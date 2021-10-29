@@ -6,6 +6,7 @@
 //
 
 import Cocoa
+import ORSSerial
 
 class ViewController: NSViewController {
 
@@ -13,6 +14,7 @@ class ViewController: NSViewController {
     super.viewDidLoad()
 
     // Do any additional setup after loading the view.
+ 
   }
 
   override var representedObject: Any? {
@@ -21,6 +23,17 @@ class ViewController: NSViewController {
     }
   }
 
+  @IBOutlet weak var serialPorts: NSComboBox!
+  
+  @IBOutlet weak var onButton: NSButton!
+  
+  @IBAction func selectSerialPort(_ sender: NSComboBox) {
+  }
+  @IBAction func onOffAction(_ sender: NSButton) {
+    
+    sender.title = sender.title == "On" ? "Off" : "On"
 
+  }
+  
 }
 

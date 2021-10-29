@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		DA8FC5E6272C3F8100FCCFCA /* ORSSerial.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA8FC5E0272C3EE800FCCFCA /* ORSSerial.framework */; };
+		DA8FC5E8272C759A00FCCFCA /* Loconet.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8FC5E7272C759A00FCCFCA /* Loconet.swift */; };
 		DAA83DEB272C37670075CBCD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA83DEA272C37670075CBCD /* AppDelegate.swift */; };
 		DAA83DED272C37670075CBCD /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA83DEC272C37670075CBCD /* ViewController.swift */; };
 		DAA83DEF272C37680075CBCD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DAA83DEE272C37680075CBCD /* Assets.xcassets */; };
@@ -40,6 +41,7 @@
 
 /* Begin PBXFileReference section */
 		DA8FC5DA272C3EE800FCCFCA /* ORSSerialPort.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ORSSerialPort.xcodeproj; path = "Frameworks/ORSSerialPort/Framework Project/ORSSerialPort.xcodeproj"; sourceTree = "<group>"; };
+		DA8FC5E7272C759A00FCCFCA /* Loconet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loconet.swift; sourceTree = "<group>"; };
 		DAA83DE7272C37670075CBCD /* MyTrains.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyTrains.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAA83DEA272C37670075CBCD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DAA83DEC272C37670075CBCD /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -102,6 +104,7 @@
 				DAA83DEE272C37680075CBCD /* Assets.xcassets */,
 				DAA83DF0272C37680075CBCD /* Main.storyboard */,
 				DAA83DF3272C37680075CBCD /* MyTrains.entitlements */,
+				DA8FC5E7272C759A00FCCFCA /* Loconet.swift */,
 			);
 			path = MyTrains;
 			sourceTree = "<group>";
@@ -202,6 +205,7 @@
 			files = (
 				DAA83DED272C37670075CBCD /* ViewController.swift in Sources */,
 				DAA83DEB272C37670075CBCD /* AppDelegate.swift in Sources */,
+				DA8FC5E8272C759A00FCCFCA /* Loconet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -361,6 +365,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = Oswalds.MyTrains;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -388,6 +393,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = Oswalds.MyTrains;
 				PRODUCT_NAME = "$(TARGET_NAME)";
