@@ -6,6 +6,7 @@
 //
 
 import Cocoa
+import ORSSerial
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -15,6 +16,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
   func applicationDidFinishLaunching(_ aNotification: Notification) {
     // Insert code here to initialize your application
+    let serialPort = ORSSerialPort(path: "/dev/tty.usbmodemDxP470881")
   }
 
   func applicationWillTerminate(_ aNotification: Notification) {
