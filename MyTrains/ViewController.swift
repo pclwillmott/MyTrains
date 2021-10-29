@@ -2,7 +2,7 @@
 //  ViewController.swift
 //  MyTrains
 //
-//  Created by Paul Willmott on 29/10/2021.
+//  Created by Paul Willmott on 29/10/2021. 
 //
 
 import Cocoa
