@@ -6,27 +6,23 @@
 //
 
 import Cocoa
-import ORSSerial
 import Foundation
+import ORSSerial
 
 @main
-class AppDelegate: NSObject, NSApplicationDelegate, ORSSerialPortDelegate {
+class AppDelegate: NSObject, NSApplicationDelegate {
 
-  func serialPortWasRemovedFromSystem(_ serialPort: ORSSerialPort) {
-    
-  }
+  private var loconet : Loconet? = nil
   
-  func serialPort(_ serialPort: ORSSerialPort, didReceive data: Data) {
-    for x in data {
-      print(String(format:"%X ", x))
-    }
-  }
-
-
   func applicationDidFinishLaunching(_ aNotification: Notification) {
+    
     // Insert code here to initialize your application
-    let serialPort = ORSSerialPort(path: "/dev/tty.usbmodemDxP470881")
-    serialPort?.delegate = self
+    
+    // "/dev/tty.usbmodemDxP470881"
+    // /dev/cu.usbmodemDxP470881
+    
+    loconet = Loconet(path: "/dev/cu.usbmodemDxP470881")
+    
     let availablePorts = ORSSerialPortManager.shared().availablePorts
     for port in availablePorts {
       print("\(port.name)")
@@ -34,6 +30,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, ORSSerialPortDelegate {
       print("\(port.path)")
       print("\(port.usesRTSCTSFlowControl)")
     }
+    
+    print(String(0x88, radix: 2))
+    
   }
 
   func applicationWillTerminate(_ aNotification: Notification) {

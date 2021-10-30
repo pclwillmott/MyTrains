@@ -13,6 +13,8 @@
 		DAA83DED272C37670075CBCD /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA83DEC272C37670075CBCD /* ViewController.swift */; };
 		DAA83DEF272C37680075CBCD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DAA83DEE272C37680075CBCD /* Assets.xcassets */; };
 		DAA83DF2272C37680075CBCD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DAA83DF0272C37680075CBCD /* Main.storyboard */; };
+		DAEA9CF7272D8DA900C9B3EC /* LoconetConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEA9CF6272D8DA900C9B3EC /* LoconetConstants.swift */; };
+		DAEA9CFA272D8FBE00C9B3EC /* LoconetMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEA9CF9272D8FBE00C9B3EC /* LoconetMessage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +50,8 @@
 		DAA83DEE272C37680075CBCD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DAA83DF1272C37680075CBCD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		DAA83DF3272C37680075CBCD /* MyTrains.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MyTrains.entitlements; sourceTree = "<group>"; };
+		DAEA9CF6272D8DA900C9B3EC /* LoconetConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoconetConstants.swift; sourceTree = "<group>"; };
+		DAEA9CF9272D8FBE00C9B3EC /* LoconetMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoconetMessage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +109,8 @@
 				DAA83DF0272C37680075CBCD /* Main.storyboard */,
 				DAA83DF3272C37680075CBCD /* MyTrains.entitlements */,
 				DA8FC5E7272C759A00FCCFCA /* Loconet.swift */,
+				DAEA9CF9272D8FBE00C9B3EC /* LoconetMessage.swift */,
+				DAEA9CF6272D8DA900C9B3EC /* LoconetConstants.swift */,
 			);
 			path = MyTrains;
 			sourceTree = "<group>";
@@ -205,6 +211,8 @@
 			files = (
 				DAA83DED272C37670075CBCD /* ViewController.swift in Sources */,
 				DAA83DEB272C37670075CBCD /* AppDelegate.swift in Sources */,
+				DAEA9CF7272D8DA900C9B3EC /* LoconetConstants.swift in Sources */,
+				DAEA9CFA272D8FBE00C9B3EC /* LoconetMessage.swift in Sources */,
 				DA8FC5E8272C759A00FCCFCA /* Loconet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
