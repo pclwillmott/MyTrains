@@ -1,5 +1,5 @@
 //
-//  Loconet.swift
+//  LoconetMessenger.swift
 //  MyTrains
 //
 //  Created by Paul Willmott on 29/10/2021.
@@ -8,7 +8,13 @@
 import Foundation
 import ORSSerial
 
-public class Loconet : NSObject, ORSSerialPortDelegate {
+public protocol LoconetMessengerDelegate {
+  func LoconetSensorMessageReceived(message:LoconetSensorMessage)
+  func LoconetSwitchRequestMessageReceived(message:LoconetSwitchRequestMessage)
+  func LoconetSlotDataMessageReceived(message:LoconetSlotDataMessage)
+}
+
+public class LoconetMessenger : NSObject, ORSSerialPortDelegate {
 
   // Constructor
   
@@ -35,6 +41,11 @@ public class Loconet : NSObject, ORSSerialPortDelegate {
   private var readPtr : Int = 0
   private var writePtr : Int = 0
   private var bufferCount : Int = 0
+  private var bufferLock : NSLock = NSLock()
+  
+  // Public Properties
+  
+  public var delegate : LoconetMessengerDelegate? = nil
   
   // ORSSerialPortDelegate Methods
   
@@ -43,14 +54,13 @@ public class Loconet : NSObject, ORSSerialPortDelegate {
   }
   
   public func serialPort(_ serialPort: ORSSerialPort, didReceive data: Data) {
+    bufferLock.lock()
+    bufferCount += data.count
     for x in data {
-//      print(String(format: "%02X", x))
-//      print(String(x, radix: 2))
       buffer[writePtr] = x
-      writePtr += 1
-      writePtr &= 0xff
-      bufferCount += 1
+      writePtr = (writePtr + 1) & 0xff
     }
+    bufferLock.unlock()
     decode()
   }
   
@@ -58,21 +68,20 @@ public class Loconet : NSObject, ORSSerialPortDelegate {
     
     // find the start of a message
     
-    var ok : Bool = false
+    var opCodeFound : Bool = false
     
+    bufferLock.lock()
     while bufferCount > 0 {
       if ((buffer[readPtr] & 0x80) != 0) {
-        ok = true
+        opCodeFound = true
         break
       }
-      readPtr += 1
-      readPtr &= 0xff
+      readPtr = (readPtr + 1) & 0xff
       bufferCount -= 1
     }
+    bufferLock.unlock()
     
-    if ok {
-      
-//      Swift.print("ok: \(ok)")
+    if opCodeFound {
       
       var length = (buffer[readPtr] & 0b01100000) >> 5
       
@@ -87,40 +96,34 @@ public class Loconet : NSObject, ORSSerialPortDelegate {
         length = 6
         break
       default :
-        
-        if bufferCount > 1 {
-          length = buffer[readPtr+1]
-        }
-        else {
-          length = 0xff
-        }
+        length = bufferCount > 1 ? buffer[(readPtr+1) & 0xff] : 0xff
         break
         
       }
       
-//      Swift.print("length \(length)")
-      
       if length < 0xff && bufferCount >= length {
         
         var message : [UInt8] = [UInt8](repeating: 0x00, count:Int(length))
-        var index : Int = 0
         
+        bufferLock.lock()
+        var index : Int = 0
         while index < length {
           message[index] = buffer[readPtr]
-          readPtr += 1
-          readPtr &= 0xff
-          bufferCount -= 1
+          readPtr = (readPtr + 1) & 0xff
           index += 1
         }
+        bufferCount -= Int(length)
+        bufferLock.unlock()
         
         var loconetMessage = LoconetMessage(message: message)
         
         if loconetMessage.checkSumOK {
+          
           let opCode = loconetMessage.opCode
           
           switch opCode {
           case .OPC_UNKNOWN:
-            print("OPC_UNKNOWN \(String(format: "%02X", loconetMessage.opCodeRawValue))")
+            print("OPC_UNKNOWN \(String(format: "%02X", loconetMessage.opCodeRawValue))\n")
             break
 /*          case .OPC_BUSY:
             break
@@ -137,10 +140,10 @@ public class Loconet : NSObject, ORSSerialPortDelegate {
           case .OPC_LOCO_SND:
             break */
           case .OPC_SW_REQ:
-            print("\(opCode) turnout address = \(loconetMessage.turnoutAddress) id = \(loconetMessage.turnoutId) state = \(loconetMessage.turnoutState)")
+            delegate?.LoconetSwitchRequestMessageReceived(message: LoconetSwitchRequestMessage(message: message))
             break
           case .OPC_INPUT_REP, .OPC_SW_REP:
-            print("\(opCode) address = \(loconetMessage.sensorAddress) id = \(loconetMessage.sensorId) state = \(loconetMessage.sensorState)")
+            delegate?.LoconetSensorMessageReceived(message: LoconetSensorMessage(message: message))
            break
 /*          case .OPC_LONG_ACK:
             break
@@ -153,18 +156,18 @@ public class Loconet : NSObject, ORSSerialPortDelegate {
           case .OPC_LINK_SLOTS:
             break
           case .OPC_MOVE_SLOTS:
-            break */
+            break
           case .OPC_RQ_SL_DATA:
-            print("\(opCode) slot = \(loconetMessage.slotNumber)")
-            break /*
+            break 
           case .OPC_SW_STATE:
             break
           case .OPC_SW_ACK:
             break
           case .OPC_LOCO_ADR:
-            break
+            break */
           case .OPC_SL_RD_DATA:
-            break
+            delegate?.LoconetSlotDataMessageReceived(message: LoconetSlotDataMessage(message: message))
+            break /*
           case .OPC_WR_SL_DATA:
             break */
           default:
