@@ -12,6 +12,22 @@ import ORSSerial
 @main
 class AppDelegate: NSObject, NSApplicationDelegate, LoconetMessengerDelegate {
   
+  func LoconetLongAcknowledgeMessageReceived(message: LoconetLongAcknowledgeMessage) {
+    print("opCode:           \(message.opCode)")
+    print("opCodeResponding: \(message.opCodeResponding)")
+    print("responseCode:     \(message.responseCode)")
+    print("")
+}
+  
+  func LoconetTurnoutOutputMessageReceived(message: LoconetTurnoutOutputMessage) {
+    print("opCode:              \(message.opCode)")
+    print("turnoutAddress:      \(message.turnoutAddress)")
+    print("turnoutId:           \(message.turnoutId)")
+    print("turnoutClosedOutput: \(message.turnoutClosedOutput)")
+    print("turnoutThrownOutput: \(message.turnoutThrownOutput)")
+    print("")
+}
+  
   func LoconetSlotDataMessageReceived(message: LoconetSlotDataMessage) {
     print("opCode:        \(message.opCode)")
     print("slotNumber:    \(message.slotNumber)")

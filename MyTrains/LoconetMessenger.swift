@@ -12,6 +12,8 @@ public protocol LoconetMessengerDelegate {
   func LoconetSensorMessageReceived(message:LoconetSensorMessage)
   func LoconetSwitchRequestMessageReceived(message:LoconetSwitchRequestMessage)
   func LoconetSlotDataMessageReceived(message:LoconetSlotDataMessage)
+  func LoconetTurnoutOutputMessageReceived(message:LoconetTurnoutOutputMessage)
+  func LoconetLongAcknowledgeMessageReceived(message:LoconetLongAcknowledgeMessage)
 }
 
 public class LoconetMessenger : NSObject, ORSSerialPortDelegate {
@@ -66,116 +68,144 @@ public class LoconetMessenger : NSObject, ORSSerialPortDelegate {
   
   private func decode() {
     
-    // find the start of a message
+    var doAgain : Bool = true
     
-    var opCodeFound : Bool = false
-    
-    bufferLock.lock()
-    while bufferCount > 0 {
-      if ((buffer[readPtr] & 0x80) != 0) {
-        opCodeFound = true
-        break
-      }
-      readPtr = (readPtr + 1) & 0xff
-      bufferCount -= 1
-    }
-    bufferLock.unlock()
-    
-    if opCodeFound {
+    while doAgain {
       
-      var length = (buffer[readPtr] & 0b01100000) >> 5
+      // find the start of a message
       
-      switch length {
-      case 0b00 :
-        length = 2
-        break
-      case 0b01 :
-        length = 4
-        break
-      case 0b10 :
-        length = 6
-        break
-      default :
-        length = bufferCount > 1 ? buffer[(readPtr+1) & 0xff] : 0xff
-        break
-        
-      }
+      var opCodeFound : Bool
       
-      if length < 0xff && bufferCount >= length {
-        
-        var message : [UInt8] = [UInt8](repeating: 0x00, count:Int(length))
-        
-        bufferLock.lock()
-        var index : Int = 0
-        while index < length {
-          message[index] = buffer[readPtr]
-          readPtr = (readPtr + 1) & 0xff
-          index += 1
+      opCodeFound = false
+      
+      bufferLock.lock()
+      while bufferCount > 0 {
+        if ((buffer[readPtr] & 0x80) != 0) {
+          opCodeFound = true
+          break
         }
-        bufferCount -= Int(length)
-        bufferLock.unlock()
+        readPtr = (readPtr + 1) & 0xff
+        bufferCount -= 1
+      }
+      bufferLock.unlock()
+      
+      if opCodeFound {
         
-        var loconetMessage = LoconetMessage(message: message)
+        var length = (buffer[readPtr] & 0b01100000) >> 5
         
-        if loconetMessage.checkSumOK {
+        switch length {
+        case 0b00 :
+          length = 2
+          break
+        case 0b01 :
+          length = 4
+          break
+        case 0b10 :
+          length = 6
+          break
+        default :
+          length = bufferCount > 1 ? buffer[(readPtr+1) & 0xff] : 0xff
+          break
           
-          let opCode = loconetMessage.opCode
+        }
+        
+        if length < 0xff && bufferCount >= length {
           
-          switch opCode {
-          case .OPC_UNKNOWN:
-            print("OPC_UNKNOWN \(String(format: "%02X", loconetMessage.opCodeRawValue))\n")
-            break
-/*          case .OPC_BUSY:
-            break
-          case .OPC_GPOFF:
-            break
-          case .OPC_GPON:
-            break
-          case .OPC_IDLE:
-            break
-          case .OPC_LOCO_SPD:
-            break
-          case .OPC_LOCO_DIRF:
-            break
-          case .OPC_LOCO_SND:
-            break */
-          case .OPC_SW_REQ:
-            delegate?.LoconetSwitchRequestMessageReceived(message: LoconetSwitchRequestMessage(message: message))
-            break
-          case .OPC_INPUT_REP, .OPC_SW_REP:
-            delegate?.LoconetSensorMessageReceived(message: LoconetSensorMessage(message: message))
-           break
-/*          case .OPC_LONG_ACK:
-            break
-          case .OPC_SLOT_STAT1:
-            break
-          case .OPC_CONSIST_FUNC:
-            break
-          case .OPC_UNLINK_SLOTS:
-            break
-          case .OPC_LINK_SLOTS:
-            break
-          case .OPC_MOVE_SLOTS:
-            break
-          case .OPC_RQ_SL_DATA:
-            break 
-          case .OPC_SW_STATE:
-            break
-          case .OPC_SW_ACK:
-            break
-          case .OPC_LOCO_ADR:
-            break */
-          case .OPC_SL_RD_DATA:
-            delegate?.LoconetSlotDataMessageReceived(message: LoconetSlotDataMessage(message: message))
-            break /*
-          case .OPC_WR_SL_DATA:
-            break */
-          default:
-            print("\(opCode)")
-            break
+          var message : [UInt8] = [UInt8](repeating: 0x00, count:Int(length))
+          
+          var done : Bool = true
+          
+          bufferLock.lock()
+          var index : Int = 0
+          while index < length {
+            let cc = buffer[readPtr]
+            if index > 0 && ((cc & 0x80) != 0x00) {
+              done = false
+              break
+            }
+            message[index] = cc
+            readPtr = (readPtr + 1) & 0xff
+            index += 1
+            bufferCount -= 1
           }
+          bufferLock.unlock()
+          
+          if done {
+          
+            let loconetMessage = LoconetMessage(message: message)
+            
+            if loconetMessage.checkSumOK {
+              
+              let opCode = loconetMessage.opCode
+              
+              switch opCode {
+              case .OPC_UNKNOWN:
+                print("OPC_UNKNOWN \(String(format: "%02X", loconetMessage.opCodeRawValue))\n")
+                break
+    /*          case .OPC_BUSY:
+                break
+              case .OPC_GPOFF:
+                break
+              case .OPC_GPON:
+                break
+              case .OPC_IDLE:
+                break
+              case .OPC_LOCO_SPD:
+                break
+              case .OPC_LOCO_DIRF:
+                break
+              case .OPC_LOCO_SND:
+                break */
+              case .OPC_SW_REQ, .OPC_SW_ACK, .OPC_SW_STATE:
+                delegate?.LoconetSwitchRequestMessageReceived(message: LoconetSwitchRequestMessage(message: message))
+                break
+              case .OPC_SW_REP:
+                if (message[2] & 0b01000000) != 0x00 {
+                  delegate?.LoconetSensorMessageReceived(message: LoconetSensorMessage(message: message))
+                }
+                else {
+                  delegate?.LoconetTurnoutOutputMessageReceived(message: LoconetTurnoutOutputMessage(message: message))
+                }
+                break
+              case .OPC_INPUT_REP:
+                delegate?.LoconetSensorMessageReceived(message: LoconetSensorMessage(message: message))
+               break
+              case .OPC_LONG_ACK:
+                delegate?.LoconetLongAcknowledgeMessageReceived(message: LoconetLongAcknowledgeMessage(message: message))
+                break
+    /*          case .OPC_SLOT_STAT1:
+                break
+              case .OPC_CONSIST_FUNC:
+                break
+              case .OPC_UNLINK_SLOTS:
+                break
+              case .OPC_LINK_SLOTS:
+                break
+              case .OPC_MOVE_SLOTS:
+                break
+              case .OPC_RQ_SL_DATA:
+                break
+              case .OPC_SW_ACK:
+                break
+              case .OPC_LOCO_ADR:
+                break */
+              case .OPC_SL_RD_DATA, .OPC_WR_SL_DATA:
+                delegate?.LoconetSlotDataMessageReceived(message: LoconetSlotDataMessage(message: message))
+                break
+              default:
+                print("\(opCode)")
+                break
+              }
+              
+            }
+
+          }
+          
         }
-        
+        else {
+          doAgain = false
+        }
+
       }
       
     }
