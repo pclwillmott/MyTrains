@@ -14,13 +14,15 @@ public protocol LoconetMessengerDelegate {
   func LoconetSlotDataMessageReceived(message:LoconetSlotDataMessage)
   func LoconetTurnoutOutputMessageReceived(message:LoconetTurnoutOutputMessage)
   func LoconetLongAcknowledgeMessageReceived(message:LoconetLongAcknowledgeMessage)
+  func LoconetRequestSlotDataMessageReceived(message:LoconetRequestSlotDataMessage)
 }
 
 public class LoconetMessenger : NSObject, ORSSerialPortDelegate {
 
   // Constructor
   
-  init(path:String) {
+  init(id:String, path:String) {
+    self.id = id
     super.init()
     if let sp = ORSSerialPort(path: path) {
       sp.delegate = self
@@ -47,6 +49,8 @@ public class LoconetMessenger : NSObject, ORSSerialPortDelegate {
   
   // Public Properties
   
+  public var id : String
+  
   public var delegate : LoconetMessengerDelegate? = nil
   
   // ORSSerialPortDelegate Methods
@@ -71,6 +75,8 @@ public class LoconetMessenger : NSObject, ORSSerialPortDelegate {
     var doAgain : Bool = true
     
     while doAgain {
+      
+      doAgain = false
       
       // find the start of a message
       
@@ -106,33 +112,48 @@ public class LoconetMessenger : NSObject, ORSSerialPortDelegate {
         default :
           length = bufferCount > 1 ? buffer[(readPtr+1) & 0xff] : 0xff
           break
-          
         }
         
         if length < 0xff && bufferCount >= length {
           
           var message : [UInt8] = [UInt8](repeating: 0x00, count:Int(length))
           
-          var done : Bool = true
+          var restart : Bool = false
           
           bufferLock.lock()
+          
           var index : Int = 0
+          
           while index < length {
+            
             let cc = buffer[readPtr]
+            
+            // check that there are no high bits set in the data bytes
+            
             if index > 0 && ((cc & 0x80) != 0x00) {
-              done = false
+              restart = true
               break
             }
+            
             message[index] = cc
+            
             readPtr = (readPtr + 1) & 0xff
             index += 1
             bufferCount -= 1
+            
           }
+          
+          // Do another loop if there are at least 2 bytes in the buffer
+          
+          doAgain = bufferCount > 1
+          
           bufferLock.unlock()
           
-          if done {
+          // Process message if no high bits set in data
           
-            let loconetMessage = LoconetMessage(message: message)
+          if !restart {
+          
+            let loconetMessage = LoconetMessage(interfaceId:self.id, message: message)
             
             if loconetMessage.checkSumOK {
               
@@ -140,11 +161,13 @@ public class LoconetMessenger : NSObject, ORSSerialPortDelegate {
               
               switch opCode {
               case .OPC_UNKNOWN:
-                print("OPC_UNKNOWN \(String(format: "%02X", loconetMessage.opCodeRawValue))\n")
+                print("OPC_UNKNOWN \(String(format: "%02X", loconetMessage.opCodeRawValue))")
+                print("message Length = \(loconetMessage.messageLength)\n")
                 break
-    /*          case .OPC_BUSY:
+              case .OPC_BUSY:
+                // Ignore these opcodes
                 break
-              case .OPC_GPOFF:
+    /*          case .OPC_GPOFF:
                 break
               case .OPC_GPON:
                 break
@@ -157,21 +180,21 @@ public class LoconetMessenger : NSObject, ORSSerialPortDelegate {
               case .OPC_LOCO_SND:
                 break */
               case .OPC_SW_REQ, .OPC_SW_ACK, .OPC_SW_STATE:
-                delegate?.LoconetSwitchRequestMessageReceived(message: LoconetSwitchRequestMessage(message: message))
+                delegate?.LoconetSwitchRequestMessageReceived(message: LoconetSwitchRequestMessage(interfaceId:self.id, message: message))
                 break
               case .OPC_SW_REP:
                 if (message[2] & 0b01000000) != 0x00 {
-                  delegate?.LoconetSensorMessageReceived(message: LoconetSensorMessage(message: message))
+                  delegate?.LoconetSensorMessageReceived(message: LoconetSensorMessage(interfaceId:self.id, message: message))
                 }
                 else {
-                  delegate?.LoconetTurnoutOutputMessageReceived(message: LoconetTurnoutOutputMessage(message: message))
+                  delegate?.LoconetTurnoutOutputMessageReceived(message: LoconetTurnoutOutputMessage(interfaceId:self.id, message: message))
                 }
                 break
               case .OPC_INPUT_REP:
-                delegate?.LoconetSensorMessageReceived(message: LoconetSensorMessage(message: message))
+                delegate?.LoconetSensorMessageReceived(message: LoconetSensorMessage(interfaceId:self.id, message: message))
                break
               case .OPC_LONG_ACK:
-                delegate?.LoconetLongAcknowledgeMessageReceived(message: LoconetLongAcknowledgeMessage(message: message))
+                delegate?.LoconetLongAcknowledgeMessageReceived(message: LoconetLongAcknowledgeMessage(interfaceId:self.id, message: message))
                 break
     /*          case .OPC_SLOT_STAT1:
                 break
@@ -183,14 +206,17 @@ public class LoconetMessenger : NSObject, ORSSerialPortDelegate {
                 break
               case .OPC_MOVE_SLOTS:
                 break
+     */
               case .OPC_RQ_SL_DATA:
+                delegate?.LoconetRequestSlotDataMessageReceived(message: LoconetRequestSlotDataMessage(interfaceId:self.id, message: message))
                 break
+                /*
               case .OPC_SW_ACK:
                 break
               case .OPC_LOCO_ADR:
                 break */
-              case .OPC_SL_RD_DATA, .OPC_WR_SL_DATA:
-                delegate?.LoconetSlotDataMessageReceived(message: LoconetSlotDataMessage(message: message))
+              case .OPC_SL_RD_DATA /*, .OPC_WR_SL_DATA */:
+                delegate?.LoconetSlotDataMessageReceived(message: LoconetSlotDataMessage(interfaceId:self.id, message: message))
                 break
               default:
                 print("\(opCode)")
@@ -202,12 +228,9 @@ public class LoconetMessenger : NSObject, ORSSerialPortDelegate {
           }
           
         }
-        else {
-          doAgain = false
-        }
 
       }
-      
+
     }
     
   }

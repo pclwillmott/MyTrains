@@ -9,12 +9,15 @@ import Foundation
 
 public class LoconetMessage : NSObject {
   
-  init(message:[UInt8]) {
+  init(interfaceId:String, message:[UInt8]) {
     self.message = message
+    self.interfaceId = interfaceId
     super.init()
   }
   
   public var message : [UInt8]
+  
+  public var interfaceId : String
   
   public var checkSumOK : Bool {
     get {
@@ -37,6 +40,30 @@ public class LoconetMessage : NSObject {
   public var opCode : LoconetOpcode {
     get {
       return LoconetOpcode.init(rawValue: opCodeRawValue) ?? .OPC_UNKNOWN
+    }
+  }
+  
+  public var messageLength : UInt8 {
+    get {
+      
+      var length = (message[0] & 0b01100000) >> 5
+      
+      switch length {
+      case 0b00 :
+        length = 2
+        break
+      case 0b01 :
+        length = 4
+        break
+      case 0b10 :
+        length = 6
+        break
+      default :
+        length = message[1]
+        break
+      }
+      
+      return length
     }
   }
     

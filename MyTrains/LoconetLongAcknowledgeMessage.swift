@@ -17,7 +17,13 @@ public class LoconetLongAcknowledgeMessage : LoconetMessage {
   
   var responseCode : LoconetResponse {
     get {
-      return LoconetResponse(rawValue: (UInt16(message[1]) << 8) | UInt16(message[2])) ?? .unknown
+      return LoconetResponse(rawValue: responseCodeRawValue) ?? .unknown
+    }
+  }
+  
+  var responseCodeRawValue : UInt16 {
+    get {
+      return (UInt16(message[1]) << 8) | UInt16(message[2])
     }
   }
   
