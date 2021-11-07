@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.5.28)  7 NOV 2021 15:55
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.5.28)  7 NOV 2021 16:11
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -251,13 +251,7 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 \c@example=\count107
 \c@warning=\count108
 
-(./Digitrax Notes.aux
-No file Chapter1/chapter1.aux.
-No file Chapter2/chapter2.aux.
-No file Chapter3/chapter3.aux.
-No file Chapter4/chapter4.aux.
-No file Chapter5/chapter5.aux.
-)
+(./Digitrax Notes.aux (./chapter1.aux))
 \openout1 = `"Digitrax Notes.aux"'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 37.
@@ -370,47 +364,53 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 \tf@toc=\write4
 \openout4 = `"Digitrax Notes.toc"'.
 
- [3]
+ [3] [4
+
+]
 \openout2 = `chapter1.aux'.
 
- (./chapter1.tex [4
+ (./chapter1.tex
+Chapter 1.
+
+Overfull \hbox (29.63216pt too wide) in paragraph at lines 10--11
+[] 
+ []
+
+[1
 
 
-]) [5]
+]) [2]
 No file "Digitrax Notes".bbl.
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 52.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 52.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 55.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 55.
 (./Digitrax Notes.aux (./chapter1.aux))
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 52.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 52.
-
-
-Package rerunfilecheck Warning: File `"Digitrax Notes".out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `"Digitrax Notes".out':
-(rerunfilecheck)             Before: D41D8CD98F00B204E9800998ECF8427E;0
-(rerunfilecheck)             After:  8CCADFE78C319F65C0EA0DF7B3FC8611;102.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 52.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 55.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 55.
+Package rerunfilecheck Info: File `"Digitrax Notes".out' has not changed.
+(rerunfilecheck)             Checksum: 9FF93B8A38B8428B97CDE971C9E3E12F;100.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 55.
  ) 
 Here is how much of TeX's memory you used:
- 5904 strings out of 492649
- 87551 string characters out of 6129622
- 176319 words of memory out of 5000000
- 9694 multiletter control sequences out of 15000+600000
- 10448 words of font info for 39 fonts, out of 8000000 for 9000
+ 5914 strings out of 492649
+ 87719 string characters out of 6129622
+ 181740 words of memory out of 5000000
+ 9707 multiletter control sequences out of 15000+600000
+ 12778 words of font info for 48 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 42i,6n,30p,396b,338s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb
-></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><
-/usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></u
-sr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr
-/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsl10.pfb>
-Output written on "Digitrax Notes.pdf" (5 pages, 50153 bytes).
+ 42i,14n,30p,396b,338s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
+></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb>
+</usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><
+/usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></u
+sr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr
+/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/l
+ocal/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsl10.pfb></usr/lo
+cal/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/loc
+al/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
+Output written on "Digitrax Notes.pdf" (6 pages, 101909 bytes).
 PDF statistics:
- 54 PDF objects out of 1000 (max. 8388607)
- 41 compressed objects within 1 object stream
- 9 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 84 PDF objects out of 1000 (max. 8388607)
+ 66 compressed objects within 1 object stream
+ 11 named destinations out of 1000 (max. 500000)
+ 17 words of extra memory for PDF output out of 10000 (max. 10000000)
 

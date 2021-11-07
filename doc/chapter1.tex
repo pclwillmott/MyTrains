@@ -7,3 +7,70 @@
 
 \section{Introduction}
 
+\rule{15.1cm}{0.4pt}
+\subsubsection{ADC HL, ss}
+\underline{Operation:} $ HL \leftarrow HL + ss + CY $
+
+\underline{Group:} \hspace{0.5cm} 16-Bit Arithmetic
+
+\underline{Format:} 
+
+\begin{tabular}{l l}
+\underline{Opcode} & \underline{Operands} \\
+ADC & HL, ss\\
+\end{tabular}
+
+\begin{tabular}{l l l}
+ADC HL, ss &
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 1 & 1 & 0 & 1 & 1 & 0 & 1\\
+\hline
+\end{tabular}
+& 0EDH\\
+& & \\
+&
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 1 & s & s & 1 & 0 & 1 & 0\\
+\hline
+\end{tabular}
+& \\
+\end{tabular}
+
+\underline{Description:}
+
+The contents of register pair ss (any of register pairs BC, DE, HL or SP) are added with CY, the Carry Flag (C flag in the F register), to the contents of register pair HL, and the result is stored in HL. Operand ss is specified as follows in the assembled object code: 
+
+\begin{tabular}{c c}
+\underline{Register} &\\
+\underline{Pair} & \underline{ss}\\
+BC & 00 \\
+DE & 01 \\
+HL & 10 \\
+SP & 11 \\
+\end{tabular}
+
+M CYCLES: 4 T STATES: 15(4,4,4,3) 
+
+\underline{Condition Bits Affected:} 
+
+\begin{tabular}{r l}
+S: & Set if result is negative; reset otherwise \\
+Z: & Set if result is zero; reset otherwise \\
+H: & Set if carry from Bit 11; reset otherwise \\ 
+P/V: & Set if overflow; reset otherwise \\
+N: & Reset \\
+C: & Set if carry from Bit 15; reset otherwise \\
+\end{tabular}
+
+\underline{Example:} 
+
+If the register pair BC contains 2222H, register pair HL contains 5437H and the Carry Flag is set, after the execution of
+
+\begin{verbatim}
+ADC HL, BC 
+\end{verbatim}
+
+the contents of HL will be 765AH. 
+
