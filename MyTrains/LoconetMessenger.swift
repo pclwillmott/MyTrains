@@ -35,6 +35,7 @@ public class LoconetMessenger : NSObject, ORSSerialPortDelegate {
       sp.usesDCDOutputFlowControl = false
       serialPort = sp
       sp.open()
+      startOutputQueue()
     }
   }
   
@@ -47,11 +48,103 @@ public class LoconetMessenger : NSObject, ORSSerialPortDelegate {
   private var bufferCount : Int = 0
   private var bufferLock : NSLock = NSLock()
   
+  private var loconetSlots = [LoconetSlot?](repeating: nil, count: 120)
+  
+  private var outputQueue : [LoconetOutputQueueItem] = []
+  private var outputQueueLock : NSLock = NSLock()
+  private var outputTimer : Timer?
+  
+  // Output Queue Timer
+    
+  @objc func handleOutputQueue() {
+    outputQueueLock.lock()
+    if outputQueue.count > 0 {
+      serialPort?.send(outputQueue[0].message)
+      outputQueue.remove(at: 0)
+    }
+    outputQueueLock.unlock()
+  }
+  
+  func addToQueue(message:Data) {
+    let item = LoconetOutputQueueItem(message: message)
+    outputQueueLock.lock()
+    outputQueue.append(item)
+    outputQueueLock.unlock()
+  }
+  
+  func startOutputQueue() {
+    outputTimer = Timer.scheduledTimer(timeInterval: 0.25, target: self, selector: #selector(handleOutputQueue), userInfo: nil, repeats: true)
+  }
+  
+  func stopOutputQueue() {
+    outputTimer?.invalidate()
+  }
+    
   // Public Properties
   
   public var id : String
   
   public var delegate : LoconetMessengerDelegate? = nil
+  
+  // public methods
+  
+  public func powerOn() {
+    
+    let message = LoconetMessage.formLoconetMessage(opCode: .OPC_GPON, data: Data([]))
+    
+    addToQueue(message: message)
+    
+  }
+  
+  public func powerOff() {
+    
+    let message = LoconetMessage.formLoconetMessage(opCode: .OPC_GPOFF, data: Data([]))
+    
+    addToQueue(message: message)
+
+  }
+  
+  public func requestSlotInfo(address:UInt8) {
+    
+    let message = LoconetMessage.formLoconetMessage(opCode: .OPC_LOCO_ADR, data: Data([0x00, address]))
+    
+    addToQueue(message: message)
+
+  }
+  
+  public func setLocoSound(slotNumber:UInt8) {
+    
+    let message = LoconetMessage.formLoconetMessage(opCode: .OPC_LOCO_SND, data: Data([slotNumber, loconetSlots[Int(slotNumber)]!.slotByte(byte: .slotSound)]))
+    
+    addToQueue(message: message)
+
+  }
+  
+  public func setLocoDirF(slotNumber:UInt8) {
+    
+    let message = LoconetMessage.formLoconetMessage(opCode: .OPC_LOCO_DIRF, data: Data([slotNumber, loconetSlots[Int(slotNumber)]!.slotByte(byte: .slotDirF)]))
+    
+    addToQueue(message: message)
+
+  }
+  
+  public func setLocoSpeed(slotNumber:UInt8) {
+    
+    let message = LoconetMessage.formLoconetMessage(opCode: .OPC_LOCO_SPD, data: Data([slotNumber, loconetSlots[Int(slotNumber)]!.slotByte(byte: .slotSpeed)]))
+    
+    addToQueue(message: message)
+
+  }
+  
+
+  
+  public func nullMove(slotNumber:UInt8) {
+    
+    let message = LoconetMessage.formLoconetMessage(opCode: .OPC_MOVE_SLOTS, data: Data([slotNumber, slotNumber]))
+    
+    addToQueue(message: message)
+
+  }
   
   // ORSSerialPortDelegate Methods
   
@@ -86,10 +179,12 @@ public class LoconetMessenger : NSObject, ORSSerialPortDelegate {
       
       bufferLock.lock()
       while bufferCount > 0 {
-        if ((buffer[readPtr] & 0x80) != 0) {
+        let cc = buffer[readPtr]
+        if (cc != 0) {
           opCodeFound = true
           break
         }
+        print("skip: \(String(format: "%02x", cc))")
         readPtr = (readPtr + 1) & 0xff
         bufferCount -= 1
       }
@@ -162,7 +257,12 @@ public class LoconetMessenger : NSObject, ORSSerialPortDelegate {
               switch opCode {
               case .OPC_UNKNOWN:
                 print("OPC_UNKNOWN \(String(format: "%02X", loconetMessage.opCodeRawValue))")
-                print("message Length = \(loconetMessage.messageLength)\n")
+                print("message Length = \(loconetMessage.messageLength)")
+                var ss:String = ""
+                for x in message {
+                  ss += String(format:"%02x", x) + " "
+                }
+                print("\(ss)\n")
                 break
               case .OPC_BUSY:
                 // Ignore these opcodes
@@ -216,10 +316,21 @@ public class LoconetMessenger : NSObject, ORSSerialPortDelegate {
               case .OPC_LOCO_ADR:
                 break */
               case .OPC_SL_RD_DATA /*, .OPC_WR_SL_DATA */:
-                delegate?.LoconetSlotDataMessageReceived(message: LoconetSlotDataMessage(interfaceId:self.id, message: message))
+                let lsdm = LoconetSlotDataMessage(interfaceId: self.id, message: message)
+                let slot = LoconetSlot(interfaceId: self.id, message: message)
+                lsdm.slot = slot
+                let sn = Int(slot.slotNumber)
+                loconetSlots[sn] = nil
+                loconetSlots[sn] = slot
+                delegate?.LoconetSlotDataMessageReceived(message: lsdm)
                 break
               default:
                 print("\(opCode)")
+                var ss:String = ""
+                for x in message {
+                  ss += String(format:"%02x", x) + " "
+                }
+                print(ss)
                 break
               }
               

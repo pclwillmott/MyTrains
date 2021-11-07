@@ -7,17 +7,15 @@
 
 import Foundation
 
-public class LoconetSlot : NSObject {
+public class LoconetSlot {
   
   init(interfaceId:String, message:[UInt8]) {
     self.interfaceId = interfaceId
-    super.init()
     load(message: message)
   }
   
   init(loconetMessage:LoconetMessage) {
     self.interfaceId = loconetMessage.interfaceId
-    super.init()
     load(loconetMessage: loconetMessage)
   }
   
@@ -43,6 +41,10 @@ public class LoconetSlot : NSObject {
   
   public var slotData : [UInt8] = [UInt8](repeating: 0x00, count:11)
 
+  public func slotByte(byte:LoconetSlotByte) -> UInt8 {
+    return slotData[byte.rawValue]
+  }
+  
   public var slotNumber : UInt8 {
     get {
       return slotData[LoconetSlotByte.slotNumber.rawValue]

@@ -7,12 +7,11 @@
 
 import Foundation
 
-public class LoconetMessage : NSObject {
+public class LoconetMessage {
   
   init(interfaceId:String, message:[UInt8]) {
     self.message = message
     self.interfaceId = interfaceId
-    super.init()
   }
   
   public var message : [UInt8]
@@ -29,6 +28,29 @@ public class LoconetMessage : NSObject {
       }
       return checkSum == 0xff
     }
+  }
+  
+  public static func checkSum(data: Data, length: Int) -> UInt8 {
+    var cs : UInt8 = 0xff
+    var index : Int = 0
+    while (index < length - 1) {
+      cs ^= data[index]
+      index += 1
+    }
+    return cs
+  }
+  
+  public static func formLoconetMessage(opCode:LoconetOpcode, data:Data) -> Data {
+    let length = 1 + data.count + 1
+    var message : Data = Data(repeating: 0x00, count: length)
+    message[0] = opCode.rawValue
+    var index : Int = 0
+    while index < data.count {
+      message[1+index] = data[index]
+      index += 1
+    }
+    message[length-1] = LoconetMessage.checkSum(data: message, length: length)
+    return message
   }
   
   public var opCodeRawValue : UInt8 {

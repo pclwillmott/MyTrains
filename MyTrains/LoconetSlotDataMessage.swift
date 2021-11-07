@@ -9,16 +9,7 @@ import Foundation
 
 public class LoconetSlotDataMessage : LoconetMessage {
 
-  private var _slot : LoconetSlot? = nil
-  
-  public var slot : LoconetSlot {
-    get {
-      if _slot == nil {
-        _slot = LoconetSlot(message: message)
-      }
-      return _slot!
-    }
-  }
+  public var slot : LoconetSlot? = nil
   
 }
 
