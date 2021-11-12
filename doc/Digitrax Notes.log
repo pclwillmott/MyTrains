@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.5.28)  7 NOV 2021 21:35
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.5.28)  11 NOV 2021 23:19
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -376,10 +376,228 @@ Overfull \hbox (29.63216pt too wide) in paragraph at lines 10--11
 [] 
  []
 
-) [1
+
+Overfull \hbox (29.63216pt too wide) in paragraph at lines 47--48
+[][] 
+ []
+
+[1
 
 
 ]
+Overfull \hbox (29.63216pt too wide) in paragraph at lines 84--85
+[][] 
+ []
+
+[2]
+Overfull \hbox (29.63216pt too wide) in paragraph at lines 132--133
+[][] 
+ []
+
+
+Overfull \hbox (29.63216pt too wide) in paragraph at lines 168--169
+[][] 
+ []
+
+[3]
+Overfull \hbox (38.29337pt too wide) in paragraph at lines 178--211
+[][] 
+ []
+
+
+Overfull \hbox (29.63216pt too wide) in paragraph at lines 224--225
+[][] 
+ []
+
+
+Overfull \hbox (3.38245pt too wide) in paragraph at lines 259--259
+[]$\OML/cmm/m/it/10.95 <$\OT1/cmr/m/n/10.95 SLOT$\OML/cmm/m/it/10.95 >$| 
+ []
+
+
+Overfull \hbox (1.25827pt too wide) in paragraph at lines 264--264
+[]\OT1/cmr/m/n/10.95 s7| 
+ []
+
+
+Overfull \hbox (1.25827pt too wide) in paragraph at lines 264--264
+[]\OT1/cmr/m/n/10.95 s6| 
+ []
+
+
+Overfull \hbox (1.25827pt too wide) in paragraph at lines 264--264
+[]\OT1/cmr/m/n/10.95 s5| 
+ []
+
+
+Overfull \hbox (1.25827pt too wide) in paragraph at lines 264--264
+[]\OT1/cmr/m/n/10.95 s4| 
+ []
+
+
+Overfull \hbox (1.25827pt too wide) in paragraph at lines 264--264
+[]\OT1/cmr/m/n/10.95 s3| 
+ []
+
+
+Overfull \hbox (1.25827pt too wide) in paragraph at lines 264--264
+[]\OT1/cmr/m/n/10.95 s2| 
+ []
+
+
+Overfull \hbox (1.25827pt too wide) in paragraph at lines 264--264
+[]\OT1/cmr/m/n/10.95 s1| 
+ []
+
+
+Overfull \hbox (1.25827pt too wide) in paragraph at lines 264--265
+[]\OT1/cmr/m/n/10.95 s0| 
+ []
+
+
+Overfull \hbox (7.7928pt too wide) in paragraph at lines 268--268
+[]$\OML/cmm/m/it/10.95 <$\OT1/cmr/m/n/10.95 STAT1$\OML/cmm/m/it/10.95 >$| 
+ []
+
+
+Overfull \hbox (65.99998pt too wide) in paragraph at lines 236--270
+[][] 
+ []
+
+[4]
+Overfull \hbox (13.50192pt too wide) in paragraph at lines 271--278
+[][] 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 280--281
+
+ []
+
+
+Overfull \hbox (13.50192pt too wide) in paragraph at lines 283--290
+[][] 
+ []
+
+
+Overfull \hbox (13.50192pt too wide) in paragraph at lines 291--296
+[][] 
+ []
+
+
+Overfull \hbox (13.50192pt too wide) in paragraph at lines 299--310
+[][] 
+ []
+
+
+Overfull \hbox (5.5116pt too wide) in paragraph at lines 318--318
+[]$\OML/cmm/m/it/10.95 <$\OT1/cmr/m/n/10.95 LADR$\OML/cmm/m/it/10.95 >$| 
+ []
+
+
+Overfull \hbox (3.02245pt too wide) in paragraph at lines 331--331
+[]\OT1/cmr/m/n/10.95 d6| 
+ []
+
+
+Overfull \hbox (3.02245pt too wide) in paragraph at lines 331--331
+[]\OT1/cmr/m/n/10.95 d5| 
+ []
+
+
+Overfull \hbox (3.02245pt too wide) in paragraph at lines 331--331
+[]\OT1/cmr/m/n/10.95 d4| 
+ []
+
+
+Overfull \hbox (3.02245pt too wide) in paragraph at lines 331--331
+[]\OT1/cmr/m/n/10.95 d3| 
+ []
+
+
+Overfull \hbox (3.02245pt too wide) in paragraph at lines 331--331
+[]\OT1/cmr/m/n/10.95 d2| 
+ []
+
+
+Overfull \hbox (3.02245pt too wide) in paragraph at lines 331--331
+[]\OT1/cmr/m/n/10.95 d1| 
+ []
+
+
+Overfull \hbox (3.02245pt too wide) in paragraph at lines 331--332
+[]\OT1/cmr/m/n/10.95 d0| 
+ []
+
+
+Overfull \hbox (1.55742pt too wide) in paragraph at lines 334--334
+[]$\OML/cmm/m/it/10.95 <$\OT1/cmr/m/n/10.95 DIRF$\OML/cmm/m/it/10.95 >$| 
+ []
+
+
+Overfull \hbox (65.99998pt too wide) in paragraph at lines 311--337
+[][] 
+ []
+
+
+Underfull \vbox (badness 1331) has occurred while \output is active []
+
+ [5]
+Overfull \hbox (1.19745pt too wide) in paragraph at lines 352--352
+[]\OT1/cmr/m/n/10.95 t6| 
+ []
+
+
+Overfull \hbox (1.19745pt too wide) in paragraph at lines 352--352
+[]\OT1/cmr/m/n/10.95 t5| 
+ []
+
+
+Overfull \hbox (1.19745pt too wide) in paragraph at lines 352--352
+[]\OT1/cmr/m/n/10.95 t4| 
+ []
+
+
+Overfull \hbox (1.19745pt too wide) in paragraph at lines 352--352
+[]\OT1/cmr/m/n/10.95 t3| 
+ []
+
+
+Overfull \hbox (1.19745pt too wide) in paragraph at lines 352--352
+[]\OT1/cmr/m/n/10.95 t2| 
+ []
+
+
+Overfull \hbox (1.19745pt too wide) in paragraph at lines 352--352
+[]\OT1/cmr/m/n/10.95 t1| 
+ []
+
+
+Overfull \hbox (1.19745pt too wide) in paragraph at lines 352--353
+[]\OT1/cmr/m/n/10.95 t0| 
+ []
+
+
+Overfull \hbox (65.99998pt too wide) in paragraph at lines 348--357
+[][] 
+ []
+
+
+Overfull \hbox (65.99998pt too wide) in paragraph at lines 369--378
+[][] 
+ []
+
+
+Overfull \hbox (6.88034pt too wide) in paragraph at lines 397--397
+[]$\OML/cmm/m/it/10.95 <$\OT1/cmr/m/n/10.95 HADR$\OML/cmm/m/it/10.95 >$| 
+ []
+
+
+Overfull \hbox (65.99998pt too wide) in paragraph at lines 390--408
+[][] 
+ []
+
+[6]) [7]
 No file "Digitrax Notes".bbl.
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 55.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 55.
@@ -391,13 +609,13 @@ Package rerunfilecheck Info: File `"Digitrax Notes".out' has not changed.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 55.
  ) 
 Here is how much of TeX's memory you used:
- 5912 strings out of 492649
- 87707 string characters out of 6129622
- 180740 words of memory out of 5000000
+ 5923 strings out of 492649
+ 87793 string characters out of 6129622
+ 196740 words of memory out of 5000000
  9707 multiletter control sequences out of 15000+600000
  12610 words of font info for 47 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 42i,14n,30p,396b,338s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 42i,16n,30p,516b,338s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
 ></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb>
 </usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><
@@ -406,10 +624,10 @@ sr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr
 /local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/l
 ocal/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsl10.pfb></usr/lo
 cal/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on "Digitrax Notes.pdf" (5 pages, 84982 bytes).
+Output written on "Digitrax Notes.pdf" (11 pages, 105296 bytes).
 PDF statistics:
- 76 PDF objects out of 1000 (max. 8388607)
- 60 compressed objects within 1 object stream
- 10 named destinations out of 1000 (max. 500000)
+ 109 PDF objects out of 1000 (max. 8388607)
+ 87 compressed objects within 1 object stream
+ 21 named destinations out of 1000 (max. 500000)
  17 words of extra memory for PDF output out of 10000 (max. 10000000)
 

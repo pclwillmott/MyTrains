@@ -3,9 +3,131 @@
  
 %!TEX root =  
 
-\chapter[Opcodes]{Loconet Commands}
+\chapter[Opcodes]{Loconet OpCodes}
 
 \section{Introduction}
+
+\rule{15.1cm}{0.4pt}
+\subsubsection{OPC\_BUSY}
+\underline{Operation:} Indicates that the master is busy.
+
+\underline{Group:} \hspace{0.5cm} 2-Byte Message
+
+\underline{Direction:} \hspace{0.05cm} $\leftrightarrow$ Command Station
+
+\underline{Encoding:} 
+
+\begin{tabular}{l l l} 
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 0 & 0 & 0 & 0 & 0 & 0 & 1\\
+\hline
+\end{tabular}
+& 0x81 & $<$OpCode$>$\\
+& \\
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 1 & 1 & 1 & 1 & 1 & 1 & 0\\
+\hline
+\end{tabular}
+& 0x7E & $<$CheckSum$>$
+\end{tabular}
+
+\underline{Description:}
+
+This message indicates that the master is busy. When sent to a command station it responds with an OPC\_PEER\_XFER message.
+
+\underline{Response:} 
+
+NONE
+
+\underline{Notes:} 
+
+
+\rule{15.1cm}{0.4pt}
+\subsubsection{OPC\_GPOFF}
+\underline{Operation:} Global power off request.
+
+\underline{Group:} \hspace{0.5cm} 2-Byte Message
+
+\underline{Direction:} \hspace{0.05cm} $\rightarrow$ Command Station
+
+\underline{Encoding:} 
+
+\begin{tabular}{l l l} 
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 0 & 0 & 0 & 0 & 0 & 1 & 0\\
+\hline
+\end{tabular}
+& 0x82 & $<$OpCode$>$\\
+& \\
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 1 & 1 & 1 & 1 & 1 & 0 & 1\\
+\hline
+\end{tabular}
+& 0x7D & $<$CheckSum$>$
+\end{tabular}
+
+\underline{Description:}
+
+This command turns off the track power.
+
+\underline{Response:} 
+
+NONE
+
+\underline{Notes:} 
+
+
+\rule{15.1cm}{0.4pt}
+\subsubsection{OPC\_GPON}
+\underline{Operation:} Global power on request.
+
+\underline{Group:} \hspace{0.5cm} 2-Byte Message
+
+\underline{Direction:} \hspace{0.05cm} $\rightarrow$ Command Station
+
+\underline{Encoding:} 
+
+\begin{tabular}{l l l} 
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 0 & 0 & 0 & 0 & 0 & 1 & 1\\
+\hline
+\end{tabular}
+& 0x83 & $<$OpCode$>$\\
+& \\
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 1 & 1 & 1 & 1 & 1 & 0 & 0\\
+\hline
+\end{tabular}
+& 0x7C & $<$CheckSum$>$
+\end{tabular}
+
+\underline{Description:}
+
+This command sends a global power on request.
+
+\underline{Response:} 
+
+The command station sends an OPC\_RQ\_SL\_DATA message for slot 0x7F. It also sends a sequence of OPC\_SW\_REQ messages with the following values of SW1 and SW2:
+
+\begin{tabular}{l l}
+\underline{SW1} & \underline{SW2}\\
+0x78 & 0x27\\
+0x79 & 0x27\\
+0x7A & 0x27\\
+0x7B & 0x27\\
+0x78 & ox07\\
+0x79 & 0x07\\
+0x7A & 0x07\\
+0x7B & 0x07\\
+\end{tabular}
+
+\underline{Notes:} 
 
 \rule{15.1cm}{0.4pt}
 \subsubsection{OPC\_IDLE}
@@ -20,18 +142,17 @@
 \begin{tabular}{l l l} 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 1 & 1 & 0 & 1 & 1 & 0 & 1\\
+1 & 0 & 0 & 0 & 0 & 1 & 0 & 1\\
 \hline
 \end{tabular}
-
-& 0xED & $<$opCode$>$\\
+& 0x85 & $<$OpCode$>$\\
 & \\
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 1 & s & s & 1 & 0 & 1 & 0\\
+0 & 1 & 1 & 1 & 1 & 0 & 1 & 0\\
 \hline
 \end{tabular}
-& 0x00 & $<$checkSum$>$
+& 0x7A & $<$CheckSum$>$
 \end{tabular}
 
 \underline{Description:}
@@ -41,4 +162,259 @@ This command forces Loconet into the idle state and broadcasts an emergency stop
 \underline{Response:} 
 
 None
+
+\underline{Notes:} 
+
+\rule{15.1cm}{0.4pt}
+\subsubsection{OPC\_LOCO\_ADR}
+\underline{Operation:} Request a slot number for a locomotive.
+
+\underline{Group:} \hspace{0.5cm} 4-Byte Message
+
+\underline{Direction:} \hspace{0.05cm} $\rightarrow$ Command Station
+
+\underline{Encoding:} 
+
+\begin{tabular}{l l l} 
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 0 & 1 & 1 & 1 & 1 & 1 & 1\\
+\hline
+\end{tabular}
+& 0xBF & $<$OpCode$>$\\
+& \\
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & h & h & h & h & h & h & h\\
+\hline
+\end{tabular}
+& $<$HADR$>$ & High Address Bits (Address $>>$ 7)\\
+& \\
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & l & l & l & l & l & l & l\\
+\hline
+\end{tabular}
+& $<$LADR$>$ & Low Address Bits (Address AND 0x7f)\\
+& \\
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & c & c & c & c & c & c & c\\
+\hline
+\end{tabular}
+& $<$CHK$>$ & $<$CheckSum$>$
+
+\end{tabular}
+
+\underline{Description:}
+
+This message requests the slot number for the selected locomotive address. If the locomotive is found in the slot table then the command station returns an OPC\_SL\_RD\_DATA message with the slot information. If it is not found then the command station will put the locomotive into a free slot and then return an OPC\_SL\_RD\_DATA message with the slot information. If there are no free slots then the command station returns an OPC\_LONG\_ACK error code.
+
+\underline{Response:} 
+
+OPC\_SL\_RD\_DATA if success, otherwise OPC\_LONG\_ACK.
+
+\underline{Notes:} 
+
+The Loconet 1.1 specification specifies that $<$HADR$>$ shall be the value 0x00.
+
+\rule{15.1cm}{0.4pt}
+\subsubsection{OPC\_SL\_RD\_DATA}
+\underline{Operation:} Returns slot data.
+
+\underline{Group:} \hspace{0.5cm} Variable-Byte Message
+
+\underline{Direction:} \hspace{0.05cm} Command Station $\rightarrow$ 
+
+\underline{Encoding:} 
+
+BYTE 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.1\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 1 & 1 & 0 & 0 & 1 & 1 & 1\\
+\hline
+\end{tabular}
+& 0xE7 & $<$OpCode$>$\\
+& \\
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 1 & 1 & 1 & 1 & 1 & 1 & 0\\
+\hline
+\end{tabular}
+& 0x0E & Message Length (14 bytes including checksum)\\
+& \\
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$SLOT$>$ & Slot number in the range 0x00 to 0x7F. Slot 0x00 is a special slot, and slots in the range 0x70 to 0x7F are reserved to Digitrax.\\
+& \\
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+s7 & s6 & s5 & s4 & s3 & s2 & s1 & s0\\
+\hline
+\end{tabular}
+
+& $<$STAT1$>$ & Slot Status 1.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.05\linewidth} p{0.05\linewidth} p{0.70\linewidth}} 
+& \underline{s7} & \underline{s6} & \\
+& 0 & 0 & Free, no consist linking.\\
+& 0 & 1 & Consist sub-member.\\
+& 1 & 0 & Consist top-member.\\
+& 1 & 1 & Consist Mid-Consist member. \\
+\end{tabular}
+
+
+Note: s7 is set to 0 in the message by the command station and so may not correctly reflect the actual setting in the slot table.\\
+
+
+\begin{tabular}{p{0.05\linewidth} p{0.05\linewidth} p{0.05\linewidth} p{0.70\linewidth}} 
+& \underline{s5} & \underline{s4} & \\
+& 0 & 0 & Free slot, no valid data. Not refreshed.\\
+& 0 & 1 & Common. Locomotive address in this slot. Refreshed.\\
+& 1 & 0 & Idle. Locomotive address in this slot. Not refreshed.\\
+& 1 & 1 & In Use. Locomotive address in this slot. Refreshed. \\
+\end{tabular}
+
+ \begin{tabular}{p{0.05\linewidth} p{0.05\linewidth} p{0.05\linewidth} p{0.70\linewidth}} 
+& & \underline{s3} & \\
+& & 0 & No slot consist linked into this slot.\\
+& & 1 & Slot consist linked into this slot.\\
+\end{tabular}
+
+
+
+\begin{tabular}{p{0.05\linewidth} p{0.05\linewidth} p{0.05\linewidth} p{0.70\linewidth}} 
+\underline{s2} & \underline{s1} & \underline{s0} & \\
+0 & 0 & 0 & 28 step decoder. 3-byte packet regular mode\\
+0 & 0 & 1 & 28 step decoder. Generate trinary packets for this mobile address\\
+0 & 1 & 0 & 14 step decoder. \\
+0 & 1 & 1 & 128 step decoder. \\
+1 & 0 & 0 & 28 step decoder. Allow advanced consisting\\
+1 & 0 & 1 & reserved\\
+1 & 1 & 0 & reserved\\
+1 & 1 & 1 & 128 step decoder. Allow advanced consisting\\
+\end{tabular}
+
+\begin{tabular}{p{0.4\linewidth} p{0.1\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & l & l & l & l & l & l & l\\
+\hline
+\end{tabular}
+& $<$LADR$>$ & Low Address Bits (Address AND 0x7f)\\
+& \\
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & s & s & s & s & s & s & s\\
+\hline
+\end{tabular}
+& $<$SPD$>$ & Speed in the range 0x00 to 0x7F. 0x00 means inertial stop and 0x01 means emergency stop. Other values mean increasing speed.\\
+& \\
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$DIRF$>$ & Locomotive direction and state of function keys F0 to F4.\\
+& \\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} l p{0.95\linewidth}} 
+d6 & Reserved. Set to 0.\\
+d5 & Locomotive direction. 1 means forward, 0 means backwards.\\
+d4 & F0 state. 1 means on, and 0 means off.\\
+d3 & F4 state. 1 means on, and 0 means off.\\
+d2 & F3 state. 1 means on, and 0 means off.\\
+d1 & F2 state. 1 means on, and 0 means off.\\
+d0 & F1 state. 1 means on, and 0 means off.\\
+\end{tabular}
+
+\begin{tabular}{p{0.4\linewidth} p{0.1\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & t6 & t5 & t4 & t3 & t2 & t1 & t0\\
+\hline
+\end{tabular}
+& $<$TRK$>$ & Global system track status.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} l p{0.6\linewidth}} 
+t6 & Reserved. Set to 0.\\
+t5 & Reserved. Set to 0.\\
+t4 & Reserved. Set to 0.\\
+t3 & 1 means the programming track is busy.\\
+t2 & 1 means this master implements Loconet version 1.1 capability, \\
+& 0 means the master is a DT200.\\
+t1 & 0 means the track is paused, broadcast an emergency stop.\\
+t0 & 1 means the DCC packets are on in the master, global power up.\\
+\end{tabular}
+
+\begin{tabular}{p{0.4\linewidth} p{0.1\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & i6 & i5 & i4 & i3 & i2 & i1 & i0\\
+\hline
+\end{tabular}
+& $<$SS2$>$ & Slot Status 2.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} l p{0.6\linewidth}} 
+i6 & Reserved. Set to 0.\\
+i5 & Reserved. Set to 0.\\
+i4 & Reserved. Set to 0.\\
+i3 & Reserved. Set to 0.\\
+i3 & 1 means expansion in ID1/2, 0 means encoded alias.\\
+i2 & 1 means expansion ID1/2 is not ID usage.\\
+i1 & Reserved. Set to 0.\\
+i0 & 1 means this slot has supressed advanced consist.\\
+\end{tabular}
+
+\begin{tabular}{p{0.4\linewidth} p{0.1\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & h & h & h & h & h & h & h\\
+\hline
+\end{tabular}
+& $<$HADR$>$ & High Address Bits (Address $>>$ 7)\\
+& \\
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & c & c & c & c & c & c & c\\
+\hline
+\end{tabular}
+& $<$CHK$>$ & Checksum\\
+
+\end{tabular}
+
+\underline{Description:}
+
+This message is sent by the command station in response to a data request.
+
+\underline{Response:} 
+
+NONE
+
+\underline{Notes:} 
+
+
 

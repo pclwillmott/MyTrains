@@ -1,3 +1,8 @@
 \contentsline {chapter}{\numberline {1}Opcodes}{1}{chapter.1}
 \contentsline {section}{\numberline {1.1}Introduction}{1}{section.1.1}
-\contentsline {subsubsection}{OPC\_IDLE}{1}{section*.2}
+\contentsline {subsubsection}{OPC\_BUSY}{1}{section*.2}
+\contentsline {subsubsection}{OPC\_GPOFF}{2}{section*.3}
+\contentsline {subsubsection}{OPC\_GPON}{2}{section*.4}
+\contentsline {subsubsection}{OPC\_IDLE}{3}{section*.5}
+\contentsline {subsubsection}{OPC\_LOCO\_ADR}{3}{section*.6}
+\contentsline {subsubsection}{OPC\_SL\_RD\_DATA}{4}{section*.7}

@@ -99,7 +99,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, LoconetMessengerDelegate {
 //    loconetMessenger = LoconetMessenger(id: "id1", path: "/dev/cu.usbmodemDxP431751")
 //    loconetMessenger?.delegate = self
     
-    /*
+    
     let availablePorts = ORSSerialPortManager.shared().availablePorts
     for port in availablePorts {
       print("\(port.name)")
@@ -107,7 +107,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, LoconetMessengerDelegate {
       print("\(port.path)")
       print("\(port.usesRTSCTSFlowControl)")
     }
-     */
+     
     
     loconetController = LoconetController()
     

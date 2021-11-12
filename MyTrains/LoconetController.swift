@@ -11,8 +11,9 @@ public class LoconetController : LoconetMessengerDelegate  {
   
   init() {
   
-    let connections = ["/dev/cu.usbmodemDxP431751"
-//                    ,  "/dev/cu.usbmodemDxP470881"
+    let connections = [//"/dev/cu.usbmodemDxP431751"
+                      "/dev/cu.usbmodemDxP470881"
+                      // "/dev/cu.usbmodemDtrxA0BA1"
     ]
     
     var index : Int = 1
