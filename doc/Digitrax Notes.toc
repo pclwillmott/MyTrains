@@ -1,8 +1,18 @@
-\contentsline {chapter}{\numberline {1}Opcodes}{1}{chapter.1}
-\contentsline {section}{\numberline {1.1}Introduction}{1}{section.1.1}
+\contentsline {chapter}{\numberline {1}Loconet Protocol}{1}{chapter.1}
+\contentsline {section}{\numberline {1.1}Opcodes}{1}{section.1.1}
 \contentsline {subsubsection}{OPC\_BUSY}{1}{section*.2}
 \contentsline {subsubsection}{OPC\_GPOFF}{2}{section*.3}
 \contentsline {subsubsection}{OPC\_GPON}{2}{section*.4}
 \contentsline {subsubsection}{OPC\_IDLE}{3}{section*.5}
-\contentsline {subsubsection}{OPC\_LOCO\_ADR}{3}{section*.6}
-\contentsline {subsubsection}{OPC\_SL\_RD\_DATA}{4}{section*.7}
+\contentsline {subsubsection}{OPC\_INPUT\_REP}{4}{section*.6}
+\contentsline {subsubsection}{OPC\_LOCO\_ADR}{5}{section*.7}
+\contentsline {subsubsection}{OPC\_LOCO\_DIRF}{6}{section*.8}
+\contentsline {subsubsection}{OPC\_LOCO\_SND}{7}{section*.9}
+\contentsline {subsubsection}{OPC\_LOCO\_SPD}{8}{section*.10}
+\contentsline {subsubsection}{OPC\_LONG\_ACK}{9}{section*.11}
+\contentsline {subsubsection}{OPC\_SL\_RD\_DATA}{10}{section*.12}
+\contentsline {subsubsection}{OPC\_SLOT\_STAT1}{13}{section*.13}
+\contentsline {subsubsection}{OPC\_SW\_ACK}{14}{section*.14}
+\contentsline {subsubsection}{OPC\_SW\_REP}{15}{section*.15}
+\contentsline {subsubsection}{OPC\_SW\_REQ}{17}{section*.16}
+\contentsline {subsubsection}{OPC\_WR\_SL\_DATA}{18}{section*.17}

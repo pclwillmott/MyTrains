@@ -3,9 +3,9 @@
  
 %!TEX root =  
 
-\chapter[Opcodes]{Loconet OpCodes}
+\chapter[Loconet Protocol]{Loconet Protocol}
 
-\section{Introduction}
+\section{Opcodes}
 
 \rule{15.1cm}{0.4pt}
 \subsubsection{OPC\_BUSY}
@@ -17,20 +17,28 @@
 
 \underline{Encoding:} 
 
-\begin{tabular}{l l l} 
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
 1 & 0 & 0 & 0 & 0 & 0 & 0 & 1\\
 \hline
 \end{tabular}
-& 0x81 & $<$OpCode$>$\\
-& \\
+& 0x81 & Opcode.\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
 0 & 1 & 1 & 1 & 1 & 1 & 1 & 0\\
 \hline
 \end{tabular}
-& 0x7E & $<$CheckSum$>$
+& 0x7E & Checksum.
 \end{tabular}
 
 \underline{Description:}
@@ -39,10 +47,11 @@ This message indicates that the master is busy. When sent to a command station i
 
 \underline{Response:} 
 
-NONE
+None.
 
 \underline{Notes:} 
 
+None.
 
 \rule{15.1cm}{0.4pt}
 \subsubsection{OPC\_GPOFF}
@@ -54,20 +63,28 @@ NONE
 
 \underline{Encoding:} 
 
-\begin{tabular}{l l l} 
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
 1 & 0 & 0 & 0 & 0 & 0 & 1 & 0\\
 \hline
 \end{tabular}
-& 0x82 & $<$OpCode$>$\\
-& \\
+& 0x82 & Opcode.\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
 0 & 1 & 1 & 1 & 1 & 1 & 0 & 1\\
 \hline
 \end{tabular}
-& 0x7D & $<$CheckSum$>$
+& 0x7D & Checksum.
 \end{tabular}
 
 \underline{Description:}
@@ -76,10 +93,11 @@ This command turns off the track power.
 
 \underline{Response:} 
 
-NONE
+None.
 
 \underline{Notes:} 
 
+None.
 
 \rule{15.1cm}{0.4pt}
 \subsubsection{OPC\_GPON}
@@ -91,20 +109,28 @@ NONE
 
 \underline{Encoding:} 
 
-\begin{tabular}{l l l} 
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
 1 & 0 & 0 & 0 & 0 & 0 & 1 & 1\\
 \hline
 \end{tabular}
-& 0x83 & $<$OpCode$>$\\
-& \\
+& 0x83 & Opcode.\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
 0 & 1 & 1 & 1 & 1 & 1 & 0 & 0\\
 \hline
 \end{tabular}
-& 0x7C & $<$CheckSum$>$
+& 0x7C & Checksum.
 \end{tabular}
 
 \underline{Description:}
@@ -129,6 +155,8 @@ The command station sends an OPC\_RQ\_SL\_DATA message for slot 0x7F. It also se
 
 \underline{Notes:} 
 
+None.
+
 \rule{15.1cm}{0.4pt}
 \subsubsection{OPC\_IDLE}
 \underline{Operation:} Force idle state and broadcast emergency stop.
@@ -139,20 +167,28 @@ The command station sends an OPC\_RQ\_SL\_DATA message for slot 0x7F. It also se
 
 \underline{Encoding:} 
 
-\begin{tabular}{l l l} 
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
 1 & 0 & 0 & 0 & 0 & 1 & 0 & 1\\
 \hline
 \end{tabular}
-& 0x85 & $<$OpCode$>$\\
-& \\
+& 0x85 & Opcode.\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
 0 & 1 & 1 & 1 & 1 & 0 & 1 & 0\\
 \hline
 \end{tabular}
-& 0x7A & $<$CheckSum$>$
+& 0x7A & Checksum.
 \end{tabular}
 
 \underline{Description:}
@@ -165,6 +201,98 @@ None
 
 \underline{Notes:} 
 
+None.
+
+\rule{15.1cm}{0.4pt}
+\subsubsection{OPC\_INPUT\_REP}
+\underline{Operation:} General sensor input report.
+
+\underline{Group:} \hspace{0.5cm} 4-Byte Message
+
+\underline{Direction:} \hspace{0.05cm} General sensor $\rightarrow$ 
+
+\underline{Encoding:} 
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 0 & 1 & 1 & 0 & 0 & 1 & 0\\
+\hline
+\end{tabular}
+& 0xB2 & Opcode.\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$IN1$>$ & Sensor address A7 to A1.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d6 & A7.\\
+d5 & A6.\\
+d4 & A5.\\
+d3 & A4.\\
+d2 & A3.\\
+d1 & A2.\\
+d0 & A1.\\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 1 & d5 & d4 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$IN2$>$ & Switch address A11 to A8 and sensor input state.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d5 & A0.\\
+d4 & Input state. 1 means sensor input $>=$ 6V, and 0 means sensor input = 0V.\\
+d3 & A11.\\
+d2 & A10.\\
+d1 & A9.\\
+d0 & A8.\\
+\end{tabular}
+
+Byte 3:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$CHK$>$ & Checksum.
+
+\end{tabular}
+
+\underline{Description:}
+
+General sensor report.
+
+\underline{Response:} 
+
+None.
+
+\underline{Notes:} 
+
+None.
+
 \rule{15.1cm}{0.4pt}
 \subsubsection{OPC\_LOCO\_ADR}
 \underline{Operation:} Request a slot number for a locomotive.
@@ -175,37 +303,53 @@ None
 
 \underline{Encoding:} 
 
-\begin{tabular}{l l l} 
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
 1 & 0 & 1 & 1 & 1 & 1 & 1 & 1\\
 \hline
 \end{tabular}
-& 0xBF & $<$OpCode$>$\\
-& \\
+& 0xBF & Opcode.\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & h & h & h & h & h & h & h\\
+0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$HADR$>$ & High Address Bits (Address $>>$ 7)\\
+& $<$ADR2$>$ & High address.\\
 & \\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & l & l & l & l & l & l & l\\
+0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$LADR$>$ & Low Address Bits (Address AND 0x7f)\\
-& \\
+& $<$ADR$>$ & Low address.\\
+\end{tabular}
+
+Byte 3:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & c & c & c & c & c & c & c\\
+0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$CHK$>$ & $<$CheckSum$>$
+& $<$CHK$>$ & Checksum.
 
 \end{tabular}
 
@@ -219,7 +363,321 @@ OPC\_SL\_RD\_DATA if success, otherwise OPC\_LONG\_ACK.
 
 \underline{Notes:} 
 
-The Loconet 1.1 specification specifies that $<$HADR$>$ shall be the value 0x00.
+The Loconet 1.1 specification specifies that $<$ADR2$>$ value is 0x00.
+
+\rule{15.1cm}{0.4pt}
+\subsubsection{OPC\_LOCO\_DIRF}
+\underline{Operation:} Set locomotive direction and function F0 to F4 states.
+
+\underline{Group:} \hspace{0.5cm} 4-Byte Message
+
+\underline{Direction:} \hspace{0.05cm} $\rightarrow$ Command Station
+
+\underline{Encoding:} 
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 0 & 1 & 0 & 0 & 0 & 0 & 1\\
+\hline
+\end{tabular}
+& 0xA1 & Opcode.\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$SLOT\#$>$ & Slot number in the range 0x00 to 0x7F.\\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$DIRF$>$ & Locomotive's direction and state of functions F0 to F4.\\
+& \\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.95\linewidth}} 
+d6 & Reserved. Set to 0.\\
+d5 & Locomotive direction. 1 means forward, 0 means backwards.\\
+d4 & F0 state. 1 means on, and 0 means off.\\
+d3 & F4 state. 1 means on, and 0 means off.\\
+d2 & F3 state. 1 means on, and 0 means off.\\
+d1 & F2 state. 1 means on, and 0 means off.\\
+d0 & F1 state. 1 means on, and 0 means off.\\
+\end{tabular}
+
+Byte 3:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$CHK$>$ & Checksum.
+
+\end{tabular}
+
+\underline{Description:}
+
+This function sets the locomotive's direction and function F0 to F4 states.
+
+\underline{Response:} 
+
+None.
+
+\underline{Notes:} 
+
+None.
+
+\rule{15.1cm}{0.4pt}
+\subsubsection{OPC\_LOCO\_SND}
+\underline{Operation:} Set locomotive sound functions.
+
+\underline{Group:} \hspace{0.5cm} 4-Byte Message
+
+\underline{Direction:} \hspace{0.05cm} $\rightarrow$ Command Station
+
+\underline{Encoding:} 
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 0 & 1 & 0 & 0 & 0 & 1 & 0\\
+\hline
+\end{tabular}
+& 0xA2 & Opcode.\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$SLOT\#$>$ & Slot number in the range 0x00 to 0x7F.\\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$SND$>$ & Locomotive's function F5 to F8 states.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d6 & Reserved. Set to 0.\\
+d5 & Reserved. Set to 0.\\
+d4 & Reserved. Set to 0.\\
+d3 & Reserved. Set to 0.\\
+d3 & Sound 4 / F8.\\
+d2 & Sound 3 / F7.\\
+d1 & Sound 2 / F6.\\
+d0 & Sound 1 / F5.\\
+\end{tabular}
+
+Byte 3:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$CHK$>$ & Checksum.
+
+\end{tabular}
+
+\underline{Description:}
+
+This function sets the locomotive's function F5 to F8 states.
+
+\underline{Response:} 
+
+None.
+
+\underline{Notes:} 
+
+None.
+
+\rule{15.1cm}{0.4pt}
+\subsubsection{OPC\_LOCO\_SPD}
+\underline{Operation:} Set locomotive speed.
+
+\underline{Group:} \hspace{0.5cm} 4-Byte Message
+
+\underline{Direction:} \hspace{0.05cm} $\rightarrow$ Command Station
+
+\underline{Encoding:} 
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 0 & 1 & 0 & 0 & 0 & 0 & 0\\
+\hline
+\end{tabular}
+& 0xA0 & Opcode.\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$SLOT\#$>$ & Slot number in the range 0x00 to 0x7F.\\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$SPD$>$ & Locomotive speed in the range 0x00 to 0x7F. 0x00 means inertial stop and 0x01 means emergency stop. Other values mean increasing speed.\\
+\end{tabular}
+
+Byte 3:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$CHK$>$ & Checksum.
+
+\end{tabular}
+
+\underline{Description:}
+
+This function sets the locomotive's speed.
+
+\underline{Response:} 
+
+None.
+
+\underline{Notes:} 
+
+None.
+
+\rule{15.1cm}{0.4pt}
+\subsubsection{OPC\_LONG\_ACK}
+\underline{Operation:} Long acknowledge.
+
+\underline{Group:} \hspace{0.5cm} 4-Byte Message
+
+\underline{Direction:} \hspace{0.05cm} $\rightarrow$ Command Station
+
+\underline{Encoding:} 
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 0 & 1 & 1 & 0 & 1 & 0 & 0\\
+\hline
+\end{tabular}
+& 0xB4 & Opcode.\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$LOPC$>$ & Opcode that this message is a response to with the most significant bit set to 0.\\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$ACK1$>$ & Response code.\\
+\end{tabular}
+
+Byte 3:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$CHK$>$ & Checksum.
+
+\end{tabular}
+
+\underline{Description:}
+
+This message provides a response code from a command.
+
+\underline{Response:} 
+
+None, it is the response.
+
+\underline{Notes:} 
+
+\begin{tabular}{l c c l}
+\underline{Responding Opcode} & \underline{$<$LOPC$>$} & \underline{$<$ACK1$>$} & \underline{Meaning}\\
+OPC\_SW\_ACK & 0x3D & 0x00 & DCS100 FIFO is full, command rejected.\\
+OPC\_SW\_ACK & 0x3D & 0x7F &  DCS100 command accepted.\\
+OPC\_MOVE\_SLOTS & 0x3A & 0x00 & Illegal move.\\
+OPC\_LINK\_SLOTS & 0x39 & 0x00 & Invalid link, link failed.\\
+OPC\_SW\_REQ & 0x30 & 0x00 & Command failed.\\
+OPC\_LOCO\_ADR & 0x3F & 0x00 & No free slot, command failed.\\
+\end{tabular}
 
 \rule{15.1cm}{0.4pt}
 \subsubsection{OPC\_SL\_RD\_DATA}
@@ -231,57 +689,66 @@ The Loconet 1.1 specification specifies that $<$HADR$>$ shall be the value 0x00.
 
 \underline{Encoding:} 
 
-BYTE 0:
+Byte 0:
 
-\begin{tabular}{p{0.4\linewidth} p{0.1\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
 1 & 1 & 1 & 0 & 0 & 1 & 1 & 1\\
 \hline
 \end{tabular}
-& 0xE7 & $<$OpCode$>$\\
-& \\
+& 0xE7 & Opcode.\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
 0 & 1 & 1 & 1 & 1 & 1 & 1 & 0\\
 \hline
 \end{tabular}
-& 0x0E & Message Length (14 bytes including checksum)\\
-& \\
+& 0x0E & Message length (14 bytes).\\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$SLOT$>$ & Slot number in the range 0x00 to 0x7F. Slot 0x00 is a special slot, and slots in the range 0x70 to 0x7F are reserved to Digitrax.\\
-& \\
+& $<$SLOT\#$>$ & Slot number in the range 0x00 to 0x7F. Slot 0x00 is a special slot, and slots in the range 0x70 to 0x7F are reserved to Digitrax.\\
+\end{tabular}
+
+Byte 3:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-s7 & s6 & s5 & s4 & s3 & s2 & s1 & s0\\
+d7 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-
-& $<$STAT1$>$ & Slot Status 1.\\
+& $<$STAT1$>$ & Slot status 1.\\
 \end{tabular}
 
 \begin{tabular}{p{0.05\linewidth} p{0.05\linewidth} p{0.05\linewidth} p{0.70\linewidth}} 
-& \underline{s7} & \underline{s6} & \\
+& \underline{d7} & \underline{d6} & \\
 & 0 & 0 & Free, no consist linking.\\
 & 0 & 1 & Consist sub-member.\\
 & 1 & 0 & Consist top-member.\\
 & 1 & 1 & Consist Mid-Consist member. \\
 \end{tabular}
 
-
-Note: s7 is set to 0 in the message by the command station and so may not correctly reflect the actual setting in the slot table.\\
-
+Note: d7 is set to 0 in the message by the command station and so may not correctly reflect the actual setting in the slot table.\\
 
 \begin{tabular}{p{0.05\linewidth} p{0.05\linewidth} p{0.05\linewidth} p{0.70\linewidth}} 
-& \underline{s5} & \underline{s4} & \\
+& \underline{d5} & \underline{d4} & \\
 & 0 & 0 & Free slot, no valid data. Not refreshed.\\
 & 0 & 1 & Common. Locomotive address in this slot. Refreshed.\\
 & 1 & 0 & Idle. Locomotive address in this slot. Not refreshed.\\
@@ -289,15 +756,13 @@ Note: s7 is set to 0 in the message by the command station and so may not correc
 \end{tabular}
 
  \begin{tabular}{p{0.05\linewidth} p{0.05\linewidth} p{0.05\linewidth} p{0.70\linewidth}} 
-& & \underline{s3} & \\
+& & \underline{d3} & \\
 & & 0 & No slot consist linked into this slot.\\
 & & 1 & Slot consist linked into this slot.\\
 \end{tabular}
 
-
-
 \begin{tabular}{p{0.05\linewidth} p{0.05\linewidth} p{0.05\linewidth} p{0.70\linewidth}} 
-\underline{s2} & \underline{s1} & \underline{s0} & \\
+\underline{d2} & \underline{d1} & \underline{d0} & \\
 0 & 0 & 0 & 28 step decoder. 3-byte packet regular mode\\
 0 & 0 & 1 & 28 step decoder. Generate trinary packets for this mobile address\\
 0 & 1 & 0 & 14 step decoder. \\
@@ -308,34 +773,43 @@ Note: s7 is set to 0 in the message by the command station and so may not correc
 1 & 1 & 1 & 128 step decoder. Allow advanced consisting\\
 \end{tabular}
 
-\begin{tabular}{p{0.4\linewidth} p{0.1\linewidth} p{0.5\linewidth}} 
+Byte 4:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & l & l & l & l & l & l & l\\
+0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$LADR$>$ & Low Address Bits (Address AND 0x7f)\\
-& \\
+& $<$ADR$>$ & Low address.\\
+\end{tabular}
+
+Byte 5:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & s & s & s & s & s & s & s\\
+0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
 & $<$SPD$>$ & Speed in the range 0x00 to 0x7F. 0x00 means inertial stop and 0x01 means emergency stop. Other values mean increasing speed.\\
-& \\
+\end{tabular}
+
+Byte 6:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
 0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-& $<$DIRF$>$ & Locomotive direction and state of function keys F0 to F4.\\
-& \\
+& $<$DIRF$>$ & Locomotive direction and state of functions F0 to F4.\\
 \end{tabular}
 
-\begin{tabular}{p{0.05\linewidth} l p{0.95\linewidth}} 
+\begin{tabular}{p{0.05\linewidth} p{0.95\linewidth}} 
 d6 & Reserved. Set to 0.\\
 d5 & Locomotive direction. 1 means forward, 0 means backwards.\\
 d4 & F0 state. 1 means on, and 0 means off.\\
@@ -345,76 +819,572 @@ d1 & F2 state. 1 means on, and 0 means off.\\
 d0 & F1 state. 1 means on, and 0 means off.\\
 \end{tabular}
 
-\begin{tabular}{p{0.4\linewidth} p{0.1\linewidth} p{0.5\linewidth}} 
+Byte 7:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & t6 & t5 & t4 & t3 & t2 & t1 & t0\\
+0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
 & $<$TRK$>$ & Global system track status.\\
 \end{tabular}
 
-\begin{tabular}{p{0.05\linewidth} l p{0.6\linewidth}} 
-t6 & Reserved. Set to 0.\\
-t5 & Reserved. Set to 0.\\
-t4 & Reserved. Set to 0.\\
-t3 & 1 means the programming track is busy.\\
-t2 & 1 means this master implements Loconet version 1.1 capability, \\
-& 0 means the master is a DT200.\\
-t1 & 0 means the track is paused, broadcast an emergency stop.\\
-t0 & 1 means the DCC packets are on in the master, global power up.\\
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d6 & Reserved. Set to 0.\\
+d5 & Reserved. Set to 0.\\
+d4 & Reserved. Set to 0.\\
+d3 & 1 means the programming track is busy.\\
+d2 & 1 means this master implements Loconet version 1.1 capability,  0 means the master is a DT200.\\
+d1 & 0 means the track is paused, broadcast an emergency stop.\\
+d0 & 1 means the DCC packets are on in the master, global power up.\\
 \end{tabular}
+
+Byte 8:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$SS2$>$ & Slot status 2.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d6 & Reserved. Set to 0.\\
+d5 & Reserved. Set to 0.\\
+d4 & Reserved. Set to 0.\\
+d3 & 1 means expansion in ID1/2, 0 means encoded alias.\\
+d2 & 1 means expansion ID1/2 is not ID usage.\\
+d1 & Reserved. Set to 0.\\
+d0 & 1 means this slot has suppressed advanced consist.\\
+\end{tabular}
+
+Byte 9:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$ADR2$>$ & High address.\\
+\end{tabular}
+
+Byte 10:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$SND$>$ & Slot sound / function mode II packets.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d6 & Reserved. Set to 0.\\
+d5 & Reserved. Set to 0.\\
+d4 & Reserved. Set to 0.\\
+d3 & Sound 4 / F8.\\
+d2 & Sound 3 / F7.\\
+d1 & Sound 2 / F6.\\
+d0 & Sound 1 / F5.\\
+\end{tabular}
+
+Byte 11:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$ID1$>$ & 7-bit ls ID code written by throttle when STAT2.4 = 1.\\
+\end{tabular}
+
+Byte 12:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$ID2$>$ & 7-bit ms ID code written by throttle when STAT2.4 = 1.\\
+\end{tabular}
+
+Byte 13:
 
 \begin{tabular}{p{0.4\linewidth} p{0.1\linewidth} p{0.5\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & i6 & i5 & i4 & i3 & i2 & i1 & i0\\
+0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$SS2$>$ & Slot Status 2.\\
+& $<$CHK$>$ & Checksum.\\
 \end{tabular}
 
-\begin{tabular}{p{0.05\linewidth} l p{0.6\linewidth}} 
-i6 & Reserved. Set to 0.\\
-i5 & Reserved. Set to 0.\\
-i4 & Reserved. Set to 0.\\
-i3 & Reserved. Set to 0.\\
-i3 & 1 means expansion in ID1/2, 0 means encoded alias.\\
-i2 & 1 means expansion ID1/2 is not ID usage.\\
-i1 & Reserved. Set to 0.\\
-i0 & 1 means this slot has supressed advanced consist.\\
-\end{tabular}
+\underline{Description:}
 
-\begin{tabular}{p{0.4\linewidth} p{0.1\linewidth} p{0.5\linewidth}} 
+This message is sent by the command station in response to a slot data request.
+
+\underline{Response:} 
+
+None.
+
+\underline{Notes:} 
+
+None.
+
+\rule{15.1cm}{0.4pt}
+\subsubsection{OPC\_SLOT\_STAT1}
+\underline{Operation:} Set slot status 1.
+
+\underline{Group:} \hspace{0.5cm} 4-Byte Message
+
+\underline{Direction:} \hspace{0.05cm} $\rightarrow$ Command Station
+
+\underline{Encoding:} 
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & h & h & h & h & h & h & h\\
+1 & 0 & 1 & 1 & 0 & 1 & 0 & 1\\
 \hline
 \end{tabular}
-& $<$HADR$>$ & High Address Bits (Address $>>$ 7)\\
-& \\
+& 0xB5 & Opcode.\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & c & c & c & c & c & c & c\\
+0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$CHK$>$ & Checksum\\
+& $<$SLOT\#$>$ & Slot number in the range 0x00 to 0x7F.\\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$STAT1$>$ & Slot status 1. See OPC\_SL\_RD\_DATA for bit encoding details.\\
+\end{tabular}
+
+Byte 3:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$CHK$>$ & Checksum.
 
 \end{tabular}
 
 \underline{Description:}
 
-This message is sent by the command station in response to a data request.
+This function sets the slot's status 1 values.
 
 \underline{Response:} 
 
-NONE
+None.
 
 \underline{Notes:} 
 
+None.
 
+\rule{15.1cm}{0.4pt}
+\subsubsection{OPC\_SW\_ACK}
+\underline{Operation:} Request switch command with acknowledge.
+
+\underline{Group:} \hspace{0.5cm} 4-Byte Message
+
+\underline{Direction:} \hspace{0.05cm} $\rightarrow$ Turnout controller
+
+\underline{Encoding:} 
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 0 & 1 & 1 & 1 & 1 & 0 & 1\\
+\hline
+\end{tabular}
+& 0xBD & Opcode.\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$SW1$>$ & Switch address A6 to A0.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d6 & A6.\\
+d5 & A5.\\
+d4 & A4.\\
+d3 & A3.\\
+d2 & A2.\\
+d1 & A1.\\
+d0 & A0.\\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$SW2$>$ & Switch address A10 to A7 and switch control bits.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d6 & Reserved. Set to 0.\\
+d5 & Direction. 1 means closed/green, and 0 means thrown/red.\\
+d4 & Output. 1 means on, and 0 means off.\\
+d3 & A10.\\
+d2 & A9.\\
+d1 & A8.\\
+d0 & A7.\\
+\end{tabular}
+
+Byte 3:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$CHK$>$ & Checksum.
+
+\end{tabular}
+
+\underline{Description:}
+
+Command a turnout controller to a specified state and send acknowledge.
+
+\underline{Response:} 
+
+OPC\_LONG\_ACK.
+
+\underline{Notes:} 
+
+None.
+
+\rule{15.1cm}{0.4pt}
+\subsubsection{OPC\_SW\_REP}
+\underline{Operation:} Turnout sensor report.
+
+\underline{Group:} \hspace{0.5cm} 4-Byte Message
+
+\underline{Direction:} \hspace{0.05cm} Turnout sensor $\rightarrow$ 
+
+\underline{Encoding:} 
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 0 & 1 & 1 & 0 & 0 & 0 & 1\\
+\hline
+\end{tabular}
+& 0xB1 & Opcode.\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$SN1$>$ & Sensor address.\\
+\end{tabular}
+
+\begin{tabular}{p{0.5\linewidth} p{0.5\linewidth}}
+\underline{SN2.d6 = 1} & \underline{SN2.d6 = 0}\\
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d6 & A7.\\
+d5 & A6.\\
+d4 & A5.\\
+d3 & A4.\\
+d2 & A3.\\
+d1 & A2.\\
+d0 & A1.\\
+\end{tabular} &
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d6 & A6.\\
+d5 & A5.\\
+d4 & A4.\\
+d3 & A3.\\
+d2 & A2.\\
+d1 & A1.\\
+d0 & A0.\\
+\end{tabular} \\
+
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$SN2$>$ & Sensor address and sensor state.\\
+\end{tabular}
+
+\begin{tabular}{p{0.5\linewidth} p{0.5\linewidth}}
+
+\underline{SN2.d6 = 1} & \underline{SN2.d6 = 0}\\
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d6 & Report type. 1 means the report is an input report, and 0 means the report is an output report.\\
+d5 & A0.\\
+d4 & Input sensor state, 1 means sensor $>=$ 6V, 0 means sensor = 0V.\\
+d3 & A11.\\
+d2 & A10.\\
+d1 & A9.\\
+d0 & A8.\\
+\end{tabular} &
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d6 & Report type. 1 means the report is an input report, and 0 means the report is an output report.\\
+d5 & 0 means closed output line is off, 1 means the closed output line is on.\\
+d4 & 0 means thrown output line is off, 1 means the thrown output line is on.\\
+d3 & A10.\\
+d2 & A9.\\
+d1 & A8.\\
+d0 & A7.\\
+\end{tabular} \\
+
+\end{tabular}
+
+Byte 3:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$CHK$>$ & Checksum.
+
+\end{tabular}
+
+\underline{Description:}
+
+Turnout sensor report.
+
+\underline{Response:} 
+
+None.
+
+\underline{Notes:} 
+
+None.
+
+\rule{15.1cm}{0.4pt}
+\subsubsection{OPC\_SW\_REQ}
+\underline{Operation:} Request switch command.
+
+\underline{Group:} \hspace{0.5cm} 4-Byte Message
+
+\underline{Direction:} \hspace{0.05cm} $\rightarrow$ Turnout controller
+
+\underline{Encoding:} 
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 0 & 1 & 1 & 0 & 0 & 0 & 0\\
+\hline
+\end{tabular}
+& 0xB0 & Opcode.\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$SW1$>$ & Switch address A6 to A0.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d6 & A6.\\
+d5 & A5.\\
+d4 & A4.\\
+d3 & A3.\\
+d2 & A2.\\
+d1 & A1.\\
+d0 & A0.\\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$SW2$>$ & Switch address A10 to A7 and switch control bits.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d6 & Reserved. Set to 0.\\
+d5 & Direction. 1 means closed/green, and 0 means thrown/red.\\
+d4 & Output. 1 means on, and 0 means off.\\
+d3 & A10.\\
+d2 & A9.\\
+d1 & A8.\\
+d0 & A7.\\
+\end{tabular}
+
+Byte 3:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$CHK$>$ & Checksum.
+
+\end{tabular}
+
+\underline{Description:}
+
+Command a turnout controller to a specified state.
+
+\underline{Response:} 
+
+OPC\_LONG\_ACK if command failed, otherwise no response.
+
+\underline{Notes:} 
+
+None.
+
+\rule{15.1cm}{0.4pt}
+\subsubsection{OPC\_WR\_SL\_DATA}
+\underline{Operation:} Write slot data.
+
+\underline{Group:} \hspace{0.5cm} Variable-Byte Message
+
+\underline{Direction:} \hspace{0.05cm} $\rightarrow$ Command Station  
+
+\underline{Encoding:} 
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 1 & 1 & 0 & 1 & 1 & 1 & 1\\
+\hline
+\end{tabular}
+& 0xEF & Opcode.\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 1 & 1 & 1 & 1 & 1 & 1 & 0\\
+\hline
+\end{tabular}
+& 0x0E & Message length (14 bytes).\\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$SLOT\#$>$ & Slot number in the range 0x00 to 0x7F. Slot 0x00 is a special slot, and slots in the range 0x70 to 0x7F are reserved to Digitrax.\\
+\end{tabular}
+
+Bytes 3 to 12 encode the same as bytes 3 to 12 of OPC\_SL\_RD\_DATA.
+
+Byte 13:
+
+\begin{tabular}{p{0.4\linewidth} p{0.1\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$CHK$>$ & Checksum.\\
+\end{tabular}
+
+\underline{Description:}
+
+This command sends the slot data to the command station.
+
+\underline{Response:} 
+
+Returns OPC\_LONG\_ACK.
+
+\underline{Notes:} 
+
+None.
 
