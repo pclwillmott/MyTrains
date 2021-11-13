@@ -5,6 +5,57 @@
 
 \chapter[Loconet Protocol]{Loconet Protocol}
 
+\section{Overview}
+
+LocoNet is a peer to peer distributed network system on which all devices can monitor the network data flow. The network is event driven by different devices in time, and is not polled by a centralised controller in normal operation. The normal LocoNet state is idle, with no data traffic unless a device has information to send. With no traffic flow, the network is quiet.
+
+LocoNet data is sent in asynchronous format using 1 start bit, 8 data bits and 1 stop bit. The 8 bit data is transmitted least significant bit first. The bit times are 60.0 $\mu$S or 16,660 baud +/- 1.5\%. A computer can connect to a Digitrax USB interface at higher baud rates and the device will make the necessary conversion. Bytes may be transmitted back-to-back, with a start bit immediately following the stop bit of the previous character. 
+
+Any message that has format or framing errors, data errors or is a fragment caused by noise glitches and does not completely follow the message format will be ignored by all receivers, and a new opcode will be scanned for re-synchronisation.
+
+The OPC\_BUSY opcode is included to allow the master to keep the network active whilst it is performing a task that requires a response, and entails a significant processing delay, i.e. it can ensure no new requests are started until it has responded to the last message. This OPC\_BUSY opcode should be simply stripped and ignored.
+
+If a device disconnects from LocoNet and so does not access or reference a slot within the system purge time, the master will force the un-accessed slot to common status so other system devices can use the slot. The typical purge time of a master is about 200 seconds. A good ``ping" or slot update activity is about every 100 seconds, i.e. if a user makes no change to a throttle/slot within 100 seconds, the throttle/device should automatically send another speed update at the current speed to reset the purge timeout for that slot.
+
+\section{Message Format}
+
+All LocoNet communications are via multi-byte messages. The master is defined as the device that is maintaining the refresh stack for DCC packet generation and is actively generating the DCC track data. Refresh of information is typically only performed for mobile decoders. Stationary type decoders are not refreshed and individual immediate commands are sent out to the track as requested.
+
+The master is only privileged in respect to performing the task of maintaining the locomotive refresh stack and generating DCC packets. In this way other network transactions may occur that the master does not need to be involved with or understand, as long as they follow the message protocol and timing requirements. i.e. Other devices may have a dialog on the network without disturbing or involving the master. Devices on LocoNet monitor the messages, check for format and data integrity and parse good messages to decode if action is required in the context. Devices such as throttles, input sensors, computer interfaces and control panels may generate LocoNet messages without needing prompting or polling by a central controller.
+
+Devices frequently will be added and removed from an operating LocoNet. The devices and protocol are tolerant of electrical and data transients. The format chosen gives a good degree of data integrity, guaranteed quick network-state synchronisation, high data throughput, good distribution of access to many competing devices and low event latency. Also, the devices may be operated without need for unique ID or other requirements that can make network administration awkward.
+
+The data bytes on LocoNet are defined as 8 bit data with the most significant bit as an opcode flag bit. If the most significant bit, d7, is 1 then the 7 least significant bits are interpreted as a network opcode . The opcode byte may only occur once in a valid message and is the first byte of a message. All the remaining bytes in the message must have a most significant bit of 0, including the last checksum byte. The checksum is the 1's complement of the byte wise exclusive or of all the bytes in the message, except the checksum itself. To validate data accuracy, all the bytes in a correctly formatted message are exclusive or'ed. If this resulting byte value is 0xFF, then the message data is accepted as good.
+
+The opcodes may be examined to determine message length and if subsequent response message is required. Data bits d6 and d5 encode the message length. The message length includes the opcode and the checksum bytes. The bit d3 = 1 implies that a follow-on message or reply is expected.
+
+\begin{tabular}{p{0.05\linewidth} p{0.05\linewidth}  p{0.05\linewidth}  p{0.05\linewidth}  p{0.05\linewidth}  p{0.05\linewidth}  p{0.05\linewidth}  p{0.05\linewidth} p{0.5\linewidth} p{0.5\linewidth}} 
+\underline{d7} & \underline{d6} & \underline{d5} & \underline{d4} & \underline{d3} & \underline{d2} & \underline{d1} & \underline{d0} & \\
+1 & 0 & 0 & E & D & C & B & A & 2 byte message\\
+1 & 0 & 1 & E & D & C & B & A & 4 byte message\\
+1 & 1 & 0 & E & D & C & B & A & 6 byte message\\
+1 & 1 & 1 & E & D & C & B & A & Variable length message. The next byte in the message is a 7 bit byte count.\\
+\end{tabular}
+
+The A,B,C,D,E are bits available to encode 32 opcodes per message length.
+
+\section{Refresh Slots}
+The model of the master refresh stack is an array of up to 120 read/write refresh slots. The slot address is a principal component and is generally the second byte or 1st argument of a message to the master. The refresh slot contains up to 10 data bytes relating to a locomotive and also controls a task in the track DCC refresh stack. Most mobile decoder or locomotive operations process the slot associated with the locomotive to be controlled. The slot number is a similar shorthand ID\# to a file handle. Slot addresses 120-127 are reserved for system and master control. Slot \#124 (0x7C) is allocated for read/write access to the programming track, and the format of the 10 data bytes is not the same as a normal slot. 
+
+\section{Standard Address Selection}
+
+To request a mobile or locomotive decoder task in the refresh stack, a throttle device requests a locomotive address for use,(opcode OPC\_LOCO\_ADR). The master (or computer in a limited master environment) responds with a slot data read for the slot,(OPC\_SL\_RD\_DATA), that contains this locomotive address and all of its state information. If the address is currently not in any slot, the master will load this new locomotive address into a new slot (speed=0, direction forwards, functions off and 128 step mode) and return this as a OPC\_SL\_RD\_DATA. If no inactive slots are free to load the new locomotive address, the response will be the OPC\_LONG\_ACK with a fail code 0x00.
+
+The throttle/computer must then examine the slot data bytes to work out how to process the master response. If the slot status 1 byte shows the slot to be common idle or new the throttle may change the slot to in use by performing a null move instruction (see OPC\_MOVE\_SLOTS) on this slot. This activation mechanism is used to guarantee proper slot usage interlocking in a multi-user asynchronous environment.
+
+If the slot return information shows the locomotive requested is in use or up-consisted (i.e. the SL\_CONUP, bit 6 of slot status 1 = 1) the user should not use the slot. Any up-consisted locomotives must be unlinked before usage. Always process the result from the OPC\_LINK\_SLOTS and OPC\_UNLINK\_SLOTS commands, since the master reserves the right to change the reply slot number and can reject the linking tasks under several circumstances. Verify the reply slot number and the link UP/DN bits in slot status 1 are as you expected.
+
+The throttle will then be able to update speed, direction and function information. Whenever slot information is changed in an active slot , the slot is flagged to be updated as the next DCC packet sent to the track. If the slot is part of linked consist slots the whole consist chain is updated consecutively.
+
+If a throttle is disconnected from the LocoNet, upon reconnection (if the throttle retains the slot state from before disconnection) it will request the full status of the slot it was previously using. If the reported status and speed, function data etc., from the master exactly matches the remembered slot state the throttle will continue using the slot. If the SLOT data does not match, the throttle will assume the slot was purged free by the system and will go through the setup log on procedure again.
+
+With this procedure the throttle does not need to have a unique ID number. slot addresses do not imply they contain any particular locomotive address. The system can be mapped such that the slot address matches the locomotive address within, if the user directly reads and writes to slots without using the master to allocate locomotive addresses.
+
 \section{Opcodes}
 
 \rule{15.1cm}{0.4pt}
@@ -44,6 +95,87 @@ Byte 1:
 \underline{Description:}
 
 This message indicates that the master is busy. When sent to a command station it responds with an OPC\_PEER\_XFER message.
+
+\underline{Response:} 
+
+None.
+
+\underline{Notes:} 
+
+None.
+
+\rule{15.1cm}{0.4pt}
+\subsubsection{OPC\_CONSIST\_FUNC}
+\underline{Operation:} Set function bits in a consist uplink element.
+
+\underline{Group:} \hspace{0.5cm} 4-Byte Message
+
+\underline{Direction:} \hspace{0.05cm} $\rightarrow$ Command Station
+
+\underline{Encoding:} 
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 0 & 1 & 1 & 0 & 1 & 1 & 0\\
+\hline
+\end{tabular}
+& 0xB6 & Opcode.\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$SLOT\#$>$ & Slot number in the range 0x00 to 0x7F.\\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$DIRF$>$ & Consist element's direction and state of functions F0 to F4.\\
+& \\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.95\linewidth}} 
+d6 & Reserved. Set to 0.\\
+d5 & Locomotive direction. 1 means forward, 0 means backwards.\\
+d4 & F0 state. 1 means on, and 0 means off.\\
+d3 & F4 state. 1 means on, and 0 means off.\\
+d2 & F3 state. 1 means on, and 0 means off.\\
+d1 & F2 state. 1 means on, and 0 means off.\\
+d0 & F1 state. 1 means on, and 0 means off.\\
+\end{tabular}
+
+Byte 3:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$CHK$>$ & Checksum.
+\end{tabular}
+
+\underline{Description:}
+
+This function sets the consist element's direction and function F0 to F4 states.
 
 \underline{Response:} 
 
@@ -204,6 +336,179 @@ None
 None.
 
 \rule{15.1cm}{0.4pt}
+\subsubsection{OPC\_IMM\_PACKET}
+\underline{Operation:} Send n-byte packet immediate.
+
+\underline{Group:} \hspace{0.5cm} Variable-Byte Message
+
+\underline{Direction:} \hspace{0.05cm} $\rightarrow$ command station  
+
+\underline{Encoding:} 
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 1 & 1 & 0 & 1 & 1 & 0 & 1\\
+\hline
+\end{tabular}
+& 0xED & Opcode.\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 1 & 0 & 0 & 0 & 0\\
+\hline
+\end{tabular}
+& 0x0B & Message length (11 bytes).\\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
+\hline
+\end{tabular}
+& 0x7F & Source id in the range 0x00 to 0x7F.\\
+\end{tabular}
+
+Byte 3:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$REPS$>$ & Number of immediate bytes and repeat count.
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d6 & N2. Number of immediate bytes.\\
+d5 & N1. Number of immediate bytes.\\
+d4 & N0. Number of immediate bytes.\\
+d3 & A4. Reserved. Set to 0.\\
+d2 & R2. Repeat count.\\
+d1 & R1. Repeat count.\\
+d0 & R0. Repeat count.\\
+\end{tabular}
+
+Byte 4:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 1 & d4 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$DHII$>$ & High bits of IM1 to IM5.
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d4 & IM5.7. High bit.\\
+d3 & IM4.7. High bit.\\
+d2 & IM3.7. High bit.\\
+d1 & IM2.7. High bit.\\
+d0 & IM1.7. High bit.\\
+\end{tabular}
+
+Byte 5:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$IM1$>$ & Data item 1 low 7 bits.
+\end{tabular}
+
+Byte 6:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$IM2$>$ & Data item 2 low 7 bits.
+\end{tabular}
+
+Byte 7:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$IM3$>$ & Data item 3 low 7 bits.
+\end{tabular}
+
+Byte 8:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$IM4$>$ & Data item 4 low 7 bits.
+\end{tabular}
+
+Byte 9:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$IM5$>$ & Data item 5 low 7 bits.
+\end{tabular}
+
+Byte 10:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$CHK$>$ & Checksum.
+
+\end{tabular}
+
+\underline{Description:}
+
+Send n-byte packet immediate.
+
+\underline{Response:} 
+
+OPC\_LONG\_ACK.
+
+\underline{Notes:} 
+
+None.
+
+\rule{15.1cm}{0.4pt}
 \subsubsection{OPC\_INPUT\_REP}
 \underline{Operation:} General sensor input report.
 
@@ -294,6 +599,77 @@ None.
 None.
 
 \rule{15.1cm}{0.4pt}
+\subsubsection{OPC\_LINK\_SLOTS}
+\underline{Operation:} Link slots.
+
+\underline{Group:} \hspace{0.5cm} 4-Byte Message
+
+\underline{Direction:} \hspace{0.05cm} $\rightarrow$ Command Station
+
+\underline{Encoding:} 
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 0 & 1 & 1 & 1 & 0 & 0 & 1\\
+\hline
+\end{tabular}
+& 0xB9 & Opcode.\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$SL1$>$ & Slot number in the range 0x00 to 0x7F.\\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$SL2$>$ & Slot number in the range 0x00 to 0x7F.\\
+& \\
+\end{tabular}
+
+Byte 3:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$CHK$>$ & Checksum.
+\end{tabular}
+
+\underline{Description:}
+
+This function links slot SL1 to slot SL2. The command station setsSL\_CONUP/DN flags appropriately. Invalid link will return a fail acknowledgement.
+
+\underline{Response:} 
+
+OPC\_SL\_RD\_DATA or OPC\_LONG\_ACK.
+
+\underline{Notes:} 
+
+None.
+
+\rule{15.1cm}{0.4pt}
 \subsubsection{OPC\_LOCO\_ADR}
 \underline{Operation:} Request a slot number for a locomotive.
 
@@ -325,7 +701,6 @@ Byte 1:
 \hline
 \end{tabular}
 & $<$ADR2$>$ & High address.\\
-& \\
 \end{tabular}
 
 Byte 2:
@@ -356,6 +731,8 @@ Byte 3:
 \underline{Description:}
 
 This message requests the slot number for the selected locomotive address. If the locomotive is found in the slot table then the command station returns an OPC\_SL\_RD\_DATA message with the slot information. If it is not found then the command station will put the locomotive into a free slot and then return an OPC\_SL\_RD\_DATA message with the slot information. If there are no free slots then the command station returns an OPC\_LONG\_ACK error code.
+
+Note that regular short 7 bit NMRA addresses are denoted by $<$ADR2$>$ = 0. The Analog, zero stretched, locomotive is selected when both $<$ADR2$>$ = 0 and $<$ADR$>$ = 0. $<$ADR$>$ is always a 7 bit value. If $<$ADR2$>$ is non-zero then the master will generate NMRA type 14 bit or long address packets using all 14 bits from $<$ADR2$>$ and $<$ADR$>$ with $<$ADR2$>$ being the most significant address bits. Note that a DT200 Master does not process 14 bit address requests and will consider the $<$ADR2$>$ to be zero. You can check the $<$TRK$>$ return bits to see if the master is a DT200.
 
 \underline{Response:} 
 
@@ -432,7 +809,6 @@ Byte 3:
 \hline
 \end{tabular}
 & $<$CHK$>$ & Checksum.
-
 \end{tabular}
 
 \underline{Description:}
@@ -442,6 +818,52 @@ This function sets the locomotive's direction and function F0 to F4 states.
 \underline{Response:} 
 
 None.
+
+\underline{Notes:} 
+
+None.
+
+\rule{15.1cm}{0.4pt}
+\subsubsection{OPC\_LOCO\_RESET}
+\underline{Operation:} Loco reset button has been pressed on the command station.
+
+\underline{Group:} \hspace{0.5cm} 2-Byte Message
+
+\underline{Direction:} \hspace{0.05cm} Command Station $\rightarrow$ 
+
+\underline{Encoding:} 
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 0 & 0 & 0 & 1 & 0 & 1 & 0\\
+\hline
+\end{tabular}
+& 0x8A & Opcode.\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 1 & 1 & 1 & 0 & 1 & 0 & 1\\
+\hline
+\end{tabular}
+& 0x75 & Checksum.
+\end{tabular}
+
+\underline{Description:}
+
+The Loco reset button has been pressed.
+
+\underline{Response:} 
+
+None, this is a response.
 
 \underline{Notes:} 
 
@@ -514,7 +936,6 @@ Byte 3:
 \hline
 \end{tabular}
 & $<$CHK$>$ & Checksum.
-
 \end{tabular}
 
 \underline{Description:}
@@ -585,7 +1006,6 @@ Byte 3:
 \hline
 \end{tabular}
 & $<$CHK$>$ & Checksum.
-
 \end{tabular}
 
 \underline{Description:}
@@ -656,7 +1076,6 @@ Byte 3:
 \hline
 \end{tabular}
 & $<$CHK$>$ & Checksum.
-
 \end{tabular}
 
 \underline{Description:}
@@ -677,7 +1096,427 @@ OPC\_MOVE\_SLOTS & 0x3A & 0x00 & Illegal move.\\
 OPC\_LINK\_SLOTS & 0x39 & 0x00 & Invalid link, link failed.\\
 OPC\_SW\_REQ & 0x30 & 0x00 & Command failed.\\
 OPC\_LOCO\_ADR & 0x3F & 0x00 & No free slot, command failed.\\
+OPC\_IMM\_PACKET & 0x7D & 0x7F & Command OK, if not limited master.\\
+OPC\_IMM\_PACKET & 0x7E & $<$lim address$>$ & Command OK, if limited master.\\
+OPC\_IMM\_PACKET & 0x7D & 0x00 & Internal buffer busy or full.\\
 \end{tabular}
+
+\rule{15.1cm}{0.4pt}
+\subsubsection{OPC\_MOVE\_SLOTS}
+\underline{Operation:} Move slot.
+
+\underline{Group:} \hspace{0.5cm} 4-Byte Message
+
+\underline{Direction:} \hspace{0.05cm} $\rightarrow$ Switch
+
+\underline{Encoding:} 
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 0 & 1 & 1 & 1 & 0 & 1 & 0\\
+\hline
+\end{tabular}
+& 0xBA & Opcode.\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$SRC$>$ & Source slot number in the range 0x00 to 0x77.\\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$DEST$>$ & Destination slot number in the range 0x00 to 0x77.\\
+\end{tabular}
+
+Byte 3:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$CHK$>$ & Checksum.
+
+\end{tabular}
+
+\underline{Description:}
+
+Move slots.
+
+\begin{tabular}{p{0.2\linewidth} p{0.2\linewidth} p{0.5\linewidth}} 
+\underline{SRC} & \underline{DEST} & \underline{Action}\\
+0x00 & Don't Care & Dispatch get. Return slot read of dispatch slot.\\
+SRC & SRC & Null move. SRC is set to in use.\\
+SRC & 0x00 & Dispatch put. Mark slot as dispatch.\\
+SRC & DEST & Move slot data from SRC to DEST if not in use. Clear SRC.\\
+\end{tabular}
+
+\underline{Response:} 
+
+OPC\_SL\_RD\_DATA or OPC\_LONG\_ACK.
+
+\underline{Notes:} 
+
+None.
+
+\rule{15.1cm}{0.4pt}
+\subsubsection{OPC\_PEER\_XFER}
+\underline{Operation:} Move 8 bytes peer to peer.
+
+\underline{Group:} \hspace{0.5cm} Variable-Byte Message
+
+\underline{Direction:} \hspace{0.05cm} device $\rightarrow$ device  
+
+\underline{Encoding:} 
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 1 & 1 & 0 & 0 & 1 & 0 & 1\\
+\hline
+\end{tabular}
+& 0xE5 & Opcode.\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 1 & 0 & 0 & 0 & 0\\
+\hline
+\end{tabular}
+& 0x10 & Message length (16 bytes).\\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$SRC$>$ & Source id in the range 0x00 to 0x7F.\\
+\end{tabular}
+
+Byte 3:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$DSTL$>$ & Destination id low in the range 0x00 to 0x7F.\\
+\end{tabular}
+
+Byte 4:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$DSTH$>$ & Destination id high in the range 0x00 to 0x7F.\\
+\end{tabular}
+
+Byte 5:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$PXCT1$>$ & Address type code and high bits of D1 to D4.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d6 & XC2. Address type code.\\
+d5 & XC1. Address type code.\\
+d4 & XC0. Address type code.\\
+d3 & D4.7. High bit\\
+d2 & D3.7. High bit\\
+d1 & D2.7. High bit\\
+d0 & D1.7. High bit\\
+\end{tabular}
+
+\begin{tabular}{p{0.1\linewidth} p{0.1\linewidth} p{0.1\linewidth} p{0.4\linewidth}} 
+\underline{XC2} & \underline{XC1} & \underline{XC0} & \underline{Meaning}\\
+0 & 0 & 0 & 7 bit peer to peer addresses.\\
+0 & 0 & 1 & reserved.\\
+0 & 1 & 0 & reserved.\\
+0 & 1 & 1 & reserved.\\
+1 & 0 & 0 & reserved.\\
+1 & 0 & 1 & reserved.\\
+1 & 1 & 0 & reserved.\\
+1 & 1 & 1 & reserved.\\
+\end{tabular}
+
+Byte 6:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$D1$>$ & Data item 1. Low 7 bits.\\
+\end{tabular}
+
+Byte 7:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$D2$>$ & Data item 2. Low 7 bits.\\
+\end{tabular}
+
+Byte 8:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$D3$>$ & Data item 3. Low 7 bits.\\
+\end{tabular}
+
+Byte 9:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$D4$>$ & Data item 4. Low 7 bits.\\
+\end{tabular}
+
+Byte 10:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$PXCT2$>$ & Data type code and high bits for D5 to D8.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d6 & XC5. Data type code.\\
+d5 & XC4. Data type code.\\
+d4 & XC3. Data type code.\\
+d3 & D8.7. High bit\\
+d2 & D7.7. High bit\\
+d1 & D6.7. High bit\\
+d0 & D5.7. High bit\\
+\end{tabular}
+
+\begin{tabular}{p{0.1\linewidth} p{0.1\linewidth} p{0.1\linewidth} p{0.4\linewidth}} 
+\underline{XC5} & \underline{XC4} & \underline{XC3} & \underline{Meaning}\\
+0 & 0 & 0 & ANSI text string.\\
+0 & 0 & 1 & reserved.\\
+0 & 1 & 0 & reserved.\\
+0 & 1 & 1 & reserved.\\
+1 & 0 & 0 & reserved.\\
+1 & 0 & 1 & reserved.\\
+1 & 1 & 0 & reserved.\\
+1 & 1 & 1 & reserved.\\
+\end{tabular}
+
+Byte 11:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$D5$>$ & Data item 5. Low 7 bits.\\
+\end{tabular}
+
+Byte 12:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$D6$>$ & Data item 6. Low 7 bits.\\
+\end{tabular}
+
+Byte 13:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$D7$>$ & Data item 7. Low 7 bits.\\
+\end{tabular}
+
+Byte 14:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$D8$>$ & Data item 8. Low 7 bits.\\
+\end{tabular}
+
+Byte 15:
+
+\begin{tabular}{p{0.4\linewidth} p{0.1\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$CHK$>$ & Checksum.\\
+\end{tabular}
+
+\underline{Description:}
+
+This command sends the data from one device to another peer to peer.
+
+\begin{tabular}{p{0.2\linewidth} p{0.1\linewidth} p{0.1\linewidth} p{0.4\linewidth}} 
+\underline{SRC} & \underline{DSTL} & \underline{DSTH} & Comments\\
+0x00 & & & Source is command station.\\
+Don't Care & 0x00 & 0x00 & Broadcast Message.\\
+0x70 to 0x7E & & & Reserved.\\
+0x7F & 0x00 & 0x00 & Broadcast throttle message transfer.\\
+0x7F & ID1 & ID2 & Throttle message transfer. ID1 and ID2 encode ID.\\
+\end{tabular}
+
+\underline{Response:} 
+
+None
+
+\underline{Notes:} 
+
+None.
+
+\rule{15.1cm}{0.4pt}
+\subsubsection{OPC\_RQ\_SL\_DATA}
+\underline{Operation:} Request slot data or status block.
+
+\underline{Group:} \hspace{0.5cm} 4-Byte Message
+
+\underline{Direction:} \hspace{0.05cm} $\rightarrow$ Switch
+
+\underline{Encoding:} 
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 0 & 1 & 1 & 1 & 0 & 1 & 1\\
+\hline
+\end{tabular}
+& 0xBB & Opcode.\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$SLOT\#$>$ & Slot number in the range 0x00 to 0x7F. 0 returns the command station status block\\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+\hline
+\end{tabular}
+& 0x00 & Reserved.\\
+\end{tabular}
+
+Byte 3:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$CHK$>$ & Checksum.
+
+\end{tabular}
+
+\underline{Description:}
+
+Request slot data or status block.
+
+\underline{Response:} 
+
+OPC\_SL\_RD\_DATA.
+
+\underline{Notes:} 
+
+None.
 
 \rule{15.1cm}{0.4pt}
 \subsubsection{OPC\_SL\_RD\_DATA}
@@ -985,7 +1824,7 @@ Byte 2:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & n & n & n & n & n & n & n\\
+0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
 & $<$STAT1$>$ & Slot status 1. See OPC\_SL\_RD\_DATA for bit encoding details.\\
@@ -1301,7 +2140,6 @@ Byte 3:
 \hline
 \end{tabular}
 & $<$CHK$>$ & Checksum.
-
 \end{tabular}
 
 \underline{Description:}
@@ -1311,6 +2149,157 @@ Command a turnout controller to a specified state.
 \underline{Response:} 
 
 OPC\_LONG\_ACK if command failed, otherwise no response.
+
+\underline{Notes:} 
+
+None.
+
+\rule{15.1cm}{0.4pt}
+\subsubsection{OPC\_SW\_STATE}
+\underline{Operation:} Request state of switch.
+
+\underline{Group:} \hspace{0.5cm} 4-Byte Message
+
+\underline{Direction:} \hspace{0.05cm} $\rightarrow$ Switch
+
+\underline{Encoding:} 
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 0 & 1 & 1 & 1 & 1 & 0 & 0\\
+\hline
+\end{tabular}
+& 0xBC & Opcode.\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$SW1$>$ & Switch address A6 to A0.\\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$SW2$>$ & Switch address A10 to A7 and switch control bits.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d6 & Reserved. Set to 0.\\
+d5 & Direction. 1 means closed/green, and 0 means thrown/red.\\
+d4 & Output. 1 means on, and 0 means off.\\
+d3 & A10.\\
+d2 & A9.\\
+d1 & A8.\\
+d0 & A7.\\
+\end{tabular}
+
+Byte 3:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$CHK$>$ & Checksum.
+
+\end{tabular}
+
+\underline{Description:}
+
+Request state of switch.
+
+\underline{Response:} 
+
+OPC\_LONG\_ACK.
+
+\underline{Notes:} 
+
+This needs to be tested to see what the real purpose is.
+
+\rule{15.1cm}{0.4pt}
+\subsubsection{OPC\_UNLINK\_SLOTS}
+\underline{Operation:} Unlink slots.
+
+\underline{Group:} \hspace{0.5cm} Variable-Byte Message
+
+\underline{Direction:} \hspace{0.05cm} $\rightarrow$ Command Station  
+
+\underline{Encoding:} 
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 0 & 1 & 1 & 1 & 0 & 0 & 0\\
+\hline
+\end{tabular}
+& 0xB8 & Opcode.\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$SL1$>$ & Slot number in the range 0x00 to 0x7F.\\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$SL2$>$ & Slot number in the range 0x00 to 0x7F.\\
+\end{tabular}
+
+Byte 3:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$CHK$>$ & Checksum.\\
+\end{tabular}
+
+\underline{Description:}
+
+This command unlinks slot SL1 from slot SL2.
+
+\underline{Response:} 
+
+Returns OPC\_SL\_RD\_DATA or OPC\_LONG\_ACK.
 
 \underline{Notes:} 
 
