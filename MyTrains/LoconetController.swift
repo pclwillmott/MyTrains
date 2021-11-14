@@ -11,8 +11,8 @@ public class LoconetController : LoconetMessengerDelegate  {
   
   init() {
   
-    let connections = [//"/dev/cu.usbmodemDxP431751"
-                      "/dev/cu.usbmodemDxP470881"
+    let connections = ["/dev/cu.usbmodemDxP431751"
+                    //  "/dev/cu.usbmodemDxP470881"
                       // "/dev/cu.usbmodemDtrxA0BA1"
     ]
     
@@ -87,10 +87,12 @@ public class LoconetController : LoconetMessengerDelegate  {
       if slot.slotNumber > 0 && slot.slotNumber < 120 {
         if let locomotive = locomotivesByAddress[slot.locoAddress] {
           locomotive.slot = slot
+          /*
           if slot.locoUsage != .inUse {
             locomotive.nullMove()
           }
-          
+           */
+          /*
           locomotive.stateF2 = false
           
           locomotive.stateF3 = false
@@ -103,6 +105,7 @@ public class LoconetController : LoconetMessengerDelegate  {
           locomotive.locoDirection = .backwards
            
           locomotive.speed = 60
+           */
         }
         else {
           print("LoconetSlotDataMessageReceived: loco with address \(slot.locoAddress) not found")
