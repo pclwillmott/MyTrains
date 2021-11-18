@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.5.28)  17 NOV 2021 20:13
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.5.28)  17 NOV 2021 20:53
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -378,12 +378,12 @@ Chapter 1.
 [1
 
 
-]
+] [2]
 Overfull \hbox (95.01001pt too wide) in paragraph at lines 32--39
 [][] 
  []
 
-[2]
+
 Overfull \hbox (3.02245pt too wide) in paragraph at lines 55--55
 []\OT1/cmr/m/n/10.95 d7| 
  []
@@ -3427,7 +3427,7 @@ sr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr
 /local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/l
 ocal/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsl10.pfb></usr/lo
 cal/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on "Network Notes.pdf" (49 pages, 179416 bytes).
+Output written on "Network Notes.pdf" (49 pages, 179441 bytes).
 PDF statistics:
  340 PDF objects out of 1000 (max. 8388607)
  278 compressed objects within 3 object streams
