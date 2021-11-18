@@ -24,7 +24,7 @@
 		DAA83DEF272C37680075CBCD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DAA83DEE272C37680075CBCD /* Assets.xcassets */; };
 		DAA83DF2272C37680075CBCD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DAA83DF0272C37680075CBCD /* Main.storyboard */; };
 		DAEA9CF7272D8DA900C9B3EC /* LoconetConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEA9CF6272D8DA900C9B3EC /* LoconetConstants.swift */; };
-		DAEA9CFA272D8FBE00C9B3EC /* LoconetMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEA9CF9272D8FBE00C9B3EC /* LoconetMessage.swift */; };
+		DAEA9CFA272D8FBE00C9B3EC /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEA9CF9272D8FBE00C9B3EC /* Message.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,7 +71,7 @@
 		DAA83DF1272C37680075CBCD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		DAA83DF3272C37680075CBCD /* MyTrains.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MyTrains.entitlements; sourceTree = "<group>"; };
 		DAEA9CF6272D8DA900C9B3EC /* LoconetConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoconetConstants.swift; sourceTree = "<group>"; };
-		DAEA9CF9272D8FBE00C9B3EC /* LoconetMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoconetMessage.swift; sourceTree = "<group>"; };
+		DAEA9CF9272D8FBE00C9B3EC /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,7 +135,7 @@
 				DA7B4729273824F700BCD587 /* LoconetQueueItem.swift */,
 				DA2E0E54273591A600C7DA7A /* LoconetTurnoutOutputMessage.swift */,
 				DA2E0E592736B8AA00C7DA7A /* LoconetRequestSlotDataMessage.swift */,
-				DAEA9CF9272D8FBE00C9B3EC /* LoconetMessage.swift */,
+				DAEA9CF9272D8FBE00C9B3EC /* Message.swift */,
 				DA5E1742272EDA5B00F9341F /* LoconetSlotDataMessage.swift */,
 				DA5E173D272EB23100F9341F /* LoconetSensorMessage.swift */,
 				DA5E1740272ED2DF00F9341F /* LoconetSwitchRequestMessage.swift */,
@@ -251,7 +251,7 @@
 				DA2E0E5A2736B8AA00C7DA7A /* LoconetRequestSlotDataMessage.swift in Sources */,
 				DA2E0E5827359ED300C7DA7A /* LoconetLongAcknowledgeMessage.swift in Sources */,
 				DA5E1743272EDA5B00F9341F /* LoconetSlotDataMessage.swift in Sources */,
-				DAEA9CFA272D8FBE00C9B3EC /* LoconetMessage.swift in Sources */,
+				DAEA9CFA272D8FBE00C9B3EC /* Message.swift in Sources */,
 				DA8FC5E8272C759A00FCCFCA /* LoconetMessenger.swift in Sources */,
 				DA5E1741272ED2DF00F9341F /* LoconetSwitchRequestMessage.swift in Sources */,
 			);
