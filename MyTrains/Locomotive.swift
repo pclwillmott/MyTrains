@@ -59,7 +59,7 @@ public class Locomotive {
     }
   }
 
-  public var sound3 : Bool {
+  public var sound3 : Bool {     
     get {
       return slot!.sound3
     }
