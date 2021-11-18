@@ -13,6 +13,6 @@ public class LoconetOutputQueueItem {
     self.message = message
   }
   
-  public var message:Data
+  public var message:Data  
   
 }
