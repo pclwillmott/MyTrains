@@ -93,7 +93,7 @@ public class LoconetController : LoconetMessengerDelegate  {
           }
            */
           /*
-          locomotive.stateF2 = false
+          locomotive.stateF2 = false 
           
           locomotive.stateF3 = false
           locomotive.stateF4 = false
