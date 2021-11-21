@@ -7,29 +7,29 @@
 
 \section{Overview}
 
-the Network is a peer to peer distributed network system on which all devices can monitor the network data flow. The network is event driven by different devices in time, and is not polled by a centralised controller in normal operation. The normal the Network state is idle, with no data traffic unless a device has information to send. With no traffic flow, the network is quiet.
+Loconet is a peer to peer distributed network system on which all devices can monitor the network data flow. The network is event driven by different devices in time, and is not polled by a centralised controller in normal operation. The normal the network state is idle, with no data traffic unless a device has information to send. With no traffic flow, the network is quiet.
 
-the Network data is sent in asynchronous format using 1 start bit, 8 data bits and 1 stop bit. The 8 bit data is transmitted least significant bit first. The bit times are 60.0 $\mu$S or 16,660 baud +/- 1.5\%. A computer can connect to a Digitrax USB interface at higher baud rates and the device will make the necessary conversion. Bytes may be transmitted back-to-back, with a start bit immediately following the stop bit of the previous character. 
+The network data is sent in asynchronous format using 1 start bit, 8 data bits and 1 stop bit. The 8 bit data is transmitted least significant bit first. The bit times are 60.0 $\mu$S or 16,660 baud +/- 1.5\%. A computer can connect to a Digitrax USB interface at higher baud rates and the device will make the necessary conversion. Bytes may be transmitted back-to-back, with a start bit immediately following the stop bit of the previous character. 
 
 Any message that has format or framing errors, data errors or is a fragment caused by noise glitches and does not completely follow the message format will be ignored by all receivers, and a new opcode will be scanned for re-synchronisation.
 
 The OPC\_BUSY opcode is included to allow the master to keep the network active whilst it is performing a task that requires a response, and entails a significant processing delay, i.e. it can ensure no new requests are started until it has responded to the last message. This OPC\_BUSY opcode should be simply stripped and ignored.
 
-If a device disconnects from the Network and so does not access or reference a slot within the system purge time, the master will force the un-accessed slot to common status so other system devices can use the slot. The typical purge time of a master is about 200 seconds. A good ``ping" or slot update activity is about every 100 seconds, i.e. if a user makes no change to a throttle/slot within 100 seconds, the throttle/device should automatically send another speed update at the current speed to reset the purge timeout for that slot.
+If a device disconnects from the network and so does not access or reference a slot within the system purge time, the command station will force the un-accessed slot to common status so other system devices can use the slot. The typical purge time of a command station is about 200 seconds. A good ``ping" or slot update activity is about every 100 seconds, i.e. if a user makes no change to a throttle/slot within 100 seconds, the throttle/device should automatically send another speed update at the current speed to reset the purge timeout for that slot.
 
 \section{Message Format}
 
-All the Network communications are via multi-byte messages. The master is defined as the device that is maintaining the refresh stack for DCC packet generation and is actively generating the DCC track data. Refresh of information is typically only performed for mobile decoders. Stationary type decoders are not refreshed and individual immediate commands are sent out to the track as requested.
+All the network communications are via multi-byte messages. The command station is defined as the device that is maintaining the refresh stack for DCC packet generation and is actively generating the DCC track data. Refresh of information is typically only performed for mobile decoders. Stationary type decoders are not refreshed and individual immediate commands are sent out to the track as requested.
 
-The master is only privileged in respect to performing the task of maintaining the locomotive refresh stack and generating DCC packets. In this way other network transactions may occur that the master does not need to be involved with or understand, as long as they follow the message protocol and timing requirements. i.e. Other devices may have a dialog on the network without disturbing or involving the master. Devices on the Network monitor the messages, check for format and data integrity and parse good messages to decode if action is required in the context. Devices such as throttles, input sensors, computer interfaces and control panels may generate the Network messages without needing prompting or polling by a central controller.
+The command station is only privileged in respect to performing the task of maintaining the locomotive refresh stack and generating DCC packets. In this way other network transactions may occur that the command station does not need to be involved with or understand, as long as they follow the message protocol and timing requirements. i.e. other devices may have a dialog on the network without disturbing or involving the command station. Devices on the network monitor the messages, check for format and data integrity and parse good messages to decode if action is required in the context. Devices such as throttles, input sensors, computer interfaces and control panels may generate the network messages without needing prompting or polling by a central controller.
 
-Devices frequently will be added and removed from an operating the Network. The devices and protocol are tolerant of electrical and data transients. The format chosen gives a good degree of data integrity, guaranteed quick network-state synchronisation, high data throughput, good distribution of access to many competing devices and low event latency. Also, the devices may be operated without need for unique ID or other requirements that can make network administration awkward.
+Devices frequently will be added and removed from an operating the network. The devices and protocol are tolerant of electrical and data transients. The format chosen gives a good degree of data integrity, guaranteed quick network-state synchronisation, high data throughput, good distribution of access to many competing devices and low event latency. Also, the devices may be operated without need for unique ID or other requirements that can make network administration awkward.
 
 The data bytes on the Network are defined as 8 bit data with the most significant bit as an opcode flag bit. If the most significant bit, d7, is 1 then the 7 least significant bits are interpreted as a network opcode . The opcode byte may only occur once in a valid message and is the first byte of a message. All the remaining bytes in the message must have a most significant bit of 0, including the last checksum byte. The checksum is the 1's complement of the byte wise exclusive or of all the bytes in the message, except the checksum itself. To validate data accuracy, all the bytes in a correctly formatted message are exclusive or'ed. If this resulting byte value is 0xFF, then the message data is accepted as good.
 
 The opcodes may be examined to determine message length and if subsequent response message is required. Data bits d6 and d5 encode the message length. The message length includes the opcode and the checksum bytes. The bit d3 = 1 implies that a follow-on message or reply is expected.
 
-\begin{tabular}{p{0.05\linewidth} p{0.05\linewidth}  p{0.05\linewidth}  p{0.05\linewidth}  p{0.05\linewidth}  p{0.05\linewidth}  p{0.05\linewidth}  p{0.05\linewidth} p{0.5\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.05\linewidth} p{0.05\linewidth}  p{0.05\linewidth}  p{0.05\linewidth}  p{0.05\linewidth}  p{0.05\linewidth}  p{0.05\linewidth}  p{0.05\linewidth} p{0.36\linewidth}} 
 \underline{d7} & \underline{d6} & \underline{d5} & \underline{d4} & \underline{d3} & \underline{d2} & \underline{d1} & \underline{d0} & \\
 1 & 0 & 0 & E & D & C & B & A & 2 byte message\\
 1 & 0 & 1 & E & D & C & B & A & 4 byte message\\
@@ -40,15 +40,27 @@ The opcodes may be examined to determine message length and if subsequent respon
 The A,B,C,D,E are bits available to encode 32 opcodes per message length.
 
 \section{Refresh Slots}
-The model of the master refresh stack is an array of up to 120 read/write refresh slots. The slot address is a principal component and is generally the second byte or 1st argument of a message to the master. The refresh slot contains up to 10 data bytes relating to a locomotive and also controls a task in the track DCC refresh stack. Most mobile decoder or locomotive operations process the slot associated with the locomotive to be controlled. The slot number is a similar shorthand ID\# to a file handle. Slot addresses 120-127 are reserved for system and master control. Slot \#124 (0x7C) is allocated for read/write access to the programming track, and the format of the 10 data bytes is not the same as a normal slot. 
+The command station standard refresh stack is an array of up to 120 read/write refresh slots. The slot address is a principal component and is generally the second byte or 1st argument of a message to the master. The standard refresh slot contains up to 10 data bytes relating to a locomotive and also controls a task in the track DCC refresh stack. Most mobile decoder or locomotive operations process the slot associated with the locomotive to be controlled. The slot number is a similar shorthand ID\# to a file handle. Slot addresses 120-127 are reserved for system and command station control. Slot \#124 (0x7C) is allocated for read/write access to the programming track, and the format is not the same as a standard slot. The DCS240 command station has 400 read/write refresh slots. The additional slots in excess of the 120 standard slots are accessed by using extended opcodes. The DCS210 also supports the extended opcodes though it only has 100 refresh slots.
 
 \subsection{Slot Format}
 
-\subsubsection{Slots 0 to 119}
+\subsubsection{Standard Slot - 0 to 119}
 
 Byte 0:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.375\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$SLOT\#$>$ & Slot number in the range 0x00 to 0x7F. Slot 0x00 is a special slot, and slots in the range 0x70 to 0x7F are reserved to Digitrax.\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -82,7 +94,7 @@ Note: d7 is set to 0 in the message by the command station and so may not correc
 & & 1 & Slot consist linked into this slot.\\
 \end{tabular}
 
-\begin{tabular}{p{0.05\linewidth} p{0.05\linewidth} p{0.05\linewidth} p{0.70\linewidth}} 
+\begin{tabular}{p{0.05\linewidth} p{0.05\linewidth} p{0.05\linewidth} p{0.75\linewidth}} 
 \underline{d2} & \underline{d1} & \underline{d0} & \\
 0 & 0 & 0 & 28 step decoder. 3-byte packet regular mode\\
 0 & 0 & 1 & 28 step decoder. Generate trinary packets for this mobile address\\
@@ -94,9 +106,9 @@ Note: d7 is set to 0 in the message by the command station and so may not correc
 1 & 1 & 1 & 128 step decoder. Allow advanced consisting\\
 \end{tabular}
 
-Byte 1:
+Byte 2:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -106,9 +118,9 @@ Byte 1:
 & $<$ADR$>$ & Low address.\\
 \end{tabular}
 
-Byte 2:
+Byte 3:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.36\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -118,9 +130,9 @@ Byte 2:
 & $<$SPD$>$ & Speed in the range 0x00 to 0x7F. 0x00 means inertial stop and 0x01 means emergency stop. Other values mean increasing speed.\\
 \end{tabular}
 
-Byte 3:
+Byte 4:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.36\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -140,9 +152,9 @@ d1 & F2 state. 1 means on, and 0 means off.\\
 d0 & F1 state. 1 means on, and 0 means off.\\
 \end{tabular}
 
-Byte 4:
+Byte 5:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -162,9 +174,9 @@ d1 & 0 means the track is paused, broadcast an emergency stop.\\
 d0 & 1 means the DCC packets are on in the master, global power up.\\
 \end{tabular}
 
-Byte 5:
+Byte 6:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -184,9 +196,9 @@ d1 & Reserved. Set to 0.\\
 d0 & 1 means this slot has suppressed advanced consist.\\
 \end{tabular}
 
-Byte 6:
+Byte 7:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -196,9 +208,9 @@ Byte 6:
 & $<$ADR2$>$ & High address.\\
 \end{tabular}
 
-Byte 7:
+Byte 8:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.36\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -218,9 +230,9 @@ d1 & Sound 2 / F6.\\
 d0 & Sound 1 / F5.\\
 \end{tabular}
 
-Byte 8:
+Byte 9:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.37\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -230,9 +242,9 @@ Byte 8:
 & $<$ID1$>$ & 7-bit ls ID code written by throttle when STAT2.4 = 1.\\
 \end{tabular}
 
-Byte 9:
+Byte 10:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.37\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -248,7 +260,19 @@ OST1 to OST6 encode the command station's option switch table. The narrative is 
 
 Byte 0:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.376\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$SLOT\#$>$ & Slot number in the range 0x00 to 0x7F. Slot 0x00 is a special slot, and slots in the range 0x70 to 0x7F are reserved to Digitrax.\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -272,9 +296,9 @@ d1 & OpSw 02 & t & t = command station mode\\
 d0 & OpSw 01 & t & do not change.\\
 \end{tabular}
 
-Byte 1:
+Byte 2:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -298,9 +322,9 @@ d1 & OpSw 10 & c & do not change\\
 d0 & OpSw 09 & c & do not change\\
 \end{tabular}
 
-Byte 2:
+Byte 3:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -336,9 +360,9 @@ c & c & t & 128 step mode\\
 c & c & c & 128 step FX mode\\
 \end{tabular}
 
-Byte 3:
+Byte 4:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -364,9 +388,9 @@ d0 & OpSw 25 & t & t = enable route echo over the Network\\
 &&& c = disbale route echo over the Network\\
 \end{tabular}
 
-Byte 4:
+Byte 5:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -386,9 +410,9 @@ d1 & 0 means the track is paused, broadcast an emergency stop.\\
 d0 & 1 means the DCC packets are on in the master, global power up.\\
 \end{tabular}
 
-Byte 5:
+Byte 6:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -413,9 +437,9 @@ d0 & OpSw 33 & c & t = track power off at power on\\
 &&& c = allow track power to restore to prior state at power on\\
 \end{tabular}
 
-Byte 6:
+Byte 7:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -441,9 +465,9 @@ d0 & OpSw 41 & t & t = diagnostic click disabled\\
 &&& c = diagnostic click when valid the Network commands incoming and routes being output\\
 \end{tabular}
 
-Byte 7:
+Byte 8:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -463,9 +487,9 @@ d1 & \\
 d0 & \\
 \end{tabular}
 
-Byte 8:
+Byte 9:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -481,9 +505,9 @@ Byte 8:
 0x1C & DCS240\\
 \end{tabular}
 
-Byte 9:
+Byte 10:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -507,53 +531,51 @@ d0 & \\
 
 Byte 0:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & n & n & n & n & n & n & n\\
+0 & 0 & 0 & 0 & 0 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-& $<$SLOTH\#$>$ & Extended slot number high bits.\\
+& $<$SLOTP\#$>$ & Extended slot page number in the range 0x0 to 0x7.\\
 \end{tabular}
 
 Byte 1:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$SLOTL\#$>$ & Extended slot number low bits.\\
+& $<$SLOTL\#$>$ & Extended slot number in the range 0x00 to 0x7F.\\
 \end{tabular}
 
 Byte 2:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
 0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-&  & Unknown.\\
+&  $<$STAT1$>$ & Slot status 1.\\
 \end{tabular}
 
-\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
-d6 & \\
-d5 & \\
-d4 & \\
-d3 & \\
-d2 & \\
-d1 & \\
-d0 & \\
+\begin{tabular}{p{0.05\linewidth} p{0.05\linewidth} p{0.05\linewidth} p{0.70\linewidth}} 
+& \underline{d5} & \underline{d4} & \\
+& 0 & 0 & Free slot, no valid data. Not refreshed.\\
+& 0 & 1 & Common. Locomotive address in this slot. Refreshed.\\
+& 1 & 0 & Idle. Locomotive address in this slot. Not refreshed.\\
+& 1 & 1 & In Use. Locomotive address in this slot. Refreshed. \\
 \end{tabular}
 
 Byte 3:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -565,7 +587,7 @@ Byte 3:
 
 Byte 4:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -577,7 +599,7 @@ Byte 4:
 
 Byte 5:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -599,7 +621,7 @@ d0 & 1 means the DCC packets are on in the master, global power up.\\
 
 Byte 6:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -621,7 +643,7 @@ d0 & \\
 
 Byte 7:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -643,7 +665,7 @@ d0 & \\
 
 Byte 8:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -665,7 +687,7 @@ d0 & \\
 
 Byte 9:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -687,7 +709,7 @@ d0 & \\
 
 Byte 10:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -709,7 +731,7 @@ d0 & \\
 
 Byte 11:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -731,7 +753,7 @@ d0 & \\
 
 Byte 12:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -753,7 +775,7 @@ d0 & \\
 
 Byte 13:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -775,7 +797,7 @@ d0 & \\
 
 Byte 14:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -797,7 +819,7 @@ d0 & \\
 
 Byte 15:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -819,7 +841,7 @@ d0 & \\
 
 Byte 16:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -841,7 +863,7 @@ d0 & \\
 
 Byte 17:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -863,19 +885,121 @@ d0 & \\
 
 \section{Standard Address Selection}
 
-To request a mobile or locomotive decoder task in the refresh stack, a throttle device requests a locomotive address for use,(opcode OPC\_LOCO\_ADR). The master (or computer in a limited master environment) responds with a slot data read for the slot,(OPC\_SL\_RD\_DATA), that contains this locomotive address and all of its state information. If the address is currently not in any slot, the master will load this new locomotive address into a new slot (speed=0, direction forwards, functions off and 128 step mode) and return this as a OPC\_SL\_RD\_DATA. If no inactive slots are free to load the new locomotive address, the response will be the OPC\_LONG\_ACK with a fail code 0x00.
+To request a mobile or locomotive decoder task in the refresh stack, a throttle device requests a locomotive address for use (OPC\_LOCO\_ADR). The command station responds with a slot data read for the slot (OPC\_SL\_RD\_DATA), that contains this locomotive address and all of its state information. If the address is currently not in any slot, the command station will load this new locomotive address into a new slot (speed=0, direction forwards, functions off and 128 step mode) and return this as a OPC\_SL\_RD\_DATA. If no inactive slots are free to load the new locomotive address, the response will be the OPC\_LONG\_ACK with a fail code 0x00.
 
-The throttle/computer must then examine the slot data bytes to work out how to process the master response. If the slot status 1 byte shows the slot to be common idle or new the throttle may change the slot to in use by performing a null move instruction (see OPC\_MOVE\_SLOTS) on this slot. This activation mechanism is used to guarantee proper slot usage interlocking in a multi-user asynchronous environment.
+The throttle/computer must then examine the slot data bytes to work out how to process the command station response. If the slot status 1 byte shows the slot to be common idle or new the throttle may change the slot to in use by performing a null move instruction (see OPC\_MOVE\_SLOTS) on this slot. This activation mechanism is used to guarantee proper slot usage interlocking in a multi-user asynchronous environment.
 
-If the slot return information shows the locomotive requested is in use or up-consisted (i.e. the SL\_CONUP, bit 6 of slot status 1 = 1) the user should not use the slot. Any up-consisted locomotives must be unlinked before usage. Always process the result from the OPC\_LINK\_SLOTS and OPC\_UNLINK\_SLOTS commands, since the master reserves the right to change the reply slot number and can reject the linking tasks under several circumstances. Verify the reply slot number and the link UP/DN bits in slot status 1 are as you expected.
+If the slot return information shows the locomotive requested is in use or up-consisted (i.e. the SL\_CONUP, bit 6 of slot status 1 = 1) the user should not use the slot. Any up-consisted locomotives must be unlinked before usage. Always process the result from the OPC\_LINK\_SLOTS and OPC\_UNLINK\_SLOTS commands, since the command station reserves the right to change the reply slot number and can reject the linking tasks under several circumstances. Verify the reply slot number and the link UP/DN bits in slot status 1 are as you expected.
 
 The throttle will then be able to update speed, direction and function information. Whenever slot information is changed in an active slot , the slot is flagged to be updated as the next DCC packet sent to the track. If the slot is part of linked consist slots the whole consist chain is updated consecutively.
 
-If a throttle is disconnected from the the Network, upon reconnection (if the throttle retains the slot state from before disconnection) it will request the full status of the slot it was previously using. If the reported status and speed, function data etc., from the master exactly matches the remembered slot state the throttle will continue using the slot. If the SLOT data does not match, the throttle will assume the slot was purged free by the system and will go through the setup log on procedure again.
+If a throttle is disconnected from the the Network, upon reconnection (if the throttle retains the slot state from before disconnection) it will request the full status of the slot it was previously using. If the reported status and speed, function data etc., from the command station exactly matches the remembered slot state the throttle will continue using the slot. If the slot data does not match, the throttle will assume the slot was purged free by the system and will go through the setup log on procedure again.
 
-With this procedure the throttle does not need to have a unique ID number. slot addresses do not imply they contain any particular locomotive address. The system can be mapped such that the slot address matches the locomotive address within, if the user directly reads and writes to slots without using the master to allocate locomotive addresses.
+With this procedure the throttle does not need to have a unique ID number. slot addresses do not imply they contain any particular locomotive address. The system can be mapped such that the slot address matches the locomotive address within, if the user directly reads and writes to slots without using the command station to allocate locomotive addresses.
 
 \section{Opcodes}
+
+\rule{15.1cm}{0.4pt}
+\subsubsection{OPC\_BRD\_OPSW}
+\underline{Operation:} Read and write board option switches.
+
+\underline{Group:} \hspace{0.5cm} 6-Byte Message
+
+\underline{Direction:} \hspace{0.05cm} $\rightarrow$ Command Station
+
+\underline{Encoding:} 
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 1 & 0 & 1 & 0 & 0 & 0 & 0\\
+\hline
+\end{tabular}
+& 0xD0 & Opcode.\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 1 & 1 & d4 & 0 & 0 & 1 & d0\\
+\hline
+\end{tabular}
+&  & The bit d0 is the most significant bit of the board id. Bit d4 indicates read/write direction. 1 means write and 0 means read.\\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$BIDL$>$ & Least significant 7 bits of the board id.\\
+\end{tabular}
+
+Byte 3:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$BTYPE$>$ & Board type code.\\
+\end{tabular}
+
+\begin{tabular}{p{0.2\linewidth} p{0.5\linewidth}} 
+\underline{Board} & \underline{Type Code}\\
+PM4 & 0x70.\\
+BDL16 & 0x71.\\
+SE8C & 0x72.\\
+DS64 & 0x73.\\
+\end{tabular}
+
+Byte 4:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+&  & Byte and bit number. The high nibble encodes the byte number, and the low nibble the bit number.\\
+\end{tabular}
+
+The byte number is calculated as (OpSw\# - 1) $>>$ 3 and the bit number is (OpSw\# - 1) - byte number $\times$ 8.
+
+Byte 5:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$CHK$>$ & Checksum.
+\end{tabular}
+
+\underline{Description:}
+
+\underline{Response:} 
+
+OPC\_LONG\_ACK.
+
+\underline{Notes:} 
+
+None.
 
 \rule{15.1cm}{0.4pt}
 \subsubsection{OPC\_BUSY}
@@ -889,7 +1013,7 @@ With this procedure the throttle does not need to have a unique ID number. slot 
 
 Byte 0:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -901,7 +1025,7 @@ Byte 0:
 
 Byte 1:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -935,7 +1059,7 @@ None.
 
 Byte 0:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -947,7 +1071,7 @@ Byte 0:
 
 Byte 1:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -959,7 +1083,7 @@ Byte 1:
 
 Byte 2:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -982,7 +1106,7 @@ d0 & F1 state. 1 means on, and 0 means off.\\
 
 Byte 3:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1016,7 +1140,7 @@ None.
 
 Byte 0:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1028,7 +1152,7 @@ Byte 0:
 
 Byte 1:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1062,7 +1186,7 @@ None.
 
 Byte 0:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1074,7 +1198,7 @@ Byte 0:
 
 Byte 1:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1090,18 +1214,18 @@ This command sends a global power on request.
 
 \underline{Response:} 
 
-The command station sends an OPC\_RQ\_SL\_DATA message for slot 0x7F. It also sends a sequence of OPC\_SW\_REQ messages with the following values of SW1 and SW2:
+The on power on the command station sends an OPC\_RQ\_SL\_DATA message for slot 0x7F. It also sends a sequence of OPC\_SW\_REQ messages with the following values of SW1 and SW2:
 
-\begin{tabular}{l l}
-\underline{SW1} & \underline{SW2}\\
+\begin{tabular}{l l l}
+\underline{SW1} & \underline{SW2} & \underline{Purpose}\\
 0x78 & 0x27\\
 0x79 & 0x27\\
 0x7A & 0x27\\
 0x7B & 0x27\\
-0x78 & ox07\\
-0x79 & 0x07\\
-0x7A & 0x07\\
-0x7B & 0x07\\
+0x78 & 0x07 & Interrogate all PM4 inputs?\\
+0x79 & 0x07 & Interrogate all BDL16 input reports?\\
+0x7A & 0x07 & Interrogate all SE8 input reports?\\
+0x7B & 0x07 & Interrogate all DS64 input reports.\\
 \end{tabular}
 
 \underline{Notes:} 
@@ -1120,7 +1244,7 @@ None.
 
 Byte 0:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1132,7 +1256,7 @@ Byte 0:
 
 Byte 1:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1166,7 +1290,7 @@ None.
 
 Byte 0:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1178,7 +1302,7 @@ Byte 0:
 
 Byte 1:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1190,7 +1314,7 @@ Byte 1:
 
 Byte 2:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1202,7 +1326,7 @@ Byte 2:
 
 Byte 3:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1224,7 +1348,7 @@ d0 & R0. Repeat count.\\
 
 Byte 4:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1244,7 +1368,7 @@ d0 & IM1.7. High bit.\\
 
 Byte 5:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1256,7 +1380,7 @@ Byte 5:
 
 Byte 6:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1268,7 +1392,7 @@ Byte 6:
 
 Byte 7:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1280,7 +1404,7 @@ Byte 7:
 
 Byte 8:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1292,7 +1416,7 @@ Byte 8:
 
 Byte 9:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1304,7 +1428,7 @@ Byte 9:
 
 Byte 10:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1339,7 +1463,7 @@ None.
 
 Byte 0:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1351,7 +1475,7 @@ Byte 0:
 
 Byte 1:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1373,7 +1497,7 @@ d0 & A1.\\
 
 Byte 2:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1394,7 +1518,7 @@ d0 & A8.\\
 
 Byte 3:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1429,7 +1553,7 @@ None.
 
 Byte 0:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1441,7 +1565,7 @@ Byte 0:
 
 Byte 1:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1453,7 +1577,7 @@ Byte 1:
 
 Byte 2:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1466,7 +1590,7 @@ Byte 2:
 
 Byte 3:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1500,7 +1624,7 @@ None.
 
 Byte 0:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1512,7 +1636,7 @@ Byte 0:
 
 Byte 1:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1524,7 +1648,7 @@ Byte 1:
 
 Byte 2:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1536,7 +1660,7 @@ Byte 2:
 
 Byte 3:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1573,7 +1697,7 @@ The the Network 1.1 specification specifies that $<$ADR2$>$ value is 0x00.
 
 Byte 0:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1585,7 +1709,7 @@ Byte 0:
 
 Byte 1:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1597,7 +1721,7 @@ Byte 1:
 
 Byte 2:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1609,7 +1733,7 @@ Byte 2:
 
 Byte 3:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1646,7 +1770,7 @@ None.
 
 Byte 0:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1658,7 +1782,7 @@ Byte 0:
 
 Byte 1:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1670,7 +1794,7 @@ Byte 1:
 
 Byte 2:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1693,7 +1817,7 @@ d0 & F1 state. 1 means on, and 0 means off.\\
 
 Byte 3:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1716,6 +1840,205 @@ None.
 None.
 
 \rule{15.1cm}{0.4pt}
+\subsubsection{OPC\_LOCO\_DIRF\_EXT}
+\underline{Operation:} Set locomotive direction and function F0 to F28 states for extended slots.
+
+\underline{Group:} \hspace{0.5cm} 6-Byte Message
+
+\underline{Direction:} \hspace{0.05cm} $\rightarrow$ Command Station
+
+\underline{Encoding:} 
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 1 & 0 & 1 & 0 & 1 & 0 & 0\\
+\hline
+\end{tabular}
+& 0xD4 & Opcode.\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 1 & 0 & 0 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& 0x2$<$SLOTP$>$ & Bits d2 to d0 contain the extended slot page number in the range 0x0 to 0x7.\\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$SLOT\#$>$ & Extended slot number.\\
+\end{tabular}
+
+Byte 3:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 0 & 0 & 1 & 0 & 0\\
+\hline
+\end{tabular}
+& $<$SUBC$>$ & Subcode.\\
+\end{tabular}
+
+Byte 4:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$DIRFX$>$ & Direction and function sates.\\
+\end{tabular}
+
+\begin{tabular}{p{0.1\linewidth} p{0.05\linewidth} p{0.05\linewidth} p{0.05\linewidth} p{0.05\linewidth} p{0.05\linewidth} p{0.05\linewidth} p{0.05\linewidth} p{0.05\linewidth}} 
+\underline{SUBC} & \underline{d6} & \underline{d5} & \underline{d4} & \underline{d3} & \underline{d2} & \underline{d1} & \underline{d0} \\ 
+0x05 & 0 & 0 & 0 & 0 & F28 & F20 & F12\\
+0x06 & 0 & DIR & F0 & F4 & F3 & F2 & F1\\ 
+0x07 & F11 & F10 & F9 & F8 & F7 & F6 & F5\\
+0x08 & F19 & F18 & F17 & F16 & F15 & F14 & F13\\
+0x09 & F27 & F26 & F25 & F24 & F23 & F22 & F21\\
+\end{tabular}
+
+For the direction bit (DIR) 1 means forwards and 0 means backwards. For the function bits 1 means on and 0 means off.
+
+Byte 5:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$CHK$>$ & Checksum.
+\end{tabular}
+
+\underline{Description:}
+
+This function sets the locomotive's direction and function F0 to F28 states.
+
+\underline{Response:} 
+
+None.
+
+\underline{Notes:} 
+
+None.
+
+\rule{15.1cm}{0.4pt}
+\subsubsection{OPC\_LOCO\_FN\_EXT}
+\underline{Operation:} Set locomotive function states for extended slots.
+
+\underline{Group:} \hspace{0.5cm} 6-Byte Message
+
+\underline{Direction:} \hspace{0.05cm} $\rightarrow$ Command Station
+
+\underline{Encoding:} 
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 1 & 0 & 1 & 0 & 1 & 0 & 0\\
+\hline
+\end{tabular}
+& 0xD4 & Opcode.\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & d4 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$SLOTP$>$ & Bits d2 to d0 contain the extended slot page number in the range 0x0 to 0x7. The bit d4 contains the function state where 1 means on and 0 means off. The bit d3 contains the high bit of the function number (bit 14).\\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$SLOT\#$>$ & Extended slot number.\\
+\end{tabular}
+
+Byte 3:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$FN0$>$ & Function number bits 0 to 6.\\
+\end{tabular}
+
+Byte 4:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$FN1$>$ & Function number bits 7 to 13.\\
+\end{tabular}
+
+Byte 5:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$CHK$>$ & Checksum.
+\end{tabular}
+
+\underline{Description:}
+
+This function sets the locomotive's function F0 to F32767 states.
+
+\underline{Response:} 
+
+None.
+
+\underline{Notes:} 
+
+None.
+
+\rule{15.1cm}{0.4pt}
 \subsubsection{OPC\_LOCO\_RESET}
 \underline{Operation:} Loco reset button has been pressed on the command station.
 
@@ -1727,7 +2050,7 @@ None.
 
 Byte 0:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1739,7 +2062,7 @@ Byte 0:
 
 Byte 1:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1773,7 +2096,7 @@ None.
 
 Byte 0:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1785,7 +2108,7 @@ Byte 0:
 
 Byte 1:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1797,7 +2120,7 @@ Byte 1:
 
 Byte 2:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1820,7 +2143,7 @@ d0 & Sound 1 / F5.\\
 
 Byte 3:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1854,7 +2177,7 @@ None.
 
 Byte 0:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1866,7 +2189,7 @@ Byte 0:
 
 Byte 1:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1878,7 +2201,7 @@ Byte 1:
 
 Byte 2:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1890,7 +2213,7 @@ Byte 2:
 
 Byte 3:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1913,8 +2236,8 @@ None.
 None.
 
 \rule{15.1cm}{0.4pt}
-\subsubsection{OPC\_LOCO\_SPD\_DIRF\_EXT}
-\underline{Operation:} Set locomotive speed, direction, and functions for extended slots.
+\subsubsection{OPC\_LOCO\_SPD\_EXT}
+\underline{Operation:} Set locomotive speed for extended slots.
 
 \underline{Group:} \hspace{0.5cm} 6-Byte Message
 
@@ -1924,7 +2247,7 @@ None.
 
 Byte 0:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1936,53 +2259,55 @@ Byte 0:
 
 Byte 1:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 0 & 1 & 0 & 0 & 0 & 0 & 1\\
+0 & 0 & 1 & 0 & 0 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-& 0x21 & Unknown - It might be the high slot address with a mask in high nibble.\\
+& $<$SLOTP$>$ & Bits d2 to d0 contain the extended slot page number in the range 0x0 to 0x7.\\
 \end{tabular}
 
 Byte 2:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$SLOT\#$>$ & Extended slot number low bits.\\
+& $<$SLOT\#$>$ & Extended slot number.\\
 \end{tabular}
 
 Byte 3:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+0 & 0 & 0 & 0 & 0 & 1 & 0 & 0\\
 \hline
 \end{tabular}
-& $<$SUBCODE$>$ & Subcode.\\
+& 0x04 & Subcode.\\
 \end{tabular}
 
-\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
-0x04 & Set speed.\\
-0x05 & Set functions F12, F20, F28.\\
-0x06 & Set direction and functions F0 to F4.\\
-0x07 & Set functions F5 to F11.\\
-0x08 & Set functions F13 to F19.\\
-0x09 & Set functions F21 to F27.\\
-d0 & Sound 1 / F5.\\
+Byte 4:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$SPD$>$ & Locomotive speed in the range 0x00 to 0x7F. 0x00 means inertial stop and 0x01 means emergency stop. Other values mean increasing speed.\\
 \end{tabular}
 
-Byte 3:
+Byte 5:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -1994,7 +2319,7 @@ Byte 3:
 
 \underline{Description:}
 
-This function sets the locomotive's function F5 to F8 states.
+This function sets the locomotive's speed.
 
 \underline{Response:} 
 
@@ -2016,7 +2341,7 @@ None.
 
 Byte 0:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2028,7 +2353,7 @@ Byte 0:
 
 Byte 1:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2040,7 +2365,7 @@ Byte 1:
 
 Byte 2:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2052,7 +2377,7 @@ Byte 2:
 
 Byte 3:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2072,7 +2397,7 @@ None, it is the response.
 
 \underline{Notes:} 
 
-\begin{tabular}{l c c l}
+\begin{tabular}{p{0.3\linewidth} p{0.10\linewidth} p{0.10\linewidth} p{0.40\linewidth}}
 \underline{Responding Opcode} & \underline{$<$LOPC$>$} & \underline{$<$ACK1$>$} & \underline{Meaning}\\
 OPC\_SW\_ACK & 0x3D & 0x00 & DCS100 FIFO is full, command rejected.\\
 OPC\_SW\_ACK & 0x3D & 0x7F &  DCS100 command accepted.\\
@@ -2083,6 +2408,7 @@ OPC\_LOCO\_ADR & 0x3F & 0x00 & No free slot, command failed.\\
 OPC\_IMM\_PACKET & 0x7D & 0x7F & Command OK, if not limited master.\\
 OPC\_IMM\_PACKET & 0x7E & $<$lim address$>$ & Command OK, if limited master.\\
 OPC\_IMM\_PACKET & 0x7D & 0x00 & Internal buffer busy or full.\\
+OPC\_WR\_SL\_DATA\_EXT & 0x6E & 0x7F & Command OK.\\
 \end{tabular}
 
 \rule{15.1cm}{0.4pt}
@@ -2097,7 +2423,7 @@ OPC\_IMM\_PACKET & 0x7D & 0x00 & Internal buffer busy or full.\\
 
 Byte 0:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2109,7 +2435,7 @@ Byte 0:
 
 Byte 1:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2121,7 +2447,7 @@ Byte 1:
 
 Byte 2:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2133,7 +2459,7 @@ Byte 2:
 
 Byte 3:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2148,7 +2474,7 @@ Byte 3:
 
 Move slots.
 
-\begin{tabular}{p{0.2\linewidth} p{0.2\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.2\linewidth} p{0.2\linewidth} p{0.53\linewidth}} 
 \underline{SRC} & \underline{DEST} & \underline{Action}\\
 0x00 & Don't Care & Dispatch get. Return slot read of dispatch slot.\\
 SRC & SRC & Null move. SRC is set to in use.\\
@@ -2159,6 +2485,108 @@ SRC & DEST & Move slot data from SRC to DEST if not in use. Clear SRC.\\
 \underline{Response:} 
 
 OPC\_SL\_RD\_DATA or OPC\_LONG\_ACK.
+
+\underline{Notes:} 
+
+None.
+
+\rule{15.1cm}{0.4pt}
+\subsubsection{OPC\_MOVE\_SLOTS\_EXT}
+\underline{Operation:} Move extended slots.
+
+\underline{Group:} \hspace{0.5cm} 6-Byte Message
+
+\underline{Direction:} \hspace{0.05cm} $\rightarrow$ Command Station
+
+\underline{Encoding:} 
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 1 & 0 & 1 & 0 & 1 & 0 & 0\\
+\hline
+\end{tabular}
+& 0xD4 & Opcode.\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 1 & 1 & 1 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$SRCP$>$ & Bits d2 to d0 contain the extended source slot page number in the range 0x0 to 0x7. The higher bits are a sub-code for this operation.\\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$SRC$>$ & Extended source slot number. In the range 0x00 to 0x7F\\
+\end{tabular}
+
+Byte 3:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 0 & 0 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$DESTP$>$ & Bits d2 to d0 contain the extended destination slot page number in the range 0x0 to 0x7. \\
+\end{tabular}
+
+Byte 4:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$DEST$>$ & Extended destination slot number. In the range 0x00 to 0x7F.\\
+\end{tabular}
+
+Byte 5:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$CHK$>$ & Checksum.
+\end{tabular}
+
+\underline{Description:}
+
+Move slots.
+
+\begin{tabular}{p{0.2\linewidth} p{0.2\linewidth} p{0.53\linewidth}} 
+\underline{SRC} & \underline{DEST} & \underline{Action}\\
+0x00 & Don't Care & Dispatch get. Return slot read of dispatch slot.\\
+SRC & SRC & Null move. SRC is set to in use.\\
+SRC & 0x00 & Dispatch put. Mark slot as dispatch.\\
+SRC & DEST & Move slot data from SRC to DEST if not in use. Clear SRC.\\
+\end{tabular}
+
+\underline{Response:} 
+
+OPC\_SL\_RD\_DATA\_EXT or OPC\_LONG\_ACK.
 
 \underline{Notes:} 
 
@@ -2176,7 +2604,7 @@ None.
 
 Byte 0:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2188,7 +2616,7 @@ Byte 0:
 
 Byte 1:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2200,7 +2628,7 @@ Byte 1:
 
 Byte 2:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2212,7 +2640,7 @@ Byte 2:
 
 Byte 3:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2224,7 +2652,7 @@ Byte 3:
 
 Byte 4:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2236,7 +2664,7 @@ Byte 4:
 
 Byte 5:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2270,7 +2698,7 @@ d0 & D1.7. High bit\\
 
 Byte 6:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2282,7 +2710,7 @@ Byte 6:
 
 Byte 7:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2294,7 +2722,7 @@ Byte 7:
 
 Byte 8:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2306,7 +2734,7 @@ Byte 8:
 
 Byte 9:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2318,7 +2746,7 @@ Byte 9:
 
 Byte 10:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2352,7 +2780,7 @@ d0 & D5.7. High bit\\
 
 Byte 11:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2364,7 +2792,7 @@ Byte 11:
 
 Byte 12:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2376,7 +2804,7 @@ Byte 12:
 
 Byte 13:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2388,7 +2816,7 @@ Byte 13:
 
 Byte 14:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2414,7 +2842,7 @@ Byte 15:
 
 This command sends the data from one device to another peer to peer.
 
-\begin{tabular}{p{0.2\linewidth} p{0.1\linewidth} p{0.1\linewidth} p{0.4\linewidth}} 
+\begin{tabular}{p{0.2\linewidth} p{0.1\linewidth} p{0.1\linewidth} p{0.50\linewidth}} 
 \underline{SRC} & \underline{DSTL} & \underline{DSTH} & Comments\\
 0x00 & & & Source is command station.\\
 Don't Care & 0x00 & 0x00 & Broadcast Message.\\
@@ -2443,7 +2871,7 @@ None.
 
 Byte 0:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2455,7 +2883,7 @@ Byte 0:
 
 Byte 1:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2467,31 +2895,19 @@ Byte 1:
 
 Byte 2:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+0 & d6 & 0 & 0 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-& 0x00 & Reserved.\\
-\end{tabular}
-
-Byte 2: (extended)
-
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
-
-\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
-\hline
-0 & n & n & n & n & n & n & n\\
-\hline
-\end{tabular}
-& $<$SLOTH$>$ & Extended slot number high bits.\\
+& $<$SLOTP$>$ & Bits d2 to d0 contain the extended slot page number in the range 0x0 to 0x7. The bit d3 does something but its function is not yet known. When bit d6 is 1 then extended slot data is returned for all slots, when it is 0 standard slot data is returned for slots 0x00 to 0x7F.\\
 \end{tabular}
 
 Byte 3:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2508,7 +2924,7 @@ Request slot data or status block.
 
 \underline{Response:} 
 
-if SLOTH = 0x00 then OPC\_SL\_RD\_DATA, otherwise OPC\_SL\_RD\_DATA\_EXT.
+if SLOTP = 0x00 then OPC\_SL\_RD\_DATA, otherwise OPC\_SL\_RD\_DATA\_EXT.
 
 \underline{Notes:} 
 
@@ -2526,7 +2942,7 @@ None.
 
 Byte 0:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2538,7 +2954,7 @@ Byte 0:
 
 Byte 1:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2548,19 +2964,7 @@ Byte 1:
 & 0x0E & Message length (14 bytes).\\
 \end{tabular}
 
-Byte 2:
-
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
-
-\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
-\hline
-0 & n & n & n & n & n & n & n\\
-\hline
-\end{tabular}
-& $<$SLOT\#$>$ & Slot number in the range 0x00 to 0x7F. Slot 0x00 is a special slot, and slots in the range 0x70 to 0x7F are reserved to Digitrax.\\
-\end{tabular}
-
-Bytes 3 to 12 encode as per slot bytes 0 to 9.
+Bytes 2 to 12 encode as per slot bytes 0 to 10.
 
 Byte 13:
 
@@ -2598,7 +3002,7 @@ None.
 
 Byte 0:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2610,7 +3014,7 @@ Byte 0:
 
 Byte 1:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2620,7 +3024,7 @@ Byte 1:
 & 0x15 & Message length (21 bytes).\\
 \end{tabular}
 
-Bytes 2 to XX encode as per extended slot bytes 0 to YY.
+Bytes 2 to 19 encode as per extended slot bytes 0 to 17.
 
 Byte 20:
 
@@ -2658,7 +3062,7 @@ None.
 
 Byte 0:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2670,7 +3074,7 @@ Byte 0:
 
 Byte 1:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2682,19 +3086,19 @@ Byte 1:
 
 Byte 2:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
 0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-& $<$STAT1$>$ & Slot status 1. See OPC\_SL\_RD\_DATA for bit encoding details.\\
+& $<$STAT1$>$ & Slot status 1.\\
 \end{tabular}
 
 Byte 3:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2729,7 +3133,7 @@ None.
 
 Byte 0:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2741,7 +3145,7 @@ Byte 0:
 
 Byte 1:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2763,7 +3167,7 @@ d0 & A0.\\
 
 Byte 2:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2785,7 +3189,7 @@ d0 & A7.\\
 
 Byte 3:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2820,7 +3224,7 @@ None.
 
 Byte 0:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2832,7 +3236,7 @@ Byte 0:
 
 Byte 1:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2867,7 +3271,7 @@ d0 & A0.\\
 
 Byte 2:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2877,7 +3281,7 @@ Byte 2:
 & $<$SN2$>$ & Sensor address and sensor state.\\
 \end{tabular}
 
-\begin{tabular}{p{0.5\linewidth} p{0.5\linewidth}}
+\begin{tabular}{p{0.555\linewidth} p{0.555\linewidth}}
 
 \underline{SN2.d6 = 1} & \underline{SN2.d6 = 0}\\
 \begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
@@ -2903,7 +3307,7 @@ d0 & A7.\\
 
 Byte 3:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2938,7 +3342,7 @@ None.
 
 Byte 0:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2950,7 +3354,7 @@ Byte 0:
 
 Byte 1:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2972,7 +3376,7 @@ d0 & A0.\\
 
 Byte 2:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -2994,7 +3398,7 @@ d0 & A7.\\
 
 Byte 3:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -3014,7 +3418,19 @@ OPC\_LONG\_ACK if command failed, otherwise no response.
 
 \underline{Notes:} 
 
-None.
+The on power on the command station sends a sequence of OPC\_SW\_REQ messages with the following values of SW1 and SW2:
+
+\begin{tabular}{l l l}
+\underline{SW1} & \underline{SW2} & \underline{Purpose}\\
+0x78 & 0x27\\
+0x79 & 0x27\\
+0x7A & 0x27\\
+0x7B & 0x27\\
+0x78 & 0x07 & Interrogate all PM4 inputs?\\
+0x79 & 0x07 & Interrogate all BDL16 input reports?\\
+0x7A & 0x07 & Interrogate all SE8 input reports?\\
+0x7B & 0x07 & Interrogate all DS64 input reports.\\
+\end{tabular}
 
 \rule{15.1cm}{0.4pt}
 \subsubsection{OPC\_SW\_STATE}
@@ -3028,7 +3444,7 @@ None.
 
 Byte 0:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -3040,7 +3456,7 @@ Byte 0:
 
 Byte 1:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -3052,7 +3468,7 @@ Byte 1:
 
 Byte 2:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -3062,7 +3478,7 @@ Byte 2:
 & $<$SW2$>$ & Switch address A10 to A7 and switch control bits.\\
 \end{tabular}
 
-\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+\begin{tabular}{p{0.05\linewidth} p{0.8\linewidth}} 
 d6 & Reserved. Set to 0.\\
 d5 & Direction. 1 means closed/green, and 0 means thrown/red.\\
 d4 & Output. 1 means on, and 0 means off.\\
@@ -3074,7 +3490,7 @@ d0 & A7.\\
 
 Byte 3:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -3098,6 +3514,98 @@ OPC\_LONG\_ACK.
 This needs to be tested to see what the real purpose is.
 
 \rule{15.1cm}{0.4pt}
+\subsubsection{OPC\_TRANS\_REP}
+\underline{Operation:} Transponder input report.
+
+\underline{Group:} \hspace{0.5cm} 6-Byte Message
+
+\underline{Direction:} \hspace{0.05cm} $\rightarrow$ Command Station
+
+\underline{Encoding:} 
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 1 & 0 & 1 & 0 & 0 & 0 & 0\\
+\hline
+\end{tabular}
+& 0xD0 & Opcode.\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+&  & A value of 0x20 means the positive detection of a transponder, 0x00 means no longer detected.\\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 0 & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$ZONE\#$>$ & Zone indicator (0x0 = A, 0x2 = B, 0x4 = C, 0x6 = D).\\
+\end{tabular}
+
+Byte 3:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$ADR$>$ & Locomotive address low bits.\\
+\end{tabular}
+
+Byte 4:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$ADR2$>$ & Locomotive address high bits.\\
+\end{tabular}
+
+Byte 5:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$CHK$>$ & Checksum.
+\end{tabular}
+
+\underline{Description:}
+
+\underline{Response:} 
+
+None.
+
+\underline{Notes:} 
+
+None.
+
+\rule{15.1cm}{0.4pt}
 \subsubsection{OPC\_UNLINK\_SLOTS}
 \underline{Operation:} Unlink slots.
 
@@ -3109,7 +3617,7 @@ This needs to be tested to see what the real purpose is.
 
 Byte 0:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -3121,7 +3629,7 @@ Byte 0:
 
 Byte 1:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -3133,7 +3641,7 @@ Byte 1:
 
 Byte 2:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -3145,7 +3653,7 @@ Byte 2:
 
 Byte 3:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -3179,7 +3687,7 @@ None.
 
 Byte 0:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -3191,7 +3699,7 @@ Byte 0:
 
 Byte 1:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -3201,21 +3709,69 @@ Byte 1:
 & 0x0E & Message length (14 bytes).\\
 \end{tabular}
 
-Byte 2:
+Bytes 2 to 12 encode as per slot bytes 0 to 10.
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
+Byte 13:
+
+\begin{tabular}{p{0.4\linewidth} p{0.1\linewidth} p{0.5\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$SLOT\#$>$ & Slot number in the range 0x00 to 0x7F. Slot 0x00 is a special slot, and slots in the range 0x70 to 0x7F are reserved to Digitrax.\\
+& $<$CHK$>$ & Checksum.\\
 \end{tabular}
 
-Bytes 3 to 12 encode the same as bytes 3 to 12 of OPC\_SL\_RD\_DATA.
+\underline{Description:}
 
-Byte 13:
+This command sends the slot data to the command station.
+
+\underline{Response:} 
+
+Returns OPC\_LONG\_ACK.
+
+\underline{Notes:} 
+
+None.
+
+\rule{15.1cm}{0.4pt}
+\subsubsection{OPC\_WR\_SL\_DATA\_EXT}
+\underline{Operation:} Write extended slot data.
+
+\underline{Group:} \hspace{0.5cm} Variable-Byte Message
+
+\underline{Direction:} \hspace{0.05cm} Command Station $\rightarrow$ 
+
+\underline{Encoding:} 
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 1 & 1 & 0 & 1 & 1 & 1 & 0\\
+\hline
+\end{tabular}
+& 0xEE & Opcode.\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 1 & 0 & 1 & 0 & 1\\
+\hline
+\end{tabular}
+& 0x15 & Message length (21 bytes).\\
+\end{tabular}
+
+Bytes 2 to 19 encode as per extended slot bytes 0 to 17.
+
+Byte 20:
 
 \begin{tabular}{p{0.4\linewidth} p{0.1\linewidth} p{0.5\linewidth}} 
 
