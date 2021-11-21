@@ -30,6 +30,7 @@ public enum LoconetOpcode : UInt8 {
   case OPC_SW_STATE     = 0xBC
   case OPC_SW_ACK       = 0xBD
   case OPC_LOCO_ADR     = 0xBF
+  case OPC_PEER_XFER    = 0xE5
   case OPC_SL_RD_DATA   = 0xE7
   case OPC_WR_SL_DATA   = 0xEF
 }

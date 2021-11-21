@@ -307,6 +307,13 @@ public class LoconetMessenger : NSObject, ORSSerialPortDelegate {
               case .OPC_MOVE_SLOTS:
                 break
      */
+              case .OPC_PEER_XFER:
+                let pxm = PeerXferMessage(interfaceId: self.id, message: message)
+                print("PEER_XFER: \(pxm.sourceId) to \(pxm.destId)")
+                for x in pxm.peerXferMessage {
+                  print("\(String(format: "%02x ", x))")
+                }
+                break
               case .OPC_RQ_SL_DATA:
                 delegate?.LoconetRequestSlotDataMessageReceived(message: LoconetRequestSlotDataMessage(interfaceId:self.id, message: message))
                 break
@@ -316,13 +323,19 @@ public class LoconetMessenger : NSObject, ORSSerialPortDelegate {
               case .OPC_LOCO_ADR:
                 break */
               case .OPC_SL_RD_DATA /*, .OPC_WR_SL_DATA */:
-                let lsdm = LoconetSlotDataMessage(interfaceId: self.id, message: message)
-                let slot = LoconetSlot(interfaceId: self.id, message: message)
-                lsdm.slot = slot
-                let sn = Int(slot.slotNumber)
-                loconetSlots[sn] = nil
-                loconetSlots[sn] = slot
-                delegate?.LoconetSlotDataMessageReceived(message: lsdm)
+                if message[2] == 0x7b {
+                  let fcm = FastClockMessage(interfaceId: self.id, message: message)
+                  print("\(fcm.hours):\(fcm.minutes).\(fcm.seconds) \(String(format:"%04x",fcm.ticks)) \(fcm.dataValid)")
+                }
+                else {
+                  let lsdm = LoconetSlotDataMessage(interfaceId: self.id, message: message)
+                  let slot = LoconetSlot(interfaceId: self.id, message: message)
+                  lsdm.slot = slot
+                  let sn = Int(slot.slotNumber)
+                  loconetSlots[sn] = nil
+                  loconetSlots[sn] = slot
+                  delegate?.LoconetSlotDataMessageReceived(message: lsdm)
+                }
                 break
               default:
                 print("\(opCode)")
