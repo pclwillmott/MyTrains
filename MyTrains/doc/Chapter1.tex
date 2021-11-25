@@ -2880,6 +2880,411 @@ DCS210 with SN 0x10D4 ver 0.3
 
 
 \rule{15.1cm}{0.4pt}
+\subsubsection{OPC\_PEER\_XFER\_20}
+\underline{Operation:} Move bytes peer to peer.
+
+\underline{Group:} \hspace{0.5cm} Variable-Byte Message
+
+\underline{Direction:} \hspace{0.05cm} device $\rightarrow$ device  
+
+\underline{Encoding:} 
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 1 & 1 & 0 & 0 & 1 & 0 & 1\\
+\hline
+\end{tabular}
+& 0xE5 & Opcode.\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 1 & 0 & 1 & 0 & 0\\
+\hline
+\end{tabular}
+& 0x14 & Message length (20 bytes).\\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$SRC$>$ & Source id in the range 0x00 to 0x7F.\\
+\end{tabular}
+
+Byte 3:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$DSTL$>$ & Destination id low in the range 0x00 to 0x7F.\\
+\end{tabular}
+
+Byte 4:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$DSTH$>$ & Destination id high in the range 0x00 to 0x7F.\\
+\end{tabular}
+
+Byte 5:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$HOST$>$ & Device host identifier.\\
+\end{tabular}
+
+This should be 0x00 for discover devices broadcast.
+
+\begin{tabular}{l l}
+\underline{Host Id} & \underline{Device}\\
+0x01 & LNRP\\
+0x04 & UT4\\
+0x0C & WTL12\\
+0x14 & DB210 Opto\\
+0x15 & DB210\\
+0x16 & DB220\\
+0x1A & DCS210+\\
+0x1B & DCS210\\
+0x1C & DCS240\\
+0x23 & PR3\\
+0x24 & PR4\\
+0x2A & DT402\\
+0x32 & DT500\\
+0x33 & DCS51\\
+0x34 & DCS52\\
+0x3E & DT602\\
+0x51 & BXPA1\\
+0x58 & BXP88\\
+0x5C & UR92\\
+0x63 & LNWI\\
+\end{tabular}
+
+Byte 6:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+&  & Hardware version.\\
+\end{tabular}
+
+\begin{tabular}{l l}
+\underline{Host Id} & \underline{Device}\\
+0x00 & Slave all\\
+0x18 & Slave RF24\\
+\end{tabular}
+
+Byte 7:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+&  & Reserved.\\
+\end{tabular}
+
+Byte 8:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+&  & Software Version Number.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d6 & version number bit 3\\
+d5 & version number bit 2.\\
+d4 & version number bit 1\\
+d3 & version number bit 0\\
+d2 & subversion number bit 2\\
+d1 & subversion number bit 1\\
+d0 & subversion number bit 0\\
+\end{tabular}
+
+e.g. 0x09 decodes as version 1.1.
+
+This is set to 0x00 for discover devices broadcast message.
+
+Byte 9:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$PXCT1$>$ & Address type code and high bits of D1 to D4.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d6 & XC2. Address type code.\\
+d5 & XC1. Address type code.\\
+d4 & XC0. Address type code.\\
+d3 & D4.7. High bit\\
+d2 & D3.7. High bit\\
+d1 & D2.7. High bit\\
+d0 & D1.7. High bit\\
+\end{tabular}
+
+\begin{tabular}{p{0.1\linewidth} p{0.1\linewidth} p{0.1\linewidth} p{0.4\linewidth}} 
+\underline{XC2} & \underline{XC1} & \underline{XC0} & \underline{Meaning}\\
+0 & 0 & 0 & 7 bit peer to peer addresses.\\
+0 & 0 & 1 & reserved.\\
+0 & 1 & 0 & reserved.\\
+0 & 1 & 1 & reserved.\\
+1 & 0 & 0 & reserved.\\
+1 & 0 & 1 & reserved.\\
+1 & 1 & 0 & reserved.\\
+1 & 1 & 1 & reserved.\\
+\end{tabular}
+
+Byte 10:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$D1$>$ & Data item 1. Low 7 bits.\\
+\end{tabular}
+
+Byte 11:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$D2$>$ & Data item 2. Low 7 bits.\\
+\end{tabular}
+
+This should be 0x01 for a discover devices broadcast message.
+
+Byte 12:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$D3$>$ & Data item 3. Low 7 bits.\\
+\end{tabular}
+
+Byte 13:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$D4$>$ & Data item 4. Low 7 bits.\\
+\end{tabular}
+
+Byte 14:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$PXCT2$>$ & Data type code and high bits for D5 to D8.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d6 & XC5. Data type code.\\
+d5 & XC4. Data type code.\\
+d4 & XC3. Data type code.\\
+d3 & D8.7. High bit\\
+d2 & D7.7. High bit\\
+d1 & D6.7. High bit\\
+d0 & D5.7. High bit\\
+\end{tabular}
+
+\begin{tabular}{p{0.1\linewidth} p{0.1\linewidth} p{0.1\linewidth} p{0.4\linewidth}} 
+\underline{XC5} & \underline{XC4} & \underline{XC3} & \underline{Meaning}\\
+0 & 0 & 0 & ANSI text string.\\
+0 & 0 & 1 & reserved.\\
+0 & 1 & 0 & reserved.\\
+0 & 1 & 1 & reserved.\\
+1 & 0 & 0 & reserved.\\
+1 & 0 & 1 & reserved.\\
+1 & 1 & 0 & reserved.\\
+1 & 1 & 1 & reserved.\\
+\end{tabular}
+
+Byte 15:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$D5$>$ & Data item 5. Low 7 bits.\\
+\end{tabular}
+
+Byte 16:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$D6$>$ & Data item 6. Low 7 bits.\\
+\end{tabular}
+
+Byte 17:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$D7$>$ & Data item 7. Low 7 bits.\\
+\end{tabular}
+
+Byte 18:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$D8$>$ & Data item 8. Low 7 bits.\\
+\end{tabular}
+
+Byte 19:
+
+\begin{tabular}{p{0.4\linewidth} p{0.1\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$CHK$>$ & Checksum.\\
+\end{tabular}
+
+\underline{Description:}
+
+This command sends the data from one device to another peer to peer.
+
+\begin{tabular}{p{0.2\linewidth} p{0.1\linewidth} p{0.1\linewidth} p{0.50\linewidth}} 
+\underline{SRC} & \underline{DSTL} & \underline{DSTH} & Comments\\
+0x0F & 0x08 & 0x00 & Discover devices broadcast message.\\
+0xoF & 0x10 & 0x00 & Discover device response.\\
+\end{tabular}
+
+\underline{Response:} 
+
+OPC\_PEER\_XFER\_20 for discover devices.
+
+\underline{Notes:} 
+
+The discover response decoded peer transfer message encodes as follows:
+
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+D1 & IPL Version Number\\
+D2 & Serial Number - low byte\\
+D3 & Serial Number - high byte\\
+D4 & \\
+D5 & Serial Number 2 - low byte\\
+D6 & Serial Number 2 - high byte\\
+D7 & \\
+D8 & \\
+\end{tabular}
+
+The IPL version number is encoded as follows:
+
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d6 & version number bit 3\\
+d5 & version number bit 2.\\
+d4 & version number bit 1\\
+d3 & version number bit 0\\
+d2 & subversion number bit 2\\
+d1 & subversion number bit 1\\
+d0 & subversion number bit 0\\
+\end{tabular}
+
+e.g. 0x09 decodes as version 1.1.
+
+These came from DigiPLII:
+
+message Length = 20
+e5 14 0f 10 00 24 00 00 00 02 00 08 07 00 00 00 00 00 00 38 
+
+message Length = 20
+e5 14 0f 08 00 00 00 00 00 00 00 01 00 00 00 00 00 00 00 08 
+
+message Length = 20
+e5 14 0f 10 00 24 00 00 00 00 00 57 13 00 00 00 00 00 00 71 
+
+message Length = 20
+e5 14 0f 10 00 1b 00 00 03 02 00 54 10 00 00 00 00 00 00 4f 
+
+It reports PR4 with serial number 0x0788 ver 0
+PR4 with serial 0x1357 ver 0
+DCS240 with SN 0x0AAB ver 0.3
+DCS210 with SN 0x10D4 ver 0.3
+
+
+\rule{15.1cm}{0.4pt}
 \subsubsection{OPC\_RQ\_SL\_DATA}
 \underline{Operation:} Request slot data or status block.
 

@@ -88,5 +88,15 @@ public class LoconetMessage {
       return length
     }
   }
+  
+  public var messageHex : String {
+    get {
+      var str : String = ""
+      for x in message {
+        str += String(format: "%02X ",x)
+      }
+      return str.trimmingCharacters(in: [" "])
+    }
+  }
     
 }

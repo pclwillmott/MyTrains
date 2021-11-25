@@ -104,6 +104,14 @@ public class LoconetMessenger : NSObject, ORSSerialPortDelegate {
 
   }
   
+  public func discoverDevices() {
+    //0x01
+    let message = LoconetMessage.formLoconetMessage(opCode: .OPC_PEER_XFER, data: Data([0x14, 0x0f, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]))
+    
+    addToQueue(message: message)
+
+  }
+  
   public func requestSlotInfo(address:UInt8) {
     
     let message = LoconetMessage.formLoconetMessage(opCode: .OPC_LOCO_ADR, data: Data([0x00, address]))
@@ -145,6 +153,8 @@ public class LoconetMessenger : NSObject, ORSSerialPortDelegate {
     addToQueue(message: message)
 
   }
+  
+  
   
   // ORSSerialPortDelegate Methods
   
@@ -308,10 +318,21 @@ public class LoconetMessenger : NSObject, ORSSerialPortDelegate {
                 break
      */
               case .OPC_PEER_XFER:
-                let pxm = PeerXferMessage(interfaceId: self.id, message: message)
-                print("PEER_XFER: \(pxm.sourceId) to \(pxm.destId)")
-                for x in pxm.peerXferMessage {
-                  print("\(String(format: "%02x ", x))")
+                if loconetMessage.messageLength == 16 {
+                  let pxm = PeerXferMessage(interfaceId: self.id, message: message)
+                  print("PEER_XFER: \(pxm.sourceId) to \(pxm.destId)")
+                  print("\(pxm.messageHex)")
+                  for x in pxm.peerXferMessage {
+                    print("\(String(format: "%02x ", x))")
+                  }
+                }
+                else {
+                  let pxm = PeerXferMessage20(interfaceId: self.id, message: message)
+                  print("PEER_XFER_20: \(pxm.sourceId) to \(pxm.destId)")
+                  print("Hex: \(pxm.messageHex)")
+                  for x in pxm.peerXferMessage {
+                    print("\(String(format: "%02x ", x))")
+                  }
                 }
                 break
               case .OPC_RQ_SL_DATA:

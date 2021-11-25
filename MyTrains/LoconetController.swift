@@ -29,10 +29,15 @@ public class LoconetController : LoconetMessengerDelegate  {
       add(locomotive: Locomotive(locomotiveId: "Class 121", address: 11, interface: interface1))
       add(locomotive: Locomotive(locomotiveId: "Class 128", address: 12, interface: interface1))
       interface1.powerOn()
+      /*
       for loco in locomotivesByAddress {
         loco.value.requestSlotInfo()
       }
+       */
+    //  interface1.discoverDevices()
     }
+    
+    
     
   }
   
