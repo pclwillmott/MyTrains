@@ -5,6 +5,861 @@
 
 \chapter[Updating Firmware]{Updating Firmware}
 
+\section{Bootloader Protocol 1}
+
+
+\section{Bootloader Protocol 2}
+
+\begin{enumerate}
+\item The IPL Setup message is sent twice to initiate the download.
+\item Each block is sent,
+\item The IPL End Operation message is sent.
+\end{enumerate}
+
+A block consists of an IPL Address message following by 1 or more IPL Data messages.
+
+\subsection{IPL Setup}
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 1 & 1 & 0 & 0 & 1 & 0 & 1\\
+\hline
+\end{tabular}
+& 0xE5 & OPC\_PEER\_XFER opcode.\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 1 & 0 & 0 & 0 & 0\\
+\hline
+\end{tabular}
+& 0x10 & Message length (16 bytes).\\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
+\hline
+\end{tabular}
+& 0x7F & Broadcast id.\\
+\end{tabular}
+
+Byte 3:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
+\hline
+\end{tabular}
+& 0x7F & Broadcast id.\\
+\end{tabular}
+
+Byte 4:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
+\hline
+\end{tabular}
+& 0x7F & Broadcast id.\\
+\end{tabular}
+
+Byte 5:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 1 & 0 & 0 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$PXCT1$>$ & Download code 0x40 and high bits of D1 to D4.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d3 & D4.7. High bit\\
+d2 & D3.7. High bit\\
+d1 & D2.7. High bit\\
+d0 & D1.7. High bit\\
+\end{tabular}
+
+Byte 6:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$D1$>$ & Manufacturer code. Low 7 bits.\\
+\end{tabular}
+
+\begin{tabular}{l l}
+\underline{Code} & \underline{Manufacturer}\\
+0x00 & Digitrak\\
+\end{tabular}
+
+Byte 7:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$D2$>$ & Product code. Low 7 bits.\\
+\end{tabular}
+
+Byte 8:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$D3$>$ & Hardware version. Low 7 bits.\\
+\end{tabular}
+
+Byte 9:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$D4$>$ & Software version. Low 7 bits.\\
+\end{tabular}
+
+Byte 10:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 0 & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$PXCT2$>$ & Setup download type code 0x00 and high bits for D5 to D8.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d3 & D8.7. High bit\\
+d2 & D7.7. High bit\\
+d1 & D6.7. High bit\\
+d0 & D5.7. High bit\\
+\end{tabular}
+
+
+Byte 11:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$D5$>$ & Options. Low 7 bits.\\
+\end{tabular}
+
+Byte 12:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+\hline
+\end{tabular}
+& $<$D6$>$ & Reserved always 0x00. Low 7 bits.\\
+\end{tabular}
+
+Byte 13:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$D7$>$ & Data item 7. Low 7 bits.\\
+\end{tabular}
+
+This is unknown at this time. It might be something to do with erase block size.
+
+Byte 14:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+\hline
+\end{tabular}
+& $<$D8$>$ & Reserved always 0x00. Low 7 bits.\\
+\end{tabular}
+
+Byte 15:
+
+\begin{tabular}{p{0.4\linewidth} p{0.1\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$CHK$>$ & Checksum.\\
+\end{tabular}
+
+\subsection{IPL Address Message}
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 1 & 1 & 0 & 0 & 1 & 0 & 1\\
+\hline
+\end{tabular}
+& 0xE5 & OPC\_PEER\_XFER opcode.\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 1 & 0 & 0 & 0 & 0\\
+\hline
+\end{tabular}
+& 0x10 & Message length (16 bytes).\\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
+\hline
+\end{tabular}
+& 0x7F & Broadcast id.\\
+\end{tabular}
+
+Byte 3:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
+\hline
+\end{tabular}
+& 0x7F & Broadcast id.\\
+\end{tabular}
+
+Byte 4:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
+\hline
+\end{tabular}
+& 0x7F & Broadcast id.\\
+\end{tabular}
+
+Byte 5:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 1 & 0 & 0 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$PXCT1$>$ & Download code 0x40 and high bits of D1 to D4.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d3 & D4.7. High bit\\
+d2 & D3.7. High bit\\
+d1 & D2.7. High bit\\
+d0 & D1.7. High bit\\
+\end{tabular}
+
+Byte 6:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$D1$>$ & Address High Byte. Low 7 bits.\\
+\end{tabular}
+
+Byte 7:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$D2$>$ & Address Mid Byte. Low 7 bits.\\
+\end{tabular}
+
+Byte 8:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$D3$>$ & Address Low Byte. Low 7 bits.\\
+\end{tabular}
+
+Byte 9:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+\hline
+\end{tabular}
+& $<$D4$>$ & Reserved always 0x00. Low 7 bits.\\
+\end{tabular}
+
+Byte 10:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 1 & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$PXCT2$>$ & Address type code 0x10 and high bits for D5 to D8.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d3 & D8.7. High bit\\
+d2 & D7.7. High bit\\
+d1 & D6.7. High bit\\
+d0 & D5.7. High bit\\
+\end{tabular}
+
+
+Byte 11:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+\hline
+\end{tabular}
+& $<$D5$>$ & Reserved always 0x00. Low 7 bits.\\
+\end{tabular}
+
+Byte 12:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+\hline
+\end{tabular}
+& $<$D6$>$ & Reserved always 0x00. Low 7 bits.\\
+\end{tabular}
+
+Byte 13:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+\hline
+\end{tabular}
+& $<$D7$>$ & Reserved always 0x00. Low 7 bits.\\
+\end{tabular}
+
+Byte 14:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+\hline
+\end{tabular}
+& $<$D8$>$ & Reserved always 0x00. Low 7 bits.\\
+\end{tabular}
+
+Byte 15:
+
+\begin{tabular}{p{0.4\linewidth} p{0.1\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$CHK$>$ & Checksum.\\
+\end{tabular}
+
+\subsection{IPL  Data Message}
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 1 & 1 & 0 & 0 & 1 & 0 & 1\\
+\hline
+\end{tabular}
+& 0xE5 & OPC\_PEER\_XFER opcode.\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 1 & 0 & 0 & 0 & 0\\
+\hline
+\end{tabular}
+& 0x10 & Message length (16 bytes).\\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
+\hline
+\end{tabular}
+& 0x7F & Broadcast id.\\
+\end{tabular}
+
+Byte 3:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
+\hline
+\end{tabular}
+& 0x7F & Broadcast id.\\
+\end{tabular}
+
+Byte 4:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
+\hline
+\end{tabular}
+& 0x7F & Broadcast id.\\
+\end{tabular}
+
+Byte 5:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 1 & 0 & 0 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$PXCT1$>$ & Download code 0x40 and high bits of D1 to D4.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d3 & D4.7. High bit\\
+d2 & D3.7. High bit\\
+d1 & D2.7. High bit\\
+d0 & D1.7. High bit\\
+\end{tabular}
+
+Byte 6:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$D1$>$ & Data Byte 1. Low 7 bits.\\
+\end{tabular}
+
+Byte 7:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$D2$>$ & Data Byte 2. Low 7 bits.\\
+\end{tabular}
+
+Byte 8:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$D3$>$ & Data Byte 3. Low 7 bits.\\
+\end{tabular}
+
+Byte 9:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$D4$>$ & Data Byte 4. Low 7 bits.\\
+\end{tabular}
+
+Byte 10:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 1 & 0 & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$PXCT2$>$ & Data type code 0x20 and high bits for D5 to D8.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d3 & D8.7. High bit\\
+d2 & D7.7. High bit\\
+d1 & D6.7. High bit\\
+d0 & D5.7. High bit\\
+\end{tabular}
+
+Byte 11:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$D5$>$ & Data Byte 5. Low 7 bits.\\
+\end{tabular}
+
+Byte 12:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$D6$>$ & Data Byte 6. Low 7 bits.\\
+\end{tabular}
+
+Byte 13:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$D7$>$ & Data Byte 7. Low 7 bits.\\
+\end{tabular}
+
+Byte 14:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$D8$>$ & Data Byte 8. Low 7 bits.\\
+\end{tabular}
+
+Byte 15:
+
+\begin{tabular}{p{0.4\linewidth} p{0.1\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$CHK$>$ & Checksum.\\
+\end{tabular}
+
+\subsection{IPL End Operation Message}
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 1 & 1 & 0 & 0 & 1 & 0 & 1\\
+\hline
+\end{tabular}
+& 0xE5 & OPC\_PEER\_XFER opcode.\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 1 & 0 & 0 & 0 & 0\\
+\hline
+\end{tabular}
+& 0x10 & Message length (16 bytes).\\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
+\hline
+\end{tabular}
+& 0x7F & Broadcast id.\\
+\end{tabular}
+
+Byte 3:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
+\hline
+\end{tabular}
+& 0x7F & Broadcast id.\\
+\end{tabular}
+
+Byte 4:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
+\hline
+\end{tabular}
+& 0x7F & Broadcast id.\\
+\end{tabular}
+
+Byte 5:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 1 & 0 & 0 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$PXCT1$>$ & Download code 0x40 and high bits of D1 to D4.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d3 & D4.7. High bit\\
+d2 & D3.7. High bit\\
+d1 & D2.7. High bit\\
+d0 & D1.7. High bit\\
+\end{tabular}
+
+Byte 6:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+\hline
+\end{tabular}
+& $<$D1$>$ & Reserved always 0x00. Low 7 bits.\\
+\end{tabular}
+
+Byte 7:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+\hline
+\end{tabular}
+& $<$D2$>$ & Reserved always 0x00. Low 7 bits.\\
+\end{tabular}
+
+Byte 8:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+\hline
+\end{tabular}
+& $<$D3$>$ & Reserved always 0x00. Low 7 bits.\\
+\end{tabular}
+
+Byte 9:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+\hline
+\end{tabular}
+& $<$D4$>$ & Reserved always 0x00. Low 7 bits.\\
+\end{tabular}
+
+Byte 10:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 1 & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$PXCT2$>$ & End Operation type code 0x40 and high bits for D5 to D8.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d3 & D8.7. High bit\\
+d2 & D7.7. High bit\\
+d1 & D6.7. High bit\\
+d0 & D5.7. High bit\\
+\end{tabular}
+
+
+Byte 11:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+\hline
+\end{tabular}
+& $<$D5$>$ & Reserved always 0x00. Low 7 bits.\\
+\end{tabular}
+
+Byte 12:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+\hline
+\end{tabular}
+& $<$D6$>$ & Reserved always 0x00. Low 7 bits.\\
+\end{tabular}
+
+Byte 13:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+\hline
+\end{tabular}
+& $<$D7$>$ & Reserved always 0x00. Low 7 bits.\\
+\end{tabular}
+
+Byte 14:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+\hline
+\end{tabular}
+& $<$D8$>$ & Reserved always 0x00. Low 7 bits.\\
+\end{tabular}
+
+Byte 15:
+
+\begin{tabular}{p{0.4\linewidth} p{0.1\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$CHK$>$ & Checksum.\\
+\end{tabular}
+
 \section{Firmware Parameters}
 
 \begin{tabular}{l l l l l l l l l l l l}
@@ -31,6 +886,22 @@
 0x5C & UR92 & 0 & 1 & 8 & 64 & 16 & 1 & 64 & 64 & 16\\
 0x5D & UR93 & 2 & 0 & 0 & 64 & 5 & 2 & 512 & 4096 & 25\\
 0x63 & LNWI & 2 & 1 & 2 & 64 & 5 & 2 & 512 & 4096 & 25\\
+\end{tabular}
+
+\begin{tabular}{r r r r r r}
+\underline{EBS} & \underline{LNRP} & \underline{DT402} & \underline{DT500} & \underline{DCS51}& \underline{DCS52}\\
+32 & 0x20 & 0x65 & 0x1B & - & 0x00 \\
+64 & 0x50 & 0x73 & 0x0E & 0x0E & 0x00\\
+128 & 0x28 & 0x3A & 0x47 & - & 0x00\\
+192 & 0x1B & 0x7C & 0x05& - & 0x2B\\
+256 & 0x14 & 0x5D & 0x64& - & 0x40\\
+1024 & 0x05 & 0x18 & 0x19& - & 0x30\\
+2048 & 0x03 & 0x0C & 0x0D& - & 0x58\\
+4096 & 0x02 & 0x06 & 0x07& - & 0x2C\\
+8192 & 0x01 & 0x03 & 0x04& - & 0x16\\
+16384 & - & 0x02 & 0x02& - & 0x0B\\
+32768 & - & 0x01 & 0x01& - & 0x06\\
+65536 & - & - & - & - & 0x03\\
 \end{tabular}
 
 \section{DMF File Format}

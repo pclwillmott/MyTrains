@@ -2696,6 +2696,9 @@ d0 & D1.7. High bit\\
 1 & 1 & 1 & reserved.\\
 \end{tabular}
 
+private static final int PXCT1DOWNLOAD = 0x40;
+
+
 Byte 6:
 
 \begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
@@ -2777,6 +2780,22 @@ d0 & D5.7. High bit\\
 1 & 1 & 0 & reserved.\\
 1 & 1 & 1 & reserved.\\
 \end{tabular}
+
+    static int PXCT2SETUP = 0x00;
+    static int PXCT2SENDADDRESS = 0x10;
+    static int PXCT2SENDDATA = 0x20;
+    static int PXCT2VERIFYDATA = 0x30;
+    static int PXCT2ENDOPERATION = 0x40;
+
+Options flags
+\begin{verbatim}
+private static final int DO_NOT_CHECK_SOFTWARE_VERSION = 0x00;
+    private static final int CHECK_SOFTWARE_VERSION_LESS = 0x04;
+
+    private static final int DO_NOT_CHECK_HARDWARE_VERSION = 0x00;
+    private static final int REQUIRE_HARDWARE_VERSION_EXACT_MATCH = 0x01;
+    private static final int ACCEPT_LATER_HARDWARE_VERSIONS = 0x03;
+\end{verbatim}
 
 Byte 11:
 
