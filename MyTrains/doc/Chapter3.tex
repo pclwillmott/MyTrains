@@ -205,10 +205,10 @@ Byte 13:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$D7$>$ & Data item 7. Low 7 bits.\\
+& $<$D7$>$ & Number of blocks to erase 7. Low 7 bits.\\
 \end{tabular}
 
-This is unknown at this time. It might be something to do with erase block size.
+This is calculated as INT(0.5 + (Last Address - First Address) / Erase Blk Size).
 
 Byte 14:
 
@@ -651,6 +651,8 @@ Byte 15:
 & $<$CHK$>$ & Checksum.\\
 \end{tabular}
 
+D1 is the lowest addressed byte and D8 is the highest addressed byte.
+
 \subsection{IPL End Operation Message}
 
 Byte 0:
@@ -862,30 +864,31 @@ Byte 15:
 
 \section{Firmware Parameters}
 
-\begin{tabular}{l l l l l l l l l l l l}
-\underline{Prod. Code} & \underline{Device} & \underline{BLV} & \underline{HWV} & \underline{SWV} & \underline{CHKS} & \underline{DLY} & \underline{OPT} & \underline{PBLK} & \underline{EBLK} & \underline{EDLY}\\
-0x01 & LNRP & 1 & 0 & 3 & 64 & 8 & 1 & 64 & 64 & 8\\
+\begin{tabular}{l l l l l l l l l l l l l l}
+\underline{PC} & \underline{Device} & \underline{DT} & \underline{BV} & \underline{HV} & \underline{SV} & \underline{CK} & \underline{DL} & \underline{OP} & \underline{PB} & \underline{EB} & \underline{ED} & \underline{DC}\\
+0x01 & LNRP & 09OCT15 & 1 & 0 & 3 & 64 & 8 & 1 & 64 & 64 & 8 & 0x50\\
 0x04 & UT4\\
-0x06 & UT6 & 2 & 0 & 1 & 64 & 11 & 2 & 512 & 4096 & 40\\
+0x06 & UT6 & 05APR21 & 2 & 0 & 1 & 64 & 11 & 2 & 512 & 4096 & 40 & 0x2E\\
 0x0C & WTL12\\
-0x14 & DB210 Opto & 2 & 1 & 2 & 64 & 7 & 2 & 512 & 4096 & 25\\
-0x15 & DB210 & 2 & 1 & 2 & 64 & 7 & 2 & 512 & 4096 & 25\\
-0x16 & DB220 & 2 & 1 & 2 & 64 & 7 & 2 & 512 & 4096 & 25\\
+0x14 & DB210O & 06MAR20 & 2 & 1 & 2 & 64 & 7 & 2 & 512 & 4096 & 25 & 0x08\\
+0x15 & DB210 & 06MAR20& 2 & 1 & 2 & 64 & 7 & 2 & 512 & 4096 & 25 & 0x08\\
+0x16 & DB220 & 06MAR20 & 2 & 1 & 2 & 64 & 7 & 2 & 512 & 4096 & 25 & 0x08\\
 0x1A & DCS210+\\
-0x1B & DCS210 & 2 & 1 & 3 & 64 & 5 & 2 & 256 & 2048 & 40\\
-0x1C & DCS240 & 2 & 1 & 3 & 64 & 5 & 2 & 256 & 2048 & 40\\
-0x23 & PR3 & 1 & 0 & 8 & 64 & 5 & 1 & - & - & -\\
-0x24 & PR4 & 0 & 0 & 0 & 64 & 5 & 2 & 256 & 2048 & 60\\
-0x2A & DT402 & 1 & 0 & 17 & 64 & 15 & 1 & 64 & 64 & 15\\
-0x32 & DT500 & 1 & 0 & 1 & 64 & 15 & 1 & 64 & 64 & 15\\
-0x33 & DCS51 & 1 & 0 & 5 & 64 & 12 & 1 & - & - & -\\
-0x34 & DCS52 & 2 & 0 & 1 & 64 & 11 & 2 & 512 & 4096 & 40\\
-0x3E & DT602 & 2 & 0 & 1 & 64 & 11 & 2 & 512 & 4096 & 40\\
-0x51 & BXPA1 & 2 & 0 & 1 & 64 & 6 & 2 & 512 & 4096 & 41\\
-0x58 & BXP88 & 2 & 0 & 2 & 64 & 50 & 2 & 256 & 2048 & 100\\
-0x5C & UR92 & 0 & 1 & 8 & 64 & 16 & 1 & 64 & 64 & 16\\
-0x5D & UR93 & 2 & 0 & 0 & 64 & 5 & 2 & 512 & 4096 & 25\\
-0x63 & LNWI & 2 & 1 & 2 & 64 & 5 & 2 & 512 & 4096 & 25\\
+0x1B & DCS210 & 06MAR20 & 2 & 1 & 3 & 64 & 5 & 2 & 256 & 2048 & 40 & 0x2C\\
+0x1C & DCS240 & 06MAR20 & 2 & 1 & 3 & 64 & 5 & 2 & 256 & 2048 & 40 & 0x2C\\
+0x23 & PR3 & 12FEB14 & 1 & 0 & 8 & 64 & 5 & 1 & - & 1024 & - & 0x14\\
+0x24 & PR4 & 05JAN18 & 0 & 0 & 0 & 64 & 5 & 2 & 256 & 2048 & 60 & 0x1C\\
+0x2A & DT402 & 10OCT16 & 1 & 0 & 17 & 64 & 15 & 1 & 64 & 64 & 15 & 0x73\\
+0x2A & DT402 & 05AUG16 & 1 & 0 & 17 & 64 & 15 & 1 & 64 & 64 & 15 & 0x4B\\
+0x32 & DT500 & 10OCT16 & 1 & 0 & 1 & 64 & 15 & 1 & 64 & 64 & 15 & 0x0E\\
+0x33 & DCS51 & 06OCT14 & 1 & 0 & 5 & 64 & 12 & 1 & - & - & - & 0x0E\\
+0x34 & DCS52 & 17JUN21 & 2 & 0 & 1 & 64 & 11 & 2 & 512 & 4096 & 40 & 0x2C\\
+0x3E & DT602 & 15JUL21 & 2 & 0 & 1 & 64 & 11 & 2 & 512 & 4096 & 40 & 0x30\\
+0x51 & BXPA1 & 18JUN21 & 2 & 0 & 1 & 64 & 6 & 2 & 512 & 4096 & 41 & 0x0A\\
+0x58 & BXP88 & 21OCT17 & 2 & 0 & 2 & 64 & 50 & 2 & 256 & 2048 & 100 & 0x18\\
+0x5C & UR92 & 07DEC15 & 0 & 1 & 8 & 64 & 16 & 1 & 64 & 64 & 16 & 0x24\\
+0x5D & UR93 & 30AUG21 & 2 & 0 & 0 & 64 & 5 & 2 & 512 & 4096 & 25 & 0x0A\\
+0x63 & LNWI & 11MAR21 & 2 & 1 & 2 & 64 & 5 & 2 & 512 & 4096 & 25 & 0x12\\
 \end{tabular}
 
 \begin{tabular}{r r r r r r}
