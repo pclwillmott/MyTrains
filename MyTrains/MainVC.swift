@@ -8,7 +8,7 @@
 import Cocoa
 import ORSSerial
 
-class ViewController: NSViewController {
+class MainVC: NSViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()

@@ -108,11 +108,17 @@ class AppDelegate: NSObject, NSApplicationDelegate, LoconetMessengerDelegate {
       print("\(port.usesRTSCTSFlowControl)")
     }
      
-    
     loconetController = LoconetController()
     
   }
 
+  @IBAction func mnuMonitorAction(_ sender: NSMenuItem) {
+    let x = ModalWindow.Monitor
+    let wc = x.windowController
+ // let vc = x.viewController(windowController: wc) as! MonitorVC
+    wc.showWindow(nil)
+  }
+  
   func applicationWillTerminate(_ aNotification: Notification) {
     // Insert code here to tear down your application
   }
