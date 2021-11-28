@@ -9,7 +9,7 @@ import Foundation
 
 public class Locomotive {
   
-  init(locomotiveId:String, address:UInt16, interface:LoconetMessenger) {
+  init(locomotiveId:String, address:UInt16, interface:NetworkMessenger) {
     self.locomotiveId = locomotiveId
     self.address = address
     self.interface = interface
@@ -21,7 +21,7 @@ public class Locomotive {
   
   public var slot : LoconetSlot? = nil
   
-  private var interface : LoconetMessenger
+  private var interface : NetworkMessenger
   
   public func requestSlotInfo() {
     interface.requestSlotInfo(address: UInt8(address))

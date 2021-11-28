@@ -85,8 +85,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, LoconetMessengerDelegate {
     print("")
   }
   
-  private var loconetMessenger : LoconetMessenger? = nil
-  private var loconetController : LoconetController? = nil
+  private var loconetMessenger : NetworkMessenger? = nil
   
   func applicationDidFinishLaunching(_ aNotification: Notification) {
     
@@ -108,8 +107,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, LoconetMessengerDelegate {
       print("\(port.usesRTSCTSFlowControl)")
     }
      
-    loconetController = LoconetController()
-    
   }
 
   @IBAction func mnuMonitorAction(_ sender: NSMenuItem) {

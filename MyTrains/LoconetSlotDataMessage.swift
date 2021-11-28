@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class LoconetSlotDataMessage : LoconetMessage {
+public class LoconetSlotDataMessage : NetworkMessage {
 
   public var slot : LoconetSlot? = nil
   

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class PeerXferMessage20 : LoconetMessage {
+public class PeerXferMessage20 : NetworkMessage {
   
   override init(interfaceId: String, message: [UInt8]) {
     

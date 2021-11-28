@@ -1,5 +1,5 @@
 //
-//  LoconetConstants.swift
+//  NetworkConstants.swift
 //  MyTrains
 //
 //  Created by Paul Willmott on 30/10/2021.

@@ -12,7 +12,7 @@ public enum LoconetSensorMessageType {
   case turnout
 }
 
-public class LoconetSensorMessage : LoconetMessage {
+public class LoconetSensorMessage : NetworkMessage {
   
   public var sensorAddress : UInt16 {
     get {

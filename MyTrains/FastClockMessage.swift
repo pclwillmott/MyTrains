@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class FastClockMessage : LoconetMessage {
+public class FastClockMessage : NetworkMessage {
   
   public var hours : Int {
     get {

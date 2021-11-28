@@ -1,5 +1,5 @@
 //
-//  LoconetMessage.swift
+//  NetworkMessage.swift
 //  MyTrains
 //
 //  Created by Paul Willmott on 30/10/2021.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class LoconetMessage {
+public class NetworkMessage {
   
   init(interfaceId:String, message:[UInt8]) {
     self.message = message
@@ -49,7 +49,7 @@ public class LoconetMessage {
       message[1+index] = data[index]
       index += 1
     }
-    message[length-1] = LoconetMessage.checkSum(data: message, length: length)
+    message[length-1] = NetworkMessage.checkSum(data: message, length: length)
     return message
   }
   

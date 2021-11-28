@@ -11,26 +11,28 @@
 		DA2E0E5827359ED300C7DA7A /* LoconetLongAcknowledgeMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2E0E5727359ED300C7DA7A /* LoconetLongAcknowledgeMessage.swift */; };
 		DA2E0E5A2736B8AA00C7DA7A /* LoconetRequestSlotDataMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2E0E592736B8AA00C7DA7A /* LoconetRequestSlotDataMessage.swift */; };
 		DA2E0E5C2736C31C00C7DA7A /* LoconetSlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2E0E5B2736C31C00C7DA7A /* LoconetSlot.swift */; };
-		DA2E0E5E2736EAF300C7DA7A /* LoconetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2E0E5D2736EAF300C7DA7A /* LoconetController.swift */; };
+		DA2E0E5E2736EAF300C7DA7A /* NetworkController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2E0E5D2736EAF300C7DA7A /* NetworkController.swift */; };
 		DA5E173E272EB23100F9341F /* LoconetSensorMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5E173D272EB23100F9341F /* LoconetSensorMessage.swift */; };
 		DA5E1741272ED2DF00F9341F /* LoconetSwitchRequestMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5E1740272ED2DF00F9341F /* LoconetSwitchRequestMessage.swift */; };
 		DA5E1743272EDA5B00F9341F /* LoconetSlotDataMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5E1742272EDA5B00F9341F /* LoconetSlotDataMessage.swift */; };
 		DA6A0AD8275295BF00913F2B /* Monitor.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA6A0AD7275295BF00913F2B /* Monitor.storyboard */; };
 		DA6A0ADA2752976800913F2B /* MonitorVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6A0AD92752976800913F2B /* MonitorVC.swift */; };
 		DA6A0ADC27529D6600913F2B /* ModalWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6A0ADB27529D6600913F2B /* ModalWindow.swift */; };
+		DA6A0ADF2753B5CF00913F2B /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6A0ADE2753B5CF00913F2B /* UserDefaults.swift */; };
+		DA6A0AE12753D50A00913F2B /* GlobalVariables.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6A0AE02753D50A00913F2B /* GlobalVariables.swift */; };
 		DA6F3926274FD0C400A63FBF /* PeerXfer20.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6F3925274FD0C400A63FBF /* PeerXfer20.swift */; };
 		DA7A4910274A89FE00C2A42B /* FastClockMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7A490F274A89FE00C2A42B /* FastClockMessage.swift */; };
 		DA7A4912274AC25600C2A42B /* PeerXferMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7A4911274AC25600C2A42B /* PeerXferMessage.swift */; };
 		DA7B4727273803BA00BCD587 /* Locomotive.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7B4726273803BA00BCD587 /* Locomotive.swift */; };
 		DA7B472A273824F700BCD587 /* LoconetQueueItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7B4729273824F700BCD587 /* LoconetQueueItem.swift */; };
 		DA8FC5E6272C3F8100FCCFCA /* ORSSerial.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA8FC5E0272C3EE800FCCFCA /* ORSSerial.framework */; };
-		DA8FC5E8272C759A00FCCFCA /* LoconetMessenger.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8FC5E7272C759A00FCCFCA /* LoconetMessenger.swift */; };
+		DA8FC5E8272C759A00FCCFCA /* NetworkMessenger.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8FC5E7272C759A00FCCFCA /* NetworkMessenger.swift */; };
 		DAA83DEB272C37670075CBCD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA83DEA272C37670075CBCD /* AppDelegate.swift */; };
 		DAA83DED272C37670075CBCD /* MainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA83DEC272C37670075CBCD /* MainVC.swift */; };
 		DAA83DEF272C37680075CBCD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DAA83DEE272C37680075CBCD /* Assets.xcassets */; };
 		DAA83DF2272C37680075CBCD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DAA83DF0272C37680075CBCD /* Main.storyboard */; };
-		DAEA9CF7272D8DA900C9B3EC /* LoconetConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEA9CF6272D8DA900C9B3EC /* LoconetConstants.swift */; };
-		DAEA9CFA272D8FBE00C9B3EC /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEA9CF9272D8FBE00C9B3EC /* Message.swift */; };
+		DAEA9CF7272D8DA900C9B3EC /* NetworkConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEA9CF6272D8DA900C9B3EC /* NetworkConstants.swift */; };
+		DAEA9CFA272D8FBE00C9B3EC /* NetworkMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEA9CF9272D8FBE00C9B3EC /* NetworkMessage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,28 +64,30 @@
 		DA2E0E5727359ED300C7DA7A /* LoconetLongAcknowledgeMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoconetLongAcknowledgeMessage.swift; sourceTree = "<group>"; };
 		DA2E0E592736B8AA00C7DA7A /* LoconetRequestSlotDataMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoconetRequestSlotDataMessage.swift; sourceTree = "<group>"; };
 		DA2E0E5B2736C31C00C7DA7A /* LoconetSlot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoconetSlot.swift; sourceTree = "<group>"; };
-		DA2E0E5D2736EAF300C7DA7A /* LoconetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoconetController.swift; sourceTree = "<group>"; };
+		DA2E0E5D2736EAF300C7DA7A /* NetworkController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkController.swift; sourceTree = "<group>"; };
 		DA5E173D272EB23100F9341F /* LoconetSensorMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoconetSensorMessage.swift; sourceTree = "<group>"; };
 		DA5E1740272ED2DF00F9341F /* LoconetSwitchRequestMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoconetSwitchRequestMessage.swift; sourceTree = "<group>"; };
 		DA5E1742272EDA5B00F9341F /* LoconetSlotDataMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoconetSlotDataMessage.swift; sourceTree = "<group>"; };
 		DA6A0AD7275295BF00913F2B /* Monitor.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Monitor.storyboard; sourceTree = "<group>"; };
 		DA6A0AD92752976800913F2B /* MonitorVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonitorVC.swift; sourceTree = "<group>"; };
 		DA6A0ADB27529D6600913F2B /* ModalWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalWindow.swift; sourceTree = "<group>"; };
+		DA6A0ADE2753B5CF00913F2B /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
+		DA6A0AE02753D50A00913F2B /* GlobalVariables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalVariables.swift; sourceTree = "<group>"; };
 		DA6F3925274FD0C400A63FBF /* PeerXfer20.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeerXfer20.swift; sourceTree = "<group>"; };
 		DA7A490F274A89FE00C2A42B /* FastClockMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastClockMessage.swift; sourceTree = "<group>"; };
 		DA7A4911274AC25600C2A42B /* PeerXferMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeerXferMessage.swift; sourceTree = "<group>"; };
 		DA7B4726273803BA00BCD587 /* Locomotive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Locomotive.swift; sourceTree = "<group>"; };
 		DA7B4729273824F700BCD587 /* LoconetQueueItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoconetQueueItem.swift; sourceTree = "<group>"; };
 		DA8FC5DA272C3EE800FCCFCA /* ORSSerialPort.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ORSSerialPort.xcodeproj; path = "Frameworks/ORSSerialPort/Framework Project/ORSSerialPort.xcodeproj"; sourceTree = "<group>"; };
-		DA8FC5E7272C759A00FCCFCA /* LoconetMessenger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoconetMessenger.swift; sourceTree = "<group>"; };
+		DA8FC5E7272C759A00FCCFCA /* NetworkMessenger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMessenger.swift; sourceTree = "<group>"; };
 		DAA83DE7272C37670075CBCD /* MyTrains.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyTrains.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAA83DEA272C37670075CBCD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DAA83DEC272C37670075CBCD /* MainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainVC.swift; sourceTree = "<group>"; };
 		DAA83DEE272C37680075CBCD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DAA83DF1272C37680075CBCD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		DAA83DF3272C37680075CBCD /* MyTrains.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MyTrains.entitlements; sourceTree = "<group>"; };
-		DAEA9CF6272D8DA900C9B3EC /* LoconetConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoconetConstants.swift; sourceTree = "<group>"; };
-		DAEA9CF9272D8FBE00C9B3EC /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		DAEA9CF6272D8DA900C9B3EC /* NetworkConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkConstants.swift; sourceTree = "<group>"; };
+		DAEA9CF9272D8FBE00C9B3EC /* NetworkMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMessage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,29 +140,31 @@
 			isa = PBXGroup;
 			children = (
 				DAA83DEA272C37670075CBCD /* AppDelegate.swift */,
+				DA6A0AE02753D50A00913F2B /* GlobalVariables.swift */,
 				DA6A0ADB27529D6600913F2B /* ModalWindow.swift */,
 				DAA83DEC272C37670075CBCD /* MainVC.swift */,
 				DAA83DEE272C37680075CBCD /* Assets.xcassets */,
 				DAA83DF0272C37680075CBCD /* Main.storyboard */,
 				DAA83DF3272C37680075CBCD /* MyTrains.entitlements */,
-				DA8FC5E7272C759A00FCCFCA /* LoconetMessenger.swift */,
+				DA8FC5E7272C759A00FCCFCA /* NetworkMessenger.swift */,
 				DA7A4911274AC25600C2A42B /* PeerXferMessage.swift */,
 				DA6F3925274FD0C400A63FBF /* PeerXfer20.swift */,
 				DA7A490F274A89FE00C2A42B /* FastClockMessage.swift */,
-				DA2E0E5D2736EAF300C7DA7A /* LoconetController.swift */,
+				DA2E0E5D2736EAF300C7DA7A /* NetworkController.swift */,
 				DA6A0AD7275295BF00913F2B /* Monitor.storyboard */,
 				DA6A0AD92752976800913F2B /* MonitorVC.swift */,
+				DA6A0ADE2753B5CF00913F2B /* UserDefaults.swift */,
 				DA7B4726273803BA00BCD587 /* Locomotive.swift */,
 				DA2E0E5B2736C31C00C7DA7A /* LoconetSlot.swift */,
 				DA7B4729273824F700BCD587 /* LoconetQueueItem.swift */,
 				DA2E0E54273591A600C7DA7A /* LoconetTurnoutOutputMessage.swift */,
 				DA2E0E592736B8AA00C7DA7A /* LoconetRequestSlotDataMessage.swift */,
-				DAEA9CF9272D8FBE00C9B3EC /* Message.swift */,
+				DAEA9CF9272D8FBE00C9B3EC /* NetworkMessage.swift */,
 				DA5E1742272EDA5B00F9341F /* LoconetSlotDataMessage.swift */,
 				DA5E173D272EB23100F9341F /* LoconetSensorMessage.swift */,
 				DA5E1740272ED2DF00F9341F /* LoconetSwitchRequestMessage.swift */,
 				DA2E0E5727359ED300C7DA7A /* LoconetLongAcknowledgeMessage.swift */,
-				DAEA9CF6272D8DA900C9B3EC /* LoconetConstants.swift */,
+				DAEA9CF6272D8DA900C9B3EC /* NetworkConstants.swift */,
 			);
 			path = MyTrains;
 			sourceTree = "<group>";
@@ -260,9 +266,11 @@
 			files = (
 				DA7A4910274A89FE00C2A42B /* FastClockMessage.swift in Sources */,
 				DA2E0E55273591A600C7DA7A /* LoconetTurnoutOutputMessage.swift in Sources */,
-				DA2E0E5E2736EAF300C7DA7A /* LoconetController.swift in Sources */,
+				DA2E0E5E2736EAF300C7DA7A /* NetworkController.swift in Sources */,
 				DA7B472A273824F700BCD587 /* LoconetQueueItem.swift in Sources */,
 				DA6F3926274FD0C400A63FBF /* PeerXfer20.swift in Sources */,
+				DA6A0ADF2753B5CF00913F2B /* UserDefaults.swift in Sources */,
+				DA6A0AE12753D50A00913F2B /* GlobalVariables.swift in Sources */,
 				DAA83DED272C37670075CBCD /* MainVC.swift in Sources */,
 				DA2E0E5C2736C31C00C7DA7A /* LoconetSlot.swift in Sources */,
 				DA7B4727273803BA00BCD587 /* Locomotive.swift in Sources */,
@@ -270,13 +278,13 @@
 				DA7A4912274AC25600C2A42B /* PeerXferMessage.swift in Sources */,
 				DA6A0ADA2752976800913F2B /* MonitorVC.swift in Sources */,
 				DA5E173E272EB23100F9341F /* LoconetSensorMessage.swift in Sources */,
-				DAEA9CF7272D8DA900C9B3EC /* LoconetConstants.swift in Sources */,
+				DAEA9CF7272D8DA900C9B3EC /* NetworkConstants.swift in Sources */,
 				DA2E0E5A2736B8AA00C7DA7A /* LoconetRequestSlotDataMessage.swift in Sources */,
 				DA2E0E5827359ED300C7DA7A /* LoconetLongAcknowledgeMessage.swift in Sources */,
 				DA5E1743272EDA5B00F9341F /* LoconetSlotDataMessage.swift in Sources */,
-				DAEA9CFA272D8FBE00C9B3EC /* Message.swift in Sources */,
+				DAEA9CFA272D8FBE00C9B3EC /* NetworkMessage.swift in Sources */,
 				DA6A0ADC27529D6600913F2B /* ModalWindow.swift in Sources */,
-				DA8FC5E8272C759A00FCCFCA /* LoconetMessenger.swift in Sources */,
+				DA8FC5E8272C759A00FCCFCA /* NetworkMessenger.swift in Sources */,
 				DA5E1741272ED2DF00F9341F /* LoconetSwitchRequestMessage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

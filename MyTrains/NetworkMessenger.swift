@@ -1,5 +1,5 @@
 //
-//  LoconetMessenger.swift
+//  NetworkMessenger.swift
 //  MyTrains
 //
 //  Created by Paul Willmott on 29/10/2021.
@@ -17,12 +17,17 @@ public protocol LoconetMessengerDelegate {
   func LoconetRequestSlotDataMessageReceived(message:LoconetRequestSlotDataMessage)
 }
 
-public class LoconetMessenger : NSObject, ORSSerialPortDelegate {
+public protocol NetworkMessengerDelegate {
+  func NetworkMessageReceived(message:NetworkMessage)
+}
+
+public class NetworkMessenger : NSObject, ORSSerialPortDelegate {
 
   // Constructor
   
   init(id:String, path:String) {
     self.id = id
+    _devicePath = path
     super.init()
     if let sp = ORSSerialPort(path: path) {
       sp.delegate = self
@@ -53,6 +58,31 @@ public class LoconetMessenger : NSObject, ORSSerialPortDelegate {
   private var outputQueue : [LoconetOutputQueueItem] = []
   private var outputQueueLock : NSLock = NSLock()
   private var outputTimer : Timer?
+  
+  private var observers : [Int:NetworkMessengerDelegate] = [:]
+  private var nextObserverKey : Int = 0
+  private var nextObserverKeyLock : NSLock = NSLock()
+  
+  public func addObserver(observer:NetworkMessengerDelegate) -> Int {
+    nextObserverKeyLock.lock()
+    let id : Int = nextObserverKey
+    nextObserverKey += 1
+    nextObserverKeyLock.unlock()
+    observers[id] = observer
+    return id
+  }
+  
+  private var _devicePath : String
+  
+  public var devicePath : String {
+    get {
+      return _devicePath
+    }
+  }
+  
+  public func removeObserver(id:Int) {
+    observers.removeValue(forKey: id)
+  }
   
   // Output Queue Timer
     
@@ -90,7 +120,7 @@ public class LoconetMessenger : NSObject, ORSSerialPortDelegate {
   
   public func powerOn() {
     
-    let message = LoconetMessage.formLoconetMessage(opCode: .OPC_GPON, data: Data([]))
+    let message = NetworkMessage.formLoconetMessage(opCode: .OPC_GPON, data: Data([]))
     
     addToQueue(message: message)
     
@@ -98,15 +128,22 @@ public class LoconetMessenger : NSObject, ORSSerialPortDelegate {
   
   public func powerOff() {
     
-    let message = LoconetMessage.formLoconetMessage(opCode: .OPC_GPOFF, data: Data([]))
+    let message = NetworkMessage.formLoconetMessage(opCode: .OPC_GPOFF, data: Data([]))
     
     addToQueue(message: message)
 
   }
   
+  public func powerIdle() {
+    
+    let message = NetworkMessage.formLoconetMessage(opCode: .OPC_IDLE, data: Data([]))
+    
+    addToQueue(message: message)
+
+  }
   public func discoverDevices() {
     //0x01
-    let message = LoconetMessage.formLoconetMessage(opCode: .OPC_PEER_XFER, data: Data([0x14, 0x0f, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]))
+    let message = NetworkMessage.formLoconetMessage(opCode: .OPC_PEER_XFER, data: Data([0x14, 0x0f, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]))
     
     addToQueue(message: message)
 
@@ -114,7 +151,7 @@ public class LoconetMessenger : NSObject, ORSSerialPortDelegate {
   
   public func requestSlotInfo(address:UInt8) {
     
-    let message = LoconetMessage.formLoconetMessage(opCode: .OPC_LOCO_ADR, data: Data([0x00, address]))
+    let message = NetworkMessage.formLoconetMessage(opCode: .OPC_LOCO_ADR, data: Data([0x00, address]))
     
     addToQueue(message: message)
 
@@ -122,7 +159,7 @@ public class LoconetMessenger : NSObject, ORSSerialPortDelegate {
   
   public func setLocoSound(slotNumber:UInt8) {
     
-    let message = LoconetMessage.formLoconetMessage(opCode: .OPC_LOCO_SND, data: Data([slotNumber, loconetSlots[Int(slotNumber)]!.slotByte(byte: .slotSound)]))
+    let message = NetworkMessage.formLoconetMessage(opCode: .OPC_LOCO_SND, data: Data([slotNumber, loconetSlots[Int(slotNumber)]!.slotByte(byte: .slotSound)]))
     
     addToQueue(message: message)
 
@@ -130,7 +167,7 @@ public class LoconetMessenger : NSObject, ORSSerialPortDelegate {
   
   public func setLocoDirF(slotNumber:UInt8) {
     
-    let message = LoconetMessage.formLoconetMessage(opCode: .OPC_LOCO_DIRF, data: Data([slotNumber, loconetSlots[Int(slotNumber)]!.slotByte(byte: .slotDirF)]))
+    let message = NetworkMessage.formLoconetMessage(opCode: .OPC_LOCO_DIRF, data: Data([slotNumber, loconetSlots[Int(slotNumber)]!.slotByte(byte: .slotDirF)]))
     
     addToQueue(message: message)
 
@@ -138,23 +175,19 @@ public class LoconetMessenger : NSObject, ORSSerialPortDelegate {
   
   public func setLocoSpeed(slotNumber:UInt8) {
     
-    let message = LoconetMessage.formLoconetMessage(opCode: .OPC_LOCO_SPD, data: Data([slotNumber, loconetSlots[Int(slotNumber)]!.slotByte(byte: .slotSpeed)]))
+    let message = NetworkMessage.formLoconetMessage(opCode: .OPC_LOCO_SPD, data: Data([slotNumber, loconetSlots[Int(slotNumber)]!.slotByte(byte: .slotSpeed)]))
     
     addToQueue(message: message)
 
   }
-  
-
   
   public func nullMove(slotNumber:UInt8) {
     
-    let message = LoconetMessage.formLoconetMessage(opCode: .OPC_MOVE_SLOTS, data: Data([slotNumber, slotNumber]))
+    let message = NetworkMessage.formLoconetMessage(opCode: .OPC_MOVE_SLOTS, data: Data([slotNumber, slotNumber]))
     
     addToQueue(message: message)
 
   }
-  
-  
   
   // ORSSerialPortDelegate Methods
   
@@ -258,9 +291,13 @@ public class LoconetMessenger : NSObject, ORSSerialPortDelegate {
           
           if !restart {
           
-            let loconetMessage = LoconetMessage(interfaceId:self.id, message: message)
+            let loconetMessage = NetworkMessage(interfaceId:self.id, message: message)
             
             if loconetMessage.checkSumOK {
+              
+              for observer in observers {
+                observer.value.NetworkMessageReceived(message: loconetMessage)
+              }
               
               let opCode = loconetMessage.opCode
               

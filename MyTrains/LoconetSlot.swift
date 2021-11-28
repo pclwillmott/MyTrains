@@ -14,7 +14,7 @@ public class LoconetSlot {
     load(message: message)
   }
   
-  init(loconetMessage:LoconetMessage) {
+  init(loconetMessage:NetworkMessage) {
     self.interfaceId = loconetMessage.interfaceId
     load(loconetMessage: loconetMessage)
   }
@@ -27,7 +27,7 @@ public class LoconetSlot {
     }
   }
   
-  public func load(loconetMessage:LoconetMessage) {
+  public func load(loconetMessage:NetworkMessage) {
     load(message: loconetMessage.message)
   }
   
