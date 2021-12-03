@@ -130,7 +130,7 @@ public enum LoconetSwitchOutput {
   case on
 }
 
-public enum LoconetTurnoutOutput {
+public enum NetworkTurnoutOutput {
   case off
   case on
 }

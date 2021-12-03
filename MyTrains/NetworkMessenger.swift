@@ -8,15 +8,6 @@
 import Foundation
 import ORSSerial
 
-public protocol LoconetMessengerDelegate {
-  func LoconetSensorMessageReceived(message:LoconetSensorMessage)
-  func LoconetSwitchRequestMessageReceived(message:LoconetSwitchRequestMessage)
-  func LoconetSlotDataMessageReceived(message:LoconetSlotDataMessage)
-  func LoconetTurnoutOutputMessageReceived(message:LoconetTurnoutOutputMessage)
-  func LoconetLongAcknowledgeMessageReceived(message:LoconetLongAcknowledgeMessage)
-  func LoconetRequestSlotDataMessageReceived(message:LoconetRequestSlotDataMessage)
-}
-
 public protocol NetworkMessengerDelegate {
   func NetworkMessageReceived(message:NetworkMessage)
 }
@@ -40,7 +31,7 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate {
       sp.usesDCDOutputFlowControl = false
       serialPort = sp
       sp.open()
-      startOutputQueue()
+      startOutputQueue(timeInterval: 0.25)
     }
   }
   
@@ -55,7 +46,7 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate {
   
   private var loconetSlots = [LoconetSlot?](repeating: nil, count: 120)
   
-  private var outputQueue : [LoconetOutputQueueItem] = []
+  private var outputQueue : [NetworkOutputQueueItem] = []
   private var outputQueueLock : NSLock = NSLock()
   private var outputTimer : Timer?
   
@@ -96,25 +87,24 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate {
   }
   
   func addToQueue(message:Data) {
-    let item = LoconetOutputQueueItem(message: message)
+    let item = NetworkOutputQueueItem(message: message)
     outputQueueLock.lock()
     outputQueue.append(item)
     outputQueueLock.unlock()
   }
   
-  func startOutputQueue() {
-    outputTimer = Timer.scheduledTimer(timeInterval: 0.25, target: self, selector: #selector(handleOutputQueue), userInfo: nil, repeats: true)
+  func startOutputQueue(timeInterval:TimeInterval) {
+    outputTimer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(handleOutputQueue), userInfo: nil, repeats: true)
   }
   
   func stopOutputQueue() {
     outputTimer?.invalidate()
+    outputTimer = nil
   }
     
   // Public Properties
   
   public var id : String
-  
-  public var delegate : LoconetMessengerDelegate? = nil
   
   // public methods
   
@@ -293,116 +283,10 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate {
           
             let loconetMessage = NetworkMessage(interfaceId:self.id, message: message)
             
-            if loconetMessage.checkSumOK {
+            if loconetMessage.checkSumOK && loconetMessage.opCode != .OPC_BUSY {
               
               for observer in observers {
                 observer.value.NetworkMessageReceived(message: loconetMessage)
-              }
-              
-              let opCode = loconetMessage.opCode
-              
-              switch opCode {
-              case .OPC_UNKNOWN:
-                print("OPC_UNKNOWN \(String(format: "%02X", loconetMessage.opCodeRawValue))")
-                print("message Length = \(loconetMessage.messageLength)")
-                var ss:String = ""
-                for x in message {
-                  ss += String(format:"%02x", x) + " "
-                }
-                print("\(ss)\n")
-                break
-              case .OPC_BUSY:
-                // Ignore these opcodes
-                break
-    /*          case .OPC_GPOFF:
-                break
-              case .OPC_GPON:
-                break
-              case .OPC_IDLE:
-                break
-              case .OPC_LOCO_SPD:
-                break
-              case .OPC_LOCO_DIRF:
-                break
-              case .OPC_LOCO_SND:
-                break */
-              case .OPC_SW_REQ, .OPC_SW_ACK, .OPC_SW_STATE:
-                delegate?.LoconetSwitchRequestMessageReceived(message: LoconetSwitchRequestMessage(interfaceId:self.id, message: message))
-                break
-              case .OPC_SW_REP:
-                if (message[2] & 0b01000000) != 0x00 {
-                  delegate?.LoconetSensorMessageReceived(message: LoconetSensorMessage(interfaceId:self.id, message: message))
-                }
-                else {
-                  delegate?.LoconetTurnoutOutputMessageReceived(message: LoconetTurnoutOutputMessage(interfaceId:self.id, message: message))
-                }
-                break
-              case .OPC_INPUT_REP:
-                delegate?.LoconetSensorMessageReceived(message: LoconetSensorMessage(interfaceId:self.id, message: message))
-               break
-              case .OPC_LONG_ACK:
-                delegate?.LoconetLongAcknowledgeMessageReceived(message: LoconetLongAcknowledgeMessage(interfaceId:self.id, message: message))
-                break
-    /*          case .OPC_SLOT_STAT1:
-                break
-              case .OPC_CONSIST_FUNC:
-                break
-              case .OPC_UNLINK_SLOTS:
-                break
-              case .OPC_LINK_SLOTS:
-                break
-              case .OPC_MOVE_SLOTS:
-                break
-     */
-              case .OPC_PEER_XFER:
-                if loconetMessage.messageLength == 16 {
-                  let pxm = PeerXferMessage(interfaceId: self.id, message: message)
-                  print("PEER_XFER: \(pxm.sourceId) to \(pxm.destId)")
-                  print("\(pxm.messageHex)")
-                  for x in pxm.peerXferMessage {
-                    print("\(String(format: "%02x ", x))")
-                  }
-                }
-                else {
-                  let pxm = PeerXferMessage20(interfaceId: self.id, message: message)
-                  print("PEER_XFER_20: \(pxm.sourceId) to \(pxm.destId)")
-                  print("Hex: \(pxm.messageHex)")
-                  for x in pxm.peerXferMessage {
-                    print("\(String(format: "%02x ", x))")
-                  }
-                }
-                break
-              case .OPC_RQ_SL_DATA:
-                delegate?.LoconetRequestSlotDataMessageReceived(message: LoconetRequestSlotDataMessage(interfaceId:self.id, message: message))
-                break
-                /*
-              case .OPC_SW_ACK:
-                break
-              case .OPC_LOCO_ADR:
-                break */
-              case .OPC_SL_RD_DATA /*, .OPC_WR_SL_DATA */:
-                if message[2] == 0x7b {
-                  let fcm = FastClockMessage(interfaceId: self.id, message: message)
-                  print("\(fcm.hours):\(fcm.minutes).\(fcm.seconds) \(String(format:"%04x",fcm.ticks)) \(fcm.dataValid)")
-                }
-                else {
-                  let lsdm = LoconetSlotDataMessage(interfaceId: self.id, message: message)
-                  let slot = LoconetSlot(interfaceId: self.id, message: message)
-                  lsdm.slot = slot
-                  let sn = Int(slot.slotNumber)
-                  loconetSlots[sn] = nil
-                  loconetSlots[sn] = slot
-                  delegate?.LoconetSlotDataMessageReceived(message: lsdm)
-                }
-                break
-              default:
-                print("\(opCode)")
-                var ss:String = ""
-                for x in message {
-                  ss += String(format:"%02x", x) + " "
-                }
-                print(ss)
-                break
               }
               
             }

@@ -8,13 +8,11 @@
 import Foundation
 import Cocoa
 
-class MonitorVC: NSViewController, NetworkMessengerDelegate {
+class MonitorVC: NSViewController, NetworkMessengerDelegate, NSWindowDelegate {
 
   enum TimeStampType : Int {
     case none = 0
     case millisecondsSinceLastMessage = 1
-    case milliseconds = 2
-    case dateTime = 3
   }
   
   enum NumberBase : Int {
@@ -22,14 +20,30 @@ class MonitorVC: NSViewController, NetworkMessengerDelegate {
     case decimal = 1
     case binary = 2
     case octal = 3
+    case hexBinary = 4
   }
   
   override func viewDidLoad() {
     super.viewDidLoad()
   }
   
+  func windowShouldClose(_ sender: NSWindow) -> Bool {
+    return true
+  }
+
+  func windowWillClose(_ notification: Notification) {
+    if observerId != -1 {
+      if let mess = messenger {
+        mess.removeObserver(id: observerId)
+        observerId = -1
+      }
+    }
+  }
+  
   override func viewWillAppear() {
     
+    self.view.window?.delegate = self
+
     let interface = UserDefaults.standard.string(forKey: DEFAULT.MONITOR_INTERFACE_ID) ?? ""
  
     cboInterface.removeAllItems()
@@ -45,9 +59,9 @@ class MonitorVC: NSViewController, NetworkMessengerDelegate {
       index += 1
     }
     
-    lblSendFileName.stringValue = UserDefaults.standard.string(forKey: DEFAULT.MONITOR_SEND_FILENAME) ?? ""
+    sendFilename = UserDefaults.standard.string(forKey: DEFAULT.MONITOR_SEND_FILENAME) ?? ""
     
-    lblCaptureFileName.stringValue = UserDefaults.standard.string(forKey: DEFAULT.MONITOR_CAPTURE_FILENAME) ?? ""
+    captureFilename = UserDefaults.standard.string(forKey: DEFAULT.MONITOR_CAPTURE_FILENAME) ?? ""
     
     chkCaptureActive.state = .off
     
@@ -63,6 +77,8 @@ class MonitorVC: NSViewController, NetworkMessengerDelegate {
     txtMessage2.stringValue = UserDefaults.standard.string(forKey: DEFAULT.MONITOR_MESSAGE2) ?? ""
     txtMessage3.stringValue = UserDefaults.standard.string(forKey: DEFAULT.MONITOR_MESSAGE3) ?? ""
     txtMessage4.stringValue = UserDefaults.standard.string(forKey: DEFAULT.MONITOR_MESSAGE4) ?? ""
+
+    txtNote.stringValue = UserDefaults.standard.string(forKey: DEFAULT.MONITOR_NOTE) ?? ""
 
     txtMonitor.font = NSFont(name: "Menlo", size: 12)
   }
@@ -81,10 +97,6 @@ class MonitorVC: NSViewController, NetworkMessengerDelegate {
     let timeNow = Date.timeIntervalSinceReferenceDate
     
     switch timeStampType {
-    case .dateTime:
-      break
-    case .milliseconds:
-      break
     case .millisecondsSinceLastMessage:
       let ms = (timeNow - lastTime) * 1000.0
       item += String(format:"%10.1f", ms) + "ms "
@@ -118,6 +130,13 @@ class MonitorVC: NSViewController, NetworkMessengerDelegate {
       case .octal:
         item += "\(String(format: "%03o", byte)) "
         break
+      case .hexBinary:
+        var padded = String(byte, radix: 2)
+        for _ in 0..<(8 - padded.count) {
+          padded = "0" + padded
+        }
+        item += "0x\(String(format: "%02x", byte)) " + "0b" + padded + " "
+        break
       default:
         item += "0x\(String(format: "%02x", byte)) "
         break
@@ -129,9 +148,60 @@ class MonitorVC: NSViewController, NetworkMessengerDelegate {
       let range = NSMakeRange(txtMonitor.string.count - 1, 0)
       txtMonitor.scrollRangeToVisible(range)
     }
+
+    item += "\n"
+
+    captureWrite(message: item)
     
   }
   
+  private func captureWrite(message:String) {
+    
+    let data = message.data(using: String.Encoding.utf8)
+    
+    if isCaptureActive {
+      if FileManager.default.fileExists(atPath: lblCaptureFileName.stringValue) {
+        
+        if let fileHandle = try? FileHandle(forWritingTo: captureURL!) {
+          fileHandle.seekToEndOfFile()
+          fileHandle.write(data!)
+          fileHandle.closeFile()
+        }
+      }
+      else {
+         try? data!.write(to: captureURL!, options: .atomicWrite)
+       }
+    }
+    
+  }
+  
+  private var captureFilename : String {
+    get {
+      return lblCaptureFileName.stringValue
+    }
+    set(value) {
+      lblCaptureFileName.stringValue = value
+      UserDefaults.standard.set(value, forKey: DEFAULT.MONITOR_CAPTURE_FILENAME)
+      let controlsEnabled = value != ""
+      btnEditCaptureFile.isEnabled = controlsEnabled
+      chkCaptureActive.isEnabled = controlsEnabled
+      txtNote.isEnabled = controlsEnabled
+      btnNote.isEnabled = controlsEnabled
+    }
+  }
+  
+  private var captureURL : URL? {
+    get {
+      let cfn = captureFilename
+      return cfn == "" ? nil : URL(fileURLWithPath: cfn)
+    }
+  }
+  
+  private var isCaptureActive : Bool {
+    get {
+      return chkCaptureActive.state == .on
+    }
+  }
   
   @IBAction func cboInterfaceAction(_ sender: NSComboBox) {
     
@@ -156,8 +226,6 @@ class MonitorVC: NSViewController, NetworkMessengerDelegate {
 
   @IBOutlet weak var cboInterface: NSComboBox!
   
-  
-  
   @IBAction func swConnectAction(_ sender: NSSwitch) {
   }
   
@@ -179,28 +247,146 @@ class MonitorVC: NSViewController, NetworkMessengerDelegate {
     messenger?.powerIdle()
   }
   
-  @IBAction func btnSelectSendFileAction(_ sender: NSButton) {
-  }
-  
   @IBOutlet weak var lblSendFileName: NSTextField!
   
+  private var sendFilename : String {
+    get {
+      return lblSendFileName.stringValue
+    }
+    set(value) {
+      lblSendFileName.stringValue = value
+      UserDefaults.standard.set(value, forKey: DEFAULT.MONITOR_SEND_FILENAME)
+      let controlsEnabled = value != ""
+      btnEditSendFile.isEnabled = controlsEnabled
+      btnSendFile.isEnabled = controlsEnabled
+   }
+  }
+
+  private var sendURL : URL? {
+    get {
+      let sfn = sendFilename
+      return sfn == "" ? nil : URL(fileURLWithPath: sfn)
+    }
+  }
+
+  @IBOutlet weak var btnSendFile: NSButton!
+  
+  @IBAction func btnSelectSendFileAction(_ sender: NSButton) {
+    
+    let dialog = NSOpenPanel()
+    
+    dialog.title                     = "Send File"
+    dialog.showsResizeIndicator      = true
+    dialog.showsHiddenFiles          = false
+    dialog.canChooseDirectories      = false
+    dialog.canCreateDirectories      = true
+    dialog.allowsMultipleSelection   = false
+    dialog.canChooseFiles            = true
+    dialog.allowedFileTypes          = ["txt", "snd"]
+    dialog.allowsOtherFileTypes      = true
+    
+    if let url = sendURL {
+      dialog.nameFieldStringValue = url.lastPathComponent
+    }
+    
+    if dialog.runModal() == .OK {
+      
+      if let result = dialog.url {
+        sendFilename = result.path
+      }
+      else {
+      // User clicked on "Cancel"
+      }
+    }
+  
+  }
+  
+  @IBOutlet weak var btnEditSendFile: NSButton!
+  
   @IBAction func btnEditSendFileAction(_ sender: NSButton) {
+    Process.launchedProcess(launchPath: "/usr/bin/open", arguments: [
+        "-a",
+        "TextEdit",
+        sendFilename
+    ])
+ 
   }
   
   @IBAction func btnSendFileAction(_ sender: NSButton) {
+    
+    if FileManager.default.fileExists(atPath: sendFilename) {
+      
+      if let _ = FileHandle(forReadingAtPath: sendFilename) {
+        
+        let contents = try! String(contentsOfFile: sendFilename)
+
+        let lines = contents.split(separator:"\n")
+
+        for line in lines {
+          sendMessage(rawMessage: String(line))
+       }
+        
+      }
+    }
+
   }
   
   @IBAction func btnSelectCaptureFileAction(_ sender: NSButton) {
+    
+    let dialog = NSSavePanel()
+    
+    dialog.title                = "Capture File"
+    dialog.showsResizeIndicator = true
+    dialog.showsHiddenFiles     = false
+    dialog.canCreateDirectories = true
+    dialog.allowedFileTypes     = ["txt", "cap"]
+    dialog.allowsOtherFileTypes = true
+    
+    if let url = captureURL {
+      dialog.nameFieldStringValue = url.lastPathComponent
+    }
+    
+    if dialog.runModal() == .OK {
+      
+      if let result = dialog.url {
+        captureFilename = result.path
+      }
+      else {
+      // User clicked on "Cancel"
+      }
+      
+      chkCaptureActive.isEnabled = lblCaptureFileName.stringValue != ""
+      
+    }
   }
   
   @IBOutlet weak var lblCaptureFileName: NSTextField!
   
+  @IBOutlet weak var btnEditCaptureFile: NSButton!
+  
   @IBAction func btnEditCaptureFileAction(_ sender: NSButton) {
+    Process.launchedProcess(launchPath: "/usr/bin/open", arguments: [
+        "-a",
+        "TextEdit",
+        captureFilename
+    ])
   }
   
   @IBOutlet weak var chkCaptureActive: NSButton!
   
   @IBAction func chkCaptureActiveAction(_ sender: NSButton) {
+  }
+  
+  @IBOutlet weak var txtNote: NSTextField!
+  
+  @IBAction func txtNoteAction(_ sender: NSTextField) {
+    UserDefaults.standard.set(txtNote.stringValue, forKey: DEFAULT.MONITOR_NOTE)
+  }
+  
+  @IBOutlet weak var btnNote: NSButton!
+  
+  @IBAction func btnNoteAction(_ sender: NSButton) {
+    captureWrite(message: "\(txtNote.stringValue)\n")
   }
   
   @IBOutlet weak var cboTimeStampType: NSComboBox!
@@ -291,15 +477,17 @@ class MonitorVC: NSViewController, NetworkMessengerDelegate {
     
     let parts = rawMessage.split(separator: " ")
     
-    var numbers : [Int] = [256]
+    var numbers : [Int] = []
     
     var index = 0
     
-    for part in parts {
+    for p in parts {
+      
+      let part = String(p)
       
       if part.prefix(2) == "0x" {
         if let nn = Int(part.suffix(part.count-2), radix: 16) {
-          numbers[index] = nn
+          numbers.append(nn)
         }
         else {
           good = false
@@ -307,23 +495,23 @@ class MonitorVC: NSViewController, NetworkMessengerDelegate {
       }
       else if part.prefix(2) == "0b" {
         if let nn = Int(part.suffix(part.count-2), radix: 2) {
-          numbers[index] = nn
-        }
+          numbers.append(nn)
+       }
         else {
           good = false
         }
       }
       else if part.prefix(1) == "0" {
         if let nn = Int(part.suffix(part.count), radix: 8) {
-          numbers[index] = nn
-        }
+          numbers.append(nn)
+       }
         else {
           good = false
         }
       }
       else {
         if let nn = Int(part.suffix(part.count), radix: 10) {
-          numbers[index] = nn
+          numbers.append(nn)
         }
         else {
           good = false

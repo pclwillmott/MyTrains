@@ -1,5 +1,5 @@
 //
-//  LoconetTurnoutOutputMessage.swift
+//  NetworkTurnoutOutputMessage.swift
 //  MyTrains
 //
 //  Created by Paul Willmott on 05/11/2021.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class LoconetTurnoutOutputMessage : NetworkMessage {
+public class NetworkTurnoutOutputMessage : NetworkMessage {
   
   public var turnoutAddress : UInt16 {
     get {
@@ -27,12 +27,12 @@ public class LoconetTurnoutOutputMessage : NetworkMessage {
     }
   }
   
-  public var turnoutClosedOutput : LoconetTurnoutOutput {
+  public var turnoutClosedOutput : NetworkTurnoutOutput {
     let status = (message[2] & 0b00110000) >> 4
     return (status & 0b10) != 0x00 ? .on : .off
   }
 
-  public var turnoutThrownOutput : LoconetTurnoutOutput {
+  public var turnoutThrownOutput : NetworkTurnoutOutput {
     let status = (message[2] & 0b00110000) >> 4
     return (status & 0b01) != 0x00 ? .on : .off
   }
