@@ -9,9 +9,9 @@ import Foundation
 
 public class LoconetLongAcknowledgeMessage : NetworkMessage {
 
-  var opCodeResponding : LoconetOpcode {
+  var opCodeResponding : NetworkMessageOpcode {
     get {
-      return LoconetOpcode(rawValue: message[1] | 0x80) ?? .OPC_UNKNOWN
+      return NetworkMessageOpcode(rawValue: message[1] | 0x80) ?? .OPC_UNKNOWN
     }
   }
   

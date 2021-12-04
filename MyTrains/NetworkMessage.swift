@@ -9,11 +9,30 @@ import Foundation
 
 public class NetworkMessage {
   
-  init(interfaceId:String, message:[UInt8]) {
-    self.message = message
+  init(interfaceId: String, data:[UInt8], appendCheckSum: Bool) {
     self.interfaceId = interfaceId
+    self.message = data
+    if appendCheckSum {
+      self.message.append(NetworkMessage.checkSum(data: Data(message), length: data.count))
+    }
   }
-  
+
+  init(interfaceId: String, data:[Int], appendCheckSum: Bool) {
+    self.interfaceId = interfaceId
+    self.message = []
+    for x in data {
+      self.message.append(UInt8(x & 0xff))
+    }
+    if appendCheckSum {
+      self.message.append(NetworkMessage.checkSum(data: Data(message), length: data.count))
+    }
+  }
+
+  init(interfaceId: String, data:[UInt8]) {
+    self.interfaceId = interfaceId
+    self.message = data
+  }
+
   public var message : [UInt8]
   
   public var interfaceId : String
@@ -33,24 +52,11 @@ public class NetworkMessage {
   public static func checkSum(data: Data, length: Int) -> UInt8 {
     var cs : UInt8 = 0xff
     var index : Int = 0
-    while (index < length - 1) {
+    while (index < length) {
       cs ^= data[index]
       index += 1
     }
     return cs
-  }
-  
-  public static func formLoconetMessage(opCode:LoconetOpcode, data:Data) -> Data {
-    let length = 1 + data.count + 1
-    var message : Data = Data(repeating: 0x00, count: length)
-    message[0] = opCode.rawValue
-    var index : Int = 0
-    while index < data.count {
-      message[1+index] = data[index]
-      index += 1
-    }
-    message[length-1] = NetworkMessage.checkSum(data: message, length: length)
-    return message
   }
   
   public var opCodeRawValue : UInt8 {
@@ -59,9 +65,9 @@ public class NetworkMessage {
     }
   }
   
-  public var opCode : LoconetOpcode {
+  public var opCode : NetworkMessageOpcode {
     get {
-      return LoconetOpcode.init(rawValue: opCodeRawValue) ?? .OPC_UNKNOWN
+      return NetworkMessageOpcode.init(rawValue: opCodeRawValue) ?? .OPC_UNKNOWN
     }
   }
   
@@ -97,6 +103,63 @@ public class NetworkMessage {
       }
       return str.trimmingCharacters(in: [" "])
     }
+  }
+  
+  private var _messageType : NetworkMessageType = .uninitialized
+  
+  public var messageType : NetworkMessageType {
+    
+    get {
+      
+      if _messageType == .uninitialized {
+
+        _messageType = .unknown
+
+        switch message[0] {
+        case NetworkMessageOpcode.OPC_BUSY.rawValue:
+          _messageType = .busy
+          break
+        case NetworkMessageOpcode.OPC_GPOFF.rawValue:
+          _messageType = .globalPowerOff
+          break
+        case NetworkMessageOpcode.OPC_GPON.rawValue:
+          _messageType = .globalPowerOn
+          break
+        case NetworkMessageOpcode.OPC_IDLE.rawValue:
+          _messageType = .forceIdleState
+          break
+        case NetworkMessageOpcode.OPC_LOCO_ADR.rawValue:
+          _messageType = message[1] == 0x00 ? .reqLocoSlotShortAddr : .reqLocoSlotLongAddr
+          break
+        case NetworkMessageOpcode.OPC_LOCO_ADR_EXP.rawValue:
+          _messageType = .reqLocoExpSlot
+          break
+        case NetworkMessageOpcode.OPC_LONG_ACK.rawValue:
+          _messageType = .longAcknowledge
+          break
+        case NetworkMessageOpcode.OPC_SL_RD_DATA.rawValue:
+          if  message[1] == 0x0e &&
+             (message[ 6] & 0b01000000) == 0x00 &&
+             (message[ 7] & 0b01110000) == 0x00 &&
+             (message[ 8] & 0b01110000) == 0x00 &&
+             (message[10] & 0b01110000) == 0x00 {
+            _messageType = .slotData
+          }
+          break
+        default:
+          break
+        }
+        
+      }
+      
+      return _messageType
+      
+    }
+    
+    set(value) {
+      _messageType = value
+    }
+    
   }
     
 }

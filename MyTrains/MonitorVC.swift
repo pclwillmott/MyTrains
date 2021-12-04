@@ -89,6 +89,10 @@ class MonitorVC: NSViewController, NetworkMessengerDelegate, NSWindowDelegate {
   
   private var lastTime = Date.timeIntervalSinceReferenceDate
   
+  func NetworkTimeOut(message: NetworkMessage) {
+    print("Timeout")
+  }
+
   func NetworkMessageReceived(message: NetworkMessage) {
     
     var item : String = ""
@@ -530,14 +534,10 @@ class MonitorVC: NSViewController, NetworkMessengerDelegate, NSWindowDelegate {
     }
     
     if good {
-      var message : Data = Data(repeating: 0x00, count: parts.count + 1)
-      var index = 0
-      for number in numbers {
-        message[index] = UInt8(number)
-        index += 1
+      if let messenger = messenger {
+        let message = NetworkMessage(interfaceId: messenger.id, data: numbers, appendCheckSum: true)
+        messenger.addToQueue(message: message, delay: TIMING.STANDARD, response: [.longAcknowledge, .slotData], delegate: self, retryCount: 10)
       }
-      message[message.count-1] = NetworkMessage.checkSum(data: message, length: message.count)
-      messenger?.addToQueue(message: message)
     }
 
   }

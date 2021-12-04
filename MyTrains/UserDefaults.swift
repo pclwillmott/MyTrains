@@ -23,3 +23,4 @@ enum DEFAULT {
   static let MONITOR_MESSAGE4         = "MonitorMessage4"
   static let MONITOR_NOTE             = "MonitorNote"
 }
+

@@ -7,7 +7,10 @@
 
 import Foundation
 
-public enum LoconetOpcode : UInt8 {
+// Constants to represent the contents of byte 0 of a
+// Network Message.
+
+public enum NetworkMessageOpcode : UInt8 {
   case OPC_UNKNOWN      = 0x00
   case OPC_BUSY         = 0x81
   case OPC_GPOFF        = 0x82
@@ -29,10 +32,29 @@ public enum LoconetOpcode : UInt8 {
   case OPC_RQ_SL_DATA   = 0xBB
   case OPC_SW_STATE     = 0xBC
   case OPC_SW_ACK       = 0xBD
+  case OPC_LOCO_ADR_EXP = 0xBE
   case OPC_LOCO_ADR     = 0xBF
   case OPC_PEER_XFER    = 0xE5
   case OPC_SL_RD_DATA   = 0xE7
   case OPC_WR_SL_DATA   = 0xEF
+}
+
+// Network Message Types are for internal MyTrains usage.
+// Unlike the Network Message Opcode, these constants uniquely
+// identify a Network Message Type.
+
+public enum NetworkMessageType {
+  case unknown
+  case uninitialized
+  case busy
+  case globalPowerOff
+  case globalPowerOn
+  case forceIdleState
+  case reqLocoSlotShortAddr
+  case reqLocoSlotLongAddr
+  case reqLocoExpSlot
+  case longAcknowledge
+  case slotData
 }
 
 /*

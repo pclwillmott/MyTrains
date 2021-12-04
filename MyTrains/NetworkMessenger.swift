@@ -10,6 +10,17 @@ import ORSSerial
 
 public protocol NetworkMessengerDelegate {
   func NetworkMessageReceived(message:NetworkMessage)
+  func NetworkTimeOut(message:NetworkMessage)
+}
+
+enum TIMING {
+  static let STANDARD = 20.0 / 1000.0
+}
+
+enum MessengerState {
+  case idle
+  case spacing
+  case waitingForResponse
 }
 
 public class NetworkMessenger : NSObject, ORSSerialPortDelegate {
@@ -31,7 +42,6 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate {
       sp.usesDCDOutputFlowControl = false
       serialPort = sp
       sp.open()
-      startOutputQueue(timeInterval: 0.25)
     }
   }
   
@@ -75,31 +85,97 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate {
     observers.removeValue(forKey: id)
   }
   
-  // Output Queue Timer
+  public func addToQueue(message:NetworkMessage, delay:TimeInterval, response: [NetworkMessageType], delegate: NetworkMessengerDelegate?, retryCount: Int) {
     
-  @objc func handleOutputQueue() {
-    outputQueueLock.lock()
-    if outputQueue.count > 0 {
-      serialPort?.send(outputQueue[0].message)
-      outputQueue.remove(at: 0)
-    }
-    outputQueueLock.unlock()
-  }
-  
-  func addToQueue(message:Data) {
-    let item = NetworkOutputQueueItem(message: message)
+    let item = NetworkOutputQueueItem(message: message, delay: delay, response: response, delegate: delegate, retryCount: retryCount)
+    
     outputQueueLock.lock()
     outputQueue.append(item)
     outputQueueLock.unlock()
+    
+    sendMessage()
+    
   }
   
-  func startOutputQueue(timeInterval:TimeInterval) {
-    outputTimer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(handleOutputQueue), userInfo: nil, repeats: true)
+  private func sendMessage() {
+    
+    outputQueueLock.lock()
+    
+    var item : NetworkOutputQueueItem?
+    
+    var delegate : NetworkMessengerDelegate? = nil
+    
+    var startTimer = false
+    
+    var delay : TimeInterval = 0.0
+    
+    if outputQueue.count > 0 {
+      
+      item = outputQueue[0]
+      
+      if messengerState == .idle {
+        
+        if item!.retryCount > 0 {
+        
+         serialPort?.send(Data(item!.message.message))
+          
+          if item!.responseExpected {
+            messengerState = .waitingForResponse
+          }
+          else {
+            messengerState = .spacing
+            outputQueue.remove(at: 0)
+          }
+          
+          item!.retryCount -= 1
+            
+          delay = item!.delay
+          
+          startTimer = true
+          
+        }
+        else {
+          
+          delegate = item!.delegate
+          
+        }
+        
+      }
+
+    }
+    
+    outputQueueLock.unlock()
+    
+    delegate?.NetworkTimeOut(message: item!.message)
+    
+    if startTimer {
+      startSpacingTimer(timeInterval: delay)
+    }
+    
+  }
+ 
+  // Spacing Timer
+    
+  @objc func spacingTimer() {
+    stopSpacingTimer()
+    outputQueueLock.lock()
+    messengerState = .idle
+    outputQueueLock.unlock()
+    sendMessage()
   }
   
-  func stopOutputQueue() {
+  private var messengerState : MessengerState = .idle
+  
+  func startSpacingTimer(timeInterval:TimeInterval) {
+    outputTimer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(spacingTimer), userInfo: nil, repeats: false)
+  }
+  
+  func stopSpacingTimer() {
     outputTimer?.invalidate()
     outputTimer = nil
+    outputQueueLock.lock()
+    messengerState = .idle
+    outputQueueLock.unlock()
   }
     
   // Public Properties
@@ -110,72 +186,72 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate {
   
   public func powerOn() {
     
-    let message = NetworkMessage.formLoconetMessage(opCode: .OPC_GPON, data: Data([]))
+    let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_GPON.rawValue], appendCheckSum: true)
     
-    addToQueue(message: message)
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: nil, retryCount: 1)
     
   }
   
   public func powerOff() {
     
-    let message = NetworkMessage.formLoconetMessage(opCode: .OPC_GPOFF, data: Data([]))
+    let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_GPOFF.rawValue], appendCheckSum: true)
     
-    addToQueue(message: message)
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: nil, retryCount: 1)
 
   }
   
   public func powerIdle() {
     
-    let message = NetworkMessage.formLoconetMessage(opCode: .OPC_IDLE, data: Data([]))
+    let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_IDLE.rawValue], appendCheckSum: true)
     
-    addToQueue(message: message)
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: nil, retryCount: 1)
 
   }
   public func discoverDevices() {
     //0x01
-    let message = NetworkMessage.formLoconetMessage(opCode: .OPC_PEER_XFER, data: Data([0x14, 0x0f, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]))
+//    let message = NetworkMessage.formLoconetMessage(opCode: .OPC_PEER_XFER, data: Data([0x14, 0x0f, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]))
     
-    addToQueue(message: message)
+//    addToQueue(message: message)
 
   }
   
   public func requestSlotInfo(address:UInt8) {
     
-    let message = NetworkMessage.formLoconetMessage(opCode: .OPC_LOCO_ADR, data: Data([0x00, address]))
+//    let message = NetworkMessage.formLoconetMessage(opCode: .OPC_LOCO_ADR, data: Data([0x00, address]))
     
-    addToQueue(message: message)
+//    addToQueue(message: message)
 
   }
   
   public func setLocoSound(slotNumber:UInt8) {
     
-    let message = NetworkMessage.formLoconetMessage(opCode: .OPC_LOCO_SND, data: Data([slotNumber, loconetSlots[Int(slotNumber)]!.slotByte(byte: .slotSound)]))
+//    let message = NetworkMessage.formLoconetMessage(opCode: .OPC_LOCO_SND, data: Data([slotNumber, loconetSlots[Int(slotNumber)]!.slotByte(byte: .slotSound)]))
     
-    addToQueue(message: message)
+//    addToQueue(message: message)
 
   }
   
   public func setLocoDirF(slotNumber:UInt8) {
     
-    let message = NetworkMessage.formLoconetMessage(opCode: .OPC_LOCO_DIRF, data: Data([slotNumber, loconetSlots[Int(slotNumber)]!.slotByte(byte: .slotDirF)]))
+//    let message = NetworkMessage.formLoconetMessage(opCode: .OPC_LOCO_DIRF, data: Data([slotNumber, loconetSlots[Int(slotNumber)]!.slotByte(byte: .slotDirF)]))
     
-    addToQueue(message: message)
+//    addToQueue(message: message)
 
   }
   
   public func setLocoSpeed(slotNumber:UInt8) {
     
-    let message = NetworkMessage.formLoconetMessage(opCode: .OPC_LOCO_SPD, data: Data([slotNumber, loconetSlots[Int(slotNumber)]!.slotByte(byte: .slotSpeed)]))
+ //   let message = NetworkMessage.formLoconetMessage(opCode: .OPC_LOCO_SPD, data: Data([slotNumber, loconetSlots[Int(slotNumber)]!.slotByte(byte: .slotSpeed)]))
     
-    addToQueue(message: message)
+//    addToQueue(message: message)
 
   }
   
   public func nullMove(slotNumber:UInt8) {
     
-    let message = NetworkMessage.formLoconetMessage(opCode: .OPC_MOVE_SLOTS, data: Data([slotNumber, slotNumber]))
+//    let message = NetworkMessage.formLoconetMessage(opCode: .OPC_MOVE_SLOTS, data: Data([slotNumber, slotNumber]))
     
-    addToQueue(message: message)
+//    addToQueue(message: message)
 
   }
   
@@ -281,12 +357,42 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate {
           
           if !restart {
           
-            let loconetMessage = NetworkMessage(interfaceId:self.id, message: message)
+            let networkMessage = NetworkMessage(interfaceId:self.id, data: message)
             
-            if loconetMessage.checkSumOK && loconetMessage.opCode != .OPC_BUSY {
+            if networkMessage.checkSumOK && networkMessage.messageType != .busy {
               
+              var stopTimer = false
+              
+              outputQueueLock.lock()
+              
+              var delegate : NetworkMessengerDelegate? = nil
+              
+              if messengerState == .waitingForResponse &&
+                outputQueue[0].isValidResponse(messageType: networkMessage.messageType) {
+                
+                delegate = outputQueue[0].delegate
+                
+                outputQueue.remove(at: 0)
+                
+                messengerState = .spacing
+                
+                stopTimer = true
+                
+              }
+              
+              outputQueueLock.unlock()
+              
+              if stopTimer {
+                stopSpacingTimer()
+                delegate?.NetworkMessageReceived(message: networkMessage)
+              }
+
               for observer in observers {
-                observer.value.NetworkMessageReceived(message: loconetMessage)
+                observer.value.NetworkMessageReceived(message: networkMessage)
+              }
+              
+              if stopTimer {
+                sendMessage()
               }
               
             }
