@@ -14,7 +14,7 @@ public protocol NetworkMessengerDelegate {
 }
 
 enum TIMING {
-  static let STANDARD = 20.0 / 1000.0
+  static let STANDARD = 30.0 / 1000.0
 }
 
 enum MessengerState {
@@ -137,9 +137,13 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate {
         else {
           
           delegate = item!.delegate
-          
+          outputQueue.remove(at: 0)
+
         }
         
+      }
+      else {
+        print("here")
       }
 
     }

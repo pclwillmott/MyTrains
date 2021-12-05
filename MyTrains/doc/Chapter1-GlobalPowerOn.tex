@@ -1,12 +1,11 @@
-
 \newpage
-\LARGE\textbf{Busy}\normalsize
+\LARGE\textbf{GlobalPowerOn}\normalsize
 
 \rule{15.1cm}{0.4pt}
 
 \underline{Description:}
 
-Broadcast message sent by a command station to indicate that it is busy and will not accept commands. 
+This command turns the track power on. 
 
 \underline{Group:}
 
@@ -14,11 +13,11 @@ Broadcast message sent by a command station to indicate that it is busy and will
 
 \underline{Opcode:}
 
-OPC\_BUSY
+OPC\_GPON
 
 \underline{Type:}
 
-Broadcast
+Command
 
 \underline{Encoding:} 
 
@@ -28,10 +27,10 @@ Byte 0:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 0 & 0 & 0 & 0 & 0 & 0 & 1\\
+1 & 0 & 0 & 0 & 0 & 0 & 1 & 1\\
 \hline
 \end{tabular}
-& 0x81 & Opcode.\\
+& 0x83 & Opcode.\\
 \end{tabular}
 
 Byte 1:
@@ -40,21 +39,33 @@ Byte 1:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 1 & 1 & 1 & 1 & 1 & 1 & 0\\
+0 & 1 & 1 & 1 & 1 & 1 & 0 & 0\\
 \hline
 \end{tabular}
-& 0x7E & Checksum.
+& 0x7C & Checksum.
 \end{tabular}
 
 \underline{Response:} 
 
-None when sent by a command station. When sent by a computer to a command station the command station responds with an OPC\_PEER\_XFER message.
+After power on the command station sends an OPC\_RQ\_SL\_DATA message for slot 0x7F. It also sends a sequence of OPC\_SW\_REQ messages with the following values of SW1 and SW2:
+
+\begin{tabular}{l l l}
+\underline{SW1} & \underline{SW2} & \underline{Purpose}\\
+0x78 & 0x27\\
+0x79 & 0x27\\
+0x7A & 0x27\\
+0x7B & 0x27\\
+0x78 & 0x07 & Interrogate all PM4 inputs?\\
+0x79 & 0x07 & Interrogate all BDL16 input reports?\\
+0x7A & 0x07 & Interrogate all SE8 input reports?\\
+0x7B & 0x07 & Interrogate all DS64 input reports.\\
+\end{tabular}
 
 \underline{Signature:}
 
 \begin{tabular}{c l}
 \underline{Byte \#} & \underline{Condition}\\
-0 & = 0x81\\
+0 & = 0x83\\
 \end{tabular}
 
 \underline{Notes:} 
@@ -62,4 +73,3 @@ None when sent by a command station. When sent by a computer to a command statio
 None.
 
 \rule{15.1cm}{0.4pt}
-

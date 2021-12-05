@@ -138,12 +138,37 @@ public class NetworkMessage {
           _messageType = .longAcknowledge
           break
         case NetworkMessageOpcode.OPC_SL_RD_DATA.rawValue:
-          if  message[1] == 0x0e &&
-             (message[ 6] & 0b01000000) == 0x00 &&
-             (message[ 7] & 0b01110000) == 0x00 &&
-             (message[ 8] & 0b01110000) == 0x00 &&
-             (message[10] & 0b01110000) == 0x00 {
-            _messageType = .slotData
+          if  message[ 1] == 0x0e &&
+             (message[ 6] &  0b01000000) == 0x00 && /* DIRF */
+             (message[ 7] &  0b00110000) == 0x00 && /* TRK  */
+             (message[ 8] &  0b01110010) == 0x00 && /* SS@  */
+             (message[10] &  0b01110000) == 0x00    /* SND  */ {
+            if message[2] < 0x78 {
+              _messageType = .readStdSlotData
+            }
+            else if message[2] == 0x7f {
+              _messageType = .readCfgSlotData
+            }
+          }
+          break
+        case NetworkMessageOpcode.OPC_WR_SL_DATA.rawValue:
+          if  message[ 1] == 0x0e &&
+              message[ 2] <  0x78 &&                /* SLOT */
+             (message[ 6] &  0b01000000) == 0x00 && /* DIRF */
+             (message[ 7] &  0b00110000) == 0x00 && /* TRK  */
+             (message[ 8] &  0b01110010) == 0x00 && /* SS@  */
+             (message[10] &  0b01110000) == 0x00    /* SND  */ {
+             _messageType = .writeStdSlotData
+          }
+          break
+        case NetworkMessageOpcode.OPC_PEER_XFER.rawValue:
+          if message[ 1] == 0x10 &&
+             message[ 2] == 0x22 &&
+             message[ 3] == 0x22 &&
+             message[ 4] == 0x01 &&
+             message[ 5] == 0x00 &&
+             message[10] == 0x00 {
+            _messageType = .readInterfaceStatus
           }
           break
         default:

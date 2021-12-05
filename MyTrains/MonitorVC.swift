@@ -145,6 +145,10 @@ class MonitorVC: NSViewController, NetworkMessengerDelegate, NSWindowDelegate {
         item += "0x\(String(format: "%02x", byte)) "
         break
       }
+      
+      if addByteNumber {
+        item += "\n"
+      }
     }
     
     if !isPaused {
@@ -536,7 +540,7 @@ class MonitorVC: NSViewController, NetworkMessengerDelegate, NSWindowDelegate {
     if good {
       if let messenger = messenger {
         let message = NetworkMessage(interfaceId: messenger.id, data: numbers, appendCheckSum: true)
-        messenger.addToQueue(message: message, delay: TIMING.STANDARD, response: [.longAcknowledge, .slotData], delegate: self, retryCount: 10)
+        messenger.addToQueue(message: message, delay: TIMING.STANDARD, response: [.longAcknowledge, .readStdSlotData], delegate: self, retryCount: 10)
       }
     }
 

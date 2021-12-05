@@ -54,7 +54,11 @@ public enum NetworkMessageType {
   case reqLocoSlotLongAddr
   case reqLocoExpSlot
   case longAcknowledge
-  case slotData
+  case readStdSlotData
+  case readCfgSlotData
+  case writeStdSlotData
+  case reqInterfaceStatus
+  case readInterfaceStatus
 }
 
 /*

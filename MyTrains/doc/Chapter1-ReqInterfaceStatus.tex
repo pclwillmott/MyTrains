@@ -1,12 +1,12 @@
 
 \newpage
-\LARGE\textbf{Busy}\normalsize
+\LARGE\textbf{ReqInterfaceStatus}\normalsize
 
 \rule{15.1cm}{0.4pt}
 
 \underline{Description:}
 
-Broadcast message sent by a command station to indicate that it is busy and will not accept commands. 
+Sent by a computer to request an \textbf{ReadInterfaceStatus} message from network interface device. 
 
 \underline{Group:}
 
@@ -18,7 +18,11 @@ OPC\_BUSY
 
 \underline{Type:}
 
-Broadcast
+Command
+
+\underline{Applicable Hardware}:
+
+Digitrax PR4 and DCS240.
 
 \underline{Encoding:} 
 
@@ -48,14 +52,11 @@ Byte 1:
 
 \underline{Response:} 
 
-None when sent by a command station. When sent by a computer to a command station the command station responds with an OPC\_PEER\_XFER message.
+A Digitrax interface returns an \textbf{InterfaceStatus} message.
 
 \underline{Signature:}
 
-\begin{tabular}{c l}
-\underline{Byte \#} & \underline{Condition}\\
-0 & = 0x81\\
-\end{tabular}
+None - the command is intercepted by the interface and is not passed on to the network.
 
 \underline{Notes:} 
 
