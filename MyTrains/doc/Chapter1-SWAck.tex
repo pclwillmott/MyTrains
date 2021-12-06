@@ -1,10 +1,10 @@
 \newpage
-\subsection{OPC\_MOVE\_SLOTS}
-\underline{Operation:} Move slot.
+\subsection{OPC\_SW\_ACK}
+\underline{Operation:} Request switch command with acknowledge.
 
 \underline{Group:} \hspace{0.5cm} 4-Byte Message
 
-\underline{Direction:} \hspace{0.05cm} $\rightarrow$ Switch
+\underline{Direction:} \hspace{0.05cm} $\rightarrow$ Turnout controller
 
 \underline{Encoding:} 
 
@@ -14,10 +14,10 @@ Byte 0:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 0 & 1 & 1 & 1 & 0 & 1 & 0\\
+1 & 0 & 1 & 1 & 1 & 1 & 0 & 1\\
 \hline
 \end{tabular}
-& 0xBA & Opcode.\\
+& 0xBD & Opcode.\\
 \end{tabular}
 
 Byte 1:
@@ -26,10 +26,20 @@ Byte 1:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & n & n & n & n & n & n & n\\
+0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-& $<$SRC$>$ & Source slot number in the range 0x00 to 0x77.\\
+& $<$SW1$>$ & Switch address A6 to A0.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d6 & A6.\\
+d5 & A5.\\
+d4 & A4.\\
+d3 & A3.\\
+d2 & A2.\\
+d1 & A1.\\
+d0 & A0.\\
 \end{tabular}
 
 Byte 2:
@@ -38,10 +48,20 @@ Byte 2:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & n & n & n & n & n & n & n\\
+0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-& $<$DEST$>$ & Destination slot number in the range 0x00 to 0x77.\\
+& $<$SW2$>$ & Switch address A10 to A7 and switch control bits.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d6 & Reserved. Set to 0.\\
+d5 & Direction. 1 means closed/green, and 0 means thrown/red.\\
+d4 & Output. 1 means on, and 0 means off.\\
+d3 & A10.\\
+d2 & A9.\\
+d1 & A8.\\
+d0 & A7.\\
 \end{tabular}
 
 Byte 3:
@@ -59,19 +79,11 @@ Byte 3:
 
 \underline{Description:}
 
-Move slots.
-
-\begin{tabular}{p{0.2\linewidth} p{0.2\linewidth} p{0.53\linewidth}} 
-\underline{SRC} & \underline{DEST} & \underline{Action}\\
-0x00 & Don't Care & Dispatch get. Return slot read of dispatch slot.\\
-SRC & SRC & Null move. SRC is set to in use.\\
-SRC & 0x00 & Dispatch put. Mark slot as dispatch.\\
-SRC & DEST & Move slot data from SRC to DEST if not in use. Clear SRC.\\
-\end{tabular}
+Command a turnout controller to a specified state and send acknowledge.
 
 \underline{Response:} 
 
-OPC\_SL\_RD\_DATA or OPC\_LONG\_ACK.
+OPC\_LONG\_ACK.
 
 \underline{Notes:} 
 

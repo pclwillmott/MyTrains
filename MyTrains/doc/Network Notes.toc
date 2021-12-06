@@ -2,54 +2,63 @@
 \contentsline {section}{\numberline {1.1}Overview}{1}{section.1.1}
 \contentsline {section}{\numberline {1.2}Message Format}{2}{section.1.2}
 \contentsline {section}{\numberline {1.3}Refresh Slots}{3}{section.1.3}
-\contentsline {subsection}{\numberline {1.3.1}Slot Format}{3}{subsection.1.3.1}
-\contentsline {subsection}{\numberline {1.3.2}Extended Slot Format}{3}{subsection.1.3.2}
-\contentsline {section}{\numberline {1.4}Standard Address Selection}{7}{section.1.4}
-\contentsline {section}{\numberline {1.5}Opcodes}{8}{section.1.5}
-\contentsline {subsubsection}{OPC\_BRD\_OPSW}{9}{section*.2}
-\contentsline {subsubsection}{OPC\_CONSIST\_FUNC}{12}{section*.3}
-\contentsline {subsubsection}{OPC\_IMM\_PACKET}{16}{section*.4}
-\contentsline {subsubsection}{OPC\_INPUT\_REP}{17}{section*.5}
-\contentsline {subsubsection}{OPC\_LINK\_SLOTS}{19}{section*.6}
-\contentsline {subsubsection}{OPC\_LOCO\_ADR}{20}{section*.7}
-\contentsline {subsubsection}{OPC\_LOCO\_ADR\_EXT}{21}{section*.8}
-\contentsline {subsubsection}{OPC\_LOCO\_DIRF}{22}{section*.9}
-\contentsline {subsubsection}{OPC\_LOCO\_DIRF\_EXT}{23}{section*.10}
-\contentsline {subsubsection}{OPC\_LOCO\_FN\_EXT}{24}{section*.11}
-\contentsline {subsubsection}{OPC\_LOCO\_RESET}{25}{section*.12}
-\contentsline {subsubsection}{OPC\_LOCO\_SND}{26}{section*.13}
-\contentsline {subsubsection}{OPC\_LOCO\_SPD}{27}{section*.14}
-\contentsline {subsubsection}{OPC\_LOCO\_SPD\_EXT}{28}{section*.15}
-\contentsline {subsubsection}{OPC\_LONG\_ACK}{29}{section*.16}
-\contentsline {subsubsection}{OPC\_MOVE\_SLOTS}{30}{section*.17}
-\contentsline {subsubsection}{OPC\_MOVE\_SLOTS\_EXT}{31}{section*.18}
-\contentsline {subsubsection}{OPC\_PEER\_XFER}{32}{section*.19}
-\contentsline {subsubsection}{OPC\_PEER\_XFER\_20}{35}{section*.20}
-\contentsline {subsubsection}{OPC\_RQ\_SL\_DATA}{40}{section*.21}
-\contentsline {subsubsection}{OPC\_SL\_RD\_DATA\_EXT}{52}{section*.22}
-\contentsline {subsubsection}{OPC\_SLOT\_STAT1}{53}{section*.23}
-\contentsline {subsubsection}{OPC\_SV\_PROG}{53}{section*.24}
-\contentsline {subsubsection}{OPC\_SW\_ACK}{58}{section*.25}
-\contentsline {subsubsection}{OPC\_SW\_REP}{60}{section*.26}
-\contentsline {subsubsection}{OPC\_SW\_REQ}{61}{section*.27}
-\contentsline {subsubsection}{OPC\_SW\_STATE}{63}{section*.28}
-\contentsline {subsubsection}{OPC\_TRANS\_REP}{64}{section*.29}
-\contentsline {subsubsection}{OPC\_UNLINK\_SLOTS}{65}{section*.30}
-\contentsline {subsubsection}{OPC\_WR\_SL\_DATA\_EXT}{70}{section*.31}
-\contentsline {chapter}{\numberline {2}Fast Clock}{77}{chapter.2}
-\contentsline {section}{\numberline {2.1}Summary}{77}{section.2.1}
-\contentsline {section}{\numberline {2.2}Slot \#123 Encoding}{77}{section.2.2}
-\contentsline {chapter}{\numberline {3}Updating Firmware}{81}{chapter.3}
-\contentsline {section}{\numberline {3.1}Bootloader Protocol 1}{81}{section.3.1}
-\contentsline {section}{\numberline {3.2}Bootloader Protocol 2}{81}{section.3.2}
-\contentsline {subsection}{\numberline {3.2.1}IPL Setup}{81}{subsection.3.2.1}
-\contentsline {subsection}{\numberline {3.2.2}IPL Address Message}{83}{subsection.3.2.2}
-\contentsline {subsection}{\numberline {3.2.3}IPL Data Message}{84}{subsection.3.2.3}
-\contentsline {subsection}{\numberline {3.2.4}IPL End Operation Message}{86}{subsection.3.2.4}
-\contentsline {section}{\numberline {3.3}Firmware Parameters}{88}{section.3.3}
-\contentsline {section}{\numberline {3.4}DMF File Format}{89}{section.3.4}
-\contentsline {subsection}{\numberline {3.4.1}Sync Records}{89}{subsection.3.4.1}
-\contentsline {subsection}{\numberline {3.4.2}Parameter Records}{89}{subsection.3.4.2}
-\contentsline {subsection}{\numberline {3.4.3}Data Records}{91}{subsection.3.4.3}
-\contentsline {subsection}{\numberline {3.4.4}End of File Record}{92}{subsection.3.4.4}
-\contentsline {chapter}{\numberline {A}Reference Tables}{95}{appendix.A}
+\contentsline {section}{\numberline {1.4}Standard Address Selection}{3}{section.1.4}
+\contentsline {section}{\numberline {1.5}Messages}{4}{section.1.5}
+\contentsline {subsection}{\numberline {1.5.1}OPC\_BRD\_OPSW}{5}{subsection.1.5.1}
+\contentsline {subsection}{\numberline {1.5.2}Busy}{7}{subsection.1.5.2}
+\contentsline {subsection}{\numberline {1.5.3}OPC\_CONSIST\_FUNC}{8}{subsection.1.5.3}
+\contentsline {subsection}{\numberline {1.5.4}OPC\_LOCO\_FN\_EXT}{9}{subsection.1.5.4}
+\contentsline {subsection}{\numberline {1.5.5}ForceIdleState}{11}{subsection.1.5.5}
+\contentsline {subsection}{\numberline {1.5.6}GetLocoSlotDataLAdrV1}{12}{subsection.1.5.6}
+\contentsline {subsection}{\numberline {1.5.7}GetLocoSlotDataLAdrV2}{14}{subsection.1.5.7}
+\contentsline {subsection}{\numberline {1.5.8}GetLocoSlotDataSAdrV1}{16}{subsection.1.5.8}
+\contentsline {subsection}{\numberline {1.5.9}GetLocoSlotDataSAdrV2}{18}{subsection.1.5.9}
+\contentsline {subsection}{\numberline {1.5.10}GlobalPowerOff}{20}{subsection.1.5.10}
+\contentsline {subsection}{\numberline {1.5.11}GlobalPowerOn}{21}{subsection.1.5.11}
+\contentsline {subsection}{\numberline {1.5.12}OPC\_IMM\_PACKET}{23}{subsection.1.5.12}
+\contentsline {subsection}{\numberline {1.5.13}OPC\_INPUT\_REP}{25}{subsection.1.5.13}
+\contentsline {subsection}{\numberline {1.5.14}OPC\_LINK\_SLOTS}{27}{subsection.1.5.14}
+\contentsline {subsection}{\numberline {1.5.15}OPC\_LOCO\_DIRF}{28}{subsection.1.5.15}
+\contentsline {subsection}{\numberline {1.5.16}OPC\_LOCO\_DIRF\_EXT}{29}{subsection.1.5.16}
+\contentsline {subsection}{\numberline {1.5.17}OPC\_LOCO\_RESET}{31}{subsection.1.5.17}
+\contentsline {subsection}{\numberline {1.5.18}LocoSlotDataV1}{32}{subsection.1.5.18}
+\contentsline {subsubsection}{OPC\_SL\_RD\_DATA\_EXT}{36}{section*.2}
+\contentsline {subsection}{\numberline {1.5.19}OPC\_LOCO\_SND}{42}{subsection.1.5.19}
+\contentsline {subsection}{\numberline {1.5.20}OPC\_LOCO\_SPD}{43}{subsection.1.5.20}
+\contentsline {subsection}{\numberline {1.5.21}OPC\_LOCO\_SPD\_EXT}{44}{subsection.1.5.21}
+\contentsline {subsection}{\numberline {1.5.22}OPC\_LONG\_ACK}{46}{subsection.1.5.22}
+\contentsline {subsection}{\numberline {1.5.23}OPC\_MOVE\_SLOTS}{48}{subsection.1.5.23}
+\contentsline {subsection}{\numberline {1.5.24}OPC\_MOVE\_SLOTS\_EXT}{49}{subsection.1.5.24}
+\contentsline {subsection}{\numberline {1.5.25}OPC\_PEER\_XFER}{51}{subsection.1.5.25}
+\contentsline {subsection}{\numberline {1.5.26}OPC\_PEER\_XFER\_20}{55}{subsection.1.5.26}
+\contentsline {subsection}{\numberline {1.5.27}ReadCfgSlotData}{60}{subsection.1.5.27}
+\contentsline {subsection}{\numberline {1.5.28}ReadInterfaceStatus}{67}{subsection.1.5.28}
+\contentsline {subsection}{\numberline {1.5.29}ReqInterfaceStatus}{69}{subsection.1.5.29}
+\contentsline {subsection}{\numberline {1.5.30}OPC\_RQ\_SL\_DATA}{70}{subsection.1.5.30}
+\contentsline {subsection}{\numberline {1.5.31}OPC\_SLOT\_STAT1}{71}{subsection.1.5.31}
+\contentsline {subsection}{\numberline {1.5.32}OPC\_SV\_PROG}{72}{subsection.1.5.32}
+\contentsline {subsection}{\numberline {1.5.33}OPC\_SW\_ACK}{77}{subsection.1.5.33}
+\contentsline {subsection}{\numberline {1.5.34}OPC\_SW\_REP}{79}{subsection.1.5.34}
+\contentsline {subsection}{\numberline {1.5.35}OPC\_SW\_REQ}{81}{subsection.1.5.35}
+\contentsline {subsection}{\numberline {1.5.36}OPC\_SW\_STATE}{83}{subsection.1.5.36}
+\contentsline {subsection}{\numberline {1.5.37}OPC\_TRANS\_REP}{84}{subsection.1.5.37}
+\contentsline {subsection}{\numberline {1.5.38}OPC\_UNLINK\_SLOTS}{85}{subsection.1.5.38}
+\contentsline {subsection}{\numberline {1.5.39}OPC\_WR\_SL\_DATA\_EXT}{86}{subsection.1.5.39}
+\contentsline {subsection}{\numberline {1.5.40}WriteStdSlotData}{87}{subsection.1.5.40}
+\contentsline {chapter}{\numberline {2}Fast Clock}{93}{chapter.2}
+\contentsline {section}{\numberline {2.1}Summary}{93}{section.2.1}
+\contentsline {section}{\numberline {2.2}Slot \#123 Encoding}{93}{section.2.2}
+\contentsline {chapter}{\numberline {3}Updating Firmware}{97}{chapter.3}
+\contentsline {section}{\numberline {3.1}Bootloader Protocol 1}{97}{section.3.1}
+\contentsline {section}{\numberline {3.2}Bootloader Protocol 2}{97}{section.3.2}
+\contentsline {subsection}{\numberline {3.2.1}IPL Setup}{97}{subsection.3.2.1}
+\contentsline {subsection}{\numberline {3.2.2}IPL Address Message}{99}{subsection.3.2.2}
+\contentsline {subsection}{\numberline {3.2.3}IPL Data Message}{100}{subsection.3.2.3}
+\contentsline {subsection}{\numberline {3.2.4}IPL End Operation Message}{102}{subsection.3.2.4}
+\contentsline {section}{\numberline {3.3}Firmware Parameters}{104}{section.3.3}
+\contentsline {section}{\numberline {3.4}DMF File Format}{105}{section.3.4}
+\contentsline {subsection}{\numberline {3.4.1}Sync Records}{105}{subsection.3.4.1}
+\contentsline {subsection}{\numberline {3.4.2}Parameter Records}{105}{subsection.3.4.2}
+\contentsline {subsection}{\numberline {3.4.3}Data Records}{107}{subsection.3.4.3}
+\contentsline {subsection}{\numberline {3.4.4}End of File Record}{108}{subsection.3.4.4}
+\contentsline {chapter}{\numberline {A}Reference Tables}{111}{appendix.A}

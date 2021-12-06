@@ -32,7 +32,7 @@ public enum NetworkMessageOpcode : UInt8 {
   case OPC_RQ_SL_DATA   = 0xBB
   case OPC_SW_STATE     = 0xBC
   case OPC_SW_ACK       = 0xBD
-  case OPC_LOCO_ADR_EXP = 0xBE
+  case OPC_LOCO_ADR_V2  = 0xBE
   case OPC_LOCO_ADR     = 0xBF
   case OPC_PEER_XFER    = 0xE5
   case OPC_SL_RD_DATA   = 0xE7
@@ -46,19 +46,26 @@ public enum NetworkMessageOpcode : UInt8 {
 public enum NetworkMessageType {
   case unknown
   case uninitialized
+  case acknowledgement
   case busy
+  case getInterfaceData
+  case getLocoSlotDataLAdrV1
+  case getLocoSlotDataLAdrV2
+  case getLocoSlotDataSAdrV1
+  case getLocoSlotDataSAdrV2
   case globalPowerOff
   case globalPowerOn
   case forceIdleState
-  case reqLocoSlotShortAddr
-  case reqLocoSlotLongAddr
-  case reqLocoExpSlot
-  case longAcknowledge
-  case readStdSlotData
-  case readCfgSlotData
-  case writeStdSlotData
-  case reqInterfaceStatus
-  case readInterfaceStatus
+  case locoSlotDataV1
+  case locoSlotDataV2
+  case cfgSlotDataV1
+  case cfgSlotDataV2
+  case interfaceDataV1
+  case writeLocoSlotDataV1
+  case writeLocoSlotDataV2
+  case writeCfgSlotDataV1
+  case writeCfgSlotDataV2
+
 }
 
 /*

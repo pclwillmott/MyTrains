@@ -1,10 +1,25 @@
 \newpage
-\subsection{OPC\_LOCO\_SPD\_EXT}
-\underline{Operation:} Set locomotive speed for extended slots.
+\subsection{GetLocoSlotDataLAdrV1}
 
-\underline{Group:} \hspace{0.5cm} 6-Byte Message
+\rule{15.1cm}{0.4pt}
 
-\underline{Direction:} \hspace{0.05cm} $\rightarrow$ Command Station
+\underline{Description:}
+
+This command requests the slot number for the selected locomotive address. If the locomotive is found in the slot table then the command station returns an \textbf{LocoSlotDataV1} message with the slot information. If it is not found then the command station will put the locomotive into a free slot and then return an \textbf{LocoSlotDataV1} message with the slot information. If there are no free slots then the command station returns an \textbf{Acknowledgement} containing the error code.
+
+The command station will generate NMRA 14 bit or long address packets for the locomotive. The address must be in the range 128 to 9983.
+
+\underline{Group:} 
+
+4-Byte Message
+
+\underline{Opcode:}
+
+OPC\_LOCO\_ADR
+
+\underline{Type:}
+
+Command
 
 \underline{Encoding:} 
 
@@ -14,10 +29,10 @@ Byte 0:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 1 & 0 & 1 & 0 & 1 & 0 & 0\\
+1 & 0 & 1 & 1 & 1 & 1 & 1 & 1\\
 \hline
 \end{tabular}
-& 0xD4 & Opcode.\\
+& 0xBF & Opcode.\\
 \end{tabular}
 
 Byte 1:
@@ -26,10 +41,10 @@ Byte 1:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 0 & 1 & 0 & 0 & d2 & d1 & d0\\
+0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$SLOTP$>$ & Bits d2 to d0 contain the extended slot page number in the range 0x0 to 0x7.\\
+& $<$ADR2$>$ & Address high 7 bits.\\
 \end{tabular}
 
 Byte 2:
@@ -41,34 +56,10 @@ Byte 2:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$SLOT\#$>$ & Extended slot number.\\
+& $<$ADR$>$ & Address low 7 bits.\\
 \end{tabular}
 
 Byte 3:
-
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
-
-\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
-\hline
-0 & 0 & 0 & 0 & 0 & 1 & 0 & 0\\
-\hline
-\end{tabular}
-& 0x04 & Subcode.\\
-\end{tabular}
-
-Byte 4:
-
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
-
-\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
-\hline
-0 & n & n & n & n & n & n & n\\
-\hline
-\end{tabular}
-& $<$SPD$>$ & Locomotive speed in the range 0x00 to 0x7F. 0x00 means inertial stop and 0x01 means emergency stop. Other values mean increasing speed.\\
-\end{tabular}
-
-Byte 5:
 
 \begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
@@ -78,18 +69,41 @@ Byte 5:
 \hline
 \end{tabular}
 & $<$CHK$>$ & Checksum.
+
 \end{tabular}
-
-\underline{Description:}
-
-This function sets the locomotive's speed.
 
 \underline{Response:} 
 
-None.
+\textbf{LocoSlotDataV1} if success, otherwise \textbf{Acknowledgement}.
+
+\underline{Signature:}
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 0 & 1 & 1 & 1 & 1 & 1 & 1\\
+\hline
+\end{tabular}
+& 0xBF &\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$ADR2$>$ & not equal to 0\\
+\end{tabular}
 
 \underline{Notes:} 
 
-None.
+This command is not supported by the Digitrax DT200 command station.
 
 \rule{15.1cm}{0.4pt}

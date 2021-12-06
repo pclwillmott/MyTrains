@@ -1,6 +1,6 @@
 \newpage
-\subsection{OPC\_LOCO\_SPD\_EXT}
-\underline{Operation:} Set locomotive speed for extended slots.
+\subsection{OPC\_TRANS\_REP}
+\underline{Operation:} Transponder input report.
 
 \underline{Group:} \hspace{0.5cm} 6-Byte Message
 
@@ -14,10 +14,10 @@ Byte 0:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 1 & 0 & 1 & 0 & 1 & 0 & 0\\
+1 & 1 & 0 & 1 & 0 & 0 & 0 & 0\\
 \hline
 \end{tabular}
-& 0xD4 & Opcode.\\
+& 0xD0 & Opcode.\\
 \end{tabular}
 
 Byte 1:
@@ -26,10 +26,10 @@ Byte 1:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 0 & 1 & 0 & 0 & d2 & d1 & d0\\
+0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$SLOTP$>$ & Bits d2 to d0 contain the extended slot page number in the range 0x0 to 0x7.\\
+&  & A value of 0x20 means the positive detection of a transponder, 0x00 means no longer detected.\\
 \end{tabular}
 
 Byte 2:
@@ -38,10 +38,10 @@ Byte 2:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & n & n & n & n & n & n & n\\
+0 & 0 & 0 & 0 & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$SLOT\#$>$ & Extended slot number.\\
+& $<$ZONE\#$>$ & Zone indicator (0x0 = A, 0x2 = B, 0x4 = C, 0x6 = D).\\
 \end{tabular}
 
 Byte 3:
@@ -50,10 +50,10 @@ Byte 3:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 0 & 0 & 0 & 0 & 1 & 0 & 0\\
+0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& 0x04 & Subcode.\\
+& $<$ADR$>$ & Locomotive address low bits.\\
 \end{tabular}
 
 Byte 4:
@@ -65,7 +65,7 @@ Byte 4:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$SPD$>$ & Locomotive speed in the range 0x00 to 0x7F. 0x00 means inertial stop and 0x01 means emergency stop. Other values mean increasing speed.\\
+& $<$ADR2$>$ & Locomotive address high bits.\\
 \end{tabular}
 
 Byte 5:
@@ -81,8 +81,6 @@ Byte 5:
 \end{tabular}
 
 \underline{Description:}
-
-This function sets the locomotive's speed.
 
 \underline{Response:} 
 

@@ -1,24 +1,9 @@
+\subsubsection{OPC\_SL\_RD\_DATA\_EXT}
+\underline{Operation:} Returns extended slot data.
 
-\newpage
-\subsection{Busy}
+\underline{Group:} \hspace{0.5cm} Variable-Byte Message
 
-\rule{15.1cm}{0.4pt}
-
-\underline{Description:}
-
-\textbf{Busy} is a broadcast message sent by a command station to indicate that it is busy and will not be accepting commands. It should be ignored by all devices.
-
-\underline{Group:}
-
-2-Byte Message
-
-\underline{Opcode:}
-
-OPC\_BUSY
-
-\underline{Type:}
-
-Broadcast
+\underline{Direction:} \hspace{0.05cm} Command Station $\rightarrow$ 
 
 \underline{Encoding:} 
 
@@ -28,10 +13,10 @@ Byte 0:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 0 & 0 & 0 & 0 & 0 & 0 & 1\\
+1 & 1 & 1 & 0 & 0 & 1 & 1 & 0\\
 \hline
 \end{tabular}
-& 0x81 & Opcode.\\
+& 0xE6 & Opcode.\\
 \end{tabular}
 
 Byte 1:
@@ -40,33 +25,36 @@ Byte 1:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 1 & 1 & 1 & 1 & 1 & 1 & 0\\
+0 & 0 & 0 & 1 & 0 & 1 & 0 & 1\\
 \hline
 \end{tabular}
-& 0x7E & Checksum.
+& 0x15 & Message length (21 bytes).\\
 \end{tabular}
 
-\underline{Response:} 
+\input{Chapter1-CommonLocoSlotDataV2}
 
-None
-
-\underline{Signature:}
-
-Byte 0:
+Byte 20:
 
 \begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 0 & 0 & 0 & 0 & 0 & 0 & 1\\
+0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& 0x81 & \\
+& $<$CHK$>$ & Checksum.\\
 \end{tabular}
+
+\underline{Description:}
+
+This message is sent by the command station in response to an extended slot data request.
+
+\underline{Response:} 
+
+None.
 
 \underline{Notes:} 
 
 None.
 
 \rule{15.1cm}{0.4pt}
-

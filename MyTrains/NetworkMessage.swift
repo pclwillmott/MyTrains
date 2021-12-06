@@ -129,13 +129,13 @@ public class NetworkMessage {
           _messageType = .forceIdleState
           break
         case NetworkMessageOpcode.OPC_LOCO_ADR.rawValue:
-          _messageType = message[1] == 0x00 ? .reqLocoSlotShortAddr : .reqLocoSlotLongAddr
+          _messageType = message[1] == 0x00 ? .getLocoSlotDataSAdrV1 : .getLocoSlotDataLAdrV1
           break
-        case NetworkMessageOpcode.OPC_LOCO_ADR_EXP.rawValue:
-          _messageType = .reqLocoExpSlot
+        case NetworkMessageOpcode.OPC_LOCO_ADR_V2.rawValue:
+          _messageType = message[1] == 0x00 ? .getLocoSlotDataSAdrV2 : .getLocoSlotDataLAdrV2
           break
         case NetworkMessageOpcode.OPC_LONG_ACK.rawValue:
-          _messageType = .longAcknowledge
+          _messageType = .acknowledgement
           break
         case NetworkMessageOpcode.OPC_SL_RD_DATA.rawValue:
           if  message[ 1] == 0x0e &&
@@ -144,10 +144,10 @@ public class NetworkMessage {
              (message[ 8] &  0b01110010) == 0x00 && /* SS@  */
              (message[10] &  0b01110000) == 0x00    /* SND  */ {
             if message[2] < 0x78 {
-              _messageType = .readStdSlotData
+              _messageType = .locoSlotDataV1
             }
             else if message[2] == 0x7f {
-              _messageType = .readCfgSlotData
+              _messageType = .cfgSlotDataV1
             }
           }
           break
@@ -158,7 +158,7 @@ public class NetworkMessage {
              (message[ 7] &  0b00110000) == 0x00 && /* TRK  */
              (message[ 8] &  0b01110010) == 0x00 && /* SS@  */
              (message[10] &  0b01110000) == 0x00    /* SND  */ {
-             _messageType = .writeStdSlotData
+            _messageType = .writeLocoSlotDataV1
           }
           break
         case NetworkMessageOpcode.OPC_PEER_XFER.rawValue:
@@ -168,7 +168,7 @@ public class NetworkMessage {
              message[ 4] == 0x01 &&
              message[ 5] == 0x00 &&
              message[10] == 0x00 {
-            _messageType = .readInterfaceStatus
+            _messageType = .getInterfaceData
           }
           break
         default:

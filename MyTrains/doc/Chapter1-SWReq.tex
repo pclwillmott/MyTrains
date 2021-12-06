@@ -1,10 +1,10 @@
 \newpage
-\subsection{OPC\_LOCO\_SND}
-\underline{Operation:} Set locomotive sound functions.
+\subsection{OPC\_SW\_REQ}
+\underline{Operation:} Request switch command.
 
 \underline{Group:} \hspace{0.5cm} 4-Byte Message
 
-\underline{Direction:} \hspace{0.05cm} $\rightarrow$ Command Station
+\underline{Direction:} \hspace{0.05cm} $\rightarrow$ Turnout controller
 
 \underline{Encoding:} 
 
@@ -14,10 +14,10 @@ Byte 0:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 0 & 1 & 0 & 0 & 0 & 1 & 0\\
+1 & 0 & 1 & 1 & 0 & 0 & 0 & 0\\
 \hline
 \end{tabular}
-& 0xA2 & Opcode.\\
+& 0xB0 & Opcode.\\
 \end{tabular}
 
 Byte 1:
@@ -26,10 +26,20 @@ Byte 1:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & n & n & n & n & n & n & n\\
+0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-& $<$SLOT\#$>$ & Slot number in the range 0x00 to 0x7F.\\
+& $<$SW1$>$ & Switch address A6 to A0.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d6 & A6.\\
+d5 & A5.\\
+d4 & A4.\\
+d3 & A3.\\
+d2 & A2.\\
+d1 & A1.\\
+d0 & A0.\\
 \end{tabular}
 
 Byte 2:
@@ -41,18 +51,17 @@ Byte 2:
 0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-& $<$SND$>$ & Locomotive's function F5 to F8 states.\\
+& $<$SW2$>$ & Switch address A10 to A7 and switch control bits.\\
 \end{tabular}
 
 \begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
 d6 & Reserved. Set to 0.\\
-d5 & Reserved. Set to 0.\\
-d4 & Reserved. Set to 0.\\
-d3 & Reserved. Set to 0.\\
-d3 & Sound 4 / F8.\\
-d2 & Sound 3 / F7.\\
-d1 & Sound 2 / F6.\\
-d0 & Sound 1 / F5.\\
+d5 & Direction. 1 means closed/green, and 0 means thrown/red.\\
+d4 & Output. 1 means on, and 0 means off.\\
+d3 & A10.\\
+d2 & A9.\\
+d1 & A8.\\
+d0 & A7.\\
 \end{tabular}
 
 Byte 3:
@@ -69,14 +78,26 @@ Byte 3:
 
 \underline{Description:}
 
-This function sets the locomotive's function F5 to F8 states.
+Command a turnout controller to a specified state.
 
 \underline{Response:} 
 
-None.
+OPC\_LONG\_ACK if command failed, otherwise no response.
 
 \underline{Notes:} 
 
-None.
+The on power on the command station sends a sequence of OPC\_SW\_REQ messages with the following values of SW1 and SW2:
+
+\begin{tabular}{l l l}
+\underline{SW1} & \underline{SW2} & \underline{Purpose}\\
+0x78 & 0x27\\
+0x79 & 0x27\\
+0x7A & 0x27\\
+0x7B & 0x27\\
+0x78 & 0x07 & Interrogate all PM4 inputs?\\
+0x79 & 0x07 & Interrogate all BDL16 input reports?\\
+0x7A & 0x07 & Interrogate all SE8 input reports?\\
+0x7B & 0x07 & Interrogate all DS64 input reports.\\
+\end{tabular}
 
 \rule{15.1cm}{0.4pt}

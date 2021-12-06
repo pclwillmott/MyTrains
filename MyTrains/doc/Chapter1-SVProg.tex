@@ -1,7 +1,6 @@
 \newpage
-\subsection{OPC\_PEER\_XFER\_20}
-
-\underline{Operation:} Move bytes peer to peer.
+\subsection{OPC\_SV\_PROG}
+\underline{Operation:} Program system variables.
 
 \underline{Group:} \hspace{0.5cm} Variable-Byte Message
 
@@ -54,8 +53,9 @@ Byte 3:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$DSTL$>$ & Destination id low in the range 0x00 to 0x7F.\\
+& $<$SV\_CMD$>$ & Specifies the SV access type.\\
 \end{tabular}
+
 
 Byte 4:
 
@@ -348,7 +348,7 @@ This command sends the data from one device to another peer to peer.
 \begin{tabular}{p{0.2\linewidth} p{0.1\linewidth} p{0.1\linewidth} p{0.50\linewidth}} 
 \underline{SRC} & \underline{DSTL} & \underline{DSTH} & Comments\\
 0x0F & 0x08 & 0x00 & Discover devices broadcast message.\\
-0xoF & 0x10 & 0x00 & Discover device response.\\
+0x0F & 0x10 & 0x00 & Discover device response.\\
 \end{tabular}
 
 \underline{Response:} 
@@ -402,6 +402,5 @@ It reports PR4 with serial number 0x0788 ver 0
 PR4 with serial 0x1357 ver 0
 DCS240 with SN 0x0AAB ver 0.3
 DCS210 with SN 0x10D4 ver 0.3
-
 
 \rule{15.1cm}{0.4pt}

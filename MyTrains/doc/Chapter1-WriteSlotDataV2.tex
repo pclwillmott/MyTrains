@@ -1,23 +1,10 @@
 \newpage
-\subsection{WriteStdSlotData}
+\subsection{OPC\_WR\_SL\_DATA\_EXT}
+\underline{Operation:} Write extended slot data.
 
-\rule{15.1cm}{0.4pt}
+\underline{Group:} \hspace{0.5cm} Variable-Byte Message
 
-\underline{Description:}
-
-This command writes the standard slot data for the specified slot to the command station.
-
-\underline{Group:}
-
-Variable-Byte Message
-
-\underline{Opcode:}
-
-OPC\_WR\_SL\_DATA
-
-\underline{Type:}
-
-Command
+\underline{Direction:} \hspace{0.05cm} Command Station $\rightarrow$ 
 
 \underline{Encoding:} 
 
@@ -27,10 +14,10 @@ Byte 0:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 1 & 1 & 0 & 1 & 1 & 1 & 1\\
+1 & 1 & 1 & 0 & 1 & 1 & 1 & 0\\
 \hline
 \end{tabular}
-& 0xEF & Opcode.\\
+& 0xEE & Opcode.\\
 \end{tabular}
 
 Byte 1:
@@ -39,15 +26,15 @@ Byte 1:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 1 & 1 & 1 & 1 & 1 & 1 & 0\\
+0 & 0 & 0 & 1 & 0 & 1 & 0 & 1\\
 \hline
 \end{tabular}
-& 0x0E & Message length (14 bytes).\\
+& 0x15 & Message length (21 bytes).\\
 \end{tabular}
 
-\input{Chapter1-CommonLocoSlotDataV1}
+Bytes 2 to 19 encode as per extended slot bytes 0 to 17.
 
-Byte 13:
+Byte 20:
 
 \begin{tabular}{p{0.4\linewidth} p{0.1\linewidth} p{0.5\linewidth}} 
 
@@ -59,26 +46,15 @@ Byte 13:
 & $<$CHK$>$ & Checksum.\\
 \end{tabular}
 
+\underline{Description:}
+
+This command sends the slot data to the command station.
+
 \underline{Response:} 
 
 Returns OPC\_LONG\_ACK.
 
-\underline{Signature:}
-
-\begin{tabular}{c l}
-\underline{Byte \#} & \underline{Condition}\\
-0 & = 0xE7\\
-1 & = 0x0E\\
-2 & $<$ 0x78\\
-6 & \& 0b01000000 = 0\\
-7 & \& 0b00110000 = 0\\
-8 & \& 0b01110010 = 0\\
-10 & \& 0b01110000 = 0\\
-\end{tabular}
-
 \underline{Notes:} 
 
 None.
-
-\rule{15.1cm}{0.4pt}
 
