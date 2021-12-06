@@ -1,0 +1,83 @@
+\subsubsection{OPC\_LONG\_ACK}
+\underline{Operation:} Long acknowledge.
+
+\underline{Group:} \hspace{0.5cm} 4-Byte Message
+
+\underline{Direction:} \hspace{0.05cm} $\rightarrow$ Command Station
+
+\underline{Encoding:} 
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 0 & 1 & 1 & 0 & 1 & 0 & 0\\
+\hline
+\end{tabular}
+& 0xB4 & Opcode.\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$LOPC$>$ & Opcode that this message is a response to with the most significant bit set to 0.\\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$ACK1$>$ & Response code.\\
+\end{tabular}
+
+Byte 3:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$CHK$>$ & Checksum.
+\end{tabular}
+
+\underline{Description:}
+
+This message provides a response code from a command.
+
+\underline{Response:} 
+
+None, it is the response.
+
+\underline{Notes:} 
+
+\begin{tabular}{p{0.3\linewidth} p{0.10\linewidth} p{0.10\linewidth} p{0.40\linewidth}}
+\underline{Responding Opcode} & \underline{$<$LOPC$>$} & \underline{$<$ACK1$>$} & \underline{Meaning}\\
+OPC\_SW\_ACK & 0x3D & 0x00 & DCS100 FIFO is full, command rejected.\\
+OPC\_SW\_ACK & 0x3D & 0x7F &  DCS100 command accepted.\\
+OPC\_MOVE\_SLOTS & 0x3A & 0x00 & Illegal move.\\
+OPC\_LINK\_SLOTS & 0x39 & 0x00 & Invalid link, link failed.\\
+OPC\_SW\_REQ & 0x30 & 0x00 & Command failed.\\
+OPC\_LOCO\_ADR & 0x3F & 0x00 & No free slot, command failed.\\
+OPC\_IMM\_PACKET & 0x7D & 0x7F & Command OK, if not limited master.\\
+OPC\_IMM\_PACKET & 0x7E & $<$lim address$>$ & Command OK, if limited master.\\
+OPC\_IMM\_PACKET & 0x7D & 0x00 & Internal buffer busy or full.\\
+OPC\_WR\_SL\_DATA\_EXT & 0x6E & 0x7F & Command OK.\\
+\end{tabular}
+
+\rule{15.1cm}{0.4pt}
+\

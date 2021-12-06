@@ -1,0 +1,173 @@
+\subsubsection{OPC\_IMM\_PACKET}
+\underline{Operation:} Send n-byte packet immediate.
+
+\underline{Group:} \hspace{0.5cm} Variable-Byte Message
+
+\underline{Direction:} \hspace{0.05cm} $\rightarrow$ command station  
+
+\underline{Encoding:} 
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 1 & 1 & 0 & 1 & 1 & 0 & 1\\
+\hline
+\end{tabular}
+& 0xED & Opcode.\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 1 & 0 & 0 & 0 & 0\\
+\hline
+\end{tabular}
+& 0x0B & Message length (11 bytes).\\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
+\hline
+\end{tabular}
+& 0x7F & Source id in the range 0x00 to 0x7F.\\
+\end{tabular}
+
+Byte 3:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$REPS$>$ & Number of immediate bytes and repeat count.
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d6 & N2. Number of immediate bytes.\\
+d5 & N1. Number of immediate bytes.\\
+d4 & N0. Number of immediate bytes.\\
+d3 & A4. Reserved. Set to 0.\\
+d2 & R2. Repeat count.\\
+d1 & R1. Repeat count.\\
+d0 & R0. Repeat count.\\
+\end{tabular}
+
+Byte 4:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 1 & d4 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$DHII$>$ & High bits of IM1 to IM5.
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d4 & IM5.7. High bit.\\
+d3 & IM4.7. High bit.\\
+d2 & IM3.7. High bit.\\
+d1 & IM2.7. High bit.\\
+d0 & IM1.7. High bit.\\
+\end{tabular}
+
+Byte 5:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$IM1$>$ & Data item 1 low 7 bits.
+\end{tabular}
+
+Byte 6:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$IM2$>$ & Data item 2 low 7 bits.
+\end{tabular}
+
+Byte 7:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$IM3$>$ & Data item 3 low 7 bits.
+\end{tabular}
+
+Byte 8:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$IM4$>$ & Data item 4 low 7 bits.
+\end{tabular}
+
+Byte 9:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$IM5$>$ & Data item 5 low 7 bits.
+\end{tabular}
+
+Byte 10:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$CHK$>$ & Checksum.
+
+\end{tabular}
+
+\underline{Description:}
+
+Send n-byte packet immediate.
+
+\underline{Response:} 
+
+OPC\_LONG\_ACK.
+
+\underline{Notes:} 
+
+None.
+
+\rule{15.1cm}{0.4pt}

@@ -1,0 +1,81 @@
+\subsubsection{OPC\_LOCO\_SND}
+\underline{Operation:} Set locomotive sound functions.
+
+\underline{Group:} \hspace{0.5cm} 4-Byte Message
+
+\underline{Direction:} \hspace{0.05cm} $\rightarrow$ Command Station
+
+\underline{Encoding:} 
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 0 & 1 & 0 & 0 & 0 & 1 & 0\\
+\hline
+\end{tabular}
+& 0xA2 & Opcode.\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$SLOT\#$>$ & Slot number in the range 0x00 to 0x7F.\\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$SND$>$ & Locomotive's function F5 to F8 states.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d6 & Reserved. Set to 0.\\
+d5 & Reserved. Set to 0.\\
+d4 & Reserved. Set to 0.\\
+d3 & Reserved. Set to 0.\\
+d3 & Sound 4 / F8.\\
+d2 & Sound 3 / F7.\\
+d1 & Sound 2 / F6.\\
+d0 & Sound 1 / F5.\\
+\end{tabular}
+
+Byte 3:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$CHK$>$ & Checksum.
+\end{tabular}
+
+\underline{Description:}
+
+This function sets the locomotive's function F5 to F8 states.
+
+\underline{Response:} 
+
+None.
+
+\underline{Notes:} 
+
+None.
+
+\rule{15.1cm}{0.4pt}
