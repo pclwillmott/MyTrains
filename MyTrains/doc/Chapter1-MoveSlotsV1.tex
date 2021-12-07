@@ -1,25 +1,29 @@
 \newpage
-\subsection{GetLocoSlotDataSAdrV1}
-
-\rule{15.1cm}{0.4pt}
+\subsection{MoveSlotsV1}
 
 \underline{Description:}
 
-This command requests the slot number for the selected locomotive address. If the locomotive is found in the slot table then the command station returns an \textbf{LocoSlotDataV1} message with the slot information. If it is not found then the command station will put the locomotive into a free slot and then return an \textbf{LocoSlotDataV1} message with the slot information. If there are no free slots then the command station returns an \textbf{Acknowledgement} containing a response code.
+Move slots.
 
-The command station will generate NMRA 7 bit or short address packets for the locomotive. The address has the range 0 to 127. The analog locomotive is selected with address 0.  
+\begin{tabular}{p{0.1\linewidth} p{0.1\linewidth} p{0.70\linewidth}} 
+\underline{SRC} & \underline{DEST} & \underline{Action}\\
+0 & $\times$ & Dispatch get. Return \textbf{LocoSlotDataV1} of dispatch slot.\\
+SRC & 0 & Dispatch put. Mark slot as dispatch.\\
+SRC & SRC & Null move. SRC is set to in use.\\
+SRC & DEST & Move slot data from SRC to DEST if not in use. Clear SRC.\\
+\end{tabular}
 
 \underline{Protocol:}
 
 1
 
-\underline{Group:} 
+\underline{Group:}
 
 4-Byte Message
 
 \underline{Opcode:}
 
-OPC\_LOCO\_ADR
+OPC\_MOVE\_SLOTS
 
 \underline{Type:}
 
@@ -33,10 +37,10 @@ Byte 0:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 0 & 1 & 1 & 1 & 1 & 1 & 1\\
+1 & 0 & 1 & 1 & 1 & 0 & 1 & 0\\
 \hline
 \end{tabular}
-& 0xBF & Opcode.\\
+& 0xBA & Opcode.\\
 \end{tabular}
 
 Byte 1:
@@ -45,10 +49,10 @@ Byte 1:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& 0x00 &\\
+& $<$SRC$>$ & Source slot number in the range 0x00 to 0x77.\\
 \end{tabular}
 
 Byte 2:
@@ -60,7 +64,7 @@ Byte 2:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$ADR$>$ & Short address in the range 0 to 127.\\
+& $<$DEST$>$ & Destination slot number in the range 0x00 to 0x77.\\
 \end{tabular}
 
 Byte 3:
@@ -78,20 +82,20 @@ Byte 3:
 
 \underline{Response:} 
 
-\textbf{LocoSlotDataV1} if success, otherwise \textbf{Acknowledgement}.
+\textbf{LocoSlotDataV1} or \textbf{Acknowledgement}.
 
 \underline{Signature:}
 
 Byte 0:
 
-\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
+\begin{tabular}{p{0.4\linewidth}  p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 0 & 1 & 1 & 1 & 1 & 1 & 1\\
+1 & 0 & 1 & 1 & 1 & 0 & 1 & 0\\
 \hline
 \end{tabular}
-& 0xBF\\
+& 0xBA \\
 \end{tabular}
 
 Byte 1:
@@ -100,10 +104,22 @@ Byte 1:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& 0x00 \\
+& less than 0x78\\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& less than 0x78\\
 \end{tabular}
 
 \underline{Notes:} 

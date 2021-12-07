@@ -1,27 +1,33 @@
 \newpage
-\subsection{LocoSlotDataV1}
-
-\rule{15.1cm}{0.4pt}
+\subsection{MoveSlotsV2}
 
 \underline{Description:}
 
-This response provides the data for a specific locomotive slot.
+Move slots.
+
+\begin{tabular}{p{0.1\linewidth} p{0.1\linewidth} p{0.70\linewidth}} 
+\underline{SRC} & \underline{DEST} & \underline{Action}\\
+0 & $\times$ & Dispatch get. Return \textbf{LocoSlotDataV2} of dispatch slot.\\
+SRC & 0 & Dispatch put. Mark slot as dispatch.\\
+SRC & SRC & Null move. SRC is set to in use.\\
+SRC & DEST & Move slot data from SRC to DEST if not in use. Clear SRC.\\
+\end{tabular}
 
 \underline{Protocol:}
 
-1
+2
 
 \underline{Group:}
 
-Variable-Byte Message
+6-Byte Message
 
 \underline{Opcode:}
 
-OPC\_SL\_RD\_DATA
+OPC\_D4\_GROUP
 
 \underline{Type:}
 
-Response
+Command
 
 \underline{Encoding:} 
 
@@ -31,10 +37,10 @@ Byte 0:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 1 & 1 & 0 & 0 & 1 & 1 & 1\\
+1 & 1 & 0 & 1 & 0 & 1 & 0 & 0\\
 \hline
 \end{tabular}
-& 0xE7 & Opcode.\\
+& 0xD4 & Opcode.\\
 \end{tabular}
 
 Byte 1:
@@ -43,29 +49,63 @@ Byte 1:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 1 & 1 & 1 & 1 & 1 & 1 & 0\\
+0 & 0 & 1 & 1 & 1 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-& 0x0E & Message length (14 bytes).\\
+& $<$SRCP$>$ & Bits d2 to d0 contain the source slot page number in the range 0x0 to 0x7. \\
 \end{tabular}
 
-\input{Chapter1-CommonLocoSlotDataV1}
+Byte 2:
 
-Byte 13:
-
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.37\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$CHK$>$ & Checksum.\\
+& $<$SRC$>$ & Source slot number.\\
+\end{tabular}
+
+Byte 3:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 0 & 0 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$DESTP$>$ & Bits d2 to d0 contain the destination slot page number in the range 0x0 to 0x7. \\
+\end{tabular}
+
+Byte 4:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$DEST$>$ & Destination slot number.\\
+\end{tabular}
+
+Byte 5:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$CHK$>$ & Checksum.
 \end{tabular}
 
 \underline{Response:} 
 
-None.
+\textbf{LocoSlotDataV2} or \textbf{Acknowledgement}.
 
 \underline{Signature:}
 
@@ -75,10 +115,10 @@ Byte 0:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 1 & 1 & 0 & 0 & 1 & 1 & 1\\
+1 & 1 & 0 & 1 & 0 & 1 & 0 & 0\\
 \hline
 \end{tabular}
-& 0xE7 \\
+& 0xD4\\
 \end{tabular}
 
 Byte 1:
@@ -87,70 +127,22 @@ Byte 1:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 1 & 1 & 1 & 1 & 1 & 1 & 0\\
-\hline
-\end{tabular}
-& 0x0E \\
-\end{tabular}
-
-Byte 2:
-
-\begin{tabular}{p{0.4\linewidth} p{0.375\linewidth}} 
-
-\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
-\hline
-0 & n & n & n & n & n & n & n\\
-\hline
-\end{tabular}
-&  less than 0x78.\\
-\end{tabular}
-
-Byte 6:
-
-\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
-
-\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
-\hline
-0 & 0 & $\times$ & $\times$ & $\times$ & $\times$ & $\times$ & $\times$\\
+0 & 0 & 1 & 1 & 1 & $\times$ & $\times$ & $\times$\\
 \hline
 \end{tabular}
 & \\
 \end{tabular}
 
-Byte 7:
+Byte 3:
 
 \begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 0 & 0 & 0 & $\times$ & $\times$ & $\times$ & $\times$\\
-\hline
-\end{tabular}
-& \\
-\end{tabular}
-
-Byte 8:
-
-\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
-
-\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
-\hline
-0 & 0 & 0 & 0 & $\times$ & $\times$ & 0 & $\times$\\
+0 & 0 & 0 & 0 & 0 & $\times$ & $\times$ & $\times$\\
 \hline
 \end{tabular}
 &  \\
-\end{tabular}
-
-Byte 10:
-
-\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
-
-\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
-\hline
-0 & 0 & 0 & 0 & $\times$ & $\times$ & $\times$ & $\times$\\
-\hline
-\end{tabular}
-& \\
 \end{tabular}
 
 \underline{Notes:} 

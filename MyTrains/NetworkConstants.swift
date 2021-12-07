@@ -11,32 +11,35 @@ import Foundation
 // Network Message.
 
 public enum NetworkMessageOpcode : UInt8 {
-  case OPC_UNKNOWN      = 0x00
-  case OPC_BUSY         = 0x81
-  case OPC_GPOFF        = 0x82
-  case OPC_GPON         = 0x83
-  case OPC_IDLE         = 0x85
-  case OPC_LOCO_SPD     = 0xA0
-  case OPC_LOCO_DIRF    = 0xA1
-  case OPC_LOCO_SND     = 0xA2
-  case OPC_LOCO_SND2    = 0xA3
-  case OPC_SW_REQ       = 0xB0
-  case OPC_SW_REP       = 0xB1
-  case OPC_INPUT_REP    = 0xB2
-  case OPC_LONG_ACK     = 0xB4
-  case OPC_SLOT_STAT1   = 0xB5
-  case OPC_CONSIST_FUNC = 0xB6
-  case OPC_UNLINK_SLOTS = 0xB8 
-  case OPC_LINK_SLOTS   = 0xB9
-  case OPC_MOVE_SLOTS   = 0xBA
-  case OPC_RQ_SL_DATA   = 0xBB
-  case OPC_SW_STATE     = 0xBC
-  case OPC_SW_ACK       = 0xBD
-  case OPC_LOCO_ADR_V2  = 0xBE
-  case OPC_LOCO_ADR     = 0xBF
-  case OPC_PEER_XFER    = 0xE5
-  case OPC_SL_RD_DATA   = 0xE7
-  case OPC_WR_SL_DATA   = 0xEF
+  case OPC_UNKNOWN       = 0x00
+  case OPC_BUSY          = 0x81
+  case OPC_GPOFF         = 0x82
+  case OPC_GPON          = 0x83
+  case OPC_IDLE          = 0x85
+  case OPC_LOCO_RESET    = 0x8A
+  case OPC_LOCO_SPD      = 0xA0
+  case OPC_LOCO_DIRF     = 0xA1
+  case OPC_LOCO_SND      = 0xA2
+  case OPC_LOCO_SND2     = 0xA3
+  case OPC_SW_REQ        = 0xB0
+  case OPC_SW_REP        = 0xB1
+  case OPC_INPUT_REP     = 0xB2
+  case OPC_LONG_ACK      = 0xB4
+  case OPC_SLOT_STAT1    = 0xB5
+  case OPC_CONSIST_FUNC  = 0xB6
+  case OPC_UNLINK_SLOTS  = 0xB8
+  case OPC_LINK_SLOTS    = 0xB9
+  case OPC_MOVE_SLOTS    = 0xBA
+  case OPC_RQ_SL_DATA    = 0xBB
+  case OPC_SW_STATE      = 0xBC
+  case OPC_SW_ACK        = 0xBD
+  case OPC_LOCO_ADR_V2   = 0xBE
+  case OPC_LOCO_ADR      = 0xBF
+  case OPC_D4_GROUP      = 0xD4
+  case OPC_PEER_XFER     = 0xE5
+  case OPC_SL_RD_DATA_V2 = 0xE6
+  case OPC_SL_RD_DATA    = 0xE7
+  case OPC_WR_SL_DATA    = 0xEF
 }
 
 // Network Message Types are for internal MyTrains usage.
@@ -48,19 +51,29 @@ public enum NetworkMessageType {
   case uninitialized
   case acknowledgement
   case busy
+  case forceIdleState
   case getInterfaceData
   case getLocoSlotDataLAdrV1
   case getLocoSlotDataLAdrV2
   case getLocoSlotDataSAdrV1
   case getLocoSlotDataSAdrV2
-  case globalPowerOff
-  case globalPowerOn
-  case forceIdleState
+  case locoDirF0F4V1
+  case locoDirF0F4V2
+  case locoF5F8V1
+  case locoF5F11V2
+  case locoF13F19V2
+  case locoF21F27V2
+  case locoF12F20F28V2
   case locoSlotDataV1
   case locoSlotDataV2
+  case locoSpdV1
+  case locoSpdV2
   case cfgSlotDataV1
   case cfgSlotDataV2
   case interfaceDataV1
+  case pwrOff
+  case pwrOn
+  case reset
   case writeLocoSlotDataV1
   case writeLocoSlotDataV2
   case writeCfgSlotDataV1

@@ -1,25 +1,21 @@
 \newpage
-\subsection{GetLocoSlotDataSAdrV1}
-
-\rule{15.1cm}{0.4pt}
+\subsection{LocoF5F8V1}
 
 \underline{Description:}
 
-This command requests the slot number for the selected locomotive address. If the locomotive is found in the slot table then the command station returns an \textbf{LocoSlotDataV1} message with the slot information. If it is not found then the command station will put the locomotive into a free slot and then return an \textbf{LocoSlotDataV1} message with the slot information. If there are no free slots then the command station returns an \textbf{Acknowledgement} containing a response code.
-
-The command station will generate NMRA 7 bit or short address packets for the locomotive. The address has the range 0 to 127. The analog locomotive is selected with address 0.  
+This command sets the locomotive's function F5 to F8 states.
 
 \underline{Protocol:}
 
 1
 
-\underline{Group:} 
+\underline{Group:}
 
 4-Byte Message
 
 \underline{Opcode:}
 
-OPC\_LOCO\_ADR
+OPC\_LOCO\_SND
 
 \underline{Type:}
 
@@ -33,10 +29,10 @@ Byte 0:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 0 & 1 & 1 & 1 & 1 & 1 & 1\\
+1 & 0 & 1 & 0 & 0 & 0 & 1 & 0\\
 \hline
 \end{tabular}
-& 0xBF & Opcode.\\
+& 0xA2 & Opcode.\\
 \end{tabular}
 
 Byte 1:
@@ -45,10 +41,10 @@ Byte 1:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& 0x00 &\\
+& $<$SLOT\#$>$ & Slot number in the range 0x00 to 0x77.\\
 \end{tabular}
 
 Byte 2:
@@ -57,10 +53,17 @@ Byte 2:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & n & n & n & n & n & n & n\\
+0 & 0 & 0 & 0 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-& $<$ADR$>$ & Short address in the range 0 to 127.\\
+& $<$SND$>$ & Locomotive's function F5 to F8 states.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d3 & F8 state: 1 means on and 0 means off.\\
+d2 & F7 state: 1 means on and 0 means off.\\
+d1 & F6 state: 1 means on and 0 means off.\\
+d0 & F5 state: 1 means on and 0 means off.\\
 \end{tabular}
 
 Byte 3:
@@ -73,12 +76,11 @@ Byte 3:
 \hline
 \end{tabular}
 & $<$CHK$>$ & Checksum.
-
 \end{tabular}
 
 \underline{Response:} 
 
-\textbf{LocoSlotDataV1} if success, otherwise \textbf{Acknowledgement}.
+None.
 
 \underline{Signature:}
 
@@ -88,10 +90,10 @@ Byte 0:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 0 & 1 & 1 & 1 & 1 & 1 & 1\\
+1 & 0 & 1 & 0 & 0 & 0 & 1 & 0\\
 \hline
 \end{tabular}
-& 0xBF\\
+& 0xA2 \\
 \end{tabular}
 
 Byte 1:
@@ -100,10 +102,22 @@ Byte 1:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& 0x00 \\
+& less than 0x78\\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 0 & $\times$ & $\times$ & $\times$ & $\times$\\
+\hline
+\end{tabular}
+& \\
 \end{tabular}
 
 \underline{Notes:} 

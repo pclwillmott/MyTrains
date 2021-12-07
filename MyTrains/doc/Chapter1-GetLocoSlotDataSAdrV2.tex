@@ -5,9 +5,13 @@
 
 \underline{Description:}
 
-This command requests the slot number for the selected locomotive address. If the locomotive is found in the slot table then the command station returns an \textbf{LocoSlotDataV2} message with the slot information. If it is not found then the command station will put the locomotive into a free slot and then return an \textbf{LocoSlotDataV2} message with the slot information. If there are no free slots then the command station returns an \textbf{Acknowledgement} containing the error code.
+This command requests the slot number for the selected locomotive address. If the locomotive is found in the slot table then the command station returns an \textbf{LocoSlotDataV2} message with the slot information. If it is not found then the command station will put the locomotive into a free slot and then return an \textbf{LocoSlotDataV2} message with the slot information. If there are no free slots then the command station returns an \textbf{Acknowledgement} containing a response code.
 
 The command station will generate NMRA 7 bit or short address packets for the locomotive. The address has the range 0 to 127. The analog locomotive is selected with address 0.  
+
+\underline{Protocol:}
+
+2
 
 \underline{Group:} 
 
@@ -15,7 +19,7 @@ The command station will generate NMRA 7 bit or short address packets for the lo
 
 \underline{Opcode:}
 
-OPC\_LOCO\_ADR\_EXP
+OPC\_LOCO\_ADR\_V2
 
 \underline{Type:}
 
@@ -80,26 +84,26 @@ Byte 3:
 
 Byte 0:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
 1 & 0 & 1 & 1 & 1 & 1 & 1 & 0\\
 \hline
 \end{tabular}
-& 0xBE &\\
+& 0xBE \\
 \end{tabular}
 
 Byte 1:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
 \hline
 \end{tabular}
-& 0x00 &\\
+& 0x00 \\
 \end{tabular}
 
 \underline{Notes:} 

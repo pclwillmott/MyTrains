@@ -1,9 +1,25 @@
-\subsubsection{OPC\_SL\_RD\_DATA\_EXT}
-\underline{Operation:} Returns extended slot data.
+\newpage
+\subsection{LocoSlotDataV2}
 
-\underline{Group:} \hspace{0.5cm} Variable-Byte Message
+\underline{Description:}
 
-\underline{Direction:} \hspace{0.05cm} Command Station $\rightarrow$ 
+This response provides data for a specific locomotive slot.
+
+\underline{Protocol:}
+
+2
+
+\underline{Group:}
+
+Variable-Byte Message
+
+\underline{Opcode:}
+
+OPC\_SL\_RD\_DATA\_V2
+
+\underline{Type:}
+
+Response
 
 \underline{Encoding:} 
 
@@ -45,13 +61,59 @@ Byte 20:
 & $<$CHK$>$ & Checksum.\\
 \end{tabular}
 
-\underline{Description:}
-
-This message is sent by the command station in response to an extended slot data request.
-
 \underline{Response:} 
 
 None.
+
+\underline{Signature:}
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 1 & 1 & 0 & 0 & 1 & 1 & 0\\
+\hline
+\end{tabular}
+& 0xE6 \\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 1 & 0 & 1 & 0 & 1\\
+\hline
+\end{tabular}
+& 0x15\\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 0 & 0 & $\times$ & $\times$ & $\times$\\
+\hline
+\end{tabular}
+& \\
+\end{tabular}
+
+Byte 7:
+
+\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & $\times$ & 0 & 0 & $\times$ & $\times$ & $\times$ & $\times$\\
+\hline
+\end{tabular}
+& \\
+\end{tabular}
 
 \underline{Notes:} 
 

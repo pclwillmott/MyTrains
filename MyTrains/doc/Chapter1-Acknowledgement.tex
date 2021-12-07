@@ -1,29 +1,21 @@
 \newpage
-\subsection{GetLocoSlotDataSAdrV1}
-
-\rule{15.1cm}{0.4pt}
+\subsection{Acknowledgement}
 
 \underline{Description:}
 
-This command requests the slot number for the selected locomotive address. If the locomotive is found in the slot table then the command station returns an \textbf{LocoSlotDataV1} message with the slot information. If it is not found then the command station will put the locomotive into a free slot and then return an \textbf{LocoSlotDataV1} message with the slot information. If there are no free slots then the command station returns an \textbf{Acknowledgement} containing a response code.
+This message provides a response code from a command.
 
-The command station will generate NMRA 7 bit or short address packets for the locomotive. The address has the range 0 to 127. The analog locomotive is selected with address 0.  
-
-\underline{Protocol:}
-
-1
-
-\underline{Group:} 
+\underline{Group:}
 
 4-Byte Message
 
 \underline{Opcode:}
 
-OPC\_LOCO\_ADR
+OPC\_LONG\_ACK
 
 \underline{Type:}
 
-Command
+Response
 
 \underline{Encoding:} 
 
@@ -33,10 +25,10 @@ Byte 0:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 0 & 1 & 1 & 1 & 1 & 1 & 1\\
+1 & 0 & 1 & 1 & 0 & 1 & 0 & 0\\
 \hline
 \end{tabular}
-& 0xBF & Opcode.\\
+& 0xB4 & Opcode.\\
 \end{tabular}
 
 Byte 1:
@@ -45,10 +37,10 @@ Byte 1:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& 0x00 &\\
+& $<$LOPC$>$ & Opcode of the command that this message is a response to with the most significant bit set to 0.\\
 \end{tabular}
 
 Byte 2:
@@ -60,7 +52,7 @@ Byte 2:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$ADR$>$ & Short address in the range 0 to 127.\\
+& $<$ACK1$>$ & Response code.\\
 \end{tabular}
 
 Byte 3:
@@ -73,12 +65,11 @@ Byte 3:
 \hline
 \end{tabular}
 & $<$CHK$>$ & Checksum.
-
 \end{tabular}
 
 \underline{Response:} 
 
-\textbf{LocoSlotDataV1} if success, otherwise \textbf{Acknowledgement}.
+None.
 
 \underline{Signature:}
 
@@ -88,26 +79,26 @@ Byte 0:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 0 & 1 & 1 & 1 & 1 & 1 & 1\\
+1 & 0 & 1 & 1 & 0 & 1 & 0 & 0\\
 \hline
 \end{tabular}
-& 0xBF\\
-\end{tabular}
-
-Byte 1:
-
-\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
-
-\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
-\hline
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
-\hline
-\end{tabular}
-& 0x00 \\
+& 0xB4\\
 \end{tabular}
 
 \underline{Notes:} 
 
-None.
+\begin{tabular}{p{0.3\linewidth} p{0.10\linewidth} p{0.10\linewidth} p{0.40\linewidth}}
+\underline{Responding Opcode} & \underline{$<$LOPC$>$} & \underline{$<$ACK1$>$} & \underline{Meaning}\\
+OPC\_SW\_ACK & 0x3D & 0x00 & DCS100 FIFO is full, command rejected.\\
+OPC\_SW\_ACK & 0x3D & 0x7F &  DCS100 command accepted.\\
+OPC\_MOVE\_SLOTS & 0x3A & 0x00 & Illegal move.\\
+OPC\_LINK\_SLOTS & 0x39 & 0x00 & Invalid link, link failed.\\
+OPC\_SW\_REQ & 0x30 & 0x00 & Command failed.\\
+OPC\_LOCO\_ADR & 0x3F & 0x00 & No free slot, command failed.\\
+OPC\_IMM\_PACKET & 0x7D & 0x7F & Command OK, if not limited master.\\
+OPC\_IMM\_PACKET & 0x7E & $<$lim address$>$ & Command OK, if limited master.\\
+OPC\_IMM\_PACKET & 0x7D & 0x00 & Internal buffer busy or full.\\
+OPC\_WR\_SL\_DATA\_V2 & 0x6E & 0x7F & Command OK.\\
+\end{tabular}
 
 \rule{15.1cm}{0.4pt}

@@ -120,10 +120,10 @@ public class NetworkMessage {
           _messageType = .busy
           break
         case NetworkMessageOpcode.OPC_GPOFF.rawValue:
-          _messageType = .globalPowerOff
+          _messageType = .pwrOff
           break
         case NetworkMessageOpcode.OPC_GPON.rawValue:
-          _messageType = .globalPowerOn
+          _messageType = .pwrOn
           break
         case NetworkMessageOpcode.OPC_IDLE.rawValue:
           _messageType = .forceIdleState

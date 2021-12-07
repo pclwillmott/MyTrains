@@ -1,11 +1,11 @@
 \newpage
-\subsection{WriteStdSlotData}
+\subsection{PwrOff}
 
 \rule{15.1cm}{0.4pt}
 
 \underline{Description:}
 
-This command writes the standard slot data for the specified slot to the command station.
+This command turns the track power off.
 
 \underline{Protocol:}
 
@@ -13,13 +13,13 @@ This command writes the standard slot data for the specified slot to the command
 
 \underline{Group:}
 
-Variable-Byte Message
+2-Byte Message
 
 \underline{Opcode:}
 
-OPC\_WR\_SL\_DATA
+OPC\_GPOFF
 
-\underline{Type:}
+\underline{Type:} 
 
 Command
 
@@ -31,10 +31,10 @@ Byte 0:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 1 & 1 & 0 & 1 & 1 & 1 & 1\\
+1 & 0 & 0 & 0 & 0 & 0 & 1 & 0\\
 \hline
 \end{tabular}
-& 0xEF & Opcode.\\
+& 0x82 & Opcode.\\
 \end{tabular}
 
 Byte 1:
@@ -43,41 +43,28 @@ Byte 1:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 1 & 1 & 1 & 1 & 1 & 1 & 0\\
+0 & 1 & 1 & 1 & 1 & 1 & 0 & 1\\
 \hline
 \end{tabular}
-& 0x0E & Message length (14 bytes).\\
-\end{tabular}
-
-\input{Chapter1-CommonLocoSlotDataV1}
-
-Byte 13:
-
-\begin{tabular}{p{0.4\linewidth} p{0.1\linewidth} p{0.5\linewidth}} 
-
-\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
-\hline
-0 & n & n & n & n & n & n & n\\
-\hline
-\end{tabular}
-& $<$CHK$>$ & Checksum.\\
+& 0x7D & Checksum.
 \end{tabular}
 
 \underline{Response:} 
 
-Returns OPC\_LONG\_ACK.
+None.
 
 \underline{Signature:}
 
-\begin{tabular}{c l}
-\underline{Byte \#} & \underline{Condition}\\
-0 & = 0xE7\\
-1 & = 0x0E\\
-2 & $<$ 0x78\\
-6 & \& 0b01000000 = 0\\
-7 & \& 0b00110000 = 0\\
-8 & \& 0b01110010 = 0\\
-10 & \& 0b01110000 = 0\\
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 0 & 0 & 0 & 0 & 0 & 1 & 0\\
+\hline
+\end{tabular}
+& 0x82 \\
 \end{tabular}
 
 \underline{Notes:} 

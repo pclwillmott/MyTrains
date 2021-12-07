@@ -4,60 +4,65 @@
 \BOOKMARK [1][-]{section.1.3}{Refresh Slots}{chapter.1}% 4
 \BOOKMARK [1][-]{section.1.4}{Standard Address Selection}{chapter.1}% 5
 \BOOKMARK [1][-]{section.1.5}{Messages}{chapter.1}% 6
-\BOOKMARK [2][-]{subsection.1.5.1}{OPC\137BRD\137OPSW}{section.1.5}% 7
-\BOOKMARK [2][-]{subsection.1.5.2}{Busy}{section.1.5}% 8
-\BOOKMARK [2][-]{subsection.1.5.3}{OPC\137CONSIST\137FUNC}{section.1.5}% 9
-\BOOKMARK [2][-]{subsection.1.5.4}{OPC\137LOCO\137FN\137EXT}{section.1.5}% 10
-\BOOKMARK [2][-]{subsection.1.5.5}{ForceIdleState}{section.1.5}% 11
+\BOOKMARK [2][-]{subsection.1.5.1}{Acknowledgement}{section.1.5}% 7
+\BOOKMARK [2][-]{subsection.1.5.2}{OPC\137BRD\137OPSW}{section.1.5}% 8
+\BOOKMARK [2][-]{subsection.1.5.3}{Busy}{section.1.5}% 9
+\BOOKMARK [2][-]{subsection.1.5.4}{OPC\137CONSIST\137FUNC}{section.1.5}% 10
+\BOOKMARK [2][-]{subsection.1.5.5}{OPC\137LOCO\137FN\137EXT}{section.1.5}% 11
 \BOOKMARK [2][-]{subsection.1.5.6}{GetLocoSlotDataLAdrV1}{section.1.5}% 12
 \BOOKMARK [2][-]{subsection.1.5.7}{GetLocoSlotDataLAdrV2}{section.1.5}% 13
 \BOOKMARK [2][-]{subsection.1.5.8}{GetLocoSlotDataSAdrV1}{section.1.5}% 14
 \BOOKMARK [2][-]{subsection.1.5.9}{GetLocoSlotDataSAdrV2}{section.1.5}% 15
-\BOOKMARK [2][-]{subsection.1.5.10}{GlobalPowerOff}{section.1.5}% 16
-\BOOKMARK [2][-]{subsection.1.5.11}{GlobalPowerOn}{section.1.5}% 17
-\BOOKMARK [2][-]{subsection.1.5.12}{OPC\137IMM\137PACKET}{section.1.5}% 18
-\BOOKMARK [2][-]{subsection.1.5.13}{OPC\137INPUT\137REP}{section.1.5}% 19
-\BOOKMARK [2][-]{subsection.1.5.14}{OPC\137LINK\137SLOTS}{section.1.5}% 20
-\BOOKMARK [2][-]{subsection.1.5.15}{OPC\137LOCO\137DIRF}{section.1.5}% 21
-\BOOKMARK [2][-]{subsection.1.5.16}{OPC\137LOCO\137DIRF\137EXT}{section.1.5}% 22
-\BOOKMARK [2][-]{subsection.1.5.17}{OPC\137LOCO\137RESET}{section.1.5}% 23
-\BOOKMARK [2][-]{subsection.1.5.18}{LocoSlotDataV1}{section.1.5}% 24
-\BOOKMARK [2][-]{subsection.1.5.19}{OPC\137LOCO\137SND}{section.1.5}% 25
-\BOOKMARK [2][-]{subsection.1.5.20}{OPC\137LOCO\137SPD}{section.1.5}% 26
-\BOOKMARK [2][-]{subsection.1.5.21}{OPC\137LOCO\137SPD\137EXT}{section.1.5}% 27
-\BOOKMARK [2][-]{subsection.1.5.22}{OPC\137LONG\137ACK}{section.1.5}% 28
-\BOOKMARK [2][-]{subsection.1.5.23}{OPC\137MOVE\137SLOTS}{section.1.5}% 29
-\BOOKMARK [2][-]{subsection.1.5.24}{OPC\137MOVE\137SLOTS\137EXT}{section.1.5}% 30
-\BOOKMARK [2][-]{subsection.1.5.25}{OPC\137PEER\137XFER}{section.1.5}% 31
-\BOOKMARK [2][-]{subsection.1.5.26}{OPC\137PEER\137XFER\13720}{section.1.5}% 32
-\BOOKMARK [2][-]{subsection.1.5.27}{ReadCfgSlotData}{section.1.5}% 33
-\BOOKMARK [2][-]{subsection.1.5.28}{ReadInterfaceStatus}{section.1.5}% 34
-\BOOKMARK [2][-]{subsection.1.5.29}{ReqInterfaceStatus}{section.1.5}% 35
-\BOOKMARK [2][-]{subsection.1.5.30}{OPC\137RQ\137SL\137DATA}{section.1.5}% 36
-\BOOKMARK [2][-]{subsection.1.5.31}{OPC\137SLOT\137STAT1}{section.1.5}% 37
-\BOOKMARK [2][-]{subsection.1.5.32}{OPC\137SV\137PROG}{section.1.5}% 38
-\BOOKMARK [2][-]{subsection.1.5.33}{OPC\137SW\137ACK}{section.1.5}% 39
-\BOOKMARK [2][-]{subsection.1.5.34}{OPC\137SW\137REP}{section.1.5}% 40
-\BOOKMARK [2][-]{subsection.1.5.35}{OPC\137SW\137REQ}{section.1.5}% 41
-\BOOKMARK [2][-]{subsection.1.5.36}{OPC\137SW\137STATE}{section.1.5}% 42
-\BOOKMARK [2][-]{subsection.1.5.37}{OPC\137TRANS\137REP}{section.1.5}% 43
-\BOOKMARK [2][-]{subsection.1.5.38}{OPC\137UNLINK\137SLOTS}{section.1.5}% 44
-\BOOKMARK [2][-]{subsection.1.5.39}{OPC\137WR\137SL\137DATA\137EXT}{section.1.5}% 45
-\BOOKMARK [2][-]{subsection.1.5.40}{WriteStdSlotData}{section.1.5}% 46
-\BOOKMARK [0][-]{chapter.2}{Fast Clock}{}% 47
-\BOOKMARK [1][-]{section.2.1}{Summary}{chapter.2}% 48
-\BOOKMARK [1][-]{section.2.2}{Slot \043123 Encoding}{chapter.2}% 49
-\BOOKMARK [0][-]{chapter.3}{Updating Firmware}{}% 50
-\BOOKMARK [1][-]{section.3.1}{Bootloader Protocol 1}{chapter.3}% 51
-\BOOKMARK [1][-]{section.3.2}{Bootloader Protocol 2}{chapter.3}% 52
-\BOOKMARK [2][-]{subsection.3.2.1}{IPL Setup}{section.3.2}% 53
-\BOOKMARK [2][-]{subsection.3.2.2}{IPL Address Message}{section.3.2}% 54
-\BOOKMARK [2][-]{subsection.3.2.3}{IPL Data Message}{section.3.2}% 55
-\BOOKMARK [2][-]{subsection.3.2.4}{IPL End Operation Message}{section.3.2}% 56
-\BOOKMARK [1][-]{section.3.3}{Firmware Parameters}{chapter.3}% 57
-\BOOKMARK [1][-]{section.3.4}{DMF File Format}{chapter.3}% 58
-\BOOKMARK [2][-]{subsection.3.4.1}{Sync Records}{section.3.4}% 59
-\BOOKMARK [2][-]{subsection.3.4.2}{Parameter Records}{section.3.4}% 60
-\BOOKMARK [2][-]{subsection.3.4.3}{Data Records}{section.3.4}% 61
-\BOOKMARK [2][-]{subsection.3.4.4}{End of File Record}{section.3.4}% 62
-\BOOKMARK [0][-]{appendix.A}{Reference Tables}{}% 63
+\BOOKMARK [2][-]{subsection.1.5.10}{OPC\137IMM\137PACKET}{section.1.5}% 16
+\BOOKMARK [2][-]{subsection.1.5.11}{OPC\137INPUT\137REP}{section.1.5}% 17
+\BOOKMARK [2][-]{subsection.1.5.12}{OPC\137LINK\137SLOTS}{section.1.5}% 18
+\BOOKMARK [2][-]{subsection.1.5.13}{LocoDirF0F4V1}{section.1.5}% 19
+\BOOKMARK [2][-]{subsection.1.5.14}{LocoDirF0F4V2}{section.1.5}% 20
+\BOOKMARK [2][-]{subsection.1.5.15}{LocoF5F8V1}{section.1.5}% 21
+\BOOKMARK [2][-]{subsection.1.5.16}{LocoF5F11V2}{section.1.5}% 22
+\BOOKMARK [2][-]{subsection.1.5.17}{LocoF13F19V2}{section.1.5}% 23
+\BOOKMARK [2][-]{subsection.1.5.18}{LocoF21F27V2}{section.1.5}% 24
+\BOOKMARK [2][-]{subsection.1.5.19}{LocoF12F20F28V2}{section.1.5}% 25
+\BOOKMARK [2][-]{subsection.1.5.20}{LocoSlotDataV1}{section.1.5}% 26
+\BOOKMARK [2][-]{subsection.1.5.21}{LocoSlotDataV2}{section.1.5}% 27
+\BOOKMARK [2][-]{subsection.1.5.22}{LocoSpdV1}{section.1.5}% 28
+\BOOKMARK [2][-]{subsection.1.5.23}{LocoSpdV2}{section.1.5}% 29
+\BOOKMARK [2][-]{subsection.1.5.24}{MoveSlotsV1}{section.1.5}% 30
+\BOOKMARK [2][-]{subsection.1.5.25}{MoveSlotsV2}{section.1.5}% 31
+\BOOKMARK [2][-]{subsection.1.5.26}{OPC\137PEER\137XFER}{section.1.5}% 32
+\BOOKMARK [2][-]{subsection.1.5.27}{OPC\137PEER\137XFER\13720}{section.1.5}% 33
+\BOOKMARK [2][-]{subsection.1.5.28}{PwrOff}{section.1.5}% 34
+\BOOKMARK [2][-]{subsection.1.5.29}{PwrOn}{section.1.5}% 35
+\BOOKMARK [2][-]{subsection.1.5.30}{ReadCfgSlotData}{section.1.5}% 36
+\BOOKMARK [2][-]{subsection.1.5.31}{ReadInterfaceStatus}{section.1.5}% 37
+\BOOKMARK [2][-]{subsection.1.5.32}{ReqInterfaceStatus}{section.1.5}% 38
+\BOOKMARK [2][-]{subsection.1.5.33}{Reset}{section.1.5}% 39
+\BOOKMARK [2][-]{subsection.1.5.34}{OPC\137RQ\137SL\137DATA}{section.1.5}% 40
+\BOOKMARK [2][-]{subsection.1.5.35}{SetIdleState}{section.1.5}% 41
+\BOOKMARK [2][-]{subsection.1.5.36}{OPC\137SLOT\137STAT1}{section.1.5}% 42
+\BOOKMARK [2][-]{subsection.1.5.37}{OPC\137SV\137PROG}{section.1.5}% 43
+\BOOKMARK [2][-]{subsection.1.5.38}{OPC\137SW\137ACK}{section.1.5}% 44
+\BOOKMARK [2][-]{subsection.1.5.39}{OPC\137SW\137REP}{section.1.5}% 45
+\BOOKMARK [2][-]{subsection.1.5.40}{OPC\137SW\137REQ}{section.1.5}% 46
+\BOOKMARK [2][-]{subsection.1.5.41}{OPC\137SW\137STATE}{section.1.5}% 47
+\BOOKMARK [2][-]{subsection.1.5.42}{OPC\137TRANS\137REP}{section.1.5}% 48
+\BOOKMARK [2][-]{subsection.1.5.43}{OPC\137UNLINK\137SLOTS}{section.1.5}% 49
+\BOOKMARK [2][-]{subsection.1.5.44}{OPC\137WR\137SL\137DATA\137EXT}{section.1.5}% 50
+\BOOKMARK [2][-]{subsection.1.5.45}{WriteStdSlotData}{section.1.5}% 51
+\BOOKMARK [0][-]{chapter.2}{Fast Clock}{}% 52
+\BOOKMARK [1][-]{section.2.1}{Summary}{chapter.2}% 53
+\BOOKMARK [1][-]{section.2.2}{Slot \043123 Encoding}{chapter.2}% 54
+\BOOKMARK [0][-]{chapter.3}{Updating Firmware}{}% 55
+\BOOKMARK [1][-]{section.3.1}{Bootloader Protocol 1}{chapter.3}% 56
+\BOOKMARK [1][-]{section.3.2}{Bootloader Protocol 2}{chapter.3}% 57
+\BOOKMARK [2][-]{subsection.3.2.1}{IPL Setup}{section.3.2}% 58
+\BOOKMARK [2][-]{subsection.3.2.2}{IPL Address Message}{section.3.2}% 59
+\BOOKMARK [2][-]{subsection.3.2.3}{IPL Data Message}{section.3.2}% 60
+\BOOKMARK [2][-]{subsection.3.2.4}{IPL End Operation Message}{section.3.2}% 61
+\BOOKMARK [1][-]{section.3.3}{Firmware Parameters}{chapter.3}% 62
+\BOOKMARK [1][-]{section.3.4}{DMF File Format}{chapter.3}% 63
+\BOOKMARK [2][-]{subsection.3.4.1}{Sync Records}{section.3.4}% 64
+\BOOKMARK [2][-]{subsection.3.4.2}{Parameter Records}{section.3.4}% 65
+\BOOKMARK [2][-]{subsection.3.4.3}{Data Records}{section.3.4}% 66
+\BOOKMARK [2][-]{subsection.3.4.4}{End of File Record}{section.3.4}% 67
+\BOOKMARK [0][-]{appendix.A}{Reference Tables}{}% 68

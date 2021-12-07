@@ -7,7 +7,7 @@ Byte 2:
 0 & 0 & 0 & 0 & 0 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-& $<$SLOTP\#$>$ & Extended slot page number in the range 0x0 to 0x7.\\
+& $<$SLOTP\#$>$ & Version 2 slot page number in the range 0x0 to 0x7.\\
 \end{tabular}
 
 Byte 3:
@@ -19,7 +19,7 @@ Byte 3:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$SLOTL\#$>$ & Extended slot number in the range 0x00 to 0x7F.\\
+& $<$SLOTL\#$>$ & Version 2 slot number in the range 0x00 to 0x7F.\\
 \end{tabular}
 
 Byte 4:
@@ -79,7 +79,7 @@ Byte 7:
 \end{tabular}
 
 \begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
-d6 & Reserved. Set to 0.\\
+d6 & 1 means this command station implements version 2 slot commands. This can be turned off on the DCS240 by setting the OpSw 44 to be closed.\\
 d5 & Reserved. Set to 0.\\
 d4 & Reserved. Set to 0.\\
 d3 & 1 means the programming track is busy.\\

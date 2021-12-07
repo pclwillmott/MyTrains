@@ -5,9 +5,13 @@
 
 \underline{Description:}
 
-This command requests the slot number for the selected locomotive address. If the locomotive is found in the slot table then the command station returns an \textbf{LocoSlotDataV1} message with the slot information. If it is not found then the command station will put the locomotive into a free slot and then return an \textbf{LocoSlotDataV1} message with the slot information. If there are no free slots then the command station returns an \textbf{Acknowledgement} containing the error code.
+This command requests the slot number for the selected locomotive address. If the locomotive is found in the slot table then the command station returns an \textbf{LocoSlotDataV1} message with the slot information. If it is not found then the command station will put the locomotive into a free slot and then return an \textbf{LocoSlotDataV1} message with the slot information. If there are no free slots then the command station returns an \textbf{Acknowledgement} containing a response code.
 
 The command station will generate NMRA 14 bit or long address packets for the locomotive. The address must be in the range 128 to 9983.
+
+\underline{Protocol:}
+
+1
 
 \underline{Group:} 
 
@@ -80,26 +84,26 @@ Byte 3:
 
 Byte 0:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
 1 & 0 & 1 & 1 & 1 & 1 & 1 & 1\\
 \hline
 \end{tabular}
-& 0xBF &\\
+& 0xBF \\
 \end{tabular}
 
 Byte 1:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$ADR2$>$ & not equal to 0\\
+&  not equal to 0\\
 \end{tabular}
 
 \underline{Notes:} 

@@ -1,16 +1,8 @@
-
 \newpage
-\subsection{Busy}
-
-\rule{15.1cm}{0.4pt}
-
+\subsection{Reset}
 \underline{Description:}
 
-\textbf{Busy} is a broadcast message sent by a command station to indicate that it is busy and will not be accepting commands. It should be ignored by all devices.
-
-\underline{Protocol:}
-
-1
+This broadcast message is sent by a command station when its ``Loco Reset" button has been pressed. Software should reload any locally cached data from the command station.
 
 \underline{Group:}
 
@@ -18,7 +10,7 @@
 
 \underline{Opcode:}
 
-OPC\_BUSY
+OPC\_LOCO\_RESET
 
 \underline{Type:}
 
@@ -32,10 +24,10 @@ Byte 0:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 0 & 0 & 0 & 0 & 0 & 0 & 1\\
+1 & 0 & 0 & 0 & 1 & 0 & 1 & 0\\
 \hline
 \end{tabular}
-& 0x81 & Opcode.\\
+& 0x8A & Opcode.\\
 \end{tabular}
 
 Byte 1:
@@ -44,28 +36,28 @@ Byte 1:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 1 & 1 & 1 & 1 & 1 & 1 & 0\\
+0 & 1 & 1 & 1 & 0 & 1 & 0 & 1\\
 \hline
 \end{tabular}
-& 0x7E & Checksum.
+& 0x75 & Checksum.
 \end{tabular}
 
 \underline{Response:} 
 
-None
+None.
 
 \underline{Signature:}
 
 Byte 0:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 0 & 0 & 0 & 0 & 0 & 0 & 1\\
+1 & 0 & 0 & 0 & 1 & 0 & 1 & 0\\
 \hline
 \end{tabular}
-& 0x81 & \\
+& 0x8A \\
 \end{tabular}
 
 \underline{Notes:} 
@@ -73,4 +65,3 @@ Byte 0:
 None.
 
 \rule{15.1cm}{0.4pt}
-
