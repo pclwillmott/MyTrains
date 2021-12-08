@@ -1,9 +1,17 @@
 \newpage
-\subsection{LinkSlots}
+\subsection{MoveSlotsP1}
 
 \underline{Description:}
 
-This command links slot SL1 to slot SL2. The command station sets SL\_CONUP/DN flags appropriately. If the command was successful then a \textbf{LocoSlotDataP1} response will be returned. An invalid link will return a fail \textbf{Ack}.
+Move slots.
+
+\begin{tabular}{p{0.1\linewidth} p{0.1\linewidth} p{0.70\linewidth}} 
+\underline{SRC} & \underline{DEST} & \underline{Action}\\
+0 & $\times$ & Dispatch get. Return \textbf{LocoSlotDataP1} of dispatch slot.\\
+SRC & 0 & Dispatch put. Mark slot as dispatch.\\
+SRC & SRC & Null move. SRC is set to in use.\\
+SRC & DEST & Move slot data from SRC to DEST if not in use. Clear SRC.\\
+\end{tabular}
 
 \underline{Protocol:}
 
@@ -15,7 +23,7 @@ This command links slot SL1 to slot SL2. The command station sets SL\_CONUP/DN f
 
 \underline{Opcode:}
 
-OPC\_LINK\_SLOTS
+OPC\_MOVE\_SLOTS
 
 \underline{Type:}
 
@@ -29,10 +37,10 @@ Byte 0:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 0 & 1 & 1 & 1 & 0 & 0 & 1\\
+1 & 0 & 1 & 1 & 1 & 0 & 1 & 0\\
 \hline
 \end{tabular}
-& 0xB9 & Opcode.\\
+& 0xBA & Opcode.\\
 \end{tabular}
 
 Byte 1:
@@ -44,7 +52,7 @@ Byte 1:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$SL1$>$ & Slot number in the range 0x01 to 0x77.\\
+& $<$SRC$>$ & Source slot number in the range 0x00 to 0x77.\\
 \end{tabular}
 
 Byte 2:
@@ -56,7 +64,7 @@ Byte 2:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$SL2$>$ & Slot number in the range 0x01 to 0x77.\\
+& $<$DEST$>$ & Destination slot number in the range 0x00 to 0x77.\\
 \end{tabular}
 
 Byte 3:
@@ -69,24 +77,25 @@ Byte 3:
 \hline
 \end{tabular}
 & $<$CHK$>$ & Checksum.
+
 \end{tabular}
 
 \underline{Response:} 
 
-\textbf{LocoSlotDataP1} or \textbf{Ack}
+\textbf{LocoSlotDataP1} or \textbf{Ack}.
 
 \underline{Signature:}
 
 Byte 0:
 
-\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
+\begin{tabular}{p{0.4\linewidth}  p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 0 & 1 & 1 & 1 & 0 & 0 & 1\\
+1 & 0 & 1 & 1 & 1 & 0 & 1 & 0\\
 \hline
 \end{tabular}
-& 0xB9 \\
+& 0xBA \\
 \end{tabular}
 
 Byte 1:
@@ -98,7 +107,7 @@ Byte 1:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& in the range 0x01 to 0x77.\\
+& less than 0x78\\
 \end{tabular}
 
 Byte 2:
@@ -110,7 +119,7 @@ Byte 2:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& in the range 0x01 to 0x77.\\
+& less than 0x78\\
 \end{tabular}
 
 \underline{Notes:} 

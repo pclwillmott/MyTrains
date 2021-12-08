@@ -1,11 +1,15 @@
 \newpage
-\subsection{ForceIdleState}
+\subsection{GetInterfaceData}
 
 \rule{15.1cm}{0.4pt}
 
 \underline{Description:}
 
-This command forces the network into the idle state and broadcasts an emergency stop.
+Sent by a computer to request an \textbf{InterfaceData} message from the attached network interface device. 
+
+\underline{Protocol:}
+
+1  *** CHECK ***
 
 \underline{Group:}
 
@@ -13,11 +17,15 @@ This command forces the network into the idle state and broadcasts an emergency 
 
 \underline{Opcode:}
 
-OPC\_IDLE
+OPC\_BUSY
 
 \underline{Type:}
 
 Command
+
+\underline{Applicable Hardware}:
+
+Digitrax PR4 and DCS240.
 
 \underline{Encoding:} 
 
@@ -27,10 +35,10 @@ Byte 0:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 0 & 0 & 0 & 0 & 1 & 0 & 1\\
+1 & 0 & 0 & 0 & 0 & 0 & 0 & 1\\
 \hline
 \end{tabular}
-& 0x85 & Opcode.\\
+& 0x81 & Opcode.\\
 \end{tabular}
 
 Byte 1:
@@ -39,25 +47,23 @@ Byte 1:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 1 & 1 & 1 & 1 & 0 & 1 & 0\\
+0 & 1 & 1 & 1 & 1 & 1 & 1 & 0\\
 \hline
 \end{tabular}
-& 0x7A & Checksum.
+& 0x7E & Checksum.
 \end{tabular}
 
 \underline{Response:} 
 
-None
+Interface device returns an \textbf{InterfaceData} message.
 
 \underline{Signature:}
 
-\begin{tabular}{c l}
-\underline{Byte \#} & \underline{Condition}\\
-0 & = 0x85\\
-\end{tabular}
+None - the command is intercepted by the interface and is not passed on to the network.
 
 \underline{Notes:} 
 
 None.
 
 \rule{15.1cm}{0.4pt}
+

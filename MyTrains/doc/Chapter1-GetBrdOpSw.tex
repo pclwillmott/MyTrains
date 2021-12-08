@@ -1,9 +1,9 @@
 \newpage
-\subsection{LinkSlots}
+\subsection{GetBrdOpSw}
 
 \underline{Description:}
 
-This command links slot SL1 to slot SL2. The command station sets SL\_CONUP/DN flags appropriately. If the command was successful then a \textbf{LocoSlotDataP1} response will be returned. An invalid link will return a fail \textbf{Ack}.
+Get board option switch setting.
 
 \underline{Protocol:}
 
@@ -11,11 +11,11 @@ This command links slot SL1 to slot SL2. The command station sets SL\_CONUP/DN f
 
 \underline{Group:}
 
-4-Byte Message
+6-Byte Message
 
 \underline{Opcode:}
 
-OPC\_LINK\_SLOTS
+OPC\_BRD\_OPSW
 
 \underline{Type:}
 
@@ -29,10 +29,10 @@ Byte 0:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 0 & 1 & 1 & 1 & 0 & 0 & 1\\
+1 & 1 & 0 & 1 & 0 & 0 & 0 & 0\\
 \hline
 \end{tabular}
-& 0xB9 & Opcode.\\
+& 0xD0 & Opcode.\\
 \end{tabular}
 
 Byte 1:
@@ -41,10 +41,10 @@ Byte 1:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & n & n & n & n & n & n & n\\
+0 & 1 & 1 & 0 & 0 & 0 & 1 & d0\\
 \hline
 \end{tabular}
-& $<$SL1$>$ & Slot number in the range 0x01 to 0x77.\\
+&  & The bit d0 is the most significant bit of the board id. \\
 \end{tabular}
 
 Byte 2:
@@ -56,10 +56,44 @@ Byte 2:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$SL2$>$ & Slot number in the range 0x01 to 0x77.\\
+& $<$BIDL$>$ & Least significant 7 bits of the board id.\\
 \end{tabular}
 
 Byte 3:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$BTYPE$>$ & Board type code.\\
+\end{tabular}
+
+\begin{tabular}{p{0.2\linewidth} p{0.5\linewidth}} 
+\underline{Board} & \underline{Type Code}\\
+PM4 & 0x70.\\
+BDL16 & 0x71.\\
+SE8C & 0x72.\\
+DS64 & 0x73.\\
+\end{tabular}
+
+Byte 4:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+&  & Byte and bit number. The high nibble encodes the byte number, and the low nibble the bit number.\\
+\end{tabular}
+
+The byte number is calculated as (OpSw\# - 1) $>>$ 3 and the bit number is (OpSw\# - 1) - byte number $\times$ 8.
+
+Byte 5:
 
 \begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
@@ -73,7 +107,7 @@ Byte 3:
 
 \underline{Response:} 
 
-\textbf{LocoSlotDataP1} or \textbf{Ack}
+\textbf{Ack}
 
 \underline{Signature:}
 
@@ -83,10 +117,10 @@ Byte 0:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 0 & 1 & 1 & 1 & 0 & 0 & 1\\
+1 & 1 & 0 & 1 & 0 & 0 & 0 & 0\\
 \hline
 \end{tabular}
-& 0xB9 \\
+& 0xD0 \\
 \end{tabular}
 
 Byte 1:
@@ -95,26 +129,13 @@ Byte 1:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & n & n & n & n & n & n & n\\
+0 & 1 & 1 & 0 & 0 & 0 & 1 & $\times$\\
 \hline
 \end{tabular}
-& in the range 0x01 to 0x77.\\
-\end{tabular}
-
-Byte 2:
-
-\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
-
-\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
-\hline
-0 & n & n & n & n & n & n & n\\
-\hline
-\end{tabular}
-& in the range 0x01 to 0x77.\\
+& \\
 \end{tabular}
 
 \underline{Notes:} 
 
-None.
+*** THIS HAS NOT BEEN TESTED ***
 
-\rule{15.1cm}{0.4pt}

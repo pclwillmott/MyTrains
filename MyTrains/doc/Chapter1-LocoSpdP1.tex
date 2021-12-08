@@ -1,9 +1,9 @@
 \newpage
-\subsection{LinkSlots}
+\subsection{LocoSpdP1}
 
 \underline{Description:}
 
-This command links slot SL1 to slot SL2. The command station sets SL\_CONUP/DN flags appropriately. If the command was successful then a \textbf{LocoSlotDataP1} response will be returned. An invalid link will return a fail \textbf{Ack}.
+This command sets the locomotive's speed in the range 0 to 127. 0 means inertial stop and 1 means emergency stop. Other values mean increasing speed.
 
 \underline{Protocol:}
 
@@ -15,7 +15,7 @@ This command links slot SL1 to slot SL2. The command station sets SL\_CONUP/DN f
 
 \underline{Opcode:}
 
-OPC\_LINK\_SLOTS
+OPC\_LOCO\_SPD
 
 \underline{Type:}
 
@@ -29,10 +29,10 @@ Byte 0:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 0 & 1 & 1 & 1 & 0 & 0 & 1\\
+1 & 0 & 1 & 0 & 0 & 0 & 0 & 0\\
 \hline
 \end{tabular}
-& 0xB9 & Opcode.\\
+& 0xA0 & Opcode.\\
 \end{tabular}
 
 Byte 1:
@@ -44,7 +44,7 @@ Byte 1:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$SL1$>$ & Slot number in the range 0x01 to 0x77.\\
+& $<$SLOT\#$>$ & Slot number in the range 0x00 to 0x77.\\
 \end{tabular}
 
 Byte 2:
@@ -56,7 +56,7 @@ Byte 2:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$SL2$>$ & Slot number in the range 0x01 to 0x77.\\
+& $<$SPD$>$ & Locomotive speed in the range 0 to 127.\\
 \end{tabular}
 
 Byte 3:
@@ -73,7 +73,7 @@ Byte 3:
 
 \underline{Response:} 
 
-\textbf{LocoSlotDataP1} or \textbf{Ack}
+None.
 
 \underline{Signature:}
 
@@ -83,10 +83,10 @@ Byte 0:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 0 & 1 & 1 & 1 & 0 & 0 & 1\\
+1 & 0 & 1 & 0 & 0 & 0 & 0 & 0\\
 \hline
 \end{tabular}
-& 0xB9 \\
+& 0xA0 \\
 \end{tabular}
 
 Byte 1:
@@ -98,19 +98,7 @@ Byte 1:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& in the range 0x01 to 0x77.\\
-\end{tabular}
-
-Byte 2:
-
-\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
-
-\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
-\hline
-0 & n & n & n & n & n & n & n\\
-\hline
-\end{tabular}
-& in the range 0x01 to 0x77.\\
+&less than 0x78\\
 \end{tabular}
 
 \underline{Notes:} 

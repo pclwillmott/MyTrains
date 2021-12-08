@@ -1,0 +1,165 @@
+\newpage
+\subsection{LocoDirF0F4P2}
+
+\underline{Description:}
+
+This command sets the locomotive's direction and function F0 to F4 states.
+
+\underline{Protocol:}
+
+2
+
+\underline{Group:}
+
+6-Byte Message
+
+\underline{Opcode:}
+
+OPC\_D4\_GROUP
+
+\underline{Type:}
+
+Command
+
+\underline{Encoding:} 
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 1 & 0 & 1 & 0 & 1 & 0 & 0\\
+\hline
+\end{tabular}
+& 0xD4 & Opcode.\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 1 & 0 & 0 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$SLOTP$>$ & Bits d2 to d0 contain the slot page number in the range 0x0 to 0x7.\\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$SLOT\#$>$ & Slot number.\\
+\end{tabular}
+
+Byte 3:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 0 & 0 & 1 & 1 & 0\\
+\hline
+\end{tabular}
+& 0x06 & Subcode.\\
+\end{tabular}
+
+Byte 4:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & d5 & d4 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+&  & Direction and function states.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.95\linewidth}} 
+d5 & Direction: 1 means forward and 0 means backwards.\\
+d4 & F0 state: 1 means on and 0 means off.\\
+d3 & F4 state: 1 means on and 0 means off.\\
+d2 & F3 state: 1 means on and 0 means off.\\
+d1 & F2 state: 1 means on and 0 means off.\\
+d0 & F1 state: 1 means on and 0 means off.\\
+\end{tabular}
+
+Byte 5:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$CHK$>$ & Checksum.
+\end{tabular}
+
+\underline{Response:} 
+
+None.
+
+\underline{Signature:}
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 1 & 0 & 1 & 0 & 1 & 0 & 0\\
+\hline
+\end{tabular}
+& 0xD4\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 1 & 0 & 0 & $\times$ & $\times$ & $\times$\\
+\hline
+\end{tabular}
+\\
+\end{tabular}
+
+Byte 3:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 0 & 0 & 1 & 1 & 0\\
+\hline
+\end{tabular}
+& 0x06\\
+\end{tabular}
+
+Byte 4:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & $\times$ & $\times$ & $\times$ & $\times$ & $\times$ & $\times$\\
+\hline
+\end{tabular}
+\\
+\end{tabular}
+
+\underline{Notes:} 
+
+None.
+
+\rule{15.1cm}{0.4pt}

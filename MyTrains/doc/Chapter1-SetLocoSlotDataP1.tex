@@ -1,12 +1,11 @@
-
 \newpage
-\subsection{Busy}
+\subsection{WriteStdSlotData}
 
 \rule{15.1cm}{0.4pt}
 
 \underline{Description:}
 
-The \textbf{Busy} broadcast message allows the command station to keep the network active whilst it is performing a task that requires a response, and entails a significant processing delay, i.e. it can ensure no new requests are started until it has responded to the last message. The \textbf{Busy} message should be simply stripped and ignored.
+This command writes the standard slot data for the specified slot to the command station.
 
 \underline{Protocol:}
 
@@ -14,15 +13,15 @@ The \textbf{Busy} broadcast message allows the command station to keep the netwo
 
 \underline{Group:}
 
-2-Byte Message
+Variable-Byte Message
 
 \underline{Opcode:}
 
-OPC\_BUSY
+OPC\_WR\_SL\_DATA
 
 \underline{Type:}
 
-Broadcast
+Command
 
 \underline{Encoding:} 
 
@@ -32,10 +31,10 @@ Byte 0:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 0 & 0 & 0 & 0 & 0 & 0 & 1\\
+1 & 1 & 1 & 0 & 1 & 1 & 1 & 1\\
 \hline
 \end{tabular}
-& 0x81 & Opcode.\\
+& 0xEF & Opcode.\\
 \end{tabular}
 
 Byte 1:
@@ -47,25 +46,38 @@ Byte 1:
 0 & 1 & 1 & 1 & 1 & 1 & 1 & 0\\
 \hline
 \end{tabular}
-& 0x7E & Checksum.
+& 0x0E & Message length (14 bytes).\\
+\end{tabular}
+
+\input{Chapter1-CommonLocoSlotDataP1}
+
+Byte 13:
+
+\begin{tabular}{p{0.4\linewidth} p{0.1\linewidth} p{0.5\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$CHK$>$ & Checksum.\\
 \end{tabular}
 
 \underline{Response:} 
 
-None
+Returns OPC\_LONG\_ACK.
 
 \underline{Signature:}
 
-Byte 0:
-
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
-
-\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
-\hline
-1 & 0 & 0 & 0 & 0 & 0 & 0 & 1\\
-\hline
-\end{tabular}
-& 0x81 & \\
+\begin{tabular}{c l}
+\underline{Byte \#} & \underline{Condition}\\
+0 & = 0xE7\\
+1 & = 0x0E\\
+2 & $<$ 0x78\\
+6 & \& 0b01000000 = 0\\
+7 & \& 0b00110000 = 0\\
+8 & \& 0b01110010 = 0\\
+10 & \& 0b01110000 = 0\\
 \end{tabular}
 
 \underline{Notes:} 

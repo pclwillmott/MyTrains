@@ -1,21 +1,25 @@
 \newpage
-\subsection{LinkSlots}
+\subsection{GetLocoSlotDataLAdrP2}
+
+\rule{15.1cm}{0.4pt}
 
 \underline{Description:}
 
-This command links slot SL1 to slot SL2. The command station sets SL\_CONUP/DN flags appropriately. If the command was successful then a \textbf{LocoSlotDataP1} response will be returned. An invalid link will return a fail \textbf{Ack}.
+This command requests the slot number for the selected locomotive address. If the locomotive is found in the slot table then the command station returns an \textbf{LocoSlotDataP2} message with the slot information. If it is not found then the command station will put the locomotive into a free slot and then return an \textbf{LocoSlotDataV2} message with the slot information. If there are no free slots then the command station returns an \textbf{Ack} containing a response code.
+
+The command station will generate NMRA 14 bit or long address packets for the locomotive. The address must be in the range 128 to 9983.
 
 \underline{Protocol:}
 
-1
+2
 
-\underline{Group:}
+\underline{Group:} 
 
 4-Byte Message
 
 \underline{Opcode:}
 
-OPC\_LINK\_SLOTS
+OPC\_LOCO\_ADR\_P2
 
 \underline{Type:}
 
@@ -29,10 +33,10 @@ Byte 0:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 0 & 1 & 1 & 1 & 0 & 0 & 1\\
+1 & 0 & 1 & 1 & 1 & 1 & 1 & 0\\
 \hline
 \end{tabular}
-& 0xB9 & Opcode.\\
+& 0xBE & Opcode.\\
 \end{tabular}
 
 Byte 1:
@@ -44,7 +48,7 @@ Byte 1:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$SL1$>$ & Slot number in the range 0x01 to 0x77.\\
+& $<$ADR2$>$ & Address high 7 bits.\\
 \end{tabular}
 
 Byte 2:
@@ -56,7 +60,7 @@ Byte 2:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$SL2$>$ & Slot number in the range 0x01 to 0x77.\\
+& $<$ADR$>$ & Address low 7 bits.\\
 \end{tabular}
 
 Byte 3:
@@ -69,11 +73,12 @@ Byte 3:
 \hline
 \end{tabular}
 & $<$CHK$>$ & Checksum.
+
 \end{tabular}
 
 \underline{Response:} 
 
-\textbf{LocoSlotDataP1} or \textbf{Ack}
+\textbf{LocoSlotDataP2} if success, otherwise \textbf{Ack}.
 
 \underline{Signature:}
 
@@ -83,10 +88,10 @@ Byte 0:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 0 & 1 & 1 & 1 & 0 & 0 & 1\\
+1 & 0 & 1 & 1 & 1 & 1 & 1 & 0\\
 \hline
 \end{tabular}
-& 0xB9 \\
+& 0xBE\\
 \end{tabular}
 
 Byte 1:
@@ -98,19 +103,7 @@ Byte 1:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& in the range 0x01 to 0x77.\\
-\end{tabular}
-
-Byte 2:
-
-\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
-
-\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
-\hline
-0 & n & n & n & n & n & n & n\\
-\hline
-\end{tabular}
-& in the range 0x01 to 0x77.\\
+& not equal to 0\\
 \end{tabular}
 
 \underline{Notes:} 

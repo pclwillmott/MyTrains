@@ -33,11 +33,12 @@ public enum NetworkMessageOpcode : UInt8 {
   case OPC_RQ_SL_DATA    = 0xBB
   case OPC_SW_STATE      = 0xBC
   case OPC_SW_ACK        = 0xBD
-  case OPC_LOCO_ADR_V2   = 0xBE
+  case OPC_LOCO_ADR_P2   = 0xBE
   case OPC_LOCO_ADR      = 0xBF
+  case OPC_BRD_OPSW      = 0xD0
   case OPC_D4_GROUP      = 0xD4
   case OPC_PEER_XFER     = 0xE5
-  case OPC_SL_RD_DATA_V2 = 0xE6
+  case OPC_SL_RD_DATA_P2 = 0xE6
   case OPC_SL_RD_DATA    = 0xE7
   case OPC_WR_SL_DATA    = 0xEF
 }
@@ -49,35 +50,35 @@ public enum NetworkMessageOpcode : UInt8 {
 public enum NetworkMessageType {
   case unknown
   case uninitialized
-  case acknowledgement
+  case ack
   case busy
-  case forceIdleState
   case getInterfaceData
-  case getLocoSlotDataLAdrV1
-  case getLocoSlotDataLAdrV2
-  case getLocoSlotDataSAdrV1
-  case getLocoSlotDataSAdrV2
-  case locoDirF0F4V1
-  case locoDirF0F4V2
-  case locoF5F8V1
-  case locoF5F11V2
-  case locoF13F19V2
-  case locoF21F27V2
-  case locoF12F20F28V2
-  case locoSlotDataV1
-  case locoSlotDataV2
-  case locoSpdV1
-  case locoSpdV2
-  case cfgSlotDataV1
-  case cfgSlotDataV2
-  case interfaceDataV1
+  case getLocoSlotDataLAdrP1
+  case getLocoSlotDataLAdrP2
+  case getLocoSlotDataSAdrP1
+  case getLocoSlotDataSAdrP2
+  case locoDirF0F4P1
+  case locoDirF0F4P2
+  case locoF5F8P1
+  case locoF5F11P2
+  case locoF13F19P2
+  case locoF21F27P2
+  case locoF12F20F28P2
+  case locoSlotDataP1
+  case locoSlotDataP2
+  case locoSpdP1
+  case locoSpdP2
+  case cfgSlotDataP1
+  case cfgSlotDataP2
+  case ifaceData
   case pwrOff
   case pwrOn
   case reset
-  case writeLocoSlotDataV1
-  case writeLocoSlotDataV2
-  case writeCfgSlotDataV1
-  case writeCfgSlotDataV2
+  case setIdleState
+  case writeLocoSlotDataP1
+  case writeLocoSlotDataP2
+  case writeCfgSlotDataP1
+  case writeCfgSlotDataP2
 
 }
 

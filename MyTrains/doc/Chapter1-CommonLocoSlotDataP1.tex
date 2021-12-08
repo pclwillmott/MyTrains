@@ -1,0 +1,200 @@
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.375\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$SLOT\#$>$ & Slot number in the range 0x00 to 0x77. Slot 0x00 is the dispatch special slot.\\
+\end{tabular}
+
+Byte 3:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+d7 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$STAT1$>$ & Slot status 1.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.05\linewidth} p{0.05\linewidth} p{0.70\linewidth}} 
+& \underline{d7} & \underline{d6} & \\
+& 0 & 0 & Free, no consist linking.\\
+& 0 & 1 & Consist sub-member.\\
+& 1 & 0 & Consist top-member.\\
+& 1 & 1 & Consist Mid-Consist member. \\
+\end{tabular}
+
+*** THIS NEEDS TESTING ***
+
+Note: d7 is set to 0 in the message by the command station and so may not correctly reflect the actual setting in the slot table.\\
+
+\begin{tabular}{p{0.05\linewidth} p{0.05\linewidth} p{0.05\linewidth} p{0.70\linewidth}} 
+& \underline{d5} & \underline{d4} & \\
+& 0 & 0 & Free slot, no valid data. Not refreshed.\\
+& 0 & 1 & Common. Locomotive address in this slot. Refreshed.\\
+& 1 & 0 & Idle. Locomotive address in this slot. Not refreshed.\\
+& 1 & 1 & In Use. Locomotive address in this slot. Refreshed. \\
+\end{tabular}
+
+ \begin{tabular}{p{0.05\linewidth} p{0.05\linewidth} p{0.05\linewidth} p{0.70\linewidth}} 
+& & \underline{d3} & \\
+& & 0 & No slot consist linked into this slot.\\
+& & 1 & Slot consist linked into this slot.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.05\linewidth} p{0.05\linewidth} p{0.75\linewidth}} 
+\underline{d2} & \underline{d1} & \underline{d0} & \\
+0 & 0 & 0 & 28 step decoder. 3-byte packet regular mode\\
+0 & 0 & 1 & 28 step decoder. Generate trinary packets for this mobile address\\
+0 & 1 & 0 & 14 step decoder. \\
+0 & 1 & 1 & 128 step decoder. \\
+1 & 0 & 0 & 28 step decoder. Allow advanced consisting\\
+1 & 0 & 1 & reserved\\
+1 & 1 & 0 & reserved\\
+1 & 1 & 1 & 128 step decoder. Allow advanced consisting\\
+\end{tabular}
+
+Byte 4:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$ADR$>$ & If $<$ADR2$>$ is 0 then this contains the NMRA short address. If $<$ADR2$>$ is greater than 0 then this contains the low 7 bits of the NMRA long address.\\
+\end{tabular}
+
+Byte 5:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.36\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$SPD$>$ & Speed in the range 0x00 to 0x7F. 0x00 means inertial stop and 0x01 means emergency stop. Other values mean increasing speed.\\
+\end{tabular}
+
+Byte 6:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.36\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & d5 & d4 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$DIRF$>$ & Locomotive direction and state of functions F0 to F4.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.95\linewidth}} 
+d5 & Direction: 1 means forward and 0 means backwards.\\
+d4 & F0 state: 1 means on and 0 means off.\\
+d3 & F4 state: 1 means on and 0 means off.\\
+d2 & F3 state: 1 means on and 0 means off.\\
+d1 & F2 state: 1 means on and 0 means off.\\
+d0 & F1 state: 1 means on and 0 means off.\\
+\end{tabular}
+
+Byte 7:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & d6 & 0 & 0 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$TRK$>$ & Global system track status.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.9\linewidth}} 
+d6 & 1 means this command station implements protocol 2 messages. This can be turned off on the DCS240 by setting the OpSw 44 to be closed.\\
+d3 & 1 means the programming track is busy.\\
+d2 & 1 means this command station implements protocol 1 messages and 0 means the command station is a DT200.\\
+d1 & 0 means the track is paused, broadcast an emergency stop.\\
+d0 & 1 means the DCC packets are on in the command station and the track power is on.\\
+\end{tabular}
+
+Byte 8:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 0 & d3 & d2 & 0 & d0\\
+\hline
+\end{tabular}
+& $<$SS2$>$ & Slot status 2.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d3 & 1 means expansion in ID1/2, 0 means encoded alias.\\
+d2 & 1 means expansion ID1/2 is not ID usage.\\
+d0 & 1 means this slot has suppressed advanced consist.\\
+\end{tabular}
+
+Byte 9:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$ADR2$>$ & If $<$ADR2$>$ is greater than 0 then this contains the high 7 bits of the NMRA long address.\\
+\end{tabular}
+
+Byte 10:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 0 & d3 & d2 & d1 & d0\\
+\hline
+\end{tabular}
+& $<$SND$>$ & Function F5 to F8 states.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d3 & F8 state: 1 means on and 0 means off.\\
+d2 & F7 state: 1 means on and 0 means off.\\
+d1 & F6 state: 1 means on and 0 means off.\\
+d0 & F5 state: 1 means on and 0 means off.\\
+\end{tabular}
+
+Byte 11:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.37\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$ID1$>$ & 7-bit ls ID code written by throttle when STAT2.4 = 1.\\
+\end{tabular}
+
+Byte 12:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.37\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& $<$ID2$>$ & 7-bit ms ID code written by throttle when STAT2.4 = 1.\\
+\end{tabular}
+

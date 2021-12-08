@@ -1,9 +1,9 @@
 \newpage
-\subsection{LinkSlots}
+\subsection{LocoDirF0F4P1}
 
 \underline{Description:}
 
-This command links slot SL1 to slot SL2. The command station sets SL\_CONUP/DN flags appropriately. If the command was successful then a \textbf{LocoSlotDataP1} response will be returned. An invalid link will return a fail \textbf{Ack}.
+This function sets the locomotive's direction and function F0 to F4 states.
 
 \underline{Protocol:}
 
@@ -15,7 +15,7 @@ This command links slot SL1 to slot SL2. The command station sets SL\_CONUP/DN f
 
 \underline{Opcode:}
 
-OPC\_LINK\_SLOTS
+OPC\_LOCO\_DIRF
 
 \underline{Type:}
 
@@ -29,10 +29,10 @@ Byte 0:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 0 & 1 & 1 & 1 & 0 & 0 & 1\\
+1 & 0 & 1 & 0 & 0 & 0 & 0 & 1\\
 \hline
 \end{tabular}
-& 0xB9 & Opcode.\\
+& 0xA1 & Opcode.\\
 \end{tabular}
 
 Byte 1:
@@ -44,7 +44,7 @@ Byte 1:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$SL1$>$ & Slot number in the range 0x01 to 0x77.\\
+& $<$SLOT\#$>$ & Slot number in the range 0x00 to 0x77.\\
 \end{tabular}
 
 Byte 2:
@@ -53,10 +53,19 @@ Byte 2:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & n & n & n & n & n & n & n\\
+0 & 0 & d5 & d4 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-& $<$SL2$>$ & Slot number in the range 0x01 to 0x77.\\
+& $<$DIRF$>$ & Locomotive's direction and state of functions F0 to F4.\\
+& \\
+\end{tabular}
+\begin{tabular}{p{0.05\linewidth} p{0.95\linewidth}} 
+d5 & Direction: 1 means forward and 0 means backwards.\\
+d4 & F0 state: 1 means on and 0 means off.\\
+d3 & F4 state: 1 means on and 0 means off.\\
+d2 & F3 state: 1 means on and 0 means off.\\
+d1 & F2 state: 1 means on and 0 means off.\\
+d0 & F1 state: 1 means on and 0 means off.\\
 \end{tabular}
 
 Byte 3:
@@ -73,7 +82,7 @@ Byte 3:
 
 \underline{Response:} 
 
-\textbf{LocoSlotDataP1} or \textbf{Ack}
+None.
 
 \underline{Signature:}
 
@@ -83,10 +92,10 @@ Byte 0:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 0 & 1 & 1 & 1 & 0 & 0 & 1\\
+1 & 0 & 1 & 0 & 0 & 0 & 0 & 1\\
 \hline
 \end{tabular}
-& 0xB9 \\
+& 0xA1 \\
 \end{tabular}
 
 Byte 1:
@@ -98,7 +107,7 @@ Byte 1:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& in the range 0x01 to 0x77.\\
+& less than 0x78\\
 \end{tabular}
 
 Byte 2:
@@ -107,10 +116,11 @@ Byte 2:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & n & n & n & n & n & n & n\\
+0 & 0 & $\times$ & $\times$ & $\times$ & $\times$ & $\times$ & $\times$\\
 \hline
 \end{tabular}
-& in the range 0x01 to 0x77.\\
+&  \\
+& \\
 \end{tabular}
 
 \underline{Notes:} 
