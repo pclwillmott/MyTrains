@@ -1,10 +1,25 @@
 \newpage
-\subsection{OPC\_SW\_REP}
-\underline{Operation:} Turnout sensor report.
+\subsection{SensRepTIn}
 
-\underline{Group:} \hspace{0.5cm} 4-Byte Message
+\underline{Description:}
 
-\underline{Direction:} \hspace{0.05cm} Turnout sensor $\rightarrow$ 
+Turnout sensor input report.
+
+\underline{Protocol:}
+
+1
+
+\underline{Group:}
+
+4-Byte Message
+
+\underline{Opcode:}
+
+OPC\_SW\_REP
+
+\underline{Type:}
+
+Message
 
 \underline{Encoding:} 
 
@@ -29,11 +44,9 @@ Byte 1:
 0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-& $<$SN1$>$ & Sensor address.\\
+& $<$SN1$>$ & Sensor address A7 to A1.\\
 \end{tabular}
 
-\begin{tabular}{p{0.5\linewidth} p{0.5\linewidth}}
-\underline{SN2.d6 = 1} & \underline{SN2.d6 = 0}\\
 \begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
 d6 & A7.\\
 d5 & A6.\\
@@ -42,17 +55,6 @@ d3 & A4.\\
 d2 & A3.\\
 d1 & A2.\\
 d0 & A1.\\
-\end{tabular} &
-\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
-d6 & A6.\\
-d5 & A5.\\
-d4 & A4.\\
-d3 & A3.\\
-d2 & A2.\\
-d1 & A1.\\
-d0 & A0.\\
-\end{tabular} \\
-
 \end{tabular}
 
 Byte 2:
@@ -61,34 +63,19 @@ Byte 2:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+0 & 1 & d5 & d4 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-& $<$SN2$>$ & Sensor address and sensor state.\\
+& $<$SN2$>$ & Sensor address A11 to A8, A0 and sensor state.\\
 \end{tabular}
 
-\begin{tabular}{p{0.555\linewidth} p{0.555\linewidth}}
-
-\underline{SN2.d6 = 1} & \underline{SN2.d6 = 0}\\
 \begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
-d6 & Report type. 1 means the report is an input report, and 0 means the report is an output report.\\
 d5 & A0.\\
 d4 & Input sensor state, 1 means sensor $>=$ 6V, 0 means sensor = 0V.\\
 d3 & A11.\\
 d2 & A10.\\
 d1 & A9.\\
 d0 & A8.\\
-\end{tabular} &
-\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
-d6 & Report type. 1 means the report is an input report, and 0 means the report is an output report.\\
-d5 & 0 means closed output line is off, 1 means the closed output line is on.\\
-d4 & 0 means thrown output line is off, 1 means the thrown output line is on.\\
-d3 & A10.\\
-d2 & A9.\\
-d1 & A8.\\
-d0 & A7.\\
-\end{tabular} \\
-
 \end{tabular}
 
 Byte 3:
@@ -104,13 +91,35 @@ Byte 3:
 
 \end{tabular}
 
-\underline{Description:}
-
-Turnout sensor report.
-
 \underline{Response:} 
 
 None.
+
+\underline{Signature:}
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 0 & 1 & 1 & 0 & 0 & 0 & 1\\
+\hline
+\end{tabular}
+& 0xB1 & \\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 1 & $\times$ & $\times$ & $\times$ & $\times$ & $\times$ & $\times$\\
+\hline
+\end{tabular}
+& \\
+\end{tabular}
 
 \underline{Notes:} 
 

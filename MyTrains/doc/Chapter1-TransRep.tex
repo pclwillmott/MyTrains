@@ -1,10 +1,25 @@
 \newpage
-\subsection{OPC\_TRANS\_REP}
-\underline{Operation:} Transponder input report.
+\subsection{TransRep}
 
-\underline{Group:} \hspace{0.5cm} 6-Byte Message
+\underline{Description:}
 
-\underline{Direction:} \hspace{0.05cm} $\rightarrow$ Command Station
+Transponder input report.
+
+\underline{Protocol:}
+
+1
+
+\underline{Group:}
+
+6-Byte Message
+
+\underline{Opcode:}
+
+OPC\_TRANS\_REP
+
+\underline{Type:}
+
+Broadcast
 
 \underline{Encoding:} 
 
@@ -80,11 +95,25 @@ Byte 5:
 & $<$CHK$>$ & Checksum.
 \end{tabular}
 
-\underline{Description:}
-
 \underline{Response:} 
 
 None.
+
+\underline{Signature:}
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 1 & 0 & 1 & 0 & 0 & 0 & 0\\
+\hline
+\end{tabular}
+& 0xD0.\\
+\end{tabular}
+
+*** THERE SHOULD BE MORE ***
 
 \underline{Notes:} 
 

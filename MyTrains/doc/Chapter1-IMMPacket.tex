@@ -177,6 +177,13 @@ Byte 10:
 
 \textbf{Ack}.
 
+\begin{tabular}{p{0.10\linewidth} p{0.20\linewidth} p{0.40\linewidth}}
+\underline{$<$LOPC$>$} & \underline{$<$ACK1$>$} & \underline{Meaning}\\
+0x7D & 0x7F & Command OK, if command station.\\
+0x7E & $<$lim address$>$ & Command OK, if limited master.\\
+0x7D & 0x00 & Internal buffer busy or full.\\
+\end{tabular}
+
 \underline{Signature:}
 
 Byte 0:

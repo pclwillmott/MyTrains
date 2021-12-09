@@ -73,7 +73,16 @@ Byte 3:
 
 \underline{Response:} 
 
-\textbf{LocoSlotDataP1} or \textbf{Ack}
+\textbf{LocoSlotDataP1} 
+
+or 
+
+\textbf{Ack}
+
+\begin{tabular}{p{0.10\linewidth} p{0.10\linewidth} p{0.40\linewidth}}
+\underline{$<$LOPC$>$} & \underline{$<$ACK1$>$} & \underline{Meaning}\\
+0x39 & 0x00 & Invalid link, link failed.\\
+\end{tabular}
 
 \underline{Signature:}
 

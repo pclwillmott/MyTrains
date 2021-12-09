@@ -78,7 +78,14 @@ Byte 3:
 
 \underline{Response:} 
 
-\textbf{LocoSlotDataP1} if success, otherwise \textbf{Ack}.
+\textbf{LocoSlotDataP1} if success, otherwise 
+
+\textbf{Ack}
+
+\begin{tabular}{p{0.10\linewidth} p{0.10\linewidth} p{0.40\linewidth}}
+\underline{$<$LOPC$>$} & \underline{$<$ACK1$>$} & \underline{Meaning}\\
+0x3F & 0x00 & No free slot, command failed.\\
+\end{tabular}
 
 \underline{Signature:}
 

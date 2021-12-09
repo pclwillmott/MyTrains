@@ -1,9 +1,9 @@
 \newpage
-\subsection{LocoDirF0F4V1}
+\subsection{SetSwWithAck}
 
 \underline{Description:}
 
-This function sets the locomotive's direction and function F0 to F4 states.
+This command sets a specified switch to a specified state. The switch responds with an \textbf{Ack}.
 
 \underline{Protocol:}
 
@@ -15,7 +15,7 @@ This function sets the locomotive's direction and function F0 to F4 states.
 
 \underline{Opcode:}
 
-OPC\_LOCO\_DIRF
+OPC\_SW\_ACK
 
 \underline{Type:}
 
@@ -29,10 +29,10 @@ Byte 0:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 0 & 1 & 0 & 0 & 0 & 0 & 1\\
+1 & 0 & 1 & 1 & 1 & 1 & 0 & 1\\
 \hline
 \end{tabular}
-& 0xA1 & Opcode.\\
+& 0xBD & Opcode.\\
 \end{tabular}
 
 Byte 1:
@@ -41,10 +41,20 @@ Byte 1:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & n & n & n & n & n & n & n\\
+0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-& $<$SLOT\#$>$ & Slot number in the range 0x00 to 0x77.\\
+& $<$SW1$>$ & Switch address A6 to A0.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d6 & A6.\\
+d5 & A5.\\
+d4 & A4.\\
+d3 & A3.\\
+d2 & A2.\\
+d1 & A1.\\
+d0 & A0.\\
 \end{tabular}
 
 Byte 2:
@@ -56,16 +66,16 @@ Byte 2:
 0 & 0 & d5 & d4 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-& $<$DIRF$>$ & Locomotive's direction and state of functions F0 to F4.\\
-& \\
+& $<$SW2$>$ & Switch address A10 to A7 and switch control bits.\\
 \end{tabular}
-\begin{tabular}{p{0.05\linewidth} p{0.95\linewidth}} 
-d5 & Locomotive direction: 1 means forward and 0 means backwards.\\
-d4 & F0 state: 1 means on and 0 means off.\\
-d3 & F4 state: 1 means on and 0 means off.\\
-d2 & F3 state: 1 means on and 0 means off.\\
-d1 & F2 state: 1 means on and 0 means off.\\
-d0 & F1 state: 1 means on and 0 means off.\\
+
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d5 & Direction. 1 means closed/green, and 0 means thrown/red.\\
+d4 & Output. 1 means on, and 0 means off.\\
+d3 & A10.\\
+d2 & A9.\\
+d1 & A8.\\
+d0 & A7.\\
 \end{tabular}
 
 Byte 3:
@@ -78,49 +88,43 @@ Byte 3:
 \hline
 \end{tabular}
 & $<$CHK$>$ & Checksum.
+
 \end{tabular}
 
 \underline{Response:} 
 
-None.
+\textbf{Ack}
+
+\begin{tabular}{p{0.10\linewidth} p{0.10\linewidth} p{0.40\linewidth}}
+\underline{$<$LOPC$>$} & \underline{$<$ACK1$>$} & \underline{Meaning}\\
+0x3D & 0x00 & FIFO is full, command rejected.\\
+0x3D & 0x7F &  Command accepted.\\
+\end{tabular}
 
 \underline{Signature:}
 
 Byte 0:
 
-\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 0 & 1 & 0 & 0 & 0 & 0 & 1\\
+1 & 0 & 1 & 1 & 1 & 1 & 0 & 1\\
 \hline
 \end{tabular}
-& 0xA1 \\
-\end{tabular}
-
-Byte 1:
-
-\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
-
-\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
-\hline
-0 & n & n & n & n & n & n & n\\
-\hline
-\end{tabular}
-& less than 0x78\\
+& 0xBD \\
 \end{tabular}
 
 Byte 2:
 
-\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
 0 & 0 & $\times$ & $\times$ & $\times$ & $\times$ & $\times$ & $\times$\\
 \hline
 \end{tabular}
-&  \\
-& \\
+& \\ 
 \end{tabular}
 
 \underline{Notes:} 

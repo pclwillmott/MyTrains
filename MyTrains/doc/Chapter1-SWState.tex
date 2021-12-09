@@ -1,10 +1,25 @@
 \newpage
-\subsection{OPC\_SW\_STATE}
-\underline{Operation:} Request state of switch.
+\subsection{SwState}
 
-\underline{Group:} \hspace{0.5cm} 4-Byte Message
+\underline{Description:}
 
-\underline{Direction:} \hspace{0.05cm} $\rightarrow$ Switch
+Request state of switch. *** NEED TO CHECK ***
+
+\underline{Protocol:}
+
+1
+
+\underline{Group:} 
+
+4-Byte Message
+
+\underline{Opcode:}
+
+OPC\_SW\_STATE
+
+\underline{Type:}
+
+Message?
 
 \underline{Encoding:} 
 
@@ -38,14 +53,13 @@ Byte 2:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+0 & 0 & d5 & d4 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
 & $<$SW2$>$ & Switch address A10 to A7 and switch control bits.\\
 \end{tabular}
 
 \begin{tabular}{p{0.05\linewidth} p{0.8\linewidth}} 
-d6 & Reserved. Set to 0.\\
 d5 & Direction. 1 means closed/green, and 0 means thrown/red.\\
 d4 & Output. 1 means on, and 0 means off.\\
 d3 & A10.\\
@@ -67,13 +81,35 @@ Byte 3:
 
 \end{tabular}
 
-\underline{Description:}
-
-Request state of switch.
-
 \underline{Response:} 
 
 OPC\_LONG\_ACK.
+
+\underline{Signature:}
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 0 & 1 & 1 & 1 & 1 & 0 & 0\\
+\hline
+\end{tabular}
+& 0xBC &\\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & $\times$ & $\times$ & $\times$ & $\times$ & $\times$ & $\times$\\
+\hline
+\end{tabular}
+& \\
+\end{tabular}
 
 \underline{Notes:} 
 

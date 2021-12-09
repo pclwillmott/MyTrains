@@ -1,10 +1,25 @@
 \newpage
-\subsection{OPC\_MOVE\_SLOTS}
-\underline{Operation:} Move slot.
+\subsection{SetLocoSlotStat1}
 
-\underline{Group:} \hspace{0.5cm} 4-Byte Message
+\underline{Description:}
 
-\underline{Direction:} \hspace{0.05cm} $\rightarrow$ Switch
+This command sets the locomotive slot status 1 values for the specified slot number.
+
+\underline{Protocol:}
+
+1
+
+\underline{Group:}
+
+4-Byte Message
+
+\underline{Opcode:}
+
+OPC\_SLOT\_STAT1
+
+\underline{Type:}
+
+Command
 
 \underline{Encoding:} 
 
@@ -14,10 +29,10 @@ Byte 0:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 0 & 1 & 1 & 1 & 0 & 1 & 0\\
+1 & 0 & 1 & 1 & 0 & 1 & 0 & 1\\
 \hline
 \end{tabular}
-& 0xBA & Opcode.\\
+& 0xB5 & Opcode.\\
 \end{tabular}
 
 Byte 1:
@@ -29,7 +44,7 @@ Byte 1:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$SRC$>$ & Source slot number in the range 0x00 to 0x77.\\
+& $<$SLOT\#$>$ & Slot number in the range 0x00 to 0x77.\\
 \end{tabular}
 
 Byte 2:
@@ -38,10 +53,10 @@ Byte 2:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & n & n & n & n & n & n & n\\
+0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-& $<$DEST$>$ & Destination slot number in the range 0x00 to 0x77.\\
+& $<$STAT1$>$ & Slot status 1.\\
 \end{tabular}
 
 Byte 3:
@@ -57,21 +72,35 @@ Byte 3:
 
 \end{tabular}
 
-\underline{Description:}
-
-Move slots.
-
-\begin{tabular}{p{0.2\linewidth} p{0.2\linewidth} p{0.53\linewidth}} 
-\underline{SRC} & \underline{DEST} & \underline{Action}\\
-0x00 & Don't Care & Dispatch get. Return slot read of dispatch slot.\\
-SRC & SRC & Null move. SRC is set to in use.\\
-SRC & 0x00 & Dispatch put. Mark slot as dispatch.\\
-SRC & DEST & Move slot data from SRC to DEST if not in use. Clear SRC.\\
-\end{tabular}
-
 \underline{Response:} 
 
-OPC\_SL\_RD\_DATA or OPC\_LONG\_ACK.
+None.
+
+\underline{Signature:}
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 0 & 1 & 1 & 0 & 1 & 0 & 1\\
+\hline
+\end{tabular}
+& 0xB5 \\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& less than 0x78\\ 
+\end{tabular}
 
 \underline{Notes:} 
 

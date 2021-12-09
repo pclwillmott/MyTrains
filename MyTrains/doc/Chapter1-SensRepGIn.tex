@@ -1,10 +1,25 @@
 \newpage
-\subsection{OPC\_INPUT\_REP}
-\underline{Operation:} General sensor input report.
+\subsection{SensRepGIn}
 
-\underline{Group:} \hspace{0.5cm} 4-Byte Message
+\underline{Description:}
 
-\underline{Direction:} \hspace{0.05cm} General sensor $\rightarrow$ 
+General sensor input report.
+
+\underline{Protocol:}
+
+1
+
+\underline{Group:}
+
+4-Byte Message
+
+\underline{Opcode:}
+
+OPC\_INPUT\_REP
+
+\underline{Type:}
+
+Message
 
 \underline{Encoding:} 
 
@@ -51,12 +66,12 @@ Byte 2:
 0 & 1 & d5 & d4 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-& $<$IN2$>$ & Switch address A11 to A8 and sensor input state.\\
+& $<$IN2$>$ & Sensor address A11 to A8, A0 and sensor input state.\\
 \end{tabular}
 
 \begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
 d5 & A0.\\
-d4 & Input state. 1 means sensor input $>=$ 6V, and 0 means sensor input = 0V.\\
+d4 & Input state: 1 means sensor input $>=$ 6V, and 0 means sensor input = 0V.\\
 d3 & A11.\\
 d2 & A10.\\
 d1 & A9.\\
@@ -76,13 +91,35 @@ Byte 3:
 
 \end{tabular}
 
-\underline{Description:}
-
-General sensor report.
-
 \underline{Response:} 
 
 None.
+
+\underline{Signature:}
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 0 & 1 & 1 & 0 & 0 & 1 & 0\\
+\hline
+\end{tabular}
+& 0xB2 & \\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 1 & $\times$ & $\times$ & $\times$ & $\times$ & $\times$ & $\times$\\
+\hline
+\end{tabular}
+& \\
+\end{tabular}
 
 \underline{Notes:} 
 

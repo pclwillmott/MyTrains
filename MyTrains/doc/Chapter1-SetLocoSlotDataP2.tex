@@ -1,14 +1,25 @@
 \newpage
-\subsection{OPC\_WR\_SL\_DATA\_EXT}
-\underline{Operation:} Write extended slot data.
+\subsection{SetLocoSlotDataP2}
+
+\underline{Description:}
+
+This command sets the locomotive slot data for the specified slot number.
 
 \underline{Protocol:}
 
 2
 
-\underline{Group:} \hspace{0.5cm} Variable-Byte Message
+\underline{Group:}
 
-\underline{Direction:} \hspace{0.05cm} Command Station $\rightarrow$ 
+Variable-Byte Message
+
+\underline{Opcode:}
+
+OPC\_WR\_SL\_DATA\_P2
+
+\underline{Type:}
+
+Command
 
 \underline{Encoding:} 
 
@@ -36,7 +47,7 @@ Byte 1:
 & 0x15 & Message length (21 bytes).\\
 \end{tabular}
 
-Bytes 2 to 19 encode as per extended slot bytes 0 to 17.
+\input{Chapter1-CommonLocoSlotDataP2}
 
 Byte 20:
 
@@ -50,13 +61,42 @@ Byte 20:
 & $<$CHK$>$ & Checksum.\\
 \end{tabular}
 
-\underline{Description:}
-
-This command sends the slot data to the command station.
-
 \underline{Response:} 
 
-Returns OPC\_LONG\_ACK.
+\textbf{Ack}
+
+\begin{tabular}{p{0.10\linewidth} p{0.10\linewidth} p{0.40\linewidth}}
+\underline{$<$LOPC$>$} & \underline{$<$ACK1$>$} & \underline{Meaning}\\
+0x6E & 0x7F & Command OK.\\
+\end{tabular}
+
+\underline{Signature:}
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 1 & 1 & 0 & 1 & 1 & 1 & 0\\
+\hline
+\end{tabular}
+& 0xEE \\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 1 & 0 & 1 & 0 & 1\\
+\hline
+\end{tabular}
+& 0x15\\
+\end{tabular}
+
+*** THERE SHOULD BE MORE ONCE ALL THE BYTES ARE DETERMINED ***
 
 \underline{Notes:} 
 

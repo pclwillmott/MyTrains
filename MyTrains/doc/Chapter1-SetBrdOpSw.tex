@@ -1,11 +1,25 @@
 \newpage
-\subsection{OPC\_BRD\_OPSW}
+\subsection{SetBrdOpSw}
 
-\underline{Operation:} Read and write board option switches.
+\underline{Description:}
 
-\underline{Group:} \hspace{0.5cm} 6-Byte Message
+Set board OpSw.
 
-\underline{Direction:} \hspace{0.05cm} $\rightarrow$ Command Station
+\underline{Protocol:}
+
+1
+
+\underline{Group:}
+
+6-Byte Message
+
+\underline{Opcode:}
+
+OPC\_BRD\_OPSW
+
+\underline{Type:}
+
+Broadcast
 
 \underline{Encoding:} 
 
@@ -27,10 +41,10 @@ Byte 1:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 1 & 1 & d4 & 0 & 0 & 1 & d0\\
+0 & 1 & 1 & 1 & 0 & 0 & 1 & d0\\
 \hline
 \end{tabular}
-&  & The bit d0 is the most significant bit of the board id. Bit d4 indicates read/write direction. 1 means write and 0 means read.\\
+&  & The bit d0 is the most significant bit of the board id. \\
 \end{tabular}
 
 Byte 2:
@@ -74,10 +88,10 @@ Byte 4:
 0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-&  & Byte and bit number. The high nibble encodes the byte number, and the low nibble the bit number.\\
+&  & Byte and bit number. \\
 \end{tabular}
 
-The byte number is calculated as (OpSw\# - 1) $>>$ 3 and the bit number is (OpSw\# - 1) - byte number $\times$ 8.
+The high nibble encodes the byte number, and the low nibble the bit number. The byte number is calculated as (OpSw\# - 1) $>>$ 3 and the bit number is (OpSw\# - 1) - byte number $\times$ 8.
 
 Byte 5:
 
@@ -91,11 +105,35 @@ Byte 5:
 & $<$CHK$>$ & Checksum.
 \end{tabular}
 
-\underline{Description:}
-
 \underline{Response:} 
 
-OPC\_LONG\_ACK.
+\textbf{Ack}
+
+\underline{Signature:}
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 1 & 0 & 1 & 0 & 0 & 0 & 0\\
+\hline
+\end{tabular}
+& 0xD0 \\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 1 & 1 & 1 & 0 & 0 & 1 & $\times$\\
+\hline
+\end{tabular}
+&   \\
+\end{tabular}
 
 \underline{Notes:} 
 

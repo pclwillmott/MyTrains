@@ -91,19 +91,6 @@ Byte 0:
 
 \underline{Notes:} 
 
-\begin{tabular}{p{0.3\linewidth} p{0.10\linewidth} p{0.10\linewidth} p{0.40\linewidth}}
-\underline{Command} & \underline{$<$LOPC$>$} & \underline{$<$ACK1$>$} & \underline{Meaning}\\
-OPC\_SW\_ACK & 0x3D & 0x00 & DCS100 FIFO is full, command rejected.\\
-OPC\_SW\_ACK & 0x3D & 0x7F &  DCS100 command accepted.\\
-MoveSlotsP1 & 0x3A & 0x00 & Illegal move.\\
-OPC\_LINK\_SLOTS & 0x39 & 0x00 & Invalid link, link failed.\\
-OPC\_SW\_REQ & 0x30 & 0x00 & Command failed.\\
-GetLocoSlotDataSAdrP1 & 0x3F & 0x00 & No free slot, command failed.\\
-GetLocoSlotDataLAdrP1 & 0x3F & 0x00 & No free slot, command failed.\\
-OPC\_IMM\_PACKET & 0x7D & 0x7F & Command OK, if not limited master.\\
-OPC\_IMM\_PACKET & 0x7E & $<$lim address$>$ & Command OK, if limited master.\\
-OPC\_IMM\_PACKET & 0x7D & 0x00 & Internal buffer busy or full.\\
-OPC\_WR\_SL\_DATA\_V2 & 0x6E & 0x7F & Command OK.\\
-\end{tabular}
+None.
 
 \rule{15.1cm}{0.4pt}

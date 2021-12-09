@@ -1,11 +1,11 @@
 \newpage
-\subsection{WriteStdSlotData}
+\subsection{SetLocoSlotDataP1}
 
 \rule{15.1cm}{0.4pt}
 
 \underline{Description:}
 
-This command writes the standard slot data for the specified slot to the command station.
+This command sets the locomotive slot data for the specified slot.
 
 \underline{Protocol:}
 
@@ -43,7 +43,7 @@ Byte 1:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 1 & 1 & 1 & 1 & 1 & 1 & 0\\
+0 & 0 & 0 & 0 & 1 & 1 & 1 & 0\\
 \hline
 \end{tabular}
 & 0x0E & Message length (14 bytes).\\
@@ -69,15 +69,88 @@ Returns OPC\_LONG\_ACK.
 
 \underline{Signature:}
 
-\begin{tabular}{c l}
-\underline{Byte \#} & \underline{Condition}\\
-0 & = 0xE7\\
-1 & = 0x0E\\
-2 & $<$ 0x78\\
-6 & \& 0b01000000 = 0\\
-7 & \& 0b00110000 = 0\\
-8 & \& 0b01110010 = 0\\
-10 & \& 0b01110000 = 0\\
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 1 & 1 & 0 & 1 & 1 & 1 & 1\\
+\hline
+\end{tabular}
+& 0xEF\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 0 & 1 & 1 & 1 & 0\\
+\hline
+\end{tabular}
+& 0x0E \\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.375\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& less than 0x78
+\end{tabular}
+
+Byte 6:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.36\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & $\times$ & $\times$ & $\times$ & $\times$ & $\times$ & $\times$\\
+\hline
+\end{tabular}
+& \\ 
+\end{tabular}
+
+Byte 7:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & $\times$ & 0 & 0 & $\times$ & $\times$ & $\times$ & $\times$\\
+\hline
+\end{tabular}
+& \\
+\end{tabular}
+
+Byte 8:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 0 & $\times$ & $\times$ & 0 & $\times$\\
+\hline
+\end{tabular}
+& \\ 
+\end{tabular}
+
+Byte 10:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 0 & $\times$ & $\times$ & $\times$ & $\times$\\
+\hline
+\end{tabular}
+& \\
 \end{tabular}
 
 \underline{Notes:} 

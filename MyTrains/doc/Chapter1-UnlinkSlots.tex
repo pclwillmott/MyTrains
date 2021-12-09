@@ -1,10 +1,25 @@
 \newpage
-\subsection{OPC\_UNLINK\_SLOTS}
-\underline{Operation:} Unlink slots.
+\subsection{UnlinkSlots}
 
-\underline{Group:} \hspace{0.5cm} Variable-Byte Message
+\underline{Description:}
 
-\underline{Direction:} \hspace{0.05cm} $\rightarrow$ Command Station  
+This command unlinks slot SL1 from slot SL2.
+
+\underline{Protocol:}
+
+1
+
+\underline{Group:}
+
+Variable-Byte Message
+
+\underline{Opcode:}
+
+OPC\_UNLINK\_SLOTS
+
+\underline{Type:}
+
+Command
 
 \underline{Encoding:} 
 
@@ -29,7 +44,7 @@ Byte 1:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$SL1$>$ & Slot number in the range 0x00 to 0x7F.\\
+& $<$SL1$>$ & Slot number in the range 0x00 to 0x77.\\
 \end{tabular}
 
 Byte 2:
@@ -41,7 +56,7 @@ Byte 2:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$SL2$>$ & Slot number in the range 0x00 to 0x7F.\\
+& $<$SL2$>$ & Slot number in the range 0x00 to 0x77.\\
 \end{tabular}
 
 Byte 3:
@@ -56,13 +71,23 @@ Byte 3:
 & $<$CHK$>$ & Checksum.\\
 \end{tabular}
 
-\underline{Description:}
-
-This command unlinks slot SL1 from slot SL2.
-
 \underline{Response:} 
 
-Returns OPC\_SL\_RD\_DATA or OPC\_LONG\_ACK.
+Returns \textbf{LocoSlotDataP1} or \textbf{Ack}
+
+\underline{Signature:}
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 0 & 1 & 1 & 1 & 0 & 0 & 0\\
+\hline
+\end{tabular}
+& 0xB8 &\\
+\end{tabular}
 
 \underline{Notes:} 
 

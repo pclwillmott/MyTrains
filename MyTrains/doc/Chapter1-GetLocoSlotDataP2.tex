@@ -1,10 +1,27 @@
 \newpage
-\subsection{OPC\_RQ\_SL\_DATA}
-\underline{Operation:} Request slot data or status block.
+\subsection{GetLocoSlotDataP2}
 
-\underline{Group:} \hspace{0.5cm} 4-Byte Message
+\underline{Description:}
+
+This command requests the locomotive slot data for the specified slot number. The command station responds with a \textbf{LocoSlotDataP2} message.
+
+\underline{Protocol:}
+
+2
+
+\underline{Group:}
+
+4-Byte Message
 
 \underline{Direction:} \hspace{0.05cm} $\rightarrow$ Switch
+
+\underline{Opcode:}
+
+OPC\_RQ\_SL\_DATA
+
+\underline{Type:}
+
+Command
 
 \underline{Encoding:} 
 
@@ -29,7 +46,7 @@ Byte 1:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$SLOT\#$>$ & Slot number in the range 0x00 to 0x7F. 0 returns the command station status block\\
+& $<$SLOT\#$>$ & Slot number in the range 0x00 to 0x77.\\
 \end{tabular}
 
 Byte 2:
@@ -38,10 +55,10 @@ Byte 2:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & d6 & 0 & 0 & d3 & d2 & d1 & d0\\
+0 & 1 & 0 & 0 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-& $<$SLOTP$>$ & Bits d2 to d0 contain the extended slot page number in the range 0x0 to 0x7. The bit d3 does something but its function is not yet known. When bit d6 is 1 then extended slot data is returned for all slots, when it is 0 standard slot data is returned for slots 0x00 to 0x7F.\\
+& $<$SLOTP$>$ & Bits d2 to d0 contain the slot page number in the range 0x0 to 0x7. The bit d3 does something but its function is not yet known.\\
 \end{tabular}
 
 Byte 3:
@@ -57,13 +74,47 @@ Byte 3:
 
 \end{tabular}
 
-\underline{Description:}
-
-Request slot data or status block.
-
 \underline{Response:} 
 
-if SLOTP = 0x00 then OPC\_SL\_RD\_DATA, otherwise OPC\_SL\_RD\_DATA\_EXT.
+\textbf{LocoSlotDataP2}
+
+\underline{Signature:}
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 0 & 1 & 1 & 1 & 0 & 1 & 1\\
+\hline
+\end{tabular}
+& 0xBB &\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& less than 0x78\\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 1 & 0 & 0 & $\times$ & $\times$ & $\times$ & $\times$\\
+\hline
+\end{tabular}
+& \\
+\end{tabular}
 
 \underline{Notes:} 
 
