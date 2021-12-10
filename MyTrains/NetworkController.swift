@@ -12,8 +12,8 @@ public class NetworkController {
   init() {
   
     let connections = [ //"/dev/cu.usbmodemDxP431751"
-                    //  "/dev/cu.usbmodemDxP470881"
-                       "/dev/cu.usbmodemDtrxA0BA1"
+                      "/dev/cu.usbmodemDxP470881"
+                     //  "/dev/cu.usbmodemDtrxA0BA1"
     ]
     
     var index : Int = 1

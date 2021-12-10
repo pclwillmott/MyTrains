@@ -1,13 +1,60 @@
+\newpage
+\subsection{IPLDevData}
+
+\underline{Description:} 
+
+An IPL capable device sends this response in response to an \textbf{IPLDiscover} broadcast message.
+
+*** THIS NEEDS CHECKING ***
+
+\underline{Group:}
+
+Variable-Byte Message
+
+\underline{Opcode:}
+
+OPC\_PEER\_XFER
+
+\underline{Type:}
+
+Response
+
+\underline{Encoding:} 
+
+Byte 0:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+1 & 1 & 1 & 0 & 0 & 1 & 0 & 1\\
+\hline
+\end{tabular}
+& 0xE5 & Opcode.\\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 1 & 0 & 1 & 0 & 0\\
+\hline
+\end{tabular}
+& 0x14 & Message length (20 bytes).\\
+\end{tabular}
+
 Byte 2:
 
 \begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 0 & 0 & 0 & 0 & d2 & d1 & d0\\
+0 & 0 & 0 & 0 & 1 & 1 & 1 & 1\\
 \hline
 \end{tabular}
-& $<$SLOTP\#$>$ & Slot page number in the range 0x0 to 0x7.\\
+& 0x0F \\
 \end{tabular}
 
 Byte 3:
@@ -16,10 +63,10 @@ Byte 3:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & n & n & n & n & n & n & n\\
+0 & 0 & 0 & 1 & 0 & 0 & 0 & 0\\
 \hline
 \end{tabular}
-& $<$SLOTL\#$>$ & Slot number in the range 0x00 to 0x77.\\
+& 0x10 & \\
 \end{tabular}
 
 Byte 4:
@@ -28,21 +75,18 @@ Byte 4:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+0 & 0 & 0 & 0 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-&  $<$STAT1$>$ & Slot status 1.\\
+& $<$PXCT1$>$ & \\
 \end{tabular}
 
-\begin{tabular}{p{0.05\linewidth} p{0.05\linewidth} p{0.05\linewidth} p{0.70\linewidth}} 
-& \underline{d5} & \underline{d4} & \\
-& 0 & 0 & Free slot, no valid data. Not refreshed.\\
-& 0 & 1 & Common. Locomotive address in this slot. Refreshed.\\
-& 1 & 0 & Idle. Locomotive address in this slot. Not refreshed.\\
-& 1 & 1 & In Use. Locomotive address in this slot. Refreshed. \\
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d3 & D4.7. High bit\\
+d2 & D3.7. High bit\\
+d1 & D2.7. High bit\\
+d0 & D1.7. High bit\\
 \end{tabular}
-
-*** THIS NEEDS TESTING ***
 
 Byte 5:
 
@@ -53,7 +97,31 @@ Byte 5:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$ADR$>$ & Low address.\\
+& $<$D1$>$ & Product code low 7 bits.\\
+\end{tabular}
+
+\begin{tabular}{l l}
+\underline{Product Code} & \underline{Device}\\
+0x01 & LNRP\\
+0x04 & UT4\\
+0x0C & WTL12\\
+0x14 & DB210 Opto\\
+0x15 & DB210\\
+0x16 & DB220\\
+0x1A & DCS210+\\
+0x1B & DCS210\\
+0x1C & DCS240\\
+0x23 & PR3\\
+0x24 & PR4\\
+0x2A & DT402\\
+0x32 & DT500\\
+0x33 & DCS51\\
+0x34 & DCS52\\
+0x3E & DT602\\
+0x51 & BXPA1\\
+0x58 & BXP88\\
+0x5C & UR92\\
+0x63 & LNWI\\
 \end{tabular}
 
 Byte 6:
@@ -65,7 +133,13 @@ Byte 6:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$ADR2$>$ & High address.\\
+& $<$D2$>$ & Hardware version 2 low 7 bits.\\
+\end{tabular}
+
+\begin{tabular}{l l}
+\underline{D2} & \underline{Meaning}\\
+0x00 & Slave all\\
+0x18 & Slave RF24\\
 \end{tabular}
 
 Byte 7:
@@ -74,20 +148,10 @@ Byte 7:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$TRK$>$ & Global system track status.\\
-\end{tabular}
-
-\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
-d6 & 1 means this command station implements protocol 2 messages. This can be turned off on the DCS240 by setting the OpSw 44 to be closed.\\
-d5 & Reserved. Set to 0.\\
-d4 & Reserved. Set to 0.\\
-d3 & 1 means the programming track is busy.\\
-d2 & 1 means this command station implements protocol 1 messages.  0 means the command station is a DT200.\\
-d1 & 0 means the track is paused, broadcast an emergency stop.\\
-d0 & 1 means the DCC packets are on in the command station and track power is on.\\
+& $<$D3$>$ & Data item 3. Low 7 bits.\\
 \end{tabular}
 
 Byte 8:
@@ -99,18 +163,20 @@ Byte 8:
 0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-&  & Unknown.\\
+& $<$D4$>$ & Software Version Number low 7 bits.\\
 \end{tabular}
 
 \begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
-d6 & \\
-d5 & \\
-d4 & \\
-d3 & \\
-d2 & \\
-d1 & \\
-d0 & \\
+d6 & version number bit 3\\
+d5 & version number bit 2.\\
+d4 & version number bit 1\\
+d3 & version number bit 0\\
+d2 & subversion number bit 2\\
+d1 & subversion number bit 1\\
+d0 & subversion number bit 0\\
 \end{tabular}
+
+e.g. 0x09 decodes as version 1.1.
 
 Byte 9:
 
@@ -118,20 +184,17 @@ Byte 9:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+0 & 0 & 0 & 0 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-&  & Unknown.\\
+& $<$PXCT2$>$ & High bits of D5 to D8.\\
 \end{tabular}
 
 \begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
-d6 & \\
-d5 & \\
-d4 & \\
-d3 & \\
-d2 & \\
-d1 & \\
-d0 & \\
+d3 & D8.7. High bit\\
+d2 & D7.7. High bit\\
+d1 & D6.7. High bit\\
+d0 & D5.7. High bit\\
 \end{tabular}
 
 Byte 10:
@@ -140,20 +203,10 @@ Byte 10:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-&  & Unknown.\\
-\end{tabular}
-
-\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
-d6 & \\
-d5 & \\
-d4 & \\
-d3 & \\
-d2 & \\
-d1 & \\
-d0 & \\
+& $<$D5$>$ & Data item 5. Low 7 bits.\\
 \end{tabular}
 
 Byte 11:
@@ -162,20 +215,10 @@ Byte 11:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-&  & Unknown.\\
-\end{tabular}
-
-\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
-d6 & \\
-d5 & \\
-d4 & \\
-d3 & \\
-d2 & \\
-d1 & \\
-d0 & \\
+& $<$D6$>$ & Serial number low byte low 7 bits.\\
 \end{tabular}
 
 Byte 12:
@@ -184,20 +227,10 @@ Byte 12:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-&  & Unknown.\\
-\end{tabular}
-
-\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
-d6 & \\
-d5 & \\
-d4 & \\
-d3 & \\
-d2 & \\
-d1 & \\
-d0 & \\
+& $<$D7$>$ & Serial number high byte low 7 bits.\\
 \end{tabular}
 
 Byte 13:
@@ -206,20 +239,10 @@ Byte 13:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-&  & Unknown.\\
-\end{tabular}
-
-\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
-d6 & \\
-d5 & \\
-d4 & \\
-d3 & \\
-d2 & \\
-d1 & \\
-d0 & \\
+& $<$D8$>$ & Data item 8. Low 7 bits.\\
 \end{tabular}
 
 Byte 14:
@@ -228,20 +251,17 @@ Byte 14:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+0 & 0 & 0 & 0 & n & n & n & n\\
 \hline
 \end{tabular}
-&  & Unknown.\\
+& $<$PXCT3$>$ & High bits for D9 to D12.\\
 \end{tabular}
 
 \begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
-d6 & \\
-d5 & \\
-d4 & \\
-d3 & \\
-d2 & \\
-d1 & \\
-d0 & \\
+d3 & D12.7. High bit\\
+d2 & D11.7. High bit\\
+d1 & D10.7. High bit\\
+d0 & D9.7. High bit\\
 \end{tabular}
 
 Byte 15:
@@ -250,20 +270,10 @@ Byte 15:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-&  & Unknown.\\
-\end{tabular}
-
-\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
-d6 & \\
-d5 & \\
-d4 & \\
-d3 & \\
-d2 & \\
-d1 & \\
-d0 & \\
+& $<$D9$>$ & Data item 9. Low 7 bits.\\
 \end{tabular}
 
 Byte 16:
@@ -272,20 +282,10 @@ Byte 16:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-&  & Unknown.\\
-\end{tabular}
-
-\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
-d6 & \\
-d5 & \\
-d4 & \\
-d3 & \\
-d2 & \\
-d1 & \\
-d0 & \\
+& $<$D10$>$ & Data item 10. Low 7 bits.\\
 \end{tabular}
 
 Byte 17:
@@ -294,20 +294,10 @@ Byte 17:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-&  & Unknown.\\
-\end{tabular}
-
-\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
-d6 & \\
-d5 & \\
-d4 & \\
-d3 & \\
-d2 & \\
-d1 & \\
-d0 & \\
+& $<$D11$>$ & Data item 11. Low 7 bits.\\
 \end{tabular}
 
 Byte 18:
@@ -316,20 +306,10 @@ Byte 18:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-&  & Unknown.\\
-\end{tabular}
-
-\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
-d6 & \\
-d5 & \\
-d4 & \\
-d3 & \\
-d2 & \\
-d1 & \\
-d0 & \\
+& $<$D12$>$ & Data item 8. Low 12 bits.\\
 \end{tabular}
 
 Byte 19:
@@ -338,18 +318,34 @@ Byte 19:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-&  & Unknown.\\
+& $<$CHK$>$ & Checksum.\\
 \end{tabular}
 
-\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
-d6 & \\
-d5 & \\
-d4 & \\
-d3 & \\
-d2 & \\
-d1 & \\
-d0 & \\
-\end{tabular}
+\underline{Response:} 
+
+None.
+
+\underline{Notes:} 
+
+These came from DigiPLII:
+
+e5 14 0f 08 00 00 00 00 00 00 00 01 00 00 00 00 00 00 00 08 
+
+e5 14 0f 10 00 24 00 00 00 02 00 08 07 00 00 00 00 00 00 38 
+
+e5 14 0f 10 00 24 00 00 00 00 00 57 13 00 00 00 00 00 00 71 
+
+e5 14 0f 10 00 1b 00 00 03 02 00 54 10 00 00 00 00 00 00 4f 
+
+PR4 with serial number 0x0788 ver 0
+
+PR4 with serial 0x1357 ver 0
+
+DCS210 with SN 0x10D4 ver 0.3
+
+DCS240 with SN 0x0AAB ver 0.3
+
+\rule{15.1cm}{0.4pt}

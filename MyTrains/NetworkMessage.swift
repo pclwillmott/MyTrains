@@ -126,16 +126,16 @@ public class NetworkMessage {
           _messageType = .pwrOn
           break
         case NetworkMessageOpcode.OPC_IDLE.rawValue:
-          _messageType = .forceIdleState
+          _messageType = .setIdleState
           break
         case NetworkMessageOpcode.OPC_LOCO_ADR.rawValue:
-          _messageType = message[1] == 0x00 ? .getLocoSlotDataSAdrV1 : .getLocoSlotDataLAdrV1
+          _messageType = message[1] == 0x00 ? .getLocoSlotDataSAdrP1 : .getLocoSlotDataLAdrP1
           break
-        case NetworkMessageOpcode.OPC_LOCO_ADR_V2.rawValue:
-          _messageType = message[1] == 0x00 ? .getLocoSlotDataSAdrV2 : .getLocoSlotDataLAdrV2
+        case NetworkMessageOpcode.OPC_LOCO_ADR_P2.rawValue:
+          _messageType = message[1] == 0x00 ? .getLocoSlotDataSAdrP2 : .getLocoSlotDataLAdrP2
           break
         case NetworkMessageOpcode.OPC_LONG_ACK.rawValue:
-          _messageType = .acknowledgement
+          _messageType = .ack
           break
         case NetworkMessageOpcode.OPC_SL_RD_DATA.rawValue:
           if  message[ 1] == 0x0e &&
@@ -144,10 +144,10 @@ public class NetworkMessage {
              (message[ 8] &  0b01110010) == 0x00 && /* SS@  */
              (message[10] &  0b01110000) == 0x00    /* SND  */ {
             if message[2] < 0x78 {
-              _messageType = .locoSlotDataV1
+              _messageType = .locoSlotDataP1
             }
             else if message[2] == 0x7f {
-              _messageType = .cfgSlotDataV1
+              _messageType = .cfgSlotDataP1
             }
           }
           break
@@ -158,7 +158,7 @@ public class NetworkMessage {
              (message[ 7] &  0b00110000) == 0x00 && /* TRK  */
              (message[ 8] &  0b01110010) == 0x00 && /* SS@  */
              (message[10] &  0b01110000) == 0x00    /* SND  */ {
-            _messageType = .writeLocoSlotDataV1
+            _messageType = .writeLocoSlotDataP1
           }
           break
         case NetworkMessageOpcode.OPC_PEER_XFER.rawValue:

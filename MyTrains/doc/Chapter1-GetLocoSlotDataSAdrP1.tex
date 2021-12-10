@@ -5,7 +5,7 @@
 
 \underline{Description:}
 
-This command requests the slot number for the selected locomotive address. If the locomotive is found in the slot table then the command station returns an \textbf{LocoSlotDataP1} message with the slot information. If it is not found then the command station will put the locomotive into a free slot and then return an \textbf{LocoSlotDataP1} message with the slot information. If there are no free slots then the command station returns an \textbf{Ack} containing a response code.
+This command requests the slot number for the selected locomotive address. If the locomotive is found in the slot table then the command station returns an \textbf{LocoSlotDataP1} response with the slot information. If it is not found then the command station will put the locomotive into a free slot and then return an \textbf{LocoSlotDataP1} response with the slot information. If there are no free slots then the command station returns an \textbf{Ack} containing a response code of 0x00.
 
 The command station will generate NMRA 7 bit or short address packets for the locomotive. The address has the range 0 to 127. The analog locomotive is selected with address 0.  
 

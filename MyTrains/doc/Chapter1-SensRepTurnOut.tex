@@ -1,13 +1,9 @@
 \newpage
-\subsection{LocoF5F8V1}
+\subsection{SensRepTurnOut}
 
 \underline{Description:}
 
-This command sets the locomotive's function F5 to F8 states.
-
-\underline{Protocol:}
-
-1
+Turnout sensor output report.
 
 \underline{Group:}
 
@@ -15,11 +11,11 @@ This command sets the locomotive's function F5 to F8 states.
 
 \underline{Opcode:}
 
-OPC\_LOCO\_SND
+OPC\_SW\_REP
 
 \underline{Type:}
 
-Command
+Message
 
 \underline{Encoding:} 
 
@@ -29,10 +25,10 @@ Byte 0:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 0 & 1 & 0 & 0 & 0 & 1 & 0\\
+1 & 0 & 1 & 1 & 0 & 0 & 0 & 1\\
 \hline
 \end{tabular}
-& 0xA2 & Opcode.\\
+& 0xB1 & Opcode.\\
 \end{tabular}
 
 Byte 1:
@@ -41,11 +37,21 @@ Byte 1:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & n & n & n & n & n & n & n\\
+0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-& $<$SLOT\#$>$ & Slot number in the range 0x00 to 0x77.\\
+& $<$SN1$>$ & Sensor address A6 to A0.\\
 \end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d6 & A6.\\
+d5 & A5.\\
+d4 & A4.\\
+d3 & A3.\\
+d2 & A2.\\
+d1 & A1.\\
+d0 & A0.\\
+\end{tabular} 
 
 Byte 2:
 
@@ -53,18 +59,20 @@ Byte 2:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 0 & 0 & 0 & d3 & d2 & d1 & d0\\
+0 & 0 & d5 & d4 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-& $<$SND$>$ & Locomotive's function F5 to F8 states.\\
+& $<$SN2$>$ & Sensor address A10 to A7 and sensor state.\\
 \end{tabular}
 
 \begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
-d3 & F8 state: 1 means on and 0 means off.\\
-d2 & F7 state: 1 means on and 0 means off.\\
-d1 & F6 state: 1 means on and 0 means off.\\
-d0 & F5 state: 1 means on and 0 means off.\\
-\end{tabular}
+d5 & 0 means closed output line is off and 1 means the closed output line is on.\\
+d4 & 0 means thrown output line is off and 1 means the thrown output line is on.\\
+d3 & A10.\\
+d2 & A9.\\
+d1 & A8.\\
+d0 & A7.\\
+\end{tabular} 
 
 Byte 3:
 
@@ -76,6 +84,7 @@ Byte 3:
 \hline
 \end{tabular}
 & $<$CHK$>$ & Checksum.
+
 \end{tabular}
 
 \underline{Response:} 
@@ -86,35 +95,23 @@ None.
 
 Byte 0:
 
-\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 0 & 1 & 0 & 0 & 0 & 1 & 0\\
+1 & 0 & 1 & 1 & 0 & 0 & 0 & 1\\
 \hline
 \end{tabular}
-& 0xA2 \\
-\end{tabular}
-
-Byte 1:
-
-\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
-
-\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
-\hline
-0 & n & n & n & n & n & n & n\\
-\hline
-\end{tabular}
-& less than 0x78\\
+& 0xB1 & \\
 \end{tabular}
 
 Byte 2:
 
-\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 0 & 0 & 0 & $\times$ & $\times$ & $\times$ & $\times$\\
+0 & 0 & $\times$ & $\times$ & $\times$ & $\times$ & $\times$ & $\times$\\
 \hline
 \end{tabular}
 & \\

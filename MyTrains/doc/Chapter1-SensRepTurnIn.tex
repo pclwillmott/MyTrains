@@ -1,21 +1,9 @@
 \newpage
-\subsection{MoveSlotsV1}
+\subsection{SensRepTurnIn}
 
 \underline{Description:}
 
-Move slots.
-
-\begin{tabular}{p{0.1\linewidth} p{0.1\linewidth} p{0.70\linewidth}} 
-\underline{SRC} & \underline{DEST} & \underline{Action}\\
-0 & $\times$ & Dispatch get. Return \textbf{LocoSlotDataV1} of dispatch slot.\\
-SRC & 0 & Dispatch put. Mark slot as dispatch.\\
-SRC & SRC & Null move. SRC is set to in use.\\
-SRC & DEST & Move slot data from SRC to DEST if not in use. Clear SRC.\\
-\end{tabular}
-
-\underline{Protocol:}
-
-1
+Turnout sensor input report.
 
 \underline{Group:}
 
@@ -23,11 +11,11 @@ SRC & DEST & Move slot data from SRC to DEST if not in use. Clear SRC.\\
 
 \underline{Opcode:}
 
-OPC\_MOVE\_SLOTS
+OPC\_SW\_REP
 
 \underline{Type:}
 
-Command
+Message
 
 \underline{Encoding:} 
 
@@ -37,10 +25,10 @@ Byte 0:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 0 & 1 & 1 & 1 & 0 & 1 & 0\\
+1 & 0 & 1 & 1 & 0 & 0 & 0 & 1\\
 \hline
 \end{tabular}
-& 0xBA & Opcode.\\
+& 0xB1 & Opcode.\\
 \end{tabular}
 
 Byte 1:
@@ -49,10 +37,20 @@ Byte 1:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & n & n & n & n & n & n & n\\
+0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-& $<$SRC$>$ & Source slot number in the range 0x00 to 0x77.\\
+& $<$SN1$>$ & Sensor address A7 to A1.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d6 & A7.\\
+d5 & A6.\\
+d4 & A5.\\
+d3 & A4.\\
+d2 & A3.\\
+d1 & A2.\\
+d0 & A1.\\
 \end{tabular}
 
 Byte 2:
@@ -61,10 +59,19 @@ Byte 2:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & n & n & n & n & n & n & n\\
+0 & 1 & d5 & d4 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-& $<$DEST$>$ & Destination slot number in the range 0x00 to 0x77.\\
+& $<$SN2$>$ & Sensor address A11 to A8, A0 and sensor state.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d5 & A0.\\
+d4 & Input sensor state, 1 means sensor $>=$ 6V, 0 means sensor = 0V.\\
+d3 & A11.\\
+d2 & A10.\\
+d1 & A9.\\
+d0 & A8.\\
 \end{tabular}
 
 Byte 3:
@@ -82,44 +89,32 @@ Byte 3:
 
 \underline{Response:} 
 
-\textbf{LocoSlotDataV1} or \textbf{Acknowledgement}.
+None.
 
 \underline{Signature:}
 
 Byte 0:
 
-\begin{tabular}{p{0.4\linewidth}  p{0.38\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 0 & 1 & 1 & 1 & 0 & 1 & 0\\
+1 & 0 & 1 & 1 & 0 & 0 & 0 & 1\\
 \hline
 \end{tabular}
-& 0xBA \\
-\end{tabular}
-
-Byte 1:
-
-\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
-
-\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
-\hline
-0 & n & n & n & n & n & n & n\\
-\hline
-\end{tabular}
-& less than 0x78\\
+& 0xB1 & \\
 \end{tabular}
 
 Byte 2:
 
-\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & n & n & n & n & n & n & n\\
+0 & 1 & $\times$ & $\times$ & $\times$ & $\times$ & $\times$ & $\times$\\
 \hline
 \end{tabular}
-& less than 0x78\\
+& \\
 \end{tabular}
 
 \underline{Notes:} 

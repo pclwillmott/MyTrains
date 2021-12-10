@@ -540,7 +540,7 @@ class MonitorVC: NSViewController, NetworkMessengerDelegate, NSWindowDelegate {
     if good {
       if let messenger = messenger {
         let message = NetworkMessage(interfaceId: messenger.id, data: numbers, appendCheckSum: true)
-        messenger.addToQueue(message: message, delay: TIMING.STANDARD, response: [.acknowledgement, .locoSlotDataV1], delegate: self, retryCount: 10)
+        messenger.addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: self, retryCount: 10)
       }
     }
 

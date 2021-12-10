@@ -7,7 +7,9 @@
 
 This is sent by an interface device in response to a \textbf{getInterfaceData} command.
 
-\underline{Group:} \hspace{0.5cm} Variable-Byte Message
+\underline{Group:}
+
+Variable-Byte Message
 
 \underline{Opcode:}
 
@@ -295,6 +297,65 @@ Byte 5:
 
 \underline{Notes:} 
 
-None.
+\begin{verbatim}
+
+PR4 #1
+
+<D0> 0xe5 OPCODE
+<D1> 0x10 LENGTH
+<D2> 0x22 SRC
+<D3> 0x22 DSTL
+<D4> 0x01 DSTH
+<D5> 0x00 PXCT1 <- I would have expected b4 = 1
+<D6> 0x08 Serial Number Low Byte
+<D7> 0x07 Serial Number High Byte - Actual serial number 0x0788
+<D8> 0x16 
+<D9> 0x00 
+<D10> 0x00 PXCT2
+<D11> 0x00 
+<D12> 0x00 
+<D13> 0x00 
+<D14> 0x24 Product Code for PR4
+<D15> 0x36  CHSUM
+
+PR4 #2
+
+<D0> 0xe5 OPCODE OPC_PEER_XFER
+<D1> 0x10 LENGTH
+<D2> 0x22 SRC
+<D3> 0x22 DSTL
+<D4> 0x01 DSTH
+<D5> 0x00 PXCT1 
+<D6> 0x57 Serial Number Low Byte
+<D7> 0x13 Serial Number High Byte - Actual serial number 0x1357
+<D8> 0x16 
+<D9> 0x00 
+<D10> 0x00 PXCT2
+<D11> 0x00 
+<D12> 0x00 
+<D13> 0x00 
+<D14> 0x24 Product Code for PR4
+<D15> 0x7d CHKSUM
+
+DCS240
+
+<D0> 0xe5 OPCODE
+<D1> 0x10 Length
+<D2> 0x22 SRC
+<D3> 0x22 DSTL
+<D4> 0x01 DSTH
+<D5> 0x00 PXCT1 <- I would have expected b4 to be 1
+<D6> 0x2b Serial Number Low Byte
+<D7> 0x0a  Serial Number High Byte - Actual serial number 0x0aab
+<D8> 0x14 
+<D9> 0x00 
+<D10> 0x00 PXCT2
+<D11> 0x01 Hardware Version?
+<D12> 0x03 Software Version
+<D13> 0x01 Hardware Version?
+<D14> 0x1c Product Code for DCS240
+<D15> 0x21
+
+\end{verbatim}
 
 \rule{15.1cm}{0.4pt}

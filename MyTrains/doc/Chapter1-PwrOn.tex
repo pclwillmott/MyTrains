@@ -7,10 +7,6 @@
 
 This command turns the track power on. 
 
-\underline{Protocol:}
-
-1
-
 \underline{Group:}
 
 2-Byte Message
@@ -51,7 +47,7 @@ Byte 1:
 
 \underline{Response:} 
 
-After power on the command station sends an OPC\_RQ\_SL\_DATA message for slot 0x7F. It also sends a sequence of OPC\_SW\_REQ messages with the following values of SW1 and SW2:
+After power on the command station sends an \textbf{getCfgSlotDataP1} message. It also sends a sequence of OPC\_SW\_REQ messages with the following values of SW1 and SW2:
 
 \begin{tabular}{l l l}
 \underline{SW1} & \underline{SW2} & \underline{Purpose}\\

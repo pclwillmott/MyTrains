@@ -5,7 +5,7 @@
 
 \underline{Description:}
 
-This command requests the slot number for the selected locomotive address. If the locomotive is found in the slot table then the command station returns an \textbf{LocoSlotDataP2} message with the slot information. If it is not found then the command station will put the locomotive into a free slot and then return an \textbf{LocoSlotDataV2} message with the slot information. If there are no free slots then the command station returns an \textbf{Ack} containing a response code.
+This command requests the slot number for the selected locomotive address. If the locomotive is found in the slot table then the command station returns an \textbf{LocoSlotDataP2} response with the slot information. If it is not found then the command station will put the locomotive into a free slot and then return an \textbf{LocoSlotDataV2} response with the slot information. If there are no free slots then the command station returns an \textbf{Ack} containing a response code of 0x00.
 
 The command station will generate NMRA 14 bit or long address packets for the locomotive. The address must be in the range 128 to 9983.
 
@@ -78,7 +78,14 @@ Byte 3:
 
 \underline{Response:} 
 
-\textbf{LocoSlotDataP2} if success, otherwise \textbf{Ack}.
+\textbf{LocoSlotDataP2} if success, otherwise 
+
+\textbf{Ack}.
+
+\begin{tabular}{p{0.10\linewidth} p{0.10\linewidth} p{0.40\linewidth}}
+\underline{$<$LOPC$>$} & \underline{$<$ACK1$>$} & \underline{Meaning}\\
+0x3E & 0x00 & No free slot, command failed.\\
+\end{tabular}
 
 \underline{Signature:}
 

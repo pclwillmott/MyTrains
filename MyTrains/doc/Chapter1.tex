@@ -41,13 +41,13 @@ The A,B,C,D,E are bits available to encode 32 opcodes per message length.
 
 \section{Refresh Slots}
 
-The command station's refresh stack is used to control the locomotives. The refresh stack is an array of read/write refresh slots. There are two protocols for manipulating the refresh slots. Protocol 1 allows up to 120 locomotive slots and each slot contains 10 bytes of data relating to the locomotive. Protocol 2 allows up to 960 locomotive slots and each slot contains 15 bytes of data relating to the locomotive. Not all command stations implement both protocols. A command station may also not implement the maximum number of locomotive slots for the protocols it supports. Where a command station implements both protocols messages from both protocols can be freely mixed. The user should check the TRK status bits to determine if protocol 1 and/or 2 are supported. In this document message mnemonics that are suffixed ``P1" belong to protocol 1 and those suffixed ``P2" belong to protocol 2. The slot number is a principal component of the protocol and is similar to a file handle. In addition to the locomotive slots there are slots reserved for system and command station control. These slots are numbered 120 to 127 (0x78 to 0x7F) and are encoded differently from the locomotive slots. Slot 124 (0x7C) is allocated for read/write access to the programming track and slot 127 (0x7F) contains the command station configuration settings.
+The command station's refresh stack is used to control the locomotives. The refresh stack is an array of read/write refresh slots. There are two protocols for manipulating the refresh slots. Protocol 1 allows up to 120 locomotive slots and each slot contains 10 bytes of data relating to the locomotive. Protocol 2 allows up to 960 locomotive slots and each slot contains 15 bytes of data relating to the locomotive. Not all command stations implement both protocols. A command station may also not implement the maximum number of locomotive slots for the protocols it supports. Where a command station implements both protocols messages from both protocols can be freely mixed. The user should check the TRK status bits to determine if protocol 1 and/or 2 are supported. In this document message mnemonics that are suffixed ``P1" belong to protocol 1 and those suffixed ``P2" belong to protocol 2. The slot number is a principal component of the protocol and is similar to a file handle. In addition to the locomotive slots there are slots reserved for system and command station control. These slots are numbered 120 to 127 (0x78 to 0x7F) and are encoded differently from the locomotive slots. Slot 123 (0x7B) is allocated to the fast clock. Slot 124 (0x7C) is allocated for read/write access to the programming track and slot 127 (0x7F) contains the command station configuration settings. Protocol 1 uses a single 7 bit number to identify a slot. Protocol 2 uses a 3 bit number to identify the page or bank of slots and a 7 bit number to identify the slot within the page or bank. Within the protocol 2 page slots numbered 0x00 to 0x77 are locomotive slots and slots numbered 0x78 to 0x7F are system slots.
 
-\section{Standard Address Selection}
+\section{Getting Started}
 
-To request a mobile or locomotive decoder task in the refresh stack, a throttle device requests a slot for the locomotive address by sending either the \textbf{getLocoSlotDataSAdr} or \textbf{getLocoSlotDataLAdr} commands. Which one depends on what type of decoder address you are using - short 2 digit or long 4 diigit. The command station responds with \textbf{LocoSlotData} messaage that contains this locomotive address and all of its state information. If the address is currently not in any slot, the command station will load this new locomotive address into a new slot (speed=0, direction forwards, functions off and 128 step mode) and return this as a \textbf{LocoSlotData}. If no inactive slots are free to load the new locomotive address, the response will be the \textbf{Ack} with a fail code 0x00.
+To request a mobile or locomotive decoder task in the refresh stack, a throttle device requests a slot for the locomotive address by sending either the \textbf{getLocoSlotDataSAdr} or \textbf{getLocoSlotDataLAdr} commands. Which one depends on what type of decoder address you are using - short 2 digit or long 4 digit. The command station responds with \textbf{LocoSlotData} response that contains this locomotive address and all of its state information. If the address is currently not in any slot, the command station will load this new locomotive address into a new slot (speed=0, direction forwards, functions off and 128 step mode) and return this as a \textbf{LocoSlotData} response. If no inactive slots are free to load the new locomotive address, the response will be the \textbf{Ack} with a fail response code of 0x00.
 
-The throttle/computer must then examine the slot data bytes to work out how to process the command station response. If the slot status 1 byte shows the slot to be ``common'', ``idle" or ``new" the throttle may change the slot to ``in use" by performing a null move instruction on this slot (see \textbf{MoveSlots}). This activation mechanism is used to guarantee proper slot usage interlocking in a multi-user asynchronous environment.
+The throttle/computer must then examine the slot data bytes to work out how to process the command station response. If the slot status 1 byte shows the slot to be ``common'' or ``idle" the throttle may change the slot to ``in use" by performing a null move instruction on this slot (see \textbf{MoveSlots}). This activation mechanism is used to guarantee proper slot usage interlocking in a multi-user asynchronous environment.
 
 If the slot return information shows the locomotive requested is ``in use" or up-consisted (i.e. the SL\_CONUP, bit 6 of slot status 1 = 1) the user should not use the slot. Any up-consisted locomotives must be unlinked before usage. Always process the result from the \textbf{LinkSlots} and \textbf{UnlinkSlots} commands, since the command station reserves the right to change the reply slot number and can reject the linking tasks under several circumstances. Verify the reply slot number and the link UP/DN bits in slot status 1 are as you expected.
 
@@ -55,7 +55,7 @@ The throttle will then be able to update speed, direction and function informati
 
 If a throttle is disconnected from the the Network, upon reconnection (if the throttle retains the slot state from before disconnection) it will request the full status of the slot it was previously using. If the reported status and speed, function data etc., from the command station exactly matches the remembered slot state the throttle will continue using the slot. If the slot data does not match, the throttle will assume the slot was purged free by the system and will go through the setup log on procedure again.
 
-With this procedure the throttle does not need to have a unique ID number. slot addresses do not imply they contain any particular locomotive address. The system can be mapped such that the slot address matches the locomotive address within, if the user directly reads and writes to slots without using the command station to allocate locomotive addresses.
+With this procedure the throttle does not need to have a unique ID number. Slot addresses do not imply they contain any particular locomotive address. The system can be mapped such that the slot address matches the locomotive address within, if the user directly reads and writes to slots without using the command station to allocate locomotive addresses.
 
 \section{Messages}
 
@@ -67,7 +67,7 @@ Description of the message's function.
 
 \underline{Protocol:}
 
-Which protocol the message belongs to.
+Which protocol the message belongs to. Only messages that relate to refresh slots belong to a protocol.
 
 \underline{Group:}
 
@@ -75,7 +75,7 @@ Which message size group the message belongs to.
 
 \underline{Opcode:}
 
-The opcode mnemonic.
+The opcode mnemonic. This is the Digitrax assigned mnemonic when known.
 
 \underline{Type:}
 
@@ -112,6 +112,8 @@ Any notes.
 \input{Chapter1-GetLocoSlotDataSAdrP2}
 \input{Chapter1-IMMPacket}
 \input{Chapter1-InterfaceData}
+\input{Chapter1-IPLDevData}
+\input{Chapter1-IPLDiscover}
 \input{Chapter1-LinkSlots}
 \input{Chapter1-LocoBinStateP2}
 \input{Chapter1-LocoDirF0F4P1}
@@ -128,13 +130,12 @@ Any notes.
 \input{Chapter1-MoveSlotsP1}
 \input{Chapter1-MoveSlotsP2}
 \input{Chapter1-PeerXfer16}
-\input{Chapter1-PeerXfer20}
 \input{Chapter1-PwrOff}
 \input{Chapter1-PwrOn}
 \input{Chapter1-Reset}
-\input{Chapter1-SensRepGIn}
-\input{Chapter1-SensRepTIn}
-\input{Chapter1-SensRepTOut}
+\input{Chapter1-SensRepGenIn}
+\input{Chapter1-SensRepTurnIn}
+\input{Chapter1-SensRepTurnOut}
 \input{Chapter1-SetBrdOpSw}
 \input{Chapter1-SetIdleState}
 \input{Chapter1-SetLocoSlotDataP1}
@@ -145,69 +146,4 @@ Any notes.
 \input{Chapter1-SWReq}
 \input{Chapter1-SWState}
 \input{Chapter1-TransRep}
-\input{Chapter1-UnlinkSlots}
-
---------------------
-
-PR4 Interface Status Message
-
-\begin{verbatim}
-
-PR4 #1
-
-<D0> 0xe5 OPCODE
-<D1> 0x10 LENGTH
-<D2> 0x22 SRC
-<D3> 0x22 DSTL
-<D4> 0x01 DSTH
-<D5> 0x00 PXCT1 <- I would have expected b4 = 1
-<D6> 0x08 Serial Number Low Byte
-<D7> 0x07 Serial Number High Byte - Actual serial number 0x0788
-<D8> 0x16 
-<D9> 0x00 
-<D10> 0x00 PXCT2
-<D11> 0x00 
-<D12> 0x00 
-<D13> 0x00 
-<D14> 0x24 Product Code for PR4
-<D15> 0x36  CHSUM
-
-PR4 #2
-
-<D0> 0xe5 OPCODE OPC_PEER_XFER
-<D1> 0x10 LENGTH
-<D2> 0x22 SRC
-<D3> 0x22 DSTL
-<D4> 0x01 DSTH
-<D5> 0x00 PXCT1 
-<D6> 0x57 Serial Number Low Byte
-<D7> 0x13 Serial Number High Byte - Actual serial number 0x1357
-<D8> 0x16 
-<D9> 0x00 
-<D10> 0x00 PXCT2
-<D11> 0x00 
-<D12> 0x00 
-<D13> 0x00 
-<D14> 0x24 Product Code for PR4
-<D15> 0x7d CHKSUM
-
-DCS240
-
-<D0> 0xe5 OPCODE
-<D1> 0x10 Length
-<D2> 0x22 SRC
-<D3> 0x22 DSTL
-<D4> 0x01 DSTH
-<D5> 0x00 PXCT1 <- I would have expected b4 to be 1
-<D6> 0x2b Serial Number Low Byte
-<D7> 0x0a  Serial Number High Byte - Actual serial number 0x0aab
-<D8> 0x14 
-<D9> 0x00 
-<D10> 0x00 PXCT2
-<D11> 0x01 Hardware Version?
-<D12> 0x03 Software Version
-<D13> 0x01 Hardware Version?
-<D14> 0x1c Product Code for DCS240
-<D15> 0x21
-
-\end{verbatim}
+\input{Chapter1-UnlinkSlotsP1}
