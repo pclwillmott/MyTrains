@@ -263,6 +263,17 @@
                                                 <action selector="cboAddByteNumberAction:" target="wI2-06-r3x" id="yWW-Pe-yYE"/>
                                             </connections>
                                         </button>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cfa-9k-6jl">
+                                            <rect key="frame" x="663" y="47" width="94" height="18"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="check" title="Add Labels" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="9Hc-aj-ezt">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="chkAddLabelsAction:" target="wI2-06-r3x" id="KDr-kk-49k"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                 </view>
                             </box>
@@ -416,11 +427,11 @@
                                                 </subviews>
                                             </clipView>
                                             <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="ZA4-Uc-aYk">
-                                                <rect key="frame" x="0.0" y="302" width="662" height="16"/>
+                                                <rect key="frame" x="0.0" y="381" width="662" height="16"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </scroller>
                                             <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="Xmb-sT-Xr3">
-                                                <rect key="frame" x="656" y="0.0" width="16" height="401"/>
+                                                <rect key="frame" x="646" y="0.0" width="16" height="397"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </scroller>
                                         </scrollView>
@@ -507,6 +518,7 @@
                         <outlet property="cboNumberBase" destination="R7U-db-SDs" id="ab3-Jc-LWh"/>
                         <outlet property="cboTimeStampType" destination="hTD-aA-KVA" id="6Y6-w4-2e1"/>
                         <outlet property="chkAddByteNumber" destination="LQt-sa-WMw" id="alz-VU-FSv"/>
+                        <outlet property="chkAddLabels" destination="cfa-9k-6jl" id="35o-bs-TUo"/>
                         <outlet property="chkCaptureActive" destination="AnB-Pl-r51" id="ml9-cR-UU5"/>
                         <outlet property="lblCaptureFileName" destination="3xd-jj-khm" id="ywG-gc-jxE"/>
                         <outlet property="lblSendFileName" destination="fqT-IS-9k6" id="wWv-w0-7dv"/>

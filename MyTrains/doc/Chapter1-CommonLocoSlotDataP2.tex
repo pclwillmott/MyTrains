@@ -35,6 +35,16 @@ Byte 4:
 \end{tabular}
 
 \begin{tabular}{p{0.05\linewidth} p{0.05\linewidth} p{0.05\linewidth} p{0.70\linewidth}} 
+& \underline{d7} & \underline{d6} & \\
+& 0 & 0 & Free, no consist linking.\\
+& 0 & 1 & Consist sub-member.\\
+& 1 & 0 & Consist top-member.\\
+& 1 & 1 & Consist Mid-Consist member. \\
+\end{tabular}
+
+Note: d7 is set to 0 in the message by the command station and so may not correctly reflect the actual setting in the slot table.\\
+
+\begin{tabular}{p{0.05\linewidth} p{0.05\linewidth} p{0.05\linewidth} p{0.70\linewidth}} 
 & \underline{d5} & \underline{d4} & \\
 & 0 & 0 & Free slot, no valid data. Not refreshed.\\
 & 0 & 1 & Common. Locomotive address in this slot. Refreshed.\\
@@ -42,7 +52,23 @@ Byte 4:
 & 1 & 1 & In Use. Locomotive address in this slot. Refreshed. \\
 \end{tabular}
 
-*** THIS NEEDS TESTING ***
+ \begin{tabular}{p{0.05\linewidth} p{0.05\linewidth} p{0.05\linewidth} p{0.70\linewidth}} 
+& & \underline{d3} & \\
+& & 0 & No slot consist linked into this slot.\\
+& & 1 & Slot consist linked into this slot.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.05\linewidth} p{0.05\linewidth} p{0.75\linewidth}} 
+\underline{d2} & \underline{d1} & \underline{d0} & \\
+0 & 0 & 0 & 28 step decoder. 3-byte packet regular mode\\
+0 & 0 & 1 & 28 step decoder. Generate trinary packets for this mobile address\\
+0 & 1 & 0 & 14 step decoder. \\
+0 & 1 & 1 & 128 step decoder. \\
+1 & 0 & 0 & 28 step decoder. Allow advanced consisting\\
+1 & 0 & 1 & reserved\\
+1 & 1 & 0 & reserved\\
+1 & 1 & 1 & 128 step decoder. Allow advanced consisting\\
+\end{tabular}
 
 Byte 5:
 
@@ -99,17 +125,7 @@ Byte 8:
 0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-&  & Unknown.\\
-\end{tabular}
-
-\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
-d6 & \\
-d5 & \\
-d4 & \\
-d3 & \\
-d2 & \\
-d1 & \\
-d0 & \\
+& $<$SPD$>$ & Speed in the range 0x00 to 0x7F. 0x00 means inertial stop and 0x01 means emergency stop. Other values mean increasing speed.\\
 \end{tabular}
 
 Byte 9:
@@ -121,16 +137,16 @@ Byte 9:
 0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-&  & Unknown.\\
+&  & Functions.\\
 \end{tabular}
 
 \begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
-d6 & \\
-d5 & \\
-d4 & \\
+d6 & F8 state: 1 means on and 0 means off\\
+d5 & F0 state: 1 means on and 0 means off\\
+d4 & F12 state: 1 means on and 0 means off\\
 d3 & \\
 d2 & \\
-d1 & \\
+d1 & F20 state: 1 means on and 0 means off\\
 d0 & \\
 \end{tabular}
 
@@ -143,12 +159,12 @@ Byte 10:
 0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-&  & Unknown.\\
+&  & Direction.\\
 \end{tabular}
 
 \begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
 d6 & \\
-d5 & \\
+d5 & Direction: 1 means forwards and 0 means backwards\\
 d4 & \\
 d3 & \\
 d2 & \\
@@ -165,13 +181,13 @@ Byte 11:
 0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-&  & Unknown.\\
+&  & Functions.\\
 \end{tabular}
 
 \begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
-d6 & \\
-d5 & \\
-d4 & \\
+d6 & F11 state: 1 means on and 0 means off\\
+d5 & F10 state: 1 means on and 0 means off\\
+d4 & F9 state: 1 means on and 0 means off\\
 d3 & \\
 d2 & \\
 d1 & \\
@@ -187,17 +203,17 @@ Byte 12:
 0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-&  & Unknown.\\
+&  & Functions.\\
 \end{tabular}
 
 \begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
-d6 & \\
-d5 & \\
-d4 & \\
-d3 & \\
-d2 & \\
-d1 & \\
-d0 & \\
+d6 & F19 state: 1 means on and 0 means off\\
+d5 & F18 state: 1 means on and 0 means off\\
+d4 & F17 state: 1 means on and 0 means off\\
+d3 & F16 state: 1 means on and 0 means off\\
+d2 & F15 state: 1 means on and 0 means off\\
+d1 & F14 state: 1 means on and 0 means off\\
+d0 & F13 state: 1 means on and 0 means off\\
 \end{tabular}
 
 Byte 13:
@@ -209,17 +225,17 @@ Byte 13:
 0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-&  & Unknown.\\
+&  & Functions.\\
 \end{tabular}
 
 \begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
-d6 & \\
-d5 & \\
-d4 & \\
-d3 & \\
-d2 & \\
-d1 & \\
-d0 & \\
+d6 & F7 state: 1 means on and 0 means off\\
+d5 & F6 state: 1 means on and 0 means off\\
+d4 & F5 state: 1 means on and 0 means off\\
+d3 & F4 state: 1 means on and 0 means off\\
+d2 & F3 state: 1 means on and 0 means off\\
+d1 & F2 state: 1 means on and 0 means off\\
+d0 & F1 state: 1 means on and 0 means off\\
 \end{tabular}
 
 Byte 14:
@@ -275,7 +291,7 @@ Byte 16:
 0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-&  & Unknown.\\
+&  & Consist slot page number.\\
 \end{tabular}
 
 \begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
@@ -283,9 +299,9 @@ d6 & \\
 d5 & \\
 d4 & \\
 d3 & \\
-d2 & \\
-d1 & \\
-d0 & \\
+d2 & Consist slot page b2\\
+d1 & Consist slot page b1\\
+d0 & Consist slot page b0\\
 \end{tabular}
 
 Byte 17:
@@ -294,20 +310,10 @@ Byte 17:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-&  & Unknown.\\
-\end{tabular}
-
-\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
-d6 & \\
-d5 & \\
-d4 & \\
-d3 & \\
-d2 & \\
-d1 & \\
-d0 & \\
+&  & Consist slot number in the range 0x00 to 0x77.\\
 \end{tabular}
 
 Byte 18:
@@ -319,17 +325,7 @@ Byte 18:
 0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-&  & Unknown.\\
-\end{tabular}
-
-\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
-d6 & \\
-d5 & \\
-d4 & \\
-d3 & \\
-d2 & \\
-d1 & \\
-d0 & \\
+&  & Throttle id low bits.\\
 \end{tabular}
 
 Byte 19:
@@ -341,15 +337,5 @@ Byte 19:
 0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-&  & Unknown.\\
-\end{tabular}
-
-\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
-d6 & \\
-d5 & \\
-d4 & \\
-d3 & \\
-d2 & \\
-d1 & \\
-d0 & \\
+&  & Throttle id high bits.\\
 \end{tabular}

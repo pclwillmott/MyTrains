@@ -137,28 +137,83 @@ public class NetworkMessage {
         case NetworkMessageOpcode.OPC_LONG_ACK.rawValue:
           _messageType = .ack
           break
+        case NetworkMessageOpcode.OPC_SL_RD_DATA_P2.rawValue:
+          if message[1] == 0x15 &&
+              (message[2] & 0b11111000) == 0x00 &&
+              (message[7] & 0b10110000) == 0x00 {
+            _messageType = .locoSlotDataP2
+          }
         case NetworkMessageOpcode.OPC_SL_RD_DATA.rawValue:
-          if  message[ 1] == 0x0e &&
-             (message[ 6] &  0b01000000) == 0x00 && /* DIRF */
-             (message[ 7] &  0b00110000) == 0x00 && /* TRK  */
-             (message[ 8] &  0b01110010) == 0x00 && /* SS@  */
-             (message[10] &  0b01110000) == 0x00    /* SND  */ {
-            if message[2] < 0x78 {
+          if   message[ 1] == 0x0e &&
+              (message[ 7] &  0b00110000) == 0x00    /* TRK  */ {
+            if message[2] < 0x78 &&
+              (message[ 6] &  0b11000000) == 0x00 && /* DIRF */
+              (message[ 8] &  0b11110010) == 0x00 && /* SS@  */
+              (message[10] &  0b11110000) == 0x00    /* SND  */ {
               _messageType = .locoSlotDataP1
             }
             else if message[2] == 0x7f {
               _messageType = .cfgSlotDataP1
             }
+            else if message[2] == 0x7b {
+              _messageType = .fastClockDataP1
+            }
+          }
+          break
+        case NetworkMessageOpcode.OPC_WR_SL_DATA_P2.rawValue:
+          if message[1] == 0x15 {
+            _messageType = .setLocoSlotDataP2
           }
           break
         case NetworkMessageOpcode.OPC_WR_SL_DATA.rawValue:
           if  message[ 1] == 0x0e &&
               message[ 2] <  0x78 &&                /* SLOT */
-             (message[ 6] &  0b01000000) == 0x00 && /* DIRF */
-             (message[ 7] &  0b00110000) == 0x00 && /* TRK  */
-             (message[ 8] &  0b01110010) == 0x00 && /* SS@  */
-             (message[10] &  0b01110000) == 0x00    /* SND  */ {
-            _messageType = .writeLocoSlotDataP1
+             (message[ 6] &  0b11000000) == 0x00 && /* DIRF */
+             (message[ 7] &  0b10110000) == 0x00 && /* TRK  */
+             (message[ 8] &  0b11110010) == 0x00 && /* SS@  */
+             (message[10] &  0b11110000) == 0x00    /* SND  */ {
+            _messageType = .setLocoSlotDataP1
+          }
+          break
+        case NetworkMessageOpcode.OPC_CONSIST_FUNC.rawValue:
+          if message[1] < 0x78 &&
+              (message[2] & 0b01000000) == 0x00 {
+            _messageType = .consistDirF0F4
+          }
+          break
+        case NetworkMessageOpcode.OPC_BRD_OPSW.rawValue:
+          let test = message[1] & 0b11111110
+          if test == 0b01100010 {
+            _messageType = .getBrdOpSw
+          }
+          else if test == 0b01110010 {
+            _messageType = .setBrdOpSw
+          }
+          break
+        case NetworkMessageOpcode.OPC_RQ_SL_DATA.rawValue:
+          if message[2] == 0x00 {
+            let sn = message[1]
+            if sn == 0x7f {
+              _messageType = .getCfgSlotDataP1
+            }
+            else if sn == 0x7b {
+              _messageType = .getFastClockDataP1
+            }
+            else if sn < 0x78 {
+              _messageType = .getLocoSlotDataP1
+            }
+          }
+          else if message[1] < 0x78 &&
+                    (message[2] & 0b11110000) == 0b01000000 {
+            _messageType = .getLocoSlotDataP2
+          }
+          break
+        case NetworkMessageOpcode.OPC_IMM_PACKET.rawValue:
+          if message[1] == 0x0b &&
+             message[2] == 0x7f &&
+            (message[3] & 0b10001000) == 0x00 &&
+            (message[4] & 0b11100000) == 0b00100000 {
+              _messageType = .immPacket
           }
           break
         case NetworkMessageOpcode.OPC_PEER_XFER.rawValue:
@@ -168,7 +223,199 @@ public class NetworkMessage {
              message[ 4] == 0x01 &&
              message[ 5] == 0x00 &&
              message[10] == 0x00 {
-            _messageType = .getInterfaceData
+            _messageType = .interfaceData
+          }
+          else if message[1] == 0x10 {
+            if message[2] == 0x7f && // *** NEEDS EXTRAS ***
+               message[3] == 0x7f &&
+               message[4] == 0x7f &&
+              (message[5] & 0b11110000) == 0b01000000 {
+              let subcode = message[10] & 0b11110000
+              switch subcode {
+              case 0b00000000:
+                _messageType = .iplSetup
+                break
+              case 0b00010000:
+                _messageType = .iplAddress
+              case 0b00100000:
+                _messageType = .iplData
+              case 0b01000000:
+                _messageType = .iplEndOperation
+              default:
+                break
+              }
+            }
+            else {
+              _messageType = .peerXfer16
+            }
+          }
+          else if message[1] == 0x14 {
+            if message[2] == 0x0f &&
+                message[3] == 0x08 &&
+                message[4] == 0x00 &&
+                message[5] == 0x00 &&
+                message[6] == 0x00 &&
+                message[7] == 0x00 &&
+                message[8] == 0x00 &&
+                message[9] == 0x00 &&
+                message[10] == 0x00 &&
+                message[11] == 0x01 &&
+                message[12] == 0x00 &&
+                message[13] == 0x00 &&
+                message[14] == 0x00 &&
+                message[15] == 0x00 &&
+                message[16] == 0x00 &&
+                message[17] == 0x00 &&
+                message[18] == 0x00 {
+              _messageType = .iplDiscover
+            }
+            else if message[2] == 0x0f &&
+                message[3] == 0x10 &&
+                (message[ 4] & 0b11110000) == 0x00 &&
+                (message[ 9] & 0b11110000) == 0x00 &&
+                (message[14] & 0b11110000) == 0x00 {
+              _messageType = .iplDevData
+            }
+          }
+          break
+        case NetworkMessageOpcode.OPC_LINK_SLOTS.rawValue:
+          if message[1] > 0 && message[1] < 0x78 &&
+              message[2] > 0 && message[2] < 0x78 {
+            _messageType = .linkSlotsP1
+          }
+          break
+        case NetworkMessageOpcode.OPC_D4_GROUP.rawValue:
+          if      (message[1] & 0b11100000) == 0b00000000 {
+            _messageType = .locoBinStateP2
+          }
+          else if (message[1] & 0b11111000) == 0b00100000 {
+            switch message[3] {
+            case 0x04:
+              _messageType = .locoSpdP2
+              break
+            case 0x05:
+              if (message[4] & 0b11111000) == 0x00 {
+                _messageType = .locoF12F20F28P2
+              }
+              break
+            case 0x06:
+              if (message[4] & 0b11000000) == 0x00 {
+                _messageType = .locoDirF0F4P2
+              }
+              break
+            case 0x07:
+              _messageType = .locoF5F11P2
+              break
+            case 0x08:
+              _messageType = .locoF13F19P2
+              break
+            case 0x09:
+              _messageType = .locoF21F27P2
+              break
+            default:
+              break
+            }
+          }
+          else if (message[1] & 0b11111000) == 0b00111000 {
+            let test = message[3] & 0b11111000
+            switch test {
+            case 0b00000000:
+              _messageType = .moveSlotsP2
+              break
+            case 0b01000000:
+              _messageType = .linkSlotsP2
+              break
+            case 0b01010000:
+              _messageType = .unlinkSlotsP2
+              break
+            default:
+              break
+            }
+          }
+          break
+        case NetworkMessageOpcode.OPC_D5_GROUP.rawValue:
+          if message[3] == 0x6d {
+            let test = message[1] & 0b11111000
+            switch test {
+            case 0b00000000:
+              _messageType = .locoSpdDirP2
+            case 0b00010000:
+              _messageType = .locoF0F6P2
+              break
+            case 0b00011000:
+              _messageType = .locoF7F13P2
+            case 0b00100000:
+              _messageType = .locoF14F20P2
+            case 0b00101000:
+              _messageType = .locoF21F28P2
+            case 0b00110000:
+              _messageType = .locoF21F28P2
+            default:
+              break
+            }
+          }
+          break
+        case NetworkMessageOpcode.OPC_LOCO_DIRF.rawValue:
+          if message[1] < 0x78 &&
+            (message[2] & 0b01000000) == 0x00 {
+            _messageType = .locoDirF0F4P1
+          }
+        case NetworkMessageOpcode.OPC_LOCO_SND.rawValue:
+          if message[1] < 0x78 &&
+              (message[2] & 0b11110000) == 0x00 {
+            _messageType = .locoF5F8P1
+          }
+          break
+        case NetworkMessageOpcode.OPC_LOCO_SPD.rawValue:
+          if message[1] < 0x78 {
+            _messageType = .locoSpdP1
+          }
+          break
+        case NetworkMessageOpcode.OPC_MOVE_SLOTS.rawValue:
+          if message[1] < 0x78 &&
+              message[2] < 0x78 {
+            _messageType = .moveSlotsP1
+          }
+          break
+        case NetworkMessageOpcode.OPC_LOCO_RESET.rawValue:
+          _messageType = .reset
+          break
+        case NetworkMessageOpcode.OPC_INPUT_REP.rawValue:
+          if (message[2] & 0b11000000) == 0b01000000 {
+            _messageType = .sensRepGenIn
+          }
+          break
+        case NetworkMessageOpcode.OPC_SW_REP.rawValue:
+          let test = message[2] & 0b11000000
+          if test == 0b01000000 {
+            _messageType = .sensRepTurnIn
+          }
+          else if test == 0b00000000 {
+            _messageType = .sensRepTurnOut
+          }
+          break
+        case NetworkMessageOpcode.OPC_SLOT_STAT1.rawValue:
+          if message[1] < 0x78 {
+            _messageType = .setLocoSlotStat1
+          }
+        case NetworkMessageOpcode.OPC_SW_ACK.rawValue:
+          if (message[2] & 0b11000000) == 0b00000000 {
+            _messageType = .setSwWithAck
+          }
+          break
+        case NetworkMessageOpcode.OPC_SW_REQ.rawValue:
+          if (message[2] & 0b11000000) == 0b00000000 {
+            _messageType = .swReq
+          }
+          break
+        case NetworkMessageOpcode.OPC_SW_STATE.rawValue:
+          if (message[2] & 0b11000000) == 0b00000000 {
+            _messageType = .swState
+          }
+          break
+        case NetworkMessageOpcode.OPC_UNLINK_SLOTS.rawValue:
+          if message[1] < 0x78 && message[2] < 0x78 {
+            _messageType = .unlinkSlotsP1
           }
           break
         default:

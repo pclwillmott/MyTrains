@@ -73,6 +73,8 @@ class MonitorVC: NSViewController, NetworkMessengerDelegate, NSWindowDelegate {
 
     chkAddByteNumber.state = NSControl.StateValue(UserDefaults.standard.integer(forKey: DEFAULT.MONITOR_ADD_BYTE_NUMBER))
  
+    chkAddLabels.state = NSControl.StateValue(UserDefaults.standard.integer(forKey: DEFAULT.MONITOR_ADD_LABELS))
+ 
     txtMessage1.stringValue = UserDefaults.standard.string(forKey: DEFAULT.MONITOR_MESSAGE1) ?? ""
     txtMessage2.stringValue = UserDefaults.standard.string(forKey: DEFAULT.MONITOR_MESSAGE2) ?? ""
     txtMessage3.stringValue = UserDefaults.standard.string(forKey: DEFAULT.MONITOR_MESSAGE3) ?? ""
@@ -99,6 +101,10 @@ class MonitorVC: NSViewController, NetworkMessengerDelegate, NSWindowDelegate {
     var byteNumber : Int = 0
     
     let timeNow = Date.timeIntervalSinceReferenceDate
+    
+    if addLabels {
+      item += "\(message.messageType)\n"
+    }
     
     switch timeStampType {
     case .millisecondsSinceLastMessage:
@@ -378,6 +384,18 @@ class MonitorVC: NSViewController, NetworkMessengerDelegate, NSWindowDelegate {
         "TextEdit",
         captureFilename
     ])
+  }
+  
+  @IBOutlet weak var chkAddLabels: NSButton!
+  
+  @IBAction func chkAddLabelsAction(_ sender: NSButton) {
+    UserDefaults.standard.set(chkAddLabels.state.rawValue, forKey: DEFAULT.MONITOR_ADD_LABELS)
+  }
+  
+  private var addLabels : Bool {
+    get {
+      return chkAddLabels.state == .on
+    }
   }
   
   @IBOutlet weak var chkCaptureActive: NSButton!

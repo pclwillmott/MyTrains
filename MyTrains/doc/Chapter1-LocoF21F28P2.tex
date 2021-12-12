@@ -1,9 +1,9 @@
 \newpage
-\subsection{LocoF21F27P2Alt}
+\subsection{LocoF21F28P2}
 
 \underline{Description:}
 
-This command sets the locomotive's function F21 to F27 states.
+This command sets the locomotive's function F21 to F28 states.
 
 \underline{Protocol:}
 
@@ -15,7 +15,7 @@ This command sets the locomotive's function F21 to F27 states.
 
 \underline{Opcode:}
 
-OPC\_D4\_GROUP
+OPC\_D5\_GROUP
 
 \underline{Type:}
 
@@ -29,10 +29,10 @@ Byte 0:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 1 & 0 & 1 & 0 & 1 & 0 & 0\\
+1 & 1 & 0 & 1 & 0 & 1 & 0 & 1\\
 \hline
 \end{tabular}
-& 0xD4 & Opcode.\\
+& 0xD5 & Opcode.\\
 \end{tabular}
 
 Byte 1:
@@ -41,10 +41,10 @@ Byte 1:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 0 & 1 & 0 & 0 & d2 & d1 & d0\\
+0 & 0 & 1 & d4 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-& $<$SLOTP$>$ & Bits d2 to d0 contain the slot page number in the range 0x0 to 0x7.\\
+& $<$SLOTP$>$ & Bits d2 to d0 contain the slot page number in the range 0x0 to 0x7. d4 and d3 encode the F28 state where 0b10 means on and 0b01 means off.\\
 \end{tabular}
 
 Byte 2:
@@ -56,7 +56,7 @@ Byte 2:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$SLOT\#$>$ & Slot number.\\
+& $<$SLOT\#$>$ & Slot number in the range 0x00 to 0x77.\\
 \end{tabular}
 
 Byte 3:
@@ -65,10 +65,10 @@ Byte 3:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 0 & 0 & 0 & 0 & 1 & 0 & 1\\
+0 & 1 & 1 & 0 & 1 & 1 & 0 & 1\\
 \hline
 \end{tabular}
-& 0x09 & Subcode.\\
+& 0x6D & Subcode.\\
 \end{tabular}
 
 Byte 4:
@@ -113,26 +113,38 @@ None.
 
 Byte 0:
 
-\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
-
-\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
-\hline
-1 & 1 & 0 & 1 & 0 & 1 & 0 & 0\\
-\hline
-\end{tabular}
-& 0xD4\\
-\end{tabular}
-
-Byte 1:
-
 \begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 0 & 1 & 0 & 0 & $\times$ & $\times$ & $\times$\\
+1 & 1 & 0 & 1 & 0 & 1 & 0 & 1\\
 \hline
 \end{tabular}
-& \\
+& 0xD5 \\
+\end{tabular}
+
+Byte 1:
+
+\begin{tabular}{p{0.4\linewidth}  p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 1 & d4 & d3 & $\times$ & $\times$ & $\times$\\
+\hline
+\end{tabular}
+& d4 and d3 can be 0b10 or 0b01\\ 
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& less than 0x78\\
 \end{tabular}
 
 Byte 3:
@@ -141,10 +153,10 @@ Byte 3:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 0 & 0 & 0 & 1 & 0 & 0 & 1\\
+0 & 1 & 1 & 0 & 1 & 1 & 0 & 1\\
 \hline
 \end{tabular}
-& 0x09\\
+& 0x6D \\
 \end{tabular}
 
 \underline{Notes:} 

@@ -1,9 +1,9 @@
 \newpage
-\subsection{LocoF21F27P2Alt}
+\subsection{UnlinkSlotsP2}
 
 \underline{Description:}
 
-This command sets the locomotive's function F21 to F27 states.
+This command unlinks slot SL1 from a consist. The command station sets SL\_CONUP/DN flags appropriately. If the command was successful then a \textbf{LocoSlotDataP2} response will be returned. An invalid link will return a \textbf{Ack} with a response code of 0x00.
 
 \underline{Protocol:}
 
@@ -41,10 +41,10 @@ Byte 1:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 0 & 1 & 0 & 0 & d2 & d1 & d0\\
+0 & 0 & 1 & 1 & 1 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-& $<$SLOTP$>$ & Bits d2 to d0 contain the slot page number in the range 0x0 to 0x7.\\
+& $<$SL1P$>$ & Bits d2 to d0 contain the SL1 slot page number in the range 0x0 to 0x7.\\
 \end{tabular}
 
 Byte 2:
@@ -56,7 +56,7 @@ Byte 2:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$SLOT\#$>$ & Slot number.\\
+& $<$SL1\#$>$ & Slot number SL1 in the range 0x00 to 0x77.\\
 \end{tabular}
 
 Byte 3:
@@ -65,10 +65,10 @@ Byte 3:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 0 & 0 & 0 & 0 & 1 & 0 & 1\\
+0 & 1 & 0 & 1 & 0 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-& 0x09 & Subcode.\\
+& $<$SL1P$>$ & Bits d2 to d0 contain the SL1 slot page number in the range 0x0 to 0x7. This is the same value as byte 1.\\
 \end{tabular}
 
 Byte 4:
@@ -77,20 +77,10 @@ Byte 4:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
+0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-&  & Function states.\\
-\end{tabular}
-
-\begin{tabular}{p{0.05\linewidth} p{0.95\linewidth}} 
-d6 & F27 state: 1 means on and 0 means off.\\
-d5 & F26 state: 1 means on and 0 means off.\\
-d4 & F25 state: 1 means on and 0 means off.\\
-d3 & F24 state: 1 means on and 0 means off.\\
-d2 & F23 state: 1 means on and 0 means off.\\
-d1 & F22 state: 1 means on and 0 means off.\\
-d0 & F21 state: 1 means on and 0 means off.\\
+& $<$SL1\#$>$ & Slot number SL1 in the range 0x00 to 0x77. This is the same value as byte 2.\\
 \end{tabular}
 
 Byte 5:
@@ -107,20 +97,20 @@ Byte 5:
 
 \underline{Response:} 
 
-None.
+\textbf{LocoSlotDataP2} or \textbf{Ack}.
 
 \underline{Signature:}
 
 Byte 0:
 
-\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
 1 & 1 & 0 & 1 & 0 & 1 & 0 & 0\\
 \hline
 \end{tabular}
-& 0xD4\\
+& 0xD4 & \\
 \end{tabular}
 
 Byte 1:
@@ -129,10 +119,22 @@ Byte 1:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 0 & 1 & 0 & 0 & $\times$ & $\times$ & $\times$\\
+0 & 0 & 1 & 1 & 1 & $\times$ & $\times$ & $\times$\\
 \hline
 \end{tabular}
 & \\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& less than 0x78\\
 \end{tabular}
 
 Byte 3:
@@ -141,10 +143,22 @@ Byte 3:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 0 & 0 & 0 & 1 & 0 & 0 & 1\\
+0 & 1 & 0 & 1 & 0 & $\times$ & $\times$ & $\times$\\
 \hline
 \end{tabular}
-& 0x09\\
+& \\ 
+\end{tabular}
+
+Byte 4:
+
+\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & n & n & n & n & n & n & n\\
+\hline
+\end{tabular}
+& less than 0x78\\
 \end{tabular}
 
 \underline{Notes:} 

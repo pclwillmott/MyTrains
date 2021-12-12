@@ -17,6 +17,7 @@ enum DEFAULT {
   static let MONITOR_DATA_TYPE        = "MonitorDataType"
   static let MONITOR_NUMBER_BASE      = "MonitorNumberBase"
   static let MONITOR_ADD_BYTE_NUMBER  = "MonitorAddByteNumber"
+  static let MONITOR_ADD_LABELS       = "MonitorAddLabels"
   static let MONITOR_MESSAGE1         = "MonitorMessage1"
   static let MONITOR_MESSAGE2         = "MonitorMessage2"
   static let MONITOR_MESSAGE3         = "MonitorMessage3"
