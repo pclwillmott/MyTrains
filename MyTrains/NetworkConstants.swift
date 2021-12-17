@@ -69,12 +69,12 @@ public enum NetworkMessageType {
   case getLocoSlotDataP1
   case getLocoSlotDataP2
   case immPacket
-  case iplAddress
-  case iplData
+  case iplSetAddr
+  case iplDataLoad
   case iplDevData
   case iplDiscover
-  case iplEndOperation
-  case iplSetup
+  case iplEndLoad
+  case iplSetupBL2
   case interfaceData
   case linkSlotsP1
   case linkSlotsP2

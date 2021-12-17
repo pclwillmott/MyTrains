@@ -1,11 +1,11 @@
 \newpage
-\subsection{InterfaceData}
+\subsection{IPLDataLoad}
 
 \rule{15.1cm}{0.4pt}
 
 \underline{Description:}
 
-This is sent by an interface device in response to a \textbf{getInterfaceData} command.
+This command loads firmware data into a device that supports IPL. D1 is the lowest addressed byte and D8 is the highest addressed byte.
 
 \underline{Group:}
 
@@ -17,11 +17,7 @@ OPC\_PEER\_XFER
 
 \underline{Type:}
 
-Response
-
-\underline{Applicable Hardware}:
-
-Digitrax PR4 and DCS240.
+Command
 
 \underline{Encoding:} 
 
@@ -55,10 +51,10 @@ Byte 2:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 0 & 1 & 0 & 0 & 0 & 1 & 0\\
+0 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
 \hline
 \end{tabular}
-& 0x22 & \\
+& 0x7F & Broadcast id.\\
 \end{tabular}
 
 Byte 3:
@@ -67,10 +63,10 @@ Byte 3:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 0 & 1 & 0 & 0 & 0 & 1 & 0\\
+0 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
 \hline
 \end{tabular}
-& 0x22 & \\
+& 0x7F & Broadcast id.\\
 \end{tabular}
 
 Byte 4:
@@ -79,10 +75,10 @@ Byte 4:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 1\\
+0 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
 \hline
 \end{tabular}
-& 0x01 & \\
+& 0x7F & Broadcast id.\\
 \end{tabular}
 
 Byte 5:
@@ -91,10 +87,17 @@ Byte 5:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+0 & 1 & 0 & 0 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-& 0x00 & \\
+& $<$PXCT1$>$ & Download code 0x40 and high bits of D1 to D4.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d3 & D4.7. High bit\\
+d2 & D3.7. High bit\\
+d1 & D2.7. High bit\\
+d0 & D1.7. High bit\\
 \end{tabular}
 
 Byte 6:
@@ -106,7 +109,7 @@ Byte 6:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$D1$>$ & Serial Number low byte low 7 bits.\\
+& $<$D1$>$ & Data Byte 1. Low 7 bits.\\
 \end{tabular}
 
 Byte 7:
@@ -118,7 +121,7 @@ Byte 7:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$D2$>$ & Serial Number high byte low 7 bits.\\
+& $<$D2$>$ & Data Byte 2. Low 7 bits.\\
 \end{tabular}
 
 Byte 8:
@@ -130,7 +133,7 @@ Byte 8:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$D3$>$ & It contains a value but the meaning is unknown.\\
+& $<$D3$>$ & Data Byte 3. Low 7 bits.\\
 \end{tabular}
 
 Byte 9:
@@ -142,7 +145,7 @@ Byte 9:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$D4$>$ & Unknown - set to zero for PR4 and DCS240.\\
+& $<$D4$>$ & Data Byte 4. Low 7 bits.\\
 \end{tabular}
 
 Byte 10:
@@ -151,10 +154,17 @@ Byte 10:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & n & n & n & n & n & n & n\\
+0 & 0 & 1 & 0 & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$PXCT2$>$ & Unknown - set to zero for PR4 and DCS240.\\
+& $<$PXCT2$>$ & Data type code 0x20 and high bits for D5 to D8.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+d3 & D8.7. High bit\\
+d2 & D7.7. High bit\\
+d1 & D6.7. High bit\\
+d0 & D5.7. High bit\\
 \end{tabular}
 
 Byte 11:
@@ -166,7 +176,7 @@ Byte 11:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$D5$>$ & Maybe hardware version.\\
+& $<$D5$>$ & Data Byte 5. Low 7 bits.\\
 \end{tabular}
 
 Byte 12:
@@ -178,7 +188,7 @@ Byte 12:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$D6$>$ & Software version.\\
+& $<$D6$>$ & Data Byte 6. Low 7 bits.\\
 \end{tabular}
 
 Byte 13:
@@ -190,7 +200,7 @@ Byte 13:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$D7$>$ & Maybe hardware version.\\
+& $<$D7$>$ & Data Byte 7. Low 7 bits.\\
 \end{tabular}
 
 Byte 14:
@@ -202,12 +212,12 @@ Byte 14:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$D8$>$ & Product code.\\
+& $<$D8$>$ & Data Byte 8. Low 7 bits.\\
 \end{tabular}
 
 Byte 15:
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.5\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -225,7 +235,7 @@ None
 
 Byte 0:
 
-\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -237,7 +247,7 @@ Byte 0:
 
 Byte 1:
 
-\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -249,123 +259,68 @@ Byte 1:
 
 Byte 2:
 
-\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 0 & 1 & 0 & 0 & 0 & 1 & 0\\
+0 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
 \hline
 \end{tabular}
-& 0x22 \\
+& 0x7F \\
 \end{tabular}
 
 Byte 3:
 
-\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 0 & 1 & 0 & 0 & 0 & 1 & 0\\
+0 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
 \hline
 \end{tabular}
-& 0x22 \\
+& 0x7F \\
 \end{tabular}
 
 Byte 4:
 
-\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 1\\
+0 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
 \hline
 \end{tabular}
-& 0x01 \\
+& 0x7F \\
 \end{tabular}
 
 Byte 5:
 
-\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+0 & 1 & 0 & 0 & $\times$ & $\times$ & $\times$ & $\times$\\
 \hline
 \end{tabular}
-& 0x00\\
+& \\
 \end{tabular}
 
 Byte 10:
 
-\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+0 & 0 & 1 & 0 & $\times$ & $\times$ & $\times$ & $\times$\\
 \hline
 \end{tabular}
-& 0x00\\
+& \\
 \end{tabular}
 
 \underline{Notes:} 
-\begin{verbatim}
-PR4 #1
 
-<D0> 0xe5 OPCODE
-<D1> 0x10 LENGTH
-<D2> 0x22 SRC
-<D3> 0x22 DSTL
-<D4> 0x01 DSTH
-<D5> 0x00 PXCT1 <- I would have expected b4 = 1
-<D6> 0x08 Serial Number Low Byte
-<D7> 0x07 Serial Number High Byte - Actual serial number 0x0788
-<D8> 0x16 
-<D9> 0x00 
-<D10> 0x00 PXCT2
-<D11> 0x00 
-<D12> 0x00 
-<D13> 0x00 
-<D14> 0x24 Product Code for PR4
-<D15> 0x36  CHSUM
-
-PR4 #2
-
-<D0> 0xe5 OPCODE OPC_PEER_XFER
-<D1> 0x10 LENGTH
-<D2> 0x22 SRC
-<D3> 0x22 DSTL
-<D4> 0x01 DSTH
-<D5> 0x00 PXCT1 
-<D6> 0x57 Serial Number Low Byte
-<D7> 0x13 Serial Number High Byte - Actual serial number 0x1357
-<D8> 0x16 
-<D9> 0x00 
-<D10> 0x00 PXCT2
-<D11> 0x00 
-<D12> 0x00 
-<D13> 0x00 
-<D14> 0x24 Product Code for PR4
-<D15> 0x7d CHKSUM
-
-DCS240
-
-<D0> 0xe5 OPCODE
-<D1> 0x10 Length
-<D2> 0x22 SRC
-<D3> 0x22 DSTL
-<D4> 0x01 DSTH
-<D5> 0x00 PXCT1 <- I would have expected b4 to be 1
-<D6> 0x2b Serial Number Low Byte
-<D7> 0x0a  Serial Number High Byte - Actual serial number 0x0aab
-<D8> 0x14 
-<D9> 0x00 
-<D10> 0x00 PXCT2
-<D11> 0x01 Hardware Version?
-<D12> 0x03 Software Version
-<D13> 0x01 Hardware Version?
-<D14> 0x1c Product Code for DCS240
-<D15> 0x21
-
-\end{verbatim}
+None.
 
 \rule{15.1cm}{0.4pt}
+
+

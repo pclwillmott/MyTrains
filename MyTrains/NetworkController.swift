@@ -6,20 +6,29 @@
 //
 
 import Foundation
+import ORSSerial
 
 public class NetworkController {
   
   init() {
   
-    let connections = [ //"/dev/cu.usbmodemDxP431751"
-                      "/dev/cu.usbmodemDxP470881"
+    var connections : [String] = []
+
+    let availablePorts = ORSSerialPortManager.shared().availablePorts
+    for port in availablePorts {
+      connections.append(port.path)
+    }
+
+//    let connections = [ //"/dev/cu.usbmodemDxP431751"
+//                      "/dev/cu.usbmodemDxP470881"
                      //  "/dev/cu.usbmodemDtrxA0BA1"
-    ]
+//    ]
     
     var index : Int = 1
     
     for connection in connections {
       let networkMessenger = NetworkMessenger(id: "id\(index)", path: connection)
+      print(networkMessenger.productCode)
       networkMessengers[networkMessenger.id] = networkMessenger
       index += 1
     }

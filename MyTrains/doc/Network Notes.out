@@ -19,58 +19,58 @@
 \BOOKMARK [2][-]{subsection.1.5.13}{GetLocoSlotDataSAdrP2}{section.1.5}% 19
 \BOOKMARK [2][-]{subsection.1.5.14}{IMMPacket}{section.1.5}% 20
 \BOOKMARK [2][-]{subsection.1.5.15}{InterfaceData}{section.1.5}% 21
-\BOOKMARK [2][-]{subsection.1.5.16}{IPLDevData}{section.1.5}% 22
-\BOOKMARK [2][-]{subsection.1.5.17}{IPLDiscover}{section.1.5}% 23
-\BOOKMARK [2][-]{subsection.1.5.18}{LinkSlotsP1}{section.1.5}% 24
-\BOOKMARK [2][-]{subsection.1.5.19}{LinkSlotsP2}{section.1.5}% 25
-\BOOKMARK [2][-]{subsection.1.5.20}{LocoBinStateP2}{section.1.5}% 26
-\BOOKMARK [2][-]{subsection.1.5.21}{LocoDirF0F4P1}{section.1.5}% 27
-\BOOKMARK [2][-]{subsection.1.5.22}{LocoDirF0F4P2}{section.1.5}% 28
-\BOOKMARK [2][-]{subsection.1.5.23}{LocoF0F6P2}{section.1.5}% 29
-\BOOKMARK [2][-]{subsection.1.5.24}{LocoF5F8P1}{section.1.5}% 30
-\BOOKMARK [2][-]{subsection.1.5.25}{LocoF7F13P2}{section.1.5}% 31
-\BOOKMARK [2][-]{subsection.1.5.26}{LocoF5F11P2}{section.1.5}% 32
-\BOOKMARK [2][-]{subsection.1.5.27}{LocoF12F20F28P2}{section.1.5}% 33
-\BOOKMARK [2][-]{subsection.1.5.28}{LocoF13F19P2}{section.1.5}% 34
-\BOOKMARK [2][-]{subsection.1.5.29}{LocoF14F20P2}{section.1.5}% 35
-\BOOKMARK [2][-]{subsection.1.5.30}{LocoF21F27P2}{section.1.5}% 36
-\BOOKMARK [2][-]{subsection.1.5.31}{LocoF21F27P2Alt}{section.1.5}% 37
-\BOOKMARK [2][-]{subsection.1.5.32}{LocoSlotDataP1}{section.1.5}% 38
-\BOOKMARK [2][-]{subsection.1.5.33}{LocoSlotDataP2}{section.1.5}% 39
-\BOOKMARK [2][-]{subsection.1.5.34}{LocoSpdP1}{section.1.5}% 40
-\BOOKMARK [2][-]{subsection.1.5.35}{LocoSpdP2}{section.1.5}% 41
-\BOOKMARK [2][-]{subsection.1.5.36}{LocoSpdDirP2}{section.1.5}% 42
-\BOOKMARK [2][-]{subsection.1.5.37}{MoveSlotsP1}{section.1.5}% 43
-\BOOKMARK [2][-]{subsection.1.5.38}{MoveSlotsP2}{section.1.5}% 44
-\BOOKMARK [2][-]{subsection.1.5.39}{PeerXfer16}{section.1.5}% 45
-\BOOKMARK [2][-]{subsection.1.5.40}{PwrOff}{section.1.5}% 46
-\BOOKMARK [2][-]{subsection.1.5.41}{PwrOn}{section.1.5}% 47
-\BOOKMARK [2][-]{subsection.1.5.42}{Reset}{section.1.5}% 48
-\BOOKMARK [2][-]{subsection.1.5.43}{SensRepGenIn}{section.1.5}% 49
-\BOOKMARK [2][-]{subsection.1.5.44}{SensRepTurnIn}{section.1.5}% 50
-\BOOKMARK [2][-]{subsection.1.5.45}{SensRepTurnOut}{section.1.5}% 51
-\BOOKMARK [2][-]{subsection.1.5.46}{SetBrdOpSw}{section.1.5}% 52
-\BOOKMARK [2][-]{subsection.1.5.47}{SetIdleState}{section.1.5}% 53
-\BOOKMARK [2][-]{subsection.1.5.48}{SetLocoSlotDataP1}{section.1.5}% 54
-\BOOKMARK [2][-]{subsection.1.5.49}{SetLocoSlotDataP2}{section.1.5}% 55
-\BOOKMARK [2][-]{subsection.1.5.50}{SetLocoSlotStat1}{section.1.5}% 56
-\BOOKMARK [2][-]{subsection.1.5.51}{SetSwWithAck}{section.1.5}% 57
-\BOOKMARK [2][-]{subsection.1.5.52}{OPC\137SV\137PROG}{section.1.5}% 58
-\BOOKMARK [2][-]{subsection.1.5.53}{SwReq}{section.1.5}% 59
-\BOOKMARK [2][-]{subsection.1.5.54}{SwState}{section.1.5}% 60
-\BOOKMARK [2][-]{subsection.1.5.55}{TransRep}{section.1.5}% 61
-\BOOKMARK [2][-]{subsection.1.5.56}{UnlinkSlotsP1}{section.1.5}% 62
-\BOOKMARK [2][-]{subsection.1.5.57}{UnlinkSlotsP2}{section.1.5}% 63
-\BOOKMARK [0][-]{chapter.2}{Fast Clock}{}% 64
-\BOOKMARK [1][-]{section.2.1}{Summary}{chapter.2}% 65
-\BOOKMARK [1][-]{section.2.2}{Slot \043123 Encoding}{chapter.2}% 66
-\BOOKMARK [0][-]{chapter.3}{Updating Firmware}{}% 67
-\BOOKMARK [1][-]{section.3.1}{Bootloader Protocol 1}{chapter.3}% 68
-\BOOKMARK [1][-]{section.3.2}{Bootloader Protocol 2}{chapter.3}% 69
-\BOOKMARK [2][-]{subsection.3.2.1}{IPL Setup}{section.3.2}% 70
-\BOOKMARK [2][-]{subsection.3.2.2}{IPL Address Message}{section.3.2}% 71
-\BOOKMARK [2][-]{subsection.3.2.3}{IPL Data Message}{section.3.2}% 72
-\BOOKMARK [2][-]{subsection.3.2.4}{IPL End Operation Message}{section.3.2}% 73
+\BOOKMARK [2][-]{subsection.1.5.16}{IPLDataLoad}{section.1.5}% 22
+\BOOKMARK [2][-]{subsection.1.5.17}{IPLDevData}{section.1.5}% 23
+\BOOKMARK [2][-]{subsection.1.5.18}{IPLDiscover}{section.1.5}% 24
+\BOOKMARK [2][-]{subsection.1.5.19}{IPLEndLoad}{section.1.5}% 25
+\BOOKMARK [2][-]{subsection.1.5.20}{IPLSetAddr}{section.1.5}% 26
+\BOOKMARK [2][-]{subsection.1.5.21}{IPLSetupBL2}{section.1.5}% 27
+\BOOKMARK [2][-]{subsection.1.5.22}{LinkSlotsP1}{section.1.5}% 28
+\BOOKMARK [2][-]{subsection.1.5.23}{LinkSlotsP2}{section.1.5}% 29
+\BOOKMARK [2][-]{subsection.1.5.24}{LocoBinStateP2}{section.1.5}% 30
+\BOOKMARK [2][-]{subsection.1.5.25}{LocoDirF0F4P1}{section.1.5}% 31
+\BOOKMARK [2][-]{subsection.1.5.26}{LocoDirF0F4P2}{section.1.5}% 32
+\BOOKMARK [2][-]{subsection.1.5.27}{LocoF0F6P2}{section.1.5}% 33
+\BOOKMARK [2][-]{subsection.1.5.28}{LocoF5F8P1}{section.1.5}% 34
+\BOOKMARK [2][-]{subsection.1.5.29}{LocoF7F13P2}{section.1.5}% 35
+\BOOKMARK [2][-]{subsection.1.5.30}{LocoF5F11P2}{section.1.5}% 36
+\BOOKMARK [2][-]{subsection.1.5.31}{LocoF12F20F28P2}{section.1.5}% 37
+\BOOKMARK [2][-]{subsection.1.5.32}{LocoF13F19P2}{section.1.5}% 38
+\BOOKMARK [2][-]{subsection.1.5.33}{LocoF14F20P2}{section.1.5}% 39
+\BOOKMARK [2][-]{subsection.1.5.34}{LocoF21F27P2}{section.1.5}% 40
+\BOOKMARK [2][-]{subsection.1.5.35}{LocoF21F28P2}{section.1.5}% 41
+\BOOKMARK [2][-]{subsection.1.5.36}{LocoSlotDataP1}{section.1.5}% 42
+\BOOKMARK [2][-]{subsection.1.5.37}{LocoSlotDataP2}{section.1.5}% 43
+\BOOKMARK [2][-]{subsection.1.5.38}{LocoSpdP1}{section.1.5}% 44
+\BOOKMARK [2][-]{subsection.1.5.39}{LocoSpdP2}{section.1.5}% 45
+\BOOKMARK [2][-]{subsection.1.5.40}{LocoSpdDirP2}{section.1.5}% 46
+\BOOKMARK [2][-]{subsection.1.5.41}{MoveSlotsP1}{section.1.5}% 47
+\BOOKMARK [2][-]{subsection.1.5.42}{MoveSlotsP2}{section.1.5}% 48
+\BOOKMARK [2][-]{subsection.1.5.43}{PeerXfer16}{section.1.5}% 49
+\BOOKMARK [2][-]{subsection.1.5.44}{PwrOff}{section.1.5}% 50
+\BOOKMARK [2][-]{subsection.1.5.45}{PwrOn}{section.1.5}% 51
+\BOOKMARK [2][-]{subsection.1.5.46}{Reset}{section.1.5}% 52
+\BOOKMARK [2][-]{subsection.1.5.47}{SensRepGenIn}{section.1.5}% 53
+\BOOKMARK [2][-]{subsection.1.5.48}{SensRepTurnIn}{section.1.5}% 54
+\BOOKMARK [2][-]{subsection.1.5.49}{SensRepTurnOut}{section.1.5}% 55
+\BOOKMARK [2][-]{subsection.1.5.50}{SetBrdOpSw}{section.1.5}% 56
+\BOOKMARK [2][-]{subsection.1.5.51}{SetIdleState}{section.1.5}% 57
+\BOOKMARK [2][-]{subsection.1.5.52}{SetLocoSlotDataP1}{section.1.5}% 58
+\BOOKMARK [2][-]{subsection.1.5.53}{SetLocoSlotDataP2}{section.1.5}% 59
+\BOOKMARK [2][-]{subsection.1.5.54}{SetLocoSlotStat1}{section.1.5}% 60
+\BOOKMARK [2][-]{subsection.1.5.55}{SetSwWithAck}{section.1.5}% 61
+\BOOKMARK [2][-]{subsection.1.5.56}{OPC\137SV\137PROG}{section.1.5}% 62
+\BOOKMARK [2][-]{subsection.1.5.57}{SwReq}{section.1.5}% 63
+\BOOKMARK [2][-]{subsection.1.5.58}{SwState}{section.1.5}% 64
+\BOOKMARK [2][-]{subsection.1.5.59}{TransRep}{section.1.5}% 65
+\BOOKMARK [2][-]{subsection.1.5.60}{UnlinkSlotsP1}{section.1.5}% 66
+\BOOKMARK [2][-]{subsection.1.5.61}{UnlinkSlotsP2}{section.1.5}% 67
+\BOOKMARK [0][-]{chapter.2}{Fast Clock}{}% 68
+\BOOKMARK [1][-]{section.2.1}{Summary}{chapter.2}% 69
+\BOOKMARK [1][-]{section.2.2}{Slot \043123 Encoding}{chapter.2}% 70
+\BOOKMARK [0][-]{chapter.3}{Updating Firmware}{}% 71
+\BOOKMARK [1][-]{section.3.1}{Bootloader Protocol 1}{chapter.3}% 72
+\BOOKMARK [1][-]{section.3.2}{Bootloader Protocol 2}{chapter.3}% 73
 \BOOKMARK [1][-]{section.3.3}{Firmware Parameters}{chapter.3}% 74
 \BOOKMARK [1][-]{section.3.4}{DMF File Format}{chapter.3}% 75
 \BOOKMARK [2][-]{subsection.3.4.1}{Sync Records}{section.3.4}% 76

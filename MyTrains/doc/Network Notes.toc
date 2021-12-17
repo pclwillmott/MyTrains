@@ -19,62 +19,62 @@
 \contentsline {subsection}{\numberline {1.5.13}GetLocoSlotDataSAdrP2}{32}{subsection.1.5.13}
 \contentsline {subsection}{\numberline {1.5.14}IMMPacket}{34}{subsection.1.5.14}
 \contentsline {subsection}{\numberline {1.5.15}InterfaceData}{37}{subsection.1.5.15}
-\contentsline {subsection}{\numberline {1.5.16}IPLDevData}{41}{subsection.1.5.16}
-\contentsline {subsection}{\numberline {1.5.17}IPLDiscover}{45}{subsection.1.5.17}
-\contentsline {subsection}{\numberline {1.5.18}LinkSlotsP1}{49}{subsection.1.5.18}
-\contentsline {subsection}{\numberline {1.5.19}LinkSlotsP2}{51}{subsection.1.5.19}
-\contentsline {subsection}{\numberline {1.5.20}LocoBinStateP2}{53}{subsection.1.5.20}
-\contentsline {subsection}{\numberline {1.5.21}LocoDirF0F4P1}{55}{subsection.1.5.21}
-\contentsline {subsection}{\numberline {1.5.22}LocoDirF0F4P2}{57}{subsection.1.5.22}
-\contentsline {subsection}{\numberline {1.5.23}LocoF0F6P2}{59}{subsection.1.5.23}
-\contentsline {subsection}{\numberline {1.5.24}LocoF5F8P1}{61}{subsection.1.5.24}
-\contentsline {subsection}{\numberline {1.5.25}LocoF7F13P2}{63}{subsection.1.5.25}
-\contentsline {subsection}{\numberline {1.5.26}LocoF5F11P2}{65}{subsection.1.5.26}
-\contentsline {subsection}{\numberline {1.5.27}LocoF12F20F28P2}{67}{subsection.1.5.27}
-\contentsline {subsection}{\numberline {1.5.28}LocoF13F19P2}{69}{subsection.1.5.28}
-\contentsline {subsection}{\numberline {1.5.29}LocoF14F20P2}{71}{subsection.1.5.29}
-\contentsline {subsection}{\numberline {1.5.30}LocoF21F27P2}{73}{subsection.1.5.30}
-\contentsline {subsection}{\numberline {1.5.31}LocoF21F27P2Alt}{75}{subsection.1.5.31}
-\contentsline {subsection}{\numberline {1.5.32}LocoSlotDataP1}{77}{subsection.1.5.32}
-\contentsline {subsection}{\numberline {1.5.33}LocoSlotDataP2}{81}{subsection.1.5.33}
-\contentsline {subsection}{\numberline {1.5.34}LocoSpdP1}{87}{subsection.1.5.34}
-\contentsline {subsection}{\numberline {1.5.35}LocoSpdP2}{89}{subsection.1.5.35}
-\contentsline {subsection}{\numberline {1.5.36}LocoSpdDirP2}{91}{subsection.1.5.36}
-\contentsline {subsection}{\numberline {1.5.37}MoveSlotsP1}{93}{subsection.1.5.37}
-\contentsline {subsection}{\numberline {1.5.38}MoveSlotsP2}{95}{subsection.1.5.38}
-\contentsline {subsection}{\numberline {1.5.39}PeerXfer16}{97}{subsection.1.5.39}
-\contentsline {subsection}{\numberline {1.5.40}PwrOff}{101}{subsection.1.5.40}
-\contentsline {subsection}{\numberline {1.5.41}PwrOn}{102}{subsection.1.5.41}
-\contentsline {subsection}{\numberline {1.5.42}Reset}{104}{subsection.1.5.42}
-\contentsline {subsection}{\numberline {1.5.43}SensRepGenIn}{105}{subsection.1.5.43}
-\contentsline {subsection}{\numberline {1.5.44}SensRepTurnIn}{107}{subsection.1.5.44}
-\contentsline {subsection}{\numberline {1.5.45}SensRepTurnOut}{109}{subsection.1.5.45}
-\contentsline {subsection}{\numberline {1.5.46}SetBrdOpSw}{111}{subsection.1.5.46}
-\contentsline {subsection}{\numberline {1.5.47}SetIdleState}{113}{subsection.1.5.47}
-\contentsline {subsection}{\numberline {1.5.48}SetLocoSlotDataP1}{114}{subsection.1.5.48}
-\contentsline {subsection}{\numberline {1.5.49}SetLocoSlotDataP2}{118}{subsection.1.5.49}
-\contentsline {subsection}{\numberline {1.5.50}SetLocoSlotStat1}{124}{subsection.1.5.50}
-\contentsline {subsection}{\numberline {1.5.51}SetSwWithAck}{126}{subsection.1.5.51}
-\contentsline {subsection}{\numberline {1.5.52}OPC\_SV\_PROG}{128}{subsection.1.5.52}
-\contentsline {subsection}{\numberline {1.5.53}SwReq}{133}{subsection.1.5.53}
-\contentsline {subsection}{\numberline {1.5.54}SwState}{135}{subsection.1.5.54}
-\contentsline {subsection}{\numberline {1.5.55}TransRep}{137}{subsection.1.5.55}
-\contentsline {subsection}{\numberline {1.5.56}UnlinkSlotsP1}{139}{subsection.1.5.56}
-\contentsline {subsection}{\numberline {1.5.57}UnlinkSlotsP2}{141}{subsection.1.5.57}
-\contentsline {chapter}{\numberline {2}Fast Clock}{143}{chapter.2}
-\contentsline {section}{\numberline {2.1}Summary}{143}{section.2.1}
-\contentsline {section}{\numberline {2.2}Slot \#123 Encoding}{143}{section.2.2}
-\contentsline {chapter}{\numberline {3}Updating Firmware}{147}{chapter.3}
-\contentsline {section}{\numberline {3.1}Bootloader Protocol 1}{147}{section.3.1}
-\contentsline {section}{\numberline {3.2}Bootloader Protocol 2}{147}{section.3.2}
-\contentsline {subsection}{\numberline {3.2.1}IPL Setup}{147}{subsection.3.2.1}
-\contentsline {subsection}{\numberline {3.2.2}IPL Address Message}{149}{subsection.3.2.2}
-\contentsline {subsection}{\numberline {3.2.3}IPL Data Message}{150}{subsection.3.2.3}
-\contentsline {subsection}{\numberline {3.2.4}IPL End Operation Message}{152}{subsection.3.2.4}
-\contentsline {section}{\numberline {3.3}Firmware Parameters}{154}{section.3.3}
-\contentsline {section}{\numberline {3.4}DMF File Format}{155}{section.3.4}
-\contentsline {subsection}{\numberline {3.4.1}Sync Records}{155}{subsection.3.4.1}
-\contentsline {subsection}{\numberline {3.4.2}Parameter Records}{155}{subsection.3.4.2}
-\contentsline {subsection}{\numberline {3.4.3}Data Records}{157}{subsection.3.4.3}
-\contentsline {subsection}{\numberline {3.4.4}End of File Record}{158}{subsection.3.4.4}
-\contentsline {chapter}{\numberline {A}Reference Tables}{161}{appendix.A}
+\contentsline {subsection}{\numberline {1.5.16}IPLDataLoad}{41}{subsection.1.5.16}
+\contentsline {subsection}{\numberline {1.5.17}IPLDevData}{44}{subsection.1.5.17}
+\contentsline {subsection}{\numberline {1.5.18}IPLDiscover}{48}{subsection.1.5.18}
+\contentsline {subsection}{\numberline {1.5.19}IPLEndLoad}{52}{subsection.1.5.19}
+\contentsline {subsection}{\numberline {1.5.20}IPLSetAddr}{55}{subsection.1.5.20}
+\contentsline {subsection}{\numberline {1.5.21}IPLSetupBL2}{58}{subsection.1.5.21}
+\contentsline {subsection}{\numberline {1.5.22}LinkSlotsP1}{61}{subsection.1.5.22}
+\contentsline {subsection}{\numberline {1.5.23}LinkSlotsP2}{63}{subsection.1.5.23}
+\contentsline {subsection}{\numberline {1.5.24}LocoBinStateP2}{65}{subsection.1.5.24}
+\contentsline {subsection}{\numberline {1.5.25}LocoDirF0F4P1}{67}{subsection.1.5.25}
+\contentsline {subsection}{\numberline {1.5.26}LocoDirF0F4P2}{69}{subsection.1.5.26}
+\contentsline {subsection}{\numberline {1.5.27}LocoF0F6P2}{71}{subsection.1.5.27}
+\contentsline {subsection}{\numberline {1.5.28}LocoF5F8P1}{73}{subsection.1.5.28}
+\contentsline {subsection}{\numberline {1.5.29}LocoF7F13P2}{75}{subsection.1.5.29}
+\contentsline {subsection}{\numberline {1.5.30}LocoF5F11P2}{77}{subsection.1.5.30}
+\contentsline {subsection}{\numberline {1.5.31}LocoF12F20F28P2}{79}{subsection.1.5.31}
+\contentsline {subsection}{\numberline {1.5.32}LocoF13F19P2}{81}{subsection.1.5.32}
+\contentsline {subsection}{\numberline {1.5.33}LocoF14F20P2}{83}{subsection.1.5.33}
+\contentsline {subsection}{\numberline {1.5.34}LocoF21F27P2}{85}{subsection.1.5.34}
+\contentsline {subsection}{\numberline {1.5.35}LocoF21F28P2}{87}{subsection.1.5.35}
+\contentsline {subsection}{\numberline {1.5.36}LocoSlotDataP1}{89}{subsection.1.5.36}
+\contentsline {subsection}{\numberline {1.5.37}LocoSlotDataP2}{93}{subsection.1.5.37}
+\contentsline {subsection}{\numberline {1.5.38}LocoSpdP1}{99}{subsection.1.5.38}
+\contentsline {subsection}{\numberline {1.5.39}LocoSpdP2}{101}{subsection.1.5.39}
+\contentsline {subsection}{\numberline {1.5.40}LocoSpdDirP2}{103}{subsection.1.5.40}
+\contentsline {subsection}{\numberline {1.5.41}MoveSlotsP1}{105}{subsection.1.5.41}
+\contentsline {subsection}{\numberline {1.5.42}MoveSlotsP2}{107}{subsection.1.5.42}
+\contentsline {subsection}{\numberline {1.5.43}PeerXfer16}{109}{subsection.1.5.43}
+\contentsline {subsection}{\numberline {1.5.44}PwrOff}{113}{subsection.1.5.44}
+\contentsline {subsection}{\numberline {1.5.45}PwrOn}{114}{subsection.1.5.45}
+\contentsline {subsection}{\numberline {1.5.46}Reset}{116}{subsection.1.5.46}
+\contentsline {subsection}{\numberline {1.5.47}SensRepGenIn}{117}{subsection.1.5.47}
+\contentsline {subsection}{\numberline {1.5.48}SensRepTurnIn}{119}{subsection.1.5.48}
+\contentsline {subsection}{\numberline {1.5.49}SensRepTurnOut}{121}{subsection.1.5.49}
+\contentsline {subsection}{\numberline {1.5.50}SetBrdOpSw}{123}{subsection.1.5.50}
+\contentsline {subsection}{\numberline {1.5.51}SetIdleState}{125}{subsection.1.5.51}
+\contentsline {subsection}{\numberline {1.5.52}SetLocoSlotDataP1}{126}{subsection.1.5.52}
+\contentsline {subsection}{\numberline {1.5.53}SetLocoSlotDataP2}{130}{subsection.1.5.53}
+\contentsline {subsection}{\numberline {1.5.54}SetLocoSlotStat1}{136}{subsection.1.5.54}
+\contentsline {subsection}{\numberline {1.5.55}SetSwWithAck}{138}{subsection.1.5.55}
+\contentsline {subsection}{\numberline {1.5.56}OPC\_SV\_PROG}{140}{subsection.1.5.56}
+\contentsline {subsection}{\numberline {1.5.57}SwReq}{145}{subsection.1.5.57}
+\contentsline {subsection}{\numberline {1.5.58}SwState}{147}{subsection.1.5.58}
+\contentsline {subsection}{\numberline {1.5.59}TransRep}{149}{subsection.1.5.59}
+\contentsline {subsection}{\numberline {1.5.60}UnlinkSlotsP1}{151}{subsection.1.5.60}
+\contentsline {subsection}{\numberline {1.5.61}UnlinkSlotsP2}{153}{subsection.1.5.61}
+\contentsline {chapter}{\numberline {2}Fast Clock}{155}{chapter.2}
+\contentsline {section}{\numberline {2.1}Summary}{155}{section.2.1}
+\contentsline {section}{\numberline {2.2}Slot \#123 Encoding}{155}{section.2.2}
+\contentsline {chapter}{\numberline {3}Updating Firmware}{159}{chapter.3}
+\contentsline {section}{\numberline {3.1}Bootloader Protocol 1}{159}{section.3.1}
+\contentsline {section}{\numberline {3.2}Bootloader Protocol 2}{159}{section.3.2}
+\contentsline {section}{\numberline {3.3}Firmware Parameters}{160}{section.3.3}
+\contentsline {section}{\numberline {3.4}DMF File Format}{161}{section.3.4}
+\contentsline {subsection}{\numberline {3.4.1}Sync Records}{161}{subsection.3.4.1}
+\contentsline {subsection}{\numberline {3.4.2}Parameter Records}{161}{subsection.3.4.2}
+\contentsline {subsection}{\numberline {3.4.3}Data Records}{163}{subsection.3.4.3}
+\contentsline {subsection}{\numberline {3.4.4}End of File Record}{164}{subsection.3.4.4}
+\contentsline {chapter}{\numberline {A}Reference Tables}{167}{appendix.A}

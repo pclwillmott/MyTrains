@@ -141,7 +141,9 @@ public class NetworkMessage {
           if message[1] == 0x15 &&
               (message[2] & 0b11111000) == 0x00 &&
               (message[7] & 0b10110000) == 0x00 {
-            _messageType = .locoSlotDataP2
+            if message[3] < 0x78 {
+              _messageType = .locoSlotDataP2
+            }
           }
         case NetworkMessageOpcode.OPC_SL_RD_DATA.rawValue:
           if   message[ 1] == 0x0e &&
@@ -226,21 +228,40 @@ public class NetworkMessage {
             _messageType = .interfaceData
           }
           else if message[1] == 0x10 {
-            if message[2] == 0x7f && // *** NEEDS EXTRAS ***
+            if message[2] == 0x7f &&
                message[3] == 0x7f &&
                message[4] == 0x7f &&
               (message[5] & 0b11110000) == 0b01000000 {
               let subcode = message[10] & 0b11110000
               switch subcode {
               case 0b00000000:
-                _messageType = .iplSetup
+                if message[12] == 0x00 &&
+                   message[14] == 0x00 {
+                  _messageType = .iplSetupBL2
+                }
                 break
               case 0b00010000:
-                _messageType = .iplAddress
+                if message[11] == 0x00 &&
+                   message[12] == 0x00 &&
+                   message[13] == 0x00 &&
+                   message[14] == 0x00 {
+                  _messageType = .iplSetAddr
+                }
               case 0b00100000:
-                _messageType = .iplData
+                _messageType = .iplDataLoad
               case 0b01000000:
-                _messageType = .iplEndOperation
+                if message[5] == 0x40 &&
+                   message[6] == 0x00 &&
+                   message[7] == 0x00 &&
+                   message[8] == 0x00 &&
+                   message[9] == 0x00 &&
+                   message[10] == 0x40 &&
+                   message[11] == 0x00 &&
+                   message[12] == 0x00 &&
+                   message[13] == 0x00 &&
+                   message[14] == 0x00 {
+                  _messageType = .iplEndLoad
+                }
               default:
                 break
               }

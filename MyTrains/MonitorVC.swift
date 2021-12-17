@@ -9,6 +9,8 @@ import Foundation
 import Cocoa
 
 class MonitorVC: NSViewController, NetworkMessengerDelegate, NSWindowDelegate {
+  
+  
 
   enum TimeStampType : Int {
     case none = 0
@@ -40,24 +42,28 @@ class MonitorVC: NSViewController, NetworkMessengerDelegate, NSWindowDelegate {
     }
   }
   
+  func messengerDidIdentify(messenger: NetworkMessenger) {
+    
+    print("identify rcv")
+    let path = messenger.devicePath
+    
+    cboInterface.addItem(withObjectValue: path)
+    
+    let interface = UserDefaults.standard.string(forKey: DEFAULT.MONITOR_INTERFACE_ID) ?? ""
+ 
+    if interface == path {
+      cboInterface.selectItem(at: cboInterface.numberOfItems-1)
+      self.messenger = messenger
+      observerId = messenger.addObserver(observer: self)
+    }
+    
+  }
+    
   override func viewWillAppear() {
     
     self.view.window?.delegate = self
 
-    let interface = UserDefaults.standard.string(forKey: DEFAULT.MONITOR_INTERFACE_ID) ?? ""
- 
     cboInterface.removeAllItems()
-    var index = 0
-    for x in networkController.networkMessengers {
-      let path = x.value.devicePath
-      cboInterface.addItem(withObjectValue: path)
-      if interface == path {
-        cboInterface.selectItem(at: index)
-        messenger = x.value
-        observerId = messenger?.addObserver(observer: self) ?? -1
-      }
-      index += 1
-    }
     
     sendFilename = UserDefaults.standard.string(forKey: DEFAULT.MONITOR_SEND_FILENAME) ?? ""
     
@@ -91,11 +97,11 @@ class MonitorVC: NSViewController, NetworkMessengerDelegate, NSWindowDelegate {
   
   private var lastTime = Date.timeIntervalSinceReferenceDate
   
-  func NetworkTimeOut(message: NetworkMessage) {
+  func networkTimeOut(message: NetworkMessage) {
     print("Timeout")
   }
 
-  func NetworkMessageReceived(message: NetworkMessage) {
+  func networkMessageReceived(message: NetworkMessage) {
     
     var item : String = ""
     var byteNumber : Int = 0
