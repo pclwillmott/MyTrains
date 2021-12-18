@@ -11,11 +11,18 @@ import ORSSerial
 public protocol NetworkMessengerDelegate {
   func networkMessageReceived(message:NetworkMessage)
   func networkTimeOut(message:NetworkMessage)
-  func messengerDidIdentify(messenger:NetworkMessenger)
+  func messengerRemoved(id:String)
+}
+
+public protocol NetworkInterfaceDelegate {
+  func interfaceNotIdentified(messenger:NetworkMessenger)
+  func interfaceIdentified(messenger:NetworkMessenger)
+  func interfaceRemoved(messenger:NetworkMessenger)
 }
 
 enum TIMING {
   static let STANDARD = 30.0 / 1000.0
+  static let DISCOVER = 1.0
 }
 
 enum MessengerState {
@@ -25,13 +32,10 @@ enum MessengerState {
 }
 
 public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessengerDelegate {
-  
-  
-  public func messengerDidIdentify(messenger: NetworkMessenger) {
-    
+ 
+  public func messengerRemoved(id: String) {
   }
   
-
   // Constructor
   
   init(id:String, path:String) {
@@ -87,6 +91,13 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
   public var devicePath : String {
     get {
       return _devicePath
+    }
+  }
+  
+  public var comboName : String {
+    get {
+      let devName = ProductCode(rawValue: productCode) ?? .unknown
+      return "\(devName) - \(devicePath)"
     }
   }
   
@@ -150,9 +161,6 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
 
         }
         
-      }
-      else {
-        print("here")
       }
 
     }
@@ -219,8 +227,6 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
     
     addToQueue(message: message, delay: TIMING.STANDARD, response: [.interfaceData], delegate: self, retryCount: 1)
     
-    print("getInterfaceData")
-
   }
   
   public func powerIdle() {
@@ -288,9 +294,18 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
       removeObserver(id: observerId)
       observerId = -1
     }
+    for observer in observers {
+      observer.value.messengerRemoved(id: self.id)
+    }
+    networkInterfaceDelegate?.interfaceRemoved(messenger: self)
   }
   
   public func serialPort(_ serialPort: ORSSerialPort, didEncounterError error: Error) {
+    if observerId != -1 {
+      removeObserver(id: observerId)
+      observerId = -1
+    }
+    networkInterfaceDelegate?.interfaceNotIdentified(messenger: self)
   }
   
   public func serialPortWasOpened(_ serialPort: ORSSerialPort) {
@@ -299,8 +314,6 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
     getInterfaceData()
   }
   
-  public func ser
-
   private var observerId : Int = -1
   
   public var isPortOpen : Bool = false
@@ -312,16 +325,18 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
       productCode = Int(message.message[14])
       removeObserver(id: observerId)
       observerId = -1
-      print("message \(productCode)")
-      for x in observers {
-        x.value.messengerDidIdentify(messenger: self)
-      }
+      networkInterfaceDelegate?.interfaceIdentified(messenger: self)
     }
   }
   
+  public var networkInterfaceDelegate : NetworkInterfaceDelegate? = nil
+  
   public func networkTimeOut(message: NetworkMessage) {
-    removeObserver(id: observerId)
-    observerId = -1
+    if observerId != -1 {
+      removeObserver(id: observerId)
+      observerId = -1
+      networkInterfaceDelegate?.interfaceNotIdentified(messenger: self)
+    }
   }
   
   public func serialPort(_ serialPort: ORSSerialPort, didReceive data: Data) {
@@ -356,7 +371,6 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
           opCodeFound = true
           break
         }
-        print("skip: \(String(format: "%02x", cc))")
         readPtr = (readPtr + 1) & 0xff
         bufferCount -= 1
       }

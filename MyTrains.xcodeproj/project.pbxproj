@@ -12,6 +12,8 @@
 		DA2E0E5A2736B8AA00C7DA7A /* LoconetRequestSlotDataMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2E0E592736B8AA00C7DA7A /* LoconetRequestSlotDataMessage.swift */; };
 		DA2E0E5C2736C31C00C7DA7A /* LoconetSlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2E0E5B2736C31C00C7DA7A /* LoconetSlot.swift */; };
 		DA2E0E5E2736EAF300C7DA7A /* NetworkController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2E0E5D2736EAF300C7DA7A /* NetworkController.swift */; };
+		DA53B250276E360500AB956C /* CommandStation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA53B24F276E360500AB956C /* CommandStation.swift */; };
+		DA53B252276E478400AB956C /* IPLDevData.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA53B251276E478400AB956C /* IPLDevData.swift */; };
 		DA5E173E272EB23100F9341F /* LoconetSensorMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5E173D272EB23100F9341F /* LoconetSensorMessage.swift */; };
 		DA5E1741272ED2DF00F9341F /* LoconetSwitchRequestMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5E1740272ED2DF00F9341F /* LoconetSwitchRequestMessage.swift */; };
 		DA5E1743272EDA5B00F9341F /* LoconetSlotDataMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5E1742272EDA5B00F9341F /* LoconetSlotDataMessage.swift */; };
@@ -65,6 +67,8 @@
 		DA2E0E592736B8AA00C7DA7A /* LoconetRequestSlotDataMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoconetRequestSlotDataMessage.swift; sourceTree = "<group>"; };
 		DA2E0E5B2736C31C00C7DA7A /* LoconetSlot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoconetSlot.swift; sourceTree = "<group>"; };
 		DA2E0E5D2736EAF300C7DA7A /* NetworkController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkController.swift; sourceTree = "<group>"; };
+		DA53B24F276E360500AB956C /* CommandStation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandStation.swift; sourceTree = "<group>"; };
+		DA53B251276E478400AB956C /* IPLDevData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IPLDevData.swift; sourceTree = "<group>"; };
 		DA5E173D272EB23100F9341F /* LoconetSensorMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoconetSensorMessage.swift; sourceTree = "<group>"; };
 		DA5E1740272ED2DF00F9341F /* LoconetSwitchRequestMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoconetSwitchRequestMessage.swift; sourceTree = "<group>"; };
 		DA5E1742272EDA5B00F9341F /* LoconetSlotDataMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoconetSlotDataMessage.swift; sourceTree = "<group>"; };
@@ -153,6 +157,8 @@
 				DA2E0E5D2736EAF300C7DA7A /* NetworkController.swift */,
 				DA6A0AD7275295BF00913F2B /* Monitor.storyboard */,
 				DA6A0AD92752976800913F2B /* MonitorVC.swift */,
+				DA53B24F276E360500AB956C /* CommandStation.swift */,
+				DA53B251276E478400AB956C /* IPLDevData.swift */,
 				DA6A0ADE2753B5CF00913F2B /* UserDefaults.swift */,
 				DA7B4726273803BA00BCD587 /* Locomotive.swift */,
 				DA2E0E5B2736C31C00C7DA7A /* LoconetSlot.swift */,
@@ -275,11 +281,13 @@
 				DA2E0E5C2736C31C00C7DA7A /* LoconetSlot.swift in Sources */,
 				DA7B4727273803BA00BCD587 /* Locomotive.swift in Sources */,
 				DAA83DEB272C37670075CBCD /* AppDelegate.swift in Sources */,
+				DA53B250276E360500AB956C /* CommandStation.swift in Sources */,
 				DA7A4912274AC25600C2A42B /* PeerXferMessage.swift in Sources */,
 				DA6A0ADA2752976800913F2B /* MonitorVC.swift in Sources */,
 				DA5E173E272EB23100F9341F /* LoconetSensorMessage.swift in Sources */,
 				DAEA9CF7272D8DA900C9B3EC /* NetworkConstants.swift in Sources */,
 				DA2E0E5A2736B8AA00C7DA7A /* LoconetRequestSlotDataMessage.swift in Sources */,
+				DA53B252276E478400AB956C /* IPLDevData.swift in Sources */,
 				DA2E0E5827359ED300C7DA7A /* LoconetLongAcknowledgeMessage.swift in Sources */,
 				DA5E1743272EDA5B00F9341F /* LoconetSlotDataMessage.swift in Sources */,
 				DAEA9CFA272D8FBE00C9B3EC /* NetworkMessage.swift in Sources */,

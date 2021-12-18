@@ -118,6 +118,21 @@ public enum NetworkMessageType {
   case unlinkSlotsP2
 }
 
+public enum Manufacturer : Int {
+  case digitrax = 0x00
+  case unknown  = 0xff
+}
+
+public enum ProductCode : Int {
+  case DCS210Plus = 0x1a
+  case DCS210     = 0x1b
+  case DCS240     = 0x1c
+  case PR3        = 0x23
+  case PR4        = 0x24
+  case DT500      = 0x32
+  case unknown    = 0xff
+}
+
 /*
      OPC_EXP_REQ_SLOT = 0xbe;
      OPC_EXP_SLOT_MOVE = 0xd4;

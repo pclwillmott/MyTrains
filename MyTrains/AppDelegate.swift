@@ -20,22 +20,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     // Insert code here to initialize your application
     
-    // "/dev/tty.usbmodemDxP470881"
-    // /dev/cu.usbmodemDxP470881
-    
-//    loconetMessenger = LoconetMessenger(path: "/dev/cu.usbmodemDxP470881")
-//    loconetMessenger = LoconetMessenger(id: "id1", path: "/dev/cu.usbmodemDxP431751")
-//    loconetMessenger?.delegate = self
-    
-    
-    let availablePorts = ORSSerialPortManager.shared().availablePorts
-    for port in availablePorts {
-      print("\(port.name)")
-      print("\(port.baudRate)")
-      print("\(port.path)")
-      print("\(port.usesRTSCTSFlowControl)")
-    }
-     
   }
 
   @IBAction func mnuMonitorAction(_ sender: NSMenuItem) {

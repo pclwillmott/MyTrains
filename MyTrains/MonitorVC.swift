@@ -8,10 +8,8 @@
 import Foundation
 import Cocoa
 
-class MonitorVC: NSViewController, NetworkMessengerDelegate, NSWindowDelegate {
+class MonitorVC: NSViewController, NetworkControllerDelegate, NetworkMessengerDelegate, NSWindowDelegate {
   
-  
-
   enum TimeStampType : Int {
     case none = 0
     case millisecondsSinceLastMessage = 1
@@ -40,30 +38,55 @@ class MonitorVC: NSViewController, NetworkMessengerDelegate, NSWindowDelegate {
         observerId = -1
       }
     }
+    if delegateId != -1 {
+      networkController.removeDelegate(id: delegateId)
+      delegateId = -1
+    }
   }
   
-  func messengerDidIdentify(messenger: NetworkMessenger) {
-    
-    print("identify rcv")
-    let path = messenger.devicePath
-    
-    cboInterface.addItem(withObjectValue: path)
-    
-    let interface = UserDefaults.standard.string(forKey: DEFAULT.MONITOR_INTERFACE_ID) ?? ""
- 
-    if interface == path {
-      cboInterface.selectItem(at: cboInterface.numberOfItems-1)
-      self.messenger = messenger
-      observerId = messenger.addObserver(observer: self)
-    }
+  func messengerRemoved(id: String) {
     
   }
+  
+  func messengersUpdated(messengers: [NetworkMessenger]) {
     
+    if observerId != -1 {
+      self.messenger?.removeObserver(id: observerId)
+      observerId = -1
+    }
+    
+    let interface = UserDefaults.standard.string(forKey: DEFAULT.MONITOR_INTERFACE_ID) ?? ""
+
+    cboInterface.removeAllItems()
+    cboInterface.deselectItem(at: cboInterface.indexOfSelectedItem)
+    
+    for messenger in messengers {
+      
+      let name = messenger.comboName
+      
+      cboInterface.addItem(withObjectValue: name)
+      
+      if interface == name {
+        cboInterface.selectItem(at: cboInterface.numberOfItems-1)
+        self.messenger = messenger
+        observerId = messenger.addObserver(observer: self)
+      }
+      
+    }
+    
+ 
+  
+  }
+  
+  private var delegateId : Int = -1
+  
   override func viewWillAppear() {
     
     self.view.window?.delegate = self
 
-    cboInterface.removeAllItems()
+    delegateId = networkController.appendDelegate(delegate: self)
+    
+    messengersUpdated(messengers: networkController.networkMessengers)
     
     sendFilename = UserDefaults.standard.string(forKey: DEFAULT.MONITOR_SEND_FILENAME) ?? ""
     
@@ -225,19 +248,19 @@ class MonitorVC: NSViewController, NetworkMessengerDelegate, NSWindowDelegate {
   
   @IBAction func cboInterfaceAction(_ sender: NSComboBox) {
     
-    let path = cboInterface.stringValue
+    let name = cboInterface.stringValue
     
-    UserDefaults.standard.set(path, forKey: DEFAULT.MONITOR_INTERFACE_ID)
+    UserDefaults.standard.set(name, forKey: DEFAULT.MONITOR_INTERFACE_ID)
     
     if let x = messenger {
-      if path != x.devicePath && observerId != -1 {
+      if name != x.comboName && observerId != -1 {
         x.removeObserver(id: observerId)
       }
     }
     
     for x in networkController.networkMessengers {
-      if x.value.devicePath == path {
-        messenger = x.value
+      if x.comboName == name {
+        messenger = x
         observerId = messenger?.addObserver(observer: self) ?? -1
       }
     }
