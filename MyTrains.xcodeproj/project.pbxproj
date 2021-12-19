@@ -14,6 +14,12 @@
 		DA2E0E5E2736EAF300C7DA7A /* NetworkController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2E0E5D2736EAF300C7DA7A /* NetworkController.swift */; };
 		DA53B250276E360500AB956C /* CommandStation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA53B24F276E360500AB956C /* CommandStation.swift */; };
 		DA53B252276E478400AB956C /* IPLDevData.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA53B251276E478400AB956C /* IPLDevData.swift */; };
+		DA5B4601276F4E38005CA03C /* DatabaseConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5B4600276F4E38005CA03C /* DatabaseConstants.swift */; };
+		DA5B4603276F5993005CA03C /* EditNetworks.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA5B4602276F5993005CA03C /* EditNetworks.storyboard */; };
+		DA5B4605276F62D5005CA03C /* EditNetworksVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5B4604276F62D5005CA03C /* EditNetworksVC.swift */; };
+		DA5B4607276F6917005CA03C /* ComboBoxDBDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5B4606276F6917005CA03C /* ComboBoxDBDS.swift */; };
+		DA5B4609276F6CBF005CA03C /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5B4608276F6CBF005CA03C /* Network.swift */; };
+		DA5B460B276F8210005CA03C /* ComboBoxNetworksDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5B460A276F8210005CA03C /* ComboBoxNetworksDS.swift */; };
 		DA5E173E272EB23100F9341F /* LoconetSensorMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5E173D272EB23100F9341F /* LoconetSensorMessage.swift */; };
 		DA5E1741272ED2DF00F9341F /* LoconetSwitchRequestMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5E1740272ED2DF00F9341F /* LoconetSwitchRequestMessage.swift */; };
 		DA5E1743272EDA5B00F9341F /* LoconetSlotDataMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5E1742272EDA5B00F9341F /* LoconetSlotDataMessage.swift */; };
@@ -33,6 +39,8 @@
 		DAA83DED272C37670075CBCD /* MainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA83DEC272C37670075CBCD /* MainVC.swift */; };
 		DAA83DEF272C37680075CBCD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DAA83DEE272C37680075CBCD /* Assets.xcassets */; };
 		DAA83DF2272C37680075CBCD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DAA83DF0272C37680075CBCD /* Main.storyboard */; };
+		DAB07498276EB6C3003278BE /* Sqlite.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB07497276EB6C3003278BE /* Sqlite.swift */; };
+		DAB0749A276EB8B1003278BE /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB07499276EB8B1003278BE /* Database.swift */; };
 		DAEA9CF7272D8DA900C9B3EC /* NetworkConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEA9CF6272D8DA900C9B3EC /* NetworkConstants.swift */; };
 		DAEA9CFA272D8FBE00C9B3EC /* NetworkMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEA9CF9272D8FBE00C9B3EC /* NetworkMessage.swift */; };
 /* End PBXBuildFile section */
@@ -69,6 +77,12 @@
 		DA2E0E5D2736EAF300C7DA7A /* NetworkController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkController.swift; sourceTree = "<group>"; };
 		DA53B24F276E360500AB956C /* CommandStation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandStation.swift; sourceTree = "<group>"; };
 		DA53B251276E478400AB956C /* IPLDevData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IPLDevData.swift; sourceTree = "<group>"; };
+		DA5B4600276F4E38005CA03C /* DatabaseConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseConstants.swift; sourceTree = "<group>"; };
+		DA5B4602276F5993005CA03C /* EditNetworks.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = EditNetworks.storyboard; sourceTree = "<group>"; };
+		DA5B4604276F62D5005CA03C /* EditNetworksVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNetworksVC.swift; sourceTree = "<group>"; };
+		DA5B4606276F6917005CA03C /* ComboBoxDBDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComboBoxDBDS.swift; sourceTree = "<group>"; };
+		DA5B4608276F6CBF005CA03C /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
+		DA5B460A276F8210005CA03C /* ComboBoxNetworksDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComboBoxNetworksDS.swift; sourceTree = "<group>"; };
 		DA5E173D272EB23100F9341F /* LoconetSensorMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoconetSensorMessage.swift; sourceTree = "<group>"; };
 		DA5E1740272ED2DF00F9341F /* LoconetSwitchRequestMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoconetSwitchRequestMessage.swift; sourceTree = "<group>"; };
 		DA5E1742272EDA5B00F9341F /* LoconetSlotDataMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoconetSlotDataMessage.swift; sourceTree = "<group>"; };
@@ -90,6 +104,8 @@
 		DAA83DEE272C37680075CBCD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DAA83DF1272C37680075CBCD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		DAA83DF3272C37680075CBCD /* MyTrains.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MyTrains.entitlements; sourceTree = "<group>"; };
+		DAB07497276EB6C3003278BE /* Sqlite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sqlite.swift; sourceTree = "<group>"; };
+		DAB07499276EB8B1003278BE /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		DAEA9CF6272D8DA900C9B3EC /* NetworkConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkConstants.swift; sourceTree = "<group>"; };
 		DAEA9CF9272D8FBE00C9B3EC /* NetworkMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMessage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -144,33 +160,41 @@
 			isa = PBXGroup;
 			children = (
 				DAA83DEA272C37670075CBCD /* AppDelegate.swift */,
-				DA6A0AE02753D50A00913F2B /* GlobalVariables.swift */,
-				DA6A0ADB27529D6600913F2B /* ModalWindow.swift */,
-				DAA83DEC272C37670075CBCD /* MainVC.swift */,
 				DAA83DEE272C37680075CBCD /* Assets.xcassets */,
-				DAA83DF0272C37680075CBCD /* Main.storyboard */,
-				DAA83DF3272C37680075CBCD /* MyTrains.entitlements */,
-				DA8FC5E7272C759A00FCCFCA /* NetworkMessenger.swift */,
-				DA7A4911274AC25600C2A42B /* PeerXferMessage.swift */,
-				DA6F3925274FD0C400A63FBF /* PeerXfer20.swift */,
+				DA5B4606276F6917005CA03C /* ComboBoxDBDS.swift */,
+				DA5B460A276F8210005CA03C /* ComboBoxNetworksDS.swift */,
+				DA53B24F276E360500AB956C /* CommandStation.swift */,
+				DAB07499276EB8B1003278BE /* Database.swift */,
+				DA5B4600276F4E38005CA03C /* DatabaseConstants.swift */,
+				DA5B4602276F5993005CA03C /* EditNetworks.storyboard */,
+				DA5B4604276F62D5005CA03C /* EditNetworksVC.swift */,
 				DA7A490F274A89FE00C2A42B /* FastClockMessage.swift */,
-				DA2E0E5D2736EAF300C7DA7A /* NetworkController.swift */,
+				DA6A0AE02753D50A00913F2B /* GlobalVariables.swift */,
+				DA53B251276E478400AB956C /* IPLDevData.swift */,
+				DA7B4726273803BA00BCD587 /* Locomotive.swift */,
+				DA2E0E5727359ED300C7DA7A /* LoconetLongAcknowledgeMessage.swift */,
+				DA2E0E592736B8AA00C7DA7A /* LoconetRequestSlotDataMessage.swift */,
+				DA5E173D272EB23100F9341F /* LoconetSensorMessage.swift */,
+				DA2E0E5B2736C31C00C7DA7A /* LoconetSlot.swift */,
+				DA5E1742272EDA5B00F9341F /* LoconetSlotDataMessage.swift */,
+				DA5E1740272ED2DF00F9341F /* LoconetSwitchRequestMessage.swift */,
+				DAA83DF0272C37680075CBCD /* Main.storyboard */,
+				DAA83DEC272C37670075CBCD /* MainVC.swift */,
+				DA6A0ADB27529D6600913F2B /* ModalWindow.swift */,
 				DA6A0AD7275295BF00913F2B /* Monitor.storyboard */,
 				DA6A0AD92752976800913F2B /* MonitorVC.swift */,
-				DA53B24F276E360500AB956C /* CommandStation.swift */,
-				DA53B251276E478400AB956C /* IPLDevData.swift */,
-				DA6A0ADE2753B5CF00913F2B /* UserDefaults.swift */,
-				DA7B4726273803BA00BCD587 /* Locomotive.swift */,
-				DA2E0E5B2736C31C00C7DA7A /* LoconetSlot.swift */,
+				DAA83DF3272C37680075CBCD /* MyTrains.entitlements */,
+				DA5B4608276F6CBF005CA03C /* Network.swift */,
+				DAEA9CF6272D8DA900C9B3EC /* NetworkConstants.swift */,
+				DA2E0E5D2736EAF300C7DA7A /* NetworkController.swift */,
+				DAEA9CF9272D8FBE00C9B3EC /* NetworkMessage.swift */,
+				DA8FC5E7272C759A00FCCFCA /* NetworkMessenger.swift */,
 				DA7B4729273824F700BCD587 /* NetworkOutputQueueItem.swift */,
 				DA2E0E54273591A600C7DA7A /* NetworkTurnoutOutputMessage.swift */,
-				DA2E0E592736B8AA00C7DA7A /* LoconetRequestSlotDataMessage.swift */,
-				DAEA9CF9272D8FBE00C9B3EC /* NetworkMessage.swift */,
-				DA5E1742272EDA5B00F9341F /* LoconetSlotDataMessage.swift */,
-				DA5E173D272EB23100F9341F /* LoconetSensorMessage.swift */,
-				DA5E1740272ED2DF00F9341F /* LoconetSwitchRequestMessage.swift */,
-				DA2E0E5727359ED300C7DA7A /* LoconetLongAcknowledgeMessage.swift */,
-				DAEA9CF6272D8DA900C9B3EC /* NetworkConstants.swift */,
+				DA6F3925274FD0C400A63FBF /* PeerXfer20.swift */,
+				DA7A4911274AC25600C2A42B /* PeerXferMessage.swift */,
+				DAB07497276EB6C3003278BE /* Sqlite.swift */,
+				DA6A0ADE2753B5CF00913F2B /* UserDefaults.swift */,
 			);
 			path = MyTrains;
 			sourceTree = "<group>";
@@ -258,6 +282,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DAA83DEF272C37680075CBCD /* Assets.xcassets in Resources */,
+				DA5B4603276F5993005CA03C /* EditNetworks.storyboard in Resources */,
 				DA6A0AD8275295BF00913F2B /* Monitor.storyboard in Resources */,
 				DAA83DF2272C37680075CBCD /* Main.storyboard in Resources */,
 			);
@@ -277,6 +302,7 @@
 				DA6F3926274FD0C400A63FBF /* PeerXfer20.swift in Sources */,
 				DA6A0ADF2753B5CF00913F2B /* UserDefaults.swift in Sources */,
 				DA6A0AE12753D50A00913F2B /* GlobalVariables.swift in Sources */,
+				DAB07498276EB6C3003278BE /* Sqlite.swift in Sources */,
 				DAA83DED272C37670075CBCD /* MainVC.swift in Sources */,
 				DA2E0E5C2736C31C00C7DA7A /* LoconetSlot.swift in Sources */,
 				DA7B4727273803BA00BCD587 /* Locomotive.swift in Sources */,
@@ -287,13 +313,19 @@
 				DA5E173E272EB23100F9341F /* LoconetSensorMessage.swift in Sources */,
 				DAEA9CF7272D8DA900C9B3EC /* NetworkConstants.swift in Sources */,
 				DA2E0E5A2736B8AA00C7DA7A /* LoconetRequestSlotDataMessage.swift in Sources */,
+				DA5B4607276F6917005CA03C /* ComboBoxDBDS.swift in Sources */,
 				DA53B252276E478400AB956C /* IPLDevData.swift in Sources */,
+				DA5B4609276F6CBF005CA03C /* Network.swift in Sources */,
 				DA2E0E5827359ED300C7DA7A /* LoconetLongAcknowledgeMessage.swift in Sources */,
 				DA5E1743272EDA5B00F9341F /* LoconetSlotDataMessage.swift in Sources */,
 				DAEA9CFA272D8FBE00C9B3EC /* NetworkMessage.swift in Sources */,
 				DA6A0ADC27529D6600913F2B /* ModalWindow.swift in Sources */,
+				DA5B4601276F4E38005CA03C /* DatabaseConstants.swift in Sources */,
 				DA8FC5E8272C759A00FCCFCA /* NetworkMessenger.swift in Sources */,
+				DA5B460B276F8210005CA03C /* ComboBoxNetworksDS.swift in Sources */,
+				DAB0749A276EB8B1003278BE /* Database.swift in Sources */,
 				DA5E1741272ED2DF00F9341F /* LoconetSwitchRequestMessage.swift in Sources */,
+				DA5B4605276F62D5005CA03C /* EditNetworksVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

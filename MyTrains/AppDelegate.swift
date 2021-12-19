@@ -18,10 +18,27 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   
   func applicationDidFinishLaunching(_ aNotification: Notification) {
     
-    // Insert code here to initialize your application
-    
+    if let _ = UserDefaults.standard.string(forKey: DEFAULT.VERSION) {
+    }
+    else {
+      
+      let appFolder  = "/MyTrains"
+      let dataFolder = "/MyTrains Database"
+      
+      UserDefaults.standard.set("Version 1.0", forKey: DEFAULT.VERSION)
+      
+      let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true) as [String]
+      
+      UserDefaults.standard.set(paths[0] + appFolder + dataFolder, forKey: DEFAULT.DATABASE_PATH)
+      
+    }
+
   }
 
+  @IBAction func mnuEditNetworksAction(_ sender: NSMenuItem) {
+    ModalWindow.EditNetworks.runModel()
+  }
+  
   @IBAction func mnuMonitorAction(_ sender: NSMenuItem) {
     let x = ModalWindow.Monitor
     let wc = x.windowController

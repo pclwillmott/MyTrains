@@ -18,7 +18,6 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
     
     super.init()
     
-    
     let nc = NotificationCenter.default
       nc.addObserver(self, selector: #selector(serialPortsWereConnected(_:)), name: NSNotification.Name.ORSSerialPortsWereConnected, object: nil)
       nc.addObserver(self, selector: #selector(serialPortsWereDisconnected(_:)), name: NSNotification.Name.ORSSerialPortsWereDisconnected, object: nil)
@@ -81,7 +80,7 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
       return true
     }
   
-  @objc func serialPortsWereConnected(_ notification: Notification) {
+    @objc func serialPortsWereConnected(_ notification: Notification) {
       if let userInfo = notification.userInfo {
         let connectedPorts = userInfo[ORSConnectedSerialPortsKey] as! [ORSSerialPort]
         self.postUserNotificationForConnectedPorts(connectedPorts)
@@ -226,5 +225,7 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
     locomotivesByName[locomotive.locomotiveId] = locomotive
     locomotivesByAddress[locomotive.address] = locomotive
   }
+  
+  public var networks : [Network] = Network.networks
   
 }

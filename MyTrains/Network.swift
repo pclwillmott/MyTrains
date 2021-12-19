@@ -1,0 +1,208 @@
+//
+//  Network.swift
+//  MyTrains
+//
+//  Created by Paul Willmott on 19/12/2021.
+//
+
+import Foundation
+
+public class Network {
+  
+  // Constructors
+  
+  init(reader:SqliteDataReader) {
+    decode(sqliteDataReader: reader)
+  }
+  
+  init() {
+  }
+  
+  // Destructors
+  
+  deinit {
+    
+  }
+  
+  // Private properties
+  
+  private var _networkId : Int = -1
+  private var _networkName : String = ""
+  private var _commandStationId : Int = -1
+  private var  modified : Bool = false
+
+  // Public properties
+  
+  public var networkId : Int {
+    get {
+      return _networkId
+    }
+    set(value) {
+      if value != _networkId {
+        _networkId = value
+        modified = true
+      }
+    }
+  }
+  
+  public var networkName : String {
+    get {
+      return _networkName
+    }
+    set(value) {
+      if value != _networkName {
+        _networkName = value
+        modified = true
+      }
+    }
+  }
+  
+  public var commandStationId : Int {
+    get {
+      return _commandStationId
+    }
+    set(value) {
+      if value != _commandStationId {
+        _commandStationId = value
+        modified = true
+      }
+    }
+  }
+  
+  public var duplicate : Network {
+    get {
+      
+      let result = Network()
+      result.networkId = self.networkId
+      result.networkName = self.networkName
+      result.commandStationId = self.commandStationId
+      result.modified = false
+      return result
+    }
+  }
+  
+  // Database Methods
+  
+  private func decode(sqliteDataReader:SqliteDataReader?) {
+    
+    if let reader = sqliteDataReader {
+      
+      networkId = reader.getInt(index: 0)!
+      
+      if !reader.isDBNull(index: 1) {
+        networkName = reader.getString(index: 1)!
+      }
+      
+      if !reader.isDBNull(index: 2) {
+        commandStationId = reader.getInt(index: 2)!
+      }
+      
+    }
+    
+    modified = false
+    
+  }
+
+  public func save() {
+    
+    if modified {
+      
+      var sql = ""
+      
+      if networkId == -1 {
+        sql = "INSERT INTO [\(TABLE.NETWORK)] (" +
+        "[\(NETWORK.NETWORK_ID)], " +
+        "[\(NETWORK.NETWORK_NAME)], " +
+        "[\(NETWORK.COMMAND_STATION_ID)]" +
+        ") VALUES (" +
+        "@\(NETWORK.NETWORK_ID), " +
+        "@\(NETWORK.NETWORK_NAME), " +
+        "@\(NETWORK.COMMAND_STATION_ID)" +
+        ")"
+        networkId = Database.nextCode(tableName: TABLE.NETWORK, primaryKey: NETWORK.COMMAND_STATION_ID)!
+      }
+      else {
+        sql = "UPDATE [\(TABLE.NETWORK)] SET " +
+        "[\(NETWORK.NETWORK_NAME)] = @\(NETWORK.NETWORK_NAME), " +
+        "[\(NETWORK.COMMAND_STATION_ID)] = @\(NETWORK.COMMAND_STATION_ID) " +
+        "WHERE [\(NETWORK.NETWORK_ID)] = @\(NETWORK.NETWORK_ID)"
+      }
+
+      let conn = Database.getConnection()
+      
+      let shouldClose = conn.state != .Open
+       
+      if shouldClose {
+         _ = conn.open()
+      }
+       
+      let cmd = conn.createCommand()
+       
+      cmd.commandText = sql
+      
+      cmd.parameters.addWithValue(key: "@\(NETWORK.NETWORK_ID)", value: networkId)
+      cmd.parameters.addWithValue(key: "@\(NETWORK.NETWORK_NAME)", value: networkName)
+      cmd.parameters.addWithValue(key: "@\(NETWORK.COMMAND_STATION_ID)", value: commandStationId)
+      
+      _ = cmd.executeNonQuery()
+
+      if shouldClose {
+        conn.close()
+      }
+      
+      modified = false
+      
+    }
+
+  }
+
+  // Class Properties
+  
+  public static var columnNames : String {
+    get {
+      return
+        "[\(NETWORK.NETWORK_ID)], " +
+        "[\(NETWORK.NETWORK_NAME)], " +
+        "[\(NETWORK.COMMAND_STATION_ID)]"
+    }
+  }
+  
+  public static var networks : [Network] {
+    
+    get {
+    
+      let conn = Database.getConnection()
+      
+      let shouldClose = conn.state != .Open
+       
+      if shouldClose {
+        _ = conn.open()
+      }
+       
+      let cmd = conn.createCommand()
+       
+      cmd.commandText = "SELECT \(columnNames) FROM [\(TABLE.NETWORK)] ORDER BY [\(NETWORK.NETWORK_NAME)]"
+
+      var result : [Network] = []
+      
+      if let reader = cmd.executeReader() {
+           
+        while reader.read() {
+          result.append(Network(reader: reader))
+        }
+           
+        reader.close()
+           
+      }
+      
+      if shouldClose {
+        conn.close()
+      }
+
+      return result
+      
+    }
+    
+  }
+  
+}

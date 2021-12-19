@@ -13,21 +13,115 @@ public protocol CommandStationDelegate {
 
 public class CommandStation : NetworkMessengerDelegate {
   
+  // Constructors
+  
   init(message:IPLDevData) {
     productCode = message.productCode
     serialNumber = message.serialNumber
     softwareVersion = message.softwareVersion
+    save()
   }
   
-  public var manufacturer : Manufacturer = .unknown
+  init(reader:SqliteDataReader) {
+    decode(sqliteDataReader: reader)
+  }
   
-  public var productCode : ProductCode = .unknown
+  init() {
+  }
   
-  public var serialNumber : Int = -1
+  // Destructors
   
-  public var hardwareVersion : Double = -1.0
+  deinit {
+    
+  }
   
-  public var softwareVersion : Double = -1.0
+  // Private Properties
+  
+  private var _manufacturer : Manufacturer = .Digitrax
+  
+  private var _productCode : ProductCode = .unknown
+  
+  private var _serialNumber : Int = -1
+  
+  private var _hardwareVersion : Double = -1.0
+  
+  private var _softwareVersion : Double = -1.0
+  
+  private var modified : Bool = false
+  
+  // Public Properties
+  
+  public var manufacturer : Manufacturer {
+    get {
+      return _manufacturer
+    }
+    set(value) {
+      if value != _manufacturer {
+        _manufacturer = value
+        modified = true
+      }
+    }
+  }
+  
+  public var productCode : ProductCode {
+    get {
+      return _productCode
+    }
+    set(value) {
+      if value != _productCode {
+        _productCode = value
+        modified = true
+      }
+    }
+  }
+  
+  public var serialNumber : Int {
+    get {
+      return _serialNumber
+    }
+    set(value) {
+      if value != _serialNumber {
+        _serialNumber = value
+        modified = true
+      }
+    }
+  }
+  
+  public var hardwareVersion : Double {
+    get {
+      return _hardwareVersion
+    }
+    set(value) {
+      if value != hardwareVersion {
+        _hardwareVersion = value
+        modified = true
+      }
+    }
+  }
+  
+  public var softwareVersion : Double {
+    get {
+      return _softwareVersion
+    }
+    set(value) {
+      if value != _softwareVersion {
+        _softwareVersion = value
+        modified = true
+      }
+    }
+  }
+  
+  public var commandStationId : Int {
+    get {
+      return (manufacturer.rawValue << 24) | (productCode.rawValue << 16) | serialNumber
+    }
+  }
+  
+  public var commandStationName : String {
+    get {
+      return "\(manufacturer) \(productCode) SN: \(serialNumber)"
+    }
+  }
   
   private var _interfaces : [String:NetworkMessenger] = [:]
   
@@ -185,6 +279,160 @@ public class CommandStation : NetworkMessengerDelegate {
         }
       }
     }
+  }
+  
+  // Database Methods
+  
+  private func decode(sqliteDataReader:SqliteDataReader?) {
+    
+    if let reader = sqliteDataReader {
+      
+      if !reader.isDBNull(index: 1) {
+        manufacturer = Manufacturer(rawValue: reader.getInt(index: 1)!) ?? .Unknown
+      }
+
+      if !reader.isDBNull(index: 2) {
+        productCode = ProductCode(rawValue: reader.getInt(index: 2)!) ?? .unknown
+      }
+      
+      if !reader.isDBNull(index: 3) {
+        serialNumber = reader.getInt(index: 3)!
+      }
+
+      if !reader.isDBNull(index: 4) {
+        hardwareVersion = reader.getDouble(index: 4)!
+      }
+
+      if !reader.isDBNull(index: 5) {
+        softwareVersion = reader.getDouble(index: 5)!
+      }
+
+    }
+    
+    modified = false
+    
+  }
+
+  public func save() {
+    
+    if modified {
+      
+      var sql = ""
+      
+      if !Database.codeExists(tableName: TABLE.COMMAND_STATION, primaryKey: COMMAND_STATION.COMMAND_STATION_ID, code: commandStationId)! {
+        sql = "INSERT INTO [\(TABLE.COMMAND_STATION)] (" +
+        "[\(COMMAND_STATION.COMMAND_STATION_ID)], " +
+        "[\(COMMAND_STATION.COMMAND_STATION_NAME)], " +
+        "[\(COMMAND_STATION.MANUFACTURER)], " +
+        "[\(COMMAND_STATION.PRODUCT_CODE)], " +
+        "[\(COMMAND_STATION.SERIAL_NUMBER)], " +
+        "[\(COMMAND_STATION.HARDWARE_VERSION)], " +
+        "[\(COMMAND_STATION.SOFTWARE_VERSION)]" +
+        ") VALUES (" +
+        "@\(COMMAND_STATION.COMMAND_STATION_ID), " +
+        "@\(COMMAND_STATION.COMMAND_STATION_NAME), " +
+        "@\(COMMAND_STATION.MANUFACTURER), " +
+        "@\(COMMAND_STATION.PRODUCT_CODE), " +
+        "@\(COMMAND_STATION.SERIAL_NUMBER), " +
+        "@\(COMMAND_STATION.HARDWARE_VERSION), " +
+        "@\(COMMAND_STATION.SOFTWARE_VERSION)" +
+        ")"
+      }
+      else {
+        sql = "UPDATE [\(TABLE.COMMAND_STATION)] SET " +
+        "[\(COMMAND_STATION.COMMAND_STATION_NAME)] = @\(COMMAND_STATION.COMMAND_STATION_NAME), " +
+        "[\(COMMAND_STATION.MANUFACTURER)] = @\(COMMAND_STATION.MANUFACTURER), " +
+        "[\(COMMAND_STATION.PRODUCT_CODE)] = @\(COMMAND_STATION.PRODUCT_CODE), " +
+        "[\(COMMAND_STATION.SERIAL_NUMBER)] = @\(COMMAND_STATION.SERIAL_NUMBER), " +
+        "[\(COMMAND_STATION.HARDWARE_VERSION)] = @\(COMMAND_STATION.HARDWARE_VERSION), " +
+        "[\(COMMAND_STATION.SOFTWARE_VERSION)] = @\(COMMAND_STATION.SOFTWARE_VERSION) " +
+        "WHERE [\(COMMAND_STATION.COMMAND_STATION_ID)] = @\(COMMAND_STATION.COMMAND_STATION_ID)"
+      }
+
+      let conn = Database.getConnection()
+      
+      let shouldClose = conn.state != .Open
+       
+      if shouldClose {
+         _ = conn.open()
+      }
+       
+      let cmd = conn.createCommand()
+       
+      cmd.commandText = sql
+      
+      cmd.parameters.addWithValue(key: "@\(COMMAND_STATION.COMMAND_STATION_ID)", value: commandStationId)
+      cmd.parameters.addWithValue(key: "@\(COMMAND_STATION.COMMAND_STATION_NAME)", value: commandStationName)
+      cmd.parameters.addWithValue(key: "@\(COMMAND_STATION.MANUFACTURER)", value: manufacturer.rawValue)
+      cmd.parameters.addWithValue(key: "@\(COMMAND_STATION.PRODUCT_CODE)", value: productCode.rawValue)
+      cmd.parameters.addWithValue(key: "@\(COMMAND_STATION.SERIAL_NUMBER)", value: serialNumber)
+      cmd.parameters.addWithValue(key: "@\(COMMAND_STATION.HARDWARE_VERSION)", value: hardwareVersion)
+      cmd.parameters.addWithValue(key: "@\(COMMAND_STATION.SOFTWARE_VERSION)", value: softwareVersion)
+
+      _ = cmd.executeNonQuery()
+
+      if shouldClose {
+        conn.close()
+      }
+      
+      modified = false
+      
+    }
+
+  }
+
+  // Class Properties
+  
+  public static var columnNames : String {
+    get {
+      return
+        "[\(COMMAND_STATION.COMMAND_STATION_NAME)], " +
+        "[\(COMMAND_STATION.MANUFACTURER)], " +
+        "[\(COMMAND_STATION.PRODUCT_CODE)], " +
+        "[\(COMMAND_STATION.SERIAL_NUMBER)], " +
+        "[\(COMMAND_STATION.HARDWARE_VERSION)], " +
+        "[\(COMMAND_STATION.SOFTWARE_VERSION)]"
+    }
+  }
+  
+  public static var commandStations : [CommandStation] {
+    
+    get {
+    
+      let conn = Database.getConnection()
+      
+      let shouldClose = conn.state != .Open
+       
+      if shouldClose {
+        _ = conn.open()
+      }
+       
+      let cmd = conn.createCommand()
+       
+      cmd.commandText = "SELECT \(columnNames) FROM [\(TABLE.COMMAND_STATION)]"
+
+      var result : [CommandStation] = []
+      
+      if let reader = cmd.executeReader() {
+           
+        while reader.read() {
+          result.append(CommandStation(reader: reader))
+        }
+           
+        reader.close()
+           
+      }
+      
+      if shouldClose {
+        conn.close()
+      }
+
+      return result.sorted {
+        $0.commandStationName < $1.commandStationName
+      }
+      
+    }
+    
   }
 
 }

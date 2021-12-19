@@ -119,8 +119,8 @@ public enum NetworkMessageType {
 }
 
 public enum Manufacturer : Int {
-  case digitrax = 0x00
-  case unknown  = 0xff
+  case Digitrax = 0x00
+  case Unknown  = 0xff
 }
 
 public enum ProductCode : Int {
