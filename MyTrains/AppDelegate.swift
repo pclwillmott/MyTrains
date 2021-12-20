@@ -12,10 +12,6 @@ import ORSSerial
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
   
- 
-  
-  private var loconetMessenger : NetworkMessenger? = nil
-  
   func applicationDidFinishLaunching(_ aNotification: Notification) {
     
     if let _ = UserDefaults.standard.string(forKey: DEFAULT.VERSION) {
@@ -34,17 +30,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
   }
-
-  @IBAction func mnuEditNetworksAction(_ sender: NSMenuItem) {
-    ModalWindow.EditNetworks.runModel()
-  }
-  
-  @IBAction func mnuMonitorAction(_ sender: NSMenuItem) {
-    let x = ModalWindow.Monitor
-    let wc = x.windowController
- // let vc = x.viewController(windowController: wc) as! MonitorVC
-    wc.showWindow(nil)
-  }
   
   func applicationWillTerminate(_ aNotification: Notification) {
     // Insert code here to tear down your application
@@ -54,6 +39,44 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     return true
   }
 
-
+  // Edit Menu
+  
+  @IBAction func mnuEditLayoutsAction(_ sender: NSMenuItem) {
+    ModalWindow.EditLayouts.runModel()
+  }
+  
+  @IBAction func mnuEditNetworksAction(_ sender: NSMenuItem) {
+    ModalWindow.EditNetworks.runModel()
+  }
+  
+  @IBAction func mnuEditLocomotivesAction(_ sender: NSMenuItem) {
+    ModalWindow.EditLocomotives.runModel()
+  }
+  
+  @IBAction func mnuEditWagonsAction(_ sender: NSMenuItem) {
+    ModalWindow.EditWagons.runModel()
+  }
+  
+  @IBAction func mnuEditTrainsAction(_ sender: NSMenuItem) {
+    ModalWindow.EditTrains.runModel()
+  }
+  
+  @IBAction func mnuEditSensorsAction(_ sender: NSMenuItem) {
+    ModalWindow.EditSensors.runModel()
+  }
+  
+  @IBAction func mnuEditSwitchesAction(_ sender: NSMenuItem) {
+    ModalWindow.EditSwitches.runModel()
+  }
+ 
+  // View Menu
+  
+  @IBAction func mnuMonitorAction(_ sender: NSMenuItem) {
+    let x = ModalWindow.Monitor
+    let wc = x.windowController
+ // let vc = x.viewController(windowController: wc) as! MonitorVC
+    wc.showWindow(nil)
+  }
+  
 }
 

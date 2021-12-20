@@ -9,13 +9,7 @@ import Foundation
 import Cocoa
 
 class EditNetworksVC: NSViewController, NSWindowDelegate {
-  
-  private enum EditorState {
-    case select
-    case editNew
-    case editExisting
-  }
-  
+    
   private var editorState : EditorState = .select
   
   override func viewDidLoad() {
@@ -45,7 +39,7 @@ class EditNetworksVC: NSViewController, NSWindowDelegate {
   private func setControls() {
     
     switch editorState {
-    case .select:
+    case .select, .selectAndDisplay:
       boxDataArea.isHidden = true
       btnNew.isEnabled = true
       btnEdit.isEnabled = cboNetwork.numberOfItems > 0
@@ -59,6 +53,7 @@ class EditNetworksVC: NSViewController, NSWindowDelegate {
       btnSave.isEnabled = modified
       btnCancel.isEnabled = true
       btnDelete.isEnabled = false
+      
     }
     
   }
@@ -67,7 +62,7 @@ class EditNetworksVC: NSViewController, NSWindowDelegate {
   
   private func setupDataArea() {
     switch editorState {
-    case .select:
+    case .select, .selectAndDisplay:
       currentNetwork = nil
       break
     case .editNew:

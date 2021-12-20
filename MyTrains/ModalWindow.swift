@@ -13,6 +13,12 @@ enum AppStoryboard : String {
   case Main                       = "Main"
   case Monitor                    = "Monitor"
   case EditNetworks               = "EditNetworks"
+  case EditLayouts                = "EditLayouts"
+  case EditLocomotives            = "EditLocomotives"
+  case EditWagons                 = "EditWagons"
+  case EditTrains                 = "EditTrains"
+  case EditSensors                = "EditSensors"
+  case EditSwitches               = "EditSwitches"
   
   var instance : NSStoryboard {
     return NSStoryboard(name: self.rawValue, bundle: Bundle.main)
@@ -24,6 +30,12 @@ let storyboardLookup           : [String:AppStoryboard] = [
   "Monitor"                    : AppStoryboard.Monitor,
   "Main"                       : AppStoryboard.Main,
   "EditNetworks"               : AppStoryboard.EditNetworks,
+  "EditLayouts"                : AppStoryboard.EditLayouts,
+  "EditLocomotives"            : AppStoryboard.EditLocomotives,
+  "EditWagons"                 : AppStoryboard.EditWagons,
+  "EditTrains"                 : AppStoryboard.EditTrains,
+  "EditSensors"                : AppStoryboard.EditSensors,
+  "EditSwitches"               : AppStoryboard.EditSwitches,
 ]
 
 /*
@@ -40,7 +52,13 @@ enum ModalWindow : String {
   case Monitor                    = "Monitor"
   case Main                       = "Main"
   case EditNetworks               = "EditNetworks"
-  
+  case EditLayouts                = "EditLayouts"
+  case EditLocomotives            = "EditLocomotives"
+  case EditWagons                 = "EditWagons"
+  case EditTrains                 = "EditTrains"
+  case EditSensors                = "EditSensors"
+  case EditSwitches               = "EditSwitches"
+
   var windowController : NSWindowController {
     let storyboard = storyboardLookup[self.rawValue]!
     let wc = storyboard.instance.instantiateController(withIdentifier: "\(self.rawValue)WC") as! NSWindowController

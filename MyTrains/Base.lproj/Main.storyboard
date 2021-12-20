@@ -123,6 +123,12 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Edit" id="W48-6f-4Dl">
                                     <items>
+                                        <menuItem title="Layouts" id="Jc2-oH-lkS">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="mnuEditLayoutsAction:" target="Voe-Tx-rLC" id="N5f-i0-p1e"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="Networks" id="zBk-bi-HQ8">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
@@ -131,18 +137,33 @@
                                         </menuItem>
                                         <menuItem title="Locomotives" id="jYS-Qx-4Nr">
                                             <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="mnuEditLocomotivesAction:" target="Voe-Tx-rLC" id="Kz3-ye-3cb"/>
+                                            </connections>
                                         </menuItem>
                                         <menuItem title="Wagons" id="2lc-br-ETR">
                                             <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="mnuEditWagonsAction:" target="Voe-Tx-rLC" id="ArW-MK-qkw"/>
+                                            </connections>
                                         </menuItem>
                                         <menuItem title="Trains" id="pCX-lg-S97">
                                             <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="mnuEditTrainsAction:" target="Voe-Tx-rLC" id="cJY-DS-6X4"/>
+                                            </connections>
                                         </menuItem>
                                         <menuItem title="Sensors" id="VCV-VZ-hVe">
                                             <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="mnuEditSensorsAction:" target="Voe-Tx-rLC" id="OE8-jR-cbJ"/>
+                                            </connections>
                                         </menuItem>
                                         <menuItem title="Switches" id="FH1-Fs-Psr">
                                             <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="mnuEditSwitchesAction:" target="Voe-Tx-rLC" id="cQt-rG-ok9"/>
+                                            </connections>
                                         </menuItem>
                                         <menuItem title="Blocks" id="E2d-BR-mab">
                                             <modifierMask key="keyEquivalentModifierMask"/>

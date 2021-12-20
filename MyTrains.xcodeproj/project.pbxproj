@@ -33,6 +33,21 @@
 		DA7A4912274AC25600C2A42B /* PeerXferMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7A4911274AC25600C2A42B /* PeerXferMessage.swift */; };
 		DA7B4727273803BA00BCD587 /* Locomotive.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7B4726273803BA00BCD587 /* Locomotive.swift */; };
 		DA7B472A273824F700BCD587 /* NetworkOutputQueueItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7B4729273824F700BCD587 /* NetworkOutputQueueItem.swift */; };
+		DA8837702770B35B000B9A41 /* EditLayouts.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA88376F2770B35B000B9A41 /* EditLayouts.storyboard */; };
+		DA8837722770B371000B9A41 /* EditLayoutsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8837712770B371000B9A41 /* EditLayoutsVC.swift */; };
+		DA8837742770B407000B9A41 /* EditorConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8837732770B407000B9A41 /* EditorConstants.swift */; };
+		DA8837762770B6F8000B9A41 /* EditLocomotives.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA8837752770B6F8000B9A41 /* EditLocomotives.storyboard */; };
+		DA8837782770B715000B9A41 /* EditWagons.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA8837772770B715000B9A41 /* EditWagons.storyboard */; };
+		DA88377A2770B726000B9A41 /* EditTrains.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA8837792770B726000B9A41 /* EditTrains.storyboard */; };
+		DA88377C2770B73A000B9A41 /* EditSensors.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA88377B2770B73A000B9A41 /* EditSensors.storyboard */; };
+		DA88377E2770B74E000B9A41 /* EditSwitches.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA88377D2770B74E000B9A41 /* EditSwitches.storyboard */; };
+		DA8837802770B768000B9A41 /* EditLocomotivesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA88377F2770B768000B9A41 /* EditLocomotivesVC.swift */; };
+		DA8837822770B77C000B9A41 /* EditWagonsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8837812770B77C000B9A41 /* EditWagonsVC.swift */; };
+		DA8837842770B78C000B9A41 /* EditTrainsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8837832770B78C000B9A41 /* EditTrainsVC.swift */; };
+		DA8837862770B79F000B9A41 /* EditSensorsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8837852770B79F000B9A41 /* EditSensorsVC.swift */; };
+		DA8837882770B7B2000B9A41 /* EditSwitchesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8837872770B7B2000B9A41 /* EditSwitchesVC.swift */; };
+		DA88378C2770FBEC000B9A41 /* DBEditorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA88378B2770FBEC000B9A41 /* DBEditorView.xib */; };
+		DA88378E2770FC41000B9A41 /* DBEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA88378D2770FC41000B9A41 /* DBEditorView.swift */; };
 		DA8FC5E6272C3F8100FCCFCA /* ORSSerial.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA8FC5E0272C3EE800FCCFCA /* ORSSerial.framework */; };
 		DA8FC5E8272C759A00FCCFCA /* NetworkMessenger.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8FC5E7272C759A00FCCFCA /* NetworkMessenger.swift */; };
 		DAA83DEB272C37670075CBCD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA83DEA272C37670075CBCD /* AppDelegate.swift */; };
@@ -96,6 +111,21 @@
 		DA7A4911274AC25600C2A42B /* PeerXferMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeerXferMessage.swift; sourceTree = "<group>"; };
 		DA7B4726273803BA00BCD587 /* Locomotive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Locomotive.swift; sourceTree = "<group>"; };
 		DA7B4729273824F700BCD587 /* NetworkOutputQueueItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkOutputQueueItem.swift; sourceTree = "<group>"; };
+		DA88376F2770B35B000B9A41 /* EditLayouts.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = EditLayouts.storyboard; sourceTree = "<group>"; };
+		DA8837712770B371000B9A41 /* EditLayoutsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditLayoutsVC.swift; sourceTree = "<group>"; };
+		DA8837732770B407000B9A41 /* EditorConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorConstants.swift; sourceTree = "<group>"; };
+		DA8837752770B6F8000B9A41 /* EditLocomotives.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = EditLocomotives.storyboard; sourceTree = "<group>"; };
+		DA8837772770B715000B9A41 /* EditWagons.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = EditWagons.storyboard; sourceTree = "<group>"; };
+		DA8837792770B726000B9A41 /* EditTrains.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = EditTrains.storyboard; sourceTree = "<group>"; };
+		DA88377B2770B73A000B9A41 /* EditSensors.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = EditSensors.storyboard; sourceTree = "<group>"; };
+		DA88377D2770B74E000B9A41 /* EditSwitches.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = EditSwitches.storyboard; sourceTree = "<group>"; };
+		DA88377F2770B768000B9A41 /* EditLocomotivesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditLocomotivesVC.swift; sourceTree = "<group>"; };
+		DA8837812770B77C000B9A41 /* EditWagonsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditWagonsVC.swift; sourceTree = "<group>"; };
+		DA8837832770B78C000B9A41 /* EditTrainsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTrainsVC.swift; sourceTree = "<group>"; };
+		DA8837852770B79F000B9A41 /* EditSensorsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditSensorsVC.swift; sourceTree = "<group>"; };
+		DA8837872770B7B2000B9A41 /* EditSwitchesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditSwitchesVC.swift; sourceTree = "<group>"; };
+		DA88378B2770FBEC000B9A41 /* DBEditorView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DBEditorView.xib; sourceTree = "<group>"; };
+		DA88378D2770FC41000B9A41 /* DBEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DBEditorView.swift; path = doc/DBEditorView.swift; sourceTree = "<group>"; };
 		DA8FC5DA272C3EE800FCCFCA /* ORSSerialPort.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ORSSerialPort.xcodeproj; path = "Frameworks/ORSSerialPort/Framework Project/ORSSerialPort.xcodeproj"; sourceTree = "<group>"; };
 		DA8FC5E7272C759A00FCCFCA /* NetworkMessenger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMessenger.swift; sourceTree = "<group>"; };
 		DAA83DE7272C37670075CBCD /* MyTrains.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyTrains.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -161,13 +191,28 @@
 			children = (
 				DAA83DEA272C37670075CBCD /* AppDelegate.swift */,
 				DAA83DEE272C37680075CBCD /* Assets.xcassets */,
+				DA88378B2770FBEC000B9A41 /* DBEditorView.xib */,
+				DA88378D2770FC41000B9A41 /* DBEditorView.swift */,
 				DA5B4606276F6917005CA03C /* ComboBoxDBDS.swift */,
 				DA5B460A276F8210005CA03C /* ComboBoxNetworksDS.swift */,
 				DA53B24F276E360500AB956C /* CommandStation.swift */,
 				DAB07499276EB8B1003278BE /* Database.swift */,
 				DA5B4600276F4E38005CA03C /* DatabaseConstants.swift */,
+				DA88376F2770B35B000B9A41 /* EditLayouts.storyboard */,
+				DA8837712770B371000B9A41 /* EditLayoutsVC.swift */,
+				DA8837752770B6F8000B9A41 /* EditLocomotives.storyboard */,
+				DA88377F2770B768000B9A41 /* EditLocomotivesVC.swift */,
 				DA5B4602276F5993005CA03C /* EditNetworks.storyboard */,
 				DA5B4604276F62D5005CA03C /* EditNetworksVC.swift */,
+				DA8837732770B407000B9A41 /* EditorConstants.swift */,
+				DA88377B2770B73A000B9A41 /* EditSensors.storyboard */,
+				DA8837852770B79F000B9A41 /* EditSensorsVC.swift */,
+				DA88377D2770B74E000B9A41 /* EditSwitches.storyboard */,
+				DA8837872770B7B2000B9A41 /* EditSwitchesVC.swift */,
+				DA8837792770B726000B9A41 /* EditTrains.storyboard */,
+				DA8837832770B78C000B9A41 /* EditTrainsVC.swift */,
+				DA8837772770B715000B9A41 /* EditWagons.storyboard */,
+				DA8837812770B77C000B9A41 /* EditWagonsVC.swift */,
 				DA7A490F274A89FE00C2A42B /* FastClockMessage.swift */,
 				DA6A0AE02753D50A00913F2B /* GlobalVariables.swift */,
 				DA53B251276E478400AB956C /* IPLDevData.swift */,
@@ -283,8 +328,15 @@
 			files = (
 				DAA83DEF272C37680075CBCD /* Assets.xcassets in Resources */,
 				DA5B4603276F5993005CA03C /* EditNetworks.storyboard in Resources */,
+				DA8837702770B35B000B9A41 /* EditLayouts.storyboard in Resources */,
+				DA88377A2770B726000B9A41 /* EditTrains.storyboard in Resources */,
 				DA6A0AD8275295BF00913F2B /* Monitor.storyboard in Resources */,
+				DA88377C2770B73A000B9A41 /* EditSensors.storyboard in Resources */,
 				DAA83DF2272C37680075CBCD /* Main.storyboard in Resources */,
+				DA8837762770B6F8000B9A41 /* EditLocomotives.storyboard in Resources */,
+				DA88378C2770FBEC000B9A41 /* DBEditorView.xib in Resources */,
+				DA88377E2770B74E000B9A41 /* EditSwitches.storyboard in Resources */,
+				DA8837782770B715000B9A41 /* EditWagons.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,10 +355,12 @@
 				DA6A0ADF2753B5CF00913F2B /* UserDefaults.swift in Sources */,
 				DA6A0AE12753D50A00913F2B /* GlobalVariables.swift in Sources */,
 				DAB07498276EB6C3003278BE /* Sqlite.swift in Sources */,
+				DA8837822770B77C000B9A41 /* EditWagonsVC.swift in Sources */,
 				DAA83DED272C37670075CBCD /* MainVC.swift in Sources */,
 				DA2E0E5C2736C31C00C7DA7A /* LoconetSlot.swift in Sources */,
 				DA7B4727273803BA00BCD587 /* Locomotive.swift in Sources */,
 				DAA83DEB272C37670075CBCD /* AppDelegate.swift in Sources */,
+				DA8837862770B79F000B9A41 /* EditSensorsVC.swift in Sources */,
 				DA53B250276E360500AB956C /* CommandStation.swift in Sources */,
 				DA7A4912274AC25600C2A42B /* PeerXferMessage.swift in Sources */,
 				DA6A0ADA2752976800913F2B /* MonitorVC.swift in Sources */,
@@ -314,17 +368,23 @@
 				DAEA9CF7272D8DA900C9B3EC /* NetworkConstants.swift in Sources */,
 				DA2E0E5A2736B8AA00C7DA7A /* LoconetRequestSlotDataMessage.swift in Sources */,
 				DA5B4607276F6917005CA03C /* ComboBoxDBDS.swift in Sources */,
+				DA88378E2770FC41000B9A41 /* DBEditorView.swift in Sources */,
 				DA53B252276E478400AB956C /* IPLDevData.swift in Sources */,
 				DA5B4609276F6CBF005CA03C /* Network.swift in Sources */,
 				DA2E0E5827359ED300C7DA7A /* LoconetLongAcknowledgeMessage.swift in Sources */,
 				DA5E1743272EDA5B00F9341F /* LoconetSlotDataMessage.swift in Sources */,
 				DAEA9CFA272D8FBE00C9B3EC /* NetworkMessage.swift in Sources */,
+				DA8837842770B78C000B9A41 /* EditTrainsVC.swift in Sources */,
+				DA8837742770B407000B9A41 /* EditorConstants.swift in Sources */,
 				DA6A0ADC27529D6600913F2B /* ModalWindow.swift in Sources */,
 				DA5B4601276F4E38005CA03C /* DatabaseConstants.swift in Sources */,
 				DA8FC5E8272C759A00FCCFCA /* NetworkMessenger.swift in Sources */,
 				DA5B460B276F8210005CA03C /* ComboBoxNetworksDS.swift in Sources */,
+				DA8837802770B768000B9A41 /* EditLocomotivesVC.swift in Sources */,
 				DAB0749A276EB8B1003278BE /* Database.swift in Sources */,
+				DA8837882770B7B2000B9A41 /* EditSwitchesVC.swift in Sources */,
 				DA5E1741272ED2DF00F9341F /* LoconetSwitchRequestMessage.swift in Sources */,
+				DA8837722770B371000B9A41 /* EditLayoutsVC.swift in Sources */,
 				DA5B4605276F62D5005CA03C /* EditNetworksVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
