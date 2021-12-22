@@ -10,7 +10,7 @@ import Cocoa
 
 class EditTrainsVC: NSViewController, NSWindowDelegate {
     
-  private var editorState : EditorState = .select
+  private var editorState : DBEditorState = .select
   
   override func viewDidLoad() {
     super.viewDidLoad()

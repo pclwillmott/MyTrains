@@ -10,8 +10,6 @@ import Cocoa
 
 class EditLayoutsVC: NSViewController, NSWindowDelegate {
     
-  private var editorState : EditorState = .select
-  
   override func viewDidLoad() {
     super.viewDidLoad()
   }
@@ -27,8 +25,13 @@ class EditLayoutsVC: NSViewController, NSWindowDelegate {
   override func viewWillAppear() {
     
     self.view.window?.delegate = self
-    
+    editorView.dataArea = dataArea
+
   }
+  
+  @IBOutlet weak var dataArea: NSBox!
+  
+  @IBOutlet weak var editorView: DBEditorView!
   
 }
 

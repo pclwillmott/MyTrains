@@ -7,9 +7,3 @@
 
 import Foundation
 
-public enum EditorState {
-  case select
-  case selectAndDisplay
-  case editNew
-  case editExisting
-}

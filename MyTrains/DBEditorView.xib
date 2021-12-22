@@ -8,6 +8,12 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="DBEditorView" customModule="MyTrains" customModuleProvider="target">
             <connections>
+                <outlet property="btnCancel" destination="Bd9-gn-Hr1" id="gbP-SH-D82"/>
+                <outlet property="btnDelete" destination="8fG-E9-54t" id="rfv-q3-G5S"/>
+                <outlet property="btnEdit" destination="Hzn-Qr-WA2" id="4UZ-t5-UKB"/>
+                <outlet property="btnNew" destination="jHE-uG-uNC" id="wQy-P3-RWs"/>
+                <outlet property="btnSave" destination="FRT-31-8MQ" id="jd1-rG-uNU"/>
+                <outlet property="cboSelect" destination="KVs-2r-GDG" id="iKz-2F-Lnz"/>
                 <outlet property="contentView" destination="c22-O7-iKe" id="L8p-jy-9mb"/>
             </connections>
         </customObject>
@@ -24,6 +30,9 @@
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
+                    <connections>
+                        <action selector="btnEditAction:" target="-2" id="gle-ba-PW6"/>
+                    </connections>
                 </button>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FRT-31-8MQ">
                     <rect key="frame" x="508" y="234" width="76" height="32"/>
@@ -32,6 +41,9 @@
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
+                    <connections>
+                        <action selector="btnSaveAction:" target="-2" id="1ts-Ai-OLt"/>
+                    </connections>
                 </button>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bd9-gn-Hr1">
                     <rect key="frame" x="508" y="202" width="76" height="32"/>
@@ -43,6 +55,9 @@
 Gw
 </string>
                     </buttonCell>
+                    <connections>
+                        <action selector="btnCancelAction:" target="-2" id="Mzt-Eu-9CN"/>
+                    </connections>
                 </button>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jHE-uG-uNC">
                     <rect key="frame" x="508" y="298" width="76" height="32"/>
@@ -51,6 +66,9 @@ Gw
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
+                    <connections>
+                        <action selector="btnNewAction:" target="-2" id="fsH-9L-OvG"/>
+                    </connections>
                 </button>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8fG-E9-54t">
                     <rect key="frame" x="510" y="13" width="74" height="32"/>
@@ -62,7 +80,22 @@ Gw
 Gw
 </string>
                     </buttonCell>
+                    <connections>
+                        <action selector="btnDeleteAction:" target="-2" id="y85-Bt-jM4"/>
+                    </connections>
                 </button>
+                <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KVs-2r-GDG">
+                    <rect key="frame" x="20" y="302" width="481" height="25"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="5" id="2Of-aF-2dL">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </comboBoxCell>
+                    <connections>
+                        <action selector="cboSelectAction:" target="-2" id="EBc-Jd-Zny"/>
+                    </connections>
+                </comboBox>
             </subviews>
             <point key="canvasLocation" x="199.5" y="171.5"/>
         </customView>

@@ -43,18 +43,32 @@
                                 <rect key="frame" x="0.0" y="0.0" width="480" height="285"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
-                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gvO-gc-X5j">
-                                        <rect key="frame" x="77" y="185" width="75" height="32"/>
+                                    <box fixedFrame="YES" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="pni-7d-xtd">
+                                        <rect key="frame" x="10" y="27" width="387" height="204"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="h1E-Kl-rcz">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system"/>
-                                        </buttonCell>
-                                    </button>
+                                        <view key="contentView" id="UUo-0E-Mln">
+                                            <rect key="frame" x="3" y="3" width="381" height="186"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <subviews>
+                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OEX-pK-0Rc">
+                                                    <rect key="frame" x="109" y="111" width="75" height="32"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="c8q-Wv-NwO">
+                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                </button>
+                                            </subviews>
+                                        </view>
+                                    </box>
                                 </subviews>
                             </customView>
                         </subviews>
                     </view>
+                    <connections>
+                        <outlet property="dataArea" destination="pni-7d-xtd" id="tSZ-yo-Y5Y"/>
+                        <outlet property="editorView" destination="G1D-vr-Y02" id="ObK-DC-Qq9"/>
+                    </connections>
                 </viewController>
                 <customObject id="IDe-qW-Z5Q" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
