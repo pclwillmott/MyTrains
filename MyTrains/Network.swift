@@ -7,15 +7,13 @@
 
 import Foundation
 
-public class Network {
+public class Network : EditorObject {
   
   // Constructors
   
   init(reader:SqliteDataReader) {
+    super.init(primaryKey: -1)
     decode(sqliteDataReader: reader)
-  }
-  
-  init() {
   }
   
   // Destructors
@@ -26,23 +24,14 @@ public class Network {
   
   // Private properties
   
-  private var _networkId : Int = -1
   private var _networkName : String = ""
   private var _commandStationId : Int = -1
   private var  modified : Bool = false
 
   // Public properties
   
-  public var networkId : Int {
-    get {
-      return _networkId
-    }
-    set(value) {
-      if value != _networkId {
-        _networkId = value
-        modified = true
-      }
-    }
+  override public func displayString() -> String {
+    return networkName
   }
   
   public var networkName : String {
@@ -69,25 +58,13 @@ public class Network {
     }
   }
   
-  public var duplicate : Network {
-    get {
-      
-      let result = Network()
-      result.networkId = self.networkId
-      result.networkName = self.networkName
-      result.commandStationId = self.commandStationId
-      result.modified = false
-      return result
-    }
-  }
-  
   // Database Methods
   
   private func decode(sqliteDataReader:SqliteDataReader?) {
     
     if let reader = sqliteDataReader {
       
-      networkId = reader.getInt(index: 0)!
+      primaryKey = reader.getInt(index: 0)!
       
       if !reader.isDBNull(index: 1) {
         networkName = reader.getString(index: 1)!
@@ -109,7 +86,7 @@ public class Network {
       
       var sql = ""
       
-      if networkId == -1 {
+      if primaryKey == -1 {
         sql = "INSERT INTO [\(TABLE.NETWORK)] (" +
         "[\(NETWORK.NETWORK_ID)], " +
         "[\(NETWORK.NETWORK_NAME)], " +
@@ -119,7 +96,7 @@ public class Network {
         "@\(NETWORK.NETWORK_NAME), " +
         "@\(NETWORK.COMMAND_STATION_ID)" +
         ")"
-        networkId = Database.nextCode(tableName: TABLE.NETWORK, primaryKey: NETWORK.COMMAND_STATION_ID)!
+        primaryKey = Database.nextCode(tableName: TABLE.NETWORK, primaryKey: NETWORK.COMMAND_STATION_ID)!
       }
       else {
         sql = "UPDATE [\(TABLE.NETWORK)] SET " +
@@ -140,7 +117,7 @@ public class Network {
        
       cmd.commandText = sql
       
-      cmd.parameters.addWithValue(key: "@\(NETWORK.NETWORK_ID)", value: networkId)
+      cmd.parameters.addWithValue(key: "@\(NETWORK.NETWORK_ID)", value: primaryKey)
       cmd.parameters.addWithValue(key: "@\(NETWORK.NETWORK_NAME)", value: networkName)
       cmd.parameters.addWithValue(key: "@\(NETWORK.COMMAND_STATION_ID)", value: commandStationId)
       
@@ -167,7 +144,7 @@ public class Network {
     }
   }
   
-  public static var networks : [Network] {
+  public static var networks : [Int:Network] {
     
     get {
     
@@ -183,12 +160,13 @@ public class Network {
        
       cmd.commandText = "SELECT \(columnNames) FROM [\(TABLE.NETWORK)] ORDER BY [\(NETWORK.NETWORK_NAME)]"
 
-      var result : [Network] = []
+      var result : [Int:Network] = [:]
       
       if let reader = cmd.executeReader() {
            
         while reader.read() {
-          result.append(Network(reader: reader))
+          let network = Network(reader: reader)
+          result[network.primaryKey] = network
         }
            
         reader.close()

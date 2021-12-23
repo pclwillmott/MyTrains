@@ -57,25 +57,25 @@ class DBEditorView: NSView {
   
   private var editorState : DBEditorState = .select
   
-  private var dataSource : NSComboBoxDataSource?
+  private var dataSource : ComboBoxDictDS = ComboBoxDictDS()
   
   private var _dictionary : [Int:Any]?
   
   private var modified = false
 
-  private var _dataArea : NSBox?
+  private var _tabView : NSTabView?
 
   // Public Properties
   
-  public var dataArea : NSBox? {
+  public var tabView : NSTabView? {
     get {
-      return _dataArea
+      return _tabView
     }
     set(value) {
-      _dataArea = value
-      if let da = _dataArea {
+      _tabView = value
+      if let tv = _tabView {
 
-        for control in da.contentView!.subviews {
+        for control in tv.subviews {
           print(control)
           if let button = control as? NSButton {
             button.isEnabled = false
@@ -94,12 +94,13 @@ class DBEditorView: NSView {
     set(value) {
       _dictionary = value
       if let dict = _dictionary {
-        // assign to datasource
+        dataSource.dictionary = dict
       }
       else {
-        dataSource = nil
+        dataSource.dictionary = [:]
       }
       cboSelect.dataSource = dataSource
+      cboSelect.reloadData()
     }
   }
   

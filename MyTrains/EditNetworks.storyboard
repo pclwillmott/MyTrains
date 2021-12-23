@@ -37,161 +37,89 @@
             <objects>
                 <viewController id="ZvT-jY-DU8" customClass="EditNetworksVC" customModule="MyTrains" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="KIg-Lb-Joy">
-                        <rect key="frame" x="0.0" y="0.0" width="697" height="261"/>
+                        <rect key="frame" x="0.0" y="0.0" width="697" height="473"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="klo-ij-zrh">
-                                <rect key="frame" x="608" y="182" width="76" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="push" title="Edit" bezelStyle="rounded" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="UwS-6X-WZA">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="btnEditAction:" target="ZvT-jY-DU8" id="thW-jm-eEW"/>
-                                </connections>
-                            </button>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dZC-Yd-jte">
-                                <rect key="frame" x="608" y="150" width="76" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="push" title="Save" bezelStyle="rounded" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="fj6-ne-gL3">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="btnSave:" target="ZvT-jY-DU8" id="0nR-EY-hdD"/>
-                                </connections>
-                            </button>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5kO-hp-WEo">
-                                <rect key="frame" x="608" y="118" width="76" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="F0g-Px-OYF">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                    <string key="keyEquivalent" base64-UTF8="YES">
-Gw
-</string>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="btnCancelAction:" target="ZvT-jY-DU8" id="F31-ja-fYc"/>
-                                </connections>
-                            </button>
-                            <box fixedFrame="YES" title="Network" translatesAutoresizingMaskIntoConstraints="NO" id="GPF-id-rh4">
-                                <rect key="frame" x="17" y="16" width="580" height="225"/>
+                            <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xxl-b0-mcb" customClass="DBEditorView" customModule="MyTrains" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="697" height="473"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <view key="contentView" id="KI4-Bh-X6R">
-                                    <rect key="frame" x="3" y="3" width="574" height="207"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <subviews>
-                                        <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="B6c-6O-g5g">
-                                            <rect key="frame" x="14" y="168" width="544" height="25"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                            <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" usesDataSource="YES" numberOfVisibleItems="5" id="xSE-aC-Pme">
-                                                <font key="font" metaFont="system"/>
-                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            </comboBoxCell>
-                                            <connections>
-                                                <action selector="cboNetworkAction:" target="ZvT-jY-DU8" id="HPQ-7p-2ft"/>
-                                            </connections>
-                                        </comboBox>
-                                        <box hidden="YES" fixedFrame="YES" title="Name" translatesAutoresizingMaskIntoConstraints="NO" id="fW6-Fy-4Ss">
-                                            <rect key="frame" x="11" y="16" width="547" height="144"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                            <view key="contentView" id="rvo-wY-Ihe">
-                                                <rect key="frame" x="3" y="3" width="541" height="126"/>
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                <subviews>
-                                                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gPe-31-F8U">
-                                                        <rect key="frame" x="20" y="68" width="500" height="21"/>
-                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="9aV-D9-mv1">
-                                                            <font key="font" usesAppearanceFont="YES"/>
-                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                        </textFieldCell>
-                                                        <connections>
-                                                            <action selector="txtNetworkNameAction:" target="ZvT-jY-DU8" id="cBE-Uy-dVa"/>
-                                                        </connections>
-                                                    </textField>
-                                                    <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="n83-zj-iBZ">
-                                                        <rect key="frame" x="20" y="13" width="503" height="25"/>
-                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                        <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" usesDataSource="YES" numberOfVisibleItems="5" id="Rko-wp-pdm">
-                                                            <font key="font" metaFont="system"/>
-                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                        </comboBoxCell>
-                                                        <connections>
-                                                            <action selector="cboCommandStationAction:" target="ZvT-jY-DU8" id="W53-9n-lzU"/>
-                                                        </connections>
-                                                    </comboBox>
-                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7QK-zs-FFj">
-                                                        <rect key="frame" x="18" y="97" width="40" height="16"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Name" id="fM4-q5-xKH">
-                                                            <font key="font" metaFont="system"/>
-                                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                        </textFieldCell>
-                                                    </textField>
-                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ty8-We-ZwJ">
-                                                        <rect key="frame" x="18" y="44" width="113" height="16"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Command Station" id="jOp-Hv-R7Q">
-                                                            <font key="font" metaFont="system"/>
-                                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                        </textFieldCell>
-                                                    </textField>
-                                                </subviews>
-                                            </view>
-                                        </box>
-                                    </subviews>
-                                </view>
-                            </box>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hfb-M5-hTY">
-                                <rect key="frame" x="608" y="214" width="76" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="push" title="New" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="jgS-eO-XA1">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="btnNewAction:" target="ZvT-jY-DU8" id="fMj-X4-wzI"/>
-                                </connections>
-                            </button>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="R3B-j4-c6c">
-                                <rect key="frame" x="609" y="26" width="74" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="push" title="Delete" bezelStyle="rounded" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Uuu-HW-U6c">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                    <string key="keyEquivalent" base64-UTF8="YES">
-Gw
-</string>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="btnDeleteAction:" target="ZvT-jY-DU8" id="fKE-tL-DmQ"/>
-                                </connections>
-                            </button>
+                                <subviews>
+                                    <tabView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Tg7-SW-0XC">
+                                        <rect key="frame" x="24" y="63" width="567" height="338"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <font key="font" metaFont="system"/>
+                                        <tabViewItems>
+                                            <tabViewItem label="Tab" identifier="" id="jEO-b4-qms">
+                                                <view key="view" id="pWv-Sx-mGt">
+                                                    <rect key="frame" x="10" y="33" width="547" height="292"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                    <subviews>
+                                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gPe-31-F8U">
+                                                            <rect key="frame" x="17" y="244" width="890" height="21"/>
+                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="9aV-D9-mv1">
+                                                                <font key="font" usesAppearanceFont="YES"/>
+                                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                            </textFieldCell>
+                                                            <connections>
+                                                                <action selector="txtNetworkNameAction:" target="ZvT-jY-DU8" id="cBE-Uy-dVa"/>
+                                                            </connections>
+                                                        </textField>
+                                                        <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="n83-zj-iBZ">
+                                                            <rect key="frame" x="17" y="189" width="893" height="25"/>
+                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                            <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" usesDataSource="YES" numberOfVisibleItems="5" id="Rko-wp-pdm">
+                                                                <font key="font" metaFont="system"/>
+                                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                            </comboBoxCell>
+                                                            <connections>
+                                                                <action selector="cboCommandStationAction:" target="ZvT-jY-DU8" id="W53-9n-lzU"/>
+                                                            </connections>
+                                                        </comboBox>
+                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7QK-zs-FFj">
+                                                            <rect key="frame" x="15" y="273" width="40" height="16"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Name" id="fM4-q5-xKH">
+                                                                <font key="font" metaFont="system"/>
+                                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                            </textFieldCell>
+                                                        </textField>
+                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ty8-We-ZwJ">
+                                                            <rect key="frame" x="15" y="220" width="113" height="16"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Command Station" id="jOp-Hv-R7Q">
+                                                                <font key="font" metaFont="system"/>
+                                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                            </textFieldCell>
+                                                        </textField>
+                                                    </subviews>
+                                                </view>
+                                            </tabViewItem>
+                                            <tabViewItem label="View" identifier="" id="Dr9-oj-IaG">
+                                                <view key="view" id="Bic-oe-a9h">
+                                                    <rect key="frame" x="10" y="33" width="547" height="292"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                </view>
+                                            </tabViewItem>
+                                        </tabViewItems>
+                                    </tabView>
+                                </subviews>
+                            </customView>
                         </subviews>
                     </view>
                     <connections>
-                        <outlet property="boxDataArea" destination="fW6-Fy-4Ss" id="eng-1I-I5N"/>
-                        <outlet property="btnCancel" destination="5kO-hp-WEo" id="s5V-NA-BzA"/>
-                        <outlet property="btnDelete" destination="R3B-j4-c6c" id="4bj-ww-UZs"/>
-                        <outlet property="btnEdit" destination="klo-ij-zrh" id="852-c6-70z"/>
-                        <outlet property="btnNew" destination="hfb-M5-hTY" id="ZDh-uT-vNg"/>
-                        <outlet property="btnSave" destination="dZC-Yd-jte" id="d5Q-CV-zs2"/>
                         <outlet property="cboCommandStation" destination="n83-zj-iBZ" id="ZE1-oL-jnc"/>
-                        <outlet property="cboNetwork" destination="B6c-6O-g5g" id="VfA-ZG-KVf"/>
+                        <outlet property="editorView" destination="Xxl-b0-mcb" id="1Ls-uO-5Qp"/>
                         <outlet property="txtNetworkName" destination="gPe-31-F8U" id="MU1-8x-phu"/>
                     </connections>
                 </viewController>
                 <customObject id="ehe-db-I0R" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="466.5" y="10.5"/>
+            <point key="canvasLocation" x="466.5" y="116.5"/>
         </scene>
     </scenes>
 </document>

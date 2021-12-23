@@ -226,6 +226,6 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
     locomotivesByAddress[locomotive.address] = locomotive
   }
   
-  public var networks : [Network] = Network.networks
+  public var networks : [Int:Network] = Network.networks
   
 }
