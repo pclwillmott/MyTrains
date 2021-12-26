@@ -29,4 +29,8 @@ public class EditorObject {
     return ""
   }
   
+  public func deleteCheck() -> String {
+    return "Are you sure you want to delete \"\(displayString())\"?"
+  }
+  
 }

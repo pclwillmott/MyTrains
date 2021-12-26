@@ -261,13 +261,30 @@ class DBEditorView: NSView {
   @IBOutlet weak var btnDelete: NSButton!
   
   @IBAction func btnDeleteAction(_ sender: NSButton) {
+    
+    var deleted = false
+    
     if let editorObject = dataSource.editorObjectAt(index: cboSelect.indexOfSelectedItem) {
-      delegate?.delete(dbEditorView: self, primaryKey: editorObject.primaryKey)
-      delegate?.clearFields(dbEditorView: self)
+      
+      let alert = NSAlert()
+
+      alert.messageText = editorObject.deleteCheck()
+      alert.informativeText = ""
+      alert.addButton(withTitle: "Yes")
+      alert.addButton(withTitle: "Cancel")
+      alert.alertStyle = .warning
+
+      if alert.runModal() == NSApplication.ModalResponse.alertFirstButtonReturn {
+        delegate?.delete(dbEditorView: self, primaryKey: editorObject.primaryKey)
+        delegate?.clearFields(dbEditorView: self)
+        deleted = true
+      }
     }
-    cboSelect.deselectItem(at: cboSelect.indexOfSelectedItem)
-    editorState = .select
-    setControls()
+    if deleted {
+      cboSelect.deselectItem(at: cboSelect.indexOfSelectedItem)
+      editorState = .select
+      setControls()
+    }
   }
   
 }

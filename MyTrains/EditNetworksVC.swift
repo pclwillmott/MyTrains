@@ -72,7 +72,7 @@ class EditNetworksVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     }
     if cboLayout.indexOfSelectedItem == -1 {
       cboLayout.becomeFirstResponder()
-      return "The network must belong to a layout."
+//      return "The network must belong to a layout."
     }
     return nil
   }
