@@ -137,6 +137,19 @@ class ComboBoxDBDS : NSObject, NSComboBoxDataSource, NSComboBoxDelegate {
      return -1
    }
   
+  // Returns the index of the combo box item matching the specified code.
+
+   public func indexOfItemWithCodeValue(code: Int) -> Int? {
+     var index = 0
+     for item in _items {
+       if item.code == code {
+        return index
+       }
+       index += 1
+     }
+     return nil
+   }
+  
 }
 
 class ComboItem {

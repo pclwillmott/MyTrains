@@ -15,7 +15,7 @@
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="268" y="330" width="697" height="259"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1792" height="1095"/>
-                        <value key="minSize" type="size" width="697" height="259"/>
+                        <value key="minSize" type="size" width="697" height="265"/>
                         <view key="contentView" id="azw-2O-8eo">
                             <rect key="frame" x="0.0" y="0.0" width="697" height="259"/>
                             <autoresizingMask key="autoresizingMask"/>
@@ -45,17 +45,17 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <tabView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Tg7-SW-0XC">
-                                        <rect key="frame" x="24" y="63" width="567" height="338"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <rect key="frame" x="16" y="10" width="584" height="419"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <font key="font" metaFont="system"/>
                                         <tabViewItems>
-                                            <tabViewItem label="Tab" identifier="" id="jEO-b4-qms">
+                                            <tabViewItem label="General" identifier="" id="jEO-b4-qms">
                                                 <view key="view" id="pWv-Sx-mGt">
-                                                    <rect key="frame" x="10" y="33" width="547" height="292"/>
+                                                    <rect key="frame" x="10" y="33" width="564" height="373"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gPe-31-F8U">
-                                                            <rect key="frame" x="17" y="244" width="890" height="21"/>
+                                                            <rect key="frame" x="17" y="325" width="530" height="21"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="9aV-D9-mv1">
                                                                 <font key="font" usesAppearanceFont="YES"/>
@@ -67,7 +67,7 @@
                                                             </connections>
                                                         </textField>
                                                         <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="n83-zj-iBZ">
-                                                            <rect key="frame" x="17" y="189" width="893" height="25"/>
+                                                            <rect key="frame" x="17" y="219" width="533" height="25"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                             <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" usesDataSource="YES" numberOfVisibleItems="5" id="Rko-wp-pdm">
                                                                 <font key="font" metaFont="system"/>
@@ -79,16 +79,16 @@
                                                             </connections>
                                                         </comboBox>
                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7QK-zs-FFj">
-                                                            <rect key="frame" x="15" y="273" width="40" height="16"/>
+                                                            <rect key="frame" x="15" y="354" width="94" height="16"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Name" id="fM4-q5-xKH">
+                                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Network Name" id="fM4-q5-xKH">
                                                                 <font key="font" metaFont="system"/>
                                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                         </textField>
                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ty8-We-ZwJ">
-                                                            <rect key="frame" x="15" y="220" width="113" height="16"/>
+                                                            <rect key="frame" x="15" y="250" width="113" height="16"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Command Station" id="jOp-Hv-R7Q">
                                                                 <font key="font" metaFont="system"/>
@@ -96,13 +96,28 @@
                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                         </textField>
+                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wDt-Eu-qdV">
+                                                            <rect key="frame" x="15" y="301" width="45" height="16"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Layout" id="WdQ-oZ-H6p">
+                                                                <font key="font" metaFont="system"/>
+                                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                            </textFieldCell>
+                                                        </textField>
+                                                        <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yxY-Gq-cnB" userLabel="Cbo Layout">
+                                                            <rect key="frame" x="17" y="270" width="533" height="25"/>
+                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                            <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="5" id="sia-x2-TfJ">
+                                                                <font key="font" metaFont="system"/>
+                                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                            </comboBoxCell>
+                                                            <connections>
+                                                                <action selector="cboLayoutAction:" target="ZvT-jY-DU8" id="PIx-HA-Har"/>
+                                                            </connections>
+                                                        </comboBox>
                                                     </subviews>
-                                                </view>
-                                            </tabViewItem>
-                                            <tabViewItem label="View" identifier="" id="Dr9-oj-IaG">
-                                                <view key="view" id="Bic-oe-a9h">
-                                                    <rect key="frame" x="10" y="33" width="547" height="292"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 </view>
                                             </tabViewItem>
                                         </tabViewItems>
@@ -113,7 +128,9 @@
                     </view>
                     <connections>
                         <outlet property="cboCommandStation" destination="n83-zj-iBZ" id="ZE1-oL-jnc"/>
+                        <outlet property="cboLayout" destination="yxY-Gq-cnB" id="CuP-Fz-msb"/>
                         <outlet property="editorView" destination="Xxl-b0-mcb" id="1Ls-uO-5Qp"/>
+                        <outlet property="tabView" destination="Tg7-SW-0XC" id="Bkl-nz-pCa"/>
                         <outlet property="txtNetworkName" destination="gPe-31-F8U" id="MU1-8x-phu"/>
                     </connections>
                 </viewController>

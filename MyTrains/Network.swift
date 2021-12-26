@@ -16,6 +16,10 @@ public class Network : EditorObject {
     decode(sqliteDataReader: reader)
   }
   
+  init() {
+    super.init(primaryKey: -1)
+  }
+  
   // Destructors
   
   deinit {
@@ -27,6 +31,7 @@ public class Network : EditorObject {
   private var _networkName : String = ""
   private var _commandStationId : Int = -1
   private var  modified : Bool = false
+  private var _layoutId : Int = -1
 
   // Public properties
   
@@ -58,6 +63,18 @@ public class Network : EditorObject {
     }
   }
   
+  public var layoutId : Int {
+    get {
+      return _layoutId
+    }
+    set(value) {
+      if value != _layoutId {
+        _layoutId = value
+        modified = true
+      }
+    }
+  }
+  
   // Database Methods
   
   private func decode(sqliteDataReader:SqliteDataReader?) {
@@ -72,6 +89,10 @@ public class Network : EditorObject {
       
       if !reader.isDBNull(index: 2) {
         commandStationId = reader.getInt(index: 2)!
+      }
+      
+      if !reader.isDBNull(index: 3) {
+        layoutId = reader.getInt(index: 3)!
       }
       
     }
@@ -90,18 +111,21 @@ public class Network : EditorObject {
         sql = "INSERT INTO [\(TABLE.NETWORK)] (" +
         "[\(NETWORK.NETWORK_ID)], " +
         "[\(NETWORK.NETWORK_NAME)], " +
-        "[\(NETWORK.COMMAND_STATION_ID)]" +
+        "[\(NETWORK.COMMAND_STATION_ID)], " +
+        "[\(NETWORK.LAYOUT_ID)]" +
         ") VALUES (" +
         "@\(NETWORK.NETWORK_ID), " +
         "@\(NETWORK.NETWORK_NAME), " +
-        "@\(NETWORK.COMMAND_STATION_ID)" +
+        "@\(NETWORK.COMMAND_STATION_ID), " +
+        "@\(NETWORK.LAYOUT_ID)" +
         ")"
-        primaryKey = Database.nextCode(tableName: TABLE.NETWORK, primaryKey: NETWORK.COMMAND_STATION_ID)!
+        primaryKey = Database.nextCode(tableName: TABLE.NETWORK, primaryKey: NETWORK.NETWORK_ID)!
       }
       else {
         sql = "UPDATE [\(TABLE.NETWORK)] SET " +
         "[\(NETWORK.NETWORK_NAME)] = @\(NETWORK.NETWORK_NAME), " +
-        "[\(NETWORK.COMMAND_STATION_ID)] = @\(NETWORK.COMMAND_STATION_ID) " +
+        "[\(NETWORK.COMMAND_STATION_ID)] = @\(NETWORK.COMMAND_STATION_ID), " +
+        "[\(NETWORK.LAYOUT_ID)] = @\(NETWORK.LAYOUT_ID) " +
         "WHERE [\(NETWORK.NETWORK_ID)] = @\(NETWORK.NETWORK_ID)"
       }
 
@@ -120,7 +144,8 @@ public class Network : EditorObject {
       cmd.parameters.addWithValue(key: "@\(NETWORK.NETWORK_ID)", value: primaryKey)
       cmd.parameters.addWithValue(key: "@\(NETWORK.NETWORK_NAME)", value: networkName)
       cmd.parameters.addWithValue(key: "@\(NETWORK.COMMAND_STATION_ID)", value: commandStationId)
-      
+      cmd.parameters.addWithValue(key: "@\(NETWORK.LAYOUT_ID)", value: layoutId)
+
       _ = cmd.executeNonQuery()
 
       if shouldClose {
@@ -140,7 +165,8 @@ public class Network : EditorObject {
       return
         "[\(NETWORK.NETWORK_ID)], " +
         "[\(NETWORK.NETWORK_NAME)], " +
-        "[\(NETWORK.COMMAND_STATION_ID)]"
+        "[\(NETWORK.COMMAND_STATION_ID)], " +
+        "[\(NETWORK.LAYOUT_ID)]"
     }
   }
   
@@ -181,6 +207,11 @@ public class Network : EditorObject {
       
     }
     
+  }
+  
+  public static func delete(primaryKey: Int) {
+    let sql = "DELETE FROM [\(TABLE.NETWORK)] WHERE [\(NETWORK.NETWORK_ID)] = \(primaryKey)"
+    Database.execute(commands: [sql])
   }
   
 }

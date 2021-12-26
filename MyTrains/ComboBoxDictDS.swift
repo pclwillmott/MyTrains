@@ -44,6 +44,27 @@ class ComboBoxDictDS : NSObject, NSComboBoxDataSource {
     }
   }
   
+  // Public Methods
+  
+  func editorObjectAt(index: Int) -> EditorObject? {
+    if index < 0 || index >= _items.count {
+      return nil
+    }
+    return _items[index]
+  }
+  
+  func indexWithKey(key: Int) -> Int? {
+    var index : Int = 0
+    while index < _items.count {
+      let item = _items[index]
+      if item.primaryKey == key {
+        return index
+      }
+      index += 1
+    }
+    return nil
+  }
+  
   // NSComboBoxDataSource Methods
   
   func numberOfItems(in comboBox: NSComboBox) -> Int {
@@ -54,7 +75,7 @@ class ComboBoxDictDS : NSObject, NSComboBoxDataSource {
     if index < 0 || index >= _items.count {
       return nil
     }
-    return _items[index]
+    return _items[index].displayString()
   }
 
   func comboBox(_ comboBox: NSComboBox, indexOfItemWithStringValue string: String) -> Int {

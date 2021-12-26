@@ -14,15 +14,20 @@ public enum DBEditorState {
   case editExisting
 }
 
-public protocol DBEditorDelegate {
-  
+protocol DBEditorDelegate {
+  func clearFields(dbEditorView:DBEditorView)
+  func setupFields(dbEditorView:DBEditorView, editorObject:EditorObject)
+  func validate(dbEditorView:DBEditorView) -> String?
+  func saveNew(dbEditorView:DBEditorView) -> EditorObject
+  func saveExisting(dbEditorView:DBEditorView, editorObject:EditorObject)
+  func delete(dbEditorView:DBEditorView, primaryKey: Int)
 }
 
 class DBEditorView: NSView {
 
   // View Control
   
-  override func draw(_ dirtyRect: NSRect) {
+  public override func draw(_ dirtyRect: NSRect) {
     super.draw(dirtyRect)
 
     // Drawing code here.
@@ -61,7 +66,7 @@ class DBEditorView: NSView {
   
   private var _dictionary : [Int:Any]?
   
-  private var modified = false
+  private var _modified = false
 
   private var _tabView : NSTabView?
 
@@ -73,15 +78,7 @@ class DBEditorView: NSView {
     }
     set(value) {
       _tabView = value
-      if let tv = _tabView {
-
-        for control in tv.subviews {
-          print(control)
-          if let button = control as? NSButton {
-            button.isEnabled = false
-          }
-        }
-      }
+      setControls()
     }
   }
   
@@ -101,12 +98,33 @@ class DBEditorView: NSView {
       }
       cboSelect.dataSource = dataSource
       cboSelect.reloadData()
+      if dataSource.numberOfItems(in: cboSelect) > 0 {
+        cboSelect.selectItem(at: 0)
+        if let editorObject = dataSource.editorObjectAt(index: cboSelect.indexOfSelectedItem) {
+          delegate?.setupFields(dbEditorView: self, editorObject: editorObject)
+        }
+        setControls()
+      }
+    }
+  }
+  
+  public var modified : Bool {
+    get {
+      return _modified
+    }
+    set(value) {
+      if value != _modified {
+        _modified = value
+        setControls()
+      }
     }
   }
   
   // Private Methods
   
   private func setControls() {
+    
+    var enableTabs = false
     
     switch editorState {
     case .select, .selectAndDisplay:
@@ -121,6 +139,20 @@ class DBEditorView: NSView {
       btnSave.isEnabled = modified
       btnCancel.isEnabled = true
       btnDelete.isEnabled = false
+      enableTabs = true
+    }
+    
+    if let tv = _tabView {
+      for tab in tv.tabViewItems {
+        for control in tab.view!.subviews {
+          if let text = control as? NSTextField {
+            text.isEnabled = enableTabs
+          }
+          else if let combo = control as? NSComboBox {
+            combo.isEnabled = enableTabs
+          }
+        }
+      }
     }
     
   }
@@ -132,6 +164,9 @@ class DBEditorView: NSView {
   @IBOutlet weak var cboSelect: NSComboBox!
   
   @IBAction func cboSelectAction(_ sender: NSComboBox) {
+    if let editorObject = dataSource.editorObjectAt(index: cboSelect.indexOfSelectedItem) {
+      delegate?.setupFields(dbEditorView: self, editorObject: editorObject)
+    }
   }
   
   @IBOutlet weak var btnNew: NSButton!
@@ -139,6 +174,7 @@ class DBEditorView: NSView {
   @IBAction func btnNewAction(_ sender: NSButton) {
     editorState = .editNew
     setControls()
+    delegate?.clearFields(dbEditorView: self)
   }
   
   @IBOutlet weak var btnEdit: NSButton!
@@ -146,18 +182,78 @@ class DBEditorView: NSView {
   @IBAction func btnEditAction(_ sender: NSButton) {
     editorState = .editExisting
     setControls()
- }
+  }
   
   @IBOutlet weak var btnSave: NSButton!
   
   @IBAction func btnSaveAction(_ sender: NSButton) {
-    editorState = .select
-    setControls()
+    
+    var okToSave = true
+    
+    if let del = delegate, let message = del.validate(dbEditorView: self) {
+      
+      let alert = NSAlert()
+
+      alert.messageText = "Error"
+      alert.informativeText = message
+      alert.addButton(withTitle: "OK")
+   // alert.addButton(withTitle: "Cancel")
+      alert.alertStyle = .critical
+
+      let _ = alert.runModal() // == NSAlertFirstButtonReturn
+      
+      okToSave = false
+
+    }
+    
+    if okToSave {
+      
+      var key : Int = -1
+      
+      switch editorState {
+      case .editNew:
+        if let editorObject = delegate?.saveNew(dbEditorView: self) {
+          key = editorObject.primaryKey
+        }
+        break
+      case .editExisting:
+        if let editorObject = dataSource.editorObjectAt(index: cboSelect.indexOfSelectedItem) {
+          delegate?.saveExisting(dbEditorView: self, editorObject: editorObject)
+          key = editorObject.primaryKey
+        }
+        break
+      default:
+        break
+      }
+      
+      if key == -1 {
+        cboSelect.deselectItem(at: cboSelect.indexOfSelectedItem)
+      }
+      else if let index = dataSource.indexWithKey(key: key) {
+        cboSelect.selectItem(at: index)
+      }
+
+      editorState = .select
+      setControls()
+      
+    }
   }
   
   @IBOutlet weak var btnCancel: NSButton!
   
   @IBAction func btnCancelAction(_ sender: NSButton) {
+    switch editorState {
+    case .editNew:
+      delegate?.clearFields(dbEditorView: self)
+      break
+    case .editExisting:
+      if let editorObject = dataSource.editorObjectAt(index: cboSelect.indexOfSelectedItem) {
+        delegate?.setupFields(dbEditorView: self, editorObject: editorObject)
+      }
+      break
+    default:
+      break
+    }
     editorState = .select
     setControls()
   }
@@ -165,6 +261,11 @@ class DBEditorView: NSView {
   @IBOutlet weak var btnDelete: NSButton!
   
   @IBAction func btnDeleteAction(_ sender: NSButton) {
+    if let editorObject = dataSource.editorObjectAt(index: cboSelect.indexOfSelectedItem) {
+      delegate?.delete(dbEditorView: self, primaryKey: editorObject.primaryKey)
+      delegate?.clearFields(dbEditorView: self)
+    }
+    cboSelect.deselectItem(at: cboSelect.indexOfSelectedItem)
     editorState = .select
     setControls()
   }

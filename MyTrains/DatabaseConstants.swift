@@ -9,6 +9,7 @@ import Foundation
 
 enum TABLE {
   static let VERSION              = "VERSION"
+  static let LAYOUT               = "LAYOUT"
   static let NETWORK              = "NETWORK"
   static let LOCOMOTIVE           = "LOCOMOTIVE"
   static let SENSOR               = "SENSOR"
@@ -28,6 +29,7 @@ enum NETWORK {
   static let NETWORK_ID           = "NETWORK_ID"
   static let NETWORK_NAME         = "NETWORK_NAME"
   static let COMMAND_STATION_ID   = "COMMAND_STATION_ID"
+  static let LAYOUT_ID            = "LAYOUT_ID"
 }
 
 enum COMMAND_STATION {
@@ -38,4 +40,10 @@ enum COMMAND_STATION {
   static let SERIAL_NUMBER        = "SERIAL_NUMBER"
   static let HARDWARE_VERSION     = "HARDWARE_VERSION"
   static let SOFTWARE_VERSION     = "SOFTWARE_VERSION"
+}
+
+enum LAYOUT {
+  static let LAYOUT_ID            = "LAYOUT_ID"
+  static let LAYOUT_NAME          = "LAYOUT_NAME"
+  static let LAYOUT_DESCRIPTION   = "LAYOUT_DESCRIPTION"
 }

@@ -58,11 +58,18 @@ class Database {
             
             "INSERT INTO [\(TABLE.VERSION)] ([\(VERSION.VERSION_ID)], [\(VERSION.VERSION_NUMBER)]) VALUES " +
             "(1, 1)",
- 
+
+            "CREATE TABLE [\(TABLE.LAYOUT)] (" +
+              "[\(LAYOUT.LAYOUT_ID)]          INT PRIMARY KEY," +
+              "[\(LAYOUT.LAYOUT_NAME)]        TEXT NOT NULL," +
+              "[\(LAYOUT.LAYOUT_DESCRIPTION)] TEXT" +
+            ")",
+
             "CREATE TABLE [\(TABLE.NETWORK)] (" +
               "[\(NETWORK.NETWORK_ID)]         INT PRIMARY KEY," +
               "[\(NETWORK.NETWORK_NAME)]       TEXT NOT NULL," +
-              "[\(NETWORK.COMMAND_STATION_ID)] INT" +
+              "[\(NETWORK.COMMAND_STATION_ID)] INT," +
+              "[\(NETWORK.LAYOUT_ID)] INT" +
             ")",
 
             "CREATE TABLE [\(TABLE.COMMAND_STATION)] (" +
