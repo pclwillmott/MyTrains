@@ -30,9 +30,9 @@ public class Network : EditorObject {
   
   private var _networkName : String = ""
   private var _commandStationId : Int = -1
-  private var  modified : Bool = false
   private var _layoutId : Int = -1
-
+  private var  modified : Bool = false
+  
   // Public properties
   
   override public func displayString() -> String {

@@ -221,11 +221,10 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
   private var locomotivesByName    : [String:Locomotive] = [:]
   private var locomotivesByAddress : [UInt16:Locomotive] = [:]
 
-  public func add(locomotive:Locomotive) {
-    locomotivesByName[locomotive.locomotiveId] = locomotive
-    locomotivesByAddress[locomotive.address] = locomotive
-  }
+
   
   public var networks : [Int:Network] = Network.networks
+  public var layouts : [Int:Layout] = Layout.layouts
+  public var locomotives : [Int:Locomotive] = Locomotive.locomotives
   
 }

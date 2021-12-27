@@ -8,8 +8,10 @@
 import Foundation
 import Cocoa
 
-class EditLayoutsVC: NSViewController, NSWindowDelegate {
-    
+class EditLayoutsVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
+
+  // Window & View Control
+  
   override func viewDidLoad() {
     super.viewDidLoad()
   }
@@ -25,10 +27,84 @@ class EditLayoutsVC: NSViewController, NSWindowDelegate {
   override func viewWillAppear() {
     
     self.view.window?.delegate = self
+    
+    editorView.delegate = self
 
+    editorView.tabView = self.tabView
+    
+    editorView.dictionary = networkController.layouts
+    
   }
   
+  // DBEditorView Delegate Methods
+  
+  func clearFields(dbEditorView: DBEditorView) {
+    txtLayoutName.stringValue = ""
+    txtDescription.stringValue = ""
+  }
+  
+  func setupFields(dbEditorView: DBEditorView, editorObject: EditorObject) {
+    clearFields(dbEditorView: dbEditorView)
+    if let layout = editorObject as? Layout {
+      txtLayoutName.stringValue = layout.layoutName
+      txtDescription.stringValue = layout.description
+    }
+  }
+  
+  func validate(dbEditorView: DBEditorView) -> String? {
+    if txtLayoutName.stringValue.trimmingCharacters(in: .whitespaces) == "" {
+      txtLayoutName.becomeFirstResponder()
+      return "The layout must have a name."
+    }
+    return nil
+  }
+  
+  func setFields(layout:Layout) {
+    layout.layoutName = txtLayoutName.stringValue
+    layout.description = txtDescription.stringValue
+    layout.save()
+  }
+  
+  func saveNew(dbEditorView: DBEditorView) -> EditorObject {
+    let layout = Layout()
+    setFields(layout: layout)
+    networkController.layouts[layout.primaryKey] = layout
+    editorView.dictionary = networkController.layouts
+    editorView.setSelection(key: layout.primaryKey)
+    return layout
+  }
+  
+  func saveExisting(dbEditorView: DBEditorView, editorObject: EditorObject) {
+    if let layout = editorObject as? Layout {
+      setFields(layout: layout)
+      editorView.dictionary = networkController.layouts
+      editorView.setSelection(key: layout.primaryKey)
+    }
+  }
+
+  func delete(dbEditorView: DBEditorView, primaryKey: Int) {
+    networkController.layouts.removeValue(forKey: primaryKey)
+    Layout.delete(primaryKey: primaryKey)
+    editorView.dictionary = networkController.layouts
+  }
+
+  // Outlets & Actions
+  
   @IBOutlet weak var editorView: DBEditorView!
+  
+  @IBOutlet weak var txtLayoutName: NSTextField!
+  
+  @IBAction func txtLayoutNameAction(_ sender: NSTextField) {
+    editorView.modified = true
+  }
+  
+  @IBOutlet weak var txtDescription: NSTextField!
+  
+  @IBAction func txtDescriptionAction(_ sender: NSTextField) {
+    editorView.modified = true
+  }
+  
+  @IBOutlet weak var tabView: NSTabView!
   
 }
 

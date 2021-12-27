@@ -82,6 +82,22 @@ class Database {
               "[\(COMMAND_STATION.SOFTWARE_VERSION)]     REAL NOT NULL" +
             ")",
 
+            "CREATE TABLE [\(TABLE.LOCOMOTIVE)] (" +
+              "[\(LOCOMOTIVE.LOCOMOTIVE_ID)]      INT PRIMARY KEY," +
+              "[\(LOCOMOTIVE.LOCOMOTIVE_NAME)]    TEXT NOT NULL," +
+              "[\(LOCOMOTIVE.LOCOMOTIVE_TYPE)]    INT NOT NULL," +
+              "[\(LOCOMOTIVE.LENGTH)]             REAL NOT NULL," +
+              "[\(LOCOMOTIVE.DECODER_TYPE)]       INT NOT NULL," +
+              "[\(LOCOMOTIVE.ADDRESS)]            INT NOT NULL," +
+              "[\(LOCOMOTIVE.FBOFF_OCC_FRONT)]    REAL NOT NULL," +
+              "[\(LOCOMOTIVE.FBOFF_OCC_REAR)]     REAL NOT NULL," +
+              "[\(LOCOMOTIVE.LOCOMOTIVE_SCALE)]   REAL NOT NULL," +
+              "[\(LOCOMOTIVE.MAX_FORWARD_SPEED)]  REAL NOT NULL," +
+              "[\(LOCOMOTIVE.MAX_BACKWARD_SPEED)] REAL NOT NULL," +
+              "[\(LOCOMOTIVE.TRACK_GAUGE)]        INT NOT NULL," +
+              "[\(LOCOMOTIVE.TRACK_RESTRICTION)]  INT NOT NULL" +
+            ")",
+
             /*
             "CREATE INDEX IDX_ARTIST_UKCHART_NAME ON [\(TABLE.ARTIST)] ([\(ARTIST.UKCHART_NAME)])",
             

@@ -10,6 +10,8 @@ import Cocoa
 
 class EditNetworksVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
 
+  // Window & View Control
+  
   override func viewDidLoad() {
     super.viewDidLoad()
   }
@@ -30,11 +32,11 @@ class EditNetworksVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     
     editorView.tabView = self.tabView
     
-    editorView.dictionary = networkController.networks
-    
     cboCommandStation.dataSource = cboCommandStationDS
     
     cboLayout.dataSource = cboLayoutDS
+    
+    editorView.dictionary = networkController.networks
     
   }
   
@@ -72,7 +74,7 @@ class EditNetworksVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     }
     if cboLayout.indexOfSelectedItem == -1 {
       cboLayout.becomeFirstResponder()
-//      return "The network must belong to a layout."
+      return "The network must belong to a layout."
     }
     return nil
   }
@@ -89,12 +91,15 @@ class EditNetworksVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     setFields(network: network)
     networkController.networks[network.primaryKey] = network
     editorView.dictionary = networkController.networks
+    editorView.setSelection(key: network.primaryKey)
     return network
   }
   
   func saveExisting(dbEditorView: DBEditorView, editorObject: EditorObject) {
     if let network = editorObject as? Network {
       setFields(network: network)
+      editorView.dictionary = networkController.networks
+      editorView.setSelection(key: network.primaryKey)
     }
   }
   

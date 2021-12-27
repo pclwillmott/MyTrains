@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		DA0197252773500100350F71 /* ComboBoxDictDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0197242773500100350F71 /* ComboBoxDictDS.swift */; };
 		DA0197272773520400350F71 /* EditorObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0197262773520400350F71 /* EditorObject.swift */; };
+		DA0DA27A2779E96B00E4F23C /* Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0DA2792779E96B00E4F23C /* Layout.swift */; };
 		DA2E0E55273591A600C7DA7A /* NetworkTurnoutOutputMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2E0E54273591A600C7DA7A /* NetworkTurnoutOutputMessage.swift */; };
 		DA2E0E5827359ED300C7DA7A /* LoconetLongAcknowledgeMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2E0E5727359ED300C7DA7A /* LoconetLongAcknowledgeMessage.swift */; };
 		DA2E0E5A2736B8AA00C7DA7A /* LoconetRequestSlotDataMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2E0E592736B8AA00C7DA7A /* LoconetRequestSlotDataMessage.swift */; };
@@ -88,6 +89,7 @@
 /* Begin PBXFileReference section */
 		DA0197242773500100350F71 /* ComboBoxDictDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComboBoxDictDS.swift; sourceTree = "<group>"; };
 		DA0197262773520400350F71 /* EditorObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorObject.swift; sourceTree = "<group>"; };
+		DA0DA2792779E96B00E4F23C /* Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Layout.swift; sourceTree = "<group>"; };
 		DA2E0E54273591A600C7DA7A /* NetworkTurnoutOutputMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkTurnoutOutputMessage.swift; sourceTree = "<group>"; };
 		DA2E0E5727359ED300C7DA7A /* LoconetLongAcknowledgeMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoconetLongAcknowledgeMessage.swift; sourceTree = "<group>"; };
 		DA2E0E592736B8AA00C7DA7A /* LoconetRequestSlotDataMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoconetRequestSlotDataMessage.swift; sourceTree = "<group>"; };
@@ -203,6 +205,7 @@
 				DA5B4600276F4E38005CA03C /* DatabaseConstants.swift */,
 				DA88376F2770B35B000B9A41 /* EditLayouts.storyboard */,
 				DA8837712770B371000B9A41 /* EditLayoutsVC.swift */,
+				DA0DA2792779E96B00E4F23C /* Layout.swift */,
 				DA8837752770B6F8000B9A41 /* EditLocomotives.storyboard */,
 				DA88377F2770B768000B9A41 /* EditLocomotivesVC.swift */,
 				DA5B4602276F5993005CA03C /* EditNetworks.storyboard */,
@@ -383,6 +386,7 @@
 				DA8837742770B407000B9A41 /* EditorConstants.swift in Sources */,
 				DA6A0ADC27529D6600913F2B /* ModalWindow.swift in Sources */,
 				DA5B4601276F4E38005CA03C /* DatabaseConstants.swift in Sources */,
+				DA0DA27A2779E96B00E4F23C /* Layout.swift in Sources */,
 				DA8FC5E8272C759A00FCCFCA /* NetworkMessenger.swift in Sources */,
 				DA8837802770B768000B9A41 /* EditLocomotivesVC.swift in Sources */,
 				DAB0749A276EB8B1003278BE /* Database.swift in Sources */,

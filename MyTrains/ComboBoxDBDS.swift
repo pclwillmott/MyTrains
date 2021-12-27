@@ -141,8 +141,8 @@ class ComboBoxDBDS : NSObject, NSComboBoxDataSource, NSComboBoxDelegate {
 
    public func indexOfItemWithCodeValue(code: Int) -> Int? {
      var index = 0
-     for item in _items {
-       if item.code == code {
+     while index < _items.count {
+       if _items[index].code == code {
         return index
        }
        index += 1

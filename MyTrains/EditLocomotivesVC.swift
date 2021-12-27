@@ -8,9 +8,9 @@
 import Foundation
 import Cocoa
 
-class EditLocomotivesVC: NSViewController, NSWindowDelegate {
-    
-  private var editorState : DBEditorState = .select
+class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
+ 
+  // Window & View Control
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -28,6 +28,46 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate {
     
     self.view.window?.delegate = self
     
+    editorView.delegate = self
+    
+    editorView.tabView = tabView
+    
+    // do comboBoxDS here
+    
+    editorView.dictionary = networkController.locomotives
+
   }
+  
+  // DBEditorDelegate Methods
+  
+  func clearFields(dbEditorView: DBEditorView) {
+    
+  }
+  
+  func setupFields(dbEditorView: DBEditorView, editorObject: EditorObject) {
+    
+  }
+  
+  func validate(dbEditorView: DBEditorView) -> String? {
+    return ""
+  }
+  
+  func saveNew(dbEditorView: DBEditorView) -> EditorObject {
+    return EditorObject(primaryKey: -1)
+  }
+  
+  func saveExisting(dbEditorView: DBEditorView, editorObject: EditorObject) {
+    
+  }
+  
+  func delete(dbEditorView: DBEditorView, primaryKey: Int) {
+    
+  }
+  
+  // Outlets & Actions
+  
+  @IBOutlet weak var tabView: NSTabView!
+  
+  @IBOutlet weak var editorView: DBEditorView!
   
 }

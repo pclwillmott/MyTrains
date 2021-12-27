@@ -68,6 +68,8 @@ class DBEditorView: NSView {
   private var _modified = false
 
   private var _tabView : NSTabView?
+  
+  private var first = true
 
   // Public Properties
   
@@ -79,6 +81,18 @@ class DBEditorView: NSView {
       _tabView = value
       setControls()
     }
+  }
+  
+  public func setSelection(key:Int) {
+    if dataSource.numberOfItems(in: cboSelect) > 0 {
+      if let index = dataSource.indexWithKey(key: key) {
+        cboSelect.selectItem(at: index)
+        if let editorObject = dataSource.editorObjectAt(index: cboSelect.indexOfSelectedItem) {
+          delegate?.setupFields(dbEditorView: self, editorObject: editorObject)
+        }
+      }
+    }
+    setControls()
   }
   
   public var delegate : DBEditorDelegate?
@@ -95,15 +109,21 @@ class DBEditorView: NSView {
       else {
         dataSource.dictionary = [:]
       }
+      cboSelect.dataSource = nil
       cboSelect.dataSource = dataSource
       cboSelect.reloadData()
-      if dataSource.numberOfItems(in: cboSelect) > 0 {
-        cboSelect.selectItem(at: 0)
-        if let editorObject = dataSource.editorObjectAt(index: cboSelect.indexOfSelectedItem) {
-          delegate?.setupFields(dbEditorView: self, editorObject: editorObject)
+      
+      if first {
+        if dataSource.numberOfItems(in: cboSelect) > 0 {
+          cboSelect.selectItem(at: 0)
+          if let editorObject = dataSource.editorObjectAt(index: cboSelect.indexOfSelectedItem) {
+            delegate?.setupFields(dbEditorView: self, editorObject: editorObject)
+          }
         }
         setControls()
+        first = false
       }
+      
     }
   }
   
@@ -174,12 +194,16 @@ class DBEditorView: NSView {
     editorState = .editNew
     setControls()
     delegate?.clearFields(dbEditorView: self)
+    modified = false
   }
   
   @IBOutlet weak var btnEdit: NSButton!
   
   @IBAction func btnEditAction(_ sender: NSButton) {
     editorState = .editExisting
+    if let editorObject = dataSource.editorObjectAt(index: cboSelect.indexOfSelectedItem) {
+      delegate?.setupFields(dbEditorView: self, editorObject: editorObject)
+    }
     setControls()
   }
   
