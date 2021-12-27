@@ -9,7 +9,6 @@ import Cocoa
 
 public enum DBEditorState {
   case select
-  case selectAndDisplay
   case editNew
   case editExisting
 }
@@ -127,7 +126,7 @@ class DBEditorView: NSView {
     var enableTabs = false
     
     switch editorState {
-    case .select, .selectAndDisplay:
+    case .select:
       btnNew.isEnabled = true
       btnEdit.isEnabled = cboSelect.numberOfItems > 0
       btnSave.isEnabled = false
@@ -270,11 +269,11 @@ class DBEditorView: NSView {
 
       alert.messageText = editorObject.deleteCheck()
       alert.informativeText = ""
+      alert.addButton(withTitle: "No")
       alert.addButton(withTitle: "Yes")
-      alert.addButton(withTitle: "Cancel")
       alert.alertStyle = .warning
 
-      if alert.runModal() == NSApplication.ModalResponse.alertFirstButtonReturn {
+      if alert.runModal() == NSApplication.ModalResponse.alertSecondButtonReturn {
         delegate?.delete(dbEditorView: self, primaryKey: editorObject.primaryKey)
         delegate?.clearFields(dbEditorView: self)
         deleted = true
