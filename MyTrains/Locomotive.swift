@@ -48,6 +48,19 @@ public enum TrackRestriction : Int {
   case onlyElectrifiedThirdRail = 2
 }
 
+public enum LengthUnit : Int {
+  case millimeters = 0
+  case centimeters = 1
+  case meters = 2
+  case inches = 3
+  case feet = 4
+}
+
+public enum SpeedUnit : Int {
+  case kilometersPerHour = 0
+  case milesPerHour = 1
+}
+
 public class Locomotive : EditorObject {
   
   // Constructors
@@ -80,8 +93,11 @@ public class Locomotive : EditorObject {
   private var _trackGauge : TrackGauge = .unknown
   private var _trackRestriction : TrackRestriction = .none
   private var _locomotiveScale : Double = 1.0
-  private var _maxForwardSpeed : Double = -1.0
-  private var _maxBackwardSpeed : Double = -1.0
+  private var _maxForwardSpeed : Double = 0.0
+  private var _maxBackwardSpeed : Double = 0.0
+  private var _lengthUnits : LengthUnit = .centimeters
+  private var _occupancyFeedbackOffsetUnits : LengthUnit = .centimeters
+  private var _speedUnits : SpeedUnit = .kilometersPerHour
   
   private var  modified : Bool = false
 
@@ -103,7 +119,6 @@ public class Locomotive : EditorObject {
     }
   }
   
-
   public var locomotiveType : LocomotiveType {
     get {
       return _locomotiveType
@@ -236,6 +251,42 @@ public class Locomotive : EditorObject {
     }
   }
   
+  public var lengthUnits : LengthUnit {
+    get {
+      return _lengthUnits
+    }
+    set(value) {
+      if value != _lengthUnits {
+        _lengthUnits = value
+        modified = true
+      }
+    }
+  }
+  
+  public var occupancyFeedbackOffsetUnits : LengthUnit {
+    get {
+      return _occupancyFeedbackOffsetUnits
+    }
+    set(value) {
+      if value != _occupancyFeedbackOffsetUnits {
+        _occupancyFeedbackOffsetUnits = value
+        modified = true
+      }
+    }
+  }
+  
+  public var speedUnits : SpeedUnit {
+    get {
+      return _speedUnits
+    }
+    set(value) {
+      if value != _speedUnits {
+        _speedUnits = value
+        modified = true
+      }
+    }
+  }
+  
   // Database Methods
   
   private func decode(sqliteDataReader:SqliteDataReader?) {
@@ -292,6 +343,18 @@ public class Locomotive : EditorObject {
         maxBackwardSpeed = reader.getDouble(index: 12)!
       }
       
+      if !reader.isDBNull(index: 13) {
+        lengthUnits = LengthUnit(rawValue: reader.getInt(index: 13)!) ?? .centimeters
+      }
+
+      if !reader.isDBNull(index: 14) {
+        occupancyFeedbackOffsetUnits = LengthUnit(rawValue: reader.getInt(index: 14)!) ?? .centimeters
+      }
+
+      if !reader.isDBNull(index: 15) {
+        speedUnits = SpeedUnit(rawValue: reader.getInt(index: 15)!) ?? .kilometersPerHour
+      }
+
     }
     
     modified = false
@@ -318,7 +381,10 @@ public class Locomotive : EditorObject {
         "[\(LOCOMOTIVE.TRACK_RESTRICTION)]," +
         "[\(LOCOMOTIVE.LOCOMOTIVE_SCALE)]," +
         "[\(LOCOMOTIVE.MAX_FORWARD_SPEED)]," +
-        "[\(LOCOMOTIVE.MAX_BACKWARD_SPEED)]" +
+        "[\(LOCOMOTIVE.MAX_BACKWARD_SPEED)]," +
+        "[\(LOCOMOTIVE.UNITS_LENGTH)]," +
+        "[\(LOCOMOTIVE.UNITS_FBOFF_OCC)]," +
+        "[\(LOCOMOTIVE.UNITS_SPEED)]" +
         ") VALUES (" +
         "@\(LOCOMOTIVE.LOCOMOTIVE_ID), " +
         "@\(LOCOMOTIVE.LOCOMOTIVE_NAME), " +
@@ -332,7 +398,10 @@ public class Locomotive : EditorObject {
         "@\(LOCOMOTIVE.TRACK_RESTRICTION), " +
         "@\(LOCOMOTIVE.LOCOMOTIVE_SCALE), " +
         "@\(LOCOMOTIVE.MAX_FORWARD_SPEED), " +
-        "@\(LOCOMOTIVE.MAX_BACKWARD_SPEED)" +
+        "@\(LOCOMOTIVE.MAX_BACKWARD_SPEED), " +
+        "@\(LOCOMOTIVE.UNITS_LENGTH), " +
+        "@\(LOCOMOTIVE.UNITS_FBOFF_OCC), " +
+        "@\(LOCOMOTIVE.UNITS_SPEED)" +
         ")"
         primaryKey = Database.nextCode(tableName: TABLE.LOCOMOTIVE, primaryKey: LOCOMOTIVE.LOCOMOTIVE_ID)!
       }
@@ -349,7 +418,10 @@ public class Locomotive : EditorObject {
         "[\(LOCOMOTIVE.TRACK_RESTRICTION)] = @\(LOCOMOTIVE.TRACK_RESTRICTION), " +
         "[\(LOCOMOTIVE.LOCOMOTIVE_SCALE)] = @\(LOCOMOTIVE.LOCOMOTIVE_SCALE), " +
         "[\(LOCOMOTIVE.MAX_FORWARD_SPEED)] = @\(LOCOMOTIVE.MAX_FORWARD_SPEED), " +
-        "[\(LOCOMOTIVE.MAX_BACKWARD_SPEED)] = @\(LOCOMOTIVE.MAX_BACKWARD_SPEED) " +
+        "[\(LOCOMOTIVE.MAX_BACKWARD_SPEED)] = @\(LOCOMOTIVE.MAX_BACKWARD_SPEED), " +
+        "[\(LOCOMOTIVE.UNITS_LENGTH)] = @\(LOCOMOTIVE.UNITS_LENGTH), " +
+        "[\(LOCOMOTIVE.UNITS_FBOFF_OCC)] = @\(LOCOMOTIVE.UNITS_FBOFF_OCC), " +
+        "[\(LOCOMOTIVE.UNITS_SPEED)] = @\(LOCOMOTIVE.UNITS_SPEED) " +
         "WHERE [\(LOCOMOTIVE.LOCOMOTIVE_ID)] = @\(LOCOMOTIVE.LOCOMOTIVE_ID)"
       }
 
@@ -378,6 +450,9 @@ public class Locomotive : EditorObject {
       cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.LOCOMOTIVE_SCALE)", value: locomotiveScale)
       cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.MAX_FORWARD_SPEED)", value: maxForwardSpeed)
       cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.MAX_BACKWARD_SPEED)", value: maxBackwardSpeed)
+      cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.UNITS_LENGTH)", value: lengthUnits.rawValue)
+      cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.UNITS_FBOFF_OCC)", value: occupancyFeedbackOffsetUnits.rawValue)
+      cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.UNITS_SPEED)", value: speedUnits.rawValue)
 
       _ = cmd.executeNonQuery()
 
@@ -408,7 +483,10 @@ public class Locomotive : EditorObject {
         "[\(LOCOMOTIVE.TRACK_RESTRICTION)], " +
         "[\(LOCOMOTIVE.LOCOMOTIVE_SCALE)], " +
         "[\(LOCOMOTIVE.MAX_FORWARD_SPEED)], " +
-        "[\(LOCOMOTIVE.MAX_BACKWARD_SPEED)]"
+        "[\(LOCOMOTIVE.MAX_BACKWARD_SPEED)], " +
+        "[\(LOCOMOTIVE.UNITS_LENGTH)], " +
+        "[\(LOCOMOTIVE.UNITS_FBOFF_OCC)], " +
+        "[\(LOCOMOTIVE.UNITS_SPEED)]"
     }
   }
   

@@ -66,4 +66,7 @@ enum LOCOMOTIVE {
   static let LOCOMOTIVE_SCALE      = "LOCOMOTIVE_SCALE"
   static let MAX_FORWARD_SPEED     = "MAX_FORWARD_SPEED"
   static let MAX_BACKWARD_SPEED    = "MAX_BACKWARD_SPEED"
+  static let UNITS_LENGTH          = "UNITS_LENGTH"
+  static let UNITS_FBOFF_OCC       = "UNITS_FBOFF_OCC"
+  static let UNITS_SPEED           = "UNITS_SPEED"
 }

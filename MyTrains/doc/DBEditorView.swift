@@ -170,6 +170,23 @@ class DBEditorView: NSView {
           else if let combo = control as? NSComboBox {
             combo.isEnabled = enableTabs
           }
+          else if let button = control as? NSButton {
+            button.isEnabled = enableTabs
+          }
+          else if let box = control as? NSBox {
+            for subControl in box.contentView!.subviews {
+              if let text = subControl as? NSTextField {
+                text.isEnabled = enableTabs
+              }
+              else if let combo = subControl as? NSComboBox {
+                combo.isEnabled = enableTabs
+              }
+              else if let button = subControl as? NSButton {
+                button.isEnabled = enableTabs
+              }
+            }
+          }
+
         }
       }
     }

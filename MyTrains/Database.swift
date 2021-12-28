@@ -95,7 +95,10 @@ class Database {
               "[\(LOCOMOTIVE.MAX_FORWARD_SPEED)]  REAL NOT NULL," +
               "[\(LOCOMOTIVE.MAX_BACKWARD_SPEED)] REAL NOT NULL," +
               "[\(LOCOMOTIVE.TRACK_GAUGE)]        INT NOT NULL," +
-              "[\(LOCOMOTIVE.TRACK_RESTRICTION)]  INT NOT NULL" +
+              "[\(LOCOMOTIVE.TRACK_RESTRICTION)]  INT NOT NULL," +
+              "[\(LOCOMOTIVE.UNITS_LENGTH)]       INT NOT NULL," +
+              "[\(LOCOMOTIVE.UNITS_FBOFF_OCC)]    INT NOT NULL," +
+              "[\(LOCOMOTIVE.UNITS_SPEED)]        INT NOT NULL" +
             ")",
 
             /*
