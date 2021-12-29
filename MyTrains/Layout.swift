@@ -29,13 +29,31 @@ public class Layout : EditorObject {
   // Private properties
   
   private var _layoutName : String = ""
+  
   private var _description : String = ""
+  
   private var  modified : Bool = false
 
   // Public properties
   
   override public func displayString() -> String {
     return layoutName
+  }
+  
+  public var networks : [Network] {
+    get {
+      var networks : [Network] = []
+      for kv in networkController.networks {
+        let network = kv.value
+        if network.layoutId == self.primaryKey {
+          networks.append(network)
+        }
+        networks.sort {
+          $0.networkName < $1.networkName
+        }
+      }
+      return networks
+    }
   }
   
   public var layoutName : String {

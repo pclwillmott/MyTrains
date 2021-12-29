@@ -44,7 +44,6 @@ class EditLayoutsVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   }
   
   func setupFields(dbEditorView: DBEditorView, editorObject: EditorObject) {
-    clearFields(dbEditorView: dbEditorView)
     if let layout = editorObject as? Layout {
       txtLayoutName.stringValue = layout.layoutName
       txtDescription.stringValue = layout.description
@@ -68,7 +67,7 @@ class EditLayoutsVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   func saveNew(dbEditorView: DBEditorView) -> EditorObject {
     let layout = Layout()
     setFields(layout: layout)
-    networkController.layouts[layout.primaryKey] = layout
+    networkController.addLayout(layout: layout)
     editorView.dictionary = networkController.layouts
     editorView.setSelection(key: layout.primaryKey)
     return layout
@@ -83,8 +82,8 @@ class EditLayoutsVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   }
 
   func delete(dbEditorView: DBEditorView, primaryKey: Int) {
-    networkController.layouts.removeValue(forKey: primaryKey)
     Layout.delete(primaryKey: primaryKey)
+    networkController.removeLayout(primaryKey: primaryKey)
     editorView.dictionary = networkController.layouts
   }
 

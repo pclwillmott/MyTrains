@@ -48,6 +48,10 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, NetworkMessengerDe
     
   }
   
+  func networkControllerUpdated(netwokController: NetworkController) {
+    
+  }
+    
   func messengersUpdated(messengers: [NetworkMessenger]) {
     
     if observerId != -1 {

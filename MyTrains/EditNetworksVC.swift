@@ -55,7 +55,6 @@ class EditNetworksVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   }
   
   func setupFields(dbEditorView: DBEditorView, editorObject: EditorObject) {
-    clearFields(dbEditorView: dbEditorView)
     if let network = editorObject as? Network {
       txtNetworkName.stringValue = network.networkName
       if let csIndex = cboCommandStationDS.indexOfItemWithCodeValue(code: network.commandStationId) {
@@ -89,7 +88,7 @@ class EditNetworksVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   func saveNew(dbEditorView: DBEditorView) -> EditorObject {
     let network = Network()
     setFields(network: network)
-    networkController.networks[network.primaryKey] = network
+    networkController.addNetwork(network: network)
     editorView.dictionary = networkController.networks
     editorView.setSelection(key: network.primaryKey)
     return network
@@ -104,8 +103,8 @@ class EditNetworksVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   }
   
   func delete(dbEditorView: DBEditorView, primaryKey: Int) {
-    networkController.networks.removeValue(forKey: primaryKey)
     Network.delete(primaryKey: primaryKey)
+    networkController.removeNetwork(primaryKey: primaryKey)
     editorView.dictionary = networkController.networks
   }
   

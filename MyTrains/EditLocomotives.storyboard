@@ -71,6 +71,9 @@
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
+                                                            <connections>
+                                                                <action selector="txtLocomotiveAction:" target="9iP-PP-Stw" id="4Ov-BA-cBa"/>
+                                                            </connections>
                                                         </textField>
                                                         <box fixedFrame="YES" title="Physical Details" translatesAutoresizingMaskIntoConstraints="NO" id="SbA-Ee-T4D">
                                                             <rect key="frame" x="14" y="192" width="496" height="84"/>
@@ -96,6 +99,9 @@
                                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                         </textFieldCell>
+                                                                        <connections>
+                                                                            <action selector="txtLengthAction:" target="9iP-PP-Stw" id="wdU-Xp-HwK"/>
+                                                                        </connections>
                                                                     </textField>
                                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GqQ-vG-fXn">
                                                                         <rect key="frame" x="352" y="50" width="81" height="16"/>
@@ -132,6 +138,9 @@
                                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                         </textFieldCell>
+                                                                        <connections>
+                                                                            <action selector="txtScaleAction:" target="9iP-PP-Stw" id="xa8-ar-C7n"/>
+                                                                        </connections>
                                                                     </textField>
                                                                     <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="31k-gB-HGV">
                                                                         <rect key="frame" x="354" y="22" width="119" height="25"/>
@@ -156,6 +165,9 @@
                                                                                 <string>Unknown</string>
                                                                             </objectValues>
                                                                         </comboBoxCell>
+                                                                        <connections>
+                                                                            <action selector="cboTrackGaugeAction:" target="9iP-PP-Stw" id="Sjz-yP-1UT"/>
+                                                                        </connections>
                                                                     </comboBox>
                                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yHP-2v-3S9">
                                                                         <rect key="frame" x="119" y="50" width="36" height="16"/>
@@ -181,6 +193,9 @@
                                                                                 <string>ft</string>
                                                                             </objectValues>
                                                                         </comboBoxCell>
+                                                                        <connections>
+                                                                            <action selector="cboLengthUnitsAction:" target="9iP-PP-Stw" id="faL-U8-YU4"/>
+                                                                        </connections>
                                                                     </comboBox>
                                                                 </subviews>
                                                             </view>
@@ -213,10 +228,14 @@
                                                                                 <string>DCC 14</string>
                                                                                 <string>DCC 28</string>
                                                                                 <string>DCC 28 Adv. Consist</string>
+                                                                                <string>DCC 28 Trinary</string>
                                                                                 <string>DCC 128</string>
                                                                                 <string>DCC 128 Adv. Consist</string>
                                                                             </objectValues>
                                                                         </comboBoxCell>
+                                                                        <connections>
+                                                                            <action selector="cboDecoderTypeAction:" target="9iP-PP-Stw" id="AaW-GZ-2aR"/>
+                                                                        </connections>
                                                                     </comboBox>
                                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JeP-Ly-Yql">
                                                                         <rect key="frame" x="198" y="50" width="54" height="16"/>
@@ -235,6 +254,9 @@
                                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                         </textFieldCell>
+                                                                        <connections>
+                                                                            <action selector="txtAddressAction:" target="9iP-PP-Stw" id="6dZ-DA-56y"/>
+                                                                        </connections>
                                                                     </textField>
                                                                 </subviews>
                                                             </view>
@@ -270,6 +292,9 @@
                                                                                 <string>Unknown</string>
                                                                             </objectValues>
                                                                         </comboBoxCell>
+                                                                        <connections>
+                                                                            <action selector="cboPowerSourceAction:" target="9iP-PP-Stw" id="l5C-u7-HdK"/>
+                                                                        </connections>
                                                                     </comboBox>
                                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PWU-cb-jEb">
                                                                         <rect key="frame" x="198" y="50" width="113" height="16"/>
@@ -293,6 +318,9 @@
                                                                                 <string>Only Third Rail Electrified Track</string>
                                                                             </objectValues>
                                                                         </comboBoxCell>
+                                                                        <connections>
+                                                                            <action selector="cboTrackRestrictionsAction:" target="9iP-PP-Stw" id="Omg-VO-ga9"/>
+                                                                        </connections>
                                                                     </comboBox>
                                                                 </subviews>
                                                             </view>
@@ -314,9 +342,9 @@
                                                                         </textFieldCell>
                                                                     </textField>
                                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mRU-Ra-HQC">
-                                                                        <rect key="frame" x="198" y="50" width="34" height="16"/>
+                                                                        <rect key="frame" x="198" y="50" width="32" height="16"/>
                                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Back" id="b9X-Id-irD">
+                                                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Rear" id="b9X-Id-irD">
                                                                             <font key="font" metaFont="system"/>
                                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -330,6 +358,9 @@
                                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                         </textFieldCell>
+                                                                        <connections>
+                                                                            <action selector="txtOccupancyFeedbackOffsetFrontAction:" target="9iP-PP-Stw" id="AZu-ou-RGq"/>
+                                                                        </connections>
                                                                     </textField>
                                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5cO-dU-KLB">
                                                                         <rect key="frame" x="200" y="25" width="96" height="21"/>
@@ -339,6 +370,9 @@
                                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                         </textFieldCell>
+                                                                        <connections>
+                                                                            <action selector="txtOccupancyFeedbackOffsetRearAction:" target="9iP-PP-Stw" id="Am0-k3-zfk"/>
+                                                                        </connections>
                                                                     </textField>
                                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tGo-NG-Ovo">
                                                                         <rect key="frame" x="403" y="50" width="36" height="16"/>
@@ -364,6 +398,9 @@
                                                                                 <string>ft</string>
                                                                             </objectValues>
                                                                         </comboBoxCell>
+                                                                        <connections>
+                                                                            <action selector="cboOccupancyFeedbackOffsetUnitsAction:" target="9iP-PP-Stw" id="4gZ-E0-nSH"/>
+                                                                        </connections>
                                                                     </comboBox>
                                                                 </subviews>
                                                             </view>
@@ -415,6 +452,9 @@
                                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                         </textFieldCell>
+                                                                        <connections>
+                                                                            <action selector="txtMaximumForwardSpeedAction:" target="9iP-PP-Stw" id="2ay-So-sQV"/>
+                                                                        </connections>
                                                                     </textField>
                                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vCW-cm-mj5">
                                                                         <rect key="frame" x="213" y="15" width="96" height="21"/>
@@ -424,6 +464,9 @@
                                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                         </textFieldCell>
+                                                                        <connections>
+                                                                            <action selector="txtMaximumReverseSpeedAction:" target="9iP-PP-Stw" id="QEu-68-5Pc"/>
+                                                                        </connections>
                                                                     </textField>
                                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WJp-sc-VjC">
                                                                         <rect key="frame" x="419" y="44" width="36" height="16"/>
@@ -446,6 +489,9 @@
                                                                                 <string>mph</string>
                                                                             </objectValues>
                                                                         </comboBoxCell>
+                                                                        <connections>
+                                                                            <action selector="cboMaximumSpeedUnitsAction:" target="9iP-PP-Stw" id="kvh-Vt-Rgh"/>
+                                                                        </connections>
                                                                     </comboBox>
                                                                 </subviews>
                                                             </view>
@@ -472,8 +518,23 @@
                         </subviews>
                     </view>
                     <connections>
+                        <outlet property="cboDecoderType" destination="Ir0-IR-GfY" id="JTf-g4-fUR"/>
+                        <outlet property="cboLengthUnits" destination="IU8-2g-EE4" id="OLe-iw-KXu"/>
+                        <outlet property="cboMaximumSpeedUnits" destination="vHh-Sl-K0L" id="faQ-4n-LiZ"/>
+                        <outlet property="cboOccupancyFeedbackOffsetUnits" destination="Pcg-q0-g9m" id="hPQ-1t-HCq"/>
+                        <outlet property="cboPowerSource" destination="ayp-9g-zkM" id="JrQ-lV-ytJ"/>
+                        <outlet property="cboTrackGuage" destination="31k-gB-HGV" id="HAx-aT-NeF"/>
+                        <outlet property="cboTrackRestrictions" destination="oZJ-Wg-hZr" id="ahF-Nu-vW8"/>
                         <outlet property="editorView" destination="Zbx-vn-sun" id="0Rl-Jj-PsP"/>
                         <outlet property="tabView" destination="Ogw-TX-qJM" id="HIB-dZ-mjo"/>
+                        <outlet property="txtAddress" destination="nc8-uN-NkL" id="Kj7-L6-jo4"/>
+                        <outlet property="txtLength" destination="2jc-4r-Ezf" id="rEU-ZW-O90"/>
+                        <outlet property="txtLocomotiveName" destination="g4a-O6-T25" id="5em-VR-49O"/>
+                        <outlet property="txtMaximumForwardSpeed" destination="nOb-HL-Y5P" id="3aY-Xp-VzD"/>
+                        <outlet property="txtMaximumReverseSpeed" destination="vCW-cm-mj5" id="mSO-s3-0Mw"/>
+                        <outlet property="txtOccupancyFeedbackOffsetFront" destination="gcj-Hq-JaJ" id="GaM-j2-dcG"/>
+                        <outlet property="txtOccupancyFeedbackOffsetRear" destination="5cO-dU-KLB" id="I41-bj-DqK"/>
+                        <outlet property="txtScale" destination="JU6-uN-DaM" id="Cyw-sc-vvH"/>
                     </connections>
                 </viewController>
                 <customObject id="2Ty-TV-Jq8" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>

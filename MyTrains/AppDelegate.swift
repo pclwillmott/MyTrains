@@ -13,7 +13,7 @@ import ORSSerial
 class AppDelegate: NSObject, NSApplicationDelegate {
   
   func applicationDidFinishLaunching(_ aNotification: Notification) {
-    
+
     if let _ = UserDefaults.standard.string(forKey: DEFAULT.VERSION) {
     }
     else {
@@ -26,7 +26,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
       let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true) as [String]
       
       UserDefaults.standard.set(paths[0] + appFolder + dataFolder, forKey: DEFAULT.DATABASE_PATH)
-      
+      UserDefaults.standard.set(LengthUnit.centimeters.rawValue, forKey: DEFAULT.UNITS_LENGTH)
+      UserDefaults.standard.set(LengthUnit.centimeters.rawValue, forKey: DEFAULT.UNITS_FBOFF_OCC)
+      UserDefaults.standard.set(SpeedUnit.kilometersPerHour.rawValue, forKey: DEFAULT.UNITS_SPEED)
+      UserDefaults.standard.set(76.2, forKey: DEFAULT.SCALE)
+      UserDefaults.standard.set(TrackGauge.oo.rawValue, forKey: DEFAULT.TRACK_GAUGE)
     }
 
   }

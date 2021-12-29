@@ -219,6 +219,7 @@ class DBEditorView: NSView {
   @IBAction func btnEditAction(_ sender: NSButton) {
     editorState = .editExisting
     if let editorObject = dataSource.editorObjectAt(index: cboSelect.indexOfSelectedItem) {
+      delegate?.clearFields(dbEditorView: self)
       delegate?.setupFields(dbEditorView: self, editorObject: editorObject)
     }
     setControls()

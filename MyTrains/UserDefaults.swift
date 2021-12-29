@@ -23,5 +23,10 @@ enum DEFAULT {
   static let MONITOR_MESSAGE3         = "MonitorMessage3"
   static let MONITOR_MESSAGE4         = "MonitorMessage4"
   static let MONITOR_NOTE             = "MonitorNote"
+  static let UNITS_LENGTH             = "UnitsLength"
+  static let UNITS_FBOFF_OCC          = "UnitsFBOffOcc"
+  static let UNITS_SPEED              = "UnitsSpeed"
+  static let SCALE                    = "Scale"
+  static let TRACK_GAUGE              = "TrackGauge"
+  static let MAIN_CURRENT_LAYOUT_ID   = "MainCurrentLayoutId"
 }
-
