@@ -68,7 +68,7 @@ public class Layout : EditorObject {
     }
   }
   
-  public var description : String {
+  public var layoutDescription : String {
     get {
       return _description
     }
@@ -93,7 +93,7 @@ public class Layout : EditorObject {
       }
       
       if !reader.isDBNull(index: 2) {
-        description = reader.getString(index: 2)!
+        layoutDescription = reader.getString(index: 2)!
       }
       
     }

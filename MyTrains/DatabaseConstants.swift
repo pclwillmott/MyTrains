@@ -22,6 +22,7 @@ enum TABLE {
   static let TRAIN                 = "TRAIN"
   static let WAGON                 = "WAGON"
   static let COMMAND_STATION       = "COMMAND_STATION"
+  static let INTERFACE             = "INTERFACE"
 }
 
 enum VERSION {
@@ -44,6 +45,16 @@ enum COMMAND_STATION {
   static let SERIAL_NUMBER         = "SERIAL_NUMBER"
   static let HARDWARE_VERSION      = "HARDWARE_VERSION"
   static let SOFTWARE_VERSION      = "SOFTWARE_VERSION"
+}
+
+enum INTERFACE {
+  static let INTERFACE_ID          = "INTERFACE_ID"
+  static let INTERFACE_NAME        = "INTERFACE_NAME"
+  static let MANUFACTURER          = "MANUFACTURER"
+  static let PRODUCT_CODE          = "PRODUCT_CODE"
+  static let SERIAL_NUMBER         = "SERIAL_NUMBER"
+  static let DEVICE_PATH           = "DEVICE_PATH"
+  static let BAUD_RATE             = "BAUD_RATE"
 }
 
 enum LAYOUT {

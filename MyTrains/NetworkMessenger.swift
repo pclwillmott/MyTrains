@@ -33,89 +33,80 @@ enum MessengerState {
 
 public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessengerDelegate {
  
-  public func messengerRemoved(id: String) {
-  }
+  // MARK: Constructor
   
-  // Constructor
-  
-  init(id:String, path:String) {
+  init(id:String, devicePath:String) {
     
     self.id = id
-    _devicePath = path
-    super.init()
-    if let sp = ORSSerialPort(path: path) {
-      sp.delegate = self
-      sp.baudRate = 57600
-      sp.numberOfDataBits = 8
-      sp.numberOfStopBits = 1
-      sp.parity = .none
-      sp.usesRTSCTSFlowControl = false
-      sp.usesDTRDSRFlowControl = false
-      sp.usesDCDOutputFlowControl = false
-      serialPort = sp
-      sp.open()
+
+    if let interface = interfacesByDevicePath[devicePath] {
+      self.interface = interface
     }
+    else {
+      self.interface = Interface(primaryKey: -1)
+      self.interface.devicePath = devicePath
+    }
+
+    super.init()
+
+    interface.delegate = self
+    interface.open()
+
   }
   
-  // Private Properties
+  // MARK: Destructor
   
-  private var serialPort : ORSSerialPort? = nil
+  deinit {
+    interface.close()
+  }
+  
+  // MARK: Private Properties
+  
   private var buffer : [UInt8] = [UInt8](repeating: 0x00, count:256)
+  
   private var readPtr : Int = 0
+  
   private var writePtr : Int = 0
+  
   private var bufferCount : Int = 0
+  
   private var bufferLock : NSLock = NSLock()
+  
   private var setupLock : NSLock = NSLock()
   
   private var loconetSlots = [LoconetSlot?](repeating: nil, count: 120)
   
   private var outputQueue : [NetworkOutputQueueItem] = []
+  
   private var outputQueueLock : NSLock = NSLock()
+  
   private var outputTimer : Timer?
   
   private var observers : [Int:NetworkMessengerDelegate] = [:]
+  
   private var nextObserverKey : Int = 0
+  
   private var nextObserverKeyLock : NSLock = NSLock()
   
-  public func addObserver(observer:NetworkMessengerDelegate) -> Int {
-    nextObserverKeyLock.lock()
-    let id : Int = nextObserverKey
-    nextObserverKey += 1
-    nextObserverKeyLock.unlock()
-    observers[id] = observer
-    return id
-  }
+  private var messengerState : MessengerState = .idle
+
+  private var observerId : Int = -1
   
-  private var _devicePath : String
+  // MARK: Public Properties
   
-  public var devicePath : String {
-    get {
-      return _devicePath
-    }
-  }
+  public var interface : Interface
   
   public var comboName : String {
     get {
-      let devName = ProductCode(rawValue: productCode) ?? .unknown
-      return "\(devName) - \(devicePath)"
+      return interface.displayString()
     }
   }
   
-  public func removeObserver(id:Int) {
-    observers.removeValue(forKey: id)
-  }
+  public var id : String
+
+  public var networkInterfaceDelegate : NetworkInterfaceDelegate? = nil
   
-  public func addToQueue(message:NetworkMessage, delay:TimeInterval, response: [NetworkMessageType], delegate: NetworkMessengerDelegate?, retryCount: Int) {
-    
-    let item = NetworkOutputQueueItem(message: message, delay: delay, response: response, delegate: delegate, retryCount: retryCount)
-    
-    outputQueueLock.lock()
-    outputQueue.append(item)
-    outputQueueLock.unlock()
-    
-    sendMessage()
-    
-  }
+  // MARK: Private Methods
   
   private func sendMessage() {
     
@@ -137,7 +128,7 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
         
         if item!.retryCount > 0 {
         
-         serialPort?.send(Data(item!.message.message))
+          interface.send(data: Data(item!.message.message))
           
           if item!.responseExpected {
             messengerState = .waitingForResponse
@@ -185,8 +176,6 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
     sendMessage()
   }
   
-  private var messengerState : MessengerState = .idle
-  
   func startSpacingTimer(timeInterval:TimeInterval) {
     outputTimer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(spacingTimer), userInfo: nil, repeats: false)
   }
@@ -197,157 +186,6 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
     outputQueueLock.lock()
     messengerState = .idle
     outputQueueLock.unlock()
-  }
-    
-  // Public Properties
-  
-  public var id : String
-  
-  // public methods
-  
-  public func powerOn() {
-    
-    let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_GPON.rawValue], appendCheckSum: true)
-    
-    addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: nil, retryCount: 1)
-    
-  }
-  
-  public func powerOff() {
-    
-    let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_GPOFF.rawValue], appendCheckSum: true)
-    
-    addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: nil, retryCount: 1)
-
-  }
-  
-  public func getInterfaceData() {
-    
-    let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_BUSY.rawValue], appendCheckSum: true)
-    
-    addToQueue(message: message, delay: TIMING.STANDARD, response: [.interfaceData], delegate: self, retryCount: 1)
-    
-  }
-  
-  public func powerIdle() {
-    
-    let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_IDLE.rawValue], appendCheckSum: true)
-    
-    addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: nil, retryCount: 1)
-
-  }
-  public func discoverDevices() {
-    //0x01
-//    let message = NetworkMessage.formLoconetMessage(opCode: .OPC_PEER_XFER, data: Data([0x14, 0x0f, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]))
-    
-//    addToQueue(message: message)
-
-  }
-  
-  public func requestSlotInfo(address:UInt8) {
-    
-//    let message = NetworkMessage.formLoconetMessage(opCode: .OPC_LOCO_ADR, data: Data([0x00, address]))
-    
-//    addToQueue(message: message)
-
-  }
-  
-  public func setLocoSound(slotNumber:UInt8) {
-    
-//    let message = NetworkMessage.formLoconetMessage(opCode: .OPC_LOCO_SND, data: Data([slotNumber, loconetSlots[Int(slotNumber)]!.slotByte(byte: .slotSound)]))
-    
-//    addToQueue(message: message)
-
-  }
-  
-  public func setLocoDirF(slotNumber:UInt8) {
-    
-//    let message = NetworkMessage.formLoconetMessage(opCode: .OPC_LOCO_DIRF, data: Data([slotNumber, loconetSlots[Int(slotNumber)]!.slotByte(byte: .slotDirF)]))
-    
-//    addToQueue(message: message)
-
-  }
-  
-  public func setLocoSpeed(slotNumber:UInt8) {
-    
- //   let message = NetworkMessage.formLoconetMessage(opCode: .OPC_LOCO_SPD, data: Data([slotNumber, loconetSlots[Int(slotNumber)]!.slotByte(byte: .slotSpeed)]))
-    
-//    addToQueue(message: message)
-
-  }
-  
-  public func nullMove(slotNumber:UInt8) {
-    
-//    let message = NetworkMessage.formLoconetMessage(opCode: .OPC_MOVE_SLOTS, data: Data([slotNumber, slotNumber]))
-    
-//    addToQueue(message: message)
-
-  }
-  
-  // ORSSerialPortDelegate Methods
-  
-  public func serialPortWasRemovedFromSystem(_ serialPort: ORSSerialPort) {
-    self.serialPort = nil
-    isPortOpen = false
-    productCode = -1
-    if observerId != -1 {
-      removeObserver(id: observerId)
-      observerId = -1
-    }
-    for observer in observers {
-      observer.value.messengerRemoved(id: self.id)
-    }
-    networkInterfaceDelegate?.interfaceRemoved(messenger: self)
-  }
-  
-  public func serialPort(_ serialPort: ORSSerialPort, didEncounterError error: Error) {
-    if observerId != -1 {
-      removeObserver(id: observerId)
-      observerId = -1
-    }
-    networkInterfaceDelegate?.interfaceNotIdentified(messenger: self)
-  }
-  
-  public func serialPortWasOpened(_ serialPort: ORSSerialPort) {
-    isPortOpen = true
-    observerId = addObserver(observer: self)
-    getInterfaceData()
-  }
-  
-  private var observerId : Int = -1
-  
-  public var isPortOpen : Bool = false
-  
-  public var productCode : Int = -1
-  
-  public func networkMessageReceived(message: NetworkMessage) {
-    if message.messageType == .interfaceData {
-      productCode = Int(message.message[14])
-      removeObserver(id: observerId)
-      observerId = -1
-      networkInterfaceDelegate?.interfaceIdentified(messenger: self)
-    }
-  }
-  
-  public var networkInterfaceDelegate : NetworkInterfaceDelegate? = nil
-  
-  public func networkTimeOut(message: NetworkMessage) {
-    if observerId != -1 {
-      removeObserver(id: observerId)
-      observerId = -1
-      networkInterfaceDelegate?.interfaceNotIdentified(messenger: self)
-    }
-  }
-  
-  public func serialPort(_ serialPort: ORSSerialPort, didReceive data: Data) {
-    bufferLock.lock()
-    bufferCount += data.count
-    for x in data {
-      buffer[writePtr] = x
-      writePtr = (writePtr + 1) & 0xff
-    }
-    bufferLock.unlock()
-    decode()
   }
   
   private func decode() {
@@ -484,4 +322,127 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
     
   }
 
+    
+  // MARK: Public Methods
+  
+  public func addObserver(observer:NetworkMessengerDelegate) -> Int {
+    nextObserverKeyLock.lock()
+    let id : Int = nextObserverKey
+    nextObserverKey += 1
+    nextObserverKeyLock.unlock()
+    observers[id] = observer
+    return id
+  }
+  
+  public func removeObserver(id:Int) {
+    observers.removeValue(forKey: id)
+  }
+  
+  public func addToQueue(message:NetworkMessage, delay:TimeInterval, response: [NetworkMessageType], delegate: NetworkMessengerDelegate?, retryCount: Int) {
+    
+    let item = NetworkOutputQueueItem(message: message, delay: delay, response: response, delegate: delegate, retryCount: retryCount)
+    
+    outputQueueLock.lock()
+    outputQueue.append(item)
+    outputQueueLock.unlock()
+    
+    sendMessage()
+    
+  }
+  
+  public func powerOn() {
+    
+    let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_GPON.rawValue], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: nil, retryCount: 1)
+    
+  }
+  
+  public func powerOff() {
+    
+    let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_GPOFF.rawValue], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: nil, retryCount: 1)
+
+  }
+  
+  public func getInterfaceData() {
+    
+    let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_BUSY.rawValue], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [.interfaceData], delegate: self, retryCount: 1)
+    
+  }
+  
+  public func powerIdle() {
+    
+    let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_IDLE.rawValue], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: nil, retryCount: 1)
+
+  }
+  
+  // MARK: NetworkMessengerDelegate Methods
+  
+  public func messengerRemoved(id: String) {
+  }
+  
+  public func networkMessageReceived(message: NetworkMessage) {
+    if message.messageType == .interfaceData {
+      if interface.serialNumber == -1 {
+        interface.productCode = ProductCode(rawValue: Int(message.message[14])) ?? .unknown
+        interface.partialSerialNumberLow = Int(message.message[6])
+        interface.partialSerialNumberHigh = Int(message.message[7])
+      }
+      removeObserver(id: observerId)
+      observerId = -1
+      networkInterfaceDelegate?.interfaceIdentified(messenger: self)
+    }
+  }
+  
+  public func networkTimeOut(message: NetworkMessage) {
+    if observerId != -1 {
+      removeObserver(id: observerId)
+      observerId = -1
+      networkInterfaceDelegate?.interfaceNotIdentified(messenger: self)
+    }
+  }
+  
+  // MARK: ORSSerialPortDelegate Methods
+  
+  public func serialPortWasRemovedFromSystem(_ serialPort: ORSSerialPort) {
+    if observerId != -1 {
+      removeObserver(id: observerId)
+      observerId = -1
+    }
+    for observer in observers {
+      observer.value.messengerRemoved(id: self.id)
+    }
+    networkInterfaceDelegate?.interfaceRemoved(messenger: self)
+  }
+  
+  public func serialPort(_ serialPort: ORSSerialPort, didEncounterError error: Error) {
+    if observerId != -1 {
+      removeObserver(id: observerId)
+      observerId = -1
+    }
+    networkInterfaceDelegate?.interfaceNotIdentified(messenger: self)
+  }
+  
+  public func serialPortWasOpened(_ serialPort: ORSSerialPort) {
+    observerId = addObserver(observer: self)
+    getInterfaceData()
+  }
+  
+  public func serialPort(_ serialPort: ORSSerialPort, didReceive data: Data) {
+    bufferLock.lock()
+    bufferCount += data.count
+    for x in data {
+      buffer[writePtr] = x
+      writePtr = (writePtr + 1) & 0xff
+    }
+    bufferLock.unlock()
+    decode()
+  }
+  
 }

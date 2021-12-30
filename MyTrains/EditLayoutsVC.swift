@@ -46,7 +46,7 @@ class EditLayoutsVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   func setupFields(dbEditorView: DBEditorView, editorObject: EditorObject) {
     if let layout = editorObject as? Layout {
       txtLayoutName.stringValue = layout.layoutName
-      txtDescription.stringValue = layout.description
+      txtDescription.stringValue = layout.layoutDescription
     }
   }
   
@@ -60,7 +60,7 @@ class EditLayoutsVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   
   func setFields(layout:Layout) {
     layout.layoutName = txtLayoutName.stringValue
-    layout.description = txtDescription.stringValue
+    layout.layoutDescription = txtDescription.stringValue
     layout.save()
   }
   

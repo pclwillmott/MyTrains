@@ -15,6 +15,7 @@
 		DA2E0E5A2736B8AA00C7DA7A /* LoconetRequestSlotDataMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2E0E592736B8AA00C7DA7A /* LoconetRequestSlotDataMessage.swift */; };
 		DA2E0E5C2736C31C00C7DA7A /* LoconetSlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2E0E5B2736C31C00C7DA7A /* LoconetSlot.swift */; };
 		DA2E0E5E2736EAF300C7DA7A /* NetworkController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2E0E5D2736EAF300C7DA7A /* NetworkController.swift */; };
+		DA3CD9F2277DEF990065D0C4 /* Interface.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3CD9F1277DEF990065D0C4 /* Interface.swift */; };
 		DA53B250276E360500AB956C /* CommandStation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA53B24F276E360500AB956C /* CommandStation.swift */; };
 		DA53B252276E478400AB956C /* IPLDevData.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA53B251276E478400AB956C /* IPLDevData.swift */; };
 		DA5B4601276F4E38005CA03C /* DatabaseConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5B4600276F4E38005CA03C /* DatabaseConstants.swift */; };
@@ -95,6 +96,7 @@
 		DA2E0E592736B8AA00C7DA7A /* LoconetRequestSlotDataMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoconetRequestSlotDataMessage.swift; sourceTree = "<group>"; };
 		DA2E0E5B2736C31C00C7DA7A /* LoconetSlot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoconetSlot.swift; sourceTree = "<group>"; };
 		DA2E0E5D2736EAF300C7DA7A /* NetworkController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkController.swift; sourceTree = "<group>"; };
+		DA3CD9F1277DEF990065D0C4 /* Interface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Interface.swift; sourceTree = "<group>"; };
 		DA53B24F276E360500AB956C /* CommandStation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandStation.swift; sourceTree = "<group>"; };
 		DA53B251276E478400AB956C /* IPLDevData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IPLDevData.swift; sourceTree = "<group>"; };
 		DA5B4600276F4E38005CA03C /* DatabaseConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseConstants.swift; sourceTree = "<group>"; };
@@ -199,6 +201,7 @@
 				DA0197242773500100350F71 /* ComboBoxDictDS.swift */,
 				DA53B24F276E360500AB956C /* CommandStation.swift */,
 				DAB07499276EB8B1003278BE /* Database.swift */,
+				DA3CD9F1277DEF990065D0C4 /* Interface.swift */,
 				DA5B4600276F4E38005CA03C /* DatabaseConstants.swift */,
 				DA88378D2770FC41000B9A41 /* DBEditorView.swift */,
 				DA88378B2770FBEC000B9A41 /* DBEditorView.xib */,
@@ -370,6 +373,7 @@
 				DA8837862770B79F000B9A41 /* EditSensorsVC.swift in Sources */,
 				DA53B250276E360500AB956C /* CommandStation.swift in Sources */,
 				DA7A4912274AC25600C2A42B /* PeerXferMessage.swift in Sources */,
+				DA3CD9F2277DEF990065D0C4 /* Interface.swift in Sources */,
 				DA6A0ADA2752976800913F2B /* MonitorVC.swift in Sources */,
 				DA5E173E272EB23100F9341F /* LoconetSensorMessage.swift in Sources */,
 				DA0197272773520400350F71 /* EditorObject.swift in Sources */,

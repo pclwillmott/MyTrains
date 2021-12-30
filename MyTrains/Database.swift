@@ -71,6 +71,16 @@ class Database {
               "[\(NETWORK.COMMAND_STATION_ID)] INT," +
               "[\(NETWORK.LAYOUT_ID)] INT" +
             ")",
+ 
+            "CREATE TABLE [\(TABLE.INTERFACE)] (" +
+              "[\(INTERFACE.INTERFACE_ID)]   INT PRIMARY KEY," +
+              "[\(INTERFACE.INTERFACE_NAME)] TEXT NOT NULL," +
+              "[\(INTERFACE.MANUFACTURER)]   INT NOT NULL," +
+              "[\(INTERFACE.PRODUCT_CODE)]   INT NOT NULL," +
+              "[\(INTERFACE.SERIAL_NUMBER)]  INT NOT NULL," +
+              "[\(INTERFACE.DEVICE_PATH)]    TEXT NOT NULL," +
+              "[\(INTERFACE.BAUD_RATE)]      INT NOT NULL" +
+            ")",
 
             "CREATE TABLE [\(TABLE.COMMAND_STATION)] (" +
               "[\(COMMAND_STATION.COMMAND_STATION_ID)]   INT PRIMARY KEY," +

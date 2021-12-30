@@ -27,7 +27,13 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
       
       NSUserNotificationCenter.default.delegate = self
 
-      findPorts()
+    for kv in interfaces {
+      let interface = kv.value
+      interfacesByDevicePath[interface.devicePath] = interface
+    }
+
+    findPorts()
+
   }
   
   // MARK: Destructor
@@ -74,10 +80,10 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
   
   private func findPorts() {
     for port in ORSSerialPortManager.shared().availablePorts {
-      let candidate = NetworkMessenger(id: nextMessengerId, path: port.path)
+      let candidate = NetworkMessenger(id: nextMessengerId, devicePath: port.path)
       var duplicate = false
       for messenger in networkMessengers {
-        if candidate.devicePath == messenger.devicePath {
+        if candidate.interface.devicePath == messenger.interface.devicePath {
           duplicate = true
           break
         }
@@ -92,13 +98,13 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
   // MARK: Public Properties
   
   public var networks : [Int:Network] = Network.networks
-  
+
   public var layouts : [Int:Layout] = Layout.layouts
-  
+
   public var locomotives : [Int:Locomotive] = Locomotive.locomotives
-  
+
   public var commandStations : [Int:CommandStation] = [:]
-  
+
   public var layoutId : Int {
     get {
       _layoutId = UserDefaults.standard.integer(forKey: DEFAULT.MAIN_CURRENT_LAYOUT_ID)
@@ -209,6 +215,8 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
       
       let pc = devData.productCode
       
+      // Command Stations
+      
       if pc == .DCS210 || pc == .DCS210Plus || pc == .DCS210 || pc == .DCS240 {
         
         if let cs = commandStations[devData.serialNumber] {
@@ -223,6 +231,21 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
           }
         }
         
+      }
+      
+      // Interfaces
+      
+      if pc == .PR3 || pc == .PR4 || pc == .DCS240 || pc == .DCS210Plus {
+        for kv in interfaces {
+          let interface = kv.value
+          if interface.productCode == pc &&
+             interface.serialNumber == -1 &&
+             interface.partialSerialNumberLow == devData.partialSerialNumberLow &&
+             interface.partialSerialNumberHigh == devData.partialSerialNumberHigh {
+            interface.serialNumber = devData.serialNumber
+            interface.save()
+          }
+        }
       }
       
       break

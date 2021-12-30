@@ -9,6 +9,8 @@ import Foundation
 
 public class IPLDevData : NetworkMessage {
   
+  // MARK: Public Properties
+  
   public var productCode : ProductCode {
     
     get {
@@ -35,6 +37,18 @@ public class IPLDevData : NetworkMessage {
       return Int(sn1) | Int(sn2) << 8
     }
     
+  }
+  
+  public var partialSerialNumberLow : Int {
+    get {
+      return serialNumber & 0x7f
+    }
+  }
+  
+  public var partialSerialNumberHigh : Int {
+    get {
+      return (serialNumber >> 8) & 0x7f
+    }
   }
   
 }

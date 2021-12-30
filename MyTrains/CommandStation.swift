@@ -386,6 +386,7 @@ public class CommandStation : NetworkMessengerDelegate {
   public static var columnNames : String {
     get {
       return
+        "[\(COMMAND_STATION.COMMAND_STATION_ID)], " +
         "[\(COMMAND_STATION.COMMAND_STATION_NAME)], " +
         "[\(COMMAND_STATION.MANUFACTURER)], " +
         "[\(COMMAND_STATION.PRODUCT_CODE)], " +

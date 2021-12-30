@@ -7,12 +7,13 @@
 
 import Foundation
 
-public class EditorObject {
+public class EditorObject : NSObject {
   
   // Constructor
   
   init(primaryKey:Int) {
     self.primaryKey = primaryKey
+    super.init()
   }
   
   // Public Properties
