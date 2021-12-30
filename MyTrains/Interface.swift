@@ -60,6 +60,12 @@ public class Interface : EditorObject, ORSSerialPortDelegate {
   
   // MARK: Public Properties
   
+  public var isConnected : Bool {
+    get {
+      return serialPort != nil
+    }
+  }
+  
   public var manufacturer : Manufacturer {
     get {
       return _manufacturer
