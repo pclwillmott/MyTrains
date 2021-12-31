@@ -10,9 +10,10 @@ import ORSSerial
 
 class MainVC: NSViewController, NetworkControllerDelegate {
 
-  // MARK: View Control
+  // MARK: Window & View Control
   
   override func viewDidLoad() {
+    
     super.viewDidLoad()
 
     // Do any additional setup after loading the view.
@@ -25,41 +26,91 @@ class MainVC: NSViewController, NetworkControllerDelegate {
     }
   }
   
+  func windowShouldClose(_ sender: NSWindow) -> Bool {
+    return true
+  }
+
+  func windowWillClose(_ notification: Notification) {
+    if controllerDelegateId != -1 {
+      networkController.removeDelegate(id: controllerDelegateId)
+      controllerDelegateId = -1
+    }
+  }
+  
   override func viewWillAppear() {
     
-    networkController.appendDelegate(delegate: self)
+    controllerDelegateId = networkController.appendDelegate(delegate: self)
     
-    let label: NSTextField = NSTextField()
-    label.frame = NSRect(x: 0, y: 0, width: 200, height: 21)
-    label.backgroundColor = NSColor.black
-    label.textColor = NSColor.white
-    label.stringValue = "test label"
-    label.isEditable = false
-    label.isBezeled = false
-    label.sizeToFit()
-
-    boxStatus.contentView?.addSubview(label)
-  
-
   }
   
   // MARK: Private Properties
   
   private var cboLayoutDS : ComboBoxDBDS? = nil
+  
+  private var controllerDelegateId : Int = -1
 
-  // MARK: Outlets & Actions
+  // MARK: Private Methods
   
-  @IBOutlet weak var cboLayout: NSComboBox!
-  
-  @IBAction func cboLayoutAction(_ sender: NSComboBox) {
+  private func updateStatus() {
     
-    networkController.layoutId = cboLayoutDS!.codeForItemAt(index: cboLayout.indexOfSelectedItem) ?? -1
-    
+    if let layout = networkController.layout {
+      
+      boxStatus.contentView?.subviews.removeAll()
+      
+      var xPos : CGFloat = 20
+      let yPos : CGFloat = 15
+      
+      for device in networkController.layoutDevices {
+        
+        var color : NSColor = NSColor.black
+        
+        let label1: NSTextField = NSTextField()
+        label1.frame = NSRect(x: xPos, y: yPos, width: 200, height: 21)
+        label1.backgroundColor = boxStatus.fillColor
+        
+        color = device.messenger.isOpen ? .systemGreen : device.messenger.isConnected ? .systemRed : .black
+        
+        label1.textColor = color
+        label1.stringValue = "\(device.messenger.interface.interfaceName) → "
+        label1.isEditable = false
+        label1.isBezeled = false
+        
+        label1.sizeToFit()
+
+        boxStatus.contentView?.addSubview(label1)
+        
+        xPos += label1.frame.width + 0
+
+        let label2: NSTextField = NSTextField()
+        label2.frame = NSRect(x: xPos, y: yPos, width: 200, height: 21)
+        label2.backgroundColor = boxStatus.fillColor
+      
+        color =  device.commandStation.powerIsOn ? .systemGreen : device.commandStation.trackIsPaused ? .orange : .red
+ 
+        label2.textColor = color
+        
+        label2.stringValue = "\(device.commandStation.commandStationName)"
+        label2.isEditable = false
+        label2.isBezeled = false
+        label2.sizeToFit()
+
+        boxStatus.contentView?.addSubview(label2)
+        
+        xPos += label2.frame.width + 10
+
+      }
+      
+    }
+        
   }
   
-  @IBOutlet weak var boxStatus: NSBox!
-  
   // MARK: NetworkController Delegate Methods
+  
+  func statusUpdated(networkController: NetworkController) {
+ 
+    updateStatus()
+    
+  }
   
   func messengersUpdated(messengers: [NetworkMessenger]) {
   }
@@ -76,7 +127,23 @@ class MainVC: NSViewController, NetworkControllerDelegate {
       cboLayout.selectItem(at: index)
     }
     
+    updateStatus()
+    
   }
+  
+  // MARK: Outlets & Actions
+  
+  @IBOutlet weak var cboLayout: NSComboBox!
+  
+  @IBAction func cboLayoutAction(_ sender: NSComboBox) {
+    
+    networkController.layoutId = cboLayoutDS!.codeForItemAt(index: cboLayout.indexOfSelectedItem) ?? -1
+    
+    updateStatus()
+    
+  }
+  
+  @IBOutlet weak var boxStatus: NSBox!
   
 }
 

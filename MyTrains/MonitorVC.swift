@@ -8,25 +8,27 @@
 import Foundation
 import Cocoa
 
+public enum TimeStampType : Int {
+  case none = 0
+  case millisecondsSinceLastMessage = 1
+}
+
+public enum NumberBase : Int {
+  case hex = 0
+  case decimal = 1
+  case binary = 2
+  case octal = 3
+  case hexBinary = 4
+}
+
 class MonitorVC: NSViewController, NetworkControllerDelegate, NetworkMessengerDelegate, NSWindowDelegate {
   
-  enum TimeStampType : Int {
-    case none = 0
-    case millisecondsSinceLastMessage = 1
-  }
-  
-  enum NumberBase : Int {
-    case hex = 0
-    case decimal = 1
-    case binary = 2
-    case octal = 3
-    case hexBinary = 4
-  }
+  // MARK: Window & View Control
   
   override func viewDidLoad() {
     super.viewDidLoad()
   }
-  
+   
   func windowShouldClose(_ sender: NSWindow) -> Bool {
     return true
   }
@@ -43,46 +45,6 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, NetworkMessengerDe
       delegateId = -1
     }
   }
-  
-  func messengerRemoved(id: String) {
-    
-  }
-  
-  func networkControllerUpdated(netwokController: NetworkController) {
-    
-  }
-    
-  func messengersUpdated(messengers: [NetworkMessenger]) {
-    
-    if observerId != -1 {
-      self.messenger?.removeObserver(id: observerId)
-      observerId = -1
-    }
-    
-    let interface = UserDefaults.standard.string(forKey: DEFAULT.MONITOR_INTERFACE_ID) ?? ""
-
-    cboInterface.removeAllItems()
-    cboInterface.deselectItem(at: cboInterface.indexOfSelectedItem)
-    
-    for messenger in messengers {
-      
-      let name = messenger.comboName
-      
-      cboInterface.addItem(withObjectValue: name)
-      
-      if interface == name {
-        cboInterface.selectItem(at: cboInterface.numberOfItems-1)
-        self.messenger = messenger
-        observerId = messenger.addObserver(observer: self)
-      }
-      
-    }
-    
- 
-  
-  }
-  
-  private var delegateId : Int = -1
   
   override func viewWillAppear() {
     
@@ -116,13 +78,228 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, NetworkMessengerDe
     txtNote.stringValue = UserDefaults.standard.string(forKey: DEFAULT.MONITOR_NOTE) ?? ""
 
     txtMonitor.font = NSFont(name: "Menlo", size: 12)
+    
   }
+  
+  // MARK: Private Properties
+  
+  private var delegateId : Int = -1
   
   private var observerId : Int = -1
   
   private var messenger : NetworkMessenger? = nil
   
   private var lastTime = Date.timeIntervalSinceReferenceDate
+  
+  private var captureFilename : String {
+    get {
+      return lblCaptureFileName.stringValue
+    }
+    set(value) {
+      lblCaptureFileName.stringValue = value
+      UserDefaults.standard.set(value, forKey: DEFAULT.MONITOR_CAPTURE_FILENAME)
+      let controlsEnabled = value != ""
+      btnEditCaptureFile.isEnabled = controlsEnabled
+      chkCaptureActive.isEnabled = controlsEnabled
+      txtNote.isEnabled = controlsEnabled
+      btnNote.isEnabled = controlsEnabled
+    }
+  }
+  
+  private var captureURL : URL? {
+    get {
+      let cfn = captureFilename
+      return cfn == "" ? nil : URL(fileURLWithPath: cfn)
+    }
+  }
+  
+  private var isCaptureActive : Bool {
+    get {
+      return chkCaptureActive.state == .on
+    }
+  }
+  
+  private var addLabels : Bool {
+    get {
+      return chkAddLabels.state == .on
+    }
+  }
+  
+  private var timeStampType : TimeStampType {
+    get {
+      return TimeStampType(rawValue: cboTimeStampType.indexOfSelectedItem) ?? .none
+    }
+  }
+  
+  private var addByteNumber : Bool {
+    get {
+      return chkAddByteNumber.state == .on
+    }
+  }
+  
+  private var numberBase : NumberBase {
+    get {
+      return NumberBase(rawValue: cboNumberBase.indexOfSelectedItem) ?? .hex
+    }
+  }
+  
+  private var sendFilename : String {
+    get {
+      return lblSendFileName.stringValue
+    }
+    set(value) {
+      lblSendFileName.stringValue = value
+      UserDefaults.standard.set(value, forKey: DEFAULT.MONITOR_SEND_FILENAME)
+      let controlsEnabled = value != ""
+      btnEditSendFile.isEnabled = controlsEnabled
+      btnSendFile.isEnabled = controlsEnabled
+   }
+  }
+
+  private var sendURL : URL? {
+    get {
+      let sfn = sendFilename
+      return sfn == "" ? nil : URL(fileURLWithPath: sfn)
+    }
+  }
+  
+  private var isPaused : Bool {
+    get {
+      return btnPauseMonitor.state == .on
+    }
+  }
+
+  // MARK: Private Methods
+  
+  private func captureWrite(message:String) {
+    
+    let data = message.data(using: String.Encoding.utf8)
+    
+    if isCaptureActive {
+      if FileManager.default.fileExists(atPath: lblCaptureFileName.stringValue) {
+        
+        if let fileHandle = try? FileHandle(forWritingTo: captureURL!) {
+          fileHandle.seekToEndOfFile()
+          fileHandle.write(data!)
+          fileHandle.closeFile()
+        }
+      }
+      else {
+         try? data!.write(to: captureURL!, options: .atomicWrite)
+       }
+    }
+    
+  }
+  
+  private func sendMessage(rawMessage:String) {
+    
+    var good = true
+    
+    let parts = rawMessage.split(separator: " ")
+    
+    var numbers : [Int] = []
+    
+    var index = 0
+    
+    for p in parts {
+      
+      let part = String(p)
+      
+      if part.prefix(2) == "0x" {
+        if let nn = Int(part.suffix(part.count-2), radix: 16) {
+          numbers.append(nn)
+        }
+        else {
+          good = false
+        }
+      }
+      else if part.prefix(2) == "0b" {
+        if let nn = Int(part.suffix(part.count-2), radix: 2) {
+          numbers.append(nn)
+       }
+        else {
+          good = false
+        }
+      }
+      else if part.prefix(1) == "0" {
+        if let nn = Int(part.suffix(part.count), radix: 8) {
+          numbers.append(nn)
+       }
+        else {
+          good = false
+        }
+      }
+      else {
+        if let nn = Int(part.suffix(part.count), radix: 10) {
+          numbers.append(nn)
+        }
+        else {
+          good = false
+        }
+      }
+      
+      if good {
+        let test = numbers[index]
+        if test < 0 || (index == 0 && test > 255) || (index > 0 && test > 127) || (index == 0 && (test & 0x80 == 0) ) {
+          good = false
+        }
+      }
+      
+      index += 1
+      
+    }
+    
+    if good {
+      if let messenger = messenger {
+        let message = NetworkMessage(interfaceId: messenger.id, data: numbers, appendCheckSum: true)
+        messenger.addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: self, retryCount: 10)
+      }
+    }
+
+  }
+  
+  // MARK: NetworkControllerDelegate Methods
+  
+  func statusUpdated(networkController: NetworkController) {
+  }
+  
+  func networkControllerUpdated(netwokController: NetworkController) {
+  }
+  
+  func messengersUpdated(messengers: [NetworkMessenger]) {
+    
+    if observerId != -1 {
+      self.messenger?.removeObserver(id: observerId)
+      observerId = -1
+    }
+    
+    let interface = UserDefaults.standard.string(forKey: DEFAULT.MONITOR_INTERFACE_ID) ?? ""
+
+    cboInterface.removeAllItems()
+    cboInterface.deselectItem(at: cboInterface.indexOfSelectedItem)
+    
+    for messenger in messengers {
+      
+      let name = messenger.comboName
+      
+      cboInterface.addItem(withObjectValue: name)
+      
+      if interface == name {
+        cboInterface.selectItem(at: cboInterface.numberOfItems-1)
+        self.messenger = messenger
+        observerId = messenger.addObserver(observer: self)
+        swConnect.state = messenger.isOpen ? .on : .off
+      }
+      
+    }
+  
+  }
+
+  // MARK: NetworkMessengerDelegate Methods
+  
+  func messengerRemoved(id: String) {
+    
+  }
   
   func networkTimeOut(message: NetworkMessage) {
     print("Timeout")
@@ -201,54 +378,8 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, NetworkMessengerDe
     captureWrite(message: item)
     
   }
-  
-  private func captureWrite(message:String) {
-    
-    let data = message.data(using: String.Encoding.utf8)
-    
-    if isCaptureActive {
-      if FileManager.default.fileExists(atPath: lblCaptureFileName.stringValue) {
-        
-        if let fileHandle = try? FileHandle(forWritingTo: captureURL!) {
-          fileHandle.seekToEndOfFile()
-          fileHandle.write(data!)
-          fileHandle.closeFile()
-        }
-      }
-      else {
-         try? data!.write(to: captureURL!, options: .atomicWrite)
-       }
-    }
-    
-  }
-  
-  private var captureFilename : String {
-    get {
-      return lblCaptureFileName.stringValue
-    }
-    set(value) {
-      lblCaptureFileName.stringValue = value
-      UserDefaults.standard.set(value, forKey: DEFAULT.MONITOR_CAPTURE_FILENAME)
-      let controlsEnabled = value != ""
-      btnEditCaptureFile.isEnabled = controlsEnabled
-      chkCaptureActive.isEnabled = controlsEnabled
-      txtNote.isEnabled = controlsEnabled
-      btnNote.isEnabled = controlsEnabled
-    }
-  }
-  
-  private var captureURL : URL? {
-    get {
-      let cfn = captureFilename
-      return cfn == "" ? nil : URL(fileURLWithPath: cfn)
-    }
-  }
-  
-  private var isCaptureActive : Bool {
-    get {
-      return chkCaptureActive.state == .on
-    }
-  }
+
+  // MARK: Outlets & Actions
   
   @IBAction func cboInterfaceAction(_ sender: NSComboBox) {
     
@@ -266,6 +397,7 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, NetworkMessengerDe
       if x.comboName == name {
         messenger = x
         observerId = messenger?.addObserver(observer: self) ?? -1
+        swConnect.state = x.isOpen ? .on : .off
       }
     }
     
@@ -273,7 +405,12 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, NetworkMessengerDe
 
   @IBOutlet weak var cboInterface: NSComboBox!
   
+  @IBOutlet weak var swConnect: NSSwitch!
+  
   @IBAction func swConnectAction(_ sender: NSSwitch) {
+    if let mess = messenger {
+      swConnect.state == .on ? mess.open() : mess.close()
+    }
   }
   
   @IBOutlet weak var btnPowerOn: NSButton!
@@ -296,26 +433,6 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, NetworkMessengerDe
   
   @IBOutlet weak var lblSendFileName: NSTextField!
   
-  private var sendFilename : String {
-    get {
-      return lblSendFileName.stringValue
-    }
-    set(value) {
-      lblSendFileName.stringValue = value
-      UserDefaults.standard.set(value, forKey: DEFAULT.MONITOR_SEND_FILENAME)
-      let controlsEnabled = value != ""
-      btnEditSendFile.isEnabled = controlsEnabled
-      btnSendFile.isEnabled = controlsEnabled
-   }
-  }
-
-  private var sendURL : URL? {
-    get {
-      let sfn = sendFilename
-      return sfn == "" ? nil : URL(fileURLWithPath: sfn)
-    }
-  }
-
   @IBOutlet weak var btnSendFile: NSButton!
   
   @IBAction func btnSelectSendFileAction(_ sender: NSButton) {
@@ -425,12 +542,6 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, NetworkMessengerDe
     UserDefaults.standard.set(chkAddLabels.state.rawValue, forKey: DEFAULT.MONITOR_ADD_LABELS)
   }
   
-  private var addLabels : Bool {
-    get {
-      return chkAddLabels.state == .on
-    }
-  }
-  
   @IBOutlet weak var chkCaptureActive: NSButton!
   
   @IBAction func chkCaptureActiveAction(_ sender: NSButton) {
@@ -454,12 +565,6 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, NetworkMessengerDe
     UserDefaults.standard.set(cboTimeStampType.indexOfSelectedItem, forKey: DEFAULT.MONITOR_TIMESTAMP_TYPE)
   }
   
-  private var timeStampType : TimeStampType {
-    get {
-      return TimeStampType(rawValue: cboTimeStampType.indexOfSelectedItem) ?? .none
-    }
-  }
-  
   @IBOutlet weak var cboDataType: NSComboBox!
   
   @IBAction func cboDataTypeAction(_ sender: NSComboBox) {
@@ -472,22 +577,10 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, NetworkMessengerDe
     UserDefaults.standard.set(cboNumberBase.indexOfSelectedItem, forKey: DEFAULT.MONITOR_NUMBER_BASE)
   }
   
-  private var numberBase : NumberBase {
-    get {
-      return NumberBase(rawValue: cboNumberBase.indexOfSelectedItem) ?? .hex
-    }
-  }
-  
   @IBOutlet weak var chkAddByteNumber: NSButton!
   
   @IBAction func cboAddByteNumberAction(_ sender: NSButton) {
     UserDefaults.standard.set(chkAddByteNumber.state.rawValue, forKey: DEFAULT.MONITOR_ADD_BYTE_NUMBER)
-  }
-  
-  private var addByteNumber : Bool {
-    get {
-      return chkAddByteNumber.state == .on
-    }
   }
   
   @IBOutlet weak var txtMessage1: NSTextField!
@@ -530,73 +623,6 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, NetworkMessengerDe
     sendMessage(rawMessage: txtMessage4.stringValue)
   }
   
-  private func sendMessage(rawMessage:String) {
-    
-    var good = true
-    
-    let parts = rawMessage.split(separator: " ")
-    
-    var numbers : [Int] = []
-    
-    var index = 0
-    
-    for p in parts {
-      
-      let part = String(p)
-      
-      if part.prefix(2) == "0x" {
-        if let nn = Int(part.suffix(part.count-2), radix: 16) {
-          numbers.append(nn)
-        }
-        else {
-          good = false
-        }
-      }
-      else if part.prefix(2) == "0b" {
-        if let nn = Int(part.suffix(part.count-2), radix: 2) {
-          numbers.append(nn)
-       }
-        else {
-          good = false
-        }
-      }
-      else if part.prefix(1) == "0" {
-        if let nn = Int(part.suffix(part.count), radix: 8) {
-          numbers.append(nn)
-       }
-        else {
-          good = false
-        }
-      }
-      else {
-        if let nn = Int(part.suffix(part.count), radix: 10) {
-          numbers.append(nn)
-        }
-        else {
-          good = false
-        }
-      }
-      
-      if good {
-        let test = numbers[index]
-        if test < 0 || (index == 0 && test > 255) || (index > 0 && test > 127) || (index == 0 && (test & 0x80 == 0) ) {
-          good = false
-        }
-      }
-      
-      index += 1
-      
-    }
-    
-    if good {
-      if let messenger = messenger {
-        let message = NetworkMessage(interfaceId: messenger.id, data: numbers, appendCheckSum: true)
-        messenger.addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: self, retryCount: 10)
-      }
-    }
-
-  }
-  
   @IBOutlet weak var scvMonitor: NSScrollView!
  
   @IBOutlet var txtMonitor: NSTextView!
@@ -609,12 +635,6 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, NetworkMessengerDe
   }
   
   @IBOutlet weak var btnPauseMonitor: NSButton!
-  
-  private var isPaused : Bool {
-    get {
-      return btnPauseMonitor.state == .on
-    }
-  }
   
 }
 

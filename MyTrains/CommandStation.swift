@@ -13,7 +13,7 @@ public protocol CommandStationDelegate {
 
 public class CommandStation : NetworkMessengerDelegate {
   
-  // Constructors
+  // MARK: Constructors
   
   init(message:IPLDevData) {
     productCode = message.productCode
@@ -29,13 +29,13 @@ public class CommandStation : NetworkMessengerDelegate {
   init() {
   }
   
-  // Destructors
+  // MARK: Destructors
   
   deinit {
     
   }
   
-  // Private Properties
+  // MARK: Private Properties
   
   private var _manufacturer : Manufacturer = .Digitrax
   
@@ -49,7 +49,33 @@ public class CommandStation : NetworkMessengerDelegate {
   
   private var modified : Bool = false
   
-  // Public Properties
+  private var _messengers : [String:NetworkMessenger] = [:]
+  
+  private var _observerId : [String:Int] = [:]
+  
+  private var _implementsProtocol1 : Bool?
+  
+  private var _implementsProtocol2 : Bool?
+  
+  private var _programmingTrackIsBusy : Bool?
+  
+  private var _trackIsPaused : Bool = false
+  
+  private var _powerIsOn : Bool = false
+  
+  private var _delegates : [Int:CommandStationDelegate] = [:]
+  
+  private var _nextDelegateId = 0
+  
+  private var _delegateLock : NSLock = NSLock()
+  
+  // MARK: Public Properties
+  
+  public var messengers : [String:NetworkMessenger] {
+    get {
+      return _messengers
+    }
+  }
   
   public var manufacturer : Manufacturer {
     get {
@@ -123,74 +149,6 @@ public class CommandStation : NetworkMessengerDelegate {
     }
   }
   
-  private var _interfaces : [String:NetworkMessenger] = [:]
-  
-  private var _observerId : [String:Int] = [:]
-  
-  public func addInterface(interface:NetworkMessenger) {
-    if let _ = _interfaces[interface.id] {
-    }
-    else {
-      _interfaces[interface.id] = interface
-      _observerId[interface.id] = interface.addObserver(observer: self)
-    }
-  }
-  
-  public func removeInterface(interface:NetworkMessenger) {
-    interface.removeObserver(id: _observerId[interface.id]!)
-    _interfaces.removeValue(forKey: interface.id)
-    _observerId.removeValue(forKey: interface.id)
-  }
-  
-  public func messengerRemoved(id: String) {
-    _interfaces.removeValue(forKey: id)
-    _observerId.removeValue(forKey: id)
-  }
-  
-  public func networkMessageReceived(message: NetworkMessage) {
-    switch message.messageType {
-    case .cfgSlotDataP1, .locoSlotDataP1, .fastClockDataP1:
-      let trk = message.message[7]
-      implementsProtocol2    = (trk & 0b0100000) == 0b0100000
-      programmingTrackIsBusy = (trk & 0b0001000) == 0b0001000
-      implementsProtocol1    = (trk & 0b0000100) == 0b0000100
-      trackIsPaused          = (trk & 0b0000010) == 0b0000010
-      powerIsOn              = (trk & 0b0000001) == 0b0000001
-      break
-    default:
-      break
-    }
-  }
-  
-  public func networkTimeOut(message: NetworkMessage) {
-    
-  }
-  
-  private var _implementsProtocol1 : Bool?
-  private var _implementsProtocol2 : Bool?
-  private var _programmingTrackIsBusy : Bool?
-  private var _trackIsPaused : Bool?
-  private var _powerIsOn : Bool?
-  
-  private var _delegates : [Int:CommandStationDelegate] = [:]
-  private var _nextDelegateId = 0
-  private var _delegateLock : NSLock = NSLock()
-
-  public func addDelegate(delegate:CommandStationDelegate) -> Int {
-    _delegateLock.lock()
-    let id = _nextDelegateId
-    _nextDelegateId += 1
-    _delegates[id] = delegate
-    _delegateLock.unlock()
-    return id
-  }
-  
-  public func removeDelegate(id:Int) {
-    _delegateLock.lock()
-    _delegates.removeValue(forKey: id)
-    _delegateLock.unlock()
-  }
-  
   public var implementsProtocol1 : Bool {
     get {
       return _implementsProtocol1 ?? false
@@ -247,41 +205,106 @@ public class CommandStation : NetworkMessengerDelegate {
   
   public var trackIsPaused : Bool {
     get {
-      return _trackIsPaused ?? false
+      return _trackIsPaused
     }
     set(value) {
-      var changed = true
-      if let x = _trackIsPaused {
-        changed = x == value
-      }
       _trackIsPaused = value
-      if changed {
-        for delegate in _delegates {
-          delegate.value.trackStatusChanged(commandStation: self)
-        }
+      for delegate in _delegates {
+        delegate.value.trackStatusChanged(commandStation: self)
       }
     }
   }
   
   public var powerIsOn : Bool {
     get {
-      return _powerIsOn ?? false
+      return _powerIsOn
     }
     set(value) {
-      var changed = true
-      if let x = _powerIsOn {
-        changed = x == value
-      }
       _powerIsOn = value
-      if changed {
-        for delegate in _delegates {
-          delegate.value.trackStatusChanged(commandStation: self)
-        }
+      for delegate in _delegates {
+        delegate.value.trackStatusChanged(commandStation: self)
       }
     }
   }
   
-  // Database Methods
+  // MARK: Public Methods
+  
+  public func addMessenger(messenger:NetworkMessenger) {
+    if let _ = _messengers[messenger.id] {
+    }
+    else {
+      _messengers[messenger.id] = messenger
+      _observerId[messenger.id] = messenger.addObserver(observer: self)
+      messenger.getCfgSlotDataP1()
+    }
+  }
+  
+  public func removeMessenger(messenger:NetworkMessenger) {
+    messenger.removeObserver(id: _observerId[messenger.id]!)
+    _messengers.removeValue(forKey: messenger.id)
+    _observerId.removeValue(forKey: messenger.id)
+  }
+  
+  public func addDelegate(delegate:CommandStationDelegate) -> Int {
+    _delegateLock.lock()
+    let id = _nextDelegateId
+    _nextDelegateId += 1
+    _delegates[id] = delegate
+    _delegateLock.unlock()
+    return id
+  }
+  
+  public func removeDelegate(id:Int) {
+    _delegateLock.lock()
+    _delegates.removeValue(forKey: id)
+    _delegateLock.unlock()
+  }
+  
+  public func getCfgSlotDataP1() {
+    for messenger in _messengers {
+      if messenger.value.isOpen {
+        messenger.value.getCfgSlotDataP1()
+      }
+    }
+  }
+  
+  // MARK: NetworkMessengerDelegate Methods
+  
+  public func messengerRemoved(id: String) {
+    _messengers.removeValue(forKey: id)
+    _observerId.removeValue(forKey: id)
+  }
+  
+  public func networkMessageReceived(message: NetworkMessage) {
+    switch message.messageType {
+    case .cfgSlotDataP1, .locoSlotDataP1, .fastClockDataP1:
+      let trk = message.message[7]
+      implementsProtocol2    = (trk & 0b0100000) == 0b0100000
+      programmingTrackIsBusy = (trk & 0b0001000) == 0b0001000
+      implementsProtocol1    = (trk & 0b0000100) == 0b0000100
+      trackIsPaused          = (trk & 0b0000010) == 0b0000000
+      powerIsOn              = (trk & 0b0000001) == 0b0000001
+      break
+    case .pwrOn:
+      powerIsOn = true
+      getCfgSlotDataP1()
+      break
+    case .pwrOff:
+      powerIsOn = false
+      getCfgSlotDataP1()
+    case .setIdleState:
+      trackIsPaused = true
+      getCfgSlotDataP1()
+      break
+    default:
+      break
+    }
+  }
+  
+  public func networkTimeOut(message: NetworkMessage) {
+  }
+  
+  // MARK: Database Methods
   
   private func decode(sqliteDataReader:SqliteDataReader?) {
     
@@ -381,7 +404,7 @@ public class CommandStation : NetworkMessengerDelegate {
 
   }
 
-  // Class Properties
+  // MARK: Class Properties
   
   public static var columnNames : String {
     get {

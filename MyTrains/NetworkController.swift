@@ -11,9 +11,10 @@ import ORSSerial
 public protocol NetworkControllerDelegate {
   func messengersUpdated(messengers:[NetworkMessenger])
   func networkControllerUpdated(netwokController:NetworkController)
+  func statusUpdated(networkController:NetworkController)
 }
 
-public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotificationCenterDelegate, NetworkMessengerDelegate {
+public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotificationCenterDelegate, NetworkMessengerDelegate, CommandStationDelegate {
   
   // MARK: Constructor
   
@@ -76,25 +77,6 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
   
   private var _observerIds : [String:Int] = [:]
   
-  // MARK: Private Methods
-  
-  private func findPorts() {
-    for port in ORSSerialPortManager.shared().availablePorts {
-      let candidate = NetworkMessenger(id: nextMessengerId, devicePath: port.path)
-      var duplicate = false
-      for messenger in networkMessengers {
-        if candidate.interface.devicePath == messenger.interface.devicePath {
-          duplicate = true
-          break
-        }
-      }
-      if !duplicate {
-        candidate.networkInterfaceDelegate = self
-        candidates[candidate.id] = candidate
-      }
-    }
-  }
-  
   // MARK: Public Properties
   
   public var networks : [Int:Network] = Network.networks
@@ -125,6 +107,26 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
     }
   }
   
+  public var layoutDevices : [(commandStation:CommandStation, messenger:NetworkMessenger)] {
+    get {
+      var result : [(commandStation:CommandStation, messenger:NetworkMessenger)] = []
+      if let lo = layout {
+        for net in lo.networks {
+          for kv in commandStations {
+            let cs = kv.value
+            if net.commandStationId == cs.commandStationId {
+              for kv2 in cs.messengers {
+                let mess = kv2.value
+                result.append((commandStation: cs, messenger: mess))
+              }
+            }
+          }
+        }
+      }
+      return result
+    }
+  }
+  
   public var networkMessengers : [NetworkMessenger] {
     get {
       var messengers : [NetworkMessenger] = []
@@ -137,8 +139,45 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
     }
   }
   
+// MARK: Private Methods
+  
+  private func findPorts() {
+    for port in ORSSerialPortManager.shared().availablePorts {
+      let candidate = NetworkMessenger(id: nextMessengerId, devicePath: port.path)
+      var duplicate = false
+      for messenger in networkMessengers {
+        if candidate.interface.devicePath == messenger.interface.devicePath {
+          duplicate = true
+          break
+        }
+      }
+      if !duplicate {
+        candidate.networkInterfaceDelegate = self
+        candidates[candidate.id] = candidate
+      }
+    }
+  }
+  
   // MARK: Public Methods
 
+  public func interfaceOpen() {
+    for kv in interfaces {
+      let interface = kv.value
+      if interface.isConnected {
+        interface.open()
+      }
+    }
+  }
+  
+  public func interfaceClose() {
+    for kv in interfaces {
+      let interface = kv.value
+      if interface.isConnected {
+        interface.close()
+      }
+    }
+  }
+  
   public func addLayout(layout: Layout) {
     layouts[layout.primaryKey] = layout
     for kv in controllerDelegates {
@@ -183,20 +222,26 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
     controllerDelegateLock.unlock()
   }
   
+  // MARK: CommandStationDelegate Methods
+  
+  public func trackStatusChanged(commandStation: CommandStation) {
+    for delegate in controllerDelegates {
+      delegate.value.statusUpdated(networkController: self)
+    }
+  }
+  
+  // MARK: NetworkInterfaceDelegate Methods
+  
   public func interfaceNotIdentified(messenger: NetworkMessenger) {
     candidates.removeValue(forKey: messenger.id)
   }
-  
+
   public func interfaceIdentified(messenger: NetworkMessenger) {
     
     _networkMessengers[messenger.id] = messenger
     _observerIds[messenger.id] = messenger.addObserver(observer: self)
     
     candidates.removeValue(forKey: messenger.id)
-    for delegate in controllerDelegates {
-      delegate.value.messengersUpdated(messengers: networkMessengers)
-      delegate.value.networkControllerUpdated(netwokController: self)
-    }
     
     let message = NetworkMessage(interfaceId: messenger.id, data: [NetworkMessageOpcode.OPC_PEER_XFER.rawValue,
       0x14, 0x0f, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
@@ -205,6 +250,24 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
     messenger.addToQueue(message: message, delay: TIMING.DISCOVER, response: [], delegate: nil, retryCount: 1)
     
   }
+  
+  public func statusChanged(messenger: NetworkMessenger) {
+    for delegate in controllerDelegates {
+      delegate.value.statusUpdated(networkController: self)
+    }
+  }
+  
+  public func interfaceRemoved(messenger: NetworkMessenger) {
+    let id = messenger.id
+    candidates.removeValue(forKey: id)
+    _networkMessengers.removeValue(forKey: id)
+    for delegate in controllerDelegates {
+      delegate.value.messengersUpdated(messengers: networkMessengers)
+      delegate.value.networkControllerUpdated(netwokController: self)
+    }
+  }
+  
+  // MARK: NetworkMessengerDelegate Methods
   
   public func networkMessageReceived(message: NetworkMessage) {
     
@@ -220,12 +283,13 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
       if pc == .DCS210 || pc == .DCS210Plus || pc == .DCS210 || pc == .DCS240 {
         
         if let cs = commandStations[devData.serialNumber] {
-          cs.addInterface(interface: _networkMessengers[message.interfaceId]!)
+          cs.addMessenger(messenger: _networkMessengers[message.interfaceId]!)
         }
         else {
           let cs = CommandStation(message: devData)
           commandStations[cs.serialNumber] = cs
-          cs.addInterface(interface: _networkMessengers[message.interfaceId]!)
+          cs.addMessenger(messenger: _networkMessengers[message.interfaceId]!)
+          _ = cs.addDelegate(delegate: self)
           for delegate in controllerDelegates {
             delegate.value.networkControllerUpdated(netwokController: self)
           }
@@ -248,6 +312,11 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
         }
       }
       
+      for delegate in controllerDelegates {
+        delegate.value.messengersUpdated(messengers: networkMessengers)
+        delegate.value.networkControllerUpdated(netwokController: self)
+      }
+      
       break
     default:
       break
@@ -255,71 +324,61 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
     
   }
   
-  public func networkTimeOut(message: NetworkMessage) {
-  }
-  
   public func messengerRemoved(id: String) {
   }
   
-  public func interfaceRemoved(messenger: NetworkMessenger) {
-    let id = messenger.id
-    candidates.removeValue(forKey: id)
-    _networkMessengers.removeValue(forKey: id)
-    for delegate in controllerDelegates {
-      delegate.value.messengersUpdated(messengers: networkMessengers)
-      delegate.value.networkControllerUpdated(netwokController: self)
-    }
+  public func networkTimeOut(message: NetworkMessage) {
   }
-      
+  
   // MARK: - NSUserNotifcationCenterDelegate
     
-    public func userNotificationCenter(_ center: NSUserNotificationCenter, didDeliver notification: NSUserNotification) {
-      let popTime = DispatchTime.now() + Double(Int64(3.0 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
-      DispatchQueue.main.asyncAfter(deadline: popTime) { () -> Void in
-        center.removeDeliveredNotification(notification)
-      }
+  public func userNotificationCenter(_ center: NSUserNotificationCenter, didDeliver notification: NSUserNotification) {
+    let popTime = DispatchTime.now() + Double(Int64(3.0 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+    DispatchQueue.main.asyncAfter(deadline: popTime) { () -> Void in
+      center.removeDeliveredNotification(notification)
     }
-    
-    public func userNotificationCenter(_ center: NSUserNotificationCenter, shouldPresent notification: NSUserNotification) -> Bool {
-      return true
-    }
+  }
   
-    @objc func serialPortsWereConnected(_ notification: Notification) {
-      if let userInfo = notification.userInfo {
-        let connectedPorts = userInfo[ORSConnectedSerialPortsKey] as! [ORSSerialPort]
-        self.postUserNotificationForConnectedPorts(connectedPorts)
-        findPorts()
-      }
+  public func userNotificationCenter(_ center: NSUserNotificationCenter, shouldPresent notification: NSUserNotification) -> Bool {
+    return true
+  }
+
+  @objc func serialPortsWereConnected(_ notification: Notification) {
+    if let userInfo = notification.userInfo {
+      let connectedPorts = userInfo[ORSConnectedSerialPortsKey] as! [ORSSerialPort]
+      self.postUserNotificationForConnectedPorts(connectedPorts)
+      findPorts()
     }
-    
-    @objc func serialPortsWereDisconnected(_ notification: Notification) {
-      if let userInfo = notification.userInfo {
-        let disconnectedPorts: [ORSSerialPort] = userInfo[ORSDisconnectedSerialPortsKey] as! [ORSSerialPort]
-        self.postUserNotificationForDisconnectedPorts(disconnectedPorts)
-      }
+  }
+  
+  @objc func serialPortsWereDisconnected(_ notification: Notification) {
+    if let userInfo = notification.userInfo {
+      let disconnectedPorts: [ORSSerialPort] = userInfo[ORSDisconnectedSerialPortsKey] as! [ORSSerialPort]
+      self.postUserNotificationForDisconnectedPorts(disconnectedPorts)
     }
-    
-    func postUserNotificationForConnectedPorts(_ connectedPorts: [ORSSerialPort]) {
-      let unc = NSUserNotificationCenter.default
-      for port in connectedPorts {
-        let userNote = NSUserNotification()
-        userNote.title = NSLocalizedString("Serial Port Connected", comment: "Serial Port Connected")
-        userNote.informativeText = "Serial Port \(port.name) was connected to your Mac."
-        userNote.soundName = nil;
-        unc.deliver(userNote)
-      }
+  }
+  
+  func postUserNotificationForConnectedPorts(_ connectedPorts: [ORSSerialPort]) {
+    let unc = NSUserNotificationCenter.default
+    for port in connectedPorts {
+      let userNote = NSUserNotification()
+      userNote.title = NSLocalizedString("Serial Port Connected", comment: "Serial Port Connected")
+      userNote.informativeText = "Serial Port \(port.name) was connected to your Mac."
+      userNote.soundName = nil;
+      unc.deliver(userNote)
     }
-    
-    func postUserNotificationForDisconnectedPorts(_ disconnectedPorts: [ORSSerialPort]) {
-      let unc = NSUserNotificationCenter.default
-      for port in disconnectedPorts {
-        let userNote = NSUserNotification()
-        userNote.title = NSLocalizedString("Serial Port Disconnected", comment: "Serial Port Disconnected")
-        userNote.informativeText = "Serial Port \(port.name) was disconnected from your Mac."
-        userNote.soundName = nil;
-        unc.deliver(userNote)
-      }
-    
+  }
+  
+  func postUserNotificationForDisconnectedPorts(_ disconnectedPorts: [ORSSerialPort]) {
+    let unc = NSUserNotificationCenter.default
+    for port in disconnectedPorts {
+      let userNote = NSUserNotification()
+      userNote.title = NSLocalizedString("Serial Port Disconnected", comment: "Serial Port Disconnected")
+      userNote.informativeText = "Serial Port \(port.name) was disconnected from your Mac."
+      userNote.soundName = nil;
+      unc.deliver(userNote)
+    }
+
   }
 
 }

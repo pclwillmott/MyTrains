@@ -38,6 +38,7 @@ public class Interface : EditorObject, ORSSerialPortDelegate {
   
   deinit {
     close()
+    serialPort = nil
   }
   
   // MARK: Private Properties
@@ -48,7 +49,7 @@ public class Interface : EditorObject, ORSSerialPortDelegate {
   
   private var _serialNumber : Int = -1
   
-  private var _baudRate : BaudRate = .br57600
+  private var _baudRate : BaudRate = .br921600
   
   private var _devicePath : String = ""
   
@@ -59,12 +60,6 @@ public class Interface : EditorObject, ORSSerialPortDelegate {
   private var _delegate : ORSSerialPortDelegate?
   
   // MARK: Public Properties
-  
-  public var isConnected : Bool {
-    get {
-      return serialPort != nil
-    }
-  }
   
   public var manufacturer : Manufacturer {
     get {
@@ -142,6 +137,12 @@ public class Interface : EditorObject, ORSSerialPortDelegate {
     }
   }
   
+  public var isConnected : Bool {
+    get {
+      return serialPort != nil
+    }
+  }
+  
   public var isOpen : Bool {
     if let port = serialPort {
       return port.isOpen
@@ -153,6 +154,8 @@ public class Interface : EditorObject, ORSSerialPortDelegate {
   
   public var partialSerialNumberHigh : Int = -1
   
+  public var messenger : NetworkMessenger?
+  
   // MARK: Public Methods
   
   override public func displayString() -> String {
@@ -160,26 +163,33 @@ public class Interface : EditorObject, ORSSerialPortDelegate {
   }
   
   public func open() {
+    
     if isOpen {
       close()
     }
-    if let sp = ORSSerialPort(path: devicePath) {
-      serialPort = sp
-      sp.delegate = _delegate
-      sp.baudRate = baudRate.rawValue
-      sp.numberOfDataBits = 8
-      sp.numberOfStopBits = 1
-      sp.parity = .none
-      sp.usesRTSCTSFlowControl = false
-      sp.usesDTRDSRFlowControl = false
-      sp.usesDCDOutputFlowControl = false
-      sp.open()
+    
+    if serialPort == nil {
+      if let port = ORSSerialPort(path: devicePath) {
+        serialPort = port
+      }
     }
+    
+    if let port = serialPort {
+      port.delegate = _delegate
+      port.baudRate = baudRate.rawValue
+      port.numberOfDataBits = 8
+      port.numberOfStopBits = 1
+      port.parity = .none
+      port.usesRTSCTSFlowControl = false
+      port.usesDTRDSRFlowControl = false
+      port.usesDCDOutputFlowControl = false
+      port.open()
+    }
+    
   }
   
   public func close() {
     serialPort?.close()
-    serialPort = nil
   }
   
   public func send(data: Data) {
@@ -199,6 +209,11 @@ public class Interface : EditorObject, ORSSerialPortDelegate {
   
   public func serialPortWasOpened(_ serialPort: ORSSerialPort) {
     delegate?.serialPortWasOpened?(serialPort)
+
+  }
+  
+  public func serialPortWasClosed(_ serialPort: ORSSerialPort) {
+    delegate?.serialPortWasClosed?(serialPort)
   }
   
   public func serialPort(_ serialPort: ORSSerialPort, didReceive data: Data) {

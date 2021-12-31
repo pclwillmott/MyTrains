@@ -18,6 +18,7 @@ public protocol NetworkInterfaceDelegate {
   func interfaceNotIdentified(messenger:NetworkMessenger)
   func interfaceIdentified(messenger:NetworkMessenger)
   func interfaceRemoved(messenger:NetworkMessenger)
+  func statusChanged(messenger:NetworkMessenger)
 }
 
 enum TIMING {
@@ -50,7 +51,11 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
     super.init()
 
     interface.delegate = self
-    interface.open()
+    self.interface.messenger = self
+
+    if !interface.isConnected {
+      interface.open()
+    }
 
   }
   
@@ -105,6 +110,18 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
   public var id : String
 
   public var networkInterfaceDelegate : NetworkInterfaceDelegate? = nil
+  
+  public var isOpen : Bool {
+    get {
+      return interface.isOpen
+    }
+  }
+  
+  public var isConnected : Bool {
+    get {
+      return interface.isConnected
+    }
+  }
   
   // MARK: Private Methods
   
@@ -350,6 +367,14 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
     
   }
   
+  public func open() {
+    interface.open()
+  }
+  
+  public func close() {
+    interface.close()
+  }
+  
   public func powerOn() {
     
     let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_GPON.rawValue], appendCheckSum: true)
@@ -361,6 +386,14 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
   public func powerOff() {
     
     let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_GPOFF.rawValue], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: nil, retryCount: 1)
+
+  }
+  
+  public func getCfgSlotDataP1() {
+    
+    let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_RQ_SL_DATA.rawValue, 0x7f, 0x00], appendCheckSum: true)
     
     addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: nil, retryCount: 1)
 
@@ -393,6 +426,8 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
         interface.productCode = ProductCode(rawValue: Int(message.message[14])) ?? .unknown
         interface.partialSerialNumberLow = Int(message.message[6])
         interface.partialSerialNumberHigh = Int(message.message[7])
+        interface.save()
+        interfaces[interface.primaryKey] = interface
       }
       removeObserver(id: observerId)
       observerId = -1
@@ -419,6 +454,7 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
       observer.value.messengerRemoved(id: self.id)
     }
     networkInterfaceDelegate?.interfaceRemoved(messenger: self)
+    networkInterfaceDelegate?.statusChanged(messenger: self)
   }
   
   public func serialPort(_ serialPort: ORSSerialPort, didEncounterError error: Error) {
@@ -432,6 +468,11 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
   public func serialPortWasOpened(_ serialPort: ORSSerialPort) {
     observerId = addObserver(observer: self)
     getInterfaceData()
+    networkInterfaceDelegate?.statusChanged(messenger: self)
+  }
+  
+  public func serialPortWasClosed(_ serialPort: ORSSerialPort) {
+    networkInterfaceDelegate?.statusChanged(messenger: self)
   }
   
   public func serialPort(_ serialPort: ORSSerialPort, didReceive data: Data) {

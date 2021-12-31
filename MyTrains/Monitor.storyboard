@@ -523,6 +523,7 @@
                         <outlet property="lblCaptureFileName" destination="3xd-jj-khm" id="ywG-gc-jxE"/>
                         <outlet property="lblSendFileName" destination="fqT-IS-9k6" id="wWv-w0-7dv"/>
                         <outlet property="scvMonitor" destination="asY-yj-cEN" id="l7t-cl-T0M"/>
+                        <outlet property="swConnect" destination="6Gv-Ga-ZDb" id="Lsm-LY-XqE"/>
                         <outlet property="txtMessage1" destination="dRB-DQ-27g" id="beA-a2-EsZ"/>
                         <outlet property="txtMessage2" destination="RGS-Qe-oKw" id="yep-ON-E2T"/>
                         <outlet property="txtMessage3" destination="KFm-dY-fN6" id="l4A-TS-yjS"/>
