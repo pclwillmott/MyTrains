@@ -61,9 +61,14 @@ public enum SpeedUnit : Int {
   case milesPerHour = 1
 }
 
+public enum LocomotiveDirection {
+  case forward
+  case reverse
+}
+
 public class Locomotive : EditorObject {
   
-  // Constructors
+  // MARK: Constructors
   
   init(reader:SqliteDataReader) {
     super.init(primaryKey: -1)
@@ -74,15 +79,14 @@ public class Locomotive : EditorObject {
     super.init(primaryKey: -1)
   }
   
-  // Destructors
+  // MARK: Destructors
   
   deinit {
     
   }
   
-  // Private properties
+  // MARK: Private properties
   
-
   private var _locomotiveName : String = ""
   private var _locomotiveType : LocomotiveType = .unknown
   private var _length : Double = 0.0
@@ -98,6 +102,11 @@ public class Locomotive : EditorObject {
   private var _lengthUnits : LengthUnit = .centimeters
   private var _occupancyFeedbackOffsetUnits : LengthUnit = .centimeters
   private var _speedUnits : SpeedUnit = .kilometersPerHour
+  private var _networkId : Int = -1
+  private var _isInUse : Bool = false
+  private var _direction : LocomotiveDirection = .forward
+  private var _targetSpeed : Int = 0
+  private var _isInertial : Bool = true
   
   private var  modified : Bool = false
 
@@ -287,7 +296,65 @@ public class Locomotive : EditorObject {
     }
   }
   
-  // Database Methods
+  public var networkId : Int {
+    get {
+      return _networkId
+    }
+    set(value) {
+      if value != _networkId {
+        _networkId = value
+        modified = true
+      }
+    }
+  }
+  
+  public var isInUse : Bool {
+    get {
+      return _isInUse
+    }
+    set(value) {
+      if value != _isInUse {
+        _isInUse = value
+      }
+    }
+  }
+  
+  public var direction : LocomotiveDirection {
+    get {
+      return _direction
+    }
+    set(value) {
+      if value != _direction {
+        _direction = value
+      }
+    }
+  }
+  
+  // NOTE: targetSpeed is in the range 0 to 126
+  
+  public var targetSpeed : Int {
+    get {
+      return _targetSpeed
+    }
+    set(value) {
+      if value != _targetSpeed {
+        _targetSpeed = value
+      }
+    }
+  }
+  
+  public var isInertial : Bool {
+    get {
+      return _isInertial
+    }
+    set(value) {
+      if value != _isInertial {
+        _isInertial = value
+      }
+    }
+  }
+  
+  // MARK: Database Methods
   
   private func decode(sqliteDataReader:SqliteDataReader?) {
     
@@ -355,6 +422,10 @@ public class Locomotive : EditorObject {
         speedUnits = SpeedUnit(rawValue: reader.getInt(index: 15)!) ?? .kilometersPerHour
       }
 
+      if !reader.isDBNull(index: 16) {
+        networkId = reader.getInt(index: 16)!
+      }
+
     }
     
     modified = false
@@ -384,7 +455,8 @@ public class Locomotive : EditorObject {
         "[\(LOCOMOTIVE.MAX_BACKWARD_SPEED)]," +
         "[\(LOCOMOTIVE.UNITS_LENGTH)]," +
         "[\(LOCOMOTIVE.UNITS_FBOFF_OCC)]," +
-        "[\(LOCOMOTIVE.UNITS_SPEED)]" +
+        "[\(LOCOMOTIVE.UNITS_SPEED)]," +
+        "[\(LOCOMOTIVE.NETWORK_ID)]" +
         ") VALUES (" +
         "@\(LOCOMOTIVE.LOCOMOTIVE_ID), " +
         "@\(LOCOMOTIVE.LOCOMOTIVE_NAME), " +
@@ -401,7 +473,8 @@ public class Locomotive : EditorObject {
         "@\(LOCOMOTIVE.MAX_BACKWARD_SPEED), " +
         "@\(LOCOMOTIVE.UNITS_LENGTH), " +
         "@\(LOCOMOTIVE.UNITS_FBOFF_OCC), " +
-        "@\(LOCOMOTIVE.UNITS_SPEED)" +
+        "@\(LOCOMOTIVE.UNITS_SPEED)," +
+        "@\(LOCOMOTIVE.NETWORK_ID)" +
         ")"
         primaryKey = Database.nextCode(tableName: TABLE.LOCOMOTIVE, primaryKey: LOCOMOTIVE.LOCOMOTIVE_ID)!
       }
@@ -421,7 +494,8 @@ public class Locomotive : EditorObject {
         "[\(LOCOMOTIVE.MAX_BACKWARD_SPEED)] = @\(LOCOMOTIVE.MAX_BACKWARD_SPEED), " +
         "[\(LOCOMOTIVE.UNITS_LENGTH)] = @\(LOCOMOTIVE.UNITS_LENGTH), " +
         "[\(LOCOMOTIVE.UNITS_FBOFF_OCC)] = @\(LOCOMOTIVE.UNITS_FBOFF_OCC), " +
-        "[\(LOCOMOTIVE.UNITS_SPEED)] = @\(LOCOMOTIVE.UNITS_SPEED) " +
+        "[\(LOCOMOTIVE.UNITS_SPEED)] = @\(LOCOMOTIVE.UNITS_SPEED), " +
+        "[\(LOCOMOTIVE.NETWORK_ID)] = @\(LOCOMOTIVE.NETWORK_ID) " +
         "WHERE [\(LOCOMOTIVE.LOCOMOTIVE_ID)] = @\(LOCOMOTIVE.LOCOMOTIVE_ID)"
       }
 
@@ -453,6 +527,7 @@ public class Locomotive : EditorObject {
       cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.UNITS_LENGTH)", value: lengthUnits.rawValue)
       cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.UNITS_FBOFF_OCC)", value: occupancyFeedbackOffsetUnits.rawValue)
       cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.UNITS_SPEED)", value: speedUnits.rawValue)
+      cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.NETWORK_ID)", value: networkId)
 
       _ = cmd.executeNonQuery()
 
@@ -486,7 +561,8 @@ public class Locomotive : EditorObject {
         "[\(LOCOMOTIVE.MAX_BACKWARD_SPEED)], " +
         "[\(LOCOMOTIVE.UNITS_LENGTH)], " +
         "[\(LOCOMOTIVE.UNITS_FBOFF_OCC)], " +
-        "[\(LOCOMOTIVE.UNITS_SPEED)]"
+        "[\(LOCOMOTIVE.UNITS_SPEED)], " +
+        "[\(LOCOMOTIVE.NETWORK_ID)]" 
     }
   }
   

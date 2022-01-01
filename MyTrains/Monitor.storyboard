@@ -446,7 +446,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="313-N7-ZNn">
-                                            <rect key="frame" x="7" y="14" width="554" height="25"/>
+                                            <rect key="frame" x="7" y="14" width="567" height="25"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                             <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="ozL-KO-rNf">
                                                 <font key="font" metaFont="system"/>
@@ -458,7 +458,7 @@
                                             </connections>
                                         </comboBox>
                                         <button toolTip="Track Power Off" fixedFrame="YES" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="849-B7-iDY">
-                                            <rect key="frame" x="696" y="9" width="30" height="36"/>
+                                            <rect key="frame" x="700" y="9" width="30" height="36"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="circle.fill" catalog="system" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="baD-YD-8u0">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -470,7 +470,7 @@
                                             </connections>
                                         </button>
                                         <button toolTip="Track Power On" fixedFrame="YES" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="esj-kn-J0F">
-                                            <rect key="frame" x="644" y="9" width="30" height="36"/>
+                                            <rect key="frame" x="650" y="9" width="30" height="36"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="circle.fill" catalog="system" imagePosition="only" alignment="center" alternateImage="circle" imageScaling="proportionallyUpOrDown" inset="2" id="8rx-0O-D0r">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -482,7 +482,7 @@
                                             </connections>
                                         </button>
                                         <button toolTip="Set Track to Idle" fixedFrame="YES" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3hM-6t-y7b">
-                                            <rect key="frame" x="749" y="9" width="30" height="36"/>
+                                            <rect key="frame" x="750" y="9" width="30" height="36"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="pause.circle" catalog="system" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="UgB-EA-SfH">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -493,7 +493,7 @@
                                             </connections>
                                         </button>
                                         <switch toolTip="Connect to Command Station" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" allowsExpansionToolTips="YES" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="6Gv-Ga-ZDb">
-                                            <rect key="frame" x="585" y="14" width="42" height="25"/>
+                                            <rect key="frame" x="586" y="14" width="42" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <connections>
                                                 <action selector="swConnectAction:" target="wI2-06-r3x" id="Q7k-g8-MXq"/>

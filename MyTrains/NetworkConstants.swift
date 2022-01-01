@@ -262,12 +262,6 @@ public enum LoconetLocoUsage : UInt8 {
   case unknown = 0xff
 }
 
-public enum LoconetLocoDirection : UInt8 {
-  case forwards  = 0b00100000
-  case backwards = 0b00000000
-  case unknown   = 0xff
-}
-
 public let loconetTrackProgBusyMask : UInt8 = 0b00001000
 public let loconetTrackMLOK1Mask    : UInt8 = 0b00000100
 public let loconetTrackIdleMask     : UInt8 = 0b00000010

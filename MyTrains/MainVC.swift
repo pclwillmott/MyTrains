@@ -53,7 +53,9 @@ class MainVC: NSViewController, NetworkControllerDelegate {
   
   private func updateStatus() {
     
-    if let layout = networkController.layout {
+    swConnect.state = networkController.isInterfaceOpen ? .on : .off
+    
+    if let _ = networkController.layout {
       
       boxStatus.contentView?.subviews.removeAll()
       
@@ -144,6 +146,32 @@ class MainVC: NSViewController, NetworkControllerDelegate {
   }
   
   @IBOutlet weak var boxStatus: NSBox!
+  
+  @IBOutlet weak var swConnect: NSSwitch!
+  
+  @IBAction func swConnectAction(_ sender: NSSwitch) {
+    
+    swConnect.state == .on ? networkController.interfaceOpen() : networkController.interfaceClose()
+    
+  }
+  
+  @IBOutlet weak var btnPowerOn: NSButton!
+  
+  @IBAction func btnPowerOnAction(_ sender: NSButton) {
+    networkController.powerOn()
+  }
+  
+  @IBOutlet weak var btnPowerOff: NSButton!
+  
+  @IBAction func btnPowerOffAction(_ sender: NSButton) {
+    networkController.powerOff()
+  }
+  
+  @IBOutlet weak var btnPause: NSButton!
+  
+  @IBAction func btnPauseAction(_ sender: NSButton) {
+    networkController.powerIdle()
+  }
   
 }
 

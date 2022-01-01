@@ -53,10 +53,6 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
   
   private var _layoutId : Int = -1
   
-  private var locomotivesByName    : [String:Locomotive] = [:]
-  
-  private var locomotivesByAddress : [UInt16:Locomotive] = [:]
-  
   private var _nextMessengerId : Int = 1
   
   private var _nextIdLock : NSLock = NSLock()
@@ -139,6 +135,18 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
     }
   }
   
+  public var isInterfaceOpen : Bool {
+    get {
+      for kv in interfaces {
+        let interface = kv.value
+        if interface.isOpen {
+          return true
+        }
+      }
+      return false
+    }
+  }
+  
 // MARK: Private Methods
   
   private func findPorts() {
@@ -178,6 +186,36 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
     }
   }
   
+  public func powerOn() {
+    if let lo = layout {
+      for network in lo.networks {
+        if let cs = commandStations[network.commandStationId] {
+          cs.powerOn()
+        }
+      }
+    }
+  }
+  
+  public func powerOff() {
+    if let lo = layout {
+      for network in lo.networks {
+        if let cs = commandStations[network.commandStationId] {
+          cs.powerOff()
+        }
+      }
+    }
+  }
+  
+  public func powerIdle() {
+    if let lo = layout {
+      for network in lo.networks {
+        if let cs = commandStations[network.commandStationId] {
+          cs.powerIdle()
+        }
+      }
+    }
+  }
+  
   public func addLayout(layout: Layout) {
     layouts[layout.primaryKey] = layout
     for kv in controllerDelegates {
@@ -201,6 +239,20 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
   
   public func removeNetwork(primaryKey:Int) {
     networks.removeValue(forKey: primaryKey)
+    for kv in controllerDelegates {
+      kv.value.networkControllerUpdated(netwokController: self)
+    }
+  }
+  
+  public func addLocomotive(locomotive: Locomotive) {
+    locomotives[locomotive.primaryKey] = locomotive
+    for kv in controllerDelegates {
+      kv.value.networkControllerUpdated(netwokController: self)
+    }
+  }
+  
+  public func removeLocomotive(primaryKey: Int) {
+    locomotives.removeValue(forKey: primaryKey)
     for kv in controllerDelegates {
       kv.value.networkControllerUpdated(netwokController: self)
     }
@@ -287,7 +339,7 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
         }
         else {
           let cs = CommandStation(message: devData)
-          commandStations[cs.serialNumber] = cs
+          commandStations[cs.commandStationId] = cs
           cs.addMessenger(messenger: _networkMessengers[message.interfaceId]!)
           _ = cs.addDelegate(delegate: self)
           for delegate in controllerDelegates {

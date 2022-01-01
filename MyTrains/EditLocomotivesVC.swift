@@ -10,7 +10,7 @@ import Cocoa
 
 class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
  
-  // Window & View Control
+  // MARK: Window & View Control
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -32,13 +32,18 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     
     editorView.tabView = tabView
     
-    // do comboBoxDS here
+    cboNetwork.dataSource = cboNetworkDS
     
     editorView.dictionary = networkController.locomotives
 
   }
   
-  // DBEditorDelegate Methods
+  // MARK: Private Properties
+  
+  private var cboNetworkDS = ComboBoxDBDS(tableName: TABLE.NETWORK, codeColumn: NETWORK.NETWORK_ID, displayColumn: NETWORK.NETWORK_NAME, sortColumn: NETWORK.NETWORK_NAME)
+  
+  
+  // MARK: DBEditorDelegate Methods
   
   func clearFields(dbEditorView: DBEditorView) {
     txtLocomotiveName.stringValue = ""
@@ -56,6 +61,8 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     txtMaximumForwardSpeed.stringValue = "75.0"
     txtMaximumReverseSpeed.stringValue = "75.0"
     cboMaximumSpeedUnits.selectItem(at: UserDefaults.standard.integer(forKey: DEFAULT.UNITS_SPEED))
+    cboNetwork.deselectItem(at: cboNetwork.indexOfSelectedItem)
+
   }
   
   func setupFields(dbEditorView: DBEditorView, editorObject: EditorObject) {
@@ -75,6 +82,9 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
       txtMaximumForwardSpeed.stringValue = "\(locomotive.maxForwardSpeed)"
       txtMaximumReverseSpeed.stringValue = "\(locomotive.maxBackwardSpeed)"
       cboMaximumSpeedUnits.selectItem(at: locomotive.speedUnits.rawValue)
+      if let netIndex = cboNetworkDS.indexOfItemWithCodeValue(code: locomotive.networkId) {
+        cboNetwork.selectItem(at: netIndex)
+      }
     }
   }
   
@@ -133,6 +143,10 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     else {
       return "A speed greater than zero is required."
     }
+    if cboNetwork.indexOfSelectedItem == -1 {
+      cboNetwork.becomeFirstResponder()
+      return "The locomotive must belong to a network."
+    }
     return nil
   }
   
@@ -152,14 +166,14 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     locomotive.maxForwardSpeed = Double(txtMaximumForwardSpeed.stringValue) ?? 0.0
     locomotive.maxBackwardSpeed = Double(txtMaximumReverseSpeed.stringValue) ?? 0.0
     locomotive.speedUnits = SpeedUnit(rawValue: cboMaximumSpeedUnits.indexOfSelectedItem) ?? .kilometersPerHour
+    locomotive.networkId = cboNetworkDS.codeForItemAt(index: cboNetwork.indexOfSelectedItem) ?? -1
     locomotive.save()
   }
 
-  
   func saveNew(dbEditorView: DBEditorView) -> EditorObject {
     let locomotive = Locomotive()
     setFields(locomotive: locomotive)
-    networkController.locomotives[locomotive.primaryKey] = locomotive
+    networkController.addLocomotive(locomotive: locomotive)
     editorView.dictionary = networkController.locomotives
     editorView.setSelection(key: locomotive.primaryKey)
     return locomotive
@@ -174,12 +188,12 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   }
   
   func delete(dbEditorView: DBEditorView, primaryKey: Int) {
-    networkController.locomotives.removeValue(forKey: primaryKey)
+    networkController.removeLocomotive(primaryKey: primaryKey)
     Locomotive.delete(primaryKey: primaryKey)
     editorView.dictionary = networkController.locomotives
   }
   
-  // Outlets & Actions
+  // MARK: Outlets & Actions
   
   @IBOutlet weak var tabView: NSTabView!
   
@@ -279,6 +293,12 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   @IBAction func cboMaximumSpeedUnitsAction(_ sender: NSComboBox) {
     editorView.modified = true
     UserDefaults.standard.set(cboMaximumSpeedUnits.indexOfSelectedItem, forKey: DEFAULT.UNITS_SPEED)
+  }
+  
+  @IBOutlet weak var cboNetwork: NSComboBox!
+  
+  @IBAction func cboNetworkAction(_ sender: NSComboBox) {
+    editorView.modified = true
   }
   
 }

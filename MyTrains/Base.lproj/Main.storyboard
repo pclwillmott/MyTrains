@@ -454,6 +454,19 @@
                                     </items>
                                 </menu>
                             </menuItem>
+                            <menuItem title="Control" id="TPi-Ta-FZe">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Control" id="hwj-Hb-krZ">
+                                    <items>
+                                        <menuItem title="Throttle" id="yDA-Sc-xvW">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="mnuThrottleAction:" target="Voe-Tx-rLC" id="Vc4-73-3MS"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
                             <menuItem title="View" id="H8h-7b-M4v">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="View" id="HyV-fh-RgO">
@@ -569,49 +582,61 @@
             <objects>
                 <viewController id="XfG-lQ-9wD" customClass="MainVC" customModule="MyTrains" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="m2S-Jp-Qdl">
-                        <rect key="frame" x="0.0" y="0.0" width="550" height="350"/>
+                        <rect key="frame" x="0.0" y="0.0" width="662" height="350"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <box fixedFrame="YES" borderType="bezel" title="Layout" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="AbY-9S-xUt">
-                                <rect key="frame" x="-3" y="296" width="556" height="56"/>
+                                <rect key="frame" x="-3" y="296" width="668" height="56"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <view key="contentView" id="f2K-Xq-V7l">
-                                    <rect key="frame" x="3" y="3" width="550" height="50"/>
+                                    <rect key="frame" x="3" y="3" width="662" height="50"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <button toolTip="Track Power Off" fixedFrame="YES" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="McJ-kX-caF">
-                                            <rect key="frame" x="460" y="9" width="30" height="36"/>
+                                            <rect key="frame" x="560" y="9" width="30" height="36"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="circle.fill" catalog="system" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="JfX-HO-gOf">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <color key="contentTintColor" name="systemRedColor" catalog="System" colorSpace="catalog"/>
+                                            <connections>
+                                                <action selector="btnPowerOffAction:" target="XfG-lQ-9wD" id="fOC-OG-I6c"/>
+                                            </connections>
                                         </button>
                                         <button toolTip="Track Power On" fixedFrame="YES" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8tU-Og-bFk">
-                                            <rect key="frame" x="420" y="9" width="30" height="36"/>
+                                            <rect key="frame" x="510" y="9" width="30" height="36"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="circle.fill" catalog="system" imagePosition="only" alignment="center" alternateImage="circle" imageScaling="proportionallyUpOrDown" inset="2" id="Gvo-tN-Fay">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <color key="contentTintColor" name="systemGreenColor" catalog="System" colorSpace="catalog"/>
+                                            <connections>
+                                                <action selector="btnPowerOnAction:" target="XfG-lQ-9wD" id="mzK-gd-HMp"/>
+                                            </connections>
                                         </button>
                                         <button toolTip="Set Track to Idle" fixedFrame="YES" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gX1-7J-iGd">
-                                            <rect key="frame" x="500" y="9" width="30" height="36"/>
+                                            <rect key="frame" x="610" y="9" width="30" height="36"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="pause.circle" catalog="system" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="JCt-Qa-HAq">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="btnPauseAction:" target="XfG-lQ-9wD" id="sNg-0d-lw1"/>
+                                            </connections>
                                         </button>
                                         <switch toolTip="Connect to Command Station" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" allowsExpansionToolTips="YES" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="SW0-0C-pTk">
-                                            <rect key="frame" x="343" y="14" width="42" height="25"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <rect key="frame" x="447" y="14" width="42" height="25"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <connections>
+                                                <action selector="swConnectAction:" target="XfG-lQ-9wD" id="N8P-iX-9uz"/>
+                                            </connections>
                                         </switch>
                                         <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FvV-6g-VOW">
-                                            <rect key="frame" x="20" y="13" width="309" height="25"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <rect key="frame" x="20" y="14" width="415" height="25"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                             <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="5" id="XS8-6K-Yk7">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -625,10 +650,10 @@
                                 </view>
                             </box>
                             <box fixedFrame="YES" title="Box" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="ELL-xv-dmg">
-                                <rect key="frame" x="-3" y="-4" width="556" height="56"/>
+                                <rect key="frame" x="-3" y="-4" width="668" height="56"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <view key="contentView" id="TZD-lO-klV">
-                                    <rect key="frame" x="3" y="3" width="550" height="50"/>
+                                    <rect key="frame" x="3" y="3" width="662" height="50"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </box>
@@ -636,12 +661,16 @@
                     </view>
                     <connections>
                         <outlet property="boxStatus" destination="ELL-xv-dmg" id="ueX-KJ-uz1"/>
+                        <outlet property="btnPause" destination="gX1-7J-iGd" id="t7M-A2-0T4"/>
+                        <outlet property="btnPowerOff" destination="McJ-kX-caF" id="G0z-Rl-kBD"/>
+                        <outlet property="btnPowerOn" destination="8tU-Og-bFk" id="73B-Iu-NUS"/>
                         <outlet property="cboLayout" destination="FvV-6g-VOW" id="tiD-sk-BfD"/>
+                        <outlet property="swConnect" destination="SW0-0C-pTk" id="ZMv-6j-eV8"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="101" y="675"/>
+            <point key="canvasLocation" x="157" y="675"/>
         </scene>
     </scenes>
     <resources>

@@ -261,6 +261,9 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, NetworkMessengerDe
   // MARK: NetworkControllerDelegate Methods
   
   func statusUpdated(networkController: NetworkController) {
+    
+    swConnect.state = networkController.isInterfaceOpen ? .on : .off
+    
   }
   
   func networkControllerUpdated(netwokController: NetworkController) {
@@ -288,11 +291,12 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, NetworkMessengerDe
         cboInterface.selectItem(at: cboInterface.numberOfItems-1)
         self.messenger = messenger
         observerId = messenger.addObserver(observer: self)
-        swConnect.state = messenger.isOpen ? .on : .off
       }
       
     }
-  
+    
+    swConnect.state = networkController.isInterfaceOpen ? .on : .off
+    
   }
 
   // MARK: NetworkMessengerDelegate Methods
@@ -397,10 +401,11 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, NetworkMessengerDe
       if x.comboName == name {
         messenger = x
         observerId = messenger?.addObserver(observer: self) ?? -1
-        swConnect.state = x.isOpen ? .on : .off
       }
     }
-    
+
+    swConnect.state = networkController.isInterfaceOpen ? .on : .off
+
   }
 
   @IBOutlet weak var cboInterface: NSComboBox!
@@ -408,9 +413,7 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, NetworkMessengerDe
   @IBOutlet weak var swConnect: NSSwitch!
   
   @IBAction func swConnectAction(_ sender: NSSwitch) {
-    if let mess = messenger {
-      swConnect.state == .on ? mess.open() : mess.close()
-    }
+    swConnect.state == .on ? networkController.interfaceOpen() : networkController.interfaceOpen()
   }
   
   @IBOutlet weak var btnPowerOn: NSButton!

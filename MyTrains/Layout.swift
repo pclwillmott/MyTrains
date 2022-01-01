@@ -9,7 +9,7 @@ import Foundation
 
 public class Layout : EditorObject {
   
-  // Constructors
+  // MARK: Constructors
   
   init(reader:SqliteDataReader) {
     super.init(primaryKey: -1)
@@ -20,21 +20,23 @@ public class Layout : EditorObject {
     super.init(primaryKey: -1)
   }
   
-  // Destructors
+  // MARK: Destructors
   
   deinit {
     
   }
   
-  // Private properties
+  // MARK: Private properties
   
   private var _layoutName : String = ""
   
   private var _description : String = ""
   
+  private var _scale : Double = 1.0
+  
   private var  modified : Bool = false
 
-  // Public properties
+  // MARK: Public properties
   
   override public func displayString() -> String {
     return layoutName
@@ -80,6 +82,18 @@ public class Layout : EditorObject {
     }
   }
   
+  public var scale : Double {
+    get {
+      return _scale
+    }
+    set(value) {
+      if value != _scale {
+        _scale = value
+        modified = true
+      }
+    }
+  }
+  
   // Database Methods
   
   private func decode(sqliteDataReader:SqliteDataReader?) {
@@ -96,6 +110,10 @@ public class Layout : EditorObject {
         layoutDescription = reader.getString(index: 2)!
       }
       
+      if !reader.isDBNull(index: 3) {
+        scale = reader.getDouble(index: 3)!
+      }
+
     }
     
     modified = false
@@ -112,18 +130,21 @@ public class Layout : EditorObject {
         sql = "INSERT INTO [\(TABLE.LAYOUT)] (" +
         "[\(LAYOUT.LAYOUT_ID)], " +
         "[\(LAYOUT.LAYOUT_NAME)], " +
-        "[\(LAYOUT.LAYOUT_DESCRIPTION)]" +
+        "[\(LAYOUT.LAYOUT_DESCRIPTION)]," +
+        "[\(LAYOUT.LAYOUT_SCALE)]" +
         ") VALUES (" +
         "@\(LAYOUT.LAYOUT_ID), " +
         "@\(LAYOUT.LAYOUT_NAME), " +
-        "@\(LAYOUT.LAYOUT_DESCRIPTION)" +
+        "@\(LAYOUT.LAYOUT_DESCRIPTION)," +
+        "@\(LAYOUT.LAYOUT_SCALE)" +
         ")"
         primaryKey = Database.nextCode(tableName: TABLE.LAYOUT, primaryKey: LAYOUT.LAYOUT_ID)!
       }
       else {
         sql = "UPDATE [\(TABLE.LAYOUT)] SET " +
         "[\(LAYOUT.LAYOUT_NAME)] = @\(LAYOUT.LAYOUT_NAME), " +
-        "[\(LAYOUT.LAYOUT_DESCRIPTION)] = @\(LAYOUT.LAYOUT_DESCRIPTION) " +
+        "[\(LAYOUT.LAYOUT_DESCRIPTION)] = @\(LAYOUT.LAYOUT_DESCRIPTION), " +
+        "[\(LAYOUT.LAYOUT_SCALE)] = @\(LAYOUT.LAYOUT_SCALE) " +
         "WHERE [\(LAYOUT.LAYOUT_ID)] = @\(LAYOUT.LAYOUT_ID)"
       }
 
@@ -142,6 +163,7 @@ public class Layout : EditorObject {
       cmd.parameters.addWithValue(key: "@\(LAYOUT.LAYOUT_ID)", value: primaryKey)
       cmd.parameters.addWithValue(key: "@\(LAYOUT.LAYOUT_NAME)", value: layoutName)
       cmd.parameters.addWithValue(key: "@\(LAYOUT.LAYOUT_DESCRIPTION)", value: description)
+      cmd.parameters.addWithValue(key: "@\(LAYOUT.LAYOUT_SCALE)", value: scale)
 
       _ = cmd.executeNonQuery()
 
@@ -162,7 +184,8 @@ public class Layout : EditorObject {
       return
         "[\(LAYOUT.LAYOUT_ID)], " +
         "[\(LAYOUT.LAYOUT_NAME)], " +
-        "[\(LAYOUT.LAYOUT_DESCRIPTION)]"
+        "[\(LAYOUT.LAYOUT_DESCRIPTION)], " +
+        "[\(LAYOUT.LAYOUT_SCALE)]" 
     }
   }
   

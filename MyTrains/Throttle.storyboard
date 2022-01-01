@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Window Controller-->
+        <scene sceneID="zaW-MY-wsa">
+            <objects>
+                <windowController storyboardIdentifier="ThrottleWC" id="mGV-i8-c5U" sceneMemberID="viewController">
+                    <window key="window" title="Throttle" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" visibleAtLaunch="NO" frameAutosaveName="Throttle" animationBehavior="default" id="rTV-du-Uzl">
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+                        <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+                        <rect key="contentRect" x="268" y="340" width="480" height="270"/>
+                        <rect key="screenRect" x="0.0" y="0.0" width="1792" height="1120"/>
+                        <value key="minSize" type="size" width="480" height="360"/>
+                        <value key="maxSize" type="size" width="480" height="360"/>
+                        <view key="contentView" id="cti-uA-bj3">
+                            <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </view>
+                        <connections>
+                            <outlet property="delegate" destination="mGV-i8-c5U" id="xks-FQ-dnP"/>
+                        </connections>
+                    </window>
+                    <connections>
+                        <segue destination="JXj-8b-fbu" kind="relationship" relationship="window.shadowedContentViewController" id="H7t-YW-YW8"/>
+                    </connections>
+                </windowController>
+                <customObject id="Eux-6c-N3g" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-51" y="53"/>
+        </scene>
+        <!--ThrottleVC-->
+        <scene sceneID="lWT-B8-ycT">
+            <objects>
+                <viewController id="JXj-8b-fbu" customClass="ThrottleVC" customModule="MyTrains" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="Bjc-Su-xiW">
+                        <rect key="frame" x="0.0" y="0.0" width="480" height="360"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EW7-F5-3Xn">
+                                <rect key="frame" x="20" y="317" width="386" height="25"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="5" id="yeX-vT-yT3">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </comboBoxCell>
+                                <connections>
+                                    <action selector="cboLocomotiveAction:" target="JXj-8b-fbu" id="YaO-ku-XmL"/>
+                                </connections>
+                            </comboBox>
+                            <slider horizontalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uvR-I8-QRi">
+                                <rect key="frame" x="429" y="43" width="24" height="259"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
+                                <sliderCell key="cell" continuous="YES" alignment="left" maxValue="126" tickMarkPosition="right" sliderType="linear" id="1bA-RJ-5Ec"/>
+                                <connections>
+                                    <action selector="vsThrottleAction:" target="JXj-8b-fbu" id="pm9-4I-wg2"/>
+                                </connections>
+                            </slider>
+                            <box fixedFrame="YES" title="Box" titlePosition="noTitle" transparent="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wzx-SJ-V9a">
+                                <rect key="frame" x="0.0" y="234" width="112" height="68"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <view key="contentView" id="f02-RJ-4lv">
+                                    <rect key="frame" x="3" y="3" width="106" height="62"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4k2-Ze-G4w">
+                                            <rect key="frame" x="17" y="34" width="76" height="18"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="radio" title="Forward" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="qDV-kS-Ngy">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="radForwardAction:" target="JXj-8b-fbu" id="iRm-CK-sMu"/>
+                                            </connections>
+                                        </button>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eVi-ww-6As">
+                                            <rect key="frame" x="17" y="12" width="75" height="18"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="radio" title="Reverse" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="b4K-BU-qKA">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="radReverseAction:" target="JXj-8b-fbu" id="jy3-z4-brI"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                </view>
+                            </box>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ggg-tP-LdL">
+                                <rect key="frame" x="161" y="243" width="156" height="52"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" borderStyle="border" alignment="center" title="0" drawsBackground="YES" id="X6T-J3-iya">
+                                    <font key="font" size="36" textStyle="largeTitle" name=".SFNS-Regular"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="usY-EM-SdU">
+                                <rect key="frame" x="160" y="219" width="158" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Distance: 0" id="en9-UJ-0Ad">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kEd-CU-vDw">
+                                <rect key="frame" x="411" y="20" width="60" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="0" id="Jzj-zf-Yh1">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="sxi-UP-own">
+                                <rect key="frame" x="420" y="317" width="42" height="25"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                <connections>
+                                    <action selector="swPowerAction:" target="JXj-8b-fbu" id="fo6-gz-AUf"/>
+                                </connections>
+                            </switch>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="djg-oe-jSj">
+                                <rect key="frame" x="18" y="19" width="68" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <buttonCell key="cell" type="check" title="Inertial" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="iya-Vs-GdY">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="chkInerialAction:" target="JXj-8b-fbu" id="Raz-hd-XHa"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                    </view>
+                    <connections>
+                        <outlet property="cboLocomotive" destination="EW7-F5-3Xn" id="heK-Ed-vWO"/>
+                        <outlet property="chkInertial" destination="djg-oe-jSj" id="CK3-Bx-eBr"/>
+                        <outlet property="lblDistance" destination="usY-EM-SdU" id="pqO-Bo-cg0"/>
+                        <outlet property="lblSpeed" destination="ggg-tP-LdL" id="zVr-w2-vZR"/>
+                        <outlet property="lblTargetStep" destination="kEd-CU-vDw" id="tk3-1U-G5s"/>
+                        <outlet property="radForward" destination="4k2-Ze-G4w" id="njE-iF-QX8"/>
+                        <outlet property="radReverse" destination="eVi-ww-6As" id="ozy-BH-5rD"/>
+                        <outlet property="swPower" destination="sxi-UP-own" id="jEZ-XT-lG7"/>
+                        <outlet property="vsThrottle" destination="uvR-I8-QRi" id="53k-G8-gW8"/>
+                    </connections>
+                </viewController>
+                <customObject id="6gN-2J-dqc" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="657" y="67"/>
+        </scene>
+    </scenes>
+</document>

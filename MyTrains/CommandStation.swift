@@ -264,10 +264,41 @@ public class CommandStation : NetworkMessengerDelegate {
     for messenger in _messengers {
       if messenger.value.isOpen {
         messenger.value.getCfgSlotDataP1()
+        break
       }
     }
   }
   
+  public func powerOn() {
+    for kv in messengers {
+      let messenger = kv.value
+      if messenger.isOpen {
+         messenger.powerOn()
+        break
+      }
+    }
+  }
+  
+  public func powerOff() {
+    for kv in messengers {
+      let messenger = kv.value
+      if messenger.isOpen {
+         messenger.powerOff()
+        break
+      }
+    }
+  }
+  
+  public func powerIdle() {
+    for kv in messengers {
+      let messenger = kv.value
+      if messenger.isOpen {
+         messenger.powerIdle()
+        break
+      }
+    }
+  }
+
   // MARK: NetworkMessengerDelegate Methods
   
   public func messengerRemoved(id: String) {

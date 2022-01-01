@@ -258,6 +258,27 @@
                                                                             <action selector="txtAddressAction:" target="9iP-PP-Stw" id="6dZ-DA-56y"/>
                                                                         </connections>
                                                                     </textField>
+                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Yb3-7g-3Xx">
+                                                                        <rect key="frame" x="313" y="50" width="56" height="16"/>
+                                                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Network" id="pLz-kb-lC4">
+                                                                            <font key="font" metaFont="system"/>
+                                                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                        </textFieldCell>
+                                                                    </textField>
+                                                                    <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fBe-gI-DCv">
+                                                                        <rect key="frame" x="315" y="22" width="158" height="25"/>
+                                                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                                                        <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="5" id="ak6-H4-hFd">
+                                                                            <font key="font" metaFont="system"/>
+                                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                        </comboBoxCell>
+                                                                        <connections>
+                                                                            <action selector="cboNetworkAction:" target="9iP-PP-Stw" id="UEX-tx-TSa"/>
+                                                                        </connections>
+                                                                    </comboBox>
                                                                 </subviews>
                                                             </view>
                                                         </box>
@@ -410,7 +431,7 @@
                                             </tabViewItem>
                                             <tabViewItem label="Functions" identifier="" id="LsB-jz-5JX">
                                                 <view key="view" id="fAl-Vi-f9y">
-                                                    <rect key="frame" x="10" y="33" width="524" height="381"/>
+                                                    <rect key="frame" x="10" y="33" width="524" height="420"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 </view>
                                             </tabViewItem>
@@ -521,6 +542,7 @@
                         <outlet property="cboDecoderType" destination="Ir0-IR-GfY" id="JTf-g4-fUR"/>
                         <outlet property="cboLengthUnits" destination="IU8-2g-EE4" id="OLe-iw-KXu"/>
                         <outlet property="cboMaximumSpeedUnits" destination="vHh-Sl-K0L" id="faQ-4n-LiZ"/>
+                        <outlet property="cboNetwork" destination="fBe-gI-DCv" id="N1H-lx-4HE"/>
                         <outlet property="cboOccupancyFeedbackOffsetUnits" destination="Pcg-q0-g9m" id="hPQ-1t-HCq"/>
                         <outlet property="cboPowerSource" destination="ayp-9g-zkM" id="JrQ-lV-ytJ"/>
                         <outlet property="cboTrackGuage" destination="31k-gB-HGV" id="HAx-aT-NeF"/>

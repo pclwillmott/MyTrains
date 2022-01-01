@@ -61,6 +61,7 @@ enum LAYOUT {
   static let LAYOUT_ID             = "LAYOUT_ID"
   static let LAYOUT_NAME           = "LAYOUT_NAME"
   static let LAYOUT_DESCRIPTION    = "LAYOUT_DESCRIPTION"
+  static let LAYOUT_SCALE          = "LAYOUT_SCALE"
 }
 
 enum LOCOMOTIVE {
@@ -80,4 +81,5 @@ enum LOCOMOTIVE {
   static let UNITS_LENGTH          = "UNITS_LENGTH"
   static let UNITS_FBOFF_OCC       = "UNITS_FBOFF_OCC"
   static let UNITS_SPEED           = "UNITS_SPEED"
+  static let NETWORK_ID            = "NETWORK_ID"
 }

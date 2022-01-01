@@ -145,14 +145,6 @@ public class LoconetSlot {
     }
   }
 
-  public var locoDirection : LoconetLocoDirection {
-    get {
-      return slotData[LoconetSlotByte.slotDirF.rawValue] & loconetDirFDirMask != 0x00 ? .forwards : .backwards
-    }
-    set(value) {
-      slotData[LoconetSlotByte.slotDirF.rawValue] = (slotData[LoconetSlotByte.slotDirF.rawValue] & ~loconetDirFDirMask) | (value == .forwards ? loconetDirFDirMask : 0x00)
-    }
-  }
   
   public var stateF0 : Bool {
     get {

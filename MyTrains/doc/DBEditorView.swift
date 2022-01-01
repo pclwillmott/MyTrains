@@ -24,7 +24,7 @@ protocol DBEditorDelegate {
 
 class DBEditorView: NSView {
 
-  // View Control
+  // MARK: View Control
   
   public override func draw(_ dirtyRect: NSRect) {
     super.draw(dirtyRect)
@@ -57,7 +57,7 @@ class DBEditorView: NSView {
     
   }
   
-  // Private Properties
+  // MARK: Private Properties
   
   private var editorState : DBEditorState = .select
   
@@ -71,7 +71,7 @@ class DBEditorView: NSView {
   
   private var first = true
 
-  // Public Properties
+  // MARK: Public Properties
   
   public var tabView : NSTabView? {
     get {
@@ -139,7 +139,7 @@ class DBEditorView: NSView {
     }
   }
   
-  // Private Methods
+  // MARK: Private Methods
   
   private func setControls() {
     
@@ -193,7 +193,7 @@ class DBEditorView: NSView {
     
   }
   
-  // Outlets & Actions
+  // MARK: Outlets & Actions
   
   @IBOutlet var contentView: DBEditorView!
   

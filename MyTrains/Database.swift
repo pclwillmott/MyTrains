@@ -62,7 +62,8 @@ class Database {
             "CREATE TABLE [\(TABLE.LAYOUT)] (" +
               "[\(LAYOUT.LAYOUT_ID)]          INT PRIMARY KEY," +
               "[\(LAYOUT.LAYOUT_NAME)]        TEXT NOT NULL," +
-              "[\(LAYOUT.LAYOUT_DESCRIPTION)] TEXT" +
+              "[\(LAYOUT.LAYOUT_DESCRIPTION)] TEXT," +
+              "[\(LAYOUT.LAYOUT_SCALE)]       REAL" +
             ")",
 
             "CREATE TABLE [\(TABLE.NETWORK)] (" +
@@ -108,7 +109,8 @@ class Database {
               "[\(LOCOMOTIVE.TRACK_RESTRICTION)]  INT NOT NULL," +
               "[\(LOCOMOTIVE.UNITS_LENGTH)]       INT NOT NULL," +
               "[\(LOCOMOTIVE.UNITS_FBOFF_OCC)]    INT NOT NULL," +
-              "[\(LOCOMOTIVE.UNITS_SPEED)]        INT NOT NULL" +
+              "[\(LOCOMOTIVE.UNITS_SPEED)]        INT NOT NULL," +
+              "[\(LOCOMOTIVE.NETWORK_ID)]         INT NOT NULL" +
             ")",
 
             /*

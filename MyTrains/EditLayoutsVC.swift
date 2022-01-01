@@ -10,7 +10,7 @@ import Cocoa
 
 class EditLayoutsVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
 
-  // Window & View Control
+  // MARK: Window & View Control
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -36,17 +36,19 @@ class EditLayoutsVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     
   }
   
-  // DBEditorView Delegate Methods
+  // MARK: DBEditorView Delegate Methods
   
   func clearFields(dbEditorView: DBEditorView) {
     txtLayoutName.stringValue = ""
     txtDescription.stringValue = ""
+    txtScale.stringValue = "\(UserDefaults.standard.double(forKey: DEFAULT.SCALE))"
   }
   
   func setupFields(dbEditorView: DBEditorView, editorObject: EditorObject) {
     if let layout = editorObject as? Layout {
       txtLayoutName.stringValue = layout.layoutName
       txtDescription.stringValue = layout.layoutDescription
+      txtScale.stringValue = "\(layout.scale)"
     }
   }
   
@@ -55,12 +57,19 @@ class EditLayoutsVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
       txtLayoutName.becomeFirstResponder()
       return "The layout must have a name."
     }
+    if let _ = Double(txtScale.stringValue) {
+    }
+    else {
+      txtScale.becomeFirstResponder()
+      return "A scale greater than zero is required."
+    }
     return nil
   }
   
   func setFields(layout:Layout) {
     layout.layoutName = txtLayoutName.stringValue
     layout.layoutDescription = txtDescription.stringValue
+    layout.scale = Double(txtScale.stringValue) ?? 1.0
     layout.save()
   }
   
@@ -87,7 +96,7 @@ class EditLayoutsVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     editorView.dictionary = networkController.layouts
   }
 
-  // Outlets & Actions
+  // MARK: Outlets & Actions
   
   @IBOutlet weak var editorView: DBEditorView!
   
@@ -104,6 +113,15 @@ class EditLayoutsVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   }
   
   @IBOutlet weak var tabView: NSTabView!
+  
+  @IBOutlet weak var txtScale: NSTextField!
+  
+  @IBAction func txtScaleAction(_ sender: NSTextField) {
+    editorView.modified = true
+    if let scale = Double(txtScale.stringValue) {
+      UserDefaults.standard.set(scale, forKey: DEFAULT.SCALE)
+    }
+  }
   
 }
 

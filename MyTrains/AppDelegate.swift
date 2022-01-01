@@ -12,6 +12,8 @@ import ORSSerial
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
   
+  // MARK: App Control
+  
   func applicationDidFinishLaunching(_ aNotification: Notification) {
 
     if let _ = UserDefaults.standard.string(forKey: DEFAULT.VERSION) {
@@ -43,7 +45,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     return true
   }
 
-  // Edit Menu
+  // MARK: Edit Menu
   
   @IBAction func mnuEditLayoutsAction(_ sender: NSMenuItem) {
     ModalWindow.EditLayouts.runModel()
@@ -72,8 +74,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   @IBAction func mnuEditSwitchesAction(_ sender: NSMenuItem) {
     ModalWindow.EditSwitches.runModel()
   }
- 
-  // View Menu
+  
+  // MARK: Control Menu
+  
+  @IBAction func mnuThrottleAction(_ sender: Any) {
+    let x = ModalWindow.Throttle
+    let wc = x.windowController
+    wc.showWindow(nil)
+  }
+  
+  // MARK: View Menu
   
   @IBAction func mnuMonitorAction(_ sender: NSMenuItem) {
     let x = ModalWindow.Monitor
