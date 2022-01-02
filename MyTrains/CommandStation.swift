@@ -8,7 +8,8 @@
 import Foundation
 
 public protocol CommandStationDelegate {
-  func trackStatusChanged(commandStation:CommandStation)
+  func trackStatusChanged(commandStation: CommandStation)
+  func locomotiveMessageReceived(message: NetworkMessage)
 }
 
 public class CommandStation : NetworkMessengerDelegate {
@@ -227,6 +228,14 @@ public class CommandStation : NetworkMessengerDelegate {
     }
   }
   
+  // MARK: Private Methods
+  
+  private func locomotiveMessage(message: NetworkMessage) {
+    for delegate in _delegates {
+      delegate.value.locomotiveMessageReceived(message: message)
+    }
+  }
+  
   // MARK: Public Methods
   
   public func addMessenger(messenger:NetworkMessenger) {
@@ -264,6 +273,39 @@ public class CommandStation : NetworkMessengerDelegate {
     for messenger in _messengers {
       if messenger.value.isOpen {
         messenger.value.getCfgSlotDataP1()
+        break
+      }
+    }
+  }
+  
+  public func getLocoSlot(forAddress: Int) {
+    if forAddress > 0 {
+      for kv in _messengers {
+        let messenger = kv.value
+        if messenger.isOpen {
+          if implementsProtocol2 {
+            messenger.getLocoSlotDataP2(forAddress: forAddress)
+          }
+          else {
+            messenger.getLocoSlotDataP1(forAddress: forAddress)
+          }
+          break
+        }
+      }
+
+    }
+  }
+  
+  public func moveSlots(sourceSlotNumber: Int, sourceSlotPage: Int, destinationSlotNumber: Int, destinationSlotPage: Int) {
+    for kv in _messengers {
+      let messenger = kv.value
+      if messenger.isOpen {
+        if implementsProtocol2 {
+          messenger.moveSlotsP2(sourceSlotNumber: sourceSlotNumber, sourceSlotPage: sourceSlotPage, destinationSlotNumber: destinationSlotNumber, destinationSlotPage: destinationSlotPage)
+        }
+        else {
+          messenger.moveSlotsP1(sourceSlotNumber: sourceSlotNumber, destinationSlotNumber: destinationSlotNumber)
+        }
         break
       }
     }
@@ -310,11 +352,15 @@ public class CommandStation : NetworkMessengerDelegate {
     switch message.messageType {
     case .cfgSlotDataP1, .locoSlotDataP1, .fastClockDataP1:
       let trk = message.message[7]
-      implementsProtocol2    = (trk & 0b0100000) == 0b0100000
-      programmingTrackIsBusy = (trk & 0b0001000) == 0b0001000
-      implementsProtocol1    = (trk & 0b0000100) == 0b0000100
-      trackIsPaused          = (trk & 0b0000010) == 0b0000000
-      powerIsOn              = (trk & 0b0000001) == 0b0000001
+      implementsProtocol2    = (trk & 0b01000000) == 0b01000000
+      programmingTrackIsBusy = (trk & 0b00001000) == 0b00001000
+      implementsProtocol1    = (trk & 0b00000100) == 0b00000100
+      trackIsPaused          = (trk & 0b00000010) == 0b00000000
+      powerIsOn              = (trk & 0b00000001) == 0b00000001
+      locomotiveMessage(message: message)
+      break
+    case .locoSlotDataP2:
+      locomotiveMessage(message: message)
       break
     case .pwrOn:
       powerIsOn = true

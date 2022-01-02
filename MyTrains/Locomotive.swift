@@ -66,17 +66,23 @@ public enum LocomotiveDirection {
   case reverse
 }
 
-public class Locomotive : EditorObject {
+public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStationDelegate {
   
   // MARK: Constructors
   
   init(reader:SqliteDataReader) {
     super.init(primaryKey: -1)
     decode(sqliteDataReader: reader)
+    functions = LocomotiveFunction.functions(locomotive: self)
   }
   
   init() {
     super.init(primaryKey: -1)
+    for fn in 0...28 {
+      let locoFunc = LocomotiveFunction(functionNumber: fn)
+      locoFunc.delegate = self
+      functions.append(locoFunc)
+    }
   }
   
   // MARK: Destructors
@@ -85,36 +91,68 @@ public class Locomotive : EditorObject {
     
   }
   
-  // MARK: Private properties
+  // MARK: Private Enums
+  
+  private enum InitState {
+    case inactive
+    case waitingForSlot
+    case waitingToActivate
+    case active
+  }
+  
+  // MARK: Private Properties
   
   private var _locomotiveName : String = ""
+  
   private var _locomotiveType : LocomotiveType = .unknown
+  
   private var _length : Double = 0.0
+  
   private var _mobileDecoderType : MobileDecoderType = .unknown
+  
   private var _address : Int = 0
+  
   private var _occupancyFeedbackOffsetFront = 0.0
+  
   private var _occupancyFeedbackOffsetRear = 0.0
+  
   private var _trackGauge : TrackGauge = .unknown
+  
   private var _trackRestriction : TrackRestriction = .none
+  
   private var _locomotiveScale : Double = 1.0
+  
   private var _maxForwardSpeed : Double = 0.0
+  
   private var _maxBackwardSpeed : Double = 0.0
+  
   private var _lengthUnits : LengthUnit = .centimeters
+  
   private var _occupancyFeedbackOffsetUnits : LengthUnit = .centimeters
+  
   private var _speedUnits : SpeedUnit = .kilometersPerHour
+  
   private var _networkId : Int = -1
+  
   private var _isInUse : Bool = false
+  
   private var _direction : LocomotiveDirection = .forward
+  
   private var _targetSpeed : Int = 0
+  
   private var _isInertial : Bool = true
   
-  private var  modified : Bool = false
-
-  // Public properties
+  private var commandStationDelegateId : Int = -1
   
-  override public func displayString() -> String {
-    return locomotiveName
-  }
+  private var initState : InitState = .inactive
+  
+  private var _speed : Int = 0
+  
+  private var modified : Bool = false
+  
+  // MARK: Public properties
+  
+  public var functions : [LocomotiveFunction] = []
   
   public var locomotiveName : String {
     get {
@@ -308,6 +346,12 @@ public class Locomotive : EditorObject {
     }
   }
   
+  public var network : Network? {
+    get {
+      return networkController.networks[networkId]
+    }
+  }
+  
   public var isInUse : Bool {
     get {
       return _isInUse
@@ -315,6 +359,17 @@ public class Locomotive : EditorObject {
     set(value) {
       if value != _isInUse {
         _isInUse = value
+        if let net = network, let cs = net.commandStation {
+          if _isInUse {
+            commandStationDelegateId = cs.addDelegate(delegate: self)
+            initState = .waitingForSlot
+            cs.getLocoSlot(forAddress: address)
+          }
+          else {
+            cs.removeDelegate(id: commandStationDelegateId)
+            initState = .inactive
+          }
+        }
       }
     }
   }
@@ -330,7 +385,8 @@ public class Locomotive : EditorObject {
     }
   }
   
-  // NOTE: targetSpeed is in the range 0 to 126
+  // NOTE: targetSpeed I/O is in the range 0 to 126, but it is stored
+  //       as -126 to 126 with the negative values meaning backwards
   
   public var targetSpeed : Int {
     get {
@@ -339,6 +395,22 @@ public class Locomotive : EditorObject {
     set(value) {
       if value != _targetSpeed {
         _targetSpeed = value
+      }
+    }
+  }
+  
+  // NOTE: speed I/O is in the range 0 to 126, but it is stored
+  //       as -126 to 126 with the negative values meaning backwards
+  
+
+  public var speed : Int {
+    get {
+      return abs(_speed)
+    }
+    set(value) {
+      if value != abs(_speed) {
+        let sign = direction == .forward ? +1 : -1
+        _speed = value * sign
       }
     }
   }
@@ -352,6 +424,74 @@ public class Locomotive : EditorObject {
         _isInertial = value
       }
     }
+  }
+  
+  public var slotNumber : Int = -1
+  
+  public var slotPage : Int = -1
+  
+  // MARK: Public Methods
+  
+  override public func displayString() -> String {
+    return locomotiveName
+  }
+  
+  // MARK: CommandStationDelegate Methods
+  
+  public func trackStatusChanged(commandStation: CommandStation) {
+  }
+  
+  public func locomotiveMessageReceived(message: NetworkMessage) {
+    
+    if let net = network, let cs = net.commandStation {
+
+      switch message.messageType {
+      case .ack:
+        let ack = Ack(interfaceId: message.interfaceId, data: message.message)
+        break
+      case .locoSlotDataP1:
+        let locoSlotDataP1 = LocoSlotDataP1(interfaceId: message.interfaceId, data: message.message)
+        if locoSlotDataP1.address == address {
+          slotPage = locoSlotDataP1.slotPage
+          slotNumber = locoSlotDataP1.slotNumber
+          if initState == .waitingForSlot {
+            initState = locoSlotDataP1.slotState == .inUse ? .active : .waitingToActivate
+            if initState == .waitingToActivate {
+              cs.moveSlots(sourceSlotNumber: slotNumber, sourceSlotPage: slotPage, destinationSlotNumber: slotNumber, destinationSlotPage: slotPage)
+            }
+          }
+          else if initState == .waitingToActivate {
+            initState = locoSlotDataP1.slotState == .inUse ? .active : .waitingToActivate
+          }
+        }
+        break
+      case .locoSlotDataP2:
+        let locoSlotDataP2 = LocoSlotDataP2(interfaceId: message.interfaceId, data: message.message)
+        if locoSlotDataP2.address == address {
+          slotPage = locoSlotDataP2.slotPage
+          slotNumber = locoSlotDataP2.slotNumber
+          if initState == .waitingForSlot {
+            initState = locoSlotDataP2.slotState == .inUse ? .active : .waitingToActivate
+            if initState == .waitingToActivate {
+              cs.moveSlots(sourceSlotNumber: slotNumber, sourceSlotPage: slotPage, destinationSlotNumber: slotNumber, destinationSlotPage: slotPage)
+            }
+          }
+          else if initState == .waitingToActivate {
+            initState = locoSlotDataP2.slotState == .inUse ? .active : .waitingToActivate
+          }
+        }
+        break
+      default:
+        break
+      }
+        
+    }
+    
+  }
+    
+  // MARK: LocomotiveFunctionDelegate Methods
+  
+  public func changeState(locomotiveFunction: LocomotiveFunction) {
   }
   
   // MARK: Database Methods
@@ -477,6 +617,11 @@ public class Locomotive : EditorObject {
         "@\(LOCOMOTIVE.NETWORK_ID)" +
         ")"
         primaryKey = Database.nextCode(tableName: TABLE.LOCOMOTIVE, primaryKey: LOCOMOTIVE.LOCOMOTIVE_ID)!
+        
+        for locoFunc in functions {
+          locoFunc.locomotiveId = primaryKey
+        }
+        
       }
       else {
         sql = "UPDATE [\(TABLE.LOCOMOTIVE)] SET " +
@@ -538,10 +683,14 @@ public class Locomotive : EditorObject {
       modified = false
       
     }
+    
+    for locoFunc in functions {
+      locoFunc.save()
+    }
 
   }
 
-  // Class Properties
+  // MARK: Class Properties
   
   public static var columnNames : String {
     get {
@@ -606,8 +755,11 @@ public class Locomotive : EditorObject {
   }
   
   public static func delete(primaryKey: Int) {
-    let sql = "DELETE FROM [\(TABLE.LOCOMOTIVE)] WHERE [\(LOCOMOTIVE.LOCOMOTIVE_ID)] = \(primaryKey)"
-    Database.execute(commands: [sql])
+    let sql = [
+      "DELETE FROM [\(TABLE.LOCOMOTIVE_FUNCTION)] WHERE [\(LOCOMOTIVE_FUNCTION.LOCOMOTIVE_ID)] = \(primaryKey)",
+      "DELETE FROM [\(TABLE.LOCOMOTIVE)] WHERE [\(LOCOMOTIVE.LOCOMOTIVE_ID)] = \(primaryKey)"
+    ]
+    Database.execute(commands: sql)
   }
   
 }

@@ -113,6 +113,19 @@ class Database {
               "[\(LOCOMOTIVE.NETWORK_ID)]         INT NOT NULL" +
             ")",
 
+            "CREATE TABLE [\(TABLE.LOCOMOTIVE_FUNCTION)] (" +
+              "[\(LOCOMOTIVE_FUNCTION.FUNCTION_ID)]          INT PRIMARY KEY," +
+              "[\(LOCOMOTIVE_FUNCTION.LOCOMOTIVE_ID)]        INT NOT NULL," +
+              "[\(LOCOMOTIVE_FUNCTION.FUNCTION_NUMBER)]      INT NOT NULL," +
+              "[\(LOCOMOTIVE_FUNCTION.ENABLED)]              INT NOT NULL," +
+              "[\(LOCOMOTIVE_FUNCTION.FUNCTION_DESCRIPTION)] TEXT NOT NULL," +
+              "[\(LOCOMOTIVE_FUNCTION.MOMENTARY)]            INT NOT NULL," +
+              "[\(LOCOMOTIVE_FUNCTION.DURATION)]             INT NOT NULL," +
+              "[\(LOCOMOTIVE_FUNCTION.INVERTED)]             INT NOT NULL," +
+              "[\(LOCOMOTIVE_FUNCTION.STATE)]                INT NOT NULL" +
+            ")",
+
+
             /*
             "CREATE INDEX IDX_ARTIST_UKCHART_NAME ON [\(TABLE.ARTIST)] ([\(ARTIST.UKCHART_NAME)])",
             

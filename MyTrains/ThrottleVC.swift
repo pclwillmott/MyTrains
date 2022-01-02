@@ -7,6 +7,7 @@
 
 import Foundation
 import Cocoa
+import AppKit
 
 class ThrottleVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate {
 
@@ -30,26 +31,27 @@ class ThrottleVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate 
     
     networkControllerDelegateId = networkController.appendDelegate(delegate: self)
     
-    let xStart : CGFloat = 25
+    let xStart : CGFloat = 20
     var xPos : CGFloat = xStart
-    var yPos : CGFloat = 150
+    var yPos : CGFloat = 170
     
     var index = 0
     while index < 29 {
       
-      let button : NSButton = NSButton()
-      button.frame = NSRect(x: xPos, y: yPos, width: 35, height: 20)
-      button.title = "F\(index)"
-      button.action = #selector(self.buttonAction(_:))
+      let button : NSButton = NSButton(title: "F\(index)", target: self, action: #selector(self.buttonAction(_:)))
+      button.frame = NSRect(x: xPos, y: yPos, width: 50, height: 20)
+      button.tag = index
+      button.setButtonType(.momentaryPushIn)
       view.subviews.append(button)
-
+      buttons.append(button)
+      
       index += 1
-      if index % 10 == 0 {
+      if index % 8 == 0 {
         yPos -= 30
         xPos = xStart
       }
       else {
-        xPos += button.frame.width + 5
+        xPos += button.frame.width
       }
       
     }
@@ -75,6 +77,8 @@ class ThrottleVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate 
       return result
     }
   }
+  
+  private var buttons : [NSButton] = []
   
   // MARK: Private Methods
   
@@ -132,6 +136,14 @@ class ThrottleVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate 
       
       chkInertial.state = loco.isInertial ? .on : .off
       
+      for button in buttons {
+        let locoFunc = loco.functions[button.tag]
+        button.setButtonType(locoFunc.isMomentary ? .momentaryPushIn : .pushOnPushOff)
+        button.isEnabled = true || locoFunc.isEnabled
+        button.state = locoFunc.state ? .on : .off
+        button.toolTip = locoFunc.toolTip
+      }
+      
     }
     else {
       
@@ -143,6 +155,13 @@ class ThrottleVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate 
       vsThrottle.integerValue = 0
       
       chkInertial.state = .on
+      
+      for button in buttons {
+        button.state = .off
+        button.isEnabled = false
+        button.setButtonType(.momentaryPushIn)
+        button.toolTip = "F\(button.tag)"
+      }
       
     }
         
@@ -163,6 +182,16 @@ class ThrottleVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate 
   // MARK: Outlets & Actions
   
   @IBAction func buttonAction(_ sender: NSButton) {
+    if let loco = locomotive {
+      let locoFunc = loco.functions[sender.tag]
+      if locoFunc.isMomentary {
+        locoFunc.state = true
+      }
+      else {
+        locoFunc.state = sender.state == .on
+        locoFunc.save()
+      }
+    }
   }
   
   @IBOutlet weak var cboLocomotive: NSComboBox!

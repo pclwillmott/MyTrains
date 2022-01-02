@@ -10,7 +10,7 @@
         <scene sceneID="zaW-MY-wsa">
             <objects>
                 <windowController storyboardIdentifier="ThrottleWC" id="mGV-i8-c5U" sceneMemberID="viewController">
-                    <window key="window" title="Throttle" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" visibleAtLaunch="NO" frameAutosaveName="Throttle" animationBehavior="default" id="rTV-du-Uzl">
+                    <window key="window" title="Throttle" autorecalculatesKeyViewLoop="NO" visibleAtLaunch="NO" frameAutosaveName="Throttle" animationBehavior="default" id="rTV-du-Uzl">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="268" y="340" width="480" height="270"/>
@@ -56,7 +56,7 @@
                             <slider horizontalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uvR-I8-QRi">
                                 <rect key="frame" x="429" y="43" width="24" height="259"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
-                                <sliderCell key="cell" continuous="YES" alignment="left" maxValue="126" tickMarkPosition="right" sliderType="linear" id="1bA-RJ-5Ec"/>
+                                <sliderCell key="cell" alignment="left" maxValue="126" tickMarkPosition="right" sliderType="linear" id="1bA-RJ-5Ec"/>
                                 <connections>
                                     <action selector="vsThrottleAction:" target="JXj-8b-fbu" id="pm9-4I-wg2"/>
                                 </connections>
@@ -97,7 +97,7 @@
                                 <rect key="frame" x="161" y="243" width="156" height="52"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" borderStyle="border" alignment="center" title="0" drawsBackground="YES" id="X6T-J3-iya">
-                                    <font key="font" size="36" textStyle="largeTitle" name=".SFNS-Regular"/>
+                                    <font key="font" textStyle="largeTitle" name=".SFNS-Regular"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>

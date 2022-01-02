@@ -83,3 +83,15 @@ enum LOCOMOTIVE {
   static let UNITS_SPEED           = "UNITS_SPEED"
   static let NETWORK_ID            = "NETWORK_ID"
 }
+
+enum LOCOMOTIVE_FUNCTION {
+  static let FUNCTION_ID           = "FUNCTION_ID"
+  static let LOCOMOTIVE_ID         = "LOCOMOTIVE_ID"
+  static let FUNCTION_NUMBER       = "FUNCTION_NUMBER"
+  static let ENABLED               = "ENABLED"
+  static let FUNCTION_DESCRIPTION  = "FUNCTION_DESCRIPTION"
+  static let MOMENTARY             = "MOMENTARY"
+  static let DURATION              = "DURATION"
+  static let INVERTED              = "INVERTED"
+  static let STATE                 = "STATE"
+}

@@ -94,7 +94,7 @@ public class Layout : EditorObject {
     }
   }
   
-  // Database Methods
+  // MARK: Database Methods
   
   private func decode(sqliteDataReader:SqliteDataReader?) {
     
@@ -177,7 +177,7 @@ public class Layout : EditorObject {
 
   }
 
-  // Class Properties
+  // MARK: Class Properties
   
   public static var columnNames : String {
     get {

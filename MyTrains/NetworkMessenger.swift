@@ -399,6 +399,49 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
 
   }
   
+  public func getLocoSlotDataP1(forAddress: Int) {
+    
+    let lo = UInt8(forAddress & 0x7f)
+    
+    let hi = UInt8(forAddress >> 7)
+    
+    let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_LOCO_ADR.rawValue, hi, lo], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [.locoSlotDataP1, .ack], delegate: nil, retryCount: 5)
+
+  }
+  
+  public func getLocoSlotDataP2(forAddress: Int) {
+    
+    let lo = UInt8(forAddress & 0x7f)
+    
+    let hi = UInt8(forAddress >> 7)
+    
+    let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_LOCO_ADR_P2.rawValue, hi, lo], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [.locoSlotDataP2, .ack], delegate: nil, retryCount: 5)
+
+  }
+  
+  public func moveSlotsP1(sourceSlotNumber: Int, destinationSlotNumber: Int) {
+    
+    let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_MOVE_SLOTS.rawValue, UInt8(sourceSlotNumber), UInt8(destinationSlotNumber)], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [.locoSlotDataP1, .ack], delegate: nil, retryCount: 5)
+
+  }
+  
+  public func moveSlotsP2(sourceSlotNumber: Int, sourceSlotPage: Int, destinationSlotNumber: Int, destinationSlotPage: Int) {
+    
+    let srcPage = UInt8(sourceSlotPage & 0b00000111) | 0b00111000
+    let dstPage = UInt8(destinationSlotPage & 0b00000111)
+    
+    let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_D4_GROUP.rawValue, srcPage, UInt8(sourceSlotNumber), dstPage, UInt8(destinationSlotNumber)], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [.locoSlotDataP2, .ack], delegate: nil, retryCount: 5)
+
+  }
+  
   public func getInterfaceData() {
     
     let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_BUSY.rawValue], appendCheckSum: true)

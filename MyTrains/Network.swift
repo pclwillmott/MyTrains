@@ -9,7 +9,7 @@ import Foundation
 
 public class Network : EditorObject {
   
-  // Constructors
+  // MARK: Constructors
   
   init(reader:SqliteDataReader) {
     super.init(primaryKey: -1)
@@ -20,24 +20,23 @@ public class Network : EditorObject {
     super.init(primaryKey: -1)
   }
   
-  // Destructors
+  // MARK: Destructors
   
   deinit {
     
   }
   
-  // Private properties
+  // MARK: Private properties
   
   private var _networkName : String = ""
+  
   private var _commandStationId : Int = -1
+  
   private var _layoutId : Int = -1
+  
   private var  modified : Bool = false
   
-  // Public properties
-  
-  override public func displayString() -> String {
-    return networkName
-  }
+  // MARK: Public properties
   
   public var networkName : String {
     get {
@@ -63,6 +62,12 @@ public class Network : EditorObject {
     }
   }
   
+  public var commandStation : CommandStation? {
+    get {
+      return networkController.commandStations[commandStationId]
+    }
+  }
+  
   public var layoutId : Int {
     get {
       return _layoutId
@@ -75,7 +80,13 @@ public class Network : EditorObject {
     }
   }
   
-  // Database Methods
+  // MARK: Public Methods
+  
+  override public func displayString() -> String {
+    return networkName
+  }
+  
+  // MARK: Database Methods
   
   private func decode(sqliteDataReader:SqliteDataReader?) {
     
