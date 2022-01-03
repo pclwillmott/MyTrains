@@ -66,6 +66,8 @@ public enum LocomotiveDirection {
   case reverse
 }
 
+public typealias LocomotiveState = (speed:Int, direction:LocomotiveDirection, functions:Int)
+
 public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStationDelegate {
   
   // MARK: Constructors
@@ -149,6 +151,8 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
   private var _speed : Int = 0
   
   private var modified : Bool = false
+  
+  private var lastLocomotiveState : LocomotiveState = (speed: 0, direction: .forward, functions: 0)
   
   // MARK: Public properties
   
@@ -385,8 +389,7 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
     }
   }
   
-  // NOTE: targetSpeed I/O is in the range 0 to 126, but it is stored
-  //       as -126 to 126 with the negative values meaning backwards
+  // NOTE: targetSpeed is in the range 0 to 126.
   
   public var targetSpeed : Int {
     get {
@@ -399,18 +402,15 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
     }
   }
   
-  // NOTE: speed I/O is in the range 0 to 126, but it is stored
-  //       as -126 to 126 with the negative values meaning backwards
+  // NOTE: speed is in the range 0 to 126.
   
-
   public var speed : Int {
     get {
-      return abs(_speed)
+      return _speed
     }
     set(value) {
-      if value != abs(_speed) {
-        let sign = direction == .forward ? +1 : -1
-        _speed = value * sign
+      if value != _speed {
+        _speed = value
       }
     }
   }
@@ -429,6 +429,28 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
   public var slotNumber : Int = -1
   
   public var slotPage : Int = -1
+  
+  public var functionSettings : Int {
+    get {
+      var result = 0
+      var mask = 1
+      for locoFunc in functions {
+        result |= locoFunc.state ? mask : 0
+        mask <<= 1
+      }
+      return result
+    }
+  }
+  
+  public var locomotiveState : LocomotiveState {
+    get {
+      var result : LocomotiveState
+      result.speed = self.speed
+      result.direction = self.direction
+      result.functions = functionSettings
+      return result
+    }
+  }
   
   // MARK: Public Methods
   

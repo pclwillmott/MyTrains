@@ -311,6 +311,67 @@ public class CommandStation : NetworkMessengerDelegate {
     }
   }
   
+  public func updateLocomotiveState(previousState:LocomotiveState, nextState:LocomotiveState) -> LocomotiveState {
+    
+    let speedChanged = previousState.speed != nextState.speed
+    
+    let directionChanged = previousState.direction != nextState.direction
+    
+    let previous = previousState.functions
+    
+    let next = nextState.functions
+
+    if implementsProtocol2 {
+      
+      let maskF0F6   = 0b00000000000000000000000001111111
+      let maskF7F13  = 0b00000000000000000011111110000000
+      let maskF14F20 = 0b00000000000111111100000000000000
+      let maskF21F28 = 0b00001111111000000000000000000000
+      
+      if previous & maskF0F6 != next & maskF0F6 {
+        
+      }
+      
+      if previous & maskF7F13 != next & maskF7F13 {
+        
+      }
+      
+      if previous & maskF14F20 != next & maskF14F20 {
+        
+      }
+      
+      if previous & maskF21F28 != next & maskF21F28 {
+        
+      }
+      
+      if speedChanged || directionChanged {
+        
+      }
+      
+    }
+    else {
+      
+      let maskF0F4 = 0b00000000000000000000000000011111
+      let maskF5F8 = 0b00000000000000000000000111100000
+      
+      if previous & maskF0F4 != next & maskF0F4 || directionChanged {
+        
+      }
+      
+      if previous & maskF5F8 != next & maskF5F8 {
+        
+      }
+      
+      if speedChanged {
+        
+      }
+
+    }
+    
+    return nextState
+    
+  }
+  
   public func powerOn() {
     for kv in messengers {
       let messenger = kv.value
