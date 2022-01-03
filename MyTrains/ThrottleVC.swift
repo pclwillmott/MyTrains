@@ -9,7 +9,7 @@ import Foundation
 import Cocoa
 import AppKit
 
-class ThrottleVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate {
+class ThrottleVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate, LocomotiveDelegate {
 
   // MARK: Window & View Control
   
@@ -80,6 +80,9 @@ class ThrottleVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate 
   
   private var buttons : [NSButton] = []
   
+  private var lastLocomotive : Locomotive?
+  private var locomotiveDelegateId : Int = -1
+  
   // MARK: Private Methods
   
   private func setup() {
@@ -117,11 +120,20 @@ class ThrottleVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate 
   
   private func setupLocomotive() {
     
+    if locomotiveDelegateId != -1 {
+      lastLocomotive?.removeDelegate(withKey: locomotiveDelegateId)
+      lastLocomotive = nil
+      locomotiveDelegateId = -1
+    }
+    
     if let loco = locomotive {
+      
+      locomotiveDelegateId = loco.addDelegate(delegate: self)
+      lastLocomotive = loco
       
       swPower.state = loco.isInUse ? .on : .off
       
-      switch loco.direction {
+      switch loco.targetSpeed.direction {
       case .forward:
         radForward.state = .on
         radReverse.state = .off
@@ -132,7 +144,10 @@ class ThrottleVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate 
         break
       }
       
-      vsThrottle.integerValue = loco.targetSpeed
+      vsThrottle.integerValue = loco.targetSpeed.speed
+      
+      lblTargetStep.integerValue = vsThrottle.integerValue
+      lblSpeed.integerValue = loco.speed.speed
       
       chkInertial.state = loco.isInertial ? .on : .off
       
@@ -163,8 +178,17 @@ class ThrottleVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate 
         button.toolTip = "F\(button.tag)"
       }
       
+      lblTargetStep.stringValue = "0"
+      lblSpeed.stringValue = "0"
+      
     }
         
+  }
+  
+  // MARK: LocomotiveDelegate Methods
+  
+  func stateUpdated(locomotive: Locomotive) {
+    lblSpeed.stringValue = "\(locomotive.speed.speed)"
   }
   
   // MARK: NetworkControllerDelegate Methods
@@ -218,7 +242,8 @@ class ThrottleVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate 
     radReverse.state = .off
  
     if let loco = locomotive {
-      loco.direction = radForward.state == .on ? .forward : .reverse
+      let speed = lblTargetStep.integerValue
+      loco.targetSpeed = (speed: speed, direction: radForward.state == .on ? .forward : .reverse)
     }
     
   }
@@ -231,7 +256,8 @@ class ThrottleVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate 
     radReverse.state = .on
  
     if let loco = locomotive {
-      loco.direction = radForward.state == .on ? .forward : .reverse
+      let speed = lblTargetStep.integerValue
+      loco.targetSpeed = (speed: speed, direction: radForward.state == .on ? .forward : .reverse)
     }
     
   }
@@ -244,7 +270,8 @@ class ThrottleVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate 
   
   @IBAction func vsThrottleAction(_ sender: NSSlider) {
     if let loco = locomotive {
-      loco.targetSpeed = sender.integerValue
+      let speed = sender.integerValue
+      loco.targetSpeed = (speed: speed, direction: radForward.state == .on ? .forward : .reverse)
     }
     lblTargetStep.stringValue = "\(sender.integerValue)"
   }

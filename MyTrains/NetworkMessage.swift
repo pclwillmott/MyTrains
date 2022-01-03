@@ -358,7 +358,7 @@ public class NetworkMessage {
           if message[3] == 0x6d {
             let test = message[1] & 0b11111000
             switch test {
-            case 0b00000000:
+            case 0b00000000, 0b00001000:
               _messageType = .locoSpdDirP2
             case 0b00010000:
               _messageType = .locoF0F6P2

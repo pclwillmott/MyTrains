@@ -33,7 +33,7 @@ public class CommandStation : NetworkMessengerDelegate {
   // MARK: Destructors
   
   deinit {
-    
+    stopTimer()
   }
   
   // MARK: Private Properties
@@ -69,6 +69,10 @@ public class CommandStation : NetworkMessengerDelegate {
   private var _nextDelegateId = 0
   
   private var _delegateLock : NSLock = NSLock()
+  
+  private var timer : Timer? = nil
+  
+  private var forceRefresh : Bool = false
   
   // MARK: Public Properties
   
@@ -236,6 +240,19 @@ public class CommandStation : NetworkMessengerDelegate {
     }
   }
   
+  @objc func timerAction() {
+    forceRefresh = true
+  }
+  
+  func startTimer(timeInterval:TimeInterval) {
+    timer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
+  }
+  
+  func stopTimer() {
+    timer?.invalidate()
+    timer = nil
+  }
+
   // MARK: Public Methods
   
   public func addMessenger(messenger:NetworkMessenger) {
@@ -311,65 +328,85 @@ public class CommandStation : NetworkMessengerDelegate {
     }
   }
   
-  public func updateLocomotiveState(previousState:LocomotiveState, nextState:LocomotiveState) -> LocomotiveState {
+  public func updateLocomotiveState(slotNumber: Int, slotPage: Int, previousState:LocomotiveState, nextState:LocomotiveState) -> LocomotiveState {
     
-    let speedChanged = previousState.speed != nextState.speed
-    
-    let directionChanged = previousState.direction != nextState.direction
-    
-    let previous = previousState.functions
-    
-    let next = nextState.functions
-
-    if implementsProtocol2 {
-      
-      let maskF0F6   = 0b00000000000000000000000001111111
-      let maskF7F13  = 0b00000000000000000011111110000000
-      let maskF14F20 = 0b00000000000111111100000000000000
-      let maskF21F28 = 0b00001111111000000000000000000000
-      
-      if previous & maskF0F6 != next & maskF0F6 {
-        
-      }
-      
-      if previous & maskF7F13 != next & maskF7F13 {
-        
-      }
-      
-      if previous & maskF14F20 != next & maskF14F20 {
-        
-      }
-      
-      if previous & maskF21F28 != next & maskF21F28 {
-        
-      }
-      
-      if speedChanged || directionChanged {
-        
-      }
-      
+    if timer == nil {
+      startTimer(timeInterval: 30.0)
     }
-    else {
+    
+    for kv in _messengers {
       
-      let maskF0F4 = 0b00000000000000000000000000011111
-      let maskF5F8 = 0b00000000000000000000000111100000
+      let messenger = kv.value
       
-      if previous & maskF0F4 != next & maskF0F4 || directionChanged {
+      if messenger.isOpen {
         
-      }
-      
-      if previous & maskF5F8 != next & maskF5F8 {
+        let speedChanged = previousState.speed != nextState.speed
         
-      }
-      
-      if speedChanged {
+        let directionChanged = previousState.direction != nextState.direction
         
-      }
+        let previous = previousState.functions
+        
+        let next = nextState.functions
 
+        if implementsProtocol2 {
+          
+          let maskF0F6   = 0b00000000000000000000000001111111
+          let maskF7F13  = 0b00000000000000000011111110000000
+          let maskF14F20 = 0b00000000000111111100000000000000
+          let maskF21F28 = 0b00001111111000000000000000000000
+          
+          if previous & maskF0F6 != next & maskF0F6 {
+            messenger.locoF0F6P2(slotNumber: slotNumber, slotPage: slotPage, functions: next)
+          }
+          
+          if previous & maskF7F13 != next & maskF7F13 {
+            messenger.locoF7F13P2(slotNumber: slotNumber, slotPage: slotPage, functions: next)
+          }
+          
+          if previous & maskF14F20 != next & maskF14F20 {
+            messenger.locoF14F20P2(slotNumber: slotNumber, slotPage: slotPage, functions: next)
+          }
+          
+          if previous & maskF21F28 != next & maskF21F28 {
+            messenger.locoF21F28P2(slotNumber: slotNumber, slotPage: slotPage, functions: next)
+          }
+          
+          if speedChanged || directionChanged || forceRefresh {
+            messenger.locoSpdDirP2(slotNumber: slotNumber, slotPage: slotPage, speed: nextState.speed, direction: nextState.direction)
+          }
+          
+        }
+        else {
+          
+          let maskF0F4 = 0b00000000000000000000000000011111
+          let maskF5F8 = 0b00000000000000000000000111100000
+          
+          if previous & maskF0F4 != next & maskF0F4 || directionChanged {
+            messenger.locoDirF0F4P1(slotNumber: slotNumber, direction: nextState.direction, functions: next)
+          }
+          
+          if previous & maskF5F8 != next & maskF5F8 {
+            messenger.locoF5F8P1(slotNumber: slotNumber, functions: next)
+          }
+          
+          // TODO: Add IMMPacket messages for the other functions
+          
+          if speedChanged || forceRefresh {
+            messenger.locoSpdP1(slotNumber: slotNumber, speed: nextState.speed)
+          }
+
+        }
+        
+        forceRefresh = false
+        
+        break
+
+      }
+      
     }
     
     return nextState
-    
+
   }
   
   public func powerOn() {
@@ -401,7 +438,7 @@ public class CommandStation : NetworkMessengerDelegate {
       }
     }
   }
-
+    
   // MARK: NetworkMessengerDelegate Methods
   
   public func messengerRemoved(id: String) {

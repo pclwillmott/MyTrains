@@ -438,7 +438,7 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
     
     let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_D4_GROUP.rawValue, srcPage, UInt8(sourceSlotNumber), dstPage, UInt8(destinationSlotNumber)], appendCheckSum: true)
     
-    addToQueue(message: message, delay: TIMING.STANDARD, response: [.locoSlotDataP2, .ack], delegate: nil, retryCount: 5)
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [.locoSlotDataP2, .ack, .locoSlotDataP1], delegate: nil, retryCount: 5)
 
   }
   
@@ -448,6 +448,150 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
     
     addToQueue(message: message, delay: TIMING.STANDARD, response: [.interfaceData], delegate: self, retryCount: 1)
     
+  }
+  
+  public func locoDirF0F4P1(slotNumber: Int, direction:LocomotiveDirection, functions: Int) {
+    
+    let slot = UInt8(slotNumber & 0x7f)
+    
+    let dirf : UInt8 =
+      direction == .forward        ? 0b00100000 : 0b00000000 |
+      functions & maskF0 == maskF0 ? 0b00010000 : 0b00000000 |
+      functions & maskF1 == maskF1 ? 0b00000001 : 0b00000000 |
+      functions & maskF2 == maskF2 ? 0b00000010 : 0b00000000 |
+      functions & maskF3 == maskF3 ? 0b00000100 : 0b00000000 |
+      functions & maskF4 == maskF4 ? 0b00001000 : 0b00000000
+    
+    let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_LOCO_DIRF.rawValue, slot, dirf], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: self, retryCount: 1)
+    
+  }
+  
+  public func locoF5F8P1(slotNumber: Int, functions: Int) {
+    
+    let slot = UInt8(slotNumber & 0x7f)
+    
+    let fnx : UInt8 =
+      functions & maskF5 == maskF5 ? 0b00000001 : 0b00000000 |
+      functions & maskF6 == maskF6 ? 0b00000010 : 0b00000000 |
+      functions & maskF7 == maskF7 ? 0b00000100 : 0b00000000 |
+      functions & maskF8 == maskF8 ? 0b00001000 : 0b00000000
+    
+    let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_LOCO_SND.rawValue, slot, fnx], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: self, retryCount: 1)
+    
+  }
+  
+  public func locoF0F6P2(slotNumber: Int, slotPage: Int, functions: Int) {
+    
+    let slot = UInt8(slotNumber & 0x7f)
+    
+    let page = UInt8(slotPage & 0x07) | 0b00010000
+    
+    let fnx : UInt8 =
+      functions & maskF0 == maskF0 ? 0b00010000 : 0b00000000 |
+      functions & maskF1 == maskF1 ? 0b00000001 : 0b00000000 |
+      functions & maskF2 == maskF2 ? 0b00000010 : 0b00000000 |
+      functions & maskF3 == maskF3 ? 0b00000100 : 0b00000000 |
+      functions & maskF4 == maskF4 ? 0b00001000 : 0b00000000 |
+      functions & maskF5 == maskF5 ? 0b00100000 : 0b00000000 |
+      functions & maskF6 == maskF6 ? 0b01000000 : 0b00000000
+
+    let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_D5_GROUP.rawValue, page, slot, 0x6d, fnx], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: self, retryCount: 1)
+    
+  }
+  
+  public func locoF7F13P2(slotNumber: Int, slotPage: Int, functions: Int) {
+    
+    let slot = UInt8(slotNumber & 0x7f)
+    
+    let page = UInt8(slotPage & 0x07) | 0b00011000
+    
+    let fnx : UInt8 =
+      functions & maskF7  == maskF7  ? 0b00000001 : 0b00000000 |
+      functions & maskF8  == maskF8  ? 0b00000010 : 0b00000000 |
+      functions & maskF9  == maskF9  ? 0b00000100 : 0b00000000 |
+      functions & maskF10 == maskF10 ? 0b00001000 : 0b00000000 |
+      functions & maskF11 == maskF11 ? 0b00010000 : 0b00000000 |
+      functions & maskF12 == maskF12 ? 0b00100000 : 0b00000000 |
+      functions & maskF13 == maskF13 ? 0b01000000 : 0b00000000
+
+    let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_D5_GROUP.rawValue, page, slot, 0x6d, fnx], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: self, retryCount: 1)
+    
+  }
+  
+  public func locoF14F20P2(slotNumber: Int, slotPage: Int, functions: Int) {
+    
+    let slot = UInt8(slotNumber & 0x7f)
+    
+    let page = UInt8(slotPage & 0x07) | 0b00100000
+    
+    let fnx : UInt8 =
+      functions & maskF14 == maskF14 ? 0b00000001 : 0b00000000 |
+      functions & maskF15 == maskF15 ? 0b00000010 : 0b00000000 |
+      functions & maskF16 == maskF16 ? 0b00000100 : 0b00000000 |
+      functions & maskF17 == maskF17 ? 0b00001000 : 0b00000000 |
+      functions & maskF18 == maskF18 ? 0b00010000 : 0b00000000 |
+      functions & maskF19 == maskF19 ? 0b00100000 : 0b00000000 |
+      functions & maskF20 == maskF20 ? 0b01000000 : 0b00000000
+
+    let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_D5_GROUP.rawValue, page, slot, 0x6d, fnx], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: self, retryCount: 1)
+    
+  }
+  
+  public func locoF21F28P2(slotNumber: Int, slotPage: Int, functions: Int) {
+    
+    let slot = UInt8(slotNumber & 0x7f)
+    
+    let page = UInt8(slotPage & 0x07) | UInt8(functions & maskF28 == maskF28 ? 0b00110000 : 0b00101000)
+    
+    let fnx : UInt8 =
+      functions & maskF21 == maskF21 ? 0b00000001 : 0b00000000 |
+      functions & maskF22 == maskF22 ? 0b00000010 : 0b00000000 |
+      functions & maskF23 == maskF23 ? 0b00000100 : 0b00000000 |
+      functions & maskF24 == maskF24 ? 0b00001000 : 0b00000000 |
+      functions & maskF25 == maskF25 ? 0b00010000 : 0b00000000 |
+      functions & maskF26 == maskF26 ? 0b00100000 : 0b00000000 |
+      functions & maskF27 == maskF27 ? 0b01000000 : 0b00000000
+
+    let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_D5_GROUP.rawValue, page, slot, 0x6d, fnx], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: self, retryCount: 1)
+    
+  }
+  
+  public func locoSpdP1(slotNumber: Int, speed: Int) {
+    
+    let slot = UInt8(slotNumber & 0x7f)
+    
+    let spd = UInt8(speed & 0x7f)
+    
+    let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_LOCO_SPD.rawValue, slot, spd], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: nil, retryCount: 1)
+
+  }
+  
+  public func locoSpdDirP2(slotNumber: Int, slotPage: Int, speed: Int, direction: LocomotiveDirection) {
+    
+    let slot = UInt8(slotNumber & 0x7f)
+    
+    let page = UInt8(slotPage & 0x07) | (direction == .forward ? 0b00001000 : 0b00000000)
+    
+    let spd = UInt8(speed & 0x7f)
+    
+    let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_D5_GROUP.rawValue, page, slot, 0x6d, spd], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: nil, retryCount: 1)
+
   }
   
   public func powerIdle() {

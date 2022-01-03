@@ -66,7 +66,43 @@ public enum LocomotiveDirection {
   case reverse
 }
 
+public protocol LocomotiveDelegate {
+  func stateUpdated(locomotive: Locomotive)
+}
+
+public typealias LocomotiveSpeed = (speed: Int, direction: LocomotiveDirection)
+
 public typealias LocomotiveState = (speed:Int, direction:LocomotiveDirection, functions:Int)
+
+public let maskF0  = 0b00000000000000000000000000000001
+public let maskF1  = 0b00000000000000000000000000000010
+public let maskF2  = 0b00000000000000000000000000000100
+public let maskF3  = 0b00000000000000000000000000001000
+public let maskF4  = 0b00000000000000000000000000010000
+public let maskF5  = 0b00000000000000000000000000100000
+public let maskF6  = 0b00000000000000000000000001000000
+public let maskF7  = 0b00000000000000000000000010000000
+public let maskF8  = 0b00000000000000000000000100000000
+public let maskF9  = 0b00000000000000000000001000000000
+public let maskF10 = 0b00000000000000000000010000000000
+public let maskF11 = 0b00000000000000000000100000000000
+public let maskF12 = 0b00000000000000000001000000000000
+public let maskF13 = 0b00000000000000000010000000000000
+public let maskF14 = 0b00000000000000000100000000000000
+public let maskF15 = 0b00000000000000001000000000000000
+public let maskF16 = 0b00000000000000010000000000000000
+public let maskF17 = 0b00000000000000100000000000000000
+public let maskF18 = 0b00000000000001000000000000000000
+public let maskF19 = 0b00000000000010000000000000000000
+public let maskF20 = 0b00000000000100000000000000000000
+public let maskF21 = 0b00000000001000000000000000000000
+public let maskF22 = 0b00000000010000000000000000000000
+public let maskF23 = 0b00000000100000000000000000000000
+public let maskF24 = 0b00000001000000000000000000000000
+public let maskF25 = 0b00000010000000000000000000000000
+public let maskF26 = 0b00000100000000000000000000000000
+public let maskF27 = 0b00001000000000000000000000000000
+public let maskF28 = 0b00010000000000000000000000000000
 
 public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStationDelegate {
   
@@ -140,7 +176,7 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
   
   private var _direction : LocomotiveDirection = .forward
   
-  private var _targetSpeed : Int = 0
+  private var _targetSpeed : LocomotiveSpeed = (speed: 0, direction: .forward)
   
   private var _isInertial : Bool = true
   
@@ -148,11 +184,17 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
   
   private var initState : InitState = .inactive
   
-  private var _speed : Int = 0
+  private var _speed  : LocomotiveSpeed = (speed: 0, direction: .forward)
   
   private var modified : Bool = false
   
   private var lastLocomotiveState : LocomotiveState = (speed: 0, direction: .forward, functions: 0)
+  
+  private var timer : Timer? = nil
+  
+  private var delegates : [Int:LocomotiveDelegate] = [:]
+  
+  private var nextDelegateId : Int = 0
   
   // MARK: Public properties
   
@@ -370,6 +412,7 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
             cs.getLocoSlot(forAddress: address)
           }
           else {
+            stopTimer()
             cs.removeDelegate(id: commandStationDelegateId)
             initState = .inactive
           }
@@ -378,40 +421,25 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
     }
   }
   
-  public var direction : LocomotiveDirection {
-    get {
-      return _direction
-    }
-    set(value) {
-      if value != _direction {
-        _direction = value
-      }
-    }
-  }
-  
   // NOTE: targetSpeed is in the range 0 to 126.
   
-  public var targetSpeed : Int {
+  public var targetSpeed : LocomotiveSpeed {
     get {
       return _targetSpeed
     }
     set(value) {
-      if value != _targetSpeed {
-        _targetSpeed = value
-      }
+      _targetSpeed = value
     }
   }
   
   // NOTE: speed is in the range 0 to 126.
   
-  public var speed : Int {
+  public var speed : LocomotiveSpeed {
     get {
       return _speed
     }
     set(value) {
-      if value != _speed {
-        _speed = value
-      }
+      _speed = value
     }
   }
   
@@ -435,7 +463,7 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
       var result = 0
       var mask = 1
       for locoFunc in functions {
-        result |= locoFunc.state ? mask : 0
+        result |= locoFunc.stateToSend ? mask : 0
         mask <<= 1
       }
       return result
@@ -445,17 +473,73 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
   public var locomotiveState : LocomotiveState {
     get {
       var result : LocomotiveState
-      result.speed = self.speed
-      result.direction = self.direction
+      
+      result.speed = speed.speed == 0 ? 0 : speed.speed + 1
+      result.direction = speed.direction
       result.functions = functionSettings
       return result
     }
+  }
+  
+  // MARK: Private Methods
+  
+  @objc func timerAction() {
+    
+    if let net = network, let cs = net.commandStation {
+      
+      if !isInertial {
+        speed = targetSpeed
+      }
+      
+      lastLocomotiveState = cs.updateLocomotiveState(slotNumber: slotNumber, slotPage: slotPage, previousState: lastLocomotiveState, nextState: locomotiveState)
+      
+      for delegate in delegates {
+        delegate.value.stateUpdated(locomotive: self)
+      }
+      
+      if isInertial {
+        let tsign = targetSpeed.direction == .forward ? 1 : -1
+        let ts = targetSpeed.speed * tsign
+        let csign = speed.direction == .forward ? 1 : -1
+        var cs = speed.speed * csign
+        if ts != cs {
+          let increment = ts <= cs ? -1 : 1
+          cs += increment
+          cs = increment < 0 ? max(ts,cs) : min(ts,cs)
+          let newDirection : LocomotiveDirection = cs >= 0 ? .forward : .reverse
+          var newSpeed = abs(cs)
+          speed = (speed: newSpeed, direction: newDirection)
+        }
+      }
+      
+    }
+    
+  }
+  
+  func startTimer(timeInterval:TimeInterval) {
+    timer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
+  }
+  
+  func stopTimer() {
+    timer?.invalidate()
+    timer = nil
   }
   
   // MARK: Public Methods
   
   override public func displayString() -> String {
     return locomotiveName
+  }
+  
+  public func addDelegate(delegate:LocomotiveDelegate) -> Int {
+    let id = nextDelegateId
+    nextDelegateId += 1
+    delegates[id] = delegate
+    return id
+  }
+  
+  public func removeDelegate(withKey: Int) {
+    delegates.removeValue(forKey: withKey)
   }
   
   // MARK: CommandStationDelegate Methods
@@ -481,9 +565,15 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
             if initState == .waitingToActivate {
               cs.moveSlots(sourceSlotNumber: slotNumber, sourceSlotPage: slotPage, destinationSlotNumber: slotNumber, destinationSlotPage: slotPage)
             }
+            if initState == .active {
+              startTimer(timeInterval: 200.0 / 1000.0)
+            }
           }
           else if initState == .waitingToActivate {
             initState = locoSlotDataP1.slotState == .inUse ? .active : .waitingToActivate
+            if initState == .active {
+              startTimer(timeInterval: 200.0 / 1000.0)
+            }
           }
         }
         break
@@ -497,9 +587,15 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
             if initState == .waitingToActivate {
               cs.moveSlots(sourceSlotNumber: slotNumber, sourceSlotPage: slotPage, destinationSlotNumber: slotNumber, destinationSlotPage: slotPage)
             }
+            if initState == .active {
+              startTimer(timeInterval: 200.0 / 1000.0)
+            }
           }
           else if initState == .waitingToActivate {
             initState = locoSlotDataP2.slotState == .inUse ? .active : .waitingToActivate
+            if initState == .active {
+              startTimer(timeInterval: 200.0 / 1000.0)
+            }
           }
         }
         break
