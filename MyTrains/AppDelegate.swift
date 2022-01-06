@@ -92,5 +92,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     wc.showWindow(nil)
   }
   
+  
+  @IBAction func mnuProgramMobileDecoderAddress(_ sender: NSMenuItem) {
+    ModalWindow.ProgramDecoderAddress.runModel()
+  }
+  
 }
 

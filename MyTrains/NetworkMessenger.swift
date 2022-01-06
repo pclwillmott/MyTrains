@@ -399,6 +399,14 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
 
   }
   
+  public func getProgSlotDataP1() {
+    
+    let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_RQ_SL_DATA.rawValue, 0x7c, 0x00], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: nil, retryCount: 1)
+
+  }
+  
   public func getLocoSlotDataP1(forAddress: Int) {
     
     let lo = UInt8(forAddress & 0x7f)
@@ -447,6 +455,38 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
     let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_BUSY.rawValue], appendCheckSum: true)
     
     addToQueue(message: message, delay: TIMING.STANDARD, response: [.interfaceData], delegate: self, retryCount: 1)
+    
+  }
+  
+  public func readCV(cv:Int) {
+    
+    let pcmd : UInt8 = 0b00101011 // Byte Direct Mode on Service Track
+    
+    let cvAdjusted = cv - 1
+    
+    let cvh : Int = (cvAdjusted & 0b0000001000000000) == 0b0000001000000000 ? 0b00100000 : 0x00 |
+                    (cvAdjusted & 0b0000000100000000) == 0b0000000100000000 ? 0b00010000 : 0x00 |
+                    (cvAdjusted & 0b0000000010000000) == 0b0000000010000000 ? 0b00000001 : 0x00
+
+    let message = NetworkMessage(interfaceId: id, data:
+        [
+          NetworkMessageOpcode.OPC_WR_SL_DATA.rawValue,
+          0x0e,
+          0x7c,
+          pcmd,
+          0x00,
+          0x00,
+          0x00,
+          0x00,
+          UInt8(cvh & 0x7f),
+          UInt8(cvAdjusted & 0x7f),
+          0x00,
+          0x00,
+          0x00
+        ],
+        appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [.progCmdAccepted, .ack, .progCmdAcceptedBlind], delegate: self, retryCount: 5)
     
   }
   

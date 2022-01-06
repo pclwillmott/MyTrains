@@ -10,6 +10,7 @@ import Foundation
 public protocol CommandStationDelegate {
   func trackStatusChanged(commandStation: CommandStation)
   func locomotiveMessageReceived(message: NetworkMessage)
+  func progMessageReceived(message:NetworkMessage)
 }
 
 public class CommandStation : NetworkMessengerDelegate {
@@ -240,6 +241,12 @@ public class CommandStation : NetworkMessengerDelegate {
     }
   }
   
+  private func progMessage(message: NetworkMessage) {
+    for delegate in _delegates {
+      delegate.value.progMessageReceived(message: message)
+    }
+  }
+  
   @objc func timerAction() {
     forceRefresh = true
   }
@@ -290,6 +297,15 @@ public class CommandStation : NetworkMessengerDelegate {
     for messenger in _messengers {
       if messenger.value.isOpen {
         messenger.value.getCfgSlotDataP1()
+        break
+      }
+    }
+  }
+  
+  public func getProgSlotDataP1() {
+    for messenger in _messengers {
+      if messenger.value.isOpen {
+        messenger.value.getProgSlotDataP1()
         break
       }
     }
@@ -438,6 +454,16 @@ public class CommandStation : NetworkMessengerDelegate {
       }
     }
   }
+  
+  public func readCV(cv:Int) {
+    for kv in messengers {
+      let messenger = kv.value
+      if messenger.isOpen {
+        messenger.readCV(cv: cv)
+        break
+      }
+    }
+  }
     
   // MARK: NetworkMessengerDelegate Methods
   
@@ -470,6 +496,9 @@ public class CommandStation : NetworkMessengerDelegate {
     case .setIdleState:
       trackIsPaused = true
       getCfgSlotDataP1()
+      break
+    case.progCmdAcceptedBlind, .progSlotDataP1, .progCmdAccepted:
+      progMessage(message: message)
       break
     default:
       break

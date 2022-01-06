@@ -47,34 +47,44 @@
 \contentsline {subsection}{\numberline {1.5.41}MoveSlotsP1}{105}{subsection.1.5.41}
 \contentsline {subsection}{\numberline {1.5.42}MoveSlotsP2}{107}{subsection.1.5.42}
 \contentsline {subsection}{\numberline {1.5.43}PeerXfer16}{109}{subsection.1.5.43}
-\contentsline {subsection}{\numberline {1.5.44}PwrOff}{113}{subsection.1.5.44}
-\contentsline {subsection}{\numberline {1.5.45}PwrOn}{114}{subsection.1.5.45}
-\contentsline {subsection}{\numberline {1.5.46}Reset}{116}{subsection.1.5.46}
-\contentsline {subsection}{\numberline {1.5.47}SensRepGenIn}{117}{subsection.1.5.47}
-\contentsline {subsection}{\numberline {1.5.48}SensRepTurnIn}{119}{subsection.1.5.48}
-\contentsline {subsection}{\numberline {1.5.49}SensRepTurnOut}{121}{subsection.1.5.49}
-\contentsline {subsection}{\numberline {1.5.50}SetBrdOpSw}{123}{subsection.1.5.50}
-\contentsline {subsection}{\numberline {1.5.51}SetIdleState}{125}{subsection.1.5.51}
-\contentsline {subsection}{\numberline {1.5.52}SetLocoSlotDataP1}{126}{subsection.1.5.52}
-\contentsline {subsection}{\numberline {1.5.53}SetLocoSlotDataP2}{130}{subsection.1.5.53}
-\contentsline {subsection}{\numberline {1.5.54}SetLocoSlotStat1}{136}{subsection.1.5.54}
-\contentsline {subsection}{\numberline {1.5.55}SetSwWithAck}{138}{subsection.1.5.55}
-\contentsline {subsection}{\numberline {1.5.56}OPC\_SV\_PROG}{140}{subsection.1.5.56}
-\contentsline {subsection}{\numberline {1.5.57}SwReq}{145}{subsection.1.5.57}
-\contentsline {subsection}{\numberline {1.5.58}SwState}{147}{subsection.1.5.58}
-\contentsline {subsection}{\numberline {1.5.59}TransRep}{149}{subsection.1.5.59}
-\contentsline {subsection}{\numberline {1.5.60}UnlinkSlotsP1}{151}{subsection.1.5.60}
-\contentsline {subsection}{\numberline {1.5.61}UnlinkSlotsP2}{153}{subsection.1.5.61}
-\contentsline {chapter}{\numberline {2}Fast Clock}{155}{chapter.2}
-\contentsline {section}{\numberline {2.1}Summary}{155}{section.2.1}
-\contentsline {section}{\numberline {2.2}Slot \#123 Encoding}{155}{section.2.2}
-\contentsline {chapter}{\numberline {3}Updating Firmware}{159}{chapter.3}
-\contentsline {section}{\numberline {3.1}Bootloader Protocol 1}{159}{section.3.1}
-\contentsline {section}{\numberline {3.2}Bootloader Protocol 2}{159}{section.3.2}
-\contentsline {section}{\numberline {3.3}Firmware Parameters}{160}{section.3.3}
-\contentsline {section}{\numberline {3.4}DMF File Format}{161}{section.3.4}
-\contentsline {subsection}{\numberline {3.4.1}Sync Records}{161}{subsection.3.4.1}
-\contentsline {subsection}{\numberline {3.4.2}Parameter Records}{161}{subsection.3.4.2}
-\contentsline {subsection}{\numberline {3.4.3}Data Records}{163}{subsection.3.4.3}
-\contentsline {subsection}{\numberline {3.4.4}End of File Record}{164}{subsection.3.4.4}
-\contentsline {chapter}{\numberline {A}Reference Tables}{167}{appendix.A}
+\contentsline {subsection}{\numberline {1.5.44}ProgCV}{113}{subsection.1.5.44}
+\contentsline {subsection}{\numberline {1.5.45}ProgSlotDataP1}{117}{subsection.1.5.45}
+\contentsline {subsection}{\numberline {1.5.46}PwrOff}{121}{subsection.1.5.46}
+\contentsline {subsection}{\numberline {1.5.47}PwrOn}{122}{subsection.1.5.47}
+\contentsline {subsection}{\numberline {1.5.48}Reset}{124}{subsection.1.5.48}
+\contentsline {subsection}{\numberline {1.5.49}SensRepGenIn}{125}{subsection.1.5.49}
+\contentsline {subsection}{\numberline {1.5.50}SensRepTurnIn}{127}{subsection.1.5.50}
+\contentsline {subsection}{\numberline {1.5.51}SensRepTurnOut}{129}{subsection.1.5.51}
+\contentsline {subsection}{\numberline {1.5.52}SetBrdOpSw}{131}{subsection.1.5.52}
+\contentsline {subsection}{\numberline {1.5.53}SetIdleState}{133}{subsection.1.5.53}
+\contentsline {subsection}{\numberline {1.5.54}SetLocoSlotDataP1}{134}{subsection.1.5.54}
+\contentsline {subsection}{\numberline {1.5.55}SetLocoSlotDataP2}{138}{subsection.1.5.55}
+\contentsline {subsection}{\numberline {1.5.56}SetLocoSlotStat1}{144}{subsection.1.5.56}
+\contentsline {subsection}{\numberline {1.5.57}SetSwWithAck}{146}{subsection.1.5.57}
+\contentsline {subsection}{\numberline {1.5.58}OPC\_SV\_PROG}{148}{subsection.1.5.58}
+\contentsline {subsection}{\numberline {1.5.59}SwReq}{153}{subsection.1.5.59}
+\contentsline {subsection}{\numberline {1.5.60}SwState}{155}{subsection.1.5.60}
+\contentsline {subsection}{\numberline {1.5.61}TransRep}{157}{subsection.1.5.61}
+\contentsline {subsection}{\numberline {1.5.62}UnlinkSlotsP1}{159}{subsection.1.5.62}
+\contentsline {subsection}{\numberline {1.5.63}UnlinkSlotsP2}{161}{subsection.1.5.63}
+\contentsline {chapter}{\numberline {2}Fast Clock}{163}{chapter.2}
+\contentsline {section}{\numberline {2.1}Summary}{163}{section.2.1}
+\contentsline {section}{\numberline {2.2}Slot \#123 Encoding}{163}{section.2.2}
+\contentsline {chapter}{\numberline {3}Updating Firmware}{167}{chapter.3}
+\contentsline {section}{\numberline {3.1}Bootloader Protocol 1}{167}{section.3.1}
+\contentsline {section}{\numberline {3.2}Bootloader Protocol 2}{167}{section.3.2}
+\contentsline {section}{\numberline {3.3}Firmware Parameters}{168}{section.3.3}
+\contentsline {section}{\numberline {3.4}DMF File Format}{169}{section.3.4}
+\contentsline {subsection}{\numberline {3.4.1}Sync Records}{169}{subsection.3.4.1}
+\contentsline {subsection}{\numberline {3.4.2}Parameter Records}{169}{subsection.3.4.2}
+\contentsline {subsection}{\numberline {3.4.3}Data Records}{171}{subsection.3.4.3}
+\contentsline {subsection}{\numberline {3.4.4}End of File Record}{172}{subsection.3.4.4}
+\contentsline {chapter}{\numberline {4}Configuration Variables}{175}{chapter.4}
+\contentsline {section}{\numberline {4.1}Introduction}{175}{section.4.1}
+\contentsline {subsection}{\numberline {4.1.1}Paged Mode Programming}{176}{subsection.4.1.1}
+\contentsline {subsection}{\numberline {4.1.2}Physical Register Programming}{176}{subsection.4.1.2}
+\contentsline {subsection}{\numberline {4.1.3}Direct Mode Programming}{176}{subsection.4.1.3}
+\contentsline {subsection}{\numberline {4.1.4}Operations Mode Programming}{176}{subsection.4.1.4}
+\contentsline {section}{\numberline {4.2}Programming Mobile Decoder Addresses}{176}{section.4.2}
+\contentsline {section}{\numberline {4.3}List of all supported CVs}{186}{section.4.3}
+\contentsline {chapter}{\numberline {A}Reference Tables}{195}{appendix.A}

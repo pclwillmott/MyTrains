@@ -285,6 +285,10 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
   public func locomotiveMessageReceived(message: NetworkMessage) {
   }
 
+  public func progMessageReceived(message: NetworkMessage) {
+  }
+  
+
   // MARK: NetworkInterfaceDelegate Methods
   
   public func interfaceNotIdentified(messenger: NetworkMessenger) {

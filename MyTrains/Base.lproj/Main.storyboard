@@ -478,6 +478,13 @@
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="mMq-k6-sOa"/>
+                                        <menuItem title="Program Mobile Decoder Address" id="Hkv-Wv-hoh">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="mnuProgramMobileDecoderAddress:" target="Voe-Tx-rLC" id="Rwy-HD-Aae"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="muo-PM-TVl"/>
                                         <menuItem title="Show Toolbar" keyEquivalent="t" id="snW-S8-Cw5">
                                             <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                             <connections>

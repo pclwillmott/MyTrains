@@ -547,6 +547,9 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
   public func trackStatusChanged(commandStation: CommandStation) {
   }
   
+  public func progMessageReceived(message: NetworkMessage) {
+  }
+  
   public func locomotiveMessageReceived(message: NetworkMessage) {
     
     if let net = network, let cs = net.commandStation {
@@ -878,6 +881,10 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
       "DELETE FROM [\(TABLE.LOCOMOTIVE)] WHERE [\(LOCOMOTIVE.LOCOMOTIVE_ID)] = \(primaryKey)"
     ]
     Database.execute(commands: sql)
+  }
+  
+  public static func decoderAddress(cv17: Int, cv18: Int) -> Int {
+    return (cv17 << 8 | cv18) - 49152
   }
   
 }

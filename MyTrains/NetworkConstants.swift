@@ -98,6 +98,10 @@ public enum NetworkMessageType {
   case moveSlotsP1
   case moveSlotsP2
   case peerXfer16
+  case progCV
+  case progSlotDataP1
+  case progCmdAccepted
+  case progCmdAcceptedBlind
   case pwrOff
   case pwrOn
   case reset

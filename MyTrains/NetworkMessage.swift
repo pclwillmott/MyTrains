@@ -135,7 +135,17 @@ public class NetworkMessage {
           _messageType = message[1] == 0x00 ? .getLocoSlotDataSAdrP2 : .getLocoSlotDataLAdrP2
           break
         case NetworkMessageOpcode.OPC_LONG_ACK.rawValue:
-          _messageType = .ack
+          if message[1] == 0x6f &&
+             message[2] == 0x01 {
+            _messageType = .progCmdAccepted
+          }
+          else if message[1] == 0x6f &&
+             message[2] == 0x40 {
+            _messageType = .progCmdAcceptedBlind
+          }
+          else {
+            _messageType = .ack
+          }
           break
         case NetworkMessageOpcode.OPC_SL_RD_DATA_P2.rawValue:
           if message[1] == 0x15 &&
@@ -154,11 +164,14 @@ public class NetworkMessage {
               (message[10] &  0b11110000) == 0x00    /* SND  */ {
               _messageType = .locoSlotDataP1
             }
-            else if message[2] == 0x7f {
-              _messageType = .cfgSlotDataP1
-            }
             else if message[2] == 0x7b {
               _messageType = .fastClockDataP1
+            }
+            else if message[2] == 0x7c {
+              _messageType = .progSlotDataP1
+            }
+            else if message[2] == 0x7f {
+              _messageType = .cfgSlotDataP1
             }
           }
           break
@@ -176,6 +189,15 @@ public class NetworkMessage {
              (message[10] &  0b11110000) == 0x00    /* SND  */ {
             _messageType = .setLocoSlotDataP1
           }
+          else if
+              message[ 1] == 0x0e &&
+              message[ 2] == 0x7c &&                /* PROG SLOT */
+              message[ 4] == 0x00 &&
+              message[ 7] == 0x00 &&
+             (message[ 8] &  0b11001100) == 0x00 {
+            _messageType = .progCV
+          }
+
           break
         case NetworkMessageOpcode.OPC_CONSIST_FUNC.rawValue:
           if message[1] < 0x78 &&
