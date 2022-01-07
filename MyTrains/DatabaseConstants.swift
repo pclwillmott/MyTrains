@@ -82,6 +82,7 @@ enum LOCOMOTIVE {
   static let UNITS_FBOFF_OCC       = "UNITS_FBOFF_OCC"
   static let UNITS_SPEED           = "UNITS_SPEED"
   static let NETWORK_ID            = "NETWORK_ID"
+  static let MAX_CV_NUMBER         = "MAX_CV_NUMBER"
 }
 
 enum LOCOMOTIVE_FUNCTION {
@@ -94,4 +95,15 @@ enum LOCOMOTIVE_FUNCTION {
   static let DURATION              = "DURATION"
   static let INVERTED              = "INVERTED"
   static let STATE                 = "STATE"
+}
+
+enum LOCOMOTIVE_CV {
+  static let CV_ID                 = "CV_ID"
+  static let LOCOMOTIVE_ID         = "LOCOMOTIVE_ID"
+  static let CV_NUMBER             = "CV_NUMBER"
+  static let CV_VALUE              = "CV_VALUE"
+  static let DEFAULT_VALUE         = "DEFAULT_VALUE"
+  static let CUSTOM_DESCRIPTION    = "CUSTOM_DESCRIPTION"
+  static let CUSTOM_NUMBER_BASE    = "CUSTOM_NUMBER_BASE"
+  static let ENABLED               = "ENABLED"
 }

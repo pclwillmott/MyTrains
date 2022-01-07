@@ -522,8 +522,31 @@
                                             </tabViewItem>
                                             <tabViewItem label="CVs" identifier="" id="khL-GH-kPV">
                                                 <view key="view" id="6kg-gm-S6Q">
-                                                    <rect key="frame" x="10" y="33" width="524" height="381"/>
+                                                    <rect key="frame" x="10" y="33" width="524" height="420"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                    <subviews>
+                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MhM-Ja-ToT">
+                                                            <rect key="frame" x="15" y="401" width="136" height="16"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Maximum CV Number" id="hQw-kE-cOj">
+                                                                <font key="font" usesAppearanceFont="YES"/>
+                                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                            </textFieldCell>
+                                                        </textField>
+                                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="19J-SA-Xag">
+                                                            <rect key="frame" x="17" y="372" width="96" height="21"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="V6I-l7-e0t">
+                                                                <font key="font" metaFont="system"/>
+                                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                            </textFieldCell>
+                                                            <connections>
+                                                                <action selector="txtMaxCVNumberAction:" target="9iP-PP-Stw" id="GU2-Vy-EFq"/>
+                                                            </connections>
+                                                        </textField>
+                                                    </subviews>
                                                 </view>
                                             </tabViewItem>
                                             <tabViewItem label="Permissions" identifier="" id="MYB-am-mcr">
@@ -552,6 +575,7 @@
                         <outlet property="txtAddress" destination="nc8-uN-NkL" id="Kj7-L6-jo4"/>
                         <outlet property="txtLength" destination="2jc-4r-Ezf" id="rEU-ZW-O90"/>
                         <outlet property="txtLocomotiveName" destination="g4a-O6-T25" id="5em-VR-49O"/>
+                        <outlet property="txtMaxCVNumber" destination="19J-SA-Xag" id="9fi-oU-dDg"/>
                         <outlet property="txtMaximumForwardSpeed" destination="nOb-HL-Y5P" id="3aY-Xp-VzD"/>
                         <outlet property="txtMaximumReverseSpeed" destination="vCW-cm-mj5" id="mSO-s3-0Mw"/>
                         <outlet property="txtOccupancyFeedbackOffsetFront" destination="gcj-Hq-JaJ" id="GaM-j2-dcG"/>

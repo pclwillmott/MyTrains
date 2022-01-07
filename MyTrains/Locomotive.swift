@@ -112,6 +112,7 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
     super.init(primaryKey: -1)
     decode(sqliteDataReader: reader)
     functions = LocomotiveFunction.functions(locomotive: self)
+    cvs = LocomotiveCV.cvs(locomotive: self)
   }
   
   init() {
@@ -120,6 +121,10 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
       let locoFunc = LocomotiveFunction(functionNumber: fn)
       locoFunc.delegate = self
       functions.append(locoFunc)
+    }
+    for cvNumber in 1...1024 {
+      let cv = LocomotiveCV(cvNumber: cvNumber)
+      cvs.append(cv)
     }
   }
   
@@ -172,6 +177,8 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
   
   private var _networkId : Int = -1
   
+  private var _maxCVNumber : Int = 255
+  
   private var _isInUse : Bool = false
   
   private var _direction : LocomotiveDirection = .forward
@@ -199,6 +206,8 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
   // MARK: Public properties
   
   public var functions : [LocomotiveFunction] = []
+  
+  public var cvs : [LocomotiveCV] = []
   
   public var locomotiveName : String {
     get {
@@ -398,6 +407,18 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
     }
   }
   
+  public var maxCVNumber : Int {
+    get {
+      return _maxCVNumber
+    }
+    set(value) {
+      if value != _maxCVNumber {
+        _maxCVNumber = value
+        modified = true
+      }
+    }
+  }
+  
   public var isInUse : Bool {
     get {
       return _isInUse
@@ -507,7 +528,7 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
           cs += increment
           cs = increment < 0 ? max(ts,cs) : min(ts,cs)
           let newDirection : LocomotiveDirection = cs >= 0 ? .forward : .reverse
-          var newSpeed = abs(cs)
+          let newSpeed = abs(cs)
           speed = (speed: newSpeed, direction: newDirection)
         }
       }
@@ -687,6 +708,10 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
         networkId = reader.getInt(index: 16)!
       }
 
+      if !reader.isDBNull(index: 17) {
+        maxCVNumber = reader.getInt(index: 17)!
+      }
+
     }
     
     modified = false
@@ -717,7 +742,8 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
         "[\(LOCOMOTIVE.UNITS_LENGTH)]," +
         "[\(LOCOMOTIVE.UNITS_FBOFF_OCC)]," +
         "[\(LOCOMOTIVE.UNITS_SPEED)]," +
-        "[\(LOCOMOTIVE.NETWORK_ID)]" +
+        "[\(LOCOMOTIVE.NETWORK_ID)]," +
+        "[\(LOCOMOTIVE.MAX_CV_NUMBER)]" +
         ") VALUES (" +
         "@\(LOCOMOTIVE.LOCOMOTIVE_ID), " +
         "@\(LOCOMOTIVE.LOCOMOTIVE_NAME), " +
@@ -734,13 +760,18 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
         "@\(LOCOMOTIVE.MAX_BACKWARD_SPEED), " +
         "@\(LOCOMOTIVE.UNITS_LENGTH), " +
         "@\(LOCOMOTIVE.UNITS_FBOFF_OCC), " +
-        "@\(LOCOMOTIVE.UNITS_SPEED)," +
-        "@\(LOCOMOTIVE.NETWORK_ID)" +
+        "@\(LOCOMOTIVE.UNITS_SPEED), " +
+        "@\(LOCOMOTIVE.NETWORK_ID), " +
+        "@\(LOCOMOTIVE.MAX_CV_NUMBER)" +
         ")"
         primaryKey = Database.nextCode(tableName: TABLE.LOCOMOTIVE, primaryKey: LOCOMOTIVE.LOCOMOTIVE_ID)!
         
         for locoFunc in functions {
           locoFunc.locomotiveId = primaryKey
+        }
+        
+        for cv in cvs {
+          cv.locomotiveId = primaryKey
         }
         
       }
@@ -761,7 +792,8 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
         "[\(LOCOMOTIVE.UNITS_LENGTH)] = @\(LOCOMOTIVE.UNITS_LENGTH), " +
         "[\(LOCOMOTIVE.UNITS_FBOFF_OCC)] = @\(LOCOMOTIVE.UNITS_FBOFF_OCC), " +
         "[\(LOCOMOTIVE.UNITS_SPEED)] = @\(LOCOMOTIVE.UNITS_SPEED), " +
-        "[\(LOCOMOTIVE.NETWORK_ID)] = @\(LOCOMOTIVE.NETWORK_ID) " +
+        "[\(LOCOMOTIVE.NETWORK_ID)] = @\(LOCOMOTIVE.NETWORK_ID), " +
+        "[\(LOCOMOTIVE.MAX_CV_NUMBER)] = @\(LOCOMOTIVE.MAX_CV_NUMBER) " +
         "WHERE [\(LOCOMOTIVE.LOCOMOTIVE_ID)] = @\(LOCOMOTIVE.LOCOMOTIVE_ID)"
       }
 
@@ -794,6 +826,7 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
       cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.UNITS_FBOFF_OCC)", value: occupancyFeedbackOffsetUnits.rawValue)
       cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.UNITS_SPEED)", value: speedUnits.rawValue)
       cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.NETWORK_ID)", value: networkId)
+      cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.MAX_CV_NUMBER)", value: maxCVNumber)
 
       _ = cmd.executeNonQuery()
 
@@ -807,6 +840,10 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
     
     for locoFunc in functions {
       locoFunc.save()
+    }
+    
+    for cv in cvs {
+      cv.save()
     }
 
   }
@@ -832,7 +869,8 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
         "[\(LOCOMOTIVE.UNITS_LENGTH)], " +
         "[\(LOCOMOTIVE.UNITS_FBOFF_OCC)], " +
         "[\(LOCOMOTIVE.UNITS_SPEED)], " +
-        "[\(LOCOMOTIVE.NETWORK_ID)]" 
+        "[\(LOCOMOTIVE.NETWORK_ID)], " +
+        "[\(LOCOMOTIVE.MAX_CV_NUMBER)]"
     }
   }
   
@@ -878,6 +916,7 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
   public static func delete(primaryKey: Int) {
     let sql = [
       "DELETE FROM [\(TABLE.LOCOMOTIVE_FUNCTION)] WHERE [\(LOCOMOTIVE_FUNCTION.LOCOMOTIVE_ID)] = \(primaryKey)",
+      "DELETE FROM [\(TABLE.LOCOMOTIVE_CV)] WHERE [\(LOCOMOTIVE_CV.LOCOMOTIVE_ID)] = \(primaryKey)",
       "DELETE FROM [\(TABLE.LOCOMOTIVE)] WHERE [\(LOCOMOTIVE.LOCOMOTIVE_ID)] = \(primaryKey)"
     ]
     Database.execute(commands: sql)
@@ -885,6 +924,16 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
   
   public static func decoderAddress(cv17: Int, cv18: Int) -> Int {
     return (cv17 << 8 | cv18) - 49152
+  }
+  
+  public static func cv17(address: Int) -> Int {
+    let temp = address + 49152
+    return temp >> 8
+  }
+  
+  public static func cv18(address: Int) -> Int {
+    let temp = address + 49152
+    return temp & 0xff
   }
   
 }

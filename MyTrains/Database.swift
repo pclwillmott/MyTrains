@@ -110,7 +110,8 @@ class Database {
               "[\(LOCOMOTIVE.UNITS_LENGTH)]       INT NOT NULL," +
               "[\(LOCOMOTIVE.UNITS_FBOFF_OCC)]    INT NOT NULL," +
               "[\(LOCOMOTIVE.UNITS_SPEED)]        INT NOT NULL," +
-              "[\(LOCOMOTIVE.NETWORK_ID)]         INT NOT NULL" +
+              "[\(LOCOMOTIVE.NETWORK_ID)]         INT NOT NULL," +
+              "[\(LOCOMOTIVE.MAX_CV_NUMBER)]      INT NOT NULL" +
             ")",
 
             "CREATE TABLE [\(TABLE.LOCOMOTIVE_FUNCTION)] (" +
@@ -125,6 +126,16 @@ class Database {
               "[\(LOCOMOTIVE_FUNCTION.STATE)]                INT NOT NULL" +
             ")",
 
+            "CREATE TABLE [\(TABLE.LOCOMOTIVE_CV)] (" +
+              "[\(LOCOMOTIVE_CV.CV_ID)]              INT PRIMARY KEY," +
+              "[\(LOCOMOTIVE_CV.LOCOMOTIVE_ID)]      INT NOT NULL," +
+              "[\(LOCOMOTIVE_CV.CV_NUMBER)]          INT NOT NULL," +
+              "[\(LOCOMOTIVE_CV.CV_VALUE)]           INT NOT NULL," +
+              "[\(LOCOMOTIVE_CV.DEFAULT_VALUE)]      INT NOT NULL," +
+              "[\(LOCOMOTIVE_CV.CUSTOM_DESCRIPTION)] TEXT NOT NULL," +
+              "[\(LOCOMOTIVE_CV.CUSTOM_NUMBER_BASE)] INT NOT NULL," +
+              "[\(LOCOMOTIVE_CV.ENABLED)]            INT NOT NULL" +
+            ")",
 
             /*
             "CREATE INDEX IDX_ARTIST_UKCHART_NAME ON [\(TABLE.ARTIST)] ([\(ARTIST.UKCHART_NAME)])",

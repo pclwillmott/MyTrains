@@ -465,6 +465,16 @@ public class CommandStation : NetworkMessengerDelegate {
     }
   }
     
+  public func writeCV(cv:Int, value:Int) {
+    for kv in messengers {
+      let messenger = kv.value
+      if messenger.isOpen {
+        messenger.writeCV(cv: cv, value: value)
+        break
+      }
+    }
+  }
+    
   // MARK: NetworkMessengerDelegate Methods
   
   public func messengerRemoved(id: String) {

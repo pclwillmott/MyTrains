@@ -80,19 +80,17 @@ d1 & 1 - unknown\\
 d0 & 1 - unknown\\
 \end{tabular}
 
-*** THIS TABLE NEEDS FIXING FOR DIRECT BYTE MODE ****
-
 \begin{tabular}{p{0.05\linewidth}p{0.05\linewidth}p{0.05\linewidth}p{0.05\linewidth}p{0.05\linewidth}p{0.05\linewidth}p{0.4\linewidth}}
 \underline{d5} & \underline{d4} & \underline{d3} & \underline{d2} & \underline{d1} & \underline{d0} & \underline{Programming Mode}\\
 1 & 0 & 0 & 0 & $\times$ & $\times$ & Paged mode byte read/write on service track\\
-1 & 0 & 0 & 1 & $\times$ & $\times$ &  Direct mode byte read/write on service track\\
-0 & 0 & 0 & 1 & $\times$ & $\times$ &  Direct mode bit read/write on service track\\
-$\times$ & 0 & 1 & 0 & $\times$ & $\times$ &  Physical register byte read/write on service track\\
-$\times$ & 0 & 1 & 1 & $\times$ & $\times$ &  Service track reserved function\\
-1 &  0 & 0 & 1 & $\times$ & $\times$ &  Ops mode byte program no feedback\\
-1 &  0 & 1 & 1 & $\times$ & $\times$ &  Ops mode byte program with feedback\\
-0 &  0 & 0 & 1 & $\times$ & $\times$ &  Ops mode bit program no feedback\\
-0 &  0 & 1 & 1 & $\times$ & $\times$ &  Ops mode bit program with feedback\\
+1 & 0 & 1 & 0 & $\times$ & $\times$ &  Direct mode byte read/write on service track\\
+0 & 0 & 1 & 0 & $\times$ & $\times$ &  Direct mode bit read/write on service track\\
+$\times$ & 1 & 0 & 0 & $\times$ & $\times$ &  Physical register byte read/write on service track\\
+$\times$ & 1 & 1 & 0 & $\times$ & $\times$ &  Service track reserved function\\
+1 &  0 & 0 & 1 & $\times$ & $\times$ &  Ops mode byte program on mainline no feedback\\
+1 &  0 & 1 & 1 & $\times$ & $\times$ &  Ops mode byte program on mainline with feedback\\
+0 &  0 & 0 & 1 & $\times$ & $\times$ &  Ops mode bit program on mainline no feedback\\
+0 &  0 & 1 & 1 & $\times$ & $\times$ &  Ops mode bit program on mainline with feedback\\
 \end{tabular}
 
 Byte 4:

@@ -62,6 +62,7 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     txtMaximumReverseSpeed.stringValue = "75.0"
     cboMaximumSpeedUnits.selectItem(at: UserDefaults.standard.integer(forKey: DEFAULT.UNITS_SPEED))
     cboNetwork.deselectItem(at: cboNetwork.indexOfSelectedItem)
+    txtMaxCVNumber.stringValue = "255"
 
   }
   
@@ -85,6 +86,7 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
       if let netIndex = cboNetworkDS.indexOfItemWithCodeValue(code: locomotive.networkId) {
         cboNetwork.selectItem(at: netIndex)
       }
+      txtMaxCVNumber.stringValue = "\(locomotive.maxCVNumber)"
     }
   }
   
@@ -104,6 +106,16 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     else {
       txtScale.becomeFirstResponder()
       return "A scale greater than zero is required."
+    }
+    if let maxCV = Int(txtMaxCVNumber.stringValue) {
+      if maxCV < 1 || maxCV > 1024 {
+        txtMaxCVNumber.becomeFirstResponder()
+        return "An CV number in the range 1 to 1024 is required."
+      }
+    }
+    else {
+      txtMaxCVNumber.becomeFirstResponder()
+      return "An CV number in the range 1 to 1024 is required."
     }
     if let address = Int(txtAddress.stringValue) {
       if address < 0 || address > 9983 {
@@ -167,6 +179,7 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     locomotive.maxBackwardSpeed = Double(txtMaximumReverseSpeed.stringValue) ?? 0.0
     locomotive.speedUnits = SpeedUnit(rawValue: cboMaximumSpeedUnits.indexOfSelectedItem) ?? .kilometersPerHour
     locomotive.networkId = cboNetworkDS.codeForItemAt(index: cboNetwork.indexOfSelectedItem) ?? -1
+    locomotive.maxCVNumber = Int(txtMaxCVNumber.stringValue) ?? 255
     locomotive.save()
   }
 
@@ -301,4 +314,10 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     editorView.modified = true
   }
   
+  @IBOutlet weak var txtMaxCVNumber: NSTextField!
+  
+  @IBAction func txtMaxCVNumberAction(_ sender: NSTextField) {
+    editorView.modified = true
+  }
+ 
 }

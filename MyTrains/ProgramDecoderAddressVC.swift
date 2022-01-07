@@ -40,10 +40,6 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
       cboCommandStation.selectItem(at: 0)
     }
     
-    if cboLocomotive.numberOfItems > 0 {
-      cboLocomotive.selectItem(at: 0)
-    }
-    
     setup()
     
   }
@@ -60,8 +56,18 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
     case waitingForReadCV17Data
     case waitingForReadCV18Ack
     case waitingForReadCV18Data
-    case waitingForWriteAck
-    case waitingForWriteData
+    case waitingForWriteReadCV29Ack
+    case waitingForWriteReadCV29Data
+    case waitingForWriteCV29Ack
+    case waitingForWriteCV29Data
+    case waitingForWriteCV01Ack
+    case waitingForWriteCV01Data
+    case waitingForWriteCV17Ack
+    case waitingForWriteCV17Data
+    case waitingForWriteCV18Ack
+    case waitingForWriteCV18Data
+    case waitingForReadCVAck
+    case waitingForReadCVData
   }
   
   // MARK: Private Properties
@@ -98,6 +104,12 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
   
   private var address : Int = 0
   
+  private var readCV : Int = 1
+  
+  private var cancelRead : Bool = false
+  
+  private var cvTableViewDS = CVTableViewDS()
+  
   // MARK: Private Methods
   
   private func setup() {
@@ -114,15 +126,30 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
     }
     
     if let loco = locomotive {
-      txtAddress.integerValue = loco.address
+      txtAddress.stringValue = "\(loco.address)"
+      txtMaxCVNumber.stringValue = "\(loco.maxCVNumber)"
     }
     else {
-      txtAddress.integerValue = 0
+      txtAddress.stringValue = "0"
+      txtMaxCVNumber.stringValue = "255"
     }
     
     btnWrite.isEnabled = cboLocomotive.indexOfSelectedItem >= 0 && cboCommandStation.indexOfSelectedItem >= 0
     
     btnRead.isEnabled = btnWrite.isEnabled
+    
+    btnCancelReadCVValues.isEnabled = false
+    btnReadCVValues.isEnabled = true
+    txtMaxCVNumber.isEnabled = true
+    chkSetDefaults.isEnabled = true
+    chkSetDefaults.state = .off
+
+    if let loco = locomotive {
+      cvTableViewDS.cvs = loco.cvs
+      cvTableView.dataSource = cvTableViewDS
+      cvTableView.delegate = cvTableViewDS
+      cvTableView.reloadData()
+    }
 
   }
   
@@ -131,6 +158,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
     var good = true
     
     if let address = Int(txtAddress.stringValue) {
+      
       if address < 0 || address > 9983 {
         good = false
       }
@@ -143,7 +171,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
       let alert = NSAlert()
 
       alert.messageText = "Invalid Address"
-      alert.informativeText = "An address in the range 0 to 9983 is expected."
+      alert.informativeText = "An address in the range 0 to 9983 is required."
       alert.addButton(withTitle: "OK")
    // alert.addButton(withTitle: "Cancel")
       alert.alertStyle = .critical
@@ -151,8 +179,41 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
       let _ = alert.runModal() // == NSAlertFirstButtonReturn
     }
     
+    if good {
+      
+      if let cv = Int(txtMaxCVNumber.stringValue) {
+        
+        if cv < 1 || cv > 1024 {
+          good = false
+        }
+      }
+      else {
+        good = false
+      }
+      
+      if !good {
+        let alert = NSAlert()
+
+        alert.messageText = "Invalid Maximum CV Number"
+        alert.informativeText = "A CV number in the range 1 to 1024 is required."
+        alert.addButton(withTitle: "OK")
+     // alert.addButton(withTitle: "Cancel")
+        alert.alertStyle = .critical
+
+        let _ = alert.runModal() // == NSAlertFirstButtonReturn
+      }
+
+    }
+    
     return good
     
+  }
+  
+  private func saveAddress(address: Int) {
+    if let loco = locomotive {
+      loco.address = address
+      loco.save()
+    }
   }
   
   // MARK: CommandStationDelegate Methods
@@ -186,6 +247,24 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
         programmerState = .waitingForReadCV18Data
         message = "Reading CV18"
         break
+      case .waitingForWriteReadCV29Ack:
+        programmerState = .waitingForWriteReadCV29Data
+        message = "Reading CV29"
+      case .waitingForWriteCV29Ack:
+        programmerState = .waitingForWriteCV29Data
+        message = "Writing CV29"
+      case .waitingForWriteCV01Ack:
+        programmerState = .waitingForWriteCV01Data
+        message = "Writing CV01"
+      case .waitingForWriteCV17Ack:
+        programmerState = .waitingForWriteCV17Data
+        message = "Writing CV17"
+      case .waitingForWriteCV18Ack:
+        programmerState = .waitingForWriteCV18Data
+        message = "Writing CV18"
+      case .waitingForReadCVAck:
+        programmerState = .waitingForReadCVData
+        lblReadCVStatus.stringValue = "Reading CV\(readCV)"
       default:
         break
       }
@@ -220,6 +299,8 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
           address = cv01
           txtAddress.stringValue = "\(address)"
           message = "Read Completed"
+          saveAddress(address: address)
+          programmerState = .idle
           break
         case .waitingForReadCV17Data:
           cv17 = psd.value
@@ -232,8 +313,83 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
           address = Locomotive.decoderAddress(cv17: cv17, cv18: cv18)
           txtAddress.stringValue = "\(address)"
           message = "Read Completed"
+          saveAddress(address: address)
           programmerState = .idle
           break
+        case .waitingForWriteReadCV29Data:
+          address = txtAddress.integerValue
+          cv29 = psd.value & 0b11011111
+          cv29 |= address > 127 ? 0b00100000 : 0x00
+          programmerState = .waitingForWriteCV29Ack
+          commandStation?.writeCV(cv: 29, value: cv29)
+          break
+        case .waitingForWriteCV29Data:
+          if address > 127 {
+            cv17 = Locomotive.cv17(address: address)
+            programmerState = .waitingForWriteCV17Ack
+            commandStation?.writeCV(cv: 17, value: cv17)
+          }
+          else {
+            cv01 = address
+            programmerState = .waitingForWriteCV01Ack
+            commandStation?.writeCV(cv: 1, value: cv01)
+          }
+          break
+        case .waitingForWriteCV01Data:
+          programmerState = .idle
+          saveAddress(address: address)
+          message = "Write Completed"
+          break
+        case .waitingForWriteCV17Data:
+          cv18 = Locomotive.cv18(address: address)
+          programmerState = .waitingForWriteCV18Ack
+          commandStation?.writeCV(cv: 18, value: cv18)
+          break
+        case .waitingForWriteCV18Data:
+          programmerState = .idle
+          saveAddress(address: address)
+          message = "Write Completed"
+          break
+        case .waitingForReadCVData:
+          if let loco = locomotive {
+            let cv = loco.cvs[readCV-1]
+            cv.cvValue = psd.value
+            if chkSetDefaults.state == .on {
+              cv.defaultValue = psd.value
+            }
+            cv.save()
+            if let loco = locomotive {
+              cvTableViewDS.cvs = loco.cvs
+              cvTableView.dataSource = cvTableViewDS
+              cvTableView.delegate = cvTableViewDS
+              cvTableView.reloadData()
+            }
+            if cancelRead {
+              programmerState = .idle
+              lblReadCVStatus.stringValue = "Read Aborted"
+              btnCancelReadCVValues.isEnabled = false
+              btnReadCVValues.isEnabled = true
+              txtMaxCVNumber.isEnabled = true
+              chkSetDefaults.isEnabled = true
+              chkSetDefaults.state = .off
+              cancelRead = false
+            }
+            else if readCV < txtMaxCVNumber.integerValue {
+              readCV += 1
+              programmerState = .waitingForReadCVAck
+              commandStation?.readCV(cv: readCV)
+            }
+            else {
+              programmerState = .idle
+              lblReadCVStatus.stringValue = "Read Completed"
+              btnCancelReadCVValues.isEnabled = false
+              btnReadCVValues.isEnabled = true
+              txtMaxCVNumber.isEnabled = true
+              chkSetDefaults.isEnabled = true
+              chkSetDefaults.state = .off
+              cancelRead = false
+            }
+          }
         default:
           break
         }
@@ -298,6 +454,19 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
   @IBOutlet weak var btnWrite: NSButton!
   
   @IBAction func btnWriteAction(_ sender: NSButton) {
+    
+    if validate() {
+      
+      if let cs = commandStation {
+        
+        programmerState = .waitingForWriteReadCV29Ack
+        
+        cs.readCV(cv: 29)
+        
+      }
+      
+    }
+
   }
   
   @IBOutlet weak var txtAddress: NSTextField!
@@ -313,6 +482,60 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
     
     setup()
     
+  }
+  
+  @IBOutlet weak var txtMaxCVNumber: NSTextField!
+  
+  @IBAction func txtMaxCVNumberAction(_ sender: NSTextField) {
+  }
+  
+  @IBOutlet weak var chkSetDefaults: NSButton!
+  
+  @IBAction func chkSetDefaultsAction(_ sender: NSButton) {
+  }
+  
+  @IBOutlet weak var lblReadCVStatus: NSTextField!
+  
+  @IBOutlet weak var btnReadCVValues: NSButton!
+  
+  @IBAction func btnReadCVValuesAction(_ sender: NSButton) {
+    
+    if validate() {
+      
+      if let cs = commandStation {
+        
+        cancelRead = false
+        
+        btnCancelReadCVValues.isEnabled = true
+        btnReadCVValues.isEnabled = false
+        txtMaxCVNumber.isEnabled = false
+        chkSetDefaults.isEnabled = false
+        
+        locomotive?.maxCVNumber = txtMaxCVNumber.integerValue
+        
+        locomotive?.save()
+        
+        programmerState = .waitingForReadCVAck
+        
+        readCV = 1
+        
+        cs.readCV(cv: readCV)
+        
+      }
+      
+    }
+
+  }
+  
+  @IBOutlet weak var btnCancelReadCVValues: NSButton!
+  
+  @IBAction func btnCancelReadCVValuesAction(_ sender: NSButton) {
+    cancelRead = true
+  }
+  
+  @IBOutlet weak var cvTableView: NSTableView!
+  
+  @IBAction func cvTableViewAction(_ sender: NSTableView) {
   }
   
 }
