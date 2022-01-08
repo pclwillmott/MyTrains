@@ -63,6 +63,7 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     cboMaximumSpeedUnits.selectItem(at: UserDefaults.standard.integer(forKey: DEFAULT.UNITS_SPEED))
     cboNetwork.deselectItem(at: cboNetwork.indexOfSelectedItem)
     txtMaxCVNumber.stringValue = "255"
+    lblManufacturer.stringValue = "Unknown"
 
   }
   
@@ -87,6 +88,7 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
         cboNetwork.selectItem(at: netIndex)
       }
       txtMaxCVNumber.stringValue = "\(locomotive.maxCVNumber)"
+      lblManufacturer.stringValue = locomotive.decoderManufacturerName
     }
   }
   
@@ -320,4 +322,6 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     editorView.modified = true
   }
  
+  @IBOutlet weak var lblManufacturer: NSTextField!
+  
 }

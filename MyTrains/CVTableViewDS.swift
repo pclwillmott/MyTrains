@@ -69,40 +69,23 @@ public class CVTableViewDS : NSObject, NSTableViewDataSource, NSTableViewDelegat
       cellIdentifier = CellIdentifiers.ValueCell
       isEditable = true
     }
-/*
-    if cellIdentifier == CellIdentifiers.OverrideCell {
+
+    if cellIdentifier == CellIdentifiers.EnabledCell {
       if let cell = tableView.makeView(withIdentifier:
-      NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil) as? NSButton {
+        NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil) as? NSButton {
        
-        if isSinglesMode {
-          if item.bestTrack == nil {
-            cell.title = "Find"
-          }
-          else {
-            cell.title = "Change"
-          }
-        }
-        else {
-          if item.bestAlbum == nil {
-            cell.title = "Find"
-          }
-          else {
-            cell.title = "Change"
-          }
-        }
         cell.tag = row
-      //  cell.textField?.font = NSFont(name: "Menlo", size: 11)
+        cell.state = item.isEnabled ? .on : .off
        
        return cell
       }
     }
-    else
- */
     
     if let cell = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil) as? NSTableCellView {
       
       cell.textField?.stringValue = text
       cell.textField?.isEditable = isEditable
+      
   //    cell.textField?.font = NSFont(name: "Menlo", size: 11)
       
       return cell

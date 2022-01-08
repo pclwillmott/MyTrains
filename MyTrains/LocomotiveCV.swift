@@ -139,6 +139,12 @@ public class LocomotiveCV : EditorObject {
     }
   }
   
+  public var nmraDescription : String {
+    get {
+      return NMRA.cvDescription(cv: cvNumber)
+    }
+  }
+  
   public var customNumberBase : CVNumberBase {
     get {
       return _customNumberBase
@@ -168,7 +174,7 @@ public class LocomotiveCV : EditorObject {
   // MARK: Public Methods
   
   override public func displayString() -> String {
-    return "CV\(_cvNumber)"
+    return customDescription == "" ? nmraDescription : customDescription
   }
 
   // MARK: Database Methods

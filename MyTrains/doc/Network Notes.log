@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.5.28)  6 JAN 2022 15:30
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.5.28)  8 JAN 2022 10:59
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -4739,107 +4739,107 @@ Overfull \hbox (41.70793pt too wide) in paragraph at lines 73--82
  []
 
 [113]
-Overfull \hbox (35.89651pt too wide) in paragraph at lines 100--109
+Overfull \hbox (35.89651pt too wide) in paragraph at lines 98--107
 [][] 
  []
 
 
-Overfull \hbox (35.89651pt too wide) in paragraph at lines 112--121
+Overfull \hbox (35.89651pt too wide) in paragraph at lines 110--119
 [][] 
  []
 
 
-Overfull \hbox (35.89651pt too wide) in paragraph at lines 124--133
+Overfull \hbox (35.89651pt too wide) in paragraph at lines 122--131
 [][] 
  []
 
 
-Overfull \hbox (35.89651pt too wide) in paragraph at lines 136--145
+Overfull \hbox (35.89651pt too wide) in paragraph at lines 134--143
 [][] 
  []
 
 
-Overfull \hbox (3.02245pt too wide) in paragraph at lines 152--152
+Overfull \hbox (3.02245pt too wide) in paragraph at lines 150--150
 []\OT1/cmr/m/n/10.95 d5| 
  []
 
 
-Overfull \hbox (3.02245pt too wide) in paragraph at lines 152--152
+Overfull \hbox (3.02245pt too wide) in paragraph at lines 150--150
 []\OT1/cmr/m/n/10.95 d4| 
  []
 
 
-Overfull \hbox (3.02245pt too wide) in paragraph at lines 152--152
+Overfull \hbox (3.02245pt too wide) in paragraph at lines 150--150
 []\OT1/cmr/m/n/10.95 d1| 
  []
 
 
-Overfull \hbox (3.02245pt too wide) in paragraph at lines 152--153
+Overfull \hbox (3.02245pt too wide) in paragraph at lines 150--151
 []\OT1/cmr/m/n/10.95 d0| 
  []
 
 
-Underfull \hbox (badness 6348) in paragraph at lines 155--156
+Underfull \hbox (badness 6348) in paragraph at lines 153--154
 []\OT1/cmr/m/n/10.95 Configuration Vari-able num-ber
  []
 
 
-Overfull \hbox (35.89651pt too wide) in paragraph at lines 148--157
+Overfull \hbox (35.89651pt too wide) in paragraph at lines 146--155
 [][] 
  []
 
 [114]
-Underfull \hbox (badness 6348) in paragraph at lines 174--175
+Underfull \hbox (badness 6348) in paragraph at lines 172--173
 []\OT1/cmr/m/n/10.95 Configuration Vari-able num-ber
  []
 
 
-Overfull \hbox (35.89651pt too wide) in paragraph at lines 167--176
+Overfull \hbox (35.89651pt too wide) in paragraph at lines 165--174
 [][] 
  []
 
 
-Overfull \hbox (35.89651pt too wide) in paragraph at lines 179--188
+Overfull \hbox (35.89651pt too wide) in paragraph at lines 177--186
 [][] 
  []
 
 
-Overfull \hbox (35.89651pt too wide) in paragraph at lines 191--200
+Overfull \hbox (35.89651pt too wide) in paragraph at lines 189--198
 [][] 
  []
 
 
-Overfull \hbox (35.89651pt too wide) in paragraph at lines 203--212
+Overfull \hbox (35.89651pt too wide) in paragraph at lines 201--210
 [][] 
  []
 
 
-Overfull \hbox (35.89651pt too wide) in paragraph at lines 215--224
+Overfull \hbox (35.89651pt too wide) in paragraph at lines 213--222
 [][] 
  []
 
 
-Overfull \hbox (35.89651pt too wide) in paragraph at lines 245--254
+Overfull \hbox (35.89651pt too wide) in paragraph at lines 243--252
 [][] 
  []
 
 
-Overfull \hbox (35.89651pt too wide) in paragraph at lines 257--266
+Overfull \hbox (35.89651pt too wide) in paragraph at lines 255--264
 [][] 
  []
 
 
-Overfull \hbox (35.89651pt too wide) in paragraph at lines 269--278
+Overfull \hbox (35.89651pt too wide) in paragraph at lines 267--276
 [][] 
  []
 
 
-Overfull \hbox (35.89651pt too wide) in paragraph at lines 281--290
+Overfull \hbox (35.89651pt too wide) in paragraph at lines 279--288
 [][] 
  []
 
 [115]
-Overfull \hbox (29.63216pt too wide) in paragraph at lines 307--308
+Overfull \hbox (29.63216pt too wide) in paragraph at lines 305--306
 [][] 
  []
 
@@ -7910,7 +7910,7 @@ ocal/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/loca
 l/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsl10.pfb></usr/local
 /texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/
 texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on "Network Notes.pdf" (201 pages, 425115 bytes).
+Output written on "Network Notes.pdf" (201 pages, 425003 bytes).
 PDF statistics:
  1441 PDF objects out of 1728 (max. 8388607)
  1215 compressed objects within 13 object streams

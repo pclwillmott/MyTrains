@@ -478,7 +478,7 @@
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="mMq-k6-sOa"/>
-                                        <menuItem title="Program Mobile Decoder Address" id="Hkv-Wv-hoh">
+                                        <menuItem title="Program Mobile Decoder" id="Hkv-Wv-hoh">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="mnuProgramMobileDecoderAddress:" target="Voe-Tx-rLC" id="Rwy-HD-Aae"/>

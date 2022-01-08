@@ -112,7 +112,7 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
     super.init(primaryKey: -1)
     decode(sqliteDataReader: reader)
     functions = LocomotiveFunction.functions(locomotive: self)
-    cvs = LocomotiveCV.cvs(locomotive: self)
+    _cvs = LocomotiveCV.cvs(locomotive: self)
   }
   
   init() {
@@ -124,7 +124,7 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
     }
     for cvNumber in 1...1024 {
       let cv = LocomotiveCV(cvNumber: cvNumber)
-      cvs.append(cv)
+      _cvs.append(cv)
     }
   }
   
@@ -203,11 +203,11 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
   
   private var nextDelegateId : Int = 0
   
+  private var _cvs : [LocomotiveCV] = []
+  
   // MARK: Public properties
   
   public var functions : [LocomotiveFunction] = []
-  
-  public var cvs : [LocomotiveCV] = []
   
   public var locomotiveName : String {
     get {
@@ -419,6 +419,12 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
     }
   }
   
+  public var cvs : [LocomotiveCV] {
+    get {
+      return _cvs
+    }
+  }
+  
   public var isInUse : Bool {
     get {
       return _isInUse
@@ -502,6 +508,12 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
     }
   }
   
+  public var decoderManufacturerName : String {
+    get {
+      return NMRA.manufacturerName(code: getCV(cvNumber: 8)!.cvValue)
+    }
+  }
+  
   // MARK: Private Methods
   
   @objc func timerAction() {
@@ -550,6 +562,13 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
   
   override public func displayString() -> String {
     return locomotiveName
+  }
+  
+  public func getCV(cvNumber: Int) -> LocomotiveCV? {
+    if cvNumber < 0 || cvNumber > 1024 {
+      return nil
+    }
+    return _cvs[cvNumber-1]
   }
   
   public func addDelegate(delegate:LocomotiveDelegate) -> Int {
@@ -770,7 +789,7 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
           locoFunc.locomotiveId = primaryKey
         }
         
-        for cv in cvs {
+        for cv in _cvs {
           cv.locomotiveId = primaryKey
         }
         
@@ -842,7 +861,7 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
       locoFunc.save()
     }
     
-    for cv in cvs {
+    for cv in _cvs {
       cv.save()
     }
 
