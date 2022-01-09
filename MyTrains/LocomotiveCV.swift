@@ -29,6 +29,11 @@ public class LocomotiveCV : EditorObject {
     _cvNumber = cvNumber
   }
   
+  init(primaryPageIndex: Int, secondaryPageNumber: Int, cvNumber: Int) {
+    super.init(primaryKey: -1)
+    _cvNumber = LocomotiveCV.indexedCvNumber(primaryPageIndex: primaryPageIndex, secondaryPageIndex: secondaryPageNumber, cvNumber: cvNumber)
+  }
+  
   // MARK: Destructors
   
   deinit {
@@ -103,6 +108,16 @@ public class LocomotiveCV : EditorObject {
     }
   }
   
+  public var displayCVNumber : String {
+    get {
+      if _cvNumber <= 1024 {
+        return "\(_cvNumber)"
+      }
+      let components = LocomotiveCV.cvNumberComponents(cvNumber: _cvNumber)
+      return "\(components.primaryPageIndex).\(components.secondaryPageIndex).\(components.cvNumber)"
+    }
+  }
+  
   public var cvValue : Int {
     get {
       return _cvValue
@@ -141,7 +156,8 @@ public class LocomotiveCV : EditorObject {
   
   public var nmraDescription : String {
     get {
-      return NMRA.cvDescription(cv: cvNumber)
+      let nmra = NMRA.cvDescription(cv: cvNumber)
+      return nmra == "" ? displayCVNumber : nmra
     }
   }
   
@@ -320,7 +336,7 @@ public class LocomotiveCV : EditorObject {
     }
   }
   
-  public static func cvs(locomotive: Locomotive) -> [LocomotiveCV] {
+  public static func cvs(locomotive: Locomotive) -> [Int:LocomotiveCV] {
     
     let conn = Database.getConnection()
       
@@ -334,13 +350,13 @@ public class LocomotiveCV : EditorObject {
        
     cmd.commandText = "SELECT \(columnNames) FROM [\(TABLE.LOCOMOTIVE_CV)] WHERE [\(LOCOMOTIVE_CV.LOCOMOTIVE_ID)] = \(locomotive.primaryKey) ORDER BY [\(LOCOMOTIVE_CV.CV_NUMBER)]"
 
-    var result : [LocomotiveCV] = []
+    var result : [Int:LocomotiveCV] = [:]
       
     if let reader = cmd.executeReader() {
            
       while reader.read() {
         let cv = LocomotiveCV(reader: reader)
-        result.append(cv)
+        result[cv.cvNumber] = cv
       }
            
       reader.close()
@@ -353,6 +369,17 @@ public class LocomotiveCV : EditorObject {
 
     return result
       
+  }
+  
+  public static func indexedCvNumber(primaryPageIndex:Int, secondaryPageIndex: Int, cvNumber: Int) -> Int {
+    return (primaryPageIndex+1) << 20 | (secondaryPageIndex+1) << 11 | cvNumber
+  }
+  
+  public static func cvNumberComponents(cvNumber: Int) -> (primaryPageIndex:Int, secondaryPageIndex: Int, cvNumber: Int) {
+    let number = cvNumber & 0b11111111111
+    let secondary = ((cvNumber >> 11) - 1) & 0xff
+    let primary = (cvNumber >> 20) - 1
+    return (primary, secondary, number)
   }
 
   public static func delete(primaryKey: Int) {

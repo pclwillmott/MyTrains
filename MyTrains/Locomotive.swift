@@ -122,9 +122,9 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
       locoFunc.delegate = self
       functions.append(locoFunc)
     }
-    for cvNumber in 1...1024 {
+    for cvNumber in 1...256 {
       let cv = LocomotiveCV(cvNumber: cvNumber)
-      _cvs.append(cv)
+      _cvs[cv.cvNumber] = cv
     }
   }
   
@@ -203,7 +203,7 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
   
   private var nextDelegateId : Int = 0
   
-  private var _cvs : [LocomotiveCV] = []
+  private var _cvs : [Int:LocomotiveCV] = [:]
   
   // MARK: Public properties
   
@@ -419,9 +419,25 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
     }
   }
   
-  public var cvs : [LocomotiveCV] {
+  public var cvs : [Int:LocomotiveCV] {
     get {
       return _cvs
+    }
+  }
+  
+  public var cvsSorted : [LocomotiveCV] {
+    get {
+      
+      var result : [LocomotiveCV] = []
+      
+      for cv in _cvs {
+        result.append(cv.value)
+      }
+      
+      return result.sorted {
+        $0.cvNumber < $1.cvNumber
+      }
+      
     }
   }
   
@@ -568,7 +584,18 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
     if cvNumber < 0 || cvNumber > 1024 {
       return nil
     }
-    return _cvs[cvNumber-1]
+    return _cvs[cvNumber]
+  }
+  
+  public func getCV(primaryPageIndex: Int, secondaryPageIndex: Int, cvNumber: Int) -> LocomotiveCV? {
+    let cv = LocomotiveCV.indexedCvNumber(primaryPageIndex: primaryPageIndex, secondaryPageIndex: secondaryPageIndex, cvNumber: cvNumber)
+    return _cvs[cv]
+  }
+  
+  public func updateCVS(cv: LocomotiveCV) {
+    cv.locomotiveId = self.primaryKey
+    _cvs[cv.cvNumber] = cv
+    cv.save()
   }
   
   public func addDelegate(delegate:LocomotiveDelegate) -> Int {
@@ -790,7 +817,7 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
         }
         
         for cv in _cvs {
-          cv.locomotiveId = primaryKey
+          cv.value.locomotiveId = primaryKey
         }
         
       }
@@ -862,7 +889,7 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
     }
     
     for cv in _cvs {
-      cv.save()
+      cv.value.save()
     }
 
   }

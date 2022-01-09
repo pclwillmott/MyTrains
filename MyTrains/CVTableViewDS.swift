@@ -47,7 +47,7 @@ public class CVTableViewDS : NSObject, NSTableViewDataSource, NSTableViewDelegat
     let item = cvs[row]
 
     if tableColumn == tableView.tableColumns[0] {
-      text = "\(item.cvNumber)"
+      text = "\(item.displayCVNumber)"
       cellIdentifier = CellIdentifiers.CVNumberCell
     }
     else if tableColumn == tableView.tableColumns[1] {
@@ -69,23 +69,31 @@ public class CVTableViewDS : NSObject, NSTableViewDataSource, NSTableViewDelegat
       cellIdentifier = CellIdentifiers.ValueCell
       isEditable = true
     }
-
+    
     if cellIdentifier == CellIdentifiers.EnabledCell {
       if let cell = tableView.makeView(withIdentifier:
-        NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil) as? NSButton {
+        NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil) as? NSTableCellView {
        
-        cell.tag = row
-        cell.state = item.isEnabled ? .on : .off
-       
+        if let button = cell.subviews[0] as? NSButton {
+          button.tag = row
+          button.state = item.isEnabled ? .on : .off
+        }
+
        return cell
       }
     }
     
     if let cell = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil) as? NSTableCellView {
       
-      cell.textField?.stringValue = text
-      cell.textField?.isEditable = isEditable
-      
+  //    cell.textField?.stringValue = text
+  //    cell.textField?.isEditable = isEditable
+
+      if let textField = cell.subviews[0] as? NSTextField {
+        textField.tag = row
+        textField.stringValue = text
+        textField.isEditable = isEditable
+      }
+
   //    cell.textField?.font = NSFont(name: "Menlo", size: 11)
       
       return cell

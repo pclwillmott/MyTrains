@@ -20,7 +20,7 @@ public class NMRA {
   // MARK: Public Class Properties
   
   public static func cvDescription(cv: Int) -> String {
-    return cvDescriptions[cv]?.description ?? "CV\(cv)"
+    return cvDescriptions[cv]?.description ?? ""
   }
   
   public static var cvDescriptions : [Int:String] {
