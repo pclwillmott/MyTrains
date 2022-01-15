@@ -367,238 +367,524 @@ unknown
 
 -----------------------
 
-\section{List of all supported CVs}
+\section{List of Common CVs}
 
-\begin{tabular}{p{0.1\linewidth} p{0.15\linewidth} p{0.5\linewidth} p{0.1\linewidth} p{0.1\linewidth}} 
-\underline{CV} & \underline{Name} &  \underline{Description} & \underline{Range} & \underline{Value}\\
-1 & Loco address & Address of engine (For Multiprotocol decoders: Range 1-255 for Motorola) & 1 - 127  & 3\\
-2 & Start voltage & Sets the minimum speed of the engine & 1 - 255  & 3\\
-3 & Acceleration & This value multiplied by 0.25 is the time from stop to maximum speed. For LokSound 5 DCC: The unit is 0.896 seconds & 0 - 255 & 28\\
-4 & Deceleration & This value multiplied by 0.25 is the time from maximum speed to stop. For LokSound 5 DCC: The unit is 0.896 seconds & 0 - 255 & 21\\
-5 & Maximum speed & Maximum speed of the engine & 0 - 255 & 255\\
-6 & Medium speed & Medium speed of the engine. Use only if 3-point speed table is enabled. For LokSound 5 DCC only.\\
-7 & Version number & Internal software version of decoder & - & -\\
-8 & Manufacturer‘s ID & Manufacturers‘s ID ESU - Writing value 8 in this CV triggers a reset to factory default values & 151 & -\\
-9 & Motor PWM Frequenz & Motor PWM frequency as a multiple of 1000 Hz. & 10 - 50 & 40\\
-13 & Analog Modus F1-F8 & Status of functions F1 to F8 in analogue mode (see chapter 12.7) & 0-255 & 1\\
-14 & Analog Modus FL, F9-F15 & Status of function F0, F9 to F12 in analogue mode (see chapter 12.7) & 0-63 & 1\\
-15 \& 16 & Decoder Lock & Decoder-Lock Function according to NMRA. For details please see: http://www.nmra.org/standards/DCC/WGpublic/0305051/0305051.html & 0 - 255 & 0\\
-17 \& 18 & Long address of the loco & Long address of engine (see chapter 9.2) & 128 - 9999 & 192\\
-19 & Consist Address & Additional address for consist operation. Value 0 or 128 means: consist address is disabled. 1 – 127 consist address active, normal direction. 129 – 255 consist address active reverse direction. & 0-255 & 0\\
-21 & Consist Mode F1-F8 & Status of functions F1 to F8 in Consist mode. Meaning of the bits as in CV 13 & 0-255 & 0\\
-22 & Consist Mode FL, F9-F12 & Status of functions FL, F9 to F12 in Consist mode. Meaning of the bits as in CV 14. & 0-63 & 0\\
-23 & Adjust Acceleration & Factor for adjusting Acceleration CV 3. Values from 0 to 127 are added to CV 3. If the values are to be subtracted, additionally set bit 7 (value 128). The unit is 0.896 seconds. & 0 - 127 & 0\\
+The NMRA Standard ``Configuration Variables For Digital Command Control" provides descriptions for Digital Decoder Configuration Variables (CVs). CVs allow the decoder to be customized for each locomotive, or other mobile or stationary devices. Unless otherwise specified, configuration Variables shall be stored in non-volatile memory and must not change when power is removed from the decoder over long extended periods of time. CVs defined by the NMRA are marked below as Mandatory, Recommended or Optional. CVs identified as Mandatory must be implemented in order to conform to the Standard, while those marked as Recommended are strongly encouraged but not mandatory, and those marked Optional are at the manufacturer’s discretion. CVs marked as Read-Only indicates a CV whose value should be set by the manufacturer and which the user cannot modify. Many CVs are implementation specific and no uniform specification is required. Others must be implemented in a uniform fashion in order to achieve compatibility. A CV marked as Uniform Spec indicates a CV which requires implementation by manufacturers according to a common specification. CVs marked as Dynamic are used for Unsolicited Decoder Initiated Transmission. 
+
+\scriptsize
+
+\begin{tabular}{p{0.075\linewidth} p{0.15\linewidth} p{0.525\linewidth} p{0.06\linewidth} p{0.05\linewidth}} 
+\underline{CV} & \underline{Name} &  \underline{Description} & \underline{Range} & \underline{Default}\\
+\\
+1 & Primary Address & NMRA: Mandatory, Uniform Spec. & 1 - 127  & 3\\
+\\
+& & Bits 0-6 contain an address with a value between 1 and 127. Bit seven must have a value of 0. If the value of CV1 is 0 then the decoder will go out of NMRA digital mode and convert to the alternate power source as defined by CV12. This setting will not affect the Digital Decoder's ability to respond to service mode packets. The default value for this CV is 3, if the decoder is not installed in a locomotive or other unit when shipped from the manufacturer.\\
+\\
+& & ESU:\\
+\\
+& & For Multiprotocol decoders: Range 1-255 for Motorola. \\
+\\
+2 & Vstart & NMRA: Required  & 0 - 255  &\\
+\\
+& & Vstart is used to define the voltage drive level used as the start voltage on the motor. The voltage drive levels shall correspond linearly to the voltage applied to the motor at speed step one, as a fraction of available rectified supply voltage. When the voltage drive level is equal to zero, there shall be zero voltage applied to the motor. When it is at maximum, 255, the full available rectified voltage shall be applied.\\
+\\
+3 & Acceleration Rate & NMRA: Required & 0 - 255\\
+& & Determines the decoder's acceleration rate. The formula for the acceleration rate shall be equal to (the contents of CV3 $\times$ 0.896) / (number of speed steps in use). For example, if the contents of CV3 equals 2, then the acceleration is 0.064 sec/step for a decoder currently using 28 speed steps. If the content of this parameter equals 0 then there is no programmed momentum during acceleration.\\
+\\
+& & ESU:\\
+\\
+& & This value multiplied by 0.25 is the time from stop to maximum speed. For LokSound 5 DCC the unit is 0.896 seconds & & \\
+\\
+4 & Deceleration Rate & NMRA: Required & 0 - 255 & \\
+& & Determines a decoders braking rate, in the same fashion as CV3.\\
+\\
+& & ESU:\\
+\\
+& & This value multiplied by 0.25 is the time from maximum speed to stop. For LokSound 5 DCC: The unit is 0.896 seconds.  & &\\
+\\
+5 & Vhigh & NMRA: Optional & 0 - 255 & \\
+\\
+& & Vhigh is used to specify the motor voltage drive levels at the maximum speed step. This value shall be specified as a fraction of available rectified supply voltage. When the contents of CV5 equals 255, the full available rectified voltage shall be applied. Values of 0 or 1 shall indicate that Vhigh is not used in the calculation of the speed table.\\
+
 \end{tabular}
-\begin{tabular}{p{0.1\linewidth} p{0.15\linewidth} p{0.5\linewidth} p{0.1\linewidth} p{0.1\linewidth}} 
-\underline{CV} & \underline{Name} &  \underline{Description} & \underline{Range} & \underline{Value}\\
-24 & Adjust Deceleration & Factor for adjusting the deceleration CV 4. Values from 0 to 127 are added to CV 3. If the values are to be subtracted, additionally set bit 7 (value 128). The unit is 0.896 seconds. & 0 - 127 & 0\\
-27 & Brake mode & Allowed (enabled) Brake modes 28 & \\
-& \begin{tabular}{ l l l }
-Bit & Function & Value\\
-0 & ABC braking, voltage higher on the right hand side & 1\\
-1 & ABC braking, voltage higher on the left hand side  & 2\\
-2 & ZIMO® HLU brakes active & 4\\
-3 & Brake on DC, if polarity against driving direction & 8\\
-4 & Brake on DC, if polarity like driving direction & 16\\
-5 & Selectrix brake diode, brakes if polarity is against driving direction & 32\\
-6 & Selectrix brake diode, rakes if polarity is like driving direction & 64\\
-7 & Loco brakes with constant brake distance if Speed=0 & 128\\
+\newpage
+\begin{tabular}{p{0.075\linewidth} p{0.15\linewidth} p{0.525\linewidth} p{0.06\linewidth} p{0.05\linewidth}} 
+\underline{CV} & \underline{Name} &  \underline{Description} & \underline{Range} & \underline{Default}\\
+\\
+6 & VMid & NMRA: Optional & \\
+\\
+& & Vmid specifies the voltage drive level at the middle speed step. Vmid is used to generate a performance curve in the decoder that translate speed step values into motor voltage drive levels and is specified as a fraction of available rectified supply voltage. Values of 0 or 1 shall indicate that Vmid is not used in the calculation of the speed table.\\
+\\
+& & ESU:\\
+\\
+& & Medium speed of the engine. Use only if 3-point speed table is enabled. For LokSound 5 DCC only.\\
+\\
+7 & Manufacturer Version Number & NMRA: Mandatory, Read-Only\\
+& & This is reserved for the manufacturer to store information regarding the version of the decoder.\\
+\\
+& & ESU: Internal software version of decoder & - & -\\
+\\
+8 & Manufacturer ID & NMRA: Mandatory, Read-Only, Uniform Spec.\\
+\\
+& & CV8 shall contain the NMRA assigned id number of the manufacturer of this decoder.\\
+\\
+& & ESU: Writing value 8 in this CV triggers a reset to factory default values & 151 & -\\
+\\
+9 & Total PWM Period & NMRA: Optional\\
+& & The value of CV9 sets the nominal PWM period at the decoder output and therefore the frequency is proportional to the reciprocal of the value. The recommend formula for PWM period should be: PWM period (uS) = (131 + MANTISSA $\times$ 4) $\times$ 2 EXP ,Where MANTISSA is in bits 0-4 bits of CV9 (low order) and EXP is bits 5-7 for CV9. If the value programmed into CV9 falls outside a decoder's capability, it is suggested (but not required) that the decoder ``adjust" the value to the appropriate highest or lowest setting supported by the decoder.\\
+\\
+& & ESU: Motor PWM frequency as a multiple of 1000 Hz. & 10 - 50 & 40\\
+\\
+10 & EMF Feedback Cutout & NMRA: Optional\\
+& & Contains a value between 1 and 128 that indicates the speed step above which the back EMF motor control cuts off. When 14 or 28 speed steps are used the LSB's of the value are truncated appropriately.\\
+\\
+11 & Packet time-out Value & NMRA: Required\\
+& & Contains the maximum time period that the decoder will maintain its speed without receiving a valid packet.\\
+\\
+12 & Power Source Conversion & NMRA: Optional, Uniform Spec.\\
+& & Contains the identity of the alternate power source to which the decoder will be converted should CV1 contain zero. This is also the primary alternative power source selected should the decoder perform power source conversion. The currently assigned Power Source Conversion codes areas follows:\\
+\\
+& & \begin{tabular}{p{0.16\linewidth} p{0.5\linewidth}} 
+0b00000001 & Analog Power Conversion \\
+0b00000010 & Radio\\
+0b00000100 & Zero-1\\
+0b00001000 & TRIX\\
+0b00010000 & CTC 16 / Railcommand \\
+0b00100000 & FMZ (Fleischmann)\\
 \end{tabular}\\
-& - & 28\\
-28 & RailCom® Configuration & Settings for RailCom® & 131\\ 
-& \begin{tabular}{l l l}
-Bit & Function & Value\\
-0 & Channel 1 Address broadcast enabled & 1\\
-1 & Data transmission allowed on Channel & 2\\
-7 & RailCom® Plus automatic loco recognition active & 128\\
+
+\end{tabular}
+\newpage
+\begin{tabular}{p{0.075\linewidth} p{0.15\linewidth} p{0.525\linewidth} p{0.06\linewidth} p{0.05\linewidth}} 
+\underline{CV} & \underline{Name} &  \underline{Description} & \underline{Range} & \underline{Default}\\
+\\
+13 & Alternate Mode Function Status & NMRA: Optional, Uniform Spec.\\
+& & Indicates the status of each function (F1 through F8) when the unit is operating in alternate power mode, which cannot control the functions. If a function can be controlled, then the corresponding bit is ignored. A value of 0 indicates the function is off, while a value of 1 indicates the function is on. Bit 0 corresponds to F1, while Bit 7 corresponds to F8.\\
+\\
+& & ESU: Status of functions F1 to F8 in analogue mode & 0-255 & 1\\
+\\
+14 & Alternate Mode Function 2 Status & NMRA: Optional, Uniform Spec.\\
+& & Indicates the status of each function (F9 through F12, \& FL) when the unit is operating in alternate power mode, which cannot control the functions. If a function can be controlled, then the corresponding bit is ignored. A value of 0 indicates the function is off, while a value of 1 indicates the function is on. FL in the forward direction is controlled by bit 0, FL in the reverse direction is controlled by bit 1. Bit 2 corresponds to F9, while Bit 5 corresponds to F12.\\
+\\
+& & ESU: Status of function F0, F9 to F12 in analogue mode & 0-63 & 1\\
+\\
+15 \& 16 & Decoder Lock & NMRA: Optional, Uniform Spec.\\
+\\
+& & The Decoder Lock is used to change CVs in only one of several decoders with the same short address (CV1) or long address (CV17 and CV18) that are installed in the same locomotive. Assign a number to CV16 in each decoder (i.e. 1 to motor decoder, 2 to sound decoder, 3 or higher to other decoders) before the decoders are installed in the locomotive. To change a value in another CV of one of the installed decoders, first write the number 1 (motor), 2 (sound), or 3 or higher (other) into CV15, then send the new value to the CV to be changed. The decoders will compare CV15 to CV16 and, if the values are equal, the CV to be changed will be changed. If the values in CV15 and CV16 are different, the update will be ignored.\\
+\\
+17 \& 18 & Extended Address & NMRA: Optional, Uniform Spec.\\
+& & The Extended Address is the locomotives address when the decoder is set up for extended addressing (indicated by a value of 1 in bit  5 of CV29). CV17 contains the most significant bits of the two byte address and must have a value between 0b11000000 and 0b11100111, inclusive, in order for this two byte address to be valid. CV18 contains the least significant bits of the address and may contain any value.\\
+\\
+19 & Consist Address & NMRA: Optional, Uniform Spec.\\
+\\
+& & Contains a seven bit address in bit positions 0-6. Bit 7 indicates the relative direction of this unit within a consist, with a value of 0 indicating normal direction, and a value of 1 indicating a direction opposite the unit's normal direction. If the seven bit address in bits 0-6 is 0b0000000 the unit is not in a consist.\\
+\\
+& & ESU: Additional address for consist operation. Value 0 or 128 means: consist address is disabled. 1 – 127 consist address active, normal direction. 129 – 255 consist address active reverse direction. & 0-255 & 0\\
+\end{tabular}
+\newpage
+\begin{tabular}{p{0.075\linewidth} p{0.15\linewidth} p{0.525\linewidth} p{0.06\linewidth} p{0.05\linewidth}} 
+\underline{CV} & \underline{Name} &  \underline{Description} & \underline{Range} & \underline{Default}\\
+\\
+21 & Consist Address Active for F1-F8 & NMRA: Optional, Uniform Spec.\\
+& & Defines for functions F1-F8 whether the function is controlled by the consist address. For each Bit a value of 1 indicates that the function will respond to instructions addressed to the consist address. A value of 0 indicates that the function will only respond to instructions addressed to the locomotive address. F1 is indicated by bit 0. F8 by bit 7.\\
+\\
+& & ESU: Status of functions F1 to F8 in Consist mode. Meaning of the bits as in CV13 & 0-255 & 0\\
+\\
+22 & Consist Address Active for FL and F9-F12 & NMRA: Optional, Uniform Spec.\\
+& & Defines for function FL whether the function is controlled by the consist address. For each Bit a value of 1 indicates that the function will respond to instructions addressed to the consist address. A value of 0 indicates that the function will only respond to instructions addressed to the locomotive address. FL in the forward direction is indicated by bit 0, FL in the reverse direction is controlled by bit 1. Bit 2 corresponds to F9, while Bit 5 corresponds to F12.\\
+\\
+& & ESU: Status of functions FL, F9 to F12 in Consist mode. Meaning of the bits as in CV14. & 0-63 & 0\\
+\\
+23 & Acceleration Adjustment & NMRA: Optional, Uniform Spec.\\
+& & This Configuration Variable contains additional acceleration rate information that is to be added to or subtracted from the base value contained in CV3 using the formula (the contents of CV23 $\times$ .896) / (number of speed steps in use). This is a 7 bit value (bits 0-6) with bit 7 being reserved for a sign bit (0-add, 1-subtract). In case of overflow the maximum acceleration rate shall be used. In case of underflow no acceleration shall be used. The expected use is for changing momentum to simulate differing train lengths/loads, most often when operating in a consist.\\
+\\
+& & ESU: Factor for adjusting Acceleration CV3. Values from 0 to 127 are added to CV3. If the values are to be subtracted, additionally set bit 7 (value 128). The unit is 0.896 seconds. & 0 - 127 & 0\\
+\\
+24 & Deceleration Adjustment & NMRA: Optional, Uniform Spec.\\
+& & This Configuration Variable contains additional braking rate information that is to be added to or subtracted from the base value contained in CV4 using the formula (the contents of CV24 $\times$.896) / (number of speed steps in use). This is a 7 bit value (bits 0-6) with bit 7 being reserved for a sign bit (0-add,1-subtract). In case of overflow the maximum deceleration rate shall be used. In case of underflow no deceleration shall be used. The expected use is for changing momentum to simulate differing train lengths/loads, most often when operating in a consist.\\
+\\
+& & ESU: Factor for adjusting the deceleration CV4. Values from 0 to 127 are added to CV3. If the values are to be subtracted, additionally set bit 7 (value 128). The unit is 0.896 seconds. & 0 - 127 & 0\\
+\end{tabular}
+\newpage
+\begin{tabular}{p{0.075\linewidth} p{0.15\linewidth} p{0.525\linewidth} p{0.06\linewidth} p{0.05\linewidth}} 
+\underline{CV} & \underline{Name} &  \underline{Description} & \underline{Range} & \underline{Default}\\
+\\
+25 & Speed Table/Mid Range Cab Speed Step & NMRA: Optional, Uniform Spec.\\
+& & A value between 2 and 127 shall be used to indicate 1 of 126 factory preset speed tables. A value of 0b00000010 indicates that the curve shall be linear. A value between 128 and 154 defines the 28-speed step position (1-26) which will define where the mid range decoder speed value will be applied. In 14-speed mode the decoder will utilize this value divided by two If the value in this variable is outside the range, the default mid cab speed of 14 (for 28 speed mode or 7 for 14 speed mode) shall be used as the mid speed value. Values of 0 or 1 shall indicate that this CV is not used in the calculation of the speed table.\\
+\\
+27 & Decoder Automatic Stopping Configuration & NMRA: Optional, Uniform Spec.\\
+& & Used to configure which actions will cause the decoder to automatically stop.\\
+\\
+& & \begin{tabular}{p{0.05\linewidth}p{0.87\linewidth}} 
+\underline{Bit} & \underline{Function} \\
+\\
+d7 & Reserved \\
+\\
+d6 & Reserved \\
+\\
+d5 & Enable/Disable Auto Stop in the presence forward polarity DC. 0 = Disabled 1 = Enabled \\
+\\
+d4 & Enable/Disable Auto Stop in the presence of reverse polarity DC. 0 = Disabled 1 = Enabled \\
+\\
+d3 & Reserved \\
+\\
+d2 & Enable/Disable Auto Stop in the presence of an Signal Controlled Influence cutout signal. 0 = Disabled 1 = Enabled \\
+\\
+d1 & Enable/Disable Auto Stop in the presence of an asymmetrical DCC signal which is more positive on the left rail. 0 = Disabled 1 = Enabled \\
+\\
+d0 & Enable/Disable Auto Stop in the presence of an asymmetrical DCC signal which is more positive on the right rail. 0 = Disabled 1 = Enabled \\
+\end{tabular}\\
+\end{tabular}
+\newpage
+\begin{tabular}{p{0.075\linewidth} p{0.15\linewidth} p{0.525\linewidth} p{0.06\linewidth} p{0.05\linewidth}} 
+\underline{CV} & \underline{Name} &  \underline{Description} & \underline{Range} & \underline{Default}\\
+\\
+& & ESU: Allowed (enabled) Brake modes & \\
+\\
+& & \begin{tabular}{p{0.05\linewidth}p{0.87\linewidth}} 
+\underline{Bit} & \underline{Function} \\
+d7 & Loco brakes with constant brake distance if Speed=0 \\
+\\
+d6 & Selectrix brake diode, rakes if polarity is like driving direction\\
+\\
+d5 & Selectrix brake diode, brakes if polarity is against driving direction\\
+\\
+d4 & Brake on DC, if polarity like driving direction\\
+\\
+d3 & Brake on DC, if polarity against driving direction\\
+\\
+d2 & ZIMO® HLU brakes active \\
+\\
+d1 & ABC braking, voltage higher on the left hand side \\
+\\
+d0 & ABC braking, voltage higher on the right hand side \\
+\end{tabular}\\
+\\
+28 & Bi-Directional Communication Configuration & NMRA: Optional, Uniform Spec.\\
+& & Used to configure decoder’s Bi-Directional communication characteristics when CV29-Bit 3 is set\\
+\\
+& & \begin{tabular}{p{0.05\linewidth}p{0.87\linewidth}} 
+\underline{Bit} & \underline{Function} \\
+\\
+d7 & Reserved\\
+\\
+d6 & Reserved\\
+\\
+d5 & Reserved\\
+\\
+d4 & Reserved\\
+\\
+d3 & Reserved\\
+\\
+d2 & Enable/Disable Initiated Broadcast Transmission using Signal Controlled Influence Signal. 0 = Disabled 1 = Enabled\\
+\\
+d1 & Enable/Disable Initiated Broadcast Transmission using Asymmetrical DCC Signal. 0 = Disabled 1 = Enabled\\
+\\
+d0 & Enable/Disable Unsolicited Decoder Initiated Transmission. 0 = Disabled 1 = Enabled\\
+\end{tabular}\\
+\\
+& & ESU: RailCom® Configuration & 131\\ 
+\\
+& & \begin{tabular}{p{0.05\linewidth}p{0.87\linewidth}} 
+\underline{Bit} & \underline{Function} \\
+\\
+d7 & Enable/Disable RailCom® Plus automatic loco recognition. 0 = Disabled 1 = Enabled\\
+\\
+d1 & Enable/Disable Data transmission on Channel. 0 = Disabled 1 = Enabled\\
+\\
+d0 & Enable/Disable Channel 1 Address broadcast. 0 = Disabled 1 = Enabled\\
 \end{tabular} \\
-29 & Configuration register & This register contains important information, some of which are only relevant for DCC operation. \\
 
-& \begin{tabular}{l l l}
-Bit & Function & Value\\
-0 & Normal direction of travel & 0\\
-& Reversed direction of travel & 1\\
-1 & 14 speed steps DCC & 0\\
-& 28 or 128 speed steps DCC & 2\\
-2 & Disable analog operation & 0\\
-& Enable analog operation & 4\\
-3 & Disable RailCom® & 0\\
-& Enable RailCom® & 8\\
-4 & Speed curve through CV 2, 5, 6 (LokSound 5 DCC ONLY). & 0\\
-& Speed curve through CV 67 - 94 (Multiprotocol) & 16\\
-5 & Short addresses (CV 1) in DCC mode & 0\\
-& Long addresses (CV 17 + 18) in DCC mode & 32\\
+\end{tabular}
+\newpage
+\begin{tabular}{p{0.075\linewidth} p{0.15\linewidth} p{0.525\linewidth} p{0.06\linewidth} p{0.05\linewidth}} 
+\underline{CV} & \underline{Name} &  \underline{Description} & \underline{Range} & \underline{Default}\\
+\\
+29 & Configurations Supported & NMRA: Mandatory, Uniform Spec.\\
+& & \begin{tabular}{p{0.05\linewidth}p{0.87\linewidth}} 
+\underline{Bit} & \underline{Function} \\
+\\
+d7 & Accessory Decoder: 0 = Multifunction Decoder, 1 = Accessory Decoder (see CV541 for a description of assignments for bits 0-6)\\
+\\
+d6 & Reserved\\
+\\
+d5 & 0 = one byte addressing, 1 = two byte addressing (also known as extended addressing),\\
+\\
+d4 & Speed Table: 0 = speed table set by CV2, CV5, and CV6, 1 = Speed Table set by CV66 to CV95\\
+\\
+d3 & Bi-Directional Communications: 0 = Bi-Directional Communications disabled, 1 = Bi-Directional Communications enabled. \\
+\\
+d2 & Power Source Conversion: 0 = NMRA Digital Only, 1 = Power Source Conversion Enabled, See CV12 for more information.\\
+\\
+d1 & FL location: 0 = bit 4 in Speed and Direction instructions control FL, 1 = bit 4 in function group one instruction controls FL.\\
+\\
+d0 & Locomotive Direction: 0 = normal, 1 = reversed. This bit controls the locomotive's forward and backward direction in digital mode only. Directional sensitive functions, such as headlights (FL and FR), will also be reversed so that they line up with the locomotive’s new forward direction.\\
+\end{tabular}\\
+\\
+&& ESU: This register contains important information, some of which are only relevant for DCC operation. \\
+\\
+& & \begin{tabular}{p{0.05\linewidth}p{0.87\linewidth}} 
+\underline{Bit} & \underline{Function} \\
+\\
+d5 & 0 = Short addresses (CV 1) in DCC mode\\
+& 1 = Long addresses (CV 17 + 18) in DCC mode\\
+\\
+d4 & 0 = Speed curve through CV 2, 5, 6 (LokSound 5 DCC ONLY).\\
+& 1 = Speed curve through CV 67 - 94 (Multiprotocol)\\
+\\
+d3 & 0 = Disable RailCom®\\
+& 1 = Enable RailCom® \\
+\\
+d2 & 0 = Disable analog operation \\
+& 1 = Enable analog operation\\
+\\
+d1 & 0 = 14 speed steps DCC\\
+& 1 = 28 or 128 speed steps DCC \\
+\\
+d0 & 0 = Normal direction of travel\\
+& 1 = Reversed direction of travel\\
 \end{tabular} & 12\\
-
+\\
+30 & Error Information & NMRA: Optional, Uniform Spec.\\
+& & In the case where the decoder has an error condition this Configuration Variable shall contain the error condition as specified by the manufacturer. A value of 0 indicates that no error has occurred.\\
 \end{tabular}
-\begin{tabular}{p{0.1\linewidth} p{0.15\linewidth} p{0.5\linewidth} p{0.1\linewidth} p{0.1\linewidth}} 
-\underline{CV} & \underline{Name} &  \underline{Description} & \underline{Range} & \underline{Value}\\
-
-31 & Index Register H & Selection page for CV257-512. For LokSound 5 usually set to 16 & 16 & 16\\
-32 & Index Register L & Selection page for CV257-512 & 0 - 16 & 0\\
-47 & Protocol selection & Which protocols are active. Please see chapter 9.5. & 0 - 255 & 13\\
-& & \begin{tabular}{l l l}
-Bit & Function & Value\\
-0 & DCC protocol active & 1\\
-1 & M4 protocol active (Not for LokSound 5 DCC) & 2\\
-2 & Motorola® protocol active (Not for LokSound 5 DCC) & 4\\
-3 & Selectrix® protocol active (Not for LokSound 5 DCC) & 8\\
+\newpage
+\begin{tabular}{p{0.075\linewidth} p{0.15\linewidth} p{0.525\linewidth} p{0.06\linewidth} p{0.05\linewidth}} 
+\underline{CV} & \underline{Name} &  \underline{Description} & \underline{Range} & \underline{Default}\\
+\\
+31 & Index High Byte & NMRA: Optional, Uniform Spec.\\
+\\
+& & The Indexed Address is the address of the indexed CV page when the decoder is set up for indexed CV operation. CV31 contains the most significant bits of the two byte address and may have any value between 0b00010000 and 0b11111111 inclusive. Values of 0b00000000 thru 0b00001111 are reserved by the NMRA for future use. (4096 indexed pages) CV32 contains the least significant bits of the index address and may contain any value. This gives a total of 61,440 indexed pages, each with 256 bytes of CV data available to manufacturers.\\
+\\
+32 & Index Low Byte & NMRA: Optional, Uniform Spec.\\
+\\
+& & See CV31\\
+\\
+33-46 & Output Locations 1-14 for Functions FL(f), FL(r), and F1-F12 & NMRA: Optional. Uniform Spec.\\
+& & Contains a matrix indication of which function inputs control which Digital Decoder outputs. This allows the user to customize which outputs are controlled by which input commands. The outputs that Function FL(f) controls are indicated in CV33, FL (r) in CV34, F1 in CV35, to F12 in CV46. A value of 1 in each bit location indicates that the function controls that output. This allows a single function to control multiple outputs, or the same output to be controlled by multiple functions. CVs 33-37 control outputs 1-8. CVs 38-42 control outputs 4-11 CVs 43-46 control outputs 7-14. The defaults is that FL (f) controls output 1, FL (r) controls output 2, F1 controls output 3 to F12 controls output 14. The lowest numbered output is in the LSB of the CV.\\
+\\
+47-64 & Manufacturer Unique\\
+\\
+47 & Protocol selection & ESU: Which protocols are active.& 0 - 255 & 13\\
+\\
+& & \begin{tabular}{p{0.05\linewidth}p{0.87\linewidth}} 
+\underline{Bit} & \underline{Function} \\
+\\
+d3 & Enable/Disable Selectrix® protocol (Not for LokSound 5 DCC). 0 = Disabled 1 = Enabled\\
+\\
+d2 & Enable/Disable Motorola® protocol (Not for LokSound 5 DCC). 0 = Disabled 1 = Enabled\\
+\\
+d1 & Enable/Disable M4 protocol (Not for LokSound 5 DCC). 0 = Disabled 1 = Enabled\\
+\\
+d0 & Enable/Disable DCC protocol. 0 = Disabled 1 = Enabled\\
 \end{tabular}\\
-
-49 & Extended Configuration \#1 & & 0-255 & 19\\
-
-&& \begin{tabular}{l l l}
-Bit & Function & Value\\
-0 & Disable Load control (Back-EMF) & 0\\
-& Enable Load control (Back-EMF) & 1\\
-1 & Reserved & 2\\
-2 & Reserved & 4\\
-3 & Märklin® Consecutive addresses, ``low"-Bit & 0, 8\\
-4 & Automatic DCC speed step detection \\
-& Disable DCC speed step detection & 0\\
-& Enable DCC speed step detection & 16\\
-5 & LGB® function button mode\\
-& Disable LGB® function button mode & 0\\
-& Enable LGB® function button mode & 32\\
-6 & Reserved & 64\\
-7 & Märklin® Consecutive addresses, ``High"-Bit. Please consider chapter 9.3.1. for explanation of Bit 3, 7 & 0, 128\\
-\end{tabular}\\
-
-50 & Analogue mode Selection of allowed analogue modes & 0 - 3 & 3\\
-& \begin{tabular}{l l l}
-Bit & Function & Value\\
-0 & AC Analogue Mode\\
-& Disable AC Analog Mode & 0\\
-& Enable AC Analog Mode & 1\\
-1 & DC Analogue mode\\
-& Disable DC Analogue mode & 0\\
-& Enable DC Analogue Mode & 2\\
-2 & QSI Quantum Engineer DC Support \\
-& Disable QSI Quantum Engineer Support & 0\\
-& Enable QSI Quantum Engineer Support & 4\\
-\end{tabular}\\
-
+\\
 \end{tabular}
-\begin{tabular}{p{0.1\linewidth} p{0.15\linewidth} p{0.5\linewidth} p{0.1\linewidth} p{0.1\linewidth}} 
-\underline{CV} & \underline{Name} &  \underline{Description} & \underline{Range} & \underline{Value}\\
-
+\newpage
+\begin{tabular}{p{0.075\linewidth} p{0.15\linewidth} p{0.525\linewidth} p{0.06\linewidth} p{0.05\linewidth}} 
+\underline{CV} & \underline{Name} &  \underline{Description} & \underline{Range} & \underline{Default}\\
+\\
+49 & Extended Configuration \#1 & ESU: & 0-255 & 19\\
+& & \begin{tabular}{p{0.05\linewidth}p{0.87\linewidth}} 
+\underline{Bit} & \underline{Function} \\
+\\
+d7 & Märklin® Consecutive addresses, ``High"-Bit.\\
+\\
+d6 & Reserved\\
+\\
+d5 & Enable/Disable LGB® function button mode. 0 = Disabled 1 = Enabled\\
+\\
+d4 & Enable/Disable Automatic DCC speed step detection. 0 = Disabled 1 = Enabled \\
+\\
+d3 & Märklin® Consecutive addresses, ``low"-Bit\\
+\\
+d2 & Reserved\\
+\\
+d1 & Reserved\\
+\\
+d0 & Enable/Disable Load control (Back-EMF). 0 = Disabled 1 = Enabled\\
+\end{tabular}\\
+\\
+50 & Analogue mode & Selection of allowed analogue modes & 0 - 3 & 3\\
+\\
+& & \begin{tabular}{p{0.05\linewidth}p{0.87\linewidth}} 
+\underline{Bit} & \underline{Function} \\
+\\
+d2 & Enable/Disable QSI Quantum Engineer DC Support. 0 = Disabled 1 = Enabled\\
+\\
+d1 & Enable/Disable DC Analogue mode. 0 = Disabled 1 = Enabled\\
+\\
+d0 & Enable/Disable AC Analogue Mode. 0 = Disabled 1 = Enabled\\
+\end{tabular}\\
+\\
 51 & K Slow Cutoff & Inernal Speedstep, until K Slow is active & 0 - 255 & 10\\
+\\
 52 & BEMF Param. K Slow ``K" -& Portion of the PI-Controller valid for lower speed steps & 0 - 255 & 10\\
+\\
 53 & Control Reference voltage & Defines the Back EMF voltage, which the motor should generate at maximum speed. The higher the efficiency of the motor, the higher this value may be set. If the engine does not reach maximum speed, reduce this parameter & 0 - 255 & 130\\
+\\
 54 & Load control Parameter K & K–component of the internal PI-controller. Defines the effect of load control. The higher the value, the stronger the effect of Back EMF control. & 0 - 255 & 50\\
+\\
 55 & Load control Parameter I  & I–component of the internal PI-controller. Defines the momentum (inertia) of the motor. The higher the momentum of the motor (large flywheel or bigger motor), the lower this value has to be set. & 0 - 255 & 100\\
+\\
 56 & BEMF Influence at VMin & 0-100\%. Defines the ``Strengh" of the BEMF at minimum speed step & 1 - 255 & 255\\
-57 & Steam chuff synchronisation \#1 & Defines the steam chuff synchronisation. See chapter 13.3. & 1 - 255 & 30\\
-58 & Steam chuff synchronisation \#2 & Defines the steam chuff synchronisation. See chapter 13.3. & 1 - 255 & 20\\
+\\
+57 & Steam chuff synchronisation \#1 & Defines the steam chuff synchronisation. & 1 - 255 & 30\\
+\\
+58 & Steam chuff synchronisation \#2 & Defines the steam chuff synchronisation. & 1 - 255 & 20\\
+\\
 63 & Sound volume ``Master" & Master volume for all sounds. & 0 - 192 & 128\\
-64 & Brake sound threshold ``Brake On" & If the actual loco speed step is smaller than or equals the value indicated here, the brake sound is triggered. Compare chapter 13.4. & 0 - 255 & 60\\
+\\
+64 & Brake sound threshold ``Brake On" & If the actual loco speed step is smaller than or equals the value indicated here, the brake sound is triggered. & 0 - 255 & 60\\
+\\
 \end{tabular}
-\begin{tabular}{p{0.1\linewidth} p{0.15\linewidth} p{0.5\linewidth} p{0.1\linewidth} p{0.1\linewidth}} 
-\underline{CV} & \underline{Name} &  \underline{Description} & \underline{Range} & \underline{Value}\\
-
-
+\newpage
+\begin{tabular}{p{0.075\linewidth} p{0.15\linewidth} p{0.525\linewidth} p{0.06\linewidth} p{0.05\linewidth}} 
+\underline{CV} & \underline{Name} &  \underline{Description} & \underline{Range} & \underline{Default}\\
+\\
 65 & Brake sound threshold ``Brake Off" & If the actual loco speed step is smaller than the one indicated here (up to 255), the brake sound will be switched off again. Compare chapter 13.4. & 0 - 255 & 7\\
+\\
 66 & Forward Trimm & Divided by 128 is the factor used to multiply the motor voltage when driving forward. The value 0 deactivates the trim. & 0 - 255 & 128\\
+\\
 67-94 & Speed table & Defines motor voltage for speed steps. The values ``in between" will be interpolated. & 0 - 255 & -\\
+\\
 95 & Reverse Trimm & Divided by 128 is the factor used to multiply the motor voltage when driving backwards. Value 0 deactivates the trim. & 0 - 255 & 128\\
-
+\\
 101 & Shunting Mode Trimm & Divided by 128, this gives the factor by which the motor voltage is multiplied when the shunting gear is active. See section 10.1.2. & 0 - 128 & 64\\
+\\
 102 & Brake Mode Exit Delay & Time as a multiple of 16 milliseconds that must pass before a detected braking distance is left again. See section 10.4.6. & 0 - 255 & 12\\
+\\
 103 & Load adjustment ``Optional Load" & Divided by 128, this gives the factor that changes CV3, CV4 and the sound when ``Optional Load" is active. See section 10.7. & 0 - 255 & 0\\
+\\
 104 & Load adjustment ``Primary Load" &  Divided by 128, this gives the factor that changes CV3, CV4 and the sound when ``Primary Load" is active. See section 10.7. & 0 - 255 & 255\\
+\\
 105 & User CV \#1 & Free CV. Here you are able to save what ever you want. & 0 - 255 & 0\\
+\\
 106 & User CV \#2 & Free CV. Here you are able to save what ever you want. & 0 - 255 & 0\\
-
+\\
 111 & Gearbox backlash & Time as a multiple of 16 mS, for which the motor runs at minimum speed after reversing the direction to prevent gear box jerking. & 0 - 255 & 0\\
+\\
 112 & Frequency for Flashing light effects & Flashing frequency for Strobe lighting effects. Multiple of 0.065536 seconds. See section 12.5.4. & 0 - 255 & 20\\
+\\
 113 & Power Fail Bypass & The time that the decoder bridges via the PowerPack after an interruption of voltage. Unit: A multiple of 0.032768 sec. See section 6.12.2. & 0 - 255 & 32\\
+\\
 116 & Slow speed BEMF Sampling period & Frequency of BEMF measurement in 0.1 milliseconds at speed step 1 & 50 - 200 & 50\\
+\\
 117 & Full speed BEMF Sampling period & Frequency of BEMF measurement in 0.1 milliseconds at speed step 255 & 50 - 200 & 150\\
-\end{tabular}
-\begin{tabular}{p{0.1\linewidth} p{0.15\linewidth} p{0.5\linewidth} p{0.1\linewidth} p{0.1\linewidth}} 
-\underline{CV} & \underline{Name} &  \underline{Description} & \underline{Range} & \underline{Value}\\
-
-
-
+\\
 118 & Slow speed BEMF & Measurement gap length VMin Length of the BEMF measuring gap in 0.1 milliseconds at speed step 1 & 10 - 20 & 150\\
+\\
 119 & Full speed BEMF & Measurement gap length Vmax Length of the BEMF measuring gap in 0.1 milliseconds at speed step 255 & 10 - 20 & 15\\
+\\
 123 & ABC Mode ``Slow drive" & Speed which is valid in the slow driving section during ABC braking. & 0 & -\\ 
-
+\end{tabular}
+\newpage
+\begin{tabular}{p{0.075\linewidth} p{0.15\linewidth} p{0.525\linewidth} p{0.06\linewidth} p{0.05\linewidth}} 
+\underline{CV} & \underline{Name} &  \underline{Description} & \underline{Range} & \underline{Default}\\
+\\
 124 & Extended Configuration \#2 & Additional important settings for decoders & & 21\\
-& \begin{tabular}{l l l}
-Bit & Description & Value\\
-0 & Bi-directional bit: Keep driving direction when changing direction. & 1 \\
-& Do not keep driving direction. & 0\\
-1 & Disable decoder lock with CV 15 / 16 & 0\\
-& Enable decoder lock with CV 15 / 16 & 2\\
-2 & Disable prime mover startup delay & 0\\
-& Enable prime mover startup delay & 4\\
-3 & Disable SUSI protocol & 0 \\
-& Enable SUSI protocol & 8\\
-4 & Enable Output AUX9 (LokSound 5 H0 only) & 0\\
-& Enable Wheel Sensor input (LokSound 5 H0 only) & 16\\
-5 & Motor Overload Protection\\
-& Motor is not switched off when blocked. & 0\\
-& Motor is switched off for a few seconds when blocked to avoid burnout & 32\\
-6 & Disable Automatic parking Brake & 0\\
-& Enable Automatic parking Brake (EMK Braking) & 64 \\
-7 & Reserved & 128\\
+& & \begin{tabular}{p{0.05\linewidth}p{0.87\linewidth}} 
+\underline{Bit} & \underline{Function} \\
+\\
+d7 & Reserved\\
+\\
+d6 & Enable/Disable Automatic parking Brake. 0 = Disabled 1 = Enabled\\
+\\
+d5 & Enable/Disable Motor is switched off for a few seconds when blocked to avoid burnout. 0 = Disabled 1 = Enabled\\
+\\
+d4 & 0 = Enable Output AUX9 (LokSound 5 H0 only). 1 = Enable Wheel Sensor input (LokSound 5 H0 only)\\
+\\
+d3 & Enable/Disable SUSI protocol. 0 = Disabled 1 = Enabled\\
+\\
+d2 & Enable/Disable prime mover startup delay. 0 = Disabled 1 = Enabled\\
+\\
+d0 & Enable/Disable Decoder lock with CV 15 / 16. 0 = Disabled 1 = Enabled\\
 \end{tabular}\\
-
+\\
 125 & Start voltage & Analog DC See section 10.8. & 0 - 255 & 90\\
+\\
 126 & Maximum speed & Analog DC See section 10.8. & 0 - 255 & 130\\
+\\
 127 & Start voltage & Analog AC See section 10.8. & 0 - 255 & 90\\
+\\
 128 & Maximum speed & Analog AC See section 10.8. & 0 - 255 & 130\\
+\\
 129 & Analog Functions & ``Hysterese" Offset voltage for functions in analogue mode. Chapter 10.8. & 0 - 255 & 15\\
+\\
 130 & Analog Motor & ``Hysterese" Offset voltage for motor functions in analogue mode. Chapter 10.8. & 0 - 255 & 5\\
+\\
 132 & Grade Crossing Hold Time & Grade Crossing holding time. See chapter 12.5.3. & 0 - 255 & 80\\
+\\
 133 & Sound Fader & Volume when sound fader is active. See chapter 13.5. & 0 - 255 & 128\\
+\\
 134 & ABC-Mode ``Sensibility" & Threshold, from which asymmentry on ABC shall be recognised. & 4 - 32 & 10\\
-\end{tabular}
-\begin{tabular}{p{0.1\linewidth} p{0.15\linewidth} p{0.5\linewidth} p{0.1\linewidth} p{0.1\linewidth}} 
-\underline{CV} & \underline{Name} &  \underline{Description} & \underline{Range} & \underline{Value}\\
-
-
+\\
 138 & Smoke Unit Trim Fan & Divided by 128, this gives the factor by which the fan speed of synchronized smoke units can be adjusted. & 0 - 255 & 128\\
+\\
 139 & Smoke Unit Trim Temperature & Divided by 128, this gives the factor by which the temperature of synchronized smoke units can be adjusted. & 0 - 255 & 128\\
+\\
 140 & Smoke TimeOut & Time until automatic shutdown of the smoke unit. & 0 - 255 & 255\\
-
+\\
 141 & Smoke Chuff Min & Minimum duration of a steam chuff of an external smoke unit in 0.041 seconds resolution. & 0 - 255 & 10\\
+\\
 142 & Smoke Chuff max & Maximum duration of a steam chuff of an external smoke unit in 0.041 seconds resolution. & 0 - 255 & 125\\
+\\
 143 & Smoke Chuff Length & Divided by 128, this gives the factor by which the duration of the steam chuffs can be adjusted relative to the trigger pulses. & 0 - 255 & 100\\
+\\
 144 & Smoke Pre Heat Temperature & Preheating temperature in degrees Celsius for secondary smoke generators (cylinder smoke unit) & 0 - 255 & 150\\
-149 & ABC Shuttle Train Holdtimet & Time in seconds, which has to be passed for ABC shuttle train operation, before the direction of travel is changed. See section 10.4.4.3. & 0 - 255 & 255\\
-150 & HLU Speedlimit 1 & HLU Speed limit 1. Internal speedstep. & 0 - 255 & 42\\
-151 & HLU Speedlimit 2 &  (U) HLU Speed limit 2 (U). Internal speedstep. & 0 - 255 & 85\\
-152 & HLU Speedlimit 3 & HLU Speed limit 3. Internal speedstep. & 0 - 255 & 127\\
-153 & HLU Speedlimit 4 & (L) HLU Speed limit 4 (L). Internal speedstep. & 0 - 255 & 170\\
-154 & HLU Speedlimit 5 & HLU Speed limit 5. Internal speedstep. & 0 - 255 & 212\\
-
-155 -170 & Sound CV 1 - Sound CV 16 & 16 CVs for selecting sounds that can be assigned within sound projects. Please note the documentation for the sound project. & 0 - 255 & 0\\
-179 & Brake Function 1 & Deceleration Value of which 33\% of CV 4 will be deducted if the Brake Function 1 is active. See section 10.6. & 0 - 255 & 80\\
-180 & Brake Function 2 & Deceleration Value of which 33\% of CV 4 will be deducted if the Brake Function 2 is active. See section 10.6. & 0 - 255 & 40\\
-181 & Brake Function 3 & Deceleration Value of which 33\% of CV 4 will be deducted if the Brake Function 3 is active. See section 10.6. & 0 - 255 & 40\\
-182 & Brake Function 1 max. & Speed Highest speed step that can be reached when Brake function 1 is active. & 0 - 126 & 0\\
 \end{tabular}
-\begin{tabular}{p{0.1\linewidth} p{0.15\linewidth} p{0.5\linewidth} p{0.1\linewidth} p{0.1\linewidth}} 
-\underline{CV} & \underline{Name} &  \underline{Description} & \underline{Range} & \underline{Value}\\
-
+\newpage
+\begin{tabular}{p{0.075\linewidth} p{0.15\linewidth} p{0.525\linewidth} p{0.06\linewidth} p{0.05\linewidth}} 
+\underline{CV} & \underline{Name} &  \underline{Description} & \underline{Range} & \underline{Default}\\
+\\
+149 & ABC Shuttle Train Holdtimet & Time in seconds, which has to be passed for ABC shuttle train operation, before the direction of travel is changed. See section 10.4.4.3. & 0 - 255 & 255\\
+\\
+150 & HLU Speedlimit 1 & HLU Speed limit 1. Internal speedstep. & 0 - 255 & 42\\
+\\
+151 & HLU Speedlimit 2 &  (U) HLU Speed limit 2 (U). Internal speedstep. & 0 - 255 & 85\\
+\\
+152 & HLU Speedlimit 3 & HLU Speed limit 3. Internal speedstep. & 0 - 255 & 127\\
+\\
+153 & HLU Speedlimit 4 & (L) HLU Speed limit 4 (L). Internal speedstep. & 0 - 255 & 170\\
+\\
+154 & HLU Speedlimit 5 & HLU Speed limit 5. Internal speedstep. & 0 - 255 & 212\\
+\\
+155 -170 & Sound CV 1 - Sound CV 16 & 16 CVs for selecting sounds that can be assigned within sound projects. Please note the documentation for the sound project. & 0 - 255 & 0\\
+\\
+179 & Brake Function 1 & Deceleration Value of which 33\% of CV 4 will be deducted if the Brake Function 1 is active. See section 10.6. & 0 - 255 & 80\\
+\\
+180 & Brake Function 2 & Deceleration Value of which 33\% of CV 4 will be deducted if the Brake Function 2 is active. See section 10.6. & 0 - 255 & 40\\
+\\
+181 & Brake Function 3 & Deceleration Value of which 33\% of CV 4 will be deducted if the Brake Function 3 is active. See section 10.6. & 0 - 255 & 40\\
+\\
+182 & Brake Function 1 max. & Speed Highest speed step that can be reached when Brake function 1 is active. & 0 - 126 & 0\\
+\\
 183 & Brake Function 2 max. & Speed Highest speed step that can be reached when Brake function 1 is active. & 0 - 126 & 126\\
+\\
 184 & Brake Function 3 max. & Speed Highest speed step that can be reached when Brake function 1 is active. & 0 - 126 & 126\\
-
+\\
 246 & Automatic decoupling Driving speed & Speed of the loco while decoupling; the higher the value, the faster the loco. Value 0 switches the automatic coupler off. Automatic decoupling is only active if the function output is adjusted to ``pulse" or ``coupler". & 0 - 255 & 0\\
+\\
 247 & Decoupling - Removing time & This value multiplied with 0.016 defines the time the loco needs for moving away from the train (automatic decoupling). & 0 – 255 & 0\\
+\\
 248 & Decoupling - Pushing time & This value multiplied with 0.016 defines the time the loco needs for pushing against the train (automatic decoupling). & 0 – 255 & 0\\
+\\
 249 & Minimum steam chuff distance & Minimum distance of two steam chuffs, independant from sensor data. Compage chapter 13.3. & 0 – 255 & 0\\
+\\
 250 & Secondary steam chuff trigger & Defines the distance between two consecutive steam chuffs for the secondary steam chuff generator. The value indicates the promilles the steam chuff distances of the secondary steam chuff generator ought to be shorter then those of the primary steam chuff generator. It is needed.for steam locos with two independent boogies, such as ``Big Boy" or ``Mallet". & 0 – 255 & 0\\
-
+\end{tabular}
+\newpage
+\begin{tabular}{p{0.075\linewidth} p{0.15\linewidth} p{0.525\linewidth} p{0.06\linewidth} p{0.05\linewidth}} 
+\underline{CV} & \underline{Name} &  \underline{Description} & \underline{Range} & \underline{Default}\\
+\\
 253 & Constant brake mode & Determines the constant brake mode. Only active, if CV254 $>$ 0 & 0 – 255 & 0\\
 & & Function\\
 & & CV 253 = 0: Decoder stops linearly\\
 & & CV 253 $>$ 0: Decoder stops constantly linear\\
+\\
 254 & Constant braking distance forward & A value $>$ 0 determines the way of brake distance it adheres to, independent from speed. & 0 – 255 & 0\\
+\\
 255 & Constant braking distance backward & Constant braking distances during reverse driving. Only active, if value $>$ 0, otherwise the value of CV 254 is used. Useful for reversible trains. & 0 – 255 & 0\\
-
 \end{tabular}
 
 

@@ -581,7 +581,7 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
   }
   
   public func getCV(cvNumber: Int) -> LocomotiveCV? {
-    if cvNumber < 0 || cvNumber > 1024 {
+    if cvNumber < 1 {
       return nil
     }
     return _cvs[cvNumber]

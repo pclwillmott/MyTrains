@@ -8,11 +8,10 @@
 import Foundation
 
 public enum CVNumberBase : Int {
+  case decimal = 0
+  case hexadecimal = 1
   case binary = 2
-  case octal = 8
-  case decimal = 10
-  case hexadecimal = 16
-  case useDefault = 0xff
+  case octal = 3
 }
 
 public class LocomotiveCV : EditorObject {
@@ -54,12 +53,13 @@ public class LocomotiveCV : EditorObject {
   
   private var _customDescription : String = ""
   
-  private var _customNumberBase : CVNumberBase = .useDefault
+  private var _customNumberBase : CVNumberBase = .decimal
   
   private var _isEnabled : Bool = true
   
   private var _modified : Bool = false
   
+  private var _newValue : String = ""
 
   // MARK: Public properties
   
@@ -108,9 +108,36 @@ public class LocomotiveCV : EditorObject {
     }
   }
   
+  public var isIndexedCV : Bool {
+    get {
+      return _cvNumber > 1024
+    }
+  }
+  
+  public var primaryPageIndex : Int {
+    get {
+      let components = LocomotiveCV.cvNumberComponents(cvNumber: _cvNumber)
+      return components.primaryPageIndex
+    }
+  }
+  
+  public var secondaryPageIndex : Int {
+    get {
+      let components = LocomotiveCV.cvNumberComponents(cvNumber: _cvNumber)
+      return components.secondaryPageIndex
+    }
+  }
+  
+  public var indexedIndex : Int {
+    get {
+      let components = LocomotiveCV.cvNumberComponents(cvNumber: _cvNumber)
+      return components.cvNumber
+    }
+  }
+  
   public var displayCVNumber : String {
     get {
-      if _cvNumber <= 1024 {
+      if !isIndexedCV {
         return "\(_cvNumber)"
       }
       let components = LocomotiveCV.cvNumberComponents(cvNumber: _cvNumber)
@@ -185,7 +212,62 @@ public class LocomotiveCV : EditorObject {
     }
   }
   
+  public var newValue : String {
+    get {
+      return _newValue
+    }
+    set(value) {
+      _newValue = value.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+  }
+  
+  public var newValueNumber : Int? {
+    get {
+      return Int.fromMultiBaseString(stringValue: newValue)
+    }
+  }
+  
+  public var displayDefaultValue : String {
+    get {
+      return toDisplay(value: defaultValue)
+    }
+  }
+  
+  public var displayCVValue : String {
+    get {
+      return toDisplay(value: cvValue)
+    }
+  }
+  
   // MARK: Private Methods
+  
+  private func toDisplay(value:Int) -> String {
+    
+    var item : String = ""
+    
+    switch customNumberBase {
+    case .decimal:
+      item += "\(String(format: "%d", value))"
+    case .hexadecimal:
+      item += "0x\(String(format: "%02x", value))"
+    case .binary:
+      var padded = String(value, radix: 2)
+      for _ in 0..<(8 - padded.count) {
+        padded = "0" + padded
+      }
+      item += "0b" + padded
+      break
+
+    case .octal:
+      item += "\(String(format: "%03o", value))"
+      if item.prefix(1) != "0" {
+        item = "0\(item)"
+      }
+    }
+    
+    return item
+
+  }
   
   // MARK: Public Methods
   
@@ -222,7 +304,7 @@ public class LocomotiveCV : EditorObject {
       }
 
       if !reader.isDBNull(index: 6) {
-        _customNumberBase = CVNumberBase(rawValue: reader.getInt(index: 6)!) ?? .useDefault
+        _customNumberBase = CVNumberBase(rawValue: reader.getInt(index: 6)!) ?? .decimal
       }
 
       if !reader.isDBNull(index: 7) {
@@ -310,19 +392,6 @@ public class LocomotiveCV : EditorObject {
 
   // MARK: Class Properties
   
-  /*
-   enum LOCOMOTIVE_CV {
-     static let CV_ID                 = "CV_ID"
-     static let LOCOMOTIVE_ID         = "LOCOMOTIVE_ID"
-     static let CV_NUMBER             = "CV_NUMBER"
-     static let CV_VALUE              = "CV_VALUE"
-     static let DEFAULT_VALUE         = "DEFAULT_VALUE"
-     static let CUSTOM_DESCRIPTION    = "CUSTOM_DESCRIPTION"
-     static let CUSTOM_NUMBER_BASE    = "CUSTOM_NUMBER_BASE"
-     static let ENABLED               = "ENABLED"
-   }
-   */
-
   public static var columnNames : String {
     get {
       return "[\(LOCOMOTIVE_CV.CV_ID)], " +
@@ -380,6 +449,23 @@ public class LocomotiveCV : EditorObject {
     let secondary = ((cvNumber >> 11) - 1) & 0xff
     let primary = (cvNumber >> 20) - 1
     return (primary, secondary, number)
+  }
+  
+  public static func cvNumber(string: String) -> Int? {
+    
+    let parts = string.split(separator: ".")
+    
+    if parts.count == 1 {
+      if let number = Int(parts[0]) {
+        return number
+      }
+    }
+    else if let primary = Int(parts[0]), let secondary = Int(parts[1]), let number = Int(parts[2]) {
+      return indexedCvNumber(primaryPageIndex: primary, secondaryPageIndex: secondary, cvNumber: number)
+    }
+    
+    return nil
+    
   }
 
   public static func delete(primaryKey: Int) {

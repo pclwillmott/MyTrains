@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.5.28)  8 JAN 2022 10:59
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.5.28)  14 JAN 2022 21:52
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -7244,676 +7244,584 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [183]
-Underfull \hbox (badness 10000) in paragraph at lines 378--378
-[]\OT1/cmr/m/n/10.95 Maximum
+[184]
+Overfull \hbox (6.00163pt too wide) in paragraph at lines 377--378
+[]$[]$| 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 379--379
-[]\OT1/cmr/m/n/10.95 Medium
+Underfull \hbox (badness 10000) in paragraph at lines 391--391
+[]\OT1/cmr/m/n/8 Acceleration
  []
 
 
-Overfull \hbox (7.7112pt too wide) in paragraph at lines 381--381
-[]\OT1/cmr/m/n/10.95 Manufacturer`s
+Underfull \hbox (badness 10000) in paragraph at lines 398--398
+[]\OT1/cmr/m/n/8 Deceleration
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 383--383
-[]\OT1/cmr/m/n/10.95 Analog
+Overfull \hbox (29.79303pt too wide) in paragraph at lines 376--410
+[][] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 384--384
-[]\OT1/cmr/m/n/10.95 Analog
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [185]
+Overfull \vbox (8.5285pt too high) has occurred while \output is active []
+
+
+[186]
+Overfull \hbox (6.00163pt too wide) in paragraph at lines 412--413
+[]$[]$| 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 384--384
-\OT1/cmr/m/n/10.95 Modus FL,
+Underfull \hbox (badness 10000) in paragraph at lines 422--422
+[]\OT1/cmr/m/n/8 Manufacturer
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 385--385
-[]\OT1/cmr/m/n/10.95 Decoder
+Underfull \hbox (badness 10000) in paragraph at lines 438--438
+[]\OT1/cmr/m/n/8 EMF Feed-back
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 385--385
-[]\OT1/cmr/m/n/10.95 Decoder-Lock Func-tion ac-cord-ing
+Underfull \hbox (badness 5388) in paragraph at lines 441--441
+[]\OT1/cmr/m/n/8 Packet time-out
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 385--385
-\OT1/cmr/m/n/10.95 to NMRA. For de-tails please see:
+Underfull \hbox (badness 10000) in paragraph at lines 444--444
+[]\OT1/cmr/m/n/8 Power Source
  []
 
 
-Overfull \hbox (137.96834pt too wide) in paragraph at lines 385--385
-\OT1/cmr/m/n/10.95 http://www.nmra.org/standards/DCC/WGpublic/0305051/0305051.h
-tml| 
+Overfull \hbox (6.85205pt too wide) in paragraph at lines 448--448
+[]\OT1/cmr/m/n/8 0b00000001| 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 386--386
-[]\OT1/cmr/m/n/10.95 128 -
+Overfull \hbox (6.85205pt too wide) in paragraph at lines 449--449
+[]\OT1/cmr/m/n/8 0b00000010| 
  []
 
 
-Underfull \hbox (badness 6927) in paragraph at lines 387--387
-[]\OT1/cmr/m/n/10.95 Consist Ad-
+Overfull \hbox (6.85205pt too wide) in paragraph at lines 450--450
+[]\OT1/cmr/m/n/8 0b00000100| 
  []
 
 
-Underfull \hbox (badness 2150) in paragraph at lines 387--387
-[]\OT1/cmr/m/n/10.95 Additional ad-dress for con-sist op-er-a-tion.
+Overfull \hbox (6.85205pt too wide) in paragraph at lines 451--451
+[]\OT1/cmr/m/n/8 0b00001000| 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 388--388
-[]\OT1/cmr/m/n/10.95 Consist
+Overfull \hbox (6.85205pt too wide) in paragraph at lines 452--452
+[]\OT1/cmr/m/n/8 0b00010000| 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 389--389
-[]\OT1/cmr/m/n/10.95 Consist
+Overfull \hbox (6.85205pt too wide) in paragraph at lines 453--453
+[]\OT1/cmr/m/n/8 0b00100000| 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 389--389
-\OT1/cmr/m/n/10.95 Mode FL,
+Overfull \hbox (29.79303pt too wide) in paragraph at lines 411--457
+[][] 
  []
 
 
-Overfull \hbox (333.97783pt too wide) in paragraph at lines 396--407
-[][]| 
+Overfull \vbox (122.52835pt too high) has occurred while \output is active []
+
+
+[187]
+Overfull \hbox (6.00163pt too wide) in paragraph at lines 459--460
+[]$[]$| 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 408--408
-[]\OT1/cmr/m/n/10.95 RailCom[]
+Underfull \hbox (badness 6559) in paragraph at lines 461--461
+[]\OT1/cmr/m/n/8 Alternate Mode
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 408--408
-\OT1/cmr/m/n/10.95 Con-fig-u-ra-
+Underfull \hbox (badness 6559) in paragraph at lines 466--466
+[]\OT1/cmr/m/n/8 Alternate Mode
  []
 
 
-Overfull \hbox (253.70815pt too wide) in paragraph at lines 409--415
-[][]| 
+Underfull \hbox (badness 10000) in paragraph at lines 475--475
+[]\OT1/cmr/m/n/8 Extended Ad-
  []
 
 
-Overfull \hbox (1.23245pt too wide) in paragraph at lines 415--415
-[]\OT1/cmr/m/n/10.95 Configuration
+Overfull \hbox (29.79303pt too wide) in paragraph at lines 458--484
+[][] 
  []
 
 
-Overfull \hbox (300.06317pt too wide) in paragraph at lines 417--431
-[][]| 
+Overfull \vbox (46.52861pt too high) has occurred while \output is active []
+
+
+[188]
+Overfull \hbox (6.00163pt too wide) in paragraph at lines 486--487
+[]$[]$| 
  []
 
 
-Underfull \hbox (badness 1668) in paragraph at lines 437--437
-[]\OT1/cmr/m/n/10.95 Index Reg-is-
+Underfull \hbox (badness 3354) in paragraph at lines 488--488
+[]\OT1/cmr/m/n/8 Consist Ad-dress
  []
 
 
-Underfull \hbox (badness 1668) in paragraph at lines 438--438
-[]\OT1/cmr/m/n/10.95 Index Reg-is-
+Underfull \hbox (badness 3354) in paragraph at lines 493--493
+[]\OT1/cmr/m/n/8 Consist Ad-dress
  []
 
 
-Underfull \hbox (badness 6592) in paragraph at lines 439--439
-[]\OT1/cmr/m/n/10.95 Protocol se-
+Overfull \hbox (29.79303pt too wide) in paragraph at lines 485--508
+[][] 
  []
 
 
-Overfull \hbox (127.23314pt too wide) in paragraph at lines 440--447
-[][]| 
- []
+Overfull \vbox (27.52866pt too high) has occurred while \output is active []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 448--448
-[]\OT1/cmr/m/n/10.95 Extended
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 448--448
-\OT1/cmr/m/n/10.95 Con-fig-u-ra-
- []
-
-
-Overfull \hbox (360.49875pt too wide) in paragraph at lines 450--466
-[][]| 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 467--467
-[]\OT1/cmr/m/n/10.95 Analogue
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 467--467
-\OT1/cmr/m/n/10.95 mode Se-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 467--467
-\OT1/cmr/m/n/10.95 lec-tion of
- []
-
-
-Underfull \hbox (badness 1910) in paragraph at lines 467--467
-\OT1/cmr/m/n/10.95 al-lowed ana-
- []
-
-
-Overfull \hbox (207.80936pt too wide) in paragraph at lines 468--480
-[][]| 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 486--486
-[]\OT1/cmr/m/n/10.95 BEMF
- []
-
-
-Underfull \hbox (badness 2762) in paragraph at lines 486--486
-\OT1/cmr/m/n/10.95 Param. K
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 487--487
-[]\OT1/cmr/m/n/10.95 Control
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 487--487
-\OT1/cmr/m/n/10.95 Ref-er-ence
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 491--491
-[]\OT1/cmr/m/n/10.95 Steam chuff
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 491--491
-\OT1/cmr/m/n/10.95 syn-chro-ni-sa-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 492--492
-[]\OT1/cmr/m/n/10.95 Steam chuff
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 492--492
-\OT1/cmr/m/n/10.95 syn-chro-ni-sa-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 493--493
-[]\OT1/cmr/m/n/10.95 Sound vol-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 493--493
-\OT1/cmr/m/n/10.95 ume ``Mas-
- []
-
-
-Underfull \hbox (badness 1983) in paragraph at lines 494--494
-[]\OT1/cmr/m/n/10.95 Brake sound
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 494--494
-\OT1/cmr/m/n/10.95 thresh-old
- []
-
-
-Underfull \hbox (badness 1983) in paragraph at lines 500--500
-[]\OT1/cmr/m/n/10.95 Brake sound
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 500--500
-\OT1/cmr/m/n/10.95 thresh-old
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 501--501
-[]\OT1/cmr/m/n/10.95 Forward
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 503--503
-[]\OT1/cmr/m/n/10.95 Reverse
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 505--505
-[]\OT1/cmr/m/n/10.95 Shunting
- []
-
-
-Underfull \hbox (badness 3954) in paragraph at lines 506--506
-[]\OT1/cmr/m/n/10.95 Brake Mode
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 507--507
-[]\OT1/cmr/m/n/10.95 Load ad-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 507--507
-\OT1/cmr/m/n/10.95 just-ment
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 507--507
-\OT1/cmr/m/n/10.95 ``Op-tional
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 508--508
-[]\OT1/cmr/m/n/10.95 Load ad-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 508--508
-\OT1/cmr/m/n/10.95 just-ment
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 508--508
-\OT1/cmr/m/n/10.95 ``Pri-mary
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 512--512
-[]\OT1/cmr/m/n/10.95 Gearbox
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 513--513
-[]\OT1/cmr/m/n/10.95 Frequency
- []
-
-
-Underfull \hbox (badness 5802) in paragraph at lines 513--513
-\OT1/cmr/m/n/10.95 for Flash-ing
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 514--514
-[]\OT1/cmr/m/n/10.95 Power Fail
+[189]
+Overfull \hbox (6.00163pt too wide) in paragraph at lines 510--511
+[]$[]$| 
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 515--515
-[]\OT1/cmr/m/n/10.95 Slow speed
+[]\OT1/cmr/m/n/8 Decoder Au-to-
  []
 
 
-Underfull \hbox (badness 1152) in paragraph at lines 515--515
-\OT1/cmr/m/n/10.95 BEMF Sam-
+Underfull \hbox (badness 10000) in paragraph at lines 515--515
+\OT1/cmr/m/n/8 matic Stop-ping
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 516--516
-[]\OT1/cmr/m/n/10.95 Full speed
- []
-
-
-Underfull \hbox (badness 1152) in paragraph at lines 516--516
-\OT1/cmr/m/n/10.95 BEMF Sam-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 523--523
-[]\OT1/cmr/m/n/10.95 Slow speed
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 524--524
-[]\OT1/cmr/m/n/10.95 Full speed
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 525--525
-[]\OT1/cmr/m/n/10.95 ABC Mode
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 527--527
-[]\OT1/cmr/m/n/10.95 Extended
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 527--527
-\OT1/cmr/m/n/10.95 Con-fig-u-ra-
- []
-
-
-Overfull \hbox (351.89314pt too wide) in paragraph at lines 528--547
+Overfull \hbox (5.93959pt too wide) in paragraph at lines 518--537
 [][]| 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 549--549
-[]\OT1/cmr/m/n/10.95 Maximum
+Overfull \hbox (29.79303pt too wide) in paragraph at lines 509--538
+[][] 
  []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 551--551
-[]\OT1/cmr/m/n/10.95 Maximum
- []
-
-
-Underfull \hbox (badness 8170) in paragraph at lines 553--553
-[]\OT1/cmr/m/n/10.95 Analog Mo-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 554--554
-\OT1/cmr/m/n/10.95 ing Hold
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 556--556
-[]\OT1/cmr/m/n/10.95 ABC-Mode
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 562--562
-[]\OT1/cmr/m/n/10.95 Smoke Unit
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 563--563
-[]\OT1/cmr/m/n/10.95 Smoke Unit
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 563--563
-\OT1/cmr/m/n/10.95 Trim Tem-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 569--569
-[]\OT1/cmr/m/n/10.95 Smoke Pre
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 569--569
-\OT1/cmr/m/n/10.95 Heat Tem-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 570--570
-[]\OT1/cmr/m/n/10.95 ABC Shut-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 570--570
-\OT1/cmr/m/n/10.95 tle Train
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 571--571
-[]\OT1/cmr/m/n/10.95 HLU
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 572--572
-[]\OT1/cmr/m/n/10.95 HLU
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 573--573
-[]\OT1/cmr/m/n/10.95 HLU
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 574--574
-[]\OT1/cmr/m/n/10.95 HLU
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 575--575
-[]\OT1/cmr/m/n/10.95 HLU
- []
-
-
-Underfull \hbox (badness 3668) in paragraph at lines 578--578
-[]\OT1/cmr/m/n/10.95 Brake Func-
- []
-
-
-Underfull \hbox (badness 3668) in paragraph at lines 579--579
-[]\OT1/cmr/m/n/10.95 Brake Func-
- []
-
-
-Underfull \hbox (badness 3668) in paragraph at lines 580--580
-[]\OT1/cmr/m/n/10.95 Brake Func-
- []
-
-
-Underfull \hbox (badness 3668) in paragraph at lines 581--581
-[]\OT1/cmr/m/n/10.95 Brake Func-
- []
-
-
-Underfull \hbox (badness 3668) in paragraph at lines 586--586
-[]\OT1/cmr/m/n/10.95 Brake Func-
- []
-
-
-Underfull \hbox (badness 3668) in paragraph at lines 587--587
-[]\OT1/cmr/m/n/10.95 Brake Func-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 589--589
-[]\OT1/cmr/m/n/10.95 Automatic
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 589--589
-\OT1/cmr/m/n/10.95 de-cou-pling
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 589--589
-\OT1/cmr/m/n/10.95 Driv-ing
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 590--590
-[]\OT1/cmr/m/n/10.95 Decoupling
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 590--590
-\OT1/cmr/m/n/10.95 - Re-mov-ing
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 592--592
-[]\OT1/cmr/m/n/10.95 Minimum
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 592--592
-\OT1/cmr/m/n/10.95 steam chuff
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 593--593
-[]\OT1/cmr/m/n/10.95 Secondary
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 593--593
-\OT1/cmr/m/n/10.95 steam chuff
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 595--595
-[]\OT1/cmr/m/n/10.95 Constant
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 599--599
-[]\OT1/cmr/m/n/10.95 Constant
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 599--599
-\OT1/cmr/m/n/10.95 brak-ing
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 599--599
-\OT1/cmr/m/n/10.95 dis-tance
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 600--600
-[]\OT1/cmr/m/n/10.95 Constant
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 600--600
-\OT1/cmr/m/n/10.95 brak-ing
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 600--600
-\OT1/cmr/m/n/10.95 dis-tance
- []
-
-
-Overfull \hbox (38.50499pt too wide) in paragraph at lines 372--603
-[]
- []
-
-
-Overfull \hbox (38.50499pt too wide) in paragraph at lines 372--603
-[]
- []
-
-
-Overfull \hbox (38.50499pt too wide) in paragraph at lines 372--603
-[]
- []
-
-
-Overfull \hbox (38.50499pt too wide) in paragraph at lines 372--603
-[]
- []
-
-
-Overfull \hbox (38.50499pt too wide) in paragraph at lines 372--603
-[]
- []
-
-
-Overfull \hbox (38.50499pt too wide) in paragraph at lines 372--603
-[]
- []
-
-
-Overfull \hbox (38.50499pt too wide) in paragraph at lines 372--603
-[]
- []
-
-
-Overfull \hbox (68.50499pt too wide) in paragraph at lines 372--603
-[] 
- []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [184]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [185]
-Overfull \vbox (97.86601pt too high) has occurred while \output is active []
-
-
-[186]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [187]
-Overfull \vbox (36.66225pt too high) has occurred while \output is active []
-
-
-[188]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [189]
-Overfull \vbox (77.46255pt too high) has occurred while \output is active []
-
 
 [190]
-Overfull \vbox (63.86232pt too high) has occurred while \output is active []
+Overfull \hbox (6.00163pt too wide) in paragraph at lines 540--541
+[]$[]$| 
+ []
+
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <8> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 556.
+
+Overfull \hbox (5.93959pt too wide) in paragraph at lines 544--562
+[][]| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 563--563
+[]\OT1/cmr/m/n/8 Bi-Directional
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 563--563
+\OT1/cmr/m/n/8 Com-mu-ni-ca-tion
+ []
+
+
+Overfull \hbox (5.93959pt too wide) in paragraph at lines 566--585
+[][]| 
+ []
+
+
+Underfull \hbox (badness 3354) in paragraph at lines 591--592
+[]\OT1/cmr/m/n/8 Enable/Disable RailCom[] Plus au-to-matic loco
+ []
+
+
+Overfull \hbox (5.93959pt too wide) in paragraph at lines 588--597
+[][]| 
+ []
+
+
+Overfull \hbox (29.79303pt too wide) in paragraph at lines 539--599
+[][] 
+ []
+
+
+Overfull \vbox (46.5282pt too high) has occurred while \output is active []
 
 
 [191]
-Overfull \vbox (63.8625pt too high) has occurred while \output is active []
+Overfull \hbox (6.00163pt too wide) in paragraph at lines 601--602
+[]$[]$| 
+ []
 
 
-[192]) [193]
+Underfull \hbox (badness 10000) in paragraph at lines 603--603
+[]\OT1/cmr/m/n/8 Configurations
+ []
+
+
+Overfull \hbox (5.93959pt too wide) in paragraph at lines 604--623
+[][]| 
+ []
+
+
+Overfull \hbox (5.93959pt too wide) in paragraph at lines 626--646
+[][]| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 648--648
+[]\OT1/cmr/m/n/8 Error In-for-ma-
+ []
+
+
+Overfull \hbox (29.79303pt too wide) in paragraph at lines 600--651
+[][] 
+ []
+
+
+Overfull \vbox (75.02829pt too high) has occurred while \output is active []
+
+
+[192]
+Overfull \hbox (6.00163pt too wide) in paragraph at lines 653--654
+[]$[]$| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 663--663
+[]\OT1/cmr/m/n/8 Output Lo-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 663--663
+\OT1/cmr/m/n/8 ca-tions 1-14
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 663--663
+\OT1/cmr/m/n/8 for Func-tions
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 663--663
+\OT1/cmr/m/n/8 FL(f), FL(r),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 666--667
+[]\OT1/cmr/m/n/8 Manufacturer
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 668--668
+[]\OT1/cmr/m/n/8 Protocol se-lec-
+ []
+
+
+Overfull \hbox (5.93959pt too wide) in paragraph at lines 670--681
+[][]| 
+ []
+
+
+Overfull \hbox (29.79303pt too wide) in paragraph at lines 652--683
+[][] 
+ []
+
+[193]
+Overfull \hbox (6.00163pt too wide) in paragraph at lines 685--686
+[]$[]$| 
+ []
+
+
+Overfull \hbox (5.93959pt too wide) in paragraph at lines 688--707
+[][]| 
+ []
+
+
+Overfull \hbox (5.93959pt too wide) in paragraph at lines 710--719
+[][]| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 724--724
+[]\OT1/cmr/m/n/8 Control Ref-er-
+ []
+
+
+Underfull \hbox (badness 1215) in paragraph at lines 730--730
+[]\OT1/cmr/m/n/8 BEMF In-flu-ence
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 736--736
+[]\OT1/cmr/m/n/8 Sound vol-ume
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 738--738
+[]\OT1/cmr/m/n/8 Brake sound
+ []
+
+
+Overfull \hbox (29.79303pt too wide) in paragraph at lines 684--741
+[][] 
+ []
+
+
+Overfull \vbox (132.0282pt too high) has occurred while \output is active []
+
+
+[194]
+Overfull \hbox (6.00163pt too wide) in paragraph at lines 743--744
+[]$[]$| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 745--745
+[]\OT1/cmr/m/n/8 Brake sound
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 753--753
+[]\OT1/cmr/m/n/8 Shunting Mode
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 765--765
+[]\OT1/cmr/m/n/8 Gearbox back-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 767--767
+[]\OT1/cmr/m/n/8 Frequency for
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 767--767
+\OT1/cmr/m/n/8 Flash-ing light
+ []
+
+
+Underfull \hbox (badness 3343) in paragraph at lines 769--769
+[]\OT1/cmr/m/n/8 Power Fail By-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 771--771
+[]\OT1/cmr/m/n/8 Slow speed
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 771--771
+[]\OT1/cmr/m/n/8 50 -
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 773--773
+[]\OT1/cmr/m/n/8 50 -
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 775--775
+[]\OT1/cmr/m/n/8 Slow speed
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 779--779
+[]\OT1/cmr/m/n/8 ABC Mode
+ []
+
+
+Overfull \hbox (29.79303pt too wide) in paragraph at lines 742--781
+[][] 
+ []
+
+
+Overfull \vbox (18.02841pt too high) has occurred while \output is active []
+
+
+[195]
+Overfull \hbox (6.00163pt too wide) in paragraph at lines 783--784
+[]$[]$| 
+ []
+
+
+Overfull \hbox (5.93959pt too wide) in paragraph at lines 786--803
+[][]| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 816--816
+[]\OT1/cmr/m/n/8 Grade Cross-ing
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 832--832
+[]\OT1/cmr/m/n/8 Smoke Chuff
+ []
+
+
+Overfull \hbox (29.79303pt too wide) in paragraph at lines 782--836
+[][] 
+ []
+
+
+Overfull \vbox (84.52821pt too high) has occurred while \output is active []
+
+
+[196]
+Overfull \hbox (6.00163pt too wide) in paragraph at lines 838--839
+[]$[]$| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 840--840
+[]\OT1/cmr/m/n/8 ABC Shut-tle
+ []
+
+
+Underfull \hbox (badness 2591) in paragraph at lines 842--842
+[]\OT1/cmr/m/n/8 HLU Speedlimit
+ []
+
+
+Underfull \hbox (badness 2591) in paragraph at lines 844--844
+[]\OT1/cmr/m/n/8 HLU Speedlimit
+ []
+
+
+Underfull \hbox (badness 2591) in paragraph at lines 846--846
+[]\OT1/cmr/m/n/8 HLU Speedlimit
+ []
+
+
+Underfull \hbox (badness 2591) in paragraph at lines 848--848
+[]\OT1/cmr/m/n/8 HLU Speedlimit
+ []
+
+
+Underfull \hbox (badness 2591) in paragraph at lines 850--850
+[]\OT1/cmr/m/n/8 HLU Speedlimit
+ []
+
+
+Underfull \hbox (badness 3039) in paragraph at lines 852--852
+[]\OT1/cmr/m/n/8 Sound CV 1 -
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 866--866
+[]\OT1/cmr/m/n/8 Automatic de-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 870--870
+[]\OT1/cmr/m/n/8 Decoupling -
+ []
+
+
+Underfull \hbox (badness 2269) in paragraph at lines 872--872
+[]\OT1/cmr/m/n/8 Minimum steam
+ []
+
+
+Overfull \hbox (29.79303pt too wide) in paragraph at lines 837--876
+[][] 
+ []
+
+
+Overfull \vbox (37.02841pt too high) has occurred while \output is active []
+
+
+[197]
+Overfull \hbox (6.00163pt too wide) in paragraph at lines 878--879
+[]$[]$| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 880--880
+[]\OT1/cmr/m/n/8 Constant brake
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 887--887
+[]\OT1/cmr/m/n/8 Constant brak-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 887--887
+\OT1/cmr/m/n/8 ing dis-tance
+ []
+
+
+Overfull \hbox (29.79303pt too wide) in paragraph at lines 877--889
+[][] 
+ []
+
+) [198]
 No file "Network Notes".bbl.
 \openout2 = `AppendixA.aux'.
 
-(./AppendixA.tex [194
+(./AppendixA.tex
+Appendix A.
+) [199
 
 
 
 ]
-Appendix A.
-) [195]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 67.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 67.
  (./Network Notes.aux (./Chapter1.aux) (./Chapter2.aux) (./Chapter3.aux) (./Cha
 pter4.aux) (./AppendixA.aux))
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 67.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 67.
-Package rerunfilecheck Info: File `"Network Notes".out' has not changed.
-(rerunfilecheck)             Checksum: 4F1C19BF16B7244FDA7490FBD9E9D476;5953.
+
+
+Package rerunfilecheck Warning: File `"Network Notes".out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `"Network Notes".out':
+(rerunfilecheck)             Before: 4F1C19BF16B7244FDA7490FBD9E9D476;5953
+(rerunfilecheck)             After:  65987A1F2A2988EBE89F6A6ECB4FC3F2;5946.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 67.
  ) 
 Here is how much of TeX's memory you used:
- 6658 strings out of 492649
- 99432 string characters out of 6129622
- 263520 words of memory out of 5000000
- 9912 multiletter control sequences out of 15000+600000
- 13392 words of font info for 50 fonts, out of 8000000 for 9000
+ 6668 strings out of 492649
+ 99523 string characters out of 6129622
+ 198520 words of memory out of 5000000
+ 9916 multiletter control sequences out of 15000+600000
+ 14037 words of font info for 53 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 42i,20n,30p,1751b,437s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 42i,22n,30p,1751b,437s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
 ></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb>
 </usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><
-/usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></u
-sr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr
-/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/l
-ocal/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/loca
-l/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsl10.pfb></usr/local
-/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/
-texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on "Network Notes.pdf" (201 pages, 425003 bytes).
+/usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></u
+sr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr
+/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/l
+ocal/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/loc
+al/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/
+texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/tex
+live/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsl10.pfb></usr/local/texl
+ive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texli
+ve/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive
+/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
+Output written on "Network Notes.pdf" (205 pages, 476492 bytes).
 PDF statistics:
- 1441 PDF objects out of 1728 (max. 8388607)
- 1215 compressed objects within 13 object streams
- 313 named destinations out of 1000 (max. 500000)
+ 1470 PDF objects out of 1728 (max. 8388607)
+ 1237 compressed objects within 13 object streams
+ 317 named destinations out of 1000 (max. 500000)
  721 words of extra memory for PDF output out of 10000 (max. 10000000)
 

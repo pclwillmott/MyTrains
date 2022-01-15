@@ -10,6 +10,7 @@ import Foundation
 enum DEFAULT {
   static let VERSION                  = "Version"
   static let DATABASE_PATH            = "DatabasePath"
+  static let SAVED_CVS_PATH           = "SavedCVsPath"
   static let MONITOR_INTERFACE_ID     = "MonitorInterfaceId"
   static let MONITOR_SEND_FILENAME    = "MonitorSendFileName"
   static let MONITOR_CAPTURE_FILENAME = "MonitorCaptureFileName"

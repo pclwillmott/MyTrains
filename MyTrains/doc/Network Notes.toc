@@ -86,5 +86,5 @@
 \contentsline {subsection}{\numberline {4.1.3}Direct Mode Programming}{176}{subsection.4.1.3}
 \contentsline {subsection}{\numberline {4.1.4}Operations Mode Programming}{176}{subsection.4.1.4}
 \contentsline {section}{\numberline {4.2}Programming Mobile Decoder Addresses}{176}{section.4.2}
-\contentsline {section}{\numberline {4.3}List of all supported CVs}{186}{section.4.3}
-\contentsline {chapter}{\numberline {A}Reference Tables}{195}{appendix.A}
+\contentsline {section}{\numberline {4.3}List of Common CVs}{184}{section.4.3}
+\contentsline {chapter}{\numberline {A}Reference Tables}{199}{appendix.A}

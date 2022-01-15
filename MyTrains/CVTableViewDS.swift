@@ -18,6 +18,8 @@ public class CVTableViewDS : NSObject, NSTableViewDataSource, NSTableViewDelegat
     static let DescriptionCell  = "DescriptionCellID"
     static let DefaultValueCell = "DefaultValueCellID"
     static let ValueCell        = "ValueCellID"
+    static let NumberBaseCell   = "NumberBaseCellID"
+    static let NewValueCell     = "NewValueCellID"
   }
 
   // MARK: Public Properties
@@ -60,14 +62,36 @@ public class CVTableViewDS : NSObject, NSTableViewDataSource, NSTableViewDelegat
       isEditable = true
     }
     else if tableColumn == tableView.tableColumns[3] {
-      text = "\(item.defaultValue)"
-      cellIdentifier = CellIdentifiers.DefaultValueCell
+      text = ""
+      cellIdentifier = CellIdentifiers.NumberBaseCell
       isEditable = true
     }
     else if tableColumn == tableView.tableColumns[4] {
-      text = "\(item.cvValue)"
+      text = "\(item.displayDefaultValue)"
+      cellIdentifier = CellIdentifiers.DefaultValueCell
+      isEditable = true
+    }
+    else if tableColumn == tableView.tableColumns[5] {
+      text = "\(item.displayCVValue)"
       cellIdentifier = CellIdentifiers.ValueCell
       isEditable = true
+    }
+    else if tableColumn == tableView.tableColumns[6] {
+      text = "\(item.newValue)"
+      cellIdentifier = CellIdentifiers.NewValueCell
+      isEditable = true
+    }
+
+    if cellIdentifier == CellIdentifiers.NumberBaseCell {
+      if let cell = tableView.makeView(withIdentifier:
+        NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil) as? NSTableCellView {
+        if let cbo = cell.subviews[0] as? NSComboBox {
+          cbo.tag = row
+          cbo.selectItem(at: item.customNumberBase.rawValue)
+        }
+
+       return cell
+      }
     }
     
     if cellIdentifier == CellIdentifiers.EnabledCell {

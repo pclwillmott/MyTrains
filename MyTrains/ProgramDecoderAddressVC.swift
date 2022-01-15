@@ -8,7 +8,7 @@
 import Foundation
 import Cocoa
 
-class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStationDelegate {
+class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStationDelegate, CSVParserDelegate {
 
   // MARK: Window & View Control
 
@@ -78,6 +78,12 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
     case waitingForIndexedWriteWriteCV32Data
     case waitingForWriteCVAck
     case waitingForWriteCVData
+    case writeMultipleState1
+    case writeMultipleState2
+    case writeMultipleState3
+    case writeMultipleState4
+    case writeMultipleState5
+    case writeMultipleState6
   }
   
   // MARK: Private Properties
@@ -134,6 +140,10 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
   
   private var cvTableViewDS = CVTableViewDS()
   
+  private var writeMultipleIndex : Int = 0
+  
+  private var csvParser : CSVParser?
+  
   // MARK: Private Methods
   
   private func setup() {
@@ -161,9 +171,12 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
     btnRead.isEnabled = btnWrite.isEnabled
     
     btnCancelReadCVValues.isEnabled = false
-    btnReadCVValues.isEnabled = true
+    btnReadCVValues.isEnabled = cboLocomotive.indexOfSelectedItem != -1
     chkSetDefaults.isEnabled = true
     chkSetDefaults.state = .off
+    btnWriteCVValues.isEnabled = btnReadCVValues.isEnabled
+    btnImportCVs.isEnabled = btnReadCVValues.isEnabled
+    btnExportCVs.isEnabled = btnReadCVValues.isEnabled
 
     if let loco = locomotive {
       cvTableViewDS.cvs = loco.cvsSorted
@@ -179,7 +192,24 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
     
     txtPrimaryPageIndex.isEnabled = isIndexedMode
     txtSecondaryPageIndex.isEnabled = isIndexedMode
+    
+  }
+  
+  private func findNextCVToWrite() -> LocomotiveCV? {
+    
+    while writeMultipleIndex < cvTableView.numberOfRows {
+      
+      let cv = cvTableViewDS.cvs[writeMultipleIndex]
 
+      if cv.newValue != "" {
+        return cv
+      }
+      
+      writeMultipleIndex += 1
+      
+    }
+    
+    return nil
   }
   
   private func validate() -> Bool {
@@ -333,6 +363,15 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
       case .waitingForWriteCVAck:
         programmerState = .waitingForWriteCVData
         lblReadCVStatus.stringValue = "Writing CV\(writeCV!.displayCVNumber)"
+      case .writeMultipleState1:
+        programmerState = .writeMultipleState2
+        lblReadCVStatus.stringValue = "Writing CV31"
+      case .writeMultipleState3:
+        programmerState = .writeMultipleState4
+        lblReadCVStatus.stringValue = "Writing CV32"
+      case .writeMultipleState5:
+        programmerState = .writeMultipleState6
+        lblReadCVStatus.stringValue = "Writing CV\(readCV)"
       default:
         break
       }
@@ -484,6 +523,9 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
               btnReadCVValues.isEnabled = true
               chkSetDefaults.isEnabled = true
               chkSetDefaults.state = .off
+              btnWriteCVValues.isEnabled = true
+              btnImportCVs.isEnabled = true
+              btnExportCVs.isEnabled = true
               cancelRead = false
             }
             else if readCV < endAddress {
@@ -499,8 +541,76 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
               chkSetDefaults.isEnabled = true
               chkSetDefaults.state = .off
               cancelRead = false
+              btnWriteCVValues.isEnabled = true
+              btnImportCVs.isEnabled = true
+              btnExportCVs.isEnabled = true
             }
           }
+        case .writeMultipleState2:
+          programmerState = .writeMultipleState3
+          commandStation?.writeCV(cv: 32, value: cv32)
+          break
+        case .writeMultipleState4:
+          programmerState = .writeMultipleState5
+          commandStation?.writeCV(cv: readCV, value: writeCV!.newValueNumber!)
+          break
+        case .writeMultipleState6:
+          
+          writeCV?.cvValue = writeCV!.newValueNumber!
+          writeCV?.newValue = ""
+          writeCV?.save()
+          cvTableView.reloadData()
+          
+          if cancelRead {
+            programmerState = .idle
+            lblReadCVStatus.stringValue = "Write Aborted"
+            btnCancelReadCVValues.isEnabled = false
+            btnReadCVValues.isEnabled = true
+            chkSetDefaults.isEnabled = true
+            chkSetDefaults.state = .off
+            btnWriteCVValues.isEnabled = true
+            btnImportCVs.isEnabled = true
+            btnExportCVs.isEnabled = true
+            cancelRead = false
+            return
+          }
+
+          writeMultipleIndex += 1
+          
+          if let cv = findNextCVToWrite(), let value = cv.newValueNumber {
+            
+            writeCV = cv
+
+            if cv.isIndexedCV {
+              
+              let components = LocomotiveCV.cvNumberComponents(cvNumber: cv.cvNumber)
+              cv31 = components.primaryPageIndex
+              cv32 = components.secondaryPageIndex
+              readCV = components.cvNumber
+              programmerState = .writeMultipleState1
+              commandStation?.writeCV(cv: 31, value: cv31)
+              
+            }
+            else {
+              readCV = cv.cvNumber
+              programmerState = .writeMultipleState5
+              commandStation?.writeCV(cv: readCV, value: value)
+            }
+          }
+          else {
+            programmerState = .idle
+            lblReadCVStatus.stringValue = "Write Completed"
+            btnCancelReadCVValues.isEnabled = false
+            btnReadCVValues.isEnabled = true
+            chkSetDefaults.isEnabled = true
+            chkSetDefaults.state = .off
+            cancelRead = false
+            btnWriteCVValues.isEnabled = true
+            btnImportCVs.isEnabled = true
+            btnExportCVs.isEnabled = true
+            writeMultipleIndex = 0
+          }
+
         default:
           break
         }
@@ -531,6 +641,73 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
       
     default:
       break
+    }
+  }
+  
+  // MARK: CSVParserDelegate Methods
+  
+  func csvParserDidStartDocument() {
+    lblReadCVStatus.stringValue = "Start Import"
+  }
+  
+  func csvParserDidEndDocument() {
+    if let loco = locomotive {
+      cvTableViewDS.cvs = loco.cvsSorted
+      cvTableView.dataSource = cvTableViewDS
+      cvTableView.reloadData()
+    }
+    lblReadCVStatus.stringValue = "Import Completed"
+  }
+  
+  func csvParser(didStartRow row: Int) {
+    writeCV = nil
+  }
+  
+  func csvParser(didEndRow row: Int) {
+  }
+  
+  func csvParser(foundCharacters column: Int, string: String) {
+    if column == 0 {
+      if string == "CV" {
+        return
+      }
+      if let cvNumber = LocomotiveCV.cvNumber(string: string) {
+        
+        if let loco = locomotive {
+          
+          if let cv = loco.getCV(cvNumber: cvNumber) {
+            writeCV = cv
+                }
+          else {
+            writeCV = LocomotiveCV(cvNumber: cvNumber)
+          }
+          
+        }
+      }
+    }
+    else if column == 1 {
+      if string == "Default Value" {
+        return
+      }
+      if let value = Int(string.trimmingCharacters(in: .whitespacesAndNewlines)) {
+        if chkSetDefaults.state == .on {
+          writeCV?.defaultValue = value
+        }
+      }
+    }
+    else if column == 2 {
+      if string == "Value" {
+        return
+      }
+      if let value = Int(string.trimmingCharacters(in: .whitespacesAndNewlines)) {
+        if value != writeCV!.cvValue {
+          if let loco = locomotive, let cv = writeCV {
+            cv.newValue = string
+            loco.updateCVS(cv: cv)
+          }
+       
+        }
+      }
     }
   }
   
@@ -615,6 +792,9 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
         btnCancelReadCVValues.isEnabled = true
         btnReadCVValues.isEnabled = false
         chkSetDefaults.isEnabled = false
+        btnWriteCVValues.isEnabled = false
+        btnImportCVs.isEnabled = false
+        btnExportCVs.isEnabled = false
         
         locomotive?.save()
         
@@ -719,7 +899,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
   @IBAction func txtDefaultValueAction(_ sender: NSTextField) {
     let cv = cvTableViewDS.cvs[sender.tag]
     var reset = true
-    if let newValue = Int(sender.stringValue) {
+    if let newValue = Int.fromMultiBaseString(stringValue: sender.stringValue) {
       if newValue >= 0 && newValue < 256 {
         reset = false
         cv.defaultValue = newValue
@@ -727,7 +907,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
       }
     }
     if reset {
-      sender.stringValue = "\(cv.defaultValue)"
+      sender.stringValue = "\(cv.displayDefaultValue)"
     }
   }
   
@@ -735,11 +915,11 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
     let cv = cvTableViewDS.cvs[sender.tag]
     writeCV = cv
     var reset = true
-    if let newValue = Int(sender.stringValue) {
+    if let newValue = Int.fromMultiBaseString(stringValue: sender.stringValue) {
       if newValue >= 0 && newValue < 256 {
         reset = false
         writeValue = newValue
-        if cv.cvNumber <= 1024 {
+        if !cv.isIndexedCV {
           programmerState = .waitingForWriteCVAck
           commandStation?.writeCV(cv: cv.cvNumber, value: writeValue)
         }
@@ -754,8 +934,164 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
       }
     }
     if reset {
-      sender.stringValue = "\(cv.defaultValue)"
+      sender.stringValue = "\(cv.displayCVValue)"
     }
+  }
+  
+  
+  @IBAction func cboNumberBaseAction(_ sender: NSComboBox) {
+    let cv = cvTableViewDS.cvs[sender.tag]
+    cv.customNumberBase = CVNumberBase(rawValue: sender.indexOfSelectedItem) ?? .decimal
+    cv.save()
+    cvTableView.reloadData()
+  }
+  
+  @IBOutlet weak var txtNewValue: NSTextField!
+  
+  @IBAction func txtNewValueAction(_ sender: NSTextField) {
+    let strVal = sender.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+    let cv = cvTableViewDS.cvs[sender.tag]
+    var reset = true
+    if let newValue = Int.fromMultiBaseString(stringValue: strVal) {
+      if newValue >= 0 && newValue < 256 {
+        reset = false
+        cv.newValue = sender.stringValue
+      }
+    }
+    else if strVal == "" {
+      cv.newValue = strVal
+      reset = false
+    }
+    if reset {
+      sender.stringValue = "\(cv.newValue)"
+    }
+  }
+  
+  @IBOutlet weak var btnWriteCVValues: NSButton!
+  
+  @IBAction func btnWriteCVValuesAction(_ sender: NSButton) {
+    
+    writeMultipleIndex = 0
+    
+    cancelRead = false
+    
+    if let cv = findNextCVToWrite(), let value = cv.newValueNumber {
+      
+      btnCancelReadCVValues.isEnabled = true
+      btnReadCVValues.isEnabled = false
+      chkSetDefaults.isEnabled = false
+      btnWriteCVValues.isEnabled = false
+      btnImportCVs.isEnabled = false
+      btnExportCVs.isEnabled = false
+
+      writeCV = cv
+
+      if cv.isIndexedCV {
+        
+        let components = LocomotiveCV.cvNumberComponents(cvNumber: cv.cvNumber)
+        cv31 = components.primaryPageIndex
+        cv32 = components.secondaryPageIndex
+        readCV = components.cvNumber
+        programmerState = .writeMultipleState1
+        commandStation?.writeCV(cv: 31, value: cv31)
+        
+      }
+      else {
+        readCV = cv.cvNumber
+        programmerState = .writeMultipleState5
+        commandStation?.writeCV(cv: readCV, value: value)
+      }
+    }
+    
+  }
+  
+  @IBOutlet weak var btnImportCVs: NSButton!
+  
+  @IBAction func btnImportCVsAction(_ sender: NSButton) {
+    
+    if let savedCVsPath = UserDefaults.standard.string(forKey: DEFAULT.SAVED_CVS_PATH) {
+    
+      let url = URL(fileURLWithPath: savedCVsPath)
+      
+      let fm = FileManager()
+      
+      try? fm.createDirectory(at: url, withIntermediateDirectories:true, attributes:nil)
+
+      let panel = NSOpenPanel()
+      
+      panel.directoryURL = url
+      panel.canChooseDirectories = false
+      panel.canChooseFiles = true
+      panel.allowsOtherFileTypes = true
+      panel.allowedFileTypes = ["csv"]
+      
+      if (panel.runModal() == .OK) {
+        
+        let newPath = panel.directoryURL!.deletingLastPathComponent()
+        
+        UserDefaults.standard.set(newPath, forKey: DEFAULT.SAVED_CVS_PATH)
+        
+        csvParser = CSVParser(withURL: panel.url!)
+        csvParser?.delegate = self
+        csvParser?.columnSeparator = ","
+        csvParser?.lineTerminator = "\n"
+        csvParser?.stringDelimiter = "\""
+        csvParser?.parse()
+      }
+
+    }
+
+  }
+  
+  @IBOutlet weak var btnExportCVs: NSButton!
+  
+  @IBAction func btnExportCVsAction(_ sender: NSButton) {
+    
+    if let savedCVsPath = UserDefaults.standard.string(forKey: DEFAULT.SAVED_CVS_PATH) {
+    
+      var url = URL(fileURLWithPath: savedCVsPath)
+      
+      let fm = FileManager()
+      
+      do{
+        try fm.createDirectory(at: url, withIntermediateDirectories:true, attributes:nil)
+      }
+      catch{
+        print("create directory failed")
+      }
+
+      let panel = NSSavePanel()
+      
+      panel.directoryURL = url
+      
+      panel.nameFieldStringValue = cboLocomotive.stringValue
+
+      panel.canCreateDirectories = true
+      
+      panel.allowedFileTypes = ["csv"]
+      
+      if (panel.runModal() == .OK) {
+        
+        let newPath = panel.directoryURL!.deletingLastPathComponent()
+        
+        UserDefaults.standard.set(newPath, forKey: DEFAULT.SAVED_CVS_PATH)
+        
+        if let loco = locomotive {
+          
+          var output = "\"CV\",\"Default Value\",\"Value\"\n"
+          
+          for cv in loco.cvsSorted {
+            output += "\(cv.displayCVNumber), \(cv.defaultValue), \(cv.cvValue)\n"
+          }
+          
+          try? output.write(to: panel.url!, atomically: true, encoding: .utf8)
+          
+        }
+
+      }
+
+    }
+    
   }
   
 }
