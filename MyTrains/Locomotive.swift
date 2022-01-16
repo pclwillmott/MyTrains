@@ -177,7 +177,17 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
   
   private var _networkId : Int = -1
   
-  private var _maxCVNumber : Int = 255
+  private var _decoderModel : String = ""
+  
+  private var _inventoryCode : String = ""
+  
+  private var _manufacturer : String = ""
+  
+  private var _purchaseDate : String = ""
+  
+  private var _notes : String = ""
+  
+  private var _isSoundFitted : Bool = false
   
   private var _isInUse : Bool = false
   
@@ -401,21 +411,81 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
     }
   }
   
-  public var network : Network? {
+  public var decoderModel : String {
     get {
-      return networkController.networks[networkId]
+      return _decoderModel
+    }
+    set(value) {
+      if value != _decoderModel {
+        _decoderModel = value
+        modified = true
+      }
     }
   }
   
-  public var maxCVNumber : Int {
+  public var inventoryCode : String {
     get {
-      return _maxCVNumber
+      return _inventoryCode
     }
     set(value) {
-      if value != _maxCVNumber {
-        _maxCVNumber = value
+      if value != _inventoryCode {
+        _inventoryCode = value
         modified = true
       }
+    }
+  }
+  
+  public var manufacturer : String {
+    get {
+      return _manufacturer
+    }
+    set(value) {
+      if value != _manufacturer {
+        _manufacturer = value
+        modified = true
+      }
+    }
+  }
+  
+  public var purchaseDate : String {
+    get {
+      return _purchaseDate
+    }
+    set(value) {
+      if value != _purchaseDate {
+        _purchaseDate = value
+        modified = true
+      }
+    }
+  }
+  
+  public var notes : String {
+    get {
+      return _notes
+    }
+    set(value) {
+      if value != _notes {
+        _notes = value
+        modified = true
+      }
+    }
+  }
+  
+  public var isSoundFitted : Bool {
+    get {
+      return _isSoundFitted
+    }
+    set(value) {
+      if value != _isSoundFitted {
+        _isSoundFitted = value
+        modified = true
+      }
+    }
+  }
+  
+  public var network : Network? {
+    get {
+      return networkController.networks[networkId]
     }
   }
   
@@ -755,7 +825,27 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
       }
 
       if !reader.isDBNull(index: 17) {
-        maxCVNumber = reader.getInt(index: 17)!
+        decoderModel = reader.getString(index: 17)!
+      }
+
+      if !reader.isDBNull(index: 18) {
+        inventoryCode = reader.getString(index: 18)!
+      }
+
+      if !reader.isDBNull(index: 19) {
+        manufacturer = reader.getString(index: 19)!
+      }
+
+      if !reader.isDBNull(index: 20) {
+        purchaseDate = reader.getString(index: 20)!
+      }
+
+      if !reader.isDBNull(index: 21) {
+        notes = reader.getString(index: 21)!
+      }
+
+      if !reader.isDBNull(index: 22) {
+        isSoundFitted = reader.getBool(index: 22)!
       }
 
     }
@@ -789,7 +879,12 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
         "[\(LOCOMOTIVE.UNITS_FBOFF_OCC)]," +
         "[\(LOCOMOTIVE.UNITS_SPEED)]," +
         "[\(LOCOMOTIVE.NETWORK_ID)]," +
-        "[\(LOCOMOTIVE.MAX_CV_NUMBER)]" +
+        "[\(LOCOMOTIVE.DECODER_MODEL)]," +
+        "[\(LOCOMOTIVE.INVENTORY_CODE)]," +
+        "[\(LOCOMOTIVE.MANUFACTURER)]," +
+        "[\(LOCOMOTIVE.PURCHASE_DATE)]," +
+        "[\(LOCOMOTIVE.NOTES)]," +
+        "[\(LOCOMOTIVE.SOUND_FITTED)]" +
         ") VALUES (" +
         "@\(LOCOMOTIVE.LOCOMOTIVE_ID), " +
         "@\(LOCOMOTIVE.LOCOMOTIVE_NAME), " +
@@ -808,7 +903,12 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
         "@\(LOCOMOTIVE.UNITS_FBOFF_OCC), " +
         "@\(LOCOMOTIVE.UNITS_SPEED), " +
         "@\(LOCOMOTIVE.NETWORK_ID), " +
-        "@\(LOCOMOTIVE.MAX_CV_NUMBER)" +
+        "@\(LOCOMOTIVE.DECODER_MODEL), " +
+        "@\(LOCOMOTIVE.INVENTORY_CODE), " +
+        "@\(LOCOMOTIVE.MANUFACTURER), " +
+        "@\(LOCOMOTIVE.PURCHASE_DATE), " +
+        "@\(LOCOMOTIVE.NOTES), " +
+        "@\(LOCOMOTIVE.SOUND_FITTED)" +
         ")"
         primaryKey = Database.nextCode(tableName: TABLE.LOCOMOTIVE, primaryKey: LOCOMOTIVE.LOCOMOTIVE_ID)!
         
@@ -839,7 +939,12 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
         "[\(LOCOMOTIVE.UNITS_FBOFF_OCC)] = @\(LOCOMOTIVE.UNITS_FBOFF_OCC), " +
         "[\(LOCOMOTIVE.UNITS_SPEED)] = @\(LOCOMOTIVE.UNITS_SPEED), " +
         "[\(LOCOMOTIVE.NETWORK_ID)] = @\(LOCOMOTIVE.NETWORK_ID), " +
-        "[\(LOCOMOTIVE.MAX_CV_NUMBER)] = @\(LOCOMOTIVE.MAX_CV_NUMBER) " +
+        "[\(LOCOMOTIVE.DECODER_MODEL)] = @\(LOCOMOTIVE.DECODER_MODEL), " +
+        "[\(LOCOMOTIVE.INVENTORY_CODE)] = @\(LOCOMOTIVE.INVENTORY_CODE), " +
+        "[\(LOCOMOTIVE.MANUFACTURER)] = @\(LOCOMOTIVE.MANUFACTURER), " +
+        "[\(LOCOMOTIVE.PURCHASE_DATE)] = @\(LOCOMOTIVE.PURCHASE_DATE), " +
+        "[\(LOCOMOTIVE.NOTES)] = @\(LOCOMOTIVE.NOTES), " +
+        "[\(LOCOMOTIVE.SOUND_FITTED)] = @\(LOCOMOTIVE.SOUND_FITTED) " +
         "WHERE [\(LOCOMOTIVE.LOCOMOTIVE_ID)] = @\(LOCOMOTIVE.LOCOMOTIVE_ID)"
       }
 
@@ -872,7 +977,12 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
       cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.UNITS_FBOFF_OCC)", value: occupancyFeedbackOffsetUnits.rawValue)
       cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.UNITS_SPEED)", value: speedUnits.rawValue)
       cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.NETWORK_ID)", value: networkId)
-      cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.MAX_CV_NUMBER)", value: maxCVNumber)
+      cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.DECODER_MODEL)", value: decoderModel)
+      cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.INVENTORY_CODE)", value: inventoryCode)
+      cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.MANUFACTURER)", value: manufacturer)
+      cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.PURCHASE_DATE)", value: purchaseDate)
+      cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.NOTES)", value: notes)
+      cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.SOUND_FITTED)", value: isSoundFitted)
 
       _ = cmd.executeNonQuery()
 
@@ -916,7 +1026,12 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
         "[\(LOCOMOTIVE.UNITS_FBOFF_OCC)], " +
         "[\(LOCOMOTIVE.UNITS_SPEED)], " +
         "[\(LOCOMOTIVE.NETWORK_ID)], " +
-        "[\(LOCOMOTIVE.MAX_CV_NUMBER)]"
+        "[\(LOCOMOTIVE.DECODER_MODEL)], " +
+        "[\(LOCOMOTIVE.INVENTORY_CODE)], " +
+        "[\(LOCOMOTIVE.MANUFACTURER)], " +
+        "[\(LOCOMOTIVE.PURCHASE_DATE)], " +
+        "[\(LOCOMOTIVE.NOTES)], " +
+        "[\(LOCOMOTIVE.SOUND_FITTED)]"
     }
   }
   

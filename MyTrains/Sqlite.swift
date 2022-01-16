@@ -106,6 +106,17 @@ class SqliteParameters {
     }
   }
   
+  public func addWithValue(key:String,value:Bool?) {
+    if !key.isEmpty && key.hasPrefix("@") {
+      if let bValue = value {
+        self.parameters[key] = " \(bValue ? 1 : 0) "
+      }
+      else {
+        addWithNull(key: key)
+      }
+    }
+  }
+  
   public static func conditionString(value:String) -> String {
     return " '\(String(value.prefix(value.count)).replacingOccurrences(of: "'", with: "''"))' "
   }
@@ -251,6 +262,13 @@ class SqliteDataReader {
       return nil;
     }
     return (Int) (sqlite3_column_int64(statement, (Int32)(index)))
+  }
+  
+  public func getBool(index:Int) -> Bool? {
+    if isDBNull(index: index){
+      return nil;
+    }
+    return 1 == (Int) (sqlite3_column_int64(statement, (Int32)(index)))
   }
   
   public func getUInt(index:Int) -> UInt? {

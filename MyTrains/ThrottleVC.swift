@@ -154,7 +154,7 @@ class ThrottleVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate,
       for button in buttons {
         let locoFunc = loco.functions[button.tag]
         button.setButtonType(locoFunc.isMomentary ? .momentaryPushIn : .pushOnPushOff)
-        button.isEnabled = true || locoFunc.isEnabled
+        button.isEnabled = locoFunc.isEnabled
         button.state = locoFunc.state ? .on : .off
         button.toolTip = locoFunc.toolTip
       }

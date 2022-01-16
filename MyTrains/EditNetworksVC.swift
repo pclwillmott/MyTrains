@@ -9,8 +9,8 @@ import Foundation
 import Cocoa
 
 class EditNetworksVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
-
-  // Window & View Control
+ 
+  // MARK: Window & View Control
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -40,14 +40,14 @@ class EditNetworksVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     
   }
   
-  // Private Properties
+  // MARK: Private Properties
   
   private var cboCommandStationDS = ComboBoxDBDS(tableName: TABLE.COMMAND_STATION, codeColumn: COMMAND_STATION.COMMAND_STATION_ID, displayColumn: COMMAND_STATION.COMMAND_STATION_NAME, sortColumn: COMMAND_STATION.COMMAND_STATION_NAME)
   
   private var cboLayoutDS = ComboBoxDBDS(tableName: TABLE.LAYOUT, codeColumn: LAYOUT.LAYOUT_ID, displayColumn: LAYOUT.LAYOUT_NAME, sortColumn: LAYOUT.LAYOUT_NAME)
   
-  // DBEditorView Delegate Methods
-  
+  // MARK: DBEditorView Delegate Methods
+ 
   func clearFields(dbEditorView:DBEditorView) {
     txtNetworkName.stringValue = ""
     cboCommandStation.deselectItem(at: cboCommandStation.indexOfSelectedItem)
@@ -108,7 +108,7 @@ class EditNetworksVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     editorView.dictionary = networkController.networks
   }
   
-  // Outlets & Actions
+  // MARK: Outlets & Actions
   
   @IBOutlet weak var editorView: DBEditorView!
   

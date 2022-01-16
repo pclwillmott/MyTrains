@@ -111,7 +111,12 @@ class Database {
               "[\(LOCOMOTIVE.UNITS_FBOFF_OCC)]    INT NOT NULL," +
               "[\(LOCOMOTIVE.UNITS_SPEED)]        INT NOT NULL," +
               "[\(LOCOMOTIVE.NETWORK_ID)]         INT NOT NULL," +
-              "[\(LOCOMOTIVE.MAX_CV_NUMBER)]      INT NOT NULL" +
+              "[\(LOCOMOTIVE.DECODER_MODEL)]      INT NOT NULL," +
+              "[\(LOCOMOTIVE.INVENTORY_CODE)]     TEXT NOT NULL," +
+              "[\(LOCOMOTIVE.MANUFACTURER)]       TEXT NOT NULL," +
+              "[\(LOCOMOTIVE.PURCHASE_DATE)]      TEXT NOT NULL," +
+              "[\(LOCOMOTIVE.NOTES)]              TEXT NOT NULL," +
+              "[\(LOCOMOTIVE.SOUND_FITTED)]       INT NOT NULL" +
             ")",
 
             "CREATE TABLE [\(TABLE.LOCOMOTIVE_FUNCTION)] (" +

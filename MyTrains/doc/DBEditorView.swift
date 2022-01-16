@@ -70,9 +70,13 @@ class DBEditorView: NSView {
   private var _tabView : NSTabView?
   
   private var first = true
-
+  
   // MARK: Public Properties
   
+  public var editorObject : EditorObject? {
+    return dataSource.editorObjectAt(index: cboSelect.indexOfSelectedItem)
+  }
+
   public var tabView : NSTabView? {
     get {
       return _tabView
@@ -161,35 +165,7 @@ class DBEditorView: NSView {
       enableTabs = true
     }
     
-    if let tv = _tabView {
-      for tab in tv.tabViewItems {
-        for control in tab.view!.subviews {
-          if let text = control as? NSTextField {
-            text.isEnabled = enableTabs
-          }
-          else if let combo = control as? NSComboBox {
-            combo.isEnabled = enableTabs
-          }
-          else if let button = control as? NSButton {
-            button.isEnabled = enableTabs
-          }
-          else if let box = control as? NSBox {
-            for subControl in box.contentView!.subviews {
-              if let text = subControl as? NSTextField {
-                text.isEnabled = enableTabs
-              }
-              else if let combo = subControl as? NSComboBox {
-                combo.isEnabled = enableTabs
-              }
-              else if let button = subControl as? NSButton {
-                button.isEnabled = enableTabs
-              }
-            }
-          }
-
-        }
-      }
-    }
+    _tabView?.isHidden = !enableTabs
     
   }
   

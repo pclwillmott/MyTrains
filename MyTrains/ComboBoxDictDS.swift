@@ -65,7 +65,7 @@ class ComboBoxDictDS : NSObject, NSComboBoxDataSource {
     return nil
   }
   
-  // NSComboBoxDataSource Methods
+  // MARK: NSComboBoxDataSource Methods
   
   func numberOfItems(in comboBox: NSComboBox) -> Int {
     return _items.count

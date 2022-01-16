@@ -41,7 +41,7 @@ public class LocomotiveFunction : EditorObject {
   
   private var _functionDescription : String = ""
   
-  private var _isMomentary : Bool = false
+  private var _isMomentary : Bool = true
   
   private var _duration : Int = 0
   
@@ -60,6 +60,16 @@ public class LocomotiveFunction : EditorObject {
   override public func displayString() -> String {
     return _functionDescription
   }
+  
+  public var newIsEnabled : Bool = true
+  
+  public var newFunctionDescription : String = ""
+  
+  public var newIsMomentary : Bool = false
+  
+  public var newDuration : Int = 0
+  
+  public var newIsInverted : Bool = false
   
   public var locomotiveId : Int {
     get {
@@ -92,6 +102,7 @@ public class LocomotiveFunction : EditorObject {
     set(value) {
       if value != _isEnabled {
         _isEnabled = value
+        newIsEnabled = _isEnabled
         modified = true
       }
     }
@@ -104,6 +115,7 @@ public class LocomotiveFunction : EditorObject {
     set(value) {
       if value != _functionDescription {
         _functionDescription = value
+        newFunctionDescription = _functionDescription
         modified = true
       }
     }
@@ -116,6 +128,7 @@ public class LocomotiveFunction : EditorObject {
     set(value) {
       if value != _isMomentary {
         _isMomentary = value
+        newIsMomentary = _isMomentary
         modified = true
       }
     }
@@ -128,6 +141,7 @@ public class LocomotiveFunction : EditorObject {
     set(value) {
       if value != _duration {
         _duration = value
+        newDuration = _duration
         modified = true
       }
     }
@@ -140,6 +154,7 @@ public class LocomotiveFunction : EditorObject {
     set(value) {
       if value != _isInverted {
         _isInverted = value
+        newIsInverted = _isInverted
         modified = true
       }
     }
@@ -254,6 +269,12 @@ public class LocomotiveFunction : EditorObject {
   }
 
   public func save() {
+    
+    isEnabled = newIsEnabled
+    functionDescription = newFunctionDescription
+    isMomentary = newIsMomentary
+    duration = newDuration
+    isInverted = newIsInverted
     
     if modified {
       

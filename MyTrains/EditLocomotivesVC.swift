@@ -35,6 +35,10 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     cboNetwork.dataSource = cboNetworkDS
     
     editorView.dictionary = networkController.locomotives
+    
+    cboDecoderModel.dataSource = cboDecoderModelDS
+    
+    cboModelManufacturer.dataSource = cboModelManufacturerDS
 
   }
   
@@ -42,6 +46,11 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   
   private var cboNetworkDS = ComboBoxDBDS(tableName: TABLE.NETWORK, codeColumn: NETWORK.NETWORK_ID, displayColumn: NETWORK.NETWORK_NAME, sortColumn: NETWORK.NETWORK_NAME)
   
+  private var cboDecoderModelDS = ComboBoxDBDS(tableName: TABLE.LOCOMOTIVE, codeColumn: LOCOMOTIVE.LOCOMOTIVE_ID, displayColumn: LOCOMOTIVE.DECODER_MODEL, sortColumn: LOCOMOTIVE.DECODER_MODEL, groupItems: true)
+  
+  private var cboModelManufacturerDS = ComboBoxDBDS(tableName: TABLE.LOCOMOTIVE, codeColumn: LOCOMOTIVE.LOCOMOTIVE_ID, displayColumn: LOCOMOTIVE.MANUFACTURER, sortColumn: LOCOMOTIVE.MANUFACTURER, groupItems: true)
+  
+  private var fnTableViewDS = FNTableViewDS()
   
   // MARK: DBEditorDelegate Methods
   
@@ -62,9 +71,13 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     txtMaximumReverseSpeed.stringValue = "75.0"
     cboMaximumSpeedUnits.selectItem(at: UserDefaults.standard.integer(forKey: DEFAULT.UNITS_SPEED))
     cboNetwork.deselectItem(at: cboNetwork.indexOfSelectedItem)
-    txtMaxCVNumber.stringValue = "255"
     lblManufacturer.stringValue = "Unknown"
-
+    cboDecoderModel.stringValue = ""
+    txtInventoryCode.stringValue = ""
+    cboModelManufacturer.stringValue = ""
+    txtPurchaseDate.stringValue = ""
+    txtNotes.string = ""
+    chkSoundFitted.state = .off
   }
   
   func setupFields(dbEditorView: DBEditorView, editorObject: EditorObject) {
@@ -87,8 +100,17 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
       if let netIndex = cboNetworkDS.indexOfItemWithCodeValue(code: locomotive.networkId) {
         cboNetwork.selectItem(at: netIndex)
       }
-      txtMaxCVNumber.stringValue = "\(locomotive.maxCVNumber)"
       lblManufacturer.stringValue = locomotive.decoderManufacturerName
+      cboDecoderModel.stringValue = locomotive.decoderModel
+      txtInventoryCode.stringValue = locomotive.inventoryCode
+      cboModelManufacturer.stringValue = locomotive.manufacturer
+      txtPurchaseDate.stringValue = locomotive.purchaseDate
+      txtNotes.string = locomotive.notes
+      chkSoundFitted.state = locomotive.isSoundFitted ? .on : .off
+      fnTableViewDS.fns = locomotive.functions
+      fnTableView.dataSource = fnTableViewDS
+      fnTableView.delegate = fnTableViewDS
+      fnTableView.reloadData()
     }
   }
   
@@ -108,16 +130,6 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     else {
       txtScale.becomeFirstResponder()
       return "A scale greater than zero is required."
-    }
-    if let maxCV = Int(txtMaxCVNumber.stringValue) {
-      if maxCV < 1 || maxCV > 1024 {
-        txtMaxCVNumber.becomeFirstResponder()
-        return "An CV number in the range 1 to 1024 is required."
-      }
-    }
-    else {
-      txtMaxCVNumber.becomeFirstResponder()
-      return "An CV number in the range 1 to 1024 is required."
     }
     if let address = Int(txtAddress.stringValue) {
       if address < 0 || address > 9983 {
@@ -181,7 +193,12 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     locomotive.maxBackwardSpeed = Double(txtMaximumReverseSpeed.stringValue) ?? 0.0
     locomotive.speedUnits = SpeedUnit(rawValue: cboMaximumSpeedUnits.indexOfSelectedItem) ?? .kilometersPerHour
     locomotive.networkId = cboNetworkDS.codeForItemAt(index: cboNetwork.indexOfSelectedItem) ?? -1
-    locomotive.maxCVNumber = Int(txtMaxCVNumber.stringValue) ?? 255
+    locomotive.decoderModel = cboDecoderModel.stringValue
+    locomotive.inventoryCode = txtInventoryCode.stringValue
+    locomotive.manufacturer = cboModelManufacturer.stringValue
+    locomotive.purchaseDate = txtPurchaseDate.stringValue
+    locomotive.notes = txtNotes.string
+    locomotive.isSoundFitted = chkSoundFitted.state == .on
     locomotive.save()
   }
 
@@ -316,12 +333,88 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     editorView.modified = true
   }
   
-  @IBOutlet weak var txtMaxCVNumber: NSTextField!
+  @IBOutlet weak var lblManufacturer: NSTextField!
   
-  @IBAction func txtMaxCVNumberAction(_ sender: NSTextField) {
+  @IBOutlet weak var cboDecoderModel: NSComboBox!
+  
+  @IBAction func cboDecoderModelAction(_ sender: NSComboBox) {
     editorView.modified = true
   }
- 
-  @IBOutlet weak var lblManufacturer: NSTextField!
+  
+  @IBOutlet weak var chkSoundFitted: NSButton!
+  
+  @IBAction func chkSoundFittedAction(_ sender: NSButton) {
+    editorView.modified = true
+  }
+  
+  @IBOutlet weak var cboModelManufacturer: NSComboBox!
+  
+  @IBAction func cboModelManufacturerAction(_ sender: NSComboBox) {
+    editorView.modified = true
+  }
+  
+  @IBOutlet weak var txtPurchaseDate: NSTextField!
+  
+  @IBAction func txtPurchaseDateAction(_ sender: NSTextField) {
+    editorView.modified = true
+  }
+  
+  @IBOutlet weak var txtInventoryCode: NSTextField!
+  
+  @IBAction func txtInventoryCodeAction(_ sender: NSTextField) {
+    editorView.modified = true
+  }
+  
+  @IBOutlet var txtNotes: NSTextView!
+  
+  @IBOutlet weak var fnTableView: NSTableView!
+  
+  @IBAction func fnTableViewAction(_ sender: NSTableView) {
+    editorView.modified = true
+  }
+  
+  @IBAction func chkFNEnabledAction(_ sender: NSButton) {
+    if let loco = editorView.editorObject as? Locomotive {
+      loco.functions[sender.tag].newIsEnabled = sender.state == .on
+    }
+    editorView.modified = true
+  }
+  
+  @IBAction func chkFNMomentaryAction(_ sender: NSButton) {
+    if let loco = editorView.editorObject as? Locomotive {
+      loco.functions[sender.tag].newIsMomentary = sender.state == .on
+    }
+    editorView.modified = true
+  }
+  
+  @IBAction func txtDurationAction(_ sender: NSTextField) {
+    if let loco = editorView.editorObject as? Locomotive {
+      var reset = true
+      if let duration = Int(sender.stringValue) {
+        if duration >= 0 {
+          loco.functions[sender.tag].newDuration = duration
+          reset = false
+        }
+      }
+      if reset {
+        sender.stringValue = "\(loco.functions[sender.tag].newDuration)"
+      }
+    }
+    editorView.modified = true
+  }
+  
+  @IBAction func chkFNInvertedAction(_ sender: NSButton) {
+    if let loco = editorView.editorObject as? Locomotive {
+      loco.functions[sender.tag].newIsInverted = sender.state == .on
+    }
+    editorView.modified = true
+  }
+  
+  @IBAction func cboDescriptionAction(_ sender: NSComboBox) {
+    if let loco = editorView.editorObject as? Locomotive {
+      loco.functions[sender.tag].newFunctionDescription = sender.stringValue
+    }
+    editorView.modified = true
+  }
   
 }

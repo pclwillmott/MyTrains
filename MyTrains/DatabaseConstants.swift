@@ -82,7 +82,12 @@ enum LOCOMOTIVE {
   static let UNITS_FBOFF_OCC       = "UNITS_FBOFF_OCC"
   static let UNITS_SPEED           = "UNITS_SPEED"
   static let NETWORK_ID            = "NETWORK_ID"
-  static let MAX_CV_NUMBER         = "MAX_CV_NUMBER"
+  static let DECODER_MODEL         = "DECODER_MODEL"
+  static let INVENTORY_CODE        = "INVENTORY_CODE"
+  static let MANUFACTURER          = "MANUFACTURER"
+  static let PURCHASE_DATE         = "PURCHASE_DATE"
+  static let NOTES                 = "NOTES"
+  static let SOUND_FITTED          = "SOUND_FITTED"
 }
 
 enum LOCOMOTIVE_FUNCTION {

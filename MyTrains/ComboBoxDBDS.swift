@@ -10,12 +10,7 @@ import Cocoa
 
 class ComboBoxDBDS : NSObject, NSComboBoxDataSource, NSComboBoxDelegate {
   
-  private var _tableName     : String
-  private var _displayColumn : String
-  private var _codeColumn    : String
-  private var _sortColumn    : String
-  
-  private var _items : [ComboItem] = []
+  // MARK: Constructors
   
   init(tableName: String, codeColumn: String, displayColumn: String, sortColumn:String) {
     
@@ -30,43 +25,94 @@ class ComboBoxDBDS : NSObject, NSComboBoxDataSource, NSComboBoxDelegate {
     
   }
   
-  public func reloadData() {
+  init(tableName: String, codeColumn: String, displayColumn: String, sortColumn:String, groupItems: Bool) {
     
-     let conn = Database.getConnection()
-     
-     let shouldClose = conn.state != .Open
-      
-     if shouldClose {
-        _ = conn.open()
-     }
-      
-     let cmd = conn.createCommand()
-      
-     cmd.commandText = "SELECT [\(_codeColumn)], [\(_displayColumn)] FROM [\(_tableName)] ORDER BY [\(_sortColumn)]"
-
-     if let reader = cmd.executeReader() {
-          
-      _items.removeAll()
-      
-       while reader.read() {
-         let code = reader.getInt(index: 0)!
-         var title = ""
-         if !reader.isDBNull(index: 1) {
-           title = reader.getString(index: 1)!
-         }
-        _items.append(ComboItem(code: code, title: title))
-       }
-          
-       reader.close()
-          
-     }
-     
-     if shouldClose {
-       conn.close()
-     }
-
+    self._tableName     = tableName
+    self._codeColumn    = codeColumn
+    self._displayColumn = displayColumn
+    self._sortColumn    = sortColumn
+    self._groupItems    = groupItems
+    
+    super.init()
+    
+    reloadData()
+    
   }
   
+  // MARK: Private Properties
+  
+  
+  private var _tableName : String
+  
+  private var _displayColumn : String
+  
+  private var _codeColumn : String
+  
+  private var _sortColumn : String
+  
+  private var _groupItems : Bool = false
+  
+  private var _items : [ComboItem] = []
+  
+  // MARK: Public Methods
+  
+  public func reloadData() {
+    
+    let conn = Database.getConnection()
+    
+    let shouldClose = conn.state != .Open
+     
+    if shouldClose {
+       _ = conn.open()
+    }
+     
+    let cmd = conn.createCommand()
+     
+    var sql : String = ""
+    
+    if _groupItems {
+      sql = "SELECT [\(_sortColumn)] FROM [\(_tableName)] GROUP BY [\(_sortColumn)]"
+    }
+    else {
+      sql = "SELECT [\(_codeColumn)], [\(_displayColumn)] FROM [\(_tableName)] ORDER BY [\(_sortColumn)]"
+    }
+    
+    cmd.commandText = sql
+
+    if let reader = cmd.executeReader() {
+         
+     _items.removeAll()
+     
+      while reader.read() {
+        var code : Int = 0
+        var title : String = ""
+        if _groupItems {
+          if !reader.isDBNull(index: 0) {
+            title = reader.getString(index: 0) ?? ""
+          }
+        }
+        else {
+          code = reader.getInt(index: 0)!
+          if !reader.isDBNull(index: 1) {
+            title = reader.getString(index: 1)!
+          }
+
+        }
+       _items.append(ComboItem(code: code, title: title))
+      }
+         
+      reader.close()
+         
+    }
+    
+    if shouldClose {
+      conn.close()
+    }
+
+  }
+
+  // MARK: NSComboBoxDataSource Methods
+
   // Returns the first item from the pop-up list that starts with the text the user has typed.
 
   public func comboBox(_ comboBox: NSComboBox, completedString string: String) -> String? {
