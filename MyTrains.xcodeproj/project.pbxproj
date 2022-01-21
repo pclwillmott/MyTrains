@@ -36,6 +36,7 @@
 		DA5E173E272EB23100F9341F /* LoconetSensorMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5E173D272EB23100F9341F /* LoconetSensorMessage.swift */; };
 		DA5E1741272ED2DF00F9341F /* LoconetSwitchRequestMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5E1740272ED2DF00F9341F /* LoconetSwitchRequestMessage.swift */; };
 		DA5E1743272EDA5B00F9341F /* LocoSlotDataP1.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5E1742272EDA5B00F9341F /* LocoSlotDataP1.swift */; };
+		DA61400D279B0B2400C5BF2F /* ORSSerial.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA8FC5E0272C3EE800FCCFCA /* ORSSerial.framework */; };
 		DA6A0AD8275295BF00913F2B /* Monitor.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA6A0AD7275295BF00913F2B /* Monitor.storyboard */; };
 		DA6A0ADA2752976800913F2B /* MonitorVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6A0AD92752976800913F2B /* MonitorVC.swift */; };
 		DA6A0ADC27529D6600913F2B /* ModalWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6A0ADB27529D6600913F2B /* ModalWindow.swift */; };
@@ -62,7 +63,6 @@
 		DA8837882770B7B2000B9A41 /* EditSwitchesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8837872770B7B2000B9A41 /* EditSwitchesVC.swift */; };
 		DA88378C2770FBEC000B9A41 /* DBEditorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA88378B2770FBEC000B9A41 /* DBEditorView.xib */; };
 		DA88378E2770FC41000B9A41 /* DBEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA88378D2770FC41000B9A41 /* DBEditorView.swift */; };
-		DA8FC5E6272C3F8100FCCFCA /* ORSSerial.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA8FC5E0272C3EE800FCCFCA /* ORSSerial.framework */; };
 		DA8FC5E8272C759A00FCCFCA /* NetworkMessenger.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8FC5E7272C759A00FCCFCA /* NetworkMessenger.swift */; };
 		DA9807C52789AFE300F73ACD /* NMRA.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9807C42789AFE300F73ACD /* NMRA.swift */; };
 		DAA83DEB272C37670075CBCD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA83DEA272C37670075CBCD /* AppDelegate.swift */; };
@@ -78,6 +78,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		DA61400A279B0ABD00C5BF2F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DA8FC5DA272C3EE800FCCFCA /* ORSSerialPort.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 9DCA89111A2BB106009285EB;
+			remoteInfo = ORSSerial;
+		};
 		DA8FC5DF272C3EE800FCCFCA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DA8FC5DA272C3EE800FCCFCA /* ORSSerialPort.xcodeproj */;
@@ -91,13 +98,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 9D7472131B6D7767002D8B10;
 			remoteInfo = "ORSSerialPort Tests";
-		};
-		DA8FC5E3272C3F6600FCCFCA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DA8FC5DA272C3EE800FCCFCA /* ORSSerialPort.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 9DCA89111A2BB106009285EB;
-			remoteInfo = ORSSerial;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -179,7 +179,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DA8FC5E6272C3F8100FCCFCA /* ORSSerial.framework in Frameworks */,
+				DA61400D279B0B2400C5BF2F /* ORSSerial.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -309,7 +309,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				DA8FC5E4272C3F6600FCCFCA /* PBXTargetDependency */,
+				DA61400B279B0ABD00C5BF2F /* PBXTargetDependency */,
 			);
 			name = MyTrains;
 			productName = MyTrains;
@@ -460,10 +460,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		DA8FC5E4272C3F6600FCCFCA /* PBXTargetDependency */ = {
+		DA61400B279B0ABD00C5BF2F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = ORSSerial;
-			targetProxy = DA8FC5E3272C3F6600FCCFCA /* PBXContainerItemProxy */;
+			targetProxy = DA61400A279B0ABD00C5BF2F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
