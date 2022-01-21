@@ -396,7 +396,7 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
           reset = false
         }
       }
-      if reset {
+      if reset { 
         sender.stringValue = "\(loco.functions[sender.tag].newDuration)"
       }
     }
