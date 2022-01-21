@@ -87,7 +87,6 @@ enum LOCOMOTIVE {
   static let MANUFACTURER          = "MANUFACTURER"
   static let PURCHASE_DATE         = "PURCHASE_DATE"
   static let NOTES                 = "NOTES"
-  static let SOUND_FITTED          = "SOUND_FITTED"
 }
 
 enum LOCOMOTIVE_FUNCTION {

@@ -115,8 +115,7 @@ class Database {
               "[\(LOCOMOTIVE.INVENTORY_CODE)]     TEXT NOT NULL," +
               "[\(LOCOMOTIVE.MANUFACTURER)]       TEXT NOT NULL," +
               "[\(LOCOMOTIVE.PURCHASE_DATE)]      TEXT NOT NULL," +
-              "[\(LOCOMOTIVE.NOTES)]              TEXT NOT NULL," +
-              "[\(LOCOMOTIVE.SOUND_FITTED)]       INT NOT NULL" +
+              "[\(LOCOMOTIVE.NOTES)]              TEXT NOT NULL" +
             ")",
 
             "CREATE TABLE [\(TABLE.LOCOMOTIVE_FUNCTION)] (" +

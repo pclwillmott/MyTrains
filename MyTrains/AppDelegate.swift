@@ -94,6 +94,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     wc.showWindow(nil)
   }
   
+  @IBAction func mnuSlotView(_ sender: NSMenuItem) {
+    let x = ModalWindow.SlotView
+    let wc = x.windowController
+    wc.showWindow(nil)
+  }
   
   @IBAction func mnuProgramMobileDecoderAddress(_ sender: NSMenuItem) {
     ModalWindow.ProgramDecoderAddress.runModel()

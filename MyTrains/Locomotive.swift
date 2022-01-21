@@ -187,8 +187,6 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
   
   private var _notes : String = ""
   
-  private var _isSoundFitted : Bool = false
-  
   private var _isInUse : Bool = false
   
   private var _direction : LocomotiveDirection = .forward
@@ -466,18 +464,6 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
     set(value) {
       if value != _notes {
         _notes = value
-        modified = true
-      }
-    }
-  }
-  
-  public var isSoundFitted : Bool {
-    get {
-      return _isSoundFitted
-    }
-    set(value) {
-      if value != _isSoundFitted {
-        _isSoundFitted = value
         modified = true
       }
     }
@@ -844,10 +830,6 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
         notes = reader.getString(index: 21)!
       }
 
-      if !reader.isDBNull(index: 22) {
-        isSoundFitted = reader.getBool(index: 22)!
-      }
-
     }
     
     modified = false
@@ -883,8 +865,7 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
         "[\(LOCOMOTIVE.INVENTORY_CODE)]," +
         "[\(LOCOMOTIVE.MANUFACTURER)]," +
         "[\(LOCOMOTIVE.PURCHASE_DATE)]," +
-        "[\(LOCOMOTIVE.NOTES)]," +
-        "[\(LOCOMOTIVE.SOUND_FITTED)]" +
+        "[\(LOCOMOTIVE.NOTES)]" +
         ") VALUES (" +
         "@\(LOCOMOTIVE.LOCOMOTIVE_ID), " +
         "@\(LOCOMOTIVE.LOCOMOTIVE_NAME), " +
@@ -907,8 +888,7 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
         "@\(LOCOMOTIVE.INVENTORY_CODE), " +
         "@\(LOCOMOTIVE.MANUFACTURER), " +
         "@\(LOCOMOTIVE.PURCHASE_DATE), " +
-        "@\(LOCOMOTIVE.NOTES), " +
-        "@\(LOCOMOTIVE.SOUND_FITTED)" +
+        "@\(LOCOMOTIVE.NOTES)" +
         ")"
         primaryKey = Database.nextCode(tableName: TABLE.LOCOMOTIVE, primaryKey: LOCOMOTIVE.LOCOMOTIVE_ID)!
         
@@ -943,8 +923,7 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
         "[\(LOCOMOTIVE.INVENTORY_CODE)] = @\(LOCOMOTIVE.INVENTORY_CODE), " +
         "[\(LOCOMOTIVE.MANUFACTURER)] = @\(LOCOMOTIVE.MANUFACTURER), " +
         "[\(LOCOMOTIVE.PURCHASE_DATE)] = @\(LOCOMOTIVE.PURCHASE_DATE), " +
-        "[\(LOCOMOTIVE.NOTES)] = @\(LOCOMOTIVE.NOTES), " +
-        "[\(LOCOMOTIVE.SOUND_FITTED)] = @\(LOCOMOTIVE.SOUND_FITTED) " +
+        "[\(LOCOMOTIVE.NOTES)] = @\(LOCOMOTIVE.NOTES) " +
         "WHERE [\(LOCOMOTIVE.LOCOMOTIVE_ID)] = @\(LOCOMOTIVE.LOCOMOTIVE_ID)"
       }
 
@@ -982,7 +961,6 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
       cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.MANUFACTURER)", value: manufacturer)
       cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.PURCHASE_DATE)", value: purchaseDate)
       cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.NOTES)", value: notes)
-      cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.SOUND_FITTED)", value: isSoundFitted)
 
       _ = cmd.executeNonQuery()
 
@@ -1030,8 +1008,7 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
         "[\(LOCOMOTIVE.INVENTORY_CODE)], " +
         "[\(LOCOMOTIVE.MANUFACTURER)], " +
         "[\(LOCOMOTIVE.PURCHASE_DATE)], " +
-        "[\(LOCOMOTIVE.NOTES)], " +
-        "[\(LOCOMOTIVE.SOUND_FITTED)]"
+        "[\(LOCOMOTIVE.NOTES)]"
     }
   }
   

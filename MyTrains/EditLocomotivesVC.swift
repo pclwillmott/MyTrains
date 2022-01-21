@@ -44,6 +44,8 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   
   // MARK: Private Properties
   
+  private var cvTableViewDS = CVTableViewDS()
+
   private var cboNetworkDS = ComboBoxDBDS(tableName: TABLE.NETWORK, codeColumn: NETWORK.NETWORK_ID, displayColumn: NETWORK.NETWORK_NAME, sortColumn: NETWORK.NETWORK_NAME)
   
   private var cboDecoderModelDS = ComboBoxDBDS(tableName: TABLE.LOCOMOTIVE, codeColumn: LOCOMOTIVE.LOCOMOTIVE_ID, displayColumn: LOCOMOTIVE.DECODER_MODEL, sortColumn: LOCOMOTIVE.DECODER_MODEL, groupItems: true)
@@ -77,7 +79,6 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     cboModelManufacturer.stringValue = ""
     txtPurchaseDate.stringValue = ""
     txtNotes.string = ""
-    chkSoundFitted.state = .off
   }
   
   func setupFields(dbEditorView: DBEditorView, editorObject: EditorObject) {
@@ -106,11 +107,14 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
       cboModelManufacturer.stringValue = locomotive.manufacturer
       txtPurchaseDate.stringValue = locomotive.purchaseDate
       txtNotes.string = locomotive.notes
-      chkSoundFitted.state = locomotive.isSoundFitted ? .on : .off
       fnTableViewDS.fns = locomotive.functions
       fnTableView.dataSource = fnTableViewDS
       fnTableView.delegate = fnTableViewDS
       fnTableView.reloadData()
+      cvTableViewDS.cvs = locomotive.cvsSorted
+      cvTableView.dataSource = cvTableViewDS
+      cvTableView.delegate = cvTableViewDS
+      cvTableView.reloadData()
     }
   }
   
@@ -198,7 +202,6 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     locomotive.manufacturer = cboModelManufacturer.stringValue
     locomotive.purchaseDate = txtPurchaseDate.stringValue
     locomotive.notes = txtNotes.string
-    locomotive.isSoundFitted = chkSoundFitted.state == .on
     locomotive.save()
   }
 
@@ -341,12 +344,6 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     editorView.modified = true
   }
   
-  @IBOutlet weak var chkSoundFitted: NSButton!
-  
-  @IBAction func chkSoundFittedAction(_ sender: NSButton) {
-    editorView.modified = true
-  }
-  
   @IBOutlet weak var cboModelManufacturer: NSComboBox!
   
   @IBAction func cboModelManufacturerAction(_ sender: NSComboBox) {
@@ -415,6 +412,64 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
       loco.functions[sender.tag].newFunctionDescription = sender.stringValue
     }
     editorView.modified = true
+  }
+  
+  @IBOutlet weak var cvTableView: NSTableView!
+  
+  @IBAction func cvTableViewAction(_ sender: NSTableView) {
+  }
+  
+  @IBAction func chkSupportedAction(_ sender: NSButton) {
+    let cv = cvTableViewDS.cvs[sender.tag]
+    cv.isEnabled = sender.state == .on
+    cv.save()
+  }
+  
+  @IBAction func txtDescriptionAction(_ sender: NSTextField) {
+    let cv = cvTableViewDS.cvs[sender.tag]
+    let trim = sender.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+    cv.customDescription = trim
+    if trim == "" {
+      sender.stringValue = NMRA.cvDescription(cv: cv.cvNumber)
+    }
+    cv.save()
+  }
+  
+  @IBAction func cboNumberBaseAction(_ sender: NSComboBox) {
+    let cv = cvTableViewDS.cvs[sender.tag]
+    cv.customNumberBase = CVNumberBase(rawValue: sender.indexOfSelectedItem) ?? .decimal
+    cv.save()
+    cvTableView.reloadData()
+  }
+  
+  @IBAction func txtDefaultValueAction(_ sender: NSTextField) {
+    let cv = cvTableViewDS.cvs[sender.tag]
+    var reset = true
+    if let newValue = Int.fromMultiBaseString(stringValue: sender.stringValue) {
+      if newValue >= 0 && newValue < 256 {
+        reset = false
+        cv.defaultValue = newValue
+        cv.save()
+      }
+    }
+    if reset {
+      sender.stringValue = "\(cv.displayDefaultValue)"
+    }
+  }
+  
+  @IBAction func txtValueAction(_ sender: NSTextField) {
+    let cv = cvTableViewDS.cvs[sender.tag]
+    var reset = true
+    if let newValue = Int.fromMultiBaseString(stringValue: sender.stringValue) {
+      if newValue >= 0 && newValue < 256 {
+        reset = false
+        cv.cvValue = newValue
+        cv.save()
+      }
+    }
+    if reset {
+      sender.stringValue = "\(cv.displayCVValue)"
+    }
   }
   
 }

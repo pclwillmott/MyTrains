@@ -79,8 +79,6 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
   
   private var setupLock : NSLock = NSLock()
   
-  private var loconetSlots = [LoconetSlot?](repeating: nil, count: 120)
-  
   private var outputQueue : [NetworkOutputQueueItem] = []
   
   private var outputQueueLock : NSLock = NSLock()
