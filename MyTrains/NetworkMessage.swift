@@ -143,6 +143,10 @@ public class NetworkMessage {
              message[2] == 0x40 {
             _messageType = .progCmdAcceptedBlind
           }
+          else if message[1] == 0x3b &&
+             message[2] == 0x00 {
+            _messageType = .slotNotImplemented
+          }
           else {
             _messageType = .ack
           }
@@ -151,14 +155,14 @@ public class NetworkMessage {
           if message[1] == 0x15 &&
               (message[2] & 0b11111000) == 0x00 &&
               (message[7] & 0b10110000) == 0x00 {
-            if message[3] < 0x78 {
+            if message[3] < 0x78 || true {
               _messageType = .locoSlotDataP2
             }
           }
         case NetworkMessageOpcode.OPC_SL_RD_DATA.rawValue:
           if   message[ 1] == 0x0e &&
               (message[ 7] &  0b00110000) == 0x00    /* TRK  */ {
-            if message[2] < 0x78 &&
+            if (message[2] < 0x78 || true) &&
               (message[ 6] &  0b11000000) == 0x00 && /* DIRF */
               (message[ 8] &  0b11110010) == 0x00 && /* SS@  */
               (message[10] &  0b11110000) == 0x00    /* SND  */ {

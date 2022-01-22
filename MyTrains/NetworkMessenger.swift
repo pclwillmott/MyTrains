@@ -22,7 +22,7 @@ public protocol NetworkInterfaceDelegate {
 }
 
 enum TIMING {
-  static let STANDARD = 30.0 / 1000.0
+  static let STANDARD = 200.0 / 1000.0
   static let DISCOVER = 1.0
 }
 
@@ -400,6 +400,22 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
   public func getProgSlotDataP1() {
     
     let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_RQ_SL_DATA.rawValue, 0x7c, 0x00], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: nil, retryCount: 1)
+
+  }
+  
+  public func getLocoSlotDataP1(slotNumber: Int) {
+    
+    let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_RQ_SL_DATA.rawValue, UInt8(slotNumber), 0x00], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: nil, retryCount: 1)
+
+  }
+  
+  public func getLocoSlotDataP2(slotPage: Int, slotNumber: Int) {
+    
+    let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_RQ_SL_DATA.rawValue, UInt8(slotNumber), UInt8(slotPage) | 0b01000000], appendCheckSum: true)
     
     addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: nil, retryCount: 1)
 

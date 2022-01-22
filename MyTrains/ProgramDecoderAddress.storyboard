@@ -200,7 +200,7 @@ Gw
                                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                                 <tableColumns>
-                                                                    <tableColumn width="80" minWidth="80" maxWidth="80" id="nZx-xA-qND">
+                                                                    <tableColumn identifier="CVNumber" width="80" minWidth="80" maxWidth="80" id="nZx-xA-qND">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="CV #">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -232,7 +232,7 @@ Gw
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn width="70" minWidth="70" maxWidth="70" id="SRz-S2-AhI">
+                                                                    <tableColumn identifier="Enabled" width="70" minWidth="70" maxWidth="70" id="SRz-S2-AhI">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Supported">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -263,7 +263,7 @@ Gw
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn width="350" minWidth="350" maxWidth="350" id="2ol-NR-b31">
+                                                                    <tableColumn identifier="Description" width="350" minWidth="350" maxWidth="350" id="2ol-NR-b31">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Description">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -298,7 +298,7 @@ Gw
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn width="90" minWidth="90" maxWidth="90" id="3mM-S1-Arn">
+                                                                    <tableColumn identifier="NumberBase" width="90" minWidth="90" maxWidth="90" id="3mM-S1-Arn">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Number Base">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -336,7 +336,7 @@ Gw
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn width="90" minWidth="90" maxWidth="90" id="2mR-eB-YGA">
+                                                                    <tableColumn identifier="DefaultValue" width="90" minWidth="90" maxWidth="90" id="2mR-eB-YGA">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Default">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -371,7 +371,7 @@ Gw
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn width="90" minWidth="90" maxWidth="90" id="G0b-IY-6Mh">
+                                                                    <tableColumn identifier="Value" width="90" minWidth="90" maxWidth="90" id="G0b-IY-6Mh">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Value">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -406,7 +406,7 @@ Gw
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn width="90" minWidth="90" maxWidth="90" id="1IL-BM-656">
+                                                                    <tableColumn identifier="NewValue" width="90" minWidth="90" maxWidth="90" id="1IL-BM-656">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="New Value">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -448,7 +448,7 @@ Gw
                                                             </tableView>
                                                         </subviews>
                                                     </clipView>
-                                                    <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="V1y-sq-iCM">
+                                                    <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="0.96616541353383456" horizontal="YES" id="V1y-sq-iCM">
                                                         <rect key="frame" x="1" y="283" width="708" height="16"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </scroller>

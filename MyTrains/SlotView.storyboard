@@ -51,7 +51,7 @@
                             <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yYM-Yn-5ic">
                                 <rect key="frame" x="22" y="394" width="643" height="25"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="5" id="YOy-aU-Lzp">
+                                <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="5" id="YOy-aU-Lzp">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -84,7 +84,7 @@
                                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                                 <tableColumns>
-                                                                    <tableColumn width="40" minWidth="40" maxWidth="40" id="pn9-Ne-RjK">
+                                                                    <tableColumn identifier="SlotNumber" editable="NO" width="40" minWidth="40" maxWidth="40" id="pn9-Ne-RjK">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Slot #">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -116,7 +116,7 @@
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn width="80" minWidth="80" maxWidth="80" id="PCt-bZ-ff6">
+                                                                    <tableColumn identifier="Status" editable="NO" width="80" minWidth="80" maxWidth="80" id="PCt-bZ-ff6">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Status">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -148,7 +148,7 @@
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn width="80" minWidth="80" maxWidth="80" id="Zmy-DN-rIu">
+                                                                    <tableColumn identifier="Decoder" editable="NO" width="80" minWidth="80" maxWidth="80" id="Zmy-DN-rIu">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Decoder">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -180,7 +180,7 @@
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn width="80" minWidth="80" maxWidth="80" id="nNY-tr-gAX">
+                                                                    <tableColumn identifier="Address" editable="NO" width="80" minWidth="80" maxWidth="80" id="nNY-tr-gAX">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Address">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -212,7 +212,7 @@
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn width="80" minWidth="80" maxWidth="80" id="b8G-eV-tJk">
+                                                                    <tableColumn identifier="Speed" editable="NO" width="80" minWidth="80" maxWidth="80" id="b8G-eV-tJk">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Speed">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -244,7 +244,7 @@
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn width="80" minWidth="80" maxWidth="80" id="duv-ZF-qLk">
+                                                                    <tableColumn identifier="Direction" editable="NO" width="80" minWidth="80" maxWidth="80" id="duv-ZF-qLk">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Direction">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -276,7 +276,7 @@
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn width="80" minWidth="80" maxWidth="80" id="PJD-n6-eRj">
+                                                                    <tableColumn identifier="Throttle" editable="NO" width="80" minWidth="80" maxWidth="80" id="PJD-n6-eRj">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Throttle ID">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -308,7 +308,7 @@
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn width="30" minWidth="30" maxWidth="30" id="mB0-qk-ayW">
+                                                                    <tableColumn identifier="F0" editable="NO" width="30" minWidth="30" maxWidth="30" id="mB0-qk-ayW">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="F0">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -340,7 +340,7 @@
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn width="30" minWidth="30" maxWidth="30" id="ZXV-HJ-aiP">
+                                                                    <tableColumn identifier="F1" editable="NO" width="30" minWidth="30" maxWidth="30" id="ZXV-HJ-aiP">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="F1">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -372,7 +372,7 @@
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn width="30" minWidth="30" maxWidth="30" id="K6Y-ul-fHO">
+                                                                    <tableColumn identifier="F2" editable="NO" width="30" minWidth="30" maxWidth="30" id="K6Y-ul-fHO">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="F2">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -404,7 +404,7 @@
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn width="30" minWidth="30" maxWidth="30" id="BDs-ic-FMc">
+                                                                    <tableColumn identifier="F3" editable="NO" width="30" minWidth="30" maxWidth="30" id="BDs-ic-FMc">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="F3">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -436,7 +436,7 @@
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn width="30" minWidth="30" maxWidth="30" id="OsR-vg-kTI">
+                                                                    <tableColumn identifier="F4" editable="NO" width="30" minWidth="30" maxWidth="30" id="OsR-vg-kTI">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="F4">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -468,7 +468,7 @@
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn width="30" minWidth="30" maxWidth="30" id="2HC-WD-F6l">
+                                                                    <tableColumn identifier="F5" editable="NO" width="30" minWidth="30" maxWidth="30" id="2HC-WD-F6l">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="F5">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -500,7 +500,7 @@
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn width="30" minWidth="30" maxWidth="30" id="BBt-Wg-9YS">
+                                                                    <tableColumn identifier="F6" editable="NO" width="30" minWidth="30" maxWidth="30" id="BBt-Wg-9YS">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="F6">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -532,7 +532,7 @@
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn width="30" minWidth="30" maxWidth="30" id="rU7-2n-cjO">
+                                                                    <tableColumn identifier="F7" editable="NO" width="30" minWidth="30" maxWidth="30" id="rU7-2n-cjO">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="F7">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -564,7 +564,7 @@
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn width="30" minWidth="30" maxWidth="30" id="exP-AU-cNa">
+                                                                    <tableColumn identifier="F8" editable="NO" width="30" minWidth="30" maxWidth="30" id="exP-AU-cNa">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="F8">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -596,7 +596,7 @@
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn width="30" minWidth="30" maxWidth="30" id="xC2-iT-qZJ">
+                                                                    <tableColumn identifier="F9" editable="NO" width="30" minWidth="30" maxWidth="30" id="xC2-iT-qZJ">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="F9">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -628,7 +628,7 @@
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn width="30" minWidth="30" maxWidth="30" id="VIk-QR-uDZ">
+                                                                    <tableColumn identifier="F10" editable="NO" width="30" minWidth="30" maxWidth="30" id="VIk-QR-uDZ">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="F10">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -660,7 +660,7 @@
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn width="30" minWidth="30" maxWidth="30" id="IfG-8p-Fpp">
+                                                                    <tableColumn identifier="F11" editable="NO" width="30" minWidth="30" maxWidth="30" id="IfG-8p-Fpp">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="F11">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -692,7 +692,7 @@
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn width="30" minWidth="30" maxWidth="30" id="dfc-0B-3Ul">
+                                                                    <tableColumn identifier="F12" editable="NO" width="30" minWidth="30" maxWidth="30" id="dfc-0B-3Ul">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="F12">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -724,7 +724,7 @@
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn width="30" minWidth="30" maxWidth="30" id="z4D-3Q-f1Z">
+                                                                    <tableColumn identifier="F13" editable="NO" width="30" minWidth="30" maxWidth="30" id="z4D-3Q-f1Z">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="F13">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -756,7 +756,7 @@
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn width="30" minWidth="30" maxWidth="30" id="6lr-5z-OD9">
+                                                                    <tableColumn identifier="F14" editable="NO" width="30" minWidth="30" maxWidth="30" id="6lr-5z-OD9">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="F14">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -788,7 +788,7 @@
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn width="30" minWidth="30" maxWidth="30" id="zdr-Ud-jQa">
+                                                                    <tableColumn identifier="F15" editable="NO" width="30" minWidth="30" maxWidth="30" id="zdr-Ud-jQa">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="F15">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -820,7 +820,7 @@
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn width="30" minWidth="30" maxWidth="30" id="A9I-yH-Gyr">
+                                                                    <tableColumn identifier="F16" editable="NO" width="30" minWidth="30" maxWidth="30" id="A9I-yH-Gyr">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="F16">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -852,7 +852,7 @@
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn width="30" minWidth="30" maxWidth="30" id="o4G-Mg-bxy">
+                                                                    <tableColumn identifier="F17" editable="NO" width="30" minWidth="30" maxWidth="30" id="o4G-Mg-bxy">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="F17">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -884,7 +884,7 @@
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn width="30" minWidth="30" maxWidth="30" id="5Yd-F5-coD">
+                                                                    <tableColumn identifier="F18" editable="NO" width="30" minWidth="30" maxWidth="30" id="5Yd-F5-coD">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="F18">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -916,7 +916,7 @@
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn width="30" minWidth="30" maxWidth="30" id="vro-bf-Mtn">
+                                                                    <tableColumn identifier="F19" editable="NO" width="30" minWidth="30" maxWidth="30" id="vro-bf-Mtn">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="F19">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -948,7 +948,7 @@
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn width="30" minWidth="30" maxWidth="30" id="VNN-bg-LmF">
+                                                                    <tableColumn identifier="F20" editable="NO" width="30" minWidth="30" maxWidth="30" id="VNN-bg-LmF">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="F20">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -980,7 +980,7 @@
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn width="30" minWidth="30" maxWidth="30" id="Vox-6p-lqO">
+                                                                    <tableColumn identifier="F21" editable="NO" width="30" minWidth="30" maxWidth="30" id="Vox-6p-lqO">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="F21">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1012,7 +1012,7 @@
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn width="30" minWidth="30" maxWidth="30" id="Yfh-6T-EmG">
+                                                                    <tableColumn identifier="F22" editable="NO" width="30" minWidth="30" maxWidth="30" id="Yfh-6T-EmG">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="F22">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1044,7 +1044,7 @@
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn width="30" minWidth="30" maxWidth="30" id="rbD-Sm-beq">
+                                                                    <tableColumn identifier="F23" editable="NO" width="30" minWidth="30" maxWidth="30" id="rbD-Sm-beq">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="F23">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1076,7 +1076,7 @@
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn width="30" minWidth="30" maxWidth="30" id="kvf-08-mOU">
+                                                                    <tableColumn identifier="F24" editable="NO" width="30" minWidth="30" maxWidth="30" id="kvf-08-mOU">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="F24">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1108,7 +1108,7 @@
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn width="30" minWidth="30" maxWidth="30" id="qjC-0o-zxf">
+                                                                    <tableColumn identifier="F25" editable="NO" width="30" minWidth="30" maxWidth="30" id="qjC-0o-zxf">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="F25">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1140,7 +1140,7 @@
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn width="30" minWidth="30" maxWidth="30" id="jeZ-kt-jbK">
+                                                                    <tableColumn identifier="F26" editable="NO" width="30" minWidth="30" maxWidth="30" id="jeZ-kt-jbK">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="F26">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1172,7 +1172,7 @@
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn width="30" minWidth="30" maxWidth="30" id="fGQ-xd-ymg">
+                                                                    <tableColumn identifier="F27" editable="NO" width="30" minWidth="30" maxWidth="30" id="fGQ-xd-ymg">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="F27">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1204,7 +1204,7 @@
                                                                             </tableCellView>
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
-                                                                    <tableColumn width="30" minWidth="30" maxWidth="30" id="4RT-Bz-dFj">
+                                                                    <tableColumn identifier="F28" editable="NO" width="30" minWidth="30" maxWidth="30" id="4RT-Bz-dFj">
                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="F28">
                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1237,10 +1237,13 @@
                                                                         </prototypeCellViews>
                                                                     </tableColumn>
                                                                 </tableColumns>
+                                                                <connections>
+                                                                    <action selector="slotTableViewAction:" target="KGJ-vn-JBX" id="kgj-cH-Qni"/>
+                                                                </connections>
                                                             </tableView>
                                                         </subviews>
                                                     </clipView>
-                                                    <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="0.99355762347888332" horizontal="YES" id="S1q-Nq-Ksj">
+                                                    <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="0.053686471009305653" horizontal="YES" id="S1q-Nq-Ksj">
                                                         <rect key="frame" x="1" y="324" width="600" height="16"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </scroller>
@@ -1268,6 +1271,7 @@
                     </view>
                     <connections>
                         <outlet property="cboCommandStation" destination="yYM-Yn-5ic" id="Kuv-MT-mUj"/>
+                        <outlet property="slotTableView" destination="jwq-Vn-VXH" id="KTq-3i-Om4"/>
                     </connections>
                 </viewController>
                 <customObject id="2WQ-Dr-c3f" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>

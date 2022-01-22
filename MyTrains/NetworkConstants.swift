@@ -116,6 +116,7 @@ public enum NetworkMessageType {
   case setLocoSlotDataP2
   case setLocoSlotStat1
   case setSwWithAck
+  case slotNotImplemented
   case swReq
   case swState
   case unlinkSlotsP1

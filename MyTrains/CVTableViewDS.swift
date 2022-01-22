@@ -10,18 +10,6 @@ import Cocoa
 
 public class CVTableViewDS : NSObject, NSTableViewDataSource, NSTableViewDelegate {
 
-  // MARK: Private Enums
-  
-  fileprivate enum CellIdentifiers {
-    static let CVNumberCell     = "CVNumberCellID"
-    static let EnabledCell      = "EnabledCellID"
-    static let DescriptionCell  = "DescriptionCellID"
-    static let DefaultValueCell = "DefaultValueCellID"
-    static let ValueCell        = "ValueCellID"
-    static let NumberBaseCell   = "NumberBaseCellID"
-    static let NewValueCell     = "NewValueCellID"
-  }
-
   // MARK: Public Properties
   
   public var cvs = [LocomotiveCV]()
@@ -42,86 +30,72 @@ public class CVTableViewDS : NSObject, NSTableViewDataSource, NSTableViewDelegat
   public func tableView(_ tableView: NSTableView,
                         viewFor tableColumn: NSTableColumn?,row: Int) -> NSView? {
     
+    let item = cvs[row]
+    
+    let columnName = tableColumn!.identifier.rawValue
+    
+    let cellIdentifier = "\(columnName)CellID"
+    
     var text: String = ""
-    var cellIdentifier: String = ""
+    
     var isEditable = false
 
-    let item = cvs[row]
+    enum ColumnIdentifiers {
+      static let CVNumberColumn     = "CVNumber"
+      static let EnabledColumn      = "Enabled"
+      static let DescriptionColumn  = "Description"
+      static let NumberBaseColumn   = "NumberBase"
+      static let DefaultValueColumn = "DefaultValue"
+      static let ValueColumn        = "Value"
+      static let NewValueColumn     = "NewValue"
+    }
 
-    if tableColumn == tableView.tableColumns[0] {
+    switch columnName {
+    case ColumnIdentifiers.CVNumberColumn:
       text = "\(item.displayCVNumber)"
-      cellIdentifier = CellIdentifiers.CVNumberCell
-    }
-    else if tableColumn == tableView.tableColumns[1] {
-      text = "\(item.isEnabled)"
-      cellIdentifier = CellIdentifiers.EnabledCell
-    }
-    else if tableColumn == tableView.tableColumns[2] {
+    case ColumnIdentifiers.EnabledColumn:
+      if let cell = tableView.makeView(withIdentifier:
+        NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil) as? NSTableCellView {
+        if let button = cell.subviews[0] as? NSButton {
+          button.tag = row
+          button.state = item.isEnabled ? .on : .off
+        }
+        return cell
+      }
+    case ColumnIdentifiers.DescriptionColumn:
       text = item.displayString()
-      cellIdentifier = CellIdentifiers.DescriptionCell
       isEditable = true
-    }
-    else if tableColumn == tableView.tableColumns[3] {
-      text = ""
-      cellIdentifier = CellIdentifiers.NumberBaseCell
-      isEditable = true
-    }
-    else if tableColumn == tableView.tableColumns[4] {
-      text = "\(item.displayDefaultValue)"
-      cellIdentifier = CellIdentifiers.DefaultValueCell
-      isEditable = true
-    }
-    else if tableColumn == tableView.tableColumns[5] {
-      text = "\(item.displayCVValue)"
-      cellIdentifier = CellIdentifiers.ValueCell
-      isEditable = true
-    }
-    else if tableColumn == tableView.tableColumns[6] {
-      text = "\(item.newValue)"
-      cellIdentifier = CellIdentifiers.NewValueCell
-      isEditable = true
-    }
-
-    if cellIdentifier == CellIdentifiers.NumberBaseCell {
+    case ColumnIdentifiers.NumberBaseColumn:
       if let cell = tableView.makeView(withIdentifier:
         NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil) as? NSTableCellView {
         if let cbo = cell.subviews[0] as? NSComboBox {
           cbo.tag = row
           cbo.selectItem(at: item.customNumberBase.rawValue)
         }
-
        return cell
       }
+    case ColumnIdentifiers.DefaultValueColumn:
+      text = "\(item.displayDefaultValue)"
+      isEditable = true
+    case ColumnIdentifiers.ValueColumn:
+      text = "\(item.displayCVValue)"
+      isEditable = true
+    case ColumnIdentifiers.NewValueColumn:
+      text = "\(item.newValue)"
+      isEditable = true
+    default:
+      break
     }
-    
-    if cellIdentifier == CellIdentifiers.EnabledCell {
-      if let cell = tableView.makeView(withIdentifier:
-        NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil) as? NSTableCellView {
-       
-        if let button = cell.subviews[0] as? NSButton {
-          button.tag = row
-          button.state = item.isEnabled ? .on : .off
+
+    if text != "" {
+      if let cell = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil) as? NSTableCellView {
+        if let textField = cell.subviews[0] as? NSTextField {
+          textField.tag = row
+          textField.stringValue = text
+          textField.isEditable = isEditable
         }
-
-       return cell
+        return cell
       }
-    }
-    
-    if let cell = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil) as? NSTableCellView {
-      
-  //    cell.textField?.stringValue = text
-  //    cell.textField?.isEditable = isEditable
-
-      if let textField = cell.subviews[0] as? NSTextField {
-        textField.tag = row
-        textField.stringValue = text
-        textField.isEditable = isEditable
-      }
-
-  //    cell.textField?.font = NSFont(name: "Menlo", size: 11)
-      
-      return cell
-      
     }
   
     return nil

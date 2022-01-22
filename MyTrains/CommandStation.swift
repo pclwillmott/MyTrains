@@ -13,6 +13,10 @@ public protocol CommandStationDelegate {
   func progMessageReceived(message:NetworkMessage)
 }
 
+public protocol SlotObserverDelegate {
+  func slotsUpdated(locoSlots:[LocoSlotData])
+}
+
 public class CommandStation : NetworkMessengerDelegate {
   
   // MARK: Constructors
@@ -75,11 +79,35 @@ public class CommandStation : NetworkMessengerDelegate {
   
   private var forceRefresh : Bool = false
   
+  private var _locoSlots : [Int:LocoSlotData] = [:]
+  
+  private var slotObservers : [Int:SlotObserverDelegate] = [:]
+  
+  private var nextSlotObserverId = 0
+  
+  private var slotObserverLock : NSLock = NSLock()
+  
   // MARK: Public Properties
   
   public var messengers : [String:NetworkMessenger] {
     get {
       return _messengers
+    }
+  }
+  
+  public var locoSlots : [LocoSlotData] {
+    get {
+      
+      var slots : [LocoSlotData] = []
+      
+      for slot in _locoSlots {
+        slots.append(slot.value)
+      }
+      
+      return slots.sorted {
+        $0.slotNumber < $1.slotNumber
+      }
+      
     }
   }
   
@@ -247,6 +275,16 @@ public class CommandStation : NetworkMessengerDelegate {
     }
   }
   
+  private func slotsUpdated() {
+    
+    let slots = locoSlots
+    
+    for kv in slotObservers {
+      kv.value.slotsUpdated(locoSlots: slots)
+    }
+    
+  }
+  
   @objc func timerAction() {
     forceRefresh = true
   }
@@ -278,6 +316,21 @@ public class CommandStation : NetworkMessengerDelegate {
     _observerId.removeValue(forKey: messenger.id)
   }
   
+  public func addSlotObserver(observer:SlotObserverDelegate) -> Int {
+    slotObserverLock.lock()
+    let id = nextSlotObserverId
+    nextSlotObserverId += 1
+    slotObservers[id] = observer
+    slotObserverLock.unlock()
+    return id
+  }
+  
+  public func removeSlotObserver(id:Int) {
+    slotObserverLock.lock()
+    slotObservers.removeValue(forKey: id)
+    slotObserverLock.unlock()
+  }
+
   public func addDelegate(delegate:CommandStationDelegate) -> Int {
     _delegateLock.lock()
     let id = _nextDelegateId
@@ -474,6 +527,26 @@ public class CommandStation : NetworkMessengerDelegate {
       }
     }
   }
+  
+  public func getLocoSlotDataP1(slotNumber: Int) {
+    for kv in messengers {
+      let messenger = kv.value
+      if messenger.isOpen {
+        messenger.getLocoSlotDataP1(slotNumber: slotNumber)
+        break
+      }
+    }
+  }
+    
+  public func getLocoSlotDataP2(slotPage: Int, slotNumber: Int) {
+    for kv in messengers {
+      let messenger = kv.value
+      if messenger.isOpen {
+        messenger.getLocoSlotDataP2(slotPage: slotPage, slotNumber: slotNumber)
+        break
+      }
+    }
+  }
     
   // MARK: NetworkMessengerDelegate Methods
   
@@ -492,9 +565,17 @@ public class CommandStation : NetworkMessengerDelegate {
       trackIsPaused          = (trk & 0b00000010) == 0b00000000
       powerIsOn              = (trk & 0b00000001) == 0b00000001
       locomotiveMessage(message: message)
+      if message.messageType == .locoSlotDataP1 {
+        let slot = LocoSlotData(locoSlotDataP1: LocoSlotDataP1(interfaceId: message.interfaceId, data: message.message))
+        _locoSlots[slot.slotNumber] = slot
+        slotsUpdated()
+      }
       break
     case .locoSlotDataP2:
       locomotiveMessage(message: message)
+      let slot = LocoSlotData(locoSlotDataP2: LocoSlotDataP2(interfaceId: message.interfaceId, data: message.message))
+      _locoSlots[slot.slotNumber] = slot
+      slotsUpdated()
       break
     case .pwrOn:
       powerIsOn = true
