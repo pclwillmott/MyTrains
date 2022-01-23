@@ -13,9 +13,11 @@ public class LocoSlotData {
   
   init(locoSlotDataP1: LocoSlotDataP1) {
     
-    slotNumber = locoSlotDataP1.slotNumber << 1
+    slotPage = 0
     
-    displaySlotNumber = "\(locoSlotDataP1.slotNumber)"
+    slotNumber = locoSlotDataP1.slotNumber
+    
+    slotID = LocoSlotData.getID(slotNumber: slotNumber)
     
     address = locoSlotDataP1.address
     
@@ -32,24 +34,18 @@ public class LocoSlotData {
     functions = locoSlotDataP1.functions
     
     isF9F28Available = locoSlotDataP1.isF9F28Available
+    
+    isP1 = true
  
-    if locoSlotDataP1.slotState == .free {
-      for cs in networkController.commandStations {
-        cs.value.moveSlots(sourceSlotNumber: locoSlotDataP1.slotNumber, sourceSlotPage: locoSlotDataP1.slotPage, destinationSlotNumber: locoSlotDataP1.slotNumber, destinationSlotPage: locoSlotDataP1.slotPage)
-      }
-    }
-    else {
-      for cs in networkController.commandStations {
-        cs.value.getLocoSlot(forAddress: locoSlotDataP1.address+1)
-      }
-    }
   }
   
   init(locoSlotDataP2: LocoSlotDataP2) {
     
-    slotNumber = locoSlotDataP2.slotPage << 8 | locoSlotDataP2.slotNumber << 1 | 0x01
+    slotPage = locoSlotDataP2.slotPage
     
-    displaySlotNumber = "\(locoSlotDataP2.slotPage).\(locoSlotDataP2.slotNumber)"
+    slotNumber = locoSlotDataP2.slotNumber
+    
+    slotID = LocoSlotData.getID(slotPage: slotPage, slotNumber: slotNumber)
     
     address = locoSlotDataP2.address
     
@@ -66,22 +62,50 @@ public class LocoSlotData {
     functions = locoSlotDataP2.functions
     
     isF9F28Available = locoSlotDataP2.isF9F28Available
+    
+    isP1 = false
 
-    if locoSlotDataP2.slotState == .free {
-      for cs in networkController.commandStations {
-        cs.value.moveSlots(sourceSlotNumber: locoSlotDataP2.slotNumber, sourceSlotPage: locoSlotDataP2.slotPage, destinationSlotNumber: locoSlotDataP2.slotNumber, destinationSlotPage: locoSlotDataP2.slotPage)
-      }
-    }
-    else {
-      for cs in networkController.commandStations {
-        cs.value.getLocoSlot(forAddress: locoSlotDataP2.address+1)
-      }
-    }
+  }
+  
+  init(slotID: Int) {
+    
+    self.slotID = slotID
+    
+    let decoded = LocoSlotData.decodeID(slotID: slotID)
+    
+    slotPage = decoded.page
+    
+    slotNumber = decoded.number
+    
+    isP1 = decoded.isP1
+    
+    address = 0
+    
+    slotState = .free
+    
+    mobileDecoderType = .unknown
+    
+    direction = .forward
+    
+    speed = 0
+    
+    throttleID = 0
+    
+    functions = 0
+    
+    isF9F28Available = false
+    
+    isDirty = true
+
   }
   
   // MARK: Private Properties
   
   // MARK: Public Properties
+  
+  public var slotID : Int
+  
+  public var slotPage : Int
   
   public var slotNumber : Int
   
@@ -101,7 +125,15 @@ public class LocoSlotData {
   
   public var isF9F28Available : Bool
   
-  public var displaySlotNumber : String
+  public var displaySlotNumber : String {
+    get {
+      return isP1 ? "\(slotNumber)" : "\(slotPage).\(slotNumber)"
+    }
+  }
+  
+  public var isP1 : Bool
+  
+  public var isDirty : Bool = false
   
   // MARK: Public Methods
   
@@ -118,6 +150,28 @@ public class LocoSlotData {
     let mask = 1 << functionNumber
     
     return (functions & mask) == mask ? "on" : "off"
+    
+  }
+
+  // MARK: Class Methods
+  
+  public static func getID(slotNumber:Int) -> Int {
+    return slotNumber << 1
+  }
+
+  public static func getID(slotPage:Int, slotNumber:Int) -> Int {
+    return slotPage << 8 | slotNumber << 1 | 0x01
+  }
+  
+  public static func decodeID(slotID: Int) -> (page: Int, number: Int, isP1 : Bool) {
+    
+    let isP1 = (slotID & 1) == 1
+    
+    let page = slotID >> 8
+    
+    let number = (slotID >> 1) & 0xff
+    
+    return (page: page, number: number, isP1: isP1)
     
   }
   

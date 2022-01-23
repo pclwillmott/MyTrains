@@ -8,10 +8,10 @@
 import Foundation
 import ORSSerial
 
-public protocol NetworkMessengerDelegate {
-  func networkMessageReceived(message:NetworkMessage)
-  func networkTimeOut(message:NetworkMessage)
-  func messengerRemoved(id:String)
+@objc public protocol NetworkMessengerDelegate {
+  @objc optional func networkMessageReceived(message:NetworkMessage)
+  @objc optional func networkTimeOut(message:NetworkMessage)
+  @objc optional func messengerRemoved(id:String)
 }
 
 public protocol NetworkInterfaceDelegate {
@@ -22,7 +22,7 @@ public protocol NetworkInterfaceDelegate {
 }
 
 enum TIMING {
-  static let STANDARD = 200.0 / 1000.0
+  static let STANDARD = 20.0 / 1000.0
   static let DISCOVER = 1.0
 }
 
@@ -173,7 +173,7 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
     
     outputQueueLock.unlock()
     
-    delegate?.networkTimeOut(message: item!.message)
+    delegate?.networkTimeOut?(message: item!.message)
     
     if startTimer {
       startSpacingTimer(timeInterval: delay)
@@ -314,11 +314,11 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
               
               if stopTimer {
                 stopSpacingTimer()
-                delegate?.networkMessageReceived(message: networkMessage)
+                delegate?.networkMessageReceived?(message: networkMessage)
               }
 
               for observer in observers {
-                observer.value.networkMessageReceived(message: networkMessage)
+                observer.value.networkMessageReceived?(message: networkMessage)
               }
               
               if stopTimer {
@@ -429,7 +429,7 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
     
     let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_LOCO_ADR.rawValue, hi, lo], appendCheckSum: true)
     
-    addToQueue(message: message, delay: TIMING.STANDARD, response: [.locoSlotDataP1, .ack], delegate: nil, retryCount: 5)
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [.locoSlotDataP1, .noFreeSlotsP1, .slotNotImplemented], delegate: nil, retryCount: 5)
 
   }
   
@@ -441,7 +441,23 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
     
     let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_LOCO_ADR_P2.rawValue, hi, lo], appendCheckSum: true)
     
-    addToQueue(message: message, delay: TIMING.STANDARD, response: [.locoSlotDataP2, .ack], delegate: nil, retryCount: 5)
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [.locoSlotDataP2, .noFreeSlotsP2, .slotNotImplemented], delegate: nil, retryCount: 5)
+
+  }
+  
+  public func clearLocoSlotDataP1(slotNumber:Int) {
+    
+    let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_WR_SL_DATA.rawValue, 0x0e, UInt8(slotNumber), 0b00000011, 0x00, 0x00, 0b00100000, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [.setSlotDataOKP1, .ack], delegate: nil, retryCount: 1)
+
+  }
+  
+  public func clearLocoSlotDataP2(slotPage: Int, slotNumber:Int) {
+    
+    let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_WR_SL_DATA_P2.rawValue, 0x15, UInt8(slotPage), UInt8(slotNumber), 0b00000011, 0x00, 0x00, 0x00, 0x00, 0x00, 0b00100000, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [.setSlotDataOKP2,.ack], delegate: nil, retryCount: 1)
 
   }
   
@@ -692,10 +708,7 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
   
   // MARK: NetworkMessengerDelegate Methods
   
-  public func messengerRemoved(id: String) {
-  }
-  
-  public func networkMessageReceived(message: NetworkMessage) {
+  @objc public func networkMessageReceived(message: NetworkMessage) {
     if message.messageType == .interfaceData {
       if interface.serialNumber == -1 {
         interface.productCode = ProductCode(rawValue: Int(message.message[14])) ?? .unknown
@@ -710,7 +723,7 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
     }
   }
   
-  public func networkTimeOut(message: NetworkMessage) {
+  @objc public func networkTimeOut(message: NetworkMessage) {
     if observerId != -1 {
       removeObserver(id: observerId)
       observerId = -1
@@ -726,7 +739,7 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
       observerId = -1
     }
     for observer in observers {
-      observer.value.messengerRemoved(id: self.id)
+      observer.value.messengerRemoved?(id: self.id)
     }
     networkInterfaceDelegate?.interfaceRemoved(messenger: self)
     networkInterfaceDelegate?.statusChanged(messenger: self)

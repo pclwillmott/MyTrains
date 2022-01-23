@@ -97,6 +97,8 @@ public enum NetworkMessageType {
   case locoSpdP2
   case moveSlotsP1
   case moveSlotsP2
+  case noFreeSlotsP1
+  case noFreeSlotsP2
   case peerXfer16
   case progCV
   case progSlotDataP1
@@ -115,6 +117,8 @@ public enum NetworkMessageType {
   case setLocoSlotDataP1
   case setLocoSlotDataP2
   case setLocoSlotStat1
+  case setSlotDataOKP1
+  case setSlotDataOKP2
   case setSwWithAck
   case slotNotImplemented
   case swReq

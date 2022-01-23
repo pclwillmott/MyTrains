@@ -301,15 +301,7 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, NetworkMessengerDe
 
   // MARK: NetworkMessengerDelegate Methods
   
-  func messengerRemoved(id: String) {
-    
-  }
-  
-  func networkTimeOut(message: NetworkMessage) {
-    print("Timeout")
-  }
-
-  func networkMessageReceived(message: NetworkMessage) {
+  @objc func networkMessageReceived(message: NetworkMessage) {
     
     var item : String = ""
     var byteNumber : Int = 0

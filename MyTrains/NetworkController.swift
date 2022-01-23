@@ -8,10 +8,10 @@
 import Foundation
 import ORSSerial
 
-public protocol NetworkControllerDelegate {
-  func messengersUpdated(messengers:[NetworkMessenger])
-  func networkControllerUpdated(netwokController:NetworkController)
-  func statusUpdated(networkController:NetworkController)
+@objc public protocol NetworkControllerDelegate {
+  @objc optional func messengersUpdated(messengers:[NetworkMessenger])
+  @objc optional func networkControllerUpdated(netwokController:NetworkController)
+  @objc optional func statusUpdated(networkController:NetworkController)
 }
 
 public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotificationCenterDelegate, NetworkMessengerDelegate, CommandStationDelegate {
@@ -166,6 +166,12 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
     }
   }
   
+  private func networkControllerUpdated() {
+    for kv in controllerDelegates {
+      kv.value.networkControllerUpdated?(netwokController: self)
+    }
+  }
+  
   // MARK: Public Methods
 
   public func interfaceOpen() {
@@ -218,44 +224,32 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
   
   public func addLayout(layout: Layout) {
     layouts[layout.primaryKey] = layout
-    for kv in controllerDelegates {
-      kv.value.networkControllerUpdated(netwokController: self)
-    }
+    networkControllerUpdated()
   }
   
   public func removeLayout(primaryKey:Int) {
     layouts.removeValue(forKey: primaryKey)
-    for kv in controllerDelegates {
-      kv.value.networkControllerUpdated(netwokController: self)
-    }
+    networkControllerUpdated()
   }
   
   public func addNetwork(network: Network) {
     networks[network.primaryKey] = network
-    for kv in controllerDelegates {
-      kv.value.networkControllerUpdated(netwokController: self)
-    }
+    networkControllerUpdated()
   }
   
   public func removeNetwork(primaryKey:Int) {
     networks.removeValue(forKey: primaryKey)
-    for kv in controllerDelegates {
-      kv.value.networkControllerUpdated(netwokController: self)
-    }
+    networkControllerUpdated()
   }
   
   public func addLocomotive(locomotive: Locomotive) {
     locomotives[locomotive.primaryKey] = locomotive
-    for kv in controllerDelegates {
-      kv.value.networkControllerUpdated(netwokController: self)
-    }
+    networkControllerUpdated()
   }
   
   public func removeLocomotive(primaryKey: Int) {
     locomotives.removeValue(forKey: primaryKey)
-    for kv in controllerDelegates {
-      kv.value.networkControllerUpdated(netwokController: self)
-    }
+    networkControllerUpdated()
   }
   
   public func appendDelegate(delegate:NetworkControllerDelegate) -> Int {
@@ -264,7 +258,7 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
     _nextControllerDelegateId += 1
     controllerDelegates[id] = delegate
     controllerDelegateLock.unlock()
-    delegate.networkControllerUpdated(netwokController: self)
+    delegate.networkControllerUpdated?(netwokController: self)
     return id
   }
   
@@ -278,7 +272,7 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
   
   public func trackStatusChanged(commandStation: CommandStation) {
     for delegate in controllerDelegates {
-      delegate.value.statusUpdated(networkController: self)
+      delegate.value.statusUpdated?(networkController: self)
     }
   }
 
@@ -312,7 +306,7 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
   
   public func statusChanged(messenger: NetworkMessenger) {
     for delegate in controllerDelegates {
-      delegate.value.statusUpdated(networkController: self)
+      delegate.value.statusUpdated?(networkController: self)
     }
   }
   
@@ -321,14 +315,14 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
     candidates.removeValue(forKey: id)
     _networkMessengers.removeValue(forKey: id)
     for delegate in controllerDelegates {
-      delegate.value.messengersUpdated(messengers: networkMessengers)
-      delegate.value.networkControllerUpdated(netwokController: self)
+      delegate.value.messengersUpdated?(messengers: networkMessengers)
+      delegate.value.networkControllerUpdated?(netwokController: self)
     }
   }
   
   // MARK: NetworkMessengerDelegate Methods
   
-  public func networkMessageReceived(message: NetworkMessage) {
+  @objc public func networkMessageReceived(message: NetworkMessage) {
     
     switch message.messageType {
     case .iplDevData:
@@ -349,9 +343,7 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
           commandStations[cs.commandStationId] = cs
           cs.addMessenger(messenger: _networkMessengers[message.interfaceId]!)
           _ = cs.addDelegate(delegate: self)
-          for delegate in controllerDelegates {
-            delegate.value.networkControllerUpdated(netwokController: self)
-          }
+          networkControllerUpdated()
         }
         
       }
@@ -372,8 +364,8 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
       }
       
       for delegate in controllerDelegates {
-        delegate.value.messengersUpdated(messengers: networkMessengers)
-        delegate.value.networkControllerUpdated(netwokController: self)
+        delegate.value.messengersUpdated?(messengers: networkMessengers)
+        delegate.value.networkControllerUpdated?(netwokController: self)
       }
       
       break
@@ -381,12 +373,6 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
       break
     }
     
-  }
-  
-  public func messengerRemoved(id: String) {
-  }
-  
-  public func networkTimeOut(message: NetworkMessage) {
   }
   
   // MARK: - NSUserNotifcationCenterDelegate

@@ -667,13 +667,7 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
   
   // MARK: CommandStationDelegate Methods
   
-  public func trackStatusChanged(commandStation: CommandStation) {
-  }
-  
-  public func progMessageReceived(message: NetworkMessage) {
-  }
-  
-  public func locomotiveMessageReceived(message: NetworkMessage) {
+  @objc public func locomotiveMessageReceived(message: NetworkMessage) {
     
     if let net = network, let cs = net.commandStation {
 

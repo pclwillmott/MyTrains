@@ -7,7 +7,9 @@
 
 import Foundation
 
-public class NetworkMessage {
+public class NetworkMessage : NSObject {
+  
+  // MARK: Constructors
   
   init(interfaceId: String, data:[UInt8], appendCheckSum: Bool) {
     self.interfaceId = interfaceId
@@ -32,7 +34,17 @@ public class NetworkMessage {
     self.interfaceId = interfaceId
     self.message = data
   }
-
+  
+  // MARK: Private Properties
+  
+  private var _messageType : NetworkMessageType = .uninitialized
+  
+  private var _willChangeSlot : Bool = false
+  
+  private var _slotID : Int = 0
+  
+  // MARK: Public Properties
+  
   public var message : [UInt8]
   
   public var interfaceId : String
@@ -47,16 +59,6 @@ public class NetworkMessage {
       }
       return checkSum == 0xff
     }
-  }
-  
-  public static func checkSum(data: Data, length: Int) -> UInt8 {
-    var cs : UInt8 = 0xff
-    var index : Int = 0
-    while (index < length) {
-      cs ^= data[index]
-      index += 1
-    }
-    return cs
   }
   
   public var opCodeRawValue : UInt8 {
@@ -92,6 +94,7 @@ public class NetworkMessage {
       }
       
       return length
+      
     }
   }
   
@@ -105,7 +108,19 @@ public class NetworkMessage {
     }
   }
   
-  private var _messageType : NetworkMessageType = .uninitialized
+  public var willChangeSlot : Bool {
+    get {
+      let _ = messageType
+      return _willChangeSlot
+    }
+  }
+  
+  public var slotID : Int {
+    get {
+      let _ = messageType
+      return _slotID
+    }
+  }
   
   public var messageType : NetworkMessageType {
     
@@ -114,6 +129,12 @@ public class NetworkMessage {
       if _messageType == .uninitialized {
 
         _messageType = .unknown
+        
+        var slotPage : Int = 0
+        
+        var slotNumber : Int = 0
+        
+        var isP1 : Bool = false
 
         switch message[0] {
         case NetworkMessageOpcode.OPC_BUSY.rawValue:
@@ -147,6 +168,18 @@ public class NetworkMessage {
              message[2] == 0x00 {
             _messageType = .slotNotImplemented
           }
+          else if message[1] == 0x6e && message[2] == 0x7f {
+            _messageType = .setSlotDataOKP2
+          }
+          else if message[1] == 0x6f && message[2] == 0x7f {
+            _messageType = .setSlotDataOKP1
+          }
+          else if message[1] == 0x3f && message[2] == 0x00 {
+            _messageType = .noFreeSlotsP1
+          }
+          else if message[1] == 0x3e && message[2] == 0x00 {
+            _messageType = .noFreeSlotsP2
+          }
           else {
             _messageType = .ack
           }
@@ -155,14 +188,14 @@ public class NetworkMessage {
           if message[1] == 0x15 &&
               (message[2] & 0b11111000) == 0x00 &&
               (message[7] & 0b10110000) == 0x00 {
-            if message[3] < 0x78 || true {
+            if message[3] < 0x78 {
               _messageType = .locoSlotDataP2
             }
           }
         case NetworkMessageOpcode.OPC_SL_RD_DATA.rawValue:
           if   message[ 1] == 0x0e &&
               (message[ 7] &  0b00110000) == 0x00    /* TRK  */ {
-            if (message[2] < 0x78 || true) &&
+            if (message[2] < 0x78) &&
               (message[ 6] &  0b11000000) == 0x00 && /* DIRF */
               (message[ 8] &  0b11110010) == 0x00 && /* SS@  */
               (message[10] &  0b11110000) == 0x00    /* SND  */ {
@@ -182,6 +215,10 @@ public class NetworkMessage {
         case NetworkMessageOpcode.OPC_WR_SL_DATA_P2.rawValue:
           if message[1] == 0x15 {
             _messageType = .setLocoSlotDataP2
+            _willChangeSlot = true
+            isP1 = false
+            slotPage = Int(message[2] & 0b00000111)
+            slotNumber = Int(message[3])
           }
           break
         case NetworkMessageOpcode.OPC_WR_SL_DATA.rawValue:
@@ -192,6 +229,10 @@ public class NetworkMessage {
              (message[ 8] &  0b11110010) == 0x00 && /* SS@  */
              (message[10] &  0b11110000) == 0x00    /* SND  */ {
             _messageType = .setLocoSlotDataP1
+            _willChangeSlot = true
+            isP1 = true
+            slotPage = 0
+            slotNumber = Int(message[2])
           }
           else if
               message[ 1] == 0x0e &&
@@ -207,6 +248,10 @@ public class NetworkMessage {
           if message[1] < 0x78 &&
               (message[2] & 0b01000000) == 0x00 {
             _messageType = .consistDirF0F4
+            _willChangeSlot = true
+            isP1 = true
+            slotPage = 0
+            slotNumber = Int(message[1])
           }
           break
         case NetworkMessageOpcode.OPC_BRD_OPSW.rawValue:
@@ -329,35 +374,67 @@ public class NetworkMessage {
           if message[1] > 0 && message[1] < 0x78 &&
               message[2] > 0 && message[2] < 0x78 {
             _messageType = .linkSlotsP1
-          }
+            _willChangeSlot = true
+            isP1 = true
+            slotPage = 0
+            slotNumber = Int(message[2])
+         }
           break
         case NetworkMessageOpcode.OPC_D4_GROUP.rawValue:
           if      (message[1] & 0b11100000) == 0b00000000 {
             _messageType = .locoBinStateP2
+            _willChangeSlot = true
+            isP1 = false
+            slotPage = Int(message[1] & 0b00000111)
+            slotNumber = Int(message[2])
           }
           else if (message[1] & 0b11111000) == 0b00100000 {
             switch message[3] {
             case 0x04:
               _messageType = .locoSpdP2
+              _willChangeSlot = true
+              isP1 = false
+              slotPage = Int(message[1] & 0b00000111)
+              slotNumber = Int(message[2])
               break
             case 0x05:
               if (message[4] & 0b11111000) == 0x00 {
                 _messageType = .locoF12F20F28P2
+                _willChangeSlot = true
+                isP1 = false
+                slotPage = Int(message[1] & 0b00000111)
+                slotNumber = Int(message[2])
               }
               break
             case 0x06:
               if (message[4] & 0b11000000) == 0x00 {
                 _messageType = .locoDirF0F4P2
+                _willChangeSlot = true
+                isP1 = false
+                slotPage = Int(message[1] & 0b00000111)
+                slotNumber = Int(message[2])
               }
               break
             case 0x07:
               _messageType = .locoF5F11P2
+              _willChangeSlot = true
+              isP1 = false
+              slotPage = Int(message[1] & 0b00000111)
+              slotNumber = Int(message[2])
               break
             case 0x08:
               _messageType = .locoF13F19P2
+              _willChangeSlot = true
+              isP1 = false
+              slotPage = Int(message[1] & 0b00000111)
+              slotNumber = Int(message[2])
               break
             case 0x09:
               _messageType = .locoF21F27P2
+              _willChangeSlot = true
+              isP1 = false
+              slotPage = Int(message[1] & 0b00000111)
+              slotNumber = Int(message[2])
               break
             default:
               break
@@ -368,12 +445,24 @@ public class NetworkMessage {
             switch test {
             case 0b00000000:
               _messageType = .moveSlotsP2
+              _willChangeSlot = true
+              isP1 = false
+              slotPage = Int(message[1] & 0b00000111)
+              slotNumber = Int(message[2])
               break
             case 0b01000000:
               _messageType = .linkSlotsP2
+              _willChangeSlot = true
+              isP1 = false
+              slotPage = Int(message[1] & 0b00000111)
+              slotNumber = Int(message[2])
               break
             case 0b01010000:
               _messageType = .unlinkSlotsP2
+              _willChangeSlot = true
+              isP1 = false
+              slotPage = Int(message[1] & 0b00000111)
+              slotNumber = Int(message[2])
               break
             default:
               break
@@ -386,17 +475,41 @@ public class NetworkMessage {
             switch test {
             case 0b00000000, 0b00001000:
               _messageType = .locoSpdDirP2
+              _willChangeSlot = true
+              isP1 = false
+              slotPage = Int(message[1] & 0b00000111)
+              slotNumber = Int(message[2])
             case 0b00010000:
               _messageType = .locoF0F6P2
+              _willChangeSlot = true
+             isP1 = false
+              slotPage = Int(message[1] & 0b00000111)
+              slotNumber = Int(message[2])
               break
             case 0b00011000:
               _messageType = .locoF7F13P2
+              _willChangeSlot = true
+              isP1 = false
+              slotPage = Int(message[1] & 0b00000111)
+              slotNumber = Int(message[2])
             case 0b00100000:
               _messageType = .locoF14F20P2
+              _willChangeSlot = true
+              isP1 = false
+              slotPage = Int(message[1] & 0b00000111)
+              slotNumber = Int(message[2])
             case 0b00101000:
               _messageType = .locoF21F28P2
+              _willChangeSlot = true
+              isP1 = false
+              slotPage = Int(message[1] & 0b00000111)
+              slotNumber = Int(message[2])
             case 0b00110000:
               _messageType = .locoF21F28P2
+              _willChangeSlot = true
+              isP1 = false
+              slotPage = Int(message[1] & 0b00000111)
+              slotNumber = Int(message[2])
             default:
               break
             }
@@ -406,22 +519,38 @@ public class NetworkMessage {
           if message[1] < 0x78 &&
             (message[2] & 0b01000000) == 0x00 {
             _messageType = .locoDirF0F4P1
+            _willChangeSlot = true
+            isP1 = true
+            slotPage = 0
+            slotNumber = Int(message[1])
           }
         case NetworkMessageOpcode.OPC_LOCO_SND.rawValue:
           if message[1] < 0x78 &&
               (message[2] & 0b11110000) == 0x00 {
             _messageType = .locoF5F8P1
+            _willChangeSlot = true
+            isP1 = true
+            slotPage = 0
+            slotNumber = Int(message[1])
           }
           break
         case NetworkMessageOpcode.OPC_LOCO_SPD.rawValue:
           if message[1] < 0x78 {
             _messageType = .locoSpdP1
+            _willChangeSlot = true
+            isP1 = true
+            slotPage = 0
+            slotNumber = Int(message[1])
           }
           break
         case NetworkMessageOpcode.OPC_MOVE_SLOTS.rawValue:
           if message[1] < 0x78 &&
               message[2] < 0x78 {
             _messageType = .moveSlotsP1
+            _willChangeSlot = true
+            isP1 = true
+            slotPage = 0
+            slotNumber = Int(message[1])
           }
           break
         case NetworkMessageOpcode.OPC_LOCO_RESET.rawValue:
@@ -444,6 +573,10 @@ public class NetworkMessage {
         case NetworkMessageOpcode.OPC_SLOT_STAT1.rawValue:
           if message[1] < 0x78 {
             _messageType = .setLocoSlotStat1
+            _willChangeSlot = true
+            isP1 = true
+            slotPage = 0
+            slotNumber = Int(message[1])
           }
         case NetworkMessageOpcode.OPC_SW_ACK.rawValue:
           if (message[2] & 0b11000000) == 0b00000000 {
@@ -463,10 +596,23 @@ public class NetworkMessage {
         case NetworkMessageOpcode.OPC_UNLINK_SLOTS.rawValue:
           if message[1] < 0x78 && message[2] < 0x78 {
             _messageType = .unlinkSlotsP1
+            _willChangeSlot = true
+            isP1 = true
+            slotPage = 0
+            slotNumber = Int(message[1])
           }
           break
         default:
           break
+        }
+        
+        if _willChangeSlot {
+          if isP1 {
+            _slotID = LocoSlotData.getID(slotNumber: slotNumber)
+          }
+          else {
+            _slotID = LocoSlotData.getID(slotPage: slotPage, slotNumber: slotNumber)
+          }
         }
         
       }
@@ -480,5 +626,17 @@ public class NetworkMessage {
     }
     
   }
-    
+
+  // MARK: Public Methods
+  
+  public static func checkSum(data: Data, length: Int) -> UInt8 {
+    var cs : UInt8 = 0xff
+    var index : Int = 0
+    while (index < length) {
+      cs ^= data[index]
+      index += 1
+    }
+    return cs
+  }
+  
 }

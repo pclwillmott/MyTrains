@@ -193,14 +193,8 @@ class ThrottleVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate,
   
   // MARK: NetworkControllerDelegate Methods
   
-  func messengersUpdated(messengers: [NetworkMessenger]) {
-  }
-  
-  func networkControllerUpdated(netwokController: NetworkController) {
+  @objc func networkControllerUpdated(netwokController: NetworkController) {
     setup()
-  }
-  
-  func statusUpdated(networkController: NetworkController) {
   }
   
   // MARK: Outlets & Actions

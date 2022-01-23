@@ -7,21 +7,23 @@
 
 import Foundation
 
-public protocol CommandStationDelegate {
-  func trackStatusChanged(commandStation: CommandStation)
-  func locomotiveMessageReceived(message: NetworkMessage)
-  func progMessageReceived(message:NetworkMessage)
+@objc public protocol CommandStationDelegate {
+  @objc optional func trackStatusChanged(commandStation: CommandStation)
+  @objc optional func locomotiveMessageReceived(message: NetworkMessage)
+  @objc optional func progMessageReceived(message:NetworkMessage)
+  @objc optional func messageReceived(message:NetworkMessage)
 }
 
-public protocol SlotObserverDelegate {
-  func slotsUpdated(locoSlots:[LocoSlotData])
+@objc public protocol SlotObserverDelegate {
+  @objc optional func slotsUpdated(commandStation:CommandStation)
 }
 
-public class CommandStation : NetworkMessengerDelegate {
+public class CommandStation : NSObject, NetworkMessengerDelegate {
   
   // MARK: Constructors
   
   init(message:IPLDevData) {
+    super.init()
     productCode = message.productCode
     serialNumber = message.serialNumber
     softwareVersion = message.softwareVersion
@@ -29,10 +31,8 @@ public class CommandStation : NetworkMessengerDelegate {
   }
   
   init(reader:SqliteDataReader) {
+    super.init()
     decode(sqliteDataReader: reader)
-  }
-  
-  init() {
   }
   
   // MARK: Destructors
@@ -59,16 +59,6 @@ public class CommandStation : NetworkMessengerDelegate {
   
   private var _observerId : [String:Int] = [:]
   
-  private var _implementsProtocol1 : Bool?
-  
-  private var _implementsProtocol2 : Bool?
-  
-  private var _programmingTrackIsBusy : Bool?
-  
-  private var _trackIsPaused : Bool = false
-  
-  private var _powerIsOn : Bool = false
-  
   private var _delegates : [Int:CommandStationDelegate] = [:]
   
   private var _nextDelegateId = 0
@@ -86,7 +76,7 @@ public class CommandStation : NetworkMessengerDelegate {
   private var nextSlotObserverId = 0
   
   private var slotObserverLock : NSLock = NSLock()
-  
+
   // MARK: Public Properties
   
   public var messengers : [String:NetworkMessenger] {
@@ -105,7 +95,7 @@ public class CommandStation : NetworkMessengerDelegate {
       }
       
       return slots.sorted {
-        $0.slotNumber < $1.slotNumber
+        $0.slotID < $1.slotID
       }
       
     }
@@ -183,81 +173,48 @@ public class CommandStation : NetworkMessengerDelegate {
     }
   }
   
-  public var implementsProtocol1 : Bool {
+  public var maxSlotNumber : (page:Int, number:Int)? {
     get {
-      return _implementsProtocol1 ?? false
-    }
-    set(value) {
-      var changed = true
-      if let x = _implementsProtocol1 {
-        changed = x == value
-      }
-      _implementsProtocol1 = value
-      if changed {
-        for delegate in _delegates {
-          delegate.value.trackStatusChanged(commandStation: self)
-        }
+      switch productCode {
+      case .DCS210Plus:
+        return (page:0, number:100)
+      case .DCS210:
+        return (page:0, number:100)
+      case .DCS240:
+        return (page:3, number:48)
+      default:
+        return nil
       }
     }
   }
   
-  public var implementsProtocol2 : Bool {
-    get {
-      return _implementsProtocol2 ?? false
-    }
-    set(value) {
-      var changed = true
-      if let x = _implementsProtocol2 {
-        changed = x == value
-      }
-      _implementsProtocol2 = value
-      if changed {
-        for delegate in _delegates {
-          delegate.value.trackStatusChanged(commandStation: self)
-        }
-      }
+  public var implementsProtocol1 : Bool = false {
+    didSet {
+      trackStatusChanged()
     }
   }
   
-  public var programmingTrackIsBusy : Bool {
-    get {
-      return _programmingTrackIsBusy ?? false
-    }
-    set(value) {
-      var changed = true
-      if let x = _programmingTrackIsBusy {
-        changed = x == value
-      }
-      _programmingTrackIsBusy = value
-      if changed {
-        for delegate in _delegates {
-          delegate.value.trackStatusChanged(commandStation: self)
-        }
-      }
+  public var implementsProtocol2 : Bool = false {
+    didSet {
+      trackStatusChanged()
     }
   }
   
-  public var trackIsPaused : Bool {
-    get {
-      return _trackIsPaused
-    }
-    set(value) {
-      _trackIsPaused = value
-      for delegate in _delegates {
-        delegate.value.trackStatusChanged(commandStation: self)
-      }
+  public var programmingTrackIsBusy : Bool = false {
+    didSet {
+      trackStatusChanged()
     }
   }
   
-  public var powerIsOn : Bool {
-    get {
-      return _powerIsOn
+  public var trackIsPaused : Bool = false {
+    didSet {
+      trackStatusChanged()
     }
-    set(value) {
-      _powerIsOn = value
-      for delegate in _delegates {
-        delegate.value.trackStatusChanged(commandStation: self)
-      }
+  }
+  
+  public var powerIsOn : Bool = false {
+    didSet {
+      trackStatusChanged()
     }
   }
   
@@ -265,24 +222,32 @@ public class CommandStation : NetworkMessengerDelegate {
   
   private func locomotiveMessage(message: NetworkMessage) {
     for delegate in _delegates {
-      delegate.value.locomotiveMessageReceived(message: message)
+      delegate.value.locomotiveMessageReceived?(message: message)
     }
   }
   
   private func progMessage(message: NetworkMessage) {
     for delegate in _delegates {
-      delegate.value.progMessageReceived(message: message)
+      delegate.value.progMessageReceived?(message: message)
+    }
+  }
+  
+  private func networkMessage(message: NetworkMessage) {
+    for delegate in _delegates {
+      delegate.value.messageReceived?(message: message)
+    }
+  }
+  
+  private func trackStatusChanged() {
+    for delegate in _delegates {
+      delegate.value.trackStatusChanged?(commandStation: self)
     }
   }
   
   private func slotsUpdated() {
-    
-    let slots = locoSlots
-    
     for kv in slotObservers {
-      kv.value.slotsUpdated(locoSlots: slots)
+      kv.value.slotsUpdated?(commandStation: self)
     }
-    
   }
   
   @objc func timerAction() {
@@ -508,6 +473,26 @@ public class CommandStation : NetworkMessengerDelegate {
     }
   }
   
+  public func clearLocoSlotDataP1(slotNumber:Int) {
+    for kv in messengers {
+      let messenger = kv.value
+      if messenger.isOpen {
+         messenger.clearLocoSlotDataP1(slotNumber: slotNumber)
+        break
+      }
+    }
+  }
+
+  public func clearLocoSlotDataP2(slotPage: Int, slotNumber:Int) {
+    for kv in messengers {
+      let messenger = kv.value
+      if messenger.isOpen {
+        messenger.clearLocoSlotDataP2(slotPage: slotPage, slotNumber: slotNumber)
+        break
+      }
+    }
+  }
+
   public func readCV(cv:Int) {
     for kv in messengers {
       let messenger = kv.value
@@ -550,16 +535,16 @@ public class CommandStation : NetworkMessengerDelegate {
     
   // MARK: NetworkMessengerDelegate Methods
   
-  public func messengerRemoved(id: String) {
+  @objc public func messengerRemoved(id: String) {
     _messengers.removeValue(forKey: id)
     _observerId.removeValue(forKey: id)
   }
   
-  public func networkMessageReceived(message: NetworkMessage) {
+  @objc public func networkMessageReceived(message: NetworkMessage) {
     switch message.messageType {
     case .cfgSlotDataP1, .locoSlotDataP1, .fastClockDataP1:
       let trk = message.message[7]
-      implementsProtocol2    = (trk & 0b01000000) == 0b01000000
+      implementsProtocol2    = false && (trk & 0b01000000) == 0b01000000
       programmingTrackIsBusy = (trk & 0b00001000) == 0b00001000
       implementsProtocol1    = (trk & 0b00000100) == 0b00000100
       trackIsPaused          = (trk & 0b00000010) == 0b00000000
@@ -567,14 +552,14 @@ public class CommandStation : NetworkMessengerDelegate {
       locomotiveMessage(message: message)
       if message.messageType == .locoSlotDataP1 {
         let slot = LocoSlotData(locoSlotDataP1: LocoSlotDataP1(interfaceId: message.interfaceId, data: message.message))
-        _locoSlots[slot.slotNumber] = slot
+        _locoSlots[slot.slotID] = slot
         slotsUpdated()
       }
       break
     case .locoSlotDataP2:
       locomotiveMessage(message: message)
       let slot = LocoSlotData(locoSlotDataP2: LocoSlotDataP2(interfaceId: message.interfaceId, data: message.message))
-      _locoSlots[slot.slotNumber] = slot
+      _locoSlots[slot.slotID] = slot
       slotsUpdated()
       break
     case .pwrOn:
@@ -594,9 +579,19 @@ public class CommandStation : NetworkMessengerDelegate {
     default:
       break
     }
-  }
-  
-  public func networkTimeOut(message: NetworkMessage) {
+    
+    if message.willChangeSlot {
+      if let slot = _locoSlots[message.slotID] {
+        slot.isDirty = true
+      }
+      else {
+        let slot = LocoSlotData(slotID: message.slotID)
+        _locoSlots[slot.slotID] = slot
+        slotsUpdated()
+      }
+    }
+    
+    networkMessage(message: message)
   }
   
   // MARK: Database Methods

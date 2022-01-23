@@ -40,7 +40,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="caS-tp-bTf">
-                                <rect key="frame" x="18" y="425" width="113" height="16"/>
+                                <rect key="frame" x="18" y="423" width="113" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Command Station" id="TAx-67-GBj">
                                     <font key="font" usesAppearanceFont="YES"/>
@@ -49,7 +49,7 @@
                                 </textFieldCell>
                             </textField>
                             <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yYM-Yn-5ic">
-                                <rect key="frame" x="22" y="394" width="643" height="25"/>
+                                <rect key="frame" x="20" y="391" width="476" height="25"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="5" id="YOy-aU-Lzp">
                                     <font key="font" metaFont="system"/>
@@ -61,24 +61,24 @@
                                 </connections>
                             </comboBox>
                             <tabView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="m7a-0b-8iw">
-                                <rect key="frame" x="13" y="2" width="656" height="394"/>
+                                <rect key="frame" x="13" y="2" width="656" height="353"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <font key="font" metaFont="system"/>
                                 <tabViewItems>
                                     <tabViewItem label="Locomotives" identifier="" id="cj9-NZ-SqI">
                                         <view key="view" id="ysl-L5-Djj">
-                                            <rect key="frame" x="10" y="33" width="636" height="348"/>
+                                            <rect key="frame" x="10" y="33" width="636" height="307"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="17" horizontalPageScroll="10" verticalLineScroll="17" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H7F-5n-eTC">
-                                                    <rect key="frame" x="17" y="4" width="602" height="341"/>
+                                                    <rect key="frame" x="17" y="4" width="602" height="300"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <clipView key="contentView" id="xoG-cj-0aB">
-                                                        <rect key="frame" x="1" y="1" width="600" height="339"/>
+                                                        <rect key="frame" x="1" y="1" width="600" height="298"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" headerView="fJ0-Py-wEB" viewBased="YES" id="jwq-Vn-VXH">
-                                                                <rect key="frame" x="0.0" y="0.0" width="1997" height="311"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="1997" height="270"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <size key="intercellSpacing" width="17" height="0.0"/>
                                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1243,8 +1243,8 @@
                                                             </tableView>
                                                         </subviews>
                                                     </clipView>
-                                                    <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="0.053686471009305653" horizontal="YES" id="S1q-Nq-Ksj">
-                                                        <rect key="frame" x="1" y="324" width="600" height="16"/>
+                                                    <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="S1q-Nq-Ksj">
+                                                        <rect key="frame" x="1" y="283" width="600" height="16"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </scroller>
                                                     <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="WQc-Kh-9vK">
@@ -1261,16 +1261,74 @@
                                     </tabViewItem>
                                     <tabViewItem label="Configuration" identifier="" id="zkH-Eh-cWD">
                                         <view key="view" id="Bhr-KX-0VL">
-                                            <rect key="frame" x="10" y="33" width="636" height="348"/>
+                                            <rect key="frame" x="10" y="33" width="636" height="307"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         </view>
                                     </tabViewItem>
                                 </tabViewItems>
                             </tabView>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rMP-er-LAR">
+                                <rect key="frame" x="501" y="414" width="85" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" title="Read" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="srb-h6-evb">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="btnReadSlotAction:" target="KGJ-vn-JBX" id="SCf-I2-qq5"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="685-Be-lQy">
+                                <rect key="frame" x="501" y="387" width="85" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" title="Read All" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="FXn-sk-2Sk">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="btnReadAllSlotsAction:" target="KGJ-vn-JBX" id="aDZ-93-Wjv"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bf7-yG-laE">
+                                <rect key="frame" x="584" y="387" width="85" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" title="Clear All" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="m5w-yi-2VF">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="btnClearAllSlotsAction:" target="KGJ-vn-JBX" id="vqF-12-J4K"/>
+                                </connections>
+                            </button>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LFY-cH-a4e">
+                                <rect key="frame" x="20" y="361" width="642" height="16"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" drawsBackground="YES" id="zV3-Yl-coQ">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CVm-fm-W8b">
+                                <rect key="frame" x="584" y="414" width="85" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" title="Clear" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="PAL-zL-MOR">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="btnClearSlotAction:" target="KGJ-vn-JBX" id="EGe-MB-DX6"/>
+                                </connections>
+                            </button>
                         </subviews>
                     </view>
                     <connections>
+                        <outlet property="btnClearAllSlots" destination="bf7-yG-laE" id="Fva-VZ-uut"/>
+                        <outlet property="btnClearSlot" destination="CVm-fm-W8b" id="sP5-2v-utS"/>
+                        <outlet property="btnReadAllSlots" destination="685-Be-lQy" id="CDI-1g-kOA"/>
+                        <outlet property="btnReadSlot" destination="rMP-er-LAR" id="ydZ-4K-qYC"/>
                         <outlet property="cboCommandStation" destination="yYM-Yn-5ic" id="Kuv-MT-mUj"/>
+                        <outlet property="lblStatus" destination="LFY-cH-a4e" id="3bu-8k-R8i"/>
                         <outlet property="slotTableView" destination="jwq-Vn-VXH" id="KTq-3i-Om4"/>
                     </connections>
                 </viewController>

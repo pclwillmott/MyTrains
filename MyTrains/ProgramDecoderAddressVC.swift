@@ -301,14 +301,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
   
   // MARK: CommandStationDelegate Methods
   
-  func trackStatusChanged(commandStation: CommandStation) {
-    
-  }
-  
-  func locomotiveMessageReceived(message: NetworkMessage) {
-  }
-  
-  func progMessageReceived(message: NetworkMessage) {
+  @objc func progMessageReceived(message: NetworkMessage) {
     
     switch message.messageType {
     case .progCmdAccepted:
