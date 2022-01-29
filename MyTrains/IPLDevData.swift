@@ -51,4 +51,10 @@ public class IPLDevData : NetworkMessage {
     }
   }
   
+  public var throttleID : Int {
+    get {
+      return partialSerialNumberHigh << 8 | partialSerialNumberLow
+    }
+  }
+  
 }

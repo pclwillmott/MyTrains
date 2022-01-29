@@ -7,27 +7,21 @@
 
 \section{Overview}
 
-Loconet is a peer to peer distributed network system on which all devices can monitor the network data flow. The network is event driven by different devices in time, and is not polled by a centralised controller in normal operation. The normal network state is idle, with no data traffic unless a device has information to send. With no traffic flow, the network is quiet.
+\Gls{Loconet} is a \gls{peer-to-peer} distributed network system on which all devices can monitor the network data flow. The network is event driven by different devices in time, and is not \gls{polled} by a centralised controller in normal operation. The normal network state is quiet, with no data traffic unless a device has information to send.
 
 The network data is sent in asynchronous format using 1 start bit, 8 data bits and 1 stop bit. The 8 bit data is transmitted least significant bit first. The bit times are 60.0 $\mu$S or 16,660 baud +/- 1.5\%. A computer can connect to a Digitrax USB interface at higher baud rates and the device will make the necessary conversion. Bytes may be transmitted back-to-back, with a start bit immediately following the stop bit of the previous character. 
 
-Any message that has format or framing errors, data errors or is a fragment caused by noise glitches and does not completely follow the message format will be ignored by all receivers, and a new opcode will be scanned for re-synchronisation.
+All the network communications are via multi-byte messages. The \gls{command station} is the device that maintains the refresh stack for \gls{DCC} packet generation and generates the DCC track data. Refresh of information is typically only performed for a \gls{mobile decoder}. A \gls{stationary decoder} is not refreshed and individual immediate commands are sent out to the track as requested.
 
-The \textbf{Busy} message is included to allow the command station to keep the network active whilst it is performing a task that requires a response, and entails a significant processing delay, i.e. it can ensure no new requests are started until it has responded to the last message. The \textbf{Busy} message should be simply stripped and ignored.
+The command station is only privileged in respect to performing the task of maintaining the locomotive refresh stack and generating DCC packets. In this way other network transactions may occur that the command station does not need to be involved with or understand, as long as they follow the message protocol and timing requirements. i.e. other devices may have a dialog on the network without disturbing or involving the command station. Devices on the network monitor the messages, check for format and data integrity and parse good messages to decode if action is required in the context. Devices such as throttles, input sensors, computer interfaces and control panels may generate the network messages without needing prompting or \gls{polling} by a central controller.
 
-If a device disconnects from the network and so does not access or reference a slot within the system purge time, the command station will force the un-accessed slot to common status so other system devices can use the slot. The typical purge time of a command station is about 200 seconds. A good ``ping" or slot update activity is about every 100 seconds, i.e. if a user makes no change to a throttle/slot within 100 seconds, the throttle/device should automatically send another speed update at the current speed to reset the purge timeout for that slot.
+Devices frequently will be added and removed from an operating the network. The devices and protocol are tolerant of electrical and data transients. The format chosen gives a good degree of data integrity, guaranteed quick network-state synchronisation, high data throughput, good distribution of access to many competing devices and low event latency. 
 
 \section{Message Format}
 
-All the network communications are via multi-byte messages. The command station is defined as the device that is maintaining the refresh stack for DCC packet generation and is actively generating the DCC track data. Refresh of information is typically only performed for mobile decoders. Stationary type decoders are not refreshed and individual immediate commands are sent out to the track as requested.
+The data bytes on the network are defined as 8 bit data with the most significant bit as an \gls{opcode} flag bit. If the most significant bit is 1, then the 7 least significant bits are interpreted as a network opcode. The opcode byte may only occur once in a valid message and is the first byte of a message. The opcode does not necessarily uniquely identify a message type. Sometimes the opcode must be used in combination with other bits or bytes in the message to determine the message type signature. All the remaining bytes in the message must have a most significant bit of 0, including the last checksum byte. The checksum is the 1's complement of the byte wise exclusive or of all the bytes in the message, except the checksum itself. To validate data accuracy, all the bytes in a correctly formatted message are exclusive or'ed. If this resulting byte value is 0xFF, then the message data is accepted as good. Any message that has format or framing errors, data errors or is a fragment caused by noise glitches and does not completely follow the message format will be ignored by all receivers, and a new opcode will be scanned for re-synchronisation.
 
-The command station is only privileged in respect to performing the task of maintaining the locomotive refresh stack and generating DCC packets. In this way other network transactions may occur that the command station does not need to be involved with or understand, as long as they follow the message protocol and timing requirements. i.e. other devices may have a dialog on the network without disturbing or involving the command station. Devices on the network monitor the messages, check for format and data integrity and parse good messages to decode if action is required in the context. Devices such as throttles, input sensors, computer interfaces and control panels may generate the network messages without needing prompting or polling by a central controller.
-
-Devices frequently will be added and removed from an operating the network. The devices and protocol are tolerant of electrical and data transients. The format chosen gives a good degree of data integrity, guaranteed quick network-state synchronisation, high data throughput, good distribution of access to many competing devices and low event latency. Also, the devices may be operated without need for unique ID or other requirements that can make network administration awkward.
-
-The data bytes on the network are defined as 8 bit data with the most significant bit as an opcode flag bit. If the most significant bit, d7, is 1 then the 7 least significant bits are interpreted as a network opcode . The opcode byte may only occur once in a valid message and is the first byte of a message. The opcode does not necessarily uniquely identify a message type. Sometimes the opcode must be used in combination of other bits or bytes in the message. All the remaining bytes in the message must have a most significant bit of 0, including the last checksum byte. The checksum is the 1's complement of the byte wise exclusive or of all the bytes in the message, except the checksum itself. To validate data accuracy, all the bytes in a correctly formatted message are exclusive or'ed. If this resulting byte value is 0xFF, then the message data is accepted as good.
-
-The opcodes may be examined to determine message length and if subsequent response message is required. Data bits d6 and d5 encode the message length. The message length includes the opcode and the checksum bytes. The bit d3 = 1 implies that a follow-on message or reply is expected. For variable byte messages  The byte following the opcode in the message is a 7 bit byte count.
+The opcodes may be examined to determine message length and if subsequent response message is required. Data bits d6 and d5 encode the message length. The message length includes the opcode and the checksum bytes. When bit d3 equals 1 a follow-on message or reply is expected. For variable byte messages the byte following the opcode in the message is a 7 bit byte count.
 
 \begin{tabular}{p{0.05\linewidth} p{0.05\linewidth}  p{0.05\linewidth}  p{0.05\linewidth}  p{0.05\linewidth}  p{0.05\linewidth}  p{0.05\linewidth}  p{0.05\linewidth} p{0.36\linewidth}} 
 \underline{d7} & \underline{d6} & \underline{d5} & \underline{d4} & \underline{d3} & \underline{d2} & \underline{d1} & \underline{d0} & \\
@@ -39,24 +33,94 @@ The opcodes may be examined to determine message length and if subsequent respon
 
 The A,B,C,D,E are bits available to encode 32 opcodes per message length.
 
-\section{Refresh Slots}
+\section{Slots}
 
-The command station's refresh stack is used to control the locomotives. The refresh stack is an array of read/write refresh slots. There are two protocols for manipulating the refresh slots. Protocol 1 allows up to 120 locomotive slots and each slot contains 10 bytes of data relating to the locomotive. Protocol 2 allows up to 960 locomotive slots and each slot contains 15 bytes of data relating to the locomotive. Not all command stations implement both protocols. A command station may also not implement the maximum number of locomotive slots for the protocols it supports. Where a command station implements both protocols messages from both protocols can be freely mixed. The user should check the TRK status bits to determine if protocol 1 and/or 2 are supported. In this document message mnemonics that are suffixed ``P1" belong to protocol 1 and those suffixed ``P2" belong to protocol 2. The slot number is a principal component of the protocol and is similar to a file handle. In addition to the locomotive slots there are slots reserved for system and command station control. These slots are numbered 120 to 127 (0x78 to 0x7F) and are encoded differently from the locomotive slots. Slot 123 (0x7B) is allocated to the fast clock. Slot 124 (0x7C) is allocated for read/write access to the programming track and slot 127 (0x7F) contains the command station configuration settings. Protocol 1 uses a single 7 bit number to identify a slot. Protocol 2 uses a 3 bit number to identify the page or bank of slots and a 7 bit number to identify the slot within the page or bank. Within the protocol 2 page slots numbered 0x00 to 0x77 are locomotive slots and slots numbered 0x78 to 0x7F are system slots.
+The command station contains an array of read/write slots. There are two classes of slots (\gls{locomotive slot} and \gls{system slot}) and two protocols for manipulating the slots. Protocol 1 allows up to 120 locomotive slots and each slot contains 10 bytes of data relating to the locomotive. Protocol 2 allows up to 960 locomotive slots and each slot contains 15 bytes of data relating to the locomotive. Not all command stations implement both protocols. A command station may also not implement the maximum number of locomotive slots for the protocols it supports. Where a command station implements both protocols messages from both protocols can be freely mixed. The user should check the \gls{Global System Track Status} bits in a \textbf{LocoSlotDataP1} or \textbf{LocoSlotDataP2} response to determine which protocols are supported. In this document message mnemonics that are suffixed ``P1" belong to protocol 1 and those suffixed ``P2" belong to protocol 2. Protocol 1 uses a single 7 bit number to identify a slot. Protocol 2 uses a 3 bit number to identify the page or bank of slots and a 7 bit number to identify the slot within the page or bank. In both protocols slots numbered 0 to 119 (0x00 to 0x77) are locomotive slots and those numbered 120 to 127 (0x78 to 0x7F) are system slots. The slot number is similar to a file handle. System slots are encoded differently from the locomotive slots. 
 
-\section{Getting Started}
+\begin{tabular}{l l}
+\underline{System Slot\#} & \underline{Description}\\
+123 (0x7B) & Fast Clock\\
+124 (0x7C & Programming Interface\\
+127 (0x7F) & Option Switch Settings\\
+\end{tabular}
 
-To request a mobile or locomotive decoder task in the refresh stack, a throttle device requests a slot for the locomotive address by sending either the \textbf{getLocoSlotDataSAdr} or \textbf{getLocoSlotDataLAdr} commands. Which one depends on what type of decoder address you are using - short 2 digit or long 4 digit. The command station responds with \textbf{LocoSlotData} response that contains this locomotive address and all of its state information. If the address is currently not in any slot, the command station will load this new locomotive address into a new slot (speed=0, direction forwards, functions off and 128 step mode) and return this as a \textbf{LocoSlotData} response. If no inactive slots are free to load the new locomotive address, the response will be the \textbf{Ack} with a fail response code of 0x00.
+Initially all locomotive slots are empty and are said to be Free. A Free slot does not have a locomotive address loaded and no DCC commands are generated by the command station for it. To control a locomotive a \gls{throttle} must request a slot from the command station and take ownership of it.
 
-The throttle/computer must then examine the slot data bytes to work out how to process the command station response. If the slot status 1 byte shows the slot to be ``common'' or ``idle" the throttle may change the slot to ``in use" by performing a null move instruction on this slot (see \textbf{MoveSlots}). This activation mechanism is used to guarantee proper slot usage interlocking in a multi-user asynchronous environment.
+\subsection{Slot State}
 
-If the slot return information shows the locomotive requested is ``in use" or up-consisted (i.e. the SL\_CONUP, bit 6 of slot status 1 = 1) the user should not use the slot. Any up-consisted locomotives must be unlinked before usage. Always process the result from the \textbf{LinkSlots} and \textbf{UnlinkSlots} commands, since the command station reserves the right to change the reply slot number and can reject the linking tasks under several circumstances. Verify the reply slot number and the link UP/DN bits in slot status 1 are as you expected.
+A locomotive slot's \gls{slot state} is determined by bits d5 and d4 of the \gls{Slot Status 1} byte of the applicable \textbf{LocoSlotData1} or \textbf{LocoSlotDataP2} response and whether the locomotive's address has been loaded. The slot state determines whether DCC commands are generated for it and if throttles can take control of it.
 
-The throttle will then be able to update speed, direction and function information. Whenever slot information is changed in an active slot , the slot is flagged to be updated as the next DCC packet sent to the track. If the slot is part of linked consist slots the whole consist chain is updated consecutively.
+\begin{tabular}{l l l l l l}
+\underline{Slot State} & \underline{d5} & \underline{d4} & \underline{Address Loaded} & \underline{Decoder Refreshed} & \underline{Any Throttle}\\
+Free & 0 & 0 & No & No & Yes\\
+New & 0 & 0 & Yes & No & Yes\\
+Common & 0 & 1 & Yes & Yes & Yes\\
+Idle & 1 & 0 & Yes & No & Yes\\
+In-Use & 1 & 1 & Yes & Yes & No\\
+\end{tabular}
 
-If a throttle is disconnected from the the Network, upon reconnection (if the throttle retains the slot state from before disconnection) it will request the full status of the slot it was previously using. If the reported status and speed, function data etc., from the command station exactly matches the remembered slot state the throttle will continue using the slot. If the slot data does not match, the throttle will assume the slot was purged free by the system and will go through the setup log on procedure again.
+\subsection{Throttle ID}
 
-With this procedure the throttle does not need to have a unique ID number. Slot addresses do not imply they contain any particular locomotive address. The system can be mapped such that the slot address matches the locomotive address within, if the user directly reads and writes to slots without using the command station to allocate locomotive addresses.
+The \gls{Throttle ID} for a \gls{physical throttle} is derived from the throttle's serial number. Digitrax serial numbers are 16-bit numbers. The Throttle ID is split into two parts consisting of the least significant bits of the low and high bytes of the serial number respectively. For example a physical throttle with the serial number of 0xFFFE would have a Throttle ID of 0x7E 0x7F with 0x7E being the low byte. The low byte of the Throttle ID is required by some of the protocol 2 commands to ensure that only the throttle that has ownership of the locomotive slot is the one that updates the slot. A \gls{software throttle} should choose a Throttle ID that does not clash with that of a physical throttle.
 
+\subsection{Protocol 1}
+
+\begin{enumerate}
+\item The throttle requests a slot for the locomotive \gls{address} by sending either a \textbf{GetLocoSlotDataSAdrP1} or \textbf{GetLocoSlotDataLAdrP1} request to the command station. Which one depends on what type of address the locomotive's decoder is programmed to use. 
+\item If a slot has been previously loaded with the locomotive's address, then the command station will return a \textbf{LocoSlotDataP1} response.
+\item If the locomotive's address is not currently in a slot, then the command station will load the new locomotive address into a Free slot, with speed equal to zero, direction forwards, functions off and 128 step mode, and return a \textbf{LocoSlotDataP1} response.
+\item If there are no Free slots to load the new locomotive address into, the command station with return a \textbf{NoFreeSlotsP1} response and this procedure is terminated.
+\item The throttle must then examine the slot data bytes to work out how to process the command station response.
+\item If the slot state is New, Common or Idle then the throttle requests a ``null move" operation by sending the command station a \textbf{MoveSlotsP1} request. The command station returns a \textbf{LocoSlotDataP1} response. 
+\item If the slot state is In-Use and the slot's \gls{Throttle ID} does not match that of the throttle then the throttle should ask the user if they wish to ``steal" the slot. If the answer is no then this procedure is terminated.
+\item The throttle now takes ownership of the slot by updating the slot's Throttle ID to that of the throttle and writing the updated slot data to the command station by sending a \textbf{SetLocoSlotDataP1} request. If the request is successful then the command station will return a \textbf{setSlotDataOKP1} response.
+\item The throttle will then be able to update speed, direction and function information. Whenever slot information is changed in an active slot, the slot is flagged to be updated as the next DCC packet sent to the track.
+\end{enumerate}
+
+\subsection{Protocol 2}
+
+\begin{enumerate}
+\item The throttle requests a slot for the locomotive \gls{address} by sending either a \textbf{GetLocoSlotDataSAdrP2} or \textbf{GetLocoSlotDataLAdrP2} request to the command station. Which one depends on what type of address the locomotive's decoder is programmed to use. 
+\item If a slot has been previously loaded with the locomotive's address, then the command station will return a \textbf{LocoSlotDataP2} response.
+\item If the locomotive's address is not currently in a slot, then the command station will load the new locomotive address into a Free slot, with speed equal to zero, direction forwards, functions off and 128 step mode, and return a \textbf{LocoSlotDataP2} response.
+\item If there are no Free slots to load the new locomotive address into, the command station with return a \textbf{NoFreeSlotsP2} response and this procedure is terminated.
+\item The throttle must then examine the slot data bytes to work out how to process the command station response.
+\item If the slot state is New, Common or Idle then the throttle requests a ``null move" operation by sending the command station a \textbf{MoveSlotsP2} request. The command station returns a \textbf{LocoSlotDataP2} response. 
+\item If the slot state is In-Use and the slot's \gls{Throttle ID} does not match that of the throttle then the throttle should ask the user if they wish to ``steal" the slot. If the answer is no then this procedure is terminated.
+\item The throttle now takes ownership of the slot by updating the slot's Throttle ID to that of the throttle and writing the updated slot data to the command station by sending a \textbf{SetLocoSlotDataP2} request. If the request is successful then the command station will return a \textbf{setSlotDataOKP2} response.
+\item The throttle will then be able to update speed, direction and function information. Whenever slot information is changed in an active slot, the slot is flagged to be updated as the next DCC packet sent to the track.
+\end{enumerate}
+
+Example:
+
+\begin{verbatim}
+getLocoSlotDataSAdrP2
+     0xbe 0x00 0x17 0x56 
+     
+locoSlotDataP2
+     0xe6 0x15 0x01 0x05 0x03 0x17 0x00 0x47 0x00 0x00 
+     0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x5b 
+
+moveSlotsP2
+     0xd4 0x39 0x05 0x01 0x05 0x13 
+
+locoSlotDataP2
+     0xe6 0x15 0x01 0x05 0x33 0x17 0x00 0x47 0x00 0x00 
+     0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x6b 
+
+setLocoSlotDataP2
+     0xee 0x15 0x01 0x05 0x33 0x17 0x00 0x47 0x00 0x00 
+     0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x6d 0x52 0x5c 
+
+setSlotDataOKP2
+     0xb4 0x6e 0x7f 0x5a 
+\end{verbatim}
+\normalsize
+
+\subsection{Purging}
+If a device disconnects from the network and so does not access or reference a slot within the system purge time, the command station will force the un-accessed slot to \gls{Common} status so other system devices can use the slot. The typical purge time of a command station is about 200 seconds. A good ``ping" or slot update activity is about every 100 seconds, i.e. if a user makes no change to a throttle/slot within 100 seconds, the throttle/device should automatically send another speed update at the current speed to reset the purge timeout for that slot.
+
+\newpage
 \section{Messages}
 
 The following information is provided for each of the messages:

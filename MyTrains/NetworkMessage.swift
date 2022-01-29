@@ -73,6 +73,28 @@ public class NetworkMessage : NSObject {
     }
   }
   
+  public var slotData : [UInt8] {
+    
+    if messageType == .locoSlotDataP1 || messageType == .locoSlotDataP2 {
+    
+      let count = Int(messageLength) - 3
+    
+      var slotData = [UInt8](repeating: 0, count: count)
+      
+      var index = 0
+      while index < count {
+        slotData[index] = message[index + 2]
+        index += 1
+      }
+      
+      return slotData
+
+    }
+    
+    return []
+    
+  }
+  
   public var messageLength : UInt8 {
     get {
       
@@ -470,51 +492,48 @@ public class NetworkMessage : NSObject {
           }
           break
         case NetworkMessageOpcode.OPC_D5_GROUP.rawValue:
-          if message[3] == 0x6d {
-            let test = message[1] & 0b11111000
-            switch test {
-            case 0b00000000, 0b00001000:
-              _messageType = .locoSpdDirP2
-              _willChangeSlot = true
-              isP1 = false
-              slotPage = Int(message[1] & 0b00000111)
-              slotNumber = Int(message[2])
-            case 0b00010000:
-              _messageType = .locoF0F6P2
-              _willChangeSlot = true
-             isP1 = false
-              slotPage = Int(message[1] & 0b00000111)
-              slotNumber = Int(message[2])
-              break
-            case 0b00011000:
-              _messageType = .locoF7F13P2
-              _willChangeSlot = true
-              isP1 = false
-              slotPage = Int(message[1] & 0b00000111)
-              slotNumber = Int(message[2])
-            case 0b00100000:
-              _messageType = .locoF14F20P2
-              _willChangeSlot = true
-              isP1 = false
-              slotPage = Int(message[1] & 0b00000111)
-              slotNumber = Int(message[2])
-            case 0b00101000:
-              _messageType = .locoF21F28P2
-              _willChangeSlot = true
-              isP1 = false
-              slotPage = Int(message[1] & 0b00000111)
-              slotNumber = Int(message[2])
-            case 0b00110000:
-              _messageType = .locoF21F28P2
-              _willChangeSlot = true
-              isP1 = false
-              slotPage = Int(message[1] & 0b00000111)
-              slotNumber = Int(message[2])
-            default:
-              break
-            }
+          let test = message[1] & 0b11111000
+          switch test {
+          case 0b00000000, 0b00001000:
+            _messageType = .locoSpdDirP2
+            _willChangeSlot = true
+            isP1 = false
+            slotPage = Int(message[1] & 0b00000111)
+            slotNumber = Int(message[2])
+          case 0b00010000:
+            _messageType = .locoF0F6P2
+            _willChangeSlot = true
+           isP1 = false
+            slotPage = Int(message[1] & 0b00000111)
+            slotNumber = Int(message[2])
+            break
+          case 0b00011000:
+            _messageType = .locoF7F13P2
+            _willChangeSlot = true
+            isP1 = false
+            slotPage = Int(message[1] & 0b00000111)
+            slotNumber = Int(message[2])
+          case 0b00100000:
+            _messageType = .locoF14F20P2
+            _willChangeSlot = true
+            isP1 = false
+            slotPage = Int(message[1] & 0b00000111)
+            slotNumber = Int(message[2])
+          case 0b00101000:
+            _messageType = .locoF21F28P2
+            _willChangeSlot = true
+            isP1 = false
+            slotPage = Int(message[1] & 0b00000111)
+            slotNumber = Int(message[2])
+          case 0b00110000:
+            _messageType = .locoF21F28P2
+            _willChangeSlot = true
+            isP1 = false
+            slotPage = Int(message[1] & 0b00000111)
+            slotNumber = Int(message[2])
+          default:
+            break
           }
-          break
         case NetworkMessageOpcode.OPC_LOCO_DIRF.rawValue:
           if message[1] < 0x78 &&
             (message[2] & 0b01000000) == 0x00 {

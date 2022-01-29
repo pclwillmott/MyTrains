@@ -133,13 +133,14 @@ public enum Manufacturer : Int {
 }
 
 public enum ProductCode : Int {
-  case DCS210Plus = 0x1a
-  case DCS210     = 0x1b
-  case DCS240     = 0x1c
-  case PR3        = 0x23
-  case PR4        = 0x24
-  case DT500      = 0x32
-  case unknown    = 0xff
+  case DCS210Plus       = 0x1a
+  case DCS210           = 0x1b
+  case DCS240           = 0x1c
+  case PR3              = 0x23
+  case PR4              = 0x24
+  case DT500            = 0x32
+  case softwareThrottle = 0x7f
+  case unknown          = 0xff
 }
 
 /*

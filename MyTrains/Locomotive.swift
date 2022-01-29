@@ -16,6 +16,36 @@ public enum MobileDecoderType : Int {
   case dcc128 = 5
   case dcc128A = 6
   case unknown = 0xffff
+  
+  public func protectMask() -> UInt8 {
+    return 0b11111000
+  }
+  
+  public func setMask() -> UInt8 {
+    
+    var mask : UInt8 = 0
+    
+    switch self {
+    case .dcc28:
+      mask = 0b000
+    case .dcc28T:
+      mask = 0b001
+    case .dcc14:
+      mask = 0b010
+    case .dcc128:
+      mask = 0b011
+    case .dcc28A:
+      mask = 0b100
+    case .dcc128A:
+      mask = 0b111
+    default:
+      break
+    }
+    
+    return mask
+    
+  }
+  
 }
 
 public enum TrackGauge : Int {
@@ -140,6 +170,7 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
     case inactive
     case waitingForSlot
     case waitingToActivate
+    case waitingForOwnershipConfirmation
     case active
   }
   
@@ -197,7 +228,16 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
   
   private var commandStationDelegateId : Int = -1
   
-  private var initState : InitState = .inactive
+  private var initState : InitState = .inactive {
+    willSet {
+      stopTimer()
+    }
+    didSet {
+      if initState == .active {
+        startTimer(timeInterval: 200.0 / 1000.0)
+      }
+    }
+  }
   
   private var _speed  : LocomotiveSpeed = (speed: 0, direction: .forward)
   
@@ -212,6 +252,8 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
   private var nextDelegateId : Int = 0
   
   private var _cvs : [Int:LocomotiveCV] = [:]
+  
+  private var _throttleID : Int?
   
   // MARK: Public properties
   
@@ -590,13 +632,13 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
   
   @objc func timerAction() {
     
-    if let net = network, let cs = net.commandStation {
+    if let net = network, let cs = net.commandStation, let throttle = _throttleID {
       
       if !isInertial {
         speed = targetSpeed
       }
       
-      lastLocomotiveState = cs.updateLocomotiveState(slotNumber: slotNumber, slotPage: slotPage, previousState: lastLocomotiveState, nextState: locomotiveState)
+      lastLocomotiveState = cs.updateLocomotiveState(slotNumber: slotNumber, slotPage: slotPage, previousState: lastLocomotiveState, nextState: locomotiveState, throttleID: throttle)
       
       for delegate in delegates {
         delegate.value.stateUpdated(locomotive: self)
@@ -628,6 +670,26 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
   func stopTimer() {
     timer?.invalidate()
     timer = nil
+  }
+  
+  private func writeBack(message:NetworkMessage) -> [UInt8] {
+
+    var slotData = message.slotData
+
+    if _throttleID == nil {
+      _throttleID = networkController.softwareThrottleID
+    }
+    
+    if let throttleID = _throttleID {
+      var index = slotData.count - 2
+      slotData[index+0] = UInt8(throttleID & 0x7f)
+      slotData[index+1] = UInt8(throttleID >> 8)
+      index = message.messageType == .locoSlotDataP1 ? 1 : 2
+      slotData[index] = (slotData[index] & mobileDecoderType.protectMask()) | mobileDecoderType.setMask()
+    }
+    
+    return slotData
+    
   }
   
   // MARK: Public Methods
@@ -670,7 +732,7 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
   @objc public func locomotiveMessageReceived(message: NetworkMessage) {
     
     if let net = network, let cs = net.commandStation {
-
+      
       switch message.messageType {
       case .ack:
         let ack = Ack(interfaceId: message.interfaceId, data: message.message)
@@ -681,19 +743,13 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
           slotPage = locoSlotDataP1.slotPage
           slotNumber = locoSlotDataP1.slotNumber
           if initState == .waitingForSlot {
-            initState = locoSlotDataP1.slotState == .inUse ? .active : .waitingToActivate
-            if initState == .waitingToActivate {
-              cs.moveSlots(sourceSlotNumber: slotNumber, sourceSlotPage: slotPage, destinationSlotNumber: slotNumber, destinationSlotPage: slotPage)
-            }
-            if initState == .active {
-              startTimer(timeInterval: 200.0 / 1000.0)
-            }
+            initState = .waitingToActivate
+            cs.moveSlots(sourceSlotNumber: slotNumber, sourceSlotPage: slotPage, destinationSlotNumber: slotNumber, destinationSlotPage: slotPage)
           }
           else if initState == .waitingToActivate {
-            initState = locoSlotDataP1.slotState == .inUse ? .active : .waitingToActivate
-            if initState == .active {
-              startTimer(timeInterval: 200.0 / 1000.0)
-            }
+            initState = .waitingForOwnershipConfirmation
+            let wb = writeBack(message: message)
+            cs.setLocoSlotDataP1(slotData: wb)
           }
         }
         break
@@ -703,22 +759,20 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
           slotPage = locoSlotDataP2.slotPage
           slotNumber = locoSlotDataP2.slotNumber
           if initState == .waitingForSlot {
-            initState = locoSlotDataP2.slotState == .inUse ? .active : .waitingToActivate
-            if initState == .waitingToActivate {
-              cs.moveSlots(sourceSlotNumber: slotNumber, sourceSlotPage: slotPage, destinationSlotNumber: slotNumber, destinationSlotPage: slotPage)
-            }
-            if initState == .active {
-              startTimer(timeInterval: 200.0 / 1000.0)
-            }
+            initState = .waitingToActivate
+            cs.moveSlots(sourceSlotNumber: slotNumber, sourceSlotPage: slotPage, destinationSlotNumber: slotNumber, destinationSlotPage: slotPage)
           }
           else if initState == .waitingToActivate {
-            initState = locoSlotDataP2.slotState == .inUse ? .active : .waitingToActivate
-            if initState == .active {
-              startTimer(timeInterval: 200.0 / 1000.0)
-            }
+            initState = .waitingForOwnershipConfirmation
+            let wb = writeBack(message: message)
+            cs.setLocoSlotDataP2(slotData: wb)
           }
         }
         break
+      case .setSlotDataOKP1, .setSlotDataOKP2:
+        initState = .active
+      case .noFreeSlotsP1, .noFreeSlotsP2:
+        initState = .inactive
       default:
         break
       }

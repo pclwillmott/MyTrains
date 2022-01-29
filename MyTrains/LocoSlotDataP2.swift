@@ -102,20 +102,31 @@ public class LocoSlotDataP2 : NetworkMessage {
       var fnx : Int = 0
       
       var byte = message[9]
-      
-      fnx |= (byte & 0b01000000) == 0b01000000 ? maskF8 : 0
-      fnx |= (byte & 0b00100000) == 0b00100000 ? maskF0 : 0
+
       fnx |= (byte & 0b00010000) == 0b00010000 ? maskF12 : 0
-      fnx |= (byte & 0b00000010) == 0b00000010 ? maskF20 : 0
-      
+      fnx |= (byte & 0b00100000) == 0b00100000 ? maskF20 : 0
+      fnx |= (byte & 0b01000000) == 0b01000000 ? maskF28 : 0
+
+      byte = message[10]
+
+      fnx |= (byte & 0b00010000) == 0b00010000 ? maskF0 : 0
+      fnx |= (byte & 0b00000001) == 0b00000001 ? maskF1 : 0
+      fnx |= (byte & 0b00000010) == 0b00000010 ? maskF2 : 0
+      fnx |= (byte & 0b00000100) == 0b00000100 ? maskF3 : 0
+      fnx |= (byte & 0b00001000) == 0b00001000 ? maskF4 : 0
+
       byte = message[11]
-      
-      fnx |= (byte & 0b01000000) == 0b01000000 ? maskF11 : 0
-      fnx |= (byte & 0b00100000) == 0b00100000 ? maskF10 : 0
+
+      fnx |= (byte & 0b00000001) == 0b00000001 ? maskF5 : 0
+      fnx |= (byte & 0b00000010) == 0b00000010 ? maskF6 : 0
+      fnx |= (byte & 0b00000100) == 0b00000100 ? maskF7 : 0
+      fnx |= (byte & 0b00001000) == 0b00001000 ? maskF8 : 0
       fnx |= (byte & 0b00010000) == 0b00010000 ? maskF9 : 0
+      fnx |= (byte & 0b00100000) == 0b00100000 ? maskF10 : 0
+      fnx |= (byte & 0b01000000) == 0b01000000 ? maskF11 : 0
 
       byte = message[12]
-      
+
       fnx |= (byte & 0b01000000) == 0b01000000 ? maskF19 : 0
       fnx |= (byte & 0b00100000) == 0b00100000 ? maskF18 : 0
       fnx |= (byte & 0b00010000) == 0b00010000 ? maskF17 : 0
@@ -125,14 +136,14 @@ public class LocoSlotDataP2 : NetworkMessage {
       fnx |= (byte & 0b00000001) == 0b00000001 ? maskF13 : 0
 
       byte = message[13]
-      
-      fnx |= (byte & 0b01000000) == 0b01000000 ? maskF7 : 0
-      fnx |= (byte & 0b00100000) == 0b00100000 ? maskF6 : 0
-      fnx |= (byte & 0b00010000) == 0b00010000 ? maskF5 : 0
-      fnx |= (byte & 0b00001000) == 0b00001000 ? maskF4 : 0
-      fnx |= (byte & 0b00000100) == 0b00000100 ? maskF3 : 0
-      fnx |= (byte & 0b00000010) == 0b00000010 ? maskF2 : 0
-      fnx |= (byte & 0b00000001) == 0b00000001 ? maskF1 : 0
+ 
+      fnx |= (byte & 0b01000000) == 0b01000000 ? maskF27 : 0
+      fnx |= (byte & 0b00100000) == 0b00100000 ? maskF26 : 0
+      fnx |= (byte & 0b00010000) == 0b00010000 ? maskF25 : 0
+      fnx |= (byte & 0b00001000) == 0b00001000 ? maskF24 : 0
+      fnx |= (byte & 0b00000100) == 0b00000100 ? maskF23 : 0
+      fnx |= (byte & 0b00000010) == 0b00000010 ? maskF22 : 0
+      fnx |= (byte & 0b00000001) == 0b00000001 ? maskF21 : 0
 
       return fnx
       

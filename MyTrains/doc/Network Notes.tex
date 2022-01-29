@@ -10,6 +10,11 @@
 \usepackage[colorlinks=true, pdfstartview=FitV, linkcolor=blue,     
             citecolor=blue, urlcolor=blue]{hyperref}
 
+\usepackage{makeidx}
+
+\makeindex
+
+
 \usepackage{sectsty}
 \sectionfont{\LARGE}
 \subsectionfont{\Large}
@@ -35,13 +40,14 @@
 \def\R{\ensuremath {\cal R}}
 \def\tr{\ensuremath {\mbox{tr}}}
 
+\usepackage{glossaries}
+\makenoidxglossaries
 
-
+\input{GlossaryDefs}
 
 % ------------------- Title and Author -----------------------------
 \title{Network Notes}
 \begin{document}
-
 
 \frontmatter
 \maketitle
@@ -56,13 +62,19 @@
 \include{Chapter3}
 \include{Chapter4}
 
-
 \bibliographystyle{plain-annote}
 \bibliography{mybibliography}
 
 \appendix
 
 \include{AppendixA}
+\include{AppendixB}
+
+\clearpage
+
+\printnoidxglossaries
+
+\printindex
 
 \end{document}
 \end

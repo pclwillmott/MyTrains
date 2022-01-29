@@ -3,7 +3,7 @@
  
 %!TEX root =  
 
-\chapter[Configuration Variables]{Programming Configuration Variables (CVs)}
+\chapter[Configuration Variables]{Programming Configuration Variables (CVs)}\index{Configuration Variables}\index{CVs|see {Configuration Variables}} 	
 
 \section{Introduction}
 
@@ -26,15 +26,15 @@ There are four programming modes:
 \item Operations mode
 \end{itemize}
 
-\subsection{Paged Mode Programming}
+\subsection{Paged Mode Programming}\index{Programming!Paged Mode}
 
-\subsection{Physical Register Programming}
+\subsection{Physical Register Programming}\index{Programming!Physical Register Mode}
 Physical Register Mode can only read CV01-CV08. You should not rely on values in the display for CVs above 08 when reading back in physical register mode.
 
-\subsection{Direct Mode Programming}
+\subsection{Direct Mode Programming}\index{Programming!Direct Mode}
 This is the preferred programming mode.
 
-\subsection{Operations Mode Programming}
+\subsection{Operations Mode Programming}\index{Programming!Operations Mode}
 Operations mode programming lets you program CVs in locomotives equipped with Extended Packet Format decoders while they are on the mainline. A typical use for Ops mode programming would be to change the acceleration rate (CV03) or the deceleration rate (CV04) of your locomotives to simulate the weight and braking capability of the train to compensate for changing the number of cars or power units on a train.
 
 Operations Mode read back can only be used with decoders that are capable of operations mode read back when there is a device attached to the network that supports operations mode read back. Digitrax transponding decoders and the DCS210 or DCS240 command stations would allow operations mode read back.
@@ -886,6 +886,8 @@ d0 & Enable/Disable Decoder lock with CV 15 / 16. 0 = Disabled 1 = Enabled\\
 \\
 255 & Constant braking distance backward & Constant braking distances during reverse driving. Only active, if value $>$ 0, otherwise the value of CV 254 is used. Useful for reversible trains. & 0 – 255 & 0\\
 \end{tabular}
+
+\normalsize
 
 
 

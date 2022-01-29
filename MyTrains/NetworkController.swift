@@ -73,6 +73,8 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
   
   private var _observerIds : [String:Int] = [:]
   
+  private var throttles : [Int:ProductCode] = [:]
+  
   // MARK: Public Properties
   
   public var networks : [Int:Network] = Network.networks
@@ -144,6 +146,23 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
         }
       }
       return false
+    }
+  }
+  
+  public var softwareThrottleID : Int? {
+    get {
+      for id in 1...0x7f {
+        if let pc = throttles[id] {
+          if pc == .softwareThrottle {
+            return id
+          }
+        }
+        else {
+          throttles[id] = .softwareThrottle
+          return id
+        }
+      }
+      return nil
     }
   }
   
@@ -361,6 +380,10 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
             interface.save()
           }
         }
+      }
+      
+      if pc == .DT500 {
+        throttles[devData.throttleID] = pc
       }
       
       for delegate in controllerDelegates {

@@ -320,6 +320,24 @@ public class CommandStation : NSObject, NetworkMessengerDelegate {
     }
   }
   
+  public func setLocoSlotDataP1(slotData:[UInt8]) {
+    for messenger in _messengers {
+      if messenger.value.isOpen {
+        messenger.value.setLocoSlotDataP1(slotData: slotData)
+        break
+      }
+    }
+  }
+  
+  public func setLocoSlotDataP2(slotData:[UInt8]) {
+    for messenger in _messengers {
+      if messenger.value.isOpen {
+        messenger.value.setLocoSlotDataP2(slotData: slotData)
+        break
+      }
+    }
+  }
+  
   public func getProgSlotDataP1() {
     for messenger in _messengers {
       if messenger.value.isOpen {
@@ -362,7 +380,7 @@ public class CommandStation : NSObject, NetworkMessengerDelegate {
     }
   }
   
-  public func updateLocomotiveState(slotNumber: Int, slotPage: Int, previousState:LocomotiveState, nextState:LocomotiveState) -> LocomotiveState {
+  public func updateLocomotiveState(slotNumber: Int, slotPage: Int, previousState:LocomotiveState, nextState:LocomotiveState, throttleID: Int) -> LocomotiveState {
     
     if timer == nil {
       startTimer(timeInterval: 30.0)
@@ -387,26 +405,26 @@ public class CommandStation : NSObject, NetworkMessengerDelegate {
           let maskF0F6   = 0b00000000000000000000000001111111
           let maskF7F13  = 0b00000000000000000011111110000000
           let maskF14F20 = 0b00000000000111111100000000000000
-          let maskF21F28 = 0b00001111111000000000000000000000
+          let maskF21F28 = 0b00011111111000000000000000000000
           
           if previous & maskF0F6 != next & maskF0F6 {
-            messenger.locoF0F6P2(slotNumber: slotNumber, slotPage: slotPage, functions: next)
+            messenger.locoF0F6P2(slotNumber: slotNumber, slotPage: slotPage, functions: next, throttleID: throttleID)
           }
           
           if previous & maskF7F13 != next & maskF7F13 {
-            messenger.locoF7F13P2(slotNumber: slotNumber, slotPage: slotPage, functions: next)
+            messenger.locoF7F13P2(slotNumber: slotNumber, slotPage: slotPage, functions: next, throttleID: throttleID)
           }
           
           if previous & maskF14F20 != next & maskF14F20 {
-            messenger.locoF14F20P2(slotNumber: slotNumber, slotPage: slotPage, functions: next)
+            messenger.locoF14F20P2(slotNumber: slotNumber, slotPage: slotPage, functions: next, throttleID: throttleID)
           }
           
           if previous & maskF21F28 != next & maskF21F28 {
-            messenger.locoF21F28P2(slotNumber: slotNumber, slotPage: slotPage, functions: next)
+            messenger.locoF21F28P2(slotNumber: slotNumber, slotPage: slotPage, functions: next, throttleID: throttleID)
           }
           
           if speedChanged || directionChanged || forceRefresh {
-            messenger.locoSpdDirP2(slotNumber: slotNumber, slotPage: slotPage, speed: nextState.speed, direction: nextState.direction)
+            messenger.locoSpdDirP2(slotNumber: slotNumber, slotPage: slotPage, speed: nextState.speed, direction: nextState.direction, throttleID: throttleID)
           }
           
         }
@@ -544,7 +562,7 @@ public class CommandStation : NSObject, NetworkMessengerDelegate {
     switch message.messageType {
     case .cfgSlotDataP1, .locoSlotDataP1, .fastClockDataP1:
       let trk = message.message[7]
-      implementsProtocol2    = false && (trk & 0b01000000) == 0b01000000
+      implementsProtocol2    = (trk & 0b01000000) == 0b01000000
       programmingTrackIsBusy = (trk & 0b00001000) == 0b00001000
       implementsProtocol1    = (trk & 0b00000100) == 0b00000100
       trackIsPaused          = (trk & 0b00000010) == 0b00000000
@@ -557,11 +575,19 @@ public class CommandStation : NSObject, NetworkMessengerDelegate {
       }
       break
     case .locoSlotDataP2:
+      let trk = message.message[7]
+      implementsProtocol2    = (trk & 0b01000000) == 0b01000000
+      programmingTrackIsBusy = (trk & 0b00001000) == 0b00001000
+      implementsProtocol1    = (trk & 0b00000100) == 0b00000100
+      trackIsPaused          = (trk & 0b00000010) == 0b00000000
+      powerIsOn              = (trk & 0b00000001) == 0b00000001
       locomotiveMessage(message: message)
       let slot = LocoSlotData(locoSlotDataP2: LocoSlotDataP2(interfaceId: message.interfaceId, data: message.message))
       _locoSlots[slot.slotID] = slot
       slotsUpdated()
       break
+    case .noFreeSlotsP2, .noFreeSlotsP1, .setSlotDataOKP1, .setSlotDataOKP2:
+      locomotiveMessage(message: message)
     case .pwrOn:
       powerIsOn = true
       getCfgSlotDataP1()
