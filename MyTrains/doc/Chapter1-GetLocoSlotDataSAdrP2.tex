@@ -1,13 +1,13 @@
 \newpage
-\subsection{GetLocoSlotDataSAdrP2}
+\subsection{GetLocoSlotDataSAdrP2}\index{GetLocoSlotDataSAdrP2}
 
 \rule{15.1cm}{0.4pt}
 
 \underline{Description:}
 
-This command requests the slot number for the selected locomotive address. If the locomotive is found in the slot table then the command station returns an \textbf{LocoSlotDataP2} response with the slot information. If it is not found then the command station will put the locomotive into a free slot and then return an \textbf{LocoSlotDataP2} response with the slot information. If there are no free slots then the command station returns an \textbf{Ack} containing a response code of 0x00.
+This command requests a slot\index{Slot} for the selected locomotive address. If the locomotive is found in the slot table then the command station returns an \textbf{LocoSlotDataP2} response with the slot information. If it is not found then the command station will put the locomotive into a free slot and then return an \textbf{LocoSlotDataP2} response with the slot information. If there are no free slots then the command station returns an \textbf{NoFreeSlotsP2} response.
 
-The command station will generate NMRA 7 bit or short address packets for the locomotive. The address has the range 0 to 127. The analog locomotive is selected with address 0.  
+The command station will generate \gls{NMRA} 7 bit or short address packets for the locomotive. The \gls{address} has the range 0 to 127. The analog locomotive is selected with address 0.  
 
 \underline{Protocol:}
 
@@ -72,21 +72,13 @@ Byte 3:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$CHK$>$ & Checksum.
+& $<$CHK$>$ & Checksum.\\
 
 \end{tabular}
 
 \underline{Response:} 
 
-\textbf{LocoSlotDataP2} if success, otherwise 
-
-\textbf{Ack}
-
-\begin{tabular}{p{0.10\linewidth} p{0.10\linewidth} p{0.40\linewidth}}
-\underline{$<$LOPC$>$} & \underline{$<$ACK1$>$} & \underline{Meaning}\\
-0x3E & 0x00 & No free slot, command failed.\\
-\end{tabular}
-
+\textbf{LocoSlotDataP2} if success, otherwise \textbf{NoFreeSlotsP2}
 
 \underline{Signature:}
 

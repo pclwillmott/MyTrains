@@ -1,9 +1,9 @@
 \newpage
-\subsection{LinkSlotsP1}
+\subsection{LinkSlotsP1}\index{LinkSlotsP1}\index{Consisting}
 
 \underline{Description:}
 
-This command links slot SL1 to slot SL2. The command station sets SL\_CONUP/DN flags appropriately. If the command was successful then a \textbf{LocoSlotDataP1} response will be returned. An invalid link will return a \textbf{Ack} with a response code of 0x00.
+This command requests the command station to link slot SL1 to slot SL2. If the command was successful then a \textbf{LocoSlotDataP1} response will be returned. An invalid link will return a \textbf{Ack} with a response code of 0x00.
 
 \underline{Protocol:}
 
@@ -68,7 +68,7 @@ Byte 3:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$CHK$>$ & Checksum.
+& $<$CHK$>$ & Checksum.\\
 \end{tabular}
 
 \underline{Response:} 

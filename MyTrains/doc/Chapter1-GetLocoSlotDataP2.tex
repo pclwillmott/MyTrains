@@ -1,5 +1,5 @@
 \newpage
-\subsection{GetLocoSlotDataP2}
+\subsection{GetLocoSlotDataP2}\index{GetLocoSlotDataP2}\index{Slot}
 
 \underline{Description:}
 
@@ -58,7 +58,7 @@ Byte 2:
 0 & 1 & 0 & 0 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-& $<$SLOTP$>$ & Bits d2 to d0 contain the slot page number in the range 0x0 to 0x7. The bit d3 does something but its function is not yet known.\\
+& $<$SLOTP$>$ & Bits d2 to d0 contain the slot page number in the range 0x0 to 0x7. The bit d3 does something but its function is not yet known.\footnote{It has not been confirmed that the page number is three bits wide. Tests show that this command cycles after two bits.}\\
 \end{tabular}
 
 Byte 3:
@@ -70,13 +70,13 @@ Byte 3:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$CHK$>$ & Checksum.
+& $<$CHK$>$ & Checksum.\\
 
 \end{tabular}
 
 \underline{Response:} 
 
-\textbf{LocoSlotDataP2}
+\textbf{LocoSlotDataP2} or \textbf{SlotNotImplemented}
 
 \underline{Signature:}
 

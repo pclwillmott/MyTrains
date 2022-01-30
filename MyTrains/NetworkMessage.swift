@@ -202,6 +202,12 @@ public class NetworkMessage : NSObject {
           else if message[1] == 0x3e && message[2] == 0x00 {
             _messageType = .noFreeSlotsP2
           }
+          else if message[1] == 0x54 && message[2] == 0x00 {
+            _messageType = .illegalMoveP2
+          }
+          else if message[1] == 0x3a && message[2] == 0x00 {
+            _messageType = .illegalMoveP1
+          }
           else {
             _messageType = .ack
           }

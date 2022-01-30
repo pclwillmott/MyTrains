@@ -1,13 +1,13 @@
 \newpage
-\subsection{GetLocoSlotDataLAdrP1}
+\subsection{GetLocoSlotDataLAdrP1}\index{GetLocoSlotDataLAdrP1}
 
 \rule{15.1cm}{0.4pt}
 
 \underline{Description:}
 
-This command requests the slot number for the selected locomotive address. If the locomotive is found in the slot table then the command station returns an \textbf{LocoSlotDataP1} response with the slot information. If it is not found then the command station will put the locomotive into a free slot and then return an \textbf{LocoSlotDataP1} response with the slot information. If there are no free slots then the command station returns an \textbf{Ack} containing a response code of 0x00.
+This command requests a slot for the selected locomotive address. If the locomotive is found in the slot table then the command station returns an \textbf{LocoSlotDataP1} response with the slot information. If it is not found then the command station will put the locomotive into a free slot and then return an \textbf{LocoSlotDataP1} response with the slot information. If there are no free slots then the command station returns an \textbf{NoFreeSlotsP1} response.
 
-The command station will generate NMRA 14 bit or long address packets for the locomotive. The address must be in the range 128 to 9983.
+The command station will generate \gls{NMRA} 14 bit or long address packets for the locomotive. The \gls{address} must be in the range 128 to 9983.
 
 \underline{Protocol:}
 
@@ -72,20 +72,13 @@ Byte 3:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$CHK$>$ & Checksum.
+& $<$CHK$>$ & Checksum.\\
 
 \end{tabular}
 
 \underline{Response:} 
 
-\textbf{LocoSlotDataP1} if success, otherwise 
-
-\textbf{Ack}
-
-\begin{tabular}{p{0.10\linewidth} p{0.10\linewidth} p{0.40\linewidth}}
-\underline{$<$LOPC$>$} & \underline{$<$ACK1$>$} & \underline{Meaning}\\
-0x3F & 0x00 & No free slot, command failed.\\
-\end{tabular}
+\textbf{LocoSlotDataP1} if success, otherwise \textbf{NoFreeSlotsP1}
 
 \underline{Signature:}
 

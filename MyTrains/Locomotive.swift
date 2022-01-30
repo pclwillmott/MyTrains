@@ -743,8 +743,15 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
           slotPage = locoSlotDataP1.slotPage
           slotNumber = locoSlotDataP1.slotNumber
           if initState == .waitingForSlot {
-            initState = .waitingToActivate
-            cs.moveSlots(sourceSlotNumber: slotNumber, sourceSlotPage: slotPage, destinationSlotNumber: slotNumber, destinationSlotPage: slotPage)
+            if locoSlotDataP1.slotState == .inUse {
+              initState = .waitingForOwnershipConfirmation
+              let wb = writeBack(message: message)
+              cs.setLocoSlotDataP1(slotData: wb)
+            }
+            else {
+              initState = .waitingToActivate
+              cs.moveSlots(sourceSlotNumber: slotNumber, sourceSlotPage: slotPage, destinationSlotNumber: slotNumber, destinationSlotPage: slotPage)
+            }
           }
           else if initState == .waitingToActivate {
             initState = .waitingForOwnershipConfirmation
@@ -759,8 +766,15 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
           slotPage = locoSlotDataP2.slotPage
           slotNumber = locoSlotDataP2.slotNumber
           if initState == .waitingForSlot {
-            initState = .waitingToActivate
-            cs.moveSlots(sourceSlotNumber: slotNumber, sourceSlotPage: slotPage, destinationSlotNumber: slotNumber, destinationSlotPage: slotPage)
+            if locoSlotDataP2.slotState == .inUse {
+              initState = .waitingForOwnershipConfirmation
+              let wb = writeBack(message: message)
+              cs.setLocoSlotDataP2(slotData: wb)
+            }
+            else {
+              initState = .waitingToActivate
+              cs.moveSlots(sourceSlotNumber: slotNumber, sourceSlotPage: slotPage, destinationSlotNumber: slotNumber, destinationSlotPage: slotPage)
+            }
           }
           else if initState == .waitingToActivate {
             initState = .waitingForOwnershipConfirmation

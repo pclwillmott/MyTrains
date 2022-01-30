@@ -1,29 +1,23 @@
 \newpage
-\subsection{GetLocoSlotDataLAdrP2}\index{GetLocoSlotDataLAdrP2}
+\subsection{SlotNotImplemented}\index{SlotNotImplemented}
 
 \rule{15.1cm}{0.4pt}
 
 \underline{Description:}
 
-This command requests a slot\index{Slot} for the selected locomotive address. If the locomotive is found in the slot table then the command station returns an \textbf{LocoSlotDataP2} response with the slot information. If it is not found then the command station will put the locomotive into a free slot and then return an \textbf{LocoSlotDataV2} response with the slot information. If there are no free slots then the command station returns an \textbf{NoFreeSlotsP2} response.
+The \textbf{SlotNotImplemented} response means that the slot requested is not supported by the command station.
 
-The command station will generate \gls{NMRA} 14 bit or long address packets for the locomotive. The \gls{address} must be in the range 128 to 9983.
-
-\underline{Protocol:}
-
-2
-
-\underline{Group:} 
+\underline{Group:}
 
 4-Byte Message
 
 \underline{Opcode:}
 
-OPC\_LOCO\_ADR\_P2 (unofficial mnemonic)
+OPC\_LONG\_ACK
 
 \underline{Type:}
 
-Command
+Response
 
 \underline{Encoding:} 
 
@@ -33,10 +27,10 @@ Byte 0:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 0 & 1 & 1 & 1 & 1 & 1 & 0\\
+1 & 0 & 1 & 1 & 0 & 1 & 0 & 0\\
 \hline
 \end{tabular}
-& 0xBE & Opcode.\\
+& 0xB4 & Opcode.\\
 \end{tabular}
 
 Byte 1:
@@ -45,10 +39,10 @@ Byte 1:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & n & n & n & n & n & n & n\\
+0 & 0 & 1 & 1 & 1 & 0 & 1 & 1\\
 \hline
 \end{tabular}
-& $<$ADR2$>$ & Address high 7 bits.\\
+& 0x3B & \\
 \end{tabular}
 
 Byte 2:
@@ -57,10 +51,10 @@ Byte 2:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & n & n & n & n & n & n & n\\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
 \hline
 \end{tabular}
-& $<$ADR$>$ & Address low 7 bits.\\
+& 0x00 & \\
 \end{tabular}
 
 Byte 3:
@@ -69,41 +63,64 @@ Byte 3:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & n & n & n & n & n & n & n\\
+0 & 1 & 1 & 1 & 0 & 0 & 0 & 0\\
 \hline
 \end{tabular}
-& $<$CHK$>$ & Checksum.\\
-
+& 0x70 & Checksum.\\
 \end{tabular}
 
 \underline{Response:} 
 
-\textbf{LocoSlotDataP2} if success, otherwise \textbf{NoFreeSlotsP2}.
+None
 
 \underline{Signature:}
 
 Byte 0:
 
-\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 0 & 1 & 1 & 1 & 1 & 1 & 0\\
+1 & 0 & 1 & 1 & 0 & 1 & 0 & 0\\
 \hline
 \end{tabular}
-& 0xBE\\
+& 0xB4 & \\
 \end{tabular}
 
 Byte 1:
 
-\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & n & n & n & n & n & n & n\\
+0 & 0 & 1 & 1 & 1 & 0 & 1 & 1\\
 \hline
 \end{tabular}
-& not equal to 0\\
+& 0x3B & \\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+\hline
+\end{tabular}
+& 0x00 & \\
+\end{tabular}
+
+Byte 3:
+
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 1 & 1 & 1 & 0 & 0 & 0 & 0\\
+\hline
+\end{tabular}
+& 0x70 & \\
 \end{tabular}
 
 \underline{Notes:} 
@@ -111,3 +128,4 @@ Byte 1:
 None.
 
 \rule{15.1cm}{0.4pt}
+

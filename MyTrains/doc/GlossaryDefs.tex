@@ -83,6 +83,11 @@
     description={is a decoder address between 128 and 9983}
 }
 
+\newglossaryentry{message}{
+    name=message,
+    description={means a sequence of two or more bytes sent over the network that conform to the network message format. The first byte of the message is an opcode and the last is a checksum}
+}
+
 \newglossaryentry{mobile decoder}{
     name=mobile decoder,
     description={means an electronic device installed in a locomotive that receives a signal from the command station through the track, decodes it and tells the locomotive what to do}
@@ -161,6 +166,11 @@
 \newglossaryentry{short address}{
     name=short Address,
     description={is a decoder address between 1 and 127}
+}
+
+\newglossaryentry{signature}{
+    name=lsignature,
+    description={is the combination of bits and bytes within a message that uniquely identify the message type}
 }
 
 \newglossaryentry{slot state}{

@@ -402,29 +402,68 @@ public class CommandStation : NSObject, NetworkMessengerDelegate {
 
         if implementsProtocol2 {
           
-          let maskF0F6   = 0b00000000000000000000000001111111
-          let maskF7F13  = 0b00000000000000000011111110000000
-          let maskF14F20 = 0b00000000000111111100000000000000
-          let maskF21F28 = 0b00011111111000000000000000000000
+          let useD5Group = true
           
-          if previous & maskF0F6 != next & maskF0F6 {
-            messenger.locoF0F6P2(slotNumber: slotNumber, slotPage: slotPage, functions: next, throttleID: throttleID)
+          if useD5Group {
+            
+            let maskF0F6   = 0b00000000000000000000000001111111
+            let maskF7F13  = 0b00000000000000000011111110000000
+            let maskF14F20 = 0b00000000000111111100000000000000
+            let maskF21F28 = 0b00011111111000000000000000000000
+            
+            if previous & maskF0F6 != next & maskF0F6 {
+              messenger.locoF0F6P2(slotNumber: slotNumber, slotPage: slotPage, functions: next, throttleID: throttleID)
+            }
+            
+            if previous & maskF7F13 != next & maskF7F13 {
+              messenger.locoF7F13P2(slotNumber: slotNumber, slotPage: slotPage, functions: next, throttleID: throttleID)
+            }
+            
+            if previous & maskF14F20 != next & maskF14F20 {
+              messenger.locoF14F20P2(slotNumber: slotNumber, slotPage: slotPage, functions: next, throttleID: throttleID)
+            }
+            
+            if previous & maskF21F28 != next & maskF21F28 {
+              messenger.locoF21F28P2(slotNumber: slotNumber, slotPage: slotPage, functions: next, throttleID: throttleID)
+            }
+            
+            if speedChanged || directionChanged || forceRefresh {
+              messenger.locoSpdDirP2(slotNumber: slotNumber, slotPage: slotPage, speed: nextState.speed, direction: nextState.direction, throttleID: throttleID)
+            }
+
           }
-          
-          if previous & maskF7F13 != next & maskF7F13 {
-            messenger.locoF7F13P2(slotNumber: slotNumber, slotPage: slotPage, functions: next, throttleID: throttleID)
-          }
-          
-          if previous & maskF14F20 != next & maskF14F20 {
-            messenger.locoF14F20P2(slotNumber: slotNumber, slotPage: slotPage, functions: next, throttleID: throttleID)
-          }
-          
-          if previous & maskF21F28 != next & maskF21F28 {
-            messenger.locoF21F28P2(slotNumber: slotNumber, slotPage: slotPage, functions: next, throttleID: throttleID)
-          }
-          
-          if speedChanged || directionChanged || forceRefresh {
-            messenger.locoSpdDirP2(slotNumber: slotNumber, slotPage: slotPage, speed: nextState.speed, direction: nextState.direction, throttleID: throttleID)
+          else {
+            
+            let maskF0F4      = 0b00000000000000000000000000011111
+            let maskF5F11     = 0b00000000000000000000111111100000
+            let maskF13F19    = 0b00000000000011111110000000000000
+            let maskF21F27    = 0b00001111111000000000000000000000
+            let maskF12F20F28 = 0b00010000000100000001000000000000
+            
+            if previous & maskF0F4 != next & maskF0F4 || directionChanged {
+              messenger.locoDirF0F4P2(slotNumber: slotNumber, slotPage: slotPage, direction: nextState.direction, functions: next)
+            }
+            
+            if previous & maskF5F11 != next & maskF5F11 {
+              messenger.locoF5F11P2(slotNumber: slotNumber, slotPage: slotPage, functions: next)
+            }
+            
+            if previous & maskF12F20F28 != next & maskF12F20F28 {
+              messenger.locoF12F20F28P2(slotNumber: slotNumber, slotPage: slotPage, functions: next)
+            }
+            
+            if previous & maskF13F19 != next & maskF13F19 {
+              messenger.locoF13F19P2(slotNumber: slotNumber, slotPage: slotPage, functions: next)
+            }
+            
+            if previous & maskF21F27 != next & maskF21F27 {
+              messenger.locoF21F27P2(slotNumber: slotNumber, slotPage: slotPage, functions: next)
+            }
+            
+            if speedChanged || forceRefresh {
+              messenger.locoSpdP2(slotNumber: slotNumber, slotPage: slotPage, speed: nextState.speed)
+            }
+
           }
           
         }
@@ -586,7 +625,7 @@ public class CommandStation : NSObject, NetworkMessengerDelegate {
       _locoSlots[slot.slotID] = slot
       slotsUpdated()
       break
-    case .noFreeSlotsP2, .noFreeSlotsP1, .setSlotDataOKP1, .setSlotDataOKP2:
+    case .noFreeSlotsP2, .noFreeSlotsP1, .setSlotDataOKP1, .setSlotDataOKP2, .illegalMoveP1, .illegalMoveP2:
       locomotiveMessage(message: message)
     case .pwrOn:
       powerIsOn = true

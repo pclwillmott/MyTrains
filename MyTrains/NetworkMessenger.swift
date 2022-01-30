@@ -499,7 +499,7 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
     
     let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_MOVE_SLOTS.rawValue, UInt8(sourceSlotNumber), UInt8(destinationSlotNumber)], appendCheckSum: true)
     
-    addToQueue(message: message, delay: TIMING.STANDARD, response: [.locoSlotDataP1, .ack], delegate: nil, retryCount: 5)
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [.locoSlotDataP1, .illegalMoveP1], delegate: nil, retryCount: 5)
 
   }
   
@@ -510,7 +510,7 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
     
     let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_D4_GROUP.rawValue, srcPage, UInt8(sourceSlotNumber), dstPage, UInt8(destinationSlotNumber)], appendCheckSum: true)
     
-    addToQueue(message: message, delay: TIMING.STANDARD, response: [.locoSlotDataP2, .ack, .locoSlotDataP1], delegate: nil, retryCount: 5)
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [.locoSlotDataP2, .illegalMoveP2, .locoSlotDataP1], delegate: nil, retryCount: 5)
 
   }
   
@@ -607,6 +607,27 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
     
   }
   
+  public func locoDirF0F4P2(slotNumber: Int, slotPage: Int, direction:LocomotiveDirection, functions: Int) {
+    
+    let slot = UInt8(slotNumber & 0x7f)
+    
+    let page = 0b00100000 | UInt8(slotPage & 0x07)
+    
+    var dirf : UInt8 = 0
+    
+    dirf |= direction == .forward        ? 0b00100000 : 0b00000000
+    dirf |= functions & maskF0 == maskF0 ? 0b00010000 : 0b00000000
+    dirf |= functions & maskF1 == maskF1 ? 0b00000001 : 0b00000000
+    dirf |= functions & maskF2 == maskF2 ? 0b00000010 : 0b00000000
+    dirf |= functions & maskF3 == maskF3 ? 0b00000100 : 0b00000000
+    dirf |= functions & maskF4 == maskF4 ? 0b00001000 : 0b00000000
+    
+    let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_D4_GROUP.rawValue, page, slot, 0x06, dirf], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: self, retryCount: 1)
+    
+  }
+  
   public func locoF5F8P1(slotNumber: Int, functions: Int) {
     
     let slot = UInt8(slotNumber & 0x7f)
@@ -648,6 +669,28 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
     
   }
   
+  public func locoF5F11P2(slotNumber: Int, slotPage: Int, functions: Int) {
+    
+    let slot = UInt8(slotNumber & 0x7f)
+    
+    let page = 0b00100000 | UInt8(slotPage & 0x07)
+    
+    var dirf : UInt8 = 0
+    
+    dirf |= functions & maskF5  == maskF5  ? 0b00000001 : 0b00000000
+    dirf |= functions & maskF6  == maskF6  ? 0b00000010 : 0b00000000
+    dirf |= functions & maskF7  == maskF7  ? 0b00000100 : 0b00000000
+    dirf |= functions & maskF8  == maskF8  ? 0b00001000 : 0b00000000
+    dirf |= functions & maskF9  == maskF9  ? 0b00010000 : 0b00000000
+    dirf |= functions & maskF10 == maskF10 ? 0b00100000 : 0b00000000
+    dirf |= functions & maskF11 == maskF11 ? 0b01000000 : 0b00000000
+
+    let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_D4_GROUP.rawValue, page, slot, 0x07, dirf], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: self, retryCount: 1)
+    
+  }
+  
   public func locoF7F13P2(slotNumber: Int, slotPage: Int, functions: Int, throttleID: Int) {
     
     let slot = UInt8(slotNumber & 0x7f)
@@ -672,6 +715,46 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
     
   }
   
+  public func locoF12F20F28P2(slotNumber: Int, slotPage: Int, functions: Int) {
+    
+    let slot = UInt8(slotNumber & 0x7f)
+    
+    let page = 0b00100000 | UInt8(slotPage & 0x07)
+    
+    var dirf : UInt8 = 0
+    
+    dirf |= functions & maskF12 == maskF12  ? 0b00000001 : 0b00000000
+    dirf |= functions & maskF20 == maskF20  ? 0b00000010 : 0b00000000
+    dirf |= functions & maskF28 == maskF28  ? 0b00000100 : 0b00000000
+ 
+    let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_D4_GROUP.rawValue, page, slot, 0x05, dirf], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: self, retryCount: 1)
+    
+  }
+  
+  public func locoF13F19P2(slotNumber: Int, slotPage: Int, functions: Int) {
+    
+    let slot = UInt8(slotNumber & 0x7f)
+    
+    let page = 0b00100000 | UInt8(slotPage & 0x07)
+    
+    var dirf : UInt8 = 0
+    
+    dirf |= functions & maskF13 == maskF13 ? 0b00000001 : 0b00000000
+    dirf |= functions & maskF14 == maskF14 ? 0b00000010 : 0b00000000
+    dirf |= functions & maskF15 == maskF15 ? 0b00000100 : 0b00000000
+    dirf |= functions & maskF16 == maskF16 ? 0b00001000 : 0b00000000
+    dirf |= functions & maskF17 == maskF17 ? 0b00010000 : 0b00000000
+    dirf |= functions & maskF18 == maskF18 ? 0b00100000 : 0b00000000
+    dirf |= functions & maskF19 == maskF19 ? 0b01000000 : 0b00000000
+
+    let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_D4_GROUP.rawValue, page, slot, 0x08, dirf], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: self, retryCount: 1)
+    
+  }
+
   public func locoF14F20P2(slotNumber: Int, slotPage: Int, functions: Int, throttleID: Int) {
     
     let slot = UInt8(slotNumber & 0x7f)
@@ -691,6 +774,28 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
     fnx |= functions & maskF20 == maskF20 ? 0b01000000 : 0b00000000
 
     let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_D5_GROUP.rawValue, page, slot, tid, fnx], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: self, retryCount: 1)
+    
+  }
+  
+  public func locoF21F27P2(slotNumber: Int, slotPage: Int, functions: Int) {
+    
+    let slot = UInt8(slotNumber & 0x7f)
+    
+    let page = 0b00100000 | UInt8(slotPage & 0x07)
+    
+    var dirf : UInt8 = 0
+    
+    dirf |= functions & maskF21 == maskF21 ? 0b00000001 : 0b00000000
+    dirf |= functions & maskF22 == maskF22 ? 0b00000010 : 0b00000000
+    dirf |= functions & maskF23 == maskF23 ? 0b00000100 : 0b00000000
+    dirf |= functions & maskF24 == maskF24 ? 0b00001000 : 0b00000000
+    dirf |= functions & maskF25 == maskF25 ? 0b00010000 : 0b00000000
+    dirf |= functions & maskF26 == maskF26 ? 0b00100000 : 0b00000000
+    dirf |= functions & maskF27 == maskF27 ? 0b01000000 : 0b00000000
+
+    let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_D4_GROUP.rawValue, page, slot, 0x09, dirf], appendCheckSum: true)
     
     addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: self, retryCount: 1)
     
@@ -743,6 +848,20 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
     let tid = UInt8(throttleID & 0x7f)
 
     let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_D5_GROUP.rawValue, page, slot, tid, spd], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: nil, retryCount: 1)
+
+  }
+  
+  public func locoSpdP2(slotNumber: Int, slotPage: Int, speed: Int) {
+    
+    let slot = UInt8(slotNumber & 0x7f)
+    
+    let page = UInt8(slotPage & 0x07) | 0b00100000
+    
+    let spd = UInt8(speed & 0x7f)
+    
+    let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_D4_GROUP.rawValue, page, slot, 0x04, spd], appendCheckSum: true)
     
     addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: nil, retryCount: 1)
 

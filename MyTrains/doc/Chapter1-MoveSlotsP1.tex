@@ -1,5 +1,5 @@
 \newpage
-\subsection{MoveSlotsP1}
+\subsection{MoveSlotsP1}\index{MoveSlotsP1}\index{Slot}\index{Null Move}
 
 \underline{Description:}
 
@@ -82,16 +82,7 @@ Byte 3:
 
 \underline{Response:} 
 
-\textbf{LocoSlotDataP1} 
-
-or 
-
-\textbf{Ack}.
-
-\begin{tabular}{p{0.10\linewidth} p{0.10\linewidth} p{0.40\linewidth}}
-\underline{$<$LOPC$>$} & \underline{$<$ACK1$>$} & \underline{Meaning}\\
-0x3A & 0x00 & Illegal move.\\
-\end{tabular}
+\textbf{LocoSlotDataP1} if successful, otherwise \textbf{IllegalMoveP1} 
 
 \underline{Signature:}
 

@@ -1,5 +1,5 @@
 \newpage
-\subsection{LocoSpdDirP2}
+\subsection{LocoSpdDirP2}\index{LocoSpdDirP2}\index{Speed}\index{Direction}
 
 \underline{Description:}
 
@@ -15,7 +15,7 @@ This function sets the locomotive's speed in the range 0 to 127 and direction. 0
 
 \underline{Opcode:}
 
-OPC\_D5\_GROUP (Unofficial mnemonic)
+OPC\_D5\_GROUP (unofficial mnemonic)
 
 \underline{Type:}
 
@@ -65,10 +65,10 @@ Byte 3:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 1 & 1 & 0 & 1 & 1 & 0 & 1\\
+0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& 0x6D & Subcode.\\
+& & Low byte of the \gls{Throttle ID}.\\
 \end{tabular}
 
 Byte 4:
@@ -92,7 +92,7 @@ Byte 5:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$CHK$>$ & Checksum.
+& $<$CHK$>$ & Checksum.\\
 \end{tabular}
 
 \underline{Response:} 
@@ -135,18 +135,6 @@ Byte 2:
 \hline
 \end{tabular}
 & less than 0x78\\
-\end{tabular}
-
-Byte 3:
-
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
-
-\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
-\hline
-0 & 1 & 1 & 0 & 1 & 1 & 0 & 1\\
-\hline
-\end{tabular}
-& 0x6D \\
 \end{tabular}
 
 \underline{Notes:} 

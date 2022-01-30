@@ -1,9 +1,9 @@
 \newpage
-\subsection{LinkSlotsP2}
+\subsection{LinkSlotsP2}\index{LinkSlotsP2}\index{Consisting}
 
 \underline{Description:}
 
-This command links slot SL1 to slot SL2. The command station sets SL\_CONUP/DN flags appropriately. If the command was successful then a \textbf{LocoSlotDataP2} response will be returned. An invalid link will return a \textbf{Ack} with a response code of 0x00.
+This command requests the command station to link slot SL1 to slot SL2. If the command was successful then a \textbf{LocoSlotDataP2} response will be returned. An invalid link will return a \textbf{Ack} with a response code of 0x00.
 
 \underline{Protocol:}
 
@@ -15,7 +15,7 @@ This command links slot SL1 to slot SL2. The command station sets SL\_CONUP/DN f
 
 \underline{Opcode:}
 
-OPC\_D4\_GROUP (Unofficial Mnemonic)
+OPC\_D4\_GROUP (unofficial mnemonic)
 
 \underline{Type:}
 

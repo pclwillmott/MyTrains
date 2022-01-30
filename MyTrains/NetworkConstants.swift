@@ -68,14 +68,16 @@ public enum NetworkMessageType {
   case getLocoSlotDataSAdrP2
   case getLocoSlotDataP1
   case getLocoSlotDataP2
+  case illegalMoveP1
+  case illegalMoveP2
   case immPacket
-  case iplSetAddr
+  case interfaceData
   case iplDataLoad
   case iplDevData
   case iplDiscover
   case iplEndLoad
+  case iplSetAddr
   case iplSetupBL2
-  case interfaceData
   case linkSlotsP1
   case linkSlotsP2
   case locoBinStateP2
@@ -85,16 +87,16 @@ public enum NetworkMessageType {
   case locoF5F8P1
   case locoF5F11P2
   case locoF7F13P2
+  case locoF12F20F28P2
   case locoF13F19P2
   case locoF14F20P2
   case locoF21F27P2
   case locoF21F28P2
-  case locoF12F20F28P2
   case locoSlotDataP1
   case locoSlotDataP2
   case locoSpdP1
-  case locoSpdDirP2
   case locoSpdP2
+  case locoSpdDirP2
   case moveSlotsP1
   case moveSlotsP2
   case noFreeSlotsP1

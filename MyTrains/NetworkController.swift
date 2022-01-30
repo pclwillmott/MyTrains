@@ -151,6 +151,7 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
   
   public var softwareThrottleID : Int? {
     get {
+  //    return 0
       for id in 1...0x7f {
         if let pc = throttles[id] {
           if pc == .softwareThrottle {
