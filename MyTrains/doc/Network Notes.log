@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.5.28)  30 JAN 2022 14:46
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.5.28)  31 JAN 2022 07:55
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1417,52 +1417,52 @@ Overfull \hbox (32.06549pt too wide) in paragraph at lines 121--1
  []
 
 [30]
-Overfull \hbox (35.89651pt too wide) in paragraph at lines 30--39
+Overfull \hbox (35.89651pt too wide) in paragraph at lines 28--37
 [][] 
  []
 
 
-Overfull \hbox (35.89651pt too wide) in paragraph at lines 42--51
+Overfull \hbox (35.89651pt too wide) in paragraph at lines 40--49
 [][] 
  []
 
 
-Overfull \hbox (3.02245pt too wide) in paragraph at lines 58--58
+Overfull \hbox (3.02245pt too wide) in paragraph at lines 56--56
 []\OT1/cmr/m/n/10.95 d3| 
  []
 
 
-Overfull \hbox (3.02245pt too wide) in paragraph at lines 58--58
+Overfull \hbox (3.02245pt too wide) in paragraph at lines 56--56
 []\OT1/cmr/m/n/10.95 d2| 
  []
 
 
-Overfull \hbox (3.02245pt too wide) in paragraph at lines 58--58
+Overfull \hbox (3.02245pt too wide) in paragraph at lines 56--56
 []\OT1/cmr/m/n/10.95 d1| 
  []
 
 
-Overfull \hbox (3.02245pt too wide) in paragraph at lines 58--59
+Overfull \hbox (3.02245pt too wide) in paragraph at lines 56--57
 []\OT1/cmr/m/n/10.95 d0| 
  []
 
 
-Overfull \hbox (35.89651pt too wide) in paragraph at lines 54--63
+Overfull \hbox (35.89651pt too wide) in paragraph at lines 52--61
 [][] 
  []
 
 
-Overfull \hbox (35.89651pt too wide) in paragraph at lines 66--76
+Overfull \hbox (35.89651pt too wide) in paragraph at lines 64--74
 [][] 
  []
 
-[31]
-Overfull \hbox (35.89651pt too wide) in paragraph at lines 85--94
+
+Overfull \hbox (35.89651pt too wide) in paragraph at lines 83--92
 [][] 
  []
 
-) (./Chapter1-GetLocoSlotDataSAdrP1.tex
-Overfull \hbox (32.06549pt too wide) in paragraph at lines 123--1
+[31]) (./Chapter1-GetLocoSlotDataSAdrP1.tex
+Overfull \hbox (32.06549pt too wide) in paragraph at lines 121--1
 [][]  
  []
 
@@ -8266,11 +8266,11 @@ Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 79.
 Here is how much of TeX's memory you used:
  12625 strings out of 492649
  198444 string characters out of 6129622
- 349111 words of memory out of 5000000
+ 349103 words of memory out of 5000000
  15631 multiletter control sequences out of 15000+600000
  15928 words of font info for 60 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,22n,87p,2000b,584s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 75i,22n,87p,2000b,586s stack positions out of 5000i,500n,10000p,200000b,80000s
 pdfTeX warning (dest): name{Hfootnote.1} has been referenced but does not exi
 st, replaced by a fixed one
 
@@ -8288,7 +8288,7 @@ e/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive
 /2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2
 018/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/20
 18/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on "Network Notes.pdf" (226 pages, 519270 bytes).
+Output written on "Network Notes.pdf" (226 pages, 519364 bytes).
 PDF statistics:
  1896 PDF objects out of 2073 (max. 8388607)
  1637 compressed objects within 17 object streams

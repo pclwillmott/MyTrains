@@ -490,6 +490,12 @@
                                                 <action selector="mnuProgramMobileDecoderAddress:" target="Voe-Tx-rLC" id="Rwy-HD-Aae"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Command Station Configuration" id="TBB-iC-dDu">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="mnuCommandStationConfiguration:" target="Voe-Tx-rLC" id="uiq-Fs-4C5"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem isSeparatorItem="YES" id="muo-PM-TVl"/>
                                         <menuItem title="Show Toolbar" keyEquivalent="t" id="snW-S8-Cw5">
                                             <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>

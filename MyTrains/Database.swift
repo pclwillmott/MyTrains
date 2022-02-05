@@ -90,7 +90,11 @@ class Database {
               "[\(COMMAND_STATION.PRODUCT_CODE)]         INT NOT NULL," +
               "[\(COMMAND_STATION.SERIAL_NUMBER)]        INT NOT NULL," +
               "[\(COMMAND_STATION.HARDWARE_VERSION)]     REAL NOT NULL," +
-              "[\(COMMAND_STATION.SOFTWARE_VERSION)]     REAL NOT NULL" +
+              "[\(COMMAND_STATION.SOFTWARE_VERSION)]     REAL NOT NULL," +
+              "[\(COMMAND_STATION.OPTION_SWITCHES_0)]    INT NOT NULL," +
+              "[\(COMMAND_STATION.OPTION_SWITCHES_1)]    INT NOT NULL," +
+              "[\(COMMAND_STATION.OPTION_SWITCHES_2)]    INT NOT NULL," +
+              "[\(COMMAND_STATION.OPTION_SWITCHES_3)]    INT NOT NULL" +
             ")",
 
             "CREATE TABLE [\(TABLE.LOCOMOTIVE)] (" +

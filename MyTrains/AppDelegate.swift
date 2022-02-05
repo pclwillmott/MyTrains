@@ -104,5 +104,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     ModalWindow.ProgramDecoderAddress.runModel()
   }
   
+  @IBAction func mnuCommandStationConfiguration(_ sender: NSMenuItem) {
+    ModalWindow.CommandStationConfiguration.runModel()
+  }
+  
 }
 

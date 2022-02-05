@@ -18,6 +18,13 @@ import Foundation
   @objc optional func slotsUpdated(commandStation:CommandStation)
 }
 
+public enum CommandStationModel : Int {
+  case dcs210 = 0
+  case dcs210Plus = 1
+  case dcs240 = 2
+  case unknown = 0xffff
+}
+
 public class CommandStation : NSObject, NetworkMessengerDelegate {
   
   // MARK: Constructors
@@ -27,12 +34,27 @@ public class CommandStation : NSObject, NetworkMessengerDelegate {
     productCode = message.productCode
     serialNumber = message.serialNumber
     softwareVersion = message.softwareVersion
+    if optionSwitches.count == 0 && model != .unknown {
+      let defs = CommandStationOptionSwitch.switches(commandStationModel: model)
+      for def in defs {
+        let opsw = CommandStationOptionSwitch(commandStation: self, switchNumber: def.switchNumber, switchDefinition: def)
+        optionSwitches.append(opsw)
+      }
+    }
     save()
   }
   
   init(reader:SqliteDataReader) {
     super.init()
     decode(sqliteDataReader: reader)
+    if optionSwitches.count == 0 && model != .unknown {
+      let defs = CommandStationOptionSwitch.switches(commandStationModel: model)
+      for def in defs {
+        let opsw = CommandStationOptionSwitch(commandStation: self, switchNumber: def.switchNumber, switchDefinition: def)
+        optionSwitches.append(opsw)
+        print("\(opsw.switchNumber)")
+      }
+    }
   }
   
   // MARK: Destructors
@@ -44,8 +66,6 @@ public class CommandStation : NSObject, NetworkMessengerDelegate {
   // MARK: Private Properties
   
   private var _manufacturer : Manufacturer = .Digitrax
-  
-  private var _productCode : ProductCode = .unknown
   
   private var _serialNumber : Int = -1
   
@@ -101,6 +121,47 @@ public class CommandStation : NSObject, NetworkMessengerDelegate {
     }
   }
   
+  public var optionSwitches : [CommandStationOptionSwitch] = []
+  
+  public var model : CommandStationModel {
+    get {
+      switch productCode {
+      case .DCS210:
+        return .dcs210
+      case .DCS210Plus:
+        return .dcs210Plus
+      case .DCS240:
+        return .dcs240
+      default:
+        return .unknown
+      }
+    }
+  }
+  
+  public var optionSwitches0 : Int64 = 0 {
+    didSet {
+      modified = true
+    }
+  }
+  
+  public var optionSwitches1 : Int64 = 0 {
+    didSet {
+      modified = true
+    }
+  }
+  
+  public var optionSwitches2 : Int64 = 0 {
+    didSet {
+      modified = true
+    }
+  }
+  
+  public var optionSwitches3 : Int64 = 0 {
+    didSet {
+      modified = true
+    }
+  }
+  
   public var manufacturer : Manufacturer {
     get {
       return _manufacturer
@@ -113,15 +174,9 @@ public class CommandStation : NSObject, NetworkMessengerDelegate {
     }
   }
   
-  public var productCode : ProductCode {
-    get {
-      return _productCode
-    }
-    set(value) {
-      if value != _productCode {
-        _productCode = value
-        modified = true
-      }
+  public var productCode : ProductCode  = .unknown {
+    didSet {
+      modified = true
     }
   }
   
@@ -685,6 +740,22 @@ public class CommandStation : NSObject, NetworkMessengerDelegate {
         softwareVersion = reader.getDouble(index: 5)!
       }
 
+      if !reader.isDBNull(index: 6) {
+        optionSwitches0 = reader.getInt64(index: 6)!
+      }
+
+      if !reader.isDBNull(index: 7) {
+        optionSwitches1 = reader.getInt64(index: 7)!
+      }
+
+      if !reader.isDBNull(index: 8) {
+        optionSwitches2 = reader.getInt64(index: 8)!
+      }
+
+      if !reader.isDBNull(index: 9) {
+        optionSwitches3 = reader.getInt64(index: 9)!
+      }
+
     }
     
     modified = false
@@ -705,7 +776,11 @@ public class CommandStation : NSObject, NetworkMessengerDelegate {
         "[\(COMMAND_STATION.PRODUCT_CODE)], " +
         "[\(COMMAND_STATION.SERIAL_NUMBER)], " +
         "[\(COMMAND_STATION.HARDWARE_VERSION)], " +
-        "[\(COMMAND_STATION.SOFTWARE_VERSION)]" +
+        "[\(COMMAND_STATION.SOFTWARE_VERSION)]," +
+        "[\(COMMAND_STATION.OPTION_SWITCHES_0)]," +
+        "[\(COMMAND_STATION.OPTION_SWITCHES_1)]," +
+        "[\(COMMAND_STATION.OPTION_SWITCHES_2)]," +
+        "[\(COMMAND_STATION.OPTION_SWITCHES_3)]" +
         ") VALUES (" +
         "@\(COMMAND_STATION.COMMAND_STATION_ID), " +
         "@\(COMMAND_STATION.COMMAND_STATION_NAME), " +
@@ -713,7 +788,11 @@ public class CommandStation : NSObject, NetworkMessengerDelegate {
         "@\(COMMAND_STATION.PRODUCT_CODE), " +
         "@\(COMMAND_STATION.SERIAL_NUMBER), " +
         "@\(COMMAND_STATION.HARDWARE_VERSION), " +
-        "@\(COMMAND_STATION.SOFTWARE_VERSION)" +
+        "@\(COMMAND_STATION.SOFTWARE_VERSION)," +
+        "@\(COMMAND_STATION.OPTION_SWITCHES_0)," +
+        "@\(COMMAND_STATION.OPTION_SWITCHES_1)," +
+        "@\(COMMAND_STATION.OPTION_SWITCHES_2)," +
+        "@\(COMMAND_STATION.OPTION_SWITCHES_3)" +
         ")"
       }
       else {
@@ -723,7 +802,11 @@ public class CommandStation : NSObject, NetworkMessengerDelegate {
         "[\(COMMAND_STATION.PRODUCT_CODE)] = @\(COMMAND_STATION.PRODUCT_CODE), " +
         "[\(COMMAND_STATION.SERIAL_NUMBER)] = @\(COMMAND_STATION.SERIAL_NUMBER), " +
         "[\(COMMAND_STATION.HARDWARE_VERSION)] = @\(COMMAND_STATION.HARDWARE_VERSION), " +
-        "[\(COMMAND_STATION.SOFTWARE_VERSION)] = @\(COMMAND_STATION.SOFTWARE_VERSION) " +
+        "[\(COMMAND_STATION.SOFTWARE_VERSION)] = @\(COMMAND_STATION.SOFTWARE_VERSION), " +
+        "[\(COMMAND_STATION.OPTION_SWITCHES_0)] = @\(COMMAND_STATION.OPTION_SWITCHES_0), " +
+        "[\(COMMAND_STATION.OPTION_SWITCHES_1)] = @\(COMMAND_STATION.OPTION_SWITCHES_1), " +
+        "[\(COMMAND_STATION.OPTION_SWITCHES_2)] = @\(COMMAND_STATION.OPTION_SWITCHES_2), " +
+        "[\(COMMAND_STATION.OPTION_SWITCHES_3)] = @\(COMMAND_STATION.OPTION_SWITCHES_3) " +
         "WHERE [\(COMMAND_STATION.COMMAND_STATION_ID)] = @\(COMMAND_STATION.COMMAND_STATION_ID)"
       }
 
@@ -746,6 +829,10 @@ public class CommandStation : NSObject, NetworkMessengerDelegate {
       cmd.parameters.addWithValue(key: "@\(COMMAND_STATION.SERIAL_NUMBER)", value: serialNumber)
       cmd.parameters.addWithValue(key: "@\(COMMAND_STATION.HARDWARE_VERSION)", value: hardwareVersion)
       cmd.parameters.addWithValue(key: "@\(COMMAND_STATION.SOFTWARE_VERSION)", value: softwareVersion)
+      cmd.parameters.addWithValue(key: "@\(COMMAND_STATION.OPTION_SWITCHES_0)", value: optionSwitches0)
+      cmd.parameters.addWithValue(key: "@\(COMMAND_STATION.OPTION_SWITCHES_1)", value: optionSwitches1)
+      cmd.parameters.addWithValue(key: "@\(COMMAND_STATION.OPTION_SWITCHES_2)", value: optionSwitches2)
+      cmd.parameters.addWithValue(key: "@\(COMMAND_STATION.OPTION_SWITCHES_3)", value: optionSwitches3)
 
       _ = cmd.executeNonQuery()
 
@@ -770,7 +857,11 @@ public class CommandStation : NSObject, NetworkMessengerDelegate {
         "[\(COMMAND_STATION.PRODUCT_CODE)], " +
         "[\(COMMAND_STATION.SERIAL_NUMBER)], " +
         "[\(COMMAND_STATION.HARDWARE_VERSION)], " +
-        "[\(COMMAND_STATION.SOFTWARE_VERSION)]"
+        "[\(COMMAND_STATION.SOFTWARE_VERSION)], " +
+        "[\(COMMAND_STATION.OPTION_SWITCHES_0)], " +
+        "[\(COMMAND_STATION.OPTION_SWITCHES_1)], " +
+        "[\(COMMAND_STATION.OPTION_SWITCHES_2)], " +
+        "[\(COMMAND_STATION.OPTION_SWITCHES_3)]"
     }
   }
   

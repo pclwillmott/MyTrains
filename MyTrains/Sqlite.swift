@@ -95,6 +95,17 @@ class SqliteParameters {
     }
   }
   
+  public func addWithValue(key:String,value:Int64?) {
+    if !key.isEmpty && key.hasPrefix("@") {
+      if let ivalue = value {
+        self.parameters[key] = " \(ivalue) "
+      }
+      else {
+        addWithNull(key: key)
+      }
+    }
+  }
+  
   public func addWithValue(key:String,value:UInt?) {
     if !key.isEmpty && key.hasPrefix("@") {
       if let ivalue = value {
@@ -262,6 +273,13 @@ class SqliteDataReader {
       return nil;
     }
     return (Int) (sqlite3_column_int64(statement, (Int32)(index)))
+  }
+  
+  public func getInt64(index:Int) -> Int64? {
+    if isDBNull(index: index){
+      return nil;
+    }
+    return sqlite3_column_int64(statement, (Int32)(index))
   }
   
   public func getBool(index:Int) -> Bool? {
