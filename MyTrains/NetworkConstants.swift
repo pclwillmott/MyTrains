@@ -125,6 +125,8 @@ public enum NetworkMessageType {
   case slotNotImplemented
   case swReq
   case swState
+  case swStateThrown
+  case swStateClosed
   case unlinkSlotsP1
   case unlinkSlotsP2
 }

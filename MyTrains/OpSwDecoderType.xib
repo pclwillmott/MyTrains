@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner"/>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="c22-O7-iKe" customClass="OpSwDecoderView" customModule="MyTrains" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="480" height="71"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MWN-jk-2fR">
+                    <rect key="frame" x="12" y="47" width="283" height="16"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" lineBreakMode="clipping" title="Decoder type for &quot;new&quot; locomotive selections" id="9Rc-AI-rJ4">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mE8-ir-TrN">
+                    <rect key="frame" x="14" y="16" width="189" height="25"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="0zC-PU-vZX">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        <objectValues>
+                            <string>14 Step</string>
+                            <string>28 Step</string>
+                            <string>28 Step FX</string>
+                            <string>128 Step</string>
+                            <string>128 Step FX</string>
+                            <string>Motorola Trinary</string>
+                            <string>Unknown</string>
+                        </objectValues>
+                    </comboBoxCell>
+                    <connections>
+                        <action selector="cboDecoderTypeAction:" target="c22-O7-iKe" id="Zes-ad-fj8"/>
+                    </connections>
+                </comboBox>
+            </subviews>
+            <connections>
+                <outlet property="cboDecoderType" destination="mE8-ir-TrN" id="68N-ga-hXR"/>
+            </connections>
+            <point key="canvasLocation" x="139" y="34.5"/>
+        </customView>
+    </objects>
+</document>

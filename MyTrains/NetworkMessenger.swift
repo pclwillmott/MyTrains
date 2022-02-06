@@ -23,6 +23,7 @@ public protocol NetworkInterfaceDelegate {
 
 enum TIMING {
   static let STANDARD = 20.0 / 1000.0
+  static let SWREQ = 20.0 / 1000.0
   static let DISCOVER = 1.0
 }
 
@@ -442,6 +443,40 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
     let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_LOCO_ADR_P2.rawValue, hi, lo], appendCheckSum: true)
     
     addToQueue(message: message, delay: TIMING.STANDARD, response: [.locoSlotDataP2, .noFreeSlotsP2, .slotNotImplemented], delegate: nil, retryCount: 5)
+
+  }
+  
+  public func swState(switchNumber: Int) {
+    
+    let lo = UInt8((switchNumber - 1) & 0x7f)
+    
+    let hi = UInt8((switchNumber - 1) >> 7)
+    
+    let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_SW_STATE.rawValue, lo, hi], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [.swStateClosed,.swStateThrown], delegate: nil, retryCount: 2)
+
+  }
+  
+  public func swReq(switchNumber: Int, state:OptionSwitchState) {
+    
+    let lo = UInt8((switchNumber - 1) & 0x7f)
+    
+    var bit : UInt8 = state == .closed ? 0x30 : 0x10
+    
+    var hi = UInt8((switchNumber - 1) >> 7) | bit
+    
+    var message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_SW_REQ.rawValue, lo, hi], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.SWREQ, response: [], delegate: nil, retryCount: 1)
+
+    bit = state == .closed ? 0x20 : 0x00
+    
+    hi = UInt8((switchNumber - 1) >> 7) | bit
+    
+    message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_SW_REQ.rawValue, lo, hi], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.SWREQ, response: [], delegate: nil, retryCount: 1)
 
   }
   

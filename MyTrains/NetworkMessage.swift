@@ -208,6 +208,12 @@ public class NetworkMessage : NSObject {
           else if message[1] == 0x3a && message[2] == 0x00 {
             _messageType = .illegalMoveP1
           }
+          else if message[1] == 0x3c && message[2] == 0x30 {
+            _messageType = .swStateClosed
+          }
+          else if message[1] == 0x3c && message[2] == 0x10 {
+            _messageType = .swStateThrown
+          }
           else {
             _messageType = .ack
           }

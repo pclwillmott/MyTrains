@@ -14,6 +14,8 @@ public class CSConfigurationTableViewDS : NSObject, NSTableViewDataSource, NSTab
   
   public var options = [CommandStationOptionSwitch]()
   
+  public var isConfigurationSlotMode : Bool = true
+  
   // MARK: NSTableViewDataSource Delegate Methods
   
   // MARK: NSTableViewDelegate Methods
@@ -49,7 +51,27 @@ public class CSConfigurationTableViewDS : NSObject, NSTableViewDataSource, NSTab
     case ColumnIdentifiers.OpSwNumberColumn:
       text = "\(item.switchNumber)"
     case ColumnIdentifiers.SettingsColumn:
-      text = "\(item.switchDefinition.closedEffect)"
+      
+      if item.switchDefinition.definitionType == .standard {
+        let nib = NSNib(nibNamed: "OpSwTCV", bundle: nil)
+        tableView.register(nib, forIdentifier: NSUserInterfaceItemIdentifier(rawValue: cellIdentifier))
+        if let cell = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil) as? OpSwTCV {
+          cell.isConfigurationSlotMode = isConfigurationSlotMode
+          cell.optionSwitch = item
+          return cell
+        }
+      }
+      else {
+        let nib = NSNib(nibNamed: "OpSwDecoderType", bundle: nil)
+        let cellIdentifier = "OpSwDecoderCellID"
+        tableView.register(nib, forIdentifier: NSUserInterfaceItemIdentifier(rawValue: cellIdentifier))
+        if let cell = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil) as? OpSwDecoderView {
+          cell.optionSwitch = item
+          return cell
+        }
+
+      }
+      
     default:
       text = ""
     }

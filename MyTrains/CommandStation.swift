@@ -38,9 +38,11 @@ public class CommandStation : NSObject, NetworkMessengerDelegate {
       let defs = CommandStationOptionSwitch.switches(commandStationModel: model)
       for def in defs {
         let opsw = CommandStationOptionSwitch(commandStation: self, switchNumber: def.switchNumber, switchDefinition: def)
+        opsw.state = def.defaultState
         optionSwitches.append(opsw)
       }
     }
+    modified = true
     save()
   }
   
@@ -52,7 +54,6 @@ public class CommandStation : NSObject, NetworkMessengerDelegate {
       for def in defs {
         let opsw = CommandStationOptionSwitch(commandStation: self, switchNumber: def.switchNumber, switchDefinition: def)
         optionSwitches.append(opsw)
-        print("\(opsw.switchNumber)")
       }
     }
   }
@@ -96,6 +97,8 @@ public class CommandStation : NSObject, NetworkMessengerDelegate {
   private var nextSlotObserverId = 0
   
   private var slotObserverLock : NSLock = NSLock()
+  
+  private var mostRecentCfgSlotDataP1 : [UInt8] = []
 
   // MARK: Public Properties
   
@@ -218,7 +221,7 @@ public class CommandStation : NSObject, NetworkMessengerDelegate {
   
   public var commandStationId : Int {
     get {
-      return (manufacturer.rawValue << 24) | (productCode.rawValue << 16) | serialNumber
+      return CommandStation.commandStationID(manufacturer: manufacturer, productCode: productCode, serialNumber: serialNumber)
     }
   }
   
@@ -402,6 +405,24 @@ public class CommandStation : NSObject, NetworkMessengerDelegate {
     }
   }
   
+  public func swState(switchNumber: Int) {
+    for messenger in _messengers {
+      if messenger.value.isOpen {
+        messenger.value.swState(switchNumber: switchNumber)
+        break
+      }
+    }
+  }
+  
+  public func swReq(switchNumber: Int, state:OptionSwitchState) {
+    for messenger in _messengers {
+      if messenger.value.isOpen {
+        messenger.value.swReq(switchNumber: switchNumber, state: state)
+        break
+      }
+    }
+  }
+  
   public func getLocoSlot(forAddress: Int) {
     if forAddress > 0 {
       for kv in _messengers {
@@ -555,6 +576,60 @@ public class CommandStation : NSObject, NetworkMessengerDelegate {
 
   }
   
+  public func setOptionSwitches() {
+    
+    if mostRecentCfgSlotDataP1.count == 14 {
+      
+      var message : [UInt8] = []
+      
+      for index in 2...mostRecentCfgSlotDataP1.count-2 {
+        message.append(mostRecentCfgSlotDataP1[index])
+      }
+
+      for opsw in optionSwitches {
+        
+        let def = opsw.switchDefinition
+        
+        if def.definitionType == .standard {
+          if def.switchNumber < 48 && def.switchNumber % 8 != 0 {
+            let byte = def.configByte - 2
+            let bit = def.configBit
+            let mask : UInt8 = 1 << bit
+            let safeMask :UInt8 = ~mask
+            let value : UInt8 = opsw.newState == .closed ? mask : 0
+            message[byte] = (message[byte] & safeMask) | value
+          }
+        }
+        else {
+          opsw.defaultDecoderType = opsw.newDefaultDecoderType
+          let byte = 5 - 2
+          var bit = 4
+          var mask : UInt8 = 1 << bit
+          var safeMask :UInt8 = ~mask
+          var value : UInt8 = opsw.getState(switchNumber: 21) == .closed ? mask : 0
+          message[byte] = (message[byte] & safeMask) | value
+          bit = 5
+          mask = 1 << bit
+          safeMask = ~mask
+          value = opsw.getState(switchNumber: 22) == .closed ? mask : 0
+          message[byte] = (message[byte] & safeMask) | value
+          bit = 6
+          mask = 1 << bit
+          safeMask = ~mask
+          value = opsw.getState(switchNumber: 23) == .closed ? mask : 0
+          message[byte] = (message[byte] & safeMask) | value
+        }
+      }
+      for kv in messengers {
+        let messenger = kv.value
+        if messenger.isOpen {
+          messenger.setLocoSlotDataP1(slotData: message)
+          break
+        }
+      }
+    }
+  }
+  
   public func powerOn() {
     for kv in messengers {
       let messenger = kv.value
@@ -667,6 +742,36 @@ public class CommandStation : NSObject, NetworkMessengerDelegate {
         _locoSlots[slot.slotID] = slot
         slotsUpdated()
       }
+      else if message.messageType == .cfgSlotDataP1 {
+        mostRecentCfgSlotDataP1 = message.message
+        for opsw in optionSwitches {
+          let byte = opsw.switchDefinition.configByte
+          if opsw.switchDefinition.definitionType == .standard {
+            if byte != -1 {
+              let mask = 1 << opsw.switchDefinition.configBit
+              let value : OptionSwitchState = (Int(message.message[byte]) & mask) == mask ? .closed : .thrown
+              opsw.state = value
+            }
+          }
+          else {
+            let byte = 5
+            var bit = 4
+            var mask = 1 << bit
+            var value : OptionSwitchState = (Int(message.message[byte]) & mask) == mask ? .closed : .thrown
+            opsw.setState(switchNumber: 21, value: value)
+            bit = 5
+            mask = 1 << bit
+            value = (Int(message.message[byte]) & mask) == mask ? .closed : .thrown
+            opsw.setState(switchNumber: 22, value: value)
+            bit = 6
+            mask = 1 << bit
+            value = (Int(message.message[byte]) & mask) == mask ? .closed : .thrown
+            opsw.setState(switchNumber: 23, value: value)
+          }
+        }
+        save()
+        trackStatusChanged()
+      }
       break
     case .locoSlotDataP2:
       let trk = message.message[7]
@@ -720,40 +825,52 @@ public class CommandStation : NSObject, NetworkMessengerDelegate {
     
     if let reader = sqliteDataReader {
       
-      if !reader.isDBNull(index: 1) {
-        manufacturer = Manufacturer(rawValue: reader.getInt(index: 1)!) ?? .Unknown
+      "[\(COMMAND_STATION.COMMAND_STATION_ID)], " +
+      "[\(COMMAND_STATION.COMMAND_STATION_NAME)], " +
+      "[\(COMMAND_STATION.MANUFACTURER)], " +
+      "[\(COMMAND_STATION.PRODUCT_CODE)], " +
+      "[\(COMMAND_STATION.SERIAL_NUMBER)], " +
+      "[\(COMMAND_STATION.HARDWARE_VERSION)], " +
+      "[\(COMMAND_STATION.SOFTWARE_VERSION)], " +
+      "[\(COMMAND_STATION.OPTION_SWITCHES_0)], " +
+      "[\(COMMAND_STATION.OPTION_SWITCHES_1)], " +
+      "[\(COMMAND_STATION.OPTION_SWITCHES_2)], " +
+      "[\(COMMAND_STATION.OPTION_SWITCHES_3)]"
+      
+      if !reader.isDBNull(index: 2) {
+        manufacturer = Manufacturer(rawValue: reader.getInt(index: 2)!) ?? .Unknown
       }
 
-      if !reader.isDBNull(index: 2) {
-        productCode = ProductCode(rawValue: reader.getInt(index: 2)!) ?? .unknown
+      if !reader.isDBNull(index: 3) {
+        productCode = ProductCode(rawValue: reader.getInt(index: 3)!) ?? .unknown
       }
       
-      if !reader.isDBNull(index: 3) {
-        serialNumber = reader.getInt(index: 3)!
-      }
-
       if !reader.isDBNull(index: 4) {
-        hardwareVersion = reader.getDouble(index: 4)!
+        serialNumber = reader.getInt(index: 4)!
       }
 
       if !reader.isDBNull(index: 5) {
-        softwareVersion = reader.getDouble(index: 5)!
+        hardwareVersion = reader.getDouble(index: 5)!
       }
 
       if !reader.isDBNull(index: 6) {
-        optionSwitches0 = reader.getInt64(index: 6)!
+        softwareVersion = reader.getDouble(index: 6)!
       }
 
       if !reader.isDBNull(index: 7) {
-        optionSwitches1 = reader.getInt64(index: 7)!
+        optionSwitches0 = reader.getInt64(index: 7)!
       }
 
       if !reader.isDBNull(index: 8) {
-        optionSwitches2 = reader.getInt64(index: 8)!
+        optionSwitches1 = reader.getInt64(index: 8)!
       }
 
       if !reader.isDBNull(index: 9) {
-        optionSwitches3 = reader.getInt64(index: 9)!
+        optionSwitches2 = reader.getInt64(index: 9)!
+      }
+
+      if !reader.isDBNull(index: 10) {
+        optionSwitches3 = reader.getInt64(index: 10)!
       }
 
     }
@@ -886,7 +1003,8 @@ public class CommandStation : NSObject, NetworkMessengerDelegate {
       if let reader = cmd.executeReader() {
            
         while reader.read() {
-          result.append(CommandStation(reader: reader))
+          let cs = CommandStation(reader: reader)
+          result.append(cs)
         }
            
         reader.close()
@@ -903,6 +1021,21 @@ public class CommandStation : NSObject, NetworkMessengerDelegate {
       
     }
     
+  }
+  
+  public static var commandStationsDictionary : [Int:CommandStation] {
+    get {
+      var result : [Int:CommandStation] = [:]
+      let css = CommandStation.commandStations
+      for cs in css {
+        result[cs.commandStationId] = cs
+      }
+      return result
+    }
+  }
+  
+  public static func commandStationID(manufacturer: Manufacturer, productCode: ProductCode, serialNumber: Int) -> Int {
+    return (manufacturer.rawValue << 24) | (productCode.rawValue << 16) | serialNumber
   }
 
 }

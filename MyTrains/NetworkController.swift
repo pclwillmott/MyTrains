@@ -83,7 +83,7 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
 
   public var locomotives : [Int:Locomotive] = Locomotive.locomotives
 
-  public var commandStations : [Int:CommandStation] = [:]
+  public var commandStations : [Int:CommandStation] = CommandStation.commandStationsDictionary
 
   public var layoutId : Int {
     get {
@@ -355,8 +355,12 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
       
       if pc == .DCS210 || pc == .DCS210Plus || pc == .DCS210 || pc == .DCS240 {
         
-        if let cs = commandStations[devData.serialNumber] {
+        let id = CommandStation.commandStationID(manufacturer: .Digitrax, productCode: pc, serialNumber: devData.serialNumber)
+        
+        if let cs = commandStations[id] {
           cs.addMessenger(messenger: _networkMessengers[message.interfaceId]!)
+          _ = cs.addDelegate(delegate: self)
+          networkControllerUpdated()
         }
         else {
           let cs = CommandStation(message: devData)
@@ -364,6 +368,7 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
           cs.addMessenger(messenger: _networkMessengers[message.interfaceId]!)
           _ = cs.addDelegate(delegate: self)
           networkControllerUpdated()
+          cs.save()
         }
         
       }

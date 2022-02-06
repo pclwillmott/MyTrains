@@ -85,8 +85,13 @@ public class CommandStationOptionSwitch {
     }
     set(value) {
       setState(switchNumber: self.switchNumber, value: value)
+      newState = value
     }
   }
+  
+  public var newState : OptionSwitchState = .thrown
+  
+  public var newDefaultDecoderType : MobileDecoderType = .unknown
   
   public var defaultDecoderType : MobileDecoderType {
     get {
@@ -151,6 +156,8 @@ public class CommandStationOptionSwitch {
       setState(switchNumber: 21, value: (bits & 0b100) == 0b100 ? .closed : .thrown)
       setState(switchNumber: 22, value: (bits & 0b010) == 0b010 ? .closed : .thrown)
       setState(switchNumber: 23, value: (bits & 0b001) == 0b001 ? .closed : .thrown)
+      
+      newDefaultDecoderType = value
       
     }
   }
@@ -362,7 +369,7 @@ public class CommandStationOptionSwitch {
     (
       definitionType: .standard,
       model: .dcs240,
-      switchNumber: 8,
+      switchNumber: 16,
       defaultState : .thrown,
       configByte: -1,
       configBit: -1,
@@ -502,7 +509,7 @@ public class CommandStationOptionSwitch {
     (
       definitionType: .standard,
       model: .dcs240,
-      switchNumber: 8,
+      switchNumber: 32,
       defaultState : .thrown,
       configByte: -1,
       configBit: -1,
@@ -658,9 +665,91 @@ public class CommandStationOptionSwitch {
       configBit: 6,
       thrownEffect : "normal programming track setting",
       closedEffect : "programming track is brake generator when not programming"
+    ),
+    /* FOLLOWING FROM KB1066 FOR DCS210+ */
+    (
+      definitionType: .standard,
+      model: .dcs240,
+      switchNumber: 49,
+      defaultState : .thrown,
+      configByte: -1,
+      configBit: -1,
+      thrownEffect : "disallow Idle power status",
+      closedEffect : "allow Idle power status"
+    ),
+    (
+      definitionType: .standard,
+      model: .dcs240,
+      switchNumber: 54,
+      defaultState : .thrown,
+      configByte: -1,
+      configBit: -1,
+      thrownEffect : "do not recall last speedd at power on",
+      closedEffect : "recall last speedd at power on"
+    ),
+    (
+      definitionType: .standard,
+      model: .dcs240,
+      switchNumber: 66,
+      defaultState : .thrown,
+      configByte: -1,
+      configBit: -1,
+      thrownEffect : "use advanced commands",
+      closedEffect : "do not use advanced commands"
+    ),
+    (
+      definitionType: .standard,
+      model: .dcs240,
+      switchNumber: 70,
+      defaultState : .thrown,
+      configByte: -1,
+      configBit: -1,
+      thrownEffect : "enable <BB7F> checks for other command stations",
+      closedEffect : "disable <BB7F> checks for other command stations"
+    ),
+    (
+      definitionType: .standard,
+      model: .dcs240,
+      switchNumber: 71,
+      defaultState : .thrown,
+      configByte: -1,
+      configBit: -1,
+      thrownEffect : "enable external command station disable",
+      closedEffect : "disable external command station disable, just defer"
+    ),
+    (
+      definitionType: .standard,
+      model: .dcs240,
+      switchNumber: 75,
+      defaultState : .thrown,
+      configByte: -1,
+      configBit: -1,
+      thrownEffect : "enable programming track precharge",
+      closedEffect : "disable programming track precharge"
+    ),
+    (
+      definitionType: .standard,
+      model: .dcs240,
+      switchNumber: 77,
+      defaultState : .thrown,
+      configByte: -1,
+      configBit: -1,
+      thrownEffect : "enable legacy commands",
+      closedEffect : "after D5 commands lockout legacy commands"
+    ),
+    (
+      definitionType: .standard,
+      model: .dcs240,
+      switchNumber: 78,
+      defaultState : .closed,
+      configByte: -1,
+      configBit: -1,
+      thrownEffect : "no not send Ack on B0 switch command",
+      closedEffect : "send Ack on B0 switch command"
     )
+
   ]
-  
+
   // MARK: Class Methods
   
   public static func switches(commandStationModel:CommandStationModel) -> [CommandStationSwitchDefinition] {

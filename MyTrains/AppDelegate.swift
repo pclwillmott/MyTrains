@@ -105,7 +105,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   }
   
   @IBAction func mnuCommandStationConfiguration(_ sender: NSMenuItem) {
-    ModalWindow.CommandStationConfiguration.runModel()
+    let x = ModalWindow.CommandStationConfiguration
+    let wc = x.windowController
+    wc.showWindow(nil)
   }
   
 }
