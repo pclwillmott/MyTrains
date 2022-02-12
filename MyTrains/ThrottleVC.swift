@@ -154,10 +154,12 @@ class ThrottleVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate,
       for button in buttons {
         let locoFunc = loco.functions[button.tag]
         button.setButtonType(locoFunc.isMomentary ? .momentaryPushIn : .pushOnPushOff)
-        button.isEnabled = locoFunc.isEnabled
+        button.isEnabled = locoFunc.isEnabled && loco.isInUse
         button.state = locoFunc.state ? .on : .off
         button.toolTip = locoFunc.toolTip
       }
+      
+      enableControls()
       
     }
     else {
@@ -181,14 +183,39 @@ class ThrottleVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate,
       lblTargetStep.stringValue = "0"
       lblSpeed.stringValue = "0"
       
+      enableControls()
+      
     }
         
+  }
+  
+  private func enableControls() {
+    let enabled = locomotive?.isInUse ?? false
+    for button in buttons {
+      button.isEnabled = enabled
+    }
+    vsThrottle.isEnabled = enabled
+    radForward.isEnabled = enabled
+    radReverse.isEnabled = enabled
+    chkInertial.isEnabled = enabled
   }
   
   // MARK: LocomotiveDelegate Methods
   
   func stateUpdated(locomotive: Locomotive) {
     lblSpeed.stringValue = "\(locomotive.speed.speed)"
+  }
+  
+  func stealZap(locomotive: Locomotive) {
+
+    locomotive.targetSpeed.speed = 0
+    
+    locomotive.isInUse = false
+
+    setup()
+    
+    lblSpeed.intValue = 0
+
   }
   
   // MARK: NetworkControllerDelegate Methods
@@ -225,6 +252,7 @@ class ThrottleVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate,
   @IBAction func swPowerAction(_ sender: NSSwitch) {
     if let loco = locomotive {
       loco.isInUse = sender.state == .on
+      enableControls()
     }
   }
   

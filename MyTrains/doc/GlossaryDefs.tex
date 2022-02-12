@@ -63,6 +63,11 @@
     description={is a locomotive slot state that indicates that slot is not active and can be selected any throttle. The locomotive's decoder is not refreshed in this state}
 }
 
+\newglossaryentry{Free}{
+    name=Free,
+    description={is a locomotive slot state that indicates that the slot does not have an address loaded in it}
+}
+
 \newglossaryentry{In-Use}{
     name=In-Use,
     description={is a locomotive slot state that indicates that the slot has been made active by a throttle and can no longer be selected by another throttle}
@@ -116,6 +121,11 @@
 \newglossaryentry{Operating Mode}{
     name=Operating Mode,
     description={means 14 or 28/128 speed steps}
+}
+
+\newglossaryentry{Product Code}{
+    name=Product Code,
+    description={means the Digitrax assigned identifier code of a device's type}
 }
 
 \newglossaryentry{Operations Mode Programming}{
@@ -208,4 +218,33 @@
     description={means a pair of 7-bit numbers that identify (hopefully uniquely) the throttle to the command station}
 }
 
+\newglossaryentry{Command}{
+    name=Command,
+    description={means a message sent to a device to request it to do something}
+}
+
+\newglossaryentry{Response}{
+    name=Response,
+    description={means a message sent in response to a Command message}
+}
+
+\newglossaryentry{Report}{
+    name=Report,
+    description={means a message sent by a device in response to a change in its internal and/or external state}
+}
+
+\newglossaryentry{Broadcast}{
+    name=Broadcast,
+    description={means a message sent by a device to all devices on the network}
+}
+
+\newglossaryentry{standard slots}{
+    name=standard slots,
+    description={means the command station slots that are accessed and manipulated by protocol 1 messages}
+}
+
+\newglossaryentry{expanded slots}{
+    name=expanded slots,
+    description={means the command station slots that are accessed and manipulated by protocol 2 messages}
+}
 

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Cocoa
 
 public enum MobileDecoderType : Int {
   case analog = 0
@@ -96,8 +97,9 @@ public enum LocomotiveDirection {
   case reverse
 }
 
-public protocol LocomotiveDelegate {
-  func stateUpdated(locomotive: Locomotive)
+@objc public protocol LocomotiveDelegate {
+  @objc optional func stateUpdated(locomotive: Locomotive)
+  @objc optional func stealZap(locomotive: Locomotive)
 }
 
 public typealias LocomotiveSpeed = (speed: Int, direction: LocomotiveDirection)
@@ -641,7 +643,7 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
       lastLocomotiveState = cs.updateLocomotiveState(slotNumber: slotNumber, slotPage: slotPage, previousState: lastLocomotiveState, nextState: locomotiveState, throttleID: throttle)
       
       for delegate in delegates {
-        delegate.value.stateUpdated(locomotive: self)
+        delegate.value.stateUpdated?(locomotive: self)
       }
       
       if isInertial {
@@ -672,14 +674,16 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
     timer = nil
   }
   
+  private func stealZAP() {
+    for delegate in delegates {
+      delegate.value.stealZap?(locomotive: self)
+    }
+  }
+  
   private func writeBack(message:NetworkMessage) -> [UInt8] {
 
     var slotData = message.slotData
 
-    if _throttleID == nil {
-      _throttleID = networkController.softwareThrottleID
-    }
-    
     if let throttleID = _throttleID {
       var index = slotData.count - 2
       slotData[index+0] = UInt8(throttleID & 0x7f)
@@ -733,6 +737,10 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
     
     if let net = network, let cs = net.commandStation {
       
+      if _throttleID == nil {
+        _throttleID = networkController.softwareThrottleID
+      }
+            
       switch message.messageType {
       case .ack:
         let ack = Ack(interfaceId: message.interfaceId, data: message.message)
@@ -743,6 +751,9 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
           slotPage = locoSlotDataP1.slotPage
           slotNumber = locoSlotDataP1.slotNumber
           if initState == .waitingForSlot {
+            let spd = locoSlotDataP1.speed < 2 ? 0 : locoSlotDataP1.speed - 1
+            let dir = locoSlotDataP1.direction
+            speed = (speed:spd, direction: dir)
             if locoSlotDataP1.slotState == .inUse {
               initState = .waitingForOwnershipConfirmation
               let wb = writeBack(message: message)
@@ -760,12 +771,62 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
           }
         }
         break
-      case .locoSlotDataP2:
+      case .setLocoSlotDataP2:
+        
         let locoSlotDataP2 = LocoSlotDataP2(interfaceId: message.interfaceId, data: message.message)
+
         if locoSlotDataP2.address == address {
+          
+          if initState == .active {
+            
+            if let throttleID = _throttleID {
+              
+              let tid = locoSlotDataP2.throttleID
+              
+              if throttleID != tid  {
+                stealZAP()
+              }
+            }
+          }
+        }
+
+      case .locoSlotDataP2:
+        
+        let locoSlotDataP2 = LocoSlotDataP2(interfaceId: message.interfaceId, data: message.message)
+        
+        if locoSlotDataP2.address == address {
+          
           slotPage = locoSlotDataP2.slotPage
           slotNumber = locoSlotDataP2.slotNumber
+
           if initState == .waitingForSlot {
+            
+            if let throttleID = _throttleID {
+              
+              let tid = locoSlotDataP2.throttleID
+              
+              if locoSlotDataP2.slotState == .inUse && throttleID != tid  {
+                
+                let alert = NSAlert()
+
+                alert.messageText = "Steal?"
+                alert.informativeText = "This locomotive is in use by another throttle. Do you wish to steal?"
+                alert.addButton(withTitle: "Yes")
+                alert.addButton(withTitle: "No")
+                alert.alertStyle = .warning
+
+                if alert.runModal() == NSApplication.ModalResponse.alertSecondButtonReturn {
+                  stealZAP()
+                  break
+                }
+              }
+                
+            }
+
+            let spd = locoSlotDataP2.speed < 2 ? 0 : locoSlotDataP2.speed - 1
+            let dir = locoSlotDataP2.direction
+            speed = (speed:spd, direction: dir)
+            
             if locoSlotDataP2.slotState == .inUse {
               initState = .waitingForOwnershipConfirmation
               let wb = writeBack(message: message)

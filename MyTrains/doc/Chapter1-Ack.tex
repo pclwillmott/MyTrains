@@ -3,7 +3,7 @@
 
 \underline{Description:}
 
-This message provides a response code from a command. This is the generic form of this message type.
+This message provides a response code from a \gls{Command}. This is the generic form of this message type.
 
 \underline{Group:}
 
@@ -15,7 +15,7 @@ OPC\_LONG\_ACK
 
 \underline{Type:}
 
-Response
+\gls{Response}
 
 \underline{Encoding:} 
 
@@ -52,7 +52,7 @@ Byte 2:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$ACK1$>$ & Response code.\\
+& $<$ACK1$>$ & Response code. This is usually 0 to indicate the \gls{Command} failed, and 127 (0x7F) if it was successful. Other values are possible to indicate other conditions or states.\\
 \end{tabular}
 
 Byte 3:

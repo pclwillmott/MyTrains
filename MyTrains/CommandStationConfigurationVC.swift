@@ -84,7 +84,7 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Command
   // MARK: Command Station Delegate Methods
   
   func trackStatusChanged(commandStation: CommandStation) {
-    tableView.reloadData()
+ //   tableView.reloadData()
   }
   
   func messageReceived(message:NetworkMessage) {
@@ -93,17 +93,21 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Command
     
     switch message.messageType {
     case .cfgSlotDataP1:
-      if radOptionSwitches.state == .on && configState == .waitingForCfgSlotDataP1 {
-        nextReadIndex = 0
-        while nextReadIndex < options.count && options[nextReadIndex].switchDefinition.configByte != -1 {
-          nextReadIndex += 1
+      if configState == .waitingForCfgSlotDataP1 {
+        if radOptionSwitches.state == .on {
+          nextReadIndex = 0
+          while nextReadIndex < options.count && options[nextReadIndex].switchDefinition.configByte != -1 {
+            nextReadIndex += 1
+          }
+          readSwitchNumber = options[nextReadIndex].switchNumber
+          configState = .waitingForReadSwitchAck
+          commandStation?.swState(switchNumber: readSwitchNumber)
+          break
         }
-        readSwitchNumber = options[nextReadIndex].switchNumber
-        configState = .waitingForReadSwitchAck
-        commandStation?.swState(switchNumber: readSwitchNumber)
-        break
+        configState = .idle
+        commandStation?.save()
+        tableView.reloadData()
       }
-      configState = .idle
       break
     case .swStateThrown, .swStateClosed:
       if configState == .waitingForReadSwitchAck {
@@ -115,6 +119,7 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Command
         }
         if nextReadIndex == options.count {
           configState = .idle
+          commandStation?.save()
           tableView.reloadData()
           break
         }
@@ -139,17 +144,44 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Command
   @IBOutlet weak var radConfigurationSlot: NSButton!
   
   @IBAction func radConfigurationSlotAction(_ sender: NSButton) {
-    radOptionSwitches.state = sender.state == .on ? .off : .on
-    csConfigurationTableViewDS.isConfigurationSlotMode = sender.state == .on
-    tableView.reloadData()
+    let alert = NSAlert()
+
+    alert.messageText = "Has the \(commandStation?.commandStationName ?? "command station") been switched into RUN Mode?"
+    alert.informativeText = ""
+    alert.addButton(withTitle: "Yes")
+    alert.addButton(withTitle: "No")
+    alert.alertStyle = .warning
+
+    if alert.runModal() == NSApplication.ModalResponse.alertFirstButtonReturn {
+      radOptionSwitches.state = sender.state == .on ? .off : .on
+      csConfigurationTableViewDS.isConfigurationSlotMode = sender.state == .on
+      tableView.reloadData()
+    }
+    else {
+      radConfigurationSlot.state = .off
+    }
   }
   
   @IBOutlet weak var radOptionSwitches: NSButton!
   
   @IBAction func radOptionSwitchesAction(_ sender: NSButton) {
-    radConfigurationSlot.state = sender.state == .on ? .off : .on
-    csConfigurationTableViewDS.isConfigurationSlotMode = sender.state == .off
-    tableView.reloadData()
+    
+    let alert = NSAlert()
+
+    alert.messageText = "Has the \(commandStation?.commandStationName ?? "command station") been switched into OP Mode?"
+    alert.informativeText = ""
+    alert.addButton(withTitle: "Yes")
+    alert.addButton(withTitle: "No")
+    alert.alertStyle = .warning
+
+    if alert.runModal() == NSApplication.ModalResponse.alertFirstButtonReturn {
+      radConfigurationSlot.state = sender.state == .on ? .off : .on
+      csConfigurationTableViewDS.isConfigurationSlotMode = sender.state == .off
+      tableView.reloadData()
+    }
+    else {
+      radOptionSwitches.state = .off
+    }
   }
   
   @IBOutlet weak var btnRead: NSButton!

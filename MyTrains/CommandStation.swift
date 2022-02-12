@@ -773,6 +773,8 @@ public class CommandStation : NSObject, NetworkMessengerDelegate {
         trackStatusChanged()
       }
       break
+    case .setLocoSlotDataP2:
+      locomotiveMessage(message: message)
     case .locoSlotDataP2:
       let trk = message.message[7]
       implementsProtocol2    = (trk & 0b01000000) == 0b01000000

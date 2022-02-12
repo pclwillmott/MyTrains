@@ -92,20 +92,31 @@ public class CommandStationOptionSwitch {
   public var newState : OptionSwitchState = .thrown
   
   public var newDefaultDecoderType : MobileDecoderType = .unknown
+
+  /*
+        let mask128  : UInt8 = 0b000
+        let mask14   : UInt8 = 0b001
+        let mask28   : UInt8 = 0b010
+        let mask128A : UInt8 = 0b100
+        let mask28A  : UInt8 = 0b110
+        let mask28T  : UInt8 = 0b011
+  */
+
+  // DCS240
   
+  let mask14   : UInt8 = 0b010
+  let mask128  : UInt8 = 0b110
+  let mask128A : UInt8 = 0b111
+  let mask28   : UInt8 = 0b000
+  let mask28A  : UInt8 = 0b001
+  let mask28T  : UInt8 = 0b100
+
   public var defaultDecoderType : MobileDecoderType {
     get {
       
       var value : UInt8 = (getState(switchNumber: 21) == .closed ? 1 : 0) << 2
       value |= (getState(switchNumber: 22) == .closed ? 1 : 0) << 1
       value |= (getState(switchNumber: 23) == .closed ? 1 : 0)
-      
-      let mask128  : UInt8 = 0b000
-      let mask14   : UInt8 = 0b001
-      let mask28   : UInt8 = 0b010
-      let mask128A : UInt8 = 0b100
-      let mask28A  : UInt8 = 0b110
-      let mask28T  : UInt8 = 0b011
       
       switch value {
       case mask128:
@@ -126,14 +137,8 @@ public class CommandStationOptionSwitch {
 
     }
     set(value) {
-
-      let mask128  : UInt8 = 0b000
-      let mask14   : UInt8 = 0b001
-      let mask28   : UInt8 = 0b010
-      let mask128A : UInt8 = 0b100
-      let mask28A  : UInt8 = 0b110
-      let mask28T  : UInt8 = 0b011
       
+
       var bits : UInt8 = 0
       
       switch value {
@@ -684,8 +689,8 @@ public class CommandStationOptionSwitch {
       defaultState : .thrown,
       configByte: -1,
       configBit: -1,
-      thrownEffect : "do not recall last speedd at power on",
-      closedEffect : "recall last speedd at power on"
+      thrownEffect : "do not recall last speed at power on",
+      closedEffect : "recall last speed at power on"
     ),
     (
       definitionType: .standard,

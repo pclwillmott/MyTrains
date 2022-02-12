@@ -470,6 +470,7 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
     
     addToQueue(message: message, delay: TIMING.SWREQ, response: [], delegate: nil, retryCount: 1)
 
+    /*
     bit = state == .closed ? 0x20 : 0x00
     
     hi = UInt8((switchNumber - 1) >> 7) | bit
@@ -477,7 +478,8 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
     message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_SW_REQ.rawValue, lo, hi], appendCheckSum: true)
     
     addToQueue(message: message, delay: TIMING.SWREQ, response: [], delegate: nil, retryCount: 1)
-
+*/
+    
   }
   
   public func setLocoSlotDataP1(slotData: [UInt8]) {
