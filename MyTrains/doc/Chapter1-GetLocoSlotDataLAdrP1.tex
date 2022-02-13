@@ -5,7 +5,7 @@
 
 \underline{Description:}
 
-This command requests a slot for the selected locomotive address. If the locomotive is found in the slot table then the command station returns an \textbf{LocoSlotDataP1} response with the slot information. If it is not found then the command station will put the locomotive into a free slot and then return an \textbf{LocoSlotDataP1} response with the slot information. If there are no free slots then the command station returns an \textbf{NoFreeSlotsP1} response.
+This \gls{Command} requests a slot for the selected locomotive address. If the locomotive \gls{address} is found in the slot table then the command station returns an \textbf{LocoSlotDataP1} \gls{Response} with the slot information. If it is not found then the command station will put the locomotive \gls{address} into a free slot and then return an \textbf{LocoSlotDataP1} \gls{Response} with the slot information. If there are no free slots then the command station returns a \textbf{NoFreeSlotsP1} \gls{Response}.
 
 The command station will generate \gls{NMRA} 14 bit or long address packets for the locomotive. The \gls{address} must be in the range 128 to 9983.
 
@@ -23,7 +23,7 @@ OPC\_LOCO\_ADR
 
 \underline{Type:}
 
-Command
+\gls{Command}
 
 \underline{Encoding:} 
 

@@ -3,7 +3,7 @@
 
 \underline{Description:}
 
-This command requests the command station to link slot SL1 to slot SL2. If the command was successful then a \textbf{LocoSlotDataP2} response will be returned. An invalid link will return a \textbf{Ack} with a response code of 0x00.
+This \gls{Command} requests the command station to link slot SL1 to slot SL2. If the \gls{Command} was successful then a \textbf{LocoSlotDataP2} \gls{Response} will be returned. An invalid link will return a \textbf{InvalidLinkP2} \gls{Response}.
 
 \underline{Protocol:}
 
@@ -19,7 +19,7 @@ OPC\_D4\_GROUP (unofficial mnemonic)
 
 \underline{Type:}
 
-Command
+\gls{Command}
 
 \underline{Encoding:} 
 
@@ -97,7 +97,7 @@ Byte 5:
 
 \underline{Response:} 
 
-\textbf{LocoSlotDataP2} or \textbf{Ack}.
+\textbf{LocoSlotDataP2} or \textbf{InvalidSlotP2}.
 
 \underline{Signature:}
 

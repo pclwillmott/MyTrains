@@ -46,6 +46,35 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Command
         delegateId = cs.addDelegate(delegate: self)
       }
     }
+    
+    let xStart : CGFloat = 55
+    var xPos : CGFloat = xStart
+    var yPos : CGFloat = 595
+    var count = 0
+    var index = 1
+    while index < 129 {
+      
+      let button : NSButton = NSButton(title: "\(index)", target: self, action: #selector(self.buttonAction(_:)))
+      button.frame = NSRect(x: xPos, y: yPos, width: 50, height: 20)
+      button.tag = index
+      button.setButtonType(.pushOnPushOff)
+      viewBitFinder.subviews.append(button)
+      buttons.append(button)
+      
+      count += 1
+      
+      index += 1
+      if count == 10 {
+        yPos -= 30
+        xPos = xStart
+        count = 0
+      }
+      else {
+        xPos += button.frame.width
+      }
+      
+    }
+
 
   }
   
@@ -55,9 +84,20 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Command
     case idle
     case waitingForCfgSlotDataP1
     case waitingForReadSwitchAck
+    case waitingforMassReadSwitchAck
+    case waitingForBaseCase
+    case waitingForNewCase
   }
   
   // MARK: Private Properties
+  
+  private var buttons : [NSButton] = []
+  
+  private var isDirty : Bool = true
+  
+  private var baseCase : NetworkMessage?
+  
+  private var newCase : NetworkMessage?
   
   private var cboCommandStationDS : CommmandStationComboBoxDS = CommmandStationComboBoxDS()
 
@@ -92,6 +132,37 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Command
     let options = csConfigurationTableViewDS.options
     
     switch message.messageType {
+    case .cfgSlotDataP2:
+      if configState == .waitingForBaseCase {
+        baseCase = message
+        let newState : OptionSwitchState = buttons[readSwitchNumber-1].state == .on ? .closed : .thrown
+        configState = .waitingForNewCase
+        commandStation?.swReq(switchNumber: readSwitchNumber, state: newState)
+        commandStation?.getCfgSlotDataP2()
+      }
+      else if configState == .waitingForNewCase {
+        newCase = message
+        if let base = baseCase, let new = newCase {
+          var changes : String = ""
+          let numBytes = message.message.count-2
+          for index in 0...numBytes {
+            if base.message[index] != new.message[index] {
+              changes += "OpSw\(readSwitchNumber) - Byte \(index) "
+              for bit in 0...7 {
+                let mask : UInt8 = 1 << bit
+                if (base.message[index] & mask) != (new.message[index] & mask) {
+                  changes += "Bit \(bit) "
+                }
+              }
+              changes += "\n"
+            }
+          }
+          txtMonitor.string = changes
+        }
+        configState = .idle
+      }
+      break
+
     case .cfgSlotDataP1:
       if configState == .waitingForCfgSlotDataP1 {
         if radOptionSwitches.state == .on {
@@ -108,11 +179,39 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Command
         commandStation?.save()
         tableView.reloadData()
       }
+      else if configState == .waitingForBaseCase {
+        baseCase = message
+        let newState : OptionSwitchState = buttons[readSwitchNumber-1].state == .on ? .closed : .thrown
+        configState = .waitingForNewCase
+        commandStation?.swReq(switchNumber: readSwitchNumber, state: newState)
+        commandStation?.getCfgSlotDataP1()
+      }
+      else if configState == .waitingForNewCase {
+        newCase = message
+        if let base = baseCase, let new = newCase {
+          var changes : String = ""
+          let numBytes = message.message.count-2
+          for index in 0...numBytes {
+            if base.message[index] != new.message[index] {
+              changes += "OpSw\(readSwitchNumber) - Byte \(index) "
+              for bit in 0...7 {
+                let mask : UInt8 = 1 << bit
+                if (base.message[index] & mask) != (new.message[index] & mask) {
+                  changes += "Bit \(bit) "
+                }
+              }
+              changes += "\n"
+            }
+          }
+          txtMonitor.string = changes
+        }
+        configState = .idle
+      }
       break
-    case .swStateThrown, .swStateClosed:
+    case .swState:
+      let switchState : OptionSwitchState = message.message[2] & 0x20 == 0 ? .thrown : .closed
       if configState == .waitingForReadSwitchAck {
-        let state : OptionSwitchState = message.messageType == .swStateClosed ? .closed : .thrown
-        options[nextReadIndex].state = state
+        options[nextReadIndex].state = switchState
         nextReadIndex += 1
         while nextReadIndex < options.count && options[nextReadIndex].switchDefinition.configByte != -1 {
           nextReadIndex += 1
@@ -126,6 +225,21 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Command
         readSwitchNumber = options[nextReadIndex].switchNumber
         configState = .waitingForReadSwitchAck
         commandStation?.swState(switchNumber: readSwitchNumber)
+        break
+      }
+      else if configState == .waitingforMassReadSwitchAck {
+        buttons[nextReadIndex-1].state = message.message[2] & 0x20 == 0 ? .off : .on
+        if nextReadIndex < 128 {
+          nextReadIndex += 1
+          configState = .waitingforMassReadSwitchAck
+          commandStation?.swState(switchNumber: nextReadIndex)
+          break
+        }
+        else {
+          isDirty = false
+          configState = .waitingForBaseCase
+          radProtocol1.state == .on ? commandStation?.getCfgSlotDataP1() : commandStation?.getCfgSlotDataP2()
+        }
         break
       }
       configState = .idle
@@ -198,6 +312,7 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Command
       for opsw in csConfigurationTableViewDS.options {
         if opsw.switchDefinition.configByte == -1 {
           commandStation?.swReq(switchNumber: opsw.switchNumber, state: opsw.newState)
+          isDirty = true
         }
       }
     }
@@ -207,6 +322,66 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Command
   @IBOutlet weak var tableView: NSTableView!
   
   @IBAction func tableViewAction(_ sender: NSTableView) {
+  }
+  
+  @IBOutlet var txtMonitor: NSTextView!
+  
+  @IBOutlet weak var viewBitFinder: NSView!
+  
+  @IBAction func buttonAction(_ sender: NSButton) {
+    
+    if radOptionSwitches.state == .off {
+      let alert = NSAlert()
+
+      alert.messageText = "Has the \(commandStation?.commandStationName ?? "command station") been switched into OP Mode?"
+      alert.informativeText = ""
+      alert.addButton(withTitle: "Yes")
+      alert.addButton(withTitle: "No")
+      alert.alertStyle = .warning
+
+      if alert.runModal() == NSApplication.ModalResponse.alertFirstButtonReturn {
+        radConfigurationSlot.state = sender.state == .on ? .off : .on
+        csConfigurationTableViewDS.isConfigurationSlotMode = sender.state == .off
+        tableView.reloadData()
+        radOptionSwitches.state = .on
+        radConfigurationSlot.state = .off
+      }
+      else {
+        for button in buttons {
+          button.state = .off
+        }
+        isDirty = true
+        return
+      }
+    }
+    
+    readSwitchNumber = sender.tag
+    
+    if isDirty {
+      for button in buttons {
+        button.state = .off
+      }
+      nextReadIndex = 1
+      configState = .waitingforMassReadSwitchAck
+      commandStation?.swState(switchNumber: nextReadIndex)
+    }
+    else {
+      configState = .waitingForBaseCase
+      radProtocol1.state == .on ? commandStation?.getCfgSlotDataP1() : commandStation?.getCfgSlotDataP2()
+    }
+
+  }
+  
+  @IBOutlet weak var radProtocol1: NSButton!
+  
+  @IBAction func radProtocol1Action(_ sender: NSButton) {
+    radProtocol2.state = sender.state == .on ? .off : .on
+  }
+  
+  @IBOutlet weak var radProtocol2: NSButton!
+  
+  @IBAction func radProtocol2Action(_ sender: NSButton) {
+    radProtocol1.state = sender.state == .on ? .off : .on
   }
   
 }

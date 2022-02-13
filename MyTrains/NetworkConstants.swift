@@ -61,6 +61,7 @@ public enum NetworkMessageType {
   case fastClockDataP1
   case getBrdOpSw
   case getCfgSlotDataP1
+  case getCfgSlotDataP2
   case getFastClockDataP1
   case getLocoSlotDataLAdrP1
   case getLocoSlotDataLAdrP2
@@ -71,6 +72,8 @@ public enum NetworkMessageType {
   case illegalMoveP1
   case illegalMoveP2
   case immPacket
+  case invalidLinkP1
+  case invalidLinkP2
   case interfaceData
   case iplDataLoad
   case iplDevData
@@ -124,9 +127,8 @@ public enum NetworkMessageType {
   case setSwWithAck
   case slotNotImplemented
   case swReq
+  case getSWState
   case swState
-  case swStateThrown
-  case swStateClosed
   case unlinkSlotsP1
   case unlinkSlotsP2
 }

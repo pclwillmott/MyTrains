@@ -49,7 +49,7 @@ A Report is a message sent by a device in response to a change in its internal a
 
 \section{Slots}\index{slots}
 
-The command station contains an array of read/write slots. There are two classes of slots (\gls{locomotive slot} and \gls{system slot}) and two protocols for manipulating the slots. Protocol 1\index{Protocol 1}\index{Protocol 2} allows up to 120 locomotive slots and each slot contains 10 bytes of data relating to the locomotive. Digitrax calls these slots \gls{standard slots}. Protocol 2 allows up to 960 locomotive slots and each slot contains 15 bytes of data relating to the locomotive. Digitrax calls these slots \gls{expanded slots}. Not all command stations implement both protocols. A command station may also not implement the maximum number of locomotive slots for the protocols it supports.  The user should check the \gls{Global System Track Status} bits in a \textbf{LocoSlotDataP1} or \textbf{LocoSlotDataP2} response to determine which protocols are supported. Expanded capability throttles are given the expanded slots first, leaving the standard slots available for legacy throttles.  In this document message mnemonics that are suffixed ``P1" belong to protocol 1 and those suffixed ``P2" belong to protocol 2. Protocol 1 uses a single 7 bit number to identify a slot. Protocol 2 uses a 3 bit number to identify the page or bank of slots and a 7 bit number to identify the slot within the page or bank. In both protocols slots numbered 0 to 119 (0x00 to 0x77) are locomotive slots and those numbered 120 to 127 (0x78 to 0x7F) are system slots. The slot number is similar to a file handle. System slots are encoded differently from the locomotive slots. 
+The command station contains an array of read/write slots. There are two classes of slots (\gls{locomotive slot} and \gls{system slot}) and two protocols for manipulating the slots. Protocol 1\index{Protocol 1}\index{Protocol 2} allows up to 120 locomotive slots and each slot contains 10 bytes of data relating to the locomotive. Digitrax calls these slots \gls{standard slots}. Protocol 2 allows up to 960 locomotive slots and each slot contains 15 bytes of data relating to the locomotive. Digitrax calls these slots \gls{expanded slots}. Not all command stations implement both protocols. A command station may also not implement the maximum number of locomotive slots for the protocols it supports.  The user should check the \gls{Global System Track Status} bits in a \textbf{LocoSlotDataP1} or \textbf{LocoSlotDataP2} response to determine which protocols are supported. Expanded capability throttles, i.e. those that implement protocol 2,  are given the expanded slots first, leaving the standard slots available for legacy throttles.  In this document message mnemonics that are suffixed ``P1" belong to protocol 1 and those suffixed ``P2" belong to protocol 2. Protocol 1 uses a single 7 bit number to identify a slot. Protocol 2 uses a 3 bit number to identify the page or bank of slots and a 7 bit number to identify the slot within the page or bank. In both protocols slots numbered 0 to 119 (0x00 to 0x77) are locomotive slots and those numbered 120 to 127 (0x78 to 0x7F) are system slots. The slot number is similar to a file handle. System slots are encoded differently from the locomotive slots. 
 
 \index{Fast Clock}
 \begin{tabular}{l l}
@@ -87,7 +87,7 @@ The \gls{Throttle ID} for a \gls{physical throttle} is derived from the throttle
 \item If there are no Free slots to load the new locomotive address into, the command station with return a \textbf{NoFreeSlotsP1} \gls{Response} and this procedure is terminated.
 \item The throttle must then examine the slot data bytes to work out how to process the command station response.
 \item If the slot state is New, Common or Idle then the throttle requests a ``null move" operation by sending the command station a \textbf{MoveSlotsP1} \gls{Command}. The command station returns a \textbf{LocoSlotDataP1} \gls{Response}. 
-\item The \textbf{SetLocoSlotDataP1} can be used at this time to change the decoder mode from that of the default.
+\item The \textbf{SetLocoSlotDataP1} \gls{Command} can be used at this time to change the decoder mode from that of the default.
 \item The throttle will then be able to update speed, direction and function information. Whenever slot information is changed in an active slot, the slot is flagged to be updated as the next DCC packet sent to the track. 
 \end{enumerate}
 
@@ -178,9 +178,11 @@ Any notes.
 \input{Chapter1-Ack}
 \input{Chapter1-Busy}
 \input{Chapter1-CfgSlotDataP1}
+\input{Chapter1-CfgSlotDataP2}
 \input{Chapter1-ConsistDirF0F4}
 \input{Chapter1-GetBrdOpSw}
 \input{Chapter1-GetCfgSlotDataP1}
+\input{Chapter1-GetCfgSlotDataP2}
 \input{Chapter1-GetInterfaceData}
 \input{Chapter1-GetLocoSlotDataLAdrP1}
 \input{Chapter1-GetLocoSlotDataLAdrP2}
@@ -188,6 +190,7 @@ Any notes.
 \input{Chapter1-GetLocoSlotDataP2}
 \input{Chapter1-GetLocoSlotDataSAdrP1}
 \input{Chapter1-GetLocoSlotDataSAdrP2}
+\input{Chapter1-GetSwState}
 \input{Chapter1-IllegalMoveP1}
 \input{Chapter1-IllegalMoveP2}
 \input{Chapter1-IMMPacket}
@@ -238,8 +241,8 @@ Any notes.
 \input{Chapter1-SetSWWithAck}
 \input{Chapter1-SlotNotImplemented}
 \input{Chapter1-SVProg}
+\input{Chapter1-SwState}
 \input{Chapter1-SWReq}
-\input{Chapter1-SWState}
 \input{Chapter1-TransRep}
 \input{Chapter1-UnlinkSlotsP1}
 \input{Chapter1-UnlinkSlotsP2}

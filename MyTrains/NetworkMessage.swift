@@ -208,11 +208,11 @@ public class NetworkMessage : NSObject {
           else if message[1] == 0x3a && message[2] == 0x00 {
             _messageType = .illegalMoveP1
           }
-          else if message[1] == 0x3c && message[2] == 0x30 {
-            _messageType = .swStateClosed
+          else if message[1] == 0x3c {
+            _messageType = .swState
           }
-          else if message[1] == 0x3c && message[2] == 0x10 {
-            _messageType = .swStateThrown
+          else if message[1] == 0x39 && message[2] == 0x00 {
+            _messageType = .invalidLinkP1
           }
           else {
             _messageType = .ack
@@ -220,10 +220,13 @@ public class NetworkMessage : NSObject {
           break
         case NetworkMessageOpcode.OPC_SL_RD_DATA_P2.rawValue:
           if message[1] == 0x15 &&
-              (message[2] & 0b11111000) == 0x00 &&
-              (message[7] & 0b10110000) == 0x00 {
-            if message[3] < 0x78 {
+              (message[2] & 0b11111000) == 0x00 {
+            if message[3] < 0x78 &&
+                (message[7] & 0b10110000) == 0x00 {
               _messageType = .locoSlotDataP2
+            }
+            else if message[3] == 0x7f {
+              _messageType = .cfgSlotDataP2
             }
           }
         case NetworkMessageOpcode.OPC_SL_RD_DATA.rawValue:
@@ -309,6 +312,10 @@ public class NetworkMessage : NSObject {
             else if sn < 0x78 {
               _messageType = .getLocoSlotDataP1
             }
+          }
+          else if message[1] == 0x7f &&
+                    message[2] == 0x40 {
+            _messageType = .getCfgSlotDataP2
           }
           else if message[1] < 0x78 &&
                     (message[2] & 0b11110000) == 0b01000000 {
@@ -621,7 +628,7 @@ public class NetworkMessage : NSObject {
           break
         case NetworkMessageOpcode.OPC_SW_STATE.rawValue:
           if (message[2] & 0b11000000) == 0b00000000 {
-            _messageType = .swState
+            _messageType = .getSWState
           }
           break
         case NetworkMessageOpcode.OPC_UNLINK_SLOTS.rawValue:

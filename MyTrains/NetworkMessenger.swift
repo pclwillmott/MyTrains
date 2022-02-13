@@ -398,6 +398,14 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
 
   }
   
+  public func getCfgSlotDataP2() {
+    
+    let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_RQ_SL_DATA.rawValue, 0x7f, 0x40], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: nil, retryCount: 1)
+
+  }
+  
   public func getProgSlotDataP1() {
     
     let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_RQ_SL_DATA.rawValue, 0x7c, 0x00], appendCheckSum: true)
@@ -454,7 +462,7 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
     
     let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_SW_STATE.rawValue, lo, hi], appendCheckSum: true)
     
-    addToQueue(message: message, delay: TIMING.STANDARD, response: [.swStateClosed,.swStateThrown], delegate: nil, retryCount: 2)
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [.swState], delegate: nil, retryCount: 2)
 
   }
   

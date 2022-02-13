@@ -3,7 +3,7 @@
 
 \underline{Description:} 
 
-An IPL capable device sends this response in response to an \textbf{IPLDiscover} broadcast message.
+An IPL capable device returns this \gls{Response} in response to an \textbf{IPLDiscover} \gls{Command}.
 
 \underline{Group:}
 
@@ -15,7 +15,7 @@ OPC\_PEER\_XFER
 
 \underline{Type:}
 
-Response
+\gls{Response}
 
 \underline{Encoding:} 
 
@@ -76,7 +76,7 @@ Byte 4:
 0 & 0 & 0 & 0 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-& $<$PXCT1$>$ & \\
+& $<$PXCT1$>$ & High bits of D1 to D4\\
 \end{tabular}
 
 \begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
@@ -95,31 +95,7 @@ Byte 5:\index{Product Code}
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$D1$>$ & Product code low 7 bits.\\
-\end{tabular}
-
-\begin{tabular}{l l}
-\underline{Product Code} & \underline{Device}\\
-0x01 & LNRP\\
-0x04 & UT4\\
-0x0C & WTL12\\
-0x14 & DB210 Opto\\
-0x15 & DB210\\
-0x16 & DB220\\
-0x1A & DCS210+\\
-0x1B & DCS210\\
-0x1C & DCS240\\
-0x23 & PR3\\
-0x24 & PR4\\
-0x2A & DT402\\
-0x32 & DT500\\
-0x33 & DCS51\\
-0x34 & DCS52\\
-0x3E & DT602\\
-0x51 & BXPA1\\
-0x58 & BXP88\\
-0x5C & UR92\\
-0x63 & LNWI\\
+& $<$D1$>$ & \gls{Product Code} low 7 bits.\\
 \end{tabular}
 
 Byte 6:\index{Hardware Version}

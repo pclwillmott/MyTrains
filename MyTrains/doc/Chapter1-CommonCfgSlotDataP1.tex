@@ -1,5 +1,5 @@
 
-OST1 to OST6 encode the command station's option switch table. A bit value of 1 means that the switch is closed and a value of 0 means that a switch is thrown. OpSw 8, OpSw 16, OpSw 24, OpSw 32 and OpSw 40 cannot be read due to bit 7 being cleared in the message format. 
+OST1 to OST8 encode the command station's option switch table. A bit value of 1 means that the switch is closed and a value of 0 means that a switch is thrown. OpSw 8, OpSw 16, OpSw 24, OpSw 32, OpSw 40, OpSw 48, OpSw 56 and OpSw 64 cannot be read due to bit 7 being cleared in the message format. 
 
 Byte 2:
 
@@ -25,15 +25,15 @@ Byte 3:
 & $<$OST1$>$ & Option switch table byte 1.\\
 \end{tabular}
 
-\begin{tabular}{p{0.05\linewidth} p{0.1\linewidth} p{0.1\linewidth} p{0.1\linewidth}} 
-\underline{Bit} & \underline{DCS240} & \underline{DCS210} & \underline{DCS210+}\\
-d6 & OpSw7\\
-d5 & OpSw6\\
-d4 & OpSw5\\
-d3 & OpSw4\\
-d2 & OpSw3\\
-d1 & OpSw2\\
-d0 & OpSw1\\
+\begin{tabular}{p{0.05\linewidth} p{0.1\linewidth} } 
+\underline{Bit} & \underline{OpSw} \\
+d6 & OpSw 7\\
+d5 & OpSw 6\\
+d4 & OpSw 5\\
+d3 & OpSw 4\\
+d2 & OpSw 3\\
+d1 & OpSw 2\\
+d0 & OpSw 1\\
 \end{tabular}
 
 Byte 4:
@@ -48,15 +48,15 @@ Byte 4:
 & $<$OST2$>$ & Option switch table byte 2.\\
 \end{tabular}
 
-\begin{tabular}{p{0.05\linewidth} p{0.1\linewidth} p{0.1\linewidth} p{0.1\linewidth}} 
-\underline{Bit} & \underline{DCS240} & \underline{DCS210} & \underline{DCS210+}\\
-d6 & OpSw15\\
-d5 & OpSw14\\
-d4 & OpSw13\\
-d3 & OpSw12\\
-d2 & OpSw11\\
-d1 & OpSw10\\
-d0 & OpSw9\\
+\begin{tabular}{p{0.05\linewidth} p{0.1\linewidth} } 
+\underline{Bit} & \underline{OpSw} \\
+d6 & OpSw 15\\
+d5 & OpSw 14\\
+d4 & OpSw 13\\
+d3 & OpSw 12\\
+d2 & OpSw 11\\
+d1 & OpSw 10\\
+d0 & OpSw 9\\
 \end{tabular}
 
 Byte 5:
@@ -70,15 +70,15 @@ Byte 5:
 & $<$OST3$>$ & Option switch table byte 3.\\
 \end{tabular}
 
-\begin{tabular}{p{0.05\linewidth} p{0.1\linewidth} p{0.1\linewidth} p{0.1\linewidth}} 
-\underline{Bit} & \underline{DCS240} & \underline{DCS210} & \underline{DCS210+}\\
-d6 & OpSw23\\
-d5 & OpSw22\\
-d4 & OpSw21\\
-d3 & OpSw20\\
-d2 & OpSw19\\
-d1 & OpSw18\\
-d0 & OpSw17\\
+\begin{tabular}{p{0.05\linewidth} p{0.1\linewidth} } 
+\underline{Bit} & \underline{OpSw} \\
+d6 & OpSw 23\\
+d5 & OpSw 22\\
+d4 & OpSw 21\\
+d3 & OpSw 20\\
+d2 & OpSw 19\\
+d1 & OpSw 18\\
+d0 & OpSw 17\\
 \end{tabular}
 
 Byte 6:
@@ -93,15 +93,15 @@ Byte 6:
 & $<$OST4$>$ & Option switch table byte 4.\\
 \end{tabular}
 
-\begin{tabular}{p{0.05\linewidth} p{0.1\linewidth} p{0.1\linewidth} p{0.1\linewidth}} 
-\underline{Bit} & \underline{DCS240} & \underline{DCS210} & \underline{DCS210+}\\
-d6 & OpSw31\\
-d5 & OpSw30\\
-d4 & OpSw29\\
-d3 & OpSw28\\
-d2 & OpSw27\\
-d1 & OpSw26\\
-d0 & OpSw25\\
+\begin{tabular}{p{0.05\linewidth} p{0.1\linewidth} } 
+\underline{Bit} & \underline{OpSw} \\
+d6 & OpSw 31\\
+d5 & OpSw 30\\
+d4 & OpSw 29\\
+d3 & OpSw 28\\
+d2 & OpSw 27\\
+d1 & OpSw 26\\
+d0 & OpSw 25\\
 \end{tabular}
 
 Byte 7:\index{Global System Track Status}
@@ -136,15 +136,15 @@ Byte 8:
 & $<$OST5$>$ & Option switch table byte 5.\\
 \end{tabular}
 
-\begin{tabular}{p{0.05\linewidth} p{0.1\linewidth} p{0.1\linewidth} p{0.1\linewidth}} 
-\underline{Bit} & \underline{DCS240} & \underline{DCS210} & \underline{DCS210+}\\
-d6 & OpSw39\\
-d5 & OpSw38\\
-d4 & OpSw37\\
-d3 & OpSw36\\
-d2 & OpSw35\\
-d1 & OpSw34\\
-d0 & OpSw33\\
+\begin{tabular}{p{0.05\linewidth} p{0.1\linewidth} } 
+\underline{Bit} & \underline{OpSw} \\
+d6 & OpSw 39\\
+d5 & OpSw 38\\
+d4 & OpSw 37\\
+d3 & OpSw 36\\
+d2 & OpSw 35\\
+d1 & OpSw 34\\
+d0 & OpSw 33\\
 \end{tabular}
 
 Byte 9:
@@ -159,15 +159,15 @@ Byte 9:
 & $<$OST6$>$ & Option switch table byte 6.\\
 \end{tabular}
 
-\begin{tabular}{p{0.05\linewidth} p{0.1\linewidth} p{0.1\linewidth} p{0.1\linewidth}} 
-\underline{Bit} & \underline{DCS240} & \underline{DCS210} & \underline{DCS210+}\\
-d6 & OpSw47\\
-d5 & OpSw46\\
-d4 & OpSw45\\
-d3 & OpSw44\\
-d2 & OpSw43\\
-d1 & OpSw42\\
-d0 & OpSw41\\
+\begin{tabular}{p{0.05\linewidth} p{0.1\linewidth} } 
+\underline{Bit} & \underline{OpSw} \\
+d6 & OpSw 47\\
+d5 & OpSw 46\\
+d4 & OpSw 45\\
+d3 & OpSw 44\\
+d2 & OpSw 43\\
+d1 & OpSw 42\\
+d0 & OpSw 41\\
 \end{tabular}
 
 Byte 10:
@@ -179,17 +179,18 @@ Byte 10:
 0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-&  & Unknown.\\
+& $<$OST7$>$ & Option switch table byte 7.\\
 \end{tabular}
 
-\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
-d6 & \\
-d5 & \\
-d4 & \\
-d3 & \\
-d2 & \\
-d1 & \\
-d0 & \\
+\begin{tabular}{p{0.05\linewidth} p{0.1\linewidth} } 
+\underline{Bit} & \underline{OpSw} \\
+d6 & OpSw 55\\
+d5 & OpSw 54\\
+d4 & OpSw 53\\
+d3 & OpSw 52\\
+d2 & OpSw 51\\
+d1 & OpSw 50\\
+d0 & OpSw 49\\
 \end{tabular}
 
 Byte 11:
@@ -198,10 +199,21 @@ Byte 11:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & n & n & n & n & n & n & n\\
+0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-& $<$CSM$>$ & \gls{Product Code}.\\
+& $<$OST8$>$ & Option switch table byte 8.\\
+\end{tabular}
+
+\begin{tabular}{p{0.05\linewidth} p{0.1\linewidth} } 
+\underline{Bit} & \underline{OpSw} \\
+d6 & OpSw 63\\
+d5 & OpSw 62\\
+d4 & OpSw 61\\
+d3 & OpSw 60\\
+d2 & OpSw 59\\
+d1 & OpSw 58\\
+d0 & OpSw 57\\
 \end{tabular}
 
 Byte 12:

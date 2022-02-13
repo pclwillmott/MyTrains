@@ -1,9 +1,9 @@
 \newpage
-\subsection{GetLocoSlotDataP2}\index{GetLocoSlotDataP2}\index{Slot}
+\subsection{GetCfgSlotDataP2}\index{GetCfgSlotDataP2}
 
 \underline{Description:}
 
-This \gls{Command} requests the locomotive slot data for the specified slot. The command station responds with a \textbf{LocoSlotDataP2} \gls{Response}.
+This \gls{Command} requests the configuration slot data. The command station returns a \textbf{CfgSlotDataP2} \gls{Response}.
 
 \underline{Protocol:}
 
@@ -19,7 +19,7 @@ OPC\_RQ\_SL\_DATA
 
 \underline{Type:}
 
-\gls{Command}
+Command
 
 \underline{Encoding:} 
 
@@ -41,10 +41,10 @@ Byte 1:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & n & n & n & n & n & n & n\\
+0 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
 \hline
 \end{tabular}
-& $<$SLOT\#$>$ & Slot number in the range 0x00 to 0x77.\\
+& 0x7F & \\
 \end{tabular}
 
 Byte 2:
@@ -53,10 +53,10 @@ Byte 2:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 1 & 0 & 0 & d3 & d2 & d1 & d0\\
+0 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\
 \hline
 \end{tabular}
-& $<$SLOTP$>$ & Bits d2 to d0 contain the slot page number in the range 0x0 to 0x7.\\
+& 0x40 & \\
 \end{tabular}
 
 Byte 3:
@@ -74,7 +74,7 @@ Byte 3:
 
 \underline{Response:} 
 
-\textbf{LocoSlotDataP2} or \textbf{SlotNotImplemented}
+\textbf{CfgSlotDataP2}
 
 \underline{Signature:}
 
@@ -87,19 +87,19 @@ Byte 0:
 1 & 0 & 1 & 1 & 1 & 0 & 1 & 1\\
 \hline
 \end{tabular}
-& 0xBB &\\
+& 0xBB & \\
 \end{tabular}
 
 Byte 1:
 
-\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & n & n & n & n & n & n & n\\
+0 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
 \hline
 \end{tabular}
-& less than 0x78\\
+& 0x7F & \\
 \end{tabular}
 
 Byte 2:
@@ -108,10 +108,10 @@ Byte 2:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & 1 & 0 & 0 & $\times$ & $\times$ & $\times$ & $\times$\\
+0 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\
 \hline
 \end{tabular}
-& \\
+& 0x40 & \\
 \end{tabular}
 
 \underline{Notes:} 
