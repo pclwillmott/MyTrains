@@ -1,9 +1,9 @@
 \newpage
-\subsection{PeerXfer16}\index{PeerXfer16}
+\section{PeerXfer16}\index{PeerXfer16}
 
 \underline{Description:}
 
-This command sends the 8 bytes of data from one device to another peer to peer. This message takes many forms and so what is presented here is a generic description. The specific forms are included elsewhere as detailed messages in their own right.
+This \gls{Command} sends the 8 bytes of data from one device to another peer to peer. This \gls{Command} takes many forms and so what is presented here is a generic description. The specific forms are included elsewhere as detailed messages in their own right.
 
 \begin{tabular}{p{0.2\linewidth} p{0.1\linewidth} p{0.1\linewidth} p{0.50\linewidth}} 
 \underline{SRC} & \underline{DSTL} & \underline{DSTH} & Comments\\
@@ -28,7 +28,7 @@ OPC\_PEER\_XFER
 
 \underline{Type:}
 
-Message
+\gls{Command}
 
 \underline{Encoding:} 
 
@@ -186,7 +186,7 @@ Byte 10:
 & $<$PXCT2$>$ & Data type code and high bits for D5 to D8.\\
 \end{tabular}
 
-\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
+\begin{tabular}{p{0.05\linewidth} p{0.91\linewidth}} 
 d6 & XC5. Data type code.\\
 d5 & XC4. Data type code.\\
 d4 & XC3. Data type code.\\
@@ -196,7 +196,7 @@ d1 & D6.7. High bit\\
 d0 & D5.7. High bit\\
 \end{tabular}
 
-\begin{tabular}{p{0.1\linewidth} p{0.1\linewidth} p{0.1\linewidth} p{0.4\linewidth}} 
+\begin{tabular}{p{0.1\linewidth} p{0.1\linewidth} p{0.1\linewidth} p{0.6\linewidth}} 
 \underline{XC5} & \underline{XC4} & \underline{XC3} & \underline{Meaning}\\
 0 & 0 & 0 & ANSI text string. IPL download setup subcode.\\
 0 & 0 & 1 & IPL download address subcode.\\

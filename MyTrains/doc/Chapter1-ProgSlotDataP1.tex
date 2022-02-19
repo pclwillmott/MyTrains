@@ -1,12 +1,12 @@
 
 \newpage
-\subsection{ProgSlotDataP1}\index{ProgSlotDataP1}\index{Configuration Variables}\index{Programming}
+\section{ProgSlotDataP1}\index{ProgSlotDataP1}\index{Configuration Variables}\index{Programming}
 
 \rule{15.1cm}{0.4pt}
 
 \underline{Description:}
 
-This response provides data for the programming slot.
+This \gls{Response} provides data for the programming slot.
 
 \underline{Group:}
 
@@ -18,7 +18,7 @@ OPC\_SL\_RD\_DATA
 
 \underline{Type:}
 
-Response
+\gls{Response}
 
 \underline{Encoding:} 
 
@@ -80,17 +80,17 @@ d1 & 1 - unknown\\
 d0 & 1 - unknown\\
 \end{tabular}
 
-\begin{tabular}{p{0.05\linewidth}p{0.05\linewidth}p{0.05\linewidth}p{0.05\linewidth}p{0.05\linewidth}p{0.05\linewidth}p{0.4\linewidth}}
+\begin{tabular}{p{0.05\linewidth}p{0.05\linewidth}p{0.05\linewidth}p{0.05\linewidth}p{0.05\linewidth}p{0.05\linewidth}p{0.51\linewidth}}
 \underline{d5} & \underline{d4} & \underline{d3} & \underline{d2} & \underline{d1} & \underline{d0} & \underline{Programming Mode}\\
-1 & 0 & 0 & 0 & $\times$ & $\times$ & Paged mode byte read/write on service track\\
-1 & 0 & 0 & 1 & $\times$ & $\times$ &  Direct mode byte read/write on service track\\
-0 & 0 & 0 & 1 & $\times$ & $\times$ &  Direct mode bit read/write on service track\\
-$\times$ & 0 & 1 & 0 & $\times$ & $\times$ &  Physical register byte read/write on service track\\
+1 & 0 & 0 & 0 & $\times$ & $\times$ & \gls{Paged Mode} byte read/write on the \gls{Programming Track}\\
+1 & 0 & 0 & 1 & $\times$ & $\times$ &  \gls{Direct Mode} byte read/write on the \gls{Programming Track}\\
+0 & 0 & 0 & 1 & $\times$ & $\times$ &  \gls{Direct Mode} bit read/write on the \gls{Programming Track}\\
+$\times$ & 0 & 1 & 0 & $\times$ & $\times$ &  \gls{Physical Register Mode} byte read/write on the \gls{Programming Track}\\
 $\times$ & 0 & 1 & 1 & $\times$ & $\times$ &  Service track reserved function\\
-1 &  0 & 0 & 1 & $\times$ & $\times$ &  Ops mode byte program no feedback\\
-1 &  0 & 1 & 1 & $\times$ & $\times$ &  Ops mode byte program with feedback\\
-0 &  0 & 0 & 1 & $\times$ & $\times$ &  Ops mode bit program no feedback\\
-0 &  0 & 1 & 1 & $\times$ & $\times$ &  Ops mode bit program with feedback\\
+1 &  0 & 0 & 1 & $\times$ & $\times$ &  \gls{Operations Mode} byte program no feedback\\
+1 &  0 & 1 & 1 & $\times$ & $\times$ &  \gls{Operations Mode} byte program with feedback\\
+0 &  0 & 0 & 1 & $\times$ & $\times$ &  \gls{Operations Mode} bit program no feedback\\
+0 &  0 & 1 & 1 & $\times$ & $\times$ &  \gls{Operations Mode} bit program with feedback\\
 \end{tabular}
 
 Byte 4:
@@ -121,7 +121,7 @@ Byte 5:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$HOPSA$>$ & In operations mode programming this contains the 7 high address bits of the locomotive to program. 0x00 if service mode.\\
+& $<$HOPSA$>$ & In \gls{Operations Mode} programming this contains the 7 high address bits of the locomotive to program. 0x00 if service mode.\\
 \end{tabular}
 
 Byte 6:
@@ -133,7 +133,7 @@ Byte 6:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$LOPSA$>$ & In operations mode programming this contains the 7 low address bits of the locomotive to program. 0x00 if service mode.\\
+& $<$LOPSA$>$ & In \gls{Operations Mode} programming this contains the 7 low address bits of the locomotive to program. 0x00 if service mode.\\
 \end{tabular}
 
 Byte 7:
@@ -145,15 +145,15 @@ Byte 7:
 0 & d6 & 0 & 0 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-& $<$TRK$>$ & Global system track status.\\
+& $<$TRK$>$ & \gls{Global System Track Status}.\\
 \end{tabular}
 
-\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
-d6 & 1 means this command station implements version 2 slot commands. This can be turned off on the DCS240 by setting the OpSw 44 to be closed.\\
+\begin{tabular}{p{0.05\linewidth} p{0.91\linewidth}} 
+d6 & 1 means this command station implements version 2 slot commands.\\
 d3 & 1 means the programming track is busy.\\
-d2 & 1 means this master implements the Network version 1.1 capability,  0 means the master is a DT200.\\
+d2 & 1 means this master implements Loconet version 1.1 capability,  0 means the master is a DT200.\\
 d1 & 0 means the track is paused, broadcast an emergency stop.\\
-d0 & 1 means the DCC packets are on in the master, global power up.\\
+d0 & 1 means the DCC packets are on in the command station and global power is up.\\
 \end{tabular}
 
 Byte 8:
@@ -208,7 +208,7 @@ Byte 11:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$SNH$>$ & Throttle ID low 7 bits of low byte.\\
+& $<$SNL$>$ & Throttle ID low 7 bits of low byte.\\
 \end{tabular}
 
 Byte 12:
@@ -220,7 +220,7 @@ Byte 12:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$SNL$>$ & Throttle ID low 7 bits of high byte.\\
+& $<$SNH$>$ & Throttle ID low 7 bits of high byte.\\
 \end{tabular}
 
 Byte 13:

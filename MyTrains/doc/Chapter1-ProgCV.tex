@@ -1,12 +1,12 @@
 
 \newpage
-\subsection{ProgCV}\index{ProgCV}\index{Configuration Variables}\index{Programming}
+\section{ProgCV}\index{ProgCV}\index{Configuration Variables}\index{Programming}
 
 \rule{15.1cm}{0.4pt}
 
 \underline{Description:}
 
-The \textbf{ProgCV} command is used to read and write a locomotive's mobile decoder configuration variables.
+The \textbf{ProgCV} \gls{Command} is used to read and write a locomotive's mobile decoder configuration variables.
 
 \underline{Group:}
 
@@ -18,7 +18,7 @@ OPC\_WR\_SL\_DATA
 
 \underline{Type:}
 
-Command
+\gls{Command}
 
 \underline{Encoding:} 
 
@@ -80,17 +80,17 @@ d1 & 1 - unknown\\
 d0 & 1 - unknown\\
 \end{tabular}
 
-\begin{tabular}{p{0.05\linewidth}p{0.05\linewidth}p{0.05\linewidth}p{0.05\linewidth}p{0.05\linewidth}p{0.05\linewidth}p{0.4\linewidth}}
+\begin{tabular}{p{0.05\linewidth}p{0.05\linewidth}p{0.05\linewidth}p{0.05\linewidth}p{0.05\linewidth}p{0.05\linewidth}p{0.515\linewidth}}
 \underline{d5} & \underline{d4} & \underline{d3} & \underline{d2} & \underline{d1} & \underline{d0} & \underline{Programming Mode}\\
-1 & 0 & 0 & 0 & $\times$ & $\times$ & Paged mode byte read/write on service track\\
-1 & 0 & 1 & 0 & $\times$ & $\times$ &  Direct mode byte read/write on service track\\
-0 & 0 & 1 & 0 & $\times$ & $\times$ &  Direct mode bit read/write on service track\\
-$\times$ & 1 & 0 & 0 & $\times$ & $\times$ &  Physical register byte read/write on service track\\
+1 & 0 & 0 & 0 & $\times$ & $\times$ & \gls{Paged Mode} byte read/write on the \gls{Programming Track}\\
+1 & 0 & 1 & 0 & $\times$ & $\times$ &  \gls{Direct Mode} byte read/write on the \gls{Programming Track}\\
+0 & 0 & 1 & 0 & $\times$ & $\times$ &  \gls{Direct Mode} bit read/write on the \gls{Programming Track}\\
+$\times$ & 1 & 0 & 0 & $\times$ & $\times$ &  \gls{Physical Register Mode} byte read/write on the \gls{Programming Track}\\
 $\times$ & 1 & 1 & 0 & $\times$ & $\times$ &  Service track reserved function\\
-1 &  0 & 0 & 1 & $\times$ & $\times$ &  Ops mode byte program on mainline no feedback\\
-1 &  0 & 1 & 1 & $\times$ & $\times$ &  Ops mode byte program on mainline with feedback\\
-0 &  0 & 0 & 1 & $\times$ & $\times$ &  Ops mode bit program on mainline no feedback\\
-0 &  0 & 1 & 1 & $\times$ & $\times$ &  Ops mode bit program on mainline with feedback\\
+1 &  0 & 0 & 1 & $\times$ & $\times$ &  \gls{Operations Mode} byte program on mainline no feedback\\
+1 &  0 & 1 & 1 & $\times$ & $\times$ &  \gls{Operations Mode} byte program on mainline with feedback\\
+0 &  0 & 0 & 1 & $\times$ & $\times$ &  \gls{Operations Mode} bit program on mainline no feedback\\
+0 &  0 & 1 & 1 & $\times$ & $\times$ &  \gls{Operations Mode} program on mainline with feedback\\
 \end{tabular}
 
 Byte 4:
@@ -114,7 +114,7 @@ Byte 5:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$HOPSA$>$ & In operations mode programming this contains the 7 high address bits of the locomotive to program. 0x00 if service mode.\\
+& $<$HOPSA$>$ & In \gls{Operations Mode} programming this contains the 7 high address bits of the locomotive to program. 0x00 if service mode.\\
 \end{tabular}
 
 Byte 6:
@@ -126,7 +126,7 @@ Byte 6:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$LOPSA$>$ & In operations mode programming this contains the 7 low address bits of the locomotive to program. 0x00 if service mode.\\
+& $<$LOPSA$>$ & In \gls{Operations Mode} programming this contains the 7 low address bits of the locomotive to program. 0x00 if service mode.\\
 \end{tabular}
 
 Byte 7:

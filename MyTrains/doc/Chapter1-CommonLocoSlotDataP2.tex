@@ -61,13 +61,13 @@ Note: d7 is set to 0 in the message by the command station and so may not correc
 \begin{tabular}{p{0.05\linewidth} p{0.05\linewidth} p{0.05\linewidth} p{0.75\linewidth}} 
 \underline{d2} & \underline{d1} & \underline{d0} & \\
 0 & 0 & 0 & 28 step decoder. 3-byte packet regular mode\\
-0 & 0 & 1 & 28 step decoder. Generate trinary packets for this mobile address\\
+0 & 0 & 1 & 28 step decoder. Generate Motorola trinary packets for this mobile address\\
 0 & 1 & 0 & 14 step decoder. \\
 0 & 1 & 1 & 128 step decoder. \\
-1 & 0 & 0 & 28 step decoder. Allow advanced consisting\\
+1 & 0 & 0 & 28 step decode with \gls{Advanced Consisting} enabled\\
 1 & 0 & 1 & reserved\\
 1 & 1 & 0 & reserved\\
-1 & 1 & 1 & 128 step decoder. Allow advanced consisting\\
+1 & 1 & 1 & 128 step decoder with \gls{Advanced Consisting} enabled\\
 \end{tabular}
 
 Byte 5:
@@ -106,8 +106,8 @@ Byte 7:
 & $<$TRK$>$ & Global system track status.\\
 \end{tabular}
 
-\begin{tabular}{p{0.05\linewidth} p{0.6\linewidth}} 
-d6 & 1 means this command station implements protocol 2 messages. This can be turned off on the DCS240 by setting the OpSw 44 to be closed.\\
+\begin{tabular}{p{0.05\linewidth} p{0.92\linewidth}} 
+d6 & 1 means this command station implements protocol 2 messages.\\
 d5 & Reserved. Set to 0.\\
 d4 & Reserved. Set to 0.\\
 d3 & 1 means the programming track is busy.\\

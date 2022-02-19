@@ -1,0 +1,60 @@
+% Activate the following line by filling in the right side. If for example the name of the root file is Main.tex, write
+% "...root = Main.tex" if the chapter file is in the same directory, and "...root = ../Main.tex" if the chapter is in a subdirectory.
+ 
+%!TEX root =  
+
+\chapter[Network Protocol]{The Network Protocol}.  
+
+\section{Overview}
+
+\Gls{Loconet} is a \gls{peer-to-peer} distributed network system on which all devices can monitor the data flow. The network is event driven and is not \gls{polled} by a centralised controller in normal operation. The normal network state is quiet, with no data traffic unless a device has information to send.
+
+The network data is sent in asynchronous format using 1 start bit, 8 data bits and 1 stop bit. The 8 bit data is transmitted least significant bit first. The bit times are 60.0 $\mu$S or 16,660 baud +/- 1.5\%. A computer can connect to a USB interface at higher baud rates and the device will make the necessary conversion. Bytes may be transmitted back-to-back, with a start bit immediately following the stop bit of the previous character. 
+
+All the network communications are via multi-byte messages. The \gls{command station}\index{Command Station} is the device that maintains the refresh stack for \gls{DCC} packet generation and generates the DCC track data. Refresh of information is typically only performed for a \gls{mobile decoder}. A \gls{stationary decoder} is not refreshed and individual immediate commands are sent out to the track as requested.
+
+The command station is only privileged in respect to performing the task of maintaining the locomotive refresh stack and generating DCC packets. In this way other network transactions may occur that the command station does not need to be involved with or understand, as long as they follow the message protocol and timing requirements. i.e. other devices may have a dialog on the network without disturbing or involving the command station. Devices on the network monitor the messages, check for format and data integrity and parse good messages to decode if action is required in the context. Devices such as throttles, input sensors, computer interfaces and control panels may generate the network messages without needing prompting or \gls{polling} by a central controller.
+
+Devices frequently will be added and removed from an operating the network. The devices and protocol are tolerant of electrical and data transients. The format chosen gives a good degree of data integrity, guaranteed quick network-state synchronisation, high data throughput, good distribution of access to many competing devices and low event latency. 
+
+\section{Message Format}\index{Message Format}
+
+The data bytes on the network are defined as 8 bit data with the most significant bit as an opcode flag bit. If the most significant bit is 1, then the 7 least significant bits are interpreted as an \gls{opcode}\index{Opcode}. The opcode may only occur once in a valid message and it is the first byte of a message. The opcode does not necessarily uniquely identify a message type. Sometimes the opcode must be used in combination with other bits or bytes in the \gls{message} to determine the message \gls{signature}\index{Signature}. All the remaining bytes in the message must have a most significant bit of 0, including the last checksum byte. The checksum\index{Checksum} is the 1's complement of the byte wise exclusive or of all the bytes in the message, except the checksum itself. To validate data accuracy, all the bytes in a correctly formatted message are exclusive or'ed. If this resulting byte value is 0xFF, then the message data is accepted as good. Any message that has format or framing errors, data errors or is a fragment caused by noise glitches and does not completely follow the message format will be ignored by all receivers, and a new opcode will be scanned for re-synchronisation.
+
+The opcodes may be examined to determine message length and if subsequent response message is required. Data bits d6 and d5 encode the message length\index{Message Length}. The message length includes the opcode and the checksum bytes. When bit d3 equals 1 a follow-on message or reply is expected. For variable byte messages the byte following the opcode in the message is a 7 bit byte count.
+
+\begin{tabular}{p{0.05\linewidth} p{0.05\linewidth}  p{0.05\linewidth}  p{0.05\linewidth}  p{0.05\linewidth}  p{0.05\linewidth}  p{0.05\linewidth}  p{0.05\linewidth} p{0.36\linewidth}} 
+\underline{d7} & \underline{d6} & \underline{d5} & \underline{d4} & \underline{d3} & \underline{d2} & \underline{d1} & \underline{d0} & \\
+1 & 0 & 0 & E & D & C & B & A & 2 byte message\\
+1 & 0 & 1 & E & D & C & B & A & 4 byte message\\
+1 & 1 & 0 & E & D & C & B & A & 6 byte message\\
+1 & 1 & 1 & E & D & C & B & A & Variable length message.\\
+\end{tabular}
+
+The A,B,C,D,E are bits available to encode 32 opcodes per message length.
+
+There are four main message types: Broadcast, Command, Response, and Report.
+
+\subsection{Broadcast}\index{Broadcast Message}
+A Broadcast is a message sent by a device to all other devices on the network. 
+
+\subsection{Command}\index{Command Message}
+A Command is a message sent to a device to request it to do something. The recipient device may send a Response back to the sender. Technically a Command is a request for action. The Command may not reach the intended recipient or the recipient may ignore the request. 
+
+\subsection{Response}\index{Response Message}
+A Response is a message sent in response to a Command. 
+
+\subsection{Report}\index{Report Message}
+A Report is a message sent by a device in response to a change in its internal and/or external state.
+
+\section{Slots}\index{slots}
+
+The command station contains an array of read/write slots. There are two classes of slots (\gls{locomotive slot} and \gls{system slot}) and two protocols for manipulating the slots. Protocol 1\index{Protocol 1}\index{Protocol 2} allows up to 120 locomotive slots and 8 system slots. Each slot contains 10 bytes of data. Digitrax calls these slots \gls{standard slots}. Protocol 2 allows up to 960 locomotive slots and 64 system slots. Each slot contains 15 bytes of data. Digitrax calls these slots \gls{expanded slots}. Not all command stations implement both protocols. A command station may also not implement the maximum number of locomotive slots for the protocols it supports.  The user should check the \gls{Global System Track Status} bits in a \textbf{LocoSlotDataP1} or \textbf{LocoSlotDataP2} response to determine which protocols are supported. Expanded capability throttles, i.e. those that implement protocol 2,  are given the expanded slots first, leaving the standard slots available for legacy throttles.  In this document message mnemonics that are suffixed ``P1" belong to protocol 1 and those suffixed ``P2" belong to protocol 2. Protocol 1 uses a single 7 bit number to identify a slot. Protocol 2 uses a 3 bit number to identify the page or bank of slots and a 7 bit number to identify the slot within the page or bank. In both protocols slots numbered 0 to 119 (0x00 to 0x77) are locomotive slots and those numbered 120 to 127 (0x78 to 0x7F) are system slots. The slot number is similar to a file handle. System slots are encoded differently from the locomotive slots. 
+
+\index{Fast Clock}
+\begin{tabular}{l l}
+\underline{System Slot\#} & \underline{Description}\\
+123 (0x7B) & Fast Clock\\
+124 (0x7C & Programming\\
+127 (0x7F) & Configuration\\
+\end{tabular}

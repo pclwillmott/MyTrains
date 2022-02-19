@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.5.28)  13 FEB 2022 14:25
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.5.28)  18 FEB 2022 14:43
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -493,9 +493,12 @@ Package: supertabular 2004/02/20 v4.1e the supertabular environment
 ty
 Package: glossary-tree 2018/04/07 v4.37 (NLCT)
 \glstreeindent=\skip59
-)) (./GlossaryDefs.tex) (./Network Notes.aux (./Chapter1.aux) (./Chapter2.aux) 
-(./Chapter3.aux) (./Chapter4.aux) (./AppendixA.aux) (./AppendixB.aux)
-(./AppendixC.aux) (./AppendixD.aux))
+)) (./GlossaryDefs.tex) (./Network Notes.aux (./Chapter1-NetworkProtocol.aux) (
+./Chapter2-LocomotiveControl.aux) (./Chapter3-SwitchControl.aux)
+(./Chapter4-DetectionTransponding.aux) (./Chapter5-Programming.aux)
+(./Chapter6-FastClock.aux) (./Chapter7-IPL.aux) (./Chapter8-Statistics.aux)
+(./Chapter9-Messages.aux) (./AppendixA.aux) (./AppendixB.aux) (./AppendixC.aux)
+(./AppendixD.aux))
 \openout1 = `"Network Notes.aux"'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 50.
@@ -614,9 +617,9 @@ LaTeX Warning: No \author given.
 \openout5 = `"Network Notes.toc"'.
 
  [6]
-\openout2 = `Chapter1.aux'.
+\openout2 = `Chapter1-NetworkProtocol.aux'.
 
- (./Chapter1.tex
+ (./Chapter1-NetworkProtocol.tex
 Chapter 1.
 [1
 
@@ -627,7 +630,787 @@ Overfull \hbox (34.80963pt too wide) in paragraph at lines 26--33
 [][] 
  []
 
-[2] [3] [4] [5] [6] [7] (./Chapter1-Ack.tex [8]
+[2] [3]) [4]
+\openout2 = `Chapter2-LocomotiveControl.aux'.
+
+ (./Chapter2-LocomotiveControl.tex
+Chapter 2.
+
+Underfull \vbox (badness 4531) has occurred while \output is active []
+
+ [5
+
+
+
+]
+[6] [7]) [8]
+\openout2 = `Chapter3-SwitchControl.aux'.
+
+ (./Chapter3-SwitchControl.tex
+Chapter 3.
+) [9
+
+
+
+]
+\openout2 = `Chapter4-DetectionTransponding.aux'.
+
+ (./Chapter4-DetectionTransponding.tex [10
+
+
+
+]
+Chapter 4.
+) [11]
+\openout2 = `Chapter5-Programming.aux'.
+
+ (./Chapter5-Programming.tex [12
+
+
+
+]
+Chapter 5.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 23.
+(/usr/local/texlive/2018/texmf-dist/tex/latex/base/omscmr.fd
+File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 23.
+ [13] [14]
+[15]
+Overfull \hbox (225.34578pt too wide) in paragraph at lines 114--114
+[]\OT1/cmtt/m/n/10.95 <D5> 0x00 0b00000000 - HOPSA - Ops mode programming - 7 h
+igh address bits of Loco to program, 0x00 if service mode[] 
+ []
+
+
+Overfull \hbox (409.30379pt too wide) in paragraph at lines 114--114
+[]\OT1/cmtt/m/n/10.95 <D6> 0x0e 0b00001110 - LOPSA - Ops Mode programming - 7 l
+ow address bits of loco to program, 0x00 if service mode (however 0e is the loc
+o address)[] 
+ []
+
+
+Overfull \hbox (231.09447pt too wide) in paragraph at lines 114--114
+[]\OT1/cmtt/m/n/10.95 <D7> 0x00 0b00000000 - TRK - normal track status for comm
+and station - this doesn't look right set to 0x00 for send[] 
+ []
+
+
+Overfull \hbox (41.84674pt too wide) in paragraph at lines 131--143
+[][] 
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [16]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [17]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [18]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [19]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [20]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [21]
+[22]
+Overfull \hbox (6.00163pt too wide) in paragraph at lines 377--378
+[]$[]$| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 391--391
+[]\OT1/cmr/m/n/8 Acceleration
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 398--398
+[]\OT1/cmr/m/n/8 Deceleration
+ []
+
+
+Overfull \hbox (29.79303pt too wide) in paragraph at lines 376--410
+[][] 
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [23]
+Overfull \vbox (8.5285pt too high) has occurred while \output is active []
+
+
+[24]
+Overfull \hbox (6.00163pt too wide) in paragraph at lines 412--413
+[]$[]$| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 422--422
+[]\OT1/cmr/m/n/8 Manufacturer
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 438--438
+[]\OT1/cmr/m/n/8 EMF Feed-back
+ []
+
+
+Underfull \hbox (badness 5388) in paragraph at lines 441--441
+[]\OT1/cmr/m/n/8 Packet time-out
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 444--444
+[]\OT1/cmr/m/n/8 Power Source
+ []
+
+
+Overfull \hbox (6.85205pt too wide) in paragraph at lines 448--448
+[]\OT1/cmr/m/n/8 0b00000001| 
+ []
+
+
+Overfull \hbox (6.85205pt too wide) in paragraph at lines 449--449
+[]\OT1/cmr/m/n/8 0b00000010| 
+ []
+
+
+Overfull \hbox (6.85205pt too wide) in paragraph at lines 450--450
+[]\OT1/cmr/m/n/8 0b00000100| 
+ []
+
+
+Overfull \hbox (6.85205pt too wide) in paragraph at lines 451--451
+[]\OT1/cmr/m/n/8 0b00001000| 
+ []
+
+
+Overfull \hbox (6.85205pt too wide) in paragraph at lines 452--452
+[]\OT1/cmr/m/n/8 0b00010000| 
+ []
+
+
+Overfull \hbox (6.85205pt too wide) in paragraph at lines 453--453
+[]\OT1/cmr/m/n/8 0b00100000| 
+ []
+
+
+Overfull \hbox (29.79303pt too wide) in paragraph at lines 411--457
+[][] 
+ []
+
+
+Overfull \vbox (122.52835pt too high) has occurred while \output is active []
+
+
+[25]
+Overfull \hbox (6.00163pt too wide) in paragraph at lines 459--460
+[]$[]$| 
+ []
+
+
+Underfull \hbox (badness 6559) in paragraph at lines 461--461
+[]\OT1/cmr/m/n/8 Alternate Mode
+ []
+
+
+Underfull \hbox (badness 6559) in paragraph at lines 466--466
+[]\OT1/cmr/m/n/8 Alternate Mode
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 475--475
+[]\OT1/cmr/m/n/8 Extended Ad-
+ []
+
+
+Overfull \hbox (29.79303pt too wide) in paragraph at lines 458--484
+[][] 
+ []
+
+
+Overfull \vbox (46.52861pt too high) has occurred while \output is active []
+
+
+[26]
+Overfull \hbox (6.00163pt too wide) in paragraph at lines 486--487
+[]$[]$| 
+ []
+
+
+Underfull \hbox (badness 3354) in paragraph at lines 488--488
+[]\OT1/cmr/m/n/8 Consist Ad-dress
+ []
+
+
+Underfull \hbox (badness 3354) in paragraph at lines 493--493
+[]\OT1/cmr/m/n/8 Consist Ad-dress
+ []
+
+
+Overfull \hbox (29.79303pt too wide) in paragraph at lines 485--508
+[][] 
+ []
+
+
+Overfull \vbox (27.52866pt too high) has occurred while \output is active []
+
+
+[27]
+Overfull \hbox (6.00163pt too wide) in paragraph at lines 510--511
+[]$[]$| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 515--515
+[]\OT1/cmr/m/n/8 Decoder Au-to-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 515--515
+\OT1/cmr/m/n/8 matic Stop-ping
+ []
+
+
+Overfull \hbox (5.93959pt too wide) in paragraph at lines 518--537
+[][]| 
+ []
+
+
+Overfull \hbox (29.79303pt too wide) in paragraph at lines 509--538
+[][] 
+ []
+
+[28]
+Overfull \hbox (6.00163pt too wide) in paragraph at lines 540--541
+[]$[]$| 
+ []
+
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <8> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 556.
+
+Overfull \hbox (5.93959pt too wide) in paragraph at lines 544--562
+[][]| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 563--563
+[]\OT1/cmr/m/n/8 Bi-Directional
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 563--563
+\OT1/cmr/m/n/8 Com-mu-ni-ca-tion
+ []
+
+
+Overfull \hbox (5.93959pt too wide) in paragraph at lines 566--585
+[][]| 
+ []
+
+
+Underfull \hbox (badness 3354) in paragraph at lines 591--592
+[]\OT1/cmr/m/n/8 Enable/Disable RailCom[] Plus au-to-matic loco
+ []
+
+
+Overfull \hbox (5.93959pt too wide) in paragraph at lines 588--597
+[][]| 
+ []
+
+
+Overfull \hbox (29.79303pt too wide) in paragraph at lines 539--599
+[][] 
+ []
+
+
+Overfull \vbox (46.5282pt too high) has occurred while \output is active []
+
+
+[29]
+Overfull \hbox (6.00163pt too wide) in paragraph at lines 601--602
+[]$[]$| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 603--603
+[]\OT1/cmr/m/n/8 Configurations
+ []
+
+
+Overfull \hbox (5.93959pt too wide) in paragraph at lines 604--623
+[][]| 
+ []
+
+
+Overfull \hbox (5.93959pt too wide) in paragraph at lines 626--646
+[][]| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 648--648
+[]\OT1/cmr/m/n/8 Error In-for-ma-
+ []
+
+
+Overfull \hbox (29.79303pt too wide) in paragraph at lines 600--651
+[][] 
+ []
+
+
+Overfull \vbox (75.02829pt too high) has occurred while \output is active []
+
+
+[30]
+Overfull \hbox (6.00163pt too wide) in paragraph at lines 653--654
+[]$[]$| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 663--663
+[]\OT1/cmr/m/n/8 Output Lo-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 663--663
+\OT1/cmr/m/n/8 ca-tions 1-14
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 663--663
+\OT1/cmr/m/n/8 for Func-tions
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 663--663
+\OT1/cmr/m/n/8 FL(f), FL(r),
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 666--667
+[]\OT1/cmr/m/n/8 Manufacturer
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 668--668
+[]\OT1/cmr/m/n/8 Protocol se-lec-
+ []
+
+
+Overfull \hbox (5.93959pt too wide) in paragraph at lines 670--681
+[][]| 
+ []
+
+
+Overfull \hbox (29.79303pt too wide) in paragraph at lines 652--683
+[][] 
+ []
+
+[31]
+Overfull \hbox (6.00163pt too wide) in paragraph at lines 685--686
+[]$[]$| 
+ []
+
+
+Overfull \hbox (5.93959pt too wide) in paragraph at lines 688--707
+[][]| 
+ []
+
+
+Overfull \hbox (5.93959pt too wide) in paragraph at lines 710--719
+[][]| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 724--724
+[]\OT1/cmr/m/n/8 Control Ref-er-
+ []
+
+
+Underfull \hbox (badness 1215) in paragraph at lines 730--730
+[]\OT1/cmr/m/n/8 BEMF In-flu-ence
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 736--736
+[]\OT1/cmr/m/n/8 Sound vol-ume
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 738--738
+[]\OT1/cmr/m/n/8 Brake sound
+ []
+
+
+Overfull \hbox (29.79303pt too wide) in paragraph at lines 684--741
+[][] 
+ []
+
+
+Overfull \vbox (132.0282pt too high) has occurred while \output is active []
+
+
+[32]
+Overfull \hbox (6.00163pt too wide) in paragraph at lines 743--744
+[]$[]$| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 745--745
+[]\OT1/cmr/m/n/8 Brake sound
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 753--753
+[]\OT1/cmr/m/n/8 Shunting Mode
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 765--765
+[]\OT1/cmr/m/n/8 Gearbox back-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 767--767
+[]\OT1/cmr/m/n/8 Frequency for
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 767--767
+\OT1/cmr/m/n/8 Flash-ing light
+ []
+
+
+Underfull \hbox (badness 3343) in paragraph at lines 769--769
+[]\OT1/cmr/m/n/8 Power Fail By-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 771--771
+[]\OT1/cmr/m/n/8 Slow speed
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 771--771
+[]\OT1/cmr/m/n/8 50 -
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 773--773
+[]\OT1/cmr/m/n/8 50 -
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 775--775
+[]\OT1/cmr/m/n/8 Slow speed
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 779--779
+[]\OT1/cmr/m/n/8 ABC Mode
+ []
+
+
+Overfull \hbox (29.79303pt too wide) in paragraph at lines 742--781
+[][] 
+ []
+
+
+Overfull \vbox (18.02841pt too high) has occurred while \output is active []
+
+
+[33]
+Overfull \hbox (6.00163pt too wide) in paragraph at lines 783--784
+[]$[]$| 
+ []
+
+
+Overfull \hbox (5.93959pt too wide) in paragraph at lines 786--803
+[][]| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 816--816
+[]\OT1/cmr/m/n/8 Grade Cross-ing
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 832--832
+[]\OT1/cmr/m/n/8 Smoke Chuff
+ []
+
+
+Overfull \hbox (29.79303pt too wide) in paragraph at lines 782--836
+[][] 
+ []
+
+
+Overfull \vbox (84.52821pt too high) has occurred while \output is active []
+
+
+[34]
+Overfull \hbox (6.00163pt too wide) in paragraph at lines 838--839
+[]$[]$| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 840--840
+[]\OT1/cmr/m/n/8 ABC Shut-tle
+ []
+
+
+Underfull \hbox (badness 2591) in paragraph at lines 842--842
+[]\OT1/cmr/m/n/8 HLU Speedlimit
+ []
+
+
+Underfull \hbox (badness 2591) in paragraph at lines 844--844
+[]\OT1/cmr/m/n/8 HLU Speedlimit
+ []
+
+
+Underfull \hbox (badness 2591) in paragraph at lines 846--846
+[]\OT1/cmr/m/n/8 HLU Speedlimit
+ []
+
+
+Underfull \hbox (badness 2591) in paragraph at lines 848--848
+[]\OT1/cmr/m/n/8 HLU Speedlimit
+ []
+
+
+Underfull \hbox (badness 2591) in paragraph at lines 850--850
+[]\OT1/cmr/m/n/8 HLU Speedlimit
+ []
+
+
+Underfull \hbox (badness 3039) in paragraph at lines 852--852
+[]\OT1/cmr/m/n/8 Sound CV 1 -
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 866--866
+[]\OT1/cmr/m/n/8 Automatic de-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 870--870
+[]\OT1/cmr/m/n/8 Decoupling -
+ []
+
+
+Underfull \hbox (badness 2269) in paragraph at lines 872--872
+[]\OT1/cmr/m/n/8 Minimum steam
+ []
+
+
+Overfull \hbox (29.79303pt too wide) in paragraph at lines 837--876
+[][] 
+ []
+
+
+Overfull \vbox (37.02841pt too high) has occurred while \output is active []
+
+
+[35]
+Overfull \hbox (6.00163pt too wide) in paragraph at lines 878--879
+[]$[]$| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 880--880
+[]\OT1/cmr/m/n/8 Constant brake
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 887--887
+[]\OT1/cmr/m/n/8 Constant brak-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 887--887
+\OT1/cmr/m/n/8 ing dis-tance
+ []
+
+
+Overfull \hbox (29.79303pt too wide) in paragraph at lines 877--889
+[][] 
+ []
+
+) [36]
+\openout2 = `Chapter6-FastClock.aux'.
+
+ (./Chapter6-FastClock.tex
+Chapter 6.
+
+Overfull \hbox (33.74438pt too wide) in paragraph at lines 16--25
+[][] 
+ []
+
+
+Overfull \hbox (33.74438pt too wide) in paragraph at lines 28--37
+[][] 
+ []
+
+
+Underfull \vbox (badness 1320) has occurred while \output is active []
+
+ [37
+
+
+
+]
+Overfull \hbox (33.74438pt too wide) in paragraph at lines 40--49
+[][] 
+ []
+
+
+Overfull \hbox (33.74438pt too wide) in paragraph at lines 52--61
+[][] 
+ []
+
+
+Overfull \hbox (3.68253pt too wide) in paragraph at lines 70--71
+[]\OT1/cmr/m/n/10.95 ticks = maxTick - (0x3FFF - (($\OML/cmm/m/it/10.95 <$\OT1/
+cmr/m/n/10.95 FRACL$\OML/cmm/m/it/10.95 >$ \OT1/cmr/m/n/10.95 & 0x7F) | (($\OML
+/cmm/m/it/10.95 <$\OT1/cmr/m/n/10.95 FRACH$\OML/cmm/m/it/10.95 >$ \OT1/cmr/m/n/
+10.95 & 0x7F) $\OML/cmm/m/it/10.95 <<$ \OT1/cmr/m/n/10.95 7))) 
+ []
+
+
+Overfull \hbox (33.74438pt too wide) in paragraph at lines 84--93
+[][] 
+ []
+
+
+Overfull \hbox (3.02245pt too wide) in paragraph at lines 110--110
+[]\OT1/cmr/m/n/10.95 d6| 
+ []
+
+
+Overfull \hbox (3.02245pt too wide) in paragraph at lines 110--110
+[]\OT1/cmr/m/n/10.95 d5| 
+ []
+
+
+Overfull \hbox (3.02245pt too wide) in paragraph at lines 110--110
+[]\OT1/cmr/m/n/10.95 d4| 
+ []
+
+
+Overfull \hbox (3.02245pt too wide) in paragraph at lines 110--110
+[]\OT1/cmr/m/n/10.95 d3| 
+ []
+
+
+Overfull \hbox (3.02245pt too wide) in paragraph at lines 110--110
+[]\OT1/cmr/m/n/10.95 d2| 
+ []
+
+
+Overfull \hbox (3.02245pt too wide) in paragraph at lines 110--110
+[]\OT1/cmr/m/n/10.95 d1| 
+ []
+
+
+Overfull \hbox (3.02245pt too wide) in paragraph at lines 110--111
+[]\OT1/cmr/m/n/10.95 d0| 
+ []
+
+
+Overfull \hbox (35.89651pt too wide) in paragraph at lines 106--115
+[][] 
+ []
+
+[38]
+Overfull \hbox (33.74438pt too wide) in paragraph at lines 128--137
+[][] 
+ []
+
+
+Overfull \hbox (33.74438pt too wide) in paragraph at lines 150--159
+[][] 
+ []
+
+
+Overfull \hbox (3.02245pt too wide) in paragraph at lines 166--166
+[]\OT1/cmr/m/n/10.95 d6| 
+ []
+
+
+Overfull \hbox (33.74438pt too wide) in paragraph at lines 162--171
+[][] 
+ []
+
+
+Overfull \hbox (33.74438pt too wide) in paragraph at lines 174--183
+[][] 
+ []
+
+
+Overfull \hbox (33.74438pt too wide) in paragraph at lines 186--195
+[][] 
+ []
+
+) [39]
+\openout2 = `Chapter7-IPL.aux'.
+
+ (./Chapter7-IPL.tex [40
+
+
+
+]
+Chapter 7.
+
+Overfull \hbox (50.58144pt too wide) in paragraph at lines 25--51
+[] 
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [41]
+Underfull \vbox (badness 6944) has occurred while \output is active []
+
+ [42]
+Overfull \hbox (26.58302pt too wide) in paragraph at lines 96--105
+ [] 
+ []
+
+[43] [44]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [45]
+Underfull \vbox (badness 7238) has occurred while \output is active []
+
+ [46])
+[47]
+\openout2 = `Chapter8-Statistics.aux'.
+
+ (./Chapter8-Statistics.tex [48
+
+
+
+]
+Chapter 8.
+) [49]
+\openout2 = `Chapter9-Messages.aux'.
+
+ (./Chapter9-Messages.tex [50
+
+
+
+]
+Chapter 9.
+[51] (./Chapter1-Ack.tex [52]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 24--33
 [][] 
  []
@@ -647,12 +1430,12 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 60--69
 [][] 
  []
 
-[9]) (./Chapter1-Busy.tex
+[53]) (./Chapter1-Busy.tex
 Overfull \hbox (32.06549pt too wide) in paragraph at lines 92--1
 [][]  
  []
 
-[10]
+[54]
 Overfull \hbox (29.63216pt too wide) in paragraph at lines 4--5
 [] 
  []
@@ -677,7 +1460,7 @@ Overfull \hbox (29.63216pt too wide) in paragraph at lines 70--71
 [][] 
  []
 
-) (./Chapter1-CfgSlotDataP1.tex [11]
+) (./Chapter1-CfgSlotDataP1.tex [55]
 Overfull \hbox (29.63216pt too wide) in paragraph at lines 4--5
 [] 
  []
@@ -737,7 +1520,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 18--27
 [][] 
  []
 
-[12]
+[56]
 Overfull \hbox (3.02245pt too wide) in paragraph at lines 45--45
 []\OT1/cmr/m/n/10.95 d6| 
  []
@@ -860,7 +1643,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 86--95
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [13]
+ [57]
 Overfull \hbox (3.02245pt too wide) in paragraph at lines 113--113
 []\OT1/cmr/m/n/10.95 d6| 
  []
@@ -975,7 +1758,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 152--161
 [][] 
  []
 
-[14]
+[58]
 Overfull \hbox (3.02245pt too wide) in paragraph at lines 179--179
 []\OT1/cmr/m/n/10.95 d6| 
  []
@@ -1100,12 +1883,12 @@ Overfull \hbox (31.59227pt too wide) in paragraph at lines 56--65
 [][] 
  []
 
-[15]) (./Chapter1-CfgSlotDataP2.tex
+[59]) (./Chapter1-CfgSlotDataP2.tex
 Overfull \hbox (32.06549pt too wide) in paragraph at lines 124--1
 [][]  
  []
 
-[16]
+[60]
 Overfull \hbox (29.63216pt too wide) in paragraph at lines 4--5
 [] 
  []
@@ -1170,7 +1953,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 30--39
 [][] 
  []
 
-[17]
+[61]
 Overfull \hbox (3.02245pt too wide) in paragraph at lines 57--57
 []\OT1/cmr/m/n/10.95 d6| 
  []
@@ -1291,9 +2074,9 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 98--107
  []
 
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Underfull \vbox (badness 7081) has occurred while \output is active []
 
- [18]
+ [62]
 Overfull \hbox (3.02245pt too wide) in paragraph at lines 125--125
 []\OT1/cmr/m/n/10.95 d6| 
  []
@@ -1416,7 +2199,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 167--176
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [19]
+ [63]
 Overfull \hbox (3.02245pt too wide) in paragraph at lines 194--194
 []\OT1/cmr/m/n/10.95 d6| 
  []
@@ -1539,7 +2322,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 236--245
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [20]
+ [64]
 Overfull \hbox (3.02245pt too wide) in paragraph at lines 263--263
 []\OT1/cmr/m/n/10.95 d6| 
  []
@@ -1662,7 +2445,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 305--314
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [21]
+ [65]
 Overfull \hbox (3.02245pt too wide) in paragraph at lines 332--332
 []\OT1/cmr/m/n/10.95 d6| 
  []
@@ -1785,7 +2568,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 374--383
 )
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [22]
+ [66]
 Overfull \hbox (31.59227pt too wide) in paragraph at lines 56--65
 [][] 
  []
@@ -1795,7 +2578,7 @@ Overfull \hbox (32.06549pt too wide) in paragraph at lines 112--1
 [][]  
  []
 
-[23]
+[67]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 28--37
 [][] 
  []
@@ -1855,12 +2638,12 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 73--82
 [][] 
  []
 
-[24]
+[68]
 Overfull \hbox (29.63216pt too wide) in paragraph at lines 129--130
 [][] 
  []
 
-) (./Chapter1-GetBrdOpSw.tex [25]
+) (./Chapter1-GetBrdOpSw.tex [69]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 24--33
 [][] 
  []
@@ -1930,12 +2713,12 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 80--89
 [][] 
  []
 
-[26]
+[70]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 94--103
 [][] 
  []
 
-) (./Chapter1-GetCfgSlotDataP1.tex [27]
+) (./Chapter1-GetCfgSlotDataP1.tex [71]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 28--37
 [][] 
  []
@@ -1965,7 +2748,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 95--104
 [][] 
  []
 
-[28]
+[72]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 107--116
 [][] 
  []
@@ -1975,7 +2758,7 @@ Overfull \hbox (32.06549pt too wide) in paragraph at lines 121--1
 [][]  
  []
 
-[29]
+[73]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 28--37
 [][] 
  []
@@ -2005,7 +2788,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 95--104
 [][] 
  []
 
-[30]
+[74]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 107--116
 [][] 
  []
@@ -2015,7 +2798,7 @@ Overfull \hbox (32.06549pt too wide) in paragraph at lines 121--1
 [][]  
  []
 
-[31]
+[75]
 Overfull \hbox (29.63216pt too wide) in paragraph at lines 4--5
 [] 
  []
@@ -2035,7 +2818,7 @@ Overfull \hbox (29.63216pt too wide) in paragraph at lines 62--63
 [][] 
  []
 
-) (./Chapter1-GetLocoSlotDataLAdrP1.tex [32]
+) (./Chapter1-GetLocoSlotDataLAdrP1.tex [76]
 Overfull \hbox (29.63216pt too wide) in paragraph at lines 4--5
 [] 
  []
@@ -2060,12 +2843,12 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 68--78
 [][] 
  []
 
-[33]) (./Chapter1-GetLocoSlotDataLAdrP2.tex
+[77]) (./Chapter1-GetLocoSlotDataLAdrP2.tex
 Overfull \hbox (32.06549pt too wide) in paragraph at lines 113--1
 [][]  
  []
 
-[34]
+[78]
 Overfull \hbox (29.63216pt too wide) in paragraph at lines 4--5
 [] 
  []
@@ -2090,12 +2873,12 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 68--78
 [][] 
  []
 
-[35]) (./Chapter1-GetLocoSlotDataP1.tex
+[79]) (./Chapter1-GetLocoSlotDataP1.tex
 Overfull \hbox (32.06549pt too wide) in paragraph at lines 113--1
 [][]  
  []
 
-[36]
+[80]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 28--37
 [][] 
  []
@@ -2125,7 +2908,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 83--92
 [][] 
  []
 
-[37]
+[81]
 Overfull \hbox (3.02245pt too wide) in paragraph at lines 111--112
 []\OT1/cmr/m/n/10.95 d0| 
  []
@@ -2140,7 +2923,7 @@ Overfull \hbox (32.06549pt too wide) in paragraph at lines 121--1
 [][]  
  []
 
-[38]
+[82]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 28--37
 [][] 
  []
@@ -2185,12 +2968,12 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 83--92
 [][] 
  []
 
-[39]) (./Chapter1-GetLocoSlotDataSAdrP1.tex
+[83]) (./Chapter1-GetLocoSlotDataSAdrP1.tex
 Overfull \hbox (32.06549pt too wide) in paragraph at lines 121--1
 [][]  
  []
 
-[40]
+[84]
 Overfull \hbox (29.63216pt too wide) in paragraph at lines 4--5
 [] 
  []
@@ -2215,12 +2998,12 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 68--78
 [][] 
  []
 
-[41]) (./Chapter1-GetLocoSlotDataSAdrP2.tex
+[85]) (./Chapter1-GetLocoSlotDataSAdrP2.tex
 Overfull \hbox (32.06549pt too wide) in paragraph at lines 113--1
 [][]  
  []
 
-[42]
+[86]
 Overfull \hbox (29.63216pt too wide) in paragraph at lines 4--5
 [] 
  []
@@ -2245,12 +3028,12 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 68--78
 [][] 
  []
 
-[43]) (./Chapter1-GetSwState.tex
+[87]) (./Chapter1-GetSwState.tex
 Overfull \hbox (32.06549pt too wide) in paragraph at lines 113--1
 [][]  
  []
 
-[44]
+[88]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 24--33
 [][] 
  []
@@ -2305,12 +3088,12 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 86--95
 [][] 
  []
 
-[45]) (./Chapter1-IllegalMoveP1.tex
+[89]) (./Chapter1-IllegalMoveP1.tex
 Overfull \hbox (32.06549pt too wide) in paragraph at lines 112--1
 [][]  
  []
 
-[46]
+[90]
 Overfull \hbox (29.63216pt too wide) in paragraph at lines 4--5
 [] 
  []
@@ -2340,7 +3123,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 84--93
 [][] 
  []
 
-[47]
+[91]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 96--105
 [][] 
  []
@@ -2360,7 +3143,7 @@ Overfull \hbox (29.63216pt too wide) in paragraph at lines 134--135
 [][] 
  []
 
-) (./Chapter1-IllegalMoveP2.tex [48]
+) (./Chapter1-IllegalMoveP2.tex [92]
 Overfull \hbox (29.63216pt too wide) in paragraph at lines 4--5
 [] 
  []
@@ -2390,7 +3173,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 84--93
 [][] 
  []
 
-[49]
+[93]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 96--105
 [][] 
  []
@@ -2410,7 +3193,7 @@ Overfull \hbox (29.63216pt too wide) in paragraph at lines 135--136
 [][] 
  []
 
-) (./Chapter1-IMMPacket.tex [50]
+) (./Chapter1-IMMPacket.tex [94]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 24--33
 [][] 
  []
@@ -2490,7 +3273,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 81--90
 [][] 
  []
 
-[51]
+[95]
 Overfull \hbox (3.02245pt too wide) in paragraph at lines 105--105
 []\OT1/cmr/m/n/10.95 d6| 
  []
@@ -2700,12 +3483,12 @@ Overfull \hbox (4.75119pt too wide) in paragraph at lines 177--177
 []$[]$| 
  []
 
-[52]) (./Chapter1-InterfaceData.tex
+[96]) (./Chapter1-InterfaceData.tex
 Overfull \hbox (32.06549pt too wide) in paragraph at lines 249--1
 [][]  
  []
 
-[53]
+[97]
 Overfull \hbox (29.63216pt too wide) in paragraph at lines 4--5
 [] 
  []
@@ -2745,7 +3528,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 102--111
 [][] 
  []
 
-[54]
+[98]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 114--123
 [][] 
  []
@@ -2790,12 +3573,12 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 210--219
 [][] 
  []
 
-[55] [56]) (./Chapter1-IPLDataLoad.tex
+[99] [100]) (./Chapter1-IPLDataLoad.tex
 Overfull \hbox (32.06549pt too wide) in paragraph at lines 371--1
 [][]  
  []
 
-[57]
+[101]
 Overfull \hbox (29.63216pt too wide) in paragraph at lines 4--5
 [] 
  []
@@ -2850,7 +3633,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 86--95
 [][] 
  []
 
-[58]
+[102]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 105--114
 [][] 
  []
@@ -2900,12 +3683,12 @@ Overfull \hbox (87.49496pt too wide) in paragraph at lines 220--229
 [][] 
  []
 
-[59]
+[103]
 Overfull \hbox (29.63216pt too wide) in paragraph at lines 324--325
 [][] 
  []
 
-) (./Chapter1-IPLDevData.tex [60]
+) (./Chapter1-IPLDevData.tex [104]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 24--33
 [][] 
  []
@@ -2955,7 +3738,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 103--112
 [][] 
  []
 
-[61]
+[105]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 121--130
 [][] 
  []
@@ -3045,7 +3828,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 212--221
 [][] 
  []
 
-[62]
+[106]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 224--233
 [][] 
  []
@@ -3080,7 +3863,7 @@ Overfull \hbox (32.06549pt too wide) in paragraph at lines 325--1
 [][]  
  []
 
-[63] [64]
+[107] [108]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 24--33
 [][] 
  []
@@ -3090,22 +3873,22 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 36--45
 [][] 
  []
 
-[65]
+[109]
 Overfull \hbox (65.99998pt too wide) in paragraph at lines 252--261
 [][] 
  []
 
-[66]
+[110]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 282--291
 [][] 
  []
 
-[67]) (./Chapter1-IPLEndLoad.tex
+[111]) (./Chapter1-IPLEndLoad.tex
 Overfull \hbox (32.06549pt too wide) in paragraph at lines 500--1
 [][]  
  []
 
-[68]
+[112]
 Overfull \hbox (29.63216pt too wide) in paragraph at lines 4--5
 [] 
  []
@@ -3140,7 +3923,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 86--95
 [][] 
  []
 
-[69]
+[113]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 146--155
 [][] 
  []
@@ -3150,12 +3933,12 @@ Overfull \hbox (87.49496pt too wide) in paragraph at lines 206--215
 [][] 
  []
 
-[70]) (./Chapter1-IPLSetAddr.tex
+[114]) (./Chapter1-IPLSetAddr.tex
 Overfull \hbox (32.06549pt too wide) in paragraph at lines 406--1
 [][]  
  []
 
-[71]
+[115]
 Overfull \hbox (29.63216pt too wide) in paragraph at lines 4--5
 [] 
  []
@@ -3210,7 +3993,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 86--95
 [][] 
  []
 
-[72]
+[116]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 105--114
 [][] 
  []
@@ -3260,12 +4043,12 @@ Overfull \hbox (87.49496pt too wide) in paragraph at lines 220--229
 [][] 
  []
 
-
+[117]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 238--247
 [][] 
  []
 
-[73]
+
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 250--259
 [][] 
  []
@@ -3285,12 +4068,12 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 286--295
 [][] 
  []
 
-
+[118]
 Overfull \hbox (29.63216pt too wide) in paragraph at lines 384--385
 [][] 
  []
 
-) (./Chapter1-IPLSetupBL2.tex [74]
+) (./Chapter1-IPLSetupBL2.tex [119]
 Overfull \hbox (29.63216pt too wide) in paragraph at lines 4--5
 [] 
  []
@@ -3345,7 +4128,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 86--95
 [][] 
  []
 
-[75]
+[120]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 105--114
 [][] 
  []
@@ -3390,12 +4173,12 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 215--224
 [][] 
  []
 
-
+[121]
 Overfull \hbox (87.49496pt too wide) in paragraph at lines 227--236
 [][] 
  []
 
-[76]
+
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 245--254
 [][] 
  []
@@ -3430,7 +4213,7 @@ Overfull \hbox (29.63216pt too wide) in paragraph at lines 355--356
 [][] 
  []
 
-) (./Chapter1-LinkSlotsP1.tex [77]
+) (./Chapter1-LinkSlotsP1.tex [122]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 28--37
 [][] 
  []
@@ -3450,12 +4233,12 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 64--73
 [][] 
  []
 
-[78]) (./Chapter1-LinkSlotsP2.tex
+[123]) (./Chapter1-LinkSlotsP2.tex
 Overfull \hbox (32.06549pt too wide) in paragraph at lines 120--1
 [][]  
  []
 
-[79]
+[124]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 28--37
 [][] 
  []
@@ -3510,7 +4293,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 76--85
 [][] 
  []
 
-[80]
+[125]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 88--97
 [][] 
  []
@@ -3520,7 +4303,7 @@ Overfull \hbox (32.06549pt too wide) in paragraph at lines 168--1
 [][]  
  []
 
-[81]
+[126]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 28--37
 [][] 
  []
@@ -3570,7 +4353,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 76--85
 [][] 
  []
 
-[82]
+[127]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 88--97
 [][] 
  []
@@ -3580,7 +4363,7 @@ Overfull \hbox (32.06549pt too wide) in paragraph at lines 132--1
 [][]  
  []
 
-[83]
+[128]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 28--37
 [][] 
  []
@@ -3635,12 +4418,12 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 73--82
 [][] 
  []
 
-[84]) (./Chapter1-LocoDirF0F4P2.tex
+[129]) (./Chapter1-LocoDirF0F4P2.tex
 Overfull \hbox (32.06549pt too wide) in paragraph at lines 130--1
 [][]  
  []
 
-[85]
+[130]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 28--37
 [][] 
  []
@@ -3715,7 +4498,7 @@ Overfull \hbox (53.99998pt too wide) in paragraph at lines 86--94
 [][] 
  []
 
-[86]
+[131]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 97--106
 [][] 
  []
@@ -3725,7 +4508,7 @@ Overfull \hbox (32.06549pt too wide) in paragraph at lines 165--1
 [][]  
  []
 
-[87]
+[132]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 28--37
 [][] 
  []
@@ -3805,7 +4588,7 @@ Overfull \hbox (53.99998pt too wide) in paragraph at lines 86--95
 [][] 
  []
 
-[88]
+[133]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 98--107
 [][] 
  []
@@ -3815,7 +4598,7 @@ Overfull \hbox (32.06549pt too wide) in paragraph at lines 154--1
 [][]  
  []
 
-[89]
+[134]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 28--37
 [][] 
  []
@@ -3855,12 +4638,12 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 71--80
 [][] 
  []
 
-[90]) (./Chapter1-LocoF7F13P2.tex
+[135]) (./Chapter1-LocoF7F13P2.tex
 Overfull \hbox (32.06549pt too wide) in paragraph at lines 127--1
 [][]  
  []
 
-[91]
+[136]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 28--37
 [][] 
  []
@@ -3940,7 +4723,7 @@ Overfull \hbox (53.99998pt too wide) in paragraph at lines 86--95
 [][] 
  []
 
-[92]
+[137]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 98--107
 [][] 
  []
@@ -3950,7 +4733,7 @@ Overfull \hbox (32.06549pt too wide) in paragraph at lines 154--1
 [][]  
  []
 
-[93]
+[138]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 28--37
 [][] 
  []
@@ -4030,7 +4813,7 @@ Overfull \hbox (53.99998pt too wide) in paragraph at lines 86--95
 [][] 
  []
 
-[94]
+[139]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 98--107
 [][] 
  []
@@ -4040,7 +4823,7 @@ Overfull \hbox (32.06549pt too wide) in paragraph at lines 154--1
 [][]  
  []
 
-[95]
+[140]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 28--37
 [][] 
  []
@@ -4105,12 +4888,12 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 94--103
 [][] 
  []
 
-[96]) (./Chapter1-LocoF13F19P2.tex
+[141]) (./Chapter1-LocoF13F19P2.tex
 Overfull \hbox (32.06549pt too wide) in paragraph at lines 162--1
 [][]  
  []
 
-[97]
+[142]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 28--37
 [][] 
  []
@@ -4190,7 +4973,7 @@ Overfull \hbox (53.99998pt too wide) in paragraph at lines 86--95
 [][] 
  []
 
-[98]
+[143]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 98--107
 [][] 
  []
@@ -4200,7 +4983,7 @@ Overfull \hbox (32.06549pt too wide) in paragraph at lines 154--1
 [][]  
  []
 
-[99]
+[144]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 28--37
 [][] 
  []
@@ -4280,7 +5063,7 @@ Overfull \hbox (53.99998pt too wide) in paragraph at lines 86--95
 [][] 
  []
 
-[100]
+[145]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 98--107
 [][] 
  []
@@ -4290,7 +5073,7 @@ Overfull \hbox (32.06549pt too wide) in paragraph at lines 154--1
 [][]  
  []
 
-[101]
+[146]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 28--37
 [][] 
  []
@@ -4370,7 +5153,7 @@ Overfull \hbox (53.99998pt too wide) in paragraph at lines 86--95
 [][] 
  []
 
-[102]
+[147]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 98--107
 [][] 
  []
@@ -4380,7 +5163,7 @@ Overfull \hbox (32.06549pt too wide) in paragraph at lines 154--1
 [][]  
  []
 
-[103]
+[148]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 28--37
 [][] 
  []
@@ -4470,7 +5253,7 @@ Overfull \hbox (53.99998pt too wide) in paragraph at lines 86--95
 [][] 
  []
 
-[104]
+[149]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 98--107
 [][] 
  []
@@ -4490,7 +5273,7 @@ Overfull \hbox (32.06549pt too wide) in paragraph at lines 154--1
 [][]  
  []
 
-[105]
+[150]
 Overfull \hbox (29.63216pt too wide) in paragraph at lines 4--5
 [] 
  []
@@ -4565,7 +5348,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 33--34
 
  []
 
-[106]
+[151]
 Overfull \hbox (13.50192pt too wide) in paragraph at lines 35--42
 [][] 
  []
@@ -4640,7 +5423,7 @@ Overfull \hbox (53.99998pt too wide) in paragraph at lines 97--105
 [][] 
  []
 
-[107]
+[152]
 Overfull \hbox (3.02245pt too wide) in paragraph at lines 112--112
 []\OT1/cmr/m/n/10.95 d6| 
  []
@@ -4735,7 +5518,7 @@ Overfull \hbox (31.59227pt too wide) in paragraph at lines 189--198
 [][] 
  []
 
-) [108]
+) [153]
 Overfull \hbox (31.59227pt too wide) in paragraph at lines 56--65
 [][] 
  []
@@ -4745,7 +5528,7 @@ Overfull \hbox (32.06549pt too wide) in paragraph at lines 160--1
 [][]  
  []
 
-[109]
+[154]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 28--37
 [][] 
  []
@@ -4830,7 +5613,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 45--46
 
  []
 
-[110]
+[155]
 Overfull \hbox (13.50192pt too wide) in paragraph at lines 47--54
 [][] 
  []
@@ -4896,9 +5679,11 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 99--108
  []
 
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Overfull \hbox (41.10037pt too wide) in paragraph at lines 109--118
+[][] 
+ []
 
- [111]
+[156]
 Overfull \hbox (3.02245pt too wide) in paragraph at lines 125--125
 []\OT1/cmr/m/n/10.95 d6| 
  []
@@ -5058,7 +5843,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 177--186
 [][] 
  []
 
-[112]
+
 Overfull \hbox (3.02245pt too wide) in paragraph at lines 203--203
 []\OT1/cmr/m/n/10.95 d6| 
  []
@@ -5098,7 +5883,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 199--208
 [][] 
  []
 
-
+[157]
 Overfull \hbox (3.02245pt too wide) in paragraph at lines 225--225
 []\OT1/cmr/m/n/10.95 d6| 
  []
@@ -5178,7 +5963,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 243--252
 [][] 
  []
 
-[113]
+
 Overfull \hbox (3.02245pt too wide) in paragraph at lines 269--269
 []\OT1/cmr/m/n/10.95 d6| 
  []
@@ -5258,7 +6043,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 287--296
 [][] 
  []
 
-
+[158]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 309--318
 [][] 
  []
@@ -5353,12 +6138,12 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 54--63
 [][] 
  []
 
-[114]) (./Chapter1-LocoSpdP1.tex
+[159]) (./Chapter1-LocoSpdP1.tex
 Overfull \hbox (32.06549pt too wide) in paragraph at lines 122--1
 [][]  
  []
 
-[115]
+[160]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 28--37
 [][] 
  []
@@ -5378,12 +6163,12 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 64--73
 [][] 
  []
 
-[116]) (./Chapter1-LocoSpdP2.tex
+[161]) (./Chapter1-LocoSpdP2.tex
 Overfull \hbox (32.06549pt too wide) in paragraph at lines 108--1
 [][]  
  []
 
-[117]
+[162]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 28--37
 [][] 
  []
@@ -5433,12 +6218,12 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 88--97
 [][] 
  []
 
-[118]) (./Chapter1-LocoSpdDirP2.tex
+[163]) (./Chapter1-LocoSpdDirP2.tex
 Overfull \hbox (32.06549pt too wide) in paragraph at lines 144--1
 [][]  
  []
 
-[119]
+[164]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 28--37
 [][] 
  []
@@ -5488,7 +6273,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 76--85
 [][] 
  []
 
-[120]
+[165]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 88--97
 [][] 
  []
@@ -5498,7 +6283,7 @@ Overfull \hbox (32.06549pt too wide) in paragraph at lines 144--1
 [][]  
  []
 
-[121]
+[166]
 Overfull \hbox (29.63216pt too wide) in paragraph at lines 4--5
 [] 
  []
@@ -5533,7 +6318,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 94--103
 [][] 
  []
 
-[122]
+[167]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 106--115
 [][] 
  []
@@ -5548,7 +6333,7 @@ Overfull \hbox (29.63216pt too wide) in paragraph at lines 132--133
 [][] 
  []
 
-) (./Chapter1-NoFreeSlotsP2.tex [123]
+) (./Chapter1-NoFreeSlotsP2.tex [168]
 Overfull \hbox (29.63216pt too wide) in paragraph at lines 4--5
 [] 
  []
@@ -5583,7 +6368,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 94--103
 [][] 
  []
 
-[124]
+[169]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 106--115
 [][] 
  []
@@ -5598,7 +6383,7 @@ Overfull \hbox (29.63216pt too wide) in paragraph at lines 132--133
 [][] 
  []
 
-) (./Chapter1-MoveSlotsP1.tex [125]
+) (./Chapter1-MoveSlotsP1.tex [170]
 Overfull \hbox (23.00346pt too wide) in paragraph at lines 8--15
 [][] 
  []
@@ -5628,12 +6413,12 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 72--82
 [][] 
  []
 
-[126]) (./Chapter1-MoveSlotsP2.tex
+[171]) (./Chapter1-MoveSlotsP2.tex
 Overfull \hbox (32.06549pt too wide) in paragraph at lines 129--1
 [][]  
  []
 
-[127]
+[172]
 Overfull \hbox (23.00346pt too wide) in paragraph at lines 8--15
 [][] 
  []
@@ -5693,7 +6478,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 84--93
 [][] 
  []
 
-[128]
+[173]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 96--105
 [][] 
  []
@@ -5703,7 +6488,7 @@ Overfull \hbox (32.06549pt too wide) in paragraph at lines 152--1
 [][]  
  []
 
-[129]
+[174]
 Overfull \hbox (35.00345pt too wide) in paragraph at lines 8--16
 [][] 
  []
@@ -5728,7 +6513,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 73--82
 [][] 
  []
 
-[130]
+[175]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 85--94
 [][] 
  []
@@ -5798,7 +6583,17 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 179--188
 [][] 
  []
 
-[131]
+[176]
+Overfull \hbox (36.80269pt too wide) in paragraph at lines 189--198
+[][] 
+ []
+
+
+Overfull \hbox (35.01001pt too wide) in paragraph at lines 199--210
+[][] 
+ []
+
+
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 223--232
 [][] 
  []
@@ -5818,17 +6613,17 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 259--268
 [][] 
  []
 
-[132]
+
 Overfull \hbox (65.99998pt too wide) in paragraph at lines 271--280
 [][] 
  []
 
-) (./Chapter1-ProgCV.tex
+[177]) (./Chapter1-ProgCV.tex
 Overfull \hbox (32.06549pt too wide) in paragraph at lines 315--1
 [][]  
  []
 
-[133]
+[178]
 Overfull \hbox (29.63216pt too wide) in paragraph at lines 5--6
 [] 
  []
@@ -5893,7 +6688,12 @@ Overfull \hbox (41.70793pt too wide) in paragraph at lines 73--82
 [][] 
  []
 
-[134]
+
+Overfull \hbox (34.45674pt too wide) in paragraph at lines 83--95
+[][] 
+ []
+
+[179]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 98--107
 [][] 
  []
@@ -5943,7 +6743,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 146--155
 [][] 
  []
 
-[135]
+[180]
 Underfull \hbox (badness 6348) in paragraph at lines 172--173
 []\OT1/cmr/m/n/10.95 Configuration Vari-able num-ber
  []
@@ -5993,12 +6793,12 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 279--288
 [][] 
  []
 
-[136]
+[181]
 Overfull \hbox (29.63216pt too wide) in paragraph at lines 305--306
 [][] 
  []
 
-) (./Chapter1-ProgSlotDataP1.tex [137]
+) (./Chapter1-ProgSlotDataP1.tex [182]
 Overfull \hbox (29.63216pt too wide) in paragraph at lines 5--6
 [] 
  []
@@ -6063,7 +6863,12 @@ Overfull \hbox (41.70793pt too wide) in paragraph at lines 73--82
 [][] 
  []
 
-[138]
+
+Overfull \hbox (32.30461pt too wide) in paragraph at lines 83--95
+[][] 
+ []
+
+[183]
 Overfull \hbox (3.02245pt too wide) in paragraph at lines 102--102
 []\OT1/cmr/m/n/10.95 d3| 
  []
@@ -6129,9 +6934,14 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 141--150
  []
 
 
-Underfull \vbox (badness 1142) has occurred while \output is active []
+Overfull \hbox (36.80269pt too wide) in paragraph at lines 151--158
+[][] 
+ []
 
- [139]
+
+Underfull \vbox (badness 5316) has occurred while \output is active []
+
+ [184]
 Overfull \hbox (3.02245pt too wide) in paragraph at lines 165--165
 []\OT1/cmr/m/n/10.95 d5| 
  []
@@ -6191,12 +7001,12 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 228--237
 [][] 
  []
 
-[140]
+
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 246--255
 [][] 
  []
 
-
+[185]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 258--267
 [][] 
  []
@@ -6216,7 +7026,7 @@ Overfull \hbox (29.63216pt too wide) in paragraph at lines 320--321
 [][] 
  []
 
-) (./Chapter1-PwrOff.tex [141]
+) (./Chapter1-PwrOff.tex [186]
 Overfull \hbox (29.63216pt too wide) in paragraph at lines 4--5
 [] 
  []
@@ -6236,7 +7046,7 @@ Overfull \hbox (29.63216pt too wide) in paragraph at lines 70--71
 [][] 
  []
 
-) (./Chapter1-PwrOn.tex [142]
+) (./Chapter1-PwrOn.tex [187]
 Overfull \hbox (29.63216pt too wide) in paragraph at lines 4--5
 [] 
  []
@@ -6256,12 +7066,12 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 68--77
 [][] 
  []
 
-[143]) (./Chapter1-Reset.tex
+[188]) (./Chapter1-Reset.tex
 Overfull \hbox (32.06549pt too wide) in paragraph at lines 82--1
 [][]  
  []
 
-[144]
+[189]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 23--32
 [][] 
  []
@@ -6276,7 +7086,7 @@ Overfull \hbox (32.06549pt too wide) in paragraph at lines 67--1
 [][]  
  []
 
-[145]
+[190]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 24--33
 [][] 
  []
@@ -6356,7 +7166,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 58--67
 [][] 
  []
 
-[146]
+[191]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 79--89
 [][] 
  []
@@ -6371,7 +7181,7 @@ Overfull \hbox (32.06549pt too wide) in paragraph at lines 124--1
 [][]  
  []
 
-[147]
+[192]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 24--33
 [][] 
  []
@@ -6451,7 +7261,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 58--67
 [][] 
  []
 
-[148]
+[193]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 79--89
 [][] 
  []
@@ -6466,7 +7276,7 @@ Overfull \hbox (32.06549pt too wide) in paragraph at lines 124--1
 [][]  
  []
 
-[149]
+[194]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 24--33
 [][] 
  []
@@ -6546,12 +7356,17 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 58--67
 [][] 
  []
 
-[150]
-Overfull \hbox (35.89651pt too wide) in paragraph at lines 79--89
+
+Overfull \hbox (36.80269pt too wide) in paragraph at lines 68--76
 [][] 
  []
 
 
+Overfull \hbox (35.89651pt too wide) in paragraph at lines 79--89
+[][] 
+ []
+
+[195]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 98--107
 [][] 
  []
@@ -6561,7 +7376,7 @@ Overfull \hbox (32.06549pt too wide) in paragraph at lines 124--1
 [][]  
  []
 
-[151]
+[196]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 24--33
 [][] 
  []
@@ -6631,12 +7446,12 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 80--89
 [][] 
  []
 
-[152]
+[197]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 94--103
 [][] 
  []
 
-) (./Chapter1-SetIdleState.tex [153]
+) (./Chapter1-SetIdleState.tex [198]
 Overfull \hbox (29.63216pt too wide) in paragraph at lines 4--5
 [] 
  []
@@ -6661,7 +7476,7 @@ Overfull \hbox (32.06549pt too wide) in paragraph at lines 70--1
 [][]  
  []
 
-[154]
+[199]
 Overfull \hbox (29.63216pt too wide) in paragraph at lines 4--5
 [] 
  []
@@ -6736,7 +7551,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 33--34
 
  []
 
-[155]
+[200]
 Overfull \hbox (13.50192pt too wide) in paragraph at lines 35--42
 [][] 
  []
@@ -6811,7 +7626,7 @@ Overfull \hbox (53.99998pt too wide) in paragraph at lines 97--105
 [][] 
  []
 
-[156]
+[201]
 Overfull \hbox (3.02245pt too wide) in paragraph at lines 112--112
 []\OT1/cmr/m/n/10.95 d6| 
  []
@@ -6906,7 +7721,7 @@ Overfull \hbox (31.59227pt too wide) in paragraph at lines 189--198
 [][] 
  []
 
-) [157]
+) [202]
 Overfull \hbox (65.99998pt too wide) in paragraph at lines 56--65
 [][] 
  []
@@ -6916,7 +7731,7 @@ Overfull \hbox (29.63216pt too wide) in paragraph at lines 160--161
 [][] 
  []
 
-) (./Chapter1-SetLocoSlotDataP2.tex [158]
+) (./Chapter1-SetLocoSlotDataP2.tex [203]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 28--37
 [][] 
  []
@@ -7001,7 +7816,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 45--46
 
  []
 
-[159]
+[204]
 Overfull \hbox (13.50192pt too wide) in paragraph at lines 47--54
 [][] 
  []
@@ -7067,9 +7882,11 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 99--108
  []
 
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Overfull \hbox (41.10037pt too wide) in paragraph at lines 109--118
+[][] 
+ []
 
- [160]
+[205]
 Overfull \hbox (3.02245pt too wide) in paragraph at lines 125--125
 []\OT1/cmr/m/n/10.95 d6| 
  []
@@ -7229,7 +8046,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 177--186
 [][] 
  []
 
-[161]
+
 Overfull \hbox (3.02245pt too wide) in paragraph at lines 203--203
 []\OT1/cmr/m/n/10.95 d6| 
  []
@@ -7269,7 +8086,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 199--208
 [][] 
  []
 
-
+[206]
 Overfull \hbox (3.02245pt too wide) in paragraph at lines 225--225
 []\OT1/cmr/m/n/10.95 d6| 
  []
@@ -7349,7 +8166,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 243--252
 [][] 
  []
 
-[162]
+
 Overfull \hbox (3.02245pt too wide) in paragraph at lines 269--269
 []\OT1/cmr/m/n/10.95 d6| 
  []
@@ -7429,7 +8246,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 287--296
 [][] 
  []
 
-
+[207]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 309--318
 [][] 
  []
@@ -7534,13 +8351,13 @@ Overfull \hbox (3.83867pt too wide) in paragraph at lines 69--69
 []$[]$| 
  []
 
-[163]
+
 Overfull \hbox (10.15257pt too wide) in paragraph at lines 99--100
 []\OT1/cmr/m/n/10.95 *** THERE SHOULD BE MORE ONCE ALL THE BYTES ARE DE-TER-MIN
 ED *** 
  []
 
-) (./Chapter1-SetLocoSlotStat1.tex [164]
+) (./Chapter1-SetLocoSlotStat1.tex [208]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 28--37
 [][] 
  []
@@ -7595,12 +8412,12 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 64--74
 [][] 
  []
 
-[165]) (./Chapter1-SetSWWithAck.tex
+[209]) (./Chapter1-SetSwState.tex
 Overfull \hbox (32.06549pt too wide) in paragraph at lines 109--1
 [][]  
  []
 
-[166]
+[210]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 24--33
 [][] 
  []
@@ -7685,7 +8502,120 @@ Underfull \hbox (badness 1418) in paragraph at lines 69--70
 []\OT1/cmr/m/n/10.95 Direction. 1 means closed/green, and 0 means
  []
 
-[167]
+[211]
+Overfull \hbox (35.89651pt too wide) in paragraph at lines 79--88
+[][] 
+ []
+
+
+Overfull \hbox (4.75119pt too wide) in paragraph at lines 94--94
+[]$[]$| 
+ []
+
+
+Overfull \hbox (3.83867pt too wide) in paragraph at lines 94--94
+[]$[]$| 
+ []
+
+
+Overfull \hbox (35.89651pt too wide) in paragraph at lines 102--111
+[][] 
+ []
+
+) (./Chapter1-SetSwStateWithAck.tex
+Overfull \hbox (32.06549pt too wide) in paragraph at lines 140--1
+[][]  
+ []
+
+[212]
+Overfull \hbox (35.89651pt too wide) in paragraph at lines 24--33
+[][] 
+ []
+
+
+Overfull \hbox (3.02245pt too wide) in paragraph at lines 40--40
+[]\OT1/cmr/m/n/10.95 d6| 
+ []
+
+
+Overfull \hbox (3.02245pt too wide) in paragraph at lines 40--40
+[]\OT1/cmr/m/n/10.95 d5| 
+ []
+
+
+Overfull \hbox (3.02245pt too wide) in paragraph at lines 40--40
+[]\OT1/cmr/m/n/10.95 d4| 
+ []
+
+
+Overfull \hbox (3.02245pt too wide) in paragraph at lines 40--40
+[]\OT1/cmr/m/n/10.95 d3| 
+ []
+
+
+Overfull \hbox (3.02245pt too wide) in paragraph at lines 40--40
+[]\OT1/cmr/m/n/10.95 d2| 
+ []
+
+
+Overfull \hbox (3.02245pt too wide) in paragraph at lines 40--40
+[]\OT1/cmr/m/n/10.95 d1| 
+ []
+
+
+Overfull \hbox (3.02245pt too wide) in paragraph at lines 40--41
+[]\OT1/cmr/m/n/10.95 d0| 
+ []
+
+
+Overfull \hbox (35.89651pt too wide) in paragraph at lines 36--45
+[][] 
+ []
+
+
+Overfull \hbox (3.02245pt too wide) in paragraph at lines 62--62
+[]\OT1/cmr/m/n/10.95 d5| 
+ []
+
+
+Overfull \hbox (3.02245pt too wide) in paragraph at lines 62--62
+[]\OT1/cmr/m/n/10.95 d4| 
+ []
+
+
+Overfull \hbox (3.02245pt too wide) in paragraph at lines 62--62
+[]\OT1/cmr/m/n/10.95 d3| 
+ []
+
+
+Overfull \hbox (3.02245pt too wide) in paragraph at lines 62--62
+[]\OT1/cmr/m/n/10.95 d2| 
+ []
+
+
+Overfull \hbox (3.02245pt too wide) in paragraph at lines 62--62
+[]\OT1/cmr/m/n/10.95 d1| 
+ []
+
+
+Overfull \hbox (3.02245pt too wide) in paragraph at lines 62--63
+[]\OT1/cmr/m/n/10.95 d0| 
+ []
+
+
+Overfull \hbox (35.89651pt too wide) in paragraph at lines 58--67
+[][] 
+ []
+
+
+Underfull \hbox (badness 1418) in paragraph at lines 69--70
+[]\OT1/cmr/m/n/10.95 Direction. 1 means closed/green, and 0 means
+ []
+
+
+Underfull \vbox (badness 2790) has occurred while \output is active []
+
+ [213]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 79--89
 [][] 
  []
@@ -7705,7 +8635,7 @@ Overfull \hbox (32.06549pt too wide) in paragraph at lines 130--1
 [][]  
  []
 
-[168]
+[214]
 Overfull \hbox (29.63216pt too wide) in paragraph at lines 4--5
 [] 
  []
@@ -7740,7 +8670,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 92--101
 [][] 
  []
 
-[169]
+[215]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 104--113
 [][] 
  []
@@ -7755,7 +8685,7 @@ Overfull \hbox (29.63216pt too wide) in paragraph at lines 130--131
 [][] 
  []
 
-) (./Chapter1-SVProg.tex [170]
+) (./Chapter1-SVProg.tex [216]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 13--22
 [][] 
  []
@@ -7788,7 +8718,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 74--83
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [171]
+ [217]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 112--121
 [][] 
  []
@@ -7838,7 +8768,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 142--151
 [][] 
  []
 
-[172]
+[218]
 Overfull \hbox (3.02245pt too wide) in paragraph at lines 172--172
 []\OT1/cmr/m/n/10.95 d6| 
  []
@@ -7903,7 +8833,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 252--261
 [][] 
  []
 
-[173]
+[219]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 286--295
 [][] 
  []
@@ -7933,12 +8863,12 @@ Overfull \hbox (35.00345pt too wide) in paragraph at lines 348--353
 [][] 
  []
 
-[174]) (./Chapter1-SwState.tex
+[220]) (./Chapter1-SwState.tex
 Overfull \hbox (32.06549pt too wide) in paragraph at lines 406--1
 [][]  
  []
 
-[175]
+[221]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 24--33
 [][] 
  []
@@ -7968,122 +8898,12 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 95--104
 [][] 
  []
 
-[176]) (./Chapter1-SWReq.tex
+[222]) (./Chapter1-TransRep.tex
 Overfull \hbox (32.06549pt too wide) in paragraph at lines 109--1
 [][]  
  []
 
-[177]
-Overfull \hbox (35.89651pt too wide) in paragraph at lines 24--33
-[][] 
- []
-
-
-Overfull \hbox (3.02245pt too wide) in paragraph at lines 40--40
-[]\OT1/cmr/m/n/10.95 d6| 
- []
-
-
-Overfull \hbox (3.02245pt too wide) in paragraph at lines 40--40
-[]\OT1/cmr/m/n/10.95 d5| 
- []
-
-
-Overfull \hbox (3.02245pt too wide) in paragraph at lines 40--40
-[]\OT1/cmr/m/n/10.95 d4| 
- []
-
-
-Overfull \hbox (3.02245pt too wide) in paragraph at lines 40--40
-[]\OT1/cmr/m/n/10.95 d3| 
- []
-
-
-Overfull \hbox (3.02245pt too wide) in paragraph at lines 40--40
-[]\OT1/cmr/m/n/10.95 d2| 
- []
-
-
-Overfull \hbox (3.02245pt too wide) in paragraph at lines 40--40
-[]\OT1/cmr/m/n/10.95 d1| 
- []
-
-
-Overfull \hbox (3.02245pt too wide) in paragraph at lines 40--41
-[]\OT1/cmr/m/n/10.95 d0| 
- []
-
-
-Overfull \hbox (35.89651pt too wide) in paragraph at lines 36--45
-[][] 
- []
-
-
-Overfull \hbox (3.02245pt too wide) in paragraph at lines 62--62
-[]\OT1/cmr/m/n/10.95 d5| 
- []
-
-
-Overfull \hbox (3.02245pt too wide) in paragraph at lines 62--62
-[]\OT1/cmr/m/n/10.95 d4| 
- []
-
-
-Overfull \hbox (3.02245pt too wide) in paragraph at lines 62--62
-[]\OT1/cmr/m/n/10.95 d3| 
- []
-
-
-Overfull \hbox (3.02245pt too wide) in paragraph at lines 62--62
-[]\OT1/cmr/m/n/10.95 d2| 
- []
-
-
-Overfull \hbox (3.02245pt too wide) in paragraph at lines 62--62
-[]\OT1/cmr/m/n/10.95 d1| 
- []
-
-
-Overfull \hbox (3.02245pt too wide) in paragraph at lines 62--63
-[]\OT1/cmr/m/n/10.95 d0| 
- []
-
-
-Overfull \hbox (35.89651pt too wide) in paragraph at lines 58--67
-[][] 
- []
-
-
-Underfull \hbox (badness 1418) in paragraph at lines 69--70
-[]\OT1/cmr/m/n/10.95 Direction. 1 means closed/green, and 0 means
- []
-
-[178]
-Overfull \hbox (35.89651pt too wide) in paragraph at lines 79--88
-[][] 
- []
-
-
-Overfull \hbox (4.75119pt too wide) in paragraph at lines 94--94
-[]$[]$| 
- []
-
-
-Overfull \hbox (3.83867pt too wide) in paragraph at lines 94--94
-[]$[]$| 
- []
-
-
-Overfull \hbox (35.89651pt too wide) in paragraph at lines 102--111
-[][] 
- []
-
-) (./Chapter1-TransRep.tex
-Overfull \hbox (32.06549pt too wide) in paragraph at lines 140--1
-[][]  
- []
-
-[179]
+[223]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 24--33
 [][] 
  []
@@ -8113,12 +8933,12 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 84--93
 [][] 
  []
 
-[180]) (./Chapter1-UnlinkSlotsP1.tex
+[224]) (./Chapter1-UnlinkSlotsP1.tex
 Overfull \hbox (32.06549pt too wide) in paragraph at lines 118--1
 [][]  
  []
 
-[181]
+[225]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 28--37
 [][] 
  []
@@ -8143,12 +8963,12 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 82--91
 [][] 
  []
 
-[182]
+[226]
 Overfull \hbox (29.63216pt too wide) in paragraph at lines 120--121
 [][] 
  []
 
-) (./Chapter1-UnlinkSlotsP2.tex [183]
+) (./Chapter1-UnlinkSlotsP2.tex [227]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 28--37
 [][] 
  []
@@ -8203,7 +9023,7 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 76--85
 [][] 
  []
 
-[184]
+[228]
 Overfull \hbox (35.89651pt too wide) in paragraph at lines 88--97
 [][] 
  []
@@ -8213,939 +9033,188 @@ Overfull \hbox (35.89651pt too wide) in paragraph at lines 106--115
 [][] 
  []
 
-))
-Overfull \hbox (32.06549pt too wide) in paragraph at lines 168--60
+)
+Overfull \hbox (32.06549pt too wide) in paragraph at lines 168--119
 [][]  
  []
 
-[185]
-\openout2 = `Chapter2.aux'.
-
- (./Chapter2.tex [186
-
-
-
-]
-Chapter 2.
-
-Overfull \hbox (33.74438pt too wide) in paragraph at lines 16--25
-[][] 
- []
-
-
-Overfull \hbox (33.74438pt too wide) in paragraph at lines 28--37
-[][] 
- []
-
-
-Underfull \vbox (badness 1320) has occurred while \output is active []
-
- [187]
-Overfull \hbox (33.74438pt too wide) in paragraph at lines 40--49
-[][] 
- []
-
-
-Overfull \hbox (33.74438pt too wide) in paragraph at lines 52--61
-[][] 
- []
-
-
-Overfull \hbox (3.68253pt too wide) in paragraph at lines 70--71
-[]\OT1/cmr/m/n/10.95 ticks = maxTick - (0x3FFF - (($\OML/cmm/m/it/10.95 <$\OT1/
-cmr/m/n/10.95 FRACL$\OML/cmm/m/it/10.95 >$ \OT1/cmr/m/n/10.95 & 0x7F) | (($\OML
-/cmm/m/it/10.95 <$\OT1/cmr/m/n/10.95 FRACH$\OML/cmm/m/it/10.95 >$ \OT1/cmr/m/n/
-10.95 & 0x7F) $\OML/cmm/m/it/10.95 <<$ \OT1/cmr/m/n/10.95 7))) 
- []
-
-
-Overfull \hbox (33.74438pt too wide) in paragraph at lines 84--93
-[][] 
- []
-
-
-Overfull \hbox (3.02245pt too wide) in paragraph at lines 110--110
-[]\OT1/cmr/m/n/10.95 d6| 
- []
-
-
-Overfull \hbox (3.02245pt too wide) in paragraph at lines 110--110
-[]\OT1/cmr/m/n/10.95 d5| 
- []
-
-
-Overfull \hbox (3.02245pt too wide) in paragraph at lines 110--110
-[]\OT1/cmr/m/n/10.95 d4| 
- []
-
-
-Overfull \hbox (3.02245pt too wide) in paragraph at lines 110--110
-[]\OT1/cmr/m/n/10.95 d3| 
- []
-
-
-Overfull \hbox (3.02245pt too wide) in paragraph at lines 110--110
-[]\OT1/cmr/m/n/10.95 d2| 
- []
-
-
-Overfull \hbox (3.02245pt too wide) in paragraph at lines 110--110
-[]\OT1/cmr/m/n/10.95 d1| 
- []
-
-
-Overfull \hbox (3.02245pt too wide) in paragraph at lines 110--111
-[]\OT1/cmr/m/n/10.95 d0| 
- []
-
-
-Overfull \hbox (35.89651pt too wide) in paragraph at lines 106--115
-[][] 
- []
-
-[188]
-Overfull \hbox (33.74438pt too wide) in paragraph at lines 128--137
-[][] 
- []
-
-
-Overfull \hbox (33.74438pt too wide) in paragraph at lines 150--159
-[][] 
- []
-
-
-Overfull \hbox (3.02245pt too wide) in paragraph at lines 166--166
-[]\OT1/cmr/m/n/10.95 d6| 
- []
-
-
-Overfull \hbox (33.74438pt too wide) in paragraph at lines 162--171
-[][] 
- []
-
-
-Overfull \hbox (33.74438pt too wide) in paragraph at lines 174--183
-[][] 
- []
-
-
-Overfull \hbox (33.74438pt too wide) in paragraph at lines 186--195
-[][] 
- []
-
-) [189]
-\openout2 = `Chapter3.aux'.
-
- (./Chapter3.tex [190
-
-
-
-]
-Chapter 3.
-
-Overfull \hbox (50.58144pt too wide) in paragraph at lines 25--51
-[] 
- []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [191]
-Underfull \vbox (badness 6944) has occurred while \output is active []
-
- [192]
-Overfull \hbox (26.58302pt too wide) in paragraph at lines 96--105
- [] 
- []
-
-[193] [194]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [195]
-Underfull \vbox (badness 7238) has occurred while \output is active []
-
- [196])
-[197]
-\openout2 = `Chapter4.aux'.
-
- (./Chapter4.tex [198
-
-
-
-]
-Chapter 4.
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 23.
-(/usr/local/texlive/2018/texmf-dist/tex/latex/base/omscmr.fd
-File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
-)
-LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 23.
- [199] [200]
-[201]
-Overfull \hbox (225.34578pt too wide) in paragraph at lines 114--114
-[]\OT1/cmtt/m/n/10.95 <D5> 0x00 0b00000000 - HOPSA - Ops mode programming - 7 h
-igh address bits of Loco to program, 0x00 if service mode[] 
- []
-
-
-Overfull \hbox (409.30379pt too wide) in paragraph at lines 114--114
-[]\OT1/cmtt/m/n/10.95 <D6> 0x0e 0b00001110 - LOPSA - Ops Mode programming - 7 l
-ow address bits of loco to program, 0x00 if service mode (however 0e is the loc
-o address)[] 
- []
-
-
-Overfull \hbox (231.09447pt too wide) in paragraph at lines 114--114
-[]\OT1/cmtt/m/n/10.95 <D7> 0x00 0b00000000 - TRK - normal track status for comm
-and station - this doesn't look right set to 0x00 for send[] 
- []
-
-
-Overfull \hbox (41.84674pt too wide) in paragraph at lines 131--143
-[][] 
- []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [202]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [203]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [204]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [205]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [206]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [207]
-[208]
-Overfull \hbox (6.00163pt too wide) in paragraph at lines 377--378
-[]$[]$| 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 391--391
-[]\OT1/cmr/m/n/8 Acceleration
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 398--398
-[]\OT1/cmr/m/n/8 Deceleration
- []
-
-
-Overfull \hbox (29.79303pt too wide) in paragraph at lines 376--410
-[][] 
- []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [209]
-Overfull \vbox (8.5285pt too high) has occurred while \output is active []
-
-
-[210]
-Overfull \hbox (6.00163pt too wide) in paragraph at lines 412--413
-[]$[]$| 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 422--422
-[]\OT1/cmr/m/n/8 Manufacturer
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 438--438
-[]\OT1/cmr/m/n/8 EMF Feed-back
- []
-
-
-Underfull \hbox (badness 5388) in paragraph at lines 441--441
-[]\OT1/cmr/m/n/8 Packet time-out
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 444--444
-[]\OT1/cmr/m/n/8 Power Source
- []
-
-
-Overfull \hbox (6.85205pt too wide) in paragraph at lines 448--448
-[]\OT1/cmr/m/n/8 0b00000001| 
- []
-
-
-Overfull \hbox (6.85205pt too wide) in paragraph at lines 449--449
-[]\OT1/cmr/m/n/8 0b00000010| 
- []
-
-
-Overfull \hbox (6.85205pt too wide) in paragraph at lines 450--450
-[]\OT1/cmr/m/n/8 0b00000100| 
- []
-
-
-Overfull \hbox (6.85205pt too wide) in paragraph at lines 451--451
-[]\OT1/cmr/m/n/8 0b00001000| 
- []
-
-
-Overfull \hbox (6.85205pt too wide) in paragraph at lines 452--452
-[]\OT1/cmr/m/n/8 0b00010000| 
- []
-
-
-Overfull \hbox (6.85205pt too wide) in paragraph at lines 453--453
-[]\OT1/cmr/m/n/8 0b00100000| 
- []
-
-
-Overfull \hbox (29.79303pt too wide) in paragraph at lines 411--457
-[][] 
- []
-
-
-Overfull \vbox (122.52835pt too high) has occurred while \output is active []
-
-
-[211]
-Overfull \hbox (6.00163pt too wide) in paragraph at lines 459--460
-[]$[]$| 
- []
-
-
-Underfull \hbox (badness 6559) in paragraph at lines 461--461
-[]\OT1/cmr/m/n/8 Alternate Mode
- []
-
-
-Underfull \hbox (badness 6559) in paragraph at lines 466--466
-[]\OT1/cmr/m/n/8 Alternate Mode
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 475--475
-[]\OT1/cmr/m/n/8 Extended Ad-
- []
-
-
-Overfull \hbox (29.79303pt too wide) in paragraph at lines 458--484
-[][] 
- []
-
-
-Overfull \vbox (46.52861pt too high) has occurred while \output is active []
-
-
-[212]
-Overfull \hbox (6.00163pt too wide) in paragraph at lines 486--487
-[]$[]$| 
- []
-
-
-Underfull \hbox (badness 3354) in paragraph at lines 488--488
-[]\OT1/cmr/m/n/8 Consist Ad-dress
- []
-
-
-Underfull \hbox (badness 3354) in paragraph at lines 493--493
-[]\OT1/cmr/m/n/8 Consist Ad-dress
- []
-
-
-Overfull \hbox (29.79303pt too wide) in paragraph at lines 485--508
-[][] 
- []
-
-
-Overfull \vbox (27.52866pt too high) has occurred while \output is active []
-
-
-[213]
-Overfull \hbox (6.00163pt too wide) in paragraph at lines 510--511
-[]$[]$| 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 515--515
-[]\OT1/cmr/m/n/8 Decoder Au-to-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 515--515
-\OT1/cmr/m/n/8 matic Stop-ping
- []
-
-
-Overfull \hbox (5.93959pt too wide) in paragraph at lines 518--537
-[][]| 
- []
-
-
-Overfull \hbox (29.79303pt too wide) in paragraph at lines 509--538
-[][] 
- []
-
-[214]
-Overfull \hbox (6.00163pt too wide) in paragraph at lines 540--541
-[]$[]$| 
- []
-
-LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <8> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 556.
-
-Overfull \hbox (5.93959pt too wide) in paragraph at lines 544--562
-[][]| 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 563--563
-[]\OT1/cmr/m/n/8 Bi-Directional
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 563--563
-\OT1/cmr/m/n/8 Com-mu-ni-ca-tion
- []
-
-
-Overfull \hbox (5.93959pt too wide) in paragraph at lines 566--585
-[][]| 
- []
-
-
-Underfull \hbox (badness 3354) in paragraph at lines 591--592
-[]\OT1/cmr/m/n/8 Enable/Disable RailCom[] Plus au-to-matic loco
- []
-
-
-Overfull \hbox (5.93959pt too wide) in paragraph at lines 588--597
-[][]| 
- []
-
-
-Overfull \hbox (29.79303pt too wide) in paragraph at lines 539--599
-[][] 
- []
-
-
-Overfull \vbox (46.5282pt too high) has occurred while \output is active []
-
-
-[215]
-Overfull \hbox (6.00163pt too wide) in paragraph at lines 601--602
-[]$[]$| 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 603--603
-[]\OT1/cmr/m/n/8 Configurations
- []
-
-
-Overfull \hbox (5.93959pt too wide) in paragraph at lines 604--623
-[][]| 
- []
-
-
-Overfull \hbox (5.93959pt too wide) in paragraph at lines 626--646
-[][]| 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 648--648
-[]\OT1/cmr/m/n/8 Error In-for-ma-
- []
-
-
-Overfull \hbox (29.79303pt too wide) in paragraph at lines 600--651
-[][] 
- []
-
-
-Overfull \vbox (75.02829pt too high) has occurred while \output is active []
-
-
-[216]
-Overfull \hbox (6.00163pt too wide) in paragraph at lines 653--654
-[]$[]$| 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 663--663
-[]\OT1/cmr/m/n/8 Output Lo-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 663--663
-\OT1/cmr/m/n/8 ca-tions 1-14
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 663--663
-\OT1/cmr/m/n/8 for Func-tions
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 663--663
-\OT1/cmr/m/n/8 FL(f), FL(r),
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 666--667
-[]\OT1/cmr/m/n/8 Manufacturer
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 668--668
-[]\OT1/cmr/m/n/8 Protocol se-lec-
- []
-
-
-Overfull \hbox (5.93959pt too wide) in paragraph at lines 670--681
-[][]| 
- []
-
-
-Overfull \hbox (29.79303pt too wide) in paragraph at lines 652--683
-[][] 
- []
-
-[217]
-Overfull \hbox (6.00163pt too wide) in paragraph at lines 685--686
-[]$[]$| 
- []
-
-
-Overfull \hbox (5.93959pt too wide) in paragraph at lines 688--707
-[][]| 
- []
-
-
-Overfull \hbox (5.93959pt too wide) in paragraph at lines 710--719
-[][]| 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 724--724
-[]\OT1/cmr/m/n/8 Control Ref-er-
- []
-
-
-Underfull \hbox (badness 1215) in paragraph at lines 730--730
-[]\OT1/cmr/m/n/8 BEMF In-flu-ence
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 736--736
-[]\OT1/cmr/m/n/8 Sound vol-ume
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 738--738
-[]\OT1/cmr/m/n/8 Brake sound
- []
-
-
-Overfull \hbox (29.79303pt too wide) in paragraph at lines 684--741
-[][] 
- []
-
-
-Overfull \vbox (132.0282pt too high) has occurred while \output is active []
-
-
-[218]
-Overfull \hbox (6.00163pt too wide) in paragraph at lines 743--744
-[]$[]$| 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 745--745
-[]\OT1/cmr/m/n/8 Brake sound
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 753--753
-[]\OT1/cmr/m/n/8 Shunting Mode
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 765--765
-[]\OT1/cmr/m/n/8 Gearbox back-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 767--767
-[]\OT1/cmr/m/n/8 Frequency for
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 767--767
-\OT1/cmr/m/n/8 Flash-ing light
- []
-
-
-Underfull \hbox (badness 3343) in paragraph at lines 769--769
-[]\OT1/cmr/m/n/8 Power Fail By-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 771--771
-[]\OT1/cmr/m/n/8 Slow speed
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 771--771
-[]\OT1/cmr/m/n/8 50 -
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 773--773
-[]\OT1/cmr/m/n/8 50 -
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 775--775
-[]\OT1/cmr/m/n/8 Slow speed
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 779--779
-[]\OT1/cmr/m/n/8 ABC Mode
- []
-
-
-Overfull \hbox (29.79303pt too wide) in paragraph at lines 742--781
-[][] 
- []
-
-
-Overfull \vbox (18.02841pt too high) has occurred while \output is active []
-
-
-[219]
-Overfull \hbox (6.00163pt too wide) in paragraph at lines 783--784
-[]$[]$| 
- []
-
-
-Overfull \hbox (5.93959pt too wide) in paragraph at lines 786--803
-[][]| 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 816--816
-[]\OT1/cmr/m/n/8 Grade Cross-ing
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 832--832
-[]\OT1/cmr/m/n/8 Smoke Chuff
- []
-
-
-Overfull \hbox (29.79303pt too wide) in paragraph at lines 782--836
-[][] 
- []
-
-
-Overfull \vbox (84.52821pt too high) has occurred while \output is active []
-
-
-[220]
-Overfull \hbox (6.00163pt too wide) in paragraph at lines 838--839
-[]$[]$| 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 840--840
-[]\OT1/cmr/m/n/8 ABC Shut-tle
- []
-
-
-Underfull \hbox (badness 2591) in paragraph at lines 842--842
-[]\OT1/cmr/m/n/8 HLU Speedlimit
- []
-
-
-Underfull \hbox (badness 2591) in paragraph at lines 844--844
-[]\OT1/cmr/m/n/8 HLU Speedlimit
- []
-
-
-Underfull \hbox (badness 2591) in paragraph at lines 846--846
-[]\OT1/cmr/m/n/8 HLU Speedlimit
- []
-
-
-Underfull \hbox (badness 2591) in paragraph at lines 848--848
-[]\OT1/cmr/m/n/8 HLU Speedlimit
- []
-
-
-Underfull \hbox (badness 2591) in paragraph at lines 850--850
-[]\OT1/cmr/m/n/8 HLU Speedlimit
- []
-
-
-Underfull \hbox (badness 3039) in paragraph at lines 852--852
-[]\OT1/cmr/m/n/8 Sound CV 1 -
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 866--866
-[]\OT1/cmr/m/n/8 Automatic de-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 870--870
-[]\OT1/cmr/m/n/8 Decoupling -
- []
-
-
-Underfull \hbox (badness 2269) in paragraph at lines 872--872
-[]\OT1/cmr/m/n/8 Minimum steam
- []
-
-
-Overfull \hbox (29.79303pt too wide) in paragraph at lines 837--876
-[][] 
- []
-
-
-Overfull \vbox (37.02841pt too high) has occurred while \output is active []
-
-
-[221]
-Overfull \hbox (6.00163pt too wide) in paragraph at lines 878--879
-[]$[]$| 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 880--880
-[]\OT1/cmr/m/n/8 Constant brake
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 887--887
-[]\OT1/cmr/m/n/8 Constant brak-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 887--887
-\OT1/cmr/m/n/8 ing dis-tance
- []
-
-
-Overfull \hbox (29.79303pt too wide) in paragraph at lines 877--889
-[][] 
- []
-
-) [222] (./Network Notes.bbl)
+) [229] (./Network Notes.bbl)
 \openout2 = `AppendixA.aux'.
 
- (./AppendixA.tex
-Appendix A.
-) [223
+ (./AppendixA.tex [230
 
 
 
 ]
+Appendix A.
+) [231]
 \openout2 = `AppendixB.aux'.
 
- (./AppendixB.tex [224
+ (./AppendixB.tex [232
 
 
 
 ]
 Appendix B.
 
-Overfull \hbox (27.0985pt too wide) in paragraph at lines 4--5
-[]$[]$| 
- []
-
-
-Underfull \hbox (badness 2564) in paragraph at lines 20--20
+Underfull \hbox (badness 2564) in paragraph at lines 37--37
 []\OT1/cmr/m/n/10.95 Computer De-coder Pro-gram-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 22--22
+Underfull \hbox (badness 10000) in paragraph at lines 41--41
 []\OT1/cmr/m/n/10.95 Advanced Ra-dio Equipped
  []
 
 
-Underfull \hbox (badness 4927) in paragraph at lines 24--24
+Underfull \hbox (badness 4927) in paragraph at lines 45--45
 \OT1/cmr/m/n/10.95 tion/Booster with in-tel-li-gent
  []
 
 
-Overfull \hbox (8.30461pt too wide) in paragraph at lines 3--27
+Overfull \hbox (29.80615pt too wide) in paragraph at lines 3--50
 [] 
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [225]
-Overfull \vbox (89.53922pt too high) has occurred while \output is active []
+ [233]
+Overfull \vbox (111.46092pt too high) has occurred while \output is active []
 
 
-[226]
-Overfull \hbox (27.0985pt too wide) in paragraph at lines 29--30
-[]$[]$| 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 39--39
+[234]
+Underfull \hbox (badness 10000) in paragraph at lines 73--73
 []\OT1/cmr/m/n/10.95 DB200-
  []
 
 
-Underfull \hbox (badness 4569) in paragraph at lines 39--39
+Underfull \hbox (badness 4569) in paragraph at lines 73--73
 []\OT1/cmr/m/n/10.95 OPTO 8 Amp DCC Opto
  []
 
 
-Underfull \hbox (badness 1147) in paragraph at lines 55--55
+Underfull \hbox (badness 1147) in paragraph at lines 105--105
 []\OT1/cmr/m/n/10.95 SoundFX USB De-coder Pro-
  []
 
 
-Underfull \hbox (badness 1048) in paragraph at lines 56--56
+Underfull \hbox (badness 1048) in paragraph at lines 107--107
 []\OT1/cmr/m/n/10.95 Super Throt-tle with In-frared
  []
 
 
-Overfull \hbox (8.30461pt too wide) in paragraph at lines 28--58
+Overfull \hbox (29.80615pt too wide) in paragraph at lines 51--110
 [][] 
  []
 
 
-Overfull \vbox (91.30145pt too high) has occurred while \output is active []
+Overfull \vbox (115.62312pt too high) has occurred while \output is active []
 
 
-[227]
-Overfull \hbox (27.0985pt too wide) in paragraph at lines 60--61
-[]$[]$| 
- []
-
-
-Overfull \hbox (0.52028pt too wide) in paragraph at lines 66--66
+[235]
+Overfull \hbox (0.52028pt too wide) in paragraph at lines 125--125
 []\OT1/cmr/m/n/10.95 DT402DCE| 
  []
 
 
-Overfull \hbox (7.05988pt too wide) in paragraph at lines 70--70
+Overfull \hbox (7.05988pt too wide) in paragraph at lines 133--133
 []\OT1/cmr/m/n/10.95 LNRPXTRA| 
  []
 
 
-Underfull \hbox (badness 1147) in paragraph at lines 71--71
+Underfull \hbox (badness 1147) in paragraph at lines 135--135
 []\OT1/cmr/m/n/10.95 SoundFX USB De-coder Pro-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 75--75
+Underfull \hbox (badness 10000) in paragraph at lines 143--143
 []\OT1/cmr/m/n/10.95 Advanced Du-plex Ra-dio
  []
 
 
-Overfull \hbox (0.52028pt too wide) in paragraph at lines 76--76
+Overfull \hbox (0.52028pt too wide) in paragraph at lines 145--145
 []\OT1/cmr/m/n/10.95 DT500DCE| 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 76--76
+Underfull \hbox (badness 10000) in paragraph at lines 145--145
 []\OT1/cmr/m/n/10.95 Advanced Du-plex Ra-dio
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 77--77
+Underfull \hbox (badness 10000) in paragraph at lines 147--147
 []\OT1/cmr/m/n/10.95 LocoNet Oc-cu-pancy De-tec-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 77--77
+Underfull \hbox (badness 10000) in paragraph at lines 147--147
 \OT1/cmr/m/n/10.95 tor, 8 De-tec-tion Sec-tions
  []
 
 
-Underfull \hbox (badness 1997) in paragraph at lines 77--77
+Underfull \hbox (badness 1997) in paragraph at lines 147--147
 \OT1/cmr/m/n/10.95 with Transpond-ing & Power
  []
 
 
-Underfull \hbox (badness 1460) in paragraph at lines 78--78
+Underfull \hbox (badness 1460) in paragraph at lines 149--149
 []\OT1/cmr/m/n/10.95 3/5/8 Amp Auto Re-ver-se-ing
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 79--79
+Underfull \hbox (badness 10000) in paragraph at lines 151--151
 []\OT1/cmr/m/n/10.95 DB210-
  []
 
 
-Underfull \hbox (badness 1460) in paragraph at lines 79--79
+Underfull \hbox (badness 1460) in paragraph at lines 151--151
 []\OT1/cmr/m/n/10.95 3/5/8 Amp Auto Re-ver-se-ing
  []
 
 
-Underfull \hbox (badness 1924) in paragraph at lines 79--79
+Underfull \hbox (badness 1924) in paragraph at lines 151--151
 \OT1/cmr/m/n/10.95 DCC Booster that is Opto-
  []
 
 
-Overfull \hbox (8.30461pt too wide) in paragraph at lines 59--83
+Overfull \hbox (29.80615pt too wide) in paragraph at lines 111--158
 [][] 
  []
 
 
-Overfull \vbox (91.30154pt too high) has occurred while \output is active []
+Overfull \vbox (113.22325pt too high) has occurred while \output is active []
 
 
-[228]
-Overfull \hbox (27.0985pt too wide) in paragraph at lines 85--86
-[]$[]$| 
- []
-
-
-Underfull \hbox (badness 1147) in paragraph at lines 87--87
+[236]
+Underfull \hbox (badness 1147) in paragraph at lines 165--165
 []\OT1/cmr/m/n/10.95 SoundFX USB De-coder Pro-
  []
 
 
-Underfull \hbox (badness 2057) in paragraph at lines 88--88
+Underfull \hbox (badness 2057) in paragraph at lines 167--167
 []\OT1/cmr/m/n/10.95 LocoNet DCC Auto-Reverser
  []
 
 
-Underfull \hbox (badness 7308) in paragraph at lines 90--90
+Underfull \hbox (badness 7308) in paragraph at lines 171--171
 []\OT1/cmr/m/n/10.95 DCC Com-mand Sta-tion &
  []
 
 
-Underfull \hbox (badness 1796) in paragraph at lines 97--97
+Underfull \hbox (badness 1796) in paragraph at lines 185--185
 []\OT1/cmr/m/n/10.95 Quad Switch Sta-tion-ary De-
  []
 
 )
-Overfull \hbox (8.30461pt too wide) in paragraph at lines 84--71
+Overfull \hbox (29.80615pt too wide) in paragraph at lines 159--76
 [][] 
  []
 
-[229]
+[237]
 \openout2 = `AppendixC.aux'.
 
- (./AppendixC.tex [230
+ (./AppendixC.tex [238
 
 
 
@@ -9209,11 +9278,11 @@ Overfull \hbox (35.00343pt too wide) in paragraph at lines 3--48
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [231]
+ [239]
 Overfull \vbox (105.8231pt too high) has occurred while \output is active []
 
 
-[232]
+[240]
 Overfull \hbox (2.513pt too wide) in paragraph at lines 54--54
 []\OT1/cmr/m/n/10.95 DCS210/DCS240/| 
  []
@@ -9287,7 +9356,7 @@ Overfull \hbox (35.00343pt too wide) in paragraph at lines 49--109
 Overfull \vbox (110.823pt too high) has occurred while \output is active []
 
 
-[233]
+[241]
 Overfull \hbox (2.513pt too wide) in paragraph at lines 115--115
 []\OT1/cmr/m/n/10.95 DCS210/DCS240/| 
  []
@@ -9361,7 +9430,7 @@ Overfull \hbox (35.00343pt too wide) in paragraph at lines 110--166
 Overfull \vbox (110.42305pt too high) has occurred while \output is active []
 
 
-[234]
+[242]
 Overfull \hbox (2.513pt too wide) in paragraph at lines 172--172
 []\OT1/cmr/m/n/10.95 DCS210/DCS240/| 
  []
@@ -9430,7 +9499,7 @@ Overfull \hbox (35.00343pt too wide) in paragraph at lines 167--226
 Overfull \vbox (44.82303pt too high) has occurred while \output is active []
 
 
-[235]
+[243]
 Overfull \hbox (2.513pt too wide) in paragraph at lines 232--232
 []\OT1/cmr/m/n/10.95 DCS210/DCS240/| 
  []
@@ -9455,7 +9524,7 @@ Overfull \hbox (6.786pt too wide) in paragraph at lines 264--264
 []$[]$| 
  []
 
-) [236]
+) [244]
 \openout2 = `AppendixD.aux'.
 
  (./AppendixD.tex
@@ -9465,52 +9534,49 @@ Overfull \hbox (79.23946pt too wide) in paragraph at lines 8--40
 [] 
  []
 
-) [237
+) [245
 
 
 
 ]
 Using TeX to sort glossary entries---this may take a while
-[238
+[246
 
 
 
 ]
-Overfull \hbox (1.33649pt too wide) in paragraph at lines 77--77
+Overfull \hbox (1.33649pt too wide) in paragraph at lines 82--82
 []\OT1/cmr/m/n/10.95 means the byte 7 of a Lo-coSlot-DataP1 or Lo-coSlot-DataP2
 
  []
 
-[239
+[247
 
-] [240] (./Network Notes.ind [241]
-Overfull \hbox (11.97273pt too wide) in paragraph at lines 55--57
-[]\OT1/cmr/m/n/10.95 Global Sys-tem Track Sta-tus, [][]14[][], [][]108[][], [][
-]157[][] 
- []
-
-[242
-
-] [243])
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 81.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 81.
- (./Network Notes.aux (./Chapter1.aux) (./Chapter2.aux)
-(./Chapter3.aux) (./Chapter4.aux) (./AppendixA.aux) (./AppendixB.aux)
-(./AppendixC.aux) (./AppendixD.aux))
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 81.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 81.
+] [248]
+No file "Network Notes".ind.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 86.
+[249]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 86.
+ (./Network Notes.aux (./Chapter1-NetworkProtocol.aux)
+(./Chapter2-LocomotiveControl.aux) (./Chapter3-SwitchControl.aux)
+(./Chapter4-DetectionTransponding.aux) (./Chapter5-Programming.aux)
+(./Chapter6-FastClock.aux) (./Chapter7-IPL.aux) (./Chapter8-Statistics.aux)
+(./Chapter9-Messages.aux) (./AppendixA.aux) (./AppendixB.aux) (./AppendixC.aux)
+(./AppendixD.aux))
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 86.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 86.
 Package rerunfilecheck Info: File `"Network Notes".out' has not changed.
-(rerunfilecheck)             Checksum: 015647B7835F1116332BA893E6BF3C56;7182.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 81.
+(rerunfilecheck)             Checksum: DD492EEDEE692FDA43065E598A0EA68D;7206.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 86.
  ) 
 Here is how much of TeX's memory you used:
- 12938 strings out of 492649
- 204543 string characters out of 6129622
- 360435 words of memory out of 5000000
- 15884 multiletter control sequences out of 15000+600000
- 14383 words of font info for 54 fonts, out of 8000000 for 9000
+ 13162 strings out of 492649
+ 209791 string characters out of 6129622
+ 367830 words of memory out of 5000000
+ 16054 multiletter control sequences out of 15000+600000
+ 14037 words of font info for 53 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,22n,87p,2000b,598s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 80i,22n,93p,2000b,596s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
 ></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb>
 </usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><
@@ -9523,12 +9589,11 @@ texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/tex
 live/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsl10.pfb></usr/local/texl
 ive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texli
 ve/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive
-/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/
-2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on "Network Notes.pdf" (249 pages, 560194 bytes).
+/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
+Output written on "Network Notes.pdf" (255 pages, 562060 bytes).
 PDF statistics:
- 2292 PDF objects out of 2487 (max. 8388607)
- 2006 compressed objects within 21 object streams
- 431 named destinations out of 1000 (max. 500000)
- 873 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 2382 PDF objects out of 2487 (max. 8388607)
+ 2091 compressed objects within 21 object streams
+ 453 named destinations out of 1000 (max. 500000)
+ 945 words of extra memory for PDF output out of 10000 (max. 10000000)
 

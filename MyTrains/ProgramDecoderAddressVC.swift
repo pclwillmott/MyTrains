@@ -56,6 +56,12 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
     case waitingForReadCV17Data
     case waitingForReadCV18Ack
     case waitingForReadCV18Data
+    case waitingForReadCV19Ack
+    case waitingForReadCV19Data
+    case waitingForReadCV21Ack
+    case waitingForReadCV21Data
+    case waitingForReadCV22Ack
+    case waitingForReadCV22Data
     case waitingForWriteReadCV29Ack
     case waitingForWriteReadCV29Data
     case waitingForWriteCV29Ack
@@ -66,6 +72,12 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
     case waitingForWriteCV17Data
     case waitingForWriteCV18Ack
     case waitingForWriteCV18Data
+    case waitingForWriteCV19Ack
+    case waitingForWriteCV19Data
+    case waitingForWriteCV21Ack
+    case waitingForWriteCV21Data
+    case waitingForWriteCV22Ack
+    case waitingForWriteCV22Data
     case waitingForReadCVAck
     case waitingForReadCVData
     case waitingForIndexedReadWriteCV31Ack
@@ -185,6 +197,33 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
       cvTableView.reloadData()
       txtPrimaryPageIndex.stringValue = "\(loco.getCV(cvNumber: 31)?.cvValue ?? 16)"
       txtSecondaryPageIndex.stringValue = "\(loco.getCV(cvNumber: 32)?.cvValue ?? 1)"
+      rad14Steps.state = loco.is14Steps ? .on : .off
+      rad28Steps.state = loco.is14Steps ? .off : .on
+      radSetCV2.state = loco.isSpeedTableCV2CV5CV6 ? .on : .off
+      radSetCV66.state = loco.isSpeedTableCV2CV5CV6 ? .off : .on
+      radNDOTForward.state = loco.isNormalDirectionOfTravelForward ? .on : .off
+      radNDOTReverse.state = loco.isNormalDirectionOfTravelForward ? .off : .on
+      radRailComEnabled.state = loco.isRailComEnabled ? .on : .off
+      radRailComDisabled.state = loco.isRailComEnabled ? .off : .on
+      radAnalogOperationEnabled.state = loco.isAnalogOperationEnabled ? .on : .off
+      radAnalogOperationDisabled.state = loco.isAnalogOperationEnabled ? .off : .on
+      txtConsistAddress.integerValue = loco.consistAddress
+      radConsistRDForward.state = loco.consistRelativeDirection == .forward ? .on : .off
+      radConsistRDReverse.state = loco.consistRelativeDirection == .reverse ? .on : .off
+      chkF1.state = loco.consistAddressActiveF1 ? .on : .off
+      chkF2.state = loco.consistAddressActiveF2 ? .on : .off
+      chkF3.state = loco.consistAddressActiveF3 ? .on : .off
+      chkF4.state = loco.consistAddressActiveF4 ? .on : .off
+      chkF5.state = loco.consistAddressActiveF5 ? .on : .off
+      chkF6.state = loco.consistAddressActiveF6 ? .on : .off
+      chkF7.state = loco.consistAddressActiveF7 ? .on : .off
+      chkF8.state = loco.consistAddressActiveF8 ? .on : .off
+      chkF9.state = loco.consistAddressActiveF9 ? .on : .off
+      chkF10.state = loco.consistAddressActiveF10 ? .on : .off
+      chkF11.state = loco.consistAddressActiveF11 ? .on : .off
+      chkF12.state = loco.consistAddressActiveF12 ? .on : .off
+      chkF0Forward.state = loco.consistAddressActiveF0Forward ? .on : .off
+      chkF0Reverse.state = loco.consistAddressActiveF0Reverse ? .on : .off
     }
     
     radRegularCVs.state = isIndexedMode ? .off : .on
@@ -286,6 +325,32 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
           let _ = alert.runModal() // == NSAlertFirstButtonReturn
         }
       }
+
+      if good {
+        
+        if let cv = Int(txtConsistAddress.stringValue) {
+          
+          if cv < 0 || cv > 127 {
+            good = false
+          }
+        }
+        else {
+          good = false
+        }
+        
+        if !good {
+          let alert = NSAlert()
+
+          alert.messageText = "Invalid Consist Address"
+          alert.informativeText = "A consist address in the range 0 to 127 is required."
+          alert.addButton(withTitle: "OK")
+       // alert.addButton(withTitle: "Cancel")
+          alert.alertStyle = .critical
+
+          let _ = alert.runModal() // == NSAlertFirstButtonReturn
+        }
+      }
+
     }
     
     return good
@@ -323,6 +388,18 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
         programmerState = .waitingForReadCV18Data
         message = "Reading CV18"
         break
+      case .waitingForReadCV19Ack:
+        programmerState = .waitingForReadCV19Data
+        message = "Reading CV19"
+        break
+      case .waitingForReadCV21Ack:
+        programmerState = .waitingForReadCV21Data
+        message = "Reading CV21"
+        break
+      case .waitingForReadCV22Ack:
+        programmerState = .waitingForReadCV22Data
+        message = "Reading CV22"
+        break
       case .waitingForWriteReadCV29Ack:
         programmerState = .waitingForWriteReadCV29Data
         message = "Reading CV29"
@@ -338,6 +415,15 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
       case .waitingForWriteCV18Ack:
         programmerState = .waitingForWriteCV18Data
         message = "Writing CV18"
+      case .waitingForWriteCV19Ack:
+        programmerState = .waitingForWriteCV19Data
+        message = "Writing CV19"
+      case .waitingForWriteCV21Ack:
+        programmerState = .waitingForWriteCV21Data
+        message = "Writing CV21"
+      case .waitingForWriteCV22Ack:
+        programmerState = .waitingForWriteCV22Data
+        message = "Writing CV22"
       case .waitingForReadCVAck:
         programmerState = .waitingForReadCVData
         lblReadCVStatus.stringValue = "Reading CV\(readCV)"
@@ -382,57 +468,138 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
         var message = ""
         
         switch programmerState {
+          
         case .waitingForReadCV29Data:
-          cv29 = psd.value
-          shortAddress = cv29 & 0b00100000 == 0x00
-          if shortAddress {
-            programmerState = .waitingForReadCV01Ack
-            commandStation?.readCV(cv: 01)
+          
+          if let loco = locomotive, let cv = loco.getCV(cvNumber: 29) {
+            
+            cv29 = psd.value
+            cv.cvValue = cv29
+            
+            if loco.isShortAddress {
+              programmerState = .waitingForReadCV01Ack
+              commandStation?.readCV(cv: 01)
+            }
+            else {
+              programmerState = .waitingForReadCV17Ack
+              commandStation?.readCV(cv: 17)
+            }
+            
+            loco.save()
+            
+            setup()
+            
           }
-          else {
-            programmerState = .waitingForReadCV17Ack
-            commandStation?.readCV(cv: 17)
-          }
+          
           break
+          
         case .waitingForReadCV01Data:
-          cv01 = psd.value
-          address = cv01
-          txtAddress.stringValue = "\(address)"
-          message = "Read Completed"
-          saveAddress(address: address)
-          programmerState = .idle
+          
+          if let loco = locomotive, let cv = loco.getCV(cvNumber: 1) {
+          
+            cv01 = psd.value
+            cv.cvValue = cv01
+            address = cv01
+            txtAddress.stringValue = "\(address)"
+            saveAddress(address: address)
+            programmerState = .waitingForReadCV19Ack
+            commandStation?.readCV(cv: 19)
+            
+          }
           break
+
         case .waitingForReadCV17Data:
-          cv17 = psd.value
-        
-          programmerState = .waitingForReadCV18Ack
-          commandStation?.readCV(cv: 18)
+          
+          if let loco = locomotive, let cv = loco.getCV(cvNumber: 17) {
+            cv17 = psd.value
+            cv.cvValue = cv17
+            programmerState = .waitingForReadCV18Ack
+            commandStation?.readCV(cv: 18)
+          }
+          
           break
         case .waitingForReadCV18Data:
-          cv18 = psd.value
-          address = Locomotive.decoderAddress(cv17: cv17, cv18: cv18)
-          txtAddress.stringValue = "\(address)"
-          message = "Read Completed"
-          saveAddress(address: address)
-          programmerState = .idle
+          if let loco = locomotive, let cv = loco.getCV(cvNumber: 18) {
+            cv18 = psd.value
+            cv.cvValue = cv18
+            address = Locomotive.decoderAddress(cv17: cv17, cv18: cv18)
+            saveAddress(address: address)
+            txtAddress.stringValue = "\(address)"
+            programmerState = .waitingForReadCV19Ack
+            commandStation?.readCV(cv: 19)
+          }
+          break
+        case .waitingForReadCV19Data:
+          
+          if let loco = locomotive, let cv = loco.getCV(cvNumber: 19) {
+            cv.cvValue = psd.value
+            programmerState = .waitingForReadCV21Ack
+            commandStation?.readCV(cv: 21)
+          }
+          
+          break
+        case .waitingForReadCV21Data:
+          
+          if let loco = locomotive, let cv = loco.getCV(cvNumber: 21) {
+            cv.cvValue = psd.value
+            programmerState = .waitingForReadCV22Ack
+            commandStation?.readCV(cv: 22)
+          }
+          
+          break
+        case .waitingForReadCV22Data:
+          if let loco = locomotive, let cv = loco.getCV(cvNumber: 22) {
+            cv.cvValue = psd.value
+            message = "Read Completed"
+            loco.save()
+            setup()
+            programmerState = .idle
+          }
           break
         case .waitingForWriteReadCV29Data:
-          address = txtAddress.integerValue
-          cv29 = psd.value & 0b11011111
-          cv29 |= address > 127 ? 0b00100000 : 0x00
-          programmerState = .waitingForWriteCV29Ack
-          commandStation?.writeCV(cv: 29, value: cv29)
+          if let loco = locomotive, let cv = loco.getCV(cvNumber: 29) {
+            address = txtAddress.integerValue
+            cv.cvValue = psd.value
+            loco.isShortAddress = address < 128
+            loco.is14Steps = rad14Steps.state == .on
+            loco.isRailComEnabled = radRailComEnabled.state == .on
+            loco.isAnalogOperationEnabled = radAnalogOperationEnabled.state == .on
+            loco.isNormalDirectionOfTravelForward = radNDOTForward.state == .on
+            loco.isSpeedTableCV2CV5CV6 = radSetCV2.state == .on
+            loco.consistAddress = txtConsistAddress.integerValue
+            loco.consistRelativeDirection = radConsistRDForward.state == .on ? .forward : .reverse
+            loco.consistAddressActiveF1 = chkF1.state == .on
+            loco.consistAddressActiveF2 = chkF2.state == .on
+            loco.consistAddressActiveF3 = chkF3.state == .on
+            loco.consistAddressActiveF4 = chkF4.state == .on
+            loco.consistAddressActiveF5 = chkF5.state == .on
+            loco.consistAddressActiveF6 = chkF6.state == .on
+            loco.consistAddressActiveF7 = chkF7.state == .on
+            loco.consistAddressActiveF8 = chkF8.state == .on
+            loco.consistAddressActiveF9 = chkF9.state == .on
+            loco.consistAddressActiveF10 = chkF10.state == .on
+            loco.consistAddressActiveF11 = chkF11.state == .on
+            loco.consistAddressActiveF12 = chkF12.state == .on
+            loco.consistAddressActiveF0Forward = chkF0Forward.state == .on
+            loco.consistAddressActiveF0Reverse = chkF0Reverse.state == .on
+            cv29 = cv.cvValue
+            programmerState = .waitingForWriteCV29Ack
+            commandStation?.writeCV(cv: 29, value: cv29)
+          }
           break
         case .waitingForWriteCV29Data:
-          if address > 127 {
-            cv17 = Locomotive.cv17(address: address)
-            programmerState = .waitingForWriteCV17Ack
-            commandStation?.writeCV(cv: 17, value: cv17)
-          }
-          else {
-            cv01 = address
-            programmerState = .waitingForWriteCV01Ack
-            commandStation?.writeCV(cv: 1, value: cv01)
+          if let loco = locomotive {
+            loco.save()
+            if !loco.isShortAddress {
+              cv17 = Locomotive.cv17(address: address)
+              programmerState = .waitingForWriteCV17Ack
+              commandStation?.writeCV(cv: 17, value: cv17)
+            }
+            else {
+              cv01 = address
+              programmerState = .waitingForWriteCV01Ack
+              commandStation?.writeCV(cv: 1, value: cv01)
+            }
           }
           break
         case .waitingForIndexedReadWriteCV31Data:
@@ -442,20 +609,63 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
         case .waitingForIndexedReadWriteCV32Data:
           programmerState = .waitingForReadCVAck
           commandStation?.readCV(cv: readCV)
+          
         case .waitingForWriteCV01Data:
-          programmerState = .idle
+          
           saveAddress(address: address)
-          message = "Write Completed"
+          
+          if let loco = locomotive {
+            
+            if let cv = loco.getCV(cvNumber: 1) {
+              cv.cvValue = cv01
+            }
+            if let cv = loco.getCV(cvNumber: 19) {
+              programmerState = .waitingForWriteCV19Ack
+              commandStation?.writeCV(cv: 19, value: cv.cvValue)
+            }
+          }
           break
         case .waitingForWriteCV17Data:
+          if let loco = locomotive, let cv = loco.getCV(cvNumber: 17) {
+            cv.cvValue = cv17
+          }
           cv18 = Locomotive.cv18(address: address)
           programmerState = .waitingForWriteCV18Ack
           commandStation?.writeCV(cv: 18, value: cv18)
           break
         case .waitingForWriteCV18Data:
-          programmerState = .idle
+          
           saveAddress(address: address)
+          
+          if let loco = locomotive {
+            
+            if let cv = loco.getCV(cvNumber: 18) {
+              cv.cvValue = cv18
+            }
+            
+            if let cv = loco.getCV(cvNumber: 19) {
+              programmerState = .waitingForWriteCV19Ack
+              commandStation?.writeCV(cv: 19, value: cv.cvValue)
+            }
+          }
+          break
+        case .waitingForWriteCV19Data:
+          if let loco = locomotive, let cv = loco.getCV(cvNumber: 21) {
+            programmerState = .waitingForWriteCV21Ack
+            commandStation?.writeCV(cv: 21, value: cv.cvValue)
+          }
+          break
+        case .waitingForWriteCV21Data:
+          if let loco = locomotive, let cv = loco.getCV(cvNumber: 22) {
+            programmerState = .waitingForWriteCV22Ack
+            commandStation?.writeCV(cv: 22, value: cv.cvValue)
+          }
+          break
+        case .waitingForWriteCV22Data:
+          locomotive?.save()
+          programmerState = .idle
           message = "Write Completed"
+          cvTableView.reloadData()
           break
         case .waitingForWriteCVData:
           programmerState = .idle
@@ -537,6 +747,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
               btnWriteCVValues.isEnabled = true
               btnImportCVs.isEnabled = true
               btnExportCVs.isEnabled = true
+              setup()
             }
           }
         case .writeMultipleState2:
@@ -602,6 +813,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
             btnImportCVs.isEnabled = true
             btnExportCVs.isEnabled = true
             writeMultipleIndex = 0
+            setup()
           }
 
         default:
@@ -1085,6 +1297,154 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
 
     }
     
+  }
+  
+  @IBOutlet weak var radAnalogOperationEnabled: NSButton!
+  
+  @IBAction func radAnalogOperationEnabledAction(_ sender: NSButton) {
+    radAnalogOperationDisabled.state = sender.state == .on ? .off : .on
+  }
+  
+  @IBOutlet weak var radAnalogOperationDisabled: NSButton!
+  
+  @IBAction func radAnalogOperationDisabledAction(_ sender: NSButton) {
+    radAnalogOperationEnabled.state = sender.state == .on ? .off : .on
+  }
+  
+  @IBOutlet weak var txtConsistAddress: NSTextField!
+  
+  @IBAction func txtConsistAddressAction(_ sender: NSTextField) {
+  }
+  
+  @IBOutlet weak var rad14Steps: NSButton!
+  
+  @IBAction func rad14StepsAction(_ sender: NSButton) {
+    rad28Steps.state = sender.state == .on ? .off : .on
+  }
+  
+  @IBOutlet weak var rad28Steps: NSButton!
+  
+  @IBAction func rad28StepsAction(_ sender: NSButton) {
+    rad14Steps.state = sender.state == .on ? .off : .on
+  }
+  
+  @IBOutlet weak var radRailComEnabled: NSButton!
+  
+  @IBAction func radRailComEnabledAction(_ sender: NSButton) {
+    radRailComDisabled.state = sender.state == .on ? .off : .on
+  }
+  
+  @IBOutlet weak var radRailComDisabled: NSButton!
+  
+  @IBAction func radRailComDisabledAction(_ sender: NSButton) {
+    radRailComEnabled.state = sender.state == .on ? .off : .on
+  }
+  
+  @IBOutlet weak var chkF0Forward: NSButton!
+  
+  @IBAction func chkF0ForwardAction(_ sender: NSButton) {
+  }
+  
+  @IBOutlet weak var chkF0Reverse: NSButton!
+  
+  
+  @IBAction func chkF0ReverseAction(_ sender: NSButton) {
+  }
+  
+  @IBOutlet weak var chkF1: NSButton!
+  
+  @IBAction func chkF1Action(_ sender: NSButton) {
+  }
+  
+  @IBOutlet weak var chkF2: NSButton!
+  
+  @IBAction func chkF2Action(_ sender: NSButton) {
+  }
+  
+  @IBOutlet weak var chkF3: NSButton!
+  
+  @IBAction func chkF3Action(_ sender: NSButton) {
+  }
+  
+  @IBOutlet weak var chkF4: NSButton!
+  
+  @IBAction func chkF4Action(_ sender: NSButton) {
+  }
+  
+  @IBOutlet weak var chkF5: NSButton!
+  
+  @IBAction func chkF5Action(_ sender: NSButton) {
+  }
+  
+  @IBOutlet weak var chkF6: NSButton!
+  
+  @IBAction func chkF6Action(_ sender: NSButton) {
+  }
+  
+  @IBOutlet weak var chkF7: NSButton!
+  
+  @IBAction func chkF7Action(_ sender: NSButton) {
+  }
+  
+  @IBOutlet weak var chkF8: NSButton!
+  
+  @IBAction func chkF8Action(_ sender: NSButton) {
+  }
+  
+  @IBOutlet weak var chkF9: NSButton!
+  
+  @IBAction func chkF9Action(_ sender: NSButton) {
+  }
+  
+  @IBOutlet weak var chkF10: NSButton!
+  
+  @IBAction func chkF10Action(_ sender: NSButton) {
+  }
+  
+  @IBOutlet weak var chkF11: NSButton!
+  
+  @IBAction func chkF11Action(_ sender: NSButton) {
+  }
+  
+  @IBOutlet weak var chkF12: NSButton!
+  
+  @IBAction func chkF12Action(_ sender: NSButton) {
+  }
+  
+  @IBOutlet weak var radNDOTForward: NSButton!
+  
+  @IBAction func radNDOTForwardAction(_ sender: NSButton) {
+    radNDOTReverse.state = sender.state == .on ? .off : .on
+  }
+  
+  @IBOutlet weak var radNDOTReverse: NSButton!
+  
+  @IBAction func radNDOTReverseAction(_ sender: NSButton) {
+    radNDOTForward.state = sender.state == .on ? .off : .on
+  }
+  
+  @IBOutlet weak var radSetCV2: NSButton!
+  
+  @IBAction func radSetCV2Action(_ sender: NSButton) {
+    radSetCV66.state = sender.state == .on ? .off : .on
+  }
+  
+  @IBOutlet weak var radSetCV66: NSButton!
+  
+  @IBAction func radSetCV66Action(_ sender: NSButton) {
+    radSetCV2.state = sender.state == .on ? .off : .on
+  }
+  
+  @IBOutlet weak var radConsistRDForward: NSButton!
+  
+  @IBAction func radConsistRDForwardAction(_ sender: NSButton) {
+    radConsistRDReverse.state = sender.state == .on ? .off : .on
+  }
+  
+  @IBOutlet weak var radConsistRDReverse: NSButton!
+  
+  @IBAction func radConsistRDReverseAction(_ sender: NSButton) {
+    radConsistRDForward.state = sender.state == .on ? .off : .on
   }
   
 }

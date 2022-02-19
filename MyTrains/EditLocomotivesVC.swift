@@ -64,7 +64,7 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     cboLengthUnits.selectItem(at: UserDefaults.standard.integer(forKey: DEFAULT.UNITS_LENGTH))
     txtScale.stringValue = "\(UserDefaults.standard.double(forKey: DEFAULT.SCALE))"
     cboTrackGuage.selectItem(at: UserDefaults.standard.integer(forKey: DEFAULT.TRACK_GAUGE))
-    cboDecoderType.selectItem(at: MobileDecoderType.dcc128A.rawValue)
+    cboDecoderType.selectItem(at: MobileDecoderType.dcc128.rawValue)
     txtAddress.stringValue = "1"
     txtOccupancyFeedbackOffsetFront.stringValue = "0.0"
     txtOccupancyFeedbackOffsetRear.stringValue = "0.0"

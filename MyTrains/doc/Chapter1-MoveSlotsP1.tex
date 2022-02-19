@@ -1,5 +1,5 @@
 \newpage
-\subsection{MoveSlotsP1}\index{MoveSlotsP1}\index{Slot}\index{Null Move}
+\section{MoveSlotsP1}\index{MoveSlotsP1}\index{Slot}\index{Null Move}
 
 \underline{Description:}
 
@@ -9,8 +9,8 @@ Move slots.
 \underline{SRC} & \underline{DEST} & \underline{Action}\\
 0 & $\times$ & Dispatch get. Return \textbf{LocoSlotDataP1} of dispatch slot.\\
 SRC & 0 & Dispatch put. Mark slot as dispatch.\\
-SRC & SRC & Null move. SRC is set to in use.\\
-SRC & DEST & Move slot data from SRC to DEST if not in use. Clear SRC.\\
+SRC & SRC & Null move. SRC is set to \gls{In-Use}.\\
+SRC & DEST & Move slot data from SRC to DEST if not \gls{In-Use}. Clear SRC.\\
 \end{tabular}
 
 \underline{Protocol:}
@@ -27,7 +27,7 @@ OPC\_MOVE\_SLOTS
 
 \underline{Type:}
 
-Command
+\gls{Command}
 
 \underline{Encoding:} 
 
