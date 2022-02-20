@@ -1,9 +1,11 @@
 \newpage
-\section{SetLocoSlotStat1}\index{SetLocoSlotStat1}
+\section{SetCfgSlotDataP1}\index{SetCfgSlotDataP1}\index{Slot}
+
+\rule{15.1cm}{0.4pt}
 
 \underline{Description:}
 
-This \gls{Command} sets the locomotive slot status 1 values for the specified slot number.
+This \gls{Command} sets the configuration slot data.
 
 \underline{Protocol:}
 
@@ -11,11 +13,11 @@ This \gls{Command} sets the locomotive slot status 1 values for the specified sl
 
 \underline{Group:}
 
-4-Byte Message
+Variable-Byte Message
 
 \underline{Opcode:}
 
-OPC\_SLOT\_STAT1
+OPC\_WR\_SL\_DATA
 
 \underline{Type:}
 
@@ -29,10 +31,10 @@ Byte 0:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 0 & 1 & 1 & 0 & 1 & 0 & 1\\
+1 & 1 & 1 & 0 & 1 & 1 & 1 & 1\\
 \hline
 \end{tabular}
-& 0xB5 & Opcode.\\
+& 0xEF & Opcode.\\
 \end{tabular}
 
 Byte 1:
@@ -41,27 +43,17 @@ Byte 1:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & n & n & n & n & n & n & n\\
+0 & 0 & 0 & 0 & 1 & 1 & 1 & 0\\
 \hline
 \end{tabular}
-& $<$SLOT\#$>$ & Slot number in the range 0x00 to 0x77.\\
+& 0x0E & Message length (14 bytes).\\
 \end{tabular}
 
-Byte 2:
+\input{Chapter1-CommonCfgSlotDataP1}
 
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+Byte 13:
 
-\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
-\hline
-0 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
-\hline
-\end{tabular}
-& $<$STAT1$>$ & \gls{Slot Status 1}.\\
-\end{tabular}
-
-Byte 3:
-
-\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.1\linewidth} p{0.5\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
@@ -69,12 +61,11 @@ Byte 3:
 \hline
 \end{tabular}
 & $<$CHK$>$ & Checksum.\\
-
 \end{tabular}
 
 \underline{Response:} 
 
-None.
+\textbf{Ack}
 
 \underline{Signature:}
 
@@ -84,22 +75,34 @@ Byte 0:
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-1 & 0 & 1 & 1 & 0 & 1 & 0 & 1\\
+1 & 1 & 1 & 0 & 1 & 1 & 1 & 1\\
 \hline
 \end{tabular}
-& 0xB5 \\
+& 0xEF\\
 \end{tabular}
 
 Byte 1:
 
-\begin{tabular}{p{0.4\linewidth} p{0.38\linewidth}} 
+\begin{tabular}{p{0.4\linewidth} p{0.15\linewidth} p{0.38\linewidth}} 
 
 \begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
 \hline
-0 & n & n & n & n & n & n & n\\
+0 & 0 & 0 & 0 & 1 & 1 & 1 & 0\\
 \hline
 \end{tabular}
-& less than 0x78\\ 
+& 0x0E \\
+\end{tabular}
+
+Byte 2:
+
+\begin{tabular}{p{0.4\linewidth} p{0.375\linewidth}} 
+
+\begin{tabular}{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+0 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
+\hline
+\end{tabular}
+& 0x7F
 \end{tabular}
 
 \underline{Notes:} 
@@ -107,3 +110,4 @@ Byte 1:
 None.
 
 \rule{15.1cm}{0.4pt}
+

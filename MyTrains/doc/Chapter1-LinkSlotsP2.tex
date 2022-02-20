@@ -3,7 +3,7 @@
 
 \underline{Description:}
 
-This \gls{Command} requests the command station to link slot SL1 to slot SL2. If the \gls{Command} was successful then a \textbf{LocoSlotDataP2} \gls{Response} will be returned. An invalid link will return a \textbf{InvalidLinkP2} \gls{Response}.
+This \gls{Command} requests the command station to link sub-member or mid-consist slot SL1 to top-member slot SL2. If the \gls{Command} was successful then a \textbf{LocoSlotDataP2} \gls{Response} will be returned for the sub-member or mid-consist. An invalid link will return a \textbf{InvalidLinkP2} \gls{Response}. The top-member slot does not have to have a locomotive address loaded.
 
 \underline{Protocol:}
 
@@ -44,7 +44,7 @@ Byte 1:
 0 & 0 & 1 & 1 & 1 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-& $<$SL1P$>$ & Bits d2 to d0 contain the SL1 slot page number in the range 0x0 to 0x7.\\
+& $<$SL1P$>$ & Bits d2 to d0 contain the sub-member or mid-consist slot page number in the range 0x0 to 0x7.\\
 \end{tabular}
 
 Byte 2:
@@ -56,7 +56,7 @@ Byte 2:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$SL1\#$>$ & Slot number SL1 in the range 0x00 to 0x77.\\
+& $<$SL1\#$>$ & Sub-member or mid-consist slot number in the range 0x00 to 0x77.\\
 \end{tabular}
 
 Byte 3:
@@ -68,7 +68,7 @@ Byte 3:
 0 & 1 & 0 & 0 & 0 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-& $<$SL2P$>$ & Bits d2 to d0 contain the SL2 slot page number in the range 0x0 to 0x7.\\
+& $<$SL2P$>$ & Bits d2 to d0 contain the top-member slot page number in the range 0x0 to 0x7.\\
 \end{tabular}
 
 Byte 4:
@@ -80,7 +80,7 @@ Byte 4:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$SL2\#$>$ & Slot number SL2 in the range 0x00 to 0x77.\\
+& $<$SL2\#$>$ & Top-member slot number in the range 0x00 to 0x77.\\
 \end{tabular}
 
 Byte 5:

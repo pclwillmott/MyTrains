@@ -82,7 +82,7 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <tabView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="M5T-Eh-0aW">
+                            <tabView hidden="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="M5T-Eh-0aW">
                                 <rect key="frame" x="13" y="13" width="764" height="495"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <font key="font" metaFont="system"/>
@@ -124,8 +124,8 @@
                                                     </connections>
                                                 </button>
                                                 <box fixedFrame="YES" title="Speed Table" translatesAutoresizingMaskIntoConstraints="NO" id="YiF-8c-ogK">
-                                                    <rect key="frame" x="469" y="248" width="213" height="86"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <rect key="frame" x="525" y="248" width="213" height="86"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                                     <view key="contentView" id="xrb-9W-8eQ">
                                                         <rect key="frame" x="3" y="3" width="207" height="68"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -156,10 +156,10 @@
                                                     </view>
                                                 </box>
                                                 <box fixedFrame="YES" title="RailCom" translatesAutoresizingMaskIntoConstraints="NO" id="dLG-xL-GQg">
-                                                    <rect key="frame" x="241" y="248" width="213" height="86"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <rect key="frame" x="241" y="248" width="271" height="86"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <view key="contentView" id="sq7-7d-arT">
-                                                        <rect key="frame" x="3" y="3" width="207" height="68"/>
+                                                        <rect key="frame" x="3" y="3" width="265" height="68"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Tzl-uU-Bbs">
@@ -188,10 +188,10 @@
                                                     </view>
                                                 </box>
                                                 <box fixedFrame="YES" title="Speed Steps" translatesAutoresizingMaskIntoConstraints="NO" id="nNL-Sn-0dX">
-                                                    <rect key="frame" x="241" y="345" width="213" height="86"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <rect key="frame" x="241" y="345" width="271" height="86"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <view key="contentView" id="QDk-HV-mgC">
-                                                        <rect key="frame" x="3" y="3" width="207" height="68"/>
+                                                        <rect key="frame" x="3" y="3" width="265" height="68"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yXV-zy-am2">
@@ -220,8 +220,8 @@
                                                     </view>
                                                 </box>
                                                 <box fixedFrame="YES" title="Normal Direction of Travel" translatesAutoresizingMaskIntoConstraints="NO" id="lBE-XB-gEY">
-                                                    <rect key="frame" x="469" y="345" width="213" height="86"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <rect key="frame" x="525" y="345" width="213" height="86"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                                     <view key="contentView" id="dYc-ld-Wpf">
                                                         <rect key="frame" x="3" y="3" width="207" height="68"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -306,10 +306,10 @@
                                                     </view>
                                                 </box>
                                                 <box fixedFrame="YES" title="Controlled by Consist Address" translatesAutoresizingMaskIntoConstraints="NO" id="cf0-Il-2xj">
-                                                    <rect key="frame" x="241" y="89" width="213" height="147"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <rect key="frame" x="241" y="89" width="271" height="147"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                     <view key="contentView" id="b8r-eg-BBj">
-                                                        <rect key="frame" x="3" y="3" width="207" height="129"/>
+                                                        <rect key="frame" x="3" y="3" width="265" height="129"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hnL-qY-j1n">
@@ -492,8 +492,8 @@
                                                     </view>
                                                 </box>
                                                 <box fixedFrame="YES" title="Consist Relative Direction" translatesAutoresizingMaskIntoConstraints="NO" id="t8Z-eO-nrI">
-                                                    <rect key="frame" x="469" y="150" width="213" height="86"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <rect key="frame" x="525" y="150" width="213" height="86"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                                     <view key="contentView" id="EoN-Lg-gBc">
                                                         <rect key="frame" x="3" y="3" width="207" height="68"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -570,7 +570,7 @@ Gw
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <clipView key="contentView" id="e5Q-He-Vlx">
                                                         <rect key="frame" x="1" y="1" width="708" height="298"/>
-                                                        <autoresizingMask key="autoresizingMask"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" headerView="QHc-fb-HFD" viewBased="YES" id="snL-Fv-hbb">
                                                                 <rect key="frame" x="0.0" y="0.0" width="974" height="270"/>
@@ -592,7 +592,7 @@ Gw
                                                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         <prototypeCellViews>
                                                                             <tableCellView identifier="CVNumberCellID" id="Gdi-Vv-khO">
-                                                                                <rect key="frame" x="18" y="2" width="78" height="17"/>
+                                                                                <rect key="frame" x="8" y="2" width="78" height="17"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
                                                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dVr-0e-sjy">
@@ -624,7 +624,7 @@ Gw
                                                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         <prototypeCellViews>
                                                                             <tableCellView identifier="EnabledCellID" id="Ufs-t7-7Lf">
-                                                                                <rect key="frame" x="113" y="2" width="70" height="17"/>
+                                                                                <rect key="frame" x="103" y="2" width="70" height="17"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
                                                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eYz-PG-4wg">
@@ -655,7 +655,7 @@ Gw
                                                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         <prototypeCellViews>
                                                                             <tableCellView identifier="DescriptionCellID" id="Iv2-yL-Bnj">
-                                                                                <rect key="frame" x="200" y="2" width="350" height="17"/>
+                                                                                <rect key="frame" x="190" y="2" width="350" height="17"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
                                                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ehg-em-aBv">
@@ -690,7 +690,7 @@ Gw
                                                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         <prototypeCellViews>
                                                                             <tableCellView identifier="NumberBaseCellID" id="DfW-Ln-L9a">
-                                                                                <rect key="frame" x="567" y="2" width="90" height="24"/>
+                                                                                <rect key="frame" x="557" y="2" width="90" height="24"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
                                                                                     <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oeO-PL-8W5">
@@ -728,7 +728,7 @@ Gw
                                                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         <prototypeCellViews>
                                                                             <tableCellView identifier="DefaultValueCellID" id="033-LC-Wp6">
-                                                                                <rect key="frame" x="674" y="2" width="90" height="17"/>
+                                                                                <rect key="frame" x="664" y="2" width="90" height="17"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
                                                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NBK-fF-kbx">
@@ -763,7 +763,7 @@ Gw
                                                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         <prototypeCellViews>
                                                                             <tableCellView identifier="ValueCellID" id="lSX-9i-EeK">
-                                                                                <rect key="frame" x="781" y="2" width="90" height="17"/>
+                                                                                <rect key="frame" x="771" y="2" width="90" height="17"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
                                                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fcF-PQ-jk5">
@@ -798,7 +798,7 @@ Gw
                                                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         <prototypeCellViews>
                                                                             <tableCellView identifier="NewValueCellID" id="V7Z-Pm-aOI">
-                                                                                <rect key="frame" x="888" y="2" width="87" height="17"/>
+                                                                                <rect key="frame" x="878" y="2" width="87" height="17"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
                                                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8Iy-pL-ZEl">
@@ -1007,6 +1007,7 @@ Gw
                         <outlet property="radRegularCVs" destination="aFJ-Fu-8qd" id="kSL-ia-rZ3"/>
                         <outlet property="radSetCV2" destination="nNe-3P-VGr" id="a6X-zX-jBY"/>
                         <outlet property="radSetCV66" destination="RYU-f0-Ow4" id="xs6-Xh-CAs"/>
+                        <outlet property="tabTabs" destination="M5T-Eh-0aW" id="QVs-XP-vvM"/>
                         <outlet property="txtAddress" destination="GkV-ow-tdi" id="x9p-Vl-WTl"/>
                         <outlet property="txtConsistAddress" destination="7TR-PK-lLp" id="iRf-Fc-Uob"/>
                         <outlet property="txtPrimaryPageIndex" destination="EzE-aF-meE" id="Uea-8k-f23"/>

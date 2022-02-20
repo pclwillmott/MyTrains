@@ -3,7 +3,7 @@
 
 \underline{Description:}
 
-This \gls{Command} requests the command station to link slot SL1 to slot SL2. If the \gls{Command} was successful then a \textbf{LocoSlotDataP1} \gls{Response} will be returned. An invalid link will return a \textbf{InvalidLinkP1} \gls{Response}.
+This \gls{Command} requests the command station to link sub-member or mid-consist slot SL1 to top-member slot SL2. If the \gls{Command} was successful then a \textbf{LocoSlotDataP1} \gls{Response} will be returned for the sub-member or mid-consist. An invalid link will return a \textbf{InvalidLinkP1} \gls{Response}. The top-member slot does not have to have a locomotive address loaded.
 
 \underline{Protocol:}
 
@@ -44,7 +44,7 @@ Byte 1:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$SL1$>$ & Slot number in the range 0x01 to 0x77.\\
+& $<$SL1$>$ & Sub-member or mid-consist slot number in the range 0x01 to 0x77.\\
 \end{tabular}
 
 Byte 2:
@@ -56,7 +56,7 @@ Byte 2:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$SL2$>$ & Slot number in the range 0x01 to 0x77.\\
+& $<$SL2$>$ & Top-member slot number in the range 0x01 to 0x77.\\
 \end{tabular}
 
 Byte 3:

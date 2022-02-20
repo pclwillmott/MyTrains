@@ -19,18 +19,18 @@ Byte 3:
 d7 & d6 & d5 & d4 & d3 & d2 & d1 & d0\\
 \hline
 \end{tabular}
-& $<$STAT1$>$ & Slot status 1.\\
+& $<$STAT1$>$ & \gls{Slot Status 1}.\\
 \end{tabular}
 
 \begin{tabular}{p{0.05\linewidth} p{0.05\linewidth} p{0.05\linewidth} p{0.70\linewidth}} 
-& \underline{d7} & \underline{d6} & \\
-& 0 & 0 & Free, no consist linking.\\
-& 0 & 1 & Consist sub-member.\\
-& 1 & 0 & Consist top-member.\\
-& 1 & 1 & Consist Mid-Consist member. \\
+& \underline{d3} & \underline{d6} & \\
+& 0 & 0 & No consist indirection/linking.\\
+& 0 & 1 & Consist sub-member, uplinked.\\
+& 1 & 0 & Consist top-member, downlinked.\\
+& 1 & 1 & Consist mid-consist member, uplinked and downlinked. \\
 \end{tabular}
 
-Note: d7 is set to 0 in the message by the command station and so may not correctly reflect the actual setting in the slot table.\\
+The consist top-member is the locomotive slot which controls the speed, direction and status of all members of a \gls{Universal Consist}. When a slot is uplinked the $<$SPD$>$ byte contains the slot number of the top-member. A mid-consist is a slot that is the top-member of another consist, i.e. a consist of consists.\index{Top-Member}\index{Mid-Consist} A downlinked slot is one which has another slot uplinked to it.
 
 \begin{tabular}{p{0.05\linewidth} p{0.05\linewidth} p{0.05\linewidth} p{0.70\linewidth}} 
 & \underline{d5} & \underline{d4} & \\
@@ -40,22 +40,18 @@ Note: d7 is set to 0 in the message by the command station and so may not correc
 & 1 & 1 & In Use. Locomotive address in this slot. Refreshed. \\
 \end{tabular}
 
- \begin{tabular}{p{0.05\linewidth} p{0.05\linewidth} p{0.05\linewidth} p{0.70\linewidth}} 
-& & \underline{d3} & \\
-& & 0 & No slot consist linked into this slot.\\
-& & 1 & Slot consist linked into this slot.\\
+\begin{tabular}{p{0.05\linewidth} p{0.05\linewidth} p{0.05\linewidth} p{0.70\linewidth}} 
+& \underline{d2} & & \gls{Advanced Consist Bit}\\
+& 0 & & Slot does not control an \gls{Advanced Consist}.\\
+& 1 & & Slot controls an \gls{Advanced Consist}.\\
 \end{tabular}
 
-\begin{tabular}{p{0.05\linewidth} p{0.05\linewidth} p{0.05\linewidth} p{0.75\linewidth}} 
-\underline{d2} & \underline{d1} & \underline{d0} & \\
-0 & 0 & 0 & 28 step decoder. 3-byte packet regular mode\\
-0 & 0 & 1 & 28 step decoder. Generate Motorola trinary packets for this mobile address\\
-0 & 1 & 0 & 14 step decoder. \\
-0 & 1 & 1 & 128 step decoder. \\
-1 & 0 & 0 & 28 step decoder with \gls{Advanced Consisting} enabled\\
-1 & 0 & 1 & reserved\\
-1 & 1 & 0 & reserved\\
-1 & 1 & 1 & 128 step decoder with \gls{Advanced Consisting} enabled\\
+\begin{tabular}{p{0.05\linewidth} p{0.05\linewidth} p{0.05\linewidth} p{0.70\linewidth}} 
+& \underline{d1} & \underline{d0} & \\
+ & 0 & 0 & 28 step decoder. 3-byte packet regular mode\\
+& 0 & 1 & 28 step decoder. Generate Motorola trinary packets for this mobile address\\
+& 1 & 0 & 14 step decoder. \\
+& 1 & 1 & 128 step decoder. \\
 \end{tabular}
 
 Byte 4:
@@ -67,7 +63,7 @@ Byte 4:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$ADR$>$ & If $<$ADR2$>$ is 0 then this contains the NMRA short address. If $<$ADR2$>$ is greater than 0 then this contains the low 7 bits of the NMRA long address.\\
+& $<$ADR$>$ & If $<$ADR2$>$ is 0 then this contains the NMRA \gls{Primary Address} or if this slot controls an Advanced Consist it contains the NMRA \gls{Consist Address} (CV19). If $<$ADR2$>$ is greater than 0 then this contains the low 7 bits of the NMRA {Extended Address}.\\
 \end{tabular}
 
 Byte 5:
@@ -79,7 +75,7 @@ Byte 5:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$SPD$>$ & Speed in the range 0x00 to 0x7F. 0x00 means inertial stop and 0x01 means emergency stop. Other values mean increasing speed.\\
+& $<$SPD$>$ & Speed in the range 0x00 to 0x7F. 0x00 means inertial stop and 0x01 means emergency stop. Other values mean increasing speed. If the slot is an uplinked slot in a consist then this byte will contain the slot number of the consist top-member.\\
 \end{tabular}
 
 Byte 6:
@@ -150,7 +146,7 @@ Byte 9:
 0 & n & n & n & n & n & n & n\\
 \hline
 \end{tabular}
-& $<$ADR2$>$ & If $<$ADR2$>$ is greater than 0 then this contains the high 7 bits of the NMRA long address.\\
+& $<$ADR2$>$ & If $<$ADR2$>$ is greater than 0 then this contains the high 7 bits of the NMRA \gls{Extended Address}.\\
 \end{tabular}
 
 Byte 10:

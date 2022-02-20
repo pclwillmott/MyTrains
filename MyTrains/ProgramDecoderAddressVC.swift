@@ -224,6 +224,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
       chkF12.state = loco.consistAddressActiveF12 ? .on : .off
       chkF0Forward.state = loco.consistAddressActiveF0Forward ? .on : .off
       chkF0Reverse.state = loco.consistAddressActiveF0Reverse ? .on : .off
+      tabTabs.isHidden = false
     }
     
     radRegularCVs.state = isIndexedMode ? .off : .on
@@ -1446,5 +1447,8 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
   @IBAction func radConsistRDReverseAction(_ sender: NSButton) {
     radConsistRDForward.state = sender.state == .on ? .off : .on
   }
+  
+  @IBOutlet weak var tabTabs: NSTabView!
+  
   
 }

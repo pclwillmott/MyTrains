@@ -103,9 +103,19 @@
     description={is the peer-to-peer local area network system architecture used by Digitrax to carry DCC and other commands across Digitrax command control systems}
 }
 
-\newglossaryentry{long address}{
-    name=long Address,
-    description={is a decoder address between 128 and 9983}
+\newglossaryentry{Extended Address}{
+    name=Extended Address,
+    description={is a decoder address between 128 and 9983. This is stored in encoded form in CV17 and CV18}
+}
+
+\newglossaryentry{Consist Address}{
+    name=Consist Address,
+    description={is a consist address between 1 and 127. This is stored in CV19}
+}
+
+\newglossaryentry{Primary Address}{
+    name=Primary Address,
+    description={is a decoder address between 1 and 127. This is stored in CV1}
 }
 
 \newglossaryentry{message}{
@@ -143,9 +153,24 @@
     description={means 14 or 28/128 speed steps}
 }
 
-\newglossaryentry{Advanced Consisting}{
-    name=Advanced Consisting,
-    description={}
+\newglossaryentry{Advanced Consist}{
+    name=Advanced Consist,
+    description={is where the consist information is stored in CV19 in the mobile decoder}
+}
+
+\newglossaryentry{Basic Consist}{
+    name=Basic Consist,
+    description={is where all locomotive mobile decoders in the consist have the same address}
+}
+
+\newglossaryentry{Advanced Consist Bit}{
+    name=Advanced Consist Bit,
+    description={means bit d2 of the Slot Status 1 byte}
+}
+
+\newglossaryentry{Universal Consist}{
+    name=Universal Consist,
+    description={is where the consist information is stored in the command station}
 }
 
 \newglossaryentry{Product Code}{

@@ -82,3 +82,58 @@ setSlotDataOKP2
 \subsection{Purging}\index{Purging}
 If a device disconnects from the network and so does not access or reference a slot within the system purge time, the command station will force the un-accessed slot to \gls{Common} status so other system devices can use the slot. The typical purge time of a command station is about 200 seconds. A good ``ping" or slot update activity is about every 100 seconds, i.e. if a user makes no change to a throttle/slot within 100 seconds, the throttle/device should automatically send another speed update at the current speed to reset the purge timeout for that slot. Purging behaviour can be modified by adjusting the command station's OpSw13-OpSw15 settings.
 
+\section{Consisting}
+
+There are three ways of creating a consist with Digital Command Control. Each consisting method has its advantages and disadvantages. In a \gls{Basic Consist} all mobile decoders in the consist have the same \gls{Primary Address} or \gls{Extended Address}. In an \gls{Advanced Consist} all mobile decoders in the consist have the same \gls{Consist Address} stored in CV19, as well as their own \gls{Primary Address} or \gls{Extended Address}. In a \gls{Universal Consist} the command station manages the individual locomotives in the consist.\\
+
+\subsection{Basic Consist}
+
+This is the simplest way of creating a consist. Simply program all the locomotives you want to run together with the same address. This can be done with a Primary or Extended address. The locomotives must all be facing the same direction for this to work, as direction of travel is determined by their orientation. If it is planned to operate locomotives as a permanent consist, such as an A-B-A set, the Normal Direction Of Travel must be set accordingly.
+
+It has the advantage of only using one slot in the command station. The command station will see all the locomotives with the same address as a single locomotive, and they will all respond to all commands in unison. This requires reprogramming the decoder to change consists. All locomotives in a basic consist will respond to function commands at the consist address. The command station sees the basic consist as a single locomotive.
+
+If the consists were created with a Primary address (1-127), there may be issues operating as a consist on another layout. There will be conflicts if the primary address is also used by another locomotive which is not part of the consist. An analog (non-decoder equipped) locomotive cannot be part of a Basic Consist. The operator cannot control individual locomotive functions such as the horn, bell, and lighting, as all the decoders will act on the command.
+
+\subsection{Advanced Consist}
+
+Advanced Consisting uses a temporary secondary address (CV19) in the locomotive to group locomotives together without changing the Primary Address. The locomotives keep track of the consisting information. Removing a locomotive from the consist without clearing the consist information will result in an orphan locomotive which responds to the \gls{Consist Address}.
+
+Advanced Consisting is done by using ops mode programming to change CV19 to set the address and normal direction of movement. Some decoders will allow you to specify what functions will respond to commands addressed at the consist address. 
+
+This method was given the name Advanced Consisting to reflect that its possibilities were much more advanced than that of Basic Consisting, as the Primary or Extended addresses were not altered, and individual control of each locomotive in the consist is possible. This implementation of consisting was considered to be a better choice than relying on the command station to create and manage consists.
+
+The command station sees the consist as a single locomotive:
+
+\begin{itemize}
+\item The consist address is stored onboard the multifunction decoder
+\item The consist will use a single slot in the command station.  
+\item The operator can control any locomotive's function operation from its specific address
+\item CV 21 (F1–F8) and 22 (FL, F9–F12) can set the functions available on any locomotive in the consist
+\item An analog locomotive cannot be part of an advanced consist
+\item Advanced Consists operate in 28 or 128 DCC speed step modes only
+\end{itemize}
+
+To request a slot for an \gls{Advanced Consist} send a \textbf{GetLocoSlotSAdrP1} or \textbf{GetLocoSlotSAdrP2} \gls{Command}. The address should be set to the \gls{Consist Address} instead of the \gls{Primary Address}. In the slot write-back after the ``Null Move" \gls{Advanced Consist Bit} of \gls{Slot Status 1} must be set to 1. The \gls{Consist Address} is limited to the values 1 through 127.
+
+\subsection{Universal Consist}
+
+All the bookkeeping chores for the consist are performed by the command station. With this method of consisting, no changes to the programming of the decoder are made. Each locomotive in the consist is a separate entity in the command station, so the size of the consist is limited to the capacity of the command station. Analog locomotives may be a part of one consist - all analog locomotives on the track will respond to the same commands, so you can't run them in different consists. Digitrax calls this method UniVersal Consisting (Yes, with a capital "V" in the middle).
+
+Consists may be stacked, making up consists within consists. Locomotive functions can still be individually controlled without affecting other locomotives in the consist. The command station sees the consist as individual locomotives, sending each locomotive its own speed and direction commands.
+
+\begin{itemize}
+\item    The lead locomotive's address is also known as the Top Address.
+\item    The functions are only acted on by the top address, or lead locomotive.
+\item    Functions on the other locomotives can be controlled directly from their address
+\item    Since the command station does the housekeeping for the consist, there will be memory or software-imposed limits on the number of consists.
+\end{itemize}
+
+With Universal Consisting, the consist responds to commands sent to the Top Locomotive (Address). The top locomotive does not have to be the lead engine, nor does it even have to exist. The consist is managed by the command station. An analog locomotive can also be included in the consist. Universal Consisting Allows:
+
+\begin{itemize}
+\item    Any address to be used, including Address 00.
+\item    Number of consists is limited by the number of slots.
+\end{itemize}
+
+A slot can be added to a top-member by sending a \textbf{LinkSlotsP1} or \textbf{LinkSlotsP2} and removed by sending a \textbf{UnlinkSlotsP1} or \textbf{UnlinkSlotsP2}.
+
