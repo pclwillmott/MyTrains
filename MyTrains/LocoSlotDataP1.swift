@@ -14,6 +14,13 @@ public enum SlotState {
   case inUse
 }
 
+public enum ConsistState {
+  case NotLinked
+  case SubMember
+  case TopMember
+  case MidConsist
+}
+
 public class LocoSlotDataP1 : NetworkMessage {
 
   // MARK: Public Properties
@@ -35,6 +42,23 @@ public class LocoSlotDataP1 : NetworkMessage {
           return.idle
       default:
         return .inUse
+      }
+    }
+  }
+  
+  public var consistState : ConsistState {
+    get {
+      var value = (slotStatus1 & 0b00001000) == 0b00001000 ? 0b10 : 0b00
+      value    |= (slotStatus1 & 0b01000000) == 0b01000000 ? 0b01 : 0b00
+      switch value {
+      case 0b01:
+        return .SubMember
+      case 0b10:
+        return .TopMember
+      case 0b11:
+        return .MidConsist
+      default:
+        return .NotLinked
       }
     }
   }

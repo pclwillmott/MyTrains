@@ -48,6 +48,9 @@ public class SlotTableViewDS : NSObject, NSTableViewDataSource, NSTableViewDeleg
       static let SpeedColumn      = "Speed"
       static let DirectionColumn  = "Direction"
       static let ThrottleColumn   = "Throttle"
+      static let LocomotiveColumn = "Locomotive"
+      static let ConsistColumn    = "Consist"
+      static let TopMemberColumn  = "TopMember"
     }
 
     switch columnName {
@@ -60,11 +63,27 @@ public class SlotTableViewDS : NSObject, NSTableViewDataSource, NSTableViewDeleg
     case ColumnIdentifiers.AddressColumn:
       text = "\(item.address)"
     case ColumnIdentifiers.SpeedColumn:
-      text = "\(item.speed)"
+      if item.consistState == .NotLinked || item.consistState == .TopMember {
+        text = "\(item.speed)"
+      }
+      else {
+        text = "-"
+      }
     case ColumnIdentifiers.DirectionColumn:
       text = "\(item.direction)"
     case ColumnIdentifiers.ThrottleColumn:
       text = "\(item.throttleID)"
+    case ColumnIdentifiers.LocomotiveColumn:
+      text = "\(item.locomotiveName)"
+    case ColumnIdentifiers.ConsistColumn:
+      text = "\(item.consistState)"
+    case ColumnIdentifiers.TopMemberColumn:
+      if item.consistState == .MidConsist || item.consistState == .SubMember {
+        text = "\(item.speed)"
+      }
+      else {
+        text = "-"
+      }
     // The remaining ones are function keys
     default:
       if let fn = Int(String(columnName.suffix(columnName.count-1))) {

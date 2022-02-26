@@ -23,6 +23,8 @@ public class LocoSlotData {
     
     slotState = locoSlotDataP1.slotState
     
+    consistState = locoSlotDataP1.consistState
+    
     mobileDecoderType = locoSlotDataP1.mobileDecoderType
     
     direction = locoSlotDataP1.direction
@@ -50,6 +52,8 @@ public class LocoSlotData {
     address = locoSlotDataP2.address
     
     slotState = locoSlotDataP2.slotState
+    
+    consistState = locoSlotDataP2.consistState
     
     mobileDecoderType = locoSlotDataP2.mobileDecoderType
     
@@ -83,6 +87,8 @@ public class LocoSlotData {
     
     slotState = .free
     
+    consistState = .NotLinked
+    
     mobileDecoderType = .unknown
     
     direction = .forward
@@ -113,6 +119,8 @@ public class LocoSlotData {
   
   public var slotState : SlotState
   
+  public var consistState : ConsistState
+  
   public var mobileDecoderType : MobileDecoderType
   
   public var direction : LocomotiveDirection
@@ -128,6 +136,17 @@ public class LocoSlotData {
   public var displaySlotNumber : String {
     get {
       return isP1 ? "\(slotNumber)" : "\(slotPage).\(slotNumber)"
+    }
+  }
+  
+  public var locomotiveName : String {
+    get {
+      for locomotive in networkController.locomotives {
+        if address == locomotive.value.address {
+          return locomotive.value.locomotiveName
+        }
+      }
+      return "Unknown"
     }
   }
   
