@@ -73,7 +73,7 @@ public enum NetworkMessageType {
   case illegalMoveP2
   case immPacket
   case invalidLinkP1
-  case invalidLinkP2
+//  case invalidLinkP2
   case interfaceData
   case iplDataLoad
   case iplDevData

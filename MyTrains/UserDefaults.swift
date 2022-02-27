@@ -30,4 +30,5 @@ enum DEFAULT {
   static let SCALE                    = "Scale"
   static let TRACK_GAUGE              = "TrackGauge"
   static let MAIN_CURRENT_LAYOUT_ID   = "MainCurrentLayoutId"
+  static let PROGRAMMER_PROG_MODE     = "ProgrammerProgMode"
 }

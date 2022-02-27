@@ -470,24 +470,14 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
     
     let lo = UInt8((switchNumber - 1) & 0x7f)
     
-    var bit : UInt8 = state == .closed ? 0x30 : 0x10
+    let bit : UInt8 = state == .closed ? 0x30 : 0x10
     
-    var hi = UInt8((switchNumber - 1) >> 7) | bit
+    let hi = UInt8((switchNumber - 1) >> 7) | bit
     
-    var message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_SW_REQ.rawValue, lo, hi], appendCheckSum: true)
+    let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_SW_REQ.rawValue, lo, hi], appendCheckSum: true)
     
     addToQueue(message: message, delay: TIMING.SWREQ, response: [], delegate: nil, retryCount: 1)
 
-    /*
-    bit = state == .closed ? 0x20 : 0x00
-    
-    hi = UInt8((switchNumber - 1) >> 7) | bit
-    
-    message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_SW_REQ.rawValue, lo, hi], appendCheckSum: true)
-    
-    addToQueue(message: message, delay: TIMING.SWREQ, response: [], delegate: nil, retryCount: 1)
-*/
-    
   }
   
   public func setLocoSlotDataP1(slotData: [UInt8]) {
@@ -567,9 +557,28 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
     
   }
   
-  public func readCV(cv:Int) {
+  public func readCV(progMode:ProgrammingMode, cv:Int, address: Int) {
     
-    let pcmd : UInt8 = 0b00101011 // Read Byte Direct Mode on Service Track
+    var pcmd : UInt8 = 0
+    
+    switch progMode {
+    case .directMode:
+      pcmd = 0b00101011
+    case .operationsMode:
+      pcmd = 0b00100111
+    case .pagedMode:
+      pcmd = 0b00100011
+    case .physicalRegister:
+      pcmd = 0b00010011
+    }
+    
+    var hopsa : UInt8 = 0
+    var lopsa : UInt8 = 0
+    
+    if progMode == .operationsMode {
+      lopsa = UInt8(address & 0x7f)
+      hopsa = UInt8(address >> 7)
+    }
     
     let cvAdjusted = cv - 1
     
@@ -584,8 +593,8 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
           0x7c,
           pcmd,
           0x00,
-          0x00,
-          0x00,
+          hopsa, // HOPSA
+          lopsa, // LOPSA
           0x00,
           UInt8(cvh & 0x7f),
           UInt8(cvAdjusted & 0x7f),
@@ -600,11 +609,30 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
   }
   
   
-  public func writeCV(cv:Int, value: Int) {
+  public func writeCV(progMode: ProgrammingMode, cv:Int, address: Int, value: Int) {
     
-    let pcmd : UInt8 = 0b01101011 // Write Byte Direct Mode on Service Track
+    var pcmd : UInt8 = 0
     
-    let cvAdjusted = cv - 1
+    switch progMode {
+    case .directMode:
+      pcmd = 0b01101011
+    case .operationsMode:
+      pcmd = 0b01101111
+    case .pagedMode:
+      pcmd = 0b01100011
+    case .physicalRegister:
+      pcmd = 0b01010011
+    }
+    
+    var hopsa : UInt8 = 0
+    var lopsa : UInt8 = 0
+    
+    if progMode == .operationsMode {
+      lopsa = UInt8(address & 0x7f)
+      hopsa = UInt8(address >> 7)
+    }
+    
+   let cvAdjusted = cv - 1
     
     let cvh : Int = (cvAdjusted & 0b0000001000000000) == 0b0000001000000000 ? 0b00100000 : 0x00 |
                     (cvAdjusted & 0b0000000100000000) == 0b0000000100000000 ? 0b00010000 : 0x00 |
@@ -618,8 +646,8 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
           0x7c,
           pcmd,
           0x00,
-          0x00,
-          0x00,
+          hopsa,
+          lopsa,
           0x00,
           UInt8(cvh & 0x7f),
           UInt8(cvAdjusted & 0x7f),

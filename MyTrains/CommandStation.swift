@@ -689,21 +689,21 @@ public class CommandStation : NSObject, NetworkMessengerDelegate {
     }
   }
 
-  public func readCV(cv:Int) {
+  public func readCV(progMode: ProgrammingMode, cv:Int, address: Int) {
     for kv in messengers {
       let messenger = kv.value
       if messenger.isOpen {
-        messenger.readCV(cv: cv)
+        messenger.readCV(progMode: progMode, cv: cv, address: address)
         break
       }
     }
   }
     
-  public func writeCV(cv:Int, value:Int) {
+  public func writeCV(progMode: ProgrammingMode, cv:Int, address: Int, value:Int) {
     for kv in messengers {
       let messenger = kv.value
       if messenger.isOpen {
-        messenger.writeCV(cv: cv, value: value)
+        messenger.writeCV(progMode: progMode, cv: cv, address: address, value: value)
         break
       }
     }
