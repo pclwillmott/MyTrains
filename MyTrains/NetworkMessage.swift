@@ -310,7 +310,7 @@ public class NetworkMessage : NSObject {
               _messageType = .getFastClockDataP1
             }
             else if sn < 0x78 {
-              _messageType = .getLocoSlotDataP1
+              _messageType = .getLocoSlotData
             }
           }
           else if message[1] == 0x7f &&
@@ -318,8 +318,8 @@ public class NetworkMessage : NSObject {
             _messageType = .getCfgSlotDataP2
           }
           else if message[1] < 0x78 &&
-                    (message[2] & 0b11110000) == 0b01000000 {
-            _messageType = .getLocoSlotDataP2
+                    (message[2] & 0b10111000) == 0 {
+            _messageType = .getLocoSlotData
           }
           break
         case NetworkMessageOpcode.OPC_IMM_PACKET.rawValue:
@@ -485,11 +485,33 @@ public class NetworkMessage : NSObject {
             let test = message[3] & 0b11111000
             switch test {
             case 0b00000000:
-              _messageType = .moveSlotsP2
-              _willChangeSlot = true
               isP1 = false
-              slotPage = Int(message[1] & 0b00000111)
-              slotNumber = Int(message[2])
+              let srcPage = Int(message[1] & 0b00000111)
+              let src = Int(message[2])
+              let dstPage = Int(message[3] & 0b00000111)
+              let dst = Int(message[4])
+              if srcPage == 0 && src == 0 {
+                _messageType = .dispatchGetP2
+                _willChangeSlot = true
+              }
+              else if dstPage == 0 && dst == 0 {
+                _messageType = .dispatchPutP2
+                slotPage = srcPage
+                slotNumber = src
+                _willChangeSlot = true
+              }
+              else if srcPage == dstPage && src == dst {
+                _messageType = .setLocoSlotInUseP2
+                slotPage = srcPage
+                slotNumber = src
+                _willChangeSlot = true
+              }
+              else if src < 0x78 && dst < 0x78 {
+                _messageType = .moveSlotP2
+                slotPage = dstPage
+                slotNumber = dst
+                _willChangeSlot = true
+              }
               break
             case 0b01000000:
               _messageType = .linkSlotsP2
@@ -582,13 +604,23 @@ public class NetworkMessage : NSObject {
           }
           break
         case NetworkMessageOpcode.OPC_MOVE_SLOTS.rawValue:
-          if message[1] < 0x78 &&
-              message[2] < 0x78 {
-            _messageType = .moveSlotsP1
-            _willChangeSlot = true
-            isP1 = true
-            slotPage = 0
+          isP1 = true
+          slotPage = 0
+          if message[1] == 0x00 {
+            _messageType = .dispatchGetP1
+          }
+          else if message[2] == 0x00 {
+            _messageType = .dispatchPutP1
             slotNumber = Int(message[1])
+          }
+          else if message[1] == message[2] {
+            _messageType = .setLocoSlotInUseP1
+            _willChangeSlot = true
+          }
+          else if message[1] < 0x78 && message[2] < 0x78 {
+            _messageType = .moveSlotP1
+            slotNumber = Int(message[1])
+            _willChangeSlot = true
           }
           break
         case NetworkMessageOpcode.OPC_LOCO_RESET.rawValue:

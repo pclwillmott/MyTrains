@@ -58,17 +58,20 @@ public enum NetworkMessageType {
   case cfgSlotDataP1
   case cfgSlotDataP2
   case consistDirF0F4
+  case dispatchGetP1
+  case dispatchGetP2
+  case dispatchPutP1
+  case dispatchPutP2
   case fastClockDataP1
   case getBrdOpSw
   case getCfgSlotDataP1
   case getCfgSlotDataP2
   case getFastClockDataP1
+  case getLocoSlotData
   case getLocoSlotDataLAdrP1
   case getLocoSlotDataLAdrP2
   case getLocoSlotDataSAdrP1
   case getLocoSlotDataSAdrP2
-  case getLocoSlotDataP1
-  case getLocoSlotDataP2
   case illegalMoveP1
   case illegalMoveP2
   case immPacket
@@ -100,8 +103,8 @@ public enum NetworkMessageType {
   case locoSpdP1
   case locoSpdP2
   case locoSpdDirP2
-  case moveSlotsP1
-  case moveSlotsP2
+  case moveSlotP1
+  case moveSlotP2
   case noFreeSlotsP1
   case noFreeSlotsP2
   case peerXfer16
@@ -121,6 +124,8 @@ public enum NetworkMessageType {
   case setIdleState
   case setLocoSlotDataP1
   case setLocoSlotDataP2
+  case setLocoSlotInUseP1
+  case setLocoSlotInUseP2
   case setLocoSlotStat1
   case setSlotDataOKP1
   case setSlotDataOKP2
