@@ -435,6 +435,17 @@
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </scroller>
                                         </scrollView>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cbA-m5-kkX">
+                                            <rect key="frame" x="704" y="333" width="82" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="push" title="Test" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="XpI-gl-pPy">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="btnTestAction:" target="wI2-06-r3x" id="Ps0-p7-rXp"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                 </view>
                             </box>
@@ -513,6 +524,7 @@
                         <outlet property="btnPowerOn" destination="esj-kn-J0F" id="Qoh-VY-ohr"/>
                         <outlet property="btnPowerPause" destination="3hM-6t-y7b" id="0w1-IG-7sZ"/>
                         <outlet property="btnSendFile" destination="hhp-Cn-ObI" id="aQe-nS-1Dz"/>
+                        <outlet property="btnTest" destination="cbA-m5-kkX" id="JzK-jn-BN9"/>
                         <outlet property="cboDataType" destination="yFf-BC-8mv" id="2t8-dq-fUZ"/>
                         <outlet property="cboInterface" destination="313-N7-ZNn" id="98F-nt-PMH"/>
                         <outlet property="cboNumberBase" destination="R7U-db-SDs" id="ab3-Jc-LWh"/>

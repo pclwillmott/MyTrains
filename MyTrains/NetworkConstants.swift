@@ -36,6 +36,7 @@ public enum NetworkMessageOpcode : UInt8 {
   case OPC_LOCO_ADR_P2   = 0xBE
   case OPC_LOCO_ADR      = 0xBF
   case OPC_BRD_OPSW      = 0xD0
+  case OPC_PR_MODE       = 0xD3
   case OPC_D4_GROUP      = 0xD4
   case OPC_D5_GROUP      = 0xD5
   case OPC_PEER_XFER     = 0xE5
@@ -112,6 +113,7 @@ public enum NetworkMessageType {
   case progSlotDataP1
   case progCmdAccepted
   case progCmdAcceptedBlind
+  case progMode
   case pwrOff
   case pwrOn
   case reset

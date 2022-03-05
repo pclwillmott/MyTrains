@@ -631,6 +631,12 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, NetworkMessengerDe
   
   @IBOutlet weak var btnPauseMonitor: NSButton!
   
+  @IBOutlet weak var btnTest: NSButton!
+  
+  @IBAction func btnTestAction(_ sender: NSButton) {
+    messenger?.readCV(progMode: .directMode, cv: 8, address: 0)
+  }
+  
 }
 
 

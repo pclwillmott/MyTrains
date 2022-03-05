@@ -33,6 +33,12 @@ enum MessengerState {
   case waitingForResponse
 }
 
+public enum ProgrammerMode : Int {
+  case MS100TerminationDisabled = 0
+  case ProgrammerMode = 1
+  case MS100TerminationEnabled = 3
+}
+
 public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessengerDelegate {
  
   // MARK: Constructor
@@ -551,9 +557,19 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
   
   public func getInterfaceData() {
     
+//    setProgMode(mode: .MS100TerminationDisabled)
+    
     let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_BUSY.rawValue], appendCheckSum: true)
     
     addToQueue(message: message, delay: TIMING.STANDARD, response: [.interfaceData], delegate: self, retryCount: 1)
+    
+  }
+  
+  public func setProgMode(mode: ProgrammerMode) {
+    
+    let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_PR_MODE.rawValue, 0x10, UInt8(mode.rawValue), 0x00, 0x00], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: self, retryCount: 1)
     
   }
   

@@ -300,6 +300,10 @@ public class NetworkMessage : NSObject {
             _messageType = .setBrdOpSw
           }
           break
+        case NetworkMessageOpcode.OPC_PR_MODE.rawValue:
+          if message[1] == 0x10 && message[3] == 0x00 && message[4] == 0x00 {
+            _messageType = .progMode
+          }
         case NetworkMessageOpcode.OPC_RQ_SL_DATA.rawValue:
           if message[2] == 0x00 {
             let sn = message[1]
