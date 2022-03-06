@@ -70,6 +70,8 @@
 		DA8837882770B7B2000B9A41 /* EditSwitchesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8837872770B7B2000B9A41 /* EditSwitchesVC.swift */; };
 		DA88378C2770FBEC000B9A41 /* DBEditorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA88378B2770FBEC000B9A41 /* DBEditorView.xib */; };
 		DA88378E2770FC41000B9A41 /* DBEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA88378D2770FC41000B9A41 /* DBEditorView.swift */; };
+		DA899EA627D4CE650033550E /* Programmer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA899EA527D4CE650033550E /* Programmer.swift */; };
+		DA899EA927D4E4160033550E /* ProgrammerComboBoxDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA899EA827D4E4160033550E /* ProgrammerComboBoxDS.swift */; };
 		DA8AE0ED279B2CCB001E9311 /* SlotView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA8AE0EC279B2CCB001E9311 /* SlotView.storyboard */; };
 		DA8AE0F0279B3074001E9311 /* SlotViewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8AE0EF279B3074001E9311 /* SlotViewVC.swift */; };
 		DA8FC5E8272C759A00FCCFCA /* NetworkMessenger.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8FC5E7272C759A00FCCFCA /* NetworkMessenger.swift */; };
@@ -175,6 +177,8 @@
 		DA8837872770B7B2000B9A41 /* EditSwitchesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditSwitchesVC.swift; sourceTree = "<group>"; };
 		DA88378B2770FBEC000B9A41 /* DBEditorView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DBEditorView.xib; sourceTree = "<group>"; };
 		DA88378D2770FC41000B9A41 /* DBEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DBEditorView.swift; path = doc/DBEditorView.swift; sourceTree = "<group>"; };
+		DA899EA527D4CE650033550E /* Programmer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Programmer.swift; sourceTree = "<group>"; };
+		DA899EA827D4E4160033550E /* ProgrammerComboBoxDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgrammerComboBoxDS.swift; sourceTree = "<group>"; };
 		DA8AE0EC279B2CCB001E9311 /* SlotView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SlotView.storyboard; sourceTree = "<group>"; };
 		DA8AE0EF279B3074001E9311 /* SlotViewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlotViewVC.swift; sourceTree = "<group>"; };
 		DA8FC5DA272C3EE800FCCFCA /* ORSSerialPort.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ORSSerialPort.xcodeproj; path = "Frameworks/ORSSerialPort/Framework Project/ORSSerialPort.xcodeproj"; sourceTree = "<group>"; };
@@ -253,6 +257,7 @@
 				DA53B24F276E360500AB956C /* CommandStation.swift */,
 				DA77794B27AEA029007EEBE9 /* CommandStationOptionSwitch.swift */,
 				DA08B434278754AB0001307C /* CommandStationComboBoxDS.swift */,
+				DA899EA827D4E4160033550E /* ProgrammerComboBoxDS.swift */,
 				DAA867C527933265008B6EEC /* CSVParser.swift */,
 				DA3AEF432788B33F00FF91D4 /* CVTableViewDS.swift */,
 				DA8FDB2C279C4AC000E15024 /* LocoSlotTableViewDS.swift */,
@@ -317,6 +322,7 @@
 				DA7A4911274AC25600C2A42B /* PeerXferMessage.swift */,
 				DA08B430278734270001307C /* ProgramDecoderAddress.storyboard */,
 				DA08B432278737530001307C /* ProgramDecoderAddressVC.swift */,
+				DA899EA527D4CE650033550E /* Programmer.swift */,
 				DA08B43627875FDD0001307C /* ProgSlotDataP1.swift */,
 				DA8AE0EC279B2CCB001E9311 /* SlotView.storyboard */,
 				DA8AE0EF279B3074001E9311 /* SlotViewVC.swift */,
@@ -445,6 +451,7 @@
 				DA0197252773500100350F71 /* ComboBoxDictDS.swift in Sources */,
 				DA8AE0F0279B3074001E9311 /* SlotViewVC.swift in Sources */,
 				DA08B43727875FDD0001307C /* ProgSlotDataP1.swift in Sources */,
+				DA899EA927D4E4160033550E /* ProgrammerComboBoxDS.swift in Sources */,
 				DA3AEF442788B33F00FF91D4 /* CVTableViewDS.swift in Sources */,
 				DA77795527AEEBBC007EEBE9 /* OpSwTCV.swift in Sources */,
 				DA7B472A273824F700BCD587 /* NetworkOutputQueueItem.swift in Sources */,
@@ -498,6 +505,7 @@
 				DA5E1741272ED2DF00F9341F /* LoconetSwitchRequestMessage.swift in Sources */,
 				DA8837722770B371000B9A41 /* EditLayoutsVC.swift in Sources */,
 				DA5B4605276F62D5005CA03C /* EditNetworksVC.swift in Sources */,
+				DA899EA627D4CE650033550E /* Programmer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

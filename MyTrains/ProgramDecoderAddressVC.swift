@@ -15,7 +15,7 @@ public enum ProgrammingMode : Int {
   case physicalRegister = 3
 }
 
-class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStationDelegate, CSVParserDelegate {
+class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDelegate, CSVParserDelegate {
 
   // MARK: Window & View Control
 
@@ -39,7 +39,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
     
     cboLocomotive.dataSource = cboLocomotiveDS
     
-    cboCommandStationDS.dictionary = networkController.commandStations
+    cboCommandStationDS.items = Programmer.programmers()
     
     cboCommandStation.dataSource = cboCommandStationDS
     
@@ -111,7 +111,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
   
   private var cboLocomotiveDS : ComboBoxDictDS = ComboBoxDictDS()
   
-  private var cboCommandStationDS : CommmandStationComboBoxDS = CommmandStationComboBoxDS()
+  private var cboCommandStationDS : ProgrammerComboBoxDS = ProgrammerComboBoxDS()
   
   private var locomotive : Locomotive? {
     get {
@@ -125,7 +125,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
   
   private var delegateId : Int = -1
   
-  private var commandStation : CommandStation?
+  private var commandStation : Programmer?
   
   private var programmerState : ProgrammerState = .idle
   
@@ -184,7 +184,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
       commandStation = nil
     }
     
-    if let cs = cboCommandStationDS.commandStationAt(index: cboCommandStation.indexOfSelectedItem) {
+    if let cs = cboCommandStationDS.programmerAt(index: cboCommandStation.indexOfSelectedItem) {
       commandStation = cs
       delegateId = cs.addDelegate(delegate: self)
     }
@@ -387,6 +387,8 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
   
   @objc func progMessageReceived(message: NetworkMessage) {
     
+    print("VC - here")
+    
     switch message.messageType {
     case .progCmdAccepted:
       var message = ""
@@ -573,6 +575,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
             loco.save()
             setup()
             programmerState = .idle
+            commandStation?.exitProgMode()
           }
           break
         case .waitingForWriteReadCV29Data:
@@ -690,6 +693,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
           programmerState = .idle
           message = "Write Completed"
           cvTableView.reloadData()
+          commandStation?.exitProgMode()
           break
         case .waitingForWriteCVData:
           programmerState = .idle
@@ -697,6 +701,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
           writeCV!.save()
           message = "Write Completed"
           lblReadCVStatus.stringValue = message
+          commandStation?.exitProgMode()
         case .waitingForIndexedWriteWriteCV31Data:
           if let loco = locomotive {
             if let cvx = loco.getCV(cvNumber: 31) {
@@ -758,6 +763,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
               btnImportCVs.isEnabled = true
               btnExportCVs.isEnabled = true
               cancelRead = false
+              commandStation?.exitProgMode()
             }
             else if readCV < endAddress {
               if let loco = locomotive {
@@ -778,6 +784,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
               btnImportCVs.isEnabled = true
               btnExportCVs.isEnabled = true
               setup()
+              commandStation?.exitProgMode()
             }
           }
         case .writeMultipleState2:
@@ -810,6 +817,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
             btnImportCVs.isEnabled = true
             btnExportCVs.isEnabled = true
             cancelRead = false
+            commandStation?.exitProgMode()
             return
           }
 
@@ -852,6 +860,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
             btnExportCVs.isEnabled = true
             writeMultipleIndex = 0
             setup()
+            commandStation?.exitProgMode()
           }
 
         default:
@@ -862,22 +871,27 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
       else if psd.status == .noDecoderDetected {
         lblStatus.stringValue = "No Decoder Detected"
         programmerState = .idle
+        commandStation?.exitProgMode()
       }
       else if psd.status == .userAborted {
         lblStatus.stringValue = "User Aborted"
         programmerState = .idle
+        commandStation?.exitProgMode()
       }
       else if psd.status == .readAckNotDetected {
         lblStatus.stringValue = "Read Ack Not Detected"
         programmerState = .idle
+        commandStation?.exitProgMode()
       }
       else if psd.status == .writeAckNotDetected {
         lblStatus.stringValue = "Write Ack Not Detected"
         programmerState = .idle
+        commandStation?.exitProgMode()
       }
       else {
         lblStatus.stringValue = "\(psd.status)"
         programmerState = .idle
+        commandStation?.exitProgMode()
       }
       
       break
@@ -972,6 +986,8 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
       
       if let cs = commandStation, let loco = locomotive {
         
+        cs.enterProgMode()
+        
         programmerState = .waitingForReadCV29Ack
         
         cs.readCV(progMode: programmingMode, cv: 29, address: loco.address)
@@ -988,6 +1004,8 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
     if validate() {
       
       if let cs = commandStation, let loco = locomotive {
+        
+        cs.enterProgMode()
         
         programmerState = .waitingForWriteReadCV29Ack
         
@@ -1027,6 +1045,8 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
     if validate() {
       
       if let cs = commandStation, let loco = locomotive {
+        
+        cs.enterProgMode()
         
         cancelRead = false
         
@@ -1156,6 +1176,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
     var reset = true
     if let newValue = Int.fromMultiBaseString(stringValue: sender.stringValue), let loco = locomotive {
       if newValue >= 0 && newValue < 256 {
+        commandStation?.enterProgMode()
         reset = false
         writeValue = newValue
         if !cv.isIndexedCV {
@@ -1215,6 +1236,8 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, CommandStati
     cancelRead = false
     
     if let cv = findNextCVToWrite(), let value = cv.newValueNumber, let loco = locomotive {
+      
+      commandStation?.enterProgMode()
       
       btnCancelReadCVValues.isEnabled = true
       btnReadCVValues.isEnabled = false

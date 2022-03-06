@@ -25,6 +25,8 @@ enum TIMING {
   static let STANDARD = 20.0 / 1000.0
   static let SWREQ = 20.0 / 1000.0
   static let DISCOVER = 1.0
+  static let PRMODE = 2.0
+  static let CVOP = 2.0
 }
 
 enum MessengerState {
@@ -127,6 +129,8 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
       return interface.isConnected
     }
   }
+  
+  public var lastProgrammerMode : ProgrammerMode = .MS100TerminationDisabled
   
   // MARK: Private Methods
   
@@ -307,14 +311,18 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
               if messengerState == .waitingForResponse &&
                 outputQueue[0].isValidResponse(messageType: networkMessage.messageType) {
                 
-                delegate = outputQueue[0].delegate
-                
-                outputQueue.remove(at: 0)
-                
-                messengerState = .spacing
-                
-                stopTimer = true
-                
+                if networkMessage.messageType != .programmerBusy {
+                  
+                  delegate = outputQueue[0].delegate
+                  
+                  outputQueue.remove(at: 0)
+                  
+                  messengerState = .spacing
+                  
+                  stopTimer = true
+                  
+                }
+              
               }
               
               outputQueueLock.unlock()
@@ -416,7 +424,7 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
     
     let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_RQ_SL_DATA.rawValue, 0x7c, 0x00], appendCheckSum: true)
     
-    addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: nil, retryCount: 1)
+    addToQueue(message: message, delay: TIMING.CVOP, response: [.progSlotDataP1], delegate: nil, retryCount: 10)
 
   }
   
@@ -557,11 +565,9 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
   
   public func getInterfaceData() {
     
-//    setProgMode(mode: .MS100TerminationDisabled)
-    
     let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_BUSY.rawValue], appendCheckSum: true)
     
-    addToQueue(message: message, delay: TIMING.STANDARD, response: [.interfaceData], delegate: self, retryCount: 1)
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [.interfaceData], delegate: self, retryCount: 3)
     
   }
   
@@ -569,7 +575,9 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
     
     let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_PR_MODE.rawValue, 0x10, UInt8(mode.rawValue), 0x00, 0x00], appendCheckSum: true)
     
-    addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: self, retryCount: 1)
+    addToQueue(message: message, delay: TIMING.PRMODE, response: [], delegate: self, retryCount: 1)
+
+    lastProgrammerMode = mode
     
   }
   
@@ -620,7 +628,7 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
         ],
         appendCheckSum: true)
     
-    addToQueue(message: message, delay: TIMING.STANDARD, response: [.progCmdAccepted, .ack, .progCmdAcceptedBlind], delegate: self, retryCount: 5)
+    addToQueue(message: message, delay: TIMING.CVOP, response: [.progCmdAccepted, .progCmdAcceptedBlind], delegate: self, retryCount: 10)
     
   }
   
@@ -673,7 +681,7 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
         ],
         appendCheckSum: true)
     
-    addToQueue(message: message, delay: TIMING.STANDARD, response: [.progCmdAccepted, .ack, .progCmdAcceptedBlind], delegate: self, retryCount: 5)
+    addToQueue(message: message, delay: TIMING.CVOP, response: [.progCmdAccepted, .progCmdAcceptedBlind], delegate: self, retryCount: 10)
     
   }
   

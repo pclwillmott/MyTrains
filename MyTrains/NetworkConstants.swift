@@ -114,6 +114,7 @@ public enum NetworkMessageType {
   case progCmdAccepted
   case progCmdAcceptedBlind
   case progMode
+  case programmerBusy
   case pwrOff
   case pwrOn
   case reset

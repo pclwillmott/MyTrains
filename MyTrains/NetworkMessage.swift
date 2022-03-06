@@ -196,6 +196,9 @@ public class NetworkMessage : NSObject {
           else if message[1] == 0x6f && message[2] == 0x7f {
             _messageType = .setSlotDataOKP1
           }
+          else if message[1] == 0x6f && message[2] == 0x00 {
+            _messageType = .programmerBusy
+          }
           else if message[1] == 0x3f && message[2] == 0x00 {
             _messageType = .noFreeSlotsP1
           }
