@@ -436,6 +436,15 @@ public class NetworkMessage : NSObject {
             slotPage = Int(message[1] & 0b00000111)
             slotNumber = Int(message[2])
           }
+          else if (message[1] & 0b00111000) == 0b00111000 &&
+                    message[2] < 0x78 &&
+                    message[3] == 0x60 {
+            _messageType = .setLocoSlotStat1P2
+            _willChangeSlot = true
+            isP1 = true
+            slotPage = Int(message[1] & 0x7)
+            slotNumber = Int(message[2])
+          }
           else if (message[1] & 0b11111000) == 0b00100000 {
             switch message[3] {
             case 0x04:
@@ -649,7 +658,7 @@ public class NetworkMessage : NSObject {
           break
         case NetworkMessageOpcode.OPC_SLOT_STAT1.rawValue:
           if message[1] < 0x78 {
-            _messageType = .setLocoSlotStat1
+            _messageType = .setLocoSlotStat1P1
             _willChangeSlot = true
             isP1 = true
             slotPage = 0

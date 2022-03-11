@@ -81,7 +81,7 @@ class SlotViewVC : NSViewController, NSWindowDelegate, SlotObserverDelegate, Com
       if let cs = commandStation {
         slotObserverId = cs.addSlotObserver(observer:self)
         commandStationDelegateId = cs.addDelegate(delegate: self)
-        startTimer(timeInterval: 1.0)
+        startTimer(timeInterval: 0.05)
       }
     }
   }

@@ -141,6 +141,9 @@ public class Programmer : NSObject, NetworkMessengerDelegate, CommandStationDele
   // MARK: NetworkMessengerDelegate Methods
   
   @objc public func networkMessageReceived(message:NetworkMessage) {
+    if programmerType == .commandStation {
+      return
+    }
     switch message.messageType {
     case.progCmdAcceptedBlind, .progSlotDataP1, .progCmdAccepted:
       DispatchQueue.main.async {
@@ -154,6 +157,9 @@ public class Programmer : NSObject, NetworkMessengerDelegate, CommandStationDele
   // MARK: CommandStationDelegate Methods
   
   @objc public func progMessageReceived(message:NetworkMessage) {
+    if programmerType == .programmer {
+      return
+    }
     progMessage(message: message)
   }
 

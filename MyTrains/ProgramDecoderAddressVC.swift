@@ -387,8 +387,6 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
   
   @objc func progMessageReceived(message: NetworkMessage) {
     
-    print("VC - here")
-    
     switch message.messageType {
     case .progCmdAccepted:
       var message = ""
