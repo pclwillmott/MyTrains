@@ -182,6 +182,17 @@ public class NetworkMessage : NSObject {
              message[2] == 0x01 {
             _messageType = .progCmdAccepted
           }
+          else if message[1] == 0x30 && message[2] == 0x00 {
+            _messageType = .setSwRejected
+          }
+          else if message[1] == 0x3d {
+            if message[2] == 0x00 {
+              _messageType = .setSwWithAckRejected
+            }
+            else if message[2] == 0x7f {
+              _messageType = .setSwWithAckAccepted
+            }
+          }
           else if message[1] == 0x6f &&
              message[2] == 0x40 {
             _messageType = .progCmdAcceptedBlind
@@ -671,7 +682,7 @@ public class NetworkMessage : NSObject {
           break
         case NetworkMessageOpcode.OPC_SW_REQ.rawValue:
           if (message[2] & 0b11000000) == 0b00000000 {
-            _messageType = .swReq
+            _messageType = .setSw
           }
           break
         case NetworkMessageOpcode.OPC_SW_STATE.rawValue:

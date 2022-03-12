@@ -79,6 +79,7 @@ public enum NetworkMessageType {
   case invalidLinkP1
 //  case invalidLinkP2
   case interfaceData
+  case interrogate
   case iplDataLoad
   case iplDevData
   case iplDiscover
@@ -133,9 +134,12 @@ public enum NetworkMessageType {
   case setLocoSlotStat1P2
   case setSlotDataOKP1
   case setSlotDataOKP2
+  case setSw
+  case setSwRejected
   case setSwWithAck
+  case setSwWithAckAccepted
+  case setSwWithAckRejected
   case slotNotImplemented
-  case swReq
   case getSWState
   case swState
   case unlinkSlotsP1
