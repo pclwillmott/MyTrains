@@ -796,7 +796,7 @@ public class CommandStation : NSObject, NetworkMessengerDelegate {
       _locoSlots[slot.slotID] = slot
       slotsUpdated()
       break
-    case .noFreeSlotsP2, .noFreeSlotsP1, .setSlotDataOKP1, .setSlotDataOKP2, .illegalMoveP1, .illegalMoveP2:
+    case .noFreeSlotsP2, .noFreeSlotsP1, .setSlotDataOKP1, .setSlotDataOKP2, .illegalMoveP1, .d4Error:
       locomotiveMessage(message: message)
     case .pwrOn:
       powerIsOn = true

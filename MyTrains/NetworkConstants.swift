@@ -35,10 +35,12 @@ public enum NetworkMessageOpcode : UInt8 {
   case OPC_SW_ACK        = 0xBD
   case OPC_LOCO_ADR_P2   = 0xBE
   case OPC_LOCO_ADR      = 0xBF
-  case OPC_BRD_OPSW      = 0xD0
   case OPC_PR_MODE       = 0xD3
+  case OPC_D0_GROUP      = 0xD0
   case OPC_D4_GROUP      = 0xD4
   case OPC_D5_GROUP      = 0xD5
+  case OPC_D7_GROUP      = 0xD7
+  case OPC_DF_GROUP      = 0xDF
   case OPC_PEER_XFER     = 0xE5
   case OPC_SL_RD_DATA_P2 = 0xE6
   case OPC_SL_RD_DATA    = 0xE7
@@ -55,31 +57,47 @@ public enum NetworkMessageType {
   case unknown
   case uninitialized
   case ack
+  case brdOpSwState
   case busy
   case cfgSlotDataP1
   case cfgSlotDataP2
   case consistDirF0F4
+  case d4Error
   case dispatchGetP1
   case dispatchGetP2
   case dispatchPutP1
   case dispatchPutP2
+  case duplexChannelNumber
+  case duplexData
+  case duplexGroupID
+  case duplexPassword
+  case duplexSignalStrength
   case fastClockDataP1
-  case getBrdOpSw
+  case findReceiver
+  case getBrdOpSwState
   case getCfgSlotDataP1
   case getCfgSlotDataP2
+  case getDuplexChannelNumber
+  case getDuplexData
+  case getDuplexGroupID
+  case getDuplexPassword
+  case getDuplexSignalStrength
   case getFastClockDataP1
   case getLocoSlotData
   case getLocoSlotDataLAdrP1
   case getLocoSlotDataLAdrP2
   case getLocoSlotDataSAdrP1
   case getLocoSlotDataSAdrP2
+  case getSwState
   case illegalMoveP1
-  case illegalMoveP2
   case immPacket
-  case invalidLinkP1
-//  case invalidLinkP2
+  case immPacketOK
+  case immPacketLMOK
+  case immPacketBufferFull
   case interfaceData
   case interrogate
+  case invalidLinkP1
+  //case invalidLinkP2
   case iplDataLoad
   case iplDevData
   case iplDiscover
@@ -88,44 +106,45 @@ public enum NetworkMessageType {
   case iplSetupBL2
   case linkSlotsP1
   case linkSlotsP2
-  case locoBinStateP2
   case locoDirF0F4P1
-  case locoDirF0F4P2
   case locoF0F6P2
   case locoF5F8P1
-  case locoF5F11P2
   case locoF7F13P2
-  case locoF12F20F28P2
-  case locoF13F19P2
   case locoF14F20P2
-  case locoF21F27P2
   case locoF21F28P2
   case locoSlotDataP1
   case locoSlotDataP2
-  case locoSpdP1
-  case locoSpdP2
   case locoSpdDirP2
+  case locoSpdP1
   case moveSlotP1
   case moveSlotP2
   case noFreeSlotsP1
   case noFreeSlotsP2
   case peerXfer16
-  case progCV
-  case progSlotDataP1
+  case pmRep
+  case prMode
   case progCmdAccepted
   case progCmdAcceptedBlind
-  case progMode
+  case progCV
+  case progSlotDataP1
   case programmerBusy
   case pwrOff
   case pwrOn
+  case receiverRep
   case reset
   case sensRepGenIn
   case sensRepTurnIn
   case sensRepTurnOut
-  case setBrdOpSw
+  case setBrdOpSwOK
+  case setBrdOpSwState
   case setCfgSlotDataP1
   case setCfgSlotDataP2
+  case setDuplexChannelNumber
+  case setDuplexGroupID
+  case setDuplexGroupName
+  case setDuplexPassword
   case setIdleState
+  case setLocoNetID
   case setLocoSlotDataP1
   case setLocoSlotDataP2
   case setLocoSlotInUseP1
@@ -135,13 +154,15 @@ public enum NetworkMessageType {
   case setSlotDataOKP1
   case setSlotDataOKP2
   case setSw
+  case setSwAccepted
   case setSwRejected
   case setSwWithAck
   case setSwWithAckAccepted
   case setSwWithAckRejected
   case slotNotImplemented
-  case getSWState
   case swState
+  case transRep
+  case trkShortRep
   case unlinkSlotsP1
   case unlinkSlotsP2
 }

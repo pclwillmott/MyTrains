@@ -559,7 +559,7 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
     
     let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_D4_GROUP.rawValue, srcPage, UInt8(sourceSlotNumber), dstPage, UInt8(destinationSlotNumber)], appendCheckSum: true)
     
-    addToQueue(message: message, delay: TIMING.STANDARD, response: [.locoSlotDataP2, .illegalMoveP2, .locoSlotDataP1], delegate: nil, retryCount: 5)
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [.locoSlotDataP2, .d4Error, .locoSlotDataP1], delegate: nil, retryCount: 5)
 
   }
   
