@@ -88,6 +88,7 @@ public enum NetworkMessageType {
   case getLocoSlotDataLAdrP2
   case getLocoSlotDataSAdrP1
   case getLocoSlotDataSAdrP2
+  case getQuerySlot
   case getSwState
   case illegalMoveP1
   case immPacket
@@ -97,7 +98,7 @@ public enum NetworkMessageType {
   case interfaceData
   case interrogate
   case invalidLinkP1
-  //case invalidLinkP2
+  case invalidUnlinkP1
   case iplDataLoad
   case iplDevData
   case iplDiscover
@@ -130,8 +131,14 @@ public enum NetworkMessageType {
   case programmerBusy
   case pwrOff
   case pwrOn
+  case querySlot1
+  case querySlot2
+  case querySlot3
+  case querySlot4
+  case querySlot5
   case receiverRep
   case reset
+  case resetQuerySlot4
   case sensRepGenIn
   case sensRepTurnIn
   case sensRepTurnOut
@@ -173,14 +180,41 @@ public enum Manufacturer : Int {
 }
 
 public enum ProductCode : Int {
+  
   case DCS210Plus       = 0x1a
   case DCS210           = 0x1b
   case DCS240           = 0x1c
   case PR3              = 0x23
   case PR4              = 0x24
   case DT500            = 0x32
+  case BXP88            = 0x58
+  case LNWI             = 0x63
   case softwareThrottle = 0x7f
   case unknown          = 0xff
+  
+  func productName() -> String {
+    switch self {
+    case .DCS210:
+      return "DCS210"
+    case .DCS210Plus:
+      return "DCS210+"
+    case .DCS240:
+      return "DCS240"
+    case .PR4:
+      return "PR4"
+    case .PR3:
+      return "PR3"
+    case .DT500:
+      return "DT500"
+    case .BXP88:
+      return  "BXP88"
+    case .LNWI:
+      return "LNWI"
+    default:
+      return "Unknown Product"
+    }
+  }
+  
 }
 
 /*

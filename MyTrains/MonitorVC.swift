@@ -308,6 +308,27 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, NetworkMessengerDe
     
     let timeNow = Date.timeIntervalSinceReferenceDate
     
+    // ****************
+    
+    // This is a hack to be removed!
+    
+    addr += 1
+    /*
+    if message.messageType == .locoSlotDataP1 && (message.message[3] & 0b00110000) != 0b00110000 {
+      let sn = Int(message.message[2])
+      messenger?.moveSlotsP1(sourceSlotNumber: sn, destinationSlotNumber: sn)
+      messenger?.getLocoSlotDataP2(forAddress: addr)
+    }
+
+    if message.messageType == .locoSlotDataP2 && (message.message[4] & 0b00110000) != 0b00110000 {
+      let sn = Int(message.message[3])
+      let sp = Int(message.message[2])
+      messenger?.moveSlotsP2(sourceSlotNumber: sn, sourceSlotPage: sp, destinationSlotNumber: sn, destinationSlotPage: sp)
+      messenger?.getLocoSlotDataP2(forAddress: addr)
+    }
+*/
+    // ****************
+    
     if addLabels {
       item += "\(message.messageType)\n"
     }
@@ -634,9 +655,10 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, NetworkMessengerDe
   @IBOutlet weak var btnTest: NSButton!
   
   @IBAction func btnTestAction(_ sender: NSButton) {
-    messenger?.readCV(progMode: .directMode, cv: 8, address: 0)
+    messenger?.getLocoSlotDataP2(forAddress: addr)
   }
   
+  var addr : Int = 1
 }
 
 

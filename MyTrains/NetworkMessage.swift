@@ -176,6 +176,13 @@ public class NetworkMessage : NSObject {
             default:
               break
             }
+          case 0x38:
+            switch message[2] {
+            case 0x00:
+              _messageType = .invalidUnlinkP1
+            default:
+              break
+            }
           case 0x39:
             switch message[2] {
             case 0x00:
@@ -223,7 +230,7 @@ public class NetworkMessage : NSObject {
               break
             }
           case 0x50:
-            if (message[2] & 0b0001000) == 0b00010000 {
+            if (message[2] & 0b01011111) == 0b00010000 {
               _messageType = .brdOpSwState
             }
             else if message[2] == 0x7f {
@@ -316,7 +323,7 @@ public class NetworkMessage : NSObject {
             
           }
           
-        // Get Slot Data P1
+        // Get Slot Data
           
         case NetworkMessageOpcode.OPC_RQ_SL_DATA.rawValue:
           
@@ -344,6 +351,9 @@ public class NetworkMessage : NSObject {
             }
             
           }
+          else if message[1] >= 0x78 && message[1] <= 0x7c && message[2] == 0x41 {
+            _messageType = .getQuerySlot
+          }
           else if message[1] == 0x7f && message[2] == 0x40 {
             _messageType = .getCfgSlotDataP2
           }
@@ -360,6 +370,22 @@ public class NetworkMessage : NSObject {
             
             if message[3] < 0x78 && (message[7] & 0b10110000) == 00 {
               _messageType = .locoSlotDataP2
+            }
+            else if message[3] >= 0x78 && message[3] <= 0x7c && message[2] == 0x01 {
+              switch message[3] {
+              case 0x78:
+                _messageType = .querySlot1
+              case 0x79:
+                _messageType = .querySlot2
+              case 0x7a:
+                _messageType = .querySlot3
+              case 0x7b:
+                _messageType = .querySlot4
+              case 0x7c:
+                _messageType = .querySlot5
+              default:
+                break
+              }
             }
             else if message[3] == 0x7f && message[2] == 0x00 {
               _messageType = .cfgSlotDataP2
@@ -993,10 +1019,15 @@ public class NetworkMessage : NSObject {
             _messageType = .sensRepTurnOut
           }
 
+        // Write Slot Data P2
+          
         case NetworkMessageOpcode.OPC_WR_SL_DATA_P2.rawValue:
           if message[1] == 0x15 {
             if message[2] == 0 && message[3] == 0x7f {
               _messageType = .setCfgSlotDataP2
+            }
+            else if message[2] == 0x19 && message[3] == 0x7b {
+              _messageType = .resetQuerySlot4
             }
             else if message[3] < 0x78 {
               _messageType = .setLocoSlotDataP2

@@ -444,6 +444,21 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
 
   }
   
+  public func getQuerySlot(querySlot: Int) {
+    
+    if querySlot < 1 || querySlot > 5 {
+      return
+    }
+    
+    let slotPage = 1
+    let slotNumber = 0x78 + querySlot - 1
+    
+    let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_RQ_SL_DATA.rawValue, UInt8(slotNumber), UInt8(slotPage) | 0b01000000], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: nil, retryCount: 1)
+
+  }
+  
   public func getLocoSlotDataP1(forAddress: Int) {
     
     let lo = UInt8(forAddress & 0x7f)
@@ -526,6 +541,14 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
     
     addToQueue(message: message, delay: TIMING.STANDARD, response: [.setSlotDataOKP2, .ack], delegate: nil, retryCount: 1)
 
+  }
+  
+  public func resetQuerySlot4() {
+    let slotPage = 0x19
+    let slotNumber = 0x7b
+    let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_WR_SL_DATA_P2.rawValue, 0x15, UInt8(slotPage), UInt8(slotNumber), 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [.setSlotDataOKP2,.ack], delegate: nil, retryCount: 1)
   }
 
   public func clearLocoSlotDataP1(slotNumber:Int) {

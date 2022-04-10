@@ -110,5 +110,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     wc.showWindow(nil)
   }
   
+  @IBAction func mnuDashBoardAction(_ sender: NSMenuItem) {
+    let x = ModalWindow.DashBoard
+    let wc = x.windowController
+    wc.showWindow(nil)
+  }
+  
 }
 

@@ -23,6 +23,7 @@ enum AppStoryboard : String {
   case ProgramDecoderAddress       = "ProgramDecoderAddress"
   case SlotView                    = "SlotView"
   case CommandStationConfiguration = "CommandStationConfiguration"
+  case DashBoard                   = "DashBoard"
   
   var instance : NSStoryboard {
     return NSStoryboard(name: self.rawValue, bundle: Bundle.main)
@@ -43,7 +44,8 @@ let storyboardLookup            : [String:AppStoryboard] = [
   "Throttle"                    : AppStoryboard.Throttle,
   "ProgramDecoderAddress"       : AppStoryboard.ProgramDecoderAddress,
   "SlotView"                    : AppStoryboard.SlotView,
-  "CommandStationConfiguration" : AppStoryboard.CommandStationConfiguration
+  "CommandStationConfiguration" : AppStoryboard.CommandStationConfiguration,
+  "DashBoard"                   : AppStoryboard.DashBoard
 ]
 
 /*
@@ -70,6 +72,7 @@ enum ModalWindow : String {
   case ProgramDecoderAddress       = "ProgramDecoderAddress"
   case SlotView                    = "SlotView"
   case CommandStationConfiguration = "CommandStationConfiguration"
+  case DashBoard                   = "DashBoard"
 
   var windowController : NSWindowController {
     let storyboard = storyboardLookup[self.rawValue]!
