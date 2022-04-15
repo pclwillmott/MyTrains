@@ -655,7 +655,8 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, NetworkMessengerDe
   @IBOutlet weak var btnTest: NSButton!
   
   @IBAction func btnTestAction(_ sender: NSButton) {
-    messenger?.getLocoSlotDataP2(forAddress: addr)
+ //   messenger?.getLocoSlotDataP2(forAddress: addr)
+    messenger?.getDuplexGroupID()
   }
   
   var addr : Int = 1

@@ -594,6 +594,130 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
     
   }
   
+  public func getDuplexData() {
+    
+    let message = NetworkMessage(interfaceId: id, data:
+      [NetworkMessageOpcode.OPC_PEER_XFER.rawValue,
+       0x14, 0x03, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+    ], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: self, retryCount: 1)
+    
+  }
+  
+  public func setDuplexChannelNumber(channelNumber: Int) {
+    
+    let cn = UInt8(channelNumber)
+    
+    let pxct1 : UInt8 = (cn & 0b10000000) == 0b10000000 ? 0b00000001 : 0
+    
+    let message = NetworkMessage(interfaceId: id, data:
+      [NetworkMessageOpcode.OPC_PEER_XFER.rawValue,
+       0x14, 0x02, 0x00, pxct1, cn, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+    ], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: self, retryCount: 1)
+    
+  }
+  
+  public func setDuplexGroupID(groupID: Int) {
+    
+    let gid = UInt8(groupID)
+    
+    let pxct1 : UInt8 = (gid & 0b10000000) == 0b10000000 ? 0b00000001 : 0
+    
+    let message = NetworkMessage(interfaceId: id, data:
+      [NetworkMessageOpcode.OPC_PEER_XFER.rawValue,
+       0x14, 0x04, 0x00, pxct1, gid, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+    ], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: self, retryCount: 1)
+    
+  }
+  
+  public func getDuplexGroupID() {
+    
+    let message = NetworkMessage(interfaceId: id, data:
+      [NetworkMessageOpcode.OPC_PEER_XFER.rawValue,
+       0x14, 0x04, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+    ], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: self, retryCount: 1)
+    
+  }
+  
+  public func getDuplexSignalStrength(duplexGroupChannel: Int) {
+    
+    let message = NetworkMessage(interfaceId: id, data:
+      [NetworkMessageOpcode.OPC_PEER_XFER.rawValue,
+       0x14, 0x10, 0x08, 0x00, UInt8(duplexGroupChannel & 0x7f), 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+    ], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: self, retryCount: 1)
+    
+  }
+  
+  public func setDuplexSignalStrength(duplexGroupChannel: Int, signalStrength:Int) {
+    
+    var pxct1 : UInt8 = 0
+    pxct1 |= ((duplexGroupChannel & 0b10000000) == 0b10000000) ? 0b00000001 : 0
+    pxct1 |= ((signalStrength     & 0b10000000) == 0b10000000) ? 0b00000010 : 0
+
+    let message = NetworkMessage(interfaceId: id, data:
+      [NetworkMessageOpcode.OPC_PEER_XFER.rawValue,
+       0x14, 0x10, 0x10, pxct1, UInt8(duplexGroupChannel & 0x7f), UInt8(signalStrength & 0x7f), 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+    ], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: self, retryCount: 1)
+    
+  }
+  public func setDuplexGroupName(groupName: String) {
+    
+    let data = String((groupName + "        ").prefix(8)).data(using: .ascii)!
+    
+    var pxct1 : UInt8 = 0
+    
+    pxct1 |= (data[0] & 0b10000000) == 0b10000000 ? 0b00000001 : 0
+    pxct1 |= (data[1] & 0b10000000) == 0b10000000 ? 0b00000010 : 0
+    pxct1 |= (data[2] & 0b10000000) == 0b10000000 ? 0b00000100 : 0
+    pxct1 |= (data[3] & 0b10000000) == 0b10000000 ? 0b00001000 : 0
+
+    var pxct2 : UInt8 = 0
+    
+    pxct2 |= (data[4] & 0b10000000) == 0b10000000 ? 0b00000001 : 0
+    pxct2 |= (data[5] & 0b10000000) == 0b10000000 ? 0b00000010 : 0
+    pxct2 |= (data[6] & 0b10000000) == 0b10000000 ? 0b00000100 : 0
+    pxct2 |= (data[7] & 0b10000000) == 0b10000000 ? 0b00001000 : 0
+    
+    let message = NetworkMessage(interfaceId: id, data:
+      [NetworkMessageOpcode.OPC_PEER_XFER.rawValue,
+       0x14, 0x03, 0x00, pxct1, data[0], data[1], data[2], data[3], pxct2, data[4], data[5], data[6], data[7], 0x00, 0x00, 0x00, 0x00, 0x00
+    ], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: self, retryCount: 1)
+    
+  }
+  
+  public func setDuplexPassword(password: String) {
+    
+    let data = String((password + "0000").prefix(4)).data(using: .ascii)!
+    
+    var pxct1 : UInt8 = 0
+    
+    pxct1 |= (data[0] & 0b10000000) == 0b10000000 ? 0b00000001 : 0
+    pxct1 |= (data[1] & 0b10000000) == 0b10000000 ? 0b00000010 : 0
+    pxct1 |= (data[2] & 0b10000000) == 0b10000000 ? 0b00000100 : 0
+    pxct1 |= (data[3] & 0b10000000) == 0b10000000 ? 0b00001000 : 0
+
+    let message = NetworkMessage(interfaceId: id, data:
+      [NetworkMessageOpcode.OPC_PEER_XFER.rawValue,
+       0x14, 0x07, 0x00, pxct1, data[0] & 0x7f, data[1] & 0x7f, data[2] & 0x7f, data[3] & 0x7f, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+    ], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: self, retryCount: 1)
+    
+  }
+  
   public func setProgMode(mode: ProgrammerMode) {
     
     let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_PR_MODE.rawValue, 0x10, UInt8(mode.rawValue), 0x00, 0x00], appendCheckSum: true)

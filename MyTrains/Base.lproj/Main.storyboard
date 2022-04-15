@@ -502,6 +502,12 @@
                                                 <action selector="mnuCommandStationConfiguration:" target="Voe-Tx-rLC" id="uiq-Fs-4C5"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Group Setup" id="jYW-oF-LfI">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="SetupGroupAction:" target="Voe-Tx-rLC" id="NzS-cx-LX8"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem isSeparatorItem="YES" id="muo-PM-TVl"/>
                                         <menuItem title="Show Toolbar" keyEquivalent="t" id="snW-S8-Cw5">
                                             <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>

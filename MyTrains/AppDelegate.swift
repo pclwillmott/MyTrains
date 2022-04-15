@@ -116,5 +116,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     wc.showWindow(nil)
   }
   
+  @IBAction func SetupGroupAction(_ sender: NSMenuItem) {
+    let x = ModalWindow.GroupSetup
+    let wc = x.windowController
+    wc.showWindow(nil)
+  }
+  
 }
 
