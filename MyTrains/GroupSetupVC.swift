@@ -92,6 +92,8 @@ class GroupSetupVC: NSViewController, NetworkControllerDelegate, NetworkMessenge
       repeatCount -= 1
       if repeatCount == 0 {
         stopTimer()
+        current = Array(repeating: 0.0, count: 16)
+        signalStrengthView.current = current
         lblNowScanning.stringValue = "Scan Completed"
         btnScan.title = "Scan"
       }
@@ -173,7 +175,12 @@ class GroupSetupVC: NSViewController, NetworkControllerDelegate, NetworkMessenge
       }
       totals[cn] += ss
       for index in 0...15 {
-        average[index] = totals[index] / Double(scanCount[index])
+        if scanCount[index] == 0 {
+          average[index] = 0.0
+        }
+        else {
+          average[index] = totals[index] / Double(scanCount[index])
+        }
       }
       signalStrengthView.max = maxValue
       signalStrengthView.current = current

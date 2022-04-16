@@ -150,6 +150,7 @@ public enum NetworkMessageType {
   case setDuplexGroupID
   case setDuplexGroupName
   case setDuplexPassword
+  case setFastClockDataP1
   case setIdleState
   case setLocoNetID
   case setLocoSlotDataP1

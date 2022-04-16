@@ -15,11 +15,13 @@ class SignalStrengthView: NSView {
 
   public var max : [Double] = [] {
     didSet {
+      needsDisplay = true
     }
   }
   
   public var current : [Double] = [] {
     didSet {
+      needsDisplay = true
     }
   }
   
@@ -63,9 +65,9 @@ class SignalStrengthView: NSView {
     }
     
     // Current Value
-    
+  
     if current.count > 0 {
-      NSColor.yellow.setFill()
+      NSColor.systemBlue.setFill()
       for cn in 0...15 {
         let dw = bounds.width / 16.0
         let dx = CGFloat(cn) * bounds.width / 16.0
@@ -80,47 +82,56 @@ class SignalStrengthView: NSView {
       }
     }
 
+    // Dash Line
+    
+    let dy = CGFloat(97) / maxValue * bounds.height
+    context?.setStrokeColor(NSColor.green.cgColor)
+    let dashPath = NSBezierPath()
+    dashPath.setLineDash([2,3], count: 2, phase: 1.0)
+    dashPath.lineWidth = 3
+    dashPath.move(to: NSMakePoint(0, dy))
+    dashPath.line(to: NSMakePoint(bounds.width, dy))
+    dashPath.close()
+    dashPath.stroke()
 
     // Max Value
-    
+ 
     if max.count > 0 {
-      NSColor.red.setFill()
+      context?.setStrokeColor(NSColor.red.cgColor)
+      let path = NSBezierPath()
+      let dw = bounds.width / 16.0
+      path.lineWidth = 3
+      path.move(to: NSMakePoint(0.0, 0.0))
       for cn in 0...15 {
-        let dw = bounds.width / 16.0
-        let dh = bounds.height / 50.0
-        let dx = CGFloat(cn) * bounds.width / 16.0
-        let dy = bounds.height / maxValue * max[cn]
-        let path = NSBezierPath()
-        path.move(to: NSMakePoint(dx, dy - dh))
+        let dx = CGFloat(cn) * dw + dw / 2.0
+        let dy = (bounds.height / maxValue) * max[cn]
         path.line(to: NSMakePoint(dx, dy))
-        path.line(to: NSMakePoint(dx+dw, dy))
-        path.line(to: NSMakePoint(dx+dw, dy - dh))
-        path.close()
-        path.fill()
       }
+      path.line(to: NSMakePoint(bounds.width, 0.0))
+      path.close()
+      path.stroke()
     }
-    
+  
     // Average Value
-    
+ 
     if average.count > 0 {
-      NSColor.orange.setFill()
+      context?.setStrokeColor(NSColor.orange.cgColor)
+      let path = NSBezierPath()
+      let dw = bounds.width / 16.0
+      path.lineWidth = 3
+      path.move(to: NSMakePoint(0.0, 0.0))
       for cn in 0...15 {
-        let dw = bounds.width / 16.0
-        let dh = bounds.height / 50.0
-        let dx = CGFloat(cn) * bounds.width / 16.0
-        let dy = bounds.height / maxValue * average[cn]
-        let path = NSBezierPath()
-        path.move(to: NSMakePoint(dx, dy - dh))
+        let dx = CGFloat(cn) * dw + dw / 2.0
+        let dy = (bounds.height / maxValue) * average[cn]
         path.line(to: NSMakePoint(dx, dy))
-        path.line(to: NSMakePoint(dx+dw, dy))
-        path.line(to: NSMakePoint(dx+dw, dy - dh))
-        path.close()
-        path.fill()
       }
+      path.line(to: NSMakePoint(bounds.width, 0.0))
+      path.close()
+      path.stroke()
     }
-    
+
     // Channel Numbers
-    
+ 
     for cn in 0...15 {
       let text = "\(cn+11)"
       let font = NSFont.boldSystemFont(ofSize: 16)
@@ -131,23 +142,13 @@ class SignalStrengthView: NSView {
       let textStyle = NSMutableParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
       let textFontAttributes = [
           NSAttributedString.Key.font: font,
-          NSAttributedString.Key.foregroundColor: NSColor.red,
+          NSAttributedString.Key.foregroundColor: NSColor.gray,
           NSAttributedString.Key.paragraphStyle: textStyle
       ] as [NSAttributedString.Key : Any]
       text.draw(in: textRect, withAttributes: textFontAttributes)
    }
 
-    // Dash Line
-    
-    let dy = CGFloat(97) / maxValue * bounds.height
-    context?.setStrokeColor(NSColor.green.cgColor)
-    let dashPath = NSBezierPath()
-    dashPath.setLineDash([2,3], count: 2, phase: 1.0)
-    dashPath.move(to: NSMakePoint(0, dy))
-    dashPath.line(to: NSMakePoint(bounds.width, dy))
-    dashPath.close()
-    dashPath.stroke()
-
   }
-    
+  
 }
+  

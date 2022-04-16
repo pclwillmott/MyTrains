@@ -162,6 +162,11 @@ public class NetworkMessage : NSObject {
           
         // Ack
           
+        case NetworkMessageOpcode.OPC_SW_REQ.rawValue:
+          if (message[2] & 0b11000000) == 0b00000000 {
+            _messageType = .setSw
+          }
+
         case NetworkMessageOpcode.OPC_LONG_ACK.rawValue:
           
           _messageType = .ack
@@ -978,6 +983,9 @@ public class NetworkMessage : NSObject {
               slotPage = 0
               slotNumber = Int(message[2])
             }
+            else if message[ 2] == 0x7b {
+              _messageType = .setFastClockDataP1
+            }
             else if message[ 2] == 0x7c &&                /* PROG SLOT */
                     message[ 4] == 0x00 &&
                     message[ 7] == 0x00 &&
@@ -988,7 +996,6 @@ public class NetworkMessage : NSObject {
               _messageType = .setCfgSlotDataP1
             }
           }
-  
         case NetworkMessageOpcode.OPC_GPOFF.rawValue:
           _messageType = .pwrOff
           
@@ -1058,11 +1065,6 @@ public class NetworkMessage : NSObject {
             isP1 = true
             slotPage = 0
             slotNumber = Int(message[1])
-          }
-
-        case NetworkMessageOpcode.OPC_SW_REQ.rawValue:
-          if (message[2] & 0b11000000) == 0b00000000 {
-            _messageType = .setSw
           }
 
         case NetworkMessageOpcode.OPC_SW_ACK.rawValue:
