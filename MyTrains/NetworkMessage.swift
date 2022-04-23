@@ -305,15 +305,13 @@ public class NetworkMessage : NSObject {
             case 0x7b:
               _messageType = .fastClockDataP1
             case 0x7c:
-              if (message[ 4] & 0b11110000) == 0 &&
-                 (message[ 7] & 0b10110010) == 0 &&
-                 (message[ 8] & 0b11001100) == 0 {
+              if (message[ 4] & 0b11110000) == 0 {
                 _messageType = .progSlotDataP1
               }
             case 0x7d:
               break
             case 0x7e:
-              break
+              _messageType = .cfgSlotDataBP1
             case 0x7f:
               _messageType = .cfgSlotDataP1
             default:

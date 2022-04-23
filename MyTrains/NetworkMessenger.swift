@@ -412,6 +412,14 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
 
   }
   
+  public func getCfgSlotDataBP1() {
+    
+    let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_RQ_SL_DATA.rawValue, 0x7e, 0x00], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: nil, retryCount: 1)
+
+  }
+  
   public func getCfgSlotDataP2() {
     
     let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_RQ_SL_DATA.rawValue, 0x7f, 0x40], appendCheckSum: true)
@@ -591,6 +599,30 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
     let message = NetworkMessage(interfaceId: id, data: [NetworkMessageOpcode.OPC_BUSY.rawValue], appendCheckSum: true)
     
     addToQueue(message: message, delay: TIMING.STANDARD, response: [.interfaceData], delegate: self, retryCount: 3)
+    
+  }
+  
+  public func findReceiver() {
+    
+    let message = NetworkMessage(interfaceId: id, data:
+      [NetworkMessageOpcode.OPC_DF_GROUP.rawValue,
+       0x00, 0x00, 0x00, 0x00
+    ], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: self, retryCount: 1)
+    
+  }
+  
+  public func setLocoNetID(locoNetID: Int) {
+    
+    let lid : UInt8 = UInt8(locoNetID & 0x7)
+    
+    let message = NetworkMessage(interfaceId: id, data:
+      [NetworkMessageOpcode.OPC_DF_GROUP.rawValue,
+       0x40, 0x1f, lid, 0x00
+    ], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: self, retryCount: 1)
     
   }
   

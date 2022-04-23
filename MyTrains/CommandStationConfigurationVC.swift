@@ -31,7 +31,14 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Command
     
     self.view.window?.delegate = self
     
-    cboCommandStationDS.dictionary = networkController.commandStations
+    let css = networkController.commandStations
+    var temp : [Int:CommandStation] = [:]
+    for y in css {
+      if y.value.messengers.count > 0 {
+        temp[y.key] = y.value
+      }
+    }
+    cboCommandStationDS.dictionary = temp
     
     cboCommandStation.dataSource = cboCommandStationDS
     
@@ -163,33 +170,18 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Command
       }
       break
 
-    case .cfgSlotDataP1:
-      if configState == .waitingForCfgSlotDataP1 {
-        if radOptionSwitches.state == .on {
-          nextReadIndex = 0
-          while nextReadIndex < options.count && options[nextReadIndex].switchDefinition.configByte != -1 {
-            nextReadIndex += 1
-          }
-          readSwitchNumber = options[nextReadIndex].switchNumber
-          configState = .waitingForReadSwitchAck
-          commandStation?.swState(switchNumber: readSwitchNumber)
-          break
-        }
-        configState = .idle
-        commandStation?.save()
-        tableView.reloadData()
-      }
-      else if configState == .waitingForBaseCase {
+    case .cfgSlotDataP1, .cfgSlotDataBP1:
+      if configState == .waitingForBaseCase {
         baseCase = message
         let newState : OptionSwitchState = buttons[readSwitchNumber-1].state == .on ? .closed : .thrown
         configState = .waitingForNewCase
         commandStation?.swReq(switchNumber: readSwitchNumber, state: newState)
-        commandStation?.getCfgSlotDataP1()
+        rad7F.state == .on ? commandStation?.getCfgSlotDataP1() : commandStation?.getCfgSlotDataBP1()
       }
       else if configState == .waitingForNewCase {
         newCase = message
         if let base = baseCase, let new = newCase {
-          var changes : String = ""
+          var changes : String = "\(rad7F.state == .on ? "0x7F: " : "0x7E: ")"
           let numBytes = message.message.count-2
           for index in 0...numBytes {
             if base.message[index] != new.message[index] {
@@ -206,6 +198,21 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Command
           txtMonitor.string = changes
         }
         configState = .idle
+      }
+      else if configState == .waitingForCfgSlotDataP1 {
+        if radOptionSwitches.state == .on {
+          nextReadIndex = 0
+          while nextReadIndex < options.count && options[nextReadIndex].switchDefinition.configByte != -1 {
+            nextReadIndex += 1
+          }
+          readSwitchNumber = options[nextReadIndex].switchNumber
+          configState = .waitingForReadSwitchAck
+          commandStation?.swState(switchNumber: readSwitchNumber)
+          break
+        }
+        configState = .idle
+        commandStation?.save()
+        tableView.reloadData()
       }
       break
     case .swState:
@@ -367,7 +374,13 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Command
     }
     else {
       configState = .waitingForBaseCase
-      radProtocol1.state == .on ? commandStation?.getCfgSlotDataP1() : commandStation?.getCfgSlotDataP2()
+      if radProtocol1.state == .on {
+        rad7F.state == .on ? commandStation?.getCfgSlotDataP1() : commandStation?.getCfgSlotDataBP1()
+      }
+      else {
+        commandStation?.getCfgSlotDataP2()
+      }
+      
     }
 
   }
@@ -382,6 +395,18 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Command
   
   @IBAction func radProtocol2Action(_ sender: NSButton) {
     radProtocol1.state = sender.state == .on ? .off : .on
+  }
+  
+  @IBOutlet weak var rad7F: NSButton!
+  
+  @IBAction func rad7FAction(_ sender: NSButton) {
+    rad7E.state = sender.state == .on ? .off : .on
+  }
+  
+  @IBOutlet weak var rad7E: NSButton!
+  
+  @IBAction func rad7EAction(_ sender: NSButton) {
+    rad7F.state = sender.state == .on ? .off : .on
   }
   
 }

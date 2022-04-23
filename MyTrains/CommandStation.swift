@@ -378,6 +378,15 @@ public class CommandStation : NSObject, NetworkMessengerDelegate {
     }
   }
   
+  public func getCfgSlotDataBP1() {
+    for messenger in _messengers {
+      if messenger.value.isOpen {
+        messenger.value.getCfgSlotDataBP1()
+        break
+      }
+    }
+  }
+  
   public func getCfgSlotDataP2() {
     for messenger in _messengers {
       if messenger.value.isOpen {

@@ -166,6 +166,8 @@ class GroupSetupVC: NSViewController, NetworkControllerDelegate, NetworkMessenge
         txtGroupID.integerValue = duplexData.groupID
         isFirst = false
       }
+    case .receiverRep:
+      txtLocoNetID.stringValue = "\(message.message[3] & 0x7)"
     case .duplexSignalStrength:
       let cn = Int(message.message[5] | (((message.message[4] & 0b00000001) == 0b00000001) ? 0b10000000 : 0)) - 11
       let ss = Double(message.message[6] | (((message.message[4] & 0b00000010) == 0b00000010) ? 0b10000000 : 0))
@@ -244,6 +246,7 @@ class GroupSetupVC: NSViewController, NetworkControllerDelegate, NetworkMessenge
   
   @IBAction func btnReadAction(_ sender: NSButton) {
     isFirst = true
+    messenger?.findReceiver()
     messenger?.getDuplexData()
   }
   
@@ -255,6 +258,7 @@ class GroupSetupVC: NSViewController, NetworkControllerDelegate, NetworkMessenge
     messenger?.setDuplexGroupID(groupID: txtGroupID.integerValue)
     messenger?.setDuplexGroupName(groupName: txtGroupName.stringValue)
     messenger?.setDuplexPassword(password: txtGroupPassword.stringValue)
+    messenger?.setLocoNetID(locoNetID: txtLocoNetID.integerValue)
     
   }
   
@@ -310,6 +314,8 @@ class GroupSetupVC: NSViewController, NetworkControllerDelegate, NetworkMessenge
   @IBOutlet weak var signalStrengthView: SignalStrengthView!
   
   @IBOutlet weak var lblNowScanning: NSTextField!
+  
+  @IBOutlet weak var txtLocoNetID: NSTextField!
   
 }
 

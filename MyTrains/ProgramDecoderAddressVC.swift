@@ -272,11 +272,13 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
   
   private func validate() -> Bool {
     
+    let maxAddress = 10239
+    
     var good = true
     
     if let address = Int(txtAddress.stringValue) {
       
-      if address < 0 || address > 9983 {
+      if address < 0 || address > maxAddress {
         good = false
       }
     }
@@ -288,7 +290,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
       let alert = NSAlert()
 
       alert.messageText = "Invalid Address"
-      alert.informativeText = "An address in the range 0 to 9983 is required."
+      alert.informativeText = "An address in the range 0 to \(maxAddress) is required."
       alert.addButton(withTitle: "OK")
    // alert.addButton(withTitle: "Cancel")
       alert.alertStyle = .critical

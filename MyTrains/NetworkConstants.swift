@@ -60,6 +60,7 @@ public enum NetworkMessageType {
   case brdOpSwState
   case busy
   case cfgSlotDataP1
+  case cfgSlotDataBP1
   case cfgSlotDataP2
   case consistDirF0F4
   case d4Error
@@ -76,6 +77,7 @@ public enum NetworkMessageType {
   case findReceiver
   case getBrdOpSwState
   case getCfgSlotDataP1
+  case getCfgSlotDataBP1
   case getCfgSlotDataP2
   case getDuplexChannelNumber
   case getDuplexData
@@ -145,6 +147,7 @@ public enum NetworkMessageType {
   case setBrdOpSwOK
   case setBrdOpSwState
   case setCfgSlotDataP1
+  case setCfgSlotDataBP1
   case setCfgSlotDataP2
   case setDuplexChannelNumber
   case setDuplexGroupID
