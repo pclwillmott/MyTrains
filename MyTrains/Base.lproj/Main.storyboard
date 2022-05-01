@@ -168,6 +168,12 @@
                                         <menuItem title="Blocks" id="E2d-BR-mab">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                         </menuItem>
+                                        <menuItem title="Switch Board" id="SfZ-Dk-Pfh">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="mnuSwitchBoardEditor:" target="Voe-Tx-rLC" id="fm9-Cl-mdz"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem isSeparatorItem="YES" id="uyl-h8-XO2"/>
                                         <menuItem title="Cut" keyEquivalent="x" id="uRl-iY-unG">
                                             <connections>

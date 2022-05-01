@@ -77,6 +77,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     ModalWindow.EditSwitches.runModel()
   }
   
+  @IBAction func mnuSwitchBoardEditor(_ sender: NSMenuItem) {
+    ModalWindow.SwitchBoardEditor.runModel()
+  }
+  
   // MARK: Control Menu
   
   @IBAction func mnuThrottleAction(_ sender: Any) {

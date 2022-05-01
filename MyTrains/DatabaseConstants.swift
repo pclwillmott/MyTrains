@@ -23,6 +23,8 @@ enum TABLE {
   static let WAGON                 = "WAGON"
   static let COMMAND_STATION       = "COMMAND_STATION"
   static let INTERFACE             = "INTERFACE"
+  static let SWITCHBOARD_PANEL     = "SWITCHBOARD_PANEL"
+  static let SWITCHBOARD_ITEM      = "SWITCHBOARD_ITEM"
 }
 
 enum VERSION {
@@ -114,4 +116,34 @@ enum LOCOMOTIVE_CV {
   static let CUSTOM_DESCRIPTION    = "CUSTOM_DESCRIPTION"
   static let CUSTOM_NUMBER_BASE    = "CUSTOM_NUMBER_BASE"
   static let ENABLED               = "ENABLED"
+}
+
+enum SWITCHBOARD_PANEL {
+  static let LAYOUT_ID             = "LAYOUT_ID"
+  static let PANEL_ID              = "PANEL_ID"
+  static let PANEL_NAME            = "PANEL_NAME"
+  static let NUMBER_OF_COLUMNS     = "NUMBER_OF_COLUMNS"
+  static let NUMBER_OF_ROWS        = "NUMBER_OF_ROWS"
+}
+
+enum SWITCHBOARD_ITEM {
+  static let LAYOUT_ID             = "LAYOUT_ID"
+  static let PANEL_ID              = "PANEL_ID"
+  static let GROUP_ID              = "GROUP_ID"
+  static let ITEM_PART_TYPE        = "PART_TYPE"
+  static let ORIENTATION           = "ORIENTATION"
+  static let XPOS                  = "XPOS"
+  static let YPOS                  = "YPOS"
+  static let BLOCK_NAME            = "BLOCK_NAME"
+  static let MANUFACTURER_ID       = "MANUFACTURER_ID"
+  static let PART_NUMBER           = "PART_NUMBER"
+  static let DIRECTION             = "DIRECTION"
+  static let LENGTHA               = "LENGTHA"
+  static let LENGTHB               = "LENGTHB"
+  static let LENGTHC               = "LENGTHC"
+  static let LENGTHD               = "LENGTHD"
+  static let LENGTHE               = "LENGTHE"
+  static let LENGTHF               = "LENGTHF"
+  static let LENGTHG               = "LENGTHG"
+  static let LENGTHH               = "LENGTHH"
 }
