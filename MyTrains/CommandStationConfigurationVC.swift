@@ -267,7 +267,7 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Command
   @IBAction func radConfigurationSlotAction(_ sender: NSButton) {
     let alert = NSAlert()
 
-    alert.messageText = "Has the \(commandStation?.commandStationName ?? "command station") been switched into RUN Mode?"
+ //   alert.messageText = "Has the \(commandStation?.commandStationName ?? "command station") been switched into RUN Mode?"
     alert.informativeText = ""
     alert.addButton(withTitle: "Yes")
     alert.addButton(withTitle: "No")
@@ -289,7 +289,7 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Command
     
     let alert = NSAlert()
 
-    alert.messageText = "Has the \(commandStation?.commandStationName ?? "command station") been switched into OP Mode?"
+ //   alert.messageText = "Has the \(commandStation?.commandStationName ?? "command station") been switched into OP Mode?"
     alert.informativeText = ""
     alert.addButton(withTitle: "Yes")
     alert.addButton(withTitle: "No")
@@ -340,7 +340,7 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Command
     if radOptionSwitches.state == .off {
       let alert = NSAlert()
 
-      alert.messageText = "Has the \(commandStation?.commandStationName ?? "command station") been switched into OP Mode?"
+  //    alert.messageText = "Has the \(commandStation?.commandStationName ?? "command station") been switched into OP Mode?"
       alert.informativeText = ""
       alert.addButton(withTitle: "Yes")
       alert.addButton(withTitle: "No")

@@ -49,7 +49,7 @@ class SwitchBoardShapeButton: NSButton {
   
   // MARK : Public Properties
   
-  public var partType : SwitchBoardPart = .straight {
+  public var partType : SwitchBoardItemPartType = .straight {
     didSet {
       needsDisplay = true
     }
@@ -61,7 +61,7 @@ class SwitchBoardShapeButton: NSButton {
       return partType.rawValue
     }
     set(value) {
-      if let part = SwitchBoardPart(rawValue: value) {
+      if let part = SwitchBoardItemPartType(rawValue: value) {
         partType = part
       }
       else {

@@ -32,7 +32,7 @@ class EditNetworksVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     
     editorView.tabView = self.tabView
     
-    cboCommandStation.dataSource = cboCommandStationDS
+//    cboCommandStation.dataSource = cboCommandStationDS
     
     cboLayout.dataSource = cboLayoutDS
     
@@ -42,8 +42,8 @@ class EditNetworksVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   
   // MARK: Private Properties
   
-  private var cboCommandStationDS = ComboBoxDBDS(tableName: TABLE.COMMAND_STATION, codeColumn: COMMAND_STATION.COMMAND_STATION_ID, displayColumn: COMMAND_STATION.COMMAND_STATION_NAME, sortColumn: COMMAND_STATION.COMMAND_STATION_NAME)
-  
+ /* private var cboCommandStationDS = ComboBoxDBDS(tableName: TABLE.COMMAND_STATION, codeColumn: COMMAND_STATION.COMMAND_STATION_ID, displayColumn: COMMAND_STATION.COMMAND_STATION_NAME, sortColumn: COMMAND_STATION.COMMAND_STATION_NAME)
+  */
   private var cboLayoutDS = ComboBoxDBDS(tableName: TABLE.LAYOUT, codeColumn: LAYOUT.LAYOUT_ID, displayColumn: LAYOUT.LAYOUT_NAME, sortColumn: LAYOUT.LAYOUT_NAME)
   
   // MARK: DBEditorView Delegate Methods
@@ -57,9 +57,9 @@ class EditNetworksVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   func setupFields(dbEditorView: DBEditorView, editorObject: EditorObject) {
     if let network = editorObject as? Network {
       txtNetworkName.stringValue = network.networkName
-      if let csIndex = cboCommandStationDS.indexOfItemWithCodeValue(code: network.commandStationId) {
+ /*     if let csIndex = cboCommandStationDS.indexOfItemWithCodeValue(code: network.commandStationId) {
         cboCommandStation.selectItem(at: csIndex)
-      }
+      } */
       if let loIndex = cboLayoutDS.indexOfItemWithCodeValue(code: network.layoutId) {
         cboLayout.selectItem(at: loIndex)
       }
@@ -80,7 +80,7 @@ class EditNetworksVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   
   func setFields(network:Network) {
     network.networkName = txtNetworkName.stringValue
-    network.commandStationId = cboCommandStationDS.codeForItemAt(index: cboCommandStation.indexOfSelectedItem) ?? -1
+ //   network.commandStationId = cboCommandStationDS.codeForItemAt(index: cboCommandStation.indexOfSelectedItem) ?? -1
     network.layoutId = cboLayoutDS.codeForItemAt(index: cboLayout.indexOfSelectedItem) ?? -1
     network.save()
   }

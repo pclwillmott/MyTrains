@@ -143,7 +143,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
   
   private var writeValue : Int = 0
   
-  private var writeCV : LocomotiveCV?
+  private var writeCV : DecoderCV?
   
   private var startAddress : Int = 1
   
@@ -253,7 +253,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
     
   }
   
-  private func findNextCVToWrite() -> LocomotiveCV? {
+  private func findNextCVToWrite() -> DecoderCV? {
     
     while writeMultipleIndex < cvTableView.numberOfRows {
       
@@ -724,13 +724,13 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
           }
         case .waitingForReadCVData:
           if let loco = locomotive {
-            var cv : LocomotiveCV?
+            var cv : DecoderCV?
             if isIndexedMode {
               if let cvx = loco.getCV(primaryPageIndex: cv31, secondaryPageIndex: cv32, cvNumber: readCV) {
                 cv = cvx
               }
               else {
-                cv = LocomotiveCV(primaryPageIndex: cv31, secondaryPageNumber: cv32, cvNumber: readCV)
+                cv = DecoderCV(primaryPageIndex: cv31, secondaryPageNumber: cv32, cvNumber: readCV)
               }
             }
             else {
@@ -738,7 +738,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
                 cv = cvx
               }
               else {
-                cv = LocomotiveCV.init(cvNumber: readCV)
+             //   cv = DecoderCV.init(cvNumber: readCV)
               }
             }
             if let cvy = cv {
@@ -829,7 +829,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
 
             if cv.isIndexedCV {
               
-              let components = LocomotiveCV.cvNumberComponents(cvNumber: cv.cvNumber)
+              let components = DecoderCV.cvNumberComponents(cvNumber: cv.cvNumber)
               cv31 = components.primaryPageIndex
               cv32 = components.secondaryPageIndex
               readCV = components.cvNumber
@@ -928,7 +928,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
       if string == "CV" {
         return
       }
-      if let cvNumber = LocomotiveCV.cvNumber(string: string) {
+      if let cvNumber = DecoderCV.cvNumber(string: string) {
         
         if let loco = locomotive {
           
@@ -936,7 +936,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
             writeCV = cv
                 }
           else {
-            writeCV = LocomotiveCV(cvNumber: cvNumber)
+      //      writeCV = DecoderCV(cvNumber: cvNumber)
           }
           
         }
@@ -1184,7 +1184,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
           commandStation?.writeCV(progMode: programmingMode, cv: cv.cvNumber, address: loco.address, value: writeValue)
         }
         else {
-          let components = LocomotiveCV.cvNumberComponents(cvNumber: cv.cvNumber)
+          let components = DecoderCV.cvNumberComponents(cvNumber: cv.cvNumber)
           cv31 = components.primaryPageIndex
           cv32 = components.secondaryPageIndex
           readCV = components.cvNumber
@@ -1250,7 +1250,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
 
       if cv.isIndexedCV {
         
-        let components = LocomotiveCV.cvNumberComponents(cvNumber: cv.cvNumber)
+        let components = DecoderCV.cvNumberComponents(cvNumber: cv.cvNumber)
         cv31 = components.primaryPageIndex
         cv32 = components.secondaryPageIndex
         readCV = components.cvNumber

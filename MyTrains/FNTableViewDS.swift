@@ -23,13 +23,13 @@ public class FNTableViewDS : NSObject, NSTableViewDataSource, NSTableViewDelegat
   
   // MARK: Private Properties
 
-  private var _fns = [LocomotiveFunction]()
+  private var _fns = [DecoderFunction]()
   
-  private var cboDescriptionDS = ComboBoxDBDS(tableName: TABLE.LOCOMOTIVE_FUNCTION, codeColumn: LOCOMOTIVE_FUNCTION.FUNCTION_DESCRIPTION, displayColumn: LOCOMOTIVE_FUNCTION.FUNCTION_DESCRIPTION, sortColumn: LOCOMOTIVE_FUNCTION.FUNCTION_DESCRIPTION, groupItems: true)
+  private var cboDescriptionDS = ComboBoxDBDS(tableName: TABLE.DECODER_FUNCTION, codeColumn: DECODER_FUNCTION.FUNCTION_DESCRIPTION, displayColumn: DECODER_FUNCTION.FUNCTION_DESCRIPTION, sortColumn: DECODER_FUNCTION.FUNCTION_DESCRIPTION, groupItems: true)
   
   // MARK: Public Properties
   
-  public var fns : [LocomotiveFunction] {
+  public var fns : [DecoderFunction] {
     get {
       return _fns
     }

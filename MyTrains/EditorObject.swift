@@ -9,16 +9,18 @@ import Foundation
 
 public class EditorObject : NSObject {
   
-  // Constructor
+  // MARK: Constructor
   
   init(primaryKey:Int) {
     self.primaryKey = primaryKey
     super.init()
   }
   
-  // Public Properties
+  // MARK: Public Properties
   
   public var primaryKey : Int
+  
+  public var modified = false
   
   // Public Methods
   

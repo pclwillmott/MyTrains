@@ -42,9 +42,9 @@ class SwitchBoardView: NSView {
       let item = kv.value
       
       if item.panelId == self.panelId {
-      
+      /*
         SwitchBoardShape.drawShape(partType: item.partType, orientation: item.orientation, location: item.location, lineWidth: lineWidth, cellSize: cellSize, isButton: false, isEnabled: true)
-        
+        */
       }
       
     }

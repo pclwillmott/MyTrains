@@ -91,7 +91,7 @@ public class CommandStationOptionSwitch {
   
   public var newState : OptionSwitchState = .thrown
   
-  public var newDefaultDecoderType : MobileDecoderType = .unknown
+  public var newDefaultDecoderType : SpeedSteps = .unknown
 
   /*
         let mask128  : UInt8 = 0b000
@@ -111,7 +111,7 @@ public class CommandStationOptionSwitch {
   let mask28A  : UInt8 = 0b001
   let mask28T  : UInt8 = 0b100
 
-  public var defaultDecoderType : MobileDecoderType {
+  public var defaultDecoderType : SpeedSteps {
     get {
       
       var value : UInt8 = (getState(switchNumber: 21) == .closed ? 1 : 0) << 2

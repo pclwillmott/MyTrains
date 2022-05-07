@@ -9,6 +9,10 @@ import Foundation
 import Cocoa
 
 class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
+  func saveNew(dbEditorView: DBEditorView) -> EditorObject {
+    return EditorObject(primaryKey: -1)
+  }
+  
  
   // MARK: Window & View Control
   
@@ -36,9 +40,9 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     
     editorView.dictionary = networkController.locomotives
     
-    cboDecoderModel.dataSource = cboDecoderModelDS
+//    cboDecoderModel.dataSource = cboDecoderModelDS
     
-    cboModelManufacturer.dataSource = cboModelManufacturerDS
+//    cboModelManufacturer.dataSource = cboModelManufacturerDS
 
   }
   
@@ -47,11 +51,11 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   private var cvTableViewDS = CVTableViewDS()
 
   private var cboNetworkDS = ComboBoxDBDS(tableName: TABLE.NETWORK, codeColumn: NETWORK.NETWORK_ID, displayColumn: NETWORK.NETWORK_NAME, sortColumn: NETWORK.NETWORK_NAME)
-  
+  /*
   private var cboDecoderModelDS = ComboBoxDBDS(tableName: TABLE.LOCOMOTIVE, codeColumn: LOCOMOTIVE.LOCOMOTIVE_ID, displayColumn: LOCOMOTIVE.DECODER_MODEL, sortColumn: LOCOMOTIVE.DECODER_MODEL, groupItems: true)
   
   private var cboModelManufacturerDS = ComboBoxDBDS(tableName: TABLE.LOCOMOTIVE, codeColumn: LOCOMOTIVE.LOCOMOTIVE_ID, displayColumn: LOCOMOTIVE.MANUFACTURER, sortColumn: LOCOMOTIVE.MANUFACTURER, groupItems: true)
-  
+  */
   private var fnTableViewDS = FNTableViewDS()
   
   // MARK: DBEditorDelegate Methods
@@ -64,7 +68,7 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     cboLengthUnits.selectItem(at: UserDefaults.standard.integer(forKey: DEFAULT.UNITS_LENGTH))
     txtScale.stringValue = "\(UserDefaults.standard.double(forKey: DEFAULT.SCALE))"
     cboTrackGuage.selectItem(at: UserDefaults.standard.integer(forKey: DEFAULT.TRACK_GAUGE))
-    cboDecoderType.selectItem(at: MobileDecoderType.dcc128.rawValue)
+    cboDecoderType.selectItem(at: SpeedSteps.dcc128.rawValue)
     txtAddress.stringValue = "1"
     txtOccupancyFeedbackOffsetFront.stringValue = "0.0"
     txtOccupancyFeedbackOffsetRear.stringValue = "0.0"
@@ -85,12 +89,12 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     if let locomotive = editorObject as? Locomotive {
       txtLocomotiveName.stringValue = locomotive.locomotiveName
       cboPowerSource.selectItem(at: locomotive.locomotiveType.rawValue)
-      cboTrackRestrictions.selectItem(at: locomotive.trackRestriction.rawValue)
+//      cboTrackRestrictions.selectItem(at: locomotive.trackRestriction.rawValue)
       txtLength.stringValue = "\(locomotive.length)"
       cboLengthUnits.selectItem(at: locomotive.lengthUnits.rawValue)
-      txtScale.stringValue = "\(locomotive.locomotiveScale)"
+  //    txtScale.stringValue = "\(locomotive.locomotiveScale)"
       cboTrackGuage.selectItem(at: locomotive.trackGauge.rawValue)
-      cboDecoderType.selectItem(at: locomotive.mobileDecoderType.rawValue)
+  //    cboDecoderType.selectItem(at: locomotive.mobileDecoderType.rawValue)
       txtAddress.stringValue = "\(locomotive.address)"
       txtOccupancyFeedbackOffsetFront.stringValue = "\(locomotive.occupancyFeedbackOffsetFront)"
       txtOccupancyFeedbackOffsetRear.stringValue = "\(locomotive.occupancyFeedbackOffsetRear)"
@@ -102,9 +106,9 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
         cboNetwork.selectItem(at: netIndex)
       }
       lblManufacturer.stringValue = locomotive.decoderManufacturerName
-      cboDecoderModel.stringValue = locomotive.decoderModel
+//      cboDecoderModel.stringValue = locomotive.decoderModel
       txtInventoryCode.stringValue = locomotive.inventoryCode
-      cboModelManufacturer.stringValue = locomotive.manufacturer
+ //     cboModelManufacturer.stringValue = locomotive.manufacturer
       txtPurchaseDate.stringValue = locomotive.purchaseDate
       txtNotes.string = locomotive.notes
       fnTableViewDS.fns = locomotive.functions
@@ -183,12 +187,12 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   func setFields(locomotive:Locomotive) {
     locomotive.locomotiveName = txtLocomotiveName.stringValue
     locomotive.locomotiveType = LocomotiveType(rawValue: cboPowerSource.indexOfSelectedItem) ?? .diesel
-    locomotive.trackRestriction = TrackRestriction(rawValue: cboTrackRestrictions.indexOfSelectedItem) ?? .none
+//    locomotive.trackRestriction = TrackRestriction(rawValue: cboTrackRestrictions.indexOfSelectedItem) ?? .none
     locomotive.length = Double(txtLength.stringValue) ?? 0.0
     locomotive.lengthUnits = LengthUnit(rawValue: cboLengthUnits.indexOfSelectedItem) ?? .centimeters
-    locomotive.locomotiveScale = Double(txtScale.stringValue) ?? 1.0
+//    locomotive.locomotiveScale = Double(txtScale.stringValue) ?? 1.0
     locomotive.trackGauge = TrackGauge(rawValue: cboTrackGuage.indexOfSelectedItem) ?? .oo
-    locomotive.mobileDecoderType = MobileDecoderType(rawValue: cboDecoderType.indexOfSelectedItem) ?? .dcc128A
+//    locomotive.mobileDecoderType = SpeedSteps(rawValue: cboDecoderType.indexOfSelectedItem) ?? .dcc128A
     locomotive.address = Int(txtAddress.stringValue) ?? 1
     locomotive.occupancyFeedbackOffsetFront = Double(txtOccupancyFeedbackOffsetFront.stringValue) ?? 0.0
     locomotive.occupancyFeedbackOffsetRear = Double(txtOccupancyFeedbackOffsetRear.stringValue) ?? 0.0
@@ -197,23 +201,25 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     locomotive.maxBackwardSpeed = Double(txtMaximumReverseSpeed.stringValue) ?? 0.0
     locomotive.speedUnits = SpeedUnit(rawValue: cboMaximumSpeedUnits.indexOfSelectedItem) ?? .kilometersPerHour
     locomotive.networkId = cboNetworkDS.codeForItemAt(index: cboNetwork.indexOfSelectedItem) ?? -1
-    locomotive.decoderModel = cboDecoderModel.stringValue
+//    locomotive.decoderModel = cboDecoderModel.stringValue
     locomotive.inventoryCode = txtInventoryCode.stringValue
-    locomotive.manufacturer = cboModelManufacturer.stringValue
+//    locomotive.manufacturer = cboModelManufacturer.stringValue
     locomotive.purchaseDate = txtPurchaseDate.stringValue
     locomotive.notes = txtNotes.string
     locomotive.save()
   }
-
+/*
   func saveNew(dbEditorView: DBEditorView) -> EditorObject {
+    /*
     let locomotive = Locomotive()
     setFields(locomotive: locomotive)
     networkController.addLocomotive(locomotive: locomotive)
     editorView.dictionary = networkController.locomotives
     editorView.setSelection(key: locomotive.primaryKey)
     return locomotive
+     */
   }
-  
+  */
   func saveExisting(dbEditorView: DBEditorView, editorObject: EditorObject) {
     if let locomotive = editorObject as? Locomotive {
       setFields(locomotive: locomotive)
@@ -223,9 +229,11 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   }
   
   func delete(dbEditorView: DBEditorView, primaryKey: Int) {
+    /*
     networkController.removeLocomotive(primaryKey: primaryKey)
     Locomotive.delete(primaryKey: primaryKey)
     editorView.dictionary = networkController.locomotives
+     */
   }
   
   // MARK: Outlets & Actions

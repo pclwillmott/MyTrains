@@ -45,19 +45,24 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
  
   // MARK: Constructor
   
+  init(id:String) {
+    self.id = id
+    super.init()
+  }
+  /*
   init(id:String, devicePath:String) {
     
     self.id = id
+    super.init()
 
     if let interface = interfacesByDevicePath[devicePath] {
       self.interface = interface
     }
     else {
-      self.interface = Interface(primaryKey: -1)
-      self.interface.devicePath = devicePath
+ //     self.interface = Interface(primaryKey: -1)
+   //   self.interface.devicePath = devicePath
     }
 
-    super.init()
 
     interface.delegate = self
     self.interface.messenger = self
@@ -67,11 +72,11 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
     }
 
   }
-  
+  */
   // MARK: Destructor
   
   deinit {
-    interface.close()
+//    interface.close()
   }
   
   // MARK: Private Properties
@@ -106,11 +111,11 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
   
   // MARK: Public Properties
   
-  public var interface : Interface
+  public var interface : Interface?
   
   public var comboName : String {
     get {
-      return interface.displayString()
+      return "" // interface.displayString()
     }
   }
   
@@ -120,13 +125,13 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
   
   public var isOpen : Bool {
     get {
-      return interface.isOpen
+      return true // interface.isOpen
     }
   }
   
   public var isConnected : Bool {
     get {
-      return interface.isConnected
+      return true // interface.isConnected
     }
   }
   
@@ -154,7 +159,7 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
         
         if item!.retryCount > 0 {
         
-          interface.send(data: Data(item!.message.message))
+      //    interface.send(data: Data(item!.message.message))
           
           if item!.responseExpected {
             messengerState = .waitingForResponse
@@ -381,11 +386,11 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
   }
   
   public func open() {
-    interface.open()
+//    interface.open()
   }
   
   public func close() {
-    interface.close()
+//    interface.close()
   }
   
   public func powerOn() {
@@ -1154,6 +1159,7 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
   // MARK: NetworkMessengerDelegate Methods
   
   @objc public func networkMessageReceived(message: NetworkMessage) {
+    /*
     if message.messageType == .interfaceData {
       if interface.serialNumber == -1 {
         interface.productCode = ProductCode(rawValue: Int(message.message[14])) ?? .unknown
@@ -1162,23 +1168,26 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
         interface.save()
         interfaces[interface.primaryKey] = interface
       }
+     
       removeObserver(id: observerId)
       observerId = -1
       networkInterfaceDelegate?.interfaceIdentified(messenger: self)
-    }
+    } */
   }
   
   @objc public func networkTimeOut(message: NetworkMessage) {
+    /*
     if observerId != -1 {
       removeObserver(id: observerId)
       observerId = -1
       networkInterfaceDelegate?.interfaceNotIdentified(messenger: self)
-    }
+    }*/
   }
   
   // MARK: ORSSerialPortDelegate Methods
   
   public func serialPortWasRemovedFromSystem(_ serialPort: ORSSerialPort) {
+    /*
     if observerId != -1 {
       removeObserver(id: observerId)
       observerId = -1
@@ -1188,27 +1197,33 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
     }
     networkInterfaceDelegate?.interfaceRemoved(messenger: self)
     networkInterfaceDelegate?.statusChanged(messenger: self)
+     */
   }
   
   public func serialPort(_ serialPort: ORSSerialPort, didEncounterError error: Error) {
+    /*
     if observerId != -1 {
       removeObserver(id: observerId)
       observerId = -1
     }
     networkInterfaceDelegate?.interfaceNotIdentified(messenger: self)
+     */
   }
   
   public func serialPortWasOpened(_ serialPort: ORSSerialPort) {
+    /*
     observerId = addObserver(observer: self)
     getInterfaceData()
     networkInterfaceDelegate?.statusChanged(messenger: self)
+     */
   }
   
   public func serialPortWasClosed(_ serialPort: ORSSerialPort) {
-    networkInterfaceDelegate?.statusChanged(messenger: self)
+ //   networkInterfaceDelegate?.statusChanged(messenger: self)
   }
   
   public func serialPort(_ serialPort: ORSSerialPort, didReceive data: Data) {
+    /*
     bufferLock.lock()
     bufferCount += data.count
     for x in data {
@@ -1217,6 +1232,7 @@ public class NetworkMessenger : NSObject, ORSSerialPortDelegate, NetworkMessenge
     }
     bufferLock.unlock()
     decode()
+     */
   }
   
 }

@@ -25,10 +25,10 @@ public enum CommandStationModel : Int {
   case unknown = 0xffff
 }
 
-public class CommandStation : NSObject, NetworkMessengerDelegate {
+public class CommandStation : LocoNetDevice, NetworkMessengerDelegate {
   
   // MARK: Constructors
-  
+/*
   init(message:IPLDevData) {
     super.init()
     productCode = message.productCode
@@ -57,7 +57,7 @@ public class CommandStation : NSObject, NetworkMessengerDelegate {
       }
     }
   }
-  
+  */
   // MARK: Destructors
   
   deinit {
@@ -66,15 +66,11 @@ public class CommandStation : NSObject, NetworkMessengerDelegate {
   
   // MARK: Private Properties
   
-  private var _manufacturer : Manufacturer = .Digitrax
-  
   private var _serialNumber : Int = -1
   
   private var _hardwareVersion : Double = -1.0
   
   private var _softwareVersion : Double = -1.0
-  
-  private var modified : Bool = false
   
   private var _messengers : [String:NetworkMessenger] = [:]
   
@@ -141,84 +137,12 @@ public class CommandStation : NSObject, NetworkMessengerDelegate {
     }
   }
   
-  public var optionSwitches0 : Int64 = 0 {
-    didSet {
-      modified = true
-    }
-  }
-  
-  public var optionSwitches1 : Int64 = 0 {
-    didSet {
-      modified = true
-    }
-  }
-  
-  public var optionSwitches2 : Int64 = 0 {
-    didSet {
-      modified = true
-    }
-  }
-  
-  public var optionSwitches3 : Int64 = 0 {
-    didSet {
-      modified = true
-    }
-  }
-  
-  public var manufacturer : Manufacturer {
-    get {
-      return _manufacturer
-    }
-    set(value) {
-      if value != _manufacturer {
-        _manufacturer = value
-        modified = true
-      }
-    }
-  }
-  
   public var productCode : ProductCode  = .unknown {
     didSet {
       modified = true
     }
   }
-  
-  public var serialNumber : Int {
-    get {
-      return _serialNumber
-    }
-    set(value) {
-      if value != _serialNumber {
-        _serialNumber = value
-        modified = true
-      }
-    }
-  }
-  
-  public var hardwareVersion : Double {
-    get {
-      return _hardwareVersion
-    }
-    set(value) {
-      if value != hardwareVersion {
-        _hardwareVersion = value
-        modified = true
-      }
-    }
-  }
-  
-  public var softwareVersion : Double {
-    get {
-      return _softwareVersion
-    }
-    set(value) {
-      if value != _softwareVersion {
-        _softwareVersion = value
-        modified = true
-      }
-    }
-  }
-  
+  /*
   public var commandStationId : Int {
     get {
       return CommandStation.commandStationID(manufacturer: manufacturer, productCode: productCode, serialNumber: serialNumber)
@@ -230,7 +154,7 @@ public class CommandStation : NSObject, NetworkMessengerDelegate {
       return "\(manufacturer) \(productCode) SN: \(serialNumber)"
     }
   }
-  
+  */
   public var maxSlotNumber : (page:Int, number:Int)? {
     get {
       switch productCode {
@@ -839,169 +763,7 @@ public class CommandStation : NSObject, NetworkMessengerDelegate {
     networkMessage(message: message)
   }
   
-  // MARK: Database Methods
-  
-  private func decode(sqliteDataReader:SqliteDataReader?) {
-    
-    if let reader = sqliteDataReader {
-      
-      "[\(COMMAND_STATION.COMMAND_STATION_ID)], " +
-      "[\(COMMAND_STATION.COMMAND_STATION_NAME)], " +
-      "[\(COMMAND_STATION.MANUFACTURER)], " +
-      "[\(COMMAND_STATION.PRODUCT_CODE)], " +
-      "[\(COMMAND_STATION.SERIAL_NUMBER)], " +
-      "[\(COMMAND_STATION.HARDWARE_VERSION)], " +
-      "[\(COMMAND_STATION.SOFTWARE_VERSION)], " +
-      "[\(COMMAND_STATION.OPTION_SWITCHES_0)], " +
-      "[\(COMMAND_STATION.OPTION_SWITCHES_1)], " +
-      "[\(COMMAND_STATION.OPTION_SWITCHES_2)], " +
-      "[\(COMMAND_STATION.OPTION_SWITCHES_3)]"
-      
-      if !reader.isDBNull(index: 2) {
-        manufacturer = Manufacturer(rawValue: reader.getInt(index: 2)!) ?? .Unknown
-      }
-
-      if !reader.isDBNull(index: 3) {
-        productCode = ProductCode(rawValue: reader.getInt(index: 3)!) ?? .unknown
-      }
-      
-      if !reader.isDBNull(index: 4) {
-        serialNumber = reader.getInt(index: 4)!
-      }
-
-      if !reader.isDBNull(index: 5) {
-        hardwareVersion = reader.getDouble(index: 5)!
-      }
-
-      if !reader.isDBNull(index: 6) {
-        softwareVersion = reader.getDouble(index: 6)!
-      }
-
-      if !reader.isDBNull(index: 7) {
-        optionSwitches0 = reader.getInt64(index: 7)!
-      }
-
-      if !reader.isDBNull(index: 8) {
-        optionSwitches1 = reader.getInt64(index: 8)!
-      }
-
-      if !reader.isDBNull(index: 9) {
-        optionSwitches2 = reader.getInt64(index: 9)!
-      }
-
-      if !reader.isDBNull(index: 10) {
-        optionSwitches3 = reader.getInt64(index: 10)!
-      }
-
-    }
-    
-    modified = false
-    
-  }
-
-  public func save() {
-    
-    if modified {
-      
-      var sql = ""
-      
-      if !Database.codeExists(tableName: TABLE.COMMAND_STATION, primaryKey: COMMAND_STATION.COMMAND_STATION_ID, code: commandStationId)! {
-        sql = "INSERT INTO [\(TABLE.COMMAND_STATION)] (" +
-        "[\(COMMAND_STATION.COMMAND_STATION_ID)], " +
-        "[\(COMMAND_STATION.COMMAND_STATION_NAME)], " +
-        "[\(COMMAND_STATION.MANUFACTURER)], " +
-        "[\(COMMAND_STATION.PRODUCT_CODE)], " +
-        "[\(COMMAND_STATION.SERIAL_NUMBER)], " +
-        "[\(COMMAND_STATION.HARDWARE_VERSION)], " +
-        "[\(COMMAND_STATION.SOFTWARE_VERSION)]," +
-        "[\(COMMAND_STATION.OPTION_SWITCHES_0)]," +
-        "[\(COMMAND_STATION.OPTION_SWITCHES_1)]," +
-        "[\(COMMAND_STATION.OPTION_SWITCHES_2)]," +
-        "[\(COMMAND_STATION.OPTION_SWITCHES_3)]" +
-        ") VALUES (" +
-        "@\(COMMAND_STATION.COMMAND_STATION_ID), " +
-        "@\(COMMAND_STATION.COMMAND_STATION_NAME), " +
-        "@\(COMMAND_STATION.MANUFACTURER), " +
-        "@\(COMMAND_STATION.PRODUCT_CODE), " +
-        "@\(COMMAND_STATION.SERIAL_NUMBER), " +
-        "@\(COMMAND_STATION.HARDWARE_VERSION), " +
-        "@\(COMMAND_STATION.SOFTWARE_VERSION)," +
-        "@\(COMMAND_STATION.OPTION_SWITCHES_0)," +
-        "@\(COMMAND_STATION.OPTION_SWITCHES_1)," +
-        "@\(COMMAND_STATION.OPTION_SWITCHES_2)," +
-        "@\(COMMAND_STATION.OPTION_SWITCHES_3)" +
-        ")"
-      }
-      else {
-        sql = "UPDATE [\(TABLE.COMMAND_STATION)] SET " +
-        "[\(COMMAND_STATION.COMMAND_STATION_NAME)] = @\(COMMAND_STATION.COMMAND_STATION_NAME), " +
-        "[\(COMMAND_STATION.MANUFACTURER)] = @\(COMMAND_STATION.MANUFACTURER), " +
-        "[\(COMMAND_STATION.PRODUCT_CODE)] = @\(COMMAND_STATION.PRODUCT_CODE), " +
-        "[\(COMMAND_STATION.SERIAL_NUMBER)] = @\(COMMAND_STATION.SERIAL_NUMBER), " +
-        "[\(COMMAND_STATION.HARDWARE_VERSION)] = @\(COMMAND_STATION.HARDWARE_VERSION), " +
-        "[\(COMMAND_STATION.SOFTWARE_VERSION)] = @\(COMMAND_STATION.SOFTWARE_VERSION), " +
-        "[\(COMMAND_STATION.OPTION_SWITCHES_0)] = @\(COMMAND_STATION.OPTION_SWITCHES_0), " +
-        "[\(COMMAND_STATION.OPTION_SWITCHES_1)] = @\(COMMAND_STATION.OPTION_SWITCHES_1), " +
-        "[\(COMMAND_STATION.OPTION_SWITCHES_2)] = @\(COMMAND_STATION.OPTION_SWITCHES_2), " +
-        "[\(COMMAND_STATION.OPTION_SWITCHES_3)] = @\(COMMAND_STATION.OPTION_SWITCHES_3) " +
-        "WHERE [\(COMMAND_STATION.COMMAND_STATION_ID)] = @\(COMMAND_STATION.COMMAND_STATION_ID)"
-      }
-
-      let conn = Database.getConnection()
-      
-      let shouldClose = conn.state != .Open
-       
-      if shouldClose {
-         _ = conn.open()
-      }
-       
-      let cmd = conn.createCommand()
-       
-      cmd.commandText = sql
-      
-      cmd.parameters.addWithValue(key: "@\(COMMAND_STATION.COMMAND_STATION_ID)", value: commandStationId)
-      cmd.parameters.addWithValue(key: "@\(COMMAND_STATION.COMMAND_STATION_NAME)", value: commandStationName)
-      cmd.parameters.addWithValue(key: "@\(COMMAND_STATION.MANUFACTURER)", value: manufacturer.rawValue)
-      cmd.parameters.addWithValue(key: "@\(COMMAND_STATION.PRODUCT_CODE)", value: productCode.rawValue)
-      cmd.parameters.addWithValue(key: "@\(COMMAND_STATION.SERIAL_NUMBER)", value: serialNumber)
-      cmd.parameters.addWithValue(key: "@\(COMMAND_STATION.HARDWARE_VERSION)", value: hardwareVersion)
-      cmd.parameters.addWithValue(key: "@\(COMMAND_STATION.SOFTWARE_VERSION)", value: softwareVersion)
-      cmd.parameters.addWithValue(key: "@\(COMMAND_STATION.OPTION_SWITCHES_0)", value: optionSwitches0)
-      cmd.parameters.addWithValue(key: "@\(COMMAND_STATION.OPTION_SWITCHES_1)", value: optionSwitches1)
-      cmd.parameters.addWithValue(key: "@\(COMMAND_STATION.OPTION_SWITCHES_2)", value: optionSwitches2)
-      cmd.parameters.addWithValue(key: "@\(COMMAND_STATION.OPTION_SWITCHES_3)", value: optionSwitches3)
-
-      _ = cmd.executeNonQuery()
-
-      if shouldClose {
-        conn.close()
-      }
-      
-      modified = false
-      
-    }
-
-  }
-
-  // MARK: Class Properties
-  
-  public static var columnNames : String {
-    get {
-      return
-        "[\(COMMAND_STATION.COMMAND_STATION_ID)], " +
-        "[\(COMMAND_STATION.COMMAND_STATION_NAME)], " +
-        "[\(COMMAND_STATION.MANUFACTURER)], " +
-        "[\(COMMAND_STATION.PRODUCT_CODE)], " +
-        "[\(COMMAND_STATION.SERIAL_NUMBER)], " +
-        "[\(COMMAND_STATION.HARDWARE_VERSION)], " +
-        "[\(COMMAND_STATION.SOFTWARE_VERSION)], " +
-        "[\(COMMAND_STATION.OPTION_SWITCHES_0)], " +
-        "[\(COMMAND_STATION.OPTION_SWITCHES_1)], " +
-        "[\(COMMAND_STATION.OPTION_SWITCHES_2)], " +
-        "[\(COMMAND_STATION.OPTION_SWITCHES_3)]"
-    }
-  }
-  
+  /*
   public static var commandStations : [CommandStation] {
     
     get {
@@ -1057,5 +819,6 @@ public class CommandStation : NSObject, NetworkMessengerDelegate {
   public static func commandStationID(manufacturer: Manufacturer, productCode: ProductCode, serialNumber: Int) -> Int {
     return (manufacturer.rawValue << 24) | (productCode.rawValue << 16) | serialNumber
   }
-
+*/
+  
 }

@@ -27,7 +27,7 @@ class OpSwDecoderView: NSTableCellView {
   
   // MARK: Public Properties
   
-  public var defaultDecoderType : MobileDecoderType {
+  public var defaultDecoderType : SpeedSteps {
     get {
       switch cboDecoderType.indexOfSelectedItem {
       case 0:

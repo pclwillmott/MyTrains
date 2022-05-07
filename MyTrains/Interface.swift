@@ -21,18 +21,9 @@ public enum BaudRate : NSNumber {
   case br921600 = 921600
 }
 
-public class Interface : EditorObject, ORSSerialPortDelegate {
+public class Interface : LocoNetDevice, ORSSerialPortDelegate {
   
   // MARK: Constructors
-  
-  init(reader:SqliteDataReader) {
-    super.init(primaryKey: -1)
-    decode(sqliteDataReader: reader)
-  }
-  
-  override init(primaryKey: Int) {
-    super.init(primaryKey: primaryKey)
-  }
   
   // MARK: Destructors
   
@@ -43,8 +34,6 @@ public class Interface : EditorObject, ORSSerialPortDelegate {
   
   // MARK: Private Properties
   
-  private var _manufacturer : Manufacturer = .Digitrax
-  
   private var _productCode : ProductCode = .unknown
   
   private var _serialNumber : Int = -1
@@ -53,25 +42,11 @@ public class Interface : EditorObject, ORSSerialPortDelegate {
   
   private var _devicePath : String = ""
   
-  private var modified : Bool = false
-  
   private var serialPort : ORSSerialPort?
   
   private var _delegate : ORSSerialPortDelegate?
   
   // MARK: Public Properties
-  
-  public var manufacturer : Manufacturer {
-    get {
-      return _manufacturer
-    }
-    set(value) {
-      if value != _manufacturer {
-        _manufacturer = value
-        modified = true
-      }
-    }
-  }
   
   public var productCode : ProductCode {
     get {
@@ -85,45 +60,10 @@ public class Interface : EditorObject, ORSSerialPortDelegate {
     }
   }
   
-  public var serialNumber : Int {
-    get {
-      return _serialNumber
-    }
-    set(value) {
-      if value != _serialNumber {
-        _serialNumber = value
-        modified = true
-      }
-    }
-  }
-  
-  public var baudRate : BaudRate {
-    get {
-      return _baudRate
-    }
-    set(value) {
-      if value != _baudRate {
-        _baudRate = value
-        modified = true
-      }
-    }
-  }
-  
-  public var devicePath : String {
-    get {
-      return _devicePath
-    }
-    set(value) {
-      if value != _devicePath {
-        _devicePath = value
-        modified = true
-      }
-    }
-  }
   
   public var interfaceName : String {
     get {
-      return "\(manufacturer) \(productCode) SN: \(serialNumber)"
+      return "\(productCode) SN: \(serialNumber)"
     }
   }
   
@@ -220,124 +160,7 @@ public class Interface : EditorObject, ORSSerialPortDelegate {
     delegate?.serialPort?(serialPort, didReceive: data)
   }
 
-  // MARK: Database Methods
-  
-  private func decode(sqliteDataReader:SqliteDataReader?) {
-    
-    if let reader = sqliteDataReader {
-      
-      primaryKey = reader.getInt(index: 0)!
-
-      if !reader.isDBNull(index: 1) {
-        manufacturer = Manufacturer(rawValue: reader.getInt(index: 1)!) ?? .Unknown
-      }
-
-      if !reader.isDBNull(index: 2) {
-        productCode = ProductCode(rawValue: reader.getInt(index: 2)!) ?? .unknown
-      }
-      
-      if !reader.isDBNull(index: 3) {
-        serialNumber = reader.getInt(index: 3)!
-      }
-
-      if !reader.isDBNull(index: 4) {
-        baudRate = BaudRate(rawValue: NSNumber(nonretainedObject: reader.getInt(index: 4)!)) ?? .br57600
-      }
-
-      if !reader.isDBNull(index: 5) {
-        devicePath = reader.getString(index: 5)!
-      }
-
-    }
-    
-    modified = false
-    
-  }
-
-  public func save() {
-    
-    if modified {
-      
-      var sql = ""
-      
-      if !Database.codeExists(tableName: TABLE.INTERFACE, primaryKey: INTERFACE.INTERFACE_ID, code: primaryKey)! {
-        sql = "INSERT INTO [\(TABLE.INTERFACE)] (" +
-        "[\(INTERFACE.INTERFACE_ID)], " +
-        "[\(INTERFACE.INTERFACE_NAME)], " +
-        "[\(INTERFACE.MANUFACTURER)], " +
-        "[\(INTERFACE.PRODUCT_CODE)], " +
-        "[\(INTERFACE.SERIAL_NUMBER)], " +
-        "[\(INTERFACE.BAUD_RATE)], " +
-        "[\(INTERFACE.DEVICE_PATH)]" +
-        ") VALUES (" +
-        "@\(INTERFACE.INTERFACE_ID), " +
-        "@\(INTERFACE.INTERFACE_NAME), " +
-        "@\(INTERFACE.MANUFACTURER), " +
-        "@\(INTERFACE.PRODUCT_CODE), " +
-        "@\(INTERFACE.SERIAL_NUMBER), " +
-        "@\(INTERFACE.BAUD_RATE), " +
-        "@\(INTERFACE.DEVICE_PATH)" +
-        ")"
-        primaryKey = Database.nextCode(tableName: TABLE.INTERFACE, primaryKey: INTERFACE.INTERFACE_ID)!
-      }
-      else {
-        sql = "UPDATE [\(TABLE.INTERFACE)] SET " +
-        "[\(INTERFACE.INTERFACE_NAME)] = @\(INTERFACE.INTERFACE_NAME), " +
-        "[\(INTERFACE.MANUFACTURER)] = @\(INTERFACE.MANUFACTURER), " +
-        "[\(INTERFACE.PRODUCT_CODE)] = @\(INTERFACE.PRODUCT_CODE), " +
-        "[\(INTERFACE.SERIAL_NUMBER)] = @\(INTERFACE.SERIAL_NUMBER), " +
-        "[\(INTERFACE.BAUD_RATE)] = @\(INTERFACE.BAUD_RATE), " +
-        "[\(INTERFACE.DEVICE_PATH)] = @\(INTERFACE.DEVICE_PATH) " +
-        "WHERE [\(INTERFACE.INTERFACE_ID)] = @\(INTERFACE.INTERFACE_ID)"
-      }
-
-      let conn = Database.getConnection()
-      
-      let shouldClose = conn.state != .Open
-       
-      if shouldClose {
-         _ = conn.open()
-      }
-       
-      let cmd = conn.createCommand()
-       
-      cmd.commandText = sql
-      
-      cmd.parameters.addWithValue(key: "@\(INTERFACE.INTERFACE_ID)", value: primaryKey)
-      cmd.parameters.addWithValue(key: "@\(INTERFACE.INTERFACE_NAME)", value: interfaceName)
-      cmd.parameters.addWithValue(key: "@\(INTERFACE.MANUFACTURER)", value: manufacturer.rawValue)
-      cmd.parameters.addWithValue(key: "@\(INTERFACE.PRODUCT_CODE)", value: productCode.rawValue)
-      cmd.parameters.addWithValue(key: "@\(INTERFACE.SERIAL_NUMBER)", value: serialNumber)
-      cmd.parameters.addWithValue(key: "@\(INTERFACE.BAUD_RATE)", value: Int(truncating: baudRate.rawValue))
-      cmd.parameters.addWithValue(key: "@\(INTERFACE.DEVICE_PATH)", value: devicePath)
-
-      _ = cmd.executeNonQuery()
-
-      if shouldClose {
-        conn.close()
-      }
-      
-      modified = false
-      
-    }
-
-  }
-
-  // Class Properties
-  
-  public static var columnNames : String {
-    get {
-      return
-        "[\(INTERFACE.INTERFACE_ID)], " +
-        "[\(INTERFACE.INTERFACE_NAME)], " +
-        "[\(INTERFACE.MANUFACTURER)], " +
-        "[\(INTERFACE.PRODUCT_CODE)], " +
-        "[\(INTERFACE.SERIAL_NUMBER)], " +
-        "[\(INTERFACE.BAUD_RATE)], " +
-        "[\(INTERFACE.DEVICE_PATH)]"
-    }
-  }
-  
+/*
   public static var interfaces : [Int:Interface] {
     
     get {
@@ -376,5 +199,5 @@ public class Interface : EditorObject, ORSSerialPortDelegate {
     }
     
   }
-
+*/
 }

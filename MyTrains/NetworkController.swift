@@ -81,9 +81,9 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
 
   public var layouts : [Int:Layout] = Layout.layouts
 
-  public var locomotives : [Int:Locomotive] = Locomotive.locomotives
+  public var locomotives : [Int:Locomotive] = [:] // Locomotive.locomotives
 
-  public var commandStations : [Int:CommandStation] = CommandStation.commandStationsDictionary
+  public var commandStations : [Int:CommandStation] = [:] // CommandStation.commandStationsDictionary
 
   public var layoutId : Int {
     get {
@@ -112,12 +112,14 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
         for net in lo.networks {
           for kv in commandStations {
             let cs = kv.value
+            /*
             if net.commandStationId == cs.commandStationId {
               for kv2 in cs.messengers {
                 let mess = kv2.value
                 result.append((commandStation: cs, messenger: mess))
               }
             }
+             */
           }
         }
       }
@@ -170,6 +172,7 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
 // MARK: Private Methods
   
   private func findPorts() {
+    /*
     for port in ORSSerialPortManager.shared().availablePorts {
       let candidate = NetworkMessenger(id: nextMessengerId, devicePath: port.path)
       var duplicate = false
@@ -183,7 +186,7 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
         candidate.networkInterfaceDelegate = self
         candidates[candidate.id] = candidate
       }
-    }
+    } */
   }
   
   private func networkControllerUpdated() {
@@ -354,7 +357,7 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
       // Command Stations
       
       if pc == .DCS210 || pc == .DCS210Plus || pc == .DCS210 || pc == .DCS240 {
-        
+        /*
         let id = CommandStation.commandStationID(manufacturer: .Digitrax, productCode: pc, serialNumber: devData.serialNumber)
         
         if let cs = commandStations[id] {
@@ -370,7 +373,7 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
           networkControllerUpdated()
           cs.save()
         }
-        
+        */
       }
       
       // Interfaces

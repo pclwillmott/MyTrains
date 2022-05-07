@@ -35,9 +35,9 @@ class CommmandStationComboBoxDS : NSObject, NSComboBoxDataSource {
       for dictEntry in _dictionary {
         _items.append(dictEntry.value)
       }
-      _items.sort {
-        $0.commandStationName < $1.commandStationName
-      }
+ //     _items.sort {
+   //     $0.commandStationName < $1.commandStationName
+  //    }
     }
   }
   
@@ -54,9 +54,9 @@ class CommmandStationComboBoxDS : NSObject, NSComboBoxDataSource {
     var index : Int = 0
     while index < _items.count {
       let item = _items[index]
-      if item.commandStationId == key {
-        return index
-      }
+  //    if item.commandStationId == key {
+    //    return index
+      //}
       index += 1
     }
     return nil
@@ -72,15 +72,16 @@ class CommmandStationComboBoxDS : NSObject, NSComboBoxDataSource {
     if index < 0 || index >= _items.count {
       return nil
     }
-    return _items[index].commandStationName
+//    return _items[index].commandStationName
+    return nil
   }
 
   func comboBox(_ comboBox: NSComboBox, indexOfItemWithStringValue string: String) -> Int {
     var index = 0
     for item in _items {
-      if item.commandStationName == string {
-        return index
-      }
+//      if item.commandStationName == string {
+  //      return index
+    //  }
       index += 1
     }
     return -1
@@ -89,9 +90,9 @@ class CommmandStationComboBoxDS : NSObject, NSComboBoxDataSource {
   func comboBox(_ comboBox: NSComboBox, completedString string: String) -> String? {
     if string.count > 1 {
       for item in _items {
-        if item.commandStationName.prefix(string.count) == string {
-          return item.commandStationName
-        }
+   //     if item.commandStationName.prefix(string.count) == string {
+     //     return item.commandStationName
+       // }
       }
     }
     return nil

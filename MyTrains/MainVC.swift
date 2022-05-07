@@ -73,7 +73,7 @@ class MainVC: NSViewController, NetworkControllerDelegate {
         color = device.messenger.isOpen ? .systemGreen : device.messenger.isConnected ? .systemRed : .black
         
         label1.textColor = color
-        label1.stringValue = "\(device.messenger.interface.interfaceName) → "
+  //      label1.stringValue = "\(device.messenger.interface.interfaceName) → "
         label1.isEditable = false
         label1.isBezeled = false
         
@@ -91,7 +91,7 @@ class MainVC: NSViewController, NetworkControllerDelegate {
  
         label2.textColor = color
         
-        label2.stringValue = "\(device.commandStation.commandStationName)"
+  //      label2.stringValue = "\(device.commandStation.commandStationName)"
         label2.isEditable = false
         label2.isBezeled = false
         label2.sizeToFit()

@@ -121,7 +121,7 @@ public class LocoSlotData {
   
   public var consistState : ConsistState
   
-  public var mobileDecoderType : MobileDecoderType
+  public var mobileDecoderType : SpeedSteps
   
   public var direction : LocomotiveDirection
   

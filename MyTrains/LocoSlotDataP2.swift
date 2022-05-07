@@ -65,7 +65,7 @@ public class LocoSlotDataP2 : NetworkMessage {
     }
   }
   
-  public var mobileDecoderType : MobileDecoderType {
+  public var mobileDecoderType : SpeedSteps {
     get {
       
       let decoderType = message[4] & 0b111

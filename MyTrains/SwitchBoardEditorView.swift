@@ -129,7 +129,7 @@ class SwitchBoardEditorView: SwitchBoardView {
     }
   }
   
-  public var nextPart : SwitchBoardPart = .none
+  public var nextPart : SwitchBoardItemPartType = .none
   
   public var isGroupMode : Bool {
     get {
@@ -239,9 +239,11 @@ class SwitchBoardEditorView: SwitchBoardView {
         selectedItems.append(item)
       }
       else {
+        /*
         let blank = SwitchBoardItem(location: startMove!, partType: .none, orientation: 0, groupId: -1, panelId: panelId)
         items[blank.key] = blank
         selectedItems.append(blank)
+         */
       }
       
     case [.shift]:
@@ -253,9 +255,11 @@ class SwitchBoardEditorView: SwitchBoardView {
           selectedItems.append(item)
         }
         else {
+          /*
           let blank = SwitchBoardItem(location: startMove!, partType: .none, orientation: 0, groupId: -1, panelId: panelId)
           items[blank.key] = blank
           selectedItems.append(blank)
+           */
         }
       }
       else {
@@ -275,9 +279,11 @@ class SwitchBoardEditorView: SwitchBoardView {
               selectedItems.append(item)
             }
             else {
+              /*
               let blank = SwitchBoardItem(location: (x:x, y:y), partType: .none, orientation: 0, groupId: -1, panelId: panelId)
               items[blank.key] = blank
               selectedItems.append(blank)
+               */
             }
           }
           
@@ -296,17 +302,20 @@ class SwitchBoardEditorView: SwitchBoardView {
       
       if let item = getItem(event: event) {
         if isArrangeMode && nextPart != .none {
-          item.partType = nextPart
+        
+        //  item.partType = nextPart
         }
         selectedItems.append(item)
       }
       else {
+        /*
         let blank = SwitchBoardItem(location: startMove!, partType: .none, orientation: 0, groupId: -1, panelId: panelId)
         if isArrangeMode && nextPart != .none {
           blank.partType = nextPart
         }
         items[blank.key] = blank
         selectedItems.append(blank)
+         */
       }
       
       if selectedItems[0].groupId != -1 {
@@ -368,12 +377,14 @@ class SwitchBoardEditorView: SwitchBoardView {
         let newY = item.location.y + dy
         
         if let occupant = getItem(x: newX, y: newY) {
+          /*
           if occupant.partType == .none {
             items[item.key] = nil
           }
           else {
             occupant.nextAction = .delete
           }
+           */
         }
         
         item.location.x = newX

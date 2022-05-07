@@ -26,16 +26,6 @@ public class Layout : EditorObject {
     
   }
   
-  // MARK: Private properties
-  
-  private var _layoutName : String = ""
-  
-  private var _description : String = ""
-  
-  private var _scale : Double = 1.0
-  
-  private var  modified : Bool = false
-
   // MARK: Public properties
   
   override public func displayString() -> String {
@@ -58,39 +48,21 @@ public class Layout : EditorObject {
     }
   }
   
-  public var layoutName : String {
-    get {
-      return _layoutName
-    }
-    set(value) {
-      if value != _layoutName {
-        _layoutName = value
-        modified = true
-      }
+  public var layoutName : String = "" {
+    didSet {
+      modified = true
     }
   }
   
-  public var layoutDescription : String {
-    get {
-      return _description
-    }
-    set(value) {
-      if value != _description {
-        _description = value
-        modified = true
-      }
+  public var layoutDescription : String = "" {
+    didSet {
+      modified = true
     }
   }
   
-  public var scale : Double {
-    get {
-      return _scale
-    }
-    set(value) {
-      if value != _scale {
-        _scale = value
-        modified = true
-      }
+  public var scale : Double = 1.0 {
+    didSet {
+      modified = true
     }
   }
   

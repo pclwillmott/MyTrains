@@ -12,7 +12,7 @@ public class CVTableViewDS : NSObject, NSTableViewDataSource, NSTableViewDelegat
 
   // MARK: Public Properties
   
-  public var cvs = [LocomotiveCV]()
+  public var cvs = [DecoderCV]()
   
   // MARK: NSTableViewDataSource Delegate Methods
   

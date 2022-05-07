@@ -44,7 +44,7 @@ class SwitchBoardEditorVC: NSViewController, NSWindowDelegate, SwitchBoardViewDe
     switchBoardView.groupId = -1
 
     for index in 0...15 {
-      let panel = SwitchBoardPanel(panelId: index, panelName: "Panel #\(index + 1)", numberOfColumns: 20, numberOfRows: 20)
+      let panel = SwitchBoardPanel(layoutId: -1, panelId: index, panelName: "Panel #\(index + 1)", numberOfColumns: 20, numberOfRows: 20)
       panels.append(panel)
     }
     switchBoardView.panels = panels
@@ -100,7 +100,7 @@ class SwitchBoardEditorVC: NSViewController, NSWindowDelegate, SwitchBoardViewDe
     }
     else {
       switchBoardView.mode = .arrange
-      switchBoardView.nextPart = .none
+      switchBoardView.nextPart = sender.partType
     }
   }
 

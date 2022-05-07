@@ -78,7 +78,7 @@ public class Programmer : NSObject, NetworkMessengerDelegate, CommandStationDele
   
   public var name : String {
     get {
-      return programmerType == .programmer ? _programmer!.comboName : _commandStation!.commandStationName
+      return "" // programmerType == .programmer ? _programmer!.comboName : _commandStation!.commandStationName
     }
   }
   
@@ -177,12 +177,14 @@ public class Programmer : NSObject, NetworkMessengerDelegate, CommandStationDele
     }
     
     for messenger in networkController.networkMessengers {
+      /*
       if messenger.interface.productCode == ProductCode.PR4 {
         if messenger.isOpen {
           let programmer = Programmer(programmer: messenger)
           result.append(programmer)
         }
       }
+       */
     }
     
     return result.sorted {$0.name < $1.name}

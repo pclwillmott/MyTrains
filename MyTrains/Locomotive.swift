@@ -8,7 +8,7 @@
 import Foundation
 import Cocoa
 
-public enum MobileDecoderType : Int {
+public enum SpeedSteps : Int {
   case analog = 0
   case dcc14 = 1
   case dcc28 = 2
@@ -67,16 +67,11 @@ public enum TrackGauge : Int {
 
 public enum LocomotiveType : Int {
   case diesel = 0
-  case electric = 1
-  case electroDiesel = 2
-  case steam = 3
-  case unknown = 4
-}
-
-public enum TrackRestriction : Int {
-  case none = 0
-  case onlyElectrifiedOverhead = 1
-  case onlyElectrifiedThirdRail = 2
+  case electricThirdRail = 1
+  case electricOverhead = 2
+  case electroDiesel = 3
+  case steam = 4
+  case unknown = 5
 }
 
 public enum LengthUnit : Int {
@@ -136,10 +131,10 @@ public let maskF26 = 0b00000100000000000000000000000000
 public let maskF27 = 0b00001000000000000000000000000000
 public let maskF28 = 0b00010000000000000000000000000000
 
-public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStationDelegate {
+public class Locomotive : RollingStock, CommandStationDelegate {
   
   // MARK: Constructors
-  
+/*
   init(reader:SqliteDataReader) {
     super.init(primaryKey: -1)
     decode(sqliteDataReader: reader)
@@ -159,7 +154,7 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
       _cvs[cv.cvNumber] = cv
     }
   }
-  
+  */
   // MARK: Destructors
   
   deinit {
@@ -184,7 +179,7 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
   
   private var _length : Double = 0.0
   
-  private var _mobileDecoderType : MobileDecoderType = .unknown
+  private var _mobileDecoderType : SpeedSteps = .unknown
   
   private var _address : Int = 0
   
@@ -193,8 +188,6 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
   private var _occupancyFeedbackOffsetRear = 0.0
   
   private var _trackGauge : TrackGauge = .unknown
-  
-  private var _trackRestriction : TrackRestriction = .none
   
   private var _locomotiveScale : Double = 1.0
   
@@ -243,8 +236,6 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
   
   private var _speed  : LocomotiveSpeed = (speed: 0, direction: .forward)
   
-  private var modified : Bool = false
-  
   private var lastLocomotiveState : LocomotiveState = (speed: 0, direction: .forward, functions: 0)
   
   private var timer : Timer? = nil
@@ -253,13 +244,13 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
   
   private var nextDelegateId : Int = 0
   
-  private var _cvs : [Int:LocomotiveCV] = [:]
+  private var _cvs : [Int:DecoderCV] = [:]
   
   private var _throttleID : Int?
   
   // MARK: Public properties
   
-  public var functions : [LocomotiveFunction] = []
+  public var functions : [DecoderFunction] = []
   
   public var locomotiveName : String {
     get {
@@ -268,42 +259,6 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
     set(value) {
       if value != _locomotiveName {
         _locomotiveName = value
-        modified = true
-      }
-    }
-  }
-  
-  public var locomotiveType : LocomotiveType {
-    get {
-      return _locomotiveType
-    }
-    set(value) {
-      if value != _locomotiveType {
-        _locomotiveType = value
-        modified = true
-      }
-    }
-  }
-  
-  public var length : Double {
-    get {
-      return _length
-    }
-    set(value) {
-      if value != _length {
-        _length = value
-        modified = true
-      }
-    }
-  }
-
-  public var mobileDecoderType : MobileDecoderType {
-    get {
-      return _mobileDecoderType
-    }
-    set(value) {
-      if value != _mobileDecoderType {
-        _mobileDecoderType = value
         modified = true
       }
     }
@@ -345,65 +300,6 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
     }
   }
 
-  public var trackGauge : TrackGauge {
-    get {
-      return _trackGauge
-    }
-    set(value) {
-      if value != _trackGauge {
-        _trackGauge = value
-        modified = true
-      }
-    }
-  }
-  
-  public var trackRestriction : TrackRestriction {
-    get {
-      return _trackRestriction
-    }
-    set(value) {
-      if value != _trackRestriction {
-        _trackRestriction = value
-        modified = true
-      }
-    }
-  }
-  
-  public var locomotiveScale : Double {
-    get {
-      return _locomotiveScale
-    }
-    set(value) {
-      if value != _locomotiveScale {
-        _locomotiveScale = value
-        modified = true
-      }
-    }
-  }
-  
-  public var maxForwardSpeed : Double {
-    get {
-      return _maxForwardSpeed
-    }
-    set(value) {
-      if value != _maxForwardSpeed {
-        _maxForwardSpeed = value
-        modified = true
-      }
-    }
-  }
-  
-  public var maxBackwardSpeed : Double {
-    get {
-      return _maxBackwardSpeed
-    }
-    set(value) {
-      if value != _maxBackwardSpeed {
-        _maxBackwardSpeed = value
-        modified = true
-      }
-    }
-  }
   
   public var lengthUnits : LengthUnit {
     get {
@@ -441,77 +337,6 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
     }
   }
   
-  public var networkId : Int {
-    get {
-      return _networkId
-    }
-    set(value) {
-      if value != _networkId {
-        _networkId = value
-        modified = true
-      }
-    }
-  }
-  
-  public var decoderModel : String {
-    get {
-      return _decoderModel
-    }
-    set(value) {
-      if value != _decoderModel {
-        _decoderModel = value
-        modified = true
-      }
-    }
-  }
-  
-  public var inventoryCode : String {
-    get {
-      return _inventoryCode
-    }
-    set(value) {
-      if value != _inventoryCode {
-        _inventoryCode = value
-        modified = true
-      }
-    }
-  }
-  
-  public var manufacturer : String {
-    get {
-      return _manufacturer
-    }
-    set(value) {
-      if value != _manufacturer {
-        _manufacturer = value
-        modified = true
-      }
-    }
-  }
-  
-  public var purchaseDate : String {
-    get {
-      return _purchaseDate
-    }
-    set(value) {
-      if value != _purchaseDate {
-        _purchaseDate = value
-        modified = true
-      }
-    }
-  }
-  
-  public var notes : String {
-    get {
-      return _notes
-    }
-    set(value) {
-      if value != _notes {
-        _notes = value
-        modified = true
-      }
-    }
-  }
   
   public var network : Network? {
     get {
@@ -519,16 +344,16 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
     }
   }
   
-  public var cvs : [Int:LocomotiveCV] {
+  public var cvs : [Int:DecoderCV] {
     get {
       return _cvs
     }
   }
   
-  public var cvsSorted : [LocomotiveCV] {
+  public var cvsSorted : [DecoderCV] {
     get {
       
-      var result : [LocomotiveCV] = []
+      var result : [DecoderCV] = []
       
       for cv in _cvs {
         result.append(cv.value)
@@ -1089,7 +914,7 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
       slotData[index+0] = UInt8(throttleID & 0x7f)
       slotData[index+1] = UInt8(throttleID >> 8)
       index = message.messageType == .locoSlotDataP1 ? 1 : 2
-      slotData[index] = (slotData[index] & mobileDecoderType.protectMask()) | mobileDecoderType.setMask()
+ //     slotData[index] = (slotData[index] & SpeedSteps.protectMask()) | mobileDecoderType.setMask()
     }
     
     return slotData
@@ -1102,20 +927,20 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
     return locomotiveName
   }
   
-  public func getCV(cvNumber: Int) -> LocomotiveCV? {
+  public func getCV(cvNumber: Int) -> DecoderCV? {
     if cvNumber < 1 {
       return nil
     }
     return _cvs[cvNumber]
   }
   
-  public func getCV(primaryPageIndex: Int, secondaryPageIndex: Int, cvNumber: Int) -> LocomotiveCV? {
-    let cv = LocomotiveCV.indexedCvNumber(primaryPageIndex: primaryPageIndex, secondaryPageIndex: secondaryPageIndex, cvNumber: cvNumber)
+  public func getCV(primaryPageIndex: Int, secondaryPageIndex: Int, cvNumber: Int) -> DecoderCV? {
+    let cv = DecoderCV.indexedCvNumber(primaryPageIndex: primaryPageIndex, secondaryPageIndex: secondaryPageIndex, cvNumber: cvNumber)
     return _cvs[cv]
   }
   
-  public func updateCVS(cv: LocomotiveCV) {
-    cv.locomotiveId = self.primaryKey
+  public func updateCVS(cv: DecoderCV) {
+//    cv.locomotiveId = self.primaryKey
     _cvs[cv.cvNumber] = cv
     cv.save()
   }
@@ -1258,283 +1083,10 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
     
   // MARK: LocomotiveFunctionDelegate Methods
   
-  public func changeState(locomotiveFunction: LocomotiveFunction) {
+  public func changeState(locomotiveFunction: DecoderFunction) {
   }
   
-  // MARK: Database Methods
-  
-  private func decode(sqliteDataReader:SqliteDataReader?) {
-    
-    if let reader = sqliteDataReader {
-      
-      primaryKey = reader.getInt(index: 0)!
-      
-      if !reader.isDBNull(index: 1) {
-        locomotiveName = reader.getString(index: 1)!
-      }
-      
-      if !reader.isDBNull(index: 2) {
-        locomotiveType = LocomotiveType(rawValue: reader.getInt(index: 2)!) ?? .unknown
-      }
-
-      if !reader.isDBNull(index: 3) {
-        length = reader.getDouble(index: 3)!
-      }
-      
-      if !reader.isDBNull(index: 4) {
-        mobileDecoderType = MobileDecoderType(rawValue: reader.getInt(index: 4)!) ?? .unknown
-      }
-
-      if !reader.isDBNull(index: 5) {
-        address = reader.getInt(index: 5)!
-      }
-      
-      if !reader.isDBNull(index: 6) {
-        occupancyFeedbackOffsetFront = reader.getDouble(index: 6)!
-      }
-      
-      if !reader.isDBNull(index: 7) {
-        occupancyFeedbackOffsetRear = reader.getDouble(index: 7)!
-      }
- 
-      if !reader.isDBNull(index: 8) {
-        trackGauge = TrackGauge(rawValue: reader.getInt(index: 8)!) ?? .unknown
-      }
-
-      if !reader.isDBNull(index: 9) {
-        trackRestriction = TrackRestriction(rawValue: reader.getInt(index: 9)!) ?? .none
-      }
-
-      if !reader.isDBNull(index: 10) {
-        locomotiveScale = reader.getDouble(index: 10)!
-      }
-      
-      if !reader.isDBNull(index: 11) {
-        maxForwardSpeed = reader.getDouble(index: 11)!
-      }
-      
-      if !reader.isDBNull(index: 12) {
-        maxBackwardSpeed = reader.getDouble(index: 12)!
-      }
-      
-      if !reader.isDBNull(index: 13) {
-        lengthUnits = LengthUnit(rawValue: reader.getInt(index: 13)!) ?? .centimeters
-      }
-
-      if !reader.isDBNull(index: 14) {
-        occupancyFeedbackOffsetUnits = LengthUnit(rawValue: reader.getInt(index: 14)!) ?? .centimeters
-      }
-
-      if !reader.isDBNull(index: 15) {
-        speedUnits = SpeedUnit(rawValue: reader.getInt(index: 15)!) ?? .kilometersPerHour
-      }
-
-      if !reader.isDBNull(index: 16) {
-        networkId = reader.getInt(index: 16)!
-      }
-
-      if !reader.isDBNull(index: 17) {
-        decoderModel = reader.getString(index: 17)!
-      }
-
-      if !reader.isDBNull(index: 18) {
-        inventoryCode = reader.getString(index: 18)!
-      }
-
-      if !reader.isDBNull(index: 19) {
-        manufacturer = reader.getString(index: 19)!
-      }
-
-      if !reader.isDBNull(index: 20) {
-        purchaseDate = reader.getString(index: 20)!
-      }
-
-      if !reader.isDBNull(index: 21) {
-        notes = reader.getString(index: 21)!
-      }
-
-    }
-    
-    modified = false
-    
-  }
-
-  public func save() {
-    
-    if modified {
-      
-      var sql = ""
-      
-      if primaryKey == -1 {
-        sql = "INSERT INTO [\(TABLE.LOCOMOTIVE)] (" +
-        "[\(LOCOMOTIVE.LOCOMOTIVE_ID)], " +
-        "[\(LOCOMOTIVE.LOCOMOTIVE_NAME)], " +
-        "[\(LOCOMOTIVE.LOCOMOTIVE_TYPE)]," +
-        "[\(LOCOMOTIVE.LENGTH)]," +
-        "[\(LOCOMOTIVE.DECODER_TYPE)]," +
-        "[\(LOCOMOTIVE.ADDRESS)]," +
-        "[\(LOCOMOTIVE.FBOFF_OCC_FRONT)]," +
-        "[\(LOCOMOTIVE.FBOFF_OCC_REAR)]," +
-        "[\(LOCOMOTIVE.TRACK_GAUGE)]," +
-        "[\(LOCOMOTIVE.TRACK_RESTRICTION)]," +
-        "[\(LOCOMOTIVE.LOCOMOTIVE_SCALE)]," +
-        "[\(LOCOMOTIVE.MAX_FORWARD_SPEED)]," +
-        "[\(LOCOMOTIVE.MAX_BACKWARD_SPEED)]," +
-        "[\(LOCOMOTIVE.UNITS_LENGTH)]," +
-        "[\(LOCOMOTIVE.UNITS_FBOFF_OCC)]," +
-        "[\(LOCOMOTIVE.UNITS_SPEED)]," +
-        "[\(LOCOMOTIVE.NETWORK_ID)]," +
-        "[\(LOCOMOTIVE.DECODER_MODEL)]," +
-        "[\(LOCOMOTIVE.INVENTORY_CODE)]," +
-        "[\(LOCOMOTIVE.MANUFACTURER)]," +
-        "[\(LOCOMOTIVE.PURCHASE_DATE)]," +
-        "[\(LOCOMOTIVE.NOTES)]" +
-        ") VALUES (" +
-        "@\(LOCOMOTIVE.LOCOMOTIVE_ID), " +
-        "@\(LOCOMOTIVE.LOCOMOTIVE_NAME), " +
-        "@\(LOCOMOTIVE.LOCOMOTIVE_TYPE), " +
-        "@\(LOCOMOTIVE.LENGTH), " +
-        "@\(LOCOMOTIVE.DECODER_TYPE), " +
-        "@\(LOCOMOTIVE.ADDRESS), " +
-        "@\(LOCOMOTIVE.FBOFF_OCC_FRONT), " +
-        "@\(LOCOMOTIVE.FBOFF_OCC_REAR), " +
-        "@\(LOCOMOTIVE.TRACK_GAUGE), " +
-        "@\(LOCOMOTIVE.TRACK_RESTRICTION), " +
-        "@\(LOCOMOTIVE.LOCOMOTIVE_SCALE), " +
-        "@\(LOCOMOTIVE.MAX_FORWARD_SPEED), " +
-        "@\(LOCOMOTIVE.MAX_BACKWARD_SPEED), " +
-        "@\(LOCOMOTIVE.UNITS_LENGTH), " +
-        "@\(LOCOMOTIVE.UNITS_FBOFF_OCC), " +
-        "@\(LOCOMOTIVE.UNITS_SPEED), " +
-        "@\(LOCOMOTIVE.NETWORK_ID), " +
-        "@\(LOCOMOTIVE.DECODER_MODEL), " +
-        "@\(LOCOMOTIVE.INVENTORY_CODE), " +
-        "@\(LOCOMOTIVE.MANUFACTURER), " +
-        "@\(LOCOMOTIVE.PURCHASE_DATE), " +
-        "@\(LOCOMOTIVE.NOTES)" +
-        ")"
-        primaryKey = Database.nextCode(tableName: TABLE.LOCOMOTIVE, primaryKey: LOCOMOTIVE.LOCOMOTIVE_ID)!
-        
-        for locoFunc in functions {
-          locoFunc.locomotiveId = primaryKey
-        }
-        
-        for cv in _cvs {
-          cv.value.locomotiveId = primaryKey
-        }
-        
-      }
-      else {
-        sql = "UPDATE [\(TABLE.LOCOMOTIVE)] SET " +
-        "[\(LOCOMOTIVE.LOCOMOTIVE_NAME)] = @\(LOCOMOTIVE.LOCOMOTIVE_NAME), " +
-        "[\(LOCOMOTIVE.LOCOMOTIVE_TYPE)] = @\(LOCOMOTIVE.LOCOMOTIVE_TYPE), " +
-        "[\(LOCOMOTIVE.LENGTH)] = @\(LOCOMOTIVE.LENGTH), " +
-        "[\(LOCOMOTIVE.DECODER_TYPE)] = @\(LOCOMOTIVE.DECODER_TYPE), " +
-        "[\(LOCOMOTIVE.ADDRESS)] = @\(LOCOMOTIVE.ADDRESS), " +
-        "[\(LOCOMOTIVE.FBOFF_OCC_FRONT)] = @\(LOCOMOTIVE.FBOFF_OCC_FRONT), " +
-        "[\(LOCOMOTIVE.FBOFF_OCC_REAR)] = @\(LOCOMOTIVE.FBOFF_OCC_REAR), " +
-        "[\(LOCOMOTIVE.TRACK_GAUGE)] = @\(LOCOMOTIVE.TRACK_GAUGE), " +
-        "[\(LOCOMOTIVE.TRACK_RESTRICTION)] = @\(LOCOMOTIVE.TRACK_RESTRICTION), " +
-        "[\(LOCOMOTIVE.LOCOMOTIVE_SCALE)] = @\(LOCOMOTIVE.LOCOMOTIVE_SCALE), " +
-        "[\(LOCOMOTIVE.MAX_FORWARD_SPEED)] = @\(LOCOMOTIVE.MAX_FORWARD_SPEED), " +
-        "[\(LOCOMOTIVE.MAX_BACKWARD_SPEED)] = @\(LOCOMOTIVE.MAX_BACKWARD_SPEED), " +
-        "[\(LOCOMOTIVE.UNITS_LENGTH)] = @\(LOCOMOTIVE.UNITS_LENGTH), " +
-        "[\(LOCOMOTIVE.UNITS_FBOFF_OCC)] = @\(LOCOMOTIVE.UNITS_FBOFF_OCC), " +
-        "[\(LOCOMOTIVE.UNITS_SPEED)] = @\(LOCOMOTIVE.UNITS_SPEED), " +
-        "[\(LOCOMOTIVE.NETWORK_ID)] = @\(LOCOMOTIVE.NETWORK_ID), " +
-        "[\(LOCOMOTIVE.DECODER_MODEL)] = @\(LOCOMOTIVE.DECODER_MODEL), " +
-        "[\(LOCOMOTIVE.INVENTORY_CODE)] = @\(LOCOMOTIVE.INVENTORY_CODE), " +
-        "[\(LOCOMOTIVE.MANUFACTURER)] = @\(LOCOMOTIVE.MANUFACTURER), " +
-        "[\(LOCOMOTIVE.PURCHASE_DATE)] = @\(LOCOMOTIVE.PURCHASE_DATE), " +
-        "[\(LOCOMOTIVE.NOTES)] = @\(LOCOMOTIVE.NOTES) " +
-        "WHERE [\(LOCOMOTIVE.LOCOMOTIVE_ID)] = @\(LOCOMOTIVE.LOCOMOTIVE_ID)"
-      }
-
-      let conn = Database.getConnection()
-      
-      let shouldClose = conn.state != .Open
-       
-      if shouldClose {
-         _ = conn.open()
-      }
-       
-      let cmd = conn.createCommand()
-       
-      cmd.commandText = sql
-      
-      cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.LOCOMOTIVE_ID)", value: primaryKey)
-      cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.LOCOMOTIVE_NAME)", value: locomotiveName)
-      cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.LOCOMOTIVE_TYPE)", value: locomotiveType.rawValue)
-      cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.LENGTH)", value: length)
-      cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.DECODER_TYPE)", value: mobileDecoderType.rawValue)
-      cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.ADDRESS)", value: address)
-      cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.FBOFF_OCC_FRONT)", value: occupancyFeedbackOffsetFront)
-      cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.FBOFF_OCC_REAR)", value: occupancyFeedbackOffsetRear)
-      cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.TRACK_GAUGE)", value: trackGauge.rawValue)
-      cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.TRACK_RESTRICTION)", value: trackRestriction.rawValue)
-      cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.LOCOMOTIVE_SCALE)", value: locomotiveScale)
-      cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.MAX_FORWARD_SPEED)", value: maxForwardSpeed)
-      cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.MAX_BACKWARD_SPEED)", value: maxBackwardSpeed)
-      cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.UNITS_LENGTH)", value: lengthUnits.rawValue)
-      cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.UNITS_FBOFF_OCC)", value: occupancyFeedbackOffsetUnits.rawValue)
-      cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.UNITS_SPEED)", value: speedUnits.rawValue)
-      cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.NETWORK_ID)", value: networkId)
-      cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.DECODER_MODEL)", value: decoderModel)
-      cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.INVENTORY_CODE)", value: inventoryCode)
-      cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.MANUFACTURER)", value: manufacturer)
-      cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.PURCHASE_DATE)", value: purchaseDate)
-      cmd.parameters.addWithValue(key: "@\(LOCOMOTIVE.NOTES)", value: notes)
-
-      _ = cmd.executeNonQuery()
-
-      if shouldClose {
-        conn.close()
-      }
-      
-      modified = false
-      
-    }
-    
-    for locoFunc in functions {
-      locoFunc.save()
-    }
-    
-    for cv in _cvs {
-      cv.value.save()
-    }
-
-  }
-
-  // MARK: Class Properties
-  
-  public static var columnNames : String {
-    get {
-      return
-        "[\(LOCOMOTIVE.LOCOMOTIVE_ID)], " +
-        "[\(LOCOMOTIVE.LOCOMOTIVE_NAME)], " +
-        "[\(LOCOMOTIVE.LOCOMOTIVE_TYPE)], " +
-        "[\(LOCOMOTIVE.LENGTH)], " +
-        "[\(LOCOMOTIVE.DECODER_TYPE)], " +
-        "[\(LOCOMOTIVE.ADDRESS)], " +
-        "[\(LOCOMOTIVE.FBOFF_OCC_FRONT)], " +
-        "[\(LOCOMOTIVE.FBOFF_OCC_REAR)], " +
-        "[\(LOCOMOTIVE.TRACK_GAUGE)], " +
-        "[\(LOCOMOTIVE.TRACK_RESTRICTION)], " +
-        "[\(LOCOMOTIVE.LOCOMOTIVE_SCALE)], " +
-        "[\(LOCOMOTIVE.MAX_FORWARD_SPEED)], " +
-        "[\(LOCOMOTIVE.MAX_BACKWARD_SPEED)], " +
-        "[\(LOCOMOTIVE.UNITS_LENGTH)], " +
-        "[\(LOCOMOTIVE.UNITS_FBOFF_OCC)], " +
-        "[\(LOCOMOTIVE.UNITS_SPEED)], " +
-        "[\(LOCOMOTIVE.NETWORK_ID)], " +
-        "[\(LOCOMOTIVE.DECODER_MODEL)], " +
-        "[\(LOCOMOTIVE.INVENTORY_CODE)], " +
-        "[\(LOCOMOTIVE.MANUFACTURER)], " +
-        "[\(LOCOMOTIVE.PURCHASE_DATE)], " +
-        "[\(LOCOMOTIVE.NOTES)]"
-    }
-  }
-  
+/*
   public static var locomotives : [Int:Locomotive] {
     
     get {
@@ -1582,7 +1134,7 @@ public class Locomotive : EditorObject, LocomotiveFunctionDelegate, CommandStati
     ]
     Database.execute(commands: sql)
   }
-  
+  */
   public static func decoderAddress(cv17: Int, cv18: Int) -> Int {
     return (cv17 << 8 | cv18) - 49152
   }

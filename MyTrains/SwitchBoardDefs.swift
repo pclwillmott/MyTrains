@@ -10,7 +10,7 @@ import Cocoa
 
 // MARK: SwitchBoardPart
 
-public enum SwitchBoardPart : Int {
+public enum SwitchBoardItemPartType : Int {
   
   case none = -1
   case straight = 0
@@ -112,5 +112,12 @@ public typealias Shape = [ShapePart]
 public enum SwitchBoardMode {
   case arrange
   case group
+}
+
+// MARK: BlockDirection
+
+public enum BlockDirection : Int {
+  case bidirectional = 0
+  case unidirectional = 1
 }
 

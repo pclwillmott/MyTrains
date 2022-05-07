@@ -178,42 +178,78 @@ public enum NetworkMessageType {
   case unlinkSlotsP2
 }
 
-public enum Manufacturer : Int {
-  case Digitrax = 0x00
-  case Unknown  = 0xff
-}
-
 public enum ProductCode : Int {
   
+  case LNRP             = 0x01
+  case UT4              = 0x04
+  case UT6              = 0x06
+  case DB210Opto        = 0x14
+  case DB210            = 0x15
+  case DB220            = 0x16
   case DCS210Plus       = 0x1a
   case DCS210           = 0x1b
   case DCS240           = 0x1c
   case PR3              = 0x23
   case PR4              = 0x24
+  case DT402            = 0x2a
   case DT500            = 0x32
+  case DCS51            = 0x33
+  case DCS52            = 0x34
+  case DT602            = 0x3e
+  case BXPA1            = 0x51
   case BXP88            = 0x58
   case LNWI             = 0x63
+  case UR92             = 0x5c
+  case UR93             = 0x5d
   case softwareThrottle = 0x7f
   case unknown          = 0xff
   
   func productName() -> String {
     switch self {
+    case .LNRP:
+      return "LNRP"
+    case .UT4:
+      return "UT4"
+    case .UT6:
+      return "UT6"
+    case .DB210:
+      return "DB210"
+    case .DB220:
+      return "DB220"
+    case .DB210Opto:
+      return "DB210OPTO"
     case .DCS210:
       return "DCS210"
     case .DCS210Plus:
       return "DCS210+"
     case .DCS240:
       return "DCS240"
+    case .DCS51:
+      return "DCS51"
+    case .DCS52:
+      return "DCS52"
     case .PR4:
       return "PR4"
     case .PR3:
       return "PR3"
+    case .DT402:
+      return "DT402"
+    case .DT602:
+      return "DT602"
     case .DT500:
       return "DT500"
+    case .BXPA1:
+      return "BXPA1"
     case .BXP88:
-      return  "BXP88"
+      return "BXP88"
     case .LNWI:
       return "LNWI"
+    case .UR92:
+      return "UR92"
+    case .UR93:
+      return "UR93"
+    case .softwareThrottle:
+      return "Software Throttle"
     default:
       return "Unknown Product"
     }
