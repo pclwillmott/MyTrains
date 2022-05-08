@@ -31,7 +31,24 @@ public typealias LocoNetDeviceAttributes = Set<LocoNetDeviceAttribute>
 
 public typealias LocoNetProduct = (id: Int, productName: String, description: String, approxDate: Int, productCode: Int, attributes: LocoNetDeviceAttributes)
 
-class LocoNetProducts {
+public class LocoNetProductDictionaryItem : EditorObject {
+
+  init(product: LocoNetProduct) {
+    self.product = product
+    super.init(primaryKey: product.id)
+  }
+  
+  private var product : LocoNetProduct
+  
+  override public func displayString() -> String {
+    return "Digitrax \(product.productName)"
+  }
+  
+}
+
+public class LocoNetProducts {
+
+  // MARK: Class Private Properties
   
   private static let products : [LocoNetProduct] = [
     (1, "CT4", "Quad Throttle", 1993, -1, [.Throttle]),
@@ -113,4 +130,67 @@ class LocoNetProducts {
     (77, "DS74", "Quad Switch Stationary Decoder", 2021,-1, [.StationaryDecoder]),
     (78, "DS78V", "Eight Servo LocoNet Stationary & Accessory decoder for turnout control", 2021,-1, [.StationaryDecoder]),
   ]
+  
+  private static var _productDictionary : [Int:LocoNetProduct]?
+  
+  // MARK: Class Public Properties
+  
+  public static var productDictionary : [Int:LocoNetProduct] {
+    
+    get {
+      
+      if let dictionary = _productDictionary {
+        return dictionary
+      }
+      
+      var dictionary : [Int:LocoNetProduct] = [:]
+      
+      for product in products {
+        dictionary[product.id] = product
+      }
+      
+      _productDictionary = dictionary
+      
+      return dictionary
+      
+    }
+    
+  }
+  
+  // MARK: Class Public Methods
+  
+  public static func product(id: Int) -> LocoNetProduct? {
+    
+    return productDictionary[id]
+    
+  }
+  
+  public static func computerInterfaces() -> [Int:LocoNetProduct] {
+    
+    var result : [Int:LocoNetProduct] = [:]
+    
+    for product in products {
+      
+      if product.attributes.contains(.ComputerInterface) {
+        result[product.id] = product
+      }
+    }
+    
+    return result
+    
+  }
+  
+  public static func productDictionary(attributes: LocoNetDeviceAttributes) -> [Int:LocoNetProductDictionaryItem] {
+    
+    var result : [Int:LocoNetProductDictionaryItem] = [:]
+    
+    for product in products {
+      if product.attributes.intersection(attributes) == attributes {
+        result[product.id] = LocoNetProductDictionaryItem(product: product)
+      }
+    }
+    
+    return result
+  }
+  
 }

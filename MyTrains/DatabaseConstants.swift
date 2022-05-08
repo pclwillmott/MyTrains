@@ -37,11 +37,13 @@ enum LAYOUT {
 enum NETWORK {
   static let NETWORK_ID                  = "NETWORK_ID"
   static let NETWORK_NAME                = "NETWORK_NAME"
-  static let COMMAND_STATION_ID          = "COMMAND_STATION_ID" // This is DEVICE.DEVICE_ID
+  static let LOCONET_DEVICE_ID           = "LOCONET_DEVICE_ID"
   static let LAYOUT_ID                   = "LAYOUT_ID"
   static let LOCONET_ID                  = "LOCONET_ID"
   static let DUPLEX_GROUP_NAME           = "DUPLEX_GROUP_NAME"
   static let DUPLEX_GROUP_PASSWORD       = "DUPLEX_GROUP_PASSWORD"
+  static let DUPLEX_GROUP_CHANNEL        = "DUPLEX_GROUP_CHANNEL"
+  static let DUPLEX_GROUP_ID             = "DUPLEX_GROUP_ID"
 }
 
 enum LOCONET_DEVICE {
@@ -58,6 +60,8 @@ enum LOCONET_DEVICE {
   static let OPTION_SWITCHES_3           = "OPTION_SWITCHES_3"
   static let DEVICE_PATH                 = "DEVICE_PATH"
   static let BAUD_RATE                   = "BAUD_RATE"
+  static let DEVICE_NAME                 = "DEVICE_NAME"
+  static let FLOW_CONTROL                = "FLOW_CONTROL"
 }
 
 enum ROLLING_STOCK {

@@ -32,9 +32,11 @@ class EditNetworksVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     
     editorView.tabView = self.tabView
     
-//    cboCommandStation.dataSource = cboCommandStationDS
-    
     cboLayout.dataSource = cboLayoutDS
+    
+    cboComputerInterfaceDS.dictionary = networkController.interfaceDevices
+    
+    cboComputerInterface.dataSource = cboComputerInterfaceDS
     
     editorView.dictionary = networkController.networks
     
@@ -42,27 +44,37 @@ class EditNetworksVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   
   // MARK: Private Properties
   
- /* private var cboCommandStationDS = ComboBoxDBDS(tableName: TABLE.COMMAND_STATION, codeColumn: COMMAND_STATION.COMMAND_STATION_ID, displayColumn: COMMAND_STATION.COMMAND_STATION_NAME, sortColumn: COMMAND_STATION.COMMAND_STATION_NAME)
-  */
+  private var cboComputerInterfaceDS = ComboBoxDictDS()
+
   private var cboLayoutDS = ComboBoxDBDS(tableName: TABLE.LAYOUT, codeColumn: LAYOUT.LAYOUT_ID, displayColumn: LAYOUT.LAYOUT_NAME, sortColumn: LAYOUT.LAYOUT_NAME)
   
   // MARK: DBEditorView Delegate Methods
  
   func clearFields(dbEditorView:DBEditorView) {
     txtNetworkName.stringValue = ""
-    cboCommandStation.deselectItem(at: cboCommandStation.indexOfSelectedItem)
     cboLayout.deselectItem(at: cboLayout.indexOfSelectedItem)
+    cboComputerInterface.deselectItem(at: cboComputerInterface.indexOfSelectedItem)
+    txtGroupName.stringValue = ""
+    txtGroupPassword.stringValue = "0000"
+    txtGroupChannel.integerValue = 11
+    txtGroupId.integerValue = 0
+    txtLocoNetId.integerValue = 0
   }
   
   func setupFields(dbEditorView: DBEditorView, editorObject: EditorObject) {
     if let network = editorObject as? Network {
       txtNetworkName.stringValue = network.networkName
- /*     if let csIndex = cboCommandStationDS.indexOfItemWithCodeValue(code: network.commandStationId) {
-        cboCommandStation.selectItem(at: csIndex)
-      } */
       if let loIndex = cboLayoutDS.indexOfItemWithCodeValue(code: network.layoutId) {
         cboLayout.selectItem(at: loIndex)
       }
+      if let index = cboComputerInterfaceDS.indexWithKey(key: network.locoNetDeviceId) {
+        cboComputerInterface.selectItem(at: index)
+      }
+      txtGroupName.stringValue = network.duplexGroupName
+      txtGroupPassword.stringValue = network.duplexGroupPassword
+      txtGroupChannel.integerValue = network.duplexGroupChannel
+      txtGroupId.integerValue = network.duplexGroupId
+      txtLocoNetId.integerValue = network.locoNetId
     }
   }
   
@@ -71,17 +83,31 @@ class EditNetworksVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
       txtNetworkName.becomeFirstResponder()
       return "The network must have a name."
     }
-    if cboLayout.indexOfSelectedItem == -1 {
+    if cboLayout.stringValue == "" {
       cboLayout.becomeFirstResponder()
       return "The network must belong to a layout."
+    }
+    if cboComputerInterface.stringValue == "" {
+      cboComputerInterface.becomeFirstResponder()
+      return "The network must have a computer interface selected."
     }
     return nil
   }
   
   func setFields(network:Network) {
     network.networkName = txtNetworkName.stringValue
- //   network.commandStationId = cboCommandStationDS.codeForItemAt(index: cboCommandStation.indexOfSelectedItem) ?? -1
     network.layoutId = cboLayoutDS.codeForItemAt(index: cboLayout.indexOfSelectedItem) ?? -1
+    if let editorObject = cboComputerInterfaceDS.editorObjectAt(index: cboComputerInterface.indexOfSelectedItem) {
+      network.locoNetDeviceId = editorObject.primaryKey
+    }
+    else {
+      network.locoNetDeviceId = -1
+    }
+    network.duplexGroupName = txtGroupName.stringValue
+    network.duplexGroupPassword = txtGroupPassword.stringValue
+    network.duplexGroupChannel = txtGroupChannel.integerValue
+    network.duplexGroupId = txtGroupId.integerValue
+    network.locoNetId = txtLocoNetId.integerValue
     network.save()
   }
   
@@ -126,13 +152,43 @@ class EditNetworksVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     editorView.modified = true
   }
   
-  @IBOutlet weak var cboCommandStation: NSComboBox!
+  @IBOutlet weak var tabView: NSTabView!
   
-  @IBAction func cboCommandStationAction(_ sender: NSComboBox) {
+  @IBOutlet weak var cboComputerInterface: NSComboBox!
+  
+  @IBAction func cboComputerInterfaceAction(_ sender: NSComboBox) {
     editorView.modified = true
   }
   
-  @IBOutlet weak var tabView: NSTabView!
+  @IBOutlet weak var txtGroupName: NSTextField!
+  
+  @IBAction func txtGroupNameAction(_ sender: NSTextField) {
+    editorView.modified = true
+  }
+  
+  @IBOutlet weak var txtGroupPassword: NSTextField!
+  
+  @IBAction func txtGroupPasswordAction(_ sender: NSTextField) {
+    editorView.modified = true
+  }
+  
+  @IBOutlet weak var txtGroupChannel: NSTextField!
+  
+  @IBAction func txtGroupChannelAction(_ sender: NSTextField) {
+    editorView.modified = true
+  }
+  
+  @IBOutlet weak var txtGroupId: NSTextField!
+  
+  @IBAction func txtGroupIdAction(_ sender: NSTextField) {
+    editorView.modified = true
+  }
+  
+  @IBOutlet weak var txtLocoNetId: NSTextField!
+  
+  @IBAction func txtLocoNetIdAction(_ sender: NSTextField) {
+    editorView.modified = true
+  }
   
 }
 

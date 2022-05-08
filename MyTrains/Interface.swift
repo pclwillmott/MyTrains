@@ -7,19 +7,7 @@
 
 import Foundation
 import ORSSerial
-
-public enum BaudRate : NSNumber {
-  case br19200  =  19200
-  case br28800  =  28800
-  case br38400  =  38400
-  case br57600  =  57600
-  case br76800  =  76800
-  case br115200 = 115200
-  case br230400 = 230400
-  case br460800 = 460800
-  case br576000 = 576000
-  case br921600 = 921600
-}
+import Cocoa
 
 public class Interface : LocoNetDevice, ORSSerialPortDelegate {
   
@@ -116,7 +104,7 @@ public class Interface : LocoNetDevice, ORSSerialPortDelegate {
     
     if let port = serialPort {
       port.delegate = _delegate
-      port.baudRate = baudRate.rawValue
+      port.baudRate = baudRate.baudRate
       port.numberOfDataBits = 8
       port.numberOfStopBits = 1
       port.parity = .none

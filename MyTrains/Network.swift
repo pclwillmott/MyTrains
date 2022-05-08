@@ -20,12 +20,6 @@ public class Network : EditorObject {
     super.init(primaryKey: -1)
   }
   
-  // MARK: Destructors
-  
-  deinit {
-    
-  }
-  
   // MARK: Public properties
   
   public var networkName : String = "" {
@@ -34,7 +28,7 @@ public class Network : EditorObject {
     }
   }
   
-  public var commandStationId : Int = -1 {
+  public var locoNetDeviceId : Int = -1 {
     didSet {
       modified = true
     }
@@ -64,11 +58,19 @@ public class Network : EditorObject {
     }
   }
   
-  public var commandStation : CommandStation? {
-    get {
-      return networkController.commandStations[commandStationId]
+  public var duplexGroupChannel : Int = -1 {
+    didSet {
+      modified = true
     }
   }
+  
+  public var duplexGroupId : Int = -1 {
+    didSet {
+      modified = true
+    }
+  }
+  
+  public var commandStation : CommandStation?
   
   // MARK: Public Methods
   
@@ -77,9 +79,9 @@ public class Network : EditorObject {
   }
   
   // MARK: Database Methods
+
+  private func decode(sqliteDataReader: SqliteDataReader?) {
   
-  private func decode(sqliteDataReader:SqliteDataReader?) {
- 
     if let reader = sqliteDataReader {
       
       primaryKey = reader.getInt(index: 0)!
@@ -89,7 +91,7 @@ public class Network : EditorObject {
       }
       
       if !reader.isDBNull(index: 2) {
-        commandStationId = reader.getInt(index: 2)!
+        locoNetDeviceId = reader.getInt(index: 2)!
       }
       
       if !reader.isDBNull(index: 3) {
@@ -108,6 +110,14 @@ public class Network : EditorObject {
         duplexGroupPassword = reader.getString(index: 6)!
       }
       
+      if !reader.isDBNull(index: 7) {
+        duplexGroupChannel = reader.getInt(index: 7)!
+      }
+      
+      if !reader.isDBNull(index: 8) {
+        duplexGroupId = reader.getInt(index: 8)!
+      }
+      
     }
     
     modified = false
@@ -124,30 +134,36 @@ public class Network : EditorObject {
         sql = "INSERT INTO [\(TABLE.NETWORK)] (" +
         "[\(NETWORK.NETWORK_ID)], " +
         "[\(NETWORK.NETWORK_NAME)], " +
-        "[\(NETWORK.COMMAND_STATION_ID)], " +
+        "[\(NETWORK.LOCONET_DEVICE_ID)], " +
         "[\(NETWORK.LAYOUT_ID)], " +
         "[\(NETWORK.LOCONET_ID)], " +
         "[\(NETWORK.DUPLEX_GROUP_NAME)], " +
-        "[\(NETWORK.DUPLEX_GROUP_PASSWORD)]" +
+        "[\(NETWORK.DUPLEX_GROUP_PASSWORD)]," +
+        "[\(NETWORK.DUPLEX_GROUP_CHANNEL)]," +
+        "[\(NETWORK.DUPLEX_GROUP_ID)]" +
         ") VALUES (" +
         "@\(NETWORK.NETWORK_ID), " +
         "@\(NETWORK.NETWORK_NAME), " +
-        "@\(NETWORK.COMMAND_STATION_ID), " +
+        "@\(NETWORK.LOCONET_DEVICE_ID), " +
         "@\(NETWORK.LAYOUT_ID)," +
         "@\(NETWORK.LOCONET_ID)," +
         "@\(NETWORK.DUPLEX_GROUP_NAME)," +
-        "@\(NETWORK.DUPLEX_GROUP_PASSWORD)" +
+        "@\(NETWORK.DUPLEX_GROUP_PASSWORD), " +
+        "@\(NETWORK.DUPLEX_GROUP_CHANNEL), " +
+        "@\(NETWORK.DUPLEX_GROUP_ID)" +
         ")"
         primaryKey = Database.nextCode(tableName: TABLE.NETWORK, primaryKey: NETWORK.NETWORK_ID)!
       }
       else {
         sql = "UPDATE [\(TABLE.NETWORK)] SET " +
         "[\(NETWORK.NETWORK_NAME)] = @\(NETWORK.NETWORK_NAME), " +
-        "[\(NETWORK.COMMAND_STATION_ID)] = @\(NETWORK.COMMAND_STATION_ID), " +
+        "[\(NETWORK.LOCONET_DEVICE_ID)] = @\(NETWORK.LOCONET_DEVICE_ID), " +
         "[\(NETWORK.LAYOUT_ID)] = @\(NETWORK.LAYOUT_ID), " +
         "[\(NETWORK.LOCONET_ID)] = @\(NETWORK.LOCONET_ID), " +
         "[\(NETWORK.DUPLEX_GROUP_NAME)] = @\(NETWORK.DUPLEX_GROUP_NAME), " +
-        "[\(NETWORK.DUPLEX_GROUP_PASSWORD)] = @\(NETWORK.DUPLEX_GROUP_PASSWORD)" +
+        "[\(NETWORK.DUPLEX_GROUP_PASSWORD)] = @\(NETWORK.DUPLEX_GROUP_PASSWORD), " +
+        "[\(NETWORK.DUPLEX_GROUP_CHANNEL)] = @\(NETWORK.DUPLEX_GROUP_CHANNEL), " +
+        "[\(NETWORK.DUPLEX_GROUP_ID)] = @\(NETWORK.DUPLEX_GROUP_ID) " +
         "WHERE [\(NETWORK.NETWORK_ID)] = @\(NETWORK.NETWORK_ID)"
       }
 
@@ -165,11 +181,13 @@ public class Network : EditorObject {
       
       cmd.parameters.addWithValue(key: "@\(NETWORK.NETWORK_ID)", value: primaryKey)
       cmd.parameters.addWithValue(key: "@\(NETWORK.NETWORK_NAME)", value: networkName)
-      cmd.parameters.addWithValue(key: "@\(NETWORK.COMMAND_STATION_ID)", value: commandStationId)
+      cmd.parameters.addWithValue(key: "@\(NETWORK.LOCONET_DEVICE_ID)", value: locoNetDeviceId)
       cmd.parameters.addWithValue(key: "@\(NETWORK.LAYOUT_ID)", value: layoutId)
       cmd.parameters.addWithValue(key: "@\(NETWORK.LOCONET_ID)", value: locoNetId)
       cmd.parameters.addWithValue(key: "@\(NETWORK.DUPLEX_GROUP_NAME)", value: duplexGroupName)
       cmd.parameters.addWithValue(key: "@\(NETWORK.DUPLEX_GROUP_PASSWORD)", value: duplexGroupPassword)
+      cmd.parameters.addWithValue(key: "@\(NETWORK.DUPLEX_GROUP_CHANNEL)", value: duplexGroupChannel)
+      cmd.parameters.addWithValue(key: "@\(NETWORK.DUPLEX_GROUP_ID)", value: duplexGroupId)
 
       _ = cmd.executeNonQuery()
 
@@ -190,11 +208,13 @@ public class Network : EditorObject {
       return
         "[\(NETWORK.NETWORK_ID)], " +
         "[\(NETWORK.NETWORK_NAME)], " +
-        "[\(NETWORK.COMMAND_STATION_ID)], " +
+        "[\(NETWORK.LOCONET_DEVICE_ID)], " +
         "[\(NETWORK.LAYOUT_ID)], " +
         "[\(NETWORK.LOCONET_ID)], " +
         "[\(NETWORK.DUPLEX_GROUP_NAME)], " +
-        "[\(NETWORK.DUPLEX_GROUP_PASSWORD)]"
+        "[\(NETWORK.DUPLEX_GROUP_PASSWORD)], " +
+        "[\(NETWORK.DUPLEX_GROUP_CHANNEL)], " +
+        "[\(NETWORK.DUPLEX_GROUP_ID)]"
     }
   }
   

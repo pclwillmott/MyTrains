@@ -129,6 +129,12 @@
                                                 <action selector="mnuEditLayoutsAction:" target="Voe-Tx-rLC" id="N5f-i0-p1e"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Computer Interfaces" id="eCk-wo-cgC">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="mnuEditComputerInterfaces:" target="Voe-Tx-rLC" id="OKg-Lb-Ytc"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="Networks" id="zBk-bi-HQ8">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>

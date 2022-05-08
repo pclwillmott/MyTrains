@@ -20,12 +20,6 @@ public class Layout : EditorObject {
     super.init(primaryKey: -1)
   }
   
-  // MARK: Destructors
-  
-  deinit {
-    
-  }
-  
   // MARK: Public properties
   
   override public func displayString() -> String {

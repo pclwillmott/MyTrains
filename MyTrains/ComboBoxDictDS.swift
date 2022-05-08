@@ -10,6 +10,8 @@ import Cocoa
 
 class ComboBoxDictDS : NSObject, NSComboBoxDataSource {
   
+  // MARK: Constructors
+  
   override init() {
     super.init()
   }
@@ -18,12 +20,13 @@ class ComboBoxDictDS : NSObject, NSComboBoxDataSource {
     _items.removeAll()
   }
   
-  // Private Properties
+  // MARK: Private Properties
   
   private var _dictionary : [Int:Any] = [:]
+  
   private var _items : [EditorObject] = []
   
-  // Public Properties
+  // MARK: Public Properties
   
   public var dictionary : [Int:Any] {
     get {
@@ -44,16 +47,16 @@ class ComboBoxDictDS : NSObject, NSComboBoxDataSource {
     }
   }
   
-  // Public Methods
+  // MARK: Public Methods
   
-  func editorObjectAt(index: Int) -> EditorObject? {
+  public func editorObjectAt(index: Int) -> EditorObject? {
     if index < 0 || index >= _items.count {
       return nil
     }
     return _items[index]
   }
   
-  func indexWithKey(key: Int) -> Int? {
+  public func indexWithKey(key: Int) -> Int? {
     var index : Int = 0
     while index < _items.count {
       let item = _items[index]

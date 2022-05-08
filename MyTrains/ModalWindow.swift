@@ -19,6 +19,7 @@ enum AppStoryboard : String {
   case EditTrains                  = "EditTrains"
   case EditSensors                 = "EditSensors"
   case EditSwitches                = "EditSwitches"
+  case EditInterfaces              = "EditInterfaces"
   case Throttle                    = "Throttle"
   case ProgramDecoderAddress       = "ProgramDecoderAddress"
   case SlotView                    = "SlotView"
@@ -43,6 +44,7 @@ let storyboardLookup            : [String:AppStoryboard] = [
   "EditTrains"                  : AppStoryboard.EditTrains,
   "EditSensors"                 : AppStoryboard.EditSensors,
   "EditSwitches"                : AppStoryboard.EditSwitches,
+  "EditInterfaces"              : AppStoryboard.EditInterfaces,
   "Throttle"                    : AppStoryboard.Throttle,
   "ProgramDecoderAddress"       : AppStoryboard.ProgramDecoderAddress,
   "SlotView"                    : AppStoryboard.SlotView,
@@ -72,6 +74,7 @@ enum ModalWindow : String {
   case EditTrains                  = "EditTrains"
   case EditSensors                 = "EditSensors"
   case EditSwitches                = "EditSwitches"
+  case EditInterfaces              = "EditInterfaces"
   case Throttle                    = "Throttle"
   case ProgramDecoderAddress       = "ProgramDecoderAddress"
   case SlotView                    = "SlotView"

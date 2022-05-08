@@ -15,7 +15,11 @@ public class LocoNetDevice : EditorObject {
     super.init(primaryKey: -1)
     decode(sqliteDataReader: reader)
   }
-  
+
+  override init(primaryKey:Int) {
+    super.init(primaryKey: primaryKey)
+  }
+
   // MARK: Public Properties
   
   public var networkId : Int = -1 {
@@ -54,6 +58,12 @@ public class LocoNetDevice : EditorObject {
     }
   }
   
+  public var locoNetProductInfo : LocoNetProduct? {
+    get {
+      return LocoNetProducts.product(id: locoNetProductId)
+    }
+  }
+  
   public var optionSwitches0 : Int64 = 0 {
     didSet {
       modified = true
@@ -89,8 +99,26 @@ public class LocoNetDevice : EditorObject {
       modified = true
     }
   }
+
+  public var deviceName : String = "" {
+    didSet {
+      modified = true
+    }
+  }
   
-  // MARK: Database Methods
+  public var flowControl : FlowControl = .noFlowControl {
+    didSet {
+      modified = true
+    }
+  }
+  
+  // MARK: Public Methods
+  
+  override public func displayString() -> String {
+    return deviceName
+  }
+  
+// MARK: Database Methods
   
   private func decode(sqliteDataReader:SqliteDataReader?) {
     
@@ -143,7 +171,15 @@ public class LocoNetDevice : EditorObject {
       }
 
       if !reader.isDBNull(index: 12) {
-        baudRate = BaudRate(rawValue: NSNumber(nonretainedObject: reader.getInt(index: 12)!)) ?? .br57600
+        baudRate = BaudRate(rawValue: reader.getInt(index: 12)!) ?? .br57600
+      }
+
+      if !reader.isDBNull(index: 13) {
+        deviceName = reader.getString(index: 13)!
+      }
+
+      if !reader.isDBNull(index: 14) {
+        flowControl = FlowControl(rawValue: reader.getInt(index: 14)!) ?? .noFlowControl
       }
 
     }
@@ -172,7 +208,9 @@ public class LocoNetDevice : EditorObject {
         "[\(LOCONET_DEVICE.OPTION_SWITCHES_2)], " +
         "[\(LOCONET_DEVICE.OPTION_SWITCHES_3)], " +
         "[\(LOCONET_DEVICE.DEVICE_PATH)], " +
-        "[\(LOCONET_DEVICE.BAUD_RATE)]" +
+        "[\(LOCONET_DEVICE.BAUD_RATE)], " +
+        "[\(LOCONET_DEVICE.DEVICE_NAME)], " +
+        "[\(LOCONET_DEVICE.FLOW_CONTROL)]" +
         ") VALUES (" +
         "@\(LOCONET_DEVICE.LOCONET_DEVICE_ID), " +
         "@\(LOCONET_DEVICE.NETWORK_ID), " +
@@ -186,7 +224,9 @@ public class LocoNetDevice : EditorObject {
         "@\(LOCONET_DEVICE.OPTION_SWITCHES_2), " +
         "@\(LOCONET_DEVICE.OPTION_SWITCHES_3), " +
         "@\(LOCONET_DEVICE.DEVICE_PATH), " +
-        "@\(LOCONET_DEVICE.BAUD_RATE)" +
+        "@\(LOCONET_DEVICE.BAUD_RATE), " +
+        "@\(LOCONET_DEVICE.DEVICE_NAME), " +
+        "@\(LOCONET_DEVICE.FLOW_CONTROL)" +
         ")"
         primaryKey = Database.nextCode(tableName: TABLE.LOCONET_DEVICE, primaryKey: LOCONET_DEVICE.LOCONET_DEVICE_ID)!
       }
@@ -203,7 +243,9 @@ public class LocoNetDevice : EditorObject {
         "[\(LOCONET_DEVICE.OPTION_SWITCHES_2)] = @\(LOCONET_DEVICE.OPTION_SWITCHES_2), " +
         "[\(LOCONET_DEVICE.OPTION_SWITCHES_3)] = @\(LOCONET_DEVICE.OPTION_SWITCHES_3), " +
         "[\(LOCONET_DEVICE.DEVICE_PATH)] = @\(LOCONET_DEVICE.DEVICE_PATH), " +
-        "[\(LOCONET_DEVICE.BAUD_RATE)] = @\(LOCONET_DEVICE.BAUD_RATE) " +
+        "[\(LOCONET_DEVICE.BAUD_RATE)] = @\(LOCONET_DEVICE.BAUD_RATE), " +
+        "[\(LOCONET_DEVICE.DEVICE_NAME)] = @\(LOCONET_DEVICE.DEVICE_NAME), " +
+        "[\(LOCONET_DEVICE.FLOW_CONTROL)] = @\(LOCONET_DEVICE.FLOW_CONTROL) " +
         "WHERE [\(LOCONET_DEVICE.LOCONET_DEVICE_ID)] = @\(LOCONET_DEVICE.LOCONET_DEVICE_ID)"
       }
 
@@ -231,7 +273,9 @@ public class LocoNetDevice : EditorObject {
       cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.OPTION_SWITCHES_2)", value: optionSwitches2)
       cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.OPTION_SWITCHES_3)", value: optionSwitches3)
       cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.DEVICE_PATH)", value: devicePath)
-      cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.BAUD_RATE)", value: Int(truncating: baudRate.rawValue))
+      cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.BAUD_RATE)", value: baudRate.rawValue)
+      cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.DEVICE_NAME)", value: deviceName)
+      cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.FLOW_CONTROL)", value: flowControl.rawValue)
 
       _ = cmd.executeNonQuery()
 
@@ -262,8 +306,54 @@ public class LocoNetDevice : EditorObject {
         "[\(LOCONET_DEVICE.OPTION_SWITCHES_2)], " +
         "[\(LOCONET_DEVICE.OPTION_SWITCHES_3)], " +
         "[\(LOCONET_DEVICE.DEVICE_PATH)], " +
-        "[\(LOCONET_DEVICE.BAUD_RATE)]"
+        "[\(LOCONET_DEVICE.BAUD_RATE)], " +
+        "[\(LOCONET_DEVICE.DEVICE_NAME)], " +
+        "[\(LOCONET_DEVICE.FLOW_CONTROL)]"
     }
   }
 
+  public static var locoNetDevices : [Int:LocoNetDevice] {
+    
+    get {
+    
+      let conn = Database.getConnection()
+      
+      let shouldClose = conn.state != .Open
+       
+      if shouldClose {
+        _ = conn.open()
+      }
+       
+      let cmd = conn.createCommand()
+       
+      cmd.commandText = "SELECT \(columnNames) FROM [\(TABLE.LOCONET_DEVICE)] ORDER BY [\(NETWORK.LOCONET_DEVICE_ID)]"
+
+      var result : [Int:LocoNetDevice] = [:]
+      
+      if let reader = cmd.executeReader() {
+           
+        while reader.read() {
+          let device = LocoNetDevice(reader: reader)
+          result[device.primaryKey] = device
+        }
+           
+        reader.close()
+           
+      }
+      
+      if shouldClose {
+        conn.close()
+      }
+
+      return result
+      
+    }
+    
+  }
+  
+  public static func delete(primaryKey: Int) {
+    let sql = "DELETE FROM [\(TABLE.NETWORK)] WHERE [\(NETWORK.NETWORK_ID)] = \(primaryKey)"
+    Database.execute(commands: [sql])
+  }
+  
 }

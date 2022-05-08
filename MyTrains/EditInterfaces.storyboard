@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="20037"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Window Controller-->
+        <scene sceneID="XNF-Of-MEa">
+            <objects>
+                <windowController storyboardIdentifier="EditInterfacesWC" id="7xy-4E-UgU" sceneMemberID="viewController">
+                    <window key="window" title="Edit Interface" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="2qY-Ek-xNr">
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+                        <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+                        <rect key="contentRect" x="268" y="340" width="707" height="378"/>
+                        <rect key="screenRect" x="0.0" y="0.0" width="1792" height="1120"/>
+                        <value key="minSize" type="size" width="707" height="378"/>
+                        <view key="contentView" id="WtJ-C4-XD8">
+                            <rect key="frame" x="0.0" y="0.0" width="707" height="378"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </view>
+                        <connections>
+                            <outlet property="delegate" destination="7xy-4E-UgU" id="wOo-M9-ydQ"/>
+                        </connections>
+                    </window>
+                    <connections>
+                        <segue destination="LdG-WE-utP" kind="relationship" relationship="window.shadowedContentViewController" id="G5u-4N-vD4"/>
+                    </connections>
+                </windowController>
+                <customObject id="ZLF-UI-wWY" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-30" y="45"/>
+        </scene>
+        <!--Edit InterfacesVC-->
+        <scene sceneID="YLH-7t-4aj">
+            <objects>
+                <viewController id="LdG-WE-utP" customClass="EditInterfacesVC" customModule="MyTrains" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="9AD-cA-dTP">
+                        <rect key="frame" x="0.0" y="0.0" width="707" height="378"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HpE-sY-SGv" customClass="DBEditorView" customModule="MyTrains" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="707" height="378"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <subviews>
+                                    <tabView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sof-fJ-m9z">
+                                        <rect key="frame" x="13" y="10" width="594" height="326"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <font key="font" metaFont="system"/>
+                                        <tabViewItems>
+                                            <tabViewItem label="General" identifier="" id="xZh-Lz-bte">
+                                                <view key="view" id="laR-7Q-wWj">
+                                                    <rect key="frame" x="10" y="33" width="574" height="280"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                    <subviews>
+                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yhx-SE-Fc0">
+                                                            <rect key="frame" x="15" y="261" width="30" height="16"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Port" id="noB-Jr-FHa">
+                                                                <font key="font" usesAppearanceFont="YES"/>
+                                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                            </textFieldCell>
+                                                        </textField>
+                                                        <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="T1m-40-S3E">
+                                                            <rect key="frame" x="17" y="227" width="543" height="25"/>
+                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                            <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="Txd-xn-a9g">
+                                                                <font key="font" metaFont="system"/>
+                                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                            </comboBoxCell>
+                                                            <connections>
+                                                                <action selector="cboPortAction:" target="LdG-WE-utP" id="Edg-Hu-f8t"/>
+                                                            </connections>
+                                                        </comboBox>
+                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aEP-MN-BXt">
+                                                            <rect key="frame" x="15" y="207" width="79" height="16"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Device Type" id="pyz-CR-csF">
+                                                                <font key="font" metaFont="system"/>
+                                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                            </textFieldCell>
+                                                        </textField>
+                                                        <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3Mc-sd-EPN">
+                                                            <rect key="frame" x="17" y="173" width="543" height="25"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="5" id="fzT-rr-h13">
+                                                                <font key="font" metaFont="system"/>
+                                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                            </comboBoxCell>
+                                                            <connections>
+                                                                <action selector="cboDeviceTypeAction:" target="LdG-WE-utP" id="UQw-TX-i6x"/>
+                                                            </connections>
+                                                        </comboBox>
+                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JaV-qR-Jej">
+                                                            <rect key="frame" x="15" y="153" width="97" height="16"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Interface Name" id="egI-s6-vDF">
+                                                                <font key="font" metaFont="system"/>
+                                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                            </textFieldCell>
+                                                        </textField>
+                                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wom-jA-Zzc">
+                                                            <rect key="frame" x="17" y="124" width="540" height="21"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="eTn-bc-mVx">
+                                                                <font key="font" metaFont="system"/>
+                                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                            </textFieldCell>
+                                                            <connections>
+                                                                <action selector="txtInterfaceNameAction:" target="LdG-WE-utP" id="XTz-QN-Wds"/>
+                                                            </connections>
+                                                        </textField>
+                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yZl-rd-d35">
+                                                            <rect key="frame" x="15" y="100" width="59" height="16"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Baudrate" id="7Cg-cP-kaJ">
+                                                                <font key="font" metaFont="system"/>
+                                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                            </textFieldCell>
+                                                        </textField>
+                                                        <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VGX-fK-DU2">
+                                                            <rect key="frame" x="17" y="66" width="161" height="25"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="RKf-lW-rFl">
+                                                                <font key="font" metaFont="system"/>
+                                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                            </comboBoxCell>
+                                                            <connections>
+                                                                <action selector="cboBaudRateAction:" target="LdG-WE-utP" id="BVb-W2-Dj1"/>
+                                                            </connections>
+                                                        </comboBox>
+                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="W30-BJ-kNb">
+                                                            <rect key="frame" x="15" y="46" width="80" height="16"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Flow Control" id="Yjx-bi-OaU">
+                                                                <font key="font" metaFont="system"/>
+                                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                            </textFieldCell>
+                                                        </textField>
+                                                        <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="msQ-J7-CaY">
+                                                            <rect key="frame" x="17" y="12" width="161" height="25"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="KAb-26-Krf">
+                                                                <font key="font" metaFont="system"/>
+                                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                <objectValues>
+                                                                    <string>Item 1</string>
+                                                                    <string>Item 2</string>
+                                                                    <string>Item 3</string>
+                                                                </objectValues>
+                                                            </comboBoxCell>
+                                                            <connections>
+                                                                <action selector="cboFlowControlAction:" target="LdG-WE-utP" id="e59-R0-U4K"/>
+                                                            </connections>
+                                                        </comboBox>
+                                                    </subviews>
+                                                </view>
+                                            </tabViewItem>
+                                        </tabViewItems>
+                                    </tabView>
+                                </subviews>
+                            </customView>
+                        </subviews>
+                    </view>
+                    <connections>
+                        <outlet property="cboBaudrate" destination="VGX-fK-DU2" id="Fqi-Lp-NH8"/>
+                        <outlet property="cboDeviceType" destination="3Mc-sd-EPN" id="7xk-4K-rNS"/>
+                        <outlet property="cboFlowControl" destination="msQ-J7-CaY" id="4qd-lZ-uMj"/>
+                        <outlet property="cboPort" destination="T1m-40-S3E" id="Otq-By-bPe"/>
+                        <outlet property="editorView" destination="HpE-sY-SGv" id="38x-vN-1R3"/>
+                        <outlet property="tabView" destination="sof-fJ-m9z" id="IxW-If-aLP"/>
+                        <outlet property="txtInterfaceName" destination="wom-jA-Zzc" id="MyA-vh-hFF"/>
+                    </connections>
+                </viewController>
+                <customObject id="9Ox-vp-edb" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="790.5" y="68"/>
+        </scene>
+    </scenes>
+</document>

@@ -53,6 +53,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     ModalWindow.EditLayouts.runModel()
   }
   
+  @IBAction func mnuEditComputerInterfaces(_ sender: NSMenuItem) {
+    ModalWindow.EditInterfaces.runModel()
+  }
+  
   @IBAction func mnuEditNetworksAction(_ sender: NSMenuItem) {
     ModalWindow.EditNetworks.runModel()
   }

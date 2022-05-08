@@ -84,6 +84,29 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
   public var locomotives : [Int:Locomotive] = [:] // Locomotive.locomotives
 
   public var commandStations : [Int:CommandStation] = [:] // CommandStation.commandStationsDictionary
+  
+  public var locoNetDevices : [Int:LocoNetDevice] = LocoNetDevice.locoNetDevices
+  
+  public var interfaceDevices : [Int:LocoNetDevice] {
+    
+    get {
+      
+      var result : [Int:LocoNetDevice] = [:]
+      
+      for kv in locoNetDevices {
+        let device = kv.value
+        if let info = device.locoNetProductInfo {
+          if info.attributes.contains(.ComputerInterface) {
+            result[device.primaryKey] = device
+          }
+        }
+      }
+      
+      return result
+      
+    }
+    
+  }
 
   public var layoutId : Int {
     get {
@@ -218,9 +241,9 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
   public func powerOn() {
     if let lo = layout {
       for network in lo.networks {
-        if let cs = commandStations[network.commandStationId] {
-          cs.powerOn()
-        }
+//        if let cs = commandStations[network.commandStationId] {
+  //        cs.powerOn()
+    //    }
       }
     }
   }
@@ -228,9 +251,9 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
   public func powerOff() {
     if let lo = layout {
       for network in lo.networks {
-        if let cs = commandStations[network.commandStationId] {
-          cs.powerOff()
-        }
+  //      if let cs = commandStations[network.commandStationId] {
+    //      cs.powerOff()
+      //  }
       }
     }
   }
@@ -238,9 +261,9 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
   public func powerIdle() {
     if let lo = layout {
       for network in lo.networks {
-        if let cs = commandStations[network.commandStationId] {
-          cs.powerIdle()
-        }
+//        if let cs = commandStations[network.commandStationId] {
+  //        cs.powerIdle()
+    //    }
       }
     }
   }
@@ -262,6 +285,16 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
   
   public func removeNetwork(primaryKey:Int) {
     networks.removeValue(forKey: primaryKey)
+    networkControllerUpdated()
+  }
+  
+  public func addDevice(device: LocoNetDevice) {
+    locoNetDevices[device.primaryKey] = device
+    networkControllerUpdated()
+  }
+  
+  public func removeDevice(primaryKey:Int) {
+    locoNetDevices.removeValue(forKey: primaryKey)
     networkControllerUpdated()
   }
   

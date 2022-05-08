@@ -62,33 +62,38 @@ class Database {
             "CREATE TABLE [\(TABLE.LAYOUT)] (" +
               "[\(LAYOUT.LAYOUT_ID)]          INT PRIMARY KEY," +
               "[\(LAYOUT.LAYOUT_NAME)]        TEXT NOT NULL," +
-              "[\(LAYOUT.LAYOUT_DESCRIPTION)] TEXT," +
-              "[\(LAYOUT.LAYOUT_SCALE)]       REAL" +
+              "[\(LAYOUT.LAYOUT_DESCRIPTION)] TEXT NOT NULL," +
+              "[\(LAYOUT.LAYOUT_SCALE)]       REAL NOT NULL" +
             ")",
 
             "CREATE TABLE [\(TABLE.NETWORK)] (" +
               "[\(NETWORK.NETWORK_ID)]            INT PRIMARY KEY," +
               "[\(NETWORK.NETWORK_NAME)]          TEXT NOT NULL," +
-              "[\(NETWORK.COMMAND_STATION_ID)]    INT," +
-              "[\(NETWORK.LOCONET_ID)]            INT," +
-              "[\(NETWORK.DUPLEX_GROUP_NAME)]     TEXT," +
-              "[\(NETWORK.DUPLEX_GROUP_PASSWORD)] TEXT," +
-              "[\(NETWORK.LAYOUT_ID)]             INT" +
+              "[\(NETWORK.LOCONET_DEVICE_ID)]     INT NOT NULL," +
+              "[\(NETWORK.LAYOUT_ID)]             INT NOT NULL," +
+              "[\(NETWORK.LOCONET_ID)]            INT NOT NULL," +
+              "[\(NETWORK.DUPLEX_GROUP_NAME)]     TEXT NOT NULL," +
+              "[\(NETWORK.DUPLEX_GROUP_PASSWORD)] TEXT NOT NULL," +
+              "[\(NETWORK.DUPLEX_GROUP_CHANNEL)]  INT NOT NULL," +
+              "[\(NETWORK.DUPLEX_GROUP_ID)]       INT NOT NULL" +
             ")",
  
             "CREATE TABLE [\(TABLE.LOCONET_DEVICE)] (" +
-              "[\(LOCONET_DEVICE.LOCONET_DEVICE_ID)] INT PRIMARY KEY," +
-              "[\(LOCONET_DEVICE.NETWORK_ID)]        INT NOT NULL," +
-              "[\(LOCONET_DEVICE.SERIAL_NUMBER)]     INT NOT NULL," +
-              "[\(LOCONET_DEVICE.SOFTWARE_VERSION)]  REAL NOT NULL," +
-              "[\(LOCONET_DEVICE.HARDWARE_VERSION)]  REAL NOT NULL," +
-              "[\(LOCONET_DEVICE.BOARD_ID)]          INT NOT NULL," +
-              "[\(LOCONET_DEVICE.OPTION_SWITCHES_0)] INT NOT NULL," +
-              "[\(LOCONET_DEVICE.OPTION_SWITCHES_1)] INT NOT NULL," +
-              "[\(LOCONET_DEVICE.OPTION_SWITCHES_2)] INT NOT NULL," +
-              "[\(LOCONET_DEVICE.OPTION_SWITCHES_3)] INT NOT NULL," +
-              "[\(LOCONET_DEVICE.DEVICE_PATH)]       TEXT NOT NULL," +
-              "[\(LOCONET_DEVICE.BAUD_RATE)]         INT NOT NULL" +
+              "[\(LOCONET_DEVICE.LOCONET_DEVICE_ID)]  INT PRIMARY KEY," +
+              "[\(LOCONET_DEVICE.NETWORK_ID)]         INT NOT NULL," +
+              "[\(LOCONET_DEVICE.SERIAL_NUMBER)]      INT NOT NULL," +
+              "[\(LOCONET_DEVICE.SOFTWARE_VERSION)]   REAL NOT NULL," +
+              "[\(LOCONET_DEVICE.HARDWARE_VERSION)]   REAL NOT NULL," +
+              "[\(LOCONET_DEVICE.BOARD_ID)]           INT NOT NULL," +
+              "[\(LOCONET_DEVICE.LOCONET_PRODUCT_ID)] INT NOT NULL," +
+              "[\(LOCONET_DEVICE.OPTION_SWITCHES_0)]  INT NOT NULL," +
+              "[\(LOCONET_DEVICE.OPTION_SWITCHES_1)]  INT NOT NULL," +
+              "[\(LOCONET_DEVICE.OPTION_SWITCHES_2)]  INT NOT NULL," +
+              "[\(LOCONET_DEVICE.OPTION_SWITCHES_3)]  INT NOT NULL," +
+              "[\(LOCONET_DEVICE.DEVICE_PATH)]        TEXT NOT NULL," +
+              "[\(LOCONET_DEVICE.BAUD_RATE)]          INT NOT NULL," +
+              "[\(LOCONET_DEVICE.DEVICE_NAME)]        TEXT NOT NULL," +
+              "[\(LOCONET_DEVICE.FLOW_CONTROL)]       INT NOT NULL" +
             ")",
 
             "CREATE TABLE [\(TABLE.ROLLING_STOCK)] (" +
