@@ -19,143 +19,6 @@
 		DA1DA5EA28280EEE00E0F993 /* BaudRate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1DA5E928280EEE00E0F993 /* BaudRate.swift */; };
 		DA1DA5EC28280FCD00E0F993 /* FlowControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1DA5EB28280FCD00E0F993 /* FlowControl.swift */; };
 		DA1DA5EE28281E5500E0F993 /* ORSSerialPortManagerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1DA5ED28281E5500E0F993 /* ORSSerialPortManagerExtensions.swift */; };
-		DA1DA67928288CF800E0F993 /* Chapter1-LocoBinStateP2.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA5F028288CF800E0F993 /* Chapter1-LocoBinStateP2.tex */; };
-		DA1DA67A28288CF800E0F993 /* AppendixE.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA5F128288CF800E0F993 /* AppendixE.tex */; };
-		DA1DA67B28288CF800E0F993 /* Chapter1-LocoF14F20P2.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA5F228288CF800E0F993 /* Chapter1-LocoF14F20P2.tex */; };
-		DA1DA67C28288CF800E0F993 /* Chapter1-ProgCV.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA5F328288CF800E0F993 /* Chapter1-ProgCV.tex */; };
-		DA1DA67D28288CF800E0F993 /* AppendixD.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA5F428288CF800E0F993 /* AppendixD.tex */; };
-		DA1DA67E28288CF800E0F993 /* Chapter1-CommonCfgSlotDataP1.log in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA5F528288CF800E0F993 /* Chapter1-CommonCfgSlotDataP1.log */; };
-		DA1DA67F28288CF800E0F993 /* Chapter1-GetLocoSlotDataLAdrP2.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA5F628288CF800E0F993 /* Chapter1-GetLocoSlotDataLAdrP2.tex */; };
-		DA1DA68028288CF800E0F993 /* Chapter2-LocomotiveControl.aux in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA5F728288CF800E0F993 /* Chapter2-LocomotiveControl.aux */; };
-		DA1DA68128288CF800E0F993 /* Chapter1-Busy.log in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA5F828288CF800E0F993 /* Chapter1-Busy.log */; };
-		DA1DA68228288CF800E0F993 /* Chapter1-InterfaceData.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA5F928288CF800E0F993 /* Chapter1-InterfaceData.tex */; };
-		DA1DA68328288CF800E0F993 /* Chapter1-CommonLocoSlotDataP1.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA5FA28288CF800E0F993 /* Chapter1-CommonLocoSlotDataP1.tex */; };
-		DA1DA68428288CF800E0F993 /* Chapter1-ConsistDirF0F4.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA5FB28288CF800E0F993 /* Chapter1-ConsistDirF0F4.tex */; };
-		DA1DA68528288CF800E0F993 /* Chapter1-IMMPacket.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA5FC28288CF800E0F993 /* Chapter1-IMMPacket.tex */; };
-		DA1DA68628288CF800E0F993 /* Chapter1-GetLocoSlotDataLAdrP1.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA5FD28288CF800E0F993 /* Chapter1-GetLocoSlotDataLAdrP1.tex */; };
-		DA1DA68728288CF800E0F993 /* Chapter1-CommonCfgSlotDataP2.log in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA5FE28288CF800E0F993 /* Chapter1-CommonCfgSlotDataP2.log */; };
-		DA1DA68828288CF800E0F993 /* Chapter1-CommonLocoSlotDataP2.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA5FF28288CF800E0F993 /* Chapter1-CommonLocoSlotDataP2.tex */; };
-		DA1DA68928288CF800E0F993 /* Chapter1-IPLDataLoad.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA60028288CF800E0F993 /* Chapter1-IPLDataLoad.tex */; };
-		DA1DA68A28288CF800E0F993 /* Chapter1-GetLocoSlotDataSAdrP1.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA60128288CF800E0F993 /* Chapter1-GetLocoSlotDataSAdrP1.tex */; };
-		DA1DA68B28288CF800E0F993 /* Chapter1-NetworkProtocol.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA60228288CF800E0F993 /* Chapter1-NetworkProtocol.tex */; };
-		DA1DA68C28288CF800E0F993 /* AppendixC.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA60328288CF800E0F993 /* AppendixC.tex */; };
-		DA1DA68D28288CF800E0F993 /* Chapter1-LinkSlotsP1.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA60428288CF800E0F993 /* Chapter1-LinkSlotsP1.tex */; };
-		DA1DA68E28288CF800E0F993 /* AppendixB.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA60528288CF800E0F993 /* AppendixB.tex */; };
-		DA1DA68F28288CF800E0F993 /* Chapter9-Messages.aux in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA60628288CF800E0F993 /* Chapter9-Messages.aux */; };
-		DA1DA69028288CF800E0F993 /* GlossaryDefs.log in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA60728288CF800E0F993 /* GlossaryDefs.log */; };
-		DA1DA69128288CF800E0F993 /* Chapter1-TransRep.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA60828288CF800E0F993 /* Chapter1-TransRep.tex */; };
-		DA1DA69228288CF800E0F993 /* Chapter1-Reset.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA60928288CF800E0F993 /* Chapter1-Reset.tex */; };
-		DA1DA69328288CF800E0F993 /* Chapter1-GetLocoSlotDataSAdrP2.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA60A28288CF800E0F993 /* Chapter1-GetLocoSlotDataSAdrP2.tex */; };
-		DA1DA69428288CF800E0F993 /* Chapter1-LinkSlotsP2.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA60B28288CF800E0F993 /* Chapter1-LinkSlotsP2.tex */; };
-		DA1DA69528288CF800E0F993 /* AppendixA.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA60C28288CF800E0F993 /* AppendixA.tex */; };
-		DA1DA69628288CF800E0F993 /* Network Notes.slo in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA60D28288CF800E0F993 /* Network Notes.slo */; };
-		DA1DA69728288CF800E0F993 /* Chapter1-LocoSpdDirP2.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA60E28288CF800E0F993 /* Chapter1-LocoSpdDirP2.tex */; };
-		DA1DA69828288CF800E0F993 /* Network Notes.aux in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA60F28288CF800E0F993 /* Network Notes.aux */; };
-		DA1DA69928288CF800E0F993 /* Chapter1-NoFreeSlotsP1.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA61028288CF800E0F993 /* Chapter1-NoFreeSlotsP1.tex */; };
-		DA1DA69A28288CF800E0F993 /* Network Notes.log in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA61128288CF800E0F993 /* Network Notes.log */; };
-		DA1DA69B28288CF800E0F993 /* Chapter1-SetCfgSlotDataP1.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA61228288CF800E0F993 /* Chapter1-SetCfgSlotDataP1.tex */; };
-		DA1DA69C28288CF800E0F993 /* Chapter1-LocoSpdP2.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA61328288CF800E0F993 /* Chapter1-LocoSpdP2.tex */; };
-		DA1DA69D28288CF800E0F993 /* Chapter6-FastClock.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA61428288CF800E0F993 /* Chapter6-FastClock.tex */; };
-		DA1DA69E28288CF800E0F993 /* Chapter1-PwrOff.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA61528288CF800E0F993 /* Chapter1-PwrOff.tex */; };
-		DA1DA69F28288CF800E0F993 /* Chapter1-LocoF7F13P2.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA61628288CF800E0F993 /* Chapter1-LocoF7F13P2.tex */; };
-		DA1DA6A028288CF800E0F993 /* Chapter1-NoFreeSlotsP2.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA61728288CF800E0F993 /* Chapter1-NoFreeSlotsP2.tex */; };
-		DA1DA6A128288CF800E0F993 /* Chapter1-LocoF13F19P2.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA61828288CF800E0F993 /* Chapter1-LocoF13F19P2.tex */; };
-		DA1DA6A228288CF800E0F993 /* Chapter1-SetCfgSlotDataP2.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA61928288CF800E0F993 /* Chapter1-SetCfgSlotDataP2.tex */; };
-		DA1DA6A328288CF800E0F993 /* Chapter1-LocoSpdP1.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA61A28288CF800E0F993 /* Chapter1-LocoSpdP1.tex */; };
-		DA1DA6A428288CF800E0F993 /* Chapter1-IPLSetAddr.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA61B28288CF800E0F993 /* Chapter1-IPLSetAddr.tex */; };
-		DA1DA6A528288CF800E0F993 /* Chapter1-SetSwStateWithAck.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA61C28288CF800E0F993 /* Chapter1-SetSwStateWithAck.tex */; };
-		DA1DA6A628288CF800E0F993 /* Chapter1-SVProg.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA61D28288CF800E0F993 /* Chapter1-SVProg.tex */; };
-		DA1DA6A728288CF800E0F993 /* Chapter1-GetCfgSlotDataP2.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA61E28288CF800E0F993 /* Chapter1-GetCfgSlotDataP2.tex */; };
-		DA1DA6A828288CF800E0F993 /* Chapter7-IPL.aux in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA61F28288CF800E0F993 /* Chapter7-IPL.aux */; };
-		DA1DA6A928288CF800E0F993 /* Chapter1-LocoDirF0F4P1.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA62028288CF800E0F993 /* Chapter1-LocoDirF0F4P1.tex */; };
-		DA1DA6AA28288CF800E0F993 /* Chapter1-LocoF21F27P2.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA62128288CF800E0F993 /* Chapter1-LocoF21F27P2.tex */; };
-		DA1DA6AB28288CF800E0F993 /* Chapter3-SwitchControl.aux in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA62228288CF800E0F993 /* Chapter3-SwitchControl.aux */; };
-		DA1DA6AC28288CF800E0F993 /* Chapter1-IllegalMoveP2.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA62328288CF800E0F993 /* Chapter1-IllegalMoveP2.tex */; };
-		DA1DA6AD28288CF800E0F993 /* Network Notes.synctex.gz in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA62428288CF800E0F993 /* Network Notes.synctex.gz */; };
-		DA1DA6AE28288CF800E0F993 /* Chapter1-GetCfgSlotDataP1.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA62528288CF800E0F993 /* Chapter1-GetCfgSlotDataP1.tex */; };
-		DA1DA6AF28288CF800E0F993 /* Chapter8-Statistics.aux in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA62628288CF800E0F993 /* Chapter8-Statistics.aux */; };
-		DA1DA6B028288CF800E0F993 /* Chapter1-LocoDirF0F4P2.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA62728288CF800E0F993 /* Chapter1-LocoDirF0F4P2.tex */; };
-		DA1DA6B128288CF800E0F993 /* Chapter5-Programming.aux in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA62828288CF800E0F993 /* Chapter5-Programming.aux */; };
-		DA1DA6B228288CF800E0F993 /* Chapter1-SlotNotImplemented.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA62928288CF800E0F993 /* Chapter1-SlotNotImplemented.tex */; };
-		DA1DA6B328288CF800E0F993 /* Chapter1-IllegalMoveP1.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA62A28288CF800E0F993 /* Chapter1-IllegalMoveP1.tex */; };
-		DA1DA6B428288CF800E0F993 /* Chapter4-DetectionTransponding.aux in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA62B28288CF800E0F993 /* Chapter4-DetectionTransponding.aux */; };
-		DA1DA6B528288CF800E0F993 /* Chapter1-SetLocoSlotStat1.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA62C28288CF800E0F993 /* Chapter1-SetLocoSlotStat1.tex */; };
-		DA1DA6B628288CF800E0F993 /* Chapter1.aux in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA62D28288CF800E0F993 /* Chapter1.aux */; };
-		DA1DA6B728288CF800E0F993 /* Chapter1-NetworkProtocol.aux in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA62E28288CF800E0F993 /* Chapter1-NetworkProtocol.aux */; };
-		DA1DA6B828288CF800E0F993 /* AppendixC.aux in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA62F28288CF800E0F993 /* AppendixC.aux */; };
-		DA1DA6B928288CF800E0F993 /* Chapter1-UnlinkSlotsP1.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA63028288CF800E0F993 /* Chapter1-UnlinkSlotsP1.tex */; };
-		DA1DA6BA28288CF800E0F993 /* Chapter1.log in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA63128288CF800E0F993 /* Chapter1.log */; };
-		DA1DA6BB28288CF800E0F993 /* Chapter1-LocoF5F8P1.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA63228288CF800E0F993 /* Chapter1-LocoF5F8P1.tex */; };
-		DA1DA6BC28288CF800E0F993 /* Network Notes.glsdefs in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA63328288CF800E0F993 /* Network Notes.glsdefs */; };
-		DA1DA6BD28288CF800E0F993 /* Network Notes.acn in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA63428288CF800E0F993 /* Network Notes.acn */; };
-		DA1DA6BE28288CF800E0F993 /* AppendixB.log in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA63528288CF800E0F993 /* AppendixB.log */; };
-		DA1DA6BF28288CF800E0F993 /* Chapter1-LocoF12F20F28P2.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA63628288CF800E0F993 /* Chapter1-LocoF12F20F28P2.tex */; };
-		DA1DA6C028288CF800E0F993 /* Chapter9-Messages.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA63728288CF800E0F993 /* Chapter9-Messages.tex */; };
-		DA1DA6C128288CF800E0F993 /* AppendixB.aux in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA63828288CF800E0F993 /* AppendixB.aux */; };
-		DA1DA6C228288CF800E0F993 /* Network Notes.ilg in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA63928288CF800E0F993 /* Network Notes.ilg */; };
-		DA1DA6C328288CF800E0F993 /* Chapter1-LocoF0F6P2.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA63A28288CF800E0F993 /* Chapter1-LocoF0F6P2.tex */; };
-		DA1DA6C428288CF800E0F993 /* Chapter1-LocoSlotDataP1.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA63B28288CF800E0F993 /* Chapter1-LocoSlotDataP1.tex */; };
-		DA1DA6C528288CF800E0F993 /* GlossaryDefs.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA63C28288CF800E0F993 /* GlossaryDefs.tex */; };
-		DA1DA6C628288CF800E0F993 /* Chapter2.aux in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA63D28288CF800E0F993 /* Chapter2.aux */; };
-		DA1DA6C728288CF800E0F993 /* Chapter1-ProgSlotDataP1.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA63E28288CF800E0F993 /* Chapter1-ProgSlotDataP1.tex */; };
-		DA1DA6C828288CF800E0F993 /* Chapter1-UnlinkSlotsP2.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA63F28288CF800E0F993 /* Chapter1-UnlinkSlotsP2.tex */; };
-		DA1DA6C928288CF800E0F993 /* Chapter1-SetSwState.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA64028288CF800E0F993 /* Chapter1-SetSwState.tex */; };
-		DA1DA6CA28288CF800E0F993 /* AppendixA.aux in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA64128288CF800E0F993 /* AppendixA.aux */; };
-		DA1DA6CB28288CF800E0F993 /* Chapter3.aux in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA64228288CF800E0F993 /* Chapter3.aux */; };
-		DA1DA6CC28288CF800E0F993 /* Network Notes.pdf in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA64328288CF800E0F993 /* Network Notes.pdf */; };
-		DA1DA6CD28288CF800E0F993 /* Chapter1-LocoSlotDataP2.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA64428288CF800E0F993 /* Chapter1-LocoSlotDataP2.tex */; };
-		DA1DA6CE28288CF800E0F993 /* Chapter1-SetBrdOpSw.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA64528288CF800E0F993 /* Chapter1-SetBrdOpSw.tex */; };
-		DA1DA6CF28288CF800E0F993 /* AppendixE.aux in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA64628288CF800E0F993 /* AppendixE.aux */; };
-		DA1DA6D028288CF800E0F993 /* Chapter1-ProgCV.log in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA64728288CF800E0F993 /* Chapter1-ProgCV.log */; };
-		DA1DA6D128288CF800E0F993 /* Chapter1-Busy.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA64828288CF800E0F993 /* Chapter1-Busy.tex */; };
-		DA1DA6D228288CF800E0F993 /* AppendixD.log in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA64928288CF800E0F993 /* AppendixD.log */; };
-		DA1DA6D328288CF800E0F993 /* Chapter1-CommonCfgSlotDataP1.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA64A28288CF800E0F993 /* Chapter1-CommonCfgSlotDataP1.tex */; };
-		DA1DA6D428288CF800E0F993 /* Chapter2-LocomotiveControl.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA64B28288CF800E0F993 /* Chapter2-LocomotiveControl.tex */; };
-		DA1DA6D528288CF800E0F993 /* AppendixD.aux in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA64C28288CF800E0F993 /* AppendixD.aux */; };
-		DA1DA6D628288CF800E0F993 /* Network Notes.bbl in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA64D28288CF800E0F993 /* Network Notes.bbl */; };
-		DA1DA6D728288CF800E0F993 /* Chapter1-SensRepTurnIn.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA64E28288CF800E0F993 /* Chapter1-SensRepTurnIn.tex */; };
-		DA1DA6D828288CF800E0F993 /* Chapter4.aux in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA64F28288CF800E0F993 /* Chapter4.aux */; };
-		DA1DA6D928288CF800E0F993 /* Chapter1-IPLDevData.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA65028288CF800E0F993 /* Chapter1-IPLDevData.tex */; };
-		DA1DA6DA28288CF800E0F993 /* Chapter1-SetIdleState.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA65128288CF800E0F993 /* Chapter1-SetIdleState.tex */; };
-		DA1DA6DB28288CF800E0F993 /* Chapter1-IMMPacket.log in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA65228288CF800E0F993 /* Chapter1-IMMPacket.log */; };
-		DA1DA6DC28288CF800E0F993 /* Chapter1-GetInterfaceData.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA65328288CF800E0F993 /* Chapter1-GetInterfaceData.tex */; };
-		DA1DA6DD28288CF800E0F993 /* Chapter4.log in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA65428288CF800E0F993 /* Chapter4.log */; };
-		DA1DA6DE28288CF800E0F993 /* Chapter1-SwState.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA65528288CF800E0F993 /* Chapter1-SwState.tex */; };
-		DA1DA6DF28288CF800E0F993 /* Chapter1-CommonCfgSlotDataP2.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA65628288CF800E0F993 /* Chapter1-CommonCfgSlotDataP2.tex */; };
-		DA1DA6E028288CF800E0F993 /* Chapter1-CommonLocoSlotDataP2.log in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA65728288CF800E0F993 /* Chapter1-CommonLocoSlotDataP2.log */; };
-		DA1DA6E128288CF800E0F993 /* Network Notes.out in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA65828288CF800E0F993 /* Network Notes.out */; };
-		DA1DA6E228288CF800E0F993 /* Chapter7-IPL.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA65928288CF800E0F993 /* Chapter7-IPL.tex */; };
-		DA1DA6E328288CF800E0F993 /* Network Notes.ist in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA65A28288CF800E0F993 /* Network Notes.ist */; };
-		DA1DA6E428288CF800E0F993 /* DBEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1DA65B28288CF800E0F993 /* DBEditorView.swift */; };
-		DA1DA6E528288CF800E0F993 /* Chapter1-SensRepTurnOut.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA65C28288CF800E0F993 /* Chapter1-SensRepTurnOut.tex */; };
-		DA1DA6E628288CF800E0F993 /* Chapter1-GetLocoSlotDataP1.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA65D28288CF800E0F993 /* Chapter1-GetLocoSlotDataP1.tex */; };
-		DA1DA6E728288CF800E0F993 /* Chapter1-CfgSlotDataP1.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA65E28288CF800E0F993 /* Chapter1-CfgSlotDataP1.tex */; };
-		DA1DA6E828288CF800E0F993 /* Chapter3-SwitchControl.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA65F28288CF800E0F993 /* Chapter3-SwitchControl.tex */; };
-		DA1DA6E928288CF800E0F993 /* Chapter1-IPLEndLoad.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA66028288CF800E0F993 /* Chapter1-IPLEndLoad.tex */; };
-		DA1DA6EA28288CF800E0F993 /* Chapter4-DetectionTransponding.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA66128288CF800E0F993 /* Chapter4-DetectionTransponding.tex */; };
-		DA1DA6EB28288CF800E0F993 /* Chapter1-Ack.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA66228288CF800E0F993 /* Chapter1-Ack.tex */; };
-		DA1DA6EC28288CF800E0F993 /* Chapter1-GetSwState.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA66328288CF800E0F993 /* Chapter1-GetSwState.tex */; };
-		DA1DA6ED28288CF800E0F993 /* Chapter1-IPLSetupBL2.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA66428288CF800E0F993 /* Chapter1-IPLSetupBL2.tex */; };
-		DA1DA6EE28288CF800E0F993 /* Chapter1-GetLocoSlotDataP2.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA66528288CF800E0F993 /* Chapter1-GetLocoSlotDataP2.tex */; };
-		DA1DA6EF28288CF800E0F993 /* Chapter8-Statistics.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA66628288CF800E0F993 /* Chapter8-Statistics.tex */; };
-		DA1DA6F028288CF800E0F993 /* Chapter1-CfgSlotDataP2.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA66728288CF800E0F993 /* Chapter1-CfgSlotDataP2.tex */; };
-		DA1DA6F128288CF800E0F993 /* Chapter1-LocoF21F28P2.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA66828288CF800E0F993 /* Chapter1-LocoF21F28P2.tex */; };
-		DA1DA6F228288CF800E0F993 /* Chapter5-Programming.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA66928288CF800E0F993 /* Chapter5-Programming.tex */; };
-		DA1DA6F328288CF800E0F993 /* Network Notes.toc in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA66A28288CF800E0F993 /* Network Notes.toc */; };
-		DA1DA6F428288CF800E0F993 /* Chapter1-LocoF5F11P2.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA66B28288CF800E0F993 /* Chapter1-LocoF5F11P2.tex */; };
-		DA1DA6F528288CF900E0F993 /* Network Notes.idx in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA66C28288CF800E0F993 /* Network Notes.idx */; };
-		DA1DA6F628288CF900E0F993 /* Network Notes.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA66D28288CF800E0F993 /* Network Notes.tex */; };
-		DA1DA6F728288CF900E0F993 /* Chapter1-SetLocoSlotDataP1.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA66E28288CF800E0F993 /* Chapter1-SetLocoSlotDataP1.tex */; };
-		DA1DA6F828288CF900E0F993 /* Network Notes.ind in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA66F28288CF800E0F993 /* Network Notes.ind */; };
-		DA1DA6F928288CF900E0F993 /* Chapter1-GetBrdOpSw.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA67028288CF800E0F993 /* Chapter1-GetBrdOpSw.tex */; };
-		DA1DA6FA28288CF900E0F993 /* Chapter6-FastClock.aux in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA67128288CF800E0F993 /* Chapter6-FastClock.aux */; };
-		DA1DA6FB28288CF900E0F993 /* Chapter1-SensRepGenIn.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA67228288CF800E0F993 /* Chapter1-SensRepGenIn.tex */; };
-		DA1DA6FC28288CF900E0F993 /* Chapter1-PwrOn.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA67328288CF800E0F993 /* Chapter1-PwrOn.tex */; };
-		DA1DA6FD28288CF900E0F993 /* Chapter1-MoveSlotsP1.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA67428288CF800E0F993 /* Chapter1-MoveSlotsP1.tex */; };
-		DA1DA6FE28288CF900E0F993 /* Chapter1-IPLDiscover.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA67528288CF800E0F993 /* Chapter1-IPLDiscover.tex */; };
-		DA1DA6FF28288CF900E0F993 /* Chapter1-SetLocoSlotDataP2.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA67628288CF800E0F993 /* Chapter1-SetLocoSlotDataP2.tex */; };
-		DA1DA70028288CF900E0F993 /* Chapter1-PeerXfer16.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA67728288CF800E0F993 /* Chapter1-PeerXfer16.tex */; };
-		DA1DA70128288CF900E0F993 /* Chapter1-MoveSlotsP2.tex in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA67828288CF800E0F993 /* Chapter1-MoveSlotsP2.tex */; };
 		DA2502B9282671600002D4AF /* RollingStock.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2502B8282671600002D4AF /* RollingStock.swift */; };
 		DA28C2BA2801CC0300857471 /* DashBoard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA28C2B92801CC0300857471 /* DashBoard.storyboard */; };
 		DA28C2BD2801CC4800857471 /* DashBoardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA28C2BC2801CC4800857471 /* DashBoardVC.swift */; };
@@ -294,143 +157,6 @@
 		DA1DA5E928280EEE00E0F993 /* BaudRate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaudRate.swift; sourceTree = "<group>"; };
 		DA1DA5EB28280FCD00E0F993 /* FlowControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowControl.swift; sourceTree = "<group>"; };
 		DA1DA5ED28281E5500E0F993 /* ORSSerialPortManagerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ORSSerialPortManagerExtensions.swift; sourceTree = "<group>"; };
-		DA1DA5F028288CF800E0F993 /* Chapter1-LocoBinStateP2.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-LocoBinStateP2.tex"; sourceTree = "<group>"; };
-		DA1DA5F128288CF800E0F993 /* AppendixE.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AppendixE.tex; sourceTree = "<group>"; };
-		DA1DA5F228288CF800E0F993 /* Chapter1-LocoF14F20P2.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-LocoF14F20P2.tex"; sourceTree = "<group>"; };
-		DA1DA5F328288CF800E0F993 /* Chapter1-ProgCV.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-ProgCV.tex"; sourceTree = "<group>"; };
-		DA1DA5F428288CF800E0F993 /* AppendixD.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AppendixD.tex; sourceTree = "<group>"; };
-		DA1DA5F528288CF800E0F993 /* Chapter1-CommonCfgSlotDataP1.log */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-CommonCfgSlotDataP1.log"; sourceTree = "<group>"; };
-		DA1DA5F628288CF800E0F993 /* Chapter1-GetLocoSlotDataLAdrP2.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-GetLocoSlotDataLAdrP2.tex"; sourceTree = "<group>"; };
-		DA1DA5F728288CF800E0F993 /* Chapter2-LocomotiveControl.aux */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter2-LocomotiveControl.aux"; sourceTree = "<group>"; };
-		DA1DA5F828288CF800E0F993 /* Chapter1-Busy.log */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-Busy.log"; sourceTree = "<group>"; };
-		DA1DA5F928288CF800E0F993 /* Chapter1-InterfaceData.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-InterfaceData.tex"; sourceTree = "<group>"; };
-		DA1DA5FA28288CF800E0F993 /* Chapter1-CommonLocoSlotDataP1.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-CommonLocoSlotDataP1.tex"; sourceTree = "<group>"; };
-		DA1DA5FB28288CF800E0F993 /* Chapter1-ConsistDirF0F4.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-ConsistDirF0F4.tex"; sourceTree = "<group>"; };
-		DA1DA5FC28288CF800E0F993 /* Chapter1-IMMPacket.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-IMMPacket.tex"; sourceTree = "<group>"; };
-		DA1DA5FD28288CF800E0F993 /* Chapter1-GetLocoSlotDataLAdrP1.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-GetLocoSlotDataLAdrP1.tex"; sourceTree = "<group>"; };
-		DA1DA5FE28288CF800E0F993 /* Chapter1-CommonCfgSlotDataP2.log */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-CommonCfgSlotDataP2.log"; sourceTree = "<group>"; };
-		DA1DA5FF28288CF800E0F993 /* Chapter1-CommonLocoSlotDataP2.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-CommonLocoSlotDataP2.tex"; sourceTree = "<group>"; };
-		DA1DA60028288CF800E0F993 /* Chapter1-IPLDataLoad.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-IPLDataLoad.tex"; sourceTree = "<group>"; };
-		DA1DA60128288CF800E0F993 /* Chapter1-GetLocoSlotDataSAdrP1.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-GetLocoSlotDataSAdrP1.tex"; sourceTree = "<group>"; };
-		DA1DA60228288CF800E0F993 /* Chapter1-NetworkProtocol.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-NetworkProtocol.tex"; sourceTree = "<group>"; };
-		DA1DA60328288CF800E0F993 /* AppendixC.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AppendixC.tex; sourceTree = "<group>"; };
-		DA1DA60428288CF800E0F993 /* Chapter1-LinkSlotsP1.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-LinkSlotsP1.tex"; sourceTree = "<group>"; };
-		DA1DA60528288CF800E0F993 /* AppendixB.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AppendixB.tex; sourceTree = "<group>"; };
-		DA1DA60628288CF800E0F993 /* Chapter9-Messages.aux */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter9-Messages.aux"; sourceTree = "<group>"; };
-		DA1DA60728288CF800E0F993 /* GlossaryDefs.log */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = GlossaryDefs.log; sourceTree = "<group>"; };
-		DA1DA60828288CF800E0F993 /* Chapter1-TransRep.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-TransRep.tex"; sourceTree = "<group>"; };
-		DA1DA60928288CF800E0F993 /* Chapter1-Reset.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-Reset.tex"; sourceTree = "<group>"; };
-		DA1DA60A28288CF800E0F993 /* Chapter1-GetLocoSlotDataSAdrP2.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-GetLocoSlotDataSAdrP2.tex"; sourceTree = "<group>"; };
-		DA1DA60B28288CF800E0F993 /* Chapter1-LinkSlotsP2.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-LinkSlotsP2.tex"; sourceTree = "<group>"; };
-		DA1DA60C28288CF800E0F993 /* AppendixA.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AppendixA.tex; sourceTree = "<group>"; };
-		DA1DA60D28288CF800E0F993 /* Network Notes.slo */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Network Notes.slo"; sourceTree = "<group>"; };
-		DA1DA60E28288CF800E0F993 /* Chapter1-LocoSpdDirP2.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-LocoSpdDirP2.tex"; sourceTree = "<group>"; };
-		DA1DA60F28288CF800E0F993 /* Network Notes.aux */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Network Notes.aux"; sourceTree = "<group>"; };
-		DA1DA61028288CF800E0F993 /* Chapter1-NoFreeSlotsP1.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-NoFreeSlotsP1.tex"; sourceTree = "<group>"; };
-		DA1DA61128288CF800E0F993 /* Network Notes.log */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Network Notes.log"; sourceTree = "<group>"; };
-		DA1DA61228288CF800E0F993 /* Chapter1-SetCfgSlotDataP1.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-SetCfgSlotDataP1.tex"; sourceTree = "<group>"; };
-		DA1DA61328288CF800E0F993 /* Chapter1-LocoSpdP2.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-LocoSpdP2.tex"; sourceTree = "<group>"; };
-		DA1DA61428288CF800E0F993 /* Chapter6-FastClock.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter6-FastClock.tex"; sourceTree = "<group>"; };
-		DA1DA61528288CF800E0F993 /* Chapter1-PwrOff.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-PwrOff.tex"; sourceTree = "<group>"; };
-		DA1DA61628288CF800E0F993 /* Chapter1-LocoF7F13P2.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-LocoF7F13P2.tex"; sourceTree = "<group>"; };
-		DA1DA61728288CF800E0F993 /* Chapter1-NoFreeSlotsP2.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-NoFreeSlotsP2.tex"; sourceTree = "<group>"; };
-		DA1DA61828288CF800E0F993 /* Chapter1-LocoF13F19P2.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-LocoF13F19P2.tex"; sourceTree = "<group>"; };
-		DA1DA61928288CF800E0F993 /* Chapter1-SetCfgSlotDataP2.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-SetCfgSlotDataP2.tex"; sourceTree = "<group>"; };
-		DA1DA61A28288CF800E0F993 /* Chapter1-LocoSpdP1.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-LocoSpdP1.tex"; sourceTree = "<group>"; };
-		DA1DA61B28288CF800E0F993 /* Chapter1-IPLSetAddr.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-IPLSetAddr.tex"; sourceTree = "<group>"; };
-		DA1DA61C28288CF800E0F993 /* Chapter1-SetSwStateWithAck.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-SetSwStateWithAck.tex"; sourceTree = "<group>"; };
-		DA1DA61D28288CF800E0F993 /* Chapter1-SVProg.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-SVProg.tex"; sourceTree = "<group>"; };
-		DA1DA61E28288CF800E0F993 /* Chapter1-GetCfgSlotDataP2.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-GetCfgSlotDataP2.tex"; sourceTree = "<group>"; };
-		DA1DA61F28288CF800E0F993 /* Chapter7-IPL.aux */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter7-IPL.aux"; sourceTree = "<group>"; };
-		DA1DA62028288CF800E0F993 /* Chapter1-LocoDirF0F4P1.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-LocoDirF0F4P1.tex"; sourceTree = "<group>"; };
-		DA1DA62128288CF800E0F993 /* Chapter1-LocoF21F27P2.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-LocoF21F27P2.tex"; sourceTree = "<group>"; };
-		DA1DA62228288CF800E0F993 /* Chapter3-SwitchControl.aux */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter3-SwitchControl.aux"; sourceTree = "<group>"; };
-		DA1DA62328288CF800E0F993 /* Chapter1-IllegalMoveP2.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-IllegalMoveP2.tex"; sourceTree = "<group>"; };
-		DA1DA62428288CF800E0F993 /* Network Notes.synctex.gz */ = {isa = PBXFileReference; lastKnownFileType = archive.gzip; path = "Network Notes.synctex.gz"; sourceTree = "<group>"; };
-		DA1DA62528288CF800E0F993 /* Chapter1-GetCfgSlotDataP1.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-GetCfgSlotDataP1.tex"; sourceTree = "<group>"; };
-		DA1DA62628288CF800E0F993 /* Chapter8-Statistics.aux */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter8-Statistics.aux"; sourceTree = "<group>"; };
-		DA1DA62728288CF800E0F993 /* Chapter1-LocoDirF0F4P2.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-LocoDirF0F4P2.tex"; sourceTree = "<group>"; };
-		DA1DA62828288CF800E0F993 /* Chapter5-Programming.aux */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter5-Programming.aux"; sourceTree = "<group>"; };
-		DA1DA62928288CF800E0F993 /* Chapter1-SlotNotImplemented.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-SlotNotImplemented.tex"; sourceTree = "<group>"; };
-		DA1DA62A28288CF800E0F993 /* Chapter1-IllegalMoveP1.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-IllegalMoveP1.tex"; sourceTree = "<group>"; };
-		DA1DA62B28288CF800E0F993 /* Chapter4-DetectionTransponding.aux */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter4-DetectionTransponding.aux"; sourceTree = "<group>"; };
-		DA1DA62C28288CF800E0F993 /* Chapter1-SetLocoSlotStat1.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-SetLocoSlotStat1.tex"; sourceTree = "<group>"; };
-		DA1DA62D28288CF800E0F993 /* Chapter1.aux */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Chapter1.aux; sourceTree = "<group>"; };
-		DA1DA62E28288CF800E0F993 /* Chapter1-NetworkProtocol.aux */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-NetworkProtocol.aux"; sourceTree = "<group>"; };
-		DA1DA62F28288CF800E0F993 /* AppendixC.aux */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AppendixC.aux; sourceTree = "<group>"; };
-		DA1DA63028288CF800E0F993 /* Chapter1-UnlinkSlotsP1.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-UnlinkSlotsP1.tex"; sourceTree = "<group>"; };
-		DA1DA63128288CF800E0F993 /* Chapter1.log */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Chapter1.log; sourceTree = "<group>"; };
-		DA1DA63228288CF800E0F993 /* Chapter1-LocoF5F8P1.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-LocoF5F8P1.tex"; sourceTree = "<group>"; };
-		DA1DA63328288CF800E0F993 /* Network Notes.glsdefs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Network Notes.glsdefs"; sourceTree = "<group>"; };
-		DA1DA63428288CF800E0F993 /* Network Notes.acn */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Network Notes.acn"; sourceTree = "<group>"; };
-		DA1DA63528288CF800E0F993 /* AppendixB.log */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AppendixB.log; sourceTree = "<group>"; };
-		DA1DA63628288CF800E0F993 /* Chapter1-LocoF12F20F28P2.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-LocoF12F20F28P2.tex"; sourceTree = "<group>"; };
-		DA1DA63728288CF800E0F993 /* Chapter9-Messages.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter9-Messages.tex"; sourceTree = "<group>"; };
-		DA1DA63828288CF800E0F993 /* AppendixB.aux */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AppendixB.aux; sourceTree = "<group>"; };
-		DA1DA63928288CF800E0F993 /* Network Notes.ilg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Network Notes.ilg"; sourceTree = "<group>"; };
-		DA1DA63A28288CF800E0F993 /* Chapter1-LocoF0F6P2.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-LocoF0F6P2.tex"; sourceTree = "<group>"; };
-		DA1DA63B28288CF800E0F993 /* Chapter1-LocoSlotDataP1.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-LocoSlotDataP1.tex"; sourceTree = "<group>"; };
-		DA1DA63C28288CF800E0F993 /* GlossaryDefs.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = GlossaryDefs.tex; sourceTree = "<group>"; };
-		DA1DA63D28288CF800E0F993 /* Chapter2.aux */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Chapter2.aux; sourceTree = "<group>"; };
-		DA1DA63E28288CF800E0F993 /* Chapter1-ProgSlotDataP1.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-ProgSlotDataP1.tex"; sourceTree = "<group>"; };
-		DA1DA63F28288CF800E0F993 /* Chapter1-UnlinkSlotsP2.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-UnlinkSlotsP2.tex"; sourceTree = "<group>"; };
-		DA1DA64028288CF800E0F993 /* Chapter1-SetSwState.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-SetSwState.tex"; sourceTree = "<group>"; };
-		DA1DA64128288CF800E0F993 /* AppendixA.aux */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AppendixA.aux; sourceTree = "<group>"; };
-		DA1DA64228288CF800E0F993 /* Chapter3.aux */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Chapter3.aux; sourceTree = "<group>"; };
-		DA1DA64328288CF800E0F993 /* Network Notes.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Network Notes.pdf"; sourceTree = "<group>"; };
-		DA1DA64428288CF800E0F993 /* Chapter1-LocoSlotDataP2.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-LocoSlotDataP2.tex"; sourceTree = "<group>"; };
-		DA1DA64528288CF800E0F993 /* Chapter1-SetBrdOpSw.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-SetBrdOpSw.tex"; sourceTree = "<group>"; };
-		DA1DA64628288CF800E0F993 /* AppendixE.aux */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AppendixE.aux; sourceTree = "<group>"; };
-		DA1DA64728288CF800E0F993 /* Chapter1-ProgCV.log */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-ProgCV.log"; sourceTree = "<group>"; };
-		DA1DA64828288CF800E0F993 /* Chapter1-Busy.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-Busy.tex"; sourceTree = "<group>"; };
-		DA1DA64928288CF800E0F993 /* AppendixD.log */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AppendixD.log; sourceTree = "<group>"; };
-		DA1DA64A28288CF800E0F993 /* Chapter1-CommonCfgSlotDataP1.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-CommonCfgSlotDataP1.tex"; sourceTree = "<group>"; };
-		DA1DA64B28288CF800E0F993 /* Chapter2-LocomotiveControl.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter2-LocomotiveControl.tex"; sourceTree = "<group>"; };
-		DA1DA64C28288CF800E0F993 /* AppendixD.aux */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AppendixD.aux; sourceTree = "<group>"; };
-		DA1DA64D28288CF800E0F993 /* Network Notes.bbl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Network Notes.bbl"; sourceTree = "<group>"; };
-		DA1DA64E28288CF800E0F993 /* Chapter1-SensRepTurnIn.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-SensRepTurnIn.tex"; sourceTree = "<group>"; };
-		DA1DA64F28288CF800E0F993 /* Chapter4.aux */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Chapter4.aux; sourceTree = "<group>"; };
-		DA1DA65028288CF800E0F993 /* Chapter1-IPLDevData.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-IPLDevData.tex"; sourceTree = "<group>"; };
-		DA1DA65128288CF800E0F993 /* Chapter1-SetIdleState.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-SetIdleState.tex"; sourceTree = "<group>"; };
-		DA1DA65228288CF800E0F993 /* Chapter1-IMMPacket.log */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-IMMPacket.log"; sourceTree = "<group>"; };
-		DA1DA65328288CF800E0F993 /* Chapter1-GetInterfaceData.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-GetInterfaceData.tex"; sourceTree = "<group>"; };
-		DA1DA65428288CF800E0F993 /* Chapter4.log */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Chapter4.log; sourceTree = "<group>"; };
-		DA1DA65528288CF800E0F993 /* Chapter1-SwState.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-SwState.tex"; sourceTree = "<group>"; };
-		DA1DA65628288CF800E0F993 /* Chapter1-CommonCfgSlotDataP2.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-CommonCfgSlotDataP2.tex"; sourceTree = "<group>"; };
-		DA1DA65728288CF800E0F993 /* Chapter1-CommonLocoSlotDataP2.log */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-CommonLocoSlotDataP2.log"; sourceTree = "<group>"; };
-		DA1DA65828288CF800E0F993 /* Network Notes.out */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Network Notes.out"; sourceTree = "<group>"; };
-		DA1DA65928288CF800E0F993 /* Chapter7-IPL.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter7-IPL.tex"; sourceTree = "<group>"; };
-		DA1DA65A28288CF800E0F993 /* Network Notes.ist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Network Notes.ist"; sourceTree = "<group>"; };
-		DA1DA65B28288CF800E0F993 /* DBEditorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBEditorView.swift; sourceTree = "<group>"; };
-		DA1DA65C28288CF800E0F993 /* Chapter1-SensRepTurnOut.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-SensRepTurnOut.tex"; sourceTree = "<group>"; };
-		DA1DA65D28288CF800E0F993 /* Chapter1-GetLocoSlotDataP1.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-GetLocoSlotDataP1.tex"; sourceTree = "<group>"; };
-		DA1DA65E28288CF800E0F993 /* Chapter1-CfgSlotDataP1.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-CfgSlotDataP1.tex"; sourceTree = "<group>"; };
-		DA1DA65F28288CF800E0F993 /* Chapter3-SwitchControl.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter3-SwitchControl.tex"; sourceTree = "<group>"; };
-		DA1DA66028288CF800E0F993 /* Chapter1-IPLEndLoad.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-IPLEndLoad.tex"; sourceTree = "<group>"; };
-		DA1DA66128288CF800E0F993 /* Chapter4-DetectionTransponding.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter4-DetectionTransponding.tex"; sourceTree = "<group>"; };
-		DA1DA66228288CF800E0F993 /* Chapter1-Ack.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-Ack.tex"; sourceTree = "<group>"; };
-		DA1DA66328288CF800E0F993 /* Chapter1-GetSwState.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-GetSwState.tex"; sourceTree = "<group>"; };
-		DA1DA66428288CF800E0F993 /* Chapter1-IPLSetupBL2.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-IPLSetupBL2.tex"; sourceTree = "<group>"; };
-		DA1DA66528288CF800E0F993 /* Chapter1-GetLocoSlotDataP2.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-GetLocoSlotDataP2.tex"; sourceTree = "<group>"; };
-		DA1DA66628288CF800E0F993 /* Chapter8-Statistics.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter8-Statistics.tex"; sourceTree = "<group>"; };
-		DA1DA66728288CF800E0F993 /* Chapter1-CfgSlotDataP2.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-CfgSlotDataP2.tex"; sourceTree = "<group>"; };
-		DA1DA66828288CF800E0F993 /* Chapter1-LocoF21F28P2.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-LocoF21F28P2.tex"; sourceTree = "<group>"; };
-		DA1DA66928288CF800E0F993 /* Chapter5-Programming.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter5-Programming.tex"; sourceTree = "<group>"; };
-		DA1DA66A28288CF800E0F993 /* Network Notes.toc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Network Notes.toc"; sourceTree = "<group>"; };
-		DA1DA66B28288CF800E0F993 /* Chapter1-LocoF5F11P2.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-LocoF5F11P2.tex"; sourceTree = "<group>"; };
-		DA1DA66C28288CF800E0F993 /* Network Notes.idx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Network Notes.idx"; sourceTree = "<group>"; };
-		DA1DA66D28288CF800E0F993 /* Network Notes.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Network Notes.tex"; sourceTree = "<group>"; };
-		DA1DA66E28288CF800E0F993 /* Chapter1-SetLocoSlotDataP1.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-SetLocoSlotDataP1.tex"; sourceTree = "<group>"; };
-		DA1DA66F28288CF800E0F993 /* Network Notes.ind */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Network Notes.ind"; sourceTree = "<group>"; };
-		DA1DA67028288CF800E0F993 /* Chapter1-GetBrdOpSw.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-GetBrdOpSw.tex"; sourceTree = "<group>"; };
-		DA1DA67128288CF800E0F993 /* Chapter6-FastClock.aux */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter6-FastClock.aux"; sourceTree = "<group>"; };
-		DA1DA67228288CF800E0F993 /* Chapter1-SensRepGenIn.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-SensRepGenIn.tex"; sourceTree = "<group>"; };
-		DA1DA67328288CF800E0F993 /* Chapter1-PwrOn.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-PwrOn.tex"; sourceTree = "<group>"; };
-		DA1DA67428288CF800E0F993 /* Chapter1-MoveSlotsP1.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-MoveSlotsP1.tex"; sourceTree = "<group>"; };
-		DA1DA67528288CF800E0F993 /* Chapter1-IPLDiscover.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-IPLDiscover.tex"; sourceTree = "<group>"; };
-		DA1DA67628288CF800E0F993 /* Chapter1-SetLocoSlotDataP2.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-SetLocoSlotDataP2.tex"; sourceTree = "<group>"; };
-		DA1DA67728288CF800E0F993 /* Chapter1-PeerXfer16.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-PeerXfer16.tex"; sourceTree = "<group>"; };
-		DA1DA67828288CF800E0F993 /* Chapter1-MoveSlotsP2.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Chapter1-MoveSlotsP2.tex"; sourceTree = "<group>"; };
 		DA2502B8282671600002D4AF /* RollingStock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollingStock.swift; sourceTree = "<group>"; };
 		DA28C2B92801CC0300857471 /* DashBoard.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = DashBoard.storyboard; sourceTree = "<group>"; };
 		DA28C2BC2801CC4800857471 /* DashBoardVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashBoardVC.swift; sourceTree = "<group>"; };
@@ -546,150 +272,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		DA1DA5EF28288CF800E0F993 /* doc */ = {
-			isa = PBXGroup;
-			children = (
-				DA1DA5F028288CF800E0F993 /* Chapter1-LocoBinStateP2.tex */,
-				DA1DA5F128288CF800E0F993 /* AppendixE.tex */,
-				DA1DA5F228288CF800E0F993 /* Chapter1-LocoF14F20P2.tex */,
-				DA1DA5F328288CF800E0F993 /* Chapter1-ProgCV.tex */,
-				DA1DA5F428288CF800E0F993 /* AppendixD.tex */,
-				DA1DA5F528288CF800E0F993 /* Chapter1-CommonCfgSlotDataP1.log */,
-				DA1DA5F628288CF800E0F993 /* Chapter1-GetLocoSlotDataLAdrP2.tex */,
-				DA1DA5F728288CF800E0F993 /* Chapter2-LocomotiveControl.aux */,
-				DA1DA5F828288CF800E0F993 /* Chapter1-Busy.log */,
-				DA1DA5F928288CF800E0F993 /* Chapter1-InterfaceData.tex */,
-				DA1DA5FA28288CF800E0F993 /* Chapter1-CommonLocoSlotDataP1.tex */,
-				DA1DA5FB28288CF800E0F993 /* Chapter1-ConsistDirF0F4.tex */,
-				DA1DA5FC28288CF800E0F993 /* Chapter1-IMMPacket.tex */,
-				DA1DA5FD28288CF800E0F993 /* Chapter1-GetLocoSlotDataLAdrP1.tex */,
-				DA1DA5FE28288CF800E0F993 /* Chapter1-CommonCfgSlotDataP2.log */,
-				DA1DA5FF28288CF800E0F993 /* Chapter1-CommonLocoSlotDataP2.tex */,
-				DA1DA60028288CF800E0F993 /* Chapter1-IPLDataLoad.tex */,
-				DA1DA60128288CF800E0F993 /* Chapter1-GetLocoSlotDataSAdrP1.tex */,
-				DA1DA60228288CF800E0F993 /* Chapter1-NetworkProtocol.tex */,
-				DA1DA60328288CF800E0F993 /* AppendixC.tex */,
-				DA1DA60428288CF800E0F993 /* Chapter1-LinkSlotsP1.tex */,
-				DA1DA60528288CF800E0F993 /* AppendixB.tex */,
-				DA1DA60628288CF800E0F993 /* Chapter9-Messages.aux */,
-				DA1DA60728288CF800E0F993 /* GlossaryDefs.log */,
-				DA1DA60828288CF800E0F993 /* Chapter1-TransRep.tex */,
-				DA1DA60928288CF800E0F993 /* Chapter1-Reset.tex */,
-				DA1DA60A28288CF800E0F993 /* Chapter1-GetLocoSlotDataSAdrP2.tex */,
-				DA1DA60B28288CF800E0F993 /* Chapter1-LinkSlotsP2.tex */,
-				DA1DA60C28288CF800E0F993 /* AppendixA.tex */,
-				DA1DA60D28288CF800E0F993 /* Network Notes.slo */,
-				DA1DA60E28288CF800E0F993 /* Chapter1-LocoSpdDirP2.tex */,
-				DA1DA60F28288CF800E0F993 /* Network Notes.aux */,
-				DA1DA61028288CF800E0F993 /* Chapter1-NoFreeSlotsP1.tex */,
-				DA1DA61128288CF800E0F993 /* Network Notes.log */,
-				DA1DA61228288CF800E0F993 /* Chapter1-SetCfgSlotDataP1.tex */,
-				DA1DA61328288CF800E0F993 /* Chapter1-LocoSpdP2.tex */,
-				DA1DA61428288CF800E0F993 /* Chapter6-FastClock.tex */,
-				DA1DA61528288CF800E0F993 /* Chapter1-PwrOff.tex */,
-				DA1DA61628288CF800E0F993 /* Chapter1-LocoF7F13P2.tex */,
-				DA1DA61728288CF800E0F993 /* Chapter1-NoFreeSlotsP2.tex */,
-				DA1DA61828288CF800E0F993 /* Chapter1-LocoF13F19P2.tex */,
-				DA1DA61928288CF800E0F993 /* Chapter1-SetCfgSlotDataP2.tex */,
-				DA1DA61A28288CF800E0F993 /* Chapter1-LocoSpdP1.tex */,
-				DA1DA61B28288CF800E0F993 /* Chapter1-IPLSetAddr.tex */,
-				DA1DA61C28288CF800E0F993 /* Chapter1-SetSwStateWithAck.tex */,
-				DA1DA61D28288CF800E0F993 /* Chapter1-SVProg.tex */,
-				DA1DA61E28288CF800E0F993 /* Chapter1-GetCfgSlotDataP2.tex */,
-				DA1DA61F28288CF800E0F993 /* Chapter7-IPL.aux */,
-				DA1DA62028288CF800E0F993 /* Chapter1-LocoDirF0F4P1.tex */,
-				DA1DA62128288CF800E0F993 /* Chapter1-LocoF21F27P2.tex */,
-				DA1DA62228288CF800E0F993 /* Chapter3-SwitchControl.aux */,
-				DA1DA62328288CF800E0F993 /* Chapter1-IllegalMoveP2.tex */,
-				DA1DA62428288CF800E0F993 /* Network Notes.synctex.gz */,
-				DA1DA62528288CF800E0F993 /* Chapter1-GetCfgSlotDataP1.tex */,
-				DA1DA62628288CF800E0F993 /* Chapter8-Statistics.aux */,
-				DA1DA62728288CF800E0F993 /* Chapter1-LocoDirF0F4P2.tex */,
-				DA1DA62828288CF800E0F993 /* Chapter5-Programming.aux */,
-				DA1DA62928288CF800E0F993 /* Chapter1-SlotNotImplemented.tex */,
-				DA1DA62A28288CF800E0F993 /* Chapter1-IllegalMoveP1.tex */,
-				DA1DA62B28288CF800E0F993 /* Chapter4-DetectionTransponding.aux */,
-				DA1DA62C28288CF800E0F993 /* Chapter1-SetLocoSlotStat1.tex */,
-				DA1DA62D28288CF800E0F993 /* Chapter1.aux */,
-				DA1DA62E28288CF800E0F993 /* Chapter1-NetworkProtocol.aux */,
-				DA1DA62F28288CF800E0F993 /* AppendixC.aux */,
-				DA1DA63028288CF800E0F993 /* Chapter1-UnlinkSlotsP1.tex */,
-				DA1DA63128288CF800E0F993 /* Chapter1.log */,
-				DA1DA63228288CF800E0F993 /* Chapter1-LocoF5F8P1.tex */,
-				DA1DA63328288CF800E0F993 /* Network Notes.glsdefs */,
-				DA1DA63428288CF800E0F993 /* Network Notes.acn */,
-				DA1DA63528288CF800E0F993 /* AppendixB.log */,
-				DA1DA63628288CF800E0F993 /* Chapter1-LocoF12F20F28P2.tex */,
-				DA1DA63728288CF800E0F993 /* Chapter9-Messages.tex */,
-				DA1DA63828288CF800E0F993 /* AppendixB.aux */,
-				DA1DA63928288CF800E0F993 /* Network Notes.ilg */,
-				DA1DA63A28288CF800E0F993 /* Chapter1-LocoF0F6P2.tex */,
-				DA1DA63B28288CF800E0F993 /* Chapter1-LocoSlotDataP1.tex */,
-				DA1DA63C28288CF800E0F993 /* GlossaryDefs.tex */,
-				DA1DA63D28288CF800E0F993 /* Chapter2.aux */,
-				DA1DA63E28288CF800E0F993 /* Chapter1-ProgSlotDataP1.tex */,
-				DA1DA63F28288CF800E0F993 /* Chapter1-UnlinkSlotsP2.tex */,
-				DA1DA64028288CF800E0F993 /* Chapter1-SetSwState.tex */,
-				DA1DA64128288CF800E0F993 /* AppendixA.aux */,
-				DA1DA64228288CF800E0F993 /* Chapter3.aux */,
-				DA1DA64328288CF800E0F993 /* Network Notes.pdf */,
-				DA1DA64428288CF800E0F993 /* Chapter1-LocoSlotDataP2.tex */,
-				DA1DA64528288CF800E0F993 /* Chapter1-SetBrdOpSw.tex */,
-				DA1DA64628288CF800E0F993 /* AppendixE.aux */,
-				DA1DA64728288CF800E0F993 /* Chapter1-ProgCV.log */,
-				DA1DA64828288CF800E0F993 /* Chapter1-Busy.tex */,
-				DA1DA64928288CF800E0F993 /* AppendixD.log */,
-				DA1DA64A28288CF800E0F993 /* Chapter1-CommonCfgSlotDataP1.tex */,
-				DA1DA64B28288CF800E0F993 /* Chapter2-LocomotiveControl.tex */,
-				DA1DA64C28288CF800E0F993 /* AppendixD.aux */,
-				DA1DA64D28288CF800E0F993 /* Network Notes.bbl */,
-				DA1DA64E28288CF800E0F993 /* Chapter1-SensRepTurnIn.tex */,
-				DA1DA64F28288CF800E0F993 /* Chapter4.aux */,
-				DA1DA65028288CF800E0F993 /* Chapter1-IPLDevData.tex */,
-				DA1DA65128288CF800E0F993 /* Chapter1-SetIdleState.tex */,
-				DA1DA65228288CF800E0F993 /* Chapter1-IMMPacket.log */,
-				DA1DA65328288CF800E0F993 /* Chapter1-GetInterfaceData.tex */,
-				DA1DA65428288CF800E0F993 /* Chapter4.log */,
-				DA1DA65528288CF800E0F993 /* Chapter1-SwState.tex */,
-				DA1DA65628288CF800E0F993 /* Chapter1-CommonCfgSlotDataP2.tex */,
-				DA1DA65728288CF800E0F993 /* Chapter1-CommonLocoSlotDataP2.log */,
-				DA1DA65828288CF800E0F993 /* Network Notes.out */,
-				DA1DA65928288CF800E0F993 /* Chapter7-IPL.tex */,
-				DA1DA65A28288CF800E0F993 /* Network Notes.ist */,
-				DA1DA65B28288CF800E0F993 /* DBEditorView.swift */,
-				DA1DA65C28288CF800E0F993 /* Chapter1-SensRepTurnOut.tex */,
-				DA1DA65D28288CF800E0F993 /* Chapter1-GetLocoSlotDataP1.tex */,
-				DA1DA65E28288CF800E0F993 /* Chapter1-CfgSlotDataP1.tex */,
-				DA1DA65F28288CF800E0F993 /* Chapter3-SwitchControl.tex */,
-				DA1DA66028288CF800E0F993 /* Chapter1-IPLEndLoad.tex */,
-				DA1DA66128288CF800E0F993 /* Chapter4-DetectionTransponding.tex */,
-				DA1DA66228288CF800E0F993 /* Chapter1-Ack.tex */,
-				DA1DA66328288CF800E0F993 /* Chapter1-GetSwState.tex */,
-				DA1DA66428288CF800E0F993 /* Chapter1-IPLSetupBL2.tex */,
-				DA1DA66528288CF800E0F993 /* Chapter1-GetLocoSlotDataP2.tex */,
-				DA1DA66628288CF800E0F993 /* Chapter8-Statistics.tex */,
-				DA1DA66728288CF800E0F993 /* Chapter1-CfgSlotDataP2.tex */,
-				DA1DA66828288CF800E0F993 /* Chapter1-LocoF21F28P2.tex */,
-				DA1DA66928288CF800E0F993 /* Chapter5-Programming.tex */,
-				DA1DA66A28288CF800E0F993 /* Network Notes.toc */,
-				DA1DA66B28288CF800E0F993 /* Chapter1-LocoF5F11P2.tex */,
-				DA1DA66C28288CF800E0F993 /* Network Notes.idx */,
-				DA1DA66D28288CF800E0F993 /* Network Notes.tex */,
-				DA1DA66E28288CF800E0F993 /* Chapter1-SetLocoSlotDataP1.tex */,
-				DA1DA66F28288CF800E0F993 /* Network Notes.ind */,
-				DA1DA67028288CF800E0F993 /* Chapter1-GetBrdOpSw.tex */,
-				DA1DA67128288CF800E0F993 /* Chapter6-FastClock.aux */,
-				DA1DA67228288CF800E0F993 /* Chapter1-SensRepGenIn.tex */,
-				DA1DA67328288CF800E0F993 /* Chapter1-PwrOn.tex */,
-				DA1DA67428288CF800E0F993 /* Chapter1-MoveSlotsP1.tex */,
-				DA1DA67528288CF800E0F993 /* Chapter1-IPLDiscover.tex */,
-				DA1DA67628288CF800E0F993 /* Chapter1-SetLocoSlotDataP2.tex */,
-				DA1DA67728288CF800E0F993 /* Chapter1-PeerXfer16.tex */,
-				DA1DA67828288CF800E0F993 /* Chapter1-MoveSlotsP2.tex */,
-			);
-			path = doc;
-			sourceTree = "<group>";
-		};
 		DA8FC5DB272C3EE800FCCFCA /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -727,7 +309,6 @@
 		DAA83DE9272C37670075CBCD /* MyTrains */ = {
 			isa = PBXGroup;
 			children = (
-				DA1DA5EF28288CF800E0F993 /* doc */,
 				DA2E0E5727359ED300C7DA7A /* Ack.swift */,
 				DAA83DEA272C37670075CBCD /* AppDelegate.swift */,
 				DAA83DEE272C37680075CBCD /* Assets.xcassets */,
@@ -925,163 +506,27 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DA1DA6A428288CF800E0F993 /* Chapter1-IPLSetAddr.tex in Resources */,
-				DA1DA6D228288CF800E0F993 /* AppendixD.log in Resources */,
-				DA1DA6B928288CF800E0F993 /* Chapter1-UnlinkSlotsP1.tex in Resources */,
-				DA1DA6DA28288CF800E0F993 /* Chapter1-SetIdleState.tex in Resources */,
-				DA1DA6B528288CF800E0F993 /* Chapter1-SetLocoSlotStat1.tex in Resources */,
-				DA1DA6D328288CF800E0F993 /* Chapter1-CommonCfgSlotDataP1.tex in Resources */,
-				DA1DA6FD28288CF900E0F993 /* Chapter1-MoveSlotsP1.tex in Resources */,
-				DA1DA6D428288CF800E0F993 /* Chapter2-LocomotiveControl.tex in Resources */,
-				DA1DA68728288CF800E0F993 /* Chapter1-CommonCfgSlotDataP2.log in Resources */,
-				DA1DA6AF28288CF800E0F993 /* Chapter8-Statistics.aux in Resources */,
-				DA1DA6A628288CF800E0F993 /* Chapter1-SVProg.tex in Resources */,
 				DAA83DEF272C37680075CBCD /* Assets.xcassets in Resources */,
-				DA1DA69C28288CF800E0F993 /* Chapter1-LocoSpdP2.tex in Resources */,
-				DA1DA69B28288CF800E0F993 /* Chapter1-SetCfgSlotDataP1.tex in Resources */,
-				DA1DA6EA28288CF800E0F993 /* Chapter4-DetectionTransponding.tex in Resources */,
-				DA1DA6DD28288CF800E0F993 /* Chapter4.log in Resources */,
-				DA1DA6E028288CF800E0F993 /* Chapter1-CommonLocoSlotDataP2.log in Resources */,
 				DA1DA5E52827E95A00E0F993 /* EditInterfaces.storyboard in Resources */,
 				DA5B4603276F5993005CA03C /* EditNetworks.storyboard in Resources */,
-				DA1DA6BA28288CF800E0F993 /* Chapter1.log in Resources */,
-				DA1DA6FF28288CF900E0F993 /* Chapter1-SetLocoSlotDataP2.tex in Resources */,
-				DA1DA6F728288CF900E0F993 /* Chapter1-SetLocoSlotDataP1.tex in Resources */,
-				DA1DA6EB28288CF800E0F993 /* Chapter1-Ack.tex in Resources */,
-				DA1DA6ED28288CF800E0F993 /* Chapter1-IPLSetupBL2.tex in Resources */,
-				DA1DA6D628288CF800E0F993 /* Network Notes.bbl in Resources */,
-				DA1DA69F28288CF800E0F993 /* Chapter1-LocoF7F13P2.tex in Resources */,
-				DA1DA69528288CF800E0F993 /* AppendixA.tex in Resources */,
-				DA1DA68C28288CF800E0F993 /* AppendixC.tex in Resources */,
 				DA77795327AEEB3A007EEBE9 /* OpSwTCV.xib in Resources */,
-				DA1DA6F928288CF900E0F993 /* Chapter1-GetBrdOpSw.tex in Resources */,
-				DA1DA6C428288CF800E0F993 /* Chapter1-LocoSlotDataP1.tex in Resources */,
 				DA8837702770B35B000B9A41 /* EditLayouts.storyboard in Resources */,
-				DA1DA69328288CF800E0F993 /* Chapter1-GetLocoSlotDataSAdrP2.tex in Resources */,
-				DA1DA68E28288CF800E0F993 /* AppendixB.tex in Resources */,
-				DA1DA6D028288CF800E0F993 /* Chapter1-ProgCV.log in Resources */,
-				DA1DA6EC28288CF800E0F993 /* Chapter1-GetSwState.tex in Resources */,
-				DA1DA6B328288CF800E0F993 /* Chapter1-IllegalMoveP1.tex in Resources */,
-				DA1DA6F628288CF900E0F993 /* Network Notes.tex in Resources */,
-				DA1DA6D728288CF800E0F993 /* Chapter1-SensRepTurnIn.tex in Resources */,
-				DA1DA6B828288CF800E0F993 /* AppendixC.aux in Resources */,
-				DA1DA6FA28288CF900E0F993 /* Chapter6-FastClock.aux in Resources */,
 				DA8AE0ED279B2CCB001E9311 /* SlotView.storyboard in Resources */,
-				DA1DA6DB28288CF800E0F993 /* Chapter1-IMMPacket.log in Resources */,
-				DA1DA6FE28288CF900E0F993 /* Chapter1-IPLDiscover.tex in Resources */,
 				DA28C2BA2801CC0300857471 /* DashBoard.storyboard in Resources */,
-				DA1DA6E328288CF800E0F993 /* Network Notes.ist in Resources */,
-				DA1DA70128288CF900E0F993 /* Chapter1-MoveSlotsP2.tex in Resources */,
-				DA1DA6C728288CF800E0F993 /* Chapter1-ProgSlotDataP1.tex in Resources */,
-				DA1DA6D928288CF800E0F993 /* Chapter1-IPLDevData.tex in Resources */,
-				DA1DA69628288CF800E0F993 /* Network Notes.slo in Resources */,
-				DA1DA6E628288CF800E0F993 /* Chapter1-GetLocoSlotDataP1.tex in Resources */,
-				DA1DA6B728288CF800E0F993 /* Chapter1-NetworkProtocol.aux in Resources */,
-				DA1DA68128288CF800E0F993 /* Chapter1-Busy.log in Resources */,
-				DA1DA6C928288CF800E0F993 /* Chapter1-SetSwState.tex in Resources */,
-				DA1DA6A028288CF800E0F993 /* Chapter1-NoFreeSlotsP2.tex in Resources */,
-				DA1DA6F328288CF800E0F993 /* Network Notes.toc in Resources */,
-				DA1DA68328288CF800E0F993 /* Chapter1-CommonLocoSlotDataP1.tex in Resources */,
-				DA1DA6CE28288CF800E0F993 /* Chapter1-SetBrdOpSw.tex in Resources */,
-				DA1DA6C328288CF800E0F993 /* Chapter1-LocoF0F6P2.tex in Resources */,
-				DA1DA6BF28288CF800E0F993 /* Chapter1-LocoF12F20F28P2.tex in Resources */,
-				DA1DA68828288CF800E0F993 /* Chapter1-CommonLocoSlotDataP2.tex in Resources */,
-				DA1DA69E28288CF800E0F993 /* Chapter1-PwrOff.tex in Resources */,
-				DA1DA6A528288CF800E0F993 /* Chapter1-SetSwStateWithAck.tex in Resources */,
-				DA1DA6F828288CF900E0F993 /* Network Notes.ind in Resources */,
-				DA1DA68928288CF800E0F993 /* Chapter1-IPLDataLoad.tex in Resources */,
-				DA1DA6AC28288CF800E0F993 /* Chapter1-IllegalMoveP2.tex in Resources */,
-				DA1DA67B28288CF800E0F993 /* Chapter1-LocoF14F20P2.tex in Resources */,
-				DA1DA6BE28288CF800E0F993 /* AppendixB.log in Resources */,
-				DA1DA70028288CF900E0F993 /* Chapter1-PeerXfer16.tex in Resources */,
-				DA1DA6B028288CF800E0F993 /* Chapter1-LocoDirF0F4P2.tex in Resources */,
 				DA88377A2770B726000B9A41 /* EditTrains.storyboard in Resources */,
-				DA1DA6CB28288CF800E0F993 /* Chapter3.aux in Resources */,
-				DA1DA6F428288CF800E0F993 /* Chapter1-LocoF5F11P2.tex in Resources */,
-				DA1DA69928288CF800E0F993 /* Chapter1-NoFreeSlotsP1.tex in Resources */,
-				DA1DA67E28288CF800E0F993 /* Chapter1-CommonCfgSlotDataP1.log in Resources */,
-				DA1DA67928288CF800E0F993 /* Chapter1-LocoBinStateP2.tex in Resources */,
-				DA1DA6B628288CF800E0F993 /* Chapter1.aux in Resources */,
-				DA1DA69828288CF800E0F993 /* Network Notes.aux in Resources */,
-				DA1DA69A28288CF800E0F993 /* Network Notes.log in Resources */,
-				DA1DA6D828288CF800E0F993 /* Chapter4.aux in Resources */,
-				DA1DA6AB28288CF800E0F993 /* Chapter3-SwitchControl.aux in Resources */,
 				DA6A0AD8275295BF00913F2B /* Monitor.storyboard in Resources */,
-				DA1DA69728288CF800E0F993 /* Chapter1-LocoSpdDirP2.tex in Resources */,
-				DA1DA6C528288CF800E0F993 /* GlossaryDefs.tex in Resources */,
-				DA1DA6CA28288CF800E0F993 /* AppendixA.aux in Resources */,
-				DA1DA69228288CF800E0F993 /* Chapter1-Reset.tex in Resources */,
-				DA1DA6AE28288CF800E0F993 /* Chapter1-GetCfgSlotDataP1.tex in Resources */,
-				DA1DA6EE28288CF800E0F993 /* Chapter1-GetLocoSlotDataP2.tex in Resources */,
-				DA1DA68428288CF800E0F993 /* Chapter1-ConsistDirF0F4.tex in Resources */,
-				DA1DA6A228288CF800E0F993 /* Chapter1-SetCfgSlotDataP2.tex in Resources */,
-				DA1DA6CD28288CF800E0F993 /* Chapter1-LocoSlotDataP2.tex in Resources */,
-				DA1DA6E128288CF800E0F993 /* Network Notes.out in Resources */,
-				DA1DA6B228288CF800E0F993 /* Chapter1-SlotNotImplemented.tex in Resources */,
-				DA1DA6BB28288CF800E0F993 /* Chapter1-LocoF5F8P1.tex in Resources */,
-				DA1DA6C628288CF800E0F993 /* Chapter2.aux in Resources */,
-				DA1DA6D128288CF800E0F993 /* Chapter1-Busy.tex in Resources */,
-				DA1DA67F28288CF800E0F993 /* Chapter1-GetLocoSlotDataLAdrP2.tex in Resources */,
-				DA1DA68D28288CF800E0F993 /* Chapter1-LinkSlotsP1.tex in Resources */,
-				DA1DA6A928288CF800E0F993 /* Chapter1-LocoDirF0F4P1.tex in Resources */,
 				DA467BAF281D5D2F00AB9650 /* SwitchBoardEditor.storyboard in Resources */,
 				DA88377C2770B73A000B9A41 /* EditSensors.storyboard in Resources */,
 				DA08B431278734270001307C /* ProgramDecoderAddress.storyboard in Resources */,
 				DA95D6BF28083E9800D9F1B6 /* GroupSetup.storyboard in Resources */,
-				DA1DA6BC28288CF800E0F993 /* Network Notes.glsdefs in Resources */,
-				DA1DA6F128288CF800E0F993 /* Chapter1-LocoF21F28P2.tex in Resources */,
-				DA1DA6E828288CF800E0F993 /* Chapter3-SwitchControl.tex in Resources */,
-				DA1DA6C828288CF800E0F993 /* Chapter1-UnlinkSlotsP2.tex in Resources */,
-				DA1DA6EF28288CF800E0F993 /* Chapter8-Statistics.tex in Resources */,
-				DA1DA68A28288CF800E0F993 /* Chapter1-GetLocoSlotDataSAdrP1.tex in Resources */,
-				DA1DA6F028288CF800E0F993 /* Chapter1-CfgSlotDataP2.tex in Resources */,
-				DA1DA6BD28288CF800E0F993 /* Network Notes.acn in Resources */,
 				DAA83DF2272C37680075CBCD /* Main.storyboard in Resources */,
-				DA1DA6E228288CF800E0F993 /* Chapter7-IPL.tex in Resources */,
-				DA1DA67A28288CF800E0F993 /* AppendixE.tex in Resources */,
-				DA1DA68228288CF800E0F993 /* Chapter1-InterfaceData.tex in Resources */,
-				DA1DA6D528288CF800E0F993 /* AppendixD.aux in Resources */,
-				DA1DA68F28288CF800E0F993 /* Chapter9-Messages.aux in Resources */,
-				DA1DA6AA28288CF800E0F993 /* Chapter1-LocoF21F27P2.tex in Resources */,
-				DA1DA6DC28288CF800E0F993 /* Chapter1-GetInterfaceData.tex in Resources */,
-				DA1DA6CF28288CF800E0F993 /* AppendixE.aux in Resources */,
-				DA1DA69D28288CF800E0F993 /* Chapter6-FastClock.tex in Resources */,
-				DA1DA6B428288CF800E0F993 /* Chapter4-DetectionTransponding.aux in Resources */,
-				DA1DA6B128288CF800E0F993 /* Chapter5-Programming.aux in Resources */,
 				DA8837762770B6F8000B9A41 /* EditLocomotives.storyboard in Resources */,
-				DA1DA6A328288CF800E0F993 /* Chapter1-LocoSpdP1.tex in Resources */,
-				DA1DA6A728288CF800E0F993 /* Chapter1-GetCfgSlotDataP2.tex in Resources */,
-				DA1DA6C228288CF800E0F993 /* Network Notes.ilg in Resources */,
-				DA1DA6C128288CF800E0F993 /* AppendixB.aux in Resources */,
 				DA33FC2027AFF9E500630227 /* OpSwDecoderType.xib in Resources */,
-				DA1DA67D28288CF800E0F993 /* AppendixD.tex in Resources */,
-				DA1DA6CC28288CF800E0F993 /* Network Notes.pdf in Resources */,
-				DA1DA6FB28288CF900E0F993 /* Chapter1-SensRepGenIn.tex in Resources */,
-				DA1DA69128288CF800E0F993 /* Chapter1-TransRep.tex in Resources */,
 				DA412E122780948900748CCD /* Throttle.storyboard in Resources */,
-				DA1DA67C28288CF800E0F993 /* Chapter1-ProgCV.tex in Resources */,
-				DA1DA6C028288CF800E0F993 /* Chapter9-Messages.tex in Resources */,
-				DA1DA6DE28288CF800E0F993 /* Chapter1-SwState.tex in Resources */,
-				DA1DA6FC28288CF900E0F993 /* Chapter1-PwrOn.tex in Resources */,
-				DA1DA68028288CF800E0F993 /* Chapter2-LocomotiveControl.aux in Resources */,
-				DA1DA68528288CF800E0F993 /* Chapter1-IMMPacket.tex in Resources */,
-				DA1DA6E928288CF800E0F993 /* Chapter1-IPLEndLoad.tex in Resources */,
-				DA1DA68628288CF800E0F993 /* Chapter1-GetLocoSlotDataLAdrP1.tex in Resources */,
 				DA77794F27AEE087007EEBE9 /* CommandStationConfiguration.storyboard in Resources */,
-				DA1DA69028288CF800E0F993 /* GlossaryDefs.log in Resources */,
-				DA1DA69428288CF800E0F993 /* Chapter1-LinkSlotsP2.tex in Resources */,
-				DA1DA68B28288CF800E0F993 /* Chapter1-NetworkProtocol.tex in Resources */,
-				DA1DA6AD28288CF800E0F993 /* Network Notes.synctex.gz in Resources */,
-				DA1DA6DF28288CF800E0F993 /* Chapter1-CommonCfgSlotDataP2.tex in Resources */,
 				DA88378C2770FBEC000B9A41 /* DBEditorView.xib in Resources */,
-				DA1DA6E528288CF800E0F993 /* Chapter1-SensRepTurnOut.tex in Resources */,
 				DA88377E2770B74E000B9A41 /* EditSwitches.storyboard in Resources */,
-				DA1DA6A128288CF800E0F993 /* Chapter1-LocoF13F19P2.tex in Resources */,
 				DA8837782770B715000B9A41 /* EditWagons.storyboard in Resources */,
-				DA1DA6A828288CF800E0F993 /* Chapter7-IPL.aux in Resources */,
-				DA1DA6F528288CF900E0F993 /* Network Notes.idx in Resources */,
-				DA1DA6E728288CF800E0F993 /* Chapter1-CfgSlotDataP1.tex in Resources */,
-				DA1DA6F228288CF800E0F993 /* Chapter5-Programming.tex in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1093,7 +538,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				DA7A4910274A89FE00C2A42B /* FastClockMessage.swift in Sources */,
-				DA1DA6E428288CF800E0F993 /* DBEditorView.swift in Sources */,
 				DA2E0E55273591A600C7DA7A /* NetworkTurnoutOutputMessage.swift in Sources */,
 				DA840BCE2794727F00944562 /* FNTableViewDS.swift in Sources */,
 				DA8FDB2A279C2B3600E15024 /* LocoSlotData.swift in Sources */,
