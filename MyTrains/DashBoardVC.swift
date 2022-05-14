@@ -8,7 +8,7 @@
 import Foundation
 import Cocoa
 
-class DashBoardVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate, NetworkMessengerDelegate {
+class DashBoardVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate, InterfaceDelegate {
   
   // MARK: Window & View Control
 
@@ -22,7 +22,7 @@ class DashBoardVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate
 
   func windowWillClose(_ notification: Notification) {
     if observerId != -1 {
-      if let mess = messenger {
+      if let mess = interface {
         mess.removeObserver(id: observerId)
         observerId = -1
       }
@@ -79,7 +79,7 @@ class DashBoardVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate
     
     delegateId = networkController.appendDelegate(delegate: self)
     
-    messengersUpdated(messengers: networkController.networkMessengers)
+    interfacesUpdated(interfaces: networkController.networkInterfaces)
     
     startQuery()
     
@@ -93,7 +93,7 @@ class DashBoardVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate
   
   private var observerId : Int = -1
   
-  private var messenger : NetworkMessenger?
+  private var interface : Interface?
   
   private var delegateId : Int = -1
   
@@ -141,7 +141,7 @@ class DashBoardVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate
   private func query() {
     nextQuery += 1
     if nextQuery <= 5 {
-      messenger?.getQuerySlot(querySlot: nextQuery)
+      interface?.getQuerySlot(querySlot: nextQuery)
       startTimer()
     }
     else {
@@ -173,28 +173,28 @@ class DashBoardVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate
   func networkControllerUpdated(netwokController: NetworkController) {
   }
   
-  func messengersUpdated(messengers: [NetworkMessenger]) {
+  func interfacesUpdated(interfaces: [Interface]) {
     
     if observerId != -1 {
-      self.messenger?.removeObserver(id: observerId)
+      self.interface?.removeObserver(id: observerId)
       observerId = -1
     }
     
-    let interface = UserDefaults.standard.string(forKey: DEFAULT.MONITOR_INTERFACE_ID) ?? ""
+    let interfaceId = UserDefaults.standard.string(forKey: DEFAULT.MONITOR_INTERFACE_ID) ?? ""
 
     cboInterface.removeAllItems()
     cboInterface.deselectItem(at: cboInterface.indexOfSelectedItem)
     
-    for messenger in messengers {
+    for interface in interfaces {
       
-      let name = messenger.comboName
+      let name = interface.interfaceName
       
       cboInterface.addItem(withObjectValue: name)
       
-      if interface == name {
+      if interfaceId == name {
         cboInterface.selectItem(at: cboInterface.numberOfItems-1)
-        self.messenger = messenger
-        observerId = messenger.addObserver(observer: self)
+        self.interface = interface
+        observerId = interface.addObserver(observer: self)
       }
       
     }
@@ -324,7 +324,7 @@ class DashBoardVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate
   @IBOutlet weak var btnReset: NSButton!
   
   @IBAction func btnResetAction(_ sender: Any) {
-    messenger?.resetQuerySlot4()
+    interface?.resetQuerySlot4(timeoutCode: .resetQuerySlot4)
   }
   
   @IBOutlet weak var lblGoodMessages: NSTextField!
@@ -353,16 +353,16 @@ class DashBoardVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate
     
     UserDefaults.standard.set(name, forKey: DEFAULT.MONITOR_INTERFACE_ID)
     
-    if let x = messenger {
-      if name != x.comboName && observerId != -1 {
+    if let x = interface {
+      if name != x.interfaceName && observerId != -1 {
         x.removeObserver(id: observerId)
       }
     }
     
-    for x in networkController.networkMessengers {
-      if x.comboName == name {
-        messenger = x
-        observerId = messenger?.addObserver(observer: self) ?? -1
+    for x in networkController.networkInterfaces {
+      if x.interfaceName == name {
+        interface = x
+        observerId = interface?.addObserver(observer: self) ?? -1
       }
     }
 

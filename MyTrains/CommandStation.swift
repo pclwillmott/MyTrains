@@ -25,7 +25,7 @@ public enum CommandStationModel : Int {
   case unknown = 0xffff
 }
 
-public class CommandStation : LocoNetDevice, NetworkMessengerDelegate {
+public class CommandStation : LocoNetDevice {
   
   // MARK: Constructors
 /*
@@ -72,8 +72,6 @@ public class CommandStation : LocoNetDevice, NetworkMessengerDelegate {
   
   private var _softwareVersion : Double = -1.0
   
-  private var _messengers : [String:NetworkMessenger] = [:]
-  
   private var _observerId : [String:Int] = [:]
   
   private var _delegates : [Int:CommandStationDelegate] = [:]
@@ -97,12 +95,6 @@ public class CommandStation : LocoNetDevice, NetworkMessengerDelegate {
   private var mostRecentCfgSlotDataP1 : [UInt8] = []
 
   // MARK: Public Properties
-  
-  public var messengers : [String:NetworkMessenger] {
-    get {
-      return _messengers
-    }
-  }
   
   public var locoSlots : [LocoSlotData] {
     get {
@@ -247,22 +239,6 @@ public class CommandStation : LocoNetDevice, NetworkMessengerDelegate {
 
   // MARK: Public Methods
   
-  public func addMessenger(messenger:NetworkMessenger) {
-    if let _ = _messengers[messenger.id] {
-    }
-    else {
-      _messengers[messenger.id] = messenger
-      _observerId[messenger.id] = messenger.addObserver(observer: self)
-      messenger.getCfgSlotDataP1()
-    }
-  }
-  
-  public func removeMessenger(messenger:NetworkMessenger) {
-    messenger.removeObserver(id: _observerId[messenger.id]!)
-    _messengers.removeValue(forKey: messenger.id)
-    _observerId.removeValue(forKey: messenger.id)
-  }
-  
   public func addSlotObserver(observer:SlotObserverDelegate) -> Int {
     slotObserverLock.lock()
     let id = nextSlotObserverId
@@ -293,80 +269,9 @@ public class CommandStation : LocoNetDevice, NetworkMessengerDelegate {
     _delegateLock.unlock()
   }
   
-  public func getCfgSlotDataP1() {
-    for messenger in _messengers {
-      if messenger.value.isOpen {
-        messenger.value.getCfgSlotDataP1()
-        break
-      }
-    }
-  }
-  
-  public func getCfgSlotDataBP1() {
-    for messenger in _messengers {
-      if messenger.value.isOpen {
-        messenger.value.getCfgSlotDataBP1()
-        break
-      }
-    }
-  }
-  
-  public func getCfgSlotDataP2() {
-    for messenger in _messengers {
-      if messenger.value.isOpen {
-        messenger.value.getCfgSlotDataP2()
-        break
-      }
-    }
-  }
-  
-  public func setLocoSlotDataP1(slotData:[UInt8]) {
-    for messenger in _messengers {
-      if messenger.value.isOpen {
-        messenger.value.setLocoSlotDataP1(slotData: slotData)
-        break
-      }
-    }
-  }
-  
-  public func setLocoSlotDataP2(slotData:[UInt8]) {
-    for messenger in _messengers {
-      if messenger.value.isOpen {
-        messenger.value.setLocoSlotDataP2(slotData: slotData)
-        break
-      }
-    }
-  }
-  
-  public func getProgSlotDataP1() {
-    for messenger in _messengers {
-      if messenger.value.isOpen {
-        messenger.value.getProgSlotDataP1()
-        break
-      }
-    }
-  }
-  
-  public func swState(switchNumber: Int) {
-    for messenger in _messengers {
-      if messenger.value.isOpen {
-        messenger.value.swState(switchNumber: switchNumber)
-        break
-      }
-    }
-  }
-  
-  public func swReq(switchNumber: Int, state:OptionSwitchState) {
-    for messenger in _messengers {
-      if messenger.value.isOpen {
-        messenger.value.swReq(switchNumber: switchNumber, state: state)
-        break
-      }
-    }
-  }
   
   public func getLocoSlot(forAddress: Int) {
-    if forAddress > 0 {
+/*    if forAddress > 0 {
       for kv in _messengers {
         let messenger = kv.value
         if messenger.isOpen {
@@ -380,11 +285,11 @@ public class CommandStation : LocoNetDevice, NetworkMessengerDelegate {
         }
       }
 
-    }
+    } */
   }
   
   public func moveSlots(sourceSlotNumber: Int, sourceSlotPage: Int, destinationSlotNumber: Int, destinationSlotPage: Int) {
-    for kv in _messengers {
+/*    for kv in _messengers {
       let messenger = kv.value
       if messenger.isOpen {
         if implementsProtocol2 {
@@ -395,11 +300,11 @@ public class CommandStation : LocoNetDevice, NetworkMessengerDelegate {
         }
         break
       }
-    }
+    } */
   }
   
   public func updateLocomotiveState(slotNumber: Int, slotPage: Int, previousState:LocomotiveState, nextState:LocomotiveState, throttleID: Int) -> LocomotiveState {
-    
+ /*
     if timer == nil {
       startTimer(timeInterval: 30.0)
     }
@@ -513,7 +418,7 @@ public class CommandStation : LocoNetDevice, NetworkMessengerDelegate {
       }
       
     }
-    
+    */
     return nextState
 
   }
@@ -562,6 +467,7 @@ public class CommandStation : LocoNetDevice, NetworkMessengerDelegate {
           message[byte] = (message[byte] & safeMask) | value
         }
       }
+      /*
       for kv in messengers {
         let messenger = kv.value
         if messenger.isOpen {
@@ -569,104 +475,18 @@ public class CommandStation : LocoNetDevice, NetworkMessengerDelegate {
           break
         }
       }
+       */
     }
   }
   
-  public func powerOn() {
-    for kv in messengers {
-      let messenger = kv.value
-      if messenger.isOpen {
-         messenger.powerOn()
-        break
-      }
-    }
-  }
   
-  public func powerOff() {
-    for kv in messengers {
-      let messenger = kv.value
-      if messenger.isOpen {
-         messenger.powerOff()
-        break
-      }
-    }
-  }
-  
-  public func powerIdle() {
-    for kv in messengers {
-      let messenger = kv.value
-      if messenger.isOpen {
-         messenger.powerIdle()
-        break
-      }
-    }
-  }
-  
-  public func clearLocoSlotDataP1(slotNumber:Int) {
-    for kv in messengers {
-      let messenger = kv.value
-      if messenger.isOpen {
-         messenger.clearLocoSlotDataP1(slotNumber: slotNumber)
-        break
-      }
-    }
-  }
-
-  public func clearLocoSlotDataP2(slotPage: Int, slotNumber:Int) {
-    for kv in messengers {
-      let messenger = kv.value
-      if messenger.isOpen {
-        messenger.clearLocoSlotDataP2(slotPage: slotPage, slotNumber: slotNumber)
-        break
-      }
-    }
-  }
-
-  public func readCV(progMode: ProgrammingMode, cv:Int, address: Int) {
-    for kv in messengers {
-      let messenger = kv.value
-      if messenger.isOpen {
-        messenger.readCV(progMode: progMode, cv: cv, address: address)
-        break
-      }
-    }
-  }
-    
-  public func writeCV(progMode: ProgrammingMode, cv:Int, address: Int, value:Int) {
-    for kv in messengers {
-      let messenger = kv.value
-      if messenger.isOpen {
-        messenger.writeCV(progMode: progMode, cv: cv, address: address, value: value)
-        break
-      }
-    }
-  }
-  
-  public func getLocoSlotDataP1(slotNumber: Int) {
-    for kv in messengers {
-      let messenger = kv.value
-      if messenger.isOpen {
-        messenger.getLocoSlotDataP1(slotNumber: slotNumber)
-        break
-      }
-    }
-  }
-    
-  public func getLocoSlotDataP2(slotPage: Int, slotNumber: Int) {
-    for kv in messengers {
-      let messenger = kv.value
-      if messenger.isOpen {
-        messenger.getLocoSlotDataP2(slotPage: slotPage, slotNumber: slotNumber)
-        break
-      }
-    }
-  }
-    
   // MARK: NetworkMessengerDelegate Methods
   
   @objc public func messengerRemoved(id: String) {
+    /*
     _messengers.removeValue(forKey: id)
     _observerId.removeValue(forKey: id)
+     */
   }
   
   @objc public func networkMessageReceived(message: NetworkMessage) {
@@ -680,9 +500,11 @@ public class CommandStation : LocoNetDevice, NetworkMessengerDelegate {
       powerIsOn              = (trk & 0b00000001) == 0b00000001
       locomotiveMessage(message: message)
       if message.messageType == .locoSlotDataP1 {
+        /*
         let slot = LocoSlotData(locoSlotDataP1: LocoSlotDataP1(interfaceId: message.interfaceId, data: message.message))
         _locoSlots[slot.slotID] = slot
         slotsUpdated()
+         */
       }
       else if message.messageType == .cfgSlotDataP1 {
         mostRecentCfgSlotDataP1 = message.message
@@ -725,22 +547,24 @@ public class CommandStation : LocoNetDevice, NetworkMessengerDelegate {
       trackIsPaused          = (trk & 0b00000010) == 0b00000000
       powerIsOn              = (trk & 0b00000001) == 0b00000001
       locomotiveMessage(message: message)
+      /*
       let slot = LocoSlotData(locoSlotDataP2: LocoSlotDataP2(interfaceId: message.interfaceId, data: message.message))
       _locoSlots[slot.slotID] = slot
       slotsUpdated()
+       */
       break
     case .noFreeSlotsP2, .noFreeSlotsP1, .setSlotDataOKP1, .setSlotDataOKP2, .illegalMoveP1, .d4Error:
       locomotiveMessage(message: message)
     case .pwrOn:
       powerIsOn = true
-      getCfgSlotDataP1()
+  //    getCfgSlotDataP1()
       break
     case .pwrOff:
       powerIsOn = false
-      getCfgSlotDataP1()
+  //    getCfgSlotDataP1()
     case .setIdleState:
       trackIsPaused = true
-      getCfgSlotDataP1()
+  //    getCfgSlotDataP1()
       break
     case.progCmdAcceptedBlind, .progSlotDataP1, .progCmdAccepted:
       progMessage(message: message)

@@ -16,7 +16,7 @@ public enum ProgrammerType {
   @objc optional func progMessageReceived(message:NetworkMessage)
 }
 
-public class Programmer : NSObject, NetworkMessengerDelegate, CommandStationDelegate {
+public class Programmer : NSObject, InterfaceDelegate, CommandStationDelegate {
   
   // MARK: Constructors
   
@@ -27,7 +27,7 @@ public class Programmer : NSObject, NetworkMessengerDelegate, CommandStationDele
     _commandStationDelegateId = commandStation.addDelegate(delegate: self)
   }
   
-  public init(programmer: NetworkMessenger) {
+  public init(programmer: Interface) {
     _programmerType = .programmer
     self._programmer = programmer
     super.init()
@@ -54,7 +54,7 @@ public class Programmer : NSObject, NetworkMessengerDelegate, CommandStationDele
   
   private var _commandStation : CommandStation?
   
-  private var _programmer : NetworkMessenger?
+  private var _programmer : Interface?
   
   private var _savedProgrammerMode : ProgrammerMode = .MS100TerminationDisabled
   
@@ -109,19 +109,18 @@ public class Programmer : NSObject, NetworkMessengerDelegate, CommandStationDele
   
   public func readCV(progMode: ProgrammingMode, cv:Int, address: Int) {
     DispatchQueue.main.async {
-      self.programmerType == .programmer ? self._programmer?.readCV(progMode: progMode, cv: cv, address: address) : self._commandStation?.readCV(progMode: progMode, cv: cv, address: address)
+      self._programmer?.readCV(progMode: progMode, cv: cv, address: address, timeoutCode: .readCV)
     }
   }
     
   public func writeCV(progMode: ProgrammingMode, cv:Int, address: Int, value:Int) {
     DispatchQueue.main.async {
-      self.programmerType == .programmer ? self._programmer?.writeCV(progMode: progMode, cv: cv, address: address, value: value) : self._commandStation?.writeCV(progMode: progMode, cv: cv, address: address, value: value)
+      self._programmer?.writeCV(progMode: progMode, cv: cv, address: address, value: value, timeoutCode: .writeCV)
     }
   }
   
   public func enterProgMode() {
     if let programmer = _programmer {
-      _savedProgrammerMode = programmer.lastProgrammerMode
 //      programmer.setProgMode(mode: .ProgrammerMode)
     }
   }
@@ -134,7 +133,7 @@ public class Programmer : NSObject, NetworkMessengerDelegate, CommandStationDele
   
   public func getProgSlotDataP1() {
     DispatchQueue.main.async {
-      self.programmerType == .programmer ? self._programmer?.getProgSlotDataP1() : self._commandStation?.getProgSlotDataP1()
+ //     self._programmer?.getProgSlotDataP1()
     }
   }
   
@@ -168,15 +167,15 @@ public class Programmer : NSObject, NetworkMessengerDelegate, CommandStationDele
   public static func programmers() -> [Programmer] {
     
     var result : [Programmer] = []
-    
+ /*
     for kv in networkController.commandStations {
-      if kv.value.messengers.count > 0 {
+      if kv.value.interfaces.count > 0 {
         let programmer = Programmer(commandStation: kv.value)
         result.append(programmer)
       }
-    }
+    } */
     
-    for messenger in networkController.networkMessengers {
+//    for messenger in networkController.networkMessengers {
       /*
       if messenger.interface.productCode == ProductCode.PR4 {
         if messenger.isOpen {
@@ -185,7 +184,7 @@ public class Programmer : NSObject, NetworkMessengerDelegate, CommandStationDele
         }
       }
        */
-    }
+ //   }
     
     return result.sorted {$0.name < $1.name}
     

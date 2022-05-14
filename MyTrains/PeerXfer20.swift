@@ -9,9 +9,9 @@ import Foundation
 
 public class PeerXferMessage20 : NetworkMessage {
   
-  override init(interfaceId: String, data: [UInt8]) {
+  override init(networkId: Int, data: [UInt8]) {
     
-    super.init(interfaceId: interfaceId, data: data)
+    super.init(networkId: networkId, data: data)
     
     let highBits1 = message[9] & 0x0f
     

@@ -172,6 +172,7 @@ public enum NetworkMessageType {
   case setSwWithAckRejected
   case slotNotImplemented
   case swState
+  case timeout
   case transRep
   case trkShortRep
   case unlinkSlotsP1

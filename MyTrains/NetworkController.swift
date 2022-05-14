@@ -9,12 +9,12 @@ import Foundation
 import ORSSerial
 
 @objc public protocol NetworkControllerDelegate {
-  @objc optional func messengersUpdated(messengers:[NetworkMessenger])
+  @objc optional func interfacesUpdated(interfaces:[Interface])
   @objc optional func networkControllerUpdated(netwokController:NetworkController)
   @objc optional func statusUpdated(networkController:NetworkController)
 }
 
-public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotificationCenterDelegate, NetworkMessengerDelegate, CommandStationDelegate {
+public class NetworkController : NSObject, InterfaceDelegate, NSUserNotificationCenterDelegate, CommandStationDelegate {
   
   // MARK: Constructor
   
@@ -23,17 +23,12 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
     super.init()
     
     let nc = NotificationCenter.default
-      nc.addObserver(self, selector: #selector(serialPortsWereConnected(_:)), name: NSNotification.Name.ORSSerialPortsWereConnected, object: nil)
-      nc.addObserver(self, selector: #selector(serialPortsWereDisconnected(_:)), name: NSNotification.Name.ORSSerialPortsWereDisconnected, object: nil)
-      
-      NSUserNotificationCenter.default.delegate = self
+    
+    nc.addObserver(self, selector: #selector(serialPortsWereConnected(_:)), name: NSNotification.Name.ORSSerialPortsWereConnected, object: nil)
 
-    for kv in interfaces {
-      let interface = kv.value
-      interfacesByDevicePath[interface.devicePath] = interface
-    }
+    nc.addObserver(self, selector: #selector(serialPortsWereDisconnected(_:)), name: NSNotification.Name.ORSSerialPortsWereDisconnected, object: nil)
 
-    findPorts()
+    NSUserNotificationCenter.default.delegate = self
 
   }
   
@@ -51,8 +46,6 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
   
   private var controllerDelegateLock : NSLock = NSLock()
   
-  private var _layoutId : Int = -1
-  
   private var _nextMessengerId : Int = 1
   
   private var _nextIdLock : NSLock = NSLock()
@@ -66,10 +59,6 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
       return "id\(id)"
     }
   }
-  
-  private var candidates : [String:NetworkMessenger] = [:]
-  
-  private var _networkMessengers : [String:NetworkMessenger] = [:]
   
   private var _observerIds : [String:Int] = [:]
   
@@ -87,19 +76,19 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
   
   public var locoNetDevices : [Int:LocoNetDevice] = LocoNetDevice.locoNetDevices
   
-  public var interfaceDevices : [Int:LocoNetDevice] {
+  public var interfaceDevices : [Int:Interface] {
     
     get {
       
-      var result : [Int:LocoNetDevice] = [:]
+      var result : [Int:Interface] = [:]
       
       for kv in locoNetDevices {
-        let device = kv.value
-        if let info = device.locoNetProductInfo {
-          if info.attributes.contains(.ComputerInterface) {
-            result[device.primaryKey] = device
-          }
+        
+        let device = Interface(device: kv.value)
+        if let info = device.locoNetProductInfo, info.attributes.contains(.ComputerInterface) {
+          result[device.primaryKey] = device
         }
+        
       }
       
       return result
@@ -110,15 +99,11 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
 
   public var layoutId : Int {
     get {
-      _layoutId = UserDefaults.standard.integer(forKey: DEFAULT.MAIN_CURRENT_LAYOUT_ID)
-      
-      return _layoutId == 0 ? -1 : _layoutId
+      let id = UserDefaults.standard.integer(forKey: DEFAULT.MAIN_CURRENT_LAYOUT_ID)
+      return id == 0 ? -1 : id
     }
     set(value) {
-      if value != layoutId {
-        _layoutId = value
-        UserDefaults.standard.set(_layoutId, forKey: DEFAULT.MAIN_CURRENT_LAYOUT_ID)
-      }
+      UserDefaults.standard.set(value, forKey: DEFAULT.MAIN_CURRENT_LAYOUT_ID)
     }
   }
   
@@ -128,49 +113,32 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
     }
   }
   
-  public var layoutDevices : [(commandStation:CommandStation, messenger:NetworkMessenger)] {
+  public var connected : Bool = false {
+    didSet {
+      for delegate in controllerDelegates {
+        delegate.value.statusUpdated?(networkController: self)
+      }
+    }
+  }
+  
+  public var networkInterfaces : [Interface] {
     get {
-      var result : [(commandStation:CommandStation, messenger:NetworkMessenger)] = []
-      if let lo = layout {
-        for net in lo.networks {
-          for kv in commandStations {
-            let cs = kv.value
-            /*
-            if net.commandStationId == cs.commandStationId {
-              for kv2 in cs.messengers {
-                let mess = kv2.value
-                result.append((commandStation: cs, messenger: mess))
-              }
+      var interfaces : [Interface] = []
+      
+      for kv in networks {
+        let network = kv.value
+        if network.layoutId == layoutId {
+          for kv in interfaceDevices {
+            let interface = kv.value
+            if interface.primaryKey == network.locoNetDeviceId {
+              interfaces.append(interface)
             }
-             */
           }
         }
       }
-      return result
-    }
-  }
-  
-  public var networkMessengers : [NetworkMessenger] {
-    get {
-      var messengers : [NetworkMessenger] = []
-      for messenger in _networkMessengers {
-        messengers.append(messenger.value)
+      return interfaces.sorted {
+        $0.interfaceName < $1.interfaceName
       }
-      return messengers.sorted {
-        $0.id < $1.id
-      }
-    }
-  }
-  
-  public var isInterfaceOpen : Bool {
-    get {
-      for kv in interfaces {
-        let interface = kv.value
-        if interface.isOpen {
-          return true
-        }
-      }
-      return false
     }
   }
   
@@ -194,24 +162,6 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
   
 // MARK: Private Methods
   
-  private func findPorts() {
-    /*
-    for port in ORSSerialPortManager.shared().availablePorts {
-      let candidate = NetworkMessenger(id: nextMessengerId, devicePath: port.path)
-      var duplicate = false
-      for messenger in networkMessengers {
-        if candidate.interface.devicePath == messenger.interface.devicePath {
-          duplicate = true
-          break
-        }
-      }
-      if !duplicate {
-        candidate.networkInterfaceDelegate = self
-        candidates[candidate.id] = candidate
-      }
-    } */
-  }
-  
   private func networkControllerUpdated() {
     for kv in controllerDelegates {
       kv.value.networkControllerUpdated?(netwokController: self)
@@ -220,51 +170,21 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
   
   // MARK: Public Methods
 
-  public func interfaceOpen() {
-    for kv in interfaces {
-      let interface = kv.value
-      if interface.isConnected {
+  public func connect() {
+    if !connected {
+      for interface in networkInterfaces {
         interface.open()
       }
+      connected = true
     }
   }
   
-  public func interfaceClose() {
-    for kv in interfaces {
-      let interface = kv.value
-      if interface.isConnected {
+  public func disconnect() {
+    if connected {
+      for interface in networkInterfaces {
         interface.close()
       }
-    }
-  }
-  
-  public func powerOn() {
-    if let lo = layout {
-      for network in lo.networks {
-//        if let cs = commandStations[network.commandStationId] {
-  //        cs.powerOn()
-    //    }
-      }
-    }
-  }
-  
-  public func powerOff() {
-    if let lo = layout {
-      for network in lo.networks {
-  //      if let cs = commandStations[network.commandStationId] {
-    //      cs.powerOff()
-      //  }
-      }
-    }
-  }
-  
-  public func powerIdle() {
-    if let lo = layout {
-      for network in lo.networks {
-//        if let cs = commandStations[network.commandStationId] {
-  //        cs.powerIdle()
-    //    }
-      }
+      connected = false
     }
   }
   
@@ -332,115 +252,7 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
     }
   }
 
-  public func locomotiveMessageReceived(message: NetworkMessage) {
-  }
-
-  public func progMessageReceived(message: NetworkMessage) {
-  }
-  
-
-  // MARK: NetworkInterfaceDelegate Methods
-  
-  public func interfaceNotIdentified(messenger: NetworkMessenger) {
-    candidates.removeValue(forKey: messenger.id)
-  }
-
-  public func interfaceIdentified(messenger: NetworkMessenger) {
-    
-    _networkMessengers[messenger.id] = messenger
-    _observerIds[messenger.id] = messenger.addObserver(observer: self)
-    
-    candidates.removeValue(forKey: messenger.id)
-    
-    let message = NetworkMessage(interfaceId: messenger.id, data: [NetworkMessageOpcode.OPC_PEER_XFER.rawValue,
-      0x14, 0x0f, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-      ], appendCheckSum: true)
-    
-    messenger.addToQueue(message: message, delay: TIMING.DISCOVER, response: [], delegate: nil, retryCount: 1)
-    
-  }
-  
-  public func statusChanged(messenger: NetworkMessenger) {
-    for delegate in controllerDelegates {
-      delegate.value.statusUpdated?(networkController: self)
-    }
-  }
-  
-  public func interfaceRemoved(messenger: NetworkMessenger) {
-    let id = messenger.id
-    candidates.removeValue(forKey: id)
-    _networkMessengers.removeValue(forKey: id)
-    for delegate in controllerDelegates {
-      delegate.value.messengersUpdated?(messengers: networkMessengers)
-      delegate.value.networkControllerUpdated?(netwokController: self)
-    }
-  }
-  
-  // MARK: NetworkMessengerDelegate Methods
-  
-  @objc public func networkMessageReceived(message: NetworkMessage) {
-    
-    switch message.messageType {
-    case .iplDevData:
-      
-      let devData = IPLDevData(interfaceId: message.interfaceId, data: message.message)
-      
-      let pc = devData.productCode
-      
-      // Command Stations
-      
-      if pc == .DCS210 || pc == .DCS210Plus || pc == .DCS210 || pc == .DCS240 {
-        /*
-        let id = CommandStation.commandStationID(manufacturer: .Digitrax, productCode: pc, serialNumber: devData.serialNumber)
-        
-        if let cs = commandStations[id] {
-          cs.addMessenger(messenger: _networkMessengers[message.interfaceId]!)
-          _ = cs.addDelegate(delegate: self)
-          networkControllerUpdated()
-        }
-        else {
-          let cs = CommandStation(message: devData)
-          commandStations[cs.commandStationId] = cs
-          cs.addMessenger(messenger: _networkMessengers[message.interfaceId]!)
-          _ = cs.addDelegate(delegate: self)
-          networkControllerUpdated()
-          cs.save()
-        }
-        */
-      }
-      
-      // Interfaces
-      
-      if pc == .PR3 || pc == .PR4 || pc == .DCS240 || pc == .DCS210Plus {
-        for kv in interfaces {
-          let interface = kv.value
-          if interface.productCode == pc &&
-             interface.serialNumber == -1 &&
-             interface.partialSerialNumberLow == devData.partialSerialNumberLow &&
-             interface.partialSerialNumberHigh == devData.partialSerialNumberHigh {
-            interface.serialNumber = devData.serialNumber
-            interface.save()
-          }
-        }
-      }
-      
-      if pc == .DT500 {
-        throttles[devData.throttleID] = pc
-      }
-      
-      for delegate in controllerDelegates {
-        delegate.value.messengersUpdated?(messengers: networkMessengers)
-        delegate.value.networkControllerUpdated?(netwokController: self)
-      }
-      
-      break
-    default:
-      break
-    }
-    
-  }
-  
-  // MARK: - NSUserNotifcationCenterDelegate
+  // MARK: - NSUserNotificationCenterDelegate
     
   public func userNotificationCenter(_ center: NSUserNotificationCenter, didDeliver notification: NSUserNotification) {
     let popTime = DispatchTime.now() + Double(Int64(3.0 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
@@ -457,7 +269,6 @@ public class NetworkController : NSObject, NetworkInterfaceDelegate, NSUserNotif
     if let userInfo = notification.userInfo {
       let connectedPorts = userInfo[ORSConnectedSerialPortsKey] as! [ORSSerialPort]
       self.postUserNotificationForConnectedPorts(connectedPorts)
-      findPorts()
     }
   }
   

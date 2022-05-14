@@ -62,6 +62,7 @@ enum LOCONET_DEVICE {
   static let BAUD_RATE                   = "BAUD_RATE"
   static let DEVICE_NAME                 = "DEVICE_NAME"
   static let FLOW_CONTROL                = "FLOW_CONTROL"
+  static let IS_STAND_ALONE_LOCONET      = "IS_STAND_ALONE_LOCONET"
 }
 
 enum ROLLING_STOCK {

@@ -11,16 +11,17 @@ public class NetworkMessage : NSObject {
   
   // MARK: Constructors
   
-  init(interfaceId: String, data:[UInt8], appendCheckSum: Bool) {
-    self.interfaceId = interfaceId
+  init(networkId: Int, data:[UInt8], appendCheckSum: Bool) {
+    self.networkId = networkId
     self.message = data
     if appendCheckSum {
       self.message.append(NetworkMessage.checkSum(data: Data(message), length: data.count))
     }
+    super.init()
   }
 
-  init(interfaceId: String, data:[Int], appendCheckSum: Bool) {
-    self.interfaceId = interfaceId
+  init(networkId: Int, data:[Int], appendCheckSum: Bool) {
+    self.networkId = networkId
     self.message = []
     for x in data {
       self.message.append(UInt8(x & 0xff))
@@ -28,11 +29,20 @@ public class NetworkMessage : NSObject {
     if appendCheckSum {
       self.message.append(NetworkMessage.checkSum(data: Data(message), length: data.count))
     }
+    super.init()
   }
 
-  init(interfaceId: String, data:[UInt8]) {
-    self.interfaceId = interfaceId
+  init(networkId: Int, data:[UInt8]) {
+    self.networkId = networkId
     self.message = data
+    super.init()
+  }
+  
+  init(networkId: Int, timeoutCode: TimeoutCode) {
+    self.networkId = networkId
+    self.message = [0x7f, timeoutCode.rawValue]
+    self._messageType = .timeout
+    super.init()
   }
   
   // MARK: Private Properties
@@ -47,7 +57,7 @@ public class NetworkMessage : NSObject {
   
   public var message : [UInt8]
   
-  public var interfaceId : String
+  public var networkId : Int
   
   public var checkSumOK : Bool {
     get {
@@ -58,6 +68,12 @@ public class NetworkMessage : NSObject {
         index += 1
       }
       return checkSum == 0xff
+    }
+  }
+  
+  public var timeoutCode : UInt8 {
+    get {
+      return message.count == 2 && message[0] == 0x7f ? message[1] : 0x00
     }
   }
   
@@ -1109,7 +1125,7 @@ public class NetworkMessage : NSObject {
     
   }
 
-  // MARK: Public Methods
+  // MARK: Class Methods
   
   public static func checkSum(data: Data, length: Int) -> UInt8 {
     var cs : UInt8 = 0xff

@@ -53,7 +53,7 @@ class MainVC: NSViewController, NetworkControllerDelegate {
   
   private func updateStatus() {
     
-    swConnect.state = networkController.isInterfaceOpen ? .on : .off
+    swConnect.state = networkController.connected ? .on : .off
     
     if let _ = networkController.layout {
       
@@ -61,7 +61,7 @@ class MainVC: NSViewController, NetworkControllerDelegate {
       
       var xPos : CGFloat = 20
       let yPos : CGFloat = 15
-      
+      /*
       for device in networkController.layoutDevices {
         
         var color : NSColor = NSColor.black
@@ -101,7 +101,7 @@ class MainVC: NSViewController, NetworkControllerDelegate {
         xPos += label2.frame.width + 10
 
       }
-      
+      */
     }
         
   }
@@ -112,9 +112,6 @@ class MainVC: NSViewController, NetworkControllerDelegate {
  
     updateStatus()
     
-  }
-  
-  func messengersUpdated(messengers: [NetworkMessenger]) {
   }
   
   func networkControllerUpdated(netwokController: NetworkController) {
@@ -151,26 +148,26 @@ class MainVC: NSViewController, NetworkControllerDelegate {
   
   @IBAction func swConnectAction(_ sender: NSSwitch) {
     
-    swConnect.state == .on ? networkController.interfaceOpen() : networkController.interfaceClose()
+    swConnect.state == .on ? networkController.connect() : networkController.disconnect()
     
   }
   
   @IBOutlet weak var btnPowerOn: NSButton!
   
   @IBAction func btnPowerOnAction(_ sender: NSButton) {
-    networkController.powerOn()
+//    networkController.powerOn()
   }
   
   @IBOutlet weak var btnPowerOff: NSButton!
   
   @IBAction func btnPowerOffAction(_ sender: NSButton) {
-    networkController.powerOff()
+//    networkController.powerOff()
   }
   
   @IBOutlet weak var btnPause: NSButton!
   
   @IBAction func btnPauseAction(_ sender: NSButton) {
-    networkController.powerIdle()
+//    networkController.powerIdle()
   }
   
 }

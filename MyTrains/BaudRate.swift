@@ -24,23 +24,7 @@ public enum BaudRate : Int {
   public var baudRate : NSNumber {
     
     get {
-      
-      let rates : [NSNumber] =
-      [
-        19200,
-        28800,
-        38400,
-        57600,
-        76800,
-       115200,
-       230400,
-       460800,
-       576000,
-       921600,
-      ]
-      
-      return rates[self.rawValue]
-      
+      return BaudRate.rates[self.rawValue]
     }
     
   }
@@ -71,7 +55,7 @@ public enum BaudRate : Int {
   
   public static var numberOfRates : Int {
     get {
-      return 10
+      return BaudRate.rates.count
     }
   }
   
@@ -82,7 +66,20 @@ public enum BaudRate : Int {
         comboBox.addItem(withObjectValue: rate.title)
       }
     }
-
   }
   
+  private static let rates : [NSNumber] =
+  [
+    19200,
+    28800,
+    38400,
+    57600,
+    76800,
+   115200,
+   230400,
+   460800,
+   576000,
+   921600,
+  ]
+
 }

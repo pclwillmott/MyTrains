@@ -482,7 +482,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
       break
     case .progSlotDataP1:
       
-      let psd = ProgSlotDataP1(interfaceId: message.interfaceId, data: message.message)
+      let psd = ProgSlotDataP1(networkId: message.networkId, data: message.message)
       
       if psd.status == .success {
         

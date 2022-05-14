@@ -968,10 +968,10 @@ public class Locomotive : RollingStock, CommandStationDelegate {
             
       switch message.messageType {
       case .ack:
-        let ack = Ack(interfaceId: message.interfaceId, data: message.message)
+  //      let ack = Ack(interfaceId: message.interfaceId, data: message.message)
         break
       case .locoSlotDataP1:
-        let locoSlotDataP1 = LocoSlotDataP1(interfaceId: message.interfaceId, data: message.message)
+        let locoSlotDataP1 = LocoSlotDataP1(networkId: message.networkId, data: message.message)
         if locoSlotDataP1.address == address {
           slotPage = locoSlotDataP1.slotPage
           slotNumber = locoSlotDataP1.slotNumber
@@ -982,7 +982,7 @@ public class Locomotive : RollingStock, CommandStationDelegate {
             if locoSlotDataP1.slotState == .inUse {
               initState = .waitingForOwnershipConfirmation
               let wb = writeBack(message: message)
-              cs.setLocoSlotDataP1(slotData: wb)
+     //         cs.setLocoSlotDataP1(slotData: wb)
             }
             else {
               initState = .waitingToActivate
@@ -992,13 +992,13 @@ public class Locomotive : RollingStock, CommandStationDelegate {
           else if initState == .waitingToActivate {
             initState = .waitingForOwnershipConfirmation
             let wb = writeBack(message: message)
-            cs.setLocoSlotDataP1(slotData: wb)
+    //        cs.setLocoSlotDataP1(slotData: wb)
           }
         }
         break
       case .setLocoSlotDataP2:
         
-        let locoSlotDataP2 = LocoSlotDataP2(interfaceId: message.interfaceId, data: message.message)
+        let locoSlotDataP2 = LocoSlotDataP2(networkId: message.networkId, data: message.message)
 
         if locoSlotDataP2.address == address {
           
@@ -1017,7 +1017,7 @@ public class Locomotive : RollingStock, CommandStationDelegate {
 
       case .locoSlotDataP2:
         
-        let locoSlotDataP2 = LocoSlotDataP2(interfaceId: message.interfaceId, data: message.message)
+        let locoSlotDataP2 = LocoSlotDataP2(networkId: message.networkId, data: message.message)
         
         if locoSlotDataP2.address == address {
           
@@ -1055,7 +1055,7 @@ public class Locomotive : RollingStock, CommandStationDelegate {
             if locoSlotDataP2.slotState == .inUse {
               initState = .waitingForOwnershipConfirmation
               let wb = writeBack(message: message)
-              cs.setLocoSlotDataP2(slotData: wb)
+       //       cs.setLocoSlotDataP2(slotData: wb)
             }
             else {
               initState = .waitingToActivate
@@ -1065,7 +1065,7 @@ public class Locomotive : RollingStock, CommandStationDelegate {
           else if initState == .waitingToActivate {
             initState = .waitingForOwnershipConfirmation
             let wb = writeBack(message: message)
-            cs.setLocoSlotDataP2(slotData: wb)
+      //      cs.setLocoSlotDataP2(slotData: wb)
           }
         }
         break

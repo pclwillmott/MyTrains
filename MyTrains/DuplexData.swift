@@ -12,7 +12,7 @@ public class DuplexData : NetworkMessage {
   // MARK: Constructors
   
   init(message:NetworkMessage) {
-    super.init(interfaceId: message.interfaceId, data: message.message)
+    super.init(networkId: message.networkId, data: message.message)
   }
   
   // MARK: Public Properties

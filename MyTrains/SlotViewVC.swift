@@ -132,10 +132,10 @@ class SlotViewVC : NSViewController, NSWindowDelegate, SlotObserverDelegate, Com
         slot.isDirty = false
         if let cs = commandStation {
           if slot.isP1 {
-            cs.getLocoSlotDataP1(slotNumber: slot.slotNumber)
+   //         cs.getLocoSlotDataP1(slotNumber: slot.slotNumber)
           }
           else {
-            cs.getLocoSlotDataP2(slotPage: slot.slotPage, slotNumber: slot.slotNumber)
+   //         cs.getLocoSlotDataP2(slotPage: slot.slotPage, slotNumber: slot.slotNumber)
           }
           break
         }
@@ -159,7 +159,7 @@ class SlotViewVC : NSViewController, NSWindowDelegate, SlotObserverDelegate, Com
             state = .readAllP1
             slotNumber = 0
             lblStatus.stringValue = "Reading \(slotNumber)"
-            cs.getLocoSlotDataP1(slotNumber: slotNumber)
+    //        cs.getLocoSlotDataP1(slotNumber: slotNumber)
             return
           }
           slotNumber += 1
@@ -168,7 +168,7 @@ class SlotViewVC : NSViewController, NSWindowDelegate, SlotObserverDelegate, Com
             slotPage += 1
           }
           lblStatus.stringValue = "Reading \(slotPage).\(slotNumber)"
-          cs.getLocoSlotDataP2(slotPage: slotPage, slotNumber: slotNumber)
+  //        cs.getLocoSlotDataP2(slotPage: slotPage, slotNumber: slotNumber)
         case .readAllP1:
           if slotNumber == 119 {
             state = .idle
@@ -177,7 +177,7 @@ class SlotViewVC : NSViewController, NSWindowDelegate, SlotObserverDelegate, Com
           }
           slotNumber += 1
           lblStatus.stringValue = "Reading \(slotNumber)"
-          cs.getLocoSlotDataP1(slotNumber: slotNumber)
+  //        cs.getLocoSlotDataP1(slotNumber: slotNumber)
         case .read:
           state = .idle
           lblStatus.stringValue = "Read Completed"
@@ -233,12 +233,12 @@ class SlotViewVC : NSViewController, NSWindowDelegate, SlotObserverDelegate, Com
 
         if slot.isP1 {
           slotNumber = slot.slotNumber
-          cs.getLocoSlotDataP1(slotNumber: slotNumber)
+    //      cs.getLocoSlotDataP1(slotNumber: slotNumber)
         }
         else {
           slotPage = slot.slotPage
           slotNumber = slot.slotNumber
-          cs.getLocoSlotDataP2(slotPage: slotPage, slotNumber: slotNumber)
+    //      cs.getLocoSlotDataP2(slotPage: slotPage, slotNumber: slotNumber)
         }
 
       }
@@ -255,7 +255,7 @@ class SlotViewVC : NSViewController, NSWindowDelegate, SlotObserverDelegate, Com
       slotPage = 0
       slotNumber = 0
       lblStatus.stringValue = "Reading \(slotPage).\(slotNumber)"
-      cs.getLocoSlotDataP2(slotPage: slotPage, slotNumber: slotNumber)
+ //     cs.getLocoSlotDataP2(slotPage: slotPage, slotNumber: slotNumber)
     }
     
   }
@@ -278,12 +278,12 @@ class SlotViewVC : NSViewController, NSWindowDelegate, SlotObserverDelegate, Com
 
         if slot.isP1 {
           slotNumber = slot.slotNumber
-          cs.clearLocoSlotDataP1(slotNumber: slotNumber)
+  //        cs.clearLocoSlotDataP1(slotNumber: slotNumber)
         }
         else {
           slotPage = slot.slotPage
           slotNumber = slot.slotNumber
-          cs.clearLocoSlotDataP2(slotPage: slotPage, slotNumber: slotNumber)
+  //        cs.clearLocoSlotDataP2(slotPage: slotPage, slotNumber: slotNumber)
         }
 
       }

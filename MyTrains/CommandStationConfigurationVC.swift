@@ -33,11 +33,11 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Command
     
     let css = networkController.commandStations
     var temp : [Int:CommandStation] = [:]
-    for y in css {
+ /*   for y in css {
       if y.value.messengers.count > 0 {
         temp[y.key] = y.value
       }
-    }
+    } */
     cboCommandStationDS.dictionary = temp
     
     cboCommandStation.dataSource = cboCommandStationDS
@@ -144,8 +144,8 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Command
         baseCase = message
         let newState : OptionSwitchState = buttons[readSwitchNumber-1].state == .on ? .closed : .thrown
         configState = .waitingForNewCase
-        commandStation?.swReq(switchNumber: readSwitchNumber, state: newState)
-        commandStation?.getCfgSlotDataP2()
+//        commandStation?.swReq(switchNumber: readSwitchNumber, state: newState)
+ //       commandStation?.getCfgSlotDataP2()
       }
       else if configState == .waitingForNewCase {
         newCase = message
@@ -175,8 +175,8 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Command
         baseCase = message
         let newState : OptionSwitchState = buttons[readSwitchNumber-1].state == .on ? .closed : .thrown
         configState = .waitingForNewCase
-        commandStation?.swReq(switchNumber: readSwitchNumber, state: newState)
-        rad7F.state == .on ? commandStation?.getCfgSlotDataP1() : commandStation?.getCfgSlotDataBP1()
+  //      commandStation?.swReq(switchNumber: readSwitchNumber, state: newState)
+  //      rad7F.state == .on ? commandStation?.getCfgSlotDataP1() : //commandStation?.getCfgSlotDataBP1()
       }
       else if configState == .waitingForNewCase {
         newCase = message
@@ -207,7 +207,7 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Command
           }
           readSwitchNumber = options[nextReadIndex].switchNumber
           configState = .waitingForReadSwitchAck
-          commandStation?.swState(switchNumber: readSwitchNumber)
+  //        commandStation?.swState(switchNumber: readSwitchNumber)
           break
         }
         configState = .idle
@@ -231,7 +231,7 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Command
         }
         readSwitchNumber = options[nextReadIndex].switchNumber
         configState = .waitingForReadSwitchAck
-        commandStation?.swState(switchNumber: readSwitchNumber)
+  //      commandStation?.swState(switchNumber: readSwitchNumber)
         break
       }
       else if configState == .waitingforMassReadSwitchAck {
@@ -239,13 +239,13 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Command
         if nextReadIndex < 128 {
           nextReadIndex += 1
           configState = .waitingforMassReadSwitchAck
-          commandStation?.swState(switchNumber: nextReadIndex)
+//          commandStation?.swState(switchNumber: nextReadIndex)
           break
         }
         else {
           isDirty = false
           configState = .waitingForBaseCase
-          radProtocol1.state == .on ? commandStation?.getCfgSlotDataP1() : commandStation?.getCfgSlotDataP2()
+//          radProtocol1.state == .on ? commandStation?.getCfgSlotDataP1() : commandStation?.getCfgSlotDataP2()
         }
         break
       }
@@ -309,7 +309,7 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Command
   
   @IBAction func btnReadAction(_ sender: NSButton) {
     configState = .waitingForCfgSlotDataP1
-    commandStation?.getCfgSlotDataP1()
+//    commandStation?.getCfgSlotDataP1()
   }
   
   @IBOutlet weak var btnWrite: NSButton!
@@ -318,7 +318,7 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Command
     if radOptionSwitches.state == .on {
       for opsw in csConfigurationTableViewDS.options {
         if opsw.switchDefinition.configByte == -1 {
-          commandStation?.swReq(switchNumber: opsw.switchNumber, state: opsw.newState)
+   //       commandStation?.swReq(switchNumber: opsw.switchNumber, state: opsw.newState)
           isDirty = true
         }
       }
@@ -370,15 +370,15 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Command
       }
       nextReadIndex = 1
       configState = .waitingforMassReadSwitchAck
-      commandStation?.swState(switchNumber: nextReadIndex)
+ //     commandStation?.swState(switchNumber: nextReadIndex)
     }
     else {
       configState = .waitingForBaseCase
       if radProtocol1.state == .on {
-        rad7F.state == .on ? commandStation?.getCfgSlotDataP1() : commandStation?.getCfgSlotDataBP1()
+//        rad7F.state == .on ? commandStation?.getCfgSlotDataP1() : commandStation?.getCfgSlotDataBP1()
       }
       else {
-        commandStation?.getCfgSlotDataP2()
+//        commandStation?.getCfgSlotDataP2()
       }
       
     }

@@ -8,7 +8,7 @@
 import Foundation
 import Cocoa
 
-class GroupSetupVC: NSViewController, NetworkControllerDelegate, NetworkMessengerDelegate, NSWindowDelegate {
+class GroupSetupVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate, NSWindowDelegate {
   
   // MARK: Window & View Control
   
@@ -23,7 +23,7 @@ class GroupSetupVC: NSViewController, NetworkControllerDelegate, NetworkMessenge
   func windowWillClose(_ notification: Notification) {
     
     if observerId != -1 {
-      if let mess = messenger {
+      if let mess = interface {
         mess.removeObserver(id: observerId)
         observerId = -1
       }
@@ -42,7 +42,7 @@ class GroupSetupVC: NSViewController, NetworkControllerDelegate, NetworkMessenge
 
     delegateId = networkController.appendDelegate(delegate: self)
     
-    messengersUpdated(messengers: networkController.networkMessengers)
+    interfacesUpdated(interfaces: networkController.networkInterfaces)
     
     btnReadAction(btnRead)
 
@@ -56,7 +56,7 @@ class GroupSetupVC: NSViewController, NetworkControllerDelegate, NetworkMessenge
   
   private var observerId : Int = -1
   
-  private var messenger : NetworkMessenger? = nil
+  private var interface : Interface? = nil
   
   private var isFirst : Bool = true
   
@@ -84,7 +84,7 @@ class GroupSetupVC: NSViewController, NetworkControllerDelegate, NetworkMessenge
     
     lblNowScanning.stringValue = "Pass: \(pass) - Scanning Channel: \(duplexGroupChannel)"
     
-    messenger?.getDuplexSignalStrength(duplexGroupChannel: duplexGroupChannel)
+    interface?.getDuplexSignalStrength(duplexGroupChannel: duplexGroupChannel)
     
     duplexGroupChannel += 1
     
@@ -117,35 +117,28 @@ class GroupSetupVC: NSViewController, NetworkControllerDelegate, NetworkMessenge
 
   // MARK: NetworkControllerDelegate Methods
   
-  func statusUpdated(networkController: NetworkController) {
-    
-  }
-  
-  func networkControllerUpdated(netwokController: NetworkController) {
-  }
-  
-  func messengersUpdated(messengers: [NetworkMessenger]) {
+  func interfacesUpdated(interfaces: [Interface]) {
     
     if observerId != -1 {
-      self.messenger?.removeObserver(id: observerId)
+      self.interface?.removeObserver(id: observerId)
       observerId = -1
     }
     
-    let interface = UserDefaults.standard.string(forKey: DEFAULT.MONITOR_INTERFACE_ID) ?? ""
+    let interfaceId = UserDefaults.standard.string(forKey: DEFAULT.MONITOR_INTERFACE_ID) ?? ""
 
     cboInterface.removeAllItems()
     cboInterface.deselectItem(at: cboInterface.indexOfSelectedItem)
     
-    for messenger in messengers {
+    for interface in interfaces {
       
-      let name = messenger.comboName
+      let name = interface.interfaceName
       
       cboInterface.addItem(withObjectValue: name)
       
-      if interface == name {
+      if interfaceId == name {
         cboInterface.selectItem(at: cboInterface.numberOfItems-1)
-        self.messenger = messenger
-        observerId = messenger.addObserver(observer: self)
+        self.interface = interface
+        observerId = interface.addObserver(observer: self)
       }
       
     }
@@ -206,16 +199,16 @@ class GroupSetupVC: NSViewController, NetworkControllerDelegate, NetworkMessenge
     
     UserDefaults.standard.set(name, forKey: DEFAULT.MONITOR_INTERFACE_ID)
     
-    if let x = messenger {
-      if name != x.comboName && observerId != -1 {
+    if let x = interface {
+      if name != x.interfaceName && observerId != -1 {
         x.removeObserver(id: observerId)
       }
     }
     
-    for x in networkController.networkMessengers {
-      if x.comboName == name {
-        messenger = x
-        observerId = messenger?.addObserver(observer: self) ?? -1
+    for x in networkController.networkInterfaces {
+      if x.interfaceName == name {
+        interface = x
+        observerId = interface?.addObserver(observer: self) ?? -1
         btnReadAction(btnRead)
       }
     }
@@ -246,19 +239,19 @@ class GroupSetupVC: NSViewController, NetworkControllerDelegate, NetworkMessenge
   
   @IBAction func btnReadAction(_ sender: NSButton) {
     isFirst = true
-    messenger?.findReceiver()
-    messenger?.getDuplexData()
+    interface?.findReceiver()
+    interface?.getDuplexData()
   }
   
   @IBOutlet var btnWrite: NSButton!
   
   @IBAction func btnWriteAction(_ sender: NSButton) {
     
-    messenger?.setDuplexChannelNumber(channelNumber: txtChannelNumber.integerValue)
-    messenger?.setDuplexGroupID(groupID: txtGroupID.integerValue)
-    messenger?.setDuplexGroupName(groupName: txtGroupName.stringValue)
-    messenger?.setDuplexPassword(password: txtGroupPassword.stringValue)
-    messenger?.setLocoNetID(locoNetID: txtLocoNetID.integerValue)
+    interface?.setDuplexChannelNumber(channelNumber: txtChannelNumber.integerValue)
+    interface?.setDuplexGroupID(groupID: txtGroupID.integerValue)
+    interface?.setDuplexGroupName(groupName: txtGroupName.stringValue)
+    interface?.setDuplexPassword(password: txtGroupPassword.stringValue)
+    interface?.setLocoNetID(locoNetID: txtLocoNetID.integerValue)
     
   }
   

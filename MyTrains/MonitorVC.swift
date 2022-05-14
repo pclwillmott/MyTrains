@@ -21,7 +21,7 @@ public enum NumberBase : Int {
   case hexBinary = 4
 }
 
-class MonitorVC: NSViewController, NetworkControllerDelegate, NetworkMessengerDelegate, NSWindowDelegate {
+class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate, NSWindowDelegate {
   
   // MARK: Window & View Control
   
@@ -35,7 +35,7 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, NetworkMessengerDe
 
   func windowWillClose(_ notification: Notification) {
     if observerId != -1 {
-      if let mess = messenger {
+      if let mess = interface {
         mess.removeObserver(id: observerId)
         observerId = -1
       }
@@ -52,7 +52,7 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, NetworkMessengerDe
 
     delegateId = networkController.appendDelegate(delegate: self)
     
-    messengersUpdated(messengers: networkController.networkMessengers)
+    interfacesUpdated(interfaces: networkController.networkInterfaces)
     
     sendFilename = UserDefaults.standard.string(forKey: DEFAULT.MONITOR_SEND_FILENAME) ?? ""
     
@@ -87,7 +87,7 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, NetworkMessengerDe
   
   private var observerId : Int = -1
   
-  private var messenger : NetworkMessenger? = nil
+  private var interface : Interface? = nil
   
   private var lastTime = Date.timeIntervalSinceReferenceDate
   
@@ -250,9 +250,9 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, NetworkMessengerDe
     }
     
     if good {
-      if let messenger = messenger {
-        let message = NetworkMessage(interfaceId: messenger.id, data: numbers, appendCheckSum: true)
-        messenger.addToQueue(message: message, delay: TIMING.STANDARD, response: [], delegate: self, retryCount: 10)
+      if let interface = interface {
+        let message = NetworkMessage(networkId: interface.networkId, data: numbers, appendCheckSum: true)
+        interface.addToQueue(message: message, delay: MessageTiming.STANDARD)
       }
     }
 
@@ -262,40 +262,40 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, NetworkMessengerDe
   
   func statusUpdated(networkController: NetworkController) {
     
-    swConnect.state = networkController.isInterfaceOpen ? .on : .off
+    swConnect.state = networkController.connected ? .on : .off
     
   }
   
   func networkControllerUpdated(netwokController: NetworkController) {
   }
   
-  func messengersUpdated(messengers: [NetworkMessenger]) {
+  func interfacesUpdated(interfaces: [Interface]) {
     
     if observerId != -1 {
-      self.messenger?.removeObserver(id: observerId)
+      self.interface?.removeObserver(id: observerId)
       observerId = -1
     }
     
-    let interface = UserDefaults.standard.string(forKey: DEFAULT.MONITOR_INTERFACE_ID) ?? ""
+    let interfaceId = UserDefaults.standard.string(forKey: DEFAULT.MONITOR_INTERFACE_ID) ?? ""
 
     cboInterface.removeAllItems()
     cboInterface.deselectItem(at: cboInterface.indexOfSelectedItem)
     
-    for messenger in messengers {
+    for interface in interfaces {
       
-      let name = messenger.comboName
+      let name = interface.interfaceName
       
       cboInterface.addItem(withObjectValue: name)
       
-      if interface == name {
+      if interfaceId == name {
         cboInterface.selectItem(at: cboInterface.numberOfItems-1)
-        self.messenger = messenger
-        observerId = messenger.addObserver(observer: self)
+        self.interface = interface
+        observerId = interface.addObserver(observer: self)
       }
       
     }
     
-    swConnect.state = networkController.isInterfaceOpen ? .on : .off
+    swConnect.state = networkController.connected ? .on : .off
     
   }
 
@@ -404,20 +404,20 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, NetworkMessengerDe
     
     UserDefaults.standard.set(name, forKey: DEFAULT.MONITOR_INTERFACE_ID)
     
-    if let x = messenger {
-      if name != x.comboName && observerId != -1 {
+    if let x = interface {
+      if name != x.interfaceName && observerId != -1 {
         x.removeObserver(id: observerId)
       }
     }
     
-    for x in networkController.networkMessengers {
-      if x.comboName == name {
-        messenger = x
-        observerId = messenger?.addObserver(observer: self) ?? -1
+    for x in networkController.networkInterfaces {
+      if x.interfaceName == name {
+        interface = x
+        observerId = interface?.addObserver(observer: self) ?? -1
       }
     }
 
-    swConnect.state = networkController.isInterfaceOpen ? .on : .off
+    swConnect.state = networkController.connected ? .on : .off
 
   }
 
@@ -426,25 +426,25 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, NetworkMessengerDe
   @IBOutlet weak var swConnect: NSSwitch!
   
   @IBAction func swConnectAction(_ sender: NSSwitch) {
-    swConnect.state == .on ? networkController.interfaceOpen() : networkController.interfaceOpen()
+    swConnect.state == .on ? networkController.connect() : networkController.disconnect()
   }
   
   @IBOutlet weak var btnPowerOn: NSButton!
   
   @IBAction func btnPowerOnAction(_ sender: NSButton) {
-    messenger?.powerOn()
+    interface?.powerOn()
   }
   
   @IBOutlet weak var btnPowerOff: NSButton!
   
   @IBAction func btnPowerOffAction(_ sender: NSButton) {
-    messenger?.powerOff()
+    interface?.powerOff()
   }
   
   @IBOutlet weak var btnPowerPause: NSButton!
   
   @IBAction func btnPowerPauseAction(_ sender: NSButton) {
-    messenger?.powerIdle()
+    interface?.powerIdle()
   }
   
   @IBOutlet weak var lblSendFileName: NSTextField!
@@ -656,7 +656,7 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, NetworkMessengerDe
   
   @IBAction func btnTestAction(_ sender: NSButton) {
  //   messenger?.getLocoSlotDataP2(forAddress: addr)
-    messenger?.getDuplexGroupID()
+    interface?.getDuplexGroupID()
   }
   
   var addr : Int = 1

@@ -9,37 +9,32 @@ import Foundation
 
 public class NetworkOutputQueueItem {
   
-  init(message: NetworkMessage, delay:TimeInterval, response: [NetworkMessageType], delegate: NetworkMessengerDelegate?, retryCount: Int) {
+  init(message: NetworkMessage, delay:TimeInterval, responses: Set<NetworkMessageType>, retryCount: Int, timeoutCode: TimeoutCode) {
     self.message = message
     self.delay = delay
-    self.response = response
-    self.delegate = delegate
-    self.retryCount = retryCount
+    self.responses = responses
+    self.retryCount = retryCount + 1
+    self.timeoutCode = timeoutCode
   }
   
   public var message : NetworkMessage
   
   public var delay : TimeInterval
   
-  public var response : [NetworkMessageType]
-  
-  public var delegate : NetworkMessengerDelegate?
+  public var responses : Set<NetworkMessageType>
   
   public var responseExpected : Bool {
     get {
-      return response.count > 0
+      return responses.count > 0
     }
   }
   
   public var retryCount : Int
   
+  public var timeoutCode : TimeoutCode
+  
   public func isValidResponse(messageType: NetworkMessageType) -> Bool {
-    for x in response {
-      if x == messageType {
-        return true
-      }
-    }
-    return false
+    return responses.contains(messageType)
   }
   
 }

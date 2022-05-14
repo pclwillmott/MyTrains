@@ -112,6 +112,12 @@ public class LocoNetDevice : EditorObject {
     }
   }
   
+  public var isStandAloneLoconet : Bool = false {
+    didSet {
+      modified = true
+    }
+  }
+  
   // MARK: Public Methods
   
   override public func displayString() -> String {
@@ -182,6 +188,10 @@ public class LocoNetDevice : EditorObject {
         flowControl = FlowControl(rawValue: reader.getInt(index: 14)!) ?? .noFlowControl
       }
 
+      if !reader.isDBNull(index: 15) {
+        isStandAloneLoconet = reader.getBool(index: 15)!
+      }
+
     }
     
     modified = false
@@ -210,7 +220,8 @@ public class LocoNetDevice : EditorObject {
         "[\(LOCONET_DEVICE.DEVICE_PATH)], " +
         "[\(LOCONET_DEVICE.BAUD_RATE)], " +
         "[\(LOCONET_DEVICE.DEVICE_NAME)], " +
-        "[\(LOCONET_DEVICE.FLOW_CONTROL)]" +
+        "[\(LOCONET_DEVICE.FLOW_CONTROL)]," +
+        "[\(LOCONET_DEVICE.IS_STAND_ALONE_LOCONET)]" +
         ") VALUES (" +
         "@\(LOCONET_DEVICE.LOCONET_DEVICE_ID), " +
         "@\(LOCONET_DEVICE.NETWORK_ID), " +
@@ -226,7 +237,8 @@ public class LocoNetDevice : EditorObject {
         "@\(LOCONET_DEVICE.DEVICE_PATH), " +
         "@\(LOCONET_DEVICE.BAUD_RATE), " +
         "@\(LOCONET_DEVICE.DEVICE_NAME), " +
-        "@\(LOCONET_DEVICE.FLOW_CONTROL)" +
+        "@\(LOCONET_DEVICE.FLOW_CONTROL), " +
+        "@\(LOCONET_DEVICE.IS_STAND_ALONE_LOCONET)" +
         ")"
         primaryKey = Database.nextCode(tableName: TABLE.LOCONET_DEVICE, primaryKey: LOCONET_DEVICE.LOCONET_DEVICE_ID)!
       }
@@ -245,7 +257,8 @@ public class LocoNetDevice : EditorObject {
         "[\(LOCONET_DEVICE.DEVICE_PATH)] = @\(LOCONET_DEVICE.DEVICE_PATH), " +
         "[\(LOCONET_DEVICE.BAUD_RATE)] = @\(LOCONET_DEVICE.BAUD_RATE), " +
         "[\(LOCONET_DEVICE.DEVICE_NAME)] = @\(LOCONET_DEVICE.DEVICE_NAME), " +
-        "[\(LOCONET_DEVICE.FLOW_CONTROL)] = @\(LOCONET_DEVICE.FLOW_CONTROL) " +
+        "[\(LOCONET_DEVICE.FLOW_CONTROL)] = @\(LOCONET_DEVICE.FLOW_CONTROL), " +
+        "[\(LOCONET_DEVICE.IS_STAND_ALONE_LOCONET)] = @\(LOCONET_DEVICE.IS_STAND_ALONE_LOCONET) " +
         "WHERE [\(LOCONET_DEVICE.LOCONET_DEVICE_ID)] = @\(LOCONET_DEVICE.LOCONET_DEVICE_ID)"
       }
 
@@ -276,6 +289,7 @@ public class LocoNetDevice : EditorObject {
       cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.BAUD_RATE)", value: baudRate.rawValue)
       cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.DEVICE_NAME)", value: deviceName)
       cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.FLOW_CONTROL)", value: flowControl.rawValue)
+      cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.IS_STAND_ALONE_LOCONET)", value: isStandAloneLoconet)
 
       _ = cmd.executeNonQuery()
 
@@ -293,22 +307,24 @@ public class LocoNetDevice : EditorObject {
   
   public static var columnNames : String {
     get {
-      return
-        "[\(LOCONET_DEVICE.LOCONET_DEVICE_ID)], " +
-        "[\(LOCONET_DEVICE.NETWORK_ID)], " +
-        "[\(LOCONET_DEVICE.SERIAL_NUMBER)], " +
-        "[\(LOCONET_DEVICE.SOFTWARE_VERSION)], " +
-        "[\(LOCONET_DEVICE.HARDWARE_VERSION)], " +
-        "[\(LOCONET_DEVICE.BOARD_ID)], " +
-        "[\(LOCONET_DEVICE.LOCONET_PRODUCT_ID)], " +
-        "[\(LOCONET_DEVICE.OPTION_SWITCHES_0)], " +
-        "[\(LOCONET_DEVICE.OPTION_SWITCHES_1)], " +
-        "[\(LOCONET_DEVICE.OPTION_SWITCHES_2)], " +
-        "[\(LOCONET_DEVICE.OPTION_SWITCHES_3)], " +
-        "[\(LOCONET_DEVICE.DEVICE_PATH)], " +
-        "[\(LOCONET_DEVICE.BAUD_RATE)], " +
-        "[\(LOCONET_DEVICE.DEVICE_NAME)], " +
-        "[\(LOCONET_DEVICE.FLOW_CONTROL)]"
+      let names =
+      "[\(LOCONET_DEVICE.LOCONET_DEVICE_ID)], " +
+      "[\(LOCONET_DEVICE.NETWORK_ID)], " +
+      "[\(LOCONET_DEVICE.SERIAL_NUMBER)], " +
+      "[\(LOCONET_DEVICE.SOFTWARE_VERSION)], " +
+      "[\(LOCONET_DEVICE.HARDWARE_VERSION)], " +
+      "[\(LOCONET_DEVICE.BOARD_ID)], " +
+      "[\(LOCONET_DEVICE.LOCONET_PRODUCT_ID)], " +
+      "[\(LOCONET_DEVICE.OPTION_SWITCHES_0)], " +
+      "[\(LOCONET_DEVICE.OPTION_SWITCHES_1)], " +
+      "[\(LOCONET_DEVICE.OPTION_SWITCHES_2)], " +
+      "[\(LOCONET_DEVICE.OPTION_SWITCHES_3)], " +
+      "[\(LOCONET_DEVICE.DEVICE_PATH)], " +
+      "[\(LOCONET_DEVICE.BAUD_RATE)], " +
+      "[\(LOCONET_DEVICE.DEVICE_NAME)], " +
+      "[\(LOCONET_DEVICE.FLOW_CONTROL)], " +
+      "[\(LOCONET_DEVICE.IS_STAND_ALONE_LOCONET)]"
+      return names
     }
   }
 
@@ -352,7 +368,7 @@ public class LocoNetDevice : EditorObject {
   }
   
   public static func delete(primaryKey: Int) {
-    let sql = "DELETE FROM [\(TABLE.NETWORK)] WHERE [\(NETWORK.NETWORK_ID)] = \(primaryKey)"
+    let sql = "DELETE FROM [\(TABLE.LOCONET_DEVICE)] WHERE [\(LOCONET_DEVICE.LOCONET_DEVICE_ID)] = \(primaryKey)"
     Database.execute(commands: [sql])
   }
   

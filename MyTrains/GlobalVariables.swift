@@ -7,10 +7,6 @@
 
 import Foundation
 
-public var interfaces : [Int:Interface] = [:] //Interface.interfaces
-
-public var interfacesByDevicePath : [String:Interface] = [:]
-
 public var networkController : NetworkController = NetworkController()
 
 

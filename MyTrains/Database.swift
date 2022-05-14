@@ -79,21 +79,22 @@ class Database {
             ")",
  
             "CREATE TABLE [\(TABLE.LOCONET_DEVICE)] (" +
-              "[\(LOCONET_DEVICE.LOCONET_DEVICE_ID)]  INT PRIMARY KEY," +
-              "[\(LOCONET_DEVICE.NETWORK_ID)]         INT NOT NULL," +
-              "[\(LOCONET_DEVICE.SERIAL_NUMBER)]      INT NOT NULL," +
-              "[\(LOCONET_DEVICE.SOFTWARE_VERSION)]   REAL NOT NULL," +
-              "[\(LOCONET_DEVICE.HARDWARE_VERSION)]   REAL NOT NULL," +
-              "[\(LOCONET_DEVICE.BOARD_ID)]           INT NOT NULL," +
-              "[\(LOCONET_DEVICE.LOCONET_PRODUCT_ID)] INT NOT NULL," +
-              "[\(LOCONET_DEVICE.OPTION_SWITCHES_0)]  INT NOT NULL," +
-              "[\(LOCONET_DEVICE.OPTION_SWITCHES_1)]  INT NOT NULL," +
-              "[\(LOCONET_DEVICE.OPTION_SWITCHES_2)]  INT NOT NULL," +
-              "[\(LOCONET_DEVICE.OPTION_SWITCHES_3)]  INT NOT NULL," +
-              "[\(LOCONET_DEVICE.DEVICE_PATH)]        TEXT NOT NULL," +
-              "[\(LOCONET_DEVICE.BAUD_RATE)]          INT NOT NULL," +
-              "[\(LOCONET_DEVICE.DEVICE_NAME)]        TEXT NOT NULL," +
-              "[\(LOCONET_DEVICE.FLOW_CONTROL)]       INT NOT NULL" +
+              "[\(LOCONET_DEVICE.LOCONET_DEVICE_ID)]      INT PRIMARY KEY," +
+              "[\(LOCONET_DEVICE.NETWORK_ID)]             INT NOT NULL," +
+              "[\(LOCONET_DEVICE.SERIAL_NUMBER)]          INT NOT NULL," +
+              "[\(LOCONET_DEVICE.SOFTWARE_VERSION)]       REAL NOT NULL," +
+              "[\(LOCONET_DEVICE.HARDWARE_VERSION)]       REAL NOT NULL," +
+              "[\(LOCONET_DEVICE.BOARD_ID)]               INT NOT NULL," +
+              "[\(LOCONET_DEVICE.LOCONET_PRODUCT_ID)]     INT NOT NULL," +
+              "[\(LOCONET_DEVICE.OPTION_SWITCHES_0)]      INT NOT NULL," +
+              "[\(LOCONET_DEVICE.OPTION_SWITCHES_1)]      INT NOT NULL," +
+              "[\(LOCONET_DEVICE.OPTION_SWITCHES_2)]      INT NOT NULL," +
+              "[\(LOCONET_DEVICE.OPTION_SWITCHES_3)]      INT NOT NULL," +
+              "[\(LOCONET_DEVICE.DEVICE_PATH)]            TEXT NOT NULL," +
+              "[\(LOCONET_DEVICE.BAUD_RATE)]              INT NOT NULL," +
+              "[\(LOCONET_DEVICE.DEVICE_NAME)]            TEXT NOT NULL," +
+              "[\(LOCONET_DEVICE.FLOW_CONTROL)]           INT NOT NULL," +
+              "[\(LOCONET_DEVICE.IS_STAND_ALONE_LOCONET)] INT NOT NULL" +
             ")",
 
             "CREATE TABLE [\(TABLE.ROLLING_STOCK)] (" +
