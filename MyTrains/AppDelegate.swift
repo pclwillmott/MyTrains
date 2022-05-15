@@ -10,7 +10,7 @@ import Foundation
 import ORSSerial
 
 @main
-class AppDelegate: NSObject, NSApplicationDelegate {
+class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDelegate {
   
   // MARK: App Control
   
@@ -36,7 +36,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
       UserDefaults.standard.set(76.2, forKey: DEFAULT.SCALE)
       UserDefaults.standard.set(TrackGauge.oo.rawValue, forKey: DEFAULT.TRACK_GAUGE)
     }
-
+    
   }
   
   func applicationWillTerminate(_ aNotification: Notification) {

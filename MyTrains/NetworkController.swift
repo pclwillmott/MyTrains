@@ -14,7 +14,7 @@ import ORSSerial
   @objc optional func statusUpdated(networkController:NetworkController)
 }
 
-public class NetworkController : NSObject, InterfaceDelegate, NSUserNotificationCenterDelegate, CommandStationDelegate {
+public class NetworkController : NSObject, InterfaceDelegate, NSUserNotificationCenterDelegate {
   
   // MARK: Constructor
   

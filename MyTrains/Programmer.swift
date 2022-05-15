@@ -27,7 +27,7 @@ public class Programmer : NSObject, InterfaceDelegate, CommandStationDelegate {
     _commandStationDelegateId = commandStation.addDelegate(delegate: self)
   }
   
-  public init(programmer: Interface) {
+  init(programmer: Interface) {
     _programmerType = .programmer
     self._programmer = programmer
     super.init()

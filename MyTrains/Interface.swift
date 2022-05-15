@@ -221,9 +221,9 @@ public class Interface : LocoNetDevice, ORSSerialPortDelegate  {
     
     close()
     
-    print(devicePath)
-    if let port = ORSSerialPort(path: "/dev/cu.usbmodemDxP470881") {
+    if let port = ORSSerialPort(path: "/dev/cu.usbmodemDxP431751") {
       serialPort = port
+      print(port.path)
     }
     
     if let port = serialPort {
@@ -235,7 +235,7 @@ public class Interface : LocoNetDevice, ORSSerialPortDelegate  {
       port.usesDTRDSRFlowControl = false
       port.usesDCDOutputFlowControl = false
       port.delegate = self
-      serialPort!.open()
+      port.open()
     }
   
   }
@@ -256,19 +256,27 @@ public class Interface : LocoNetDevice, ORSSerialPortDelegate  {
   }
   
   public func serialPortWasOpened(_ serialPort: ORSSerialPort) {
-    print("port opened")
-    for observer in observers {
-//      observer.value.interfaceWasOpened?(interface: self)
+      print("Close")
     }
+    
+  public func serialPortWasClosed(_ serialPort: ORSSerialPort) {
+      print("Open")
+    }
+ /*
+  public func serialPortWasOpened(_ serialPort: ORSSerialPort) {
+    print("port opened")
+//    for observer in observers {
+//      observer.value.interfaceWasOpened?(interface: self)
+//    }
   }
   
   public func serialPortWasClosed(_ serialPort: ORSSerialPort) {
     print("port closed")
-    for observer in observers {
+ //   for observer in observers {
  //     observer.value.interfaceWasClosed?(interface: self)
-    }
+ //   }
   }
-  
+  */
   public func serialPortWasRemovedFromSystem(_ serialPort: ORSSerialPort) {
     print("port was removed")
     for observer in observers {
