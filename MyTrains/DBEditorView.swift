@@ -127,7 +127,6 @@ class DBEditorView: NSView {
         setControls()
         first = false
       }
-      
     }
   }
   
