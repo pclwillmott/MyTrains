@@ -63,7 +63,6 @@
 		DA5E173E272EB23100F9341F /* LoconetSensorMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5E173D272EB23100F9341F /* LoconetSensorMessage.swift */; };
 		DA5E1741272ED2DF00F9341F /* LoconetSwitchRequestMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5E1740272ED2DF00F9341F /* LoconetSwitchRequestMessage.swift */; };
 		DA5E1743272EDA5B00F9341F /* LocoSlotDataP1.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5E1742272EDA5B00F9341F /* LocoSlotDataP1.swift */; };
-		DA61400D279B0B2400C5BF2F /* ORSSerial.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA8FC5E0272C3EE800FCCFCA /* ORSSerial.framework */; };
 		DA6A0AD8275295BF00913F2B /* Monitor.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA6A0AD7275295BF00913F2B /* Monitor.storyboard */; };
 		DA6A0ADA2752976800913F2B /* MonitorVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6A0AD92752976800913F2B /* MonitorVC.swift */; };
 		DA6A0ADC27529D6600913F2B /* ModalWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6A0ADB27529D6600913F2B /* ModalWindow.swift */; };
@@ -123,30 +122,6 @@
 		DAEA9CFA272D8FBE00C9B3EC /* NetworkMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEA9CF9272D8FBE00C9B3EC /* NetworkMessage.swift */; };
 		DAF5BCD9281EF086000B61CA /* SwitchBoardPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF5BCD8281EF086000B61CA /* SwitchBoardPanel.swift */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		DA61400A279B0ABD00C5BF2F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DA8FC5DA272C3EE800FCCFCA /* ORSSerialPort.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 9DCA89111A2BB106009285EB;
-			remoteInfo = ORSSerial;
-		};
-		DA8FC5DF272C3EE800FCCFCA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DA8FC5DA272C3EE800FCCFCA /* ORSSerialPort.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 9DCA89121A2BB106009285EB;
-			remoteInfo = ORSSerial;
-		};
-		DA8FC5E1272C3EE800FCCFCA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DA8FC5DA272C3EE800FCCFCA /* ORSSerialPort.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 9D7472131B6D7767002D8B10;
-			remoteInfo = "ORSSerialPort Tests";
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		DA0197242773500100350F71 /* ComboBoxDictDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComboBoxDictDS.swift; sourceTree = "<group>"; };
@@ -244,7 +219,6 @@
 		DA8B5D18282FDE1800D39F07 /* ProgrammerMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgrammerMode.swift; sourceTree = "<group>"; };
 		DA8B5D1A282FE23900D39F07 /* MessageTiming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTiming.swift; sourceTree = "<group>"; };
 		DA8B5D1C282FE31600D39F07 /* InterfaceDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceDelegate.swift; sourceTree = "<group>"; };
-		DA8FC5DA272C3EE800FCCFCA /* ORSSerialPort.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ORSSerialPort.xcodeproj; path = "Frameworks/ORSSerialPort/Framework Project/ORSSerialPort.xcodeproj"; sourceTree = "<group>"; };
 		DA8FDB29279C2B3600E15024 /* LocoSlotData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoSlotData.swift; sourceTree = "<group>"; };
 		DA8FDB2C279C4AC000E15024 /* LocoSlotTableViewDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoSlotTableViewDS.swift; sourceTree = "<group>"; };
 		DA95D6BC280833ED00D9F1B6 /* GroupSetupVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupSetupVC.swift; sourceTree = "<group>"; };
@@ -274,22 +248,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DA61400D279B0B2400C5BF2F /* ORSSerial.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		DA8FC5DB272C3EE800FCCFCA /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				DA8FC5E0272C3EE800FCCFCA /* ORSSerial.framework */,
-				DA8FC5E2272C3EE800FCCFCA /* ORSSerialPort Tests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		DA8FC5E5272C3F8100FCCFCA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -303,7 +267,6 @@
 				DAEFAA5F28289668007AC92D /* DBEditorView.swift */,
 				DA8FC5E5272C3F8100FCCFCA /* Frameworks */,
 				DAA83DE9272C37670075CBCD /* MyTrains */,
-				DA8FC5DA272C3EE800FCCFCA /* ORSSerialPort.xcodeproj */,
 				DAA83DE8272C37670075CBCD /* Products */,
 			);
 			sourceTree = "<group>";
@@ -452,7 +415,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				DA61400B279B0ABD00C5BF2F /* PBXTargetDependency */,
 			);
 			name = MyTrains;
 			productName = MyTrains;
@@ -485,35 +447,12 @@
 			mainGroup = DAA83DDE272C37670075CBCD;
 			productRefGroup = DAA83DE8272C37670075CBCD /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = DA8FC5DB272C3EE800FCCFCA /* Products */;
-					ProjectRef = DA8FC5DA272C3EE800FCCFCA /* ORSSerialPort.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				DAA83DE6272C37670075CBCD /* MyTrains */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		DA8FC5E0272C3EE800FCCFCA /* ORSSerial.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = ORSSerial.framework;
-			remoteRef = DA8FC5DF272C3EE800FCCFCA /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		DA8FC5E2272C3EE800FCCFCA /* ORSSerialPort Tests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = "ORSSerialPort Tests.xctest";
-			remoteRef = DA8FC5E1272C3EE800FCCFCA /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		DAA83DE5272C37670075CBCD /* Resources */ = {
@@ -648,14 +587,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		DA61400B279B0ABD00C5BF2F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = ORSSerial;
-			targetProxy = DA61400A279B0ABD00C5BF2F /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		DAA83DF0272C37680075CBCD /* Main.storyboard */ = {
