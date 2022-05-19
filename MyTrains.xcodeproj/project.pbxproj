@@ -42,6 +42,8 @@
 		DA412E122780948900748CCD /* Throttle.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA412E112780948900748CCD /* Throttle.storyboard */; };
 		DA412E14278099AF00748CCD /* ThrottleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA412E13278099AF00748CCD /* ThrottleVC.swift */; };
 		DA412E162780DC3C00748CCD /* DecoderFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA412E152780DC3C00748CCD /* DecoderFunction.swift */; };
+		DA434294283698CA00E8D555 /* SerialPort.c in Sources */ = {isa = PBXBuildFile; fileRef = DA434293283698CA00E8D555 /* SerialPort.c */; };
+		DA4342962836996800E8D555 /* MTSerialPort.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA4342952836996800E8D555 /* MTSerialPort.swift */; };
 		DA467B9D281CAFDA00AB9650 /* NSColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA467B9C281CAFDA00AB9650 /* NSColorExtensions.swift */; };
 		DA467B9F281CBAF900AB9650 /* NSRectExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA467B9E281CBAF900AB9650 /* NSRectExtensions.swift */; };
 		DA467BA3281D501300AB9650 /* SwitchBoardDefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA467BA2281D501300AB9650 /* SwitchBoardDefs.swift */; };
@@ -160,6 +162,10 @@
 		DA412E112780948900748CCD /* Throttle.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Throttle.storyboard; sourceTree = "<group>"; };
 		DA412E13278099AF00748CCD /* ThrottleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThrottleVC.swift; sourceTree = "<group>"; };
 		DA412E152780DC3C00748CCD /* DecoderFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecoderFunction.swift; sourceTree = "<group>"; };
+		DA434291283698CA00E8D555 /* MyTrains-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MyTrains-Bridging-Header.h"; sourceTree = "<group>"; };
+		DA434292283698CA00E8D555 /* SerialPort.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SerialPort.h; sourceTree = "<group>"; };
+		DA434293283698CA00E8D555 /* SerialPort.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = SerialPort.c; sourceTree = "<group>"; };
+		DA4342952836996800E8D555 /* MTSerialPort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTSerialPort.swift; sourceTree = "<group>"; };
 		DA467B9C281CAFDA00AB9650 /* NSColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSColorExtensions.swift; sourceTree = "<group>"; };
 		DA467B9E281CBAF900AB9650 /* NSRectExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSRectExtensions.swift; sourceTree = "<group>"; };
 		DA467BA2281D501300AB9650 /* SwitchBoardDefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchBoardDefs.swift; sourceTree = "<group>"; };
@@ -352,6 +358,8 @@
 				DA6A0ADB27529D6600913F2B /* ModalWindow.swift */,
 				DA6A0AD7275295BF00913F2B /* Monitor.storyboard */,
 				DA6A0AD92752976800913F2B /* MonitorVC.swift */,
+				DA4342952836996800E8D555 /* MTSerialPort.swift */,
+				DA434291283698CA00E8D555 /* MyTrains-Bridging-Header.h */,
 				DAA83DF3272C37680075CBCD /* MyTrains.entitlements */,
 				DA5B4608276F6CBF005CA03C /* Network.swift */,
 				DAEA9CF6272D8DA900C9B3EC /* NetworkConstants.swift */,
@@ -381,6 +389,8 @@
 				DA28C2C62801EEA900857471 /* QuerySlot4.swift */,
 				DA28C2C82801EF6500857471 /* QuerySlot5.swift */,
 				DA2502B8282671600002D4AF /* RollingStock.swift */,
+				DA434293283698CA00E8D555 /* SerialPort.c */,
+				DA434292283698CA00E8D555 /* SerialPort.h */,
 				DA95D6C42809C00600D9F1B6 /* SignalStrengthView.swift */,
 				DA8AE0EC279B2CCB001E9311 /* SlotView.storyboard */,
 				DA8AE0EF279B3074001E9311 /* SlotViewVC.swift */,
@@ -438,6 +448,7 @@
 				TargetAttributes = {
 					DAA83DE6272C37670075CBCD = {
 						CreatedOnToolsVersion = 13.1;
+						LastSwiftMigration = 1340;
 					};
 				};
 			};
@@ -519,6 +530,7 @@
 				DA08B433278737540001307C /* ProgramDecoderAddressVC.swift in Sources */,
 				DA08B435278754AB0001307C /* CommandStationComboBoxDS.swift in Sources */,
 				DA6F3926274FD0C400A63FBF /* PeerXfer20.swift in Sources */,
+				DA4342962836996800E8D555 /* MTSerialPort.swift in Sources */,
 				DA6A0ADF2753B5CF00913F2B /* UserDefaults.swift in Sources */,
 				DA6A0AE12753D50A00913F2B /* GlobalVariables.swift in Sources */,
 				DAB07498276EB6C3003278BE /* Sqlite.swift in Sources */,
@@ -574,6 +586,7 @@
 				DA412E162780DC3C00748CCD /* DecoderFunction.swift in Sources */,
 				DA8B5D1B282FE23900D39F07 /* MessageTiming.swift in Sources */,
 				DA28C2C52801ED9700857471 /* QuerySlot3.swift in Sources */,
+				DA434294283698CA00E8D555 /* SerialPort.c in Sources */,
 				DA0DA27A2779E96B00E4F23C /* Layout.swift in Sources */,
 				DA467BA9281D569300AB9650 /* SwitchBoardView.swift in Sources */,
 				DA8837802770B768000B9A41 /* EditLocomotivesVC.swift in Sources */,
@@ -729,6 +742,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = MyTrains/MyTrains.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -750,6 +764,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = Oswalds.MyTrains;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "MyTrains/MyTrains-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -759,6 +775,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = MyTrains/MyTrains.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -780,6 +797,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = Oswalds.MyTrains;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "MyTrains/MyTrains-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;

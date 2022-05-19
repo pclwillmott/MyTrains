@@ -76,26 +76,7 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
   
   public var locoNetDevices : [Int:LocoNetDevice] = LocoNetDevice.locoNetDevices
   
-  public var interfaceDevices : [Int:Interface] {
-    
-    get {
-      
-      var result : [Int:Interface] = [:]
-      
-      for kv in locoNetDevices {
-        
-        let device = Interface(device: kv.value)
-        if let info = device.locoNetProductInfo, info.attributes.contains(.ComputerInterface) {
-          result[device.primaryKey] = device
-        }
-        
-      }
-      
-      return result
-      
-    }
-    
-  }
+  public var interfaceDevices : [Int:Interface] = Interface.interfaceDevices
 
   public var layoutId : Int {
     get {

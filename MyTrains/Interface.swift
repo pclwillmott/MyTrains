@@ -15,39 +15,19 @@ enum InterfaceState {
   case waitingForResponse
 }
 
-public class Interface : LocoNetDevice, ORSSerialPortDelegate  {
+public class Interface : LocoNetDevice, MTSerialPortDelegate  {
   
   // MARK: Constructors
   
-  init(device:LocoNetDevice) {
-    super.init(primaryKey: device.primaryKey)
-    self.networkId = device.networkId
-    self.serialNumber = device.serialNumber
-    self.softwareVersion = device.softwareVersion
-    self.hardwareVersion = device.hardwareVersion
-    self.boardId = device.boardId
-    self.locoNetProductId = device.locoNetProductId
-    self.optionSwitches0 = device.optionSwitches0
-    self.optionSwitches1 = device.optionSwitches1
-    self.optionSwitches2 = device.optionSwitches2
-    self.optionSwitches3 = device.optionSwitches3
-    self.devicePath = device.devicePath
-    self.baudRate = device.baudRate
-    self.deviceName = device.deviceName
-    self.flowControl = device.flowControl
-    self.isStandAloneLoconet = device.isStandAloneLoconet
-  }
-
   // MARK: Destructors
   
   deinit {
     close()
-    serialPort = nil
   }
   
   // MARK: Private Properties
   
-  @objc dynamic private var serialPort : ORSSerialPort?
+  private var serialPort : MTSerialPort?
   
   private var buffer : [UInt8] = [UInt8](repeating: 0x00, count:256)
   
@@ -119,7 +99,7 @@ public class Interface : LocoNetDevice, ORSSerialPortDelegate  {
       
       if item.retryCount > 0 {
       
-        send(data: Data(item.message.message))
+        send(data: item.message.message)
         
         if item.responseExpected {
           interfaceState = .waitingForResponse
@@ -219,21 +199,14 @@ public class Interface : LocoNetDevice, ORSSerialPortDelegate  {
   
   public func open() {
     
-    close()
-    
-    if let port = ORSSerialPort(path: "/dev/cu.usbmodemDxP431751") {
-      serialPort = port
-      print(port.path)
-    }
-    
-    if let port = serialPort {
-      port.baudRate = baudRate.baudRate
+    if let port = MTSerialPort(path: "/dev/cu.usbmodemDxP431751") {
+      port.baudRate = baudRate
       port.numberOfDataBits = 8
       port.numberOfStopBits = 1
       port.parity = .none
       port.usesRTSCTSFlowControl = false // .rtsCts
-      port.usesDTRDSRFlowControl = false
-      port.usesDCDOutputFlowControl = false
+ //     port.usesDTRDSRFlowControl = false
+ //     port.usesDCDOutputFlowControl = false
       port.delegate = self
       port.open()
     }
@@ -242,51 +215,16 @@ public class Interface : LocoNetDevice, ORSSerialPortDelegate  {
   
   public func close() {
     serialPort?.close()
-    serialPort = nil
   }
   
-  public func send(data: Data) {
-    serialPort?.send(data)
+  public func send(data: [UInt8]) {
+    serialPort?.write(data:data)
   }
   
-  // MARK: ORSSerialPortDelegate Methods
+  // MARK: MTSerialPortDelegate Methods
   
-  public func serialPort(_ serialPort: ORSSerialPort, didEncounterError error: Error) {
-    print("err")
-  }
-  
-  public func serialPortWasOpened(_ serialPort: ORSSerialPort) {
-      print("Close")
-    }
+  public func serialPort(_ serialPort: MTSerialPort, didReceive data: [UInt8]) {
     
-  public func serialPortWasClosed(_ serialPort: ORSSerialPort) {
-      print("Open")
-    }
- /*
-  public func serialPortWasOpened(_ serialPort: ORSSerialPort) {
-    print("port opened")
-//    for observer in observers {
-//      observer.value.interfaceWasOpened?(interface: self)
-//    }
-  }
-  
-  public func serialPortWasClosed(_ serialPort: ORSSerialPort) {
-    print("port closed")
- //   for observer in observers {
- //     observer.value.interfaceWasClosed?(interface: self)
- //   }
-  }
-  */
-  public func serialPortWasRemovedFromSystem(_ serialPort: ORSSerialPort) {
-    print("port was removed")
-    for observer in observers {
-  //    observer.value.interfaceWasDisconnected?(interface: self)
-    }
-  }
-  
-  public func serialPort(_ serialPort: ORSSerialPort, didReceive data: Data) {
-    
-    print("rx data")
     bufferLock.lock()
     bufferCount += data.count
     for x in data {
@@ -423,7 +361,64 @@ public class Interface : LocoNetDevice, ORSSerialPortDelegate  {
       }
 
     }
-
+  }
+  
+  public func serialPortWasRemovedFromSystem(_ serialPort: MTSerialPort) {
+    
+  }
+  
+  public func serialPortWasOpened(_ serialPort: MTSerialPort) {
+    self.serialPort = serialPort
+  }
+  
+  public func serialPortWasClosed(_ serialPort: MTSerialPort) {
+    self.serialPort = nil
   }
 
+  public static var interfaceDevices : [Int:Interface] {
+    
+    get {
+    
+      let conn = Database.getConnection()
+      
+      let shouldClose = conn.state != .Open
+       
+      if shouldClose {
+        _ = conn.open()
+      }
+       
+      let cmd = conn.createCommand()
+       
+      cmd.commandText = "SELECT \(columnNames) FROM [\(TABLE.LOCONET_DEVICE)] ORDER BY [\(NETWORK.LOCONET_DEVICE_ID)]"
+
+      var result : [Int:Interface] = [:]
+      
+      if let reader = cmd.executeReader() {
+           
+        while reader.read() {
+          
+          let device = Interface(reader: reader)
+          
+          if let info = device.locoNetProductInfo {
+            if info.attributes.contains(.ComputerInterface) {
+              result[device.primaryKey] = device
+            }
+          }
+          
+        }
+           
+        reader.close()
+           
+      }
+      
+      if shouldClose {
+        conn.close()
+      }
+
+      return result
+      
+    }
+    
+  }
+  
 }

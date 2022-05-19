@@ -21,7 +21,7 @@ public enum BaudRate : Int {
   case br576000 = 8
   case br921600 = 9
   
-  public var baudRate : NSNumber {
+  public var baudRate : UInt {
     
     get {
       return BaudRate.rates[self.rawValue]
@@ -42,8 +42,8 @@ public enum BaudRate : Int {
       formatter.minimumFractionDigits = 0
       formatter.maximumFractionDigits = 0
 
-      let x = Double(truncating: self.baudRate)
-      if let string = formatter.string(from: NSNumber(value:x)) {
+      let x = Double(BaudRate.rates[self.rawValue])
+      if let string = formatter.string(from: x as NSNumber) {
         return string
       }
       
@@ -59,16 +59,7 @@ public enum BaudRate : Int {
     }
   }
   
-  public static func populate(comboBox: NSComboBox) {
-    comboBox.removeAllItems()
-    for index in 0...BaudRate.numberOfRates-1 {
-      if let rate = BaudRate(rawValue: index) {
-        comboBox.addItem(withObjectValue: rate.title)
-      }
-    }
-  }
-  
-  private static let rates : [NSNumber] =
+  private static let rates : [UInt] =
   [
     19200,
     28800,
@@ -81,5 +72,15 @@ public enum BaudRate : Int {
    576000,
    921600,
   ]
+  
+  public static func populate(comboBox:NSComboBox) {
+    
+    comboBox.removeAllItems()
+    
+    for rate in rates {
+      comboBox.addItem(withObjectValue: "\(rate)")
+    }
+    
+  }
 
 }
