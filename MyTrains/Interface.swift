@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import ORSSerial
 import Cocoa
 
 enum InterfaceState {
@@ -199,12 +198,12 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate  {
   
   public func open() {
     
-    if let port = MTSerialPort(path: "/dev/cu.usbmodemDxP431751") {
+    if let port = MTSerialPort(path: devicePath) {
       port.baudRate = baudRate
       port.numberOfDataBits = 8
       port.numberOfStopBits = 1
       port.parity = .none
-      port.usesRTSCTSFlowControl = false // .rtsCts
+      port.usesRTSCTSFlowControl = flowControl == .rtsCts
  //     port.usesDTRDSRFlowControl = false
  //     port.usesDCDOutputFlowControl = false
       port.delegate = self
@@ -369,10 +368,16 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate  {
   
   public func serialPortWasOpened(_ serialPort: MTSerialPort) {
     self.serialPort = serialPort
+    for observer in observers {
+      observer.value.interfaceWasOpened?(interface: self)
+    }
   }
   
   public func serialPortWasClosed(_ serialPort: MTSerialPort) {
     self.serialPort = nil
+    for observer in observers {
+      observer.value.interfaceWasClosed?(interface: self)
+    }
   }
 
   public static var interfaceDevices : [Int:Interface] {

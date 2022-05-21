@@ -29,21 +29,10 @@
 // Given the path to a serial device, open the device and configure it.
 // Return the file descriptor associated with the device.
 
-int openSerialPort(
-  const char *path,
-  speed_t baudRate,
-  int numberOfDataBits,
-  int numberOfStopBits,
-  int parity,
-  int usesRTSCTSFlowControl
-)
+int openSerialPort(const char *path)
 {
 
   int fd = -1;
-
-  int handshake;
-
-  struct termios options;
 
   // Open the serial port read/write, with no controlling terminal, and don't wait for a connection.
 
@@ -75,11 +64,38 @@ int openSerialPort(
       goto error;
   }
 
+  // Success
+
+  return fd;
+
+  // Failure path
+
+error:
+
+  if (fd != -1) {
+    close(fd);
+  }
+
+  return -1;
+
+}
+
+int setSerialPortOptions(
+  int fd,
+  speed_t baudRate,
+  int numberOfDataBits,
+  int numberOfStopBits,
+  int parity,
+  int usesRTSCTSFlowControl
+)
+{
+
+  struct termios options;
+
   // Get the current options.
 
   if (tcgetattr(fd, &options) == -1) {
-      printf("Error getting tty attributes %s - %s(%d).\n", path, strerror(errno), errno);
-      goto error;
+    goto error;
   }
 
   // The serial port attributes such as timeouts and baud rate are set by modifying the termios structure and then calling tcsetattr() to cause the changes to take effect. Note that the changes will not become effective without the tcsetattr() call.
@@ -92,38 +108,12 @@ int openSerialPort(
 
   cfmakeraw(&options);
 
+  // Return as many as you can without waiting
+  
   options.c_cc[VMIN] = 0;
   options.c_cc[VTIME] = 0;
 
   // The baud rate, word length, and handshake options can be set as follows:
-
-//  cfsetspeed(&options, B19200);       // Set 19200 baud
-
-#if defined eric
-#if !defined(_POSIX_C_SOURCE) || defined(_DARWIN_C_SOURCE)
-#define CIGNORE         0x00000001      /* ignore control flags */
-#endif
-#define CSIZE           0x00000300      /* character size mask */
-#define     CS5             0x00000000      /* 5 bits (pseudo) */
-#define     CS6             0x00000100      /* 6 bits */
-#define     CS7             0x00000200      /* 7 bits */
-#define     CS8             0x00000300      /* 8 bits */
-#define CSTOPB          0x00000400      /* send 2 stop bits */
-#define CREAD           0x00000800      /* enable receiver */
-#define PARENB          0x00001000      /* parity enable */
-#define PARODD          0x00002000      /* odd parity, else even */
-#define HUPCL           0x00004000      /* hang up on last close */
-#define CLOCAL          0x00008000      /* ignore modem status lines */
-#if !defined(_POSIX_C_SOURCE) || defined(_DARWIN_C_SOURCE)
-#define CCTS_OFLOW      0x00010000      /* CTS flow control of output */
-#define CRTSCTS         (CCTS_OFLOW | CRTS_IFLOW)
-#define CRTS_IFLOW      0x00020000      /* RTS flow control of input */
-#define CDTR_IFLOW      0x00040000      /* DTR flow control of input */
-#define CDSR_OFLOW      0x00080000      /* DSR flow control of output */
-#define CCAR_OFLOW      0x00100000      /* DCD flow control of output */
-#define MDMBUF          0x00100000      /* old name for CCAR_OFLOW */
-#endif
-#endif
   
   options.c_cflag &= ~(CSIZE | CSTOPB | CREAD | PARENB | PARODD | CRTSCTS);
   
@@ -170,84 +160,108 @@ int openSerialPort(
   speed_t speed = baudRate;
 
   if (ioctl(fd, IOSSIOSPEED, &speed) == -1) {
-      printf("Error calling ioctl(..., IOSSIOSPEED, ...) %s - %s(%d).\n", path, strerror(errno), errno);
+    goto error;
   }
 
   // Cause the new options to take effect immediately.
 
   if (tcsetattr(fd, TCSANOW, &options) == -1) {
-      printf("Error setting tty attributes %s - %s(%d).\n", path, strerror(errno), errno);
       goto error;
   }
-
-  // To set the modem handshake lines, use the following ioctls.
-
-  // See tty(4) <x-man-page//4/tty> and ioctl(2) <x-man-page//2/ioctl> for details.
-
-  
-/*
-  // Assert Data Terminal Ready (DTR)
-
-  if (ioctl(fd, TIOCSDTR) == -1) {
-    printf("Error asserting DTR %s - %s(%d).\n", path, strerror(errno), errno);
-  }
-
-  // Clear Data Terminal Ready (DTR)
-
-  if (ioctl(fd, TIOCCDTR) == -1) {
-    printf("Error clearing DTR %s - %s(%d).\n", path, strerror(errno), errno);
-  }
-
-  // Set the modem lines depending on the bits set in handshake
-
-  handshake = TIOCM_DTR | TIOCM_RTS | TIOCM_CTS | TIOCM_DSR;
-
-  if (ioctl(fd, TIOCMSET, &handshake) == -1) {
-      printf("Error setting handshake lines %s - %s(%d).\n", path, strerror(errno), errno);
-  }
-
-  // To read the state of the modem lines, use the following ioctl.
-
-  // See tty(4) <x-man-page//4/tty> and ioctl(2) <x-man-page//2/ioctl> for details.
-
-  // Store the state of the modem lines in handshake
-
-  if (ioctl(fd, TIOCMGET, &handshake) == -1) {
-    printf("Error getting handshake lines %s - %s(%d).\n", path, strerror(errno), errno);
-  }
-
-  printf("Handshake lines currently set to %d\n", handshake);
-
-  */
 
   unsigned long mics = 1UL;
 
   // Set the receive latency in microseconds. Serial drivers use this value to determine how often to dequeue characters received by the hardware. Most applications don't need to set this value: if an app reads lines of characters, the app can't do anything until the line termination character has been received anyway. The most common applications which are sensitive to read latency are MIDI and IrDA applications.
 
+  // set latency to 1 microsecond
+
   if (ioctl(fd, IOSSDATALAT, &mics) == -1) {
-
-      // set latency to 1 microsecond
-
-      printf("Error setting read latency %s - %s(%d).\n", path, strerror(errno), errno);
-
-      goto error;
-
+    goto error;
   }
 
   // Success
 
-  return fd;
+  return 0;
 
   // Failure path
 
 error:
 
-  if (fd != -1) {
-    close(fd);
+  return -1;
+  
+}
+
+int getSerialPortOptions(
+  int fd,
+  speed_t *baudRate,
+  int *numberOfDataBits,
+  int *numberOfStopBits,
+  int *parity,
+  int *usesRTSCTSFlowControl
+)
+{
+
+  struct termios options;
+
+  // Get the current options.
+
+  if (tcgetattr(fd, &options) == -1) {
+    goto error;
   }
 
-  return -1;
+  // The serial port attributes such as timeouts and baud rate are set by modifying the termios structure and then calling tcsetattr() to cause the changes to take effect. Note that the changes will not become effective without the tcsetattr() call.
 
+  // See tcsetattr(4) <x-man-page://4/tcsetattr> for details.
+
+  // Set raw input (non-canonical) mode, with reads blocking until either a single character has been received or a one second timeout expires.
+
+  // See tcsetattr(4) <x-man-page://4/tcsetattr> and termios(4) <x-man-page://4/termios> for details.
+
+  cfmakeraw(&options);
+
+  // The baud rate, word length, and handshake options can be got as follows:
+  
+  switch (options.c_cflag & CSIZE) {
+    case CS5:
+      *numberOfDataBits = 5;
+      break;
+    case CS6:
+      *numberOfDataBits = 6;
+      break;
+    case CS7:
+      *numberOfDataBits = 7;
+      break;
+    default:
+      *numberOfDataBits = 8;
+      break;
+  }
+  
+  *numberOfStopBits = (options.c_cflag & CSTOPB) ? 2 : 1;
+
+  *usesRTSCTSFlowControl = (options.c_cflag & CRTSCTS) == CRTSCTS ? 1 : 0;
+  
+  if ((options.c_cflag & (PARENB | PARODD)) == (PARENB | PARODD)) {
+    *parity = 2;
+  }
+  else if ((options.c_cflag & (PARENB)) == (PARENB)) {
+    *parity = 1;
+  }
+  else {
+    *parity = 0;
+  }
+  
+  *baudRate = cfgetispeed(&options);
+
+  // Success
+
+  return 0;
+
+  // Failure path
+
+error:
+
+  return -1;
+  
 }
 
 void closeSerialPort(int fd)
@@ -269,5 +283,187 @@ ssize_t readSerialPort(int fd, unsigned char *buffer, ssize_t nbyte) {
 
 ssize_t writeSerialPort(int fd, unsigned char *buffer, ssize_t nbyte) {
   return write(fd, buffer, nbyte);
+}
+
+// Returns an iterator across all known modems. Caller is responsible for releasing the iterator when iteration is complete.
+
+static kern_return_t findModems(io_iterator_t *matchingServices)
+{
+
+  kern_return_t           kernResult;
+
+  CFMutableDictionaryRef  classesToMatch;
+
+  // Serial devices are instances of class IOSerialBSDClient.
+
+  // Create a matching dictionary to find those instances.
+
+  classesToMatch = IOServiceMatching(kIOSerialBSDServiceValue);
+
+  if (classesToMatch == NULL) {
+    printf("IOServiceMatching returned a NULL dictionary.\n");
+  }
+
+  else {
+
+    // Look for devices that claim to be modems.
+
+    CFDictionarySetValue(classesToMatch,
+                         CFSTR(kIOSerialBSDTypeKey),
+                         CFSTR(kIOSerialBSDModemType));
+
+
+    // Each serial device object has a property with key kIOSerialBSDTypeKey and a value that is one of kIOSerialBSDAllTypes, kIOSerialBSDModemType, or kIOSerialBSDRS232Type. You can experiment with the matching by changing the last parameter in the above call to CFDictionarySetValue.
+
+    // As shipped, this sample is only interested in modems, so add this property to the CFDictionary we're matching on. This will find devices that advertise themselves as modems, such as built-in and USB modems. However, this match won't find serial modems.
+
+  }
+
+  // Get an iterator across all matching devices.
+
+  kernResult = IOServiceGetMatchingServices(kIOMasterPortDefault, classesToMatch, matchingServices);
+
+  if (KERN_SUCCESS != kernResult) {
+    printf("IOServiceGetMatchingServices returned %d\n", kernResult);
+    goto exit;
+  }
+
+exit:
+
+  return kernResult;
+
+}
+
+// Given an iterator across a set of modems, return the BSD path to the first one with the callout device path matching MATCH_PATH if defined. If MATCH_PATH is not defined, return the first device found. If no modems are found the path name is set to an empty string.
+
+static kern_return_t getModemPath(io_iterator_t serialPortIterator, char *bsdPath, CFIndex maxPathSize)
+{
+
+  io_object_t     modemService;
+
+  kern_return_t   kernResult = KERN_FAILURE;
+
+  extern int serialPortCount;
+  
+  extern char ** serialPortPaths;
+
+  // Initialize the returned path
+
+  *bsdPath = '\0';
+
+  // Iterate across all modems found. In this example, we bail after finding the first modem.
+
+  clearSerialPorts();
+  
+  while ((modemService = IOIteratorNext(serialPortIterator))) {
+
+    CFTypeRef   bsdPathAsCFString;
+
+    // Get the callout device's path (/dev/cu.xxxxx). The callout device should almost always be used: the dialin device (/dev/tty.xxxxx) would be used when monitoring a serial port for incoming calls, e.g. a fax listener.
+
+    bsdPathAsCFString = IORegistryEntryCreateCFProperty(modemService, CFSTR(kIOCalloutDeviceKey), kCFAllocatorDefault, 0);
+
+    if (bsdPathAsCFString) {
+
+      Boolean result;
+
+      // Convert the path from a CFString to a C (NUL-terminated) string for use with the POSIX open() call.
+
+      result = CFStringGetCString(bsdPathAsCFString, bsdPath, maxPathSize, kCFStringEncodingUTF8);
+
+      CFRelease(bsdPathAsCFString);
+
+#ifdef MATCH_PATH
+      if (strncmp(bsdPath, MATCH_PATH, strlen(MATCH_PATH)) != 0) {
+        result = false;
+      }
+#endif
+
+      if (result) {
+        
+        serialPortCount++;
+        
+        if (serialPortPaths == NULL) {
+          serialPortPaths = (char **) malloc(sizeof(char *) * serialPortCount);
+        }
+        else {
+          serialPortPaths = (char **) realloc(serialPortPaths, sizeof(char *) * serialPortCount);
+        }
+        
+        char *new = malloc(strlen(bsdPath)+1);
+        
+        strcpy(new, bsdPath);
+        
+        serialPortPaths[serialPortCount-1] = new;
+        
+  //      printf("Modem found with BSD path: %s", bsdPath);
+        kernResult = KERN_SUCCESS;
+      }
+
+    }
+
+//    printf("\n");
+
+    // Release the io_service_t now that we are done with it.
+
+    (void) IOObjectRelease(modemService);
+
+  }
+
+  return kernResult;
+
+}
+
+char **serialPortPaths = NULL;
+
+int serialPortCount = 0;
+
+void clearSerialPorts() {
+  
+  serialPortCount = 0;
+  
+  if (serialPortPaths != NULL) {
+    for (int i=0; i<serialPortCount; i++) {
+      free(serialPortPaths[i]);
+    }
+    free(serialPortPaths);
+    serialPortPaths = NULL;
+  }
+  
+}
+
+int findSerialPorts() {
+  
+//  serialPortCount = 0;
+  
+  kern_return_t   kernResult;
+
+  io_iterator_t   serialPortIterator;
+
+  char            bsdPath[MAXPATHLEN];
+
+  kernResult = findModems(&serialPortIterator);
+
+  if (KERN_SUCCESS != kernResult) {
+//    printf("No modems were found.\n");
+  }
+  
+  kernResult = getModemPath(serialPortIterator, bsdPath, sizeof(bsdPath));
+
+  if (KERN_SUCCESS != kernResult) {
+//    printf("Could not get path for modem.\n");
+  }
+
+  IOObjectRelease(serialPortIterator);    // Release the iterator.
+  
+  return serialPortCount;
+
+}
+
+char * getSerialPortPath(int index) {
+  if (index < 0 || index >= serialPortCount) {
+    return NULL;
+  }
+  return serialPortPaths[index];
 }
 

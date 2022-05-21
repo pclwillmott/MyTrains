@@ -38,6 +38,12 @@ public class NetworkMessage : NSObject {
     super.init()
   }
   
+  init(message: NetworkMessage) {
+    self.networkId = message.networkId
+    self.message = message.message
+    super.init()
+  }
+  
   init(networkId: Int, timeoutCode: TimeoutCode) {
     self.networkId = networkId
     self.message = [0x7f, timeoutCode.rawValue]

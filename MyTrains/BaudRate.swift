@@ -21,7 +21,7 @@ public enum BaudRate : Int {
   case br576000 = 8
   case br921600 = 9
   
-  public var baudRate : UInt {
+  public var baudRate : speed_t {
     
     get {
       return BaudRate.rates[self.rawValue]
@@ -59,7 +59,7 @@ public enum BaudRate : Int {
     }
   }
   
-  private static let rates : [UInt] =
+  private static let rates : [speed_t] =
   [
     19200,
     28800,
@@ -72,6 +72,15 @@ public enum BaudRate : Int {
    576000,
    921600,
   ]
+  
+  public static func baudRate(speed: speed_t) -> BaudRate {
+    for index in 0...rates.count-1 {
+      if rates[index] == speed {
+        return BaudRate(rawValue: index)!
+      }
+    }
+    return .br19200
+  }
   
   public static func populate(comboBox:NSComboBox) {
     

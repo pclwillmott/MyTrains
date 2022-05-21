@@ -165,6 +165,18 @@ public class LocoNetProducts {
     
   }
   
+  public static func product(productCode:UInt8) -> LocoNetProduct? {
+    
+    for product in products {
+      if product.productCode == productCode {
+        return product
+      }
+    }
+    
+    return nil
+    
+  }
+  
   public static func computerInterfaces() -> [Int:LocoNetProduct] {
     
     var result : [Int:LocoNetProduct] = [:]

@@ -13,11 +13,11 @@
                     <window key="window" title="Layout Editor" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" visibleAtLaunch="NO" frameAutosaveName="LayoutEditor" animationBehavior="default" id="qPg-vT-4YV">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-                        <rect key="contentRect" x="268" y="330" width="480" height="270"/>
+                        <rect key="contentRect" x="268" y="330" width="658" height="414"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1792" height="1095"/>
-                        <value key="minSize" type="size" width="660" height="415"/>
+                        <value key="minSize" type="size" width="658" height="414"/>
                         <view key="contentView" id="IcD-Gn-rrw">
-                            <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                            <rect key="frame" x="0.0" y="0.0" width="658" height="414"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </view>
                         <connections>

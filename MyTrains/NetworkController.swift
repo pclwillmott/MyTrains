@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import ORSSerial
 
 @objc public protocol NetworkControllerDelegate {
   @objc optional func interfacesUpdated(interfaces:[Interface])
@@ -24,9 +23,9 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
     
     let nc = NotificationCenter.default
     
-    nc.addObserver(self, selector: #selector(serialPortsWereConnected(_:)), name: NSNotification.Name.ORSSerialPortsWereConnected, object: nil)
+//    nc.addObserver(self, selector: #selector(serialPortsWereConnected(_:)), name: NSNotification.Name.ORSSerialPortsWereConnected, object: nil)
 
-    nc.addObserver(self, selector: #selector(serialPortsWereDisconnected(_:)), name: NSNotification.Name.ORSSerialPortsWereDisconnected, object: nil)
+//    nc.addObserver(self, selector: #selector(serialPortsWereDisconnected(_:)), name: NSNotification.Name.ORSSerialPortsWereDisconnected, object: nil)
 
     NSUserNotificationCenter.default.delegate = self
 
@@ -199,6 +198,16 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
     networkControllerUpdated()
   }
   
+  public func addInterface(device: Interface) {
+    interfaceDevices[device.primaryKey] = device
+    networkControllerUpdated()
+  }
+  
+  public func removeInterface(primaryKey:Int) {
+    interfaceDevices.removeValue(forKey: primaryKey)
+    networkControllerUpdated()
+  }
+  
   public func addLocomotive(locomotive: Locomotive) {
     locomotives[locomotive.primaryKey] = locomotive
     networkControllerUpdated()
@@ -245,7 +254,7 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
   public func userNotificationCenter(_ center: NSUserNotificationCenter, shouldPresent notification: NSUserNotification) -> Bool {
     return true
   }
-
+/*
   @objc func serialPortsWereConnected(_ notification: Notification) {
     if let userInfo = notification.userInfo {
       let connectedPorts = userInfo[ORSConnectedSerialPortsKey] as! [ORSSerialPort]
@@ -282,5 +291,5 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
     }
 
   }
-
+*/
 }

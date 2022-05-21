@@ -20,7 +20,43 @@ public class MTSerialPort {
   // MARK: Constructors
   
   init?(path: String) {
+    
+    let _fd = openSerialPort(path)
+    
+    guard _fd != -1 else {
+      return nil
+    }
+
+    var speed : speed_t = 0
+    
+    var dataBits : Int32 = 0
+    
+    var stopBits : Int32 = 0
+    
+    var ctsrts : Int32 = 0
+    
+    var par_value : Int32 = 0
+    
+    guard getSerialPortOptions(_fd, &speed, &dataBits, &stopBits, &par_value, &ctsrts) == 0 else {
+      closeSerialPort(_fd)
+      return nil
+    }
+    
+    self._baudRate = BaudRate.baudRate(speed: speed)
+    self._numberOfDataBits = dataBits
+    self._numberOfStopBits = stopBits
+    self._parity = Parity(rawValue: par_value) ?? .none
+    self._usesRTSCTSFlowControl = ctsrts == 1
+    
     self.path = path
+    self.baudRate = _baudRate
+    self.numberOfDataBits = _numberOfDataBits
+    self.numberOfStopBits = _numberOfStopBits
+    self.parity = _parity
+    self.usesRTSCTSFlowControl = _usesRTSCTSFlowControl
+    
+    closeSerialPort(_fd)
+    
   }
   
   // MARK: Destructors
@@ -36,6 +72,16 @@ public class MTSerialPort {
   private var fd : Int32 = -1
   
   private var quit : Bool = false
+  
+  private var _baudRate : BaudRate
+  
+  private var _numberOfDataBits : Int32
+  
+  private var _numberOfStopBits : Int32
+  
+  private var _parity : Parity
+  
+  private var _usesRTSCTSFlowControl : Bool
   
   // MARK: Public Properties
 
@@ -103,6 +149,10 @@ public class MTSerialPort {
       
     } while !quit;
     
+    // try and restore previous options
+    
+    setSerialPortOptions(fd, _baudRate.baudRate, _numberOfDataBits, _numberOfStopBits, _parity.rawValue, _usesRTSCTSFlowControl ? 1 : 0)
+    
     closeSerialPort(fd);
     
     fd = -1
@@ -119,14 +169,22 @@ public class MTSerialPort {
     
     quit = false
     
-    fd = openSerialPort(path, baudRate.baudRate, numberOfDataBits, numberOfStopBits, parity.rawValue, usesRTSCTSFlowControl ? 1 : 0)
+    fd = openSerialPort(path)
     
     if fd != -1 {
       
-      DispatchQueue.global(qos: .utility).async {
-        self.monitorPort()
-      }
+      if setSerialPortOptions(fd, baudRate.baudRate, numberOfDataBits, numberOfStopBits, parity.rawValue, usesRTSCTSFlowControl ? 1 : 0) == 0 {
       
+        DispatchQueue.global(qos: .utility).async {
+          self.monitorPort()
+        }
+        
+      }
+      else {
+        closeSerialPort(fd)
+        fd = -1
+      }
+
     }
     
   }
@@ -164,5 +222,3 @@ public enum Parity : Int32 {
   case even = 1
   case odd = 2
 }
-
-

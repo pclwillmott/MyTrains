@@ -6,7 +6,6 @@
 //
 
 import Cocoa
-import ORSSerial
 
 class MainVC: NSViewController, NetworkControllerDelegate {
 

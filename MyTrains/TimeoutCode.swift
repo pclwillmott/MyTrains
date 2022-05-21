@@ -12,4 +12,5 @@ public enum TimeoutCode : UInt8 {
   case readCV = 1
   case writeCV = 2
   case resetQuerySlot4 = 3
+  case getInterfaceData = 4
 }

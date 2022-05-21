@@ -7,9 +7,15 @@
 
 import Foundation
 import Cocoa
-import ORSSerial
 
-class EditInterfacesVC: NSViewController, NSWindowDelegate, DBEditorDelegate, NetworkControllerDelegate {
+private enum InitialState {
+  case existingInterfaceOpen
+  case existingInterfaceClosed
+  case temporaryInterface
+  case inactive
+}
+
+class EditInterfacesVC: NSViewController, NSWindowDelegate, DBEditorDelegate, NetworkControllerDelegate, InterfaceDelegate {
  
   // MARK: Window & View Control
   
@@ -37,7 +43,7 @@ class EditInterfacesVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Ne
     
     FlowControl.populate(comboBox: cboFlowControl)
     
-    ORSSerialPortManager.populate(comboBox: cboPort)
+    MTSerialPortManager.populate(comboBox: cboPort)
 
     editorView.delegate = self
     
@@ -52,6 +58,22 @@ class EditInterfacesVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Ne
   private var interfaceProductDictionary = LocoNetProducts.productDictionary(attributes: [.ComputerInterface])
   
   private var cboDeviceTypeDS = ComboBoxDictDS()
+  
+  private var interface : Interface?
+  
+  private var tempInterface : Interface?
+  
+  private var initialState : InitialState = .inactive
+
+  var observerId : Int = -1
+  
+  private var timer : Timer?
+  
+  var partialSerialNumberLow : UInt8 = 0
+  
+  var partialSerialNumberHigh : UInt8 = 0
+  
+  var productCode : UInt8 = 0
   
   // MARK: Private Methods
   
@@ -76,9 +98,42 @@ class EditInterfacesVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Ne
     
   }
   
+  private func tidyUp() {
+    stopTimer()
+    if observerId != -1 {
+      tempInterface?.removeObserver(id: observerId)
+    }
+    tempInterface?.close()
+    tempInterface = nil
+    if initialState == .existingInterfaceOpen {
+      interface?.open()
+    }
+    btnIdentify.isEnabled = true
+  }
+  
+  @objc func timeoutTimer() {
+    print("timeoutTimer")
+    tidyUp()
+  }
+  
+  func starttimer() {
+//    stopTimer()
+    print("startTimer 1")
+    let interval : TimeInterval = 1.0
+    timer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(timeoutTimer), userInfo: nil, repeats: false)
+    print("startTimer 2")
+  }
+  
+  func stopTimer() {
+    print("stopTimer")
+    timer?.invalidate()
+    timer = nil
+  }
+  
   // MARK: DBEditorView Delegate Methods
  
   func clearFields(dbEditorView:DBEditorView) {
+    interface = nil
     cboPort.stringValue = ""
     cboPort.textColor = NSColor.black
     cboDeviceType.stringValue = ""
@@ -88,7 +143,8 @@ class EditInterfacesVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Ne
   }
   
   func setupFields(dbEditorView: DBEditorView, editorObject: EditorObject) {
-    if let device = editorObject as? LocoNetDevice {
+    if let device = editorObject as? Interface {
+      interface = device
       cboPort.stringValue = device.devicePath
       checkPort()
       if let index = cboDeviceTypeDS.indexWithKey(key: device.locoNetProductId) {
@@ -116,7 +172,7 @@ class EditInterfacesVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Ne
     return nil
   }
   
-  func setFields(device:LocoNetDevice) {
+  func setFields(device:Interface) {
     device.devicePath = cboPort.stringValue
     if let editorObject = cboDeviceTypeDS.editorObjectAt(index: cboDeviceType.indexOfSelectedItem) {
       device.locoNetProductId = editorObject.primaryKey
@@ -127,30 +183,77 @@ class EditInterfacesVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Ne
     device.deviceName = txtInterfaceName.stringValue
     device.baudRate = BaudRate(rawValue: cboBaudrate.indexOfSelectedItem) ?? .br19200
     device.flowControl = FlowControl(rawValue: cboFlowControl.indexOfSelectedItem) ?? .noFlowControl
-    device.save()
   }
   
   func saveNew(dbEditorView: DBEditorView) -> EditorObject {
-    let device = LocoNetDevice(primaryKey: -1)
+    let device = Interface(primaryKey: -1)
     setFields(device: device)
-    networkController.addDevice(device: device)
+    device.save()
+    networkController.addInterface(device: device)
     editorView.dictionary = networkController.interfaceDevices
     editorView.setSelection(key: device.primaryKey)
     return device
   }
   
   func saveExisting(dbEditorView: DBEditorView, editorObject: EditorObject) {
-    if let device = editorObject as? LocoNetDevice {
+    if let device = editorObject as? Interface {
       setFields(device: device)
+      device.save()
       editorView.dictionary = networkController.interfaceDevices
       editorView.setSelection(key: device.primaryKey)
     }
   }
   
   func delete(dbEditorView: DBEditorView, primaryKey: Int) {
-    LocoNetDevice.delete(primaryKey: primaryKey)
-    networkController.removeDevice(primaryKey: primaryKey)
+    Interface.delete(primaryKey: primaryKey)
+    networkController.removeInterface(primaryKey: primaryKey)
     editorView.dictionary = networkController.interfaceDevices
+  }
+  
+  // MARK: InterfaceDelegate Methods
+  
+  func networkMessageReceived(message:NetworkMessage) {
+    switch message.messageType {
+    case .interfaceData:
+      
+      productCode = message.message[14]
+      
+      if let product = LocoNetProducts.product(productCode: productCode) {
+        if let index = cboDeviceTypeDS.indexWithKey(key: product.id) {
+          cboDeviceType.selectItem(at: index)
+        }
+      }
+      
+      partialSerialNumberLow = message.message[6]
+      partialSerialNumberHigh = message.message[7]
+      
+      tempInterface?.iplDiscover()
+      
+      starttimer()
+    
+    case .iplDevData:
+      
+      let iplDevData = IPLDevData(message: message)
+      
+      if iplDevData.partialSerialNumberLow == partialSerialNumberLow &&   iplDevData.partialSerialNumberHigh == partialSerialNumberHigh &&
+        iplDevData.productCode.rawValue == productCode {
+        lblSerialNumber.stringValue = "\(iplDevData.serialNumber)"
+        tidyUp()
+      }
+      else {
+        starttimer()
+      }
+      
+    default:
+      break
+    }
+  }
+  
+  func interfaceWasOpened(interface:Interface) {
+    tempInterface?.getInterfaceData(timeoutCode: .getInterfaceData)
+  }
+  
+  func interfaceWasClosed(interface:Interface) {
   }
   
   // MARK: Outlets & Actions
@@ -163,6 +266,7 @@ class EditInterfacesVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Ne
   
   @IBAction func cboPortAction(_ sender: NSComboBox) {
     editorView.modified = true
+    checkPort()
   }
   
   @IBOutlet weak var cboDeviceType: NSComboBox!
@@ -191,6 +295,36 @@ class EditInterfacesVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Ne
   @IBAction func cboFlowControlAction(_ sender: NSComboBox) {
     editorView.modified = true
   }
+  
+  @IBOutlet weak var btnIdentify: NSButton!
+  
+  @IBAction func btnIdentifyAction(_ sender: NSButton) {
+    btnIdentify.isEnabled = false
+    starttimer()
+    partialSerialNumberLow = 0
+    partialSerialNumberHigh = 0
+    productCode = 0
+    if let device = interface {
+      if cboPort.stringValue == device.devicePath {
+        initialState = device.isOpen ? .existingInterfaceOpen : .existingInterfaceClosed
+        device.close()
+      }
+      else {
+        initialState = .temporaryInterface
+      }
+    }
+    else {
+      initialState = .temporaryInterface
+    }
+    tempInterface = Interface(primaryKey: -1)
+    if let device = tempInterface {
+      setFields(device: device)
+      observerId = device.addObserver(observer: self)
+  //    device.open()
+    }
+  }
+  
+  @IBOutlet weak var lblSerialNumber: NSTextField!
   
 }
 

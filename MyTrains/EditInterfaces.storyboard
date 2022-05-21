@@ -64,7 +64,7 @@
                                                             </textFieldCell>
                                                         </textField>
                                                         <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="T1m-40-S3E">
-                                                            <rect key="frame" x="17" y="227" width="543" height="25"/>
+                                                            <rect key="frame" x="17" y="227" width="462" height="25"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                             <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="Txd-xn-a9g">
                                                                 <font key="font" metaFont="system"/>
@@ -86,7 +86,7 @@
                                                         </textField>
                                                         <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3Mc-sd-EPN">
                                                             <rect key="frame" x="17" y="173" width="543" height="25"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                             <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="5" id="fzT-rr-h13">
                                                                 <font key="font" metaFont="system"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -107,7 +107,7 @@
                                                         </textField>
                                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wom-jA-Zzc">
                                                             <rect key="frame" x="17" y="124" width="540" height="21"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="eTn-bc-mVx">
                                                                 <font key="font" metaFont="system"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -164,6 +164,35 @@
                                                                 <action selector="cboFlowControlAction:" target="LdG-WE-utP" id="e59-R0-U4K"/>
                                                             </connections>
                                                         </comboBox>
+                                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qcK-Hq-3im">
+                                                            <rect key="frame" x="484" y="223" width="80" height="32"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                                            <buttonCell key="cell" type="push" title="Identify" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="JaP-K9-dFJ">
+                                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                <font key="font" metaFont="system"/>
+                                                            </buttonCell>
+                                                            <connections>
+                                                                <action selector="btnIdentifyAction:" target="LdG-WE-utP" id="KHu-8Q-ymG"/>
+                                                            </connections>
+                                                        </button>
+                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xLy-x5-dC2">
+                                                            <rect key="frame" x="234" y="100" width="90" height="16"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Serial Number" id="klA-nj-c25">
+                                                                <font key="font" metaFont="system"/>
+                                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                            </textFieldCell>
+                                                        </textField>
+                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="68f-T4-bf9">
+                                                            <rect key="frame" x="236" y="70" width="156" height="19"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <textFieldCell key="cell" lineBreakMode="clipping" drawsBackground="YES" id="mp8-mJ-NEm">
+                                                                <font key="font" metaFont="system"/>
+                                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="alternateSelectedControlTextColor" catalog="System" colorSpace="catalog"/>
+                                                            </textFieldCell>
+                                                        </textField>
                                                     </subviews>
                                                 </view>
                                             </tabViewItem>
@@ -174,11 +203,13 @@
                         </subviews>
                     </view>
                     <connections>
+                        <outlet property="btnIdentify" destination="qcK-Hq-3im" id="9BW-mI-kcI"/>
                         <outlet property="cboBaudrate" destination="VGX-fK-DU2" id="Fqi-Lp-NH8"/>
                         <outlet property="cboDeviceType" destination="3Mc-sd-EPN" id="7xk-4K-rNS"/>
                         <outlet property="cboFlowControl" destination="msQ-J7-CaY" id="4qd-lZ-uMj"/>
                         <outlet property="cboPort" destination="T1m-40-S3E" id="Otq-By-bPe"/>
                         <outlet property="editorView" destination="HpE-sY-SGv" id="38x-vN-1R3"/>
+                        <outlet property="lblSerialNumber" destination="68f-T4-bf9" id="i5G-hQ-rFr"/>
                         <outlet property="tabView" destination="sof-fJ-m9z" id="IxW-If-aLP"/>
                         <outlet property="txtInterfaceName" destination="wom-jA-Zzc" id="MyA-vh-hFF"/>
                     </connections>

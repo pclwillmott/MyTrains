@@ -773,5 +773,16 @@ extension Interface {
     addToQueue(message: message, delay: MessageTiming.STANDARD)
 
   }
+  
+  public func iplDiscover() {
+    
+    let message = NetworkMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_PEER_XFER.rawValue,
+       0x14, 0x0f, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: MessageTiming.DISCOVER)
+
+  }
+  
+
 
 }

@@ -7,7 +7,6 @@
 
 import Cocoa
 import Foundation
-import ORSSerial
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDelegate {
