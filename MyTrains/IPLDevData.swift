@@ -15,7 +15,7 @@ public class IPLDevData : NetworkMessage {
     
     get {
       let pc = message[5] | (message[4] & 0b00000001 != 0 ? 0b10000000 : 0b00000000)
-      return ProductCode(rawValue: Int(pc)) ?? .unknown
+      return ProductCode(rawValue: pc) ?? .none
     }
     
   }
@@ -35,6 +35,14 @@ public class IPLDevData : NetworkMessage {
       let sn1 = message[11] | ((message[9] & 0b00000010) != 0 ? 0b10000000 : 0b00000000)
       let sn2 = message[12] | ((message[9] & 0b00000100) != 0 ? 0b10000000 : 0b00000000)
       return Int(sn1) | Int(sn2) << 8
+    }
+    
+  }
+  
+  public var boardId : Int {
+    
+    get {
+      return Int(message[15] | (message[14] & 0b00000001 != 0 ? 0b10000000 : 0b00000000))
     }
     
   }

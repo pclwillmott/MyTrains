@@ -56,33 +56,30 @@ public enum NetworkMessageOpcode : UInt8 {
 public enum NetworkMessageType {
   case unknown
   case uninitialized
-  case ack
   case brdOpSwState
   case busy
-  case cfgSlotDataP1
-  case cfgSlotDataBP1
-  case cfgSlotDataP2
   case consistDirF0F4
   case d4Error
   case dispatchGetP1
   case dispatchGetP2
   case dispatchPutP1
   case dispatchPutP2
-  case duplexChannelNumber
-  case duplexData
+  case duplexGroupChannel
+  case duplexGroupData
   case duplexGroupID
-  case duplexPassword
+  case duplexGroupPassword
   case duplexSignalStrength
+  case ezRouteConfirm
   case fastClockDataP1
   case findReceiver
   case getBrdOpSwState
-  case getCfgSlotDataP1
-  case getCfgSlotDataBP1
-  case getCfgSlotDataP2
-  case getDuplexChannelNumber
-  case getDuplexData
+  case getOpSwDataAP1
+  case getOpSwDataBP1
+  case getOpSwDataP2
+  case getDuplexGroupChannel
+  case getDuplexGroupData
   case getDuplexGroupID
-  case getDuplexPassword
+  case getDuplexGroupPassword
   case getDuplexSignalStrength
   case getFastClockDataP1
   case getLocoSlotData
@@ -91,6 +88,9 @@ public enum NetworkMessageType {
   case getLocoSlotDataSAdrP1
   case getLocoSlotDataSAdrP2
   case getQuerySlot
+  case getRouteTableInfoA
+  case getRouteTableInfoB
+  case getRouteTablePage
   case getSwState
   case illegalMoveP1
   case immPacket
@@ -98,6 +98,8 @@ public enum NetworkMessageType {
   case immPacketLMOK
   case immPacketBufferFull
   case interfaceData
+  case interfaceDataLB
+  case interfaceDataPR3
   case interrogate
   case invalidLinkP1
   case invalidUnlinkP1
@@ -109,6 +111,7 @@ public enum NetworkMessageType {
   case iplSetupBL2
   case linkSlotsP1
   case linkSlotsP2
+  case lnwiData
   case locoDirF0F4P1
   case locoF0F6P2
   case locoF5F8P1
@@ -123,6 +126,9 @@ public enum NetworkMessageType {
   case moveSlotP2
   case noFreeSlotsP1
   case noFreeSlotsP2
+  case opSwDataAP1
+  case opSwDataBP1
+  case opSwDataP2
   case peerXfer16
   case pmRep
   case prMode
@@ -141,18 +147,22 @@ public enum NetworkMessageType {
   case receiverRep
   case reset
   case resetQuerySlot4
+  case routeTableInfoA
+  case routeTableInfoB
+  case routeTablePage
+  case routesDisabled
   case sensRepGenIn
   case sensRepTurnIn
   case sensRepTurnOut
   case setBrdOpSwOK
   case setBrdOpSwState
-  case setCfgSlotDataP1
-  case setCfgSlotDataBP1
-  case setCfgSlotDataP2
-  case setDuplexChannelNumber
+  case setOpSwDataAP1
+  case setOpSwDataBP1
+  case setOpSwDataP2
+  case setDuplexGroupChannel
+  case setDuplexGroupData
   case setDuplexGroupID
-  case setDuplexGroupName
-  case setDuplexPassword
+  case setDuplexGroupPassword
   case setFastClockDataP1
   case setIdleState
   case setLocoNetID
@@ -177,85 +187,6 @@ public enum NetworkMessageType {
   case trkShortRep
   case unlinkSlotsP1
   case unlinkSlotsP2
-}
-
-public enum ProductCode : Int {
-  
-  case LNRP             = 0x01
-  case UT4              = 0x04
-  case UT6              = 0x06
-  case DB210Opto        = 0x14
-  case DB210            = 0x15
-  case DB220            = 0x16
-  case DCS210Plus       = 0x1a
-  case DCS210           = 0x1b
-  case DCS240           = 0x1c
-  case PR3              = 0x23
-  case PR4              = 0x24
-  case DT402            = 0x2a
-  case DT500            = 0x32
-  case DCS51            = 0x33
-  case DCS52            = 0x34
-  case DT602            = 0x3e
-  case BXPA1            = 0x51
-  case BXP88            = 0x58
-  case LNWI             = 0x63
-  case UR92             = 0x5c
-  case UR93             = 0x5d
-  case softwareThrottle = 0x7f
-  case unknown          = 0xff
-  
-  func productName() -> String {
-    switch self {
-    case .LNRP:
-      return "LNRP"
-    case .UT4:
-      return "UT4"
-    case .UT6:
-      return "UT6"
-    case .DB210:
-      return "DB210"
-    case .DB220:
-      return "DB220"
-    case .DB210Opto:
-      return "DB210OPTO"
-    case .DCS210:
-      return "DCS210"
-    case .DCS210Plus:
-      return "DCS210+"
-    case .DCS240:
-      return "DCS240"
-    case .DCS51:
-      return "DCS51"
-    case .DCS52:
-      return "DCS52"
-    case .PR4:
-      return "PR4"
-    case .PR3:
-      return "PR3"
-    case .DT402:
-      return "DT402"
-    case .DT602:
-      return "DT602"
-    case .DT500:
-      return "DT500"
-    case .BXPA1:
-      return "BXPA1"
-    case .BXP88:
-      return "BXP88"
-    case .LNWI:
-      return "LNWI"
-    case .UR92:
-      return "UR92"
-    case .UR93:
-      return "UR93"
-    case .softwareThrottle:
-      return "Software Throttle"
-    default:
-      return "Unknown Product"
-    }
-  }
-  
 }
 
 /*

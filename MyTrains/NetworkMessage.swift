@@ -55,9 +55,7 @@ public class NetworkMessage : NSObject {
   
   private var _messageType : NetworkMessageType = .uninitialized
   
-  private var _willChangeSlot : Bool = false
-  
-  private var _slotID : Int = 0
+  private var _slotsChanged : Set<Int> = []
   
   // MARK: Public Properties
   
@@ -152,17 +150,10 @@ public class NetworkMessage : NSObject {
     }
   }
   
-  public var willChangeSlot : Bool {
+  public var slotsChanged : Set<Int> {
     get {
       let _ = messageType
-      return _willChangeSlot
-    }
-  }
-  
-  public var slotID : Int {
-    get {
-      let _ = messageType
-      return _slotID
+      return _slotsChanged
     }
   }
   
@@ -174,24 +165,97 @@ public class NetworkMessage : NSObject {
 
         _messageType = .unknown
         
-        var slotPage : Int = 0
-        
-        var slotNumber : Int = 0
-        
-        var isP1 : Bool = false
-
         switch message[0] {
+        
+        // MARK: 0x81
           
-        // Ack
+        case 0x81: // OPC_BUSY
           
-        case NetworkMessageOpcode.OPC_SW_REQ.rawValue:
-          if (message[2] & 0b11000000) == 0b00000000 {
-            _messageType = .setSw
+          _messageType = .busy
+        
+        // MARK: 0x82
+          
+        case 0x82: // OPC_GPOFF
+          
+          _messageType = .pwrOff
+        
+        // MARK: 0x83
+          
+        case 0x83: // OPC_GPON
+          
+          _messageType = .pwrOn
+          
+        // MARK: 0x85
+          
+        case 0x85: // OPC_IDLE
+          
+          _messageType = .setIdleState
+ 
+        // MARK: 0x8A
+          
+        case 0x8a:
+          
+          _messageType = .reset
+
+        // MARK: 0xA0
+          
+        case 0xa0: // OPC_LOCO_SPD
+          
+          if message[1] > 0 && message[1] < 0x78 {
+            _messageType = .locoSpdP1
+            _slotsChanged.insert(LocoSlotData.encodeID(slotPage: 0, slotNumber: message[1]))
           }
 
-        case NetworkMessageOpcode.OPC_LONG_ACK.rawValue:
+        // MARK: 0xA1
           
-          _messageType = .ack
+        case 0xa1: // OPC_LOCO_DIRF
+          
+          if message[1] > 0 && message[1] < 0x78 && (message[2] & 0b01000000) == 0x00 {
+            _messageType = .locoDirF0F4P1
+            _slotsChanged.insert(LocoSlotData.encodeID(slotPage: 0, slotNumber: message[1]))
+          }
+          
+        // MARK: 0xA2
+          
+        case 0xa2: // OPC_LOCO_SND
+          
+          if message[1] > 0 && message[1] < 0x78 &&
+            (message[2] & 0b11110000) == 0x00 {
+            _messageType = .locoF5F8P1
+            _slotsChanged.insert(LocoSlotData.encodeID(slotPage: 0, slotNumber: message[1]))
+          }
+
+        // MARK: 0xB0
+          
+        case 0xb0: // OPC_SW_REQ
+          
+          if (message[1] & 0b01111000) == 0b01111000 && (message[2] & 0b11101111) == 0b00000111 {
+            _messageType = .interrogate
+          }
+          
+        // MARK: 0xB1
+          
+        case 0xb1: // OPC_SW_REP
+          
+          let test = message[2] & 0b11000000
+          if test == 0b01000000 {
+            _messageType = .sensRepTurnIn
+          }
+          else if test == 0b00000000 {
+            _messageType = .sensRepTurnOut
+          }
+
+        // MARK: 0xB2
+          
+        case 0xb2: // OPC_INPUT_REP
+          
+          if (message[2] & 0b11000000) == 0b01000000 {
+            _messageType = .sensRepGenIn
+          }
+          
+        // MARK: 0xB4
+          
+        case 0xb4: // OPC_LONG_ACK
           
           switch message[1] {
           case 0x30:
@@ -272,6 +336,8 @@ public class NetworkMessage : NSObject {
             }
           case 0x6e:
             switch message[2] {
+            case 0x00:
+              _messageType = .routesDisabled
             case 0x7f:
               _messageType = .setSlotDataOKP2
             default:
@@ -304,53 +370,59 @@ public class NetworkMessage : NSObject {
          default:
             break
           }
-        
-        // Busy
           
-        case NetworkMessageOpcode.OPC_BUSY.rawValue:
-          _messageType = .busy
-        
-        // Slot Data P1
+        // MARK: 0xB5
           
-        case NetworkMessageOpcode.OPC_SL_RD_DATA.rawValue:
+        case 0xb5: // OPC_SLOT_STAT1
           
-          if message[ 1] == 0x0e &&
-            (message[ 7] &  0b00110000) == 0x00 /* TRK */ {
-            
-            switch message[2] {
-            case 0x78:
-              break
-            case 0x79:
-              break
-            case 0x7a:
-              break
-            case 0x7b:
-              _messageType = .fastClockDataP1
-            case 0x7c:
-              if (message[ 4] & 0b11110000) == 0 {
-                _messageType = .progSlotDataP1
-              }
-            case 0x7d:
-              break
-            case 0x7e:
-              _messageType = .cfgSlotDataBP1
-            case 0x7f:
-              _messageType = .cfgSlotDataP1
-            default:
-              if message[2] < 0x78 &&
-                (message[ 6] & 0b11000000) == 0 && /* DIRF */
-                (message[ 7] & 0b10110000) == 0 &&
-                (message[ 8] & 0b11110010) == 0 && /* SS@  */
-                (message[10] & 0b11110000) == 0    /* SND  */ {
-                _messageType = .locoSlotDataP1
-              }
-            }
-            
+          if message[1] > 0 && message[1] < 0x78 {
+            _messageType = .setLocoSlotStat1P1
+            _slotsChanged.insert(LocoSlotData.encodeID(slotPage: 0, slotNumber: message[1]))
+          }
+
+        // MARK: 0xB6
+          
+        case 0xb6: // OPC_CONSIST_FUNC
+          
+          if message[1] > 0 && message[1] < 0x78 && (message[2] & 0b11100000) == 0 {
+            _messageType = .consistDirF0F4
+            _slotsChanged.insert(LocoSlotData.encodeID(slotPage: 0, slotNumber: message[1]))
           }
           
-        // Get Slot Data
+        // MARK: 0xB9
           
-        case NetworkMessageOpcode.OPC_RQ_SL_DATA.rawValue:
+        case 0xb9: // OPC_LINK_SLOTS
+          
+          if message[1] > 0 && message[1] < 0x78 &&
+             message[2] > 0 && message[2] < 0x78 {
+            _messageType = .linkSlotsP1
+            _slotsChanged.insert(LocoSlotData.encodeID(slotPage: 0, slotNumber: message[1]))
+            _slotsChanged.insert(LocoSlotData.encodeID(slotPage: 0, slotNumber: message[2]))
+          }
+          
+       // MARK: 0xBA
+            
+        case 0xba: // OPC_MOVE_SLOTS
+          
+          if message[1] == 0x00 {
+            _messageType = .dispatchGetP1
+          }
+          else if message[2] == 0x00 && message[1] > 0 && message[1] < 0x78 {
+            _messageType = .dispatchPutP1
+          }
+          else if message[1] == message[2] && message[1] > 0 && message[1] < 0x78 {
+            _messageType = .setLocoSlotInUseP1
+            _slotsChanged.insert(LocoSlotData.encodeID(slotPage: 0, slotNumber: message[1]))
+          }
+          else if message[1] < 0x78 && message[2] < 0x78 {
+            _messageType = .moveSlotP1
+            _slotsChanged.insert(LocoSlotData.encodeID(slotPage: 0, slotNumber: message[1]))
+            _slotsChanged.insert(LocoSlotData.encodeID(slotPage: 0, slotNumber: message[2]))
+          }
+
+        // MARK: 0xBB
+            
+        case 0xbb: // OPC_RQ_SL_DATA
           
           if message[2] == 0x00 {
             
@@ -368,9 +440,9 @@ public class NetworkMessage : NSObject {
             case 0x7d:
               break
             case 0x7e:
-              break
+              _messageType = .getOpSwDataBP1
             case 0x7f:
-              _messageType = .getCfgSlotDataP1
+              _messageType = .getOpSwDataAP1
             default:
               _messageType = .getLocoSlotData
             }
@@ -379,159 +451,220 @@ public class NetworkMessage : NSObject {
           else if message[1] >= 0x78 && message[1] <= 0x7c && message[2] == 0x41 {
             _messageType = .getQuerySlot
           }
+          else if message[1] == 0x7e && message[2] == 0x40 {
+            _messageType = .getOpSwDataP2
+          }
           else if message[1] == 0x7f && message[2] == 0x40 {
-            _messageType = .getCfgSlotDataP2
+            _messageType = .getOpSwDataP2
           }
           else if message[1] < 0x78 && (message[2] & 0b10111000) == 0 {
             _messageType = .getLocoSlotData
           }
-          break
-
-        // Slot Data P2
           
-        case NetworkMessageOpcode.OPC_SL_RD_DATA_P2.rawValue:
+        // MARK: 0xBC
           
-          if message[1] == 0x15 && (message[2] & 0b11111000) == 0 {
-            
-            if message[3] < 0x78 && (message[7] & 0b10110000) == 00 {
-              _messageType = .locoSlotDataP2
-            }
-            else if message[3] >= 0x78 && message[3] <= 0x7c && message[2] == 0x01 {
-              switch message[3] {
-              case 0x78:
-                _messageType = .querySlot1
-              case 0x79:
-                _messageType = .querySlot2
-              case 0x7a:
-                _messageType = .querySlot3
-              case 0x7b:
-                _messageType = .querySlot4
-              case 0x7c:
-                _messageType = .querySlot5
-              default:
-                break
-              }
-            }
-            else if message[3] == 0x7f && message[2] == 0x00 {
-              _messageType = .cfgSlotDataP2
-            }
-            
+        case 0xbc: // OPC_SW_STATE
+          if (message[2] & 0b11110000) == 0 {
+            _messageType = .getSwState
           }
 
-        // ConsistDirF0F4
+        // MARK: 0xBE
           
-        case NetworkMessageOpcode.OPC_CONSIST_FUNC.rawValue:
+        case 0xbe:
+          _messageType = message[1] == 0 ? .getLocoSlotDataSAdrP2 : .getLocoSlotDataLAdrP2
+
+        // MARK: 0xBF
           
-          if message[1] < 0x78 && (message[2] & 0b01000000) == 0x00 {
-            _messageType = .consistDirF0F4
-            _willChangeSlot = true
-            isP1 = true
-            slotPage = 0
-            slotNumber = Int(message[1])
+        case 0xbf: // OPC_LOCO_ADR
+          _messageType = message[1] == 0 ? .getLocoSlotDataSAdrP1 : .getLocoSlotDataLAdrP1
+          
+        // MARK: 0xD0
+            
+        case 0xd0:
+          
+          if (message[1] & 0b11111110) == 0b01100010 &&
+             (message[3] & 0b11110000) == 0b01110000 {
+            _messageType = .getBrdOpSwState
           }
-  
-        // Move Slots P1 Group
-          
-        case NetworkMessageOpcode.OPC_MOVE_SLOTS.rawValue:
-          
-          isP1 = true
-          slotPage = 0
-          
-          if message[1] == 0x00 {
-            _messageType = .dispatchGetP1
+          else if (message[1] & 0b11111110) == 0b01110010 &&
+                  (message[3] & 0b11110000) == 0b01110000 {
+            _messageType = .setBrdOpSwState
           }
-          else if message[2] == 0x00 && message[1] < 0x78 {
-            _messageType = .dispatchPutP1
-            slotNumber = Int(message[1])
+          else if message[1] == 0x62 &&
+                 (message[3] & 0b11110000) == 0b00110000 &&
+                 (message[4] & 0b11100000) == 0 {
+            _messageType = .pmRep
           }
-          else if message[1] == message[2] && message[1] < 0x78 {
-            _messageType = .setLocoSlotInUseP1
-            slotNumber = Int(message[1])
-            _willChangeSlot = true
+          else if message[1] == 0x60 &&
+                 (message[4] & 0b11111110) == 0 {
+            _messageType = .trkShortRep
           }
-          else if message[1] < 0x78 && message[2] < 0x78 {
-            _messageType = .moveSlotP1
-            slotNumber = Int(message[2])
-            _willChangeSlot = true
-          }
-  
-        // D4 Group
+        
+        // MARK: 0xD3
           
-        case NetworkMessageOpcode.OPC_D4_GROUP.rawValue:
+        case 0xd3:
+          
+          if message[1] == 0x10 &&
+            (message[2] & 0b11111100) == 0 &&
+             message[3] == 0x00 &&
+             message[4] == 0x00 {
+            _messageType = .prMode
+          }
+
+        // MARK: 0xD4
+          
+        case 0xd4:
           
           if (message[1] & 0b11111000) == 0b00111000 {
             
             let subCode = message[3] & 0b11111000
             
+            let srcPage = message[1] & 0b00000111
+            let src = message[2]
+            let dstPage = message[3] & 0b00000111
+            let dst = message[4]
+            
             switch subCode {
             case 0b00000000:
-              isP1 = false
-              let srcPage = Int(message[1] & 0b00000111)
-              let src = Int(message[2])
-              let dstPage = Int(message[3] & 0b00000111)
-              let dst = Int(message[4])
+              
               if message[2] == 0x00 && (message[3] & 0b11111000) == 0 {
                 _messageType = .dispatchGetP2
-                _willChangeSlot = true
               }
-              else if message[3] == 0 && message[4] == 0 && message[2] < 0x78 {
+              else if message[3] == 0 && dst == 0 && src > 0 && src < 0x78 {
                 _messageType = .dispatchPutP2
-                slotPage = srcPage
-                slotNumber = src
-                _willChangeSlot = true
               }
-              else if srcPage == dstPage && src == dst && src < 0x78 && (message[3] & 0b11111000) == 0 {
+              else if srcPage == dstPage && src == dst && src > 0 && src > 0 && src < 0x78 && (message[3] & 0b11111000) == 0 {
                 _messageType = .setLocoSlotInUseP2
-                slotPage = srcPage
-                slotNumber = src
-                _willChangeSlot = true
+                _slotsChanged.insert(LocoSlotData.encodeID(slotPage: srcPage, slotNumber: src))
               }
-              else if src < 0x78 && dst < 0x78 && (message[3] & 0b11111000) == 0 {
+              else if src > 0 && src < 0x78 && dst > 0 && dst < 0x78 && (message[3] & 0b11111000) == 0 {
                 _messageType = .moveSlotP2
-                slotPage = dstPage
-                slotNumber = dst
-                _willChangeSlot = true
+                _slotsChanged.insert(LocoSlotData.encodeID(slotPage: srcPage, slotNumber: src))
+                _slotsChanged.insert(LocoSlotData.encodeID(slotPage: dstPage, slotNumber: dst))
               }
+              
             case 0b01000000:
-              _messageType = .linkSlotsP2
-              _willChangeSlot = true
-              isP1 = false
-              slotPage = Int(message[1] & 0b00000111)
-              slotNumber = Int(message[2])
+              
+              if src > 0 && src < 0x78 && dst > 0 && dst < 0x78 {
+                _messageType = .linkSlotsP2
+                _slotsChanged.insert(LocoSlotData.encodeID(slotPage: srcPage, slotNumber: src))
+                _slotsChanged.insert(LocoSlotData.encodeID(slotPage: dstPage, slotNumber: dst))
+              }
+              
             case 0b01100000:
-              if message[2] < 0x78 && message[4] < 0x78 {
+              
+              if src > 0 && src < 0x78 {
                 _messageType = .setLocoSlotStat1P2
-                _willChangeSlot = true
-                isP1 = true
-                slotPage = Int(message[1] & 0x7)
-                slotNumber = Int(message[2])
+                _slotsChanged.insert(LocoSlotData.encodeID(slotPage: srcPage, slotNumber: src))
               }
+              
             case 0b01010000:
-              if message[2] < 0x78 && message[4] < 0x78 {
+              
+              if src > 0 && src < 0x78 && dst > 0 && dst < 0x78 {
                 _messageType = .unlinkSlotsP2
-                _willChangeSlot = true
-                isP1 = false
-                slotPage = Int(message[1] & 0b00000111)
-                slotNumber = Int(message[2])
+                _slotsChanged.insert(LocoSlotData.encodeID(slotPage: srcPage, slotNumber: src))
+                _slotsChanged.insert(LocoSlotData.encodeID(slotPage: dstPage, slotNumber: dst))
               }
+              
             default:
               break
             }
+            
           }
           
-        // Peer Xfer Group
+        // MARK: 0xD5
           
-        case NetworkMessageOpcode.OPC_PEER_XFER.rawValue:
+        case 0xd5:
           
+          if message[2] > 0 && message[2] < 0x78 {
+            
+            let subCode = message[1] & 0b11111000
+            
+            switch subCode {
+            case 0b00000000, 0b00001000:
+              _messageType = .locoSpdDirP2
+            case 0b00010000:
+              _messageType = .locoF0F6P2
+            case 0b00011000:
+              _messageType = .locoF7F13P2
+            case 0b00100000:
+              _messageType = .locoF14F20P2
+            case 0b00101000, 0b00110000:
+              _messageType = .locoF21F28P2
+            default:
+              break
+            }
+            
+            if _messageType != .unknown {
+              _slotsChanged.insert(LocoSlotData.encodeID(slotPage: message[1], slotNumber: message[2]))
+            }
+            
+          }
+          
+        // MARK: 0xD7
+          
+        case 0xd7:
+          
+          if message[2] == 0 &&
+            (message[3] & 0b11110000) == 0 &&
+             message[4] == 0x20 {
+            _messageType = .receiverRep
+          }
+
+        // MARK: 0xDF
+            
+        case 0xdf:
+          
+          if message[1] == 0x00 &&
+             message[2] == 0x00 &&
+             message[3] == 0x00 &&
+             message[4] == 0x00 {
+            _messageType = .findReceiver
+          }
+          else if message[1] == 0x40 &&
+                  message[2] == 0x1f &&
+                 (message[3] & 0b11111000) == 0 &&
+                  message[4] == 0x00 {
+            _messageType = .setLocoNetID
+          }
+
+        // MARK: 0xE5
+            
+        case 0xe5: // OPC_PEER_XFER
+            
           switch message[1] {
+            
+          case 0x09:
+            
+            if message[2] == 0x01 &&
+               message[3] == 0x00 {
+              _messageType = .ezRouteConfirm
+            }
+            
           case 0x10:
             
             if message[ 2] == 0x22 &&
                message[ 3] == 0x22 &&
                message[ 4] == 0x01 &&
                message[ 5] == 0x00 &&
+               (message[7] & 0b11100000) == 0x00 &&
+               (message[8] & 0b11110000) == 0b00010000 &&
                message[10] == 0x00 {
               _messageType = .interfaceData
+            }
+            else if message[ 2] == 0x50 &&
+               message[ 3] == 0x50 &&
+               message[ 4] == 0x01 &&
+              (message[ 5] & 0b11110000) == 0x00 &&
+              (message[10] & 0b11110000) == 0x00 {
+              _messageType = .interfaceDataLB
+            }
+            else if message[ 2] == 0x22 &&
+               message[ 3] == 0x22 &&
+               message[ 4] == 0x01 &&
+               message[ 5] == 0x00 &&
+               message[10] == 0x00 {
+              _messageType = .interfaceDataPR3
             }
             else if message[2] == 0x7f &&
                message[3] == 0x7f &&
@@ -593,7 +726,7 @@ public class NetworkMessage : NSObject {
                    message[16] == 0x00 &&
                    message[17] == 0x00 &&
                    message[18] == 0x00 {
-                  _messageType = .setDuplexChannelNumber
+                  _messageType = .setDuplexGroupChannel
                 }
               case 0x08:
                 if message[4 ] == 0x00 &&
@@ -611,7 +744,7 @@ public class NetworkMessage : NSObject {
                    message[16] == 0x00 &&
                    message[17] == 0x00 &&
                    message[18] == 0x00 {
-                  _messageType = .getDuplexChannelNumber
+                  _messageType = .getDuplexGroupChannel
                 }
               case 0x10:
                 if message[4 ] == 0x00 &&
@@ -628,7 +761,7 @@ public class NetworkMessage : NSObject {
                    message[16] == 0x00 &&
                    message[17] == 0x00 &&
                    message[18] == 0x00 {
-                  _messageType = .duplexChannelNumber
+                  _messageType = .duplexGroupChannel
                 }
               default:
                 break
@@ -638,12 +771,8 @@ public class NetworkMessage : NSObject {
               case 0x00:
                 if (message[4 ] & 0b11110000) == 0 &&
                    (message[9 ] & 0b11110000) == 0 &&
-                   (message[14] & 0b11110000) == 0 &&
-                    message[15] == 0x00 &&
-                    message[16] == 0x00 &&
-                    message[17] == 0x00 &&
-                    message[18] == 0x00 {
-                  _messageType = .setDuplexGroupName
+                   (message[14] & 0b11110000) == 0 {
+                  _messageType = .setDuplexGroupData
                 }
               case 0x08:
                 if message[4 ] == 0x00 &&
@@ -661,13 +790,13 @@ public class NetworkMessage : NSObject {
                    message[16] == 0x00 &&
                    message[17] == 0x00 &&
                    message[18] == 0x00 {
-                  _messageType = .getDuplexData
+                  _messageType = .getDuplexGroupData
                 }
               case 0x10:
                   if (message[4 ] & 0b11110000) == 0 &&
                      (message[9 ] & 0b11110000) == 0 &&
                      (message[14] & 0b11110000) == 0 {
-                    _messageType = .duplexData
+                    _messageType = .duplexGroupData
                   }
               default:
                 break
@@ -743,7 +872,7 @@ public class NetworkMessage : NSObject {
                     message[16] == 0x00 &&
                     message[17] == 0x00 &&
                     message[18] == 0x00 {
-                  _messageType = .setDuplexPassword
+                  _messageType = .setDuplexGroupPassword
                 }
               case 0x08:
                 if message[4 ] == 0x00 &&
@@ -761,7 +890,7 @@ public class NetworkMessage : NSObject {
                    message[16] == 0x00 &&
                    message[17] == 0x00 &&
                    message[18] == 0x00 {
-                  _messageType = .getDuplexPassword
+                  _messageType = .getDuplexGroupPassword
                 }
               case 0x10:
                 if message[4 ] == 0x00 &&
@@ -775,7 +904,7 @@ public class NetworkMessage : NSObject {
                    message[16] == 0x00 &&
                    message[17] == 0x00 &&
                    message[18] == 0x00 {
-                  _messageType = .duplexPassword
+                  _messageType = .duplexGroupPassword
                 }
               default:
                 break
@@ -811,8 +940,6 @@ public class NetworkMessage : NSObject {
               }
             case 0x10:
               switch message[3] {
-              case 0x00:
-                break
               case 0x08:
                 if message[4 ] == 0x00 &&
                    message[6 ] == 0x00 &&
@@ -844,6 +971,20 @@ public class NetworkMessage : NSObject {
                     message[18] == 0x00 {
                   _messageType = .duplexSignalStrength
                 }
+                else if (message[4 ] & 0b11110000) == 0 &&
+                    message[ 5] != 0x00 &&
+                    message[ 6] != 0x00 &&
+                    message[ 7] != 0x00 &&
+                    message[ 8] != 0x00 &&
+                    (message[9] & 0b11110000) == 0x00 &&
+                    message[10] != 0x00 &&
+                    message[11] != 0x00 &&
+                    message[12] != 0x00 &&
+                    message[13] != 0x00 &&
+                   (message[14] & 0b11110000) == 0x00 {
+                  _messageType = .lnwiData
+                }
+
               default:
                 break
               }
@@ -855,57 +996,94 @@ public class NetworkMessage : NSObject {
           default:
             break
           }
-        
-        // DF Group
+
+        // MARK: 0xE6
+            
+        case 0xe6:
           
-        case NetworkMessageOpcode.OPC_DF_GROUP.rawValue:
-          
-          if message[1] == 0x00 &&
-             message[2] == 0x00 &&
-             message[3] == 0x00 &&
-             message[4] == 0x00 {
-            _messageType = .findReceiver
+          if message[1] == 0x15 && (message[2] & 0b11111000) == 0 {
+            
+            if message[3] > 0 && message[3] < 0x78 && (message[7] & 0b10110000) == 00 {
+              _messageType = .locoSlotDataP2
+            }
+            else if message[3] >= 0x78 && message[3] <= 0x7c && message[2] == 0x01 {
+              switch message[3] {
+              case 0x78:
+                _messageType = .querySlot1
+              case 0x79:
+                _messageType = .querySlot2
+              case 0x7a:
+                _messageType = .querySlot3
+              case 0x7b:
+                _messageType = .querySlot4
+              case 0x7c:
+                _messageType = .querySlot5
+              default:
+                break
+              }
+            }
+            else if message[3] == 0x7f && message[2] == 0x00 {
+              _messageType = .opSwDataP2
+            }
+            
           }
-          else if message[1] == 0x40 &&
-                  message[2] == 0x1f &&
-                 (message[3] & 0b11111000) == 0 &&
-                  message[4] == 0x00 {
-            _messageType = .setLocoNetID
+          else if message[1] == 0x10 && message[2] == 0x01 {
+            if message[3] == 0x00 &&
+               message[4] == 0x00 &&
+               message[10] == 0x00 &&
+               message[11] == 0x00 &&
+               message[12] == 0x00 &&
+               message[13] == 0x00 &&
+               message[14] == 0x00 {
+              _messageType = .routeTableInfoA
+            }
+            else if message[3] == 0x02 &&
+              (message[5] & 0b11111110) == 0x00 &&
+               message[6] == 0x0f {
+              _messageType = .routeTablePage
+            }
           }
 
-        // D0 Group
+        // MARK: 0xE7
+            
+        case 0xe7: // OPC_SL_RD_DATA
           
-        case NetworkMessageOpcode.OPC_D0_GROUP.rawValue:
+          if message[ 1] == 0x0e &&
+            (message[ 7] &  0b00110000) == 0x00 /* TRK */ {
+            
+            switch message[2] {
+            case 0x78:
+              break
+            case 0x79:
+              break
+            case 0x7a:
+              break
+            case 0x7b:
+              _messageType = .fastClockDataP1
+            case 0x7c:
+              if (message[ 4] & 0b11110000) == 0 {
+                _messageType = .progSlotDataP1
+              }
+            case 0x7d:
+              break
+            case 0x7e:
+              _messageType = .opSwDataBP1
+            case 0x7f:
+              _messageType = .opSwDataAP1
+            default:
+              if message[ 2] > 0 && message[2] < 0x78 &&
+                (message[ 6] & 0b11000000) == 0 && /* DIRF */
+                (message[ 7] & 0b10110000) == 0 &&
+                (message[ 8] & 0b11110010) == 0 && /* SS@  */
+                (message[10] & 0b11110000) == 0    /* SND  */ {
+                _messageType = .locoSlotDataP1
+              }
+            }
+            
+          }
           
-          if (message[1] & 0b11111110) == 0b01100010 &&
-             (message[3] & 0b11110000) == 0b01110000 {
-            _messageType = .getBrdOpSwState
-          }
-          else if (message[1] & 0b11111110) == 0b01110010 &&
-                  (message[3] & 0b11110000) == 0b01110000 {
-            _messageType = .setBrdOpSwState
-          }
-          else if message[1] == 0x62 &&
-                 (message[3] & 0b11110000) == 0b00110000 &&
-                 (message[4] & 0b11100000) == 0 {
-            _messageType = .pmRep
-          }
-          else if message[1] == 0x60 &&
-                 (message[4] & 0b11111110) == 0 {
-            _messageType = .trkShortRep
-          }
-        
-        case NetworkMessageOpcode.OPC_LOCO_ADR.rawValue:
-          _messageType = message[1] == 0 ? .getLocoSlotDataSAdrP1 : .getLocoSlotDataLAdrP1
+        // MARK: 0xED
           
-        case NetworkMessageOpcode.OPC_LOCO_ADR_P2.rawValue:
-          _messageType = message[1] == 0 ? .getLocoSlotDataSAdrP2 : .getLocoSlotDataLAdrP2
-
-        case NetworkMessageOpcode.OPC_SW_STATE.rawValue:
-          if (message[2] & 0b11110000) == 0 {
-            _messageType = .getSwState
-          }
-
         case NetworkMessageOpcode.OPC_IMM_PACKET.rawValue:
           if message[1] == 0x0b &&
              message[2] == 0x7f &&
@@ -914,94 +1092,82 @@ public class NetworkMessage : NSObject {
               _messageType = .immPacket
           }
 
-        case NetworkMessageOpcode.OPC_SW_REQ.rawValue:
-          if (message[1] & 0b01111000) == 0b01111000 && (message[2] & 0b11101111) == 0b00000111 {
-            _messageType = .interrogate
-          }
-        
-        case NetworkMessageOpcode.OPC_LINK_SLOTS.rawValue:
-          if message[1] > 0 && message[1] < 0x78 &&
-            message[2] > 0 && message[2] < 0x78 {
-            _messageType = .linkSlotsP1
-            _willChangeSlot = true
-            isP1 = true
-            slotPage = 0
-            slotNumber = Int(message[1])
-          }
-          
-        case NetworkMessageOpcode.OPC_LOCO_DIRF.rawValue:
-          if message[1] < 0x78 && (message[2] & 0b01000000) == 0x00 {
-            _messageType = .locoDirF0F4P1
-            _willChangeSlot = true
-            isP1 = true
-            slotPage = 0
-            slotNumber = Int(message[1])
-          }
-          
-        // D5 Group
-          
-        case NetworkMessageOpcode.OPC_D5_GROUP.rawValue:
-          
-          if message[2] < 0x78 {
+        // MARK: 0xEE
             
-            let subCode = message[1] & 0b11111000
-            
-            switch subCode {
-            case 0b00000000, 0b00001000:
-              _messageType = .locoSpdDirP2
-            case 0b00010000:
-              _messageType = .locoF0F6P2
-            case 0b00011000:
-              _messageType = .locoF7F13P2
-            case 0b00100000:
-              _messageType = .locoF14F20P2
-            case 0b00101000, 0b00110000:
-              _messageType = .locoF21F28P2
-            default:
-              break
+        case 0xee:
+          
+          if message[1] == 0x15 {
+            if message[2] == 0 && message[3] == 0x7f {
+              _messageType = .setOpSwDataP2
             }
-            
-            if _messageType != .unknown {
-              _willChangeSlot = true
-              isP1 = false
-              slotPage = Int(message[1] & 0b00000111)
-              slotNumber = Int(message[2])
+            else if message[2] == 0x19 && message[3] == 0x7b {
+              _messageType = .resetQuerySlot4
             }
+            else if message[3] > 0 && message[3] < 0x78 {
+              _messageType = .setLocoSlotDataP2
+              _slotsChanged.insert(LocoSlotData.encodeID(slotPage: message[2], slotNumber: message[3]))
+            }
+          }
+          else if message[1] == 0x10 {
+            if message[ 2] == 0x01 &&
+               message[ 3] == 0x00 &&
+               message[ 4] == 0x00 &&
+               message[ 5] == 0x00 &&
+               message[ 6] == 0x00 &&
+               message[ 7] == 0x00 &&
+               message[ 8] == 0x00 &&
+               message[ 9] == 0x00 &&
+               message[10] == 0x00 &&
+               message[11] == 0x00 &&
+               message[12] == 0x00 &&
+               message[13] == 0x00 &&
+               message[14] == 0x00 {
+              _messageType = .getRouteTableInfoA
+            }
+            else if message[ 2] == 0x02 &&
+               message[ 3] == 0x00 &&
+               message[ 4] == 0x00 &&
+               message[ 5] == 0x00 &&
+               message[ 6] == 0x00 &&
+               message[ 7] == 0x00 &&
+               message[ 8] == 0x00 &&
+               message[ 9] == 0x00 &&
+               message[10] == 0x00 &&
+               message[11] == 0x00 &&
+               message[12] == 0x00 &&
+               message[13] == 0x00 &&
+               message[14] == 0x00 {
+              _messageType = .getRouteTableInfoB
+            }
+            else if message[ 2] == 0x01 &&
+               message[ 3] == 0x02 &&
+               (message[5] & 0b00000001) == 0x00 &&
+               message[ 6] == 0x0f &&
+               message[ 7] == 0x7f &&
+               message[ 8] == 0x7f &&
+               message[ 9] == 0x7f &&
+               message[10] == 0x7f &&
+               message[11] == 0x7f &&
+               message[12] == 0x7f &&
+               message[13] == 0x7f &&
+               message[14] == 0x7f {
+              _messageType = .getRouteTablePage
+            }
+          }
+          
+        // MARK: 0xEF
             
-          }
-          
-        case NetworkMessageOpcode.OPC_LOCO_SPD.rawValue:
-          if message[1] < 0x78 {
-            _messageType = .locoSpdP1
-            _willChangeSlot = true
-            isP1 = true
-            slotPage = 0
-            slotNumber = Int(message[1])
-          }
-
-        case NetworkMessageOpcode.OPC_PR_MODE.rawValue:
-          if message[1] == 0x10 &&
-            (message[2] & 0b11111100) == 0 &&
-             message[3] == 0x00 &&
-             message[4] == 0x00 {
-            _messageType = .prMode
-          }
-
-        // Write Slot P1
-          
-        case NetworkMessageOpcode.OPC_WR_SL_DATA.rawValue:
+        case 0xef: // OPC_WR_SL_DATA
           
           if message[1] == 0x0e {
-            if message[ 2] <  0x78 &&                /* SLOT */
+            
+            if message[2] > 0 && message[ 2] <  0x78 && /* SLOT */
               (message[ 6] &  0b11000000) == 0x00 && /* DIRF */
               (message[ 7] &  0b10110000) == 0x00 && /* TRK  */
               (message[ 8] &  0b11110010) == 0x00 && /* SS@  */
               (message[10] &  0b11110000) == 0x00    /* SND  */ {
               _messageType = .setLocoSlotDataP1
-              _willChangeSlot = true
-              isP1 = true
-              slotPage = 0
-              slotNumber = Int(message[2])
+              _slotsChanged.insert(LocoSlotData.encodeID(slotPage: 0, slotNumber: message[2]))
             }
             else if message[ 2] == 0x7b {
               _messageType = .setFastClockDataP1
@@ -1012,80 +1178,23 @@ public class NetworkMessage : NSObject {
                    (message[ 8] &  0b11001100) == 0x00 {
               _messageType = .progCV
             }
+            else if message[2] == 0x7e {
+              _messageType = .setOpSwDataBP1
+            }
             else if message[2] == 0x7f {
-              _messageType = .setCfgSlotDataP1
+              _messageType = .setOpSwDataAP1
             }
+            
           }
-        case NetworkMessageOpcode.OPC_GPOFF.rawValue:
-          _messageType = .pwrOff
+
+       // -------------------------------------------------
           
-        case NetworkMessageOpcode.OPC_GPON.rawValue:
-          _messageType = .pwrOn
-
-        case NetworkMessageOpcode.OPC_D7_GROUP.rawValue:
-          if message[2] == 0 &&
-            (message[3] & 0b11110000) == 0 &&
-             message[4] == 0x20 {
-            _messageType = .receiverRep
+        case NetworkMessageOpcode.OPC_SW_REQ.rawValue:
+          if (message[2] & 0b11000000) == 0b00000000 {
+            _messageType = .setSw
           }
 
-        case NetworkMessageOpcode.OPC_LOCO_RESET.rawValue:
-          _messageType = .reset
-
-        case NetworkMessageOpcode.OPC_INPUT_REP.rawValue:
-          if (message[2] & 0b11000000) == 0b01000000 {
-            _messageType = .sensRepGenIn
-          }
           
-        case NetworkMessageOpcode.OPC_SW_REP.rawValue:
-          let test = message[2] & 0b11000000
-          if test == 0b01000000 {
-            _messageType = .sensRepTurnIn
-          }
-          else if test == 0b00000000 {
-            _messageType = .sensRepTurnOut
-          }
-
-        // Write Slot Data P2
-          
-        case NetworkMessageOpcode.OPC_WR_SL_DATA_P2.rawValue:
-          if message[1] == 0x15 {
-            if message[2] == 0 && message[3] == 0x7f {
-              _messageType = .setCfgSlotDataP2
-            }
-            else if message[2] == 0x19 && message[3] == 0x7b {
-              _messageType = .resetQuerySlot4
-            }
-            else if message[3] < 0x78 {
-              _messageType = .setLocoSlotDataP2
-              _willChangeSlot = true
-              isP1 = false
-              slotPage = Int(message[2] & 0b00000111)
-              slotNumber = Int(message[3])
-            }
-          }
-
-        case NetworkMessageOpcode.OPC_IDLE.rawValue:
-          _messageType = .setIdleState
- 
-        case NetworkMessageOpcode.OPC_SLOT_STAT1.rawValue:
-          if message[1] < 0x78 {
-            _messageType = .setLocoSlotStat1P1
-            _willChangeSlot = true
-            isP1 = true
-            slotPage = 0
-            slotNumber = Int(message[1])
-          }
-
-        case NetworkMessageOpcode.OPC_LOCO_SND.rawValue:
-          if message[1] < 0x78 &&
-            (message[2] & 0b11110000) == 0x00 {
-            _messageType = .locoF5F8P1
-            _willChangeSlot = true
-            isP1 = true
-            slotPage = 0
-            slotNumber = Int(message[1])
-          }
 
         case NetworkMessageOpcode.OPC_SW_ACK.rawValue:
           if (message[2] & 0b11000000) == 0 {

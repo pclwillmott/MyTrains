@@ -14,7 +14,11 @@ enum InterfaceState {
   case waitingForResponse
 }
 
-public class Interface : LocoNetDevice, MTSerialPortDelegate  {
+@objc public protocol SlotObserverDelegate {
+  @objc optional func slotsUpdated(commandStation:CommandStation)
+}
+
+public class Interface : LocoNetDevice, MTSerialPortDelegate {
   
   // MARK: Constructors
   
@@ -52,16 +56,21 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate  {
   
   private var interfaceState : InterfaceState = .idle
 
+  internal var _locoSlots : [Int:LocoSlotData] = [:]
+  
+  private var slotObservers : [Int:SlotObserverDelegate] = [:]
+  
+  private var nextSlotObserverId = 0
+  
+  private var slotObserverLock : NSLock = NSLock()
+  
   // MARK: Public Properties
   
-  public var interfaceName : String {
-    get {
-      if let info = locoNetProductInfo {
-        return "\(info.productName) SN: \(serialNumber)"
-      }
-      return deviceName
-    }
-  }
+  public var opSwBankA : NetworkMessage?
+  
+  public var opSwBankB : NetworkMessage?
+  
+  public var globalSystemTrackStatus : UInt8?
   
   public var isConnected : Bool {
     get {
@@ -76,11 +85,109 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate  {
     return false
   }
   
+  override public var locoNetProductId: LocoNetProductId {
+    get {
+      return super.locoNetProductId
+    }
+    set(value) {
+      super.locoNetProductId = value
+      if let info = locoNetProductInfo, info.attributes.contains(.CommandStation) {
+        commandStation = self
+      }
+    }
+  }
+  
   public var partialSerialNumberLow : Int = -1
   
   public var partialSerialNumberHigh : Int = -1
   
+  public var commandStation : Interface?
+  
   // MARK: Private Methods
+  
+  private func slotsUpdated() {
+    for kv in slotObservers {
+      kv.value.slotsUpdated?(commandStation: self)
+    }
+  }
+  
+  private func networkMessageReceived(message: NetworkMessage) {
+    
+    switch message.messageType {
+      
+    case .iplDevData:
+      
+      let iplDevData = IPLDevData(message: message)
+      
+      var newDevice = true
+      
+      for kv in networkController.locoNetDevices {
+        
+        let device = kv.value
+        
+        if let info = device.locoNetProductInfo, info.productCode == iplDevData.productCode &&
+            device.serialNumber == iplDevData.serialNumber {
+          
+          newDevice = false
+          
+          device.softwareVersion = iplDevData.softwareVersion
+          device.boardId = iplDevData.boardId
+          device.networkId = message.networkId
+          
+          device.save()
+          
+        }
+        
+      }
+      
+      if newDevice {
+        
+        if let info = iplDevData.productCode.product() {
+          
+          let device = LocoNetDevice(primaryKey: -1)
+          
+          device.networkId = message.networkId
+          device.boardId = iplDevData.boardId
+          device.softwareVersion = iplDevData.softwareVersion
+          device.serialNumber = iplDevData.serialNumber
+          device.locoNetProductId = info.id
+          
+          device.save()
+          
+          networkController.addDevice(device: device)
+          
+        }
+        
+      }
+    
+    case .opSwDataAP1:
+      commandStation?.opSwBankA = message
+      commandStation?.globalSystemTrackStatus = message.message[7]
+      
+    case .opSwDataBP1:
+      commandStation?.opSwBankB = message
+      commandStation?.globalSystemTrackStatus = message.message[7]
+     
+    case .fastClockDataP1:
+      commandStation?.globalSystemTrackStatus = message.message[7]
+      
+    case .locoSlotDataP1:
+      commandStation?.globalSystemTrackStatus = message.message[7]
+      let slot = LocoSlotData(locoSlotDataP1: LocoSlotDataP1(networkId: self.networkId, data: message.message))
+      _locoSlots[slot.slotID] = slot
+      slotsUpdated()
+
+    case .locoSlotDataP2:
+      commandStation?.globalSystemTrackStatus = message.message[7]
+      let slot = LocoSlotData(locoSlotDataP2: LocoSlotDataP2(networkId: self.networkId, data: message.message))
+      _locoSlots[slot.slotID] = slot
+      slotsUpdated()
+
+    default:
+      break
+    }
+    
+  }
   
   private func sendMessage() {
     
@@ -163,6 +270,21 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate  {
 
   // MARK: Public Methods
   
+  public func addSlotObserver(observer:SlotObserverDelegate) -> Int {
+    slotObserverLock.lock()
+    let id = nextSlotObserverId
+    nextSlotObserverId += 1
+    slotObservers[id] = observer
+    slotObserverLock.unlock()
+    return id
+  }
+  
+  public func removeSlotObserver(id:Int) {
+    slotObserverLock.lock()
+    slotObservers.removeValue(forKey: id)
+    slotObserverLock.unlock()
+  }
+
   public func addObserver(observer:InterfaceDelegate) -> Int {
     nextObserverKeyLock.lock()
     let id : Int = nextObserverKey
@@ -174,10 +296,6 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate  {
   
   public func removeObserver(id:Int) {
     observers.removeValue(forKey: id)
-  }
-  
-  override public func displayString() -> String {
-    return interfaceName
   }
   
   public func addToQueue(message:NetworkMessage, delay:TimeInterval, responses: Set<NetworkMessageType>, retryCount: Int, timeoutCode: TimeoutCode) {
@@ -343,6 +461,8 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate  {
                 stopSpacingTimer()
               }
 
+              networkMessageReceived(message: networkMessage)
+              
               for observer in observers {
                 observer.value.networkMessageReceived?(message: networkMessage)
               }
@@ -371,6 +491,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate  {
     for observer in observers {
       observer.value.interfaceWasOpened?(interface: self)
     }
+    iplDiscover()
   }
   
   public func serialPortWasClosed(_ serialPort: MTSerialPort) {

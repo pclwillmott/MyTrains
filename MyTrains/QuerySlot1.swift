@@ -99,7 +99,7 @@ public class QuerySlot1 : NetworkMessage {
   
   public var productCode : ProductCode {
     get {
-      return ProductCode(rawValue: Int(message[14])) ?? .unknown
+      return ProductCode(rawValue: message[14]) ?? .none
     }
   }
   

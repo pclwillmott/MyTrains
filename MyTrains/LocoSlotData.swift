@@ -174,24 +174,14 @@ public class LocoSlotData {
 
   // MARK: Class Methods
   
-  public static func getID(slotNumber:Int) -> Int {
-    return slotNumber << 1
-  }
-
-  public static func getID(slotPage:Int, slotNumber:Int) -> Int {
-    return slotPage << 8 | slotNumber << 1 | 0x01
+  public static func encodeID(slotPage: UInt8, slotNumber: UInt8) -> Int {
+    return Int(slotPage & 0b00000111) << 8 | Int(slotNumber)
   }
   
-  public static func decodeID(slotID: Int) -> (page: Int, number: Int, isP1 : Bool) {
-    
-    let isP1 = (slotID & 1) == 1
-    
+  public static func decodeID(slotID: Int) -> (page: Int, number: Int) {
     let page = slotID >> 8
-    
-    let number = (slotID >> 1) & 0xff
-    
-    return (page: page, number: number, isP1: isP1)
-    
+    let number = slotID & 0xff
+    return (page: page, number: number)
   }
   
 }

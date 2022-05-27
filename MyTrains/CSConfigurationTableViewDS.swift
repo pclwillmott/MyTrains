@@ -12,7 +12,7 @@ public class CSConfigurationTableViewDS : NSObject, NSTableViewDataSource, NSTab
 
   // MARK: Public Properties
   
-  public var options = [CommandStationOptionSwitch]()
+  public var options = [OptionSwitch]()
   
   public var isConfigurationSlotMode : Bool = true
   

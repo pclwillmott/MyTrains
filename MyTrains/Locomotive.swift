@@ -986,7 +986,7 @@ public class Locomotive : RollingStock, CommandStationDelegate {
             }
             else {
               initState = .waitingToActivate
-              cs.moveSlots(sourceSlotNumber: slotNumber, sourceSlotPage: slotPage, destinationSlotNumber: slotNumber, destinationSlotPage: slotPage)
+      //        cs.moveSlots(sourceSlotNumber: slotNumber, sourceSlotPage: slotPage, destinationSlotNumber: slotNumber, destinationSlotPage: slotPage)
             }
           }
           else if initState == .waitingToActivate {
@@ -1059,7 +1059,7 @@ public class Locomotive : RollingStock, CommandStationDelegate {
             }
             else {
               initState = .waitingToActivate
-              cs.moveSlots(sourceSlotNumber: slotNumber, sourceSlotPage: slotPage, destinationSlotNumber: slotNumber, destinationSlotPage: slotPage)
+        //      cs.moveSlots(sourceSlotNumber: slotNumber, sourceSlotPage: slotPage, destinationSlotNumber: slotNumber, destinationSlotPage: slotPage)
             }
           }
           else if initState == .waitingToActivate {

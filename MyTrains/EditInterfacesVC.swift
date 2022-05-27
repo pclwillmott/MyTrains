@@ -67,8 +67,6 @@ class EditInterfacesVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Ne
 
   var observerId : Int = -1
   
-  private var timer : Timer?
-  
   var partialSerialNumberLow : UInt8 = 0
   
   var partialSerialNumberHigh : UInt8 = 0
@@ -99,7 +97,6 @@ class EditInterfacesVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Ne
   }
   
   private func tidyUp() {
-    stopTimer()
     if observerId != -1 {
       tempInterface?.removeObserver(id: observerId)
     }
@@ -109,25 +106,6 @@ class EditInterfacesVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Ne
       interface?.open()
     }
     btnIdentify.isEnabled = true
-  }
-  
-  @objc func timeoutTimer() {
-    print("timeoutTimer")
-    tidyUp()
-  }
-  
-  func starttimer() {
-//    stopTimer()
-    print("startTimer 1")
-    let interval : TimeInterval = 1.0
-    timer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(timeoutTimer), userInfo: nil, repeats: false)
-    print("startTimer 2")
-  }
-  
-  func stopTimer() {
-    print("stopTimer")
-    timer?.invalidate()
-    timer = nil
   }
   
   // MARK: DBEditorView Delegate Methods
@@ -140,6 +118,7 @@ class EditInterfacesVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Ne
     txtInterfaceName.stringValue = ""
     cboBaudrate.selectItem(at: 0)
     cboFlowControl.selectItem(at: 0)
+    lblSerialNumber.stringValue = ""
   }
   
   func setupFields(dbEditorView: DBEditorView, editorObject: EditorObject) {
@@ -153,6 +132,7 @@ class EditInterfacesVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Ne
       txtInterfaceName.stringValue = device.deviceName
       cboBaudrate.selectItem(at: device.baudRate.rawValue)
       cboFlowControl.selectItem(at: device.flowControl.rawValue)
+      lblSerialNumber.stringValue = device.serialNumber == 0 ? "" : "\(device.serialNumber)"
     }
   }
   
@@ -183,6 +163,7 @@ class EditInterfacesVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Ne
     device.deviceName = txtInterfaceName.stringValue
     device.baudRate = BaudRate(rawValue: cboBaudrate.indexOfSelectedItem) ?? .br19200
     device.flowControl = FlowControl(rawValue: cboFlowControl.indexOfSelectedItem) ?? .noFlowControl
+    device.serialNumber = lblSerialNumber.integerValue
   }
   
   func saveNew(dbEditorView: DBEditorView) -> EditorObject {
@@ -213,6 +194,7 @@ class EditInterfacesVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Ne
   // MARK: InterfaceDelegate Methods
   
   func networkMessageReceived(message:NetworkMessage) {
+    
     switch message.messageType {
     case .interfaceData:
       
@@ -221,6 +203,8 @@ class EditInterfacesVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Ne
       if let product = LocoNetProducts.product(productCode: productCode) {
         if let index = cboDeviceTypeDS.indexWithKey(key: product.id) {
           cboDeviceType.selectItem(at: index)
+          lblSerialNumber.stringValue = ""
+          txtInterfaceName.stringValue = ""
         }
       }
       
@@ -228,8 +212,6 @@ class EditInterfacesVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Ne
       partialSerialNumberHigh = message.message[7]
       
       tempInterface?.iplDiscover()
-      
-      starttimer()
     
     case .iplDevData:
       
@@ -238,10 +220,7 @@ class EditInterfacesVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Ne
       if iplDevData.partialSerialNumberLow == partialSerialNumberLow &&   iplDevData.partialSerialNumberHigh == partialSerialNumberHigh &&
         iplDevData.productCode.rawValue == productCode {
         lblSerialNumber.stringValue = "\(iplDevData.serialNumber)"
-        tidyUp()
-      }
-      else {
-        starttimer()
+        txtInterfaceName.stringValue = "\(cboDeviceType.stringValue) SN: #\(iplDevData.serialNumber)"
       }
       
     default:
@@ -299,8 +278,12 @@ class EditInterfacesVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Ne
   @IBOutlet weak var btnIdentify: NSButton!
   
   @IBAction func btnIdentifyAction(_ sender: NSButton) {
+    
+    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+      self.tidyUp()
+    }
+    
     btnIdentify.isEnabled = false
-    starttimer()
     partialSerialNumberLow = 0
     partialSerialNumberHigh = 0
     productCode = 0
@@ -320,7 +303,7 @@ class EditInterfacesVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Ne
     if let device = tempInterface {
       setFields(device: device)
       observerId = device.addObserver(observer: self)
-  //    device.open()
+      device.open()
     }
   }
   

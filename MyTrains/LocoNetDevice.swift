@@ -52,7 +52,7 @@ public class LocoNetDevice : EditorObject {
     }
   }
   
-  public var locoNetProductId : Int = -1 {
+  public var locoNetProductId : LocoNetProductId = .UNKNOWN {
     didSet {
       modified = true
     }
@@ -153,7 +153,7 @@ public class LocoNetDevice : EditorObject {
       }
 
       if !reader.isDBNull(index: 6) {
-        locoNetProductId = reader.getInt(index: 6)!
+        locoNetProductId = LocoNetProductId(rawValue: reader.getInt(index: 6)!) ?? .UNKNOWN
       }
       
       if !reader.isDBNull(index: 7) {
@@ -280,7 +280,7 @@ public class LocoNetDevice : EditorObject {
       cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.SOFTWARE_VERSION)", value: softwareVersion)
       cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.HARDWARE_VERSION)", value: hardwareVersion)
       cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.BOARD_ID)", value: boardId)
-      cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.LOCONET_PRODUCT_ID)", value: locoNetProductId)
+      cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.LOCONET_PRODUCT_ID)", value: locoNetProductId.rawValue)
       cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.OPTION_SWITCHES_0)", value: optionSwitches0)
       cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.OPTION_SWITCHES_1)", value: optionSwitches1)
       cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.OPTION_SWITCHES_2)", value: optionSwitches2)
@@ -350,7 +350,11 @@ public class LocoNetDevice : EditorObject {
            
         while reader.read() {
           let device = LocoNetDevice(reader: reader)
-          result[device.primaryKey] = device
+          if let info = device.locoNetProductInfo {
+            if !info.attributes.contains(.ComputerInterface) {
+              result[device.primaryKey] = device
+            }
+          }
         }
            
         reader.close()

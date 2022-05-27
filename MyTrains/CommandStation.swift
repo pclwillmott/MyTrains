@@ -14,50 +14,10 @@ import Foundation
   @objc optional func messageReceived(message:NetworkMessage)
 }
 
-@objc public protocol SlotObserverDelegate {
-  @objc optional func slotsUpdated(commandStation:CommandStation)
-}
-
-public enum CommandStationModel : Int {
-  case dcs210 = 0
-  case dcs210Plus = 1
-  case dcs240 = 2
-  case unknown = 0xffff
-}
-
-public class CommandStation : LocoNetDevice {
+public class CommandStation : NSObject {
   
   // MARK: Constructors
-/*
-  init(message:IPLDevData) {
-    super.init()
-    productCode = message.productCode
-    serialNumber = message.serialNumber
-    softwareVersion = message.softwareVersion
-    if optionSwitches.count == 0 && model != .unknown {
-      let defs = CommandStationOptionSwitch.switches(commandStationModel: model)
-      for def in defs {
-        let opsw = CommandStationOptionSwitch(commandStation: self, switchNumber: def.switchNumber, switchDefinition: def)
-        opsw.state = def.defaultState
-        optionSwitches.append(opsw)
-      }
-    }
-    modified = true
-    save()
-  }
-  
-  init(reader:SqliteDataReader) {
-    super.init()
-    decode(sqliteDataReader: reader)
-    if optionSwitches.count == 0 && model != .unknown {
-      let defs = CommandStationOptionSwitch.switches(commandStationModel: model)
-      for def in defs {
-        let opsw = CommandStationOptionSwitch(commandStation: self, switchNumber: def.switchNumber, switchDefinition: def)
-        optionSwitches.append(opsw)
-      }
-    }
-  }
-  */
+
   // MARK: Destructors
   
   deinit {
@@ -65,12 +25,6 @@ public class CommandStation : LocoNetDevice {
   }
   
   // MARK: Private Properties
-  
-  private var _serialNumber : Int = -1
-  
-  private var _hardwareVersion : Double = -1.0
-  
-  private var _softwareVersion : Double = -1.0
   
   private var _observerId : [String:Int] = [:]
   
@@ -84,113 +38,11 @@ public class CommandStation : LocoNetDevice {
   
   private var forceRefresh : Bool = false
   
-  private var _locoSlots : [Int:LocoSlotData] = [:]
-  
-  private var slotObservers : [Int:SlotObserverDelegate] = [:]
-  
-  private var nextSlotObserverId = 0
-  
-  private var slotObserverLock : NSLock = NSLock()
-  
   private var mostRecentCfgSlotDataP1 : [UInt8] = []
 
   // MARK: Public Properties
+    
   
-  public var locoSlots : [LocoSlotData] {
-    get {
-      
-      var slots : [LocoSlotData] = []
-      
-      for slot in _locoSlots {
-        slots.append(slot.value)
-      }
-      
-      return slots.sorted {
-        $0.slotID < $1.slotID
-      }
-      
-    }
-  }
-  
-  public var optionSwitches : [CommandStationOptionSwitch] = []
-  
-  public var model : CommandStationModel {
-    get {
-      switch productCode {
-      case .DCS210:
-        return .dcs210
-      case .DCS210Plus:
-        return .dcs210Plus
-      case .DCS240:
-        return .dcs240
-      default:
-        return .unknown
-      }
-    }
-  }
-  
-  public var productCode : ProductCode  = .unknown {
-    didSet {
-      modified = true
-    }
-  }
-  /*
-  public var commandStationId : Int {
-    get {
-      return CommandStation.commandStationID(manufacturer: manufacturer, productCode: productCode, serialNumber: serialNumber)
-    }
-  }
-  
-  public var commandStationName : String {
-    get {
-      return "\(manufacturer) \(productCode) SN: \(serialNumber)"
-    }
-  }
-  */
-  public var maxSlotNumber : (page:Int, number:Int)? {
-    get {
-      switch productCode {
-      case .DCS210Plus:
-        return (page:0, number:100)
-      case .DCS210:
-        return (page:0, number:100)
-      case .DCS240:
-        return (page:3, number:48)
-      default:
-        return nil
-      }
-    }
-  }
-  
-  public var implementsProtocol1 : Bool = false {
-    didSet {
-      trackStatusChanged()
-    }
-  }
-  
-  public var implementsProtocol2 : Bool = false {
-    didSet {
-      trackStatusChanged()
-    }
-  }
-  
-  public var programmingTrackIsBusy : Bool = false {
-    didSet {
-      trackStatusChanged()
-    }
-  }
-  
-  public var trackIsPaused : Bool = false {
-    didSet {
-      trackStatusChanged()
-    }
-  }
-  
-  public var powerIsOn : Bool = false {
-    didSet {
-      trackStatusChanged()
-    }
-  }
   
   // MARK: Private Methods
   
@@ -218,12 +70,6 @@ public class CommandStation : LocoNetDevice {
     }
   }
   
-  private func slotsUpdated() {
-    for kv in slotObservers {
-      kv.value.slotsUpdated?(commandStation: self)
-    }
-  }
-  
   @objc func timerAction() {
     forceRefresh = true
   }
@@ -239,21 +85,6 @@ public class CommandStation : LocoNetDevice {
 
   // MARK: Public Methods
   
-  public func addSlotObserver(observer:SlotObserverDelegate) -> Int {
-    slotObserverLock.lock()
-    let id = nextSlotObserverId
-    nextSlotObserverId += 1
-    slotObservers[id] = observer
-    slotObserverLock.unlock()
-    return id
-  }
-  
-  public func removeSlotObserver(id:Int) {
-    slotObserverLock.lock()
-    slotObservers.removeValue(forKey: id)
-    slotObserverLock.unlock()
-  }
-
   public func addDelegate(delegate:CommandStationDelegate) -> Int {
     _delegateLock.lock()
     let id = _nextDelegateId
@@ -288,20 +119,6 @@ public class CommandStation : LocoNetDevice {
     } */
   }
   
-  public func moveSlots(sourceSlotNumber: Int, sourceSlotPage: Int, destinationSlotNumber: Int, destinationSlotPage: Int) {
-/*    for kv in _messengers {
-      let messenger = kv.value
-      if messenger.isOpen {
-        if implementsProtocol2 {
-          messenger.moveSlotsP2(sourceSlotNumber: sourceSlotNumber, sourceSlotPage: sourceSlotPage, destinationSlotNumber: destinationSlotNumber, destinationSlotPage: destinationSlotPage)
-        }
-        else {
-          messenger.moveSlotsP1(sourceSlotNumber: sourceSlotNumber, destinationSlotNumber: destinationSlotNumber)
-        }
-        break
-      }
-    } */
-  }
   
   public func updateLocomotiveState(slotNumber: Int, slotPage: Int, previousState:LocomotiveState, nextState:LocomotiveState, throttleID: Int) -> LocomotiveState {
  /*
@@ -492,19 +309,8 @@ public class CommandStation : LocoNetDevice {
   @objc public func networkMessageReceived(message: NetworkMessage) {
     switch message.messageType {
     case .cfgSlotDataP1, .locoSlotDataP1, .fastClockDataP1:
-      let trk = message.message[7]
-      implementsProtocol2    = (trk & 0b01000000) == 0b01000000
-      programmingTrackIsBusy = (trk & 0b00001000) == 0b00001000
-      implementsProtocol1    = (trk & 0b00000100) == 0b00000100
-      trackIsPaused          = (trk & 0b00000010) == 0b00000000
-      powerIsOn              = (trk & 0b00000001) == 0b00000001
       locomotiveMessage(message: message)
       if message.messageType == .locoSlotDataP1 {
-        /*
-        let slot = LocoSlotData(locoSlotDataP1: LocoSlotDataP1(interfaceId: message.interfaceId, data: message.message))
-        _locoSlots[slot.slotID] = slot
-        slotsUpdated()
-         */
       }
       else if message.messageType == .cfgSlotDataP1 {
         mostRecentCfgSlotDataP1 = message.message
@@ -539,20 +345,6 @@ public class CommandStation : LocoNetDevice {
       break
     case .setLocoSlotDataP2:
       locomotiveMessage(message: message)
-    case .locoSlotDataP2:
-      let trk = message.message[7]
-      implementsProtocol2    = (trk & 0b01000000) == 0b01000000
-      programmingTrackIsBusy = (trk & 0b00001000) == 0b00001000
-      implementsProtocol1    = (trk & 0b00000100) == 0b00000100
-      trackIsPaused          = (trk & 0b00000010) == 0b00000000
-      powerIsOn              = (trk & 0b00000001) == 0b00000001
-      locomotiveMessage(message: message)
-      /*
-      let slot = LocoSlotData(locoSlotDataP2: LocoSlotDataP2(interfaceId: message.interfaceId, data: message.message))
-      _locoSlots[slot.slotID] = slot
-      slotsUpdated()
-       */
-      break
     case .noFreeSlotsP2, .noFreeSlotsP1, .setSlotDataOKP1, .setSlotDataOKP2, .illegalMoveP1, .d4Error:
       locomotiveMessage(message: message)
     case .pwrOn:
@@ -586,63 +378,5 @@ public class CommandStation : LocoNetDevice {
     
     networkMessage(message: message)
   }
-  
-  /*
-  public static var commandStations : [CommandStation] {
-    
-    get {
-    
-      let conn = Database.getConnection()
-      
-      let shouldClose = conn.state != .Open
-       
-      if shouldClose {
-        _ = conn.open()
-      }
-       
-      let cmd = conn.createCommand()
-       
-      cmd.commandText = "SELECT \(columnNames) FROM [\(TABLE.COMMAND_STATION)]"
-
-      var result : [CommandStation] = []
-      
-      if let reader = cmd.executeReader() {
-           
-        while reader.read() {
-          let cs = CommandStation(reader: reader)
-          result.append(cs)
-        }
-           
-        reader.close()
-           
-      }
-      
-      if shouldClose {
-        conn.close()
-      }
-
-      return result.sorted {
-        $0.commandStationName < $1.commandStationName
-      }
-      
-    }
-    
-  }
-  
-  public static var commandStationsDictionary : [Int:CommandStation] {
-    get {
-      var result : [Int:CommandStation] = [:]
-      let css = CommandStation.commandStations
-      for cs in css {
-        result[cs.commandStationId] = cs
-      }
-      return result
-    }
-  }
-  
-  public static func commandStationID(manufacturer: Manufacturer, productCode: ProductCode, serialNumber: Int) -> Int {
-    return (manufacturer.rawValue << 24) | (productCode.rawValue << 16) | serialNumber
-  }
-*/
   
 }

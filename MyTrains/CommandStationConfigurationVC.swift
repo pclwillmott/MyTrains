@@ -202,8 +202,8 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Command
       else if configState == .waitingForCfgSlotDataP1 {
         if radOptionSwitches.state == .on {
           nextReadIndex = 0
-          while nextReadIndex < options.count && options[nextReadIndex].switchDefinition.configByte != -1 {
-            nextReadIndex += 1
+          while nextReadIndex < options.count && //options[nextReadIndex].switchDefinition.configByte != -1 {
+        //    nextReadIndex += 1
           }
           readSwitchNumber = options[nextReadIndex].switchNumber
           configState = .waitingForReadSwitchAck
@@ -211,8 +211,8 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Command
           break
         }
         configState = .idle
-        commandStation?.save()
-        tableView.reloadData()
+   //     commandStation?.save()
+   //     tableView.reloadData()
       }
       break
     case .swState:
@@ -220,12 +220,12 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Command
       if configState == .waitingForReadSwitchAck {
         options[nextReadIndex].state = switchState
         nextReadIndex += 1
-        while nextReadIndex < options.count && options[nextReadIndex].switchDefinition.configByte != -1 {
+        while nextReadIndex < options.count && //options[nextReadIndex].switchDefinition.configByte != -1 {
           nextReadIndex += 1
         }
         if nextReadIndex == options.count {
           configState = .idle
-          commandStation?.save()
+   //       commandStation?.save()
           tableView.reloadData()
           break
         }

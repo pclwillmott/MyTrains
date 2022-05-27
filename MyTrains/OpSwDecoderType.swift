@@ -23,7 +23,7 @@ class OpSwDecoderView: NSTableCellView {
   
   // MARK: Private Properties
   
-  private var _optionSwitch : CommandStationOptionSwitch?
+  private var _optionSwitch : OptionSwitch?
   
   // MARK: Public Properties
   
@@ -66,7 +66,7 @@ class OpSwDecoderView: NSTableCellView {
     }
   }
   
-  public var optionSwitch : CommandStationOptionSwitch? {
+  public var optionSwitch : OptionSwitch? {
     get {
       return _optionSwitch
     }

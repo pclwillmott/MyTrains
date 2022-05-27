@@ -21,14 +21,18 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
     
     super.init()
     
-    let nc = NotificationCenter.default
+//    let nc = NotificationCenter.default
     
 //    nc.addObserver(self, selector: #selector(serialPortsWereConnected(_:)), name: NSNotification.Name.ORSSerialPortsWereConnected, object: nil)
 
 //    nc.addObserver(self, selector: #selector(serialPortsWereDisconnected(_:)), name: NSNotification.Name.ORSSerialPortsWereDisconnected, object: nil)
 
-    NSUserNotificationCenter.default.delegate = self
+//    NSUserNotificationCenter.default.delegate = self
 
+    for interface in interfaceDevices {
+      locoNetDevices[interface.value.primaryKey] = interface.value
+    }
+    
   }
   
   // MARK: Destructor
@@ -117,7 +121,7 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
         }
       }
       return interfaces.sorted {
-        $0.interfaceName < $1.interfaceName
+        $0.deviceName < $1.deviceName
       }
     }
   }

@@ -131,7 +131,7 @@ class GroupSetupVC: NSViewController, NetworkControllerDelegate, InterfaceDelega
     
     for interface in interfaces {
       
-      let name = interface.interfaceName
+      let name = interface.deviceName
       
       cboInterface.addItem(withObjectValue: name)
       
@@ -200,13 +200,13 @@ class GroupSetupVC: NSViewController, NetworkControllerDelegate, InterfaceDelega
     UserDefaults.standard.set(name, forKey: DEFAULT.MONITOR_INTERFACE_ID)
     
     if let x = interface {
-      if name != x.interfaceName && observerId != -1 {
+      if name != x.deviceName && observerId != -1 {
         x.removeObserver(id: observerId)
       }
     }
     
     for x in networkController.networkInterfaces {
-      if x.interfaceName == name {
+      if x.deviceName == name {
         interface = x
         observerId = interface?.addObserver(observer: self) ?? -1
         btnReadAction(btnRead)

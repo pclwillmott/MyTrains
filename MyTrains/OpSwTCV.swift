@@ -23,7 +23,7 @@ class OpSwTCV: NSTableCellView {
   
   // MARK: Private Properties
   
-  private var _optionSwitch : CommandStationOptionSwitch?
+  private var _optionSwitch : OptionSwitch?
   
   // MARK: Public Properties
   
@@ -39,7 +39,7 @@ class OpSwTCV: NSTableCellView {
     }
   }
   
-  public var optionSwitch : CommandStationOptionSwitch? {
+  public var optionSwitch : OptionSwitch? {
     get {
       return _optionSwitch
     }

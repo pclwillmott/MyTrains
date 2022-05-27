@@ -27,7 +27,7 @@ extension Interface {
 
   }
   
-  public func getCfgSlotDataP1() {
+  public func getOpSwDataAP1() {
     
     let message = NetworkMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_RQ_SL_DATA.rawValue, 0x7f, 0x00], appendCheckSum: true)
     
@@ -35,7 +35,7 @@ extension Interface {
 
   }
   
-  public func getCfgSlotDataBP1() {
+  public func getOpSwDataBP1() {
     
     let message = NetworkMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_RQ_SL_DATA.rawValue, 0x7e, 0x00], appendCheckSum: true)
     
@@ -43,7 +43,7 @@ extension Interface {
 
   }
   
-  public func getCfgSlotDataP2() {
+  public func getOpSwDataP2() {
     
     let message = NetworkMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_RQ_SL_DATA.rawValue, 0x7f, 0x40], appendCheckSum: true)
     
@@ -783,6 +783,4 @@ extension Interface {
 
   }
   
-
-
 }
