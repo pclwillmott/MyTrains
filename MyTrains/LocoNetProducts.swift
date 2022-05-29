@@ -276,13 +276,13 @@ public class LocoNetProducts {
     
   }
   
-  public static func productDictionary(attributes: LocoNetDeviceAttributes) -> [LocoNetProductId:LocoNetProductDictionaryItem] {
+  public static func productDictionary(attributes: LocoNetDeviceAttributes) -> [Int:LocoNetProductDictionaryItem] {
     
-    var result : [LocoNetProductId:LocoNetProductDictionaryItem] = [:]
+    var result : [Int:LocoNetProductDictionaryItem] = [:]
     
     for product in products {
       if product.attributes.intersection(attributes) == attributes {
-        result[product.id] = LocoNetProductDictionaryItem(product: product)
+        result[product.id.rawValue] = LocoNetProductDictionaryItem(product: product)
       }
     }
     

@@ -13,11 +13,15 @@
 		DA08B433278737540001307C /* ProgramDecoderAddressVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA08B432278737530001307C /* ProgramDecoderAddressVC.swift */; };
 		DA08B435278754AB0001307C /* CommandStationComboBoxDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA08B434278754AB0001307C /* CommandStationComboBoxDS.swift */; };
 		DA08B43727875FDD0001307C /* ProgSlotDataP1.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA08B43627875FDD0001307C /* ProgSlotDataP1.swift */; };
+		DA0946542843C06A00F1AB81 /* DMF.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0946532843C06A00F1AB81 /* DMF.swift */; };
+		DA0946562843EB4100F1AB81 /* InterfaceIPLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0946552843EB4100F1AB81 /* InterfaceIPLExtensions.swift */; };
 		DA0DA27A2779E96B00E4F23C /* Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0DA2792779E96B00E4F23C /* Layout.swift */; };
 		DA1DA5E52827E95A00E0F993 /* EditInterfaces.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA5E42827E95A00E0F993 /* EditInterfaces.storyboard */; };
 		DA1DA5E82827EA6700E0F993 /* EditInterfacesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1DA5E72827EA6700E0F993 /* EditInterfacesVC.swift */; };
 		DA1DA5EA28280EEE00E0F993 /* BaudRate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1DA5E928280EEE00E0F993 /* BaudRate.swift */; };
 		DA1DA5EC28280FCD00E0F993 /* FlowControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1DA5EB28280FCD00E0F993 /* FlowControl.swift */; };
+		DA1ECC9328439D4600C4F963 /* UpdateFirmware.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA1ECC9228439D4600C4F963 /* UpdateFirmware.storyboard */; };
+		DA1ECC9828439DE500C4F963 /* UpdateFirmwareVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1ECC9728439DE500C4F963 /* UpdateFirmwareVC.swift */; };
 		DA2502B9282671600002D4AF /* RollingStock.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2502B8282671600002D4AF /* RollingStock.swift */; };
 		DA2785402837EAE700EDCBB7 /* MTSerialPortManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA27853F2837EAE700EDCBB7 /* MTSerialPortManager.swift */; };
 		DA28C2BA2801CC0300857471 /* DashBoard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA28C2B92801CC0300857471 /* DashBoard.storyboard */; };
@@ -134,11 +138,15 @@
 		DA08B432278737530001307C /* ProgramDecoderAddressVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramDecoderAddressVC.swift; sourceTree = "<group>"; };
 		DA08B434278754AB0001307C /* CommandStationComboBoxDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandStationComboBoxDS.swift; sourceTree = "<group>"; };
 		DA08B43627875FDD0001307C /* ProgSlotDataP1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgSlotDataP1.swift; sourceTree = "<group>"; };
+		DA0946532843C06A00F1AB81 /* DMF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMF.swift; sourceTree = "<group>"; };
+		DA0946552843EB4100F1AB81 /* InterfaceIPLExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceIPLExtensions.swift; sourceTree = "<group>"; };
 		DA0DA2792779E96B00E4F23C /* Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Layout.swift; sourceTree = "<group>"; };
 		DA1DA5E42827E95A00E0F993 /* EditInterfaces.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = EditInterfaces.storyboard; sourceTree = "<group>"; };
 		DA1DA5E72827EA6700E0F993 /* EditInterfacesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditInterfacesVC.swift; sourceTree = "<group>"; };
 		DA1DA5E928280EEE00E0F993 /* BaudRate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaudRate.swift; sourceTree = "<group>"; };
 		DA1DA5EB28280FCD00E0F993 /* FlowControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowControl.swift; sourceTree = "<group>"; };
+		DA1ECC9228439D4600C4F963 /* UpdateFirmware.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = UpdateFirmware.storyboard; sourceTree = "<group>"; };
+		DA1ECC9728439DE500C4F963 /* UpdateFirmwareVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateFirmwareVC.swift; sourceTree = "<group>"; };
 		DA2502B8282671600002D4AF /* RollingStock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollingStock.swift; sourceTree = "<group>"; };
 		DA27853F2837EAE700EDCBB7 /* MTSerialPortManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTSerialPortManager.swift; sourceTree = "<group>"; };
 		DA28C2B92801CC0300857471 /* DashBoard.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = DashBoard.storyboard; sourceTree = "<group>"; };
@@ -342,6 +350,7 @@
 				DA8B5D1C282FE31600D39F07 /* InterfaceDelegate.swift */,
 				DA8B5D13282FC35E00D39F07 /* InterfaceExtensions.swift */,
 				DAFD69822840FCF50028E7D3 /* InterfaceCommandStationExtensions.swift */,
+				DA0946552843EB4100F1AB81 /* InterfaceIPLExtensions.swift */,
 				DAA867C327930C62008B6EEC /* IntExtensions.swift */,
 				DA53B251276E478400AB956C /* IPLDevData.swift */,
 				DA0DA2792779E96B00E4F23C /* Layout.swift */,
@@ -413,6 +422,9 @@
 				DA412E13278099AF00748CCD /* ThrottleVC.swift */,
 				DA8B5D16282FCE2700D39F07 /* TimeoutCode.swift */,
 				DA6A0ADE2753B5CF00913F2B /* UserDefaults.swift */,
+				DA1ECC9228439D4600C4F963 /* UpdateFirmware.storyboard */,
+				DA1ECC9728439DE500C4F963 /* UpdateFirmwareVC.swift */,
+				DA0946532843C06A00F1AB81 /* DMF.swift */,
 			);
 			path = MyTrains;
 			sourceTree = "<group>";
@@ -484,6 +496,7 @@
 				DA1DA5E52827E95A00E0F993 /* EditInterfaces.storyboard in Resources */,
 				DA5B4603276F5993005CA03C /* EditNetworks.storyboard in Resources */,
 				DA77795327AEEB3A007EEBE9 /* OpSwTCV.xib in Resources */,
+				DA1ECC9328439D4600C4F963 /* UpdateFirmware.storyboard in Resources */,
 				DA8837702770B35B000B9A41 /* EditLayouts.storyboard in Resources */,
 				DA8AE0ED279B2CCB001E9311 /* SlotView.storyboard in Resources */,
 				DA28C2BA2801CC0300857471 /* DashBoard.storyboard in Resources */,
@@ -572,11 +585,13 @@
 				DA359850278219A400B81AD3 /* LocoSlotDataP2.swift in Sources */,
 				DAE9DBB728258E12004BC75D /* LocoNetProducts.swift in Sources */,
 				DAA867C627933265008B6EEC /* CSVParser.swift in Sources */,
+				DA0946562843EB4100F1AB81 /* InterfaceIPLExtensions.swift in Sources */,
 				DA53B252276E478400AB956C /* IPLDevData.swift in Sources */,
 				DA5B4609276F6CBF005CA03C /* Network.swift in Sources */,
 				DAA867C427930C62008B6EEC /* IntExtensions.swift in Sources */,
 				DA2E0E5827359ED300C7DA7A /* Ack.swift in Sources */,
 				DA28C2BD2801CC4800857471 /* DashBoardVC.swift in Sources */,
+				DA1ECC9828439DE500C4F963 /* UpdateFirmwareVC.swift in Sources */,
 				DA5E1743272EDA5B00F9341F /* LocoSlotDataP1.swift in Sources */,
 				DA1DA5EC28280FCD00E0F993 /* FlowControl.swift in Sources */,
 				DAEA9CFA272D8FBE00C9B3EC /* NetworkMessage.swift in Sources */,
@@ -594,6 +609,7 @@
 				DA434294283698CA00E8D555 /* SerialPort.c in Sources */,
 				DA0DA27A2779E96B00E4F23C /* Layout.swift in Sources */,
 				DA467BA9281D569300AB9650 /* SwitchBoardView.swift in Sources */,
+				DA0946542843C06A00F1AB81 /* DMF.swift in Sources */,
 				DA8837802770B768000B9A41 /* EditLocomotivesVC.swift in Sources */,
 				DAB0749A276EB8B1003278BE /* Database.swift in Sources */,
 				DA412E14278099AF00748CCD /* ThrottleVC.swift in Sources */,

@@ -194,7 +194,7 @@ extension Interface {
     
     let message = NetworkMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_WR_SL_DATA_P2.rawValue, 0x15, UInt8(slotPage), UInt8(slotNumber), 0b00000011, 0x00, 0x00, 0x00, 0x00, 0x00, 0b00100000, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], appendCheckSum: true)
     
-    addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [.setSlotDataOKP2,.ack], retryCount: 10, timeoutCode: timeoutCode)
+    addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [.setSlotDataOKP2], retryCount: 10, timeoutCode: timeoutCode)
 
   }
   

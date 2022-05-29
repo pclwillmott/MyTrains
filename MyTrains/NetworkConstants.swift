@@ -172,6 +172,7 @@ public enum NetworkMessageType {
   case setLocoSlotInUseP2
   case setLocoSlotStat1P1
   case setLocoSlotStat1P2
+  case setRouteTablePage
   case setSlotDataOKP1
   case setSlotDataOKP2
   case setSw

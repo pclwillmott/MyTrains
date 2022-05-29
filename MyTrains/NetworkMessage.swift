@@ -229,10 +229,13 @@ public class NetworkMessage : NSObject {
           
         case 0xb0: // OPC_SW_REQ
           
-          if (message[1] & 0b01111000) == 0b01111000 && (message[2] & 0b11101111) == 0b00000111 {
+          if (message[1] & 0b01111000) == 0b01111000 && (message[2] & 0b11011111) == 0b00000111 {
             _messageType = .interrogate
           }
-          
+          else if (message[2] & 0b11000000) == 0b00000000 {
+            _messageType = .setSw
+          }
+
         // MARK: 0xB1
           
         case 0xb1: // OPC_SW_REP
@@ -388,6 +391,16 @@ public class NetworkMessage : NSObject {
             _messageType = .consistDirF0F4
             _slotsChanged.insert(LocoSlotData.encodeID(slotPage: 0, slotNumber: message[1]))
           }
+        
+        // MARK: 0xB8
+          
+        case 0xb8: // OPC_UNLINK_SLOTS
+          
+          if message[1] > 0 && message[1] < 0x78 && message[2] > 0 && message[2] < 0x78 {
+            _messageType = .unlinkSlotsP1
+            _slotsChanged.insert(LocoSlotData.encodeID(slotPage: 0, slotNumber: message[1]))
+            _slotsChanged.insert(LocoSlotData.encodeID(slotPage: 0, slotNumber: message[2]))
+          }
           
         // MARK: 0xB9
           
@@ -467,15 +480,25 @@ public class NetworkMessage : NSObject {
           if (message[2] & 0b11110000) == 0 {
             _messageType = .getSwState
           }
+          
+        // MARK: 0xBD
+          
+        case 0xbd: // OPC_SW_ACK
+          
+          if (message[2] & 0b11000000) == 0 {
+            _messageType = .setSwWithAck
+          }
 
         // MARK: 0xBE
           
         case 0xbe:
+          
           _messageType = message[1] == 0 ? .getLocoSlotDataSAdrP2 : .getLocoSlotDataLAdrP2
 
         // MARK: 0xBF
           
         case 0xbf: // OPC_LOCO_ADR
+          
           _messageType = message[1] == 0 ? .getLocoSlotDataSAdrP1 : .getLocoSlotDataLAdrP1
           
         // MARK: 0xD0
@@ -499,7 +522,7 @@ public class NetworkMessage : NSObject {
                  (message[4] & 0b11111110) == 0 {
             _messageType = .trkShortRep
           }
-        
+
         // MARK: 0xD3
           
         case 0xd3:
@@ -913,7 +936,6 @@ public class NetworkMessage : NSObject {
               switch message[3] {
               case 0x08:
                 if message[4 ] == 0x00 &&
-                   message[5 ] == 0x00 &&
                    message[6 ] == 0x00 &&
                    message[7 ] == 0x00 &&
                    message[8 ] == 0x00 &&
@@ -1153,6 +1175,12 @@ public class NetworkMessage : NSObject {
                message[14] == 0x7f {
               _messageType = .getRouteTablePage
             }
+            else if message[ 2] == 0x01 &&
+               message[ 3] == 0x03 &&
+               (message[5] & 0b00000001) == 0x00 &&
+               message[ 6] == 0x0f {
+              _messageType = .setRouteTablePage
+            }
           }
           
         // MARK: 0xEF
@@ -1187,45 +1215,8 @@ public class NetworkMessage : NSObject {
             
           }
 
-       // -------------------------------------------------
-          
-        case NetworkMessageOpcode.OPC_SW_REQ.rawValue:
-          if (message[2] & 0b11000000) == 0b00000000 {
-            _messageType = .setSw
-          }
-
-          
-
-        case NetworkMessageOpcode.OPC_SW_ACK.rawValue:
-          if (message[2] & 0b11000000) == 0 {
-            _messageType = .setSwWithAck
-          }
-
-        case NetworkMessageOpcode.OPC_INPUT_REP.rawValue:
-          if (message[2] & 0b11110000) == 0 {
-            _messageType = .transRep
-          }
-        
-        case NetworkMessageOpcode.OPC_UNLINK_SLOTS.rawValue:
-          if message[1] < 0x78 && message[2] < 0x78 {
-            _messageType = .unlinkSlotsP1
-            _willChangeSlot = true
-            isP1 = true
-            slotPage = 0
-            slotNumber = Int(message[1])
-          }
-
         default:
           break
-        }
-        
-        if _willChangeSlot {
-          if isP1 {
-            _slotID = LocoSlotData.getID(slotNumber: slotNumber)
-          }
-          else {
-            _slotID = LocoSlotData.getID(slotPage: slotPage, slotNumber: slotNumber)
-          }
         }
         
       }

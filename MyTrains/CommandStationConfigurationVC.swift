@@ -46,11 +46,11 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Command
       cboCommandStation.selectItem(at: 0)
       commandStation = cboCommandStationDS.commandStationAt(index: 0)
       if let cs = commandStation {
-        csConfigurationTableViewDS.options = cs.optionSwitches
+ /*       csConfigurationTableViewDS.options = cs.optionSwitches
         tableView.dataSource = csConfigurationTableViewDS
         tableView.delegate = csConfigurationTableViewDS
         tableView.reloadData()
-        delegateId = cs.addDelegate(delegate: self)
+        delegateId = cs.addDelegate(delegate: self) */
       }
     }
     
@@ -61,12 +61,12 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Command
     var index = 1
     while index < 129 {
       
-      let button : NSButton = NSButton(title: "\(index)", target: self, action: #selector(self.buttonAction(_:)))
+/*      let button : NSButton = NSButton(title: "\(index)", target: self, action: #selector(self.buttonAction(_:)))
       button.frame = NSRect(x: xPos, y: yPos, width: 50, height: 20)
       button.tag = index
       button.setButtonType(.pushOnPushOff)
       viewBitFinder.subviews.append(button)
-      buttons.append(button)
+      buttons.append(button) */
       
       count += 1
       
@@ -77,7 +77,7 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Command
         count = 0
       }
       else {
-        xPos += button.frame.width
+   //     xPos += button.frame.width
       }
       
     }
@@ -118,11 +118,11 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Command
   
   private var commandStation : CommandStation? {
     didSet {
-      if let cs = commandStation {
+ /*     if let cs = commandStation {
         csConfigurationTableViewDS.options = cs.optionSwitches
         tableView.dataSource = csConfigurationTableViewDS
         tableView.reloadData()
-      }
+      } */
     }
   }
   
@@ -139,7 +139,7 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Command
     let options = csConfigurationTableViewDS.options
     
     switch message.messageType {
-    case .cfgSlotDataP2:
+    case .opSwDataP2:
       if configState == .waitingForBaseCase {
         baseCase = message
         let newState : OptionSwitchState = buttons[readSwitchNumber-1].state == .on ? .closed : .thrown
@@ -170,7 +170,7 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Command
       }
       break
 
-    case .cfgSlotDataP1, .cfgSlotDataBP1:
+    case .opSwDataAP1, .opSwDataBP1:
       if configState == .waitingForBaseCase {
         baseCase = message
         let newState : OptionSwitchState = buttons[readSwitchNumber-1].state == .on ? .closed : .thrown
@@ -202,9 +202,10 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Command
       else if configState == .waitingForCfgSlotDataP1 {
         if radOptionSwitches.state == .on {
           nextReadIndex = 0
+          /*
           while nextReadIndex < options.count && //options[nextReadIndex].switchDefinition.configByte != -1 {
         //    nextReadIndex += 1
-          }
+          } */
           readSwitchNumber = options[nextReadIndex].switchNumber
           configState = .waitingForReadSwitchAck
   //        commandStation?.swState(switchNumber: readSwitchNumber)
@@ -220,13 +221,14 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Command
       if configState == .waitingForReadSwitchAck {
         options[nextReadIndex].state = switchState
         nextReadIndex += 1
+        /*
         while nextReadIndex < options.count && //options[nextReadIndex].switchDefinition.configByte != -1 {
-          nextReadIndex += 1
-        }
+      //    nextReadIndex += 1
+        } */
         if nextReadIndex == options.count {
           configState = .idle
    //       commandStation?.save()
-          tableView.reloadData()
+      //    tableView.reloadData()
           break
         }
         readSwitchNumber = options[nextReadIndex].switchNumber
@@ -317,10 +319,11 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Command
   @IBAction func btnWriteAction(_ sender: NSButton) {
     if radOptionSwitches.state == .on {
       for opsw in csConfigurationTableViewDS.options {
+        /*
         if opsw.switchDefinition.configByte == -1 {
    //       commandStation?.swReq(switchNumber: opsw.switchNumber, state: opsw.newState)
           isDirty = true
-        }
+        } */
       }
     }
     commandStation?.setOptionSwitches()

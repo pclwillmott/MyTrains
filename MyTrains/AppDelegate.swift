@@ -22,20 +22,23 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
       let appFolder  = "/MyTrains"
       let dataFolder = "/MyTrains Database"
       let savedCVsFolder = "/MyTrains Saved CVs"
-      
+      let DMFFolder = "/MyTrains DMF Files"
+
       UserDefaults.standard.set("Version 1.0", forKey: DEFAULT.VERSION)
       
       let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true) as [String]
       
       UserDefaults.standard.set(paths[0] + appFolder + dataFolder, forKey: DEFAULT.DATABASE_PATH)
       UserDefaults.standard.set(paths[0] + appFolder + savedCVsFolder, forKey: DEFAULT.SAVED_CVS_PATH)
+      UserDefaults.standard.set(paths[0] + appFolder + DMFFolder, forKey: DEFAULT.DMF_PATH)
       UserDefaults.standard.set(LengthUnit.centimeters.rawValue, forKey: DEFAULT.UNITS_LENGTH)
       UserDefaults.standard.set(LengthUnit.centimeters.rawValue, forKey: DEFAULT.UNITS_FBOFF_OCC)
       UserDefaults.standard.set(SpeedUnit.kilometersPerHour.rawValue, forKey: DEFAULT.UNITS_SPEED)
       UserDefaults.standard.set(76.2, forKey: DEFAULT.SCALE)
       UserDefaults.standard.set(TrackGauge.oo.rawValue, forKey: DEFAULT.TRACK_GAUGE)
+
     }
-    
+
   }
   
   func applicationWillTerminate(_ aNotification: Notification) {
@@ -129,5 +132,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     wc.showWindow(nil)
   }
   
+  @IBAction func mnuUpdateFirmware(_ sender: NSMenuItem) {
+    let x = ModalWindow.UpdateFirmware
+    let wc = x.windowController
+    wc.showWindow(nil)
+  }
 }
 

@@ -23,10 +23,8 @@ class GroupSetupVC: NSViewController, NetworkControllerDelegate, InterfaceDelega
   func windowWillClose(_ notification: Notification) {
     
     if observerId != -1 {
-      if let mess = interface {
-        mess.removeObserver(id: observerId)
-        observerId = -1
-      }
+      interface?.removeObserver(id: observerId)
+      observerId = -1
     }
     
     if delegateId != -1 {
@@ -114,7 +112,6 @@ class GroupSetupVC: NSViewController, NetworkControllerDelegate, InterfaceDelega
     timer = nil
   }
   
-
   // MARK: NetworkControllerDelegate Methods
   
   func interfacesUpdated(interfaces: [Interface]) {
@@ -150,7 +147,7 @@ class GroupSetupVC: NSViewController, NetworkControllerDelegate, InterfaceDelega
   @objc func networkMessageReceived(message: NetworkMessage) {
   
     switch message.messageType {
-    case .duplexData:
+    case .duplexGroupData:
       if isFirst {
         let duplexData = DuplexData(message: message)
         txtGroupName.stringValue = duplexData.groupName

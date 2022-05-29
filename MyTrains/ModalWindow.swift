@@ -27,6 +27,7 @@ enum AppStoryboard : String {
   case DashBoard                   = "DashBoard"
   case GroupSetup                  = "GroupSetup"
   case SwitchBoardEditor           = "SwitchBoardEditor"
+  case UpdateFirmware              = "UpdateFirmware"
   
   var instance : NSStoryboard {
     return NSStoryboard(name: self.rawValue, bundle: Bundle.main)
@@ -51,7 +52,8 @@ let storyboardLookup            : [String:AppStoryboard] = [
   "CommandStationConfiguration" : AppStoryboard.CommandStationConfiguration,
   "DashBoard"                   : AppStoryboard.DashBoard,
   "GroupSetup"                  : AppStoryboard.GroupSetup,
-  "SwitchBoardEditor"           : AppStoryboard.SwitchBoardEditor
+  "SwitchBoardEditor"           : AppStoryboard.SwitchBoardEditor,
+  "UpdateFirmware"              : AppStoryboard.UpdateFirmware
 ]
 
 /*
@@ -82,6 +84,7 @@ enum ModalWindow : String {
   case DashBoard                   = "DashBoard"
   case GroupSetup                  = "GroupSetup"
   case SwitchBoardEditor           = "SwitchBoardEditor"
+  case UpdateFirmware              = "UpdateFirmware"
 
   var windowController : NSWindowController {
     let storyboard = storyboardLookup[self.rawValue]!

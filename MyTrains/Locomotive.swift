@@ -967,9 +967,6 @@ public class Locomotive : RollingStock, CommandStationDelegate {
       }
             
       switch message.messageType {
-      case .ack:
-  //      let ack = Ack(interfaceId: message.interfaceId, data: message.message)
-        break
       case .locoSlotDataP1:
         let locoSlotDataP1 = LocoSlotDataP1(networkId: message.networkId, data: message.message)
         if locoSlotDataP1.address == address {

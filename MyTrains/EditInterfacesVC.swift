@@ -126,7 +126,7 @@ class EditInterfacesVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Ne
       interface = device
       cboPort.stringValue = device.devicePath
       checkPort()
-      if let index = cboDeviceTypeDS.indexWithKey(key: device.locoNetProductId) {
+      if let index = cboDeviceTypeDS.indexWithKey(key: device.locoNetProductId.rawValue) {
         cboDeviceType.selectItem(at: index)
       }
       txtInterfaceName.stringValue = device.deviceName
@@ -155,10 +155,10 @@ class EditInterfacesVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Ne
   func setFields(device:Interface) {
     device.devicePath = cboPort.stringValue
     if let editorObject = cboDeviceTypeDS.editorObjectAt(index: cboDeviceType.indexOfSelectedItem) {
-      device.locoNetProductId = editorObject.primaryKey
+      device.locoNetProductId = LocoNetProductId(rawValue: editorObject.primaryKey) ?? .UNKNOWN
     }
     else {
-      device.locoNetProductId = -1
+      device.locoNetProductId = .UNKNOWN
     }
     device.deviceName = txtInterfaceName.stringValue
     device.baudRate = BaudRate(rawValue: cboBaudrate.indexOfSelectedItem) ?? .br19200
@@ -201,7 +201,7 @@ class EditInterfacesVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Ne
       productCode = message.message[14]
       
       if let product = LocoNetProducts.product(productCode: productCode) {
-        if let index = cboDeviceTypeDS.indexWithKey(key: product.id) {
+        if let index = cboDeviceTypeDS.indexWithKey(key: product.id.rawValue) {
           cboDeviceType.selectItem(at: index)
           lblSerialNumber.stringValue = ""
           txtInterfaceName.stringValue = ""

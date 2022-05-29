@@ -34,7 +34,7 @@ class EditNetworksVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     
     cboLayout.dataSource = cboLayoutDS
     
-    cboComputerInterfaceDS.dictionary = networkController.interfaceDevices
+    cboComputerInterfaceDS.dictionary = networkController.locoNetInterfaces
     
     cboComputerInterface.dataSource = cboComputerInterfaceDS
     

@@ -150,12 +150,14 @@ class DBEditorView: NSView {
     
     switch editorState {
     case .select:
+      cboSelect.isEnabled = true
       btnNew.isEnabled = true
       btnEdit.isEnabled = cboSelect.numberOfItems > 0
       btnSave.isEnabled = false
       btnCancel.isEnabled = false
       btnDelete.isEnabled = cboSelect.numberOfItems > 0
     case .editExisting, .editNew:
+      cboSelect.isEnabled = false
       btnNew.isEnabled = false
       btnEdit.isEnabled = false
       btnSave.isEnabled = modified

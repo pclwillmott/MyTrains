@@ -121,7 +121,7 @@ public class LocoNetDevice : EditorObject {
   // MARK: Public Methods
   
   override public func displayString() -> String {
-    return deviceName
+    return deviceName == "" ? "fred" : deviceName
   }
   
 // MARK: Database Methods

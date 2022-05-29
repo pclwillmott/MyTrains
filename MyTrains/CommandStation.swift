@@ -249,7 +249,7 @@ public class CommandStation : NSObject {
       for index in 2...mostRecentCfgSlotDataP1.count-2 {
         message.append(mostRecentCfgSlotDataP1[index])
       }
-
+      /*
       for opsw in optionSwitches {
         
         let def = opsw.switchDefinition
@@ -284,7 +284,7 @@ public class CommandStation : NSObject {
           message[byte] = (message[byte] & safeMask) | value
         }
       }
-      /*
+      
       for kv in messengers {
         let messenger = kv.value
         if messenger.isOpen {
@@ -308,12 +308,13 @@ public class CommandStation : NSObject {
   
   @objc public func networkMessageReceived(message: NetworkMessage) {
     switch message.messageType {
-    case .cfgSlotDataP1, .locoSlotDataP1, .fastClockDataP1:
+    case .opSwDataAP1, .locoSlotDataP1, .fastClockDataP1:
       locomotiveMessage(message: message)
       if message.messageType == .locoSlotDataP1 {
       }
-      else if message.messageType == .cfgSlotDataP1 {
+      else if message.messageType == .opSwDataAP1 {
         mostRecentCfgSlotDataP1 = message.message
+        /*
         for opsw in optionSwitches {
           let byte = opsw.switchDefinition.configByte
           if opsw.switchDefinition.definitionType == .standard {
@@ -340,6 +341,7 @@ public class CommandStation : NSObject {
           }
         }
         save()
+         */
         trackStatusChanged()
       }
       break
@@ -347,15 +349,15 @@ public class CommandStation : NSObject {
       locomotiveMessage(message: message)
     case .noFreeSlotsP2, .noFreeSlotsP1, .setSlotDataOKP1, .setSlotDataOKP2, .illegalMoveP1, .d4Error:
       locomotiveMessage(message: message)
-    case .pwrOn:
-      powerIsOn = true
+ //   case .pwrOn:
+  //    powerIsOn = true
   //    getCfgSlotDataP1()
       break
-    case .pwrOff:
-      powerIsOn = false
+ //   case .pwrOff:
+  //    powerIsOn = false
   //    getCfgSlotDataP1()
-    case .setIdleState:
-      trackIsPaused = true
+ //   case .setIdleState:
+  //    trackIsPaused = true
   //    getCfgSlotDataP1()
       break
     case.progCmdAcceptedBlind, .progSlotDataP1, .progCmdAccepted:
@@ -364,7 +366,7 @@ public class CommandStation : NSObject {
     default:
       break
     }
-    
+    /*
     if message.willChangeSlot {
       if let slot = _locoSlots[message.slotID] {
         slot.isDirty = true
@@ -374,7 +376,7 @@ public class CommandStation : NSObject {
         _locoSlots[slot.slotID] = slot
         slotsUpdated()
       }
-    }
+    } */
     
     networkMessage(message: message)
   }

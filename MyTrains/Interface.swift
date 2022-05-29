@@ -107,7 +107,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
   
   private func slotsUpdated() {
     for kv in slotObservers {
-      kv.value.slotsUpdated?(commandStation: self)
+ //     kv.value.slotsUpdated?(commandStation: self)
     }
   }
   
@@ -136,6 +136,10 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
           
           device.save()
           
+          if let cs = device as? Interface, info.attributes.contains(.CommandStation) {
+            self.commandStation = cs
+          }
+          
         }
         
       }
@@ -144,17 +148,32 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
         
         if let info = iplDevData.productCode.product() {
           
-          let device = LocoNetDevice(primaryKey: -1)
+          var dev : LocoNetDevice?
           
-          device.networkId = message.networkId
-          device.boardId = iplDevData.boardId
-          device.softwareVersion = iplDevData.softwareVersion
-          device.serialNumber = iplDevData.serialNumber
-          device.locoNetProductId = info.id
+          if info.attributes.contains(.ComputerInterface) {
+            dev = Interface(primaryKey: -1)
+          }
+          else {
+            dev = LocoNetDevice(primaryKey: -1)
+          }
           
-          device.save()
-          
-          networkController.addDevice(device: device)
+          if let device = dev {
+            
+            device.networkId = message.networkId
+            device.boardId = iplDevData.boardId
+            device.softwareVersion = iplDevData.softwareVersion
+            device.serialNumber = iplDevData.serialNumber
+            device.locoNetProductId = info.id
+            
+            device.save()
+            
+            networkController.addDevice(device: device)
+            
+            if let cs = device as? Interface, info.attributes.contains(.CommandStation) {
+              self.commandStation = cs
+            }
+            
+          }
           
         }
         

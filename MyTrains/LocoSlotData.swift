@@ -17,7 +17,7 @@ public class LocoSlotData {
     
     slotNumber = locoSlotDataP1.slotNumber
     
-    slotID = LocoSlotData.getID(slotNumber: slotNumber)
+    slotID = LocoSlotData.encodeID(slotPage: 0, slotNumber: UInt8(slotNumber))
     
     address = locoSlotDataP1.address
     
@@ -37,8 +37,6 @@ public class LocoSlotData {
     
     isF9F28Available = locoSlotDataP1.isF9F28Available
     
-    isP1 = true
- 
   }
   
   init(locoSlotDataP2: LocoSlotDataP2) {
@@ -47,7 +45,7 @@ public class LocoSlotData {
     
     slotNumber = locoSlotDataP2.slotNumber
     
-    slotID = LocoSlotData.getID(slotPage: slotPage, slotNumber: slotNumber)
+    slotID = LocoSlotData.encodeID(slotPage: UInt8(slotPage), slotNumber: UInt8(slotNumber))
     
     address = locoSlotDataP2.address
     
@@ -67,8 +65,6 @@ public class LocoSlotData {
     
     isF9F28Available = locoSlotDataP2.isF9F28Available
     
-    isP1 = false
-
   }
   
   init(slotID: Int) {
@@ -80,8 +76,6 @@ public class LocoSlotData {
     slotPage = decoded.page
     
     slotNumber = decoded.number
-    
-    isP1 = decoded.isP1
     
     address = 0
     
@@ -135,7 +129,7 @@ public class LocoSlotData {
   
   public var displaySlotNumber : String {
     get {
-      return isP1 ? "\(slotNumber)" : "\(slotPage).\(slotNumber)"
+      return "\(slotPage).\(slotNumber)"
     }
   }
   
@@ -149,8 +143,6 @@ public class LocoSlotData {
       return "Unknown"
     }
   }
-  
-  public var isP1 : Bool
   
   public var isDirty : Bool = false
   

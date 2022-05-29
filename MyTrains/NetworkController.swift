@@ -105,14 +105,32 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
     }
   }
   
+  public var locoNetInterfaces : [Int:Interface] {
+    get {
+      
+      var interfaces : [Int:Interface] = [:]
+      
+      for kv in interfaceDevices {
+        let interface = kv.value
+        if let info = interface.locoNetProductInfo, info.attributes.contains(.LocoNetInterface) {
+          interfaces[interface.primaryKey] = interface
+        }
+      }
+
+      return interfaces
+      
+    }
+  }
+  
   public var networkInterfaces : [Interface] {
     get {
+      
       var interfaces : [Interface] = []
       
       for kv in networks {
         let network = kv.value
         if network.layoutId == layoutId {
-          for kv in interfaceDevices {
+          for kv in locoNetInterfaces {
             let interface = kv.value
             if interface.primaryKey == network.locoNetDeviceId {
               interfaces.append(interface)
@@ -120,15 +138,16 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
           }
         }
       }
+      
       return interfaces.sorted {
         $0.deviceName < $1.deviceName
       }
+      
     }
   }
   
   public var softwareThrottleID : Int? {
     get {
-  //    return 0
       for id in 1...0x7f {
         if let pc = throttles[id] {
           if pc == .softwareThrottle {

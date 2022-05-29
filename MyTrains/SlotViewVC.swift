@@ -23,7 +23,7 @@ class SlotViewVC : NSViewController, NSWindowDelegate, SlotObserverDelegate, Com
   func windowWillClose(_ notification: Notification) {
     if let cs = commandStation {
       if slotObserverId != -1 {
-        cs.removeSlotObserver(id: slotObserverId)
+  //      cs.removeSlotObserver(id: slotObserverId)
         slotObserverId = -1
       }
       if commandStationDelegateId != -1 {
@@ -38,14 +38,14 @@ class SlotViewVC : NSViewController, NSWindowDelegate, SlotObserverDelegate, Com
     self.view.window?.delegate = self
     
     cboCommandStationDS.dictionary = networkController.commandStations
-    
+    /*
     cboCommandStation.dataSource = cboCommandStationDS
     
     if cboCommandStation.numberOfItems > 0 {
       cboCommandStation.selectItem(at: 0)
       commandStation = cboCommandStationDS.commandStationAt(index: 0)
     }
-    
+    */
   }
   
   // MARK: Private Enums
@@ -69,7 +69,7 @@ class SlotViewVC : NSViewController, NSWindowDelegate, SlotObserverDelegate, Com
     willSet {
       stopTimer()
       if slotObserverId != -1 {
-        commandStation?.removeSlotObserver(id: slotObserverId)
+   //     commandStation?.removeSlotObserver(id: slotObserverId)
         slotObserverId = -1
       }
       if commandStationDelegateId != -1 {
@@ -79,7 +79,7 @@ class SlotViewVC : NSViewController, NSWindowDelegate, SlotObserverDelegate, Com
     }
     didSet {
       if let cs = commandStation {
-        slotObserverId = cs.addSlotObserver(observer:self)
+   //     slotObserverId = cs.addSlotObserver(observer:self)
         commandStationDelegateId = cs.addDelegate(delegate: self)
         startTimer(timeInterval: 0.05)
       }
@@ -97,9 +97,9 @@ class SlotViewVC : NSViewController, NSWindowDelegate, SlotObserverDelegate, Com
   private var slots : [LocoSlotData] = [] {
     didSet {
       slotTableViewDS.slots = slots
-      slotTableView.dataSource = slotTableViewDS
-      slotTableView.delegate = slotTableViewDS
-      slotTableView.reloadData()
+//      slotTableView.dataSource = slotTableViewDS
+  //    slotTableView.delegate = slotTableViewDS
+    //  slotTableView.reloadData()
     }
   }
   
@@ -131,12 +131,13 @@ class SlotViewVC : NSViewController, NSWindowDelegate, SlotObserverDelegate, Com
       if slot.isDirty {
         slot.isDirty = false
         if let cs = commandStation {
+          /*
           if slot.isP1 {
    //         cs.getLocoSlotDataP1(slotNumber: slot.slotNumber)
           }
           else {
    //         cs.getLocoSlotDataP2(slotPage: slot.slotPage, slotNumber: slot.slotNumber)
-          }
+          } */
           break
         }
       }
@@ -150,7 +151,7 @@ class SlotViewVC : NSViewController, NSWindowDelegate, SlotObserverDelegate, Com
   @objc func messageReceived(message:NetworkMessage) {
 
     if message.messageType == .locoSlotDataP1 || message.messageType == .locoSlotDataP2 {
-      
+      /*
       if let cs = commandStation, let bounds = cs.maxSlotNumber {
 
         switch state {
@@ -190,14 +191,14 @@ class SlotViewVC : NSViewController, NSWindowDelegate, SlotObserverDelegate, Com
           break
         }
 
-      }
+      } */
     }
   }
 
   // MARK: SlotObserverDelegate Methods
   
   @objc func slotsUpdated(commandStation: CommandStation) {
-    slots = commandStation.locoSlots
+//    slots = commandStation.locoSlots
   }
 
   // MARK: Outlets & Actions
@@ -230,7 +231,7 @@ class SlotViewVC : NSViewController, NSWindowDelegate, SlotObserverDelegate, Com
         let slot = slots[index]
         
         lblStatus.stringValue = "Reading \(slot.displaySlotNumber)"
-
+/*
         if slot.isP1 {
           slotNumber = slot.slotNumber
     //      cs.getLocoSlotDataP1(slotNumber: slotNumber)
@@ -239,7 +240,7 @@ class SlotViewVC : NSViewController, NSWindowDelegate, SlotObserverDelegate, Com
           slotPage = slot.slotPage
           slotNumber = slot.slotNumber
     //      cs.getLocoSlotDataP2(slotPage: slotPage, slotNumber: slotNumber)
-        }
+        } */
 
       }
     }
@@ -249,14 +250,14 @@ class SlotViewVC : NSViewController, NSWindowDelegate, SlotObserverDelegate, Com
   @IBOutlet weak var btnReadAllSlots: NSButton!
   
   @IBAction func btnReadAllSlotsAction(_ sender: NSButton) {
-    
+    /*
     if let cs = commandStation, let _ = cs.maxSlotNumber {
       state = .readAllP2
       slotPage = 0
       slotNumber = 0
       lblStatus.stringValue = "Reading \(slotPage).\(slotNumber)"
  //     cs.getLocoSlotDataP2(slotPage: slotPage, slotNumber: slotNumber)
-    }
+    } */
     
   }
   
@@ -275,7 +276,7 @@ class SlotViewVC : NSViewController, NSWindowDelegate, SlotObserverDelegate, Com
         let slot = slots[index]
         
         lblStatus.stringValue = "Clearing \(slot.displaySlotNumber)"
-
+/*
         if slot.isP1 {
           slotNumber = slot.slotNumber
   //        cs.clearLocoSlotDataP1(slotNumber: slotNumber)
@@ -284,7 +285,7 @@ class SlotViewVC : NSViewController, NSWindowDelegate, SlotObserverDelegate, Com
           slotPage = slot.slotPage
           slotNumber = slot.slotNumber
   //        cs.clearLocoSlotDataP2(slotPage: slotPage, slotNumber: slotNumber)
-        }
+        } */
 
       }
       

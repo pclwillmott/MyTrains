@@ -11,6 +11,7 @@ enum DEFAULT {
   static let VERSION                  = "Version"
   static let DATABASE_PATH            = "DatabasePath"
   static let SAVED_CVS_PATH           = "SavedCVsPath"
+  static let DMF_PATH                 = "DMFPath"
   static let MONITOR_INTERFACE_ID     = "MonitorInterfaceId"
   static let MONITOR_SEND_FILENAME    = "MonitorSendFileName"
   static let MONITOR_CAPTURE_FILENAME = "MonitorCaptureFileName"
@@ -31,4 +32,7 @@ enum DEFAULT {
   static let TRACK_GAUGE              = "TrackGauge"
   static let MAIN_CURRENT_LAYOUT_ID   = "MainCurrentLayoutId"
   static let PROGRAMMER_PROG_MODE     = "ProgrammerProgMode"
+  static let IPL_INTERFACE_ID         = "IPLInterfaceId"
+  static let IPL_DMF_FILENAME         = "IPLDMFFileName"
+  
 }
