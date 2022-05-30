@@ -211,7 +211,7 @@ public class LocoNetProducts {
     (.UT6, "UT6", " Utility Throttle", 2020, .UT6, [.Throttle]),
     (.UT6D, "UT6D", "Duplex Radio Utility Throttle", 2020, .UT6, [.Throttle, .DuplexRadioTransceiver]),
     (.UT6DE, "UT6DE", "Duplex Radio Utility Throttle CE (For Europe)", 2020, .UT6, [.Throttle, .DuplexRadioTransceiver]),
-    (.DS74, "DS74", "Quad Switch Stationary Decoder", 2021, .none, [.StationaryDecoder]),
+    (.DS74, "DS74", "Quad Switch Stationary Decoder", 2021, .DS74, [.StationaryDecoder]),
     (.DS78V, "DS78V", "Eight Servo LocoNet Stationary & Accessory decoder for turnout control", 2021, .none, [.StationaryDecoder]),
   ]
   

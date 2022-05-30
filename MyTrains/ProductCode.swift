@@ -30,6 +30,7 @@ public enum ProductCode : UInt8 {
   case LNWI             = 0x63
   case UR92             = 0x5c
   case UR93             = 0x5d
+  case DS74             = 0x74
   case softwareThrottle = 0x7f
   case none             = 0xff
   

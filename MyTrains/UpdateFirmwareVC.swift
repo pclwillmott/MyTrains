@@ -8,7 +8,7 @@
 import Foundation
 import Cocoa
 
-class UpdateFirmwareVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
+class UpdateFirmwareVC: NSViewController, NSWindowDelegate, InterfaceDelegate, DMFDelegate {
 
   // MARK: Window & View Control
   
@@ -85,21 +85,6 @@ class UpdateFirmwareVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
     
   }
   
-  @objc func timerAction() {
-    
-  }
-  
-  func startTimer() {
-    stopTimer()
-    let timeInterval = 300.0 / 1000.0
-    timer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
-  }
-  
-  func stopTimer() {
-    timer?.invalidate()
-    timer = nil
-  }
-  
   func interfacesUpdated(interfaces: [Interface]) {
     
     if observerId != -1 {
@@ -128,6 +113,24 @@ class UpdateFirmwareVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
     
   }
   
+  // MARK: DMFDelegate Methods
+  
+  func update(progress: Double) {
+    btnStart.isEnabled = false
+    barProgress.isHidden = false
+    barProgress.doubleValue = progress
+  }
+  
+  func aborted() {
+    barProgress.isHidden = true
+    btnStart.isEnabled = true
+  }
+  
+  func completed() {
+    barProgress.isHidden = true
+    btnStart.isEnabled = true
+  }
+
   // MARK: Outlets & Actions
   
   @IBOutlet weak var cboInterface: NSComboBox!
@@ -169,7 +172,7 @@ class UpdateFirmwareVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
     dialog.allowsMultipleSelection   = false
     dialog.canChooseFiles            = true
     dialog.allowedFileTypes          = ["dmf"]
-    dialog.allowsOtherFileTypes      = false
+    dialog.allowsOtherFileTypes      = true
     
     if let url = dmfURL {
       dialog.nameFieldStringValue = url.lastPathComponent
@@ -181,16 +184,16 @@ class UpdateFirmwareVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
         dmfPath = result.path
         if let dmf = DMF(path: _dmfPath) {
           self.dmf = dmf
-          lblOptions.integerValue = dmf.options
+          lblOptions.integerValue = Int(dmf.options)
           lblProduct.stringValue = dmf.locoNetProductInfo?.productName ?? ""
-          lblManufacturer.integerValue = dmf.manufacturerCode
+          lblManufacturer.integerValue = Int(dmf.manufacturerCode)
           lblTXDelay.integerValue = dmf.txDelay
           lblChunkSize.integerValue = dmf.chunkSize
           lblEraseDelay.integerValue = dmf.eraseDelay
           lblLastAddress.integerValue = dmf.lastAddress
           lblFirstAddress.integerValue = dmf.firstAddress
-          lblHardwareVersion.integerValue = dmf.hardwareVersion
-          lblSoftwareVersion.integerValue = dmf.softwareVersion
+          lblHardwareVersion.integerValue = Int(dmf.hardwareVersion)
+          lblSoftwareVersion.integerValue = Int(dmf.softwareVersion)
           lblBootloaderVersion.integerValue = dmf.bootloaderVersion
           lblProgBlockSize.integerValue = dmf.progBlockSize
           lblEraseBlockSize.integerValue = dmf.eraseBlockSize
@@ -211,12 +214,14 @@ class UpdateFirmwareVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   
   @IBAction func btnStartAction(_ sender: NSButton) {
     
+    dmf?.start(interface: interface!, delegate: self)
     
   }
   
   @IBOutlet weak var btnCancel: NSButton!
   
   @IBAction func btnCancelAction(_ sender: NSButton) {
+    dmf?.cancel()
   }
   
   @IBOutlet weak var barProgress: NSProgressIndicator!
