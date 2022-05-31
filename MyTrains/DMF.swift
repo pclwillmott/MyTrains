@@ -254,6 +254,8 @@ public class DMF : NSObject {
   public var eraseDelayInSeconds : TimeInterval {
     get {
       
+      return (Double(numberOfBlocksToErase) * Double(eraseDelay) + 125.0) / 1000.0
+      
       let paramaters : [ProductCode:(A:Int, B:Int)] = [
         .DB210     : (A: 8, B: 125),
         .DB210Opto : (A: 8, B: 125),

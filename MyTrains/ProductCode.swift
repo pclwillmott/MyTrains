@@ -12,6 +12,7 @@ public enum ProductCode : UInt8 {
   case LNRP             = 0x01
   case UT4              = 0x04
   case UT6              = 0x06
+  case WTL12            = 0x0c
   case DB210Opto        = 0x14
   case DB210            = 0x15
   case DB220            = 0x16
