@@ -108,7 +108,7 @@ public enum NetworkMessageType {
   case iplDiscover
   case iplEndLoad
   case iplSetAddr
-  case iplSetupBL2
+  case iplSetup
   case linkSlotsP1
   case linkSlotsP2
   case lnwiData

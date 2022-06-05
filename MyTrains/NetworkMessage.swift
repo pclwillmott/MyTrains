@@ -700,7 +700,7 @@ public class NetworkMessage : NSObject {
               case 0b00000000:
                 if message[12] == 0x00 &&
                    message[14] == 0x00 {
-                  _messageType = .iplSetupBL2
+                  _messageType = .iplSetup
                 }
                 break
               case 0b00010000:

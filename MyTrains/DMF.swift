@@ -18,10 +18,10 @@ public typealias DMFData = (recordLength: Int, loadOffset: Int, data: [UInt8])
 
 private enum NextAction {
   case idle
-  case bl2SendSetup
-  case bl2SendAddr
-  case bl2SendBlock
-  case bl2SendEnd
+  case sendSetup
+  case sendAddr
+  case sendBlock
+  case sendEnd
 }
 
 public class DMF : NSObject {
@@ -177,7 +177,7 @@ public class DMF : NSObject {
       
     }
     
-    if bootloaderVersion != 2 {
+    guard bootloaderVersion >= 0 && bootloaderVersion <= 2 else {
       print("bootloader version not supported: \(bootloaderVersion)")
       return nil
     }
@@ -224,7 +224,7 @@ public class DMF : NSObject {
   
   public var progBlockSize : Int = 0
   
-  public var eraseBlockSize : Int = 0
+  public var eraseBlockSize : Int = 1024
   
   public var eraseDelay : Int = 0
   
@@ -247,50 +247,37 @@ public class DMF : NSObject {
   
   public var setupDelayInSeconds : TimeInterval {
     get {
-      return 60.0 / 1000.0
+      let delay = bootloaderVersion == 2 ? 60.0 : bootloaderVersion == 0 ? 120.0 : 122.0
+      return delay / 1000.0
     }
   }
   
   public var eraseDelayInSeconds : TimeInterval {
     get {
-      
       return (Double(numberOfBlocksToErase) * Double(eraseDelay) + 125.0) / 1000.0
-      
-      let paramaters : [ProductCode:(A:Int, B:Int)] = [
-        .DB210     : (A: 8, B: 125),
-        .DB210Opto : (A: 8, B: 125),
-        .DB220     : (A: 8, B: 125),
-        .UT6       : (A:46, B:  90),
-        .DT602     : (A:48, B: 125),
-        .DCS52     : (A:46, B:-220),
-        .DCS210    : (A:44, B: 125),
- //       .DCS240    : (A:44, B: 125), // *** THIS IS A GUESS ***
-        .BXP88     : (A:24, B: 125),
-        .LNWI      : (A:18, B: 125),
-        .BXPA1     : (A:10, B: 125),
-        .UR93      : (A:10, B: 125),
-        .DS74      : (A:10, B: 125),
-      ]
-      
-      if let pc = ProductCode(rawValue: productCode), let p = paramaters[pc] {
-        return Double(p.A * eraseDelay + p.B) / 1000.0
-      }
-      
-      return 2.5
-      
     }
   
   }
   
   public var blockDelayInSeconds : TimeInterval {
     get {
-      return 18.0 / 1000.0
+      let delay = bootloaderVersion == 2 ? 18.0 : bootloaderVersion == 0 ? 20.0 : 26.0
+      return delay / 1000.0
     }
+  }
+  
+  public var endOfChunkDelay : TimeInterval {
+    let delay = bootloaderVersion == 2 ? blockDelayInSeconds : bootloaderVersion == 0 ? (70.0 + Double(txDelay)) / 1000.0 : (76.0 + Double(txDelay)) / 1000.0
+    return delay
   }
   
   public var numberOfBlocksToErase : UInt8 {
     get {
-      return UInt8((lastAddress - firstAddress) / eraseBlockSize)
+      var nb : Int = (lastAddress - firstAddress) / eraseBlockSize
+      if (lastAddress - firstAddress) % eraseBlockSize != 0 {
+        nb += 1
+      }
+      return UInt8(nb & 0xff)
     }
   }
   
@@ -299,6 +286,7 @@ public class DMF : NSObject {
   @objc func timerAction() {
     
     if _cancel {
+      interface?.iplEndLoad()
       DispatchQueue.main.async { [self] in
         self.delegate?.aborted?()
       }
@@ -308,12 +296,12 @@ public class DMF : NSObject {
     switch nextAction {
     case .idle:
       break
-    case .bl2SendSetup:
-      nextAction = .bl2SendAddr
-      interface?.iplSetupBL2(dmf: self)
+    case .sendSetup:
+      nextAction = .sendAddr
+      interface?.iplSetup(dmf: self)
       startTimer(timeInterval: eraseDelayInSeconds, repeats: false)
-    case .bl2SendAddr:
-      nextAction = .bl2SendBlock
+    case .sendAddr:
+      nextAction = .sendBlock
       let dataRecord = dataRecords[blockIndex]
       byteIndex = 0
       interface?.iplSetAddr(loadAddress: dataRecord.loadOffset)
@@ -321,7 +309,7 @@ public class DMF : NSObject {
       DispatchQueue.main.async { [self] in
         self.delegate?.update?(progress: Double(self.blockIndex) / Double(self.dataRecords.count) * 100.0)
       }
-    case .bl2SendBlock:
+    case .sendBlock:
       let dataRecord = dataRecords[blockIndex]
       let d1 : UInt8 = dataRecord.data[byteIndex+0]
       let d2 : UInt8 = dataRecord.data[byteIndex+1]
@@ -333,21 +321,23 @@ public class DMF : NSObject {
       let d8 : UInt8 = dataRecord.data[byteIndex+7]
       interface?.iplDataLoad(D1: d1, D2: d2, D3: d3, D4: d4, D5: d5, D6: d6, D7: d7, D8: d8)
       byteIndex += 8
+      var delay = blockDelayInSeconds
       if byteIndex == dataRecord.recordLength {
+        delay = endOfChunkDelay
         blockIndex += 1
         byteIndex = 0
         if blockIndex == dataRecords.count {
-          nextAction = .bl2SendEnd
+          nextAction = .sendEnd
         }
         else {
-          nextAction = .bl2SendAddr
+          nextAction = .sendAddr
         }
       }
       else {
-        nextAction = .bl2SendBlock
+        nextAction = .sendBlock
       }
-      startTimer(timeInterval: blockDelayInSeconds, repeats: false)
-    case .bl2SendEnd:
+      startTimer(timeInterval: delay, repeats: false)
+    case .sendEnd:
       nextAction = .idle
       interface?.iplEndLoad()
       DispatchQueue.main.async { [self] in
@@ -382,8 +372,14 @@ public class DMF : NSObject {
     case 2:
       blockIndex = 0
       byteIndex = 0
-      nextAction = .bl2SendSetup
-      interface.iplSetupBL2(dmf: self)
+      nextAction = .sendSetup
+      interface.iplSetup(dmf: self)
+      startTimer(timeInterval: setupDelayInSeconds, repeats: false)
+    case 0, 1:
+      blockIndex = 0
+      byteIndex = 0
+      nextAction = .sendAddr
+      interface.iplSetup(dmf: self)
       startTimer(timeInterval: setupDelayInSeconds, repeats: false)
     default:
       break

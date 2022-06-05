@@ -11,7 +11,7 @@ extension Interface {
   
   // MARK: Public Methods
   
-  public func iplSetupBL2(dmf: DMF) {
+  public func iplSetup(dmf: DMF) {
   
     var pxct1 : UInt8 = 0b01000000
     
