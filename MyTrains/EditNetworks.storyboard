@@ -13,11 +13,11 @@
                     <window key="window" title="Network Editor" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" visibleAtLaunch="NO" frameAutosaveName="NetworkEditor" animationBehavior="default" id="cio-Qq-mJE">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-                        <rect key="contentRect" x="268" y="330" width="697" height="546"/>
+                        <rect key="contentRect" x="268" y="330" width="697" height="596"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1792" height="1095"/>
-                        <value key="minSize" type="size" width="697" height="546"/>
+                        <value key="minSize" type="size" width="697" height="596"/>
                         <view key="contentView" id="azw-2O-8eo">
-                            <rect key="frame" x="0.0" y="0.0" width="697" height="546"/>
+                            <rect key="frame" x="0.0" y="0.0" width="697" height="596"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </view>
                         <connections>
@@ -37,25 +37,25 @@
             <objects>
                 <viewController id="ZvT-jY-DU8" customClass="EditNetworksVC" customModule="MyTrains" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="KIg-Lb-Joy">
-                        <rect key="frame" x="0.0" y="0.0" width="697" height="546"/>
+                        <rect key="frame" x="0.0" y="0.0" width="697" height="596"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xxl-b0-mcb" customClass="DBEditorView" customModule="MyTrains" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="697" height="546"/>
+                                <rect key="frame" x="0.0" y="0.0" width="697" height="596"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <tabView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Tg7-SW-0XC">
-                                        <rect key="frame" x="16" y="10" width="584" height="492"/>
+                                        <rect key="frame" x="16" y="10" width="584" height="542"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <font key="font" metaFont="system"/>
                                         <tabViewItems>
                                             <tabViewItem label="General" identifier="" id="jEO-b4-qms">
                                                 <view key="view" id="pWv-Sx-mGt">
-                                                    <rect key="frame" x="10" y="33" width="564" height="446"/>
+                                                    <rect key="frame" x="10" y="33" width="564" height="496"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gPe-31-F8U">
-                                                            <rect key="frame" x="17" y="398" width="530" height="21"/>
+                                                            <rect key="frame" x="17" y="448" width="530" height="21"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="9aV-D9-mv1">
                                                                 <font key="font" usesAppearanceFont="YES"/>
@@ -67,7 +67,7 @@
                                                             </connections>
                                                         </textField>
                                                         <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="n83-zj-iBZ">
-                                                            <rect key="frame" x="17" y="292" width="533" height="25"/>
+                                                            <rect key="frame" x="17" y="342" width="533" height="25"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                             <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" usesDataSource="YES" numberOfVisibleItems="5" id="Rko-wp-pdm">
                                                                 <font key="font" metaFont="system"/>
@@ -79,7 +79,7 @@
                                                             </connections>
                                                         </comboBox>
                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7QK-zs-FFj">
-                                                            <rect key="frame" x="15" y="427" width="94" height="16"/>
+                                                            <rect key="frame" x="15" y="477" width="94" height="16"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Network Name" id="fM4-q5-xKH">
                                                                 <font key="font" metaFont="system"/>
@@ -88,7 +88,7 @@
                                                             </textFieldCell>
                                                         </textField>
                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ty8-We-ZwJ">
-                                                            <rect key="frame" x="15" y="323" width="122" height="16"/>
+                                                            <rect key="frame" x="15" y="373" width="122" height="16"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Computer Interface" id="jOp-Hv-R7Q">
                                                                 <font key="font" metaFont="system"/>
@@ -97,7 +97,7 @@
                                                             </textFieldCell>
                                                         </textField>
                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wDt-Eu-qdV">
-                                                            <rect key="frame" x="15" y="374" width="45" height="16"/>
+                                                            <rect key="frame" x="15" y="424" width="45" height="16"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Layout" id="WdQ-oZ-H6p">
                                                                 <font key="font" metaFont="system"/>
@@ -106,7 +106,7 @@
                                                             </textFieldCell>
                                                         </textField>
                                                         <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yxY-Gq-cnB" userLabel="Cbo Layout">
-                                                            <rect key="frame" x="17" y="343" width="533" height="25"/>
+                                                            <rect key="frame" x="17" y="393" width="533" height="25"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                             <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="5" id="sia-x2-TfJ">
                                                                 <font key="font" metaFont="system"/>
@@ -118,7 +118,7 @@
                                                             </connections>
                                                         </comboBox>
                                                         <box fixedFrame="YES" title="Duplex Throttles" translatesAutoresizingMaskIntoConstraints="NO" id="GSZ-8K-zlf">
-                                                            <rect key="frame" x="14" y="10" width="146" height="275"/>
+                                                            <rect key="frame" x="14" y="7" width="146" height="275"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                             <view key="contentView" id="mYe-cE-Qkt">
                                                                 <rect key="frame" x="3" y="3" width="140" height="257"/>
@@ -212,7 +212,7 @@
                                                             </view>
                                                         </box>
                                                         <box fixedFrame="YES" title="Simplex Throttles" translatesAutoresizingMaskIntoConstraints="NO" id="n35-sW-rMH">
-                                                            <rect key="frame" x="171" y="171" width="142" height="114"/>
+                                                            <rect key="frame" x="171" y="168" width="142" height="114"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                             <view key="contentView" id="6Ot-ow-fxo">
                                                                 <rect key="frame" x="3" y="3" width="136" height="96"/>
@@ -242,6 +242,27 @@
                                                                 </subviews>
                                                             </view>
                                                         </box>
+                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2Ui-nw-haw">
+                                                            <rect key="frame" x="15" y="322" width="113" height="16"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Command Station" id="KO9-qF-wGK">
+                                                                <font key="font" metaFont="system"/>
+                                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                            </textFieldCell>
+                                                        </textField>
+                                                        <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rhe-tr-SUT">
+                                                            <rect key="frame" x="17" y="291" width="533" height="25"/>
+                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                            <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="5" id="Xga-HX-CZJ">
+                                                                <font key="font" metaFont="system"/>
+                                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                            </comboBoxCell>
+                                                            <connections>
+                                                                <action selector="cboCommandStationAction:" target="ZvT-jY-DU8" id="7ou-Xj-7nm"/>
+                                                            </connections>
+                                                        </comboBox>
                                                     </subviews>
                                                 </view>
                                             </tabViewItem>
@@ -252,6 +273,7 @@
                         </subviews>
                     </view>
                     <connections>
+                        <outlet property="cboCommandStation" destination="rhe-tr-SUT" id="cc4-y9-aUx"/>
                         <outlet property="cboComputerInterface" destination="n83-zj-iBZ" id="1vK-66-Ycm"/>
                         <outlet property="cboLayout" destination="yxY-Gq-cnB" id="CuP-Fz-msb"/>
                         <outlet property="editorView" destination="Xxl-b0-mcb" id="1Ls-uO-5Qp"/>
@@ -266,7 +288,7 @@
                 </viewController>
                 <customObject id="ehe-db-I0R" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="466.5" y="153"/>
+            <point key="canvasLocation" x="466.5" y="178"/>
         </scene>
     </scenes>
 </document>

@@ -38,6 +38,10 @@ class EditNetworksVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     
     cboComputerInterface.dataSource = cboComputerInterfaceDS
     
+    cboCommandStationDS.dictionary = networkController.commandStations
+    
+    cboCommandStation.dataSource = cboCommandStationDS
+    
     editorView.dictionary = networkController.networks
     
   }
@@ -45,6 +49,8 @@ class EditNetworksVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   // MARK: Private Properties
   
   private var cboComputerInterfaceDS = ComboBoxDictDS()
+
+  private var cboCommandStationDS = ComboBoxDictDS()
 
   private var cboLayoutDS = ComboBoxDBDS(tableName: TABLE.LAYOUT, codeColumn: LAYOUT.LAYOUT_ID, displayColumn: LAYOUT.LAYOUT_NAME, sortColumn: LAYOUT.LAYOUT_NAME)
   
@@ -54,6 +60,7 @@ class EditNetworksVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     txtNetworkName.stringValue = ""
     cboLayout.deselectItem(at: cboLayout.indexOfSelectedItem)
     cboComputerInterface.deselectItem(at: cboComputerInterface.indexOfSelectedItem)
+    cboCommandStation.deselectItem(at: cboCommandStation.indexOfSelectedItem)
     txtGroupName.stringValue = ""
     txtGroupPassword.stringValue = "0000"
     txtGroupChannel.integerValue = 11
@@ -67,8 +74,11 @@ class EditNetworksVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
       if let loIndex = cboLayoutDS.indexOfItemWithCodeValue(code: network.layoutId) {
         cboLayout.selectItem(at: loIndex)
       }
-      if let index = cboComputerInterfaceDS.indexWithKey(key: network.locoNetDeviceId) {
+      if let index = cboComputerInterfaceDS.indexWithKey(key: network.interfaceId) {
         cboComputerInterface.selectItem(at: index)
+      }
+      if let index = cboCommandStationDS.indexWithKey(key: network.commandStationId) {
+        cboCommandStation.selectItem(at: index)
       }
       txtGroupName.stringValue = network.duplexGroupName
       txtGroupPassword.stringValue = network.duplexGroupPassword
@@ -98,10 +108,16 @@ class EditNetworksVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     network.networkName = txtNetworkName.stringValue
     network.layoutId = cboLayoutDS.codeForItemAt(index: cboLayout.indexOfSelectedItem) ?? -1
     if let editorObject = cboComputerInterfaceDS.editorObjectAt(index: cboComputerInterface.indexOfSelectedItem) {
-      network.locoNetDeviceId = editorObject.primaryKey
+      network.interfaceId = editorObject.primaryKey
     }
     else {
-      network.locoNetDeviceId = -1
+      network.interfaceId = -1
+    }
+    if let editorObject = cboCommandStationDS.editorObjectAt(index: cboCommandStation.indexOfSelectedItem) {
+      network.commandStationId = editorObject.primaryKey
+    }
+    else {
+      network.commandStationId = -1
     }
     network.duplexGroupName = txtGroupName.stringValue
     network.duplexGroupPassword = txtGroupPassword.stringValue
@@ -109,6 +125,7 @@ class EditNetworksVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     network.duplexGroupId = txtGroupId.integerValue
     network.locoNetId = txtLocoNetId.integerValue
     network.save()
+    networkController.connected ? networkController.connect() : networkController.disconnect()
   }
   
   func saveNew(dbEditorView: DBEditorView) -> EditorObject {
@@ -187,6 +204,12 @@ class EditNetworksVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   @IBOutlet weak var txtLocoNetId: NSTextField!
   
   @IBAction func txtLocoNetIdAction(_ sender: NSTextField) {
+    editorView.modified = true
+  }
+  
+  @IBOutlet weak var cboCommandStation: NSComboBox!
+  
+  @IBAction func cboCommandStationAction(_ sender: NSComboBox) {
     editorView.modified = true
   }
   

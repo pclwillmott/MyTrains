@@ -26,9 +26,53 @@ public class RollingStock : EditorObject, DecoderFunctionDelegate {
   init(reader:SqliteDataReader) {
     super.init(primaryKey: -1)
     decode(sqliteDataReader: reader)
+    functions = DecoderFunction.functions(rollingStock: self, decoderType: .mobile)
+    _cvs = DecoderCV.cvs(rollingStock: self, decoderType: .mobile)
+    
   }
   
+  override init(primaryKey:Int) {
+    super.init(primaryKey: primaryKey)
+    for fn in 0...28 {
+      let decoderFunc = DecoderFunction(decoderType: .mobile, functionNumber: fn)
+      decoderFunc.delegate = self
+      functions.append(decoderFunc)
+    }
+    for cvNumber in 1...256 {
+      let cv = DecoderCV(decoderType: .mobile, cvNumber: cvNumber)
+      _cvs[cv.cvNumber] = cv
+    }
+  }
+  
+  // MARK: Private Properties
+  
+  private var _cvs : [Int:DecoderCV] = [:]
+  
   // MARK: Public Properties
+  
+  public var functions : [DecoderFunction] = []
+  
+  public var cvs : [Int:DecoderCV] {
+    get {
+      return _cvs
+    }
+  }
+  
+  public var cvsSorted : [DecoderCV] {
+    get {
+      
+      var result : [DecoderCV] = []
+      
+      for cv in _cvs {
+        result.append(cv.value)
+      }
+      
+      return result.sorted {
+        $0.cvNumber < $1.cvNumber
+      }
+      
+    }
+  }
   
   public var rollingStockName : String = "" {
     didSet {
@@ -180,6 +224,42 @@ public class RollingStock : EditorObject, DecoderFunctionDelegate {
     }
   }
   
+  public var mDecoderInstalled : Bool = false {
+    didSet {
+      modified = true
+    }
+  }
+  
+  public var aDecoderInstalled : Bool = false {
+    didSet {
+      modified = true
+    }
+  }
+  
+  // MARK: Public Methods
+  
+  override public func displayString() -> String {
+    return rollingStockName
+  }
+  
+  public func getCV(cvNumber: Int) -> DecoderCV? {
+    if cvNumber < 1 {
+      return nil
+    }
+    return _cvs[cvNumber]
+  }
+  
+  public func getCV(primaryPageIndex: Int, secondaryPageIndex: Int, cvNumber: Int) -> DecoderCV? {
+    let cv = DecoderCV.indexedCvNumber(primaryPageIndex: primaryPageIndex, secondaryPageIndex: secondaryPageIndex, cvNumber: cvNumber)
+    return _cvs[cv]
+  }
+  
+  public func updateCVS(cv: DecoderCV) {
+    cv.rollingStockId = self.primaryKey
+    _cvs[cv.cvNumber] = cv
+    cv.save()
+  }
+  
   // MARK: Decoder Delegate Methods
   
   public func changeState(decoderFunction: DecoderFunction) {
@@ -294,6 +374,14 @@ public class RollingStock : EditorObject, DecoderFunctionDelegate {
         locomotiveType = LocomotiveType(rawValue: reader.getInt(index: 25)!) ?? .unknown
       }
 
+      if !reader.isDBNull(index: 26) {
+        mDecoderInstalled = reader.getBool(index: 26)!
+      }
+
+      if !reader.isDBNull(index: 27) {
+        aDecoderInstalled = reader.getBool(index: 27)!
+      }
+
     }
     
     modified = false
@@ -333,7 +421,9 @@ public class RollingStock : EditorObject, DecoderFunctionDelegate {
         "[\(ROLLING_STOCK.INVENTORY_CODE)], " +
         "[\(ROLLING_STOCK.PURCHASE_DATE)], " +
         "[\(ROLLING_STOCK.NOTES)], " +
-        "[\(ROLLING_STOCK.LOCOMOTIVE_TYPE)]" +
+        "[\(ROLLING_STOCK.LOCOMOTIVE_TYPE)], " +
+        "[\(ROLLING_STOCK.MDECODER_INSTALLED)], " +
+        "[\(ROLLING_STOCK.ADECODER_INSTALLED)]" +
         ") VALUES (" +
         "@\(ROLLING_STOCK.ROLLING_STOCK_ID), " +
         "@\(ROLLING_STOCK.ROLLING_STOCK_NAME), " +
@@ -360,9 +450,11 @@ public class RollingStock : EditorObject, DecoderFunctionDelegate {
         "@\(ROLLING_STOCK.INVENTORY_CODE), " +
         "@\(ROLLING_STOCK.PURCHASE_DATE), " +
         "@\(ROLLING_STOCK.NOTES), " +
-        "@\(ROLLING_STOCK.LOCOMOTIVE_TYPE)" +
+        "@\(ROLLING_STOCK.LOCOMOTIVE_TYPE), " +
+        "@\(ROLLING_STOCK.MDECODER_INSTALLED), " +
+        "@\(ROLLING_STOCK.ADECODER_INSTALLED)" +
         ")"
-        primaryKey = Database.nextCode(tableName: TABLE.LOCONET_DEVICE, primaryKey: LOCONET_DEVICE.LOCONET_DEVICE_ID)!
+        primaryKey = Database.nextCode(tableName: TABLE.ROLLING_STOCK, primaryKey: ROLLING_STOCK.ROLLING_STOCK_ID)!
       }
       else {
         sql = "UPDATE [\(TABLE.ROLLING_STOCK)] SET " +
@@ -390,7 +482,9 @@ public class RollingStock : EditorObject, DecoderFunctionDelegate {
         "[\(ROLLING_STOCK.INVENTORY_CODE)] = @\(ROLLING_STOCK.INVENTORY_CODE), " +
         "[\(ROLLING_STOCK.PURCHASE_DATE)] = @\(ROLLING_STOCK.PURCHASE_DATE), " +
         "[\(ROLLING_STOCK.NOTES)] = @\(ROLLING_STOCK.NOTES), " +
-        "[\(ROLLING_STOCK.LOCOMOTIVE_TYPE)] = @\(ROLLING_STOCK.LOCOMOTIVE_TYPE) " +
+        "[\(ROLLING_STOCK.LOCOMOTIVE_TYPE)] = @\(ROLLING_STOCK.LOCOMOTIVE_TYPE), " +
+        "[\(ROLLING_STOCK.MDECODER_INSTALLED)] = @\(ROLLING_STOCK.MDECODER_INSTALLED), " +
+        "[\(ROLLING_STOCK.ADECODER_INSTALLED)] = @\(ROLLING_STOCK.ADECODER_INSTALLED) " +
         "WHERE [\(ROLLING_STOCK.ROLLING_STOCK_ID)] = @\(ROLLING_STOCK.ROLLING_STOCK_ID)"
       }
 
@@ -432,6 +526,8 @@ public class RollingStock : EditorObject, DecoderFunctionDelegate {
       cmd.parameters.addWithValue(key: "@\(ROLLING_STOCK.PURCHASE_DATE)", value: purchaseDate)
       cmd.parameters.addWithValue(key: "@\(ROLLING_STOCK.NOTES)", value: notes)
       cmd.parameters.addWithValue(key: "@\(ROLLING_STOCK.LOCOMOTIVE_TYPE)", value: locomotiveType.rawValue)
+      cmd.parameters.addWithValue(key: "@\(ROLLING_STOCK.MDECODER_INSTALLED)", value: mDecoderInstalled)
+      cmd.parameters.addWithValue(key: "@\(ROLLING_STOCK.ADECODER_INSTALLED)", value: aDecoderInstalled)
 
       _ = cmd.executeNonQuery()
 
@@ -475,8 +571,15 @@ public class RollingStock : EditorObject, DecoderFunctionDelegate {
         "[\(ROLLING_STOCK.INVENTORY_CODE)], " +
         "[\(ROLLING_STOCK.PURCHASE_DATE)], " +
         "[\(ROLLING_STOCK.NOTES)], " +
-        "[\(ROLLING_STOCK.LOCOMOTIVE_TYPE)]"
+        "[\(ROLLING_STOCK.LOCOMOTIVE_TYPE)], " +
+        "[\(ROLLING_STOCK.MDECODER_INSTALLED)], " +
+        "[\(ROLLING_STOCK.ADECODER_INSTALLED)]"
     }
+  }
+
+  public static func delete(primaryKey: Int) {
+    let sql = "DELETE FROM [\(TABLE.ROLLING_STOCK)] WHERE [\(ROLLING_STOCK.ROLLING_STOCK_ID)] = \(primaryKey)"
+    Database.execute(commands: [sql])
   }
 
 }

@@ -37,13 +37,14 @@ enum LAYOUT {
 enum NETWORK {
   static let NETWORK_ID                  = "NETWORK_ID"
   static let NETWORK_NAME                = "NETWORK_NAME"
-  static let LOCONET_DEVICE_ID           = "LOCONET_DEVICE_ID"
+  static let INTERFACE_ID                = "INTERFACE_ID"
   static let LAYOUT_ID                   = "LAYOUT_ID"
   static let LOCONET_ID                  = "LOCONET_ID"
   static let DUPLEX_GROUP_NAME           = "DUPLEX_GROUP_NAME"
   static let DUPLEX_GROUP_PASSWORD       = "DUPLEX_GROUP_PASSWORD"
   static let DUPLEX_GROUP_CHANNEL        = "DUPLEX_GROUP_CHANNEL"
   static let DUPLEX_GROUP_ID             = "DUPLEX_GROUP_ID"
+  static let COMMAND_STATION_ID          = "COMMAND_STATION_ID"
 }
 
 enum LOCONET_DEVICE {
@@ -63,6 +64,7 @@ enum LOCONET_DEVICE {
   static let DEVICE_NAME                 = "DEVICE_NAME"
   static let FLOW_CONTROL                = "FLOW_CONTROL"
   static let IS_STAND_ALONE_LOCONET      = "IS_STAND_ALONE_LOCONET"
+  static let FLAGS                       = "FLAGS"
 }
 
 enum ROLLING_STOCK {
@@ -92,6 +94,8 @@ enum ROLLING_STOCK {
   static let PURCHASE_DATE               = "PURCHASE_DATE"
   static let NOTES                       = "NOTES"
   static let LOCOMOTIVE_TYPE             = "LOCOMOTIVE_TYPE"
+  static let MDECODER_INSTALLED          = "MDECODER_INSTALLED"
+  static let ADECODER_INSTALLED          = "ADECODER_INSTALLED"
 }
 
 enum DECODER_FUNCTION {

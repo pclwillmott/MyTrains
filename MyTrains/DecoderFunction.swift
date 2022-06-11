@@ -1,5 +1,5 @@
 //
-//  LocomotiveFunction.swift
+//  DecoderFunction.swift
 //  MyTrains
 //
 //  Created by Paul Willmott on 01/01/2022.

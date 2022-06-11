@@ -76,7 +76,7 @@
                                                             </connections>
                                                         </textField>
                                                         <box fixedFrame="YES" title="Physical Details" translatesAutoresizingMaskIntoConstraints="NO" id="SbA-Ee-T4D">
-                                                            <rect key="frame" x="14" y="272" width="492" height="84"/>
+                                                            <rect key="frame" x="14" y="289" width="492" height="84"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                             <view key="contentView" id="52N-zm-QJl">
                                                                 <rect key="frame" x="3" y="3" width="486" height="66"/>
@@ -201,7 +201,7 @@
                                                             </view>
                                                         </box>
                                                         <box fixedFrame="YES" title="DCC Decoder" translatesAutoresizingMaskIntoConstraints="NO" id="HiR-C6-IRW">
-                                                            <rect key="frame" x="14" y="95" width="492" height="173"/>
+                                                            <rect key="frame" x="14" y="112" width="492" height="173"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                             <view key="contentView" id="phI-mL-dQO">
                                                                 <rect key="frame" x="3" y="3" width="486" height="155"/>
@@ -321,31 +321,21 @@
                                                                 </subviews>
                                                             </view>
                                                         </box>
-                                                        <box fixedFrame="YES" title="Power &amp; Track" translatesAutoresizingMaskIntoConstraints="NO" id="584-Qr-HNl">
-                                                            <rect key="frame" x="14" y="360" width="492" height="84"/>
+                                                        <box fixedFrame="YES" title="Locomotive Type" translatesAutoresizingMaskIntoConstraints="NO" id="584-Qr-HNl">
+                                                            <rect key="frame" x="14" y="377" width="492" height="67"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                             <view key="contentView" id="I9U-DR-Pst">
-                                                                <rect key="frame" x="3" y="3" width="486" height="66"/>
+                                                                <rect key="frame" x="3" y="3" width="486" height="49"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <subviews>
-                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3Tf-so-Kk7">
-                                                                        <rect key="frame" x="18" y="50" width="88" height="16"/>
-                                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Power Source" id="7Ct-Pq-pM2">
-                                                                            <font key="font" metaFont="system"/>
-                                                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                        </textFieldCell>
-                                                                    </textField>
                                                                     <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ayp-9g-zkM">
-                                                                        <rect key="frame" x="20" y="16" width="165" height="25"/>
+                                                                        <rect key="frame" x="20" y="18" width="165" height="25"/>
                                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                         <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="EOA-My-yKF">
                                                                             <font key="font" metaFont="system"/>
                                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                             <objectValues>
-                                                                                <string>Diesel</string>
                                                                                 <string>Electric</string>
                                                                                 <string>Electro-Diesel</string>
                                                                                 <string>Steam</string>
@@ -356,37 +346,11 @@
                                                                             <action selector="cboPowerSourceAction:" target="9iP-PP-Stw" id="l5C-u7-HdK"/>
                                                                         </connections>
                                                                     </comboBox>
-                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PWU-cb-jEb">
-                                                                        <rect key="frame" x="194" y="50" width="113" height="16"/>
-                                                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Track Restrictions" id="SpH-lV-yoX">
-                                                                            <font key="font" metaFont="system"/>
-                                                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                        </textFieldCell>
-                                                                    </textField>
-                                                                    <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oZJ-Wg-hZr">
-                                                                        <rect key="frame" x="196" y="16" width="273" height="25"/>
-                                                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                                                        <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="wPD-8m-aq6">
-                                                                            <font key="font" metaFont="system"/>
-                                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                            <objectValues>
-                                                                                <string>None</string>
-                                                                                <string>Only Overhead Electrified Track</string>
-                                                                                <string>Only Third Rail Electrified Track</string>
-                                                                            </objectValues>
-                                                                        </comboBoxCell>
-                                                                        <connections>
-                                                                            <action selector="cboTrackRestrictionsAction:" target="9iP-PP-Stw" id="Omg-VO-ga9"/>
-                                                                        </connections>
-                                                                    </comboBox>
                                                                 </subviews>
                                                             </view>
                                                         </box>
                                                         <box fixedFrame="YES" title="Occupancy Feedback Offset" translatesAutoresizingMaskIntoConstraints="NO" id="nWO-jk-PhX">
-                                                            <rect key="frame" x="14" y="7" width="492" height="84"/>
+                                                            <rect key="frame" x="14" y="24" width="492" height="84"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                             <view key="contentView" id="jN8-Pp-iUQ">
                                                                 <rect key="frame" x="3" y="3" width="486" height="66"/>
@@ -1164,7 +1128,6 @@
                         <outlet property="cboOccupancyFeedbackOffsetUnits" destination="Pcg-q0-g9m" id="hPQ-1t-HCq"/>
                         <outlet property="cboPowerSource" destination="ayp-9g-zkM" id="JrQ-lV-ytJ"/>
                         <outlet property="cboTrackGuage" destination="31k-gB-HGV" id="HAx-aT-NeF"/>
-                        <outlet property="cboTrackRestrictions" destination="oZJ-Wg-hZr" id="ahF-Nu-vW8"/>
                         <outlet property="cvTableView" destination="HSE-j9-gxf" id="FdU-L5-3MN"/>
                         <outlet property="editorView" destination="Zbx-vn-sun" id="0Rl-Jj-PsP"/>
                         <outlet property="fnTableView" destination="W0f-3l-VUn" id="v5u-ER-MfM"/>

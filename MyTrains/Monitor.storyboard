@@ -457,7 +457,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="313-N7-ZNn">
-                                            <rect key="frame" x="7" y="14" width="567" height="25"/>
+                                            <rect key="frame" x="7" y="14" width="775" height="25"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                             <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="ozL-KO-rNf">
                                                 <font key="font" metaFont="system"/>
@@ -468,48 +468,6 @@
                                                 <action selector="cboInterfaceAction:" target="wI2-06-r3x" id="hFm-na-X0V"/>
                                             </connections>
                                         </comboBox>
-                                        <button toolTip="Track Power Off" fixedFrame="YES" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="849-B7-iDY">
-                                            <rect key="frame" x="700" y="9" width="30" height="36"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="circle.fill" catalog="system" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="baD-YD-8u0">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <color key="contentTintColor" name="systemRedColor" catalog="System" colorSpace="catalog"/>
-                                            <connections>
-                                                <action selector="btnPowerOffAction:" target="wI2-06-r3x" id="juj-bt-KZ9"/>
-                                            </connections>
-                                        </button>
-                                        <button toolTip="Track Power On" fixedFrame="YES" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="esj-kn-J0F">
-                                            <rect key="frame" x="650" y="9" width="30" height="36"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="circle.fill" catalog="system" imagePosition="only" alignment="center" alternateImage="circle" imageScaling="proportionallyUpOrDown" inset="2" id="8rx-0O-D0r">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <color key="contentTintColor" name="systemGreenColor" catalog="System" colorSpace="catalog"/>
-                                            <connections>
-                                                <action selector="btnPowerOnAction:" target="wI2-06-r3x" id="8wk-Uv-Bz7"/>
-                                            </connections>
-                                        </button>
-                                        <button toolTip="Set Track to Idle" fixedFrame="YES" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3hM-6t-y7b">
-                                            <rect key="frame" x="750" y="9" width="30" height="36"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="pause.circle" catalog="system" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="UgB-EA-SfH">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <connections>
-                                                <action selector="btnPowerPauseAction:" target="wI2-06-r3x" id="Evm-UF-gGA"/>
-                                            </connections>
-                                        </button>
-                                        <switch toolTip="Connect to Command Station" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" allowsExpansionToolTips="YES" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="6Gv-Ga-ZDb">
-                                            <rect key="frame" x="586" y="14" width="42" height="25"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <connections>
-                                                <action selector="swConnectAction:" target="wI2-06-r3x" id="Q7k-g8-MXq"/>
-                                            </connections>
-                                        </switch>
                                     </subviews>
                                 </view>
                             </box>
@@ -520,9 +478,6 @@
                         <outlet property="btnEditSendFile" destination="ixr-Rx-o45" id="jeO-0T-rD9"/>
                         <outlet property="btnNote" destination="g7k-PV-gTb" id="7Kq-72-VeU"/>
                         <outlet property="btnPauseMonitor" destination="wT4-cC-bIG" id="nV3-y1-22J"/>
-                        <outlet property="btnPowerOff" destination="849-B7-iDY" id="nWE-2y-SF2"/>
-                        <outlet property="btnPowerOn" destination="esj-kn-J0F" id="Qoh-VY-ohr"/>
-                        <outlet property="btnPowerPause" destination="3hM-6t-y7b" id="0w1-IG-7sZ"/>
                         <outlet property="btnSendFile" destination="hhp-Cn-ObI" id="aQe-nS-1Dz"/>
                         <outlet property="btnTest" destination="cbA-m5-kkX" id="JzK-jn-BN9"/>
                         <outlet property="cboDataType" destination="yFf-BC-8mv" id="2t8-dq-fUZ"/>
@@ -535,7 +490,6 @@
                         <outlet property="lblCaptureFileName" destination="3xd-jj-khm" id="ywG-gc-jxE"/>
                         <outlet property="lblSendFileName" destination="fqT-IS-9k6" id="wWv-w0-7dv"/>
                         <outlet property="scvMonitor" destination="asY-yj-cEN" id="l7t-cl-T0M"/>
-                        <outlet property="swConnect" destination="6Gv-Ga-ZDb" id="Lsm-LY-XqE"/>
                         <outlet property="txtMessage1" destination="dRB-DQ-27g" id="beA-a2-EsZ"/>
                         <outlet property="txtMessage2" destination="RGS-Qe-oKw" id="yep-ON-E2T"/>
                         <outlet property="txtMessage3" destination="KFm-dY-fN6" id="l4A-TS-yjS"/>
@@ -549,9 +503,4 @@
             <point key="canvasLocation" x="782" y="597"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="circle" catalog="system" width="15" height="15"/>
-        <image name="circle.fill" catalog="system" width="15" height="15"/>
-        <image name="pause.circle" catalog="system" width="15" height="15"/>
-    </resources>
 </document>

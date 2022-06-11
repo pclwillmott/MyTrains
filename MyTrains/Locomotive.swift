@@ -65,15 +65,6 @@ public enum TrackGauge : Int {
   case unknown    = 0xffff
 }
 
-public enum LocomotiveType : Int {
-  case diesel = 0
-  case electricThirdRail = 1
-  case electricOverhead = 2
-  case electroDiesel = 3
-  case steam = 4
-  case unknown = 5
-}
-
 public enum LengthUnit : Int {
   case millimeters = 0
   case centimeters = 1
@@ -131,30 +122,10 @@ public let maskF26 = 0b00000100000000000000000000000000
 public let maskF27 = 0b00001000000000000000000000000000
 public let maskF28 = 0b00010000000000000000000000000000
 
-public class Locomotive : RollingStock, CommandStationDelegate {
+public class Locomotive : RollingStock {
   
   // MARK: Constructors
-/*
-  init(reader:SqliteDataReader) {
-    super.init(primaryKey: -1)
-    decode(sqliteDataReader: reader)
-    functions = LocomotiveFunction.functions(locomotive: self)
-    _cvs = LocomotiveCV.cvs(locomotive: self)
-  }
-  
-  init() {
-    super.init(primaryKey: -1)
-    for fn in 0...28 {
-      let locoFunc = LocomotiveFunction(functionNumber: fn)
-      locoFunc.delegate = self
-      functions.append(locoFunc)
-    }
-    for cvNumber in 1...256 {
-      let cv = LocomotiveCV(cvNumber: cvNumber)
-      _cvs[cv.cvNumber] = cv
-    }
-  }
-  */
+
   // MARK: Destructors
   
   deinit {
@@ -173,45 +144,6 @@ public class Locomotive : RollingStock, CommandStationDelegate {
   
   // MARK: Private Properties
   
-  private var _locomotiveName : String = ""
-  
-  private var _locomotiveType : LocomotiveType = .unknown
-  
-  private var _length : Double = 0.0
-  
-  private var _mobileDecoderType : SpeedSteps = .unknown
-  
-  private var _address : Int = 0
-  
-  private var _occupancyFeedbackOffsetFront = 0.0
-  
-  private var _occupancyFeedbackOffsetRear = 0.0
-  
-  private var _trackGauge : TrackGauge = .unknown
-  
-  private var _locomotiveScale : Double = 1.0
-  
-  private var _maxForwardSpeed : Double = 0.0
-  
-  private var _maxBackwardSpeed : Double = 0.0
-  
-  private var _lengthUnits : LengthUnit = .centimeters
-  
-  private var _occupancyFeedbackOffsetUnits : LengthUnit = .centimeters
-  
-  private var _speedUnits : SpeedUnit = .kilometersPerHour
-  
-  private var _networkId : Int = -1
-  
-  private var _decoderModel : String = ""
-  
-  private var _inventoryCode : String = ""
-  
-  private var _manufacturer : String = ""
-  
-  private var _purchaseDate : String = ""
-  
-  private var _notes : String = ""
   
   private var _isInUse : Bool = false
   
@@ -244,125 +176,13 @@ public class Locomotive : RollingStock, CommandStationDelegate {
   
   private var nextDelegateId : Int = 0
   
-  private var _cvs : [Int:DecoderCV] = [:]
-  
   private var _throttleID : Int?
   
   // MARK: Public properties
   
-  public var functions : [DecoderFunction] = []
-  
-  public var locomotiveName : String {
-    get {
-      return _locomotiveName
-    }
-    set(value) {
-      if value != _locomotiveName {
-        _locomotiveName = value
-        modified = true
-      }
-    }
-  }
-  
-  public var address : Int {
-    get {
-      return _address
-    }
-    set(value) {
-      if value != _address {
-        _address = value
-        modified = true
-      }
-    }
-  }
-  
-  public var occupancyFeedbackOffsetFront : Double {
-    get {
-      return _occupancyFeedbackOffsetFront
-    }
-    set(value) {
-      if value != _occupancyFeedbackOffsetFront {
-        _occupancyFeedbackOffsetFront = value
-        modified = true
-      }
-    }
-  }
-  
-  public var occupancyFeedbackOffsetRear : Double {
-    get {
-      return _occupancyFeedbackOffsetRear
-    }
-    set(value) {
-      if value != _occupancyFeedbackOffsetRear {
-        _occupancyFeedbackOffsetRear = value
-        modified = true
-      }
-    }
-  }
-
-  
-  public var lengthUnits : LengthUnit {
-    get {
-      return _lengthUnits
-    }
-    set(value) {
-      if value != _lengthUnits {
-        _lengthUnits = value
-        modified = true
-      }
-    }
-  }
-  
-  public var occupancyFeedbackOffsetUnits : LengthUnit {
-    get {
-      return _occupancyFeedbackOffsetUnits
-    }
-    set(value) {
-      if value != _occupancyFeedbackOffsetUnits {
-        _occupancyFeedbackOffsetUnits = value
-        modified = true
-      }
-    }
-  }
-  
-  public var speedUnits : SpeedUnit {
-    get {
-      return _speedUnits
-    }
-    set(value) {
-      if value != _speedUnits {
-        _speedUnits = value
-        modified = true
-      }
-    }
-  }
-  
-  
   public var network : Network? {
     get {
       return networkController.networks[networkId]
-    }
-  }
-  
-  public var cvs : [Int:DecoderCV] {
-    get {
-      return _cvs
-    }
-  }
-  
-  public var cvsSorted : [DecoderCV] {
-    get {
-      
-      var result : [DecoderCV] = []
-      
-      for cv in _cvs {
-        result.append(cv.value)
-      }
-      
-      return result.sorted {
-        $0.cvNumber < $1.cvNumber
-      }
-      
     }
   }
   
@@ -375,13 +195,13 @@ public class Locomotive : RollingStock, CommandStationDelegate {
         _isInUse = value
         if let net = network, let cs = net.commandStation {
           if _isInUse {
-            commandStationDelegateId = cs.addDelegate(delegate: self)
+   //         commandStationDelegateId = cs.addDelegate(delegate: self)
             initState = .waitingForSlot
-            cs.getLocoSlot(forAddress: address)
+     //       cs.getLocoSlot(forAddress: address)
           }
           else {
             stopTimer()
-            cs.removeDelegate(id: commandStationDelegateId)
+       //     cs.removeDelegate(id: commandStationDelegateId)
             initState = .inactive
           }
         }
@@ -451,7 +271,7 @@ public class Locomotive : RollingStock, CommandStationDelegate {
   
   public var decoderManufacturerName : String {
     get {
-      return NMRA.manufacturerName(code: getCV(cvNumber: 8)!.cvValue)
+      return "" // NMRA.manufacturerName(code: getCV(cvNumber: 8).cvValue)
     }
   }
   
@@ -865,7 +685,7 @@ public class Locomotive : RollingStock, CommandStationDelegate {
         speed = targetSpeed
       }
       
-      lastLocomotiveState = cs.updateLocomotiveState(slotNumber: slotNumber, slotPage: slotPage, previousState: lastLocomotiveState, nextState: locomotiveState, throttleID: throttle)
+  //    lastLocomotiveState = cs.updateLocomotiveState(slotNumber: slotNumber, slotPage: slotPage, previousState: lastLocomotiveState, nextState: locomotiveState, throttleID: throttle)
       
       for delegate in delegates {
         delegate.value.stateUpdated?(locomotive: self)
@@ -923,26 +743,9 @@ public class Locomotive : RollingStock, CommandStationDelegate {
   
   // MARK: Public Methods
   
-  override public func displayString() -> String {
-    return locomotiveName
-  }
-  
-  public func getCV(cvNumber: Int) -> DecoderCV? {
-    if cvNumber < 1 {
-      return nil
-    }
-    return _cvs[cvNumber]
-  }
-  
-  public func getCV(primaryPageIndex: Int, secondaryPageIndex: Int, cvNumber: Int) -> DecoderCV? {
-    let cv = DecoderCV.indexedCvNumber(primaryPageIndex: primaryPageIndex, secondaryPageIndex: secondaryPageIndex, cvNumber: cvNumber)
-    return _cvs[cv]
-  }
-  
-  public func updateCVS(cv: DecoderCV) {
-//    cv.locomotiveId = self.primaryKey
-    _cvs[cv.cvNumber] = cv
-    cv.save()
+  override public func save() {
+    rollingStockType = .locomotive
+    super.save()
   }
   
   public func addDelegate(delegate:LocomotiveDelegate) -> Int {
@@ -969,7 +772,7 @@ public class Locomotive : RollingStock, CommandStationDelegate {
       switch message.messageType {
       case .locoSlotDataP1:
         let locoSlotDataP1 = LocoSlotDataP1(networkId: message.networkId, data: message.message)
-        if locoSlotDataP1.address == address {
+        if locoSlotDataP1.address == mDecoderAddress {
           slotPage = locoSlotDataP1.slotPage
           slotNumber = locoSlotDataP1.slotNumber
           if initState == .waitingForSlot {
@@ -997,7 +800,7 @@ public class Locomotive : RollingStock, CommandStationDelegate {
         
         let locoSlotDataP2 = LocoSlotDataP2(networkId: message.networkId, data: message.message)
 
-        if locoSlotDataP2.address == address {
+        if locoSlotDataP2.address == mDecoderAddress {
           
           if initState == .active {
             
@@ -1016,7 +819,7 @@ public class Locomotive : RollingStock, CommandStationDelegate {
         
         let locoSlotDataP2 = LocoSlotDataP2(networkId: message.networkId, data: message.message)
         
-        if locoSlotDataP2.address == address {
+        if locoSlotDataP2.address == mDecoderAddress {
           
           slotPage = locoSlotDataP2.slotPage
           slotNumber = locoSlotDataP2.slotNumber
@@ -1083,7 +886,8 @@ public class Locomotive : RollingStock, CommandStationDelegate {
   public func changeState(locomotiveFunction: DecoderFunction) {
   }
   
-/*
+  // MARK: Class Public Methods
+  
   public static var locomotives : [Int:Locomotive] {
     
     get {
@@ -1098,7 +902,7 @@ public class Locomotive : RollingStock, CommandStationDelegate {
        
       let cmd = conn.createCommand()
        
-      cmd.commandText = "SELECT \(columnNames) FROM [\(TABLE.LOCOMOTIVE)] ORDER BY [\(LOCOMOTIVE.LOCOMOTIVE_NAME)]"
+      cmd.commandText = "SELECT \(columnNames) FROM [\(TABLE.ROLLING_STOCK)] ORDER BY [\(ROLLING_STOCK.ROLLING_STOCK_NAME)]"
 
       var result : [Int:Locomotive] = [:]
       
@@ -1123,15 +927,6 @@ public class Locomotive : RollingStock, CommandStationDelegate {
     
   }
   
-  public static func delete(primaryKey: Int) {
-    let sql = [
-      "DELETE FROM [\(TABLE.LOCOMOTIVE_FUNCTION)] WHERE [\(LOCOMOTIVE_FUNCTION.LOCOMOTIVE_ID)] = \(primaryKey)",
-      "DELETE FROM [\(TABLE.LOCOMOTIVE_CV)] WHERE [\(LOCOMOTIVE_CV.LOCOMOTIVE_ID)] = \(primaryKey)",
-      "DELETE FROM [\(TABLE.LOCOMOTIVE)] WHERE [\(LOCOMOTIVE.LOCOMOTIVE_ID)] = \(primaryKey)"
-    ]
-    Database.execute(commands: sql)
-  }
-  */
   public static func decoderAddress(cv17: Int, cv18: Int) -> Int {
     return (cv17 << 8 | cv18) - 49152
   }

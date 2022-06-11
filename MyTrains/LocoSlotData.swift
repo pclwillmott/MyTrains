@@ -136,8 +136,8 @@ public class LocoSlotData {
   public var locomotiveName : String {
     get {
       for locomotive in networkController.locomotives {
-        if address == locomotive.value.address {
-          return locomotive.value.locomotiveName
+        if address == locomotive.value.mDecoderAddress {
+          return locomotive.value.rollingStockName
         }
       }
       return "Unknown"

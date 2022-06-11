@@ -193,6 +193,17 @@
                                                                 <color key="backgroundColor" name="alternateSelectedControlTextColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                         </textField>
+                                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="db7-PV-aCj">
+                                                            <rect key="frame" x="234" y="16" width="146" height="18"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <buttonCell key="cell" type="check" title="LocoNet Terminator" bezelStyle="regularSquare" imagePosition="left" inset="2" id="WAI-ec-ceP">
+                                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                                <font key="font" metaFont="system"/>
+                                                            </buttonCell>
+                                                            <connections>
+                                                                <action selector="chkLocoNetTerminatorAction:" target="LdG-WE-utP" id="s6b-xU-PrG"/>
+                                                            </connections>
+                                                        </button>
                                                     </subviews>
                                                 </view>
                                             </tabViewItem>
@@ -208,6 +219,7 @@
                         <outlet property="cboDeviceType" destination="3Mc-sd-EPN" id="7xk-4K-rNS"/>
                         <outlet property="cboFlowControl" destination="msQ-J7-CaY" id="4qd-lZ-uMj"/>
                         <outlet property="cboPort" destination="T1m-40-S3E" id="Otq-By-bPe"/>
+                        <outlet property="chkLocoNetTerminator" destination="db7-PV-aCj" id="oCW-pe-o5x"/>
                         <outlet property="editorView" destination="HpE-sY-SGv" id="38x-vN-1R3"/>
                         <outlet property="lblSerialNumber" destination="68f-T4-bf9" id="i5G-hQ-rFr"/>
                         <outlet property="tabView" destination="sof-fJ-m9z" id="IxW-If-aLP"/>

@@ -37,7 +37,7 @@ class SlotViewVC : NSViewController, NSWindowDelegate, SlotObserverDelegate, Com
     
     self.view.window?.delegate = self
     
-    cboCommandStationDS.dictionary = networkController.commandStations
+ //   cboCommandStationDS.dictionary = networkController.commandStations
     /*
     cboCommandStation.dataSource = cboCommandStationDS
     
@@ -61,7 +61,7 @@ class SlotViewVC : NSViewController, NSWindowDelegate, SlotObserverDelegate, Com
   
   // MARK: Private Properties
 
-  private var cboCommandStationDS : CommmandStationComboBoxDS = CommmandStationComboBoxDS()
+  private var cboCommandStationDS : ComboBoxDictDS = ComboBoxDictDS()
   
   private var commandStationDelegateId : Int = -1
   
@@ -206,7 +206,7 @@ class SlotViewVC : NSViewController, NSWindowDelegate, SlotObserverDelegate, Com
   @IBOutlet weak var cboCommandStation: NSComboBox!
   
   @IBAction func cboCommandStationAction(_ sender: NSComboBox) {
-    commandStation = cboCommandStationDS.commandStationAt(index: cboCommandStation.indexOfSelectedItem)
+//    commandStation = cboCommandStationDS.commandStationAt(index: cboCommandStation.indexOfSelectedItem)
   }
   
   @IBOutlet weak var slotTableView: NSTableView!

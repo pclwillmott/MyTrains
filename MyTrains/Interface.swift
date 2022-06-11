@@ -72,6 +72,14 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
   
   public var globalSystemTrackStatus : UInt8?
   
+  public var isEdit : Bool = false
+  
+  public var commandStation : Interface? {
+    get {
+      return network?.commandStation
+    }
+  }
+  
   public var isConnected : Bool {
     get {
       return serialPort != nil
@@ -85,23 +93,9 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
     return false
   }
   
-  override public var locoNetProductId: LocoNetProductId {
-    get {
-      return super.locoNetProductId
-    }
-    set(value) {
-      super.locoNetProductId = value
-      if let info = locoNetProductInfo, info.attributes.contains(.CommandStation) {
-        commandStation = self
-      }
-    }
-  }
-  
   public var partialSerialNumberLow : Int = -1
   
   public var partialSerialNumberHigh : Int = -1
-  
-  public var commandStation : Interface?
   
   // MARK: Private Methods
   
@@ -112,7 +106,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
   }
   
   private func networkMessageReceived(message: NetworkMessage) {
-    
+
     switch message.messageType {
       
     case .iplDevData:
@@ -127,7 +121,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
         
         if let info = device.locoNetProductInfo, info.productCode == iplDevData.productCode &&
             device.serialNumber == iplDevData.serialNumber {
-          
+  
           newDevice = false
           
           device.softwareVersion = iplDevData.softwareVersion
@@ -136,8 +130,12 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
           
           device.save()
           
-          if let cs = device as? Interface, info.attributes.contains(.CommandStation) {
-            self.commandStation = cs
+          if info.attributes.contains(.CommandStation) {
+
+            if let net = network {
+              net.commandStationId = device.primaryKey
+              net.save()
+            }
           }
           
         }
@@ -150,11 +148,11 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
           
           var dev : LocoNetDevice?
           
-          if info.attributes.contains(.ComputerInterface) {
-            dev = Interface(primaryKey: -1)
+          if info.attributes.intersection([.ComputerInterface, .CommandStation]).isEmpty {
+            dev = LocoNetDevice(primaryKey: -1)
           }
           else {
-            dev = LocoNetDevice(primaryKey: -1)
+            dev = Interface(primaryKey: -1)
           }
           
           if let device = dev {
@@ -164,21 +162,29 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
             device.softwareVersion = iplDevData.softwareVersion
             device.serialNumber = iplDevData.serialNumber
             device.locoNetProductId = info.id
+            device.deviceName = device.iplName
             
-            device.save()
-            
-            networkController.addDevice(device: device)
-            
-            if let cs = device as? Interface, info.attributes.contains(.CommandStation) {
-              self.commandStation = cs
+            if !isEdit {
+              
+              device.save()
+              
+              networkController.addDevice(device: device)
+              
+              if let net = network, info.attributes.contains(.CommandStation) {
+                net.commandStationId = device.primaryKey
+                net.save()
+              }
+              
             }
-            
+
           }
           
         }
         
       }
     
+      networkController.networkControllerStatusUpdated()
+
     case .opSwDataAP1:
       commandStation?.opSwBankA = message
       commandStation?.globalSystemTrackStatus = message.message[7]
@@ -335,22 +341,24 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
   
   public func open() {
     
+    close()
+    
     if let port = MTSerialPort(path: devicePath) {
       port.baudRate = baudRate
       port.numberOfDataBits = 8
       port.numberOfStopBits = 1
       port.parity = .none
       port.usesRTSCTSFlowControl = flowControl == .rtsCts
- //     port.usesDTRDSRFlowControl = false
- //     port.usesDCDOutputFlowControl = false
       port.delegate = self
       port.open()
+      serialPort = port
     }
-  
+
   }
   
   public func close() {
     serialPort?.close()
+    serialPort = nil
   }
   
   public func send(data: [UInt8]) {
@@ -510,7 +518,9 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
     for observer in observers {
       observer.value.interfaceWasOpened?(interface: self)
     }
-    iplDiscover()
+    if !isEdit {
+      iplDiscover()
+    }
   }
   
   public func serialPortWasClosed(_ serialPort: MTSerialPort) {
@@ -520,50 +530,4 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
     }
   }
 
-  public static var interfaceDevices : [Int:Interface] {
-    
-    get {
-    
-      let conn = Database.getConnection()
-      
-      let shouldClose = conn.state != .Open
-       
-      if shouldClose {
-        _ = conn.open()
-      }
-       
-      let cmd = conn.createCommand()
-       
-      cmd.commandText = "SELECT \(columnNames) FROM [\(TABLE.LOCONET_DEVICE)] ORDER BY [\(NETWORK.LOCONET_DEVICE_ID)]"
-
-      var result : [Int:Interface] = [:]
-      
-      if let reader = cmd.executeReader() {
-           
-        while reader.read() {
-          
-          let device = Interface(reader: reader)
-          
-          if let info = device.locoNetProductInfo {
-            if info.attributes.contains(.ComputerInterface) {
-              result[device.primaryKey] = device
-            }
-          }
-          
-        }
-           
-        reader.close()
-           
-      }
-      
-      if shouldClose {
-        conn.close()
-      }
-
-      return result
-      
-    }
-    
-  }
-  
 }

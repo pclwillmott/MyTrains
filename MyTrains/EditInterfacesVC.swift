@@ -119,6 +119,7 @@ class EditInterfacesVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Ne
     cboBaudrate.selectItem(at: 0)
     cboFlowControl.selectItem(at: 0)
     lblSerialNumber.stringValue = ""
+    chkLocoNetTerminator.state = .off
   }
   
   func setupFields(dbEditorView: DBEditorView, editorObject: EditorObject) {
@@ -133,6 +134,7 @@ class EditInterfacesVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Ne
       cboBaudrate.selectItem(at: device.baudRate.rawValue)
       cboFlowControl.selectItem(at: device.flowControl.rawValue)
       lblSerialNumber.stringValue = device.serialNumber == 0 ? "" : "\(device.serialNumber)"
+      chkLocoNetTerminator.state = device.isStandAloneLoconet ? .on : .off
     }
   }
   
@@ -164,13 +166,14 @@ class EditInterfacesVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Ne
     device.baudRate = BaudRate(rawValue: cboBaudrate.indexOfSelectedItem) ?? .br19200
     device.flowControl = FlowControl(rawValue: cboFlowControl.indexOfSelectedItem) ?? .noFlowControl
     device.serialNumber = lblSerialNumber.integerValue
+    device.isStandAloneLoconet = chkLocoNetTerminator.state == .on
   }
   
   func saveNew(dbEditorView: DBEditorView) -> EditorObject {
     let device = Interface(primaryKey: -1)
     setFields(device: device)
     device.save()
-    networkController.addInterface(device: device)
+    networkController.addDevice(device: device)
     editorView.dictionary = networkController.interfaceDevices
     editorView.setSelection(key: device.primaryKey)
     return device
@@ -187,7 +190,7 @@ class EditInterfacesVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Ne
   
   func delete(dbEditorView: DBEditorView, primaryKey: Int) {
     Interface.delete(primaryKey: primaryKey)
-    networkController.removeInterface(primaryKey: primaryKey)
+    networkController.removeDevice(primaryKey: primaryKey)
     editorView.dictionary = networkController.interfaceDevices
   }
   
@@ -301,6 +304,7 @@ class EditInterfacesVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Ne
     }
     tempInterface = Interface(primaryKey: -1)
     if let device = tempInterface {
+      device.isEdit = true
       setFields(device: device)
       observerId = device.addObserver(observer: self)
       device.open()
@@ -308,6 +312,12 @@ class EditInterfacesVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Ne
   }
   
   @IBOutlet weak var lblSerialNumber: NSTextField!
+  
+  @IBOutlet weak var chkLocoNetTerminator: NSButton!
+  
+  @IBAction func chkLocoNetTerminatorAction(_ sender: NSButton) {
+    editorView.modified = true
+  }
   
 }
 

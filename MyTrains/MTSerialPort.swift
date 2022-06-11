@@ -209,7 +209,10 @@ public class MTSerialPort {
         buffer.advanced(by: index).pointee = data[index]
       }
       
-      writeSerialPort(fd, buffer, data.count)
+      if writeSerialPort(fd, buffer, data.count) != data.count {
+        delegate?.serialPortWasRemovedFromSystem(self)
+        quit = true
+      }
       
     }
     

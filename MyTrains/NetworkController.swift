@@ -13,7 +13,7 @@ import Foundation
   @objc optional func statusUpdated(networkController:NetworkController)
 }
 
-public class NetworkController : NSObject, InterfaceDelegate, NSUserNotificationCenterDelegate {
+public class NetworkController : NSObject, InterfaceDelegate, NSUserNotificationCenterDelegate, MTSerialPortManagerDelegate {
   
   // MARK: Constructor
   
@@ -21,24 +21,17 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
     
     super.init()
     
-//    let nc = NotificationCenter.default
+    MTSerialPortManager.delegate = self
     
-//    nc.addObserver(self, selector: #selector(serialPortsWereConnected(_:)), name: NSNotification.Name.ORSSerialPortsWereConnected, object: nil)
-
-//    nc.addObserver(self, selector: #selector(serialPortsWereDisconnected(_:)), name: NSNotification.Name.ORSSerialPortsWereDisconnected, object: nil)
-
-//    NSUserNotificationCenter.default.delegate = self
-
-    for interface in interfaceDevices {
-      locoNetDevices[interface.value.primaryKey] = interface.value
-    }
+    checkPortsTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(checkPortsTimerAction), userInfo: nil, repeats: true)
     
   }
   
   // MARK: Destructor
   
   deinit {
-    NotificationCenter.default.removeObserver(self)
+    checkPortsTimer?.invalidate()
+    checkPortsTimer = nil
   }
   
   // MARK: Private Properties
@@ -52,6 +45,8 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
   private var _nextMessengerId : Int = 1
   
   private var _nextIdLock : NSLock = NSLock()
+  
+  private var checkPortsTimer : Timer?
   
   private var nextMessengerId : String {
     get {
@@ -73,14 +68,10 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
 
   public var layouts : [Int:Layout] = Layout.layouts
 
-  public var locomotives : [Int:Locomotive] = [:] // Locomotive.locomotives
+  public var locomotives : [Int:Locomotive] = Locomotive.locomotives
 
-  public var commandStations : [Int:CommandStation] = [:] // CommandStation.commandStationsDictionary
-  
   public var locoNetDevices : [Int:LocoNetDevice] = LocoNetDevice.locoNetDevices
   
-  public var interfaceDevices : [Int:Interface] = Interface.interfaceDevices
-
   public var layoutId : Int {
     get {
       let id = UserDefaults.standard.integer(forKey: DEFAULT.MAIN_CURRENT_LAYOUT_ID)
@@ -102,6 +93,40 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
       for delegate in controllerDelegates {
         delegate.value.statusUpdated?(networkController: self)
       }
+    }
+  }
+  
+  public var commandStations : [Int:Interface] {
+    get {
+      
+      var result : [Int:Interface] = [:]
+      
+      for kv in locoNetDevices {
+        let device = kv.value
+        if let info = device.locoNetProductInfo, info.attributes.contains(.CommandStation), let cs = kv.value as? Interface {
+          result[cs.primaryKey] = cs
+        }
+      }
+      
+      return result
+      
+    }
+  }
+  
+  public var interfaceDevices : [Int:Interface] {
+    get {
+      
+      var result : [Int:Interface] = [:]
+      
+      for kv in locoNetDevices {
+        let device = kv.value
+        if let info = device.locoNetProductInfo, info.attributes.contains(.ComputerInterface), let interface = kv.value as? Interface {
+          result[interface.primaryKey] = interface
+        }
+      }
+      
+      return result
+      
     }
   }
   
@@ -132,7 +157,8 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
         if network.layoutId == layoutId {
           for kv in locoNetInterfaces {
             let interface = kv.value
-            if interface.primaryKey == network.locoNetDeviceId {
+            if interface.primaryKey == network.interfaceId {
+              interface.networkId = network.primaryKey
               interfaces.append(interface)
             }
           }
@@ -144,6 +170,27 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
       }
       
     }
+  }
+  
+  public var programmers : [Int:Interface] {
+    
+    var progs : [Int:Interface] = [:]
+    
+    for interface in networkInterfaces {
+      if let info = interface.locoNetProductInfo, info.attributes.contains(.Programmer) {
+        progs[interface.primaryKey] = interface
+      }
+    }
+    
+    for kv in networks {
+      let network = kv.value
+      if network.layoutId == layoutId, let cs = network.commandStation {
+        progs[cs.primaryKey] = cs
+      }
+    }
+    
+    return progs
+
   }
   
   public var softwareThrottleID : Int? {
@@ -171,23 +218,41 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
     }
   }
   
+  @objc func checkPortsTimerAction() {
+    MTSerialPortManager.checkPorts()
+  }
+  
   // MARK: Public Methods
 
-  public func connect() {
-    if !connected {
-      for interface in networkInterfaces {
-        interface.open()
-      }
-      connected = true
+  public func networkControllerStatusUpdated() {
+    for kv in controllerDelegates {
+      kv.value.statusUpdated?(networkController: self)
     }
+  }
+
+  public func connect() {
+    for interface in networkInterfaces {
+      interface.open()
+    }
+    connected = true
   }
   
   public func disconnect() {
-    if connected {
-      for interface in networkInterfaces {
-        interface.close()
-      }
-      connected = false
+    for interface in networkInterfaces {
+      interface.close()
+    }
+    connected = false
+  }
+  
+  public func powerOn() {
+    for interface in networkInterfaces {
+      interface.powerOn()
+    }
+  }
+  
+  public func powerOff() {
+    for interface in networkInterfaces {
+      interface.powerOff()
     }
   }
   
@@ -203,31 +268,25 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
   
   public func addNetwork(network: Network) {
     networks[network.primaryKey] = network
+    connected ? connect() : disconnect()
     networkControllerUpdated()
   }
   
   public func removeNetwork(primaryKey:Int) {
     networks.removeValue(forKey: primaryKey)
+    connected ? connect() : disconnect()
     networkControllerUpdated()
   }
   
   public func addDevice(device: LocoNetDevice) {
     locoNetDevices[device.primaryKey] = device
+    connected ? connect() : disconnect()
     networkControllerUpdated()
   }
   
   public func removeDevice(primaryKey:Int) {
     locoNetDevices.removeValue(forKey: primaryKey)
-    networkControllerUpdated()
-  }
-  
-  public func addInterface(device: Interface) {
-    interfaceDevices[device.primaryKey] = device
-    networkControllerUpdated()
-  }
-  
-  public func removeInterface(primaryKey:Int) {
-    interfaceDevices.removeValue(forKey: primaryKey)
+    connected ? connect() : disconnect()
     networkControllerUpdated()
   }
   
@@ -257,6 +316,30 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
     controllerDelegateLock.unlock()
   }
   
+  // MARK: MTSerialPortManagerDelegate Methods
+  
+  public func serialPortWasAdded(path: String) {
+    if connected {
+      for interface in networkInterfaces {
+        if interface.devicePath == path {
+          interface.open()
+        }
+      }
+    }
+    networkControllerStatusUpdated()
+  }
+  
+  public func serialPortWasRemoved(path: String) {
+    if connected {
+      for interface in networkInterfaces {
+        if interface.devicePath == path {
+          interface.close()
+        }
+      }
+    }
+    networkControllerStatusUpdated()
+  }
+  
   // MARK: CommandStationDelegate Methods
   
   public func trackStatusChanged(commandStation: CommandStation) {
@@ -265,54 +348,4 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
     }
   }
 
-  // MARK: - NSUserNotificationCenterDelegate
-    
-  public func userNotificationCenter(_ center: NSUserNotificationCenter, didDeliver notification: NSUserNotification) {
-    let popTime = DispatchTime.now() + Double(Int64(3.0 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
-    DispatchQueue.main.asyncAfter(deadline: popTime) { () -> Void in
-      center.removeDeliveredNotification(notification)
-    }
-  }
-  
-  public func userNotificationCenter(_ center: NSUserNotificationCenter, shouldPresent notification: NSUserNotification) -> Bool {
-    return true
-  }
-/*
-  @objc func serialPortsWereConnected(_ notification: Notification) {
-    if let userInfo = notification.userInfo {
-      let connectedPorts = userInfo[ORSConnectedSerialPortsKey] as! [ORSSerialPort]
-      self.postUserNotificationForConnectedPorts(connectedPorts)
-    }
-  }
-  
-  @objc func serialPortsWereDisconnected(_ notification: Notification) {
-    if let userInfo = notification.userInfo {
-      let disconnectedPorts: [ORSSerialPort] = userInfo[ORSDisconnectedSerialPortsKey] as! [ORSSerialPort]
-      self.postUserNotificationForDisconnectedPorts(disconnectedPorts)
-    }
-  }
-  
-  func postUserNotificationForConnectedPorts(_ connectedPorts: [ORSSerialPort]) {
-    let unc = NSUserNotificationCenter.default
-    for port in connectedPorts {
-      let userNote = NSUserNotification()
-      userNote.title = NSLocalizedString("Serial Port Connected", comment: "Serial Port Connected")
-      userNote.informativeText = "Serial Port \(port.name) was connected to your Mac."
-      userNote.soundName = nil;
-      unc.deliver(userNote)
-    }
-  }
-  
-  func postUserNotificationForDisconnectedPorts(_ disconnectedPorts: [ORSSerialPort]) {
-    let unc = NSUserNotificationCenter.default
-    for port in disconnectedPorts {
-      let userNote = NSUserNotification()
-      userNote.title = NSLocalizedString("Serial Port Disconnected", comment: "Serial Port Disconnected")
-      userNote.informativeText = "Serial Port \(port.name) was disconnected from your Mac."
-      userNote.soundName = nil;
-      unc.deliver(userNote)
-    }
-
-  }
-*/
 }

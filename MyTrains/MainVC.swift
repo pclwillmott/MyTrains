@@ -52,7 +52,7 @@ class MainVC: NSViewController, NetworkControllerDelegate {
   
   private func updateStatus() {
     
-    swConnect.state = networkController.connected ? .on : .off
+ //   swConnect.state = networkController.connected ? .on : .off
     
     if let _ = networkController.layout {
       
@@ -60,8 +60,8 @@ class MainVC: NSViewController, NetworkControllerDelegate {
       
       var xPos : CGFloat = 20
       let yPos : CGFloat = 15
-      /*
-      for device in networkController.layoutDevices {
+      
+      for interface in networkController.networkInterfaces {
         
         var color : NSColor = NSColor.black
         
@@ -69,10 +69,10 @@ class MainVC: NSViewController, NetworkControllerDelegate {
         label1.frame = NSRect(x: xPos, y: yPos, width: 200, height: 21)
         label1.backgroundColor = boxStatus.fillColor
         
-        color = device.messenger.isOpen ? .systemGreen : device.messenger.isConnected ? .systemRed : .black
+        color = interface.isOpen ? .systemGreen : .systemRed
         
         label1.textColor = color
-  //      label1.stringValue = "\(device.messenger.interface.interfaceName) → "
+        label1.stringValue = "\(interface.deviceName) → "
         label1.isEditable = false
         label1.isBezeled = false
         
@@ -82,25 +82,29 @@ class MainVC: NSViewController, NetworkControllerDelegate {
         
         xPos += label1.frame.width + 0
 
-        let label2: NSTextField = NSTextField()
-        label2.frame = NSRect(x: xPos, y: yPos, width: 200, height: 21)
-        label2.backgroundColor = boxStatus.fillColor
-      
-        color =  device.commandStation.powerIsOn ? .systemGreen : device.commandStation.trackIsPaused ? .orange : .red
- 
-        label2.textColor = color
+        if let cs = interface.commandStation {
+          
+          let label2: NSTextField = NSTextField()
+          label2.frame = NSRect(x: xPos, y: yPos, width: 200, height: 21)
+          label2.backgroundColor = boxStatus.fillColor
         
-  //      label2.stringValue = "\(device.commandStation.commandStationName)"
-        label2.isEditable = false
-        label2.isBezeled = false
-        label2.sizeToFit()
+       //   color =  cs.powerIsOn ? .systemGreen : device.commandStation.trackIsPaused ? .orange : .red
+   
+          label2.textColor = color
+          
+          label2.stringValue = "\(cs.deviceName)"
+          label2.isEditable = false
+          label2.isBezeled = false
+          label2.sizeToFit()
 
-        boxStatus.contentView?.addSubview(label2)
-        
-        xPos += label2.frame.width + 10
+          boxStatus.contentView?.addSubview(label2)
+          
+          xPos += label2.frame.width + 10
+
+        }
 
       }
-      */
+      
     }
         
   }
@@ -146,21 +150,19 @@ class MainVC: NSViewController, NetworkControllerDelegate {
   @IBOutlet weak var swConnect: NSSwitch!
   
   @IBAction func swConnectAction(_ sender: NSSwitch) {
-    
-    swConnect.state == .on ? networkController.connect() : networkController.disconnect()
-    
+    sender.state == .on ? networkController.connect() : networkController.disconnect()
   }
   
   @IBOutlet weak var btnPowerOn: NSButton!
   
   @IBAction func btnPowerOnAction(_ sender: NSButton) {
-//    networkController.powerOn()
+    networkController.powerOn()
   }
   
   @IBOutlet weak var btnPowerOff: NSButton!
   
   @IBAction func btnPowerOffAction(_ sender: NSButton) {
-//    networkController.powerOff()
+    networkController.powerOff()
   }
   
   @IBOutlet weak var btnPause: NSButton!

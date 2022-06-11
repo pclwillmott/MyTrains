@@ -69,13 +69,14 @@ class Database {
             "CREATE TABLE [\(TABLE.NETWORK)] (" +
               "[\(NETWORK.NETWORK_ID)]            INT PRIMARY KEY," +
               "[\(NETWORK.NETWORK_NAME)]          TEXT NOT NULL," +
-              "[\(NETWORK.LOCONET_DEVICE_ID)]     INT NOT NULL," +
+              "[\(NETWORK.INTERFACE_ID)]          INT NOT NULL," +
               "[\(NETWORK.LAYOUT_ID)]             INT NOT NULL," +
               "[\(NETWORK.LOCONET_ID)]            INT NOT NULL," +
               "[\(NETWORK.DUPLEX_GROUP_NAME)]     TEXT NOT NULL," +
               "[\(NETWORK.DUPLEX_GROUP_PASSWORD)] TEXT NOT NULL," +
               "[\(NETWORK.DUPLEX_GROUP_CHANNEL)]  INT NOT NULL," +
-              "[\(NETWORK.DUPLEX_GROUP_ID)]       INT NOT NULL" +
+              "[\(NETWORK.DUPLEX_GROUP_ID)]       INT NOT NULL," +
+              "[\(NETWORK.COMMAND_STATION_ID)]    INT NOT NULL" +
             ")",
  
             "CREATE TABLE [\(TABLE.LOCONET_DEVICE)] (" +
@@ -94,7 +95,8 @@ class Database {
               "[\(LOCONET_DEVICE.BAUD_RATE)]              INT NOT NULL," +
               "[\(LOCONET_DEVICE.DEVICE_NAME)]            TEXT NOT NULL," +
               "[\(LOCONET_DEVICE.FLOW_CONTROL)]           INT NOT NULL," +
-              "[\(LOCONET_DEVICE.IS_STAND_ALONE_LOCONET)] INT NOT NULL" +
+              "[\(LOCONET_DEVICE.IS_STAND_ALONE_LOCONET)] INT NOT NULL," +
+              "[\(LOCONET_DEVICE.FLAGS)]                  INT NOT NULL" +
             ")",
 
             "CREATE TABLE [\(TABLE.ROLLING_STOCK)] (" +
@@ -123,7 +125,9 @@ class Database {
               "[\(ROLLING_STOCK.INVENTORY_CODE)]           TEXT NOT NULL," +
               "[\(ROLLING_STOCK.PURCHASE_DATE)]            TEXT NOT NULL," +
               "[\(ROLLING_STOCK.NOTES)]                    TEXT NOT NULL," +
-              "[\(ROLLING_STOCK.LOCOMOTIVE_TYPE)]          INT NOT NULL" +
+              "[\(ROLLING_STOCK.LOCOMOTIVE_TYPE)]          INT NOT NULL," +
+              "[\(ROLLING_STOCK.MDECODER_INSTALLED)]       INT NOT NULL," +
+              "[\(ROLLING_STOCK.ADECODER_INSTALLED)]       INT NOT NULL" +
             ")",
 
             "CREATE TABLE [\(TABLE.DECODER_FUNCTION)] (" +

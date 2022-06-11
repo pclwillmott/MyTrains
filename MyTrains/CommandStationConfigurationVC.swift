@@ -44,7 +44,7 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Command
     
     if cboCommandStation.numberOfItems > 0 {
       cboCommandStation.selectItem(at: 0)
-      commandStation = cboCommandStationDS.commandStationAt(index: 0)
+   //   commandStation = cboCommandStationDS.commandStationAt(index: 0)
       if let cs = commandStation {
  /*       csConfigurationTableViewDS.options = cs.optionSwitches
         tableView.dataSource = csConfigurationTableViewDS
@@ -106,7 +106,7 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Command
   
   private var newCase : NetworkMessage?
   
-  private var cboCommandStationDS : CommmandStationComboBoxDS = CommmandStationComboBoxDS()
+  private var cboCommandStationDS : ComboBoxDictDS = ComboBoxDictDS()
 
   private var delegateId : Int = -1
   

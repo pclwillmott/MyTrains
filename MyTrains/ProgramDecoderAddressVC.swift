@@ -39,7 +39,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
     
     cboLocomotive.dataSource = cboLocomotiveDS
     
-    cboCommandStationDS.items = Programmer.programmers()
+    cboCommandStationDS.dictionary = networkController.programmers
     
     cboCommandStation.dataSource = cboCommandStationDS
     
@@ -111,7 +111,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
   
   private var cboLocomotiveDS : ComboBoxDictDS = ComboBoxDictDS()
   
-  private var cboCommandStationDS : ProgrammerComboBoxDS = ProgrammerComboBoxDS()
+  private var cboCommandStationDS : ComboBoxDictDS = ComboBoxDictDS()
   
   private var locomotive : Locomotive? {
     get {
@@ -184,13 +184,13 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
       commandStation = nil
     }
     
-    if let cs = cboCommandStationDS.programmerAt(index: cboCommandStation.indexOfSelectedItem) {
+/*    if let cs = cboCommandStationDS.programmerAt(index: cboCommandStation.indexOfSelectedItem) {
       commandStation = cs
       delegateId = cs.addDelegate(delegate: self)
-    }
+    } */
     
     if let loco = locomotive {
-      txtAddress.stringValue = "\(loco.address)"
+      txtAddress.stringValue = "\(loco.mDecoderAddress)"
     }
     else {
       txtAddress.stringValue = "0"
@@ -380,7 +380,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
   
   private func saveAddress(address: Int) {
     if let loco = locomotive {
-      loco.address = address
+      loco.mDecoderAddress = address
       loco.save()
     }
   }
@@ -499,11 +499,11 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
             
             if loco.isShortAddress {
               programmerState = .waitingForReadCV01Ack
-              commandStation?.readCV(progMode: programmingMode, cv: 1, address: loco.address)
+              commandStation?.readCV(progMode: programmingMode, cv: 1, address: loco.mDecoderAddress)
             }
             else {
               programmerState = .waitingForReadCV17Ack
-              commandStation?.readCV(progMode: programmingMode, cv: 17, address: loco.address)
+              commandStation?.readCV(progMode: programmingMode, cv: 17, address: loco.mDecoderAddress)
             }
             
             loco.save()
@@ -524,7 +524,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
             txtAddress.stringValue = "\(address)"
             saveAddress(address: address)
             programmerState = .waitingForReadCV19Ack
-            commandStation?.readCV(progMode: programmingMode, cv: 19, address: loco.address)
+            commandStation?.readCV(progMode: programmingMode, cv: 19, address: loco.mDecoderAddress)
 
           }
           break
@@ -535,7 +535,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
             cv17 = psd.value
             cv.cvValue = cv17
             programmerState = .waitingForReadCV18Ack
-            commandStation?.readCV(progMode: programmingMode, cv: 18, address: loco.address)
+            commandStation?.readCV(progMode: programmingMode, cv: 18, address: loco.mDecoderAddress)
           }
           
           break
@@ -547,7 +547,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
             saveAddress(address: address)
             txtAddress.stringValue = "\(address)"
             programmerState = .waitingForReadCV19Ack
-            commandStation?.readCV(progMode: programmingMode, cv: 19, address: loco.address)
+            commandStation?.readCV(progMode: programmingMode, cv: 19, address: loco.mDecoderAddress)
           }
           break
         case .waitingForReadCV19Data:
@@ -555,7 +555,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
           if let loco = locomotive, let cv = loco.getCV(cvNumber: 19) {
             cv.cvValue = psd.value
             programmerState = .waitingForReadCV21Ack
-            commandStation?.readCV(progMode: programmingMode, cv: 21, address: loco.address)
+            commandStation?.readCV(progMode: programmingMode, cv: 21, address: loco.mDecoderAddress)
           }
           
           break
@@ -564,7 +564,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
           if let loco = locomotive, let cv = loco.getCV(cvNumber: 21) {
             cv.cvValue = psd.value
             programmerState = .waitingForReadCV22Ack
-            commandStation?.readCV(progMode: programmingMode, cv: 22, address: loco.address)
+            commandStation?.readCV(progMode: programmingMode, cv: 22, address: loco.mDecoderAddress)
           }
           
           break
@@ -606,7 +606,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
             loco.consistAddressActiveF0Reverse = chkF0Reverse.state == .on
             cv29 = cv.cvValue
             programmerState = .waitingForWriteCV29Ack
-            commandStation?.writeCV(progMode: programmingMode, cv: 29, address: loco.address, value: cv29)
+            commandStation?.writeCV(progMode: programmingMode, cv: 29, address: loco.mDecoderAddress, value: cv29)
           }
           break
         case .waitingForWriteCV29Data:
@@ -615,25 +615,25 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
             if !loco.isShortAddress {
               cv17 = Locomotive.cv17(address: address)
               programmerState = .waitingForWriteCV17Ack
-              commandStation?.writeCV(progMode: programmingMode, cv: 17, address: loco.address, value: cv17)
+              commandStation?.writeCV(progMode: programmingMode, cv: 17, address: loco.mDecoderAddress, value: cv17)
             }
             else {
               cv01 = address
               programmerState = .waitingForWriteCV01Ack
-              commandStation?.writeCV(progMode: programmingMode, cv: 1, address: loco.address, value: cv01)
+              commandStation?.writeCV(progMode: programmingMode, cv: 1, address: loco.mDecoderAddress, value: cv01)
             }
           }
           break
         case .waitingForIndexedReadWriteCV31Data:
           if let loco = locomotive {
             programmerState = .waitingForIndexedReadWriteCV32Ack
-            commandStation?.writeCV(progMode: programmingMode, cv: 32, address: loco.address, value: cv32)
+            commandStation?.writeCV(progMode: programmingMode, cv: 32, address: loco.mDecoderAddress, value: cv32)
           }
          break
         case .waitingForIndexedReadWriteCV32Data:
           if let loco = locomotive {
             programmerState = .waitingForReadCVAck
-            commandStation?.readCV(progMode: programmingMode, cv: readCV, address: loco.address)
+            commandStation?.readCV(progMode: programmingMode, cv: readCV, address: loco.mDecoderAddress)
           }
         case .waitingForWriteCV01Data:
           
@@ -646,7 +646,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
             }
             if let cv = loco.getCV(cvNumber: 19) {
               programmerState = .waitingForWriteCV19Ack
-              commandStation?.writeCV(progMode: programmingMode, cv: 19, address: loco.address, value: cv.cvValue)
+              commandStation?.writeCV(progMode: programmingMode, cv: 19, address: loco.mDecoderAddress, value: cv.cvValue)
             }
           }
           break
@@ -657,7 +657,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
             }
             cv18 = Locomotive.cv18(address: address)
             programmerState = .waitingForWriteCV18Ack
-            commandStation?.writeCV(progMode: programmingMode, cv: 18, address: loco.address, value: cv18)
+            commandStation?.writeCV(progMode: programmingMode, cv: 18, address: loco.mDecoderAddress, value: cv18)
           }
           break
         case .waitingForWriteCV18Data:
@@ -672,20 +672,20 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
             
             if let cv = loco.getCV(cvNumber: 19) {
               programmerState = .waitingForWriteCV19Ack
-              commandStation?.writeCV(progMode: programmingMode, cv: 19, address: loco.address, value: cv.cvValue)
+              commandStation?.writeCV(progMode: programmingMode, cv: 19, address: loco.mDecoderAddress, value: cv.cvValue)
             }
           }
           break
         case .waitingForWriteCV19Data:
           if let loco = locomotive, let cv = loco.getCV(cvNumber: 21) {
             programmerState = .waitingForWriteCV21Ack
-            commandStation?.writeCV(progMode: programmingMode, cv: 21, address: loco.address, value: cv.cvValue)
+            commandStation?.writeCV(progMode: programmingMode, cv: 21, address: loco.mDecoderAddress, value: cv.cvValue)
           }
           break
         case .waitingForWriteCV21Data:
           if let loco = locomotive, let cv = loco.getCV(cvNumber: 22) {
             programmerState = .waitingForWriteCV22Ack
-            commandStation?.writeCV(progMode: programmingMode, cv: 22, address: loco.address, value: cv.cvValue)
+            commandStation?.writeCV(progMode: programmingMode, cv: 22, address: loco.mDecoderAddress, value: cv.cvValue)
           }
           break
         case .waitingForWriteCV22Data:
@@ -710,7 +710,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
               txtPrimaryPageIndex.stringValue = "\(cv31)"
             }
             programmerState = .waitingForIndexedWriteWriteCV32Ack
-            commandStation?.writeCV(progMode: programmingMode, cv: 32, address: loco.address, value: cv32)
+            commandStation?.writeCV(progMode: programmingMode, cv: 32, address: loco.mDecoderAddress, value: cv32)
           }
         case .waitingForIndexedWriteWriteCV32Data:
           if let loco = locomotive {
@@ -720,7 +720,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
               txtSecondaryPageIndex.stringValue = "\(cv32)"
             }
             programmerState = .waitingForWriteCVAck
-            commandStation?.writeCV(progMode: programmingMode, cv: readCV, address: loco.address, value: writeValue)
+            commandStation?.writeCV(progMode: programmingMode, cv: readCV, address: loco.mDecoderAddress, value: writeValue)
           }
         case .waitingForReadCVData:
           if let loco = locomotive {
@@ -769,7 +769,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
               if let loco = locomotive {
                 readCV += 1
                 programmerState = .waitingForReadCVAck
-                commandStation?.readCV(progMode: programmingMode, cv: readCV, address: loco.address)
+                commandStation?.readCV(progMode: programmingMode, cv: readCV, address: loco.mDecoderAddress)
               }
             }
             else {
@@ -790,13 +790,13 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
         case .writeMultipleState2:
           if let loco = locomotive {
             programmerState = .writeMultipleState3
-            commandStation?.writeCV(progMode: programmingMode, cv: 32, address: loco.address, value: cv32)
+            commandStation?.writeCV(progMode: programmingMode, cv: 32, address: loco.mDecoderAddress, value: cv32)
           }
           break
         case .writeMultipleState4:
           if let loco = locomotive {
             programmerState = .writeMultipleState5
-            commandStation?.writeCV(progMode: programmingMode, cv: readCV, address: loco.address, value: writeCV!.newValueNumber!)
+            commandStation?.writeCV(progMode: programmingMode, cv: readCV, address: loco.mDecoderAddress, value: writeCV!.newValueNumber!)
           }
           break
         case .writeMultipleState6:
@@ -835,7 +835,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
               readCV = components.cvNumber
               programmerState = .writeMultipleState1
               if let loco = locomotive {
-                commandStation?.writeCV(progMode: programmingMode, cv: 31, address: loco.address, value: cv31)
+                commandStation?.writeCV(progMode: programmingMode, cv: 31, address: loco.mDecoderAddress, value: cv31)
               }
               
             }
@@ -843,7 +843,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
               readCV = cv.cvNumber
               programmerState = .writeMultipleState5
               if let loco = locomotive {
-                commandStation?.writeCV(progMode: programmingMode, cv: readCV, address: loco.address, value: value)
+                commandStation?.writeCV(progMode: programmingMode, cv: readCV, address: loco.mDecoderAddress, value: value)
               }
             }
           }
@@ -990,7 +990,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
         
         programmerState = .waitingForReadCV29Ack
         
-        cs.readCV(progMode: programmingMode, cv: 29, address: loco.address)
+        cs.readCV(progMode: programmingMode, cv: 29, address: loco.mDecoderAddress)
       }
       
     }
@@ -1009,7 +1009,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
         
         programmerState = .waitingForWriteReadCV29Ack
         
-        cs.readCV(progMode: programmingMode, cv: 29, address: loco.address)
+        cs.readCV(progMode: programmingMode, cv: 29, address: loco.mDecoderAddress)
       }
       
     }
@@ -1071,7 +1071,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
           
           programmerState = .waitingForIndexedReadWriteCV31Ack
           
-          cs.writeCV(progMode: programmingMode, cv: 31, address: loco.address, value: cv31)
+          cs.writeCV(progMode: programmingMode, cv: 31, address: loco.mDecoderAddress, value: cv31)
         }
         else {
           
@@ -1081,7 +1081,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
           endAddress = 256
           readCV = startAddress
 
-          cs.readCV(progMode: programmingMode, cv: readCV, address: loco.address)
+          cs.readCV(progMode: programmingMode, cv: readCV, address: loco.mDecoderAddress)
         }
         
       }
@@ -1181,7 +1181,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
         writeValue = newValue
         if !cv.isIndexedCV {
           programmerState = .waitingForWriteCVAck
-          commandStation?.writeCV(progMode: programmingMode, cv: cv.cvNumber, address: loco.address, value: writeValue)
+          commandStation?.writeCV(progMode: programmingMode, cv: cv.cvNumber, address: loco.mDecoderAddress, value: writeValue)
         }
         else {
           let components = DecoderCV.cvNumberComponents(cvNumber: cv.cvNumber)
@@ -1189,7 +1189,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
           cv32 = components.secondaryPageIndex
           readCV = components.cvNumber
           programmerState = .waitingForIndexedWriteWriteCV31Ack
-          commandStation?.writeCV(progMode: programmingMode, cv: 31, address: loco.address, value: cv31)
+          commandStation?.writeCV(progMode: programmingMode, cv: 31, address: loco.mDecoderAddress, value: cv31)
         }
       }
     }
@@ -1255,12 +1255,12 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
         cv32 = components.secondaryPageIndex
         readCV = components.cvNumber
         programmerState = .writeMultipleState1
-        commandStation?.writeCV(progMode: programmingMode, cv: 31, address: loco.address, value: cv31)
+        commandStation?.writeCV(progMode: programmingMode, cv: 31, address: loco.mDecoderAddress, value: cv31)
       }
       else {
         readCV = cv.cvNumber
         programmerState = .writeMultipleState5
-        commandStation?.writeCV(progMode: programmingMode, cv: readCV, address: loco.address, value: value)
+        commandStation?.writeCV(progMode: programmingMode, cv: readCV, address: loco.mDecoderAddress, value: value)
       }
     }
     

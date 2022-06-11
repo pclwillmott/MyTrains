@@ -262,8 +262,6 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
   
   func statusUpdated(networkController: NetworkController) {
     
-    swConnect.state = networkController.connected ? .on : .off
-    
   }
   
   func networkControllerUpdated(netwokController: NetworkController) {
@@ -294,8 +292,6 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
       }
       
     }
-    
-    swConnect.state = networkController.connected ? .on : .off
     
   }
 
@@ -417,36 +413,10 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
       }
     }
 
-    swConnect.state = networkController.connected ? .on : .off
-
   }
 
   @IBOutlet weak var cboInterface: NSComboBox!
-  
-  @IBOutlet weak var swConnect: NSSwitch!
-  
-  @IBAction func swConnectAction(_ sender: NSSwitch) {
-    swConnect.state == .on ? networkController.connect() : networkController.disconnect()
-  }
-  
-  @IBOutlet weak var btnPowerOn: NSButton!
-  
-  @IBAction func btnPowerOnAction(_ sender: NSButton) {
-    interface?.powerOn()
-  }
-  
-  @IBOutlet weak var btnPowerOff: NSButton!
-  
-  @IBAction func btnPowerOffAction(_ sender: NSButton) {
-    interface?.powerOff()
-  }
-  
-  @IBOutlet weak var btnPowerPause: NSButton!
-  
-  @IBAction func btnPowerPauseAction(_ sender: NSButton) {
-    interface?.powerIdle()
-  }
-  
+    
   @IBOutlet weak var lblSendFileName: NSTextField!
   
   @IBOutlet weak var btnSendFile: NSButton!

@@ -162,33 +162,5 @@ public class Programmer : NSObject, InterfaceDelegate, CommandStationDelegate {
     progMessage(message: message)
   }
 
-  // MARK: Class Methods
-  
-  public static func programmers() -> [Programmer] {
-    
-    var result : [Programmer] = []
- /*
-    for kv in networkController.commandStations {
-      if kv.value.interfaces.count > 0 {
-        let programmer = Programmer(commandStation: kv.value)
-        result.append(programmer)
-      }
-    } */
-    
-//    for messenger in networkController.networkMessengers {
-      /*
-      if messenger.interface.productCode == ProductCode.PR4 {
-        if messenger.isOpen {
-          let programmer = Programmer(programmer: messenger)
-          result.append(programmer)
-        }
-      }
-       */
- //   }
-    
-    return result.sorted {$0.name < $1.name}
-    
-  }
-
 }
 
