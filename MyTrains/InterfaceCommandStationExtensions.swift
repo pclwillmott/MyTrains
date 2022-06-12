@@ -61,12 +61,10 @@ extension Interface {
       
       var slots : [LocoSlotData] = []
       
-      if let cs = commandStation {
-        for slot in cs._locoSlots {
-          slots.append(slot.value)
-        }
+      for slot in _locoSlots {
+        slots.append(slot.value)
       }
-      
+
       return slots.sorted {
         $0.slotID < $1.slotID
       }

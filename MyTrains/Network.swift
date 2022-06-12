@@ -34,6 +34,12 @@ public class Network : EditorObject {
     }
   }
   
+  public var interface : Interface? {
+    get {
+      return networkController.interfaceDevices[interfaceId]
+    }
+  }
+  
   public var layoutId : Int = -1 {
     didSet {
       modified = true

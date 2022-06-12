@@ -15,6 +15,7 @@
 		DA0946542843C06A00F1AB81 /* DMF.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0946532843C06A00F1AB81 /* DMF.swift */; };
 		DA0946562843EB4100F1AB81 /* InterfaceIPLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0946552843EB4100F1AB81 /* InterfaceIPLExtensions.swift */; };
 		DA0DA27A2779E96B00E4F23C /* Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0DA2792779E96B00E4F23C /* Layout.swift */; };
+		DA1A040A2856108900FFD25F /* RollingStockDecoderExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1A04092856108900FFD25F /* RollingStockDecoderExtensions.swift */; };
 		DA1DA5E52827E95A00E0F993 /* EditInterfaces.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA1DA5E42827E95A00E0F993 /* EditInterfaces.storyboard */; };
 		DA1DA5E82827EA6700E0F993 /* EditInterfacesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1DA5E72827EA6700E0F993 /* EditInterfacesVC.swift */; };
 		DA1DA5EA28280EEE00E0F993 /* BaudRate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1DA5E928280EEE00E0F993 /* BaudRate.swift */; };
@@ -99,7 +100,6 @@
 		DA8837862770B79F000B9A41 /* EditSensorsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8837852770B79F000B9A41 /* EditSensorsVC.swift */; };
 		DA8837882770B7B2000B9A41 /* EditSwitchesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8837872770B7B2000B9A41 /* EditSwitchesVC.swift */; };
 		DA88378C2770FBEC000B9A41 /* DBEditorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA88378B2770FBEC000B9A41 /* DBEditorView.xib */; };
-		DA899EA627D4CE650033550E /* Programmer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA899EA527D4CE650033550E /* Programmer.swift */; };
 		DA8AE0ED279B2CCB001E9311 /* SlotView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA8AE0EC279B2CCB001E9311 /* SlotView.storyboard */; };
 		DA8AE0F0279B3074001E9311 /* SlotViewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8AE0EF279B3074001E9311 /* SlotViewVC.swift */; };
 		DA8B5D14282FC35E00D39F07 /* InterfaceExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8B5D13282FC35E00D39F07 /* InterfaceExtensions.swift */; };
@@ -139,6 +139,7 @@
 		DA0946532843C06A00F1AB81 /* DMF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMF.swift; sourceTree = "<group>"; };
 		DA0946552843EB4100F1AB81 /* InterfaceIPLExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceIPLExtensions.swift; sourceTree = "<group>"; };
 		DA0DA2792779E96B00E4F23C /* Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Layout.swift; sourceTree = "<group>"; };
+		DA1A04092856108900FFD25F /* RollingStockDecoderExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollingStockDecoderExtensions.swift; sourceTree = "<group>"; };
 		DA1DA5E42827E95A00E0F993 /* EditInterfaces.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = EditInterfaces.storyboard; sourceTree = "<group>"; };
 		DA1DA5E72827EA6700E0F993 /* EditInterfacesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditInterfacesVC.swift; sourceTree = "<group>"; };
 		DA1DA5E928280EEE00E0F993 /* BaudRate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaudRate.swift; sourceTree = "<group>"; };
@@ -225,7 +226,6 @@
 		DA8837852770B79F000B9A41 /* EditSensorsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditSensorsVC.swift; sourceTree = "<group>"; };
 		DA8837872770B7B2000B9A41 /* EditSwitchesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditSwitchesVC.swift; sourceTree = "<group>"; };
 		DA88378B2770FBEC000B9A41 /* DBEditorView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DBEditorView.xib; sourceTree = "<group>"; };
-		DA899EA527D4CE650033550E /* Programmer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Programmer.swift; sourceTree = "<group>"; };
 		DA8AE0EC279B2CCB001E9311 /* SlotView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SlotView.storyboard; sourceTree = "<group>"; };
 		DA8AE0EF279B3074001E9311 /* SlotViewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlotViewVC.swift; sourceTree = "<group>"; };
 		DA8B5D13282FC35E00D39F07 /* InterfaceExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceExtensions.swift; sourceTree = "<group>"; };
@@ -390,7 +390,6 @@
 				DA7A4911274AC25600C2A42B /* PeerXferMessage.swift */,
 				DA08B430278734270001307C /* ProgramDecoderAddress.storyboard */,
 				DA08B432278737530001307C /* ProgramDecoderAddressVC.swift */,
-				DA899EA527D4CE650033550E /* Programmer.swift */,
 				DA8B5D18282FDE1800D39F07 /* ProgrammerMode.swift */,
 				DA08B43627875FDD0001307C /* ProgSlotDataP1.swift */,
 				DA28C2BE2801E46D00857471 /* QuerySlot1.swift */,
@@ -399,6 +398,7 @@
 				DA28C2C62801EEA900857471 /* QuerySlot4.swift */,
 				DA28C2C82801EF6500857471 /* QuerySlot5.swift */,
 				DA2502B8282671600002D4AF /* RollingStock.swift */,
+				DA1A04092856108900FFD25F /* RollingStockDecoderExtensions.swift */,
 				DA434293283698CA00E8D555 /* SerialPort.c */,
 				DA434292283698CA00E8D555 /* SerialPort.h */,
 				DA95D6C42809C00600D9F1B6 /* SignalStrengthView.swift */,
@@ -592,6 +592,7 @@
 				DA1DA5EC28280FCD00E0F993 /* FlowControl.swift in Sources */,
 				DAEA9CFA272D8FBE00C9B3EC /* NetworkMessage.swift in Sources */,
 				DA28C2C32801EB9400857471 /* QuerySlot2.swift in Sources */,
+				DA1A040A2856108900FFD25F /* RollingStockDecoderExtensions.swift in Sources */,
 				DA8837842770B78C000B9A41 /* EditTrainsVC.swift in Sources */,
 				DA6A0ADC27529D6600913F2B /* ModalWindow.swift in Sources */,
 				DA467BA3281D501300AB9650 /* SwitchBoardDefs.swift in Sources */,
@@ -619,7 +620,6 @@
 				DA8837722770B371000B9A41 /* EditLayoutsVC.swift in Sources */,
 				DA8B5D17282FCE2700D39F07 /* TimeoutCode.swift in Sources */,
 				DA5B4605276F62D5005CA03C /* EditNetworksVC.swift in Sources */,
-				DA899EA627D4CE650033550E /* Programmer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

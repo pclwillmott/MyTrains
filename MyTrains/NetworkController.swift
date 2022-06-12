@@ -68,7 +68,7 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
 
   public var layouts : [Int:Layout] = Layout.layouts
 
-  public var locomotives : [Int:Locomotive] = Locomotive.locomotives
+  public var rollingStock : [Int:RollingStock] = RollingStock.rollingStock
 
   public var locoNetDevices : [Int:LocoNetDevice] = LocoNetDevice.locoNetDevices
   
@@ -93,6 +93,39 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
       for delegate in controllerDelegates {
         delegate.value.statusUpdated?(networkController: self)
       }
+    }
+  }
+  
+  public var locomotives : [Int:Locomotive] {
+    get {
+      
+      var result : [Int:Locomotive] = [:]
+      
+      for kv in rollingStock {
+        if let rs = kv.value as? Locomotive, rs.rollingStockType == .locomotive {
+          result[rs.primaryKey] = rs
+        }
+      }
+      
+      return result
+      
+    }
+  }
+  
+  public var rollingStockWithDecoders : [Int:RollingStock] {
+    get {
+      
+      var result : [Int:RollingStock] = [:]
+      
+      for kv in rollingStock {
+        let rs = kv.value
+        if rs.mDecoderInstalled || rs.aDecoderInstalled {
+          result[rs.primaryKey] = rs
+        }
+      }
+      
+      return result
+      
     }
   }
   
@@ -224,6 +257,13 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
   
   // MARK: Public Methods
 
+  public func commandStationInterface(commandStation:Interface) -> Interface? {
+    if let network = networks[commandStation.networkId] {
+      return network.interface
+    }
+    return nil
+  }
+  
   public func networkControllerStatusUpdated() {
     for kv in controllerDelegates {
       kv.value.statusUpdated?(networkController: self)
@@ -290,13 +330,13 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
     networkControllerUpdated()
   }
   
-  public func addLocomotive(locomotive: Locomotive) {
-    locomotives[locomotive.primaryKey] = locomotive
+  public func addRollingStock(rollingStock: RollingStock) {
+    self.rollingStock[rollingStock.primaryKey] = rollingStock
     networkControllerUpdated()
   }
   
-  public func removeLocomotive(primaryKey: Int) {
-    locomotives.removeValue(forKey: primaryKey)
+  public func removeRollingStock(primaryKey: Int) {
+    self.rollingStock.removeValue(forKey: primaryKey)
     networkControllerUpdated()
   }
   

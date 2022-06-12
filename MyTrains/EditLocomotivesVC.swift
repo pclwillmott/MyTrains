@@ -65,8 +65,11 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     cboLengthUnits.selectItem(at: UserDefaults.standard.integer(forKey: DEFAULT.UNITS_LENGTH))
     txtScale.stringValue = "\(UserDefaults.standard.double(forKey: DEFAULT.SCALE))"
     cboTrackGuage.selectItem(at: UserDefaults.standard.integer(forKey: DEFAULT.TRACK_GAUGE))
+    chkMobileDecoderInstalled.state = .off
+    chkAccessoryDecoderInstalled.state = .off
     cboDecoderType.selectItem(at: SpeedSteps.dcc128.rawValue)
-    txtAddress.stringValue = "1"
+    txtAddress.stringValue = ""
+    txtAccessoryDecoderAddress.stringValue = ""
     txtOccupancyFeedbackOffsetFront.stringValue = "0.0"
     txtOccupancyFeedbackOffsetRear.stringValue = "0.0"
     cboOccupancyFeedbackOffsetUnits.selectItem(at: UserDefaults.standard.integer(forKey: DEFAULT.UNITS_FBOFF_OCC))
@@ -75,7 +78,9 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     cboMaximumSpeedUnits.selectItem(at: UserDefaults.standard.integer(forKey: DEFAULT.UNITS_SPEED))
     cboNetwork.deselectItem(at: cboNetwork.indexOfSelectedItem)
     lblManufacturer.stringValue = "Unknown"
+    lblAccessoryDecoderManufacturer.stringValue = "Unknown"
     cboDecoderModel.stringValue = ""
+    cboAccessoryDecoderModel.stringValue = ""
     txtInventoryCode.stringValue = ""
     cboModelManufacturer.stringValue = ""
     txtPurchaseDate.stringValue = ""
@@ -88,10 +93,13 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
       cboPowerSource.selectItem(at: locomotive.locomotiveType.rawValue)
       txtLength.stringValue = "\(locomotive.length)"
       cboLengthUnits.selectItem(at: locomotive.unitsLength.rawValue)
-  //    txtScale.stringValue = "\(locomotive.locomotiveScale)"
+      txtScale.stringValue = "\(locomotive.scale)"
       cboTrackGuage.selectItem(at: locomotive.trackGauge.rawValue)
-  //    cboDecoderType.selectItem(at: locomotive.mobileDecoderType.rawValue)
-      txtAddress.stringValue = "\(locomotive.mDecoderAddress)"
+      chkMobileDecoderInstalled.state = locomotive.mDecoderInstalled ? .on : .off
+      chkAccessoryDecoderInstalled.state = locomotive.aDecoderInstalled ? .on : .off
+      cboDecoderType.selectItem(at: locomotive.speedSteps.rawValue)
+      txtAddress.stringValue = locomotive.mDecoderAddress == -1 ? "" : "\(locomotive.mDecoderAddress)"
+      txtAccessoryDecoderAddress.stringValue = locomotive.aDecoderAddress == -1 ? "" : "\(locomotive.aDecoderAddress)"
       txtOccupancyFeedbackOffsetFront.stringValue = "\(locomotive.feedbackOccupancyOffsetFront)"
       txtOccupancyFeedbackOffsetRear.stringValue = "\(locomotive.feedbackOccupancyOffsetRear)"
       cboOccupancyFeedbackOffsetUnits.selectItem(at: locomotive.unitsFeedbackOccupancyOffset.rawValue)
@@ -102,7 +110,8 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
         cboNetwork.selectItem(at: netIndex)
       }
       lblManufacturer.stringValue = locomotive.decoderManufacturerName
-//      cboDecoderModel.stringValue = locomotive.decoderModel
+      cboDecoderModel.stringValue = locomotive.mDecoderModel
+      cboAccessoryDecoderModel.stringValue = locomotive.aDecoderModel
       txtInventoryCode.stringValue = locomotive.inventoryCode
  //     cboModelManufacturer.stringValue = locomotive.manufacturer
       txtPurchaseDate.stringValue = locomotive.purchaseDate
@@ -185,10 +194,13 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     locomotive.locomotiveType = LocomotiveType.getType(forName: cboPowerSource.stringValue)
     locomotive.length = Double(txtLength.stringValue) ?? 0.0
     locomotive.unitsLength = LengthUnit(rawValue: cboLengthUnits.indexOfSelectedItem) ?? .centimeters
-//    locomotive.locomotiveScale = Double(txtScale.stringValue) ?? 1.0
+    locomotive.scale = Double(txtScale.stringValue) ?? 1.0
     locomotive.trackGauge = TrackGauge(rawValue: cboTrackGuage.indexOfSelectedItem) ?? .oo
-//    locomotive.mobileDecoderType = SpeedSteps(rawValue: cboDecoderType.indexOfSelectedItem) ?? .dcc128A
-    locomotive.mDecoderAddress = Int(txtAddress.stringValue) ?? 1
+    locomotive.speedSteps = SpeedSteps(rawValue: cboDecoderType.indexOfSelectedItem) ?? .dcc128A
+    locomotive.mDecoderAddress = Int(txtAddress.stringValue) ?? -1
+    locomotive.aDecoderAddress = Int(txtAccessoryDecoderAddress.stringValue) ?? -1
+    locomotive.mDecoderInstalled = chkMobileDecoderInstalled.state == .on
+    locomotive.aDecoderInstalled = chkAccessoryDecoderInstalled.state == .on
     locomotive.feedbackOccupancyOffsetFront = Double(txtOccupancyFeedbackOffsetFront.stringValue) ?? 0.0
     locomotive.feedbackOccupancyOffsetRear = Double(txtOccupancyFeedbackOffsetRear.stringValue) ?? 0.0
     locomotive.unitsFeedbackOccupancyOffset = LengthUnit(rawValue: cboOccupancyFeedbackOffsetUnits.indexOfSelectedItem) ?? .centimeters
@@ -196,7 +208,8 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     locomotive.maxBackwardSpeed = Double(txtMaximumReverseSpeed.stringValue) ?? 0.0
     locomotive.unitsSpeed = SpeedUnit(rawValue: cboMaximumSpeedUnits.indexOfSelectedItem) ?? .kilometersPerHour
     locomotive.networkId = cboNetworkDS.codeForItemAt(index: cboNetwork.indexOfSelectedItem) ?? -1
-//    locomotive.decoderModel = cboDecoderModel.stringValue
+    locomotive.mDecoderModel = cboDecoderModel.stringValue
+    locomotive.aDecoderModel = cboAccessoryDecoderModel.stringValue
     locomotive.inventoryCode = txtInventoryCode.stringValue
 //    locomotive.manufacturer = cboModelManufacturer.stringValue
     locomotive.purchaseDate = txtPurchaseDate.stringValue
@@ -208,7 +221,7 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     
     let locomotive = Locomotive(primaryKey: -1)
     setFields(locomotive: locomotive)
-    networkController.addLocomotive(locomotive: locomotive)
+    networkController.addRollingStock(rollingStock: locomotive)
     editorView.dictionary = networkController.locomotives
     editorView.setSelection(key: locomotive.primaryKey)
     return locomotive
@@ -225,7 +238,7 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   
   func delete(dbEditorView: DBEditorView, primaryKey: Int) {
     
-    networkController.removeLocomotive(primaryKey: primaryKey)
+    networkController.removeRollingStock(primaryKey: primaryKey)
     Locomotive.delete(primaryKey: primaryKey)
     editorView.dictionary = networkController.locomotives
      
@@ -468,5 +481,28 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
       sender.stringValue = "\(cv.displayCVValue)"
     }
   }
+  
+  @IBOutlet weak var chkMobileDecoderInstalled: NSButton!
+  
+  @IBAction func chkMobileDecoderInstalledAction(_ sender: NSButton) {
+  }
+  
+  @IBOutlet weak var chkAccessoryDecoderInstalled: NSButton!
+  
+  @IBAction func chkAccessoryDecoderInstalledAction(_ sender: NSButton) {
+  }
+  
+  @IBOutlet weak var lblAccessoryDecoderManufacturer: NSTextField!
+  
+  @IBOutlet weak var cboAccessoryDecoderModel: NSComboBox!
+  
+  @IBAction func cboAccessoryDecoderModelAction(_ sender: NSComboBox) {
+  }
+  
+  @IBOutlet weak var txtAccessoryDecoderAddress: NSTextField!
+  
+  @IBAction func txtAccessoryDecoderAddressAction(_ sender: NSTextField) {
+  }
+  
   
 }

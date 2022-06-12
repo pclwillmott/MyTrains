@@ -15,7 +15,7 @@ public enum ProgrammingMode : Int {
   case physicalRegister = 3
 }
 
-class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDelegate, CSVParserDelegate {
+class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, InterfaceDelegate, CSVParserDelegate {
 
   // MARK: Window & View Control
 
@@ -35,7 +35,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
     
     self.view.window?.delegate = self
     
-    cboLocomotiveDS.dictionary = networkController.locomotives
+    cboLocomotiveDS.dictionary = networkController.rollingStockWithDecoders
     
     cboLocomotive.dataSource = cboLocomotiveDS
     
@@ -48,6 +48,8 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
     }
     
     programmingMode = ProgrammingMode(rawValue: UserDefaults.standard.integer(forKey: DEFAULT.PROGRAMMER_PROG_MODE)) ?? .directMode
+    
+    tabView.isHidden = true
     
     setup()
     
@@ -113,19 +115,19 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
   
   private var cboCommandStationDS : ComboBoxDictDS = ComboBoxDictDS()
   
-  private var locomotive : Locomotive? {
+  private var locomotive : RollingStock? {
     get {
-      var result : Locomotive? = nil
+      var result : RollingStock? = nil
       if let editorObject = cboLocomotiveDS.editorObjectAt(index: cboLocomotive.indexOfSelectedItem) {
-        result = networkController.locomotives[editorObject.primaryKey]
+        result = networkController.rollingStock[editorObject.primaryKey]
       }
       return result
     }
   }
   
-  private var delegateId : Int = -1
+  private var observerId : Int = -1
   
-  private var commandStation : Programmer?
+  private var commandStation : Interface?
   
   private var programmerState : ProgrammerState = .idle
   
@@ -178,19 +180,33 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
   
   private func setup() {
   
-    if delegateId != -1 {
-      commandStation?.removeDelegate(id: delegateId)
-      delegateId = -1
+    if observerId != -1 {
+      commandStation?.removeObserver(id: observerId)
+      observerId = -1
       commandStation = nil
     }
     
-/*    if let cs = cboCommandStationDS.programmerAt(index: cboCommandStation.indexOfSelectedItem) {
-      commandStation = cs
-      delegateId = cs.addDelegate(delegate: self)
-    } */
+    if let programmer = cboCommandStationDS.editorObjectAt(index: cboCommandStation.indexOfSelectedItem) as? Interface {
+      if let info = programmer.locoNetProductInfo, info.attributes.contains(.CommandStation) {
+        commandStation = networkController.commandStationInterface(commandStation: programmer)
+      }
+      else {
+        commandStation = programmer
+      }
+      if let cs = commandStation {
+        observerId = cs.addObserver(observer: self)
+      }
+    }
+    
+    tabMobileDecoder.view?.isHidden = true
+    tabAccessoryDecoder.view?.isHidden = true
+    tabView.isHidden = true
     
     if let loco = locomotive {
       txtAddress.stringValue = "\(loco.mDecoderAddress)"
+      tabMobileDecoder.view?.isHidden = !loco.mDecoderInstalled
+      tabAccessoryDecoder.view?.isHidden = !loco.aDecoderInstalled
+      tabView.isHidden = !(loco.mDecoderInstalled || loco.aDecoderInstalled)
     }
     else {
       txtAddress.stringValue = "0"
@@ -390,6 +406,11 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
   @objc func progMessageReceived(message: NetworkMessage) {
     
     switch message.messageType {
+    case .timeout:
+      commandStation?.exitProgMode()
+      programmerState = .idle
+      lblStatus.stringValue = "Timeout"
+      
     case .progCmdAccepted:
       var message = ""
       switch programmerState {
@@ -1510,5 +1531,11 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, ProgrammerDe
   @IBAction func cboProgModeAction(_ sender: NSComboBox) {
     UserDefaults.standard.set(cboProgMode.indexOfSelectedItem, forKey: DEFAULT.PROGRAMMER_PROG_MODE)
   }
+  
+  @IBOutlet weak var tabMobileDecoder: NSTabViewItem!
+  
+  @IBOutlet weak var tabAccessoryDecoder: NSTabViewItem!
+  
+  @IBOutlet weak var tabView: NSTabView!
   
 }

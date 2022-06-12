@@ -383,7 +383,7 @@ extension Interface {
     
   }
   
-  public func readCV(progMode:ProgrammingMode, cv:Int, address: Int, timeoutCode: TimeoutCode) {
+  public func readCV(progMode:ProgrammingMode, cv:Int, address: Int) {
     
     var pcmd : UInt8 = 0
     
@@ -430,12 +430,12 @@ extension Interface {
         ],
         appendCheckSum: true)
     
-    addToQueue(message: message, delay: MessageTiming.CVOP, responses: [.progCmdAccepted, .progCmdAcceptedBlind], retryCount: 10, timeoutCode: timeoutCode)
+    addToQueue(message: message, delay: MessageTiming.CVOP, responses: [.progCmdAccepted, .progCmdAcceptedBlind], retryCount: 10, timeoutCode: .readCV)
     
   }
   
   
-  public func writeCV(progMode: ProgrammingMode, cv:Int, address: Int, value: Int, timeoutCode: TimeoutCode) {
+  public func writeCV(progMode: ProgrammingMode, cv:Int, address: Int, value: Int) {
     
     var pcmd : UInt8 = 0
     
@@ -483,7 +483,7 @@ extension Interface {
         ],
         appendCheckSum: true)
     
-    addToQueue(message: message, delay: MessageTiming.CVOP, responses: [.progCmdAccepted, .progCmdAcceptedBlind], retryCount: 10, timeoutCode: timeoutCode)
+    addToQueue(message: message, delay: MessageTiming.CVOP, responses: [.progCmdAccepted, .progCmdAcceptedBlind], retryCount: 10, timeoutCode: .writeCV)
     
   }
   
@@ -782,5 +782,41 @@ extension Interface {
     addToQueue(message: message, delay: MessageTiming.DISCOVER)
 
   }
+  
+  /*
+  public func readCV(progMode: ProgrammingMode, cv:Int, address: Int) {
+    DispatchQueue.main.async {
+      self._programmer?.readCV(progMode: progMode, cv: cv, address: address, timeoutCode: .readCV)
+    }
+  }
+    
+  public func writeCV(progMode: ProgrammingMode, cv:Int, address: Int, value:Int) {
+    DispatchQueue.main.async {
+      self._programmer?.writeCV(progMode: progMode, cv: cv, address: address, value: value, timeoutCode: .writeCV)
+    }
+  }
+  */
+  public func enterProgMode() {
+    if let info = locoNetProductInfo, info.attributes.contains(.CommandStation) {
+    }
+    else {
+ //     setProgMode(mode: .ProgrammerMode)
+    }
+  }
+  
+  public func exitProgMode() {
+    if let info = locoNetProductInfo, info.attributes.contains(.CommandStation) {
+    }
+    else {
+ //     setProgMode(mode: .MS100TerminationDisabled)
+    }
+  }
+  
+  public func getProgSlotDataP1() {
+    DispatchQueue.main.async {
+ //     self._programmer?.getProgSlotDataP1()
+    }
+  }
+
   
 }

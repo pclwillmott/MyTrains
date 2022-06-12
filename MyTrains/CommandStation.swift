@@ -366,17 +366,6 @@ public class CommandStation : NSObject {
     default:
       break
     }
-    /*
-    if message.willChangeSlot {
-      if let slot = _locoSlots[message.slotID] {
-        slot.isDirty = true
-      }
-      else {
-        let slot = LocoSlotData(slotID: message.slotID)
-        _locoSlots[slot.slotID] = slot
-        slotsUpdated()
-      }
-    } */
     
     networkMessage(message: message)
   }

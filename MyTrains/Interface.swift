@@ -14,10 +14,6 @@ enum InterfaceState {
   case waitingForResponse
 }
 
-@objc public protocol SlotObserverDelegate {
-  @objc optional func slotsUpdated(commandStation:CommandStation)
-}
-
 public class Interface : LocoNetDevice, MTSerialPortDelegate {
   
   // MARK: Constructors
@@ -58,12 +54,6 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
 
   internal var _locoSlots : [Int:LocoSlotData] = [:]
   
-  private var slotObservers : [Int:SlotObserverDelegate] = [:]
-  
-  private var nextSlotObserverId = 0
-  
-  private var slotObserverLock : NSLock = NSLock()
-  
   // MARK: Public Properties
   
   public var opSwBankA : NetworkMessage?
@@ -100,8 +90,8 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
   // MARK: Private Methods
   
   private func slotsUpdated() {
-    for kv in slotObservers {
- //     kv.value.slotsUpdated?(commandStation: self)
+    for kv in observers {
+      kv.value.slotsUpdated?(interface: self)
     }
   }
   
@@ -182,7 +172,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
         }
         
       }
-    
+      
       networkController.networkControllerStatusUpdated()
 
     case .opSwDataAP1:
@@ -212,6 +202,23 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
       break
     }
     
+    var newSlot = false
+    
+    for slotNumber in message.slotsChanged {
+      if let slot = _locoSlots[slotNumber] {
+        slot.isDirty = true
+      }
+      else {
+        let slot = LocoSlotData(slotID: slotNumber)
+        _locoSlots[slotNumber] = slot
+        newSlot = true
+      }
+    }
+    
+    if newSlot {
+      slotsUpdated()
+    }
+
   }
   
   private func sendMessage() {
@@ -264,6 +271,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
     if let timeoutMessage = timeout {
       for observer in observers {
         observer.value.networkMessageReceived?(message: timeoutMessage)
+        observer.value.progMessageReceived?(message: timeoutMessage)
       }
     }
     
@@ -295,21 +303,6 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
 
   // MARK: Public Methods
   
-  public func addSlotObserver(observer:SlotObserverDelegate) -> Int {
-    slotObserverLock.lock()
-    let id = nextSlotObserverId
-    nextSlotObserverId += 1
-    slotObservers[id] = observer
-    slotObserverLock.unlock()
-    return id
-  }
-  
-  public func removeSlotObserver(id:Int) {
-    slotObserverLock.lock()
-    slotObservers.removeValue(forKey: id)
-    slotObserverLock.unlock()
-  }
-
   public func addObserver(observer:InterfaceDelegate) -> Int {
     nextObserverKeyLock.lock()
     let id : Int = nextObserverKey
@@ -491,7 +484,15 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
               networkMessageReceived(message: networkMessage)
               
               for observer in observers {
+                
                 observer.value.networkMessageReceived?(message: networkMessage)
+                
+                let progMessages : Set<NetworkMessageType> = [.progCmdAccepted, .progSlotDataP1, .progCmdAcceptedBlind]
+                
+                if progMessages.contains(networkMessage.messageType) {
+                  observer.value.progMessageReceived?(message: networkMessage)
+                }
+                
               }
               
               if stopTimer {

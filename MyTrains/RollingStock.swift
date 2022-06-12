@@ -28,7 +28,6 @@ public class RollingStock : EditorObject, DecoderFunctionDelegate {
     decode(sqliteDataReader: reader)
     functions = DecoderFunction.functions(rollingStock: self, decoderType: .mobile)
     _cvs = DecoderCV.cvs(rollingStock: self, decoderType: .mobile)
-    
   }
   
   override init(primaryKey:Int) {
@@ -530,6 +529,17 @@ public class RollingStock : EditorObject, DecoderFunctionDelegate {
       cmd.parameters.addWithValue(key: "@\(ROLLING_STOCK.ADECODER_INSTALLED)", value: aDecoderInstalled)
 
       _ = cmd.executeNonQuery()
+      
+      for fn in functions {
+        fn.rollingStockId = primaryKey
+        fn.save()
+      }
+      
+      for kv in _cvs {
+        let cv = kv.value
+        cv.rollingStockId = primaryKey
+        cv.save()
+      }
 
       if shouldClose {
         conn.close()
@@ -580,6 +590,51 @@ public class RollingStock : EditorObject, DecoderFunctionDelegate {
   public static func delete(primaryKey: Int) {
     let sql = "DELETE FROM [\(TABLE.ROLLING_STOCK)] WHERE [\(ROLLING_STOCK.ROLLING_STOCK_ID)] = \(primaryKey)"
     Database.execute(commands: [sql])
+  }
+
+  public static var rollingStock : [Int:RollingStock] {
+    
+    get {
+    
+      let conn = Database.getConnection()
+      
+      let shouldClose = conn.state != .Open
+       
+      if shouldClose {
+        _ = conn.open()
+      }
+       
+      let cmd = conn.createCommand()
+       
+      cmd.commandText = "SELECT \(columnNames) FROM [\(TABLE.ROLLING_STOCK)]"
+
+      var result : [Int:RollingStock] = [:]
+      
+      if let reader = cmd.executeReader() {
+           
+        while reader.read() {
+          let rs = RollingStock(reader: reader)
+          if rs.rollingStockType == .locomotive {
+            let loco = Locomotive(reader: reader)
+            result[loco.primaryKey] = loco
+          }
+          else {
+            result[rs.primaryKey] = rs
+          }
+        }
+           
+        reader.close()
+           
+      }
+      
+      if shouldClose {
+        conn.close()
+      }
+
+      return result
+      
+    }
+    
   }
 
 }
