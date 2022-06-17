@@ -164,9 +164,9 @@ class SwitchBoardShape {
   }
   
   public static func getShape(part: SwitchBoardItemPartType, orientation: Int) -> Shape? {
-/*    if let shape = shapes[part] {
+    if let shape = shapes[part] {
       return shape[shape.count == 1 ? 0 : orientation & 1]
-    } */
+    } 
     return nil
   }
   

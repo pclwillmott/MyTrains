@@ -383,6 +383,12 @@ class SwitchBoardItem : EditorObject {
     }
   }
   
+  public var isScenicSection : Bool = true {
+    didSet {
+      modified = true
+    }
+  }
+  
   public var nextAction : SwitchBoardItemAction = .noAction
   
   public var key : Int {
@@ -659,6 +665,10 @@ class SwitchBoardItem : EditorObject {
         sw2SensorId = reader.getInt(index: 58)!
       }
 
+      if !reader.isDBNull(index: 59) {
+        isScenicSection = reader.getBool(index: 59)!
+      }
+
     }
     
     modified = false
@@ -731,7 +741,8 @@ class SwitchBoardItem : EditorObject {
         "[\(SWITCHBOARD_ITEM.SW2_LOCONET_DEVICE_ID)], " +
         "[\(SWITCHBOARD_ITEM.SW2_PORT)], " +
         "[\(SWITCHBOARD_ITEM.SW2_TURNOUT_MOTOR_TYPE)], " +
-        "[\(SWITCHBOARD_ITEM.SW2_SENSOR_ID)]" +
+        "[\(SWITCHBOARD_ITEM.SW2_SENSOR_ID)], " +
+        "[\(SWITCHBOARD_ITEM.IS_SCENIC_SECTION)]" +
         ") VALUES (" +
         "@\(SWITCHBOARD_ITEM.SWITCHBOARD_ITEM_ID), " +
         "@\(SWITCHBOARD_ITEM.LAYOUT_ID), " +
@@ -791,7 +802,8 @@ class SwitchBoardItem : EditorObject {
         "@\(SWITCHBOARD_ITEM.SW2_LOCONET_DEVICE_ID), " +
         "@\(SWITCHBOARD_ITEM.SW2_PORT), " +
         "@\(SWITCHBOARD_ITEM.SW2_TURNOUT_MOTOR_TYPE), " +
-        "@\(SWITCHBOARD_ITEM.SW2_SENSOR_ID)" +
+        "@\(SWITCHBOARD_ITEM.SW2_SENSOR_ID), " +
+        "@\(SWITCHBOARD_ITEM.IS_SCENIC_SECTION)" +
         ")"
         primaryKey = Database.nextCode(tableName: TABLE.SWITCHBOARD_ITEM, primaryKey: SWITCHBOARD_ITEM.SWITCHBOARD_ITEM_ID)!
       }
@@ -854,7 +866,8 @@ class SwitchBoardItem : EditorObject {
         "[\(SWITCHBOARD_ITEM.SW2_LOCONET_DEVICE_ID)] = @\(SWITCHBOARD_ITEM.SW2_LOCONET_DEVICE_ID), " +
         "[\(SWITCHBOARD_ITEM.SW2_PORT)] = @\(SWITCHBOARD_ITEM.SW2_PORT), " +
         "[\(SWITCHBOARD_ITEM.SW2_TURNOUT_MOTOR_TYPE)] = @\(SWITCHBOARD_ITEM.SW2_TURNOUT_MOTOR_TYPE), " +
-        "[\(SWITCHBOARD_ITEM.SW2_SENSOR_ID)] = @\(SWITCHBOARD_ITEM.SW2_SENSOR_ID) " +
+        "[\(SWITCHBOARD_ITEM.SW2_SENSOR_ID)] = @\(SWITCHBOARD_ITEM.SW2_SENSOR_ID), " +
+        "[\(SWITCHBOARD_ITEM.IS_SCENIC_SECTION)] = @\(SWITCHBOARD_ITEM.IS_SCENIC_SECTION) " +
         "WHERE [\(SWITCHBOARD_ITEM.SWITCHBOARD_ITEM_ID)] = @\(SWITCHBOARD_ITEM.SWITCHBOARD_ITEM_ID)"
       }
 
@@ -929,6 +942,7 @@ class SwitchBoardItem : EditorObject {
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.SW2_PORT)", value: sw2Port)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.SW2_TURNOUT_MOTOR_TYPE)", value: sw2TurnoutMotorType.rawValue)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.SW2_SENSOR_ID)", value: sw2SensorId)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.IS_SCENIC_SECTION)", value: isScenicSection)
 
       _ = cmd.executeNonQuery()
 
@@ -1005,7 +1019,8 @@ class SwitchBoardItem : EditorObject {
         "[\(SWITCHBOARD_ITEM.SW2_LOCONET_DEVICE_ID)], " +
         "[\(SWITCHBOARD_ITEM.SW2_PORT)], " +
         "[\(SWITCHBOARD_ITEM.SW2_TURNOUT_MOTOR_TYPE)], " +
-        "[\(SWITCHBOARD_ITEM.SW2_SENSOR_ID)]"
+        "[\(SWITCHBOARD_ITEM.SW2_SENSOR_ID)], " +
+        "[\(SWITCHBOARD_ITEM.IS_SCENIC_SECTION)]"
     }
   }
 

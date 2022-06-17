@@ -14,5 +14,5 @@ import Foundation
   @objc optional func interfaceWasClosed(interface:Interface)
   @objc optional func progMessageReceived(message: NetworkMessage) 
   @objc optional func slotsUpdated(interface:Interface)
+  @objc optional func trackStatusChanged(interface: Interface)
 }
-

@@ -25,7 +25,7 @@ extension RollingStock {
   
   public var decoderManufacturerName : String {
     get {
-      return "" // NMRA.manufacturerName(code: getCV(cvNumber: 8).cvValue)
+      return NMRA.manufacturerNameNMRA(codeNMRA: getCV(cvNumber: 8)!.cvValue)
     }
   }
   

@@ -8,7 +8,7 @@
 import Foundation
 import Cocoa
 
-class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, CommandStationDelegate {
+class CommandStationConfigurationVC: NSViewController, NSWindowDelegate {
  
   // MARK: Window & View Control
   
@@ -22,7 +22,7 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Command
 
   func windowWillClose(_ notification: Notification) {
     if delegateId != -1 {
-      commandStation?.removeDelegate(id: delegateId)
+   //   commandStation?.removeDelegate(id: delegateId)
     }
     stopModal()
   }

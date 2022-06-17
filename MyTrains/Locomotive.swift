@@ -122,7 +122,7 @@ public let maskF26 = 0b00000100000000000000000000000000
 public let maskF27 = 0b00001000000000000000000000000000
 public let maskF28 = 0b00010000000000000000000000000000
 
-public class Locomotive : RollingStock {
+public class Locomotive : RollingStock, InterfaceDelegate {
   
   // MARK: Constructors
 
@@ -152,7 +152,7 @@ public class Locomotive : RollingStock {
   
   private var _isInertial : Bool = true
   
-  private var commandStationDelegateId : Int = -1
+  private var interfaceDelegateId : Int = -1
   
   private var initState : InitState = .inactive {
     willSet {
@@ -171,6 +171,10 @@ public class Locomotive : RollingStock {
   
   private var timer : Timer? = nil
   
+  internal var refreshTimer : Timer?
+  
+  internal var forceRefresh : Bool = false
+  
   private var delegates : [Int:LocomotiveDelegate] = [:]
   
   private var nextDelegateId : Int = 0
@@ -186,21 +190,23 @@ public class Locomotive : RollingStock {
   }
   
   public var isInUse : Bool {
+    
     get {
       return _isInUse
     }
+    
     set(value) {
       if value != _isInUse {
         _isInUse = value
-        if let net = network, let cs = net.commandStation {
+        if let network = self.network, let interface = network.interface {
           if _isInUse {
-   //         commandStationDelegateId = cs.addDelegate(delegate: self)
+            interfaceDelegateId = interface.addObserver(observer: self)
             initState = .waitingForSlot
-     //       cs.getLocoSlot(forAddress: address)
+            interface.getLocoSlot(forAddress: mDecoderAddress)
           }
           else {
             stopTimer()
-       //     cs.removeDelegate(id: commandStationDelegateId)
+            interface.removeObserver(id: interfaceDelegateId)
             initState = .inactive
           }
         }
@@ -259,15 +265,28 @@ public class Locomotive : RollingStock {
   
   // MARK: Private Methods
   
+  @objc func refreshTimerAction() {
+    forceRefresh = true
+  }
+  
+  func startRefreshTimer(timeInterval:TimeInterval) {
+    refreshTimer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
+  }
+  
+  func stopRefreshTimer() {
+    refreshTimer?.invalidate()
+    refreshTimer = nil
+  }
+
   @objc func timerAction() {
     
-    if let net = network, let cs = net.commandStation, let throttle = _throttleID {
+    if let network = self.network, let interface = network.interface, let throttle = _throttleID {
       
       if !isInertial {
         speed = targetSpeed
       }
       
-  //    lastLocomotiveState = cs.updateLocomotiveState(slotNumber: slotNumber, slotPage: slotPage, previousState: lastLocomotiveState, nextState: locomotiveState, throttleID: throttle)
+      lastLocomotiveState = interface.updateLocomotiveState(slotNumber: slotNumber, slotPage: slotPage, previousState: lastLocomotiveState, nextState: locomotiveState, throttleID: throttle, forceRefresh: forceRefresh)
       
       for delegate in delegates {
         delegate.value.stateUpdated?(locomotive: self)
@@ -316,7 +335,7 @@ public class Locomotive : RollingStock {
       slotData[index+0] = UInt8(throttleID & 0x7f)
       slotData[index+1] = UInt8(throttleID >> 8)
       index = message.messageType == .locoSlotDataP1 ? 1 : 2
- //     slotData[index] = (slotData[index] & SpeedSteps.protectMask()) | mobileDecoderType.setMask()
+      slotData[index] = (slotData[index] & speedSteps.protectMask()) | speedSteps.setMask()
     }
     
     return slotData
@@ -341,11 +360,11 @@ public class Locomotive : RollingStock {
     delegates.removeValue(forKey: withKey)
   }
   
-  // MARK: CommandStationDelegate Methods
+  // MARK: InterfaceDelegate Methods
   
-  @objc public func locomotiveMessageReceived(message: NetworkMessage) {
+  @objc public func networkMessageReceived(message: NetworkMessage) {
     
-    if let net = network, let cs = net.commandStation {
+    if let network = self.network, let interface = network.interface {
       
       if _throttleID == nil {
         _throttleID = networkController.softwareThrottleID
@@ -364,17 +383,17 @@ public class Locomotive : RollingStock {
             if locoSlotDataP1.slotState == .inUse {
               initState = .waitingForOwnershipConfirmation
               let wb = writeBack(message: message)
-     //         cs.setLocoSlotDataP1(slotData: wb)
+              interface.setLocoSlotDataP1(slotData: wb, timeoutCode: .setLocoSlotData)
             }
             else {
               initState = .waitingToActivate
-      //        cs.moveSlots(sourceSlotNumber: slotNumber, sourceSlotPage: slotPage, destinationSlotNumber: slotNumber, destinationSlotPage: slotPage)
+              interface.moveSlotsP1(sourceSlotNumber: slotNumber, destinationSlotNumber: slotNumber, timeoutCode: .moveSlots)
             }
           }
           else if initState == .waitingToActivate {
             initState = .waitingForOwnershipConfirmation
             let wb = writeBack(message: message)
-    //        cs.setLocoSlotDataP1(slotData: wb)
+            interface.setLocoSlotDataP1(slotData: wb, timeoutCode: .setLocoSlotData)
           }
         }
         break
@@ -437,17 +456,18 @@ public class Locomotive : RollingStock {
             if locoSlotDataP2.slotState == .inUse {
               initState = .waitingForOwnershipConfirmation
               let wb = writeBack(message: message)
-       //       cs.setLocoSlotDataP2(slotData: wb)
+              interface.setLocoSlotDataP2(slotData: wb, timeoutCode: .setLocoSlotData)
             }
             else {
               initState = .waitingToActivate
-        //      cs.moveSlots(sourceSlotNumber: slotNumber, sourceSlotPage: slotPage, destinationSlotNumber: slotNumber, destinationSlotPage: slotPage)
+              interface.moveSlotsP2(sourceSlotNumber: slotNumber, sourceSlotPage: slotPage, destinationSlotNumber: slotNumber, destinationSlotPage: slotPage, timeoutCode: .moveSlots)
             }
           }
           else if initState == .waitingToActivate {
             initState = .waitingForOwnershipConfirmation
             let wb = writeBack(message: message)
-      //      cs.setLocoSlotDataP2(slotData: wb)
+            
+            interface.setLocoSlotDataP2(slotData: wb, timeoutCode: .setLocoSlotData)
           }
         }
         break

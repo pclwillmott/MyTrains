@@ -176,6 +176,8 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, InterfaceDel
     }
   }
   
+  private var needToSetPRMode : Bool = false
+  
   // MARK: Private Methods
   
   private func setup() {
@@ -189,9 +191,11 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, InterfaceDel
     if let programmer = cboCommandStationDS.editorObjectAt(index: cboCommandStation.indexOfSelectedItem) as? Interface {
       if let info = programmer.locoNetProductInfo, info.attributes.contains(.CommandStation) {
         commandStation = networkController.commandStationInterface(commandStation: programmer)
+        needToSetPRMode = false
       }
       else {
         commandStation = programmer
+        needToSetPRMode = true
       }
       if let cs = commandStation {
         observerId = cs.addObserver(observer: self)
@@ -407,7 +411,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, InterfaceDel
     
     switch message.messageType {
     case .timeout:
-      commandStation?.exitProgMode()
+      commandStation?.exitProgMode(needToSetPRMode: needToSetPRMode)
       programmerState = .idle
       lblStatus.stringValue = "Timeout"
       
@@ -596,7 +600,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, InterfaceDel
             loco.save()
             setup()
             programmerState = .idle
-            commandStation?.exitProgMode()
+            commandStation?.exitProgMode(needToSetPRMode: needToSetPRMode)
           }
           break
         case .waitingForWriteReadCV29Data:
@@ -714,7 +718,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, InterfaceDel
           programmerState = .idle
           message = "Write Completed"
           cvTableView.reloadData()
-          commandStation?.exitProgMode()
+          commandStation?.exitProgMode(needToSetPRMode: needToSetPRMode)
           break
         case .waitingForWriteCVData:
           programmerState = .idle
@@ -722,7 +726,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, InterfaceDel
           writeCV!.save()
           message = "Write Completed"
           lblReadCVStatus.stringValue = message
-          commandStation?.exitProgMode()
+          commandStation?.exitProgMode(needToSetPRMode: needToSetPRMode)
         case .waitingForIndexedWriteWriteCV31Data:
           if let loco = locomotive {
             if let cvx = loco.getCV(cvNumber: 31) {
@@ -784,7 +788,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, InterfaceDel
               btnImportCVs.isEnabled = true
               btnExportCVs.isEnabled = true
               cancelRead = false
-              commandStation?.exitProgMode()
+              commandStation?.exitProgMode(needToSetPRMode: needToSetPRMode)
             }
             else if readCV < endAddress {
               if let loco = locomotive {
@@ -805,7 +809,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, InterfaceDel
               btnImportCVs.isEnabled = true
               btnExportCVs.isEnabled = true
               setup()
-              commandStation?.exitProgMode()
+              commandStation?.exitProgMode(needToSetPRMode: needToSetPRMode)
             }
           }
         case .writeMultipleState2:
@@ -838,7 +842,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, InterfaceDel
             btnImportCVs.isEnabled = true
             btnExportCVs.isEnabled = true
             cancelRead = false
-            commandStation?.exitProgMode()
+            commandStation?.exitProgMode(needToSetPRMode: needToSetPRMode)
             return
           }
 
@@ -881,7 +885,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, InterfaceDel
             btnExportCVs.isEnabled = true
             writeMultipleIndex = 0
             setup()
-            commandStation?.exitProgMode()
+            commandStation?.exitProgMode(needToSetPRMode: needToSetPRMode)
           }
 
         default:
@@ -892,27 +896,27 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, InterfaceDel
       else if psd.status == .noDecoderDetected {
         lblStatus.stringValue = "No Decoder Detected"
         programmerState = .idle
-        commandStation?.exitProgMode()
+        commandStation?.exitProgMode(needToSetPRMode: needToSetPRMode)
       }
       else if psd.status == .userAborted {
         lblStatus.stringValue = "User Aborted"
         programmerState = .idle
-        commandStation?.exitProgMode()
+        commandStation?.exitProgMode(needToSetPRMode: needToSetPRMode)
       }
       else if psd.status == .readAckNotDetected {
         lblStatus.stringValue = "Read Ack Not Detected"
         programmerState = .idle
-        commandStation?.exitProgMode()
+        commandStation?.exitProgMode(needToSetPRMode: needToSetPRMode)
       }
       else if psd.status == .writeAckNotDetected {
         lblStatus.stringValue = "Write Ack Not Detected"
         programmerState = .idle
-        commandStation?.exitProgMode()
+        commandStation?.exitProgMode(needToSetPRMode: needToSetPRMode)
       }
       else {
         lblStatus.stringValue = "\(psd.status)"
         programmerState = .idle
-        commandStation?.exitProgMode()
+        commandStation?.exitProgMode(needToSetPRMode: needToSetPRMode)
       }
       
       break
@@ -1007,7 +1011,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, InterfaceDel
       
       if let cs = commandStation, let loco = locomotive {
         
-        cs.enterProgMode()
+        cs.enterProgMode(needToSetPRMode: needToSetPRMode)
         
         programmerState = .waitingForReadCV29Ack
         
@@ -1026,7 +1030,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, InterfaceDel
       
       if let cs = commandStation, let loco = locomotive {
         
-        cs.enterProgMode()
+        cs.enterProgMode(needToSetPRMode: needToSetPRMode)
         
         programmerState = .waitingForWriteReadCV29Ack
         
@@ -1067,7 +1071,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, InterfaceDel
       
       if let cs = commandStation, let loco = locomotive {
         
-        cs.enterProgMode()
+        cs.enterProgMode(needToSetPRMode: needToSetPRMode)
         
         cancelRead = false
         
@@ -1197,7 +1201,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, InterfaceDel
     var reset = true
     if let newValue = Int.fromMultiBaseString(stringValue: sender.stringValue), let loco = locomotive {
       if newValue >= 0 && newValue < 256 {
-        commandStation?.enterProgMode()
+        commandStation?.enterProgMode(needToSetPRMode: needToSetPRMode)
         reset = false
         writeValue = newValue
         if !cv.isIndexedCV {
@@ -1258,7 +1262,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, InterfaceDel
     
     if let cv = findNextCVToWrite(), let value = cv.newValueNumber, let loco = locomotive {
       
-      commandStation?.enterProgMode()
+      commandStation?.enterProgMode(needToSetPRMode: needToSetPRMode)
       
       btnCancelReadCVValues.isEnabled = true
       btnReadCVValues.isEnabled = false

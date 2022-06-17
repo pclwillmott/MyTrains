@@ -375,12 +375,16 @@ extension Interface {
   
   public func setProgMode(mode: ProgrammerMode) {
     
-    let message = NetworkMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_PR_MODE.rawValue, 0x10, UInt8(mode.rawValue), 0x00, 0x00], appendCheckSum: true)
+    var prMode = UInt8(mode.rawValue)
+    
+    if mode == .MS100 && (locoNetProductId == .PR3 || locoNetProductId == .PR3XTRA) && isStandAloneLoconet {
+      prMode |= 0b10
+    }
+    
+    let message = NetworkMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_PR_MODE.rawValue, 0x10, prMode, 0x00, 0x00], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.PRMODE)
 
-//    lastProgrammerMode = mode
-    
   }
   
   public func readCV(progMode:ProgrammingMode, cv:Int, address: Int) {
@@ -796,19 +800,15 @@ extension Interface {
     }
   }
   */
-  public func enterProgMode() {
-    if let info = locoNetProductInfo, info.attributes.contains(.CommandStation) {
-    }
-    else {
- //     setProgMode(mode: .ProgrammerMode)
+  public func enterProgMode(needToSetPRMode: Bool) {
+    if needToSetPRMode {
+      setProgMode(mode: .ProgrammerMode)
     }
   }
   
-  public func exitProgMode() {
-    if let info = locoNetProductInfo, info.attributes.contains(.CommandStation) {
-    }
-    else {
- //     setProgMode(mode: .MS100TerminationDisabled)
+  public func exitProgMode(needToSetPRMode: Bool) {
+    if needToSetPRMode {
+      setProgMode(mode: .MS100)
     }
   }
   

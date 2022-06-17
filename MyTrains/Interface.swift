@@ -463,7 +463,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
               if interfaceState == .waitingForResponse &&
                 outputQueue[0].isValidResponse(messageType: networkMessage.messageType) {
                 
-                if networkMessage.messageType != .programmerBusy {
+          //      if networkMessage.messageType != .programmerBusy {
                   
                   outputQueue.remove(at: 0)
                   
@@ -471,7 +471,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
                   
                   stopTimer = true
                   
-                }
+            //    }
               
               }
               

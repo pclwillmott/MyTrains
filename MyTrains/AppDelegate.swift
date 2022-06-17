@@ -111,7 +111,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
   }
   
   @IBAction func mnuProgramMobileDecoderAddress(_ sender: NSMenuItem) {
-    ModalWindow.ProgramDecoderAddress.runModel()
+    let x = ModalWindow.ProgramDecoderAddress
+    let wc = x.windowController
+    wc.showWindow(nil)
   }
   
   @IBAction func mnuCommandStationConfiguration(_ sender: NSMenuItem) {
