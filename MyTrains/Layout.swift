@@ -12,12 +12,24 @@ public class Layout : EditorObject {
   // MARK: Constructors
   
   init(reader:SqliteDataReader) {
+    
     super.init(primaryKey: -1)
+    
     decode(sqliteDataReader: reader)
+    
+    revertToSaved()
+    
   }
   
   init() {
+    
     super.init(primaryKey: -1)
+    
+    for index in 0...15 {
+      let panel = SwitchBoardPanel(layoutId: -1, panelId: index, panelName: "Panel #\(index + 1)", numberOfColumns: 20, numberOfRows: 20)
+      switchBoardPanels.append(panel)
+    }
+
   }
   
   // MARK: Public properties
@@ -60,7 +72,104 @@ public class Layout : EditorObject {
     }
   }
   
+  public var switchBoardItems : [Int:SwitchBoardItem] = [:] {
+    didSet {
+      modified = true
+    }
+  }
+  
+  public var switchBoardPanels : [SwitchBoardPanel] = [] {
+    didSet {
+      modified = true
+    }
+  }
+  
+  // MARK: Public Methods
+  
+  public func revertToSaved() {
+    switchBoardPanels = _switchBoardPanels
+    switchBoardItems = _switchBoardItems
+  }
+  
   // MARK: Database Methods
+  
+  private var _switchBoardItems : [Int:SwitchBoardItem] {
+    
+    get {
+    
+      let conn = Database.getConnection()
+      
+      let shouldClose = conn.state != .Open
+       
+      if shouldClose {
+        _ = conn.open()
+      }
+       
+      let cmd = conn.createCommand()
+       
+      cmd.commandText = "SELECT \(SwitchBoardItem.columnNames) FROM [\(TABLE.SWITCHBOARD_ITEM)] WHERE [\(SWITCHBOARD_ITEM.LAYOUT_ID)] = \(primaryKey) ORDER BY [\(SWITCHBOARD_ITEM.SWITCHBOARD_ITEM_ID)]"
+
+      var result : [Int:SwitchBoardItem] = [:]
+      
+      if let reader = cmd.executeReader() {
+           
+        while reader.read() {
+          let switchBoardItem = SwitchBoardItem(reader: reader)
+          result[switchBoardItem.key] = switchBoardItem
+        }
+           
+        reader.close()
+           
+      }
+      
+      if shouldClose {
+        conn.close()
+      }
+
+      return result
+      
+    }
+    
+  }
+
+  private var _switchBoardPanels : [SwitchBoardPanel] {
+    
+    get {
+    
+      let conn = Database.getConnection()
+      
+      let shouldClose = conn.state != .Open
+       
+      if shouldClose {
+        _ = conn.open()
+      }
+       
+      let cmd = conn.createCommand()
+       
+      cmd.commandText = "SELECT \(SwitchBoardPanel.columnNames) FROM [\(TABLE.SWITCHBOARD_PANEL)] WHERE [\(SWITCHBOARD_PANEL.LAYOUT_ID)] = \(primaryKey) ORDER BY [\(SWITCHBOARD_PANEL.PANEL_ID)]"
+
+      var result : [SwitchBoardPanel] = []
+      
+      if let reader = cmd.executeReader() {
+           
+        while reader.read() {
+          let switchBoardPanel = SwitchBoardPanel(reader: reader)
+          result.append(switchBoardPanel)
+        }
+           
+        reader.close()
+           
+      }
+      
+      if shouldClose {
+        conn.close()
+      }
+
+      return result
+      
+    }
+    
+  }
   
   private func decode(sqliteDataReader:SqliteDataReader?) {
     
@@ -140,6 +249,23 @@ public class Layout : EditorObject {
       modified = false
       
     }
+    
+    for panel in switchBoardPanels {
+      panel.layoutId = self.primaryKey
+      panel.save()
+    }
+    
+    for kv in switchBoardItems {
+      let item = kv.value
+      item.layoutId = primaryKey
+      if item.nextAction == .delete {
+        SwitchBoardItem.delete(primaryKey: item.primaryKey)
+        switchBoardItems[item.primaryKey] = nil
+      }
+      else {
+        item.save()
+      }
+    }
 
   }
 
@@ -195,8 +321,12 @@ public class Layout : EditorObject {
   }
   
   public static func delete(primaryKey: Int) {
-    let sql = "DELETE FROM [\(TABLE.LAYOUT)] WHERE [\(LAYOUT.LAYOUT_ID)] = \(primaryKey)"
-    Database.execute(commands: [sql])
+    let sql : [String] = [
+      "DELETE FROM [\(TABLE.LAYOUT)] WHERE [\(LAYOUT.LAYOUT_ID)] = \(primaryKey)",
+      "DELETE FROM [\(TABLE.SWITCHBOARD_ITEM)] WHERE [\(SWITCHBOARD_ITEM.LAYOUT_ID)] = \(primaryKey)",
+      "DELETE FROM [\(TABLE.SWITCHBOARD_PANEL)] WHERE [\(SWITCHBOARD_PANEL.LAYOUT_ID)] = \(primaryKey)",
+    ]
+    Database.execute(commands: sql)
   }
   
 }

@@ -25,7 +25,7 @@ class SwitchBoardEditorVC: NSViewController, NSWindowDelegate, SwitchBoardViewDe
   }
   
   override func viewWillAppear() {
-    
+        
     self.view.window?.delegate = self
     
     for x in self.view.subviews {
@@ -38,20 +38,19 @@ class SwitchBoardEditorVC: NSViewController, NSWindowDelegate, SwitchBoardViewDe
     
     groupButtons.append(btnAddToGroup)
     groupButtons.append(btnRemoveFromGroup)
+    
+    switchBoardView.layout = networkController.layout
+    
+    panelsChanged()
 
     switchBoardView.delegate = self
     
     switchBoardView.groupId = -1
 
-    for index in 0...15 {
-      let panel = SwitchBoardPanel(layoutId: -1, panelId: index, panelName: "Panel #\(index + 1)", numberOfColumns: 20, numberOfRows: 20)
-      panels.append(panel)
-    }
-    switchBoardView.panels = panels
-          
     scrollView.documentView?.frame = NSMakeRect(0.0, 0.0, 2000.0, 2000.0)
     scrollView.allowsMagnification = true
     scrollView.magnification = 1.0
+    
   }
   
   // MARK: Private Properties
@@ -60,8 +59,6 @@ class SwitchBoardEditorVC: NSViewController, NSWindowDelegate, SwitchBoardViewDe
   
   private var groupButtons : [NSButton] = []
   
-  private var panels : [SwitchBoardPanel] = []
-
   // MARK: Private Methods
   
   // MARK: SwitchBoardViewDelegate
@@ -74,14 +71,17 @@ class SwitchBoardEditorVC: NSViewController, NSWindowDelegate, SwitchBoardViewDe
   
   func panelsChanged() {
     cboPanelId.removeAllItems()
-    for panel in switchBoardView.panels {
-      let name = "\(panel.panelId + 1): \(panel.panelName)"
-      cboPanelId.addItem(withObjectValue: name)
+    if let layout = networkController.layout {
+      let panels = layout.switchBoardPanels
+      for panel in panels {
+        let name = "\(panel.panelId + 1): \(panel.panelName)"
+        cboPanelId.addItem(withObjectValue: name)
+      }
+      cboPanelId.selectItem(at: switchBoardView.panelId)
+      txtGridX.integerValue = panels[switchBoardView.panelId].numberOfColumns
+      txtGridY.integerValue = panels[switchBoardView.panelId].numberOfRows
+      txtPanelName.stringValue = panels[switchBoardView.panelId].panelName
     }
-    cboPanelId.selectItem(at: switchBoardView.panelId)
-    txtGridX.integerValue = switchBoardView.panels[switchBoardView.panelId].numberOfColumns
-    txtGridY.integerValue = switchBoardView.panels[switchBoardView.panelId].numberOfRows
-    txtPanelName.stringValue = switchBoardView.panels[switchBoardView.panelId].panelName
   }
   
   // MARK: Outlets & Actions
@@ -213,28 +213,44 @@ class SwitchBoardEditorVC: NSViewController, NSWindowDelegate, SwitchBoardViewDe
   @IBOutlet weak var txtGridX: NSTextField!
   
   @IBAction func txtGridXAction(_ sender: NSTextField) {
-    panels[switchBoardView.panelId].numberOfColumns = sender.integerValue
-    switchBoardView.panels = panels
+    if let layout = networkController.layout {
+      let panels = layout.switchBoardPanels
+      panels[switchBoardView.panelId].numberOfColumns = sender.integerValue
+      switchBoardView.needsDisplay = true
+    }
   }
   
   @IBOutlet weak var txtGridY: NSTextField!
   
   @IBAction func txtGridYAction(_ sender: NSTextField) {
-    panels[switchBoardView.panelId].numberOfRows = sender.integerValue
-    switchBoardView.panels = panels
+    if let layout = networkController.layout {
+      let panels = layout.switchBoardPanels
+      panels[switchBoardView.panelId].numberOfRows = sender.integerValue
+      switchBoardView.needsDisplay = true
+    }
   }
   
   @IBOutlet weak var txtPanelName: NSTextField!
   
   @IBAction func txtPanelNameAction(_ sender: NSTextField) {
-    panels[switchBoardView.panelId].panelName = sender.stringValue
-    switchBoardView.panels = panels
+    if let layout = networkController.layout {
+      let panels = layout.switchBoardPanels
+      panels[switchBoardView.panelId].panelName = sender.stringValue
+      switchBoardView.needsDisplay = true
+    }
   }
   
   @IBAction func btnCancelAction(_ sender: NSButton) {
+    if let layout = networkController.layout {
+      layout.revertToSaved()
+    }
+    self.view.window?.close()
   }
   
   @IBAction func btnSaveAction(_ sender: NSButton) {
+    if let layout = networkController.layout {
+      layout.save()
+    }
   }
   
 }

@@ -175,7 +175,13 @@ class SqliteParameters {
   
   func replaceParameters(target:String) -> String {
     var output : String = target
+    var params : [(key:String, value:String)] = []
     for (key, value) in self.parameters {
+      params.append((key: key, value: value))
+    }
+    params.sort { $0.key.count > $1.key.count }
+    
+    for (key, value) in params {
       output = output.replacingOccurrences(of: key, with: value)
     }
     return output

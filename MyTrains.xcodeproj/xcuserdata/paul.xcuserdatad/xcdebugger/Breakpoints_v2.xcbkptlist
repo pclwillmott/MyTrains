@@ -62,8 +62,8 @@
             filePath = "MyTrains/Sqlite.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "271"
-            endingLineNumber = "271"
+            startingLineNumber = "277"
+            endingLineNumber = "277"
             landmarkName = "getInt(index:)"
             landmarkType = "7">
          </BreakpointContent>

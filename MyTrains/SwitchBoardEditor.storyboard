@@ -261,8 +261,8 @@
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VDC-sM-AHe" customClass="SwitchBoardEditorView" customModule="MyTrains" customModuleProvider="target">
-                                                    <rect key="frame" x="20" y="71" width="553" height="441"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <rect key="frame" x="20" y="20" width="629" height="492"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="lineWidth">
                                                             <real key="value" value="5"/>

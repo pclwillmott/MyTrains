@@ -18,7 +18,7 @@ public enum TurnoutMotorType : Int {
   case solenoid = 1
 }
 
-class SwitchBoardItem : EditorObject {
+public class SwitchBoardItem : EditorObject {
 
   // MARK: Constructors
   
@@ -721,7 +721,7 @@ class SwitchBoardItem : EditorObject {
         "[\(SWITCHBOARD_ITEM.DN_SPEED_STOP_EXPECTED_UD)], " +
         "[\(SWITCHBOARD_ITEM.DN_SPEED_RESTRICTED_UD)], " +
         "[\(SWITCHBOARD_ITEM.DN_SPEED_BRAKE_UD)], " +
-        "[\(SWITCHBOARD_ITEM.DN_SPEED_BRAKE_UD)], " +
+        "[\(SWITCHBOARD_ITEM.DN_SPEED_SHUNT_UD)], " +
         "[\(SWITCHBOARD_ITEM.DP_BRAKE_POSITION)], " +
         "[\(SWITCHBOARD_ITEM.DP_STOP_POSITION)], " +
         "[\(SWITCHBOARD_ITEM.DP_SPEED_MAX)], " +
@@ -733,7 +733,7 @@ class SwitchBoardItem : EditorObject {
         "[\(SWITCHBOARD_ITEM.DP_SPEED_STOP_EXPECTED_UD)], " +
         "[\(SWITCHBOARD_ITEM.DP_SPEED_RESTRICTED_UD)], " +
         "[\(SWITCHBOARD_ITEM.DP_SPEED_BRAKE_UD)], " +
-        "[\(SWITCHBOARD_ITEM.DP_SPEED_BRAKE_UD)], " +
+        "[\(SWITCHBOARD_ITEM.DP_SPEED_SHUNT_UD)], " +
         "[\(SWITCHBOARD_ITEM.SW1_LOCONET_DEVICE_ID)], " +
         "[\(SWITCHBOARD_ITEM.SW1_PORT)], " +
         "[\(SWITCHBOARD_ITEM.SW1_TURNOUT_MOTOR_TYPE)], " +
@@ -910,30 +910,37 @@ class SwitchBoardItem : EditorObject {
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.IS_CRITICAL)", value: isCritical)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.UNITS_SPEED)", value: unitsSpeed.rawValue)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.UNITS_POSITION)", value: unitsPosition.rawValue)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DN_BRAKE_POSITION)", value: dirNextBrakePosition)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DN_STOP_POSITION)", value: dirNextStopPosition)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DN_SPEED_MAX)", value: dirNextSpeedMax)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DN_SPEED_STOP_EXPECTED)", value: dirNextSpeedStopExpected)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DN_SPEED_RESTRICTED)", value: dirNextSpeedRestricted)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DN_SPEED_BRAKE)", value: dirNextSpeedBrake)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DN_SPEED_SHUNT)", value: dirNextSpeedShunt)
+      
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DN_SPEED_MAX_UD)", value: dirNextSpeedMaxUseDefault)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DN_SPEED_STOP_EXPECTED_UD)", value: dirNextSpeedStopExpectedUseDefault)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DN_SPEED_RESTRICTED_UD)", value: dirNextSpeedRestrictedUseDefault)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DN_SPEED_BRAKE_UD)", value: dirNextSpeedBrakeUseDefault)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DN_SPEED_SHUNT_UD)", value: dirNextSpeedShuntUseDefault)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DP_BRAKE_POSITION)", value: dirPreviousBrakePosition)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DP_STOP_POSITION)", value: dirPreviousStopPosition)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DP_SPEED_MAX)", value: dirPreviousSpeedMax)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DP_SPEED_STOP_EXPECTED)", value: dirPreviousSpeedStopExpected)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DP_SPEED_RESTRICTED)", value: dirPreviousSpeedRestricted)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DP_SPEED_BRAKE)", value: dirPreviousSpeedBrake)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DP_SPEED_SHUNT)", value: dirPreviousSpeedShunt)
+      
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DP_SPEED_MAX_UD)", value: dirPreviousSpeedMaxUseDefault)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DP_SPEED_STOP_EXPECTED_UD)", value: dirPreviousSpeedStopExpectedUseDefault)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DP_SPEED_RESTRICTED_UD)", value: dirPreviousSpeedRestrictedUseDefault)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DP_SPEED_BRAKE_UD)", value: dirPreviousSpeedBrakeUseDefault)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DP_SPEED_SHUNT_UD)", value: dirPreviousSpeedShuntUseDefault)
+
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DN_BRAKE_POSITION)", value: dirNextBrakePosition)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DN_STOP_POSITION)", value: dirNextStopPosition)
+      
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DP_BRAKE_POSITION)", value: dirPreviousBrakePosition)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DP_STOP_POSITION)", value: dirPreviousStopPosition)
+      
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DN_SPEED_MAX)", value: dirNextSpeedMax)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DN_SPEED_STOP_EXPECTED)", value: dirNextSpeedStopExpected)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DN_SPEED_RESTRICTED)", value: dirNextSpeedRestricted)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DN_SPEED_BRAKE)", value: dirNextSpeedBrake)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DN_SPEED_SHUNT)", value: dirNextSpeedShunt)
+      
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DP_SPEED_MAX)", value: dirPreviousSpeedMax)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DP_SPEED_STOP_EXPECTED)", value: dirPreviousSpeedStopExpected)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DP_SPEED_RESTRICTED)", value: dirPreviousSpeedRestricted)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DP_SPEED_BRAKE)", value: dirPreviousSpeedBrake)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DP_SPEED_SHUNT)", value: dirPreviousSpeedShunt)
+      
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.SW1_LOCONET_DEVICE_ID)", value: sw1LocoNetDeviceId)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.SW1_PORT)", value: sw1Port)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.SW1_TURNOUT_MOTOR_TYPE)", value: sw1TurnoutMotorType.rawValue)
@@ -1030,4 +1037,9 @@ class SwitchBoardItem : EditorObject {
     return (location.x & 0xffff) | ((location.y & 0xffff) << 16) | ((panelId & 0xff) << 32) | ((nextAction == .delete) ? (1 << 40) : 0)
   }
   
+  public static func delete(primaryKey: Int) {
+    let sql = "DELETE FROM [\(TABLE.SWITCHBOARD_ITEM)] WHERE [\(SWITCHBOARD_ITEM.SWITCHBOARD_ITEM_ID)] = \(primaryKey)"
+    Database.execute(commands: [sql])
+  }
+
 }

@@ -8,7 +8,7 @@
 import Foundation
 import Cocoa
 
-// MARK: SwitchBoardPart
+// MARK: SwitchBoardItemPartType
 
 public enum SwitchBoardItemPartType : Int {
   
@@ -120,4 +120,3 @@ public enum BlockDirection : Int {
   case bidirectional = 0
   case unidirectional = 1
 }
-

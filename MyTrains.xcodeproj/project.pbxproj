@@ -123,6 +123,7 @@
 		DAB07498276EB6C3003278BE /* Sqlite.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB07497276EB6C3003278BE /* Sqlite.swift */; };
 		DAB0749A276EB8B1003278BE /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB07499276EB8B1003278BE /* Database.swift */; };
 		DAB4FF5E2854F8CF00D74920 /* LocomotiveType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB4FF5D2854F8CF00D74920 /* LocomotiveType.swift */; };
+		DADBBFEA285DF36700426CD5 /* LayoutSwitchBoardExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADBBFE9285DF36700426CD5 /* LayoutSwitchBoardExtensions.swift */; };
 		DAE9DBB728258E12004BC75D /* LocoNetProducts.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE9DBB628258E12004BC75D /* LocoNetProducts.swift */; };
 		DAEA9CF7272D8DA900C9B3EC /* NetworkConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEA9CF6272D8DA900C9B3EC /* NetworkConstants.swift */; };
 		DAEA9CFA272D8FBE00C9B3EC /* NetworkMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEA9CF9272D8FBE00C9B3EC /* NetworkMessage.swift */; };
@@ -251,6 +252,7 @@
 		DAB07497276EB6C3003278BE /* Sqlite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sqlite.swift; sourceTree = "<group>"; };
 		DAB07499276EB8B1003278BE /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		DAB4FF5D2854F8CF00D74920 /* LocomotiveType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocomotiveType.swift; sourceTree = "<group>"; };
+		DADBBFE9285DF36700426CD5 /* LayoutSwitchBoardExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutSwitchBoardExtensions.swift; sourceTree = "<group>"; };
 		DAE9DBB628258E12004BC75D /* LocoNetProducts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoNetProducts.swift; sourceTree = "<group>"; };
 		DAEA9CF6272D8DA900C9B3EC /* NetworkConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkConstants.swift; sourceTree = "<group>"; };
 		DAEA9CF9272D8FBE00C9B3EC /* NetworkMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMessage.swift; sourceTree = "<group>"; };
@@ -351,6 +353,7 @@
 				DAA867C327930C62008B6EEC /* IntExtensions.swift */,
 				DA53B251276E478400AB956C /* IPLDevData.swift */,
 				DA0DA2792779E96B00E4F23C /* Layout.swift */,
+				DADBBFE9285DF36700426CD5 /* LayoutSwitchBoardExtensions.swift */,
 				DA7B4726273803BA00BCD587 /* Locomotive.swift */,
 				DAB4FF5D2854F8CF00D74920 /* LocomotiveType.swift */,
 				DA28E5882824943200E1604C /* LocoNetDevice.swift */,
@@ -601,6 +604,7 @@
 				DA5B4601276F4E38005CA03C /* DatabaseConstants.swift in Sources */,
 				DA1DA5EA28280EEE00E0F993 /* BaudRate.swift in Sources */,
 				DA412E162780DC3C00748CCD /* DecoderFunction.swift in Sources */,
+				DADBBFEA285DF36700426CD5 /* LayoutSwitchBoardExtensions.swift in Sources */,
 				DA8B5D1B282FE23900D39F07 /* MessageTiming.swift in Sources */,
 				DA28C2C52801ED9700857471 /* QuerySlot3.swift in Sources */,
 				DA434294283698CA00E8D555 /* SerialPort.c in Sources */,

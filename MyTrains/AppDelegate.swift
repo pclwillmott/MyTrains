@@ -84,7 +84,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
   }
   
   @IBAction func mnuSwitchBoardEditor(_ sender: NSMenuItem) {
-    ModalWindow.SwitchBoardEditor.runModel()
+    if let _ = networkController.layout {
+      ModalWindow.SwitchBoardEditor.runModel()
+    }
   }
   
   // MARK: Control Menu

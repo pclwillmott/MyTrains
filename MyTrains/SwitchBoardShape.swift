@@ -57,12 +57,12 @@ class SwitchBoardShape {
           path.lineWidth = lineWidth
           
           path.appendArc(withCenter: NSMakePoint(coordinates[0].x, coordinates[0].y), radius: shapePart.parameters[0] * cellSize, startAngle: 0.0, endAngle: 360.0)
-          /*
+          
           if let fillColor = shapePart.actionColors[.fill] {
             isEnabled ? NSColor.setFillColor(color:fillColor) : NSColor.setFillColor(color: .lightGray)
             path.fill()
           }
-          */
+          
           path.stroke()
           
         case .rectangle:
@@ -81,12 +81,12 @@ class SwitchBoardShape {
           path.line(to: NSMakePoint(x2, y2))
           path.line(to: NSMakePoint(x1, y2))
           path.close()
-/*
+
           if let fillColor = shapePart.actionColors[.fill] {
             isEnabled ? NSColor.setFillColor(color: fillColor) : NSColor.setFillColor(color: .lightGray)
             path.fill()
           }
-*/
+
           path.stroke()
 
         case .irregular:
@@ -102,12 +102,12 @@ class SwitchBoardShape {
           }
           
           path.close()
-          /*
+        
           if let fillColor = shapePart.actionColors[.fill] {
             isEnabled ? NSColor.setFillColor(color: fillColor) : NSColor.setFillColor(color: .lightGray)
             path.fill()
           }
-*/
+
           path.stroke()
 
         case .ellipse:
@@ -119,12 +119,12 @@ class SwitchBoardShape {
           let rect = NSRect(coordinates: coordinates)
           
           path.appendOval(in: rect)
-          /*
+          
           if let fillColor = shapePart.actionColors[.fill] {
             isEnabled ? NSColor.setFillColor(color: fillColor) : NSColor.setFillColor(color: .lightGray)
             path.fill()
           }
-          */
+          
           path.stroke()
           
         case .line:

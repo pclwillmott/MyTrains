@@ -7,7 +7,7 @@
 
 import Foundation
 
-class SwitchBoardPanel : EditorObject {
+public class SwitchBoardPanel : EditorObject {
   
   // MARK: Constructors
   
@@ -168,6 +168,11 @@ class SwitchBoardPanel : EditorObject {
         "[\(SWITCHBOARD_PANEL.NUMBER_OF_COLUMNS)], " +
         "[\(SWITCHBOARD_PANEL.NUMBER_OF_ROWS)]"
     }
+  }
+
+  public static func delete(primaryKey: Int) {
+    let sql = "DELETE FROM [\(TABLE.SWITCHBOARD_PANEL)] WHERE [\(SWITCHBOARD_PANEL.SWITCHBOARD_PANEL_ID)] = \(primaryKey)"
+    Database.execute(commands: [sql])
   }
 
 }
