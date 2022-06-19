@@ -29,7 +29,7 @@ class SwitchBoardShapeButton: NSButton {
     
     path.fill()
     
-    SwitchBoardShape.drawShape(partType: partType, orientation: 0, location: (x:0,y:0), lineWidth: lineWidth, cellSize: cellSize, isButton: true, isEnabled: isEnabled)
+    SwitchBoardShape.drawShape(partType: partType, orientation: .deg0, location: (x:0,y:0), lineWidth: lineWidth, cellSize: cellSize, isButton: true, isEnabled: isEnabled)
     
     if isEnabled {
       

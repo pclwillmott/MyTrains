@@ -13,12 +13,6 @@ public enum RollingStockType : Int {
   case wagon = 1
 }
 
-public enum TrackElectrificationType : Int {
-  case notElectrified = 0
-  case thirdRail = 1
-  case overhead = 2
-}
-
 public class RollingStock : EditorObject, DecoderFunctionDelegate {
   
   // MARK: Constructors
@@ -163,7 +157,7 @@ public class RollingStock : EditorObject, DecoderFunctionDelegate {
     }
   }
   
-  public var trackGauge : TrackGauge = .unknown {
+  public var trackGauge : TrackGauge = TrackGauge.defaultValue {
     didSet {
       modified = true
     }
@@ -181,19 +175,19 @@ public class RollingStock : EditorObject, DecoderFunctionDelegate {
     }
   }
   
-  public var unitsLength : LengthUnit = .centimeters {
+  public var unitsLength : UnitLength = UnitLength.defaultValue {
     didSet {
       modified = true
     }
   }
   
-  public var unitsFeedbackOccupancyOffset : LengthUnit = .centimeters {
+  public var unitsFeedbackOccupancyOffset : UnitLength = UnitLength.defaultValue {
     didSet {
       modified = true
     }
   }
   
-  public var unitsSpeed : SpeedUnit = .milesPerHour {
+  public var unitsSpeed : UnitSpeed = UnitSpeed.defaultValue {
     didSet {
       modified = true
     }
@@ -334,7 +328,7 @@ public class RollingStock : EditorObject, DecoderFunctionDelegate {
       }
 
       if !reader.isDBNull(index: 16) {
-        trackGauge = TrackGauge(rawValue: reader.getInt(index: 16)!) ?? .unknown
+        trackGauge = TrackGauge(rawValue: reader.getInt(index: 16)!) ?? TrackGauge.defaultValue
       }
       
       if !reader.isDBNull(index: 17) {
@@ -346,15 +340,15 @@ public class RollingStock : EditorObject, DecoderFunctionDelegate {
       }
 
       if !reader.isDBNull(index: 19) {
-        unitsLength = LengthUnit(rawValue: reader.getInt(index: 19)!) ?? .centimeters
+        unitsLength = UnitLength(rawValue: reader.getInt(index: 19)!) ?? UnitLength.defaultValue
       }
       
       if !reader.isDBNull(index: 20) {
-        unitsFeedbackOccupancyOffset = LengthUnit(rawValue: reader.getInt(index: 20)!) ?? .centimeters
+        unitsFeedbackOccupancyOffset = UnitLength(rawValue: reader.getInt(index: 20)!) ?? UnitLength.defaultValue
       }
       
       if !reader.isDBNull(index: 21) {
-        unitsSpeed = SpeedUnit(rawValue: reader.getInt(index: 21)!) ?? .milesPerHour
+        unitsSpeed = UnitSpeed(rawValue: reader.getInt(index: 21)!) ?? UnitSpeed.defaultValue
       }
       
       if !reader.isDBNull(index: 22) {

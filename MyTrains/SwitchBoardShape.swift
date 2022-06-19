@@ -12,7 +12,7 @@ class SwitchBoardShape {
   
   // MARK: Class Methods
   
-  public static func drawShape(partType: SwitchBoardItemPartType, orientation: Int, location: SwitchBoardLocation, lineWidth:CGFloat, cellSize: CGFloat, isButton: Bool, isEnabled: Bool) {
+  public static func drawShape(partType: SwitchBoardItemPartType, orientation: Orientation, location: SwitchBoardLocation, lineWidth:CGFloat, cellSize: CGFloat, isButton: Bool, isEnabled: Bool) {
     
     if let shape = SwitchBoardShape.getShape(part: partType, orientation: orientation) {
 
@@ -26,7 +26,7 @@ class SwitchBoardShape {
       let bx = (CGFloat(location.x) + 0.5) * cellSize
       let by = (CGFloat(location.y) + 0.5) * cellSize
       
-      let theta : CGFloat = CGFloat(orientation >> 1) * -0.5 * CGFloat.pi
+      let theta : CGFloat = CGFloat(orientation.rawValue >> 1) * -0.5 * CGFloat.pi
       
       let sinTheta = sin(theta)
       
@@ -163,9 +163,9 @@ class SwitchBoardShape {
 
   }
   
-  public static func getShape(part: SwitchBoardItemPartType, orientation: Int) -> Shape? {
+  public static func getShape(part: SwitchBoardItemPartType, orientation: Orientation) -> Shape? {
     if let shape = shapes[part] {
-      return shape[shape.count == 1 ? 0 : orientation & 1]
+      return shape[shape.count == 1 ? 0 : orientation.rawValue & 1]
     } 
     return nil
   }

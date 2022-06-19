@@ -49,35 +49,6 @@ public enum SpeedSteps : Int {
   
 }
 
-public enum TrackGauge : Int {
-  case em         = 0
-  case ho         = 1
-  case n          = 2
-  case o          = 3
-  case o14        = 4
-  case oo         = 5
-  case ooo        = 6
-  case p4         = 7
-  case s          = 8
-  case scaleSeven = 9
-  case tt         = 10
-  case tt3        = 11
-  case unknown    = 0xffff
-}
-
-public enum LengthUnit : Int {
-  case millimeters = 0
-  case centimeters = 1
-  case meters = 2
-  case inches = 3
-  case feet = 4
-}
-
-public enum SpeedUnit : Int {
-  case kilometersPerHour = 0
-  case milesPerHour = 1
-}
-
 public enum LocomotiveDirection {
   case forward
   case reverse

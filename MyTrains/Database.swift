@@ -199,7 +199,8 @@ class Database {
               "[\(SWITCHBOARD_ITEM.GRADIENT)]                   REAL NOT NULL," +
               "[\(SWITCHBOARD_ITEM.IS_CRITICAL)]                INT NOT NULL," +
               "[\(SWITCHBOARD_ITEM.UNITS_SPEED)]                INT NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.UNITS_POSITION)]             INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.DN_UNITS_POSITION)]          INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.DP_UNITS_POSITION)]          INT NOT NULL," +
               "[\(SWITCHBOARD_ITEM.DN_BRAKE_POSITION)]          REAL NOT NULL," +
               "[\(SWITCHBOARD_ITEM.DN_STOP_POSITION)]           REAL NOT NULL," +
               "[\(SWITCHBOARD_ITEM.DN_SPEED_MAX)]               REAL NOT NULL," +

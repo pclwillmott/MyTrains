@@ -10,24 +10,25 @@ import Cocoa
 
 enum AppStoryboard : String {
   
-  case Main                        = "Main"
-  case Monitor                     = "Monitor"
-  case EditNetworks                = "EditNetworks"
-  case EditLayouts                 = "EditLayouts"
-  case EditLocomotives             = "EditLocomotives"
-  case EditWagons                  = "EditWagons"
-  case EditTrains                  = "EditTrains"
-  case EditSensors                 = "EditSensors"
-  case EditSwitches                = "EditSwitches"
-  case EditInterfaces              = "EditInterfaces"
-  case Throttle                    = "Throttle"
-  case ProgramDecoderAddress       = "ProgramDecoderAddress"
-  case SlotView                    = "SlotView"
-  case CommandStationConfiguration = "CommandStationConfiguration"
-  case DashBoard                   = "DashBoard"
-  case GroupSetup                  = "GroupSetup"
-  case SwitchBoardEditor           = "SwitchBoardEditor"
-  case UpdateFirmware              = "UpdateFirmware"
+  case Main                         = "Main"
+  case Monitor                      = "Monitor"
+  case EditNetworks                 = "EditNetworks"
+  case EditLayouts                  = "EditLayouts"
+  case EditLocomotives              = "EditLocomotives"
+  case EditWagons                   = "EditWagons"
+  case EditTrains                   = "EditTrains"
+  case EditSensors                  = "EditSensors"
+  case EditSwitches                 = "EditSwitches"
+  case EditInterfaces               = "EditInterfaces"
+  case Throttle                     = "Throttle"
+  case ProgramDecoderAddress        = "ProgramDecoderAddress"
+  case SlotView                     = "SlotView"
+  case CommandStationConfiguration  = "CommandStationConfiguration"
+  case DashBoard                    = "DashBoard"
+  case GroupSetup                   = "GroupSetup"
+  case SwitchBoardEditor            = "SwitchBoardEditor"
+  case UpdateFirmware               = "UpdateFirmware"
+  case SwitchBoardItemPropertySheet = "SwitchBoardItemPropertySheet"
   
   var instance : NSStoryboard {
     return NSStoryboard(name: self.rawValue, bundle: Bundle.main)
@@ -35,25 +36,26 @@ enum AppStoryboard : String {
   
 }
 
-let storyboardLookup            : [String:AppStoryboard] = [
-  "Monitor"                     : AppStoryboard.Monitor,
-  "Main"                        : AppStoryboard.Main,
-  "EditNetworks"                : AppStoryboard.EditNetworks,
-  "EditLayouts"                 : AppStoryboard.EditLayouts,
-  "EditLocomotives"             : AppStoryboard.EditLocomotives,
-  "EditWagons"                  : AppStoryboard.EditWagons,
-  "EditTrains"                  : AppStoryboard.EditTrains,
-  "EditSensors"                 : AppStoryboard.EditSensors,
-  "EditSwitches"                : AppStoryboard.EditSwitches,
-  "EditInterfaces"              : AppStoryboard.EditInterfaces,
-  "Throttle"                    : AppStoryboard.Throttle,
-  "ProgramDecoderAddress"       : AppStoryboard.ProgramDecoderAddress,
-  "SlotView"                    : AppStoryboard.SlotView,
-  "CommandStationConfiguration" : AppStoryboard.CommandStationConfiguration,
-  "DashBoard"                   : AppStoryboard.DashBoard,
-  "GroupSetup"                  : AppStoryboard.GroupSetup,
-  "SwitchBoardEditor"           : AppStoryboard.SwitchBoardEditor,
-  "UpdateFirmware"              : AppStoryboard.UpdateFirmware
+let storyboardLookup             : [String:AppStoryboard] = [
+  "Monitor"                      : AppStoryboard.Monitor,
+  "Main"                         : AppStoryboard.Main,
+  "EditNetworks"                 : AppStoryboard.EditNetworks,
+  "EditLayouts"                  : AppStoryboard.EditLayouts,
+  "EditLocomotives"              : AppStoryboard.EditLocomotives,
+  "EditWagons"                   : AppStoryboard.EditWagons,
+  "EditTrains"                   : AppStoryboard.EditTrains,
+  "EditSensors"                  : AppStoryboard.EditSensors,
+  "EditSwitches"                 : AppStoryboard.EditSwitches,
+  "EditInterfaces"               : AppStoryboard.EditInterfaces,
+  "Throttle"                     : AppStoryboard.Throttle,
+  "ProgramDecoderAddress"        : AppStoryboard.ProgramDecoderAddress,
+  "SlotView"                     : AppStoryboard.SlotView,
+  "CommandStationConfiguration"  : AppStoryboard.CommandStationConfiguration,
+  "DashBoard"                    : AppStoryboard.DashBoard,
+  "GroupSetup"                   : AppStoryboard.GroupSetup,
+  "SwitchBoardEditor"            : AppStoryboard.SwitchBoardEditor,
+  "UpdateFirmware"               : AppStoryboard.UpdateFirmware,
+  "SwitchBoardItemPropertySheet" : AppStoryboard.SwitchBoardItemPropertySheet
 ]
 
 /*
@@ -67,24 +69,25 @@ let storyboardLookup            : [String:AppStoryboard] = [
 
 enum ModalWindow : String {
   
-  case Monitor                     = "Monitor"
-  case Main                        = "Main"
-  case EditNetworks                = "EditNetworks"
-  case EditLayouts                 = "EditLayouts"
-  case EditLocomotives             = "EditLocomotives"
-  case EditWagons                  = "EditWagons"
-  case EditTrains                  = "EditTrains"
-  case EditSensors                 = "EditSensors"
-  case EditSwitches                = "EditSwitches"
-  case EditInterfaces              = "EditInterfaces"
-  case Throttle                    = "Throttle"
-  case ProgramDecoderAddress       = "ProgramDecoderAddress"
-  case SlotView                    = "SlotView"
-  case CommandStationConfiguration = "CommandStationConfiguration"
-  case DashBoard                   = "DashBoard"
-  case GroupSetup                  = "GroupSetup"
-  case SwitchBoardEditor           = "SwitchBoardEditor"
-  case UpdateFirmware              = "UpdateFirmware"
+  case Monitor                      = "Monitor"
+  case Main                         = "Main"
+  case EditNetworks                 = "EditNetworks"
+  case EditLayouts                  = "EditLayouts"
+  case EditLocomotives              = "EditLocomotives"
+  case EditWagons                   = "EditWagons"
+  case EditTrains                   = "EditTrains"
+  case EditSensors                  = "EditSensors"
+  case EditSwitches                 = "EditSwitches"
+  case EditInterfaces               = "EditInterfaces"
+  case Throttle                     = "Throttle"
+  case ProgramDecoderAddress        = "ProgramDecoderAddress"
+  case SlotView                     = "SlotView"
+  case CommandStationConfiguration  = "CommandStationConfiguration"
+  case DashBoard                    = "DashBoard"
+  case GroupSetup                   = "GroupSetup"
+  case SwitchBoardEditor            = "SwitchBoardEditor"
+  case UpdateFirmware               = "UpdateFirmware"
+  case SwitchBoardItemPropertySheet = "SwitchBoardItemPropertySheet"
 
   var windowController : NSWindowController {
     let storyboard = storyboardLookup[self.rawValue]!

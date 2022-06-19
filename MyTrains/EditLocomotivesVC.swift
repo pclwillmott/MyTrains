@@ -38,6 +38,11 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     
     editorView.dictionary = networkController.locomotives
     
+    UnitLength.populate(comboBox: cboLengthUnits)
+    UnitLength.populate(comboBox: cboOccupancyFeedbackOffsetUnits)
+    TrackGauge.populate(comboBox: cboTrackGuage)
+    UnitSpeed.populate(comboBox: cboMaximumSpeedUnits)
+    
 //    cboDecoderModel.dataSource = cboDecoderModelDS
     
 //    cboModelManufacturer.dataSource = cboModelManufacturerDS
@@ -193,9 +198,9 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     locomotive.rollingStockName = txtLocomotiveName.stringValue
     locomotive.locomotiveType = LocomotiveType.getType(forName: cboPowerSource.stringValue)
     locomotive.length = Double(txtLength.stringValue) ?? 0.0
-    locomotive.unitsLength = LengthUnit(rawValue: cboLengthUnits.indexOfSelectedItem) ?? .centimeters
+    locomotive.unitsLength = UnitLength(rawValue: cboLengthUnits.indexOfSelectedItem) ?? UnitLength.defaultValue
     locomotive.scale = Double(txtScale.stringValue) ?? 1.0
-    locomotive.trackGauge = TrackGauge(rawValue: cboTrackGuage.indexOfSelectedItem) ?? .oo
+    locomotive.trackGauge = TrackGauge(rawValue: cboTrackGuage.indexOfSelectedItem) ?? TrackGauge.defaultValue
     locomotive.speedSteps = SpeedSteps(rawValue: cboDecoderType.indexOfSelectedItem) ?? .dcc128A
     locomotive.mDecoderAddress = Int(txtAddress.stringValue) ?? -1
     locomotive.aDecoderAddress = Int(txtAccessoryDecoderAddress.stringValue) ?? -1
@@ -203,10 +208,10 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     locomotive.aDecoderInstalled = chkAccessoryDecoderInstalled.state == .on
     locomotive.feedbackOccupancyOffsetFront = Double(txtOccupancyFeedbackOffsetFront.stringValue) ?? 0.0
     locomotive.feedbackOccupancyOffsetRear = Double(txtOccupancyFeedbackOffsetRear.stringValue) ?? 0.0
-    locomotive.unitsFeedbackOccupancyOffset = LengthUnit(rawValue: cboOccupancyFeedbackOffsetUnits.indexOfSelectedItem) ?? .centimeters
+    locomotive.unitsFeedbackOccupancyOffset = UnitLength(rawValue: cboOccupancyFeedbackOffsetUnits.indexOfSelectedItem) ?? UnitLength.defaultValue
     locomotive.maxForwardSpeed = Double(txtMaximumForwardSpeed.stringValue) ?? 0.0
     locomotive.maxBackwardSpeed = Double(txtMaximumReverseSpeed.stringValue) ?? 0.0
-    locomotive.unitsSpeed = SpeedUnit(rawValue: cboMaximumSpeedUnits.indexOfSelectedItem) ?? .kilometersPerHour
+    locomotive.unitsSpeed = UnitSpeed(rawValue: cboMaximumSpeedUnits.indexOfSelectedItem) ?? UnitSpeed.defaultValue
     locomotive.networkId = cboNetworkDS.codeForItemAt(index: cboNetwork.indexOfSelectedItem) ?? -1
     locomotive.mDecoderModel = cboDecoderModel.stringValue
     locomotive.aDecoderModel = cboAccessoryDecoderModel.stringValue

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Cocoa
 
 public enum SwitchBoardItemAction {
   case delete
@@ -27,7 +28,7 @@ public class SwitchBoardItem : EditorObject {
     decode(sqliteDataReader: reader)
   }
   
-  init(location: SwitchBoardLocation, itemPartType: SwitchBoardItemPartType, orientation: Int, groupId: Int, panelId: Int, layoutId: Int) {
+  init(location: SwitchBoardLocation, itemPartType: SwitchBoardItemPartType, orientation: Orientation, groupId: Int, panelId: Int, layoutId: Int) {
     super.init(primaryKey: -1)
     self.location = location
     self.itemPartType = itemPartType
@@ -44,6 +45,12 @@ public class SwitchBoardItem : EditorObject {
   public var layoutId : Int = -1 {
     didSet {
       modified = true
+    }
+  }
+  
+  public var layout : Layout? {
+    get {
+      return layoutId == -1 ? networkController.layout : networkController.layouts[layoutId]
     }
   }
   
@@ -65,7 +72,7 @@ public class SwitchBoardItem : EditorObject {
     }
   }
   
-  public var orientation : Int = 0 {
+  public var orientation : Orientation = Orientation.defaultValue {
     didSet {
       modified = true
     }
@@ -143,7 +150,7 @@ public class SwitchBoardItem : EditorObject {
     }
   }
   
-  public var unitsDimension : LengthUnit = .centimeters {
+  public var unitsDimension : UnitLength = UnitLength.defaultValue {
     didSet {
       modified = true
     }
@@ -179,13 +186,19 @@ public class SwitchBoardItem : EditorObject {
     }
   }
   
-  public var unitsSpeed : SpeedUnit = .milesPerHour {
+  public var unitsSpeed : UnitSpeed = UnitSpeed.defaultValue {
     didSet {
       modified = true
     }
   }
   
-  public var unitsPosition : LengthUnit = .centimeters {
+  public var dirNextUnitsPosition : UnitLength = UnitLength.defaultValue {
+    didSet {
+      modified = true
+    }
+  }
+  
+  public var dirPreviousUnitsPosition : UnitLength = UnitLength.defaultValue {
     didSet {
       modified = true
     }
@@ -408,21 +421,33 @@ public class SwitchBoardItem : EditorObject {
   // MARK: Public Methods
   
   public func rotateRight() {
-    var orientation = self.orientation
+    var orientation = self.orientation.rawValue
     orientation += 1
     if orientation > 7 {
       orientation = 0
     }
-    self.orientation = orientation
+    self.orientation = Orientation(rawValue: orientation) ?? Orientation.defaultValue
   }
   
   public func rotateLeft() {
-    var orientation = self.orientation
+    var orientation = self.orientation.rawValue
     orientation -= 1
     if orientation < 0 {
       orientation = 7
     }
-    self.orientation = orientation
+    self.orientation = Orientation(rawValue: orientation) ?? Orientation.defaultValue
+  }
+  
+  public func propertySheet() {
+    let x = ModalWindow.SwitchBoardItemPropertySheet
+    let wc = x.windowController
+    let vc = x.viewController(windowController: wc) as! SwitchBoardItemPropertySheetVC
+    vc.switchBoardItem = self
+    if let window = wc.window {
+      NSApplication.shared.runModal(for: window)
+      window.close()
+    }
+
   }
   
   // MARK: Database Methods
@@ -450,7 +475,7 @@ public class SwitchBoardItem : EditorObject {
       }
       
       if !reader.isDBNull(index: 5) {
-        orientation = reader.getInt(index: 5)!
+        orientation = Orientation(rawValue: reader.getInt(index: 5)!) ?? Orientation.defaultValue
       }
 
       if !reader.isDBNull(index: 6) {
@@ -506,7 +531,7 @@ public class SwitchBoardItem : EditorObject {
       }
 
       if !reader.isDBNull(index: 19) {
-        unitsDimension = LengthUnit(rawValue: reader.getInt(index: 19)!) ?? .centimeters
+        unitsDimension = UnitLength(rawValue: reader.getInt(index: 19)!) ?? UnitLength.defaultValue
       }
 
       if !reader.isDBNull(index: 20) {
@@ -530,143 +555,147 @@ public class SwitchBoardItem : EditorObject {
       }
 
       if !reader.isDBNull(index: 25) {
-        unitsSpeed = SpeedUnit(rawValue: reader.getInt(index: 25)!) ?? .milesPerHour
+        unitsSpeed = UnitSpeed(rawValue: reader.getInt(index: 25)!) ?? UnitSpeed.defaultValue
       }
 
       if !reader.isDBNull(index: 26) {
-        unitsPosition = LengthUnit(rawValue: reader.getInt(index: 26)!) ?? .centimeters
+        dirNextUnitsPosition = UnitLength(rawValue: reader.getInt(index: 26)!) ?? UnitLength.defaultValue
       }
 
       if !reader.isDBNull(index: 27) {
-        dirNextBrakePosition = reader.getDouble(index: 27)!
+        dirPreviousUnitsPosition = UnitLength(rawValue: reader.getInt(index: 27)!) ?? UnitLength.defaultValue
       }
 
       if !reader.isDBNull(index: 28) {
-        dirNextStopPosition = reader.getDouble(index: 28)!
+        dirNextBrakePosition = reader.getDouble(index: 28)!
       }
 
       if !reader.isDBNull(index: 29) {
-        dirNextSpeedMax = reader.getDouble(index: 29)!
+        dirNextStopPosition = reader.getDouble(index: 29)!
       }
 
       if !reader.isDBNull(index: 30) {
-        dirNextSpeedStopExpected = reader.getDouble(index: 30)!
+        dirNextSpeedMax = reader.getDouble(index: 30)!
       }
 
       if !reader.isDBNull(index: 31) {
-        dirNextSpeedRestricted = reader.getDouble(index: 31)!
+        dirNextSpeedStopExpected = reader.getDouble(index: 31)!
       }
 
       if !reader.isDBNull(index: 32) {
-        dirNextSpeedBrake = reader.getDouble(index: 32)!
+        dirNextSpeedRestricted = reader.getDouble(index: 32)!
       }
 
       if !reader.isDBNull(index: 33) {
-        dirNextSpeedShunt = reader.getDouble(index: 33)!
+        dirNextSpeedBrake = reader.getDouble(index: 33)!
       }
 
       if !reader.isDBNull(index: 34) {
-        dirNextSpeedMaxUseDefault = reader.getBool(index: 34)!
+        dirNextSpeedShunt = reader.getDouble(index: 34)!
       }
 
       if !reader.isDBNull(index: 35) {
-        dirNextSpeedStopExpectedUseDefault = reader.getBool(index: 35)!
+        dirNextSpeedMaxUseDefault = reader.getBool(index: 35)!
       }
 
       if !reader.isDBNull(index: 36) {
-        dirNextSpeedRestrictedUseDefault = reader.getBool(index: 36)!
+        dirNextSpeedStopExpectedUseDefault = reader.getBool(index: 36)!
       }
 
       if !reader.isDBNull(index: 37) {
-        dirNextSpeedBrakeUseDefault = reader.getBool(index: 37)!
+        dirNextSpeedRestrictedUseDefault = reader.getBool(index: 37)!
       }
 
       if !reader.isDBNull(index: 38) {
-        dirNextSpeedShuntUseDefault = reader.getBool(index: 38)!
+        dirNextSpeedBrakeUseDefault = reader.getBool(index: 38)!
       }
 
       if !reader.isDBNull(index: 39) {
-        dirPreviousBrakePosition = reader.getDouble(index: 39)!
+        dirNextSpeedShuntUseDefault = reader.getBool(index: 39)!
       }
 
       if !reader.isDBNull(index: 40) {
-        dirPreviousStopPosition = reader.getDouble(index: 40)!
+        dirPreviousBrakePosition = reader.getDouble(index: 40)!
       }
 
       if !reader.isDBNull(index: 41) {
-        dirPreviousSpeedMax = reader.getDouble(index: 41)!
+        dirPreviousStopPosition = reader.getDouble(index: 41)!
       }
 
       if !reader.isDBNull(index: 42) {
-        dirPreviousSpeedStopExpected = reader.getDouble(index: 42)!
+        dirPreviousSpeedMax = reader.getDouble(index: 42)!
       }
 
       if !reader.isDBNull(index: 43) {
-        dirPreviousSpeedRestricted = reader.getDouble(index: 43)!
+        dirPreviousSpeedStopExpected = reader.getDouble(index: 43)!
       }
 
       if !reader.isDBNull(index: 44) {
-        dirPreviousSpeedBrake = reader.getDouble(index: 44)!
+        dirPreviousSpeedRestricted = reader.getDouble(index: 44)!
       }
 
       if !reader.isDBNull(index: 45) {
-        dirPreviousSpeedShunt = reader.getDouble(index: 45)!
+        dirPreviousSpeedBrake = reader.getDouble(index: 45)!
       }
 
       if !reader.isDBNull(index: 46) {
-        dirPreviousSpeedMaxUseDefault = reader.getBool(index: 46)!
+        dirPreviousSpeedShunt = reader.getDouble(index: 46)!
       }
 
       if !reader.isDBNull(index: 47) {
-        dirPreviousSpeedStopExpectedUseDefault = reader.getBool(index: 47)!
+        dirPreviousSpeedMaxUseDefault = reader.getBool(index: 47)!
       }
 
       if !reader.isDBNull(index: 48) {
-        dirPreviousSpeedRestrictedUseDefault = reader.getBool(index: 48)!
+        dirPreviousSpeedStopExpectedUseDefault = reader.getBool(index: 48)!
       }
 
       if !reader.isDBNull(index: 49) {
-        dirPreviousSpeedBrakeUseDefault = reader.getBool(index: 49)!
+        dirPreviousSpeedRestrictedUseDefault = reader.getBool(index: 49)!
       }
 
       if !reader.isDBNull(index: 50) {
-        dirPreviousSpeedShuntUseDefault = reader.getBool(index: 50)!
+        dirPreviousSpeedBrakeUseDefault = reader.getBool(index: 50)!
       }
 
       if !reader.isDBNull(index: 51) {
-        sw1LocoNetDeviceId = reader.getInt(index: 51)!
+        dirPreviousSpeedShuntUseDefault = reader.getBool(index: 51)!
       }
 
       if !reader.isDBNull(index: 52) {
-        sw1Port = reader.getInt(index: 52)!
+        sw1LocoNetDeviceId = reader.getInt(index: 52)!
       }
 
       if !reader.isDBNull(index: 53) {
-        sw1TurnoutMotorType = TurnoutMotorType(rawValue: reader.getInt(index: 53)!) ?? .solenoid
+        sw1Port = reader.getInt(index: 53)!
       }
 
       if !reader.isDBNull(index: 54) {
-        sw1SensorId = reader.getInt(index: 54)!
+        sw1TurnoutMotorType = TurnoutMotorType(rawValue: reader.getInt(index: 54)!) ?? .solenoid
       }
 
       if !reader.isDBNull(index: 55) {
-        sw2LocoNetDeviceId = reader.getInt(index: 55)!
+        sw1SensorId = reader.getInt(index: 55)!
       }
 
       if !reader.isDBNull(index: 56) {
-        sw2Port = reader.getInt(index: 56)!
+        sw2LocoNetDeviceId = reader.getInt(index: 56)!
       }
 
       if !reader.isDBNull(index: 57) {
-        sw2TurnoutMotorType = TurnoutMotorType(rawValue: reader.getInt(index: 57)!) ?? .solenoid
+        sw2Port = reader.getInt(index: 57)!
       }
 
       if !reader.isDBNull(index: 58) {
-        sw2SensorId = reader.getInt(index: 58)!
+        sw2TurnoutMotorType = TurnoutMotorType(rawValue: reader.getInt(index: 58)!) ?? .solenoid
       }
 
       if !reader.isDBNull(index: 59) {
-        isScenicSection = reader.getBool(index: 59)!
+        sw2SensorId = reader.getInt(index: 59)!
+      }
+
+      if !reader.isDBNull(index: 60) {
+        isScenicSection = reader.getBool(index: 60)!
       }
 
     }
@@ -709,7 +738,8 @@ public class SwitchBoardItem : EditorObject {
         "[\(SWITCHBOARD_ITEM.GRADIENT)], " +
         "[\(SWITCHBOARD_ITEM.IS_CRITICAL)], " +
         "[\(SWITCHBOARD_ITEM.UNITS_SPEED)], " +
-        "[\(SWITCHBOARD_ITEM.UNITS_POSITION)], " +
+        "[\(SWITCHBOARD_ITEM.DN_UNITS_POSITION)], " +
+        "[\(SWITCHBOARD_ITEM.DP_UNITS_POSITION)], " +
         "[\(SWITCHBOARD_ITEM.DN_BRAKE_POSITION)], " +
         "[\(SWITCHBOARD_ITEM.DN_STOP_POSITION)], " +
         "[\(SWITCHBOARD_ITEM.DN_SPEED_MAX)], " +
@@ -770,7 +800,8 @@ public class SwitchBoardItem : EditorObject {
         "@\(SWITCHBOARD_ITEM.GRADIENT), " +
         "@\(SWITCHBOARD_ITEM.IS_CRITICAL), " +
         "@\(SWITCHBOARD_ITEM.UNITS_SPEED), " +
-        "@\(SWITCHBOARD_ITEM.UNITS_POSITION), " +
+        "@\(SWITCHBOARD_ITEM.DN_UNITS_POSITION), " +
+        "@\(SWITCHBOARD_ITEM.DP_UNITS_POSITION), " +
         "@\(SWITCHBOARD_ITEM.DN_BRAKE_POSITION), " +
         "@\(SWITCHBOARD_ITEM.DN_STOP_POSITION), " +
         "@\(SWITCHBOARD_ITEM.DN_SPEED_MAX), " +
@@ -834,7 +865,8 @@ public class SwitchBoardItem : EditorObject {
         "[\(SWITCHBOARD_ITEM.GRADIENT)] = @\(SWITCHBOARD_ITEM.GRADIENT), " +
         "[\(SWITCHBOARD_ITEM.IS_CRITICAL)] = @\(SWITCHBOARD_ITEM.IS_CRITICAL), " +
         "[\(SWITCHBOARD_ITEM.UNITS_SPEED)] = @\(SWITCHBOARD_ITEM.UNITS_SPEED), " +
-        "[\(SWITCHBOARD_ITEM.UNITS_POSITION)] = @\(SWITCHBOARD_ITEM.UNITS_POSITION), " +
+        "[\(SWITCHBOARD_ITEM.DN_UNITS_POSITION)] = @\(SWITCHBOARD_ITEM.DN_UNITS_POSITION), " +
+        "[\(SWITCHBOARD_ITEM.DP_UNITS_POSITION)] = @\(SWITCHBOARD_ITEM.DP_UNITS_POSITION), " +
         "[\(SWITCHBOARD_ITEM.DN_BRAKE_POSITION)] = @\(SWITCHBOARD_ITEM.DN_BRAKE_POSITION), " +
         "[\(SWITCHBOARD_ITEM.DN_STOP_POSITION)] = @\(SWITCHBOARD_ITEM.DN_STOP_POSITION), " +
         "[\(SWITCHBOARD_ITEM.DN_SPEED_MAX)] = @\(SWITCHBOARD_ITEM.DN_SPEED_MAX), " +
@@ -888,7 +920,7 @@ public class SwitchBoardItem : EditorObject {
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.PANEL_ID)", value: panelId)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.GROUP_ID)", value: groupId)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.ITEM_PART_TYPE)", value: itemPartType.rawValue)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.ORIENTATION)", value: orientation)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.ORIENTATION)", value: orientation.rawValue)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.XPOS)", value: location.x)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.YPOS)", value: location.y)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.BLOCK_NAME)", value: blockName)
@@ -909,8 +941,9 @@ public class SwitchBoardItem : EditorObject {
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.GRADIENT)", value: gradient)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.IS_CRITICAL)", value: isCritical)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.UNITS_SPEED)", value: unitsSpeed.rawValue)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.UNITS_POSITION)", value: unitsPosition.rawValue)
-      
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DN_UNITS_POSITION)", value: dirNextUnitsPosition.rawValue)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DP_UNITS_POSITION)", value: dirPreviousUnitsPosition.rawValue)
+
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DN_SPEED_MAX_UD)", value: dirNextSpeedMaxUseDefault)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DN_SPEED_STOP_EXPECTED_UD)", value: dirNextSpeedStopExpectedUseDefault)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DN_SPEED_RESTRICTED_UD)", value: dirNextSpeedRestrictedUseDefault)
@@ -994,7 +1027,8 @@ public class SwitchBoardItem : EditorObject {
         "[\(SWITCHBOARD_ITEM.GRADIENT)], " +
         "[\(SWITCHBOARD_ITEM.IS_CRITICAL)], " +
         "[\(SWITCHBOARD_ITEM.UNITS_SPEED)], " +
-        "[\(SWITCHBOARD_ITEM.UNITS_POSITION)], " +
+        "[\(SWITCHBOARD_ITEM.DN_UNITS_POSITION)], " +
+        "[\(SWITCHBOARD_ITEM.DP_UNITS_POSITION)], " +
         "[\(SWITCHBOARD_ITEM.DN_BRAKE_POSITION)], " +
         "[\(SWITCHBOARD_ITEM.DN_STOP_POSITION)], " +
         "[\(SWITCHBOARD_ITEM.DN_SPEED_MAX)], " +

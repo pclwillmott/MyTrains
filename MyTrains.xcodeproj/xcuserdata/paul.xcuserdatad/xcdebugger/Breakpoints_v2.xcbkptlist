@@ -94,8 +94,8 @@
             filePath = "MyTrains/SwitchBoardDefs.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "115"
-            endingLineNumber = "115"
+            startingLineNumber = "52"
+            endingLineNumber = "52"
             landmarkName = "SwitchBoardMode"
             landmarkType = "13">
          </BreakpointContent>
@@ -178,6 +178,54 @@
             endingLineNumber = "296"
             landmarkName = "interfacesUpdated(interfaces:)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "994BBDD1-02BC-458B-82EC-6B2200D0BBA2"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MyTrains/RollingStock.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "16"
+            endingLineNumber = "16"
+            landmarkName = "TrackElectrificationType"
+            landmarkType = "13">
+            <Locations>
+               <Location
+                  uuid = "994BBDD1-02BC-458B-82EC-6B2200D0BBA2 - 92caa6c3124facbb"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MyTrains.TrackElectrificationType.init(rawValue: Swift.Int) -&gt; Swift.Optional&lt;MyTrains.TrackElectrificationType&gt;"
+                  moduleName = "MyTrains"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/Documents/MyTrains/MyTrains/RollingStock.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "17"
+                  endingLineNumber = "17"
+                  offsetFromSymbolStart = "36">
+               </Location>
+               <Location
+                  uuid = "994BBDD1-02BC-458B-82EC-6B2200D0BBA2 - e48956d40cf57f9b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MyTrains.TrackElectrificationType.rawValue.getter : Swift.Int"
+                  moduleName = "MyTrains"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/Documents/MyTrains/MyTrains/RollingStock.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "17"
+                  endingLineNumber = "17"
+                  offsetFromSymbolStart = "36">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

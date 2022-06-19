@@ -31,11 +31,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
       UserDefaults.standard.set(paths[0] + appFolder + dataFolder, forKey: DEFAULT.DATABASE_PATH)
       UserDefaults.standard.set(paths[0] + appFolder + savedCVsFolder, forKey: DEFAULT.SAVED_CVS_PATH)
       UserDefaults.standard.set(paths[0] + appFolder + DMFFolder, forKey: DEFAULT.DMF_PATH)
-      UserDefaults.standard.set(LengthUnit.centimeters.rawValue, forKey: DEFAULT.UNITS_LENGTH)
-      UserDefaults.standard.set(LengthUnit.centimeters.rawValue, forKey: DEFAULT.UNITS_FBOFF_OCC)
-      UserDefaults.standard.set(SpeedUnit.kilometersPerHour.rawValue, forKey: DEFAULT.UNITS_SPEED)
+      UserDefaults.standard.set(UnitLength.defaultValue, forKey: DEFAULT.UNITS_LENGTH)
+      UserDefaults.standard.set(UnitLength.defaultValue.rawValue, forKey: DEFAULT.UNITS_FBOFF_OCC)
+      UserDefaults.standard.set(UnitSpeed.defaultValue.rawValue, forKey: DEFAULT.UNITS_SPEED)
       UserDefaults.standard.set(76.2, forKey: DEFAULT.SCALE)
-      UserDefaults.standard.set(TrackGauge.oo.rawValue, forKey: DEFAULT.TRACK_GAUGE)
+      UserDefaults.standard.set(TrackGauge.defaultValue.rawValue, forKey: DEFAULT.TRACK_GAUGE)
 
     }
 

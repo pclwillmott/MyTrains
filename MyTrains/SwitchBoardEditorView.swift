@@ -250,7 +250,7 @@ class SwitchBoardEditorView: SwitchBoardView {
         }
         else {
           
-          let blank = SwitchBoardItem(location: startMove!, itemPartType: .none, orientation: 0, groupId: -1, panelId: panelId, layoutId: -1)
+          let blank = SwitchBoardItem(location: startMove!, itemPartType: .none, orientation: .deg0, groupId: -1, panelId: panelId, layoutId: -1)
           
           layout.switchBoardItems[blank.key] = blank
           selectedItems.append(blank)
@@ -258,7 +258,10 @@ class SwitchBoardEditorView: SwitchBoardView {
         }
         
       case [.option]:
-        break
+        
+        if let item = getItem(event: event) {
+          item.propertySheet()
+        }
         
       case [.shift]:
         
@@ -270,7 +273,7 @@ class SwitchBoardEditorView: SwitchBoardView {
           }
           else {
             
-            let blank = SwitchBoardItem(location: startMove!, itemPartType: .none, orientation: 0, groupId: -1, panelId: panelId, layoutId: -1)
+            let blank = SwitchBoardItem(location: startMove!, itemPartType: .none, orientation: .deg0, groupId: -1, panelId: panelId, layoutId: -1)
             layout.switchBoardItems[blank.key] = blank
             selectedItems.append(blank)
              
@@ -293,7 +296,7 @@ class SwitchBoardEditorView: SwitchBoardView {
                 selectedItems.append(item)
               }
               else {
-                let blank = SwitchBoardItem(location: (x:x, y:y), itemPartType: .none, orientation: 0, groupId: -1, panelId: panelId, layoutId: -1)
+                let blank = SwitchBoardItem(location: (x:x, y:y), itemPartType: .none, orientation: .deg0, groupId: -1, panelId: panelId, layoutId: -1)
                 layout.switchBoardItems[blank.key] = blank
                 selectedItems.append(blank)
                  
@@ -321,7 +324,7 @@ class SwitchBoardEditorView: SwitchBoardView {
           selectedItems.append(item)
         }
         else {
-          let blank = SwitchBoardItem(location: startMove!, itemPartType: .none, orientation: 0, groupId: -1, panelId: panelId, layoutId: -1)
+          let blank = SwitchBoardItem(location: startMove!, itemPartType: .none, orientation: .deg0, groupId: -1, panelId: panelId, layoutId: -1)
           if isArrangeMode && nextPart != .none {
             blank.itemPartType = nextPart
           }

@@ -149,21 +149,6 @@
                                                                             <font key="font" metaFont="system"/>
                                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                            <objectValues>
-                                                                                <string>EM</string>
-                                                                                <string>H0</string>
-                                                                                <string>N</string>
-                                                                                <string>0</string>
-                                                                                <string>O14</string>
-                                                                                <string>00</string>
-                                                                                <string>000</string>
-                                                                                <string>P4</string>
-                                                                                <string>S</string>
-                                                                                <string>ScaleSeven</string>
-                                                                                <string>TT</string>
-                                                                                <string>TT3</string>
-                                                                                <string>Unknown</string>
-                                                                            </objectValues>
                                                                         </comboBoxCell>
                                                                         <connections>
                                                                             <action selector="cboTrackGaugeAction:" target="9iP-PP-Stw" id="Sjz-yP-1UT"/>
@@ -185,13 +170,6 @@
                                                                             <font key="font" metaFont="system"/>
                                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                            <objectValues>
-                                                                                <string>mm</string>
-                                                                                <string>cm</string>
-                                                                                <string>m</string>
-                                                                                <string>in</string>
-                                                                                <string>ft</string>
-                                                                            </objectValues>
                                                                         </comboBoxCell>
                                                                         <connections>
                                                                             <action selector="cboLengthUnitsAction:" target="9iP-PP-Stw" id="faL-U8-YU4"/>
@@ -293,13 +271,6 @@
                                                                             <font key="font" metaFont="system"/>
                                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                            <objectValues>
-                                                                                <string>mm</string>
-                                                                                <string>cm</string>
-                                                                                <string>m</string>
-                                                                                <string>in</string>
-                                                                                <string>ft</string>
-                                                                            </objectValues>
                                                                         </comboBoxCell>
                                                                         <connections>
                                                                             <action selector="cboOccupancyFeedbackOffsetUnitsAction:" target="9iP-PP-Stw" id="4gZ-E0-nSH"/>
@@ -1081,10 +1052,6 @@
                                                                             <font key="font" metaFont="system"/>
                                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                            <objectValues>
-                                                                                <string>km/h</string>
-                                                                                <string>mph</string>
-                                                                            </objectValues>
                                                                         </comboBoxCell>
                                                                         <connections>
                                                                             <action selector="cboMaximumSpeedUnitsAction:" target="9iP-PP-Stw" id="kvh-Vt-Rgh"/>
@@ -1364,7 +1331,7 @@
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <clipView key="contentView" id="aO4-a4-I5K">
                                                                                     <rect key="frame" x="1" y="1" width="450" height="491"/>
-                                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                                    <autoresizingMask key="autoresizingMask"/>
                                                                                     <subviews>
                                                                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="20" usesAutomaticRowHeights="YES" headerView="LLN-Nt-wwj" viewBased="YES" id="rwg-yt-aYP">
                                                                                             <rect key="frame" x="0.0" y="0.0" width="867" height="463"/>
@@ -1386,7 +1353,7 @@
                                                                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                                                     <prototypeCellViews>
                                                                                                         <tableCellView identifier="CVNumberCellID" id="cvD-2o-Cip">
-                                                                                                            <rect key="frame" x="8" y="0.0" width="78" height="73"/>
+                                                                                                            <rect key="frame" x="18" y="0.0" width="78" height="73"/>
                                                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                                             <subviews>
                                                                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aRr-ct-iEi">
@@ -1418,7 +1385,7 @@
                                                                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                                                     <prototypeCellViews>
                                                                                                         <tableCellView identifier="EnabledCellID" id="dz5-ar-gg4">
-                                                                                                            <rect key="frame" x="103" y="0.0" width="70" height="73"/>
+                                                                                                            <rect key="frame" x="113" y="0.0" width="70" height="73"/>
                                                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                                             <subviews>
                                                                                                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qaY-EQ-09X">
@@ -1449,7 +1416,7 @@
                                                                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                                                     <prototypeCellViews>
                                                                                                         <tableCellView identifier="DescriptionCellID" id="DX0-TY-wfY">
-                                                                                                            <rect key="frame" x="190" y="0.0" width="350" height="73"/>
+                                                                                                            <rect key="frame" x="200" y="0.0" width="350" height="73"/>
                                                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                                             <subviews>
                                                                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="W3J-yb-18b">
@@ -1484,7 +1451,7 @@
                                                                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                                                     <prototypeCellViews>
                                                                                                         <tableCellView identifier="NumberBaseCellID" id="Anh-2d-B4N">
-                                                                                                            <rect key="frame" x="557" y="0.0" width="90" height="80"/>
+                                                                                                            <rect key="frame" x="567" y="0.0" width="90" height="80"/>
                                                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                                             <subviews>
                                                                                                                 <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="imm-dw-KmJ">
@@ -1522,7 +1489,7 @@
                                                                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                                                     <prototypeCellViews>
                                                                                                         <tableCellView identifier="DefaultValueCellID" id="eix-45-OPF">
-                                                                                                            <rect key="frame" x="664" y="0.0" width="90" height="73"/>
+                                                                                                            <rect key="frame" x="674" y="0.0" width="90" height="73"/>
                                                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                                             <subviews>
                                                                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EoL-s1-Aka">
@@ -1557,7 +1524,7 @@
                                                                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                                                     <prototypeCellViews>
                                                                                                         <tableCellView identifier="ValueCellID" id="lLd-32-rqn">
-                                                                                                            <rect key="frame" x="771" y="0.0" width="87" height="73"/>
+                                                                                                            <rect key="frame" x="781" y="0.0" width="87" height="73"/>
                                                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                                             <subviews>
                                                                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ht4-bC-vwl">
@@ -1609,17 +1576,17 @@
                                             </tabViewItem>
                                             <tabViewItem label="Permissions" identifier="" id="MYB-am-mcr">
                                                 <view key="view" id="YS5-rn-Td6">
-                                                    <rect key="frame" x="10" y="33" width="520" height="500"/>
+                                                    <rect key="frame" x="10" y="33" width="520" height="555"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 </view>
                                             </tabViewItem>
                                             <tabViewItem label="Model Notes" identifier="" id="8p6-Qx-OBJ">
                                                 <view key="view" id="Wfz-ds-bzM">
-                                                    <rect key="frame" x="10" y="33" width="520" height="500"/>
+                                                    <rect key="frame" x="10" y="33" width="520" height="555"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lo5-os-br7">
-                                                            <rect key="frame" x="15" y="377" width="96" height="16"/>
+                                                            <rect key="frame" x="15" y="432" width="96" height="16"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Inventory Code" id="QPU-9q-rRB">
                                                                 <font key="font" usesAppearanceFont="YES"/>
@@ -1628,7 +1595,7 @@
                                                             </textFieldCell>
                                                         </textField>
                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gbI-Or-bFx">
-                                                            <rect key="frame" x="15" y="481" width="127" height="16"/>
+                                                            <rect key="frame" x="15" y="536" width="127" height="16"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Model Manufacturer" id="Vws-vQ-AjJ">
                                                                 <font key="font" metaFont="system"/>
@@ -1637,7 +1604,7 @@
                                                             </textFieldCell>
                                                         </textField>
                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cvV-q9-Weg">
-                                                            <rect key="frame" x="15" y="430" width="88" height="16"/>
+                                                            <rect key="frame" x="15" y="485" width="88" height="16"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Puchase Date" id="lt4-4R-AOB">
                                                                 <font key="font" metaFont="system"/>
@@ -1646,7 +1613,7 @@
                                                             </textFieldCell>
                                                         </textField>
                                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rvJ-N2-pVT">
-                                                            <rect key="frame" x="17" y="348" width="123" height="21"/>
+                                                            <rect key="frame" x="17" y="403" width="123" height="21"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="Uzt-4r-Cvz">
                                                                 <font key="font" metaFont="system"/>
@@ -1658,7 +1625,7 @@
                                                             </connections>
                                                         </textField>
                                                         <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NV5-bz-51s">
-                                                            <rect key="frame" x="17" y="450" width="489" height="25"/>
+                                                            <rect key="frame" x="17" y="505" width="489" height="25"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                             <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="5" id="mIY-57-U9n">
                                                                 <font key="font" metaFont="system"/>
@@ -1670,7 +1637,7 @@
                                                             </connections>
                                                         </comboBox>
                                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="b2P-gV-jcZ">
-                                                            <rect key="frame" x="17" y="401" width="123" height="21"/>
+                                                            <rect key="frame" x="17" y="456" width="123" height="21"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="YMq-pP-Szm">
                                                                 <font key="font" metaFont="system"/>
@@ -1682,18 +1649,18 @@
                                                             </connections>
                                                         </textField>
                                                         <scrollView fixedFrame="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XjC-lW-CO2">
-                                                            <rect key="frame" x="17" y="17" width="486" height="299"/>
+                                                            <rect key="frame" x="17" y="17" width="486" height="333"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                                             <clipView key="contentView" drawsBackground="NO" id="kSW-50-yuQ">
-                                                                <rect key="frame" x="0.0" y="0.0" width="486" height="299"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="486" height="333"/>
+                                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <subviews>
                                                                     <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="642-Id-4Ni">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="486" height="299"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="486" height="333"/>
                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                        <size key="minSize" width="486" height="299"/>
+                                                                        <size key="minSize" width="486" height="333"/>
                                                                         <size key="maxSize" width="486" height="10000000"/>
                                                                         <color key="insertionPointColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                                     </textView>
@@ -1709,7 +1676,7 @@
                                                             </scroller>
                                                         </scrollView>
                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JHA-is-0BC">
-                                                            <rect key="frame" x="15" y="324" width="40" height="16"/>
+                                                            <rect key="frame" x="15" y="379" width="40" height="16"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Notes" id="mWa-2P-MJH">
                                                                 <font key="font" metaFont="system"/>
