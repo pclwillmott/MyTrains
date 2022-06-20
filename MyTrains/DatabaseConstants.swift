@@ -202,6 +202,7 @@ enum SWITCHBOARD_ITEM {
   static let SW2_TURNOUT_MOTOR_TYPE      = "SW2_TURNOUT_MOTOR_TYPE"
   static let SW2_SENSOR_ID               = "SW2_SENSOR_ID"
   static let IS_SCENIC_SECTION           = "IS_SCENIC_SECTION"
+  static let BLOCK_TYPE                  = "BLOCK_TYPE"
 }
 
 enum SENSOR {

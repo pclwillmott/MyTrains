@@ -29,7 +29,7 @@ class SwitchBoardShapeButton: NSButton {
     
     path.fill()
     
-    SwitchBoardShape.drawShape(partType: partType, orientation: .deg0, location: (x:0,y:0), lineWidth: lineWidth, cellSize: cellSize, isButton: true, isEnabled: isEnabled)
+    SwitchBoardShape.drawShape(partType: partType, orientation: .deg0, location: (x:0,y:0), lineWidth: lineWidth, cellSize: cellSize, isButton: true, isEnabled: isEnabled, offset: CGPoint(x: 0.0, y: 0.0))
     
     if isEnabled {
       
@@ -47,9 +47,9 @@ class SwitchBoardShapeButton: NSButton {
 
   }
   
-  // MARK : Public Properties
+  // MARK: Public Properties
   
-  public var partType : SwitchBoardItemPartType = .straight {
+  public var partType : SwitchBoardItemPartType = .none {
     didSet {
       needsDisplay = true
     }

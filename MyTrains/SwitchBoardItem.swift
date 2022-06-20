@@ -14,11 +14,6 @@ public enum SwitchBoardItemAction {
   case noAction
 }
 
-public enum TurnoutMotorType : Int {
-  case slowMotion = 0
-  case solenoid = 1
-}
-
 public class SwitchBoardItem : EditorObject {
 
   // MARK: Constructors
@@ -40,6 +35,19 @@ public class SwitchBoardItem : EditorObject {
   
   // MARK: Private Properties
   
+  private var _dirNextSpeedMax          : Double = 0.0
+  private var _dirNextSpeedStopExpected : Double = 0.0
+  private var _dirNextSpeedRestricted   : Double = 0.0
+  private var _dirNextSpeedBrake        : Double = 0.0
+  private var _dirNextSpeedShunt        : Double = 0.0
+
+  private var _dirPreviousSpeedMax          : Double = 0.0
+  private var _dirPreviousSpeedStopExpected : Double = 0.0
+  private var _dirPreviousSpeedRestricted   : Double = 0.0
+  private var _dirPreviousSpeedBrake        : Double = 0.0
+  private var _dirPreviousSpeedShunt        : Double = 0.0
+
+
   // MARK: Public Properties
   
   public var layoutId : Int = -1 {
@@ -90,7 +98,9 @@ public class SwitchBoardItem : EditorObject {
     }
   }
   
-  public var blockDirection : BlockDirection = .bidirectional {
+  public var blockType : BlockType = BlockType.defaultValue
+  
+  public var blockDirection : BlockDirection = BlockDirection.defaultValue {
     didSet {
       modified = true
     }
@@ -168,7 +178,7 @@ public class SwitchBoardItem : EditorObject {
     }
   }
   
-  public var trackElectrificationType : TrackElectrificationType = .notElectrified {
+  public var trackElectrificationType : TrackElectrificationType = TrackElectrificationType.defaultValue {
     didSet {
       modified = true
     }
@@ -216,61 +226,81 @@ public class SwitchBoardItem : EditorObject {
     }
   }
   
-  public var dirNextSpeedMax : Double = 0.0 {
+  public var dirNextSpeedMax : Double {
+    get {
+      return dirNextSpeedMaxAllowEdit ? _dirNextSpeedMax : SwitchBoardItem.defaultSpeedMax(blockType: blockType)
+    }
+    set(value) {
+      _dirNextSpeedMax = value
+      modified = true
+    }
+  }
+  
+  public var dirNextSpeedStopExpected : Double {
+    get {
+      return dirNextSpeedStopExpectedAllowEdit ? _dirNextSpeedStopExpected : SwitchBoardItem.defaultSpeedStopExpected(blockType: blockType)
+    }
+    set(value) {
+      _dirNextSpeedStopExpected = value
+      modified = true
+    }
+  }
+  
+  public var dirNextSpeedRestricted : Double {
+    get {
+      return dirNextSpeedRestrictedAllowEdit ? _dirNextSpeedRestricted : SwitchBoardItem.defaultSpeedRestricted(blockType: blockType)
+    }
+    set(value) {
+      _dirNextSpeedRestricted = value
+      modified = true
+    }
+  }
+  
+  public var dirNextSpeedBrake : Double {
+    get {
+      return dirNextSpeedBrakeAllowEdit ? _dirNextSpeedBrake : SwitchBoardItem.defaultSpeedBrake(blockType: blockType)
+    }
+    set(value) {
+      _dirNextSpeedBrake = value
+      modified = true
+    }
+  }
+  
+  public var dirNextSpeedShunt : Double {
+    get {
+      return dirNextSpeedShuntAllowEdit ? _dirNextSpeedShunt : SwitchBoardItem.defaultSpeedShunt(blockType: blockType)
+    }
+    set(value) {
+      _dirNextSpeedShunt = value
+      modified = true
+    }
+  }
+  
+  public var dirNextSpeedMaxAllowEdit : Bool = false {
     didSet {
       modified = true
     }
   }
   
-  public var dirNextSpeedStopExpected : Double = 0.0 {
+  public var dirNextSpeedStopExpectedAllowEdit : Bool = false {
     didSet {
       modified = true
     }
   }
   
-  public var dirNextSpeedRestricted : Double = 0.0 {
+  public var dirNextSpeedRestrictedAllowEdit : Bool = false {
     didSet {
       modified = true
     }
   }
   
-  public var dirNextSpeedBrake : Double = 0.0 {
+  public var dirNextSpeedBrakeAllowEdit : Bool = false {
     didSet {
       modified = true
     }
   }
   
-  public var dirNextSpeedShunt : Double = 0.0 {
-    didSet {
-      modified = true
-    }
-  }
-  
-  public var dirNextSpeedMaxUseDefault : Bool = true {
-    didSet {
-      modified = true
-    }
-  }
-  
-  public var dirNextSpeedStopExpectedUseDefault : Bool = true {
-    didSet {
-      modified = true
-    }
-  }
-  
-  public var dirNextSpeedRestrictedUseDefault : Bool = true {
-    didSet {
-      modified = true
-    }
-  }
-  
-  public var dirNextSpeedBrakeUseDefault : Bool = true {
-    didSet {
-      modified = true
-    }
-  }
-  
-  public var dirNextSpeedShuntUseDefault : Bool = true {
+  public var dirNextSpeedShuntAllowEdit : Bool = false {
     didSet {
       modified = true
     }
@@ -288,61 +318,81 @@ public class SwitchBoardItem : EditorObject {
     }
   }
   
-  public var dirPreviousSpeedMax : Double = 0.0 {
+  public var dirPreviousSpeedMax : Double {
+    get {
+      return dirPreviousSpeedMaxAllowEdit ? _dirPreviousSpeedMax : SwitchBoardItem.defaultSpeedMax(blockType: blockType)
+    }
+    set(value) {
+      _dirPreviousSpeedMax = value
+      modified = true
+    }
+  }
+  
+  public var dirPreviousSpeedStopExpected : Double {
+    get {
+      return dirPreviousSpeedStopExpectedAllowEdit ? _dirPreviousSpeedStopExpected : SwitchBoardItem.defaultSpeedStopExpected(blockType: blockType)
+    }
+    set(value) {
+      _dirPreviousSpeedStopExpected = value
+      modified = true
+    }
+  }
+  
+  public var dirPreviousSpeedRestricted : Double {
+    get {
+      return dirPreviousSpeedRestrictedAllowEdit ? _dirPreviousSpeedRestricted : SwitchBoardItem.defaultSpeedRestricted(blockType: blockType)
+    }
+    set(value) {
+      _dirPreviousSpeedRestricted = value
+      modified = true
+    }
+  }
+  
+  public var dirPreviousSpeedBrake : Double {
+    get {
+      return dirPreviousSpeedBrakeAllowEdit ? _dirPreviousSpeedBrake : SwitchBoardItem.defaultSpeedBrake(blockType: blockType)
+    }
+    set(value) {
+      _dirPreviousSpeedBrake = value
+      modified = true
+    }
+  }
+  
+  public var dirPreviousSpeedShunt : Double {
+    get {
+      return dirPreviousSpeedShuntAllowEdit ? _dirPreviousSpeedShunt : SwitchBoardItem.defaultSpeedShunt(blockType: blockType)
+    }
+    set(value) {
+      _dirPreviousSpeedShunt = value
+      modified = true
+    }
+  }
+  
+  public var dirPreviousSpeedMaxAllowEdit : Bool = false {
     didSet {
       modified = true
     }
   }
   
-  public var dirPreviousSpeedStopExpected : Double = 0.0 {
+  public var dirPreviousSpeedStopExpectedAllowEdit : Bool = false {
     didSet {
       modified = true
     }
   }
   
-  public var dirPreviousSpeedRestricted : Double = 0.0 {
+  public var dirPreviousSpeedRestrictedAllowEdit : Bool = false {
     didSet {
       modified = true
     }
   }
   
-  public var dirPreviousSpeedBrake : Double = 0.0 {
+  public var dirPreviousSpeedBrakeAllowEdit : Bool = false {
     didSet {
       modified = true
     }
   }
   
-  public var dirPreviousSpeedShunt : Double = 0.0 {
-    didSet {
-      modified = true
-    }
-  }
-  
-  public var dirPreviousSpeedMaxUseDefault : Bool = true {
-    didSet {
-      modified = true
-    }
-  }
-  
-  public var dirPreviousSpeedStopExpectedUseDefault : Bool = true {
-    didSet {
-      modified = true
-    }
-  }
-  
-  public var dirPreviousSpeedRestrictedUseDefault : Bool = true {
-    didSet {
-      modified = true
-    }
-  }
-  
-  public var dirPreviousSpeedBrakeUseDefault : Bool = true {
-    didSet {
-      modified = true
-    }
-  }
-  
-  public var dirPreviousSpeedShuntUseDefault : Bool = true {
+  public var dirPreviousSpeedShuntAllowEdit : Bool = false {
     didSet {
       modified = true
     }
@@ -360,7 +410,7 @@ public class SwitchBoardItem : EditorObject {
     }
   }
   
-  public var sw1TurnoutMotorType : TurnoutMotorType = .solenoid {
+  public var sw1TurnoutMotorType : TurnoutMotorType = TurnoutMotorType.defaultValue {
     didSet {
       modified = true
     }
@@ -384,7 +434,7 @@ public class SwitchBoardItem : EditorObject {
     }
   }
   
-  public var sw2TurnoutMotorType : TurnoutMotorType = .solenoid {
+  public var sw2TurnoutMotorType : TurnoutMotorType = TurnoutMotorType.defaultValue {
     didSet {
       modified = true
     }
@@ -491,7 +541,7 @@ public class SwitchBoardItem : EditorObject {
       }
       
       if !reader.isDBNull(index: 9) {
-        blockDirection = BlockDirection(rawValue: reader.getInt(index: 9)!) ?? .bidirectional
+        blockDirection = BlockDirection(rawValue: reader.getInt(index: 9)!) ?? BlockDirection.defaultValue
       }
       
       if !reader.isDBNull(index: 10) {
@@ -539,11 +589,11 @@ public class SwitchBoardItem : EditorObject {
       }
 
       if !reader.isDBNull(index: 21) {
-        trackGauge = TrackGauge(rawValue: reader.getInt(index: 21)!) ?? .oo
+        trackGauge = TrackGauge(rawValue: reader.getInt(index: 21)!) ?? TrackGauge.defaultValue
       }
 
       if !reader.isDBNull(index: 22) {
-        trackElectrificationType = TrackElectrificationType(rawValue: reader.getInt(index: 22)!) ?? .notElectrified
+        trackElectrificationType = TrackElectrificationType(rawValue: reader.getInt(index: 22)!) ?? TrackElectrificationType.defaultValue
       }
 
       if !reader.isDBNull(index: 23) {
@@ -595,23 +645,23 @@ public class SwitchBoardItem : EditorObject {
       }
 
       if !reader.isDBNull(index: 35) {
-        dirNextSpeedMaxUseDefault = reader.getBool(index: 35)!
+        dirNextSpeedMaxAllowEdit = reader.getBool(index: 35)!
       }
 
       if !reader.isDBNull(index: 36) {
-        dirNextSpeedStopExpectedUseDefault = reader.getBool(index: 36)!
+        dirNextSpeedStopExpectedAllowEdit = reader.getBool(index: 36)!
       }
 
       if !reader.isDBNull(index: 37) {
-        dirNextSpeedRestrictedUseDefault = reader.getBool(index: 37)!
+        dirNextSpeedRestrictedAllowEdit = reader.getBool(index: 37)!
       }
 
       if !reader.isDBNull(index: 38) {
-        dirNextSpeedBrakeUseDefault = reader.getBool(index: 38)!
+        dirNextSpeedBrakeAllowEdit = reader.getBool(index: 38)!
       }
 
       if !reader.isDBNull(index: 39) {
-        dirNextSpeedShuntUseDefault = reader.getBool(index: 39)!
+        dirNextSpeedShuntAllowEdit = reader.getBool(index: 39)!
       }
 
       if !reader.isDBNull(index: 40) {
@@ -643,23 +693,23 @@ public class SwitchBoardItem : EditorObject {
       }
 
       if !reader.isDBNull(index: 47) {
-        dirPreviousSpeedMaxUseDefault = reader.getBool(index: 47)!
+        dirPreviousSpeedMaxAllowEdit = reader.getBool(index: 47)!
       }
 
       if !reader.isDBNull(index: 48) {
-        dirPreviousSpeedStopExpectedUseDefault = reader.getBool(index: 48)!
+        dirPreviousSpeedStopExpectedAllowEdit = reader.getBool(index: 48)!
       }
 
       if !reader.isDBNull(index: 49) {
-        dirPreviousSpeedRestrictedUseDefault = reader.getBool(index: 49)!
+        dirPreviousSpeedRestrictedAllowEdit = reader.getBool(index: 49)!
       }
 
       if !reader.isDBNull(index: 50) {
-        dirPreviousSpeedBrakeUseDefault = reader.getBool(index: 50)!
+        dirPreviousSpeedBrakeAllowEdit = reader.getBool(index: 50)!
       }
 
       if !reader.isDBNull(index: 51) {
-        dirPreviousSpeedShuntUseDefault = reader.getBool(index: 51)!
+        dirPreviousSpeedShuntAllowEdit = reader.getBool(index: 51)!
       }
 
       if !reader.isDBNull(index: 52) {
@@ -671,7 +721,7 @@ public class SwitchBoardItem : EditorObject {
       }
 
       if !reader.isDBNull(index: 54) {
-        sw1TurnoutMotorType = TurnoutMotorType(rawValue: reader.getInt(index: 54)!) ?? .solenoid
+        sw1TurnoutMotorType = TurnoutMotorType(rawValue: reader.getInt(index: 54)!) ?? TurnoutMotorType.defaultValue
       }
 
       if !reader.isDBNull(index: 55) {
@@ -687,7 +737,7 @@ public class SwitchBoardItem : EditorObject {
       }
 
       if !reader.isDBNull(index: 58) {
-        sw2TurnoutMotorType = TurnoutMotorType(rawValue: reader.getInt(index: 58)!) ?? .solenoid
+        sw2TurnoutMotorType = TurnoutMotorType(rawValue: reader.getInt(index: 58)!) ?? TurnoutMotorType.defaultValue
       }
 
       if !reader.isDBNull(index: 59) {
@@ -696,6 +746,10 @@ public class SwitchBoardItem : EditorObject {
 
       if !reader.isDBNull(index: 60) {
         isScenicSection = reader.getBool(index: 60)!
+      }
+
+      if !reader.isDBNull(index: 61) {
+        blockType = BlockType(rawValue: reader.getInt(index: 61)!) ?? BlockType.defaultValue
       }
 
     }
@@ -772,7 +826,8 @@ public class SwitchBoardItem : EditorObject {
         "[\(SWITCHBOARD_ITEM.SW2_PORT)], " +
         "[\(SWITCHBOARD_ITEM.SW2_TURNOUT_MOTOR_TYPE)], " +
         "[\(SWITCHBOARD_ITEM.SW2_SENSOR_ID)], " +
-        "[\(SWITCHBOARD_ITEM.IS_SCENIC_SECTION)]" +
+        "[\(SWITCHBOARD_ITEM.IS_SCENIC_SECTION)], " +
+        "[\(SWITCHBOARD_ITEM.BLOCK_TYPE)]" +
         ") VALUES (" +
         "@\(SWITCHBOARD_ITEM.SWITCHBOARD_ITEM_ID), " +
         "@\(SWITCHBOARD_ITEM.LAYOUT_ID), " +
@@ -834,7 +889,8 @@ public class SwitchBoardItem : EditorObject {
         "@\(SWITCHBOARD_ITEM.SW2_PORT), " +
         "@\(SWITCHBOARD_ITEM.SW2_TURNOUT_MOTOR_TYPE), " +
         "@\(SWITCHBOARD_ITEM.SW2_SENSOR_ID), " +
-        "@\(SWITCHBOARD_ITEM.IS_SCENIC_SECTION)" +
+        "@\(SWITCHBOARD_ITEM.IS_SCENIC_SECTION), " +
+        "@\(SWITCHBOARD_ITEM.BLOCK_TYPE)" +
         ")"
         primaryKey = Database.nextCode(tableName: TABLE.SWITCHBOARD_ITEM, primaryKey: SWITCHBOARD_ITEM.SWITCHBOARD_ITEM_ID)!
       }
@@ -899,7 +955,8 @@ public class SwitchBoardItem : EditorObject {
         "[\(SWITCHBOARD_ITEM.SW2_PORT)] = @\(SWITCHBOARD_ITEM.SW2_PORT), " +
         "[\(SWITCHBOARD_ITEM.SW2_TURNOUT_MOTOR_TYPE)] = @\(SWITCHBOARD_ITEM.SW2_TURNOUT_MOTOR_TYPE), " +
         "[\(SWITCHBOARD_ITEM.SW2_SENSOR_ID)] = @\(SWITCHBOARD_ITEM.SW2_SENSOR_ID), " +
-        "[\(SWITCHBOARD_ITEM.IS_SCENIC_SECTION)] = @\(SWITCHBOARD_ITEM.IS_SCENIC_SECTION) " +
+        "[\(SWITCHBOARD_ITEM.IS_SCENIC_SECTION)] = @\(SWITCHBOARD_ITEM.IS_SCENIC_SECTION), " +
+        "[\(SWITCHBOARD_ITEM.BLOCK_TYPE)] = @\(SWITCHBOARD_ITEM.BLOCK_TYPE) " +
         "WHERE [\(SWITCHBOARD_ITEM.SWITCHBOARD_ITEM_ID)] = @\(SWITCHBOARD_ITEM.SWITCHBOARD_ITEM_ID)"
       }
 
@@ -944,17 +1001,17 @@ public class SwitchBoardItem : EditorObject {
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DN_UNITS_POSITION)", value: dirNextUnitsPosition.rawValue)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DP_UNITS_POSITION)", value: dirPreviousUnitsPosition.rawValue)
 
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DN_SPEED_MAX_UD)", value: dirNextSpeedMaxUseDefault)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DN_SPEED_STOP_EXPECTED_UD)", value: dirNextSpeedStopExpectedUseDefault)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DN_SPEED_RESTRICTED_UD)", value: dirNextSpeedRestrictedUseDefault)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DN_SPEED_BRAKE_UD)", value: dirNextSpeedBrakeUseDefault)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DN_SPEED_SHUNT_UD)", value: dirNextSpeedShuntUseDefault)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DN_SPEED_MAX_UD)", value: dirNextSpeedMaxAllowEdit)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DN_SPEED_STOP_EXPECTED_UD)", value: dirNextSpeedStopExpectedAllowEdit)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DN_SPEED_RESTRICTED_UD)", value: dirNextSpeedRestrictedAllowEdit)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DN_SPEED_BRAKE_UD)", value: dirNextSpeedBrakeAllowEdit)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DN_SPEED_SHUNT_UD)", value: dirNextSpeedShuntAllowEdit)
       
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DP_SPEED_MAX_UD)", value: dirPreviousSpeedMaxUseDefault)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DP_SPEED_STOP_EXPECTED_UD)", value: dirPreviousSpeedStopExpectedUseDefault)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DP_SPEED_RESTRICTED_UD)", value: dirPreviousSpeedRestrictedUseDefault)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DP_SPEED_BRAKE_UD)", value: dirPreviousSpeedBrakeUseDefault)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DP_SPEED_SHUNT_UD)", value: dirPreviousSpeedShuntUseDefault)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DP_SPEED_MAX_UD)", value: dirPreviousSpeedMaxAllowEdit)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DP_SPEED_STOP_EXPECTED_UD)", value: dirPreviousSpeedStopExpectedAllowEdit)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DP_SPEED_RESTRICTED_UD)", value: dirPreviousSpeedRestrictedAllowEdit)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DP_SPEED_BRAKE_UD)", value: dirPreviousSpeedBrakeAllowEdit)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DP_SPEED_SHUNT_UD)", value: dirPreviousSpeedShuntAllowEdit)
 
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DN_BRAKE_POSITION)", value: dirNextBrakePosition)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DN_STOP_POSITION)", value: dirNextStopPosition)
@@ -983,6 +1040,7 @@ public class SwitchBoardItem : EditorObject {
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.SW2_TURNOUT_MOTOR_TYPE)", value: sw2TurnoutMotorType.rawValue)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.SW2_SENSOR_ID)", value: sw2SensorId)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.IS_SCENIC_SECTION)", value: isScenicSection)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.BLOCK_TYPE)", value: blockType.rawValue)
 
       _ = cmd.executeNonQuery()
 
@@ -1061,7 +1119,8 @@ public class SwitchBoardItem : EditorObject {
         "[\(SWITCHBOARD_ITEM.SW2_PORT)], " +
         "[\(SWITCHBOARD_ITEM.SW2_TURNOUT_MOTOR_TYPE)], " +
         "[\(SWITCHBOARD_ITEM.SW2_SENSOR_ID)], " +
-        "[\(SWITCHBOARD_ITEM.IS_SCENIC_SECTION)]"
+        "[\(SWITCHBOARD_ITEM.IS_SCENIC_SECTION)], " +
+        "[\(SWITCHBOARD_ITEM.BLOCK_TYPE)]"
     }
   }
 
@@ -1075,5 +1134,30 @@ public class SwitchBoardItem : EditorObject {
     let sql = "DELETE FROM [\(TABLE.SWITCHBOARD_ITEM)] WHERE [\(SWITCHBOARD_ITEM.SWITCHBOARD_ITEM_ID)] = \(primaryKey)"
     Database.execute(commands: [sql])
   }
+  
+  public static func defaultSpeedMax(blockType: BlockType) -> Double {
+    let speed : [Double] = [75.0, 40.0, 40.0, 25.0, 75.0]
+    return speed[blockType.rawValue]
+  }
 
+  public static func defaultSpeedStopExpected(blockType: BlockType) -> Double {
+    let speed : [Double] = [45.0, 40.0, 40.0, 25.0, 45.0]
+    return speed[blockType.rawValue]
+  }
+
+  public static func defaultSpeedRestricted(blockType: BlockType) -> Double {
+    let speed : [Double] = [25.0, 25.0, 25.0, 25.0, 25.0]
+    return speed[blockType.rawValue]
+  }
+  
+  public static func defaultSpeedBrake(blockType: BlockType) -> Double {
+    let speed : [Double] = [20.0, 20.0, 20.0, 20.0, 20.0]
+    return speed[blockType.rawValue]
+  }
+
+  public static func defaultSpeedShunt(blockType: BlockType) -> Double {
+    let speed : [Double] = [25.0, 25.0, 25.0, 25.0, 25.0]
+    return speed[blockType.rawValue]
+  }
+  
 }

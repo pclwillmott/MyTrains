@@ -8,6 +8,8 @@
 import Foundation
 import AppKit
 
+public typealias SwitchBoardConnection = (from:Int, to:Int)
+
 public enum SwitchBoardItemPartType : Int {
   
   case straight = 0
@@ -34,6 +36,82 @@ public enum SwitchBoardItemPartType : Int {
     }
   }
   
+  public var connections : [SwitchBoardConnection] {
+    get {
+      return SwitchBoardItemPartType.connections[self] ?? []
+    }
+  }
+  
+  public func points(orientation:Orientation) -> [Int] {
+    var result : Set<Int> = []
+    for connection in connections {
+      if connection.from != -1 {
+        let from = (connection.from + orientation.rawValue) % 8
+        result.insert(from)
+      }
+      if connection.to != -1 {
+        let to = (connection.to + orientation.rawValue) % 8
+        result.insert(to)
+      }
+    }
+    return result.sorted {$0 < $1}
+  }
+  
+  public func pointLabels(orientation:Orientation) -> [(pos:Int,label:String)] {
+    
+    let labels = ["A","B","C","D","E","F","G","H"]
+    
+    var nextLabel = 0
+    
+    var result : [(pos:Int, label:String)] = []
+    for point in points(orientation: orientation) {
+      result.append((pos: point, label: String(labels[nextLabel])))
+      nextLabel += 1
+    }
+    
+    return result
+  }
+  
+  public func routeLabels(orientation:Orientation) -> [(index:Int,label:String)] {
+    
+    var lookup : [Int:String] = [:]
+    for point in pointLabels(orientation: orientation) {
+      lookup[point.pos] = point.label
+    }
+    
+    var result : [(index:Int,label:String)] = []
+    var index = 0
+    for connection in connections {
+      if let to = lookup[(connection.to + orientation.rawValue) % 8], let from = lookup[(connection.from + orientation.rawValue) % 8] {
+        let label = to < from ? "\(to) to \(from)" : "\(from) to \(to)"
+        result.append((index:index, label:label))
+      }
+      index += 1
+    }
+    
+    return result.sorted {$0.label < $1.label}
+  }
+  
+  private static let connections : [SwitchBoardItemPartType:[SwitchBoardConnection]] = [
+    .straight           : [(5,1)],
+    .curve              : [(5,3)],
+    .longCurve          : [(5,2)],
+    .turnoutRight       : [(5,1),(5,2)],
+    .turnoutLeft        : [(5,1),(5,0)],
+    .cross              : [(7,3),(5,1)],
+    .diagonalCross      : [(0,4),(5,1)],
+    .yTurnout           : [(5,0),(5,2)],
+    .turnout3Way        : [(5,0),(5,1),(5,2)],
+    .leftCurvedTurnout  : [(5,7),(5,0)],
+    .rightCurvedTurnout : [(5,3),(5,2)],
+    .buffer             : [(5,-1)],
+    .block              : [(5,1)],
+    .feedback           : [(5,1)],
+    .link               : [(5,-1)],
+    .platform           : [],
+    .none               : [],
+  ]
+  
   private static let titles = [
     "Straight",
     "Curve",
@@ -55,13 +133,15 @@ public enum SwitchBoardItemPartType : Int {
   
   public static func populate(comboBox: NSComboBox) {
     comboBox.removeAllItems()
-    for item in titles {
-      comboBox.addItem(withObjectValue: item)
-    }
+    comboBox.addItems(withObjectValues: titles)
   }
   
   public static func select(comboBox: NSComboBox, partType:SwitchBoardItemPartType) {
     comboBox.selectItem(at: partType.rawValue)
+  }
+  
+  public static func selected(comboBox: NSComboBox) -> SwitchBoardItemPartType {
+    return SwitchBoardItemPartType(rawValue: comboBox.indexOfSelectedItem) ?? .none
   }
   
 }

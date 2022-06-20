@@ -261,6 +261,7 @@ class SwitchBoardEditorView: SwitchBoardView {
         
         if let item = getItem(event: event) {
           item.propertySheet()
+          needsDisplay = true
         }
         
       case [.shift]:

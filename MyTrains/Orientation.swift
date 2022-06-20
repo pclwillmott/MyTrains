@@ -40,14 +40,16 @@ public enum Orientation : Int {
   
   public static func populate(comboBox:NSComboBox) {
     comboBox.removeAllItems()
-    for item in titles {
-      comboBox.addItem(withObjectValue: item)
-    }
-    select(comboBox: comboBox, value: .deg0)
+    comboBox.addItems(withObjectValues: titles)
+    select(comboBox: comboBox, value: .defaultValue)
   }
   
   public static func select(comboBox:NSComboBox, value:Orientation) {
     comboBox.selectItem(at: value.rawValue)
+  }
+  
+  public static func selected(comboBox: NSComboBox) -> Orientation {
+    return Orientation(rawValue: comboBox.indexOfSelectedItem) ?? defaultValue
   }
   
 }

@@ -6,6 +6,7 @@
 //
 
 import Cocoa
+import SQLite3
 
 class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
 
@@ -45,7 +46,7 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
       cboPanel.selectItem(at: item.panelId)
       
       var groupIds : Set<Int> = []
-      for (key, item) in layout.switchBoardItems {
+      for (_, item) in layout.switchBoardItems {
         if item.groupId != -1 {
           groupIds.insert(item.groupId)
         }
@@ -59,6 +60,8 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
       
       SwitchBoardItemPartType.populate(comboBox: cboPartType)
       SwitchBoardItemPartType.select(comboBox: cboPartType, partType: item.itemPartType)
+      
+      switchBoardItemView.switchBoardItem = item
 
       Orientation.populate(comboBox: cboOrientation)
       Orientation.select(comboBox: cboOrientation, value: item.orientation)
@@ -82,21 +85,70 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
       
       txtGradient.doubleValue = item.gradient
       
-      chkCriticalSection.state = item.isCritical ? .on : .off
+      chkCriticalSection.boolValue = item.isCritical
       
-      chkScenicSection.state = item.isScenicSection ? .on : .off
+      chkScenicSection.boolValue = item.isScenicSection
       
-      chkAllowShunt.state = item.allowShunt ? .on : .off
+      chkAllowShunt.boolValue = item.allowShunt
       
       UnitLength.populate(comboBox: cboDimensionUnits)
       UnitLength.select(comboBox: cboDimensionUnits, value: item.unitsDimension)
+      
+      BlockType.populate(comboBox: cboBlockType)
+      BlockType.select(comboBox: cboBlockType, value: item.blockType)
       
       // FEEDBACK
       
       // DIRECTION NEXT
       
+      txtDNBrakePosition.doubleValue = item.dirNextBrakePosition
+      
+      txtDNStopPosition.doubleValue = item.dirNextStopPosition
+      
+      UnitLength.populate(comboBox: cboDNPositionUnits)
+      UnitLength.select(comboBox: cboDNPositionUnits, value: item.dirNextUnitsPosition)
+      
+      // DIRECTION PREVIOUS
+      
+      txtDPBrakePosition.doubleValue = item.dirPreviousBrakePosition
+      
+      txtDPStopPosition.doubleValue = item.dirPreviousStopPosition
+      
+      UnitLength.populate(comboBox: cboDPPositionUnits)
+      UnitLength.select(comboBox: cboDPPositionUnits, value: item.dirPreviousUnitsPosition)
+      
+      // SPEED
+      
+      txtDNMax.doubleValue = item.dirNextSpeedMax
+      txtDNStopExpected.doubleValue = item.dirNextSpeedStopExpected
+      txtDNRestricted.doubleValue = item.dirNextSpeedRestricted
+      txtDNBrake.doubleValue = item.dirNextSpeedBrake
+      txtDNShunt.doubleValue = item.dirNextSpeedShunt
+      
+      txtDPMax.doubleValue = item.dirPreviousSpeedMax
+      txtDPStopExpected.doubleValue = item.dirPreviousSpeedStopExpected
+      txtDPRestricted.doubleValue = item.dirPreviousSpeedRestricted
+      txtDPBrake.doubleValue = item.dirPreviousSpeedBrake
+      txtDPShunt.doubleValue = item.dirPreviousSpeedShunt
+      
+      chkDNMaxUD.boolValue = item.dirNextSpeedMaxAllowEdit
+      chkDNStopExpectedUD.boolValue = item.dirNextSpeedStopExpectedAllowEdit
+      chkDNRestrictedUD.boolValue = item.dirNextSpeedRestrictedAllowEdit
+      chkDNBrakeUD.boolValue = item.dirNextSpeedBrakeAllowEdit
+      chkDNShuntUD.boolValue = item.dirNextSpeedShuntAllowEdit
+      
+      chkDPMaxUD.boolValue = item.dirPreviousSpeedMaxAllowEdit
+      chkDPStopExpectedUD.boolValue = item.dirPreviousSpeedStopExpectedAllowEdit
+      chkDPRestrictedUD.boolValue = item.dirPreviousSpeedRestrictedAllowEdit
+      chkDPBrakeUD.boolValue = item.dirPreviousSpeedBrakeAllowEdit
+      chkDPShuntUD.boolValue = item.dirPreviousSpeedShuntAllowEdit
+      
+      UnitSpeed.populate(comboBox: cboSpeedUnits)
+      UnitSpeed.select(comboBox: cboSpeedUnits, value: item.unitsSpeed)
       
     }
+    
+    setupControls()
 
   }
   
@@ -112,71 +164,35 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
   
   public var switchBoardItem : SwitchBoardItem?
 
-  /*
-   enum SWITCHBOARD_ITEM {
-     static let SWITCHBOARD_ITEM_ID         = "SWITCHBOARD_ITEM_ID"         x
-     static let LAYOUT_ID                   = "LAYOUT_ID"                   x
-     static let PANEL_ID                    = "PANEL_ID"                    x
-     static let GROUP_ID                    = "GROUP_ID"                    x
-     static let ITEM_PART_TYPE              = "ITEM_PART_TYPE"              x
-     static let ORIENTATION                 = "ORIENTATION"                 x
-     static let XPOS                        = "XPOS"                        x
-     static let YPOS                        = "YPOS"                        x
-     static let BLOCK_NAME                  = "BLOCK_NAME"                  x
-     static let BLOCK_DIRECTION             = "BLOCK_DIRECTION"             x
-     static let TRACK_PART_ID               = "TRACK_PART_ID"               x
-     static let DIMENSIONA                  = "DIMENSIONA"                  x
-     static let DIMENSIONB                  = "DIMENSIONB"                  x
-     static let DIMENSIONC                  = "DIMENSIONC"                  x
-     static let DIMENSIOND                  = "DIMENSIOND"                  x
-     static let DIMENSIONE                  = "DIMENSIONE"                  x
-     static let DIMENSIONF                  = "DIMENSIONF"                  x
-     static let DIMENSIONG                  = "DIMENSIONG"                  x
-     static let DIMENSIONH                  = "DIMENSIONH"                  x
-     static let UNITS_DIMENSION             = "UNITS_DIMENSION"             x
-     static let ALLOW_SHUNT                 = "ALLOW_SHUNT"                 x
-     static let TRACK_GAUGE                 = "TRACK_GAUGE"                 x
-     static let TRACK_ELECTRIFICATION_TYPE  = "TRACK_ELECTRIFICATION_TYPE"  x
-     static let GRADIENT                    = "GRADIENT"                    x
-     static let IS_CRITICAL                 = "IS_CRITICAL"                 x
-     static let UNITS_SPEED                 = "UNITS_SPEED"                 x
-     static let UNITS_POSITION              = "UNITS_POSITION"              x
-     static let DN_BRAKE_POSITION           = "DN_BRAKE_POSITION"           x
-     static let DN_STOP_POSITION            = "DN_STOP_POSITION"            x
-     static let DN_SPEED_MAX                = "DN_SPEED_MAX"                x
-     static let DN_SPEED_STOP_EXPECTED      = "DN_SPEED_STOP_EXPECTED"      x
-     static let DN_SPEED_RESTRICTED         = "DN_SPEED_RESTRICTED"         x
-     static let DN_SPEED_BRAKE              = "DN_SPEED_BRAKE"              x
-     static let DN_SPEED_SHUNT              = "DN_SPEED_SHUNT"              x
-     static let DN_SPEED_MAX_UD             = "DN_SPEED_MAX_UD"             x
-     static let DN_SPEED_STOP_EXPECTED_UD   = "DN_SPEED_STOP_EXPECTED_UD"   x
-     static let DN_SPEED_RESTRICTED_UD      = "DN_SPEED_RESTRICTED_UD"      x
-     static let DN_SPEED_BRAKE_UD           = "DN_SPEED_BRAKE_UD"           x
-     static let DN_SPEED_SHUNT_UD           = "DN_SPEED_SHUNT_UD"           x
-     static let DP_BRAKE_POSITION           = "DP_BRAKE_POSITION"           x
-     static let DP_STOP_POSITION            = "DP_STOP_POSITION"            x
-     static let DP_SPEED_MAX                = "DP_SPEED_MAX"                x
-     static let DP_SPEED_STOP_EXPECTED      = "DP_SPEED_STOP_EXPECTED"      x
-     static let DP_SPEED_RESTRICTED         = "DP_SPEED_RESTRICTED"         x
-     static let DP_SPEED_BRAKE              = "DP_SPEED_BRAKE"              x
-     static let DP_SPEED_SHUNT              = "DP_SPEED_SHUNT"              x
-     static let DP_SPEED_MAX_UD             = "DP_SPEED_MAX_UD"             x
-     static let DP_SPEED_STOP_EXPECTED_UD   = "DP_SPEED_STOP_EXPECTED_UD"   x
-     static let DP_SPEED_RESTRICTED_UD      = "DP_SPEED_RESTRICTED_UD"      x
-     static let DP_SPEED_BRAKE_UD           = "DP_SPEED_BRAKE_UD"           x
-     static let DP_SPEED_SHUNT_UD           = "DP_SPEED_SHUNT_UD"           x
-     static let SW1_LOCONET_DEVICE_ID       = "SW1_LOCONET_DEVICE_ID"
-     static let SW1_PORT                    = "SW1_PORT"
-     static let SW1_TURNOUT_MOTOR_TYPE      = "SW1_TURNOUT_MOTOR_TYPE"
-     static let SW1_SENSOR_ID               = "SW1_SENSOR_ID"
-     static let SW2_LOCONET_DEVICE_ID       = "SW2_LOCONET_DEVICE_ID"
-     static let SW2_PORT                    = "SW2_PORT"
-     static let SW2_TURNOUT_MOTOR_TYPE      = "SW2_TURNOUT_MOTOR_TYPE"
-     static let SW2_SENSOR_ID               = "SW2_SENSOR_ID"
-     static let IS_SCENIC_SECTION           = "IS_SCENIC_SECTION"           x
-   }
-
-   */
+  // MARK: Private Methods
+  
+  private func setupControls() {
+    
+    // GENERAL
+    
+    // OPTIONS
+    
+    // FEEDBACK
+    
+    // DIRECTION NEXT
+    
+    // DIRECTION PREVIOUS
+    
+    // SPEED
+    
+    txtDNMax.isEnabled = chkDNMaxUD.boolValue
+    txtDNStopExpected.isEnabled = chkDNStopExpectedUD.boolValue
+    txtDNRestricted.isEnabled = chkDNRestrictedUD.boolValue
+    txtDNBrake.isEnabled = chkDNBrakeUD.boolValue
+    txtDNShunt.isEnabled = chkDNShuntUD.boolValue
+    
+    txtDPMax.isEnabled = chkDPMaxUD.boolValue
+    txtDPStopExpected.isEnabled = chkDPStopExpectedUD.boolValue
+    txtDPRestricted.isEnabled = chkDPRestrictedUD.boolValue
+    txtDPBrake.isEnabled = chkDPBrakeUD.boolValue
+    txtDPShunt.isEnabled = chkDPShuntUD.boolValue
+    
+  }
   
   // MARK: Outlets & Actions
   
@@ -312,9 +328,77 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
   }
   
   @IBAction func btnCancelAction(_ sender: NSButton) {
+    view.window?.close()
   }
   
   @IBAction func btnDoneAction(_ sender: NSButton) {
+    
+    item.blockType = BlockType.selected(comboBox: cboBlockType)
+    
+    item.dirNextSpeedMaxAllowEdit = chkDNMaxUD.boolValue
+    item.dirNextSpeedStopExpectedAllowEdit = chkDNStopExpectedUD.boolValue
+    item.dirNextSpeedRestrictedAllowEdit = chkDNRestrictedUD.boolValue
+    item.dirNextSpeedBrakeAllowEdit = chkDNBrakeUD.boolValue
+    item.dirNextSpeedShuntAllowEdit = chkDNShuntUD.boolValue
+    
+    item.dirPreviousSpeedMaxAllowEdit = chkDPMaxUD.boolValue
+    item.dirPreviousSpeedStopExpectedAllowEdit = chkDPStopExpectedUD.boolValue
+    item.dirPreviousSpeedRestrictedAllowEdit = chkDPRestrictedUD.boolValue
+    item.dirPreviousSpeedBrakeAllowEdit = chkDPBrakeUD.boolValue
+    item.dirPreviousSpeedShuntAllowEdit = chkDPShuntUD.boolValue
+    
+    item.dirNextSpeedMax = txtDNMax.doubleValue
+    item.dirNextSpeedStopExpected = txtDNStopExpected.doubleValue
+    item.dirNextSpeedRestricted = txtDNRestricted.doubleValue
+    item.dirNextSpeedBrake = txtDNBrake.doubleValue
+    item.dirNextSpeedShunt = txtDNShunt.doubleValue
+    
+    item.dirPreviousSpeedMax = txtDPMax.doubleValue
+    item.dirPreviousSpeedStopExpected = txtDPStopExpected.doubleValue
+    item.dirPreviousSpeedRestricted = txtDPRestricted.doubleValue
+    item.dirPreviousSpeedBrake = txtDPBrake.doubleValue
+    item.dirPreviousSpeedShunt = txtDPShunt.doubleValue
+    
+    item.unitsSpeed = UnitSpeed.selected(comboBox: cboSpeedUnits)
+    
+    item.allowShunt = chkAllowShunt.boolValue
+    
+    item.blockDirection = BlockDirection.selected(comboBox: cboDirection)
+    
+    item.blockName = txtName.stringValue
+    
+    item.dirNextBrakePosition = txtDNBrakePosition.doubleValue
+    
+    item.dirNextStopPosition = txtDNStopPosition.doubleValue
+    
+    item.dirNextUnitsPosition = UnitLength.selected(comboBox: cboDNPositionUnits)
+    
+    item.dirPreviousBrakePosition = txtDPBrakePosition.doubleValue
+    
+    item.dirPreviousStopPosition = txtDPStopPosition.doubleValue
+    
+    item.dirPreviousUnitsPosition = UnitLength.selected(comboBox: cboDPPositionUnits)
+    
+    item.gradient = txtGradient.doubleValue
+    
+    item.isCritical = chkCriticalSection.boolValue
+    
+    item.isScenicSection = chkScenicSection.boolValue
+    
+    item.orientation = Orientation.selected(comboBox: cboOrientation)
+    
+    item.trackElectrificationType = TrackElectrificationType.selected(comboBox: cboTrackElectrificationType)
+    
+    item.trackGauge = TrackGauge.selected(comboBox: cboTrackGauge)
+    
+    item.unitsDimension = UnitLength.selected(comboBox: cboDimensionUnits)
+    
+    item.location = (x: txtXPos.integerValue, y: txtYPos.integerValue)
+    
+    item.itemPartType = SwitchBoardItemPartType.selected(comboBox: cboPartType)
+
+    view.window?.close()
+    
   }
   
   @IBOutlet weak var txtDNBrakePosition: NSTextField!
@@ -350,26 +434,31 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
   @IBOutlet weak var chkDNMaxUD: NSButton!
   
   @IBAction func chkDNMaxUDAction(_ sender: NSButton) {
+    setupControls()
   }
   
   @IBOutlet weak var chkDNStopExpectedUD: NSButton!
   
   @IBAction func chkDNStopExpectedUDAction(_ sender: NSButton) {
+    setupControls()
   }
   
   @IBOutlet weak var chkDNRestrictedUD: NSButton!
   
   @IBAction func chkDNRestrictedUDAction(_ sender: NSButton) {
+    setupControls()
   }
   
   @IBOutlet weak var chkDNBrakeUD: NSButton!
   
   @IBAction func chkDNBrakeUDAction(_ sender: NSButton) {
+    setupControls()
   }
   
   @IBOutlet weak var chkDNShuntUD: NSButton!
   
   @IBAction func chkDNShuntUDAction(_ sender: NSButton) {
+    setupControls()
   }
   
   @IBOutlet weak var txtDNMax: NSTextField!
@@ -398,31 +487,53 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
   }
   
   @IBAction func btnDNSetDefaults(_ sender: NSButton) {
+    
+    let blockType = BlockType.selected(comboBox: cboBlockType)
+    
+    txtDNMax.doubleValue = SwitchBoardItem.defaultSpeedMax(blockType: blockType)
+    txtDNStopExpected.doubleValue = SwitchBoardItem.defaultSpeedStopExpected(blockType: blockType)
+    txtDNRestricted.doubleValue = SwitchBoardItem.defaultSpeedRestricted(blockType: blockType)
+    txtDNBrake.doubleValue = SwitchBoardItem.defaultSpeedBrake(blockType: blockType)
+    txtDNShunt.doubleValue = SwitchBoardItem.defaultSpeedShunt(blockType: blockType)
+    
+    chkDNMaxUD.boolValue = false
+    chkDNStopExpectedUD.boolValue = false
+    chkDNRestrictedUD.boolValue = false
+    chkDNBrakeUD.boolValue = false
+    chkDNShuntUD.boolValue = false
+    
+    setupControls()
+    
   }
   
   @IBOutlet weak var chkDPMaxUD: NSButton!
   
   @IBAction func chkDPMaxUDAction(_ sender: NSButton) {
+    setupControls()
   }
   
   @IBOutlet weak var chkDPStopExpectedUD: NSButton!
   
   @IBAction func chkDPStopExpectedUDAction(_ sender: NSButton) {
+    setupControls()
   }
   
   @IBOutlet weak var chkDPRestrictedUD: NSButton!
   
   @IBAction func chkDPRestrictedUDAction(_ sender: NSButton) {
+    setupControls()
   }
   
   @IBOutlet weak var chkDPBrakeUD: NSButton!
   
   @IBAction func chkDPBrakeUDAction(_ sender: NSButton) {
+    setupControls()
   }
   
   @IBOutlet weak var chkDPShuntUD: NSButton!
   
   @IBAction func chkDPShuntUDAction(_ sender: NSButton) {
+    setupControls()
   }
   
   @IBOutlet weak var txtDPMax: NSTextField!
@@ -451,6 +562,23 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
   }
   
   @IBAction func btnDPSetDefaults(_ sender: NSButton) {
+    
+    let blockType = BlockType.selected(comboBox: cboBlockType)
+    
+    txtDPMax.doubleValue = SwitchBoardItem.defaultSpeedMax(blockType: blockType)
+    txtDPStopExpected.doubleValue = SwitchBoardItem.defaultSpeedStopExpected(blockType: blockType)
+    txtDPRestricted.doubleValue = SwitchBoardItem.defaultSpeedRestricted(blockType: blockType)
+    txtDPBrake.doubleValue = SwitchBoardItem.defaultSpeedBrake(blockType: blockType)
+    txtDPShunt.doubleValue = SwitchBoardItem.defaultSpeedShunt(blockType: blockType)
+    
+    chkDPMaxUD.boolValue = false
+    chkDPStopExpectedUD.boolValue = false
+    chkDPRestrictedUD.boolValue = false
+    chkDPBrakeUD.boolValue = false
+    chkDPShuntUD.boolValue = false
+    
+    setupControls()
+     
   }
   
   @IBOutlet weak var cboSpeedUnits: NSComboBox!
@@ -458,6 +586,45 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
   @IBAction func btnSpeedUnitsAction(_ sender: NSComboBox) {
   }
   
+  @IBOutlet weak var cboBlockType: NSComboBox!
   
+  @IBAction func cboBlockTypeAction(_ sender: NSComboBox) {
+    
+    let blockType = BlockType.selected(comboBox: sender)
+    
+    if !chkDNMaxUD.boolValue {
+      txtDNMax.doubleValue = SwitchBoardItem.defaultSpeedMax(blockType: blockType)
+    }
+    if !chkDNStopExpectedUD.boolValue {
+      txtDNStopExpected.doubleValue = SwitchBoardItem.defaultSpeedStopExpected(blockType: blockType)
+    }
+    if !chkDNRestrictedUD.boolValue {
+      txtDNRestricted.doubleValue = SwitchBoardItem.defaultSpeedRestricted(blockType: blockType)
+    }
+    if !chkDNBrakeUD.boolValue {
+      txtDNBrake.doubleValue = SwitchBoardItem.defaultSpeedBrake(blockType: blockType)
+    }
+    if !chkDNShuntUD.boolValue {
+      txtDNShunt.doubleValue = SwitchBoardItem.defaultSpeedShunt(blockType: blockType)
+    }
+    
+    if !chkDPMaxUD.boolValue {
+      txtDPMax.doubleValue = SwitchBoardItem.defaultSpeedMax(blockType: blockType)
+    }
+    if !chkDPStopExpectedUD.boolValue {
+      txtDPStopExpected.doubleValue = SwitchBoardItem.defaultSpeedStopExpected(blockType: blockType)
+    }
+    if !chkDPRestrictedUD.boolValue {
+      txtDPRestricted.doubleValue = SwitchBoardItem.defaultSpeedRestricted(blockType: blockType)
+    }
+    if !chkDPBrakeUD.boolValue {
+      txtDPBrake.doubleValue = SwitchBoardItem.defaultSpeedBrake(blockType: blockType)
+    }
+    if !chkDPShuntUD.boolValue {
+      txtDPShunt.doubleValue = SwitchBoardItem.defaultSpeedShunt(blockType: blockType)
+    }
+    
+  }
   
+  @IBOutlet weak var switchBoardItemView: SwitchBoardItemView!
 }

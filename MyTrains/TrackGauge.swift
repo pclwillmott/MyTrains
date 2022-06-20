@@ -44,11 +44,11 @@ public enum TrackGauge : Int {
     "TT3",
   ]
   
+  public static let defaultValue : TrackGauge = .oo
+
   public static func populate(comboBox: NSComboBox) {
     comboBox.removeAllItems()
-    for index in 0...titles.count-1 {
-      comboBox.addItem(withObjectValue: titles[index])
-    }
+    comboBox.addItems(withObjectValues: titles)
     select(comboBox: comboBox, value: defaultValue)
   }
   
@@ -56,7 +56,9 @@ public enum TrackGauge : Int {
     comboBox.selectItem(at: value.rawValue)
   }
   
-  public static let defaultValue : TrackGauge = .oo
-
+  public static func selected(comboBox: NSComboBox) -> TrackGauge {
+    return TrackGauge(rawValue: comboBox.indexOfSelectedItem) ?? defaultValue
+  }
+  
 }
 

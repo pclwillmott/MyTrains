@@ -44,5 +44,34 @@ public enum UnitSpeed : Int {
     return UnitSpeed(rawValue: comboBox.indexOfSelectedItem) ?? defaultValue
   }
   
+  // The factor to be applied to a speed in units to get a speed in cm/s.
+  // This factor does not take into account the layout scale.
+  public static func toCMS(units: UnitSpeed) -> Double {
+    
+    let secondsPerHour : Double = 60.0 * 60.0
+    let km2m           : Double = 1000.0
+    let m2cm           : Double = 100.0
+    let km2cm          : Double = km2m * m2cm
+    let miles2cm       : Double = 1.609344 * km2cm
+    
+    switch units {
+    case .kilometersPerHour:
+      return 1.0 / secondsPerHour * km2cm
+    case .milesPerHour:
+      return 1.0 / secondsPerHour * miles2cm
+    case .metersPerSecond:
+      return m2cm
+    case .centimetersPerSecond:
+      return 1.0
+    }
+    
+  }
+  
+  // The factor to be applied to a speed in cm/s to get a speed in units.
+  // This factor does not take into account the layout scale.
+  public static func fromCMS(units: UnitSpeed) -> Double {
+    return 1.0 / toCMS(units: units)
+  }
+  
 }
 

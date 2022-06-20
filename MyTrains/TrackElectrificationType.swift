@@ -26,11 +26,11 @@ public enum TrackElectrificationType : Int {
     "Overhead"
   ]
   
+  public static let defaultValue : TrackElectrificationType = .notElectrified
+  
   public static func populate(comboBox: NSComboBox) {
     comboBox.removeAllItems()
-    for item in titles {
-      comboBox.addItem(withObjectValue: item)
-    }
+    comboBox.addItems(withObjectValues: titles)
     select(comboBox: comboBox, value: defaultValue)
   }
   
@@ -38,6 +38,8 @@ public enum TrackElectrificationType : Int {
     comboBox.selectItem(at: value.rawValue)
   }
   
-  public static let defaultValue : TrackElectrificationType = .notElectrified
+  public static func selected(comboBox: NSComboBox) -> TrackElectrificationType {
+    return TrackElectrificationType(rawValue: comboBox.indexOfSelectedItem) ?? defaultValue
+  }
   
 }

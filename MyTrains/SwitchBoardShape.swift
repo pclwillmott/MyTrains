@@ -12,7 +12,7 @@ class SwitchBoardShape {
   
   // MARK: Class Methods
   
-  public static func drawShape(partType: SwitchBoardItemPartType, orientation: Orientation, location: SwitchBoardLocation, lineWidth:CGFloat, cellSize: CGFloat, isButton: Bool, isEnabled: Bool) {
+  public static func drawShape(partType: SwitchBoardItemPartType, orientation: Orientation, location: SwitchBoardLocation, lineWidth:CGFloat, cellSize: CGFloat, isButton: Bool, isEnabled: Bool, offset: CGPoint) {
     
     if let shape = SwitchBoardShape.getShape(part: partType, orientation: orientation) {
 
@@ -44,7 +44,7 @@ class SwitchBoardShape {
           let dx = bx + x * cosTheta - y * sinTheta
           let dy = by + x * sinTheta + y * cosTheta
           
-          coordinates.append(CGPoint(x: dx, y: dy))
+          coordinates.append(CGPoint(x: offset.x + dx, y: offset.y + dy))
           
         }
         

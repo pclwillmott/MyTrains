@@ -233,7 +233,8 @@ class Database {
               "[\(SWITCHBOARD_ITEM.SW2_PORT)]                   INT NOT NULL," +
               "[\(SWITCHBOARD_ITEM.SW2_TURNOUT_MOTOR_TYPE)]     INT NOT NULL," +
               "[\(SWITCHBOARD_ITEM.SW2_SENSOR_ID)]              INT NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.IS_SCENIC_SECTION)]          INT NOT NULL" +
+              "[\(SWITCHBOARD_ITEM.IS_SCENIC_SECTION)]          INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.BLOCK_TYPE)]                 INT NOT NULL" +
             ")",
 
             "CREATE TABLE [\(TABLE.SENSOR)] (" +
