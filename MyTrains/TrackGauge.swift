@@ -11,17 +11,16 @@ import AppKit
 public enum TrackGauge : Int {
   
   case em         = 0
-  case ho         = 1
-  case n          = 2
-  case o          = 3
-  case o14        = 4
-  case oo         = 5
-  case ooo        = 6
-  case p4         = 7
-  case s          = 8
-  case scaleSeven = 9
-  case tt         = 10
-  case tt3        = 11
+  case n          = 1
+  case o          = 2
+  case o14        = 3
+  case ooho       = 4
+  case ooo        = 5
+  case p4         = 6
+  case s          = 7
+  case scaleSeven = 8
+  case tt         = 9
+  case tt3        = 10
 
   public var title : String {
     get {
@@ -31,12 +30,11 @@ public enum TrackGauge : Int {
   
   private static let titles = [
     "EM",
-    "HO",
     "N",
     "O",
     "O14",
-    "00",
-    "000",
+    "OO/HO",
+    "OOO",
     "P4",
     "S",
     "Scale 7",
@@ -44,7 +42,7 @@ public enum TrackGauge : Int {
     "TT3",
   ]
   
-  public static let defaultValue : TrackGauge = .oo
+  public static let defaultValue : TrackGauge = .ooho
 
   public static func populate(comboBox: NSComboBox) {
     comboBox.removeAllItems()

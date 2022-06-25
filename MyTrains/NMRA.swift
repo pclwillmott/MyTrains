@@ -419,6 +419,7 @@ public class NMRA {
     ("BRAWA Modellspielwaren GmbH & Co.", 0xBA, "DE", -1, 160),
     ("Con-Com GmbH", 0xCC, "AT", -1, 161),
     ("Blue Digital", 0xE1, "POL", -1, 162),
+    ("PECO", -1, "UK", -1, 163),
 //  ("NMRA Reserved (for extended ID #’s)", 0xEE, "US", -1, 163),
   ]
 

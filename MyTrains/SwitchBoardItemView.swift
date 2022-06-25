@@ -29,12 +29,6 @@ class SwitchBoardItemView: NSView {
    
       let path = NSBezierPath()
       
-      path.appendRect(bounds)
-      
-      NSColor.windowBackgroundColor.setFill()
-      
-      path.fill()
-      
       SwitchBoardShape.drawShape(partType: item.itemPartType, orientation: item.orientation, location: (x:0,y:0), lineWidth: lineWidth, cellSize: cellSize, isButton: false, isEnabled: true, offset: offset)
       
       NSColor.setStrokeColor(color: .clear)
@@ -45,22 +39,21 @@ class SwitchBoardItemView: NSView {
       
       path.stroke()
       
+      let coords : [CGPoint] = [
+        CGPoint(x: 0.1,  y: 0.84),
+        CGPoint(x: 0.47, y: 0.84),
+        CGPoint(x: 0.84, y: 0.84),
+        CGPoint(x: 0.84, y: 0.47),
+        CGPoint(x: 0.84, y: 0.1),
+        CGPoint(x: 0.47, y: 0.1),
+        CGPoint(x: 0.1,  y: 0.1),
+        CGPoint(x: 0.1,  y: 0.47),
+      ]
+      
       for labelInfo in item.itemPartType.pointLabels(orientation: item.orientation) {
-        
-        let coords : [CGPoint] = [
-          CGPoint(x: 0.1, y: 0.84),
-          CGPoint(x: 0.47, y: 0.84),
-          CGPoint(x: 0.84, y: 0.84),
-          CGPoint(x: 0.84, y: 0.47),
-          CGPoint(x: 0.84, y: 0.1),
-          CGPoint(x: 0.47, y: 0.1),
-          CGPoint(x: 0.1, y: 0.1),
-          CGPoint(x: 0.1, y: 0.47),
-        ]
         
         let x = coords[labelInfo.pos].x * bounds.width
         let y = coords[labelInfo.pos].y * bounds.height
-        
         
         let text = "\(labelInfo.label)"
         let font = NSFont.boldSystemFont(ofSize: 16)
@@ -74,8 +67,6 @@ class SwitchBoardItemView: NSView {
         text.draw(in: textRect, withAttributes: textFontAttributes)
 
       }
-      
-      print(item.itemPartType.routeLabels(orientation: item.orientation))
       
     }
     

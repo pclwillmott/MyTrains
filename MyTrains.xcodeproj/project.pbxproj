@@ -137,6 +137,10 @@
 		DAB0749A276EB8B1003278BE /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB07499276EB8B1003278BE /* Database.swift */; };
 		DAB4FF5E2854F8CF00D74920 /* LocomotiveType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB4FF5D2854F8CF00D74920 /* LocomotiveType.swift */; };
 		DADBBFEA285DF36700426CD5 /* LayoutSwitchBoardExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADBBFE9285DF36700426CD5 /* LayoutSwitchBoardExtensions.swift */; };
+		DAE8DD51286741BD0097C2D1 /* TrackPart.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE8DD50286741BD0097C2D1 /* TrackPart.swift */; };
+		DAE8DD53286751BE0097C2D1 /* Manufacturer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE8DD52286751BE0097C2D1 /* Manufacturer.swift */; };
+		DAE8DD55286754C00097C2D1 /* TrackCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE8DD54286754C00097C2D1 /* TrackCode.swift */; };
+		DAE8DD5728675B040097C2D1 /* FrogType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE8DD5628675B040097C2D1 /* FrogType.swift */; };
 		DAE9DBB728258E12004BC75D /* LocoNetProducts.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE9DBB628258E12004BC75D /* LocoNetProducts.swift */; };
 		DAEA9CF7272D8DA900C9B3EC /* NetworkConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEA9CF6272D8DA900C9B3EC /* NetworkConstants.swift */; };
 		DAEA9CFA272D8FBE00C9B3EC /* NetworkMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEA9CF9272D8FBE00C9B3EC /* NetworkMessage.swift */; };
@@ -279,6 +283,10 @@
 		DAB07499276EB8B1003278BE /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		DAB4FF5D2854F8CF00D74920 /* LocomotiveType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocomotiveType.swift; sourceTree = "<group>"; };
 		DADBBFE9285DF36700426CD5 /* LayoutSwitchBoardExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutSwitchBoardExtensions.swift; sourceTree = "<group>"; };
+		DAE8DD50286741BD0097C2D1 /* TrackPart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackPart.swift; sourceTree = "<group>"; };
+		DAE8DD52286751BE0097C2D1 /* Manufacturer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Manufacturer.swift; sourceTree = "<group>"; };
+		DAE8DD54286754C00097C2D1 /* TrackCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackCode.swift; sourceTree = "<group>"; };
+		DAE8DD5628675B040097C2D1 /* FrogType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrogType.swift; sourceTree = "<group>"; };
 		DAE9DBB628258E12004BC75D /* LocoNetProducts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoNetProducts.swift; sourceTree = "<group>"; };
 		DAEA9CF6272D8DA900C9B3EC /* NetworkConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkConstants.swift; sourceTree = "<group>"; };
 		DAEA9CF9272D8FBE00C9B3EC /* NetworkMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMessage.swift; sourceTree = "<group>"; };
@@ -370,6 +378,7 @@
 				DA7A490F274A89FE00C2A42B /* FastClockMessage.swift */,
 				DA1DA5EB28280FCD00E0F993 /* FlowControl.swift */,
 				DA840BCD2794727F00944562 /* FNTableViewDS.swift */,
+				DAE8DD5628675B040097C2D1 /* FrogType.swift */,
 				DA6A0AE02753D50A00913F2B /* GlobalVariables.swift */,
 				DA95D6BE28083E9800D9F1B6 /* GroupSetup.storyboard */,
 				DA95D6BC280833ED00D9F1B6 /* GroupSetupVC.swift */,
@@ -396,6 +405,7 @@
 				DA8FDB2C279C4AC000E15024 /* LocoSlotTableViewDS.swift */,
 				DAA83DF0272C37680075CBCD /* Main.storyboard */,
 				DAA83DEC272C37670075CBCD /* MainVC.swift */,
+				DAE8DD52286751BE0097C2D1 /* Manufacturer.swift */,
 				DA8B5D1A282FE23900D39F07 /* MessageTiming.swift */,
 				DA6A0ADB27529D6600913F2B /* ModalWindow.swift */,
 				DA6A0AD7275295BF00913F2B /* Monitor.storyboard */,
@@ -457,8 +467,10 @@
 				DA412E112780948900748CCD /* Throttle.storyboard */,
 				DA412E13278099AF00748CCD /* ThrottleVC.swift */,
 				DA8B5D16282FCE2700D39F07 /* TimeoutCode.swift */,
+				DAE8DD54286754C00097C2D1 /* TrackCode.swift */,
 				DA6E28E2285F8F1A00772641 /* TrackElectrificationType.swift */,
 				DA1B79FC285F3C5E009E1189 /* TrackGauge.swift */,
+				DAE8DD50286741BD0097C2D1 /* TrackPart.swift */,
 				DA9CF8FC2860978A00825FA9 /* TurnoutMotorType.swift */,
 				DA6A0ADE2753B5CF00913F2B /* UserDefaults.swift */,
 				DA1ECC9228439D4600C4F963 /* UpdateFirmware.storyboard */,
@@ -611,6 +623,7 @@
 				DA53B250276E360500AB956C /* CommandStation.swift in Sources */,
 				DA95D6BD280833FE00D9F1B6 /* GroupSetupVC.swift in Sources */,
 				DA2502B9282671600002D4AF /* RollingStock.swift in Sources */,
+				DAE8DD55286754C00097C2D1 /* TrackCode.swift in Sources */,
 				DA467BAD281D56BC00AB9650 /* SwitchBoardOperationsView.swift in Sources */,
 				DA7A4912274AC25600C2A42B /* PeerXferMessage.swift in Sources */,
 				DA77795127AEE0E5007EEBE9 /* CommandStationConfigurationVC.swift in Sources */,
@@ -620,6 +633,7 @@
 				DA6A0ADA2752976800913F2B /* MonitorVC.swift in Sources */,
 				DA5E173E272EB23100F9341F /* LoconetSensorMessage.swift in Sources */,
 				DA467BB1281D5ED400AB9650 /* SwitchBoardEditorVC.swift in Sources */,
+				DAE8DD5728675B040097C2D1 /* FrogType.swift in Sources */,
 				DA0197272773520400350F71 /* EditorObject.swift in Sources */,
 				DAEA9CF7272D8DA900C9B3EC /* NetworkConstants.swift in Sources */,
 				DA2E0E5A2736B8AA00C7DA7A /* LoconetRequestSlotDataMessage.swift in Sources */,
@@ -651,10 +665,12 @@
 				DA5B4601276F4E38005CA03C /* DatabaseConstants.swift in Sources */,
 				DA1DA5EA28280EEE00E0F993 /* BaudRate.swift in Sources */,
 				DA412E162780DC3C00748CCD /* DecoderFunction.swift in Sources */,
+				DAE8DD51286741BD0097C2D1 /* TrackPart.swift in Sources */,
 				DADBBFEA285DF36700426CD5 /* LayoutSwitchBoardExtensions.swift in Sources */,
 				DA8B5D1B282FE23900D39F07 /* MessageTiming.swift in Sources */,
 				DA28C2C52801ED9700857471 /* QuerySlot3.swift in Sources */,
 				DA434294283698CA00E8D555 /* SerialPort.c in Sources */,
+				DAE8DD53286751BE0097C2D1 /* Manufacturer.swift in Sources */,
 				DA0DA27A2779E96B00E4F23C /* Layout.swift in Sources */,
 				DA467BA9281D569300AB9650 /* SwitchBoardView.swift in Sources */,
 				DA9CF8F9286089B000825FA9 /* NSButtonExtensions.swift in Sources */,

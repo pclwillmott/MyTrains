@@ -58,13 +58,11 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
         cboGroupId.addItem(withObjectValue: "\(id)")
       }
       
-      SwitchBoardItemPartType.populate(comboBox: cboPartType)
-      SwitchBoardItemPartType.select(comboBox: cboPartType, partType: item.itemPartType)
+      lblPartType.stringValue = item.itemPartType.partName
       
       switchBoardItemView.switchBoardItem = item
 
-      Orientation.populate(comboBox: cboOrientation)
-      Orientation.select(comboBox: cboOrientation, value: item.orientation)
+      lblOrientation.stringValue = item.orientation.title
       
       txtXPos.integerValue = item.location.x
       
@@ -74,6 +72,8 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
       
       // OPTIONS TAB
       
+      tabs.tabViewItems[1].view?.isHidden = item.isTrack || item.isScenic
+
       TrackGauge.populate(comboBox: cboTrackGauge)
       TrackGauge.select(comboBox: cboTrackGauge, value: item.trackGauge)
       
@@ -97,10 +97,40 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
       BlockType.populate(comboBox: cboBlockType)
       BlockType.select(comboBox: cboBlockType, value: item.blockType)
       
+      cboTrackPartTypeDS.dictionary = TrackPart.dictionary(itemPartType: item.itemPartType, trackGauge: item.trackGauge)
+      cboTrackPartType.dataSource = cboTrackPartTypeDS
+      
+      dimensions = [
+        (lblA, txtA),
+        (lblB, txtB),
+        (lblC, txtC),
+        (lblD, txtD),
+        (lblE, txtE),
+        (lblF, txtF),
+        (lblG, txtG),
+        (lblH, txtH),
+      ]
+      
+      let labels = item.itemPartType.routeLabels(orientation: item.orientation)
+      
+      var index = 0
+      for dimension in dimensions {
+        let isHidden = index >= labels.count
+        dimension.label.isHidden = isHidden
+        dimension.value.isHidden = isHidden
+        if index < labels.count {
+          dimension.label.stringValue = labels[index].label
+          dimension.value.doubleValue = item.getDimension(index: labels[index].index)
+        }
+        index += 1
+      }
+
       // FEEDBACK
       
       // DIRECTION NEXT
       
+      tabs.tabViewItems[3].view?.isHidden = !item.isBlock
+
       txtDNBrakePosition.doubleValue = item.dirNextBrakePosition
       
       txtDNStopPosition.doubleValue = item.dirNextStopPosition
@@ -110,6 +140,8 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
       
       // DIRECTION PREVIOUS
       
+      tabs.tabViewItems[4].view?.isHidden = !item.isBlock
+
       txtDPBrakePosition.doubleValue = item.dirPreviousBrakePosition
       
       txtDPStopPosition.doubleValue = item.dirPreviousStopPosition
@@ -119,6 +151,8 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
       
       // SPEED
       
+      tabs.tabViewItems[5].view?.isHidden = item.isTrack || item.isScenic
+
       txtDNMax.doubleValue = item.dirNextSpeedMax
       txtDNStopExpected.doubleValue = item.dirNextSpeedStopExpected
       txtDNRestricted.doubleValue = item.dirNextSpeedRestricted
@@ -159,6 +193,10 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
       return switchBoardItem!
     }
   }
+  
+  private var cboTrackPartTypeDS : ComboBoxDictDS = ComboBoxDictDS()
+  
+  private var dimensions : [(label:NSTextField, value:NSTextField)] = []
   
   // MARK: Public Properties
   
@@ -208,16 +246,6 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
   @IBOutlet weak var cboGroupId: NSComboBox!
   
   @IBAction func cboGroupIdAction(_ sender: NSComboBox) {
-  }
-  
-  @IBOutlet weak var cboPartType: NSComboBox!
-  
-  @IBAction func cboPartTypeAction(_ sender: NSComboBox) {
-  }
-  
-  @IBOutlet weak var cboOrientation: NSComboBox!
-  
-  @IBAction func cboOrientationAction(_ sender: NSComboBox) {
   }
   
   @IBOutlet weak var txtXPos: NSTextField!
@@ -385,8 +413,6 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
     
     item.isScenicSection = chkScenicSection.boolValue
     
-    item.orientation = Orientation.selected(comboBox: cboOrientation)
-    
     item.trackElectrificationType = TrackElectrificationType.selected(comboBox: cboTrackElectrificationType)
     
     item.trackGauge = TrackGauge.selected(comboBox: cboTrackGauge)
@@ -395,7 +421,15 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
     
     item.location = (x: txtXPos.integerValue, y: txtYPos.integerValue)
     
-    item.itemPartType = SwitchBoardItemPartType.selected(comboBox: cboPartType)
+    let labels = item.itemPartType.routeLabels(orientation: item.orientation)
+    
+    var index = 0
+    for dimension in dimensions {
+      if index < labels.count {
+        item.setDimension(index: labels[index].index, value: dimension.value.doubleValue)
+      }
+      index += 1
+    }
 
     view.window?.close()
     
@@ -627,4 +661,18 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
   }
   
   @IBOutlet weak var switchBoardItemView: SwitchBoardItemView!
+  
+  @IBOutlet weak var lblPartType: NSTextField!
+  
+  @IBOutlet weak var lblOrientation: NSTextField!
+  
+  @IBOutlet weak var cboLink: NSComboBox!
+  
+  @IBAction func cboLinkAction(_ sender: NSComboBox) {
+  }
+  
+  @IBOutlet weak var lblLink: NSTextField!
+  
+  @IBOutlet weak var tabs: NSTabView!
+  
 }

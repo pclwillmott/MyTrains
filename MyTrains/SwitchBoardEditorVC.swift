@@ -51,6 +51,8 @@ class SwitchBoardEditorVC: NSViewController, NSWindowDelegate, SwitchBoardViewDe
     scrollView.allowsMagnification = true
     scrollView.magnification = 1.0
     
+    
+    
   }
   
   // MARK: Private Properties

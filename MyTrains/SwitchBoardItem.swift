@@ -14,6 +14,8 @@ public enum SwitchBoardItemAction {
   case noAction
 }
 
+public typealias NodeLink = (switchBoardItem: SwitchBoardItem?, nodeId: Int)
+
 public class SwitchBoardItem : EditorObject {
 
   // MARK: Constructors
@@ -50,6 +52,8 @@ public class SwitchBoardItem : EditorObject {
 
   // MARK: Public Properties
   
+  public var nodeLinks = [NodeLink](repeating: (nil, -1), count: 8)
+  
   public var layoutId : Int = -1 {
     didSet {
       modified = true
@@ -74,9 +78,55 @@ public class SwitchBoardItem : EditorObject {
     }
   }
   
+  public var isEliminated : Bool = false
+  
   public var itemPartType : SwitchBoardItemPartType = .none {
     didSet {
       modified = true
+    }
+  }
+  
+  public var isTurnout : Bool {
+    get {
+      let turnouts : Set<SwitchBoardItemPartType> = [
+        .cross,
+        .rightCurvedTurnout,
+        .leftCurvedTurnout,
+        .turnout3Way,
+        .yTurnout,
+        .diagonalCross,
+        .turnoutLeft,
+        .turnoutRight,
+      ]
+      return turnouts.contains(itemPartType)
+    }
+  }
+  
+  public var isScenic : Bool {
+    get {
+      let scenics : Set<SwitchBoardItemPartType> = [
+        .platform,
+        .buffer,
+      ]
+      return scenics.contains(itemPartType)
+    }
+  }
+  
+  public var isBlock : Bool {
+    get {
+      return itemPartType == .block
+    }
+  }
+  
+  public var isTrack : Bool {
+    get {
+      let track : Set<SwitchBoardItemPartType> = [
+        .curve,
+        .feedback,
+        .longCurve,
+        .straight,
+      ]
+      return track.contains(itemPartType)
     }
   }
   
@@ -172,7 +222,7 @@ public class SwitchBoardItem : EditorObject {
     }
   }
   
-  public var trackGauge : TrackGauge = .oo {
+  public var trackGauge : TrackGauge = .ooho {
     didSet {
       modified = true
     }
@@ -452,6 +502,12 @@ public class SwitchBoardItem : EditorObject {
     }
   }
   
+  public var linkItem : Int = -1 {
+    didSet {
+      modified = true
+    }
+  }
+  
   public var nextAction : SwitchBoardItemAction = .noAction
   
   public var key : Int {
@@ -469,6 +525,67 @@ public class SwitchBoardItem : EditorObject {
   // MARK: Private Methods
   
   // MARK: Public Methods
+  
+  public func exitPoint(entryPoint:Int) -> [NodeLink] {
+    var result : [NodeLink] = []
+    for connection in itemPartType.connections {
+      let to = (connection.to + orientation.rawValue) % 8
+      let from = (connection.from + orientation.rawValue) % 8
+      if entryPoint == to {
+        result.append(nodeLinks[from])
+      }
+      else if entryPoint == from {
+        result.append(nodeLinks[to])
+      }
+    }
+    return result
+  }
+  
+  public func setDimension(index: Int, value: Double) {
+    switch index {
+    case 0:
+      dimensionA = value
+    case 1:
+      dimensionB = value
+    case 2:
+      dimensionC = value
+    case 3:
+      dimensionD = value
+    case 4:
+      dimensionE = value
+    case 5:
+      dimensionF = value
+    case 6:
+      dimensionG = value
+    case 7:
+      dimensionH = value
+    default:
+      break
+    }
+  }
+  
+  public func getDimension(index: Int) -> Double {
+    switch index {
+    case 0:
+      return dimensionA
+    case 1:
+      return dimensionB
+    case 2:
+      return dimensionC
+    case 3:
+      return dimensionD
+    case 4:
+      return dimensionE
+    case 5:
+      return dimensionF
+    case 6:
+      return dimensionG
+    case 7:
+      return dimensionH
+    default:
+      return 0.0
+    }
+  }
   
   public func rotateRight() {
     var orientation = self.orientation.rawValue
@@ -752,6 +869,10 @@ public class SwitchBoardItem : EditorObject {
         blockType = BlockType(rawValue: reader.getInt(index: 61)!) ?? BlockType.defaultValue
       }
 
+      if !reader.isDBNull(index: 62) {
+        linkItem = reader.getInt(index: 62)!
+      }
+
     }
     
     modified = false
@@ -827,7 +948,8 @@ public class SwitchBoardItem : EditorObject {
         "[\(SWITCHBOARD_ITEM.SW2_TURNOUT_MOTOR_TYPE)], " +
         "[\(SWITCHBOARD_ITEM.SW2_SENSOR_ID)], " +
         "[\(SWITCHBOARD_ITEM.IS_SCENIC_SECTION)], " +
-        "[\(SWITCHBOARD_ITEM.BLOCK_TYPE)]" +
+        "[\(SWITCHBOARD_ITEM.BLOCK_TYPE)], " +
+        "[\(SWITCHBOARD_ITEM.LINK_ITEM)]" +
         ") VALUES (" +
         "@\(SWITCHBOARD_ITEM.SWITCHBOARD_ITEM_ID), " +
         "@\(SWITCHBOARD_ITEM.LAYOUT_ID), " +
@@ -890,7 +1012,8 @@ public class SwitchBoardItem : EditorObject {
         "@\(SWITCHBOARD_ITEM.SW2_TURNOUT_MOTOR_TYPE), " +
         "@\(SWITCHBOARD_ITEM.SW2_SENSOR_ID), " +
         "@\(SWITCHBOARD_ITEM.IS_SCENIC_SECTION), " +
-        "@\(SWITCHBOARD_ITEM.BLOCK_TYPE)" +
+        "@\(SWITCHBOARD_ITEM.BLOCK_TYPE), " +
+        "@\(SWITCHBOARD_ITEM.LINK_ITEM)" +
         ")"
         primaryKey = Database.nextCode(tableName: TABLE.SWITCHBOARD_ITEM, primaryKey: SWITCHBOARD_ITEM.SWITCHBOARD_ITEM_ID)!
       }
@@ -956,7 +1079,8 @@ public class SwitchBoardItem : EditorObject {
         "[\(SWITCHBOARD_ITEM.SW2_TURNOUT_MOTOR_TYPE)] = @\(SWITCHBOARD_ITEM.SW2_TURNOUT_MOTOR_TYPE), " +
         "[\(SWITCHBOARD_ITEM.SW2_SENSOR_ID)] = @\(SWITCHBOARD_ITEM.SW2_SENSOR_ID), " +
         "[\(SWITCHBOARD_ITEM.IS_SCENIC_SECTION)] = @\(SWITCHBOARD_ITEM.IS_SCENIC_SECTION), " +
-        "[\(SWITCHBOARD_ITEM.BLOCK_TYPE)] = @\(SWITCHBOARD_ITEM.BLOCK_TYPE) " +
+        "[\(SWITCHBOARD_ITEM.BLOCK_TYPE)] = @\(SWITCHBOARD_ITEM.BLOCK_TYPE), " +
+        "[\(SWITCHBOARD_ITEM.LINK_ITEM)] = @\(SWITCHBOARD_ITEM.LINK_ITEM) " +
         "WHERE [\(SWITCHBOARD_ITEM.SWITCHBOARD_ITEM_ID)] = @\(SWITCHBOARD_ITEM.SWITCHBOARD_ITEM_ID)"
       }
 
@@ -1041,6 +1165,7 @@ public class SwitchBoardItem : EditorObject {
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.SW2_SENSOR_ID)", value: sw2SensorId)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.IS_SCENIC_SECTION)", value: isScenicSection)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.BLOCK_TYPE)", value: blockType.rawValue)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.LINK_ITEM)", value: linkItem)
 
       _ = cmd.executeNonQuery()
 
@@ -1120,7 +1245,8 @@ public class SwitchBoardItem : EditorObject {
         "[\(SWITCHBOARD_ITEM.SW2_TURNOUT_MOTOR_TYPE)], " +
         "[\(SWITCHBOARD_ITEM.SW2_SENSOR_ID)], " +
         "[\(SWITCHBOARD_ITEM.IS_SCENIC_SECTION)], " +
-        "[\(SWITCHBOARD_ITEM.BLOCK_TYPE)]"
+        "[\(SWITCHBOARD_ITEM.BLOCK_TYPE)], " +
+        "[\(SWITCHBOARD_ITEM.LINK_ITEM)]"
     }
   }
 

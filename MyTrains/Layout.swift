@@ -86,9 +86,134 @@ public class Layout : EditorObject {
   
   // MARK: Public Methods
   
+  public func linkSwitchBoardItems() {
+    
+    // Remove all links
+    
+    for (_, item) in switchBoardItems {
+      for index in 0...7 {
+        item.nodeLinks[index] = (switchBoardItem: nil, nodeId: -1)
+      }
+      item.isEliminated = item.isScenic
+    }
+    
+    let lookup : [(dx:Int, dy:Int, point:Int)] = [
+      (dx: -1, dy: +1, point: 4),
+      (dx:  0, dy: +1, point: 5),
+      (dx: +1, dy: +1, point: 6),
+      (dx: +1, dy:  0, point: 7),
+      (dx: +1, dy: -1, point: 0),
+      (dx:  0, dy: -1, point: 1),
+      (dx: -1, dy: -1, point: 2),
+      (dx: -1, dy:  0, point: 3),
+    ]
+    
+    // Link the nodes
+    
+    for (_, item1) in switchBoardItems {
+      
+      if item1.isEliminated {
+        continue
+      }
+      
+      let x = item1.location.x
+      let y = item1.location.y
+      
+      for point1 in item1.itemPartType.pointsSet(orientation: item1.orientation) {
+        
+        if item1.nodeLinks[point1].switchBoardItem == nil {
+          
+          let look = lookup[point1]
+          
+          let test : SwitchBoardLocation = (x: x + look.dx, y: y + look.dy)
+          
+          if test.x >= 0 && test.y >= 0 {
+            
+            let key = SwitchBoardItem.createKey(panelId: item1.panelId, location: test, nextAction: .noAction)
+            
+            let point2 = look.point
+            
+            if let item2 = switchBoardItems[key], item2.itemPartType.pointsSet(orientation: item2.orientation).contains(point2) {
+              item1.nodeLinks[point1].switchBoardItem = item2
+              item1.nodeLinks[point1].nodeId = point2
+              item2.nodeLinks[point2].switchBoardItem = item1
+              item2.nodeLinks[point2].nodeId = point1
+            }
+
+          }
+          
+        }
+        
+      }
+      
+    }
+    
+    // Eliminate track items linked to turnouts and blocks
+    
+    for (_, item1) in switchBoardItems {
+      
+      if item1.isEliminated {
+        continue
+      }
+      
+      for point1 in item1.itemPartType.pointsSet(orientation: item1.orientation) {
+        var nodeLink = item1.nodeLinks[point1]
+        while let node = nodeLink.switchBoardItem, node.isTrack {
+          let exits = node.exitPoint(entryPoint: nodeLink.nodeId)
+          let exit = exits[0] // Track items only have one item
+          item1.nodeLinks[point1] = exit
+          if let item2 = exit.switchBoardItem {
+            item2.nodeLinks[exit.nodeId].switchBoardItem = item1
+            item2.nodeLinks[exit.nodeId].nodeId = point1
+          }
+          node.isEliminated = true
+          nodeLink = item1.nodeLinks[point1]
+        }
+
+      }
+      
+    }
+    
+    // Eliminate track parts that are not connected to a block or a turnout
+    
+    for (_, item) in switchBoardItems {
+      if item.isTrack {
+        item.isEliminated = true
+      }
+    }
+    
+    for (_, item) in switchBoardItems {
+      
+      if item.isEliminated {
+        continue
+      }
+      
+      print("\(item.itemPartType.partName) \(item.primaryKey)")
+      
+      for point in item.itemPartType.pointsSet(orientation: item.orientation) {
+        let nodeLink = item.nodeLinks[point]
+        if let node = nodeLink.switchBoardItem {
+          print("  \(point): \(node.primaryKey) - \(nodeLink.nodeId)")
+        }
+      }
+    }
+    
+  }
+  
+  public func links(item:SwitchBoardItem) -> [Int:SwitchBoardItem] {
+    var result : [Int:SwitchBoardItem] = [:]
+    for (_, value) in switchBoardItems {
+      if value.itemPartType == .link && item.primaryKey != value.primaryKey {
+        result[item.primaryKey] = item
+      }
+    }
+    return result
+  }
+  
   public func revertToSaved() {
     switchBoardPanels = _switchBoardPanels
     switchBoardItems = _switchBoardItems
+    linkSwitchBoardItems()
   }
   
   // MARK: Database Methods
@@ -266,6 +391,8 @@ public class Layout : EditorObject {
         item.save()
       }
     }
+    
+    linkSwitchBoardItems()
 
   }
 

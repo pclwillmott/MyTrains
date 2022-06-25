@@ -28,6 +28,8 @@ public enum SwitchBoardItemPartType : Int {
   case feedback = 13
   case link = 14
   case platform = 15
+  case singleSlip = 16
+  case doubleSlip = 17
   case none = -1
 
   public var partName : String {
@@ -42,7 +44,7 @@ public enum SwitchBoardItemPartType : Int {
     }
   }
   
-  public func points(orientation:Orientation) -> [Int] {
+  public func pointsSet(orientation:Orientation) -> Set<Int> {
     var result : Set<Int> = []
     for connection in connections {
       if connection.from != -1 {
@@ -54,7 +56,11 @@ public enum SwitchBoardItemPartType : Int {
         result.insert(to)
       }
     }
-    return result.sorted {$0 < $1}
+    return result
+  }
+  
+  public func points(orientation:Orientation) -> [Int] {
+    return pointsSet(orientation: orientation).sorted {$0 < $1}
   }
   
   public func pointLabels(orientation:Orientation) -> [(pos:Int,label:String)] {
@@ -104,12 +110,14 @@ public enum SwitchBoardItemPartType : Int {
     .turnout3Way        : [(5,0),(5,1),(5,2)],
     .leftCurvedTurnout  : [(5,7),(5,0)],
     .rightCurvedTurnout : [(5,3),(5,2)],
-    .buffer             : [(5,-1)],
+    .buffer             : [],
     .block              : [(5,1)],
     .feedback           : [(5,1)],
     .link               : [(5,-1)],
     .platform           : [],
     .none               : [],
+    .singleSlip         : [],
+    .doubleSlip         : [],
   ]
   
   private static let titles = [
@@ -129,6 +137,8 @@ public enum SwitchBoardItemPartType : Int {
     "Feedback",
     "Link",
     "Platform",
+    "Single Slip",
+    "Double Slip",
   ]
   
   public static func populate(comboBox: NSComboBox) {

@@ -179,11 +179,14 @@ class SwitchBoardShape {
     ]],
     .block : [[
       (type: .line, coordinates:[CGPoint(x: 0.0, y: -0.5), CGPoint(x: 0.0, y: 0.5)], parameters: [], actionColors: [:]),
-      (type: .rectangle, coordinates:[CGPoint(x: -0.2, y: -0.40), CGPoint(x: +0.2, y: +0.40)], parameters: [], actionColors: [.fill:NSColor.white, .stroke:NSColor.black])
+      (type: .rectangle, coordinates:[CGPoint(x: -0.2, y: -0.40), CGPoint(x: +0.2, y: +0.40)], parameters: [], actionColors: [.fill:NSColor.white, .stroke:NSColor.black]),
+      (type: .circle, coordinates:[CGPoint(x: 0.0, y: 0.3),], parameters: [0.01], actionColors:[/*.fill:NSColor.black,*/.stroke:NSColor.black])
+
     ],
     [
       (type: .line, coordinates:[CGPoint(x: -0.5, y: -0.5), CGPoint(x: 0.5, y: 0.5)], parameters: [], actionColors: [:]),
-      (type: .irregular , coordinates:[CGPoint(x: -0.42426, y: -0.14142), CGPoint(x: 0.14142, y: 0.42426), CGPoint(x: 0.42426, y: 0.14142), CGPoint(x: -0.14142, y: -0.42426)], parameters: [], actionColors: [.fill:NSColor.white, .stroke:NSColor.black])
+      (type: .irregular , coordinates:[CGPoint(x: -0.42426, y: -0.14142), CGPoint(x: 0.14142, y: 0.42426), CGPoint(x: 0.42426, y: 0.14142), CGPoint(x: -0.14142, y: -0.42426)], parameters: [], actionColors: [.fill:NSColor.white, .stroke:NSColor.black]),
+      (type: .circle, coordinates:[CGPoint(x: 0.2, y: 0.2),], parameters: [0.01], actionColors:[/*.fill:NSColor.black,*/.stroke:NSColor.black])
     ]],
     .platform : [[
       (type: .rectangle, coordinates:[CGPoint(x: -0.5, y: -0.50), CGPoint(x: +0.5, y: +0.50)], parameters: [], actionColors: [.fill:NSColor.lightGray])
