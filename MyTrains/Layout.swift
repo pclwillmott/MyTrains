@@ -86,6 +86,45 @@ public class Layout : EditorObject {
   
   // MARK: Public Methods
   
+  public func nextItemName(switchBoardItem:SwitchBoardItem) -> String {
+
+    var prefix : String = ""
+    
+    if switchBoardItem.isBlock {
+      prefix = "B"
+    }
+    else if switchBoardItem.isLink {
+      prefix = "L"
+    }
+    else if switchBoardItem.isTurnout {
+      prefix = "T"
+    }
+    else {
+      return ""
+    }
+    
+    var found = false
+    
+    var index : Int = 0
+    
+    var test : String = ""
+    
+    repeat {
+      found = false
+      index += 1
+      test = "\(prefix)\(index)"
+      for (_, item) in switchBoardItems {
+        if item.blockName.trimmingCharacters(in: .whitespacesAndNewlines) == test {
+          found = true
+          break
+        }
+      }
+    } while found
+    
+    return test
+    
+  }
+  
   public func linkSwitchBoardItems() {
     
     // Remove all links
@@ -134,10 +173,12 @@ public class Layout : EditorObject {
             let point2 = look.point
             
             if let item2 = switchBoardItems[key], item2.itemPartType.pointsSet(orientation: item2.orientation).contains(point2) {
-              item1.nodeLinks[point1].switchBoardItem = item2
-              item1.nodeLinks[point1].nodeId = point2
-              item2.nodeLinks[point2].switchBoardItem = item1
-              item2.nodeLinks[point2].nodeId = point1
+              if item1.trackGauge == item2.trackGauge {
+                item1.nodeLinks[point1].switchBoardItem = item2
+                item1.nodeLinks[point1].nodeId = point2
+                item2.nodeLinks[point2].switchBoardItem = item1
+                item2.nodeLinks[point2].nodeId = point1
+              }
             }
 
           }
@@ -182,13 +223,34 @@ public class Layout : EditorObject {
       }
     }
     
+    // Now do inter-panel links
+    
+    for (_, item1) in switchBoardItems {
+      if item1.isLink {
+        for (_, item2) in switchBoardItems {
+          if item1.linkItem == item2.primaryKey && item2.linkItem == item1.primaryKey {
+            let point1 = item1.itemPartType.points(orientation: item1.orientation)[0]
+            let point2 = item2.itemPartType.points(orientation: item2.orientation)[0]
+            let node1 = item1.nodeLinks[point1]
+            let node2 = item2.nodeLinks[point2]
+            node1.switchBoardItem?.nodeLinks[node1.nodeId].switchBoardItem = node2.switchBoardItem
+            node1.switchBoardItem?.nodeLinks[node1.nodeId].nodeId = node2.nodeId
+            node2.switchBoardItem?.nodeLinks[node2.nodeId].switchBoardItem = node1.switchBoardItem
+            node2.switchBoardItem?.nodeLinks[node2.nodeId].nodeId = node1.nodeId
+            item1.isEliminated = true
+            item2.isEliminated = true
+          }
+        }
+      }
+    }
+    /*
     for (_, item) in switchBoardItems {
       
       if item.isEliminated {
         continue
       }
       
-      print("\(item.itemPartType.partName) \(item.primaryKey)")
+      print("\(item.itemPartType.partName) \(item.primaryKey) \(item.blockName)")
       
       for point in item.itemPartType.pointsSet(orientation: item.orientation) {
         let nodeLink = item.nodeLinks[point]
@@ -196,15 +258,16 @@ public class Layout : EditorObject {
           print("  \(point): \(node.primaryKey) - \(nodeLink.nodeId)")
         }
       }
+       
     }
-    
+    */
   }
   
   public func links(item:SwitchBoardItem) -> [Int:SwitchBoardItem] {
     var result : [Int:SwitchBoardItem] = [:]
     for (_, value) in switchBoardItems {
-      if value.itemPartType == .link && item.primaryKey != value.primaryKey {
-        result[item.primaryKey] = item
+      if value.nextAction == .noAction && value.itemPartType == .link && item.primaryKey != value.primaryKey {
+        result[value.primaryKey] = value
       }
     }
     return result
@@ -383,12 +446,20 @@ public class Layout : EditorObject {
     for kv in switchBoardItems {
       let item = kv.value
       item.layoutId = primaryKey
-      if item.nextAction == .delete {
-        SwitchBoardItem.delete(primaryKey: item.primaryKey)
-        switchBoardItems[item.primaryKey] = nil
+      if item.itemPartType == .none {
+        if item.isDatabaseItem {
+          SwitchBoardItem.delete(primaryKey: item.primaryKey)
+        }
+        switchBoardItems[item.key] = nil
       }
       else {
-        item.save()
+        if item.nextAction == .delete {
+          SwitchBoardItem.delete(primaryKey: item.primaryKey)
+          switchBoardItems[item.key] = nil
+        }
+        else {
+          item.save()
+        }
       }
     }
     

@@ -40,6 +40,8 @@ class MainVC: NSViewController, NetworkControllerDelegate {
     
     controllerDelegateId = networkController.appendDelegate(delegate: self)
     
+    switchBoardView.layout = networkController.layout
+    
   }
   
   // MARK: Private Properties
@@ -117,6 +119,10 @@ class MainVC: NSViewController, NetworkControllerDelegate {
     
   }
   
+  func switchBoardUpdated() {
+    switchBoardView.needsDisplay = true
+  }
+  
   func networkControllerUpdated(netwokController: NetworkController) {
     
     cboLayout.deselectItem(at: cboLayout.indexOfSelectedItem)
@@ -170,6 +176,10 @@ class MainVC: NSViewController, NetworkControllerDelegate {
   @IBAction func btnPauseAction(_ sender: NSButton) {
 //    networkController.powerIdle()
   }
+  
+  @IBOutlet weak var scrollView: NSScrollView!
+  
+  @IBOutlet weak var switchBoardView: SwitchBoardOperationsView!
   
 }
 

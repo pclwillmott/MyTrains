@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="20037"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -631,18 +632,18 @@
             <objects>
                 <viewController id="XfG-lQ-9wD" customClass="MainVC" customModule="MyTrains" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="m2S-Jp-Qdl">
-                        <rect key="frame" x="0.0" y="0.0" width="662" height="350"/>
+                        <rect key="frame" x="0.0" y="0.0" width="787" height="854"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <box fixedFrame="YES" borderType="bezel" title="Layout" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="AbY-9S-xUt">
-                                <rect key="frame" x="-3" y="296" width="668" height="56"/>
+                                <rect key="frame" x="-3" y="800" width="793" height="56"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <view key="contentView" id="f2K-Xq-V7l">
-                                    <rect key="frame" x="3" y="3" width="662" height="50"/>
+                                    <rect key="frame" x="3" y="3" width="787" height="50"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <button toolTip="Track Power Off" fixedFrame="YES" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="McJ-kX-caF">
-                                            <rect key="frame" x="560" y="9" width="30" height="36"/>
+                                            <rect key="frame" x="685" y="9" width="30" height="36"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="circle.fill" catalog="system" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="JfX-HO-gOf">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -654,7 +655,7 @@
                                             </connections>
                                         </button>
                                         <button toolTip="Track Power On" fixedFrame="YES" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8tU-Og-bFk">
-                                            <rect key="frame" x="510" y="9" width="30" height="36"/>
+                                            <rect key="frame" x="635" y="9" width="30" height="36"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="circle.fill" catalog="system" imagePosition="only" alignment="center" alternateImage="circle" imageScaling="proportionallyUpOrDown" inset="2" id="Gvo-tN-Fay">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -666,7 +667,7 @@
                                             </connections>
                                         </button>
                                         <button toolTip="Set Track to Idle" fixedFrame="YES" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gX1-7J-iGd">
-                                            <rect key="frame" x="610" y="9" width="30" height="36"/>
+                                            <rect key="frame" x="735" y="9" width="30" height="36"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="pause.circle" catalog="system" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="JCt-Qa-HAq">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -677,14 +678,14 @@
                                             </connections>
                                         </button>
                                         <switch toolTip="Connect to Command Station" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" allowsExpansionToolTips="YES" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="SW0-0C-pTk">
-                                            <rect key="frame" x="447" y="14" width="42" height="25"/>
+                                            <rect key="frame" x="572" y="14" width="42" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <connections>
                                                 <action selector="swConnectAction:" target="XfG-lQ-9wD" id="N8P-iX-9uz"/>
                                             </connections>
                                         </switch>
                                         <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FvV-6g-VOW">
-                                            <rect key="frame" x="20" y="14" width="415" height="25"/>
+                                            <rect key="frame" x="20" y="14" width="428" height="25"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                             <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="5" id="XS8-6K-Yk7">
                                                 <font key="font" metaFont="system"/>
@@ -695,17 +696,77 @@
                                                 <action selector="cboLayoutAction:" target="XfG-lQ-9wD" id="kNJ-HQ-kr7"/>
                                             </connections>
                                         </comboBox>
+                                        <button toolTip="Zoom In" fixedFrame="YES" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TQD-qK-bW9">
+                                            <rect key="frame" x="467" y="11.5" width="24" height="27"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="bM7-wK-5yz">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                                <imageReference key="image" image="plus.magnifyingglass" catalog="system" symbolScale="small"/>
+                                            </buttonCell>
+                                        </button>
+                                        <button toolTip="Zoom Out" fixedFrame="YES" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Q4n-AY-BBa">
+                                            <rect key="frame" x="501" y="10.5" width="24" height="28"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="I2B-d4-mmS">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                                <imageReference key="image" image="minus.magnifyingglass" catalog="system" symbolScale="small"/>
+                                                <modifierMask key="keyEquivalentModifierMask" command="YES"/>
+                                            </buttonCell>
+                                        </button>
+                                        <button toolTip="Scale to Fit" fixedFrame="YES" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oeW-CB-kAA">
+                                            <rect key="frame" x="535" y="11" width="24" height="28"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="Woq-Cj-kh4">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                                <imageReference key="image" image="NSEnterFullScreenTemplate" symbolScale="small"/>
+                                            </buttonCell>
+                                        </button>
                                     </subviews>
                                 </view>
                             </box>
                             <box fixedFrame="YES" title="Box" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="ELL-xv-dmg">
-                                <rect key="frame" x="-3" y="-4" width="668" height="56"/>
+                                <rect key="frame" x="-3" y="-4" width="793" height="56"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <view key="contentView" id="TZD-lO-klV">
-                                    <rect key="frame" x="3" y="3" width="662" height="50"/>
+                                    <rect key="frame" x="3" y="3" width="787" height="50"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </box>
+                            <scrollView fixedFrame="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3HQ-vy-QuZ">
+                                <rect key="frame" x="20" y="70" width="747" height="713"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <clipView key="contentView" id="8D4-kA-me7">
+                                    <rect key="frame" x="1" y="1" width="745" height="711"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <view id="VOh-Es-Yk9">
+                                            <rect key="frame" x="0.0" y="0.0" width="730" height="696"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <subviews>
+                                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lcX-IG-BcZ" customClass="SwitchBoardOperationsView" customModule="MyTrains" customModuleProvider="target">
+                                                    <rect key="frame" x="20" y="20" width="690" height="656"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="showGridLines" value="NO"/>
+                                                    </userDefinedRuntimeAttributes>
+                                                </customView>
+                                            </subviews>
+                                        </view>
+                                    </subviews>
+                                    <color key="backgroundColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                </clipView>
+                                <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="u22-t5-D5t">
+                                    <rect key="frame" x="1" y="696" width="745" height="16"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                                <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="D2V-4t-1rQ">
+                                    <rect key="frame" x="730" y="1" width="16" height="711"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                            </scrollView>
                         </subviews>
                     </view>
                     <connections>
@@ -714,17 +775,22 @@
                         <outlet property="btnPowerOff" destination="McJ-kX-caF" id="G0z-Rl-kBD"/>
                         <outlet property="btnPowerOn" destination="8tU-Og-bFk" id="73B-Iu-NUS"/>
                         <outlet property="cboLayout" destination="FvV-6g-VOW" id="tiD-sk-BfD"/>
+                        <outlet property="scrollView" destination="3HQ-vy-QuZ" id="A5H-Cz-eKC"/>
                         <outlet property="swConnect" destination="SW0-0C-pTk" id="ZMv-6j-eV8"/>
+                        <outlet property="switchBoardView" destination="lcX-IG-BcZ" id="PzE-48-bB6"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="157" y="675"/>
+            <point key="canvasLocation" x="219.5" y="927"/>
         </scene>
     </scenes>
     <resources>
+        <image name="NSEnterFullScreenTemplate" width="13" height="12"/>
         <image name="circle" catalog="system" width="15" height="15"/>
         <image name="circle.fill" catalog="system" width="15" height="15"/>
+        <image name="minus.magnifyingglass" catalog="system" width="12" height="12"/>
         <image name="pause.circle" catalog="system" width="15" height="15"/>
+        <image name="plus.magnifyingglass" catalog="system" width="12" height="12"/>
     </resources>
 </document>

@@ -51,7 +51,9 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
           groupIds.insert(item.groupId)
         }
       }
-      cboGroupId.integerValue = item.groupId
+      if item.groupId != -1 {
+        cboGroupId.integerValue = item.groupId
+      }
 
       cboGroupId.removeAllItems()
       for id in groupIds.sorted() {
@@ -69,6 +71,17 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
       txtYPos.integerValue = item.location.y
       
       txtName.stringValue = item.blockName
+      
+      if txtName.stringValue.isEmpty {
+        txtName.stringValue = item.layout!.nextItemName(switchBoardItem: item)
+      }
+      
+      lblLink.isHidden = !item.isLink
+      cboLink.isHidden = !item.isLink
+      
+      cboLinkDS.dictionary = layout.links(item: item)
+      cboLink.dataSource = cboLinkDS
+      cboLink.selectItem(at: cboLinkDS.indexWithKey(key: item.linkItem) ?? -1)
       
       // OPTIONS TAB
       
@@ -91,14 +104,18 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
       
       chkAllowShunt.boolValue = item.allowShunt
       
+      chkAllowShunt.isHidden = !item.isBlock
+      
       UnitLength.populate(comboBox: cboDimensionUnits)
       UnitLength.select(comboBox: cboDimensionUnits, value: item.unitsDimension)
       
       BlockType.populate(comboBox: cboBlockType)
       BlockType.select(comboBox: cboBlockType, value: item.blockType)
+      cboBlockType.isEnabled = item.isBlock
       
       cboTrackPartTypeDS.dictionary = TrackPart.dictionary(itemPartType: item.itemPartType, trackGauge: item.trackGauge)
       cboTrackPartType.dataSource = cboTrackPartTypeDS
+      cboTrackPartType.selectItem(at: cboTrackPartTypeDS.indexWithKey(key: item.trackPartId) ?? -1)
       
       dimensions = [
         (lblA, txtA),
@@ -121,6 +138,7 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
         if index < labels.count {
           dimension.label.stringValue = labels[index].label
           dimension.value.doubleValue = item.getDimension(index: labels[index].index)
+          dimension.value.tag = labels[index].index
         }
         index += 1
       }
@@ -180,6 +198,19 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
       UnitSpeed.populate(comboBox: cboSpeedUnits)
       UnitSpeed.select(comboBox: cboSpeedUnits, value: item.unitsSpeed)
       
+      if !(item.isBlock || item.isTurnout) {
+        tabs.removeTabViewItem(tabs.tabViewItems[5])
+        tabs.removeTabViewItem(tabs.tabViewItems[4])
+        tabs.removeTabViewItem(tabs.tabViewItems[3])
+        tabs.removeTabViewItem(tabs.tabViewItems[2])
+        tabs.removeTabViewItem(tabs.tabViewItems[1])
+      }
+      else if item.isTurnout {
+        tabs.removeTabViewItem(tabs.tabViewItems[4])
+        tabs.removeTabViewItem(tabs.tabViewItems[3])
+        boxSpeedPrevious.isHidden = true
+        boxSpeedNext.title = ""
+      }
     }
     
     setupControls()
@@ -195,7 +226,9 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
   }
   
   private var cboTrackPartTypeDS : ComboBoxDictDS = ComboBoxDictDS()
-  
+
+  private var cboLinkDS : ComboBoxDictDS = ComboBoxDictDS()
+
   private var dimensions : [(label:NSTextField, value:NSTextField)] = []
   
   // MARK: Public Properties
@@ -208,8 +241,35 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
     
     // GENERAL
     
+    let hideName = !(item.isBlock || item.isTurnout || item.isLink)
+    
+    lblName.isHidden = hideName
+    txtName.isHidden = hideName
+    
     // OPTIONS
     
+    if let trackPart = cboTrackPartTypeDS.editorObjectAt(index: cboTrackPartType.indexOfSelectedItem) as? TrackPartEditorObject {
+      let allowEdit = trackPart.trackPart == .custom
+      for dimension in dimensions {
+        dimension.value.isEnabled = allowEdit
+        if !allowEdit {
+          dimension.value.doubleValue = trackPart.trackPart.partInfo?.dimensions[dimension.value.tag] ?? 0.0
+        }
+      }
+      cboDimensionUnits.isEnabled = allowEdit
+      if !allowEdit {
+        UnitLength.select(comboBox: cboDimensionUnits, value: .centimeters)
+      }
+    }
+    
+    let trackGauge = TrackGauge.selected(comboBox: cboTrackGauge)
+    let lastValue = cboTrackPartType.stringValue
+    cboTrackPartTypeDS.dictionary = TrackPart.dictionary(itemPartType: item.itemPartType, trackGauge: trackGauge)
+    cboTrackPartType.dataSource = cboTrackPartTypeDS
+    cboTrackPartType.stringValue = lastValue
+    
+    cboDirection.isEnabled = item.isBlock
+
     // FEEDBACK
     
     // DIRECTION NEXT
@@ -258,14 +318,14 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
   @IBAction func txtYPosAction(_ sender: NSTextField) {
   }
   
-  @IBOutlet weak var txtName: NSTextField!
+  @IBOutlet weak var lblName: NSTextField!
   
-  @IBAction func txtNameAction(_ sender: NSTextField) {
-  }
+  @IBOutlet weak var txtName: NSTextField!
   
   @IBOutlet weak var cboTrackPartType: NSComboBox!
   
   @IBAction func cboTrackPartTypeAction(_ sender: NSComboBox) {
+    setupControls()
   }
   
   @IBOutlet weak var lblA: NSTextField!
@@ -327,6 +387,7 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
   @IBOutlet weak var cboTrackGauge: NSComboBox!
   
   @IBAction func cboTrackGaugeAction(_ sender: NSComboBox) {
+    setupControls()
   }
   
   @IBOutlet weak var cboTrackElectrificationType: NSComboBox!
@@ -362,6 +423,11 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
   @IBAction func btnDoneAction(_ sender: NSButton) {
     
     item.blockType = BlockType.selected(comboBox: cboBlockType)
+    
+    item.groupId = -1
+    if cboGroupId.integerValue > 0 {
+      item.groupId = cboGroupId.integerValue
+    }
     
     item.dirNextSpeedMaxAllowEdit = chkDNMaxUD.boolValue
     item.dirNextSpeedStopExpectedAllowEdit = chkDNStopExpectedUD.boolValue
@@ -420,6 +486,20 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
     item.unitsDimension = UnitLength.selected(comboBox: cboDimensionUnits)
     
     item.location = (x: txtXPos.integerValue, y: txtYPos.integerValue)
+    
+    item.linkItem = -1
+    
+    if let item2 = cboLinkDS.editorObjectAt(index: cboLink.indexOfSelectedItem) as? SwitchBoardItem {
+      item.linkItem = item2.primaryKey
+      item2.linkItem = item.primaryKey
+    }
+    
+    if let edObj = cboTrackPartTypeDS.editorObjectAt(index: cboTrackPartType.indexOfSelectedItem) {
+      item.trackPartId = edObj.primaryKey
+    }
+    else {
+      item.trackPartId = -1
+    }
     
     let labels = item.itemPartType.routeLabels(orientation: item.orientation)
     
@@ -674,5 +754,9 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
   @IBOutlet weak var lblLink: NSTextField!
   
   @IBOutlet weak var tabs: NSTabView!
+  
+  @IBOutlet weak var boxSpeedNext: NSBox!
+  
+  @IBOutlet weak var boxSpeedPrevious: NSBox!
   
 }

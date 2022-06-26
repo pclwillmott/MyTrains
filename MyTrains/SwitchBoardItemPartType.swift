@@ -23,13 +23,13 @@ public enum SwitchBoardItemPartType : Int {
   case turnout3Way = 8
   case leftCurvedTurnout = 9
   case rightCurvedTurnout = 10
-  case buffer = 11
-  case block = 12
-  case feedback = 13
-  case link = 14
-  case platform = 15
-  case singleSlip = 16
-  case doubleSlip = 17
+  case singleSlip = 11
+  case doubleSlip = 12
+  case buffer = 13
+  case block = 14
+  case feedback = 15
+  case link = 16
+  case platform = 17
   case none = -1
 
   public var partName : String {
@@ -110,14 +110,14 @@ public enum SwitchBoardItemPartType : Int {
     .turnout3Way        : [(5,0),(5,1),(5,2)],
     .leftCurvedTurnout  : [(5,7),(5,0)],
     .rightCurvedTurnout : [(5,3),(5,2)],
+    .singleSlip         : [(0,4),(5,1),(4,1)],
+    .doubleSlip         : [(0,4),(5,1),(4,1),(5,0)],
     .buffer             : [],
     .block              : [(5,1)],
     .feedback           : [(5,1)],
     .link               : [(5,-1)],
     .platform           : [],
     .none               : [],
-    .singleSlip         : [],
-    .doubleSlip         : [],
   ]
   
   private static let titles = [
@@ -132,13 +132,13 @@ public enum SwitchBoardItemPartType : Int {
     "3-Way Turnout",
     "Left Curved Turnout",
     "Right Curved Turnout",
+    "Single Slip",
+    "Double Slip",
     "Buffer",
     "Block",
     "Feedback",
     "Link",
     "Platform",
-    "Single Slip",
-    "Double Slip",
   ]
   
   public static func populate(comboBox: NSComboBox) {

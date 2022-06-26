@@ -174,15 +174,17 @@ class SwitchBoardEditorView: SwitchBoardView {
         
       }
       
+      groups.sort { $0 < $1 }
+      
       var groupNames : [String] = ["0"]
       
       for group in groups {
         groupNames.append("\(group)")
       }
       
-      groupNames.sort() {
+/*      groupNames.sort() {
         $0 < $1
-      }
+      } */
       
       var selectedIndex = 0
      

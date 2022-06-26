@@ -34,5 +34,6 @@ enum DEFAULT {
   static let PROGRAMMER_PROG_MODE     = "ProgrammerProgMode"
   static let IPL_INTERFACE_ID         = "IPLInterfaceId"
   static let IPL_DMF_FILENAME         = "IPLDMFFileName"
+  static let SWITCHBOARD_EDITOR_MAG   = "SWITCHBOARD_EDITOR_MAG"
   
 }

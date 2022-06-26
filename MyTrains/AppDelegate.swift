@@ -36,9 +36,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
       UserDefaults.standard.set(UnitSpeed.defaultValue.rawValue, forKey: DEFAULT.UNITS_SPEED)
       UserDefaults.standard.set(76.2, forKey: DEFAULT.SCALE)
       UserDefaults.standard.set(TrackGauge.defaultValue.rawValue, forKey: DEFAULT.TRACK_GAUGE)
+      UserDefaults.standard.set(1.0, forKey: DEFAULT.SWITCHBOARD_EDITOR_MAG)
 
     }
-
+    
   }
   
   func applicationWillTerminate(_ aNotification: Notification) {

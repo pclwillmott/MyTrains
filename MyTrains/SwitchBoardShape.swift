@@ -293,6 +293,22 @@ class SwitchBoardShape {
       (type: .curve, coordinates:[CGPoint(x: -0.5, y: -0.5), CGPoint(x: 0.0, y: 0.5), CGPoint(x: -0.2, y: -0.2), CGPoint(x: -0.2, y: -0.2)], parameters: [], actionColors: [:]),
       (type: .line, coordinates:[CGPoint(x: -0.5, y: -0.5), CGPoint(x: 0.5, y: 0.5)], parameters: [], actionColors: [:])
     ]],
+    .singleSlip : [[
+      (type: .line, coordinates:[CGPoint(x: 0.0, y: -0.5), CGPoint(x: 0.0, y: 0.5)], parameters: [], actionColors: [:]),
+      (type: .line, coordinates:[CGPoint(x: -0.5, y: 0.5), CGPoint(x: 0.5, y: -0.5)], parameters: [], actionColors: [:])
+    ],
+    [
+      (type: .line, coordinates:[CGPoint(x: -0.5, y: -0.5), CGPoint(x: 0.5, y: 0.5)], parameters: [], actionColors: [:]),
+      (type: .line, coordinates:[CGPoint(x: 0.0, y: 0.5), CGPoint(x: 0.0, y: -0.5)], parameters: [], actionColors: [:])
+    ]],
+    .doubleSlip : [[
+      (type: .line, coordinates:[CGPoint(x: 0.0, y: -0.5), CGPoint(x: 0.0, y: 0.5)], parameters: [], actionColors: [:]),
+      (type: .line, coordinates:[CGPoint(x: -0.5, y: 0.5), CGPoint(x: 0.5, y: -0.5)], parameters: [], actionColors: [:])
+    ],
+    [
+      (type: .line, coordinates:[CGPoint(x: -0.5, y: -0.5), CGPoint(x: 0.5, y: 0.5)], parameters: [], actionColors: [:]),
+      (type: .line, coordinates:[CGPoint(x: 0.0, y: 0.5), CGPoint(x: 0.0, y: -0.5)], parameters: [], actionColors: [:])
+    ]],
   ]
 
   

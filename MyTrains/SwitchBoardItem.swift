@@ -54,6 +54,10 @@ public class SwitchBoardItem : EditorObject {
   
   public var nodeLinks = [NodeLink](repeating: (nil, -1), count: 8)
   
+  override public func displayString() -> String {
+    return blockName
+  }
+  
   public var layoutId : Int = -1 {
     didSet {
       modified = true
@@ -82,6 +86,10 @@ public class SwitchBoardItem : EditorObject {
   
   public var itemPartType : SwitchBoardItemPartType = .none {
     didSet {
+      if isTurnout {
+        blockType = .turnout
+        blockDirection = .bidirectional
+      }
       modified = true
     }
   }
@@ -97,6 +105,8 @@ public class SwitchBoardItem : EditorObject {
         .diagonalCross,
         .turnoutLeft,
         .turnoutRight,
+        .singleSlip,
+        .doubleSlip,
       ]
       return turnouts.contains(itemPartType)
     }
@@ -115,6 +125,12 @@ public class SwitchBoardItem : EditorObject {
   public var isBlock : Bool {
     get {
       return itemPartType == .block
+    }
+  }
+  
+  public var isLink : Bool {
+    get {
+      return itemPartType == .link
     }
   }
   
@@ -156,7 +172,7 @@ public class SwitchBoardItem : EditorObject {
     }
   }
   
-  public var trackPartId : Int = -1 {
+  public var trackPartId : Int = TrackPart.custom.rawValue {
     didSet {
       modified = true
     }
@@ -880,6 +896,10 @@ public class SwitchBoardItem : EditorObject {
   }
 
   public func save() {
+    
+    if blockName.isEmpty {
+      blockName = layout!.nextItemName(switchBoardItem: self)
+    }
     
     if modified {
       

@@ -7,6 +7,6 @@
 
 import Foundation
 
-class SwitchBoardOperationsView : SwitchBoardItem {
+class SwitchBoardOperationsView : SwitchBoardView {
   
 }

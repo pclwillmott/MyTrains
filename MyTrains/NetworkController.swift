@@ -11,6 +11,7 @@ import Foundation
   @objc optional func interfacesUpdated(interfaces:[Interface])
   @objc optional func networkControllerUpdated(netwokController:NetworkController)
   @objc optional func statusUpdated(networkController:NetworkController)
+  @objc optional func switchBoardUpdated()
 }
 
 public class NetworkController : NSObject, InterfaceDelegate, NSUserNotificationCenterDelegate, MTSerialPortManagerDelegate {
@@ -265,11 +266,17 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
   }
   
   public func networkControllerStatusUpdated() {
-    for kv in controllerDelegates {
-      kv.value.statusUpdated?(networkController: self)
+    for (_, value) in controllerDelegates {
+      value.statusUpdated?(networkController: self)
     }
   }
-
+  
+  public func switchBoardUpdated() {
+    for (_, value) in controllerDelegates {
+      value.switchBoardUpdated?()
+    }
+  }
+  
   public func connect() {
     for interface in networkInterfaces {
       interface.open()

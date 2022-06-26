@@ -424,7 +424,7 @@ public enum TrackPart : Int {
      trackCode: .code100,
      trackGauge: .ooho,
      frogType: .insulFrog,
-     dimensions: [24.9, 24.9]),
+     dimensions: [24.9, 24.9, 24.9]),
 
     (trackPartId: .pecoStreamlineOOHOCode100DoubleSlip,
      manufacturer: .peco,
@@ -435,7 +435,7 @@ public enum TrackPart : Int {
      trackCode: .code100,
      trackGauge: .ooho,
      frogType: .insulFrog,
-     dimensions: [24.9, 24.9]),
+     dimensions: [24.9, 24.9, 24.9, 24.9]),
 
     (trackPartId: .pecoStreamlineOOHOCode1003WayTurnout,
      manufacturer: .peco,
@@ -677,7 +677,7 @@ public enum TrackPart : Int {
      trackCode: .code75,
      trackGauge: .ooho,
      frogType: .insulFrog,
-     dimensions: [24.9, 24.9]),
+     dimensions: [24.9, 24.9, 24.9]),
 
     (trackPartId: .pecoStreamlineOOHOCode75SingleSlipEF,
      manufacturer: .peco,
@@ -688,7 +688,7 @@ public enum TrackPart : Int {
      trackCode: .code75,
      trackGauge: .ooho,
      frogType: .electroFrog,
-     dimensions: [24.9, 24.9]),
+     dimensions: [24.9, 24.9, 24.9]),
 
     (trackPartId: .pecoStreamlineOOHOCode75DoubleSlip,
      manufacturer: .peco,
@@ -699,7 +699,7 @@ public enum TrackPart : Int {
      trackCode: .code75,
      trackGauge: .ooho,
      frogType: .insulFrog,
-     dimensions: [24.9, 24.9]),
+     dimensions: [24.9, 24.9, 24.9, 24.9]),
 
     (trackPartId: .pecoStreamlineOOHOCode75DoubleSlipEF,
      manufacturer: .peco,
@@ -710,7 +710,7 @@ public enum TrackPart : Int {
      trackCode: .code75,
      trackGauge: .ooho,
      frogType: .electroFrog,
-     dimensions: [24.9, 24.9]),
+     dimensions: [24.9, 24.9, 24.9, 24.9]),
 
     (trackPartId: .pecoStreamlineOOHOCode75LargeRadiusTurnoutRightHandUFBullhead,
      manufacturer: .peco,
@@ -776,7 +776,7 @@ public enum TrackPart : Int {
      trackCode: .code75,
      trackGauge: .ooho,
      frogType: .uniFrog,
-     dimensions: [24.9, 24.9]),
+     dimensions: [24.9, 24.9, 24.9]),
 
     (trackPartId: .pecoStreamlineOOHOCode75DoubleSlipUFBullhead,
      manufacturer: .peco,
@@ -787,7 +787,7 @@ public enum TrackPart : Int {
      trackCode: .code75,
      trackGauge: .ooho,
      frogType: .uniFrog,
-     dimensions: [24.9, 24.9]),
+     dimensions: [24.9, 24.9, 24.9, 24.9]),
 
     (trackPartId: .pecoSetrackOOHOCode100No2RadiusTurnoutRightHand,
      manufacturer: .peco,

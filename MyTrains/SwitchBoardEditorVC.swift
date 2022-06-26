@@ -49,10 +49,8 @@ class SwitchBoardEditorVC: NSViewController, NSWindowDelegate, SwitchBoardViewDe
 
     scrollView.documentView?.frame = NSMakeRect(0.0, 0.0, 2000.0, 2000.0)
     scrollView.allowsMagnification = true
-    scrollView.magnification = 1.0
-    
-    
-    
+    scrollView.magnification = UserDefaults.standard.double(forKey: DEFAULT.SWITCHBOARD_EDITOR_MAG)
+
   }
   
   // MARK: Private Properties
@@ -137,12 +135,14 @@ class SwitchBoardEditorVC: NSViewController, NSWindowDelegate, SwitchBoardViewDe
   
   @IBAction func btnZoomInAction(_ sender: Any) {
     scrollView.magnification += 0.25
+    UserDefaults.standard.set(scrollView.magnification, forKey: DEFAULT.SWITCHBOARD_EDITOR_MAG)
   }
   
   @IBOutlet weak var btnZoomOut: NSButton!
   
   @IBAction func btnZoomOutAction(_ sender: Any) {
     scrollView.magnification -= 0.25
+    UserDefaults.standard.set(scrollView.magnification, forKey: DEFAULT.SWITCHBOARD_EDITOR_MAG)
   }
   
   @IBOutlet weak var btnSizeToFit: NSButton!
@@ -166,6 +166,7 @@ class SwitchBoardEditorVC: NSViewController, NSWindowDelegate, SwitchBoardViewDe
     }
     
     scrollView.magnification = scale
+    UserDefaults.standard.set(scrollView.magnification, forKey: DEFAULT.SWITCHBOARD_EDITOR_MAG)
 
   }
   
@@ -252,6 +253,8 @@ class SwitchBoardEditorVC: NSViewController, NSWindowDelegate, SwitchBoardViewDe
   @IBAction func btnSaveAction(_ sender: NSButton) {
     if let layout = networkController.layout {
       layout.save()
+      networkController.switchBoardUpdated()
+      view.window?.close()
     }
   }
   
