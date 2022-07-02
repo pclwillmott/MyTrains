@@ -126,7 +126,7 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate {
     }
   }
   
-  private var csConfigurationTableViewDS : CSConfigurationTableViewDS = CSConfigurationTableViewDS()
+  private var csConfigurationTableViewDS : OpSwTableViewDS = OpSwTableViewDS()
   
   // MARK: Command Station Delegate Methods
   

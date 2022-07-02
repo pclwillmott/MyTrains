@@ -221,6 +221,20 @@ public class OptionSwitch {
   
   // MARK: Class Properties
   
+  public static let enterSetBoardIdModeInstructions : [LocoNetProductId:String] = [
+    .BXP88 : "Press and hold the ID button on the BXP88 for approximately 4 seconds until the ID LED flashes red, then release it. The ID LED will flash alternating red and green.",
+  ]
+
+  public static let exitSetBoardIdModeInstructions : [LocoNetProductId:String] = [:]
+
+  public static let enterOptionSwitchModeInstructions : [LocoNetProductId:String] = [
+    .BXP88 : "Press and hold the OPS button on the BXP88 for about 2 seconds, then release it. The red OPS and green ID LEDs will flash alternately.",
+  ]
+  
+  public static let exitOptionSwitchModeInstructions : [LocoNetProductId:String] = [
+    .BXP88 : "Press and hold the OPS button on the BXP88 for about 2 seconds and release it.",
+  ]
+  
   public static let allOptions : [OptionSwitchDefinition] = [
     (
       definitionType: .standard,
@@ -363,7 +377,7 @@ public class OptionSwitch {
       bankABit: 6,
       bankBByte: -1,
       bankBBit: -1,
-     thrownEffect : "Blast Mode programming disabled",
+      thrownEffect : "Blast Mode programming disabled",
       closedEffect : "Blast mode programming enabled"
     ),
     (
@@ -375,7 +389,7 @@ public class OptionSwitch {
       bankABit: 6,
       bankBByte: -1,
       bankBBit: -1,
-     thrownEffect : "do not change",
+      thrownEffect : "do not change",
       closedEffect : "do not change"
     ),
     (
@@ -519,7 +533,7 @@ public class OptionSwitch {
       bankABit: 0,
       bankBByte: -1,
       bankBBit: -1,
-     thrownEffect : "automatic advanced decode (FX) consists are enabled",
+      thrownEffect : "automatic advanced decode (FX) consists are enabled",
       closedEffect : "automatic advanced decode (FX) consists are disabled"
     ),
     (
@@ -531,7 +545,7 @@ public class OptionSwitch {
       bankABit: 1,
       bankBByte: -1,
       bankBBit: -1,
-     thrownEffect : "normal command station booster short circuit shutdown time",
+      thrownEffect : "normal command station booster short circuit shutdown time",
       closedEffect : "extended command station booster short circuit shutdown time"
     ),
     (
@@ -543,7 +557,7 @@ public class OptionSwitch {
       bankABit: 2,
       bankBByte: -1,
       bankBBit: -1,
-     thrownEffect : "do not change",
+      thrownEffect : "do not change",
       closedEffect : "do not change"
     ),
     (
@@ -555,7 +569,7 @@ public class OptionSwitch {
       bankABit: 2,
       bankBByte: -1,
       bankBBit: -1,
-     thrownEffect : "Ops mode feedback module not installed",
+      thrownEffect : "Ops mode feedback module not installed",
       closedEffect : "Ops mode feedback module installed"
     ),
     (
@@ -567,7 +581,7 @@ public class OptionSwitch {
       bankABit: 3,
       bankBByte: -1,
       bankBBit: -1,
-     thrownEffect : "enable address 0 for analog stretching for conventional locomotives",
+      thrownEffect : "enable address 0 for analog stretching for conventional locomotives",
       closedEffect : "disable address 0 for analog stretching for conventional locomotives"
     ),
     (
@@ -579,7 +593,7 @@ public class OptionSwitch {
       bankABit: 4,
       bankBByte: -1,
       bankBBit: -1,
-     thrownEffect : "",
+      thrownEffect : "",
       closedEffect : ""
     ),
     (
@@ -591,7 +605,7 @@ public class OptionSwitch {
       bankABit: -1,
       bankBByte: -1,
       bankBBit: -1,
-     thrownEffect : "do not change",
+      thrownEffect : "do not change",
       closedEffect : "do not change"
     ),
     (
@@ -603,7 +617,7 @@ public class OptionSwitch {
       bankABit: 0,
       bankBByte: -1,
       bankBBit: -1,
-     thrownEffect : "enable route echo over Loconet",
+      thrownEffect : "enable route echo over Loconet",
       closedEffect : "disable route echo over Loconet"
     ),
     (
@@ -615,7 +629,7 @@ public class OptionSwitch {
       bankABit: 0,
       bankBByte: -1,
       bankBBit: -1,
-     thrownEffect : "enable aliasing",
+      thrownEffect : "enable aliasing",
       closedEffect : "disable aliasing"
     ),
     (
@@ -819,7 +833,7 @@ public class OptionSwitch {
       bankABit: 6,
       bankBByte: -1,
       bankBBit: -1,
-     thrownEffect : "",
+      thrownEffect : "",
       closedEffect : "reset to factory defaults"
     ),
     (
@@ -831,7 +845,7 @@ public class OptionSwitch {
       bankABit: 6,
       bankBByte: -1,
       bankBBit: -1,
-     thrownEffect : "",
+      thrownEffect : "",
       closedEffect : "clear all internal memory states, including OpSw 36 and 37"
     ),
     (
@@ -843,7 +857,7 @@ public class OptionSwitch {
       bankABit: 6,
       bankBByte: -1,
       bankBBit: -1,
-     thrownEffect : "do not change",
+      thrownEffect : "do not change",
       closedEffect : "do not change"
     ),
     (
@@ -1086,7 +1100,322 @@ public class OptionSwitch {
       bankBBit: 2,
       thrownEffect : "jump mode disabled",
       closedEffect : "jump mode enabled"
-    )
+    ),
+    
+    // MARK: BXP88
+    
+    (
+      definitionType: .standard,
+      model: [.BXP88],
+      switchNumber: 4,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "normal short circuit detection",
+      closedEffect : "slower short circuit detection"
+    ),
+    (
+      definitionType: .standard,
+      model: [.BXP88],
+      switchNumber: 5,
+      defaultState : .closed,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "transponding disabled",
+      closedEffect : "transponding enabled"
+    ),
+    (
+      definitionType: .standard,
+      model: [.BXP88],
+      switchNumber: 7,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "enable fast find",
+      closedEffect : "disable fast find"
+    ),
+    (
+      definitionType: .standard,
+      model: [.BXP88],
+      switchNumber: 10,
+      defaultState : .closed,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "disable power manager",
+      closedEffect : "enable power manager"
+    ),
+    (
+      definitionType: .standard,
+      model: [.BXP88],
+      switchNumber: 11,
+      defaultState : .closed,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "disable power manager reporting to LocoNet",
+      closedEffect : "enable power manager reporting to LocoNet"
+    ),
+    (
+      definitionType: .standard,
+      model: [.BXP88],
+      switchNumber: 14,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "regular detection sensitivity",
+      closedEffect : "high detection sensitivity"
+    ),
+    (
+      definitionType: .standard,
+      model: [.BXP88],
+      switchNumber: 15,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "send occupied message on LocoNet when faulted",
+      closedEffect : "do not send occupied message on LocoNet when faulted"
+    ),
+    (
+      definitionType: .standard,
+      model: [.BXP88],
+      switchNumber: 33,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "enable Operations Mode readback",
+      closedEffect : "disable Operations Mode readback"
+    ),
+    (
+      definitionType: .standard,
+      model: [.BXP88],
+      switchNumber: 40,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "",
+      closedEffect : "set factory defaults"
+    ),
+    (
+      definitionType: .standard,
+      model: [.BXP88],
+      switchNumber: 41,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "enable occupancy reporting for Detection Section 1",
+      closedEffect : "disable occupancy reporting for Detection Section 1"
+    ),
+    (
+      definitionType: .standard,
+      model: [.BXP88],
+      switchNumber: 42,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "enable occupancy reporting for Detection Section 2",
+      closedEffect : "disable occupancy reporting for Detection Section 2"
+    ),
+    (
+      definitionType: .standard,
+      model: [.BXP88],
+      switchNumber: 43,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "enable occupancy reporting for Detection Section 3",
+      closedEffect : "disable occupancy reporting for Detection Section 3"
+    ),
+    (
+      definitionType: .standard,
+      model: [.BXP88],
+      switchNumber: 44,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "enable occupancy reporting for Detection Section 4",
+      closedEffect : "disable occupancy reporting for Detection Section 4"
+    ),
+    (
+      definitionType: .standard,
+      model: [.BXP88],
+      switchNumber: 45,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "enable occupancy reporting for Detection Section 5",
+      closedEffect : "disable occupancy reporting for Detection Section 5"
+    ),
+    (
+      definitionType: .standard,
+      model: [.BXP88],
+      switchNumber: 46,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "enable occupancy reporting for Detection Section 6",
+      closedEffect : "disable occupancy reporting for Detection Section 6"
+    ),
+    (
+      definitionType: .standard,
+      model: [.BXP88],
+      switchNumber: 47,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "enable occupancy reporting for Detection Section 7",
+      closedEffect : "disable occupancy reporting for Detection Section 7"
+    ),
+    (
+      definitionType: .standard,
+      model: [.BXP88],
+      switchNumber: 48,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "enable occupancy reporting for Detection Section 8",
+      closedEffect : "disable occupancy reporting for Detection Section 8"
+    ),
+    (
+      definitionType: .standard,
+      model: [.BXP88],
+      switchNumber: 50,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "allow selective transponding disabling by OpSw 51-58",
+      closedEffect : "do not allow selective transponding disabling by OpSw 51-58"
+    ),
+    (
+      definitionType: .standard,
+      model: [.BXP88],
+      switchNumber: 51,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "enable transponding reporting for Detection Section 1",
+      closedEffect : "disable transponding reporting for Detection Section 1"
+    ),
+    (
+      definitionType: .standard,
+      model: [.BXP88],
+      switchNumber: 52,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "enable transponding reporting for Detection Section 2",
+      closedEffect : "disable transponding reporting for Detection Section 2"
+    ),
+    (
+      definitionType: .standard,
+      model: [.BXP88],
+      switchNumber: 53,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "enable transponding reporting for Detection Section 3",
+      closedEffect : "disable transponding reporting for Detection Section 3"
+    ),
+    (
+      definitionType: .standard,
+      model: [.BXP88],
+      switchNumber: 54,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "enable transponding reporting for Detection Section 4",
+      closedEffect : "disable transponding reporting for Detection Section 4"
+    ),
+    (
+      definitionType: .standard,
+      model: [.BXP88],
+      switchNumber: 55,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "enable transponding reporting for Detection Section 5",
+      closedEffect : "disable transponding reporting for Detection Section 5"
+    ),
+    (
+      definitionType: .standard,
+      model: [.BXP88],
+      switchNumber: 56,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "enable transponding reporting for Detection Section 6",
+      closedEffect : "disable transponding reporting for Detection Section 6"
+    ),
+    (
+      definitionType: .standard,
+      model: [.BXP88],
+      switchNumber: 57,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "enable transponding reporting for Detection Section 7",
+      closedEffect : "disable transponding reporting for Detection Section 7"
+    ),
+    (
+      definitionType: .standard,
+      model: [.BXP88],
+      switchNumber: 58,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "enable transponding reporting for Detection Section 8",
+      closedEffect : "disable transponding reporting for Detection Section 8"
+    ),
 
   ]
 

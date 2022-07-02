@@ -22,6 +22,18 @@ public class LocoNetDevice : EditorObject {
 
   // MARK: Public Properties
   
+  public var optionSwitches : [OptionSwitch] {
+    get {
+      var result : [OptionSwitch] = []
+      for opSwDef in OptionSwitch.switches(locoNetProductId: locoNetProductId) {
+        let opSw = OptionSwitch(locoNetDevice: self, switchNumber: opSwDef.switchNumber, switchDefinition: opSwDef)
+        result.append(opSw)
+      }
+      result.sort {$0.switchNumber < $1.switchNumber}
+      return result
+    }
+  }
+  
   public var networkId : Int = -1 {
     didSet {
       modified = true
@@ -124,6 +136,15 @@ public class LocoNetDevice : EditorObject {
     }
   }
   
+  public var isSensorDevice : Bool {
+    get {
+      if let info = locoNetProductInfo {
+        return !info.attributes.intersection([.PowerManager, .Transponding, .OccupancyDetector]).isEmpty
+      }
+      return false
+    }
+  }
+  
   public var flags : Int64 = 0 {
     didSet {
       modified = true
@@ -133,7 +154,11 @@ public class LocoNetDevice : EditorObject {
   public var iplName : String {
     get {
       if let info = locoNetProductInfo {
-        return "Digitrax \(info.productName) SN: #\(serialNumber)"
+        var name = "Digitrax \(info.productName) SN: #\(serialNumber)"
+        if !info.attributes.intersection([.OccupancyDetector, .PowerManager, .Transponding]).isEmpty {
+          name += " BID: \(boardId)"
+        }
+        return name
       }
       return ""
     }

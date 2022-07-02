@@ -28,6 +28,8 @@ class EditSwitchesVC: NSViewController, NSWindowDelegate {
     
     self.view.window?.delegate = self
     
+    
+    
   }
   
 }

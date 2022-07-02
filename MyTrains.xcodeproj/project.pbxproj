@@ -90,7 +90,7 @@
 		DA77795127AEE0E5007EEBE9 /* CommandStationConfigurationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA77795027AEE0E5007EEBE9 /* CommandStationConfigurationVC.swift */; };
 		DA77795327AEEB3A007EEBE9 /* OpSwTCV.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA77795227AEEB3A007EEBE9 /* OpSwTCV.xib */; };
 		DA77795527AEEBBC007EEBE9 /* OpSwTCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA77795427AEEBBC007EEBE9 /* OpSwTCV.swift */; };
-		DA77795727AEF2E5007EEBE9 /* CSConfigurationTableViewDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA77795627AEF2E5007EEBE9 /* CSConfigurationTableViewDS.swift */; };
+		DA77795727AEF2E5007EEBE9 /* OpSwTableViewDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA77795627AEF2E5007EEBE9 /* OpSwTableViewDS.swift */; };
 		DA7A4910274A89FE00C2A42B /* FastClockMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7A490F274A89FE00C2A42B /* FastClockMessage.swift */; };
 		DA7A4912274AC25600C2A42B /* PeerXferMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7A4911274AC25600C2A42B /* PeerXferMessage.swift */; };
 		DA7B4727273803BA00BCD587 /* Locomotive.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7B4726273803BA00BCD587 /* Locomotive.swift */; };
@@ -234,7 +234,7 @@
 		DA77795027AEE0E5007EEBE9 /* CommandStationConfigurationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandStationConfigurationVC.swift; sourceTree = "<group>"; };
 		DA77795227AEEB3A007EEBE9 /* OpSwTCV.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OpSwTCV.xib; sourceTree = "<group>"; };
 		DA77795427AEEBBC007EEBE9 /* OpSwTCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpSwTCV.swift; sourceTree = "<group>"; };
-		DA77795627AEF2E5007EEBE9 /* CSConfigurationTableViewDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSConfigurationTableViewDS.swift; sourceTree = "<group>"; };
+		DA77795627AEF2E5007EEBE9 /* OpSwTableViewDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpSwTableViewDS.swift; sourceTree = "<group>"; };
 		DA7A490F274A89FE00C2A42B /* FastClockMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastClockMessage.swift; sourceTree = "<group>"; };
 		DA7A4911274AC25600C2A42B /* PeerXferMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeerXferMessage.swift; sourceTree = "<group>"; };
 		DA7B4726273803BA00BCD587 /* Locomotive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Locomotive.swift; sourceTree = "<group>"; };
@@ -346,7 +346,7 @@
 				DA77794E27AEE087007EEBE9 /* CommandStationConfiguration.storyboard */,
 				DA77795027AEE0E5007EEBE9 /* CommandStationConfigurationVC.swift */,
 				DA77794B27AEA029007EEBE9 /* OptionSwitch.swift */,
-				DA77795627AEF2E5007EEBE9 /* CSConfigurationTableViewDS.swift */,
+				DA77795627AEF2E5007EEBE9 /* OpSwTableViewDS.swift */,
 				DAA867C527933265008B6EEC /* CSVParser.swift */,
 				DA3AEF432788B33F00FF91D4 /* CVTableViewDS.swift */,
 				DA28C2B92801CC0300857471 /* DashBoard.storyboard */,
@@ -638,7 +638,7 @@
 				DAEA9CF7272D8DA900C9B3EC /* NetworkConstants.swift in Sources */,
 				DA2E0E5A2736B8AA00C7DA7A /* LoconetRequestSlotDataMessage.swift in Sources */,
 				DA2785402837EAE700EDCBB7 /* MTSerialPortManager.swift in Sources */,
-				DA77795727AEF2E5007EEBE9 /* CSConfigurationTableViewDS.swift in Sources */,
+				DA77795727AEF2E5007EEBE9 /* OpSwTableViewDS.swift in Sources */,
 				DA467BA7281D534900AB9650 /* SwitchBoardItem.swift in Sources */,
 				DA5B4607276F6917005CA03C /* ComboBoxDBDS.swift in Sources */,
 				DA359850278219A400B81AD3 /* LocoSlotDataP2.swift in Sources */,

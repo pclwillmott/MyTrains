@@ -153,7 +153,7 @@
                                                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         <prototypeCellViews>
                                                                             <tableCellView identifier="OpSwNumberCellID" id="pkx-6C-C5V">
-                                                                                <rect key="frame" x="18" y="19" width="48" height="23"/>
+                                                                                <rect key="frame" x="8" y="19" width="48" height="23"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
                                                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xu9-Ng-K2N">
@@ -185,11 +185,11 @@
                                                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         <prototypeCellViews>
                                                                             <customView identifier="SettingsCellID" id="Nhm-xY-lLO" customClass="OpSwTCV" customModule="MyTrains" customModuleProvider="target">
-                                                                                <rect key="frame" x="83" y="19" width="472" height="55"/>
+                                                                                <rect key="frame" x="73" y="19" width="472" height="55"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                             </customView>
                                                                             <customView identifier="OpSwDecoderCellID" id="N9p-9v-ISE" customClass="OpSwDecoderView" customModule="MyTrains" customModuleProvider="target">
-                                                                                <rect key="frame" x="83" y="112" width="472" height="55"/>
+                                                                                <rect key="frame" x="73" y="112" width="472" height="55"/>
                                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                             </customView>
                                                                         </prototypeCellViews>

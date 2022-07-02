@@ -126,7 +126,7 @@ extension Interface {
 
   }
   
-  public func swReq(switchNumber: Int, state:OptionSwitchState) {
+  public func setSw(switchNumber: Int, state:OptionSwitchState) {
     
     let lo = UInt8((switchNumber - 1) & 0x7f)
     

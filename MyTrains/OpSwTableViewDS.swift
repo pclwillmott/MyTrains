@@ -8,13 +8,13 @@
 import Foundation
 import Cocoa
 
-public class CSConfigurationTableViewDS : NSObject, NSTableViewDataSource, NSTableViewDelegate {
+public class OpSwTableViewDS : NSObject, NSTableViewDataSource, NSTableViewDelegate {
 
   // MARK: Public Properties
   
   public var options = [OptionSwitch]()
   
-  public var isConfigurationSlotMode : Bool = true
+  public var isConfigurationSlotMode : Bool = false
   
   // MARK: NSTableViewDataSource Delegate Methods
   

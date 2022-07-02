@@ -186,8 +186,7 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
       
       var interfaces : [Interface] = []
       
-      for kv in networks {
-        let network = kv.value
+      for (_, network) in networks {
         if network.layoutId == layoutId {
           for kv in locoNetInterfaces {
             let interface = kv.value
@@ -202,6 +201,22 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
       return interfaces.sorted {
         $0.deviceName < $1.deviceName
       }
+      
+    }
+  }
+  
+  public var sensors : [Int:LocoNetDevice] {
+    get {
+      
+      var result : [Int:LocoNetDevice] = [:]
+      
+      for (_, device) in locoNetDevices {
+        if device.isSensorDevice {
+          result[device.primaryKey] = device
+        }
+      }
+
+      return result
       
     }
   }
