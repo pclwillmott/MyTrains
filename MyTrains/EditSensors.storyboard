@@ -10,13 +10,14 @@
         <scene sceneID="uFG-cc-s2Z">
             <objects>
                 <windowController storyboardIdentifier="EditSensorsWC" id="tCH-mC-mSw" sceneMemberID="viewController">
-                    <window key="window" title="Sensor Editor" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="kZP-C7-MSs">
+                    <window key="window" title="Sensor Editor" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="EditSensors" animationBehavior="default" id="kZP-C7-MSs">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-                        <rect key="contentRect" x="268" y="330" width="480" height="270"/>
+                        <rect key="contentRect" x="268" y="330" width="889" height="573"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1792" height="1095"/>
+                        <value key="minSize" type="size" width="889" height="573"/>
                         <view key="contentView" id="UAp-2Y-B5u">
-                            <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                            <rect key="frame" x="0.0" y="0.0" width="889" height="573"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </view>
                         <connections>
@@ -36,15 +37,15 @@
             <objects>
                 <viewController id="KHz-fg-M0c" customClass="EditSensorsVC" customModule="MyTrains" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="D0Z-8t-dzf">
-                        <rect key="frame" x="0.0" y="0.0" width="665" height="481"/>
+                        <rect key="frame" x="0.0" y="0.0" width="889" height="573"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="C8G-nY-4SR" customClass="DBEditorView" customModule="MyTrains" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="665" height="481"/>
+                                <rect key="frame" x="0.0" y="0.0" width="889" height="573"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <tabView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iLf-su-ZZA">
-                                        <rect key="frame" x="13" y="10" width="552" height="421"/>
+                                        <rect key="frame" x="13" y="14" width="739" height="509"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES"/>
                                         <font key="font" metaFont="system"/>
                                         <tabViewItems>
@@ -159,18 +160,18 @@
                                             </tabViewItem>
                                             <tabViewItem label="Option Switches" identifier="" id="Kxw-Rl-cpU">
                                                 <view key="view" id="kL0-gO-ob8">
-                                                    <rect key="frame" x="10" y="33" width="532" height="375"/>
+                                                    <rect key="frame" x="10" y="33" width="719" height="463"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="93" horizontalPageScroll="10" verticalLineScroll="93" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AaR-nw-J5s">
-                                                            <rect key="frame" x="17" y="38" width="498" height="334"/>
+                                                            <rect key="frame" x="17" y="38" width="685" height="422"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <clipView key="contentView" id="YDv-RZ-dtu">
-                                                                <rect key="frame" x="1" y="1" width="496" height="332"/>
+                                                                <rect key="frame" x="1" y="1" width="683" height="420"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <subviews>
                                                                     <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="55" rowSizeStyle="automatic" headerView="zhW-4g-aAC" viewBased="YES" id="C3v-5o-viM">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="496" height="304"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="683" height="392"/>
                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                         <size key="intercellSpacing" width="17" height="38"/>
                                                                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -208,7 +209,7 @@
                                                                                     </tableCellView>
                                                                                 </prototypeCellViews>
                                                                             </tableColumn>
-                                                                            <tableColumn identifier="Settings" width="417" minWidth="40" maxWidth="1000" id="tmb-g7-uae">
+                                                                            <tableColumn identifier="Settings" width="604" minWidth="40" maxWidth="1000" id="tmb-g7-uae">
                                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Settings">
                                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                     <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -221,11 +222,11 @@
                                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                                 <prototypeCellViews>
                                                                                     <customView identifier="SettingsCellID" id="Tla-ZE-Na7" customClass="OpSwTCV" customModule="MyTrains" customModuleProvider="target">
-                                                                                        <rect key="frame" x="73" y="19" width="414" height="55"/>
+                                                                                        <rect key="frame" x="73" y="19" width="601" height="55"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                                     </customView>
                                                                                     <customView identifier="OpSwDecoderCellID" id="Spe-WX-wuQ" customClass="OpSwDecoderView" customModule="MyTrains" customModuleProvider="target">
-                                                                                        <rect key="frame" x="73" y="112" width="414" height="55"/>
+                                                                                        <rect key="frame" x="73" y="112" width="601" height="55"/>
                                                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                                     </customView>
                                                                                 </prototypeCellViews>
@@ -238,7 +239,7 @@
                                                                 </subviews>
                                                             </clipView>
                                                             <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="d4D-mh-qq7">
-                                                                <rect key="frame" x="1" y="280" width="496" height="16"/>
+                                                                <rect key="frame" x="1" y="408" width="679" height="16"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                             </scroller>
                                                             <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="8MJ-2O-sY9">
@@ -246,7 +247,7 @@
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                             </scroller>
                                                             <tableHeaderView key="headerView" wantsLayer="YES" id="zhW-4g-aAC">
-                                                                <rect key="frame" x="0.0" y="0.0" width="496" height="28"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="683" height="28"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                             </tableHeaderView>
                                                         </scrollView>
@@ -262,7 +263,7 @@
                                                             </connections>
                                                         </button>
                                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="i3P-lZ-6dQ">
-                                                            <rect key="frame" x="455" y="0.0" width="67" height="32"/>
+                                                            <rect key="frame" x="642" y="0.0" width="67" height="32"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                             <buttonCell key="cell" type="push" title="Write" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Cy0-kd-if3">
                                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -296,7 +297,7 @@
                 </viewController>
                 <customObject id="LSu-Wv-0VA" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="725.5" y="152.5"/>
+            <point key="canvasLocation" x="837.5" y="198.5"/>
         </scene>
     </scenes>
 </document>

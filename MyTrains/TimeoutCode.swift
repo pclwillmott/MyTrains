@@ -16,4 +16,5 @@ public enum TimeoutCode : UInt8 {
   case getLocoSlotData = 5
   case setLocoSlotData = 6
   case moveSlots = 7
+  case getSwState = 8
 }

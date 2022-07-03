@@ -114,7 +114,7 @@ extension Interface {
 
   }
   
-  public func swState(switchNumber: Int, timeoutCode: TimeoutCode) {
+  public func getSwState(switchNumber: Int) {
     
     let lo = UInt8((switchNumber - 1) & 0x7f)
     
@@ -122,7 +122,7 @@ extension Interface {
     
     let message = NetworkMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_SW_STATE.rawValue, lo, hi], appendCheckSum: true)
     
-    addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [.swState], retryCount: 10, timeoutCode: timeoutCode)
+    addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [.swState], retryCount: 10, timeoutCode: .getSwState)
 
   }
   

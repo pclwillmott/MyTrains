@@ -131,6 +131,7 @@ public enum NetworkMessageType {
   case opSwDataP2
   case peerXfer16
   case pmRep
+  case pmRepBXP88
   case prMode
   case progCmdAccepted
   case progCmdAcceptedBlind

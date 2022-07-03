@@ -196,7 +196,7 @@ public class LocoNetProducts {
     (.DT500, "DT500", "Advanced Super Throttle with Infrared Capability", 2016, .DT500, [.Throttle, .IRTransmitter], 0, 0),
     (.DT500D, "DT500D", "Advanced Duplex Radio Equipped Super Throttle", 2016, .DT500, [.Throttle, .DuplexRadioTransceiver], 0, 0),
     (.DT500DCE, "DT500DCE", "Advanced Duplex Radio Equipped Super Throttle CE (for Europe)", 2016, .DT500, [.Throttle, .DuplexRadioTransceiver], 0, 0),
-    (.BXP88, "BXP88", "LocoNet Occupancy Detector, 8 Detection Sections with Transponding & Power Management", 2017, .BXP88, [.OccupancyDetector, .PowerManager, .Transponding], 4, 0),
+    (.BXP88, "BXP88", "LocoNet Occupancy Detector, 8 Detection Sections with Transponding & Power Management", 2017, .BXP88, [.OccupancyDetector, .PowerManager, .Transponding], 8, 0),
     (.DB210, "DB210", "3/5/8 Amp Auto Reverseing DCC Booster", 2017, .DB210, [.Booster], 0, 0),
     (.DB210OPTO, "DB210-OPTO", "3/5/8 Amp Auto Reverseing DCC Booster that is Opto-Isolated for layouts with common rail wiring", 2017, .DB210Opto, [.Booster], 0, 0),
     (.DB220, "DB220", "Dual 3/5/8 Amp AutoReverseing DCC Booster", 2017, .DB220, [.Booster], 0, 0),

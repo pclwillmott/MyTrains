@@ -19,8 +19,12 @@ public class LocoNetDevice : EditorObject {
   override init(primaryKey:Int) {
     super.init(primaryKey: primaryKey)
   }
-
+  
+  // MARK: Private Properties
+  
   // MARK: Public Properties
+  
+  public var sensors : [Sensor] = []
   
   public var optionSwitches : [OptionSwitch] {
     get {
@@ -164,6 +168,23 @@ public class LocoNetDevice : EditorObject {
     }
   }
   
+  // MARK: Private Methods
+  
+  private func makeSensors() {
+    
+    if let info = locoNetProductInfo {
+      
+      for index in 1...info.sensors {
+        let sensor = Sensor()
+        sensor.locoNetDeviceId = primaryKey
+        sensor.channelNumber = index
+        sensors.append(sensor)
+      }
+      
+    }
+    
+  }
+  
   // MARK: Public Methods
   
   override public func displayString() -> String {
@@ -245,6 +266,13 @@ public class LocoNetDevice : EditorObject {
     }
     
     modified = false
+    
+    if let info = locoNetProductInfo, info.sensors > 0 {
+      sensors = Sensor.sensors(locoNetDevice: self)
+      if sensors.count == 0 {
+        makeSensors()
+      }
+    }
     
   }
 
@@ -354,6 +382,16 @@ public class LocoNetDevice : EditorObject {
       modified = false
       
     }
+    
+    if let info = locoNetProductInfo, info.sensors > 0 {
+      if sensors.count == 0 {
+        makeSensors()
+      }
+    }
+    
+    for sensor in sensors {
+      sensor.save()
+    }
 
   }
 
@@ -430,8 +468,12 @@ public class LocoNetDevice : EditorObject {
   }
   
   public static func delete(primaryKey: Int) {
-    let sql = "DELETE FROM [\(TABLE.LOCONET_DEVICE)] WHERE [\(LOCONET_DEVICE.LOCONET_DEVICE_ID)] = \(primaryKey)"
-    Database.execute(commands: [sql])
+    
+    let sql = [
+      "DELETE FROM [\(TABLE.SENSOR)] WHERE [\(SENSOR.LOCONET_DEVICE_ID)] = \(primaryKey)",
+      "DELETE FROM [\(TABLE.LOCONET_DEVICE)] WHERE [\(LOCONET_DEVICE.LOCONET_DEVICE_ID)] = \(primaryKey)"
+    ]
+    Database.execute(commands: sql)
   }
   
 }

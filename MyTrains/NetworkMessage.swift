@@ -518,6 +518,11 @@ public class NetworkMessage : NSObject {
                  (message[4] & 0b11100000) == 0 {
             _messageType = .pmRep
           }
+          else if message[1] & 0b01111110 == 0b01100010 &&
+                 (message[3] & 0b10010000) == 0 &&
+                 (message[4] & 0b10010000) == 0 {
+            _messageType = .pmRepBXP88
+          }
           else if message[1] == 0x60 &&
                  (message[4] & 0b11111110) == 0 {
             _messageType = .trkShortRep

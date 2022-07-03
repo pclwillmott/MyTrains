@@ -115,7 +115,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
           newDevice = false
           
           device.softwareVersion = iplDevData.softwareVersion
-          device.boardId = iplDevData.boardId
+          device.boardId = iplDevData.boardId + 1
           device.networkId = message.networkId
           
           device.save()
@@ -148,7 +148,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
           if let device = dev {
             
             device.networkId = message.networkId
-            device.boardId = iplDevData.boardId
+            device.boardId = iplDevData.boardId + 1
             device.softwareVersion = iplDevData.softwareVersion
             device.serialNumber = iplDevData.serialNumber
             device.locoNetProductId = info.id

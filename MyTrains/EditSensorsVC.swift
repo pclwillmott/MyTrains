@@ -8,7 +8,7 @@
 import Foundation
 import Cocoa
 
-class EditSensorsVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
+class EditSensorsVC: NSViewController, NSWindowDelegate, DBEditorDelegate, InterfaceDelegate {
   
   // MARK: Window & View Control
   
@@ -21,6 +21,9 @@ class EditSensorsVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   }
 
   func windowWillClose(_ notification: Notification) {
+    if observerId != -1 {
+      readInterface?.removeObserver(id: observerId)
+    }
     stopModal()
   }
   
@@ -52,6 +55,60 @@ class EditSensorsVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   private var cboNetworkDS = ComboBoxDBDS(tableName: TABLE.NETWORK, codeColumn: NETWORK.NETWORK_ID, displayColumn: NETWORK.NETWORK_NAME, sortColumn: NETWORK.NETWORK_NAME)
 
   private var opSwTableViewDS : OpSwTableViewDS = OpSwTableViewDS()
+  
+  private var observerId : Int = -1
+  
+  private var lastOpSw : Int = 0
+  
+  private var readInterface : Interface? = nil
+
+  // MARK: InterfaceDelegate Methods
+  
+  func networkMessageReceived(message:NetworkMessage) {
+    
+    switch message.messageType {
+    case .swState:
+      
+      if let device = editorView.editorObject as? LocoNetDevice, let interface = readInterface, message.message[2] == 0x10 || message.message[2] == 0x30 {
+        
+        let options = device.optionSwitches
+        
+        let option = options[lastOpSw]
+        
+        option.state = (message.message[2] & 0b00100000) == 0b00100000 ? .closed : .thrown
+        
+        tableView.reloadData()
+        
+        lastOpSw += 1
+        
+        if lastOpSw == options.count {
+          
+          interface.removeObserver(id: observerId)
+          observerId = -1
+          lastOpSw = 0
+          
+          let alert = NSAlert()
+
+          alert.messageText = OptionSwitch.exitOptionSwitchModeInstructions[device.locoNetProductId] ?? ""
+          
+          alert.informativeText = ""
+          alert.addButton(withTitle: "OK")
+          alert.alertStyle = .informational
+
+          if alert.runModal() == NSApplication.ModalResponse.alertFirstButtonReturn {
+          }
+
+        }
+        else {
+          interface.getSwState(switchNumber: options[lastOpSw].switchNumber)
+        }
+        
+      }
+
+    default:
+      break
+    }
+  }
 
   // MARK: DBEditorDelegate Methods
   
@@ -200,6 +257,41 @@ class EditSensorsVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   @IBOutlet weak var btnRead: NSButton!
   
   @IBAction func btnReadAction(_ sender: NSButton) {
+    
+    if let device = editorView.editorObject as? LocoNetDevice, let message = OptionSwitch.enterOptionSwitchModeInstructions[device.locoNetProductId] {
+      
+      let alert = NSAlert()
+
+      alert.messageText = message
+      alert.informativeText = ""
+      alert.addButton(withTitle: "OK")
+      alert.addButton(withTitle: "Cancel")
+      alert.alertStyle = .informational
+
+      if alert.runModal() == NSApplication.ModalResponse.alertFirstButtonReturn {
+        
+        readInterface = device.network?.interface
+        
+        if let interface = readInterface {
+          
+          if observerId != -1 {
+            interface.removeObserver(id: observerId)
+          }
+          observerId = interface.addObserver(observer: self)
+          
+          lastOpSw = 0
+          
+          let options = device.optionSwitches
+          if lastOpSw < options.count {
+            interface.getSwState(switchNumber: options[lastOpSw].switchNumber)
+          }
+          
+        }
+        
+      }
+      
+    }
+
   }
   
   @IBOutlet weak var btnWrite: NSButton!

@@ -20,7 +20,7 @@ public class Network : EditorObject {
     super.init(primaryKey: -1)
   }
   
-  // MARK: Public properties
+  // MARK: Public Properties
   
   public var networkName : String = "" {
     didSet {
