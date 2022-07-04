@@ -24,7 +24,6 @@ class EditSensorsVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Inter
     if observerId != -1 {
       readInterface?.removeObserver(id: observerId)
     }
-    stopModal()
   }
   
   override func viewWillAppear() {
@@ -56,11 +55,127 @@ class EditSensorsVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Inter
 
   private var opSwTableViewDS : OpSwTableViewDS = OpSwTableViewDS()
   
+  private var sensorTableViewDS : SensorTableViewDS = SensorTableViewDS()
+  
   private var observerId : Int = -1
   
   private var lastOpSw : Int = 0
   
   private var readInterface : Interface? = nil
+  
+  private var timer : Timer?
+  
+  enum Mode {
+    case idle
+    case read
+    case write
+    case wrapUpSetBID
+    case wrapUpRead
+    case wrapUpWrite
+  }
+  
+  private var mode : Mode = .idle
+
+  // MARK: Private Methods
+  
+  @objc func next() {
+    
+    switch mode {
+    case .idle:
+      break
+    case .read:
+      
+      let options = opSwTableViewDS.options!
+      
+      lastOpSw += 1
+    
+      if lastOpSw == options.count {
+        mode = .wrapUpRead
+      }
+      else {
+        readInterface?.getSwState(switchNumber: options[lastOpSw].switchNumber)
+      }
+      
+    case .write:
+
+      let options = opSwTableViewDS.options!
+      
+      lastOpSw += 1
+    
+      if lastOpSw == options.count {
+        mode = .wrapUpWrite
+      }
+      else {
+        let newState = options[lastOpSw].newState
+        options[lastOpSw].state = newState
+        readInterface?.setSw(switchNumber: options[lastOpSw].switchNumber, state: newState)
+      }
+
+    case .wrapUpSetBID:
+      
+      stopTimer()
+      
+      if let device = editorView.editorObject as? LocoNetDevice, let message = OptionSwitch.exitSetBoardIdModeInstructions[device.locoNetProductId] {
+        
+        let alert = NSAlert()
+
+        alert.messageText = message
+        alert.informativeText = ""
+        alert.addButton(withTitle: "OK")
+        alert.alertStyle = .informational
+
+        if alert.runModal() == NSApplication.ModalResponse.alertFirstButtonReturn {
+        }
+
+        mode = .idle
+        
+      }
+      
+    case .wrapUpRead, .wrapUpWrite:
+      
+      stopTimer()
+      
+      if observerId != -1 {
+        readInterface?.removeObserver(id: observerId)
+      }
+      
+      observerId = -1
+      
+      lastOpSw = 0
+      
+      editorView.modified = true
+
+      mode = .idle
+      
+      if let device = editorView.editorObject as? LocoNetDevice, let message = OptionSwitch.exitOptionSwitchModeInstructions[device.locoNetProductId] {
+        
+        let alert = NSAlert()
+
+        alert.messageText = message
+        alert.informativeText = ""
+        alert.addButton(withTitle: "OK")
+        alert.alertStyle = .informational
+
+        if alert.runModal() == NSApplication.ModalResponse.alertFirstButtonReturn {
+        }
+
+      }
+      
+      btnRead.isEnabled = true
+      btnWrite.isEnabled = true
+
+    }
+    
+  }
+  
+  func startTimer() {
+    timer = Timer.scheduledTimer(timeInterval: 0.25, target: self, selector: #selector(next), userInfo: nil, repeats: true)
+  }
+  
+  func stopTimer() {
+    timer?.invalidate()
+    timer = nil
+  }
 
   // MARK: InterfaceDelegate Methods
   
@@ -69,42 +184,14 @@ class EditSensorsVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Inter
     switch message.messageType {
     case .swState:
       
-      if let device = editorView.editorObject as? LocoNetDevice, let interface = readInterface, message.message[2] == 0x10 || message.message[2] == 0x30 {
-        
-        let options = device.optionSwitches
-        
-        let option = options[lastOpSw]
-        
-        option.state = (message.message[2] & 0b00100000) == 0b00100000 ? .closed : .thrown
-        
-        tableView.reloadData()
-        
-        lastOpSw += 1
-        
-        if lastOpSw == options.count {
-          
-          interface.removeObserver(id: observerId)
-          observerId = -1
-          lastOpSw = 0
-          
-          let alert = NSAlert()
-
-          alert.messageText = OptionSwitch.exitOptionSwitchModeInstructions[device.locoNetProductId] ?? ""
-          
-          alert.informativeText = ""
-          alert.addButton(withTitle: "OK")
-          alert.alertStyle = .informational
-
-          if alert.runModal() == NSApplication.ModalResponse.alertFirstButtonReturn {
-          }
-
-        }
-        else {
-          interface.getSwState(switchNumber: options[lastOpSw].switchNumber)
-        }
-        
-      }
-
+      let options = opSwTableViewDS.options
+      
+      let option = options![lastOpSw]
+      
+      option.state = (message.message[2] & 0b00100000) == 0b00100000 ? .closed : .thrown
+      
+      tableView.reloadData()
+              
     default:
       break
     }
@@ -118,6 +205,9 @@ class EditSensorsVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Inter
     cboNetwork.stringValue = ""
     txtBoardId.stringValue = ""
     tableView.dataSource = nil
+    sensorTableViewDS.sensors = []
+    sensorTableView.dataSource = sensorTableViewDS
+    sensorTableView.reloadData()
   }
   
   func setupFields(dbEditorView: DBEditorView, editorObject: EditorObject) {
@@ -131,7 +221,12 @@ class EditSensorsVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Inter
       opSwTableViewDS.options = device.optionSwitches
       tableView.dataSource = opSwTableViewDS
       tableView.delegate = opSwTableViewDS
-       tableView.reloadData()
+      tableView.reloadData()
+      sensorTableViewDS.sensors = device.sensors
+      sensorTableView.dataSource = sensorTableViewDS
+      sensorTableView.delegate = sensorTableViewDS
+      sensorTableView.reloadData()
+      tabView.selectFirstTabViewItem(self)
     }
   }
   
@@ -233,16 +328,13 @@ class EditSensorsVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Inter
       if alert.runModal() == NSApplication.ModalResponse.alertFirstButtonReturn {
         
         if let interface = device.network?.interface {
+          
+          mode = .wrapUpSetBID
+
           interface.setSw(switchNumber: txtBoardId.integerValue, state: .closed)
           
-          if let message = OptionSwitch.exitSetBoardIdModeInstructions[device.locoNetProductId] {
-            alert.messageText = message
-            alert.informativeText = ""
-            alert.alertStyle = .informational
-
-            if alert.runModal() == NSApplication.ModalResponse.alertFirstButtonReturn {
-            }
-          }
+          startTimer()
+          
         }
         
       }
@@ -270,21 +362,33 @@ class EditSensorsVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Inter
 
       if alert.runModal() == NSApplication.ModalResponse.alertFirstButtonReturn {
         
+        if observerId != -1 {
+          readInterface?.removeObserver(id: observerId)
+        }
+        
         readInterface = device.network?.interface
         
         if let interface = readInterface {
           
-          if observerId != -1 {
-            interface.removeObserver(id: observerId)
-          }
           observerId = interface.addObserver(observer: self)
           
           lastOpSw = 0
           
-          let options = device.optionSwitches
+          let options = opSwTableViewDS.options!
+          
           if lastOpSw < options.count {
             interface.getSwState(switchNumber: options[lastOpSw].switchNumber)
+            mode = .read
+            
           }
+          else {
+            mode = .wrapUpRead
+          }
+          
+          btnRead.isEnabled = false
+          btnWrite.isEnabled = false
+          
+          startTimer()
           
         }
         
@@ -309,25 +413,35 @@ class EditSensorsVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Inter
       alert.alertStyle = .informational
 
       if alert.runModal() == NSApplication.ModalResponse.alertFirstButtonReturn {
-        if let interface = device.network?.interface {
-          for opsw in opSwTableViewDS.options {
-            interface.setSw(switchNumber: opsw.switchNumber, state: opsw.newState)
-            let newState = opsw.newState
-            opsw.state = newState
-          }
-        }
         
-        if let message = OptionSwitch.exitOptionSwitchModeInstructions[device.locoNetProductId] {
-          alert.messageText = message
-          alert.informativeText = ""
-          alert.alertStyle = .informational
-          if alert.runModal() == NSApplication.ModalResponse.alertFirstButtonReturn {
+        readInterface = device.network?.interface
+        
+        if let interface = readInterface {
+          
+          lastOpSw = 0
+          
+          let options = opSwTableViewDS.options!
+          
+          if lastOpSw < options.count {
+            let newState = options[lastOpSw].newState
+            options[lastOpSw].state = newState
+            interface.setSw(switchNumber: options[lastOpSw].switchNumber, state: newState)
+            mode = .write
+            
           }
+          else {
+            mode = .wrapUpWrite
+          }
+          
+          btnRead.isEnabled = false
+          btnWrite.isEnabled = false
+          
+          startTimer()
+          
         }
         
       }
-      
-      
+
     }
 
   }
@@ -336,5 +450,8 @@ class EditSensorsVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Inter
   
   @IBAction func tableViewAction(_ sender: NSTableView) {
   }
+  
+  @IBOutlet weak var sensorTableView: NSTableView!
+  
   
 }

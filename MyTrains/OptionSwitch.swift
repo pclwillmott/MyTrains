@@ -34,13 +34,15 @@ public class OptionSwitch {
   
   // MARK: Constructors
   
-  init(locoNetDevice: LocoNetDevice, switchNumber: Int, switchDefinition:OptionSwitchDefinition) {
+  init(locoNetDevice: LocoNetDevice, switchDefinition:OptionSwitchDefinition) {
     
     self._locoNetDevice = locoNetDevice
     
-    self._switchNumber = switchNumber
+    self._switchNumber = switchDefinition.switchNumber
     
     self._switchDefinition = switchDefinition
+    
+    self.newState = state
     
   }
   

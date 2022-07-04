@@ -192,8 +192,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "16"
             endingLineNumber = "16"
-            landmarkName = "TrackElectrificationType"
-            landmarkType = "13">
+            landmarkName = "RollingStock"
+            landmarkType = "3">
             <Locations>
                <Location
                   uuid = "994BBDD1-02BC-458B-82EC-6B2200D0BBA2 - 92caa6c3124facbb"
@@ -258,6 +258,22 @@
             endingLineNumber = "132"
             landmarkName = "info"
             landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "A07401DB-0EF4-49A7-9149-EADDE122F577"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MyTrains/LocoNetDevice.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "27"
+            endingLineNumber = "27"
+            landmarkName = "LocoNetDevice"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

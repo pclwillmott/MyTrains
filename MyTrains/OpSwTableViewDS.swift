@@ -12,7 +12,7 @@ public class OpSwTableViewDS : NSObject, NSTableViewDataSource, NSTableViewDeleg
 
   // MARK: Public Properties
   
-  public var options = [OptionSwitch]()
+  public var options : [OptionSwitch]?
   
   public var isConfigurationSlotMode : Bool = false
   
@@ -22,7 +22,7 @@ public class OpSwTableViewDS : NSObject, NSTableViewDataSource, NSTableViewDeleg
   
   // Returns the number of records managed for aTableView by the data source object.
    public func numberOfRows(in tableView: NSTableView) -> Int {
-     return options.count
+     return options!.count
    }
   
   // Sets the data object for an item in the specified row and column.
@@ -32,7 +32,7 @@ public class OpSwTableViewDS : NSObject, NSTableViewDataSource, NSTableViewDeleg
   public func tableView(_ tableView: NSTableView,
                         viewFor tableColumn: NSTableColumn?,row: Int) -> NSView? {
     
-    let item = options[row]
+    let item = options![row]
     
     let columnName = tableColumn!.identifier.rawValue
     

@@ -46,6 +46,12 @@ public class Network : EditorObject {
     }
   }
   
+  public var layout : Layout? {
+    get {
+      return networkController.layouts[layoutId]
+    }
+  }
+  
   public var locoNetId : Int = -1 {
     didSet {
       modified = true

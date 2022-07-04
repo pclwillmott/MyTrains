@@ -122,7 +122,7 @@ extension Interface {
     
     let message = NetworkMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_SW_STATE.rawValue, lo, hi], appendCheckSum: true)
     
-    addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [.swState], retryCount: 10, timeoutCode: .getSwState)
+    addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [], retryCount: 0, timeoutCode: .none)
 
   }
   

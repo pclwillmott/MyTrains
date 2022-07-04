@@ -84,6 +84,18 @@ public class Layout : EditorObject {
     }
   }
   
+  public var switchBoardBlocks : [Int:SwitchBoardItem] {
+    get {
+      var result : [Int:SwitchBoardItem] = [:]
+      for (_, item) in switchBoardItems {
+        if item.isBlock || item.isTurnout {
+          result[item.primaryKey] = item
+        }
+      }
+      return result
+    }
+  }
+  
   // MARK: Public Methods
   
   public func nextItemName(switchBoardItem:SwitchBoardItem) -> String {

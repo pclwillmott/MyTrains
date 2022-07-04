@@ -21,22 +21,26 @@ public class LocoNetDevice : EditorObject {
   }
   
   // MARK: Private Properties
+
+  private var _optionSwitches : [OptionSwitch]?
   
   // MARK: Public Properties
   
-  public var sensors : [Sensor] = []
-  
   public var optionSwitches : [OptionSwitch] {
     get {
-      var result : [OptionSwitch] = []
-      for opSwDef in OptionSwitch.switches(locoNetProductId: locoNetProductId) {
-        let opSw = OptionSwitch(locoNetDevice: self, switchNumber: opSwDef.switchNumber, switchDefinition: opSwDef)
-        result.append(opSw)
+      if _optionSwitches == nil {
+        var result : [OptionSwitch] = []
+        for opSwDef in OptionSwitch.switches(locoNetProductId: locoNetProductId) {
+          let opSw = OptionSwitch(locoNetDevice: self, switchDefinition: opSwDef)
+          result.append(opSw)
+        }
+        result.sort {$0.switchNumber < $1.switchNumber}
+        _optionSwitches = result
       }
-      result.sort {$0.switchNumber < $1.switchNumber}
-      return result
+      return _optionSwitches!
     }
   }
+  public var sensors : [Sensor] = []
   
   public var networkId : Int = -1 {
     didSet {
@@ -168,6 +172,16 @@ public class LocoNetDevice : EditorObject {
     }
   }
   
+  override public func sortString() -> String {
+    let name = displayString()
+    if name.contains("BID:") {
+      let split = displayString().split(separator: ":")
+      let s = String(("00000000" + split[split.count-1].trimmingCharacters(in: .whitespaces)).suffix(8))
+      return s
+    }
+    return displayString()
+  }
+  
   // MARK: Private Methods
   
   private func makeSensors() {
@@ -184,7 +198,7 @@ public class LocoNetDevice : EditorObject {
     }
     
   }
-  
+    
   // MARK: Public Methods
   
   override public func displayString() -> String {
@@ -277,6 +291,12 @@ public class LocoNetDevice : EditorObject {
   }
 
   public func save() {
+    
+    for option in optionSwitches {
+      if option.state != option.newState {
+        option.state = option.newState
+      }
+    }
     
     if modified {
       

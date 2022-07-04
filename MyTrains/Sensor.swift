@@ -27,10 +27,22 @@ public class Sensor : EditorObject {
       modified = true
     }
   }
-  
+
+  public var nextSwitchBoardItemId : Int = -1 {
+    didSet {
+      modified = true
+    }
+  }
+
   public var locoNetDeviceId : Int = -1 {
     didSet {
       modified = true
+    }
+  }
+  
+  public var locoNetDevice : LocoNetDevice? {
+    get {
+      return networkController.locoNetDevices[locoNetDeviceId]
     }
   }
   
@@ -102,11 +114,15 @@ public class Sensor : EditorObject {
       
     }
     
+    nextSwitchBoardItemId = switchBoardItemId
+    
     modified = false
     
   }
 
   public func save() {
+    
+    switchBoardItemId = nextSwitchBoardItemId
     
     if modified {
       
@@ -151,7 +167,7 @@ public class Sensor : EditorObject {
         primaryKey = Database.nextCode(tableName: TABLE.SENSOR, primaryKey: SENSOR.SENSOR_ID)!
       }
       else {
-        sql = "UPDATE [\(TABLE.NETWORK)] SET " +
+        sql = "UPDATE [\(TABLE.SENSOR)] SET " +
         "[\(SENSOR.SWITCHBOARD_ITEM_ID)] = @\(SENSOR.SWITCHBOARD_ITEM_ID), " +
         "[\(SENSOR.LOCONET_DEVICE_ID)] = @\(SENSOR.LOCONET_DEVICE_ID), " +
         "[\(SENSOR.CHANNEL_NUMBER)] = @\(SENSOR.CHANNEL_NUMBER), " +

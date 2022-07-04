@@ -136,7 +136,7 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate {
   
   func messageReceived(message:NetworkMessage) {
     
-    let options = csConfigurationTableViewDS.options
+    let options = csConfigurationTableViewDS.options!
     
     switch message.messageType {
     case .opSwDataP2:
@@ -318,7 +318,7 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate {
   
   @IBAction func btnWriteAction(_ sender: NSButton) {
     if radOptionSwitches.state == .on {
-      for opsw in csConfigurationTableViewDS.options {
+      for opsw in csConfigurationTableViewDS.options! {
         /*
         if opsw.switchDefinition.configByte == -1 {
    //       commandStation?.swReq(switchNumber: opsw.switchNumber, state: opsw.newState)

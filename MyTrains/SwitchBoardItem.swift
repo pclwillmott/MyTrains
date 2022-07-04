@@ -58,6 +58,20 @@ public class SwitchBoardItem : EditorObject {
     return blockName
   }
   
+  override public func sortString() -> String {
+    var s : String = ""
+    switch blockName.prefix(1) {
+    case "B":
+      s += "00000000"
+    case "T":
+      s += "99999999"
+    default:
+      break
+    }
+    s += blockName.suffix(blockName.count-1)
+    return String(s.suffix(8))
+  }
+  
   public var layoutId : Int = -1 {
     didSet {
       modified = true
