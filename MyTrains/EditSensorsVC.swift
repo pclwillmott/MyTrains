@@ -127,9 +127,9 @@ class EditSensorsVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Inter
         if alert.runModal() == NSApplication.ModalResponse.alertFirstButtonReturn {
         }
 
-        mode = .idle
-        
       }
+      
+      mode = .idle
       
     case .wrapUpRead, .wrapUpWrite:
       
@@ -216,7 +216,7 @@ class EditSensorsVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Inter
         cboDeviceType.selectItem(at: index)
       }
       txtDeviceName.stringValue = device.deviceName
-      cboNetwork.stringValue = device.network?.networkName ?? ""
+      cboNetwork.selectItem(at: cboNetworkDS.indexOfItemWithCodeValue(code: device.networkId) ?? -1)
       txtBoardId.integerValue = device.boardId
       opSwTableViewDS.options = device.optionSwitches
       tableView.dataSource = opSwTableViewDS
@@ -227,6 +227,7 @@ class EditSensorsVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Inter
       sensorTableView.delegate = sensorTableViewDS
       sensorTableView.reloadData()
       tabView.selectFirstTabViewItem(self)
+      editorView.modified = true
     }
   }
   

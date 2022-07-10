@@ -152,6 +152,9 @@ public enum NetworkMessageType {
   case routeTableInfoB
   case routeTablePage
   case routesDisabled
+  case s7CVRW
+  case s7CVState
+  case s7Info
   case sensRepGenIn
   case sensRepTurnIn
   case sensRepTurnOut
@@ -174,6 +177,7 @@ public enum NetworkMessageType {
   case setLocoSlotStat1P1
   case setLocoSlotStat1P2
   case setRouteTablePage
+  case setS7BaseAddr
   case setSlotDataOKP1
   case setSlotDataOKP2
   case setSw

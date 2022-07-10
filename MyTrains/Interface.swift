@@ -116,7 +116,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
           
           device.softwareVersion = iplDevData.softwareVersion
           device.boardId = iplDevData.boardId + 1
-          device.networkId = message.networkId
+   //       device.networkId = message.networkId
           
           device.save()
           

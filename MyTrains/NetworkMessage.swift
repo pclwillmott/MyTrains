@@ -337,6 +337,16 @@ public class NetworkMessage : NSObject {
             default:
               break
             }
+          case 0x6d:
+            switch message[2] {
+              case 0x00:
+              _messageType = .immPacketBufferFull
+              case 0x7f:
+              _messageType = .immPacketOK
+            default:
+              _messageType = .s7CVState
+              break
+            }
           case 0x6e:
             switch message[2] {
             case 0x00:
@@ -344,6 +354,7 @@ public class NetworkMessage : NSObject {
             case 0x7f:
               _messageType = .setSlotDataOKP2
             default:
+              _messageType = .s7CVState
               break
             }
           case 0x6f:
@@ -361,15 +372,6 @@ public class NetworkMessage : NSObject {
             }
           case 0x7e:
             _messageType = .immPacketLMOK
-          case 0x7d:
-            switch message[2] {
-              case 0x00:
-              _messageType = .immPacketBufferFull
-              case 0x7f:
-              _messageType = .immPacketOK
-            default:
-              break
-            }
          default:
             break
           }
@@ -1054,21 +1056,41 @@ public class NetworkMessage : NSObject {
             }
             
           }
-          else if message[1] == 0x10 && message[2] == 0x01 {
-            if message[3] == 0x00 &&
-               message[4] == 0x00 &&
-               message[10] == 0x00 &&
-               message[11] == 0x00 &&
-               message[12] == 0x00 &&
-               message[13] == 0x00 &&
-               message[14] == 0x00 {
-              _messageType = .routeTableInfoA
+          else if message[1] == 0x10 {
+                    
+            if message[2] == 0x01 {
+              
+              if message[3] == 0x00 &&
+                 message[10] == 0x00 &&
+                 message[11] == 0x00 &&
+                 message[12] == 0x00 &&
+                 message[13] == 0x00 &&
+                 message[14] == 0x00 {
+                _messageType = .routeTableInfoA
+              }
+              else if message[3] == 0x02 &&
+                (message[5] & 0b11111110) == 0x00 &&
+                 message[6] == 0x0f {
+                _messageType = .routeTablePage
+              }
+              
             }
-            else if message[3] == 0x02 &&
-              (message[5] & 0b11111110) == 0x00 &&
-               message[6] == 0x0f {
-              _messageType = .routeTablePage
+            else if message[2] == 0x02 {
+              
+              if message[ 3] == 0x00 &&
+                 message[ 4] == 0x10 &&
+                 message[ 5] == 0x00 &&
+                 message[ 6] == 0x00 &&
+                 message[ 7] == 0x02 &&
+                 message[ 8] == 0x08 &&
+                 message[10] == 0x00 &&
+                 (message[12] & 0b11000000) == 0x00 &&
+                 (message[14] & 0b11110000) == 0x00 {
+                _messageType = .s7Info
+              }
+
             }
+            
           }
 
         // MARK: 0xE7
@@ -1112,11 +1134,19 @@ public class NetworkMessage : NSObject {
         // MARK: 0xED
           
         case NetworkMessageOpcode.OPC_IMM_PACKET.rawValue:
-          if message[1] == 0x0b &&
-             message[2] == 0x7f &&
-            (message[3] & 0b10001000) == 0 &&
-            (message[4] & 0b11100000) == 0b00100000 {
+          
+          if message[1] == 0x0b && message[2] == 0x7f {
+            
+            if (message[3] & 0b10001000) == 0 &&
+               (message[4] & 0b11100000) == 0b00100000 {
               _messageType = .immPacket
+            }
+            else if message[3] == 0x54 &&
+              (message[4] & 0b11100111) == 0b00000111 &&
+              (message[7] & 0b11110111) == 0b01100100 {
+              _messageType = .s7CVRW
+            }
+            
           }
 
         // MARK: 0xEE
@@ -1136,56 +1166,70 @@ public class NetworkMessage : NSObject {
             }
           }
           else if message[1] == 0x10 {
-            if message[ 2] == 0x01 &&
-               message[ 3] == 0x00 &&
-               message[ 4] == 0x00 &&
-               message[ 5] == 0x00 &&
-               message[ 6] == 0x00 &&
-               message[ 7] == 0x00 &&
-               message[ 8] == 0x00 &&
-               message[ 9] == 0x00 &&
-               message[10] == 0x00 &&
-               message[11] == 0x00 &&
-               message[12] == 0x00 &&
-               message[13] == 0x00 &&
-               message[14] == 0x00 {
-              _messageType = .getRouteTableInfoA
+            
+            if message[2] == 0x01 {
+              
+              if message[ 3] == 0x00 &&
+                 message[ 4] == 0x00 &&
+                 message[ 5] == 0x00 &&
+                 message[ 6] == 0x00 &&
+                 message[ 7] == 0x00 &&
+                 message[ 8] == 0x00 &&
+                 message[ 9] == 0x00 &&
+                 message[10] == 0x00 &&
+                 message[11] == 0x00 &&
+                 message[12] == 0x00 &&
+                 message[13] == 0x00 {
+                _messageType = .getRouteTableInfoA
+              }
+              else if message[ 3] == 0x02 &&
+                 (message[5] & 0b11111110) == 0x00 &&
+                 message[ 6] == 0x00 &&
+                 message[ 7] == 0x00 &&
+                 message[ 8] == 0x00 &&
+                 message[ 9] == 0x00 &&
+                 message[10] == 0x00 &&
+                 message[11] == 0x00 &&
+                 message[12] == 0x00 &&
+                 message[13] == 0x00 {
+                _messageType = .getRouteTablePage
+              }
+              else if message[ 3] == 0x03 &&
+                 (message[5] & 0b11111110) == 0x00 {
+                _messageType = .setRouteTablePage
+              }
+
             }
-            else if message[ 2] == 0x02 &&
-               message[ 3] == 0x00 &&
-               message[ 4] == 0x00 &&
-               message[ 5] == 0x00 &&
-               message[ 6] == 0x00 &&
-               message[ 7] == 0x00 &&
-               message[ 8] == 0x00 &&
-               message[ 9] == 0x00 &&
-               message[10] == 0x00 &&
-               message[11] == 0x00 &&
-               message[12] == 0x00 &&
-               message[13] == 0x00 &&
-               message[14] == 0x00 {
-              _messageType = .getRouteTableInfoB
+            else if message[2] == 0x02 {
+              
+              if message[ 3] == 0x00 &&
+                 message[ 4] == 0x00 &&
+                 message[ 5] == 0x00 &&
+                 message[ 6] == 0x00 &&
+                 message[ 7] == 0x00 &&
+                 message[ 8] == 0x00 &&
+                 message[ 9] == 0x00 &&
+                 message[10] == 0x00 &&
+                 message[11] == 0x00 &&
+                 message[12] == 0x00 &&
+                 message[13] == 0x00 &&
+                 message[14] == 0x00 {
+                _messageType = .getRouteTableInfoB
+              }
+              else if message[3] == 0x0f &&
+                 message[ 4] == 0x00 &&
+                 message[ 5] == 0x00 &&
+                 message[ 6] == 0x00 &&
+                 message[ 7] == 0x00 &&
+                 message[ 8] == 0x00 &&
+                 message[10] == 0x00 &&
+                 (message[12] & 0b11000000) == 0x00 &&
+                 (message[14] & 0b11110000) == 0x00 {
+                _messageType = .setS7BaseAddr
+              }
+
             }
-            else if message[ 2] == 0x01 &&
-               message[ 3] == 0x02 &&
-               (message[5] & 0b00000001) == 0x00 &&
-               message[ 6] == 0x0f &&
-               message[ 7] == 0x7f &&
-               message[ 8] == 0x7f &&
-               message[ 9] == 0x7f &&
-               message[10] == 0x7f &&
-               message[11] == 0x7f &&
-               message[12] == 0x7f &&
-               message[13] == 0x7f &&
-               message[14] == 0x7f {
-              _messageType = .getRouteTablePage
-            }
-            else if message[ 2] == 0x01 &&
-               message[ 3] == 0x03 &&
-               (message[5] & 0b00000001) == 0x00 &&
-               message[ 6] == 0x0f {
-              _messageType = .setRouteTablePage
-            }
+            
           }
           
         // MARK: 0xEF
