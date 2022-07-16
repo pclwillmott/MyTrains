@@ -71,6 +71,7 @@ public enum NetworkMessageType {
   case duplexSignalStrength
   case ezRouteConfirm
   case fastClockDataP1
+  case findLoco
   case findReceiver
   case getBrdOpSwState
   case getOpSwDataAP1
@@ -118,6 +119,7 @@ public enum NetworkMessageType {
   case locoF7F13P2
   case locoF14F20P2
   case locoF21F28P2
+  case locoRep
   case locoSlotDataP1
   case locoSlotDataP2
   case locoSpdDirP2

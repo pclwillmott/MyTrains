@@ -529,6 +529,9 @@ public class NetworkMessage : NSObject {
                  (message[4] & 0b11111110) == 0 {
             _messageType = .trkShortRep
           }
+          else if (message[1] & 0b11010000) == 0 {
+            _messageType = .transRep
+          }
 
         // MARK: 0xD3
           
@@ -670,7 +673,18 @@ public class NetworkMessage : NSObject {
                message[3] == 0x00 {
               _messageType = .ezRouteConfirm
             }
-            
+            else if message[2] == 0x40 &&
+               message[5] == 0x00 &&
+               message[6] == 0x00 &&
+               message[7] == 0x00 {
+              _messageType = .findLoco
+            }
+            else if message[2] == 0x00 &&
+              (message[5] & 0b11110000) == 0 &&
+               message[7] == 0x00 {
+              _messageType = .locoRep
+            }
+
           case 0x10:
             
             if message[ 2] == 0x22 &&

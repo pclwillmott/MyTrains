@@ -28,8 +28,6 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     
     self.view.window?.delegate = self
     
-    editorView.delegate = self
-    
     editorView.tabView = tabView
     
     LocomotiveType.populate(comboBox: cboPowerSource)
@@ -47,6 +45,8 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     
 //    cboModelManufacturer.dataSource = cboModelManufacturerDS
 
+    editorView.delegate = self
+    
   }
   
   // MARK: Private Properties
