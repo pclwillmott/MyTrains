@@ -172,6 +172,12 @@
                                                 <action selector="mnuEditSwitchesAction:" target="Voe-Tx-rLC" id="cQt-rG-ok9"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Configure Option Switches" id="TBB-iC-dDu">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="mnuCommandStationConfiguration:" target="Voe-Tx-rLC" id="uiq-Fs-4C5"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="Blocks" id="E2d-BR-mab">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                         </menuItem>
@@ -507,12 +513,6 @@
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="mnuProgramMobileDecoderAddress:" target="Voe-Tx-rLC" id="Rwy-HD-Aae"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Command Station Configuration" id="TBB-iC-dDu">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="mnuCommandStationConfiguration:" target="Voe-Tx-rLC" id="uiq-Fs-4C5"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem title="Group Setup" id="jYW-oF-LfI">

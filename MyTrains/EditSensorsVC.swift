@@ -149,6 +149,8 @@ class EditSensorsVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Inter
       
       if let device = editorView.editorObject as? LocoNetDevice, let message = OptionSwitch.exitOptionSwitchModeInstructions[device.locoNetProductId] {
         
+        device.optionSwitchesOK = true
+        
         let alert = NSAlert()
 
         alert.messageText = message
@@ -292,6 +294,12 @@ class EditSensorsVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Inter
   
   @IBAction func cboDeviceTypeAction(_ sender: NSComboBox) {
     editorView.modified = true
+    if let device = editorView.editorObject as? LocoNetDevice {
+      opSwTableViewDS.options = device.optionSwitches
+      tableView.dataSource = opSwTableViewDS
+      tableView.delegate = opSwTableViewDS
+      tableView.reloadData()
+    }
   }
   
   @IBOutlet weak var txtDeviceName: NSTextField!

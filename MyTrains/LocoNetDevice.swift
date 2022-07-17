@@ -20,9 +20,17 @@ public class LocoNetDevice : EditorObject {
     super.init(primaryKey: primaryKey)
   }
   
+  // MARK: Private Enums
+  
+  private enum Flag {
+    static let opswRead : Int64 = 0b0000000000000000000000000000000000000000000000000000000000000001
+  }
+  
   // MARK: Private Properties
 
   private var _optionSwitches : [OptionSwitch]?
+  
+  private var _methodForOpSw : [OptionSwitchMethod:Set<Int>]?
   
   // MARK: Public Properties
   
@@ -40,6 +48,94 @@ public class LocoNetDevice : EditorObject {
       return _optionSwitches!
     }
   }
+  
+  public var optionSwitchesChanged : [OptionSwitch] {
+    get {
+      var result : [OptionSwitch] = []
+      for opsw in optionSwitches {
+        if opsw.state != opsw.newState {
+          result.append(opsw)
+        }
+      }
+      return result
+    }
+  }
+  
+  public var optionSwitchesChangedSet : Set<Int> {
+    get {
+      var result : Set<Int> = []
+      for opsw in optionSwitchesChanged {
+        result.insert(opsw.switchNumber)
+      }
+      return result
+    }
+  }
+
+  public var optionSwitchSet : Set<Int> {
+    get {
+      
+      var result : Set<Int> = []
+      
+      for opsw in optionSwitches {
+        result.insert(opsw.switchNumber)
+      }
+      
+      return result
+    }
+  }
+  
+  public var methodForOpSw : [OptionSwitchMethod:Set<Int>] {
+    
+    get {
+      
+      if _methodForOpSw == nil, let info = locoNetProductInfo {
+        
+        var series7     : Set<Int> = []
+        var brdOpSw     : Set<Int> = []
+        var opswDataAP1 : Set<Int> = []
+        var opswDataBP1 : Set<Int> = []
+        var opMode      : Set<Int> = []
+        
+        let hasBankA   = info.attributes.contains(.OpSwDataAP1)
+        let hasBankB   = info.attributes.contains(.OpSwDataBP1)
+        let hasBrdOpSw = info.attributes.contains(.BrdOpSw)
+        
+        for opsw in optionSwitchSet {
+          
+          if isSeries7 {
+            series7.insert(opsw)
+          }
+          else if hasBrdOpSw {
+            brdOpSw.insert(opsw)
+          }
+          else if hasBankA && opsw % 8 != 0 && opsw > 0 && opsw <= 64 {
+            opswDataAP1.insert(opsw)
+          }
+          else if hasBankB && opsw % 8 != 0 && opsw > 64 && opsw <= 128 {
+            opswDataBP1.insert(opsw)
+          }
+          else {
+            opMode.insert(opsw)
+          }
+        }
+        
+        var result : [OptionSwitchMethod:Set<Int>] = [:]
+        
+        result[.Series7]     = series7
+        result[.BrdOpSw]     = brdOpSw
+        result[.OpSwDataAP1] = opswDataAP1
+        result[.OpSwDataBP1] = opswDataBP1
+        result[.OpMode]      = opMode
+        
+        _methodForOpSw = result
+        
+      }
+      
+      return _methodForOpSw!
+      
+    }
+  }
+  
   public var sensors : [Sensor] = []
   
   public var networkId : Int = -1 {
@@ -90,6 +186,15 @@ public class LocoNetDevice : EditorObject {
     }
   }
   
+  public var isSeries7 : Bool {
+    get {
+      if let info = locoNetProductInfo {
+        return info.attributes.contains(.Series7)
+      }
+      return false
+    }
+  }
+  
   public var optionSwitches0 : Int64 = 0 {
     didSet {
       modified = true
@@ -111,6 +216,19 @@ public class LocoNetDevice : EditorObject {
   public var optionSwitches3 : Int64 = 0 {
     didSet {
       modified = true
+    }
+  }
+  
+  public var optionSwitchesOK : Bool {
+    get {
+      return (flags & Flag.opswRead) == Flag.opswRead
+    }
+    set(value) {
+      var temp = flags & ~Flag.opswRead
+      if value {
+        temp |= Flag.opswRead
+      }
+      flags = temp
     }
   }
   
@@ -148,6 +266,15 @@ public class LocoNetDevice : EditorObject {
     get {
       if let info = locoNetProductInfo {
         return !info.attributes.intersection([.PowerManager, .Transponding, .OccupancyDetector]).isEmpty
+      }
+      return false
+    }
+  }
+  
+  public var isStationaryDecoder : Bool {
+    get {
+      if let info = locoNetProductInfo {
+        return !info.attributes.intersection([.StationaryDecoder]).isEmpty
       }
       return false
     }

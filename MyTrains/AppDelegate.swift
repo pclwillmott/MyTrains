@@ -83,7 +83,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
   }
   
   @IBAction func mnuEditSwitchesAction(_ sender: NSMenuItem) {
-    ModalWindow.EditSwitches.runModel()
+    let x = ModalWindow.EditSwitches
+    let wc = x.windowController
+    wc.showWindow(nil)
   }
   
   @IBAction func mnuSwitchBoardEditor(_ sender: NSMenuItem) {

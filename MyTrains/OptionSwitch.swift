@@ -8,13 +8,37 @@
 import Foundation
 
 public enum OptionSwitchState : Int {
+  
   case thrown = 0
   case closed = 1
+  case autoThrown = 2
+  case autoClosed = 3
+  
+  public var isThrown : Bool {
+    get {
+      return (self.rawValue & 0b1) == 0
+    }
+  }
+
+  public var isClosed : Bool {
+    get {
+      return (self.rawValue & 0b1) == 1
+    }
+  }
+
 }
 
 public enum OptionSwitchDefinitionType {
   case decoder
   case standard
+}
+
+public enum OptionSwitchMethod {
+  case Series7
+  case BrdOpSw
+  case OpSwDataAP1
+  case OpSwDataBP1
+  case OpMode
 }
 
 public typealias OptionSwitchDefinition = (
@@ -225,16 +249,22 @@ public class OptionSwitch {
   
   public static let enterSetBoardIdModeInstructions : [LocoNetProductId:String] = [
     .BXP88 : "Press and hold the ID button on the BXP88 for approximately 4 seconds until the ID LED flashes red, then release it. The ID LED will flash alternating red and green.",
+    .DS74 : "Press and hold the ID button on the DS74 for about 3 seconds until the RTS and OPS LEDs blink alternately, then release the ID button.",
+    .DS64 : "Press and hold the STAT button on the DS64 down for approximately 10 seconds. The STAT LED will blink at a fast rate and after approximately 10 seconds it will change to a slow blink rate, alternating between red and green. You must release the STAT button as soon as the blink rate changes or the DS64 will time out and you'll have to start again.",
   ]
 
   public static let exitSetBoardIdModeInstructions : [LocoNetProductId:String] = [:]
 
   public static let enterOptionSwitchModeInstructions : [LocoNetProductId:String] = [
     .BXP88 : "Press and hold the OPS button on the BXP88 for about 2 seconds, then release it. The red OPS and green ID LEDs will flash alternately.",
+    .DS74 : "Press and hold the OPS button on the DS74 for about 3 seconds until the green ID and RTS LEDs blink alternately, then release the OPS button.",
+    .DS64 : "Press and hold the OPS button on the DS64 for about 3 seconds until the red OPS LED and green ID LED begin to blink alternately."
   ]
   
   public static let exitOptionSwitchModeInstructions : [LocoNetProductId:String] = [
     .BXP88 : "Press and hold the OPS button on the BXP88 for about 2 seconds and release it.",
+    .DS74 : "Press and hold the OPS button for 3 seconds and release it.",
+    .DS64 : "Press and hold the OPS button on the DS64 until the red LED stops blinking."
   ]
   
   public static let allOptions : [OptionSwitchDefinition] = [
@@ -782,7 +812,7 @@ public class OptionSwitch {
       definitionType: .standard,
       model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200],
       switchNumber: 37,
-      defaultState : .thrown,
+      defaultState : .autoThrown,
       bankAByte: 8,
       bankABit: 4,
       bankBByte: -1,
@@ -794,7 +824,7 @@ public class OptionSwitch {
       definitionType: .standard,
       model: [.DCS210, .DCS210PLUS],
       switchNumber: 38,
-      defaultState : .thrown,
+      defaultState : .autoThrown,
       bankAByte: 8,
       bankABit: 5,
       bankBByte: -1,
@@ -818,7 +848,7 @@ public class OptionSwitch {
       definitionType: .standard,
       model: [.DCS100, .DCS200],
       switchNumber: 38,
-      defaultState : .thrown,
+      defaultState : .autoThrown,
       bankAByte: 8,
       bankABit: 5,
       bankBByte: -1,
@@ -830,7 +860,7 @@ public class OptionSwitch {
       definitionType: .standard,
       model: [.DCS50, .DCS51],
       switchNumber: 39,
-      defaultState : .thrown,
+      defaultState : .autoThrown,
       bankAByte: 8,
       bankABit: 6,
       bankBByte: -1,
@@ -842,7 +872,7 @@ public class OptionSwitch {
       definitionType: .standard,
       model: [.DCS240, .DCS210, .DCS100, .DCS200, .DCS52],
       switchNumber: 39,
-      defaultState : .thrown,
+      defaultState : .autoThrown,
       bankAByte: 8,
       bankABit: 6,
       bankBByte: -1,
@@ -866,7 +896,7 @@ public class OptionSwitch {
       definitionType: .standard,
       model: [.DCS240, .DCS210, .DCS210PLUS, .DCS52],
       switchNumber: 40,
-      defaultState : .thrown,
+      defaultState : .autoThrown,
       bankAByte: -1,
       bankABit: -1,
       bankBByte: -1,
@@ -1206,7 +1236,7 @@ public class OptionSwitch {
       definitionType: .standard,
       model: [.BXP88],
       switchNumber: 40,
-      defaultState : .thrown,
+      defaultState : .autoThrown,
       bankAByte: -1,
       bankABit: -1,
       bankBByte: -1,
@@ -1419,6 +1449,396 @@ public class OptionSwitch {
       closedEffect : "disable transponding reporting for Detection Section 8"
     ),
 
+    // MARK: DS74
+    
+    (
+      definitionType: .standard,
+      model: [.DS74],
+      switchNumber: 1,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "mode select",
+      closedEffect : "mode select"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DS74],
+      switchNumber: 2,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "mode select",
+      closedEffect : "mode select"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DS74],
+      switchNumber: 3,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "mode select",
+      closedEffect : "mode select"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DS74],
+      switchNumber: 4,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "mode select",
+      closedEffect : "mode select"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DS74],
+      switchNumber: 6,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "enable internal routes",
+      closedEffect : "disable internal routes"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DS74],
+      switchNumber: 10,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "accept standard switch commands",
+      closedEffect : "ignore standard switch commands (\"Bushby Bit\")"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DS74],
+      switchNumber: 11,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "8 input lines do not trigger routes",
+      closedEffect : "8 input lines trigger routes"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DS74],
+      switchNumber: 14,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "accept LocoNet commands",
+      closedEffect : "DCC switch commands only, ignore LocoNet commands"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DS74],
+      switchNumber: 15,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "echo Route switch commands to LocoNet",
+      closedEffect : "do not echo Route switch commands to LocoNet"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DS74],
+      switchNumber: 16,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "do not use capacitive discharge in pulse solenoid mode",
+      closedEffect : "use capacitive discharge in pulse solenoid mode"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DS74],
+      switchNumber: 40,
+      defaultState : .autoThrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "",
+      closedEffect : "factory reset"
+    ),
+    
+    // MARK: DS64
+
+    (
+      definitionType: .standard,
+      model: [.DS64],
+      switchNumber: 1,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "pulse mode for solenoid devices",
+      closedEffect : "static output for slow motion devices"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DS64],
+      switchNumber: 2,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "disabled",
+      closedEffect : "pulse timeout 200ms"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DS64],
+      switchNumber: 3,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "disabled",
+      closedEffect : "pulse timeout 400ms"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DS64],
+      switchNumber: 4,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "disabled",
+      closedEffect : "pulse timeout 800ms"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DS64],
+      switchNumber: 5,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "disabled",
+      closedEffect : "pulse timeout 1600ms"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DS64],
+      switchNumber: 6,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "output auto power up",
+      closedEffect : "disabled"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DS64],
+      switchNumber: 7,
+      defaultState : .autoThrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "",
+      closedEffect : "reset to factory default"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DS64],
+      switchNumber: 8,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "regular startup delay - 65ms x Output #1 address",
+      closedEffect : "startup delay doubled"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DS64],
+      switchNumber: 9,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "timeout disabled",
+      closedEffect : "16 second timeout for static output"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DS64],
+      switchNumber: 10,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "throttle and computer commands accepted",
+      closedEffect : "computer commands only accepted"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DS64],
+      switchNumber: 11,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "Route commands from throttle or computer only",
+      closedEffect : "enable route commands from local inputs"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DS64],
+      switchNumber: 12,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "the \"A\" input is set for sensor only and the \"S\" input toggles the output",
+      closedEffect : "the \"A\" input if high forces output to thrown and the \"S\" input if high forces the output to closed"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DS64],
+      switchNumber: 13,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "disabled",
+      closedEffect : "all inputs are set for sensors & also control outputs per OpSw 12 setting"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DS64],
+      switchNumber: 14,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "allow commands from LocoNet and Track",
+      closedEffect : "allow commands from track only"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DS64],
+      switchNumber: 15,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "disable inputs for sensor messages only",
+      closedEffect : "enable inputs for sensor messages only"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DS64],
+      switchNumber: 16,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "enable operation of routes",
+      closedEffect : "disable operation of routes"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DS64],
+      switchNumber: 17,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "disabled",
+      closedEffect : "enable crossing gate function for output 1"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DS64],
+      switchNumber: 18,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "disabled",
+      closedEffect : "enable crossing gate function for output 2"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DS64],
+      switchNumber: 19,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "disabled",
+      closedEffect : "enable crossing gate function for output 3"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DS64],
+      switchNumber: 20,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "disabled",
+      closedEffect : "enable crossing gate function for output 4"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DS64],
+      switchNumber: 21,
+      defaultState : .thrown,
+      bankAByte: -1,
+      bankABit: -1,
+      bankBByte: -1,
+      bankBBit: -1,
+      thrownEffect : "generate LocoNet general sensor messages",
+      closedEffect : "generate LocoNet turnout state messages"
+    ),
+    
   ]
 
   // MARK: Class Methods

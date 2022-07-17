@@ -181,6 +181,18 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
     }
   }
   
+  public var networksForCurrentLayout : [Int:Network] {
+    get {
+      var result : [Int:Network] = [:]
+      for (_, network) in networks {
+        if network.layoutId == self.layoutId {
+          result[network.primaryKey] = network
+        }
+      }
+      return result
+    }
+  }
+  
   public var networkInterfaces : [Interface] {
     get {
       
@@ -221,6 +233,21 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
     }
   }
   
+  public var stationaryDecoders : [Int:LocoNetDevice] {
+    get {
+      
+      var result : [Int:LocoNetDevice] = [:]
+      
+      for (_, device) in locoNetDevices {
+        if device.isStationaryDecoder {
+          result[device.primaryKey] = device
+        }
+      }
+
+      return result
+      
+    }
+  }
   public var programmers : [Int:Interface] {
     
     var progs : [Int:Interface] = [:]
@@ -273,6 +300,33 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
   
   // MARK: Public Methods
 
+  public func locoNetDevicesForNetwork(networkId: Int) -> [Int:LocoNetDevice] {
+    
+    var result : [Int:LocoNetDevice] = [:]
+    
+    for (_, device) in locoNetDevices {
+      if device.networkId == networkId {
+        result[device.primaryKey] = device
+      }
+    }
+    
+    return result
+    
+  }
+  
+  public func locoNetDevicesForNetworkWithAttributes(networkId: Int, attributes: LocoNetDeviceAttributes) -> [Int:LocoNetDevice] {
+    
+    var result : [Int:LocoNetDevice] = [:]
+    
+    for (_, device) in locoNetDevicesForNetwork(networkId: networkId) {
+      if let info = device.locoNetProductInfo, info.attributes.intersection(attributes) == attributes {
+        result[device.primaryKey] = device
+      }
+    }
+    
+    return result
+  }
+  
   public func commandStationInterface(commandStation:Interface) -> Interface? {
     if let network = networks[commandStation.networkId] {
       return network.interface
