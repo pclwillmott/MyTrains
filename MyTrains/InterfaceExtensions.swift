@@ -35,6 +35,80 @@ extension Interface {
 
   }
   
+  public func getBrdOpSwState(device:LocoNetDevice, switchNumber:Int) {
+    
+    let boardType : [LocoNetProductId:UInt8] = [
+      .PM4 : 0,
+      .PM42 : 0,
+      .BDL16 : 1,
+      .BDL162 : 1,
+      .BDL168 : 1,
+      .SE8C : 2,
+      .DS64 : 3,
+    ]
+    
+    if let bType = boardType[device.locoNetProductId] {
+
+      let id : UInt8 = UInt8((device.boardId - 1) & 0xff)
+    
+      let high = 0b01100010 | (id >> 7)
+      
+      let low = id & 0x7f
+      
+      let bt = 0b01110000 | bType
+      
+      let opsw = UInt8((switchNumber-1) & 0x7f)
+      
+      let message = NetworkMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_D0_GROUP.rawValue, high, low, bt, opsw], appendCheckSum: true)
+      
+      addToQueue(message: message, delay: MessageTiming.STANDARD)
+
+    }
+
+  }
+
+  private func s7CVRW(device:LocoNetDevice, cvNumber:Int, isRead:Bool, value:Int) {
+    
+    let cv = UInt8((cvNumber - 1) & 0xff)
+    
+    let val = isRead ? 0 : UInt8(value & 0xff)
+    
+    let high = (0b00000111) | ((cv & 0x80) >> 4) | ((val & 0x80) >> 3)
+    
+    let b = device.boardId - 1
+    
+    let c = b % 4
+    
+    let d = b / 4
+    
+    let e = d % 64
+    
+    let addA = UInt8(e)
+    
+    let g = d / 64
+    
+    let h = 7 - g
+    
+    let i = h * 16 + c * 2 + 8
+    
+    let addB = UInt8(i)
+    
+    let mode : UInt8 = 0b01100100 | (isRead ? 0 : 0b1000)
+    
+    let message = NetworkMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_IMM_PACKET.rawValue, 0x0b, 0x7f, 0x54, high, addA, addB, mode, cv & 0x7f, val & 0x7f], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: MessageTiming.STANDARD)
+
+  }
+
+  public func getS7CV(device:LocoNetDevice, cvNumber:Int) {
+    s7CVRW(device: device, cvNumber: cvNumber, isRead: true, value: 0)
+  }
+
+  public func setS7CV(device:LocoNetDevice, cvNumber:Int, value:Int) {
+    s7CVRW(device: device, cvNumber: cvNumber, isRead: false, value: value)
+  }
+
   public func getOpSwDataBP1() {
     
     let message = NetworkMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_RQ_SL_DATA.rawValue, 0x7e, 0x00], appendCheckSum: true)

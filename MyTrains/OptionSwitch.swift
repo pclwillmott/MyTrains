@@ -54,6 +54,13 @@ public typealias OptionSwitchDefinition = (
   closedEffect : String
 )
 
+public typealias MasksEtAl = (
+  opsw : Int,
+  word : Int,
+  bit  : Int,
+  mask : Int64
+)
+
 public class OptionSwitch {
   
   // MARK: Constructors
@@ -69,15 +76,6 @@ public class OptionSwitch {
     self.newState = state
     
   }
-  
-  // MARK: Private TypeAlias
-  
-  private typealias MasksEtAl = (
-    opsw : Int,
-    word : Int,
-    bit  : Int,
-    mask : Int64
-  )
   
   // MARK: Private Properties
   
@@ -194,57 +192,17 @@ public class OptionSwitch {
     }
   }
   
-  // MARK: Private Methods
-  
-  private func masksEtAl(switchNumber: Int) -> MasksEtAl {
-    let opsw = switchNumber - 1
-    let word = opsw >> 6
-    let bit = opsw & 0b00111111
-    let mask : Int64 = 1 << bit
-    return (opsw: opsw, word: word, bit: bit, mask: mask)
-  }
-  
   // MARK: Public Methods
   
   
   public func getState(switchNumber: Int) -> OptionSwitchState {
-    let masks = masksEtAl(switchNumber: switchNumber)
-    let mask = masks.mask
-    switch masks.word {
-      case 0:
-      return ((locoNetDevice.optionSwitches0 & mask) == mask) ? .closed : .thrown
-      case 1:
-      return ((locoNetDevice.optionSwitches1 & mask) == mask) ? .closed : .thrown
-      case 2:
-      return ((locoNetDevice.optionSwitches2 & mask) == mask) ? .closed : .thrown
-      case 3:
-      return ((locoNetDevice.optionSwitches3 & mask) == mask) ? .closed : .thrown
-    default:
-      break
-    }
-    return .thrown
+    return locoNetDevice.getState(switchNumber: switchNumber)
   }
 
   public func setState(switchNumber: Int, value: OptionSwitchState) {
-    let masks = masksEtAl(switchNumber: switchNumber)
-    let mask = masks.mask
-    let safe = ~mask
-    let temp : Int64 = value == .closed ? mask : 0
-    switch masks.word {
-      case 0:
-      locoNetDevice.optionSwitches0 = (locoNetDevice.optionSwitches0 & safe) | temp
-      case 1:
-      locoNetDevice.optionSwitches1 = (locoNetDevice.optionSwitches1 & safe) | temp
-      case 2:
-      locoNetDevice.optionSwitches2 = (locoNetDevice.optionSwitches2 & safe) | temp
-      case 3:
-      locoNetDevice.optionSwitches3 = (locoNetDevice.optionSwitches3 & safe) | temp
-    default:
-      break
-    }
+    locoNetDevice.setState(switchNumber: switchNumber, value: value)
   }
 
-  
   // MARK: Class Properties
   
   public static let enterSetBoardIdModeInstructions : [LocoNetProductId:String] = [
@@ -258,13 +216,17 @@ public class OptionSwitch {
   public static let enterOptionSwitchModeInstructions : [LocoNetProductId:String] = [
     .BXP88 : "Press and hold the OPS button on the BXP88 for about 2 seconds, then release it. The red OPS and green ID LEDs will flash alternately.",
     .DS74 : "Press and hold the OPS button on the DS74 for about 3 seconds until the green ID and RTS LEDs blink alternately, then release the OPS button.",
-    .DS64 : "Press and hold the OPS button on the DS64 for about 3 seconds until the red OPS LED and green ID LED begin to blink alternately."
+    .DS64 : "Press and hold the OPS button on the DS64 for about 3 seconds until the red OPS LED and green ID LED begin to blink alternately.",
+    .DCS210 : "Move the Mode toggle switch on the front of the DCS210 to the \"OP\" position. The PWR indicator will flash green alternating with the PROG indicator flashing red.",
+    .DCS240 : "Move the Mode toggle switch on the front of the DCS240 to the \"OP\" position. The PWR indicator will flash green alternating with the PROG indicator flashing red.",
   ]
   
   public static let exitOptionSwitchModeInstructions : [LocoNetProductId:String] = [
     .BXP88 : "Press and hold the OPS button on the BXP88 for about 2 seconds and release it.",
     .DS74 : "Press and hold the OPS button for 3 seconds and release it.",
-    .DS64 : "Press and hold the OPS button on the DS64 until the red LED stops blinking."
+    .DS64 : "Press and hold the OPS button on the DS64 until the red LED stops blinking.",
+    .DCS210 : "Move the Mode toggle switch on the DCS210 to the \"RUN\" position.",
+    .DCS240 : "Move the Mode toggle switch on the DCS240 to the \"RUN\" position.",
   ]
   
   public static let allOptions : [OptionSwitchDefinition] = [
@@ -1051,7 +1013,7 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210PLUS],
+      model: [.DCS240, .DCS210PLUS, .DCS210],
       switchNumber: 66,
       defaultState : .thrown,
       bankAByte: -1,
@@ -1858,5 +1820,17 @@ public class OptionSwitch {
     }
     
   }
+  
+  // MARK: Private Methods
+  
+  public static func masksEtAl(switchNumber: Int) -> MasksEtAl {
+    let opsw = switchNumber - 1
+    let word = opsw >> 6
+    let bit = opsw & 0b00111111
+    let mask : Int64 = 1 << bit
+    return (opsw: opsw, word: word, bit: bit, mask: mask)
+  }
+  
+
   
 }

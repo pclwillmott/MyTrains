@@ -49,6 +49,16 @@ public class LocoNetDevice : EditorObject {
     }
   }
   
+  public var optionSwitchesSet : Set<Int> {
+    get {
+      var result : Set<Int> = []
+      for opsw in optionSwitches {
+        result.insert(opsw.switchNumber)
+      }
+      return result
+    }
+  }
+
   public var optionSwitchesChanged : [OptionSwitch] {
     get {
       var result : [OptionSwitch] = []
@@ -108,10 +118,10 @@ public class LocoNetDevice : EditorObject {
           else if hasBrdOpSw {
             brdOpSw.insert(opsw)
           }
-          else if hasBankA && opsw % 8 != 0 && opsw > 0 && opsw <= 64 {
+          else if hasBankA && (opsw % 8) != 0 && opsw > 0 && opsw <= 64 {
             opswDataAP1.insert(opsw)
           }
-          else if hasBankB && opsw % 8 != 0 && opsw > 64 && opsw <= 128 {
+          else if hasBankB && (opsw % 8) != 0 && opsw > 64 && opsw <= 128 {
             opswDataBP1.insert(opsw)
           }
           else {
@@ -330,6 +340,52 @@ public class LocoNetDevice : EditorObject {
   
   override public func displayString() -> String {
     return deviceName == "" ? "unnamed device" : deviceName
+  }
+  
+  public func getOptionSwitch(switchNumber:Int) -> OptionSwitch? {
+    for opsw in optionSwitches {
+      if opsw.switchNumber == switchNumber {
+        return opsw
+      }
+    }
+    return nil
+  }
+  
+  public func getState(switchNumber: Int) -> OptionSwitchState {
+    let masks = OptionSwitch.masksEtAl(switchNumber: switchNumber)
+    let mask = masks.mask
+    switch masks.word {
+      case 0:
+      return ((optionSwitches0 & mask) == mask) ? .closed : .thrown
+      case 1:
+      return ((optionSwitches1 & mask) == mask) ? .closed : .thrown
+      case 2:
+      return ((optionSwitches2 & mask) == mask) ? .closed : .thrown
+      case 3:
+      return ((optionSwitches3 & mask) == mask) ? .closed : .thrown
+    default:
+      break
+    }
+    return .thrown
+  }
+
+  public func setState(switchNumber: Int, value: OptionSwitchState) {
+    let masks = OptionSwitch.masksEtAl(switchNumber: switchNumber)
+    let mask = masks.mask
+    let safe = ~mask
+    let temp : Int64 = value == .closed ? mask : 0
+    switch masks.word {
+      case 0:
+      optionSwitches0 = (optionSwitches0 & safe) | temp
+      case 1:
+      optionSwitches1 = (optionSwitches1 & safe) | temp
+      case 2:
+      optionSwitches2 = (optionSwitches2 & safe) | temp
+      case 3:
+      optionSwitches3 = (optionSwitches3 & safe) | temp
+    default:
+      break
+    }
   }
   
 // MARK: Database Methods
