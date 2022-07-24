@@ -200,6 +200,8 @@ public class DMF : NSObject {
   
   private var _cancel = false
   
+  private var chunkCount : Int = 0
+  
   // MARK: Public Properties
   
   public var productCode : UInt8 = 0
@@ -271,6 +273,15 @@ public class DMF : NSObject {
     return delay
   }
   
+  public var endOfProgBlockDelay : TimeInterval {
+    let delay = bootloaderVersion == 2 ? Double(txDelay) / 1000.0 : 0.0
+    return delay
+  }
+  
+  public var chunksPerProgBlock : Int {
+    return progBlockSize / chunkSize
+  }
+  
   public var numberOfBlocksToErase : UInt8 {
     get {
       var nb : Int = (lastAddress - firstAddress) / eraseBlockSize
@@ -332,6 +343,13 @@ public class DMF : NSObject {
         else {
           nextAction = .sendAddr
         }
+        if chunkCount != -1 {
+          chunkCount -= 1
+          if chunkCount == 0 {
+            delay += endOfProgBlockDelay
+            chunkCount = chunksPerProgBlock
+          }
+        }
       }
       else {
         nextAction = .sendBlock
@@ -372,12 +390,14 @@ public class DMF : NSObject {
     case 2:
       blockIndex = 0
       byteIndex = 0
+      chunkCount = chunksPerProgBlock
       nextAction = .sendSetup
       interface.iplSetup(dmf: self)
       startTimer(timeInterval: setupDelayInSeconds, repeats: false)
     case 0, 1:
       blockIndex = 0
       byteIndex = 0
+      chunkCount = -1
       nextAction = .sendAddr
       interface.iplSetup(dmf: self)
       startTimer(timeInterval: setupDelayInSeconds, repeats: false)
