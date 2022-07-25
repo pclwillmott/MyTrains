@@ -45,7 +45,11 @@ public class DMF : NSObject {
     
     var done = false
     
-    let lines = contents.split(separator: "\n")
+    var lines = contents.split(separator: "\n")
+    
+    if lines.count == 1 {
+      lines = contents.split(separator: "\r\n")
+    }
     
     for line in lines {
       
@@ -249,35 +253,42 @@ public class DMF : NSObject {
   
   public var setupDelayInSeconds : TimeInterval {
     get {
-      let delay = bootloaderVersion == 2 ? 60.0 : bootloaderVersion == 0 ? 120.0 : 122.0
+      let delay = bootloaderVersion == 2 ? 59.2 : bootloaderVersion == 0 ? 123.0 : 123.0
       return delay / 1000.0
     }
   }
   
   public var eraseDelayInSeconds : TimeInterval {
     get {
-      return (Double(numberOfBlocksToErase) * Double(eraseDelay) + 125.0) / 1000.0
+      return (Double(numberOfBlocksToErase) * Double(eraseDelay) + 123.8) / 1000.0
     }
   
   }
   
   public var blockDelayInSeconds : TimeInterval {
     get {
-      let delay = bootloaderVersion == 2 ? 18.0 : bootloaderVersion == 0 ? 20.0 : 26.0
+      let delay = bootloaderVersion == 2 ? 17.65 : bootloaderVersion == 0 ? 26.0 : 26.0
       return delay / 1000.0
     }
   }
   
   public var endOfChunkDelay : TimeInterval {
-    let delay = bootloaderVersion == 2 ? blockDelayInSeconds : bootloaderVersion == 0 ? (70.0 + Double(txDelay)) / 1000.0 : (76.0 + Double(txDelay)) / 1000.0
-    return delay
+    let delay = bootloaderVersion == 2 ? 0.0 :
+                bootloaderVersion == 0 ? 50.0 + Double(txDelay) :
+                                         50.0 + Double(txDelay)
+    return delay / 1000.0 + blockDelayInSeconds
   }
   
   public var endOfProgBlockDelay : TimeInterval {
-    let delay = bootloaderVersion == 2 ? Double(txDelay) / 1000.0 : 0.0
+    let delay = bootloaderVersion == 2 ? (Double(txDelay) - 0.61) / 1000.0 : 0.0
     return delay
   }
-  
+
+  public var setAddrDelayInSeconds : TimeInterval {
+    let delay = bootloaderVersion == 2 ? blockDelayInSeconds + 0.49 / 1000.0 : 23.0 / 1000.0
+    return delay
+  }
+
   public var chunksPerProgBlock : Int {
     return progBlockSize / chunkSize
   }
@@ -316,7 +327,7 @@ public class DMF : NSObject {
       let dataRecord = dataRecords[blockIndex]
       byteIndex = 0
       interface?.iplSetAddr(loadAddress: dataRecord.loadOffset)
-      startTimer(timeInterval: blockDelayInSeconds, repeats: false)
+      startTimer(timeInterval: setAddrDelayInSeconds, repeats: false)
       DispatchQueue.main.async { [self] in
         self.delegate?.update?(progress: Double(self.blockIndex) / Double(self.dataRecords.count) * 100.0)
       }
@@ -368,6 +379,7 @@ public class DMF : NSObject {
   func startTimer(timeInterval:TimeInterval, repeats: Bool) {
     stopTimer()
     timer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(timerAction), userInfo: nil, repeats: repeats)
+    RunLoop.current.add(timer!, forMode: .common)
   }
   
   func stopTimer() {

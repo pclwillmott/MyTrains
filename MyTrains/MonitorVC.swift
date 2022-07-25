@@ -89,8 +89,6 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
   
   private var interface : Interface? = nil
   
-  private var lastTime = Date.timeIntervalSinceReferenceDate
-  
   private var captureFilename : String {
     get {
       return lblCaptureFileName.stringValue
@@ -331,9 +329,8 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
     
     switch timeStampType {
     case .millisecondsSinceLastMessage:
-      let ms = (timeNow - lastTime) * 1000.0
+      let ms = (message.timeSinceLastMessage) * 1000.0
       item += String(format:"%10.1f", ms) + "ms "
-      lastTime = timeNow
       break
     default:
       break

@@ -53,6 +53,36 @@ class UpdateFirmwareVC: NSViewController, NSWindowDelegate, InterfaceDelegate, D
   
   private var _dmfPath : String = ""
   
+  private enum Mode {
+    case idle
+    case setup
+    case erase
+    case setaddr
+    case dataload
+    case endProgBlock
+  }
+  
+  
+  private var setAddrTotal : TimeInterval = 0.0
+  
+  private var setAddrCount : Int = 0
+  
+  private var loadDelayTotal : TimeInterval = 0.0
+  
+  private var loadDelayCount : Int = 0
+  
+  private var progBlockDelayTotal : TimeInterval = 0.0
+  
+  private var progBlockDelayCount : Int = 0
+  
+  private var lastTimeStamp : TimeInterval = 0.0
+  
+  private var chunkCount : Int = 0
+  
+  private var loadCount : Int = 0
+  
+  private var mode : Mode = .idle
+  
   private var dmfPath : String {
     get {
       return _dmfPath
@@ -61,6 +91,7 @@ class UpdateFirmwareVC: NSViewController, NSWindowDelegate, InterfaceDelegate, D
       _dmfPath = value
       lblDMF.stringValue = dmfURL?.lastPathComponent ?? ""
       UserDefaults.standard.set(value, forKey: DEFAULT.IPL_DMF_FILENAME)
+      mode = .idle
    }
   }
 
@@ -77,11 +108,13 @@ class UpdateFirmwareVC: NSViewController, NSWindowDelegate, InterfaceDelegate, D
     
     let noPath = dmfURL == nil
     
-    boxSettings.isHidden = noPath
+    tabView.isHidden = noPath
     
     btnStart.isEnabled = !noPath
     
     btnCancel.isEnabled = !noPath
+    
+    
     
   }
   
@@ -129,6 +162,159 @@ class UpdateFirmwareVC: NSViewController, NSWindowDelegate, InterfaceDelegate, D
   func completed() {
     barProgress.isHidden = true
     btnStart.isEnabled = true
+  }
+  
+  // MARK: InterfaceDelegate Methods
+  
+  @objc func networkMessageReceived(message:NetworkMessage) {
+    
+    if let dmf = self.dmf {
+      
+      switch message.messageType {
+      case .iplSetup:
+     
+        if mode != .idle && mode != .setup {
+          mode = .idle
+        }
+        
+        if dmf.bootloaderVersion == 2 {
+          
+          if mode == .idle {
+            mode = .setup
+            setAddrTotal = 0.0
+            setAddrCount = 0
+            loadDelayTotal = 0.0
+            loadDelayCount = 0
+            progBlockDelayTotal = 0.0
+            progBlockDelayCount = 0
+          }
+          else {
+            let delay = (message.timeStamp - lastTimeStamp) * 1000.0
+            lblSetupDelay.stringValue = String(format: "%1.1f", delay)
+            mode = .erase
+          }
+          
+
+        }
+        else {
+          mode = .erase
+          setAddrTotal = 0.0
+          setAddrCount = 0
+          loadDelayTotal = 0.0
+          loadDelayCount = 0
+          progBlockDelayTotal = 0.0
+          progBlockDelayCount = 0
+        }
+        
+        lastTimeStamp = message.timeStamp
+
+      case .iplSetAddr:
+        
+        if dmf.bootloaderVersion == 2 {
+
+          let delay = (message.timeStamp - lastTimeStamp) * 1000.0
+          
+          loadCount = dmf.chunkSize / 8
+
+          if mode == .erase {
+            lblEraseDelayActual.stringValue = String(format: "%1.1f", delay)
+            chunkCount = dmf.chunksPerProgBlock
+          }
+          else {
+            chunkCount -= 1
+            if chunkCount == 0 {
+              chunkCount = dmf.chunksPerProgBlock
+              progBlockDelayTotal += delay
+              progBlockDelayCount += 1
+              let average = progBlockDelayTotal / Double(progBlockDelayCount)
+              lblEndOfProgBlockDelay.stringValue = String(format: "%1.1f", average)
+            }
+            else {
+              loadDelayTotal += delay
+              loadDelayCount += 1
+              let average = loadDelayTotal / Double(loadDelayCount)
+              lblDataLoadDelay.stringValue = String(format: "%1.1f", average)
+           }
+            
+          }
+
+        }
+        else {
+          
+          let delay = (message.timeStamp - lastTimeStamp) * 1000.0
+          
+          loadCount = dmf.chunkSize / 8
+
+          if mode == .erase {
+            lblEraseDelayActual.stringValue = String(format: "%1.1f", delay)
+            chunkCount = dmf.chunksPerProgBlock
+          }
+          else {
+            progBlockDelayTotal += delay
+            progBlockDelayCount += 1
+            let average = progBlockDelayTotal / Double(progBlockDelayCount)
+            lblEndOfProgBlockDelay.stringValue = String(format: "%1.1f", average)
+          }
+
+        }
+        
+        mode = .setaddr
+
+        lastTimeStamp = message.timeStamp
+
+      case .iplDataLoad:
+
+        let delay = (message.timeStamp - lastTimeStamp) * 1000.0
+
+        if dmf.bootloaderVersion == 2 {
+          if mode == .setaddr {
+            setAddrTotal += delay
+            setAddrCount += 1
+            let average = setAddrTotal / Double(setAddrCount)
+            lblSetAddressDelay.stringValue = String(format: "%1.1f", average)
+            mode = .dataload
+          }
+          else {
+            loadDelayTotal += delay
+            loadDelayCount += 1
+            let average = loadDelayTotal / Double(loadDelayCount)
+            lblDataLoadDelay.stringValue = String(format: "%1.1f", average)
+          }
+        }
+        else {
+          
+          if mode == .setaddr {
+            setAddrTotal += delay
+            setAddrCount += 1
+            let average = setAddrTotal / Double(setAddrCount)
+            lblSetAddressDelay.stringValue = String(format: "%1.1f", average)
+            mode = .dataload
+          }
+          else {
+            loadDelayTotal += delay
+            loadDelayCount += 1
+            let average = loadDelayTotal / Double(loadDelayCount)
+            lblDataLoadDelay.stringValue = String(format: "%1.1f", average)
+          }
+          
+          loadCount -= 1
+          
+          if loadCount == 0 {
+            mode = .endProgBlock
+          }
+
+        }
+        
+        lastTimeStamp = message.timeStamp
+
+      case .iplEndLoad:
+        mode = .idle
+      default:
+        break
+      }
+      
+    }
+    
   }
 
   // MARK: Outlets & Actions
@@ -197,6 +383,19 @@ class UpdateFirmwareVC: NSViewController, NSWindowDelegate, InterfaceDelegate, D
           lblBootloaderVersion.integerValue = dmf.bootloaderVersion
           lblProgBlockSize.integerValue = dmf.progBlockSize
           lblEraseBlockSize.integerValue = dmf.eraseBlockSize
+          let boot2 = dmf.bootloaderVersion == 2
+          
+          lblSetupDelay.isHidden = !boot2
+          lblSetupDelayLabel.isHidden = !boot2
+          
+          lblSetupDelay.stringValue = ""
+          lblEraseDelayActual.stringValue = ""
+          lblSetAddressDelay.stringValue = ""
+          lblDataLoadDelay.stringValue = ""
+          lblEndOfProgBlockDelay.stringValue = ""
+          
+          lblEndOfProgBlockLaabelLabel.stringValue = boot2 ? "End of Prog Block Delay" : "End of Chunk Delay"
+          
         }
         else {
           dmfPath = ""
@@ -214,6 +413,7 @@ class UpdateFirmwareVC: NSViewController, NSWindowDelegate, InterfaceDelegate, D
   
   @IBAction func btnStartAction(_ sender: NSButton) {
     
+    mode = .idle
     dmf?.start(interface: interface!, delegate: self)
     
   }
@@ -222,11 +422,10 @@ class UpdateFirmwareVC: NSViewController, NSWindowDelegate, InterfaceDelegate, D
   
   @IBAction func btnCancelAction(_ sender: NSButton) {
     dmf?.cancel()
+    mode = .idle
   }
   
   @IBOutlet weak var barProgress: NSProgressIndicator!
-  
-  @IBOutlet weak var boxSettings: NSBox!
   
   @IBOutlet weak var lblManufacturer: NSTextField!
   
@@ -248,11 +447,27 @@ class UpdateFirmwareVC: NSViewController, NSWindowDelegate, InterfaceDelegate, D
   
   @IBOutlet weak var lblChunkSize: NSTextField!
   
-  @IBOutlet weak var lblEraseDelay: NSTextField!
-  
   @IBOutlet weak var lblLastAddress: NSTextField!
   
   @IBOutlet weak var lblEraseBlockSize: NSTextField!
+  
+  @IBOutlet weak var lblSetupDelay: NSTextField!
+  
+  @IBOutlet weak var lblSetAddressDelay: NSTextField!
+  
+  @IBOutlet weak var lblDataLoadDelay: NSTextField!
+  
+  @IBOutlet weak var lblEndOfProgBlockDelay: NSTextField!
+  
+  @IBOutlet weak var lblEraseDelayActual: NSTextField!
+  
+  @IBOutlet weak var lblEraseDelay: NSTextField!
+  
+  @IBOutlet weak var tabView: NSTabView!
+  
+  @IBOutlet weak var lblSetupDelayLabel: NSTextField!
+  
+  @IBOutlet weak var lblEndOfProgBlockLaabelLabel: NSTextField!
   
 }
 

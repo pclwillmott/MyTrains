@@ -51,6 +51,8 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
   private var nextObserverKeyLock : NSLock = NSLock()
   
   private var interfaceState : InterfaceState = .idle
+  
+  private var lastTimeStamp : TimeInterval = Date.timeIntervalSinceReferenceDate
 
   internal var _locoSlots : [Int:LocoSlotData] = [:]
   
@@ -291,6 +293,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
   
   func startSpacingTimer(timeInterval:TimeInterval) {
     outputTimer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(spacingTimer), userInfo: nil, repeats: false)
+    RunLoop.current.add(outputTimer!, forMode: .common)
   }
   
   func stopSpacingTimer() {
@@ -453,6 +456,10 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
           if !restart {
           
             let networkMessage = NetworkMessage(networkId: networkId, data: message)
+            
+            networkMessage.timeStamp = Date.timeIntervalSinceReferenceDate
+            networkMessage.timeSinceLastMessage = networkMessage.timeStamp - lastTimeStamp
+            lastTimeStamp = networkMessage.timeStamp
             
             if networkMessage.checkSumOK && networkMessage.messageType != .busy {
               

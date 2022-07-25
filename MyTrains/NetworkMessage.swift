@@ -75,6 +75,10 @@ public class NetworkMessage : NSObject {
     }
   }
   
+  public var timeStamp : TimeInterval = 0.0
+  
+  public var timeSinceLastMessage : TimeInterval = 0.0
+  
   public var timeoutCode : UInt8 {
     get {
       return message.count == 2 && message[0] == 0x7f ? message[1] : 0x00
