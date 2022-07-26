@@ -105,6 +105,7 @@ class GroupSetupVC: NSViewController, NetworkControllerDelegate, InterfaceDelega
     stopTimer()
     let timeInterval = 300.0 / 1000.0
     timer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
+    RunLoop.current.add(timer!, forMode: .common)
   }
   
   func stopTimer() {

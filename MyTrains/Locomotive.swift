@@ -242,6 +242,7 @@ public class Locomotive : RollingStock, InterfaceDelegate {
   
   func startRefreshTimer(timeInterval:TimeInterval) {
     refreshTimer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
+    RunLoop.current.add(refreshTimer!, forMode: .common)
   }
   
   func stopRefreshTimer() {
@@ -284,6 +285,7 @@ public class Locomotive : RollingStock, InterfaceDelegate {
   
   func startTimer(timeInterval:TimeInterval) {
     timer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
+    RunLoop.current.add(timer!, forMode: .common)
   }
   
   func stopTimer() {
@@ -354,7 +356,7 @@ public class Locomotive : RollingStock, InterfaceDelegate {
             if locoSlotDataP1.slotState == .inUse {
               initState = .waitingForOwnershipConfirmation
               let wb = writeBack(message: message)
-              interface.setLocoSlotDataP1(slotData: wb, timeoutCode: .setLocoSlotData)
+              interface.setLocoSlotDataP1(slotData: wb)
             }
             else {
               initState = .waitingToActivate
@@ -364,7 +366,7 @@ public class Locomotive : RollingStock, InterfaceDelegate {
           else if initState == .waitingToActivate {
             initState = .waitingForOwnershipConfirmation
             let wb = writeBack(message: message)
-            interface.setLocoSlotDataP1(slotData: wb, timeoutCode: .setLocoSlotData)
+            interface.setLocoSlotDataP1(slotData: wb)
           }
         }
         break

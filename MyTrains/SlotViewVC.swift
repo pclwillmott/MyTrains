@@ -109,6 +109,7 @@ class SlotViewVC : NSViewController, NSWindowDelegate, InterfaceDelegate {
   
   func startTimer(timeInterval:TimeInterval) {
     timer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
+    RunLoop.current.add(timer!, forMode: .common)
   }
   
   func stopTimer() {

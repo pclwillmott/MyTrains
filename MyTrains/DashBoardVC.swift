@@ -158,6 +158,7 @@ class DashBoardVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate
     stopTimer()
     let timeInterval = 200.0 / 1000.0
     timer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(timerAction), userInfo: nil, repeats: false)
+    RunLoop.current.add(timer!, forMode: .common)
   }
   
   func stopTimer() {

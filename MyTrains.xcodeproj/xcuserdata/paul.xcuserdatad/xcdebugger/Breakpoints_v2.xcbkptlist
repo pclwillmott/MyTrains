@@ -110,8 +110,8 @@
             filePath = "MyTrains/NetworkController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "82"
-            endingLineNumber = "82"
+            startingLineNumber = "83"
+            endingLineNumber = "83"
             landmarkName = "layoutId"
             landmarkType = "24">
          </BreakpointContent>
@@ -142,8 +142,8 @@
             filePath = "MyTrains/SerialPort.c"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "225"
-            endingLineNumber = "225"
+            startingLineNumber = "226"
+            endingLineNumber = "226"
             landmarkName = "getSerialPortOptions(fd, baudRate, numberOfDataBits, numberOfStopBits, parity, usesRTSCTSFlowControl)"
             landmarkType = "9">
          </BreakpointContent>
@@ -286,9 +286,9 @@
             filePath = "MyTrains/InterfaceExtensions.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "108"
-            endingLineNumber = "108"
-            landmarkName = "getS7CV(device:cvNumber:)"
+            startingLineNumber = "140"
+            endingLineNumber = "140"
+            landmarkName = "setS7CV(device:cvNumber:value:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

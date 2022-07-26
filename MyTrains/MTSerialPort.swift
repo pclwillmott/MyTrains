@@ -175,7 +175,7 @@ public class MTSerialPort {
       
       if setSerialPortOptions(fd, baudRate.baudRate, numberOfDataBits, numberOfStopBits, parity.rawValue, usesRTSCTSFlowControl ? 1 : 0) == 0 {
       
-        DispatchQueue.global(qos: .utility).async {
+        DispatchQueue.global(qos: .background /* .utility*/).async {
           self.monitorPort()
         }
         

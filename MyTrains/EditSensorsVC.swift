@@ -172,6 +172,7 @@ class EditSensorsVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Inter
   
   func startTimer() {
     timer = Timer.scheduledTimer(timeInterval: 0.25, target: self, selector: #selector(next), userInfo: nil, repeats: true)
+    RunLoop.current.add(timer!, forMode: .common)
   }
   
   func stopTimer() {
@@ -335,6 +336,8 @@ class EditSensorsVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Inter
       alert.alertStyle = .informational
 
       if alert.runModal() == NSApplication.ModalResponse.alertFirstButtonReturn {
+        
+        device.networkId = cboNetworkDS.codeForItemAt(index: cboNetwork.indexOfSelectedItem) ?? -1
         
         if let interface = device.network?.interface {
           

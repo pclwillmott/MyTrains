@@ -160,6 +160,7 @@ public class DecoderFunction : EditorObject {
   
   func startTimer(timeInterval:TimeInterval) {
     timer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(timerAction), userInfo: nil, repeats: false)
+    RunLoop.current.add(timer!, forMode: .common)
   }
   
   func stopTimer() {

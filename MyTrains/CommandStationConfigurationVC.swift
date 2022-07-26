@@ -130,7 +130,42 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Interfa
           interface.getOpSwDataAP1()
         }
         else {
-          // TODO: Do Write
+          
+          var data = [UInt8](repeating: 0, count: 11)
+          
+          data[0] = 0x7f
+          
+          for opsw in 1...64 {
+            
+            if opsw % 8 != 0 {
+              
+              var byte = 1 + (opsw - 1) / 8
+              
+              if byte > 4 {
+                byte += 1
+              }
+              
+              var state : OptionSwitchState
+              
+              if let temp = device.getOptionSwitch(switchNumber: opsw) {
+                state = temp.newState
+              }
+              else {
+                state = device.getState(switchNumber: opsw)
+              }
+              
+              if state == .closed {
+                data[byte] |= 1 << ((opsw - 1) % 8)
+              }
+              
+              selectedSwitches.remove(opsw)
+
+            }
+            
+          }
+          
+          interface.setLocoSlotDataP1(slotData: data)
+          
         }
 
       }
@@ -143,7 +178,43 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Interfa
           interface.getOpSwDataBP1()
         }
         else {
-          // TODO: Do Write
+          
+          var data = [UInt8](repeating: 0, count: 11)
+          
+          data[0] = 0x7e
+          
+          for opsw in 65...128 {
+            
+            if opsw % 8 != 0 {
+              
+              var byte = 1 + (opsw - 1 - 64) / 8
+              
+              if byte > 4 {
+                byte += 1
+              }
+              
+              var state : OptionSwitchState
+              
+              if let temp = device.getOptionSwitch(switchNumber: opsw) {
+                state = temp.newState
+                temp.state = state
+              }
+              else {
+                state = device.getState(switchNumber: opsw)
+              }
+              
+              if state == .closed {
+                data[byte] |= 1 << ((opsw - 1) % 8)
+              }
+              
+              selectedSwitches.remove(opsw)
+
+            }
+            
+          }
+          
+          interface.setLocoSlotDataP1(slotData: data)
+          
         }
         
       }
@@ -156,7 +227,15 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Interfa
         
         lastMethod = .BrdOpSw
         
-        interface.getBrdOpSwState(device: device, switchNumber: lastIndex)
+        if isRead {
+          interface.getBrdOpSwState(device: device, switchNumber: lastIndex)
+        }
+        else {
+          if let opsw = device.getOptionSwitch(switchNumber: lastIndex) {
+            interface.setSw(switchNumber: lastIndex, state: opsw.newState)
+            selectedSwitches.remove(lastIndex)
+          }
+        }
 
       }
       
@@ -183,7 +262,15 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Interfa
         
         lastMethod = .OpMode
         
-        interface.getSwState(switchNumber: lastIndex)
+        if isRead {
+          interface.getSwState(switchNumber: lastIndex)
+        }
+        else {
+          if let opsw = device.getOptionSwitch(switchNumber: lastIndex) {
+            interface.setSw(switchNumber: lastIndex, state: opsw.newState)
+            selectedSwitches.remove(lastIndex)
+          }
+        }
         
       }
       
@@ -198,6 +285,7 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Interfa
   func startTimer() {
     timer = Timer.scheduledTimer(timeInterval: 0.25, target: self, selector: #selector(next), userInfo: nil, repeats: true)
     noResponse = false
+    RunLoop.current.add(timer!, forMode: .common)
   }
   
   func stopTimer() {
@@ -224,10 +312,10 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Interfa
 
         alert.runModal()
         
-        inOpMode = false
-
       }
       
+      inOpMode = false
+
     }
     
   }
@@ -271,10 +359,13 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Interfa
     tableView.dataSource = nil
     tableView.delegate = nil
     
+    lblOptionSwitchesRead.stringValue = "Option Switches have not been read."
+    
     if let device = cboCommandStationDS.editorObjectAt(index: cboCommandStation.indexOfSelectedItem) as? LocoNetDevice {
       opswTableViewDS.options = device.optionSwitches
       tableView.dataSource = opswTableViewDS
       tableView.delegate = opswTableViewDS
+      lblOptionSwitchesRead.stringValue = device.optionSwitchesOK ? "Option Switches have been read." : "Option Switches have not been read."
     }
 
     tableView.reloadData()
@@ -310,6 +401,7 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Interfa
             let value : OptionSwitchState = (message.message[byte] & mask) == mask ? .closed : .thrown
 
             device.setState(switchNumber: switchNumber, value: value)
+            
           }
           
         }

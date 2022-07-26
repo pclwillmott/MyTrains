@@ -54,13 +54,9 @@ class EditSwitchesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   
   private var cboNetworkDS = ComboBoxDBDS(tableName: TABLE.NETWORK, codeColumn: NETWORK.NETWORK_ID, displayColumn: NETWORK.NETWORK_NAME, sortColumn: NETWORK.NETWORK_NAME)
 
-  private var opSwTableViewDS : OpSwTableViewDS = OpSwTableViewDS()
-  
 //  private var switchTableViewDS : SensorTableViewDS = SensorTableViewDS()
   
   private var observerId : Int = -1
-  
-  private var lastOpSw : Int = 0
   
   private var readInterface : Interface? = nil
   
@@ -77,16 +73,14 @@ class EditSwitchesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   
   private var mode : Mode = .idle
   
+  private var interface : Interface?
+  
   // MARK: Private Methods
   
   private func setupView() {
     lblBoardID.stringValue = "Board ID"
     btnSetBoardID.title = "Set Board ID"
     if let device = editorView.editorObject as? LocoNetDevice {
-      opSwTableViewDS.options = device.optionSwitches
-      tableView.dataSource = opSwTableViewDS
-      tableView.delegate = opSwTableViewDS
-      tableView.reloadData()
       if device.isSeries7 {
         lblBoardID.stringValue = "Base Address"
         btnSetBoardID.title = "Set Base Address"
@@ -98,20 +92,6 @@ class EditSwitchesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   
   func networkMessageReceived(message:NetworkMessage) {
     
-    switch message.messageType {
-    case .swState:
-      
-      let options = opSwTableViewDS.options
-      
-      let option = options![lastOpSw]
-      
-      option.state = (message.message[2] & 0b00100000) == 0b00100000 ? .closed : .thrown
-      
-      tableView.reloadData()
-              
-    default:
-      break
-    }
   }
 
   // MARK: DBEditorDelegate Methods
@@ -121,7 +101,6 @@ class EditSwitchesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     txtDeviceName.stringValue = ""
     cboNetwork.deselectItem(at: cboNetwork.indexOfSelectedItem)
     txtBoardID.stringValue = ""
-    tableView.dataSource = nil
 //    sensorTableViewDS.sensors = []
 //    sensorTableView.dataSource = sensorTableViewDS
 //    sensorTableView.reloadData()
@@ -136,7 +115,6 @@ class EditSwitchesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
       txtDeviceName.stringValue = device.deviceName
       cboNetwork.selectItem(at: cboNetworkDS.indexOfItemWithCodeValue(code: device.networkId) ?? -1)
       txtBoardID.integerValue = device.boardId
-      opSwTableViewDS.options = device.optionSwitches
 //      sensorTableViewDS.sensors = device.sensors
 //      sensorTableView.dataSource = sensorTableViewDS
 //      sensorTableView.delegate = sensorTableViewDS
@@ -228,24 +206,41 @@ class EditSwitchesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   @IBOutlet weak var btnSetBoardID: NSButton!
   
   @IBAction func btnSetBoardIDAction(_ sender: NSButton) {
-    editorView.modified = true
+    
+    if let device = editorView.editorObject as? LocoNetDevice, let message = OptionSwitch.enterSetBoardIdModeInstructions[device.locoNetProductId] {
+      
+      let alert = NSAlert()
+
+      alert.messageText = message
+      alert.informativeText = ""
+      alert.addButton(withTitle: "OK")
+      alert.addButton(withTitle: "Cancel")
+      alert.alertStyle = .informational
+
+      if alert.runModal() == NSApplication.ModalResponse.alertFirstButtonReturn {
+        
+        device.networkId = cboNetworkDS.codeForItemAt(index: cboNetwork.indexOfSelectedItem) ?? -1
+        
+        editorView.modified = true
+
+        if let interface = device.network?.interface {
+          
+          mode = .wrapUpSetBID
+
+          interface.setSw(switchNumber: txtBoardID.integerValue, state: .closed)
+          
+   //       startTimer()
+          
+        }
+        
+      }
+      
+    }
+    
   }
-  
-  @IBOutlet weak var btnRead: NSButton!
-  
-  @IBAction func btnReadAction(_ sender: NSButton) {
-    editorView.modified = true
-  }
-  
-  @IBOutlet weak var btnWrite: NSButton!
-  
-  @IBAction func btnWriteAction(_ sender: NSButton) {
-    editorView.modified = true
-  }
-  
-  @IBOutlet weak var tableView: NSTableView!
   
   @IBOutlet weak var tabView: NSTabView!
   
   @IBOutlet weak var editorView: DBEditorView!
+  
 }

@@ -67,6 +67,38 @@ extension Interface {
 
   }
 
+  public func setBrdOpSwState(device:LocoNetDevice, switchNumber:Int, state:OptionSwitchState) {
+    
+    let boardType : [LocoNetProductId:UInt8] = [
+      .PM4 : 0,
+      .PM42 : 0,
+      .BDL16 : 1,
+      .BDL162 : 1,
+      .BDL168 : 1,
+      .SE8C : 2,
+      .DS64 : 3,
+    ]
+    
+    if let bType = boardType[device.locoNetProductId] {
+
+      let id : UInt8 = UInt8((device.boardId - 1) & 0xff)
+    
+      let high = 0b01110010 | (id >> 7)
+      
+      let low = id & 0x7f
+      
+      let bt = 0b01110000 | bType
+      
+      let opsw = UInt8((switchNumber-1) << 1) | (state == .closed ? 1 : 0)
+      
+      let message = NetworkMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_D0_GROUP.rawValue, high, low, bt, opsw], appendCheckSum: true)
+      
+      addToQueue(message: message, delay: MessageTiming.STANDARD)
+
+    }
+
+  }
+
   private func s7CVRW(device:LocoNetDevice, cvNumber:Int, isRead:Bool, value:Int) {
     
     let cv = UInt8((cvNumber - 1) & 0xff)
@@ -202,11 +234,13 @@ extension Interface {
   
   public func setSw(switchNumber: Int, state:OptionSwitchState) {
     
-    let lo = UInt8((switchNumber - 1) & 0x7f)
+    let sn = switchNumber - 1
+    
+    let lo = UInt8(sn & 0x7f)
     
     let bit : UInt8 = state == .closed ? 0x30 : 0x10
     
-    let hi = UInt8((switchNumber - 1) >> 7) | bit
+    let hi = UInt8(sn >> 7) | bit
     
     let message = NetworkMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_SW_REQ.rawValue, lo, hi], appendCheckSum: true)
     
@@ -214,7 +248,7 @@ extension Interface {
 
   }
   
-  public func setLocoSlotDataP1(slotData: [UInt8], timeoutCode: TimeoutCode) {
+  public func setLocoSlotDataP1(slotData: [UInt8]) {
     
     var data = [UInt8](repeating: 0, count: 13)
     
@@ -227,7 +261,7 @@ extension Interface {
     
     let message = NetworkMessage(networkId: networkId, data: data, appendCheckSum: true)
     
-    addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [.setSlotDataOKP1], retryCount: 10, timeoutCode: timeoutCode)
+    addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [], retryCount: 0, timeoutCode: .none)
 
   }
 

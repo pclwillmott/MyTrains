@@ -253,7 +253,7 @@ public class DMF : NSObject {
   
   public var setupDelayInSeconds : TimeInterval {
     get {
-      let delay = bootloaderVersion == 2 ? 59.2 : bootloaderVersion == 0 ? 123.0 : 123.0
+      let delay = bootloaderVersion == 2 ? 59.2 : bootloaderVersion == 0 ? 124.0 : 124.0
       return delay / 1000.0
     }
   }
@@ -267,15 +267,15 @@ public class DMF : NSObject {
   
   public var blockDelayInSeconds : TimeInterval {
     get {
-      let delay = bootloaderVersion == 2 ? 17.65 : bootloaderVersion == 0 ? 26.0 : 26.0
+      let delay = bootloaderVersion == 2 ? 17.65 : bootloaderVersion == 0 ? 26.0 : 25.25
       return delay / 1000.0
     }
   }
   
   public var endOfChunkDelay : TimeInterval {
     let delay = bootloaderVersion == 2 ? 0.0 :
-                bootloaderVersion == 0 ? 50.0 + Double(txDelay) :
-                                         50.0 + Double(txDelay)
+                bootloaderVersion == 0 ? 50.8 + Double(txDelay) :
+                                         50.8 + Double(txDelay)
     return delay / 1000.0 + blockDelayInSeconds
   }
   
@@ -285,7 +285,7 @@ public class DMF : NSObject {
   }
 
   public var setAddrDelayInSeconds : TimeInterval {
-    let delay = bootloaderVersion == 2 ? blockDelayInSeconds + 0.49 / 1000.0 : 23.0 / 1000.0
+    let delay = bootloaderVersion == 2 ? blockDelayInSeconds + 0.49 / 1000.0 : 22.2 / 1000.0
     return delay
   }
 

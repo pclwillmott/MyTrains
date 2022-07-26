@@ -19,6 +19,7 @@
 #include <sys/param.h>
 #include <sys/select.h>
 #include <sys/time.h>
+#include <sys/types.h>
 #include <time.h>
 #include <CoreFoundation/CoreFoundation.h>
 #include <IOKit/IOKitLib.h>
@@ -272,13 +273,26 @@ void closeSerialPort(int fd)
 }
 
 ssize_t readSerialPort(int fd, unsigned char *buffer, ssize_t nbyte) {
-  ssize_t nb = read(fd, buffer, nbyte);
-  /*
-  if (nb == -1) {
-    printf("%i", errno);
+  
+  fd_set  set;
+  
+  struct timeval timeout;
+  
+  FD_ZERO (&set);
+  FD_SET (fd, &set);
+  
+  timeout.tv_sec = 1;
+  timeout.tv_usec = 0;
+  
+  // Go to sleep for 1 second or until something arrives
+  
+  if (select (FD_SETSIZE, &set, NULL, NULL, &timeout)) {
+    ssize_t nb = read(fd, buffer, nbyte);
+    return  nb;
   }
-   */
-  return  nb;
+  
+  return 0L;
+  
 }
 
 ssize_t writeSerialPort(int fd, unsigned char *buffer, ssize_t nbyte) {
