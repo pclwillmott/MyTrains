@@ -131,40 +131,13 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Interfa
         }
         else {
           
-          var data = [UInt8](repeating: 0, count: 11)
-          
-          data[0] = 0x7f
-          
-          for opsw in 1...64 {
-            
-            if opsw % 8 != 0 {
-              
-              var byte = 1 + (opsw - 1) / 8
-              
-              if byte > 4 {
-                byte += 1
-              }
-              
-              var state : OptionSwitchState
-              
-              if let temp = device.getOptionSwitch(switchNumber: opsw) {
-                state = temp.newState
-              }
-              else {
-                state = device.getState(switchNumber: opsw)
-              }
-              
-              if state == .closed {
-                data[byte] |= 1 << ((opsw - 1) % 8)
-              }
-              
-              selectedSwitches.remove(opsw)
+          interface.setLocoSlotDataP1(slotData: device.newOpSwDataAP1)
 
+          for switchNumber in 1...64 {
+            if (switchNumber % 8) != 0 {
+              selectedSwitches.remove(switchNumber)
             }
-            
           }
-          
-          interface.setLocoSlotDataP1(slotData: data)
           
         }
 
@@ -179,42 +152,14 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Interfa
         }
         else {
           
-          var data = [UInt8](repeating: 0, count: 11)
-          
-          data[0] = 0x7e
-          
-          for opsw in 65...128 {
-            
-            if opsw % 8 != 0 {
-              
-              var byte = 1 + (opsw - 1 - 64) / 8
-              
-              if byte > 4 {
-                byte += 1
-              }
-              
-              var state : OptionSwitchState
-              
-              if let temp = device.getOptionSwitch(switchNumber: opsw) {
-                state = temp.newState
-                temp.state = state
-              }
-              else {
-                state = device.getState(switchNumber: opsw)
-              }
-              
-              if state == .closed {
-                data[byte] |= 1 << ((opsw - 1) % 8)
-              }
-              
-              selectedSwitches.remove(opsw)
+          interface.setLocoSlotDataP1(slotData: device.newOpSwDataBP1)
 
+          for switchNumber in 65...128 {
+            if (switchNumber % 8) != 0 {
+              selectedSwitches.remove(switchNumber)
             }
-            
           }
-          
-          interface.setLocoSlotDataP1(slotData: data)
-          
+
         }
         
       }
@@ -231,7 +176,7 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Interfa
           interface.getBrdOpSwState(device: device, switchNumber: lastIndex)
         }
         else {
-          if let opsw = device.getOptionSwitch(switchNumber: lastIndex) {
+          if let opsw = device.optionSwitchDictionary[lastIndex] {
             interface.setSw(switchNumber: lastIndex, state: opsw.newState)
             selectedSwitches.remove(lastIndex)
           }
@@ -266,7 +211,7 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Interfa
           interface.getSwState(switchNumber: lastIndex)
         }
         else {
-          if let opsw = device.getOptionSwitch(switchNumber: lastIndex) {
+          if let opsw = device.optionSwitchDictionary[lastIndex] {
             interface.setSw(switchNumber: lastIndex, state: opsw.newState)
             selectedSwitches.remove(lastIndex)
           }
@@ -386,44 +331,12 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Interfa
           return
         }
         
-        for switchNumber in 1...64 {
-          
-          if switchNumber % 8 != 0 {
-            
-            let sn = switchNumber - 1
-            
-            let byte = (sn >> 8) + switchNumber < 33 ? 3 : 4
-            
-            let bit = sn % 8
-            
-            let mask : UInt8 = 1 << bit
-            
-            let value : OptionSwitchState = (message.message[byte] & mask) == mask ? .closed : .thrown
-
-            device.setState(switchNumber: switchNumber, value: value)
-            
-          }
-          
-        }
+        device.setState(opswDataAP1: message)
         
-        for opsw in device.optionSwitches {
-          
-          if opsw.switchNumber < 65 && opsw.switchNumber % 8 != 0 {
-              
-            let sn = opsw.switchNumber - 1
-            
-            let byte = (sn >> 8) + opsw.switchNumber < 33 ? 3 : 4
-            
-            let bit = sn % 8
-            
-            let mask : UInt8 = 1 << bit
-            
-            opsw.state = (message.message[byte] & mask) == mask ? .closed : .thrown
-            
-            selectedSwitches.remove(opsw.switchNumber)
-            
+        for switchNumber in 1...64 {
+          if (switchNumber % 8) != 0 {
+            selectedSwitches.remove(switchNumber)
           }
-
         }
         
         noResponse = false
@@ -434,44 +347,12 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Interfa
           return
         }
         
-        for switchNumber in 65...128 {
-          
-          if switchNumber % 8 != 0 {
-            
-            let sn = switchNumber - 65
-            
-            let byte = (sn >> 8) + switchNumber < 97 ? 3 : 4
-            
-            let bit = sn % 8
-            
-            let mask : UInt8 = 1 << bit
-            
-            let value : OptionSwitchState = (message.message[byte] & mask) == mask ? .closed : .thrown
-            
-            device.setState(switchNumber: switchNumber, value: value)
-
-          }
-          
-        }
+        device.setState(opswDataBP1: message)
         
-        for opsw in device.optionSwitches {
-          
-          if opsw.switchNumber > 64 && opsw.switchNumber % 8 != 0 {
-              
-            let sn = opsw.switchNumber - 65
-            
-            let byte = (sn >> 8) + opsw.switchNumber < 97 ? 3 : 4
-            
-            let bit = sn % 8
-            
-            let mask : UInt8 = 1 << bit
-            
-            opsw.state = (message.message[byte] & mask) == mask ? .closed : .thrown
-            
-            selectedSwitches.remove(opsw.switchNumber)
-            
+        for switchNumber in 65...128 {
+          if (switchNumber % 8) != 0 {
+            selectedSwitches.remove(switchNumber)
           }
-          
         }
         
         noResponse = false
@@ -482,7 +363,7 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Interfa
           return
         }
         
-        if let opsw = device.getOptionSwitch(switchNumber: lastIndex) {
+        if let opsw = device.optionSwitchDictionary[lastIndex] {
           
           let mask : UInt8 = 0b00100000
           
@@ -500,7 +381,7 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Interfa
           return
         }
         
-        if let opsw = device.getOptionSwitch(switchNumber: lastIndex) {
+        if let opsw = device.optionSwitchDictionary[lastIndex] {
           
           let mask : UInt8 = 0b00100000
           
@@ -530,7 +411,7 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Interfa
             
             device.setState(switchNumber: switchNumber, value: value)
             
-            if let opsw = device.getOptionSwitch(switchNumber: switchNumber) {
+            if let opsw = device.optionSwitchDictionary[switchNumber] {
               opsw.state = value
             }
             
@@ -543,7 +424,7 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Interfa
 
             device.setState(switchNumber: switchNumber, value: value)
             
-            if let opsw = device.getOptionSwitch(switchNumber: switchNumber) {
+            if let opsw = device.optionSwitchDictionary[switchNumber] {
               opsw.state = value
             }
             
@@ -629,5 +510,3 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Interfa
   @IBOutlet weak var lblOptionSwitchesRead: NSTextField!
   
 }
-
-

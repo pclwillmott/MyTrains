@@ -10,10 +10,17 @@ import Foundation
 public class LocoNetDevice : EditorObject {
   
   // MARK: Constructors
-
+  
   init(reader:SqliteDataReader) {
+    
     super.init(primaryKey: -1)
+    
     decode(sqliteDataReader: reader)
+    
+    for index in 0...3 {
+      _newOptionSwitchState[index] = _optionSwitchState[index]
+    }
+    
   }
 
   override init(primaryKey:Int) {
@@ -32,20 +39,25 @@ public class LocoNetDevice : EditorObject {
   
   private var _methodForOpSw : [OptionSwitchMethod:Set<Int>]?
   
+  private var _optionSwitchDictionary : [Int:OptionSwitch]?
+  
+  private var _optionSwitchState = [UInt64](repeating: 0, count: 4)
+  
+  private var _newOptionSwitchState = [UInt64](repeating: 0, count: 4)
+
   // MARK: Public Properties
   
   public var optionSwitches : [OptionSwitch] {
     get {
-      if _optionSwitches == nil {
-        var result : [OptionSwitch] = []
-        for opSwDef in OptionSwitch.switches(locoNetProductId: locoNetProductId) {
-          let opSw = OptionSwitch(locoNetDevice: self, switchDefinition: opSwDef)
-          result.append(opSw)
-        }
-        result.sort {$0.switchNumber < $1.switchNumber}
-        _optionSwitches = result
-      }
+      makeOptionSwitches()
       return _optionSwitches!
+    }
+  }
+  
+  public var optionSwitchDictionary : [Int:OptionSwitch] {
+    get {
+      makeOptionSwitches()
+      return _optionSwitchDictionary!
     }
   }
   
@@ -60,25 +72,54 @@ public class LocoNetDevice : EditorObject {
   }
 
   public var optionSwitchesChanged : [OptionSwitch] {
+    
     get {
+      
       var result : [OptionSwitch] = []
-      for opsw in optionSwitches {
-        if opsw.state != opsw.newState {
+      
+      for switchNumber in optionSwitchesChangedSet {
+        if let opsw = optionSwitchDictionary[switchNumber] {
           result.append(opsw)
         }
       }
+      
       return result
     }
+    
   }
   
   public var optionSwitchesChangedSet : Set<Int> {
+    
     get {
+      
       var result : Set<Int> = []
-      for opsw in optionSwitchesChanged {
-        result.insert(opsw.switchNumber)
+      
+      var changed = [UInt64](repeating: 0, count: 4)
+      
+      for index in 0...3 {
+        changed[index] = _optionSwitchState[index] ^ _newOptionSwitchState[index]
       }
+      
+      for switchNumber in 1...256 {
+        
+        let sn = switchNumber - 1
+        
+        let byte = sn / 64
+        
+        let bit = sn % 64
+        
+        let mask : UInt64 = 1 << bit
+        
+        if (changed[byte] & mask) == mask {
+          result.insert(switchNumber)
+        }
+        
+      }
+      
       return result
+      
     }
+    
   }
 
   public var optionSwitchSet : Set<Int> {
@@ -205,30 +246,6 @@ public class LocoNetDevice : EditorObject {
     }
   }
   
-  public var optionSwitches0 : Int64 = 0 {
-    didSet {
-      modified = true
-    }
-  }
-  
-  public var optionSwitches1 : Int64 = 0 {
-    didSet {
-      modified = true
-    }
-  }
-  
-  public var optionSwitches2 : Int64 = 0 {
-    didSet {
-      modified = true
-    }
-  }
-  
-  public var optionSwitches3 : Int64 = 0 {
-    didSet {
-      modified = true
-    }
-  }
-  
   public var optionSwitchesOK : Bool {
     get {
       return (flags & Flag.opswRead) == Flag.opswRead
@@ -242,6 +259,76 @@ public class LocoNetDevice : EditorObject {
     }
   }
   
+  public var newOpSwDataAP1 : [UInt8] {
+    get {
+      
+      var result : [UInt8] = [UInt8](repeating: 0, count: 11)
+      
+      result[0] = 0x7f
+      
+      for switchNumber in 1...64 {
+        
+        if (switchNumber % 8) != 0 {
+        
+          let sn = switchNumber - 1
+          
+          let byte = (sn / 8) + (switchNumber < 33 ? 1 : 2)
+          
+          let bit = sn % 8
+          
+          let mask : UInt8 = 1 << bit
+          
+          let safe : UInt8 = ~mask
+          
+          let newState = getNewState(switchNumber: switchNumber)
+          
+          let value = newState.isClosed ? mask : 0
+          
+          result[byte] = (result[byte] & safe) | value
+          
+        }
+        
+      }
+      
+      return result
+      
+    }
+  }
+ 
+  public var newOpSwDataBP1 : [UInt8] {
+    get {
+      
+      var result : [UInt8] = [UInt8](repeating: 0, count: 11)
+      
+      result[0] = 0x7e
+      
+      for switchNumber in 65...128 {
+        
+        if (switchNumber % 8) != 0 {
+        
+          let sn = switchNumber - 1 - 64
+          
+          let byte = (sn / 8) + (switchNumber < 97 ? 1 : 2)
+          
+          let bit = sn % 8
+          
+          let mask : UInt8 = 1 << bit
+          
+          let safe = ~mask
+          
+          let value = getNewState(switchNumber: switchNumber).isClosed ? mask : 0
+          
+          result[byte] = (result[byte] & safe) | value
+          
+        }
+        
+      }
+      
+      return result
+      
+    }
+  }
+
   public var devicePath : String = "" {
     didSet {
       modified = true
@@ -321,6 +408,19 @@ public class LocoNetDevice : EditorObject {
   
   // MARK: Private Methods
   
+  private func makeOptionSwitches() {
+    if _optionSwitches == nil {
+      _optionSwitches = []
+      _optionSwitchDictionary = [:]
+      for opSwDef in OptionSwitch.switches(locoNetProductId: locoNetProductId) {
+        let opSw = OptionSwitch(locoNetDevice: self, switchDefinition: opSwDef)
+        _optionSwitches!.append(opSw)
+        _optionSwitchDictionary![opSw.switchNumber] = opSw
+      }
+      _optionSwitches!.sort {$0.switchNumber < $1.switchNumber}
+    }
+  }
+  
   private func makeSensors() {
     
     if let info = locoNetProductInfo {
@@ -342,52 +442,139 @@ public class LocoNetDevice : EditorObject {
     return deviceName == "" ? "unnamed device" : deviceName
   }
   
-  public func getOptionSwitch(switchNumber:Int) -> OptionSwitch? {
-    for opsw in optionSwitches {
-      if opsw.switchNumber == switchNumber {
-        return opsw
-      }
-    }
-    return nil
-  }
-  
   public func getState(switchNumber: Int) -> OptionSwitchState {
-    let masks = OptionSwitch.masksEtAl(switchNumber: switchNumber)
-    let mask = masks.mask
-    switch masks.word {
-      case 0:
-      return ((optionSwitches0 & mask) == mask) ? .closed : .thrown
-      case 1:
-      return ((optionSwitches1 & mask) == mask) ? .closed : .thrown
-      case 2:
-      return ((optionSwitches2 & mask) == mask) ? .closed : .thrown
-      case 3:
-      return ((optionSwitches3 & mask) == mask) ? .closed : .thrown
-    default:
-      break
+    
+    guard switchNumber > 0 && switchNumber < 257 else {
+      return .thrown
     }
-    return .thrown
+    
+    let sn = switchNumber - 1
+    
+    let byte = sn / 64
+    
+    let bit = sn % 64
+    
+    let mask : UInt64 = 1 << bit
+    
+    return ((_optionSwitchState[byte] & mask) == mask) ? .closed : .thrown
+    
   }
 
   public func setState(switchNumber: Int, value: OptionSwitchState) {
-    let masks = OptionSwitch.masksEtAl(switchNumber: switchNumber)
-    let mask = masks.mask
-    let safe = ~mask
-    let temp : Int64 = value == .closed ? mask : 0
-    switch masks.word {
-      case 0:
-      optionSwitches0 = (optionSwitches0 & safe) | temp
-      case 1:
-      optionSwitches1 = (optionSwitches1 & safe) | temp
-      case 2:
-      optionSwitches2 = (optionSwitches2 & safe) | temp
-      case 3:
-      optionSwitches3 = (optionSwitches3 & safe) | temp
-    default:
-      break
+
+    guard switchNumber > 0 && switchNumber < 257 else {
+      return
     }
+    
+    let sn = switchNumber - 1
+    
+    let byte = sn / 64
+    
+    let bit = sn % 64
+    
+    let mask : UInt64 = 1 << bit
+
+    let safe = ~mask
+    
+    let temp : UInt64 = (value.isClosed) ? mask : 0
+
+    _optionSwitchState[byte] = (_optionSwitchState[byte] & safe) | temp
+    _newOptionSwitchState[byte] = (_newOptionSwitchState[byte] & safe) | temp
+
+    modified = true
+    
   }
   
+  public func getNewState(switchNumber: Int) -> OptionSwitchState {
+    
+    guard switchNumber > 0 && switchNumber < 257 else {
+      return .thrown
+    }
+    
+    let sn = switchNumber - 1
+    
+    let byte = sn / 64
+    
+    let bit = sn % 64
+    
+    let mask : UInt64 = 1 << bit
+    
+    return ((_newOptionSwitchState[byte] & mask) == mask) ? .closed : .thrown
+    
+  }
+
+  public func setNewState(switchNumber: Int, value: OptionSwitchState) {
+
+    guard switchNumber > 0 && switchNumber < 257 else {
+      return
+    }
+    
+    let sn = switchNumber - 1
+    
+    let byte = sn / 64
+    
+    let bit = sn % 64
+    
+    let mask : UInt64 = 1 << bit
+
+    let safe = ~mask
+    
+    let temp : UInt64 = (value.isClosed) ? mask : 0
+
+    _newOptionSwitchState[byte] = (_newOptionSwitchState[byte] & safe) | temp
+    
+    modified = true
+    
+  }
+  
+  public func setState(opswDataAP1:NetworkMessage) {
+   
+    for switchNumber in 1...64 {
+      
+      if (switchNumber % 8) != 0 {
+      
+        let sn = switchNumber - 1
+        
+        let byte = (sn / 8) + (switchNumber < 33 ? 3 : 4)
+        
+        let bit = sn % 8
+        
+        let mask : UInt8 = 1 << bit
+        
+        let value : OptionSwitchState = (opswDataAP1.message[byte] & mask) == mask ? .closed : .thrown
+        
+        setState(switchNumber: switchNumber, value: value)
+        
+      }
+      
+    }
+    
+  }
+
+  public func setState(opswDataBP1:NetworkMessage) {
+
+    for switchNumber in 65...128 {
+      
+      if (switchNumber % 8) != 0 {
+      
+        let sn = switchNumber - 1 - 64
+        
+        let byte = (sn / 8) + (switchNumber < 97 ? 3 : 4)
+        
+        let bit = sn % 8
+        
+        let mask : UInt8 = 1 << bit
+        
+        let value : OptionSwitchState = (opswDataBP1.message[byte] & mask) == mask ? .closed : .thrown
+        
+        setState(switchNumber: switchNumber, value: value)
+        
+      }
+      
+    }
+
+  }
+
 // MARK: Database Methods
   
   private func decode(sqliteDataReader:SqliteDataReader?) {
@@ -421,19 +608,19 @@ public class LocoNetDevice : EditorObject {
       }
       
       if !reader.isDBNull(index: 7) {
-        optionSwitches0 = reader.getInt64(index: 7)!
+        _optionSwitchState[0] = UInt64(reader.getInt64(index: 7)!)
       }
       
       if !reader.isDBNull(index: 8) {
-        optionSwitches1 = reader.getInt64(index: 8)!
+        _optionSwitchState[1] = UInt64(reader.getInt64(index: 8)!)
       }
       
       if !reader.isDBNull(index: 9) {
-        optionSwitches2 = reader.getInt64(index: 9)!
+        _optionSwitchState[2] = UInt64(reader.getInt64(index: 9)!)
       }
       
       if !reader.isDBNull(index: 10) {
-        optionSwitches3 = reader.getInt64(index: 10)!
+        _optionSwitchState[3] = UInt64(reader.getInt64(index: 10)!)
       }
       
       if !reader.isDBNull(index: 11) {
@@ -475,14 +662,19 @@ public class LocoNetDevice : EditorObject {
 
   public func save() {
     
-    for option in optionSwitches {
-      if option.state != option.newState {
-        option.state = option.newState
-      }
-    }
-    
     if modified {
       
+      for index in 0...3 {
+        _optionSwitchState[index] = _newOptionSwitchState[index]
+      }
+      
+      for opsw in optionSwitches {
+        let def = opsw.switchDefinition.defaultState
+        if def.isAuto {
+          setState(switchNumber: opsw.switchNumber, value: def.value)
+        }
+      }
+
       var sql = ""
       
       if !Database.codeExists(tableName: TABLE.LOCONET_DEVICE, primaryKey: LOCONET_DEVICE.LOCONET_DEVICE_ID, code: primaryKey)! {
@@ -565,10 +757,10 @@ public class LocoNetDevice : EditorObject {
       cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.HARDWARE_VERSION)", value: hardwareVersion)
       cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.BOARD_ID)", value: boardId)
       cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.LOCONET_PRODUCT_ID)", value: locoNetProductId.rawValue)
-      cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.OPTION_SWITCHES_0)", value: optionSwitches0)
-      cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.OPTION_SWITCHES_1)", value: optionSwitches1)
-      cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.OPTION_SWITCHES_2)", value: optionSwitches2)
-      cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.OPTION_SWITCHES_3)", value: optionSwitches3)
+      cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.OPTION_SWITCHES_0)", value: Int64(_optionSwitchState[0]))
+      cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.OPTION_SWITCHES_1)", value: Int64(_optionSwitchState[1]))
+      cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.OPTION_SWITCHES_2)", value: Int64(_optionSwitchState[2]))
+      cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.OPTION_SWITCHES_3)", value: Int64(_optionSwitchState[3]))
       cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.DEVICE_PATH)", value: devicePath)
       cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.BAUD_RATE)", value: baudRate.rawValue)
       cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.DEVICE_NAME)", value: deviceName)
