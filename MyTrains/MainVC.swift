@@ -157,10 +157,6 @@ class MainVC: NSViewController, NetworkControllerDelegate {
   
   @IBAction func swConnectAction(_ sender: NSSwitch) {
     sender.state == .on ? networkController.connect() : networkController.disconnect()
-    let mainMenu = NSApplication.shared.mainMenu!
-    if let edit = mainMenu.item(withTitle: "Edit"), let sensor = edit.submenu?.item(withTitle: "Sensors") {
-      sensor.isEnabled = sender.state == .on
-    }
   }
   
   @IBOutlet weak var btnPowerOn: NSButton!

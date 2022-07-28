@@ -57,7 +57,7 @@ extension Interface {
       
       let bt = 0b01110000 | bType
       
-      let opsw = UInt8((switchNumber-1) & 0x7f)
+      let opsw = UInt8(((switchNumber-1) << 1) & 0x7f)
       
       let message = NetworkMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_D0_GROUP.rawValue, high, low, bt, opsw], appendCheckSum: true)
       
@@ -99,11 +99,11 @@ extension Interface {
 
   }
 
-  private func s7CVRW(device:LocoNetDevice, cvNumber:Int, isRead:Bool, value:Int) {
+  private func s7CVRW(device:LocoNetDevice, cvNumber:Int, isRead:Bool, value:UInt8) {
     
     let cv = UInt8((cvNumber - 1) & 0xff)
     
-    let val = isRead ? 0 : UInt8(value & 0xff)
+    let val = isRead ? 0 : value
     
     let high = (0b00000111) | ((cv & 0x80) >> 4) | ((val & 0x80) >> 3)
     
@@ -137,7 +137,7 @@ extension Interface {
     s7CVRW(device: device, cvNumber: cvNumber, isRead: true, value: 0)
   }
 
-  public func setS7CV(device:LocoNetDevice, cvNumber:Int, value:Int) {
+  public func setS7CV(device:LocoNetDevice, cvNumber:Int, value:UInt8) {
     s7CVRW(device: device, cvNumber: cvNumber, isRead: false, value: value)
   }
 

@@ -129,7 +129,7 @@
                                                         </tableCellView>
                                                     </prototypeCellViews>
                                                 </tableColumn>
-                                                <tableColumn identifier="Settings" width="747" minWidth="40" maxWidth="1000" id="2aG-HS-8iV">
+                                                <tableColumn identifier="Settings" width="732" minWidth="40" maxWidth="1000" id="2aG-HS-8iV">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Settings">
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -142,11 +142,11 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <customView identifier="OpSwDecoderCellID" id="N9p-9v-ISE" customClass="OpSwDecoderView" customModule="MyTrains" customModuleProvider="target">
-                                                            <rect key="frame" x="73" y="19" width="744" height="55"/>
+                                                            <rect key="frame" x="73" y="19" width="729" height="55"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                             <subviews>
                                                                 <customView identifier="SettingsCellID" id="Nhm-xY-lLO" customClass="OpSwTCV" customModule="MyTrains" customModuleProvider="target">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="1011" height="55"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="996" height="55"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                 </customView>
                                                             </subviews>

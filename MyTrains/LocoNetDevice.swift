@@ -442,6 +442,48 @@ public class LocoNetDevice : EditorObject {
     return deviceName == "" ? "unnamed device" : deviceName
   }
   
+  public func newS7CV(cvNumber:Int) -> UInt8 {
+    
+    let baseSwitchNumber = (cvNumber - 11) * 8 + 1
+    
+    var result : UInt8 = 0
+    
+    for index in 0...7 {
+      
+      if getNewState(switchNumber: baseSwitchNumber + index).isClosed {
+        result |= 1 << index
+      }
+      
+    }
+    
+    return result
+    
+  }
+  
+  public func setState(cvNumber:Int, s7CVState:NetworkMessage) {
+
+    let baseSwitchNumber = (cvNumber - 11 ) * 8 + 1
+    
+    for bit in 0...6 {
+      
+      let switchNumber =  baseSwitchNumber + bit
+      
+      let mask : UInt8 = 1 << bit
+      
+      let value : OptionSwitchState = ((s7CVState.message[2] & mask) == mask ? .closed : .thrown)
+      
+      setState(switchNumber: switchNumber, value: value)
+      
+    }
+      
+    let mask : UInt8 = 0b00000011
+      
+    let value : OptionSwitchState = ((s7CVState.message[1] & mask) == 0b00000010 ? .thrown : .closed)
+
+    setState(switchNumber: baseSwitchNumber + 7, value: value)
+      
+  }
+  
   public func getState(switchNumber: Int) -> OptionSwitchState {
     
     guard switchNumber > 0 && switchNumber < 257 else {

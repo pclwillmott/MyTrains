@@ -88,6 +88,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     wc.showWindow(nil)
   }
   
+  @IBAction func mnuAddressManagerAction(_ sender: NSMenuItem) {
+    let x = ModalWindow.AddressManager
+    let wc = x.windowController
+    wc.showWindow(nil)
+  }
+  
   @IBAction func mnuSwitchBoardEditor(_ sender: NSMenuItem) {
     if let _ = networkController.layout {
       ModalWindow.SwitchBoardEditor.runModel()

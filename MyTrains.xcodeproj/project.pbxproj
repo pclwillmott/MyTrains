@@ -28,6 +28,10 @@
 		DA1DA5EC28280FCD00E0F993 /* FlowControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1DA5EB28280FCD00E0F993 /* FlowControl.swift */; };
 		DA1ECC9328439D4600C4F963 /* UpdateFirmware.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA1ECC9228439D4600C4F963 /* UpdateFirmware.storyboard */; };
 		DA1ECC9828439DE500C4F963 /* UpdateFirmwareVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1ECC9728439DE500C4F963 /* UpdateFirmwareVC.swift */; };
+		DA2429712892F7AE000D4ADE /* DeviceTCV.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA2429702892F7AE000D4ADE /* DeviceTCV.xib */; };
+		DA2429732892F7E1000D4ADE /* DeviceTCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2429722892F7E1000D4ADE /* DeviceTCV.swift */; };
+		DA2429752892FE94000D4ADE /* AddressManager.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA2429742892FE94000D4ADE /* AddressManager.storyboard */; };
+		DA2429772892FEDB000D4ADE /* AddressManagerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2429762892FEDB000D4ADE /* AddressManagerVC.swift */; };
 		DA2502B9282671600002D4AF /* RollingStock.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2502B8282671600002D4AF /* RollingStock.swift */; };
 		DA2785402837EAE700EDCBB7 /* MTSerialPortManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA27853F2837EAE700EDCBB7 /* MTSerialPortManager.swift */; };
 		DA28C2BA2801CC0300857471 /* DashBoard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA28C2B92801CC0300857471 /* DashBoard.storyboard */; };
@@ -174,6 +178,10 @@
 		DA1DA5EB28280FCD00E0F993 /* FlowControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowControl.swift; sourceTree = "<group>"; };
 		DA1ECC9228439D4600C4F963 /* UpdateFirmware.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = UpdateFirmware.storyboard; sourceTree = "<group>"; };
 		DA1ECC9728439DE500C4F963 /* UpdateFirmwareVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateFirmwareVC.swift; sourceTree = "<group>"; };
+		DA2429702892F7AE000D4ADE /* DeviceTCV.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DeviceTCV.xib; sourceTree = "<group>"; };
+		DA2429722892F7E1000D4ADE /* DeviceTCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceTCV.swift; sourceTree = "<group>"; };
+		DA2429742892FE94000D4ADE /* AddressManager.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AddressManager.storyboard; sourceTree = "<group>"; };
+		DA2429762892FEDB000D4ADE /* AddressManagerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressManagerVC.swift; sourceTree = "<group>"; };
 		DA2502B8282671600002D4AF /* RollingStock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollingStock.swift; sourceTree = "<group>"; };
 		DA27853F2837EAE700EDCBB7 /* MTSerialPortManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTSerialPortManager.swift; sourceTree = "<group>"; };
 		DA28C2B92801CC0300857471 /* DashBoard.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = DashBoard.storyboard; sourceTree = "<group>"; };
@@ -353,6 +361,8 @@
 				DA53B24F276E360500AB956C /* CommandStation.swift */,
 				DA77794E27AEE087007EEBE9 /* CommandStationConfiguration.storyboard */,
 				DA77795027AEE0E5007EEBE9 /* CommandStationConfigurationVC.swift */,
+				DA2429742892FE94000D4ADE /* AddressManager.storyboard */,
+				DA2429762892FEDB000D4ADE /* AddressManagerVC.swift */,
 				DAA867C527933265008B6EEC /* CSVParser.swift */,
 				DA3AEF432788B33F00FF91D4 /* CVTableViewDS.swift */,
 				DA28C2B92801CC0300857471 /* DashBoard.storyboard */,
@@ -435,6 +445,8 @@
 				DA77795627AEF2E5007EEBE9 /* OpSwTableViewDS.swift */,
 				DA77795427AEEBBC007EEBE9 /* OpSwTCV.swift */,
 				DA77795227AEEB3A007EEBE9 /* OpSwTCV.xib */,
+				DA2429722892F7E1000D4ADE /* DeviceTCV.swift */,
+				DA2429702892F7AE000D4ADE /* DeviceTCV.xib */,
 				DA77794B27AEA029007EEBE9 /* OptionSwitch.swift */,
 				DA6E28E0285F86B900772641 /* Orientation.swift */,
 				DA6F3925274FD0C400A63FBF /* PeerXfer20.swift */,
@@ -560,6 +572,7 @@
 				DA5B4603276F5993005CA03C /* EditNetworks.storyboard in Resources */,
 				DA77795327AEEB3A007EEBE9 /* OpSwTCV.xib in Resources */,
 				DA1ECC9328439D4600C4F963 /* UpdateFirmware.storyboard in Resources */,
+				DA2429752892FE94000D4ADE /* AddressManager.storyboard in Resources */,
 				DAB450ED2872FEC000657295 /* SensorTCV.xib in Resources */,
 				DA8837702770B35B000B9A41 /* EditLayouts.storyboard in Resources */,
 				DA8AE0ED279B2CCB001E9311 /* SlotView.storyboard in Resources */,
@@ -567,6 +580,7 @@
 				DA88377A2770B726000B9A41 /* EditTrains.storyboard in Resources */,
 				DA6A0AD8275295BF00913F2B /* Monitor.storyboard in Resources */,
 				DA467BAF281D5D2F00AB9650 /* SwitchBoardEditor.storyboard in Resources */,
+				DA2429712892F7AE000D4ADE /* DeviceTCV.xib in Resources */,
 				DA1B79F5285F24B8009E1189 /* SwitchBoardItemPropertySheet.storyboard in Resources */,
 				DA88377C2770B73A000B9A41 /* EditSensors.storyboard in Resources */,
 				DA08B431278734270001307C /* ProgramDecoderAddress.storyboard in Resources */,
@@ -596,6 +610,7 @@
 				DA2E4988282899AF00C25162 /* DBEditorView.swift in Sources */,
 				DA8FDB2A279C2B3600E15024 /* LocoSlotData.swift in Sources */,
 				DA2E0E5E2736EAF300C7DA7A /* NetworkController.swift in Sources */,
+				DA2429732892F7E1000D4ADE /* DeviceTCV.swift in Sources */,
 				DA1B79FB285F3AD0009E1189 /* UnitLength.swift in Sources */,
 				DA0197252773500100350F71 /* ComboBoxDictDS.swift in Sources */,
 				DA8AE0F0279B3074001E9311 /* SlotViewVC.swift in Sources */,
@@ -629,6 +644,7 @@
 				DA28C2BF2801E46D00857471 /* QuerySlot1.swift in Sources */,
 				DA77794C27AEA029007EEBE9 /* OptionSwitch.swift in Sources */,
 				DA7B4727273803BA00BCD587 /* Locomotive.swift in Sources */,
+				DA2429772892FEDB000D4ADE /* AddressManagerVC.swift in Sources */,
 				DAB4FF5E2854F8CF00D74920 /* LocomotiveType.swift in Sources */,
 				DAA83DEB272C37670075CBCD /* AppDelegate.swift in Sources */,
 				DA8FDB2D279C4AC000E15024 /* LocoSlotTableViewDS.swift in Sources */,

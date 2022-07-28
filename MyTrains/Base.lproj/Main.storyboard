@@ -160,7 +160,7 @@
                                                 <action selector="mnuEditTrainsAction:" target="Voe-Tx-rLC" id="cJY-DS-6X4"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Sensors" enabled="NO" id="VCV-VZ-hVe">
+                                        <menuItem title="Sensors" id="VCV-VZ-hVe">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="mnuEditSensorsAction:" target="Voe-Tx-rLC" id="OE8-jR-cbJ"/>
@@ -176,6 +176,12 @@
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="mnuCommandStationConfiguration:" target="Voe-Tx-rLC" id="uiq-Fs-4C5"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Address Manager" id="Crk-3m-Im8">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="mnuAddressManagerAction:" target="Voe-Tx-rLC" id="wOz-FZ-bvJ"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem title="Blocks" id="E2d-BR-mab">

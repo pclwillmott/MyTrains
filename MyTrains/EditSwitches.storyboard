@@ -138,17 +138,6 @@
                                                                 <action selector="txtBoardIDAction:" target="XTa-n6-tdC" id="jyg-1j-P7s"/>
                                                             </connections>
                                                         </textField>
-                                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3iX-W2-Ki3">
-                                                            <rect key="frame" x="122" y="239" width="141" height="32"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                            <buttonCell key="cell" type="push" title="Set Base Address" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="cpJ-fy-Aek">
-                                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                <font key="font" metaFont="system"/>
-                                                            </buttonCell>
-                                                            <connections>
-                                                                <action selector="btnSetBoardIDAction:" target="XTa-n6-tdC" id="Q4F-VL-MYK"/>
-                                                            </connections>
-                                                        </button>
                                                     </subviews>
                                                 </view>
                                             </tabViewItem>
@@ -162,7 +151,7 @@
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <clipView key="contentView" id="blD-tE-Z2k">
                                                                 <rect key="frame" x="1" y="1" width="683" height="441"/>
-                                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
                                                                 <subviews>
                                                                     <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="56" rowSizeStyle="automatic" headerView="kyk-WJ-lOU" viewBased="YES" id="SPc-61-mai">
                                                                         <rect key="frame" x="0.0" y="0.0" width="683" height="413"/>
@@ -184,7 +173,7 @@
                                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                                 <prototypeCellViews>
                                                                                     <tableCellView identifier="SectionCellID" id="Mal-7a-DYf">
-                                                                                        <rect key="frame" x="8" y="10" width="114" height="52"/>
+                                                                                        <rect key="frame" x="18" y="10" width="114" height="52"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                         <subviews>
                                                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eDE-35-cTc">
@@ -216,7 +205,7 @@
                                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                                 <prototypeCellViews>
                                                                                     <tableCellView identifier="BlockCellID" id="bz0-hv-WYF" customClass="SensorTCV" customModule="MyTrains" customModuleProvider="target">
-                                                                                        <rect key="frame" x="139" y="10" width="535" height="56"/>
+                                                                                        <rect key="frame" x="149" y="10" width="535" height="56"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                     </tableCellView>
                                                                                 </prototypeCellViews>
@@ -248,7 +237,6 @@
                         </subviews>
                     </view>
                     <connections>
-                        <outlet property="btnSetBoardID" destination="3iX-W2-Ki3" id="BqW-2m-uch"/>
                         <outlet property="cboDeviceType" destination="pv1-Ne-NDx" id="6fc-VU-wTn"/>
                         <outlet property="cboNetwork" destination="uK4-4t-rzv" id="OQ5-PM-A5S"/>
                         <outlet property="editorView" destination="w3k-Uh-FqK" id="b5E-7O-L8o"/>

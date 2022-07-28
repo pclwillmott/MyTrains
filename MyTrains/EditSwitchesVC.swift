@@ -21,9 +21,6 @@ class EditSwitchesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   }
 
   func windowWillClose(_ notification: Notification) {
-    if observerId != -1 {
-      readInterface?.removeObserver(id: observerId)
-    }
   }
   
   override func viewWillAppear() {
@@ -56,42 +53,15 @@ class EditSwitchesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
 
 //  private var switchTableViewDS : SensorTableViewDS = SensorTableViewDS()
   
-  private var observerId : Int = -1
-  
-  private var readInterface : Interface? = nil
-  
-  private var timer : Timer?
-  
-  enum Mode {
-    case idle
-    case read
-    case write
-    case wrapUpSetBID
-    case wrapUpRead
-    case wrapUpWrite
-  }
-  
-  private var mode : Mode = .idle
-  
-  private var interface : Interface?
-  
   // MARK: Private Methods
   
   private func setupView() {
     lblBoardID.stringValue = "Board ID"
-    btnSetBoardID.title = "Set Board ID"
     if let device = editorView.editorObject as? LocoNetDevice {
       if device.isSeries7 {
         lblBoardID.stringValue = "Base Address"
-        btnSetBoardID.title = "Set Base Address"
       }
     }
-  }
-
-  // MARK: InterfaceDelegate Methods
-  
-  func networkMessageReceived(message:NetworkMessage) {
-    
   }
 
   // MARK: DBEditorDelegate Methods
@@ -120,7 +90,6 @@ class EditSwitchesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
 //      sensorTableView.delegate = sensorTableViewDS
 //      sensorTableView.reloadData()
       tabView.selectFirstTabViewItem(self)
-      editorView.modified = true
     }
     setupView()
   }
@@ -202,43 +171,7 @@ class EditSwitchesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   @IBAction func txtBoardIDAction(_ sender: NSTextField) {
     editorView.modified = true
   }
-  
-  @IBOutlet weak var btnSetBoardID: NSButton!
-  
-  @IBAction func btnSetBoardIDAction(_ sender: NSButton) {
     
-    if let device = editorView.editorObject as? LocoNetDevice, let message = OptionSwitch.enterSetBoardIdModeInstructions[device.locoNetProductId] {
-      
-      let alert = NSAlert()
-
-      alert.messageText = message
-      alert.informativeText = ""
-      alert.addButton(withTitle: "OK")
-      alert.addButton(withTitle: "Cancel")
-      alert.alertStyle = .informational
-
-      if alert.runModal() == NSApplication.ModalResponse.alertFirstButtonReturn {
-        
-        device.networkId = cboNetworkDS.codeForItemAt(index: cboNetwork.indexOfSelectedItem) ?? -1
-        
-        editorView.modified = true
-
-        if let interface = device.network?.interface {
-          
-          mode = .wrapUpSetBID
-
-          interface.setSw(switchNumber: txtBoardID.integerValue, state: .closed)
-          
-   //       startTimer()
-          
-        }
-        
-      }
-      
-    }
-    
-  }
-  
   @IBOutlet weak var tabView: NSTabView!
   
   @IBOutlet weak var editorView: DBEditorView!

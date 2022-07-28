@@ -1266,7 +1266,7 @@ public class OptionSwitch {
       switchNumber: 7,
       defaultState : .autoThrown,
       thrownEffect : "",
-      closedEffect : "reset to factory default"
+      closedEffect : "reset to factory defaults"
     ),
     (
       definitionType: .standard,

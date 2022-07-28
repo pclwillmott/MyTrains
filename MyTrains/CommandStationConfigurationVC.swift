@@ -102,7 +102,7 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Interfa
       
       if let method = device.methodForOpSw[.Series7], !method.intersection(selectedSwitches).isEmpty {
         
-        lastIndex = 0
+        lastIndex = 11
         
         for cv in series7CV {
           
@@ -110,7 +110,22 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Interfa
             
             lastMethod = .Series7
             
-            interface.getS7CV(device: device, cvNumber: 11 + lastIndex)
+            if isRead {
+              interface.getS7CV(device: device, cvNumber: lastIndex)
+            }
+            else {
+              
+              let value = device.newS7CV(cvNumber: lastIndex)
+              
+              interface.setS7CV(device: device, cvNumber: lastIndex, value: value)
+              
+              for opsw in cv {
+                selectedSwitches.remove(opsw)
+              }
+              
+              noResponse = false
+              
+            }
             
             return
             
@@ -177,7 +192,7 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Interfa
         }
         else {
           if let opsw = device.optionSwitchDictionary[lastIndex] {
-            interface.setSw(switchNumber: lastIndex, state: opsw.newState)
+            interface.setBrdOpSwState(device: device, switchNumber: opsw.switchNumber, state: opsw.newState)
             selectedSwitches.remove(lastIndex)
           }
         }
@@ -215,6 +230,7 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Interfa
             interface.setSw(switchNumber: lastIndex, state: opsw.newState)
             selectedSwitches.remove(lastIndex)
           }
+          noResponse = false
         }
         
       }
@@ -356,6 +372,10 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Interfa
         }
         
         noResponse = false
+     
+      case .setSwAccepted:
+        
+        noResponse = false
         
       case .swState:
         
@@ -393,45 +413,18 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Interfa
           
         }
         
-      case .routesDisabled, .s7CVState:
+      case .routesDisabled, .s7CVState, .immPacketBufferFull:
         
-        guard lastMethod == .Series7 else {
+        guard lastMethod == .Series7 && isRead else {
           return
         }
         
-        for bit in 0...7 {
-          
-          let switchNumber = lastIndex * 8 + bit + 1
-          
-          if bit < 7 {
-            
-            let mask : UInt8 = 1 << bit
-            
-            let value : OptionSwitchState = ((message.message[2] & mask) == mask ? .closed : .thrown)
-            
-            device.setState(switchNumber: switchNumber, value: value)
-            
-            if let opsw = device.optionSwitchDictionary[switchNumber] {
-              opsw.state = value
-            }
-            
-          }
-          else {
-            
-            let mask : UInt8 = 0b00000011
-            
-            let value : OptionSwitchState = ((message.message[1] & mask) == 0b00000010 ? .closed : .thrown)
-
-            device.setState(switchNumber: switchNumber, value: value)
-            
-            if let opsw = device.optionSwitchDictionary[switchNumber] {
-              opsw.state = value
-            }
-            
-          }
-          
-          selectedSwitches.remove(switchNumber)
-          
+        device.setState(cvNumber: lastIndex, s7CVState: message)
+        
+        let baseSwitchNumber = (lastIndex - 11) * 8 + 1
+        
+        for index in 0...7 {
+          selectedSwitches.remove(baseSwitchNumber + index)
         }
         
         noResponse = false
