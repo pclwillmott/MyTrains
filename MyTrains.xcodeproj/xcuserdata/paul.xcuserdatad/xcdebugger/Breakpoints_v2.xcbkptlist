@@ -270,8 +270,8 @@
             filePath = "MyTrains/LocoNetDevice.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "48"
-            endingLineNumber = "48"
+            startingLineNumber = "49"
+            endingLineNumber = "49"
             landmarkName = "LocoNetDevice"
             landmarkType = "3">
          </BreakpointContent>
@@ -286,8 +286,8 @@
             filePath = "MyTrains/InterfaceExtensions.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "140"
-            endingLineNumber = "140"
+            startingLineNumber = "161"
+            endingLineNumber = "161"
             landmarkName = "setS7CV(device:cvNumber:value:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -306,6 +306,70 @@
             endingLineNumber = "53"
             landmarkName = "optionSwitch"
             landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "1C8AA12F-F1E9-4BEC-9D9E-8A3FE630F0E0"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MyTrains/LocoNetDevice.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "261"
+            endingLineNumber = "261"
+            landmarkName = "baseAddress"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "796E6317-F699-4C32-B721-4A9FA446D337"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MyTrains/LocoNetDevice.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "275"
+            endingLineNumber = "275"
+            landmarkName = "addresses"
+            landmarkType = "24">
+            <Locations>
+               <Location
+                  uuid = "796E6317-F699-4C32-B721-4A9FA446D337 - 92823fcb2057c21f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MyTrains.LocoNetDevice.optionSwitchesOK.modify : Swift.Bool"
+                  moduleName = "MyTrains"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/Documents/MyTrains/MyTrains/LocoNetDevice.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "275"
+                  endingLineNumber = "275"
+                  offsetFromSymbolStart = "0">
+               </Location>
+               <Location
+                  uuid = "796E6317-F699-4C32-B721-4A9FA446D337 - 2253d2983d90b40c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MyTrains.LocoNetDevice.optionSwitchesOK.modify : Swift.Bool with unmangled suffix &quot;.resume.0&quot;"
+                  moduleName = "MyTrains"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/Documents/MyTrains/MyTrains/LocoNetDevice.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "275"
+                  endingLineNumber = "275"
+                  offsetFromSymbolStart = "25">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

@@ -133,6 +133,27 @@ extension Interface {
 
   }
 
+  public func setS7BaseAddr(device:LocoNetDevice) {
+    
+    if let info = device.locoNetProductInfo {
+      
+      let pc : UInt8 = UInt8(info.productCode.rawValue)
+      
+      let lowSN = UInt8(device.serialNumber & 0x7f)
+      
+      let highSN = UInt8(device.serialNumber >> 7)
+      
+      let lowAddr = UInt8(device.baseAddress & 0x7f)
+      
+      let highAddr = UInt8(device.baseAddress >> 7)
+      
+     let message = NetworkMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_WR_SL_DATA_P2.rawValue, 0x10, 0x02, 0x0f, 0x00, 0x00, 0x00, 0x00, 0x00, pc, 0x00, lowSN, highSN, lowAddr, highAddr], appendCheckSum: true)
+    
+     addToQueue(message: message, delay: MessageTiming.STANDARD)
+      
+    }
+    
+  }
   public func getS7CV(device:LocoNetDevice, cvNumber:Int) {
     s7CVRW(device: device, cvNumber: cvNumber, isRead: true, value: 0)
   }

@@ -235,6 +235,7 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
   }
   
   public var stationaryDecoders : [Int:LocoNetDevice] {
+  
     get {
       
       var result : [Int:LocoNetDevice] = [:]
@@ -248,7 +249,9 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
       return result
       
     }
+ 
   }
+  
   public var programmers : [Int:Interface] {
     
     var progs : [Int:Interface] = [:]
@@ -300,6 +303,23 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
   }
   
   // MARK: Public Methods
+
+  public func devicesWithAddresses(networkId:Int) -> [LocoNetDevice] {
+    
+    var result : [LocoNetDevice] = []
+    
+    for (_, device) in locoNetDevices {
+      if device.networkId == networkId && device.hasAddresses {
+        result.append(device)
+      }
+    }
+    
+    result.sort {$0.baseAddress < $1.baseAddress}
+    
+    return result
+    
+  }
+  
 
   public func locoNetDevicesForNetwork(networkId: Int) -> [Int:LocoNetDevice] {
     

@@ -121,6 +121,7 @@
 		DA8B5D19282FDE1800D39F07 /* ProgrammerMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8B5D18282FDE1800D39F07 /* ProgrammerMode.swift */; };
 		DA8B5D1B282FE23900D39F07 /* MessageTiming.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8B5D1A282FE23900D39F07 /* MessageTiming.swift */; };
 		DA8B5D1D282FE31600D39F07 /* InterfaceDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8B5D1C282FE31600D39F07 /* InterfaceDelegate.swift */; };
+		DA8E6E932893FEB800093468 /* AddressTableViewDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8E6E922893FEB800093468 /* AddressTableViewDS.swift */; };
 		DA8FDB2A279C2B3600E15024 /* LocoSlotData.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8FDB29279C2B3600E15024 /* LocoSlotData.swift */; };
 		DA8FDB2D279C4AC000E15024 /* LocoSlotTableViewDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8FDB2C279C4AC000E15024 /* LocoSlotTableViewDS.swift */; };
 		DA95D6BD280833FE00D9F1B6 /* GroupSetupVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA95D6BC280833ED00D9F1B6 /* GroupSetupVC.swift */; };
@@ -273,6 +274,7 @@
 		DA8B5D18282FDE1800D39F07 /* ProgrammerMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgrammerMode.swift; sourceTree = "<group>"; };
 		DA8B5D1A282FE23900D39F07 /* MessageTiming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTiming.swift; sourceTree = "<group>"; };
 		DA8B5D1C282FE31600D39F07 /* InterfaceDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceDelegate.swift; sourceTree = "<group>"; };
+		DA8E6E922893FEB800093468 /* AddressTableViewDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressTableViewDS.swift; sourceTree = "<group>"; };
 		DA8FDB29279C2B3600E15024 /* LocoSlotData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoSlotData.swift; sourceTree = "<group>"; };
 		DA8FDB2C279C4AC000E15024 /* LocoSlotTableViewDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoSlotTableViewDS.swift; sourceTree = "<group>"; };
 		DA95D6BC280833ED00D9F1B6 /* GroupSetupVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupSetupVC.swift; sourceTree = "<group>"; };
@@ -363,6 +365,7 @@
 				DA77795027AEE0E5007EEBE9 /* CommandStationConfigurationVC.swift */,
 				DA2429742892FE94000D4ADE /* AddressManager.storyboard */,
 				DA2429762892FEDB000D4ADE /* AddressManagerVC.swift */,
+				DA8E6E922893FEB800093468 /* AddressTableViewDS.swift */,
 				DAA867C527933265008B6EEC /* CSVParser.swift */,
 				DA3AEF432788B33F00FF91D4 /* CVTableViewDS.swift */,
 				DA28C2B92801CC0300857471 /* DashBoard.storyboard */,
@@ -702,6 +705,7 @@
 				DA28C2C52801ED9700857471 /* QuerySlot3.swift in Sources */,
 				DA0BB98B28730B3400B6B812 /* SensorTableViewDS.swift in Sources */,
 				DA434294283698CA00E8D555 /* SerialPort.c in Sources */,
+				DA8E6E932893FEB800093468 /* AddressTableViewDS.swift in Sources */,
 				DAE8DD53286751BE0097C2D1 /* Manufacturer.swift in Sources */,
 				DA0DA27A2779E96B00E4F23C /* Layout.swift in Sources */,
 				DA467BA9281D569300AB9650 /* SwitchBoardView.swift in Sources */,

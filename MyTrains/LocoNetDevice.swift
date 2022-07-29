@@ -31,6 +31,7 @@ public class LocoNetDevice : EditorObject {
   
   private enum Flag {
     static let opswRead : Int64 = 0b0000000000000000000000000000000000000000000000000000000000000001
+    static let bidSet   : Int64 = 0b0000000000000000000000000000000000000000000000000000000000000010
   }
   
   // MARK: Private Properties
@@ -243,6 +244,75 @@ public class LocoNetDevice : EditorObject {
         return info.attributes.contains(.Series7)
       }
       return false
+    }
+  }
+  
+  public var numberOfAddresses : Int {
+    get {
+      if let info = locoNetProductInfo {
+        return max(info.sensors, info.switches)
+      }
+      return 0
+    }
+  }
+  
+  public var baseAddress : Int {
+    get {
+      if isSeries7 {
+        return boardId
+      }
+      return (boardId - 1) * numberOfAddresses + 1
+    }
+  }
+  
+  public var addresses : Set<Int> {
+    get {
+      
+      var result : Set<Int> = []
+
+      let num = numberOfAddresses
+      
+      if num > 0 {
+        for sw in 0...num - 1 {
+          result.insert(baseAddress + sw)
+        }
+      }
+      
+      return result
+      
+    }
+  }
+  
+  public var hasAddresses : Bool {
+    get {
+      if let info = locoNetProductInfo {
+        return info.sensors > 0 || info.switches > 0
+      }
+      return false
+    }
+  }
+  
+  public var isAddressClash : Bool {
+    get {
+      for device in networkController.devicesWithAddresses(networkId: networkId) {
+        if device.primaryKey != self.primaryKey && !addresses.intersection(device.addresses).isEmpty {
+          return true
+        }
+      }
+      return false
+    }
+  }
+  
+  public var baseAddressOK : Bool {
+    get {
+      return (flags & Flag.bidSet) == Flag.bidSet
+    }
+    set(value) {
+      var temp = flags & ~Flag.bidSet
+      if value {
+        temp |= Flag.bidSet
+      }
+      flags = temp
     }
   }
   
