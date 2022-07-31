@@ -20,6 +20,7 @@ enum TABLE {
   static let SWITCHBOARD_PANEL           = "SWITCHBOARD_PANEL"
   static let SWITCHBOARD_ITEM            = "SWITCHBOARD_ITEM"
   static let SENSOR                      = "SENSOR"
+  static let TURNOUT_SWITCH              = "TURNOUT_SWITCH"
 }
 
 enum VERSION {
@@ -215,4 +216,14 @@ enum SENSOR {
   static let SENSOR_TYPE                 = "SENSOR_TYPE"
   static let POSITION                    = "POSITION"
   static let UNITS_POSITION              = "UNITS_POSITION"
+}
+
+enum TURNOUT_SWITCH {
+  static let TURNOUT_SWITCH_ID           = "TURNOUT_SWITCH_ID"
+  static let LOCONET_DEVICE_ID           = "LOCONET_DEVICE_ID"
+  static let SWITCHBOARD_ITEM_ID         = "SWITCHBOARD_ITEM_ID"
+  static let TURNOUT_INDEX               = "TURNOUT_INDEX"
+  static let CHANNEL_NUMBER              = "CHANNEL_NUMBER"
+  static let FEEDBACK_TYPE               = "FEEDBACK_TYPE"
+  static let SWITCH_TYPE                 = "SWITCH_TYPE"
 }

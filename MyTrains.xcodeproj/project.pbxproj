@@ -144,6 +144,12 @@
 		DAB450ED2872FEC000657295 /* SensorTCV.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAB450EC2872FEC000657295 /* SensorTCV.xib */; };
 		DAB450EF2872FEE800657295 /* SensorTCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB450EE2872FEE800657295 /* SensorTCV.swift */; };
 		DAB4FF5E2854F8CF00D74920 /* LocomotiveType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB4FF5D2854F8CF00D74920 /* LocomotiveType.swift */; };
+		DACB59272896A27E006B1861 /* TurnoutSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACB59262896A27E006B1861 /* TurnoutSwitch.swift */; };
+		DACB59292896A39E006B1861 /* TurnoutFeedbackType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACB59282896A39E006B1861 /* TurnoutFeedbackType.swift */; };
+		DACB592B2896AF89006B1861 /* TurnoutSwitchTCV.xib in Resources */ = {isa = PBXBuildFile; fileRef = DACB592A2896AF89006B1861 /* TurnoutSwitchTCV.xib */; };
+		DACB592D2896AFCB006B1861 /* TurnoutSwitchTCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACB592C2896AFCB006B1861 /* TurnoutSwitchTCV.swift */; };
+		DACB592F2896B7E3006B1861 /* TurnoutSwitchTableViewDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACB592E2896B7E3006B1861 /* TurnoutSwitchTableViewDS.swift */; };
+		DACB59312896CDCE006B1861 /* TurnoutSwitchState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACB59302896CDCE006B1861 /* TurnoutSwitchState.swift */; };
 		DAD66A2E2871FF9B00376479 /* Sensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD66A2D2871FF9B00376479 /* Sensor.swift */; };
 		DADBBFEA285DF36700426CD5 /* LayoutSwitchBoardExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADBBFE9285DF36700426CD5 /* LayoutSwitchBoardExtensions.swift */; };
 		DAE8DD51286741BD0097C2D1 /* TrackPart.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE8DD50286741BD0097C2D1 /* TrackPart.swift */; };
@@ -299,6 +305,12 @@
 		DAB450EC2872FEC000657295 /* SensorTCV.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SensorTCV.xib; sourceTree = "<group>"; };
 		DAB450EE2872FEE800657295 /* SensorTCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorTCV.swift; sourceTree = "<group>"; };
 		DAB4FF5D2854F8CF00D74920 /* LocomotiveType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocomotiveType.swift; sourceTree = "<group>"; };
+		DACB59262896A27E006B1861 /* TurnoutSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TurnoutSwitch.swift; sourceTree = "<group>"; };
+		DACB59282896A39E006B1861 /* TurnoutFeedbackType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TurnoutFeedbackType.swift; sourceTree = "<group>"; };
+		DACB592A2896AF89006B1861 /* TurnoutSwitchTCV.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TurnoutSwitchTCV.xib; sourceTree = "<group>"; };
+		DACB592C2896AFCB006B1861 /* TurnoutSwitchTCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TurnoutSwitchTCV.swift; sourceTree = "<group>"; };
+		DACB592E2896B7E3006B1861 /* TurnoutSwitchTableViewDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TurnoutSwitchTableViewDS.swift; sourceTree = "<group>"; };
+		DACB59302896CDCE006B1861 /* TurnoutSwitchState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TurnoutSwitchState.swift; sourceTree = "<group>"; };
 		DAD66A2D2871FF9B00376479 /* Sensor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sensor.swift; sourceTree = "<group>"; };
 		DADBBFE9285DF36700426CD5 /* LayoutSwitchBoardExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutSwitchBoardExtensions.swift; sourceTree = "<group>"; };
 		DAE8DD50286741BD0097C2D1 /* TrackPart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackPart.swift; sourceTree = "<group>"; };
@@ -470,6 +482,12 @@
 				DA0BB98A28730B3400B6B812 /* SensorTableViewDS.swift */,
 				DAB450EC2872FEC000657295 /* SensorTCV.xib */,
 				DAB450EE2872FEE800657295 /* SensorTCV.swift */,
+				DACB59262896A27E006B1861 /* TurnoutSwitch.swift */,
+				DACB59302896CDCE006B1861 /* TurnoutSwitchState.swift */,
+				DACB59282896A39E006B1861 /* TurnoutFeedbackType.swift */,
+				DACB592A2896AF89006B1861 /* TurnoutSwitchTCV.xib */,
+				DACB592C2896AFCB006B1861 /* TurnoutSwitchTCV.swift */,
+				DACB592E2896B7E3006B1861 /* TurnoutSwitchTableViewDS.swift */,
 				DA434293283698CA00E8D555 /* SerialPort.c */,
 				DA434292283698CA00E8D555 /* SerialPort.h */,
 				DA95D6C42809C00600D9F1B6 /* SignalStrengthView.swift */,
@@ -589,6 +607,7 @@
 				DA08B431278734270001307C /* ProgramDecoderAddress.storyboard in Resources */,
 				DA95D6BF28083E9800D9F1B6 /* GroupSetup.storyboard in Resources */,
 				DAA83DF2272C37680075CBCD /* Main.storyboard in Resources */,
+				DACB592B2896AF89006B1861 /* TurnoutSwitchTCV.xib in Resources */,
 				DA8837762770B6F8000B9A41 /* EditLocomotives.storyboard in Resources */,
 				DA33FC2027AFF9E500630227 /* OpSwDecoderType.xib in Resources */,
 				DA412E122780948900748CCD /* Throttle.storyboard in Resources */,
@@ -646,6 +665,7 @@
 				DA33FC2327AFFA1400630227 /* OpSwDecoderType.swift in Sources */,
 				DA28C2BF2801E46D00857471 /* QuerySlot1.swift in Sources */,
 				DA77794C27AEA029007EEBE9 /* OptionSwitch.swift in Sources */,
+				DACB59292896A39E006B1861 /* TurnoutFeedbackType.swift in Sources */,
 				DA7B4727273803BA00BCD587 /* Locomotive.swift in Sources */,
 				DA2429772892FEDB000D4ADE /* AddressManagerVC.swift in Sources */,
 				DAB4FF5E2854F8CF00D74920 /* LocomotiveType.swift in Sources */,
@@ -669,9 +689,11 @@
 				DAE8DD5728675B040097C2D1 /* FrogType.swift in Sources */,
 				DA0197272773520400350F71 /* EditorObject.swift in Sources */,
 				DAEA9CF7272D8DA900C9B3EC /* NetworkConstants.swift in Sources */,
+				DACB592F2896B7E3006B1861 /* TurnoutSwitchTableViewDS.swift in Sources */,
 				DA2E0E5A2736B8AA00C7DA7A /* LoconetRequestSlotDataMessage.swift in Sources */,
 				DA2785402837EAE700EDCBB7 /* MTSerialPortManager.swift in Sources */,
 				DA77795727AEF2E5007EEBE9 /* OpSwTableViewDS.swift in Sources */,
+				DACB592D2896AFCB006B1861 /* TurnoutSwitchTCV.swift in Sources */,
 				DA467BA7281D534900AB9650 /* SwitchBoardItem.swift in Sources */,
 				DA5B4607276F6917005CA03C /* ComboBoxDBDS.swift in Sources */,
 				DA359850278219A400B81AD3 /* LocoSlotDataP2.swift in Sources */,
@@ -707,11 +729,13 @@
 				DA434294283698CA00E8D555 /* SerialPort.c in Sources */,
 				DA8E6E932893FEB800093468 /* AddressTableViewDS.swift in Sources */,
 				DAE8DD53286751BE0097C2D1 /* Manufacturer.swift in Sources */,
+				DACB59312896CDCE006B1861 /* TurnoutSwitchState.swift in Sources */,
 				DA0DA27A2779E96B00E4F23C /* Layout.swift in Sources */,
 				DA467BA9281D569300AB9650 /* SwitchBoardView.swift in Sources */,
 				DA9CF8F9286089B000825FA9 /* NSButtonExtensions.swift in Sources */,
 				DA6E28DF285F827600772641 /* SwitchBoardItemPartType.swift in Sources */,
 				DA0946542843C06A00F1AB81 /* DMF.swift in Sources */,
+				DACB59272896A27E006B1861 /* TurnoutSwitch.swift in Sources */,
 				DA8837802770B768000B9A41 /* EditLocomotivesVC.swift in Sources */,
 				DAB0749A276EB8B1003278BE /* Database.swift in Sources */,
 				DA9CF8FB2860952300825FA9 /* BlockType.swift in Sources */,

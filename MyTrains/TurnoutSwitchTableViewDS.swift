@@ -1,18 +1,18 @@
 //
-//  SensorTableViewDS.swift
+//  TurnoutSwitchTableViewDS.swift
 //  MyTrains
 //
-//  Created by Paul Willmott on 04/07/2022.
+//  Created by Paul Willmott on 31/07/2022.
 //
 
 import Foundation
 import Cocoa
 
-public class SensorTableViewDS : NSObject, NSTableViewDataSource, NSTableViewDelegate {
+public class TurnoutSwitchTableViewDS : NSObject, NSTableViewDataSource, NSTableViewDelegate {
 
   // MARK: Public Properties
   
-  public var sensors = [Sensor]()
+  public var turnoutSwitches = [TurnoutSwitch]()
   
   // MARK: NSTableViewDataSource Delegate Methods
   
@@ -20,7 +20,7 @@ public class SensorTableViewDS : NSObject, NSTableViewDataSource, NSTableViewDel
   
   // Returns the number of records managed for aTableView by the data source object.
    public func numberOfRows(in tableView: NSTableView) -> Int {
-     return sensors.count
+     return turnoutSwitches.count
    }
   
   // Sets the data object for an item in the specified row and column.
@@ -30,7 +30,7 @@ public class SensorTableViewDS : NSObject, NSTableViewDataSource, NSTableViewDel
   public func tableView(_ tableView: NSTableView,
                         viewFor tableColumn: NSTableColumn?,row: Int) -> NSView? {
     
-    let item = sensors[row]
+    let item = turnoutSwitches[row]
     
     let columnName = tableColumn!.identifier.rawValue
     
@@ -47,13 +47,13 @@ public class SensorTableViewDS : NSObject, NSTableViewDataSource, NSTableViewDel
 
     switch columnName {
     case ColumnIdentifiers.SectionColumn:
-      text = "\(item.sensorAddress)"
+      text = "\(item.switchAddress)"
     case ColumnIdentifiers.BlockColumn:
       
-      let nib = NSNib(nibNamed: "SensorTCV", bundle: nil)
+      let nib = NSNib(nibNamed: "TurnoutSwitchTCV", bundle: nil)
       tableView.register(nib, forIdentifier: NSUserInterfaceItemIdentifier(rawValue: cellIdentifier))
-      if let cell = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil) as? SensorTCV {
-        cell.sensor = item
+      if let cell = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil) as? TurnoutSwitchTCV {
+        cell.turnoutSwitch = item
         return cell
       }
 

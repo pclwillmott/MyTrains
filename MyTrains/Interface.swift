@@ -56,6 +56,8 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
 
   internal var _locoSlots : [Int:LocoSlotData] = [:]
   
+  private var sensorLookup : [Int:SwitchBoardItem] = [:]
+  
   // MARK: Public Properties
   
   public var opSwBankA : NetworkMessage?
@@ -200,6 +202,13 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
       _locoSlots[slot.slotID] = slot
       slotsUpdated()
 
+    case .sensRepGenIn:
+      if let block = sensorLookup[message.sensorAddress], let layout = network?.layout {
+        block.isOccupied = message.sensorState
+        layout.needsDisplay()
+      }
+      print("sensRepGenIn: \(message.sensorAddress) \(message.sensorState)")
+      print(message.messageHex)
     default:
       break
     }
@@ -305,6 +314,38 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
   }
 
   // MARK: Public Methods
+      
+  public func initSensorLookup() {
+     
+    sensorLookup.removeAll()
+    
+    if let layout = networkController.layout {
+      
+      layout.operationalTurnouts.removeAll()
+      
+      for device in networkController.devicesWithAddresses(networkId: networkId) {
+        
+        for sensor in device.sensors {
+          
+          if sensor.switchBoardItemId != -1, let block = layout.operationalBlocks[sensor.switchBoardItemId] {
+            sensorLookup[sensor.sensorAddress] = block
+          }
+          
+        }
+        
+        for turnoutSwitch in device.turnoutSwitches {
+          
+          if turnoutSwitch.switchBoardItemId != -1 {
+            layout.operationalTurnouts[turnoutSwitch.switchBoardItemId] = turnoutSwitch
+          }
+          
+        }
+        
+      }
+      
+    }
+    
+  }
   
   public func addObserver(observer:InterfaceDelegate) -> Int {
     nextObserverKeyLock.lock()

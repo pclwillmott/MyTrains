@@ -96,12 +96,12 @@ class AddressManagerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
     
     if let device = self.device, let interface = self.interface {
       
-      if nextAddr == device.numberOfAddresses {
+      if nextAddr == device.turnoutSwitches.count {
         stopTimer()
         return
       }
       
-      interface.setSw(switchNumber: device.baseAddress + nextAddr, state: .closed)
+      interface.setSw(switchNumber: device.turnoutSwitches[nextAddr].switchAddress, state: .closed)
       
       nextAddr += 1
       
@@ -110,7 +110,7 @@ class AddressManagerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   }
   
   func startTimer() {
-    timer = Timer.scheduledTimer(timeInterval: 0.25, target: self, selector: #selector(next), userInfo: nil, repeats: true)
+    timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(next), userInfo: nil, repeats: true)
     RunLoop.current.add(timer!, forMode: .common)
   }
   

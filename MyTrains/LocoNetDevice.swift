@@ -190,6 +190,8 @@ public class LocoNetDevice : EditorObject {
   
   public var sensors : [Sensor] = []
   
+  public var turnoutSwitches : [TurnoutSwitch] = []
+  
   public var networkId : Int = -1 {
     didSet {
       modified = true
@@ -505,7 +507,22 @@ public class LocoNetDevice : EditorObject {
     }
     
   }
+
+  private func makeTurnoutSwitches() {
+      
+    if let info = locoNetProductInfo {
+      
+      for index in 1...info.switches {
+        let turnoutSwitch = TurnoutSwitch()
+        turnoutSwitch.locoNetDeviceId = primaryKey
+        turnoutSwitch.channelNumber = index
+        turnoutSwitches.append(turnoutSwitch)
+      }
+      
+    }
     
+  }
+  
   // MARK: Public Methods
   
   override public func displayString() -> String {
@@ -763,11 +780,21 @@ public class LocoNetDevice : EditorObject {
     
     modified = false
     
-    if let info = locoNetProductInfo, info.sensors > 0 {
-      sensors = Sensor.sensors(locoNetDevice: self)
-      if sensors.count == 0 {
-        makeSensors()
+    if let info = locoNetProductInfo {
+      
+      if info.sensors > 0 {
+        sensors = Sensor.sensors(locoNetDevice: self)
+        if sensors.count == 0 {
+          makeSensors()
+        }
       }
+      if info.switches > 0 {
+        turnoutSwitches = TurnoutSwitch.turnoutSwitches(locoNetDevice: self)
+        if turnoutSwitches.count == 0 {
+          makeTurnoutSwitches()
+        }
+      }
+
     }
     
   }
@@ -890,14 +917,24 @@ public class LocoNetDevice : EditorObject {
       
     }
     
-    if let info = locoNetProductInfo, info.sensors > 0 {
-      if sensors.count == 0 {
-        makeSensors()
+    if let info = locoNetProductInfo {
+      
+      if info.sensors > 0 && sensors.count == 0 {
+          makeSensors()
       }
+      
+      if info.switches > 0 && turnoutSwitches.count == 0 {
+          makeTurnoutSwitches()
+      }
+      
     }
     
     for sensor in sensors {
       sensor.save()
+    }
+    
+    for turnoutSwitch in turnoutSwitches {
+      turnoutSwitch.save()
     }
 
   }
@@ -977,6 +1014,7 @@ public class LocoNetDevice : EditorObject {
   public static func delete(primaryKey: Int) {
     
     let sql = [
+      "DELETE FROM [\(TABLE.TURNOUT_SWITCH)] WHERE [\(TURNOUT_SWITCH.LOCONET_DEVICE_ID)] = \(primaryKey)",
       "DELETE FROM [\(TABLE.SENSOR)] WHERE [\(SENSOR.LOCONET_DEVICE_ID)] = \(primaryKey)",
       "DELETE FROM [\(TABLE.LOCONET_DEVICE)] WHERE [\(LOCONET_DEVICE.LOCONET_DEVICE_ID)] = \(primaryKey)"
     ]

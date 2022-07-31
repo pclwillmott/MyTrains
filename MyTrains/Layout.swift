@@ -7,6 +7,10 @@
 
 import Foundation
 
+@objc public protocol LayoutDelegate {
+  @objc optional func needsDisplay()
+}
+
 public class Layout : EditorObject {
   
   // MARK: Constructors
@@ -32,7 +36,30 @@ public class Layout : EditorObject {
 
   }
   
-  // MARK: Public properties
+  // MARK: Private Properties
+  
+  private var delegates : [Int:LayoutDelegate] = [:]
+  
+  private var nextDelegateId = 1
+  
+  // MARK: Public Properties
+  
+  public func addDelegate(delegate:LayoutDelegate) -> Int {
+    let id = nextDelegateId
+    nextDelegateId += 1
+    delegates[id] = delegate
+    return id
+  }
+  
+  public func needsDisplay() {
+    for (_, delegate) in delegates {
+      delegate.needsDisplay?()
+    }
+  }
+  
+  public func removeDelegate(delegateId:Int) {
+    delegates[delegateId] = nil
+  }
   
   override public func displayString() -> String {
     return layoutName
@@ -95,6 +122,24 @@ public class Layout : EditorObject {
       return result
     }
   }
+  
+  public var switchBoardTurnouts : [Int:SwitchBoardItem] {
+    get {
+      var result : [Int:SwitchBoardItem] = [:]
+      for (_, item) in switchBoardItems {
+        if item.isTurnout {
+          result[item.primaryKey] = item
+        }
+      }
+      return result
+    }
+  }
+  
+  public var operationalBlocks : [Int:SwitchBoardItem] = [:]
+  
+  public var operationalGroups : [Int:[SwitchBoardItem]] = [:]
+  
+  public var operationalTurnouts : [Int:TurnoutSwitch] = [:]
   
   // MARK: Public Methods
   
@@ -255,6 +300,33 @@ public class Layout : EditorObject {
         }
       }
     }
+    
+    // Create Dictionaries
+    
+    operationalBlocks.removeAll()
+    operationalGroups.removeAll()
+    
+    for (_, item) in switchBoardItems {
+      
+      if !item.isEliminated {
+        operationalBlocks[item.primaryKey] = item
+      }
+      
+      if item.groupId != -1 {
+        
+        if var group = operationalGroups[item.groupId] {
+          group.append(item)
+          operationalGroups[item.groupId] = group
+        }
+        else {
+          var group : [SwitchBoardItem] = [item]
+          operationalGroups[item.groupId] = group
+        }
+        
+      }
+      
+    }
+    
     /*
     for (_, item) in switchBoardItems {
       

@@ -320,7 +320,6 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
     
   }
   
-
   public func locoNetDevicesForNetwork(networkId: Int) -> [Int:LocoNetDevice] {
     
     var result : [Int:LocoNetDevice] = [:]
@@ -369,6 +368,7 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
   
   public func connect() {
     for interface in networkInterfaces {
+      interface.initSensorLookup()
       interface.open()
     }
     connected = true

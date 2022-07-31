@@ -7,7 +7,7 @@
 
 import Cocoa
 
-class MainVC: NSViewController, NetworkControllerDelegate {
+class MainVC: NSViewController, NetworkControllerDelegate, LayoutDelegate {
 
   // MARK: Window & View Control
   
@@ -34,6 +34,9 @@ class MainVC: NSViewController, NetworkControllerDelegate {
       networkController.removeDelegate(id: controllerDelegateId)
       controllerDelegateId = -1
     }
+    if layoutDelegateId != -1 {
+      networkController.layout?.removeDelegate(delegateId: layoutDelegateId)
+    }
   }
   
   override func viewWillAppear() {
@@ -42,6 +45,10 @@ class MainVC: NSViewController, NetworkControllerDelegate {
     
     switchBoardView.layout = networkController.layout
     
+    if let layout = networkController.layout {
+      layoutDelegateId = layout.addDelegate(delegate: self)
+    }
+    
   }
   
   // MARK: Private Properties
@@ -49,6 +56,8 @@ class MainVC: NSViewController, NetworkControllerDelegate {
   private var cboLayoutDS : ComboBoxDBDS? = nil
   
   private var controllerDelegateId : Int = -1
+  
+  private var layoutDelegateId : Int = -1
 
   // MARK: Private Methods
   
@@ -109,6 +118,12 @@ class MainVC: NSViewController, NetworkControllerDelegate {
       
     }
         
+  }
+  
+  // MARK: LayoutDelegate Methods
+  
+  func needsDisplay() {
+    switchBoardView.needsDisplay = true
   }
   
   // MARK: NetworkController Delegate Methods

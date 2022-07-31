@@ -269,6 +269,22 @@ extension Interface {
 
   }
   
+  public func setSwWithAck(switchNumber: Int, state:OptionSwitchState) {
+    
+    let sn = switchNumber - 1
+    
+    let lo = UInt8(sn & 0x7f)
+    
+    let bit : UInt8 = state == .closed ? 0x30 : 0x10
+    
+    let hi = UInt8(sn >> 7) | bit
+    
+    let message = NetworkMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_SW_ACK.rawValue, lo, hi], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: MessageTiming.SWREQ)
+
+  }
+  
   public func setLocoSlotDataP1(slotData: [UInt8]) {
     
     var data = [UInt8](repeating: 0, count: 13)

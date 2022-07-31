@@ -51,7 +51,7 @@ class EditSwitchesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   
   private var cboNetworkDS = ComboBoxDBDS(tableName: TABLE.NETWORK, codeColumn: NETWORK.NETWORK_ID, displayColumn: NETWORK.NETWORK_NAME, sortColumn: NETWORK.NETWORK_NAME)
 
-//  private var switchTableViewDS : SensorTableViewDS = SensorTableViewDS()
+  private var turnoutSwitchTableViewDS : TurnoutSwitchTableViewDS = TurnoutSwitchTableViewDS()
   
   // MARK: Private Methods
   
@@ -71,9 +71,9 @@ class EditSwitchesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     txtDeviceName.stringValue = ""
     cboNetwork.deselectItem(at: cboNetwork.indexOfSelectedItem)
     txtBoardID.stringValue = ""
-//    sensorTableViewDS.sensors = []
-//    sensorTableView.dataSource = sensorTableViewDS
-//    sensorTableView.reloadData()
+    turnoutSwitchTableViewDS.turnoutSwitches = []
+    turnoutSwitchTableView.dataSource = turnoutSwitchTableViewDS
+    turnoutSwitchTableView.reloadData()
     setupView()
   }
   
@@ -85,11 +85,12 @@ class EditSwitchesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
       txtDeviceName.stringValue = device.deviceName
       cboNetwork.selectItem(at: cboNetworkDS.indexOfItemWithCodeValue(code: device.networkId) ?? -1)
       txtBoardID.integerValue = device.boardId
-//      sensorTableViewDS.sensors = device.sensors
-//      sensorTableView.dataSource = sensorTableViewDS
-//      sensorTableView.delegate = sensorTableViewDS
-//      sensorTableView.reloadData()
+      turnoutSwitchTableViewDS.turnoutSwitches = device.turnoutSwitches
+      turnoutSwitchTableView.dataSource = turnoutSwitchTableViewDS
+      turnoutSwitchTableView.delegate = turnoutSwitchTableViewDS
+      turnoutSwitchTableView.reloadData()
       tabView.selectFirstTabViewItem(self)
+      editorView.modified = true
     }
     setupView()
   }
@@ -175,5 +176,7 @@ class EditSwitchesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   @IBOutlet weak var tabView: NSTabView!
   
   @IBOutlet weak var editorView: DBEditorView!
+  
+  @IBOutlet weak var turnoutSwitchTableView: NSTableView!
   
 }

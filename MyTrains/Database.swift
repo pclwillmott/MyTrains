@@ -273,6 +273,32 @@ class Database {
             
             reader.close()
             
+            // MARK: Updates
+            
+            if Version == 1 {
+     
+              let commands = [
+                
+                "CREATE TABLE [\(TABLE.TURNOUT_SWITCH)] (" +
+                "[\(TURNOUT_SWITCH.TURNOUT_SWITCH_ID)]   INT PRIMARY KEY," +
+                "[\(TURNOUT_SWITCH.LOCONET_DEVICE_ID)]   INT NOT NULL," +
+                "[\(TURNOUT_SWITCH.SWITCHBOARD_ITEM_ID)] INT NOT NULL," +
+                "[\(TURNOUT_SWITCH.TURNOUT_INDEX)]       INT NOT NULL," +
+                "[\(TURNOUT_SWITCH.CHANNEL_NUMBER)]      INT NOT NULL," +
+                "[\(TURNOUT_SWITCH.FEEDBACK_TYPE)]       INT NOT NULL," +
+                "[\(TURNOUT_SWITCH.SWITCH_TYPE)]         INT NOT NULL" +
+                ")",
+                
+                "UPDATE [\(TABLE.VERSION)] SET [\(VERSION.VERSION_NUMBER)] = 2 WHERE [\(VERSION.VERSION_ID)] = 1",
+                
+              ]
+              
+              execute(commands: commands)
+              
+              Version = 2
+
+            }
+            
             connection!.close()
             
           }

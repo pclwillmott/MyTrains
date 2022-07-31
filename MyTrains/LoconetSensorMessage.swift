@@ -14,10 +14,10 @@ public enum LoconetSensorMessageType {
 
 public class LoconetSensorMessage : NetworkMessage {
   
-  public var sensorAddress : UInt16 {
+  override public var sensorAddress : Int {
     get {
-      let in1 = UInt16(message[1])
-      let in2 = UInt16(message[2])
+      let in1 = Int(message[1])
+      let in2 = Int(message[2])
       return 1 + (
         (in1 << 1) |
         ((in2 & 0b00001111) << 8) |
@@ -32,13 +32,13 @@ public class LoconetSensorMessage : NetworkMessage {
       return "\(1 + addr >> 3).\(1 + addr % 8)"
     }
   }
-  
+/*
   public var sensorState : Bool {
     get {
       return (message[2] & 0b00010000) != 0x00
     }
   }
-  
+*/
   public var sensorMessageType : LoconetSensorMessageType {
     get {
       return opCode == .OPC_INPUT_REP ? .general : .turnout

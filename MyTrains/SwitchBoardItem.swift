@@ -108,6 +108,12 @@ public class SwitchBoardItem : EditorObject {
     }
   }
   
+  public var isOccupied : Bool = false {
+    didSet {
+      layout?.needsDisplay()
+    }
+  }
+  
   public var isTurnout : Bool {
     get {
       let turnouts : Set<SwitchBoardItemPartType> = [

@@ -183,7 +183,7 @@ public class LocoNetProducts {
     (.UT4, "UT4", "Utility Throttle with 4 Digit Addressing and Infrared Capability", 2006, .UT4, [.Throttle], 0, 0),
     (.UT4R, "UT4R", "Simplex Radio Equipped Utility Throttle with 4 Digit Addressing", 2006, .UT4, [.Throttle, .SimplexRadioTransmitter], 0, 0),
     (.DS54, "DS54", " Quad Stationary Decoder with Programmable LocoNet Inputs & Outputs", 2006, .none, [.StationaryDecoder, .OptionSwitches], 4, 4),
-    (.DS64, "DS64", "Quad Stationary Decoder", 2006, .none, [.StationaryDecoder, .OptionSwitches, .BrdOpSw], 4, 4),
+    (.DS64, "DS64", "Quad Stationary Decoder", 2006, .none, [.StationaryDecoder, .OptionSwitches, .BrdOpSw], 8, 4),
     (.LNRP, "LNRP", "Loconet Repeater Module", 2007, .LNRP, [.Repeater, .OptionSwitches], 0, 0),
     (.PR3, "PR3", "SoundFX USB Decoder Programmer", 2008, .PR3, [.ComputerInterface, .LocoNetInterface, .Programmer, .OptionSwitches], 0, 0),
     (.DT402, "DT402", "Super Throttle with Infrared Capability", 2009, .DT402, [.Throttle, .IRTransmitter], 0, 0),

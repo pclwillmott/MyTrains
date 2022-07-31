@@ -76,6 +76,15 @@ public class Sensor : EditorObject {
     }
   }
   
+  public var sensorAddress : Int {
+    get {
+      if let device = locoNetDevice {
+        return device.baseAddress + channelNumber - 1
+      }
+      return 0
+    }
+  }
+  
   // MARK: Database Methods
   
   private func decode(sqliteDataReader: SqliteDataReader?) {
