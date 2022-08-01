@@ -22,6 +22,7 @@ public class RollingStock : EditorObject, DecoderFunctionDelegate {
     decode(sqliteDataReader: reader)
     functions = DecoderFunction.functions(rollingStock: self, decoderType: .mobile)
     _cvs = DecoderCV.cvs(rollingStock: self, decoderType: .mobile)
+    speedProfile = SpeedProfile.speedProfile(rollingStock: self)
   }
   
   override init(primaryKey:Int) {
@@ -35,6 +36,10 @@ public class RollingStock : EditorObject, DecoderFunctionDelegate {
       let cv = DecoderCV(decoderType: .mobile, cvNumber: cvNumber)
       _cvs[cv.cvNumber] = cv
     }
+    for stepNumber in 1...127 {
+      let sp = SpeedProfile(stepNumber: stepNumber)
+      speedProfile.append(sp)
+    }
   }
   
   // MARK: Private Properties
@@ -44,6 +49,8 @@ public class RollingStock : EditorObject, DecoderFunctionDelegate {
   // MARK: Public Properties
   
   public var functions : [DecoderFunction] = []
+  
+  public var speedProfile : [SpeedProfile] = []
   
   public var cvs : [Int:DecoderCV] {
     get {
@@ -229,6 +236,12 @@ public class RollingStock : EditorObject, DecoderFunctionDelegate {
     }
   }
   
+  public var flags : Int64 = 0 {
+    didSet {
+      modified = true
+    }
+  }
+
   // MARK: Public Methods
   
   override public func displayString() -> String {
@@ -375,6 +388,10 @@ public class RollingStock : EditorObject, DecoderFunctionDelegate {
         aDecoderInstalled = reader.getBool(index: 27)!
       }
 
+      if !reader.isDBNull(index: 28) {
+        flags = reader.getInt64(index: 28)!
+      }
+
     }
     
     modified = false
@@ -416,7 +433,8 @@ public class RollingStock : EditorObject, DecoderFunctionDelegate {
         "[\(ROLLING_STOCK.NOTES)], " +
         "[\(ROLLING_STOCK.LOCOMOTIVE_TYPE)], " +
         "[\(ROLLING_STOCK.MDECODER_INSTALLED)], " +
-        "[\(ROLLING_STOCK.ADECODER_INSTALLED)]" +
+        "[\(ROLLING_STOCK.ADECODER_INSTALLED)], " +
+        "[\(ROLLING_STOCK.FLAGS)]" +
         ") VALUES (" +
         "@\(ROLLING_STOCK.ROLLING_STOCK_ID), " +
         "@\(ROLLING_STOCK.ROLLING_STOCK_NAME), " +
@@ -445,7 +463,8 @@ public class RollingStock : EditorObject, DecoderFunctionDelegate {
         "@\(ROLLING_STOCK.NOTES), " +
         "@\(ROLLING_STOCK.LOCOMOTIVE_TYPE), " +
         "@\(ROLLING_STOCK.MDECODER_INSTALLED), " +
-        "@\(ROLLING_STOCK.ADECODER_INSTALLED)" +
+        "@\(ROLLING_STOCK.ADECODER_INSTALLED), " +
+        "@\(ROLLING_STOCK.FLAGS)" +
         ")"
         primaryKey = Database.nextCode(tableName: TABLE.ROLLING_STOCK, primaryKey: ROLLING_STOCK.ROLLING_STOCK_ID)!
       }
@@ -477,7 +496,8 @@ public class RollingStock : EditorObject, DecoderFunctionDelegate {
         "[\(ROLLING_STOCK.NOTES)] = @\(ROLLING_STOCK.NOTES), " +
         "[\(ROLLING_STOCK.LOCOMOTIVE_TYPE)] = @\(ROLLING_STOCK.LOCOMOTIVE_TYPE), " +
         "[\(ROLLING_STOCK.MDECODER_INSTALLED)] = @\(ROLLING_STOCK.MDECODER_INSTALLED), " +
-        "[\(ROLLING_STOCK.ADECODER_INSTALLED)] = @\(ROLLING_STOCK.ADECODER_INSTALLED) " +
+        "[\(ROLLING_STOCK.ADECODER_INSTALLED)] = @\(ROLLING_STOCK.ADECODER_INSTALLED), " +
+        "[\(ROLLING_STOCK.FLAGS)] = @\(ROLLING_STOCK.FLAGS) " +
         "WHERE [\(ROLLING_STOCK.ROLLING_STOCK_ID)] = @\(ROLLING_STOCK.ROLLING_STOCK_ID)"
       }
 
@@ -521,6 +541,7 @@ public class RollingStock : EditorObject, DecoderFunctionDelegate {
       cmd.parameters.addWithValue(key: "@\(ROLLING_STOCK.LOCOMOTIVE_TYPE)", value: locomotiveType.rawValue)
       cmd.parameters.addWithValue(key: "@\(ROLLING_STOCK.MDECODER_INSTALLED)", value: mDecoderInstalled)
       cmd.parameters.addWithValue(key: "@\(ROLLING_STOCK.ADECODER_INSTALLED)", value: aDecoderInstalled)
+      cmd.parameters.addWithValue(key: "@\(ROLLING_STOCK.FLAGS)", value: flags)
 
       _ = cmd.executeNonQuery()
       
@@ -529,12 +550,16 @@ public class RollingStock : EditorObject, DecoderFunctionDelegate {
         fn.save()
       }
       
-      for kv in _cvs {
-        let cv = kv.value
+      for (_, cv) in _cvs {
         cv.rollingStockId = primaryKey
         cv.save()
       }
-
+      
+      for sp in speedProfile {
+        sp.rollingStockId = primaryKey
+        sp.save()
+      }
+      
       if shouldClose {
         conn.close()
       }
@@ -577,13 +602,20 @@ public class RollingStock : EditorObject, DecoderFunctionDelegate {
         "[\(ROLLING_STOCK.NOTES)], " +
         "[\(ROLLING_STOCK.LOCOMOTIVE_TYPE)], " +
         "[\(ROLLING_STOCK.MDECODER_INSTALLED)], " +
-        "[\(ROLLING_STOCK.ADECODER_INSTALLED)]"
+        "[\(ROLLING_STOCK.ADECODER_INSTALLED)], " +
+        "[\(ROLLING_STOCK.FLAGS)]"
     }
   }
 
   public static func delete(primaryKey: Int) {
-    let sql = "DELETE FROM [\(TABLE.ROLLING_STOCK)] WHERE [\(ROLLING_STOCK.ROLLING_STOCK_ID)] = \(primaryKey)"
-    Database.execute(commands: [sql])
+    let sql = [
+      "DELETE FROM [\(TABLE.DECODER_CV)] WHERE [\(DECODER_CV.ROLLING_STOCK_ID)] = \(primaryKey)",
+      "DELETE FROM [\(TABLE.DECODER_FUNCTION)] WHERE [\(DECODER_FUNCTION.ROLLING_STOCK_ID)] = \(primaryKey)",
+      "DELETE FROM [\(TABLE.SPEED_PROFILE)] WHERE [\(SPEED_PROFILE.ROLLING_STOCK_ID)] = \(primaryKey)",
+      "DELETE FROM [\(TABLE.ROLLING_STOCK)] WHERE [\(ROLLING_STOCK.ROLLING_STOCK_ID)] = \(primaryKey)",
+    ]
+    
+    Database.execute(commands: sql)
   }
 
   public static var rollingStock : [Int:RollingStock] {

@@ -100,6 +100,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     }
   }
   
+  @IBAction func mnuSpeedProfiler(_ sender: NSMenuItem) {
+    let x = ModalWindow.SpeedProfiler
+    let wc = x.windowController
+    wc.showWindow(nil)
+  }
+  
   // MARK: Control Menu
   
   @IBAction func mnuThrottleAction(_ sender: Any) {

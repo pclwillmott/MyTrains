@@ -8,7 +8,9 @@
 import Foundation
 import AppKit
 
-public typealias SwitchBoardConnection = (from:Int, to:Int)
+public typealias TurnoutSwitchSetting = (switchNumber: Int, switchState: TurnoutSwitchState)
+
+public typealias SwitchBoardConnection = (from: Int, to: Int, switchSettings: [TurnoutSwitchSetting])
 
 public enum SwitchBoardItemPartType : Int {
   
@@ -99,23 +101,26 @@ public enum SwitchBoardItemPartType : Int {
   }
   
   private static let connections : [SwitchBoardItemPartType:[SwitchBoardConnection]] = [
-    .straight           : [(5,1)],
-    .curve              : [(5,3)],
-    .longCurve          : [(5,2)],
-    .turnoutRight       : [(5,1),(5,2)],
-    .turnoutLeft        : [(5,1),(5,0)],
-    .cross              : [(7,3),(5,1)],
-    .diagonalCross      : [(0,4),(5,1)],
-    .yTurnout           : [(5,0),(5,2)],
-    .turnout3Way        : [(5,0),(5,1),(5,2)],
-    .leftCurvedTurnout  : [(5,7),(5,0)],
-    .rightCurvedTurnout : [(5,3),(5,2)],
-    .singleSlip         : [(0,4),(5,1),(4,1)],
-    .doubleSlip         : [(0,4),(5,1),(4,1),(5,0)],
-    .buffer             : [],
-    .block              : [(5,1)],
-    .feedback           : [(5,1)],
-    .link               : [(5,-1)],
+    .straight           : [(5, 1, [])],
+    .curve              : [(5, 3, [])],
+    .longCurve          : [(5, 2, [])],
+    .turnoutRight       : [(5, 1, [(1, .closed)]),(5, 2, [(1, .thrown)])],
+    .turnoutLeft        : [(5, 1, [(1, .closed)]),(5, 0, [(1, .thrown)])],
+    .cross              : [(7, 3, []),(5, 1, [])],
+    .diagonalCross      : [(0, 4, []),(5, 1, [])],
+    .yTurnout           : [(5, 0, [(1, .closed)]),(5, 2, [(1, .thrown)])],
+    .turnout3Way        : [(5, 0, [(1, .thrown), (2, .closed)]),(5, 1, [(1, .closed), (2, .closed)]),(5, 2, [(1, .thrown), (2, .thrown)])],
+    .leftCurvedTurnout  : [(5, 7, [(1, .thrown)]),(5, 0, [(1, .closed)])],
+    .rightCurvedTurnout : [(5, 3, [(1, .closed)]),(5, 2, [(1, .thrown)])],
+    .singleSlip         : [(0, 4, [(1, .closed)]),(5, 1, [(1, .closed)]),(4, 1, [(1, .thrown)])],
+    .doubleSlip         : [(0, 4, [(1, .closed), (2, .closed)]),
+                           (5, 1, [(1, .closed), (2, .closed)]),
+                           (4, 1, [(1, .thrown), (2, .thrown)]),
+                           (5, 0, [(1, .thrown), (2, .thrown)])],
+    .buffer             : [(5, -1, [])],
+    .block              : [(5, 1, [])],
+    .feedback           : [(5, 1, [])],
+    .link               : [(5, -1, [])],
     .platform           : [],
     .none               : [],
   ]

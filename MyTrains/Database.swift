@@ -57,7 +57,7 @@ class Database {
             ")",
             
             "INSERT INTO [\(TABLE.VERSION)] ([\(VERSION.VERSION_ID)], [\(VERSION.VERSION_NUMBER)]) VALUES " +
-            "(1, 1)",
+            "(1, 6)",
 
             "CREATE TABLE [\(TABLE.LAYOUT)] (" +
               "[\(LAYOUT.LAYOUT_ID)]          INT PRIMARY KEY," +
@@ -127,6 +127,7 @@ class Database {
               "[\(ROLLING_STOCK.NOTES)]                    TEXT NOT NULL," +
               "[\(ROLLING_STOCK.LOCOMOTIVE_TYPE)]          INT NOT NULL," +
               "[\(ROLLING_STOCK.MDECODER_INSTALLED)]       INT NOT NULL," +
+              "[\(ROLLING_STOCK.ADECODER_INSTALLED)]       INT NOT NULL," +
               "[\(ROLLING_STOCK.ADECODER_INSTALLED)]       INT NOT NULL" +
             ")",
 
@@ -158,9 +159,9 @@ class Database {
             "CREATE TABLE [\(TABLE.SPEED_PROFILE)] (" +
               "[\(SPEED_PROFILE.SPEED_PROFILE_ID)]  INT PRIMARY KEY," +
               "[\(SPEED_PROFILE.ROLLING_STOCK_ID)]  INT NOT NULL," +
-              "[\(SPEED_PROFILE.DIRECTION)]         INT NOT NULL," +
               "[\(SPEED_PROFILE.STEP_NUMBER)]       INT NOT NULL," +
-              "[\(SPEED_PROFILE.SPEED)]             REAL NOT NULL" +
+              "[\(SPEED_PROFILE.SPEED_FORWARD)]     REAL NOT NULL," +
+              "[\(SPEED_PROFILE.SPEED_REVERSE)]     REAL NOT NULL" +
             ")",
 
             "CREATE TABLE [\(TABLE.SWITCHBOARD_PANEL)] (" +
@@ -248,7 +249,18 @@ class Database {
               "[\(SENSOR.POSITION)]            REAL NOT NULL," +
               "[\(SENSOR.UNITS_POSITION)]      INT NOT NULL" +
             ")",
-          ]
+            
+            "CREATE TABLE [\(TABLE.TURNOUT_SWITCH)] (" +
+              "[\(TURNOUT_SWITCH.TURNOUT_SWITCH_ID)]   INT PRIMARY KEY," +
+              "[\(TURNOUT_SWITCH.LOCONET_DEVICE_ID)]   INT NOT NULL," +
+              "[\(TURNOUT_SWITCH.SWITCHBOARD_ITEM_ID)] INT NOT NULL," +
+              "[\(TURNOUT_SWITCH.TURNOUT_INDEX)]       INT NOT NULL," +
+              "[\(TURNOUT_SWITCH.CHANNEL_NUMBER)]      INT NOT NULL," +
+              "[\(TURNOUT_SWITCH.FEEDBACK_TYPE)]       INT NOT NULL," +
+              "[\(TURNOUT_SWITCH.SWITCH_TYPE)]         INT NOT NULL" +
+            ")",
+            
+         ]
           
           execute(commands: commands)
           
@@ -275,27 +287,33 @@ class Database {
             
             // MARK: Updates
             
-            if Version == 1 {
+            if Version == 5 {
      
               let commands = [
+             
+                /*
+                "DROP TABLE  IF EXISTS [\(TABLE.SPEED_PROFILE)]",
                 
-                "CREATE TABLE [\(TABLE.TURNOUT_SWITCH)] (" +
-                "[\(TURNOUT_SWITCH.TURNOUT_SWITCH_ID)]   INT PRIMARY KEY," +
-                "[\(TURNOUT_SWITCH.LOCONET_DEVICE_ID)]   INT NOT NULL," +
-                "[\(TURNOUT_SWITCH.SWITCHBOARD_ITEM_ID)] INT NOT NULL," +
-                "[\(TURNOUT_SWITCH.TURNOUT_INDEX)]       INT NOT NULL," +
-                "[\(TURNOUT_SWITCH.CHANNEL_NUMBER)]      INT NOT NULL," +
-                "[\(TURNOUT_SWITCH.FEEDBACK_TYPE)]       INT NOT NULL," +
-                "[\(TURNOUT_SWITCH.SWITCH_TYPE)]         INT NOT NULL" +
+                "CREATE TABLE [\(TABLE.SPEED_PROFILE)] (" +
+                  "[\(SPEED_PROFILE.SPEED_PROFILE_ID)]  INT PRIMARY KEY," +
+                  "[\(SPEED_PROFILE.ROLLING_STOCK_ID)]  INT NOT NULL," +
+                  "[\(SPEED_PROFILE.STEP_NUMBER)]       INT NOT NULL," +
+                  "[\(SPEED_PROFILE.SPEED_FORWARD)]     REAL NOT NULL," +
+                  "[\(SPEED_PROFILE.SPEED_REVERSE)]     REAL NOT NULL" +
                 ")",
+                */
                 
-                "UPDATE [\(TABLE.VERSION)] SET [\(VERSION.VERSION_NUMBER)] = 2 WHERE [\(VERSION.VERSION_ID)] = 1",
+                "ALTER TABLE [\(TABLE.ROLLING_STOCK)] ADD [\(ROLLING_STOCK.FLAGS)] INT",
+                
+                "UPDATE [\(TABLE.ROLLING_STOCK)] SET [\(ROLLING_STOCK.FLAGS)] = 0",
+                
+                "UPDATE [\(TABLE.VERSION)] SET [\(VERSION.VERSION_NUMBER)] = 6 WHERE [\(VERSION.VERSION_ID)] = 1",
                 
               ]
               
               execute(commands: commands)
               
-              Version = 2
+              Version = 6
 
             }
             

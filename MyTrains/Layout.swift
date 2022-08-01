@@ -188,7 +188,7 @@ public class Layout : EditorObject {
     
     for (_, item) in switchBoardItems {
       for index in 0...7 {
-        item.nodeLinks[index] = (switchBoardItem: nil, nodeId: -1)
+        item.nodeLinks[index] = (switchBoardItem: nil, nodeId: -1, routes: [])
       }
       item.isEliminated = item.isScenic
     }
@@ -327,6 +327,56 @@ public class Layout : EditorObject {
       
     }
     
+    for (_, block) in operationalBlocks {
+      
+      for connection in block.itemPartType.connections {
+        
+        let from = (connection.from + block.orientation.rawValue) % 8
+        
+        let to = (connection.to + block.orientation.rawValue) % 8
+        
+        if let fromNode = block.nodeLinks[from].switchBoardItem, let toNode = block.nodeLinks[to].switchBoardItem {
+          
+          var route : RoutePart = (block, from, toNode, block.nodeLinks[to].nodeId, connection.switchSettings)
+          
+          block.nodeLinks[from].routes.append(route)
+          
+          route = (block, to, fromNode, block.nodeLinks[from].nodeId, connection.switchSettings)
+          
+          block.nodeLinks[to].routes.append(route)
+
+        }
+        
+      }
+      /*
+      print("\(block.blockName)")
+      
+      var index = 0
+      for node in block.nodeLinks {
+        
+        if let item = node.switchBoardItem {
+          for route in node.routes {
+            print("  \(route.fromSwitchBoardItem.blockName) \(route.fromNodeId)  -> \(route.toSwitchBoardItem.blockName) \(route.toNodeId) \(route.switchSettings)")
+          }
+        }
+        index += 1
+      }
+      */
+      // Find Loops
+      
+    }
+    
+    findLoops()
+    
+    for loop in loops {
+      for routePart in loop {
+        print("\(routePart.fromSwitchBoardItem.blockName)", terminator: " ")
+      }
+      print("\n")
+    }
+    
+//    print(loops)
+    
     /*
     for (_, item) in switchBoardItems {
       
@@ -345,6 +395,113 @@ public class Layout : EditorObject {
        
     }
     */
+  }
+  
+  public typealias Route = [RoutePart]
+  
+  public var loops : [Route] = []
+  
+  public var loopNames : [String] = []
+  
+  private var routeSoFar : Route = []
+  
+  private var inLoop : Set<Int> = []
+  
+  func findLoopsFrom(startPos:Int, nodeId:Int, next:RoutePart) -> Bool {
+    
+    if startPos == next.toSwitchBoardItem.primaryKey && nodeId == next.toNodeId {
+      var newRoute : Route = []
+      for temp in routeSoFar {
+        newRoute.append(temp)
+      }
+      loops.append(newRoute)
+      return true
+    }
+    
+    var found = false
+    
+    for route in next.toSwitchBoardItem.nodeLinks[next.toNodeId].routes {
+      if !inLoop.contains(next.toSwitchBoardItem.primaryKey) {
+        inLoop.insert(next.toSwitchBoardItem.primaryKey)
+        routeSoFar.append(route)
+        found = findLoopsFrom(startPos: startPos, nodeId: nodeId, next: route)
+        routeSoFar.remove(at: routeSoFar.count-1)
+        inLoop.remove(next.toSwitchBoardItem.primaryKey)
+        if found {
+          break
+        }
+      }
+    }
+    
+    return found
+
+  }
+  
+  func findLoops() {
+    
+    loops.removeAll()
+    
+    routeSoFar.removeAll()
+    
+    var found = false
+    
+    for (_, startBlock ) in operationalBlocks {
+      for nodeLink in startBlock.nodeLinks {
+        for route in nodeLink.routes {
+          routeSoFar.append(route)
+          found = findLoopsFrom(startPos: startBlock.primaryKey, nodeId: route.fromNodeId, next: route)
+          routeSoFar.remove(at: routeSoFar.count-1)
+          if found {
+            break
+          }
+        }
+      }
+    }
+    
+    var numLoop = loops.count
+    
+    var index = 0
+    
+    while index < numLoop {
+      
+      var items : Set<Int> = []
+      for rp in loops[index] {
+        items.insert(rp.fromSwitchBoardItem.primaryKey)
+      }
+      
+      var index2 = index + 1
+      
+      while index2 < numLoop {
+        
+        var items2 : Set<Int> = []
+        for rp2 in loops[index2] {
+          items2.insert(rp2.fromSwitchBoardItem.primaryKey)
+        }
+        
+        if items == items2 {
+          loops.remove(at: index2)
+          numLoop -= 1
+        }
+        else {
+          index2 += 1
+        }
+
+      }
+      
+      index += 1
+      
+    }
+    
+    loopNames.removeAll()
+    
+    for loop in loops {
+      var name = ""
+      for item in loop {
+        name += "\(item.fromSwitchBoardItem.blockName) "
+      }
+      loopNames.append(name.trimmingCharacters(in: .whitespacesAndNewlines))
+    }
+    
   }
   
   public func links(item:SwitchBoardItem) -> [Int:SwitchBoardItem] {

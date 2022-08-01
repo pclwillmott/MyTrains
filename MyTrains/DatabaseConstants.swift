@@ -97,6 +97,7 @@ enum ROLLING_STOCK {
   static let LOCOMOTIVE_TYPE             = "LOCOMOTIVE_TYPE"
   static let MDECODER_INSTALLED          = "MDECODER_INSTALLED"
   static let ADECODER_INSTALLED          = "ADECODER_INSTALLED"
+  static let FLAGS                       = "FLAGS"
 }
 
 enum DECODER_FUNCTION {
@@ -127,9 +128,9 @@ enum DECODER_CV {
 enum SPEED_PROFILE {
   static let SPEED_PROFILE_ID            = "SPEED_PROFILE_ID"
   static let ROLLING_STOCK_ID            = "ROLLING_STOCK_ID"
-  static let DIRECTION                   = "DIRECTION"
   static let STEP_NUMBER                 = "STEP_NUMBER"
-  static let SPEED                       = "SPEED"
+  static let SPEED_FORWARD               = "SPEED_FORWARD"
+  static let SPEED_REVERSE               = "SPEED_REVERSE"
 }
 
 enum SWITCHBOARD_PANEL {

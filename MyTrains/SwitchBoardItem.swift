@@ -14,7 +14,9 @@ public enum SwitchBoardItemAction {
   case noAction
 }
 
-public typealias NodeLink = (switchBoardItem: SwitchBoardItem?, nodeId: Int)
+public typealias RoutePart = (fromSwitchBoardItem: SwitchBoardItem, fromNodeId: Int, toSwitchBoardItem: SwitchBoardItem, toNodeId: Int, switchSettings: [TurnoutSwitchSetting])
+
+public typealias NodeLink = (switchBoardItem: SwitchBoardItem?, nodeId: Int, routes: [RoutePart])
 
 public class SwitchBoardItem : EditorObject {
 
@@ -52,7 +54,7 @@ public class SwitchBoardItem : EditorObject {
 
   // MARK: Public Properties
   
-  public var nodeLinks = [NodeLink](repeating: (nil, -1), count: 8)
+  public var nodeLinks = [NodeLink](repeating: (nil, -1, []), count: 8)
   
   override public func displayString() -> String {
     return blockName
@@ -136,7 +138,6 @@ public class SwitchBoardItem : EditorObject {
     get {
       let scenics : Set<SwitchBoardItemPartType> = [
         .platform,
-        .buffer,
       ]
       return scenics.contains(itemPartType)
     }
@@ -161,6 +162,7 @@ public class SwitchBoardItem : EditorObject {
         .feedback,
         .longCurve,
         .straight,
+        .buffer,
       ]
       return track.contains(itemPartType)
     }

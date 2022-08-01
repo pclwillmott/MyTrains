@@ -148,6 +148,12 @@
                                                 <action selector="mnuEditLocomotivesAction:" target="Voe-Tx-rLC" id="Kz3-ye-3cb"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Speed Profiler" id="VKr-kh-cQQ">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="mnuSpeedProfiler:" target="Voe-Tx-rLC" id="8XF-o4-caX"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="Wagons" id="2lc-br-ETR">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
