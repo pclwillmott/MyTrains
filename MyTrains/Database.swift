@@ -57,7 +57,7 @@ class Database {
             ")",
             
             "INSERT INTO [\(TABLE.VERSION)] ([\(VERSION.VERSION_ID)], [\(VERSION.VERSION_NUMBER)]) VALUES " +
-            "(1, 6)",
+            "(1, 7)",
 
             "CREATE TABLE [\(TABLE.LAYOUT)] (" +
               "[\(LAYOUT.LAYOUT_ID)]          INT PRIMARY KEY," +
@@ -128,7 +128,8 @@ class Database {
               "[\(ROLLING_STOCK.LOCOMOTIVE_TYPE)]          INT NOT NULL," +
               "[\(ROLLING_STOCK.MDECODER_INSTALLED)]       INT NOT NULL," +
               "[\(ROLLING_STOCK.ADECODER_INSTALLED)]       INT NOT NULL," +
-              "[\(ROLLING_STOCK.ADECODER_INSTALLED)]       INT NOT NULL" +
+              "[\(ROLLING_STOCK.ADECODER_INSTALLED)]       INT NOT NULL," +
+              "[\(ROLLING_STOCK.BEST_FIT_METHOD)]          INT NOT NULL" +
             ")",
 
             "CREATE TABLE [\(TABLE.DECODER_FUNCTION)] (" +
@@ -287,9 +288,9 @@ class Database {
             
             // MARK: Updates
             
-            if Version == 5 {
+            if Version == 7 {
      
-              let commands = [
+          //    let commands = [
              
                 /*
                 "DROP TABLE  IF EXISTS [\(TABLE.SPEED_PROFILE)]",
@@ -303,17 +304,19 @@ class Database {
                 ")",
                 */
                 
-                "ALTER TABLE [\(TABLE.ROLLING_STOCK)] ADD [\(ROLLING_STOCK.FLAGS)] INT",
+          //      "DELETE FROM [\(TABLE.SPEED_PROFILE)] WHERE [\(SPEED_PROFILE.STEP_NUMBER)] = 127",
                 
-                "UPDATE [\(TABLE.ROLLING_STOCK)] SET [\(ROLLING_STOCK.FLAGS)] = 0",
+         //       "ALTER TABLE [\(TABLE.ROLLING_STOCK)] ADD [\(ROLLING_STOCK.BEST_FIT_METHOD)] INT",
                 
-                "UPDATE [\(TABLE.VERSION)] SET [\(VERSION.VERSION_NUMBER)] = 6 WHERE [\(VERSION.VERSION_ID)] = 1",
+         //       "UPDATE [\(TABLE.ROLLING_STOCK)] SET [\(ROLLING_STOCK.BEST_FIT_METHOD)] = 0",
                 
-              ]
+          //      "UPDATE [\(TABLE.VERSION)] SET [\(VERSION.VERSION_NUMBER)] = 7 WHERE [\(VERSION.VERSION_ID)] = 1",
+                
+         //     ]
               
-              execute(commands: commands)
+          //    execute(commands: commands)
               
-              Version = 6
+              Version = 7
 
             }
             

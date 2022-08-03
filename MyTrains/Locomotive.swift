@@ -317,6 +317,95 @@ public class Locomotive : RollingStock, InterfaceDelegate {
   
   // MARK: Public Methods
   
+  public func doBestFit() {
+    
+    for profile in self.speedProfile {
+      profile.bestFitForward = 0.0
+      profile.bestFitReverse = 0.0
+    }
+    
+    switch newBestFitMethod {
+    case .straightLine:
+      
+      var fwdSumX : Int = 0
+      var fwdSumY : Double = 0.0
+      var fwdNum : Int = 0
+      var bwdSumX : Int = 0
+      var bwdSumY : Double = 0.0
+      var bwdNum : Int = 0
+
+      for profile in speedProfile {
+        let x = profile.stepNumber
+        if profile.newSpeedForward != 0.0 {
+          fwdNum += 1
+          fwdSumX += x
+          fwdSumY += profile.newSpeedForward
+        }
+        if profile.newSpeedReverse != 0.0 {
+          bwdNum += 1
+          bwdSumX += x
+          bwdSumY += profile.newSpeedForward
+        }
+      }
+      
+      if fwdNum > 0 {
+
+        let meanX = Double(fwdSumX) / Double(fwdNum)
+        let meanY = Double(fwdSumY) / Double(fwdNum)
+        
+        var A : Double = 0.0
+        var B : Double = 0.0
+
+        for profile in speedProfile {
+          if profile.newSpeedForward != 0.0 {
+            let x = profile.stepNumber
+            let temp = Double(x) - meanX
+            A += (temp * (profile.newSpeedForward - meanY))
+            B += (temp * temp)
+          }
+        }
+        
+        let gradient = A / B
+        
+        let intercept = meanY - gradient * meanX
+        
+        for x in 1...126 {
+          speedProfile[x - 1].bestFitForward = gradient * Double(x) + intercept
+        }
+        
+      }
+
+      if bwdNum > 0 {
+
+        let meanX = Double(bwdSumX) / Double(bwdNum)
+        let meanY = Double(bwdSumY) / Double(bwdNum)
+        
+        var A : Double = 0.0
+        var B : Double = 0.0
+
+        for profile in speedProfile {
+          if profile.newSpeedReverse != 0.0 {
+            let x = profile.stepNumber
+            let temp = Double(x) - meanX
+            A += (temp * (profile.newSpeedReverse - meanY))
+            B += (temp * temp)
+          }
+        }
+        
+        let gradient = A / B
+        
+        let intercept = meanY - gradient * meanX
+        
+        for x in 1...126 {
+          speedProfile[x].bestFitReverse = gradient * Double(x) + intercept
+        }
+        
+      }
+
+    }
+    
+  }
+  
   override public func save() {
     rollingStockType = .locomotive
     super.save()

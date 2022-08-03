@@ -66,6 +66,10 @@ public class SpeedProfile : EditorObject {
     }
   }
 
+  public var bestFitForward : Double = 0.0
+  
+  public var bestFitReverse : Double = 0.0
+
   // MARK: Database Methods
   
   private func decode(sqliteDataReader:SqliteDataReader?) {

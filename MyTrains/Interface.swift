@@ -56,9 +56,9 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
 
   internal var _locoSlots : [Int:LocoSlotData] = [:]
   
-  private var sensorLookup : [Int:SwitchBoardItem] = [:]
-  
   // MARK: Public Properties
+  
+  public var sensorLookup : [Int:SwitchBoardItem] = [:]
   
   public var opSwBankA : NetworkMessage?
   
@@ -207,8 +207,6 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
         block.isOccupied = message.sensorState
         layout.needsDisplay()
       }
-      print("sensRepGenIn: \(message.sensorAddress) \(message.sensorState)")
-      print(message.messageHex)
     default:
       break
     }
@@ -336,7 +334,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
         for turnoutSwitch in device.turnoutSwitches {
           
           if turnoutSwitch.switchBoardItemId != -1 {
-            layout.operationalTurnouts[turnoutSwitch.switchBoardItemId] = turnoutSwitch
+            layout.operationalTurnouts[turnoutSwitch.dictionaryKey] = turnoutSwitch
           }
           
         }

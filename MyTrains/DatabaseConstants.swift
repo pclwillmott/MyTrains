@@ -98,6 +98,7 @@ enum ROLLING_STOCK {
   static let MDECODER_INSTALLED          = "MDECODER_INSTALLED"
   static let ADECODER_INSTALLED          = "ADECODER_INSTALLED"
   static let FLAGS                       = "FLAGS"
+  static let BEST_FIT_METHOD             = "BEST_FIT_METHOD"
 }
 
 enum DECODER_FUNCTION {

@@ -36,7 +36,7 @@ public class RollingStock : EditorObject, DecoderFunctionDelegate {
       let cv = DecoderCV(decoderType: .mobile, cvNumber: cvNumber)
       _cvs[cv.cvNumber] = cv
     }
-    for stepNumber in 1...127 {
+    for stepNumber in 0...126 {
       let sp = SpeedProfile(stepNumber: stepNumber)
       speedProfile.append(sp)
     }
@@ -242,6 +242,18 @@ public class RollingStock : EditorObject, DecoderFunctionDelegate {
     }
   }
 
+  public var bestFitMethod : BestFitMethod = .straightLine {
+    didSet {
+      modified = true
+    }
+  }
+  
+  public var newBestFitMethod : BestFitMethod = .straightLine {
+    didSet {
+      modified = true
+    }
+  }
+  
   // MARK: Public Methods
   
   override public func displayString() -> String {
@@ -392,13 +404,21 @@ public class RollingStock : EditorObject, DecoderFunctionDelegate {
         flags = reader.getInt64(index: 28)!
       }
 
+      if !reader.isDBNull(index: 29) {
+        bestFitMethod = BestFitMethod(rawValue: reader.getInt(index: 29)!) ?? .straightLine
+      }
+
     }
+    
+    newBestFitMethod = bestFitMethod
     
     modified = false
     
   }
 
   public func save() {
+    
+    bestFitMethod = newBestFitMethod
     
     if modified {
       
@@ -434,7 +454,8 @@ public class RollingStock : EditorObject, DecoderFunctionDelegate {
         "[\(ROLLING_STOCK.LOCOMOTIVE_TYPE)], " +
         "[\(ROLLING_STOCK.MDECODER_INSTALLED)], " +
         "[\(ROLLING_STOCK.ADECODER_INSTALLED)], " +
-        "[\(ROLLING_STOCK.FLAGS)]" +
+        "[\(ROLLING_STOCK.FLAGS)], " +
+        "[\(ROLLING_STOCK.BEST_FIT_METHOD)]" +
         ") VALUES (" +
         "@\(ROLLING_STOCK.ROLLING_STOCK_ID), " +
         "@\(ROLLING_STOCK.ROLLING_STOCK_NAME), " +
@@ -464,7 +485,8 @@ public class RollingStock : EditorObject, DecoderFunctionDelegate {
         "@\(ROLLING_STOCK.LOCOMOTIVE_TYPE), " +
         "@\(ROLLING_STOCK.MDECODER_INSTALLED), " +
         "@\(ROLLING_STOCK.ADECODER_INSTALLED), " +
-        "@\(ROLLING_STOCK.FLAGS)" +
+        "@\(ROLLING_STOCK.FLAGS), " +
+        "@\(ROLLING_STOCK.BEST_FIT_METHOD)" +
         ")"
         primaryKey = Database.nextCode(tableName: TABLE.ROLLING_STOCK, primaryKey: ROLLING_STOCK.ROLLING_STOCK_ID)!
       }
@@ -497,7 +519,8 @@ public class RollingStock : EditorObject, DecoderFunctionDelegate {
         "[\(ROLLING_STOCK.LOCOMOTIVE_TYPE)] = @\(ROLLING_STOCK.LOCOMOTIVE_TYPE), " +
         "[\(ROLLING_STOCK.MDECODER_INSTALLED)] = @\(ROLLING_STOCK.MDECODER_INSTALLED), " +
         "[\(ROLLING_STOCK.ADECODER_INSTALLED)] = @\(ROLLING_STOCK.ADECODER_INSTALLED), " +
-        "[\(ROLLING_STOCK.FLAGS)] = @\(ROLLING_STOCK.FLAGS) " +
+        "[\(ROLLING_STOCK.FLAGS)] = @\(ROLLING_STOCK.FLAGS), " +
+        "[\(ROLLING_STOCK.BEST_FIT_METHOD)] = @\(ROLLING_STOCK.BEST_FIT_METHOD) " +
         "WHERE [\(ROLLING_STOCK.ROLLING_STOCK_ID)] = @\(ROLLING_STOCK.ROLLING_STOCK_ID)"
       }
 
@@ -542,6 +565,7 @@ public class RollingStock : EditorObject, DecoderFunctionDelegate {
       cmd.parameters.addWithValue(key: "@\(ROLLING_STOCK.MDECODER_INSTALLED)", value: mDecoderInstalled)
       cmd.parameters.addWithValue(key: "@\(ROLLING_STOCK.ADECODER_INSTALLED)", value: aDecoderInstalled)
       cmd.parameters.addWithValue(key: "@\(ROLLING_STOCK.FLAGS)", value: flags)
+      cmd.parameters.addWithValue(key: "@\(ROLLING_STOCK.BEST_FIT_METHOD)", value: bestFitMethod.rawValue)
 
       _ = cmd.executeNonQuery()
       
@@ -603,7 +627,8 @@ public class RollingStock : EditorObject, DecoderFunctionDelegate {
         "[\(ROLLING_STOCK.LOCOMOTIVE_TYPE)], " +
         "[\(ROLLING_STOCK.MDECODER_INSTALLED)], " +
         "[\(ROLLING_STOCK.ADECODER_INSTALLED)], " +
-        "[\(ROLLING_STOCK.FLAGS)]"
+        "[\(ROLLING_STOCK.FLAGS)], " +
+        "[\(ROLLING_STOCK.BEST_FIT_METHOD)]"
     }
   }
 

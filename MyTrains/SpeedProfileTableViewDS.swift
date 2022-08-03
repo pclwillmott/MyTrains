@@ -14,7 +14,9 @@ public class SpeedProfileTableViewDS : NSObject, NSTableViewDataSource, NSTableV
   
   public var speedProfile : [SpeedProfile]?
   
-  public var unitSpeed : UnitSpeed = .centimetersPerSecond
+  public var unitSpeed : UnitSpeed = .centimetersPerSecond 
+  
+  public var resultsType : SpeedProfileResultsType = .actual
   
   // MARK: NSTableViewDataSource Delegate Methods
   
@@ -53,11 +55,13 @@ public class SpeedProfileTableViewDS : NSObject, NSTableViewDataSource, NSTableV
       text = "\(item.stepNumber)"
       
     case ColumnIdentifiers.Forward:
-        text = "\(item.newSpeedForward)"
+      let value = resultsType == .actual ? item.newSpeedForward : item.bestFitForward
+      text = String(format: "%.1f", value * unitSpeed.fromCMS)
       
     case ColumnIdentifiers.Reverse:
-    text = "\(item.newSpeedReverse)"
-      
+      let value = resultsType == .actual ? item.newSpeedReverse : item.bestFitReverse
+      text = String(format: "%.1f", value * unitSpeed.fromCMS)
+
     default:
       text = ""
     }

@@ -22,6 +22,12 @@ public class TurnoutSwitch : EditorObject {
   
   // MARK: Public Properties
   
+  public var dictionaryKey : Int {
+    get {
+      return TurnoutSwitch.dictionaryKey(switchBoardItemId: switchBoardItemId, turnoutIndex: turnoutIndex)
+    }
+  }
+  
   public var switchBoardItemId : Int = -1 {
     didSet {
       modified = true
@@ -97,28 +103,24 @@ public class TurnoutSwitch : EditorObject {
   
   // MARK: Public Methods
   
-  public func setClosed() {
-    requiredState = .closed
+  public func setState(state:TurnoutSwitchState) {
+    requiredState = state
     if let interface = locoNetDevice?.network?.interface {
-      interface.setSwWithAck(switchNumber: switchAddress, state: .closed)
-      state = requiredState
+      let temp : OptionSwitchState = requiredState == .closed ? .closed : .thrown
+      interface.setSwWithAck(switchNumber: switchAddress, state: temp)
+      self.state = requiredState
     }
+  }
+  public func setClosed() {
+    setState(state: .closed)
   }
   
   public func setThrown() {
-    requiredState = .thrown
-    if let interface = locoNetDevice?.network?.interface {
-      interface.setSwWithAck(switchNumber: switchAddress, state: .thrown)
-      state = requiredState
-    }
+    setState(state: .thrown)
   }
 
   public func toggle() {
-    requiredState = state == .closed ? .thrown : .closed
-    if let interface = locoNetDevice?.network?.interface {
-      interface.setSwWithAck(switchNumber: switchAddress, state: OptionSwitchState(rawValue: requiredState.rawValue) ?? .closed)
-      state = requiredState
-    }
+    setState(state: state == .closed ? .thrown : .closed)
   }
 
   // MARK: Database Methods
@@ -300,6 +302,10 @@ public static var columnNames : String {
   public static func delete(primaryKey: Int) {
     let sql = "DELETE FROM [\(TABLE.TURNOUT_SWITCH)] WHERE [\(TURNOUT_SWITCH.TURNOUT_SWITCH_ID)] = \(primaryKey)"
     Database.execute(commands: [sql])
+  }
+  
+  public static func dictionaryKey(switchBoardItemId: Int, turnoutIndex: Int) -> Int {
+    return (switchBoardItemId << 2) | ((turnoutIndex - 1) & 0b11)
   }
 
 }

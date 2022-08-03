@@ -22,6 +22,18 @@ public enum UnitLength : Int {
     }
   }
   
+  public var toCM : Double {
+    get {
+      return UnitLength.toCM(units: self)
+    }
+  }
+  
+  public var fromCM : Double {
+    get {
+      return UnitLength.fromCM(units: self)
+    }
+  }
+  
   private static let titles = [
     "mm",
     "cm",
@@ -44,6 +56,31 @@ public enum UnitLength : Int {
   
   public static func selected(comboBox:NSComboBox) -> UnitLength {
     return UnitLength(rawValue: comboBox.indexOfSelectedItem) ?? defaultValue
+  }
+  
+  // The factor to be applied to a length in units to get a length in cm.
+  // This factor does not take into account the layout scale.
+  public static func toCM(units: UnitLength) -> Double {
+    
+    switch units {
+    case .millimeters:
+      return 1.0 / 10.0
+    case .centimeters:
+      return 1.0
+    case .feet:
+      return 12.0 * 2.54
+    case .meters:
+      return 100.0
+    case .inches:
+      return 2.54
+    }
+    
+  }
+  
+  // The factor to be applied to a length in cm/s to get a length in units.
+  // This factor does not take into account the layout scale.
+  public static func fromCM(units: UnitLength) -> Double {
+    return 1.0 / toCM(units: units)
   }
 
 }

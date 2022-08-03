@@ -11,6 +11,8 @@ import Foundation
   @objc optional func needsDisplay()
 }
 
+public typealias Route = [RoutePart]
+
 public class Layout : EditorObject {
   
   // MARK: Constructors
@@ -142,6 +144,26 @@ public class Layout : EditorObject {
   public var operationalTurnouts : [Int:TurnoutSwitch] = [:]
   
   // MARK: Public Methods
+  
+  public func setRoute(route:Route) {
+    
+    for routePart in route {
+      
+      for setting in routePart.switchSettings {
+        
+        print("\(routePart.fromSwitchBoardItem.blockName) \(routePart.fromNodeId)")
+        
+        let id = TurnoutSwitch.dictionaryKey(switchBoardItemId: routePart.fromSwitchBoardItem.primaryKey, turnoutIndex: setting.switchNumber)
+        
+        if let turnoutSwitch = operationalTurnouts[id] {
+          print("here")
+          turnoutSwitch.setState(state: setting.switchState)
+        }
+        
+      }
+    }
+    
+  }
   
   public func nextItemName(switchBoardItem:SwitchBoardItem) -> String {
 
@@ -329,6 +351,8 @@ public class Layout : EditorObject {
     
     for (_, block) in operationalBlocks {
       
+      var index : Int = 0
+      
       for connection in block.itemPartType.connections {
         
         let from = (connection.from + block.orientation.rawValue) % 8
@@ -337,15 +361,17 @@ public class Layout : EditorObject {
         
         if let fromNode = block.nodeLinks[from].switchBoardItem, let toNode = block.nodeLinks[to].switchBoardItem {
           
-          var route : RoutePart = (block, from, toNode, block.nodeLinks[to].nodeId, connection.switchSettings)
+          var route : RoutePart = (block, from, toNode, block.nodeLinks[to].nodeId, connection.switchSettings, distance: block.getDimension(index: index))
           
           block.nodeLinks[from].routes.append(route)
           
-          route = (block, to, fromNode, block.nodeLinks[from].nodeId, connection.switchSettings)
+          route = (block, to, fromNode, block.nodeLinks[from].nodeId, connection.switchSettings, distance: block.getDimension(index: index))
           
           block.nodeLinks[to].routes.append(route)
 
         }
+        
+        index += 1
         
       }
       /*
@@ -367,14 +393,14 @@ public class Layout : EditorObject {
     }
     
     findLoops()
-    
+    /*
     for loop in loops {
       for routePart in loop {
         print("\(routePart.fromSwitchBoardItem.blockName)", terminator: " ")
       }
       print("\n")
     }
-    
+    */
 //    print(loops)
     
     /*
@@ -397,11 +423,11 @@ public class Layout : EditorObject {
     */
   }
   
-  public typealias Route = [RoutePart]
-  
   public var loops : [Route] = []
   
   public var loopNames : [String] = []
+  
+  public var loopLengths : [Double] = []
   
   private var routeSoFar : Route = []
   
@@ -493,13 +519,17 @@ public class Layout : EditorObject {
     }
     
     loopNames.removeAll()
+    loopLengths.removeAll()
     
     for loop in loops {
       var name = ""
+      var length : Double = 0.0
       for item in loop {
         name += "\(item.fromSwitchBoardItem.blockName) "
+        length += item.distance
       }
       loopNames.append(name.trimmingCharacters(in: .whitespacesAndNewlines))
+      loopLengths.append(length)
     }
     
   }

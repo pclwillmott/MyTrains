@@ -21,6 +21,30 @@ public enum UnitSpeed : Int {
     }
   }
   
+  public var toCMS : Double {
+    get {
+      var temp = UnitSpeed.toCMS(units: self)
+      if self == .kilometersPerHour || self == .milesPerHour {
+        if let layout = networkController.layout {
+          temp /= layout.scale
+        }
+      }
+      return temp
+    }
+  }
+  
+  public var fromCMS : Double {
+    get {
+      var temp = UnitSpeed.fromCMS(units: self)
+      if self == .kilometersPerHour || self == .milesPerHour {
+        if let layout = networkController.layout {
+          temp *= layout.scale
+        }
+      }
+      return temp
+    }
+  }
+  
   private static let titles = [
     "km/h",
     "mph",

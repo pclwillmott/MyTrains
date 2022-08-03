@@ -65,15 +65,15 @@ class SwitchBoardOperationsView : SwitchBoardView {
       switch event.modifierFlags.intersection(.deviceIndependentFlagsMask) {
         
       case [.control]:
-        if let item = getItem(event: event), let turnoutSwitch = layout.operationalTurnouts[item.primaryKey] {
+        if let item = getItem(event: event), let turnoutSwitch = layout.operationalTurnouts[TurnoutSwitch.dictionaryKey(switchBoardItemId: item.primaryKey, turnoutIndex: 1)] {
           turnoutSwitch.setThrown()
         }
       case [.option]:
-        if let item = getItem(event: event), let turnoutSwitch = layout.operationalTurnouts[item.primaryKey] {
+        if let item = getItem(event: event), let turnoutSwitch = layout.operationalTurnouts[TurnoutSwitch.dictionaryKey(switchBoardItemId: item.primaryKey, turnoutIndex: 1)] {
           turnoutSwitch.toggle()
         }
       case [.shift]:
-        if let item = getItem(event: event), let turnoutSwitch = layout.operationalTurnouts[item.primaryKey] {
+        if let item = getItem(event: event), let turnoutSwitch = layout.operationalTurnouts[TurnoutSwitch.dictionaryKey(switchBoardItemId: item.primaryKey, turnoutIndex: 1)] {
           turnoutSwitch.setClosed()
         }
       default:
