@@ -7,13 +7,6 @@
 
 import Foundation
 
-public enum SlotState {
-  case free
-  case common
-  case idle
-  case inUse
-}
-
 public enum ConsistState {
   case NotLinked
   case SubMember

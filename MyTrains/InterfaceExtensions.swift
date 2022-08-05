@@ -269,6 +269,24 @@ extension Interface {
 
   }
   
+  public func setLocoSlotStat1P1(slotNumber:Int, stat1:UInt8) {
+
+    let message = NetworkMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_SLOT_STAT1.rawValue, UInt8(slotNumber), stat1], appendCheckSum: true)
+
+    addToQueue(message: message, delay: MessageTiming.STANDARD)
+
+  }
+  
+  public func setLocoSlotStat1P2(slotPage:Int, slotNumber:Int, stat1:UInt8) {
+
+    let page : UInt8 = 0b00111000 | UInt8(slotPage & 0b00000111)
+    
+    let message = NetworkMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_D4_GROUP.rawValue, page, UInt8(slotNumber & 0x7f), 0x60, stat1], appendCheckSum: true)
+
+    addToQueue(message: message, delay: MessageTiming.STANDARD)
+
+  }
+  
   public func setSwWithAck(switchNumber: Int, state:OptionSwitchState) {
     
     let sn = switchNumber - 1
@@ -301,7 +319,7 @@ extension Interface {
     addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [], retryCount: 0, timeoutCode: .none)
 
   }
-
+  
   public func setLocoSlotDataP2(slotData: [UInt8], timeoutCode: TimeoutCode) {
     
     var data = [UInt8](repeating: 0, count: 20)

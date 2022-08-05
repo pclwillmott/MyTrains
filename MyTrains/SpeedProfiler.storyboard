@@ -222,7 +222,7 @@
                                     </subviews>
                                 </clipView>
                                 <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="NWY-OI-DCQ">
-                                    <rect key="frame" x="1" y="382" width="294" height="16"/>
+                                    <rect key="frame" x="1" y="420" width="294" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="lxG-5X-dc9">
@@ -400,7 +400,7 @@
                                 </textFieldCell>
                             </textField>
                             <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Oeq-bE-dLP">
-                                <rect key="frame" x="556" y="531" width="141" height="25"/>
+                                <rect key="frame" x="556" y="531" width="170" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="UIg-kX-vKS">
                                     <font key="font" metaFont="system"/>

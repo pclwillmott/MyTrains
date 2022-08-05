@@ -465,13 +465,21 @@ public class Layout : EditorObject {
   
   func findLoops() {
     
+    var blocks : [SwitchBoardItem] = []
+    
+    for (_, block) in operationalBlocks {
+      blocks.append(block)
+    }
+    
+    blocks.sort {$0.sortString() < $1.sortString()}
+    
     loops.removeAll()
     
     routeSoFar.removeAll()
     
     var found = false
     
-    for (_, startBlock ) in operationalBlocks {
+    for startBlock in blocks {
       for nodeLink in startBlock.nodeLinks {
         for route in nodeLink.routes {
           routeSoFar.append(route)

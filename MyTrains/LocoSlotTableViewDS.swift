@@ -57,20 +57,20 @@ public class SlotTableViewDS : NSObject, NSTableViewDataSource, NSTableViewDeleg
     case ColumnIdentifiers.SlotNumberColumn:
       text = "\(item.displaySlotNumber)"
     case ColumnIdentifiers.StatusColumn:
-      text = "\(item.slotState)"
+      text = "\(item.slotState.title)"
     case ColumnIdentifiers.DecoderColumn:
       text = "\(item.mobileDecoderType)"
     case ColumnIdentifiers.AddressColumn:
       text = "\(item.address)"
     case ColumnIdentifiers.SpeedColumn:
       if item.consistState == .NotLinked || item.consistState == .TopMember {
-        text = "\(item.speed)"
+        text = "\(item.speedForDisplay)"
       }
       else {
         text = "-"
       }
     case ColumnIdentifiers.DirectionColumn:
-      text = "\(item.direction)"
+      text = "\(item.direction.title)"
     case ColumnIdentifiers.ThrottleColumn:
       text = "\(item.throttleID)"
     case ColumnIdentifiers.LocomotiveColumn:

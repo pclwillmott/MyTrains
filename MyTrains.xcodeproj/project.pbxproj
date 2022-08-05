@@ -128,6 +128,8 @@
 		DA8E6E932893FEB800093468 /* AddressTableViewDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8E6E922893FEB800093468 /* AddressTableViewDS.swift */; };
 		DA8FDB2A279C2B3600E15024 /* LocoSlotData.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8FDB29279C2B3600E15024 /* LocoSlotData.swift */; };
 		DA8FDB2D279C4AC000E15024 /* LocoSlotTableViewDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8FDB2C279C4AC000E15024 /* LocoSlotTableViewDS.swift */; };
+		DA9325A6289C02C300CC317F /* LocomotiveDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9325A5289C02C300CC317F /* LocomotiveDirection.swift */; };
+		DA9325A8289C04CE00CC317F /* SlotState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9325A7289C04CE00CC317F /* SlotState.swift */; };
 		DA95D6BD280833FE00D9F1B6 /* GroupSetupVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA95D6BC280833ED00D9F1B6 /* GroupSetupVC.swift */; };
 		DA95D6BF28083E9800D9F1B6 /* GroupSetup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA95D6BE28083E9800D9F1B6 /* GroupSetup.storyboard */; };
 		DA95D6C12808412200D9F1B6 /* DuplexData.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA95D6C02808412200D9F1B6 /* DuplexData.swift */; };
@@ -294,6 +296,8 @@
 		DA8E6E922893FEB800093468 /* AddressTableViewDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressTableViewDS.swift; sourceTree = "<group>"; };
 		DA8FDB29279C2B3600E15024 /* LocoSlotData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoSlotData.swift; sourceTree = "<group>"; };
 		DA8FDB2C279C4AC000E15024 /* LocoSlotTableViewDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoSlotTableViewDS.swift; sourceTree = "<group>"; };
+		DA9325A5289C02C300CC317F /* LocomotiveDirection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocomotiveDirection.swift; sourceTree = "<group>"; };
+		DA9325A7289C04CE00CC317F /* SlotState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlotState.swift; sourceTree = "<group>"; };
 		DA95D6BC280833ED00D9F1B6 /* GroupSetupVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupSetupVC.swift; sourceTree = "<group>"; };
 		DA95D6BE28083E9800D9F1B6 /* GroupSetup.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = GroupSetup.storyboard; sourceTree = "<group>"; };
 		DA95D6C02808412200D9F1B6 /* DuplexData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuplexData.swift; sourceTree = "<group>"; };
@@ -440,6 +444,7 @@
 				DA0DA2792779E96B00E4F23C /* Layout.swift */,
 				DADBBFE9285DF36700426CD5 /* LayoutSwitchBoardExtensions.swift */,
 				DA7B4726273803BA00BCD587 /* Locomotive.swift */,
+				DA9325A5289C02C300CC317F /* LocomotiveDirection.swift */,
 				DAB4FF5D2854F8CF00D74920 /* LocomotiveType.swift */,
 				DA28E5882824943200E1604C /* LocoNetDevice.swift */,
 				DAE9DBB628258E12004BC75D /* LocoNetProducts.swift */,
@@ -448,6 +453,7 @@
 				DA5E1740272ED2DF00F9341F /* LoconetSwitchRequestMessage.swift */,
 				DA8FDB29279C2B3600E15024 /* LocoSlotData.swift */,
 				DA5E1742272EDA5B00F9341F /* LocoSlotDataP1.swift */,
+				DA9325A7289C04CE00CC317F /* SlotState.swift */,
 				DA35984F278219A400B81AD3 /* LocoSlotDataP2.swift */,
 				DA8FDB2C279C4AC000E15024 /* LocoSlotTableViewDS.swift */,
 				DAA83DF0272C37680075CBCD /* Main.storyboard */,
@@ -665,6 +671,7 @@
 				DAFD69832840FCF50028E7D3 /* InterfaceCommandStationExtensions.swift in Sources */,
 				DA77795527AEEBBC007EEBE9 /* OpSwTCV.swift in Sources */,
 				DA467B9F281CBAF900AB9650 /* NSRectExtensions.swift in Sources */,
+				DA9325A6289C02C300CC317F /* LocomotiveDirection.swift in Sources */,
 				DA8B5D1D282FE31600D39F07 /* InterfaceDelegate.swift in Sources */,
 				DA95D6C12808412200D9F1B6 /* DuplexData.swift in Sources */,
 				DA467BB3281D60E400AB9650 /* SwitchBoardShapeButton.swift in Sources */,
@@ -676,6 +683,7 @@
 				DA6A0ADF2753B5CF00913F2B /* UserDefaults.swift in Sources */,
 				DA6A0AE12753D50A00913F2B /* GlobalVariables.swift in Sources */,
 				DAB07498276EB6C3003278BE /* Sqlite.swift in Sources */,
+				DA9325A8289C04CE00CC317F /* SlotState.swift in Sources */,
 				DA8837822770B77C000B9A41 /* EditWagonsVC.swift in Sources */,
 				DA8B5D19282FDE1800D39F07 /* ProgrammerMode.swift in Sources */,
 				DA6E28E3285F8F1A00772641 /* TrackElectrificationType.swift in Sources */,

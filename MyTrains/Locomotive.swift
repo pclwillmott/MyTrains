@@ -49,11 +49,6 @@ public enum SpeedSteps : Int {
   
 }
 
-public enum LocomotiveDirection {
-  case forward
-  case reverse
-}
-
 @objc public protocol LocomotiveDelegate {
   @objc optional func stateUpdated(locomotive: Locomotive)
   @objc optional func stealZap(locomotive: Locomotive)
@@ -110,12 +105,17 @@ public class Locomotive : RollingStock, InterfaceDelegate {
     case waitingToActivate
     case waitingForOwnershipConfirmation
     case active
+    case release
   }
   
   // MARK: Private Properties
   
   
   private var _isInUse : Bool = false
+  
+  private var stat1 : UInt8 = 0
+  
+  private var proto : Int = 1
   
   private var _direction : LocomotiveDirection = .forward
   
@@ -130,7 +130,7 @@ public class Locomotive : RollingStock, InterfaceDelegate {
       stopTimer()
     }
     didSet {
-      if initState == .active {
+      if initState == .active || initState == .release {
         startTimer(timeInterval: 200.0 / 1000.0)
       }
     }
@@ -176,9 +176,7 @@ public class Locomotive : RollingStock, InterfaceDelegate {
             interface.getLocoSlot(forAddress: mDecoderAddress)
           }
           else {
-            stopTimer()
-            interface.removeObserver(id: interfaceDelegateId)
-            initState = .inactive
+            initState = .release
           }
         }
       }
@@ -225,10 +223,18 @@ public class Locomotive : RollingStock, InterfaceDelegate {
   public var locomotiveState : LocomotiveState {
     get {
       var result : LocomotiveState
+
+      if initState == .release {
+        speed = (speed:0, direction: speed.direction)
+        result.functions = 0
+      }
+      else {
+        result.functions = functionSettings
+      }
       
       result.speed = speed.speed == 0 ? 0 : speed.speed + 1
       result.direction = speed.direction
-      result.functions = functionSettings
+
       return result
     }
   }
@@ -262,6 +268,18 @@ public class Locomotive : RollingStock, InterfaceDelegate {
       
       for delegate in delegates {
         delegate.value.stateUpdated?(locomotive: self)
+      }
+      
+      if initState == .release {
+        if interfaceDelegateId != -1 {
+          interface.removeObserver(id:interfaceDelegateId )
+          interfaceDelegateId = -1
+        }
+        stopTimer()
+        stat1 = (stat1 & 0b01001111) | 0b00010000
+        proto == 1 ? interface.setLocoSlotStat1P1(slotNumber: slotNumber, stat1: stat1) : interface.setLocoSlotStat1P2(slotPage: slotPage, slotNumber: slotNumber, stat1: stat1)
+        initState = .inactive
+        return
       }
       
       if isInertial {
@@ -307,8 +325,10 @@ public class Locomotive : RollingStock, InterfaceDelegate {
       var index = slotData.count - 2
       slotData[index+0] = UInt8(throttleID & 0x7f)
       slotData[index+1] = UInt8(throttleID >> 8)
-      index = message.messageType == .locoSlotDataP1 ? 1 : 2
+      proto = message.messageType == .locoSlotDataP1 ? 1 : 2
+      index = proto
       slotData[index] = (slotData[index] & speedSteps.protectMask()) | speedSteps.setMask()
+      stat1 = slotData[index]
     }
     
     return slotData
@@ -370,7 +390,7 @@ public class Locomotive : RollingStock, InterfaceDelegate {
         let intercept = meanY - gradient * meanX
         
         for x in 1...126 {
-          speedProfile[x - 1].bestFitForward = gradient * Double(x) + intercept
+          speedProfile[x].bestFitForward = gradient * Double(x) + intercept
         }
         
       }

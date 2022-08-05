@@ -121,6 +121,19 @@ public class LocoSlotData {
   
   public var speed : Int
   
+  public var speedForDisplay : String {
+    get {
+      switch speed {
+      case 0:
+        return "0"
+      case 1:
+        return "ES"
+      default:
+        return "\(speed-1)"
+      }
+    }
+  }
+  
   public var throttleID : Int
   
   public var functions : Int

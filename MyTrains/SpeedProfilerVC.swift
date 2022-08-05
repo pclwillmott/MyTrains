@@ -67,16 +67,35 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   
   // MARK: Private Properties
   
-  private enum Mode {
-    case idle
-    case gettingUptoSpeed
-    case doingTiming
-    case setupNextRun
+  private enum Mode : Int {
+    case idle = 0
+    case gettingUptoSpeed = 1
+    case doingTiming = 2
+    case setupNextRun = 3
+    
+    public var title : String {
+      get {
+        return Mode.titles[self.rawValue]
+      }
+    }
+    
+    private static let titles = [
+      "Idle",
+      "Getting up to speed",
+      "Doing timing",
+      "Setting up",
+    ]
+
   }
   
   private var mode : Mode = .idle {
     didSet {
-      lblStatus.stringValue = "\(mode) \(currentStep) \(locomotiveDirection)"
+      if mode == .idle {
+        lblStatus.stringValue = "\(mode.title)"
+      }
+      else {
+        lblStatus.stringValue = "\(mode.title) for \(locomotiveDirection.title) Step \(currentStep)"
+      }
     }
   }
   
@@ -105,6 +124,8 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   private var route : Route = []
   
   private var routeDirection : LocomotiveDirection = .forward
+  
+  private var startDirection : LocomotiveDirection = .forward
   
   // MARK: Private Methods
   
@@ -176,11 +197,13 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
           temp += 1
         }
         
-        if newIndex != -1 {
+        if newIndex != -1 && newIndex != lastBlockIndex {
           
           if mode == .gettingUptoSpeed {
+            
             triggerCount += 1
-            if triggerCount == 3 {
+            
+            if triggerCount == 2 {
               mode = .setupNextRun
               totalDistance = 0.0
               startTime = message.timeStamp
@@ -190,7 +213,10 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
           }
           else if mode == .doingTiming {
             
-            if routeDirection == locomotiveDirection {
+            let goForward = (routeDirection == .forward && locomotiveDirection == startDirection) ||
+            (routeDirection == .reverse && locomotiveDirection != startDirection)
+            
+            if goForward {
               var temp = lastBlockIndex
               while temp != newIndex {
                 totalDistance += route[lastBlockIndex].distance
@@ -214,11 +240,11 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
             
             triggerCount += 1
             
-            if triggerCount == route.count * 2 {
+            let totalTime = message.timeStamp - startTime
+          
+            if (triggerCount == route.count * 2) {
               
               mode = .setupNextRun
-              
-              let totalTime = message.timeStamp - startTime
               
               var speed : Double = 0.0
               
@@ -245,8 +271,8 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
                   locomotiveDirection = .reverse
                 }
                 else {
-                  currentStep = 0
-                  mode = .idle
+                  btnStartProfilerAction(btnStartProfiler)
+                  return
                 }
               }
 
@@ -331,6 +357,8 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
         resultsView.locomotive = locomotive
         
         locomotiveDirection = cboLocomotiveDirection.indexOfSelectedItem == 1 ? .reverse : .forward
+        
+        startDirection = locomotiveDirection
 
         for profile in tableViewDS.speedProfile! {
           if cboLocomotiveDirection.indexOfSelectedItem == 0 || cboLocomotiveDirection.indexOfSelectedItem == 2 {
@@ -380,8 +408,7 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
       mode = .idle
       if let locomotive = self.locomotive {
         locomotive.targetSpeed = (speed: 0, direction:.forward)
-     //   locomotive.isInUse = false
-        locomotive.isInertial = false
+        locomotive.isInUse = false
       }
     }
     
