@@ -216,6 +216,10 @@ public class Locomotive : RollingStock, InterfaceDelegate {
     }
   }
   
+  public var r2Forward : Double = 0.0
+  
+  public var r2Reverse : Double = 0.0
+  
   public var slotNumber : Int = -1
   
   public var slotPage : Int = -1
@@ -393,6 +397,20 @@ public class Locomotive : RollingStock, InterfaceDelegate {
           speedProfile[x].bestFitForward = gradient * Double(x) + intercept
         }
         
+        var SSR : Double = 0.0
+        var SST : Double = 0.0
+        
+        for profile in speedProfile {
+          if profile.newSpeedForward != 0.0 {
+            var temp = profile.newSpeedForward - profile.bestFitForward
+            SSR += (temp * temp)
+            temp = profile.newSpeedForward - meanY
+            SST += (temp * temp)
+          }
+        }
+        
+        r2Forward = SST == 0.0 ? 0.0 : 1.0 - SSR / SST
+
       }
 
       if bwdNum > 0 {
@@ -420,10 +438,24 @@ public class Locomotive : RollingStock, InterfaceDelegate {
           speedProfile[x].bestFitReverse = gradient * Double(x) + intercept
         }
         
+        var SSR : Double = 0.0
+        var SST : Double = 0.0
+        
+        for profile in speedProfile {
+          if profile.newSpeedReverse != 0.0 {
+            var temp = profile.newSpeedReverse - profile.bestFitReverse
+            SSR += (temp * temp)
+            temp = profile.newSpeedReverse - meanY
+            SST += (temp * temp)
+          }
+        }
+        
+        r2Reverse = SST == 0.0 ? 0.0 : 1.0 - SSR / SST
+
       }
 
     }
-    
+        
   }
   
   override public func save() {

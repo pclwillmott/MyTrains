@@ -479,7 +479,7 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
   
   // MARK: CommandStationDelegate Methods
   
-  public func trackStatusChanged(commandStation: CommandStation) {
+  public func trackStatusChanged(commandStation: LocoNetDevice) {
     for delegate in controllerDelegates {
       delegate.value.statusUpdated?(networkController: self)
     }

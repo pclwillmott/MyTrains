@@ -12,6 +12,7 @@ enum AppStoryboard : String {
   
   case Main                         = "Main"
   case Monitor                      = "Monitor"
+  case EditCommandStations          = "EditCommandStations"
   case EditNetworks                 = "EditNetworks"
   case EditLayouts                  = "EditLayouts"
   case EditLocomotives              = "EditLocomotives"
@@ -41,6 +42,7 @@ enum AppStoryboard : String {
 let storyboardLookup             : [String:AppStoryboard] = [
   "Monitor"                      : AppStoryboard.Monitor,
   "Main"                         : AppStoryboard.Main,
+  "EditCommandStations"          : AppStoryboard.EditCommandStations,
   "EditNetworks"                 : AppStoryboard.EditNetworks,
   "EditLayouts"                  : AppStoryboard.EditLayouts,
   "EditLocomotives"              : AppStoryboard.EditLocomotives,
@@ -75,6 +77,7 @@ enum ModalWindow : String {
   
   case Monitor                      = "Monitor"
   case Main                         = "Main"
+  case EditCommandStations          = "EditCommandStations"
   case EditNetworks                 = "EditNetworks"
   case EditLayouts                  = "EditLayouts"
   case EditLocomotives              = "EditLocomotives"

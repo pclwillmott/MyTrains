@@ -235,9 +235,9 @@
                                 </tableHeaderView>
                             </scrollView>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HV7-9k-Flu">
-                                <rect key="frame" x="837" y="13" width="73" height="32"/>
+                                <rect key="frame" x="782" y="14" width="128" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                <buttonCell key="cell" type="push" title="Save" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="X7z-Fo-2GZ">
+                                <buttonCell key="cell" type="push" title="Save Results" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="X7z-Fo-2GZ">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
@@ -448,6 +448,39 @@
                                     <action selector="btnSetRouteAction:" target="Jae-zZ-Yvj" id="ioH-kh-LUW"/>
                                 </connections>
                             </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="q4h-9l-cBG">
+                                <rect key="frame" x="524" y="14" width="128" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                <buttonCell key="cell" type="push" title="Reset Results" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="EAC-XY-S2u">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="btnResetResultsAction:" target="Jae-zZ-Yvj" id="biq-SG-9JO"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZFc-y2-Wsd">
+                                <rect key="frame" x="653" y="14" width="128" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                <buttonCell key="cell" type="push" title="Discard Results" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Z9h-rV-fQM">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="btnDiscardResultsAction:" target="Jae-zZ-Yvj" id="s9S-9z-nwf"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3Rh-Bs-Cbr">
+                                <rect key="frame" x="403" y="21" width="82" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <buttonCell key="cell" type="check" title="Trendline" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="eul-fx-tyG">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="chkShowTrendlineAction:" target="Jae-zZ-Yvj" id="tgs-pC-VBH"/>
+                                </connections>
+                            </button>
                         </subviews>
                     </view>
                     <connections>
@@ -462,6 +495,7 @@
                         <outlet property="cboResultsType" destination="RVh-0g-vPn" id="8VN-fR-JQ8"/>
                         <outlet property="cboRoute" destination="naB-Lu-Hmv" id="axq-Eq-XtX"/>
                         <outlet property="cboUnits" destination="dgg-ch-WpG" id="JYI-9O-qbt"/>
+                        <outlet property="chkShowTrendline" destination="3Rh-Bs-Cbr" id="82f-1Y-22e"/>
                         <outlet property="lblRouteLength" destination="gRR-Dk-81X" id="qys-H9-J4t"/>
                         <outlet property="lblStatus" destination="zfG-FP-ZU9" id="2Qv-L9-Vk9"/>
                         <outlet property="resultsView" destination="wFu-yy-VmP" id="hGr-Vb-AUw"/>

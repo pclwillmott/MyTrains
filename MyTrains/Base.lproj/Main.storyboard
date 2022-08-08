@@ -142,6 +142,12 @@
                                                 <action selector="mnuEditNetworksAction:" target="Voe-Tx-rLC" id="Xo7-lL-m8y"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Command Stations" id="AiA-nG-kpn">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="mnuEditCommandStations:" target="Voe-Tx-rLC" id="PY0-b8-EbU"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="Locomotives" id="jYS-Qx-4Nr">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>

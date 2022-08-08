@@ -60,6 +60,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     ModalWindow.EditInterfaces.runModel()
   }
   
+  @IBAction func mnuEditCommandStations(_ sender: NSMenuItem) {
+    ModalWindow.EditCommandStations.runModel()
+  }
+  
   @IBAction func mnuEditNetworksAction(_ sender: NSMenuItem) {
     ModalWindow.EditNetworks.runModel()
   }

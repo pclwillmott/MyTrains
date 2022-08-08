@@ -430,9 +430,133 @@
             filePath = "MyTrains/SpeedResultsView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "66"
-            endingLineNumber = "66"
+            startingLineNumber = "78"
+            endingLineNumber = "78"
             landmarkName = "draw(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "DF2CBF0E-62B8-4D5B-8C84-D31E595B197F"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MyTrains/EditSensorsVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "47"
+            endingLineNumber = "47"
+            landmarkName = "EditSensorsVC"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  uuid = "DF2CBF0E-62B8-4D5B-8C84-D31E595B197F - 17b2a4535f9b9528"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MyTrains.EditSensorsVC.sensorProductDictionary.getter : Swift.Dictionary&lt;Swift.Int, MyTrains.LocoNetProductDictionaryItem&gt;"
+                  moduleName = "MyTrains"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/Documents/MyTrains/MyTrains/EditSensorsVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "47"
+                  endingLineNumber = "47"
+                  offsetFromSymbolStart = "90">
+               </Location>
+               <Location
+                  uuid = "DF2CBF0E-62B8-4D5B-8C84-D31E595B197F - ab13b48b2dd6f95c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MyTrains.EditSensorsVC.sensorProductDictionary.setter : Swift.Dictionary&lt;Swift.Int, MyTrains.LocoNetProductDictionaryItem&gt;"
+                  moduleName = "MyTrains"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/Documents/MyTrains/MyTrains/EditSensorsVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "47"
+                  endingLineNumber = "47"
+                  offsetFromSymbolStart = "116">
+               </Location>
+               <Location
+                  uuid = "DF2CBF0E-62B8-4D5B-8C84-D31E595B197F - 90b9762c10747a2f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MyTrains.EditSensorsVC.sensorProductDictionary.modify : Swift.Dictionary&lt;Swift.Int, MyTrains.LocoNetProductDictionaryItem&gt;"
+                  moduleName = "MyTrains"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/Documents/MyTrains/MyTrains/EditSensorsVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "47"
+                  endingLineNumber = "47"
+                  offsetFromSymbolStart = "0">
+               </Location>
+               <Location
+                  uuid = "DF2CBF0E-62B8-4D5B-8C84-D31E595B197F - 645bdd140d9b4504"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MyTrains.EditSensorsVC.sensorProductDictionary.modify : Swift.Dictionary&lt;Swift.Int, MyTrains.LocoNetProductDictionaryItem&gt; with unmangled suffix &quot;.resume.0&quot;"
+                  moduleName = "MyTrains"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/Documents/MyTrains/MyTrains/EditSensorsVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "47"
+                  endingLineNumber = "47"
+                  offsetFromSymbolStart = "15">
+               </Location>
+               <Location
+                  uuid = "DF2CBF0E-62B8-4D5B-8C84-D31E595B197F - f22df4c92f5974e3"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MyTrains.EditSensorsVC.init(nibName: Swift.Optional&lt;Swift.String&gt;, bundle: Swift.Optional&lt;__C.NSBundle&gt;) -&gt; MyTrains.EditSensorsVC"
+                  moduleName = "MyTrains"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/Documents/MyTrains/MyTrains/EditSensorsVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "47"
+                  endingLineNumber = "47"
+                  offsetFromSymbolStart = "258">
+               </Location>
+               <Location
+                  uuid = "DF2CBF0E-62B8-4D5B-8C84-D31E595B197F - f9dcc6a4dd62bf2d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MyTrains.EditSensorsVC.init(coder: __C.NSCoder) -&gt; Swift.Optional&lt;MyTrains.EditSensorsVC&gt;"
+                  moduleName = "MyTrains"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/Documents/MyTrains/MyTrains/EditSensorsVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "47"
+                  endingLineNumber = "47"
+                  offsetFromSymbolStart = "206">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "32EB3BD5-D579-461B-99E9-3A1FFB95FDC2"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MyTrains/EditCommandStationsVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "68"
+            endingLineNumber = "68"
+            landmarkName = "setupFields(dbEditorView:editorObject:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

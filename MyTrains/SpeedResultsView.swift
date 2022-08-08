@@ -25,6 +25,18 @@ class SpeedResultsView: NSView {
     }
   }
   
+  public var showTrendline : Bool = false {
+    didSet {
+      needsDisplay = true
+    }
+  }
+  
+  public var dataSet : Int = 2 {
+    didSet {
+      needsDisplay = true
+    }
+  }
+  
   override func draw(_ dirtyRect: NSRect) {
 
     super.draw(dirtyRect)
@@ -102,72 +114,115 @@ class SpeedResultsView: NSView {
       
       locomotive.doBestFit()
 
-      for profile in locomotive.speedProfile {
-
-        if profile.newSpeedForward != 0.0 {
+      if dataSet != 1 {
         
-          NSColor.systemBlue.setFill()
-          let dx = xOffset + CGFloat(profile.stepNumber) * (bounds.width - xOffset) / 129.0
-          let dy = yOffset + ((bounds.height - yOffset) / maxValue) * profile.newSpeedForward
-          let path = NSBezierPath()
-          path.move(to: NSMakePoint(dx-2, dy+2))
-          path.line(to: NSMakePoint(dx+2, dy+2))
-          path.line(to: NSMakePoint(dx+2, dy-2))
-          path.line(to: NSMakePoint(dx-2, dy-2))
-          path.close()
-          path.fill()
+        for profile in locomotive.speedProfile {
+
+          if profile.newSpeedForward != 0.0 {
+          
+            NSColor.systemBlue.setFill()
+            let dx = xOffset + CGFloat(profile.stepNumber) * (bounds.width - xOffset) / 129.0
+            let dy = yOffset + ((bounds.height - yOffset) / maxValue) * profile.newSpeedForward
+            let path = NSBezierPath()
+            path.move(to: NSMakePoint(dx-2, dy+2))
+            path.line(to: NSMakePoint(dx+2, dy+2))
+            path.line(to: NSMakePoint(dx+2, dy-2))
+            path.line(to: NSMakePoint(dx-2, dy-2))
+            path.close()
+            path.fill()
+            
+          }
           
         }
         
       }
 
-      for profile in locomotive.speedProfile {
+      if dataSet != 0 {
 
-        NSColor.cyan.setFill()
-        let dx = xOffset + CGFloat(profile.stepNumber) * (bounds.width - xOffset) / 129.0
-        let dy = yOffset + ((bounds.height - yOffset) / maxValue) * profile.bestFitForward
-        let path = NSBezierPath()
-        path.move(to: NSMakePoint(dx-2, dy+2))
-        path.line(to: NSMakePoint(dx+2, dy+2))
-        path.line(to: NSMakePoint(dx+2, dy-2))
-        path.line(to: NSMakePoint(dx-2, dy-2))
-        path.close()
-        path.fill()
-
-      }
-
-      for profile in locomotive.speedProfile {
+        for profile in locomotive.speedProfile {
         
-        if profile.newSpeedReverse != 0.0 {
-          NSColor.red.setFill()
-          let dx = xOffset + CGFloat(profile.stepNumber) * (bounds.width - xOffset) / 129.0
-          let dy = yOffset + ((bounds.height - yOffset) / maxValue) * profile.newSpeedReverse
-          let path = NSBezierPath()
-          path.move(to: NSMakePoint(dx-2, dy+2))
-          path.line(to: NSMakePoint(dx+2, dy+2))
-          path.line(to: NSMakePoint(dx+2, dy-2))
-          path.line(to: NSMakePoint(dx-2, dy-2))
-          path.close()
-          path.fill()
+          if profile.newSpeedReverse != 0.0 {
+            NSColor.red.setFill()
+            let dx = xOffset + CGFloat(profile.stepNumber) * (bounds.width - xOffset) / 129.0
+            let dy = yOffset + ((bounds.height - yOffset) / maxValue) * profile.newSpeedReverse
+            let path = NSBezierPath()
+            path.move(to: NSMakePoint(dx-2, dy+2))
+            path.line(to: NSMakePoint(dx+2, dy+2))
+            path.line(to: NSMakePoint(dx+2, dy-2))
+            path.line(to: NSMakePoint(dx-2, dy-2))
+            path.close()
+            path.fill()
+          }
+
         }
         
       }
 
-      for profile in locomotive.speedProfile {
+      if showTrendline {
+        
+        if dataSet != 1 {
+          
+          for profile in locomotive.speedProfile {
 
-        NSColor.magenta.setFill()
-        let dx = xOffset + CGFloat(profile.stepNumber) * (bounds.width - xOffset) / 129.0
-        let dy = yOffset + ((bounds.height - yOffset) / maxValue) * profile.bestFitReverse
-        let path = NSBezierPath()
-        path.move(to: NSMakePoint(dx-2, dy+2))
-        path.line(to: NSMakePoint(dx+2, dy+2))
-        path.line(to: NSMakePoint(dx+2, dy-2))
-        path.line(to: NSMakePoint(dx-2, dy-2))
-        path.close()
-        path.fill()
+            NSColor.cyan.setFill()
+            let dx = xOffset + CGFloat(profile.stepNumber) * (bounds.width - xOffset) / 129.0
+            let dy = yOffset + ((bounds.height - yOffset) / maxValue) * profile.bestFitForward
+            let path = NSBezierPath()
+            path.move(to: NSMakePoint(dx-2, dy+2))
+            path.line(to: NSMakePoint(dx+2, dy+2))
+            path.line(to: NSMakePoint(dx+2, dy-2))
+            path.line(to: NSMakePoint(dx-2, dy-2))
+            path.close()
+            path.fill()
 
+          }
+          
+          let text = "R2 = \(String(format: "%.4f", locomotive.r2Forward))"
+          let font = NSFont.boldSystemFont(ofSize: 12)
+          let textRect = CGRect(x: xOffset * 2 + 4, y: bounds.height - 38, width: 200 , height: 30)
+          let textStyle = NSMutableParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
+          let textFontAttributes = [
+              NSAttributedString.Key.font: font,
+              NSAttributedString.Key.foregroundColor: NSColor.cyan,
+              NSAttributedString.Key.paragraphStyle: textStyle,
+          ] as [NSAttributedString.Key : Any]
+          text.draw(in: textRect, withAttributes: textFontAttributes)
+          
+        }
+        
+        if dataSet != 0 {
+          
+          for profile in locomotive.speedProfile {
+
+            NSColor.magenta.setFill()
+            let dx = xOffset + CGFloat(profile.stepNumber) * (bounds.width - xOffset) / 129.0
+            let dy = yOffset + ((bounds.height - yOffset) / maxValue) * profile.bestFitReverse
+            let path = NSBezierPath()
+            path.move(to: NSMakePoint(dx-2, dy+2))
+            path.line(to: NSMakePoint(dx+2, dy+2))
+            path.line(to: NSMakePoint(dx+2, dy-2))
+            path.line(to: NSMakePoint(dx-2, dy-2))
+            path.close()
+            path.fill()
+
+          }
+          
+          let drop = (dataSet == 2) ? -68.0 : -38.0
+
+          let text = "R2 = \(String(format: "%.4f", locomotive.r2Reverse))"
+          let font = NSFont.boldSystemFont(ofSize: 12)
+          let textRect = CGRect(x: xOffset * 2 + 4, y: bounds.height + drop, width: 200 , height: 30)
+          let textStyle = NSMutableParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
+          let textFontAttributes = [
+              NSAttributedString.Key.font: font,
+              NSAttributedString.Key.foregroundColor: NSColor.magenta,
+              NSAttributedString.Key.paragraphStyle: textStyle,
+          ] as [NSAttributedString.Key : Any]
+          text.draw(in: textRect, withAttributes: textFontAttributes)
+        }
+        
       }
-      
+    
     }
     
   }

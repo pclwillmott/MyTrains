@@ -29,7 +29,7 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   override func viewWillAppear() {
     
     self.view.window?.delegate = self
-    
+        
     cboProfilerMode.selectItem(at: 0)
     
     UnitSpeed.populate(comboBox: cboUnits)
@@ -61,6 +61,14 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
       cboRouteAction(cboRoute)
     }
     
+    chkShowTrendline.state = NSControl.StateValue(rawValue: UserDefaults.standard.integer(forKey: DEFAULT.SPEED_PROFILER_TRENDLINE))
+
+    cboLengthUnits.selectItem(at: UserDefaults.standard.integer(forKey: DEFAULT.SPEED_PROFILER_LENGTH_UNITS))
+    
+    cboResultsType.selectItem(at: UserDefaults.standard.integer(forKey: DEFAULT.SPEED_PROFILER_RESULTS_TYPE))
+    
+    cboUnits.selectItem(at: UserDefaults.standard.integer(forKey: DEFAULT.SPEED_PROFILER_SPEED_UNITS))
+
     setupLoco()
     
   }
@@ -111,6 +119,8 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   
   private var lastBlockIndex : Int = -1
   
+  private var blocksToIgnore : Set<Int> = []
+  
   private var triggerCount : Int = 0
   
   private var currentStep : Int = 40
@@ -149,6 +159,10 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
         tableViewDS.resultsType = SpeedProfileResultsType.selected(comboBox: cboResultsType)
         
         resultsView.speedUnits = tableViewDS.unitSpeed
+        
+        resultsView.showTrendline = chkShowTrendline.state == .on
+        
+        resultsView.dataSet = cboLocomotiveDirection.indexOfSelectedItem
 
         tableViewDS.speedProfile = locomotive.speedProfile
         
@@ -197,13 +211,94 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
           temp += 1
         }
         
-        if newIndex != -1 && newIndex != lastBlockIndex {
+        if newIndex != -1 && !blocksToIgnore.contains(newIndex) {
+
+          blocksToIgnore.removeAll()
+          blocksToIgnore.insert(newIndex)
           
+          var extraDistance : Double = 0.0
+          
+          let goForward = (routeDirection == .forward && locomotiveDirection == startDirection) ||
+          (routeDirection == .reverse && locomotiveDirection != startDirection)
+          
+          if goForward {
+            
+            var temp = lastBlockIndex
+            
+            if mode == .doingTiming {
+              while temp != newIndex {
+                extraDistance += route[temp].distance
+                temp += 1
+                if temp == route.count {
+                  temp = 0
+                }
+              }
+            }
+            
+            var distance : Double = 0.0
+            
+            temp = newIndex - 1
+            if temp < 0 {
+              temp = route.count - 1
+            }
+            
+            while distance < locomotive!.length {
+              
+              distance += route[temp].distance
+              
+              blocksToIgnore.insert(temp)
+              
+              temp = newIndex - 1
+              if temp < 0 {
+                temp = route.count - 1
+              }
+              
+            }
+            
+          }
+          else {
+            
+            var temp = lastBlockIndex
+            
+            if mode == .doingTiming {
+              while temp != newIndex {
+                extraDistance += route[temp].distance
+                temp -= 1
+                if temp < 0 {
+                  temp = route.count - 1
+                }
+              }
+            }
+
+            var distance : Double = 0.0
+            
+            temp = newIndex + 1
+            if temp == route.count {
+              temp = 0
+            }
+            
+            while distance < locomotive!.length {
+              
+              distance += route[temp].distance
+              
+              blocksToIgnore.insert(temp)
+              
+              temp = newIndex + 1
+              if temp == route.count {
+                temp = 0
+              }
+
+            }
+
+          }
+          
+          let totalTime = message.timeStamp - startTime
+        
           if mode == .gettingUptoSpeed {
             
             triggerCount += 1
             
-            if triggerCount == 2 {
+            if /* triggerCount == 2 */ totalTime > 2.0 {
               mode = .setupNextRun
               totalDistance = 0.0
               startTime = message.timeStamp
@@ -213,36 +308,11 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
           }
           else if mode == .doingTiming {
             
-            let goForward = (routeDirection == .forward && locomotiveDirection == startDirection) ||
-            (routeDirection == .reverse && locomotiveDirection != startDirection)
-            
-            if goForward {
-              var temp = lastBlockIndex
-              while temp != newIndex {
-                totalDistance += route[lastBlockIndex].distance
-                temp += 1
-                if temp == route.count {
-                  temp = 0
-                }
-              }
-            }
-            else {
-              var temp = lastBlockIndex
-              while temp != newIndex {
-                totalDistance += route[lastBlockIndex].distance
-                temp -= 1
-                if temp < 0 {
-                  temp = route.count - 1
-                }
-              }
-
-            }
+            totalDistance += extraDistance
             
             triggerCount += 1
             
-            let totalTime = message.timeStamp - startTime
-          
-            if (triggerCount == route.count * 2) {
+            if /*(triggerCount == route.count * 2)*/ totalTime > 15.0 {
               
               mode = .setupNextRun
               
@@ -279,6 +349,8 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
               locomotive!.targetSpeed = (speed: currentStep, direction:locomotiveDirection)
               
               triggerCount = 0
+              
+              startTime = message.timeStamp
               
               mode = .gettingUptoSpeed
 
@@ -334,6 +406,7 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
     tableViewDS.unitSpeed = UnitSpeed.selected(comboBox: cboUnits)
     tableView.reloadData()
     resultsView.speedUnits = tableViewDS.unitSpeed
+    UserDefaults.standard.set(cboUnits.indexOfSelectedItem, forKey: DEFAULT.SPEED_PROFILER_SPEED_UNITS)
   }
   
   @IBOutlet weak var btnStartProfiler: NSButton!
@@ -360,15 +433,6 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
         
         startDirection = locomotiveDirection
 
-        for profile in tableViewDS.speedProfile! {
-          if cboLocomotiveDirection.indexOfSelectedItem == 0 || cboLocomotiveDirection.indexOfSelectedItem == 2 {
-            profile.newSpeedForward = 0.0
-          }
-          if cboLocomotiveDirection.indexOfSelectedItem == 1 || cboLocomotiveDirection.indexOfSelectedItem == 2 {
-            profile.newSpeedReverse = 0.0
-          }
-        }
-        
         tableView.reloadData()
         
         locomotive.targetSpeed = (speed: 20, direction:locomotiveDirection)
@@ -395,11 +459,15 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
 
         triggerCount = 0
         
+        blocksToIgnore.removeAll()
+        
         currentStep = txtStartStep.integerValue
 
         mode = .gettingUptoSpeed
         
         locomotive.targetSpeed = (speed: currentStep, direction:locomotiveDirection)
+        
+ //       locomotive.forceRefresh = true
         
       }
     }
@@ -418,6 +486,7 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   
   @IBAction func btnSaveAction(_ sender: NSButton) {
     locomotive?.save()
+    self.view.window?.close()
   }
   
   @IBOutlet weak var scrollView: NSScrollView!
@@ -446,6 +515,7 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   @IBAction func cboResultsType(_ sender: NSComboBox) {
     tableViewDS.resultsType = SpeedProfileResultsType.selected(comboBox: cboResultsType)
     tableView.reloadData()
+    UserDefaults.standard.set(cboResultsType.indexOfSelectedItem, forKey: DEFAULT.SPEED_PROFILER_RESULTS_TYPE)
   }
   
   @IBOutlet weak var lblRouteLength: NSTextField!
@@ -454,17 +524,56 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   
   @IBAction func cboLengthUnitsAction(_ sender: NSComboBox) {
     cboRouteAction(cboRoute)
+    UserDefaults.standard.set(cboLengthUnits.indexOfSelectedItem, forKey: DEFAULT.SPEED_PROFILER_LENGTH_UNITS)
   }
   
   @IBOutlet weak var cboLocomotiveDirection: NSComboBox!
   
   @IBAction func cboLocomotiveDirectionAction(_ sender: NSComboBox) {
+    resultsView.dataSet = sender.indexOfSelectedItem
   }
   
   @IBOutlet weak var txtStartStep: NSTextField!
   
   @IBAction func txtStartStepAction(_ sender: NSTextField) {
   }
+  
+  @IBOutlet weak var chkShowTrendline: NSButton!
+  
+  @IBAction func chkShowTrendlineAction(_ sender: NSButton) {
+    resultsView.showTrendline = sender.state == .on
+    UserDefaults.standard.set(chkShowTrendline.state.rawValue, forKey: DEFAULT.SPEED_PROFILER_TRENDLINE)
+  }
+  
+  @IBAction func btnResetResultsAction(_ sender: NSButton) {
+    for profile in tableViewDS.speedProfile! {
+      if cboLocomotiveDirection.indexOfSelectedItem == 0 || cboLocomotiveDirection.indexOfSelectedItem == 2 {
+        profile.newSpeedForward = 0.0
+      }
+      if cboLocomotiveDirection.indexOfSelectedItem == 1 || cboLocomotiveDirection.indexOfSelectedItem == 2 {
+        profile.newSpeedReverse = 0.0
+      }
+    }
+    tableView.reloadData()
+    resultsView.needsDisplay = true
+  }
+  
+  @IBAction func btnDiscardResultsAction(_ sender: NSButton) {
+    for profile in tableViewDS.speedProfile! {
+      profile.newSpeedForward = profile.speedForward
+      profile.newSpeedReverse = profile.speedReverse
+    }
+    self.view.window?.close()
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
 }
 

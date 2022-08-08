@@ -151,12 +151,9 @@ public class Layout : EditorObject {
       
       for setting in routePart.switchSettings {
         
-        print("\(routePart.fromSwitchBoardItem.blockName) \(routePart.fromNodeId)")
-        
         let id = TurnoutSwitch.dictionaryKey(switchBoardItemId: routePart.fromSwitchBoardItem.primaryKey, turnoutIndex: setting.switchNumber)
         
         if let turnoutSwitch = operationalTurnouts[id] {
-          print("here")
           turnoutSwitch.setState(state: setting.switchState)
         }
         
