@@ -27,6 +27,7 @@
 		DA1DA5E82827EA6700E0F993 /* EditInterfacesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1DA5E72827EA6700E0F993 /* EditInterfacesVC.swift */; };
 		DA1DA5EA28280EEE00E0F993 /* BaudRate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1DA5E928280EEE00E0F993 /* BaudRate.swift */; };
 		DA1DA5EC28280FCD00E0F993 /* FlowControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1DA5EB28280FCD00E0F993 /* FlowControl.swift */; };
+		DA1DC9FF28A1CE0D007A957A /* SamplePeriod.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1DC9FE28A1CE0D007A957A /* SamplePeriod.swift */; };
 		DA1ECC9328439D4600C4F963 /* UpdateFirmware.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA1ECC9228439D4600C4F963 /* UpdateFirmware.storyboard */; };
 		DA1ECC9828439DE500C4F963 /* UpdateFirmwareVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1ECC9728439DE500C4F963 /* UpdateFirmwareVC.swift */; };
 		DA2429712892F7AE000D4ADE /* DeviceTCV.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA2429702892F7AE000D4ADE /* DeviceTCV.xib */; };
@@ -194,6 +195,7 @@
 		DA1DA5E72827EA6700E0F993 /* EditInterfacesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditInterfacesVC.swift; sourceTree = "<group>"; };
 		DA1DA5E928280EEE00E0F993 /* BaudRate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaudRate.swift; sourceTree = "<group>"; };
 		DA1DA5EB28280FCD00E0F993 /* FlowControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowControl.swift; sourceTree = "<group>"; };
+		DA1DC9FE28A1CE0D007A957A /* SamplePeriod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SamplePeriod.swift; sourceTree = "<group>"; };
 		DA1ECC9228439D4600C4F963 /* UpdateFirmware.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = UpdateFirmware.storyboard; sourceTree = "<group>"; };
 		DA1ECC9728439DE500C4F963 /* UpdateFirmwareVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateFirmwareVC.swift; sourceTree = "<group>"; };
 		DA2429702892F7AE000D4ADE /* DeviceTCV.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DeviceTCV.xib; sourceTree = "<group>"; };
@@ -517,6 +519,7 @@
 				DAF4DD4B289A90C1000B848E /* SpeedResultsView.swift */,
 				DAF4DD4F289ABDDE000B848E /* SpeedProfileResultsType.swift */,
 				DAF4DD4D289A9901000B848E /* BestFitMethod.swift */,
+				DA1DC9FE28A1CE0D007A957A /* SamplePeriod.swift */,
 				DAB07497276EB6C3003278BE /* Sqlite.swift */,
 				DA467BA2281D501300AB9650 /* SwitchBoardDefs.swift */,
 				DA467BAE281D5D2F00AB9650 /* SwitchBoardEditor.storyboard */,
@@ -681,6 +684,7 @@
 				DA467BB3281D60E400AB9650 /* SwitchBoardShapeButton.swift in Sources */,
 				DA7B472A273824F700BCD587 /* NetworkOutputQueueItem.swift in Sources */,
 				DA08B433278737540001307C /* ProgramDecoderAddressVC.swift in Sources */,
+				DA1DC9FF28A1CE0D007A957A /* SamplePeriod.swift in Sources */,
 				DA6F3926274FD0C400A63FBF /* PeerXfer20.swift in Sources */,
 				DA4342962836996800E8D555 /* MTSerialPort.swift in Sources */,
 				DA1B79F7285F2540009E1189 /* SwitchBoardItemPropertySheetVC.swift in Sources */,

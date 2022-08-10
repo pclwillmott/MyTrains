@@ -243,7 +243,7 @@ public class Locomotive : RollingStock, InterfaceDelegate {
     }
   }
   
-  
+
   // MARK: Private Methods
   
   @objc func refreshTimerAction() {
@@ -349,6 +349,42 @@ public class Locomotive : RollingStock, InterfaceDelegate {
     }
     
     switch newBestFitMethod {
+    case .centralMovingAverage:
+      
+      for profile in speedProfile {
+        
+        switch profile.stepNumber {
+        case 0:
+          profile.bestFitForward = 0.0
+          profile.bestFitReverse = 0.0
+          break
+        case 1, 125:
+          profile.bestFitForward = (
+            speedProfile[profile.stepNumber-1].newSpeedForward +
+            speedProfile[profile.stepNumber].newSpeedForward +
+            speedProfile[profile.stepNumber+1].newSpeedForward) / 3.0
+          profile.bestFitReverse = (
+            speedProfile[profile.stepNumber-1].newSpeedReverse +
+            speedProfile[profile.stepNumber].newSpeedReverse +
+            speedProfile[profile.stepNumber+1].newSpeedReverse) / 3.0
+        case 126:
+          profile.bestFitForward = (speedProfile[profile.stepNumber-1].newSpeedForward + speedProfile[profile.stepNumber].newSpeedForward) / 2.0
+          profile.bestFitReverse = (speedProfile[profile.stepNumber-1].newSpeedReverse + speedProfile[profile.stepNumber].newSpeedReverse) / 2.0
+          break
+        default:
+          profile.bestFitForward = (speedProfile[profile.stepNumber - 2].newSpeedForward +
+                                    speedProfile[profile.stepNumber - 1].newSpeedForward +
+                                    speedProfile[profile.stepNumber].newSpeedForward +
+                                    speedProfile[profile.stepNumber + 1].newSpeedForward +
+                                    speedProfile[profile.stepNumber + 2].newSpeedForward) / 5.0
+          
+          profile.bestFitReverse = (speedProfile[profile.stepNumber - 2].newSpeedReverse +
+                                    speedProfile[profile.stepNumber - 1].newSpeedReverse +
+                                    speedProfile[profile.stepNumber].newSpeedReverse +
+                                    speedProfile[profile.stepNumber + 1].newSpeedReverse +
+                                    speedProfile[profile.stepNumber + 2].newSpeedReverse) / 5.0
+        }
+      }
     case .straightLine:
       
       var fwdSumX : Int = 0

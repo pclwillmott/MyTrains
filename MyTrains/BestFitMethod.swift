@@ -11,6 +11,7 @@ import AppKit
 public enum BestFitMethod : Int {
   
   case straightLine = 0
+  case centralMovingAverage
 
   public var title : String {
     get {
@@ -20,6 +21,7 @@ public enum BestFitMethod : Int {
   
   private static let titles = [
     "Straight Line",
+    "Moving Average",
   ]
   
   public static let defaultValue : BestFitMethod = .straightLine

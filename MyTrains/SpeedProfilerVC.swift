@@ -44,6 +44,9 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
     
     UnitLength.populate(comboBox: cboLengthUnits)
     
+    SamplePeriod.populate(comboBox: cboSampleSize)
+    cboSampleSize.selectItem(at: UserDefaults.standard.integer(forKey: DEFAULT.SPEED_PROFILER_SAMPLE_SIZE))
+    
     cboLocomotiveDirection.selectItem(at: 0)
     
     if cboLocomotive.numberOfItems > 0 {
@@ -60,6 +63,12 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
       cboRoute.selectItem(at: 0)
       cboRouteAction(cboRoute)
     }
+    
+    txtStartStep.integerValue = UserDefaults.standard.integer(forKey: DEFAULT.SPEED_PROFILER_START_STEP)
+    txtStartStep.integerValue = txtStartStep.integerValue == 0 ? 1 : txtStartStep.integerValue
+    
+    txtStopStep.integerValue = UserDefaults.standard.integer(forKey: DEFAULT.SPEED_PROFILER_STOP_STEP)
+    txtStopStep.integerValue = txtStopStep.integerValue == 0 ? 126 : txtStopStep.integerValue
     
     chkShowTrendline.state = NSControl.StateValue(rawValue: UserDefaults.standard.integer(forKey: DEFAULT.SPEED_PROFILER_TRENDLINE))
 
@@ -298,7 +307,7 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
             
             triggerCount += 1
             
-            if /* triggerCount == 2 */ totalTime > 2.0 {
+            if totalTime > 2.0 {
               mode = .setupNextRun
               totalDistance = 0.0
               startTime = message.timeStamp
@@ -312,7 +321,9 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
             
             triggerCount += 1
             
-            if /*(triggerCount == route.count * 2)*/ totalTime > 15.0 {
+            let samplePeriod = SamplePeriod.selected(comboBox: cboSampleSize)
+            
+            if totalTime > samplePeriod.samplePeriod {
               
               mode = .setupNextRun
               
@@ -335,7 +346,7 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
               
               currentStep += 1
               
-              if currentStep == 127 {
+              if currentStep == txtStopStep.integerValue + 1 {
                 currentStep = txtStartStep.integerValue
                 if cboLocomotiveDirection.indexOfSelectedItem == 2 && locomotiveDirection == .forward {
                   locomotiveDirection = .reverse
@@ -486,7 +497,7 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   
   @IBAction func btnSaveAction(_ sender: NSButton) {
     locomotive?.save()
-    self.view.window?.close()
+//    self.view.window?.close()
   }
   
   @IBOutlet weak var scrollView: NSScrollView!
@@ -507,7 +518,9 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   
   @IBAction func cboBestFitMethodAction(_ sender: NSComboBox) {
     locomotive?.newBestFitMethod = BestFitMethod.selected(comboBox: sender)
+    locomotive?.doBestFit()
     tableView.reloadData()
+    resultsView.needsDisplay = true
   }
   
   @IBOutlet weak var cboResultsType: NSComboBox!
@@ -536,6 +549,7 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   @IBOutlet weak var txtStartStep: NSTextField!
   
   @IBAction func txtStartStepAction(_ sender: NSTextField) {
+    UserDefaults.standard.set(txtStartStep.integerValue, forKey: DEFAULT.SPEED_PROFILER_START_STEP)
   }
   
   @IBOutlet weak var chkShowTrendline: NSButton!
@@ -563,17 +577,20 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
       profile.newSpeedForward = profile.speedForward
       profile.newSpeedReverse = profile.speedReverse
     }
-    self.view.window?.close()
+//    self.view.window?.close()
   }
   
+  @IBOutlet weak var cboSampleSize: NSComboBox!
   
+  @IBAction func cboSampleSizeAction(_ sender: NSComboBox) {
+    UserDefaults.standard.set(cboSampleSize.indexOfSelectedItem, forKey: DEFAULT.SPEED_PROFILER_SAMPLE_SIZE)
+  }
   
+  @IBOutlet weak var txtStopStep: NSTextField!
   
-  
-  
-  
-  
-  
+  @IBAction func txtStopStepAction(_ sender: NSTextField) {
+    UserDefaults.standard.set(txtStopStep.integerValue, forKey: DEFAULT.SPEED_PROFILER_STOP_STEP)
+  }
   
 }
 

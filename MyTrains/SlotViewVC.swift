@@ -38,10 +38,18 @@ class SlotViewVC : NSViewController, NSWindowDelegate, InterfaceDelegate {
     cboCommandStation.dataSource = cboCommandStationDS
     
     if cboCommandStation.numberOfItems > 0 {
-      cboCommandStation.selectItem(at: 0)
-      if let cs = cboCommandStationDS.editorObjectAt(index: 0) as? Interface {
+      
+      let key = UserDefaults.standard.integer(forKey: DEFAULT.SLOT_VIEW_COMMAND_STATION)
+      
+      if let index = cboCommandStationDS.indexWithKey(key: key), let cs = cboCommandStationDS.editorObjectAt(index: index) as? Interface {
+        cboCommandStation.selectItem(at: index)
         commandStation = cs
       }
+      else if let cs = cboCommandStationDS.editorObjectAt(index: 0) as? Interface {
+        cboCommandStation.selectItem(at: 0)
+        commandStation = cs
+      }
+      
     }
     
   }
@@ -201,6 +209,7 @@ class SlotViewVC : NSViewController, NSWindowDelegate, InterfaceDelegate {
   @IBAction func cboCommandStationAction(_ sender: NSComboBox) {
     if let cs = cboCommandStationDS.editorObjectAt(index: cboCommandStation.indexOfSelectedItem) as? Interface {
       commandStation = cs
+      UserDefaults.standard.set(cs.primaryKey, forKey: DEFAULT.SLOT_VIEW_COMMAND_STATION)
     }
   }
   

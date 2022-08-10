@@ -163,7 +163,7 @@ class SpeedResultsView: NSView {
         if dataSet != 1 {
           
           for profile in locomotive.speedProfile {
-
+            
             NSColor.cyan.setFill()
             let dx = xOffset + CGFloat(profile.stepNumber) * (bounds.width - xOffset) / 129.0
             let dy = yOffset + ((bounds.height - yOffset) / maxValue) * profile.bestFitForward
@@ -176,7 +176,7 @@ class SpeedResultsView: NSView {
             path.fill()
 
           }
-          
+          /*
           let text = "R2 = \(String(format: "%.4f", locomotive.r2Forward))"
           let font = NSFont.boldSystemFont(ofSize: 12)
           let textRect = CGRect(x: xOffset * 2 + 4, y: bounds.height - 38, width: 200 , height: 30)
@@ -187,7 +187,7 @@ class SpeedResultsView: NSView {
               NSAttributedString.Key.paragraphStyle: textStyle,
           ] as [NSAttributedString.Key : Any]
           text.draw(in: textRect, withAttributes: textFontAttributes)
-          
+          */
         }
         
         if dataSet != 0 {
@@ -207,6 +207,7 @@ class SpeedResultsView: NSView {
 
           }
           
+          /*
           let drop = (dataSet == 2) ? -68.0 : -38.0
 
           let text = "R2 = \(String(format: "%.4f", locomotive.r2Reverse))"
@@ -219,6 +220,9 @@ class SpeedResultsView: NSView {
               NSAttributedString.Key.paragraphStyle: textStyle,
           ] as [NSAttributedString.Key : Any]
           text.draw(in: textRect, withAttributes: textFontAttributes)
+           
+           */
+          
         }
         
       }
