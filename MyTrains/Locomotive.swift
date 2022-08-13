@@ -88,6 +88,8 @@ public let maskF26 = 0b00000100000000000000000000000000
 public let maskF27 = 0b00001000000000000000000000000000
 public let maskF28 = 0b00010000000000000000000000000000
 
+public let locomotiveUpdateInterval : TimeInterval = 200.0 / 1000.0
+
 public class Locomotive : RollingStock, InterfaceDelegate {
   
   // MARK: Constructors
@@ -131,7 +133,7 @@ public class Locomotive : RollingStock, InterfaceDelegate {
     }
     didSet {
       if initState == .active || initState == .release {
-        startTimer(timeInterval: 200.0 / 1000.0)
+        startTimer(timeInterval: locomotiveUpdateInterval)
       }
     }
   }
@@ -139,6 +141,8 @@ public class Locomotive : RollingStock, InterfaceDelegate {
   private var _speed  : LocomotiveSpeed = (speed: 0, direction: .forward)
   
   private var lastLocomotiveState : LocomotiveState = (speed: 0, direction: .forward, functions: 0)
+  
+  private var lastTimeStamp : TimeInterval = -1.0
   
   private var timer : Timer? = nil
   
@@ -224,6 +228,20 @@ public class Locomotive : RollingStock, InterfaceDelegate {
   
   public var slotPage : Int = -1
   
+  public var originBlock : SwitchBoardItem?
+  
+  public var originBlockPosition : Double = 0.0
+  
+  public var destinationBlock : SwitchBoardItem?
+  
+  public var destinationBlockPosition : Double = 0.0
+  
+  public var currentBlock : SwitchBoardItem?
+  
+  public var currentBlockPosition : Double = 0.0
+  
+  public var routeDirection : RouteDirection = .next
+  
   public var locomotiveState : LocomotiveState {
     get {
       var result : LocomotiveState
@@ -243,7 +261,8 @@ public class Locomotive : RollingStock, InterfaceDelegate {
     }
   }
   
-
+  public var distanceTravelled : Double = 0.0
+  
   // MARK: Private Methods
   
   @objc func refreshTimerAction() {
@@ -263,6 +282,16 @@ public class Locomotive : RollingStock, InterfaceDelegate {
   @objc func timerAction() {
     
     if let network = self.network, let interface = network.interface, let throttle = _throttleID {
+      
+      let newTimeStamp = Date.timeIntervalSinceReferenceDate
+      
+      let spd = lastLocomotiveState.speed == 0 ? 0 : lastLocomotiveState.speed - 1
+      
+      let velocity = (lastLocomotiveState.direction == .forward) ? speedProfile[spd].bestFitForward : speedProfile[spd].bestFitReverse
+      
+      distanceTravelled += ((newTimeStamp - lastTimeStamp) * velocity)
+      
+      lastTimeStamp = newTimeStamp
       
       if !isInertial {
         speed = targetSpeed
@@ -306,6 +335,9 @@ public class Locomotive : RollingStock, InterfaceDelegate {
   }
   
   func startTimer(timeInterval:TimeInterval) {
+    doBestFit()
+    lastTimeStamp = Date.timeIntervalSinceReferenceDate
+    distanceTravelled = 0.0
     timer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
     RunLoop.current.add(timer!, forMode: .common)
   }
@@ -340,6 +372,30 @@ public class Locomotive : RollingStock, InterfaceDelegate {
   }
   
   // MARK: Public Methods
+  
+  public func setOriginBlock(block:SwitchBoardItem) {
+    
+    self.originBlock = block
+    
+    self.originBlockPosition = block.dimensionA / 2.0
+    
+    for delegate in delegates {
+      delegate.value.stateUpdated?(locomotive: self)
+    }
+    
+  }
+  
+  public func setDestinationBlock(block:SwitchBoardItem) {
+    
+    self.destinationBlock = block
+    
+    self.destinationBlockPosition = block.dimensionA / 2.0
+    
+    for delegate in delegates {
+      delegate.value.stateUpdated?(locomotive: self)
+    }
+    
+  }
   
   public func doBestFit() {
     
@@ -522,6 +578,7 @@ public class Locomotive : RollingStock, InterfaceDelegate {
             
       switch message.messageType {
       case .locoSlotDataP1:
+        
         let locoSlotDataP1 = LocoSlotDataP1(networkId: message.networkId, data: message.message)
         if locoSlotDataP1.address == mDecoderAddress {
           slotPage = locoSlotDataP1.slotPage
@@ -546,7 +603,7 @@ public class Locomotive : RollingStock, InterfaceDelegate {
             interface.setLocoSlotDataP1(slotData: wb)
           }
         }
-        break
+        
       case .setLocoSlotDataP2:
         
         let locoSlotDataP2 = LocoSlotDataP2(networkId: message.networkId, data: message.message)
@@ -620,11 +677,13 @@ public class Locomotive : RollingStock, InterfaceDelegate {
             interface.setLocoSlotDataP2(slotData: wb, timeoutCode: .setLocoSlotData)
           }
         }
-        break
+
       case .setSlotDataOKP1, .setSlotDataOKP2:
         initState = .active
+        
       case .noFreeSlotsP1, .noFreeSlotsP2:
         initState = .inactive
+        
       default:
         break
       }

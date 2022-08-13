@@ -62,23 +62,46 @@ class SwitchBoardOperationsView : SwitchBoardView {
 
     if let layout = self.layout {
       
-      switch event.modifierFlags.intersection(.deviceIndependentFlagsMask) {
+      if let item = getItem(event: event) {
         
-      case [.control]:
-        if let item = getItem(event: event), let turnoutSwitch = layout.operationalTurnouts[TurnoutSwitch.dictionaryKey(switchBoardItemId: item.primaryKey, turnoutIndex: 1)] {
-          turnoutSwitch.setThrown()
+        switch event.modifierFlags.intersection(.deviceIndependentFlagsMask) {
+          
+        case [.control]:
+          if let turnoutSwitch = layout.operationalTurnouts[TurnoutSwitch.dictionaryKey(switchBoardItemId: item.primaryKey, turnoutIndex: 1)] {
+            turnoutSwitch.setThrown()
+          }
+          else if item.itemPartType == .block {
+            let x = ModalWindow.PlaceLocomotive
+            let wc = x.windowController
+            if let vc = wc.contentViewController as? PlaceLocomotiveVC {
+              vc.switchBoardItem = item
+              vc.isOrigin = false
+            }
+            wc.showWindow(nil)
+          }
+        case [.option]:
+          if let turnoutSwitch = layout.operationalTurnouts[TurnoutSwitch.dictionaryKey(switchBoardItemId: item.primaryKey, turnoutIndex: 1)] {
+            turnoutSwitch.toggle()
+          }
+        case [.shift]:
+          if let turnoutSwitch = layout.operationalTurnouts[TurnoutSwitch.dictionaryKey(switchBoardItemId: item.primaryKey, turnoutIndex: 1)] {
+            turnoutSwitch.setClosed()
+          }
+          else if item.itemPartType == .block {
+            let x = ModalWindow.PlaceLocomotive
+            let wc = x.windowController
+            if let vc = wc.contentViewController as? PlaceLocomotiveVC {
+              vc.switchBoardItem = item
+              vc.isOrigin = true
+            }
+            wc.showWindow(nil)
+          }
+        default:
+          break
         }
-      case [.option]:
-        if let item = getItem(event: event), let turnoutSwitch = layout.operationalTurnouts[TurnoutSwitch.dictionaryKey(switchBoardItemId: item.primaryKey, turnoutIndex: 1)] {
-          turnoutSwitch.toggle()
-        }
-      case [.shift]:
-        if let item = getItem(event: event), let turnoutSwitch = layout.operationalTurnouts[TurnoutSwitch.dictionaryKey(switchBoardItemId: item.primaryKey, turnoutIndex: 1)] {
-          turnoutSwitch.setClosed()
-        }
-      default:
-        break
+
       }
+      
 
   //    needsDisplay = true
 

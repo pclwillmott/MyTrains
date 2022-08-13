@@ -271,6 +271,10 @@ extension Interface {
   
   public func setLocoSlotStat1P1(slotNumber:Int, stat1:UInt8) {
 
+    guard slotNumber > 0 && slotNumber < 120 else {
+      return
+    }
+    
     let message = NetworkMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_SLOT_STAT1.rawValue, UInt8(slotNumber), stat1], appendCheckSum: true)
 
     addToQueue(message: message, delay: MessageTiming.STANDARD)

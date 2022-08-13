@@ -722,6 +722,9 @@
                                                 <font key="font" metaFont="system"/>
                                                 <imageReference key="image" image="plus.magnifyingglass" catalog="system" symbolScale="small"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="btnZoomIn:" target="XfG-lQ-9wD" id="3HC-ng-edW"/>
+                                            </connections>
                                         </button>
                                         <button toolTip="Zoom Out" fixedFrame="YES" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Q4n-AY-BBa">
                                             <rect key="frame" x="501" y="10.5" width="24" height="28"/>
@@ -732,6 +735,9 @@
                                                 <imageReference key="image" image="minus.magnifyingglass" catalog="system" symbolScale="small"/>
                                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="btnZoomOut:" target="XfG-lQ-9wD" id="X4x-2c-eP4"/>
+                                            </connections>
                                         </button>
                                         <button toolTip="Scale to Fit" fixedFrame="YES" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oeW-CB-kAA">
                                             <rect key="frame" x="535" y="11" width="24" height="28"/>
@@ -741,6 +747,9 @@
                                                 <font key="font" metaFont="system"/>
                                                 <imageReference key="image" image="NSEnterFullScreenTemplate" symbolScale="small"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="btnZoomToFit:" target="XfG-lQ-9wD" id="E2Q-zL-ou6"/>
+                                            </connections>
                                         </button>
                                     </subviews>
                                 </view>

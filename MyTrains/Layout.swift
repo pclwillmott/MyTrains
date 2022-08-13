@@ -358,11 +358,11 @@ public class Layout : EditorObject {
         
         if let fromNode = block.nodeLinks[from].switchBoardItem, let toNode = block.nodeLinks[to].switchBoardItem {
           
-          var route : RoutePart = (block, from, toNode, block.nodeLinks[to].nodeId, connection.switchSettings, distance: block.getDimension(index: index))
+          var route : RoutePart = (block, from, toNode, block.nodeLinks[to].nodeId, connection.switchSettings, distance: block.getDimension(index: index), routeDirection: .next)
           
           block.nodeLinks[from].routes.append(route)
           
-          route = (block, to, fromNode, block.nodeLinks[from].nodeId, connection.switchSettings, distance: block.getDimension(index: index))
+          route = (block, to, fromNode, block.nodeLinks[from].nodeId, connection.switchSettings, distance: block.getDimension(index: index), routeDirection: .previous)
           
           block.nodeLinks[to].routes.append(route)
 
@@ -536,6 +536,56 @@ public class Layout : EditorObject {
       loopNames.append(name.trimmingCharacters(in: .whitespacesAndNewlines))
       loopLengths.append(length)
     }
+    
+  }
+
+  public func findRouteFrom(origin:SwitchBoardItem, destination:SwitchBoardItem, routeDirection:RouteDirection, routeSoFar: inout Route, inLoop: inout Set<Int>, next:RoutePart) -> Route {
+    
+    if destination.primaryKey == next.toSwitchBoardItem.primaryKey {
+      return routeSoFar
+    }
+
+    for routePart in next.toSwitchBoardItem.nodeLinks[next.toNodeId].routes {
+      if !inLoop.contains(next.toSwitchBoardItem.primaryKey) {
+        if next.toSwitchBoardItem.isTurnout || routePart.routeDirection == routeDirection {
+          inLoop.insert(next.toSwitchBoardItem.primaryKey)
+          routeSoFar.append(routePart)
+          let temp = findRouteFrom(origin: origin, destination: destination, routeDirection: routeDirection, routeSoFar: &routeSoFar, inLoop: &inLoop, next: routePart)
+          if !temp.isEmpty {
+            return temp
+          }
+          routeSoFar.remove(at: routeSoFar.count-1)
+          inLoop.remove(next.toSwitchBoardItem.primaryKey)
+        }
+      }
+    }
+    
+    return []
+
+  }
+  
+  public func findRoute(origin:SwitchBoardItem, destination:SwitchBoardItem, routeDirection:RouteDirection) -> Route {
+    
+    var routeSoFar : Route = []
+    
+    var inLoop : Set<Int> = []
+
+    inLoop.insert(origin.primaryKey)
+    
+    for nodeLink in origin.nodeLinks {
+      for routePart in nodeLink.routes {
+        if routePart.routeDirection == routeDirection {
+          routeSoFar.append(routePart)
+          let temp = findRouteFrom(origin: origin, destination: destination, routeDirection: routeDirection, routeSoFar: &routeSoFar, inLoop: &inLoop, next: routePart)
+          if !temp.isEmpty {
+            return temp
+          }
+          routeSoFar.remove(at: routeSoFar.count-1)
+        }
+      }
+    }
+
+    return []
     
   }
   

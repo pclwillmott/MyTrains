@@ -45,6 +45,10 @@ class MainVC: NSViewController, NetworkControllerDelegate, LayoutDelegate {
     
     switchBoardView.layout = networkController.layout
     
+    scrollView.documentView?.frame = NSMakeRect(0.0, 0.0, 2000.0, 2000.0)
+    scrollView.allowsMagnification = true
+    scrollView.magnification = UserDefaults.standard.double(forKey: DEFAULT.SWITCHBOARD_EDITOR_MAG)
+
     if let layout = networkController.layout {
       layoutDelegateId = layout.addDelegate(delegate: self)
     }
@@ -195,6 +199,39 @@ class MainVC: NSViewController, NetworkControllerDelegate, LayoutDelegate {
   @IBOutlet weak var scrollView: NSScrollView!
   
   @IBOutlet weak var switchBoardView: SwitchBoardOperationsView!
+  
+  @IBAction func btnZoomIn(_ sender: NSButton) {
+    scrollView.magnification += 0.25
+    UserDefaults.standard.set(scrollView.magnification, forKey: DEFAULT.MAIN_SWITCHBOARD_MAG)
+  }
+  
+  @IBAction func btnZoomOut(_ sender: NSButton) {
+    scrollView.magnification -= 0.25
+    UserDefaults.standard.set(scrollView.magnification, forKey: DEFAULT.MAIN_SWITCHBOARD_MAG)
+  }
+  
+  @IBAction func btnZoomToFit(_ sender: NSButton) {
+    
+    scrollView.magnification = 1.0
+
+    let sWidth = scrollView.frame.width
+    let sHeight = scrollView.frame.height
+    let gWidth = switchBoardView.bounds.width
+    let gHeight = switchBoardView.bounds.height
+
+    var scale = 1.0
+
+    if gWidth > gHeight {
+      scale = sWidth / gWidth
+    }
+    else {
+      scale = sHeight / gHeight
+    }
+    
+    scrollView.magnification = scale
+    UserDefaults.standard.set(scrollView.magnification, forKey: DEFAULT.MAIN_SWITCHBOARD_MAG)
+    
+  }
   
 }
 

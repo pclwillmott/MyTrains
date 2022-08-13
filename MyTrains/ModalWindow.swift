@@ -32,6 +32,7 @@ enum AppStoryboard : String {
   case SwitchBoardItemPropertySheet = "SwitchBoardItemPropertySheet"
   case AddressManager               = "AddressManager"
   case SpeedProfiler                = "SpeedProfiler"
+  case PlaceLocomotive              = "PlaceLocomotive"
   
   var instance : NSStoryboard {
     return NSStoryboard(name: self.rawValue, bundle: Bundle.main)
@@ -62,6 +63,7 @@ let storyboardLookup             : [String:AppStoryboard] = [
   "SwitchBoardItemPropertySheet" : AppStoryboard.SwitchBoardItemPropertySheet,
   "AddressManager"               : AppStoryboard.AddressManager,
   "SpeedProfiler"                : AppStoryboard.SpeedProfiler,
+  "PlaceLocomotive"              : AppStoryboard.PlaceLocomotive,
 ]
 
 /*
@@ -97,6 +99,7 @@ enum ModalWindow : String {
   case SwitchBoardItemPropertySheet = "SwitchBoardItemPropertySheet"
   case AddressManager               = "AddressManager"
   case SpeedProfiler                = "SpeedProfiler"
+  case PlaceLocomotive              = "PlaceLocomotive"
 
   var windowController : NSWindowController {
     let storyboard = storyboardLookup[self.rawValue]!
