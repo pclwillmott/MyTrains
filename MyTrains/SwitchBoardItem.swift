@@ -14,7 +14,7 @@ public enum SwitchBoardItemAction {
   case noAction
 }
 
-public typealias RoutePart = (fromSwitchBoardItem: SwitchBoardItem, fromNodeId: Int, toSwitchBoardItem: SwitchBoardItem, toNodeId: Int, switchSettings: [TurnoutSwitchSetting], distance: Double, routeDirection: RouteDirection)
+public typealias RoutePart = (fromSwitchBoardItem: SwitchBoardItem, fromNodeId: Int, toSwitchBoardItem: SwitchBoardItem, toNodeId: Int, switchSettings: [TurnoutSwitchSetting], distance: Double, routeDirection: RouteDirection) 
 
 public typealias NodeLink = (switchBoardItem: SwitchBoardItem?, nodeId: Int, routes: [RoutePart])
 

@@ -122,7 +122,7 @@ public class OptionSwitch {
     }
   }
   
-  public var newDefaultDecoderType : SpeedSteps = .unknown
+  public var newDefaultDecoderType : SpeedSteps = SpeedSteps.defaultValue
 
   // DCS240
   
@@ -221,7 +221,7 @@ public class OptionSwitch {
         }
       }
 
-      return .unknown
+      return SpeedSteps.defaultValue
       
     }
     

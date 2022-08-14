@@ -91,13 +91,13 @@ public class LocoSlotDataP1 : NetworkMessage {
       case 0b100:
         return .dcc28A
       case 0b101:
-        return .unknown
+        return SpeedSteps.defaultValue
       case 0b110:
-        return .unknown
+        return SpeedSteps.defaultValue
       case 0b111:
         return .dcc128A
       default:
-        return .unknown
+        return SpeedSteps.defaultValue
       }
       
     }

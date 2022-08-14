@@ -174,6 +174,8 @@
 		DAF4DD4C289A90C1000B848E /* SpeedResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF4DD4B289A90C1000B848E /* SpeedResultsView.swift */; };
 		DAF4DD4E289A9901000B848E /* BestFitMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF4DD4D289A9901000B848E /* BestFitMethod.swift */; };
 		DAF4DD50289ABDDE000B848E /* SpeedProfileResultsType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF4DD4F289ABDDE000B848E /* SpeedProfileResultsType.swift */; };
+		DAF5B4FD28A91A830015E758 /* SpeedSteps.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF5B4FC28A91A830015E758 /* SpeedSteps.swift */; };
+		DAF5B4FF28A93D0E0015E758 /* RandomAccessCollectionExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF5B4FE28A93D0E0015E758 /* RandomAccessCollectionExtensions.swift */; };
 		DAF5BCD9281EF086000B61CA /* SwitchBoardPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF5BCD8281EF086000B61CA /* SwitchBoardPanel.swift */; };
 		DAFD69832840FCF50028E7D3 /* InterfaceCommandStationExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAFD69822840FCF50028E7D3 /* InterfaceCommandStationExtensions.swift */; };
 /* End PBXBuildFile section */
@@ -351,6 +353,8 @@
 		DAF4DD4B289A90C1000B848E /* SpeedResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedResultsView.swift; sourceTree = "<group>"; };
 		DAF4DD4D289A9901000B848E /* BestFitMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BestFitMethod.swift; sourceTree = "<group>"; };
 		DAF4DD4F289ABDDE000B848E /* SpeedProfileResultsType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedProfileResultsType.swift; sourceTree = "<group>"; };
+		DAF5B4FC28A91A830015E758 /* SpeedSteps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedSteps.swift; sourceTree = "<group>"; };
+		DAF5B4FE28A93D0E0015E758 /* RandomAccessCollectionExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomAccessCollectionExtensions.swift; sourceTree = "<group>"; };
 		DAF5BCD8281EF086000B61CA /* SwitchBoardPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchBoardPanel.swift; sourceTree = "<group>"; };
 		DAFD69822840FCF50028E7D3 /* InterfaceCommandStationExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceCommandStationExtensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -457,6 +461,8 @@
 				DA0DA2792779E96B00E4F23C /* Layout.swift */,
 				DADBBFE9285DF36700426CD5 /* LayoutSwitchBoardExtensions.swift */,
 				DA7B4726273803BA00BCD587 /* Locomotive.swift */,
+				DAF5B4FE28A93D0E0015E758 /* RandomAccessCollectionExtensions.swift */,
+				DAF5B4FC28A91A830015E758 /* SpeedSteps.swift */,
 				DA613AC828A7DECD003218BA /* PlaceLocomotive.storyboard */,
 				DA613ACA28A7E02E003218BA /* PlaceLocomotiveVC.swift */,
 				DA9325A5289C02C300CC317F /* LocomotiveDirection.swift */,
@@ -692,10 +698,12 @@
 				DA77795527AEEBBC007EEBE9 /* OpSwTCV.swift in Sources */,
 				DA467B9F281CBAF900AB9650 /* NSRectExtensions.swift in Sources */,
 				DA9325A6289C02C300CC317F /* LocomotiveDirection.swift in Sources */,
+				DAF5B4FD28A91A830015E758 /* SpeedSteps.swift in Sources */,
 				DA8B5D1D282FE31600D39F07 /* InterfaceDelegate.swift in Sources */,
 				DA95D6C12808412200D9F1B6 /* DuplexData.swift in Sources */,
 				DA467BB3281D60E400AB9650 /* SwitchBoardShapeButton.swift in Sources */,
 				DA7B472A273824F700BCD587 /* NetworkOutputQueueItem.swift in Sources */,
+				DAF5B4FF28A93D0E0015E758 /* RandomAccessCollectionExtensions.swift in Sources */,
 				DA08B433278737540001307C /* ProgramDecoderAddressVC.swift in Sources */,
 				DA1DC9FF28A1CE0D007A957A /* SamplePeriod.swift in Sources */,
 				DA6F3926274FD0C400A63FBF /* PeerXfer20.swift in Sources */,

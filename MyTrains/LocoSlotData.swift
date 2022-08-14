@@ -83,7 +83,7 @@ public class LocoSlotData {
     
     consistState = .NotLinked
     
-    mobileDecoderType = .unknown
+    mobileDecoderType = SpeedSteps.defaultValue
     
     direction = .forward
     

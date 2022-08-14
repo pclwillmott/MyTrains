@@ -111,6 +111,8 @@ class ThrottleVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate,
       
       self.locomotive = locomotive
       
+      locomotive.throttleMode = ThrottleMode.selected(comboBox: cboThrottleMode)
+      
       locomotiveDelegateId = locomotive.addDelegate(delegate: self)
       
       swPower.state = locomotive.isInUse ? .on : .off
@@ -129,6 +131,7 @@ class ThrottleVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate,
       vsThrottle.integerValue = locomotive.targetSpeed.speed
       
       lblTargetStep.integerValue = vsThrottle.integerValue
+      
       lblSpeed.integerValue = locomotive.speed.speed
       
       chkInertial.state = locomotive.isInertial ? .on : .off
@@ -146,6 +149,7 @@ class ThrottleVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate,
       if let origin = locomotive.originBlock {
         lblOrigin.stringValue = origin.blockName
       }
+      
       if let destination = locomotive.destinationBlock {
         lblDestination.stringValue = destination.blockName
       }
@@ -308,10 +312,7 @@ class ThrottleVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate,
   @IBOutlet weak var chkInertial: NSButton!
   
   @IBAction func chkInerialAction(_ sender: NSButton) {
-    
-    if let loco = locomotive {
-      loco.isInertial = chkInertial.state == .on
-    }
+    locomotive?.isInertial = chkInertial.state == .on
   }
   
   @IBOutlet weak var lblTargetStep: NSTextField!
@@ -326,6 +327,7 @@ class ThrottleVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate,
   @IBOutlet weak var cboThrottleMode: NSComboBox!
   
   @IBAction func cboThrottleModeAction(_ sender: NSComboBox) {
+    locomotive?.throttleMode = ThrottleMode.selected(comboBox: cboThrottleMode)
     enableControls()
   }
   
@@ -336,18 +338,15 @@ class ThrottleVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate,
   @IBOutlet weak var btnSetRoute: NSButton!
   
   @IBAction func btnSetRouteAction(_ sender: NSButton) {
-    if let locomotive = self.locomotive, let origin = locomotive.originBlock, let destination = locomotive.destinationBlock, let layout = networkController.layout {
-      route = layout.findRoute(origin: origin, destination: destination, routeDirection: RouteDirection.selected(comboBox: cboRouteDirection))
-      layout.setRoute(route: route)
+    if let locomotive = self.locomotive, let layout = networkController.layout {
+      layout.setRoute(route: locomotive.route)
     }
   }
   
   @IBOutlet weak var btnGo: NSButton!
   
   @IBAction func btnGoAction(_ sender: NSButton) {
-    if let locomotive = self.locomotive, let origin = locomotive.originBlock, let destination = locomotive.destinationBlock, let layout = networkController.layout {
-      route = layout.findRoute(origin: origin, destination: destination, routeDirection: RouteDirection.selected(comboBox: cboRouteDirection))
-    }
+    locomotive?.startAutoRoute()
   }
   
   @IBOutlet weak var boxMain: NSBox!

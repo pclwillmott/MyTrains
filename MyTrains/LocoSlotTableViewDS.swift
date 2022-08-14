@@ -59,7 +59,7 @@ public class SlotTableViewDS : NSObject, NSTableViewDataSource, NSTableViewDeleg
     case ColumnIdentifiers.StatusColumn:
       text = "\(item.slotState.title)"
     case ColumnIdentifiers.DecoderColumn:
-      text = "\(item.mobileDecoderType)"
+      text = "\(item.mobileDecoderType.title)"
     case ColumnIdentifiers.AddressColumn:
       text = "\(item.address)"
     case ColumnIdentifiers.SpeedColumn:

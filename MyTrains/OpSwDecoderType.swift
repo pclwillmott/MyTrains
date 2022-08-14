@@ -43,7 +43,7 @@ class OpSwDecoderView: NSTableCellView {
       case 5:
         return .dcc28T
       default:
-        return .unknown
+        return SpeedSteps.defaultValue
       }
     }
     set(value) {
