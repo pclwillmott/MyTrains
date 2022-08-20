@@ -570,8 +570,8 @@
             filePath = "MyTrains/Locomotive.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "409"
-            endingLineNumber = "409"
+            startingLineNumber = "447"
+            endingLineNumber = "447"
             landmarkName = "autoRouteDistanceToSpeedStep(targetSpeed:autoRouteIncrement:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -586,8 +586,8 @@
             filePath = "MyTrains/Locomotive.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "415"
-            endingLineNumber = "415"
+            startingLineNumber = "453"
+            endingLineNumber = "453"
             landmarkName = "autoRouteDistanceToSpeedStep(targetSpeed:autoRouteIncrement:)"
             landmarkType = "7">
          </BreakpointContent>

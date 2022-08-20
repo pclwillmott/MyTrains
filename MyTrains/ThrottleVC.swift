@@ -200,11 +200,11 @@ class ThrottleVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate,
     lblDistance.stringValue = String(format: "%.1f", locomotive.distanceTravelled)
     lblOrigin.stringValue = ""
     if let origin = locomotive.originBlock {
-      lblOrigin.stringValue = origin.blockName
+      lblOrigin.stringValue = "\(origin.blockName) \(String(format:"%.1f", locomotive.originBlockPosition))"
     }
     lblDestination.stringValue = ""
     if let destination = locomotive.destinationBlock {
-      lblDestination.stringValue = destination.blockName
+      lblDestination.stringValue = "\(destination.blockName) \(String(format:"%.1f", locomotive.destinationBlockPosition))"
     }
 
   }

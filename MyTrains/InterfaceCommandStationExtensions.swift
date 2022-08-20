@@ -113,13 +113,19 @@ extension Interface {
     }
   }
   
-  public func updateLocomotiveState(slotNumber: Int, slotPage: Int, previousState:LocomotiveState, nextState:LocomotiveState, throttleID: Int, forceRefresh: Bool) -> LocomotiveState {
+  public func updateLocomotiveState(slotNumber: Int, slotPage: Int, previousState:LocomotiveState, nextState:LocomotiveState, throttleID: Int, forceRefresh: Bool) -> LocomotiveStateWithTimeStamp {
  
+    var timeStamp : TimeInterval?
+    
     if isOpen {
       
       let speedChanged = previousState.speed != nextState.speed
       
       let directionChanged = previousState.direction != nextState.direction
+      
+      if speedChanged || directionChanged {
+        timeStamp = Date.timeIntervalSinceReferenceDate
+      }
       
       let previous = previousState.functions
       
@@ -215,7 +221,7 @@ extension Interface {
       
     }
 
-    return nextState
+    return (state: nextState, timeStamp: timeStamp)
 
   }
 

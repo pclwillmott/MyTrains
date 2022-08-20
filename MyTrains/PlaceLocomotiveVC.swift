@@ -59,7 +59,7 @@ class PlaceLocomotiveVC: NSViewController, NSWindowDelegate {
   @IBAction func btnSetAction(_ sender: NSButton) {
     
     if let locomotive = cboLocomotiveDS.editorObjectAt(index: cboLocomotive.indexOfSelectedItem) as? Locomotive, let block = switchBoardItem {
-      isOrigin ? locomotive.setOriginBlock(block: block) : locomotive.setDestinationBlock(block: block)
+      isOrigin ? locomotive.setOriginBlock(originBlock: block, originPosition: 0.0) : locomotive.setDestinationBlock(destinationBlock: block, destinationPosition: block.dirNextStopPosition * block.dirNextUnitsPosition.toCM)
     }
     
     self.view.window?.close()
