@@ -570,10 +570,10 @@
             filePath = "MyTrains/Locomotive.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "447"
-            endingLineNumber = "447"
-            landmarkName = "autoRouteDistanceToSpeedStep(targetSpeed:autoRouteIncrement:)"
-            landmarkType = "7">
+            startingLineNumber = "452"
+            endingLineNumber = "452"
+            landmarkName = "autoRouteDistanceToSpeedStep(lastLocomotiveState:targetSpeed:autoRouteIncrement:)"
+            landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -586,9 +586,25 @@
             filePath = "MyTrains/Locomotive.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "453"
-            endingLineNumber = "453"
-            landmarkName = "autoRouteDistanceToSpeedStep(targetSpeed:autoRouteIncrement:)"
+            startingLineNumber = "458"
+            endingLineNumber = "458"
+            landmarkName = "autoRouteDistanceToSpeedStep(lastLocomotiveState:targetSpeed:autoRouteIncrement:)"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "043CB79B-F407-4D0A-A5D6-650553070628"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MyTrains/Layout.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "550"
+            endingLineNumber = "550"
+            landmarkName = "findRouteFrom(locomotive:origin:destination:routeDirection:routeSoFar:inLoop:next:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

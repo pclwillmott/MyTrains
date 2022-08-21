@@ -14,7 +14,15 @@ public enum SwitchBoardItemAction {
   case noAction
 }
 
-public typealias RoutePart = (fromSwitchBoardItem: SwitchBoardItem, fromNodeId: Int, toSwitchBoardItem: SwitchBoardItem, toNodeId: Int, switchSettings: [TurnoutSwitchSetting], distance: Double, routeDirection: RouteDirection) 
+public typealias RoutePart = (
+  fromSwitchBoardItem: SwitchBoardItem,
+  fromNodeId: Int,
+  toSwitchBoardItem: SwitchBoardItem,
+  toNodeId: Int,
+  switchSettings: [TurnoutSwitchSetting],
+  distance: Double,
+  routeDirection: RouteDirection
+) 
 
 public typealias NodeLink = (switchBoardItem: SwitchBoardItem?, nodeId: Int, routes: [RoutePart])
 
@@ -269,6 +277,19 @@ public class SwitchBoardItem : EditorObject {
   public var trackElectrificationType : TrackElectrificationType = TrackElectrificationType.defaultValue {
     didSet {
       modified = true
+    }
+  }
+  
+  public var validLocomotiveTypes : Set<LocomotiveType> {
+    get {
+      switch trackElectrificationType {
+      case .overhead:
+        return [.electricOverhead, .electroDiesel, .diesel, .steam]
+      case .thirdRail:
+        return [.electricThirdRail, .electroDiesel, .diesel, .steam]
+      default:
+        return [.electroDiesel, .diesel, .steam]
+      }
     }
   }
   
@@ -623,6 +644,22 @@ public class SwitchBoardItem : EditorObject {
     default:
       return 0.0
     }
+  }
+  
+  public func stopPositionInCM(routeDirection: RouteDirection) -> Double {
+    
+    var stopPosition : Double = (routeDirection == .next)
+    ? (dirNextStopPosition * dirNextUnitsPosition.toCM)
+    : (dirPreviousStopPosition * dirPreviousUnitsPosition.toCM)
+    
+    // A stop position is always in a block. Blocks only have one dimension, so we use a fixed index of 0.
+    
+    if stopPosition < 0.0 {
+      stopPosition += (getDimension(index: 0) * unitsDimension.toCM)
+    }
+
+    return stopPosition
+    
   }
   
   public func rotateRight() {

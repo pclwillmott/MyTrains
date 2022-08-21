@@ -49,7 +49,7 @@ public let maskF26 = 0b00000100000000000000000000000000
 public let maskF27 = 0b00001000000000000000000000000000
 public let maskF28 = 0b00010000000000000000000000000000
 
-public let locomotiveUpdateInterval : TimeInterval = 200.0 / 1000.0
+public let locomotiveUpdateInterval : TimeInterval = 250.0 / 1000.0
 
 public class Locomotive : RollingStock, InterfaceDelegate {
   
@@ -104,6 +104,10 @@ public class Locomotive : RollingStock, InterfaceDelegate {
   private var autoRouteLock : NSLock = NSLock()
   
   private var recentStates : [LocomotiveStateWithTimeStamp] = []
+  
+  private var findFirstBlockLength : Bool = true
+  
+  private var autoRouteStartTime : TimeInterval = 0.0
   
   private var blocksInRoute : Set<Int> = []
   
@@ -173,12 +177,10 @@ public class Locomotive : RollingStock, InterfaceDelegate {
     set(value) {
       _route = value
       blocksInRoute.removeAll()
-      print("set route")
+ //     print("set route")
       for routePart in _route {
-        print("  \(routePart.fromSwitchBoardItem.blockName) -> \(routePart.toSwitchBoardItem.blockName)")
-        if routePart.toSwitchBoardItem.isBlock {
-          blocksInRoute.insert(routePart.toSwitchBoardItem.primaryKey)
-        }
+        print("  \(routePart.fromSwitchBoardItem.blockName) -> \(routePart.toSwitchBoardItem.blockName) \(routePart.distance)")
+        blocksInRoute.insert(routePart.toSwitchBoardItem.primaryKey)
       }
     }
   }
@@ -287,14 +289,18 @@ public class Locomotive : RollingStock, InterfaceDelegate {
       let result = interface.updateLocomotiveState(slotNumber: slotNumber, slotPage: slotPage, previousState: lastLocomotiveState, nextState: locomotiveState, throttleID: throttle, forceRefresh: forceRefresh)
       
       lastLocomotiveState = result.state
+      
+      if findFirstBlockLength {
+        autoRouteStartTime = lastTimeStamp
+      }
  
       if autoRouteActive {
-        autoRouteLock.lock()
+ //       autoRouteLock.lock()
         autoRouteDistanceTravelled += distance
         if let _ = result.timeStamp {
-//          recentStates.append(result)
+          recentStates.append(result)
         }
-        autoRouteLock.unlock()
+ //       autoRouteLock.unlock()
       }
     
       for delegate in delegates {
@@ -315,32 +321,34 @@ public class Locomotive : RollingStock, InterfaceDelegate {
       
       if autoRouteActive {
         
-        autoRouteLock.lock()
+ //       autoRouteLock.lock()
         
         let distanceToDestination = autoRouteLength - autoRouteDistanceTravelled
 
         // At destination or overshot destination
         
         if distanceToDestination <= 0.0 {
+          
           speed.speed = 0
           autoRouteActive = false
           blocksToIgnore.removeAll()
-          var totalDistance : Double = 0.0
-          for routePart in route {
-            totalDistance += routePart.distance
+          
+          var stopPosition : Double = autoRouteDistanceTravelled
+          for index in 0...route.count - 2 {
+            stopPosition -= route[index].distance
           }
-          let dest = route[route.count-1].toSwitchBoardItem
-          setOriginBlock(originBlock: dest, originPosition: totalDistance - autoRouteDistanceTravelled)
-          print("at destination")
+          
+          setOriginBlock(originBlock: destinationBlock!, originPosition: stopPosition)
+          
+          print("at destination - stopPosition: \(stopPosition) startDistance: \(route[0].distance)")
           
         }
         
         // Stopping distance reached or overshot
         
-        else if distanceToDestination <= autoRouteDistanceToStop(autoRouteIncrement: 1) + 1.5 {
-          speed.speed -= autoRouteStepIncToStop(distance:distanceToDestination)
+        else if distanceToDestination <= autoRouteDistanceToStop(lastLocomotiveState:lastLocomotiveState, autoRouteIncrement: 1) + 1.5 {
+          speed.speed -= autoRouteStepIncToStop(lastLocomotiveState:lastLocomotiveState, distance:distanceToDestination)
           speed.speed = max(1,speed.speed)
-  //        print("stopping - \(distanceToDestination) \(autoRouteDistanceToStop(autoRouteIncrement: 1)) \(autoRouteStepIncToStop(distance:distanceToDestination))")
         }
         else {
           
@@ -374,9 +382,8 @@ public class Locomotive : RollingStock, InterfaceDelegate {
             
             let distanceToNextBlock = distance - autoRouteDistanceTravelled
             
-            speed.speed -= autoRouteStepIncToSpeedStep(distance: distanceToNextBlock, targetSpeed: nBlockStep)
+            speed.speed -= autoRouteStepIncToSpeedStep(lastLocomotiveState:lastLocomotiveState, distance: distanceToNextBlock, targetSpeed: nBlockStep)
             
-   //         print("reduce speed for next block max speed")
           }
           else {
             
@@ -390,14 +397,12 @@ public class Locomotive : RollingStock, InterfaceDelegate {
             
             if speed.speed < cBlockStep {
               speed.speed += 1
-   //           print("accelerate to \(cBlockMaxSpeed) \(cBlockStep)")
             }
             
             // Decelerate to speed limit
             
             else if speed.speed > cBlockStep {
               speed.speed -= 1
-     //         print("declerate")
             }
             
           }
@@ -406,7 +411,7 @@ public class Locomotive : RollingStock, InterfaceDelegate {
         
         speed.speed = min(max(speed.speed, 0), 126)
         
-        autoRouteLock.unlock()
+   //     autoRouteLock.unlock()
         
       }
       else if isInertial {
@@ -428,11 +433,11 @@ public class Locomotive : RollingStock, InterfaceDelegate {
     
   }
   
-  private func autoRouteDistanceToStop(autoRouteIncrement:Int) -> Double {
-    return autoRouteDistanceToSpeedStep(targetSpeed: 0, autoRouteIncrement: autoRouteIncrement)
+  private func autoRouteDistanceToStop(lastLocomotiveState:LocomotiveState, autoRouteIncrement:Int) -> Double {
+    return autoRouteDistanceToSpeedStep(lastLocomotiveState:lastLocomotiveState, targetSpeed: 0, autoRouteIncrement: autoRouteIncrement)
   }
 
-  private func autoRouteDistanceToSpeedStep(targetSpeed: Int, autoRouteIncrement:Int) -> Double {
+  private func autoRouteDistanceToSpeedStep(lastLocomotiveState:LocomotiveState, targetSpeed: Int, autoRouteIncrement:Int) -> Double {
     
     var distance = 0.0
     
@@ -454,13 +459,13 @@ public class Locomotive : RollingStock, InterfaceDelegate {
     
   }
 
-  private func autoRouteStepIncToStop(distance:Double) -> Int {
-    return autoRouteStepIncToSpeedStep(distance: distance, targetSpeed: 0)
+  private func autoRouteStepIncToStop(lastLocomotiveState:LocomotiveState, distance:Double) -> Int {
+    return autoRouteStepIncToSpeedStep(lastLocomotiveState:lastLocomotiveState, distance: distance, targetSpeed: 0)
   }
   
-  private func autoRouteStepIncToSpeedStep(distance:Double, targetSpeed: Int) -> Int {
+  private func autoRouteStepIncToSpeedStep(lastLocomotiveState:LocomotiveState, distance:Double, targetSpeed: Int) -> Int {
     var increment : Int = 1
-    while increment < 10 && autoRouteDistanceToSpeedStep(targetSpeed: targetSpeed, autoRouteIncrement: increment) > distance {
+    while increment < 10 && autoRouteDistanceToSpeedStep(lastLocomotiveState:lastLocomotiveState, targetSpeed: targetSpeed, autoRouteIncrement: increment) > distance {
       increment += 1
     }
     return increment
@@ -537,11 +542,9 @@ public class Locomotive : RollingStock, InterfaceDelegate {
     
   }
   
-  public func setDestinationBlock(destinationBlock:SwitchBoardItem, destinationPosition: Double) {
+  public func setDestinationBlock(destinationBlock:SwitchBoardItem) {
     
     self.destinationBlock = destinationBlock
-    
-    self.destinationBlockPosition = destinationPosition
     
     for delegate in delegates {
       delegate.value.stateUpdated?(locomotive: self)
@@ -551,27 +554,26 @@ public class Locomotive : RollingStock, InterfaceDelegate {
   
   public func startAutoRoute() {
     
-    if let layout = networkController.layout, let origin = originBlock, let destination = destinationBlock {
-      route = layout.findRoute(origin: origin, destination: destination, routeDirection: routeDirection)
-    }
+    print("startAutoRoute")
     
-    if !route.isEmpty {
+    self.route = []
+
+    if let layout = networkController.layout, let origin = originBlock, let destination = destinationBlock, let route = layout.findRoute(locomotive: self, origin: origin, originPosition: originBlockPosition, destination: destination, routeDirection: routeDirection) {
+
+      self.route = route
       
-      speed.direction = targetSpeed.direction
+      speed.direction = (route[0].routeDirection == .next) ? .forward : .reverse
       
       autoRouteLock.lock()
       
       autoRouteLength = 0.0
-      
       for routePart in route {
         autoRouteLength += routePart.distance
       }
       
-      let routeDirection = route[route.count-1].routeDirection
+      autoRouteDistanceTravelled = 0.0
       
-      autoRouteLength += ((routeDirection == .next) ? destinationBlock!.dirNextStopPosition : destinationBlock!.dirPreviousStopPosition)
-      
-      autoRouteDistanceTravelled = originBlockPosition
+      findFirstBlockLength = true
       
       autoRouteActive = true
       
@@ -889,47 +891,141 @@ public class Locomotive : RollingStock, InterfaceDelegate {
           return
         }
         
+        // filter those blocks of interest.
+        
         if let block = interface.sensorLookup[message.sensorAddress], message.sensorState && blocksInRoute.contains(block.primaryKey) && !blocksToIgnore.contains(block.primaryKey) {
+          
+          if block == destinationBlock {
+            return
+          }
+          
+          // Acquire the lock.
           
           autoRouteLock.lock()
           
-          print("new block")
+          // Find the route part that exits to the new block.
+          // Calculate the distance up to the new block.
+          
+          var newDistance : Double = 0.0
+          
+          var index : Int = 0
+          for routePart in route {
+            if !findFirstBlockLength || index > 0 {
+              newDistance += routePart.distance
+            }
+            if routePart.toSwitchBoardItem == block {
+              break
+            }
+            index += 1
+          }
+                      
+          // Set up which blocks in the route to ignore for false positives.
+          
+          
+          // Find the locomotive state effective at the time the block reported.
+          
+          var lastState : LocomotiveStateWithTimeStamp?
+          
+          var startDistance : Double = 0.0
+          
+          while !recentStates.isEmpty && recentStates[0].timeStamp! <= message.timeStamp {
+            
+            lastState = recentStates[0]
+            recentStates.remove(at: 0)
+            
+            if findFirstBlockLength {
+              
+              let deltaTime = lastState!.timeStamp! - autoRouteStartTime
+              
+              autoRouteStartTime = lastState!.timeStamp!
+              
+              let speedStep = lastState!.state.speed == 0 ? 0 : lastState!.state.speed - 1
+            
+              let velocity = (lastState!.state.direction == .forward) ? speedProfile[speedStep].bestFitForward : speedProfile[speedStep].bestFitReverse
+              
+              startDistance += (deltaTime * velocity)
+
+            }
+            
+          }
+          
+          print("startDistance: \(startDistance)")
+          
+          if findFirstBlockLength {
+            
+            let firstBlock = startDistance - newDistance
+            
+            autoRouteLength -= route[0].distance
+            route[0].distance = firstBlock
+            autoRouteLength += route[0].distance
+            
+            newDistance += route[0].distance
+
+            findFirstBlockLength = false
+            
+          }
           
           blocksToIgnore.removeAll()
           
           blocksToIgnore.insert(block.primaryKey)
           
-          var currentIndex : Int = 0
-          
-          var currentBlock : SwitchBoardItem?
-          
-          autoRouteDistanceTravelled = 0.0
-          for routePart in route {
-            if routePart.toSwitchBoardItem == block {
-              currentBlock = routePart.toSwitchBoardItem
-              break
-            }
-            autoRouteDistanceTravelled += routePart.distance
-            currentIndex += 1
-          }
-          
-          print("current block: \(currentBlock!.blockName) currentIndex: \(currentIndex) autoRouteDistanceTravelled: \(autoRouteDistanceTravelled)")
-          
           var ignoreDistance : Double = 0.0
-          
-          var index = currentIndex
           
           while index >= 0 && ignoreDistance < self.length {
             let routePart = route[index]
             ignoreDistance += routePart.distance
             blocksToIgnore.insert(routePart.fromSwitchBoardItem.primaryKey)
-            print("  ignore - \(routePart.fromSwitchBoardItem.blockName)")
             index -= 1
           }
           
-          print("Set Block: \(currentBlock!.blockName) \(0.0)")
+         // If found, process all the remaining states.
           
-          setOriginBlock(originBlock: currentBlock!, originPosition: 0.0)
+          if let _ = lastState {
+            
+            var lastTime = message.timeStamp
+            
+            while !recentStates.isEmpty {
+              
+              // Accumulate all the step distances
+              
+              if let state = lastState {
+                
+                let nextState = recentStates[0]
+                
+                let deltaTime = nextState.timeStamp! - lastTime
+                
+                let speedStep = state.state.speed == 0 ? 0 : state.state.speed - 1
+              
+                let velocity = (state.state.direction == .forward) ? speedProfile[speedStep].bestFitForward : speedProfile[speedStep].bestFitReverse
+                
+                newDistance += (deltaTime * velocity)
+                
+                lastState = nextState
+                
+                lastTime = nextState.timeStamp!
+              
+                recentStates.remove(at: 0)
+                
+              }
+              
+            }
+            
+            // Bring it up to date
+            
+            let deltaTime = Date.timeIntervalSinceReferenceDate - lastTime
+            
+            let speedStep = lastState!.state.speed == 0 ? 0 : lastState!.state.speed - 1
+          
+            let velocity = (lastState!.state.direction == .forward) ? speedProfile[speedStep].bestFitForward : speedProfile[speedStep].bestFitReverse
+            
+            newDistance += (deltaTime * velocity)
+            
+          }
+          
+          print("block: \(block.blockName) autoRouteDistanceTravelled: \(autoRouteDistanceTravelled) newDistance: \(newDistance) delta: \(autoRouteDistanceTravelled - newDistance)")
+          
+          
+          // Release the lock.
           
           autoRouteLock.unlock()
           

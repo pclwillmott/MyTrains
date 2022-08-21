@@ -362,9 +362,13 @@ public class Layout : EditorObject {
           
           block.nodeLinks[from].routes.append(route)
           
-          route = (block, to, fromNode, block.nodeLinks[from].nodeId, connection.switchSettings, distance: block.getDimension(index: index), routeDirection: .previous)
+          if fromNode.isTurnout || fromNode.blockDirection == .bidirectional {
           
-          block.nodeLinks[to].routes.append(route)
+            route = (block, to, fromNode, block.nodeLinks[from].nodeId, connection.switchSettings, distance: block.getDimension(index: index), routeDirection: .previous)
+            
+            block.nodeLinks[to].routes.append(route)
+
+          }
 
         }
         
@@ -539,53 +543,82 @@ public class Layout : EditorObject {
     
   }
 
-  public func findRouteFrom(origin:SwitchBoardItem, destination:SwitchBoardItem, routeDirection:RouteDirection, routeSoFar: inout Route, inLoop: inout Set<Int>, next:RoutePart) -> Route {
-    
-    if destination.primaryKey == next.toSwitchBoardItem.primaryKey {
-      return routeSoFar
-    }
+  public func findRouteFrom(locomotive:Locomotive, origin:SwitchBoardItem, destination:SwitchBoardItem, routeDirection:RouteDirection, routeSoFar: inout Route, inLoop: inout Set<Int>, next:RoutePart) -> Route? {
+        
+    if next.fromSwitchBoardItem.validLocomotiveTypes.contains(locomotive.locomotiveType) {
 
-    for routePart in next.toSwitchBoardItem.nodeLinks[next.toNodeId].routes {
-      if !inLoop.contains(next.toSwitchBoardItem.primaryKey) {
-        if next.toSwitchBoardItem.isTurnout || routePart.routeDirection == routeDirection {
-          inLoop.insert(next.toSwitchBoardItem.primaryKey)
-          routeSoFar.append(routePart)
-          let temp = findRouteFrom(origin: origin, destination: destination, routeDirection: routeDirection, routeSoFar: &routeSoFar, inLoop: &inLoop, next: routePart)
-          if !temp.isEmpty {
-            return temp
-          }
-          routeSoFar.remove(at: routeSoFar.count-1)
-          inLoop.remove(next.toSwitchBoardItem.primaryKey)
-        }
+      if destination == next.toSwitchBoardItem {
+        
+        let routePart : RoutePart = (
+          fromSwitchBoardItem: next.toSwitchBoardItem,
+          fromNodeId: next.toNodeId,
+          toSwitchBoardItem: next.toSwitchBoardItem,
+          toNodeId: next.toNodeId,
+          switchSettings: [],
+          distance: destination.stopPositionInCM(routeDirection: next.routeDirection),
+          routeDirection: next.routeDirection
+        )
+        
+        routeSoFar.append(routePart)
+        
+        return routeSoFar
+        
       }
+      
+      for routePart in next.toSwitchBoardItem.nodeLinks[next.toNodeId].routes {
+        if !inLoop.contains(next.toSwitchBoardItem.primaryKey) {
+          if next.toSwitchBoardItem.isTurnout || routePart.routeDirection == routeDirection {
+            inLoop.insert(next.toSwitchBoardItem.primaryKey)
+            routeSoFar.append(routePart)
+            if let temp = findRouteFrom(locomotive: locomotive, origin: origin, destination: destination, routeDirection: routeDirection, routeSoFar: &routeSoFar, inLoop: &inLoop, next: routePart) {
+              return temp
+            }
+            routeSoFar.remove(at: routeSoFar.count-1)
+            inLoop.remove(next.toSwitchBoardItem.primaryKey)
+          }
+        }
+
+      }
+      
     }
     
-    return []
+    return nil
 
   }
   
-  public func findRoute(origin:SwitchBoardItem, destination:SwitchBoardItem, routeDirection:RouteDirection) -> Route {
+  public func findRoute(locomotive:Locomotive, origin:SwitchBoardItem, originPosition: Double, destination:SwitchBoardItem, routeDirection:RouteDirection) -> Route? {
     
-    var routeSoFar : Route = []
-    
-    var inLoop : Set<Int> = []
+    if origin.validLocomotiveTypes.contains(locomotive.locomotiveType) && destination.validLocomotiveTypes.contains(locomotive.locomotiveType) {
+      
+      var routeSoFar : Route = []
+      
+      var inLoop : Set<Int> = []
 
-    inLoop.insert(origin.primaryKey)
-    
-    for nodeLink in origin.nodeLinks {
-      for routePart in nodeLink.routes {
-        if routePart.routeDirection == routeDirection {
-          routeSoFar.append(routePart)
-          let temp = findRouteFrom(origin: origin, destination: destination, routeDirection: routeDirection, routeSoFar: &routeSoFar, inLoop: &inLoop, next: routePart)
-          if !temp.isEmpty {
+      inLoop.insert(origin.primaryKey)
+      
+      for nodeLink in origin.nodeLinks {
+        
+        for routePart in nodeLink.routes {
+
+          var newRoutePart = routePart
+          
+          newRoutePart.distance -= originPosition
+          
+          routeSoFar.append(newRoutePart)
+          
+          if let temp = findRouteFrom(locomotive: locomotive, origin: origin, destination: destination, routeDirection: routeDirection, routeSoFar: &routeSoFar, inLoop: &inLoop, next: routePart) {
             return temp
           }
+          
           routeSoFar.remove(at: routeSoFar.count-1)
+          
         }
+        
       }
+      
     }
-
-    return []
+    
+    return nil
     
   }
   
