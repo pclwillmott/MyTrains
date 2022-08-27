@@ -99,30 +99,17 @@ public class TurnoutSwitch : EditorObject {
   
   public var state : TurnoutSwitchState = .unknown
     
-  public var requiredState : TurnoutSwitchState = .unknown
+  public var requiredState : TurnoutSwitchState = .unknown {
+    didSet {
+      if let interface = locoNetDevice?.network?.interface {
+        let temp : OptionSwitchState = requiredState == .closed ? .closed : .thrown
+        interface.setSwWithAck(switchNumber: switchAddress, state: temp)
+      }
+    }
+  }
   
   // MARK: Public Methods
   
-  public func setState(state:TurnoutSwitchState) {
-    requiredState = state
-    if let interface = locoNetDevice?.network?.interface {
-      let temp : OptionSwitchState = requiredState == .closed ? .closed : .thrown
-      interface.setSwWithAck(switchNumber: switchAddress, state: temp)
-      self.state = requiredState
-    }
-  }
-  public func setClosed() {
-    setState(state: .closed)
-  }
-  
-  public func setThrown() {
-    setState(state: .thrown)
-  }
-
-  public func toggle() {
-    setState(state: state == .closed ? .thrown : .closed)
-  }
-
   // MARK: Database Methods
   
   private func decode(sqliteDataReader: SqliteDataReader?) {

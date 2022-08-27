@@ -148,16 +148,7 @@ public class Layout : EditorObject {
   public func setRoute(route:Route) {
     
     for routePart in route {
-      
-      for setting in routePart.switchSettings {
-        
-        let id = TurnoutSwitch.dictionaryKey(switchBoardItemId: routePart.fromSwitchBoardItem.primaryKey, turnoutIndex: setting.switchNumber)
-        
-        if let turnoutSwitch = operationalTurnouts[id] {
-          turnoutSwitch.setState(state: setting.switchState)
-        }
-        
-      }
+      routePart.fromSwitchBoardItem.turnoutConnection = routePart.turnoutConnection
     }
     
   }
@@ -358,13 +349,13 @@ public class Layout : EditorObject {
         
         if let fromNode = block.nodeLinks[from].switchBoardItem, let toNode = block.nodeLinks[to].switchBoardItem {
           
-          var route : RoutePart = (block, from, toNode, block.nodeLinks[to].nodeId, connection.switchSettings, distance: block.getDimension(index: index), routeDirection: .next)
+          var route : RoutePart = (block, from, toNode, block.nodeLinks[to].nodeId, index, distance: block.getDimension(index: index), routeDirection: .next)
           
           block.nodeLinks[from].routes.append(route)
           
           if fromNode.isTurnout || fromNode.blockDirection == .bidirectional {
           
-            route = (block, to, fromNode, block.nodeLinks[from].nodeId, connection.switchSettings, distance: block.getDimension(index: index), routeDirection: .previous)
+            route = (block, to, fromNode, block.nodeLinks[from].nodeId, index, distance: block.getDimension(index: index), routeDirection: .previous)
             
             block.nodeLinks[to].routes.append(route)
 
@@ -554,7 +545,7 @@ public class Layout : EditorObject {
           fromNodeId: next.toNodeId,
           toSwitchBoardItem: next.toSwitchBoardItem,
           toNodeId: next.toNodeId,
-          switchSettings: [],
+          turnoutConnection: 0,
           distance: destination.stopPositionInCM(routeDirection: next.routeDirection),
           routeDirection: next.routeDirection
         )

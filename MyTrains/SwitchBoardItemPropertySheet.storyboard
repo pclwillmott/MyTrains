@@ -644,6 +644,58 @@
                                                         <action selector="cboTrackPartTypeAction:" target="luq-MD-xG7" id="NFo-xs-HTa"/>
                                                     </connections>
                                                 </comboBox>
+                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="I2p-T2-EMO">
+                                                    <rect key="frame" x="475" y="185" width="142" height="16"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="Turnout Motor #1 Type" id="Ewt-zx-ec2">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZKC-Cm-qDU">
+                                                    <rect key="frame" x="477" y="155" width="196" height="25"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="aqt-Zu-7fS">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                        <objectValues>
+                                                            <string>Item 1</string>
+                                                            <string>Item 2</string>
+                                                            <string>Item 3</string>
+                                                        </objectValues>
+                                                    </comboBoxCell>
+                                                    <connections>
+                                                        <action selector="cboTurnoutMotorTypeAction:" target="luq-MD-xG7" id="wZE-Yh-WcV"/>
+                                                    </connections>
+                                                </comboBox>
+                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aLw-wb-dnv">
+                                                    <rect key="frame" x="475" y="133" width="144" height="16"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="Turnout Motor #2 Type" id="nye-Vk-Zd8">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mbn-Q2-aq0">
+                                                    <rect key="frame" x="477" y="103" width="196" height="25"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="Xde-Xs-LP8">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                        <objectValues>
+                                                            <string>Item 1</string>
+                                                            <string>Item 2</string>
+                                                            <string>Item 3</string>
+                                                        </objectValues>
+                                                    </comboBoxCell>
+                                                    <connections>
+                                                        <action selector="cboTurnoutMotorType2Action:" target="luq-MD-xG7" id="tHj-r1-6aS"/>
+                                                    </connections>
+                                                </comboBox>
                                             </subviews>
                                         </view>
                                     </tabViewItem>
@@ -1265,6 +1317,8 @@ Gw
                         <outlet property="cboTrackElectrificationType" destination="8Tb-bm-n3j" id="Yo4-kK-1cp"/>
                         <outlet property="cboTrackGauge" destination="FlW-Hq-yS8" id="wmx-0t-xSm"/>
                         <outlet property="cboTrackPartType" destination="raU-OG-7u5" id="ASu-JA-wzX"/>
+                        <outlet property="cboTurnoutMotorType" destination="ZKC-Cm-qDU" id="d1K-4f-YQg"/>
+                        <outlet property="cboTurnoutMotorType2" destination="Mbn-Q2-aq0" id="N7K-vz-Kpl"/>
                         <outlet property="chkAllowShunt" destination="zWw-Hm-hhD" id="oMd-My-nbl"/>
                         <outlet property="chkCriticalSection" destination="gvw-t4-jHO" id="GWr-qR-5dk"/>
                         <outlet property="chkDNBrakeUD" destination="d3l-01-7hu" id="OEE-Iu-3QL"/>
@@ -1292,6 +1346,8 @@ Gw
                         <outlet property="lblName" destination="wwu-WJ-mqz" id="EBE-Pq-qxP"/>
                         <outlet property="lblOrientation" destination="CgP-JH-ArW" id="7h0-n0-LP1"/>
                         <outlet property="lblPartType" destination="dKy-CN-CoC" id="PkU-y4-c6Z"/>
+                        <outlet property="lblTurnoutMotorType" destination="I2p-T2-EMO" id="i1u-Z9-eEl"/>
+                        <outlet property="lblTurnoutMotorType2" destination="aLw-wb-dnv" id="kOt-rY-Mjb"/>
                         <outlet property="switchBoardItemView" destination="YSs-8X-jZC" id="egX-s1-9xb"/>
                         <outlet property="tabs" destination="XAb-PD-doL" id="fze-uY-STg"/>
                         <outlet property="txtA" destination="Hd0-fF-wH3" id="zHa-xn-wNV"/>

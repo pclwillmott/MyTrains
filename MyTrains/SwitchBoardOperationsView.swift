@@ -54,6 +54,31 @@ class SwitchBoardOperationsView : SwitchBoardView {
     
     super.draw(dirtyRect)
     
+    if let layout = self.layout {
+      
+      let panel = layout.switchBoardPanels[panelId]
+      
+      if bounds.width <= bounds.height {
+        cellSize = bounds.width / CGFloat(panel.numberOfColumns)
+      }
+      else {
+        cellSize = bounds.height / CGFloat(panel.numberOfRows)
+      }
+      
+      let lineWidth = cellSize * 0.1
+      
+      for (_, item) in layout.switchBoardItems {
+        
+        if item.panelId == self.panelId && item.isTurnout {
+          
+          SwitchBoardShape.drawShape(partType: item.itemPartType, orientation: item.orientation, location: item.location, lineWidth: lineWidth, cellSize: cellSize, isButton: false, isEnabled: true, offset: CGPoint(x: 0.0, y: 0.0), switchBoardItem: item)
+          
+        }
+        
+      }
+      
+    }
+    
   }
 
   // MARK: Mouse Events
@@ -67,10 +92,7 @@ class SwitchBoardOperationsView : SwitchBoardView {
         switch event.modifierFlags.intersection(.deviceIndependentFlagsMask) {
           
         case [.control]:
-          if let turnoutSwitch = layout.operationalTurnouts[TurnoutSwitch.dictionaryKey(switchBoardItemId: item.primaryKey, turnoutIndex: 1)] {
-            turnoutSwitch.setThrown()
-          }
-          else if item.itemPartType == .block {
+          if item.itemPartType == .block {
             let x = ModalWindow.PlaceLocomotive
             let wc = x.windowController
             if let vc = wc.contentViewController as? PlaceLocomotiveVC {
@@ -80,14 +102,9 @@ class SwitchBoardOperationsView : SwitchBoardView {
             wc.showWindow(nil)
           }
         case [.option]:
-          if let turnoutSwitch = layout.operationalTurnouts[TurnoutSwitch.dictionaryKey(switchBoardItemId: item.primaryKey, turnoutIndex: 1)] {
-            turnoutSwitch.toggle()
-          }
+          break
         case [.shift]:
-          if let turnoutSwitch = layout.operationalTurnouts[TurnoutSwitch.dictionaryKey(switchBoardItemId: item.primaryKey, turnoutIndex: 1)] {
-            turnoutSwitch.setClosed()
-          }
-          else if item.itemPartType == .block {
+          if item.itemPartType == .block {
             let x = ModalWindow.PlaceLocomotive
             let wc = x.windowController
             if let vc = wc.contentViewController as? PlaceLocomotiveVC {
@@ -97,7 +114,9 @@ class SwitchBoardOperationsView : SwitchBoardView {
             wc.showWindow(nil)
           }
         default:
-          break
+          if item.isTurnout {
+            item.nextTurnoutConnection()
+          }
         }
 
       }

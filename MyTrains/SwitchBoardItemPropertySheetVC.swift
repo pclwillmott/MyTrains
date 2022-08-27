@@ -96,6 +96,17 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
       BlockDirection.populate(comboBox: cboDirection)
       BlockDirection.select(comboBox: cboDirection, value: item.blockDirection)
       
+      TurnoutMotorType.populate(comboBox: cboTurnoutMotorType)
+      TurnoutMotorType.select(comboBox: cboTurnoutMotorType, value: item.sw1TurnoutMotorType)
+      
+      TurnoutMotorType.populate(comboBox: cboTurnoutMotorType2)
+      TurnoutMotorType.select(comboBox: cboTurnoutMotorType2, value: item.sw2TurnoutMotorType)
+      
+      lblTurnoutMotorType.isHidden = !item.isTurnout
+      cboTurnoutMotorType.isHidden = !item.isTurnout
+      lblTurnoutMotorType2.isHidden = !item.isTurnout
+      cboTurnoutMotorType2.isHidden = !item.isTurnout
+
       txtGradient.doubleValue = item.gradient
       
       chkCriticalSection.boolValue = item.isCritical
@@ -485,6 +496,10 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
     
     item.unitsDimension = UnitLength.selected(comboBox: cboDimensionUnits)
     
+    item.sw1TurnoutMotorType = TurnoutMotorType.selected(comboBox: cboTurnoutMotorType)
+    
+    item.sw2TurnoutMotorType = TurnoutMotorType.selected(comboBox: cboTurnoutMotorType2)
+    
     item.location = (x: txtXPos.integerValue, y: txtYPos.integerValue)
     
     item.linkItem = -1
@@ -758,5 +773,19 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
   @IBOutlet weak var boxSpeedNext: NSBox!
   
   @IBOutlet weak var boxSpeedPrevious: NSBox!
+  
+  @IBOutlet weak var lblTurnoutMotorType: NSTextField!
+  
+  @IBOutlet weak var cboTurnoutMotorType: NSComboBox!
+  
+  @IBAction func cboTurnoutMotorTypeAction(_ sender: NSComboBox) {
+  }
+  
+  @IBOutlet weak var lblTurnoutMotorType2: NSTextField!
+  
+  @IBOutlet weak var cboTurnoutMotorType2: NSComboBox!
+  
+  @IBAction func cboTurnoutMotorType2Action(_ sender: NSComboBox) {
+  }
   
 }

@@ -60,6 +60,8 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
   
   public var sensorLookup : [Int:SwitchBoardItem] = [:]
   
+  public var turnoutLookup : [Int:TurnoutSwitch] = [:]
+  
   public var opSwBankA : NetworkMessage?
   
   public var opSwBankB : NetworkMessage?
@@ -203,8 +205,36 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
       slotsUpdated()
 
     case .sensRepGenIn:
+      print("sensRepGenIn: \(message.sensorAddress) \(message.sensorState)")
       if let block = sensorLookup[message.sensorAddress], let layout = network?.layout {
         block.isOccupied = message.sensorState
+        layout.needsDisplay()
+      }
+      else if let turnoutSwitch = turnoutLookup[message.sensorAddress], let layout = network?.layout {
+        let even = (message.sensorAddress % 2) == 0
+        switch turnoutSwitch.feedbackType {
+        case .closed:
+          turnoutSwitch.state = message.sensorState ? .closed : .thrown
+        case .thrown:
+          turnoutSwitch.state = message.sensorState ? .thrown : .closed
+        case .both:
+          if even {
+            turnoutSwitch.state = message.sensorState ? .thrown : .unknown
+          }
+          else {
+            turnoutSwitch.state = message.sensorState ? .closed : .unknown
+          }
+        case .bothInverted:
+          if even {
+            turnoutSwitch.state = message.sensorState ? .closed : .unknown
+          }
+          else {
+            turnoutSwitch.state = message.sensorState ? .thrown : .unknown
+          }
+        default:
+          break
+        }
+        print("Turnout: \(message.sensorAddress) \(turnoutSwitch.state)")
         layout.needsDisplay()
       }
     default:
@@ -317,6 +347,8 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
      
     sensorLookup.removeAll()
     
+    turnoutLookup.removeAll()
+    
     if let layout = networkController.layout {
       
       layout.operationalTurnouts.removeAll()
@@ -335,6 +367,8 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
           
           if turnoutSwitch.switchBoardItemId != -1 {
             layout.operationalTurnouts[turnoutSwitch.dictionaryKey] = turnoutSwitch
+            turnoutLookup[turnoutSwitch.switchAddress] = turnoutSwitch
+            turnoutLookup[turnoutSwitch.switchAddress + 1] = turnoutSwitch
           }
           
         }

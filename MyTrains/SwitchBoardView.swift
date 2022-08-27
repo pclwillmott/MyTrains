@@ -41,7 +41,7 @@ class SwitchBoardView: NSView {
         
         if item.panelId == self.panelId && item.nextAction != .delete {
         
-          SwitchBoardShape.drawShape(partType: item.itemPartType, orientation: item.orientation, location: item.location, lineWidth: lineWidth, cellSize: cellSize, isButton: false, isEnabled: true, offset: CGPoint(x: 0.0, y: 0.0))
+          SwitchBoardShape.drawShape(partType: item.itemPartType, orientation: item.orientation, location: item.location, lineWidth: lineWidth, cellSize: cellSize, isButton: false, isEnabled: true, offset: CGPoint(x: 0.0, y: 0.0), switchBoardItem: nil)
           
         }
         

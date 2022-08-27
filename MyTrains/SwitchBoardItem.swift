@@ -19,7 +19,7 @@ public typealias RoutePart = (
   fromNodeId: Int,
   toSwitchBoardItem: SwitchBoardItem,
   toNodeId: Int,
-  switchSettings: [TurnoutSwitchSetting],
+  turnoutConnection:Int,
   distance: Double,
   routeDirection: RouteDirection
 ) 
@@ -58,7 +58,8 @@ public class SwitchBoardItem : EditorObject {
   private var _dirPreviousSpeedRestricted   : Double = 0.0
   private var _dirPreviousSpeedBrake        : Double = 0.0
   private var _dirPreviousSpeedShunt        : Double = 0.0
-
+  
+  private var _turnoutConnection : Int = 0
 
   // MARK: Public Properties
   
@@ -507,6 +508,24 @@ public class SwitchBoardItem : EditorObject {
     }
   }
   
+  public var sw1 : TurnoutSwitch? {
+    get {
+      if let layout = self.layout {
+        return layout.operationalTurnouts[TurnoutSwitch.dictionaryKey(switchBoardItemId: primaryKey, turnoutIndex: 1)]
+      }
+      return nil
+    }
+  }
+  
+  public var sw2 : TurnoutSwitch? {
+    get {
+      if let layout = self.layout {
+        return layout.operationalTurnouts[TurnoutSwitch.dictionaryKey(switchBoardItemId: primaryKey, turnoutIndex: 2)]
+      }
+      return nil
+    }
+  }
+  
   public var sw1LocoNetDeviceId : Int = -1 {
     didSet {
       modified = true
@@ -555,6 +574,88 @@ public class SwitchBoardItem : EditorObject {
     }
   }
   
+  public var numberOfConnections : Int {
+    return isTurnout ? itemPartType.connections.count : 0
+  }
+  
+  public var actualTurnoutConnection : Int? {
+    get {
+      
+      var state1 : TurnoutSwitchSetting = (switchNumber:1, switchState: .closed)
+      
+      if let sw1 = self.sw1 {
+        state1 = (switchNumber:1, switchState: sw1.state)
+      }
+      
+      var state2 : TurnoutSwitchSetting = (switchNumber:2, switchState: .closed)
+
+      if let sw2 = self.sw2 {
+        state2 = (switchNumber:1, switchState: sw2.state)
+      }
+      
+      var index : Int = 0
+      
+      while index < numberOfConnections {
+        
+        let switchSettings = itemPartType.connections[index].switchSettings
+                
+        switch switchSettings.count {
+        case 1:
+          
+          if switchSettings[0] == state1 {
+            return index
+          }
+          
+        case 2:
+          
+          if switchSettings[0] == state1 && switchSettings[1] == state2 {
+            return index
+          }
+          
+        default:
+          break
+        }
+
+        index += 1
+        
+      }
+      
+      return nil
+      
+    }
+  }
+  
+  public var turnoutConnection : Int {
+    get {
+      return _turnoutConnection
+    }
+    set(value) {
+      
+      if value < numberOfConnections {
+        
+        _turnoutConnection = value
+        
+        for sw in itemPartType.connections[_turnoutConnection].switchSettings {
+          
+          switch sw.switchNumber {
+          case 1:
+            sw1?.requiredState = sw.switchState
+          case 2:
+            sw2?.requiredState = sw.switchState
+          default:
+            break
+          }
+          
+        }
+        
+        layout?.needsDisplay()
+        
+      }
+      
+    }
+    
+  }
+  
   public var isScenicSection : Bool = true {
     didSet {
       modified = true
@@ -584,6 +685,10 @@ public class SwitchBoardItem : EditorObject {
   // MARK: Private Methods
   
   // MARK: Public Methods
+  
+  public func nextTurnoutConnection() {
+    turnoutConnection = (_turnoutConnection + 1) % numberOfConnections
+  }
   
   public func exitPoint(entryPoint:Int) -> [NodeLink] {
     var result : [NodeLink] = []
@@ -948,6 +1053,10 @@ public class SwitchBoardItem : EditorObject {
         linkItem = reader.getInt(index: 62)!
       }
 
+      if !reader.isDBNull(index: 63) {
+        _turnoutConnection = reader.getInt(index: 63)!
+      }
+
     }
     
     modified = false
@@ -1028,7 +1137,8 @@ public class SwitchBoardItem : EditorObject {
         "[\(SWITCHBOARD_ITEM.SW2_SENSOR_ID)], " +
         "[\(SWITCHBOARD_ITEM.IS_SCENIC_SECTION)], " +
         "[\(SWITCHBOARD_ITEM.BLOCK_TYPE)], " +
-        "[\(SWITCHBOARD_ITEM.LINK_ITEM)]" +
+        "[\(SWITCHBOARD_ITEM.LINK_ITEM)], " +
+        "[\(SWITCHBOARD_ITEM.TURNOUT_CONNECTION)]" +
         ") VALUES (" +
         "@\(SWITCHBOARD_ITEM.SWITCHBOARD_ITEM_ID), " +
         "@\(SWITCHBOARD_ITEM.LAYOUT_ID), " +
@@ -1092,7 +1202,8 @@ public class SwitchBoardItem : EditorObject {
         "@\(SWITCHBOARD_ITEM.SW2_SENSOR_ID), " +
         "@\(SWITCHBOARD_ITEM.IS_SCENIC_SECTION), " +
         "@\(SWITCHBOARD_ITEM.BLOCK_TYPE), " +
-        "@\(SWITCHBOARD_ITEM.LINK_ITEM)" +
+        "@\(SWITCHBOARD_ITEM.LINK_ITEM), " +
+        "@\(SWITCHBOARD_ITEM.TURNOUT_CONNECTION)" +
         ")"
         primaryKey = Database.nextCode(tableName: TABLE.SWITCHBOARD_ITEM, primaryKey: SWITCHBOARD_ITEM.SWITCHBOARD_ITEM_ID)!
       }
@@ -1159,7 +1270,8 @@ public class SwitchBoardItem : EditorObject {
         "[\(SWITCHBOARD_ITEM.SW2_SENSOR_ID)] = @\(SWITCHBOARD_ITEM.SW2_SENSOR_ID), " +
         "[\(SWITCHBOARD_ITEM.IS_SCENIC_SECTION)] = @\(SWITCHBOARD_ITEM.IS_SCENIC_SECTION), " +
         "[\(SWITCHBOARD_ITEM.BLOCK_TYPE)] = @\(SWITCHBOARD_ITEM.BLOCK_TYPE), " +
-        "[\(SWITCHBOARD_ITEM.LINK_ITEM)] = @\(SWITCHBOARD_ITEM.LINK_ITEM) " +
+        "[\(SWITCHBOARD_ITEM.LINK_ITEM)] = @\(SWITCHBOARD_ITEM.LINK_ITEM), " +
+        "[\(SWITCHBOARD_ITEM.TURNOUT_CONNECTION)] = @\(SWITCHBOARD_ITEM.TURNOUT_CONNECTION) " +
         "WHERE [\(SWITCHBOARD_ITEM.SWITCHBOARD_ITEM_ID)] = @\(SWITCHBOARD_ITEM.SWITCHBOARD_ITEM_ID)"
       }
 
@@ -1245,6 +1357,7 @@ public class SwitchBoardItem : EditorObject {
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.IS_SCENIC_SECTION)", value: isScenicSection)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.BLOCK_TYPE)", value: blockType.rawValue)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.LINK_ITEM)", value: linkItem)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.TURNOUT_CONNECTION)", value: turnoutConnection)
 
       _ = cmd.executeNonQuery()
 
@@ -1325,7 +1438,8 @@ public class SwitchBoardItem : EditorObject {
         "[\(SWITCHBOARD_ITEM.SW2_SENSOR_ID)], " +
         "[\(SWITCHBOARD_ITEM.IS_SCENIC_SECTION)], " +
         "[\(SWITCHBOARD_ITEM.BLOCK_TYPE)], " +
-        "[\(SWITCHBOARD_ITEM.LINK_ITEM)]"
+        "[\(SWITCHBOARD_ITEM.LINK_ITEM)], " +
+        "[\(SWITCHBOARD_ITEM.TURNOUT_CONNECTION)]"
     }
   }
 

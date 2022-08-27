@@ -142,6 +142,7 @@ class ThrottleVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate,
         button.isEnabled = true // locoFunc.isEnabled && locomotive.isInUse
         button.state = locoFunc.state ? .on : .off
         button.toolTip = locoFunc.toolTip
+        button.allowsExpansionToolTips = true
       }
       
       RouteDirection.select(comboBox: cboRouteDirection, value: locomotive.routeDirection)

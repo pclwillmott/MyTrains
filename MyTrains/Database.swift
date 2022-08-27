@@ -57,7 +57,7 @@ class Database {
             ")",
             
             "INSERT INTO [\(TABLE.VERSION)] ([\(VERSION.VERSION_ID)], [\(VERSION.VERSION_NUMBER)]) VALUES " +
-            "(1, 7)",
+            "(1, 8)",
 
             "CREATE TABLE [\(TABLE.LAYOUT)] (" +
               "[\(LAYOUT.LAYOUT_ID)]          INT PRIMARY KEY," +
@@ -237,7 +237,8 @@ class Database {
               "[\(SWITCHBOARD_ITEM.SW2_SENSOR_ID)]              INT NOT NULL," +
               "[\(SWITCHBOARD_ITEM.IS_SCENIC_SECTION)]          INT NOT NULL," +
               "[\(SWITCHBOARD_ITEM.BLOCK_TYPE)]                 INT NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.LINK_ITEM)]                  INT NOT NULL" +
+              "[\(SWITCHBOARD_ITEM.LINK_ITEM)]                  INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.TURNOUT_CONNECTION)]         INT NOT NULL" +
             ")",
 
             "CREATE TABLE [\(TABLE.SENSOR)] (" +
@@ -290,7 +291,7 @@ class Database {
             
             if Version == 7 {
      
-          //    let commands = [
+              let commands = [
              
                 /*
                 "DROP TABLE  IF EXISTS [\(TABLE.SPEED_PROFILE)]",
@@ -306,17 +307,17 @@ class Database {
                 
           //      "DELETE FROM [\(TABLE.SPEED_PROFILE)] WHERE [\(SPEED_PROFILE.STEP_NUMBER)] = 127",
                 
-         //       "ALTER TABLE [\(TABLE.ROLLING_STOCK)] ADD [\(ROLLING_STOCK.BEST_FIT_METHOD)] INT",
+                "ALTER TABLE [\(TABLE.SWITCHBOARD_ITEM)] ADD [\(SWITCHBOARD_ITEM.TURNOUT_CONNECTION)] INT",
                 
-         //       "UPDATE [\(TABLE.ROLLING_STOCK)] SET [\(ROLLING_STOCK.BEST_FIT_METHOD)] = 0",
+                "UPDATE [\(TABLE.SWITCHBOARD_ITEM)] SET [\(SWITCHBOARD_ITEM.TURNOUT_CONNECTION)] = 0",
                 
-          //      "UPDATE [\(TABLE.VERSION)] SET [\(VERSION.VERSION_NUMBER)] = 7 WHERE [\(VERSION.VERSION_ID)] = 1",
+                "UPDATE [\(TABLE.VERSION)] SET [\(VERSION.VERSION_NUMBER)] = 8 WHERE [\(VERSION.VERSION_ID)] = 1",
                 
-         //     ]
+             ]
               
-          //    execute(commands: commands)
+              execute(commands: commands)
               
-              Version = 7
+              Version = 8
 
             }
             

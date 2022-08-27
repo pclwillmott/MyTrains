@@ -94,10 +94,10 @@
             filePath = "MyTrains/SwitchBoardDefs.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "52"
-            endingLineNumber = "52"
-            landmarkName = "SwitchBoardMode"
-            landmarkType = "13">
+            startingLineNumber = "55"
+            endingLineNumber = "55"
+            landmarkName = "unknown"
+            landmarkType = "0">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -382,8 +382,8 @@
             filePath = "MyTrains/Interface.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "324"
-            endingLineNumber = "324"
+            startingLineNumber = "356"
+            endingLineNumber = "356"
             landmarkName = "initSensorLookup()"
             landmarkType = "7">
          </BreakpointContent>
@@ -573,7 +573,7 @@
             startingLineNumber = "452"
             endingLineNumber = "452"
             landmarkName = "autoRouteDistanceToSpeedStep(lastLocomotiveState:targetSpeed:autoRouteIncrement:)"
-            landmarkType = "9">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -589,7 +589,7 @@
             startingLineNumber = "458"
             endingLineNumber = "458"
             landmarkName = "autoRouteDistanceToSpeedStep(lastLocomotiveState:targetSpeed:autoRouteIncrement:)"
-            landmarkType = "9">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -602,8 +602,8 @@
             filePath = "MyTrains/Layout.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "550"
-            endingLineNumber = "550"
+            startingLineNumber = "541"
+            endingLineNumber = "541"
             landmarkName = "findRouteFrom(locomotive:origin:destination:routeDirection:routeSoFar:inLoop:next:)"
             landmarkType = "7">
          </BreakpointContent>

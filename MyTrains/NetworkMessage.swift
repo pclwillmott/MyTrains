@@ -1308,6 +1308,16 @@ public class NetworkMessage : NSObject {
     }
   }
   
+  public var turnoutReportAddress : Int {
+    get {
+      var addr = Int(message[1])
+      addr |= (Int(message[2] & 0b00001111) << 7)
+//      addr <<= 1
+//      addr |= (Int(message[2] & 0b00100000) >> 5)
+      return addr + 1
+    }
+  }
+  
   public var sensorState : Bool {
     get {
       let mask : UInt8 = 0b00010000

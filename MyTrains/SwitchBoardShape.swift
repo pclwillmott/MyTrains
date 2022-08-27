@@ -12,17 +12,19 @@ class SwitchBoardShape {
   
   // MARK: Class Methods
   
-  public static func drawShape(partType: SwitchBoardItemPartType, orientation: Orientation, location: SwitchBoardLocation, lineWidth:CGFloat, cellSize: CGFloat, isButton: Bool, isEnabled: Bool, offset: CGPoint) {
+  public static func drawShape(partType: SwitchBoardItemPartType, orientation: Orientation, location: SwitchBoardLocation, lineWidth:CGFloat, cellSize: CGFloat, isButton: Bool, isEnabled: Bool, offset: CGPoint, switchBoardItem: SwitchBoardItem?) {
     
+    var onlyTurnouts : Bool = switchBoardItem != nil
+    
+    var turnoutConnection : Int = -1
+    
+    if let item = switchBoardItem, let actualTurnoutConnection = item.actualTurnoutConnection {
+      turnoutConnection = actualTurnoutConnection
+   //   turnoutConnection = item.turnoutConnection
+    }
+        
     if let shape = SwitchBoardShape.getShape(part: partType, orientation: orientation) {
 
-      if isButton {
-        isEnabled ? NSColor.setStrokeColor(color: .black) : NSColor.setStrokeColor(color: .lightGray)
-      }
-      else {
-        NSColor.setStrokeColor(color: .lightGray)
-      }
-      
       let bx = (CGFloat(location.x) + 0.5) * cellSize
       let by = (CGFloat(location.y) + 0.5) * cellSize
       
@@ -31,6 +33,8 @@ class SwitchBoardShape {
       let sinTheta = sin(theta)
       
       let cosTheta = cos(theta)
+      
+      var index : Int = 0
       
       for shapePart in shape {
         
@@ -48,117 +52,153 @@ class SwitchBoardShape {
           
         }
         
+        if isButton {
+          isEnabled ? NSColor.setStrokeColor(color: .black) : NSColor.setStrokeColor(color: .lightGray)
+        }
+        else if onlyTurnouts {
+          NSColor.setStrokeColor(color: .white)
+        }
+        else {
+          NSColor.setStrokeColor(color: .lightGray)
+        }
+                
         switch shapePart.type {
        
         case .circle:
           
-          let path = NSBezierPath()
-          
-          path.lineWidth = lineWidth
-          
-          path.appendArc(withCenter: NSMakePoint(coordinates[0].x, coordinates[0].y), radius: shapePart.parameters[0] * cellSize, startAngle: 0.0, endAngle: 360.0)
-          
-          if let fillColor = shapePart.actionColors[.fill] {
-            isEnabled ? NSColor.setFillColor(color:fillColor) : NSColor.setFillColor(color: .lightGray)
-            path.fill()
+          if !onlyTurnouts {
+            
+            let path = NSBezierPath()
+            
+            path.lineWidth = lineWidth
+            
+            path.appendArc(withCenter: NSMakePoint(coordinates[0].x, coordinates[0].y), radius: shapePart.parameters[0] * cellSize, startAngle: 0.0, endAngle: 360.0)
+            
+            if let fillColor = shapePart.actionColors[.fill] {
+              isEnabled ? NSColor.setFillColor(color:fillColor) : NSColor.setFillColor(color: .lightGray)
+              path.fill()
+            }
+            
+            path.stroke()
+            
           }
-          
-          path.stroke()
           
         case .rectangle:
           
-          let path = NSBezierPath()
+          if !onlyTurnouts {
           
-          path.lineWidth = lineWidth
+            let path = NSBezierPath()
           
-          let x1 = coordinates[0].x
-          let y1 = coordinates[0].y
-          let x2 = coordinates[1].x
-          let y2 = coordinates[1].y
-          
-          path.move(to: NSMakePoint(x1, y1))
-          path.line(to: NSMakePoint(x2, y1))
-          path.line(to: NSMakePoint(x2, y2))
-          path.line(to: NSMakePoint(x1, y2))
-          path.close()
+            path.lineWidth = lineWidth
+            
+            let x1 = coordinates[0].x
+            let y1 = coordinates[0].y
+            let x2 = coordinates[1].x
+            let y2 = coordinates[1].y
+            
+            path.move(to: NSMakePoint(x1, y1))
+            path.line(to: NSMakePoint(x2, y1))
+            path.line(to: NSMakePoint(x2, y2))
+            path.line(to: NSMakePoint(x1, y2))
+            path.close()
 
-          if let fillColor = shapePart.actionColors[.fill] {
-            isEnabled ? NSColor.setFillColor(color: fillColor) : NSColor.setFillColor(color: .lightGray)
-            path.fill()
+            if let fillColor = shapePart.actionColors[.fill] {
+              isEnabled ? NSColor.setFillColor(color: fillColor) : NSColor.setFillColor(color: .lightGray)
+              path.fill()
+            }
+
+            path.stroke()
+
           }
-
-          path.stroke()
-
+          
         case .irregular:
           
-          let path = NSBezierPath()
+          if !onlyTurnouts {
+            
+            let path = NSBezierPath()
+            
+            path.lineWidth = lineWidth
+            
+            path.move(to: NSMakePoint(coordinates[0].x, coordinates[0].y))
+            
+            for index in 1...coordinates.count-1 {
+              path.line(to: NSMakePoint(coordinates[index].x, coordinates[index].y))
+            }
+            
+            path.close()
           
-          path.lineWidth = lineWidth
-          
-          path.move(to: NSMakePoint(coordinates[0].x, coordinates[0].y))
-          
-          for index in 1...coordinates.count-1 {
-            path.line(to: NSMakePoint(coordinates[index].x, coordinates[index].y))
-          }
-          
-          path.close()
-        
-          if let fillColor = shapePart.actionColors[.fill] {
-            isEnabled ? NSColor.setFillColor(color: fillColor) : NSColor.setFillColor(color: .lightGray)
-            path.fill()
-          }
+            if let fillColor = shapePart.actionColors[.fill] {
+              isEnabled ? NSColor.setFillColor(color: fillColor) : NSColor.setFillColor(color: .lightGray)
+              path.fill()
+            }
 
-          path.stroke()
+            path.stroke()
+
+          }
 
         case .ellipse:
           
-          let path = NSBezierPath()
+          if !onlyTurnouts {
           
-          path.lineWidth = lineWidth
+            let path = NSBezierPath()
           
-          let rect = NSRect(coordinates: coordinates)
-          
-          path.appendOval(in: rect)
-          
-          if let fillColor = shapePart.actionColors[.fill] {
-            isEnabled ? NSColor.setFillColor(color: fillColor) : NSColor.setFillColor(color: .lightGray)
-            path.fill()
+            path.lineWidth = lineWidth
+            
+            let rect = NSRect(coordinates: coordinates)
+            
+            path.appendOval(in: rect)
+            
+            if let fillColor = shapePart.actionColors[.fill] {
+              isEnabled ? NSColor.setFillColor(color: fillColor) : NSColor.setFillColor(color: .lightGray)
+              path.fill()
+            }
+            
+            path.stroke()
+
           }
-          
-          path.stroke()
           
         case .line:
           
-          let path = NSBezierPath()
+          if !onlyTurnouts || index == turnoutConnection {
           
-          path.lineWidth = lineWidth
+            let path = NSBezierPath()
           
-          path.move(to: NSMakePoint(coordinates[0].x, coordinates[0].y))
-          
-          for index in 1...coordinates.count-1 {
-            path.line(to: NSMakePoint(coordinates[index].x, coordinates[index].y))
+            path.lineWidth = lineWidth
+            
+            path.move(to: NSMakePoint(coordinates[0].x, coordinates[0].y))
+            
+            for index in 1...coordinates.count-1 {
+              path.line(to: NSMakePoint(coordinates[index].x, coordinates[index].y))
+            }
+            
+            path.stroke()
+
           }
-          
-          path.stroke()
           
         case .curve:
           
-          let path = NSBezierPath()
+          if !onlyTurnouts || index == turnoutConnection {
           
-          path.lineWidth = lineWidth
-          
-          path.move(to: NSMakePoint(coordinates[0].x, coordinates[0].y))
-          
-          path.curve(to: NSMakePoint(coordinates[1].x, coordinates[1].y), controlPoint1: NSMakePoint(coordinates[2].x, coordinates[2].y), controlPoint2: NSMakePoint(coordinates[3].x, coordinates[3].y))
-          
-          path.stroke()
+            let path = NSBezierPath()
+            
+            path.lineWidth = lineWidth
+            
+            path.move(to: NSMakePoint(coordinates[0].x, coordinates[0].y))
+            
+            path.curve(to: NSMakePoint(coordinates[1].x, coordinates[1].y), controlPoint1: NSMakePoint(coordinates[2].x, coordinates[2].y), controlPoint2: NSMakePoint(coordinates[3].x, coordinates[3].y))
+            
+            path.stroke()
+
+          }
           
         default:
           break
         }
         
-      }
+        index += 1
 
+      }
+      
     }
 
   }
@@ -278,20 +318,20 @@ class SwitchBoardShape {
       (type: .curve, coordinates:[CGPoint(x: -0.5, y: -0.5), CGPoint(x: 0.5, y: 0.0), CGPoint(x: -0.2, y: -0.2), CGPoint(x: -0.2, y: -0.2)], parameters: [], actionColors: [:])
     ]],
     .turnoutRight : [[
+      (type: .line, coordinates:[CGPoint(x: 0.0, y: -0.5), CGPoint(x: 0.0, y: 0.5)], parameters: [], actionColors: [:]),
       (type: .curve, coordinates:[CGPoint(x: 0.0, y: -0.5), CGPoint(x: 0.5, y: 0.5), CGPoint(x: 0.0, y: -0.2), CGPoint(x: 0.0, y: -0.2)], parameters: [], actionColors: [:]),
-      (type: .line, coordinates:[CGPoint(x: 0.0, y: -0.5), CGPoint(x: 0.0, y: 0.5)], parameters: [], actionColors: [:])
     ],
     [
+      (type: .line, coordinates:[CGPoint(x: -0.5, y: -0.5), CGPoint(x: 0.5, y: 0.5)], parameters: [], actionColors: [:]),
       (type: .curve, coordinates:[CGPoint(x: -0.5, y: -0.5), CGPoint(x: 0.5, y: 0.0), CGPoint(x: -0.2, y: -0.2), CGPoint(x: -0.2, y: -0.2)], parameters: [], actionColors: [:]),
-      (type: .line, coordinates:[CGPoint(x: -0.5, y: -0.5), CGPoint(x: 0.5, y: 0.5)], parameters: [], actionColors: [:])
     ]],
     .turnoutLeft : [[
+      (type: .line, coordinates:[CGPoint(x: 0.0, y: -0.5), CGPoint(x: 0.0, y: 0.5)], parameters: [], actionColors: [:]),
       (type: .curve, coordinates:[CGPoint(x: 0.0, y: -0.5), CGPoint(x: -0.5, y: 0.5), CGPoint(x: 0.0, y: -0.2), CGPoint(x: 0.0, y: -0.2)], parameters: [], actionColors: [:]),
-      (type: .line, coordinates:[CGPoint(x: 0.0, y: -0.5), CGPoint(x: 0.0, y: 0.5)], parameters: [], actionColors: [:])
     ],
     [
+      (type: .line, coordinates:[CGPoint(x: -0.5, y: -0.5), CGPoint(x: 0.5, y: 0.5)], parameters: [], actionColors: [:]),
       (type: .curve, coordinates:[CGPoint(x: -0.5, y: -0.5), CGPoint(x: 0.0, y: 0.5), CGPoint(x: -0.2, y: -0.2), CGPoint(x: -0.2, y: -0.2)], parameters: [], actionColors: [:]),
-      (type: .line, coordinates:[CGPoint(x: -0.5, y: -0.5), CGPoint(x: 0.5, y: 0.5)], parameters: [], actionColors: [:])
     ]],
     .singleSlip : [[
       (type: .line, coordinates:[CGPoint(x: 0.0, y: -0.5), CGPoint(x: 0.0, y: 0.5)], parameters: [], actionColors: [:]),
@@ -311,5 +351,4 @@ class SwitchBoardShape {
     ]],
   ]
 
-  
 }

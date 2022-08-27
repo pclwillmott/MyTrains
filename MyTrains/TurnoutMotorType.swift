@@ -10,8 +10,9 @@ import AppKit
 
 public enum TurnoutMotorType : Int {
   
-  case slowMotion = 0
-  case solenoid = 1
+  case manual = 0
+  case slowMotion = 1
+  case solenoid = 2
   
   public var title : String {
     get {
@@ -20,11 +21,12 @@ public enum TurnoutMotorType : Int {
   }
   
   private static let titles = [
+    "Manual",
     "Slow Motion",
     "Solenoid",
   ]
   
-  public static let defaultValue : TurnoutMotorType = .solenoid
+  public static let defaultValue : TurnoutMotorType = .manual
   
   public static func populate(comboBox: NSComboBox) {
     comboBox.removeAllItems()
@@ -41,4 +43,3 @@ public enum TurnoutMotorType : Int {
   }
   
 }
-

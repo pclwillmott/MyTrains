@@ -29,7 +29,7 @@ class SwitchBoardItemView: NSView {
    
       let path = NSBezierPath()
       
-      SwitchBoardShape.drawShape(partType: item.itemPartType, orientation: item.orientation, location: (x:0,y:0), lineWidth: lineWidth, cellSize: cellSize, isButton: false, isEnabled: true, offset: offset)
+      SwitchBoardShape.drawShape(partType: item.itemPartType, orientation: item.orientation, location: (x:0,y:0), lineWidth: lineWidth, cellSize: cellSize, isButton: false, isEnabled: true, offset: offset, switchBoardItem: nil)
       
       NSColor.setStrokeColor(color: .clear)
       

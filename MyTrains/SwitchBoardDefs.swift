@@ -29,9 +29,12 @@ public enum ShapePartType {
 // MARK: ActionColor
 
 public enum ActionColor {
-  case closed
-  case thrown
-  case ndeterminate
+  case closedSW1
+  case thrownSW1
+  case indeterminateSW1
+  case closedSW2
+  case thrownSW2
+  case indeterminateSW2
   case fill
   case stroke
 }

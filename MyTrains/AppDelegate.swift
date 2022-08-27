@@ -40,6 +40,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
 
     }
     
+    print(networkController.layout?.layoutName)
+    
   }
   
   func applicationWillTerminate(_ aNotification: Notification) {

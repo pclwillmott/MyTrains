@@ -207,6 +207,7 @@ enum SWITCHBOARD_ITEM {
   static let IS_SCENIC_SECTION           = "IS_SCENIC_SECTION"
   static let BLOCK_TYPE                  = "BLOCK_TYPE"
   static let LINK_ITEM                   = "LINK_ITEM"
+  static let TURNOUT_CONNECTION          = "TURNOUT_CONNECTION"
 }
 
 enum SENSOR {
