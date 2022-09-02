@@ -19,6 +19,7 @@ public enum ProductCode : UInt8 {
   case DCS210Plus       = 0x1a
   case DCS210           = 0x1b
   case DCS240           = 0x1c
+  case DCS240Plus       = 0x1d
   case PR3              = 0x23
   case PR4              = 0x24
   case DT402            = 0x2a

@@ -51,6 +51,7 @@ class ThrottleVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate,
       button.frame = NSRect(x: xPos, y: yPos, width: 50, height: 20)
       button.tag = index
       button.setButtonType(.momentaryPushIn)
+      button.allowsExpansionToolTips = true
       boxMain.addSubview(button)
       buttons.append(button)
       

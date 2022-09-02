@@ -219,7 +219,7 @@ public class LocoNetProducts {
     (.UT6DE, "UT6DE", "Duplex Radio Utility Throttle CE (For Europe)", 2020, .UT6, [.Throttle, .DuplexRadioTransceiver], 0, 0),
     (.DS74, "DS74", "Quad Switch Stationary Decoder", 2021, .DS74, [.StationaryDecoder, .Series7, .OptionSwitches], 4, 4),
     (.DS78V, "DS78V", "Eight Servo LocoNet Stationary & Accessory decoder for turnout control", 2021, .none, [.StationaryDecoder, .Series7, .OptionSwitches], 0, 0),
-    (.DCS240PLUS, "DCS240+", "DCC Command Station & Booster" , 2022, .none, [.CommandStation, .Booster, .ComputerInterface, .LocoNetInterface, .Programmer, .OptionSwitches, .OpSwDataAP1, .OpSwDataBP1], 0, 0),
+    (.DCS240PLUS, "DCS240+", "DCC Command Station & Booster" , 2022, .DCS240Plus, [.CommandStation, .Booster, .ComputerInterface, .LocoNetInterface, .Programmer, .OptionSwitches, .OpSwDataAP1, .OpSwDataBP1], 0, 0),
   ]
   
   private static var _productDictionary : [LocoNetProductId:LocoNetProduct]?

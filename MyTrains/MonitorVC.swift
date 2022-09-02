@@ -306,7 +306,26 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
     
     // This is a hack to be removed!
     
-    addr += 1
+    if message.messageType == .locoSlotDataP1 {
+      if (message.message[3] & 0b00110000) != 0b00110000 {
+        interface?.moveSlotsP1(sourceSlotNumber: Int(message.message[2]), destinationSlotNumber: Int(message.message[2]), timeoutCode: .none)
+      }
+      else {
+        addr += 1
+        interface?.getLocoSlot(forAddress: addr, locoNetProtocol: 1)
+      }
+    }
+
+    if message.messageType == .locoSlotDataP2 {
+      if (message.message[4] & 0b00110000) != 0b00110000 {
+        interface?.moveSlotsP2(sourceSlotNumber: Int(message.message[3]), sourceSlotPage: Int(message.message[2]), destinationSlotNumber: Int(message.message[3]), destinationSlotPage: Int(message.message[2]), timeoutCode: .none)
+      }
+      else {
+        addr += 1
+        interface?.getLocoSlot(forAddress: addr, locoNetProtocol: 2)
+      }
+    }
+
     /*
     if message.messageType == .locoSlotDataP1 && (message.message[3] & 0b00110000) != 0b00110000 {
       let sn = Int(message.message[2])
@@ -622,11 +641,12 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
   @IBOutlet weak var btnTest: NSButton!
   
   @IBAction func btnTestAction(_ sender: NSButton) {
- //   messenger?.getLocoSlotDataP2(forAddress: addr)
-    interface?.getDuplexGroupID()
+    addr = 1
+    interface?.getLocoSlot(forAddress: addr, locoNetProtocol: 2)
   }
   
   var addr : Int = 1
+  
 }
 
 

@@ -41,7 +41,7 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     TrackGauge.populate(comboBox: cboTrackGuage)
     UnitSpeed.populate(comboBox: cboMaximumSpeedUnits)
     
-//    cboDecoderModel.dataSource = cboDecoderModelDS
+    cboDecoderModel.dataSource = cboDecoderModelDS
     
 //    cboModelManufacturer.dataSource = cboModelManufacturerDS
 
@@ -54,10 +54,10 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   private var cvTableViewDS = CVTableViewDS()
 
   private var cboNetworkDS = ComboBoxDBDS(tableName: TABLE.NETWORK, codeColumn: NETWORK.NETWORK_ID, displayColumn: NETWORK.NETWORK_NAME, sortColumn: NETWORK.NETWORK_NAME)
-  /*
-  private var cboDecoderModelDS = ComboBoxDBDS(tableName: TABLE.LOCOMOTIVE, codeColumn: LOCOMOTIVE.LOCOMOTIVE_ID, displayColumn: LOCOMOTIVE.DECODER_MODEL, sortColumn: LOCOMOTIVE.DECODER_MODEL, groupItems: true)
   
-  private var cboModelManufacturerDS = ComboBoxDBDS(tableName: TABLE.LOCOMOTIVE, codeColumn: LOCOMOTIVE.LOCOMOTIVE_ID, displayColumn: LOCOMOTIVE.MANUFACTURER, sortColumn: LOCOMOTIVE.MANUFACTURER, groupItems: true)
+  private var cboDecoderModelDS = ComboBoxDBDS(tableName: TABLE.ROLLING_STOCK, codeColumn: ROLLING_STOCK.ROLLING_STOCK_ID, displayColumn: ROLLING_STOCK.MDECODER_MODEL, sortColumn: ROLLING_STOCK.MDECODER_MODEL, groupItems: true)
+  /*
+  private var cboModelManufacturerDS = ComboBoxDBDS(tableName: TABLE.ROLLING_STOCK, codeColumn: ROLLING_STOCK.ROLLING_STOCK_ID, displayColumn: ROLLING_STOCK.M, sortColumn: LOCOMOTIVE.MANUFACTURER, groupItems: true)
   */
   private var fnTableViewDS = FNTableViewDS()
   

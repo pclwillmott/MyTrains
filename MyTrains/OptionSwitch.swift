@@ -324,6 +324,7 @@ public class OptionSwitch {
     .DS64 : "Press and hold the \"OPS\" button on the DS64 until the red LED stops blinking.",
     .DCS210 : "Move the Mode toggle switch on the DCS210 to the \"RUN\" position.",
     .DCS240 : "Move the Mode toggle switch on the DCS240 to the \"RUN\" position.",
+    .DCS100 : "Move the Mode toggle switch on the DCS100 to the \"RUN\" position.",
   ]
   
   public static let allOptions : [OptionSwitchDefinition] = [
@@ -332,8 +333,8 @@ public class OptionSwitch {
       model: [.DCS50, .DCS51],
       switchNumber: 1,
       defaultState : .thrown,
-      thrownEffect : "one jump port",
-      closedEffect : "two jump ports"
+      thrownEffect : "two jump port",
+      closedEffect : "one jump ports"
     ),
     (
       definitionType: .standard,
@@ -890,7 +891,7 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210PLUS],
+      model: [.DCS240, .DCS210PLUS, .DCS210],
       switchNumber: 77,
       defaultState : .thrown,
       thrownEffect : "enable legacy commands",

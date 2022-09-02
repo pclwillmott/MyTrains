@@ -76,9 +76,15 @@ extension Interface {
   
   public func getLocoSlot(forAddress: Int) {
     
+    getLocoSlot(forAddress: forAddress, locoNetProtocol: implementsProtocol2 ? 2 : 1)
+    
+  }
+
+  public func getLocoSlot(forAddress: Int, locoNetProtocol: Int) {
+    
     if forAddress > 0 {
       
-      if implementsProtocol2 {
+      if locoNetProtocol == 2 {
         getLocoSlotDataP2(forAddress: forAddress, timeoutCode: .getLocoSlotData)
       }
       else {
