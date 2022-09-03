@@ -304,6 +304,16 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
   
   // MARK: Public Methods
 
+  public func deviceForQuerySlot(productCode:ProductCode, serialNumber: Int) -> LocoNetDevice? {
+    
+    for (_, device) in locoNetDevices {
+      if let info = device.locoNetProductInfo, info.productCode == productCode && (device.serialNumber & 0b0011111111111111) == serialNumber {
+        return device
+      }
+    }
+    return nil
+  }
+  
   public func devicesWithAddresses(networkId:Int) -> [LocoNetDevice] {
     
     var result : [LocoNetDevice] = []

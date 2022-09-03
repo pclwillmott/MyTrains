@@ -306,21 +306,26 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
     
     // This is a hack to be removed!
     
-    if message.messageType == .locoSlotDataP1 {
+    let addrLow = UInt8(addr & 0x7f)
+    let addrHigh = UInt8(addr >> 7)
+    
+    if message.messageType == .locoSlotDataP1 && message.message[4] == addrLow  && message.message[9] == addrHigh {
       if (message.message[3] & 0b00110000) != 0b00110000 {
         interface?.moveSlotsP1(sourceSlotNumber: Int(message.message[2]), destinationSlotNumber: Int(message.message[2]), timeoutCode: .none)
       }
       else {
+        print("slot: \(message.message[2]) addr: \(addr)")
         addr += 1
         interface?.getLocoSlot(forAddress: addr, locoNetProtocol: 1)
       }
     }
 
-    if message.messageType == .locoSlotDataP2 {
+    if message.messageType == .locoSlotDataP2 && message.message[5] == addrLow && message.message[6] == addrHigh {
       if (message.message[4] & 0b00110000) != 0b00110000 {
         interface?.moveSlotsP2(sourceSlotNumber: Int(message.message[3]), sourceSlotPage: Int(message.message[2]), destinationSlotNumber: Int(message.message[3]), destinationSlotPage: Int(message.message[2]), timeoutCode: .none)
       }
       else {
+        print("slot: \(message.message[2]).\(message.message[3]) addr: \(addr)")
         addr += 1
         interface?.getLocoSlot(forAddress: addr, locoNetProtocol: 2)
       }
@@ -642,7 +647,7 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
   
   @IBAction func btnTestAction(_ sender: NSButton) {
     addr = 1
-    interface?.getLocoSlot(forAddress: addr, locoNetProtocol: 2)
+    interface?.getLocoSlot(forAddress: addr, locoNetProtocol: 1)
   }
   
   var addr : Int = 1

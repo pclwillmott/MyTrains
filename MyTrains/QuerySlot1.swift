@@ -111,13 +111,17 @@ public class QuerySlot1 : NetworkMessage {
   
   public var serialNumber : Int {
     get {
-      return Int(message[19] & 0b00111111) << 7 | Int(message[18])
+      let sn = Int(message[19] & 0b00111111) << 7 | Int(message[18])
+      if let device = networkController.deviceForQuerySlot(productCode: productCode, serialNumber: sn) {
+        return device.serialNumber
+      }
+      return 0
     }
   }
   
   public var hardwareVersion : Double? {
     get {
-      if productCode == .DCS240 || productCode == .DCS210 || productCode == .DCS210Plus || productCode == .PR4 {
+      if productCode == .DCS240 || productCode == .DCS210 || productCode == .DCS210Plus || productCode == .PR4 || productCode == .DCS240Plus{
         return Double(message[17] & 0x78) / 8.0 + Double(message[17] & 0x07) / 10.0
       }
       return nil

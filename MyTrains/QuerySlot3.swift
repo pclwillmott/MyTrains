@@ -27,7 +27,11 @@ public class QuerySlot3 : NetworkMessage {
   
   public var serialNumber : Int {
     get {
-      return Int(message[19] & 0b00111111) << 7 | Int(message[18])
+      let sn = Int(message[19] & 0b00111111) << 7 | Int(message[18])
+      if let device = networkController.deviceForQuerySlot(productCode: productCode, serialNumber: sn) {
+        return device.serialNumber
+      }
+      return 0
     }
   }
 

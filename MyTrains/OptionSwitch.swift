@@ -316,6 +316,7 @@ public class OptionSwitch {
     .DCS210 : "Move the Mode toggle switch on the front of the DCS210 to the \"OP\" position. The PWR indicator will flash green alternating with the PROG indicator flashing red.",
     .DCS240 : "Move the Mode toggle switch on the front of the DCS240 to the \"OP\" position. The PWR indicator will flash green alternating with the PROG indicator flashing red.",
     .DCS100 : "Move the Mode toggle switch on the front of the DCS100 to the \"OP\" position. The PWR indicator will flash green alternating with the PROG indicator flashing red.",
+    .DCS240PLUS : "Move the Mode toggle switch on the front of the DCS240+ to the \"OP\" position. The PWR indicator will flash green alternating with the PROG indicator flashing red.",
   ]
   
   public static let exitOptionSwitchModeInstructions : [LocoNetProductId:String] = [
@@ -325,6 +326,7 @@ public class OptionSwitch {
     .DCS210 : "Move the Mode toggle switch on the DCS210 to the \"RUN\" position.",
     .DCS240 : "Move the Mode toggle switch on the DCS240 to the \"RUN\" position.",
     .DCS100 : "Move the Mode toggle switch on the DCS100 to the \"RUN\" position.",
+    .DCS240PLUS : "Move the Mode toggle switch on the DCS240+ to the \"RUN\" position.",
   ]
   
   public static let allOptions : [OptionSwitchDefinition] = [
@@ -562,7 +564,7 @@ public class OptionSwitch {
     ),
     (
       definitionType: .decoder,
-      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200],
+      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200, .DCS240PLUS],
       switchNumber: 21,
       defaultState : .thrown,
       thrownEffect : "",
@@ -692,7 +694,7 @@ public class OptionSwitch {
       definitionType: .standard,
       model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200, .DCS50, .DCS51, .DCS52, .DCS240PLUS],
       switchNumber: 36,
-      defaultState : .thrown,
+      defaultState : .autoThrown,
       thrownEffect : "",
       closedEffect : "clears all mobile decoder info and consists"
     ),
@@ -843,7 +845,7 @@ public class OptionSwitch {
     /* FOLLOWING FROM KB1066 FOR DCS210+ */
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210PLUS],
+      model: [.DCS240, .DCS210PLUS, .DCS240PLUS, .DCS210],
       switchNumber: 49,
       defaultState : .thrown,
       thrownEffect : "disallow Idle power status",
@@ -851,7 +853,7 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210PLUS],
+      model: [.DCS240, .DCS210PLUS, .DCS240PLUS, .DCS210],
       switchNumber: 54,
       defaultState : .thrown,
       thrownEffect : "do not recall last speed at power on",
@@ -859,7 +861,7 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210PLUS, .DCS210],
+      model: [.DCS240, .DCS210PLUS, .DCS210, .DCS240PLUS],
       switchNumber: 66,
       defaultState : .thrown,
       thrownEffect : "use advanced commands",
@@ -867,7 +869,7 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210PLUS],
+      model: [.DCS240, .DCS210PLUS, .DCS240PLUS, .DCS210],
       switchNumber: 70,
       defaultState : .thrown,
       thrownEffect : "enable <BB7F> checks for other command stations",
@@ -875,7 +877,7 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210PLUS],
+      model: [.DCS240, .DCS210PLUS, .DCS240PLUS, .DCS210],
       switchNumber: 71,
       defaultState : .thrown,
       thrownEffect : "enable external command station disable",
@@ -883,7 +885,7 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210PLUS],
+      model: [.DCS240, .DCS210PLUS, .DCS240PLUS, .DCS210],
       switchNumber: 75,
       defaultState : .thrown,
       thrownEffect : "enable programming track precharge",
@@ -891,7 +893,7 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210PLUS, .DCS210],
+      model: [.DCS240, .DCS210PLUS, .DCS210, .DCS240PLUS],
       switchNumber: 77,
       defaultState : .thrown,
       thrownEffect : "enable legacy commands",
@@ -899,7 +901,7 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210PLUS, .DCS210],
+      model: [.DCS240, .DCS210PLUS, .DCS210, .DCS240PLUS],
       switchNumber: 78,
       defaultState : .closed,
       thrownEffect : "no not send Ack on B0 switch command",

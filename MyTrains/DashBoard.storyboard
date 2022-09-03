@@ -67,7 +67,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5dL-rn-8i9">
-                                            <rect key="frame" x="125" y="109" width="217" height="16"/>
+                                            <rect key="frame" x="125" y="109" width="194" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="19a-Ee-SgZ">
                                                 <font key="font" metaFont="system"/>
@@ -85,7 +85,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ihs-Fs-2Pr">
-                                            <rect key="frame" x="125" y="85" width="217" height="16"/>
+                                            <rect key="frame" x="125" y="85" width="194" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="3BC-kb-bIV">
                                                 <font key="font" metaFont="system"/>
@@ -103,7 +103,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NH6-dT-TRR">
-                                            <rect key="frame" x="125" y="61" width="217" height="16"/>
+                                            <rect key="frame" x="125" y="61" width="194" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="E7H-6Q-AHK">
                                                 <font key="font" metaFont="system"/>
@@ -121,7 +121,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UFh-QE-p4Z">
-                                            <rect key="frame" x="125" y="37" width="217" height="16"/>
+                                            <rect key="frame" x="125" y="37" width="194" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="WJe-IF-Lf9">
                                                 <font key="font" metaFont="system"/>
@@ -130,7 +130,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lza-lZ-bhI">
-                                            <rect key="frame" x="10" y="13" width="57" height="16"/>
+                                            <rect key="frame" x="8" y="13" width="57" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Board ID" id="Kdq-iT-SZk">
                                                 <font key="font" metaFont="system"/>
@@ -139,7 +139,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8jA-nE-vej">
-                                            <rect key="frame" x="127" y="13" width="215" height="16"/>
+                                            <rect key="frame" x="126" y="13" width="193" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="fTj-M7-fGf">
                                                 <font key="font" metaFont="system"/>
@@ -224,9 +224,9 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="je1-U2-9QI">
-                                            <rect key="frame" x="6" y="254" width="44" height="16"/>
+                                            <rect key="frame" x="6" y="254" width="64" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Bit 4.3" id="pbE-Tu-quS">
+                                            <textFieldCell key="cell" lineBreakMode="clipping" title="RSyn Max" id="pbE-Tu-quS">
                                                 <font key="font" usesAppearanceFont="YES"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>

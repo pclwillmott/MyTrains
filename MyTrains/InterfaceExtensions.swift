@@ -369,7 +369,7 @@ extension Interface {
     
     let message = NetworkMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_MOVE_SLOTS.rawValue, UInt8(sourceSlotNumber), UInt8(destinationSlotNumber)], appendCheckSum: true)
     
-    addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [.locoSlotDataP1, .illegalMoveP1], retryCount: 10, timeoutCode: timeoutCode)
+    addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [.locoSlotDataP1, .illegalMoveP1], retryCount: 0, timeoutCode: .none)
 
   }
   
@@ -380,7 +380,7 @@ extension Interface {
     
     let message = NetworkMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_D4_GROUP.rawValue, srcPage, UInt8(sourceSlotNumber), dstPage, UInt8(destinationSlotNumber)], appendCheckSum: true)
     
-    addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [.locoSlotDataP2, .d4Error, .locoSlotDataP1], retryCount: 10, timeoutCode: timeoutCode)
+    addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [.locoSlotDataP2, .d4Error, .locoSlotDataP1], retryCount: 0, timeoutCode: .none)
 
   }
   
