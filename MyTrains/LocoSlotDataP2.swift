@@ -93,7 +93,13 @@ public class LocoSlotDataP2 : NetworkMessage {
       
     }
   }
-  
+
+  public var rawMobileDecoderType : Int {
+    get {
+      return Int(message[4] & 0b111)
+    }
+  }
+
   public var direction : LocomotiveDirection {
     get {
       let directionMask : UInt8 = 0b00100000

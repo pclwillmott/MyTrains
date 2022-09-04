@@ -24,8 +24,10 @@ public class LocoSlotData {
     slotState = locoSlotDataP1.slotState
     
     consistState = locoSlotDataP1.consistState
-    
+
     mobileDecoderType = locoSlotDataP1.mobileDecoderType
+    
+    rawMobileDecodeType = locoSlotDataP1.rawMobileDecoderType
     
     direction = locoSlotDataP1.direction
     
@@ -54,6 +56,8 @@ public class LocoSlotData {
     consistState = locoSlotDataP2.consistState
     
     mobileDecoderType = locoSlotDataP2.mobileDecoderType
+    
+    rawMobileDecodeType = locoSlotDataP2.rawMobileDecoderType
     
     direction = locoSlotDataP2.direction
     
@@ -84,6 +88,8 @@ public class LocoSlotData {
     consistState = .NotLinked
     
     mobileDecoderType = SpeedSteps.defaultValue
+    
+    rawMobileDecodeType = 0
     
     direction = .forward
     
@@ -116,6 +122,8 @@ public class LocoSlotData {
   public var consistState : ConsistState
   
   public var mobileDecoderType : SpeedSteps
+  
+  public var rawMobileDecodeType : Int
   
   public var direction : LocomotiveDirection
   

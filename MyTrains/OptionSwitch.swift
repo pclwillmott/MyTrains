@@ -126,7 +126,7 @@ public class OptionSwitch {
 
   // DCS240
   
-  let DCS240Type : Set<LocoNetProductId> = [.DCS240, .DCS210, .DCS240PLUS]
+  let DCS240Type : Set<LocoNetProductId> = [.DCS240, .DCS210, .DCS240PLUS, .DCS210PLUS]
 
   let DCS240mask28   : UInt8 = 0b000
   let DCS240mask28A  : UInt8 = 0b001
@@ -137,14 +137,14 @@ public class OptionSwitch {
 
   // DCS100
   
-  let DCS100Type : Set<LocoNetProductId> = [.DCS100, .DCS200, .DCS210PLUS]
+  let DCS100Type : Set<LocoNetProductId> = [.DCS100, .DCS200]
 
   let DCS100mask128  : UInt8 = 0b000
-  let DCS100mask14   : UInt8 = 0b001
-  let DCS100mask28   : UInt8 = 0b010
-  let DCS100mask28T  : UInt8 = 0b011
-  let DCS100mask128A : UInt8 = 0b100
-  let DCS100mask28A  : UInt8 = 0b110
+  let DCS100mask128A : UInt8 = 0b001
+  let DCS100mask28T  : UInt8 = 0b010
+  let DCS100mask14   : UInt8 = 0b100
+  let DCS100mask28   : UInt8 = 0b110
+  let DCS100mask28A  : UInt8 = 0b111
 
   // DCS50
   
@@ -153,9 +153,9 @@ public class OptionSwitch {
   let DCS50mask128  : UInt8 = 0b000 // VERY UNSURE OF THESE VALUES
   let DCS50mask128A : UInt8 = 0b001
   let DCS50mask28T  : UInt8 = 0b010
-  let DCS50mask28A  : UInt8 = 0b011
   let DCS50mask14   : UInt8 = 0b100
   let DCS50mask28   : UInt8 = 0b110
+  let DCS50mask28A  : UInt8 = 0b111
 
   public var defaultDecoderType : SpeedSteps {
     get {
@@ -200,9 +200,8 @@ public class OptionSwitch {
         default:
           break
         }
-
       }
-      else {
+      else if DCS50Type.contains(locoNetDevice.locoNetProductId){
         switch value {
         case DCS50mask128:
           return .dcc128
@@ -265,7 +264,7 @@ public class OptionSwitch {
           break
         }
       }
-      else {
+      else if DCS50Type.contains(locoNetDevice.locoNetProductId) {
         switch value {
         case .dcc28:
           bits = DCS50mask28
