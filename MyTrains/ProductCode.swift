@@ -27,12 +27,15 @@ public enum ProductCode : UInt8 {
   case DCS51            = 0x33
   case DCS52            = 0x34
   case DT602            = 0x3e
+  case SE74             = 0x46
+  case PM74             = 0x4a
   case BXPA1            = 0x51
   case BXP88            = 0x58
   case LNWI             = 0x63
   case UR92             = 0x5c
   case UR93             = 0x5d
   case DS74             = 0x74
+  case DS78V            = 0x7c
   case softwareThrottle = 0x7f
   case none             = 0xff
   

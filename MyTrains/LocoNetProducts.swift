@@ -115,6 +115,8 @@ public enum LocoNetProductId : Int {
   case DS74 = 77
   case DS78V = 78
   case DCS240PLUS = 79
+  case SE74 = 80
+  case PM74 = 81
 }
 
 public typealias LocoNetDeviceAttributes = Set<LocoNetDeviceAttribute>
@@ -218,8 +220,10 @@ public class LocoNetProducts {
     (.UT6D, "UT6D", "Duplex Radio Utility Throttle", 2020, .UT6, [.Throttle, .DuplexRadioTransceiver], 0, 0),
     (.UT6DE, "UT6DE", "Duplex Radio Utility Throttle CE (For Europe)", 2020, .UT6, [.Throttle, .DuplexRadioTransceiver], 0, 0),
     (.DS74, "DS74", "Quad Switch Stationary Decoder", 2021, .DS74, [.StationaryDecoder, .Series7, .OptionSwitches], 4, 4),
-    (.DS78V, "DS78V", "Eight Servo LocoNet Stationary & Accessory decoder for turnout control", 2021, .none, [.StationaryDecoder, .Series7, .OptionSwitches], 0, 0),
+    (.DS78V, "DS78V", "Eight Servo LocoNet Stationary & Accessory decoder for turnout control", 2021, .DS78V, [.StationaryDecoder, .Series7, .OptionSwitches], 8, 8),
     (.DCS240PLUS, "DCS240+", "DCC Command Station & Booster" , 2022, .DCS240Plus, [.CommandStation, .Booster, .ComputerInterface, .LocoNetInterface, .Programmer, .OptionSwitches, .OpSwDataAP1, .OpSwDataBP1], 0, 0),
+    (.SE74, "SE74", "16 Signal Head Controller with 4 Turnout Controls and 8 Input Lines", 2022, .SE74, [.StationaryDecoder, .Series7, .OptionSwitches], 36, 4),
+    (.PM74, "PM74", "Power Manager with Occupancy and Transponding Detection for 4 Sub-Districts", 2022, .PM74, [.OccupancyDetector, .Series7, .OptionSwitches, .Transponding, .PowerManager], 4, 0),
   ]
   
   private static var _productDictionary : [LocoNetProductId:LocoNetProduct]?

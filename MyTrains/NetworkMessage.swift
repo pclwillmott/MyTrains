@@ -695,7 +695,6 @@ public class NetworkMessage : NSObject {
                message[ 3] == 0x22 &&
                message[ 4] == 0x01 &&
                message[ 5] == 0x00 &&
-               (message[7] & 0b11100000) == 0x00 &&
                (message[8] & 0b11110000) == 0b00010000 &&
                message[10] == 0x00 {
               _messageType = .interfaceData
