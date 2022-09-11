@@ -64,33 +64,10 @@ public class LocoSlotDataP2 : NetworkMessage {
       return Int(message[5]) | (Int(message[6]) << 7)
     }
   }
-  
+
   public var mobileDecoderType : SpeedSteps {
     get {
-      
-      let decoderType = message[4] & 0b111
-      
-      switch decoderType {
-      case 0b000:
-        return .dcc28
-      case 0b001:
-        return .dcc28T
-      case 0b010:
-        return .dcc14
-      case 0b011:
-        return .dcc128
-      case 0b100:
-        return .dcc28A
-      case 0b101:
-        return SpeedSteps.defaultValue
-      case 0b110:
-        return SpeedSteps.defaultValue
-      case 0b111:
-        return .dcc128A
-      default:
-        return SpeedSteps.defaultValue
-      }
-      
+      return SpeedSteps(rawValue: Int(message[4] & 0b111)) ?? SpeedSteps.defaultValue
     }
   }
 

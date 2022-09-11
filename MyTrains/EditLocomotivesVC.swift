@@ -41,6 +41,8 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     TrackGauge.populate(comboBox: cboTrackGuage)
     UnitSpeed.populate(comboBox: cboMaximumSpeedUnits)
     
+    SpeedSteps.populate(comboBox: cboDecoderType)
+    
     cboDecoderModel.dataSource = cboDecoderModelDS
     
 //    cboModelManufacturer.dataSource = cboModelManufacturerDS
@@ -72,7 +74,7 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     cboTrackGuage.selectItem(at: UserDefaults.standard.integer(forKey: DEFAULT.TRACK_GAUGE))
     chkMobileDecoderInstalled.state = .off
     chkAccessoryDecoderInstalled.state = .off
-    cboDecoderType.selectItem(at: SpeedSteps.dcc128.rawValue)
+    SpeedSteps.select(comboBox: cboDecoderType, value: SpeedSteps.defaultValue)
     txtAddress.stringValue = ""
     txtAccessoryDecoderAddress.stringValue = ""
     txtOccupancyFeedbackOffsetFront.stringValue = "0.0"
@@ -102,7 +104,7 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
       cboTrackGuage.selectItem(at: locomotive.trackGauge.rawValue)
       chkMobileDecoderInstalled.state = locomotive.mDecoderInstalled ? .on : .off
       chkAccessoryDecoderInstalled.state = locomotive.aDecoderInstalled ? .on : .off
-      cboDecoderType.selectItem(at: locomotive.speedSteps.rawValue)
+      SpeedSteps.select(comboBox: cboDecoderType, value: locomotive.speedSteps)
       txtAddress.stringValue = locomotive.mDecoderAddress == -1 ? "" : "\(locomotive.mDecoderAddress)"
       txtAccessoryDecoderAddress.stringValue = locomotive.aDecoderAddress == -1 ? "" : "\(locomotive.aDecoderAddress)"
       txtOccupancyFeedbackOffsetFront.stringValue = "\(locomotive.feedbackOccupancyOffsetFront)"
@@ -201,7 +203,7 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     locomotive.unitsLength = UnitLength(rawValue: cboLengthUnits.indexOfSelectedItem) ?? UnitLength.defaultValue
     locomotive.scale = Double(txtScale.stringValue) ?? 1.0
     locomotive.trackGauge = TrackGauge(rawValue: cboTrackGuage.indexOfSelectedItem) ?? TrackGauge.defaultValue
-    locomotive.speedSteps = SpeedSteps(rawValue: cboDecoderType.indexOfSelectedItem) ?? .dcc128A
+    locomotive.speedSteps = SpeedSteps.selected(comboBox: cboDecoderType)
     locomotive.mDecoderAddress = Int(txtAddress.stringValue) ?? -1
     locomotive.aDecoderAddress = Int(txtAccessoryDecoderAddress.stringValue) ?? -1
     locomotive.mDecoderInstalled = chkMobileDecoderInstalled.state == .on

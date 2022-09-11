@@ -124,168 +124,24 @@ public class OptionSwitch {
   
   public var newDefaultDecoderType : SpeedSteps = SpeedSteps.defaultValue
 
-  // DCS240
-  
-  let DCS240Type : Set<LocoNetProductId> = [.DCS240, .DCS210, .DCS240PLUS, .DCS210PLUS]
-
-  let DCS240mask28   : UInt8 = 0b000
-  let DCS240mask28A  : UInt8 = 0b001
-  let DCS240mask14   : UInt8 = 0b010
-  let DCS240mask28T  : UInt8 = 0b100
-  let DCS240mask128  : UInt8 = 0b110
-  let DCS240mask128A : UInt8 = 0b111
-
-  // DCS100
-  
-  let DCS100Type : Set<LocoNetProductId> = [.DCS100, .DCS200]
-
-  let DCS100mask128  : UInt8 = 0b000
-  let DCS100mask128A : UInt8 = 0b001
-  let DCS100mask28T  : UInt8 = 0b010
-  let DCS100mask14   : UInt8 = 0b100
-  let DCS100mask28   : UInt8 = 0b110
-  let DCS100mask28A  : UInt8 = 0b111
-
-  // DCS50
-  
-  let DCS50Type : Set<LocoNetProductId> = [.DCS50, .DCS51]
-
-  let DCS50mask128  : UInt8 = 0b000 // VERY UNSURE OF THESE VALUES
-  let DCS50mask128A : UInt8 = 0b001
-  let DCS50mask28T  : UInt8 = 0b010
-  let DCS50mask14   : UInt8 = 0b100
-  let DCS50mask28   : UInt8 = 0b110
-  let DCS50mask28A  : UInt8 = 0b111
-
   public var defaultDecoderType : SpeedSteps {
     get {
       
-      var value : UInt8 = 0
-      value |= (locoNetDevice.getState(switchNumber: 21).isClosed ? 1 : 0) << 2
+      var value : Int = 0
+      value |= (locoNetDevice.getState(switchNumber: 23).isClosed ? 1 : 0) << 2
       value |= (locoNetDevice.getState(switchNumber: 22).isClosed ? 1 : 0) << 1
-      value |= (locoNetDevice.getState(switchNumber: 23).isClosed ? 1 : 0)
-      
-      if DCS240Type.contains(locoNetDevice.locoNetProductId) {
-        switch value {
-        case DCS240mask128:
-          return .dcc128
-        case DCS240mask14:
-          return .dcc14
-        case DCS240mask28:
-          return .dcc28
-        case DCS240mask128A:
-          return .dcc128A
-        case DCS240mask28A:
-          return .dcc28A
-        case DCS240mask28T:
-          return .dcc28T
-        default:
-          break
-        }
-      }
-      else if DCS100Type.contains(locoNetDevice.locoNetProductId) {
-        switch value {
-        case DCS100mask128:
-          return .dcc128
-        case DCS100mask14:
-          return .dcc14
-        case DCS100mask28:
-          return .dcc28
-        case DCS100mask128A:
-          return .dcc128A
-        case DCS100mask28A:
-          return .dcc28A
-        case DCS100mask28T:
-          return .dcc28T
-        default:
-          break
-        }
-      }
-      else if DCS50Type.contains(locoNetDevice.locoNetProductId){
-        switch value {
-        case DCS50mask128:
-          return .dcc128
-        case DCS50mask14:
-          return .dcc14
-        case DCS50mask28:
-          return .dcc28
-        case DCS50mask128A:
-          return .dcc128A
-        case DCS50mask28A:
-          return .dcc28A
-        case DCS50mask28T:
-          return .dcc28T
-        default:
-          break
-        }
-      }
-
-      return SpeedSteps.defaultValue
+      value |= (locoNetDevice.getState(switchNumber: 21).isClosed ? 1 : 0)
+   
+      return SpeedSteps.speedStepFromOpSw(opsw: value, locoNetProductId: locoNetDevice.locoNetProductId)
       
     }
-    
     set(value) {
       
-      var bits : UInt8 = 0
+      let bits = value.opsw(locoNetProductId: locoNetDevice.locoNetProductId)
       
-      if DCS240Type.contains(locoNetDevice.locoNetProductId) {
-        switch value {
-        case .dcc28:
-          bits = DCS240mask28
-        case .dcc28T:
-          bits = DCS240mask28T
-        case .dcc14:
-          bits = DCS240mask14
-        case .dcc128:
-          bits = DCS240mask128
-        case .dcc28A:
-          bits = DCS240mask28A
-        case .dcc128A:
-          bits = DCS240mask128A
-        default:
-          break
-        }
-      }
-      else if DCS100Type.contains(locoNetDevice.locoNetProductId) {
-        switch value {
-        case .dcc28:
-          bits = DCS100mask28
-        case .dcc28T:
-          bits = DCS100mask28T
-        case .dcc14:
-          bits = DCS100mask14
-        case .dcc128:
-          bits = DCS100mask128
-        case .dcc28A:
-          bits = DCS100mask28A
-        case .dcc128A:
-          bits = DCS100mask128A
-        default:
-          break
-        }
-      }
-      else if DCS50Type.contains(locoNetDevice.locoNetProductId) {
-        switch value {
-        case .dcc28:
-          bits = DCS50mask28
-        case .dcc28T:
-          bits = DCS50mask28T
-        case .dcc14:
-          bits = DCS50mask14
-        case .dcc128:
-          bits = DCS50mask128
-        case .dcc28A:
-          bits = DCS50mask28A
-        case .dcc128A:
-          bits = DCS50mask128A
-        default:
-          break
-        }
-      }
-      
-      locoNetDevice.setState(switchNumber: 21, value: (bits & 0b100) == 0b100 ? .closed : .thrown)
+      locoNetDevice.setState(switchNumber: 23, value: (bits & 0b100) == 0b100 ? .closed : .thrown)
       locoNetDevice.setState(switchNumber: 22, value: (bits & 0b010) == 0b010 ? .closed : .thrown)
-      locoNetDevice.setState(switchNumber: 23, value: (bits & 0b001) == 0b001 ? .closed : .thrown)
+      locoNetDevice.setState(switchNumber: 21, value: (bits & 0b001) == 0b001 ? .closed : .thrown)
       
       newDefaultDecoderType = value
       
@@ -707,9 +563,9 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS210, .DCS210PLUS],
+      model: [.DCS210, .DCS210PLUS, .DCS240PLUS, .DCS240],
       switchNumber: 38,
-      defaultState : .autoThrown,
+      defaultState : .thrown,
       thrownEffect : "loco reset button activates OpSw 39",
       closedEffect : "loco reset activates slot zero"
     ),

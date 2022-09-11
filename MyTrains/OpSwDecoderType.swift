@@ -29,40 +29,10 @@ class OpSwDecoderView: NSTableCellView {
   
   public var defaultDecoderType : SpeedSteps {
     get {
-      switch cboDecoderType.indexOfSelectedItem {
-      case 0:
-        return .dcc14
-      case 1:
-        return .dcc28
-      case 2:
-        return .dcc28A
-      case 3:
-        return .dcc128
-      case 4:
-        return .dcc128A
-      case 5:
-        return .dcc28T
-      default:
-        return SpeedSteps.defaultValue
-      }
+      return SpeedSteps.selected(comboBox: cboDecoderType)
     }
     set(value) {
-      switch value {
-      case .dcc14:
-        cboDecoderType.selectItem(at: 0)
-      case .dcc28:
-        cboDecoderType.selectItem(at: 1)
-      case .dcc28A:
-        cboDecoderType.selectItem(at: 2)
-      case .dcc128:
-        cboDecoderType.selectItem(at: 3)
-      case .dcc128A:
-        cboDecoderType.selectItem(at: 4)
-      case .dcc28T:
-        cboDecoderType.selectItem(at: 5)
-      default:
-        break
-      }
+      SpeedSteps.select(comboBox: cboDecoderType, value: value)
     }
   }
   
@@ -71,10 +41,15 @@ class OpSwDecoderView: NSTableCellView {
       return _optionSwitch
     }
     set(value) {
+      
       _optionSwitch = value
+      
+      SpeedSteps.populate(comboBox: cboDecoderType)
+      
       if let opsw = _optionSwitch {
         defaultDecoderType = opsw.defaultDecoderType
       }
+      
     }
   }
 

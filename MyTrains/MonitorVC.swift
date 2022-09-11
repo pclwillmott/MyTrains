@@ -402,9 +402,26 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
     }
     
     if !isPaused {
+      
       txtMonitor.string += "\(item)\n"
+      
+      let maxSize = 1 << 15
+      
+      var newString = ""
+      
+      if txtMonitor.string.count > maxSize {
+        let temp = txtMonitor.string.split(separator: "\n")
+        var index = temp.count - 1
+        while index >= 0 && newString.count < maxSize {
+          newString = "\(temp[index])\n" + newString
+          index -= 1
+        }
+        txtMonitor.string = newString
+      }
+      
       let range = NSMakeRange(txtMonitor.string.count - 1, 0)
       txtMonitor.scrollRangeToVisible(range)
+      
     }
 
     item += "\n"

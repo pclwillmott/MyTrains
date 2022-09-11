@@ -102,6 +102,8 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
   }
   
   private func networkMessageReceived(message: NetworkMessage) {
+    
+    let printOpSw = true
 
     switch message.messageType {
       
@@ -182,12 +184,69 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
       networkController.networkControllerStatusUpdated()
 
     case .opSwDataAP1:
+      
       commandStation?.opSwBankA = message
       commandStation?.globalSystemTrackStatus = message.message[7]
       
+      if printOpSw {
+        
+        var opSw = 1
+        var byte = 3
+        
+        while byte < 12 {
+          
+          for shift in 0...7 {
+            let mask : UInt8 = 1 << shift
+            let opSwState : Bool = (message.message[byte] & mask) == mask
+            if opSw % 8 != 0 {
+              print("\(opSw)\t\(opSwState ? "Closed" : "Thrown")")
+            }
+            opSw += 1
+          }
+          
+          byte += 1
+          if byte == 7 {
+            byte += 1
+          }
+          
+        }
+        
+        print("----------------")
+        
+      }
+      
     case .opSwDataBP1:
+      
       commandStation?.opSwBankB = message
       commandStation?.globalSystemTrackStatus = message.message[7]
+      
+      if printOpSw {
+        
+        var opSw = 65
+        var byte = 3
+        
+        while byte < 12 {
+          
+          for shift in 0...7 {
+            let mask : UInt8 = 1 << shift
+            let opSwState : Bool = (message.message[byte] & mask) == mask
+            if opSw % 8 != 0 {
+              print("\(opSw)\t\(opSwState ? "Closed" : "Thrown")")
+            }
+            opSw += 1
+          }
+          
+          byte += 1
+          if byte == 7 {
+            byte += 1
+          }
+          
+        }
+        
+        print("----------------")
+        
+      }
+
      
     case .fastClockDataP1:
       commandStation?.globalSystemTrackStatus = message.message[7]

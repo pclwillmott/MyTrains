@@ -306,7 +306,43 @@ extension Interface {
     addToQueue(message: message, delay: MessageTiming.SWREQ)
 
   }
-  
+
+  public func setOpSwDataAP1(state:Bool) {
+    
+    var data = [UInt8](repeating: 0, count: 13)
+    
+    data[0] = NetworkMessageOpcode.OPC_WR_SL_DATA.rawValue
+    data[1] = 14
+    data[2] = 0x7f
+    
+    for byte in 3...13 {
+      data[byte] = state ? 0x7f : 0x00
+    }
+    
+    let message = NetworkMessage(networkId: networkId, data: data, appendCheckSum: true)
+    
+    addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [], retryCount: 0, timeoutCode: .none)
+
+  }
+
+  public func setOpSwDataBP1(state:Bool) {
+    
+    var data = [UInt8](repeating: 0, count: 13)
+    
+    data[0] = NetworkMessageOpcode.OPC_WR_SL_DATA.rawValue
+    data[1] = 14
+    data[2] = 0x7e
+    
+    for byte in 3...13 {
+      data[byte] = state ? 0x7f : 0x00
+    }
+    
+    let message = NetworkMessage(networkId: networkId, data: data, appendCheckSum: true)
+    
+    addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [], retryCount: 0, timeoutCode: .none)
+
+  }
+
   public func setLocoSlotDataP1(slotData: [UInt8]) {
     
     var data = [UInt8](repeating: 0, count: 13)

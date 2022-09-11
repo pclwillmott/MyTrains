@@ -10,40 +10,34 @@ import Cocoa
 
 public enum SpeedSteps : Int {
   
-  case analog = 0
-  case dcc14 = 1
-  case dcc28 = 2
-  case dcc28A = 3
-  case dcc28T = 4
-  case dcc128 = 5
-  case dcc128A = 6
+  case dcc28      = 0b000
+  case trinary    = 0b001
+  case dcc14      = 0b010
+  case dcc128     = 0b011
+  case dcc28FX    = 0b100
+  case trinaryFX  = 0b101
+  case dcc14FX    = 0b110
+  case dcc128FX   = 0b111
   
   public func protectMask() -> UInt8 {
     return 0b11111000
   }
   
   public func setMask() -> UInt8 {
+    return UInt8(self.rawValue)
+  }
+  
+  public func opsw(locoNetProductId:LocoNetProductId) -> Int {
     
-    var mask : UInt8 = 0
+    let fx = self.rawValue & 0b100
     
-    switch self {
-    case .dcc28:
-      mask = 0b000
-    case .dcc28T:
-      mask = 0b001
-    case .dcc14:
-      mask = 0b010
-    case .dcc128:
-      mask = 0b011
-    case .dcc28A:
-      mask = 0b100
-    case .dcc128A:
-      mask = 0b111
-    default:
-      break
+    var dt = self.rawValue & 0b011
+    
+    if !SpeedSteps.newStyleCommandStations.contains(locoNetProductId) {
+      dt = (~dt) & 0b011
     }
     
-    return mask
+    return fx | dt
     
   }
 
@@ -54,13 +48,14 @@ public enum SpeedSteps : Int {
   }
   
   private static let titles = [
-    "Analog",
-    "DCC 14",
     "DCC 28",
-    "DCC 28A",
-    "Trinary",
+    "Motorola Trinary",
+    "DCC 14",
     "DCC 128",
-    "DCC 128A",
+    "DCC 28 FX",
+    "Reserved 1",
+    "Reserved 2",
+    "DCC 128 FX",
   ]
   
   public static let defaultValue : SpeedSteps = .dcc128
@@ -74,9 +69,37 @@ public enum SpeedSteps : Int {
   public static func select(comboBox:NSComboBox, value:SpeedSteps) {
     comboBox.selectItem(at: value.rawValue)
   }
-  
+
+  public static func select(comboBox:NSComboBox, opsw:Int, locoNetProductId:LocoNetProductId) {
+    
+    let value = SpeedSteps.speedStepFromOpSw(opsw: opsw, locoNetProductId: locoNetProductId)
+    
+    select(comboBox: comboBox, value: value)
+    
+  }
+
   public static func selected(comboBox: NSComboBox) -> SpeedSteps {
     return SpeedSteps(rawValue: comboBox.indexOfSelectedItem) ?? defaultValue
+  }
+  
+  public static var newStyleCommandStations : Set<LocoNetProductId> {
+    get {
+      return [.DCS210, .DCS240, .DCS210PLUS, .DCS240PLUS, .DCS52]
+    }
+  }
+  
+  public static func speedStepFromOpSw(opsw:Int, locoNetProductId: LocoNetProductId) -> SpeedSteps {
+    
+    let fx = opsw & 0b100
+    
+    var dt = opsw & 0b011
+    
+    if !SpeedSteps.newStyleCommandStations.contains(locoNetProductId) {
+      dt = (~dt) & 0b011
+    }
+
+    return SpeedSteps(rawValue: fx | dt) ?? .defaultValue
+    
   }
 
 }
