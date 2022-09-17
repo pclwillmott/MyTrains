@@ -295,6 +295,8 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
 
   // MARK: NetworkMessengerDelegate Methods
   
+  private var updateLock : NSLock = NSLock()
+  
   @objc func networkMessageReceived(message: NetworkMessage) {
     
     var item : String = ""
@@ -407,17 +409,18 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
       
       let maxSize = 1 << 15
       
-      var newString = ""
-      
+      updateLock.lock()
       if txtMonitor.string.count > maxSize {
+        var newString = ""
         let temp = txtMonitor.string.split(separator: "\n")
         var index = temp.count - 1
         while index >= 0 && newString.count < maxSize {
-          newString = "\(temp[index])\n" + newString
+          newString = "\(temp[index])\n\(newString)"
           index -= 1
         }
         txtMonitor.string = newString
       }
+      updateLock.unlock()
       
       let range = NSMakeRange(txtMonitor.string.count - 1, 0)
       txtMonitor.scrollRangeToVisible(range)
