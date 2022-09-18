@@ -211,7 +211,7 @@ public class LocoNetProducts {
     (.LNWI, "LNWI", "LocoNet WiFi Interface", 2017, .LNWI, [.WiFiPanel, .OptionSwitches], 0, 0),
     (.PR4, "PR4", "SoundFX USB Decoder Programmer", 2017, .PR4, [.ComputerInterface, .LocoNetInterface, .Programmer, .OptionSwitches], 0, 0),
     (.BXPA1, "BXPA1", "LocoNet DCC Auto-Reverser with Detection, Transponding and Power Management", 2018, .BXPA1, [.OccupancyDetector, .PowerManager, .Transponding, .OptionSwitches], 0, 0),
-    (.DCS52, "DCS52", "All-in-one Command Station / Booster / Throttle", 2019, .DCS52, [.CommandStation, .Booster, .Throttle, .OptionSwitches, .OpSwDataAP1, .OpSwDataBP1], 0, 0),
+    (.DCS52, "DCS52", "All-in-one Command Station / Booster / Throttle", 2019, .DCS52, [.CommandStation, .Booster, .Throttle, .OptionSwitches, .OpSwDataAP1, .OpSwDataBP1, .ComputerInterface, .LocoNetInterface, .Programmer], 0, 0),
     (.DCS210PLUS, "DCS210+", "DCC Command Station & Booster" , 2020, .DCS210Plus, [.CommandStation, .Booster, .ComputerInterface, .LocoNetInterface, .Programmer, .OptionSwitches, .OpSwDataAP1, .OpSwDataBP1], 0, 0),
     (.DT602, "DT602", "DT602 Advanced Super Throttle", 2020, .DT602, [.Throttle], 0, 0),
     (.DT602D, "DT602D", "Advanced Duplex Super Throttle", 2020, .DT602, [.Throttle, .DuplexRadioTransceiver], 0, 0),
