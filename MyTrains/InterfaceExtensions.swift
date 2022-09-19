@@ -277,7 +277,7 @@ extension Interface {
     
     let message = NetworkMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_SLOT_STAT1.rawValue, UInt8(slotNumber), stat1], appendCheckSum: true)
 
-    addToQueue(message: message, delay: MessageTiming.STANDARD)
+ //   addToQueue(message: message, delay: MessageTiming.STANDARD)
 
   }
   
@@ -287,7 +287,7 @@ extension Interface {
     
     let message = NetworkMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_D4_GROUP.rawValue, page, UInt8(slotNumber & 0x7f), 0x60, stat1], appendCheckSum: true)
 
-    addToQueue(message: message, delay: MessageTiming.STANDARD)
+//    addToQueue(message: message, delay: MessageTiming.STANDARD)
 
   }
   

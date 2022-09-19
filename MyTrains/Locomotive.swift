@@ -286,7 +286,7 @@ public class Locomotive : RollingStock, InterfaceDelegate {
         speed = targetSpeed
       }
       
-      let result = interface.updateLocomotiveState(slotNumber: slotNumber, slotPage: slotPage, previousState: lastLocomotiveState, nextState: locomotiveState, throttleID: throttle, forceRefresh: forceRefresh)
+      let result = interface.updateLocomotiveState(slotNumber: slotNumber, slotPage: slotPage, previousState: lastLocomotiveState, nextState: locomotiveState, throttleID: throttle, forceRefresh: false && forceRefresh)
       
       lastLocomotiveState = result.state
       
