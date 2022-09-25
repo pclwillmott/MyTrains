@@ -400,6 +400,42 @@ public class LocoNetDevice : EditorObject {
       
     }
   }
+  
+  public var isStandardLocoAddressPurgeTime : Bool {
+    get {
+      return getNewState(switchNumber: 13) == .thrown
+    }
+    set(value) {
+      setNewState(switchNumber: 13, value: value ? .thrown : .closed)
+    }
+  }
+  
+  public var doBeepsOnPurge : Bool {
+    get {
+      return getNewState(switchNumber: 42) == .thrown
+    }
+    set(value) {
+      setNewState(switchNumber: 42, value: value ? .thrown : .closed)
+    }
+  }
+  
+  public var isSetToZeroSpeedOnPurge : Bool {
+    get {
+      return getNewState(switchNumber: 15) == .closed
+    }
+    set(value) {
+      setNewState(switchNumber: 15, value: value ? .closed : .thrown)
+    }
+  }
+  
+  public var isPurgeEnabled : Bool {
+    get {
+      return getNewState(switchNumber: 14) == .thrown
+    }
+    set(value) {
+      setNewState(switchNumber: 14, value: value ? .thrown : .closed)
+    }
+  }
 
   public var devicePath : String = "" {
     didSet {
@@ -896,10 +932,10 @@ public class LocoNetDevice : EditorObject {
       cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.HARDWARE_VERSION)", value: hardwareVersion)
       cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.BOARD_ID)", value: boardId)
       cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.LOCONET_PRODUCT_ID)", value: locoNetProductId.rawValue)
-      cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.OPTION_SWITCHES_0)", value: Int64(_optionSwitchState[0]))
-      cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.OPTION_SWITCHES_1)", value: Int64(_optionSwitchState[1]))
-      cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.OPTION_SWITCHES_2)", value: Int64(_optionSwitchState[2]))
-      cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.OPTION_SWITCHES_3)", value: Int64(_optionSwitchState[3]))
+      cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.OPTION_SWITCHES_0)", value: Int64(_optionSwitchState[0] & 0x7fffffffffffffff))
+      cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.OPTION_SWITCHES_1)", value: Int64(_optionSwitchState[1] & 0x7fffffffffffffff))
+      cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.OPTION_SWITCHES_2)", value: Int64(_optionSwitchState[2] & 0x7fffffffffffffff))
+      cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.OPTION_SWITCHES_3)", value: Int64(_optionSwitchState[3] & 0x7fffffffffffffff))
       cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.DEVICE_PATH)", value: devicePath)
       cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.BAUD_RATE)", value: baudRate.rawValue)
       cmd.parameters.addWithValue(key: "@\(LOCONET_DEVICE.DEVICE_NAME)", value: deviceName)

@@ -190,12 +190,12 @@ public class OptionSwitch {
       model: [.DCS50, .DCS51],
       switchNumber: 1,
       defaultState : .thrown,
-      thrownEffect : "two jump port",
-      closedEffect : "one jump ports"
+      thrownEffect : "two jump ports",
+      closedEffect : "one jump port"
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200],
+      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200, .DB150, .DCS52, .DCS240PLUS],
       switchNumber: 1,
       defaultState : .thrown,
       thrownEffect : "do not change",
@@ -203,15 +203,15 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200, .DCS50, .DCS51, .DCS240PLUS],
+      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200, .DCS50, .DCS51, .DCS240PLUS, .DB150, .DCS52],
       switchNumber: 2,
       defaultState : .thrown,
       thrownEffect : "command station mode",
-      closedEffect : "booster only mode"
+      closedEffect : "booster mode"
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200, .DCS50, .DCS51, .DCS240PLUS],
+      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200, .DCS50, .DCS51, .DCS240PLUS, .DB150, .DCS52],
       switchNumber: 3,
       defaultState : .thrown,
       thrownEffect : "command station's booster is normal",
@@ -219,7 +219,7 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200],
+      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200, .DB150, .DCS50, .DCS51, .DCS52, .DCS240PLUS],
       switchNumber: 4,
       defaultState : .thrown,
       thrownEffect : "do not change",
@@ -229,13 +229,13 @@ public class OptionSwitch {
       definitionType: .standard,
       model: [.DCS50, .DCS51],
       switchNumber: 5,
-      defaultState : .thrown, // Check
+      defaultState : .closed,
       thrownEffect : "change allowed for Throttle ID, VMax and Brake Rate",
       closedEffect : "no change allowed for Throttle ID, VMax and Brake Rate"
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210, .DCS210PLUS],
+      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS52, .DCS240PLUS],
       switchNumber: 5,
       defaultState : .thrown,
       thrownEffect : "do not change",
@@ -251,7 +251,15 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS240PLUS],
+      model: [.DB150],
+      switchNumber: 5,
+      defaultState : .closed,
+      thrownEffect : "DB150 is not a command station",
+      closedEffect : "DB150 is a command station"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS240PLUS, .DCS52],
       switchNumber: 6,
       defaultState : .thrown,
       thrownEffect : "check for decoder before programming",
@@ -259,7 +267,7 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS100, .DCS200],
+      model: [.DCS100, .DCS200, .DB150],
       switchNumber: 6,
       defaultState : .thrown,
       thrownEffect : "do not change",
@@ -278,12 +286,12 @@ public class OptionSwitch {
       model: [.DCS50, .DCS51],
       switchNumber: 7,
       defaultState : .closed,
-      thrownEffect : "Blast Mode programming disabled",
-      closedEffect : "Blast mode programming enabled"
+      thrownEffect : "service mode programming",
+      closedEffect : "blast mode programming"
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200],
+      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200, .DB150, .DCS52, .DCS240PLUS],
       switchNumber: 7,
       defaultState : .thrown,
       thrownEffect : "do not change",
@@ -291,7 +299,7 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200],
+      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200, .DB150, .DCS50, .DCS51, .DCS52, .DCS240PLUS],
       switchNumber: 8,
       defaultState : .thrown,
       thrownEffect : "do not change",
@@ -299,7 +307,15 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200],
+      model: [.DCS100, .DCS200, .DB150, .DCS50],
+      switchNumber: 9,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS52, .DCS240PLUS],
       switchNumber: 9,
       defaultState : .closed,
       thrownEffect : "",
@@ -315,7 +331,15 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200],
+      model: [.DCS100, .DCS200, .DB150, .DCS50],
+      switchNumber: 10,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS52, .DCS240PLUS],
       switchNumber: 10,
       defaultState : .closed,
       thrownEffect : "",
@@ -331,7 +355,7 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200],
+      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200, .DB150, .DCS50, .DCS52, .DCS240PLUS],
       switchNumber: 11,
       defaultState : .thrown,
       thrownEffect : "do not change",
@@ -339,7 +363,7 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200],
+      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200, .DB150, .DCS50, .DCS52, .DCS240PLUS],
       switchNumber: 12,
       defaultState : .thrown,
       thrownEffect : "do not change",
@@ -347,15 +371,15 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200, .DCS50, .DCS51, .DCS240PLUS],
+      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200, .DCS50, .DCS51, .DCS240PLUS, .DCS52, .DB150],
       switchNumber: 13,
       defaultState : .thrown,
-      thrownEffect : "locomotive address purge time 200 seconds",
-      closedEffect : "locomotive address purge time 600 seconds"
+      thrownEffect : "Purge Time Constant 200 seconds. Loco address purge time between 200 and 400 seconds inclusive.",
+      closedEffect : "Purge Time Constant 600 seconds. Loco address purge time between 600 and 1200 seconds inclusive."
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200, .DCS50, .DCS51, .DCS240PLUS],
+      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200, .DCS50, .DCS51, .DCS240PLUS, .DCS52, .DB150],
       switchNumber: 14,
       defaultState : .thrown,
       thrownEffect : "locomotive address purging enabled",
@@ -363,7 +387,7 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200, .DCS50, .DCS51, .DCS240PLUS],
+      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200, .DCS50, .DCS51, .DCS240PLUS, .DCS52, .DB150],
       switchNumber: 15,
       defaultState : .thrown,
       thrownEffect : "purging will not change locomotive speed",
@@ -371,7 +395,7 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200],
+      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200, .DB150, .DCS50, .DCS51, .DCS52, .DCS240PLUS],
       switchNumber: 16,
       defaultState : .thrown,
       thrownEffect : "do not change",
@@ -379,7 +403,7 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200, .DCS50, .DCS51, .DCS240PLUS],
+      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200, .DCS51, .DCS240PLUS, .DCS52],
       switchNumber: 17,
       defaultState : .thrown,
       thrownEffect : "automatic advanced decode (FX) consists are enabled",
@@ -387,7 +411,15 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200, .DCS50, .DCS51, .DCS240PLUS],
+      model: [.DB150, .DCS50],
+      switchNumber: 17,
+      defaultState : .closed,
+      thrownEffect : "automatic advanced decode (FX) consists are enabled",
+      closedEffect : "automatic advanced decode (FX) consists are disabled"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200, .DCS50, .DCS51, .DCS240PLUS, .DB150, .DCS52],
       switchNumber: 18,
       defaultState : .thrown,
       thrownEffect : "normal command station booster short circuit shutdown time",
@@ -395,7 +427,7 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210, .DCS100, .DCS200],
+      model: [.DCS240, .DCS210, .DCS100, .DCS200, .DB150, .DCS50, .DCS52],
       switchNumber: 19,
       defaultState : .thrown,
       thrownEffect : "do not change",
@@ -403,7 +435,7 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS210PLUS],
+      model: [.DCS210PLUS, .DCS240PLUS],
       switchNumber: 19,
       defaultState : .closed,
       thrownEffect : "Ops mode feedback module not installed",
@@ -411,7 +443,7 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200, .DCS50, .DCS51, .DCS240PLUS],
+      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200, .DCS50, .DCS51, .DCS240PLUS, .DB150, .DCS52],
       switchNumber: 20,
       defaultState : .thrown,
       thrownEffect : "enable address 0 for analog stretching for conventional locomotives",
@@ -419,7 +451,7 @@ public class OptionSwitch {
     ),
     (
       definitionType: .decoder,
-      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200, .DCS240PLUS],
+      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200, .DCS240PLUS, .DB150, .DCS50, .DCS51, .DCS52],
       switchNumber: 21,
       defaultState : .thrown,
       thrownEffect : "",
@@ -427,7 +459,7 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200],
+      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200, .DB150, .DCS50, .DCS51, .DCS52, .DCS240PLUS],
       switchNumber: 24,
       defaultState : .thrown,
       thrownEffect : "do not change",
@@ -451,7 +483,39 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200, .DCS240PLUS],
+      model: [.DB150, .DCS50],
+      switchNumber: 25,
+      defaultState : .closed,
+      thrownEffect : "",
+      closedEffect : "do not change"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS52],
+      switchNumber: 25,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS100, .DCS200],
+      switchNumber: 26,
+      defaultState : .thrown,
+      thrownEffect : "disable routes",
+      closedEffect : "enable routes"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DB150, .DCS50],
+      switchNumber: 26,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS240PLUS],
       switchNumber: 26,
       defaultState : .closed,
       thrownEffect : "disable routes",
@@ -459,7 +523,15 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200, .DCS50, .DCS51, .DCS240PLUS],
+      model: [.DCS52],
+      switchNumber: 26,
+      defaultState : .closed,
+      thrownEffect : "",
+      closedEffect : "do not change"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200, .DCS50, .DCS51, .DCS240PLUS, .DB150, .DCS52],
       switchNumber: 27,
       defaultState : .thrown,
       thrownEffect : "enable normal switch commands, a.k.a. the \"Bushby bit\"",
@@ -475,7 +547,15 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200],
+      model: [.DB150, .DCS52],
+      switchNumber: 28,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200, .DB150, .DCS50, .DCS52],
       switchNumber: 29,
       defaultState : .thrown,
       thrownEffect : "do not change",
@@ -491,7 +571,7 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200],
+      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200, .DB150, .DCS50, .DCS52, .DCS240PLUS],
       switchNumber: 30,
       defaultState : .thrown,
       thrownEffect : "do not change",
@@ -499,7 +579,7 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200, .DCS240PLUS],
+      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200, .DCS240PLUS, .DCS52],
       switchNumber: 31,
       defaultState : .thrown,
       thrownEffect : "normal route/switch output rate when not trinary",
@@ -507,7 +587,15 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200],
+      model: [.DB150, .DCS50],
+      switchNumber: 31,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200, .DB150, .DCS50, .DCS51, .DCS52, .DCS240PLUS],
       switchNumber: 32,
       defaultState : .thrown,
       thrownEffect : "do not change",
@@ -515,7 +603,15 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200, .DCS50, .DCS51, .DCS240PLUS],
+      model: [.DCS100, .DCS200, .DCS51],
+      switchNumber: 33,
+      defaultState : .thrown,
+      thrownEffect : "track power off at power on",
+      closedEffect : "allow track power to restore to prior state at power on"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DB150, .DCS50],
       switchNumber: 33,
       defaultState : .closed,
       thrownEffect : "track power off at power on",
@@ -523,7 +619,23 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200, .DCS50, .DCS51, .DCS240PLUS],
+      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS240PLUS, .DCS52],
+      switchNumber: 33,
+      defaultState : .closed,
+      thrownEffect : "track power off at power on",
+      closedEffect : "allow track power to restore to prior state at power on"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS100, .DCS200, .DCS50,.DB150],
+      switchNumber: 34,
+      defaultState : .closed,
+      thrownEffect : "disallow track to power up to run state, if set to run prior to power up",
+      closedEffect : "allow track to power up to run state, if set to run prior to power up"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS51, .DCS240PLUS, .DCS52],
       switchNumber: 34,
       defaultState : .thrown,
       thrownEffect : "disallow track to power up to run state, if set to run prior to power up",
@@ -531,7 +643,7 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS240PLUS],
+      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS240PLUS, .DCS52],
       switchNumber: 35,
       defaultState : .thrown,
       thrownEffect : "enable loco reset button",
@@ -539,7 +651,7 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS100, .DCS200],
+      model: [.DCS100, .DCS200, .DB150, .DCS50],
       switchNumber: 35,
       defaultState : .thrown,
       thrownEffect : "do not change",
@@ -547,7 +659,7 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200, .DCS50, .DCS51, .DCS52, .DCS240PLUS],
+      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200, .DCS50, .DCS51, .DCS52, .DCS240PLUS, .DB150],
       switchNumber: 36,
       defaultState : .autoThrown,
       thrownEffect : "",
@@ -563,7 +675,15 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS210, .DCS210PLUS, .DCS240PLUS, .DCS240],
+      model: [.DB150, .DCS50, .DCS52],
+      switchNumber: 37,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS210PLUS, .DCS240PLUS, .DCS240, .DCS52],
       switchNumber: 38,
       defaultState : .thrown,
       thrownEffect : "loco reset button activates OpSw 39",
@@ -571,7 +691,7 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240],
+      model: [.DCS50],
       switchNumber: 38,
       defaultState : .thrown,
       thrownEffect : "do not change",
@@ -579,7 +699,7 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS100, .DCS200],
+      model: [.DCS100, .DCS200, .DB150],
       switchNumber: 38,
       defaultState : .autoThrown,
       thrownEffect : "",
@@ -595,19 +715,11 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210, .DCS100, .DCS200, .DCS52, .DCS240PLUS],
+      model: [.DCS240, .DCS210, .DCS100, .DCS200, .DCS52, .DCS240PLUS, .DB150, .DCS210PLUS],
       switchNumber: 39,
       defaultState : .autoThrown,
       thrownEffect : "",
       closedEffect : "clear all internal memory states, including OpSw 36 and 37"
-    ),
-    (
-      definitionType: .standard,
-      model: [.DCS210PLUS],
-      switchNumber: 39,
-      defaultState : .thrown,
-      thrownEffect : "do not change",
-      closedEffect : ""
     ),
     (
       definitionType: .standard,
@@ -619,7 +731,7 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS100, .DCS200],
+      model: [.DCS100, .DCS200, .DB150, .DCS50],
       switchNumber: 40,
       defaultState : .thrown,
       thrownEffect : "do not change",
@@ -627,15 +739,23 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210, .DCS100, .DCS200, .DCS240PLUS],
+      model: [.DCS240, .DCS210, .DCS100, .DCS200, .DCS240PLUS, .DB150, .DCS52, .DCS210PLUS],
       switchNumber: 41,
       defaultState : .thrown,
       thrownEffect : "diagnostic click disabled",
-      closedEffect : "diagnostic click when valid Loconet commands incoming and routes being output"
+      closedEffect : "diagnostic click when valid LocoNet commands incoming and routes being output"
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210, .DCS100, .DCS200, .DCS240PLUS],
+      model: [.DCS50],
+      switchNumber: 41,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS240, .DCS210, .DCS100, .DCS200, .DCS240PLUS, .DCS52, .DB150, .DCS210PLUS],
       switchNumber: 42,
       defaultState : .thrown,
       thrownEffect : "enable 2 short beeps when locomotive address purged",
@@ -643,15 +763,23 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210, .DCS100, .DCS200, .DCS50, .DCS51, .DCS240PLUS],
-      switchNumber: 43,
+      model: [.DCS50],
+      switchNumber: 42,
       defaultState : .thrown,
-      thrownEffect : "enable Loconet update of command station's track status",
-      closedEffect : "disable Loconet update of command station's track status"
+      thrownEffect : "do not change",
+      closedEffect : ""
     ),
     (
       definitionType: .standard,
-      model: [.DCS210],
+      model: [.DCS240, .DCS210, .DCS100, .DCS200, .DCS50, .DCS51, .DCS240PLUS, .DB150, .DCS52, .DCS210PLUS],
+      switchNumber: 43,
+      defaultState : .thrown,
+      thrownEffect : "enable LocoNet update of command station's track status",
+      closedEffect : "disable LocoNet update of command station's track status"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS52],
       switchNumber: 44,
       defaultState : .closed,
       thrownEffect : "",
@@ -659,7 +787,15 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS240PLUS],
+      model: [.DB150, .DCS50],
+      switchNumber: 44,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS240],
       switchNumber: 44,
       defaultState : .thrown,
       thrownEffect : "maximum slots to 400",
@@ -667,15 +803,23 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS100, .DCS200],
+      model: [.DCS240PLUS],
       switchNumber: 44,
       defaultState : .thrown,
-      thrownEffect : "maximum slots to 22",
-      closedEffect : "maximum slots to 120"
+      thrownEffect : "maximum slots to 404",
+      closedEffect : "maximum slots to 118"
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210, .DCS100, .DCS200, .DCS50, .DCS51, .DCS240PLUS],
+      model: [.DCS100, .DCS200],
+      switchNumber: 44,
+      defaultState : .thrown,
+      thrownEffect : "maximum slots to 23",
+      closedEffect : "maximum slots to 119"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS100, .DCS200, .DCS50, .DCS51, .DB150],
       switchNumber: 45,
       defaultState : .thrown,
       thrownEffect : "enable reply for switch state request",
@@ -683,7 +827,15 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210, .DCS100, .DCS200],
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 45,
+      defaultState : .thrown,
+      thrownEffect : "enable reply for switch state request",
+      closedEffect : "disable reply for switch state request"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS240, .DCS210, .DCS100, .DCS200, .DB150, .DCS50, .DCS52, .DCS210PLUS, .DCS240PLUS],
       switchNumber: 46,
       defaultState : .thrown,
       thrownEffect : "do not change",
@@ -697,10 +849,25 @@ public class OptionSwitch {
       thrownEffect : "normal programming track setting",
       closedEffect : "programming track is brake generator when not programming"
     ),
-    /* FOLLOWING FROM KB1066 FOR DCS210+ */
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210PLUS, .DCS240PLUS, .DCS210],
+      model: [.DB150, .DCS50, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 47,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS240, .DCS210, .DCS210PLUS, .DCS100, .DCS200, .DB150, .DCS50, .DCS51, .DCS52, .DCS240PLUS],
+      switchNumber: 48,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210PLUS, .DCS240PLUS, .DCS52],
       switchNumber: 49,
       defaultState : .thrown,
       thrownEffect : "disallow Idle power status",
@@ -708,15 +875,119 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210PLUS, .DCS240PLUS, .DCS210],
-      switchNumber: 54,
+      model: [.DCS100, .DCS200, .DCS50, .DCS210, .DCS240],
+      switchNumber: 49,
       defaultState : .thrown,
-      thrownEffect : "do not recall last speed at power on",
-      closedEffect : "recall last speed at power on"
+      thrownEffect : "do not change",
+      closedEffect : ""
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210PLUS, .DCS210, .DCS240PLUS],
+      model: [.DB150],
+      switchNumber: 49,
+      defaultState : .thrown,
+      thrownEffect : "no beep when program command sent",
+      closedEffect : "beep when program command sent"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS100, .DCS200, .DCS50, .DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 50,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DB150],
+      switchNumber: 50,
+      defaultState : .thrown,
+      thrownEffect : "longer short circuit recovery time",
+      closedEffect : "shorter short circuit recovery time"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS100, .DCS200, .DCS50, .DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 51,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DB150],
+      switchNumber: 51,
+      defaultState : .thrown,
+      thrownEffect : "do not allow EXT voltage restart",
+      closedEffect : "allow EXT voltage restart"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS100, .DCS200, .DB150, .DCS50, .DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 52,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS100, .DCS200, .DB150, .DCS50, .DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 53,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS100, .DCS200, .DB150, .DCS50],
+      switchNumber: 54,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS240, .DCS210PLUS, .DCS240PLUS, .DCS210, .DCS52],
+      switchNumber: 54,
+      defaultState : .thrown,
+      thrownEffect : "set speed to zero at power up",
+      closedEffect : "recall last speed at power up"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS100, .DCS200, .DB150, .DCS50, .DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 55,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS100, .DCS200, .DB150, .DCS50, .DCS51, .DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 56,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS100, .DCS200, .DB150, .DCS50, .DCS51, .DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 64,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 65,
+      defaultState : .closed,
+      thrownEffect : "",
+      closedEffect : "do not change"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS240, .DCS210PLUS, .DCS210, .DCS240PLUS, .DCS52],
       switchNumber: 66,
       defaultState : .thrown,
       thrownEffect : "use advanced commands",
@@ -724,19 +995,67 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210PLUS, .DCS240PLUS, .DCS210],
-      switchNumber: 70,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 67,
       defaultState : .thrown,
-      thrownEffect : "enable <BB7F> checks for other command stations",
-      closedEffect : "disable <BB7F> checks for other command stations"
+      thrownEffect : "do not change",
+      closedEffect : ""
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210PLUS, .DCS240PLUS, .DCS210],
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 68,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 69,
+      defaultState : .closed,
+      thrownEffect : "",
+      closedEffect : "do not change"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS240, .DCS210PLUS, .DCS240PLUS, .DCS210, .DCS52],
+      switchNumber: 70,
+      defaultState : .thrown,
+      thrownEffect : "enable probes for other command stations",
+      closedEffect : "disable probes for other command stations"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS240, .DCS210PLUS, .DCS240PLUS, .DCS210, .DCS52],
       switchNumber: 71,
       defaultState : .thrown,
       thrownEffect : "enable external command station disable",
       closedEffect : "disable external command station disable, just defer"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 72,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 73,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 74,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
     ),
     (
       definitionType: .standard,
@@ -748,7 +1067,15 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210PLUS, .DCS210, .DCS240PLUS],
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 76,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS240, .DCS210PLUS, .DCS210, .DCS240PLUS, .DCS52],
       switchNumber: 77,
       defaultState : .thrown,
       thrownEffect : "enable legacy commands",
@@ -756,11 +1083,51 @@ public class OptionSwitch {
     ),
     (
       definitionType: .standard,
-      model: [.DCS240, .DCS210PLUS, .DCS210, .DCS240PLUS],
+      model: [.DCS240, .DCS210PLUS, .DCS210, .DCS240PLUS, .DCS52],
       switchNumber: 78,
       defaultState : .closed,
       thrownEffect : "no not send Ack on B0 switch command",
       closedEffect : "send Ack on B0 switch command"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 79,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 80,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 81,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 82,
+      defaultState : .closed,
+      thrownEffect : "",
+      closedEffect : "do not change"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 83,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
     ),
     (
       definitionType: .standard,
@@ -770,7 +1137,367 @@ public class OptionSwitch {
       thrownEffect : "jump mode disabled",
       closedEffect : "jump mode enabled"
     ),
-    
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 84,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 85,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 86,
+      defaultState : .closed,
+      thrownEffect : "",
+      closedEffect : "do not change"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 87,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 88,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 89,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 90,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 91,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 92,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 93,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 94,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 95,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 96,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 97,
+      defaultState : .closed,
+      thrownEffect : "",
+      closedEffect : "do not change"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 98,
+      defaultState : .closed,
+      thrownEffect : "",
+      closedEffect : "do not change"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 99,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 100,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 101,
+      defaultState : .closed,
+      thrownEffect : "",
+      closedEffect : "do not change"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 102,
+      defaultState : .closed,
+      thrownEffect : "",
+      closedEffect : "do not change"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 103,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 104,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 105,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 106,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 107,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 108,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 109,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 110,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 111,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 112,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 113,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 114,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 115,
+      defaultState : .closed,
+      thrownEffect : "",
+      closedEffect : "do not change"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 116,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 117,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 118,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 119,
+      defaultState : .closed,
+      thrownEffect : "",
+      closedEffect : "do not change"
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 120,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 121,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 122,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 123,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 124,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 125,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 126,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 127,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+    (
+      definitionType: .standard,
+      model: [.DCS210, .DCS240, .DCS52, .DCS210PLUS, .DCS240PLUS],
+      switchNumber: 128,
+      defaultState : .thrown,
+      thrownEffect : "do not change",
+      closedEffect : ""
+    ),
+
     // MARK: BXP88
     
     (

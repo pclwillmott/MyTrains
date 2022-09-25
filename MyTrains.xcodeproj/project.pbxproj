@@ -98,6 +98,8 @@
 		DA6F3926274FD0C400A63FBF /* PeerXfer20.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6F3925274FD0C400A63FBF /* PeerXfer20.swift */; };
 		DA7243F628A7F1E5003157CA /* RouteDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7243F528A7F1E5003157CA /* RouteDirection.swift */; };
 		DA7243F828A81165003157CA /* ThrottleMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7243F728A81165003157CA /* ThrottleMode.swift */; };
+		DA77750228DF1B4E00C07E24 /* PurgeProfiler.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA77750128DF1B4E00C07E24 /* PurgeProfiler.storyboard */; };
+		DA77750428DF290E00C07E24 /* PurgeProfilerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA77750328DF290E00C07E24 /* PurgeProfilerVC.swift */; };
 		DA77794C27AEA029007EEBE9 /* OptionSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA77794B27AEA029007EEBE9 /* OptionSwitch.swift */; };
 		DA77794F27AEE087007EEBE9 /* CommandStationConfiguration.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA77794E27AEE087007EEBE9 /* CommandStationConfiguration.storyboard */; };
 		DA77795127AEE0E5007EEBE9 /* CommandStationConfigurationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA77795027AEE0E5007EEBE9 /* CommandStationConfigurationVC.swift */; };
@@ -274,6 +276,8 @@
 		DA6F3925274FD0C400A63FBF /* PeerXfer20.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeerXfer20.swift; sourceTree = "<group>"; };
 		DA7243F528A7F1E5003157CA /* RouteDirection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteDirection.swift; sourceTree = "<group>"; };
 		DA7243F728A81165003157CA /* ThrottleMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThrottleMode.swift; sourceTree = "<group>"; };
+		DA77750128DF1B4E00C07E24 /* PurgeProfiler.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = PurgeProfiler.storyboard; sourceTree = "<group>"; };
+		DA77750328DF290E00C07E24 /* PurgeProfilerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurgeProfilerVC.swift; sourceTree = "<group>"; };
 		DA77794B27AEA029007EEBE9 /* OptionSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionSwitch.swift; sourceTree = "<group>"; };
 		DA77794E27AEE087007EEBE9 /* CommandStationConfiguration.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = CommandStationConfiguration.storyboard; sourceTree = "<group>"; };
 		DA77795027AEE0E5007EEBE9 /* CommandStationConfigurationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandStationConfigurationVC.swift; sourceTree = "<group>"; };
@@ -510,6 +514,8 @@
 				DA08B432278737530001307C /* ProgramDecoderAddressVC.swift */,
 				DA8B5D18282FDE1800D39F07 /* ProgrammerMode.swift */,
 				DA08B43627875FDD0001307C /* ProgSlotDataP1.swift */,
+				DA77750128DF1B4E00C07E24 /* PurgeProfiler.storyboard */,
+				DA77750328DF290E00C07E24 /* PurgeProfilerVC.swift */,
 				DA28C2BE2801E46D00857471 /* QuerySlot1.swift */,
 				DA28C2C22801EB9400857471 /* QuerySlot2.swift */,
 				DA28C2C42801ED9700857471 /* QuerySlot3.swift */,
@@ -655,6 +661,7 @@
 				DA467BAF281D5D2F00AB9650 /* SwitchBoardEditor.storyboard in Resources */,
 				DA2429712892F7AE000D4ADE /* DeviceTCV.xib in Resources */,
 				DAC0194A289E79BF001152F6 /* EditCommandStations.storyboard in Resources */,
+				DA77750228DF1B4E00C07E24 /* PurgeProfiler.storyboard in Resources */,
 				DA1B79F5285F24B8009E1189 /* SwitchBoardItemPropertySheet.storyboard in Resources */,
 				DA88377C2770B73A000B9A41 /* EditSensors.storyboard in Resources */,
 				DA08B431278734270001307C /* ProgramDecoderAddress.storyboard in Resources */,
@@ -700,6 +707,7 @@
 				DA9325A6289C02C300CC317F /* LocomotiveDirection.swift in Sources */,
 				DAF5B4FD28A91A830015E758 /* SpeedSteps.swift in Sources */,
 				DA8B5D1D282FE31600D39F07 /* InterfaceDelegate.swift in Sources */,
+				DA77750428DF290E00C07E24 /* PurgeProfilerVC.swift in Sources */,
 				DA95D6C12808412200D9F1B6 /* DuplexData.swift in Sources */,
 				DA467BB3281D60E400AB9650 /* SwitchBoardShapeButton.swift in Sources */,
 				DA7B472A273824F700BCD587 /* NetworkOutputQueueItem.swift in Sources */,

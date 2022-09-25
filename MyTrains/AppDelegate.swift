@@ -66,6 +66,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     ModalWindow.EditCommandStations.runModel()
   }
   
+  @IBAction func mnuPurgeProfiler(_ sender: NSMenuItem) {
+    let x = ModalWindow.PurgeProfiler
+    let wc = x.windowController
+    wc.showWindow(nil)
+  }
+  
   @IBAction func mnuEditNetworksAction(_ sender: NSMenuItem) {
     ModalWindow.EditNetworks.runModel()
   }
