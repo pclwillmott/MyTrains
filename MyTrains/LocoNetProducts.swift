@@ -164,7 +164,7 @@ public class LocoNetProducts {
     (.UR91, "UR91", "Simplex Radio Equipped / IR Receiver Panel", 1998 , .none, [.SimplexRadioPanel, .OptionSwitches], 0, 0),
     (.UT2, "UT2", "Utility Throttle", 1998, .none, [.Throttle], 0, 0),
     (.DCS200, "DCS200", "8 Amp DCC Command Station & Booster", 2000, .none, [.CommandStation, .Booster, .Programmer, .OptionSwitches, .OpSwDataAP1, .OpSwDataBP1], 0, 0),
-    (.DB150, "DB150", "5 Amp DCC Command Station/Booster with intelligent Auto Reverse", 1999, .none, [.CommandStation, .Booster, .OptionSwitches], 0, 0),
+    (.DB150, "DB150", "5 Amp DCC Command Station/Booster with intelligent Auto Reverse", 1999, .none, [.CommandStation, .Booster, .OptionSwitches, .OpSwDataAP1, .OpSwDataBP1], 0, 0),
     (.BDL16, "BDL16", "LocoNet Occupancy Detector, 16 Detection Sections", 2000, .none, [.OccupancyDetector, .OptionSwitches], 0, 0),
     (.DT300, "DT300", "Advanced LocoNet Throttle", 2000, .none, [.Throttle], 0, 0),
     (.DT300R, "DT300R", "Radio Equipped Advanced LocoNet Throttle", 2000, .none, [.Throttle, .SimplexRadioTransmitter], 0, 0),

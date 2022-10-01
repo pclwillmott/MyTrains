@@ -190,14 +190,22 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
       
       if printOpSw {
         
+ //       <E7 0E 7F 00 03 30 02 47 01 08 00 1A 60 6C>
+ //       <E7 0E 7E 11 00 22 00 47 33 00 44 00 60 0B>
+        
         var opSw = 1
         var byte = 3
+        
+        var mess : [UInt8] = message.message
+        mess = [0xE7, 0x0E, 0x7F, 0x00, 0x03, 0x30, 0x02, 0x47, 0x01, 0x08, 0x00, 0x1A, 0x60, 0x6C]
+
+        print("DCS210+")
         
         while byte < 12 {
           
           for shift in 0...7 {
             let mask : UInt8 = 1 << shift
-            let opSwState : Bool = (message.message[byte] & mask) == mask
+            let opSwState : Bool = (mess[byte] & mask) == mask
             if opSw % 8 != 0 {
               print("\(opSw)\t\(opSwState ? "Closed" : "Thrown")")
             }
@@ -225,11 +233,16 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
         var opSw = 65
         var byte = 3
         
+        var mess : [UInt8] = message.message
+        mess = [0xE7, 0x0E, 0x7E, 0x11, 0x00, 0x22, 0x00, 0x47, 0x33, 0x00, 0x44, 0x00, 0x60, 0x0B]
+        
+        print("DCS210+")
+ 
         while byte < 12 {
           
           for shift in 0...7 {
             let mask : UInt8 = 1 << shift
-            let opSwState : Bool = (message.message[byte] & mask) == mask
+            let opSwState : Bool = (mess[byte] & mask) == mask
             if opSw % 8 != 0 {
               print("\(opSw)\t\(opSwState ? "Closed" : "Thrown")")
             }
