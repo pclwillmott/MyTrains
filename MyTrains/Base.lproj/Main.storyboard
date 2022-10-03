@@ -154,6 +154,12 @@
                                                 <action selector="mnuPurgeProfiler:" target="Voe-Tx-rLC" id="pDo-Rc-Loo"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Locomotive Roster" id="fOB-wE-bdK">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="mnuLocomotiveRosterAction:" target="Voe-Tx-rLC" id="eZj-Xs-hD0"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="Locomotives" id="jYS-Qx-4Nr">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>

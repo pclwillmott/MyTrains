@@ -89,6 +89,7 @@ public enum NetworkMessageType {
   case getLocoSlotDataSAdrP1
   case getLocoSlotDataSAdrP2
   case getQuerySlot
+  case getRosterEntry
   case getRouteTableInfoA
   case getRouteTableInfoB
   case getRouteTablePage
@@ -150,6 +151,7 @@ public enum NetworkMessageType {
   case receiverRep
   case reset
   case resetQuerySlot4
+  case rosterEntry
   case routeTableInfoA
   case routeTableInfoB
   case routeTablePage
@@ -178,6 +180,7 @@ public enum NetworkMessageType {
   case setLocoSlotInUseP2
   case setLocoSlotStat1P1
   case setLocoSlotStat1P2
+  case setRosterEntry
   case setRouteTablePage
   case setS7BaseAddr
   case setSlotDataOKP1

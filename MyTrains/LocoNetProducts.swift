@@ -174,7 +174,7 @@ public class LocoNetProducts {
     (.SE8C, "SE8C", "Signal Decoder", 2003, .none, [.SignalDecoder, .OptionSwitches, .BrdOpSw], 0, 0),
     (.BDL168, "BDL168", "LocoNet Occupancy Detector, 16 Detection Sections", 2004, .none, [.OccupancyDetector, .OptionSwitches, .BrdOpSw], 0, 0),
     (.DB200OPTO, "DB200-OPTO", "OPTO 8 Amp DCC Opto Booster", 2006, .none, [.Booster, .OptionSwitches], 0, 0),
-    (.DCS50, "DCS50", "All-in-one Command Station / Booster / Throttle", 2006, .none, [.CommandStation, .Booster, .Throttle, .OptionSwitches, .OpSwDataAP1, .OpSwDataBP1], 0, 0),
+    (.DCS50, "DCS50", "All-in-one Command Station / Booster / Throttle", 2006, .none, [.CommandStation, .Booster, .Throttle, .OptionSwitches, .OpSwDataAP1], 0, 0),
     (.DT400, "DT400", " Super Walkaround / IR Throttle", 2006, .none, [.Throttle, .IRTransmitter], 0, 0),
     (.DT400R, "DT400R", "Super Radio Throttle", 2006, .none, [.Throttle, .SimplexRadioTransmitter], 0, 0),
     (.PR2, "PR2", "SoundFX Serial Port Decoder Programmer", 2006, .none, [.ComputerInterface, .Programmer], 0, 0),

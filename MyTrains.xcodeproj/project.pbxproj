@@ -86,6 +86,8 @@
 		DA5E1743272EDA5B00F9341F /* LocoSlotDataP1.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5E1742272EDA5B00F9341F /* LocoSlotDataP1.swift */; };
 		DA613AC928A7DECD003218BA /* PlaceLocomotive.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA613AC828A7DECD003218BA /* PlaceLocomotive.storyboard */; };
 		DA613ACB28A7E02E003218BA /* PlaceLocomotiveVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA613ACA28A7E02E003218BA /* PlaceLocomotiveVC.swift */; };
+		DA6803B028EA518B00DED1D8 /* LocomotiveRoster.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA6803AF28EA518B00DED1D8 /* LocomotiveRoster.storyboard */; };
+		DA6803B228EA553900DED1D8 /* LocomotiveRosterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6803B128EA553900DED1D8 /* LocomotiveRosterVC.swift */; };
 		DA6A0AD8275295BF00913F2B /* Monitor.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA6A0AD7275295BF00913F2B /* Monitor.storyboard */; };
 		DA6A0ADA2752976800913F2B /* MonitorVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6A0AD92752976800913F2B /* MonitorVC.swift */; };
 		DA6A0ADC27529D6600913F2B /* ModalWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6A0ADB27529D6600913F2B /* ModalWindow.swift */; };
@@ -264,6 +266,8 @@
 		DA5E1742272EDA5B00F9341F /* LocoSlotDataP1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoSlotDataP1.swift; sourceTree = "<group>"; };
 		DA613AC828A7DECD003218BA /* PlaceLocomotive.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = PlaceLocomotive.storyboard; sourceTree = "<group>"; };
 		DA613ACA28A7E02E003218BA /* PlaceLocomotiveVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceLocomotiveVC.swift; sourceTree = "<group>"; };
+		DA6803AF28EA518B00DED1D8 /* LocomotiveRoster.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LocomotiveRoster.storyboard; sourceTree = "<group>"; };
+		DA6803B128EA553900DED1D8 /* LocomotiveRosterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocomotiveRosterVC.swift; sourceTree = "<group>"; };
 		DA6A0AD7275295BF00913F2B /* Monitor.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Monitor.storyboard; sourceTree = "<group>"; };
 		DA6A0AD92752976800913F2B /* MonitorVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonitorVC.swift; sourceTree = "<group>"; };
 		DA6A0ADB27529D6600913F2B /* ModalWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalWindow.swift; sourceTree = "<group>"; };
@@ -468,6 +472,8 @@
 				DA7B4726273803BA00BCD587 /* Locomotive.swift */,
 				DA9325A5289C02C300CC317F /* LocomotiveDirection.swift */,
 				DAB4FF5D2854F8CF00D74920 /* LocomotiveType.swift */,
+				DA6803AF28EA518B00DED1D8 /* LocomotiveRoster.storyboard */,
+				DA6803B128EA553900DED1D8 /* LocomotiveRosterVC.swift */,
 				DA28E5882824943200E1604C /* LocoNetDevice.swift */,
 				DAE9DBB628258E12004BC75D /* LocoNetProducts.swift */,
 				DA2E0E592736B8AA00C7DA7A /* LoconetRequestSlotDataMessage.swift */,
@@ -663,6 +669,7 @@
 				DAC0194A289E79BF001152F6 /* EditCommandStations.storyboard in Resources */,
 				DA77750228DF1B4E00C07E24 /* PurgeProfiler.storyboard in Resources */,
 				DA1B79F5285F24B8009E1189 /* SwitchBoardItemPropertySheet.storyboard in Resources */,
+				DA6803B028EA518B00DED1D8 /* LocomotiveRoster.storyboard in Resources */,
 				DA88377C2770B73A000B9A41 /* EditSensors.storyboard in Resources */,
 				DA08B431278734270001307C /* ProgramDecoderAddress.storyboard in Resources */,
 				DA95D6BF28083E9800D9F1B6 /* GroupSetup.storyboard in Resources */,
@@ -784,6 +791,7 @@
 				DA5E1743272EDA5B00F9341F /* LocoSlotDataP1.swift in Sources */,
 				DA1DA5EC28280FCD00E0F993 /* FlowControl.swift in Sources */,
 				DAEA9CFA272D8FBE00C9B3EC /* NetworkMessage.swift in Sources */,
+				DA6803B228EA553900DED1D8 /* LocomotiveRosterVC.swift in Sources */,
 				DA9CF8FD2860978A00825FA9 /* TurnoutMotorType.swift in Sources */,
 				DA28C2C32801EB9400857471 /* QuerySlot2.swift in Sources */,
 				DA1A040A2856108900FFD25F /* RollingStockDecoderExtensions.swift in Sources */,

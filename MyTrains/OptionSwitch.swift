@@ -172,7 +172,7 @@ public class OptionSwitch {
     .DCS240 : "Move the Mode toggle switch on the front of the DCS240 to the \"OP\" position. The PWR indicator will flash green alternating with the PROG indicator flashing red.",
     .DCS100 : "Move the Mode toggle switch on the front of the DCS100 to the \"OP\" position. The PWR indicator will flash green alternating with the PROG indicator flashing red.",
     .DCS200 : "Move the Mode toggle switch on the front of the DCS200 to the \"OP\" position. The PWR indicator will flash green alternating with the PROG indicator flashing red.",
-    .DB150 : "Move the Mode toggle switch on the front of the DB150 to the \"OP\" position. The PWR indicator will flash green alternating with the PROG indicator flashing red.",
+    .DB150 : "Move the Mode toggle switch on the front of the DB150 to the \"OP\" position.",
     .DCS240PLUS : "Move the Mode toggle switch on the front of the DCS240+ to the \"OP\" position. The PWR indicator will flash green alternating with the PROG indicator flashing red.",
   ]
   

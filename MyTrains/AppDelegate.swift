@@ -54,6 +54,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
 
   // MARK: Edit Menu
   
+  @IBAction func mnuLocomotiveRosterAction(_ sender: NSMenuItem) {
+    let x = ModalWindow.LocomotiveRoster
+    let wc = x.windowController
+    wc.showWindow(nil)
+  }
+  
   @IBAction func mnuEditLayoutsAction(_ sender: NSMenuItem) {
     ModalWindow.EditLayouts.runModel()
   }
