@@ -197,9 +197,9 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
         var byte = 3
         
         var mess : [UInt8] = message.message
-        mess = [0xE7, 0x0E, 0x7F, 0x00, 0x03, 0x30, 0x02, 0x47, 0x01, 0x08, 0x00, 0x1A, 0x60, 0x6C]
+    //    mess = [0xE7, 0x0E, 0x7F, 0x00, 0x03, 0x30, 0x02, 0x47, 0x01, 0x08, 0x00, 0x1A, 0x60, 0x6C]
 
-        print("DCS210+")
+    //    print("DCS210+")
         
         while byte < 12 {
           
@@ -234,9 +234,9 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
         var byte = 3
         
         var mess : [UInt8] = message.message
-        mess = [0xE7, 0x0E, 0x7E, 0x11, 0x00, 0x22, 0x00, 0x47, 0x33, 0x00, 0x44, 0x00, 0x60, 0x0B]
+//        mess = [0xE7, 0x0E, 0x7E, 0x11, 0x00, 0x22, 0x00, 0x47, 0x33, 0x00, 0x44, 0x00, 0x60, 0x0B]
         
-        print("DCS210+")
+  //      print("DCS210+")
  
         while byte < 12 {
           
@@ -634,6 +634,8 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
               }
 
               networkMessageReceived(message: networkMessage)
+              
+              let _ = networkMessage.messageType // Force slot update
               
               for observer in observers {
                 

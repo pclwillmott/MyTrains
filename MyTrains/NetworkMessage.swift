@@ -1074,8 +1074,30 @@ public class NetworkMessage : NSObject {
             
           }
           else if message[1] == 0x10 {
-                    
-            if message[2] == 0x01 {
+            
+            if message[2] == 0x00 {
+              
+              // 0xe6 0x10 0x00 0x00 0x20 0x00 0x0b 0x02 0x02 0x7f 0x00 0x00 0x00 0x00 0x00 0x5d
+
+              if message[3] == 0x00 &&
+                 message[10] == 0x00 &&
+                 message[11] == 0x00 &&
+                 message[12] == 0x00 &&
+                 message[13] == 0x00 &&
+                 message[14] == 0x00 {
+                _messageType = .rosterTableInfo
+              }
+             else if message[ 3] == 0x02 &&
+                 (message[4] & 0b11100000) == 0x00 &&
+                 message[ 5] == 0x00 &&
+                 message[ 6] == 0x0f &&
+                 message[10] == 0x00 &&
+                 message[14] == 0x00 {
+                _messageType = .rosterEntry
+              }
+              
+            }
+            else if message[2] == 0x01 {
               
               if message[3] == 0x00 &&
                  message[10] == 0x00 &&
@@ -1183,22 +1205,35 @@ public class NetworkMessage : NSObject {
             }
           }
           else if message[1] == 0x10 {
+    // 0xee 0x10 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x01
             
             if message[2] == 0x00 {
-              
-              if message[ 3] == 0x02 &&
-                 (message[4] & 0b11100000) == 0x00 &&
+    
+              if message[ 3] == 0x00 &&
+                 message[ 4] == 0x00 &&
                  message[ 5] == 0x00 &&
-                 message[ 6] == 0x0f &&
+                 message[ 6] == 0x00 &&
                  message[ 7] == 0x00 &&
                  message[ 8] == 0x00 &&
                  message[ 9] == 0x00 &&
                  message[10] == 0x00 &&
                  message[11] == 0x00 &&
                  message[12] == 0x00 &&
-                 message[13] == 0x00 &&
+                 message[13] == 0x00 {
+                _messageType = .getRosterTableInfo
+              }
+              else if message[ 3] == 0x02 &&
+                 (message[4] & 0b11100000) == 0x00 &&
+                 message[ 5] == 0x00 &&
+                 message[10] == 0x00 &&
                  message[14] == 0x00 {
                 _messageType = .getRosterEntry
+              }
+              else if message[ 3] == 0x43 &&
+                      message[ 5] == 0x00 &&
+                      message[10] == 0x00 &&
+                      message[14] == 0x00 {
+                     _messageType = .setRosterEntry
               }
 
             }

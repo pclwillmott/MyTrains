@@ -108,6 +108,7 @@
 		DA77795327AEEB3A007EEBE9 /* OpSwTCV.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA77795227AEEB3A007EEBE9 /* OpSwTCV.xib */; };
 		DA77795527AEEBBC007EEBE9 /* OpSwTCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA77795427AEEBBC007EEBE9 /* OpSwTCV.swift */; };
 		DA77795727AEF2E5007EEBE9 /* OpSwTableViewDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA77795627AEF2E5007EEBE9 /* OpSwTableViewDS.swift */; };
+		DA78875B28F039BF0093C647 /* LocomotiveRosterTableViewDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA78875A28F039BF0093C647 /* LocomotiveRosterTableViewDS.swift */; };
 		DA7A4910274A89FE00C2A42B /* FastClockMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7A490F274A89FE00C2A42B /* FastClockMessage.swift */; };
 		DA7A4912274AC25600C2A42B /* PeerXferMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7A4911274AC25600C2A42B /* PeerXferMessage.swift */; };
 		DA7B4727273803BA00BCD587 /* Locomotive.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7B4726273803BA00BCD587 /* Locomotive.swift */; };
@@ -288,6 +289,7 @@
 		DA77795227AEEB3A007EEBE9 /* OpSwTCV.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OpSwTCV.xib; sourceTree = "<group>"; };
 		DA77795427AEEBBC007EEBE9 /* OpSwTCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpSwTCV.swift; sourceTree = "<group>"; };
 		DA77795627AEF2E5007EEBE9 /* OpSwTableViewDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpSwTableViewDS.swift; sourceTree = "<group>"; };
+		DA78875A28F039BF0093C647 /* LocomotiveRosterTableViewDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocomotiveRosterTableViewDS.swift; sourceTree = "<group>"; };
 		DA7A490F274A89FE00C2A42B /* FastClockMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastClockMessage.swift; sourceTree = "<group>"; };
 		DA7A4911274AC25600C2A42B /* PeerXferMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeerXferMessage.swift; sourceTree = "<group>"; };
 		DA7B4726273803BA00BCD587 /* Locomotive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Locomotive.swift; sourceTree = "<group>"; };
@@ -474,6 +476,7 @@
 				DAB4FF5D2854F8CF00D74920 /* LocomotiveType.swift */,
 				DA6803AF28EA518B00DED1D8 /* LocomotiveRoster.storyboard */,
 				DA6803B128EA553900DED1D8 /* LocomotiveRosterVC.swift */,
+				DA78875A28F039BF0093C647 /* LocomotiveRosterTableViewDS.swift */,
 				DA28E5882824943200E1604C /* LocoNetDevice.swift */,
 				DAE9DBB628258E12004BC75D /* LocoNetProducts.swift */,
 				DA2E0E592736B8AA00C7DA7A /* LoconetRequestSlotDataMessage.swift */,
@@ -823,6 +826,7 @@
 				DA9CF8FB2860952300825FA9 /* BlockType.swift in Sources */,
 				DA412E14278099AF00748CCD /* ThrottleVC.swift in Sources */,
 				DA1DA5E82827EA6700E0F993 /* EditInterfacesVC.swift in Sources */,
+				DA78875B28F039BF0093C647 /* LocomotiveRosterTableViewDS.swift in Sources */,
 				DA8837882770B7B2000B9A41 /* EditSwitchesVC.swift in Sources */,
 				DA9807C52789AFE300F73ACD /* NMRA.swift in Sources */,
 				DA7243F628A7F1E5003157CA /* RouteDirection.swift in Sources */,

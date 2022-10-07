@@ -241,6 +241,36 @@ extension Interface {
 
   }
   
+  public func getRosterEntry(recordNumber: Int) {
+    
+    let recNum : UInt8 = UInt8(recordNumber & 0x1f)
+    
+    let message = NetworkMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_WR_SL_DATA_P2.rawValue,
+    0x10, 0x00, 0x02, recNum, 0x00, 0x0f, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [], retryCount: 0, timeoutCode: .none)
+    
+  }
+  
+  public func setRosterEntry(entryNumber:Int, extendedAddress1:Int, primaryAddress1:Int,extendedAddress2:Int, primaryAddress2:Int) {
+    
+    let low1 = UInt8(extendedAddress1 & 0x7f)
+    let high1 = UInt8(extendedAddress1 >> 7)
+    let primary1 = UInt8(primaryAddress1)
+
+    let low2 = UInt8(extendedAddress2 & 0x7f)
+    let high2 = UInt8(extendedAddress2 >> 7)
+    let primary2 = UInt8(primaryAddress2)
+    
+    let flag : UInt8 = (entryNumber & 0x01) == 0x01 ? 0x04 : 0x00
+
+    let message = NetworkMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_WR_SL_DATA_P2.rawValue,
+    0x10, 0x00, 0x43, UInt8(entryNumber >> 1), 0x00, flag, low1, high1, primary1, 0x00, low2, high2, primary2, 0x00], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [], retryCount: 0, timeoutCode: .none)
+    
+  }
+  
   public func getSwState(switchNumber: Int) {
     
     let lo = UInt8((switchNumber - 1) & 0x7f)
