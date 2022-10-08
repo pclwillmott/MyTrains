@@ -7,13 +7,6 @@
 
 import Foundation
 
-public enum ConsistState {
-  case NotLinked
-  case SubMember
-  case TopMember
-  case MidConsist
-}
-
 public class LocoSlotDataP1 : NetworkMessage {
 
   // MARK: Public Properties
@@ -41,18 +34,9 @@ public class LocoSlotDataP1 : NetworkMessage {
   
   public var consistState : ConsistState {
     get {
-      var value = (slotStatus1 & 0b00001000) == 0b00001000 ? 0b10 : 0b00
-      value    |= (slotStatus1 & 0b01000000) == 0b01000000 ? 0b01 : 0b00
-      switch value {
-      case 0b01:
-        return .SubMember
-      case 0b10:
-        return .TopMember
-      case 0b11:
-        return .MidConsist
-      default:
-        return .NotLinked
-      }
+      var state = (slotStatus1 & 0b00001000) == 0b00001000 ? 0b10 : 0b00
+      state    |= (slotStatus1 & 0b01000000) == 0b01000000 ? 0b01 : 0b00
+      return ConsistState(rawValue: state) ?? .NotLinked
     }
   }
   
@@ -70,7 +54,11 @@ public class LocoSlotDataP1 : NetworkMessage {
   
   public var address : Int {
     get {
-      return Int(message[4]) | (Int(message[9]) << 7)
+      var address = Int(message[4])
+      if message[9] != 0x7f {
+        address |= Int(message[9]) << 7
+      }
+      return address
     }
   }
   
@@ -101,7 +89,14 @@ public class LocoSlotDataP1 : NetworkMessage {
 
   public var throttleID : Int {
     get {
-      return Int(message[11]) | Int(message[12]) << 8
+      var id = Int(message[11])
+      if message[9] == 0x7f && (message[8] & 0b100) == 0b100 {
+        id |= Int(message[12]) << 7
+      }
+      else {
+        id |= Int(message[12]) << 8
+      }
+      return id
     }
   }
   

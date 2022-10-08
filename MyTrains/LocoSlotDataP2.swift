@@ -32,18 +32,9 @@ public class LocoSlotDataP2 : NetworkMessage {
   
   public var consistState : ConsistState {
     get {
-      var value = (slotStatus1 & 0b00001000) == 0b00001000 ? 0b10 : 0b00
-      value    |= (slotStatus1 & 0b01000000) == 0b01000000 ? 0b01 : 0b00
-      switch value {
-      case 0b01:
-        return .SubMember
-      case 0b10:
-        return .TopMember
-      case 0b11:
-        return .MidConsist
-      default:
-        return .NotLinked
-      }
+      var state = (slotStatus1 & 0b00001000) == 0b00001000 ? 0b10 : 0b00
+      state    |= (slotStatus1 & 0b01000000) == 0b01000000 ? 0b01 : 0b00
+      return ConsistState(rawValue: state) ?? .NotLinked
     }
   }
   

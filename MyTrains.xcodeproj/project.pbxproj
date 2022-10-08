@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		DA0197252773500100350F71 /* ComboBoxDictDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0197242773500100350F71 /* ComboBoxDictDS.swift */; };
 		DA0197272773520400350F71 /* EditorObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0197262773520400350F71 /* EditorObject.swift */; };
+		DA04B8DA28F1AED70062D944 /* ConsistState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA04B8D928F1AEB60062D944 /* ConsistState.swift */; };
 		DA08B431278734270001307C /* ProgramDecoderAddress.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA08B430278734270001307C /* ProgramDecoderAddress.storyboard */; };
 		DA08B433278737540001307C /* ProgramDecoderAddressVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA08B432278737530001307C /* ProgramDecoderAddressVC.swift */; };
 		DA08B43727875FDD0001307C /* ProgSlotDataP1.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA08B43627875FDD0001307C /* ProgSlotDataP1.swift */; };
@@ -188,6 +189,7 @@
 /* Begin PBXFileReference section */
 		DA0197242773500100350F71 /* ComboBoxDictDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComboBoxDictDS.swift; sourceTree = "<group>"; };
 		DA0197262773520400350F71 /* EditorObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorObject.swift; sourceTree = "<group>"; };
+		DA04B8D928F1AEB60062D944 /* ConsistState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsistState.swift; sourceTree = "<group>"; };
 		DA08B430278734270001307C /* ProgramDecoderAddress.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ProgramDecoderAddress.storyboard; sourceTree = "<group>"; };
 		DA08B432278737530001307C /* ProgramDecoderAddressVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramDecoderAddressVC.swift; sourceTree = "<group>"; };
 		DA08B43627875FDD0001307C /* ProgSlotDataP1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgSlotDataP1.swift; sourceTree = "<group>"; };
@@ -422,6 +424,7 @@
 				DA0197242773500100350F71 /* ComboBoxDictDS.swift */,
 				DA77794E27AEE087007EEBE9 /* CommandStationConfiguration.storyboard */,
 				DA77795027AEE0E5007EEBE9 /* CommandStationConfigurationVC.swift */,
+				DA04B8D928F1AEB60062D944 /* ConsistState.swift */,
 				DAA867C527933265008B6EEC /* CSVParser.swift */,
 				DA3AEF432788B33F00FF91D4 /* CVTableViewDS.swift */,
 				DA28C2B92801CC0300857471 /* DashBoard.storyboard */,
@@ -767,6 +770,7 @@
 				DA6A0ADA2752976800913F2B /* MonitorVC.swift in Sources */,
 				DA5E173E272EB23100F9341F /* LoconetSensorMessage.swift in Sources */,
 				DA467BB1281D5ED400AB9650 /* SwitchBoardEditorVC.swift in Sources */,
+				DA04B8DA28F1AED70062D944 /* ConsistState.swift in Sources */,
 				DAE8DD5728675B040097C2D1 /* FrogType.swift in Sources */,
 				DA0197272773520400350F71 /* EditorObject.swift in Sources */,
 				DAEA9CF7272D8DA900C9B3EC /* NetworkConstants.swift in Sources */,
