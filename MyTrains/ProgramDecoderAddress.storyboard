@@ -864,7 +864,7 @@ Gw
                                                                                 </tableView>
                                                                             </subviews>
                                                                         </clipView>
-                                                                        <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="0.96405228758169936" horizontal="YES" id="V1y-sq-iCM">
+                                                                        <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="V1y-sq-iCM">
                                                                             <rect key="frame" x="1" y="340" width="668" height="16"/>
                                                                             <autoresizingMask key="autoresizingMask"/>
                                                                         </scroller>

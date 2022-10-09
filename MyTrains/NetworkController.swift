@@ -119,8 +119,7 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
       
       var result : [Int:RollingStock] = [:]
       
-      for kv in rollingStock {
-        let rs = kv.value
+      for (_, rs) in rollingStock {
         if rs.mDecoderInstalled || rs.aDecoderInstalled {
           result[rs.primaryKey] = rs
         }
@@ -136,10 +135,25 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
       
       var result : [Int:Interface] = [:]
       
-      for kv in locoNetDevices {
-        let device = kv.value
-        if let info = device.locoNetProductInfo, info.attributes.contains(.CommandStation), let cs = kv.value as? Interface {
+      for (_, device) in locoNetDevices {
+        if let info = device.locoNetProductInfo, info.attributes.contains(.CommandStation), let cs = device as? Interface {
           result[cs.primaryKey] = cs
+        }
+      }
+      
+      return result
+      
+    }
+  }
+  
+  public var routeHosts : [Int:LocoNetDevice] {
+    get {
+      
+      var result : [Int:LocoNetDevice] = [:]
+      
+      for (_, device) in locoNetDevices {
+        if let info = device.locoNetProductInfo, info.attributes.contains(.RouteHost) {
+          result[device.primaryKey] = device
         }
       }
       
@@ -153,9 +167,8 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
       
       var result : [Int:Interface] = [:]
       
-      for kv in locoNetDevices {
-        let device = kv.value
-        if let info = device.locoNetProductInfo, info.attributes.contains(.ComputerInterface), let interface = kv.value as? Interface {
+      for (_, device) in locoNetDevices {
+        if let info = device.locoNetProductInfo, info.attributes.contains(.ComputerInterface), let interface = device as? Interface {
           result[interface.primaryKey] = interface
         }
       }
@@ -170,8 +183,7 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
       
       var interfaces : [Int:Interface] = [:]
       
-      for kv in interfaceDevices {
-        let interface = kv.value
+      for (_, interface) in interfaceDevices {
         if let info = interface.locoNetProductInfo, info.attributes.contains(.LocoNetInterface) {
           interfaces[interface.primaryKey] = interface
         }

@@ -11,7 +11,7 @@ import AppKit
 public enum RouteDirection : Int {
   
   case next = 0
-  case previous
+  case previous = 1
 
   public var title : String {
     get {

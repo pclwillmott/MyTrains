@@ -241,6 +241,66 @@ extension Interface {
 
   }
   
+  public func getRouteTableInfoA() {
+    
+    let message = NetworkMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_WR_SL_DATA_P2.rawValue,
+    0x10, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [], retryCount: 0, timeoutCode: .none)
+    
+  }
+
+  public func getRouteTablePage(routeNumber: Int, pageNumber: Int, pagesPerRoute: Int ) {
+    
+    let shift = pagesPerRoute / 2
+    
+    var combined : Int = pageNumber | (routeNumber - 1) << shift
+    
+    let pageL = UInt8(combined & 0x7f)
+    let pageH = UInt8(combined >> 7)
+    
+    let message = NetworkMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_WR_SL_DATA_P2.rawValue,
+    0x10, 0x01, 0x02, pageL, pageH, 0x0f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [], retryCount: 0, timeoutCode: .none)
+    
+  }
+
+  public func setRouteTablePages(routeNumber: Int, route: [SwitchRoute], pagesPerRoute: Int ) {
+    
+    let shift = pagesPerRoute / 2
+    
+    for pageNumber in 0...pagesPerRoute - 1 {
+      
+      var combined : Int = pageNumber | (routeNumber - 1) << shift
+      
+      let pageL = UInt8(combined & 0x7f)
+      let pageH = UInt8(combined >> 7)
+      
+      var data : [UInt8] = [NetworkMessageOpcode.OPC_WR_SL_DATA_P2.rawValue,
+                            0x10, 0x01, 0x03, pageL, pageH, 0x0f]
+      
+      for entryNumber in (pageNumber * 4)...(pageNumber * 4 + 3) {
+        let switchNumber = route[entryNumber].switchNumber - 1
+        var part1 = switchNumber & 0x7f
+        var mask = route[entryNumber].switchState == .closed ? 0b100000 : 0
+        var part2 = (switchNumber >> 7) | 0b10000 | mask
+        if route[entryNumber].switchNumber == 0x7f && route[entryNumber].switchState == .unknown {
+          part1 = 0x7f
+          part2 = 0x7f
+        }
+        data.append(UInt8(part1))
+        data.append(UInt8(part2))
+      }
+      
+      let message = NetworkMessage(networkId: networkId, data: data, appendCheckSum: true)
+      
+      addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [], retryCount: 0, timeoutCode: .none)
+      
+    }
+    
+  }
+
   public func getRosterEntry(recordNumber: Int) {
     
     let recNum : UInt8 = UInt8(recordNumber & 0x1f)

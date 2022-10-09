@@ -160,6 +160,12 @@
                                                 <action selector="mnuLocomotiveRosterAction:" target="Voe-Tx-rLC" id="eZj-Xs-hD0"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Route Manager" id="Hbi-Wh-44y">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="mnuRouteManger:" target="Voe-Tx-rLC" id="qHR-RX-yg6"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="Locomotives" id="jYS-Qx-4Nr">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>

@@ -1253,15 +1253,15 @@ public class NetworkMessage : NSObject {
                 _messageType = .getRouteTableInfoA
               }
               else if message[ 3] == 0x02 &&
-                 (message[5] & 0b11111110) == 0x00 &&
-                 message[ 6] == 0x00 &&
-                 message[ 7] == 0x00 &&
-                 message[ 8] == 0x00 &&
-                 message[ 9] == 0x00 &&
-                 message[10] == 0x00 &&
-                 message[11] == 0x00 &&
-                 message[12] == 0x00 &&
-                 message[13] == 0x00 {
+                        (message[5] & 0b11111110) == 0x00 { // &&
+             //    message[ 6] == 0x00 &&
+             //    message[ 7] == 0x00 &&
+             //    message[ 8] == 0x00 &&
+             //    message[ 9] == 0x00 &&
+             //    message[10] == 0x00 &&
+             //    message[11] == 0x00 &&
+             //    message[12] == 0x00 &&
+             //    message[13] == 0x00 {
                 _messageType = .getRouteTablePage
               }
               else if message[ 3] == 0x03 &&

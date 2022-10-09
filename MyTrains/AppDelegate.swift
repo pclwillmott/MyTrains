@@ -124,6 +124,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     wc.showWindow(nil)
   }
   
+  @IBAction func mnuRouteManger(_ sender: NSMenuItem) {
+    let x = ModalWindow.RouteManager
+    let wc = x.windowController
+    wc.showWindow(nil)
+ }
+  
   // MARK: Control Menu
   
   @IBAction func mnuThrottleAction(_ sender: Any) {

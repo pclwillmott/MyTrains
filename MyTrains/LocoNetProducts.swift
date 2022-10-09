@@ -32,6 +32,7 @@ public enum LocoNetDeviceAttribute {
   case OpSwDataAP1
   case OpSwDataBP1
   case BrdOpSw
+  case RouteHost
 }
 
 public enum LocoNetProductId : Int {
@@ -154,7 +155,7 @@ public class LocoNetProducts {
     (.UP2, "UP2", "Universal Panel", 1995, .none, [], 0, 0),
     (.UP3, "UP3", "Universal Panel", 1995, .none, [], 0, 0),
     (.UT1, "UT1", "Utility Throttle", 1995, .none, [.Throttle], 0, 0),
-    (.DCS100, "DCS100", "5 Amp DCC Command Station & Booster", 1996, .none, [.CommandStation, .Booster, .Programmer, .OptionSwitches, .OpSwDataAP1, .OpSwDataBP1], 0, 0),
+    (.DCS100, "DCS100", "5 Amp DCC Command Station & Booster", 1996, .none, [.CommandStation, .Booster, .Programmer, .OptionSwitches, .OpSwDataAP1, .OpSwDataBP1, .RouteHost], 0, 0),
     (.DT100, "DT100", "Advanced Throttle", 1996, .none, [.Throttle], 0, 0),
     (.MS100, "MS100", "LocoNet PC Computer Interface - RS232", 1996, .none, [.ComputerInterface, .LocoNetInterface], 0, 0),
     (.PR1, "PR1", "Computer Decoder Programmer - Serial", 1996, .none, [.ComputerInterface, .Programmer], 0, 0),
@@ -163,7 +164,7 @@ public class LocoNetProducts {
     (.UR90, "UR90", "Infrared Receiver Front Panel", 1998, .none, [.IRPanel, .OptionSwitches], 0, 0),
     (.UR91, "UR91", "Simplex Radio Equipped / IR Receiver Panel", 1998 , .none, [.SimplexRadioPanel, .OptionSwitches], 0, 0),
     (.UT2, "UT2", "Utility Throttle", 1998, .none, [.Throttle], 0, 0),
-    (.DCS200, "DCS200", "8 Amp DCC Command Station & Booster", 2000, .none, [.CommandStation, .Booster, .Programmer, .OptionSwitches, .OpSwDataAP1, .OpSwDataBP1], 0, 0),
+    (.DCS200, "DCS200", "8 Amp DCC Command Station & Booster", 2000, .none, [.CommandStation, .Booster, .Programmer, .OptionSwitches, .OpSwDataAP1, .OpSwDataBP1, .RouteHost], 0, 0),
     (.DB150, "DB150", "5 Amp DCC Command Station/Booster with intelligent Auto Reverse", 1999, .none, [.CommandStation, .Booster, .OptionSwitches, .OpSwDataAP1, .OpSwDataBP1], 0, 0),
     (.BDL16, "BDL16", "LocoNet Occupancy Detector, 16 Detection Sections", 2000, .none, [.OccupancyDetector, .OptionSwitches], 0, 0),
     (.DT300, "DT300", "Advanced LocoNet Throttle", 2000, .none, [.Throttle], 0, 0),
@@ -199,8 +200,8 @@ public class LocoNetProducts {
     (.UP6Z, "UP6Z", "LocoNet Universal Interconnect Panel and 3 Amp Z Scale Voltage Reducer", 2012 , .none, [], 0, 0),
     (.LNRPXTRA, "LNRPXTRA", "LocoNet Repeter Module", 2013, .none, [.Repeater, .OptionSwitches], 0, 0),
     (.PR3XTRA, "PR3XTRA", "SoundFX USB Decoder Programmer", 2013, .none, [.ComputerInterface, .LocoNetInterface, .Programmer, .OptionSwitches], 0, 0),
-    (.DCS210, "DCS210", "5/8 Amp DCC Command Station & Booster", 2016, .DCS210, [.CommandStation, .Booster, .Programmer, .OptionSwitches, .OpSwDataAP1, .OpSwDataBP1], 0, 0),
-    (.DCS240, "DCS240", "5/8 Amp DCC Command Station & Booster", 2016, .DCS240, [.CommandStation, .Booster, .ComputerInterface, .LocoNetInterface, .Programmer, .OptionSwitches, .OpSwDataAP1, .OpSwDataBP1], 0, 0),
+    (.DCS210, "DCS210", "5/8 Amp DCC Command Station & Booster", 2016, .DCS210, [.CommandStation, .Booster, .Programmer, .OptionSwitches, .OpSwDataAP1, .OpSwDataBP1, .RouteHost], 0, 0),
+    (.DCS240, "DCS240", "5/8 Amp DCC Command Station & Booster", 2016, .DCS240, [.CommandStation, .Booster, .ComputerInterface, .LocoNetInterface, .Programmer, .OptionSwitches, .OpSwDataAP1, .OpSwDataBP1, .RouteHost], 0, 0),
     (.DT500, "DT500", "Advanced Super Throttle with Infrared Capability", 2016, .DT500, [.Throttle, .IRTransmitter], 0, 0),
     (.DT500D, "DT500D", "Advanced Duplex Radio Equipped Super Throttle", 2016, .DT500, [.Throttle, .DuplexRadioTransceiver], 0, 0),
     (.DT500DCE, "DT500DCE", "Advanced Duplex Radio Equipped Super Throttle CE (for Europe)", 2016, .DT500, [.Throttle, .DuplexRadioTransceiver], 0, 0),
@@ -212,7 +213,7 @@ public class LocoNetProducts {
     (.PR4, "PR4", "SoundFX USB Decoder Programmer", 2017, .PR4, [.ComputerInterface, .LocoNetInterface, .Programmer, .OptionSwitches], 0, 0),
     (.BXPA1, "BXPA1", "LocoNet DCC Auto-Reverser with Detection, Transponding and Power Management", 2018, .BXPA1, [.OccupancyDetector, .PowerManager, .Transponding, .OptionSwitches], 0, 0),
     (.DCS52, "DCS52", "All-in-one Command Station / Booster / Throttle", 2019, .DCS52, [.CommandStation, .Booster, .Throttle, .OptionSwitches, .OpSwDataAP1, .OpSwDataBP1, .ComputerInterface, .LocoNetInterface, .Programmer], 0, 0),
-    (.DCS210PLUS, "DCS210+", "DCC Command Station & Booster" , 2020, .DCS210Plus, [.CommandStation, .Booster, .ComputerInterface, .LocoNetInterface, .Programmer, .OptionSwitches, .OpSwDataAP1, .OpSwDataBP1], 0, 0),
+    (.DCS210PLUS, "DCS210+", "DCC Command Station & Booster" , 2020, .DCS210Plus, [.CommandStation, .Booster, .ComputerInterface, .LocoNetInterface, .Programmer, .OptionSwitches, .OpSwDataAP1, .OpSwDataBP1, .RouteHost], 0, 0),
     (.DT602, "DT602", "DT602 Advanced Super Throttle", 2020, .DT602, [.Throttle], 0, 0),
     (.DT602D, "DT602D", "Advanced Duplex Super Throttle", 2020, .DT602, [.Throttle, .DuplexRadioTransceiver], 0, 0),
     (.DT602DE, "DT602DE", "Advanced Duplex Super Throttle CE (For Europe)", 2020, .DT602, [.Throttle, .DuplexRadioTransceiver], 0, 0),
@@ -221,7 +222,7 @@ public class LocoNetProducts {
     (.UT6DE, "UT6DE", "Duplex Radio Utility Throttle CE (For Europe)", 2020, .UT6, [.Throttle, .DuplexRadioTransceiver], 0, 0),
     (.DS74, "DS74", "Quad Switch Stationary Decoder", 2021, .DS74, [.StationaryDecoder, .Series7, .OptionSwitches], 4, 4),
     (.DS78V, "DS78V", "Eight Servo LocoNet Stationary & Accessory decoder for turnout control", 2021, .DS78V, [.StationaryDecoder, .Series7, .OptionSwitches], 8, 8),
-    (.DCS240PLUS, "DCS240+", "DCC Command Station & Booster" , 2022, .DCS240Plus, [.CommandStation, .Booster, .ComputerInterface, .LocoNetInterface, .Programmer, .OptionSwitches, .OpSwDataAP1, .OpSwDataBP1], 0, 0),
+    (.DCS240PLUS, "DCS240+", "DCC Command Station & Booster" , 2022, .DCS240Plus, [.CommandStation, .Booster, .ComputerInterface, .LocoNetInterface, .Programmer, .OptionSwitches, .OpSwDataAP1, .OpSwDataBP1, .RouteHost], 0, 0),
     (.SE74, "SE74", "16 Signal Head Controller with 4 Turnout Controls and 8 Input Lines", 2022, .SE74, [.StationaryDecoder, .Series7, .OptionSwitches], 36, 4),
     (.PM74, "PM74", "Power Manager with Occupancy and Transponding Detection for 4 Sub-Districts", 2022, .PM74, [.OccupancyDetector, .Series7, .OptionSwitches, .Transponding, .PowerManager], 4, 0),
   ]
