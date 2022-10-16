@@ -310,7 +310,7 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
     
     let addrLow = UInt8(addr & 0x7f)
     let addrHigh = UInt8(addr >> 7)
-    /*
+   
     if message.messageType == .locoSlotDataP1 && message.message[4] == addrLow  && message.message[9] == addrHigh {
       if (message.message[3] & 0b00110000) != 0b00110000 {
         interface?.moveSlotsP1(sourceSlotNumber: Int(message.message[2]), destinationSlotNumber: Int(message.message[2]), timeoutCode: .none)
@@ -321,7 +321,7 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
         interface?.getLocoSlot(forAddress: addr, locoNetProtocol: 1)
       }
     }
-
+    
     if message.messageType == .locoSlotDataP2 && message.message[5] == addrLow && message.message[6] == addrHigh {
       if (message.message[4] & 0b00110000) != 0b00110000 {
         interface?.moveSlotsP2(sourceSlotNumber: Int(message.message[3]), sourceSlotPage: Int(message.message[2]), destinationSlotNumber: Int(message.message[3]), destinationSlotPage: Int(message.message[2]), timeoutCode: .none)
@@ -332,7 +332,7 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
         interface?.getLocoSlot(forAddress: addr, locoNetProtocol: 2)
       }
     }
-    */
+    
     /*
     if message.messageType == .locoSlotDataP1 && (message.message[3] & 0b00110000) != 0b00110000 {
       let sn = Int(message.message[2])
@@ -666,11 +666,11 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
   @IBOutlet weak var btnTest: NSButton!
   
   @IBAction func btnTestAction(_ sender: NSButton) {
-    addr = 1
+    addr = 500
     interface?.getLocoSlot(forAddress: addr, locoNetProtocol: 1)
   }
   
-  var addr : Int = 1
+  var addr : Int = 500
   
 }
 

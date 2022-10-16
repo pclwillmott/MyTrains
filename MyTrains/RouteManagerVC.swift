@@ -114,7 +114,6 @@ class RouteManagerVC : NSViewController, NSWindowDelegate, InterfaceDelegate {
       switchesPerRoute = Int(message.message[8])
       numberOfPages =  switchesPerRoute / 4
       numberOfRoutes = switchesPerRoute << 2
-      print("\(switchesPerRoute) \(numberOfPages)")
       for index in 1...numberOfRoutes {
         cboRouteNumber.addItem(withObjectValue: "\(index)")
       }
@@ -134,9 +133,10 @@ class RouteManagerVC : NSViewController, NSWindowDelegate, InterfaceDelegate {
       
     case .routeTablePage:
       
-      let pageNumber = Int(message.message[4]) & (numberOfPages - 1)
-      var routeNumber = Int(message.message[4] >> (numberOfPages / 2)) + 1
-      routeNumber |= ((message.message[5] & 0b1) == 0b1) ? 0b100000 : 0
+      var combined = Int(message.message[4])
+      combined |= ((message.message[5] & 0b1) == 0b1) ? 0b10000000 : 0
+      let pageNumber = combined & (numberOfPages - 1)
+      let routeNumber = (combined >> (numberOfPages / 2)) + 1
       
       for index in 0...3 {
         var entryNumber = pageNumber * 4 + index + 1

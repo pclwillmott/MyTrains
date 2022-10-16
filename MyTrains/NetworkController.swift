@@ -414,7 +414,13 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
       interface.powerOff()
     }
   }
-  
+
+  public func powerIdle() {
+    for interface in networkInterfaces {
+      interface.powerIdle()
+    }
+  }
+
   public func addLayout(layout: Layout) {
     layouts[layout.primaryKey] = layout
     networkControllerUpdated()

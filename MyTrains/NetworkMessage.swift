@@ -1160,7 +1160,7 @@ public class NetworkMessage : NSObject {
               _messageType = .opSwDataAP1
             default:
               if message[ 2] > 0 && message[2] < 0x78 &&
-                (message[ 6] & 0b11000000) == 0 && /* DIRF */
+            //    (message[ 6] & 0b11000000) == 0 && /* DIRF */
                 (message[ 7] & 0b10110000) == 0 &&
                 (message[ 8] & 0b11110010) == 0 && /* SS@  */
                 (message[10] & 0b11110000) == 0    /* SND  */ {
@@ -1309,7 +1309,7 @@ public class NetworkMessage : NSObject {
           if message[1] == 0x0e {
             
             if message[2] > 0 && message[ 2] <  0x78 && /* SLOT */
-              (message[ 6] &  0b11000000) == 0x00 && /* DIRF */
+       //       (message[ 6] &  0b11000000) == 0x00 && /* DIRF */
               (message[ 7] &  0b10110000) == 0x00 && /* TRK  */
               (message[ 8] &  0b11110010) == 0x00 && /* SS@  */
               (message[10] &  0b11110000) == 0x00    /* SND  */ {

@@ -193,7 +193,7 @@ class MainVC: NSViewController, NetworkControllerDelegate, LayoutDelegate {
   @IBOutlet weak var btnPause: NSButton!
   
   @IBAction func btnPauseAction(_ sender: NSButton) {
-//    networkController.powerIdle()
+    networkController.powerIdle()
   }
   
   @IBOutlet weak var scrollView: NSScrollView!
