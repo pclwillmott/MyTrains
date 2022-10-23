@@ -229,6 +229,16 @@ public class NetworkMessage : NSObject {
             _slotsChanged.insert(LocoSlotData.encodeID(slotPage: 0, slotNumber: message[1]))
           }
 
+        // MARK: 0xA2
+            
+        case 0xa3:
+            
+          if message[1] > 0 && message[1] < 0x78 &&
+            (message[2] & 0b11110000) == 0x00 {
+            _messageType = .locoF9F12P1
+            _slotsChanged.insert(LocoSlotData.encodeID(slotPage: 0, slotNumber: message[1]))
+          }
+
         // MARK: 0xB0
           
         case 0xb0: // OPC_SW_REQ
@@ -551,8 +561,29 @@ public class NetworkMessage : NSObject {
         // MARK: 0xD4
           
         case 0xd4:
-          
-          if (message[1] & 0b11111000) == 0b00111000 {
+ 
+          if (message[1] & 0b11111000) == 0b00100000 {
+            
+            let subCode = message[3]
+  
+            let srcPage = message[1] & 0b00000111
+            let src = message[2]
+
+            switch subCode {
+            case 0x05 :
+              _messageType = .locoF12F20F28P2
+              _slotsChanged.insert(LocoSlotData.encodeID(slotPage: srcPage, slotNumber: src))
+            case 0x08:
+              _messageType = .locoF13F19P2
+              _slotsChanged.insert(LocoSlotData.encodeID(slotPage: srcPage, slotNumber: src))
+            case 0x09:
+              _messageType = .locoF21F27P2
+              _slotsChanged.insert(LocoSlotData.encodeID(slotPage: srcPage, slotNumber: src))
+            default:
+              break
+            }
+          }
+          else if (message[1] & 0b11111000) == 0b00111000 {
             
             let subCode = message[3] & 0b11111000
             
@@ -1176,7 +1207,55 @@ public class NetworkMessage : NSObject {
           
           if message[1] == 0x0b && message[2] == 0x7f {
             
-            if (message[3] & 0b10001000) == 0 &&
+            if message[3] == 0x34 &&
+               (message[4] & 0b11011100) == 0b00000100 &&
+               (message[7] & 0b11110000) == 0b00100000 &&
+                message[8] == 0 &&
+                message[9] == 0 {
+              _messageType = .locoF9F12IMMLAdr
+              // TODO: Find slot from address
+            }
+            else if message[3] == 0x24 &&
+               (message[4] & 0b11011111) == 0x2 &&
+               (message[6] & 0b11110000) == 0b00100000 &&
+                message[7] == 0 &&
+                message[8] == 0 &&
+                message[9] == 0 {
+              _messageType = .locoF9F12IMMSAdr
+              // TODO: Find slot from address
+            }
+            else if message[3] == 0x44 &&
+               (message[4] & 0b11010100) == 0b00000100 &&
+                message[7] == 0x5e &&
+                message[9] == 0 {
+              _messageType = .locoF13F20IMMLAdr
+              // TODO: Find slot from address
+            }
+            else if message[3] == 0x34 &&
+               (message[4] & 0b11011011) == 0b00000010 &&
+                message[6] == 0x5e &&
+                message[8] == 0 &&
+                message[9] == 0 {
+              _messageType = .locoF13F20IMMSAdr
+              // TODO: Find slot from address
+            }
+            else if message[3] == 0x44 &&
+               (message[4] & 0b11010100) == 0b00000100 &&
+                message[7] == 0x5f &&
+                (message[8] & 0b11110000) == 0 &&
+                message[9] == 0 {
+              _messageType = .locoF21F28IMMLAdr
+              // TODO: Find slot from address
+            }
+            else if message[3] == 0x34 &&
+               (message[4] & 0b11011011) == 0b00000010 &&
+                message[6] == 0x5f &&
+                message[8] == 0 &&
+                message[9] == 0 {
+              _messageType = .locoF21F28IMMSAdr
+              // TODO: Find slot from address
+            }
+            else if (message[3] & 0b10001000) == 0 &&
                (message[4] & 0b11100000) == 0b00100000 {
               _messageType = .immPacket
             }

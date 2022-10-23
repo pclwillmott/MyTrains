@@ -119,7 +119,17 @@ public enum NetworkMessageType {
   case locoF0F6P2
   case locoF5F8P1
   case locoF7F13P2
+  case locoF9F12IMMLAdr
+  case locoF9F12IMMSAdr
+  case locoF9F12P1
+  case locoF12F20F28P2
+  case locoF13F20IMMLAdr
+  case locoF13F20IMMSAdr
+  case locoF13F19P2
   case locoF14F20P2
+  case locoF21F27P2
+  case locoF21F28IMMLAdr
+  case locoF21F28IMMSAdr
   case locoF21F28P2
   case locoRep
   case locoSlotDataP1
