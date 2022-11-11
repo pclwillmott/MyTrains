@@ -79,6 +79,8 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
 
     txtMonitor.font = NSFont(name: "Menlo", size: 12)
     
+    cboIMMRepeat.selectItem(at: 4)
+    
   }
   
   // MARK: Private Properties
@@ -189,7 +191,7 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
     
   }
   
-  private func sendMessage(rawMessage:String) {
+  private func sendMessage(rawMessage:String, isLocoNet:Bool) {
     
     var good = true
     
@@ -236,7 +238,7 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
         }
       }
       
-      if good {
+      if good && isLocoNet {
         let test = numbers[index]
         if test < 0 || (index == 0 && test > 255) || (index > 0 && test > 127) || (index == 0 && (test & 0x80 == 0) ) {
           good = false
@@ -247,11 +249,16 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
       
     }
     
-    if good {
-      if let interface = interface {
-        let message = NetworkMessage(networkId: interface.networkId, data: numbers, appendCheckSum: true)
-        interface.addToQueue(message: message, delay: MessageTiming.STANDARD)
+    if good, let interface = interface {
+      
+      if isLocoNet {
+          let message = NetworkMessage(networkId: interface.networkId, data: numbers, appendCheckSum: true)
+          interface.addToQueue(message: message, delay: MessageTiming.STANDARD)
       }
+      else {
+        interface.immPacket(packet: numbers, repeatCount: cboIMMRepeat.integerValue)
+      }
+      
     }
 
   }
@@ -350,7 +357,9 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
     // ****************
     
     if addLabels {
+      
       item += "\(message.messageType)\n"
+            
     }
     
     switch timeStampType {
@@ -401,6 +410,49 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
       if addByteNumber {
         item += "\n"
       }
+    }
+    
+    if addLabels {
+      
+      if message.isIMMPacket, let packetType = message.dccPacketType, let addressPartition = message.dccAddressPartition {
+        
+        if message.dccPacketType == .dccIdle {
+          return
+        }
+        
+        item += "\n  \(addressPartition) \(packetType)\n  "
+        
+        for im in message.dccPacket {
+          
+          switch numberBase {
+          case .binary:
+            var padded = String(im, radix: 2)
+            for _ in 0..<(8 - padded.count) {
+              padded = "0" + padded
+            }
+            item += "0b" + padded + " "
+            break
+          case .decimal:
+            item += "\(String(format: "%d", im)) "
+            break
+          case .octal:
+            item += "\(String(format: "%03o", im)) "
+            break
+          case .hexBinary:
+            var padded = String(im, radix: 2)
+            for _ in 0..<(8 - padded.count) {
+              padded = "0" + padded
+            }
+            item += "0x\(String(format: "%02x", im)) " + "0b" + padded + " "
+            break
+          default:
+            item += "0x\(String(format: "%02x", im)) "
+            break
+          }
+
+        }
+      }
+      
     }
     
     if !isPaused {
@@ -514,7 +566,7 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
         let lines = contents.split(separator:"\n")
 
         for line in lines {
-          sendMessage(rawMessage: String(line))
+          sendMessage(rawMessage: String(line), isLocoNet: true)
        }
         
       }
@@ -635,19 +687,35 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
   }
   
   @IBAction func btnSendMessage1(_ sender: NSButton) {
-    sendMessage(rawMessage: txtMessage1.stringValue)
+    sendMessage(rawMessage: txtMessage1.stringValue, isLocoNet: true)
   }
   
   @IBAction func btnSendMessage2(_ sender: NSButton) {
-    sendMessage(rawMessage: txtMessage2.stringValue)
+    sendMessage(rawMessage: txtMessage2.stringValue, isLocoNet: true)
   }
   
   @IBAction func btnSendMessage3(_ sender: NSButton) {
-    sendMessage(rawMessage: txtMessage3.stringValue)
+    sendMessage(rawMessage: txtMessage3.stringValue, isLocoNet: true)
   }
   
   @IBAction func btnSendMessage4(_ sender: NSButton) {
-    sendMessage(rawMessage: txtMessage4.stringValue)
+    sendMessage(rawMessage: txtMessage4.stringValue, isLocoNet: true)
+  }
+  
+  @IBAction func btnIMM1(_ sender: NSButton) {
+    sendMessage(rawMessage: txtMessage1.stringValue, isLocoNet: false)
+  }
+  
+  @IBAction func btnIMM2(_ sender: NSButton) {
+    sendMessage(rawMessage: txtMessage2.stringValue, isLocoNet: false)
+  }
+  
+  @IBAction func btnIMM3(_ sender: NSButton) {
+    sendMessage(rawMessage: txtMessage3.stringValue, isLocoNet: false)
+  }
+  
+  @IBAction func btnIMM4(_ sender: NSButton) {
+    sendMessage(rawMessage: txtMessage4.stringValue, isLocoNet: false)
   }
   
   @IBOutlet weak var scvMonitor: NSScrollView!
@@ -667,10 +735,13 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
   
   @IBAction func btnTestAction(_ sender: NSButton) {
     addr = 500
-    interface?.getLocoSlot(forAddress: addr, locoNetProtocol: 1)
+//    interface?.getLocoSlot(forAddress: addr, locoNetProtocol: 1)
+    interface?.setSwIMM(address: 1, state: .closed, isOutputOn: true)
   }
   
   var addr : Int = 500
+  
+  @IBOutlet weak var cboIMMRepeat: NSComboBox!
   
 }
 

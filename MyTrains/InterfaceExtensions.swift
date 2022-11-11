@@ -202,6 +202,88 @@ extension Interface {
 
   }
   
+  public func setSwIMM(address: Int, state:TurnoutSwitchState, isOutputOn:Bool) {
+    
+    for eric in 1...2048 {
+      
+      let add = eric - 1
+      
+      var adr1 = ((add & 0b11) << 1) | 0b10000000
+      
+      adr1 |= ((state == .closed) ? 1 : 0)
+      
+      adr1 |= (isOutputOn ? 0b1000 : 0)
+      
+      adr1 |= ((~(add >> 8) & 0x07) << 4)
+      
+      var payload : [Int] = [
+        (((add >> 2) + 1) & 0b00111111) | 0b10000000,
+        adr1,
+      ]
+      
+      print(payload)
+
+    }
+    
+    let add = address - 1
+    
+    var adr1 = ((add & 0b11) << 1) | 0b10000000
+    
+    adr1 |= ((state == .closed) ? 1 : 0)
+    
+    adr1 |= (isOutputOn ? 0b1000 : 0)
+    
+    adr1 |= ((~(add >> 8) & 0x07) << 4)
+    
+    var payload : [Int] = [
+      (((add >> 2) + 1) & 0b00111111) | 0b10000000,
+      adr1,
+    ]
+    
+    immPacket(packet: payload, repeatCount: 2)
+    
+  }
+  
+  public func immPacket(packet:[Int], repeatCount: Int) {
+    
+    guard packet.count < 6 && repeatCount < 0x10 else {
+      print("invalid IMMPacket")
+      return
+    }
+    
+    let param : Int = ((packet.count << 4) | repeatCount) & 0x7f
+    
+    var payload : [UInt8] = [
+      NetworkMessageOpcode.OPC_IMM_PACKET.rawValue,
+      0x0b,
+      0x7f,
+      UInt8(param),
+      0b00000000,
+      0x00,
+      0x00,
+      0x00,
+      0x00,
+      0x00
+    ]
+    
+    var mask : Int = 1
+    
+    for index in 0...packet.count - 1 {
+      
+      payload[4] |= UInt8((packet[index] & 0x80 == 0x80) ? mask : 0x00)
+      
+      payload[5 + index] = UInt8(packet[index] & 0x7f)
+      
+      mask <<= 1
+      
+    }
+    
+    let message = NetworkMessage(networkId: networkId, data: payload, appendCheckSum: true)
+    
+    addToQueue(message: message, delay: MessageTiming.STANDARD)
+
+  }
+  
   public func getQuerySlot(querySlot: Int) {
     
     guard querySlot > 0 && querySlot <= 5 else {

@@ -87,7 +87,7 @@ public class MTSerialPort {
 
   public var path : String
   
-  public var baudRate : BaudRate = .br19200
+  public var baudRate : BaudRate = .br115200
   
   public var numberOfDataBits : Int32 = 8
   

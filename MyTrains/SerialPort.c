@@ -376,6 +376,7 @@ static kern_return_t getModemPath(io_iterator_t serialPortIterator, char *bsdPat
     // Get the callout device's path (/dev/cu.xxxxx). The callout device should almost always be used: the dialin device (/dev/tty.xxxxx) would be used when monitoring a serial port for incoming calls, e.g. a fax listener.
 
     bsdPathAsCFString = IORegistryEntryCreateCFProperty(modemService, CFSTR(kIOCalloutDeviceKey), kCFAllocatorDefault, 0);
+  //  bsdPathAsCFString = IORegistryEntryCreateCFProperty(modemService, CFSTR(kIODialinDeviceKey), kCFAllocatorDefault, 0);
 
     if (bsdPathAsCFString) {
 

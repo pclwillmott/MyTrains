@@ -10,16 +10,17 @@ import Cocoa
 
 public enum BaudRate : Int {
   
-  case br19200  = 0
-  case br28800  = 1
-  case br38400  = 2
-  case br57600  = 3
-  case br76800  = 4
-  case br115200 = 5
-  case br230400 = 6
-  case br460800 = 7
-  case br576000 = 8
-  case br921600 = 9
+  case br9600   = 0
+  case br19200  = 1
+  case br28800  = 2
+  case br38400  = 3
+  case br57600  = 4
+  case br76800  = 5
+  case br115200 = 6
+  case br230400 = 7
+  case br460800 = 8
+  case br576000 = 9
+  case br921600 = 10
   
   public var baudRate : speed_t {
     
@@ -61,6 +62,7 @@ public enum BaudRate : Int {
   
   private static let rates : [speed_t] =
   [
+     9600,
     19200,
     28800,
     38400,

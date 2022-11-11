@@ -49,6 +49,29 @@ public enum NetworkMessageOpcode : UInt8 {
   case OPC_WR_SL_DATA    = 0xEF
 }
 
+public enum DCCAddressPartition {
+  case dccBroadcast
+  case dccMFDPA
+  case dccBAD11
+  case dccMFDEA
+  case dccReserved
+  case dccAEPF
+  case dccIdle
+}
+
+public enum DCCPacketType {
+  case dccF0F4
+  case dccF5F8
+  case dccF9F12
+  case dccF13F20
+  case dccF21F28
+  case dccIdle
+  case dccSpdDirF0
+  case dccSpdDir128
+  case dccUnknown
+  case dccUnitialized
+}
+
 // Network Message Types are for internal MyTrains usage.
 // Unlike the Network Message Opcode, these constants uniquely
 // identify a Network Message Type.

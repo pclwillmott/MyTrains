@@ -28,7 +28,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
   
   private var serialPort : MTSerialPort?
   
-  private var buffer : [UInt8] = [UInt8](repeating: 0x00, count:256)
+  private var buffer : [UInt8] = [UInt8](repeating: 0x00, count:1024)
   
   private var readPtr : Int = 0
   
@@ -486,6 +486,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
     
     if let port = MTSerialPort(path: devicePath) {
       port.baudRate = baudRate
+ //     port.baudRate = .br115200
       port.numberOfDataBits = 8
       port.numberOfStopBits = 1
       port.parity = .none
@@ -493,6 +494,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
       port.delegate = self
       port.open()
       serialPort = port
+      print("open: \(self.deviceName)")
     }
 
   }
@@ -500,6 +502,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
   public func close() {
     serialPort?.close()
     serialPort = nil
+    print("close: \(self.deviceName)")
   }
   
   public func send(data: [UInt8]) {
@@ -509,7 +512,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
   // MARK: MTSerialPortDelegate Methods
   
   public func serialPort(_ serialPort: MTSerialPort, didReceive data: [UInt8]) {
-    
+
     bufferLock.lock()
     bufferCount += data.count
     for x in data {
@@ -533,7 +536,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
       bufferLock.lock()
       while bufferCount > 0 {
         let cc = buffer[readPtr]
-        if (cc != 0) {
+        if ((cc & 0x80) != 0) {
           opCodeFound = true
           break
         }
@@ -544,7 +547,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
       
       if opCodeFound {
         
-        var length = (buffer[readPtr] & 0b01100000) >> 5
+       var length = (buffer[readPtr] & 0b01100000) >> 5
         
         switch length {
         case 0b00 :
@@ -563,7 +566,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
         
         if length < 0xff && bufferCount >= length {
           
-          var message : [UInt8] = [UInt8](repeating: 0x00, count:Int(length))
+         var message : [UInt8] = [UInt8](repeating: 0x00, count:Int(length))
           
           var restart : Bool = false
           

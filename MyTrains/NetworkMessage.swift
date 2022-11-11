@@ -57,6 +57,10 @@ public class NetworkMessage : NSObject {
   
   private var _slotsChanged : Set<Int> = []
   
+  private var _dccPacket : [UInt8] = []
+  
+  private var _dccPacketType : DCCPacketType = .dccUnitialized
+  
   // MARK: Public Properties
   
   public var message : [UInt8]
@@ -161,6 +165,117 @@ public class NetworkMessage : NSObject {
     }
   }
   
+  public var isIMMPacket : Bool {
+    get {
+      return messageType == .immPacket
+    }
+  }
+  
+  public var dccPacket : [UInt8] {
+    get {
+      if isIMMPacket && _dccPacket.count == 0 {
+        var mask : UInt8 = 1
+        var count = Int((message[3] & 0b01110000) >> 4)
+        for i in 0...count - 1 {
+          var im : UInt8 = message[5 + i]
+          im |= ((message[4] & mask) == mask) ? 0x80 : 0x00
+          _dccPacket.append(im)
+          mask <<= 1
+        }
+        var crc : UInt8 = 0
+        for im in _dccPacket {
+          crc ^= im
+        }
+        _dccPacket.append(crc)
+      }
+      return _dccPacket
+    }
+  }
+  
+  public var dccAddressPartition : DCCAddressPartition? {
+    get {
+      if isIMMPacket {
+        let packet = dccPacket
+        switch packet[0] {
+        case 0:
+          return .dccBroadcast
+        case 1...127:
+          return .dccMFDPA
+        case 128...191:
+          return .dccBAD11
+        case 192...231:
+          return .dccMFDEA
+        case 232...252:
+          return .dccReserved
+        case 253...254:
+          return .dccAEPF
+        case 255:
+          return .dccIdle
+        default:
+          return nil
+        }
+      }
+      return nil
+    }
+  }
+  
+  public var dccPacketType : DCCPacketType? {
+    get {
+      if isIMMPacket {
+        let packet = dccPacket
+        if _dccPacketType == .dccUnitialized && packet.count > 0 {
+          _dccPacketType = .dccUnknown
+          let adr1 = packet[0]
+          
+          switch dccAddressPartition {
+          case .dccBroadcast:
+            break
+          case .dccMFDPA, .dccMFDEA:
+            let instrByte = dccAddressPartition == .dccMFDPA ? 1 : 2
+            let ccc   = (packet[instrByte] & 0b11100000) >> 5
+            let ggggg = (packet[instrByte] & 0b00011111)
+            switch ccc {
+            case 0b001:
+              switch ggggg {
+              case 0b11111:
+                _dccPacketType = .dccSpdDir128
+              default:
+                break
+              }
+            case 0b010, 0b011:
+              _dccPacketType = .dccSpdDirF0
+            case 0b100:
+              _dccPacketType = .dccF0F4
+            case 0b101:
+              _dccPacketType = ((packet[1] & 0b00010000) == 0b00010000) ? .dccF5F8 : .dccF9F12
+            case 0b110:
+              switch ggggg {
+              case 0b11110:
+                _dccPacketType = .dccF13F20
+              case 0b11111:
+                _dccPacketType = .dccF21F28
+              default:
+                break
+              }
+            default:
+              break
+            }
+          case .dccIdle:
+            if packet[1] == 0x00 && packet[2] == 0xff {
+              _dccPacketType = .dccIdle
+            }
+          default:
+            break
+          }
+          
+        }
+        return _dccPacketType
+      }
+      return nil
+    }
+  }
+  
+  
   public var messageType : NetworkMessageType {
     
     get {
@@ -229,7 +344,7 @@ public class NetworkMessage : NSObject {
             _slotsChanged.insert(LocoSlotData.encodeID(slotPage: 0, slotNumber: message[1]))
           }
 
-        // MARK: 0xA2
+        // MARK: 0xA3
             
         case 0xa3:
             
@@ -529,6 +644,10 @@ public class NetworkMessage : NSObject {
                   (message[3] & 0b11110000) == 0b01110000 {
             _messageType = .setBrdOpSwState
           }
+          else if message[1] == 0x60 &&
+                 (message[4] & 0b11111110) == 0 {
+            _messageType = .trkShortRep
+          }
           else if message[1] == 0x62 &&
                  (message[3] & 0b11110000) == 0b00110000 &&
                  (message[4] & 0b11100000) == 0 {
@@ -538,10 +657,6 @@ public class NetworkMessage : NSObject {
                  (message[3] & 0b10010000) == 0 &&
                  (message[4] & 0b10010000) == 0 {
             _messageType = .pmRepBXP88
-          }
-          else if message[1] == 0x60 &&
-                 (message[4] & 0b11111110) == 0 {
-            _messageType = .trkShortRep
           }
           else if (message[1] & 0b11010000) == 0 {
             _messageType = .transRep
@@ -1255,8 +1370,8 @@ public class NetworkMessage : NSObject {
               _messageType = .locoF21F28IMMSAdr
               // TODO: Find slot from address
             }
-            else if (message[3] & 0b10001000) == 0 &&
-               (message[4] & 0b11100000) == 0b00100000 {
+            else if (message[3] & 0b10001000) == 0 /* &&
+               (message[4] & 0b11100000) == 0b00100000 */ {
               _messageType = .immPacket
             }
             else if message[3] == 0x54 &&
