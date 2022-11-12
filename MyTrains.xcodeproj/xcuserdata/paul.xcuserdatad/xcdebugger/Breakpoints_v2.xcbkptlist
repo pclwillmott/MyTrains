@@ -286,8 +286,8 @@
             filePath = "MyTrains/InterfaceExtensions.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "161"
-            endingLineNumber = "161"
+            startingLineNumber = "195"
+            endingLineNumber = "195"
             landmarkName = "setS7CV(device:cvNumber:value:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -414,8 +414,8 @@
             filePath = "MyTrains/InterfaceExtensions.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "437"
-            endingLineNumber = "437"
+            startingLineNumber = "467"
+            endingLineNumber = "467"
             landmarkName = "setSw(switchNumber:state:)"
             landmarkType = "7">
          </BreakpointContent>

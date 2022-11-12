@@ -736,7 +736,8 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
   @IBAction func btnTestAction(_ sender: NSButton) {
     addr = 500
 //    interface?.getLocoSlot(forAddress: addr, locoNetProtocol: 1)
-    interface?.setSwIMM(address: 1, state: .closed, isOutputOn: true)
+    interface?.s7CVRW(boardId: 777, cvNumber: 1, isRead: true, value: 0)
+    interface?.testIMM(address: 777)
   }
   
   var addr : Int = 500

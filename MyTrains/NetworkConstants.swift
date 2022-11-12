@@ -66,6 +66,7 @@ public enum DCCPacketType {
   case dccF13F20
   case dccF21F28
   case dccIdle
+  case dccSetSw
   case dccSpdDirF0
   case dccSpdDir128
   case dccUnknown

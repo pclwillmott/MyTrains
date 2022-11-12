@@ -99,6 +99,40 @@ extension Interface {
 
   }
 
+  public func s7CVRW(boardId: Int, cvNumber:Int, isRead:Bool, value:UInt8) {
+    
+    let cv = UInt8((cvNumber - 1) & 0xff)
+    
+    let val = isRead ? 0 : value
+    
+    let high = (0b00000111) | ((cv & 0x80) >> 4) | ((val & 0x80) >> 3)
+    
+    let b = boardId - 1
+    
+    let c = b % 4
+    
+    let d = b / 4
+    
+    let e = d % 64
+    
+    let addA = UInt8(e)
+    
+    let g = d / 64
+    
+    let h = 7 - g
+    
+    let i = h * 16 + c * 2 + 8
+    
+    let addB = UInt8(i)
+    
+    let mode : UInt8 = 0b01100100 | (isRead ? 0 : 0b1000)
+    
+    let message = NetworkMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_IMM_PACKET.rawValue, 0x0b, 0x7f, 0x54, high, addA, addB, mode, cv & 0x7f, val & 0x7f], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: MessageTiming.STANDARD)
+
+  }
+
   private func s7CVRW(device:LocoNetDevice, cvNumber:Int, isRead:Bool, value:UInt8) {
     
     let cv = UInt8((cvNumber - 1) & 0xff)
@@ -202,28 +236,24 @@ extension Interface {
 
   }
   
-  public func setSwIMM(address: Int, state:TurnoutSwitchState, isOutputOn:Bool) {
+  public func testIMM(address: Int) {
     
-    for eric in 1...2048 {
-      
-      let add = eric - 1
-      
-      var adr1 = ((add & 0b11) << 1) | 0b10000000
-      
-      adr1 |= ((state == .closed) ? 1 : 0)
-      
-      adr1 |= (isOutputOn ? 0b1000 : 0)
-      
-      adr1 |= ((~(add >> 8) & 0x07) << 4)
-      
-      var payload : [Int] = [
-        (((add >> 2) + 1) & 0b00111111) | 0b10000000,
-        adr1,
-      ]
-      
-      print(payload)
+    let add = address - 1
+    
+    var adr1 = ((add & 0b11) << 1) | 0b10001000
+    
+    adr1 |= ((~(add >> 8) & 0x07) << 4)
+    
+    var payload : [Int] = [
+      ((add >> 2) & 0b00111111) | 0b10000000,
+      adr1,
+    ]
+    
+    immPacket(packet: payload, repeatCount: 2)
+    
+  }
 
-    }
+  public func setSwIMM(address: Int, state:TurnoutSwitchState, isOutputOn:Bool) {
     
     let add = address - 1
     

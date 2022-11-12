@@ -264,6 +264,10 @@ public class NetworkMessage : NSObject {
             if packet[1] == 0x00 && packet[2] == 0xff {
               _dccPacketType = .dccIdle
             }
+          case .dccBAD11:
+            if (packet[1] & 0b10000000) == 0b10000000 {
+              _dccPacketType = .dccSetSw
+            }
           default:
             break
           }
