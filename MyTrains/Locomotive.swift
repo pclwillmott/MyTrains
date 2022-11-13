@@ -179,7 +179,7 @@ public class Locomotive : RollingStock, InterfaceDelegate {
       blocksInRoute.removeAll()
  //     print("set route")
       for routePart in _route {
-        print("  \(routePart.fromSwitchBoardItem.blockName) -> \(routePart.toSwitchBoardItem.blockName) \(routePart.distance)")
+     //   print("  \(routePart.fromSwitchBoardItem.blockName) -> \(routePart.toSwitchBoardItem.blockName) \(routePart.distance)")
         blocksInRoute.insert(routePart.toSwitchBoardItem.primaryKey)
       }
     }
@@ -340,7 +340,7 @@ public class Locomotive : RollingStock, InterfaceDelegate {
           
           setOriginBlock(originBlock: destinationBlock!, originPosition: stopPosition)
           
-          print("at destination - stopPosition: \(stopPosition) startDistance: \(route[0].distance)")
+     //     print("at destination - stopPosition: \(stopPosition) startDistance: \(route[0].distance)")
           
         }
         
@@ -554,7 +554,7 @@ public class Locomotive : RollingStock, InterfaceDelegate {
   
   public func startAutoRoute() {
     
-    print("startAutoRoute")
+//    print("startAutoRoute")
     
     self.route = []
 
@@ -949,7 +949,7 @@ public class Locomotive : RollingStock, InterfaceDelegate {
             
           }
           
-          print("startDistance: \(startDistance)")
+   //       print("startDistance: \(startDistance)")
           
           if findFirstBlockLength {
             
@@ -1022,7 +1022,7 @@ public class Locomotive : RollingStock, InterfaceDelegate {
             
           }
           
-          print("block: \(block.blockName) autoRouteDistanceTravelled: \(autoRouteDistanceTravelled) newDistance: \(newDistance) delta: \(autoRouteDistanceTravelled - newDistance)")
+    //      print("block: \(block.blockName) autoRouteDistanceTravelled: \(autoRouteDistanceTravelled) newDistance: \(newDistance) delta: \(autoRouteDistanceTravelled - newDistance)")
           
           
           // Release the lock.

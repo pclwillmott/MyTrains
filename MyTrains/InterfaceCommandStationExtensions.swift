@@ -22,6 +22,7 @@ extension Interface {
   
   public var implementsProtocol2 : Bool {
     get {
+      return true
       if let cs = commandStation, let trk = cs.globalSystemTrackStatus {
         return (trk & 0b01000000) == 0b01000000
       }
@@ -137,7 +138,7 @@ extension Interface {
       
       let next = nextState.functions
 
-      if implementsProtocol2 {
+      if implementsProtocol2 || true {
         
         let useD5Group = true
         

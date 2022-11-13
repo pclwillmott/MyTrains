@@ -36,6 +36,7 @@ enum AppStoryboard : String {
   case PurgeProfiler                = "PurgeProfiler"
   case LocomotiveRoster             = "LocomotiveRoster"
   case RouteManager                 = "RouteManager"
+  case Bridge                       = "Bridge"
   
   var instance : NSStoryboard {
     return NSStoryboard(name: self.rawValue, bundle: Bundle.main)
@@ -70,6 +71,7 @@ let storyboardLookup             : [String:AppStoryboard] = [
   "PurgeProfiler"                : AppStoryboard.PurgeProfiler,
   "LocomotiveRoster"             : AppStoryboard.LocomotiveRoster,
   "RouteManager"                 : AppStoryboard.RouteManager,
+  "Bridge"                       : AppStoryboard.Bridge,
 ]
 
 /*
@@ -109,6 +111,7 @@ enum ModalWindow : String {
   case PurgeProfiler                = "PurgeProfiler"
   case LocomotiveRoster             = "LocomotiveRoster"
   case RouteManager                 = "RouteManager"
+  case Bridge                       = "Bridge"
 
   var windowController : NSWindowController {
     let storyboard = storyboardLookup[self.rawValue]!

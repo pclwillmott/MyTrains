@@ -207,7 +207,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
             let mask : UInt8 = 1 << shift
             let opSwState : Bool = (mess[byte] & mask) == mask
             if opSw % 8 != 0 {
-              print("\(opSw)\t\(opSwState ? "Closed" : "Thrown")")
+        //      print("\(opSw)\t\(opSwState ? "Closed" : "Thrown")")
             }
             opSw += 1
           }
@@ -244,7 +244,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
             let mask : UInt8 = 1 << shift
             let opSwState : Bool = (mess[byte] & mask) == mask
             if opSw % 8 != 0 {
-              print("\(opSw)\t\(opSwState ? "Closed" : "Thrown")")
+         //     print("\(opSw)\t\(opSwState ? "Closed" : "Thrown")")
             }
             opSw += 1
           }
@@ -256,7 +256,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
           
         }
         
-        print("----------------")
+    //    print("----------------")
         
       }
 
@@ -277,7 +277,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
       slotsUpdated()
 
     case .sensRepGenIn:
-      print("sensRepGenIn: \(message.sensorAddress) \(message.sensorState)")
+ //     print("sensRepGenIn: \(message.sensorAddress) \(message.sensorState)")
       if let block = sensorLookup[message.sensorAddress], let layout = network?.layout {
         block.isOccupied = message.sensorState
         layout.needsDisplay()
@@ -306,7 +306,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
         default:
           break
         }
-        print("Turnout: \(message.sensorAddress) \(turnoutSwitch.state)")
+  //      print("Turnout: \(message.sensorAddress) \(turnoutSwitch.state)")
         layout.needsDisplay()
       }
     default:
@@ -494,7 +494,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
       port.delegate = self
       port.open()
       serialPort = port
-      print("open: \(self.deviceName)")
+ //     print("open: \(self.deviceName)")
     }
 
   }
@@ -502,7 +502,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
   public func close() {
     serialPort?.close()
     serialPort = nil
-    print("close: \(self.deviceName)")
+//    print("close: \(self.deviceName)")
   }
   
   public func send(data: [UInt8]) {

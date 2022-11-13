@@ -40,8 +40,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
 
     }
     
-    print(networkController.layout?.layoutName)
-    
   }
   
   func applicationWillTerminate(_ aNotification: Notification) {
@@ -134,6 +132,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
   
   @IBAction func mnuThrottleAction(_ sender: Any) {
     let x = ModalWindow.Throttle
+    let wc = x.windowController
+    wc.showWindow(nil)
+  }
+  
+  @IBAction func mnuBridge(_ sender: NSMenuItem) {
+    let x = ModalWindow.Bridge
     let wc = x.windowController
     wc.showWindow(nil)
   }

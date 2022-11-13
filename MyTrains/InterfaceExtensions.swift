@@ -349,7 +349,7 @@ extension Interface {
     
     let message = NetworkMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_LOCO_ADR_P2.rawValue, hi, lo], appendCheckSum: true)
     
-    addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [.locoSlotDataP2, .noFreeSlotsP2, .slotNotImplemented], retryCount: 5, timeoutCode: timeoutCode)
+    addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [], retryCount: 0, timeoutCode: timeoutCode)
 
   }
   
@@ -575,7 +575,7 @@ extension Interface {
     
     let message = NetworkMessage(networkId: networkId, data: data, appendCheckSum: true)
     
-    addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [.setSlotDataOKP2], retryCount: 10, timeoutCode: timeoutCode)
+    addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [], retryCount: 0, timeoutCode: timeoutCode)
 
   }
   
@@ -618,7 +618,7 @@ extension Interface {
     
     let message = NetworkMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_D4_GROUP.rawValue, srcPage, UInt8(sourceSlotNumber), dstPage, UInt8(destinationSlotNumber)], appendCheckSum: true)
     
-    addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [.locoSlotDataP2, .d4Error, .locoSlotDataP1], retryCount: 0, timeoutCode: .none)
+    addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [], retryCount: 0, timeoutCode: .none)
 
   }
   

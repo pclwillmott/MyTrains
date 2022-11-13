@@ -52,6 +52,9 @@
 		DA2E4988282899AF00C25162 /* DBEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2E4986282899AF00C25162 /* DBEditorView.swift */; };
 		DA33FC2027AFF9E500630227 /* OpSwDecoderType.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA33FC1F27AFF9E500630227 /* OpSwDecoderType.xib */; };
 		DA33FC2327AFFA1400630227 /* OpSwDecoderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA33FC2227AFFA1400630227 /* OpSwDecoderType.swift */; };
+		DA341C9729212F9600C3EF4F /* LocoNetBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA341C9629212F9600C3EF4F /* LocoNetBridge.swift */; };
+		DA341C9929212FD600C3EF4F /* Bridge.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA341C9829212FD600C3EF4F /* Bridge.storyboard */; };
+		DA341C9B29212FEE00C3EF4F /* BridgeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA341C9A29212FEE00C3EF4F /* BridgeVC.swift */; };
 		DA359850278219A400B81AD3 /* LocoSlotDataP2.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA35984F278219A400B81AD3 /* LocoSlotDataP2.swift */; };
 		DA3AEF422788855800FF91D4 /* DecoderCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3AEF412788855800FF91D4 /* DecoderCV.swift */; };
 		DA3AEF442788B33F00FF91D4 /* CVTableViewDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3AEF432788B33F00FF91D4 /* CVTableViewDS.swift */; };
@@ -235,6 +238,9 @@
 		DA2E4986282899AF00C25162 /* DBEditorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBEditorView.swift; sourceTree = "<group>"; };
 		DA33FC1F27AFF9E500630227 /* OpSwDecoderType.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OpSwDecoderType.xib; sourceTree = "<group>"; };
 		DA33FC2227AFFA1400630227 /* OpSwDecoderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpSwDecoderType.swift; sourceTree = "<group>"; };
+		DA341C9629212F9600C3EF4F /* LocoNetBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoNetBridge.swift; sourceTree = "<group>"; };
+		DA341C9829212FD600C3EF4F /* Bridge.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Bridge.storyboard; sourceTree = "<group>"; };
+		DA341C9A29212FEE00C3EF4F /* BridgeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeVC.swift; sourceTree = "<group>"; };
 		DA35984F278219A400B81AD3 /* LocoSlotDataP2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoSlotDataP2.swift; sourceTree = "<group>"; };
 		DA3AEF412788855800FF91D4 /* DecoderCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecoderCV.swift; sourceTree = "<group>"; };
 		DA3AEF432788B33F00FF91D4 /* CVTableViewDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CVTableViewDS.swift; sourceTree = "<group>"; };
@@ -599,6 +605,9 @@
 				DA1ECC9228439D4600C4F963 /* UpdateFirmware.storyboard */,
 				DA1ECC9728439DE500C4F963 /* UpdateFirmwareVC.swift */,
 				DA6A0ADE2753B5CF00913F2B /* UserDefaults.swift */,
+				DA341C9629212F9600C3EF4F /* LocoNetBridge.swift */,
+				DA341C9829212FD600C3EF4F /* Bridge.storyboard */,
+				DA341C9A29212FEE00C3EF4F /* BridgeVC.swift */,
 			);
 			path = MyTrains;
 			sourceTree = "<group>";
@@ -693,6 +702,7 @@
 				DACB592B2896AF89006B1861 /* TurnoutSwitchTCV.xib in Resources */,
 				DA8837762770B6F8000B9A41 /* EditLocomotives.storyboard in Resources */,
 				DA33FC2027AFF9E500630227 /* OpSwDecoderType.xib in Resources */,
+				DA341C9929212FD600C3EF4F /* Bridge.storyboard in Resources */,
 				DA412E122780948900748CCD /* Throttle.storyboard in Resources */,
 				DA77794F27AEE087007EEBE9 /* CommandStationConfiguration.storyboard in Resources */,
 				DA88378C2770FBEC000B9A41 /* DBEditorView.xib in Resources */,
@@ -748,6 +758,7 @@
 				DA8B5D19282FDE1800D39F07 /* ProgrammerMode.swift in Sources */,
 				DA6E28E3285F8F1A00772641 /* TrackElectrificationType.swift in Sources */,
 				DA28C2C92801EF6500857471 /* QuerySlot5.swift in Sources */,
+				DA341C9729212F9600C3EF4F /* LocoNetBridge.swift in Sources */,
 				DA7243F828A81165003157CA /* ThrottleMode.swift in Sources */,
 				DA467BAB281D56A700AB9650 /* SwitchBoardEditorView.swift in Sources */,
 				DA1B79F9285F3885009E1189 /* UnitSpeed.swift in Sources */,
@@ -769,6 +780,7 @@
 				DAF4DD50289ABDDE000B848E /* SpeedProfileResultsType.swift in Sources */,
 				DA2502B9282671600002D4AF /* RollingStock.swift in Sources */,
 				DAB450EF2872FEE800657295 /* SensorTCV.swift in Sources */,
+				DA341C9B29212FEE00C3EF4F /* BridgeVC.swift in Sources */,
 				DAE8DD55286754C00097C2D1 /* TrackCode.swift in Sources */,
 				DA467BAD281D56BC00AB9650 /* SwitchBoardOperationsView.swift in Sources */,
 				DA7A4912274AC25600C2A42B /* PeerXferMessage.swift in Sources */,

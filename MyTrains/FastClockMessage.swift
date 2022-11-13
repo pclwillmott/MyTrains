@@ -28,7 +28,7 @@ public class FastClockMessage : NetworkMessage {
   public var ticks : UInt16 {
     get {
       let temp = maxTicks - (0x3FFF - ((UInt16(message[4]) & 0x7F) | ((UInt16(message[5]) & 0x7F) << 7)))
-      print("\(String(format:"%02x %02x %04x", message[4],message[5], temp))")
+  //    print("\(String(format:"%02x %02x %04x", message[4],message[5], temp))")
 
       return temp
     }

@@ -323,7 +323,7 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
         interface?.moveSlotsP1(sourceSlotNumber: Int(message.message[2]), destinationSlotNumber: Int(message.message[2]), timeoutCode: .none)
       }
       else {
-        print("slot: \(message.message[2]) addr: \(addr)")
+ //       print("slot: \(message.message[2]) addr: \(addr)")
         addr += 1
         interface?.getLocoSlot(forAddress: addr, locoNetProtocol: 1)
       }
@@ -334,7 +334,7 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
         interface?.moveSlotsP2(sourceSlotNumber: Int(message.message[3]), sourceSlotPage: Int(message.message[2]), destinationSlotNumber: Int(message.message[3]), destinationSlotPage: Int(message.message[2]), timeoutCode: .none)
       }
       else {
-        print("slot: \(message.message[2]).\(message.message[3]) addr: \(addr)")
+   //     print("slot: \(message.message[2]).\(message.message[3]) addr: \(addr)")
         addr += 1
         interface?.getLocoSlot(forAddress: addr, locoNetProtocol: 2)
       }

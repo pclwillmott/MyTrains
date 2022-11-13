@@ -210,7 +210,7 @@ class PurgeProfilerVC : NSViewController, NSWindowDelegate, InterfaceDelegate {
 
             let time = message.timeStamp - startTime
             
-            print(time)
+   //         print(time)
             
             barProgress.doubleValue += 1.0
             
@@ -251,7 +251,7 @@ class PurgeProfilerVC : NSViewController, NSWindowDelegate, InterfaceDelegate {
             
             let time = message.timeStamp - startTime
             
-            print(time)
+      //      print(time)
             
             barProgress.doubleValue += 1.0
             

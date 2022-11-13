@@ -175,7 +175,7 @@ public class NetworkMessage : NSObject {
     get {
       if isIMMPacket && _dccPacket.count == 0 {
         var mask : UInt8 = 1
-        var count = Int((message[3] & 0b01110000) >> 4)
+        let count = Int((message[3] & 0b01110000) >> 4)
         for i in 0...count - 1 {
           var im : UInt8 = message[5 + i]
           im |= ((message[4] & mask) == mask) ? 0x80 : 0x00
@@ -225,7 +225,6 @@ public class NetworkMessage : NSObject {
         let packet = dccPacket
         if _dccPacketType == .dccUnitialized && packet.count > 0 {
           _dccPacketType = .dccUnknown
-          let adr1 = packet[0]
           
           switch dccAddressPartition {
           case .dccBroadcast:
