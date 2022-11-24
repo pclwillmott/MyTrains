@@ -793,7 +793,7 @@ public class NetworkMessage : NSObject {
           
           if message[2] == 0 &&
             (message[3] & 0b11110000) == 0 &&
-             message[4] == 0x20 {
+            (message[4] == 0x20 || message[4] == 0x7f) {
             _messageType = .receiverRep
           }
 
