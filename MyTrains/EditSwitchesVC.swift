@@ -124,6 +124,7 @@ class EditSwitchesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     setFields(device: device)
     device.save()
     networkController.addDevice(device: device)
+    device.save()
     editorView.dictionary = networkController.stationaryDecoders
     editorView.setSelection(key: device.primaryKey)
     return device
@@ -132,6 +133,7 @@ class EditSwitchesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   func saveExisting(dbEditorView: DBEditorView, editorObject: EditorObject) {
     if let device = editorObject as? LocoNetDevice {
       setFields(device: device)
+      device.save()
       device.save()
       editorView.dictionary = networkController.stationaryDecoders
       editorView.setSelection(key: device.primaryKey)

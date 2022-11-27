@@ -62,6 +62,25 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
       
       lblPartType.stringValue = item.itemPartType.partName
       
+      let numberOfSwitches = item.itemPartType.numberOfTurnoutSwitches
+      
+      print(numberOfSwitches)
+      
+      lblTurnoutSwitch1.isHidden = numberOfSwitches < 1
+      cboTurnoutSwitch1.isHidden = lblTurnoutSwitch1.isHidden
+      lblTurnoutMotorType.isHidden = lblTurnoutSwitch1.isHidden
+      cboTurnoutMotorType.isHidden = lblTurnoutSwitch1.isHidden
+      
+      lblTurnoutSwitch2.isHidden = numberOfSwitches < 2
+      cboTurnoutSwitch2.isHidden = lblTurnoutSwitch2.isHidden
+      lblTurnoutMotorType2.isHidden = lblTurnoutSwitch2.isHidden
+      cboTurnoutMotorType2.isHidden = lblTurnoutSwitch2.isHidden
+      
+      if lblTurnoutSwitch2.isHidden {
+        lblTurnoutSwitch1.stringValue = "Turnout Switch"
+        lblTurnoutMotorType.stringValue = "Turnout Motor Type"
+      }
+
       switchBoardItemView.switchBoardItem = item
 
       lblOrientation.stringValue = item.orientation.title
@@ -102,11 +121,6 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
       TurnoutMotorType.populate(comboBox: cboTurnoutMotorType2)
       TurnoutMotorType.select(comboBox: cboTurnoutMotorType2, value: item.sw2TurnoutMotorType)
       
-      lblTurnoutMotorType.isHidden = !item.isTurnout
-      cboTurnoutMotorType.isHidden = !item.isTurnout
-      lblTurnoutMotorType2.isHidden = !item.isTurnout
-      cboTurnoutMotorType2.isHidden = !item.isTurnout
-
       txtGradient.doubleValue = item.gradient
       
       chkCriticalSection.boolValue = item.isCritical
@@ -153,9 +167,67 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
         }
         index += 1
       }
-
+      
+      turnoutSwitches = networkController.turnoutSwitches
+      turnoutSwitch1DS.items = turnoutSwitches
+      turnoutSwitch2DS.items = turnoutSwitches
+      cboTurnoutSwitch1.dataSource = turnoutSwitch1DS
+      cboTurnoutSwitch2.dataSource = turnoutSwitch2DS
+      if let index = turnoutSwitch1DS.indexWithKey(deviceId: item.sw1LocoNetDeviceId, channelNumber: item.sw1ChannelNumber) {
+        cboTurnoutSwitch1.selectItem(at: index)
+      }
+      if let index = turnoutSwitch1DS.indexWithKey(deviceId: item.sw2LocoNetDeviceId, channelNumber: item.sw2ChannelNumber) {
+        cboTurnoutSwitch2.selectItem(at: index)
+      }
+      
       // FEEDBACK
       
+      generalSensors = networkController.sensors(sensorTypes: [.occupancy])
+      
+      generalSensorDS.items = generalSensors
+      
+      cboGeneralSensor.dataSource = generalSensorDS
+      
+      if let index = generalSensorDS.indexWithKey(deviceId: item.generalSensorId, channelNumber: item.generalSensorChannelNumber) {
+        cboGeneralSensor.selectItem(at: index)
+      }
+      
+      turnoutSensors = networkController.sensors(sensorTypes: [.turnoutState])
+      
+      sw1ClosedDS.items = turnoutSensors
+      cboSW1Closed.dataSource = sw1ClosedDS
+      
+      if let index = sw1ClosedDS.indexWithKey(deviceId: item.sw1Sensor2Id, channelNumber: item.sw1Sensor2ChannelNumber) {
+        cboSW1Closed.selectItem(at: index)
+      }
+
+      sw1ThrownDS.items = turnoutSensors
+      cboSW1Thrown.dataSource = sw1ThrownDS
+
+      if let index = sw1ThrownDS.indexWithKey(deviceId: item.sw1Sensor1Id, channelNumber: item.sw1Sensor1ChannelNumber) {
+        cboSW1Thrown.selectItem(at: index)
+      }
+
+      sw2ClosedDS.items = turnoutSensors
+      cboSW2Closed.dataSource = sw2ClosedDS
+
+      if let index = sw2ClosedDS.indexWithKey(deviceId: item.sw2Sensor2Id, channelNumber: item.sw2Sensor2ChannelNumber) {
+        cboSW2Closed.selectItem(at: index)
+      }
+
+      sw2ThrownDS.items = turnoutSensors
+      cboSW2Thrown.dataSource = sw2ThrownDS
+
+      if let index = sw2ThrownDS.indexWithKey(deviceId: item.sw2Sensor1Id, channelNumber: item.sw2Sensor1ChannelNumber) {
+        cboSW2Thrown.selectItem(at: index)
+      }
+      
+      UnitLength.populate(comboBox: cboPositionUnits)
+      
+      UnitLength.select(comboBox: cboPositionUnits, value: item.sensorPositionUnits)
+      
+      txtGeneralSensorPosition.doubleValue = item.sensorPosition
+
       // DIRECTION NEXT
       
       tabs.tabViewItems[3].view?.isHidden = !item.isBlock
@@ -242,6 +314,21 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
 
   private var dimensions : [(label:NSTextField, value:NSTextField)] = []
   
+  private var turnoutSwitches : [TurnoutSwitch] = []
+  
+  private var generalSensors : [Sensor] = []
+
+  private var turnoutSensors : [Sensor] = []
+
+  private var turnoutSwitch1DS : TurnoutSwitchComboDS = TurnoutSwitchComboDS()
+  private var turnoutSwitch2DS : TurnoutSwitchComboDS = TurnoutSwitchComboDS()
+  
+  private var generalSensorDS : SensorComboDS = SensorComboDS()
+  private var sw1ThrownDS : SensorComboDS = SensorComboDS()
+  private var sw1ClosedDS : SensorComboDS = SensorComboDS()
+  private var sw2ThrownDS : SensorComboDS = SensorComboDS()
+  private var sw2ClosedDS : SensorComboDS = SensorComboDS()
+
   // MARK: Public Properties
   
   public var switchBoardItem : SwitchBoardItem?
@@ -495,6 +582,67 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
     item.trackGauge = TrackGauge.selected(comboBox: cboTrackGauge)
     
     item.unitsDimension = UnitLength.selected(comboBox: cboDimensionUnits)
+    
+    item.sw1LocoNetDeviceId = -1
+    item.sw1ChannelNumber = -1
+    if cboTurnoutSwitch1.indexOfSelectedItem != -1 {
+      let turnoutSwitch = turnoutSwitches[cboTurnoutSwitch1.indexOfSelectedItem]
+      item.sw1LocoNetDeviceId = turnoutSwitch.locoNetDeviceId
+      item.sw1ChannelNumber = turnoutSwitch.channelNumber
+    }
+    
+    item.sw2LocoNetDeviceId = -1
+    item.sw2ChannelNumber = -1
+    if cboTurnoutSwitch2.indexOfSelectedItem != -1 {
+      let turnoutSwitch = turnoutSwitches[cboTurnoutSwitch2.indexOfSelectedItem]
+      item.sw2LocoNetDeviceId = turnoutSwitch.locoNetDeviceId
+      item.sw2ChannelNumber = turnoutSwitch.channelNumber
+    }
+    
+    item.generalSensorId = -1
+    item.generalSensorChannelNumber = -1
+    if cboGeneralSensor.indexOfSelectedItem != -1 {
+      let sensor = generalSensors[cboGeneralSensor.indexOfSelectedItem]
+      item.generalSensorId = sensor.locoNetDeviceId
+      item.generalSensorChannelNumber = sensor.channelNumber
+    }
+    
+    item.sw1Sensor1Id = -1
+    item.sw1Sensor1ChannelNumber = -1
+    item.sw1Sensor2Id = -1
+    item.sw1Sensor2ChannelNumber = -1
+    item.sw2Sensor1Id = -1
+    item.sw2Sensor1ChannelNumber = -1
+    item.sw2Sensor2Id = -1
+    item.sw2Sensor2ChannelNumber = -1
+    
+    if cboSW1Thrown.indexOfSelectedItem != -1 {
+      let sensor = turnoutSensors[cboSW1Thrown.indexOfSelectedItem]
+      item.sw1Sensor1Id = sensor.locoNetDeviceId
+      item.sw1Sensor1ChannelNumber = sensor.channelNumber
+    }
+
+    if cboSW1Closed.indexOfSelectedItem != -1 {
+      let sensor = turnoutSensors[cboSW1Closed.indexOfSelectedItem]
+      item.sw1Sensor2Id = sensor.locoNetDeviceId
+      item.sw1Sensor2ChannelNumber = sensor.channelNumber
+    }
+
+    if cboSW2Thrown.indexOfSelectedItem != -1 {
+      let sensor = turnoutSensors[cboSW2Thrown.indexOfSelectedItem]
+      item.sw2Sensor1Id = sensor.locoNetDeviceId
+      item.sw2Sensor1ChannelNumber = sensor.channelNumber
+    }
+
+    if cboSW2Closed.indexOfSelectedItem != -1 {
+      let sensor = turnoutSensors[cboSW2Closed.indexOfSelectedItem]
+      item.sw2Sensor2Id = sensor.locoNetDeviceId
+      item.sw2Sensor2ChannelNumber = sensor.channelNumber
+    }
+    
+    item.sensorPosition = txtGeneralSensorPosition.doubleValue
+    
+    item.sensorPositionUnits = UnitLength.selected(comboBox: cboPositionUnits)
     
     item.sw1TurnoutMotorType = TurnoutMotorType.selected(comboBox: cboTurnoutMotorType)
     
@@ -786,6 +934,105 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
   @IBOutlet weak var cboTurnoutMotorType2: NSComboBox!
   
   @IBAction func cboTurnoutMotorType2Action(_ sender: NSComboBox) {
+  }
+  
+  @IBOutlet weak var lblTurnoutSwitch1: NSTextField!
+  
+  @IBOutlet weak var cboTurnoutSwitch1: NSComboBox!
+  
+  @IBAction func cboTurnoutSwitch1Action(_ sender: NSComboBox) {
+  }
+  
+  @IBOutlet weak var lblTurnoutSwitch2: NSTextField!
+  
+  @IBOutlet weak var cboTurnoutSwitch2: NSComboBox!
+  
+  @IBAction func cboTurnoutSwitch2Action(_ sender: NSComboBox) {
+  }
+  
+  @IBOutlet weak var btnClearTurnoutSwitch1: NSButton!
+  
+  @IBAction func btnClearTurnoutSwitch1Action(_ sender: NSButton) {
+  }
+  
+  @IBOutlet weak var btnClearTurnoutSwitch2: NSButton!
+  
+  @IBAction func btnClearTurnoutSwitch2Action(_ sender: NSButton) {
+  }
+  
+  @IBOutlet weak var lblGeneralSensor: NSTextField!
+  
+  @IBOutlet weak var cboGeneralSensor: NSComboBox!
+  
+  @IBAction func cboGeneralSensorAction(_ sender: NSComboBox) {
+  }
+  
+  @IBOutlet weak var lblSW1Thrown: NSTextField!
+  
+  @IBOutlet weak var cboSW1Thrown: NSComboBox!
+  
+  @IBAction func cboSW1ThrownAction(_ sender: NSComboBox) {
+  }
+  
+  @IBOutlet weak var lblSW1Closed: NSTextField!
+  
+  @IBOutlet weak var cboSW1Closed: NSComboBox!
+  
+  @IBAction func cboSW1ClosedAction(_ sender: NSComboBox) {
+  }
+  
+  @IBOutlet weak var lblSW2Thrown: NSTextField!
+  
+  @IBOutlet weak var cboSW2Thrown: NSComboBox!
+  
+  @IBAction func cboSw2ThrownAction(_ sender: NSComboBox) {
+  }
+  
+  @IBOutlet weak var lblSW2Closed: NSTextField!
+  
+  @IBOutlet weak var cboSW2Closed: NSComboBox!
+  
+  @IBAction func cboSW2ClosedAction(_ sender: NSComboBox) {
+  }
+  
+  @IBOutlet weak var btnClearGeneralSensor: NSButton!
+  
+  @IBAction func btnClearGeneralSensorAction(_ sender: NSButton) {
+  }
+  
+  @IBOutlet weak var btnClearSW1Thrown: NSButton!
+  
+  
+  @IBAction func btnClearSW1ThrownAction(_ sender: NSButton) {
+  }
+  
+  @IBOutlet weak var btnClearSW1Closed: NSButton!
+  
+  @IBAction func btnClearSW1ClosedAction(_ sender: NSButton) {
+  }
+  
+  @IBOutlet weak var btnClearSW2Thrown: NSButton!
+  
+  @IBAction func btnClearSW2ThrownAction(_ sender: NSButton) {
+  }
+  
+  @IBOutlet weak var btnClearSW2Closed: NSButton!
+  
+  @IBAction func btnClearSW2ClosedAction(_ sender: NSButton) {
+  }
+  
+  @IBOutlet weak var lblGeneralSensorPosition: NSTextField!
+  
+  @IBOutlet weak var txtGeneralSensorPosition: NSTextField!
+  
+  @IBAction func txtGeneralSensorPositionAction(_ sender: NSTextField) {
+  }
+  
+  @IBOutlet weak var lblPositionUnits: NSTextField!
+  
+  @IBOutlet weak var cboPositionUnits: NSComboBox!
+  
+  @IBAction func cboPositionUnitsAction(_ sender: NSComboBox) {
   }
   
 }

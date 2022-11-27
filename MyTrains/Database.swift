@@ -57,7 +57,7 @@ class Database {
             ")",
             
             "INSERT INTO [\(TABLE.VERSION)] ([\(VERSION.VERSION_ID)], [\(VERSION.VERSION_NUMBER)]) VALUES " +
-            "(1, 8)",
+            "(1, 10)",
 
             "CREATE TABLE [\(TABLE.LAYOUT)] (" +
               "[\(LAYOUT.LAYOUT_ID)]          INT PRIMARY KEY," +
@@ -228,41 +228,48 @@ class Database {
               "[\(SWITCHBOARD_ITEM.DP_SPEED_BRAKE_UD)]          INT NOT NULL," +
               "[\(SWITCHBOARD_ITEM.DP_SPEED_SHUNT_UD)]          INT NOT NULL," +
               "[\(SWITCHBOARD_ITEM.SW1_LOCONET_DEVICE_ID)]      INT NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.SW1_PORT)]                   INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.SW1_CHANNEL_NUMBER)]         INT NOT NULL," +
               "[\(SWITCHBOARD_ITEM.SW1_TURNOUT_MOTOR_TYPE)]     INT NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.SW1_SENSOR_ID)]              INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.SW1_SENSOR1_ID)]             INT NOT NULL," +
               "[\(SWITCHBOARD_ITEM.SW2_LOCONET_DEVICE_ID)]      INT NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.SW2_PORT)]                   INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.SW2_CHANNEL_NUMBER)]         INT NOT NULL," +
               "[\(SWITCHBOARD_ITEM.SW2_TURNOUT_MOTOR_TYPE)]     INT NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.SW2_SENSOR_ID)]              INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.SW2_SENSOR1_ID)]             INT NOT NULL," +
               "[\(SWITCHBOARD_ITEM.IS_SCENIC_SECTION)]          INT NOT NULL," +
               "[\(SWITCHBOARD_ITEM.BLOCK_TYPE)]                 INT NOT NULL," +
               "[\(SWITCHBOARD_ITEM.LINK_ITEM)]                  INT NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.TURNOUT_CONNECTION)]         INT NOT NULL" +
+              "[\(SWITCHBOARD_ITEM.TURNOUT_CONNECTION)]         INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.SW1_SENSOR1_CHANNEL_NUMBER)] INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.SW1_SENSOR2_ID)]             INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.SW1_SENSOR2_CHANNEL_NUMBER)] INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.SW2_SENSOR1_CHANNEL_NUMBER)] INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.SW2_SENSOR2_ID)]             INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.SW2_SENSOR2_CHANNEL_NUMBER)] INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.SENSOR_POSITION)]            REAL NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.UNITS_SENSOR_POSITION)]      INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.GEN_SENSOR_ID)]              INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.GEN_SENSOR_CHANNEL_NUMBER)]  INT NOT NULL" +
             ")",
-
+            
             "CREATE TABLE [\(TABLE.SENSOR)] (" +
               "[\(SENSOR.SENSOR_ID)]           INT PRIMARY KEY," +
-              "[\(SENSOR.SWITCHBOARD_ITEM_ID)] INT NOT NULL," +
               "[\(SENSOR.LOCONET_DEVICE_ID)]   INT NOT NULL," +
               "[\(SENSOR.CHANNEL_NUMBER)]      INT NOT NULL," +
-              "[\(SENSOR.MESSAGE_TYPE)]        INT NOT NULL," +
               "[\(SENSOR.SENSOR_TYPE)]         INT NOT NULL," +
-              "[\(SENSOR.POSITION)]            REAL NOT NULL," +
-              "[\(SENSOR.UNITS_POSITION)]      INT NOT NULL" +
+              "[\(SENSOR.SENSOR_ADDRESS)]      INT NOT NULL," +
+              "[\(SENSOR.DELAY_ON)]            INT NOT NULL," +
+              "[\(SENSOR.DELAY_OFF)]           INT NOT NULL," +
+              "[\(SENSOR.INVERTED)]            INT NOT NULL" +
             ")",
             
             "CREATE TABLE [\(TABLE.TURNOUT_SWITCH)] (" +
               "[\(TURNOUT_SWITCH.TURNOUT_SWITCH_ID)]   INT PRIMARY KEY," +
               "[\(TURNOUT_SWITCH.LOCONET_DEVICE_ID)]   INT NOT NULL," +
-              "[\(TURNOUT_SWITCH.SWITCHBOARD_ITEM_ID)] INT NOT NULL," +
-              "[\(TURNOUT_SWITCH.TURNOUT_INDEX)]       INT NOT NULL," +
               "[\(TURNOUT_SWITCH.CHANNEL_NUMBER)]      INT NOT NULL," +
-              "[\(TURNOUT_SWITCH.FEEDBACK_TYPE)]       INT NOT NULL," +
-              "[\(TURNOUT_SWITCH.SWITCH_TYPE)]         INT NOT NULL" +
+              "[\(TURNOUT_SWITCH.SWITCH_ADDRESS)]      INT NOT NULL" +
             ")",
-            
-         ]
+
+          ]
           
           execute(commands: commands)
           
@@ -289,7 +296,7 @@ class Database {
             
             // MARK: Updates
             
-            if Version == 7 {
+            if Version == 9 {
      
               let commands = [
              
@@ -307,17 +314,70 @@ class Database {
                 
           //      "DELETE FROM [\(TABLE.SPEED_PROFILE)] WHERE [\(SPEED_PROFILE.STEP_NUMBER)] = 127",
                 
-                "ALTER TABLE [\(TABLE.SWITCHBOARD_ITEM)] ADD [\(SWITCHBOARD_ITEM.TURNOUT_CONNECTION)] INT",
+          //      "ALTER TABLE [\(TABLE.SWITCHBOARD_ITEM)] ADD [\(SWITCHBOARD_ITEM.TURNOUT_CONNECTION)] INT",
                 
-                "UPDATE [\(TABLE.SWITCHBOARD_ITEM)] SET [\(SWITCHBOARD_ITEM.TURNOUT_CONNECTION)] = 0",
+          //      "UPDATE [\(TABLE.SWITCHBOARD_ITEM)] SET [\(SWITCHBOARD_ITEM.TURNOUT_CONNECTION)] = 0",
+                /*
+                "ALTER TABLE [\(TABLE.SWITCHBOARD_ITEM)] RENAME COLUMN [\(SWITCHBOARD_ITEM.SW1_SENSOR_ID)] TO [\(SWITCHBOARD_ITEM.SW1_SENSOR1_ID)]",
                 
-                "UPDATE [\(TABLE.VERSION)] SET [\(VERSION.VERSION_NUMBER)] = 8 WHERE [\(VERSION.VERSION_ID)] = 1",
+                "ALTER TABLE [\(TABLE.SWITCHBOARD_ITEM)] RENAME COLUMN [\(SWITCHBOARD_ITEM.SW2_SENSOR_ID)] TO [\(SWITCHBOARD_ITEM.SW2_SENSOR1_ID)]",
+
+                "ALTER TABLE [\(TABLE.SWITCHBOARD_ITEM)] RENAME COLUMN [\(SWITCHBOARD_ITEM.SW1_PORT)] TO [\(SWITCHBOARD_ITEM.SW1_CHANNEL_NUMBER)]",
+
+                "ALTER TABLE [\(TABLE.SWITCHBOARD_ITEM)] RENAME COLUMN [\(SWITCHBOARD_ITEM.SW2_PORT)] TO [\(SWITCHBOARD_ITEM.SW2_CHANNEL_NUMBER)]",
+
+                "ALTER TABLE [\(TABLE.SWITCHBOARD_ITEM)] ADD [\(SWITCHBOARD_ITEM.SW1_SENSOR1_CHANNEL_NUMBER)] INT",
+
+                "ALTER TABLE [\(TABLE.SWITCHBOARD_ITEM)] ADD [\(SWITCHBOARD_ITEM.SW1_SENSOR2_ID)] INT",
+
+                "ALTER TABLE [\(TABLE.SWITCHBOARD_ITEM)] ADD [\(SWITCHBOARD_ITEM.SW1_SENSOR2_CHANNEL_NUMBER)] INT",
+
+                "ALTER TABLE [\(TABLE.SWITCHBOARD_ITEM)] ADD [\(SWITCHBOARD_ITEM.SW2_SENSOR1_CHANNEL_NUMBER)] INT",
+
+                "ALTER TABLE [\(TABLE.SWITCHBOARD_ITEM)] ADD [\(SWITCHBOARD_ITEM.SW2_SENSOR2_ID)] INT",
+
+                "ALTER TABLE [\(TABLE.SWITCHBOARD_ITEM)] ADD [\(SWITCHBOARD_ITEM.SW2_SENSOR2_CHANNEL_NUMBER)] INT",
+
+                "ALTER TABLE [\(TABLE.SWITCHBOARD_ITEM)] ADD [\(SWITCHBOARD_ITEM.SENSOR_POSITION)] REAL",
+
+                "ALTER TABLE [\(TABLE.SWITCHBOARD_ITEM)] ADD [\(SWITCHBOARD_ITEM.UNITS_SENSOR_POSITION)] INT",
+
+                "ALTER TABLE [\(TABLE.SENSOR)] DROP COLUMN [\(SENSOR.SWITCHBOARD_ITEM_ID)]",
                 
+                "ALTER TABLE [\(TABLE.SENSOR)] DROP COLUMN [\(SENSOR.MESSAGE_TYPE)]",
+ 
+                "ALTER TABLE [\(TABLE.SENSOR)] DROP COLUMN [\(SENSOR.POSITION)]",
+                
+                "ALTER TABLE [\(TABLE.SENSOR)] DROP COLUMN [\(SENSOR.UNITS_POSITION)]",
+                
+                "ALTER TABLE [\(TABLE.SENSOR)] ADD [\(SENSOR.SENSOR_ADDRESS)] INT",
+
+                "ALTER TABLE [\(TABLE.SENSOR)] ADD [\(SENSOR.DELAY_ON)] INT",
+
+                "ALTER TABLE [\(TABLE.SENSOR)] ADD [\(SENSOR.DELAY_OFF)] INT",
+
+                "ALTER TABLE [\(TABLE.SENSOR)] ADD [\(SENSOR.INVERTED)] INT",
+
+                "ALTER TABLE [\(TABLE.TURNOUT_SWITCH)] DROP COLUMN [\(TURNOUT_SWITCH.SWITCHBOARD_ITEM_ID)]",
+                
+                "ALTER TABLE [\(TABLE.TURNOUT_SWITCH)] DROP COLUMN [\(TURNOUT_SWITCH.TURNOUT_INDEX)]",
+                
+                "ALTER TABLE [\(TABLE.TURNOUT_SWITCH)] DROP COLUMN [\(TURNOUT_SWITCH.FEEDBACK_TYPE)]",
+                
+                "ALTER TABLE [\(TABLE.TURNOUT_SWITCH)] DROP COLUMN [\(TURNOUT_SWITCH.SWITCH_TYPE)]",
+                */
+
+                "ALTER TABLE [\(TABLE.SWITCHBOARD_ITEM)] ADD [\(SWITCHBOARD_ITEM.GEN_SENSOR_ID)] INT",
+
+                "ALTER TABLE [\(TABLE.SWITCHBOARD_ITEM)] ADD [\(SWITCHBOARD_ITEM.GEN_SENSOR_CHANNEL_NUMBER)] INT",
+
+                "UPDATE [\(TABLE.VERSION)] SET [\(VERSION.VERSION_NUMBER)] = 10 WHERE [\(VERSION.VERSION_ID)] = 1",
+                    
              ]
               
               execute(commands: commands)
               
-              Version = 8
+              Version = 9
 
             }
             

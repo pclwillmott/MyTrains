@@ -20,20 +20,12 @@ public class Sensor : EditorObject {
     super.init(primaryKey: -1)
   }
   
+  // MARK: Private Properties
+  
+  private var _sensorAddress : Int = -1
+  
   // MARK: Public Properties
   
-  public var switchBoardItemId : Int = -1 {
-    didSet {
-      modified = true
-    }
-  }
-
-  public var nextSwitchBoardItemId : Int = -1 {
-    didSet {
-      modified = true
-    }
-  }
-
   public var locoNetDeviceId : Int = -1 {
     didSet {
       modified = true
@@ -52,39 +44,88 @@ public class Sensor : EditorObject {
     }
   }
   
-  public var messageType : Int = 0 {
+  public var displayChannelNumber : String {
+    get {
+      if let device = locoNetDevice {
+        return "\(device.boardId).\(channelNumber)"
+      }
+      return "err"
+    }
+  }
+  
+  public var sensorType : SensorType = SensorType.defaultValue {
     didSet {
       modified = true
     }
   }
   
-  public var sensorType : Int = 0 {
-    didSet {
-      modified = true
-    }
-  }
-  
-  public var position : Double = 0.0 {
-    didSet {
-      modified = true
-    }
-  }
-  
-  public var unitsPosition : UnitLength = .centimeters {
-    didSet {
-      modified = true
-    }
-  }
+  public var nextSensorType : SensorType = SensorType.defaultValue
   
   public var sensorAddress : Int {
+    get {
+      return _sensorAddress
+    }
+    set(value) {
+      _sensorAddress = value
+      modified = true
+    }
+  }
+
+  public var nextSensorAddress : Int = -1
+
+  public var calculatedSensorAddress : Int {
     get {
       if let device = locoNetDevice {
         return device.baseAddress + channelNumber - 1
       }
-      return 0
+      return -1
     }
   }
   
+  public var comboSensorName : String {
+    get {
+      if let device = locoNetDevice, let info = device.locoNetProductInfo {
+        return "\(info.productName) \(device.boardId).\(channelNumber) (\(sensorAddress))"
+      }
+      return "err"
+    }
+  }
+  
+  public var comboSortOrder : String {
+    get {
+      if let device = locoNetDevice, let info = device.locoNetProductInfo {
+        let bid = String("000000000\(device.boardId)").suffix(8)
+        let cnum = String("000000000\(channelNumber)").suffix(8)
+        return "\(info.productName) \(bid).\(cnum) (\(sensorAddress))"
+      }
+      return "err"
+    }
+  }
+
+  public var delayOn : Int = 0 {
+    didSet {
+      modified = true
+    }
+  }
+
+  public var nextDelayOn : Int = 0
+
+  public var delayOff : Int = 0 {
+    didSet {
+      modified = true
+    }
+  }
+
+  public var nextDelayOff : Int = 0
+
+  public var inverted : Bool = false {
+    didSet {
+      modified = true
+    }
+  }
+  
+  public var nextInverted : Bool = false
+
   // MARK: Database Methods
   
   private func decode(sqliteDataReader: SqliteDataReader?) {
@@ -92,46 +133,54 @@ public class Sensor : EditorObject {
     if let reader = sqliteDataReader {
       
       primaryKey = reader.getInt(index: 0)!
-      
+
       if !reader.isDBNull(index: 1) {
-        switchBoardItemId = reader.getInt(index: 1)!
+        locoNetDeviceId = reader.getInt(index: 1)!
       }
       
       if !reader.isDBNull(index: 2) {
-        locoNetDeviceId = reader.getInt(index: 2)!
+        channelNumber = reader.getInt(index: 2)!
       }
       
       if !reader.isDBNull(index: 3) {
-        channelNumber = reader.getInt(index: 3)!
+        sensorType = SensorType(rawValue: reader.getInt(index: 3)!) ?? SensorType.defaultValue
       }
       
       if !reader.isDBNull(index: 4) {
-        messageType = reader.getInt(index: 4)!
+        sensorAddress = reader.getInt(index: 4)!
       }
       
       if !reader.isDBNull(index: 5) {
-        sensorType = reader.getInt(index: 5)!
+        delayOn = reader.getInt(index: 5)!
       }
       
       if !reader.isDBNull(index: 6) {
-        position = reader.getDouble(index: 6)!
+        delayOff = reader.getInt(index: 6)!
       }
       
       if !reader.isDBNull(index: 7) {
-        unitsPosition = UnitLength(rawValue: reader.getInt(index: 7)!) ?? UnitLength.defaultValue
+        inverted = reader.getBool(index: 7)!
       }
       
     }
-    
-    nextSwitchBoardItemId = switchBoardItemId
-    
+        
     modified = false
+    
+    nextSensorType = sensorType
+    nextSensorAddress = sensorAddress
+    nextInverted = inverted
+    nextDelayOn = delayOn
+    nextDelayOff = delayOff
     
   }
 
   public func save() {
     
-    switchBoardItemId = nextSwitchBoardItemId
+    sensorType = nextSensorType
+    sensorAddress = nextSensorAddress
+    inverted = nextInverted
+    delayOn = nextDelayOn
+    delayOff = nextDelayOff
     
     if modified {
       
@@ -140,50 +189,47 @@ public class Sensor : EditorObject {
       /*
        enum SENSOR {
          static let SENSOR_ID                   = "SENSOR_ID"
-         static let SWITCHBOARD_ITEM_ID         = "SWITCHBOARD_ITEM_ID"
          static let LOCONET_DEVICE_ID           = "LOCONET_DEVICE_ID"
          static let CHANNEL_NUMBER              = "CHANNEL_NUMBER"
-         static let MESSAGE_TYPE                = "MESSAGE_TYPE"
          static let SENSOR_TYPE                 = "SENSOR_TYPE"
-         static let POSITION                    = "POSITION"
-         static let UNITS_POSITION              = "UNITS_POSITION"
+         static let SENSOR_ADDRESS              = "SENSOR_ADDRESS"
+         static let DELAY_ON                    = "DELAY_ON"
+         static let DELAY_OFF                   = "DELAY_OFF"
+         static let INVERTED                    = "INVERTED"
        }
-
        */
-      
-
 
       if primaryKey == -1 {
         sql = "INSERT INTO [\(TABLE.SENSOR)] (" +
         "[\(SENSOR.SENSOR_ID)], " +
-        "[\(SENSOR.SWITCHBOARD_ITEM_ID)], " +
         "[\(SENSOR.LOCONET_DEVICE_ID)], " +
         "[\(SENSOR.CHANNEL_NUMBER)], " +
-        "[\(SENSOR.MESSAGE_TYPE)], " +
         "[\(SENSOR.SENSOR_TYPE)], " +
-        "[\(SENSOR.POSITION)], " +
-        "[\(SENSOR.UNITS_POSITION)]" +
+        "[\(SENSOR.SENSOR_ADDRESS)], " +
+        "[\(SENSOR.DELAY_ON)], " +
+        "[\(SENSOR.DELAY_OFF)], " +
+        "[\(SENSOR.INVERTED)]" +
         ") VALUES (" +
         "@\(SENSOR.SENSOR_ID), " +
-        "@\(SENSOR.SWITCHBOARD_ITEM_ID), " +
         "@\(SENSOR.LOCONET_DEVICE_ID), " +
         "@\(SENSOR.CHANNEL_NUMBER)," +
-        "@\(SENSOR.MESSAGE_TYPE)," +
         "@\(SENSOR.SENSOR_TYPE), " +
-        "@\(SENSOR.POSITION), " +
-        "@\(SENSOR.UNITS_POSITION)" +
+        "@\(SENSOR.SENSOR_ADDRESS), " +
+        "@\(SENSOR.DELAY_ON), " +
+        "@\(SENSOR.DELAY_OFF), " +
+        "@\(SENSOR.INVERTED)" +
         ")"
         primaryKey = Database.nextCode(tableName: TABLE.SENSOR, primaryKey: SENSOR.SENSOR_ID)!
       }
       else {
         sql = "UPDATE [\(TABLE.SENSOR)] SET " +
-        "[\(SENSOR.SWITCHBOARD_ITEM_ID)] = @\(SENSOR.SWITCHBOARD_ITEM_ID), " +
         "[\(SENSOR.LOCONET_DEVICE_ID)] = @\(SENSOR.LOCONET_DEVICE_ID), " +
         "[\(SENSOR.CHANNEL_NUMBER)] = @\(SENSOR.CHANNEL_NUMBER), " +
-        "[\(SENSOR.MESSAGE_TYPE)] = @\(SENSOR.MESSAGE_TYPE), " +
         "[\(SENSOR.SENSOR_TYPE)] = @\(SENSOR.SENSOR_TYPE), " +
-        "[\(SENSOR.POSITION)] = @\(SENSOR.POSITION), " +
-        "[\(SENSOR.UNITS_POSITION)] = @\(SENSOR.UNITS_POSITION) " +
+        "[\(SENSOR.SENSOR_ADDRESS)] = @\(SENSOR.SENSOR_ADDRESS), " +
+        "[\(SENSOR.DELAY_ON)] = @\(SENSOR.DELAY_ON), " +
+        "[\(SENSOR.DELAY_OFF)] = @\(SENSOR.DELAY_OFF), " +
+        "[\(SENSOR.INVERTED)] = @\(SENSOR.INVERTED) " +
         "WHERE [\(SENSOR.SENSOR_ID)] = @\(SENSOR.SENSOR_ID)"
       }
 
@@ -200,13 +246,13 @@ public class Sensor : EditorObject {
       cmd.commandText = sql
       
       cmd.parameters.addWithValue(key: "@\(SENSOR.SENSOR_ID)", value: primaryKey)
-      cmd.parameters.addWithValue(key: "@\(SENSOR.SWITCHBOARD_ITEM_ID)", value: switchBoardItemId)
       cmd.parameters.addWithValue(key: "@\(SENSOR.LOCONET_DEVICE_ID)", value: locoNetDeviceId)
       cmd.parameters.addWithValue(key: "@\(SENSOR.CHANNEL_NUMBER)", value: channelNumber)
-      cmd.parameters.addWithValue(key: "@\(SENSOR.MESSAGE_TYPE)", value: messageType)
-      cmd.parameters.addWithValue(key: "@\(SENSOR.SENSOR_TYPE)", value: sensorType)
-      cmd.parameters.addWithValue(key: "@\(SENSOR.POSITION)", value: position)
-      cmd.parameters.addWithValue(key: "@\(SENSOR.UNITS_POSITION)", value: unitsPosition.rawValue)
+      cmd.parameters.addWithValue(key: "@\(SENSOR.SENSOR_TYPE)", value: sensorType.rawValue)
+      cmd.parameters.addWithValue(key: "@\(SENSOR.SENSOR_ADDRESS)", value: sensorAddress)
+      cmd.parameters.addWithValue(key: "@\(SENSOR.DELAY_ON)", value: delayOn)
+      cmd.parameters.addWithValue(key: "@\(SENSOR.DELAY_OFF)", value: delayOff)
+      cmd.parameters.addWithValue(key: "@\(SENSOR.INVERTED)", value: inverted)
 
       _ = cmd.executeNonQuery()
 
@@ -220,19 +266,19 @@ public class Sensor : EditorObject {
 
   }
 
-  // Class Properties
+  // MARK: Class Properties
   
   public static var columnNames : String {
     get {
       return
         "[\(SENSOR.SENSOR_ID)], " +
-        "[\(SENSOR.SWITCHBOARD_ITEM_ID)], " +
         "[\(SENSOR.LOCONET_DEVICE_ID)], " +
         "[\(SENSOR.CHANNEL_NUMBER)], " +
-        "[\(SENSOR.MESSAGE_TYPE)], " +
         "[\(SENSOR.SENSOR_TYPE)], " +
-        "[\(SENSOR.POSITION)], " +
-        "[\(SENSOR.UNITS_POSITION)]"
+        "[\(SENSOR.SENSOR_ADDRESS)], " +
+        "[\(SENSOR.DELAY_ON)], " +
+        "[\(SENSOR.DELAY_OFF)], " +
+        "[\(SENSOR.INVERTED)]"
     }
   }
   

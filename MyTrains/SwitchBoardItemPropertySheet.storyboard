@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="20037"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -340,7 +340,7 @@
                                                     </connections>
                                                 </textField>
                                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gvw-t4-jHO">
-                                                    <rect key="frame" x="15" y="72" width="118" height="18"/>
+                                                    <rect key="frame" x="15" y="83" width="118" height="18"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="check" title="Critical Section" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="T2L-Xh-uQq">
                                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -348,7 +348,7 @@
                                                     </buttonCell>
                                                 </button>
                                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fJc-lA-zLP">
-                                                    <rect key="frame" x="15" y="50" width="116" height="18"/>
+                                                    <rect key="frame" x="15" y="61" width="116" height="18"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="check" title="Scenic Section" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="UvG-hx-Zv3">
                                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -590,7 +590,7 @@
                                                     </view>
                                                 </box>
                                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zWw-Hm-hhD">
-                                                    <rect key="frame" x="15" y="28" width="207" height="18"/>
+                                                    <rect key="frame" x="15" y="39" width="207" height="18"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="check" title="Allow shunt in occupied block" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="VLb-1n-DUj">
                                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -645,7 +645,7 @@
                                                     </connections>
                                                 </comboBox>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="I2p-T2-EMO">
-                                                    <rect key="frame" x="475" y="185" width="142" height="16"/>
+                                                    <rect key="frame" x="528" y="84" width="142" height="16"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Turnout Motor #1 Type" id="Ewt-zx-ec2">
                                                         <font key="font" metaFont="system"/>
@@ -654,7 +654,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZKC-Cm-qDU">
-                                                    <rect key="frame" x="477" y="155" width="196" height="25"/>
+                                                    <rect key="frame" x="530" y="54" width="141" height="25"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="aqt-Zu-7fS">
                                                         <font key="font" metaFont="system"/>
@@ -671,7 +671,7 @@
                                                     </connections>
                                                 </comboBox>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aLw-wb-dnv">
-                                                    <rect key="frame" x="475" y="133" width="144" height="16"/>
+                                                    <rect key="frame" x="528" y="32" width="144" height="16"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Turnout Motor #2 Type" id="nye-Vk-Zd8">
                                                         <font key="font" metaFont="system"/>
@@ -680,7 +680,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mbn-Q2-aq0">
-                                                    <rect key="frame" x="477" y="103" width="196" height="25"/>
+                                                    <rect key="frame" x="530" y="2" width="141" height="25"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="Xde-Xs-LP8">
                                                         <font key="font" metaFont="system"/>
@@ -696,13 +696,286 @@
                                                         <action selector="cboTurnoutMotorType2Action:" target="luq-MD-xG7" id="tHj-r1-6aS"/>
                                                     </connections>
                                                 </comboBox>
+                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wzx-N5-IiR">
+                                                    <rect key="frame" x="230" y="84" width="113" height="16"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="Turnout Switch #1" id="Fok-4n-vG3">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pYu-fb-roJ">
+                                                    <rect key="frame" x="233" y="54" width="224" height="25"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="5" id="lVo-Wd-yM1">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </comboBoxCell>
+                                                    <connections>
+                                                        <action selector="cboTurnoutSwitch1Action:" target="luq-MD-xG7" id="idd-2a-ffu"/>
+                                                    </connections>
+                                                </comboBox>
+                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bvt-B4-drw">
+                                                    <rect key="frame" x="230" y="32" width="115" height="16"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="Turnout Switch #2" id="Dxc-uT-F0T">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cYF-id-hCx">
+                                                    <rect key="frame" x="232" y="2" width="225" height="25"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="5" id="Lsk-Ew-Tql">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </comboBoxCell>
+                                                    <connections>
+                                                        <action selector="cboTurnoutSwitch2Action:" target="luq-MD-xG7" id="lhD-mh-tHW"/>
+                                                    </connections>
+                                                </comboBox>
+                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mfb-OA-DcH">
+                                                    <rect key="frame" x="455" y="50" width="66" height="32"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <buttonCell key="cell" type="push" title="Clear" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="AnQ-MK-g9H">
+                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <action selector="btnClearTurnoutSwitch1Action:" target="luq-MD-xG7" id="xXQ-d0-Xpx"/>
+                                                    </connections>
+                                                </button>
+                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hZA-YX-WI4">
+                                                    <rect key="frame" x="455" y="-2" width="66" height="32"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <buttonCell key="cell" type="push" title="Clear" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="2Ef-tq-is7">
+                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <action selector="btnClearTurnoutSwitch2Action:" target="luq-MD-xG7" id="J7X-5W-ufW"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                         </view>
                                     </tabViewItem>
                                     <tabViewItem label="Feedback" identifier="" id="Hhz-Er-MvY">
                                         <view key="view" id="7IH-bU-0XS">
-                                            <rect key="frame" x="10" y="33" width="663" height="477"/>
+                                            <rect key="frame" x="10" y="33" width="687" height="477"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <subviews>
+                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hoh-1b-5G6">
+                                                    <rect key="frame" x="58" y="377" width="119" height="16"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="Occupancy Sensor" id="HQD-be-5RC">
+                                                        <font key="font" usesAppearanceFont="YES"/>
+                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="46t-qP-rCK">
+                                                    <rect key="frame" x="60" y="346" width="273" height="25"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="5" id="y1z-Zd-xp9">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </comboBoxCell>
+                                                    <connections>
+                                                        <action selector="cboGeneralSensorAction:" target="luq-MD-xG7" id="2HJ-wG-3h6"/>
+                                                    </connections>
+                                                </comboBox>
+                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="t65-qZ-cXT">
+                                                    <rect key="frame" x="58" y="326" width="218" height="16"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="Turnout Switch #1 - Thrown Sensor" id="tkt-mU-iUA">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uwy-gR-Y2H">
+                                                    <rect key="frame" x="60" y="295" width="272" height="25"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="5" id="fRZ-zv-kjs">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </comboBoxCell>
+                                                    <connections>
+                                                        <action selector="cboSW1ThrownAction:" target="luq-MD-xG7" id="Bcl-F0-r9O"/>
+                                                    </connections>
+                                                </comboBox>
+                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vnQ-FU-hLN">
+                                                    <rect key="frame" x="58" y="275" width="214" height="16"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="Turnout Switch #1 - Closed Sensor" id="uKO-NN-dzR">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gdb-Ah-EwG">
+                                                    <rect key="frame" x="60" y="244" width="272" height="25"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="5" id="jWO-Tb-Y2h">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </comboBoxCell>
+                                                    <connections>
+                                                        <action selector="cboSW1ClosedAction:" target="luq-MD-xG7" id="6N3-le-3Vv"/>
+                                                    </connections>
+                                                </comboBox>
+                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="q4q-AL-vwh">
+                                                    <rect key="frame" x="58" y="224" width="220" height="16"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="Turnout Switch #2 - Thrown Sensor" id="EyV-FN-hKV">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DLi-EB-5F0">
+                                                    <rect key="frame" x="60" y="193" width="272" height="25"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="5" id="RaI-UO-NGC">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </comboBoxCell>
+                                                    <connections>
+                                                        <action selector="cboSw2ThrownAction:" target="luq-MD-xG7" id="8ec-3u-sa2"/>
+                                                    </connections>
+                                                </comboBox>
+                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mW9-fB-aa9">
+                                                    <rect key="frame" x="58" y="173" width="216" height="16"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="Turnout Switch #2 - Closed Sensor" id="nLk-ja-5YC">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="36T-8K-diT">
+                                                    <rect key="frame" x="60" y="142" width="272" height="25"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="5" id="K7M-YJ-mXx">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </comboBoxCell>
+                                                    <connections>
+                                                        <action selector="cboSW2ClosedAction:" target="luq-MD-xG7" id="Okg-Kg-A0C"/>
+                                                    </connections>
+                                                </comboBox>
+                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2UJ-wh-Jpp">
+                                                    <rect key="frame" x="348" y="343" width="66" height="32"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <buttonCell key="cell" type="push" title="Clear" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Zxl-fB-AQ1">
+                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <action selector="btnClearGeneralSensorAction:" target="luq-MD-xG7" id="L25-LW-3kX"/>
+                                                    </connections>
+                                                </button>
+                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FSG-Xs-6ed">
+                                                    <rect key="frame" x="348" y="292" width="66" height="32"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <buttonCell key="cell" type="push" title="Clear" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="idz-G3-DJ1">
+                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <action selector="btnClearSW1ThrownAction:" target="luq-MD-xG7" id="ltJ-Nh-6ds"/>
+                                                    </connections>
+                                                </button>
+                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wa0-8T-muU">
+                                                    <rect key="frame" x="348" y="241" width="66" height="32"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <buttonCell key="cell" type="push" title="Clear" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="WTt-2Q-yrp">
+                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <action selector="btnClearSW1ClosedAction:" target="luq-MD-xG7" id="Wfy-Lz-dYY"/>
+                                                    </connections>
+                                                </button>
+                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SL2-Fz-I2P">
+                                                    <rect key="frame" x="348" y="190" width="66" height="32"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <buttonCell key="cell" type="push" title="Clear" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="lnN-x6-jvT">
+                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <action selector="btnClearSW2ThrownAction:" target="luq-MD-xG7" id="AUa-V6-KIa"/>
+                                                    </connections>
+                                                </button>
+                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LDV-gw-f69">
+                                                    <rect key="frame" x="348" y="139" width="66" height="32"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <buttonCell key="cell" type="push" title="Clear" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="enG-EI-hFM">
+                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <action selector="btnClearSW2ClosedAction:" target="luq-MD-xG7" id="ZHS-bq-2qN"/>
+                                                    </connections>
+                                                </button>
+                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fgf-VP-cli">
+                                                    <rect key="frame" x="430" y="377" width="53" height="16"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="Position" id="Y8J-AM-e57">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TwE-t9-Us4">
+                                                    <rect key="frame" x="432" y="349" width="96" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="F31-av-Dd3">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                    <connections>
+                                                        <action selector="txtGeneralSensorPositionAction:" target="luq-MD-xG7" id="8DM-oy-2iq"/>
+                                                    </connections>
+                                                </textField>
+                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zf6-fg-7KA">
+                                                    <rect key="frame" x="546" y="377" width="36" height="16"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="Units" id="hdR-m1-1sH">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jkZ-p8-QTz">
+                                                    <rect key="frame" x="548" y="347" width="83" height="25"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="UlZ-GX-lvT">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                        <objectValues>
+                                                            <string>Item 1</string>
+                                                            <string>Item 2</string>
+                                                            <string>Item 3</string>
+                                                        </objectValues>
+                                                    </comboBoxCell>
+                                                    <connections>
+                                                        <action selector="cboPositionUnitsAction:" target="luq-MD-xG7" id="8oa-RM-khw"/>
+                                                    </connections>
+                                                </comboBox>
+                                            </subviews>
                                         </view>
                                     </tabViewItem>
                                     <tabViewItem label="Direction Next" identifier="" id="iDO-sW-NiJ">
@@ -1305,20 +1578,35 @@ Gw
                     <connections>
                         <outlet property="boxSpeedNext" destination="dgz-9M-N9P" id="sFc-lv-Udp"/>
                         <outlet property="boxSpeedPrevious" destination="bSE-c3-L4m" id="K5a-SI-3yz"/>
+                        <outlet property="btnClearGeneralSensor" destination="2UJ-wh-Jpp" id="j4t-Rn-VxT"/>
+                        <outlet property="btnClearSW1Closed" destination="wa0-8T-muU" id="APW-YS-vKs"/>
+                        <outlet property="btnClearSW1Thrown" destination="FSG-Xs-6ed" id="lim-O6-wTe"/>
+                        <outlet property="btnClearSW2Closed" destination="LDV-gw-f69" id="R0C-lB-6VF"/>
+                        <outlet property="btnClearSW2Thrown" destination="SL2-Fz-I2P" id="KwW-Y4-cfw"/>
+                        <outlet property="btnClearTurnoutSwitch1" destination="Mfb-OA-DcH" id="cJ0-Sr-crK"/>
+                        <outlet property="btnClearTurnoutSwitch2" destination="hZA-YX-WI4" id="o0g-wV-tiS"/>
                         <outlet property="cboBlockType" destination="w2f-ZO-IpO" id="umD-Zt-PQR"/>
                         <outlet property="cboDNPositionUnits" destination="0is-om-hwx" id="9bA-Ef-zJu"/>
                         <outlet property="cboDPPositionUnits" destination="wv0-LV-r6U" id="Ljs-SD-b2e"/>
                         <outlet property="cboDimensionUnits" destination="I5Y-fF-l7A" id="ufk-TM-Omw"/>
                         <outlet property="cboDirection" destination="fQd-sD-o2d" id="GsC-p8-3K4"/>
+                        <outlet property="cboGeneralSensor" destination="46t-qP-rCK" id="sEZ-cJ-awN"/>
                         <outlet property="cboGroupId" destination="dJi-uD-CNn" id="nZD-pR-h18"/>
                         <outlet property="cboLink" destination="OSK-Xy-xeI" id="jxt-eh-b91"/>
                         <outlet property="cboPanel" destination="1od-d7-uAk" id="LIs-PR-sXg"/>
+                        <outlet property="cboPositionUnits" destination="jkZ-p8-QTz" id="SJD-eA-C0C"/>
+                        <outlet property="cboSW1Closed" destination="Gdb-Ah-EwG" id="E8O-VU-6Wv"/>
+                        <outlet property="cboSW1Thrown" destination="uwy-gR-Y2H" id="nhj-yw-GKl"/>
+                        <outlet property="cboSW2Closed" destination="36T-8K-diT" id="fwz-aW-AWs"/>
+                        <outlet property="cboSW2Thrown" destination="DLi-EB-5F0" id="Zg1-6j-VtS"/>
                         <outlet property="cboSpeedUnits" destination="paA-Qe-yLp" id="TDg-kk-UZV"/>
                         <outlet property="cboTrackElectrificationType" destination="8Tb-bm-n3j" id="Yo4-kK-1cp"/>
                         <outlet property="cboTrackGauge" destination="FlW-Hq-yS8" id="wmx-0t-xSm"/>
                         <outlet property="cboTrackPartType" destination="raU-OG-7u5" id="ASu-JA-wzX"/>
                         <outlet property="cboTurnoutMotorType" destination="ZKC-Cm-qDU" id="d1K-4f-YQg"/>
                         <outlet property="cboTurnoutMotorType2" destination="Mbn-Q2-aq0" id="N7K-vz-Kpl"/>
+                        <outlet property="cboTurnoutSwitch1" destination="pYu-fb-roJ" id="s0V-7M-CgA"/>
+                        <outlet property="cboTurnoutSwitch2" destination="cYF-id-hCx" id="jWk-iZ-sb8"/>
                         <outlet property="chkAllowShunt" destination="zWw-Hm-hhD" id="oMd-My-nbl"/>
                         <outlet property="chkCriticalSection" destination="gvw-t4-jHO" id="GWr-qR-5dk"/>
                         <outlet property="chkDNBrakeUD" destination="d3l-01-7hu" id="OEE-Iu-3QL"/>
@@ -1339,6 +1627,8 @@ Gw
                         <outlet property="lblE" destination="qPj-hN-lNK" id="gNm-Cc-HKY"/>
                         <outlet property="lblF" destination="ncX-Ux-a4I" id="Bgu-TQ-euK"/>
                         <outlet property="lblG" destination="lwZ-XU-fFa" id="uoK-7L-ijv"/>
+                        <outlet property="lblGeneralSensor" destination="hoh-1b-5G6" id="5hS-K9-eVV"/>
+                        <outlet property="lblGeneralSensorPosition" destination="fgf-VP-cli" id="Quk-FH-8sg"/>
                         <outlet property="lblH" destination="lyn-bR-rAJ" id="PsO-hl-N8k"/>
                         <outlet property="lblItemId" destination="nGG-N3-o0a" id="xU2-xb-lsp"/>
                         <outlet property="lblLayout" destination="xly-cW-1Fa" id="Xbn-nQ-oQZ"/>
@@ -1346,8 +1636,15 @@ Gw
                         <outlet property="lblName" destination="wwu-WJ-mqz" id="EBE-Pq-qxP"/>
                         <outlet property="lblOrientation" destination="CgP-JH-ArW" id="7h0-n0-LP1"/>
                         <outlet property="lblPartType" destination="dKy-CN-CoC" id="PkU-y4-c6Z"/>
+                        <outlet property="lblPositionUnits" destination="zf6-fg-7KA" id="Tin-Yl-Rb5"/>
+                        <outlet property="lblSW1Closed" destination="vnQ-FU-hLN" id="Z24-1a-hPc"/>
+                        <outlet property="lblSW1Thrown" destination="t65-qZ-cXT" id="rlY-yN-ndL"/>
+                        <outlet property="lblSW2Closed" destination="mW9-fB-aa9" id="3TJ-EY-hXO"/>
+                        <outlet property="lblSW2Thrown" destination="q4q-AL-vwh" id="Nk7-qc-PU0"/>
                         <outlet property="lblTurnoutMotorType" destination="I2p-T2-EMO" id="i1u-Z9-eEl"/>
                         <outlet property="lblTurnoutMotorType2" destination="aLw-wb-dnv" id="kOt-rY-Mjb"/>
+                        <outlet property="lblTurnoutSwitch1" destination="wzx-N5-IiR" id="dK0-Vj-NRb"/>
+                        <outlet property="lblTurnoutSwitch2" destination="bvt-B4-drw" id="c1h-MY-3oJ"/>
                         <outlet property="switchBoardItemView" destination="YSs-8X-jZC" id="egX-s1-9xb"/>
                         <outlet property="tabs" destination="XAb-PD-doL" id="fze-uY-STg"/>
                         <outlet property="txtA" destination="Hd0-fF-wH3" id="zHa-xn-wNV"/>
@@ -1371,6 +1668,7 @@ Gw
                         <outlet property="txtE" destination="ab3-zd-qez" id="L1J-ux-XQ2"/>
                         <outlet property="txtF" destination="kuD-qW-SBq" id="FAD-Fz-Wl3"/>
                         <outlet property="txtG" destination="nmX-w7-sFy" id="tyy-VI-dau"/>
+                        <outlet property="txtGeneralSensorPosition" destination="TwE-t9-Us4" id="o4F-qB-6VK"/>
                         <outlet property="txtGradient" destination="MQB-Uw-oUD" id="o8n-Li-BRu"/>
                         <outlet property="txtH" destination="i6H-x7-KFO" id="URx-45-vGE"/>
                         <outlet property="txtName" destination="FfM-Hv-9D8" id="LQR-Ty-2ur"/>

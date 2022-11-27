@@ -284,6 +284,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
       }
       else if let turnoutSwitch = turnoutLookup[message.sensorAddress], let layout = network?.layout {
         let even = (message.sensorAddress % 2) == 0
+        /*
         switch turnoutSwitch.feedbackType {
         case .closed:
           turnoutSwitch.state = message.sensorState ? .closed : .thrown
@@ -305,7 +306,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
           }
         default:
           break
-        }
+        } */
   //      print("Turnout: \(message.sensorAddress) \(turnoutSwitch.state)")
         layout.needsDisplay()
       }
@@ -428,21 +429,21 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
       for device in networkController.devicesWithAddresses(networkId: networkId) {
         
         for sensor in device.sensors {
-          
+          /*
           if sensor.switchBoardItemId != -1, let block = layout.operationalBlocks[sensor.switchBoardItemId] {
             sensorLookup[sensor.sensorAddress] = block
           }
-          
+          */
         }
         
         for turnoutSwitch in device.turnoutSwitches {
-          
+          /*
           if turnoutSwitch.switchBoardItemId != -1 {
-            layout.operationalTurnouts[turnoutSwitch.dictionaryKey] = turnoutSwitch
+      //      layout.operationalTurnouts[turnoutSwitch.dictionaryKey] = turnoutSwitch
             turnoutLookup[turnoutSwitch.switchAddress] = turnoutSwitch
             turnoutLookup[turnoutSwitch.switchAddress + 1] = turnoutSwitch
           }
-          
+          */
         }
         
       }

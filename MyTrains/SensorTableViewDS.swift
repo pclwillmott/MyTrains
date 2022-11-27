@@ -47,7 +47,7 @@ public class SensorTableViewDS : NSObject, NSTableViewDataSource, NSTableViewDel
 
     switch columnName {
     case ColumnIdentifiers.SectionColumn:
-      text = "\(item.sensorAddress)"
+      text = "\(item.displayChannelNumber)"
     case ColumnIdentifiers.BlockColumn:
       
       let nib = NSNib(nibNamed: "SensorTCV", bundle: nil)

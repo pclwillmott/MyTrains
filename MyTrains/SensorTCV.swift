@@ -29,28 +29,57 @@ class SensorTCV: NSTableCellView {
   
   public var sensor : Sensor? {
     didSet {
-      if let s = sensor, let device = s.locoNetDevice, let layout = device.network?.layout {
-        cboBlockDS.dictionary = layout.switchBoardBlocks
-        cboBlock.dataSource = cboBlockDS
-        cboBlock.deselectItem(at: cboBlock.indexOfSelectedItem)
-        cboBlock.selectItem(at: cboBlockDS.indexWithKey(key: s.switchBoardItemId) ?? -1)
+      if let sensor = self.sensor {
+        SensorType.populate(comboBox: cboSensorType)
+        SensorType.select(comboBox: cboSensorType, value: sensor.sensorType)
+        txtAddress.integerValue = sensor.sensorAddress
+        txtDelayOn.integerValue = sensor.delayOn
+        txtDelayOff.integerValue = sensor.delayOff
+        chkInverted.boolValue = sensor.inverted
       }
     }
   }
   
   // MARK: Outlets & Actions
   
-  @IBOutlet weak var cboBlock: NSComboBox!
+  @IBOutlet weak var txtAddress: NSTextField!
   
-  @IBAction func cboBlockAction(_ sender: NSComboBox) {
-    if let item = cboBlockDS.editorObjectAt(index: cboBlock.indexOfSelectedItem) as? SwitchBoardItem {
-      sensor?.nextSwitchBoardItemId = item.primaryKey
+  @IBAction func txtAddressAction(_ sender: NSTextField) {
+    if let sensor = self.sensor {
+      sensor.nextSensorAddress = sender.integerValue
     }
   }
   
-  @IBAction func btnClearAction(_ sender: NSButton) {
-    cboBlock.deselectItem(at: cboBlock.indexOfSelectedItem)
-    sensor?.nextSwitchBoardItemId = -1
+  @IBOutlet weak var cboSensorType: NSComboBox!
+  
+  @IBAction func cboSensorTypeAction(_ sender: NSComboBox) {
+    if let sensor = self.sensor {
+      sensor.nextSensorType = SensorType.selected(comboBox: cboSensorType)
+    }
+  }
+  
+  @IBOutlet weak var txtDelayOn: NSTextField!
+  
+  @IBAction func txtDelayOnAction(_ sender: NSTextField) {
+    if let sensor = self.sensor {
+      sensor.nextDelayOn = sender.integerValue
+    }
+  }
+  
+  @IBOutlet weak var txtDelayOff: NSTextField!
+  
+  @IBAction func txtDelayOffAction(_ sender: NSTextField) {
+    if let sensor = self.sensor {
+      sensor.nextDelayOff = sender.integerValue
+    }
+  }
+  
+  @IBOutlet weak var chkInverted: NSButton!
+  
+  @IBAction func chkInvertedAction(_ sender: NSButton) {
+    if let sensor = self.sensor {
+      sensor.nextInverted = sender.boolValue
+    }
   }
   
 }

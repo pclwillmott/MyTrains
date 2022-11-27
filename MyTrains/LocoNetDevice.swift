@@ -470,7 +470,7 @@ public class LocoNetDevice : EditorObject {
   public var isSensorDevice : Bool {
     get {
       if let info = locoNetProductInfo {
-        return !info.attributes.intersection([.PowerManager, .Transponding, .OccupancyDetector]).isEmpty
+        return info.sensors > 0
       }
       return false
     }
@@ -479,7 +479,7 @@ public class LocoNetDevice : EditorObject {
   public var isStationaryDecoder : Bool {
     get {
       if let info = locoNetProductInfo {
-        return !info.attributes.intersection([.StationaryDecoder]).isEmpty
+        return info.switches > 0
       }
       return false
     }
@@ -966,10 +966,18 @@ public class LocoNetDevice : EditorObject {
     }
     
     for sensor in sensors {
+      if sensor.sensorAddress == -1 {
+        sensor.sensorAddress = sensor.calculatedSensorAddress
+        sensor.nextSensorAddress = sensor.sensorAddress
+      }
       sensor.save()
     }
     
     for turnoutSwitch in turnoutSwitches {
+      if turnoutSwitch.switchAddress == -1 {
+        turnoutSwitch.switchAddress = turnoutSwitch.calculatedSwitchAddress
+        turnoutSwitch.nextSwitchAddress = turnoutSwitch.switchAddress
+      }
       turnoutSwitch.save()
     }
 

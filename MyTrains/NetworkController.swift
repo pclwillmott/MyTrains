@@ -246,6 +246,29 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
     }
   }
   
+  
+  public var turnoutSwitches : [TurnoutSwitch] {
+    
+    get {
+      
+      var result : [TurnoutSwitch] = []
+      
+      for (_, device) in stationaryDecoders {
+        
+        for turnoutSwitch in device.turnoutSwitches {
+          result.append(turnoutSwitch)
+        }
+        
+      }
+      
+      result.sort {$0.comboSortOrder < $1.comboSortOrder}
+      
+      return result
+      
+    }
+    
+  }
+  
   public var stationaryDecoders : [Int:LocoNetDevice] {
   
     get {
@@ -315,6 +338,26 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
   }
   
   // MARK: Public Methods
+
+  public func sensors(sensorTypes: Set<SensorType>) -> [Sensor] {
+    
+    var result : [Sensor] = []
+    
+    for (_, device) in sensors {
+      
+      for sensor in device.sensors {
+        if sensorTypes.contains(sensor.sensorType) {
+          result.append(sensor)
+        }
+      }
+      
+    }
+    
+    result.sort {$0.comboSortOrder < $1.comboSortOrder}
+    
+    return result
+    
+  }
 
   public func deviceForQuerySlot(productCode:ProductCode, serialNumber: Int) -> LocoNetDevice? {
     

@@ -44,7 +44,7 @@ class EditSensorsVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Inter
   
   private var editorState : DBEditorState = .select
 
-  private var sensorProductDictionary = LocoNetProducts.productDictionaryOr(attributes: [.Transponding, .OccupancyDetector, .PowerManager])
+  private var sensorProductDictionary = LocoNetProducts.productDictionaryForSensors()
 
   private var cboDeviceTypeDS = ComboBoxDictDS()
   
@@ -110,6 +110,8 @@ class EditSensorsVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Inter
     setFields(device: device)
     device.save()
     networkController.addDevice(device: device)
+    device.save()
+
     editorView.dictionary = networkController.sensors
     editorView.setSelection(key: device.primaryKey)
     return device
@@ -118,6 +120,7 @@ class EditSensorsVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Inter
   func saveExisting(dbEditorView: DBEditorView, editorObject: EditorObject) {
     if let device = editorObject as? LocoNetDevice {
       setFields(device: device)
+      device.save()
       device.save()
       editorView.dictionary = networkController.sensors
       editorView.setSelection(key: device.primaryKey)

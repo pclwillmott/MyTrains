@@ -197,36 +197,43 @@ enum SWITCHBOARD_ITEM {
   static let DP_SPEED_BRAKE_UD           = "DP_SPEED_BRAKE_UD"
   static let DP_SPEED_SHUNT_UD           = "DP_SPEED_SHUNT_UD"
   static let SW1_LOCONET_DEVICE_ID       = "SW1_LOCONET_DEVICE_ID"
-  static let SW1_PORT                    = "SW1_PORT"
+  static let SW1_CHANNEL_NUMBER          = "SW1_CHANNEL_NUMBER"
   static let SW1_TURNOUT_MOTOR_TYPE      = "SW1_TURNOUT_MOTOR_TYPE"
-  static let SW1_SENSOR_ID               = "SW1_SENSOR_ID"
+  static let SW1_SENSOR1_ID              = "SW1_SENSOR1_ID"  // THIS IS A LOCONET_DEVICE_ID
   static let SW2_LOCONET_DEVICE_ID       = "SW2_LOCONET_DEVICE_ID"
-  static let SW2_PORT                    = "SW2_PORT"
+  static let SW2_CHANNEL_NUMBER          = "SW2_CHANNEL_NUMBER"
   static let SW2_TURNOUT_MOTOR_TYPE      = "SW2_TURNOUT_MOTOR_TYPE"
-  static let SW2_SENSOR_ID               = "SW2_SENSOR_ID"
+  static let SW2_SENSOR1_ID              = "SW2_SENSOR1_ID" // THIS IS A LOCONET_DEVICE_ID
   static let IS_SCENIC_SECTION           = "IS_SCENIC_SECTION"
   static let BLOCK_TYPE                  = "BLOCK_TYPE"
   static let LINK_ITEM                   = "LINK_ITEM"
   static let TURNOUT_CONNECTION          = "TURNOUT_CONNECTION"
+  static let SW1_SENSOR1_CHANNEL_NUMBER  = "SW1_SENSOR1_CHANNEL_NUMBER"
+  static let SW1_SENSOR2_ID              = "SW1_SENSOR2_ID" // THIS IS A LOCONET_DEVICE_ID
+  static let SW1_SENSOR2_CHANNEL_NUMBER  = "SW1_SENSOR2_CHANNEL_NUMBER"
+  static let SW2_SENSOR1_CHANNEL_NUMBER  = "SW2_SENSOR1_CHANNEL_NUMBER"
+  static let SW2_SENSOR2_ID              = "SW2_SENSOR2_ID" // THIS IS A LOCONET_DEVICE_ID
+  static let SW2_SENSOR2_CHANNEL_NUMBER  = "SW2_SENSOR2_CHANNEL_NUMBER"
+  static let SENSOR_POSITION             = "SENSOR_POSITION"
+  static let UNITS_SENSOR_POSITION       = "UNITS_SENSOR_POSITION"
+  static let GEN_SENSOR_ID               = "GEN_SENSOR_ID" // THIS IS A LOCONET_DEVICE_ID
+  static let GEN_SENSOR_CHANNEL_NUMBER   = "GEN_SENSOR_CHANNEL_NUMBER"
 }
 
 enum SENSOR {
   static let SENSOR_ID                   = "SENSOR_ID"
-  static let SWITCHBOARD_ITEM_ID         = "SWITCHBOARD_ITEM_ID"
   static let LOCONET_DEVICE_ID           = "LOCONET_DEVICE_ID"
   static let CHANNEL_NUMBER              = "CHANNEL_NUMBER"
-  static let MESSAGE_TYPE                = "MESSAGE_TYPE"
   static let SENSOR_TYPE                 = "SENSOR_TYPE"
-  static let POSITION                    = "POSITION"
-  static let UNITS_POSITION              = "UNITS_POSITION"
+  static let SENSOR_ADDRESS              = "SENSOR_ADDRESS"
+  static let DELAY_ON                    = "DELAY_ON"
+  static let DELAY_OFF                   = "DELAY_OFF"
+  static let INVERTED                    = "INVERTED"
 }
 
 enum TURNOUT_SWITCH {
   static let TURNOUT_SWITCH_ID           = "TURNOUT_SWITCH_ID"
   static let LOCONET_DEVICE_ID           = "LOCONET_DEVICE_ID"
-  static let SWITCHBOARD_ITEM_ID         = "SWITCHBOARD_ITEM_ID"
-  static let TURNOUT_INDEX               = "TURNOUT_INDEX"
   static let CHANNEL_NUMBER              = "CHANNEL_NUMBER"
-  static let FEEDBACK_TYPE               = "FEEDBACK_TYPE"
-  static let SWITCH_TYPE                 = "SWITCH_TYPE"
+  static let SWITCH_ADDRESS              = "SWITCH_ADDRESS"
 }

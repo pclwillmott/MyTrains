@@ -75,6 +75,7 @@
 		DA467BAF281D5D2F00AB9650 /* SwitchBoardEditor.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA467BAE281D5D2F00AB9650 /* SwitchBoardEditor.storyboard */; };
 		DA467BB1281D5ED400AB9650 /* SwitchBoardEditorVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA467BB0281D5ED400AB9650 /* SwitchBoardEditorVC.swift */; };
 		DA467BB3281D60E400AB9650 /* SwitchBoardShapeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA467BB2281D60E400AB9650 /* SwitchBoardShapeButton.swift */; };
+		DA484A022933D09000D9EAF1 /* TurnoutSwitchComboDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA484A012933D09000D9EAF1 /* TurnoutSwitchComboDS.swift */; };
 		DA53B252276E478400AB956C /* IPLDevData.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA53B251276E478400AB956C /* IPLDevData.swift */; };
 		DA5550EA28392A6B00C4FE4E /* ProductCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5550E928392A6B00C4FE4E /* ProductCode.swift */; };
 		DA5B4601276F4E38005CA03C /* DatabaseConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5B4600276F4E38005CA03C /* DatabaseConstants.swift */; };
@@ -166,6 +167,7 @@
 		DAB450ED2872FEC000657295 /* SensorTCV.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAB450EC2872FEC000657295 /* SensorTCV.xib */; };
 		DAB450EF2872FEE800657295 /* SensorTCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB450EE2872FEE800657295 /* SensorTCV.swift */; };
 		DAB4FF5E2854F8CF00D74920 /* LocomotiveType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB4FF5D2854F8CF00D74920 /* LocomotiveType.swift */; };
+		DAB768F929339DCC00ECC41A /* SensorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB768F829339DCC00ECC41A /* SensorType.swift */; };
 		DAC0194A289E79BF001152F6 /* EditCommandStations.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DAC01949289E79BF001152F6 /* EditCommandStations.storyboard */; };
 		DAC0194C289E7B80001152F6 /* EditCommandStationsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAC0194B289E7B80001152F6 /* EditCommandStationsVC.swift */; };
 		DACB59272896A27E006B1861 /* TurnoutSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACB59262896A27E006B1861 /* TurnoutSwitch.swift */; };
@@ -183,6 +185,7 @@
 		DAE9DBB728258E12004BC75D /* LocoNetProducts.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE9DBB628258E12004BC75D /* LocoNetProducts.swift */; };
 		DAEA9CF7272D8DA900C9B3EC /* NetworkConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEA9CF6272D8DA900C9B3EC /* NetworkConstants.swift */; };
 		DAEA9CFA272D8FBE00C9B3EC /* NetworkMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEA9CF9272D8FBE00C9B3EC /* NetworkMessage.swift */; };
+		DAEE9BEB2933E7B5005F553D /* SensorComboDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEE9BEA2933E7B5005F553D /* SensorComboDS.swift */; };
 		DAF4DD4C289A90C1000B848E /* SpeedResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF4DD4B289A90C1000B848E /* SpeedResultsView.swift */; };
 		DAF4DD4E289A9901000B848E /* BestFitMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF4DD4D289A9901000B848E /* BestFitMethod.swift */; };
 		DAF4DD50289ABDDE000B848E /* SpeedProfileResultsType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF4DD4F289ABDDE000B848E /* SpeedProfileResultsType.swift */; };
@@ -263,6 +266,7 @@
 		DA467BAE281D5D2F00AB9650 /* SwitchBoardEditor.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SwitchBoardEditor.storyboard; sourceTree = "<group>"; };
 		DA467BB0281D5ED400AB9650 /* SwitchBoardEditorVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchBoardEditorVC.swift; sourceTree = "<group>"; };
 		DA467BB2281D60E400AB9650 /* SwitchBoardShapeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchBoardShapeButton.swift; sourceTree = "<group>"; };
+		DA484A012933D09000D9EAF1 /* TurnoutSwitchComboDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TurnoutSwitchComboDS.swift; sourceTree = "<group>"; };
 		DA53B251276E478400AB956C /* IPLDevData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IPLDevData.swift; sourceTree = "<group>"; };
 		DA5550E928392A6B00C4FE4E /* ProductCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductCode.swift; sourceTree = "<group>"; };
 		DA5B4600276F4E38005CA03C /* DatabaseConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseConstants.swift; sourceTree = "<group>"; };
@@ -356,6 +360,7 @@
 		DAB450EC2872FEC000657295 /* SensorTCV.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SensorTCV.xib; sourceTree = "<group>"; };
 		DAB450EE2872FEE800657295 /* SensorTCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorTCV.swift; sourceTree = "<group>"; };
 		DAB4FF5D2854F8CF00D74920 /* LocomotiveType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocomotiveType.swift; sourceTree = "<group>"; };
+		DAB768F829339DCC00ECC41A /* SensorType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorType.swift; sourceTree = "<group>"; };
 		DAC01949289E79BF001152F6 /* EditCommandStations.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = EditCommandStations.storyboard; sourceTree = "<group>"; };
 		DAC0194B289E7B80001152F6 /* EditCommandStationsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCommandStationsVC.swift; sourceTree = "<group>"; };
 		DACB59262896A27E006B1861 /* TurnoutSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TurnoutSwitch.swift; sourceTree = "<group>"; };
@@ -373,6 +378,7 @@
 		DAE9DBB628258E12004BC75D /* LocoNetProducts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoNetProducts.swift; sourceTree = "<group>"; };
 		DAEA9CF6272D8DA900C9B3EC /* NetworkConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkConstants.swift; sourceTree = "<group>"; };
 		DAEA9CF9272D8FBE00C9B3EC /* NetworkMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMessage.swift; sourceTree = "<group>"; };
+		DAEE9BEA2933E7B5005F553D /* SensorComboDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorComboDS.swift; sourceTree = "<group>"; };
 		DAEFAA5F28289668007AC92D /* DBEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DBEditorView.swift; path = MyTrains/DBEditorView.swift; sourceTree = "<group>"; };
 		DAF4DD4B289A90C1000B848E /* SpeedResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedResultsView.swift; sourceTree = "<group>"; };
 		DAF4DD4D289A9901000B848E /* BestFitMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BestFitMethod.swift; sourceTree = "<group>"; };
@@ -554,6 +560,8 @@
 				DA9ED4EF28F24B7700EA914A /* RouteManagerTableViewDS.swift */,
 				DA1DC9FE28A1CE0D007A957A /* SamplePeriod.swift */,
 				DAD66A2D2871FF9B00376479 /* Sensor.swift */,
+				DAEE9BEA2933E7B5005F553D /* SensorComboDS.swift */,
+				DAB768F829339DCC00ECC41A /* SensorType.swift */,
 				DA0BB98A28730B3400B6B812 /* SensorTableViewDS.swift */,
 				DAB450EE2872FEE800657295 /* SensorTCV.swift */,
 				DAB450EC2872FEC000657295 /* SensorTCV.xib */,
@@ -596,6 +604,7 @@
 				DACB59282896A39E006B1861 /* TurnoutFeedbackType.swift */,
 				DA9CF8FC2860978A00825FA9 /* TurnoutMotorType.swift */,
 				DACB59262896A27E006B1861 /* TurnoutSwitch.swift */,
+				DA484A012933D09000D9EAF1 /* TurnoutSwitchComboDS.swift */,
 				DACB59302896CDCE006B1861 /* TurnoutSwitchState.swift */,
 				DACB592E2896B7E3006B1861 /* TurnoutSwitchTableViewDS.swift */,
 				DACB592C2896AFCB006B1861 /* TurnoutSwitchTCV.swift */,
@@ -726,6 +735,7 @@
 				DA2E4988282899AF00C25162 /* DBEditorView.swift in Sources */,
 				DA8FDB2A279C2B3600E15024 /* LocoSlotData.swift in Sources */,
 				DA2E0E5E2736EAF300C7DA7A /* NetworkController.swift in Sources */,
+				DAEE9BEB2933E7B5005F553D /* SensorComboDS.swift in Sources */,
 				DA2429732892F7E1000D4ADE /* DeviceTCV.swift in Sources */,
 				DA1B79FB285F3AD0009E1189 /* UnitLength.swift in Sources */,
 				DA0197252773500100350F71 /* ComboBoxDictDS.swift in Sources */,
@@ -815,6 +825,7 @@
 				DA5B4609276F6CBF005CA03C /* Network.swift in Sources */,
 				DAA867C427930C62008B6EEC /* IntExtensions.swift in Sources */,
 				DA2E0E5827359ED300C7DA7A /* Ack.swift in Sources */,
+				DA484A022933D09000D9EAF1 /* TurnoutSwitchComboDS.swift in Sources */,
 				DA28C2BD2801CC4800857471 /* DashBoardVC.swift in Sources */,
 				DA1ECC9828439DE500C4F963 /* UpdateFirmwareVC.swift in Sources */,
 				DA5E1743272EDA5B00F9341F /* LocoSlotDataP1.swift in Sources */,
@@ -836,6 +847,7 @@
 				DADBBFEA285DF36700426CD5 /* LayoutSwitchBoardExtensions.swift in Sources */,
 				DA8B5D1B282FE23900D39F07 /* MessageTiming.swift in Sources */,
 				DA9ED4F028F24B7700EA914A /* RouteManagerTableViewDS.swift in Sources */,
+				DAB768F929339DCC00ECC41A /* SensorType.swift in Sources */,
 				DA28C2C52801ED9700857471 /* QuerySlot3.swift in Sources */,
 				DA0BB98B28730B3400B6B812 /* SensorTableViewDS.swift in Sources */,
 				DA434294283698CA00E8D555 /* SerialPort.c in Sources */,

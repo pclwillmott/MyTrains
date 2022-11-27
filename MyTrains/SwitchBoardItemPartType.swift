@@ -100,6 +100,20 @@ public enum SwitchBoardItemPartType : Int {
     return result.sorted {$0.label < $1.label}
   }
   
+  public var numberOfTurnoutSwitches : Int {
+    get {
+      var used : Set<Int> = []
+      if let connections = SwitchBoardItemPartType.connections[self] {
+        for connection in connections {
+          for item in connection.switchSettings {
+            used.insert(item.switchNumber)
+          }
+        }
+      }
+      return used.count
+    }
+  }
+  
   private static let connections : [SwitchBoardItemPartType:[SwitchBoardConnection]] = [
     .straight           : [(5, 1, [])],
     .curve              : [(5, 3, [])],

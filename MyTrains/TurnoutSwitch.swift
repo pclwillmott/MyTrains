@@ -22,24 +22,6 @@ public class TurnoutSwitch : EditorObject {
   
   // MARK: Public Properties
   
-  public var dictionaryKey : Int {
-    get {
-      return TurnoutSwitch.dictionaryKey(switchBoardItemId: switchBoardItemId, turnoutIndex: turnoutIndex)
-    }
-  }
-  
-  public var switchBoardItemId : Int = -1 {
-    didSet {
-      modified = true
-    }
-  }
-
-  public var nextSwitchBoardItemId : Int = -1 {
-    didSet {
-      modified = true
-    }
-  }
-
   public var locoNetDeviceId : Int = -1 {
     didSet {
       modified = true
@@ -58,42 +40,50 @@ public class TurnoutSwitch : EditorObject {
     }
   }
   
-  public var switchAddress : Int {
+  public var displayChannelNumber : String {
     get {
       if let device = locoNetDevice {
-        return device.baseAddress + (channelNumber - 1) * 2
+        return "\(device.boardId).\(channelNumber)"
       }
-      return 0
+      return "err"
     }
   }
   
-  public var turnoutIndex : Int = 1 {
+  public var comboSwitchName : String {
+    get {
+      if let device = locoNetDevice, let info = device.locoNetProductInfo {
+        return "\(info.productName) \(device.boardId).\(channelNumber) (\(switchAddress))"
+      }
+      return "err"
+    }
+  }
+  
+  public var comboSortOrder : String {
+    get {
+      if let device = locoNetDevice, let info = device.locoNetProductInfo {
+        let bid = String("000000000\(device.boardId)").suffix(8)
+        let cnum = String("000000000\(channelNumber)").suffix(8)
+        return "\(info.productName) \(bid).\(cnum) (\(switchAddress))"
+      }
+      return "err"
+    }
+  }
+  
+  public var switchAddress : Int = -1 {
     didSet {
       modified = true
     }
   }
-  
-  public var nextTurnoutIndex : Int = 1 {
-    didSet {
-      modified = true
-    }
-  }
-  
-  public var switchType : Int = 0 {
-    didSet {
-      modified = true
-    }
-  }
-  
-  public var feedbackType : TurnoutFeedbackType = TurnoutFeedbackType.defaultValue {
-    didSet {
-      modified = true
-    }
-  }
-  
-  public var nextFeedbackType : TurnoutFeedbackType = TurnoutFeedbackType.defaultValue {
-    didSet {
-      modified = true
+
+  public var nextSwitchAddress : Int = -1 
+
+  public var calculatedSwitchAddress : Int {
+    get {
+      if let device = locoNetDevice {
+        let multiplier = device.sensors.count > 0 ? device.sensors.count / device.turnoutSwitches.count : 1
+        return device.baseAddress + (channelNumber - 1) * multiplier
+      }
+      return -1
     }
   }
   
@@ -123,40 +113,24 @@ public class TurnoutSwitch : EditorObject {
       }
       
       if !reader.isDBNull(index: 2) {
-        switchBoardItemId = reader.getInt(index: 2)!
+        channelNumber = reader.getInt(index: 2)!
       }
       
       if !reader.isDBNull(index: 3) {
-        turnoutIndex = reader.getInt(index: 3)!
-      }
-      
-      if !reader.isDBNull(index: 4) {
-        channelNumber = reader.getInt(index: 4)!
-      }
-      
-      if !reader.isDBNull(index: 5) {
-        feedbackType = TurnoutFeedbackType(rawValue: reader.getInt(index: 5)!) ?? TurnoutFeedbackType.defaultValue
-      }
-      
-      if !reader.isDBNull(index: 6) {
-        switchType = reader.getInt(index: 6)!
+        switchAddress = reader.getInt(index: 3)!
       }
             
     }
     
-    nextSwitchBoardItemId = switchBoardItemId
-    nextTurnoutIndex = turnoutIndex
-    nextFeedbackType = feedbackType
-    
     modified = false
+    
+    nextSwitchAddress = switchAddress
     
   }
 
   public func save() {
     
-    switchBoardItemId = nextSwitchBoardItemId
-    turnoutIndex = nextTurnoutIndex
-    feedbackType = nextFeedbackType
+    switchAddress = nextSwitchAddress
     
     if modified {
       
@@ -166,30 +140,21 @@ public class TurnoutSwitch : EditorObject {
         sql = "INSERT INTO [\(TABLE.TURNOUT_SWITCH)] (" +
         "[\(TURNOUT_SWITCH.TURNOUT_SWITCH_ID)], " +
         "[\(TURNOUT_SWITCH.LOCONET_DEVICE_ID)], " +
-        "[\(TURNOUT_SWITCH.SWITCHBOARD_ITEM_ID)], " +
-        "[\(TURNOUT_SWITCH.TURNOUT_INDEX)], " +
         "[\(TURNOUT_SWITCH.CHANNEL_NUMBER)], " +
-        "[\(TURNOUT_SWITCH.FEEDBACK_TYPE)], " +
-        "[\(TURNOUT_SWITCH.SWITCH_TYPE)]" +
+        "[\(TURNOUT_SWITCH.SWITCH_ADDRESS)]" +
         ") VALUES (" +
         "@\(TURNOUT_SWITCH.TURNOUT_SWITCH_ID), " +
         "@\(TURNOUT_SWITCH.LOCONET_DEVICE_ID), " +
-        "@\(TURNOUT_SWITCH.SWITCHBOARD_ITEM_ID), " +
-        "@\(TURNOUT_SWITCH.TURNOUT_INDEX)," +
         "@\(TURNOUT_SWITCH.CHANNEL_NUMBER)," +
-        "@\(TURNOUT_SWITCH.FEEDBACK_TYPE), " +
-        "@\(TURNOUT_SWITCH.SWITCH_TYPE)" +
+        "@\(TURNOUT_SWITCH.SWITCH_ADDRESS)" +
         ")"
         primaryKey = Database.nextCode(tableName: TABLE.TURNOUT_SWITCH, primaryKey: TURNOUT_SWITCH.TURNOUT_SWITCH_ID)!
       }
       else {
         sql = "UPDATE [\(TABLE.TURNOUT_SWITCH)] SET " +
         "[\(TURNOUT_SWITCH.LOCONET_DEVICE_ID)] = @\(TURNOUT_SWITCH.LOCONET_DEVICE_ID), " +
-        "[\(TURNOUT_SWITCH.SWITCHBOARD_ITEM_ID)] = @\(TURNOUT_SWITCH.SWITCHBOARD_ITEM_ID), " +
-        "[\(TURNOUT_SWITCH.TURNOUT_INDEX)] = @\(TURNOUT_SWITCH.TURNOUT_INDEX), " +
         "[\(TURNOUT_SWITCH.CHANNEL_NUMBER)] = @\(TURNOUT_SWITCH.CHANNEL_NUMBER), " +
-        "[\(TURNOUT_SWITCH.FEEDBACK_TYPE)] = @\(TURNOUT_SWITCH.FEEDBACK_TYPE), " +
-        "[\(TURNOUT_SWITCH.SWITCH_TYPE)] = @\(TURNOUT_SWITCH.SWITCH_TYPE) " +
+        "[\(TURNOUT_SWITCH.SWITCH_ADDRESS)] = @\(TURNOUT_SWITCH.SWITCH_ADDRESS) " +
         "WHERE [\(TURNOUT_SWITCH.TURNOUT_SWITCH_ID)] = @\(TURNOUT_SWITCH.TURNOUT_SWITCH_ID)"
       }
 
@@ -207,11 +172,8 @@ public class TurnoutSwitch : EditorObject {
 
       cmd.parameters.addWithValue(key: "@\(TURNOUT_SWITCH.TURNOUT_SWITCH_ID)", value: primaryKey)
       cmd.parameters.addWithValue(key: "@\(TURNOUT_SWITCH.LOCONET_DEVICE_ID)", value: locoNetDeviceId)
-      cmd.parameters.addWithValue(key: "@\(TURNOUT_SWITCH.SWITCHBOARD_ITEM_ID)", value: switchBoardItemId)
-      cmd.parameters.addWithValue(key: "@\(TURNOUT_SWITCH.TURNOUT_INDEX)", value: turnoutIndex)
       cmd.parameters.addWithValue(key: "@\(TURNOUT_SWITCH.CHANNEL_NUMBER)", value: channelNumber)
-      cmd.parameters.addWithValue(key: "@\(TURNOUT_SWITCH.FEEDBACK_TYPE)", value: feedbackType.rawValue)
-      cmd.parameters.addWithValue(key: "@\(TURNOUT_SWITCH.SWITCH_TYPE)", value: switchType)
+      cmd.parameters.addWithValue(key: "@\(TURNOUT_SWITCH.SWITCH_ADDRESS)", value: switchAddress)
 
       _ = cmd.executeNonQuery()
 
@@ -231,12 +193,10 @@ public class TurnoutSwitch : EditorObject {
    enum TURNOUT_SWITCH {
      static let TURNOUT_SWITCH_ID           = "TURNOUT_SWITCH_ID"
      static let LOCONET_DEVICE_ID           = "LOCONET_DEVICE_ID"
-     static let SWITCHBOARD_ITEM_ID         = "SWITCHBOARD_ITEM_ID"
-     static let TURNOUT_INDEX               = "TURNOUT_INDEX"
      static let CHANNEL_NUMBER              = "CHANNEL_NUMBER"
-     static let FEEDBACK_TYPE               = "FEEDBACK_TYPE"
-     static let SWITCH_TYPE                 = "SWITCH_TYPE"
+     static let SWITCH_ADDRESS              = "SWITCH_ADDRESS"
    }
+
    */
 
 public static var columnNames : String {
@@ -244,11 +204,8 @@ public static var columnNames : String {
       return
         "[\(TURNOUT_SWITCH.TURNOUT_SWITCH_ID)], " +
         "[\(TURNOUT_SWITCH.LOCONET_DEVICE_ID)], " +
-        "[\(TURNOUT_SWITCH.SWITCHBOARD_ITEM_ID)], " +
-        "[\(TURNOUT_SWITCH.TURNOUT_INDEX)], " +
         "[\(TURNOUT_SWITCH.CHANNEL_NUMBER)], " +
-        "[\(TURNOUT_SWITCH.FEEDBACK_TYPE)], " +
-        "[\(TURNOUT_SWITCH.SWITCH_TYPE)]"
+        "[\(TURNOUT_SWITCH.SWITCH_ADDRESS)]"
     }
   }
   
@@ -291,8 +248,4 @@ public static var columnNames : String {
     Database.execute(commands: [sql])
   }
   
-  public static func dictionaryKey(switchBoardItemId: Int, turnoutIndex: Int) -> Int {
-    return (switchBoardItemId << 2) | ((turnoutIndex - 1) & 0b11)
-  }
-
 }

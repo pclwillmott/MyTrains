@@ -47,7 +47,7 @@ public class TurnoutSwitchTableViewDS : NSObject, NSTableViewDataSource, NSTable
 
     switch columnName {
     case ColumnIdentifiers.SectionColumn:
-      text = "\(item.switchAddress)"
+      text = item.displayChannelNumber
     case ColumnIdentifiers.BlockColumn:
       
       let nib = NSNib(nibNamed: "TurnoutSwitchTCV", bundle: nil)

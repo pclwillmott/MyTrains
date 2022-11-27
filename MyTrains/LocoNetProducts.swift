@@ -301,6 +301,34 @@ public class LocoNetProducts {
     return result
   }
 
+  public static func productDictionaryForSensors() -> [Int:LocoNetProductDictionaryItem] {
+    
+    var result : [Int:LocoNetProductDictionaryItem] = [:]
+    
+    for product in products {
+      if product.sensors > 0 {
+        result[product.id.rawValue] = LocoNetProductDictionaryItem(product: product)
+      }
+    }
+    
+    return result
+
+  }
+
+  public static func productDictionaryForSwitches() -> [Int:LocoNetProductDictionaryItem] {
+    
+    var result : [Int:LocoNetProductDictionaryItem] = [:]
+    
+    for product in products {
+      if product.switches > 0 {
+        result[product.id.rawValue] = LocoNetProductDictionaryItem(product: product)
+      }
+    }
+    
+    return result
+
+  }
+
   public static func productDictionaryOr(attributes: LocoNetDeviceAttributes) -> [Int:LocoNetProductDictionaryItem] {
     
     var result : [Int:LocoNetProductDictionaryItem] = [:]
@@ -312,6 +340,7 @@ public class LocoNetProducts {
     }
     
     return result
+    
   }
 
 }

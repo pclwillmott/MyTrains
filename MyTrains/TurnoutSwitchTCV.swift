@@ -30,48 +30,20 @@ class TurnoutSwitchTCV: NSTableCellView {
   
   public var turnoutSwitch : TurnoutSwitch? {
     didSet {
-      if let t = turnoutSwitch, let device = t.locoNetDevice, let layout = device.network?.layout {
-        cboTurnoutDS.dictionary = layout.switchBoardTurnouts
-        cboTurnout.dataSource = cboTurnoutDS
-        cboTurnout.deselectItem(at: cboTurnout.indexOfSelectedItem)
-        cboTurnout.selectItem(at: cboTurnoutDS.indexWithKey(key: t.switchBoardItemId) ?? -1)
-        cboTurnoutIndex.deselectItem(at: cboTurnoutIndex.indexOfSelectedItem)
-        cboTurnoutIndex.selectItem(at: t.turnoutIndex - 1)
-        TurnoutFeedbackType.populate(comboBox: cboFeedbackType)
-        cboFeedbackType.selectItem(at: t.feedbackType.rawValue)
+      if let t = turnoutSwitch {
+        txtSwitchAddress.integerValue = t.switchAddress
       }
     }
   }
   
   // MARK: Outlets & Actions
   
-  @IBOutlet weak var cboTurnout: NSComboBox!
+  @IBOutlet weak var txtSwitchAddress: NSTextField!
   
-  @IBAction func cboTurnoutAction(_ sender: NSComboBox) {
-    if let item = cboTurnoutDS.editorObjectAt(index: cboTurnout.indexOfSelectedItem) as? SwitchBoardItem {
-      turnoutSwitch?.nextSwitchBoardItemId = item.primaryKey
+  @IBAction func txtSwitchAddressAction(_ sender: NSTextField) {
+    if let t = turnoutSwitch {
+      t.nextSwitchAddress = sender.integerValue
     }
-  }
-  
-  @IBOutlet weak var cboTurnoutIndex: NSComboBox!
-  
-  @IBAction func cboTurnoutIndexAction(_ sender: NSComboBox) {
-    turnoutSwitch?.nextTurnoutIndex = cboTurnoutIndex.indexOfSelectedItem + 1
-  }
-  
-  @IBOutlet weak var cboFeedbackType: NSComboBox!
-  
-  @IBAction func cboFeedbackTypeAction(_ sender: NSComboBox) {
-    turnoutSwitch?.nextFeedbackType = TurnoutFeedbackType(rawValue: cboFeedbackType.indexOfSelectedItem) ?? .none
-  }
-  
-  @IBAction func btnReset(_ sender: NSButton) {
-    cboTurnout.deselectItem(at: cboTurnout.indexOfSelectedItem)
-    turnoutSwitch?.nextSwitchBoardItemId = -1
-    cboTurnoutIndex.selectItem(at: 0)
-    turnoutSwitch?.nextTurnoutIndex = 1
-    cboFeedbackType.selectItem(at: 0)
-    turnoutSwitch?.nextFeedbackType = .none
   }
   
 }
