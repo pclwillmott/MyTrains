@@ -93,6 +93,7 @@ public class TurnoutSwitch : EditorObject {
     didSet {
       if let interface = locoNetDevice?.network?.interface {
         let temp : OptionSwitchState = requiredState == .closed ? .closed : .thrown
+ //       print("\(switchAddress) \(temp)")
         interface.setSwWithAck(switchNumber: switchAddress, state: temp)
       }
     }

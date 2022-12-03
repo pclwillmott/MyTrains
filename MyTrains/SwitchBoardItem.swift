@@ -152,6 +152,12 @@ public class SwitchBoardItem : EditorObject {
     }
   }
   
+  public var isFeedback : Bool {
+    get {
+      return itemPartType == .feedback
+    }
+  }
+  
   public var isBlock : Bool {
     get {
       return itemPartType == .block
@@ -508,24 +514,6 @@ public class SwitchBoardItem : EditorObject {
     }
   }
   
-  public var sw1 : TurnoutSwitch? {
-    get {
-      if let layout = self.layout {
-   //     return layout.operationalTurnouts[TurnoutSwitch.dictionaryKey(switchBoardItemId: primaryKey, turnoutIndex: 1)]
-      }
-      return nil
-    }
-  }
-  
-  public var sw2 : TurnoutSwitch? {
-    get {
-      if let layout = self.layout {
-    //    return layout.operationalTurnouts[TurnoutSwitch.dictionaryKey(switchBoardItemId: primaryKey, turnoutIndex: 2)]
-      }
-      return nil
-    }
-  }
-  
   public var sw1LocoNetDeviceId : Int = -1 {
     didSet {
       modified = true
@@ -535,6 +523,15 @@ public class SwitchBoardItem : EditorObject {
   public var sw1ChannelNumber : Int = -1 {
     didSet {
       modified = true
+    }
+  }
+  
+  public var sw1 : TurnoutSwitch? {
+    get {
+      if let device = networkController.locoNetDevices[sw1LocoNetDeviceId], (1...device.turnoutSwitches.count).contains(sw1ChannelNumber) {
+        return device.turnoutSwitches[sw1ChannelNumber - 1]
+      }
+      return nil
     }
   }
   
@@ -556,6 +553,15 @@ public class SwitchBoardItem : EditorObject {
     }
   }
   
+  public var sw1Sensor1 : Sensor? {
+    get {
+      if let device = networkController.locoNetDevices[sw1Sensor1Id], (1...device.sensors.count).contains(sw1Sensor1ChannelNumber) {
+        return device.sensors[sw1Sensor1ChannelNumber - 1]
+      }
+      return nil
+    }
+  }
+  
   public var sw1Sensor2Id : Int = -1 {
     didSet {
       modified = true
@@ -568,6 +574,15 @@ public class SwitchBoardItem : EditorObject {
     }
   }
   
+  public var sw1Sensor2 : Sensor? {
+    get {
+      if let device = networkController.locoNetDevices[sw1Sensor2Id], (1...device.sensors.count).contains(sw1Sensor2ChannelNumber) {
+        return device.sensors[sw1Sensor2ChannelNumber - 1]
+      }
+      return nil
+    }
+  }
+
   public var sw2LocoNetDeviceId : Int = -1 {
     didSet {
       modified = true
@@ -577,6 +592,15 @@ public class SwitchBoardItem : EditorObject {
   public var sw2ChannelNumber : Int = -1 {
     didSet {
       modified = true
+    }
+  }
+  
+  public var sw2 : TurnoutSwitch? {
+    get {
+      if let device = networkController.locoNetDevices[sw2LocoNetDeviceId], (1...device.turnoutSwitches.count).contains(sw2ChannelNumber) {
+        return device.turnoutSwitches[sw2ChannelNumber - 1]
+      }
+      return nil
     }
   }
   
@@ -598,6 +622,15 @@ public class SwitchBoardItem : EditorObject {
     }
   }
 
+  public var sw2Sensor1 : Sensor? {
+    get {
+      if let device = networkController.locoNetDevices[sw2Sensor1Id], (1...device.sensors.count).contains(sw2Sensor1ChannelNumber) {
+        return device.sensors[sw2Sensor1ChannelNumber - 1]
+      }
+      return nil
+    }
+  }
+
   public var sw2Sensor2Id : Int = -1 {
     didSet {
       modified = true
@@ -607,6 +640,15 @@ public class SwitchBoardItem : EditorObject {
   public var sw2Sensor2ChannelNumber : Int = -1 {
     didSet {
       modified = true
+    }
+  }
+  
+  public var sw2Sensor2 : Sensor? {
+    get {
+      if let device = networkController.locoNetDevices[sw2Sensor2Id], (1...device.sensors.count).contains(sw2Sensor2ChannelNumber) {
+        return device.sensors[sw2Sensor2ChannelNumber - 1]
+      }
+      return nil
     }
   }
   
@@ -631,6 +673,15 @@ public class SwitchBoardItem : EditorObject {
   public var generalSensorChannelNumber : Int = -1 {
     didSet {
       modified = true
+    }
+  }
+  
+  public var generalSensor : Sensor? {
+    get {
+      if let device = networkController.locoNetDevices[generalSensorId], (1...device.sensors.count).contains(generalSensorChannelNumber) {
+        return device.sensors[generalSensorChannelNumber-1]
+      }
+      return nil
     }
   }
 

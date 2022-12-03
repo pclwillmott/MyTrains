@@ -69,7 +69,7 @@ class SwitchBoardOperationsView : SwitchBoardView {
       
       for (_, item) in layout.switchBoardItems {
         
-        if item.panelId == self.panelId && item.isTurnout {
+        if item.panelId == self.panelId && (item.isTurnout || item.isFeedback) {
           
           SwitchBoardShape.drawShape(partType: item.itemPartType, orientation: item.orientation, location: item.location, lineWidth: lineWidth, cellSize: cellSize, isButton: false, isEnabled: true, offset: CGPoint(x: 0.0, y: 0.0), switchBoardItem: item)
           

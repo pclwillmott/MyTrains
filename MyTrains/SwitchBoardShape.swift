@@ -16,6 +16,12 @@ class SwitchBoardShape {
     
     var onlyTurnouts : Bool = switchBoardItem != nil
     
+    var isFeedback : Bool = false
+    
+    if let item = switchBoardItem, item.isFeedback {
+      isFeedback = true
+    }
+    
     var turnoutConnection : Int = -1
     
     if let item = switchBoardItem, let actualTurnoutConnection = item.actualTurnoutConnection {
@@ -66,7 +72,7 @@ class SwitchBoardShape {
        
         case .circle:
           
-          if !onlyTurnouts {
+          if !onlyTurnouts || isFeedback {
             
             let path = NSBezierPath()
             
@@ -76,6 +82,9 @@ class SwitchBoardShape {
             
             if let fillColor = shapePart.actionColors[.fill] {
               isEnabled ? NSColor.setFillColor(color:fillColor) : NSColor.setFillColor(color: .lightGray)
+              if let item = switchBoardItem {
+                item.isOccupied ? NSColor.setFillColor(color:fillColor) : NSColor.setFillColor(color:.darkGray)
+              }
               path.fill()
             }
             

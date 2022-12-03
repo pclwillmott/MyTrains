@@ -58,7 +58,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
   
   // MARK: Public Properties
   
-  public var sensorLookup : [Int:SwitchBoardItem] = [:]
+  public var sensorLookup : [Int:Sensor] = [:] // Key is address
   
   public var turnoutLookup : [Int:TurnoutSwitch] = [:]
   
@@ -219,7 +219,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
           
         }
         
-        print("----------------")
+ //       print("----------------")
         
       }
       
@@ -277,38 +277,41 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
       slotsUpdated()
 
     case .sensRepGenIn:
- //     print("sensRepGenIn: \(message.sensorAddress) \(message.sensorState)")
-      if let block = sensorLookup[message.sensorAddress], let layout = network?.layout {
-        block.isOccupied = message.sensorState
+      
+  //    print("sensRepGenIn: \(message.sensorAddress) \(message.sensorState)")
+      
+      if let sensor = sensorLookup[message.sensorAddress], let layout = network?.layout {
+        
+        let state = sensor.inverted ? !message.sensorState : message.sensorState
+        
+        for item in sensor.switchBoardItems {
+          switch sensor.sensorType {
+          case .position:
+            item.isOccupied = state
+            break
+          case .turnoutState:
+            if item.sw1Sensor1 == sensor {
+              item.sw1?.state = state ? .thrown : item.sw1Sensor2 == nil ? .closed : .unknown
+            }
+            else if item.sw1Sensor2 == sensor {
+              item.sw1?.state = state ? .closed : item.sw1Sensor1 == nil ? .thrown : .unknown
+            }
+            else if item.sw2Sensor1 == sensor {
+              item.sw2?.state = state ? .thrown : item.sw2Sensor2 == nil ? .closed : .unknown
+            }
+            else if item.sw2Sensor2 == sensor {
+              item.sw2?.state = state ? .closed : item.sw2Sensor1 == nil ? .thrown : .unknown
+            }
+            break
+          case .occupancy:
+            item.isOccupied = state
+          default:
+            break
+          }
+        }
+        
         layout.needsDisplay()
-      }
-      else if let turnoutSwitch = turnoutLookup[message.sensorAddress], let layout = network?.layout {
-        let even = (message.sensorAddress % 2) == 0
-        /*
-        switch turnoutSwitch.feedbackType {
-        case .closed:
-          turnoutSwitch.state = message.sensorState ? .closed : .thrown
-        case .thrown:
-          turnoutSwitch.state = message.sensorState ? .thrown : .closed
-        case .both:
-          if even {
-            turnoutSwitch.state = message.sensorState ? .thrown : .unknown
-          }
-          else {
-            turnoutSwitch.state = message.sensorState ? .closed : .unknown
-          }
-        case .bothInverted:
-          if even {
-            turnoutSwitch.state = message.sensorState ? .closed : .unknown
-          }
-          else {
-            turnoutSwitch.state = message.sensorState ? .thrown : .unknown
-          }
-        default:
-          break
-        } */
-  //      print("Turnout: \(message.sensorAddress) \(turnoutSwitch.state)")
-        layout.needsDisplay()
+        
       }
     default:
       break
@@ -417,33 +420,42 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
   // MARK: Public Methods
       
   public func initSensorLookup() {
-     
-    sensorLookup.removeAll()
     
+    sensorLookup.removeAll()
+
+    for (_, device) in networkController.sensors {
+      for sensor in device.sensors {
+        sensor.switchBoardItems.removeAll()
+        sensorLookup[sensor.sensorAddress] = sensor
+      }
+    }
+     
     turnoutLookup.removeAll()
     
     if let layout = networkController.layout {
       
       layout.operationalTurnouts.removeAll()
       
-      for device in networkController.devicesWithAddresses(networkId: networkId) {
+      for (_, item) in layout.switchBoardItems {
         
-        for sensor in device.sensors {
-          /*
-          if sensor.switchBoardItemId != -1, let block = layout.operationalBlocks[sensor.switchBoardItemId] {
-            sensorLookup[sensor.sensorAddress] = block
+        if item.isBlock || item.isFeedback {
+          if let sensor = item.generalSensor {
+            sensor.switchBoardItems.append(item)
           }
-          */
         }
-        
-        for turnoutSwitch in device.turnoutSwitches {
-          /*
-          if turnoutSwitch.switchBoardItemId != -1 {
-      //      layout.operationalTurnouts[turnoutSwitch.dictionaryKey] = turnoutSwitch
-            turnoutLookup[turnoutSwitch.switchAddress] = turnoutSwitch
-            turnoutLookup[turnoutSwitch.switchAddress + 1] = turnoutSwitch
+        else if item.isTurnout {
+          if let sensor = item.sw1Sensor1 {
+            sensor.switchBoardItems.append(item)
           }
-          */
+          if let sensor = item.sw1Sensor2 {
+            sensor.switchBoardItems.append(item)
+          }
+          if let sensor = item.sw2Sensor1 {
+            sensor.switchBoardItems.append(item)
+          }
+          if let sensor = item.sw2Sensor2 {
+            sensor.switchBoardItems.append(item)
+          }
         }
         
       }

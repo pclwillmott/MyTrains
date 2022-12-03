@@ -64,17 +64,17 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
       
       let numberOfSwitches = item.itemPartType.numberOfTurnoutSwitches
       
-      print(numberOfSwitches)
-      
       lblTurnoutSwitch1.isHidden = numberOfSwitches < 1
       cboTurnoutSwitch1.isHidden = lblTurnoutSwitch1.isHidden
       lblTurnoutMotorType.isHidden = lblTurnoutSwitch1.isHidden
       cboTurnoutMotorType.isHidden = lblTurnoutSwitch1.isHidden
-      
+      btnClearTurnoutSwitch1.isHidden = lblTurnoutSwitch1.isHidden
+
       lblTurnoutSwitch2.isHidden = numberOfSwitches < 2
       cboTurnoutSwitch2.isHidden = lblTurnoutSwitch2.isHidden
       lblTurnoutMotorType2.isHidden = lblTurnoutSwitch2.isHidden
       cboTurnoutMotorType2.isHidden = lblTurnoutSwitch2.isHidden
+      btnClearTurnoutSwitch2.isHidden = lblTurnoutSwitch2.isHidden
       
       if lblTurnoutSwitch2.isHidden {
         lblTurnoutSwitch1.stringValue = "Turnout Switch"
@@ -181,8 +181,13 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
       }
       
       // FEEDBACK
-      
-      generalSensors = networkController.sensors(sensorTypes: [.occupancy])
+     
+      if item.isFeedback {
+        generalSensors = networkController.sensors(sensorTypes: [.position])
+      }
+      else {
+        generalSensors = networkController.sensors(sensorTypes: [.occupancy])
+      }
       
       generalSensorDS.items = generalSensors
       
@@ -281,18 +286,60 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
       UnitSpeed.populate(comboBox: cboSpeedUnits)
       UnitSpeed.select(comboBox: cboSpeedUnits, value: item.unitsSpeed)
       
-      if !(item.isBlock || item.isTurnout) {
+      if !(item.isBlock || item.isTurnout || item.isFeedback) {
         tabs.removeTabViewItem(tabs.tabViewItems[5])
         tabs.removeTabViewItem(tabs.tabViewItems[4])
         tabs.removeTabViewItem(tabs.tabViewItems[3])
         tabs.removeTabViewItem(tabs.tabViewItems[2])
         tabs.removeTabViewItem(tabs.tabViewItems[1])
       }
+      else if item.isFeedback || item.isBlock {
+        tabs.removeTabViewItem(tabs.tabViewItems[5])
+        tabs.removeTabViewItem(tabs.tabViewItems[4])
+        tabs.removeTabViewItem(tabs.tabViewItems[3])
+        tabs.removeTabViewItem(tabs.tabViewItems[1])
+        lblSW1Closed.isHidden = true
+        lblSW1Thrown.isHidden = true
+        cboSW1Closed.isHidden = true
+        cboSW1Thrown.isHidden = true
+        btnClearSW1Closed.isHidden = true
+        btnClearSW1Thrown.isHidden = true
+        lblSW2Closed.isHidden = true
+        lblSW2Thrown.isHidden = true
+        cboSW2Closed.isHidden = true
+        cboSW2Thrown.isHidden = true
+        btnClearSW2Closed.isHidden = true
+        btnClearSW2Thrown.isHidden = true
+        if item.isFeedback {
+          lblGeneralSensor.stringValue = "Position Sensor"
+        }
+        else {
+          lblGeneralSensorPosition.isHidden = true
+          txtGeneralSensorPosition.isHidden = true
+          lblPositionUnits.isHidden = true
+          cboPositionUnits.isHidden = true
+        }
+      }
       else if item.isTurnout {
         tabs.removeTabViewItem(tabs.tabViewItems[4])
         tabs.removeTabViewItem(tabs.tabViewItems[3])
         boxSpeedPrevious.isHidden = true
         boxSpeedNext.title = ""
+        lblGeneralSensorPosition.isHidden = true
+        txtGeneralSensorPosition.isHidden = true
+        lblPositionUnits.isHidden = true
+        cboPositionUnits.isHidden = true
+
+        if numberOfSwitches < 2 {
+          lblSW2Closed.isHidden = true
+          lblSW2Thrown.isHidden = true
+          cboSW2Closed.isHidden = true
+          cboSW2Thrown.isHidden = true
+          btnClearSW2Closed.isHidden = true
+          btnClearSW2Thrown.isHidden = true
+          lblSW1Closed.stringValue = "Turnout Switch - Closed Sensor"
+          lblSW1Thrown.stringValue = "Turnout Switch - Thrown Sensor"
+        }
       }
     }
     
@@ -953,11 +1000,13 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
   @IBOutlet weak var btnClearTurnoutSwitch1: NSButton!
   
   @IBAction func btnClearTurnoutSwitch1Action(_ sender: NSButton) {
+    cboTurnoutSwitch1.deselectItem(at: cboTurnoutSwitch1.indexOfSelectedItem)
   }
   
   @IBOutlet weak var btnClearTurnoutSwitch2: NSButton!
   
   @IBAction func btnClearTurnoutSwitch2Action(_ sender: NSButton) {
+    cboTurnoutSwitch2.deselectItem(at: cboTurnoutSwitch2.indexOfSelectedItem)
   }
   
   @IBOutlet weak var lblGeneralSensor: NSTextField!
@@ -998,27 +1047,32 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
   @IBOutlet weak var btnClearGeneralSensor: NSButton!
   
   @IBAction func btnClearGeneralSensorAction(_ sender: NSButton) {
+    cboGeneralSensor.deselectItem(at: cboGeneralSensor.indexOfSelectedItem)
   }
   
   @IBOutlet weak var btnClearSW1Thrown: NSButton!
   
   
   @IBAction func btnClearSW1ThrownAction(_ sender: NSButton) {
+    cboSW1Thrown.deselectItem(at: cboSW1Thrown.indexOfSelectedItem)
   }
   
   @IBOutlet weak var btnClearSW1Closed: NSButton!
   
   @IBAction func btnClearSW1ClosedAction(_ sender: NSButton) {
+    cboSW1Closed.deselectItem(at: cboSW1Closed.indexOfSelectedItem)
   }
   
   @IBOutlet weak var btnClearSW2Thrown: NSButton!
   
   @IBAction func btnClearSW2ThrownAction(_ sender: NSButton) {
+    cboSW2Thrown.deselectItem(at: cboSW2Thrown.indexOfSelectedItem)
   }
   
   @IBOutlet weak var btnClearSW2Closed: NSButton!
   
   @IBAction func btnClearSW2ClosedAction(_ sender: NSButton) {
+    cboSW2Closed.deselectItem(at: cboSW2Closed.indexOfSelectedItem)
   }
   
   @IBOutlet weak var lblGeneralSensorPosition: NSTextField!

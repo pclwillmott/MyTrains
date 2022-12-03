@@ -125,6 +125,8 @@ public class Sensor : EditorObject {
   }
   
   public var nextInverted : Bool = false
+  
+  public var switchBoardItems : [SwitchBoardItem] = []
 
   // MARK: Database Methods
   
