@@ -29,10 +29,6 @@ class SetFastClockVC: NSViewController, NSWindowDelegate {
     
     let fastClock : FastClock = networkController.fastClock
     
-    DayOfWeek.populate(comboBox: cboDayOfWeek)
-    
-    DayOfWeek.select(comboBox: cboDayOfWeek, value: fastClock.scaleDayOfWeek)
-    
     FastClockScaleFactor.populate(comboBox: cboScaleFactor)
     
     FastClockScaleFactor.select(comboBox: cboScaleFactor, value: fastClock.scaleFactor)
@@ -46,12 +42,6 @@ class SetFastClockVC: NSViewController, NSWindowDelegate {
   // MARK: Private Properties
   
   // MARK: Outlets & Actions
-  
-  @IBOutlet weak var cboDayOfWeek: NSComboBox!
-  
-  @IBAction func cboDayOfWeekAction(_ sender: NSComboBox) {
-  }
-  
   
   @IBOutlet weak var pckTime: NSDatePicker!
   
@@ -68,8 +58,6 @@ class SetFastClockVC: NSViewController, NSWindowDelegate {
     let fastClock = networkController.fastClock
     
     fastClock.scaleFactor = FastClockScaleFactor.selected(comboBox: cboScaleFactor)
-    
-    fastClock.dayOfWeek = DayOfWeek.selected(comboBox: cboDayOfWeek)
     
     fastClock.epoch = pckTime.dateValue.timeIntervalSince1970
     

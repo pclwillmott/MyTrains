@@ -17,8 +17,6 @@ public class FastClock {
   
   public init() {
     
-    dayOfWeek = DayOfWeek(rawValue: UserDefaults.standard.integer(forKey: DEFAULT.FAST_CLOCK_DAY_OF_WEEK)) ?? DayOfWeek.defaultValue
-
     epoch = UserDefaults.standard.double(forKey: DEFAULT.FAST_CLOCK_EPOCH)
     
     referenceTime = UserDefaults.standard.double(forKey: DEFAULT.FAST_CLOCK_REFERENCE_TIME)
@@ -42,13 +40,6 @@ public class FastClock {
   private var nextObserverId : Int = 0
   
   // MARK: Public Properties
-  
-  public var dayOfWeek : DayOfWeek {
-    didSet {
-      UserDefaults.standard.set(dayOfWeek.rawValue, forKey: DEFAULT.FAST_CLOCK_DAY_OF_WEEK)
-      startTimer()
-    }
-  }
   
   // UTC time of what clock should show when set
   public var epoch : TimeInterval {
@@ -83,19 +74,12 @@ public class FastClock {
     }
   }
   
-  public var scaleDayOfWeek : DayOfWeek {
-    get {
-      let dec = scaleTimeDecoded
-      return dec.day
-    }
-  }
-  
   public var scaleTimeDecoded : (day:DayOfWeek, hour:Int, minute:Int, seconds:Int) {
     get {
       
       var sec = Int(scaleTime)
       let days = sec / 86400
-      let d = (days + dayOfWeek.rawValue + 1) % 7
+      let d = (days + 3) % 7
       let day = DayOfWeek(rawValue: d) ?? DayOfWeek.defaultValue
       sec -= days * 86400
       let hr = sec / 3600
