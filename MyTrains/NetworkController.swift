@@ -66,6 +66,8 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
   
   // MARK: Public Properties
   
+  public var fastClock : FastClock = FastClock()
+  
   public var networks : [Int:Network] = Network.networks
 
   public var layouts : [Int:Layout] = Layout.layouts

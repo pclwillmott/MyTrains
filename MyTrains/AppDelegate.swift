@@ -52,6 +52,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
 
   // MARK: Edit Menu
   
+  @IBAction func mnySetFastClock(_ sender: NSMenuItem) {
+    let x = ModalWindow.SetFastClock
+    let wc = x.windowController
+    wc.showWindow(nil)
+  }
+  
   @IBAction func mnuLocomotiveRosterAction(_ sender: NSMenuItem) {
     let x = ModalWindow.LocomotiveRoster
     let wc = x.windowController

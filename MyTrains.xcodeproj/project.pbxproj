@@ -10,6 +10,8 @@
 		DA0197252773500100350F71 /* ComboBoxDictDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0197242773500100350F71 /* ComboBoxDictDS.swift */; };
 		DA0197272773520400350F71 /* EditorObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0197262773520400350F71 /* EditorObject.swift */; };
 		DA04B8DA28F1AED70062D944 /* ConsistState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA04B8D928F1AEB60062D944 /* ConsistState.swift */; };
+		DA063397293CE8F400CEAFD1 /* SetFastClock.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA063396293CE8F400CEAFD1 /* SetFastClock.storyboard */; };
+		DA063399293CEB8700CEAFD1 /* SetFastClockVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA063398293CEB8700CEAFD1 /* SetFastClockVC.swift */; };
 		DA08B431278734270001307C /* ProgramDecoderAddress.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA08B430278734270001307C /* ProgramDecoderAddress.storyboard */; };
 		DA08B433278737540001307C /* ProgramDecoderAddressVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA08B432278737530001307C /* ProgramDecoderAddressVC.swift */; };
 		DA08B43727875FDD0001307C /* ProgSlotDataP1.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA08B43627875FDD0001307C /* ProgSlotDataP1.swift */; };
@@ -76,6 +78,9 @@
 		DA467BB1281D5ED400AB9650 /* SwitchBoardEditorVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA467BB0281D5ED400AB9650 /* SwitchBoardEditorVC.swift */; };
 		DA467BB3281D60E400AB9650 /* SwitchBoardShapeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA467BB2281D60E400AB9650 /* SwitchBoardShapeButton.swift */; };
 		DA484A022933D09000D9EAF1 /* TurnoutSwitchComboDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA484A012933D09000D9EAF1 /* TurnoutSwitchComboDS.swift */; };
+		DA48EE29293CEF16006C26A0 /* DayOfWeek.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA48EE28293CEF16006C26A0 /* DayOfWeek.swift */; };
+		DA48EE2B293CEFEA006C26A0 /* FastClockScaleFactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA48EE2A293CEFEA006C26A0 /* FastClockScaleFactor.swift */; };
+		DA48EE2D293CF260006C26A0 /* FastClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA48EE2C293CF260006C26A0 /* FastClock.swift */; };
 		DA53B252276E478400AB956C /* IPLDevData.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA53B251276E478400AB956C /* IPLDevData.swift */; };
 		DA5550EA28392A6B00C4FE4E /* ProductCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5550E928392A6B00C4FE4E /* ProductCode.swift */; };
 		DA5B4601276F4E38005CA03C /* DatabaseConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5B4600276F4E38005CA03C /* DatabaseConstants.swift */; };
@@ -199,6 +204,8 @@
 		DA0197242773500100350F71 /* ComboBoxDictDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComboBoxDictDS.swift; sourceTree = "<group>"; };
 		DA0197262773520400350F71 /* EditorObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorObject.swift; sourceTree = "<group>"; };
 		DA04B8D928F1AEB60062D944 /* ConsistState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsistState.swift; sourceTree = "<group>"; };
+		DA063396293CE8F400CEAFD1 /* SetFastClock.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SetFastClock.storyboard; sourceTree = "<group>"; };
+		DA063398293CEB8700CEAFD1 /* SetFastClockVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetFastClockVC.swift; sourceTree = "<group>"; };
 		DA08B430278734270001307C /* ProgramDecoderAddress.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ProgramDecoderAddress.storyboard; sourceTree = "<group>"; };
 		DA08B432278737530001307C /* ProgramDecoderAddressVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramDecoderAddressVC.swift; sourceTree = "<group>"; };
 		DA08B43627875FDD0001307C /* ProgSlotDataP1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgSlotDataP1.swift; sourceTree = "<group>"; };
@@ -267,6 +274,9 @@
 		DA467BB0281D5ED400AB9650 /* SwitchBoardEditorVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchBoardEditorVC.swift; sourceTree = "<group>"; };
 		DA467BB2281D60E400AB9650 /* SwitchBoardShapeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchBoardShapeButton.swift; sourceTree = "<group>"; };
 		DA484A012933D09000D9EAF1 /* TurnoutSwitchComboDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TurnoutSwitchComboDS.swift; sourceTree = "<group>"; };
+		DA48EE28293CEF16006C26A0 /* DayOfWeek.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayOfWeek.swift; sourceTree = "<group>"; };
+		DA48EE2A293CEFEA006C26A0 /* FastClockScaleFactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastClockScaleFactor.swift; sourceTree = "<group>"; };
+		DA48EE2C293CF260006C26A0 /* FastClock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastClock.swift; sourceTree = "<group>"; };
 		DA53B251276E478400AB956C /* IPLDevData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IPLDevData.swift; sourceTree = "<group>"; };
 		DA5550E928392A6B00C4FE4E /* ProductCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductCode.swift; sourceTree = "<group>"; };
 		DA5B4600276F4E38005CA03C /* DatabaseConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseConstants.swift; sourceTree = "<group>"; };
@@ -476,6 +486,11 @@
 				DA8837832770B78C000B9A41 /* EditTrainsVC.swift */,
 				DA8837772770B715000B9A41 /* EditWagons.storyboard */,
 				DA8837812770B77C000B9A41 /* EditWagonsVC.swift */,
+				DA063396293CE8F400CEAFD1 /* SetFastClock.storyboard */,
+				DA063398293CEB8700CEAFD1 /* SetFastClockVC.swift */,
+				DA48EE2C293CF260006C26A0 /* FastClock.swift */,
+				DA48EE28293CEF16006C26A0 /* DayOfWeek.swift */,
+				DA48EE2A293CEFEA006C26A0 /* FastClockScaleFactor.swift */,
 				DA7A490F274A89FE00C2A42B /* FastClockMessage.swift */,
 				DA1DA5EB28280FCD00E0F993 /* FlowControl.swift */,
 				DA840BCD2794727F00944562 /* FNTableViewDS.swift */,
@@ -690,6 +705,7 @@
 				DA77795327AEEB3A007EEBE9 /* OpSwTCV.xib in Resources */,
 				DA1ECC9328439D4600C4F963 /* UpdateFirmware.storyboard in Resources */,
 				DA2429752892FE94000D4ADE /* AddressManager.storyboard in Resources */,
+				DA063397293CE8F400CEAFD1 /* SetFastClock.storyboard in Resources */,
 				DAB450ED2872FEC000657295 /* SensorTCV.xib in Resources */,
 				DA8837702770B35B000B9A41 /* EditLayouts.storyboard in Resources */,
 				DA8AE0ED279B2CCB001E9311 /* SlotView.storyboard in Resources */,
@@ -776,6 +792,7 @@
 				DA3AEF422788855800FF91D4 /* DecoderCV.swift in Sources */,
 				DA33FC2327AFFA1400630227 /* OpSwDecoderType.swift in Sources */,
 				DA28C2BF2801E46D00857471 /* QuerySlot1.swift in Sources */,
+				DA48EE2D293CF260006C26A0 /* FastClock.swift in Sources */,
 				DA77794C27AEA029007EEBE9 /* OptionSwitch.swift in Sources */,
 				DACB59292896A39E006B1861 /* TurnoutFeedbackType.swift in Sources */,
 				DA7B4727273803BA00BCD587 /* Locomotive.swift in Sources */,
@@ -787,6 +804,7 @@
 				DA8837862770B79F000B9A41 /* EditSensorsVC.swift in Sources */,
 				DA5CCB4A2897EBB800F99AE6 /* SpeedProfile.swift in Sources */,
 				DA95D6BD280833FE00D9F1B6 /* GroupSetupVC.swift in Sources */,
+				DA48EE29293CEF16006C26A0 /* DayOfWeek.swift in Sources */,
 				DAF4DD50289ABDDE000B848E /* SpeedProfileResultsType.swift in Sources */,
 				DA2502B9282671600002D4AF /* RollingStock.swift in Sources */,
 				DAB450EF2872FEE800657295 /* SensorTCV.swift in Sources */,
@@ -807,6 +825,7 @@
 				DA0197272773520400350F71 /* EditorObject.swift in Sources */,
 				DAEA9CF7272D8DA900C9B3EC /* NetworkConstants.swift in Sources */,
 				DACB592F2896B7E3006B1861 /* TurnoutSwitchTableViewDS.swift in Sources */,
+				DA063399293CEB8700CEAFD1 /* SetFastClockVC.swift in Sources */,
 				DA2E0E5A2736B8AA00C7DA7A /* LoconetRequestSlotDataMessage.swift in Sources */,
 				DA2785402837EAE700EDCBB7 /* MTSerialPortManager.swift in Sources */,
 				DA15BE26289806BF00FD82FD /* SpeedProfileTableViewDS.swift in Sources */,
@@ -874,6 +893,7 @@
 				DA9CF8FF2860CA0100825FA9 /* SwitchBoardItemView.swift in Sources */,
 				DA95D6C52809C00600D9F1B6 /* SignalStrengthView.swift in Sources */,
 				DA5CCB4E2897F6B200F99AE6 /* SpeedProfilerVC.swift in Sources */,
+				DA48EE2B293CEFEA006C26A0 /* FastClockScaleFactor.swift in Sources */,
 				DA28E5892824943200E1604C /* LocoNetDevice.swift in Sources */,
 				DA5E1741272ED2DF00F9341F /* LoconetSwitchRequestMessage.swift in Sources */,
 				DAF5BCD9281EF086000B61CA /* SwitchBoardPanel.swift in Sources */,

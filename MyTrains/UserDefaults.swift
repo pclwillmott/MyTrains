@@ -49,4 +49,8 @@ enum DEFAULT {
   static let ROUTE_MANAGER_HOST                 = "ROUTE_MANAGER_HOST"
   static let BRIDGE_THROTTLE_NETWORK            = "BRIDGE_THROTTLE_NETWORK"
   static let BRIDGE_SLAVE_NETWORK               = "BRIDGE_SLAVE_NETWORK"
+  static let FAST_CLOCK_DAY_OF_WEEK             = "FAST_CLOCK_DAY_OF_WEEK"
+  static let FAST_CLOCK_REFERENCE_TIME          = "FAST_CLOCK_REFERENCE_TIME"
+  static let FAST_CLOCK_EPOCH                   = "FAST_CLOCK_EPOCH"
+  static let FAST_CLOCK_SCALE_FACTOR            = "FAST_CLOCK_SCALE_FACTOR"
 }

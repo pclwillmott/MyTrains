@@ -7,7 +7,7 @@
 
 import Cocoa
 
-class MainVC: NSViewController, NetworkControllerDelegate, LayoutDelegate {
+class MainVC: NSViewController, NetworkControllerDelegate, LayoutDelegate, FastClockDelegate {
 
   // MARK: Window & View Control
   
@@ -37,6 +37,9 @@ class MainVC: NSViewController, NetworkControllerDelegate, LayoutDelegate {
     if layoutDelegateId != -1 {
       networkController.layout?.removeDelegate(delegateId: layoutDelegateId)
     }
+    if fastClockObserverId != -1 {
+      networkController.fastClock.removeObserver(observerId: fastClockObserverId)
+    }
   }
   
   override func viewWillAppear() {
@@ -53,9 +56,13 @@ class MainVC: NSViewController, NetworkControllerDelegate, LayoutDelegate {
       layoutDelegateId = layout.addDelegate(delegate: self)
     }
     
+    fastClockObserverId = networkController.fastClock.addObserver(observer: self)
+    
   }
   
   // MARK: Private Properties
+  
+  private var fastClockObserverId : Int = -1
   
   private var cboLayoutDS : ComboBoxDBDS? = nil
   
@@ -122,6 +129,14 @@ class MainVC: NSViewController, NetworkControllerDelegate, LayoutDelegate {
       
     }
         
+  }
+  
+  // MARK: FastClockDelegate Methods
+  
+  func fastClockTick(fastClock:FastClock) {
+    
+    lblFastClock.stringValue = fastClock.displayTime
+    
   }
   
   // MARK: LayoutDelegate Methods
@@ -232,6 +247,8 @@ class MainVC: NSViewController, NetworkControllerDelegate, LayoutDelegate {
     UserDefaults.standard.set(scrollView.magnification, forKey: DEFAULT.MAIN_SWITCHBOARD_MAG)
     
   }
+  
+  @IBOutlet weak var lblFastClock: NSTextField!
   
 }
 
