@@ -183,6 +183,7 @@
 		DACB59312896CDCE006B1861 /* TurnoutSwitchState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACB59302896CDCE006B1861 /* TurnoutSwitchState.swift */; };
 		DAD66A2E2871FF9B00376479 /* Sensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD66A2D2871FF9B00376479 /* Sensor.swift */; };
 		DADBBFEA285DF36700426CD5 /* LayoutSwitchBoardExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADBBFE9285DF36700426CD5 /* LayoutSwitchBoardExtensions.swift */; };
+		DADC21CE2944ABE2008A2F33 /* ClockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADC21CD2944ABE2008A2F33 /* ClockView.swift */; };
 		DAE8DD51286741BD0097C2D1 /* TrackPart.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE8DD50286741BD0097C2D1 /* TrackPart.swift */; };
 		DAE8DD53286751BE0097C2D1 /* Manufacturer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE8DD52286751BE0097C2D1 /* Manufacturer.swift */; };
 		DAE8DD55286754C00097C2D1 /* TrackCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE8DD54286754C00097C2D1 /* TrackCode.swift */; };
@@ -381,6 +382,7 @@
 		DACB59302896CDCE006B1861 /* TurnoutSwitchState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TurnoutSwitchState.swift; sourceTree = "<group>"; };
 		DAD66A2D2871FF9B00376479 /* Sensor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sensor.swift; sourceTree = "<group>"; };
 		DADBBFE9285DF36700426CD5 /* LayoutSwitchBoardExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutSwitchBoardExtensions.swift; sourceTree = "<group>"; };
+		DADC21CD2944ABE2008A2F33 /* ClockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClockView.swift; sourceTree = "<group>"; };
 		DAE8DD50286741BD0097C2D1 /* TrackPart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackPart.swift; sourceTree = "<group>"; };
 		DAE8DD52286751BE0097C2D1 /* Manufacturer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Manufacturer.swift; sourceTree = "<group>"; };
 		DAE8DD54286754C00097C2D1 /* TrackCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackCode.swift; sourceTree = "<group>"; };
@@ -489,6 +491,7 @@
 				DA063396293CE8F400CEAFD1 /* SetFastClock.storyboard */,
 				DA063398293CEB8700CEAFD1 /* SetFastClockVC.swift */,
 				DA48EE2C293CF260006C26A0 /* FastClock.swift */,
+				DADC21CD2944ABE2008A2F33 /* ClockView.swift */,
 				DA48EE28293CEF16006C26A0 /* DayOfWeek.swift */,
 				DA48EE2A293CEFEA006C26A0 /* FastClockScaleFactor.swift */,
 				DA7A490F274A89FE00C2A42B /* FastClockMessage.swift */,
@@ -778,6 +781,7 @@
 				DA1B79F7285F2540009E1189 /* SwitchBoardItemPropertySheetVC.swift in Sources */,
 				DA6A0ADF2753B5CF00913F2B /* UserDefaults.swift in Sources */,
 				DA6A0AE12753D50A00913F2B /* GlobalVariables.swift in Sources */,
+				DADC21CE2944ABE2008A2F33 /* ClockView.swift in Sources */,
 				DAB07498276EB6C3003278BE /* Sqlite.swift in Sources */,
 				DA9325A8289C04CE00CC317F /* SlotState.swift in Sources */,
 				DA8837822770B77C000B9A41 /* EditWagonsVC.swift in Sources */,

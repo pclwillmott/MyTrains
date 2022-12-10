@@ -135,7 +135,7 @@ class MainVC: NSViewController, NetworkControllerDelegate, LayoutDelegate, FastC
   
   func fastClockTick(fastClock:FastClock) {
     
-    lblFastClock.stringValue = fastClock.displayTime
+    clockView.date = Date(timeIntervalSince1970: fastClock.scaleTime)
     
   }
   
@@ -249,6 +249,8 @@ class MainVC: NSViewController, NetworkControllerDelegate, LayoutDelegate, FastC
   }
   
   @IBOutlet weak var lblFastClock: NSTextField!
+  
+  @IBOutlet weak var clockView: ClockView!
   
 }
 

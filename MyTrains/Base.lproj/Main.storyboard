@@ -785,10 +785,10 @@
                                 </view>
                             </box>
                             <box fixedFrame="YES" title="Box" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="ELL-xv-dmg">
-                                <rect key="frame" x="-3" y="-4" width="648" height="56"/>
+                                <rect key="frame" x="-3" y="-4" width="531" height="56"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <view key="contentView" id="TZD-lO-klV">
-                                    <rect key="frame" x="3" y="3" width="642" height="50"/>
+                                    <rect key="frame" x="3" y="3" width="525" height="50"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </box>
@@ -824,15 +824,10 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WT6-EY-oQ6">
-                                <rect key="frame" x="658" y="15" width="111" height="19"/>
+                            <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YnO-dt-gsD" customClass="ClockView" customModule="MyTrains" customModuleProvider="target">
+                                <rect key="frame" x="547" y="7" width="220" height="55"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" id="fWy-2M-VXe">
-                                    <font key="font" metaFont="system" size="16"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
+                            </customView>
                         </subviews>
                     </view>
                     <connections>
@@ -841,7 +836,7 @@
                         <outlet property="btnPowerOff" destination="McJ-kX-caF" id="G0z-Rl-kBD"/>
                         <outlet property="btnPowerOn" destination="8tU-Og-bFk" id="73B-Iu-NUS"/>
                         <outlet property="cboLayout" destination="FvV-6g-VOW" id="tiD-sk-BfD"/>
-                        <outlet property="lblFastClock" destination="WT6-EY-oQ6" id="haX-nj-gl3"/>
+                        <outlet property="clockView" destination="YnO-dt-gsD" id="vfE-uc-aIh"/>
                         <outlet property="scrollView" destination="3HQ-vy-QuZ" id="A5H-Cz-eKC"/>
                         <outlet property="swConnect" destination="SW0-0C-pTk" id="ZMv-6j-eV8"/>
                         <outlet property="switchBoardView" destination="lcX-IG-BcZ" id="PzE-48-bB6"/>
