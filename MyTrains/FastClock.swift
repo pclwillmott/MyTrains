@@ -74,9 +74,15 @@ public class FastClock {
     }
   }
   
+  public var scaleDate : Date {
+    get {
+      return Date(timeIntervalSince1970: scaleTime)
+    }
+  }
+  
   public var scaleTimeDecoded : (day:DayOfWeek, hour:Int, minute:Int, seconds:Int) {
     get {
-      
+      /*
       var sec = Int(scaleTime)
       let days = sec / 86400
       let d = (days + 3) % 7
@@ -86,7 +92,23 @@ public class FastClock {
       sec -= hr * 3600
       let min = sec / 60
       sec -= min * 60
+      */
+      
+      let date = Date(timeIntervalSince1970: scaleTime)
+      let components = date.dateComponents
+      
+      let day = DayOfWeek(rawValue: components.weekday!) ?? .defaultValue
+      let hr = components.hour!
+      let min = components.minute!
+      let sec = components.second!
+      
       return (day:day, hour:hr, minute:min, seconds:sec)
+      
+    }
+  }
+  
+  public var isEnabled : Bool = true {
+    didSet {
       
     }
   }
@@ -107,7 +129,7 @@ public class FastClock {
     
     let dec = scaleTimeDecoded
     
-    if dec.seconds == 0 {
+    if isEnabled && dec.seconds == 0 {
       
       var data : [UInt8] =
       [

@@ -33,7 +33,7 @@ class SetFastClockVC: NSViewController, NSWindowDelegate {
     
     FastClockScaleFactor.select(comboBox: cboScaleFactor, value: fastClock.scaleFactor)
     
-    pckTime.timeZone = TimeZone(abbreviation: "UTC")
+    pckTime.timeZone = TimeZone.current
     
     pckTime.dateValue = Date(timeIntervalSince1970: fastClock.scaleTime)
     
@@ -64,6 +64,22 @@ class SetFastClockVC: NSViewController, NSWindowDelegate {
     let date = Date()
     
     fastClock.referenceTime = date.timeIntervalSince1970
+    
+    view.window?.close()
+
+  }
+  
+  @IBAction func btnResetAction(_ sender: NSButton) {
+    
+    let fastClock = networkController.fastClock
+    
+    fastClock.scaleFactor = FastClockScaleFactor.selected(comboBox: cboScaleFactor)
+
+    pckTime.dateValue = Date()
+    
+    fastClock.epoch = pckTime.dateValue.timeIntervalSince1970
+    
+    fastClock.referenceTime = pckTime.dateValue.timeIntervalSince1970
     
     view.window?.close()
 

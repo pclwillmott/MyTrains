@@ -412,6 +412,31 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
       }
     }
     
+    let fastClockMessages : Set<NetworkMessageType> = [.fastClockData, .setFastClockData]
+    
+    if fastClockMessages.contains(message.messageType) {
+      
+  //    let hour = (24 - ((256 - Int(message.message[8])) & 0x7f) % 24) % 24
+      
+  //    let minute = (60 - ((256 - Int(message.message[6])) & 0x7f) % 60) % 60
+
+      let hour = (24 - ((256 - Int(message.message[8])) & 0x7f)) % 24
+          
+      let minute = (60 - ((256 - Int(message.message[6])) & 0x7f)) % 60
+
+      let maxTick = 0xbff
+      
+      let ticks = maxTick - (0x3fff - ((Int(message.message[4]) & 0x7f) - ((Int(message.message[5]) & 0x7f) << 7)))
+      
+      let second = (Int(message.message[4]) | (Int(message.message[5]) << 7)) & 0x3ff 
+      
+      let s = "\n\(hour):\(minute):\(second)\n"
+      
+      print(s)
+      
+      item += s
+    }
+    
     if addLabels {
       
       if message.isIMMPacket, let packetType = message.dccPacketType, let addressPartition = message.dccAddressPartition {

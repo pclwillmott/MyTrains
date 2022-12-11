@@ -261,7 +261,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
       }
 
      
-    case .fastClockDataP1:
+    case .fastClockData:
       commandStation?.globalSystemTrackStatus = message.message[7]
       
     case .locoSlotDataP1:

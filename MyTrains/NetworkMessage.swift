@@ -581,7 +581,7 @@ public class NetworkMessage : NSObject {
             case 0x7a:
               break
             case 0x7b:
-              _messageType = .getFastClockDataP1
+              _messageType = .getFastClockData
             case 0x7c:
               break
             case 0x7d:
@@ -1296,7 +1296,7 @@ public class NetworkMessage : NSObject {
             case 0x7a:
               break
             case 0x7b:
-              _messageType = .fastClockDataP1
+              _messageType = .fastClockData
             case 0x7c:
               if (message[ 4] & 0b11110000) == 0 {
                 _messageType = .progSlotDataP1
@@ -1514,7 +1514,7 @@ public class NetworkMessage : NSObject {
               _slotsChanged.insert(LocoSlotData.encodeID(slotPage: 0, slotNumber: message[2]))
             }
             else if message[ 2] == 0x7b {
-              _messageType = .setFastClockDataP1
+              _messageType = .setFastClockData
             }
             else if message[ 2] == 0x7c &&                /* PROG SLOT */
                     message[ 4] == 0x00 &&
@@ -1573,6 +1573,15 @@ public class NetworkMessage : NSObject {
       return (message[2] & mask) == mask
     }
   }
+  
+  // MARK: FastClock Properties
+  
+  public var fastClockScaleFactor : FastClockScaleFactor {
+    get {
+      return FastClockScaleFactor(rawValue: Int(message[3])) ?? .defaultValue
+    }
+  }
+  
 
   // MARK: Class Methods
   

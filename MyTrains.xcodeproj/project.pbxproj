@@ -33,6 +33,8 @@
 		DA1DC9FF28A1CE0D007A957A /* SamplePeriod.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1DC9FE28A1CE0D007A957A /* SamplePeriod.swift */; };
 		DA1ECC9328439D4600C4F963 /* UpdateFirmware.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA1ECC9228439D4600C4F963 /* UpdateFirmware.storyboard */; };
 		DA1ECC9828439DE500C4F963 /* UpdateFirmwareVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1ECC9728439DE500C4F963 /* UpdateFirmwareVC.swift */; };
+		DA23EFAF294551B100C1581F /* FastClockTester.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA23EFAE294551B100C1581F /* FastClockTester.storyboard */; };
+		DA23EFB12945522300C1581F /* FastClockTesterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA23EFB02945522300C1581F /* FastClockTesterVC.swift */; };
 		DA2429712892F7AE000D4ADE /* DeviceTCV.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA2429702892F7AE000D4ADE /* DeviceTCV.xib */; };
 		DA2429732892F7E1000D4ADE /* DeviceTCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2429722892F7E1000D4ADE /* DeviceTCV.swift */; };
 		DA2429752892FE94000D4ADE /* AddressManager.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA2429742892FE94000D4ADE /* AddressManager.storyboard */; };
@@ -184,6 +186,7 @@
 		DAD66A2E2871FF9B00376479 /* Sensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD66A2D2871FF9B00376479 /* Sensor.swift */; };
 		DADBBFEA285DF36700426CD5 /* LayoutSwitchBoardExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADBBFE9285DF36700426CD5 /* LayoutSwitchBoardExtensions.swift */; };
 		DADC21CE2944ABE2008A2F33 /* ClockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADC21CD2944ABE2008A2F33 /* ClockView.swift */; };
+		DADFFF902946025500CD2119 /* DateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADFFF8F2946025500CD2119 /* DateExtensions.swift */; };
 		DAE8DD51286741BD0097C2D1 /* TrackPart.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE8DD50286741BD0097C2D1 /* TrackPart.swift */; };
 		DAE8DD53286751BE0097C2D1 /* Manufacturer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE8DD52286751BE0097C2D1 /* Manufacturer.swift */; };
 		DAE8DD55286754C00097C2D1 /* TrackCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE8DD54286754C00097C2D1 /* TrackCode.swift */; };
@@ -228,6 +231,8 @@
 		DA1DC9FE28A1CE0D007A957A /* SamplePeriod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SamplePeriod.swift; sourceTree = "<group>"; };
 		DA1ECC9228439D4600C4F963 /* UpdateFirmware.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = UpdateFirmware.storyboard; sourceTree = "<group>"; };
 		DA1ECC9728439DE500C4F963 /* UpdateFirmwareVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateFirmwareVC.swift; sourceTree = "<group>"; };
+		DA23EFAE294551B100C1581F /* FastClockTester.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = FastClockTester.storyboard; sourceTree = "<group>"; };
+		DA23EFB02945522300C1581F /* FastClockTesterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastClockTesterVC.swift; sourceTree = "<group>"; };
 		DA2429702892F7AE000D4ADE /* DeviceTCV.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DeviceTCV.xib; sourceTree = "<group>"; };
 		DA2429722892F7E1000D4ADE /* DeviceTCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceTCV.swift; sourceTree = "<group>"; };
 		DA2429742892FE94000D4ADE /* AddressManager.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AddressManager.storyboard; sourceTree = "<group>"; };
@@ -383,6 +388,7 @@
 		DAD66A2D2871FF9B00376479 /* Sensor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sensor.swift; sourceTree = "<group>"; };
 		DADBBFE9285DF36700426CD5 /* LayoutSwitchBoardExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutSwitchBoardExtensions.swift; sourceTree = "<group>"; };
 		DADC21CD2944ABE2008A2F33 /* ClockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClockView.swift; sourceTree = "<group>"; };
+		DADFFF8F2946025500CD2119 /* DateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensions.swift; sourceTree = "<group>"; };
 		DAE8DD50286741BD0097C2D1 /* TrackPart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackPart.swift; sourceTree = "<group>"; };
 		DAE8DD52286751BE0097C2D1 /* Manufacturer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Manufacturer.swift; sourceTree = "<group>"; };
 		DAE8DD54286754C00097C2D1 /* TrackCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackCode.swift; sourceTree = "<group>"; };
@@ -491,7 +497,10 @@
 				DA063396293CE8F400CEAFD1 /* SetFastClock.storyboard */,
 				DA063398293CEB8700CEAFD1 /* SetFastClockVC.swift */,
 				DA48EE2C293CF260006C26A0 /* FastClock.swift */,
+				DA23EFAE294551B100C1581F /* FastClockTester.storyboard */,
+				DA23EFB02945522300C1581F /* FastClockTesterVC.swift */,
 				DADC21CD2944ABE2008A2F33 /* ClockView.swift */,
+				DADFFF8F2946025500CD2119 /* DateExtensions.swift */,
 				DA48EE28293CEF16006C26A0 /* DayOfWeek.swift */,
 				DA48EE2A293CEFEA006C26A0 /* FastClockScaleFactor.swift */,
 				DA7A490F274A89FE00C2A42B /* FastClockMessage.swift */,
@@ -728,6 +737,7 @@
 				DAA83DF2272C37680075CBCD /* Main.storyboard in Resources */,
 				DA5CCB4C2897F58D00F99AE6 /* SpeedProfiler.storyboard in Resources */,
 				DACB592B2896AF89006B1861 /* TurnoutSwitchTCV.xib in Resources */,
+				DA23EFAF294551B100C1581F /* FastClockTester.storyboard in Resources */,
 				DA8837762770B6F8000B9A41 /* EditLocomotives.storyboard in Resources */,
 				DA33FC2027AFF9E500630227 /* OpSwDecoderType.xib in Resources */,
 				DA341C9929212FD600C3EF4F /* Bridge.storyboard in Resources */,
@@ -788,6 +798,7 @@
 				DA8B5D19282FDE1800D39F07 /* ProgrammerMode.swift in Sources */,
 				DA6E28E3285F8F1A00772641 /* TrackElectrificationType.swift in Sources */,
 				DA28C2C92801EF6500857471 /* QuerySlot5.swift in Sources */,
+				DADFFF902946025500CD2119 /* DateExtensions.swift in Sources */,
 				DA341C9729212F9600C3EF4F /* LocoNetBridge.swift in Sources */,
 				DA7243F828A81165003157CA /* ThrottleMode.swift in Sources */,
 				DA467BAB281D56A700AB9650 /* SwitchBoardEditorView.swift in Sources */,
@@ -847,6 +858,7 @@
 				DA53B252276E478400AB956C /* IPLDevData.swift in Sources */,
 				DA5B4609276F6CBF005CA03C /* Network.swift in Sources */,
 				DAA867C427930C62008B6EEC /* IntExtensions.swift in Sources */,
+				DA23EFB12945522300C1581F /* FastClockTesterVC.swift in Sources */,
 				DA2E0E5827359ED300C7DA7A /* Ack.swift in Sources */,
 				DA484A022933D09000D9EAF1 /* TurnoutSwitchComboDS.swift in Sources */,
 				DA28C2BD2801CC4800857471 /* DashBoardVC.swift in Sources */,

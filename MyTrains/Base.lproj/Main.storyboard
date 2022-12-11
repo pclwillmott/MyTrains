@@ -130,6 +130,12 @@
                                                 <action selector="mnySetFastClock:" target="Voe-Tx-rLC" id="9zo-yi-LxJ"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Fast Clock Tester" id="Ean-mW-BM5">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="mnuFastClockTester:" target="Voe-Tx-rLC" id="gAH-NU-OdD"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="Layouts" id="Jc2-oH-lkS">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>

@@ -52,6 +52,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
 
   // MARK: Edit Menu
   
+  @IBAction func mnuFastClockTester(_ sender: NSMenuItem) {
+    let x = ModalWindow.FastClockTester
+    let wc = x.windowController
+    wc.showWindow(nil)
+  }
+  
   @IBAction func mnySetFastClock(_ sender: NSMenuItem) {
     let x = ModalWindow.SetFastClock
     let wc = x.windowController

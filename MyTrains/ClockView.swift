@@ -103,7 +103,7 @@ class ClockView: NSView {
     
     path.lineWidth = 1
     
-    xPos = bounds.width * 11.6 / 16.0
+    xPos = bounds.width * 11.72 / 16.0
     yPos = bounds.height * 0.1 + ySize * 0.5
     
     dotSize = 0.3 / 16.0 * bounds.width / 2.0
@@ -117,6 +117,7 @@ class ClockView: NSView {
 
     var number = 0
     
+    /*
     var seconds = date.timeIntervalSince1970
     
     var sec = Int(seconds)
@@ -127,10 +128,18 @@ class ClockView: NSView {
     let min = sec / 60
     sec -= min * 60
 
+    */
+    
+    let components = date.dateComponents
+    
+    let hr = components.hour!
+    let min = components.minute!
+    let sec = components.second!
+    
     number += hr * 10000
     number += min * 100
     number += sec
-    
+
 //    number = 888888
     
     let param : [(x:CGFloat, y:CGFloat, color:NSColor, size:CGFloat)] = [

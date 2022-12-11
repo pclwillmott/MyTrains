@@ -1223,5 +1223,46 @@ extension Interface {
     }
   }
 
+  public func getFastClock() {
+    
+    var data : [UInt8] =
+    [
+      NetworkMessageOpcode.OPC_RQ_SL_DATA.rawValue,
+      0x7b,
+      0x00,
+    ]
+    
+    let message = NetworkMessage(networkId: networkId, data: data, appendCheckSum: true)
+
+    addToQueue(message: message, delay: MessageTiming.STANDARD)
+
+  }
+  
+  public func setFastClock(date:Date, scaleFactor:FastClockScaleFactor) {
+    
+    let comp = date.dateComponents
+    
+    var data : [UInt8] =
+    [
+      NetworkMessageOpcode.OPC_WR_SL_DATA.rawValue,
+      0x0e,
+      0x7b,
+      UInt8(scaleFactor.rawValue),
+      0x7f,
+      0x7f,
+      UInt8((255 - (60 - comp.minute!)) & 0x7f),
+      0x00,
+      UInt8((256 - (24 - comp.hour!)) & 0x7f),
+      0x00,
+      0x40,
+      0x7f,
+      0x7f,
+    ]
+    
+    let message = NetworkMessage(networkId: networkId, data: data, appendCheckSum: true)
+
+    addToQueue(message: message, delay: MessageTiming.STANDARD)
+
+  }
   
 }

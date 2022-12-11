@@ -94,7 +94,7 @@ public enum NetworkMessageType {
   case duplexGroupPassword
   case duplexSignalStrength
   case ezRouteConfirm
-  case fastClockDataP1
+  case fastClockData
   case findLoco
   case findReceiver
   case getBrdOpSwState
@@ -106,7 +106,7 @@ public enum NetworkMessageType {
   case getDuplexGroupID
   case getDuplexGroupPassword
   case getDuplexSignalStrength
-  case getFastClockDataP1
+  case getFastClockData
   case getLocoSlotData
   case getLocoSlotDataLAdrP1
   case getLocoSlotDataLAdrP2
@@ -207,7 +207,7 @@ public enum NetworkMessageType {
   case setDuplexGroupData
   case setDuplexGroupID
   case setDuplexGroupPassword
-  case setFastClockDataP1
+  case setFastClockData
   case setIdleState
   case setLocoNetID
   case setLocoSlotDataP1
