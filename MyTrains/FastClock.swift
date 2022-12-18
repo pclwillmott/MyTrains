@@ -129,7 +129,7 @@ public class FastClock {
     
     let dec = scaleTimeDecoded
     
-    if isEnabled && dec.seconds == 0 {
+    if false && isEnabled && dec.seconds == 0 {
       
       var data : [UInt8] =
       [

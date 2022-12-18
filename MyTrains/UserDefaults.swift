@@ -53,4 +53,10 @@ enum DEFAULT {
   static let FAST_CLOCK_REFERENCE_TIME          = "FAST_CLOCK_REFERENCE_TIME"
   static let FAST_CLOCK_EPOCH                   = "FAST_CLOCK_EPOCH"
   static let FAST_CLOCK_SCALE_FACTOR            = "FAST_CLOCK_SCALE_FACTOR"
+  static let FC_TESTER_NETWORK_ID               = "FC_TESTER_NETWORK_ID"
+  static let FC_TESTER_SCALE_FACTOR             = "FC_TESTER_SCALE_FACTOR"
+  static let FC_TESTER_SAMPLE_RATE              = "FC_TESTER_SAMPLE_RATE"
+  static let FC_TESTER_DAYS                     = "FC_TESTER_DAYS"
+  
+  
 }

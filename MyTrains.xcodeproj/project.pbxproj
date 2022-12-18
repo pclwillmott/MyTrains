@@ -54,6 +54,7 @@
 		DA2E0E5A2736B8AA00C7DA7A /* LoconetRequestSlotDataMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2E0E592736B8AA00C7DA7A /* LoconetRequestSlotDataMessage.swift */; };
 		DA2E0E5E2736EAF300C7DA7A /* NetworkController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2E0E5D2736EAF300C7DA7A /* NetworkController.swift */; };
 		DA2E4988282899AF00C25162 /* DBEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2E4986282899AF00C25162 /* DBEditorView.swift */; };
+		DA32C97A294CB0E40034DB4F /* SampleRate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA32C979294CB0E40034DB4F /* SampleRate.swift */; };
 		DA33FC2027AFF9E500630227 /* OpSwDecoderType.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA33FC1F27AFF9E500630227 /* OpSwDecoderType.xib */; };
 		DA33FC2327AFFA1400630227 /* OpSwDecoderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA33FC2227AFFA1400630227 /* OpSwDecoderType.swift */; };
 		DA341C9729212F9600C3EF4F /* LocoNetBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA341C9629212F9600C3EF4F /* LocoNetBridge.swift */; };
@@ -252,6 +253,7 @@
 		DA2E0E592736B8AA00C7DA7A /* LoconetRequestSlotDataMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoconetRequestSlotDataMessage.swift; sourceTree = "<group>"; };
 		DA2E0E5D2736EAF300C7DA7A /* NetworkController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkController.swift; sourceTree = "<group>"; };
 		DA2E4986282899AF00C25162 /* DBEditorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBEditorView.swift; sourceTree = "<group>"; };
+		DA32C979294CB0E40034DB4F /* SampleRate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleRate.swift; sourceTree = "<group>"; };
 		DA33FC1F27AFF9E500630227 /* OpSwDecoderType.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OpSwDecoderType.xib; sourceTree = "<group>"; };
 		DA33FC2227AFFA1400630227 /* OpSwDecoderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpSwDecoderType.swift; sourceTree = "<group>"; };
 		DA341C9629212F9600C3EF4F /* LocoNetBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoNetBridge.swift; sourceTree = "<group>"; };
@@ -499,6 +501,7 @@
 				DA48EE2C293CF260006C26A0 /* FastClock.swift */,
 				DA23EFAE294551B100C1581F /* FastClockTester.storyboard */,
 				DA23EFB02945522300C1581F /* FastClockTesterVC.swift */,
+				DA32C979294CB0E40034DB4F /* SampleRate.swift */,
 				DADC21CD2944ABE2008A2F33 /* ClockView.swift */,
 				DADFFF8F2946025500CD2119 /* DateExtensions.swift */,
 				DA48EE28293CEF16006C26A0 /* DayOfWeek.swift */,
@@ -878,6 +881,7 @@
 				DA5B4601276F4E38005CA03C /* DatabaseConstants.swift in Sources */,
 				DA1DA5EA28280EEE00E0F993 /* BaudRate.swift in Sources */,
 				DA412E162780DC3C00748CCD /* DecoderFunction.swift in Sources */,
+				DA32C97A294CB0E40034DB4F /* SampleRate.swift in Sources */,
 				DAE8DD51286741BD0097C2D1 /* TrackPart.swift in Sources */,
 				DADBBFEA285DF36700426CD5 /* LayoutSwitchBoardExtensions.swift in Sources */,
 				DA8B5D1B282FE23900D39F07 /* MessageTiming.swift in Sources */,

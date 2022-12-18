@@ -1234,7 +1234,7 @@ extension Interface {
     
     let message = NetworkMessage(networkId: networkId, data: data, appendCheckSum: true)
 
-    addToQueue(message: message, delay: MessageTiming.STANDARD)
+    addToQueue(message: message, delay: MessageTiming.FAST)
 
   }
   
@@ -1250,10 +1250,10 @@ extension Interface {
       UInt8(scaleFactor.rawValue),
       0x7f,
       0x7f,
-      UInt8((255 - (60 - comp.minute!)) & 0x7f),
-      0x00,
+      UInt8((256 - (60 - comp.minute!)) & 0x7f),
+      0b01000111,
       UInt8((256 - (24 - comp.hour!)) & 0x7f),
-      0x00,
+      0x01,
       0x40,
       0x7f,
       0x7f,
@@ -1261,7 +1261,7 @@ extension Interface {
     
     let message = NetworkMessage(networkId: networkId, data: data, appendCheckSum: true)
 
-    addToQueue(message: message, delay: MessageTiming.STANDARD)
+    addToQueue(message: message, delay: MessageTiming.FAST)
 
   }
   

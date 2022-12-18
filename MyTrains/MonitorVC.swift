@@ -424,6 +424,10 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
           
       let minute = (60 - ((256 - Int(message.message[6])) & 0x7f)) % 60
 
+  //    let hour = -Int8(bitPattern: message.message[8] | 0b10000000)
+      
+ //     let minute = -Int8(bitPattern: message.message[6] | 0b10000000)
+
       let maxTick = 0xbff
       
       let ticks = maxTick - (0x3fff - ((Int(message.message[4]) & 0x7f) - ((Int(message.message[5]) & 0x7f) << 7)))

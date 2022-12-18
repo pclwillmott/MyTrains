@@ -13,4 +13,5 @@ enum MessageTiming {
   static let DISCOVER = 1.0
   static let PRMODE = 1.0
   static let CVOP = 2.0
+  static let FAST = 5.0 / 1000.0
 }
