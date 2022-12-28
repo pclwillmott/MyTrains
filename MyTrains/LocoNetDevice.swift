@@ -192,6 +192,8 @@ public class LocoNetDevice : EditorObject {
   
   public var turnoutSwitches : [TurnoutSwitch] = []
   
+  public var cvs : [LocoNetDeviceCV] = []
+  
   public var networkId : Int = -1 {
     didSet {
       modified = true
@@ -543,6 +545,21 @@ public class LocoNetDevice : EditorObject {
     }
     
   }
+  
+  private func makeCVs() {
+    
+    if let info = locoNetProductInfo {
+      
+      for index in 1...info.cvs {
+        let cv = LocoNetDeviceCV()
+        cv.locoNetDeviceId = primaryKey
+        cv.cvNumber = index
+        cv.cvValue = 0
+        cvs.append(cv)
+      }
+    }
+    
+  }
 
   private func makeTurnoutSwitches() {
       
@@ -560,6 +577,16 @@ public class LocoNetDevice : EditorObject {
   }
   
   // MARK: Public Methods
+  
+  public func discardChangesToCVs() {
+  
+    for cv in cvs {
+      cv.nextCVValue = cv.cvValue
+      cv.defaultValue = cv.nextDefaultValue
+      cv.modified = false
+    }
+    
+  }
   
   override public func displayString() -> String {
     return deviceName == "" ? "unnamed device" : deviceName
@@ -830,6 +857,12 @@ public class LocoNetDevice : EditorObject {
           makeTurnoutSwitches()
         }
       }
+      if info.cvs > 0 {
+        cvs = LocoNetDeviceCV.cvs(locoNetDevice: self)
+        if cvs.count == 0 {
+          makeCVs()
+        }
+      }
 
     }
     
@@ -963,6 +996,10 @@ public class LocoNetDevice : EditorObject {
           makeTurnoutSwitches()
       }
       
+      if info.cvs > 0 && cvs.count == 0 {
+        makeCVs()
+      }
+      
     }
     
     for sensor in sensors {
@@ -979,6 +1016,10 @@ public class LocoNetDevice : EditorObject {
         turnoutSwitch.nextSwitchAddress = turnoutSwitch.switchAddress
       }
       turnoutSwitch.save()
+    }
+    
+    for cv in cvs {
+      cv.save()
     }
 
   }
@@ -1060,7 +1101,8 @@ public class LocoNetDevice : EditorObject {
     let sql = [
       "DELETE FROM [\(TABLE.TURNOUT_SWITCH)] WHERE [\(TURNOUT_SWITCH.LOCONET_DEVICE_ID)] = \(primaryKey)",
       "DELETE FROM [\(TABLE.SENSOR)] WHERE [\(SENSOR.LOCONET_DEVICE_ID)] = \(primaryKey)",
-      "DELETE FROM [\(TABLE.LOCONET_DEVICE)] WHERE [\(LOCONET_DEVICE.LOCONET_DEVICE_ID)] = \(primaryKey)"
+      "DELETE FROM [\(TABLE.LOCONET_DEVICE)] WHERE [\(LOCONET_DEVICE.LOCONET_DEVICE_ID)] = \(primaryKey)",
+      "DELETE FROM [\(TABLE.LOCONET_DEVICE_CV)] WHERE [\(LOCONET_DEVICE_CV.LOCONET_DEVICE_ID)] = \(primaryKey)"
     ]
     Database.execute(commands: sql)
   }

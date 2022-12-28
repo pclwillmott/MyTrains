@@ -100,6 +100,22 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
     }
   }
   
+  public var tc64s : [Int:LocoNetDevice] {
+    get {
+      
+      var result : [Int:LocoNetDevice] = [:]
+      
+      for (_, device) in locoNetDevices {
+        if let info = device.locoNetProductInfo, info.id == .TowerControllerMarkII {
+          result[device.primaryKey] = device
+        }
+      }
+      
+      return result
+      
+    }
+  }
+  
   public var locomotives : [Int:Locomotive] {
     get {
       

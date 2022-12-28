@@ -800,7 +800,7 @@ extension Interface {
     case .directMode:
       pcmd = 0b00101011
     case .operationsMode:
-      pcmd = 0b00100111
+      pcmd = 0b00101111
     case .pagedMode:
       pcmd = 0b00100011
     case .physicalRegister:
@@ -839,7 +839,7 @@ extension Interface {
         ],
         appendCheckSum: true)
     
-    addToQueue(message: message, delay: MessageTiming.CVOP, responses: [.progCmdAccepted, .progCmdAcceptedBlind], retryCount: 10, timeoutCode: .readCV)
+    addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [], retryCount: 0, timeoutCode: .none)
     
   }
   
@@ -1250,9 +1250,9 @@ extension Interface {
       UInt8(scaleFactor.rawValue),
       0x7f,
       0x7f,
-      UInt8((256 - (60 - comp.minute!)) & 0x7f),
+      UInt8(comp.minute! + 68),
       0b01000111,
-      UInt8((256 - (24 - comp.hour!)) & 0x7f),
+      UInt8(comp.hour! + 104),
       0x01,
       0x40,
       0x7f,

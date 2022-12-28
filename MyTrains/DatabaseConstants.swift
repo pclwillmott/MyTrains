@@ -21,6 +21,7 @@ enum TABLE {
   static let SWITCHBOARD_ITEM            = "SWITCHBOARD_ITEM"
   static let SENSOR                      = "SENSOR"
   static let TURNOUT_SWITCH              = "TURNOUT_SWITCH"
+  static let LOCONET_DEVICE_CV           = "LOCONET_DEVICE_CV"
 }
 
 enum VERSION {
@@ -66,6 +67,17 @@ enum LOCONET_DEVICE {
   static let FLOW_CONTROL                = "FLOW_CONTROL"
   static let IS_STAND_ALONE_LOCONET      = "IS_STAND_ALONE_LOCONET"
   static let FLAGS                       = "FLAGS"
+}
+
+enum LOCONET_DEVICE_CV {
+  static let LOCONET_DEVICE_CV_ID        = "LOCONET_DEVICE_CV_ID"
+  static let LOCONET_DEVICE_ID           = "LOCONET_DEVICE_ID"
+  static let CV_NUMBER                   = "CV_NUMBER"
+  static let CV_VALUE                    = "CV_VALUE"
+  static let DEFAULT_VALUE               = "DEFAULT_VALUE"
+  static let CUSTOM_DESCRIPTION          = "CUSTOM_DESCRIPTION"
+  static let CUSTOM_NUMBER_BASE          = "CUSTOM_NUMBER_BASE"
+  static let ENABLED                     = "ENABLED"
 }
 
 enum ROLLING_STOCK {

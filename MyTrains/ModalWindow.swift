@@ -39,6 +39,7 @@ enum AppStoryboard : String {
   case Bridge                       = "Bridge"
   case SetFastClock                 = "SetFastClock"
   case FastClockTester              = "FastClockTester"
+  case TC64Config                   = "TC64Config"
   
   var instance : NSStoryboard {
     return NSStoryboard(name: self.rawValue, bundle: Bundle.main)
@@ -76,6 +77,7 @@ let storyboardLookup             : [String:AppStoryboard] = [
   "Bridge"                       : AppStoryboard.Bridge,
   "SetFastClock"                 : AppStoryboard.SetFastClock,
   "FastClockTester"              : AppStoryboard.FastClockTester,
+  "TC64Config"                   : AppStoryboard.TC64Config,
 ]
 
 /*
@@ -118,6 +120,7 @@ enum ModalWindow : String {
   case Bridge                       = "Bridge"
   case SetFastClock                 = "SetFastClock"
   case FastClockTester              = "FastClockTester"
+  case TC64Config                   = "TC64Config"
 
   var windowController : NSWindowController {
     let storyboard = storyboardLookup[self.rawValue]!

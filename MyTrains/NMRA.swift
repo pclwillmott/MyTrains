@@ -333,7 +333,7 @@ public class NMRA {
     ("Railflyer Model Prototypes, Inc.", 0x54, "CAN", -1, 74),
     ("Uhlenbrock GmbH", 0x55, "DE", -1, 75),
     ("Wekomm Engineering, GmbH", 0x56, "DE", -1, 76),
-    ("RR-Cirkits", 0x57, "US", -1, 77),
+    ("RR-CirKits", 0x57, "US", -1, 77),
     ("HONS Model", 0x58, "HKG", -1, 78),
     ("Pojezdy.EU", 0x59, "CZE", -1, 79),
     ("Shourt Line", 0x5A, "US", -1, 80),

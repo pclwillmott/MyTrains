@@ -15,6 +15,7 @@
 #include <IOKit/serial/IOSerialKeys.h>
 #include <IOKit/serial/ioss.h>
 #include <IOKit/IOBSD.h>
+#include <stdint.h>
 
 int openSerialPort(const char *path);
 
@@ -51,5 +52,13 @@ void clearSerialPorts(void) ;
 char * getSerialPortPath(int);
 
 int findSerialPorts(void);
+
+uint16_t my_rand (void);
+
+void my_srand (uint16_t seed);
+
+extern uint32_t my_Randseed;
+
+#define MY_RAND_MAX 32767
 
 #endif /* SerialPort_h */

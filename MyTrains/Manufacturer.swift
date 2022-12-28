@@ -9,6 +9,8 @@ import Foundation
 
 public enum Manufacturer : Int {
   
+  case digitrax = 118
+  case rrCirKits = 77
   case peco = 163
   
   public var title : String {

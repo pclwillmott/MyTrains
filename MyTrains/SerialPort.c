@@ -482,3 +482,26 @@ char * getSerialPortPath(int index) {
   return serialPortPaths[index];
 }
 
+uint16_t my_rand (void) {
+//  my_Randseed = my_Randseed * 1103515245UL + 12345UL;
+//  return ((uint16_t)(my_Randseed >> 16) & MY_RAND_MAX);
+  
+  UInt32 t = my_Randseed;
+
+  t ^= t >> 10;
+  t ^= t << 9;
+  t ^= t >> 25;
+
+  my_Randseed = t;
+
+  return(t & MY_RAND_MAX);
+
+}
+
+void my_srand (uint16_t seed) {
+  my_Randseed = seed | 0x80000000;
+}
+
+uint32_t my_Randseed = 0x80000001;
+
+

@@ -185,9 +185,11 @@ class FastClockTesterVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
       
     case .fastClockData:
   
-      let hour = (24 - ((256 - Int(message.message[8])) & 0x7f)) % 24
+      // 0xe7 0x0e 0x7b 0x10 0x79 0x79 0x01 0x04 0x6d 0x01 0x40 0x7f 0x7f 0x54
+      
+      let hour = Int(message.message[8]) - 104
           
-      let minute = (60 - ((256 - Int(message.message[6])) & 0x7f)) % 60
+      let minute = Int(message.message[6]) - 68
 
       let mask = 0x3ff
       
@@ -195,7 +197,7 @@ class FastClockTesterVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
       
       let s = combined < lastCombined ? "*" : ""
       
-      print("\(combined) \(s)")
+ //     print("\(combined) \(s)")
       
       let ticks = combined
       

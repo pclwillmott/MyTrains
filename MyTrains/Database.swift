@@ -57,7 +57,7 @@ class Database {
             ")",
             
             "INSERT INTO [\(TABLE.VERSION)] ([\(VERSION.VERSION_ID)], [\(VERSION.VERSION_NUMBER)]) VALUES " +
-            "(1, 10)",
+            "(1, 11)",
 
             "CREATE TABLE [\(TABLE.LAYOUT)] (" +
               "[\(LAYOUT.LAYOUT_ID)]          INT PRIMARY KEY," +
@@ -99,7 +99,18 @@ class Database {
               "[\(LOCONET_DEVICE.FLAGS)]                  INT NOT NULL" +
             ")",
 
-            "CREATE TABLE [\(TABLE.ROLLING_STOCK)] (" +
+            "CREATE TABLE [\(TABLE.LOCONET_DEVICE_CV)] (" +
+            "[\(LOCONET_DEVICE_CV.LOCONET_DEVICE_CV_ID)]  INT PRIMARY KEY," +
+            "[\(LOCONET_DEVICE_CV.LOCONET_DEVICE_ID)]     INT NOT NULL," +
+            "[\(LOCONET_DEVICE_CV.CV_NUMBER)]             INT NOT NULL," +
+            "[\(LOCONET_DEVICE_CV.CV_VALUE)]              INT NOT NULL," +
+            "[\(LOCONET_DEVICE_CV.DEFAULT_VALUE)]         INT NOT NULL," +
+            "[\(LOCONET_DEVICE_CV.CUSTOM_DESCRIPTION)]    TEXT NOT NULL," +
+            "[\(LOCONET_DEVICE_CV.CUSTOM_NUMBER_BASE)]    INT NOT NULL," +
+            "[\(LOCONET_DEVICE_CV.ENABLED)]               INT NOT NULL" +
+           ")",
+            
+           "CREATE TABLE [\(TABLE.ROLLING_STOCK)] (" +
               "[\(ROLLING_STOCK.ROLLING_STOCK_ID)]         INT PRIMARY KEY," +
               "[\(ROLLING_STOCK.ROLLING_STOCK_NAME)]       TEXT NOT NULL," +
               "[\(ROLLING_STOCK.NETWORK_ID)]               INT NOT NULL," +
@@ -296,21 +307,20 @@ class Database {
             
             // MARK: Updates
             
-            if Version == 9 {
-     
+            if Version == 11 {
+  
               let commands = [
-             
-                /*
-                "DROP TABLE  IF EXISTS [\(TABLE.SPEED_PROFILE)]",
-                
-                "CREATE TABLE [\(TABLE.SPEED_PROFILE)] (" +
-                  "[\(SPEED_PROFILE.SPEED_PROFILE_ID)]  INT PRIMARY KEY," +
-                  "[\(SPEED_PROFILE.ROLLING_STOCK_ID)]  INT NOT NULL," +
-                  "[\(SPEED_PROFILE.STEP_NUMBER)]       INT NOT NULL," +
-                  "[\(SPEED_PROFILE.SPEED_FORWARD)]     REAL NOT NULL," +
-                  "[\(SPEED_PROFILE.SPEED_REVERSE)]     REAL NOT NULL" +
+        
+
+         //       "DROP TABLE  IF EXISTS [\(TABLE.LOCONET_DEVICE_CV)]",
+           /*
+                "CREATE TABLE [\(TABLE.LOCONET_DEVICE_CV)] (" +
+                "[\(LOCONET_DEVICE_CV.LOCONET_DEVICE_CV_ID)]  INT PRIMARY KEY," +
+                "[\(LOCONET_DEVICE_CV.LOCONET_DEVICE_ID)]     INT NOT NULL," +
+                "[\(LOCONET_DEVICE_CV.CV_NUMBER)]             INT NOT NULL," +
+                "[\(LOCONET_DEVICE_CV.CV_VALUE)]              INT NOT NULL" +
                 ")",
-                */
+              */
                 
           //      "DELETE FROM [\(TABLE.SPEED_PROFILE)] WHERE [\(SPEED_PROFILE.STEP_NUMBER)] = 127",
                 
@@ -367,17 +377,23 @@ class Database {
                 "ALTER TABLE [\(TABLE.TURNOUT_SWITCH)] DROP COLUMN [\(TURNOUT_SWITCH.SWITCH_TYPE)]",
                 */
 
-                "ALTER TABLE [\(TABLE.SWITCHBOARD_ITEM)] ADD [\(SWITCHBOARD_ITEM.GEN_SENSOR_ID)] INT",
+          //      "ALTER TABLE [\(TABLE.SWITCHBOARD_ITEM)] ADD [\(SWITCHBOARD_ITEM.GEN_SENSOR_ID)] INT",
 
-                "ALTER TABLE [\(TABLE.SWITCHBOARD_ITEM)] ADD [\(SWITCHBOARD_ITEM.GEN_SENSOR_CHANNEL_NUMBER)] INT",
+                "ALTER TABLE [\(TABLE.LOCONET_DEVICE_CV)] ADD [\(LOCONET_DEVICE_CV.DEFAULT_VALUE)] INT",
 
-                "UPDATE [\(TABLE.VERSION)] SET [\(VERSION.VERSION_NUMBER)] = 10 WHERE [\(VERSION.VERSION_ID)] = 1",
+                "ALTER TABLE [\(TABLE.LOCONET_DEVICE_CV)] ADD [\(LOCONET_DEVICE_CV.CUSTOM_DESCRIPTION)] TEXT",
+
+                "ALTER TABLE [\(TABLE.LOCONET_DEVICE_CV)] ADD [\(LOCONET_DEVICE_CV.CUSTOM_NUMBER_BASE)] INT",
+
+                "ALTER TABLE [\(TABLE.LOCONET_DEVICE_CV)] ADD [\(LOCONET_DEVICE_CV.ENABLED)] INT",
+
+                "UPDATE [\(TABLE.VERSION)] SET [\(VERSION.VERSION_NUMBER)] = 12 WHERE [\(VERSION.VERSION_ID)] = 1",
                     
              ]
               
               execute(commands: commands)
               
-              Version = 9
+              Version = 11
 
             }
             

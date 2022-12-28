@@ -7,13 +7,6 @@
 
 import Foundation
 
-public enum CVNumberBase : Int {
-  case decimal = 0
-  case hexadecimal = 1
-  case binary = 2
-  case octal = 3
-}
-
 public class DecoderCV : EditorObject {
   
   // MARK: Constructors
@@ -132,7 +125,7 @@ public class DecoderCV : EditorObject {
     }
   }
   
-  public var customNumberBase : CVNumberBase = .decimal {
+  public var customNumberBase : CVNumberBase = .defaultValue {
     didSet {
       modified = true
     }
@@ -161,45 +154,17 @@ public class DecoderCV : EditorObject {
   
   public var displayDefaultValue : String {
     get {
-      return toDisplay(value: defaultValue)
+      return customNumberBase.toString(value: defaultValue)
     }
   }
   
   public var displayCVValue : String {
     get {
-      return toDisplay(value: cvValue)
+      return customNumberBase.toString(value: cvValue)
     }
   }
   
   // MARK: Private Methods
-  
-  private func toDisplay(value:Int) -> String {
-    
-    var item : String = ""
-    
-    switch customNumberBase {
-    case .decimal:
-      item += "\(String(format: "%d", value))"
-    case .hexadecimal:
-      item += "0x\(String(format: "%02x", value))"
-    case .binary:
-      var padded = String(value, radix: 2)
-      for _ in 0..<(8 - padded.count) {
-        padded = "0" + padded
-      }
-      item += "0b" + padded
-      break
-
-    case .octal:
-      item += "\(String(format: "%03o", value))"
-      if item.prefix(1) != "0" {
-        item = "0\(item)"
-      }
-    }
-    
-    return item
-
-  }
   
   // MARK: Public Methods
   
@@ -244,7 +209,7 @@ public class DecoderCV : EditorObject {
       }
 
       if !reader.isDBNull(index: 8) {
-        isEnabled = reader.getInt(index: 8)! == 1
+        isEnabled = reader.getBool(index: 8)!
       }
       
     }

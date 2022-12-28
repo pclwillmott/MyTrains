@@ -214,6 +214,12 @@
                                                 <action selector="mnuEditSwitchesAction:" target="Voe-Tx-rLC" id="cQt-rG-ok9"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Configure Tower Controller" id="afT-LC-SLf">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="mnuConfigTowerController:" target="Voe-Tx-rLC" id="vsV-DT-Mdw"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="Configure Option Switches" id="TBB-iC-dDu">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
@@ -693,11 +699,11 @@
                                 <rect key="frame" x="-3" y="800" width="793" height="56"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <view key="contentView" id="f2K-Xq-V7l">
-                                    <rect key="frame" x="3" y="3" width="787" height="50"/>
+                                    <rect key="frame" x="4" y="5" width="785" height="48"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <button toolTip="Track Power Off" fixedFrame="YES" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="McJ-kX-caF">
-                                            <rect key="frame" x="685" y="9" width="30" height="36"/>
+                                            <rect key="frame" x="683" y="7" width="30" height="36"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="circle.fill" catalog="system" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="JfX-HO-gOf">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -709,7 +715,7 @@
                                             </connections>
                                         </button>
                                         <button toolTip="Track Power On" fixedFrame="YES" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8tU-Og-bFk">
-                                            <rect key="frame" x="635" y="9" width="30" height="36"/>
+                                            <rect key="frame" x="633" y="7" width="30" height="36"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="circle.fill" catalog="system" imagePosition="only" alignment="center" alternateImage="circle" imageScaling="proportionallyUpOrDown" inset="2" id="Gvo-tN-Fay">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -721,7 +727,7 @@
                                             </connections>
                                         </button>
                                         <button toolTip="Set Track to Idle" fixedFrame="YES" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gX1-7J-iGd">
-                                            <rect key="frame" x="735" y="9" width="30" height="36"/>
+                                            <rect key="frame" x="733" y="7" width="30" height="36"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="pause.circle" catalog="system" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="JCt-Qa-HAq">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -732,14 +738,14 @@
                                             </connections>
                                         </button>
                                         <switch toolTip="Connect to Command Station" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" allowsExpansionToolTips="YES" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="SW0-0C-pTk">
-                                            <rect key="frame" x="572" y="14" width="42" height="25"/>
+                                            <rect key="frame" x="570" y="12" width="42" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <connections>
                                                 <action selector="swConnectAction:" target="XfG-lQ-9wD" id="N8P-iX-9uz"/>
                                             </connections>
                                         </switch>
                                         <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FvV-6g-VOW">
-                                            <rect key="frame" x="20" y="14" width="428" height="25"/>
+                                            <rect key="frame" x="20" y="12" width="426" height="25"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                             <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="5" id="XS8-6K-Yk7">
                                                 <font key="font" metaFont="system"/>
@@ -751,7 +757,7 @@
                                             </connections>
                                         </comboBox>
                                         <button toolTip="Zoom In" fixedFrame="YES" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TQD-qK-bW9">
-                                            <rect key="frame" x="467" y="11.5" width="24" height="27"/>
+                                            <rect key="frame" x="465" y="9.5" width="24" height="27"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="bM7-wK-5yz">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -763,7 +769,7 @@
                                             </connections>
                                         </button>
                                         <button toolTip="Zoom Out" fixedFrame="YES" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Q4n-AY-BBa">
-                                            <rect key="frame" x="501" y="10.5" width="24" height="28"/>
+                                            <rect key="frame" x="499" y="8.5" width="24" height="28"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="I2B-d4-mmS">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -776,7 +782,7 @@
                                             </connections>
                                         </button>
                                         <button toolTip="Scale to Fit" fixedFrame="YES" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oeW-CB-kAA">
-                                            <rect key="frame" x="535" y="11" width="24" height="28"/>
+                                            <rect key="frame" x="533" y="9" width="24" height="28"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="Woq-Cj-kh4">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -794,7 +800,7 @@
                                 <rect key="frame" x="-3" y="-4" width="531" height="56"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <view key="contentView" id="TZD-lO-klV">
-                                    <rect key="frame" x="3" y="3" width="525" height="50"/>
+                                    <rect key="frame" x="4" y="5" width="523" height="48"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </box>

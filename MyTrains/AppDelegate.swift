@@ -52,6 +52,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
 
   // MARK: Edit Menu
   
+  
+  @IBAction func mnuConfigTowerController(_ sender: NSMenuItem) {
+    let x = ModalWindow.TC64Config
+    let wc = x.windowController
+    wc.showWindow(nil)
+  }
+  
   @IBAction func mnuFastClockTester(_ sender: NSMenuItem) {
     let x = ModalWindow.FastClockTester
     let wc = x.windowController
