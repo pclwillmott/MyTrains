@@ -484,6 +484,23 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
       
     }
     
+    if message.messageType == .progCV {
+      var cvNumber = Int(message.message[9])
+      
+      let mask1 : UInt8 = 0b00000001
+      let mask2 : UInt8 = 0b00010000
+      let mask3 : UInt8 = 0b00100000
+      
+      cvNumber |= ((message.message[8] & mask1) == mask1) ? 0b0000000010000000 : 0
+      cvNumber |= ((message.message[8] & mask2) == mask2) ? 0b0000000100000000 : 0
+      cvNumber |= ((message.message[8] & mask3) == mask3) ? 0b0000001000000000 : 0
+      
+      cvNumber += 1
+
+      item += "\nCV\(cvNumber)"
+
+    }
+    
     if !isPaused {
       
       txtMonitor.string += "\(item)\n"

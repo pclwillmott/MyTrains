@@ -64,6 +64,7 @@
 		DA3AEF422788855800FF91D4 /* DecoderCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3AEF412788855800FF91D4 /* DecoderCV.swift */; };
 		DA3AEF442788B33F00FF91D4 /* CVTableViewDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3AEF432788B33F00FF91D4 /* CVTableViewDS.swift */; };
 		DA3CD9F2277DEF990065D0C4 /* Interface.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3CD9F1277DEF990065D0C4 /* Interface.swift */; };
+		DA3D87A9295DF99A003398F5 /* TC64CVTableDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3D87A8295DF99A003398F5 /* TC64CVTableDS.swift */; };
 		DA412E122780948900748CCD /* Throttle.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA412E112780948900748CCD /* Throttle.storyboard */; };
 		DA412E14278099AF00748CCD /* ThrottleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA412E13278099AF00748CCD /* ThrottleVC.swift */; };
 		DA412E162780DC3C00748CCD /* DecoderFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA412E152780DC3C00748CCD /* DecoderFunction.swift */; };
@@ -268,6 +269,7 @@
 		DA3AEF412788855800FF91D4 /* DecoderCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecoderCV.swift; sourceTree = "<group>"; };
 		DA3AEF432788B33F00FF91D4 /* CVTableViewDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CVTableViewDS.swift; sourceTree = "<group>"; };
 		DA3CD9F1277DEF990065D0C4 /* Interface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Interface.swift; sourceTree = "<group>"; };
+		DA3D87A8295DF99A003398F5 /* TC64CVTableDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TC64CVTableDS.swift; sourceTree = "<group>"; };
 		DA412E112780948900748CCD /* Throttle.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Throttle.storyboard; sourceTree = "<group>"; };
 		DA412E13278099AF00748CCD /* ThrottleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThrottleVC.swift; sourceTree = "<group>"; };
 		DA412E152780DC3C00748CCD /* DecoderFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecoderFunction.swift; sourceTree = "<group>"; };
@@ -474,6 +476,7 @@
 				DA77795027AEE0E5007EEBE9 /* CommandStationConfigurationVC.swift */,
 				DA60D81A295C6D4000B5A2C4 /* TC64Config.storyboard */,
 				DA5A9F91295C950F00950479 /* TC64ConfigVC.swift */,
+				DA3D87A8295DF99A003398F5 /* TC64CVTableDS.swift */,
 				DA04B8D928F1AEB60062D944 /* ConsistState.swift */,
 				DAA867C527933265008B6EEC /* CSVParser.swift */,
 				DA3AEF432788B33F00FF91D4 /* CVTableViewDS.swift */,
@@ -797,6 +800,7 @@
 				DA467B9F281CBAF900AB9650 /* NSRectExtensions.swift in Sources */,
 				DA9325A6289C02C300CC317F /* LocomotiveDirection.swift in Sources */,
 				DAF5B4FD28A91A830015E758 /* SpeedSteps.swift in Sources */,
+				DA3D87A9295DF99A003398F5 /* TC64CVTableDS.swift in Sources */,
 				DA8B5D1D282FE31600D39F07 /* InterfaceDelegate.swift in Sources */,
 				DA77750428DF290E00C07E24 /* PurgeProfilerVC.swift in Sources */,
 				DA95D6C12808412200D9F1B6 /* DuplexData.swift in Sources */,

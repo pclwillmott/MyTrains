@@ -8,6 +8,13 @@
 import Foundation
 import Cocoa
 
+enum TC64Mode {
+  case idle
+  case readAll
+  case writeAll
+  case readDefaults
+}
+
 class TC64ConfigVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   
   // MARK: Window & View Control
@@ -34,7 +41,7 @@ class TC64ConfigVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
     
     cboDevice.dataSource = cboDeviceDS
     
-    cboProgrammerDS.dictionary = networkController.programmers
+    cboProgrammerDS.dictionary = networkController.interfaceDevices
     
     cboProgrammer.dataSource = cboProgrammerDS
     
@@ -65,6 +72,12 @@ class TC64ConfigVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   private var maxCV : Int = 0
   
   private var deviceAddr : Int = 0
+  
+  private var mode : TC64Mode = .idle
+  
+  private let specialCV : [Int] = [17, 18, 1, 112, 116, 117]
+  
+  private var tvCVsDS = TC64CVTableDS()
 
   // MARK: Private Methods
   
@@ -109,7 +122,7 @@ class TC64ConfigVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
     
     if let device = self.device {
       
-      txtDCCAddress.integerValue = device.boardId
+      txtDCCAddress.stringValue = "\(device.boardId)"
       
       lblFirmwareVersion.integerValue = device.firmwareVersion
       
@@ -130,7 +143,12 @@ class TC64ConfigVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
       chkMasterMode.state = device.isMasterModeEnabled ? .on : .off
       
       lblFlashRewriteCount.integerValue = device.flashRewriteCount
-      
+
+      tvCVsDS.cvs = device.cvs
+      tvCVs.dataSource = tvCVsDS
+      tvCVs.delegate = tvCVsDS
+      tvCVs.reloadData()
+
       tabView.isHidden = false
       
     }
@@ -145,30 +163,101 @@ class TC64ConfigVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   @objc func networkMessageReceived(message:NetworkMessage) {
     
     switch message.messageType {
+      
+    case .progCmdAcceptedBlind:
+      
+      if let device = self.device, mode == .writeAll {
+
+        currentCV += 1
+        let newCVNumber = currentCV < specialCV.count ? specialCV[currentCV] : 123 + currentCV
+
+        if newCVNumber <= maxCV {
+          lblStatus.stringValue = "Writing CV #\(newCVNumber)"
+          programmer?.writeCV(progMode: .operationsMode, cv: newCVNumber, address: deviceAddr, value: device.cvs[newCVNumber - 1].nextCVValue)
+        }
+        else {
+          
+          let newAddress = device.cvs[17].nextCVValue | (device.cvs[16].nextCVValue << 8)
+          
+          if newAddress != device.boardId {
+            
+            let alert = NSAlert()
+
+            alert.messageText = "The device address has been changed. The device must be power cycled in order for this to take effect."
+            alert.informativeText = ""
+            alert.addButton(withTitle: "OK")
+            alert.alertStyle = .informational
+
+            alert.runModal()
+
+            device.boardId = txtDCCAddress.integerValue
+            
+          }
+          
+          lblStatus.stringValue = "Done"
+          mode = .idle
+          device.save()
+        }
+
+      }
+     
+    case .programmerBusy:
+      
+      if let device = self.device, mode == .writeAll {
+
+        let newCVNumber = currentCV < specialCV.count ? specialCV[currentCV] : 123 + currentCV
+        programmer?.writeCV(progMode: .operationsMode, cv: newCVNumber, address: deviceAddr, value: device.cvs[newCVNumber - 1].nextCVValue)
+
+      }
+      
+      
     case .progSlotDataP1:
 
-      if let device = self.device {
+      var cvNumber = Int(message.message[9])
+      
+      let mask1 : UInt8 = 0b00000001
+      let mask2 : UInt8 = 0b00010000
+      let mask3 : UInt8 = 0b00100000
+      
+      cvNumber |= ((message.message[8] & mask1) == mask1) ? 0b0000000010000000 : 0
+      cvNumber |= ((message.message[8] & mask2) == mask2) ? 0b0000000100000000 : 0
+      cvNumber |= ((message.message[8] & mask3) == mask3) ? 0b0000001000000000 : 0
+      
+      cvNumber += 1
+      
+      if (mode == .readAll || mode == .readDefaults) && cvNumber == currentCV {
         
-        var cvValue = message.message[10]
+        if let device = self.device {
+          
+          var cvValue = message.message[10]
+          
+          let mask : UInt8 = 0b00000010
+          
+          cvValue |= ((message.message[8] & mask) == mask) ? 0b10000000 : 0
+          
+          if mode == .readAll {
+            device.cvs[cvNumber - 1].nextCVValue = Int(cvValue)
+          }
+          else {
+            device.cvs[cvNumber - 1].defaultValue = Int(cvValue)
+          }
+          
+          updateDisplay()
+          
+        }
         
-        let mask : UInt8 = 0b00000010
+        if currentCV < maxCV {
+          currentCV += 1
+          lblStatus.stringValue = "Reading CV #\(currentCV)"
+          programmer?.readCV(progMode: .operationsMode, cv: currentCV, address: deviceAddr)
+        }
+        else {
+          lblStatus.stringValue = "Done"
+          mode = .idle
+        }
         
-        cvValue |= ((message.message[8] & mask) == mask) ? 0b10000000 : 0
-        
-        device.cvs[currentCV-1].nextCVValue = Int(cvValue)
-        
-        updateDisplay()
-
       }
-
-      if currentCV < maxCV {
-        currentCV += 1
-        lblStatus.stringValue = "Reading CV #\(currentCV)"
-        programmer?.readCV(progMode: .operationsMode, cv: currentCV, address: deviceAddr)
-      }
-      else {
-        lblStatus.stringValue = "Done"
-      }
+      
     default:
       break
     }
@@ -197,7 +286,11 @@ class TC64ConfigVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   
   
   @IBAction func txtDCCAddressAction(_ sender: NSTextField) {
-    device?.boardId = txtDCCAddress.integerValue
+    if let device = self.device {
+      let address = txtDCCAddress.integerValue
+      device.cvs[16].nextCVValue = address >> 8
+      device.cvs[17].nextCVValue = address & 0xff
+    }
   }
   
   @IBOutlet weak var chkMasterMode: NSButton!
@@ -255,6 +348,7 @@ class TC64ConfigVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   @IBAction func btnReadAllAction(_ sender: NSButton) {
     currentCV = 1
     if let device = self.device, let info = device.locoNetProductInfo {
+      mode = .readAll
       maxCV = info.cvs
       deviceAddr = device.boardId
       lblStatus.stringValue = "Reading CV #\(currentCV)"
@@ -266,6 +360,7 @@ class TC64ConfigVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   
   @IBAction func btnDiscardChangesAction(_ sender: NSButton) {
     
+    mode = .idle
     device?.discardChangesToCVs()
     updateDisplay()
     
@@ -274,6 +369,15 @@ class TC64ConfigVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   @IBOutlet weak var btnWriteAll: NSButton!
   
   @IBAction func btnWriteAllAction(_ sender: NSButton) {
+    if let device = self.device, let info = device.locoNetProductInfo {
+      mode = .writeAll
+      maxCV = info.cvs
+      deviceAddr = device.boardId
+      lblStatus.stringValue = "Writing CV #\(currentCV)"
+      currentCV = 0
+      let newCVNumber = currentCV < specialCV.count ? specialCV[currentCV] : 123 + currentCV
+      programmer?.writeCV(progMode: .operationsMode, cv: newCVNumber, address: deviceAddr, value: device.cvs[newCVNumber - 1].nextCVValue)
+    }
   }
   
   @IBOutlet weak var lblStatus: NSTextField!
@@ -286,11 +390,52 @@ class TC64ConfigVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
     
   }
   
+  @IBAction func btnReadDefaultsAction(_ sender: NSButton) {
+    currentCV = 1
+    if let device = self.device, let info = device.locoNetProductInfo {
+      mode = .readDefaults
+      maxCV = info.cvs
+      deviceAddr = device.boardId
+      lblStatus.stringValue = "Reading CV #\(currentCV)"
+      programmer?.readCV(progMode: .operationsMode, cv: currentCV, address: deviceAddr)
+    }
+  }
   
+  @IBAction func chkSupportedAction(_ sender: NSButton) {
+    if let device = self.device {
+      let item = device.cvs[sender.tag]
+      item.nextIsEnabled = sender.state == .on
+    }
+  }
   
+  @IBAction func txtDescriptionAction(_ sender: NSTextField) {
+    if let device = self.device {
+      let item = device.cvs[sender.tag]
+      item.nextCustomDescription = sender.stringValue
+    }
+  }
   
+  @IBAction func cboNumberBaseAction(_ sender: NSComboBox) {
+    if let device = self.device {
+      let item = device.cvs[sender.tag]
+      item.nextCustomNumberBase = CVNumberBase.selected(comboBox: sender)
+      tvCVs.reloadData()
+    }
+  }
   
+  @IBAction func txtDefaultAction(_ sender: NSTextField) {
+    if let device = self.device {
+      let item = device.cvs[sender.tag]
+      item.nextDefaultValue = sender.integerValue
+    }
+  }
   
+  @IBAction func txtValueAction(_ sender: NSTextField) {
+    if let device = self.device {
+      let item = device.cvs[sender.tag]
+      item.nextCVValue = sender.integerValue
+    }
+  }
   
 }
 

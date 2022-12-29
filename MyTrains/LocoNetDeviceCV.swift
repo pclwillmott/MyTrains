@@ -24,7 +24,146 @@ public class LocoNetDeviceCV : EditorObject {
   
   private var _newValue : String = ""
   
+  private var _cvDescriptions : [Int:String]?
+  
   // MARK: Public Properties
+ 
+  public var cvDescriptions : [Int:String] {
+    
+    get {
+      if let descriptions = _cvDescriptions {
+        return descriptions
+      }
+      var temp : [(cvNumber:Int, cvDescription:String)] = [
+        (1, "Primary Address"),
+        (2, "Vstart"),
+        (3, "Acceleration Rate"),
+        (4, "Decleration Rate"),
+        (5, "Vhigh"),
+        (6, "Vmid"),
+        (7, "Manufacturer Version Number"),
+        (8, "Manufacturer ID"),
+        (9, "Total PWM Period"),
+        (10, "EMF Feedback Cutout"),
+        (11, "Packet time-out Value"),
+        (12, "Power Source Conversion"),
+        (13, "Alternate Mode Function Status"),
+        (14, "Alternate Mode Function 2 Status"),
+        (15, "Decoder Lock"),
+        (16, "Decoder Lock"),
+        (17, "Extended Address MSBits"),
+        (18, "Extended Address LSBits"),
+        (19, "Consist Address"),
+        (21, "Consist Address Active for F1-F8"),
+        (22, "Consist Address Active for FL and F9-F12"),
+        (23, "Acceleration Adjustment"),
+        (24, "Decleration Adjustment"),
+        (25, "Speed Table/Mid Range Cab Speed Step"),
+        (27, "Decoder Automatic Stopping Configuration"),
+        (28, "Bi-Directional Communication Configuration"),
+        (29, "Configurations Supported"),
+        (30, "ERROR Information"),
+        (31, "Index High Byte"),
+        (32, "Index Low Byte"),
+        (33, "Manufacturer Unique"),
+        (34, "Manufacturer Unique"),
+        (35, "Manufacturer Unique"),
+        (36, "Manufacturer Unique"),
+        (37, "Manufacturer Unique"),
+        (38, "Manufacturer Unique"),
+        (39, "Manufacturer Unique"),
+        (40, "Manufacturer Unique"),
+        (41, "Manufacturer Unique"),
+        (42, "Manufacturer Unique"),
+        (43, "Manufacturer Unique"),
+        (44, "Manufacturer Unique"),
+        (45, "Manufacturer Unique"),
+        (46, "Manufacturer Unique"),
+        (47, "Manufacturer Unique"),
+        (48, "Manufacturer Unique"),
+        (49, "Manufacturer Unique"),
+        (50, "Manufacturer Unique"),
+        (51, "Manufacturer Unique"),
+        (52, "Manufacturer Unique"),
+        (53, "Manufacturer Unique"),
+        (54, "Manufacturer Unique"),
+        (55, "Manufacturer Unique"),
+        (56, "Manufacturer Unique"),
+        (57, "Manufacturer Unique"),
+        (58, "Manufacturer Unique"),
+        (59, "Manufacturer Unique"),
+        (60, "Manufacturer Unique"),
+        (61, "Manufacturer Unique"),
+        (62, "Manufacturer Unique"),
+        (63, "Manufacturer Unique"),
+        (64, "Manufacturer Unique"),
+        (65, "Kick Start"),
+        (66, "Forward Trim"),
+        (67, "Speed Table #1"),
+        (68, "Speed Table #2"),
+        (69, "Speed Table #3"),
+        (70, "Speed Table #4"),
+        (71, "Speed Table #5"),
+        (72, "Speed Table #6"),
+        (73, "Speed Table #7"),
+        (74, "Speed Table #8"),
+        (75, "Speed Table #9"),
+        (76, "Speed Table #10"),
+        (77, "Speed Table #11"),
+        (78, "Speed Table #12"),
+        (79, "Speed Table #13"),
+        (80, "Speed Table #14"),
+        (81, "Speed Table #15"),
+        (82, "Speed Table #16"),
+        (83, "Speed Table #17"),
+        (84, "Speed Table #18"),
+        (85, "Speed Table #19"),
+        (86, "Speed Table #20"),
+        (87, "Speed Table #21"),
+        (88, "Speed Table #22"),
+        (89, "Speed Table #23"),
+        (90, "Speed Table #24"),
+        (91, "Speed Table #25"),
+        (92, "Speed Table #26"),
+        (93, "Speed Table #27"),
+        (94, "Speed Table #28"),
+        (95, "Reverse Trim"),
+        (96, "NMRA Reserved"),
+        (97, "NMRA Reserved"),
+        (98, "NMRA Reserved"),
+        (99, "NMRA Reserved"),
+        (100, "NMRA Reserved"),
+        (101, "NMRA Reserved"),
+        (102, "NMRA Reserved"),
+        (103, "NMRA Reserved"),
+        (104, "NMRA Reserved"),
+        (105, "User Identification #1"),
+        (106, "User Identification #2"),
+        (107, "NMRA Reserved"),
+        (108, "NMRA Reserved"),
+        (109, "NMRA Reserved"),
+        (110, "NMRA Reserved"),
+        (111, "NMRA Reserved"),
+        (892, "Decoder Load"),
+        (893, "Flags"),
+        (894, "Fuel/Coal"),
+        (895, "Water"),
+      ]
+      
+      for cv in 112...256 {
+        temp.append((cv, "Manufacturer Unique"))
+      }
+      
+      _cvDescriptions = [:]
+      
+      for x in temp {
+        _cvDescriptions![x.cvNumber] = x.cvDescription
+      }
+      
+      return _cvDescriptions!
+      
+    }
+  }
   
   public var locoNetDeviceId : Int = -1 {
     didSet {
@@ -116,12 +255,21 @@ public class LocoNetDeviceCV : EditorObject {
     }
   }
   
+  public var cvDescription : String {
+    get {
+      if let description = cvDescriptions[cvNumber] {
+        return description
+      }
+      return "unknown - \(cvNumber)"
+    }
+  }
+  
   // MARK: Private Methods
     
   // MARK: Public Methods
   
   override public func displayString() -> String {
-    return customDescription == "" ? "eric" : customDescription
+    return customDescription == "" ? cvDescription : customDescription
   }
 
   // MARK: Public Methods

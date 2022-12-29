@@ -817,9 +817,9 @@ extension Interface {
     
     let cvAdjusted = cv - 1
     
-    let cvh : Int = (cvAdjusted & 0b0000001000000000) == 0b0000001000000000 ? 0b00100000 : 0x00 |
-                    (cvAdjusted & 0b0000000100000000) == 0b0000000100000000 ? 0b00010000 : 0x00 |
-                    (cvAdjusted & 0b0000000010000000) == 0b0000000010000000 ? 0b00000001 : 0x00
+    let cvh : Int = ((cvAdjusted & 0b0000001000000000) == 0b0000001000000000 ? 0b00100000 : 0x00) |
+                    ((cvAdjusted & 0b0000000100000000) == 0b0000000100000000 ? 0b00010000 : 0x00) |
+                    ((cvAdjusted & 0b0000000010000000) == 0b0000000010000000 ? 0b00000001 : 0x00)
 
     let message = NetworkMessage(networkId: networkId, data:
         [
@@ -852,7 +852,8 @@ extension Interface {
     case .directMode:
       pcmd = 0b01101011
     case .operationsMode:
-      pcmd = 0b01101111
+//      pcmd = 0b01101111
+      pcmd = 0b01100111
     case .pagedMode:
       pcmd = 0b01100011
     case .physicalRegister:
@@ -869,10 +870,10 @@ extension Interface {
     
    let cvAdjusted = cv - 1
     
-    let cvh : Int = (cvAdjusted & 0b0000001000000000) == 0b0000001000000000 ? 0b00100000 : 0x00 |
-                    (cvAdjusted & 0b0000000100000000) == 0b0000000100000000 ? 0b00010000 : 0x00 |
-                    (cvAdjusted & 0b0000000010000000) == 0b0000000010000000 ? 0b00000001 : 0x00 |
-                    (value & 0b10000000) == 0b10000000 ? 0b00000010 : 0x00
+    let cvh : Int = ((cvAdjusted & 0b0000001000000000) == 0b0000001000000000 ? 0b00100000 : 0x00) |
+                    ((cvAdjusted & 0b0000000100000000) == 0b0000000100000000 ? 0b00010000 : 0x00) |
+                    ((cvAdjusted & 0b0000000010000000) == 0b0000000010000000 ? 0b00000001 : 0x00) |
+                    ((value & 0b10000000) == 0b10000000 ? 0b00000010 : 0x00)
 
     let message = NetworkMessage(networkId: networkId, data:
         [
@@ -887,12 +888,12 @@ extension Interface {
           UInt8(cvh & 0x7f),
           UInt8(cvAdjusted & 0x7f),
           UInt8(value & 0x7f),
-          0x00,
-          0x00
+          0x7f,
+          0x7f
         ],
         appendCheckSum: true)
     
-    addToQueue(message: message, delay: MessageTiming.CVOP, responses: [.progCmdAccepted, .progCmdAcceptedBlind], retryCount: 10, timeoutCode: .writeCV)
+    addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [], retryCount: 0, timeoutCode: .none)
     
   }
   
