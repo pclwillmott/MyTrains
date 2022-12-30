@@ -8,7 +8,7 @@
 import Foundation
 import Cocoa
 
-enum TC64Mode {
+enum TC64ConfigMode {
   case idle
   case readAll
   case writeAll
@@ -41,15 +41,21 @@ class TC64ConfigVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
     
     cboDevice.dataSource = cboDeviceDS
     
-    cboProgrammerDS.dictionary = networkController.interfaceDevices
+    let deviceId = UserDefaults.standard.integer(forKey: DEFAULT.TC64_CONFIG_LAST_DEVICE)
+
+    cboDevice.selectItem(at: cboDeviceDS.indexWithKey(key: deviceId) ?? -1)
     
+    cboProgrammerDS.dictionary = networkController.interfaceDevices
+
     cboProgrammer.dataSource = cboProgrammerDS
     
-    if cboProgrammer.numberOfItems > 0 {
-      cboProgrammer.selectItem(at: 0)
-    }
+    let interfaceId = UserDefaults.standard.integer(forKey: DEFAULT.TC64_CONFIG_INTERFACE)
+    
+    cboProgrammer.selectItem(at: cboProgrammerDS.indexWithKey(key: interfaceId) ?? -1)
     
     tabView.isHidden = true
+    
+    setup()
 
   }
   
@@ -73,7 +79,7 @@ class TC64ConfigVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   
   private var deviceAddr : Int = 0
   
-  private var mode : TC64Mode = .idle
+  private var mode : TC64ConfigMode = .idle
   
   private let specialCV : [Int] = [17, 18, 1, 112, 116, 117]
   
@@ -92,6 +98,8 @@ class TC64ConfigVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
     }
     
     if let programmer = cboProgrammerDS.editorObjectAt(index: cboProgrammer.indexOfSelectedItem) as? Interface {
+
+
       if let info = programmer.locoNetProductInfo, info.attributes.contains(.CommandStation) {
         self.programmer = networkController.commandStationInterface(commandStation: programmer)
         needToSetPRMode = false
@@ -102,10 +110,14 @@ class TC64ConfigVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
       }
       if let cs = self.programmer {
         
+        UserDefaults.standard.set(cs.primaryKey, forKey: DEFAULT.TC64_CONFIG_INTERFACE)
+
         observerId = cs.addObserver(observer: self)
         
         if let device = cboDeviceDS.editorObjectAt(index: cboDevice.indexOfSelectedItem) as? LocoNetDevice {
           
+          UserDefaults.standard.set(device.primaryKey, forKey: DEFAULT.TC64_CONFIG_LAST_DEVICE)
+
           self.device = device
           
         }

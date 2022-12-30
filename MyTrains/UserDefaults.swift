@@ -57,6 +57,7 @@ enum DEFAULT {
   static let FC_TESTER_SCALE_FACTOR             = "FC_TESTER_SCALE_FACTOR"
   static let FC_TESTER_SAMPLE_RATE              = "FC_TESTER_SAMPLE_RATE"
   static let FC_TESTER_DAYS                     = "FC_TESTER_DAYS"
-  
+  static let TC64_CONFIG_INTERFACE              = "TC64_CONFIG_INTERFACE"
+  static let TC64_CONFIG_LAST_DEVICE            = "TC64_CONFIG_LAST_DEVICE"
   
 }
