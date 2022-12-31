@@ -270,8 +270,8 @@
             filePath = "MyTrains/LocoNetDevice.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "49"
-            endingLineNumber = "49"
+            startingLineNumber = "52"
+            endingLineNumber = "52"
             landmarkName = "LocoNetDevice"
             landmarkType = "3">
          </BreakpointContent>
@@ -318,8 +318,8 @@
             filePath = "MyTrains/LocoNetDevice.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "265"
-            endingLineNumber = "265"
+            startingLineNumber = "280"
+            endingLineNumber = "280"
             landmarkName = "baseAddress"
             landmarkType = "24">
          </BreakpointContent>
@@ -334,8 +334,8 @@
             filePath = "MyTrains/LocoNetDevice.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "279"
-            endingLineNumber = "279"
+            startingLineNumber = "294"
+            endingLineNumber = "294"
             landmarkName = "addresses"
             landmarkType = "24">
             <Locations>
@@ -398,8 +398,8 @@
             filePath = "MyTrains/LocoNetDevice.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1005"
-            endingLineNumber = "1005"
+            startingLineNumber = "1020"
+            endingLineNumber = "1020"
             landmarkName = "save()"
             landmarkType = "7">
          </BreakpointContent>
@@ -682,8 +682,8 @@
             filePath = "MyTrains/TC64ConfigVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "260"
-            endingLineNumber = "260"
+            startingLineNumber = "372"
+            endingLineNumber = "372"
             landmarkName = "networkMessageReceived(message:)"
             landmarkType = "7">
          </BreakpointContent>

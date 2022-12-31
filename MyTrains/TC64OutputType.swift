@@ -25,6 +25,12 @@ public enum TC64OutputType : Int {
     }
   }
   
+  public var isLong : Bool {
+    get {
+      return self == .longPulse || self == .longBlink
+    }
+  }
+  
   private static let titles = [
     "Short Pulse",
     "Long Pulse",

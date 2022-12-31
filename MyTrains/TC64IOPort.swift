@@ -36,7 +36,7 @@ public class TC64IOPort : NSObject {
       let port = (ioPortNumber - 1 ) / 8 + 1
       let line = (ioPortNumber - 1 ) % 8 + 1
       let pins = [10, 9, 8, 7, 4, 3, 2, 1]
-      return "Port #\(port) I/O#\(line) Pin #\(pins[line - 1])"
+      return "I/O #\(port) Line #\(line) Pin #\(pins[line - 1])"
     }
   }
   
@@ -94,12 +94,12 @@ public class TC64IOPort : NSObject {
     }
   }
   
-  public var actionPaired : TC64ActionPaired {
+  public var paired : TC64Paired {
     get {
       let cv = baseCVNumber + 1
       let mask = 0b11000000
       let rawValue = (locoNetDevice.cvs[cv - 1].nextCVValue & mask) >> 6
-      return TC64ActionPaired(rawValue: rawValue) ?? .defaultValue
+      return TC64Paired(rawValue: rawValue) ?? .defaultValue
     }
     set(value) {
       let cv = baseCVNumber + 1
@@ -107,6 +107,15 @@ public class TC64IOPort : NSObject {
       var rawValue = locoNetDevice.cvs[cv - 1].nextCVValue & ~mask
       rawValue |= (value.rawValue << 6)
       locoNetDevice.cvs[cv - 1].nextCVValue = rawValue & 0xff
+    }
+  }
+  
+  public var action : TC64Action {
+    get {
+      return TC64Action(rawValue: paired.rawValue) ?? .defaultValue
+    }
+    set(value) {
+      paired = TC64Paired(rawValue: value.rawValue) ?? .defaultValue
     }
   }
   
@@ -162,47 +171,47 @@ public class TC64IOPort : NSObject {
     get {
       let cv = baseCVNumber + 2
       let mask = 0b00000011
-      let rawValue = locoNetDevice.cvs[cv - 1].nextCVValue & (mask << 0)
+      let rawValue = locoNetDevice.cvs[cv - 1].nextCVValue & mask
       return TC64TransitionControl(rawValue: rawValue) ?? .defaultValue
     }
     set(value) {
       let cv = baseCVNumber + 2
       let mask = 0b00000011
-      var rawValue = locoNetDevice.cvs[cv - 1].nextCVValue & ~(mask << 0)
-      rawValue |= (value.rawValue << 0)
-      locoNetDevice.cvs[cv - 1].nextCVValue = rawValue & 0xff
+      var rawValue = (locoNetDevice.cvs[cv - 1].nextCVValue & ~mask) & 0xff
+      rawValue |= value.rawValue
+      locoNetDevice.cvs[cv - 1].nextCVValue = rawValue
     }
   }
   
   public var transitionControlSecondary : TC64TransitionControl {
     get {
       let cv = baseCVNumber + 2
-      let mask = 0b00000011
-      let rawValue = locoNetDevice.cvs[cv - 1].nextCVValue & (mask << 2)
+      let mask = 0b00001100
+      let rawValue = (locoNetDevice.cvs[cv - 1].nextCVValue & mask) >> 2
       return TC64TransitionControl(rawValue: rawValue) ?? .defaultValue
     }
     set(value) {
       let cv = baseCVNumber + 2
-      let mask = 0b00000011
-      var rawValue = locoNetDevice.cvs[cv - 1].nextCVValue & ~(mask << 2)
-      rawValue |= (value.rawValue << 0)
-      locoNetDevice.cvs[cv - 1].nextCVValue = rawValue & 0xff
+      let mask = 0b00001100
+      var rawValue = (locoNetDevice.cvs[cv - 1].nextCVValue & ~mask) & 0xff
+      rawValue |= (value.rawValue << 2)
+      locoNetDevice.cvs[cv - 1].nextCVValue = rawValue
     }
   }
   
   public var transitionControlTertiary : TC64TransitionControl {
     get {
       let cv = baseCVNumber + 2
-      let mask = 0b00000011
-      let rawValue = locoNetDevice.cvs[cv - 1].nextCVValue & (mask << 4)
+      let mask = 0b00110000
+      let rawValue = (locoNetDevice.cvs[cv - 1].nextCVValue & mask) >> 4
       return TC64TransitionControl(rawValue: rawValue) ?? .defaultValue
     }
     set(value) {
       let cv = baseCVNumber + 2
-      let mask = 0b00000011
-      var rawValue = locoNetDevice.cvs[cv - 1].nextCVValue & ~(mask << 4)
-      rawValue |= (value.rawValue << 0)
-      locoNetDevice.cvs[cv - 1].nextCVValue = rawValue & 0xff
+      let mask = 0b00110000
+      var rawValue = (locoNetDevice.cvs[cv - 1].nextCVValue & ~mask) & 0xff
+      rawValue |= (value.rawValue << 4)
+      locoNetDevice.cvs[cv - 1].nextCVValue = rawValue
     }
   }
   
@@ -216,23 +225,41 @@ public class TC64IOPort : NSObject {
     set(value) {
       let cv = baseCVNumber + 2
       let mask = 0b01000000
-      var rawValue = locoNetDevice.cvs[cv - 1].nextCVValue & ~mask
-      rawValue |= (value == .input) ? mask : 0
-      locoNetDevice.cvs[cv - 1].nextCVValue = rawValue & 0xff
+      var rawValue = (locoNetDevice.cvs[cv - 1].nextCVValue & ~mask) & 0xff
+      rawValue |= ((value == .input) ? mask : 0)
+      locoNetDevice.cvs[cv - 1].nextCVValue = rawValue
     }
   }
   
-  public var timing : TC64Timing {
+  public var outputShortTiming : TC64ShortTiming {
     get {
       let cv = baseCVNumber + 3
       let rawValue = locoNetDevice.cvs[cv - 1].nextCVValue & 0x0f
-      return TC64Timing(rawValue: rawValue) ?? .defaultValue
+      return TC64ShortTiming(rawValue: rawValue) ?? .defaultValue
     }
     set(value) {
       let cv = baseCVNumber + 3
       var rawValue = locoNetDevice.cvs[cv - 1].nextCVValue & ~0x0f
       rawValue |= value.rawValue
       locoNetDevice.cvs[cv - 1].nextCVValue = rawValue & 0xff
+    }
+  }
+  
+  public var outputLongTiming : TC64LongTiming {
+    get {
+      return TC64LongTiming(rawValue: outputShortTiming.rawValue) ?? .defaultValue
+    }
+    set(value) {
+      outputShortTiming = TC64ShortTiming(rawValue: value.rawValue) ?? .defaultValue
+    }
+  }
+  
+  public var debounceTiming : TC64DebounceTiming {
+    get {
+      return TC64DebounceTiming(rawValue: outputShortTiming.rawValue) ?? .defaultValue
+    }
+    set(value) {
+      outputShortTiming = TC64ShortTiming(rawValue: value.rawValue) ?? .defaultValue
     }
   }
   
@@ -265,6 +292,31 @@ public class TC64IOPort : NSObject {
       var rawValue = locoNetDevice.cvs[cv - 1].nextCVValue & ~mask
       rawValue |= (value ? mask : 0)
       locoNetDevice.cvs[cv - 1].nextCVValue = rawValue & 0xff
+    }
+  }
+
+  public var outputPolarityPrimary : TC64OutputPolarityPrimary {
+    get {
+      let cv = baseCVNumber + 2
+      let mask = 0b10000000
+      let rawValue = (locoNetDevice.cvs[cv - 1].nextCVValue & mask) >> 7
+      return TC64OutputPolarityPrimary(rawValue: rawValue) ?? .defaultValue
+    }
+    set(value) {
+      let cv = baseCVNumber + 2
+      let mask = 0b10000000
+      var rawValue = locoNetDevice.cvs[cv - 1].nextCVValue & ~mask
+      rawValue |= (value.rawValue << 7)
+      locoNetDevice.cvs[cv - 1].nextCVValue = rawValue & 0xff
+    }
+  }
+  
+  public var inputPolarityPrimary : TC64InputPolarityPrimary {
+    get {
+      return TC64InputPolarityPrimary(rawValue: outputPolarityPrimary.rawValue) ?? .defaultValue
+    }
+    set(value) {
+      outputPolarityPrimary = TC64OutputPolarityPrimary(rawValue: value.rawValue) ?? .defaultValue
     }
   }
   

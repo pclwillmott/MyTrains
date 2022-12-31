@@ -45,6 +45,9 @@ public class LocoNetDevice : EditorObject {
   private var _optionSwitchState = [UInt64](repeating: 0, count: 4)
   
   private var _newOptionSwitchState = [UInt64](repeating: 0, count: 4)
+  
+  private var _tc64IOPorts : [TC64IOPort] = []
+
 
   // MARK: Public Properties
   
@@ -191,6 +194,18 @@ public class LocoNetDevice : EditorObject {
   public var sensors : [Sensor] = []
   
   public var turnoutSwitches : [TurnoutSwitch] = []
+  
+  public var tc64IOPorts : [TC64IOPort] {
+    get {
+      if _tc64IOPorts.count == 0 {
+        for index in 1...64 {
+          let ioPort = TC64IOPort(locoNetDevice: self, ioPortNumber: index)
+          _tc64IOPorts.append(ioPort)
+        }
+      }
+      return _tc64IOPorts
+    }
+  }
   
   public var cvs : [LocoNetDeviceCV] = []
   
