@@ -584,14 +584,14 @@
                                                     </connections>
                                                 </comboBox>
                                                 <box fixedFrame="YES" title="Output" translatesAutoresizingMaskIntoConstraints="NO" id="svO-3o-usF">
-                                                    <rect key="frame" x="617" y="10" width="910" height="455"/>
+                                                    <rect key="frame" x="617" y="42" width="910" height="425"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <view key="contentView" id="11r-OG-glj">
-                                                        <rect key="frame" x="4" y="5" width="902" height="435"/>
+                                                        <rect key="frame" x="4" y="5" width="902" height="405"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <box fixedFrame="YES" title="Primary" translatesAutoresizingMaskIntoConstraints="NO" id="gt6-8a-Dno">
-                                                                <rect key="frame" x="9" y="237" width="876" height="93"/>
+                                                                <rect key="frame" x="9" y="207" width="876" height="93"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                 <view key="contentView" id="0V6-Nr-jaT">
                                                                     <rect key="frame" x="4" y="5" width="868" height="73"/>
@@ -700,7 +700,7 @@
                                                                 </view>
                                                             </box>
                                                             <box fixedFrame="YES" title="Secondary" translatesAutoresizingMaskIntoConstraints="NO" id="79O-H5-xPD">
-                                                                <rect key="frame" x="9" y="140" width="876" height="93"/>
+                                                                <rect key="frame" x="9" y="110" width="876" height="93"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                 <view key="contentView" id="AdQ-ph-o7K">
                                                                     <rect key="frame" x="4" y="5" width="868" height="73"/>
@@ -809,7 +809,7 @@
                                                                 </view>
                                                             </box>
                                                             <box fixedFrame="YES" title="Tertiary" translatesAutoresizingMaskIntoConstraints="NO" id="wgM-82-8fd">
-                                                                <rect key="frame" x="9" y="43" width="876" height="93"/>
+                                                                <rect key="frame" x="9" y="13" width="876" height="93"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                 <view key="contentView" id="pAU-Zz-PLF">
                                                                     <rect key="frame" x="4" y="5" width="868" height="73"/>
@@ -918,7 +918,7 @@
                                                                 </view>
                                                             </box>
                                                             <box fixedFrame="YES" title="Control" translatesAutoresizingMaskIntoConstraints="NO" id="Y5y-i4-FzU">
-                                                                <rect key="frame" x="9" y="334" width="876" height="93"/>
+                                                                <rect key="frame" x="9" y="304" width="876" height="93"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                 <view key="contentView" id="Qae-Bo-Cqh">
                                                                     <rect key="frame" x="4" y="5" width="868" height="73"/>
@@ -1020,14 +1020,14 @@
                                                     </view>
                                                 </box>
                                                 <box fixedFrame="YES" title="Input" translatesAutoresizingMaskIntoConstraints="NO" id="jzj-jj-TDl">
-                                                    <rect key="frame" x="16" y="10" width="910" height="455"/>
+                                                    <rect key="frame" x="16" y="75" width="910" height="425"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <view key="contentView" id="oQe-DO-I7E">
-                                                        <rect key="frame" x="4" y="5" width="902" height="435"/>
+                                                        <rect key="frame" x="4" y="5" width="902" height="405"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <box fixedFrame="YES" title="Primary" translatesAutoresizingMaskIntoConstraints="NO" id="93T-Td-Bor">
-                                                                <rect key="frame" x="9" y="237" width="876" height="93"/>
+                                                                <rect key="frame" x="9" y="207" width="876" height="93"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                 <view key="contentView" id="DZk-Wb-iXp">
                                                                     <rect key="frame" x="4" y="5" width="868" height="73"/>
@@ -1136,7 +1136,7 @@
                                                                 </view>
                                                             </box>
                                                             <box fixedFrame="YES" title="Secondary" translatesAutoresizingMaskIntoConstraints="NO" id="ldY-zq-zf6">
-                                                                <rect key="frame" x="9" y="140" width="876" height="93"/>
+                                                                <rect key="frame" x="9" y="110" width="876" height="93"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                 <view key="contentView" id="Y5G-SO-cCc">
                                                                     <rect key="frame" x="4" y="5" width="868" height="73"/>
@@ -1245,7 +1245,7 @@
                                                                 </view>
                                                             </box>
                                                             <box fixedFrame="YES" title="Tertiary" translatesAutoresizingMaskIntoConstraints="NO" id="YbU-wd-UiR">
-                                                                <rect key="frame" x="9" y="43" width="876" height="93"/>
+                                                                <rect key="frame" x="9" y="13" width="876" height="93"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                 <view key="contentView" id="9xr-AS-I0c">
                                                                     <rect key="frame" x="4" y="5" width="868" height="73"/>
@@ -1354,7 +1354,7 @@
                                                                 </view>
                                                             </box>
                                                             <box fixedFrame="YES" title="Control" translatesAutoresizingMaskIntoConstraints="NO" id="fh4-xw-j7n">
-                                                                <rect key="frame" x="9" y="334" width="876" height="93"/>
+                                                                <rect key="frame" x="9" y="304" width="876" height="93"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                 <view key="contentView" id="889-2b-J1G">
                                                                     <rect key="frame" x="4" y="5" width="868" height="73"/>
@@ -1427,6 +1427,17 @@
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
+                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="l2C-PB-TUf">
+                                                    <rect key="frame" x="662" y="-1" width="138" height="32"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
+                                                    <buttonCell key="cell" type="push" title="Write Page" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="rBb-XJ-nG8">
+                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <action selector="btnWritePageAction:" target="GGA-Hv-cAw" id="EAL-Ar-Rn5"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                         </view>
                                     </tabViewItem>

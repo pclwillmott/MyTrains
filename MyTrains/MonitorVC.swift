@@ -501,6 +501,10 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
 
     }
     
+    if message.messageType == .sensRepGenIn || message.messageType == .sensRepTurnIn || message.messageType == .sensRepTurnOut {
+      print("\(message.messageType) \(message.sensorAddress) \(message.sensorState)")
+    }
+    
     if !isPaused {
       
       txtMonitor.string += "\(item)\n"

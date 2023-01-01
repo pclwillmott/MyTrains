@@ -19,13 +19,19 @@ public class TC64IOPort : NSObject {
   
   // MARK: Private Properties
   
-  private var baseCVNumber : Int {
+  // MARK: Public Properties
+  
+  public var baseCVNumber : Int {
     get {
       return 129 + (ioPortNumber - 1) * 8
     }
   }
   
-  // MARK: Public Properties
+  public var lastCVNumber : Int {
+    get {
+      return baseCVNumber + 7
+    }
+  }
   
   public var locoNetDevice : LocoNetDevice
   
@@ -46,14 +52,15 @@ public class TC64IOPort : NSObject {
       var address = locoNetDevice.cvs[cv - 1].nextCVValue
       cv += 1
       address |= (locoNetDevice.cvs[cv - 1].nextCVValue & 0x0f) << 8
-      return address
+      return address + 1
     }
     set(value) {
+      let address = value - 1
       var cv = baseCVNumber + 0
-      locoNetDevice.cvs[cv - 1].nextCVValue = value & 0xff
+      locoNetDevice.cvs[cv - 1].nextCVValue = address & 0xff
       cv += 1
       var rawValue = locoNetDevice.cvs[cv - 1].nextCVValue & 0xf0
-      rawValue |= ((value & 0x0f00) >> 8)
+      rawValue |= ((address & 0x0f00) >> 8)
       locoNetDevice.cvs[cv - 1].nextCVValue = rawValue & 0xff
     }
   }
@@ -64,14 +71,15 @@ public class TC64IOPort : NSObject {
       var address = locoNetDevice.cvs[cv - 1].nextCVValue
       cv += 1
       address |= (locoNetDevice.cvs[cv - 1].nextCVValue & 0x0f) << 8
-      return address
+      return address + 1
     }
     set(value) {
+      let address = value - 1
       var cv = baseCVNumber + 4
-      locoNetDevice.cvs[cv - 1].nextCVValue = value & 0xff
+      locoNetDevice.cvs[cv - 1].nextCVValue = address & 0xff
       cv += 1
       var rawValue = locoNetDevice.cvs[cv - 1].nextCVValue & 0xf0
-      rawValue |= ((value & 0x0f00) >> 8)
+      rawValue |= ((address & 0x0f00) >> 8)
       locoNetDevice.cvs[cv - 1].nextCVValue = rawValue & 0xff
     }
   }
@@ -82,14 +90,15 @@ public class TC64IOPort : NSObject {
       var address = locoNetDevice.cvs[cv - 1].nextCVValue
       cv += 1
       address |= (locoNetDevice.cvs[cv - 1].nextCVValue & 0x0f) << 8
-      return address
+      return address + 1
     }
     set(value) {
+      let address = value - 1
       var cv = baseCVNumber + 6
-      locoNetDevice.cvs[cv - 1].nextCVValue = value & 0xff
+      locoNetDevice.cvs[cv - 1].nextCVValue = address & 0xff
       cv += 1
       var rawValue = locoNetDevice.cvs[cv - 1].nextCVValue & 0xf0
-      rawValue |= ((value & 0x0f00) >> 8)
+      rawValue |= ((address & 0x0f00) >> 8)
       locoNetDevice.cvs[cv - 1].nextCVValue = rawValue & 0xff
     }
   }

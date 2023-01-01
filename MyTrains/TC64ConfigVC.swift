@@ -12,6 +12,7 @@ enum TC64ConfigMode {
   case idle
   case readAll
   case writeAll
+  case writePage
   case readDefaults
 }
 
@@ -94,9 +95,9 @@ class TC64ConfigVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
     TC64Paired.populate(comboBox: cboOutputPaired)
 
     boxInput.frame.origin.x = 19
-    boxInput.frame.origin.y = 7
+    boxInput.frame.origin.y = 34
     boxOutput.frame.origin.x = 19
-    boxOutput.frame.origin.y = 7
+    boxOutput.frame.origin.y = 34
     
     lblStatus.stringValue = ""
 
@@ -290,39 +291,58 @@ class TC64ConfigVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
       
     case .progCmdAcceptedBlind:
       
-      if let device = self.device, mode == .writeAll {
-
-        currentCV += 1
-        let newCVNumber = currentCV < specialCV.count ? specialCV[currentCV] : 123 + currentCV
-
-        if newCVNumber <= maxCV {
-          lblStatus.stringValue = "Writing CV #\(newCVNumber)"
-          programmer?.writeCV(progMode: .operationsMode, cv: newCVNumber, address: deviceAddr, value: device.cvs[newCVNumber - 1].nextCVValue)
-        }
-        else {
+      if let device = self.device {
+        
+        if mode == .writeAll {
           
-          let newAddress = device.cvs[17].nextCVValue | (device.cvs[16].nextCVValue << 8)
+          currentCV += 1
+          let newCVNumber = currentCV < specialCV.count ? specialCV[currentCV] : 123 + currentCV
           
-          if newAddress != device.boardId {
+          if newCVNumber <= maxCV {
+            lblStatus.stringValue = "Writing CV #\(newCVNumber)"
+            programmer?.writeCV(progMode: .operationsMode, cv: newCVNumber, address: deviceAddr, value: device.cvs[newCVNumber - 1].nextCVValue)
+          }
+          else {
             
-            let alert = NSAlert()
-
-            alert.messageText = "The device address has been changed. The device must be power cycled in order for this to take effect."
-            alert.informativeText = ""
-            alert.addButton(withTitle: "OK")
-            alert.alertStyle = .informational
-
-            alert.runModal()
-
-            device.boardId = txtDCCAddress.integerValue
+            let newAddress = device.cvs[17].nextCVValue | (device.cvs[16].nextCVValue << 8)
             
+            if newAddress != device.boardId {
+              
+              let alert = NSAlert()
+              
+              alert.messageText = "The device address has been changed. The device must be power cycled in order for this to take effect."
+              alert.informativeText = ""
+              alert.addButton(withTitle: "OK")
+              alert.alertStyle = .informational
+              
+              alert.runModal()
+              
+              device.boardId = txtDCCAddress.integerValue
+              
+            }
+            
+            lblStatus.stringValue = "Done"
+            mode = .idle
+            device.save()
           }
           
-          lblStatus.stringValue = "Done"
-          mode = .idle
-          device.save()
         }
+        else if mode == .writePage {
+          
+          currentCV += 1
+          
+          if currentCV <= maxCV {
+            lblStatus.stringValue = "Writing CV #\(currentCV)"
+            programmer?.writeCV(progMode: .operationsMode, cv: currentCV, address: deviceAddr, value: device.cvs[currentCV - 1].nextCVValue)
+          }
+          else {
+            lblStatus.stringValue = "Done"
+            mode = .idle
+            device.save()
+          }
 
+        }
+        
       }
      
     case .programmerBusy:
@@ -858,9 +878,16 @@ class TC64ConfigVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
     }
   }
   
-  
-  
-  
-  
+  @IBAction func btnWritePageAction(_ sender: NSButton) {
+    if let device = self.device, let port = currentPort {
+      mode = .writePage
+      currentCV = port.baseCVNumber
+      maxCV = port.lastCVNumber
+      deviceAddr = device.boardId
+      lblStatus.stringValue = "Writing CV #\(currentCV)"
+      programmer?.writeCV(progMode: .operationsMode, cv: currentCV, address: deviceAddr, value: device.cvs[currentCV - 1].nextCVValue)
+    }
+  }
+
 }
 
