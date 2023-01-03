@@ -839,7 +839,9 @@ extension Interface {
         ],
         appendCheckSum: true)
     
-    addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [], retryCount: 0, timeoutCode: .none)
+    let timing = progMode == .operationsMode ? MessageTiming.STANDARD : MessageTiming.PRMODE
+    
+    addToQueue(message: message, delay: timing, responses: [], retryCount: 0, timeoutCode: .none)
     
   }
   
@@ -892,8 +894,10 @@ extension Interface {
           0x7f
         ],
         appendCheckSum: true)
-    
-    addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [], retryCount: 0, timeoutCode: .none)
+
+    let timing = progMode == .operationsMode ? MessageTiming.STANDARD : MessageTiming.PRMODE
+
+    addToQueue(message: message, delay: timing, responses: [], retryCount: 0, timeoutCode: .none)
     
   }
   
@@ -903,7 +907,7 @@ extension Interface {
     
     var dirf : UInt8 = 0
     
-    dirf |= direction == .forward        ? 0b00100000 : 0b00000000
+    dirf |= direction == .reverse        ? 0b00100000 : 0b00000000
     dirf |= functions & maskF0 == maskF0 ? 0b00010000 : 0b00000000
     dirf |= functions & maskF1 == maskF1 ? 0b00000001 : 0b00000000
     dirf |= functions & maskF2 == maskF2 ? 0b00000010 : 0b00000000
@@ -924,7 +928,7 @@ extension Interface {
     
     var dirf : UInt8 = 0
     
-    dirf |= direction == .forward        ? 0b00100000 : 0b00000000
+    dirf |= direction == .reverse        ? 0b00100000 : 0b00000000
     dirf |= functions & maskF0 == maskF0 ? 0b00010000 : 0b00000000
     dirf |= functions & maskF1 == maskF1 ? 0b00000001 : 0b00000000
     dirf |= functions & maskF2 == maskF2 ? 0b00000010 : 0b00000000
@@ -1150,7 +1154,7 @@ extension Interface {
     
     let slot = UInt8(slotNumber & 0x7f)
     
-    let page = UInt8(slotPage & 0x07) | (direction == .forward ? 0b00001000 : 0b00000000)
+    let page = UInt8(slotPage & 0x07) | (direction == .reverse ? 0b00001000 : 0b00000000)
     
     let spd = UInt8(speed & 0x7f)
     

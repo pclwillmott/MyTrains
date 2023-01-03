@@ -150,7 +150,8 @@ public class LocoSlotData {
   
   public var displaySlotNumber : String {
     get {
-      return "\(slotPage).\(slotNumber)"
+      let bank = UnicodeScalar(65+slotPage) ?? "X"
+      return "\(bank).\(slotNumber)"
     }
   }
   

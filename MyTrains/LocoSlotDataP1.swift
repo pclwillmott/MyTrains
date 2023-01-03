@@ -77,7 +77,7 @@ public class LocoSlotDataP1 : NetworkMessage {
   public var direction : LocomotiveDirection {
     get {
       let directionMask : UInt8 = 0b00100000
-      return (message[6] & directionMask) == directionMask ? .forward : .reverse
+      return (message[6] & directionMask) == directionMask ? .reverse : .forward
     }
   }
   
