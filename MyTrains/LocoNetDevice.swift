@@ -860,18 +860,6 @@ public class LocoNetDevice : EditorObject {
     
     if let info = locoNetProductInfo {
       
-      if info.sensors > 0 {
-        sensors = Sensor.sensors(locoNetDevice: self)
-        if sensors.count == 0 {
-          makeSensors()
-        }
-      }
-      if info.switches > 0 {
-        turnoutSwitches = TurnoutSwitch.turnoutSwitches(locoNetDevice: self)
-        if turnoutSwitches.count == 0 {
-          makeTurnoutSwitches()
-        }
-      }
       if info.cvs > 0 {
         cvs = LocoNetDeviceCV.cvs(locoNetDevice: self)
         if cvs.count == 0 {
@@ -879,6 +867,20 @@ public class LocoNetDevice : EditorObject {
         }
       }
 
+      if info.sensors > 0 {
+        sensors = Sensor.sensors(locoNetDevice: self)
+        if sensors.count == 0 {
+          makeSensors()
+        }
+      }
+      
+      if info.switches > 0 {
+        turnoutSwitches = TurnoutSwitch.turnoutSwitches(locoNetDevice: self)
+        if turnoutSwitches.count == 0 {
+          makeTurnoutSwitches()
+        }
+      }
+      
     }
     
   }
@@ -1003,6 +1005,10 @@ public class LocoNetDevice : EditorObject {
     
     if let info = locoNetProductInfo {
       
+      if info.cvs > 0 && cvs.count == 0 {
+        makeCVs()
+      }
+
       if info.sensors > 0 && sensors.count == 0 {
           makeSensors()
       }
@@ -1011,10 +1017,10 @@ public class LocoNetDevice : EditorObject {
           makeTurnoutSwitches()
       }
       
-      if info.cvs > 0 && cvs.count == 0 {
-        makeCVs()
-      }
-      
+    }
+    
+    for cv in cvs {
+      cv.save()
     }
     
     for sensor in sensors {
@@ -1033,9 +1039,6 @@ public class LocoNetDevice : EditorObject {
       turnoutSwitch.save()
     }
     
-    for cv in cvs {
-      cv.save()
-    }
 
   }
 

@@ -256,7 +256,8 @@ class TC64ConfigVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
 
         chkOutputInverted.state = port.isOutputInverted ? .on : .off
         
-        txtOAddressPrimary.stringValue = "\(port.addressPrimary)"
+        
+        txtOAddressPrimary.stringValue = "\(device.sensors[cboIOPortNumber.indexOfSelectedItem].sensorAddressOverride)"
         txtOAddressSecondary.stringValue = "\(port.addressSecondary)"
         txtOAddressTertiary.stringValue = "\(port.addressTertiary)"
         txtIAddressPrimary.stringValue = "\(port.addressPrimary)"
@@ -645,8 +646,8 @@ class TC64ConfigVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   
   
   @IBAction func txtOAddressPrimaryAction(_ sender: NSTextField) {
-    if let port = currentPort {
-      port.addressPrimary = sender.integerValue
+    if let device = self.device {
+      device.sensors[cboIOPortNumber.indexOfSelectedItem].sensorAddressOverride = sender.integerValue
       updateDisplay()
     }
   }

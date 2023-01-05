@@ -56,6 +56,7 @@ public class Sensor : EditorObject {
   public var sensorType : SensorType = SensorType.defaultValue {
     didSet {
       modified = true
+      nextSensorType = sensorType
     }
   }
   
@@ -68,10 +69,36 @@ public class Sensor : EditorObject {
     set(value) {
       _sensorAddress = value
       modified = true
+      nextSensorAddress = _sensorAddress
     }
   }
 
   public var nextSensorAddress : Int = -1
+  
+  public var sensorAddressOverride : Int {
+    get {
+      if let device = locoNetDevice, let info = device.locoNetProductInfo {
+        switch info.id {
+        case .TowerControllerMarkII:
+          nextSensorAddress = device.tc64IOPorts[channelNumber - 1].addressPrimary
+        default:
+          break
+        }
+      }
+      return nextSensorAddress
+    }
+    set(value) {
+      nextSensorAddress = value
+      if let device = locoNetDevice, let info = device.locoNetProductInfo {
+        switch info.id {
+        case .TowerControllerMarkII:
+          device.tc64IOPorts[channelNumber - 1].addressPrimary = nextSensorAddress
+        default:
+          break
+        }
+      }
+    }
+  }
 
   public var calculatedSensorAddress : Int {
     get {
@@ -105,6 +132,7 @@ public class Sensor : EditorObject {
   public var delayOn : Int = 0 {
     didSet {
       modified = true
+      nextDelayOn = delayOn
     }
   }
 
@@ -113,6 +141,7 @@ public class Sensor : EditorObject {
   public var delayOff : Int = 0 {
     didSet {
       modified = true
+      nextDelayOff = delayOff
     }
   }
 
@@ -121,10 +150,25 @@ public class Sensor : EditorObject {
   public var inverted : Bool = false {
     didSet {
       modified = true
+      nextInverted = inverted
     }
   }
   
   public var nextInverted : Bool = false
+  
+  public var isEnabled : Bool {
+    get {
+      if let device = self.locoNetDevice, let info = device.locoNetProductInfo {
+        switch info.id {
+        case .TowerControllerMarkII:
+          return device.tc64IOPorts[channelNumber - 1].io == .input
+        default:
+          break
+        }
+      }
+      return true
+    }
+  }
   
   public var switchBoardItems : [SwitchBoardItem] = []
 
@@ -165,15 +209,15 @@ public class Sensor : EditorObject {
       }
       
     }
-        
-    modified = false
     
-    nextSensorType = sensorType
     nextSensorAddress = sensorAddress
-    nextInverted = inverted
     nextDelayOn = delayOn
     nextDelayOff = delayOff
-    
+    nextInverted = inverted
+    nextSensorType = sensorType
+        
+    modified = false
+        
   }
 
   public func save() {

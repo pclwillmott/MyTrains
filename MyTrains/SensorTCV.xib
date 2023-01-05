@@ -117,6 +117,10 @@
             <connections>
                 <outlet property="cboSensorType" destination="3C1-aj-7tU" id="WPX-Li-4MW"/>
                 <outlet property="chkInverted" destination="K4g-8W-8lD" id="LY8-v3-t0o"/>
+                <outlet property="lblAddress" destination="wT9-Gp-J6A" id="62z-B5-fvg"/>
+                <outlet property="lblDelayOff" destination="bhd-X9-HAa" id="qde-9k-BLG"/>
+                <outlet property="lblDelayOn" destination="tWR-bT-Ca0" id="icR-RE-F0S"/>
+                <outlet property="lblSensorType" destination="w91-m5-VX5" id="bDn-uM-WQA"/>
                 <outlet property="txtAddress" destination="IXR-T4-kR7" id="OoJ-Qh-cl6"/>
                 <outlet property="txtDelayOff" destination="bCw-6Q-5Cp" id="YrS-eM-ezG"/>
                 <outlet property="txtDelayOn" destination="YGw-ya-xQO" id="cik-lv-5nr"/>

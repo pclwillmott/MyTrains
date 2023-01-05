@@ -29,14 +29,27 @@ class SensorTCV: NSTableCellView {
   
   public var sensor : Sensor? {
     didSet {
+      var isEnabled : Bool = true
+      SensorType.populate(comboBox: cboSensorType)
+      txtAddress.stringValue = ""
+      txtDelayOn.stringValue = ""
+      txtDelayOff.stringValue = ""
+      chkInverted.boolValue = false
       if let sensor = self.sensor {
-        SensorType.populate(comboBox: cboSensorType)
-        SensorType.select(comboBox: cboSensorType, value: sensor.sensorType)
-        txtAddress.integerValue = sensor.sensorAddress
-        txtDelayOn.integerValue = sensor.delayOn
-        txtDelayOff.integerValue = sensor.delayOff
-        chkInverted.boolValue = sensor.inverted
+        isEnabled = sensor.isEnabled
+        if isEnabled {
+          SensorType.select(comboBox: cboSensorType, value: sensor.nextSensorType)
+          txtAddress.stringValue = "\(sensor.sensorAddressOverride)"
+          txtDelayOn.integerValue = sensor.nextDelayOn
+          txtDelayOff.integerValue = sensor.nextDelayOff
+          chkInverted.boolValue = sensor.nextInverted
+        }
       }
+      cboSensorType.isEnabled = isEnabled
+      txtAddress.isEnabled = isEnabled
+      txtDelayOn.isEnabled = isEnabled
+      txtDelayOff.isEnabled = isEnabled
+      chkInverted.isEnabled = isEnabled
     }
   }
   
@@ -46,7 +59,7 @@ class SensorTCV: NSTableCellView {
   
   @IBAction func txtAddressAction(_ sender: NSTextField) {
     if let sensor = self.sensor {
-      sensor.nextSensorAddress = sender.integerValue
+      sensor.sensorAddressOverride = sender.integerValue
     }
   }
   
@@ -81,5 +94,13 @@ class SensorTCV: NSTableCellView {
       sensor.nextInverted = sender.boolValue
     }
   }
+  
+  @IBOutlet weak var lblAddress: NSTextField!
+  
+  @IBOutlet weak var lblSensorType: NSTextField!
+  
+  @IBOutlet weak var lblDelayOn: NSTextField!
+  
+  @IBOutlet weak var lblDelayOff: NSTextField!
   
 }
