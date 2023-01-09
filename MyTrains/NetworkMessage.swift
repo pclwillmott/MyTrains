@@ -1550,8 +1550,7 @@ public class NetworkMessage : NSObject {
   public var sensorAddress : Int {
     get {
       var addr = Int(message[1])
-      addr |= (Int(message[2] & 0b00001111) << 7)
-      addr <<= 1
+      addr |= (Int(message[2] & 0b00001111) << 8)
       addr |= (Int(message[2] & 0b00100000) >> 5)
       return addr + 1
     }
@@ -1561,8 +1560,6 @@ public class NetworkMessage : NSObject {
     get {
       var addr = Int(message[1])
       addr |= (Int(message[2] & 0b00001111) << 7)
-//      addr <<= 1
-//      addr |= (Int(message[2] & 0b00100000) >> 5)
       return addr + 1
     }
   }

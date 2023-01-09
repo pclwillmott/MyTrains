@@ -22,7 +22,7 @@ enum SqliteConnectionState : Int {
   case Closed
 }
 
-enum SqliteType : Int {
+public enum SqliteType : Int {
   case Integer
   case Float
   case Text
@@ -229,7 +229,7 @@ class SqliteCommand {
   
 }
 
-class SqliteDataReader {
+public class SqliteDataReader {
   
   public var errorMessage : String = ""
   

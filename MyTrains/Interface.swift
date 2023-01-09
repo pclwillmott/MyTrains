@@ -276,9 +276,15 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
       _locoSlots[slot.slotID] = slot
       slotsUpdated()
 
+//    case .sensRepTurnIn:
+  //    print("sensRepTurnIn: \(message.turnoutReportAddress) \(message.sensorState)")
+      
+//    case .sensRepTurnOut:
+  //    print("sensRepTurnOut: \(message.turnoutReportAddress) \(message.sensorState)")
+      
     case .sensRepGenIn:
       
-  //    print("sensRepGenIn: \(message.sensorAddress) \(message.sensorState)")
+   //   print("sensRepGenIn: \(message.sensorAddress) \(message.sensorState)")
       
       if let sensor = sensorLookup[message.sensorAddress], let layout = network?.layout {
         

@@ -484,6 +484,15 @@ public class LocoNetDevice : EditorObject {
     }
   }
   
+  public var isIODevice : Bool {
+    get {
+      let ioDevices : Set<LocoNetProductId> = [
+        .DS64
+      ]
+      return ioDevices.contains(locoNetProductId)
+    }
+  }
+  
   public var isSensorDevice : Bool {
     get {
       if let info = locoNetProductInfo {
@@ -784,7 +793,7 @@ public class LocoNetDevice : EditorObject {
 
 // MARK: Database Methods
   
-  private func decode(sqliteDataReader:SqliteDataReader?) {
+  public func decode(sqliteDataReader:SqliteDataReader?) {
     
     if let reader = sqliteDataReader {
       
@@ -857,6 +866,9 @@ public class LocoNetDevice : EditorObject {
     }
     
     modified = false
+    
+    
+    // LEGACY STUFF - TO BE REMOVED ONCE NEW IODEVICE METHODOLOGY COMPLETED
     
     if let info = locoNetProductInfo {
       
@@ -1089,15 +1101,31 @@ public class LocoNetDevice : EditorObject {
       if let reader = cmd.executeReader() {
            
         while reader.read() {
-          let device = LocoNetDevice(reader: reader)
-          if let info = device.locoNetProductInfo {
-            if info.attributes.intersection([.CommandStation, .ComputerInterface]).isEmpty {
-              result[device.primaryKey] = device
+          
+          var device = LocoNetDevice(reader: reader)
+          
+          switch device.locoNetProductId {
+            
+          case .DS64:
+            
+            device = IODeviceDS64(reader: reader)
+            
+          case .TowerControllerMarkII:
+            
+            device = IODeviceTC64MkII(reader: reader)
+            
+          default:
+            
+            if let info = device.locoNetProductInfo, !info.attributes.intersection([.CommandStation, .ComputerInterface]).isEmpty {
+              
+              device = Interface(reader: reader)
+              
             }
-            else {
-              result[device.primaryKey] = Interface(reader: reader)
-            }
+            
           }
+
+          result[device.primaryKey] = device
+
         }
            
         reader.close()

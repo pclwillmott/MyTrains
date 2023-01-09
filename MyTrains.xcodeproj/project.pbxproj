@@ -191,6 +191,17 @@
 		DAA83DF2272C37680075CBCD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DAA83DF0272C37680075CBCD /* Main.storyboard */; };
 		DAA867C427930C62008B6EEC /* IntExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA867C327930C62008B6EEC /* IntExtensions.swift */; };
 		DAA867C627933265008B6EEC /* CSVParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA867C527933265008B6EEC /* CSVParser.swift */; };
+		DAA8CEF82968402D00B07971 /* IODevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA8CEF72968402D00B07971 /* IODevice.swift */; };
+		DAA8CEFA2968406000B07971 /* IOChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA8CEF92968406000B07971 /* IOChannel.swift */; };
+		DAA8CEFC2968408700B07971 /* IOFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA8CEFB2968408700B07971 /* IOFunction.swift */; };
+		DAA8CEFE29684DD600B07971 /* IODeviceDS64.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA8CEFD29684DD600B07971 /* IODeviceDS64.swift */; };
+		DAA8CF00296857F500B07971 /* IOChannelInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA8CEFF296857F500B07971 /* IOChannelInput.swift */; };
+		DAA8CF022968581B00B07971 /* IOChannelOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA8CF012968581B00B07971 /* IOChannelOutput.swift */; };
+		DAA8CF042968583F00B07971 /* IOChannelTC64MkII.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA8CF032968583F00B07971 /* IOChannelTC64MkII.swift */; };
+		DAA8CF06296862DA00B07971 /* IOFunctionDS64Input.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA8CF05296862DA00B07971 /* IOFunctionDS64Input.swift */; };
+		DAA8CF082968630300B07971 /* IOFunctionDS64Output.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA8CF072968630300B07971 /* IOFunctionDS64Output.swift */; };
+		DAA8CF0A2968648700B07971 /* IOFunctionTC64MkII.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA8CF092968648700B07971 /* IOFunctionTC64MkII.swift */; };
+		DAA8CF0C296866D600B07971 /* IODeviceTC64MkII.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA8CF0B296866D600B07971 /* IODeviceTC64MkII.swift */; };
 		DAB07498276EB6C3003278BE /* Sqlite.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB07497276EB6C3003278BE /* Sqlite.swift */; };
 		DAB0749A276EB8B1003278BE /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB07499276EB8B1003278BE /* Database.swift */; };
 		DAB450ED2872FEC000657295 /* SensorTCV.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAB450EC2872FEC000657295 /* SensorTCV.xib */; };
@@ -415,6 +426,17 @@
 		DAA83DF3272C37680075CBCD /* MyTrains.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MyTrains.entitlements; sourceTree = "<group>"; };
 		DAA867C327930C62008B6EEC /* IntExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntExtensions.swift; sourceTree = "<group>"; };
 		DAA867C527933265008B6EEC /* CSVParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVParser.swift; sourceTree = "<group>"; };
+		DAA8CEF72968402D00B07971 /* IODevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IODevice.swift; sourceTree = "<group>"; };
+		DAA8CEF92968406000B07971 /* IOChannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOChannel.swift; sourceTree = "<group>"; };
+		DAA8CEFB2968408700B07971 /* IOFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOFunction.swift; sourceTree = "<group>"; };
+		DAA8CEFD29684DD600B07971 /* IODeviceDS64.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IODeviceDS64.swift; sourceTree = "<group>"; };
+		DAA8CEFF296857F500B07971 /* IOChannelInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOChannelInput.swift; sourceTree = "<group>"; };
+		DAA8CF012968581B00B07971 /* IOChannelOutput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOChannelOutput.swift; sourceTree = "<group>"; };
+		DAA8CF032968583F00B07971 /* IOChannelTC64MkII.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOChannelTC64MkII.swift; sourceTree = "<group>"; };
+		DAA8CF05296862DA00B07971 /* IOFunctionDS64Input.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOFunctionDS64Input.swift; sourceTree = "<group>"; };
+		DAA8CF072968630300B07971 /* IOFunctionDS64Output.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOFunctionDS64Output.swift; sourceTree = "<group>"; };
+		DAA8CF092968648700B07971 /* IOFunctionTC64MkII.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOFunctionTC64MkII.swift; sourceTree = "<group>"; };
+		DAA8CF0B296866D600B07971 /* IODeviceTC64MkII.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IODeviceTC64MkII.swift; sourceTree = "<group>"; };
 		DAB07497276EB6C3003278BE /* Sqlite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sqlite.swift; sourceTree = "<group>"; };
 		DAB07499276EB8B1003278BE /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		DAB450EC2872FEC000657295 /* SensorTCV.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SensorTCV.xib; sourceTree = "<group>"; };
@@ -580,6 +602,17 @@
 				DA8B5D13282FC35E00D39F07 /* InterfaceExtensions.swift */,
 				DA0946552843EB4100F1AB81 /* InterfaceIPLExtensions.swift */,
 				DAA867C327930C62008B6EEC /* IntExtensions.swift */,
+				DAA8CEF72968402D00B07971 /* IODevice.swift */,
+				DAA8CEFD29684DD600B07971 /* IODeviceDS64.swift */,
+				DAA8CF0B296866D600B07971 /* IODeviceTC64MkII.swift */,
+				DAA8CEF92968406000B07971 /* IOChannel.swift */,
+				DAA8CEFF296857F500B07971 /* IOChannelInput.swift */,
+				DAA8CF012968581B00B07971 /* IOChannelOutput.swift */,
+				DAA8CF032968583F00B07971 /* IOChannelTC64MkII.swift */,
+				DAA8CEFB2968408700B07971 /* IOFunction.swift */,
+				DAA8CF05296862DA00B07971 /* IOFunctionDS64Input.swift */,
+				DAA8CF072968630300B07971 /* IOFunctionDS64Output.swift */,
+				DAA8CF092968648700B07971 /* IOFunctionTC64MkII.swift */,
 				DA53B251276E478400AB956C /* IPLDevData.swift */,
 				DA0DA2792779E96B00E4F23C /* Layout.swift */,
 				DADBBFE9285DF36700426CD5 /* LayoutSwitchBoardExtensions.swift */,
@@ -825,6 +858,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DAA8CF06296862DA00B07971 /* IOFunctionDS64Input.swift in Sources */,
 				DA7A4910274A89FE00C2A42B /* FastClockMessage.swift in Sources */,
 				DA1B79FD285F3C5E009E1189 /* TrackGauge.swift in Sources */,
 				DA2E0E55273591A600C7DA7A /* NetworkTurnoutOutputMessage.swift in Sources */,
@@ -836,6 +870,7 @@
 				DA2429732892F7E1000D4ADE /* DeviceTCV.swift in Sources */,
 				DA1B79FB285F3AD0009E1189 /* UnitLength.swift in Sources */,
 				DA0197252773500100350F71 /* ComboBoxDictDS.swift in Sources */,
+				DAA8CF0C296866D600B07971 /* IODeviceTC64MkII.swift in Sources */,
 				DA8AE0F0279B3074001E9311 /* SlotViewVC.swift in Sources */,
 				DA08B43727875FDD0001307C /* ProgSlotDataP1.swift in Sources */,
 				DA6E28E5285F925C00772641 /* BlockDirection.swift in Sources */,
@@ -866,9 +901,11 @@
 				DA9325A8289C04CE00CC317F /* SlotState.swift in Sources */,
 				DA8837822770B77C000B9A41 /* EditWagonsVC.swift in Sources */,
 				DA4E254A2960894B00984D45 /* TC64LongTiming.swift in Sources */,
+				DAA8CEF82968402D00B07971 /* IODevice.swift in Sources */,
 				DA8B5D19282FDE1800D39F07 /* ProgrammerMode.swift in Sources */,
 				DA91274B295F547900E9B96E /* TC64Mode.swift in Sources */,
 				DA6E28E3285F8F1A00772641 /* TrackElectrificationType.swift in Sources */,
+				DAA8CEFC2968408700B07971 /* IOFunction.swift in Sources */,
 				DA28C2C92801EF6500857471 /* QuerySlot5.swift in Sources */,
 				DADFFF902946025500CD2119 /* DateExtensions.swift in Sources */,
 				DA341C9729212F9600C3EF4F /* LocoNetBridge.swift in Sources */,
@@ -894,6 +931,7 @@
 				DA8837862770B79F000B9A41 /* EditSensorsVC.swift in Sources */,
 				DA5CCB4A2897EBB800F99AE6 /* SpeedProfile.swift in Sources */,
 				DA95D6BD280833FE00D9F1B6 /* GroupSetupVC.swift in Sources */,
+				DAA8CF082968630300B07971 /* IOFunctionDS64Output.swift in Sources */,
 				DA48EE29293CEF16006C26A0 /* DayOfWeek.swift in Sources */,
 				DAF4DD50289ABDDE000B848E /* SpeedProfileResultsType.swift in Sources */,
 				DA2502B9282671600002D4AF /* RollingStock.swift in Sources */,
@@ -910,6 +948,7 @@
 				DA91273F295F28D800E9B96E /* TC64IOPort.swift in Sources */,
 				DA3CD9F2277DEF990065D0C4 /* Interface.swift in Sources */,
 				DA8B5D14282FC35E00D39F07 /* InterfaceExtensions.swift in Sources */,
+				DAA8CEFA2968406000B07971 /* IOChannel.swift in Sources */,
 				DA6A0ADA2752976800913F2B /* MonitorVC.swift in Sources */,
 				DA5E173E272EB23100F9341F /* LoconetSensorMessage.swift in Sources */,
 				DA467BB1281D5ED400AB9650 /* SwitchBoardEditorVC.swift in Sources */,
@@ -920,6 +959,7 @@
 				DACB592F2896B7E3006B1861 /* TurnoutSwitchTableViewDS.swift in Sources */,
 				DA912747295F428900E9B96E /* TC64OutputType.swift in Sources */,
 				DA063399293CEB8700CEAFD1 /* SetFastClockVC.swift in Sources */,
+				DAA8CF042968583F00B07971 /* IOChannelTC64MkII.swift in Sources */,
 				DA2E0E5A2736B8AA00C7DA7A /* LoconetRequestSlotDataMessage.swift in Sources */,
 				DA2785402837EAE700EDCBB7 /* MTSerialPortManager.swift in Sources */,
 				DA15BE26289806BF00FD82FD /* SpeedProfileTableViewDS.swift in Sources */,
@@ -934,6 +974,7 @@
 				DAE9DBB728258E12004BC75D /* LocoNetProducts.swift in Sources */,
 				DAD66A2E2871FF9B00376479 /* Sensor.swift in Sources */,
 				DAA867C627933265008B6EEC /* CSVParser.swift in Sources */,
+				DAA8CF00296857F500B07971 /* IOChannelInput.swift in Sources */,
 				DA0946562843EB4100F1AB81 /* InterfaceIPLExtensions.swift in Sources */,
 				DA53B252276E478400AB956C /* IPLDevData.swift in Sources */,
 				DA5B4609276F6CBF005CA03C /* Network.swift in Sources */,
@@ -950,6 +991,7 @@
 				DA6803B228EA553900DED1D8 /* LocomotiveRosterVC.swift in Sources */,
 				DA912743295F3C9900E9B96E /* InputOutput.swift in Sources */,
 				DA9CF8FD2860978A00825FA9 /* TurnoutMotorType.swift in Sources */,
+				DAA8CEFE29684DD600B07971 /* IODeviceDS64.swift in Sources */,
 				DA28C2C32801EB9400857471 /* QuerySlot2.swift in Sources */,
 				DA1A040A2856108900FFD25F /* RollingStockDecoderExtensions.swift in Sources */,
 				DA8837842770B78C000B9A41 /* EditTrainsVC.swift in Sources */,
@@ -957,6 +999,7 @@
 				DA467BA3281D501300AB9650 /* SwitchBoardDefs.swift in Sources */,
 				DA5550EA28392A6B00C4FE4E /* ProductCode.swift in Sources */,
 				DA467BA5281D519700AB9650 /* SwitchBoardShape.swift in Sources */,
+				DAA8CF0A2968648700B07971 /* IOFunctionTC64MkII.swift in Sources */,
 				DA5B4601276F4E38005CA03C /* DatabaseConstants.swift in Sources */,
 				DA1DA5EA28280EEE00E0F993 /* BaudRate.swift in Sources */,
 				DA412E162780DC3C00748CCD /* DecoderFunction.swift in Sources */,
@@ -970,6 +1013,7 @@
 				DA0BB98B28730B3400B6B812 /* SensorTableViewDS.swift in Sources */,
 				DA434294283698CA00E8D555 /* SerialPort.c in Sources */,
 				DA8E6E932893FEB800093468 /* AddressTableViewDS.swift in Sources */,
+				DAA8CF022968581B00B07971 /* IOChannelOutput.swift in Sources */,
 				DAE8DD53286751BE0097C2D1 /* Manufacturer.swift in Sources */,
 				DACB59312896CDCE006B1861 /* TurnoutSwitchState.swift in Sources */,
 				DA9ED4EE28F240A400EA914A /* RouteManagerVC.swift in Sources */,
