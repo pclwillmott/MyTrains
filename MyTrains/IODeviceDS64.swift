@@ -28,12 +28,14 @@ public class IODeviceDS64 : IODevice {
       
       var result : Set<Int> = []
 
-      for sensor in 0...7 {
-        result.insert(baseSensorAddress + sensor)
+      for ioChannel in ioChannels {
+        if let ioFunction = ioChannel.ioFunctions[0] as? IOFunctionDS64Input {
+          result.insert(ioFunction.address)
+        }
       }
-    
-      return result
       
+      return result
+
     }
   }
 
@@ -44,7 +46,7 @@ public class IODeviceDS64 : IODevice {
 
       for ioChannel in ioChannels {
         if let ioFunction = ioChannel.ioFunctions[0] as? IOFunctionDS64Output {
-          result.insert(ioFunction.switchAddress)
+          result.insert(ioFunction.address)
         }
       }
       
@@ -58,7 +60,19 @@ public class IODeviceDS64 : IODevice {
   override public func decode(sqliteDataReader:SqliteDataReader?) {
     
     super.decode(sqliteDataReader: sqliteDataReader)
-    
+
+    for channelNumber in 1...8 {
+      let ioChannel = IOChannelInput(ioDevice: self, ioChannelNumber: channelNumber, ioChannelType: .input)
+      ioChannels.append(ioChannel)
+      ioChannel.ioFunctions = IOFunction.functions(ioChannel: ioChannel)
+    }
+
+    for channelNumber in 9...12 {
+      let ioChannel = IOChannelOutput(ioDevice: self, ioChannelNumber: channelNumber, ioChannelType: .output)
+      ioChannels.append(ioChannel)
+      ioChannel.ioFunctions = IOFunction.functions(ioChannel: ioChannel)
+    }
+
   }
   
   override public func save() {
@@ -67,17 +81,18 @@ public class IODeviceDS64 : IODevice {
     
     if ioChannels.count == 0 {
       
-      for channelNumber in 0...7 {
-        let ioChannel = IOChannelInput(ioDevice: self, channelNumber: channelNumber, channelType: .input)
+      for channelNumber in 1...8 {
+        let ioChannel = IOChannelInput(ioDevice: self, ioChannelNumber: channelNumber, ioChannelType: .input)
         ioChannels.append(ioChannel)
-        let ioFunction = IOFunctionDS64Input(ioChannel: ioChannel, functionNumber: 0)
+        let ioFunction = IOFunctionDS64Input(ioChannel: ioChannel, ioFunctionNumber: 1)
         ioChannel.ioFunctions.append(ioFunction)
       }
 
-      for channelNumber in 8...11 {
-        let ioChannel = IOChannelOutput(ioDevice: self, channelNumber: channelNumber, channelType: .output)
+      for channelNumber in 9...12 {
+        let ioChannel = IOChannelOutput(ioDevice: self, ioChannelNumber: channelNumber, ioChannelType: .output)
         ioChannels.append(ioChannel)
-        let ioFunction = IOFunctionDS64Output(ioChannel: ioChannel, functionNumber: 0)
+        let ioFunction = IOFunctionDS64Output(ioChannel: ioChannel, ioFunctionNumber: 1)
+        ioFunction.address = channelNumber - 8
         ioChannel.ioFunctions.append(ioFunction)
       }
 

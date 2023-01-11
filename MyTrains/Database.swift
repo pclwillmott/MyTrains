@@ -270,7 +270,9 @@ class Database {
               "[\(SENSOR.SENSOR_ADDRESS)]      INT NOT NULL," +
               "[\(SENSOR.DELAY_ON)]            INT NOT NULL," +
               "[\(SENSOR.DELAY_OFF)]           INT NOT NULL," +
-              "[\(SENSOR.INVERTED)]            INT NOT NULL" +
+              "[\(SENSOR.INVERTED)]            INT NOT NULL," +
+              "[\(SENSOR.FUNCTION_NUMBER)]     INT NOT NULL," +
+              "[\(SENSOR.FUNCTION_TYPE)]       INT NOT NULL" +
             ")",
             
             "CREATE TABLE [\(TABLE.TURNOUT_SWITCH)] (" +
@@ -307,7 +309,7 @@ class Database {
             
             // MARK: Updates
             
-            if Version == 11 {
+            if Version == 12 {
   
               let commands = [
         
@@ -379,21 +381,27 @@ class Database {
 
           //      "ALTER TABLE [\(TABLE.SWITCHBOARD_ITEM)] ADD [\(SWITCHBOARD_ITEM.GEN_SENSOR_ID)] INT",
 
-                "ALTER TABLE [\(TABLE.LOCONET_DEVICE_CV)] ADD [\(LOCONET_DEVICE_CV.DEFAULT_VALUE)] INT",
+                "ALTER TABLE [\(TABLE.SENSOR)] ADD [\(SENSOR.FUNCTION_NUMBER)] INT",
 
-                "ALTER TABLE [\(TABLE.LOCONET_DEVICE_CV)] ADD [\(LOCONET_DEVICE_CV.CUSTOM_DESCRIPTION)] TEXT",
+                "UPDATE [\(TABLE.SENSOR)] SET [\(SENSOR.FUNCTION_NUMBER)] = 1",
 
-                "ALTER TABLE [\(TABLE.LOCONET_DEVICE_CV)] ADD [\(LOCONET_DEVICE_CV.CUSTOM_NUMBER_BASE)] INT",
+                "ALTER TABLE [\(TABLE.SENSOR)] ADD [\(SENSOR.FUNCTION_TYPE)] INT",
 
-                "ALTER TABLE [\(TABLE.LOCONET_DEVICE_CV)] ADD [\(LOCONET_DEVICE_CV.ENABLED)] INT",
+                "UPDATE [\(TABLE.SENSOR)] SET [\(SENSOR.FUNCTION_TYPE)] = 0",
 
-                "UPDATE [\(TABLE.VERSION)] SET [\(VERSION.VERSION_NUMBER)] = 12 WHERE [\(VERSION.VERSION_ID)] = 1",
+          //      "ALTER TABLE [\(TABLE.LOCONET_DEVICE_CV)] ADD [\(LOCONET_DEVICE_CV.CUSTOM_DESCRIPTION)] TEXT",
+
+          //      "ALTER TABLE [\(TABLE.LOCONET_DEVICE_CV)] ADD [\(LOCONET_DEVICE_CV.CUSTOM_NUMBER_BASE)] INT",
+
+          //      "ALTER TABLE [\(TABLE.LOCONET_DEVICE_CV)] ADD [\(LOCONET_DEVICE_CV.ENABLED)] INT",
+
+                "UPDATE [\(TABLE.VERSION)] SET [\(VERSION.VERSION_NUMBER)] = 13 WHERE [\(VERSION.VERSION_ID)] = 1",
                     
              ]
               
               execute(commands: commands)
               
-              Version = 11
+              Version = 13
 
             }
             

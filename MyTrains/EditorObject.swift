@@ -24,12 +24,12 @@ public class EditorObject : NSObject {
   
   // Public Methods
   
-  public func sortString() -> String {
-    return displayString()
-  }
-  
   public func displayString() -> String {
     return ""
+  }
+  
+  public func sortString() -> String {
+    return displayString()
   }
   
   public func deleteCheck() -> String {

@@ -17,20 +17,20 @@ public class IOChannel : NSObject {
   
   // MARK: Constructors & Destructors
   
-  init(ioDevice:IODevice, channelNumber:Int, channelType:IOChannelType) {
+  init(ioDevice:IODevice, ioChannelNumber:Int, ioChannelType:IOChannelType) {
     self.ioDevice = ioDevice
-    self.channelNumber = channelNumber
-    self.channelType = channelType
+    self.ioChannelNumber = ioChannelNumber
+    self.ioChannelType = ioChannelType
     super.init()
   }
   
   // MARK: Public Properties
   
-  public var channelNumber : Int
+  public var ioChannelNumber : Int
   
   public var ioDevice : IODevice
   
-  public var channelType : IOChannelType
+  public var ioChannelType : IOChannelType
   
   public var ioFunctions : [IOFunction] = []
   

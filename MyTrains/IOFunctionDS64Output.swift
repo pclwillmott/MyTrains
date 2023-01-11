@@ -9,6 +9,4 @@ import Foundation
 
 public class IOFunctionDS64Output : IOFunction {
   
-  public var switchAddress : Int = -1
-  
 }

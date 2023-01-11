@@ -232,6 +232,8 @@ enum SWITCHBOARD_ITEM {
   static let GEN_SENSOR_CHANNEL_NUMBER   = "GEN_SENSOR_CHANNEL_NUMBER"
 }
 
+// THIS IS NOW IOFUNCTION
+
 enum SENSOR {
   static let SENSOR_ID                   = "SENSOR_ID"
   static let LOCONET_DEVICE_ID           = "LOCONET_DEVICE_ID"
@@ -241,6 +243,8 @@ enum SENSOR {
   static let DELAY_ON                    = "DELAY_ON"
   static let DELAY_OFF                   = "DELAY_OFF"
   static let INVERTED                    = "INVERTED"
+  static let FUNCTION_NUMBER             = "FUNCTION_NUMBER"
+  static let FUNCTION_TYPE               = "FUNCTION_TYPE"
 }
 
 enum TURNOUT_SWITCH {

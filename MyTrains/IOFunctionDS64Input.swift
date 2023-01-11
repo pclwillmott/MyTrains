@@ -11,13 +11,17 @@ public class IOFunctionDS64Input : IOFunction {
   
   // MARK: Public Properties
   
-  public var sensorAddress : Int {
+  override public var address : Int {
     get {
       if let device = ioDevice as? IODeviceDS64 {
-        return device.baseSensorAddress + ioChannel.channelNumber
+        return device.baseSensorAddress + ioChannel.ioChannelNumber - 1
       }
-      return -1
+      return _address
+    }
+    set(value) {
+      _ = value
+      _address = address
     }
   }
-  
+
 }
