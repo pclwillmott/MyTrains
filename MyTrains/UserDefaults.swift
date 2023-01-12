@@ -59,5 +59,5 @@ enum DEFAULT {
   static let FC_TESTER_DAYS                     = "FC_TESTER_DAYS"
   static let TC64_CONFIG_INTERFACE              = "TC64_CONFIG_INTERFACE"
   static let TC64_CONFIG_LAST_DEVICE            = "TC64_CONFIG_LAST_DEVICE"
-  
+  static let IODEVICE_MANAGER_NETWORK           = "IODEVICE_MANAGER_NETWORK"
 }

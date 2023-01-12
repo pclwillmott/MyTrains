@@ -36,10 +36,10 @@ class SensorTCV: NSTableCellView {
       txtDelayOff.stringValue = ""
       chkInverted.boolValue = false
       if let sensor = self.sensor {
-        isEnabled = sensor.isEnabled
+    //    isEnabled = sensor.isEnabled
         if isEnabled {
           SensorType.select(comboBox: cboSensorType, value: sensor.nextSensorType)
-          txtAddress.stringValue = "\(sensor.sensorAddressOverride)"
+     //     txtAddress.stringValue = "\(sensor.sensorAddressOverride)"
           txtDelayOn.integerValue = sensor.nextDelayOn
           txtDelayOff.integerValue = sensor.nextDelayOff
           chkInverted.boolValue = sensor.nextInverted
@@ -59,7 +59,7 @@ class SensorTCV: NSTableCellView {
   
   @IBAction func txtAddressAction(_ sender: NSTextField) {
     if let sensor = self.sensor {
-      sensor.sensorAddressOverride = sender.integerValue
+ //     sensor.sensorAddressOverride = sender.integerValue
     }
   }
   

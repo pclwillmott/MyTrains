@@ -29,7 +29,7 @@ public class IODeviceDS64 : IODevice {
       var result : Set<Int> = []
 
       for ioChannel in ioChannels {
-        if let ioFunction = ioChannel.ioFunctions[0] as? IOFunctionDS64Input {
+        if ioChannel.ioFunctions.count > 0, let ioFunction = ioChannel.ioFunctions[0] as? IOFunctionDS64Input {
           result.insert(ioFunction.address)
         }
       }
@@ -45,7 +45,7 @@ public class IODeviceDS64 : IODevice {
       var result : Set<Int> = []
 
       for ioChannel in ioChannels {
-        if let ioFunction = ioChannel.ioFunctions[0] as? IOFunctionDS64Output {
+        if ioChannel.ioFunctions.count > 0, let ioFunction = ioChannel.ioFunctions[0] as? IOFunctionDS64Output {
           result.insert(ioFunction.address)
         }
       }

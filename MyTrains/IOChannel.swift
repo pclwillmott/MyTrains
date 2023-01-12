@@ -7,12 +7,6 @@
 
 import Foundation
 
-public enum IOChannelType : Int {
-  case input = 0
-  case output = 1
-  case ioTC64MkII = 2
-}
-
 public class IOChannel : NSObject {
   
   // MARK: Constructors & Destructors
@@ -41,6 +35,10 @@ public class IOChannel : NSObject {
     for ioFunction in ioFunctions {
       ioFunction.save()
     }
+    
+  }
+  
+  public func propertySheet() {
     
   }
   

@@ -101,7 +101,7 @@ class TC64ConfigVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
     
     lblStatus.stringValue = ""
 
-    setup()
+ //   setup()
 
   }
   
@@ -130,7 +130,7 @@ class TC64ConfigVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   private let specialCV : [Int] = [17, 18, 1, 112, 116, 117]
   
   private var tvCVsDS = TC64CVTableDS()
-  
+  /*
   private var currentPort : TC64IOPort? {
     get {
       if let device = self.device {
@@ -409,20 +409,21 @@ class TC64ConfigVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
     
   }
 
-
+*/
+  
   // MARK: Outlets & Actions
   
   @IBOutlet weak var cboProgrammer: NSComboBox!
   
   
   @IBAction func cboProgrammerAction(_ sender: NSComboBox) {
-    setup()
+//    setup()
   }
   
   @IBOutlet weak var cboDevice: NSComboBox!
   
   @IBAction func cboDeviceAction(_ sender: NSComboBox) {
-    setup()
+//    setup()
   }
   
   @IBOutlet weak var tabView: NSTabView!
@@ -441,37 +442,37 @@ class TC64ConfigVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   @IBOutlet weak var chkMasterMode: NSButton!
   
   @IBAction func chkMasterModeAction(_ sender: NSButton) {
-    device?.isMasterModeEnabled = sender.state == .on
+//    device?.isMasterModeEnabled = sender.state == .on
   }
   
   @IBOutlet weak var chkPortStateMemory: NSButton!
   
   @IBAction func chkPortStateAction(_ sender: NSButton) {
-    device?.isPortStateEnabled = sender.state == .on
+//    device?.isPortStateEnabled = sender.state == .on
   }
   
   @IBOutlet weak var chkOpsModeEnabled: NSButton!
   
   @IBAction func chkOpsModeEnabledAction(_ sender: NSButton) {
-    device?.isOpsModeEnabled = sender.state == .on
+//    device?.isOpsModeEnabled = sender.state == .on
   }
   
   @IBOutlet weak var chkIntTrackPowerOn: NSButton!
   
   @IBAction func chkIntTrackPowerOnAction(_ sender: NSButton) {
-    device?.isInterrogatePwrOnEnabled = sender.state == .on
+//    device?.isInterrogatePwrOnEnabled = sender.state == .on
   }
   
   @IBOutlet weak var chkIntInputs: NSButton!
   
   @IBAction func chkIntInputsAction(_ sender: NSButton) {
-    device?.isInterrogateInputs = sender.state == .on
+//    device?.isInterrogateInputs = sender.state == .on
   }
   
   @IBOutlet weak var chkIntOutputs: NSButton!
   
   @IBAction func chkIntOutputsAction(_ sender: NSButton) {
-    device?.isInterrogateOutputs = sender.state == .on
+//    device?.isInterrogateOutputs = sender.state == .on
   }
   
   @IBOutlet weak var lblManufacturerId: NSTextField!
@@ -507,7 +508,7 @@ class TC64ConfigVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
     
     mode = .idle
     device?.discardChangesToCVs()
-    updateDisplay()
+//    updateDisplay()
     
   }
   
@@ -585,7 +586,7 @@ class TC64ConfigVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   @IBOutlet weak var cboIOPortNumber: NSComboBox!
   
   @IBAction func cboIOPortNumberAction(_ sender: NSComboBox) {
-    updateDisplay()
+//    updateDisplay()
   }
   
   @IBOutlet weak var lblIOPortName: NSTextField!
@@ -593,10 +594,10 @@ class TC64ConfigVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   @IBOutlet weak var cboIOPortType: NSComboBox!
   
   @IBAction func cboIOPortTypeAction(_ sender: NSComboBox) {
-    if let port = currentPort {
+/*    if let port = currentPort {
       port.io = InputOutput.selected(comboBox: cboIOPortType)
-      updateDisplay()
-    }
+ //     updateDisplay()
+    }*/
   }
   
   @IBOutlet weak var boxOutput: NSBox!
@@ -604,25 +605,25 @@ class TC64ConfigVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   @IBOutlet weak var cboOutputPaired: NSComboBox!
   
   @IBAction func cboOutputPairedAction(_ sender: NSComboBox) {
-    if let port = currentPort {
+/*    if let port = currentPort {
       port.paired = TC64Paired.selected(comboBox: sender)
       updateDisplay()
-    }
+    } */
   }
   
   @IBOutlet weak var cboOutputType: NSComboBox!
   
   @IBAction func cboOutputTypeAction(_ sender: NSComboBox) {
-    if let port = currentPort {
+/*    if let port = currentPort {
       port.ioType = TC64OutputType.selected(comboBox: sender)
       updateDisplay()
-    }
+    }*/
   }
   
   @IBOutlet weak var cboOutputTiming: NSComboBox!
   
   @IBAction func cboOutputTimingAction(_ sender: NSComboBox) {
-    if let port = currentPort {
+/*    if let port = currentPort {
       if port.ioType.isLong {
         port.outputLongTiming = TC64LongTiming.selected(comboBox: sender)
       }
@@ -630,125 +631,125 @@ class TC64ConfigVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
         port.outputShortTiming = TC64ShortTiming.selected(comboBox: sender)
       }
       updateDisplay()
-    }
+    }*/
   }
   
   @IBOutlet weak var chkOutputInverted: NSButton!
   
   @IBAction func chkOutputInvertedAction(_ sender: NSButton) {
-    if let port = currentPort {
+ /*   if let port = currentPort {
       port.isOutputInverted = chkOutputInverted.state == .on
       updateDisplay()
-    }
+    } */
   }
   
   @IBOutlet weak var txtOAddressPrimary: NSTextField!
   
   
   @IBAction func txtOAddressPrimaryAction(_ sender: NSTextField) {
-    if let device = self.device {
+/*    if let device = self.device {
       device.sensors[cboIOPortNumber.indexOfSelectedItem].sensorAddressOverride = sender.integerValue
       updateDisplay()
-    }
+    } */
   }
   
   @IBOutlet weak var txtOAddressSecondary: NSTextField!
   
   @IBAction func txtOAddressSecondaryAction(_ sender: NSTextField) {
-    if let port = currentPort {
+/*    if let port = currentPort {
       port.addressSecondary = sender.integerValue
       updateDisplay()
-    }
+    } */
   }
   
   @IBOutlet weak var txtOAddressTertiary: NSTextField!
   
   @IBAction func txtOAddressTertiaryAction(_ sender: NSTextField) {
-    if let port = currentPort {
+ /*   if let port = currentPort {
       port.addressTertiary = sender.integerValue
       updateDisplay()
-    }
+    } */
   }
   
   @IBOutlet weak var cboOPolarityPrimary: NSComboBox!
   
   @IBAction func cboOPolarityPrimaryAction(_ sender: NSComboBox) {
-    if let port = currentPort {
+/*    if let port = currentPort {
       port.outputPolarityPrimary = TC64OutputPolarityPrimary.selected(comboBox: sender)
       updateDisplay()
-    }
+    } */
   }
   
   @IBOutlet weak var cboOPolaritySecondary: NSComboBox!
   
   @IBAction func cboOPolaritySecondaryAction(_ sender: NSComboBox) {
-    if let port = currentPort {
+/*    if let port = currentPort {
       port.polaritySecondary = TC64Polarity.selected(comboBox: sender)
       updateDisplay()
-    }
+    } */
   }
   
   @IBOutlet weak var cboOPolarityTertiary: NSComboBox!
   
   @IBAction func cboOPolarityTertiaryAction(_ sender: NSComboBox) {
-    if let port = currentPort {
+/*    if let port = currentPort {
       port.polarityTertiary = TC64Polarity.selected(comboBox: sender)
       updateDisplay()
-    }
+    } */
   }
   
   @IBOutlet weak var cboOMessageTypePrimary: NSComboBox!
   
   @IBAction func cboOMessageTypePrimaryAction(_ sender: NSComboBox) {
-    if let port = currentPort {
+/*    if let port = currentPort {
       port.modePrimary = TC64Mode.selected(comboBox: sender)
       updateDisplay()
-    }
+    } */
   }
   
   @IBOutlet weak var cboOMessageTypeSecondary: NSComboBox!
   
   @IBAction func cboOMessageTypeSecondaryAction(_ sender: NSComboBox) {
-    if let port = currentPort {
+/*    if let port = currentPort {
       port.modeSecondary = TC64Mode.selected(comboBox: sender)
       updateDisplay()
-    }
+    } */
   }
   
   @IBOutlet weak var cboOMessageTypeTertiary: NSComboBox!
   
   @IBAction func cboOMessageTypeTertiaryAction(_ sender: NSComboBox) {
-    if let port = currentPort {
+/*    if let port = currentPort {
       port.modeTertiary = TC64Mode.selected(comboBox: sender)
       updateDisplay()
-    }
+    } */
   }
   
   @IBOutlet weak var cboOTControlPrimary: NSComboBox!
   
   @IBAction func cboOTControlPrimaryAction(_ sender: NSComboBox) {
-    if let port = currentPort {
+/*    if let port = currentPort {
       port.transitionControlPrimary = TC64TransitionControl.selected(comboBox: sender)
       updateDisplay()
-    }
+    } */
   }
   
   @IBOutlet weak var cboOTControlSecondary: NSComboBox!
   
   @IBAction func cboOTControlSecondaryAction(_ sender: NSComboBox) {
-    if let port = currentPort {
+/*    if let port = currentPort {
       port.transitionControlSecondary = TC64TransitionControl.selected(comboBox: sender)
       updateDisplay()
-    }
+    } */
   }
   
   @IBOutlet weak var cboOTControlTertiary: NSComboBox!
   
   @IBAction func cboOTControlTertiaryAction(_ sender: NSComboBox) {
-    if let port = currentPort {
+/*    if let port = currentPort {
       port.transitionControlTertiary = TC64TransitionControl.selected(comboBox: sender)
       updateDisplay()
-    }
+    } */
   }
   
   @IBOutlet weak var boxInput: NSBox!
@@ -756,138 +757,138 @@ class TC64ConfigVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   @IBOutlet weak var cboIAction: NSComboBox!
   
   @IBAction func cboIActionAction(_ sender: NSComboBox) {
-    if let port = currentPort {
+/*    if let port = currentPort {
       port.action = TC64Action.selected(comboBox: sender)
       updateDisplay()
-    }
+    } */
   }
   
   @IBOutlet weak var cboIDebounceTiming: NSComboBox!
   
   @IBAction func cboIDebounceTimingAction(_ sender: NSComboBox) {
-    if let port = currentPort {
+/*    if let port = currentPort {
       port.debounceTiming = TC64DebounceTiming.selected(comboBox: sender)
       updateDisplay()
-    }
+    } */
   }
   
   @IBOutlet weak var txtIAddressPrimary: NSTextField!
   
   @IBAction func txtIAddressPrimaryAction(_ sender: NSTextField) {
-    if let port = currentPort {
+ /*   if let port = currentPort {
       port.addressPrimary = sender.integerValue
       updateDisplay()
-    }
+    } */
   }
   
   @IBOutlet weak var txtIAddressSecondary: NSTextField!
   
   @IBAction func txtIAddressSecondaryAction(_ sender: NSTextField) {
-    if let port = currentPort {
+/*    if let port = currentPort {
       port.addressSecondary = sender.integerValue
       updateDisplay()
-    }
+    } */
   }
   
   @IBOutlet weak var txtIAddressTertiary: NSTextField!
   
   @IBAction func txtIAddressTertiaryAction(_ sender: NSTextField) {
-    if let port = currentPort {
+/*    if let port = currentPort {
       port.addressTertiary = sender.integerValue
       updateDisplay()
-    }
+    } */
   }
   
   @IBOutlet weak var cboIPolarityPrimary: NSComboBox!
   
   @IBAction func cboIPolarityPrimaryAction(_ sender: NSComboBox) {
-    if let port = currentPort {
+ /*   if let port = currentPort {
       port.inputPolarityPrimary = TC64InputPolarityPrimary.selected(comboBox: sender)
       updateDisplay()
-    }
+    } */
   }
   
   @IBOutlet weak var cboIPolaritySecondary: NSComboBox!
   
   @IBAction func cboIPolaritySecondaryAction(_ sender: NSComboBox) {
-    if let port = currentPort {
+/*    if let port = currentPort {
       port.polaritySecondary = TC64Polarity.selected(comboBox: sender)
       updateDisplay()
-    }
+    } */
   }
   
   @IBOutlet weak var cboIPolarityTertiary: NSComboBox!
   
   @IBAction func cboIPolarityTertiaryAction(_ sender: NSComboBox) {
-    if let port = currentPort {
+  /*  if let port = currentPort {
       port.polarityTertiary = TC64Polarity.selected(comboBox: sender)
       updateDisplay()
-    }
+    } */
   }
   
   @IBOutlet weak var cboIMessageTypePrimary: NSComboBox!
   
   @IBAction func cboIMessageTypePrimaryAction(_ sender: NSComboBox) {
-    if let port = currentPort {
+ /*   if let port = currentPort {
       port.modePrimary = TC64Mode.selected(comboBox: sender)
       updateDisplay()
-    }
+    } */
   }
   
   @IBOutlet weak var cboIMessageTypeSecondary: NSComboBox!
   
   @IBAction func cboIMessageTypeSecondaryAction(_ sender: NSComboBox) {
-    if let port = currentPort {
+ /*   if let port = currentPort {
       port.modeSecondary = TC64Mode.selected(comboBox: sender)
       updateDisplay()
-    }
+    } */
   }
   
   @IBOutlet weak var cboIMessageTypeTertiary: NSComboBox!
   
   @IBAction func cboIMessageTypeTertiaryAction(_ sender: NSComboBox) {
-    if let port = currentPort {
+ /*   if let port = currentPort {
       port.modeTertiary = TC64Mode.selected(comboBox: sender)
       updateDisplay()
-    }
+    }*/
   }
   
   @IBOutlet weak var cboITControlPrimary: NSComboBox!
   
   @IBAction func cboITControlPrimaryAction(_ sender: NSComboBox) {
-    if let port = currentPort {
+ /*   if let port = currentPort {
       port.transitionControlPrimary = TC64TransitionControl.selected(comboBox: sender)
       updateDisplay()
-    }
+    } */
   }
   
   @IBOutlet weak var cboITControlSecondary: NSComboBox!
   
   @IBAction func cboITControlSecondaryAction(_ sender: NSComboBox) {
-    if let port = currentPort {
+ /*   if let port = currentPort {
       port.transitionControlSecondary = TC64TransitionControl.selected(comboBox: sender)
       updateDisplay()
-    }
+    } */
   }
   
   @IBOutlet weak var cboITControlTertiary: NSComboBox!
   
   @IBAction func cboITControlTertiaryAction(_ sender: NSComboBox) {
-    if let port = currentPort {
+ /*   if let port = currentPort {
       port.transitionControlTertiary = TC64TransitionControl.selected(comboBox: sender)
       updateDisplay()
-    }
+    }*/
   }
   
   @IBAction func btnWritePageAction(_ sender: NSButton) {
-    if let device = self.device, let port = currentPort {
+ /*   if let device = self.device, let port = currentPort {
       mode = .writePage
       currentCV = port.baseCVNumber
       maxCV = port.lastCVNumber
       deviceAddr = device.boardId
       lblStatus.stringValue = "Writing CV #\(currentCV)"
       programmer?.writeCV(progMode: .operationsMode, cv: currentCV, address: deviceAddr, value: device.cvs[currentCV - 1].nextCVValue)
-    }
+    }*/
   }
 
 }

@@ -226,6 +226,12 @@
                                                 <action selector="mnuCommandStationConfiguration:" target="Voe-Tx-rLC" id="uiq-Fs-4C5"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="I/O Device Manager" id="QmE-BW-509">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="mnuIODeviceManager:" target="Voe-Tx-rLC" id="cyT-Q3-TIT"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="Address Manager" id="Crk-3m-Im8">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>

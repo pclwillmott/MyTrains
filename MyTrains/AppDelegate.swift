@@ -59,6 +59,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     wc.showWindow(nil)
   }
   
+  @IBAction func mnuIODeviceManager(_ sender: NSMenuItem) {
+    let x = ModalWindow.IODeviceManager
+    let wc = x.windowController
+    wc.showWindow(nil)
+  }
+  
   @IBAction func mnuFastClockTester(_ sender: NSMenuItem) {
     let x = ModalWindow.FastClockTester
     let wc = x.windowController

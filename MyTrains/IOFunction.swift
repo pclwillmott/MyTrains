@@ -98,6 +98,10 @@ public class IOFunction : EditorObject {
     return "err"
   }
   
+  public func propertySheet() {
+    
+  }
+
   // MARK: Database Methods
   
   private func decode(sqliteDataReader: SqliteDataReader?) {
@@ -266,7 +270,11 @@ public class IOFunction : EditorObject {
         case .DS64:
           
           ioFunction = ioFunction.ioChannel.ioChannelNumber < 9 ? IOFunctionDS64Input(ioChannel: ioChannel, reader: reader) : IOFunctionDS64Output(ioChannel: ioChannel, reader: reader)
+         
+        case .BXP88:
           
+          ioFunction = IOFunctionBXP88Input(ioChannel: ioChannel, reader: reader) 
+ 
         case .TowerControllerMarkII:
           
           ioFunction = IOFunctionTC54MkII(ioChannel: ioChannel, reader: reader)

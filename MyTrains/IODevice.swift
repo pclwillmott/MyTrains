@@ -24,7 +24,24 @@ public class IODevice : LocoNetDevice {
       return []
     }
   }
+  
+  public var addressCollision : Bool {
+    get {
+      for ioFunction in networkController.ioFunctions(networkId: networkId) {
+        let ioDevice = ioFunction.ioDevice
+        if ioDevice != self {
+          if !ioDevice.switchAddresses.intersection(self.switchAddresses).isEmpty || !ioDevice.sensorAddresses.intersection(self.sensorAddresses).isEmpty {
+            return true
+          }
+        }
+      }
+      return false
+    }
+  }
 
   // MARK: Public Methods
+  
+  public func propertySheet() {
+  }
   
 }

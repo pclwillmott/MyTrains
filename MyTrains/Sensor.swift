@@ -74,7 +74,7 @@ public class Sensor : EditorObject {
   }
 
   public var nextSensorAddress : Int = -1
-  
+  /*
   public var sensorAddressOverride : Int {
     get {
       if let device = locoNetDevice, let info = device.locoNetProductInfo {
@@ -99,7 +99,7 @@ public class Sensor : EditorObject {
       }
     }
   }
-
+*/
   public var calculatedSensorAddress : Int {
     get {
       if let device = locoNetDevice {
@@ -155,7 +155,7 @@ public class Sensor : EditorObject {
   }
   
   public var nextInverted : Bool = false
-  
+  /*
   public var isEnabled : Bool {
     get {
       if let device = self.locoNetDevice, let info = device.locoNetProductInfo {
@@ -169,7 +169,7 @@ public class Sensor : EditorObject {
       return true
     }
   }
-  
+  */
   public var switchBoardItems : [SwitchBoardItem] = []
 
   // MARK: Database Methods

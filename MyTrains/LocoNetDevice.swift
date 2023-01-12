@@ -46,7 +46,7 @@ public class LocoNetDevice : EditorObject {
   
   private var _newOptionSwitchState = [UInt64](repeating: 0, count: 4)
   
-  private var _tc64IOPorts : [TC64IOPort] = []
+//  private var _tc64IOPorts : [TC64IOPort] = []
 
 
   // MARK: Public Properties
@@ -195,6 +195,7 @@ public class LocoNetDevice : EditorObject {
   
   public var turnoutSwitches : [TurnoutSwitch] = []
   
+  /*
   public var tc64IOPorts : [TC64IOPort] {
     get {
       if _tc64IOPorts.count == 0 {
@@ -205,7 +206,7 @@ public class LocoNetDevice : EditorObject {
       }
       return _tc64IOPorts
     }
-  }
+  }*/
   
   public var cvs : [LocoNetDeviceCV] = []
   
@@ -514,6 +515,15 @@ public class LocoNetDevice : EditorObject {
   public var flags : Int64 = 0 {
     didSet {
       modified = true
+    }
+  }
+  
+  public var productName : String {
+    get {
+      if let info = locoNetProductInfo {
+        return "\(info.manufacturer.title) \(info.productName)"
+      }
+      return "unknown product"
     }
   }
   
@@ -1109,6 +1119,10 @@ public class LocoNetDevice : EditorObject {
           case .DS64:
             
             device = IODeviceDS64(reader: reader)
+            
+          case .BXP88:
+            
+            device = IODeviceBXP88(reader: reader)
             
           case .TowerControllerMarkII:
             

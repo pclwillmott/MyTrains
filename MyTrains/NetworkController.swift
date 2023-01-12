@@ -264,6 +264,25 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
     }
   }
   
+  public func ioFunctions(networkId:Int) -> [IOFunction] {
+    
+    var result : [IOFunction] = []
+    
+    for (_, device) in locoNetDevices {
+      if let ioDevice = device as? IODevice, ioDevice.networkId == networkId {
+        for ioChannel in ioDevice.ioChannels {
+          for ioFunction in ioChannel.ioFunctions {
+            result.append(ioFunction)
+          }
+        }
+      }
+    }
+    
+    result.sort() {$0.sortString() < $1.sortString()}
+    
+    return result
+    
+  }
   
   public var turnoutSwitches : [TurnoutSwitch] {
     
