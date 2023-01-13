@@ -1050,7 +1050,7 @@ public class LocoNetDevice : EditorObject {
         sensor.sensorAddress = sensor.calculatedSensorAddress
         sensor.nextSensorAddress = sensor.sensorAddress
       }
-      sensor.save()
+ //     sensor.save()
     }
     
     for turnoutSwitch in turnoutSwitches {
@@ -1058,7 +1058,7 @@ public class LocoNetDevice : EditorObject {
         turnoutSwitch.switchAddress = turnoutSwitch.calculatedSwitchAddress
         turnoutSwitch.nextSwitchAddress = turnoutSwitch.switchAddress
       }
-      turnoutSwitch.save()
+  //    turnoutSwitch.save()
     }
     
 
@@ -1161,8 +1161,8 @@ public class LocoNetDevice : EditorObject {
     let sql = [
       "DELETE FROM [\(TABLE.TURNOUT_SWITCH)] WHERE [\(TURNOUT_SWITCH.LOCONET_DEVICE_ID)] = \(primaryKey)",
       "DELETE FROM [\(TABLE.SENSOR)] WHERE [\(SENSOR.LOCONET_DEVICE_ID)] = \(primaryKey)",
+      "DELETE FROM [\(TABLE.LOCONET_DEVICE_CV)] WHERE [\(LOCONET_DEVICE_CV.LOCONET_DEVICE_ID)] = \(primaryKey)",
       "DELETE FROM [\(TABLE.LOCONET_DEVICE)] WHERE [\(LOCONET_DEVICE.LOCONET_DEVICE_ID)] = \(primaryKey)",
-      "DELETE FROM [\(TABLE.LOCONET_DEVICE_CV)] WHERE [\(LOCONET_DEVICE_CV.LOCONET_DEVICE_ID)] = \(primaryKey)"
     ]
     Database.execute(commands: sql)
   }

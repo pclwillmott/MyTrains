@@ -29,6 +29,12 @@ public class IOFunction : EditorObject {
   
   // MARK: Public Properties
   
+  public var hasPropertySheet : Bool {
+    get {
+      return false
+    }
+  }
+
   public var ioDevice : IODevice {
     get {
       return ioChannel.ioDevice

@@ -34,6 +34,7 @@ public enum LocoNetDeviceAttribute {
   case BrdOpSw
   case RouteHost
   case CVs
+  case IODevice
 }
 
 public enum LocoNetProductId : Int {
@@ -187,7 +188,7 @@ public class LocoNetProducts {
     (.UT4, "UT4", "Utility Throttle with 4 Digit Addressing and Infrared Capability", 2006, .UT4, [.Throttle], 0, 0, .digitrax, 0),
     (.UT4R, "UT4R", "Simplex Radio Equipped Utility Throttle with 4 Digit Addressing", 2006, .UT4, [.Throttle, .SimplexRadioTransmitter], 0, 0, .digitrax, 0),
     (.DS54, "DS54", " Quad Stationary Decoder with Programmable LocoNet Inputs & Outputs", 2006, .none, [.StationaryDecoder, .OptionSwitches], 4, 4, .digitrax, 0),
-    (.DS64, "DS64", "Quad Stationary Decoder", 2006, .none, [.StationaryDecoder, .OptionSwitches, .BrdOpSw], 8, 4, .digitrax, 0),
+    (.DS64, "DS64", "Quad Stationary Decoder", 2006, .none, [.StationaryDecoder, .OptionSwitches, .BrdOpSw, .IODevice], 8, 4, .digitrax, 0),
     (.LNRP, "LNRP", "Loconet Repeater Module", 2007, .LNRP, [.Repeater, .OptionSwitches], 0, 0, .digitrax, 0),
     (.PR3, "PR3", "SoundFX USB Decoder Programmer", 2008, .PR3, [.ComputerInterface, .LocoNetInterface, .Programmer, .OptionSwitches], 0, 0, .digitrax, 0),
     (.DT402, "DT402", "Super Throttle with Infrared Capability", 2009, .DT402, [.Throttle, .IRTransmitter], 0, 0, .digitrax, 0),
@@ -206,7 +207,7 @@ public class LocoNetProducts {
     (.DT500, "DT500", "Advanced Super Throttle with Infrared Capability", 2016, .DT500, [.Throttle, .IRTransmitter], 0, 0, .digitrax, 0),
     (.DT500D, "DT500D", "Advanced Duplex Radio Equipped Super Throttle", 2016, .DT500, [.Throttle, .DuplexRadioTransceiver], 0, 0, .digitrax, 0),
     (.DT500DCE, "DT500DCE", "Advanced Duplex Radio Equipped Super Throttle CE (for Europe)", 2016, .DT500, [.Throttle, .DuplexRadioTransceiver], 0, 0, .digitrax, 0),
-    (.BXP88, "BXP88", "LocoNet Occupancy Detector, 8 Detection Sections with Transponding & Power Management", 2017, .BXP88, [.OccupancyDetector, .PowerManager, .Transponding, .OptionSwitches], 8, 0, .digitrax, 0),
+    (.BXP88, "BXP88", "LocoNet Occupancy Detector, 8 Detection Sections with Transponding & Power Management", 2017, .BXP88, [.OccupancyDetector, .PowerManager, .Transponding, .OptionSwitches, .IODevice], 8, 0, .digitrax, 0),
     (.DB210, "DB210", "3/5/8 Amp Auto Reverseing DCC Booster", 2017, .DB210, [.Booster, .OptionSwitches], 0, 0, .digitrax, 0),
     (.DB210OPTO, "DB210-OPTO", "3/5/8 Amp Auto Reverseing DCC Booster that is Opto-Isolated for layouts with common rail wiring", 2017, .DB210Opto, [.Booster, .OptionSwitches], 0, 0, .digitrax, 0),
     (.DB220, "DB220", "Dual 3/5/8 Amp AutoReverseing DCC Booster", 2017, .DB220, [.Booster, .OptionSwitches], 0, 0, .digitrax, 0),
@@ -226,7 +227,7 @@ public class LocoNetProducts {
     (.DCS240PLUS, "DCS240+", "DCC Command Station & Booster" , 2022, .DCS240Plus, [.CommandStation, .Booster, .ComputerInterface, .LocoNetInterface, .Programmer, .OptionSwitches, .OpSwDataAP1, .OpSwDataBP1, .RouteHost], 0, 0, .digitrax, 0),
     (.SE74, "SE74", "16 Signal Head Controller with 4 Turnout Controls and 8 Input Lines", 2022, .SE74, [.StationaryDecoder, .Series7, .OptionSwitches], 36, 4, .digitrax, 0),
     (.PM74, "PM74", "Power Manager with Occupancy and Transponding Detection for 4 Sub-Districts", 2022, .PM74, [.OccupancyDetector, .Series7, .OptionSwitches, .Transponding, .PowerManager], 4, 0, .digitrax, 0),
-    (.TowerControllerMarkII, "Tower Controller Mark II", "64 Line LocoNet Input/Output", 2015, .none, [.OccupancyDetector, .StationaryDecoder], 64, 64, .rrCirKits, 640),
+    (.TowerControllerMarkII, "Tower Controller Mark II", "64 Line LocoNet Input/Output", 2015, .none, [.OccupancyDetector, .StationaryDecoder, .IODevice], 64, 64, .rrCirKits, 640),
   ]
   
   private static var _productDictionary : [LocoNetProductId:LocoNetProduct]?
@@ -309,6 +310,20 @@ public class LocoNetProducts {
     
     for product in products {
       if product.sensors > 0 {
+        result[product.id.rawValue] = LocoNetProductDictionaryItem(product: product)
+      }
+    }
+    
+    return result
+
+  }
+
+  public static func productDictionaryForIODevices() -> [Int:LocoNetProductDictionaryItem] {
+    
+    var result : [Int:LocoNetProductDictionaryItem] = [:]
+    
+    for product in products {
+      if product.attributes.contains(.IODevice) {
         result[product.id.rawValue] = LocoNetProductDictionaryItem(product: product)
       }
     }

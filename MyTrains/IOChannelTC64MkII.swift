@@ -11,6 +11,28 @@ public class IOChannelTC64MkII : IOChannel {
   
   // MARK: Public Properties
   
+  override public var allowedChannelTypes : Set<InputOutput> {
+    get {
+      return [.output, .input]
+    }
+  }
+  
+  override public var channelType: InputOutput {
+    get {
+      let cv = baseCVNumber + 2
+      let rawValue = ioDevice.cvs[cv - 1].nextCVValue
+      let mask = 0b01000000
+      return (rawValue & mask) == mask ? .input : .output
+    }
+    set(value) {
+      let cv = baseCVNumber + 2
+      let mask = 0b01000000
+      var rawValue = (ioDevice.cvs[cv - 1].nextCVValue & ~mask) & 0xff
+      rawValue |= ((value == .input) ? mask : 0)
+      ioDevice.cvs[cv - 1].nextCVValue = rawValue
+    }
+  }
+
   public var baseCVNumber : Int {
     get {
       return 129 + (ioChannelNumber - 1) * 8
@@ -54,23 +76,6 @@ public class IOChannelTC64MkII : IOChannel {
     }
     set(value) {
       paired = TC64Paired(rawValue: value.rawValue) ?? .defaultValue
-    }
-  }
-  
-  
-  public var io : InputOutput {
-    get {
-      let cv = baseCVNumber + 2
-      let rawValue = ioDevice.cvs[cv - 1].nextCVValue
-      let mask = 0b01000000
-      return (rawValue & mask) == mask ? .input : .output
-    }
-    set(value) {
-      let cv = baseCVNumber + 2
-      let mask = 0b01000000
-      var rawValue = (ioDevice.cvs[cv - 1].nextCVValue & ~mask) & 0xff
-      rawValue |= ((value == .input) ? mask : 0)
-      ioDevice.cvs[cv - 1].nextCVValue = rawValue
     }
   }
   

@@ -62,13 +62,13 @@ public class IODeviceDS64 : IODevice {
     super.decode(sqliteDataReader: sqliteDataReader)
 
     for channelNumber in 1...8 {
-      let ioChannel = IOChannelInput(ioDevice: self, ioChannelNumber: channelNumber, ioChannelType: .input)
+      let ioChannel = IOChannelInput(ioDevice: self, ioChannelNumber: channelNumber)
       ioChannels.append(ioChannel)
       ioChannel.ioFunctions = IOFunction.functions(ioChannel: ioChannel)
     }
 
     for channelNumber in 9...12 {
-      let ioChannel = IOChannelOutput(ioDevice: self, ioChannelNumber: channelNumber, ioChannelType: .output)
+      let ioChannel = IOChannelOutput(ioDevice: self, ioChannelNumber: channelNumber)
       ioChannels.append(ioChannel)
       ioChannel.ioFunctions = IOFunction.functions(ioChannel: ioChannel)
     }
@@ -78,18 +78,18 @@ public class IODeviceDS64 : IODevice {
   override public func save() {
     
     super.save()
-    
+    print("here save")
     if ioChannels.count == 0 {
       
       for channelNumber in 1...8 {
-        let ioChannel = IOChannelInput(ioDevice: self, ioChannelNumber: channelNumber, ioChannelType: .input)
+        let ioChannel = IOChannelInput(ioDevice: self, ioChannelNumber: channelNumber)
         ioChannels.append(ioChannel)
         let ioFunction = IOFunctionDS64Input(ioChannel: ioChannel, ioFunctionNumber: 1)
         ioChannel.ioFunctions.append(ioFunction)
       }
 
       for channelNumber in 9...12 {
-        let ioChannel = IOChannelOutput(ioDevice: self, ioChannelNumber: channelNumber, ioChannelType: .output)
+        let ioChannel = IOChannelOutput(ioDevice: self, ioChannelNumber: channelNumber)
         ioChannels.append(ioChannel)
         let ioFunction = IOFunctionDS64Output(ioChannel: ioChannel, ioFunctionNumber: 1)
         ioFunction.address = channelNumber - 8

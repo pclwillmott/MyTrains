@@ -40,7 +40,7 @@ public class IODeviceBXP88 : IODevice {
     super.decode(sqliteDataReader: sqliteDataReader)
 
     for channelNumber in 1...8 {
-      let ioChannel = IOChannelInput(ioDevice: self, ioChannelNumber: channelNumber, ioChannelType: .input)
+      let ioChannel = IOChannelInput(ioDevice: self, ioChannelNumber: channelNumber)
       ioChannels.append(ioChannel)
       ioChannel.ioFunctions = IOFunction.functions(ioChannel: ioChannel)
     }
@@ -54,7 +54,7 @@ public class IODeviceBXP88 : IODevice {
     if ioChannels.count == 0 {
       
       for channelNumber in 1...8 {
-        let ioChannel = IOChannelInput(ioDevice: self, ioChannelNumber: channelNumber, ioChannelType: .input)
+        let ioChannel = IOChannelInput(ioDevice: self, ioChannelNumber: channelNumber)
         ioChannels.append(ioChannel)
         let ioFunction = IOFunctionBXP88Input(ioChannel: ioChannel, ioFunctionNumber: 1)
         ioChannel.ioFunctions.append(ioFunction)

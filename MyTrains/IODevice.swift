@@ -9,8 +9,16 @@ import Foundation
 
 public class IODevice : LocoNetDevice {
   
+  // MARK: Constructors & Destructors
+  
   // MARK: Public Properties
  
+  public var hasPropertySheet : Bool {
+    get {
+      return false
+    }
+  }
+  
   public var ioChannels : [IOChannel] = []
   
   public var sensorAddresses : Set<Int> {

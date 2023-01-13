@@ -160,7 +160,6 @@
 		DA8D6E8E29703962004B9139 /* IODeviceManager.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA8D6E8D29703962004B9139 /* IODeviceManager.storyboard */; };
 		DA8D6E90297039B3004B9139 /* IODeviceManagerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8D6E8F297039B3004B9139 /* IODeviceManagerVC.swift */; };
 		DA8D6E92297055A6004B9139 /* IODeviceManagerTableViewDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8D6E91297055A6004B9139 /* IODeviceManagerTableViewDS.swift */; };
-		DA8D6E9429706244004B9139 /* IOChannelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8D6E9329706244004B9139 /* IOChannelType.swift */; };
 		DA8D6E9629706644004B9139 /* IODeviceBXP88.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8D6E9529706644004B9139 /* IODeviceBXP88.swift */; };
 		DA8D6E9A297066FF004B9139 /* IOFunctionBXP88Input.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8D6E99297066FF004B9139 /* IOFunctionBXP88Input.swift */; };
 		DA8E6E932893FEB800093468 /* AddressTableViewDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8E6E922893FEB800093468 /* AddressTableViewDS.swift */; };
@@ -209,6 +208,8 @@
 		DAA8CF0C296866D600B07971 /* IODeviceTC64MkII.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA8CF0B296866D600B07971 /* IODeviceTC64MkII.swift */; };
 		DAB07498276EB6C3003278BE /* Sqlite.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB07497276EB6C3003278BE /* Sqlite.swift */; };
 		DAB0749A276EB8B1003278BE /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB07499276EB8B1003278BE /* Database.swift */; };
+		DAB1DB8F2971CC9200918A5F /* IODeviceNew.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DAB1DB8E2971CC9200918A5F /* IODeviceNew.storyboard */; };
+		DAB1DB912971CCA900918A5F /* IODeviceNewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB1DB902971CCA900918A5F /* IODeviceNewVC.swift */; };
 		DAB450ED2872FEC000657295 /* SensorTCV.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAB450EC2872FEC000657295 /* SensorTCV.xib */; };
 		DAB450EF2872FEE800657295 /* SensorTCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB450EE2872FEE800657295 /* SensorTCV.swift */; };
 		DAB4FF5E2854F8CF00D74920 /* LocomotiveType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB4FF5D2854F8CF00D74920 /* LocomotiveType.swift */; };
@@ -399,7 +400,6 @@
 		DA8D6E8D29703962004B9139 /* IODeviceManager.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = IODeviceManager.storyboard; sourceTree = "<group>"; };
 		DA8D6E8F297039B3004B9139 /* IODeviceManagerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IODeviceManagerVC.swift; sourceTree = "<group>"; };
 		DA8D6E91297055A6004B9139 /* IODeviceManagerTableViewDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IODeviceManagerTableViewDS.swift; sourceTree = "<group>"; };
-		DA8D6E9329706244004B9139 /* IOChannelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOChannelType.swift; sourceTree = "<group>"; };
 		DA8D6E9529706644004B9139 /* IODeviceBXP88.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IODeviceBXP88.swift; sourceTree = "<group>"; };
 		DA8D6E99297066FF004B9139 /* IOFunctionBXP88Input.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOFunctionBXP88Input.swift; sourceTree = "<group>"; };
 		DA8E6E922893FEB800093468 /* AddressTableViewDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressTableViewDS.swift; sourceTree = "<group>"; };
@@ -450,6 +450,8 @@
 		DAA8CF0B296866D600B07971 /* IODeviceTC64MkII.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IODeviceTC64MkII.swift; sourceTree = "<group>"; };
 		DAB07497276EB6C3003278BE /* Sqlite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sqlite.swift; sourceTree = "<group>"; };
 		DAB07499276EB8B1003278BE /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
+		DAB1DB8E2971CC9200918A5F /* IODeviceNew.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = IODeviceNew.storyboard; sourceTree = "<group>"; };
+		DAB1DB902971CCA900918A5F /* IODeviceNewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IODeviceNewVC.swift; sourceTree = "<group>"; };
 		DAB450EC2872FEC000657295 /* SensorTCV.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SensorTCV.xib; sourceTree = "<group>"; };
 		DAB450EE2872FEE800657295 /* SensorTCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorTCV.swift; sourceTree = "<group>"; };
 		DAB4FF5D2854F8CF00D74920 /* LocomotiveType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocomotiveType.swift; sourceTree = "<group>"; };
@@ -597,7 +599,6 @@
 				DA0946552843EB4100F1AB81 /* InterfaceIPLExtensions.swift */,
 				DAA867C327930C62008B6EEC /* IntExtensions.swift */,
 				DAA8CEF92968406000B07971 /* IOChannel.swift */,
-				DA8D6E9329706244004B9139 /* IOChannelType.swift */,
 				DAA8CEFF296857F500B07971 /* IOChannelInput.swift */,
 				DAA8CF012968581B00B07971 /* IOChannelOutput.swift */,
 				DAA8CF032968583F00B07971 /* IOChannelTC64MkII.swift */,
@@ -607,6 +608,8 @@
 				DA8D6E9529706644004B9139 /* IODeviceBXP88.swift */,
 				DA8D6E8D29703962004B9139 /* IODeviceManager.storyboard */,
 				DA8D6E8F297039B3004B9139 /* IODeviceManagerVC.swift */,
+				DAB1DB8E2971CC9200918A5F /* IODeviceNew.storyboard */,
+				DAB1DB902971CCA900918A5F /* IODeviceNewVC.swift */,
 				DA8D6E91297055A6004B9139 /* IODeviceManagerTableViewDS.swift */,
 				DAA8CEFB2968408700B07971 /* IOFunction.swift */,
 				DA8D6E99297066FF004B9139 /* IOFunctionBXP88Input.swift */,
@@ -859,6 +862,7 @@
 				DA23EFAF294551B100C1581F /* FastClockTester.storyboard in Resources */,
 				DA8837762770B6F8000B9A41 /* EditLocomotives.storyboard in Resources */,
 				DA33FC2027AFF9E500630227 /* OpSwDecoderType.xib in Resources */,
+				DAB1DB8F2971CC9200918A5F /* IODeviceNew.storyboard in Resources */,
 				DA341C9929212FD600C3EF4F /* Bridge.storyboard in Resources */,
 				DA8D6E8E29703962004B9139 /* IODeviceManager.storyboard in Resources */,
 				DA412E122780948900748CCD /* Throttle.storyboard in Resources */,
@@ -891,6 +895,7 @@
 				DA0197252773500100350F71 /* ComboBoxDictDS.swift in Sources */,
 				DAA8CF0C296866D600B07971 /* IODeviceTC64MkII.swift in Sources */,
 				DA8AE0F0279B3074001E9311 /* SlotViewVC.swift in Sources */,
+				DAB1DB912971CCA900918A5F /* IODeviceNewVC.swift in Sources */,
 				DA08B43727875FDD0001307C /* ProgSlotDataP1.swift in Sources */,
 				DA6E28E5285F925C00772641 /* BlockDirection.swift in Sources */,
 				DA467B9D281CAFDA00AB9650 /* NSColorExtensions.swift in Sources */,
@@ -1025,7 +1030,6 @@
 				DAA8CF0A2968648700B07971 /* IOFunctionTC64MkII.swift in Sources */,
 				DA5B4601276F4E38005CA03C /* DatabaseConstants.swift in Sources */,
 				DA1DA5EA28280EEE00E0F993 /* BaudRate.swift in Sources */,
-				DA8D6E9429706244004B9139 /* IOChannelType.swift in Sources */,
 				DA412E162780DC3C00748CCD /* DecoderFunction.swift in Sources */,
 				DA32C97A294CB0E40034DB4F /* SampleRate.swift in Sources */,
 				DAE8DD51286741BD0097C2D1 /* TrackPart.swift in Sources */,

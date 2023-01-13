@@ -30,6 +30,7 @@ class IODeviceManagerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   override func viewWillAppear() {
     
     self.view.window?.delegate = self
+ 
     cboNetworkDS.dictionary = networkController.networksForCurrentLayout
     
     cboNetwork.dataSource = cboNetworkDS
@@ -102,7 +103,6 @@ class IODeviceManagerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   @IBOutlet weak var tvTableView: NSTableView!
   
   @IBAction func tvTableViewAction(_ sender: NSTableView) {
-    print("tvAction")
   }
   
   @IBAction func btnEditIODeviceAction(_ sender: NSButton) {
@@ -113,6 +113,30 @@ class IODeviceManagerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   }
   
   @IBAction func btnDeleteIODeviceAction(_ sender: NSButton) {
+ 
+    if let ioFunctions = tableViewDS.ioFunctions {
+      
+      let ioDevice = ioFunctions[sender.tag].ioDevice
+
+      let alert = NSAlert()
+
+      alert.messageText = ioDevice.deleteCheck()
+      alert.informativeText = ""
+      alert.addButton(withTitle: "No")
+      alert.addButton(withTitle: "Yes")
+      alert.alertStyle = .warning
+
+      if alert.runModal() == NSApplication.ModalResponse.alertSecondButtonReturn {
+        if let network = cboNetworkDS.editorObjectAt(index: cboNetwork.indexOfSelectedItem) as? Network {
+          networkController.removeDevice(primaryKey: ioDevice.primaryKey)
+          IODevice.delete(primaryKey: ioDevice.primaryKey)
+          tableViewDS.ioFunctions = networkController.ioFunctions(networkId: network.primaryKey)
+          tvTableView.reloadData()
+        }
+      }
+
+    }
+    
   }
   
   @IBAction func btnEditChannelAction(_ sender: NSButton) {
@@ -134,6 +158,42 @@ class IODeviceManagerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
       ioFunctions[sender.tag].ioDevice.boardId = sender.integerValue
       tvTableView.reloadData()
     }
+  }
+  
+  @IBAction func txtIODeviceAction(_ sender: NSTextField) {
+    if let ioFunctions = tableViewDS.ioFunctions {
+      ioFunctions[sender.tag].ioDevice.deviceName = sender.stringValue
+      ioFunctions[sender.tag].ioDevice.save()
+      tvTableView.reloadData()
+    }
+  }
+  
+  @IBAction func cboTVNetworkAction(_ sender: NSComboBox) {
+    if let network = cboNetworkDS.editorObjectAt(index: sender.indexOfSelectedItem) as? Network, let ioFunctions = tableViewDS.ioFunctions {
+      ioFunctions[sender.tag].ioDevice.networkId = network.primaryKey
+      ioFunctions[sender.tag].ioDevice.save()
+      tableViewDS.ioFunctions = networkController.ioFunctions(networkId: network.primaryKey)
+      tvTableView.reloadData()
+    }
+  }
+  
+  @IBAction func btnNewAction(_ sender: NSButton) {
+ 
+    if let network = cboNetworkDS.editorObjectAt(index: cboNetwork.indexOfSelectedItem) as? Network {
+      
+      let x = ModalWindow.IODeviceNew
+      let wc = x.windowController
+      let vc = x.viewController(windowController: wc) as! IODeviceNewVC
+      vc.network = network
+      if let window = wc.window {
+        NSApplication.shared.runModal(for: window)
+        window.close()
+        tableViewDS.ioFunctions = networkController.ioFunctions(networkId: network.primaryKey)
+        tvTableView.reloadData()
+      }
+
+    }
+    
   }
   
 }

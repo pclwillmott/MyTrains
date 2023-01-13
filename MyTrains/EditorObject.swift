@@ -16,13 +16,24 @@ public class EditorObject : NSObject {
     super.init()
   }
   
+  // MARK: Private Properties
+  
+  internal var _modified : Bool = false
+  
   // MARK: Public Properties
   
   public var primaryKey : Int
   
-  public var modified = false
+  public var modified : Bool {
+    get {
+      return _modified
+    }
+    set(value) {
+      _modified = value
+    }
+  }
   
-  // Public Methods
+  // MARK: Public Methods
   
   public func displayString() -> String {
     return ""

@@ -123,7 +123,7 @@ public class IODeviceTC64MkII : IODevice {
     super.decode(sqliteDataReader: sqliteDataReader)
 
     for channelNumber in 1...64 {
-      let ioChannel = IOChannelTC64MkII(ioDevice: self, ioChannelNumber: channelNumber, ioChannelType: .ioTC64MkII)
+      let ioChannel = IOChannelTC64MkII(ioDevice: self, ioChannelNumber: channelNumber)
       ioChannels.append(ioChannel)
       ioChannel.ioFunctions = IOFunction.functions(ioChannel: ioChannel)
     }
@@ -137,7 +137,7 @@ public class IODeviceTC64MkII : IODevice {
     if ioChannels.count == 0 {
       
       for channelNumber in 1...64 {
-        let ioChannel = IOChannelTC64MkII(ioDevice: self, ioChannelNumber: channelNumber, ioChannelType: .ioTC64MkII)
+        let ioChannel = IOChannelTC64MkII(ioDevice: self, ioChannelNumber: channelNumber)
         ioChannels.append(ioChannel)
         for functionNumber in 1...3 {
           let ioFunction = IOFunctionTC54MkII(ioChannel: ioChannel, ioFunctionNumber: functionNumber)

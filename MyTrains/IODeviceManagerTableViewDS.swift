@@ -10,6 +10,20 @@ import Cocoa
 
 public class IODeviceManagerTableViewDS : NSObject, NSTableViewDataSource, NSTableViewDelegate {
 
+  // MARK: Constructors
+  
+  override public init() {
+    
+    super.init()
+    
+    cboNetworkDS.dictionary = networkController.networksForCurrentLayout
+
+  }
+  
+  // MARK: Private Properties
+  
+  private var cboNetworkDS : ComboBoxDictDS = ComboBoxDictDS()
+
   // MARK: Public Properties
   
   public var ioFunctions : [IOFunction]?
@@ -53,13 +67,15 @@ public class IODeviceManagerTableViewDS : NSObject, NSTableViewDataSource, NSTab
       static let editChannel = "EditChannel"
       static let function = "Function"
       static let editFunction = "EditFunction"
+      static let network = "Network"
+      static let channelType = "ChannelType"
     }
-
 
     switch columnName {
     
     case ColumnIdentifiers.ioDevice:
-      text = "\(item.ioDevice.productName)"
+      text = "\(item.ioDevice.deviceName)"
+      isEditable = true
       
     case ColumnIdentifiers.boardID:
       textColor = !item.ioDevice.addressCollision ? .black : .orange
@@ -67,18 +83,53 @@ public class IODeviceManagerTableViewDS : NSObject, NSTableViewDataSource, NSTab
       isEditable = true
      
     case ColumnIdentifiers.channel:
-      text = "\(item.ioChannel.ioChannelNumber) - \(item.ioChannel.ioChannelType.title)"
+      text = "\(item.ioChannel.ioChannelNumber)"
       
     case ColumnIdentifiers.function:
       text = "\(item.displayString())"
             
+    case ColumnIdentifiers.network:
+
+
+      if let cell = tableView.makeView(withIdentifier:
+                                        NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil), let combo = cell.subviews[0] as? NSComboBox {
+          
+        combo.tag = row
+
+        combo.dataSource = cboNetworkDS
+        
+        combo.selectItem(at: cboNetworkDS.indexWithKey(key: item.ioDevice.networkId) ?? -1)
+
+        return cell
+        
+      }
+      
+    case ColumnIdentifiers.channelType:
+
+
+      if let cell = tableView.makeView(withIdentifier:
+                                        NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil), let combo = cell.subviews[0] as? NSComboBox {
+          
+        combo.tag = row
+
+        InputOutput.populate(comboBox: combo, fromSet: item.ioChannel.allowedChannelTypes)
+        
+        InputOutput.select(comboBox: combo, value: item.ioChannel.channelType)
+        
+        return cell
+        
+      }
+      
     case ColumnIdentifiers.editIODevice:
       
       if let cell = tableView.makeView(withIdentifier:
-      NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil) as? NSButton {
+                                        NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil), let button = cell.subviews[0] as? NSButton {
        
-        cell.title = "Edit"
-        cell.tag = row
+        button.title = "Edit"
+        
+        button.tag = row
+        
+        button.isEnabled = item.ioDevice.hasPropertySheet
         
         return cell
         
@@ -87,10 +138,11 @@ public class IODeviceManagerTableViewDS : NSObject, NSTableViewDataSource, NSTab
     case ColumnIdentifiers.deleteIODevice:
       
       if let cell = tableView.makeView(withIdentifier:
-      NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil) as? NSButton {
+      NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil), let button = cell.subviews[0] as? NSButton {
        
-        cell.title = "Delete"
-        cell.tag = row
+        button.title = "Delete"
+        
+        button.tag = row
         
         return cell
         
@@ -99,10 +151,13 @@ public class IODeviceManagerTableViewDS : NSObject, NSTableViewDataSource, NSTab
     case ColumnIdentifiers.editChannel:
       
       if let cell = tableView.makeView(withIdentifier:
-      NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil) as? NSButton {
+      NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil), let button = cell.subviews[0] as? NSButton {
        
-        cell.title = "Edit"
-        cell.tag = row
+        button.title = "Edit"
+        
+        button.tag = row
+        
+        button.isEnabled = item.ioChannel.hasPropertySheet
         
         return cell
         
@@ -111,10 +166,14 @@ public class IODeviceManagerTableViewDS : NSObject, NSTableViewDataSource, NSTab
    case ColumnIdentifiers.editFunction:
       
       if let cell = tableView.makeView(withIdentifier:
-      NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil) as? NSButton {
+      NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil), let button = cell.subviews[0] as? NSButton {
        
-        cell.title = "Edit"
-        cell.tag = row
+        button.title = "Edit"
+        
+        button.tag = row
+        
+        button.isEnabled = item.hasPropertySheet
+        
         return cell
         
       }

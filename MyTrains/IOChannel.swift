@@ -11,20 +11,42 @@ public class IOChannel : NSObject {
   
   // MARK: Constructors & Destructors
   
-  init(ioDevice:IODevice, ioChannelNumber:Int, ioChannelType:IOChannelType) {
+  init(ioDevice:IODevice, ioChannelNumber:Int) {
     self.ioDevice = ioDevice
     self.ioChannelNumber = ioChannelNumber
-    self.ioChannelType = ioChannelType
     super.init()
   }
   
+  // MARK: Private Properties
+  
+  internal var _channelType : InputOutput = .input
+  
   // MARK: Public Properties
+  
+  public var hasPropertySheet : Bool {
+    get {
+      return false
+    }
+  }
+  
+  public var allowedChannelTypes : Set<InputOutput> {
+    get {
+      return []
+    }
+  }
+  
+  public var channelType : InputOutput {
+    get {
+      return _channelType
+    }
+    set(value) {
+      _channelType = value
+    }
+  }
   
   public var ioChannelNumber : Int
   
   public var ioDevice : IODevice
-  
-  public var ioChannelType : IOChannelType
   
   public var ioFunctions : [IOFunction] = []
   
