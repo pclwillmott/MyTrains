@@ -105,6 +105,10 @@
 		DA5E173E272EB23100F9341F /* LoconetSensorMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5E173D272EB23100F9341F /* LoconetSensorMessage.swift */; };
 		DA5E1741272ED2DF00F9341F /* LoconetSwitchRequestMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5E1740272ED2DF00F9341F /* LoconetSwitchRequestMessage.swift */; };
 		DA5E1743272EDA5B00F9341F /* LocoSlotDataP1.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5E1742272EDA5B00F9341F /* LocoSlotDataP1.swift */; };
+		DA5E97722972CD48001453A1 /* UpdateDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5E97712972CD48001453A1 /* UpdateDelegate.swift */; };
+		DA5E97742972FF25001453A1 /* IODeviceDS64PropertySheet.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA5E97732972FF25001453A1 /* IODeviceDS64PropertySheet.storyboard */; };
+		DA5E97762972FF3F001453A1 /* IODeviceDS64PropertySheetVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5E97752972FF3F001453A1 /* IODeviceDS64PropertySheetVC.swift */; };
+		DA5E977829730902001453A1 /* SensorMessageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5E977729730902001453A1 /* SensorMessageType.swift */; };
 		DA60D819295B617000B5A2C4 /* LocoNetDeviceCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA60D818295B617000B5A2C4 /* LocoNetDeviceCV.swift */; };
 		DA60D81B295C6D4000B5A2C4 /* TC64Config.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA60D81A295C6D4000B5A2C4 /* TC64Config.storyboard */; };
 		DA613AC928A7DECD003218BA /* PlaceLocomotive.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA613AC828A7DECD003218BA /* PlaceLocomotive.storyboard */; };
@@ -345,6 +349,10 @@
 		DA5E173D272EB23100F9341F /* LoconetSensorMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoconetSensorMessage.swift; sourceTree = "<group>"; };
 		DA5E1740272ED2DF00F9341F /* LoconetSwitchRequestMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoconetSwitchRequestMessage.swift; sourceTree = "<group>"; };
 		DA5E1742272EDA5B00F9341F /* LocoSlotDataP1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoSlotDataP1.swift; sourceTree = "<group>"; };
+		DA5E97712972CD48001453A1 /* UpdateDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateDelegate.swift; sourceTree = "<group>"; };
+		DA5E97732972FF25001453A1 /* IODeviceDS64PropertySheet.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = IODeviceDS64PropertySheet.storyboard; sourceTree = "<group>"; };
+		DA5E97752972FF3F001453A1 /* IODeviceDS64PropertySheetVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IODeviceDS64PropertySheetVC.swift; sourceTree = "<group>"; };
+		DA5E977729730902001453A1 /* SensorMessageType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorMessageType.swift; sourceTree = "<group>"; };
 		DA60D818295B617000B5A2C4 /* LocoNetDeviceCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoNetDeviceCV.swift; sourceTree = "<group>"; };
 		DA60D81A295C6D4000B5A2C4 /* TC64Config.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = TC64Config.storyboard; sourceTree = "<group>"; };
 		DA613AC828A7DECD003218BA /* PlaceLocomotive.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = PlaceLocomotive.storyboard; sourceTree = "<group>"; };
@@ -604,6 +612,8 @@
 				DAA8CF032968583F00B07971 /* IOChannelTC64MkII.swift */,
 				DAA8CEF72968402D00B07971 /* IODevice.swift */,
 				DAA8CEFD29684DD600B07971 /* IODeviceDS64.swift */,
+				DA5E97732972FF25001453A1 /* IODeviceDS64PropertySheet.storyboard */,
+				DA5E97752972FF3F001453A1 /* IODeviceDS64PropertySheetVC.swift */,
 				DAA8CF0B296866D600B07971 /* IODeviceTC64MkII.swift */,
 				DA8D6E9529706644004B9139 /* IODeviceBXP88.swift */,
 				DA8D6E8D29703962004B9139 /* IODeviceManager.storyboard */,
@@ -692,6 +702,7 @@
 				DA1DC9FE28A1CE0D007A957A /* SamplePeriod.swift */,
 				DA32C979294CB0E40034DB4F /* SampleRate.swift */,
 				DAD66A2D2871FF9B00376479 /* Sensor.swift */,
+				DA5E977729730902001453A1 /* SensorMessageType.swift */,
 				DAEE9BEA2933E7B5005F553D /* SensorComboDS.swift */,
 				DA0BB98A28730B3400B6B812 /* SensorTableViewDS.swift */,
 				DAB450EE2872FEE800657295 /* SensorTCV.swift */,
@@ -761,6 +772,7 @@
 				DACB592A2896AF89006B1861 /* TurnoutSwitchTCV.xib */,
 				DA1B79FA285F3AD0009E1189 /* UnitLength.swift */,
 				DA1B79F8285F3885009E1189 /* UnitSpeed.swift */,
+				DA5E97712972CD48001453A1 /* UpdateDelegate.swift */,
 				DA1ECC9228439D4600C4F963 /* UpdateFirmware.storyboard */,
 				DA1ECC9728439DE500C4F963 /* UpdateFirmwareVC.swift */,
 				DA6A0ADE2753B5CF00913F2B /* UserDefaults.swift */,
@@ -846,6 +858,7 @@
 				DA28C2BA2801CC0300857471 /* DashBoard.storyboard in Resources */,
 				DA88377A2770B726000B9A41 /* EditTrains.storyboard in Resources */,
 				DA6A0AD8275295BF00913F2B /* Monitor.storyboard in Resources */,
+				DA5E97742972FF25001453A1 /* IODeviceDS64PropertySheet.storyboard in Resources */,
 				DA467BAF281D5D2F00AB9650 /* SwitchBoardEditor.storyboard in Resources */,
 				DA2429712892F7AE000D4ADE /* DeviceTCV.xib in Resources */,
 				DAC0194A289E79BF001152F6 /* EditCommandStations.storyboard in Resources */,
@@ -894,6 +907,7 @@
 				DA1B79FB285F3AD0009E1189 /* UnitLength.swift in Sources */,
 				DA0197252773500100350F71 /* ComboBoxDictDS.swift in Sources */,
 				DAA8CF0C296866D600B07971 /* IODeviceTC64MkII.swift in Sources */,
+				DA5E97722972CD48001453A1 /* UpdateDelegate.swift in Sources */,
 				DA8AE0F0279B3074001E9311 /* SlotViewVC.swift in Sources */,
 				DAB1DB912971CCA900918A5F /* IODeviceNewVC.swift in Sources */,
 				DA08B43727875FDD0001307C /* ProgSlotDataP1.swift in Sources */,
@@ -917,6 +931,7 @@
 				DA08B433278737540001307C /* ProgramDecoderAddressVC.swift in Sources */,
 				DA1DC9FF28A1CE0D007A957A /* SamplePeriod.swift in Sources */,
 				DA6F3926274FD0C400A63FBF /* PeerXfer20.swift in Sources */,
+				DA5E97762972FF3F001453A1 /* IODeviceDS64PropertySheetVC.swift in Sources */,
 				DA4342962836996800E8D555 /* MTSerialPort.swift in Sources */,
 				DA1B79F7285F2540009E1189 /* SwitchBoardItemPropertySheetVC.swift in Sources */,
 				DA6A0ADF2753B5CF00913F2B /* UserDefaults.swift in Sources */,
@@ -990,6 +1005,7 @@
 				DA2785402837EAE700EDCBB7 /* MTSerialPortManager.swift in Sources */,
 				DA15BE26289806BF00FD82FD /* SpeedProfileTableViewDS.swift in Sources */,
 				DAC0194C289E7B80001152F6 /* EditCommandStationsVC.swift in Sources */,
+				DA5E977829730902001453A1 /* SensorMessageType.swift in Sources */,
 				DAA5F3CC295CA2C200C25028 /* LocoNetDeviceTC64Extensions.swift in Sources */,
 				DA77795727AEF2E5007EEBE9 /* OpSwTableViewDS.swift in Sources */,
 				DACB592D2896AFCB006B1861 /* TurnoutSwitchTCV.swift in Sources */,

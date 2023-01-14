@@ -12,6 +12,8 @@ public class IODevice : LocoNetDevice {
   // MARK: Constructors & Destructors
   
   // MARK: Public Properties
+  
+  public var upDateDelegate : UpdateDelegate?
  
   public var hasPropertySheet : Bool {
     get {
@@ -50,6 +52,13 @@ public class IODevice : LocoNetDevice {
   // MARK: Public Methods
   
   public func propertySheet() {
+  }
+  
+  public func setDefaults() {
+  }
+  
+  public func setBoardId(newBoardId:Int) {
+    
   }
   
 }

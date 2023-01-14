@@ -684,8 +684,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "393"
             endingLineNumber = "393"
-            landmarkName = "networkMessageReceived(message:)"
-            landmarkType = "7">
+            landmarkName = "TC64ConfigVC"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy

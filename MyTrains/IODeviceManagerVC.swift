@@ -8,7 +8,7 @@
 import Foundation
 import Cocoa
 
-class IODeviceManagerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
+class IODeviceManagerVC: NSViewController, NSWindowDelegate, UpdateDelegate {
   
   // MARK: Window & View Control
   
@@ -21,10 +21,6 @@ class IODeviceManagerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   }
   
   func windowWillClose(_ notification: Notification) {
-    if observerId != -1 {
-      interface?.removeObserver(id: observerId)
-      observerId = -1
-    }
   }
   
   override func viewWillAppear() {
@@ -51,25 +47,13 @@ class IODeviceManagerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   
   private var cboNetworkDS : ComboBoxDictDS = ComboBoxDictDS()
 
-  private var observerId : Int = -1
-  
-  private var interface : Interface?
-  
   private var tableViewDS = IODeviceManagerTableViewDS()
   
   // MARK: Private Methods
   
   private func setupInterface() {
     
-    if observerId != -1 {
-      interface?.removeObserver(id: observerId)
-      observerId = -1
-    }
-    
     if let network = cboNetworkDS.editorObjectAt(index: cboNetwork.indexOfSelectedItem) as? Network, let interface = network.interface {
-      
-      self.interface = interface
-      self.observerId = interface.addObserver(observer: self)
       
       tableViewDS.ioFunctions = networkController.ioFunctions(networkId: network.primaryKey)
       tvTableView.dataSource = tableViewDS
@@ -80,10 +64,14 @@ class IODeviceManagerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
     
   }
   
-  // MARK: InterfaceDelegate Methods
+  // MARK: UpdateDelegate Methods
   
-  func networkMessageReceived(message:NetworkMessage) {
-    
+  public func displayUpdate(update:String) {
+    lblUpdate.stringValue = update
+  }
+  
+  public func updateCompleted(success:Bool) {
+    tvTableView.reloadData()
   }
 
   // MARK: Outlets & Actions
@@ -155,8 +143,7 @@ class IODeviceManagerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   
   @IBAction func txtBoardIDAction(_ sender: NSTextField) {
     if let ioFunctions = tableViewDS.ioFunctions {
-      ioFunctions[sender.tag].ioDevice.boardId = sender.integerValue
-      tvTableView.reloadData()
+      ioFunctions[sender.tag].ioDevice.setBoardId(newBoardId: sender.integerValue)
     }
   }
   
@@ -195,6 +182,8 @@ class IODeviceManagerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
     }
     
   }
+  
+  @IBOutlet weak var lblUpdate: NSTextField!
   
 }
 

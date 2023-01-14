@@ -43,6 +43,7 @@ class IODeviceNewVC: NSViewController, NSWindowDelegate {
   private func checkOKToSave() {
     
     btnSave.isEnabled = cboDeviceType.indexOfSelectedItem != -1 && txtBoardId.integerValue > 0
+    
   }
   
   // MARK: Public Properties
@@ -81,6 +82,8 @@ class IODeviceNewVC: NSViewController, NSWindowDelegate {
       }
       
       if let device = ioDevice {
+       
+        device.setDefaults()
         
         device.locoNetProductId = locoNetProductId
         device.boardId = txtBoardId.integerValue

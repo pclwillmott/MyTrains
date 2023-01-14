@@ -24,7 +24,7 @@ public enum InputOutput : Int {
     "Input",
   ]
   
-  private static let sequence : [InputOutput] = [output, input]
+  private static let sequence : [InputOutput] = [.output, .input]
   
   public static let defaultValue : InputOutput = .input
 

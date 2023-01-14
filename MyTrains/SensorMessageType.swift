@@ -1,42 +1,42 @@
 //
-//  TurnoutMotorType.swift
+//  SensorMessageType.swift
 //  MyTrains
 //
-//  Created by Paul Willmott on 20/06/2022.
+//  Created by Paul Willmott on 14/01/2023.
 //
 
 import Foundation
 import AppKit
 
-public enum TurnoutMotorType : Int {
-  
-  case manual = 0
-  case slowMotion = 1
-  case solenoid = 2
-  
+public enum SensorMessageType : Int {
+    
+  case generalSensorReport = 0
+  case turnoutSensorState = 1
+  case turnoutOutputState = 2
+
   public var title : String {
     get {
-      return TurnoutMotorType.titles[self.rawValue]
+      return SensorMessageType.titles[self.rawValue]
     }
   }
   
   private static let titles = [
-    "Manual",
-    "Slow Motion",
-    "Solenoid",
+    "General Sensor Report",
+    "Turnout Sensor State",
+    "Turnout Output State",
   ]
+  
+  private static let sequence : [SensorMessageType] = [.generalSensorReport, .turnoutSensorState, .turnoutOutputState]
+  
+  public static let defaultValue : SensorMessageType = .generalSensorReport
 
-  private static let sequence : [TurnoutMotorType] = [.manual, .slowMotion, .solenoid]
-  
-  public static let defaultValue : TurnoutMotorType = .manual
-  
   public static func populate(comboBox: NSComboBox) {
     comboBox.removeAllItems()
     comboBox.addItems(withObjectValues: titles)
     select(comboBox: comboBox, value: defaultValue)
   }
-  
-  public static func populate(comboBox: NSComboBox, fromSet:Set<TurnoutMotorType>) {
+
+  public static func populate(comboBox: NSComboBox, fromSet:Set<SensorMessageType>) {
     comboBox.removeAllItems()
     for item in fromSet {
       comboBox.addItem(withObjectValue: item.title)
@@ -44,7 +44,7 @@ public enum TurnoutMotorType : Int {
     comboBox.selectItem(at: 0)
   }
 
-  public static func select(comboBox: NSComboBox, value: TurnoutMotorType) {
+  public static func select(comboBox: NSComboBox, value: SensorMessageType) {
     var index = 0
     while index < comboBox.numberOfItems {
       if (comboBox.itemObjectValue(at: index) as! String) == value.title {
@@ -55,13 +55,14 @@ public enum TurnoutMotorType : Int {
     }
   }
   
-  public static func selected(comboBox: NSComboBox) -> TurnoutMotorType {
+  public static func selected(comboBox: NSComboBox) -> SensorMessageType {
     for value in sequence {
       if comboBox.stringValue == value.title {
         return value
       }
     }
-    return .manual
+    return defaultValue
   }
-
+  
 }
+

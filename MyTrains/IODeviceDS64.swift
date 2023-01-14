@@ -6,17 +6,18 @@
 //
 
 import Foundation
+import AppKit
 
 public class IODeviceDS64 : IODevice {
   
+  // MARK: Private Properties
+  
+  private var timer : Timer?
+  
+  private var nextAddr : Int = 0
+  
   // MARK: Public Properties
  
-  public var isGeneralReporting : Bool {
-    get {
-      return getState(switchNumber: 21) == .thrown
-    }
-  }
-  
   public var baseSensorAddress : Int {
     get {
       return (boardId - 1) * 8 + 1
@@ -54,8 +55,319 @@ public class IODeviceDS64 : IODevice {
       
     }
   }
+  
+  public var outputType : TurnoutMotorType {
+    get {
+      return getNewState(switchNumber: 1) == .closed ? .slowMotion : .solenoid
+    }
+    set(value) {
+      setNewState(switchNumber: 1, value: value == .slowMotion ? .closed : .thrown)
+    }
+  }
+  
+  public var timing : Int {
+    get {
+      var result : Int = 0
+      result |= ((getNewState(switchNumber: 2) == .closed) ? 0b0001 : 0)
+      result |= ((getNewState(switchNumber: 3) == .closed) ? 0b0010 : 0)
+      result |= ((getNewState(switchNumber: 4) == .closed) ? 0b0100 : 0)
+      result |= ((getNewState(switchNumber: 5) == .closed) ? 0b1000 : 0)
+      return result
+    }
+    set(value) {
+      let x = value & 0x0f
+      setNewState(switchNumber: 2, value: (x & 0b0001) == 0b0001 ? .closed : .thrown)
+      setNewState(switchNumber: 3, value: (x & 0b0010) == 0b0010 ? .closed : .thrown)
+      setNewState(switchNumber: 4, value: (x & 0b0100) == 0b0100 ? .closed : .thrown)
+      setNewState(switchNumber: 5, value: (x & 0b1000) == 0b1000 ? .closed : .thrown)
+    }
+  }
+  
+  public var outputsPowerUpAtPowerOn : Bool {
+    get {
+      return getNewState(switchNumber: 6) == .thrown
+    }
+    set(value) {
+      setNewState(switchNumber: 6, value: value ? .thrown : .closed)
+    }
+  }
+  
+  public var isLongStartUpDelay : Bool {
+    get {
+      return getNewState(switchNumber: 8) == .closed
+    }
+    set(value) {
+      setNewState(switchNumber: 8, value: value ? .closed : .thrown)
+    }
+  }
+  
+  public var outputsDoNotShutOff : Bool {
+    get {
+      return getNewState(switchNumber: 8) == .thrown
+    }
+    set(value) {
+      setNewState(switchNumber: 8, value: value ? .thrown : .closed)
+    }
+  }
+  
+  public var sensorMessageType : SensorMessageType {
+    get {
+      return getState(switchNumber: 21) == .thrown ? .generalSensorReport : .turnoutSensorState
+    }
+    set(value) {
+      setNewState(switchNumber: 21, value: value == .generalSensorReport ? .thrown : .closed)
+    }
+  }
+  
+  public var isCrossingGate1Enabled : Bool {
+    get {
+      return getState(switchNumber: 17) == .closed
+    }
+    set(value) {
+      setNewState(switchNumber: 17, value: value ? .closed : .thrown)
+    }
+  }
+  
+  public var isCrossingGate2Enabled : Bool {
+    get {
+      return getState(switchNumber: 18) == .closed
+    }
+    set(value) {
+      setNewState(switchNumber: 18, value: value ? .closed : .thrown)
+    }
+  }
+  
+  public var isCrossingGate3Enabled : Bool {
+    get {
+      return getState(switchNumber: 19) == .closed
+    }
+    set(value) {
+      setNewState(switchNumber: 19, value: value ? .closed : .thrown)
+    }
+  }
+  
+  public var isCrossingGate4Enabled : Bool {
+    get {
+      return getState(switchNumber: 20) == .closed
+    }
+    set(value) {
+      setNewState(switchNumber: 20, value: value ? .closed : .thrown)
+    }
+  }
+
+  public var obeySwitchCommandsFromTrackOnly : Bool {
+    get {
+      return getState(switchNumber: 14) == .closed
+    }
+    set(value) {
+      setNewState(switchNumber: 14, value: value ? .closed : .thrown)
+    }
+  }
+
+  public var isLocalRoutesEnabled : Bool {
+    get {
+      return getState(switchNumber: 16) == .thrown
+    }
+    set(value) {
+      setNewState(switchNumber: 16, value: value ? .thrown : .closed)
+    }
+  }
+
+  public var localRoutesUsingInputsEnabled : Bool {
+    get {
+      return getState(switchNumber: 11) == .closed
+    }
+    set(value) {
+      setNewState(switchNumber: 11, value: value ? .closed : .thrown)
+    }
+  }
+
+  public var ignoreSetSwCommands : Bool {
+    get {
+      return getState(switchNumber: 10) == .closed
+    }
+    set(value) {
+      setNewState(switchNumber: 10, value: value ? .closed : .thrown)
+    }
+  }
+
+  public var inputsForSensorMessagesOnly : Bool {
+    get {
+      return getState(switchNumber: 15) == .closed
+    }
+    set(value) {
+      setNewState(switchNumber: 15, value: value ? .closed : .thrown)
+    }
+  }
+
+  public var forcedOutputOnHigh : Bool {
+    get {
+      return getState(switchNumber: 12) == .closed
+    }
+    set(value) {
+      setNewState(switchNumber: 12, value: value ? .closed : .thrown)
+    }
+  }
+
+  public var inputsForSensorMessagesEnabled : Bool {
+    get {
+      return getState(switchNumber: 13) == .closed
+    }
+    set(value) {
+      setNewState(switchNumber: 13, value: value ? .closed : .thrown)
+    }
+  }
+
+  // MARK: Private Methods
+  
+  @objc func next() {
+    
+    if let network = self.network, let interface = network.interface {
+      
+      if nextAddr == 4 {
+        
+        stopTimer()
+        
+        let alertCheck = NSAlert()
+        
+        alertCheck.messageText = "Have the set switch commands been accepted?"
+        alertCheck.informativeText = "The green LED should have stopped slowly blinking and you should see a single green heart beat."
+        alertCheck.addButton(withTitle: "No")
+        alertCheck.addButton(withTitle: "Yes")
+        alertCheck.alertStyle = .informational
+        
+        if alertCheck.runModal() == NSApplication.ModalResponse.alertSecondButtonReturn {
+          upDateDelegate?.displayUpdate?(update: "Update Complete")
+          upDateDelegate?.updateCompleted?(success: true)
+          return
+        }
+        else {
+          nextAddr = 0
+          startTimer()
+        }
+
+      }
+      
+      interface.setSw(switchNumber: ioChannels[8 + nextAddr].ioFunctions[0].address, state: .closed)
+      
+      nextAddr += 1
+      
+    }
+    
+  }
+  
+  func startTimer() {
+    timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(next), userInfo: nil, repeats: true)
+    RunLoop.current.add(timer!, forMode: .common)
+  }
+  
+  func stopTimer() {
+    timer?.invalidate()
+    timer = nil
+  }
+
 
   // MARK: Public Methods
+  
+  override public func setBoardId(newBoardId:Int) {
+
+    
+    if let network = network, let interface = network.interface {
+      
+      if let message = OptionSwitch.enterSetBoardIdModeInstructions[locoNetProductId] {
+        
+        let alert = NSAlert()
+
+        alert.messageText = message
+        alert.informativeText = ""
+        alert.addButton(withTitle: "OK")
+        alert.alertStyle = .informational
+
+        alert.runModal()
+        
+        upDateDelegate?.displayUpdate?(update: "Updating")
+        
+        while true {
+          
+          interface.setSw(switchNumber: newBoardId, state: .closed)
+          
+          let alertCheck = NSAlert()
+          
+          alertCheck.messageText = "Has the set Board ID command been accepted?"
+          alertCheck.informativeText = "The LEDs should no longer be alternating between red and green."
+          alertCheck.addButton(withTitle: "No")
+          alertCheck.addButton(withTitle: "Yes")
+          alertCheck.alertStyle = .informational
+          
+          if alertCheck.runModal() == NSApplication.ModalResponse.alertSecondButtonReturn {
+            break
+          }
+          
+        }
+        
+        boardId = newBoardId
+        
+        save()
+        
+        if let message = OptionSwitch.enterSetSwitchAddressModeInstructions[locoNetProductId] {
+
+          alert.messageText = message
+
+          alert.runModal()
+          
+          nextAddr = 0
+          
+          startTimer()
+          
+        }
+
+      }
+      
+    }
+    
+  }
+  
+  override public func setDefaults() {
+    
+    for channelNumber in 9...12 {
+      ioChannels[channelNumber - 1].ioFunctions[0].address = channelNumber - 8
+    }
+    
+    outputType = .solenoid
+    
+    timing = 0
+    
+    outputsPowerUpAtPowerOn = true
+    
+    isLongStartUpDelay = false
+    
+    outputsDoNotShutOff = true
+    
+    ignoreSetSwCommands = false
+    
+    localRoutesUsingInputsEnabled = false
+    
+    forcedOutputOnHigh = false
+    
+    inputsForSensorMessagesEnabled = false
+    
+    obeySwitchCommandsFromTrackOnly = false
+    
+    inputsForSensorMessagesOnly = false
+    
+    isLocalRoutesEnabled = true
+    
+    isCrossingGate1Enabled = false
+    
+    isCrossingGate2Enabled = false
+    
+    isCrossingGate3Enabled = false
+    
+    isCrossingGate4Enabled = false
+    
+    sensorMessageType = .generalSensorReport
+    
+  }
   
   override public func decode(sqliteDataReader:SqliteDataReader?) {
     
@@ -78,7 +390,7 @@ public class IODeviceDS64 : IODevice {
   override public func save() {
     
     super.save()
-    print("here save")
+  
     if ioChannels.count == 0 {
       
       for channelNumber in 1...8 {
@@ -102,6 +414,25 @@ public class IODeviceDS64 : IODevice {
       ioChannel.save()
     }
     
+  }
+  
+  override public var hasPropertySheet: Bool {
+    get {
+      return true
+    }
+  }
+  
+  override public func propertySheet() {
+    
+    let x = ModalWindow.IODeviceDS64PropertySheet
+    let wc = x.windowController
+    let vc = x.viewController(windowController: wc) as! IODeviceDS64PropertySheetVC
+    vc.ioDevice = self
+    if let window = wc.window {
+      NSApplication.shared.runModal(for: window)
+      window.close()
+    }
+
   }
   
 }

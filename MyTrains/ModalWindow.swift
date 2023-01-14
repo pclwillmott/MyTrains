@@ -42,6 +42,7 @@ enum AppStoryboard : String {
   case TC64Config                   = "TC64Config"
   case IODeviceManager              = "IODeviceManager"
   case IODeviceNew                  = "IODeviceNew"
+  case IODeviceDS64PropertySheet    = "IODeviceDS64PropertySheet"
   
   var instance : NSStoryboard {
     return NSStoryboard(name: self.rawValue, bundle: Bundle.main)
@@ -82,6 +83,7 @@ let storyboardLookup             : [String:AppStoryboard] = [
   "TC64Config"                   : AppStoryboard.TC64Config,
   "IODeviceManager"              : AppStoryboard.IODeviceManager,
   "IODeviceNew"                  : AppStoryboard.IODeviceNew,
+  "IODeviceDS64PropertySheet"    : AppStoryboard.IODeviceDS64PropertySheet,
 ]
 
 /*
@@ -127,6 +129,7 @@ enum ModalWindow : String {
   case TC64Config                   = "TC64Config"
   case IODeviceManager              = "IODeviceManager"
   case IODeviceNew                  = "IODeviceNew"
+  case IODeviceDS64PropertySheet    = "IODeviceDS64PropertySheet"
 
   var windowController : NSWindowController {
     let storyboard = storyboardLookup[self.rawValue]!
