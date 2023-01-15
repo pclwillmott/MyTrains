@@ -115,6 +115,11 @@
 		DA613ACB28A7E02E003218BA /* PlaceLocomotiveVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA613ACA28A7E02E003218BA /* PlaceLocomotiveVC.swift */; };
 		DA6803B028EA518B00DED1D8 /* LocomotiveRoster.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA6803AF28EA518B00DED1D8 /* LocomotiveRoster.storyboard */; };
 		DA6803B228EA553900DED1D8 /* LocomotiveRosterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6803B128EA553900DED1D8 /* LocomotiveRosterVC.swift */; };
+		DA69E3932974581700447414 /* IOChannelDS64Output.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA69E3922974581700447414 /* IOChannelDS64Output.swift */; };
+		DA69E3952974668700447414 /* IOFunctionDS64OutputPropertySheet.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA69E3942974668700447414 /* IOFunctionDS64OutputPropertySheet.storyboard */; };
+		DA69E397297466AA00447414 /* IOFunctionDS64OutputPropertySheetVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA69E396297466AA00447414 /* IOFunctionDS64OutputPropertySheetVC.swift */; };
+		DA69E399297466D200447414 /* IOFunctionDS64InputPropertySheet.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA69E398297466D200447414 /* IOFunctionDS64InputPropertySheet.storyboard */; };
+		DA69E39B297466EF00447414 /* IOFunctionDS64InputPropertySheetVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA69E39A297466EF00447414 /* IOFunctionDS64InputPropertySheetVC.swift */; };
 		DA6A0AD8275295BF00913F2B /* Monitor.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA6A0AD7275295BF00913F2B /* Monitor.storyboard */; };
 		DA6A0ADA2752976800913F2B /* MonitorVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6A0AD92752976800913F2B /* MonitorVC.swift */; };
 		DA6A0ADC27529D6600913F2B /* ModalWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6A0ADB27529D6600913F2B /* ModalWindow.swift */; };
@@ -359,6 +364,11 @@
 		DA613ACA28A7E02E003218BA /* PlaceLocomotiveVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceLocomotiveVC.swift; sourceTree = "<group>"; };
 		DA6803AF28EA518B00DED1D8 /* LocomotiveRoster.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LocomotiveRoster.storyboard; sourceTree = "<group>"; };
 		DA6803B128EA553900DED1D8 /* LocomotiveRosterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocomotiveRosterVC.swift; sourceTree = "<group>"; };
+		DA69E3922974581700447414 /* IOChannelDS64Output.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOChannelDS64Output.swift; sourceTree = "<group>"; };
+		DA69E3942974668700447414 /* IOFunctionDS64OutputPropertySheet.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = IOFunctionDS64OutputPropertySheet.storyboard; sourceTree = "<group>"; };
+		DA69E396297466AA00447414 /* IOFunctionDS64OutputPropertySheetVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOFunctionDS64OutputPropertySheetVC.swift; sourceTree = "<group>"; };
+		DA69E398297466D200447414 /* IOFunctionDS64InputPropertySheet.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = IOFunctionDS64InputPropertySheet.storyboard; sourceTree = "<group>"; };
+		DA69E39A297466EF00447414 /* IOFunctionDS64InputPropertySheetVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOFunctionDS64InputPropertySheetVC.swift; sourceTree = "<group>"; };
 		DA6A0AD7275295BF00913F2B /* Monitor.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Monitor.storyboard; sourceTree = "<group>"; };
 		DA6A0AD92752976800913F2B /* MonitorVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonitorVC.swift; sourceTree = "<group>"; };
 		DA6A0ADB27529D6600913F2B /* ModalWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalWindow.swift; sourceTree = "<group>"; };
@@ -610,6 +620,7 @@
 				DAA8CEFF296857F500B07971 /* IOChannelInput.swift */,
 				DAA8CF012968581B00B07971 /* IOChannelOutput.swift */,
 				DAA8CF032968583F00B07971 /* IOChannelTC64MkII.swift */,
+				DA69E3922974581700447414 /* IOChannelDS64Output.swift */,
 				DAA8CEF72968402D00B07971 /* IODevice.swift */,
 				DAA8CEFD29684DD600B07971 /* IODeviceDS64.swift */,
 				DA5E97732972FF25001453A1 /* IODeviceDS64PropertySheet.storyboard */,
@@ -625,6 +636,10 @@
 				DA8D6E99297066FF004B9139 /* IOFunctionBXP88Input.swift */,
 				DAA8CF05296862DA00B07971 /* IOFunctionDS64Input.swift */,
 				DAA8CF072968630300B07971 /* IOFunctionDS64Output.swift */,
+				DA69E3942974668700447414 /* IOFunctionDS64OutputPropertySheet.storyboard */,
+				DA69E396297466AA00447414 /* IOFunctionDS64OutputPropertySheetVC.swift */,
+				DA69E398297466D200447414 /* IOFunctionDS64InputPropertySheet.storyboard */,
+				DA69E39A297466EF00447414 /* IOFunctionDS64InputPropertySheetVC.swift */,
 				DAA8CF092968648700B07971 /* IOFunctionTC64MkII.swift */,
 				DADD6969296EFE5500BA4402 /* IOFunctionType.swift */,
 				DA53B251276E478400AB956C /* IPLDevData.swift */,
@@ -850,6 +865,7 @@
 				DA1ECC9328439D4600C4F963 /* UpdateFirmware.storyboard in Resources */,
 				DA2429752892FE94000D4ADE /* AddressManager.storyboard in Resources */,
 				DA91274F295F653300E9B96E /* TC64PortView.xib in Resources */,
+				DA69E3952974668700447414 /* IOFunctionDS64OutputPropertySheet.storyboard in Resources */,
 				DA063397293CE8F400CEAFD1 /* SetFastClock.storyboard in Resources */,
 				DAB450ED2872FEC000657295 /* SensorTCV.xib in Resources */,
 				DA8837702770B35B000B9A41 /* EditLayouts.storyboard in Resources */,
@@ -879,6 +895,7 @@
 				DA341C9929212FD600C3EF4F /* Bridge.storyboard in Resources */,
 				DA8D6E8E29703962004B9139 /* IODeviceManager.storyboard in Resources */,
 				DA412E122780948900748CCD /* Throttle.storyboard in Resources */,
+				DA69E399297466D200447414 /* IOFunctionDS64InputPropertySheet.storyboard in Resources */,
 				DA77794F27AEE087007EEBE9 /* CommandStationConfiguration.storyboard in Resources */,
 				DA88378C2770FBEC000B9A41 /* DBEditorView.xib in Resources */,
 				DA9ED4EC28F238CF00EA914A /* RouteManager.storyboard in Resources */,
@@ -947,6 +964,7 @@
 				DA6E28E3285F8F1A00772641 /* TrackElectrificationType.swift in Sources */,
 				DAA8CEFC2968408700B07971 /* IOFunction.swift in Sources */,
 				DA28C2C92801EF6500857471 /* QuerySlot5.swift in Sources */,
+				DA69E3932974581700447414 /* IOChannelDS64Output.swift in Sources */,
 				DADFFF902946025500CD2119 /* DateExtensions.swift in Sources */,
 				DA341C9729212F9600C3EF4F /* LocoNetBridge.swift in Sources */,
 				DA60D819295B617000B5A2C4 /* LocoNetDeviceCV.swift in Sources */,
@@ -1016,6 +1034,7 @@
 				DAF4DD4C289A90C1000B848E /* SpeedResultsView.swift in Sources */,
 				DAE9DBB728258E12004BC75D /* LocoNetProducts.swift in Sources */,
 				DAD66A2E2871FF9B00376479 /* Sensor.swift in Sources */,
+				DA69E397297466AA00447414 /* IOFunctionDS64OutputPropertySheetVC.swift in Sources */,
 				DAA867C627933265008B6EEC /* CSVParser.swift in Sources */,
 				DAA8CF00296857F500B07971 /* IOChannelInput.swift in Sources */,
 				DADD696A296EFE5500BA4402 /* IOFunctionType.swift in Sources */,
@@ -1066,6 +1085,7 @@
 				DA467BA9281D569300AB9650 /* SwitchBoardView.swift in Sources */,
 				DA9CF8F9286089B000825FA9 /* NSButtonExtensions.swift in Sources */,
 				DA6E28DF285F827600772641 /* SwitchBoardItemPartType.swift in Sources */,
+				DA69E39B297466EF00447414 /* IOFunctionDS64InputPropertySheetVC.swift in Sources */,
 				DA0946542843C06A00F1AB81 /* DMF.swift in Sources */,
 				DACB59272896A27E006B1861 /* TurnoutSwitch.swift in Sources */,
 				DA8837802770B768000B9A41 /* EditLocomotivesVC.swift in Sources */,

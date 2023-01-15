@@ -71,6 +71,7 @@ class IODeviceManagerVC: NSViewController, NSWindowDelegate, UpdateDelegate {
   }
   
   public func updateCompleted(success:Bool) {
+    
     tvTableView.reloadData()
   }
 
@@ -95,6 +96,7 @@ class IODeviceManagerVC: NSViewController, NSWindowDelegate, UpdateDelegate {
   
   @IBAction func btnEditIODeviceAction(_ sender: NSButton) {
     if let ioFunctions = tableViewDS.ioFunctions {
+      ioFunctions[sender.tag].ioDevice.upDateDelegate = self
       ioFunctions[sender.tag].ioDevice.propertySheet()
       tvTableView.reloadData()
     }
@@ -184,6 +186,24 @@ class IODeviceManagerVC: NSViewController, NSWindowDelegate, UpdateDelegate {
   }
   
   @IBOutlet weak var lblUpdate: NSTextField!
+  
+  @IBAction func btnWriteChannelAction(_ sender: NSButton) {
+    if let ioFunctions = tableViewDS.ioFunctions, let ioFunction = ioFunctions[sender.tag] as? IOFunctionDS64Output {
+      ioFunction.ioDevice.upDateDelegate = self
+      ioFunction.ioChannel.writeChannel()
+    }
+  }
+  
+  @IBAction func cboChannelTypeAction(_ sender: NSComboBox) {
+    
+    if let ioFunctions = tableViewDS.ioFunctions {
+      let ioChannel = ioFunctions[sender.tag].ioChannel
+      ioChannel.channelType = InputOutput.selected(comboBox: sender)
+    }
+    
+  }
+  
+  
   
 }
 

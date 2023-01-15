@@ -29,6 +29,12 @@ public class IOChannel : NSObject {
     }
   }
   
+  public var canWriteChannel : Bool {
+    get {
+      return false
+    }
+  }
+  
   public var allowedChannelTypes : Set<InputOutput> {
     get {
       return []
@@ -61,6 +67,10 @@ public class IOChannel : NSObject {
   }
   
   public func propertySheet() {
+    
+  }
+  
+  public func writeChannel() {
     
   }
   

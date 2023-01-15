@@ -6,8 +6,17 @@
 //
 
 import Foundation
+import AppKit
 
 public class IOFunctionDS64Input : IOFunction {
+  
+  // MARK: Public Properties
+  
+  override public var hasPropertySheet: Bool {
+    get {
+      return true
+    }
+  }
   
   // MARK: Public Properties
   
@@ -22,6 +31,25 @@ public class IOFunctionDS64Input : IOFunction {
       _ = value
       _address = address
     }
+  }
+
+  // MARK: Public Methods
+  
+  override public func displayString() -> String {
+    return "\(super.displayString()) (\(address))"
+  }
+  
+  override public func propertySheet() {
+    
+    let x = ModalWindow.IOFunctionDS64InputPropertySheet
+    let wc = x.windowController
+    let vc = x.viewController(windowController: wc) as! IOFunctionDS64InputPropertySheetVC
+    vc.ioFunction = self
+    if let window = wc.window {
+      NSApplication.shared.runModal(for: window)
+      window.close()
+    }
+
   }
 
 }

@@ -11,3 +11,7 @@ import Foundation
   @objc optional func displayUpdate(update:String)
   @objc optional func updateCompleted(success:Bool)
 }
+
+@objc public protocol IODevicePropertySheetDelegate {
+  @objc optional func reloadData()
+}

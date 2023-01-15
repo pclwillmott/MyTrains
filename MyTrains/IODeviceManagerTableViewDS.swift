@@ -69,6 +69,7 @@ public class IODeviceManagerTableViewDS : NSObject, NSTableViewDataSource, NSTab
       static let editFunction = "EditFunction"
       static let network = "Network"
       static let channelType = "ChannelType"
+      static let writeChannel = "WriteChannel"
     }
 
     switch columnName {
@@ -159,6 +160,21 @@ public class IODeviceManagerTableViewDS : NSObject, NSTableViewDataSource, NSTab
         
         button.isEnabled = item.ioChannel.hasPropertySheet
         
+        return cell
+        
+      }
+      
+    case ColumnIdentifiers.writeChannel:
+      
+      if let cell = tableView.makeView(withIdentifier:
+      NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil), let button = cell.subviews[0] as? NSButton {
+       
+        button.title = "Write"
+        
+        button.tag = row
+        
+        button.isEnabled = item.ioChannel.canWriteChannel
+         
         return cell
         
       }

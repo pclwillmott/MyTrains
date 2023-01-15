@@ -8,7 +8,7 @@
 import Foundation
 import Cocoa
 
-class IODeviceDS64PropertySheetVC: NSViewController, NSWindowDelegate {
+class IODeviceDS64PropertySheetVC: NSViewController, NSWindowDelegate, IODevicePropertySheetDelegate {
   
   // MARK: Window & View Control
   
@@ -30,6 +30,18 @@ class IODeviceDS64PropertySheetVC: NSViewController, NSWindowDelegate {
     
     view.window?.title = ioDevice!.deviceName
     
+    reloadData()
+    
+  }
+  
+  // MARK: Public Properties
+  
+  public var ioDevice : IODeviceDS64?
+  
+  // MARK: Public Methods
+  
+  public func reloadData() {
+    
     TurnoutMotorType.populate(comboBox: cboOutputType, fromSet: [.solenoid, .slowMotion])
     TurnoutMotorType.select(comboBox: cboOutputType, value: ioDevice!.outputType)
     
@@ -48,6 +60,8 @@ class IODeviceDS64PropertySheetVC: NSViewController, NSWindowDelegate {
     chkOutputsDoNotShutOff.state = ioDevice!.outputsDoNotShutOff ? .on : .off
     
     chkOnlyAcceptsComputerCommands.state = ioDevice!.ignoreSetSwCommands ? .on : .off
+    
+    chkOnlyAcceptsCommandsFromTrack.state = ioDevice!.obeySwitchCommandsFromTrackOnly ? .on : .off
     
     chkEnableRouteCommandsFromInputs.state = ioDevice!.localRoutesUsingInputsEnabled ? .on : .off
     
@@ -68,12 +82,8 @@ class IODeviceDS64PropertySheetVC: NSViewController, NSWindowDelegate {
 
     SensorMessageType.populate(comboBox: cboSensorMessageType, fromSet: [.generalSensorReport, .turnoutSensorState])
     SensorMessageType.select(comboBox: cboSensorMessageType, value: ioDevice!.sensorMessageType)
-    
+
   }
-  
-  // MARK: Public Properties
-  
-  public var ioDevice : IODeviceDS64? 
   
   // MARK: Outlets & Actions
   
@@ -129,6 +139,9 @@ class IODeviceDS64PropertySheetVC: NSViewController, NSWindowDelegate {
   @IBOutlet weak var chkEnableRouteCommandsFromInputs: NSButton!
   
   @IBAction func btnRead(_ sender: NSButton) {
+    if let ioDevice = ioDevice {
+      ioDevice.readOptionSwitches()
+    }
   }
   
   @IBAction func btnWrite(_ sender: NSButton) {
@@ -163,6 +176,8 @@ class IODeviceDS64PropertySheetVC: NSViewController, NSWindowDelegate {
       ioDevice.isCrossingGate4Enabled = chkEnableCrossingGate4.state == .on
       
       ioDevice.sensorMessageType = SensorMessageType.selected(comboBox: cboSensorMessageType)
+      
+      ioDevice.writeOptionSwitches()
       
     }
     

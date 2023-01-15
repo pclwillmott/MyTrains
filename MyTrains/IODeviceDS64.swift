@@ -228,24 +228,12 @@ public class IODeviceDS64 : IODevice {
         
         stopTimer()
         
-        let alertCheck = NSAlert()
+        upDateDelegate?.displayUpdate?(update: "Completed")
         
-        alertCheck.messageText = "Have the set switch commands been accepted?"
-        alertCheck.informativeText = "The green LED should have stopped slowly blinking and you should see a single green heart beat."
-        alertCheck.addButton(withTitle: "No")
-        alertCheck.addButton(withTitle: "Yes")
-        alertCheck.alertStyle = .informational
-        
-        if alertCheck.runModal() == NSApplication.ModalResponse.alertSecondButtonReturn {
-          upDateDelegate?.displayUpdate?(update: "Update Complete")
-          upDateDelegate?.updateCompleted?(success: true)
-          return
-        }
-        else {
-          nextAddr = 0
-          startTimer()
-        }
+        upDateDelegate?.updateCompleted?(success: true)
 
+        return
+        
       }
       
       interface.setSw(switchNumber: ioChannels[8 + nextAddr].ioFunctions[0].address, state: .closed)
@@ -269,9 +257,31 @@ public class IODeviceDS64 : IODevice {
 
   // MARK: Public Methods
   
+  public func setSwitchAddresses() {
+  
+    if let message = OptionSwitch.enterSetSwitchAddressModeInstructions[locoNetProductId] {
+
+      let alert = NSAlert()
+
+      alert.messageText = message
+      alert.informativeText = ""
+      alert.addButton(withTitle: "OK")
+      alert.alertStyle = .informational
+
+      alert.runModal()
+      
+      upDateDelegate?.displayUpdate?(update: "Updating Switch Addresses")
+      
+      nextAddr = 0
+      
+      startTimer()
+      
+    }
+
+  }
+  
   override public func setBoardId(newBoardId:Int) {
 
-    
     if let network = network, let interface = network.interface {
       
       if let message = OptionSwitch.enterSetBoardIdModeInstructions[locoNetProductId] {
@@ -309,18 +319,6 @@ public class IODeviceDS64 : IODevice {
         
         save()
         
-        if let message = OptionSwitch.enterSetSwitchAddressModeInstructions[locoNetProductId] {
-
-          alert.messageText = message
-
-          alert.runModal()
-          
-          nextAddr = 0
-          
-          startTimer()
-          
-        }
-
       }
       
     }
@@ -328,10 +326,6 @@ public class IODeviceDS64 : IODevice {
   }
   
   override public func setDefaults() {
-    
-    for channelNumber in 9...12 {
-      ioChannels[channelNumber - 1].ioFunctions[0].address = channelNumber - 8
-    }
     
     outputType = .solenoid
     
@@ -380,7 +374,7 @@ public class IODeviceDS64 : IODevice {
     }
 
     for channelNumber in 9...12 {
-      let ioChannel = IOChannelOutput(ioDevice: self, ioChannelNumber: channelNumber)
+      let ioChannel = IOChannelDS64Output(ioDevice: self, ioChannelNumber: channelNumber)
       ioChannels.append(ioChannel)
       ioChannel.ioFunctions = IOFunction.functions(ioChannel: ioChannel)
     }
@@ -401,7 +395,7 @@ public class IODeviceDS64 : IODevice {
       }
 
       for channelNumber in 9...12 {
-        let ioChannel = IOChannelOutput(ioDevice: self, ioChannelNumber: channelNumber)
+        let ioChannel = IOChannelDS64Output(ioDevice: self, ioChannelNumber: channelNumber)
         ioChannels.append(ioChannel)
         let ioFunction = IOFunctionDS64Output(ioChannel: ioChannel, ioFunctionNumber: 1)
         ioFunction.address = channelNumber - 8
@@ -428,6 +422,7 @@ public class IODeviceDS64 : IODevice {
     let wc = x.windowController
     let vc = x.viewController(windowController: wc) as! IODeviceDS64PropertySheetVC
     vc.ioDevice = self
+    propertySheetDelegate = vc
     if let window = wc.window {
       NSApplication.shared.runModal(for: window)
       window.close()

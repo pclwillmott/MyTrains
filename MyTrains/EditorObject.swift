@@ -26,7 +26,7 @@ public class EditorObject : NSObject {
   
   public var modified : Bool {
     get {
-      return _modified
+      return _modified || primaryKey == -1
     }
     set(value) {
       _modified = value

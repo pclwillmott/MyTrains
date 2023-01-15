@@ -105,7 +105,6 @@ public class IOFunction : EditorObject {
   }
   
   public func propertySheet() {
-    
   }
 
   // MARK: Database Methods

@@ -353,7 +353,7 @@
                 </viewController>
                 <customObject id="1cd-ek-opE" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1188" y="-38"/>
+            <point key="canvasLocation" x="1187.5" y="-38"/>
         </scene>
     </scenes>
 </document>
