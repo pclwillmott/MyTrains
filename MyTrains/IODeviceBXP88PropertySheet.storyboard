@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Window Controller-->
+        <scene sceneID="CvU-xX-Qs2">
+            <objects>
+                <windowController storyboardIdentifier="IODeviceBXP88PropertySheetWC" id="Y8z-gw-Xuy" sceneMemberID="viewController">
+                    <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" visibleAtLaunch="NO" frameAutosaveName="IODeviceBXP88PropertySheet" animationBehavior="default" id="Kzf-cn-DOr">
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
+                        <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+                        <rect key="contentRect" x="268" y="340" width="464" height="497"/>
+                        <rect key="screenRect" x="0.0" y="0.0" width="1792" height="1120"/>
+                        <value key="minSize" type="size" width="464" height="497"/>
+                        <value key="maxSize" type="size" width="464" height="497"/>
+                        <value key="minFullScreenContentSize" type="size" width="464" height="497"/>
+                        <value key="maxFullScreenContentSize" type="size" width="464" height="497"/>
+                        <view key="contentView" id="B7Q-Y1-T0O">
+                            <rect key="frame" x="0.0" y="0.0" width="464" height="497"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </view>
+                        <connections>
+                            <outlet property="delegate" destination="Y8z-gw-Xuy" id="u0z-e4-Pre"/>
+                        </connections>
+                    </window>
+                    <connections>
+                        <segue destination="yM2-8h-NV7" kind="relationship" relationship="window.shadowedContentViewController" id="sqe-Tm-gRM"/>
+                    </connections>
+                </windowController>
+                <customObject id="xok-xr-YDw" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-374" y="94"/>
+        </scene>
+        <!--DeviceBXP88 Property SheetVC-->
+        <scene sceneID="XH1-Bf-OlV">
+            <objects>
+                <viewController id="yM2-8h-NV7" customClass="IODeviceBXP88PropertySheetVC" customModule="MyTrains" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="F3r-72-s6L">
+                        <rect key="frame" x="0.0" y="0.0" width="464" height="497"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <box fixedFrame="YES" title="Power Manager" translatesAutoresizingMaskIntoConstraints="NO" id="kxH-gr-Edm">
+                                <rect key="frame" x="17" y="301" width="430" height="176"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <view key="contentView" id="caH-dz-fdA">
+                                    <rect key="frame" x="4" y="5" width="422" height="156"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="swm-8E-5ZZ">
+                                            <rect key="frame" x="18" y="119" width="173" height="18"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="check" title="Power Manager Enabled" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="KWd-8W-aYc">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                        </button>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gTd-S9-ZJn">
+                                            <rect key="frame" x="18" y="97" width="306" height="18"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="check" title="Power Manager Reporting to LocoNet Enabled" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="aiE-rG-y8Z">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                        </button>
+                                        <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MWs-ii-pnp">
+                                            <rect key="frame" x="19" y="15" width="230" height="23"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="YZb-BL-VAH">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                <objectValues>
+                                                    <string>Item 1</string>
+                                                    <string>Item 2</string>
+                                                    <string>Item 3</string>
+                                                </objectValues>
+                                            </comboBoxCell>
+                                        </comboBox>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vun-7l-Cfd">
+                                            <rect key="frame" x="20" y="45" width="185" height="16"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Short Circuit Detection Speed" id="6N7-kW-Ipg">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vXI-Q5-QAP">
+                                            <rect key="frame" x="18" y="75" width="247" height="18"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="check" title="Operations Mode Readback Enabled" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="sUK-py-TwH">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                        </button>
+                                    </subviews>
+                                </view>
+                            </box>
+                            <box fixedFrame="YES" title="Occupancy Detection" translatesAutoresizingMaskIntoConstraints="NO" id="nSv-Hm-5ci">
+                                <rect key="frame" x="17" y="168" width="430" height="129"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <view key="contentView" id="95Z-3a-DMU">
+                                    <rect key="frame" x="4" y="5" width="422" height="109"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MST-oL-DDC">
+                                            <rect key="frame" x="18" y="73" width="129" height="16"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Detection Sensitivity" id="UV4-eQ-B4I">
+                                                <font key="font" usesAppearanceFont="YES"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xeP-VD-vHb">
+                                            <rect key="frame" x="19" y="41" width="229" height="23"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="f0p-l3-bna">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                <objectValues>
+                                                    <string>Item 1</string>
+                                                    <string>Item 2</string>
+                                                    <string>Item 3</string>
+                                                </objectValues>
+                                            </comboBoxCell>
+                                        </comboBox>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gFk-m8-cVG">
+                                            <rect key="frame" x="18" y="14" width="259" height="18"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="check" title="Send Occupied Message when faulted" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="vga-kZ-W7R">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                        </button>
+                                    </subviews>
+                                </view>
+                            </box>
+                            <box fixedFrame="YES" title="Transponding" translatesAutoresizingMaskIntoConstraints="NO" id="DcB-tb-gip">
+                                <rect key="frame" x="17" y="50" width="430" height="114"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <view key="contentView" id="cKs-w5-a9W">
+                                    <rect key="frame" x="4" y="5" width="422" height="94"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fzt-mh-eWC">
+                                            <rect key="frame" x="18" y="57" width="162" height="18"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="check" title="Transponding Enabled" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="abK-nF-bUS">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                        </button>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6i2-Iz-4Of">
+                                            <rect key="frame" x="18" y="35" width="134" height="18"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="check" title="Fast Find Enabled" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="ROR-UF-6RN">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                        </button>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7sN-kv-ZeI">
+                                            <rect key="frame" x="18" y="13" width="279" height="18"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="check" title="Selective Transponding Disabling Allowed" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="DUg-P9-Cy2">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                        </button>
+                                    </subviews>
+                                </view>
+                            </box>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Kdi-7L-FM1">
+                                <rect key="frame" x="323" y="13" width="128" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
+                                <buttonCell key="cell" type="push" title="Write to BXP88" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="EDC-Sj-WJm">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="btnWrite:" target="yM2-8h-NV7" id="hDh-YZ-Yur"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RBT-Ay-vqe">
+                                <rect key="frame" x="13" y="13" width="136" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <buttonCell key="cell" type="push" title="Read from BXP88" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="BlB-DU-Npx">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="btnRead:" target="yM2-8h-NV7" id="7h7-R0-WmH"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                    </view>
+                    <connections>
+                        <outlet property="cboDetectionSensitivity" destination="xeP-VD-vHb" id="m3f-sA-bvl"/>
+                        <outlet property="cboShortCircuitDetectionSpeed" destination="MWs-ii-pnp" id="RKq-Cv-jmv"/>
+                        <outlet property="chkFastFindEnabled" destination="6i2-Iz-4Of" id="csS-BJ-w96"/>
+                        <outlet property="chkOpsModeReadbackEnabled" destination="vXI-Q5-QAP" id="dsM-FT-aSo"/>
+                        <outlet property="chkPowerManagerEnabled" destination="swm-8E-5ZZ" id="fdc-FW-Bgp"/>
+                        <outlet property="chkPowerManagerReportingEnabled" destination="gTd-S9-ZJn" id="QsO-Qx-Ena"/>
+                        <outlet property="chkSelectiveTranspondingEnabled" destination="7sN-kv-ZeI" id="NjF-9i-1Mj"/>
+                        <outlet property="chkTranspondingEnabled" destination="fzt-mh-eWC" id="rFx-gW-xoW"/>
+                        <outlet property="sendOccupiedMessageWhenFaulted" destination="gFk-m8-cVG" id="42P-5j-EtC"/>
+                    </connections>
+                </viewController>
+                <customObject id="9BY-gu-aEF" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="326" y="176.5"/>
+        </scene>
+    </scenes>
+</document>

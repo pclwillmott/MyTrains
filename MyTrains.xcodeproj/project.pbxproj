@@ -198,6 +198,13 @@
 		DA9ED4EE28F240A400EA914A /* RouteManagerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9ED4ED28F240A400EA914A /* RouteManagerVC.swift */; };
 		DA9ED4F028F24B7700EA914A /* RouteManagerTableViewDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9ED4EF28F24B7700EA914A /* RouteManagerTableViewDS.swift */; };
 		DAA5F3CC295CA2C200C25028 /* LocoNetDeviceTC64Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA5F3CB295CA2C200C25028 /* LocoNetDeviceTC64Extensions.swift */; };
+		DAA71693297C19220080114F /* ShortCircuitDetectionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA71692297C19220080114F /* ShortCircuitDetectionType.swift */; };
+		DAA71695297C1B580080114F /* DetectionSensitivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA71694297C1B580080114F /* DetectionSensitivity.swift */; };
+		DAA71697297C232D0080114F /* IOChannelBXP88Input.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA71696297C232D0080114F /* IOChannelBXP88Input.swift */; };
+		DAA71699297C25050080114F /* IODeviceBXP88PropertySheet.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DAA71698297C25050080114F /* IODeviceBXP88PropertySheet.storyboard */; };
+		DAA7169B297C2B350080114F /* IODeviceBXP88PropertySheetVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA7169A297C2B350080114F /* IODeviceBXP88PropertySheetVC.swift */; };
+		DAA7169D297C39640080114F /* IOFunctionBXP88InputPropertySheet.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DAA7169C297C39640080114F /* IOFunctionBXP88InputPropertySheet.storyboard */; };
+		DAA7169F297C3AF40080114F /* IOFunctionBXP88InputPropertySheetVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA7169E297C3AF40080114F /* IOFunctionBXP88InputPropertySheetVC.swift */; };
 		DAA83DEB272C37670075CBCD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA83DEA272C37670075CBCD /* AppDelegate.swift */; };
 		DAA83DED272C37670075CBCD /* MainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA83DEC272C37670075CBCD /* MainVC.swift */; };
 		DAA83DEF272C37680075CBCD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DAA83DEE272C37680075CBCD /* Assets.xcassets */; };
@@ -447,6 +454,13 @@
 		DA9ED4ED28F240A400EA914A /* RouteManagerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteManagerVC.swift; sourceTree = "<group>"; };
 		DA9ED4EF28F24B7700EA914A /* RouteManagerTableViewDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteManagerTableViewDS.swift; sourceTree = "<group>"; };
 		DAA5F3CB295CA2C200C25028 /* LocoNetDeviceTC64Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoNetDeviceTC64Extensions.swift; sourceTree = "<group>"; };
+		DAA71692297C19220080114F /* ShortCircuitDetectionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortCircuitDetectionType.swift; sourceTree = "<group>"; };
+		DAA71694297C1B580080114F /* DetectionSensitivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetectionSensitivity.swift; sourceTree = "<group>"; };
+		DAA71696297C232D0080114F /* IOChannelBXP88Input.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOChannelBXP88Input.swift; sourceTree = "<group>"; };
+		DAA71698297C25050080114F /* IODeviceBXP88PropertySheet.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = IODeviceBXP88PropertySheet.storyboard; sourceTree = "<group>"; };
+		DAA7169A297C2B350080114F /* IODeviceBXP88PropertySheetVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IODeviceBXP88PropertySheetVC.swift; sourceTree = "<group>"; };
+		DAA7169C297C39640080114F /* IOFunctionBXP88InputPropertySheet.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = IOFunctionBXP88InputPropertySheet.storyboard; sourceTree = "<group>"; };
+		DAA7169E297C3AF40080114F /* IOFunctionBXP88InputPropertySheetVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOFunctionBXP88InputPropertySheetVC.swift; sourceTree = "<group>"; };
 		DAA83DE7272C37670075CBCD /* MyTrains.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyTrains.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAA83DEA272C37670075CBCD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DAA83DEC272C37670075CBCD /* MainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainVC.swift; sourceTree = "<group>"; };
@@ -618,15 +632,18 @@
 				DAA867C327930C62008B6EEC /* IntExtensions.swift */,
 				DAA8CEF92968406000B07971 /* IOChannel.swift */,
 				DAA8CEFF296857F500B07971 /* IOChannelInput.swift */,
+				DAA71696297C232D0080114F /* IOChannelBXP88Input.swift */,
 				DAA8CF012968581B00B07971 /* IOChannelOutput.swift */,
 				DAA8CF032968583F00B07971 /* IOChannelTC64MkII.swift */,
 				DA69E3922974581700447414 /* IOChannelDS64Output.swift */,
 				DAA8CEF72968402D00B07971 /* IODevice.swift */,
+				DA8D6E9529706644004B9139 /* IODeviceBXP88.swift */,
+				DAA71698297C25050080114F /* IODeviceBXP88PropertySheet.storyboard */,
+				DAA7169A297C2B350080114F /* IODeviceBXP88PropertySheetVC.swift */,
 				DAA8CEFD29684DD600B07971 /* IODeviceDS64.swift */,
 				DA5E97732972FF25001453A1 /* IODeviceDS64PropertySheet.storyboard */,
 				DA5E97752972FF3F001453A1 /* IODeviceDS64PropertySheetVC.swift */,
 				DAA8CF0B296866D600B07971 /* IODeviceTC64MkII.swift */,
-				DA8D6E9529706644004B9139 /* IODeviceBXP88.swift */,
 				DA8D6E8D29703962004B9139 /* IODeviceManager.storyboard */,
 				DA8D6E8F297039B3004B9139 /* IODeviceManagerVC.swift */,
 				DAB1DB8E2971CC9200918A5F /* IODeviceNew.storyboard */,
@@ -634,6 +651,8 @@
 				DA8D6E91297055A6004B9139 /* IODeviceManagerTableViewDS.swift */,
 				DAA8CEFB2968408700B07971 /* IOFunction.swift */,
 				DA8D6E99297066FF004B9139 /* IOFunctionBXP88Input.swift */,
+				DAA7169C297C39640080114F /* IOFunctionBXP88InputPropertySheet.storyboard */,
+				DAA7169E297C3AF40080114F /* IOFunctionBXP88InputPropertySheetVC.swift */,
 				DAA8CF05296862DA00B07971 /* IOFunctionDS64Input.swift */,
 				DAA8CF072968630300B07971 /* IOFunctionDS64Output.swift */,
 				DA69E3942974668700447414 /* IOFunctionDS64OutputPropertySheet.storyboard */,
@@ -723,6 +742,8 @@
 				DAB450EE2872FEE800657295 /* SensorTCV.swift */,
 				DAB450EC2872FEC000657295 /* SensorTCV.xib */,
 				DAB768F829339DCC00ECC41A /* SensorType.swift */,
+				DAA71692297C19220080114F /* ShortCircuitDetectionType.swift */,
+				DAA71694297C1B580080114F /* DetectionSensitivity.swift */,
 				DA434293283698CA00E8D555 /* SerialPort.c */,
 				DA434292283698CA00E8D555 /* SerialPort.h */,
 				DA063396293CE8F400CEAFD1 /* SetFastClock.storyboard */,
@@ -862,6 +883,7 @@
 				DA1DA5E52827E95A00E0F993 /* EditInterfaces.storyboard in Resources */,
 				DA5B4603276F5993005CA03C /* EditNetworks.storyboard in Resources */,
 				DA77795327AEEB3A007EEBE9 /* OpSwTCV.xib in Resources */,
+				DAA71699297C25050080114F /* IODeviceBXP88PropertySheet.storyboard in Resources */,
 				DA1ECC9328439D4600C4F963 /* UpdateFirmware.storyboard in Resources */,
 				DA2429752892FE94000D4ADE /* AddressManager.storyboard in Resources */,
 				DA91274F295F653300E9B96E /* TC64PortView.xib in Resources */,
@@ -877,6 +899,7 @@
 				DA5E97742972FF25001453A1 /* IODeviceDS64PropertySheet.storyboard in Resources */,
 				DA467BAF281D5D2F00AB9650 /* SwitchBoardEditor.storyboard in Resources */,
 				DA2429712892F7AE000D4ADE /* DeviceTCV.xib in Resources */,
+				DAA7169D297C39640080114F /* IOFunctionBXP88InputPropertySheet.storyboard in Resources */,
 				DAC0194A289E79BF001152F6 /* EditCommandStations.storyboard in Resources */,
 				DA77750228DF1B4E00C07E24 /* PurgeProfiler.storyboard in Resources */,
 				DA1B79F5285F24B8009E1189 /* SwitchBoardItemPropertySheet.storyboard in Resources */,
@@ -966,10 +989,12 @@
 				DA28C2C92801EF6500857471 /* QuerySlot5.swift in Sources */,
 				DA69E3932974581700447414 /* IOChannelDS64Output.swift in Sources */,
 				DADFFF902946025500CD2119 /* DateExtensions.swift in Sources */,
+				DAA7169B297C2B350080114F /* IODeviceBXP88PropertySheetVC.swift in Sources */,
 				DA341C9729212F9600C3EF4F /* LocoNetBridge.swift in Sources */,
 				DA60D819295B617000B5A2C4 /* LocoNetDeviceCV.swift in Sources */,
 				DA7243F828A81165003157CA /* ThrottleMode.swift in Sources */,
 				DA467BAB281D56A700AB9650 /* SwitchBoardEditorView.swift in Sources */,
+				DAA71697297C232D0080114F /* IOChannelBXP88Input.swift in Sources */,
 				DA1B79F9285F3885009E1189 /* UnitSpeed.swift in Sources */,
 				DAA83DED272C37670075CBCD /* MainVC.swift in Sources */,
 				DA3AEF422788855800FF91D4 /* DecoderCV.swift in Sources */,
@@ -1019,6 +1044,7 @@
 				DA912747295F428900E9B96E /* TC64OutputType.swift in Sources */,
 				DA063399293CEB8700CEAFD1 /* SetFastClockVC.swift in Sources */,
 				DAA8CF042968583F00B07971 /* IOChannelTC64MkII.swift in Sources */,
+				DAA71695297C1B580080114F /* DetectionSensitivity.swift in Sources */,
 				DA2E0E5A2736B8AA00C7DA7A /* LoconetRequestSlotDataMessage.swift in Sources */,
 				DA2785402837EAE700EDCBB7 /* MTSerialPortManager.swift in Sources */,
 				DA15BE26289806BF00FD82FD /* SpeedProfileTableViewDS.swift in Sources */,
@@ -1031,6 +1057,7 @@
 				DA5B4607276F6917005CA03C /* ComboBoxDBDS.swift in Sources */,
 				DA359850278219A400B81AD3 /* LocoSlotDataP2.swift in Sources */,
 				DA8D6E92297055A6004B9139 /* IODeviceManagerTableViewDS.swift in Sources */,
+				DAA7169F297C3AF40080114F /* IOFunctionBXP88InputPropertySheetVC.swift in Sources */,
 				DAF4DD4C289A90C1000B848E /* SpeedResultsView.swift in Sources */,
 				DAE9DBB728258E12004BC75D /* LocoNetProducts.swift in Sources */,
 				DAD66A2E2871FF9B00376479 /* Sensor.swift in Sources */,
@@ -1107,6 +1134,7 @@
 				DA28E5892824943200E1604C /* LocoNetDevice.swift in Sources */,
 				DA912749295F502500E9B96E /* TC64Polarity.swift in Sources */,
 				DA5E1741272ED2DF00F9341F /* LoconetSwitchRequestMessage.swift in Sources */,
+				DAA71693297C19220080114F /* ShortCircuitDetectionType.swift in Sources */,
 				DAF5BCD9281EF086000B61CA /* SwitchBoardPanel.swift in Sources */,
 				DA8837722770B371000B9A41 /* EditLayoutsVC.swift in Sources */,
 				DA8B5D17282FCE2700D39F07 /* TimeoutCode.swift in Sources */,

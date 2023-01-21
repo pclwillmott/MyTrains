@@ -10,41 +10,43 @@ import Cocoa
 
 enum AppStoryboard : String {
   
-  case Main                         = "Main"
-  case Monitor                      = "Monitor"
-  case EditCommandStations          = "EditCommandStations"
-  case EditNetworks                 = "EditNetworks"
-  case EditLayouts                  = "EditLayouts"
-  case EditLocomotives              = "EditLocomotives"
-  case EditWagons                   = "EditWagons"
-  case EditTrains                   = "EditTrains"
-  case EditSensors                  = "EditSensors"
-  case EditSwitches                 = "EditSwitches"
-  case EditInterfaces               = "EditInterfaces"
-  case Throttle                     = "Throttle"
-  case ProgramDecoderAddress        = "ProgramDecoderAddress"
-  case SlotView                     = "SlotView"
-  case CommandStationConfiguration  = "CommandStationConfiguration"
-  case DashBoard                    = "DashBoard"
-  case GroupSetup                   = "GroupSetup"
-  case SwitchBoardEditor            = "SwitchBoardEditor"
-  case UpdateFirmware               = "UpdateFirmware"
-  case SwitchBoardItemPropertySheet = "SwitchBoardItemPropertySheet"
-  case AddressManager               = "AddressManager"
-  case SpeedProfiler                = "SpeedProfiler"
-  case PlaceLocomotive              = "PlaceLocomotive"
-  case PurgeProfiler                = "PurgeProfiler"
-  case LocomotiveRoster             = "LocomotiveRoster"
-  case RouteManager                 = "RouteManager"
-  case Bridge                       = "Bridge"
-  case SetFastClock                 = "SetFastClock"
-  case FastClockTester              = "FastClockTester"
-  case TC64Config                   = "TC64Config"
-  case IODeviceManager              = "IODeviceManager"
-  case IODeviceNew                  = "IODeviceNew"
-  case IODeviceDS64PropertySheet    = "IODeviceDS64PropertySheet"
-  case IOFunctionDS64InputPropertySheet = "IOFunctionDS64InputPropertySheet"
+  case Main                              = "Main"
+  case Monitor                           = "Monitor"
+  case EditCommandStations               = "EditCommandStations"
+  case EditNetworks                      = "EditNetworks"
+  case EditLayouts                       = "EditLayouts"
+  case EditLocomotives                   = "EditLocomotives"
+  case EditWagons                        = "EditWagons"
+  case EditTrains                        = "EditTrains"
+  case EditSensors                       = "EditSensors"
+  case EditSwitches                      = "EditSwitches"
+  case EditInterfaces                    = "EditInterfaces"
+  case Throttle                          = "Throttle"
+  case ProgramDecoderAddress             = "ProgramDecoderAddress"
+  case SlotView                          = "SlotView"
+  case CommandStationConfiguration       = "CommandStationConfiguration"
+  case DashBoard                         = "DashBoard"
+  case GroupSetup                        = "GroupSetup"
+  case SwitchBoardEditor                 = "SwitchBoardEditor"
+  case UpdateFirmware                    = "UpdateFirmware"
+  case SwitchBoardItemPropertySheet      = "SwitchBoardItemPropertySheet"
+  case AddressManager                    = "AddressManager"
+  case SpeedProfiler                     = "SpeedProfiler"
+  case PlaceLocomotive                   = "PlaceLocomotive"
+  case PurgeProfiler                     = "PurgeProfiler"
+  case LocomotiveRoster                  = "LocomotiveRoster"
+  case RouteManager                      = "RouteManager"
+  case Bridge                            = "Bridge"
+  case SetFastClock                      = "SetFastClock"
+  case FastClockTester                   = "FastClockTester"
+  case TC64Config                        = "TC64Config"
+  case IODeviceManager                   = "IODeviceManager"
+  case IODeviceNew                       = "IODeviceNew"
+  case IODeviceDS64PropertySheet         = "IODeviceDS64PropertySheet"
+  case IOFunctionDS64InputPropertySheet  = "IOFunctionDS64InputPropertySheet"
   case IOFunctionDS64OutputPropertySheet = "IOFunctionDS64OutputPropertySheet"
+  case IODeviceBXP88PropertySheet        = "IODeviceBXP88PropertySheet"
+  case IOFunctionBXP88InputPropertySheet = "IOFunctionBXP88InputPropertySheet"
 
   var instance : NSStoryboard {
     return NSStoryboard(name: self.rawValue, bundle: Bundle.main)
@@ -52,42 +54,44 @@ enum AppStoryboard : String {
   
 }
 
-let storyboardLookup             : [String:AppStoryboard] = [
-  "Monitor"                      : AppStoryboard.Monitor,
-  "Main"                         : AppStoryboard.Main,
-  "EditCommandStations"          : AppStoryboard.EditCommandStations,
-  "EditNetworks"                 : AppStoryboard.EditNetworks,
-  "EditLayouts"                  : AppStoryboard.EditLayouts,
-  "EditLocomotives"              : AppStoryboard.EditLocomotives,
-  "EditWagons"                   : AppStoryboard.EditWagons,
-  "EditTrains"                   : AppStoryboard.EditTrains,
-  "EditSensors"                  : AppStoryboard.EditSensors,
-  "EditSwitches"                 : AppStoryboard.EditSwitches,
-  "EditInterfaces"               : AppStoryboard.EditInterfaces,
-  "Throttle"                     : AppStoryboard.Throttle,
-  "ProgramDecoderAddress"        : AppStoryboard.ProgramDecoderAddress,
-  "SlotView"                     : AppStoryboard.SlotView,
-  "CommandStationConfiguration"  : AppStoryboard.CommandStationConfiguration,
-  "DashBoard"                    : AppStoryboard.DashBoard,
-  "GroupSetup"                   : AppStoryboard.GroupSetup,
-  "SwitchBoardEditor"            : AppStoryboard.SwitchBoardEditor,
-  "UpdateFirmware"               : AppStoryboard.UpdateFirmware,
-  "SwitchBoardItemPropertySheet" : AppStoryboard.SwitchBoardItemPropertySheet,
-  "AddressManager"               : AppStoryboard.AddressManager,
-  "SpeedProfiler"                : AppStoryboard.SpeedProfiler,
-  "PlaceLocomotive"              : AppStoryboard.PlaceLocomotive,
-  "PurgeProfiler"                : AppStoryboard.PurgeProfiler,
-  "LocomotiveRoster"             : AppStoryboard.LocomotiveRoster,
-  "RouteManager"                 : AppStoryboard.RouteManager,
-  "Bridge"                       : AppStoryboard.Bridge,
-  "SetFastClock"                 : AppStoryboard.SetFastClock,
-  "FastClockTester"              : AppStoryboard.FastClockTester,
-  "TC64Config"                   : AppStoryboard.TC64Config,
-  "IODeviceManager"              : AppStoryboard.IODeviceManager,
-  "IODeviceNew"                  : AppStoryboard.IODeviceNew,
-  "IODeviceDS64PropertySheet"    : AppStoryboard.IODeviceDS64PropertySheet,
-  "IOFunctionDS64InputPropertySheet" : AppStoryboard.IOFunctionDS64InputPropertySheet,
+let storyboardLookup : [String:AppStoryboard] = [
+  "Monitor"                           : AppStoryboard.Monitor,
+  "Main"                              : AppStoryboard.Main,
+  "EditCommandStations"               : AppStoryboard.EditCommandStations,
+  "EditNetworks"                      : AppStoryboard.EditNetworks,
+  "EditLayouts"                       : AppStoryboard.EditLayouts,
+  "EditLocomotives"                   : AppStoryboard.EditLocomotives,
+  "EditWagons"                        : AppStoryboard.EditWagons,
+  "EditTrains"                        : AppStoryboard.EditTrains,
+  "EditSensors"                       : AppStoryboard.EditSensors,
+  "EditSwitches"                      : AppStoryboard.EditSwitches,
+  "EditInterfaces"                    : AppStoryboard.EditInterfaces,
+  "Throttle"                          : AppStoryboard.Throttle,
+  "ProgramDecoderAddress"             : AppStoryboard.ProgramDecoderAddress,
+  "SlotView"                          : AppStoryboard.SlotView,
+  "CommandStationConfiguration"       : AppStoryboard.CommandStationConfiguration,
+  "DashBoard"                         : AppStoryboard.DashBoard,
+  "GroupSetup"                        : AppStoryboard.GroupSetup,
+  "SwitchBoardEditor"                 : AppStoryboard.SwitchBoardEditor,
+  "UpdateFirmware"                    : AppStoryboard.UpdateFirmware,
+  "SwitchBoardItemPropertySheet"      : AppStoryboard.SwitchBoardItemPropertySheet,
+  "AddressManager"                    : AppStoryboard.AddressManager,
+  "SpeedProfiler"                     : AppStoryboard.SpeedProfiler,
+  "PlaceLocomotive"                   : AppStoryboard.PlaceLocomotive,
+  "PurgeProfiler"                     : AppStoryboard.PurgeProfiler,
+  "LocomotiveRoster"                  : AppStoryboard.LocomotiveRoster,
+  "RouteManager"                      : AppStoryboard.RouteManager,
+  "Bridge"                            : AppStoryboard.Bridge,
+  "SetFastClock"                      : AppStoryboard.SetFastClock,
+  "FastClockTester"                   : AppStoryboard.FastClockTester,
+  "TC64Config"                        : AppStoryboard.TC64Config,
+  "IODeviceManager"                   : AppStoryboard.IODeviceManager,
+  "IODeviceNew"                       : AppStoryboard.IODeviceNew,
+  "IODeviceDS64PropertySheet"         : AppStoryboard.IODeviceDS64PropertySheet,
+  "IOFunctionDS64InputPropertySheet"  : AppStoryboard.IOFunctionDS64InputPropertySheet,
   "IOFunctionDS64OutputPropertySheet" : AppStoryboard.IOFunctionDS64OutputPropertySheet,
+  "IODeviceBXP88PropertySheet"        : AppStoryboard.IODeviceBXP88PropertySheet,
+  "IOFunctionBXP88InputPropertySheet" : AppStoryboard.IOFunctionBXP88InputPropertySheet,
 ]
 
 /*
@@ -101,41 +105,43 @@ let storyboardLookup             : [String:AppStoryboard] = [
 
 enum ModalWindow : String {
   
-  case Monitor                      = "Monitor"
-  case Main                         = "Main"
-  case EditCommandStations          = "EditCommandStations"
-  case EditNetworks                 = "EditNetworks"
-  case EditLayouts                  = "EditLayouts"
-  case EditLocomotives              = "EditLocomotives"
-  case EditWagons                   = "EditWagons"
-  case EditTrains                   = "EditTrains"
-  case EditSensors                  = "EditSensors"
-  case EditSwitches                 = "EditSwitches"
-  case EditInterfaces               = "EditInterfaces"
-  case Throttle                     = "Throttle"
-  case ProgramDecoderAddress        = "ProgramDecoderAddress"
-  case SlotView                     = "SlotView"
-  case CommandStationConfiguration  = "CommandStationConfiguration"
-  case DashBoard                    = "DashBoard"
-  case GroupSetup                   = "GroupSetup"
-  case SwitchBoardEditor            = "SwitchBoardEditor"
-  case UpdateFirmware               = "UpdateFirmware"
-  case SwitchBoardItemPropertySheet = "SwitchBoardItemPropertySheet"
-  case AddressManager               = "AddressManager"
-  case SpeedProfiler                = "SpeedProfiler"
-  case PlaceLocomotive              = "PlaceLocomotive"
-  case PurgeProfiler                = "PurgeProfiler"
-  case LocomotiveRoster             = "LocomotiveRoster"
-  case RouteManager                 = "RouteManager"
-  case Bridge                       = "Bridge"
-  case SetFastClock                 = "SetFastClock"
-  case FastClockTester              = "FastClockTester"
-  case TC64Config                   = "TC64Config"
-  case IODeviceManager              = "IODeviceManager"
-  case IODeviceNew                  = "IODeviceNew"
-  case IODeviceDS64PropertySheet    = "IODeviceDS64PropertySheet"
-  case IOFunctionDS64InputPropertySheet = "IOFunctionDS64InputPropertySheet"
+  case Monitor                           = "Monitor"
+  case Main                              = "Main"
+  case EditCommandStations               = "EditCommandStations"
+  case EditNetworks                      = "EditNetworks"
+  case EditLayouts                       = "EditLayouts"
+  case EditLocomotives                   = "EditLocomotives"
+  case EditWagons                        = "EditWagons"
+  case EditTrains                        = "EditTrains"
+  case EditSensors                       = "EditSensors"
+  case EditSwitches                      = "EditSwitches"
+  case EditInterfaces                    = "EditInterfaces"
+  case Throttle                          = "Throttle"
+  case ProgramDecoderAddress             = "ProgramDecoderAddress"
+  case SlotView                          = "SlotView"
+  case CommandStationConfiguration       = "CommandStationConfiguration"
+  case DashBoard                         = "DashBoard"
+  case GroupSetup                        = "GroupSetup"
+  case SwitchBoardEditor                 = "SwitchBoardEditor"
+  case UpdateFirmware                    = "UpdateFirmware"
+  case SwitchBoardItemPropertySheet      = "SwitchBoardItemPropertySheet"
+  case AddressManager                    = "AddressManager"
+  case SpeedProfiler                     = "SpeedProfiler"
+  case PlaceLocomotive                   = "PlaceLocomotive"
+  case PurgeProfiler                     = "PurgeProfiler"
+  case LocomotiveRoster                  = "LocomotiveRoster"
+  case RouteManager                      = "RouteManager"
+  case Bridge                            = "Bridge"
+  case SetFastClock                      = "SetFastClock"
+  case FastClockTester                   = "FastClockTester"
+  case TC64Config                        = "TC64Config"
+  case IODeviceManager                   = "IODeviceManager"
+  case IODeviceNew                       = "IODeviceNew"
+  case IODeviceDS64PropertySheet         = "IODeviceDS64PropertySheet"
+  case IOFunctionDS64InputPropertySheet  = "IOFunctionDS64InputPropertySheet"
   case IOFunctionDS64OutputPropertySheet = "IOFunctionDS64OutputPropertySheet"
+  case IODeviceBXP88PropertySheet        = "IODeviceBXP88PropertySheet"
+  case IOFunctionBXP88InputPropertySheet = "IOFunctionBXP88InputPropertySheet"
 
   var windowController : NSWindowController {
     let storyboard = storyboardLookup[self.rawValue]!

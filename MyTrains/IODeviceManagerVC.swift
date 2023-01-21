@@ -146,6 +146,7 @@ class IODeviceManagerVC: NSViewController, NSWindowDelegate, UpdateDelegate {
   @IBAction func txtBoardIDAction(_ sender: NSTextField) {
     if let ioFunctions = tableViewDS.ioFunctions {
       ioFunctions[sender.tag].ioDevice.setBoardId(newBoardId: sender.integerValue)
+      tvTableView.reloadData()
     }
   }
   
@@ -189,6 +190,10 @@ class IODeviceManagerVC: NSViewController, NSWindowDelegate, UpdateDelegate {
   
   @IBAction func btnWriteChannelAction(_ sender: NSButton) {
     if let ioFunctions = tableViewDS.ioFunctions, let ioFunction = ioFunctions[sender.tag] as? IOFunctionDS64Output {
+      ioFunction.ioDevice.upDateDelegate = self
+      ioFunction.ioChannel.writeChannel()
+    }
+    if let ioFunctions = tableViewDS.ioFunctions, let ioFunction = ioFunctions[sender.tag] as? IOFunctionBXP88Input {
       ioFunction.ioDevice.upDateDelegate = self
       ioFunction.ioChannel.writeChannel()
     }

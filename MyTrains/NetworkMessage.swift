@@ -1547,6 +1547,14 @@ public class NetworkMessage : NSObject {
     
   }
   
+  public var transponderAddress : Int {
+    get {
+      var addr = Int(message[2])
+      addr |= (Int(message[1] & 0b00001111) << 7)
+      return addr
+    }
+  }
+  
   public var sensorAddress : Int {
     get {
       var addr = Int(message[1])
