@@ -47,6 +47,7 @@ enum AppStoryboard : String {
   case IOFunctionDS64OutputPropertySheet = "IOFunctionDS64OutputPropertySheet"
   case IODeviceBXP88PropertySheet        = "IODeviceBXP88PropertySheet"
   case IOFunctionBXP88InputPropertySheet = "IOFunctionBXP88InputPropertySheet"
+  case IODeviceTC64MkIIPropertySheet     = "IODeviceTC64MkIIPropertySheet"
 
   var instance : NSStoryboard {
     return NSStoryboard(name: self.rawValue, bundle: Bundle.main)
@@ -92,6 +93,7 @@ let storyboardLookup : [String:AppStoryboard] = [
   "IOFunctionDS64OutputPropertySheet" : AppStoryboard.IOFunctionDS64OutputPropertySheet,
   "IODeviceBXP88PropertySheet"        : AppStoryboard.IODeviceBXP88PropertySheet,
   "IOFunctionBXP88InputPropertySheet" : AppStoryboard.IOFunctionBXP88InputPropertySheet,
+  "IODeviceTC64MkIIPropertySheet"     : AppStoryboard.IODeviceTC64MkIIPropertySheet,
 ]
 
 /*
@@ -142,6 +144,7 @@ enum ModalWindow : String {
   case IOFunctionDS64OutputPropertySheet = "IOFunctionDS64OutputPropertySheet"
   case IODeviceBXP88PropertySheet        = "IODeviceBXP88PropertySheet"
   case IOFunctionBXP88InputPropertySheet = "IOFunctionBXP88InputPropertySheet"
+  case IODeviceTC64MkIIPropertySheet     = "IODeviceTC64MkIIPropertySheet"
 
   var windowController : NSWindowController {
     let storyboard = storyboardLookup[self.rawValue]!

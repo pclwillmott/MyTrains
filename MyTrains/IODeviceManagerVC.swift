@@ -73,6 +73,7 @@ class IODeviceManagerVC: NSViewController, NSWindowDelegate, UpdateDelegate {
   public func updateCompleted(success:Bool) {
     
     tvTableView.reloadData()
+    
   }
 
   // MARK: Outlets & Actions

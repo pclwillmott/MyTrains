@@ -30,6 +30,10 @@ public class IODevice : LocoNetDevice, InterfaceDelegate {
   
   private var inOpMode : Bool = false
   
+  private var isCVMode : Bool = false
+  
+  private var currentCV : Int = 0
+  
   let series7CV : [Set<Int>] = [
     [ 1, 2, 3, 4, 5, 6, 7, 8],
     [ 9,10,11,12,13,14,15,16],
@@ -38,7 +42,6 @@ public class IODevice : LocoNetDevice, InterfaceDelegate {
     [33,34,35,36,37,38,39,40],
     [41,42,43,44,45,46,47,48],
   ]
-  
   
   // MARK: Public Properties
   
@@ -290,7 +293,6 @@ public class IODevice : LocoNetDevice, InterfaceDelegate {
     
   }
   
-  
   // MARK: Public Methods
   
   public func propertySheet() {
@@ -319,6 +321,8 @@ public class IODevice : LocoNetDevice, InterfaceDelegate {
       
       isRead = true
       
+      isCVMode = false
+      
       startOpsSwTimer()
       
     }
@@ -342,108 +346,294 @@ public class IODevice : LocoNetDevice, InterfaceDelegate {
       
       isRead = false
       
+      isCVMode = false
+
       startOpsSwTimer()
       
     }
     
   }
+
+  public func readCVs(selectedCVs:Set<Int>) {
+    
+    selectedSwitches.removeAll()
+    
+    selectedSwitches = selectedCVs
+    
+    if let network = self.network, let interface = network.interface {
+      
+      if observerId != -1 {
+        interface.removeObserver(id: observerId)
+      }
+      
+      observerId = interface.addObserver(observer: self)
+      
+      if !selectedSwitches.isEmpty {
+        
+        isRead = true
+        
+        isCVMode = true
+        
+        currentCV = selectedSwitches.first!
+        
+        upDateDelegate?.displayUpdate?(update: "Reading CV #\(currentCV)")
+        
+        interface.readCV(progMode: .operationsMode, cv: currentCV, address: boardId)
+
+      }
+      
+    }
+        
+  }
   
+  public func writeCVs(selectedCVs:Set<Int>) {
+    
+    selectedSwitches.removeAll()
+    
+    selectedSwitches = selectedCVs
+    
+    if let network = self.network, let interface = network.interface {
+      
+      if observerId != -1 {
+        interface.removeObserver(id: observerId)
+      }
+      
+      observerId = interface.addObserver(observer: self)
+      
+      if !selectedSwitches.isEmpty {
+        
+        isRead = false
+        
+        isCVMode = true
+
+        currentCV = selectedSwitches.first!
+        
+        upDateDelegate?.displayUpdate?(update: "Writing CV #\(currentCV)")
+        
+        interface.writeCV(progMode: .operationsMode, cv: currentCV, address: boardId, value: cvs[currentCV - 1].nextCVValue)
+
+      }
+      
+    }
+    
+  }
+
   // MARK: InterfaceDelegate Methods
   
   public func networkMessageReceived(message:NetworkMessage) {
     
-    switch message.messageType {
-      
-    case .opSwDataAP1:
-      
-      guard lastMethod == .OpSwDataAP1 else {
-        return
-      }
-      
-      setState(opswDataAP1: message)
-      
-      for switchNumber in 1...64 {
-        if (switchNumber % 8) != 0 {
-          selectedSwitches.remove(switchNumber)
+    if isCVMode {
+
+      if let network = self.network, let interface = network.interface {
+        
+        switch message.messageType {
+          
+        case .progCmdAcceptedBlind:
+          
+          if !isRead {
+            
+            selectedSwitches.remove(currentCV)
+            
+            if selectedSwitches.isEmpty {
+              
+              interface.removeObserver(id: observerId)
+              
+              observerId = -1
+              
+              let newAddress = cvs[17].nextCVValue | (cvs[16].nextCVValue << 8)
+              
+              if newAddress != boardId {
+                
+                let alert = NSAlert()
+                
+                alert.messageText = "The device address has been changed. The device must be power cycled in order for this to take effect."
+                alert.informativeText = ""
+                alert.addButton(withTitle: "OK")
+                alert.alertStyle = .informational
+                
+                alert.runModal()
+                
+                boardId = newAddress
+                
+              }
+              
+              upDateDelegate?.displayUpdate?(update: "Done")
+              
+              save()
+              
+              let OK = selectedSwitches.count == 0
+              
+              upDateDelegate?.displayUpdate?(update: !OK ? "Timeout" : "Completed")
+              upDateDelegate?.updateCompleted?(success: OK)
+
+              propertySheetDelegate?.reloadData?()
+
+            }
+            else {
+              
+              currentCV = selectedSwitches.first!
+              
+              upDateDelegate?.displayUpdate?(update: "Writing CV #\(currentCV)")
+              
+              interface.writeCV(progMode: .operationsMode, cv: currentCV, address: boardId, value: cvs[currentCV - 1].nextCVValue)
+              
+            }
+            
+          }
+          
+        case .programmerBusy:
+          
+          interface.writeCV(progMode: .operationsMode, cv: currentCV, address: boardId, value: cvs[currentCV - 1].nextCVValue)
+
+        case .progSlotDataP1:
+          
+          var cvNumber = Int(message.message[9])
+          
+          let mask1 : UInt8 = 0b00000001
+          let mask2 : UInt8 = 0b00010000
+          let mask3 : UInt8 = 0b00100000
+          
+          cvNumber |= ((message.message[8] & mask1) == mask1) ? 0b0000000010000000 : 0
+          cvNumber |= ((message.message[8] & mask2) == mask2) ? 0b0000000100000000 : 0
+          cvNumber |= ((message.message[8] & mask3) == mask3) ? 0b0000001000000000 : 0
+          
+          cvNumber += 1
+          
+          if isRead && cvNumber == currentCV {
+            
+            var cvValue = message.message[10]
+            
+            let mask : UInt8 = 0b00000010
+            
+            cvValue |= (((message.message[8] & mask) == mask) ? 0b10000000 : 0)
+            
+            cvs[cvNumber - 1].nextCVValue = Int(cvValue)
+
+            selectedSwitches.remove(currentCV)
+            
+            if selectedSwitches.isEmpty {
+
+              save()
+
+              let OK = selectedSwitches.count == 0
+              
+              upDateDelegate?.displayUpdate?(update: !OK ? "Timeout" : "Completed")
+              upDateDelegate?.updateCompleted?(success: OK)
+
+              propertySheetDelegate?.reloadData?()
+              
+            }
+            else {
+              currentCV = selectedSwitches.first!
+              upDateDelegate?.displayUpdate?(update: "Reading CV #\(currentCV)")
+              interface.readCV(progMode: .operationsMode, cv: currentCV, address: boardId)
+            }
+            
+          }
+          
+        default:
+          break
         }
+        
       }
       
-      noResponse = false
+    }
+    else {
       
-    case .opSwDataBP1:
-      
-      guard lastMethod == .OpSwDataBP1 else {
-        return
-      }
-      
-      setState(opswDataBP1: message)
-      
-      for switchNumber in 65...128 {
-        if (switchNumber % 8) != 0 {
-          selectedSwitches.remove(switchNumber)
+      switch message.messageType {
+        
+      case .opSwDataAP1:
+        
+        guard lastMethod == .OpSwDataAP1 else {
+          return
         }
-      }
-      
-      noResponse = false
-      
-    case .setSwAccepted:
-      
-      noResponse = false
-      
-    case .swState:
-      
-      guard lastMethod == .OpMode else {
-        return
-      }
-      
-      if let opsw = optionSwitchDictionary[lastIndex] {
         
-        let mask : UInt8 = 0b00100000
+        setState(opswDataAP1: message)
         
-        opsw.state = (message.message[2] & mask) == mask ? .closed : .thrown
-        
-        selectedSwitches.remove(lastIndex)
+        for switchNumber in 1...64 {
+          if (switchNumber % 8) != 0 {
+            selectedSwitches.remove(switchNumber)
+          }
+        }
         
         noResponse = false
         
-      }
-      
-    case .brdOpSwState:
-      
-      guard lastMethod == .BrdOpSw else {
-        return
-      }
-      
-      if let opsw = optionSwitchDictionary[lastIndex] {
+      case .opSwDataBP1:
         
-        let mask : UInt8 = 0b00100000
+        guard lastMethod == .OpSwDataBP1 else {
+          return
+        }
         
-        opsw.state = (message.message[2] & mask) == mask ? .closed : .thrown
+        setState(opswDataBP1: message)
         
-        selectedSwitches.remove(lastIndex)
+        for switchNumber in 65...128 {
+          if (switchNumber % 8) != 0 {
+            selectedSwitches.remove(switchNumber)
+          }
+        }
         
         noResponse = false
         
+      case .setSwAccepted:
+        
+        noResponse = false
+        
+      case .swState:
+        
+        guard lastMethod == .OpMode else {
+          return
+        }
+        
+        if let opsw = optionSwitchDictionary[lastIndex] {
+          
+          let mask : UInt8 = 0b00100000
+          
+          opsw.state = (message.message[2] & mask) == mask ? .closed : .thrown
+          
+          selectedSwitches.remove(lastIndex)
+          
+          noResponse = false
+          
+        }
+        
+      case .brdOpSwState:
+        
+        guard lastMethod == .BrdOpSw else {
+          return
+        }
+        
+        if let opsw = optionSwitchDictionary[lastIndex] {
+          
+          let mask : UInt8 = 0b00100000
+          
+          opsw.state = (message.message[2] & mask) == mask ? .closed : .thrown
+          
+          selectedSwitches.remove(lastIndex)
+          
+          noResponse = false
+          
+        }
+        
+      case .routesDisabled, .s7CVState, .immPacketBufferFull:
+        
+        guard lastMethod == .Series7 && isRead else {
+          return
+        }
+        
+        setState(cvNumber: lastIndex, s7CVState: message)
+        
+        let baseSwitchNumber = (lastIndex - 11) * 8 + 1
+        
+        for index in 0...7 {
+          selectedSwitches.remove(baseSwitchNumber + index)
+        }
+        
+        noResponse = false
+        
+      default:
+        break
       }
       
-    case .routesDisabled, .s7CVState, .immPacketBufferFull:
-      
-      guard lastMethod == .Series7 && isRead else {
-        return
-      }
-      
-      setState(cvNumber: lastIndex, s7CVState: message)
-      
-      let baseSwitchNumber = (lastIndex - 11) * 8 + 1
-      
-      for index in 0...7 {
-        selectedSwitches.remove(baseSwitchNumber + index)
-      }
-      
-      noResponse = false
-      
-    default:
-      break
     }
     
   }

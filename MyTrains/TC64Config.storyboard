@@ -584,7 +584,7 @@
                                                     </connections>
                                                 </comboBox>
                                                 <box fixedFrame="YES" title="Output" translatesAutoresizingMaskIntoConstraints="NO" id="svO-3o-usF">
-                                                    <rect key="frame" x="617" y="42" width="910" height="425"/>
+                                                    <rect key="frame" x="515" y="10" width="910" height="425"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <view key="contentView" id="11r-OG-glj">
                                                         <rect key="frame" x="4" y="5" width="902" height="405"/>
@@ -1019,8 +1019,28 @@
                                                         </subviews>
                                                     </view>
                                                 </box>
+                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vwg-fO-WAO">
+                                                    <rect key="frame" x="413" y="475" width="204" height="16"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="Port #1 Line #1 Pin #10" id="QsJ-yq-TuD">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="l2C-PB-TUf">
+                                                    <rect key="frame" x="662" y="-1" width="138" height="32"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
+                                                    <buttonCell key="cell" type="push" title="Write Page" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="rBb-XJ-nG8">
+                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <action selector="btnWritePageAction:" target="GGA-Hv-cAw" id="EAL-Ar-Rn5"/>
+                                                    </connections>
+                                                </button>
                                                 <box fixedFrame="YES" title="Input" translatesAutoresizingMaskIntoConstraints="NO" id="jzj-jj-TDl">
-                                                    <rect key="frame" x="16" y="75" width="910" height="425"/>
+                                                    <rect key="frame" x="11" y="42" width="910" height="425"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <view key="contentView" id="oQe-DO-I7E">
                                                         <rect key="frame" x="4" y="5" width="902" height="405"/>
@@ -1418,26 +1438,6 @@
                                                         </subviews>
                                                     </view>
                                                 </box>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vwg-fO-WAO">
-                                                    <rect key="frame" x="413" y="475" width="204" height="16"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="Port #1 Line #1 Pin #10" id="QsJ-yq-TuD">
-                                                        <font key="font" metaFont="system"/>
-                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                </textField>
-                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="l2C-PB-TUf">
-                                                    <rect key="frame" x="662" y="-1" width="138" height="32"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
-                                                    <buttonCell key="cell" type="push" title="Write Page" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="rBb-XJ-nG8">
-                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                        <font key="font" metaFont="system"/>
-                                                    </buttonCell>
-                                                    <connections>
-                                                        <action selector="btnWritePageAction:" target="GGA-Hv-cAw" id="EAL-Ar-Rn5"/>
-                                                    </connections>
-                                                </button>
                                             </subviews>
                                         </view>
                                     </tabViewItem>

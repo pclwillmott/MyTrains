@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import AppKit
 
 public class IODeviceTC64MkII : IODevice {
   
@@ -118,6 +119,34 @@ public class IODeviceTC64MkII : IODevice {
 
   // MARK: Public Methods
   
+  public func readDeviceCVs() {
+    var selectedCVs : Set<Int> = [7, 8, 9, 17, 18, 112, 113, 114, 115]
+    readCVs(selectedCVs: selectedCVs)
+  }
+  
+  public func writeDeviceCVs() {
+    var selectedCVs : Set<Int> = [17, 18, 112]
+    writeCVs(selectedCVs: selectedCVs)
+  }
+
+  public func readChannelCVs(ioChannelNumber:Int) {
+    var selectedCVs : Set<Int> = []
+    let baseCV = 129 + (ioChannelNumber - 1) * 8
+    for cvNumber in baseCV...baseCV + 7 {
+      selectedCVs.insert(cvNumber)
+    }
+    readCVs(selectedCVs: selectedCVs)
+  }
+
+  public func writeChannelCVs(ioChannelNumber:Int) {
+    var selectedCVs : Set<Int> = []
+    let baseCV = 129 + (ioChannelNumber - 1) * 8
+    for cvNumber in baseCV...baseCV + 7 {
+      selectedCVs.insert(cvNumber)
+    }
+    writeCVs(selectedCVs: selectedCVs)
+  }
+
   override public func decode(sqliteDataReader:SqliteDataReader?) {
     
     super.decode(sqliteDataReader: sqliteDataReader)
@@ -153,4 +182,24 @@ public class IODeviceTC64MkII : IODevice {
     
   }
   
+  override public var hasPropertySheet: Bool {
+    get {
+      return true
+    }
+  }
+  
+  override public func propertySheet() {
+    
+    let x = ModalWindow.IODeviceTC64MkIIPropertySheet
+    let wc = x.windowController
+    let vc = x.viewController(windowController: wc) as! IODeviceTC64MkIIPropertySheetVC
+    vc.ioDevice = self
+    propertySheetDelegate = vc
+    if let window = wc.window {
+      NSApplication.shared.runModal(for: window)
+      window.close()
+    }
+
+  }
+
 }
