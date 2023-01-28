@@ -23,6 +23,10 @@ public class IOChannel : NSObject {
   
   // MARK: Public Properties
   
+  public var propertySheetDelegate : IODevicePropertySheetDelegate?
+  
+  public var upDateDelegate : UpdateDelegate?
+  
   public var hasPropertySheet : Bool {
     get {
       return false
@@ -57,7 +61,11 @@ public class IOChannel : NSObject {
   public var ioFunctions : [IOFunction] = []
   
   // MARK: Public Methods
-  
+
+  public func displayString() -> String {
+    return "\(ioDevice.boardId).\(ioChannelNumber)"
+  }
+
   public func save() {
 
     for ioFunction in ioFunctions {

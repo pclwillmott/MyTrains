@@ -80,19 +80,19 @@ class TC64ConfigVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
     
     TC64DebounceTiming.populate(comboBox: cboIDebounceTiming)
     
-    TC64OutputPolarityPrimary.populate(comboBox: cboOPolarityPrimary)
+ //   TC64OutputPolarityPrimary.populate(comboBox: cboOPolarityPrimary)
     TC64Polarity.populate(comboBox: cboOPolaritySecondary)
     TC64Polarity.populate(comboBox: cboOPolarityTertiary)
 
-    TC64InputPolarityPrimary.populate(comboBox: cboIPolarityPrimary)
+//    TC64InputPolarityPrimary.populate(comboBox: cboIPolarityPrimary)
     TC64Polarity.populate(comboBox: cboIPolaritySecondary)
     TC64Polarity.populate(comboBox: cboIPolarityTertiary)
     
     TC64OutputType.populate(comboBox: cboOutputType)
     
-    TC64Action.populate(comboBox: cboIAction)
+//    TC64Action.populate(comboBox: cboIAction)
     
-    TC64Paired.populate(comboBox: cboOutputPaired)
+//    TC64Paired.populate(comboBox: cboOutputPaired)
 
     boxInput.frame.origin.x = 19
     boxInput.frame.origin.y = 34

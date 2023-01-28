@@ -6,8 +6,9 @@
 //
 
 import Foundation
+import AppKit
 
-public class IOFunctionTC54MkII : IOFunction {
+public class IOFunctionTC64MkII : IOFunction {
 
   // MARK: Private Properties
   
@@ -170,57 +171,86 @@ public class IOFunctionTC54MkII : IOFunction {
     }
   }
   
-  public var outputPolarityPrimary : TC64OutputPolarityPrimary {
+  private var invertedPrimary : Bool {
     get {
       let cv = tc64IOChannel.baseCVNumber + 2
       let mask = 0b10000000
-      let rawValue = (ioDevice.cvs[cv - 1].nextCVValue & mask) >> 7
-      return TC64OutputPolarityPrimary(rawValue: rawValue) ?? .defaultValue
+      return (ioDevice.cvs[cv - 1].nextCVValue & mask) == mask
     }
     set(value) {
       let cv = tc64IOChannel.baseCVNumber + 2
       let mask = 0b10000000
       var rawValue = ioDevice.cvs[cv - 1].nextCVValue & ~mask
-      rawValue |= (value.rawValue << 7)
+      rawValue |= (value ? mask : 0)
       ioDevice.cvs[cv - 1].nextCVValue = rawValue & 0xff
     }
   }
-  
-  public var inputPolarityPrimary : TC64InputPolarityPrimary {
+
+  private var invertedSecondary : Bool {
     get {
-      return TC64InputPolarityPrimary(rawValue: outputPolarityPrimary.rawValue) ?? .defaultValue
+      let cv = tc64IOChannel.baseCVNumber + 5
+      let mask = 0b01000000
+      return (ioDevice.cvs[cv - 1].nextCVValue & mask) == mask
     }
     set(value) {
-      outputPolarityPrimary = TC64OutputPolarityPrimary(rawValue: value.rawValue) ?? .defaultValue
+      let cv = tc64IOChannel.baseCVNumber + 5
+      let mask = 0b01000000
+      var rawValue = ioDevice.cvs[cv - 1].nextCVValue & ~mask
+      rawValue |= (value ? mask : 0)
+      ioDevice.cvs[cv - 1].nextCVValue = rawValue & 0xff
+    }
+  }
+
+  private var invertedTertiary : Bool {
+    get {
+      let cv = tc64IOChannel.baseCVNumber + 7
+      let mask = 0b01000000
+      return (ioDevice.cvs[cv - 1].nextCVValue & mask) == mask
+    }
+    set(value) {
+      let cv = tc64IOChannel.baseCVNumber + 7
+      let mask = 0b01000000
+      var rawValue = ioDevice.cvs[cv - 1].nextCVValue & ~mask
+      rawValue |= (value ? mask : 0)
+      ioDevice.cvs[cv - 1].nextCVValue = rawValue & 0xff
+    }
+  }
+
+  private var directionPrimary : TC64Direction {
+    get {
+      return ioChannel.channelType == .input ? .send : .respond
+    }
+    set(value) {
+      let _ = value
     }
   }
   
-  public var polaritySecondary : TC64Polarity {
+  private var directionSecondary : TC64Direction {
     get {
       let cv = tc64IOChannel.baseCVNumber + 5
-      let mask = 0b11000000
+      let mask = 0b10000000
       let rawValue = (ioDevice.cvs[cv - 1].nextCVValue & mask) >> 6
-      return TC64Polarity(rawValue: rawValue) ?? .defaultValue
+      return TC64Direction(rawValue: rawValue) ?? .defaultValue
     }
     set(value) {
       let cv = tc64IOChannel.baseCVNumber + 5
-      let mask = 0b11000000
+      let mask = 0b10000000
       var rawValue = ioDevice.cvs[cv - 1].nextCVValue & ~mask
       rawValue |= (value.rawValue << 6)
       ioDevice.cvs[cv - 1].nextCVValue = rawValue & 0xff
     }
   }
   
-  public var polarityTertiary : TC64Polarity {
+  private var directionTertiary : TC64Direction {
     get {
       let cv = tc64IOChannel.baseCVNumber + 7
-      let mask = 0b11000000
+      let mask = 0b10000000
       let rawValue = (ioDevice.cvs[cv - 1].nextCVValue & mask) >> 6
-      return TC64Polarity(rawValue: rawValue) ?? .defaultValue
+      return TC64Direction(rawValue: rawValue) ?? .defaultValue
     }
     set(value) {
       let cv = tc64IOChannel.baseCVNumber + 7
-      let mask = 0b11000000
+      let mask = 0b10000000
       var rawValue = ioDevice.cvs[cv - 1].nextCVValue & ~mask
       rawValue |= (value.rawValue << 6)
       ioDevice.cvs[cv - 1].nextCVValue = rawValue & 0xff
@@ -229,6 +259,15 @@ public class IOFunctionTC54MkII : IOFunction {
 
   // MARK: Public Properties
   
+  public var allowedDirection : Set<TC64Direction> {
+    get {
+      if ioFunctionNumber == 1 {
+        return ioChannel.channelType == .input ? [.send] : [.respond]
+      }
+      return [.send, .respond]
+    }
+  }
+
   override public var address : Int {
     get {
       switch ioFunctionNumber {
@@ -250,6 +289,60 @@ public class IOFunctionTC54MkII : IOFunction {
         addressSecondary = value
       case 3:
         addressTertiary = value
+      default:
+        break
+      }
+    }
+  }
+  
+  public var direction : TC64Direction {
+    get {
+      switch ioFunctionNumber {
+      case 1:
+        return directionPrimary
+      case 2:
+        return directionSecondary
+      case 3:
+        return directionTertiary
+      default:
+        return .defaultValue
+      }
+    }
+    set(value) {
+      switch ioFunctionNumber {
+      case 1:
+        directionPrimary = value
+      case 2:
+        directionSecondary = value
+      case 3:
+        directionTertiary = value
+      default:
+        break
+      }
+    }
+  }
+  
+  public var isInverted : Bool {
+    get {
+      switch ioFunctionNumber {
+      case 1:
+        return invertedPrimary
+      case 2:
+        return invertedSecondary
+      case 3:
+        return invertedTertiary
+      default:
+        return false
+      }
+    }
+    set(value) {
+      switch ioFunctionNumber {
+      case 1:
+        invertedPrimary = value
+      case 2:
+        invertedSecondary = value
+      case 3:
+        invertedTertiary = value
       default:
         break
       }
@@ -308,6 +401,41 @@ public class IOFunctionTC54MkII : IOFunction {
         break
       }
     }
+  }
+  
+  override public var hasPropertySheet: Bool {
+    get {
+      return true
+    }
+  }
+  
+  // MARK: Public Methods
+  
+  override public func propertySheet() {
+    
+    if ioChannel.channelType == .input {
+      let x = ModalWindow.IOFunctionTC64MkIIInputPropertySheet
+      let wc = x.windowController
+      let vc = x.viewController(windowController: wc) as! IOFunctionTC64MkIIInputPropertySheetVC
+      vc.ioFunction = self
+      propertySheetDelegate = vc
+      if let window = wc.window {
+        NSApplication.shared.runModal(for: window)
+        window.close()
+      }
+    }
+    else {
+      let x = ModalWindow.IOFunctionTC64MkIIOutputPropertySheet
+      let wc = x.windowController
+      let vc = x.viewController(windowController: wc) as! IOFunctionTC64MkIIOutputPropertySheetVC
+      vc.ioFunction = self
+      propertySheetDelegate = vc
+      if let window = wc.window {
+        NSApplication.shared.runModal(for: window)
+        window.close()
+      }
+    }
+    
   }
 
 }

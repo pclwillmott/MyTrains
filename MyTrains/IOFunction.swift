@@ -29,6 +29,10 @@ public class IOFunction : EditorObject {
   
   // MARK: Public Properties
   
+  public var propertySheetDelegate : IODevicePropertySheetDelegate?
+  
+  public var upDateDelegate : UpdateDelegate?
+  
   public var hasPropertySheet : Bool {
     get {
       return false
@@ -282,7 +286,7 @@ public class IOFunction : EditorObject {
  
         case .TowerControllerMarkII:
           
-          ioFunction = IOFunctionTC54MkII(ioChannel: ioChannel, reader: reader)
+          ioFunction = IOFunctionTC64MkII(ioChannel: ioChannel, reader: reader)
           
         default:
           break

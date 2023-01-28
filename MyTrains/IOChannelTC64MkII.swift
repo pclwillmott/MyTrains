@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import AppKit
 
 public class IOChannelTC64MkII : IOChannel {
   
@@ -16,7 +17,16 @@ public class IOChannelTC64MkII : IOChannel {
       return [.output, .input]
     }
   }
-  
+
+  public var allowedActionPaired : Set<TC64ActionPaired> {
+    get {
+      if channelType == .input {
+        return [.normal, .alternate, .paired]
+      }
+      return [.normal, .paired, .signal]
+    }
+  }
+
   override public var channelType: InputOutput {
     get {
       let cv = baseCVNumber + 2
@@ -54,12 +64,12 @@ public class IOChannelTC64MkII : IOChannel {
     }
   }
   
-  public var paired : TC64Paired {
+  public var actionPaired : TC64ActionPaired {
     get {
       let cv = baseCVNumber + 1
       let mask = 0b11000000
       let rawValue = (ioDevice.cvs[cv - 1].nextCVValue & mask) >> 6
-      return TC64Paired(rawValue: rawValue) ?? .defaultValue
+      return TC64ActionPaired(rawValue: rawValue) ?? .defaultValue
     }
     set(value) {
       let cv = baseCVNumber + 1
@@ -67,15 +77,6 @@ public class IOChannelTC64MkII : IOChannel {
       var rawValue = ioDevice.cvs[cv - 1].nextCVValue & ~mask
       rawValue |= (value.rawValue << 6)
       ioDevice.cvs[cv - 1].nextCVValue = rawValue & 0xff
-    }
-  }
-  
-  public var action : TC64Action {
-    get {
-      return TC64Action(rawValue: paired.rawValue) ?? .defaultValue
-    }
-    set(value) {
-      paired = TC64Paired(rawValue: value.rawValue) ?? .defaultValue
     }
   }
   
@@ -141,6 +142,41 @@ public class IOChannelTC64MkII : IOChannel {
       rawValue |= (value ? mask : 0)
       ioDevice.cvs[cv - 1].nextCVValue = rawValue & 0xff
     }
+  }
+  
+  override public var hasPropertySheet: Bool {
+    get {
+      return true
+    }
+  }
+  
+  // MARK: Public Methods
+  
+  override public func propertySheet() {
+    
+    if channelType == .input {
+      let x = ModalWindow.IOChannelTC64MkIIInputPropertySheet
+      let wc = x.windowController
+      let vc = x.viewController(windowController: wc) as! IOChannelTC64MkIIInputPropertySheetVC
+      vc.ioChannel = self
+      propertySheetDelegate = vc
+      if let window = wc.window {
+        NSApplication.shared.runModal(for: window)
+        window.close()
+      }
+    }
+    else {
+      let x = ModalWindow.IOChannelTC64MkIIOutputPropertySheet
+      let wc = x.windowController
+      let vc = x.viewController(windowController: wc) as! IOChannelTC64MkIIOutputPropertySheetVC
+      vc.ioChannel = self
+      propertySheetDelegate = vc
+      if let window = wc.window {
+        NSApplication.shared.runModal(for: window)
+        window.close()
+      }
+    }
+    
   }
 
 }

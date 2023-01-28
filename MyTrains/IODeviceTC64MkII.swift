@@ -169,7 +169,7 @@ public class IODeviceTC64MkII : IODevice {
         let ioChannel = IOChannelTC64MkII(ioDevice: self, ioChannelNumber: channelNumber)
         ioChannels.append(ioChannel)
         for functionNumber in 1...3 {
-          let ioFunction = IOFunctionTC54MkII(ioChannel: ioChannel, ioFunctionNumber: functionNumber)
+          let ioFunction = IOFunctionTC64MkII(ioChannel: ioChannel, ioFunctionNumber: functionNumber)
           ioChannel.ioFunctions.append(ioFunction)
         }
       }

@@ -48,6 +48,10 @@ enum AppStoryboard : String {
   case IODeviceBXP88PropertySheet        = "IODeviceBXP88PropertySheet"
   case IOFunctionBXP88InputPropertySheet = "IOFunctionBXP88InputPropertySheet"
   case IODeviceTC64MkIIPropertySheet     = "IODeviceTC64MkIIPropertySheet"
+  case IOChannelTC64MkIIInputPropertySheet   = "IOChannelTC64MkIIInputPropertySheet"
+  case IOChannelTC64MkIIOutputPropertySheet  = "IOChannelTC64MkIIOutputPropertySheet"
+  case IOFunctionTC64MkIIInputPropertySheet  = "IOFunctionTC64MkIIInputPropertySheet"
+  case IOFunctionTC64MkIIOutputPropertySheet = "IOFunctionTC64MkIIOutputPropertySheet"
 
   var instance : NSStoryboard {
     return NSStoryboard(name: self.rawValue, bundle: Bundle.main)
@@ -94,6 +98,10 @@ let storyboardLookup : [String:AppStoryboard] = [
   "IODeviceBXP88PropertySheet"        : AppStoryboard.IODeviceBXP88PropertySheet,
   "IOFunctionBXP88InputPropertySheet" : AppStoryboard.IOFunctionBXP88InputPropertySheet,
   "IODeviceTC64MkIIPropertySheet"     : AppStoryboard.IODeviceTC64MkIIPropertySheet,
+  "IOChannelTC64MkIIInputPropertySheet"   : AppStoryboard.IOChannelTC64MkIIInputPropertySheet,
+  "IOChannelTC64MkIIOutputPropertySheet"  : AppStoryboard.IOChannelTC64MkIIOutputPropertySheet,
+  "IOFunctionTC64MkIIInputPropertySheet"  : AppStoryboard.IOFunctionTC64MkIIInputPropertySheet,
+  "IOFunctionTC64MkIIOutputPropertySheet" : AppStoryboard.IOFunctionTC64MkIIOutputPropertySheet,
 ]
 
 /*
@@ -145,6 +153,10 @@ enum ModalWindow : String {
   case IODeviceBXP88PropertySheet        = "IODeviceBXP88PropertySheet"
   case IOFunctionBXP88InputPropertySheet = "IOFunctionBXP88InputPropertySheet"
   case IODeviceTC64MkIIPropertySheet     = "IODeviceTC64MkIIPropertySheet"
+  case IOChannelTC64MkIIInputPropertySheet   = "IOChannelTC64MkIIInputPropertySheet"
+  case IOChannelTC64MkIIOutputPropertySheet  = "IOChannelTC64MkIIOutputPropertySheet"
+  case IOFunctionTC64MkIIInputPropertySheet  = "IOFunctionTC64MkIIInputPropertySheet"
+  case IOFunctionTC64MkIIOutputPropertySheet = "IOFunctionTC64MkIIOutputPropertySheet"
 
   var windowController : NSWindowController {
     let storyboard = storyboardLookup[self.rawValue]!
