@@ -870,7 +870,7 @@ extension Interface {
       hopsa = UInt8(address >> 7)
     }
     
-   let cvAdjusted = cv - 1
+    let cvAdjusted = cv - 1
     
     let cvh : Int = ((cvAdjusted & 0b0000001000000000) == 0b0000001000000000 ? 0b00100000 : 0x00) |
                     ((cvAdjusted & 0b0000000100000000) == 0b0000000100000000 ? 0b00010000 : 0x00) |

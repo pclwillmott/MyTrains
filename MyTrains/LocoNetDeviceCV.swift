@@ -257,7 +257,7 @@ public class LocoNetDeviceCV : EditorObject {
 
   }
 
-  // Class Properties
+  // MARK: Class Properties
   
 public static var columnNames : String {
     get {

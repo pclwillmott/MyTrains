@@ -92,19 +92,13 @@ class IODeviceTC64MkIIPropertySheetVC: NSViewController, NSWindowDelegate, IODev
   
   @IBAction func btnReadAction(_ sender: NSButton) {
     
-    if let ioDevice = self.ioDevice {
-      
-      ioDevice.readDeviceCVs()
-      
-    }
+    ioDevice?.readDeviceCVs()
     
   }
   
   @IBAction func btnWriteAction(_ sender: NSButton) {
     
     if let ioDevice = self.ioDevice {
-      
-      ioDevice.isMasterModeEnabled = chkMasterMode.boolValue
       
       ioDevice.isPortStateEnabled = chkPortStateMemory.boolValue
       
@@ -116,9 +110,23 @@ class IODeviceTC64MkIIPropertySheetVC: NSViewController, NSWindowDelegate, IODev
       
       ioDevice.isInterrogateOutputs = chkIntOutputs.boolValue
       
+      ioDevice.isMasterModeEnabled = chkMasterMode.boolValue
+      
       ioDevice.writeDeviceCVs()
       
     }
+    
+  }
+  
+  @IBAction func btnReadAllAction(_ sender: NSButton) {
+    
+    ioDevice?.readAllChannelCVs()
+    
+  }
+  
+  @IBAction func btnSetToDefaults(_ sender: Any) {
+    
+    ioDevice?.setToDefaults()
     
   }
   

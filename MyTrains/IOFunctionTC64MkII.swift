@@ -229,14 +229,14 @@ public class IOFunctionTC64MkII : IOFunction {
     get {
       let cv = tc64IOChannel.baseCVNumber + 5
       let mask = 0b10000000
-      let rawValue = (ioDevice.cvs[cv - 1].nextCVValue & mask) >> 6
+      let rawValue = (ioDevice.cvs[cv - 1].nextCVValue & mask) >> 7
       return TC64Direction(rawValue: rawValue) ?? .defaultValue
     }
     set(value) {
       let cv = tc64IOChannel.baseCVNumber + 5
       let mask = 0b10000000
       var rawValue = ioDevice.cvs[cv - 1].nextCVValue & ~mask
-      rawValue |= (value.rawValue << 6)
+      rawValue |= (value.rawValue << 7)
       ioDevice.cvs[cv - 1].nextCVValue = rawValue & 0xff
     }
   }
@@ -245,14 +245,14 @@ public class IOFunctionTC64MkII : IOFunction {
     get {
       let cv = tc64IOChannel.baseCVNumber + 7
       let mask = 0b10000000
-      let rawValue = (ioDevice.cvs[cv - 1].nextCVValue & mask) >> 6
+      let rawValue = (ioDevice.cvs[cv - 1].nextCVValue & mask) >> 7
       return TC64Direction(rawValue: rawValue) ?? .defaultValue
     }
     set(value) {
       let cv = tc64IOChannel.baseCVNumber + 7
       let mask = 0b10000000
       var rawValue = ioDevice.cvs[cv - 1].nextCVValue & ~mask
-      rawValue |= (value.rawValue << 6)
+      rawValue |= (value.rawValue << 7)
       ioDevice.cvs[cv - 1].nextCVValue = rawValue & 0xff
     }
   }
@@ -410,6 +410,10 @@ public class IOFunctionTC64MkII : IOFunction {
   }
   
   // MARK: Public Methods
+  
+  override public func displayString() -> String {
+    return "\(super.displayString()) (\(address))"
+  }
   
   override public func propertySheet() {
     

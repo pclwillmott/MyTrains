@@ -93,6 +93,9 @@ class IOChannelTC64MkIIOutputPropertySheetVC: NSViewController, NSWindowDelegate
   @IBOutlet weak var chkOutputInverted: NSButton!
   
   @IBAction func btnReadAction(_ sender: NSButton) {
+    
+    ioChannel?.readChannel()
+    
   }
   
   @IBAction func btnWriteAction(_ sender: NSButton) {

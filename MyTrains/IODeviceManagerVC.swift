@@ -132,6 +132,8 @@ class IODeviceManagerVC: NSViewController, NSWindowDelegate, UpdateDelegate {
   
   @IBAction func btnEditChannelAction(_ sender: NSButton) {
     if let ioFunctions = tableViewDS.ioFunctions {
+      ioFunctions[sender.tag].ioDevice.upDateDelegate = self
+      ioFunctions[sender.tag].ioChannel.upDateDelegate = self
       ioFunctions[sender.tag].ioChannel.propertySheet()
       tvTableView.reloadData()
     }
@@ -139,6 +141,9 @@ class IODeviceManagerVC: NSViewController, NSWindowDelegate, UpdateDelegate {
   
   @IBAction func btnEditFunctionAction(_ sender: NSButton) {
     if let ioFunctions = tableViewDS.ioFunctions {
+      ioFunctions[sender.tag].ioDevice.upDateDelegate = self
+      ioFunctions[sender.tag].ioChannel.upDateDelegate = self
+      ioFunctions[sender.tag].upDateDelegate = self
       ioFunctions[sender.tag].propertySheet()
       tvTableView.reloadData()
     }
@@ -190,14 +195,17 @@ class IODeviceManagerVC: NSViewController, NSWindowDelegate, UpdateDelegate {
   @IBOutlet weak var lblUpdate: NSTextField!
   
   @IBAction func btnWriteChannelAction(_ sender: NSButton) {
-    if let ioFunctions = tableViewDS.ioFunctions, let ioFunction = ioFunctions[sender.tag] as? IOFunctionDS64Output {
+    
+    if let ioFunctions = tableViewDS.ioFunctions {
+      
+      let ioFunction = ioFunctions[sender.tag]
+      
       ioFunction.ioDevice.upDateDelegate = self
+      
       ioFunction.ioChannel.writeChannel()
+      
     }
-    if let ioFunctions = tableViewDS.ioFunctions, let ioFunction = ioFunctions[sender.tag] as? IOFunctionBXP88Input {
-      ioFunction.ioDevice.upDateDelegate = self
-      ioFunction.ioChannel.writeChannel()
-    }
+    
   }
   
   @IBAction func cboChannelTypeAction(_ sender: NSComboBox) {
@@ -205,11 +213,10 @@ class IODeviceManagerVC: NSViewController, NSWindowDelegate, UpdateDelegate {
     if let ioFunctions = tableViewDS.ioFunctions {
       let ioChannel = ioFunctions[sender.tag].ioChannel
       ioChannel.channelType = InputOutput.selected(comboBox: sender)
+      tvTableView.reloadData()
     }
     
   }
-  
-  
-  
+
 }
 

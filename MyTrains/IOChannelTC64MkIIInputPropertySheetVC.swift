@@ -65,6 +65,8 @@ class IOChannelTC64MkIIInputPropertySheetVC: NSViewController, NSWindowDelegate,
   
   @IBAction func btnReadAction(_ sender: NSButton) {
     
+    ioChannel?.readChannel()
+
   }
   
   @IBAction func btnWriteAction(_ sender: NSButton) {
@@ -78,6 +80,7 @@ class IOChannelTC64MkIIInputPropertySheetVC: NSViewController, NSWindowDelegate,
       ioChannel.writeChannel()
       
     }
+
   }
   
 }

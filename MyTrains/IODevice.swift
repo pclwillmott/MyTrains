@@ -471,8 +471,11 @@ public class IODevice : LocoNetDevice, InterfaceDelegate {
             }
             else {
               
-              currentCV = selectedSwitches.first!
-              
+              var x : [Int] = [Int](selectedSwitches)
+              x.sort() {$0 < $1}
+              currentCV = x.first!
+//              currentCV = selectedSwitches.first!
+
               upDateDelegate?.displayUpdate?(update: "Writing CV #\(currentCV)")
               
               interface.writeCV(progMode: .operationsMode, cv: currentCV, address: boardId, value: cvs[currentCV - 1].nextCVValue)
@@ -501,11 +504,14 @@ public class IODevice : LocoNetDevice, InterfaceDelegate {
           
           if isRead && cvNumber == currentCV {
             
+            
             var cvValue = message.message[10]
             
             let mask : UInt8 = 0b00000010
             
             cvValue |= (((message.message[8] & mask) == mask) ? 0b10000000 : 0)
+            
+     //       print("CV\(cvNumber) \(cvValue) \(message.message[4])")
             
             cvs[cvNumber - 1].nextCVValue = Int(cvValue)
 
@@ -524,7 +530,10 @@ public class IODevice : LocoNetDevice, InterfaceDelegate {
               
             }
             else {
-              currentCV = selectedSwitches.first!
+              var x : [Int] = [Int](selectedSwitches)
+              x.sort() {$0 < $1}
+              currentCV = x.first!
+//              currentCV = selectedSwitches.first!
               upDateDelegate?.displayUpdate?(update: "Reading CV #\(currentCV)")
               interface.readCV(progMode: .operationsMode, cv: currentCV, address: boardId)
             }

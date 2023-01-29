@@ -39,7 +39,8 @@ public class IODeviceTC64MkII : IODevice {
     set(value) {
       let cv112 = cvs[111]
       let mask : Int = 0b00000001
-      cv112.nextCVValue = (cv112.nextCVValue & ~mask) | (value ? mask : 0)
+      let clearMask = mask // | 0b01100000
+      cv112.nextCVValue = (cv112.nextCVValue & ~clearMask) | (value ? mask : 0)
     }
   }
   
@@ -52,7 +53,8 @@ public class IODeviceTC64MkII : IODevice {
     set(value) {
       let cv112 = cvs[111]
       let mask : Int = 0b00000010
-      cv112.nextCVValue = (cv112.nextCVValue & ~mask) | (value ? mask : 0)
+      let clearMask = mask // | 0b01100000
+      cv112.nextCVValue = (cv112.nextCVValue & ~clearMask) | (value ? mask : 0)
     }
   }
   
@@ -65,7 +67,8 @@ public class IODeviceTC64MkII : IODevice {
     set(value) {
       let cv112 = cvs[111]
       let mask : Int = 0b00000100
-      cv112.nextCVValue = (cv112.nextCVValue & ~mask) | (value ? mask : 0)
+      let clearMask = mask // | 0b01100000
+      cv112.nextCVValue = (cv112.nextCVValue & ~clearMask) | (value ? mask : 0)
     }
   }
   
@@ -78,7 +81,8 @@ public class IODeviceTC64MkII : IODevice {
     set(value) {
       let cv112 = cvs[111]
       let mask : Int = 0b00001000
-      cv112.nextCVValue = (cv112.nextCVValue & ~mask) | (value ? mask : 0)
+      let clearMask = mask // | 0b01100000
+      cv112.nextCVValue = (cv112.nextCVValue & ~clearMask) | (value ? mask : 0)
     }
   }
 
@@ -91,7 +95,8 @@ public class IODeviceTC64MkII : IODevice {
     set(value) {
       let cv112 = cvs[111]
       let mask : Int = 0b00010000
-      cv112.nextCVValue = (cv112.nextCVValue & ~mask) | (value ? mask : 0)
+      let clearMask = mask // | 0b01100000
+      cv112.nextCVValue = (cv112.nextCVValue & ~clearMask) | (value ? mask : 0)
     }
   }
   
@@ -104,7 +109,8 @@ public class IODeviceTC64MkII : IODevice {
     set(value) {
       let cv112 = cvs[111]
       let mask : Int = 0b10000000
-      cv112.nextCVValue = (cv112.nextCVValue & ~mask) | (value ? mask : 0)
+      let clearMask = mask // | 0b01100000
+      cv112.nextCVValue = ((cv112.nextCVValue & ~clearMask) | (value ? mask : 0)) & 0xff
     }
   }
   
@@ -119,13 +125,20 @@ public class IODeviceTC64MkII : IODevice {
 
   // MARK: Public Methods
   
+  override public func setBoardId(newBoardId:Int) {
+    cvs[16].nextCVValue = newBoardId >> 8
+    cvs[17].nextCVValue = newBoardId & 0xff
+    var selectedCVs : Set<Int> = [17, 18]
+    writeCVs(selectedCVs: selectedCVs)
+  }
+
   public func readDeviceCVs() {
     var selectedCVs : Set<Int> = [7, 8, 9, 17, 18, 112, 113, 114, 115]
     readCVs(selectedCVs: selectedCVs)
   }
   
   public func writeDeviceCVs() {
-    var selectedCVs : Set<Int> = [17, 18, 112]
+    var selectedCVs : Set<Int> = [112]
     writeCVs(selectedCVs: selectedCVs)
   }
 
@@ -136,6 +149,32 @@ public class IODeviceTC64MkII : IODevice {
       selectedCVs.insert(cvNumber)
     }
     readCVs(selectedCVs: selectedCVs)
+  }
+
+  public func readAllChannelCVs() {
+    var selectedCVs : Set<Int> = [7, 8, 9, 17, 18, 112, 113, 114, 115]
+    for ioChannelNumber in 1...64 {
+      let baseCV = 129 + (ioChannelNumber - 1) * 8
+      for cvNumber in baseCV...baseCV + 7 {
+        selectedCVs.insert(cvNumber)
+      }
+    }
+    readCVs(selectedCVs: selectedCVs)
+  }
+  
+  public func setToDefaults() {
+    var selectedCVs : Set<Int> = []
+    for ioChannelNumber in 1...64 {
+      let baseCV = 129 + (ioChannelNumber - 1) * 8
+      for cvNumber in baseCV...baseCV + 7 {
+        cvs[cvNumber - 1].nextCVValue = 0
+        selectedCVs.insert(cvNumber)
+      }
+      cvs[baseCV - 1].nextCVValue = ioChannelNumber - 1
+      cvs[111].nextCVValue = 0xff
+      selectedCVs.insert(112)
+    }
+    writeCVs(selectedCVs: selectedCVs)
   }
 
   public func writeChannelCVs(ioChannelNumber:Int) {

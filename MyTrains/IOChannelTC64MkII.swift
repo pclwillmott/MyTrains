@@ -150,6 +150,12 @@ public class IOChannelTC64MkII : IOChannel {
     }
   }
   
+  override public var canWriteChannel : Bool {
+    get {
+      return true
+    }
+  }
+  
   // MARK: Public Methods
   
   override public func propertySheet() {
@@ -178,5 +184,23 @@ public class IOChannelTC64MkII : IOChannel {
     }
     
   }
+  
+  override public func writeChannel() {
+    
+    if let ioDevice = self.ioDevice as? IODeviceTC64MkII {
+      ioDevice.propertySheetDelegate = self.propertySheetDelegate
+      ioDevice.writeChannelCVs(ioChannelNumber: ioChannelNumber)
+    }
+    
+  }
+  
+  override public func readChannel() {
+    
+    if let ioDevice = self.ioDevice as? IODeviceTC64MkII {
+      ioDevice.propertySheetDelegate = self.propertySheetDelegate
+      ioDevice.readChannelCVs(ioChannelNumber: ioChannelNumber)
+    }
 
+  }
+  
 }

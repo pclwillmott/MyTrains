@@ -28,7 +28,7 @@ class IOFunctionTC64MkIIInputPropertySheetVC: NSViewController, NSWindowDelegate
     
     self.view.window?.delegate = self
     
-    view.window?.title = ioFunction!.ioChannel.ioDevice.deviceName
+    view.window?.title = ioFunction!.displayString()
     
     TC64Direction.populate(comboBox: cboDirection, fromSet: ioFunction!.allowedDirection)
     
@@ -51,6 +51,8 @@ class IOFunctionTC64MkIIInputPropertySheetVC: NSViewController, NSWindowDelegate
   public func reloadData() {
     
     if let ioFunction = self.ioFunction {
+      
+      view.window?.title = ioFunction.displayString()
       
       txtAddress.stringValue = "\(ioFunction.address)"
       
@@ -91,9 +93,39 @@ class IOFunctionTC64MkIIInputPropertySheetVC: NSViewController, NSWindowDelegate
   @IBOutlet weak var chkInverted: NSButton!
   
   @IBAction func btnReadAction(_ sender: NSButton) {
+    
+    ioFunction?.ioChannel.propertySheetDelegate = self
+
+    ioFunction?.ioChannel.readChannel()
+    
   }
   
   @IBAction func btnWriteAction(_ sender: NSButton) {
+    
+    if let ioFunction = self.ioFunction {
+      
+      ioFunction.address = txtAddress.integerValue
+      
+      ioFunction.direction = TC64Direction.selected(comboBox: cboDirection)
+      
+      ioFunction.mode = TC64Mode.selected(comboBox: cboMessage)
+      
+      ioFunction.transitionControl = TC64TransitionControl.selected(comboBox: cboTransitionControl)
+      
+      ioFunction.sensorType = SensorType.selected(comboBox: cboSensorType)
+      
+      ioFunction.delayOn = txtDelayOn.integerValue
+      
+      ioFunction.delayOff = txtDelayOff.integerValue
+      
+      ioFunction.isInverted = chkInverted.boolValue
+      
+      ioFunction.ioChannel.propertySheetDelegate = self
+      
+      ioFunction.ioChannel.writeChannel()
+      
+    }
+    
   }
   
 }

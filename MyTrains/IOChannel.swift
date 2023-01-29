@@ -82,4 +82,8 @@ public class IOChannel : NSObject {
     
   }
   
+  public func readChannel() {
+    
+  }
+  
 }
