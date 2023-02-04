@@ -1547,17 +1547,52 @@ public class NetworkMessage : NSObject {
     
   }
   
+  public var boardId : Int {
+    get {
+      if messageType == .pmRepBXP88 {
+        var bid = message[2]
+        bid |= (message[1] & 0b00000001) == 0b00000001 ? 0b10000000 : 0
+        return Int(bid) + 1
+      }
+      return -1
+    }
+  }
+  
+  public var detectionSectionsSet : [Int] {
+    get {
+      var ds : [Int] = []
+      let addr = (boardId - 1) * 8
+      if messageType == .pmRepBXP88 {
+        var mask : UInt8 = 0b00000001
+        for index in 1...4 {
+          if (message[4] & mask) == mask {
+            ds.append(addr + index)
+          }
+          mask <<= 1
+        }
+        mask = 0b00000001
+        for index in 5...8 {
+          if (message[3] & mask) == mask {
+            ds.append(addr + index)
+          }
+          mask <<= 1
+        }
+      }
+      return ds
+    }
+  }
+  
   public var transponderAddress : Int {
     get {
       var addr = Int(message[2])
       addr |= (Int(message[1] & 0b00001111) << 7)
-      return addr
+      return addr + 1
     }
   }
   
   public var sensorAddress : Int {
     get {
-      var addr = Int(message[1])
+      var addr = Int(message[1]) << 1
       addr |= (Int(message[2] & 0b00001111) << 8)
       addr |= (Int(message[2] & 0b00100000) >> 5)
       return addr + 1

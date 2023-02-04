@@ -136,7 +136,7 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="b2C-pu-gmX">
-                                <rect key="frame" x="18" y="41" width="210" height="18"/>
+                                <rect key="frame" x="18" y="41" width="258" height="18"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="check" title="Occupancy Reporting Enabled" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="jSe-g8-22W">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -144,7 +144,7 @@
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OfB-cD-OJa">
-                                <rect key="frame" x="18" y="19" width="224" height="18"/>
+                                <rect key="frame" x="18" y="19" width="258" height="18"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="check" title="Transponding Reporting Enabled" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="DLm-RB-u1E">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>

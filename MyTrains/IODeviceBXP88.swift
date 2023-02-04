@@ -24,8 +24,10 @@ public class IODeviceBXP88 : IODevice {
       var result : Set<Int> = []
 
       for ioChannel in ioChannels {
-        if let ioFunction = ioChannel.ioFunctions[0] as? IOFunctionBXP88Input {
-          result.insert(ioFunction.address)
+        for ioFunction in ioChannel.ioFunctions {
+          if let function = ioFunction as? IOFunctionBXP88Input {
+            result.insert(function.address)
+          }
         }
       }
       
@@ -224,8 +226,20 @@ public class IODeviceBXP88 : IODevice {
       for channelNumber in 1...8 {
         let ioChannel = IOChannelBXP88Input(ioDevice: self, ioChannelNumber: channelNumber)
         ioChannels.append(ioChannel)
-        let ioFunction = IOFunctionBXP88Input(ioChannel: ioChannel, ioFunctionNumber: 1)
-        ioChannel.ioFunctions.append(ioFunction)
+        for function in 1...3 {
+          let ioFunction = IOFunctionBXP88Input(ioChannel: ioChannel, ioFunctionNumber: function)
+          switch ioFunction.ioFunctionNumber {
+          case 1:
+            ioFunction.sensorType = .occupancy
+          case 2:
+            ioFunction.sensorType = .transponder
+          case 3:
+            ioFunction.sensorType = .trackFault
+          default:
+            break
+          }
+          ioChannel.ioFunctions.append(ioFunction)
+        }
       }
 
     }

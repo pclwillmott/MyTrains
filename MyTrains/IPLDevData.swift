@@ -39,7 +39,7 @@ public class IPLDevData : NetworkMessage {
     
   }
   
-  public var boardId : Int {
+  override public var boardId : Int {
     
     get {
       return Int(message[15] | (message[14] & 0b00000001 != 0 ? 0b10000000 : 0b00000000))

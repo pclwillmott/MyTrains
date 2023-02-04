@@ -502,11 +502,15 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
     }
     
     if message.messageType == .sensRepGenIn || message.messageType == .sensRepTurnIn || message.messageType == .sensRepTurnOut {
-//      print("\(message.messageType) \(message.sensorAddress) \(message.sensorState)")
+      item += "\n  address: \(message.sensorAddress) state: \(message.sensorState)"
+    }
+    
+    if message.messageType == .pmRepBXP88 {
+      item += "\n  board id: \(message.boardId) detection sections: \(message.detectionSectionsSet)"
     }
     
     if message.messageType == .transRep {
-      print(message.transponderAddress)
+      item += "\n address: \(message.transponderAddress)"
     }
     
     if !isPaused {

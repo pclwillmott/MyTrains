@@ -149,6 +149,9 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
           if info.attributes.intersection([.ComputerInterface, .CommandStation]).isEmpty {
             dev = LocoNetDevice(primaryKey: -1)
           }
+          else if info.productCode == .BXP88 {
+            dev = IODeviceBXP88(primaryKey: -1)
+          }
           else {
             dev = Interface(primaryKey: -1)
           }

@@ -24,7 +24,15 @@ public enum InputOutput : Int {
     "Input",
   ]
   
-  private static let sequence : [InputOutput] = [.output, .input]
+  private static var sequence : [InputOutput] {
+    get {
+      var result : [InputOutput] = []
+      for index in 0...titles.count - 1 {
+        result.append(InputOutput(rawValue: index)!)
+      }
+      return result
+    }
+  }
   
   public static let defaultValue : InputOutput = .input
 

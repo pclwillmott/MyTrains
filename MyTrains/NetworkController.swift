@@ -248,14 +248,18 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
     }
   }
   
-  public var sensors : [Int:LocoNetDevice] {
+  public var sensors : [Int:IOFunction] {
     get {
       
-      var result : [Int:LocoNetDevice] = [:]
+      var result : [Int:IOFunction] = [:]
       
       for (_, device) in locoNetDevices {
-        if device.isSensorDevice {
-          result[device.primaryKey] = device
+        if let ioDevice = device as? IODevice {
+          for ioFunction in ioDevice.ioFunctions {
+            if ioFunction.ioChannel.channelType == .input {
+              result[ioFunction.primaryKey] = ioFunction
+            }
+          }
         }
       }
 
@@ -270,11 +274,7 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
     
     for (_, device) in locoNetDevices {
       if let ioDevice = device as? IODevice, ioDevice.networkId == networkId {
-        for ioChannel in ioDevice.ioChannels {
-          for ioFunction in ioChannel.ioFunctions {
-            result.append(ioFunction)
-          }
-        }
+        result.append(contentsOf: ioDevice.ioFunctions)
       }
     }
     
@@ -376,21 +376,35 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
   
   // MARK: Public Methods
 
-  public func sensors(sensorTypes: Set<SensorType>) -> [Sensor] {
+  public func ioFunction(primaryKey: Int) -> IOFunction? {
     
-    var result : [Sensor] = []
-    
-    for (_, device) in sensors {
-      
-      for sensor in device.sensors {
-        if sensorTypes.contains(sensor.sensorType) {
-          result.append(sensor)
+    for (_, device) in locoNetDevices {
+      if let ioDevice = device as? IODevice {
+        for ioFunction in ioDevice.ioFunctions {
+          if ioFunction.primaryKey == primaryKey {
+            return ioFunction
+          }
         }
       }
+    }
+
+    return nil
+    
+  }
+  
+  public func sensors(sensorTypes: Set<SensorType>) -> [IOFunction] {
+    
+    var result : [IOFunction] = []
+    
+    for (_, sensor) in sensors {
       
+      if sensorTypes.contains(sensor.sensorType) {
+        result.append(sensor)
+      }
+    
     }
     
-    result.sort {$0.comboSortOrder < $1.comboSortOrder}
+    result.sort {$0.sortString() < $1.sortString()}
     
     return result
     

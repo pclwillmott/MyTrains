@@ -57,6 +57,18 @@ public class IODevice : LocoNetDevice, InterfaceDelegate {
   
   public var ioChannels : [IOChannel] = []
   
+  public var ioFunctions : [IOFunction] {
+    get {
+      var result : [IOFunction] = []
+      for ioChannel in ioChannels {
+        for ioFunction in ioChannel.ioFunctions {
+          result.append(ioFunction)
+        }
+      }
+      return result
+    }
+  }
+  
   public var sensorAddresses : Set<Int> {
     get {
       return []

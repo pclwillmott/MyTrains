@@ -24,11 +24,11 @@ class SensorComboDS : NSObject, NSComboBoxDataSource {
   
   // MARK: Public Properties
   
-  public var items : [Sensor] = []
+  public var items : [IOFunction] = []
   
   // MARK: Public Methods
   
-  public func objectAt(index: Int) -> Sensor? {
+  public func objectAt(index: Int) -> IOFunction? {
     if index < 0 || index >= items.count {
       return nil
     }

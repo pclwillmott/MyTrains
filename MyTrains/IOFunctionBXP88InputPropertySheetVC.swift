@@ -28,7 +28,20 @@ class IOFunctionBXP88InputPropertySheetVC: NSViewController, NSWindowDelegate {
     
     self.view.window?.delegate = self
     
-    SensorType.populate(comboBox: cboSensorType)
+    var sensorTypes : Set<SensorType> = []
+    
+    switch ioFunction!.ioFunctionNumber {
+    case 1:
+      sensorTypes = [.occupancy, .unconnected]
+    case 2:
+      sensorTypes = [.occupancy, .transponder, .unconnected]
+    case 3:
+      sensorTypes = [.trackFault, .unconnected]
+    default:
+      break
+    }
+    
+    SensorType.populate(comboBox: cboSensorType, fromSet: sensorTypes)
     
     reloadData()
     
@@ -53,6 +66,9 @@ class IOFunctionBXP88InputPropertySheetVC: NSViewController, NSWindowDelegate {
         chkOccupancyDetectionEnabled.boolValue = ioDevice.isOccupancyReportingEnabled(detectionSection: ioFunction.ioChannel.ioChannelNumber)
         chkTranspondingReportingEnabled.boolValue = ioDevice.isTranspondingReportingEnabled(detectionSection: ioFunction.ioChannel.ioChannelNumber)
       }
+      chkOccupancyDetectionEnabled.isHidden = ioFunction.ioFunctionNumber != 1
+      chkTranspondingReportingEnabled.isHidden = ioFunction.ioFunctionNumber != 2
+      chkTranspondingReportingEnabled.frame = chkOccupancyDetectionEnabled.frame
     }
   }
   

@@ -363,9 +363,9 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
   
   private var turnoutSwitches : [TurnoutSwitch] = []
   
-  private var generalSensors : [Sensor] = []
+  private var generalSensors : [IOFunction] = []
 
-  private var turnoutSensors : [Sensor] = []
+  private var turnoutSensors : [IOFunction] = []
 
   private var turnoutSwitch1DS : TurnoutSwitchComboDS = TurnoutSwitchComboDS()
   private var turnoutSwitch2DS : TurnoutSwitchComboDS = TurnoutSwitchComboDS()

@@ -202,18 +202,6 @@
                                                 <action selector="mnuEditTrainsAction:" target="Voe-Tx-rLC" id="cJY-DS-6X4"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Sensors" id="VCV-VZ-hVe">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="mnuEditSensorsAction:" target="Voe-Tx-rLC" id="OE8-jR-cbJ"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Switches" id="FH1-Fs-Psr">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="mnuEditSwitchesAction:" target="Voe-Tx-rLC" id="cQt-rG-ok9"/>
-                                            </connections>
-                                        </menuItem>
                                         <menuItem title="Configure Tower Controller" id="afT-LC-SLf">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>

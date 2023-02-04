@@ -88,7 +88,7 @@ public class IOFunction : EditorObject {
   // MARK: Public Methods
   
   override public func displayString() -> String {
-    return "\(ioDevice.boardId).\(ioChannel.ioChannelNumber).\(ioFunctionNumber)"
+    return "\(ioDevice.boardId).\(ioChannel.ioChannelNumber).\(ioFunctionNumber) (\(address))"
   }
   
   override public func sortString() -> String {
