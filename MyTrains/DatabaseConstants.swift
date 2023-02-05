@@ -208,28 +208,23 @@ enum SWITCHBOARD_ITEM {
   static let DP_SPEED_RESTRICTED_UD      = "DP_SPEED_RESTRICTED_UD"
   static let DP_SPEED_BRAKE_UD           = "DP_SPEED_BRAKE_UD"
   static let DP_SPEED_SHUNT_UD           = "DP_SPEED_SHUNT_UD"
-  static let SW1_LOCONET_DEVICE_ID       = "SW1_LOCONET_DEVICE_ID"
-  static let SW1_CHANNEL_NUMBER          = "SW1_CHANNEL_NUMBER"
   static let SW1_TURNOUT_MOTOR_TYPE      = "SW1_TURNOUT_MOTOR_TYPE"
-  static let SW1_SENSOR1_ID              = "SW1_SENSOR1_ID"  // THIS IS A LOCONET_DEVICE_ID
-  static let SW2_LOCONET_DEVICE_ID       = "SW2_LOCONET_DEVICE_ID"
-  static let SW2_CHANNEL_NUMBER          = "SW2_CHANNEL_NUMBER"
   static let SW2_TURNOUT_MOTOR_TYPE      = "SW2_TURNOUT_MOTOR_TYPE"
-  static let SW2_SENSOR1_ID              = "SW2_SENSOR1_ID" // THIS IS A LOCONET_DEVICE_ID
   static let IS_SCENIC_SECTION           = "IS_SCENIC_SECTION"
   static let BLOCK_TYPE                  = "BLOCK_TYPE"
   static let LINK_ITEM                   = "LINK_ITEM"
   static let TURNOUT_CONNECTION          = "TURNOUT_CONNECTION"
-  static let SW1_SENSOR1_CHANNEL_NUMBER  = "SW1_SENSOR1_CHANNEL_NUMBER"
-  static let SW1_SENSOR2_ID              = "SW1_SENSOR2_ID" // THIS IS A LOCONET_DEVICE_ID
-  static let SW1_SENSOR2_CHANNEL_NUMBER  = "SW1_SENSOR2_CHANNEL_NUMBER"
-  static let SW2_SENSOR1_CHANNEL_NUMBER  = "SW2_SENSOR1_CHANNEL_NUMBER"
-  static let SW2_SENSOR2_ID              = "SW2_SENSOR2_ID" // THIS IS A LOCONET_DEVICE_ID
-  static let SW2_SENSOR2_CHANNEL_NUMBER  = "SW2_SENSOR2_CHANNEL_NUMBER"
   static let SENSOR_POSITION             = "SENSOR_POSITION"
   static let UNITS_SENSOR_POSITION       = "UNITS_SENSOR_POSITION"
-  static let GEN_SENSOR_ID               = "GEN_SENSOR_ID" // THIS IS A LOCONET_DEVICE_ID
-  static let GEN_SENSOR_CHANNEL_NUMBER   = "GEN_SENSOR_CHANNEL_NUMBER"
+  static let GEN_SENSOR_ID               = "GEN_SENSOR_ID"         // THIS IS A LOCONET_DEVICE_ID
+  static let TRANSPONDER_SENSOR_ID       = "TRANSPONDER_SENSOR_ID" // THIS IS A LOCONET_DEVICE_ID
+  static let TRACK_FAULT_SENSOR_ID       = "TRACK_FAULT_SENSOR_ID" // THIS IS A LOCONET_DEVICE_ID
+  static let SW1_ID                      = "SW1_ID"                // THIS IS A LOCONET_DEVICE_ID
+  static let SW1_SENSOR1_ID              = "SW1_SENSOR1_ID"        // THIS IS A LOCONET_DEVICE_ID
+  static let SW1_SENSOR2_ID              = "SW1_SENSOR2_ID"        // THIS IS A LOCONET_DEVICE_ID
+  static let SW2_ID                      = "SW2_ID"                // THIS IS A LOCONET_DEVICE_ID
+  static let SW2_SENSOR1_ID              = "SW2_SENSOR1_ID"        // THIS IS A LOCONET_DEVICE_ID
+  static let SW2_SENSOR2_ID              = "SW2_SENSOR2_ID"        // THIS IS A LOCONET_DEVICE_ID
 }
 
 // THIS IS NOW IOFUNCTION

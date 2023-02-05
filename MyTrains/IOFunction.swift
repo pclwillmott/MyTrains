@@ -85,6 +85,8 @@ public class IOFunction : EditorObject {
     }
   }
   
+  public var switchBoardItems : [SwitchBoardItem] = []
+  
   // MARK: Public Methods
   
   override public func displayString() -> String {

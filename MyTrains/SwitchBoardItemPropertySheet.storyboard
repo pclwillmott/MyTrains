@@ -790,7 +790,7 @@
                                                     </connections>
                                                 </comboBox>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="t65-qZ-cXT">
-                                                    <rect key="frame" x="58" y="326" width="218" height="16"/>
+                                                    <rect key="frame" x="58" y="220" width="218" height="16"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Turnout Switch #1 - Thrown Sensor" id="tkt-mU-iUA">
                                                         <font key="font" metaFont="system"/>
@@ -799,7 +799,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uwy-gR-Y2H">
-                                                    <rect key="frame" x="60" y="295" width="272" height="25"/>
+                                                    <rect key="frame" x="60" y="189" width="272" height="25"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="5" id="fRZ-zv-kjs">
                                                         <font key="font" metaFont="system"/>
@@ -811,7 +811,7 @@
                                                     </connections>
                                                 </comboBox>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vnQ-FU-hLN">
-                                                    <rect key="frame" x="58" y="275" width="214" height="16"/>
+                                                    <rect key="frame" x="58" y="169" width="214" height="16"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Turnout Switch #1 - Closed Sensor" id="uKO-NN-dzR">
                                                         <font key="font" metaFont="system"/>
@@ -820,7 +820,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gdb-Ah-EwG">
-                                                    <rect key="frame" x="60" y="244" width="272" height="25"/>
+                                                    <rect key="frame" x="60" y="138" width="272" height="25"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="5" id="jWO-Tb-Y2h">
                                                         <font key="font" metaFont="system"/>
@@ -832,7 +832,7 @@
                                                     </connections>
                                                 </comboBox>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="q4q-AL-vwh">
-                                                    <rect key="frame" x="58" y="224" width="220" height="16"/>
+                                                    <rect key="frame" x="58" y="118" width="220" height="16"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Turnout Switch #2 - Thrown Sensor" id="EyV-FN-hKV">
                                                         <font key="font" metaFont="system"/>
@@ -841,7 +841,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DLi-EB-5F0">
-                                                    <rect key="frame" x="60" y="193" width="272" height="25"/>
+                                                    <rect key="frame" x="60" y="87" width="272" height="25"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="5" id="RaI-UO-NGC">
                                                         <font key="font" metaFont="system"/>
@@ -853,7 +853,7 @@
                                                     </connections>
                                                 </comboBox>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mW9-fB-aa9">
-                                                    <rect key="frame" x="58" y="173" width="216" height="16"/>
+                                                    <rect key="frame" x="58" y="67" width="216" height="16"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Turnout Switch #2 - Closed Sensor" id="nLk-ja-5YC">
                                                         <font key="font" metaFont="system"/>
@@ -862,7 +862,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="36T-8K-diT">
-                                                    <rect key="frame" x="60" y="142" width="272" height="25"/>
+                                                    <rect key="frame" x="60" y="36" width="272" height="25"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="5" id="K7M-YJ-mXx">
                                                         <font key="font" metaFont="system"/>
@@ -885,7 +885,7 @@
                                                     </connections>
                                                 </button>
                                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FSG-Xs-6ed">
-                                                    <rect key="frame" x="336" y="292" width="66" height="32"/>
+                                                    <rect key="frame" x="336" y="186" width="66" height="32"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="push" title="Clear" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="idz-G3-DJ1">
                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -896,7 +896,7 @@
                                                     </connections>
                                                 </button>
                                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wa0-8T-muU">
-                                                    <rect key="frame" x="336" y="241" width="66" height="32"/>
+                                                    <rect key="frame" x="336" y="135" width="66" height="32"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="push" title="Clear" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="WTt-2Q-yrp">
                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -907,7 +907,7 @@
                                                     </connections>
                                                 </button>
                                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SL2-Fz-I2P">
-                                                    <rect key="frame" x="336" y="190" width="66" height="32"/>
+                                                    <rect key="frame" x="336" y="84" width="66" height="32"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="push" title="Clear" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="lnN-x6-jvT">
                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -918,7 +918,7 @@
                                                     </connections>
                                                 </button>
                                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LDV-gw-f69">
-                                                    <rect key="frame" x="336" y="139" width="66" height="32"/>
+                                                    <rect key="frame" x="336" y="33" width="66" height="32"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="push" title="Clear" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="enG-EI-hFM">
                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -975,6 +975,64 @@
                                                         <action selector="cboPositionUnitsAction:" target="luq-MD-xG7" id="8oa-RM-khw"/>
                                                     </connections>
                                                 </comboBox>
+                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="y7a-8L-86u">
+                                                    <rect key="frame" x="59" y="324" width="127" height="16"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="Transponder Sensor" id="WMO-f3-txh">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KrJ-71-Uev">
+                                                    <rect key="frame" x="60" y="294" width="273" height="23"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="5" id="WWY-23-WaV">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </comboBoxCell>
+                                                </comboBox>
+                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YC7-go-RsE">
+                                                    <rect key="frame" x="336" y="289" width="66" height="32"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <buttonCell key="cell" type="push" title="Clear" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="1f5-KD-Omd">
+                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <action selector="btnClearTransponderSensorAction:" target="luq-MD-xG7" id="n9n-is-eQw"/>
+                                                    </connections>
+                                                </button>
+                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XsZ-P7-wJN">
+                                                    <rect key="frame" x="58" y="272" width="117" height="16"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="Track Fault Sensor" id="XyI-Ib-4jG">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LJ8-cB-24l">
+                                                    <rect key="frame" x="60" y="242" width="272" height="23"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="5" id="Jn9-T3-jnX">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </comboBoxCell>
+                                                </comboBox>
+                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yWx-h2-bb9">
+                                                    <rect key="frame" x="336" y="237" width="66" height="32"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <buttonCell key="cell" type="push" title="Clear" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="dui-i1-Njk">
+                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <action selector="btnClearTrackFaultSensor:" target="luq-MD-xG7" id="0rv-2h-nFt"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                         </view>
                                     </tabViewItem>
@@ -1583,6 +1641,8 @@ Gw
                         <outlet property="btnClearSW1Thrown" destination="FSG-Xs-6ed" id="lim-O6-wTe"/>
                         <outlet property="btnClearSW2Closed" destination="LDV-gw-f69" id="R0C-lB-6VF"/>
                         <outlet property="btnClearSW2Thrown" destination="SL2-Fz-I2P" id="KwW-Y4-cfw"/>
+                        <outlet property="btnClearTrackFaultSensor" destination="yWx-h2-bb9" id="xZC-hB-FEj"/>
+                        <outlet property="btnClearTransponderSensor" destination="YC7-go-RsE" id="2P0-yF-dV3"/>
                         <outlet property="btnClearTurnoutSwitch1" destination="Mfb-OA-DcH" id="cJ0-Sr-crK"/>
                         <outlet property="btnClearTurnoutSwitch2" destination="hZA-YX-WI4" id="o0g-wV-tiS"/>
                         <outlet property="cboBlockType" destination="w2f-ZO-IpO" id="umD-Zt-PQR"/>
@@ -1601,8 +1661,10 @@ Gw
                         <outlet property="cboSW2Thrown" destination="DLi-EB-5F0" id="Zg1-6j-VtS"/>
                         <outlet property="cboSpeedUnits" destination="paA-Qe-yLp" id="TDg-kk-UZV"/>
                         <outlet property="cboTrackElectrificationType" destination="8Tb-bm-n3j" id="Yo4-kK-1cp"/>
+                        <outlet property="cboTrackFaultSensor" destination="LJ8-cB-24l" id="UI3-Eo-hrX"/>
                         <outlet property="cboTrackGauge" destination="FlW-Hq-yS8" id="wmx-0t-xSm"/>
                         <outlet property="cboTrackPartType" destination="raU-OG-7u5" id="ASu-JA-wzX"/>
+                        <outlet property="cboTransponderSensor" destination="KrJ-71-Uev" id="NLf-sY-Xwt"/>
                         <outlet property="cboTurnoutMotorType" destination="ZKC-Cm-qDU" id="d1K-4f-YQg"/>
                         <outlet property="cboTurnoutMotorType2" destination="Mbn-Q2-aq0" id="N7K-vz-Kpl"/>
                         <outlet property="cboTurnoutSwitch1" destination="pYu-fb-roJ" id="s0V-7M-CgA"/>
@@ -1641,6 +1703,8 @@ Gw
                         <outlet property="lblSW1Thrown" destination="t65-qZ-cXT" id="rlY-yN-ndL"/>
                         <outlet property="lblSW2Closed" destination="mW9-fB-aa9" id="3TJ-EY-hXO"/>
                         <outlet property="lblSW2Thrown" destination="q4q-AL-vwh" id="Nk7-qc-PU0"/>
+                        <outlet property="lblTrackFaultSensor" destination="XsZ-P7-wJN" id="iYL-9i-tkx"/>
+                        <outlet property="lblTransponderSensor" destination="y7a-8L-86u" id="gze-xF-GTL"/>
                         <outlet property="lblTurnoutMotorType" destination="I2p-T2-EMO" id="i1u-Z9-eEl"/>
                         <outlet property="lblTurnoutMotorType2" destination="aLw-wb-dnv" id="kOt-rY-Mjb"/>
                         <outlet property="lblTurnoutSwitch1" destination="wzx-N5-IiR" id="dK0-Vj-NRb"/>

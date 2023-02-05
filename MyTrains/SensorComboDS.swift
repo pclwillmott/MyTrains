@@ -35,11 +35,11 @@ class SensorComboDS : NSObject, NSComboBoxDataSource {
     return items[index]
   }
   
-  public func indexWithKey(deviceId:Int, channelNumber: Int) -> Int? {
+  public func indexWithKey(ioFunctionId: Int) -> Int? {
     var index : Int = 0
     while index < items.count {
       let item = items[index]
-      if item.locoNetDeviceId == deviceId && item.channelNumber == channelNumber {
+      if item.primaryKey == ioFunctionId {
         return index
       }
       index += 1
@@ -57,13 +57,13 @@ class SensorComboDS : NSObject, NSComboBoxDataSource {
     if index < 0 || index >= items.count {
       return nil
     }
-    return items[index].comboSensorName
+    return items[index].comboSensorName()
   }
 
   func comboBox(_ comboBox: NSComboBox, indexOfItemWithStringValue string: String) -> Int {
     var index = 0
     for item in items {
-      if item.comboSensorName == string {
+      if item.comboSensorName() == string {
         return index
       }
       index += 1
@@ -74,8 +74,8 @@ class SensorComboDS : NSObject, NSComboBoxDataSource {
   func comboBox(_ comboBox: NSComboBox, completedString string: String) -> String? {
     if string.count > 1 {
       for item in items {
-        if item.comboSensorName.prefix(string.count) == string {
-          return item.comboSensorName
+        if item.comboSensorName().prefix(string.count) == string {
+          return item.comboSensorName()
         }
       }
     }

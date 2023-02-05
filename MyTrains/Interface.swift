@@ -7,6 +7,7 @@
 
 import Foundation
 import Cocoa
+import AVFoundation
 
 enum InterfaceState {
   case idle
@@ -58,7 +59,11 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
   
   // MARK: Public Properties
   
-  public var sensorLookup : [Int:Sensor] = [:] // Key is address
+  public var generalSensorLookup : [Int:IOFunction] = [:] // Key is address
+  
+  public var transponderSensorLookup : [Int:IOFunction] = [:] // Key is address
+  
+  public var trackFaultSensorLookup : [Int:IOFunction] = [:] // Key is address
   
   public var turnoutLookup : [Int:TurnoutSwitch] = [:]
   
@@ -284,12 +289,47 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
       
 //    case .sensRepTurnOut:
   //    print("sensRepTurnOut: \(message.turnoutReportAddress) \(message.sensorState)")
+    
+    case .transRep:
       
+      if let sensor = transponderSensorLookup[message.transponderAddress] {
+       
+    
+      }
+      
+    case .pmRepBXP88:
+      
+      for address in message.detectionSectionsSet.notSet {
+      
+        if let sensor = trackFaultSensorLookup[address] {
+
+          for item in sensor.switchBoardItems {
+            item.isTrackFault = false
+          }
+          
+        }
+        
+      }
+
+      for address in message.detectionSectionsSet.set {
+      
+        if let sensor = trackFaultSensorLookup[address] {
+
+          for item in sensor.switchBoardItems {
+            item.isTrackFault = true
+          }
+          
+        }
+        
+      }
+      
+
+  
     case .sensRepGenIn:
       
    //   print("sensRepGenIn: \(message.sensorAddress) \(message.sensorState)")
       
-      if let sensor = sensorLookup[message.sensorAddress], let layout = network?.layout {
+      if let sensor = generalSensorLookup[message.sensorAddress], let layout = network?.layout {
         
         let state = sensor.inverted ? !message.sensorState : message.sensorState
         
@@ -430,12 +470,21 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
       
   public func initSensorLookup() {
     
-    sensorLookup.removeAll()
+    generalSensorLookup.removeAll()
+    transponderSensorLookup.removeAll()
+    trackFaultSensorLookup.removeAll()
 
-    for (_, device) in networkController.sensors {
-      for sensor in device.sensors {
-        sensor.switchBoardItems.removeAll()
-        sensorLookup[sensor.sensorAddress] = sensor
+    for (_, ioFunction) in networkController.sensors {
+      ioFunction.switchBoardItems.removeAll()
+      switch ioFunction.sensorType {
+      case .trackFault:
+        trackFaultSensorLookup[ioFunction.address] = ioFunction
+      case .transponder:
+        transponderSensorLookup[ioFunction.address] = ioFunction
+      case .occupancy, .position:
+        generalSensorLookup[ioFunction.address] = ioFunction
+      default:
+        break
       }
     }
      
@@ -447,10 +496,20 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
       
       for (_, item) in layout.switchBoardItems {
         
-        if item.isBlock || item.isFeedback {
+        if item.isBlock || item.isFeedback || item.isTurnout {
+          
           if let sensor = item.generalSensor {
             sensor.switchBoardItems.append(item)
           }
+          
+          if let sensor = item.transponderSensor {
+            sensor.switchBoardItems.append(item)
+          }
+          
+          if let sensor = item.trackFaultSensor {
+            sensor.switchBoardItems.append(item)
+          }
+          
         }
         else if item.isTurnout {
           if let sensor = item.sw1Sensor1 {
@@ -459,12 +518,12 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
           if let sensor = item.sw1Sensor2 {
             sensor.switchBoardItems.append(item)
           }
-          if let sensor = item.sw2Sensor1 {
-            sensor.switchBoardItems.append(item)
-          }
-          if let sensor = item.sw2Sensor2 {
-            sensor.switchBoardItems.append(item)
-          }
+   //       if let sensor = item.sw2Sensor1 {
+   //         sensor.switchBoardItems.append(item)
+   //       }
+   //       if let sensor = item.sw2Sensor2 {
+   //         sensor.switchBoardItems.append(item)
+   //       }
         }
         
       }

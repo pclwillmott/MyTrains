@@ -1558,15 +1558,20 @@ public class NetworkMessage : NSObject {
     }
   }
   
-  public var detectionSectionsSet : [Int] {
+  public var detectionSectionsSet : (set:[Int], notSet:[Int]) {
     get {
       var ds : [Int] = []
+      var dns : [Int] = []
+      
       let addr = (boardId - 1) * 8
       if messageType == .pmRepBXP88 {
         var mask : UInt8 = 0b00000001
         for index in 1...4 {
           if (message[4] & mask) == mask {
             ds.append(addr + index)
+          }
+          else {
+            dns.append(addr + index)
           }
           mask <<= 1
         }
@@ -1575,10 +1580,13 @@ public class NetworkMessage : NSObject {
           if (message[3] & mask) == mask {
             ds.append(addr + index)
           }
+          else {
+            dns.append(addr + index)
+          }
           mask <<= 1
         }
       }
-      return ds
+      return (ds, dns)
     }
   }
   

@@ -191,7 +191,7 @@ public class LocoNetDevice : EditorObject {
     }
   }
   
-  public var sensors : [Sensor] = []
+  public var sensors : [IOFunction] = []
   
   public var turnoutSwitches : [TurnoutSwitch] = []
   
@@ -568,14 +568,14 @@ public class LocoNetDevice : EditorObject {
   private func makeSensors() {
     
     if let info = locoNetProductInfo {
-      
+ /*
       for index in 1...info.sensors {
         let sensor = Sensor()
         sensor.locoNetDeviceId = primaryKey
         sensor.channelNumber = index
         sensors.append(sensor)
       }
-      
+      */
     }
     
   }
@@ -888,18 +888,18 @@ public class LocoNetDevice : EditorObject {
           makeCVs()
         }
       }
-
+/*
       if info.sensors > 0 {
         sensors = Sensor.sensors(locoNetDevice: self)
         if sensors.count == 0 {
-          makeSensors()
+  //        makeSensors()
         }
       }
-      
+      */
       if info.switches > 0 {
         turnoutSwitches = TurnoutSwitch.turnoutSwitches(locoNetDevice: self)
         if turnoutSwitches.count == 0 {
-          makeTurnoutSwitches()
+  //        makeTurnoutSwitches()
         }
       }
       
@@ -1044,14 +1044,14 @@ public class LocoNetDevice : EditorObject {
     for cv in cvs {
       cv.save()
     }
-    
+    /*
     for sensor in sensors {
       if sensor.sensorAddress == -1 {
         sensor.sensorAddress = sensor.calculatedSensorAddress
         sensor.nextSensorAddress = sensor.sensorAddress
       }
  //     sensor.save()
-    }
+    }*/
     
     for turnoutSwitch in turnoutSwitches {
       if turnoutSwitch.switchAddress == -1 {

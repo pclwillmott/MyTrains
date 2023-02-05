@@ -27,7 +27,7 @@ class SwitchBoardOperationsView : SwitchBoardView {
 
       for (_, block) in layout.operationalBlocks {
         
-        if block.isOccupied, let group = layout.operationalGroups[block.groupId] {
+        if block.isOccupied || block.isTrackFault, let group = layout.operationalGroups[block.groupId] {
           
           for item in group {
             
@@ -40,7 +40,7 @@ class SwitchBoardOperationsView : SwitchBoardView {
             
             path.appendRect(rect)
             
-            NSColor.setFillColor(color: .orange)
+            NSColor.setFillColor(color: block.isTrackFault ? .red : .orange)
             
             path.fill()
 

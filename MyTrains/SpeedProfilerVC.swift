@@ -207,7 +207,7 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
         return
       }
       
-      if let block = interface?.sensorLookup[message.sensorAddress], message.sensorState {
+      if let block = interface?.generalSensorLookup[message.sensorAddress], message.sensorState {
         
         var newIndex : Int = -1
         

@@ -893,7 +893,7 @@ public class Locomotive : RollingStock, InterfaceDelegate {
         
         // filter those blocks of interest.
         
-        if let block = interface.sensorLookup[message.sensorAddress], message.sensorState && blocksInRoute.contains(block.primaryKey) && !blocksToIgnore.contains(block.primaryKey) {
+        if let block = interface.generalSensorLookup[message.sensorAddress], message.sensorState && blocksInRoute.contains(block.primaryKey) && !blocksToIgnore.contains(block.primaryKey) {
           
           if block == destinationBlock {
             return

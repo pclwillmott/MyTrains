@@ -382,8 +382,8 @@
             filePath = "MyTrains/Interface.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "472"
-            endingLineNumber = "472"
+            startingLineNumber = "531"
+            endingLineNumber = "531"
             landmarkName = "initSensorLookup()"
             landmarkType = "7">
          </BreakpointContent>
@@ -666,8 +666,8 @@
             filePath = "MyTrains/SwitchBoardItem.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "577"
-            endingLineNumber = "577"
+            startingLineNumber = "583"
+            endingLineNumber = "583"
             landmarkName = "sw1Sensor2"
             landmarkType = "24">
          </BreakpointContent>
@@ -716,7 +716,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "95"
             endingLineNumber = "95"
-            landmarkName = "Sensor"
+            landmarkName = "SensorX"
             landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>

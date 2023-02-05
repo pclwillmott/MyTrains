@@ -173,28 +173,54 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
       turnoutSwitch2DS.items = turnoutSwitches
       cboTurnoutSwitch1.dataSource = turnoutSwitch1DS
       cboTurnoutSwitch2.dataSource = turnoutSwitch2DS
-      if let index = turnoutSwitch1DS.indexWithKey(deviceId: item.sw1LocoNetDeviceId, channelNumber: item.sw1ChannelNumber) {
-        cboTurnoutSwitch1.selectItem(at: index)
-      }
-      if let index = turnoutSwitch1DS.indexWithKey(deviceId: item.sw2LocoNetDeviceId, channelNumber: item.sw2ChannelNumber) {
-        cboTurnoutSwitch2.selectItem(at: index)
-      }
+//      if let index = turnoutSwitch1DS.indexWithKey(deviceId: item.sw1LocoNetDeviceId, channelNumber: item.sw1ChannelNumber) {
+//        cboTurnoutSwitch1.selectItem(at: index)
+//      }
+//      if let index = turnoutSwitch1DS.indexWithKey(deviceId: item.sw2LocoNetDeviceId, channelNumber: item.sw2ChannelNumber) {
+//        cboTurnoutSwitch2.selectItem(at: index)
+//      }
       
       // FEEDBACK
      
       if item.isFeedback {
         generalSensors = networkController.sensors(sensorTypes: [.position])
+        lblTransponderSensor.isHidden = true
+        cboTransponderSensor.isHidden = true
+        btnClearTransponderSensor.isHidden = true
+        lblTrackFaultSensor.isHidden = true
+        cboTrackFaultSensor.isHidden = true
+        btnClearTrackFaultSensor.isHidden = true
       }
       else {
         generalSensors = networkController.sensors(sensorTypes: [.occupancy])
       }
-      
+        
       generalSensorDS.items = generalSensors
       
       cboGeneralSensor.dataSource = generalSensorDS
       
-      if let index = generalSensorDS.indexWithKey(deviceId: item.generalSensorId, channelNumber: item.generalSensorChannelNumber) {
+      if let index = generalSensorDS.indexWithKey(ioFunctionId: item.generalSensorId) {
         cboGeneralSensor.selectItem(at: index)
+      }
+      
+      transponderSensors = networkController.sensors(sensorTypes: [.transponder])
+      
+      transponderSensorDS.items = transponderSensors
+      
+      cboTransponderSensor.dataSource = transponderSensorDS
+      
+      if let index = transponderSensorDS.indexWithKey(ioFunctionId: item.transponderSensorId) {
+        cboTransponderSensor.selectItem(at: index)
+      }
+      
+      trackFaultSensors = networkController.sensors(sensorTypes: [.trackFault])
+      
+      trackFaultSensorDS.items = trackFaultSensors
+      
+      cboTrackFaultSensor.dataSource = trackFaultSensorDS
+      
+      if let index = trackFaultSensorDS.indexWithKey(ioFunctionId: item.trackFaultSensorId) {
+        cboTrackFaultSensor.selectItem(at: index)
       }
       
       turnoutSensors = networkController.sensors(sensorTypes: [.turnoutState])
@@ -202,28 +228,28 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
       sw1ClosedDS.items = turnoutSensors
       cboSW1Closed.dataSource = sw1ClosedDS
       
-      if let index = sw1ClosedDS.indexWithKey(deviceId: item.sw1Sensor2Id, channelNumber: item.sw1Sensor2ChannelNumber) {
+      if let index = sw1ClosedDS.indexWithKey(ioFunctionId: item.sw1Sensor2Id) {
         cboSW1Closed.selectItem(at: index)
       }
 
       sw1ThrownDS.items = turnoutSensors
       cboSW1Thrown.dataSource = sw1ThrownDS
 
-      if let index = sw1ThrownDS.indexWithKey(deviceId: item.sw1Sensor1Id, channelNumber: item.sw1Sensor1ChannelNumber) {
+      if let index = sw1ThrownDS.indexWithKey(ioFunctionId: item.sw1Sensor1Id) {
         cboSW1Thrown.selectItem(at: index)
       }
 
       sw2ClosedDS.items = turnoutSensors
       cboSW2Closed.dataSource = sw2ClosedDS
 
-      if let index = sw2ClosedDS.indexWithKey(deviceId: item.sw2Sensor2Id, channelNumber: item.sw2Sensor2ChannelNumber) {
+      if let index = sw2ClosedDS.indexWithKey(ioFunctionId: item.sw2Sensor2Id) {
         cboSW2Closed.selectItem(at: index)
       }
 
       sw2ThrownDS.items = turnoutSensors
       cboSW2Thrown.dataSource = sw2ThrownDS
 
-      if let index = sw2ThrownDS.indexWithKey(deviceId: item.sw2Sensor1Id, channelNumber: item.sw2Sensor1ChannelNumber) {
+      if let index = sw2ThrownDS.indexWithKey(ioFunctionId: item.sw2Sensor1Id) {
         cboSW2Thrown.selectItem(at: index)
       }
       
@@ -364,6 +390,10 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
   private var turnoutSwitches : [TurnoutSwitch] = []
   
   private var generalSensors : [IOFunction] = []
+  
+  private var transponderSensors : [IOFunction] = []
+  
+  private var trackFaultSensors : [IOFunction] = []
 
   private var turnoutSensors : [IOFunction] = []
 
@@ -371,6 +401,11 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
   private var turnoutSwitch2DS : TurnoutSwitchComboDS = TurnoutSwitchComboDS()
   
   private var generalSensorDS : SensorComboDS = SensorComboDS()
+  
+  private var transponderSensorDS : SensorComboDS = SensorComboDS()
+  
+  private var trackFaultSensorDS : SensorComboDS = SensorComboDS()
+  
   private var sw1ThrownDS : SensorComboDS = SensorComboDS()
   private var sw1ClosedDS : SensorComboDS = SensorComboDS()
   private var sw2ThrownDS : SensorComboDS = SensorComboDS()
@@ -629,62 +664,61 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
     item.trackGauge = TrackGauge.selected(comboBox: cboTrackGauge)
     
     item.unitsDimension = UnitLength.selected(comboBox: cboDimensionUnits)
+
     
-    item.sw1LocoNetDeviceId = -1
-    item.sw1ChannelNumber = -1
+    item.sw1Id = -1
     if cboTurnoutSwitch1.indexOfSelectedItem != -1 {
       let turnoutSwitch = turnoutSwitches[cboTurnoutSwitch1.indexOfSelectedItem]
-      item.sw1LocoNetDeviceId = turnoutSwitch.locoNetDeviceId
-      item.sw1ChannelNumber = turnoutSwitch.channelNumber
+      item.sw1Id = turnoutSwitch.locoNetDeviceId
     }
     
-    item.sw2LocoNetDeviceId = -1
-    item.sw2ChannelNumber = -1
+    item.sw2Id = -1
     if cboTurnoutSwitch2.indexOfSelectedItem != -1 {
       let turnoutSwitch = turnoutSwitches[cboTurnoutSwitch2.indexOfSelectedItem]
-      item.sw2LocoNetDeviceId = turnoutSwitch.locoNetDeviceId
-      item.sw2ChannelNumber = turnoutSwitch.channelNumber
+      item.sw2Id = turnoutSwitch.locoNetDeviceId
     }
     
     item.generalSensorId = -1
-    item.generalSensorChannelNumber = -1
     if cboGeneralSensor.indexOfSelectedItem != -1 {
       let sensor = generalSensors[cboGeneralSensor.indexOfSelectedItem]
-      item.generalSensorId = sensor.locoNetDeviceId
-      item.generalSensorChannelNumber = sensor.channelNumber
+      item.generalSensorId = sensor.primaryKey
+    }
+
+    item.transponderSensorId = -1
+    if cboTransponderSensor.indexOfSelectedItem != -1 {
+      let transponderSensor = transponderSensors[cboTransponderSensor.indexOfSelectedItem]
+      item.transponderSensorId = transponderSensor.primaryKey
+    }
+    
+    item.trackFaultSensorId = -1
+    if cboTrackFaultSensor.indexOfSelectedItem != -1 {
+      let trackFaultSensor = trackFaultSensors[cboTrackFaultSensor.indexOfSelectedItem]
+      item.trackFaultSensorId = trackFaultSensor.primaryKey
     }
     
     item.sw1Sensor1Id = -1
-    item.sw1Sensor1ChannelNumber = -1
     item.sw1Sensor2Id = -1
-    item.sw1Sensor2ChannelNumber = -1
     item.sw2Sensor1Id = -1
-    item.sw2Sensor1ChannelNumber = -1
     item.sw2Sensor2Id = -1
-    item.sw2Sensor2ChannelNumber = -1
     
     if cboSW1Thrown.indexOfSelectedItem != -1 {
       let sensor = turnoutSensors[cboSW1Thrown.indexOfSelectedItem]
-      item.sw1Sensor1Id = sensor.locoNetDeviceId
-      item.sw1Sensor1ChannelNumber = sensor.channelNumber
+      item.sw1Sensor1Id = sensor.primaryKey
     }
 
     if cboSW1Closed.indexOfSelectedItem != -1 {
       let sensor = turnoutSensors[cboSW1Closed.indexOfSelectedItem]
-      item.sw1Sensor2Id = sensor.locoNetDeviceId
-      item.sw1Sensor2ChannelNumber = sensor.channelNumber
+      item.sw1Sensor2Id = sensor.primaryKey
     }
 
     if cboSW2Thrown.indexOfSelectedItem != -1 {
       let sensor = turnoutSensors[cboSW2Thrown.indexOfSelectedItem]
-      item.sw2Sensor1Id = sensor.locoNetDeviceId
-      item.sw2Sensor1ChannelNumber = sensor.channelNumber
+      item.sw2Sensor1Id = sensor.primaryKey
     }
 
     if cboSW2Closed.indexOfSelectedItem != -1 {
       let sensor = turnoutSensors[cboSW2Closed.indexOfSelectedItem]
-      item.sw2Sensor2Id = sensor.locoNetDeviceId
-      item.sw2Sensor2ChannelNumber = sensor.channelNumber
+      item.sw2Sensor2Id = sensor.primaryKey
     }
     
     item.sensorPosition = txtGeneralSensorPosition.doubleValue
@@ -1016,6 +1050,14 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
   @IBAction func cboGeneralSensorAction(_ sender: NSComboBox) {
   }
   
+  @IBOutlet weak var lblTransponderSensor: NSTextField!
+  
+  @IBOutlet weak var cboTransponderSensor: NSComboBox!
+  
+  @IBOutlet weak var lblTrackFaultSensor: NSTextField!
+  
+  @IBOutlet weak var cboTrackFaultSensor: NSComboBox!
+  
   @IBOutlet weak var lblSW1Thrown: NSTextField!
   
   @IBOutlet weak var cboSW1Thrown: NSComboBox!
@@ -1049,6 +1091,18 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
   @IBAction func btnClearGeneralSensorAction(_ sender: NSButton) {
     cboGeneralSensor.deselectItem(at: cboGeneralSensor.indexOfSelectedItem)
   }
+  
+  @IBOutlet weak var btnClearTransponderSensor: NSButton!
+  
+  @IBAction func btnClearTransponderSensorAction(_ sender: NSButton) {
+  }
+  
+  @IBAction func btnClearTrackFaultSensor(_ sender: NSButton) {
+  }
+  
+  @IBOutlet weak var btnClearTrackFaultSensor: NSButton!
+  
+  
   
   @IBOutlet weak var btnClearSW1Thrown: NSButton!
   
@@ -1088,5 +1142,7 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
   
   @IBAction func cboPositionUnitsAction(_ sender: NSComboBox) {
   }
+  
+  
   
 }
