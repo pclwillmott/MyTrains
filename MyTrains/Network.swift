@@ -40,6 +40,15 @@ public class Network : EditorObject {
     }
   }
   
+  public var networkType : NetworkType {
+    get {
+      if let device = interface, let info = device.locoNetProductInfo {
+        return info.attributes.contains(.LCC) ? .LCC : .LocoNet
+      }
+      return .LocoNet
+    }
+  }
+  
   public var layoutId : Int = -1 {
     didSet {
       modified = true

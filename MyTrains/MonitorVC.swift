@@ -19,6 +19,7 @@ public enum NumberBase : Int {
   case binary = 2
   case octal = 3
   case hexBinary = 4
+  case character = 5
 }
 
 class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate, NSWindowDelegate {
@@ -304,6 +305,57 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
   
   private var updateLock : NSLock = NSLock()
   
+  @objc func lccCANFrameReceived(frame:LCCCANFrame) {
+
+    var item : String = ""
+
+    if addLabels {
+      
+      item += "\(frame.frameType)\n"
+            
+    }
+    
+    switch timeStampType {
+    case .millisecondsSinceLastMessage:
+      let ms = (frame.timeSinceLastMessage) * 1000.0
+      item += String(format:"%10.1f", ms) + "ms "
+      break
+    default:
+      break
+    }
+    
+    item += "\(frame.frame)\n\(frame.info)"
+    
+    if !isPaused {
+      
+      txtMonitor.string += "\(item)\n"
+      
+      let maxSize = 1 << 15
+      
+      updateLock.lock()
+      if txtMonitor.string.count > maxSize {
+        var newString = ""
+        let temp = txtMonitor.string.split(separator: "\n")
+        var index = temp.count - 1
+        while index >= 0 && newString.count < maxSize {
+          newString = "\(temp[index])\n\(newString)"
+          index -= 1
+        }
+        txtMonitor.string = newString
+      }
+      updateLock.unlock()
+      
+      let range = NSMakeRange(txtMonitor.string.count - 1, 0)
+      txtMonitor.scrollRangeToVisible(range)
+      
+    }
+
+    item += "\n"
+
+    captureWrite(message: item)
+
+  }
+
   @objc func networkMessageReceived(message: NetworkMessage) {
     
     var item : String = ""
@@ -402,6 +454,8 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
         }
         item += "0x\(String(format: "%02x", byte)) " + "0b" + padded + " "
         break
+      case .character:
+        item += String(format:"%C", byte)
       default:
         item += "0x\(String(format: "%02x", byte)) "
         break

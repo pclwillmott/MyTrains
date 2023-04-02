@@ -86,6 +86,10 @@
 		DA48EE2D293CF260006C26A0 /* FastClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA48EE2C293CF260006C26A0 /* FastClock.swift */; };
 		DA4E254429607E1A00984D45 /* TC64DebounceTiming.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA4E254329607E1A00984D45 /* TC64DebounceTiming.swift */; };
 		DA4E254A2960894B00984D45 /* TC64LongTiming.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA4E25492960894B00984D45 /* TC64LongTiming.swift */; };
+		DA51B8D829D9D5430074E881 /* LCCCANTransportLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA51B8D729D9D5430074E881 /* LCCCANTransportLayer.swift */; };
+		DA51FB9A29D8807E002CAAC1 /* NetworkType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA51FB9929D8807E002CAAC1 /* NetworkType.swift */; };
+		DA51FB9C29D88320002CAAC1 /* LCCCANFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA51FB9B29D88320002CAAC1 /* LCCCANFrame.swift */; };
+		DA51FB9E29D8921B002CAAC1 /* LCCCANFrameType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA51FB9D29D8921B002CAAC1 /* LCCCANFrameType.swift */; };
 		DA53B252276E478400AB956C /* IPLDevData.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA53B251276E478400AB956C /* IPLDevData.swift */; };
 		DA5550EA28392A6B00C4FE4E /* ProductCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5550E928392A6B00C4FE4E /* ProductCode.swift */; };
 		DA5A9F90295C89FC00950479 /* CVNumberBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5A9F8F295C89FC00950479 /* CVNumberBase.swift */; };
@@ -339,6 +343,10 @@
 		DA48EE2C293CF260006C26A0 /* FastClock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastClock.swift; sourceTree = "<group>"; };
 		DA4E254329607E1A00984D45 /* TC64DebounceTiming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TC64DebounceTiming.swift; sourceTree = "<group>"; };
 		DA4E25492960894B00984D45 /* TC64LongTiming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TC64LongTiming.swift; sourceTree = "<group>"; };
+		DA51B8D729D9D5430074E881 /* LCCCANTransportLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCCCANTransportLayer.swift; sourceTree = "<group>"; };
+		DA51FB9929D8807E002CAAC1 /* NetworkType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkType.swift; sourceTree = "<group>"; };
+		DA51FB9B29D88320002CAAC1 /* LCCCANFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCCCANFrame.swift; sourceTree = "<group>"; };
+		DA51FB9D29D8921B002CAAC1 /* LCCCANFrameType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCCCANFrameType.swift; sourceTree = "<group>"; };
 		DA53B251276E478400AB956C /* IPLDevData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IPLDevData.swift; sourceTree = "<group>"; };
 		DA5550E928392A6B00C4FE4E /* ProductCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductCode.swift; sourceTree = "<group>"; };
 		DA5A9F8F295C89FC00950479 /* CVNumberBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CVNumberBase.swift; sourceTree = "<group>"; };
@@ -616,6 +624,7 @@
 				DA95D6BC280833ED00D9F1B6 /* GroupSetupVC.swift */,
 				DA912742295F3C9900E9B96E /* InputOutput.swift */,
 				DA3CD9F1277DEF990065D0C4 /* Interface.swift */,
+				DA51B8D729D9D5430074E881 /* LCCCANTransportLayer.swift */,
 				DAFD69822840FCF50028E7D3 /* InterfaceCommandStationExtensions.swift */,
 				DA8B5D1C282FE31600D39F07 /* InterfaceDelegate.swift */,
 				DA8B5D13282FC35E00D39F07 /* InterfaceExtensions.swift */,
@@ -695,9 +704,12 @@
 				DA434291283698CA00E8D555 /* MyTrains-Bridging-Header.h */,
 				DAA83DF3272C37680075CBCD /* MyTrains.entitlements */,
 				DA5B4608276F6CBF005CA03C /* Network.swift */,
+				DA51FB9929D8807E002CAAC1 /* NetworkType.swift */,
 				DAEA9CF6272D8DA900C9B3EC /* NetworkConstants.swift */,
 				DA2E0E5D2736EAF300C7DA7A /* NetworkController.swift */,
 				DAEA9CF9272D8FBE00C9B3EC /* NetworkMessage.swift */,
+				DA51FB9B29D88320002CAAC1 /* LCCCANFrame.swift */,
+				DA51FB9D29D8921B002CAAC1 /* LCCCANFrameType.swift */,
 				DA7B4729273824F700BCD587 /* NetworkOutputQueueItem.swift */,
 				DA2E0E54273591A600C7DA7A /* NetworkTurnoutOutputMessage.swift */,
 				DA9807C42789AFE300F73ACD /* NMRA.swift */,
@@ -928,6 +940,7 @@
 			files = (
 				DAA8CF06296862DA00B07971 /* IOFunctionDS64Input.swift in Sources */,
 				DA7A4910274A89FE00C2A42B /* FastClockMessage.swift in Sources */,
+				DA51FB9E29D8921B002CAAC1 /* LCCCANFrameType.swift in Sources */,
 				DA1B79FD285F3C5E009E1189 /* TrackGauge.swift in Sources */,
 				DA2E0E55273591A600C7DA7A /* NetworkTurnoutOutputMessage.swift in Sources */,
 				DA840BCE2794727F00944562 /* FNTableViewDS.swift in Sources */,
@@ -988,6 +1001,7 @@
 				DAF0CADD29855505009B392A /* IOFunctionTC64MkIIOutputPropertySheetVC.swift in Sources */,
 				DA7243F828A81165003157CA /* ThrottleMode.swift in Sources */,
 				DA467BAB281D56A700AB9650 /* SwitchBoardEditorView.swift in Sources */,
+				DA51B8D829D9D5430074E881 /* LCCCANTransportLayer.swift in Sources */,
 				DAA71697297C232D0080114F /* IOChannelBXP88Input.swift in Sources */,
 				DA1B79F9285F3885009E1189 /* UnitSpeed.swift in Sources */,
 				DAA83DED272C37670075CBCD /* MainVC.swift in Sources */,
@@ -1042,6 +1056,8 @@
 				DA2785402837EAE700EDCBB7 /* MTSerialPortManager.swift in Sources */,
 				DA15BE26289806BF00FD82FD /* SpeedProfileTableViewDS.swift in Sources */,
 				DAC0194C289E7B80001152F6 /* EditCommandStationsVC.swift in Sources */,
+				DA51FB9C29D88320002CAAC1 /* LCCCANFrame.swift in Sources */,
+				DA51FB9A29D8807E002CAAC1 /* NetworkType.swift in Sources */,
 				DA5E977829730902001453A1 /* SensorMessageType.swift in Sources */,
 				DAA5F3CC295CA2C200C25028 /* LocoNetDeviceTC64Extensions.swift in Sources */,
 				DA77795727AEF2E5007EEBE9 /* OpSwTableViewDS.swift in Sources */,

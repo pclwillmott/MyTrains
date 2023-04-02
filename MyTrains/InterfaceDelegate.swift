@@ -15,4 +15,5 @@ import Foundation
   @objc optional func progMessageReceived(message: NetworkMessage) 
   @objc optional func slotsUpdated(interface:Interface)
   @objc optional func trackStatusChanged(interface: Interface)
+  @objc optional func lccCANFrameReceived(frame:LCCCANFrame)
 }

@@ -17,10 +17,11 @@ public enum BaudRate : Int {
   case br57600  = 4
   case br76800  = 5
   case br115200 = 6
-  case br230400 = 7
-  case br460800 = 8
-  case br576000 = 9
-  case br921600 = 10
+  case br125000 = 7
+  case br230400 = 8
+  case br460800 = 9
+  case br576000 = 10
+  case br921600 = 11
   
   public var baudRate : speed_t {
     
@@ -69,6 +70,7 @@ public enum BaudRate : Int {
     57600,
     76800,
    115200,
+   125000,
    230400,
    460800,
    576000,

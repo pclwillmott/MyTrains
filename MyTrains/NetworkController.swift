@@ -76,6 +76,12 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
 
   public var locoNetDevices : [Int:LocoNetDevice] = LocoNetDevice.locoNetDevices
   
+  public var lccNodeId : UInt64 {
+    get {
+      return 0x050101017b00 // Paul Willmott's Start of range
+    }
+  }
+  
   public var layoutId : Int {
     get {
       let id = UserDefaults.standard.integer(forKey: DEFAULT.MAIN_CURRENT_LAYOUT_ID)
@@ -211,7 +217,23 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
       
     }
   }
-  
+
+  public var lccInterfaces : [Int:Interface] {
+    get {
+      
+      var interfaces : [Int:Interface] = [:]
+      
+      for (_, interface) in interfaceDevices {
+        if let info = interface.locoNetProductInfo, info.attributes.contains(.LCC) {
+          interfaces[interface.primaryKey] = interface
+        }
+      }
+
+      return interfaces
+      
+    }
+  }
+
   public var networksForCurrentLayout : [Int:Network] {
     get {
       var result : [Int:Network] = [:]
@@ -232,6 +254,13 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
       for (_, network) in networks {
         if network.layoutId == layoutId {
           for kv in locoNetInterfaces {
+            let interface = kv.value
+            if interface.primaryKey == network.interfaceId {
+              interface.networkId = network.primaryKey
+              interfaces.append(interface)
+            }
+          }
+          for kv in lccInterfaces {
             let interface = kv.value
             if interface.primaryKey == network.interfaceId {
               interface.networkId = network.primaryKey

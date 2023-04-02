@@ -106,6 +106,10 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
     }
   }
   
+  @objc func lccCANFrameReceived(frame:LCCCANFrame) {
+
+  }
+
   private func networkMessageReceived(message: NetworkMessage) {
     
     let printOpSw = true
@@ -581,6 +585,10 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
   }
   
   public func close() {
+    if let transportLayer = lccCANTransportLayer {
+      transportLayer.transitionToInhibitedState()
+      lccCANTransportLayer = nil
+    }
     serialPort?.close()
     serialPort = nil
 //    print("close: \(self.deviceName)")
@@ -589,11 +597,23 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
   public func send(data: [UInt8]) {
     serialPort?.write(data:data)
   }
-  
+
+  public func send(header: String, data:String) {
+    
+    let formattedString = ":X\(header)N\(data);\n"
+    
+    var data : [UInt8] = [UInt8](formattedString.utf8)
+    
+    serialPort?.write(data:data)
+    
+  }
+
   // MARK: MTSerialPortDelegate Methods
   
   public func serialPort(_ serialPort: MTSerialPort, didReceive data: [UInt8]) {
 
+    // Handle LCC
+ 
     bufferLock.lock()
     bufferCount += data.count
     for x in data {
@@ -602,8 +622,118 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
     }
     bufferLock.unlock()
 
-    var doAgain : Bool = true
+    let minFrameSize = 13
     
+    var doAgain : Bool = bufferCount >= minFrameSize
+    
+    if network!.networkType == .LCC {
+      
+      while doAgain {
+        
+        enum SearchState {
+          case searchingForColon
+          case searchingForSemiColon
+          case searchingForNewline
+        }
+        
+        var state : SearchState = .searchingForColon
+          
+        bufferLock.lock()
+
+        var index = readPtr
+        
+        var tempCount = bufferCount
+        
+        var frame : String = ""
+
+        bufferLock.unlock()
+        
+        while tempCount > 0 {
+          
+          let char = String(format: "%C", buffer[index])
+          
+          switch state {
+          case .searchingForColon:
+            if char == ":" {
+              frame += char
+              state = .searchingForSemiColon
+            }
+            else {
+              bufferLock.lock()
+              readPtr = (readPtr + 1) & 0xff
+              bufferCount -= 1
+              bufferLock.unlock()
+            }
+            
+          case .searchingForSemiColon:
+            
+            frame += char
+            
+            if char == ":" {
+              let increment = frame.count
+              bufferLock.lock()
+              readPtr = (readPtr + increment) & 0xff
+              bufferCount -= increment
+              bufferLock.unlock()
+              frame = char
+            }
+            else if char == "\n" {
+              let increment = frame.count
+              bufferLock.lock()
+              readPtr = (readPtr + increment) & 0xff
+              bufferCount -= increment
+              bufferLock.unlock()
+              frame = ""
+              state = .searchingForColon
+            }
+            if char == ";" {
+              state = .searchingForNewline
+            }
+            
+          case .searchingForNewline:
+            
+            if char == "\n" {
+              
+              let increment = frame.count + 1
+              bufferLock.lock()
+              readPtr = (readPtr + increment) & 0xff
+              bufferCount -= increment
+              bufferLock.unlock()
+              
+              frame.removeFirst() // Remove ":"
+              frame.removeFirst() // Remove "X"
+              frame.removeLast()  // Remove ";"
+              
+              let frame = LCCCANFrame(networkId: networkId, frame: frame)
+              
+              frame.timeStamp = Date.timeIntervalSinceReferenceDate
+              frame.timeSinceLastMessage = frame.timeStamp - lastTimeStamp
+              lastTimeStamp = frame.timeStamp
+              
+              for (_, observer) in observers {
+                observer.lccCANFrameReceived?(frame: frame)
+              }
+
+            }
+            
+          }
+          
+          index = (index + 1) & 0xff
+          tempCount -= 1
+          
+        }
+        
+        doAgain = bufferCount >= minFrameSize
+        
+      }
+      
+      return
+
+    }
+
+    // LocoNet from here onwards
+    
+
     while doAgain {
       
       doAgain = false
@@ -752,12 +882,18 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
     
   }
   
+  public var lccCANTransportLayer : LCCCANTransportLayer?
+  
   public func serialPortWasOpened(_ serialPort: MTSerialPort) {
     self.serialPort = serialPort
     for observer in observers {
       observer.value.interfaceWasOpened?(interface: self)
     }
-    if !isEdit {
+    if let network = self.network, network.networkType == .LCC {
+      lccCANTransportLayer = LCCCANTransportLayer(interface: self, nodeId: networkController.lccNodeId)
+      lccCANTransportLayer!.transitionToPermittedState()
+    }
+    else if !isEdit {
       iplDiscover()
     }
   }

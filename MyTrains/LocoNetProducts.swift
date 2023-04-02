@@ -35,6 +35,7 @@ public enum LocoNetDeviceAttribute {
   case RouteHost
   case CVs
   case IODevice
+  case LCC
 }
 
 public enum LocoNetProductId : Int {
@@ -121,6 +122,8 @@ public enum LocoNetProductId : Int {
   case SE74 = 80
   case PM74 = 81
   case TowerControllerMarkII = 82
+  case TowerLCC = 83
+  case LCCBufferUSB = 84
 }
 
 public typealias LocoNetDeviceAttributes = Set<LocoNetDeviceAttribute>
@@ -228,6 +231,8 @@ public class LocoNetProducts {
     (.SE74, "SE74", "16 Signal Head Controller with 4 Turnout Controls and 8 Input Lines", 2022, .SE74, [.StationaryDecoder, .Series7, .OptionSwitches], 36, 4, .digitrax, 0),
     (.PM74, "PM74", "Power Manager with Occupancy and Transponding Detection for 4 Sub-Districts", 2022, .PM74, [.OccupancyDetector, .Series7, .OptionSwitches, .Transponding, .PowerManager], 4, 0, .digitrax, 0),
     (.TowerControllerMarkII, "Tower Controller Mark II", "64 Line LocoNet Input/Output", 2015, .none, [.OccupancyDetector, .StationaryDecoder, .IODevice], 64, 64, .rrCirKits, 640),
+    (.LCCBufferUSB, "LCC Buffer-USB", "NMRA CAN bus LCC to USB Interface", 2015, .none, [.ComputerInterface, .LCC, ], 0, 0, .rrCirKits, 0),
+    (.TowerLCC, "Tower-LCC", "16 Line Input/Output LCC Node", 2020, .none, [.OccupancyDetector, .StationaryDecoder, .LCC], 16, 16, .rrCirKits, 0),
   ]
   
   private static var _productDictionary : [LocoNetProductId:LocoNetProduct]?
