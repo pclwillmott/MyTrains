@@ -14,10 +14,7 @@ public enum LCCCANTransportLayerState {
 
 public enum LCCCANTransportTransitionState {
   case inhibited
-  case cid1
-  case cid2
-  case cid3
-  case cid4
+  case cid
   case rid
   case amd
   case permitted
@@ -45,6 +42,8 @@ public class LCCCANTransportLayer : NSObject, InterfaceDelegate {
   
   private var lfsr2 : UInt32
   
+  private var waitTimer : Timer?
+  
   private var _state : LCCCANTransportLayerState = .inhibited
   
   private var transitionState : LCCCANTransportTransitionState = .inhibited
@@ -56,6 +55,18 @@ public class LCCCANTransportLayer : NSObject, InterfaceDelegate {
   public var interface : Interface
   
   public var nodeId : UInt64
+  
+  public var nodeIdAsString : String {
+    get {
+      var id = ""
+      var temp = nodeId
+      for _ in 1...6 {
+        id = String(format:"%02X", UInt16(temp & 0xFF)) + id
+        temp >>= 8
+      }
+      return id
+    }
+  }
   
   public var alias : UInt16?
   
@@ -101,6 +112,26 @@ public class LCCCANTransportLayer : NSObject, InterfaceDelegate {
     
   }
   
+  @objc func waitTimerTick() {
+    stopWaitTimer()
+    transitionState = .rid
+    interface.send(header: createReserveIdFrame(), data: "")
+    interface.send(header: createAliasMapDefinitionFrame(), data: nodeIdAsString)
+    transitionState = .permitted
+  }
+  
+  func startWaitTimer() {
+    let waitInterval : TimeInterval = 250.0 / 1000.0
+    waitTimer = Timer.scheduledTimer(timeInterval: waitInterval, target: self, selector: #selector(waitTimerTick), userInfo: nil, repeats: false)
+    RunLoop.current.add(waitTimer!, forMode: .common)
+  }
+  
+  func stopWaitTimer() {
+    waitTimer?.invalidate()
+    waitTimer = nil
+  }
+
+  
   private func createCheckIdFrame(number:UInt16) -> String {
     
     var variableField : UInt16 = (8 - number) << 12
@@ -112,7 +143,37 @@ public class LCCCANTransportLayer : NSObject, InterfaceDelegate {
     return "\(String(format: "%08X", header))"
     
   }
-  
+
+  private func createReserveIdFrame() -> String {
+    
+    var variableField : UInt16 = 0x0700
+    
+    let header = LCCCANFrame.createFrameHeader(frameType: .canControlFrame, variableField: variableField, sourceNIDAlias: alias!)
+    
+    return "\(String(format: "%08X", header))"
+    
+  }
+
+  private func createAliasMapDefinitionFrame() -> String {
+    
+    var variableField : UInt16 = 0x0701
+    
+    let header = LCCCANFrame.createFrameHeader(frameType: .canControlFrame, variableField: variableField, sourceNIDAlias: alias!)
+    
+    return "\(String(format: "%08X", header))"
+    
+  }
+
+  private func createAliasMapResetFrame() -> String {
+    
+    var variableField : UInt16 = 0x0703
+    
+    let header = LCCCANFrame.createFrameHeader(frameType: .canControlFrame, variableField: variableField, sourceNIDAlias: alias!)
+    
+    return "\(String(format: "%08X", header))"
+    
+  }
+
   // MARK: Public Methods
   
   public func transitionToPermittedState() {
@@ -131,13 +192,15 @@ public class LCCCANTransportLayer : NSObject, InterfaceDelegate {
 
     alias = nextAlias()
     
-    transitionState = .cid1
+    transitionState = .cid
     
     interface.send(header: createCheckIdFrame(number: 1), data: "")
     interface.send(header: createCheckIdFrame(number: 2), data: "")
     interface.send(header: createCheckIdFrame(number: 3), data: "")
     interface.send(header: createCheckIdFrame(number: 4), data: "")
 
+    startWaitTimer()
+    
   }
   
   public func transitionToInhibitedState() {
@@ -146,11 +209,45 @@ public class LCCCANTransportLayer : NSObject, InterfaceDelegate {
       return
     }
     
+    interface.send(header: createAliasMapResetFrame(), data: nodeIdAsString)
+    
     if observerId != -1 {
       interface.removeObserver(id: observerId)
       observerId = -1
     }
     
+    transitionState = .inhibited
+    
   }
   
+  // MARK: InterfaceDelegate Methods
+  
+  @objc public func lccCANFrameReceived(frame:LCCCANFrame) {
+    
+    if transitionState == .cid && frame.sourceNIDAlias == alias {
+      startWaitTimer()
+      transitionState = .inhibited
+      transitionToPermittedState()
+    }
+    else if transitionState == .permitted {
+      
+      let cidSet : Set<LCCCANFrameFormat> = [.checkId4Frame, .checkId5Frame, .checkId6Frame, .checkId7Frame]
+      
+      if frame.canFrameFormat == .aliasMappingEnquiryFrame {
+        
+        if frame.dataAsString.isEmpty || frame.dataAsString == nodeIdAsString {
+          interface.send(header: createAliasMapDefinitionFrame(), data: nodeIdAsString)
+        }
+        
+      }
+      else if cidSet.contains(frame.canFrameFormat) {
+        if frame.sourceNIDAlias == self.alias! {
+          interface.send(header: createReserveIdFrame(), data: "")
+        }
+      }
+      else 
+    }
+    
+  }
+
 }

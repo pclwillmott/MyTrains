@@ -600,8 +600,9 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
 
   public func send(header: String, data:String) {
     
-    let formattedString = ":X\(header)N\(data);\n"
+    let formattedString = ":X\(header)N\(data);"
     
+    print(formattedString)
     var data : [UInt8] = [UInt8](formattedString.utf8)
     
     serialPort?.write(data:data)
@@ -633,7 +634,6 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
         enum SearchState {
           case searchingForColon
           case searchingForSemiColon
-          case searchingForNewline
         }
         
         var state : SearchState = .searchingForColon
@@ -653,7 +653,9 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
           let char = String(format: "%C", buffer[index])
           
           switch state {
+            
           case .searchingForColon:
+            
             if char == ":" {
               frame += char
               state = .searchingForSemiColon
@@ -677,7 +679,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
               bufferLock.unlock()
               frame = char
             }
-            else if char == "\n" {
+            else if char == "\n" || char == "\r" {
               let increment = frame.count
               bufferLock.lock()
               readPtr = (readPtr + increment) & 0xff
@@ -686,32 +688,27 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
               frame = ""
               state = .searchingForColon
             }
-            if char == ";" {
-              state = .searchingForNewline
-            }
-            
-          case .searchingForNewline:
-            
-            if char == "\n" {
+            else if char == ";" {
               
-              let increment = frame.count + 1
+              state = .searchingForColon
+              
+              let increment = frame.count
+              
               bufferLock.lock()
               readPtr = (readPtr + increment) & 0xff
               bufferCount -= increment
               bufferLock.unlock()
               
-              frame.removeFirst() // Remove ":"
-              frame.removeFirst() // Remove "X"
-              frame.removeLast()  // Remove ";"
-              
-              let frame = LCCCANFrame(networkId: networkId, frame: frame)
-              
-              frame.timeStamp = Date.timeIntervalSinceReferenceDate
-              frame.timeSinceLastMessage = frame.timeStamp - lastTimeStamp
-              lastTimeStamp = frame.timeStamp
-              
-              for (_, observer) in observers {
-                observer.lccCANFrameReceived?(frame: frame)
+              if let frame = LCCCANFrame(networkId: networkId, message: frame) {
+                
+                frame.timeStamp = Date.timeIntervalSinceReferenceDate
+                frame.timeSinceLastMessage = frame.timeStamp - lastTimeStamp
+                lastTimeStamp = frame.timeStamp
+                
+                for (_, observer) in observers {
+                  observer.lccCANFrameReceived?(frame: frame)
+                }
+                
               }
 
             }

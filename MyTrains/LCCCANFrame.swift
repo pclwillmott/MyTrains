@@ -11,11 +11,54 @@ public class LCCCANFrame : NSObject {
 
   // MARK: Constructors & Destructors
   
-  init(networkId: Int, frame:String) {
+  init?(networkId: Int, message:String) {
+    
+    // Check that the message conforms to the standard
+    
+    guard LCCCANFrame.canMessageOK(message: message) else {
+      return nil
+    }
+    
+    // Initialise Network Id
+    
     self.networkId = networkId
-    self.frame = frame
-    self.header = UInt32(frame.prefix(8), radix: 16) ?? 0
+    
+    // Create frame string by striping the prefix and suffix
+    
+    frame = message
+    frame.removeFirst()
+    frame.removeFirst()
+    frame.removeLast()
+    
+    // Split into header and data sections
+    
+    var temp1 = frame.split(separator: "N")
+    
+    // Extract header value
+    
+    self.header = UInt32(temp1[0], radix: 16) ?? 0
+    
+    // Extract data if present
+    
+    if temp1.count == 2 {
+      
+      dataAsString = String(temp1[1])
+      
+      var temp2 = dataAsString
+      
+      while temp2.count > 0 {
+        data.append(UInt8(temp2.prefix(2), radix: 16) ?? 0)
+        temp2.removeFirst(2)
+      }
+      
+    }
+    
+    // Init super
+    
     super.init()
+    
+    // Done.
+    
   }
   
   // MARK: Private Properties
@@ -27,6 +70,10 @@ public class LCCCANFrame : NSObject {
   // MARK: Public Properties
   
   public var frame : String
+  
+  public var data : [UInt8] = []
+  
+  public var dataAsString : String = ""
   
   public var networkId : Int
 
@@ -46,6 +93,10 @@ public class LCCCANFrame : NSObject {
     get {
       return (header & mask_VariableField) >> 12
     }
+  }
+  
+  public var sourceNIDAlias : UInt16 {
+    return UInt16(header & 0x00000FFF)
   }
   
   public var canFrameFormat : LCCCANFrameFormat {
@@ -107,6 +158,76 @@ public class LCCCANFrame : NSObject {
     header |= UInt32(sourceNIDAlias & 0x0fff)
     
     return header
+    
+  }
+  
+  public static func canMessageOK(message:String) -> Bool {
+    
+    // Check for minimum length (":XFN;")
+    
+    guard message.count >= 5 else {
+      return false
+    }
+ 
+    // Check for valid prefix and suffix
+    
+    guard message.prefix(2) == ":X" && message.last == ";" else {
+      return false
+    }
+    
+    // Strip off prefix and suffix
+    
+    var temp1 = message
+    
+    temp1.removeFirst()
+    temp1.removeFirst()
+    temp1.removeLast()
+    
+    // Check that there is only one "N" and split into header and data strings
+    
+    let temp2 = temp1.split(separator: "N")
+    
+    guard temp2.count > 0 && temp2.count < 3 else {
+      return false
+    }
+    
+    if temp2.count == 1 && temp1.last != "N" {
+      return false
+    }
+    
+    // Check that the header is not greater than 8 hex digits
+    
+    if temp2[0].count > 8 {
+      return false
+    }
+    
+    // Check that the data section has two hex digits per byte
+    
+    if temp2.count > 1 && temp2[1].count % 2 != 0 {
+      return false
+    }
+    
+    // Check that the header and data sections only contain hex digits in upper case
+    
+    let hexDigits : Set<Character> = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"]
+    
+    var index = 0
+ 
+    while index < temp2.count {
+      
+      for char in temp2[index] {
+        guard hexDigits.contains(char) else {
+          return false
+        }
+      }
+      
+      index += 1
+      
+    }
+    
+    // All is well, report success
+    
+    return true
     
   }
   
