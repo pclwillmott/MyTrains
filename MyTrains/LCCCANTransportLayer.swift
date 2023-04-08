@@ -7,20 +7,14 @@
 
 import Foundation
 
-public enum LCCCANTransportLayerState {
-  case inhibited
-  case permitted
+private enum LCCCANTransportTransitionState {
+  case idle
+  case testingAlias
+  case reservingAlias
+  case mappingDeclared
 }
 
-public enum LCCCANTransportTransitionState {
-  case inhibited
-  case cid
-  case rid
-  case amd
-  case permitted
-}
-
-public class LCCCANTransportLayer : NSObject, InterfaceDelegate {
+public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
   
   // MARK: Constructors & Destructors
   
@@ -38,17 +32,21 @@ public class LCCCANTransportLayer : NSObject, InterfaceDelegate {
   
   // MARK: Private Properties
   
+  private let waitInterval : TimeInterval = 200.0 / 1000.0
+
   private var lfsr1 : UInt32
   
   private var lfsr2 : UInt32
   
   private var waitTimer : Timer?
   
-  private var _state : LCCCANTransportLayerState = .inhibited
-  
-  private var transitionState : LCCCANTransportTransitionState = .inhibited
+  private var transitionState : LCCCANTransportTransitionState = .idle
   
   private var observerId : Int = -1
+  
+  private var aliasLookup : [UInt16:String] = [:]
+  
+  private var nodeIdLookup : [String:UInt16] = [:]
   
   // MARK: Public Properties
   
@@ -70,13 +68,70 @@ public class LCCCANTransportLayer : NSObject, InterfaceDelegate {
   
   public var alias : UInt16?
   
-  public var state : LCCCANTransportLayerState {
-    get {
-      return _state
+  // MARK: Private Methods
+  
+  override func send() {
+    
+    var index = 0
+    
+    while index < outputQueue.count {
+      
+      var deleteMessage = false
+      
+      let message = outputQueue[index]
+
+      switch message.canFrameType {
+        
+      case 1:
+        
+        if message.isAddressPresent {
+          if let destinationNodeId = message.destinationNodeId {
+            if let destinationAlias = nodeIdLookup[destinationNodeId] {
+              // TODO: send message
+            }
+            else {
+              // TODO: send a request here
+            }
+          }
+          else {
+            deleteMessage = true
+          }
+        }
+        
+      // Delete messages we don't understand yet
+        
+      default:
+        deleteMessage = true
+      }
+      
+      if deleteMessage {
+        outputQueueLock.lock()
+        outputQueue.remove(at: index)
+        outputQueueLock.unlock()
+      }
+
+    }
+    
+  }
+  
+  private func addNodeIdAliasMapping(nodeId: String, alias:UInt16) {
+    aliasLookup[alias] = nodeId
+    nodeIdLookup[nodeId] = alias
+  }
+  
+  private func removeNodeIdAliasMapping(nodeId:String) {
+    if let alias = nodeIdLookup[nodeId] {
+      aliasLookup[alias] = nil
+      nodeIdLookup[nodeId] = nil
     }
   }
   
-  // MARK: Private Methods
+  private func removeNodeIdAliasMapping(alias:UInt16) {
+    if let nodeId = aliasLookup[alias] {
+      nodeIdLookup[nodeId] = nil
+      aliasLookup[alias] = nil
+    }
+  }
   
   private func nextAlias() -> UInt16 {
     
@@ -113,16 +168,26 @@ public class LCCCANTransportLayer : NSObject, InterfaceDelegate {
   }
   
   @objc func waitTimerTick() {
+    
     stopWaitTimer()
-    transitionState = .rid
-    interface.send(header: createReserveIdFrame(), data: "")
-    interface.send(header: createAliasMapDefinitionFrame(), data: nodeIdAsString)
-    transitionState = .permitted
+    
+    switch transitionState {
+    case .testingAlias:
+      transitionState = .reservingAlias
+      interface.send(header: createReserveIdFrame(), data: "")
+      startWaitTimer(interval: waitInterval)
+    case .reservingAlias:
+      transitionState = .mappingDeclared
+      _state = .permitted
+      interface.send(header: createAliasMapDefinitionFrame(), data: nodeIdAsString)
+    default:
+      break
+    }
+
   }
   
-  func startWaitTimer() {
-    let waitInterval : TimeInterval = 250.0 / 1000.0
-    waitTimer = Timer.scheduledTimer(timeInterval: waitInterval, target: self, selector: #selector(waitTimerTick), userInfo: nil, repeats: false)
+  func startWaitTimer(interval: TimeInterval) {
+    waitTimer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(waitTimerTick), userInfo: nil, repeats: false)
     RunLoop.current.add(waitTimer!, forMode: .common)
   }
   
@@ -131,7 +196,6 @@ public class LCCCANTransportLayer : NSObject, InterfaceDelegate {
     waitTimer = nil
   }
 
-  
   private func createCheckIdFrame(number:UInt16) -> String {
     
     var variableField : UInt16 = (8 - number) << 12
@@ -174,6 +238,16 @@ public class LCCCANTransportLayer : NSObject, InterfaceDelegate {
     
   }
 
+  private func createDuplicateNodeIdErrorFrame(alias:UInt16) -> String {
+    
+    var header : UInt32 = 0x195B4000
+    
+    header |= UInt32(alias & 0x0fff)
+
+    return "\(String(format: "%08X", header))"
+    
+  }
+
   // MARK: Public Methods
   
   public func transitionToPermittedState() {
@@ -182,24 +256,22 @@ public class LCCCANTransportLayer : NSObject, InterfaceDelegate {
       return
     }
     
-    transitionState = .inhibited
-    
     if observerId != -1 {
       interface.removeObserver(id: observerId)
     }
     
     observerId = interface.addObserver(observer: self)
 
-    alias = nextAlias()
+    transitionState = .testingAlias
     
-    transitionState = .cid
+    alias = nextAlias()
     
     interface.send(header: createCheckIdFrame(number: 1), data: "")
     interface.send(header: createCheckIdFrame(number: 2), data: "")
     interface.send(header: createCheckIdFrame(number: 3), data: "")
     interface.send(header: createCheckIdFrame(number: 4), data: "")
 
-    startWaitTimer()
+    startWaitTimer(interval: waitInterval)
     
   }
   
@@ -209,14 +281,18 @@ public class LCCCANTransportLayer : NSObject, InterfaceDelegate {
       return
     }
     
+    transitionState = .idle
+    
+    _state = .inhibited
+    
     interface.send(header: createAliasMapResetFrame(), data: nodeIdAsString)
+    
+    alias = nil
     
     if observerId != -1 {
       interface.removeObserver(id: observerId)
       observerId = -1
     }
-    
-    transitionState = .inhibited
     
   }
   
@@ -224,28 +300,107 @@ public class LCCCANTransportLayer : NSObject, InterfaceDelegate {
   
   @objc public func lccCANFrameReceived(frame:LCCCANFrame) {
     
-    if transitionState == .cid && frame.sourceNIDAlias == alias {
-      startWaitTimer()
-      transitionState = .inhibited
-      transitionToPermittedState()
+    guard state != .stopped else {
+      return
     }
-    else if transitionState == .permitted {
+    
+    switch frame.frameType {
       
-      let cidSet : Set<LCCCANFrameFormat> = [.checkId4Frame, .checkId5Frame, .checkId6Frame, .checkId7Frame]
+    case .canControlFrame:
       
-      if frame.canFrameFormat == .aliasMappingEnquiryFrame {
+      if let alias = self.alias {
         
-        if frame.dataAsString.isEmpty || frame.dataAsString == nodeIdAsString {
-          interface.send(header: createAliasMapDefinitionFrame(), data: nodeIdAsString)
+        // Testing an alias
+        
+        if (transitionState == .testingAlias || transitionState == .reservingAlias) {
+          
+          if frame.sourceNIDAlias == alias {
+            
+            stopWaitTimer()
+            
+            _state = .inhibited
+            
+            self.alias = nil
+            
+            transitionState = .idle
+            
+            transitionToPermittedState()
+            
+            return
+            
+          }
+          
+        }
+        else if state == .permitted {
+          
+          // Node Id Alias Validation
+          
+          if frame.canFrameFormat == .aliasMappingEnquiryFrame {
+            
+            let nidas = nodeIdAsString
+            
+            if frame.dataAsString.isEmpty || frame.dataAsString == nidas {
+              interface.send(header: createAliasMapDefinitionFrame(), data: nidas)
+            }
+            
+            return
+            
+          }
+          
+        }
+        
+        // Node Id Collision Handling
+        
+        let cidSet : Set<LCCCANFrameFormat> = [.checkId4Frame, .checkId5Frame, .checkId6Frame, .checkId7Frame]
+        
+        if frame.sourceNIDAlias == alias {
+          
+          // Is a CID Frame
+          
+          if cidSet.contains(frame.canFrameFormat) {
+            interface.send(header: createReserveIdFrame(), data: "")
+            return
+          }
+          
+          // Is not a CID Frame
+          
+          else if state == .permitted {
+            transitionToInhibitedState()
+            transitionToPermittedState()
+          }
+          
+        }
+        
+        // Remove lookups for reset mappings
+        
+        if frame.canFrameFormat == .aliasMapResetFrame {
+          removeNodeIdAliasMapping(alias: frame.sourceNIDAlias)
+          return
+        }
+        
+        // Check for Duplicate NodeId
+        
+        if frame.canFrameFormat == .aliasMapDefinitionFrame {
+          
+          if nodeIdAsString == frame.dataAsString {
+            _state = .stopped
+            interface.send(header: createDuplicateNodeIdErrorFrame(alias: alias), data: "0101000000000201")
+            interface.removeObserver(id: observerId)
+            observerId = -1
+            transitionState = .idle
+            self.alias = nil
+            delegate?.transportLayerStateChanged(transportLayer: self)
+            return
+          }
+          
+          addNodeIdAliasMapping(nodeId: frame.dataAsString, alias: frame.sourceNIDAlias)
+          
         }
         
       }
-      else if cidSet.contains(frame.canFrameFormat) {
-        if frame.sourceNIDAlias == self.alias! {
-          interface.send(header: createReserveIdFrame(), data: "")
-        }
-      }
-      else 
+
+    case .openLCBMessage:
+      break
     }
     
   }

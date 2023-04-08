@@ -22,11 +22,14 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
     
     super.init()
     
+    lccNetworkLayer = LCCNetworkLayer(nodeId: lccNodeId)
+    
     MTSerialPortManager.delegate = self
     
     checkPortsTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(checkPortsTimerAction), userInfo: nil, repeats: true)
     
     RunLoop.current.add(checkPortsTimer!, forMode: .common)
+    
   }
   
   // MARK: Destructor
@@ -603,6 +606,8 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
     controllerDelegates.removeValue(forKey: id)
     controllerDelegateLock.unlock()
   }
+  
+  public var lccNetworkLayer : LCCNetworkLayer?
   
   // MARK: MTSerialPortManagerDelegate Methods
   
