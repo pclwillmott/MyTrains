@@ -11,18 +11,69 @@ public class OpenLCBMessage : NSObject {
   
   // MARK: Constructors
   
-  public init(messageTypeIndicator: OpenLCBMTI) {
+  init(messageTypeIndicator: OpenLCBMTI) {
     
     self.messageTypeIndicator = messageTypeIndicator
+    
+    self.canFrameType = .globalAndAddressedMTI
     
     super.init()
     
   }
   
+  init(frame:LCCCANFrame) {
+
+    canFrameType = OpenLCBMessageCANFrameType(rawValue: (frame.header & 0x07000000) >> 24) ?? .reserved1
+    
+    switch canFrameType {
+    case .globalAndAddressedMTI:
+      
+      messageTypeIndicator = OpenLCBMTI(rawValue: UInt16((frame.header >> 12) & 0xfff))!
+      
+      sourceNIDAlias = UInt16(frame.header & 0xfff)
+      
+      otherContent = frame.data
+      
+      var mask : UInt16 = 0x0008
+      
+      if (messageTypeIndicator.rawValue & mask) == mask { // isAddressPresent
+        destinationNIDAlias = UInt16(otherContent[1]) | (UInt16(otherContent[0] & 0x0f) << 8)
+        flags = otherContent[0] >> 4
+        otherContent.removeFirst(2)
+      }
+
+      mask = 0x0004
+      
+      if (messageTypeIndicator.rawValue & mask) == mask { // isEventPresent
+        
+        var id : UInt64 = 0
+        
+        for index in 0...7 {
+          id <<= 8
+          id |= UInt64(otherContent[index])
+        }
+        
+        eventId = id
+        
+        otherContent.removeFirst(8)
+        
+      }
+
+    default: // Reserved
+      messageTypeIndicator = .unknown
+    }
+    
+    super.init()
+    
+  }
+  
+  
   // MARK: Public Properties
   
   public var messageTypeIndicator : OpenLCBMTI
   
+  public var flags : UInt8 = 0
+
   public var isSpecial : Bool {
     get {
       let mask : UInt16 = 0x2000
@@ -81,18 +132,40 @@ public class OpenLCBMessage : NSObject {
   
   public var sourceNodeId : UInt64?
   
+  public var sourceNIDAlias : UInt16?
+  
   public var destinationNodeId : UInt64?
+  
+  public var destinationNIDAlias : UInt16?
   
   public var eventId : UInt64?
   
   public var otherContent : [UInt8] = []
   
-  public var canFrameType : Int {
+  public var isMessageComplete : Bool {
+    
     get {
-      if !isSpecial && !isStreamOrDatagram {
-        return 1
+      var result = sourceNodeId != nil && sourceNIDAlias != nil
+      if isAddressPresent {
+        result = result && destinationNodeId != nil && destinationNIDAlias != nil
       }
-      return 0 // PLACEHOLDER
+      if isEventPresent {
+        result = result && eventId != nil
+      }
+      return result
+    }
+    
+  }
+  
+  public var canFrameType : OpenLCBMessageCANFrameType
+ 
+  public static func canFrameType(message:OpenLCBMessage) -> OpenLCBMessageCANFrameType {
+    
+    if !message.isStreamOrDatagram && !message.isSpecial {
+      return .globalAndAddressedMTI
+    }
+    else {
+      return .reserved1
     }
   }
   

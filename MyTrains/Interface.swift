@@ -598,15 +598,8 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
     serialPort?.write(data:data)
   }
 
-  public func send(header: String, data:String) {
-    
-    let formattedString = ":X\(header)N\(data);"
-    
-    print(formattedString)
-    var data : [UInt8] = [UInt8](formattedString.utf8)
-    
-    serialPort?.write(data:data)
-    
+  public func send(data:String) {
+    serialPort?.write(data:[UInt8](data.utf8))
   }
 
   // MARK: MTSerialPortDelegate Methods

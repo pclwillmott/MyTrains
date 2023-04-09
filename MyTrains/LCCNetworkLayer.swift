@@ -39,6 +39,7 @@ public class LCCNetworkLayer : NSObject, LCCTransportLayerDelegate {
   
   public func addTransportLayer(transportLayer: LCCTransportLayer) {
     transportLayers[ObjectIdentifier(transportLayer)] = transportLayer
+    transportLayer.delegate = self
   }
   
   public func removeTransportLayer(transportLayer: LCCTransportLayer) {
@@ -48,8 +49,12 @@ public class LCCNetworkLayer : NSObject, LCCTransportLayerDelegate {
   
   // MARK: TransportLayerDelegate Methods
   
-  public func openLCBMessageReceived(frame: LCCCANFrame) {
-    
+  public func openLCBMessageReceived(message: OpenLCBMessage) {
+    print("SRC: \(message.sourceNodeId!.toHex(numberOfDigits: 12))")
+    print("MTI: \(message.messageTypeIndicator)")
+    if message.isAddressPresent {
+      print("DST: \(message.destinationNodeId!.toHex(numberOfDigits: 12))\n")
+    }
   }
   
   public func transportLayerStateChanged(transportLayer: LCCTransportLayer) {

@@ -17,6 +17,10 @@ public class LCCTransportLayer : NSObject {
   
   internal var outputQueueLock : NSLock = NSLock()
   
+  internal var inputQueue : [OpenLCBMessage] = []
+  
+  internal var inputQueueLock : NSLock = NSLock()
+  
   // MARK: Public Properties
   
   public var delegate : LCCTransportLayerDelegate?
@@ -29,7 +33,7 @@ public class LCCTransportLayer : NSObject {
   
   // MARK: Private Methods
   
-  internal func send() {
+  internal func processQueues() {
     
   }
   
@@ -39,7 +43,14 @@ public class LCCTransportLayer : NSObject {
     outputQueueLock.lock()
     outputQueue.append(message)
     outputQueueLock.unlock()
-    send()
+    processQueues()
   }
-  
+
+  public func addToInputQueue(message: OpenLCBMessage) {
+    inputQueueLock.lock()
+    inputQueue.append(message)
+    inputQueueLock.unlock()
+    processQueues()
+  }
+
 }

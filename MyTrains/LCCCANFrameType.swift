@@ -12,15 +12,3 @@ public enum LCCCANFrameType {
   case canControlFrame
 }
 
-public enum LCCCANFrameFormat {
-  case checkId7Frame
-  case checkId6Frame
-  case checkId5Frame
-  case checkId4Frame
-  case reserveIdFrame
-  case aliasMapDefinitionFrame
-  case aliasMappingEnquiryFrame
-  case aliasMapResetFrame
-  case errorInformationReport
-  case unknown
-}

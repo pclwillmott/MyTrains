@@ -8,6 +8,6 @@
 import Foundation
 
 public protocol LCCTransportLayerDelegate {
-  func openLCBMessageReceived(frame:LCCCANFrame)
+  func openLCBMessageReceived(message:OpenLCBMessage)
   func transportLayerStateChanged(transportLayer:LCCTransportLayer)
 }

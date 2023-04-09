@@ -54,64 +54,99 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
   
   public var nodeId : UInt64
   
-  public var nodeIdAsString : String {
-    get {
-      var id = ""
-      var temp = nodeId
-      for _ in 1...6 {
-        id = String(format:"%02X", UInt16(temp & 0xFF)) + id
-        temp >>= 8
-      }
-      return id
-    }
-  }
-  
   public var alias : UInt16?
   
   // MARK: Private Methods
   
-  override func send() {
+  override func processQueues() {
     
-    var index = 0
+    // Input Queue
     
-    while index < outputQueue.count {
+    if !inputQueue.isEmpty {
       
-      var deleteMessage = false
+      var sendQuery = false
       
-      let message = outputQueue[index]
-
-      switch message.canFrameType {
+      var index = 0
+      
+      while index < inputQueue.count {
         
-      case 1:
+        let message = inputQueue[index]
         
-        if message.isAddressPresent {
-          if let destinationNodeId = message.destinationNodeId {
-            if let destinationAlias = nodeIdLookup[destinationNodeId] {
-              // TODO: send message
-            }
-            else {
-              // TODO: send a request here
-            }
+        if message.sourceNodeId == nil, let alias = message.sourceNIDAlias {
+          if let id = aliasLookup[alias] {
+            message.sourceNodeId = UInt64(hex: id)
           }
           else {
-            deleteMessage = true
+            sendQuery = true
           }
         }
         
-      // Delete messages we don't understand yet
+        if message.isAddressPresent && message.destinationNodeId == nil, let alias = message.destinationNIDAlias {
+          if let id = aliasLookup[alias] {
+            message.destinationNodeId = UInt64(hex: id)
+          }
+          else {
+            sendQuery = true
+          }
+        }
         
-      default:
-        deleteMessage = true
+        if message.isMessageComplete {
+          if !message.isAddressPresent || message.isAddressPresent && message.destinationNodeId! == nodeId {
+            delegate?.openLCBMessageReceived(message: message)
+          }
+          inputQueueLock.lock()
+          inputQueue.remove(at: index)
+          inputQueueLock.unlock()
+        }
+        else {
+          index += 1
+        }
+        
       }
       
-      if deleteMessage {
-        outputQueueLock.lock()
-        outputQueue.remove(at: index)
-        outputQueueLock.unlock()
+      if sendQuery {
+        sendAliasMappingEnquiryFrame()
       }
-
+            
     }
     
+    // Output Queue
+    
+    if !outputQueue.isEmpty {
+      
+      var index = 0
+      
+      while index < outputQueue.count {
+        
+        let message = outputQueue[index]
+        
+        message.sourceNodeId = nodeId
+        
+        message.sourceNIDAlias = alias
+        
+        if message.isAddressPresent, let destinationNodeId = message.destinationNodeId {
+          
+          if let alias = nodeIdLookup[destinationNodeId.toHex(numberOfDigits: 12)] {
+            message.destinationNIDAlias = alias
+          }
+          else {
+            sendAliasMappingEnquiryFrame(nodeId: destinationNodeId)
+          }
+          
+        }
+        
+        if message.isMessageComplete {
+          
+        }
+        
+      }
+      
+    }
+
+    if !inputQueue.isEmpty || !outputQueue.isEmpty {
+      startWaitTimer(interval: waitInterval)
+    }
+
   }
   
   private func addNodeIdAliasMapping(nodeId: String, alias:UInt16) {
@@ -147,8 +182,8 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
     // To step the PRNG:
     // First, form 2^9*val
     
-    var temp1 : UInt32 = ((lfsr1 << 9) | ((lfsr2 >> 15) & 0x1FF)) & 0xFFFFFF
-    var temp2 : UInt32 = (lfsr2 << 9) & 0xFFFFFF
+    let temp1 : UInt32 = ((lfsr1 << 9) | ((lfsr2 >> 15) & 0x1FF)) & 0xFFFFFF
+    let temp2 : UInt32 = (lfsr2 << 9) & 0xFFFFFF
     
     // add
     
@@ -174,15 +209,18 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
     switch transitionState {
     case .testingAlias:
       transitionState = .reservingAlias
-      interface.send(header: createReserveIdFrame(), data: "")
+      sendReserveIdFrame()
       startWaitTimer(interval: waitInterval)
     case .reservingAlias:
       transitionState = .mappingDeclared
       _state = .permitted
-      interface.send(header: createAliasMapDefinitionFrame(), data: nodeIdAsString)
+      sendAliasMapDefinitionFrame()
+      addNodeIdAliasMapping(nodeId: nodeId.toHex(numberOfDigits: 12), alias: alias!)
     default:
       break
     }
+    
+    processQueues()
 
   }
   
@@ -196,56 +234,80 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
     waitTimer = nil
   }
 
-  private func createCheckIdFrame(number:UInt16) -> String {
+  private func send(header: String, data:String) {
+    interface.send(data: ":X\(header)N\(data);")
+  }
+
+  private func sendCheckIdFrame(format:OpenLCBCANControlFrameFormat, alias: UInt16) {
     
-    var variableField : UInt16 = (8 - number) << 12
+    var variableField : UInt16 = format.rawValue
     
-    variableField |= UInt16((nodeId >> ((4 - number) * 12)) & 0x0fff)
+    variableField |= UInt16((nodeId >> (((format.rawValue >> 12) - 4) * 12)) & 0x0fff)
+    
+    let header = LCCCANFrame.createFrameHeader(frameType: .canControlFrame, variableField: variableField, sourceNIDAlias: alias)
+    
+    send(header: header, data: "")
+
+  }
+
+  private func sendReserveIdFrame() {
+    
+    let variableField : UInt16 = OpenLCBCANControlFrameFormat.reserveIdFrame.rawValue
     
     let header = LCCCANFrame.createFrameHeader(frameType: .canControlFrame, variableField: variableField, sourceNIDAlias: alias!)
     
-    return "\(String(format: "%08X", header))"
-    
+    send(header: header, data: "")
+
   }
 
-  private func createReserveIdFrame() -> String {
+  private func sendAliasMapDefinitionFrame() {
     
-    var variableField : UInt16 = 0x0700
+    let variableField : UInt16 = OpenLCBCANControlFrameFormat.aliasMapDefinitionFrame.rawValue
     
     let header = LCCCANFrame.createFrameHeader(frameType: .canControlFrame, variableField: variableField, sourceNIDAlias: alias!)
     
-    return "\(String(format: "%08X", header))"
-    
+    send(header: header, data: nodeId.toHex(numberOfDigits: 12))
+
   }
 
-  private func createAliasMapDefinitionFrame() -> String {
+  private func sendAliasMapResetFrame() {
     
-    var variableField : UInt16 = 0x0701
+    let variableField : UInt16 = OpenLCBCANControlFrameFormat.aliasMapResetFrame.rawValue
     
     let header = LCCCANFrame.createFrameHeader(frameType: .canControlFrame, variableField: variableField, sourceNIDAlias: alias!)
     
-    return "\(String(format: "%08X", header))"
-    
+    send(header: header, data: nodeId.toHex(numberOfDigits: 12))
+
   }
 
-  private func createAliasMapResetFrame() -> String {
+  private func sendAliasMappingEnquiryFrame(nodeId:UInt64) {
     
-    var variableField : UInt16 = 0x0703
+    let variableField : UInt16 = OpenLCBCANControlFrameFormat.aliasMappingEnquiryFrame.rawValue
     
     let header = LCCCANFrame.createFrameHeader(frameType: .canControlFrame, variableField: variableField, sourceNIDAlias: alias!)
     
-    return "\(String(format: "%08X", header))"
-    
+    send(header: header, data: nodeId.toHex(numberOfDigits: 12))
+
   }
 
-  private func createDuplicateNodeIdErrorFrame(alias:UInt16) -> String {
+  private func sendAliasMappingEnquiryFrame() {
+    
+    let variableField : UInt16 = OpenLCBCANControlFrameFormat.aliasMappingEnquiryFrame.rawValue
+    
+    let header = LCCCANFrame.createFrameHeader(frameType: .canControlFrame, variableField: variableField, sourceNIDAlias: alias!)
+    
+    send(header: header, data: "")
+
+  }
+
+  private func sendDuplicateNodeIdErrorFrame() {
     
     var header : UInt32 = 0x195B4000
     
-    header |= UInt32(alias & 0x0fff)
+    header |= UInt32(alias! & 0x0fff)
 
-    return "\(String(format: "%08X", header))"
-    
+    send(header: header.toHex(numberOfDigits: 8), data: "0101000000000201")
+
   }
 
   // MARK: Public Methods
@@ -266,10 +328,10 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
     
     alias = nextAlias()
     
-    interface.send(header: createCheckIdFrame(number: 1), data: "")
-    interface.send(header: createCheckIdFrame(number: 2), data: "")
-    interface.send(header: createCheckIdFrame(number: 3), data: "")
-    interface.send(header: createCheckIdFrame(number: 4), data: "")
+    sendCheckIdFrame(format: .checkId7Frame, alias: alias!)
+    sendCheckIdFrame(format: .checkId6Frame, alias: alias!)
+    sendCheckIdFrame(format: .checkId5Frame, alias: alias!)
+    sendCheckIdFrame(format: .checkId4Frame, alias: alias!)
 
     startWaitTimer(interval: waitInterval)
     
@@ -281,11 +343,13 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
       return
     }
     
+    sendAliasMapResetFrame()
+    
+    removeNodeIdAliasMapping(nodeId: nodeId.toHex(numberOfDigits: 12))
+
     transitionState = .idle
     
     _state = .inhibited
-    
-    interface.send(header: createAliasMapResetFrame(), data: nodeIdAsString)
     
     alias = nil
     
@@ -297,6 +361,8 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
   }
   
   // MARK: InterfaceDelegate Methods
+  
+  private var count = 0
   
   @objc public func lccCANFrameReceived(frame:LCCCANFrame) {
     
@@ -335,12 +401,10 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
           
           // Node Id Alias Validation
           
-          if frame.canFrameFormat == .aliasMappingEnquiryFrame {
+          if frame.canControlFrameFormat == .aliasMappingEnquiryFrame {
             
-            let nidas = nodeIdAsString
-            
-            if frame.dataAsString.isEmpty || frame.dataAsString == nidas {
-              interface.send(header: createAliasMapDefinitionFrame(), data: nidas)
+            if frame.dataAsString.isEmpty || frame.dataAsString == nodeId.toHex(numberOfDigits: 12) {
+              sendAliasMapDefinitionFrame()
             }
             
             return
@@ -351,14 +415,12 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
         
         // Node Id Collision Handling
         
-        let cidSet : Set<LCCCANFrameFormat> = [.checkId4Frame, .checkId5Frame, .checkId6Frame, .checkId7Frame]
-        
         if frame.sourceNIDAlias == alias {
           
           // Is a CID Frame
           
-          if cidSet.contains(frame.canFrameFormat) {
-            interface.send(header: createReserveIdFrame(), data: "")
+          if frame.canControlFrameFormat.isCheckIdFrame {
+            sendReserveIdFrame()
             return
           }
           
@@ -373,18 +435,19 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
         
         // Remove lookups for reset mappings
         
-        if frame.canFrameFormat == .aliasMapResetFrame {
+        if frame.canControlFrameFormat == .aliasMapResetFrame {
           removeNodeIdAliasMapping(alias: frame.sourceNIDAlias)
           return
         }
         
         // Check for Duplicate NodeId
         
-        if frame.canFrameFormat == .aliasMapDefinitionFrame {
+        if frame.canControlFrameFormat == .aliasMapDefinitionFrame {
           
-          if nodeIdAsString == frame.dataAsString {
+          if nodeId.toHex(numberOfDigits: 12) == frame.dataAsString {
+            sendDuplicateNodeIdErrorFrame()
+            removeNodeIdAliasMapping(nodeId: nodeId.toHex(numberOfDigits: 12))
             _state = .stopped
-            interface.send(header: createDuplicateNodeIdErrorFrame(alias: alias), data: "0101000000000201")
             interface.removeObserver(id: observerId)
             observerId = -1
             transitionState = .idle
@@ -400,9 +463,20 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
       }
 
     case .openLCBMessage:
-      break
+      
+      let message = OpenLCBMessage(frame: frame)
+      
+      addToInputQueue(message: message)
     }
     
+    /*
+    for (key, value) in nodeIdLookup {
+      print("0x\(key) : 0x\(value.toHex(numberOfDigits: 3))")
+    }
+    print()
+     */
   }
+  
+
 
 }
