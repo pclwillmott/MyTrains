@@ -21,49 +21,56 @@ public class OpenLCBMessage : NSObject {
     
   }
   
-  init(frame:LCCCANFrame) {
+  init?(frame:LCCCANFrame) {
 
-    canFrameType = OpenLCBMessageCANFrameType(rawValue: (frame.header & 0x07000000) >> 24) ?? .reserved1
-    
-    switch canFrameType {
-    case .globalAndAddressedMTI:
+    if let canFrameType = OpenLCBMessageCANFrameType(rawValue: (frame.header & 0x07000000) >> 24) {
       
-      messageTypeIndicator = OpenLCBMTI(rawValue: UInt16((frame.header >> 12) & 0xfff))!
+      self.canFrameType = canFrameType
       
-      sourceNIDAlias = UInt16(frame.header & 0xfff)
-      
-      otherContent = frame.data
-      
-      var mask : UInt16 = 0x0008
-      
-      if (messageTypeIndicator.rawValue & mask) == mask { // isAddressPresent
-        destinationNIDAlias = UInt16(otherContent[1]) | (UInt16(otherContent[0] & 0x0f) << 8)
-        flags = otherContent[0] >> 4
-        otherContent.removeFirst(2)
-      }
-
-      mask = 0x0004
-      
-      if (messageTypeIndicator.rawValue & mask) == mask { // isEventPresent
+      switch canFrameType {
+      case .globalAndAddressedMTI:
         
-        var id : UInt64 = 0
+        messageTypeIndicator = OpenLCBMTI(rawValue: UInt16((frame.header >> 12) & 0xfff))!
         
-        for index in 0...7 {
-          id <<= 8
-          id |= UInt64(otherContent[index])
+        sourceNIDAlias = UInt16(frame.header & 0xfff)
+        
+        otherContent = frame.data
+        
+        var mask : UInt16 = 0x0008
+        
+        if (messageTypeIndicator.rawValue & mask) == mask { // isAddressPresent
+          destinationNIDAlias = UInt16(otherContent[1]) | (UInt16(otherContent[0] & 0x0f) << 8)
+          flags = otherContent[0] >> 4
+          otherContent.removeFirst(2)
         }
         
-        eventId = id
+        mask = 0x0004
         
-        otherContent.removeFirst(8)
+        if (messageTypeIndicator.rawValue & mask) == mask { // isEventPresent
+          
+          var id : UInt64 = 0
+          
+          for index in 0...7 {
+            id <<= 8
+            id |= UInt64(otherContent[index])
+          }
+          
+          eventId = id
+          
+          otherContent.removeFirst(8)
+          
+        }
         
+      default: // Reserved
+        messageTypeIndicator = .unknown
       }
-
-    default: // Reserved
-      messageTypeIndicator = .unknown
+      
+      super.init()
+      
     }
-    
-    super.init()
+    else {
+      return nil
+    }
     
   }
   
@@ -142,6 +149,16 @@ public class OpenLCBMessage : NSObject {
   
   public var otherContent : [UInt8] = []
   
+  public var otherContentAsHex : String {
+    get {
+      var result = ""
+      for byte in otherContent {
+        result += byte.toHex(numberOfDigits: 2)
+      }
+      return result
+    }
+  }
+  
   public var isMessageComplete : Bool {
     
     get {
@@ -168,5 +185,7 @@ public class OpenLCBMessage : NSObject {
       return .reserved1
     }
   }
+  
+  public var timeStamp : TimeInterval = 0
   
 }

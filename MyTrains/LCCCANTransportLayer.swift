@@ -33,6 +33,8 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
   // MARK: Private Properties
   
   private let waitInterval : TimeInterval = 200.0 / 1000.0
+  
+  private let timeoutInterval : TimeInterval = 3.0
 
   private var lfsr1 : UInt32
   
@@ -62,6 +64,8 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
     
     // Input Queue
     
+    let referenceDate = Date.timeIntervalSinceReferenceDate
+    
     if !inputQueue.isEmpty {
       
       var sendQuery = false
@@ -90,10 +94,19 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
           }
         }
         
+        var delete = false
+        
         if message.isMessageComplete {
-          if !message.isAddressPresent || message.isAddressPresent && message.destinationNodeId! == nodeId {
+     //     if !message.isAddressPresent || message.isAddressPresent && message.destinationNodeId! == nodeId {
             delegate?.openLCBMessageReceived(message: message)
-          }
+     //     }
+          delete = true
+        }
+        else if (referenceDate - message.timeStamp) > timeoutInterval {
+          delete = true
+        }
+        
+        if delete {
           inputQueueLock.lock()
           inputQueue.remove(at: index)
           inputQueueLock.unlock()
@@ -135,8 +148,23 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
           
         }
         
-        if message.isMessageComplete {
-          
+        var delete = false
+        
+        if let frame = LCCCANFrame(networkId: interface.networkId, message: message) {
+          interface.send(data: frame.message)
+          delete = true
+        }
+        else if (referenceDate - message.timeStamp) > timeoutInterval {
+          delete = true
+        }
+        
+        if delete {
+          outputQueueLock.lock()
+          outputQueue.remove(at: index)
+          outputQueueLock.unlock()
+        }
+        else {
+          index += 1
         }
         
       }
@@ -216,6 +244,7 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
       _state = .permitted
       sendAliasMapDefinitionFrame()
       addNodeIdAliasMapping(nodeId: nodeId.toHex(numberOfDigits: 12), alias: alias!)
+      delegate?.transportLayerStateChanged(transportLayer: self)
     default:
       break
     }
@@ -312,7 +341,7 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
 
   // MARK: Public Methods
   
-  public func transitionToPermittedState() {
+  override public func transitionToPermittedState() {
     
     guard state == .inhibited else {
       return
@@ -337,7 +366,7 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
     
   }
   
-  public func transitionToInhibitedState() {
+  override public func transitionToInhibitedState() {
     
     guard state == .permitted else {
       return
@@ -357,6 +386,8 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
       interface.removeObserver(id: observerId)
       observerId = -1
     }
+    
+    delegate?.transportLayerStateChanged(transportLayer: self)
     
   }
   
@@ -403,7 +434,7 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
           
           if frame.canControlFrameFormat == .aliasMappingEnquiryFrame {
             
-            if frame.dataAsString.isEmpty || frame.dataAsString == nodeId.toHex(numberOfDigits: 12) {
+            if frame.dataAsHex.isEmpty || frame.dataAsHex == nodeId.toHex(numberOfDigits: 12) {
               sendAliasMapDefinitionFrame()
             }
             
@@ -444,7 +475,7 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
         
         if frame.canControlFrameFormat == .aliasMapDefinitionFrame {
           
-          if nodeId.toHex(numberOfDigits: 12) == frame.dataAsString {
+          if nodeId.toHex(numberOfDigits: 12) == frame.dataAsHex {
             sendDuplicateNodeIdErrorFrame()
             removeNodeIdAliasMapping(nodeId: nodeId.toHex(numberOfDigits: 12))
             _state = .stopped
@@ -456,7 +487,7 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
             return
           }
           
-          addNodeIdAliasMapping(nodeId: frame.dataAsString, alias: frame.sourceNIDAlias)
+          addNodeIdAliasMapping(nodeId: frame.dataAsHex, alias: frame.sourceNIDAlias)
           
         }
         
@@ -464,9 +495,13 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
 
     case .openLCBMessage:
       
-      let message = OpenLCBMessage(frame: frame)
+      if let message = OpenLCBMessage(frame: frame) {
+        addToInputQueue(message: message)
+      }
+      else {
+        print("*\(frame.header.toHex(numberOfDigits: 4))")
+      }
       
-      addToInputQueue(message: message)
     }
     
     /*
@@ -477,6 +512,4 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
      */
   }
   
-
-
 }

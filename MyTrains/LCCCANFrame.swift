@@ -25,7 +25,7 @@ public class LCCCANFrame : NSObject {
     
     // Create frame string by striping the prefix and suffix
     
-    frame = message
+    var frame = message
     frame.removeFirst()
     frame.removeFirst()
     frame.removeLast()
@@ -40,11 +40,11 @@ public class LCCCANFrame : NSObject {
     
     // Extract data if present
     
+    data = []
+    
     if temp1.count == 2 {
       
-      dataAsString = String(temp1[1])
-      
-      var temp2 = dataAsString
+      var temp2 = temp1[1]
       
       while temp2.count > 0 {
         data.append(UInt8(hex:temp2.prefix(2)))
@@ -61,9 +61,21 @@ public class LCCCANFrame : NSObject {
     
   }
   
-  init(message:OpenLCBMessage) {
+  init?(networkId: Int, message:OpenLCBMessage) {
     
-    var header : UInt32 = 0x18000000 // CAN Prefix
+    // Check that the message is complete
+    
+    guard message.isMessageComplete else {
+      return nil
+    }
+    
+    // Initialise Network Id
+    
+    self.networkId = networkId
+
+    // Build CAN header
+    
+    header  = 0x18000000 // CAN Prefix
     
     header |= (OpenLCBMessage.canFrameType(message: message).rawValue & 0x07) << 24
     
@@ -71,8 +83,35 @@ public class LCCCANFrame : NSObject {
     
     header |= UInt32(message.sourceNIDAlias! & 0xfff)
     
+    // Build CAN data payload
+    
+    data = []
+    
+    if message.isAddressPresent {
+      var temp = message.destinationNIDAlias! & 0x0fff
+      temp |= UInt16(message.flags & 0x0f) << 12
+      data.append(UInt8(temp >> 8))
+      data.append(UInt8(temp & 0xff))
+    }
+    
+    if message.isEventPresent {
+      var mask : UInt64 = 0xff00000000000000
+      let eventId = message.eventId!
+      for index in 0...7 {
+        data.append(UInt8((eventId & mask) >> ((7 - index) * 8)))
+        mask >>= 8
+      }
+    }
+
+    for byte in message.otherContent {
+      data.append(byte)
+    }
+    
+    // Init super
     
     super.init()
+    
+    // Done.
     
   }
   
@@ -84,17 +123,29 @@ public class LCCCANFrame : NSObject {
   
   // MARK: Public Properties
   
-  public var frame : String
+  public var header : UInt32
   
-  public var data : [UInt8] = []
+  public var data : [UInt8]
   
-  public var dataAsString : String = ""
+  public var dataAsHex : String {
+    get {
+      var result = ""
+      for byte in data {
+        result += byte.toHex(numberOfDigits: 2)
+      }
+      return result
+    }
+  }
+  
+  public var message : String {
+    get {
+      return ":X\(header.toHex(numberOfDigits: 8))N\(dataAsHex);"
+    }
+  }
   
   public var networkId : Int
 
   public var timeStamp : TimeInterval = 0.0
-  
-  public var header : UInt32
   
   public var timeSinceLastMessage : TimeInterval = 0.0
 

@@ -40,6 +40,7 @@ public class LCCTransportLayer : NSObject {
   // MARK: Public Methods
   
   public func addToOutputQueue(message: OpenLCBMessage) {
+    message.timeStamp = Date.timeIntervalSinceReferenceDate
     outputQueueLock.lock()
     outputQueue.append(message)
     outputQueueLock.unlock()
@@ -47,10 +48,17 @@ public class LCCTransportLayer : NSObject {
   }
 
   public func addToInputQueue(message: OpenLCBMessage) {
+    message.timeStamp = Date.timeIntervalSinceReferenceDate
     inputQueueLock.lock()
     inputQueue.append(message)
     inputQueueLock.unlock()
     processQueues()
   }
+  
+  public func transitionToPermittedState() {
+  }
 
+  public func transitionToInhibitedState() {
+  }
+  
 }

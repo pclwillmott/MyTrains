@@ -234,6 +234,7 @@
 		DAB1DB912971CCA900918A5F /* IODeviceNewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB1DB902971CCA900918A5F /* IODeviceNewVC.swift */; };
 		DAB4FF5E2854F8CF00D74920 /* LocomotiveType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB4FF5D2854F8CF00D74920 /* LocomotiveType.swift */; };
 		DAB768F929339DCC00ECC41A /* SensorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB768F829339DCC00ECC41A /* SensorType.swift */; };
+		DABD30B629E4610A002A2C4B /* NetworkLayerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABD30B529E4610A002A2C4B /* NetworkLayerDelegate.swift */; };
 		DAC0194A289E79BF001152F6 /* EditCommandStations.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DAC01949289E79BF001152F6 /* EditCommandStations.storyboard */; };
 		DAC0194C289E7B80001152F6 /* EditCommandStationsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAC0194B289E7B80001152F6 /* EditCommandStationsVC.swift */; };
 		DACB59272896A27E006B1861 /* TurnoutSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACB59262896A27E006B1861 /* TurnoutSwitch.swift */; };
@@ -503,6 +504,7 @@
 		DAB1DB902971CCA900918A5F /* IODeviceNewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IODeviceNewVC.swift; sourceTree = "<group>"; };
 		DAB4FF5D2854F8CF00D74920 /* LocomotiveType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocomotiveType.swift; sourceTree = "<group>"; };
 		DAB768F829339DCC00ECC41A /* SensorType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorType.swift; sourceTree = "<group>"; };
+		DABD30B529E4610A002A2C4B /* NetworkLayerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkLayerDelegate.swift; sourceTree = "<group>"; };
 		DAC01949289E79BF001152F6 /* EditCommandStations.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = EditCommandStations.storyboard; sourceTree = "<group>"; };
 		DAC0194B289E7B80001152F6 /* EditCommandStationsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCommandStationsVC.swift; sourceTree = "<group>"; };
 		DACB59262896A27E006B1861 /* TurnoutSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TurnoutSwitch.swift; sourceTree = "<group>"; };
@@ -647,6 +649,7 @@
 				DA912742295F3C9900E9B96E /* InputOutput.swift */,
 				DA3CD9F1277DEF990065D0C4 /* Interface.swift */,
 				DA56260E29E1AC2B00D465CC /* LCCNetworkLayer.swift */,
+				DABD30B529E4610A002A2C4B /* NetworkLayerDelegate.swift */,
 				DA56261229E1B64F00D465CC /* LCCNetworkLayerState.swift */,
 				DA56260A29E1A08500D465CC /* LCCTransportLayer.swift */,
 				DA56260C29E1A13300D465CC /* LCCTransportLayerState.swift */,
@@ -986,6 +989,7 @@
 				DA5E97722972CD48001453A1 /* UpdateDelegate.swift in Sources */,
 				DA8AE0F0279B3074001E9311 /* SlotViewVC.swift in Sources */,
 				DAB1DB912971CCA900918A5F /* IODeviceNewVC.swift in Sources */,
+				DABD30B629E4610A002A2C4B /* NetworkLayerDelegate.swift in Sources */,
 				DA56260F29E1AC2B00D465CC /* LCCNetworkLayer.swift in Sources */,
 				DA08B43727875FDD0001307C /* ProgSlotDataP1.swift in Sources */,
 				DA6E28E5285F925C00772641 /* BlockDirection.swift in Sources */,

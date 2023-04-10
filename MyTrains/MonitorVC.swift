@@ -324,7 +324,7 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
       break
     }
     
-    item += "\(frame.frame)\n\(frame.info)\n\(frame.data)"
+    item += "\(frame.message)\n\(frame.info)\n\(frame.data)"
     
     if !isPaused {
       

@@ -586,7 +586,6 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
   
   public func close() {
     if let transportLayer = lccCANTransportLayer, let networkLayer = networkController.lccNetworkLayer {
-      transportLayer.transitionToInhibitedState()
       networkLayer.removeTransportLayer(transportLayer: transportLayer)
       lccCANTransportLayer = nil
     }
@@ -599,6 +598,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
   }
 
   public func send(data:String) {
+    print(data)
     serialPort?.write(data:[UInt8](data.utf8))
   }
 
@@ -882,7 +882,6 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
     if let network = self.network, network.networkType == .LCC, let networkLayer = networkController.lccNetworkLayer {
       lccCANTransportLayer = LCCCANTransportLayer(interface: self, nodeId: networkLayer.nodeId)
       networkLayer.addTransportLayer(transportLayer: lccCANTransportLayer!)
-      lccCANTransportLayer!.transitionToPermittedState()
     }
     else if !isEdit {
       iplDiscover()
