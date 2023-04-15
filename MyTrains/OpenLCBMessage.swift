@@ -40,7 +40,7 @@ public class OpenLCBMessage : NSObject {
         
         if (messageTypeIndicator.rawValue & mask) == mask { // isAddressPresent
           destinationNIDAlias = UInt16(otherContent[1]) | (UInt16(otherContent[0] & 0x0f) << 8)
-          flags = otherContent[0] >> 4
+          flags = LCCCANFrameFlag(rawValue: (otherContent[0] & 0xf0) >> 4)!
           otherContent.removeFirst(2)
         }
         
@@ -74,13 +74,10 @@ public class OpenLCBMessage : NSObject {
     
   }
   
-  
   // MARK: Public Properties
   
   public var messageTypeIndicator : OpenLCBMTI
   
-  public var flags : UInt8 = 0
-
   public var isSpecial : Bool {
     get {
       let mask : UInt16 = 0x2000
@@ -144,6 +141,8 @@ public class OpenLCBMessage : NSObject {
   public var destinationNodeId : UInt64?
   
   public var destinationNIDAlias : UInt16?
+  
+  public var flags : LCCCANFrameFlag = .onlyFrame
   
   public var eventId : UInt64?
   

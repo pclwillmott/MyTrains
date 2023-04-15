@@ -39,6 +39,8 @@ public class LCCNetworkLayer : NSObject, LCCTransportLayerDelegate {
   
   public var transportLayers : [ObjectIdentifier:LCCTransportLayer] = [:]
   
+  public var externalLCCNodes : [UInt64:OpenLCBNode] = [:]
+  
   // MARK: Public Methods
   
   public func addTransportLayer(transportLayer: LCCTransportLayer) {
@@ -147,27 +149,42 @@ public class LCCNetworkLayer : NSObject, LCCTransportLayerDelegate {
   // MARK: TransportLayerDelegate Methods
   
   public func openLCBMessageReceived(message: OpenLCBMessage) {
-    print("SRC: \(message.sourceNodeId!.toHex(numberOfDigits: 12))")
-    print("MTI: \(message.messageTypeIndicator)")
-    if message.isAddressPresent {
-      print("DST: \(message.destinationNodeId!.toHex(numberOfDigits: 12))")
-      print("FLG: \(message.flags)")
-    }
-    if message.isEventPresent {
-      print("EVT: \(message.eventId!.toHex(numberOfDigits: 16))")
-    }
-    if !message.otherContent.isEmpty {
-      print("OC: \(message.otherContentAsHex)")
-    }
-    print()
     
-    switch message.messageTypeIndicator {
-    case .verifyNodeIDNumberGlobal:
-      if message.otherContentAsHex == nodeId.toHex(numberOfDigits: 12) {
-        sendVerifiedNodeIdNumber()
+    if let _ = externalLCCNodes[message.sourceNodeId!] {
+    }
+    else {
+      externalLCCNodes[message.sourceNodeId!] = OpenLCBNode(nodeId: message.sourceNodeId!)
+    }
+    
+    if let node = externalLCCNodes[message.sourceNodeId!] {
+      
+      print("SRC: \(message.sourceNodeId!.toHex(numberOfDigits: 12))")
+      print("MTI: \(message.messageTypeIndicator)")
+      if message.isAddressPresent {
+        print("DST: \(message.destinationNodeId!.toHex(numberOfDigits: 12))")
       }
-    default:
-      break
+      if message.isEventPresent {
+        print("EVT: \(message.eventId!.toHex(numberOfDigits: 16))")
+      }
+      if !message.otherContent.isEmpty {
+        print("OC: \(message.otherContentAsHex)")
+      }
+      print()
+      
+      switch message.messageTypeIndicator {
+      case .verifyNodeIDNumberGlobal:
+        if message.otherContentAsHex == nodeId.toHex(numberOfDigits: 12) {
+          sendVerifiedNodeIdNumber()
+        }
+      case .protocolSupportReply:
+        node.supportedProtocols = message.otherContent
+        for item in node.supportedProtocolsInfo {
+          print(item)
+        }
+      default:
+        break
+      }
+      
     }
     
   }

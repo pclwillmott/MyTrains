@@ -89,7 +89,7 @@ public class LCCCANFrame : NSObject {
     
     if message.isAddressPresent {
       var temp = message.destinationNIDAlias! & 0x0fff
-      temp |= UInt16(message.flags & 0x0f) << 12
+      temp |= UInt16(LCCCANFrameFlag.onlyFrame.rawValue & 0x0f) << 12
       data.append(UInt8(temp >> 8))
       data.append(UInt8(temp & 0xff))
     }
@@ -114,7 +114,72 @@ public class LCCCANFrame : NSObject {
     // Done.
     
   }
-  
+
+  init?(networkId: Int, message:OpenLCBMessage, flags: LCCCANFrameFlag, frameNumber: Int) {
+    
+    // Check that the message is complete
+    
+    guard message.isMessageComplete else {
+      return nil
+    }
+    
+    // Initialise Network Id
+    
+    self.networkId = networkId
+
+    // Build CAN header
+    
+    header  = 0x18000000 // CAN Prefix
+    
+    header |= (OpenLCBMessage.canFrameType(message: message).rawValue & 0x07) << 24
+    
+    header |= UInt32(message.messageTypeIndicator.rawValue & 0x0fff) << 12
+    
+    header |= UInt32(message.sourceNIDAlias! & 0xfff)
+    
+    // Build CAN data payload
+    
+    data = []
+    
+    if message.isAddressPresent {
+      var temp = message.destinationNIDAlias! & 0x0fff
+      temp |= UInt16(flags.rawValue & 0x0f) << 12
+      data.append(UInt8(temp >> 8))
+      data.append(UInt8(temp & 0xff))
+    }
+    
+    if message.isEventPresent {
+      var mask : UInt64 = 0xff00000000000000
+      let eventId = message.eventId!
+      for index in 0...7 {
+        data.append(UInt8((eventId & mask) >> ((7 - index) * 8)))
+        mask >>= 8
+      }
+    }
+
+    for byte in message.otherContent {
+      data.append(byte)
+    }
+    
+    var numberToRemove = (frameNumber - 1) * 6
+    
+    while numberToRemove > 0 {
+      data.remove(at: 2)
+      numberToRemove -= 1
+    }
+    
+    while data.count > 8 {
+      data.removeLast()
+    }
+    
+    // Init super
+    
+    super.init()
+    
+    // Done.
+    
+  }
+
   // MARK: Private Properties
   
   private let mask_FrameType : UInt32 = 0x08000000

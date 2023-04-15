@@ -50,6 +50,8 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
   
   private var nodeIdLookup : [String:UInt16] = [:]
   
+  private var firstFrame : LCCCANFrame?
+  
   // MARK: Public Properties
   
   public var interface : Interface
@@ -97,10 +99,13 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
         var delete = false
         
         if message.isMessageComplete {
-     //     if !message.isAddressPresent || message.isAddressPresent && message.destinationNodeId! == nodeId {
+          
+//          if !message.isAddressPresent || message.isAddressPresent && message.destinationNodeId! == nodeId {
             delegate?.openLCBMessageReceived(message: message)
-     //     }
+//          }
+          
           delete = true
+          
         }
         else if (referenceDate - message.timeStamp) > timeoutInterval {
           delete = true
@@ -150,9 +155,48 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
         
         var delete = false
         
-        if let frame = LCCCANFrame(networkId: interface.networkId, message: message) {
-          interface.send(data: frame.message)
-          delete = true
+        if message.isMessageComplete {
+          
+          if message.isAddressPresent {
+            
+            if let frame = LCCCANFrame(networkId: interface.networkId, message: message) {
+              
+              if frame.data.count <= 8 {
+                interface.send(data: frame.message)
+              }
+              else {
+                
+                let numberOfFrames = 1 + (frame.data.count - 3 ) / 6
+                
+                for frameNumber in 1...numberOfFrames {
+                  
+                  var flags : LCCCANFrameFlag = .middleFrame
+                  
+                  if frameNumber == 1 {
+                    flags = .firstFrame
+                  }
+                  else if frameNumber == numberOfFrames {
+                    flags = .lastFrame
+                  }
+                  
+                  if let frame = LCCCANFrame(networkId: interface.networkId, message: message, flags: flags, frameNumber: frameNumber) {
+                    interface.send(data: frame.message)
+                  }
+                  
+                }
+                
+              }
+              
+            }
+            
+            delete = true
+            
+          }
+          else if let frame = LCCCANFrame(networkId: interface.networkId, message: message) {
+            interface.send(data: frame.message)
+            delete = true
+          }
+          
         }
         else if (referenceDate - message.timeStamp) > timeoutInterval {
           delete = true
@@ -496,7 +540,25 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
     case .openLCBMessage:
       
       if let message = OpenLCBMessage(frame: frame) {
-        addToInputQueue(message: message)
+        
+        switch message.flags {
+        case .onlyFrame:
+          addToInputQueue(message: message)
+        case .firstFrame:
+          firstFrame = frame
+        case .middleFrame, .lastFrame:
+          if let first = firstFrame {
+            frame.data.removeFirst(2)
+            first.data += frame.data
+            if message.flags == .lastFrame, let message = OpenLCBMessage(frame: first) {
+              message.flags = .onlyFrame
+              addToInputQueue(message: message)
+              print(first.data)
+              firstFrame = nil
+            }
+          }
+        }
+        
       }
       else {
         print("*\(frame.header.toHex(numberOfDigits: 4))")
