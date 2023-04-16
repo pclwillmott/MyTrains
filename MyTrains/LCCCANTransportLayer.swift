@@ -50,7 +50,11 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
   
   private var nodeIdLookup : [String:UInt16] = [:]
   
-  private var firstFrame : LCCCANFrame?
+  private var splitFrames : [UInt64:LCCCANFrame] = [:]
+  
+  private var datagrams : [UInt32:OpenLCBMessage] = [:]
+  
+  private var datagramsAwaitingReceipt : [UInt32:OpenLCBMessage] = [:]
   
   // MARK: Public Properties
   
@@ -87,7 +91,7 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
           }
         }
         
-        if message.isAddressPresent && message.destinationNodeId == nil, let alias = message.destinationNIDAlias {
+        if (message.isAddressPresent || message.messageTypeIndicator == .datagram) && message.destinationNodeId == nil, let alias = message.destinationNIDAlias {
           if let id = aliasLookup[alias] {
             message.destinationNodeId = UInt64(hex: id)
           }
@@ -100,10 +104,24 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
         
         if message.isMessageComplete {
           
-//          if !message.isAddressPresent || message.isAddressPresent && message.destinationNodeId! == nodeId {
-            delegate?.openLCBMessageReceived(message: message)
-//          }
-          
+          switch message.messageTypeIndicator {
+          case .datagramReceivedOK:
+            if let datagram = datagramsAwaitingReceipt[message.datagramIdReversed] {
+              datagramsAwaitingReceipt.removeValue(forKey: message.datagramIdReversed)
+            }
+          case .datagramRejected:
+            if let datagram = datagramsAwaitingReceipt[message.datagramIdReversed] {
+              datagramsAwaitingReceipt.removeValue(forKey: message.datagramIdReversed)
+              if message.errorCode.isTemporary {
+                addToOutputQueue(message: datagram)
+              }
+            }
+          default:
+            break
+          }
+
+          delegate?.openLCBMessageReceived(message: message)
+
           delete = true
           
         }
@@ -138,11 +156,13 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
         
         let message = outputQueue[index]
         
-        message.sourceNodeId = nodeId
+        if message.sourceNodeId == nil {
+          message.sourceNodeId = nodeId
+        }
         
-        message.sourceNIDAlias = alias
+        message.sourceNIDAlias = nodeIdLookup[message.sourceNodeId!.toHex(numberOfDigits: 12)]
         
-        if message.isAddressPresent, let destinationNodeId = message.destinationNodeId {
+        if (message.messageTypeIndicator == .datagram ) || message.isAddressPresent, let destinationNodeId = message.destinationNodeId {
           
           if let alias = nodeIdLookup[destinationNodeId.toHex(numberOfDigits: 12)] {
             message.destinationNIDAlias = alias
@@ -157,7 +177,51 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
         
         if message.isMessageComplete {
           
-          if message.isAddressPresent {
+          if message.messageTypeIndicator == .datagram {
+
+            datagramsAwaitingReceipt[message.datagramId] = message
+
+            if message.otherContent.count <= 8 {
+              if let frame = LCCCANFrame(networkId: interface.networkId, message: message, canFrameType: .datagramCompleteInFrame, data: message.otherContent) {
+                interface.send(data: frame.message)
+              }
+            }
+            else {
+              
+              let numberOfFrames = message.otherContent.count == 0 ? 1 : 1 + (message.otherContent.count - 1) / 8
+              
+              for frameNumber in 1...numberOfFrames {
+                
+                var canFrameType : OpenLCBMessageCANFrameType = .datagramMiddleFrame
+                
+                if frameNumber == 1 {
+                  canFrameType = .datagramFirstFrame
+                }
+                else if frameNumber == numberOfFrames {
+                  canFrameType = .datagramFinalFrame
+                }
+                
+                var data : [UInt8] = []
+                
+                var index = (frameNumber - 1) * 8
+                
+                var count = 0
+                
+                while index < message.otherContent.count && count < 8 {
+                  data.append(message.otherContent[index])
+                  index += 1
+                  count += 1
+                }
+                
+                if let frame = LCCCANFrame(networkId: interface.networkId, message: message, canFrameType: canFrameType, data: data) {
+                  interface.send(data: frame.message)
+                }
+                
+              }
+              
+            }
+          }
+          else if message.isAddressPresent {
             
             if let frame = LCCCANFrame(networkId: interface.networkId, message: message) {
               
@@ -541,22 +605,95 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
       
       if let message = OpenLCBMessage(frame: frame) {
         
-        switch message.flags {
-        case .onlyFrame:
-          addToInputQueue(message: message)
-        case .firstFrame:
-          firstFrame = frame
-        case .middleFrame, .lastFrame:
-          if let first = firstFrame {
-            frame.data.removeFirst(2)
-            first.data += frame.data
-            if message.flags == .lastFrame, let message = OpenLCBMessage(frame: first) {
-              message.flags = .onlyFrame
-              addToInputQueue(message: message)
-              print(first.data)
-              firstFrame = nil
+        var deleteList : [LCCCANFrame] = []
+        
+        let now = frame.timeStamp
+        
+        for (_, frame) in splitFrames {
+          if (now - frame.timeStamp) > 3.0 {
+            deleteList.append(frame)
+          }
+        }
+        
+        while deleteList.count > 0 {
+          splitFrames.removeValue(forKey: deleteList[0].splitFrameId)
+        }
+        
+        var timeOutList : [OpenLCBMessage] = []
+        
+        for (_, message) in datagrams {
+          if (now - message.timeStamp) > 3.0 {
+            timeOutList.append(message)
+          }
+        }
+        
+        while timeOutList.count > 0 {
+          let message = timeOutList[0]
+          if message.destinationNIDAlias == alias {
+            let errorMessage = OpenLCBMessage(messageTypeIndicator: .datagramRejected)
+            errorMessage.destinationNIDAlias = message.sourceNIDAlias
+            errorMessage.sourceNIDAlias = alias
+            errorMessage.sourceNodeId = nodeId
+            errorMessage.otherContent = OpenLCBErrorCode.temporaryErrorTimeOutWaitingForEndFrame.asData
+            addToOutputQueue(message: errorMessage)
+          }
+          datagrams.removeValue(forKey: timeOutList[0].datagramId)
+        }
+
+        switch message.canFrameType {
+        case .globalAndAddressedMTI:
+          switch message.flags {
+          case .onlyFrame:
+            addToInputQueue(message: message)
+          case .firstFrame:
+            splitFrames[frame.splitFrameId] = frame
+          case .middleFrame, .lastFrame:
+            if let first = splitFrames[frame.splitFrameId] {
+              frame.data.removeFirst(2)
+              first.data += frame.data
+              if message.flags == .lastFrame, let message = OpenLCBMessage(frame: first) {
+                message.flags = .onlyFrame
+                addToInputQueue(message: message)
+                splitFrames.removeValue(forKey: first.splitFrameId)
+              }
             }
           }
+        case .datagramCompleteInFrame:
+          addToInputQueue(message: message)
+        case .datagramFirstFrame:
+          if let oldMessage = datagrams[message.datagramId] {
+            if oldMessage.destinationNIDAlias == alias {
+              let errorMessage = OpenLCBMessage(messageTypeIndicator: .datagramRejected)
+              errorMessage.destinationNIDAlias = message.sourceNIDAlias
+              errorMessage.sourceNIDAlias = alias
+              errorMessage.sourceNodeId = nodeId
+              errorMessage.otherContent = OpenLCBErrorCode.temporaryErrorOutOfOrderStartFrameBeforeFinishingPreviousMessage.asData
+              addToOutputQueue(message: errorMessage)
+            }
+            datagrams.removeValue(forKey: oldMessage.datagramId)
+          }
+          else {
+            datagrams[message.datagramId] = message
+          }
+        case .datagramMiddleFrame, .datagramFinalFrame:
+          if let first = datagrams[message.datagramId] {
+            first.timeStamp = message.timeStamp
+            first.otherContent += message.otherContent
+            if message.canFrameType == .datagramFinalFrame {
+              addToInputQueue(message: first)
+              datagrams.removeValue(forKey: first.datagramId)
+            }
+          }
+          else if message.destinationNIDAlias == alias {
+            let errorMessage = OpenLCBMessage(messageTypeIndicator: .datagramRejected)
+            errorMessage.destinationNIDAlias = message.sourceNIDAlias
+            errorMessage.sourceNIDAlias = alias
+            errorMessage.sourceNodeId = nodeId
+            errorMessage.otherContent = OpenLCBErrorCode.temporaryErrorOutOfOrderMiddleOrEndFrameWithoutStartFrame.asData
+            addToOutputQueue(message: errorMessage)
+          }
+        default:
+          break
         }
         
       }

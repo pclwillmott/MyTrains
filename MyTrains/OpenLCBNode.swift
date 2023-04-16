@@ -27,6 +27,50 @@ public class OpenLCBNode : NSObject {
   
   public var nodeId : UInt64
   
+  public var manufacturerName : String = ""
+  
+  public var nodeModelName : String = ""
+  
+  public var nodeHardwareVersion : String = ""
+  
+  public var nodeSoftwareVersion : String = ""
+  
+  public var userNodeName : String = ""
+  
+  public var userNodeDescription : String = ""
+  
+  public var encodedNodeInformation : [UInt8] {
+    get {
+      return [UInt8](("\u{04}\(manufacturerName)\0\(nodeModelName)\0\(nodeHardwareVersion)\0\(nodeSoftwareVersion)\0\u{02}\(userNodeName)\0\(userNodeDescription)\0").utf8)
+    }
+    set(value) {
+      
+      let temp = String(bytes: value, encoding: .utf8)!.split(separator: "\0", omittingEmptySubsequences: false)
+      
+      let version = value[0]
+      
+      if version == 1 || version == 4 {
+        
+        manufacturerName = String(temp[0])
+        
+        manufacturerName.removeFirst()
+        
+        nodeModelName = String(temp[1])
+        
+        nodeHardwareVersion = String(temp[2])
+        
+        nodeSoftwareVersion = String(temp[3])
+        
+        userNodeName = String(temp[4])
+        userNodeName.removeFirst()
+        
+        userNodeDescription = String(temp[5])
+        
+      }
+
+    }
+  }
+  
   public var supportedProtocols : [UInt8] {
     get {
       return _supportedProtocols

@@ -270,6 +270,7 @@
 		DAF5B4FD28A91A830015E758 /* SpeedSteps.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF5B4FC28A91A830015E758 /* SpeedSteps.swift */; };
 		DAF5B4FF28A93D0E0015E758 /* RandomAccessCollectionExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF5B4FE28A93D0E0015E758 /* RandomAccessCollectionExtensions.swift */; };
 		DAF5BCD9281EF086000B61CA /* SwitchBoardPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF5BCD8281EF086000B61CA /* SwitchBoardPanel.swift */; };
+		DAFBC3ED29EC39A6003336BE /* OpenLCBErrorCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAFBC3EC29EC39A6003336BE /* OpenLCBErrorCode.swift */; };
 		DAFD69832840FCF50028E7D3 /* InterfaceCommandStationExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAFD69822840FCF50028E7D3 /* InterfaceCommandStationExtensions.swift */; };
 		DAFE9813298587D900AC2C4A /* TC64ActionPaired.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAFE9812298587D900AC2C4A /* TC64ActionPaired.swift */; };
 		DAFE981529858A6300AC2C4A /* TC64Direction.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAFE981429858A6300AC2C4A /* TC64Direction.swift */; };
@@ -543,6 +544,7 @@
 		DAF5B4FC28A91A830015E758 /* SpeedSteps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedSteps.swift; sourceTree = "<group>"; };
 		DAF5B4FE28A93D0E0015E758 /* RandomAccessCollectionExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomAccessCollectionExtensions.swift; sourceTree = "<group>"; };
 		DAF5BCD8281EF086000B61CA /* SwitchBoardPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchBoardPanel.swift; sourceTree = "<group>"; };
+		DAFBC3EC29EC39A6003336BE /* OpenLCBErrorCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBErrorCode.swift; sourceTree = "<group>"; };
 		DAFD69822840FCF50028E7D3 /* InterfaceCommandStationExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceCommandStationExtensions.swift; sourceTree = "<group>"; };
 		DAFE9812298587D900AC2C4A /* TC64ActionPaired.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TC64ActionPaired.swift; sourceTree = "<group>"; };
 		DAFE981429858A6300AC2C4A /* TC64Direction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TC64Direction.swift; sourceTree = "<group>"; };
@@ -667,6 +669,7 @@
 				DA56261429E1BE7800D465CC /* OpenLCBMTI.swift */,
 				DA7A127529E2E6DB000DCE1C /* OpenLCBCANControlFrameFormat.swift */,
 				DA5B6AA929EAC2D90095F7D5 /* OpenLCBNode.swift */,
+				DAFBC3EC29EC39A6003336BE /* OpenLCBErrorCode.swift */,
 				DAFD69822840FCF50028E7D3 /* InterfaceCommandStationExtensions.swift */,
 				DA8B5D1C282FE31600D39F07 /* InterfaceDelegate.swift */,
 				DA8B5D13282FC35E00D39F07 /* InterfaceExtensions.swift */,
@@ -1166,6 +1169,7 @@
 				DA5B6AAA29EAC2D90095F7D5 /* OpenLCBNode.swift in Sources */,
 				DAE8DD53286751BE0097C2D1 /* Manufacturer.swift in Sources */,
 				DACB59312896CDCE006B1861 /* TurnoutSwitchState.swift in Sources */,
+				DAFBC3ED29EC39A6003336BE /* OpenLCBErrorCode.swift in Sources */,
 				DA9ED4EE28F240A400EA914A /* RouteManagerVC.swift in Sources */,
 				DA912741295F315000E9B96E /* TC64ShortTiming.swift in Sources */,
 				DA0DA27A2779E96B00E4F23C /* Layout.swift in Sources */,

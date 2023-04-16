@@ -96,6 +96,7 @@ public class LCCNetworkLayer : NSObject, LCCTransportLayerDelegate {
     
     sendProtocolSupportInquiry(nodeId: 0x020157000570)
     
+    sendSimpleNodeInformationRequest(nodeId: 0x020157000570)
   }
 
   public func sendVerifyNodeIdNumber() {
@@ -146,6 +147,16 @@ public class LCCNetworkLayer : NSObject, LCCTransportLayerDelegate {
 
   }
   
+  public func sendSimpleNodeInformationRequest(nodeId:UInt64) {
+
+    let message = OpenLCBMessage(messageTypeIndicator: .simpleNodeIdentInfoRequest)
+    
+    message.destinationNodeId = nodeId
+    
+    sendMessage(message: message)
+
+  }
+  
   // MARK: TransportLayerDelegate Methods
   
   public func openLCBMessageReceived(message: OpenLCBMessage) {
@@ -180,6 +191,22 @@ public class LCCNetworkLayer : NSObject, LCCTransportLayerDelegate {
         node.supportedProtocols = message.otherContent
         for item in node.supportedProtocolsInfo {
           print(item)
+        }
+      case .simpleNodeIdentInfoReply:
+        if let node = externalLCCNodes[message.sourceNodeId!] {
+        }
+        else {
+          let node = OpenLCBNode(nodeId: message.sourceNodeId!)
+          externalLCCNodes[node.nodeId] = node
+        }
+        if let node = externalLCCNodes[message.sourceNodeId!] {
+          node.encodedNodeInformation = message.otherContent
+          print("Manufacturer:          \(node.manufacturerName)")
+          print("Node Model Name:       \(node.nodeModelName)")
+          print("Node Hardware Version: \(node.nodeHardwareVersion)")
+          print("Node Software Version: \(node.nodeSoftwareVersion)")
+          print("User Node Name:        \(node.userNodeName)")
+          print("User Node Description: \(node.userNodeDescription)")
         }
       default:
         break

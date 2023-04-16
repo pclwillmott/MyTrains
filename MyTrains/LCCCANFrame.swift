@@ -180,6 +180,40 @@ public class LCCCANFrame : NSObject {
     
   }
 
+  init?(networkId: Int, message:OpenLCBMessage, canFrameType:OpenLCBMessageCANFrameType, data: [UInt8]) {
+    
+    // Check that the message is complete
+    
+    guard message.isMessageComplete else {
+      return nil
+    }
+    
+    // Initialise Network Id
+    
+    self.networkId = networkId
+
+    // Build CAN header
+    
+    header  = 0x18000000 // CAN Prefix
+    
+    header |= (canFrameType.rawValue & 0x07) << 24
+    
+    header |= UInt32(message.destinationNIDAlias! & 0x0fff) << 12
+    
+    header |= UInt32(message.sourceNIDAlias! & 0xfff)
+    
+    // Build CAN data payload
+    
+    self.data = data
+    
+    // Init super
+    
+    super.init()
+    
+    // Done.
+    
+  }
+
   // MARK: Private Properties
   
   private let mask_FrameType : UInt32 = 0x08000000
@@ -191,6 +225,15 @@ public class LCCCANFrame : NSObject {
   public var header : UInt32
   
   public var data : [UInt8]
+  
+  public var splitFrameId : UInt64 {
+    get {
+      var result = UInt64(header) << 16
+      result |= UInt64(data[0] & 0x0f) << 8
+      result |= UInt64(data[1])
+      return result
+    }
+  }
   
   public var dataAsHex : String {
     get {

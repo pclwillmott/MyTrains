@@ -60,7 +60,17 @@ public class OpenLCBMessage : NSObject {
           otherContent.removeFirst(8)
           
         }
+      
+      case .datagramCompleteInFrame, .datagramFirstFrame, .datagramMiddleFrame, .datagramFinalFrame:
         
+        messageTypeIndicator = .datagram
+        
+        sourceNIDAlias = UInt16(frame.header & 0xfff)
+
+        destinationNIDAlias = UInt16(frame.header & 0xfff000) >> 12
+        
+        otherContent = frame.data
+
       default: // Reserved
         messageTypeIndicator = .unknown
       }
@@ -142,6 +152,29 @@ public class OpenLCBMessage : NSObject {
   
   public var destinationNIDAlias : UInt16?
   
+  public var datagramId : UInt32 {
+    get {
+      return (UInt32(destinationNIDAlias!) << 12) | UInt32(sourceNIDAlias!)
+    }
+  }
+
+  public var datagramIdReversed : UInt32 {
+    get {
+      return (UInt32(sourceNIDAlias!) << 12) | UInt32(destinationNIDAlias!)
+    }
+  }
+
+  public var errorCode : OpenLCBErrorCode {
+    get {
+      var error : UInt16 = 0
+      if otherContent.count > 1 {
+        error |= UInt16(otherContent[0]) << 8
+        error |= UInt16(otherContent[1])
+      }
+      return OpenLCBErrorCode(rawValue: error) ?? .nodeError
+    }
+  }
+  
   public var flags : LCCCANFrameFlag = .onlyFrame
   
   public var eventId : UInt64?
@@ -162,10 +195,11 @@ public class OpenLCBMessage : NSObject {
     
     get {
       var result = sourceNodeId != nil && sourceNIDAlias != nil
-      if isAddressPresent {
+      let isDatagram = messageTypeIndicator == .datagram
+      if isAddressPresent || isDatagram {
         result = result && destinationNodeId != nil && destinationNIDAlias != nil
       }
-      if isEventPresent {
+      if isEventPresent && !isDatagram {
         result = result && eventId != nil
       }
       return result
@@ -180,9 +214,10 @@ public class OpenLCBMessage : NSObject {
     if !message.isStreamOrDatagram && !message.isSpecial {
       return .globalAndAddressedMTI
     }
-    else {
-      return .reserved1
+    else if message.messageTypeIndicator == .datagram {
+      return .datagramFirstFrame
     }
+    return .reserved1
   }
   
   public var timeStamp : TimeInterval = 0
