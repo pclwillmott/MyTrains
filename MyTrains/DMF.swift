@@ -216,8 +216,6 @@ public class DMF : NSObject {
       maxCount = count
     }
 
-    print("character: \(maxChar) count: \(maxCount)")
-  
     decode(data: data)
   //    writeToFile(data: Data(data), fileName: "DECODED")
     
@@ -257,7 +255,7 @@ public class DMF : NSObject {
         k4 = UInt8(my_rand() & 0xff)
         k3 = UInt8(my_rand() & 0xff)
         lastBlock = block
-        print("\(block) \(k1) \(k2) \(k3) \(k4)")
+//        print("\(block) \(k1) \(k2) \(k3) \(k4)")
       }
       
       if data[index+0] == data[index+step+0] &&
@@ -290,7 +288,7 @@ public class DMF : NSObject {
           total += diff[ii]
         }
         if true || total != 0 {
-          print("\(block)\t\(mask[0])\t\(mask[1])\t\(mask[2])\t\(mask[3])\t\(mask[4])\t\(mask[5])\t\(mask[6])\t\(mask[7])")
+     //     print("\(block)\t\(mask[0])\t\(mask[1])\t\(mask[2])\t\(mask[3])\t\(mask[4])\t\(mask[5])\t\(mask[6])\t\(mask[7])")
         }
       }
 

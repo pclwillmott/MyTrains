@@ -211,5 +211,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     let wc = x.windowController
     wc.showWindow(nil)
   }
+  
+  @IBAction func mnuViewLCCNetwork(_ sender: NSMenuItem) {
+    let x = ModalWindow.ViewLCCNetwork
+    let wc = x.windowController
+ // let vc = x.viewController(windowController: wc) as! MonitorVC
+    wc.showWindow(nil)
+  }
+  
 }
 

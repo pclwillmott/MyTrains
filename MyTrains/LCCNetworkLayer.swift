@@ -92,16 +92,60 @@ public class LCCNetworkLayer : NSObject, LCCTransportLayerDelegate {
     
     sendMessage(message: message)
     
-    sendVerifyNodeIdNumber()
-    
-    sendProtocolSupportInquiry(nodeId: 0x020157000570)
-    
-    sendSimpleNodeInformationRequest(nodeId: 0x020157000570)
   }
 
   public func sendVerifyNodeIdNumber() {
     
     let message = OpenLCBMessage(messageTypeIndicator: .verifyNodeIDNumberGlobal)
+    
+    sendMessage(message: message)
+    
+  }
+  
+  public func sendNodeMemoryReadRequest(destinationNodeId:UInt64, addressSpace:UInt8, startAddress:UInt32, numberOfBytesToRead: UInt8) {
+    
+    guard numberOfBytesToRead > 0 && numberOfBytesToRead <= 64 else {
+      print("sendNodeMemoryReadRequest: invalid number of bytes")
+      return
+    }
+    
+    let message = OpenLCBMessage(messageTypeIndicator: .datagram)
+    
+    message.destinationNodeId = destinationNodeId
+    
+    message.sourceNodeId = networkController.lccNodeId
+    
+    var data : [UInt8] = [0x20]
+    
+    var addByte6 = false
+    
+    switch addressSpace {
+    case 0xff:
+      data.append(0x43)
+    case 0xfe:
+      data.append(0x42)
+    case 0xfd:
+      data.append(0x41)
+    default:
+      data.append(0x40)
+      addByte6 = true
+    }
+    
+    var mask : UInt32 = 0xff000000
+    for index in (0...3).reversed() {
+      data.append(UInt8((startAddress & mask) >> (index * 8)))
+      mask >>= 8
+    }
+    
+    if addByte6 {
+      data.append(addressSpace)
+    }
+    
+    data.append(numberOfBytesToRead)
+    
+    message.otherContent = data
+    
+    print(data)
     
     sendMessage(message: message)
     
@@ -167,51 +211,17 @@ public class LCCNetworkLayer : NSObject, LCCTransportLayerDelegate {
       externalLCCNodes[message.sourceNodeId!] = OpenLCBNode(nodeId: message.sourceNodeId!)
     }
     
-    if let node = externalLCCNodes[message.sourceNodeId!] {
-      
-      print("SRC: \(message.sourceNodeId!.toHex(numberOfDigits: 12))")
-      print("MTI: \(message.messageTypeIndicator)")
-      if message.isAddressPresent {
-        print("DST: \(message.destinationNodeId!.toHex(numberOfDigits: 12))")
+    switch message.messageTypeIndicator {
+    case .verifyNodeIDNumberGlobal:
+      if message.otherContentAsHex == nodeId.toHex(numberOfDigits: 12) {
+        sendVerifiedNodeIdNumber()
       }
-      if message.isEventPresent {
-        print("EVT: \(message.eventId!.toHex(numberOfDigits: 16))")
-      }
-      if !message.otherContent.isEmpty {
-        print("OC: \(message.otherContentAsHex)")
-      }
-      print()
-      
-      switch message.messageTypeIndicator {
-      case .verifyNodeIDNumberGlobal:
-        if message.otherContentAsHex == nodeId.toHex(numberOfDigits: 12) {
-          sendVerifiedNodeIdNumber()
-        }
-      case .protocolSupportReply:
-        node.supportedProtocols = message.otherContent
-        for item in node.supportedProtocolsInfo {
-          print(item)
-        }
-      case .simpleNodeIdentInfoReply:
-        if let node = externalLCCNodes[message.sourceNodeId!] {
-        }
-        else {
-          let node = OpenLCBNode(nodeId: message.sourceNodeId!)
-          externalLCCNodes[node.nodeId] = node
-        }
-        if let node = externalLCCNodes[message.sourceNodeId!] {
-          node.encodedNodeInformation = message.otherContent
-          print("Manufacturer:          \(node.manufacturerName)")
-          print("Node Model Name:       \(node.nodeModelName)")
-          print("Node Hardware Version: \(node.nodeHardwareVersion)")
-          print("Node Software Version: \(node.nodeSoftwareVersion)")
-          print("User Node Name:        \(node.userNodeName)")
-          print("User Node Description: \(node.userNodeDescription)")
-        }
-      default:
-        break
-      }
-      
+    default:
+      break
+    }
+
+    for (_, observer) in observers {
+      observer.openLCBMessageReceived(message: message)
     }
     
   }

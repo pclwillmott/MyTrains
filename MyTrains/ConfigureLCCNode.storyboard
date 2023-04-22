@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21701"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Window Controller-->
+        <scene sceneID="5Co-yq-Irp">
+            <objects>
+                <windowController storyboardIdentifier="ConfigureLCCNodeWC" id="Er3-k7-3Id" sceneMemberID="viewController">
+                    <window key="window" title="Configure LCC Node" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" visibleAtLaunch="NO" frameAutosaveName="ConfigureLCCNode" animationBehavior="default" id="Qr6-bu-292">
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+                        <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+                        <rect key="contentRect" x="268" y="340" width="480" height="270"/>
+                        <rect key="screenRect" x="0.0" y="0.0" width="1792" height="1120"/>
+                        <view key="contentView" id="k3X-ky-Hgk">
+                            <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </view>
+                        <connections>
+                            <outlet property="delegate" destination="Er3-k7-3Id" id="QDB-iC-AUB"/>
+                        </connections>
+                    </window>
+                    <connections>
+                        <segue destination="sxP-xp-Aif" kind="relationship" relationship="window.shadowedContentViewController" id="sar-57-wUk"/>
+                    </connections>
+                </windowController>
+                <customObject id="RMe-ng-IzO" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-104" y="86"/>
+        </scene>
+        <!--ConfigureLCC NodeVC-->
+        <scene sceneID="fm4-WY-MAf">
+            <objects>
+                <viewController id="sxP-xp-Aif" customClass="ConfigureLCCNodeVC" customModule="MyTrains" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="2es-HJ-RrN">
+                        <rect key="frame" x="0.0" y="0.0" width="713" height="502"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uS4-fX-1kL">
+                                <rect key="frame" x="167" y="23" width="82" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" title="Get CDI" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="jJG-Ny-hdn">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="btnGetCDI:" target="sxP-xp-Aif" id="REy-do-nBG"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                    </view>
+                </viewController>
+                <customObject id="vvr-m7-zaL" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="720.5" y="171"/>
+        </scene>
+    </scenes>
+</document>

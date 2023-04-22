@@ -130,9 +130,11 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
         }
         
         if delete {
-          inputQueueLock.lock()
-          inputQueue.remove(at: index)
-          inputQueueLock.unlock()
+          if index < inputQueue.count {
+            inputQueueLock.lock()
+            inputQueue.remove(at: index)
+            inputQueueLock.unlock()
+          }
         }
         else {
           index += 1

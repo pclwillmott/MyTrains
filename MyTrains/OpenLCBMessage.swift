@@ -67,7 +67,7 @@ public class OpenLCBMessage : NSObject {
         
         sourceNIDAlias = UInt16(frame.header & 0xfff)
 
-        destinationNIDAlias = UInt16(frame.header & 0xfff000) >> 12
+        destinationNIDAlias = UInt16((frame.header & 0xfff000) >> 12)
         
         otherContent = frame.data
 

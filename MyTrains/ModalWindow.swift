@@ -52,6 +52,8 @@ enum AppStoryboard : String {
   case IOChannelTC64MkIIOutputPropertySheet  = "IOChannelTC64MkIIOutputPropertySheet"
   case IOFunctionTC64MkIIInputPropertySheet  = "IOFunctionTC64MkIIInputPropertySheet"
   case IOFunctionTC64MkIIOutputPropertySheet = "IOFunctionTC64MkIIOutputPropertySheet"
+  case ViewLCCNetwork                        = "ViewLCCNetwork"
+  case ConfigureLCCNode                      = "ConfigureLCCNode"
 
   var instance : NSStoryboard {
     return NSStoryboard(name: self.rawValue, bundle: Bundle.main)
@@ -102,6 +104,8 @@ let storyboardLookup : [String:AppStoryboard] = [
   "IOChannelTC64MkIIOutputPropertySheet"  : AppStoryboard.IOChannelTC64MkIIOutputPropertySheet,
   "IOFunctionTC64MkIIInputPropertySheet"  : AppStoryboard.IOFunctionTC64MkIIInputPropertySheet,
   "IOFunctionTC64MkIIOutputPropertySheet" : AppStoryboard.IOFunctionTC64MkIIOutputPropertySheet,
+  "ViewLCCNetwork"                        : AppStoryboard.ViewLCCNetwork,
+  "ConfigureLCCNode"                      : AppStoryboard.ConfigureLCCNode,
 ]
 
 /*
@@ -157,6 +161,8 @@ enum ModalWindow : String {
   case IOChannelTC64MkIIOutputPropertySheet  = "IOChannelTC64MkIIOutputPropertySheet"
   case IOFunctionTC64MkIIInputPropertySheet  = "IOFunctionTC64MkIIInputPropertySheet"
   case IOFunctionTC64MkIIOutputPropertySheet = "IOFunctionTC64MkIIOutputPropertySheet"
+  case ViewLCCNetwork                        = "ViewLCCNetwork"
+  case ConfigureLCCNode                      = "ConfigureLCCNode"
 
   var windowController : NSWindowController {
     let storyboard = storyboardLookup[self.rawValue]!

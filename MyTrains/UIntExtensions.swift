@@ -23,6 +23,28 @@ extension UInt64 {
     
   }
   
+  public func toHexDotFormat(numberOfBytes:Int) -> String {
+
+    guard numberOfBytes >= 0 && numberOfBytes <= 8 else {
+      return "error"
+    }
+
+    var hex = self.toHex(numberOfDigits: numberOfBytes * 2)
+    
+    var result = ""
+    
+    while !hex.isEmpty {
+      result += hex.prefix(2)
+      hex.removeFirst(2)
+      if !hex.isEmpty {
+        result += "."
+      }
+    }
+    
+    return result
+    
+  }
+  
   init(hex:String) {
     
     self.init()
