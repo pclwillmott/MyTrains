@@ -23,6 +23,8 @@ public class OpenLCBMessage : NSObject {
   
   init?(frame:LCCCANFrame) {
 
+    self.timeStamp = frame.timeStamp
+    
     if let canFrameType = OpenLCBMessageCANFrameType(rawValue: (frame.header & 0x07000000) >> 24) {
       
       self.canFrameType = canFrameType
@@ -79,6 +81,7 @@ public class OpenLCBMessage : NSObject {
       
     }
     else {
+      print("failed to find can frame type")
       return nil
     }
     

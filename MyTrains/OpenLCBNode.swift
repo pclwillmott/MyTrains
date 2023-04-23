@@ -7,6 +7,8 @@
 
 import Foundation
 
+public typealias OpenLCBNodeAddressSpaceInformation = (addressSpace:UInt8, lowestAddress:UInt32, highestAddress:UInt32, isReadOnly:Bool, description:String)
+
 public class OpenLCBNode : NSObject {
   
   // MARK: Constructors
@@ -38,6 +40,8 @@ public class OpenLCBNode : NSObject {
   public var userNodeName : String = ""
   
   public var userNodeDescription : String = ""
+  
+  public var addressSpaceInformation : [UInt8:OpenLCBNodeAddressSpaceInformation] = [:]
   
   public var encodedNodeInformation : [UInt8] {
     get {
@@ -351,6 +355,58 @@ public class OpenLCBNode : NSObject {
       return result
       
     }
+  }
+  
+  // MARK: Public Methods
+  
+  public func addAddressSpaceInformation(message:OpenLCBMessage) -> OpenLCBNodeAddressSpaceInformation {
+    
+    var data = message.otherContent
+    
+    let isPresent = data[1] == 0x87
+    
+    let addressSpace = data[2]
+    
+    let highestAddress =
+    (UInt32(data[3]) << 24) |
+    (UInt32(data[4]) << 16) |
+    (UInt32(data[5]) << 8) |
+    (UInt32(data[6]))
+    
+    let readOnlyMask :UInt8 = 0b00000001
+    let isReadOnly = (data[7] & readOnlyMask) == readOnlyMask
+    
+    var lowestAddress : UInt32 = 0
+    
+    let lowAddressPresentMask : UInt8 = 0b00000010
+    let isLowestAddressPresent = (data[7] & lowAddressPresentMask) == lowAddressPresentMask
+    
+    var prefix = 8
+    
+    if (isLowestAddressPresent) {
+      lowestAddress =
+      (UInt32(data[8]) << 24) |
+      (UInt32(data[9]) << 16) |
+      (UInt32(data[10]) << 8) |
+      (UInt32(data[11]))
+      prefix += 4
+    }
+    
+    data.removeFirst(prefix)
+    
+    var description = ""
+    
+    if data.count > 0 {
+      description = String(decoding: data, as: UTF8.self)
+      description.removeLast()
+    }
+    
+    let info : OpenLCBNodeAddressSpaceInformation = (addressSpace:addressSpace, lowestAddress: lowestAddress, highestAddress: highestAddress, isReadOnly: isReadOnly, description: description)
+    
+    addressSpaceInformation[addressSpace] = info
+    
+    return info
+    
   }
   
 }

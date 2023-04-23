@@ -56,6 +56,10 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
   
   private var datagramsAwaitingReceipt : [UInt32:OpenLCBMessage] = [:]
   
+  private var inProcessQueue : Bool = false
+  
+  private var processQueueLock : NSLock = NSLock()
+  
   // MARK: Public Properties
   
   public var interface : Interface
@@ -67,6 +71,17 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
   // MARK: Private Methods
   
   override func processQueues() {
+    
+    processQueueLock.lock()
+    let ok = !inProcessQueue
+    if ok {
+      inProcessQueue = true
+    }
+    processQueueLock.unlock()
+    
+    if !ok {
+      return
+    }
     
     // Input Queue
     
@@ -106,9 +121,7 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
           
           switch message.messageTypeIndicator {
           case .datagramReceivedOK:
-            if let datagram = datagramsAwaitingReceipt[message.datagramIdReversed] {
-              datagramsAwaitingReceipt.removeValue(forKey: message.datagramIdReversed)
-            }
+            datagramsAwaitingReceipt.removeValue(forKey: message.datagramIdReversed)
           case .datagramRejected:
             if let datagram = datagramsAwaitingReceipt[message.datagramIdReversed] {
               datagramsAwaitingReceipt.removeValue(forKey: message.datagramIdReversed)
@@ -130,11 +143,9 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
         }
         
         if delete {
-          if index < inputQueue.count {
-            inputQueueLock.lock()
-            inputQueue.remove(at: index)
-            inputQueueLock.unlock()
-          }
+          inputQueueLock.lock()
+          inputQueue.remove(at: index)
+          inputQueueLock.unlock()
         }
         else {
           index += 1
@@ -222,6 +233,9 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
               }
               
             }
+            
+            delete = true
+            
           }
           else if message.isAddressPresent {
             
@@ -284,7 +298,9 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
     if !inputQueue.isEmpty || !outputQueue.isEmpty {
       startWaitTimer(interval: waitInterval)
     }
-
+    
+    inProcessQueue = false
+    
   }
   
   private func addNodeIdAliasMapping(nodeId: String, alias:UInt16) {
@@ -618,7 +634,8 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
         }
         
         while deleteList.count > 0 {
-          splitFrames.removeValue(forKey: deleteList[0].splitFrameId)
+          splitFrames.removeValue(forKey: deleteList.first!.splitFrameId)
+          deleteList.removeFirst()
         }
         
         var timeOutList : [OpenLCBMessage] = []
@@ -630,7 +647,9 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
         }
         
         while timeOutList.count > 0 {
-          let message = timeOutList[0]
+          let message = timeOutList.first!
+          datagrams.removeValue(forKey: message.datagramId)
+          timeOutList.removeFirst()
           if message.destinationNIDAlias == alias {
             let errorMessage = OpenLCBMessage(messageTypeIndicator: .datagramRejected)
             errorMessage.destinationNIDAlias = message.sourceNIDAlias
@@ -639,7 +658,6 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
             errorMessage.otherContent = OpenLCBErrorCode.temporaryErrorTimeOutWaitingForEndFrame.asData
             addToOutputQueue(message: errorMessage)
           }
-          datagrams.removeValue(forKey: timeOutList[0].datagramId)
         }
 
         switch message.canFrameType {

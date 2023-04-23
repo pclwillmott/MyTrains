@@ -102,10 +102,36 @@ public class LCCNetworkLayer : NSObject, LCCTransportLayerDelegate {
     
   }
   
-  public func sendNodeMemoryReadRequest(destinationNodeId:UInt64, addressSpace:UInt8, startAddress:UInt32, numberOfBytesToRead: UInt8) {
+  public func sendGetMemorySpaceInformationRequest(sourceNodeId:UInt64, destinationNodeId:UInt64,addressSpace:UInt8) {
     
-    guard numberOfBytesToRead > 0 && numberOfBytesToRead <= 64 else {
-      print("sendNodeMemoryReadRequest: invalid number of bytes")
+    let data : [UInt8] = [0x20, 0x84, addressSpace]
+    
+    sendDatagram(sourceNodeId: sourceNodeId, destinationNodeId: destinationNodeId, data: data)
+    
+  }
+  
+  public func sendDatagramReceivedOK(sourceNodeId:UInt64, destinationNodeId:UInt64, replyPending:Bool, timeOut: TimeInterval) {
+    
+    let message = OpenLCBMessage(messageTypeIndicator: .datagramReceivedOK)
+    
+    message.destinationNodeId = destinationNodeId
+    
+    message.sourceNodeId = sourceNodeId
+    
+    var data : UInt8 = replyPending ? 0b10000000 : 0
+    
+    data |= timeOut != 0.0 ? (UInt8(log(timeOut) / log(2.0) + 0.9) & 0x0f) : 0x00
+    
+    message.otherContent = [data]
+    
+    sendMessage(message: message)
+    
+  }
+
+  public func sendDatagram(sourceNodeId:UInt64, destinationNodeId:UInt64, data: [UInt8]) {
+
+    guard data.count >= 0 && data.count <= 72 else {
+      print("sendDatagram: invalid number of bytes - \(data.count)")
       return
     }
     
@@ -113,7 +139,20 @@ public class LCCNetworkLayer : NSObject, LCCTransportLayerDelegate {
     
     message.destinationNodeId = destinationNodeId
     
-    message.sourceNodeId = networkController.lccNodeId
+    message.sourceNodeId = sourceNodeId
+    
+    message.otherContent = data
+    
+    sendMessage(message: message)
+
+  }
+  
+  public func sendNodeMemoryReadRequest(sourceNodeId:UInt64, destinationNodeId:UInt64, addressSpace:UInt8, startAddress:UInt32, numberOfBytesToRead: UInt8) {
+    
+    guard numberOfBytesToRead > 0 && numberOfBytesToRead <= 64 else {
+      print("sendNodeMemoryReadRequest: invalid number of bytes to read - \(numberOfBytesToRead)")
+      return
+    }
     
     var data : [UInt8] = [0x20]
     
@@ -143,11 +182,7 @@ public class LCCNetworkLayer : NSObject, LCCTransportLayerDelegate {
     
     data.append(numberOfBytesToRead)
     
-    message.otherContent = data
-    
-    print(data)
-    
-    sendMessage(message: message)
+    sendDatagram(sourceNodeId: sourceNodeId, destinationNodeId: destinationNodeId, data: data)
     
   }
   
