@@ -17,10 +17,8 @@
 		DA08B43727875FDD0001307C /* ProgSlotDataP1.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA08B43627875FDD0001307C /* ProgSlotDataP1.swift */; };
 		DA0946542843C06A00F1AB81 /* DMF.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0946532843C06A00F1AB81 /* DMF.swift */; };
 		DA0946562843EB4100F1AB81 /* InterfaceIPLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0946552843EB4100F1AB81 /* InterfaceIPLExtensions.swift */; };
-		DA0BBB7329FD4A7C003E03EF /* LCCCDIElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0BBB7229FD4A7C003E03EF /* LCCCDIElement.swift */; };
-		DA0BBB7529FD4A91003E03EF /* LCCCDIDataElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0BBB7429FD4A91003E03EF /* LCCCDIDataElement.swift */; };
-		DA0BBB7729FD4AC1003E03EF /* LCCCDIElementType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0BBB7629FD4AC1003E03EF /* LCCCDIElementType.swift */; };
-		DA0BBB7929FD4B22003E03EF /* LCCCDIDataElementType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0BBB7829FD4B22003E03EF /* LCCCDIDataElementType.swift */; };
+		DA0BBB7529FD4A91003E03EF /* LCCCDIElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0BBB7429FD4A91003E03EF /* LCCCDIElement.swift */; };
+		DA0BBB7929FD4B22003E03EF /* LCCCDIElementType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0BBB7829FD4B22003E03EF /* LCCCDIElementType.swift */; };
 		DA0BBB7B29FD4ED3003E03EF /* LCCCDIMapRelation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0BBB7A29FD4ED2003E03EF /* LCCCDIMapRelation.swift */; };
 		DA0DA27A2779E96B00E4F23C /* Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0DA2792779E96B00E4F23C /* Layout.swift */; };
 		DA15BE26289806BF00FD82FD /* SpeedProfileTableViewDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA15BE25289806BF00FD82FD /* SpeedProfileTableViewDS.swift */; };
@@ -170,6 +168,10 @@
 		DA7B4727273803BA00BCD587 /* Locomotive.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7B4726273803BA00BCD587 /* Locomotive.swift */; };
 		DA7B472A273824F700BCD587 /* NetworkOutputQueueItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7B4729273824F700BCD587 /* NetworkOutputQueueItem.swift */; };
 		DA840BCE2794727F00944562 /* FNTableViewDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA840BCD2794727F00944562 /* FNTableViewDS.swift */; };
+		DA877B0929FEB61600F8546D /* LCCCDITableViewDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA877B0829FEB61600F8546D /* LCCCDITableViewDS.swift */; };
+		DA877B0B29FEBF5600F8546D /* LCCCDITableCellViewIntCombo.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA877B0A29FEBF5600F8546D /* LCCCDITableCellViewIntCombo.xib */; };
+		DA877B0D29FEBF6F00F8546D /* LCCCDITableCellViewIntComboVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA877B0C29FEBF6F00F8546D /* LCCCDITableCellViewIntComboVC.swift */; };
+		DA877B0F29FEC13B00F8546D /* LCCCDIMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA877B0E29FEC13B00F8546D /* LCCCDIMap.swift */; };
 		DA8837702770B35B000B9A41 /* EditLayouts.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA88376F2770B35B000B9A41 /* EditLayouts.storyboard */; };
 		DA8837722770B371000B9A41 /* EditLayoutsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8837712770B371000B9A41 /* EditLayoutsVC.swift */; };
 		DA8837762770B6F8000B9A41 /* EditLocomotives.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA8837752770B6F8000B9A41 /* EditLocomotives.storyboard */; };
@@ -264,6 +266,8 @@
 		DAE8DD55286754C00097C2D1 /* TrackCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE8DD54286754C00097C2D1 /* TrackCode.swift */; };
 		DAE8DD5728675B040097C2D1 /* FrogType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE8DD5628675B040097C2D1 /* FrogType.swift */; };
 		DAE9DBB728258E12004BC75D /* LocoNetProducts.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE9DBB628258E12004BC75D /* LocoNetProducts.swift */; };
+		DAEA8F7D29FEB1B8003698A7 /* LCCCDITableCellViewString.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAEA8F7C29FEB1B8003698A7 /* LCCCDITableCellViewString.xib */; };
+		DAEA8F7F29FEB20E003698A7 /* LCCCDITableCellViewStringVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEA8F7E29FEB20E003698A7 /* LCCCDITableCellViewStringVC.swift */; };
 		DAEA9CF7272D8DA900C9B3EC /* NetworkConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEA9CF6272D8DA900C9B3EC /* NetworkConstants.swift */; };
 		DAEA9CFA272D8FBE00C9B3EC /* NetworkMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEA9CF9272D8FBE00C9B3EC /* NetworkMessage.swift */; };
 		DAEE9BEB2933E7B5005F553D /* SensorComboDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEE9BEA2933E7B5005F553D /* SensorComboDS.swift */; };
@@ -298,10 +302,8 @@
 		DA08B43627875FDD0001307C /* ProgSlotDataP1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgSlotDataP1.swift; sourceTree = "<group>"; };
 		DA0946532843C06A00F1AB81 /* DMF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMF.swift; sourceTree = "<group>"; };
 		DA0946552843EB4100F1AB81 /* InterfaceIPLExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceIPLExtensions.swift; sourceTree = "<group>"; };
-		DA0BBB7229FD4A7C003E03EF /* LCCCDIElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCCCDIElement.swift; sourceTree = "<group>"; };
-		DA0BBB7429FD4A91003E03EF /* LCCCDIDataElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCCCDIDataElement.swift; sourceTree = "<group>"; };
-		DA0BBB7629FD4AC1003E03EF /* LCCCDIElementType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCCCDIElementType.swift; sourceTree = "<group>"; };
-		DA0BBB7829FD4B22003E03EF /* LCCCDIDataElementType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCCCDIDataElementType.swift; sourceTree = "<group>"; };
+		DA0BBB7429FD4A91003E03EF /* LCCCDIElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCCCDIElement.swift; sourceTree = "<group>"; };
+		DA0BBB7829FD4B22003E03EF /* LCCCDIElementType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCCCDIElementType.swift; sourceTree = "<group>"; };
 		DA0BBB7A29FD4ED2003E03EF /* LCCCDIMapRelation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCCCDIMapRelation.swift; sourceTree = "<group>"; };
 		DA0DA2792779E96B00E4F23C /* Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Layout.swift; sourceTree = "<group>"; };
 		DA15BE25289806BF00FD82FD /* SpeedProfileTableViewDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedProfileTableViewDS.swift; sourceTree = "<group>"; };
@@ -452,6 +454,10 @@
 		DA7B4726273803BA00BCD587 /* Locomotive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Locomotive.swift; sourceTree = "<group>"; };
 		DA7B4729273824F700BCD587 /* NetworkOutputQueueItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkOutputQueueItem.swift; sourceTree = "<group>"; };
 		DA840BCD2794727F00944562 /* FNTableViewDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FNTableViewDS.swift; sourceTree = "<group>"; };
+		DA877B0829FEB61600F8546D /* LCCCDITableViewDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCCCDITableViewDS.swift; sourceTree = "<group>"; };
+		DA877B0A29FEBF5600F8546D /* LCCCDITableCellViewIntCombo.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LCCCDITableCellViewIntCombo.xib; sourceTree = "<group>"; };
+		DA877B0C29FEBF6F00F8546D /* LCCCDITableCellViewIntComboVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCCCDITableCellViewIntComboVC.swift; sourceTree = "<group>"; };
+		DA877B0E29FEC13B00F8546D /* LCCCDIMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCCCDIMap.swift; sourceTree = "<group>"; };
 		DA88376F2770B35B000B9A41 /* EditLayouts.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = EditLayouts.storyboard; sourceTree = "<group>"; };
 		DA8837712770B371000B9A41 /* EditLayoutsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditLayoutsVC.swift; sourceTree = "<group>"; };
 		DA8837752770B6F8000B9A41 /* EditLocomotives.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = EditLocomotives.storyboard; sourceTree = "<group>"; };
@@ -548,6 +554,8 @@
 		DAE8DD54286754C00097C2D1 /* TrackCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackCode.swift; sourceTree = "<group>"; };
 		DAE8DD5628675B040097C2D1 /* FrogType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrogType.swift; sourceTree = "<group>"; };
 		DAE9DBB628258E12004BC75D /* LocoNetProducts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoNetProducts.swift; sourceTree = "<group>"; };
+		DAEA8F7C29FEB1B8003698A7 /* LCCCDITableCellViewString.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LCCCDITableCellViewString.xib; sourceTree = "<group>"; };
+		DAEA8F7E29FEB20E003698A7 /* LCCCDITableCellViewStringVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCCCDITableCellViewStringVC.swift; sourceTree = "<group>"; };
 		DAEA9CF6272D8DA900C9B3EC /* NetworkConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkConstants.swift; sourceTree = "<group>"; };
 		DAEA9CF9272D8FBE00C9B3EC /* NetworkMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMessage.swift; sourceTree = "<group>"; };
 		DAEE9BEA2933E7B5005F553D /* SensorComboDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorComboDS.swift; sourceTree = "<group>"; };
@@ -683,11 +691,15 @@
 				DA60140429F4162500AD9ACD /* ViewLCCNetworkTableViewDS.swift */,
 				DA60140629F43FD600AD9ACD /* ConfigureLCCNode.storyboard */,
 				DA60140829F4401300AD9ACD /* ConfigureLCCNodeVC.swift */,
+				DA877B0829FEB61600F8546D /* LCCCDITableViewDS.swift */,
+				DA877B0E29FEC13B00F8546D /* LCCCDIMap.swift */,
+				DAEA8F7C29FEB1B8003698A7 /* LCCCDITableCellViewString.xib */,
+				DA877B0A29FEBF5600F8546D /* LCCCDITableCellViewIntCombo.xib */,
+				DA877B0C29FEBF6F00F8546D /* LCCCDITableCellViewIntComboVC.swift */,
+				DAEA8F7E29FEB20E003698A7 /* LCCCDITableCellViewStringVC.swift */,
 				DABD30B529E4610A002A2C4B /* LCCNetworkLayerDelegate.swift */,
-				DA0BBB7229FD4A7C003E03EF /* LCCCDIElement.swift */,
-				DA0BBB7629FD4AC1003E03EF /* LCCCDIElementType.swift */,
-				DA0BBB7829FD4B22003E03EF /* LCCCDIDataElementType.swift */,
-				DA0BBB7429FD4A91003E03EF /* LCCCDIDataElement.swift */,
+				DA0BBB7829FD4B22003E03EF /* LCCCDIElementType.swift */,
+				DA0BBB7429FD4A91003E03EF /* LCCCDIElement.swift */,
 				DA0BBB7A29FD4ED2003E03EF /* LCCCDIMapRelation.swift */,
 				DA56261229E1B64F00D465CC /* LCCNetworkLayerState.swift */,
 				DA56260A29E1A08500D465CC /* LCCTransportLayer.swift */,
@@ -971,6 +983,7 @@
 				DA063397293CE8F400CEAFD1 /* SetFastClock.storyboard in Resources */,
 				DA8837702770B35B000B9A41 /* EditLayouts.storyboard in Resources */,
 				DA60140729F43FD600AD9ACD /* ConfigureLCCNode.storyboard in Resources */,
+				DAEA8F7D29FEB1B8003698A7 /* LCCCDITableCellViewString.xib in Resources */,
 				DA8AE0ED279B2CCB001E9311 /* SlotView.storyboard in Resources */,
 				DA613AC928A7DECD003218BA /* PlaceLocomotive.storyboard in Resources */,
 				DA28C2BA2801CC0300857471 /* DashBoard.storyboard in Resources */,
@@ -979,6 +992,7 @@
 				DA5E97742972FF25001453A1 /* IODeviceDS64PropertySheet.storyboard in Resources */,
 				DA467BAF281D5D2F00AB9650 /* SwitchBoardEditor.storyboard in Resources */,
 				DA2429712892F7AE000D4ADE /* DeviceTCV.xib in Resources */,
+				DA877B0B29FEBF5600F8546D /* LCCCDITableCellViewIntCombo.xib in Resources */,
 				DAA7169D297C39640080114F /* IOFunctionBXP88InputPropertySheet.storyboard in Resources */,
 				DAC0194A289E79BF001152F6 /* EditCommandStations.storyboard in Resources */,
 				DA77750228DF1B4E00C07E24 /* PurgeProfiler.storyboard in Resources */,
@@ -1026,6 +1040,7 @@
 				DA8FDB2A279C2B3600E15024 /* LocoSlotData.swift in Sources */,
 				DA2E0E5E2736EAF300C7DA7A /* NetworkController.swift in Sources */,
 				DAEE9BEB2933E7B5005F553D /* SensorComboDS.swift in Sources */,
+				DA877B0F29FEC13B00F8546D /* LCCCDIMap.swift in Sources */,
 				DA2429732892F7E1000D4ADE /* DeviceTCV.swift in Sources */,
 				DA1B79FB285F3AD0009E1189 /* UnitLength.swift in Sources */,
 				DA0197252773500100350F71 /* ComboBoxDictDS.swift in Sources */,
@@ -1053,7 +1068,7 @@
 				DA7B472A273824F700BCD587 /* NetworkOutputQueueItem.swift in Sources */,
 				DA5A9F90295C89FC00950479 /* CVNumberBase.swift in Sources */,
 				DAF5B4FF28A93D0E0015E758 /* RandomAccessCollectionExtensions.swift in Sources */,
-				DA0BBB7529FD4A91003E03EF /* LCCCDIDataElement.swift in Sources */,
+				DA0BBB7529FD4A91003E03EF /* LCCCDIElement.swift in Sources */,
 				DA08B433278737540001307C /* ProgramDecoderAddressVC.swift in Sources */,
 				DA1DC9FF28A1CE0D007A957A /* SamplePeriod.swift in Sources */,
 				DAFE981529858A6300AC2C4A /* TC64Direction.swift in Sources */,
@@ -1071,7 +1086,6 @@
 				DAA8CEF82968402D00B07971 /* IODevice.swift in Sources */,
 				DA8B5D19282FDE1800D39F07 /* ProgrammerMode.swift in Sources */,
 				DA91274B295F547900E9B96E /* TC64Mode.swift in Sources */,
-				DA0BBB7329FD4A7C003E03EF /* LCCCDIElement.swift in Sources */,
 				DA0BBB7B29FD4ED3003E03EF /* LCCCDIMapRelation.swift in Sources */,
 				DA6E28E3285F8F1A00772641 /* TrackElectrificationType.swift in Sources */,
 				DAA8CEFC2968408700B07971 /* IOFunction.swift in Sources */,
@@ -1083,6 +1097,7 @@
 				DA5B6AAC29EAEDB20095F7D5 /* LCCCANFrameFlag.swift in Sources */,
 				DA60D819295B617000B5A2C4 /* LocoNetDeviceCV.swift in Sources */,
 				DAF0CADD29855505009B392A /* IOFunctionTC64MkIIOutputPropertySheetVC.swift in Sources */,
+				DA877B0929FEB61600F8546D /* LCCCDITableViewDS.swift in Sources */,
 				DA7243F828A81165003157CA /* ThrottleMode.swift in Sources */,
 				DA467BAB281D56A700AB9650 /* SwitchBoardEditorView.swift in Sources */,
 				DA51B8D829D9D5430074E881 /* LCCCANTransportLayer.swift in Sources */,
@@ -1129,7 +1144,6 @@
 				DA5E173E272EB23100F9341F /* LoconetSensorMessage.swift in Sources */,
 				DA467BB1281D5ED400AB9650 /* SwitchBoardEditorVC.swift in Sources */,
 				DA04B8DA28F1AED70062D944 /* ConsistState.swift in Sources */,
-				DA0BBB7729FD4AC1003E03EF /* LCCCDIElementType.swift in Sources */,
 				DAE8DD5728675B040097C2D1 /* FrogType.swift in Sources */,
 				DA0197272773520400350F71 /* EditorObject.swift in Sources */,
 				DAF0CAD129855097009B392A /* IOChannelTC64MkIIInputPropertySheetVC.swift in Sources */,
@@ -1236,13 +1250,15 @@
 				DA5CCB4E2897F6B200F99AE6 /* SpeedProfilerVC.swift in Sources */,
 				DA60140329F408F100AD9ACD /* ViewLCCNetworkVC.swift in Sources */,
 				DA48EE2B293CEFEA006C26A0 /* FastClockScaleFactor.swift in Sources */,
+				DA877B0D29FEBF6F00F8546D /* LCCCDITableCellViewIntComboVC.swift in Sources */,
 				DA28E5892824943200E1604C /* LocoNetDevice.swift in Sources */,
 				DA912749295F502500E9B96E /* TC64Polarity.swift in Sources */,
-				DA0BBB7929FD4B22003E03EF /* LCCCDIDataElementType.swift in Sources */,
+				DA0BBB7929FD4B22003E03EF /* LCCCDIElementType.swift in Sources */,
 				DA5E1741272ED2DF00F9341F /* LoconetSwitchRequestMessage.swift in Sources */,
 				DAA71693297C19220080114F /* ShortCircuitDetectionType.swift in Sources */,
 				DAF5BCD9281EF086000B61CA /* SwitchBoardPanel.swift in Sources */,
 				DA8837722770B371000B9A41 /* EditLayoutsVC.swift in Sources */,
+				DAEA8F7F29FEB20E003698A7 /* LCCCDITableCellViewStringVC.swift in Sources */,
 				DA8B5D17282FCE2700D39F07 /* TimeoutCode.swift in Sources */,
 				DA7A127629E2E6DB000DCE1C /* OpenLCBCANControlFrameFormat.swift in Sources */,
 				DA5B4605276F62D5005CA03C /* EditNetworksVC.swift in Sources */,
