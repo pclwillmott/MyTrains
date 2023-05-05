@@ -49,6 +49,14 @@ public class LCCCDIElement {
   
   public var address : Int = 0
   
+  public var sortAddress : UInt64 {
+    get {
+      return (UInt64(space) << 32) | UInt64(address)
+    }
+  }
+  
+  public var tag : Int = -1
+  
   // MARK: Public Methods
   
   public func clone() -> LCCCDIElement {

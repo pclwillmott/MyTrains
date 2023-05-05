@@ -14,6 +14,8 @@ private enum State {
   case gettingCDI
 }
 
+private typealias MemoryMapItem = (address: UInt64, size: Int, data: [UInt8])
+
 class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDelegate, XMLParserDelegate {
   
   // MARK: Window & View Methods
@@ -79,13 +81,23 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDel
   
   private var relationValue : String?
   
-  private var fieldList : [LCCCDIElement] = []
+  private var fieldTree : LCCCDIElement?
   
   private var currentSpace : UInt8 = 0
   
   private var currentAddress : Int = 0
   
+  private var currentTag : Int = 0
+  
+  private var elementLookup : [Int:LCCCDIElement] = [:]
+  
   private var tableViewDS = LCCCDITableViewDS()
+  
+  private var outlineViewDS : LCCCDITreeViewDS?
+  
+  private var editElement : LCCCDIElement?
+  
+  private var memoryMap : [MemoryMapItem] = []
   
   // MARK: Public Properties
   
@@ -94,7 +106,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDel
   // MARK: Private Methods
   
   private func printDataElement(dataElement:LCCCDIElement, indent:String) {
-    print("\(indent)name: \"\(dataElement.name)\" type: \(dataElement.type) size: \(dataElement.size) description: \"\(dataElement.description)\" replication: \(dataElement.replication) repname: \"\(dataElement.repname)\" stringValue: \"\(dataElement.stringValue)\"")
+    print("\(indent) space: 0x\(dataElement.space.toHex(numberOfDigits: 2)) address: \(dataElement.address) name: \"\(dataElement.name)\" type: \(dataElement.type) size: \(dataElement.size) description: \"\(dataElement.description)\" replication: \(dataElement.replication) repname: \"\(dataElement.repname)\" stringValue: \"\(dataElement.stringValue)\"")
     if dataElement.map.count > 0 {
       print("\(indent) map:")
       for relation in dataElement.map {
@@ -105,56 +117,109 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDel
       printDataElement(dataElement: child, indent: indent + "  ")
     }
   }
-  
-  private func buildFieldList(element:LCCCDIElement, replicationNumber:Int) {
-    
-    let clone = element.clone()
-    
-    switch element.type {
-    case .segment:
-      currentSpace = element.space
-      currentAddress = element.origin
-    case .group:
-      if !clone.repname.isEmpty {
-        clone.name = "\(clone.repname) \(replicationNumber)"
-      }
-      if replicationNumber == 1 {
-        currentAddress += clone.offset
-      }
-    default:
-      currentAddress += clone.offset
-    }
-    
-    clone.space = currentSpace
-    
-    if clone.type.isData {
-      clone.address = currentAddress
-      currentAddress += clone.size
-    }
-    
-    fieldList.append(clone)
 
-    for childElement in element.childElements {
+  private func makeChildren(template:[LCCCDIElement]) -> [LCCCDIElement] {
+    
+    var result : [LCCCDIElement] = []
+    
+    for childTemplate in template {
       
-      for replicationNumber in 1...childElement.replication {
-        buildFieldList(element: childElement, replicationNumber: replicationNumber)
+      if childTemplate.type == .group {
+        currentAddress += childTemplate.offset
+        for replicationNumber in 1...childTemplate.replication {
+          let child = childTemplate.clone()
+          child.tag = currentTag
+          currentTag += 1
+          elementLookup[child.tag] = child
+          child.childElements = makeChildren(template: childTemplate.childElements)
+          if !child.repname.isEmpty {
+            child.name = "\(child.repname) \(replicationNumber)"
+          }
+          result.append(child)
+        }
+      }
+      else {
+        let child = childTemplate.clone()
+        child.tag = currentTag
+        currentTag += 1
+        elementLookup[child.tag] = child
+       child.childElements = makeChildren(template: childTemplate.childElements)
+        if child.type == .segment {
+          currentSpace = child.space
+          currentAddress = child.origin
+        }
+        else {
+          currentAddress += child.offset
+        }
+        if child.type.isData {
+          child.space = currentSpace
+          child.address = currentAddress
+          currentAddress += child.size
+          var memoryMapItem : MemoryMapItem = (address: child.sortAddress, size: child.size, data: [])
+          memoryMap.append(memoryMapItem)
+        }
+        result.append(child)
       }
       
     }
+    
+    return result
     
   }
   
-  private func buildFieldList() {
+  private func expandTree() {
+    elementLookup.removeAll()
     currentSpace = 0
     currentAddress = 0
-    fieldList.removeAll()
+    currentTag = 0
+    memoryMap.removeAll()
     if let element = currentElement {
-      buildFieldList(element: element, replicationNumber: 1)
+      element.tag = currentTag
+      currentTag += 1
+      element.childElements = makeChildren(template: element.childElements)
+      elementLookup[element.tag] = element
     }
-    /*
-    for field in fieldList {
-      print("\(field.type) - space: 0x\(field.space.toHex(numberOfDigits: 2)) address: \(field.address) name: \"\(field.name)\" description: \"\(field.description)\" repname: \"\(field.repname)\"")
-    } */
+    
+    memoryMap.sort {$0.address < $1.address}
+    
+    var index = 0
+    while index < memoryMap.count {
+      if index + 1 < memoryMap.count {
+        var current = memoryMap[index]
+        var nextAddress = current.address + UInt64(current.size)
+        var next = memoryMap[index + 1]
+        var good = false
+        for gap in 0...0 {
+          if next.address == nextAddress + UInt64(gap) {
+            memoryMap[index].size += next.size + gap
+            good = true
+            break
+          }
+        }
+        if good {
+          memoryMap.remove(at: index + 1)
+        }
+        else {
+          index += 1
+        }
+      }
+      else {
+        index += 1
+      }
+    }
+    
+    var bytes = 0
+    print("count: \(memoryMap.count)")
+    for item in memoryMap {
+      bytes += item.size
+      print("0x\((item.address >> 32).toHex(numberOfDigits: 2)): \(item.address & 0xffffffff): \(item.size)")
+    }
+    print("bytes: \(bytes)")
+    
+    outlineViewDS = LCCCDITreeViewDS(root: currentElement!)
+    outlineView.dataSource = outlineViewDS
+    outlineView.delegate = outlineViewDS
+//    printDataElement(dataElement: currentElement!, indent: "  ")
   }
   
   // MARK: LCCNetworkLayerDelegate Methods
@@ -278,14 +343,16 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDel
 //    print("parserDidEndDocument")
     
 //    printDataElement(dataElement: currentElement!, indent: "  ")
-
+/*
     buildFieldList()
     
     tableViewDS.fields = fieldList
     tableView.dataSource = tableViewDS
     tableView.delegate = tableViewDS
     tableView.reloadData()
+  */
     
+    expandTree()
   }
 
   func parser(_ parser: XMLParser, foundNotationDeclarationWithName name: String, publicID: String?, systemID: String?) {
@@ -460,13 +527,54 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDel
     }
   }
   
-  @IBOutlet weak var tableView: NSTableView!
-  
-  @IBAction func btnRefreshAction(_ sender: NSButton) {
+  @IBOutlet weak var outlineView: NSOutlineView!
+    
+  @IBAction func outlineViewAction(_ sender: NSOutlineView) {
+
+    let selectedIndex = outlineView.selectedRow
+    
+    if let node = outlineView.item(atRow: selectedIndex) as? LCCCDIElement {
+      
+      editElement = nil
+      
+      switch node.type {
+      case .eventid:
+        break
+      case .float:
+        break
+      case .int:
+        break
+      case .string:
+        break
+      default:
+        return
+      }
+      
+      editElement = node
+      
+      lblName.stringValue = node.name
+      
+      lblDescription.stringValue = node.description
+      
+      if node.map.count > 0 {
+        
+        let map = LCCCDIMap(field: node)
+        
+        map.populate(comboBox: cboCombo)
+        
+      }
+      
+    }
   }
   
-  @IBAction func btnWriteAction(_ sender: NSButton) {
+  @IBOutlet weak var lblName: NSTextField!
+  
+  @IBOutlet weak var cboCombo: NSComboBox!
+  
+  @IBAction func cboComboAction(_ sender: NSComboBox) {
   }
+  
+  @IBOutlet weak var lblDescription: NSTextField!
   
 }
 

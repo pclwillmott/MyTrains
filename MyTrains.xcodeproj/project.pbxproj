@@ -22,6 +22,7 @@
 		DA0BBB7B29FD4ED3003E03EF /* LCCCDIMapRelation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0BBB7A29FD4ED2003E03EF /* LCCCDIMapRelation.swift */; };
 		DA0DA27A2779E96B00E4F23C /* Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0DA2792779E96B00E4F23C /* Layout.swift */; };
 		DA15BE26289806BF00FD82FD /* SpeedProfileTableViewDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA15BE25289806BF00FD82FD /* SpeedProfileTableViewDS.swift */; };
+		DA1767182A054C4A009D13C1 /* LCCCDITreeViewDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1767172A054C4A009D13C1 /* LCCCDITreeViewDS.swift */; };
 		DA1A040A2856108900FFD25F /* RollingStockDecoderExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1A04092856108900FFD25F /* RollingStockDecoderExtensions.swift */; };
 		DA1B79F5285F24B8009E1189 /* SwitchBoardItemPropertySheet.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA1B79F4285F24B8009E1189 /* SwitchBoardItemPropertySheet.storyboard */; };
 		DA1B79F7285F2540009E1189 /* SwitchBoardItemPropertySheetVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1B79F6285F2540009E1189 /* SwitchBoardItemPropertySheetVC.swift */; };
@@ -72,6 +73,7 @@
 		DA412E162780DC3C00748CCD /* DecoderFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA412E152780DC3C00748CCD /* DecoderFunction.swift */; };
 		DA434294283698CA00E8D555 /* SerialPort.c in Sources */ = {isa = PBXBuildFile; fileRef = DA434293283698CA00E8D555 /* SerialPort.c */; };
 		DA4342962836996800E8D555 /* MTSerialPort.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA4342952836996800E8D555 /* MTSerialPort.swift */; };
+		DA4406FE2A055B3700E7859C /* LCCCDITreeViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA4406FD2A055B3700E7859C /* LCCCDITreeViewDelegate.swift */; };
 		DA467B9D281CAFDA00AB9650 /* NSColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA467B9C281CAFDA00AB9650 /* NSColorExtensions.swift */; };
 		DA467B9F281CBAF900AB9650 /* NSRectExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA467B9E281CBAF900AB9650 /* NSRectExtensions.swift */; };
 		DA467BA3281D501300AB9650 /* SwitchBoardDefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA467BA2281D501300AB9650 /* SwitchBoardDefs.swift */; };
@@ -307,6 +309,7 @@
 		DA0BBB7A29FD4ED2003E03EF /* LCCCDIMapRelation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCCCDIMapRelation.swift; sourceTree = "<group>"; };
 		DA0DA2792779E96B00E4F23C /* Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Layout.swift; sourceTree = "<group>"; };
 		DA15BE25289806BF00FD82FD /* SpeedProfileTableViewDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedProfileTableViewDS.swift; sourceTree = "<group>"; };
+		DA1767172A054C4A009D13C1 /* LCCCDITreeViewDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCCCDITreeViewDS.swift; sourceTree = "<group>"; };
 		DA1A04092856108900FFD25F /* RollingStockDecoderExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollingStockDecoderExtensions.swift; sourceTree = "<group>"; };
 		DA1B79F4285F24B8009E1189 /* SwitchBoardItemPropertySheet.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SwitchBoardItemPropertySheet.storyboard; sourceTree = "<group>"; };
 		DA1B79F6285F2540009E1189 /* SwitchBoardItemPropertySheetVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchBoardItemPropertySheetVC.swift; sourceTree = "<group>"; };
@@ -359,6 +362,7 @@
 		DA434292283698CA00E8D555 /* SerialPort.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SerialPort.h; sourceTree = "<group>"; };
 		DA434293283698CA00E8D555 /* SerialPort.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = SerialPort.c; sourceTree = "<group>"; };
 		DA4342952836996800E8D555 /* MTSerialPort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTSerialPort.swift; sourceTree = "<group>"; };
+		DA4406FD2A055B3700E7859C /* LCCCDITreeViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCCCDITreeViewDelegate.swift; sourceTree = "<group>"; };
 		DA467B9C281CAFDA00AB9650 /* NSColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSColorExtensions.swift; sourceTree = "<group>"; };
 		DA467B9E281CBAF900AB9650 /* NSRectExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSRectExtensions.swift; sourceTree = "<group>"; };
 		DA467BA2281D501300AB9650 /* SwitchBoardDefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchBoardDefs.swift; sourceTree = "<group>"; };
@@ -692,6 +696,8 @@
 				DA60140629F43FD600AD9ACD /* ConfigureLCCNode.storyboard */,
 				DA60140829F4401300AD9ACD /* ConfigureLCCNodeVC.swift */,
 				DA877B0829FEB61600F8546D /* LCCCDITableViewDS.swift */,
+				DA1767172A054C4A009D13C1 /* LCCCDITreeViewDS.swift */,
+				DA4406FD2A055B3700E7859C /* LCCCDITreeViewDelegate.swift */,
 				DA877B0E29FEC13B00F8546D /* LCCCDIMap.swift */,
 				DAEA8F7C29FEB1B8003698A7 /* LCCCDITableCellViewString.xib */,
 				DA877B0A29FEBF5600F8546D /* LCCCDITableCellViewIntCombo.xib */,
@@ -1063,6 +1069,7 @@
 				DA3D87A9295DF99A003398F5 /* TC64CVTableDS.swift in Sources */,
 				DA8B5D1D282FE31600D39F07 /* InterfaceDelegate.swift in Sources */,
 				DA77750428DF290E00C07E24 /* PurgeProfilerVC.swift in Sources */,
+				DA1767182A054C4A009D13C1 /* LCCCDITreeViewDS.swift in Sources */,
 				DA95D6C12808412200D9F1B6 /* DuplexData.swift in Sources */,
 				DA467BB3281D60E400AB9650 /* SwitchBoardShapeButton.swift in Sources */,
 				DA7B472A273824F700BCD587 /* NetworkOutputQueueItem.swift in Sources */,
@@ -1148,6 +1155,7 @@
 				DA0197272773520400350F71 /* EditorObject.swift in Sources */,
 				DAF0CAD129855097009B392A /* IOChannelTC64MkIIInputPropertySheetVC.swift in Sources */,
 				DAEA9CF7272D8DA900C9B3EC /* NetworkConstants.swift in Sources */,
+				DA4406FE2A055B3700E7859C /* LCCCDITreeViewDelegate.swift in Sources */,
 				DA912747295F428900E9B96E /* TC64OutputType.swift in Sources */,
 				DA063399293CEB8700CEAFD1 /* SetFastClockVC.swift in Sources */,
 				DAFE9813298587D900AC2C4A /* TC64ActionPaired.swift in Sources */,
