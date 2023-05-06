@@ -12,9 +12,10 @@ private enum State {
   case idle
   case gettingAddressSpaceInfo
   case gettingCDI
+  case readingMemory
 }
 
-private typealias MemoryMapItem = (address: UInt64, size: Int, data: [UInt8])
+private typealias MemoryMapItem = (sortAddress:UInt64, space:UInt8, address: Int, size: Int, data: [UInt8])
 
 class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDelegate, XMLParserDelegate {
   
@@ -59,9 +60,9 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDel
   
   private var observerId : Int = -1
   
-  private var nextCDIStartAddress : UInt32 = 0
+  private var nextCDIStartAddress : Int = 0
   
-  private var bytesToGo : UInt32 = 0
+  //private var bytesToGo : UInt32 = 0
   
   private var CDI : [UInt8] = []
   
@@ -98,6 +99,10 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDel
   private var editElement : LCCCDIElement?
   
   private var memoryMap : [MemoryMapItem] = []
+  
+  private var currentMemoryBlock : Int = 0
+  
+  private var totalBytesRead = 0
   
   // MARK: Public Properties
   
@@ -155,8 +160,10 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDel
           child.space = currentSpace
           child.address = currentAddress
           currentAddress += child.size
-          var memoryMapItem : MemoryMapItem = (address: child.sortAddress, size: child.size, data: [])
-          memoryMap.append(memoryMapItem)
+          if child.space == 0xff || child.space == 0xfe || child.space == 0xfd {
+            var memoryMapItem : MemoryMapItem = (sortAddress: child.sortAddress, space: child.space, address: child.address, size: child.size, data: [])
+            memoryMap.append(memoryMapItem)
+          }
         }
         result.append(child)
       }
@@ -168,6 +175,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDel
   }
   
   private func expandTree() {
+    
     elementLookup.removeAll()
     currentSpace = 0
     currentAddress = 0
@@ -180,17 +188,17 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDel
       elementLookup[element.tag] = element
     }
     
-    memoryMap.sort {$0.address < $1.address}
+    memoryMap.sort {$0.sortAddress < $1.sortAddress}
     
     var index = 0
     while index < memoryMap.count {
       if index + 1 < memoryMap.count {
         var current = memoryMap[index]
-        var nextAddress = current.address + UInt64(current.size)
+        var nextAddress = current.sortAddress + UInt64(current.size)
         var next = memoryMap[index + 1]
         var good = false
-        for gap in 0...0 {
-          if next.address == nextAddress + UInt64(gap) {
+        for gap in 0...8 {
+          if next.sortAddress == nextAddress + UInt64(gap) {
             memoryMap[index].size += next.size + gap
             good = true
             break
@@ -208,18 +216,18 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDel
       }
     }
     
-    var bytes = 0
-    print("count: \(memoryMap.count)")
-    for item in memoryMap {
-      bytes += item.size
-      print("0x\((item.address >> 32).toHex(numberOfDigits: 2)): \(item.address & 0xffffffff): \(item.size)")
+    for map in memoryMap {
+//      print("space: 0x\(map.space.toHex(numberOfDigits: 2)) address: \(map.address) size: \(map.size)")
     }
-    print("bytes: \(bytes)")
     
-    outlineViewDS = LCCCDITreeViewDS(root: currentElement!)
-    outlineView.dataSource = outlineViewDS
-    outlineView.delegate = outlineViewDS
-//    printDataElement(dataElement: currentElement!, indent: "  ")
+    if let node = self.node, let network = networkLayer {
+      currentMemoryBlock = 0
+      state = .readingMemory
+      memoryMap[currentMemoryBlock].data.removeAll()
+      nextCDIStartAddress = memoryMap[currentMemoryBlock].address
+      let bytesToRead = UInt8(min(64, memoryMap[currentMemoryBlock].size))
+      network.sendNodeMemoryReadRequest(sourceNodeId: sourceNodeId, destinationNodeId: node.nodeId, addressSpace: memoryMap[currentMemoryBlock].space, startAddress: nextCDIStartAddress, numberOfBytesToRead: bytesToRead)
+    }
   }
   
   // MARK: LCCNetworkLayerDelegate Methods
@@ -246,12 +254,64 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDel
           var data = message.otherContent
           
           if data[0] == 0x20 {
-            
+
             switch data[1] {
-            case 0x51:
-              break
-            case 0x52:
-              break
+            case 0x51, 0x52, 0x50:
+
+              if state == .readingMemory {
+                
+                let startAddress =
+                (UInt32(data[2]) << 24) |
+                (UInt32(data[3]) << 16) |
+                (UInt32(data[4]) << 8) |
+                (UInt32(data[5]))
+                
+                if startAddress == nextCDIStartAddress {
+                  
+                  totalBytesRead += data.count - 6
+                  lblDescription.stringValue = "\(totalBytesRead)"
+ 
+                  data.removeFirst(6)
+                  
+                  memoryMap[currentMemoryBlock].data.append(contentsOf: data)
+                  
+                  var isLast = memoryMap[currentMemoryBlock].size == memoryMap[currentMemoryBlock].data.count
+                  
+                  if !isLast {
+                    
+                    nextCDIStartAddress += data.count
+                    let bytesToRead = UInt8(min(64, memoryMap[currentMemoryBlock].size - memoryMap[currentMemoryBlock].data.count))
+                    network.sendNodeMemoryReadRequest(sourceNodeId: sourceNodeId, destinationNodeId: node.nodeId, addressSpace: memoryMap[currentMemoryBlock].space, startAddress: nextCDIStartAddress, numberOfBytesToRead: bytesToRead)
+
+                  }
+                  else {
+                    
+     //               print(memoryMap[currentMemoryBlock].data)
+                    
+                    currentMemoryBlock += 1
+                    
+                    if currentMemoryBlock < memoryMap.count {
+                      
+                      memoryMap[currentMemoryBlock].data.removeAll()
+                      
+                      nextCDIStartAddress = memoryMap[currentMemoryBlock].address
+                      let bytesToRead = UInt8(min(64, memoryMap[currentMemoryBlock].size))
+                      network.sendNodeMemoryReadRequest(sourceNodeId: sourceNodeId, destinationNodeId: node.nodeId, addressSpace: memoryMap[currentMemoryBlock].space, startAddress: nextCDIStartAddress, numberOfBytesToRead: bytesToRead)
+                    }
+                    else {
+                      state = .idle
+                      outlineViewDS = LCCCDITreeViewDS(root: currentElement!)
+                      outlineView.dataSource = outlineViewDS
+                      outlineView.delegate = outlineViewDS
+                    }
+                    
+                  }
+                }
+                else {
+                  print("error: bad address - \(startAddress.toHex(numberOfDigits: 8))")
+                  state = .idle
+                }
+              }
             case 0x53:
               if state == .gettingCDI {
                 
@@ -262,6 +322,9 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDel
                 (UInt32(data[5]))
                 
                 if startAddress == nextCDIStartAddress {
+                  
+                  totalBytesRead += data.count - 6
+                  lblDescription.stringValue = "\(totalBytesRead)"
                   
                   data.removeFirst(6)
                   
@@ -276,17 +339,16 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDel
                   }
                   
                   if !isLast {
-                    nextCDIStartAddress += UInt32(data.count)
+                    nextCDIStartAddress += data.count
                     network.sendNodeMemoryReadRequest(sourceNodeId: sourceNodeId, destinationNodeId: node.nodeId, addressSpace: LCCNodeMemoryAddressSpace.CDI.rawValue, startAddress: nextCDIStartAddress, numberOfBytesToRead: 64)
                   }
                   else {
+                    state = .idle
                     let newData : Data = Data(CDI)
                     xmlParser = XMLParser(data: newData)
                     xmlParser?.delegate = self
                     xmlParser?.parse()
-                 //   print(String(decoding: CDI, as: UTF8.self))
-
-                    state = .idle
+              //      print(String(decoding: CDI, as: UTF8.self))
                   }
                 }
                 else {
@@ -303,11 +365,10 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDel
               case 0xff:
                 if state == .gettingAddressSpaceInfo {
                   state = .gettingCDI
+                  totalBytesRead = 0
                   nextCDIStartAddress = info.lowestAddress
-                  bytesToGo = info.highestAddress - info.lowestAddress + 1
-                  let numberOfBytes = UInt8(min(64, bytesToGo))
                   CDI = []
-                  network.sendNodeMemoryReadRequest(sourceNodeId: sourceNodeId, destinationNodeId: node.nodeId, addressSpace: LCCNodeMemoryAddressSpace.CDI.rawValue, startAddress: nextCDIStartAddress, numberOfBytesToRead: numberOfBytes)
+                  network.sendNodeMemoryReadRequest(sourceNodeId: sourceNodeId, destinationNodeId: node.nodeId, addressSpace: LCCNodeMemoryAddressSpace.CDI.rawValue, startAddress: nextCDIStartAddress, numberOfBytesToRead: 64)
                 }
               case 0xfe:
                 break

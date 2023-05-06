@@ -7,7 +7,7 @@
 
 import Foundation
 
-public typealias OpenLCBNodeAddressSpaceInformation = (addressSpace:UInt8, lowestAddress:UInt32, highestAddress:UInt32, isReadOnly:Bool, description:String)
+public typealias OpenLCBNodeAddressSpaceInformation = (addressSpace:UInt8, lowestAddress:Int, highestAddress:Int, isReadOnly:Bool, description:String)
 
 public class OpenLCBNode : NSObject {
   
@@ -401,7 +401,7 @@ public class OpenLCBNode : NSObject {
       description.removeLast()
     }
     
-    let info : OpenLCBNodeAddressSpaceInformation = (addressSpace:addressSpace, lowestAddress: lowestAddress, highestAddress: highestAddress, isReadOnly: isReadOnly, description: description)
+    let info : OpenLCBNodeAddressSpaceInformation = (addressSpace:addressSpace, lowestAddress: Int(lowestAddress), highestAddress: Int(highestAddress), isReadOnly: isReadOnly, description: description)
     
     addressSpaceInformation[addressSpace] = info
     

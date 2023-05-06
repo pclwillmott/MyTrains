@@ -147,7 +147,7 @@ public class LCCNetworkLayer : NSObject, LCCTransportLayerDelegate {
 
   }
   
-  public func sendNodeMemoryReadRequest(sourceNodeId:UInt64, destinationNodeId:UInt64, addressSpace:UInt8, startAddress:UInt32, numberOfBytesToRead: UInt8) {
+  public func sendNodeMemoryReadRequest(sourceNodeId:UInt64, destinationNodeId:UInt64, addressSpace:UInt8, startAddress:Int, numberOfBytesToRead: UInt8) {
     
     guard numberOfBytesToRead > 0 && numberOfBytesToRead <= 64 else {
       print("sendNodeMemoryReadRequest: invalid number of bytes to read - \(numberOfBytesToRead)")
@@ -172,7 +172,7 @@ public class LCCNetworkLayer : NSObject, LCCTransportLayerDelegate {
     
     var mask : UInt32 = 0xff000000
     for index in (0...3).reversed() {
-      data.append(UInt8((startAddress & mask) >> (index * 8)))
+      data.append(UInt8((UInt32(startAddress) & mask) >> (index * 8)))
       mask >>= 8
     }
     
