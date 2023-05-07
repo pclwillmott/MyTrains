@@ -504,5 +504,3 @@ void my_srand (uint16_t seed) {
 
 uint32_t my_Randseed = 0x80000001;
 
-
-}
