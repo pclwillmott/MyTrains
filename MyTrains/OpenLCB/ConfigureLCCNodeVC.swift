@@ -14,6 +14,7 @@ private enum State {
   case gettingCDI
   case readingMemory
   case refreshElement
+  case writingMemory
 }
 
 private typealias MemoryMapItem = (sortAddress:UInt64, space:UInt8, address: Int, size: Int, data: [UInt8], modified: Bool)
@@ -50,8 +51,6 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDel
     self.view.window?.title = "Configure \(node!.manufacturerName) - \(node!.nodeModelName) (\(node!.nodeId.toHexDotFormat(numberOfBytes: 6)))"
     
     sourceNodeId = networkController.lccNodeId
-    
-    safeDescriptionTop = lblDescription.frame.origin.y
     
     safeTextTop = txtValue.frame.origin.y
     
@@ -129,9 +128,11 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDel
   
   private var refreshMemoryBlock : Int = 0
   
-  private var safeDescriptionTop : CGFloat = 0.0
-  
   private var safeTextTop : CGFloat = 0.0
+  
+  private var timer : Timer?
+  
+  var dataToWrite : [(space: UInt8, address:Int, data:[UInt8])] = []
   
   // MARK: Public Properties
   
@@ -200,6 +201,20 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDel
     
   }
   
+  private func displayErrorMessage(message: String) {
+    
+    let alert = NSAlert()
+
+    alert.messageText = "Error"
+    alert.informativeText = message
+    alert.addButton(withTitle: "OK")
+ // alert.addButton(withTitle: "Cancel")
+    alert.alertStyle = .critical
+
+    let _ = alert.runModal() // == NSAlertFirstButtonReturn
+
+  }
+  
   private func displayEditElement(element:LCCCDIElement) {
     
     editElement = nil
@@ -228,33 +243,65 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDel
       
       switch element.type {
       case .eventid:
-        
         var eventId : UInt64 = 0
         for byte in data {
           eventId <<= 8
           eventId |= UInt64(byte)
         }
-
         txtValue.stringValue = eventId.toHexDotFormat(numberOfBytes: 8)
-        property = txtValue.stringValue
-        
       case .float:
-        break
+        var floatValue : UInt64 = 0
+        for byte in data {
+          floatValue <<= 8
+          floatValue |= UInt64(byte)
+        }
+        switch element.size {
+        case 2:
+          // TODO: Add custom data type for Float16
+          print("displayEditElement: float16 found!")
+        case 4:
+          let word = UInt32(floatValue & 0xffffffff)
+          let float32 = Float32(bitPattern: word)
+          txtValue.stringValue = "\(float32)"
+        case 8:
+          let float64 = Float64(bitPattern: floatValue)
+          txtValue.stringValue = "\(float64)"
+        default:
+          print("displayEditElement: bad float size: \(element.size)")
+        }
       case .int:
         var intValue : UInt64 = 0
         for byte in data {
           intValue <<= 8
           intValue |= UInt64(byte)
         }
-        txtValue.stringValue = "\(intValue)"
-        property = txtValue.stringValue
+        switch element.size {
+        case 1:
+          let byte = UInt8(intValue & 0xff)
+          let int8 = Int8(bitPattern: byte)
+          txtValue.stringValue = "\(int8)"
+        case 2:
+          let word = UInt16(intValue & 0xffff)
+          let int16 = Int16(bitPattern: word)
+          txtValue.stringValue = "\(int16)"
+        case 4:
+          let dword = UInt32(intValue & 0xffffffff)
+          let int32 = Int32(bitPattern: dword)
+          txtValue.stringValue = "\(int32)"
+        case 8:
+          let int64 = Int64(bitPattern: intValue)
+          txtValue.stringValue = "\(int64)"
+        default:
+          print("displayEditElement: bad integer size: \(element.size)")
+        }
       case .string:
         txtValue.stringValue = String(cString: data)
-        property = txtValue.stringValue
         break
       default:
-        break
+        print("displayEditElement: unexpected element type: \(element.type)")
       }
+
+      property = txtValue.stringValue
 
       cboCombo.removeAllItems()
       
@@ -271,7 +318,6 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDel
       cboCombo.isHidden = cboCombo.numberOfItems == 0
       
       txtValue.frame.origin.y = safeTextTop
- //     lblDescription.frame.origin.y = safeTextTop
 
       if cboCombo.isHidden {
         txtValue.frame.origin.y = cboCombo.frame.origin.y
@@ -281,8 +327,6 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDel
 
       lblDescription.isHidden = lblDescription.stringValue.isEmpty
       
-      lblDescription.frame.origin.y = safeDescriptionTop
- 
       btnRefresh.isEnabled = true
       btnWrite.isEnabled = true
 
@@ -429,6 +473,22 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDel
     
   }
   
+  @objc func timeOutTimer() {
+    stopTimer()
+    displayErrorMessage(message: "TimeOut: - write failed")
+    state = .idle
+  }
+  
+  func startTimer(timeInterval:TimeInterval) {
+    timer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(timeOutTimer), userInfo: nil, repeats: false)
+    RunLoop.current.add(timer!, forMode: .common)
+  }
+  
+  func stopTimer() {
+    timer?.invalidate()
+    timer = nil
+  }
+
   // MARK: LCCNetworkLayerDelegate Methods
   
   func networkLayerStateChanged(networkLayer: LCCNetworkLayer) {
@@ -444,6 +504,48 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDel
     if let network = networkLayer {
       
       switch message.messageTypeIndicator {
+       
+      case .datagramReceivedOK:
+        
+        if let node = self.node {
+          
+          if state == .writingMemory {
+            
+            if !message.otherContent.isEmpty {
+              
+              let flags = message.otherContent[0]
+              
+              let replyPending = (flags & 0x80) == 0x80
+              
+              let exponent = flags & 0x0f
+              
+              if exponent > 0 {
+                
+                let delay : TimeInterval = pow(2.0, Double(exponent))
+                
+                startTimer(timeInterval: delay)
+                
+              }
+              
+            }
+            else {
+              
+              dataToWrite.removeFirst()
+              
+              if !dataToWrite.isEmpty {
+                network.sendNodeMemoryWriteRequest(sourceNodeId: sourceNodeId, destinationNodeId: node.nodeId, addressSpace: dataToWrite[0].space, startAddress: dataToWrite[0].address, dataToWrite: dataToWrite[0].data)
+              }
+              else {
+                state = .idle
+                stopTimer()
+              }
+              
+            }
+            
+          }
+          
+        }
+        
       case .datagram:
         
         if let node = self.node {
@@ -455,6 +557,30 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDel
           if data[0] == 0x20 {
 
             switch data[1] {
+              
+            case 0x10, 0x11, 0x12, 0x13:
+              
+              if state == .writingMemory {
+                
+                dataToWrite.removeFirst()
+                
+                if !dataToWrite.isEmpty {
+                  network.sendNodeMemoryWriteRequest(sourceNodeId: sourceNodeId, destinationNodeId: node.nodeId, addressSpace: dataToWrite[0].space, startAddress: dataToWrite[0].address, dataToWrite: dataToWrite[0].data)
+                }
+                else {
+                  stopTimer()
+                  state = .idle
+                }
+
+              }
+            case 0x18, 0x19, 0x1a, 0x1b:
+              
+              stopTimer()
+              
+              state = .idle
+
+              displayErrorMessage(message: "Write failed")
+              
             case 0x50, 0x51, 0x52:
 
               if state == .readingMemory || state == .refreshElement {
@@ -860,6 +986,194 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDel
   @IBOutlet weak var btnWrite: NSButton!
   
   @IBAction func btnWriteAction(_ sender: NSButton) {
+    
+    if let element = editElement, let index = getMemoryBlockIndex(sortAddress: element.sortAddress) {
+      
+      if element.map.count == 0 {
+
+        // Check that numbers are OK for the data type and size
+       
+        var data : [UInt8] = []
+        
+        switch element.type {
+          
+        case .int:
+          
+          switch element.size {
+          case 1:
+            if let int8 = Int8(txtValue.stringValue) {
+              if let max = element.max, let maxInt8 = Int8(max), int8 > maxInt8 {
+                displayErrorMessage(message: "The value is greater than the maximum value of \(max).")
+                return
+              }
+              if let min = element.min, let minInt8 = Int8(min), int8 < minInt8 {
+                displayErrorMessage(message: "The value is greater than the minimum value of \(min).")
+                return
+              }
+              data = int8.bigEndianData
+            }
+            else {
+              displayErrorMessage(message: "Integer value expected.")
+              return
+            }
+          case 2:
+            if let int16 = Int16(txtValue.stringValue) {
+              if let max = element.max, let maxInt16 = Int16(max), int16 > maxInt16 {
+                displayErrorMessage(message: "The value is greater than the maximum value of \(max).")
+                return
+              }
+              if let min = element.min, let minInt16 = Int16(min), int16 < minInt16 {
+                displayErrorMessage(message: "The value is greater than the minimum value of \(min).")
+                return
+              }
+              data = int16.bigEndianData
+           }
+            else {
+              displayErrorMessage(message: "Integer value expected.")
+              return
+            }
+          case 4:
+            if let int32 = Int32(txtValue.stringValue) {
+              if let max = element.max, let maxInt32 = Int32(max), int32 > maxInt32 {
+                displayErrorMessage(message: "The value is greater than the maximum value of \(max).")
+                return
+              }
+              if let min = element.min, let minInt32 = Int32(min), int32 < minInt32 {
+                displayErrorMessage(message: "The value is greater than the minimum value of \(min).")
+                return
+              }
+              data = int32.bigEndianData
+            }
+            else {
+              displayErrorMessage(message: "Integer value expected.")
+              return
+            }
+          case 8:
+            if let int64 = Int64(txtValue.stringValue) {
+              if let max = element.max, let maxInt64 = Int64(max), int64 > maxInt64 {
+                displayErrorMessage(message: "The value is greater than the maximum value of \(max).")
+                return
+              }
+              if let min = element.min, let minInt64 = Int64(min), int64 < minInt64 {
+                displayErrorMessage(message: "The value is greater than the minimum value of \(min).")
+                return
+              }
+              data = int64.bigEndianData
+            }
+            else {
+              displayErrorMessage(message: "Integer value expected.")
+              return
+            }
+          default:
+            print("btnWriteAction: unexpected integer size: \(element.size)")
+            return
+          }
+          
+        case .float:
+          
+          switch element.size {
+          case 2:
+            print("btnWriteAction: float16 found!")
+            return
+          case 4:
+            if let float32 = Float32(txtValue.stringValue) {
+              if let max = element.max, let maxFloat32 = Float32(max), float32 > maxFloat32 {
+                displayErrorMessage(message: "The value is greater than the maximum value of \(max).")
+                return
+              }
+              if let min = element.min, let minFloat32 = Float32(min), float32 < minFloat32 {
+                displayErrorMessage(message: "The value is greater than the minimum value of \(min).")
+                return
+              }
+              data = float32.bitPattern.bigEndianData
+            }
+            else {
+              displayErrorMessage(message: "Float value expected.")
+              return
+            }
+          case 8:
+            if let float64 = Float64(txtValue.stringValue) {
+              if let max = element.max, let maxFloat64 = Float64(max), float64 > maxFloat64 {
+                displayErrorMessage(message: "The value is greater than the maximum value of \(max).")
+                return
+              }
+              if let min = element.min, let minFloat64 = Float64(min), float64 < minFloat64 {
+                displayErrorMessage(message: "The value is greater than the minimum value of \(min).")
+                return
+              }
+              data = float64.bitPattern.bigEndianData
+            }
+            else {
+              displayErrorMessage(message: "Float value expected.")
+              return
+            }
+          default:
+            print("btnWriteAction: unexpected float size: \(element.size)")
+            return
+          }
+          
+        case .string:
+          
+          let stringValue = txtValue.stringValue
+          
+          if stringValue.count >= element.size {
+            displayErrorMessage(message: "Text has too many characters. The maximum length is \(element.size - 1) characters.")
+            return
+          }
+          
+          data = stringValue.padWithNull(length: element.size)
+          
+        case .eventid:
+          
+          if let eventId = UInt64(dotHex: txtValue.stringValue) {
+            data = eventId.bigEndianData
+          }
+          else {
+            displayErrorMessage(message: "Invalid event ID.")
+            return
+          }
+          
+        default:
+          print("btnWriteAction: unexpected element type: \(element.type)")
+          return
+        }
+
+        setMemoryBlock(sortAddress: element.sortAddress, data: data)
+
+        if let node = self.node, let network = networkLayer {
+
+          state = .writingMemory
+
+          dataToWrite.removeAll()
+          
+          var item = 0
+          var address = element.address
+          while item < data.count {
+            let numberToWrite = min(64, data.count)
+            var block : [UInt8] = []
+            for _ in 1...numberToWrite {
+              block.append(data.first!)
+              data.removeFirst()
+              item += 1
+            }
+            dataToWrite.append((space: memoryMap[index].space, address: address, data: block))
+            address += data.count
+          }
+          
+          network.sendNodeMemoryWriteRequest(sourceNodeId: sourceNodeId, destinationNodeId: node.nodeId, addressSpace: dataToWrite[0].space, startAddress: dataToWrite[0].address, dataToWrite: dataToWrite[0].data)
+          
+        }
+
+      }
+      
+      // TODO: MAPPINGS!
+      
+      else {
+        
+      }
+      
+    }
+    
   }
   
 }

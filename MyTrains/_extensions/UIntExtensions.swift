@@ -45,6 +45,32 @@ extension UInt64 {
     
   }
   
+  init?(dotHex:String) {
+    
+    let split = dotHex.trimmingCharacters(in: .whitespacesAndNewlines).split(separator: ".", omittingEmptySubsequences: true)
+    
+    if split.count != 8 {
+      return nil
+    }
+    
+    var value : UInt64 = 0
+    
+    for digits in split {
+      if let byte = UInt64(digits, radix: 16) {
+        value <<= 8
+        value |= byte
+      }
+      else {
+        return nil
+      }
+    }
+    
+    self.init()
+    
+    self = value
+    
+  }
+  
   init(hex:String) {
     
     self.init()
@@ -59,6 +85,20 @@ extension UInt64 {
     
     self = UInt64(hex, radix: 16) ?? 0
     
+  }
+  
+  public var bigEndianData : [UInt8] {
+    get {
+      var intValue = self
+      var data : [UInt8] = []
+      for _ in 1...MemoryLayout<UInt64>.size {
+        let byte = UInt8(intValue & 0xff)
+        data.insert(byte, at: 0)
+        intValue >>= 8
+      }
+      return data
+    }
+
   }
 
 }
@@ -93,6 +133,20 @@ extension UInt32 {
     
   }
 
+  public var bigEndianData : [UInt8] {
+    get {
+      var intValue = self
+      var data : [UInt8] = []
+      for _ in 1...MemoryLayout<UInt32>.size {
+        let byte = UInt8(intValue & 0xff)
+        data.insert(byte, at: 0)
+        intValue >>= 8
+      }
+      return data
+    }
+
+  }
+
 }
 
 extension UInt16 {
@@ -125,6 +179,20 @@ extension UInt16 {
     
   }
 
+  public var bigEndianData : [UInt8] {
+    get {
+      var intValue = self
+      var data : [UInt8] = []
+      for _ in 1...MemoryLayout<UInt16>.size {
+        let byte = UInt8(intValue & 0xff)
+        data.insert(byte, at: 0)
+        intValue >>= 8
+      }
+      return data
+    }
+
+  }
+
 }
 
 extension UInt8 {
@@ -155,6 +223,12 @@ extension UInt8 {
     
     self = UInt8(hex, radix: 16) ?? 0
     
+  }
+
+  public var bigEndianData : [UInt8] {
+    get {
+      return [self]
+    }
   }
 
 }

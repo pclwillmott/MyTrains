@@ -186,6 +186,45 @@ public class LCCNetworkLayer : NSObject, LCCTransportLayerDelegate {
     
   }
   
+  public func sendNodeMemoryWriteRequest(sourceNodeId:UInt64, destinationNodeId:UInt64, addressSpace:UInt8, startAddress:Int, dataToWrite: [UInt8]) {
+    
+    guard dataToWrite.count > 0 && dataToWrite.count <= 64 else {
+      print("sendNodeMemoryWriteRequest: invalid number of bytes to write - \(dataToWrite.count)")
+      return
+    }
+    
+    var data : [UInt8] = [0x20]
+    
+    var addByte6 = false
+    
+    switch addressSpace {
+    case 0xff:
+      data.append(0x03)
+    case 0xfe:
+      data.append(0x02)
+    case 0xfd:
+      data.append(0x01)
+    default:
+      data.append(0x00)
+      addByte6 = true
+    }
+    
+    var mask : UInt32 = 0xff000000
+    for index in (0...3).reversed() {
+      data.append(UInt8((UInt32(startAddress) & mask) >> (index * 8)))
+      mask >>= 8
+    }
+    
+    if addByte6 {
+      data.append(addressSpace)
+    }
+    
+    data.append(contentsOf: dataToWrite)
+    
+    sendDatagram(sourceNodeId: sourceNodeId, destinationNodeId: destinationNodeId, data: data)
+    
+  }
+
   public func sendVerifyNodeIdNumber(nodeId:UInt64) {
     
     let message = OpenLCBMessage(messageTypeIndicator: .verifyNodeIDNumberGlobal)

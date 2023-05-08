@@ -221,6 +221,7 @@
 		DA9ED4EE28F240A400EA914A /* RouteManagerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9ED4ED28F240A400EA914A /* RouteManagerVC.swift */; };
 		DA9ED4F028F24B7700EA914A /* RouteManagerTableViewDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9ED4EF28F24B7700EA914A /* RouteManagerTableViewDS.swift */; };
 		DAA5F3CC295CA2C200C25028 /* LocoNetDeviceTC64Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA5F3CB295CA2C200C25028 /* LocoNetDeviceTC64Extensions.swift */; };
+		DAA66BD22A092DC2001804AC /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA66BD12A092DC2001804AC /* StringExtensions.swift */; };
 		DAA71693297C19220080114F /* ShortCircuitDetectionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA71692297C19220080114F /* ShortCircuitDetectionType.swift */; };
 		DAA71695297C1B580080114F /* DetectionSensitivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA71694297C1B580080114F /* DetectionSensitivity.swift */; };
 		DAA71697297C232D0080114F /* IOChannelBXP88Input.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA71696297C232D0080114F /* IOChannelBXP88Input.swift */; };
@@ -509,6 +510,7 @@
 		DA9ED4ED28F240A400EA914A /* RouteManagerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteManagerVC.swift; sourceTree = "<group>"; };
 		DA9ED4EF28F24B7700EA914A /* RouteManagerTableViewDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteManagerTableViewDS.swift; sourceTree = "<group>"; };
 		DAA5F3CB295CA2C200C25028 /* LocoNetDeviceTC64Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoNetDeviceTC64Extensions.swift; sourceTree = "<group>"; };
+		DAA66BD12A092DC2001804AC /* StringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		DAA71692297C19220080114F /* ShortCircuitDetectionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortCircuitDetectionType.swift; sourceTree = "<group>"; };
 		DAA71694297C1B580080114F /* DetectionSensitivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetectionSensitivity.swift; sourceTree = "<group>"; };
 		DAA71696297C232D0080114F /* IOChannelBXP88Input.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOChannelBXP88Input.swift; sourceTree = "<group>"; };
@@ -635,7 +637,7 @@
 			path = OpenLCB;
 			sourceTree = "<group>";
 		};
-		DA2CB4B32A0720C4000E197E /* enumerations */ = {
+		DA2CB4B32A0720C4000E197E /* _enumerations */ = {
 			isa = PBXGroup;
 			children = (
 				DA1DA5E928280EEE00E0F993 /* BaudRate.swift */,
@@ -670,7 +672,7 @@
 				DA1B79FA285F3AD0009E1189 /* UnitLength.swift */,
 				DA1B79F8285F3885009E1189 /* UnitSpeed.swift */,
 			);
-			path = enumerations;
+			path = _enumerations;
 			sourceTree = "<group>";
 		};
 		DA8FC5E5272C3F8100FCCFCA /* Frameworks */ = {
@@ -678,6 +680,20 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		DAA66BD02A09226E001804AC /* _extensions */ = {
+			isa = PBXGroup;
+			children = (
+				DADFFF8F2946025500CD2119 /* DateExtensions.swift */,
+				DAA867C327930C62008B6EEC /* IntExtensions.swift */,
+				DA9CF8F8286089B000825FA9 /* NSButtonExtensions.swift */,
+				DA467B9C281CAFDA00AB9650 /* NSColorExtensions.swift */,
+				DA467B9E281CBAF900AB9650 /* NSRectExtensions.swift */,
+				DAA66BD12A092DC2001804AC /* StringExtensions.swift */,
+				DA7A127229E2DCB0000DCE1C /* UIntExtensions.swift */,
+			);
+			path = _extensions;
 			sourceTree = "<group>";
 		};
 		DAA83DDE272C37670075CBCD = {
@@ -700,6 +716,8 @@
 		DAA83DE9272C37670075CBCD /* MyTrains */ = {
 			isa = PBXGroup;
 			children = (
+				DA2CB4B32A0720C4000E197E /* _enumerations */,
+				DAA66BD02A09226E001804AC /* _extensions */,
 				DA2E0E5727359ED300C7DA7A /* Ack.swift */,
 				DA2429742892FE94000D4ADE /* AddressManager.storyboard */,
 				DA2429762892FEDB000D4ADE /* AddressManagerVC.swift */,
@@ -719,7 +737,6 @@
 				DA28C2BC2801CC4800857471 /* DashBoardVC.swift */,
 				DAB07499276EB8B1003278BE /* Database.swift */,
 				DA5B4600276F4E38005CA03C /* DatabaseConstants.swift */,
-				DADFFF8F2946025500CD2119 /* DateExtensions.swift */,
 				DAEFAA5F28289668007AC92D /* DBEditorView.swift */,
 				DA88378B2770FBEC000B9A41 /* DBEditorView.xib */,
 				DA3AEF412788855800FF91D4 /* DecoderCV.swift */,
@@ -744,7 +761,6 @@
 				DA8837832770B78C000B9A41 /* EditTrainsVC.swift */,
 				DA8837772770B715000B9A41 /* EditWagons.storyboard */,
 				DA8837812770B77C000B9A41 /* EditWagonsVC.swift */,
-				DA2CB4B32A0720C4000E197E /* enumerations */,
 				DA48EE2C293CF260006C26A0 /* FastClock.swift */,
 				DA7A490F274A89FE00C2A42B /* FastClockMessage.swift */,
 				DA23EFAE294551B100C1581F /* FastClockTester.storyboard */,
@@ -759,7 +775,6 @@
 				DA8B5D1C282FE31600D39F07 /* InterfaceDelegate.swift */,
 				DA8B5D13282FC35E00D39F07 /* InterfaceExtensions.swift */,
 				DA0946552843EB4100F1AB81 /* InterfaceIPLExtensions.swift */,
-				DAA867C327930C62008B6EEC /* IntExtensions.swift */,
 				DAA8CEF92968406000B07971 /* IOChannel.swift */,
 				DAA71696297C232D0080114F /* IOChannelBXP88Input.swift */,
 				DA69E3922974581700447414 /* IOChannelDS64Output.swift */,
@@ -836,9 +851,6 @@
 				DA7B4729273824F700BCD587 /* NetworkOutputQueueItem.swift */,
 				DA2E0E54273591A600C7DA7A /* NetworkTurnoutOutputMessage.swift */,
 				DA9807C42789AFE300F73ACD /* NMRA.swift */,
-				DA9CF8F8286089B000825FA9 /* NSButtonExtensions.swift */,
-				DA467B9C281CAFDA00AB9650 /* NSColorExtensions.swift */,
-				DA467B9E281CBAF900AB9650 /* NSRectExtensions.swift */,
 				DA2CB4B22A071CC7000E197E /* OpenLCB */,
 				DA33FC2227AFFA1400630227 /* OpSwDecoderType.swift */,
 				DA33FC1F27AFF9E500630227 /* OpSwDecoderType.xib */,
@@ -919,7 +931,6 @@
 				DACB59262896A27E006B1861 /* TurnoutSwitch.swift */,
 				DA484A012933D09000D9EAF1 /* TurnoutSwitchComboDS.swift */,
 				DACB59302896CDCE006B1861 /* TurnoutSwitchState.swift */,
-				DA7A127229E2DCB0000DCE1C /* UIntExtensions.swift */,
 				DA5E97712972CD48001453A1 /* UpdateDelegate.swift */,
 				DA1ECC9228439D4600C4F963 /* UpdateFirmware.storyboard */,
 				DA1ECC9728439DE500C4F963 /* UpdateFirmwareVC.swift */,
@@ -1179,6 +1190,7 @@
 				DAA71695297C1B580080114F /* DetectionSensitivity.swift in Sources */,
 				DA2E0E5A2736B8AA00C7DA7A /* LoconetRequestSlotDataMessage.swift in Sources */,
 				DA2785402837EAE700EDCBB7 /* MTSerialPortManager.swift in Sources */,
+				DAA66BD22A092DC2001804AC /* StringExtensions.swift in Sources */,
 				DA15BE26289806BF00FD82FD /* SpeedProfileTableViewDS.swift in Sources */,
 				DAC0194C289E7B80001152F6 /* EditCommandStationsVC.swift in Sources */,
 				DA51FB9C29D88320002CAAC1 /* LCCCANFrame.swift in Sources */,
