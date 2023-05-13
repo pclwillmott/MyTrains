@@ -203,12 +203,48 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rBy-jN-2RU">
+                                <rect key="frame" x="13" y="13" width="81" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <buttonCell key="cell" type="push" title="Refresh" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ExD-zS-bAq">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="btnRefreshAllAction:" target="sxP-xp-Aif" id="6jG-5Z-g3y"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kvf-qQ-BZ4">
+                                <rect key="frame" x="91" y="13" width="78" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <buttonCell key="cell" type="push" title="Reboot" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Vpw-4V-Nlc">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="btnRebootAction:" target="sxP-xp-Aif" id="nOP-PY-mT9"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Eam-mN-aec">
+                                <rect key="frame" x="167" y="13" width="138" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <buttonCell key="cell" type="push" title="Reset to Defaults" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="a2q-dI-5XA">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="btnResetToDefaultsAction:" target="sxP-xp-Aif" id="Pma-aX-zT1"/>
+                                </connections>
+                            </button>
                         </subviews>
                     </view>
                     <connections>
                         <outlet property="barProgress" destination="OtW-dV-uqc" id="Lie-OZ-Fpv"/>
                         <outlet property="boxBox" destination="Q5b-Ib-DWK" id="JTV-8g-g7t"/>
-                        <outlet property="btnRefresh" destination="1Y9-2p-1Hz" id="KdV-PD-gId"/>
+                        <outlet property="btnReboot" destination="kvf-qQ-BZ4" id="4ax-8q-RDo"/>
+                        <outlet property="btnRefresh" destination="1Y9-2p-1Hz" id="Tx5-c8-Gh1"/>
+                        <outlet property="btnRefreshAll" destination="rBy-jN-2RU" id="Xvz-d5-0zA"/>
+                        <outlet property="btnResetToDefaults" destination="Eam-mN-aec" id="R1X-QC-zYI"/>
                         <outlet property="btnWrite" destination="Mwk-u3-MoC" id="hRr-MW-Zuo"/>
                         <outlet property="cboCombo" destination="UGZ-RE-3HG" id="jlU-0z-Gxc"/>
                         <outlet property="lblDescription" destination="Xf2-KQ-UYM" id="CC7-Vb-gsM"/>

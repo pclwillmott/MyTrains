@@ -61,4 +61,8 @@ public class LCCTransportLayer : NSObject {
   public func transitionToInhibitedState() {
   }
   
+  public func removeAlias(destinationNodeId:UInt64) {
+    
+  }
+  
 }

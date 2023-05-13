@@ -194,14 +194,14 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
 
             datagramsAwaitingReceipt[message.datagramId] = message
 
-            if message.otherContent.count <= 8 {
-              if let frame = LCCCANFrame(networkId: interface.networkId, message: message, canFrameType: .datagramCompleteInFrame, data: message.otherContent) {
+            if message.payload.count <= 8 {
+              if let frame = LCCCANFrame(networkId: interface.networkId, message: message, canFrameType: .datagramCompleteInFrame, data: message.payload) {
                 interface.send(data: frame.message)
               }
             }
             else {
               
-              let numberOfFrames = message.otherContent.count == 0 ? 1 : 1 + (message.otherContent.count - 1) / 8
+              let numberOfFrames = message.payload.count == 0 ? 1 : 1 + (message.payload.count - 1) / 8
               
               for frameNumber in 1...numberOfFrames {
                 
@@ -220,8 +220,8 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
                 
                 var count = 0
                 
-                while index < message.otherContent.count && count < 8 {
-                  data.append(message.otherContent[index])
+                while index < message.payload.count && count < 8 {
+                  data.append(message.payload[index])
                   index += 1
                   count += 1
                 }
@@ -517,6 +517,10 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
     
   }
   
+  override public func removeAlias(destinationNodeId:UInt64) {
+    removeNodeIdAliasMapping(nodeId: destinationNodeId.toHex(numberOfDigits: 12))
+  }
+
   // MARK: InterfaceDelegate Methods
   
   private var count = 0
@@ -655,7 +659,7 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
             errorMessage.destinationNIDAlias = message.sourceNIDAlias
             errorMessage.sourceNIDAlias = alias
             errorMessage.sourceNodeId = nodeId
-            errorMessage.otherContent = OpenLCBErrorCode.temporaryErrorTimeOutWaitingForEndFrame.asData
+            errorMessage.payload = OpenLCBErrorCode.temporaryErrorTimeOutWaitingForEndFrame.asData
             addToOutputQueue(message: errorMessage)
           }
         }
@@ -687,7 +691,7 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
               errorMessage.destinationNIDAlias = message.sourceNIDAlias
               errorMessage.sourceNIDAlias = alias
               errorMessage.sourceNodeId = nodeId
-              errorMessage.otherContent = OpenLCBErrorCode.temporaryErrorOutOfOrderStartFrameBeforeFinishingPreviousMessage.asData
+              errorMessage.payload = OpenLCBErrorCode.temporaryErrorOutOfOrderStartFrameBeforeFinishingPreviousMessage.asData
               addToOutputQueue(message: errorMessage)
             }
             datagrams.removeValue(forKey: oldMessage.datagramId)
@@ -698,7 +702,7 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
         case .datagramMiddleFrame, .datagramFinalFrame:
           if let first = datagrams[message.datagramId] {
             first.timeStamp = message.timeStamp
-            first.otherContent += message.otherContent
+            first.payload += message.payload
             if message.canFrameType == .datagramFinalFrame {
               addToInputQueue(message: first)
               datagrams.removeValue(forKey: first.datagramId)
@@ -709,7 +713,7 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
             errorMessage.destinationNIDAlias = message.sourceNIDAlias
             errorMessage.sourceNIDAlias = alias
             errorMessage.sourceNodeId = nodeId
-            errorMessage.otherContent = OpenLCBErrorCode.temporaryErrorOutOfOrderMiddleOrEndFrameWithoutStartFrame.asData
+            errorMessage.payload = OpenLCBErrorCode.temporaryErrorOutOfOrderMiddleOrEndFrameWithoutStartFrame.asData
             addToOutputQueue(message: errorMessage)
           }
         default:

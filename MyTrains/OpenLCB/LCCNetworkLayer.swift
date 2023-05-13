@@ -50,6 +50,12 @@ public class LCCNetworkLayer : NSObject, LCCTransportLayerDelegate {
 
   }
   
+  public func removeAlias(destinationNodeId:UInt64) {
+    for (_, layer) in transportLayers {
+      layer.removeAlias(destinationNodeId: destinationNodeId)
+    }
+  }
+
   public func removeTransportLayer(transportLayer: LCCTransportLayer) {
     transportLayer.transitionToInhibitedState()
   }
@@ -88,7 +94,7 @@ public class LCCNetworkLayer : NSObject, LCCTransportLayerDelegate {
       data.append(UInt8((nodeId >> ((5 - index) * 8))  & 0xff))
     }
     
-    message.otherContent = data
+    message.payload = data
     
     sendMessage(message: message)
     
@@ -122,7 +128,7 @@ public class LCCNetworkLayer : NSObject, LCCTransportLayerDelegate {
     
     data |= timeOut != 0.0 ? (UInt8(log(timeOut) / log(2.0) + 0.9) & 0x0f) : 0x00
     
-    message.otherContent = [data]
+    message.payload = [data]
     
     sendMessage(message: message)
     
@@ -141,7 +147,7 @@ public class LCCNetworkLayer : NSObject, LCCTransportLayerDelegate {
     
     message.sourceNodeId = sourceNodeId
     
-    message.otherContent = data
+    message.payload = data
     
     sendMessage(message: message)
 
@@ -224,6 +230,50 @@ public class LCCNetworkLayer : NSObject, LCCTransportLayerDelegate {
     sendDatagram(sourceNodeId: sourceNodeId, destinationNodeId: destinationNodeId, data: data)
     
   }
+  
+  public func sendLockCommand(sourceNodeId:UInt64, destinationNodeId:UInt64) {
+
+    var data = sourceNodeId.bigEndianData
+    data.removeFirst(2)
+
+    data.insert(OpenLCBDatagramType.LockReserveCommand.rawValue, at: 0)
+    data.insert(0x20, at: 0)
+    
+    sendDatagram(sourceNodeId: sourceNodeId, destinationNodeId: destinationNodeId, data: data)
+    
+  }
+
+  public func sendUnLockCommand(sourceNodeId:UInt64, destinationNodeId:UInt64) {
+
+    var data = [0x20, OpenLCBDatagramType.LockReserveCommand.rawValue, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
+    
+    sendDatagram(sourceNodeId: sourceNodeId, destinationNodeId: destinationNodeId, data: data)
+    
+  }
+
+  public func sendRebootCommand(sourceNodeId:UInt64, destinationNodeId:UInt64) {
+
+    var data = [0x20, OpenLCBDatagramType.resetRebootCommand.rawValue]
+    
+    sendDatagram(sourceNodeId: sourceNodeId, destinationNodeId: destinationNodeId, data: data)
+    
+    removeAlias(destinationNodeId: destinationNodeId)
+    
+  }
+
+  public func sendResetToDefaults(sourceNodeId:UInt64, destinationNodeId:UInt64) {
+
+    var data = destinationNodeId.bigEndianData
+    data.removeFirst(2)
+
+    data.insert(OpenLCBDatagramType.reinitializeFactoryResetCommand.rawValue, at: 0)
+    data.insert(0x20, at: 0)
+
+    sendDatagram(sourceNodeId: sourceNodeId, destinationNodeId: destinationNodeId, data: data)
+    
+    removeAlias(destinationNodeId: destinationNodeId)
+    
+  }
 
   public func sendVerifyNodeIdNumber(nodeId:UInt64) {
     
@@ -234,7 +284,7 @@ public class LCCNetworkLayer : NSObject, LCCTransportLayerDelegate {
       data.append(UInt8((nodeId >> ((5 - index) * 8))  & 0xff))
     }
     
-    message.otherContent = data
+    message.payload = data
     
     sendMessage(message: message)
     
@@ -249,7 +299,7 @@ public class LCCNetworkLayer : NSObject, LCCTransportLayerDelegate {
       data.append(UInt8((nodeId >> ((5 - index) * 8))  & 0xff))
     }
     
-    message.otherContent = data
+    message.payload = data
     
     sendMessage(message: message)
     
@@ -287,7 +337,7 @@ public class LCCNetworkLayer : NSObject, LCCTransportLayerDelegate {
     
     switch message.messageTypeIndicator {
     case .verifyNodeIDNumberGlobal:
-      if message.otherContentAsHex == nodeId.toHex(numberOfDigits: 12) {
+      if message.payloadAsHex == nodeId.toHex(numberOfDigits: 12) {
         sendVerifiedNodeIdNumber()
       }
     default:

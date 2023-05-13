@@ -95,22 +95,21 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDeleg
         nodes[node.nodeId] = node
         reload()
         if let network = networkLayer {
-          network.sendProtocolSupportInquiry(nodeId: node.nodeId)
           network.sendSimpleNodeInformationRequest(nodeId: node.nodeId)
+          network.sendProtocolSupportInquiry(nodeId: node.nodeId)
         }
       }
       
     case .protocolSupportReply:
       
       if let node = nodes[message.sourceNodeId!] {
-        node.supportedProtocols = message.otherContent
+        node.supportedProtocols = message.payload
         reload()
       }
     
     case .simpleNodeIdentInfoReply:
-//      print(message.sourceNodeId!.toHexDotFormat(numberOfBytes: 6))
       if let node = nodes[message.sourceNodeId!] {
-        node.encodedNodeInformation = message.otherContent
+        node.encodedNodeInformation = message.payload
         reload()
       }
     default:
@@ -140,6 +139,18 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDeleg
   }
   
   @IBAction func btnUpdateFirmwareAction(_ sender: NSButton) {
+  }
+  
+  @IBAction func btnInfoAction(_ sender: NSButton) {
+    
+    let node = tableViewDS.nodes[sender.tag]
+    
+    let x = ModalWindow.ViewNodeInfo
+    let wc = x.windowController
+    let vc = x.viewController(windowController: wc) as! ViewNodeInfoVC
+    vc.node = node
+    wc.showWindow(nil)
+
   }
   
 }

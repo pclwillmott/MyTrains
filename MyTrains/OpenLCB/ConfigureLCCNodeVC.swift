@@ -15,6 +15,7 @@ private enum State {
   case readingMemory
   case refreshElement
   case writingMemory
+  case gettingLock
 }
 
 private typealias MemoryMapItem = (sortAddress:UInt64, space:UInt8, address: Int, size: Int, data: [UInt8], modified: Bool)
@@ -32,10 +33,16 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDel
   }
   
   func windowWillClose(_ notification: Notification) {
+    
+    if haveLock {
+      networkLayer?.sendUnLockCommand(sourceNodeId: sourceNodeId, destinationNodeId: node!.nodeId)
+    }
+    
     if observerId != -1 {
       networkLayer?.removeObserver(observerId: observerId)
       observerId = -1
     }
+    
   }
   
   override func viewWillAppear() {
@@ -61,15 +68,16 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDel
     barProgress.isHidden = true
     btnRefresh.isEnabled = false
     btnWrite.isEnabled = false
+    btnRefreshAll.isHidden = true
+    btnReboot.isHidden = true
+    btnResetToDefaults.isHidden = true
 
     if let network = networkLayer {
       
-      state = .gettingAddressSpaceInfo
-      
-      network.sendGetMemorySpaceInformationRequest(sourceNodeId: sourceNodeId, destinationNodeId: node!.nodeId, addressSpace: 0xff)
+      state = .gettingLock
+      network.sendLockCommand(sourceNodeId: sourceNodeId, destinationNodeId: node!.nodeId)
+      lblStatus.stringValue = "Getting Lock"
 
-      lblStatus.stringValue = "Reading Configuration Description Information - \(totalBytesRead) bytes"
-      
     }
 
   }
@@ -132,7 +140,9 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDel
   
   private var timer : Timer?
   
-  var dataToWrite : [(space: UInt8, address:Int, data:[UInt8])] = []
+  private var dataToWrite : [(space: UInt8, address:Int, data:[UInt8])] = []
+  
+  private var haveLock : Bool = false
   
   // MARK: Public Properties
   
@@ -278,19 +288,15 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDel
         switch element.size {
         case 1:
           let byte = UInt8(intValue & 0xff)
-          let int8 = Int8(bitPattern: byte)
-          txtValue.stringValue = "\(int8)"
+          txtValue.stringValue = "\(byte)"
         case 2:
           let word = UInt16(intValue & 0xffff)
-          let int16 = Int16(bitPattern: word)
-          txtValue.stringValue = "\(int16)"
+          txtValue.stringValue = "\(word)"
         case 4:
           let dword = UInt32(intValue & 0xffffffff)
-          let int32 = Int32(bitPattern: dword)
-          txtValue.stringValue = "\(int32)"
+          txtValue.stringValue = "\(dword)"
         case 8:
-          let int64 = Int64(bitPattern: intValue)
-          txtValue.stringValue = "\(int64)"
+          txtValue.stringValue = "\(intValue)"
         default:
           print("displayEditElement: bad integer size: \(element.size)")
         }
@@ -505,15 +511,29 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDel
       
       switch message.messageTypeIndicator {
        
+      case .datagramRejected:
+        
+        if state == .gettingLock {
+          
+          state = .gettingAddressSpaceInfo
+          
+          lblStatus.stringValue = "Reading Configuration Description Information - \(totalBytesRead) bytes"
+
+          network.sendGetMemorySpaceInformationRequest(sourceNodeId: sourceNodeId, destinationNodeId: node!.nodeId, addressSpace: 0xff)
+                    
+          btnWrite.isEnabled = true
+          
+        }
+
       case .datagramReceivedOK:
         
         if let node = self.node {
           
           if state == .writingMemory {
             
-            if !message.otherContent.isEmpty {
+            if !message.payload.isEmpty {
               
-              let flags = message.otherContent[0]
+              let flags = message.payload[0]
               
               let replyPending = (flags & 0x80) == 0x80
               
@@ -552,13 +572,38 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDel
           
           network.sendDatagramReceivedOK(sourceNodeId: sourceNodeId, destinationNodeId: node.nodeId, replyPending: false, timeOut: 0.0)
           
-          var data = message.otherContent
+          var data = message.payload
           
-          if data[0] == 0x20 {
-
-            switch data[1] {
+          if let datagramType = message.datagramType {
+            
+            switch datagramType {
               
-            case 0x10, 0x11, 0x12, 0x13:
+            case .LockReserveReply:
+              
+              if state == .gettingLock {
+                
+                var data = message.payload
+                
+                data.removeFirst(2)
+                
+                state = .gettingAddressSpaceInfo
+                
+                lblStatus.stringValue = "Reading Configuration Description Information - \(totalBytesRead) bytes"
+ 
+                network.sendGetMemorySpaceInformationRequest(sourceNodeId: sourceNodeId, destinationNodeId: node.nodeId, addressSpace: 0xff)
+                
+                if let id = UInt64(bigEndianData: data) {
+                  haveLock = id == sourceNodeId
+                  if !haveLock {
+                    displayErrorMessage(message: "This node is locked by \(id.toHexDotFormat(numberOfBytes: 6))")
+                  }
+                }
+                
+                btnWrite.isEnabled = haveLock
+                
+              }
+              
+            case .writeReplyGeneric, .writeReply0xFD, .writeReply0xFE, .writeReply0xFF:
               
               if state == .writingMemory {
                 
@@ -573,16 +618,17 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDel
                 }
 
               }
-            case 0x18, 0x19, 0x1a, 0x1b:
               
+            case .writeReplyFailureGeneric, .writeReplyFailure0xFD, .writeReplyFailure0xFE, .writeReplyFailure0xFF:
+
               stopTimer()
               
               state = .idle
 
               displayErrorMessage(message: "Write failed")
+            
+            case .readReplyGeneric, .readReply0xFD, .readReply0xFE:
               
-            case 0x50, 0x51, 0x52:
-
               if state == .readingMemory || state == .refreshElement {
                 
                 let startAddress =
@@ -648,6 +694,10 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDel
                       
                       lblStatus.stringValue = ""
                       
+                      btnRefreshAll.isHidden = false
+                      btnReboot.isHidden = false
+                      btnResetToDefaults.isHidden = false
+
                       state = .idle
                       
                     }
@@ -660,7 +710,8 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDel
                 }
                 
               }
-            case 0x53:
+              
+            case .readReply0xFF:
               
               if state == .gettingCDI {
                 
@@ -712,24 +763,31 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDel
                 }
                 
               }
-            case 0x86, 0x87:
-              let info = node.addAddressSpaceInformation(message: message)
-              switch info.addressSpace {
-              case 0xff:
-                if state == .gettingAddressSpaceInfo {
-                  state = .gettingCDI
-                  totalBytesRead = 0
-                  nextCDIStartAddress = info.lowestAddress
-                  CDI = []
-                  network.sendNodeMemoryReadRequest(sourceNodeId: sourceNodeId, destinationNodeId: node.nodeId, addressSpace: LCCNodeMemoryAddressSpace.CDI.rawValue, startAddress: nextCDIStartAddress, numberOfBytesToRead: 64)
+
+            case .getAddressSpaceInformationReply, .getAddressSpaceInformationReplyLowAddressPresent:
+              
+              if state == .gettingAddressSpaceInfo {
+                
+                let info = node.addAddressSpaceInformation(message: message)
+                
+                switch info.addressSpace {
+                case 0xff:
+                  if state == .gettingAddressSpaceInfo {
+                    state = .gettingCDI
+                    totalBytesRead = 0
+                    nextCDIStartAddress = info.lowestAddress
+                    CDI = []
+                    network.sendNodeMemoryReadRequest(sourceNodeId: sourceNodeId, destinationNodeId: node.nodeId, addressSpace: LCCNodeMemoryAddressSpace.CDI.rawValue, startAddress: nextCDIStartAddress, numberOfBytesToRead: 64)
+                  }
+                case 0xfe:
+                  break
+                case 0xfd:
+                  break
+                default:
+                  break
                 }
-              case 0xfe:
-                break
-              case 0xfd:
-                break
-              default:
-                break
               }
+              
             default:
               break
             }
@@ -989,76 +1047,76 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDel
     
     if let element = editElement, let index = getMemoryBlockIndex(sortAddress: element.sortAddress) {
       
+      var data : [UInt8] = []
+      
       if element.map.count == 0 {
 
         // Check that numbers are OK for the data type and size
        
-        var data : [UInt8] = []
-        
         switch element.type {
           
         case .int:
           
           switch element.size {
           case 1:
-            if let int8 = Int8(txtValue.stringValue) {
-              if let max = element.max, let maxInt8 = Int8(max), int8 > maxInt8 {
+            if let uint8 = UInt8(txtValue.stringValue) {
+              if let max = element.max, let maxUInt8 = UInt8(max), uint8 > maxUInt8 {
                 displayErrorMessage(message: "The value is greater than the maximum value of \(max).")
                 return
               }
-              if let min = element.min, let minInt8 = Int8(min), int8 < minInt8 {
+              if let min = element.min, let minUInt8 = UInt8(min), uint8 < minUInt8 {
                 displayErrorMessage(message: "The value is greater than the minimum value of \(min).")
                 return
               }
-              data = int8.bigEndianData
+              data = uint8.bigEndianData
             }
             else {
               displayErrorMessage(message: "Integer value expected.")
               return
             }
           case 2:
-            if let int16 = Int16(txtValue.stringValue) {
-              if let max = element.max, let maxInt16 = Int16(max), int16 > maxInt16 {
+            if let uint16 = UInt16(txtValue.stringValue) {
+              if let max = element.max, let maxUInt16 = UInt16(max), uint16 > maxUInt16 {
                 displayErrorMessage(message: "The value is greater than the maximum value of \(max).")
                 return
               }
-              if let min = element.min, let minInt16 = Int16(min), int16 < minInt16 {
+              if let min = element.min, let minUInt16 = UInt16(min), uint16 < minUInt16 {
                 displayErrorMessage(message: "The value is greater than the minimum value of \(min).")
                 return
               }
-              data = int16.bigEndianData
+              data = uint16.bigEndianData
            }
             else {
               displayErrorMessage(message: "Integer value expected.")
               return
             }
           case 4:
-            if let int32 = Int32(txtValue.stringValue) {
-              if let max = element.max, let maxInt32 = Int32(max), int32 > maxInt32 {
+            if let uint32 = UInt32(txtValue.stringValue) {
+              if let max = element.max, let maxUInt32 = UInt32(max), uint32 > maxUInt32 {
                 displayErrorMessage(message: "The value is greater than the maximum value of \(max).")
                 return
               }
-              if let min = element.min, let minInt32 = Int32(min), int32 < minInt32 {
+              if let min = element.min, let minUInt32 = UInt32(min), uint32 < minUInt32 {
                 displayErrorMessage(message: "The value is greater than the minimum value of \(min).")
                 return
               }
-              data = int32.bigEndianData
+              data = uint32.bigEndianData
             }
             else {
               displayErrorMessage(message: "Integer value expected.")
               return
             }
           case 8:
-            if let int64 = Int64(txtValue.stringValue) {
-              if let max = element.max, let maxInt64 = Int64(max), int64 > maxInt64 {
+            if let uint64 = UInt64(txtValue.stringValue) {
+              if let max = element.max, let maxUInt64 = UInt64(max), uint64 > maxUInt64 {
                 displayErrorMessage(message: "The value is greater than the maximum value of \(max).")
                 return
               }
-              if let min = element.min, let minInt64 = Int64(min), int64 < minInt64 {
+              if let min = element.min, let minUInt64 = UInt64(min), uint64 < minUInt64 {
                 displayErrorMessage(message: "The value is greater than the minimum value of \(min).")
                 return
               }
-              data = int64.bigEndianData
+              data = uint64.bigEndianData
             }
             else {
               displayErrorMessage(message: "Integer value expected.")
@@ -1138,12 +1196,106 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDel
           return
         }
 
+      }
+      
+      // TODO: MAPPINGS!
+      
+      else {
+        
+        let map = LCCCDIMap(field: element)
+
+        if let mapping = map.selectedItem(comboBox: cboCombo) {
+          
+          switch element.type {
+          case .int:
+            switch element.size {
+            case 1:
+              if let uint8 = UInt8(mapping) {
+                data = uint8.bigEndianData
+              }
+              else {
+                print("btnWriteAction: unexpected UInt8 error")
+                return
+              }
+            case 2:
+              if let uint16 = UInt16(mapping) {
+                data = uint16.bigEndianData
+              }
+              else {
+                print("btnWriteAction: unexpected UInt16 error")
+                return
+              }
+            case 4:
+              if let uint32 = UInt32(mapping) {
+                data = uint32.bigEndianData
+              }
+              else {
+                print("btnWriteAction: unexpected UInt32 error")
+                return
+              }
+            case 8:
+              if let uint64 = UInt64(mapping) {
+                data = uint64.bigEndianData
+              }
+              else {
+                print("btnWriteAction: unexpected UInt64 error")
+                return
+              }
+            default:
+              print("btnWriteAction: unexpected int size: \(element.size)")
+              return
+           }
+          case .float:
+            switch element.size {
+            case 2:
+              print("btnWriteAction: float16 found!")
+              return
+            case 4:
+              if let float32 = Float32(mapping) {
+                data = float32.bitPattern.bigEndianData
+              }
+              else {
+                print("btnWriteAction: unexpected Float32 error")
+                return
+              }
+            case 8:
+              if let float64 = Float32(mapping) {
+                data = float64.bitPattern.bigEndianData
+              }
+              else {
+                print("btnWriteAction: unexpected Float64 error")
+                return
+              }
+            default:
+              print("btnWriteAction: unexpected float size: \(element.size)")
+              return
+            }
+          case .eventid:
+            if let eventId = UInt64(dotHex: mapping) {
+              data = eventId.bigEndianData
+            }
+            else {
+              print("btnWriteAction: Invalid event ID.")
+              return
+            }
+          case .string:
+            data = mapping.padWithNull(length: element.size)
+          default:
+            break
+          }
+          
+        }
+        
+      }
+      
+      if data.count > 0 {
+        
         setMemoryBlock(sortAddress: element.sortAddress, data: data)
-
+        
         if let node = self.node, let network = networkLayer {
-
+          
           state = .writingMemory
-
+          
           dataToWrite.removeAll()
           
           var item = 0
@@ -1163,17 +1315,101 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDel
           network.sendNodeMemoryWriteRequest(sourceNodeId: sourceNodeId, destinationNodeId: node.nodeId, addressSpace: dataToWrite[0].space, startAddress: dataToWrite[0].address, dataToWrite: dataToWrite[0].data)
           
         }
-
-      }
-      
-      // TODO: MAPPINGS!
-      
-      else {
         
       }
+
       
     }
     
+  }
+  
+  @IBOutlet weak var btnRefreshAll: NSButton!
+  
+  @IBAction func btnRefreshAllAction(_ sender: NSButton) {
+    
+    nextCDIStartAddress = 0
+    
+    CDI = []
+    
+    state = .idle
+    
+    currentElement = nil
+    
+    currentElementType = .int
+    
+    groupStack = []
+    
+    fieldTree = nil
+    
+    currentSpace = 0
+    
+    currentAddress = 0
+    
+    currentTag = 0
+    
+    elementLookup  = [:]
+    
+    outlineViewDS = nil
+    
+    editElement = nil
+    
+    memoryMap  = []
+    
+    currentMemoryBlock = 0
+    
+    totalBytesRead = 0
+    
+    dataBytesToRead = 0
+    
+    refreshMemoryBlock = 0
+    
+    dataToWrite = []
+    
+    state = .gettingAddressSpaceInfo
+    
+    outlineView.dataSource = nil
+    
+    outlineView.delegate = nil
+    
+    outlineView.reloadData()
+    
+    btnRefreshAll.isHidden = true
+    btnReboot.isHidden = true
+    btnResetToDefaults.isHidden = true
+    
+    lblStatus.stringValue = "Reading Configuration Description Information - \(totalBytesRead) bytes"
+
+    if let network = networkLayer {
+      network.sendGetMemorySpaceInformationRequest(sourceNodeId: sourceNodeId, destinationNodeId: node!.nodeId, addressSpace: 0xff)
+    }
+  }
+  
+  @IBOutlet weak var btnReboot: NSButton!
+  
+  @IBAction func btnRebootAction(_ sender: NSButton) {
+    if let network = networkLayer {
+      network.sendRebootCommand(sourceNodeId: sourceNodeId, destinationNodeId: node!.nodeId)
+    }
+  }
+  
+  @IBOutlet weak var btnResetToDefaults: NSButton!
+  
+  @IBAction func btnResetToDefaultsAction(_ sender: NSButton) {
+    
+    let alert = NSAlert()
+
+    alert.messageText = "Are you sure that you wish to reset this node to factory defaults?"
+    alert.informativeText = ""
+    alert.addButton(withTitle: "No")
+    alert.addButton(withTitle: "Yes")
+    alert.alertStyle = .warning
+
+    if alert.runModal() == NSApplication.ModalResponse.alertSecondButtonReturn {
+      if let network = networkLayer {
+        network.sendResetToDefaults(sourceNodeId: sourceNodeId, destinationNodeId: node!.nodeId)
+      }
+    }
+
   }
   
 }

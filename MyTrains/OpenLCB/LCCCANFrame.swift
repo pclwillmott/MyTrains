@@ -103,7 +103,7 @@ public class LCCCANFrame : NSObject {
       }
     }
 
-    for byte in message.otherContent {
+    for byte in message.payload {
       data.append(byte)
     }
     
@@ -157,7 +157,7 @@ public class LCCCANFrame : NSObject {
       }
     }
 
-    for byte in message.otherContent {
+    for byte in message.payload {
       data.append(byte)
     }
     

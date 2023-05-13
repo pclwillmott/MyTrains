@@ -357,41 +357,53 @@ public class OpenLCBNode : NSObject {
     }
   }
   
+  public var supportedProtocolsAsString : String {
+    
+    get {
+      var result : String = ""
+      for proto in supportedProtocolsInfo {
+        if proto.supported {
+          result += "\(proto.protocol)\n"
+        }
+      }
+      return result
+    }
+    
+  }
+  
   // MARK: Public Methods
   
   public func addAddressSpaceInformation(message:OpenLCBMessage) -> OpenLCBNodeAddressSpaceInformation {
     
-    var data = message.otherContent
+    var data = message.payload
     
-    let isPresent = data[1] == 0x87
+    let isPresent = OpenLCBDatagramType(rawValue: data[1])! == .getAddressSpaceInformationReplyLowAddressPresent
     
     let addressSpace = data[2]
     
-    let highestAddress =
-    (UInt32(data[3]) << 24) |
-    (UInt32(data[4]) << 16) |
-    (UInt32(data[5]) << 8) |
-    (UInt32(data[6]))
+    var highestAddress : UInt32 = 0
     
-    let readOnlyMask :UInt8 = 0b00000001
+    if let address = UInt32(bigEndianData: [data[3], data[4], data[5], data[6]]) {
+      highestAddress = address
+    }
+    
+    let readOnlyMask : UInt8 = 0b00000001
+    
     let isReadOnly = (data[7] & readOnlyMask) == readOnlyMask
     
     var lowestAddress : UInt32 = 0
     
     let lowAddressPresentMask : UInt8 = 0b00000010
+    
     let isLowestAddressPresent = (data[7] & lowAddressPresentMask) == lowAddressPresentMask
     
     var prefix = 8
     
-    if (isLowestAddressPresent) {
-      lowestAddress =
-      (UInt32(data[8]) << 24) |
-      (UInt32(data[9]) << 16) |
-      (UInt32(data[10]) << 8) |
-      (UInt32(data[11]))
+    if isLowestAddressPresent, let address = UInt32(bigEndianData: [data[8], data[9], data[10], data[11]]) {
+      lowestAddress = address
       prefix += 4
     }
-    
+
     data.removeFirst(prefix)
     
     var description = ""

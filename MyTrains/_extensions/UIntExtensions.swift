@@ -87,6 +87,22 @@ extension UInt64 {
     
   }
   
+  init?(bigEndianData: [UInt8]) {
+    
+    guard bigEndianData.count == 8 else {
+      return nil
+    }
+    
+    self.init()
+    
+    self = 0
+    for byte in bigEndianData {
+      self <<= 8
+      self |= UInt64(byte)
+    }
+    
+  }
+  
   public var bigEndianData : [UInt8] {
     get {
       var intValue = self
@@ -130,6 +146,22 @@ extension UInt32 {
     self.init()
     
     self = UInt32(hex, radix: 16) ?? 0
+    
+  }
+
+  init?(bigEndianData: [UInt8]) {
+    
+    guard bigEndianData.count == 4 else {
+      return nil
+    }
+    
+    self.init()
+    
+    self = 0
+    for byte in bigEndianData {
+      self <<= 8
+      self |= UInt32(byte)
+    }
     
   }
 
@@ -179,6 +211,22 @@ extension UInt16 {
     
   }
 
+  init?(bigEndianData: [UInt8]) {
+    
+    guard bigEndianData.count == 2 else {
+      return nil
+    }
+    
+    self.init()
+    
+    self = 0
+    for byte in bigEndianData {
+      self <<= 8
+      self |= UInt16(byte)
+    }
+    
+  }
+  
   public var bigEndianData : [UInt8] {
     get {
       var intValue = self
@@ -225,6 +273,18 @@ extension UInt8 {
     
   }
 
+  init?(bigEndianData: [UInt8]) {
+    
+    guard bigEndianData.count == 1 else {
+      return nil
+    }
+    
+    self.init()
+    
+    self = bigEndianData[0]
+    
+  }
+  
   public var bigEndianData : [UInt8] {
     get {
       return [self]

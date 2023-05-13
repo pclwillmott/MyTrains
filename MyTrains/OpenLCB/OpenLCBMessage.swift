@@ -36,33 +36,26 @@ public class OpenLCBMessage : NSObject {
         
         sourceNIDAlias = UInt16(frame.header & 0xfff)
         
-        otherContent = frame.data
+        payload = frame.data
         
         var mask : UInt16 = 0x0008
         
-        if (messageTypeIndicator.rawValue & mask) == mask { // isAddressPresent
-          destinationNIDAlias = UInt16(otherContent[1]) | (UInt16(otherContent[0] & 0x0f) << 8)
-          flags = LCCCANFrameFlag(rawValue: (otherContent[0] & 0xf0) >> 4)!
-          otherContent.removeFirst(2)
+        // isAddressPresent
+        
+        if (messageTypeIndicator.rawValue & mask) == mask, let alias = UInt16(bigEndianData: [payload[0] & 0x0f, payload[1]]) {
+          destinationNIDAlias = alias
+          flags = LCCCANFrameFlag(rawValue: (payload[0] & 0xf0) >> 4)!
+          payload.removeFirst(2)
         }
         
         mask = 0x0004
         
-        if (messageTypeIndicator.rawValue & mask) == mask { // isEventPresent
-          
-          var id : UInt64 = 0
-          
-          for index in 0...7 {
-            id <<= 8
-            id |= UInt64(otherContent[index])
-          }
-          
+        if (messageTypeIndicator.rawValue & mask) == mask, let id = UInt64(bigEndianData: [UInt8](payload.prefix(8))) {
           eventId = id
           
-          otherContent.removeFirst(8)
-          
+          payload.removeFirst(8)
         }
-      
+
       case .datagramCompleteInFrame, .datagramFirstFrame, .datagramMiddleFrame, .datagramFinalFrame:
         
         messageTypeIndicator = .datagram
@@ -71,7 +64,7 @@ public class OpenLCBMessage : NSObject {
 
         destinationNIDAlias = UInt16((frame.header & 0xfff000) >> 12)
         
-        otherContent = frame.data
+        payload = frame.data
 
       default: // Reserved
         messageTypeIndicator = .unknown
@@ -95,6 +88,18 @@ public class OpenLCBMessage : NSObject {
     get {
       let mask : UInt16 = 0x2000
       return (messageTypeIndicator.rawValue & mask) == mask
+    }
+  }
+  
+  public var datagramType : OpenLCBDatagramType? {
+    get {
+      
+      guard messageTypeIndicator == .datagram && payload.count >= 2 && payload[0] == 0x20 else {
+        return nil
+      }
+      
+      return OpenLCBDatagramType(rawValue: payload[1])
+      
     }
   }
   
@@ -169,12 +174,10 @@ public class OpenLCBMessage : NSObject {
 
   public var errorCode : OpenLCBErrorCode {
     get {
-      var error : UInt16 = 0
-      if otherContent.count > 1 {
-        error |= UInt16(otherContent[0]) << 8
-        error |= UInt16(otherContent[1])
+      if let error = UInt16(bigEndianData: [payload[0], payload[1]]) {
+        return OpenLCBErrorCode(rawValue: error) ?? .nodeError
       }
-      return OpenLCBErrorCode(rawValue: error) ?? .nodeError
+      return .nodeError
     }
   }
   
@@ -182,12 +185,12 @@ public class OpenLCBMessage : NSObject {
   
   public var eventId : UInt64?
   
-  public var otherContent : [UInt8] = []
+  public var payload : [UInt8] = []
   
-  public var otherContentAsHex : String {
+  public var payloadAsHex : String {
     get {
       var result = ""
-      for byte in otherContent {
+      for byte in payload {
         result += byte.toHex(numberOfDigits: 2)
       }
       return result

@@ -80,6 +80,7 @@ public class ViewLCCNetworkTableViewDS : NSObject, NSTableViewDataSource, NSTabl
       static let userNodeDescription = "UserNodeDescription"
       static let configure = "Configure"
       static let updateFirmware = "UpdateFirmware"
+      static let info = "Info"
     }
 
     switch columnName {
@@ -124,8 +125,8 @@ public class ViewLCCNetworkTableViewDS : NSObject, NSTableViewDataSource, NSTabl
     case ColumnIdentifiers.updateFirmware:
       
       if let cell = tableView.makeView(withIdentifier:
-      NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil), let button = cell.subviews[0] as? NSButton {
-       
+                                        NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil), let button = cell.subviews[0] as? NSButton {
+        
         button.title = "Update Firmware"
         
         button.tag = row
@@ -133,9 +134,22 @@ public class ViewLCCNetworkTableViewDS : NSObject, NSTableViewDataSource, NSTabl
         button.isEnabled = item.isFirmwareUpgradeProtocolSupported
         
         return cell
-        
       }
       
+    case ColumnIdentifiers.info:
+      
+      if let cell = tableView.makeView(withIdentifier:
+                                        NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil), let button = cell.subviews[0] as? NSButton {
+        
+        button.title = "Info"
+        
+        button.tag = row
+        
+        button.isEnabled = true
+        
+        return cell
+      }
+
     default:
       text = ""
     }
