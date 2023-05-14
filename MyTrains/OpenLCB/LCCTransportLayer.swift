@@ -11,7 +11,7 @@ public class LCCTransportLayer : NSObject {
   
   // MARK: Private Properties
   
-  internal var _state : LCCTransportLayerState = .inhibited
+  internal var isActive : Bool = false
   
   internal var outputQueue : [OpenLCBMessage] = []
   
@@ -21,15 +21,23 @@ public class LCCTransportLayer : NSObject {
   
   internal var inputQueueLock : NSLock = NSLock()
   
+  internal var internalNodes : [UInt64:OpenLCBNode] = [:]
+  
   // MARK: Public Properties
   
   public var delegate : LCCTransportLayerDelegate?
-  
-  public var state : LCCTransportLayerState {
-    get {
-      return _state
-    }
+
+  public func start() {
   }
+  
+  public func stop() {
+  }
+
+//  public var state : LCCTransportLayerState {
+//    get {
+//      return _state
+//    }
+//  }
   
   // MARK: Private Methods
   
@@ -61,8 +69,16 @@ public class LCCTransportLayer : NSObject {
   public func transitionToInhibitedState() {
   }
   
-  public func removeAlias(destinationNodeId:UInt64) {
+  public func removeAlias(nodeId:UInt64) {
     
+  }
+  
+  public func registerNode(node:OpenLCBNode) {
+    internalNodes[node.nodeId] = node
+  }
+  
+  public func deregisterNode(node:OpenLCBNode) {
+    internalNodes.removeValue(forKey: node.nodeId)
   }
   
 }

@@ -220,6 +220,8 @@
 		DA9ED4EC28F238CF00EA914A /* RouteManager.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA9ED4EB28F238CF00EA914A /* RouteManager.storyboard */; };
 		DA9ED4EE28F240A400EA914A /* RouteManagerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9ED4ED28F240A400EA914A /* RouteManagerVC.swift */; };
 		DA9ED4F028F24B7700EA914A /* RouteManagerTableViewDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9ED4EF28F24B7700EA914A /* RouteManagerTableViewDS.swift */; };
+		DAA36B9D2A110B6200F07D8E /* LCCTransportLayerAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA36B9C2A110B6200F07D8E /* LCCTransportLayerAlias.swift */; };
+		DAA36B9F2A110C0000F07D8E /* LCCCANTransportLayerTransitionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA36B9E2A110C0000F07D8E /* LCCCANTransportLayerTransitionState.swift */; };
 		DAA5F3CC295CA2C200C25028 /* LocoNetDeviceTC64Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA5F3CB295CA2C200C25028 /* LocoNetDeviceTC64Extensions.swift */; };
 		DAA66BD22A092DC2001804AC /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA66BD12A092DC2001804AC /* StringExtensions.swift */; };
 		DAA71693297C19220080114F /* ShortCircuitDetectionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA71692297C19220080114F /* ShortCircuitDetectionType.swift */; };
@@ -512,6 +514,8 @@
 		DA9ED4EB28F238CF00EA914A /* RouteManager.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = RouteManager.storyboard; sourceTree = "<group>"; };
 		DA9ED4ED28F240A400EA914A /* RouteManagerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteManagerVC.swift; sourceTree = "<group>"; };
 		DA9ED4EF28F24B7700EA914A /* RouteManagerTableViewDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteManagerTableViewDS.swift; sourceTree = "<group>"; };
+		DAA36B9C2A110B6200F07D8E /* LCCTransportLayerAlias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCCTransportLayerAlias.swift; sourceTree = "<group>"; };
+		DAA36B9E2A110C0000F07D8E /* LCCCANTransportLayerTransitionState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCCCANTransportLayerTransitionState.swift; sourceTree = "<group>"; };
 		DAA5F3CB295CA2C200C25028 /* LocoNetDeviceTC64Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoNetDeviceTC64Extensions.swift; sourceTree = "<group>"; };
 		DAA66BD12A092DC2001804AC /* StringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		DAA71692297C19220080114F /* ShortCircuitDetectionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortCircuitDetectionType.swift; sourceTree = "<group>"; };
@@ -622,6 +626,8 @@
 				DA56260C29E1A13300D465CC /* LCCTransportLayerState.swift */,
 				DA56260829E19E6A00D465CC /* LCCTransportLayerDelegate.swift */,
 				DA51B8D729D9D5430074E881 /* LCCCANTransportLayer.swift */,
+				DAA36B9E2A110C0000F07D8E /* LCCCANTransportLayerTransitionState.swift */,
+				DAA36B9C2A110B6200F07D8E /* LCCTransportLayerAlias.swift */,
 				DA56260E29E1AC2B00D465CC /* LCCNetworkLayer.swift */,
 				DA60140A29F448B000AD9ACD /* LCCNodeMemoryAddressSpace.swift */,
 				DA60140029F408D800AD9ACD /* ViewLCCNetwork.storyboard */,
@@ -1101,6 +1107,7 @@
 				DA77795527AEEBBC007EEBE9 /* OpSwTCV.swift in Sources */,
 				DA467B9F281CBAF900AB9650 /* NSRectExtensions.swift in Sources */,
 				DA9325A6289C02C300CC317F /* LocomotiveDirection.swift in Sources */,
+				DAA36B9F2A110C0000F07D8E /* LCCCANTransportLayerTransitionState.swift in Sources */,
 				DA8D6E9A297066FF004B9139 /* IOFunctionBXP88Input.swift in Sources */,
 				DAF5B4FD28A91A830015E758 /* SpeedSteps.swift in Sources */,
 				DA3D87A9295DF99A003398F5 /* TC64CVTableDS.swift in Sources */,
@@ -1186,6 +1193,7 @@
 				DA8D6E9629706644004B9139 /* IODeviceBXP88.swift in Sources */,
 				DAA8CEFA2968406000B07971 /* IOChannel.swift in Sources */,
 				DA6A0ADA2752976800913F2B /* MonitorVC.swift in Sources */,
+				DAA36B9D2A110B6200F07D8E /* LCCTransportLayerAlias.swift in Sources */,
 				DA5E173E272EB23100F9341F /* LoconetSensorMessage.swift in Sources */,
 				DA467BB1281D5ED400AB9650 /* SwitchBoardEditorVC.swift in Sources */,
 				DA04B8DA28F1AED70062D944 /* ConsistState.swift in Sources */,

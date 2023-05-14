@@ -215,6 +215,10 @@ public class OpenLCBMessage : NSObject {
   
   public var canFrameType : OpenLCBMessageCANFrameType
  
+  // MARK: Public Methods
+  
+  // MARK: Class Methods
+  
   public static func canFrameType(message:OpenLCBMessage) -> OpenLCBMessageCANFrameType {
     
     if !message.isStreamOrDatagram && !message.isSpecial {

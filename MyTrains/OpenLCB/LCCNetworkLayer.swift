@@ -13,9 +13,13 @@ public class LCCNetworkLayer : NSObject, LCCTransportLayerDelegate {
   
   public init(nodeId: UInt64) {
     
-    self.nodeId = nodeId
+    myTrainsNode = OpenLCBNode(nodeId: nodeId)
     
     super.init()
+
+    internalLCCNodes[myTrainsNode.nodeId] = myTrainsNode
+
+    myTrainsNode.networkLayer = self
     
   }
   
@@ -27,6 +31,10 @@ public class LCCNetworkLayer : NSObject, LCCTransportLayerDelegate {
   
   private var observers : [Int:LCCNetworkLayerDelegate] = [:]
   
+  private var externalNodes : [UInt64:OpenLCBNode] = [:]
+
+  private var internalNodes : [UInt64:OpenLCBNode] = [:]
+
   // MARK: Public Properties
   
   public var state : LCCNetworkLayerState {
@@ -35,31 +43,67 @@ public class LCCNetworkLayer : NSObject, LCCTransportLayerDelegate {
     }
   }
   
-  public var nodeId : UInt64
+  public var nodeId : UInt64 {
+    get {
+      return myTrainsNode.nodeId
+    }
+  }
+  
+  public var myTrainsNode : OpenLCBNode
   
   public var transportLayers : [ObjectIdentifier:LCCTransportLayer] = [:]
   
-  public var externalLCCNodes : [UInt64:OpenLCBNode] = [:]
-  
   // MARK: Public Methods
+  
+  public func start() {
+    
+    guard state == .uninitialized else {
+      return
+    }
+    
+    for (_, interface) in networkController.lccInterfaces {
+      var transportLayer = LCCCANTransportLayer(interface: interface)
+      addTransportLayer(transportLayer: transportLayer)
+    }
+    
+    for (_, transportLayer) in transportLayers {
+      transportLayer.start()
+    }
+    
+  }
+  
+  public func stop() {
+    
+    guard state == .initialized else {
+      return
+    }
+    
+    for (_, transportLayer) in transportLayers {
+      transportLayer.stop()
+    }
+    
+  }
   
   public func addTransportLayer(transportLayer: LCCTransportLayer) {
     transportLayers[ObjectIdentifier(transportLayer)] = transportLayer
     transportLayer.delegate = self
+    for (_, node) in internalNodes {
+      transportLayer.registerNode(node: node)
+    }
     transportLayer.transitionToPermittedState()
 
   }
   
-  public func removeAlias(destinationNodeId:UInt64) {
-    for (_, layer) in transportLayers {
-      layer.removeAlias(destinationNodeId: destinationNodeId)
-    }
-  }
-
   public func removeTransportLayer(transportLayer: LCCTransportLayer) {
     transportLayer.transitionToInhibitedState()
   }
   
+  public func removeAlias(nodeId:UInt64) {
+    for (_, layer) in transportLayers {
+      layer.removeAlias(nodeId: nodeId)
+    }
+  }
+
   public func addObserver(observer:LCCNetworkLayerDelegate) -> Int{
     let id = nextObserverId
     nextObserverId += 1
@@ -71,6 +115,14 @@ public class LCCNetworkLayer : NSObject, LCCTransportLayerDelegate {
     observers.removeValue(forKey: observerId)
   }
   
+  public func registerNode(node:OpenLCBNode) {
+    internalNodes[node.nodeId] = node
+  }
+  
+  public func deregisterNode(node:OpenLCBNode) {
+    internalNodes.removeValue(forKey: node.nodeId)
+  }
+
   // MARK: Messages
   
   internal func sendMessage(message:OpenLCBMessage) {
@@ -79,20 +131,24 @@ public class LCCNetworkLayer : NSObject, LCCTransportLayerDelegate {
       return
     }
     
+    for (_, internalNode) in internalLCCNodes {
+      if internalNode.nodeId != message.sourceNodeId {
+        internalNode.openLCBMessageReceived(message: message)
+      }
+    }
+    
     for (_, transportLayer) in transportLayers {
       transportLayer.addToOutputQueue(message: message)
     }
     
   }
   
-  public func sendInitializationComplete() {
+  public func sendInitializationComplete(nodeId:UInt64) {
     
     let message = OpenLCBMessage(messageTypeIndicator: .initializationComplete)
     
-    var data : [UInt8] = []
-    for index in 0...5 {
-      data.append(UInt8((nodeId >> ((5 - index) * 8))  & 0xff))
-    }
+    var data = nodeId.bigEndianData
+    data.removeFirst(2)
     
     message.payload = data
     
@@ -275,6 +331,16 @@ public class LCCNetworkLayer : NSObject, LCCTransportLayerDelegate {
     
   }
 
+  public func sendSimpleNodeInformationReply(sourceNodeId:UInt64, destinationNodeId:UInt64, data:[UInt8]) {
+
+    let message = OpenLCBMessage(messageTypeIndicator: .simpleNodeIdentInfoReply)
+    
+    message.payload = data
+    
+    sendMessage(message: message)
+
+  }
+
   public func sendVerifyNodeIdNumber(nodeId:UInt64) {
     
     let message = OpenLCBMessage(messageTypeIndicator: .verifyNodeIDNumberGlobal)
@@ -290,14 +356,12 @@ public class LCCNetworkLayer : NSObject, LCCTransportLayerDelegate {
     
   }
 
-  public func sendVerifiedNodeIdNumber() {
+  public func sendVerifiedNodeIdNumber(nodeId:UInt64) {
     
     let message = OpenLCBMessage(messageTypeIndicator: .verifiedNodeIDNumber)
     
-    var data : [UInt8] = []
-    for index in 0...5 {
-      data.append(UInt8((nodeId >> ((5 - index) * 8))  & 0xff))
-    }
+    var data : [UInt8] = nodeId.bigEndianData
+    data.removeFirst(2)
     
     message.payload = data
     
@@ -335,15 +399,6 @@ public class LCCNetworkLayer : NSObject, LCCTransportLayerDelegate {
       externalLCCNodes[message.sourceNodeId!] = OpenLCBNode(nodeId: message.sourceNodeId!)
     }
     
-    switch message.messageTypeIndicator {
-    case .verifyNodeIDNumberGlobal:
-      if message.payloadAsHex == nodeId.toHex(numberOfDigits: 12) {
-        sendVerifiedNodeIdNumber()
-      }
-    default:
-      break
-    }
-
     for (_, observer) in observers {
       observer.openLCBMessageReceived(message: message)
     }
@@ -351,6 +406,32 @@ public class LCCNetworkLayer : NSObject, LCCTransportLayerDelegate {
   }
   
   public func transportLayerStateChanged(transportLayer: LCCTransportLayer) {
+    
+    switch transportLayer.isActive {
+      case true:
+        if state == .uninitialized {
+          for (_, transportLayer) in transportLayers {
+            if !transportLayer.isActive {
+              return
+            }
+          }
+          _state = .initialized
+          for (_, transportLayer) in transportLayers {
+            for (_, internalNode) in internalNodes {
+              transportLayer.registerNode(node: internalNode)
+            }
+          }
+        }
+      case false:
+        if state == .initialized {
+          for (_, transportLayer) in transportLayers {
+            if transportLayer.isActive {
+              return
+            }
+          }
+          _state = .uninitialized
+        }
+    }
     
     switch transportLayer.state {
     case .inhibited:

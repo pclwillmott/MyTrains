@@ -871,16 +871,12 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
     
   }
   
-  public var lccCANTransportLayer : LCCCANTransportLayer?
-  
   public func serialPortWasOpened(_ serialPort: MTSerialPort) {
     self.serialPort = serialPort
     for observer in observers {
       observer.value.interfaceWasOpened?(interface: self)
     }
     if let network = self.network, network.networkType == .LCC, let networkLayer = networkController.lccNetworkLayer {
-      lccCANTransportLayer = LCCCANTransportLayer(interface: self, nodeId: networkLayer.nodeId)
-      networkLayer.addTransportLayer(transportLayer: lccCANTransportLayer!)
     }
     else if !isEdit {
       iplDiscover()

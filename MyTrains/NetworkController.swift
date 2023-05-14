@@ -515,16 +515,22 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
   }
   
   public func connect() {
+    lccNetworkLayer?.start()
     for interface in networkInterfaces {
-      interface.initSensorLookup()
-      interface.open()
+      if let network = interface.network, network.networkType == .LocoNet {
+        interface.initSensorLookup()
+        interface.open()
+      }
     }
     connected = true
   }
   
   public func disconnect() {
+    lccNetworkLayer?.stop()
     for interface in networkInterfaces {
-      interface.close()
+      if let network = interface.network, network.networkType == .LocoNet {
+        interface.close()
+      }
     }
     connected = false
   }

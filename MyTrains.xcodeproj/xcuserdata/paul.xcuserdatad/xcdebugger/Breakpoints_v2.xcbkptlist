@@ -62,8 +62,8 @@
             filePath = "MyTrains/OpenLCB/OpenLCBNode.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "402"
-            endingLineNumber = "402"
+            startingLineNumber = "447"
+            endingLineNumber = "447"
             landmarkName = "addAddressSpaceInformation(message:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -81,6 +81,22 @@
             startingLineNumber = "53"
             endingLineNumber = "53"
             landmarkName = "init?(frame:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "FC603A9A-76A6-4565-8D1F-13B80100E344"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MyTrains/Interface.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "879"
+            endingLineNumber = "879"
+            landmarkName = "serialPortWasOpened(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
