@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class LCCTransportLayer : NSObject {
+public class OpenLCBTransportLayer : NSObject {
   
   // MARK: Private Properties
   
@@ -25,13 +25,7 @@ public class LCCTransportLayer : NSObject {
   
   // MARK: Public Properties
   
-  public var delegate : LCCTransportLayerDelegate?
-
-  public func start() {
-  }
-  
-  public func stop() {
-  }
+  public var delegate : OpenLCBTransportLayerDelegate?
 
 //  public var state : LCCTransportLayerState {
 //    get {
@@ -47,6 +41,34 @@ public class LCCTransportLayer : NSObject {
   
   // MARK: Public Methods
   
+  public func start() {
+    
+    guard !isActive else {
+      return
+    }
+    
+    isActive = true
+    
+    for (_, node) in internalNodes {
+      node.start()
+    }
+    
+    delegate?.transportLayerStateChanged(transportLayer: self)
+    
+  }
+  
+  public func stop() {
+    
+    guard isActive else {
+      return
+    }
+    
+    isActive = false
+    
+    delegate?.transportLayerStateChanged(transportLayer: self)
+    
+  }
+
   public func addToOutputQueue(message: OpenLCBMessage) {
     message.timeStamp = Date.timeIntervalSinceReferenceDate
     outputQueueLock.lock()
@@ -63,14 +85,7 @@ public class LCCTransportLayer : NSObject {
     processQueues()
   }
   
-  public func transitionToPermittedState() {
-  }
-
-  public func transitionToInhibitedState() {
-  }
-  
   public func removeAlias(nodeId:UInt64) {
-    
   }
   
   public func registerNode(node:OpenLCBNode) {

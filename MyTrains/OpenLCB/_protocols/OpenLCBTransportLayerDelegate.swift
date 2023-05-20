@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol LCCTransportLayerDelegate {
+public protocol OpenLCBTransportLayerDelegate {
   func openLCBMessageReceived(message:OpenLCBMessage)
-  func transportLayerStateChanged(transportLayer:LCCTransportLayer)
+  func transportLayerStateChanged(transportLayer:OpenLCBTransportLayer)
 }

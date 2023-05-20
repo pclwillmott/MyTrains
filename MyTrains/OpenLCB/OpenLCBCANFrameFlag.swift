@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum LCCCANFrameFlag : UInt8 {
+public enum OpenLCBCANFrameFlag : UInt8 {
   
   case onlyFrame   = 0b00
   case firstFrame  = 0b01

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum LCCTransportLayerState {
+public enum OpenLCBTransportLayerState {
   case inhibited
   case permitted
   case stopped

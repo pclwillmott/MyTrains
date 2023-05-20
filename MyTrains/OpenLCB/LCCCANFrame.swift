@@ -89,7 +89,7 @@ public class LCCCANFrame : NSObject {
     
     if message.isAddressPresent {
       var temp = message.destinationNIDAlias! & 0x0fff
-      temp |= UInt16(LCCCANFrameFlag.onlyFrame.rawValue & 0x0f) << 12
+      temp |= UInt16(OpenLCBCANFrameFlag.onlyFrame.rawValue & 0x0f) << 12
       data.append(UInt8(temp >> 8))
       data.append(UInt8(temp & 0xff))
     }
@@ -115,7 +115,7 @@ public class LCCCANFrame : NSObject {
     
   }
 
-  init?(networkId: Int, message:OpenLCBMessage, flags: LCCCANFrameFlag, frameNumber: Int) {
+  init?(networkId: Int, message:OpenLCBMessage, flags: OpenLCBCANFrameFlag, frameNumber: Int) {
     
     // Check that the message is complete
     

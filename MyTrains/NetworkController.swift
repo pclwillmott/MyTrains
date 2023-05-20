@@ -22,7 +22,7 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
     
     super.init()
     
-    lccNetworkLayer = LCCNetworkLayer(nodeId: lccNodeId)
+    openLCBNetworkLayer = OpenLCBNetworkLayer(nodeId: openLCBNodeId)
     
     MTSerialPortManager.delegate = self
     
@@ -79,12 +79,14 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
 
   public var locoNetDevices : [Int:LocoNetDevice] = LocoNetDevice.locoNetDevices
   
-  public var lccNodeId : UInt64 {
+  public var openLCBNodeId : UInt64 {
     get {
       return 0x050101017b00 // Paul Willmott's Start of range
     }
   }
   
+  public var openLCBNetworkLayer : OpenLCBNetworkLayer?
+    
   public var layoutId : Int {
     get {
       let id = UserDefaults.standard.integer(forKey: DEFAULT.MAIN_CURRENT_LAYOUT_ID)
@@ -221,7 +223,7 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
     }
   }
 
-  public var lccInterfaces : [Int:Interface] {
+  public var openLCBInterfaces : [Int:Interface] {
     get {
       
       var interfaces : [Int:Interface] = [:]
@@ -263,7 +265,7 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
               interfaces.append(interface)
             }
           }
-          for kv in lccInterfaces {
+          for kv in openLCBInterfaces {
             let interface = kv.value
             if interface.primaryKey == network.interfaceId {
               interface.networkId = network.primaryKey
@@ -515,7 +517,7 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
   }
   
   public func connect() {
-    lccNetworkLayer?.start()
+    openLCBNetworkLayer?.start()
     for interface in networkInterfaces {
       if let network = interface.network, network.networkType == .LocoNet {
         interface.initSensorLookup()
@@ -526,7 +528,7 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
   }
   
   public func disconnect() {
-    lccNetworkLayer?.stop()
+    openLCBNetworkLayer?.stop()
     for interface in networkInterfaces {
       if let network = interface.network, network.networkType == .LocoNet {
         interface.close()
@@ -612,8 +614,6 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
     controllerDelegates.removeValue(forKey: id)
     controllerDelegateLock.unlock()
   }
-  
-  public var lccNetworkLayer : LCCNetworkLayer?
   
   // MARK: MTSerialPortManagerDelegate Methods
   

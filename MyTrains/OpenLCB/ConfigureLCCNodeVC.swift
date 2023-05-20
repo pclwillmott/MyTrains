@@ -20,7 +20,7 @@ private enum State {
 
 private typealias MemoryMapItem = (sortAddress:UInt64, space:UInt8, address: Int, size: Int, data: [UInt8], modified: Bool)
 
-class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDelegate, XMLParserDelegate {
+class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLayerDelegate, XMLParserDelegate {
   
   // MARK: Window & View Methods
   
@@ -49,7 +49,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDel
     
     self.view.window?.delegate = self
     
-    networkLayer = networkController.lccNetworkLayer
+    networkLayer = networkController.openLCBNetworkLayer
     
     if let network = self.networkLayer {
       observerId = network.addObserver(observer: self)
@@ -57,7 +57,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDel
     
     self.view.window?.title = "Configure \(node!.manufacturerName) - \(node!.nodeModelName) (\(node!.nodeId.toHexDotFormat(numberOfBytes: 6)))"
     
-    sourceNodeId = networkController.lccNodeId
+    sourceNodeId = networkController.openLCBNetworkLayer!.myTrainsNode.nodeId
     
     safeTextTop = txtValue.frame.origin.y
     
@@ -84,7 +84,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDel
   
   // MARK: Private Properties
   
-  private var networkLayer : LCCNetworkLayer?
+  private var networkLayer : OpenLCBNetworkLayer?
   
   private var observerId : Int = -1
   
@@ -497,11 +497,13 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDel
 
   // MARK: LCCNetworkLayerDelegate Methods
   
-  func networkLayerStateChanged(networkLayer: LCCNetworkLayer) {
+  func networkLayerStateChanged(networkLayer: OpenLCBNetworkLayer) {
     
   }
   
   func openLCBMessageReceived(message: OpenLCBMessage) {
+    
+    print("\(message.messageTypeIndicator) \(message.datagramType)")
     
     guard message.destinationNodeId == sourceNodeId && message.sourceNodeId == node!.nodeId else {
       return

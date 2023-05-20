@@ -44,7 +44,8 @@ public class OpenLCBMessage : NSObject {
         
         if (messageTypeIndicator.rawValue & mask) == mask, let alias = UInt16(bigEndianData: [payload[0] & 0x0f, payload[1]]) {
           destinationNIDAlias = alias
-          flags = LCCCANFrameFlag(rawValue: (payload[0] & 0xf0) >> 4)!
+          let temp = (payload[0] & 0x30) >> 4
+          flags = OpenLCBCANFrameFlag(rawValue: temp)!
           payload.removeFirst(2)
         }
         
@@ -181,7 +182,7 @@ public class OpenLCBMessage : NSObject {
     }
   }
   
-  public var flags : LCCCANFrameFlag = .onlyFrame
+  public var flags : OpenLCBCANFrameFlag = .onlyFrame
   
   public var eventId : UInt64?
   

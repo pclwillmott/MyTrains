@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum LCCNetworkLayerState {
+public enum OpenLCBNetworkLayerState {
   case uninitialized
   case initialized
 }

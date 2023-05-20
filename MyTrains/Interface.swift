@@ -585,10 +585,6 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
   }
   
   public func close() {
-    if let transportLayer = lccCANTransportLayer, let networkLayer = networkController.lccNetworkLayer {
-      networkLayer.removeTransportLayer(transportLayer: transportLayer)
-      lccCANTransportLayer = nil
-    }
     serialPort?.close()
     serialPort = nil
   }
@@ -873,20 +869,20 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
   
   public func serialPortWasOpened(_ serialPort: MTSerialPort) {
     self.serialPort = serialPort
-    for observer in observers {
-      observer.value.interfaceWasOpened?(interface: self)
+    for (_, observer) in observers {
+      observer.interfaceWasOpened?(interface: self)
     }
-    if let network = self.network, network.networkType == .LCC, let networkLayer = networkController.lccNetworkLayer {
-    }
-    else if !isEdit {
-      iplDiscover()
+    if let network = self.network, network.networkType == .LocoNet {
+      if !isEdit {
+        iplDiscover()
+      }
     }
   }
   
   public func serialPortWasClosed(_ serialPort: MTSerialPort) {
     self.serialPort = nil
-    for observer in observers {
-      observer.value.interfaceWasClosed?(interface: self)
+    for (_, observer) in observers {
+      observer.interfaceWasClosed?(interface: self)
     }
   }
 

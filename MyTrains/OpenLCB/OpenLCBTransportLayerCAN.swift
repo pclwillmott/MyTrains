@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
+public class OpenLCBTransportLayerCAN : OpenLCBTransportLayer, InterfaceDelegate {
   
   // MARK: Constructors & Destructors
   
@@ -15,15 +15,21 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
     
     self.interface = interface
     
+    super.init()
+    
     observerId = interface.addObserver(observer: self)
     
   }
   
   // MARK: Private Properties
   
-  private var observerId : Int
+  private var observerId : Int = -1
   
-  private var initNodeQueue : [LCCTransportLayerAlias] = []
+  private var initNodeQueue : [OpenLCBTransportLayerAlias] = []
+  
+  private var managedNodeIdLookup : [UInt64:OpenLCBTransportLayerAlias] = [:]
+  
+  private var managedAliasLookup : [UInt16:OpenLCBTransportLayerAlias] = [:]
   
   private let waitInterval : TimeInterval = 200.0 / 1000.0
   
@@ -54,10 +60,6 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
   // MARK: Public Properties
   
   public var interface : Interface
-  
-//  public var nodeId : UInt64
-  
-//  public var alias : UInt16?
   
   // MARK: Private Methods
   
@@ -111,7 +113,7 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
         if message.isMessageComplete {
           
           switch message.messageTypeIndicator {
-          case .initializationComplete:
+          case .initializationCompleteSimpleSetSufficient, .initializationCompleteFullProtocolRequired:
             for (key, datagram) in datagramsAwaitingReceipt {
               if datagram.destinationNodeId == message.sourceNodeId {
                 datagramsAwaitingReceipt.removeValue(forKey: key)
@@ -150,8 +152,8 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
         
       }
       
-      if sendQuery {
-        sendAliasMappingEnquiryFrame()
+      if sendQuery, let alias = nodeIdLookup[networkController.openLCBNodeId] {
+        sendAliasMappingEnquiryFrame(alias: alias)
       }
             
     }
@@ -165,10 +167,6 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
       while index < outputQueue.count {
         
         let message = outputQueue[index]
-        
-//        if message.sourceNodeId == nil {
-//          message.sourceNodeId = nodeId
-//        }
         
         if let alias = nodeIdLookup[message.sourceNodeId!] {
           
@@ -185,8 +183,6 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
             
           }
           
-        }
-        else {
         }
         
         var delete = false
@@ -253,7 +249,7 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
                 
                 for frameNumber in 1...numberOfFrames {
                   
-                  var flags : LCCCANFrameFlag = .middleFrame
+                  var flags : OpenLCBCANFrameFlag = .middleFrame
                   
                   if frameNumber == 1 {
                     flags = .firstFrame
@@ -302,12 +298,6 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
       startWaitTimer(interval: waitInterval)
     }
     else if isStopping {
-      for (_, internalNode) in internalNodes {
-        internalNode.stop()
-      }
-      internalNodes.removeAll()
-      nodeIdLookup.removeAll()
-      aliasLookup.removeAll()
       interface.close()
     }
     
@@ -323,16 +313,16 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
   private func removeNodeIdAliasMapping(nodeId:UInt64) {
     if let alias = nodeIdLookup[nodeId] {
       sendAliasMapResetFrame(nodeId: nodeId, alias: alias)
-      aliasLookup[alias] = nil
-      nodeIdLookup[nodeId] = nil
+      aliasLookup.removeValue(forKey: alias)
+      nodeIdLookup.removeValue(forKey: nodeId)
     }
   }
   
   private func removeNodeIdAliasMapping(alias:UInt16) {
     if let nodeId = aliasLookup[alias] {
       sendAliasMapResetFrame(nodeId: nodeId, alias: alias)
-      nodeIdLookup[nodeId] = nil
-      aliasLookup[alias] = nil
+      aliasLookup.removeValue(forKey: alias)
+      nodeIdLookup.removeValue(forKey: nodeId)
     }
   }
   
@@ -386,11 +376,11 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
         internalNode.state = .permitted
         sendAliasMapDefinitionFrame(nodeId: internalNode.node.nodeId, alias: internalNode.alias!)
         addNodeIdAliasMapping(nodeId: internalNode.node.nodeId, alias: internalNode.alias!)
+        managedAliasLookup[internalNode.alias!] = internalNode
+        managedNodeIdLookup[internalNode.node.nodeId] = internalNode
         initNodeQueue.removeFirst()
-        if initNodeQueue.isEmpty {
-          delegate?.transportLayerStateChanged(transportLayer: self)
-        }
-        else {
+        internalNode.node.start()
+        if !initNodeQueue.isEmpty {
           getAlias()
         }
       default:
@@ -415,20 +405,30 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
       return
     }
 
-    if let node = initNodeQueue.first, node.transitionState == .idle {
+    if let node = initNodeQueue.first {
 
-      node.state = .inhibited
+      if node.transitionState == .tryAgain {
+        managedAliasLookup.removeValue(forKey: node.alias!)
+        managedNodeIdLookup.removeValue(forKey: node.node.nodeId)
+        node.transitionState = .idle
+      }
       
-      node.transitionState = .testingAlias
-      
-      node.alias = nextAlias(node: node.node)
-      
-      sendCheckIdFrame(format: .checkId7Frame, nodeId: node.node.nodeId, alias: node.alias!)
-      sendCheckIdFrame(format: .checkId6Frame, nodeId: node.node.nodeId, alias: node.alias!)
-      sendCheckIdFrame(format: .checkId5Frame, nodeId: node.node.nodeId, alias: node.alias!)
-      sendCheckIdFrame(format: .checkId4Frame, nodeId: node.node.nodeId, alias: node.alias!)
-
-      startWaitTimer(interval: waitInterval)
+      if node.transitionState == .idle {
+        
+        node.state = .inhibited
+        
+        node.transitionState = .testingAlias
+        
+        node.alias = nextAlias(node: node.node)
+        
+        sendCheckIdFrame(format: .checkId7Frame, nodeId: node.node.nodeId, alias: node.alias!)
+        sendCheckIdFrame(format: .checkId6Frame, nodeId: node.node.nodeId, alias: node.alias!)
+        sendCheckIdFrame(format: .checkId5Frame, nodeId: node.node.nodeId, alias: node.alias!)
+        sendCheckIdFrame(format: .checkId4Frame, nodeId: node.node.nodeId, alias: node.alias!)
+        
+        startWaitTimer(interval: waitInterval)
+        
+      }
       
     }
     
@@ -544,74 +544,28 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
       return
     }
 
-    for (_, internalNode) in internalNodes {
-      if let alias = nodeIdLookup[internalNode.nodeId] {
-        sendAliasMapResetFrame(nodeId: internalNode.nodeId, alias: alias)
-      }
+    while let (_, node) = internalNodes.first {
+      deregisterNode(node: node)
     }
-    
+
     isStopping = true
+    
+    processQueues()
     
   }
   
   override public func registerNode(node:OpenLCBNode) {
-    super.internalNodes[node.nodeId] = node
-    let alias = LCCTransportLayerAlias(node: node)
+    super.registerNode(node: node)
+    let alias = OpenLCBTransportLayerAlias(node: node)
     initNodeQueue.append(alias)
     getAlias()
-
   }
   
   override public func deregisterNode(node:OpenLCBNode) {
     removeNodeIdAliasMapping(nodeId: node.nodeId)
-    super.internalNodes.removeValue(forKey: node.nodeId)
+    super.deregisterNode(node: node)
   }
 
-  override public func transitionToPermittedState() {
-    
- //   guard state == .inhibited else {
- //     return
- //   }
-    
-    if observerId != -1 {
-      interface.removeObserver(id: observerId)
-    }
-    
-    observerId = interface.addObserver(observer: self)
-
-//    transitionState = .testingAlias
-    
-  }
-  
-  override public func transitionToInhibitedState() {
-    
- //   guard state == .permitted else {
- //     return
- //   }
-
-    initNodeQueue.removeAll()
-    
-    for (_, internalNode) in internalNodes {
-      if let alias = internalNode.alias {
-        sendAliasMapResetFrame(nodeId: internalNode.nodeId, alias: alias)
-        removeNodeIdAliasMapping(nodeId: internalNode.nodeId)
-      }
-      internalNode.transitionState = .idle
-    }
-    
-    internalNodes.removeAll()
-    
-//    _state = .inhibited
-    
-    if observerId != -1 {
-      interface.removeObserver(id: observerId)
-      observerId = -1
-    }
-    
-    delegate?.transportLayerStateChanged(transportLayer: self)
-    
-  }
-  
   override public func removeAlias(nodeId:UInt64) {
     removeNodeIdAliasMapping(nodeId: nodeId)
   }
@@ -622,114 +576,97 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
   
   @objc public func lccCANFrameReceived(frame:LCCCANFrame) {
     
-//    guard state != .stopped else {
-//      return
-//    }
-    
     switch frame.frameType {
       
     case .canControlFrame:
       
-      if let node = initNodeQueue.first, let alias = node.alias {
-        
-        // Testing an alias
-        
-        if (node.transitionState == .testingAlias || node.transitionState == .reservingAlias) {
+      // Testing an alias
+      
+      if let node = initNodeQueue.first, let alias = node.alias, (node.transitionState == .testingAlias || node.transitionState == .reservingAlias) && frame.sourceNIDAlias == alias {
+        stopWaitTimer()
+        node.transitionState = .idle
+        getAlias()
+        return
+      }
+      
+      // Node Id Alias Validation
+      
+      if frame.canControlFrameFormat == .aliasMappingEnquiryFrame {
           
-          if frame.sourceNIDAlias == alias {
+        if frame.data.isEmpty {
+          for (_, internalNode) in managedNodeIdLookup {
+            if internalNode.state == .permitted {
+              sendAliasMapDefinitionFrame(nodeId: internalNode.node.nodeId, alias: internalNode.alias!)
+            }
+          }
+        }
+        else {
+          if let nodeId = UInt64(bigEndianData: frame.data), let internalNode = managedNodeIdLookup[nodeId], internalNode.state == .permitted {
+            sendAliasMapDefinitionFrame(nodeId: nodeId, alias: internalNode.alias!)
+          }
+        }
+        
+        return
+
+      }
+
+      for (_, internalNode) in managedNodeIdLookup {
+        
+        // Node Id Collision Handling
+        
+        if let alias = internalNode.alias, frame.sourceNIDAlias == alias {
+          
+          // Is a CID Frame
+          
+          if frame.canControlFrameFormat.isCheckIdFrame {
+            sendReserveIdFrame(alias: alias)
+            return
+          }
+          
+          // Is not a CID Frame
+          
+          if internalNode.state == .permitted {
             
-            stopWaitTimer()
-            
-            node.state = .inhibited
-            
-            node.alias = nil
-            
-            node.transitionState = .idle
-            
+            removeNodeIdAliasMapping(nodeId: internalNode.node.nodeId)
+            internalNode.alias = nil
+            internalNode.state = .inhibited
+            internalNode.transitionState = .tryAgain
+            initNodeQueue.append(internalNode)
             getAlias()
-            
             return
             
           }
-          else if node.state == .permitted {
-            
-            // Node Id Alias Validation
-            
-            if frame.canControlFrameFormat == .aliasMappingEnquiryFrame {
-              
-              if frame.dataAsHex.isEmpty || frame.dataAsHex == node.node.nodeId {
-                sendAliasMapDefinitionFrame(nodeId: node.nodeId, alias: alias)
-              }
-              
-              return
-              
-            }
-            
-          }
           
         }
         
-        for (_, internalNode) in internalNodes {
-
-          // Node Id Collision Handling
-          
-          if frame.sourceNIDAlias == internalNode.alias {
-            
-            // Is a CID Frame
-            
-            if frame.canControlFrameFormat.isCheckIdFrame {
-              sendReserveIdFrame(alias: internalNode.alias!)
-              return
-            }
-            
-            // Is not a CID Frame
-            
-            else if internalNode.state == .permitted {
-              
-              if let alias = internalNode.alias {
-                sendAliasMapResetFrame(nodeId: internalNode.nodeId, alias: alias)
-                removeNodeIdAliasMapping(nodeId: internalNode.nodeId)
-              }
-              internalNode.alias = nil
-              internalNode.state = .inhibited
-              internalNode.transitionState = .idle
-              initNodeQueue.append(internalNode)
-              getAlias()
-              return
-
-            }
-
-          }
+        
+      }
       
-        }
+      // Remove lookups for reset mappings
         
-        // Remove lookups for reset mappings
-        
-        if frame.canControlFrameFormat == .aliasMapResetFrame {
-          removeNodeIdAliasMapping(alias: frame.sourceNIDAlias)
-          return
-        }
+      if frame.canControlFrameFormat == .aliasMapResetFrame {
+        removeNodeIdAliasMapping(alias: frame.sourceNIDAlias)
+        return
+      }
         
         // Check for Duplicate NodeId
         
-        if frame.canControlFrameFormat == .aliasMapDefinitionFrame {
-          
-          if nodeId.toHex(numberOfDigits: 12) == frame.dataAsHex {
-            sendDuplicateNodeIdErrorFrame()
-            removeNodeIdAliasMapping(nodeId: nodeId.toHex(numberOfDigits: 12))
-            _state = .stopped
-            interface.removeObserver(id: observerId)
-            observerId = -1
-            transitionState = .idle
-            self.alias = nil
-            delegate?.transportLayerStateChanged(transportLayer: self)
-            return
-          }
-          
-          addNodeIdAliasMapping(nodeId: frame.dataAsHex, alias: frame.sourceNIDAlias)
-          
+      if frame.canControlFrameFormat == .aliasMapDefinitionFrame, let nodeId = UInt64(bigEndianData: frame.data) {
+
+        if let internalNode = managedNodeIdLookup[nodeId] {
+          sendDuplicateNodeIdErrorFrame(alias: internalNode.alias!)
+          removeNodeIdAliasMapping(nodeId: nodeId)
+          internalNode.state = .stopped
+          internalNode.transitionState = .idle
+          managedAliasLookup.removeValue(forKey: internalNode.alias!)
+          managedNodeIdLookup.removeValue(forKey: nodeId)
+          internalNode.alias = nil
+          internalNode.node.stop()
+          return
         }
         
+        addNodeIdAliasMapping(nodeId: nodeId, alias: frame.sourceNIDAlias)
+
       }
 
     case .openLCBMessage:
@@ -759,15 +696,15 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
           }
         }
         
-        while timeOutList.count > 0 {
+        while !timeOutList.isEmpty {
           let message = timeOutList.first!
           datagrams.removeValue(forKey: message.datagramId)
           timeOutList.removeFirst()
-          if message.destinationNIDAlias == alias {
+          if let internalNode = managedAliasLookup[message.destinationNIDAlias!] {
             let errorMessage = OpenLCBMessage(messageTypeIndicator: .datagramRejected)
             errorMessage.destinationNIDAlias = message.sourceNIDAlias
-            errorMessage.sourceNIDAlias = alias
-            errorMessage.sourceNodeId = nodeId
+            errorMessage.sourceNIDAlias = internalNode.alias!
+            errorMessage.sourceNodeId = internalNode.node.nodeId
             errorMessage.payload = OpenLCBErrorCode.temporaryErrorTimeOutWaitingForEndFrame.asData
             addToOutputQueue(message: errorMessage)
           }
@@ -795,11 +732,11 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
           addToInputQueue(message: message)
         case .datagramFirstFrame:
           if let oldMessage = datagrams[message.datagramId] {
-            if oldMessage.destinationNIDAlias == alias {
+            if let internalNode = managedAliasLookup[oldMessage.destinationNIDAlias!] {
               let errorMessage = OpenLCBMessage(messageTypeIndicator: .datagramRejected)
               errorMessage.destinationNIDAlias = message.sourceNIDAlias
-              errorMessage.sourceNIDAlias = alias
-              errorMessage.sourceNodeId = nodeId
+              errorMessage.sourceNIDAlias = internalNode.alias!
+              errorMessage.sourceNodeId = internalNode.node.nodeId
               errorMessage.payload = OpenLCBErrorCode.temporaryErrorOutOfOrderStartFrameBeforeFinishingPreviousMessage.asData
               addToOutputQueue(message: errorMessage)
             }
@@ -817,11 +754,11 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
               datagrams.removeValue(forKey: first.datagramId)
             }
           }
-          else if message.destinationNIDAlias == alias {
+          else if let internalNode = managedAliasLookup[message.destinationNIDAlias!] {
             let errorMessage = OpenLCBMessage(messageTypeIndicator: .datagramRejected)
             errorMessage.destinationNIDAlias = message.sourceNIDAlias
-            errorMessage.sourceNIDAlias = alias
-            errorMessage.sourceNodeId = nodeId
+            errorMessage.sourceNIDAlias = internalNode.alias!
+            errorMessage.sourceNodeId = internalNode.node.nodeId
             errorMessage.payload = OpenLCBErrorCode.temporaryErrorOutOfOrderMiddleOrEndFrameWithoutStartFrame.asData
             addToOutputQueue(message: errorMessage)
           }
@@ -836,12 +773,6 @@ public class LCCCANTransportLayer : LCCTransportLayer, InterfaceDelegate {
       
     }
     
-    /*
-    for (key, value) in nodeIdLookup {
-      print("0x\(key) : 0x\(value.toHex(numberOfDigits: 3))")
-    }
-    print()
-     */
   }
   
   @objc public func interfaceWasDisconnected(interface:Interface) {

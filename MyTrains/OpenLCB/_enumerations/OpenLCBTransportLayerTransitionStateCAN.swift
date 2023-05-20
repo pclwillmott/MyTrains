@@ -7,10 +7,11 @@
 
 import Foundation
 
-public enum LCCCANTransportTransitionState {
+public enum OpenLCBTransportTransitionStateCAN {
   case idle
   case testingAlias
   case reservingAlias
   case mappingDeclared
+  case tryAgain
 }
 

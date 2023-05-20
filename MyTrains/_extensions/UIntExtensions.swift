@@ -89,7 +89,7 @@ extension UInt64 {
   
   init?(bigEndianData: [UInt8]) {
     
-    guard bigEndianData.count == 8 else {
+    guard bigEndianData.count <= 8 else {
       return nil
     }
     

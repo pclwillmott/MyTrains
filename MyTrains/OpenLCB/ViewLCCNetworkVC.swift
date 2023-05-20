@@ -8,7 +8,7 @@
 import Foundation
 import Cocoa
 
-class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDelegate {
+class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLayerDelegate {
   
   // MARK: Window & View Methods
   
@@ -31,7 +31,7 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDeleg
     
     self.view.window?.delegate = self
     
-    networkLayer = networkController.lccNetworkLayer
+    networkLayer = networkController.openLCBNetworkLayer
     
     if let network = self.networkLayer {
       observerId = network.addObserver(observer: self)
@@ -49,7 +49,7 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDeleg
   
   private var tableViewDS : ViewLCCNetworkTableViewDS = ViewLCCNetworkTableViewDS()
   
-  private var networkLayer : LCCNetworkLayer?
+  private var networkLayer : OpenLCBNetworkLayer?
   
   private var observerId : Int = -1
   
@@ -61,7 +61,7 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDeleg
       
       nodes.removeAll()
       
-      network.sendVerifyNodeIdNumber()
+      network.sendVerifyNodeIdNumber(sourceNodeId: networkLayer!.myTrainsNode.nodeId)
       
     }
     
@@ -78,7 +78,7 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDeleg
   
   // MARK: LCCNetworkLayerDelegate Methods
   
-  func networkLayerStateChanged(networkLayer: LCCNetworkLayer) {
+  func networkLayerStateChanged(networkLayer: OpenLCBNetworkLayer) {
     
   }
   
@@ -86,17 +86,23 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, LCCNetworkLayerDeleg
     
     switch message.messageTypeIndicator {
       
-    case .verifiedNodeIDNumber:
+    case .verifiedNodeIDNumberSimpleSetSufficient, .verifiedNodeIDNumberFullProtocolRequired:
       
-      if let _ = nodes[message.sourceNodeId!] {
+      var xnode : OpenLCBNode?
+      
+      if let oldNode = nodes[message.sourceNodeId!] {
+        xnode = oldNode
       }
       else {
-        let node = OpenLCBNode(nodeId: message.sourceNodeId!)
+        xnode = OpenLCBNode(nodeId: message.sourceNodeId!)
+      }
+      if let node = xnode {
         nodes[node.nodeId] = node
         reload()
         if let network = networkLayer {
-          network.sendSimpleNodeInformationRequest(nodeId: node.nodeId)
-          network.sendProtocolSupportInquiry(nodeId: node.nodeId)
+          let myTrainsNodeId = network.myTrainsNode.nodeId
+          network.sendSimpleNodeInformationRequest(sourceNodeId: myTrainsNodeId, destinationNodeId: node.nodeId)
+          network.sendProtocolSupportInquiry(sourceNodeId: myTrainsNodeId, destinationNodeId: node.nodeId)
         }
       }
       

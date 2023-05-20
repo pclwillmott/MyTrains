@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class LCCTransportLayerAlias {
+public class OpenLCBTransportLayerAlias {
   
   // MARK: Constructors
   
@@ -21,8 +21,8 @@ public class LCCTransportLayerAlias {
   
   public var alias : UInt16?
   
-  public var transitionState : LCCCANTransportTransitionState = .idle
+  public var transitionState : OpenLCBTransportTransitionStateCAN = .idle
 
-  public var state : LCCTransportLayerState = .inhibited
+  public var state : OpenLCBTransportLayerState = .inhibited
   
 }
