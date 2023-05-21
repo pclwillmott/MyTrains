@@ -27,6 +27,8 @@ public class LCCCDIElement {
   
   public var defaultValue : String?
   
+  public var floatFormat : String?
+  
   public var map : [LCCCDIMapRelation] = []
   
   public var size : Int = 0
@@ -74,6 +76,7 @@ public class LCCCDIElement {
     result.stringValue = self.stringValue
     result.space = self.space
     result.origin = self.origin
+    result.floatFormat = self.floatFormat
     
     for relation in self.map {
       result.map.append(relation)

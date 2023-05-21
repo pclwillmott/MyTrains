@@ -45,8 +45,9 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     
     cboDecoderModel.dataSource = cboDecoderModelDS
     
-//    cboModelManufacturer.dataSource = cboModelManufacturerDS
-
+    cboModelManufacturerDS.dictionary = NMRA.manufacturersComboDict
+    cboModelManufacturer.dataSource = cboModelManufacturerDS
+    
     editorView.delegate = self
     
   }
@@ -58,9 +59,9 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   private var cboNetworkDS = ComboBoxDBDS(tableName: TABLE.NETWORK, codeColumn: NETWORK.NETWORK_ID, displayColumn: NETWORK.NETWORK_NAME, sortColumn: NETWORK.NETWORK_NAME)
   
   private var cboDecoderModelDS = ComboBoxDBDS(tableName: TABLE.ROLLING_STOCK, codeColumn: ROLLING_STOCK.ROLLING_STOCK_ID, displayColumn: ROLLING_STOCK.MDECODER_MODEL, sortColumn: ROLLING_STOCK.MDECODER_MODEL, groupItems: true)
-  /*
-  private var cboModelManufacturerDS = ComboBoxDBDS(tableName: TABLE.ROLLING_STOCK, codeColumn: ROLLING_STOCK.ROLLING_STOCK_ID, displayColumn: ROLLING_STOCK.M, sortColumn: LOCOMOTIVE.MANUFACTURER, groupItems: true)
-  */
+  
+  private var cboModelManufacturerDS = ComboBoxDictDS()
+  
   private var fnTableViewDS = FNTableViewDS()
   
   // MARK: DBEditorDelegate Methods
@@ -92,6 +93,7 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     cboModelManufacturer.stringValue = ""
     txtPurchaseDate.stringValue = ""
     txtNotes.string = ""
+    cboModelManufacturer.deselectItem(at: cboModelManufacturer.indexOfSelectedItem)
   }
   
   func setupFields(dbEditorView: DBEditorView, editorObject: EditorObject) {
@@ -120,7 +122,7 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
       cboDecoderModel.stringValue = locomotive.mDecoderModel
       cboAccessoryDecoderModel.stringValue = locomotive.aDecoderModel
       txtInventoryCode.stringValue = locomotive.inventoryCode
- //     cboModelManufacturer.stringValue = locomotive.manufacturer
+      cboModelManufacturer.selectItem(at: cboModelManufacturerDS.indexWithKey(key: locomotive.manufacturerId) ?? -1)
       txtPurchaseDate.stringValue = locomotive.purchaseDate
       txtNotes.string = locomotive.notes
       fnTableViewDS.fns = locomotive.functions
@@ -218,7 +220,7 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     locomotive.mDecoderModel = cboDecoderModel.stringValue
     locomotive.aDecoderModel = cboAccessoryDecoderModel.stringValue
     locomotive.inventoryCode = txtInventoryCode.stringValue
-//    locomotive.manufacturer = cboModelManufacturer.stringValue
+    locomotive.manufacturerId = cboModelManufacturerDS.editorObjectAt(index: cboModelManufacturer.indexOfSelectedItem)?.primaryKey ?? -1
     locomotive.purchaseDate = txtPurchaseDate.stringValue
     locomotive.notes = txtNotes.string
     locomotive.save()

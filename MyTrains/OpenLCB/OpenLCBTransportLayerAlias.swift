@@ -11,13 +11,13 @@ public class OpenLCBTransportLayerAlias {
   
   // MARK: Constructors
   
-  init(node:OpenLCBNode) {
+  init(node:OpenLCBNodeVirtual) {
     self.node = node
   }
   
   // MARK: Public Properties
   
-  public var node : OpenLCBNode
+  public var node : OpenLCBNodeVirtual
   
   public var alias : UInt16?
   

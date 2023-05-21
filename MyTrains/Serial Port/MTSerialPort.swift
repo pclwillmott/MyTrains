@@ -109,7 +109,7 @@ public class MTSerialPort {
   
   private func monitorPort() {
     
-    let kInitialBufferSize = 256
+    let kInitialBufferSize = 0x1000
     
     let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: kInitialBufferSize)
     

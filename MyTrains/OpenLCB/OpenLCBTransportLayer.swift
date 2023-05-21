@@ -21,18 +21,12 @@ public class OpenLCBTransportLayer : NSObject {
   
   internal var inputQueueLock : NSLock = NSLock()
   
-  internal var internalNodes : [UInt64:OpenLCBNode] = [:]
+  internal var virtualNodes : [UInt64:OpenLCBNodeVirtual] = [:]
   
   // MARK: Public Properties
   
   public var delegate : OpenLCBTransportLayerDelegate?
 
-//  public var state : LCCTransportLayerState {
-//    get {
-//      return _state
-//    }
-//  }
-  
   // MARK: Private Methods
   
   internal func processQueues() {
@@ -49,7 +43,7 @@ public class OpenLCBTransportLayer : NSObject {
     
     isActive = true
     
-    for (_, node) in internalNodes {
+    for (_, node) in virtualNodes {
       node.start()
     }
     
@@ -88,12 +82,12 @@ public class OpenLCBTransportLayer : NSObject {
   public func removeAlias(nodeId:UInt64) {
   }
   
-  public func registerNode(node:OpenLCBNode) {
-    internalNodes[node.nodeId] = node
+  public func registerNode(node:OpenLCBNodeVirtual) {
+    virtualNodes[node.nodeId] = node
   }
   
-  public func deregisterNode(node:OpenLCBNode) {
-    internalNodes.removeValue(forKey: node.nodeId)
+  public func deregisterNode(node:OpenLCBNodeVirtual) {
+    virtualNodes.removeValue(forKey: node.nodeId)
   }
   
 }

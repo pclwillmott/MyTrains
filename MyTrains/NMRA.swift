@@ -233,6 +233,19 @@ public class NMRA {
     }
   }
   
+  public static var manufacturersComboDict : [Int:EditorObject] {
+    get {
+      var result : [Int:EditorObject] = [:]
+      
+      for (_, manufacturer) in manufacturers {
+        let entry = ComboBoxDictEntry(primaryKey: manufacturer.code)
+        entry.title = manufacturer.name
+        result[entry.primaryKey] = entry
+      }
+      return result
+    }
+  }
+  
   public static var manufacturers : [Int:ManufacturerInfo] {
     get {
 

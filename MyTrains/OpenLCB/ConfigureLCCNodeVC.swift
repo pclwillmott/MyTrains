@@ -265,17 +265,23 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
           floatValue <<= 8
           floatValue |= UInt64(byte)
         }
+        var floatFormat = "%f"
+        if let format = element.floatFormat {
+          floatFormat = format
+        }
         switch element.size {
         case 2:
-          // TODO: Add custom data type for Float16
-          print("displayEditElement: float16 found!")
+          let word = UInt16(floatValue & 0xffff)
+          var float16 : float16_t = float16_t(v: word)
+          let float32 = Float(float16: float16)
+          txtValue.stringValue = String(format: floatFormat, float32)
         case 4:
-          let word = UInt32(floatValue & 0xffffffff)
-          let float32 = Float32(bitPattern: word)
-          txtValue.stringValue = "\(float32)"
+          let dword = UInt32(floatValue & 0xffffffff)
+          let float32 = Float32(bitPattern: dword)
+          txtValue.stringValue = String(format: floatFormat, float32)
         case 8:
           let float64 = Float64(bitPattern: floatValue)
-          txtValue.stringValue = "\(float64)"
+          txtValue.stringValue = String(format: floatFormat, float64)
         default:
           print("displayEditElement: bad float size: \(element.size)")
         }
@@ -503,7 +509,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
   
   func openLCBMessageReceived(message: OpenLCBMessage) {
     
-    print("\(message.messageTypeIndicator) \(message.datagramType)")
+ //   print("->\(message.messageTypeIndicator) \(message.datagramType)")
     
     guard message.destinationNodeId == sourceNodeId && message.sourceNodeId == node!.nodeId else {
       return
@@ -870,6 +876,9 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
         if let replication = attributeDict["replication"] {
           element.replication = Int(replication) ?? 1
         }
+        if let floatFormat = attributeDict["floatFormat"] {
+          element.floatFormat = floatFormat
+        }
         if let size = attributeDict["size"] {
           element.size = Int(size) ?? 0
         }
@@ -1133,8 +1142,22 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
           
           switch element.size {
           case 2:
-            print("btnWriteAction: float16 found!")
-            return
+            if let float32 = Float32(txtValue.stringValue) {
+              if let max = element.max, let maxFloat32 = Float32(max), float32 > maxFloat32 {
+                displayErrorMessage(message: "The value is greater than the maximum value of \(max).")
+                return
+              }
+              if let min = element.min, let minFloat32 = Float32(min), float32 < minFloat32 {
+                displayErrorMessage(message: "The value is greater than the minimum value of \(min).")
+                return
+              }
+              let word = float32.float16.v
+              data = word.bigEndianData
+            }
+            else {
+              displayErrorMessage(message: "Float value expected.")
+              return
+            }
           case 4:
             if let float32 = Float32(txtValue.stringValue) {
               if let max = element.max, let maxFloat32 = Float32(max), float32 > maxFloat32 {

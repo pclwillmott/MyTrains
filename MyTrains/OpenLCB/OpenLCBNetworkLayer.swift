@@ -13,12 +13,18 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
   
   public init(nodeId: UInt64) {
     
-    myTrainsNode = OpenLCBNode(nodeId: nodeId)
+    myTrainsNode = OpenLCBNodeMyTrains(nodeId: nodeId)
     
     super.init()
 
     registerNode(node: myTrainsNode)
-
+    
+    for (_, rollingStock) in RollingStock.rollingStock {
+      if rollingStock.rollingStockType == .locomotive {
+        registerNode(node: OpenLCBNodeRollingStock(rollingStock: rollingStock))
+      }
+    }
+    
   }
   
   // MARK: Private Properties
@@ -29,7 +35,7 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
   
   private var observers : [Int:OpenLCBNetworkLayerDelegate] = [:]
   
-  private var internalNodes : [UInt64:OpenLCBNode] = [:]
+  private var virtualNodes : [UInt64:OpenLCBNodeVirtual] = [:]
 
   // MARK: Public Properties
   
@@ -39,7 +45,7 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
     }
   }
   
-  public var myTrainsNode : OpenLCBNode
+  public var myTrainsNode : OpenLCBNodeMyTrains
   
   public var transportLayers : [ObjectIdentifier:OpenLCBTransportLayer] = [:]
   
@@ -100,13 +106,13 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
     observers.removeValue(forKey: observerId)
   }
   
-  public func registerNode(node:OpenLCBNode) {
-    internalNodes[node.nodeId] = node
+  public func registerNode(node:OpenLCBNodeVirtual) {
+    virtualNodes[node.nodeId] = node
     node.networkLayer = self
   }
   
-  public func deregisterNode(node:OpenLCBNode) {
-    internalNodes.removeValue(forKey: node.nodeId)
+  public func deregisterNode(node:OpenLCBNodeVirtual) {
+    virtualNodes.removeValue(forKey: node.nodeId)
     node.networkLayer = nil
   }
 
@@ -118,9 +124,17 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
       return
     }
     
-    for (_, internalNode) in internalNodes {
+    for (_, internalNode) in virtualNodes {
       if internalNode.nodeId != message.sourceNodeId {
-        internalNode.openLCBMessageReceived(message: message)
+        DispatchQueue.main.async {
+          internalNode.openLCBMessageReceived(message: message)
+        }
+      }
+    }
+    
+    for (_, observer) in observers {
+      DispatchQueue.main.async {
+        observer.openLCBMessageReceived(message: message)
       }
     }
     
@@ -328,7 +342,7 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
 
   public func sendUnLockCommand(sourceNodeId:UInt64, destinationNodeId:UInt64) {
 
-    var data = [0x20, OpenLCBDatagramType.LockReserveCommand.rawValue, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
+    let data = [0x20, OpenLCBDatagramType.LockReserveCommand.rawValue, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
     
     sendDatagram(sourceNodeId: sourceNodeId, destinationNodeId: destinationNodeId, data: data)
     
@@ -336,7 +350,7 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
 
   public func sendRebootCommand(sourceNodeId:UInt64, destinationNodeId:UInt64) {
 
-    var data = [0x20, OpenLCBDatagramType.resetRebootCommand.rawValue]
+    let data = [0x20, OpenLCBDatagramType.resetRebootCommand.rawValue]
     
     sendDatagram(sourceNodeId: sourceNodeId, destinationNodeId: destinationNodeId, data: data)
     
@@ -395,13 +409,35 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
     sendMessage(message: message)
 
   }
-  
+
+  public func sendProtocolSupportReply(sourceNodeId:UInt64, destinationNodeId:UInt64, data:[UInt8]) {
+
+    let message = OpenLCBMessage(messageTypeIndicator: .protocolSupportReply)
+    
+    message.sourceNodeId = sourceNodeId
+    
+    message.destinationNodeId = destinationNodeId
+    
+    message.payload = data
+    
+    sendMessage(message: message)
+
+  }
+
   // MARK: TransportLayerDelegate Methods
   
   public func openLCBMessageReceived(message: OpenLCBMessage) {
+    
+    for (_, internalNode) in virtualNodes {
+      if internalNode.nodeId != message.sourceNodeId {
+        internalNode.openLCBMessageReceived(message: message)
+      }
+    }
+
     for (_, observer) in observers {
       observer.openLCBMessageReceived(message: message)
     }
+    
   }
   
   public func transportLayerStateChanged(transportLayer: OpenLCBTransportLayer) {
@@ -419,7 +455,7 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
           }
           _state = .initialized
           for (_, transportLayer) in transportLayers {
-            for (_, internalNode) in internalNodes {
+            for (_, internalNode) in virtualNodes {
               transportLayer.registerNode(node: internalNode)
             }
           }
@@ -432,7 +468,7 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
             return
           }
           // Stop all the nodes
-          for (_, internalNode) in internalNodes {
+          for (_, internalNode) in virtualNodes {
             internalNode.stop()
           }
           _state = .uninitialized

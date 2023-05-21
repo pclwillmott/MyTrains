@@ -280,14 +280,14 @@
                                                             </view>
                                                         </box>
                                                         <box fixedFrame="YES" title="Network" translatesAutoresizingMaskIntoConstraints="NO" id="XLg-bd-wmB">
-                                                            <rect key="frame" x="368" y="432" width="417" height="67"/>
+                                                            <rect key="frame" x="367" y="432" width="418" height="67"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES"/>
                                                             <view key="contentView" id="u88-iw-9AX">
-                                                                <rect key="frame" x="4" y="5" width="409" height="47"/>
+                                                                <rect key="frame" x="4" y="5" width="410" height="47"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <subviews>
                                                                     <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fBe-gI-DCv">
-                                                                        <rect key="frame" x="17" y="14" width="375" height="25"/>
+                                                                        <rect key="frame" x="18" y="14" width="374" height="25"/>
                                                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES"/>
                                                                         <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="5" id="ak6-H4-hFd">
                                                                             <font key="font" metaFont="system"/>
@@ -1644,7 +1644,7 @@
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                                             <clipView key="contentView" drawsBackground="NO" id="kSW-50-yuQ">
                                                                 <rect key="frame" x="0.0" y="0.0" width="765" height="333"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <subviews>
                                                                     <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="642-Id-4Ni">
                                                                         <rect key="frame" x="0.0" y="0.0" width="765" height="333"/>

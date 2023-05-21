@@ -17,8 +17,6 @@ public class OpenLCBTransportLayerCAN : OpenLCBTransportLayer, InterfaceDelegate
     
     super.init()
     
-    observerId = interface.addObserver(observer: self)
-    
   }
   
   // MARK: Private Properties
@@ -132,8 +130,8 @@ public class OpenLCBTransportLayerCAN : OpenLCBTransportLayer, InterfaceDelegate
             break
           }
 
-          delegate?.openLCBMessageReceived(message: message)
-
+          self.delegate?.openLCBMessageReceived(message: message)
+ 
           delete = true
           
         }
@@ -326,7 +324,7 @@ public class OpenLCBTransportLayerCAN : OpenLCBTransportLayer, InterfaceDelegate
     }
   }
   
-  private func nextAlias(node: OpenLCBNode) -> UInt16 {
+  private func nextAlias(node: OpenLCBNodeVirtual) -> UInt16 {
     
     // The PRNG state is stored in two 32-bit quantities:
     // uint32_t lfsr1, lfsr2; // sequence value: lfsr1 is upper 24 bits, lfsr2 lower
@@ -544,7 +542,7 @@ public class OpenLCBTransportLayerCAN : OpenLCBTransportLayer, InterfaceDelegate
       return
     }
 
-    while let (_, node) = internalNodes.first {
+    while let (_, node) = virtualNodes.first {
       deregisterNode(node: node)
     }
 
@@ -554,14 +552,14 @@ public class OpenLCBTransportLayerCAN : OpenLCBTransportLayer, InterfaceDelegate
     
   }
   
-  override public func registerNode(node:OpenLCBNode) {
+  override public func registerNode(node:OpenLCBNodeVirtual) {
     super.registerNode(node: node)
     let alias = OpenLCBTransportLayerAlias(node: node)
     initNodeQueue.append(alias)
     getAlias()
   }
   
-  override public func deregisterNode(node:OpenLCBNode) {
+  override public func deregisterNode(node:OpenLCBNodeVirtual) {
     removeNodeIdAliasMapping(nodeId: node.nodeId)
     super.deregisterNode(node: node)
   }
@@ -786,6 +784,7 @@ public class OpenLCBTransportLayerCAN : OpenLCBTransportLayer, InterfaceDelegate
   
   @objc public func interfaceWasClosed(interface:Interface) {
     interface.removeObserver(id: observerId)
+    observerId = -1
     isActive = false
     delegate?.transportLayerStateChanged(transportLayer: self)
   }

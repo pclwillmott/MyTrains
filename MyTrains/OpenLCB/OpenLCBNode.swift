@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class OpenLCBNode : NSObject, OpenLCBNetworkLayerDelegate {
+public class OpenLCBNode : NSObject {
   
   // MARK: Constructors
   
@@ -15,31 +15,17 @@ public class OpenLCBNode : NSObject, OpenLCBNetworkLayerDelegate {
     
     self.nodeId = nodeId
  
-    self.lfsr1 = UInt32(nodeId >> 24)
-    
-    self.lfsr2 = UInt32(nodeId & 0xffffff)
-
     super.init()
     
   }
   
   // MARK: Private Properties
   
-  private var _supportedProtocols : [UInt8] = [UInt8](repeating: 0x00, count: 64)
-  
-  private var observerId : Int = -1
+  private var _supportedProtocols : [UInt8] = [UInt8](repeating: 0x00, count: 6)
   
   // MARK: Public Properties
   
   public var nodeId : UInt64
-  
-  public var lfsr1 : UInt32
-  
-  public var lfsr2 : UInt32
-
-  public var state : OpenLCBTransportLayerState = .inhibited
-  
-  public var networkLayer : OpenLCBNetworkLayer?
   
   public var manufacturerName : String = ""
   
@@ -92,8 +78,8 @@ public class OpenLCBNode : NSObject, OpenLCBNetworkLayerDelegate {
       return _supportedProtocols
     }
     set(value) {
-      _supportedProtocols = [UInt8](repeating: 0x00, count: 64)
-      for index in 0...min(value.count - 1, 63) {
+      _supportedProtocols = [UInt8](repeating: 0x00, count: 6)
+      for index in 0...min(value.count - 1, 6) {
         _supportedProtocols[index] = value[index]
       }
     }
@@ -385,26 +371,6 @@ public class OpenLCBNode : NSObject, OpenLCBNetworkLayerDelegate {
   
   // MARK: Public Methods
   
-  public func start() {
-  
-    if let network = networkLayer {
-      state = .permitted
-      if observerId == -1 {
-        observerId = network.addObserver(observer: self)
-      }
-      network.sendInitializationComplete(sourceNodeId: nodeId, isSimpleSetSufficient: false)
-    }
-    
-  }
-  
-  public func stop() {
-    if let network = networkLayer {
-      network.removeObserver(observerId: observerId)
-      observerId = -1
-      state = .inhibited
-    }
-  }
-  
   public func addAddressSpaceInformation(message:OpenLCBMessage) -> OpenLCBNodeAddressSpaceInformation {
     
     var data = message.payload
@@ -450,31 +416,6 @@ public class OpenLCBNode : NSObject, OpenLCBNetworkLayerDelegate {
     addressSpaceInformation[addressSpace] = info
     
     return info
-    
-  }
-  
-  // MARK: LCCNetworkLayerDelegate Methods
-  
-  public func networkLayerStateChanged(networkLayer: OpenLCBNetworkLayer) {
-    
-  }
-  
-  public func openLCBMessageReceived(message: OpenLCBMessage) {
-    
-    guard message.destinationNodeId == self.nodeId else {
-      return
-    }
-
-    switch message.messageTypeIndicator {
-    case .simpleNodeIdentInfoRequest:
-      networkLayer?.sendSimpleNodeInformationReply(sourceNodeId: self.nodeId, destinationNodeId: message.sourceNodeId!, data: encodedNodeInformation)
-    case .verifyNodeIDNumberGlobal:
-      if message.payload.isEmpty || message.payloadAsHex == nodeId.toHex(numberOfDigits: 12) {
-        networkLayer?.sendVerifiedNodeIdNumber(sourceNodeId: nodeId, isSimpleSetSufficient: false)
-      }
-    default:
-      break
-    }
     
   }
   

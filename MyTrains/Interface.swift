@@ -29,7 +29,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
   
   private var serialPort : MTSerialPort?
   
-  private var buffer : [UInt8] = [UInt8](repeating: 0x00, count:1024)
+  private var buffer : [UInt8] = [UInt8](repeating: 0x00, count:0x1000)
   
   private var readPtr : Int = 0
   
@@ -607,7 +607,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
     bufferCount += data.count
     for x in data {
       buffer[writePtr] = x
-      writePtr = (writePtr + 1) & 0xff
+      writePtr = (writePtr + 1) & 0xfff
     }
     bufferLock.unlock()
 
@@ -650,7 +650,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
             }
             else {
               bufferLock.lock()
-              readPtr = (readPtr + 1) & 0xff
+              readPtr = (readPtr + 1) & 0xfff
               bufferCount -= 1
               bufferLock.unlock()
             }
@@ -662,7 +662,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
             if char == ":" {
               let increment = frame.count
               bufferLock.lock()
-              readPtr = (readPtr + increment) & 0xff
+              readPtr = (readPtr + increment) & 0xfff
               bufferCount -= increment
               bufferLock.unlock()
               frame = char
@@ -670,7 +670,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
             else if char == "\n" || char == "\r" {
               let increment = frame.count
               bufferLock.lock()
-              readPtr = (readPtr + increment) & 0xff
+              readPtr = (readPtr + increment) & 0xfff
               bufferCount -= increment
               bufferLock.unlock()
               frame = ""
@@ -683,7 +683,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
               let increment = frame.count
               
               bufferLock.lock()
-              readPtr = (readPtr + increment) & 0xff
+              readPtr = (readPtr + increment) & 0xfff
               bufferCount -= increment
               bufferLock.unlock()
               
@@ -703,7 +703,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
             
           }
           
-          index = (index + 1) & 0xff
+          index = (index + 1) & 0xfff
           tempCount -= 1
           
         }
@@ -736,7 +736,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
           opCodeFound = true
           break
         }
-        readPtr = (readPtr + 1) & 0xff
+        readPtr = (readPtr + 1) & 0xfff
         bufferCount -= 1
       }
       bufferLock.unlock()
@@ -756,7 +756,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
           length = 6
           break
         default :
-          length = bufferCount > 1 ? buffer[(readPtr+1) & 0xff] : 0xff
+          length = bufferCount > 1 ? buffer[(readPtr+1) & 0xfff] : 0xff
           break
         }
         
@@ -783,7 +783,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
             
             message[index] = cc
             
-            readPtr = (readPtr + 1) & 0xff
+            readPtr = (readPtr + 1) & 0xfff
             index += 1
             bufferCount -= 1
             
