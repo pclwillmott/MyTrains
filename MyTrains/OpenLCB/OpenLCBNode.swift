@@ -13,6 +13,10 @@ public class OpenLCBNode : NSObject {
   
   public init(nodeId:UInt64) {
     
+    UNDERSTOOD_BYTES = 3
+    
+    _supportedProtocols = [UInt8](repeating: 0x00, count: UNDERSTOOD_BYTES)
+    
     self.nodeId = nodeId
  
     super.init()
@@ -21,7 +25,9 @@ public class OpenLCBNode : NSObject {
   
   // MARK: Private Properties
   
-  private var _supportedProtocols : [UInt8] = [UInt8](repeating: 0x00, count: 6)
+  private let UNDERSTOOD_BYTES : Int
+  
+  private var _supportedProtocols : [UInt8]
   
   // MARK: Public Properties
   
@@ -78,9 +84,9 @@ public class OpenLCBNode : NSObject {
       return _supportedProtocols
     }
     set(value) {
-      _supportedProtocols = [UInt8](repeating: 0x00, count: 6)
-      for index in 0...min(value.count - 1, 6) {
-        _supportedProtocols[index] = value[index]
+      _supportedProtocols = value
+      while _supportedProtocols.count < UNDERSTOOD_BYTES {
+        _supportedProtocols.append(0x00)
       }
     }
   }
@@ -374,8 +380,6 @@ public class OpenLCBNode : NSObject {
   public func addAddressSpaceInformation(message:OpenLCBMessage) -> OpenLCBNodeAddressSpaceInformation {
     
     var data = message.payload
-    
-    let isPresent = OpenLCBDatagramType(rawValue: data[1])! == .getAddressSpaceInformationReplyLowAddressPresent
     
     let addressSpace = data[2]
     

@@ -8,9 +8,7 @@
 import Foundation
 import Cocoa
 
-private enum State {
-  case idle
-  case getNodes
+private enum Task {
   case getSNIP
   case getProtocols
 }
@@ -51,13 +49,15 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLayerD
   
   // MARK: Private Properties
   
-  private let PACING_DELAY : TimeInterval = 0.3
+  private let GET_DELAY : TimeInterval = 0.01
   
+  private let TIMEOUT_DELAY : TimeInterval = 0.01
+
   private var nodes : [UInt64:OpenLCBNode] = [:]
   
-  private var nodesToDo : [OpenLCBNode] = []
+  private var tasks : [(nodeId:UInt64, task:Task)] = []
   
-  private var state : State = .idle
+  private var taskLock : NSLock = NSLock()
   
   private var tableViewDS : ViewLCCNetworkTableViewDS = ViewLCCNetworkTableViewDS()
   
@@ -73,17 +73,19 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLayerD
     
     if let network = networkLayer {
       
+      stopPacingTimer()
+      
       nodes.removeAll()
       
-      nodesToDo.removeAll()
-      
-      state = .getNodes
+      taskLock.lock()
+      tasks.removeAll()
+      taskLock.unlock()
       
       nodes[network.myTrainsNode.nodeId] = network.myTrainsNode
       
       network.sendVerifyNodeIdNumber(sourceNodeId: network.myTrainsNode.nodeId)
       
-      startPacingTimer(timeInterval: PACING_DELAY)
+      startPacingTimer(timeInterval: TIMEOUT_DELAY)
       
     }
     
@@ -98,36 +100,41 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLayerD
     
   }
   
-  @objc func pacingTimerAction() {
+  func doTask() {
+  
     stopPacingTimer()
-    if !nodesToDo.isEmpty {
-      if let network = networkLayer, let node = nodesToDo.first {
+    
+    taskLock.lock()
+    
+    if let nextTask = tasks.first {
+      
+      tasks.removeFirst()
+      
+      taskLock.unlock()
+      
+      if let network = networkLayer {
+        
         let myTrainsNodeId = network.myTrainsNode.nodeId
-        switch state {
-        case .getNodes:
-          state = .getSNIP
-          network.sendSimpleNodeInformationRequest(sourceNodeId: myTrainsNodeId, destinationNodeId: node.nodeId)
+
+        switch nextTask.task {
         case .getSNIP:
-          state = .getProtocols
-          network.sendProtocolSupportInquiry(sourceNodeId: myTrainsNodeId, destinationNodeId: node.nodeId)
+          network.sendSimpleNodeInformationRequest(sourceNodeId: myTrainsNodeId, destinationNodeId: nextTask.nodeId)
         case .getProtocols:
-          nodesToDo.removeFirst()
-          if let node = nodesToDo.first {
-            state = .getSNIP
-            network.sendSimpleNodeInformationRequest(sourceNodeId: myTrainsNodeId, destinationNodeId: node.nodeId)
-          }
-        default:
-          break
+          network.sendProtocolSupportInquiry(sourceNodeId: myTrainsNodeId, destinationNodeId: nextTask.nodeId)
         }
-      }
-      if !nodesToDo.isEmpty {
-        startPacingTimer(timeInterval: PACING_DELAY)
-      }
-      else {
-        state = .idle
+        
+        startPacingTimer(timeInterval: GET_DELAY)
+        
       }
     }
+    else {
+      taskLock.unlock()
+    }
 
+  }
+  
+  @objc func pacingTimerAction() {
+    doTask()
   }
   
   func startPacingTimer(timeInterval:TimeInterval) {
@@ -140,6 +147,7 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLayerD
     pacingTimer?.invalidate()
     pacingTimer = nil
   }
+  
   // MARK: LCCNetworkLayerDelegate Methods
   
   func networkLayerStateChanged(networkLayer: OpenLCBNetworkLayer) {
@@ -152,58 +160,48 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLayerD
       
     case .verifiedNodeIDNumberSimpleSetSufficient, .verifiedNodeIDNumberFullProtocolRequired:
       
-      var xnode : OpenLCBNode?
+      taskLock.lock()
       
-      if let oldNode = nodes[message.sourceNodeId!] {
-        xnode = oldNode
+      if !nodes.keys.contains(message.sourceNodeId!) {
+ 
+        stopPacingTimer()
+        
+        let nodeId = message.sourceNodeId!
+        
+        nodes[nodeId] = OpenLCBNode(nodeId: nodeId)
+
+        tasks.append((nodeId: nodeId, task: .getSNIP))
+        tasks.append((nodeId: nodeId, task: .getProtocols))
+        
+        taskLock.unlock()
+        
+        reload()
+        
+        startPacingTimer(timeInterval: GET_DELAY)
+        
       }
       else {
-        xnode = OpenLCBNode(nodeId: message.sourceNodeId!)
-        nodesToDo.append(xnode!)
-      }
-      startPacingTimer(timeInterval: PACING_DELAY)
-      if let node = xnode {
-        nodes[node.nodeId] = node
-        reload()
+        taskLock.unlock()
       }
       
     case .protocolSupportReply:
       
-      guard message.destinationNodeId! == networkLayer!.myTrainsNode.nodeId else {
-        return
-      }
-      
-      if let node = nodes[message.sourceNodeId!] {
+      if message.destinationNodeId! == networkLayer!.myTrainsNode.nodeId, let node = nodes[message.sourceNodeId!] {
+        stopPacingTimer()
         node.supportedProtocols = message.payload
         reload()
-        if !nodesToDo.isEmpty {
-          nodesToDo.removeFirst()
-          if let node = nodesToDo.first, let network = networkLayer {
-            let myTrainsNodeId = network.myTrainsNode.nodeId
-            state = .getSNIP
-            startPacingTimer(timeInterval: PACING_DELAY)
-            network.sendSimpleNodeInformationRequest(sourceNodeId: myTrainsNodeId, destinationNodeId: node.nodeId)
-          }
-        }
+        doTask()
       }
     
     case .simpleNodeIdentInfoReply:
       
-      guard message.destinationNodeId! == networkLayer!.myTrainsNode.nodeId else {
-        return
-      }
-      
-      if let node = nodes[message.sourceNodeId!] {
+      if message.destinationNodeId! == networkLayer!.myTrainsNode.nodeId, let node = nodes[message.sourceNodeId!] {
+        stopPacingTimer()
         node.encodedNodeInformation = message.payload
         reload()
-        if let node = nodesToDo.first, let network = networkLayer {
-          let myTrainsNodeId = network.myTrainsNode.nodeId
-          state = .getProtocols
-          startPacingTimer(timeInterval: PACING_DELAY)
-          network.sendProtocolSupportInquiry(sourceNodeId: myTrainsNodeId, destinationNodeId: node.nodeId)
-        }
-
+        doTask()
       }
+
     default:
       break
     }
