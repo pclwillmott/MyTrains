@@ -7,7 +7,7 @@
 
 import Cocoa
 
-class MainVC: NSViewController, NetworkControllerDelegate, LayoutDelegate, FastClockDelegate {
+class MainVC: NSViewController, NetworkControllerDelegate, LayoutDelegate, OpenLCBClockDelegate {
 
   // MARK: Window & View Control
   
@@ -40,6 +40,7 @@ class MainVC: NSViewController, NetworkControllerDelegate, LayoutDelegate, FastC
     if fastClockObserverId != -1 {
       networkController.fastClock.removeObserver(observerId: fastClockObserverId)
     }
+    
   }
   
   override func viewWillAppear() {
@@ -56,7 +57,7 @@ class MainVC: NSViewController, NetworkControllerDelegate, LayoutDelegate, FastC
       layoutDelegateId = layout.addDelegate(delegate: self)
     }
     
-    fastClockObserverId = networkController.fastClock.addObserver(observer: self)
+    fastClockObserverId = networkController.openLCBNetworkLayer!.myTrainsNode.fastClock!.addObserver(observer: self)
     
   }
   
@@ -69,7 +70,7 @@ class MainVC: NSViewController, NetworkControllerDelegate, LayoutDelegate, FastC
   private var controllerDelegateId : Int = -1
   
   private var layoutDelegateId : Int = -1
-
+  
   // MARK: Private Methods
   
   private func updateStatus() {
@@ -137,6 +138,12 @@ class MainVC: NSViewController, NetworkControllerDelegate, LayoutDelegate, FastC
     
     clockView.date = Date(timeIntervalSince1970: fastClock.scaleTime)
     
+  }
+  
+  // MARK: OpenLCBClockDelegate Methods
+  
+  func clockTick(clock: OpenLCBClock) {
+    clockView.date = clock.date
   }
   
   // MARK: LayoutDelegate Methods

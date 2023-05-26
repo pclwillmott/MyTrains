@@ -40,7 +40,16 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
 
     }
     
+    // KEEP ALIVE
+    
+    activity = ProcessInfo.processInfo.beginActivity(options: .userInitiatedAllowingIdleSystemSleep, reason: "Good Reason")
+
+//    ProcessInfo.processInfo.endActivity(activity)
+
+    
   }
+  
+  var activity: NSObjectProtocol?
   
   func applicationWillTerminate(_ aNotification: Notification) {
     // Insert code here to tear down your application

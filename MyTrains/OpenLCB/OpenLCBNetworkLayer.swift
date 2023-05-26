@@ -73,6 +73,8 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
       return
     }
     
+    myTrainsNode.fastClock?.stop()
+    
     for (_, transportLayer) in transportLayers {
       transportLayer.stop()
     }
@@ -124,12 +126,8 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
       return
     }
     
-    for (_, internalNode) in virtualNodes {
-      if internalNode.nodeId != message.sourceNodeId {
-        DispatchQueue.main.async {
-          internalNode.openLCBMessageReceived(message: message)
-        }
-      }
+    for (_, transportLayer) in transportLayers {
+      transportLayer.addToOutputQueue(message: message)
     }
     
     for (_, observer) in observers {
@@ -138,8 +136,12 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
       }
     }
     
-    for (_, transportLayer) in transportLayers {
-      transportLayer.addToOutputQueue(message: message)
+    for (_, virtualNode) in virtualNodes {
+      if virtualNode.nodeId != message.sourceNodeId {
+        DispatchQueue.main.async {
+          virtualNode.openLCBMessageReceived(message: message)
+        }
+      }
     }
     
   }
@@ -158,7 +160,55 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
     message.payload = data
     
     sendMessage(message: message)
+ 
+  }
+
+  public func sendClockQuery(sourceNodeId:UInt64, clockType:OpenLCBClockType) {
     
+    let message = OpenLCBMessage(messageTypeIndicator: .producerConsumerEventReport)
+    
+    message.sourceNodeId = sourceNodeId
+    
+    message.eventId = clockType.rawValue | 0xf000
+    
+    sendMessage(message: message)
+    
+  }
+
+  public func sendEvent(sourceNodeId:UInt64, eventId:UInt64) {
+    
+    let message = OpenLCBMessage(messageTypeIndicator: .producerConsumerEventReport)
+    
+    message.sourceNodeId = sourceNodeId
+    
+    message.eventId = eventId
+    
+    sendMessage(message: message)
+    
+  }
+
+  public func sendProducerRangeIdentified(sourceNodeId:UInt64, eventId:UInt64) {
+
+    let message = OpenLCBMessage(messageTypeIndicator: .producerRangeIdentified)
+
+    message.sourceNodeId = sourceNodeId
+    
+    message.eventId = eventId
+    
+    sendMessage(message: message)
+
+  }
+
+  public func sendConsumerRangeIdentified(sourceNodeId:UInt64, eventId:UInt64) {
+
+    let message = OpenLCBMessage(messageTypeIndicator: .consumerRangeIdentified)
+
+    message.sourceNodeId = sourceNodeId
+    
+    message.eventId = eventId
+    
+    sendMessage(message: message)
+
   }
 
   public func sendVerifyNodeIdNumber(sourceNodeId:UInt64) {
@@ -428,10 +478,8 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
   
   public func openLCBMessageReceived(message: OpenLCBMessage) {
     
-    for (_, internalNode) in virtualNodes {
-      if internalNode.nodeId != message.sourceNodeId {
-        internalNode.openLCBMessageReceived(message: message)
-      }
+    for (_, virtualNode) in virtualNodes {
+      virtualNode.openLCBMessageReceived(message: message)
     }
 
     for (_, observer) in observers {
@@ -446,6 +494,7 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
     
     switch transportLayer.isActive {
       case true:
+      
         if state == .uninitialized {
           // Wait for all transport layers to go active
           for (_, transportLayer) in transportLayers {
@@ -455,12 +504,18 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
           }
           _state = .initialized
           for (_, transportLayer) in transportLayers {
-            for (_, internalNode) in virtualNodes {
-              transportLayer.registerNode(node: internalNode)
+            for (_, virtualNode) in virtualNodes {
+              transportLayer.registerNode(node: virtualNode)
             }
           }
+          
+          if let clock = myTrainsNode.fastClock, clock.state == .stopped {
+            clock.start()
+          }
+          
         }
       case false:
+      
         removeTransportLayer(transportLayer: transportLayer)
         if state == .initialized {
           // Wait for all transport layers are inactive
@@ -468,11 +523,12 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
             return
           }
           // Stop all the nodes
-          for (_, internalNode) in virtualNodes {
-            internalNode.stop()
+          for (_, virtualNode) in virtualNodes {
+            virtualNode.stop()
           }
           _state = .uninitialized
         }
+      
     }
     
     if state != lastState {

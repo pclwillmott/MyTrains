@@ -22,7 +22,13 @@ extension Float {
       return float_to_float16(self)
     }
   }
-  
+
+  public var sign : Float {
+    get {
+      return self < 0.0 ? -1.0 : 1.0
+    }
+  }
+
 }
 
 extension Double {
@@ -39,6 +45,12 @@ extension Double {
     get {
       let f = Float(self)
       return float_to_float16(f)
+    }
+  }
+  
+  public var sign : Double {
+    get {
+      return self < 0.0 ? -1.0 : 1.0
     }
   }
 

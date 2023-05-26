@@ -236,6 +236,10 @@
 		DAA7169B297C2B350080114F /* IODeviceBXP88PropertySheetVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA7169A297C2B350080114F /* IODeviceBXP88PropertySheetVC.swift */; };
 		DAA7169D297C39640080114F /* IOFunctionBXP88InputPropertySheet.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DAA7169C297C39640080114F /* IOFunctionBXP88InputPropertySheet.storyboard */; };
 		DAA7169F297C3AF40080114F /* IOFunctionBXP88InputPropertySheetVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA7169E297C3AF40080114F /* IOFunctionBXP88InputPropertySheetVC.swift */; };
+		DAA777CA2A20C84C008EAF02 /* OpenLCBClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA777C92A20C84C008EAF02 /* OpenLCBClock.swift */; };
+		DAA777CC2A20C861008EAF02 /* OpenLCBClockType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA777CB2A20C861008EAF02 /* OpenLCBClockType.swift */; };
+		DAA777CE2A20CFE1008EAF02 /* OpenLCBClockDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA777CD2A20CFE1008EAF02 /* OpenLCBClockDelegate.swift */; };
+		DAA777D02A20D734008EAF02 /* OpenLCBClockState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA777CF2A20D734008EAF02 /* OpenLCBClockState.swift */; };
 		DAA83DEB272C37670075CBCD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA83DEA272C37670075CBCD /* AppDelegate.swift */; };
 		DAA83DED272C37670075CBCD /* MainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA83DEC272C37670075CBCD /* MainVC.swift */; };
 		DAA83DEF272C37680075CBCD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DAA83DEE272C37680075CBCD /* Assets.xcassets */; };
@@ -540,6 +544,10 @@
 		DAA7169A297C2B350080114F /* IODeviceBXP88PropertySheetVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IODeviceBXP88PropertySheetVC.swift; sourceTree = "<group>"; };
 		DAA7169C297C39640080114F /* IOFunctionBXP88InputPropertySheet.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = IOFunctionBXP88InputPropertySheet.storyboard; sourceTree = "<group>"; };
 		DAA7169E297C3AF40080114F /* IOFunctionBXP88InputPropertySheetVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOFunctionBXP88InputPropertySheetVC.swift; sourceTree = "<group>"; };
+		DAA777C92A20C84C008EAF02 /* OpenLCBClock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBClock.swift; sourceTree = "<group>"; };
+		DAA777CB2A20C861008EAF02 /* OpenLCBClockType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBClockType.swift; sourceTree = "<group>"; };
+		DAA777CD2A20CFE1008EAF02 /* OpenLCBClockDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBClockDelegate.swift; sourceTree = "<group>"; };
+		DAA777CF2A20D734008EAF02 /* OpenLCBClockState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBClockState.swift; sourceTree = "<group>"; };
 		DAA83DE7272C37670075CBCD /* MyTrains.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyTrains.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAA83DEA272C37670075CBCD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DAA83DEC272C37670075CBCD /* MainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainVC.swift; sourceTree = "<group>"; };
@@ -663,6 +671,10 @@
 				DA5BC9922A1A6CEA00D67ABE /* OpenLCBNodeRollingStock.swift */,
 				DACA33562A18D065009E791F /* OpenLCBNodeAddressSpaceInformation.swift */,
 				DAFBC3EC29EC39A6003336BE /* OpenLCBErrorCode.swift */,
+				DAA777C92A20C84C008EAF02 /* OpenLCBClock.swift */,
+				DAA777CD2A20CFE1008EAF02 /* OpenLCBClockDelegate.swift */,
+				DAA777CB2A20C861008EAF02 /* OpenLCBClockType.swift */,
+				DAA777CF2A20D734008EAF02 /* OpenLCBClockState.swift */,
 				DA51FB9B29D88320002CAAC1 /* LCCCANFrame.swift */,
 				DA5B6AAB29EAEDB20095F7D5 /* OpenLCBCANFrameFlag.swift */,
 				DA51FB9D29D8921B002CAAC1 /* LCCCANFrameType.swift */,
@@ -1250,7 +1262,9 @@
 				DA77795127AEE0E5007EEBE9 /* CommandStationConfigurationVC.swift in Sources */,
 				DA912745295F3DF300E9B96E /* TC64TransitionControl.swift in Sources */,
 				DAF4DD4E289A9901000B848E /* BestFitMethod.swift in Sources */,
+				DAA777CA2A20C84C008EAF02 /* OpenLCBClock.swift in Sources */,
 				DA28C2C72801EEA900857471 /* QuerySlot4.swift in Sources */,
+				DAA777CC2A20C861008EAF02 /* OpenLCBClockType.swift in Sources */,
 				DAF0CAD5298550D8009B392A /* IOChannelTC64MkIIOutputPropertySheetVC.swift in Sources */,
 				DA7A127429E2DCCD000DCE1C /* UIntExtensions.swift in Sources */,
 				DA3CD9F2277DEF990065D0C4 /* Interface.swift in Sources */,
@@ -1342,6 +1356,7 @@
 				DAB768F929339DCC00ECC41A /* SensorType.swift in Sources */,
 				DA28C2C52801ED9700857471 /* QuerySlot3.swift in Sources */,
 				DA434294283698CA00E8D555 /* SerialPort.c in Sources */,
+				DAA777CE2A20CFE1008EAF02 /* OpenLCBClockDelegate.swift in Sources */,
 				DA8E6E932893FEB800093468 /* AddressTableViewDS.swift in Sources */,
 				DAA8CF022968581B00B07971 /* IOChannelOutput.swift in Sources */,
 				DA56261129E1AE2800D465CC /* OpenLCBMessage.swift in Sources */,
@@ -1355,6 +1370,7 @@
 				DA912741295F315000E9B96E /* TC64ShortTiming.swift in Sources */,
 				DA0DA27A2779E96B00E4F23C /* Layout.swift in Sources */,
 				DA467BA9281D569300AB9650 /* SwitchBoardView.swift in Sources */,
+				DAA777D02A20D734008EAF02 /* OpenLCBClockState.swift in Sources */,
 				DA9CF8F9286089B000825FA9 /* NSButtonExtensions.swift in Sources */,
 				DA6E28DF285F827600772641 /* SwitchBoardItemPartType.swift in Sources */,
 				DA69E39B297466EF00447414 /* IOFunctionDS64InputPropertySheetVC.swift in Sources */,

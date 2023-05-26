@@ -166,7 +166,6 @@ class ClockView: NSView {
 
     }
     
-    
   }
   
   func drawDigit(xPos:CGFloat, yPos:CGFloat, xSize: CGFloat, ySize:CGFloat, color:NSColor, digit:Int) {

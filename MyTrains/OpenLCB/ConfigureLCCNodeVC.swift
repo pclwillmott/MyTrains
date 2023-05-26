@@ -741,6 +741,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
                   for byte in data {
                     if byte == 0 {
                       isLast = true
+               //       CDI.append(byte)
                       break
                     }
                     CDI.append(byte)
@@ -758,6 +759,9 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
                     state = .idle
                     
                     let newData : Data = Data(CDI)
+                    
+                //    print(String(cString: CDI))
+                    
                     xmlParser = XMLParser(data: newData)
                     xmlParser?.delegate = self
                     xmlParser?.parse()

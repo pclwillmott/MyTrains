@@ -155,7 +155,22 @@ class SqliteParameters {
       }
     }
   }
-  
+
+  public func addWithValue(key:String,value:[UInt8]?) {
+    if !key.isEmpty && key.hasPrefix("@") {
+      if let data = value {
+        var str = ""
+        for byte in data {
+          str += byte.toHex(numberOfDigits: 2)
+        }
+        self.parameters[key] = " X'\(str)' "
+      }
+      else {
+        addWithNull(key: key)
+      }
+    }
+  }
+
   public func addWithValue(key:String, value:Double?) {
     if !key.isEmpty && key.hasPrefix("@") {
       if let dvalue = value {
@@ -316,7 +331,19 @@ public class SqliteDataReader {
     let cString = sqlite3_column_text(statement, (Int32)(index))
     return String(cString: cString!)
   }
-  
+
+  public func getBlob(index:Int) -> [UInt8]? {
+    var size = Int(sqlite3_column_bytes(statement, (Int32)(index)))
+    if !isDBNull(index: index) && size > 0, let blobPtr = sqlite3_column_blob(statement, (Int32)(index)) {
+      let result : [UInt8] = []
+      for offset in 0 ... size - 1 {
+        let byte = blobPtr.load(fromByteOffset: offset, as: UInt8.self)
+      }
+      return result
+    }
+    return nil
+  }
+
   public func getDate(index:Int) -> Date? {
     if isDBNull(index: index){
       return nil;

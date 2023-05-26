@@ -16,6 +16,7 @@ public class LCCCANFrame : NSObject {
     // Check that the message conforms to the standard
     
     guard LCCCANFrame.canMessageOK(message: message) else {
+      print("LCCCANFrame: Error")
       return nil
     }
     
