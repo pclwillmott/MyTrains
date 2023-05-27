@@ -8,7 +8,7 @@
 import Foundation
 import Cocoa
 
-class SetFastClockVC: NSViewController, NSWindowDelegate {
+class SetFastClockVC: NSViewController, NSWindowDelegate, OpenLCBClockDelegate {
   
   // MARK: Window & View Control
   
@@ -21,25 +21,41 @@ class SetFastClockVC: NSViewController, NSWindowDelegate {
   }
   
   func windowWillClose(_ notification: Notification) {
+    if let fastClock = networkController.openLCBNetworkLayer?.myTrainsNode.fastClock {
+      fastClock.removeObserver(observerId: observerId)
+      observerId = -1
+    }
   }
   
   override func viewWillAppear() {
     
     self.view.window?.delegate = self
     
-    let fastClock : FastClock = networkController.fastClock
-    
-    FastClockScaleFactor.populate(comboBox: cboScaleFactor)
-    
-    FastClockScaleFactor.select(comboBox: cboScaleFactor, value: fastClock.scaleFactor)
-    
-    pckTime.timeZone = TimeZone.current
-    
-    pckTime.dateValue = Date(timeIntervalSince1970: fastClock.scaleTime)
+    if let fastClock = networkController.openLCBNetworkLayer?.myTrainsNode.fastClock {
+      
+      txtRate.stringValue = "\(fastClock.rate)"
+      
+      swSwitch.state = fastClock.state == .running ? .on : .off
+      
+      pckTime.timeZone = TimeZone(secondsFromGMT: 0)!
+      
+      pckTime.dateValue = fastClock.date
+      
+      observerId = fastClock.addObserver(observer: self)
+      
+    }
     
   }
   
   // MARK: Private Properties
+  
+  var observerId : Int = -1
+  
+  // MARK: OpenLCBClockDelegate Methods
+  
+  func clockTick(clock: OpenLCBClock) {
+    clockView.date = clock.date
+  }
   
   // MARK: Outlets & Actions
   
@@ -48,42 +64,74 @@ class SetFastClockVC: NSViewController, NSWindowDelegate {
   @IBAction func pckTimeAction(_ sender: NSDatePicker) {
   }
   
-  @IBOutlet weak var cboScaleFactor: NSComboBox!
+  @IBOutlet weak var txtRate: NSTextField!
   
-  @IBAction func cboScaleFactorAction(_ sender: NSComboBox) {
+  @IBAction func txtRateAction(_ sender: NSTextField) {
   }
   
   @IBAction func btnSetAction(_ sender: NSButton) {
     
-    let fastClock = networkController.fastClock
-    
-    fastClock.scaleFactor = FastClockScaleFactor.selected(comboBox: cboScaleFactor)
-    
-    fastClock.epoch = pckTime.dateValue.timeIntervalSince1970
-    
-    let date = Date()
-    
-    fastClock.referenceTime = date.timeIntervalSince1970
-    
-    view.window?.close()
+    if let networkLayer = networkController.openLCBNetworkLayer {
+
+      var events : [UInt64] = []
+
+      let date = pckTime.dateValue
+      
+      let components = date.dateComponents
+      
+      for index in 0 ... 4 {
+        
+        if let eventIndex = OpenLCBFastClockEventIndex(rawValue: index) {
+          
+          var eventId : UInt64 = OpenLCBClockType.fastClock.rawValue
+          
+          switch eventIndex {
+          case .startOrStopEvent:
+            eventId |= (swSwitch.state == .on ? 0xf002 : 0xf001)
+          case .reportRateEvent:
+            if let rate = Double(txtRate.stringValue) {
+              eventId |= 0xc000 + UInt64(rate.openLCBClockRate)
+            }
+          case .reportYearEvent:
+            eventId |= UInt64(0xb000 + components.year!)
+          case .reportDateEvent:
+            eventId |= UInt64(0xa000 + (components.month! << 8) + components.day!)
+          case .reportTimeEvent:
+            eventId |= UInt64(0x8000 + (components.hour! << 8) + components.minute!)
+          }
+          
+          events.append(eventId)
+
+        }
+        
+        let nodeId = networkLayer.myTrainsNode.nodeId
+
+        for eventId in events {
+          networkLayer.sendEvent(sourceNodeId: nodeId, eventId: eventId)
+        }
+
+      }
+      
+    }
+ 
+//    view.window?.close()
 
   }
   
   @IBAction func btnResetAction(_ sender: NSButton) {
     
-    let fastClock = networkController.fastClock
-    
-    fastClock.scaleFactor = FastClockScaleFactor.selected(comboBox: cboScaleFactor)
-
     pckTime.dateValue = Date()
     
-    fastClock.epoch = pckTime.dateValue.timeIntervalSince1970
+    btnSetAction(sender)
     
-    fastClock.referenceTime = pckTime.dateValue.timeIntervalSince1970
-    
-    view.window?.close()
-
   }
+  
+  @IBOutlet weak var swSwitch: NSSwitch!
+  
+  @IBAction func swSwitchAction(_ sender: NSSwitch) {
+  }
+  
+  @IBOutlet weak var clockView: ClockView!
   
 }
 

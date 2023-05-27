@@ -227,6 +227,7 @@
 		DA9ED4F028F24B7700EA914A /* RouteManagerTableViewDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9ED4EF28F24B7700EA914A /* RouteManagerTableViewDS.swift */; };
 		DAA36B9D2A110B6200F07D8E /* OpenLCBTransportLayerAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA36B9C2A110B6200F07D8E /* OpenLCBTransportLayerAlias.swift */; };
 		DAA36B9F2A110C0000F07D8E /* OpenLCBTransportLayerTransitionStateCAN.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA36B9E2A110C0000F07D8E /* OpenLCBTransportLayerTransitionStateCAN.swift */; };
+		DAA54F7F2A217CDA005CED7E /* OpenLCBNodeConfigurationTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA54F7E2A217CDA005CED7E /* OpenLCBNodeConfigurationTool.swift */; };
 		DAA5F3CC295CA2C200C25028 /* LocoNetDeviceTC64Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA5F3CB295CA2C200C25028 /* LocoNetDeviceTC64Extensions.swift */; };
 		DAA66BD22A092DC2001804AC /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA66BD12A092DC2001804AC /* StringExtensions.swift */; };
 		DAA71693297C19220080114F /* ShortCircuitDetectionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA71692297C19220080114F /* ShortCircuitDetectionType.swift */; };
@@ -535,6 +536,7 @@
 		DA9ED4EF28F24B7700EA914A /* RouteManagerTableViewDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteManagerTableViewDS.swift; sourceTree = "<group>"; };
 		DAA36B9C2A110B6200F07D8E /* OpenLCBTransportLayerAlias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBTransportLayerAlias.swift; sourceTree = "<group>"; };
 		DAA36B9E2A110C0000F07D8E /* OpenLCBTransportLayerTransitionStateCAN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBTransportLayerTransitionStateCAN.swift; sourceTree = "<group>"; };
+		DAA54F7E2A217CDA005CED7E /* OpenLCBNodeConfigurationTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBNodeConfigurationTool.swift; sourceTree = "<group>"; };
 		DAA5F3CB295CA2C200C25028 /* LocoNetDeviceTC64Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoNetDeviceTC64Extensions.swift; sourceTree = "<group>"; };
 		DAA66BD12A092DC2001804AC /* StringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		DAA71692297C19220080114F /* ShortCircuitDetectionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortCircuitDetectionType.swift; sourceTree = "<group>"; };
@@ -668,6 +670,7 @@
 				DA5B6AA929EAC2D90095F7D5 /* OpenLCBNode.swift */,
 				DAF3746E2A1A2A9B009E91F0 /* OpenLCBNodeVirtual.swift */,
 				DAF374702A1A2AB3009E91F0 /* OpenLCBNodeMyTrains.swift */,
+				DAA54F7E2A217CDA005CED7E /* OpenLCBNodeConfigurationTool.swift */,
 				DA5BC9922A1A6CEA00D67ABE /* OpenLCBNodeRollingStock.swift */,
 				DACA33562A18D065009E791F /* OpenLCBNodeAddressSpaceInformation.swift */,
 				DAFBC3EC29EC39A6003336BE /* OpenLCBErrorCode.swift */,
@@ -1263,6 +1266,7 @@
 				DA912745295F3DF300E9B96E /* TC64TransitionControl.swift in Sources */,
 				DAF4DD4E289A9901000B848E /* BestFitMethod.swift in Sources */,
 				DAA777CA2A20C84C008EAF02 /* OpenLCBClock.swift in Sources */,
+				DAA54F7F2A217CDA005CED7E /* OpenLCBNodeConfigurationTool.swift in Sources */,
 				DA28C2C72801EEA900857471 /* QuerySlot4.swift in Sources */,
 				DAA777CC2A20C861008EAF02 /* OpenLCBClockType.swift in Sources */,
 				DAF0CAD5298550D8009B392A /* IOChannelTC64MkIIOutputPropertySheetVC.swift in Sources */,

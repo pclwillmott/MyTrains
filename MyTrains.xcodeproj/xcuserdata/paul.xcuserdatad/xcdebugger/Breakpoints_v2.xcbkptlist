@@ -94,8 +94,8 @@
             filePath = "MyTrains/Interface.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "875"
-            endingLineNumber = "875"
+            startingLineNumber = "877"
+            endingLineNumber = "877"
             landmarkName = "serialPortWasOpened(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -110,8 +110,8 @@
             filePath = "MyTrains/OpenLCB/OpenLCBTransportLayerCAN.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "584"
-            endingLineNumber = "584"
+            startingLineNumber = "599"
+            endingLineNumber = "599"
             landmarkName = "lccCANFrameReceived(frame:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -126,8 +126,8 @@
             filePath = "MyTrains/OpenLCB/ViewLCCNetworkVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "86"
-            endingLineNumber = "86"
+            startingLineNumber = "87"
+            endingLineNumber = "87"
             landmarkName = "findAll()"
             landmarkType = "7">
          </BreakpointContent>

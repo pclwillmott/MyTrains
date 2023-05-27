@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21701"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -40,7 +40,7 @@
             <objects>
                 <viewController id="nVt-4p-LyH" customClass="SetFastClockVC" customModule="MyTrains" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="zdY-9U-ACF">
-                        <rect key="frame" x="0.0" y="0.0" width="549" height="369"/>
+                        <rect key="frame" x="0.0" y="0.0" width="623" height="369"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dju-4B-daR">
@@ -59,8 +59,8 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <datePickerCell key="cell" borderStyle="bezel" alignment="left" useCurrentDate="YES" id="c5D-Ti-4Ei">
                                     <font key="font" metaFont="system"/>
-                                    <date key="date" timeIntervalSinceReferenceDate="692453649.67114496">
-                                        <!--2022-12-11 12:14:09 +0000-->
+                                    <date key="date" timeIntervalSinceReferenceDate="706900336.22290802">
+                                        <!--2023-05-27 17:12:16 +0000-->
                                     </date>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -80,31 +80,14 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qsy-V4-86z">
-                                <rect key="frame" x="220" y="333" width="80" height="16"/>
+                                <rect key="frame" x="220" y="333" width="32" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Scale Factor" id="nDD-L2-8od">
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Rate" id="nDD-L2-8od">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="u8I-Om-3A1">
-                                <rect key="frame" x="221" y="299" width="80" height="25"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="1Aj-RX-zpV">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                    <objectValues>
-                                        <string>1:1</string>
-                                        <string>1:2</string>
-                                        <string>1:3</string>
-                                    </objectValues>
-                                </comboBoxCell>
-                                <connections>
-                                    <action selector="cboScaleFactorAction:" target="nVt-4p-LyH" id="jJG-FX-gQA"/>
-                                </connections>
-                            </comboBox>
                             <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="z8D-mE-FZA" customClass="ClockView" customModule="MyTrains" customModuleProvider="target">
                                 <rect key="frame" x="20" y="158" width="480" height="123"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -120,16 +103,38 @@
                                     <action selector="btnResetAction:" target="nVt-4p-LyH" id="CZ0-iL-h0t"/>
                                 </connections>
                             </button>
+                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zpf-vp-N1d">
+                                <rect key="frame" x="222" y="302" width="77" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="0vH-RM-Z0I">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                                <connections>
+                                    <action selector="txtRateAction:" target="nVt-4p-LyH" id="eE7-3T-erP"/>
+                                </connections>
+                            </textField>
+                            <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="bpF-pd-ftR">
+                                <rect key="frame" x="492" y="297" width="42" height="25"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <connections>
+                                    <action selector="swSwitchAction:" target="nVt-4p-LyH" id="du3-nc-RDu"/>
+                                </connections>
+                            </switch>
                         </subviews>
                     </view>
                     <connections>
-                        <outlet property="cboScaleFactor" destination="u8I-Om-3A1" id="ocT-0W-or0"/>
+                        <outlet property="clockView" destination="z8D-mE-FZA" id="BHO-Ke-Wms"/>
                         <outlet property="pckTime" destination="qvT-dG-Cei" id="aKo-y7-jOt"/>
+                        <outlet property="swSwitch" destination="bpF-pd-ftR" id="Jj8-Pm-GV8"/>
+                        <outlet property="switch" destination="bpF-pd-ftR" id="QVa-8L-dT6"/>
+                        <outlet property="txtRate" destination="Zpf-vp-N1d" id="Itt-cd-Lx3"/>
                     </connections>
                 </viewController>
                 <customObject id="8Ke-l7-qVn" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="655.5" y="130.5"/>
+            <point key="canvasLocation" x="692.5" y="130.5"/>
         </scene>
     </scenes>
 </document>

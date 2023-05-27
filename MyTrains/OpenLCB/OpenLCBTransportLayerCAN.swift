@@ -90,18 +90,22 @@ public class OpenLCBTransportLayerCAN : OpenLCBTransportLayer, InterfaceDelegate
         
         if message.sourceNodeId == nil, let alias = message.sourceNIDAlias {
           if let id = aliasLookup[alias] {
+       //     print("source id found: \(id.toHexDotFormat(numberOfBytes: 6))")
             message.sourceNodeId = id
           }
           else {
+       //     print("source id not found: \(alias.toHex(numberOfDigits: 3))")
             sendQuery = true
           }
         }
         
         if (message.isAddressPresent || message.messageTypeIndicator == .datagram) && message.destinationNodeId == nil, let alias = message.destinationNIDAlias {
           if let id = aliasLookup[alias] {
+       //     print("dest id found: \(id.toHexDotFormat(numberOfBytes: 6))")
             message.destinationNodeId = id
           }
           else {
+      //      print("dest id not found: \(alias.toHex(numberOfDigits: 3))")
             sendQuery = true
           }
         }
@@ -136,6 +140,7 @@ public class OpenLCBTransportLayerCAN : OpenLCBTransportLayer, InterfaceDelegate
           
         }
         else if (referenceDate - message.timeStamp) > timeoutInterval {
+          print("timeout: \(message.messageTypeIndicator)")
           delete = true
         }
         
@@ -173,14 +178,24 @@ public class OpenLCBTransportLayerCAN : OpenLCBTransportLayer, InterfaceDelegate
           if (message.messageTypeIndicator == .datagram ) || message.isAddressPresent, let destinationNodeId = message.destinationNodeId {
             
             if let alias = nodeIdLookup[destinationNodeId] {
+         //     print("dest alias found: \(destinationNodeId.toHexDotFormat(numberOfBytes: 6)) - \(alias.toHex(numberOfDigits: 3))")
               message.destinationNIDAlias = alias
             }
             else {
+         //     print("dest id not found: \(destinationNodeId.toHexDotFormat(numberOfBytes: 6)))")
               sendAliasMappingEnquiryFrame(nodeId: destinationNodeId, alias: alias)
             }
             
           }
           
+        }
+        else {
+          /*
+          for (nodeId, alias) in nodeIdLookup {
+            print("\(nodeId.toHexDotFormat(numberOfBytes: 6)) - 0x\(alias.toHex(numberOfDigits: 3))")
+          }
+          print("send source alias not found: \(message.sourceNodeId!.toHexDotFormat(numberOfBytes: 6))")
+           */
         }
         
         var delete = false

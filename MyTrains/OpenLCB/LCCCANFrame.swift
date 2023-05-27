@@ -331,12 +331,14 @@ public class LCCCANFrame : NSObject {
     // Check for minimum length (":XFN;")
     
     guard message.count >= 5 else {
+      print("LCCCANFrame.canMessageOK: \"\(message)\"")
       return false
     }
  
     // Check for valid prefix and suffix
     
     guard message.prefix(2) == ":X" && message.last == ";" else {
+      print("LCCCANFrame.canMessageOK: \"\(message)\"")
       return false
     }
     
@@ -353,22 +355,26 @@ public class LCCCANFrame : NSObject {
     let temp2 = temp1.split(separator: "N")
     
     guard temp2.count > 0 && temp2.count < 3 else {
+      print("LCCCANFrame.canMessageOK: \"\(message)\"")
       return false
     }
     
     if temp2.count == 1 && temp1.last != "N" {
+      print("LCCCANFrame.canMessageOK: \"\(message)\"")
       return false
     }
     
     // Check that the header is not greater than 8 hex digits
     
     if temp2[0].count > 8 {
+      print("LCCCANFrame.canMessageOK: \"\(message)\"")
       return false
     }
     
     // Check that the data section has two hex digits per byte
     
     if temp2.count > 1 && temp2[1].count % 2 != 0 {
+      print("LCCCANFrame.canMessageOK: \"\(message)\"")
       return false
     }
     
@@ -382,6 +388,7 @@ public class LCCCANFrame : NSObject {
       
       for char in temp2[index] {
         guard hexDigits.contains(char) else {
+          print("LCCCANFrame.canMessageOK: \"\(message)\"")
           return false
         }
       }

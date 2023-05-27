@@ -687,14 +687,16 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
               bufferCount -= increment
               bufferLock.unlock()
               
-              if let frame = LCCCANFrame(networkId: networkId, message: frame) {
+              if let newframe = LCCCANFrame(networkId: networkId, message: frame) {
                 
-                frame.timeStamp = Date.timeIntervalSinceReferenceDate
-                frame.timeSinceLastMessage = frame.timeStamp - lastTimeStamp
-                lastTimeStamp = frame.timeStamp
+                frame = ""
+                
+                newframe.timeStamp = Date.timeIntervalSinceReferenceDate
+                newframe.timeSinceLastMessage = newframe.timeStamp - lastTimeStamp
+                lastTimeStamp = newframe.timeStamp
                 
                 for (_, observer) in observers {
-                  observer.lccCANFrameReceived?(frame: frame)
+                  observer.lccCANFrameReceived?(frame: newframe)
                 }
                 
               }

@@ -82,10 +82,12 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLayerD
       taskLock.unlock()
       
       nodes[network.myTrainsNode.nodeId] = network.myTrainsNode
-      
-      network.sendVerifyNodeIdNumber(sourceNodeId: network.myTrainsNode.nodeId)
-      
+      nodes[network.configurationToolNode.nodeId] = network.configurationToolNode
+
       startPacingTimer(timeInterval: TIMEOUT_DELAY)
+
+      network.sendVerifyNodeIdNumber(sourceNodeId: network.configurationToolNode.nodeId)
+      
       
     }
     
@@ -114,13 +116,13 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLayerD
       
       if let network = networkLayer {
         
-        let myTrainsNodeId = network.myTrainsNode.nodeId
+        let configurationToolNodeId = network.configurationToolNode.nodeId
 
         switch nextTask.task {
         case .getSNIP:
-          network.sendSimpleNodeInformationRequest(sourceNodeId: myTrainsNodeId, destinationNodeId: nextTask.nodeId)
+          network.sendSimpleNodeInformationRequest(sourceNodeId: configurationToolNodeId, destinationNodeId: nextTask.nodeId)
         case .getProtocols:
-          network.sendProtocolSupportInquiry(sourceNodeId: myTrainsNodeId, destinationNodeId: nextTask.nodeId)
+          network.sendProtocolSupportInquiry(sourceNodeId: configurationToolNodeId, destinationNodeId: nextTask.nodeId)
         }
         
         startPacingTimer(timeInterval: GET_DELAY)
@@ -186,7 +188,7 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLayerD
       
     case .protocolSupportReply:
       
-      if message.destinationNodeId! == networkLayer!.myTrainsNode.nodeId, let node = nodes[message.sourceNodeId!] {
+      if message.destinationNodeId! == networkLayer!.configurationToolNode.nodeId, let node = nodes[message.sourceNodeId!] {
         stopPacingTimer()
         node.supportedProtocols = message.payload
         reload()
@@ -195,7 +197,7 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLayerD
     
     case .simpleNodeIdentInfoReply:
       
-      if message.destinationNodeId! == networkLayer!.myTrainsNode.nodeId, let node = nodes[message.sourceNodeId!] {
+      if message.destinationNodeId! == networkLayer!.configurationToolNode.nodeId, let node = nodes[message.sourceNodeId!] {
         stopPacingTimer()
         node.encodedNodeInformation = message.payload
         reload()

@@ -15,9 +15,13 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
     
     myTrainsNode = OpenLCBNodeMyTrains(nodeId: nodeId)
     
+    configurationToolNode = OpenLCBNodeConfigurationTool(nodeId: nodeId + 1)
+    
     super.init()
 
     registerNode(node: myTrainsNode)
+    
+    registerNode(node: configurationToolNode)
     
     for (_, rollingStock) in RollingStock.rollingStock {
       if rollingStock.rollingStockType == .locomotive {
@@ -46,6 +50,8 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
   }
   
   public var myTrainsNode : OpenLCBNodeMyTrains
+  
+  public var configurationToolNode : OpenLCBNodeVirtual
   
   public var transportLayers : [ObjectIdentifier:OpenLCBTransportLayer] = [:]
   
@@ -210,6 +216,19 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
     sendMessage(message: message)
 
   }
+  
+  public func sendProducerIdentifiedValid(sourceNodeId:UInt64, eventId:UInt64) {
+
+    let message = OpenLCBMessage(messageTypeIndicator: .producerIdentifiedAsCurrentlyValid)
+
+    message.sourceNodeId = sourceNodeId
+    
+    message.eventId = eventId
+    
+    sendMessage(message: message)
+
+  }
+
 
   public func sendVerifyNodeIdNumber(sourceNodeId:UInt64) {
     
