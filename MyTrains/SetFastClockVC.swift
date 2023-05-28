@@ -37,8 +37,6 @@ class SetFastClockVC: NSViewController, NSWindowDelegate, OpenLCBClockDelegate {
       
       swSwitch.state = fastClock.state == .running ? .on : .off
       
-      pckTime.timeZone = TimeZone(secondsFromGMT: 0)!
-      
       pckTime.dateValue = fastClock.date
       
       observerId = fastClock.addObserver(observer: self)
@@ -71,41 +69,44 @@ class SetFastClockVC: NSViewController, NSWindowDelegate, OpenLCBClockDelegate {
   
   @IBAction func btnSetAction(_ sender: NSButton) {
     
-    if let networkLayer = networkController.openLCBNetworkLayer {
+    if let networkLayer = networkController.openLCBNetworkLayer, let fastClock = networkLayer.myTrainsNode.fastClock {
 
       var events : [UInt64] = []
 
       let date = pckTime.dateValue
       
       let components = date.dateComponents
-      
+ 
+      let nodeId = networkLayer.configurationToolNode.nodeId
+
+      networkLayer.sendEvent(sourceNodeId: nodeId, eventId: fastClock.encodeStopStartEvent(state: .stopped))
+
       for index in 0 ... 4 {
         
         if let eventIndex = OpenLCBFastClockEventIndex(rawValue: index) {
           
-          var eventId : UInt64 = OpenLCBClockType.fastClock.rawValue
-          
           switch eventIndex {
           case .startOrStopEvent:
-            eventId |= (swSwitch.state == .on ? 0xf002 : 0xf001)
+            events.append(fastClock.encodeStopStartEvent(state: swSwitch.state == .on ? .running : .stopped))
           case .reportRateEvent:
             if let rate = Double(txtRate.stringValue) {
-              eventId |= 0xc000 + UInt64(rate.openLCBClockRate)
+              var r = rate
+              if rate < -512.0 || rate > 511.75 {
+                txtRate.stringValue = "1.0"
+                r = 1.0
+              }
+              events.append(fastClock.encodeRateEvent(subCode: .setRateEventId, rate: r))
             }
           case .reportYearEvent:
-            eventId |= UInt64(0xb000 + components.year!)
+            events.append(fastClock.encodeYearEvent(subCode: .setYearEventId, year: components.year!))
           case .reportDateEvent:
-            eventId |= UInt64(0xa000 + (components.month! << 8) + components.day!)
+            events.append(fastClock.encodeDateEvent(subCode: .setDateEventId, month: components.month!, day: components.day!))
           case .reportTimeEvent:
-            eventId |= UInt64(0x8000 + (components.hour! << 8) + components.minute!)
+            events.append(fastClock.encodeTimeEvent(subCode: .setTimeEventId, hour: components.hour!, minute: components.minute!))
           }
           
-          events.append(eventId)
-
         }
         
-        let nodeId = networkLayer.myTrainsNode.nodeId
-
         for eventId in events {
           networkLayer.sendEvent(sourceNodeId: nodeId, eventId: eventId)
         }
@@ -114,21 +115,17 @@ class SetFastClockVC: NSViewController, NSWindowDelegate, OpenLCBClockDelegate {
       
     }
  
-//    view.window?.close()
-
-  }
-  
-  @IBAction func btnResetAction(_ sender: NSButton) {
-    
-    pckTime.dateValue = Date()
-    
-    btnSetAction(sender)
-    
   }
   
   @IBOutlet weak var swSwitch: NSSwitch!
   
   @IBAction func swSwitchAction(_ sender: NSSwitch) {
+
+    if let networkLayer = networkController.openLCBNetworkLayer, let fastclock = networkLayer.myTrainsNode.fastClock {
+      let nodeId = networkLayer.configurationToolNode.nodeId
+      networkLayer.sendEvent(sourceNodeId: nodeId, eventId: fastclock.encodeStopStartEvent(state: (swSwitch.state == .on ? .running : .stopped)))
+    }
+    
   }
   
   @IBOutlet weak var clockView: ClockView!

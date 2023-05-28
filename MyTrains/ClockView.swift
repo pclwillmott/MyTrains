@@ -132,6 +132,10 @@ class ClockView: NSView {
     
     let components = date.dateComponents
     
+//    var calendar = Calendar(identifier: .gregorian)
+//    calendar.timeZone = TimeZone(secondsFromGMT: 0)!
+//    var components = calendar.dateComponents(in: TimeZone(secondsFromGMT: 0)!, from: date)
+    
     let hr = components.hour!
     let min = components.minute!
     let sec = components.second!

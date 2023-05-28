@@ -78,6 +78,10 @@ extension Double {
   public var openLCBClockRate : UInt16 {
     get {
       
+      guard self >= -512.0 && self <= 511.75 else {
+        return 0
+      }
+      
       // -512.00 = 0x800 = 0b100000000000
       // -511.75 = 0x801 = 0b100000000001
       // -511.50 = 0x802 = 0b100000000010
