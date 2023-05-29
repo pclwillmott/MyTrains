@@ -277,6 +277,12 @@ class Database {
               "[\(TURNOUT_SWITCH.SWITCH_ADDRESS)]      INT NOT NULL" +
             ")",
 
+            "CREATE TABLE [\(TABLE.MEMORY_SPACE)] (" +
+              "[\(MEMORY_SPACE.NODE_ID)] INT PRIMARY KEY," +
+              "[\(MEMORY_SPACE.SPACE)]   INT NOT NULL," +
+              "[\(MEMORY_SPACE.MEMORY)]  BLOB" +
+            ")",
+
           ]
           
           execute(commands: commands)
@@ -304,7 +310,7 @@ class Database {
             
             // MARK: Updates
             
-            if Version == 14 {
+            if Version == 15 {
   
               let commands = [
         
@@ -410,21 +416,28 @@ class Database {
                 "ALTER TABLE [\(TABLE.SWITCHBOARD_ITEM)] ADD [\(SWITCHBOARD_ITEM.SW1_ID)] INT",
                 "ALTER TABLE [\(TABLE.SWITCHBOARD_ITEM)] ADD [\(SWITCHBOARD_ITEM.SW1_SENSOR1_ID)] INT",
                 "ALTER TABLE [\(TABLE.SWITCHBOARD_ITEM)] ADD [\(SWITCHBOARD_ITEM.SW1_SENSOR2_ID)] INT",
- */
+ 
                 "ALTER TABLE [\(TABLE.SWITCHBOARD_ITEM)] DROP COLUMN [\(SWITCHBOARD_ITEM.SW2_SENSOR1_ID)]",
                 "ALTER TABLE [\(TABLE.SWITCHBOARD_ITEM)] DROP COLUMN [\(SWITCHBOARD_ITEM.SW2_SENSOR2_ID)]",
 
                 "ALTER TABLE [\(TABLE.SWITCHBOARD_ITEM)] ADD [\(SWITCHBOARD_ITEM.SW2_ID)] INT",
                 "ALTER TABLE [\(TABLE.SWITCHBOARD_ITEM)] ADD [\(SWITCHBOARD_ITEM.SW2_SENSOR1_ID)] INT",
                 "ALTER TABLE [\(TABLE.SWITCHBOARD_ITEM)] ADD [\(SWITCHBOARD_ITEM.SW2_SENSOR2_ID)] INT",
-
-                "UPDATE [\(TABLE.VERSION)] SET [\(VERSION.VERSION_NUMBER)] = 15 WHERE [\(VERSION.VERSION_ID)] = 1",
-                    
+ */
+                 
+                "CREATE TABLE [\(TABLE.MEMORY_SPACE)] (" +
+                  "[\(MEMORY_SPACE.NODE_ID)] INT PRIMARY KEY," +
+                  "[\(MEMORY_SPACE.SPACE)]   INT NOT NULL," +
+                  "[\(MEMORY_SPACE.MEMORY)]  BLOB" +
+                ")",
+                
+                "UPDATE [\(TABLE.VERSION)] SET [\(VERSION.VERSION_NUMBER)] = 16 WHERE [\(VERSION.VERSION_ID)] = 1",
+ 
              ]
               
               execute(commands: commands)
               
-              Version = 15
+              Version = 16
 
             }
             

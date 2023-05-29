@@ -87,6 +87,7 @@ public class OpenLCBTransportLayer : NSObject {
   }
   
   public func deregisterNode(node:OpenLCBNodeVirtual) {
+    node.stop()
     virtualNodes.removeValue(forKey: node.nodeId)
   }
   

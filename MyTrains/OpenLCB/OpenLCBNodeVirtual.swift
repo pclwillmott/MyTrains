@@ -17,6 +17,8 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate {
     
     self.lfsr2 = UInt32(nodeId & 0xffffff)
 
+    self.memorySpace = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: 0xfb, defaultMemorySize: 256)
+
     super.init(nodeId: nodeId)
 
     isIdentificationSupported = true
@@ -29,6 +31,8 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate {
   
   // MARK: Private Properties
   
+  private var memorySpace : OpenLCBMemorySpace
+
   // MARK: Public Properties
   
   public var lfsr1 : UInt32

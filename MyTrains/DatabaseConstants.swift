@@ -22,6 +22,7 @@ enum TABLE {
   static let SENSOR                      = "SENSOR"
   static let TURNOUT_SWITCH              = "TURNOUT_SWITCH"
   static let LOCONET_DEVICE_CV           = "LOCONET_DEVICE_CV"
+  static let MEMORY_SPACE                = "MEMORY_SPACE"
 }
 
 enum VERSION {
@@ -247,4 +248,10 @@ enum TURNOUT_SWITCH {
   static let LOCONET_DEVICE_ID           = "LOCONET_DEVICE_ID"
   static let CHANNEL_NUMBER              = "CHANNEL_NUMBER"
   static let SWITCH_ADDRESS              = "SWITCH_ADDRESS"
+}
+
+enum MEMORY_SPACE {
+  static let NODE_ID                     = "NODE_ID"
+  static let SPACE                       = "SPACE"
+  static let MEMORY                      = "MEMORY"
 }

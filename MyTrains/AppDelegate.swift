@@ -52,7 +52,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
   var activity: NSObjectProtocol?
   
   func applicationWillTerminate(_ aNotification: Notification) {
-    // Insert code here to tear down your application
+    networkController.openLCBNetworkLayer?.stop()
   }
 
   func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {

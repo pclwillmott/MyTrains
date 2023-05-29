@@ -15,13 +15,17 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
     
     myTrainsNode = OpenLCBNodeMyTrains(nodeId: nodeId)
     
-    configurationToolNode = OpenLCBNodeConfigurationTool(nodeId: nodeId + 1)
+    configurationToolNode = OpenLCBNodeConfigurationTool(nodeId: 0x09000d000000)
+    
+    fastClock = OpenLCBClock(nodeId: 0x09000d000001, type: .fastClock)
     
     super.init()
 
     registerNode(node: myTrainsNode)
     
     registerNode(node: configurationToolNode)
+    
+    registerNode(node: fastClock)
     
     for (_, rollingStock) in RollingStock.rollingStock {
       if rollingStock.rollingStockType == .locomotive {
@@ -53,6 +57,8 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
   
   public var configurationToolNode : OpenLCBNodeVirtual
   
+  public var fastClock : OpenLCBClock
+  
   public var transportLayers : [ObjectIdentifier:OpenLCBTransportLayer] = [:]
   
   // MARK: Public Methods
@@ -78,8 +84,6 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
     guard state == .initialized else {
       return
     }
-    
-    myTrainsNode.fastClock?.stop()
     
     for (_, transportLayer) in transportLayers {
       transportLayer.stop()
@@ -528,10 +532,6 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
             }
           }
           
-          if let clock = myTrainsNode.fastClock, clock.state == .stopped {
-            clock.start()
-          }
-          
         }
       case false:
       
@@ -540,10 +540,6 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
           // Wait for all transport layers are inactive
           if !transportLayers.isEmpty {
             return
-          }
-          // Stop all the nodes
-          for (_, virtualNode) in virtualNodes {
-            virtualNode.stop()
           }
           _state = .uninitialized
         }

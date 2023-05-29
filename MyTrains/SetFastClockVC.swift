@@ -21,7 +21,7 @@ class SetFastClockVC: NSViewController, NSWindowDelegate, OpenLCBClockDelegate {
   }
   
   func windowWillClose(_ notification: Notification) {
-    if let fastClock = networkController.openLCBNetworkLayer?.myTrainsNode.fastClock {
+    if let fastClock = networkController.openLCBNetworkLayer?.fastClock {
       fastClock.removeObserver(observerId: observerId)
       observerId = -1
     }
@@ -31,11 +31,11 @@ class SetFastClockVC: NSViewController, NSWindowDelegate, OpenLCBClockDelegate {
     
     self.view.window?.delegate = self
     
-    if let fastClock = networkController.openLCBNetworkLayer?.myTrainsNode.fastClock {
+    if let fastClock = networkController.openLCBNetworkLayer?.fastClock {
       
       txtRate.stringValue = "\(fastClock.rate)"
       
-      swSwitch.state = fastClock.state == .running ? .on : .off
+      swSwitch.state = fastClock.clockState == .running ? .on : .off
       
       pckTime.dateValue = fastClock.date
       
@@ -69,14 +69,16 @@ class SetFastClockVC: NSViewController, NSWindowDelegate, OpenLCBClockDelegate {
   
   @IBAction func btnSetAction(_ sender: NSButton) {
     
-    if let networkLayer = networkController.openLCBNetworkLayer, let fastClock = networkLayer.myTrainsNode.fastClock {
+    if let networkLayer = networkController.openLCBNetworkLayer {
 
+      let fastClock = networkLayer.fastClock
+      
       var events : [UInt64] = []
 
       let date = pckTime.dateValue
       
       let components = date.dateComponents
- 
+       
       let nodeId = networkLayer.configurationToolNode.nodeId
 
       networkLayer.sendEvent(sourceNodeId: nodeId, eventId: fastClock.encodeStopStartEvent(state: .stopped))
@@ -121,7 +123,8 @@ class SetFastClockVC: NSViewController, NSWindowDelegate, OpenLCBClockDelegate {
   
   @IBAction func swSwitchAction(_ sender: NSSwitch) {
 
-    if let networkLayer = networkController.openLCBNetworkLayer, let fastclock = networkLayer.myTrainsNode.fastClock {
+    if let networkLayer = networkController.openLCBNetworkLayer {
+      let fastclock = networkLayer.fastClock
       let nodeId = networkLayer.configurationToolNode.nodeId
       networkLayer.sendEvent(sourceNodeId: nodeId, eventId: fastclock.encodeStopStartEvent(state: (swSwitch.state == .on ? .running : .stopped)))
     }

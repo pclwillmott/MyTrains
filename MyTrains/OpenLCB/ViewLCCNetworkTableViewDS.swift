@@ -68,7 +68,7 @@ public class ViewLCCNetworkTableViewDS : NSObject, NSTableViewDataSource, NSTabl
     
     var isEditable = false
     
-    var textColor : NSColor = .black
+    let textColor : NSColor = .black
 
     enum ColumnIdentifiers {
       static let nodeId = "NodeID"

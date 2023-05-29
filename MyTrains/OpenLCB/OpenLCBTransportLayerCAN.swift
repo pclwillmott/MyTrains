@@ -575,8 +575,8 @@ public class OpenLCBTransportLayerCAN : OpenLCBTransportLayer, InterfaceDelegate
   }
   
   override public func deregisterNode(node:OpenLCBNodeVirtual) {
-    removeNodeIdAliasMapping(nodeId: node.nodeId)
     super.deregisterNode(node: node)
+    removeNodeIdAliasMapping(nodeId: node.nodeId)
   }
 
   override public func removeAlias(nodeId:UInt64) {

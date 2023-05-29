@@ -106,6 +106,18 @@ class SqliteParameters {
     }
   }
   
+  public func addWithValue(key:String,value:UInt64?) {
+    if !key.isEmpty && key.hasPrefix("@") {
+      if let uivalue = value {
+        let ivalue = Int64(bitPattern: uivalue)
+        self.parameters[key] = " \(ivalue) "
+      }
+      else {
+        addWithNull(key: key)
+      }
+    }
+  }
+  
   public func addWithValue(key:String,value:UInt?) {
     if !key.isEmpty && key.hasPrefix("@") {
       if let ivalue = value {
@@ -303,6 +315,14 @@ public class SqliteDataReader {
     return sqlite3_column_int64(statement, (Int32)(index))
   }
   
+  public func getUInt64(index:Int) -> UInt64? {
+    if isDBNull(index: index){
+      return nil;
+    }
+    let int64 = sqlite3_column_int64(statement, (Int32)(index))
+    return UInt64(bitPattern: int64)
+  }
+  
   public func getBool(index:Int) -> Bool? {
     if isDBNull(index: index){
       return nil;
@@ -333,11 +353,12 @@ public class SqliteDataReader {
   }
 
   public func getBlob(index:Int) -> [UInt8]? {
-    var size = Int(sqlite3_column_bytes(statement, (Int32)(index)))
+    let size = Int(sqlite3_column_bytes(statement, (Int32)(index)))
     if !isDBNull(index: index) && size > 0, let blobPtr = sqlite3_column_blob(statement, (Int32)(index)) {
-      let result : [UInt8] = []
+      var result : [UInt8] = []
       for offset in 0 ... size - 1 {
         let byte = blobPtr.load(fromByteOffset: offset, as: UInt8.self)
+        result.append(byte)
       }
       return result
     }

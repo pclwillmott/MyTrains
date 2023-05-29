@@ -18,7 +18,7 @@ public class OpenLCBNode : NSObject {
     _supportedProtocols = [UInt8](repeating: 0x00, count: UNDERSTOOD_BYTES)
     
     self.nodeId = nodeId
- 
+    
     super.init()
     
   }

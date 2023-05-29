@@ -59,22 +59,23 @@ public enum OpenLCBFastClockSubCode : UInt64 {
   
 }
 
-public class OpenLCBClock : NSObject {
+public class OpenLCBClock : OpenLCBNodeVirtual {
   
   // MARK: Constructors & Destructors
   
-  public init(node:OpenLCBNodeMyTrains, type:OpenLCBClockType) {
+  public init(nodeId:UInt64, type:OpenLCBClockType) {
     
     self.type = type
     
-    self.node = node
+    super.init(nodeId: nodeId)
     
-    super.init()
+    self.date = Date()
     
-    if isClockGenerator {
-      date = Date()
-      rate = 1.0
-    }
+    self.manufacturerName = "Paul Willmott"
+    
+    self.nodeModelName = "MyTrains \(type)"
+    
+    self.nodeSoftwareVersion = "v0.1"
     
   }
   
@@ -84,15 +85,9 @@ public class OpenLCBClock : NSObject {
   
   // MARK: Private Properties
   
-  private var node:OpenLCBNodeMyTrains
-  
-  private var timeClock : TimeInterval = 0.0
-  
-  private var dateClock : TimeInterval = 0.0
-  
   private let secPerDay : TimeInterval = 86400.0
   
-  private var _state : OpenLCBClockState = .stopped
+  private var _clockState : OpenLCBClockState = .stopped
   
   private var _rate : Double = 1.0
   
@@ -135,147 +130,160 @@ public class OpenLCBClock : NSObject {
     set(value) {
       if _rate != value {
         _rate = value
-        if state == .running {
+        if clockState == .running {
           startTimer()
         }
       }
     }
   }
   
-  public var state : OpenLCBClockState {
+  public var clockState : OpenLCBClockState {
     get {
-      return _state
+      return _clockState
     }
   }
   
-  public var isClockGenerator : Bool = true
+  public var isClockGenerator : Bool = false
   
   public var date : Date {
     get {
-      return Date(timeIntervalSince1970: dateClock)
+      
+      var components = DateComponents()
+      
+      components.year              = year
+      components.month             = month
+      components.day               = day
+      components.hour              = hour
+      components.minute            = minute
+      components.second            = second
+      
+      // Nulify the remaining fields to avoid confusion about what the date should be based on
+      
+      components.yearForWeekOfYear = nil
+      components.weekOfYear        = nil
+      components.weekday           = nil
+      components.era               = nil
+      components.isLeapMonth       = nil
+      components.quarter           = nil
+      components.weekOfMonth       = nil
+      
+      return calendar.date(from: components)!
+      
     }
     set(value) {
-      let interval = value.timeIntervalSince1970
-      dateClock = interval - interval.truncatingRemainder(dividingBy: secPerDay)
+      
+      let components = value.dateComponents
+      
+      year   = components.year!
+      month  = components.month!
+      day    = components.day!
+      hour   = components.hour!
+      minute = components.minute!
+      second = components.second!
+      
     }
   }
   
-  public var time : Date {
-    get {
-      return Date(timeIntervalSince1970: timeClock)
-    }
-    set(value) {
-      timeClock = value.timeIntervalSince1970.truncatingRemainder(dividingBy: secPerDay)
-    }
-  }
-
-  public var dateTime : Date {
-    get {
-      return Date(timeIntervalSince1970: timeClock + dateClock)
-    }
-    set(value) {
-      time = value
-      date = value
-    }
-  }
+  public var year : Int = 1970
   
-  public var monthDay : (month:Int, day:Int) {
-    get {
-      let components = date.dateComponents
-      return (month: components.month!, day: components.day!)
-    }
-    set(value) {
-      var components = date.dateComponents
-      components.yearForWeekOfYear = nil
-      components.day = value.day
-      components.month = value.month
-      components.weekOfYear = nil
-      components.weekday = nil
-      components.era = nil
-      components.isLeapMonth = nil
-      components.quarter = nil
-      components.weekOfMonth = nil
-      date = calendar.date(from: components)!
-    }
-  }
-
-  public var year : Int {
-    get {
-      let components = date.dateComponents
-      return components.year!
-    }
-    set(value) {
-      var components : DateComponents = date.dateComponents
-      components.year = value
-      components.yearForWeekOfYear = nil
-      components.weekOfYear = nil
-      components.weekday = nil
-      components.era = nil
-      components.isLeapMonth = nil
-      components.quarter = nil
-      components.weekOfMonth = nil
-      date = calendar.date(from: components)!
-      components = date.dateComponents
-    }
-  }
+  public var month : Int = 1
   
-  public var hms : (hour:Int, minute:Int, second:Int) {
-    get {
-      let components = time.dateComponents
-      return (hour: components.hour!, minute: components.minute!, second: components.second!)
-    }
-    set (value) {
-      var components = time.dateComponents
-      components.yearForWeekOfYear = nil
-      components.hour = value.hour
-      components.minute = value.minute
-      components.second = value.second
-      components.weekOfYear = nil
-      components.weekday = nil
-      components.era = nil
-      components.isLeapMonth = nil
-      components.quarter = nil
-      components.weekOfMonth = nil
-      time = calendar.date(from: components)!
-    }
-  }
-
+  public var day : Int = 1
+  
+  public var hour : Int = 0
+  
+  public var minute : Int = 0
+  
+  public var second : Int = 0
+  
   // MARK: Private Methods
 
+  private func isLeapYear(year:Int) -> Bool {
+    return ( (year % 4 == 0) && (year % 100 != 0) ) || (year % 400 == 0)
+  }
+  
+  private func daysInMonth(month:Int, year:Int) -> Int {
+    var days : [Int] = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    if isLeapYear(year: year) {
+      days[1] = 29
+    }
+    return days[month - 1]
+  }
+  
   @objc func timerAction() {
     
     var rollover = false
     
     switch clockDirection {
     case .forward:
-      timeClock += 1.0
-      if timeClock == secPerDay {
-        rollover = true
-        timeClock = 0.0
+      second += 1
+      if second == 60 {                                        // Seconds in the range 0 ... 59
+        second = 0
+        minute += 1
+        if minute == 60 {                                      // Minutes in the range 0 ... 59
+          minute = 0
+          hour += 1
+          if hour == 24 {                                      // Hour in the range 0 ... 23
+            hour = 0
+            if isClockGenerator {
+              rollover = true
+              day += 1
+              if day > daysInMonth(month: month, year: year) { // Day in range 1 ... Days in Month
+                day = 1
+                month += 1
+                if month == 13 {                               // Month in the range 1 ... 12
+                  month = 1
+                  year += 1
+                  if year == 4096 {                            // Year in the range 0 ... 4095
+                    year = 0
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     case .backward:
-      timeClock -= 1.0
-      if timeClock == -1.0 {
-        rollover = true
-        timeClock = secPerDay - 1
+      second -= 1
+      if second == -1 {                                       // Seconds in the range 0 ... 59
+        second = 59
+        minute -= 1
+        if minute == -1 {                                     // Minutes in the range 0 ... 59
+          minute = 59
+          hour -= 1
+          if hour == -1 {                                     // Hour in the range 0 ... 23
+            hour = 23
+            if isClockGenerator {
+              rollover = true
+              day -= 1
+              if day == 0 {                                   // Day in range 1 ... Days in Month
+                month -= 1
+                day = daysInMonth(month: month, year: year)
+                if month == 0 {                               // Month in the range 1 ... 12
+                  month = 12
+                  year -= 1
+                  if year == 0 {                              // Year in the range 0 ... 4095
+                    year = 4095
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
     
     let newDate = Date().timeIntervalSince1970
     triggered = triggered || (newDate - lastSend) > 59.0
     
-    if isClockGenerator, let network = node.networkLayer {
+    if isClockGenerator, let network = networkLayer {
       
       if rollover {
-        dateClock += clockDirection.rawValue * secPerDay
-        let eventId = encodeDateRolloverEvent()
-        network.sendEvent(sourceNodeId: node.nodeId, eventId: eventId)
+        network.sendEvent(sourceNodeId: nodeId, eventId: encodeDateRolloverEvent())
         startRolloverTimer()
       }
 
-      let newComponents = dateTime.dateComponents
-      
-      let eventId = encodeTimeEvent(subCode: .reportTimeEventId, hour: newComponents.hour!, minute: newComponents.minute!)
+      let eventId = encodeTimeEvent(subCode: .reportTimeEventId, hour: hour, minute: minute)
           
       if lastEvents[OpenLCBFastClockEventIndex.reportTimeEvent.rawValue] != eventId {
         
@@ -283,9 +291,9 @@ public class OpenLCBClock : NSObject {
           triggered = true
         }
         
-        if triggered {
+        if triggered || rollover {
           lastEvents[OpenLCBFastClockEventIndex.reportTimeEvent.rawValue] = eventId
-          network.sendEvent(sourceNodeId: node.nodeId, eventId: eventId)
+          network.sendEvent(sourceNodeId: nodeId, eventId: eventId)
           triggered = false
           lastSend = newDate
         }
@@ -307,7 +315,7 @@ public class OpenLCBClock : NSObject {
     stoptimer()
     
     guard rate != 0.0 else {
-      _state = .stopped
+      _clockState = .stopped
       return
     }
     
@@ -329,19 +337,17 @@ public class OpenLCBClock : NSObject {
     syncTimer?.invalidate()
     syncTimer = nil
     
-    if let networkLayer = node.networkLayer {
+    if let networkLayer = networkLayer {
       
       var eventsToSend : [(index:OpenLCBFastClockEventIndex, eventId:UInt64)] = []
       
-      let newComponents = dateTime.dateComponents
+      eventsToSend.append((index: .reportYearEvent, eventId: encodeYearEvent(subCode: .reportYearEventId, year: year)))
       
-      eventsToSend.append((index: .reportYearEvent, eventId: encodeYearEvent(subCode: .reportYearEventId, year: newComponents.year!)))
-      
-      eventsToSend.append((index: .reportDateEvent, eventId: encodeDateEvent(subCode: .reportDateEventId, month: newComponents.month!, day: newComponents.day!)))
+      eventsToSend.append((index: .reportDateEvent, eventId: encodeDateEvent(subCode: .reportDateEventId, month: month, day: day)))
       
       for (index, eventId) in eventsToSend {
         lastEvents[index.rawValue] = eventId
-        networkLayer.sendEvent(sourceNodeId: node.nodeId, eventId: eventId)
+        networkLayer.sendEvent(sourceNodeId: nodeId, eventId: eventId)
       }
       
     }
@@ -393,17 +399,15 @@ public class OpenLCBClock : NSObject {
         
         switch eventIndex {
         case .startOrStopEvent:
-          eventId = encodeStopStartEvent(state: state)
+          eventId = encodeStopStartEvent(state: clockState)
         case .reportRateEvent:
           eventId = encodeRateEvent(subCode: .reportRateEventId, rate: rate)
         case .reportYearEvent:
           eventId = encodeYearEvent(subCode: .reportYearEventId, year: year)
         case .reportDateEvent:
-          let temp = monthDay
-          eventId = encodeDateEvent(subCode: .reportDateEventId, month: temp.month, day: temp.day)
+          eventId = encodeDateEvent(subCode: .reportDateEventId, month: month, day: day)
         case .reportTimeEvent:
-          let temp = hms
-          eventId = encodeTimeEvent(subCode: .reportTimeEventId, hour: temp.hour, minute: temp.minute)
+          eventId = encodeTimeEvent(subCode: .reportTimeEventId, hour: hour, minute: minute)
         }
         
         lastEvents[index] = eventId
@@ -416,14 +420,14 @@ public class OpenLCBClock : NSObject {
   
   private func sendSync() {
     
-    if let network = node.networkLayer {
+    if let network = networkLayer {
       
       if lastEvents.isEmpty {
         makeSync()
       }
       
       for index in 0 ... 4 {
-        network.sendProducerIdentifiedValid(sourceNodeId: node.nodeId, eventId: lastEvents[index])
+        network.sendProducerIdentifiedValid(sourceNodeId: nodeId, eventId: lastEvents[index])
       }
       
       triggered = true
@@ -462,25 +466,25 @@ public class OpenLCBClock : NSObject {
     return type.rawValue | subCode.rawValue
   }
 
-  public func start() {
+  public func startClock() {
     
-    guard state == .stopped else {
+    guard clockState == .stopped else {
       return
     }
     
-    _state = .running
+    _clockState = .running
     
-    if let network = node.networkLayer {
+    if let network = networkLayer {
       if isClockGenerator {
         let eventId = type.rawValue | 0xffff
-        network.sendProducerRangeIdentified(sourceNodeId: node.nodeId, eventId: eventId)
-        network.sendConsumerRangeIdentified(sourceNodeId: node.nodeId, eventId: eventId)
+        network.sendProducerRangeIdentified(sourceNodeId: nodeId, eventId: eventId)
+        network.sendConsumerRangeIdentified(sourceNodeId: nodeId, eventId: eventId)
         sendSync()
       }
       else {
         let eventId = type.rawValue | 0xffff
-        network.sendConsumerRangeIdentified(sourceNodeId: node.nodeId, eventId: eventId)
-        network.sendClockQuery(sourceNodeId: node.nodeId, clockType: type)
+        network.sendConsumerRangeIdentified(sourceNodeId: nodeId, eventId: eventId)
+        network.sendClockQuery(sourceNodeId: nodeId, clockType: type)
       }
     }
     
@@ -488,19 +492,19 @@ public class OpenLCBClock : NSObject {
 
   }
   
-  public func stop() {
+  public func stopClock() {
     
-    guard state == .running else {
+    guard clockState == .running else {
       return
     }
     
-    _state = .stopped
+    _clockState = .stopped
     stoptimer()
     
-    if isClockGenerator, let network = node.networkLayer {
-      let eventId = encodeStopStartEvent(state: state)
+    if isClockGenerator, let network = networkLayer {
+      let eventId = encodeStopStartEvent(state: clockState)
       lastEvents[OpenLCBFastClockEventIndex.startOrStopEvent.rawValue] = eventId
-      network.sendEvent(sourceNodeId: node.nodeId, eventId: eventId)
+      network.sendEvent(sourceNodeId: nodeId, eventId: eventId)
     }
     
   }
@@ -516,9 +520,21 @@ public class OpenLCBClock : NSObject {
     observers.removeValue(forKey: observerId)
   }
   
+  public override func start() {
+    super.start()
+    startClock()
+  }
+  
+  public override func stop() {
+    stopClock()
+    super.stop()
+  }
+  
   // MARK: OpenLCBNetworkLayerDelegate Methods
   
-  public func openLCBMessageReceived(message: OpenLCBMessage) {
+  public override func openLCBMessageReceived(message: OpenLCBMessage) {
+    
+    super.openLCBMessageReceived(message: message)
     
     switch message.messageTypeIndicator {
     case .consumerIdentifiedAsCurrentlyInvalid, .consumerIdentifiedAsCurrentlyValid, .consumerIdentifiedWithValidityUnknown:
@@ -541,7 +557,11 @@ public class OpenLCBClock : NSObject {
         
         var word = UInt16(eventId & ~specificUpperPartMask)
         
-        let code = OpenLCBFastClockSubCode(rawValue: UInt64(word)) ?? OpenLCBFastClockSubCode(rawValue: UInt64(word & 0xf000))
+        var code = OpenLCBFastClockSubCode(rawValue: UInt64(word)) ?? OpenLCBFastClockSubCode(rawValue: UInt64(word & 0xf000))
+        
+        if code == .setTimeEventId2 {
+          code = .setTimeEventId
+        }
         
         if let subCode = code {
           
@@ -550,16 +570,19 @@ public class OpenLCBClock : NSObject {
           let byte6 = Int(word >> 8)
           let byte7 = Int(word & 0xff)
           
-          var eventToSend : [UInt64] = []
+          var eventToSend : [(index:OpenLCBFastClockEventIndex, eventId:UInt64)] = []
           
           switch subCode {
           case .reportTimeEventId:
             if !isClockGenerator {
-              hms = (hour: byte6, minute: byte7, second: 0)
+              hour = byte6
+              minute = byte7
+              second = 0
             }
           case .reportDateEventId:
             if !isClockGenerator {
-              monthDay = (month: byte6, day: byte7)
+              month = byte6
+              day = byte7
             }
           case .reportYearEventId:
             if !isClockGenerator {
@@ -570,24 +593,27 @@ public class OpenLCBClock : NSObject {
               rate = Double(openLCBClockRate: word)
             }
           case .setTimeEventId, .setTimeEventId2:
+            hour = byte6
+            minute = byte7
+            second = 0
             if isClockGenerator {
-              hms = (hour: byte6, minute: byte7, second: 0)
-              eventToSend.append(encodeTimeEvent(subCode: .reportTimeEventId, hour: byte6, minute: byte7))
+              eventToSend.append((index: .reportTimeEvent, eventId:encodeTimeEvent(subCode: .reportTimeEventId, hour: byte6, minute: byte7)))
             }
           case .setDateEventId:
+            month = byte6
+            day = byte7
             if isClockGenerator {
-              monthDay = (month: byte6, day: byte7)
-              eventToSend.append(encodeDateEvent(subCode: .reportDateEventId, month: byte6, day: byte7))
+              eventToSend.append((index: .reportDateEvent, eventId:encodeDateEvent(subCode: .reportDateEventId, month: byte6, day: byte7)))
             }
           case .setYearEventId:
+            year = Int(word)
             if isClockGenerator {
-              year = Int(word)
-              eventToSend.append(encodeYearEvent(subCode: .reportYearEventId, year: Int(word)))
+              eventToSend.append((index:.reportYearEvent, eventId:encodeYearEvent(subCode: .reportYearEventId, year: Int(word))))
             }
           case .setRateEventId:
+            rate = Double(openLCBClockRate: word)
             if isClockGenerator {
-              rate = Double(openLCBClockRate: word)
-              eventToSend.append(encodeRateEvent(subCode: .reportRateEventId, rate: rate))
+              eventToSend.append((index: .reportRateEvent, eventId:encodeRateEvent(subCode: .reportRateEventId, rate: rate)))
             }
           case .queryEventId:
             if isClockGenerator {
@@ -601,17 +627,38 @@ public class OpenLCBClock : NSObject {
             if !isClockGenerator {
               switch clockDirection {
               case .forward:
-                timeClock = 0.0
+                day += 1
+                if day > daysInMonth(month: month, year: year) {
+                  day = 1
+                  month += 1
+                  if month == 13 {
+                    month = 1
+                    year += 1
+                    if year == 4096 {
+                      year = 0
+                    }
+                  }
+                }
               case .backward:
-                timeClock = secPerDay - 1.0
+                day -= 1
+                if day == 0 {
+                  month -= 1
+                  if month == 0 {
+                    month = 12
+                    year -= 1
+                    if year == -1 {
+                      year = 4095
+                    }
+                  }
+                  day = daysInMonth(month: month, year: year)
+                }
               }
-              dateClock += secPerDay * rate.sign
             }
           }
           
-          if let eventId = eventToSend.first {
-            lastEvents[subCode.index!.rawValue] = eventId
-            node.networkLayer?.sendEvent(sourceNodeId: node.nodeId, eventId: eventId)
+          if let (index, eventId) = eventToSend.first {
+            lastEvents[index.rawValue] = eventId
+            networkLayer?.sendEvent(sourceNodeId: nodeId, eventId: eventId)
             startSyncTimer()
           }
           

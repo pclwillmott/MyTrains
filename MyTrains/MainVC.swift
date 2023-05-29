@@ -57,7 +57,7 @@ class MainVC: NSViewController, NetworkControllerDelegate, LayoutDelegate, OpenL
       layoutDelegateId = layout.addDelegate(delegate: self)
     }
     
-    fastClockObserverId = networkController.openLCBNetworkLayer!.myTrainsNode.fastClock!.addObserver(observer: self)
+    fastClockObserverId = networkController.openLCBNetworkLayer!.fastClock.addObserver(observer: self)
     
   }
   
@@ -132,18 +132,14 @@ class MainVC: NSViewController, NetworkControllerDelegate, LayoutDelegate, OpenL
         
   }
   
-  // MARK: FastClockDelegate Methods
-  
-  func fastClockTick(fastClock:FastClock) {
-    
-    clockView.date = Date(timeIntervalSince1970: fastClock.scaleTime)
-    
-  }
-  
   // MARK: OpenLCBClockDelegate Methods
   
   func clockTick(clock: OpenLCBClock) {
     clockView.date = clock.date
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateStyle = .full
+    dateFormatter.timeStyle = .none
+    lblFastClock.stringValue = dateFormatter.string(from: clock.date)
   }
   
   // MARK: LayoutDelegate Methods

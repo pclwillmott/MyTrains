@@ -23,7 +23,7 @@ public enum ConsistState : Int {
   public var stat1Mask : UInt8 {
     get {
       
-      var    mask : UInt8 = (((self.rawValue & 0b01) == 0b01) ? 0b01000000 : 0x00)
+      let    mask : UInt8 = (((self.rawValue & 0b01) == 0b01) ? 0b01000000 : 0x00)
       return mask         | (((self.rawValue & 0b10) == 0b10) ? 0b00001000 : 0x00)
 
     }

@@ -96,7 +96,7 @@ extension Double {
       
       var temp = abs(self)
       
-      var dp = temp.truncatingRemainder(dividingBy: 1.0)
+      let dp = temp.truncatingRemainder(dividingBy: 1.0)
       
       temp -= dp
       

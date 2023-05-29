@@ -56,7 +56,7 @@ class ClockView: NSView {
     
     super.draw(dirtyRect)
     
-    var xSize : CGFloat = bounds.width * 1.9 / 16.0
+    let xSize : CGFloat = bounds.width * 1.9 / 16.0
     let ySize = xSize * 1.5
 
     var path = NSBezierPath()
@@ -132,9 +132,9 @@ class ClockView: NSView {
     
     let components = date.dateComponents
     
-//    var calendar = Calendar(identifier: .gregorian)
-//    calendar.timeZone = TimeZone(secondsFromGMT: 0)!
-//    var components = calendar.dateComponents(in: TimeZone(secondsFromGMT: 0)!, from: date)
+ //   var calendar = Calendar(identifier: .gregorian)
+ //   calendar.timeZone = TimeZone(secondsFromGMT: 0)!
+ //   var components = calendar.dateComponents(in: TimeZone(secondsFromGMT: 0)!, from: date)
     
     let hr = components.hour!
     let min = components.minute!
@@ -183,7 +183,7 @@ class ClockView: NSView {
       [(0,   89), (0,  135), (8,  143), (16, 135), (16,  89), (8,   80)],
       [(12,  77), (19,  85), (67,  85), (75,  77), (67,  69), (19,  69)],
     ]
-
+/*
     let segments2 : [[(x:CGFloat, y:CGFloat)]] = [
       [( 3, 154), (84, 154), (65, 139), (21, 139)], // A
       [(70,  79), (70, 137), (86, 151), (86,  79)], // B
@@ -193,7 +193,7 @@ class ClockView: NSView {
       [( 0,  79), ( 0, 151), (16, 138), (16,  79)], // F
       [(21,  69), (21,  85), (65,  85), (65,  69)], // G
     ]
-
+*/
     NSColor.setStrokeColor(color: color)
     NSColor.setFillColor(color: color)
     

@@ -272,7 +272,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
         switch element.size {
         case 2:
           let word = UInt16(floatValue & 0xffff)
-          var float16 : float16_t = float16_t(v: word)
+          let float16 : float16_t = float16_t(v: word)
           let float32 = Float(float16: float16)
           txtValue.stringValue = String(format: floatFormat, float32)
         case 4:
@@ -410,7 +410,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
           child.space = currentSpace
           child.address = currentAddress
           currentAddress += child.size
-          var memoryMapItem : MemoryMapItem = (sortAddress: child.sortAddress, space: child.space, address: child.address, size: child.size, data: [], modified: false)
+          let memoryMapItem : MemoryMapItem = (sortAddress: child.sortAddress, space: child.space, address: child.address, size: child.size, data: [], modified: false)
           memoryMap.append(memoryMapItem)
         }
         child.childElements = makeChildren(template: childTemplate.childElements)

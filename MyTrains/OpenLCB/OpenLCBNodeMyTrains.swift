@@ -25,26 +25,14 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     
     isDatagramProtocolSupported = true
     
-    fastClock = OpenLCBClock(node: self, type: .fastClock)
-    
   }
   
   // MARK: Private Properties
   
   // MARK: Public Properties
   
-  public var fastClock : OpenLCBClock?
-  
   // MARK: Public Methods
   
   // MARK: OpenLCBNetworkLayerDelegate Methods
-  
-  public override func openLCBMessageReceived(message: OpenLCBMessage) {
-    
-    super.openLCBMessageReceived(message: message)
-    
-    fastClock?.openLCBMessageReceived(message: message)
-    
-  }
   
 }

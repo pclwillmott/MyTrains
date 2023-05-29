@@ -138,6 +138,7 @@
 		DA60D81B295C6D4000B5A2C4 /* TC64Config.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA60D81A295C6D4000B5A2C4 /* TC64Config.storyboard */; };
 		DA613AC928A7DECD003218BA /* PlaceLocomotive.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA613AC828A7DECD003218BA /* PlaceLocomotive.storyboard */; };
 		DA613ACB28A7E02E003218BA /* PlaceLocomotiveVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA613ACA28A7E02E003218BA /* PlaceLocomotiveVC.swift */; };
+		DA6403EF2A24EF62001CE29B /* OpenLCBMemorySpace.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6403EE2A24EF62001CE29B /* OpenLCBMemorySpace.swift */; };
 		DA6803B028EA518B00DED1D8 /* LocomotiveRoster.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA6803AF28EA518B00DED1D8 /* LocomotiveRoster.storyboard */; };
 		DA6803B228EA553900DED1D8 /* LocomotiveRosterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6803B128EA553900DED1D8 /* LocomotiveRosterVC.swift */; };
 		DA69E3932974581700447414 /* IOChannelDS64Output.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA69E3922974581700447414 /* IOChannelDS64Output.swift */; };
@@ -448,6 +449,7 @@
 		DA60D81A295C6D4000B5A2C4 /* TC64Config.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = TC64Config.storyboard; sourceTree = "<group>"; };
 		DA613AC828A7DECD003218BA /* PlaceLocomotive.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = PlaceLocomotive.storyboard; sourceTree = "<group>"; };
 		DA613ACA28A7E02E003218BA /* PlaceLocomotiveVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceLocomotiveVC.swift; sourceTree = "<group>"; };
+		DA6403EE2A24EF62001CE29B /* OpenLCBMemorySpace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBMemorySpace.swift; sourceTree = "<group>"; };
 		DA6803AF28EA518B00DED1D8 /* LocomotiveRoster.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LocomotiveRoster.storyboard; sourceTree = "<group>"; };
 		DA6803B128EA553900DED1D8 /* LocomotiveRosterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocomotiveRosterVC.swift; sourceTree = "<group>"; };
 		DA69E3922974581700447414 /* IOChannelDS64Output.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOChannelDS64Output.swift; sourceTree = "<group>"; };
@@ -678,6 +680,7 @@
 				DAA777CD2A20CFE1008EAF02 /* OpenLCBClockDelegate.swift */,
 				DAA777CB2A20C861008EAF02 /* OpenLCBClockType.swift */,
 				DAA777CF2A20D734008EAF02 /* OpenLCBClockState.swift */,
+				DA6403EE2A24EF62001CE29B /* OpenLCBMemorySpace.swift */,
 				DA51FB9B29D88320002CAAC1 /* LCCCANFrame.swift */,
 				DA5B6AAB29EAEDB20095F7D5 /* OpenLCBCANFrameFlag.swift */,
 				DA51FB9D29D8921B002CAAC1 /* LCCCANFrameType.swift */,
@@ -1226,6 +1229,7 @@
 				DAA7169B297C2B350080114F /* IODeviceBXP88PropertySheetVC.swift in Sources */,
 				DA341C9729212F9600C3EF4F /* LocoNetBridge.swift in Sources */,
 				DA5B6AAC29EAEDB20095F7D5 /* OpenLCBCANFrameFlag.swift in Sources */,
+				DA6403EF2A24EF62001CE29B /* OpenLCBMemorySpace.swift in Sources */,
 				DA60D819295B617000B5A2C4 /* LocoNetDeviceCV.swift in Sources */,
 				DAF0CADD29855505009B392A /* IOFunctionTC64MkIIOutputPropertySheetVC.swift in Sources */,
 				DA877B0929FEB61600F8546D /* LCCCDITableViewDS.swift in Sources */,
