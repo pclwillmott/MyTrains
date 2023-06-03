@@ -322,6 +322,37 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
     sendMessage(message: message)
 
   }
+
+  public func sendLockReserveReply(sourceNodeId:UInt64, destinationNodeId:UInt64, reservedNodeId:UInt64) {
+
+    var data : [UInt8] = reservedNodeId.bigEndianData
+    data.removeFirst(2)
+    
+    data.insert(0x8a, at: 0)
+    data.insert(0x20, at: 0)
+    
+    sendDatagram(sourceNodeId: sourceNodeId, destinationNodeId: destinationNodeId, data: data)
+
+  }
+  
+  public func sendDatagramRejected(sourceNodeId:UInt64, destinationNodeId:UInt64, errorCode:OpenLCBErrorCode) {
+
+    let message = OpenLCBMessage(messageTypeIndicator: .datagramRejected)
+    
+    message.destinationNodeId = destinationNodeId
+    
+    message.sourceNodeId = sourceNodeId
+    
+    var data = errorCode.rawValue.bigEndianData
+    
+    if data[1] == 0 {
+      data.removeLast()
+    }
+    message.payload = data
+    
+    sendMessage(message: message)
+
+  }
   
   public func sendNodeMemoryReadRequest(sourceNodeId:UInt64, destinationNodeId:UInt64, addressSpace:UInt8, startAddress:Int, numberOfBytesToRead: UInt8) {
     

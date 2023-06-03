@@ -14,3 +14,4 @@ public typealias OpenLCBNodeAddressSpaceInformation = (
   isReadOnly     : Bool,
   description    : String
 )
+

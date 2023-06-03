@@ -22,6 +22,9 @@ public enum OpenLCBErrorCode : UInt16 {
   case permanentErrorReserved6                                               = 0x1060
   case permanentErrorReserved7                                               = 0x1070
   case permanentErrorInvalidArguments                                        = 0x1080
+  case permanentErrorAddressSpaceUnknown                                     = 0x1081
+  case permanentErrorAddressOutOfBounds                                      = 0x1082
+  case permanentErrorWriteAccessToReadOnlySpace                              = 0x1083
   case permanentErrorReserved9                                               = 0x1090
   case permanentErrorReserved10                                              = 0x10a0
   case permanentErrorReserved11                                              = 0x10b0

@@ -278,9 +278,10 @@ class Database {
             ")",
 
             "CREATE TABLE [\(TABLE.MEMORY_SPACE)] (" +
-              "[\(MEMORY_SPACE.NODE_ID)] INT PRIMARY KEY," +
-              "[\(MEMORY_SPACE.SPACE)]   INT NOT NULL," +
-              "[\(MEMORY_SPACE.MEMORY)]  BLOB" +
+              "[\(MEMORY_SPACE.MEMORY_SPACE_ID)] INT PRIMARY KEY," +
+              "[\(MEMORY_SPACE.NODE_ID)]         INT NOT NULL," +
+              "[\(MEMORY_SPACE.SPACE)]           INT NOT NULL," +
+              "[\(MEMORY_SPACE.MEMORY)]          BLOB" +
             ")",
 
           ]
@@ -310,12 +311,11 @@ class Database {
             
             // MARK: Updates
             
-            if Version == 15 {
+            if Version == 18 {
   
               let commands = [
         
 
-         //       "DROP TABLE  IF EXISTS [\(TABLE.LOCONET_DEVICE_CV)]",
            /*
                 "CREATE TABLE [\(TABLE.LOCONET_DEVICE_CV)] (" +
                 "[\(LOCONET_DEVICE_CV.LOCONET_DEVICE_CV_ID)]  INT PRIMARY KEY," +
@@ -425,19 +425,22 @@ class Database {
                 "ALTER TABLE [\(TABLE.SWITCHBOARD_ITEM)] ADD [\(SWITCHBOARD_ITEM.SW2_SENSOR2_ID)] INT",
  */
                  
+                "DROP TABLE IF EXISTS [\(TABLE.MEMORY_SPACE)]",
+
                 "CREATE TABLE [\(TABLE.MEMORY_SPACE)] (" +
-                  "[\(MEMORY_SPACE.NODE_ID)] INT PRIMARY KEY," +
-                  "[\(MEMORY_SPACE.SPACE)]   INT NOT NULL," +
-                  "[\(MEMORY_SPACE.MEMORY)]  BLOB" +
+                  "[\(MEMORY_SPACE.MEMORY_SPACE_ID)] INT PRIMARY KEY," +
+                  "[\(MEMORY_SPACE.NODE_ID)]         INT NOT NULL," +
+                  "[\(MEMORY_SPACE.SPACE)]           INT NOT NULL," +
+                  "[\(MEMORY_SPACE.MEMORY)]          BLOB" +
                 ")",
-                
-                "UPDATE [\(TABLE.VERSION)] SET [\(VERSION.VERSION_NUMBER)] = 16 WHERE [\(VERSION.VERSION_ID)] = 1",
+
+                "UPDATE [\(TABLE.VERSION)] SET [\(VERSION.VERSION_NUMBER)] = 19 WHERE [\(VERSION.VERSION_ID)] = 1",
  
              ]
               
               execute(commands: commands)
               
-              Version = 16
+              Version = 19
 
             }
             

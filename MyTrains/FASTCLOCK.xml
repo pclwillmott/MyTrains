@@ -1,0 +1,136 @@
+<?xml version="1.0"?>
+<cdi xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://openlcb.org/schema/cdi/1/1/cdi.xsd">
+<identification>
+<manufacturer>Logic Rail Technologies</manufacturer>
+<model>LCC Fast Clock</model>
+<hardwareVersion>Rev 2</hardwareVersion>
+<softwareVersion>0.9-5ebc7fa</softwareVersion>
+</identification>
+<acdi/>
+<segment space='251' origin='1'>
+<string size='63'>
+<name>User Name</name>
+<description>This name will appear in network browsers for this device.</description>
+</string>
+<string size='64'>
+<name>User Description</name>
+<description>This description will appear in network browsers for this device.</description>
+</string>
+</segment>
+<segment space='1'>
+<name>Current Time, Date, and Clock State Refresh or Set</name>
+<description>The settings in this section are not persistent between power cycles! This section can be used for two puposes:
+
+    1. Obtain (Read or Refresh) the current time, date, and clock state.
+    2. Configure/Set (Write) the current time, date, and clock state.
+
+Changes to these configurations take effect immediately.</description>
+<string size='6'>
+<name>Time</name>
+<description>Current time in format of "hh:mm".</description>
+</string>
+<string size='13'>
+<name>Date</name>
+<description>Current date in format of "Mmm dd, yyyy".</description>
+</string>
+<string size='8'>
+<name>Rate</name>
+<description>Current clock rate in resolution of 0.25. Valid range: -512.00 to 511.75.</description>
+</string>
+<int size='1'>
+<name>Running</name>
+<description>Current clock running state.</description>
+<min>0</min>
+<max>1</max>
+<default>1</default>
+<map><relation><property>0</property><value>Stopped</value></relation><relation><property>1</property><value>Running</value></relation></map>
+</int>
+<int size='1'>
+<name>Reset Time</name>
+<description>Reset the time to the "Initial Time Settings".</description>
+<min>0</min>
+<max>1</max>
+<default>0</default>
+<map><relation><property>0</property><value>Disabled</value></relation><relation><property>1</property><value>Enabled</value></relation></map>
+</int>
+</segment>
+<segment space='253' origin='128'>
+<name>Persistent Settings</name>
+<description>The settings in this section are persistent between power cycles. Depending on the kind of configuration change(s), the clock may automatically reboot in order to make the change(s) effective.</description>
+<group offset='4'/>
+<int size='1'>
+<name>Hour Format</name>
+<min>0</min>
+<max>1</max>
+<default>1</default>
+<map><relation><property>0</property><value>12 Hour</value></relation><relation><property>1</property><value>24 Hour</value></relation></map>
+</int>
+<int size='1'>
+<name>Operating Mode</name>
+<description>There can only be one Master (generator) per Clock ID.</description>
+<min>0</min>
+<max>1</max>
+<default>1</default>
+<map><relation><property>0</property><value>Slave (consumer)</value></relation><relation><property>1</property><value>Master (generator)</value></relation></map>
+</int>
+<int size='1'>
+<name>Tick Colon Flashing</name>
+<description>When Enabled, the colon will flash when the clock is running.</description>
+<min>0</min>
+<max>1</max>
+<default>0</default>
+<map><relation><property>0</property><value>Disabled</value></relation><relation><property>1</property><value>Enabled</value></relation></map>
+</int>
+<group>
+<name>Initial Time Settings</name>
+<description>These are the initial time settings of the clock whenever it is powered on. These settings are only used when the Operating Mode is "Master (generator)".</description>
+<int size='1'>
+<name>Power-on Running State</name>
+<description>The running state when the clock is powered on. This setting only applies when the Operating Mode is "Master (generator)".</description>
+<min>0</min>
+<max>1</max>
+<default>1</default>
+<map><relation><property>0</property><value>Stopped</value></relation><relation><property>1</property><value>Running</value></relation></map>
+</int>
+<string size='6'>
+<name>Time</name>
+<description>Initial time in format of "hh:mm".</description>
+</string>
+<string size='13'>
+<name>Date</name>
+<description>Initial date in format of "Mmm dd, yyyy".</description>
+</string>
+<string size='8'>
+<name>Rate</name>
+<description>Initial clock rate in resolution of 0.25. Valid range: -512.00 to 511.75.</description>
+</string>
+</group>
+<group>
+<name>Display Brightness Settings</name>
+<int size='1'>
+<name>Display Brightness Mode</name>
+<description>In "Automatic" mode, the display brightness will determined by the following hour and minute settings.</description>
+<min>0</min>
+<max>2</max>
+<default>0</default>
+<map><relation><property>0</property><value>High</value></relation><relation><property>1</property><value>Low</value></relation><relation><property>2</property><value>Automatic</value></relation></map>
+</int>
+<string size='6'>
+<name>Automatic: Time Start High Brightness</name>
+</string>
+<string size='6'>
+<name>Automatic: Time Start Low Brightness</name>
+</string>
+</group>
+<int size='1'>
+<name>Clock ID</name>
+<description>The Clock ID used by this clock. Most users do not need to edit this field. The LCC standard defines four "well-known" clock ID's. It is also possible to specify a custom clock ID. If choosing option "Custom Self", this clock's own Unique ID will be used. If choosing "Custom User", the user can specify any ID of their choosing which is under their own control.</description>
+<default>0</default>
+<map><relation><property>0</property><value>Default Fast Clock</value></relation><relation><property>1</property><value>Default Real-Time Clock</value></relation><relation><property>2</property><value>Alternate Clock 1</value></relation><relation><property>3</property><value>Alternate Clock 2</value></relation><relation><property>254</property><value>Custom Self</value></relation><relation><property>255</property><value>Custom User</value></relation></map>
+</int>
+<eventid>
+<name>Custom Clock ID Event Base</name>
+<description>48-bit Unique ID, right padded with "00.00". Normally, the chosen clocks's 48-bit ID is automatically filled in. When Choosing "Custom User", a custom 48-bit ID, right padded with "00.00", may be filled in.</description>
+</eventid>
+</segment>
+</cdi>

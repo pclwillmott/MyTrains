@@ -11,24 +11,51 @@ public class OpenLCBMemorySpace {
   
   // MARK: Constructors
   
-  init(nodeId:UInt64, space:Int) {
+  init(nodeId:UInt64, space:UInt8, isReadOnly: Bool, description: String) {
     self.nodeId = nodeId
     self.space = space
+    self._isReadOnly = isReadOnly
+    self.description = description
   }
   
-  init(reader: SqliteDataReader) {
+  init(reader: SqliteDataReader, isReadOnly:Bool, description: String) {
+    self._isReadOnly = isReadOnly
     decode(sqliteDataReader: reader)
   }
   
   // MARK: Private Properties
   
+  private var _isReadOnly : Bool
+  
   // MARK: Public Properties
+  
+  public var primaryKey : Int = -1
   
   public var nodeId : UInt64 = 0
   
-  public var space : Int = 0
+  public var space : UInt8 = 0
   
   public var memory : [UInt8] = []
+  
+  public var description : String = ""
+  
+  public var isReadOnly : Bool {
+    get {
+      return _isReadOnly
+    }
+  }
+  
+  public var addressSpaceInformation: OpenLCBNodeAddressSpaceInformation {
+    get {
+      var result : OpenLCBNodeAddressSpaceInformation
+      result.addressSpace = space
+      result.highestAddress = memory.count - 1
+      result.lowestAddress = 0
+      result.isReadOnly = isReadOnly
+      result.description = description
+      return result
+    }
+  }
   
   // MARK: Private Methods
   
@@ -36,108 +63,201 @@ public class OpenLCBMemorySpace {
   
   public func getUInt8(address:Int) -> UInt8? {
     
-    guard address < memory.count else {
-      return nil
+    if let data = getBlock(address: address, count: 1) {
+      return UInt8(bigEndianData: data)
     }
     
-    return memory[address]
+    return nil
     
   }
   
-  public func setUInt8(address:Int, value:UInt8) {
-    
-    guard address < memory.count else {
-      return
-    }
-    
-    memory[address] = value
-    
-  }
-
   public func getUInt16(address:Int) -> UInt16? {
     
-    guard address + 1 < memory.count else {
-      return nil
+    if let data = getBlock(address: address, count: 2) {
+      return UInt16(bigEndianData: data)
     }
     
-    var temp : [UInt8] = []
-    
-    for index in 0...1 {
-      temp.append(memory[index])
-    }
-    return UInt16(bigEndianData: temp)
+    return nil
 
   }
   
-  public func setUInt16(address:Int, value:UInt16) {
-    
-    guard address + 1 < memory.count else {
-      return
-    }
-    
-    memory[address + 0] = UInt8((value >> 8) & 0xff)
-    memory[address + 1] = UInt8((value >> 0) & 0xff)
-    
-  }
-
   public func getUInt32(address:Int) -> UInt32? {
     
-    guard address + 3 < memory.count else {
-      return nil
+    if let data = getBlock(address: address, count: 4) {
+      return UInt32(bigEndianData: data)
     }
     
-    var temp : [UInt8] = []
-    
-    for index in 0...3 {
-      temp.append(memory[index])
-    }
-    return UInt32(bigEndianData: temp)
+    return nil
 
   }
   
-  public func setUInt32(address:Int, value:UInt32) {
-    
-    guard address + 3 < memory.count else {
-      return
-    }
-    
-    memory[address + 0] = UInt8((value >> 24) & 0xff)
-    memory[address + 1] = UInt8((value >> 16) & 0xff)
-    memory[address + 2] = UInt8((value >>  8) & 0xff)
-    memory[address + 3] = UInt8((value >>  0) & 0xff)
-
-  }
-
   public func getUInt64(address:Int) -> UInt64? {
     
-    guard address + 7 < memory.count else {
+    if let data = getBlock(address: address, count: 8) {
+      return UInt64(bigEndianData: data)
+    }
+    
+    return nil
+
+  }
+  
+  public func getFloat16(address:Int) -> float16_t? {
+      
+    if let data = getBlock(address: address, count: 2) {
+      return float16_t(bigEndianData: data)
+    }
+    
+    return nil
+
+  }
+
+  public func getFloat(address:Int) -> Float? {
+    
+    if let data = getBlock(address: address, count: 4) {
+      return Float(bigEndianData: data)
+    }
+    
+    return nil
+
+  }
+  
+  public func getDouble(address:Int) -> Double? {
+    
+    if let data = getBlock(address: address, count: 8) {
+      return Double(bigEndianData: data)
+    }
+    
+    return nil
+
+  }
+
+  public func getBlock(address:Int, count:Int) -> [UInt8]? {
+    
+    guard address + count - 1 < memory.count && count > 0 else {
+      print("getBlock: address + data.count - 1 >= memory.count || count <= 0" )
       return nil
     }
     
-    var temp : [UInt8] = []
+    var result : [UInt8] = []
     
-    for index in 0...7 {
-      temp.append(memory[index])
+    for index in address ... address + count - 1 {
+      result.append(memory[index])
     }
-    return UInt64(bigEndianData: temp)
+
+    return result
     
   }
   
-  public func setUInt64(address:Int, value:UInt64) {
-    
-    guard address + 7 < memory.count else {
+  public func setUInt(address:Int, value:UInt8) {
+    setBlock(address: address, data: value.bigEndianData)
+  }
+
+  public func setUInt(address:Int, value:UInt16) {
+    setBlock(address: address, data: value.bigEndianData)
+  }
+
+  public func setUInt(address:Int, value:UInt32) {
+    setBlock(address: address, data: value.bigEndianData)
+  }
+
+  public func setUInt(address:Int, value:UInt64) {
+    setBlock(address: address, data: value.bigEndianData)
+  }
+  
+  public func setFloat(address:Int, value:Float) {
+    setBlock(address: address, data: value.bigEndianData)
+  }
+  
+  public func setDouble(address:Int, value:Double) {
+    setBlock(address: address, data: value.bigEndianData)
+  }
+
+  public func setFloat(address:Int, value:float16_t) {
+    setBlock(address: address, data: value.v.bigEndianData)
+  }
+
+  public func setString(address:Int, value:String, fieldSize:Int) {
+  
+    guard address + fieldSize - 1 < memory.count else {
+      print("setString: address + fieldSize - 1 < memory.count >= memory.count" )
       return
     }
     
-    memory[address + 0] = UInt8((value >> 56) & 0xff)
-    memory[address + 1] = UInt8((value >> 48) & 0xff)
-    memory[address + 2] = UInt8((value >> 40) & 0xff)
-    memory[address + 3] = UInt8((value >> 32) & 0xff)
-    memory[address + 4] = UInt8((value >> 24) & 0xff)
-    memory[address + 5] = UInt8((value >> 16) & 0xff)
-    memory[address + 6] = UInt8((value >>  8) & 0xff)
-    memory[address + 7] = UInt8((value >>  0) & 0xff)
+    guard value.utf8.count < fieldSize else {
+      print("setString: value.utf8.count >= fieldSize" )
+      return
+    }
 
+    var data : [UInt8] = []
+
+    for byte in value.utf8 {
+      data.append(byte)
+    }
+
+    var index = value.utf8.count
+
+    while index < fieldSize {
+      data.append(0)
+      index += 1
+    }
+
+    setBlock(address: address, data: data)
+
+  }
+  
+  public func setBlock(address:Int, data:[UInt8]) {
+    
+    guard address + data.count - 1 < memory.count else {
+      print("setBlock: address + data.count - 1 >= memory.count" )
+      return
+    }
+    
+    let oldData = getBlock(address: address, count: data.count)!
+    
+    var isChanged = false
+    
+    var index = 0
+    while index < data.count {
+      if oldData[index] != data[index] {
+        isChanged = true
+        break
+      }
+      index += 1
+    }
+    
+    if !isChanged {
+      return
+    }
+    
+    index = 0
+    for byte in data {
+      memory[address + index] = byte
+      index += 1
+    }
+    
+    memoryChanged(startAddress: address, endAddress: address + data.count - 1)
+    
+  }
+  
+  public func getString(address:Int, count:Int) -> String? {
+    
+    guard address + count - 1 < memory.count else {
+      print("getString: address + data.count - 1 >= memory.count" )
+      return nil
+    }
+    
+    var data : [UInt8] = []
+    
+    for index in address ... address + count - 1 {
+      data.append(memory[index])
+    }
+
+    return String(cString: data)
+
+  }
+
+  public func memoryChanged(startAddress:Int, endAddress:Int) {
+    save()
   }
 
   // MARK: Database Methods
@@ -146,14 +266,16 @@ public class OpenLCBMemorySpace {
   
     if let reader = sqliteDataReader {
       
-      nodeId = reader.getUInt64(index: 0)!
-      
-      if !reader.isDBNull(index: 1) {
-        space = reader.getInt(index: 1)!
+      primaryKey = reader.getInt(index: 0)!
+
+      nodeId = reader.getUInt64(index: 1)!
+
+      if !reader.isDBNull(index: 2) {
+        space = UInt8(reader.getInt(index: 2)! & 0xff)
       }
       
-      if !reader.isDBNull(index: 2) {
-        memory = reader.getBlob(index: 2)!
+      if !reader.isDBNull(index: 3) {
+        memory = reader.getBlob(index: 3)!
       }
       
     }
@@ -166,7 +288,7 @@ public class OpenLCBMemorySpace {
        "[\(MEMORY_SPACE.NODE_ID)] = @\(MEMORY_SPACE.NODE_ID), " +
        "[\(MEMORY_SPACE.SPACE)] = @\(MEMORY_SPACE.SPACE), " +
        "[\(MEMORY_SPACE.MEMORY)] = @\(MEMORY_SPACE.MEMORY) " +
-       "WHERE [\(MEMORY_SPACE.NODE_ID)] = @\(MEMORY_SPACE.NODE_ID) AND [\(MEMORY_SPACE.SPACE)] = @\(MEMORY_SPACE.SPACE)"
+       "WHERE [\(MEMORY_SPACE.MEMORY_SPACE_ID)] = @\(MEMORY_SPACE.MEMORY_SPACE_ID) = @\(MEMORY_SPACE.MEMORY_SPACE_ID)"
 
      let conn = Database.getConnection()
      
@@ -180,8 +302,9 @@ public class OpenLCBMemorySpace {
       
      cmd.commandText = sql
      
+     cmd.parameters.addWithValue(key: "@\(MEMORY_SPACE.MEMORY_SPACE_ID)", value: self.primaryKey)
      cmd.parameters.addWithValue(key: "@\(MEMORY_SPACE.NODE_ID)", value: self.nodeId)
-     cmd.parameters.addWithValue(key: "@\(MEMORY_SPACE.SPACE)", value: self.space)
+     cmd.parameters.addWithValue(key: "@\(MEMORY_SPACE.SPACE)", value: Int(self.space))
      cmd.parameters.addWithValue(key: "@\(MEMORY_SPACE.MEMORY)", value: self.memory)
 
     _ = cmd.executeNonQuery()
@@ -197,13 +320,14 @@ public class OpenLCBMemorySpace {
   public static var columnNames : String {
     get {
       return
+        "[\(MEMORY_SPACE.MEMORY_SPACE_ID)], " +
         "[\(MEMORY_SPACE.NODE_ID)], " +
         "[\(MEMORY_SPACE.SPACE)], " +
         "[\(MEMORY_SPACE.MEMORY)]"
     }
   }
   
-  public static func getMemorySpace(nodeId:UInt64, space:Int, defaultMemorySize:Int) -> OpenLCBMemorySpace {
+  public static func getMemorySpace(nodeId: UInt64, space: UInt8, defaultMemorySize: Int, isReadOnly: Bool, description: String) -> OpenLCBMemorySpace {
     
     let conn = Database.getConnection()
     
@@ -220,28 +344,27 @@ public class OpenLCBMemorySpace {
     var result : OpenLCBMemorySpace?
     
     if let reader = cmd.executeReader(), reader.read() {
-      
-      result = OpenLCBMemorySpace(reader: reader)
-      
-      reader.close()
-      
+
+        result = OpenLCBMemorySpace(reader: reader, isReadOnly: isReadOnly, description: description)
+        
+        reader.close()
+  
     }
     else {
 
-      result = OpenLCBMemorySpace(nodeId: nodeId, space: space)
+      result = OpenLCBMemorySpace(nodeId: nodeId, space: space, isReadOnly: isReadOnly, description: description)
       
       if let memorySpace = result {
         
         memorySpace.memory = [UInt8](repeating: 0, count: defaultMemorySize)
-        memorySpace.memory[0] = 0x34
-        memorySpace.memory[1] = 0x35
-        memorySpace.memory[2] = 0x36
 
-        var sql = "INSERT INTO [\(TABLE.MEMORY_SPACE)] (" +
+        let sql = "INSERT INTO [\(TABLE.MEMORY_SPACE)] (" +
+        "[\(MEMORY_SPACE.MEMORY_SPACE_ID)], " +
         "[\(MEMORY_SPACE.NODE_ID)], " +
         "[\(MEMORY_SPACE.SPACE)], " +
         "[\(MEMORY_SPACE.MEMORY)]" +
         ") VALUES (" +
+        "@\(MEMORY_SPACE.MEMORY_SPACE_ID), " +
         "@\(MEMORY_SPACE.NODE_ID), " +
         "@\(MEMORY_SPACE.SPACE), " +
         "@\(MEMORY_SPACE.MEMORY)" +
@@ -251,8 +374,11 @@ public class OpenLCBMemorySpace {
          
         cmd.commandText = sql
         
+        memorySpace.primaryKey = Database.nextCode(tableName: TABLE.MEMORY_SPACE, primaryKey: MEMORY_SPACE.MEMORY_SPACE_ID) ?? 1
+        
+        cmd.parameters.addWithValue(key: "@\(MEMORY_SPACE.MEMORY_SPACE_ID)", value: memorySpace.primaryKey)
         cmd.parameters.addWithValue(key: "@\(MEMORY_SPACE.NODE_ID)", value: memorySpace.nodeId)
-        cmd.parameters.addWithValue(key: "@\(MEMORY_SPACE.SPACE)", value: memorySpace.space)
+        cmd.parameters.addWithValue(key: "@\(MEMORY_SPACE.SPACE)", value: Int(memorySpace.space))
         cmd.parameters.addWithValue(key: "@\(MEMORY_SPACE.MEMORY)", value: memorySpace.memory)
 
         _ = cmd.executeNonQuery()

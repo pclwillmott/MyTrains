@@ -7,6 +7,28 @@
 
 import Foundation
 
+extension float16_t {
+
+  init?(bigEndianData: [UInt8]) {
+    
+    guard bigEndianData.count == 2 else {
+      return nil
+    }
+    
+    self.init()
+    
+    var temp : UInt16 = 0
+    for byte in bigEndianData {
+      temp <<= 8
+      temp |= UInt16(byte)
+    }
+    
+    self.v = temp
+    
+  }
+
+}
+
 extension Float {
   
   init(float16:float16_t) {
@@ -16,6 +38,25 @@ extension Float {
     self = float16_to_float(float16)
     
   }
+  
+  init?(bigEndianData: [UInt8]) {
+    
+    guard bigEndianData.count == 4 else {
+      return nil
+    }
+    
+    self.init()
+    
+    var temp : UInt32 = 0
+    for byte in bigEndianData {
+      temp <<= 8
+      temp |= UInt32(byte)
+    }
+    
+    self = Float(bitPattern: temp)
+    
+  }
+
   
   public var float16 : float16_t {
     get {
@@ -28,7 +69,20 @@ extension Float {
       return self < 0.0 ? -1.0 : 1.0
     }
   }
-
+  
+  public var bigEndianData : [UInt8] {
+    get {
+      var intValue : UInt32 = self.bitPattern
+      var data : [UInt8] = []
+      for _ in 1...MemoryLayout<UInt32>.size {
+        let byte = UInt8(intValue & 0xff)
+        data.insert(byte, at: 0)
+        intValue >>= 8
+      }
+      return data
+    }
+  }
+  
 }
 
 extension Double {
@@ -38,6 +92,24 @@ extension Double {
     self.init()
     
     self = Double(float16_to_float(float16))
+    
+  }
+  
+  init?(bigEndianData: [UInt8]) {
+    
+    guard bigEndianData.count == 8 else {
+      return nil
+    }
+    
+    self.init()
+    
+    var temp : UInt64 = 0
+    for byte in bigEndianData {
+      temp <<= 8
+      temp |= UInt64(byte)
+    }
+    
+    self = Double(bitPattern: temp)
     
   }
   
@@ -110,6 +182,20 @@ extension Double {
       
     }
     
+  }
+
+  public var bigEndianData : [UInt8] {
+    get {
+      var intValue : UInt64 = self.bitPattern
+      var data : [UInt8] = []
+      for _ in 1...MemoryLayout<UInt64>.size {
+        let byte = UInt8(intValue & 0xff)
+        data.insert(byte, at: 0)
+        intValue >>= 8
+      }
+      return data
+    }
+
   }
 
 }

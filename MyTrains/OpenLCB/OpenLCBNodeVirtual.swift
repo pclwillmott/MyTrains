@@ -17,8 +17,6 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate {
     
     self.lfsr2 = UInt32(nodeId & 0xffffff)
 
-    self.memorySpace = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: 0xfb, defaultMemorySize: 256)
-
     super.init(nodeId: nodeId)
 
     isIdentificationSupported = true
@@ -31,7 +29,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate {
   
   // MARK: Private Properties
   
-  private var memorySpace : OpenLCBMemorySpace
+  private var lockedNodeId : UInt64 = 0
 
   // MARK: Public Properties
   
@@ -55,9 +53,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate {
   }
   
   public func stop() {
-    if let network = networkLayer {
-      state = .inhibited
-    }
+    state = .inhibited
   }
   
   // MARK: OpenLCBNetworkLayerDelegate Methods
@@ -79,8 +75,33 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate {
       }
     case .protocolSupportInquiry:
       if message.destinationNodeId! == nodeId {
-        var data = supportedProtocols
+        let data = supportedProtocols
         networkLayer?.sendProtocolSupportReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, data: data)
+      }
+    case .datagram:
+      switch message.datagramType {
+      case.LockReserveCommand:
+        message.payload.removeFirst(2)
+        if let id = UInt64(bigEndianData: message.payload) {
+          if lockedNodeId == 0 {
+            lockedNodeId = id
+          }
+          networkLayer?.sendLockReserveReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, reservedNodeId: lockedNodeId)
+        }
+      case .getAddressSpaceInformationCommand:
+        
+        message.payload.removeFirst(2)
+        
+        let space = message.payload[0]
+        
+        if let memorySpace = memorySpaces[space] {
+          
+        }
+        else {
+          networkLayer?.sendDatagramRejected(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, errorCode: .permanentErrorAddressSpaceUnknown)
+        }
+      default:
+        break
       }
     default:
       break

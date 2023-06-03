@@ -751,7 +751,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
                     
                     nextCDIStartAddress += data.count
                     
-                    network.sendNodeMemoryReadRequest(sourceNodeId: sourceNodeId, destinationNodeId: node.nodeId, addressSpace: LCCNodeMemoryAddressSpace.CDI.rawValue, startAddress: nextCDIStartAddress, numberOfBytesToRead: 64)
+                    network.sendNodeMemoryReadRequest(sourceNodeId: sourceNodeId, destinationNodeId: node.nodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cdi.rawValue, startAddress: nextCDIStartAddress, numberOfBytesToRead: 64)
                     
                   }
                   else {
@@ -789,7 +789,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
                     totalBytesRead = 0
                     nextCDIStartAddress = info.lowestAddress
                     CDI = []
-                    network.sendNodeMemoryReadRequest(sourceNodeId: sourceNodeId, destinationNodeId: node.nodeId, addressSpace: LCCNodeMemoryAddressSpace.CDI.rawValue, startAddress: nextCDIStartAddress, numberOfBytesToRead: 64)
+                    network.sendNodeMemoryReadRequest(sourceNodeId: sourceNodeId, destinationNodeId: node.nodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cdi.rawValue, startAddress: nextCDIStartAddress, numberOfBytesToRead: 64)
                   }
                 case 0xfe:
                   break

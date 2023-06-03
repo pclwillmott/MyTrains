@@ -251,6 +251,7 @@ enum TURNOUT_SWITCH {
 }
 
 enum MEMORY_SPACE {
+  static let MEMORY_SPACE_ID             = "MEMORY_SPACE_ID"
   static let NODE_ID                     = "NODE_ID"
   static let SPACE                       = "SPACE"
   static let MEMORY                      = "MEMORY"

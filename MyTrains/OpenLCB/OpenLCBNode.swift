@@ -15,11 +15,23 @@ public class OpenLCBNode : NSObject {
     
     UNDERSTOOD_BYTES = 3
     
-    _supportedProtocols = [UInt8](repeating: 0x00, count: UNDERSTOOD_BYTES)
+    _supportedProtocols = [UInt8](repeating: 0, count: UNDERSTOOD_BYTES)
     
     self.nodeId = nodeId
     
+    acdiManufacturerSpace = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.acdiManufacturer.rawValue, defaultMemorySize: 125, isReadOnly: true, description: "")
+
+    acdiUserSpace = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.acdiUser.rawValue, defaultMemorySize: 128, isReadOnly: true, description: "")
+    
     super.init()
+    
+    self.memorySpaces[acdiManufacturerSpace.space] = acdiManufacturerSpace
+
+    self.memorySpaces[acdiUserSpace.space] = acdiUserSpace
+    
+    self.acdiManufacturerSpaceVersion = 4
+    
+    self.acdiUserSpaceVersion = 2
     
   }
   
@@ -29,54 +41,210 @@ public class OpenLCBNode : NSObject {
   
   private var _supportedProtocols : [UInt8]
   
+  internal var memorySpaces : [UInt8:OpenLCBMemorySpace] = [:]
+  
   // MARK: Public Properties
   
   public var nodeId : UInt64
   
-  public var manufacturerName : String = ""
+  public var acdiManufacturerSpace : OpenLCBMemorySpace
   
-  public var nodeModelName : String = ""
+  public var acdiUserSpace : OpenLCBMemorySpace
   
-  public var nodeHardwareVersion : String = ""
+  public var acdiManufacturerSpaceVersion : UInt8 {
+    get {
+      var result = acdiManufacturerSpace.getUInt8(address: 0)!
+      return result == 0 ? 4 : result
+    }
+    set(value) {
+      acdiManufacturerSpace.setUInt(address: 0, value: value == 1 ? 4 : value)
+    }
+  }
   
-  public var nodeSoftwareVersion : String = ""
+  public var manufacturerName : String {
+    get {
+      return acdiManufacturerSpace.getString(address: 1, count: 41)!
+    }
+    set(value) {
+      acdiManufacturerSpace.setString(address: 1, value: String(value.prefix(40)), fieldSize: 41)
+    }
+  }
   
-  public var userNodeName : String = ""
+  public var nodeModelName : String {
+    get {
+      return acdiManufacturerSpace.getString(address: 42, count: 41)!
+    }
+    set(value) {
+      acdiManufacturerSpace.setString(address: 42, value: String(value.prefix(40)), fieldSize: 41)
+    }
+  }
   
-  public var userNodeDescription : String = ""
+  public var nodeHardwareVersion : String {
+    get {
+      return acdiManufacturerSpace.getString(address: 83, count: 21)!
+    }
+    set(value) {
+      acdiManufacturerSpace.setString(address: 83, value: String(value.prefix(20)), fieldSize: 21)
+    }
+  }
+  
+  public var nodeSoftwareVersion : String {
+    get {
+      return acdiManufacturerSpace.getString(address: 104, count: 21)!
+    }
+    set(value) {
+      acdiManufacturerSpace.setString(address: 104, value: String(value.prefix(20)), fieldSize: 21)
+    }
+
+  }
+  
+  public var acdiUserSpaceVersion : UInt8 {
+    get {
+      var result = acdiUserSpace.getUInt8(address: 0)!
+      return result == 0 ? 2 : result
+    }
+    set(value) {
+      acdiUserSpace.setUInt(address: 0, value: value == 1 ? 2 : value)
+    }
+  }
+
+  public var userNodeName : String {
+    get {
+      return acdiUserSpace.getString(address: 1, count: 63)!
+    }
+    set(value) {
+      acdiUserSpace.setString(address: 1, value: String(value.prefix(62)), fieldSize: 63)
+    }
+  }
+  
+  public var userNodeDescription : String {
+    get {
+      return acdiUserSpace.getString(address: 64, count: 64)!
+    }
+    set(value) {
+      acdiUserSpace.setString(address: 64, value: String(value.prefix(63)), fieldSize: 64)
+    }
+  }
   
   public var addressSpaceInformation : [UInt8:OpenLCBNodeAddressSpaceInformation] = [:]
   
   public var encodedNodeInformation : [UInt8] {
+    
     get {
-      return [UInt8](("\u{04}\(manufacturerName)\0\(nodeModelName)\0\(nodeHardwareVersion)\0\(nodeSoftwareVersion)\0\u{02}\(userNodeName)\0\(userNodeDescription)\0").utf8)
+      
+      var data : [UInt8] = []
+      
+      data.append(acdiManufacturerSpaceVersion)
+      
+      for stringNumber in 1 ... acdiManufacturerSpaceVersion {
+        var string : String = ""
+        switch stringNumber {
+        case 1:
+          string = manufacturerName
+        case 2:
+          string = nodeModelName
+        case 3:
+          string = nodeHardwareVersion
+        case 4:
+          string = nodeSoftwareVersion
+        default:
+          break
+        }
+        for byte in string.utf8 {
+          data.append(byte)
+        }
+        data.append(0)
+      }
+      
+      data.append(acdiUserSpaceVersion)
+      
+      for stringNumber in 1 ... acdiUserSpaceVersion {
+        var string : String = ""
+        switch stringNumber {
+        case 1:
+          string = userNodeName
+        case 2:
+          string = userNodeDescription
+        default:
+          break
+        }
+        for byte in string.utf8 {
+          data.append(byte)
+        }
+        data.append(0)
+      }
+      
+      return data
+      
     }
+    
     set(value) {
       
-      let temp = String(bytes: value, encoding: .utf8)!.split(separator: "\0", omittingEmptySubsequences: false)
+      var index : Int = 0
+
+      acdiManufacturerSpaceVersion = value[index]
       
-      let version = value[0]
+      index += 1
       
-      if version == 1 || version == 4 {
+      var stringNumber = 0
+            
+      while stringNumber < acdiManufacturerSpaceVersion && index < value.count {
         
-        manufacturerName = String(temp[0])
+        var current : [UInt8] = []
         
-        manufacturerName.removeFirst()
+        while value[index] != UInt8(0) {
+          current.append(value[index])
+          index += 1
+        }
         
-        nodeModelName = String(temp[1])
+        current.append(value[index])
+        index += 1
         
-        nodeHardwareVersion = String(temp[2])
-        
-        nodeSoftwareVersion = String(temp[3])
-        
-        userNodeName = String(temp[4])
-        userNodeName.removeFirst()
-        
-        userNodeDescription = String(temp[5])
-        
+        let string = String(cString: current)
+        stringNumber += 1
+        switch stringNumber {
+        case 1:
+          manufacturerName = string
+        case 2:
+          nodeModelName = string
+        case 3:
+          nodeHardwareVersion = string
+        case 4:
+          nodeSoftwareVersion = string
+        default:
+          break
+        }
+
+      }
+      
+      acdiUserSpaceVersion = value[index]
+      
+      index += 1
+
+      stringNumber = 0
+            
+      while stringNumber < acdiUserSpaceVersion && index < value.count {
+        var current : [UInt8] = []
+        while value[index] != 0 {
+          current.append(value[index])
+          index += 1
+        }
+        current.append(value[index])
+        index += 1
+        let string = String(cString: current)
+        stringNumber += 1
+        switch stringNumber {
+        case 1:
+          userNodeName = string
+        case 2:
+          userNodeDescription = string
+        default:
+          break
+        }
       }
 
     }
+    
   }
   
   public var supportedProtocols : [UInt8] {
