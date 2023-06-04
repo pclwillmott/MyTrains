@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum LCCCANFrameType {
+public enum OpenLCBCANFrameType {
   case openLCBMessage
   case canControlFrame
 }

@@ -11,13 +11,13 @@ public class LCCCDIElement {
   
   // MARK: Constructors
   
-  init(type:LCCCDIElementType) {
+  init(type:OpenLCBCDIElementType) {
     self.type = type
   }
   
   // MARK: Public Properties
   
-  public var type : LCCCDIElementType
+  public var type : OpenLCBCDIElementType
   
   public var childElements : [LCCCDIElement] = []
   

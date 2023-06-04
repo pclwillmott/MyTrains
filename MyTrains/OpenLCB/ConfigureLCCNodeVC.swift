@@ -102,7 +102,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
   
   private var currentElement : LCCCDIElement?
   
-  private var currentElementType : LCCCDIElementType = .int
+  private var currentElementType : OpenLCBCDIElementType = .int
   
   private var groupStack : [LCCCDIElement] = []
   
@@ -855,7 +855,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
   
   func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
 
-    if let elementType = LCCCDIElementType(rawValue: elementName) {
+    if let elementType = OpenLCBCDIElementType(rawValue: elementName) {
       
       currentElementType = elementType
       
@@ -903,7 +903,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
 
   func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
     
-    if let elementType = LCCCDIElementType(rawValue: elementName) {
+    if let elementType = OpenLCBCDIElementType(rawValue: elementName) {
       
       if elementType.isNode {
         if let last = groupStack.last {

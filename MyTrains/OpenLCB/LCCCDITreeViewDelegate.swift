@@ -8,5 +8,5 @@
 import Foundation
 
 public protocol LCCCDITreeViewDelegate {
-  func itemSelected(item:LCCCDIElementType)
+  func itemSelected(item:OpenLCBCDIElementType)
 }

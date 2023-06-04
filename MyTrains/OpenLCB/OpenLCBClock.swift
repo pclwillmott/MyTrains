@@ -143,7 +143,7 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
     }
   }
   
-  public var isClockGenerator : Bool = true
+  public var isClockGenerator : Bool = false
   
   public var date : Date {
     get {

@@ -258,7 +258,7 @@ public class LCCCANFrame : NSObject {
   
   public var timeSinceLastMessage : TimeInterval = 0.0
 
-  public var frameType : LCCCANFrameType {
+  public var frameType : OpenLCBCANFrameType {
     get {
       return (header & mask_FrameType) == mask_FrameType ? .openLCBMessage : .canControlFrame
     }
@@ -312,7 +312,7 @@ public class LCCCANFrame : NSObject {
   
   // MARK: Public Class Methods
   
-  public static func createFrameHeader(frameType: LCCCANFrameType, variableField: UInt16, sourceNIDAlias: UInt16) -> String {
+  public static func createFrameHeader(frameType: OpenLCBCANFrameType, variableField: UInt16, sourceNIDAlias: UInt16) -> String {
     
     var header : UInt32 = 0x10000000
     

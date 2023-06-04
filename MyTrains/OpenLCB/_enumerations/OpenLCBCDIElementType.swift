@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum LCCCDIElementType : String {
+public enum OpenLCBCDIElementType : String {
   
   case cdi             = "cdi"
   case name            = "name"
@@ -36,7 +36,7 @@ public enum LCCCDIElementType : String {
   
   public var isNode : Bool {
     
-    let nodeTypes : Set<LCCCDIElementType> = [
+    let nodeTypes : Set<OpenLCBCDIElementType> = [
       .cdi,
       .identification,
       .acdi,
@@ -58,7 +58,7 @@ public enum LCCCDIElementType : String {
 
   public var isData : Bool {
     
-    let dataTypes : Set<LCCCDIElementType> = [
+    let dataTypes : Set<OpenLCBCDIElementType> = [
       .int,
       .string,
       .eventid,

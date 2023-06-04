@@ -41,4 +41,14 @@ class ViewNodeInfoVC: NSViewController, NSWindowDelegate {
   
   @IBOutlet var textView: NSTextView!
   
+  @IBOutlet var txtAvailableCommands: NSTextView!
+  
+  @IBOutlet var txtWriteLengths: NSTextView!
+  
+  @IBOutlet weak var lblHighestAddressSpace: NSTextField!
+  
+  @IBOutlet weak var lblLowestAddressSpace: NSTextField!
+  
+  @IBOutlet weak var lblName: NSTextField!
+  
 }
