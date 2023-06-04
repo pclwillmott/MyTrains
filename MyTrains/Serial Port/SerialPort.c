@@ -433,7 +433,7 @@ char **serialPortPaths = NULL;
 
 int serialPortCount = 0;
 
-void clearSerialPorts() {
+void clearSerialPorts(void) {
   
   serialPortCount = 0;
   
@@ -447,7 +447,7 @@ void clearSerialPorts() {
   
 }
 
-int findSerialPorts() {
+int findSerialPorts(void) {
   
 //  serialPortCount = 0;
   

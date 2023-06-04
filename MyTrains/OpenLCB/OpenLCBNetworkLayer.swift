@@ -335,6 +335,152 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
 
   }
   
+  public func sendReadReply(sourceNodeId:UInt64, destinationNodeId:UInt64, addressSpace:UInt8, startAddress:UInt32, data:[UInt8]) {
+
+    var payload : [UInt8] = [0x20]
+    
+    var addAddressSpace = false
+    
+    switch addressSpace {
+    case 0xff:
+      payload.append(OpenLCBDatagramType.readReply0xFF.rawValue)
+    case 0xfe:
+      payload.append(OpenLCBDatagramType.readReply0xFE.rawValue)
+    case 0xfd:
+      payload.append(OpenLCBDatagramType.readReply0xFD.rawValue)
+    default:
+      payload.append(OpenLCBDatagramType.readReplyGeneric.rawValue)
+      addAddressSpace = true
+    }
+    
+    payload.append(contentsOf: startAddress.bigEndianData)
+    
+    if addAddressSpace {
+      payload.append(addressSpace)
+    }
+    
+    payload.append(contentsOf: data)
+    
+    sendDatagram(sourceNodeId: sourceNodeId, destinationNodeId: destinationNodeId, data: payload)
+
+  }
+
+  public func sendReadReplyFailure(sourceNodeId:UInt64, destinationNodeId:UInt64, addressSpace:UInt8, startAddress:UInt32, errorCode:OpenLCBErrorCode) {
+
+    var payload : [UInt8] = [0x20]
+    
+    var addAddressSpace = false
+    
+    switch addressSpace {
+    case 0xff:
+      payload.append(OpenLCBDatagramType.readReplyFailure0xFF.rawValue)
+    case 0xfe:
+      payload.append(OpenLCBDatagramType.readReplyFailure0xFE.rawValue)
+    case 0xfd:
+      payload.append(OpenLCBDatagramType.readReplyFailure0xFD.rawValue)
+    default:
+      payload.append(OpenLCBDatagramType.readReplyFailureGeneric.rawValue)
+      addAddressSpace = true
+    }
+    
+    payload.append(contentsOf: startAddress.bigEndianData)
+    
+    if addAddressSpace {
+      payload.append(addressSpace)
+    }
+    
+    payload.append(contentsOf: errorCode.bigEndianData)
+    
+    sendDatagram(sourceNodeId: sourceNodeId, destinationNodeId: destinationNodeId, data: payload)
+
+  }
+
+  public func sendWriteReply(sourceNodeId:UInt64, destinationNodeId:UInt64, addressSpace:UInt8, startAddress:UInt32) {
+
+    var payload : [UInt8] = [0x20]
+    
+    var addAddressSpace = false
+    
+    switch addressSpace {
+    case 0xff:
+      payload.append(OpenLCBDatagramType.writeReply0xFF.rawValue)
+    case 0xfe:
+      payload.append(OpenLCBDatagramType.writeReply0xFE.rawValue)
+    case 0xfd:
+      payload.append(OpenLCBDatagramType.writeReply0xFD.rawValue)
+    default:
+      payload.append(OpenLCBDatagramType.writeReplyGeneric.rawValue)
+      addAddressSpace = true
+    }
+    
+    payload.append(contentsOf: startAddress.bigEndianData)
+    
+    if addAddressSpace {
+      payload.append(addressSpace)
+    }
+    
+    sendDatagram(sourceNodeId: sourceNodeId, destinationNodeId: destinationNodeId, data: payload)
+
+  }
+
+  public func sendWriteReplyFailure(sourceNodeId:UInt64, destinationNodeId:UInt64, addressSpace:UInt8, startAddress:UInt32, errorCode:OpenLCBErrorCode) {
+
+    var payload : [UInt8] = [0x20]
+    
+    var addAddressSpace = false
+    
+    switch addressSpace {
+    case 0xff:
+      payload.append(OpenLCBDatagramType.writeReplyFailure0xFF.rawValue)
+    case 0xfe:
+      payload.append(OpenLCBDatagramType.writeReplyFailure0xFE.rawValue)
+    case 0xfd:
+      payload.append(OpenLCBDatagramType.writeReplyFailure0xFD.rawValue)
+    default:
+      payload.append(OpenLCBDatagramType.writeReplyFailureGeneric.rawValue)
+      addAddressSpace = true
+    }
+    
+    payload.append(contentsOf: startAddress.bigEndianData)
+    
+    if addAddressSpace {
+      payload.append(addressSpace)
+    }
+    
+    payload.append(contentsOf: errorCode.bigEndianData)
+    
+    sendDatagram(sourceNodeId: sourceNodeId, destinationNodeId: destinationNodeId, data: payload)
+
+  }
+
+  public func sendGetAddressSpaceInformationReply(sourceNodeId:UInt64, destinationNodeId:UInt64, memorySpace:OpenLCBMemorySpace) {
+
+    var data : [UInt8] = [0x20, 0x87]
+    
+    let info = memorySpace.addressSpaceInformation
+    
+    data.append(info.addressSpace)
+    
+    data.append(contentsOf: info.highestAddress.bigEndianData)
+    
+    var flags : UInt8 = 0b10
+    flags |= info.isReadOnly ? 0b01 : 0b00
+    
+    data.append(flags)
+    
+    data.append(contentsOf: info.lowestAddress.bigEndianData)
+    
+    if !info.description.isEmpty {
+      for byte in info.description.utf8 {
+        data.append(byte)
+      }
+      data.append(0)
+    }
+    
+    sendDatagram(sourceNodeId: sourceNodeId, destinationNodeId: destinationNodeId, data: data)
+
+  }
+  
   public func sendDatagramRejected(sourceNodeId:UInt64, destinationNodeId:UInt64, errorCode:OpenLCBErrorCode) {
 
     let message = OpenLCBMessage(messageTypeIndicator: .datagramRejected)
@@ -459,6 +605,14 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
     sendDatagram(sourceNodeId: sourceNodeId, destinationNodeId: destinationNodeId, data: data)
     
     removeAlias(nodeId: destinationNodeId)
+    
+  }
+
+  public func sendGetConfigurationOptionsCommand(sourceNodeId:UInt64, destinationNodeId:UInt64) {
+
+    let data = [0x20, OpenLCBDatagramType.getConfigurationOptionsCommand.rawValue]
+    
+    sendDatagram(sourceNodeId: sourceNodeId, destinationNodeId: destinationNodeId, data: data)
     
   }
 

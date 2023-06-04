@@ -281,7 +281,7 @@ class Database {
               "[\(MEMORY_SPACE.MEMORY_SPACE_ID)] INT PRIMARY KEY," +
               "[\(MEMORY_SPACE.NODE_ID)]         INT NOT NULL," +
               "[\(MEMORY_SPACE.SPACE)]           INT NOT NULL," +
-              "[\(MEMORY_SPACE.MEMORY)]          BLOB" +
+              "[\(MEMORY_SPACE.MEMORY)]          TEXT NOT NULL" +
             ")",
 
           ]
@@ -311,7 +311,9 @@ class Database {
             
             // MARK: Updates
             
-            if Version == 18 {
+            print("Version: \(Version)")
+            
+            if Version == 24 {
   
               let commands = [
         
@@ -431,16 +433,16 @@ class Database {
                   "[\(MEMORY_SPACE.MEMORY_SPACE_ID)] INT PRIMARY KEY," +
                   "[\(MEMORY_SPACE.NODE_ID)]         INT NOT NULL," +
                   "[\(MEMORY_SPACE.SPACE)]           INT NOT NULL," +
-                  "[\(MEMORY_SPACE.MEMORY)]          BLOB" +
+                  "[\(MEMORY_SPACE.MEMORY)]          TEXT NOT NULL" +
                 ")",
 
-                "UPDATE [\(TABLE.VERSION)] SET [\(VERSION.VERSION_NUMBER)] = 19 WHERE [\(VERSION.VERSION_ID)] = 1",
+                "UPDATE [\(TABLE.VERSION)] SET [\(VERSION.VERSION_NUMBER)] = 25 WHERE [\(VERSION.VERSION_ID)] = 1",
  
              ]
               
               execute(commands: commands)
               
-              Version = 19
+              Version = 25
 
             }
             

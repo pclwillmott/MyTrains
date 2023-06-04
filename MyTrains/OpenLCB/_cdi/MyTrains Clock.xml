@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <cdi xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://openlcb.org/schema/cdi/1/1/cdi.xsd">
 <identification>
-<manufacturer>Logic Rail Technologies</manufacturer>
-<model>LCC Fast Clock</model>
-<hardwareVersion>Rev 2</hardwareVersion>
-<softwareVersion>0.9-5ebc7fa</softwareVersion>
+<manufacturer>Paul Willmott</manufacturer>
+<model>MyTrains Clock</model>
+<hardwareVersion>v0.1</hardwareVersion>
+<softwareVersion>v0.1</softwareVersion>
 </identification>
 <acdi/>
 <segment space='251' origin='1'>
@@ -17,7 +17,7 @@
 <description>This description will appear in network browsers for this device.</description>
 </string>
 </segment>
-<segment space='1'>
+<segment space='253'>
 <name>Current Time, Date, and Clock State Refresh or Set</name>
 <description>The settings in this section are not persistent between power cycles! This section can be used for two puposes:
 

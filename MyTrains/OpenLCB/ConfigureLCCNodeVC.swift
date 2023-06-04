@@ -441,6 +441,12 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
     outlineView.delegate = outlineViewDS
         
     memoryMap.sort {$0.sortAddress < $1.sortAddress}
+
+    /*
+    for map in memoryMap {
+      print("expandTree: \(map.address) \(map.space) \(map.size)")
+    }
+    */
     
     // Combine adjacent blocks
     
@@ -780,24 +786,27 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
               
               if state == .gettingAddressSpaceInfo {
                 
-                let info = node.addAddressSpaceInformation(message: message)
-                
-                switch info.addressSpace {
-                case 0xff:
-                  if state == .gettingAddressSpaceInfo {
-                    state = .gettingCDI
-                    totalBytesRead = 0
-                    nextCDIStartAddress = info.lowestAddress
-                    CDI = []
-                    network.sendNodeMemoryReadRequest(sourceNodeId: sourceNodeId, destinationNodeId: node.nodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cdi.rawValue, startAddress: nextCDIStartAddress, numberOfBytesToRead: 64)
+                if let info = node.addAddressSpaceInformation(message: message) {
+                  
+                  switch info.addressSpace {
+                  case 0xff:
+                    if state == .gettingAddressSpaceInfo {
+                      state = .gettingCDI
+                      totalBytesRead = 0
+                      nextCDIStartAddress = Int(info.lowestAddress)
+                      CDI = []
+                      network.sendNodeMemoryReadRequest(sourceNodeId: sourceNodeId, destinationNodeId: node.nodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cdi.rawValue, startAddress: nextCDIStartAddress, numberOfBytesToRead: 64)
+                    }
+                  case 0xfe:
+                    break
+                  case 0xfd:
+                    break
+                  default:
+                    break
                   }
-                case 0xfe:
-                  break
-                case 0xfd:
-                  break
-                default:
-                  break
+                  
                 }
+                
               }
               
             default:

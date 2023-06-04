@@ -9,8 +9,9 @@ import Foundation
 
 public typealias OpenLCBNodeAddressSpaceInformation = (
   addressSpace   : UInt8,
-  lowestAddress  : Int,
-  highestAddress : Int,
+  lowestAddress  : UInt32,
+  highestAddress : UInt32,
+  size           : UInt32,
   isReadOnly     : Bool,
   description    : String
 )

@@ -179,6 +179,59 @@ public class OpenLCBNodeConfigurationOptions {
     
   }
   
+  public var availableCommandsAsString : String {
+    
+    var result = ""
+    
+    if isWriteUnderMaskSupported {
+      result += "Write under mask supported.\n"
+    }
+    if isUnalignedReadsSupported {
+      result += "Unaligned reads supported.\n"
+    }
+    if isUnalignedWritesSupported {
+      result += "Unaligned writes supported.\n"
+    }
+    if isReadFromACDIManufacturerAvailable {
+      result += "Read from address space 0xFC available.\n"
+    }
+    if isReadFromACDIUserAvailable {
+      result += "Read from address space 0xFB available.\n"
+    }
+    if isWriteToACDIUserAvailable {
+      result += "Write to address space 0xFB available.\n"
+    }
+    
+    return result
+    
+  }
+  
+  public var writeLengthsAsString : String {
+    
+    var result = ""
+    
+    if is1ByteWriteSupported {
+      result += "1 byte write supported.\n"
+    }
+    if is2ByteWriteSupported {
+      result += "2 byte write supported.\n"
+    }
+    if is4ByteWriteSupported {
+      result += "4 byte write supported.\n"
+    }
+    if is64ByteWriteSupported {
+      result += "64 byte writes supported.\n"
+    }
+    if isAnyLengthWriteSupported {
+      result += "Arbitrary writes of any length supported.\n"
+    }
+    if isStreamSupported {
+      result += "Stream writes supported.\n"
+    }
+    return result
+    
+  }
+  
   // MARK: Private Methods
   
   // MARK: Public Methods

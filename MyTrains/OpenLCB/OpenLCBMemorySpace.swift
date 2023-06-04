@@ -49,8 +49,9 @@ public class OpenLCBMemorySpace {
     get {
       var result : OpenLCBNodeAddressSpaceInformation
       result.addressSpace = space
-      result.highestAddress = memory.count - 1
-      result.lowestAddress = 0
+      result.highestAddress = UInt32(memory.count - 1)
+      result.lowestAddress = UInt32(0)
+      result.size = UInt32(memory.count)
       result.isReadOnly = isReadOnly
       result.description = description
       return result
@@ -131,10 +132,14 @@ public class OpenLCBMemorySpace {
 
   }
 
+  public func isWithinSpace(address:Int, count:Int) -> Bool {
+    return (address >= addressSpaceInformation.lowestAddress) && (address + count - 1 <= addressSpaceInformation.highestAddress)
+  }
+  
   public func getBlock(address:Int, count:Int) -> [UInt8]? {
     
-    guard address + count - 1 < memory.count && count > 0 else {
-      print("getBlock: address + data.count - 1 >= memory.count || count <= 0" )
+    guard isWithinSpace(address: address, count: count) else {
+      print("getBlock: address:\(address) count:\(count) \(addressSpaceInformation)" )
       return nil
     }
     
@@ -178,7 +183,7 @@ public class OpenLCBMemorySpace {
 
   public func setString(address:Int, value:String, fieldSize:Int) {
   
-    guard address + fieldSize - 1 < memory.count else {
+    guard isWithinSpace(address: address, count: fieldSize) else {
       print("setString: address + fieldSize - 1 < memory.count >= memory.count" )
       return
     }
@@ -207,7 +212,7 @@ public class OpenLCBMemorySpace {
   
   public func setBlock(address:Int, data:[UInt8]) {
     
-    guard address + data.count - 1 < memory.count else {
+    guard isWithinSpace(address: address, count: data.count) else {
       print("setBlock: address + data.count - 1 >= memory.count" )
       return
     }
@@ -275,6 +280,7 @@ public class OpenLCBMemorySpace {
       }
       
       if !reader.isDBNull(index: 3) {
+        print("\(nodeId.toHexDotFormat(numberOfBytes: 6)) 0x\(space.toHex(numberOfDigits: 2)) decode: \"\(reader.getString(index:3)!)\"")
         memory = reader.getBlob(index: 3)!
       }
       
@@ -283,6 +289,8 @@ public class OpenLCBMemorySpace {
   }
 
   public func save() {
+    
+    print("saving: \(primaryKey) \(self.memory)")
     
     let sql = "UPDATE [\(TABLE.MEMORY_SPACE)] SET " +
        "[\(MEMORY_SPACE.NODE_ID)] = @\(MEMORY_SPACE.NODE_ID), " +
@@ -346,12 +354,14 @@ public class OpenLCBMemorySpace {
     if let reader = cmd.executeReader(), reader.read() {
 
         result = OpenLCBMemorySpace(reader: reader, isReadOnly: isReadOnly, description: description)
-        
+
+      print("found: \(result!.nodeId.toHexDotFormat(numberOfBytes: 6)) space:0x\(result!.space.toHex(numberOfDigits: 2)) \(result!.primaryKey) \(result!.memory)")
+
         reader.close()
   
     }
     else {
-
+        print("new")
       result = OpenLCBMemorySpace(nodeId: nodeId, space: space, isReadOnly: isReadOnly, description: description)
       
       if let memorySpace = result {

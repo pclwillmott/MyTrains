@@ -31,9 +31,28 @@ class ViewNodeInfoVC: NSViewController, NSWindowDelegate {
 
     textView.string = node!.supportedProtocolsAsString
     
+    txtAvailableCommands.string = node!.configurationOptions.availableCommandsAsString
+    
+    txtWriteLengths.string = node!.configurationOptions.writeLengthsAsString
+    
+    lblLowestAddressSpace.stringValue = "0x\(node!.configurationOptions.lowestAddressSpace.toHex(numberOfDigits: 2))"
+    
+    lblHighestAddressSpace.stringValue = "0x\(node!.configurationOptions.highestAddressSpace.toHex(numberOfDigits: 2))"
+    
+    lblName.stringValue = node!.configurationOptions.name
+    
+    tableViewDS.addressSpaceInformation = node!.addressSpaceInformation
+    tableView.dataSource = tableViewDS
+    tableView.delegate = tableViewDS
+    tableView.reloadData()
+
   }
   
-  // MARK: Public Variables
+  // MARK: Private Properties
+  
+  private var tableViewDS = ViewNodeInfoMemorySpaceInfoTVDS()
+  
+  // MARK: Public Properties
   
   public var node: OpenLCBNode?
 
@@ -50,5 +69,7 @@ class ViewNodeInfoVC: NSViewController, NSWindowDelegate {
   @IBOutlet weak var lblLowestAddressSpace: NSTextField!
   
   @IBOutlet weak var lblName: NSTextField!
+  
+  @IBOutlet weak var tableView: NSTableView!
   
 }

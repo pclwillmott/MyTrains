@@ -21,7 +21,7 @@ public class OpenLCBNode : NSObject {
     
     acdiManufacturerSpace = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.acdiManufacturer.rawValue, defaultMemorySize: 125, isReadOnly: true, description: "")
 
-    acdiUserSpace = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.acdiUser.rawValue, defaultMemorySize: 128, isReadOnly: true, description: "")
+    acdiUserSpace = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.acdiUser.rawValue, defaultMemorySize: 128, isReadOnly: false, description: "")
     
     super.init()
     
@@ -246,6 +246,8 @@ public class OpenLCBNode : NSObject {
     }
     
   }
+  
+  public var configurationOptions : OpenLCBNodeConfigurationOptions = OpenLCBNodeConfigurationOptions()
   
   public var supportedProtocols : [UInt8] {
     get {
@@ -545,13 +547,26 @@ public class OpenLCBNode : NSObject {
   
   // MARK: Public Methods
   
-  public func addAddressSpaceInformation(message:OpenLCBMessage) -> OpenLCBNodeAddressSpaceInformation {
+  public func addAddressSpaceInformation(message:OpenLCBMessage) -> OpenLCBNodeAddressSpaceInformation? {
     
     var data = message.payload
     
     let addressSpace = data[2]
     
     var highestAddress : UInt32 = 0
+
+    /*
+    print("\(message.sourceNodeId!.toHexDotFormat(numberOfBytes: 6)) -> ", terminator: "")
+    for byte in message.payload {
+      print("\(byte.toHex(numberOfDigits: 2)), ", terminator: "")
+    }
+    print()
+    */
+    
+    guard message.payload.count >= 8 else {
+  //    print("addAddressSpaceInformation: payload too short.")
+      return nil
+    }
     
     if let address = UInt32(bigEndianData: [data[3], data[4], data[5], data[6]]) {
       highestAddress = address
@@ -583,7 +598,9 @@ public class OpenLCBNode : NSObject {
       description.removeLast()
     }
     
-    let info : OpenLCBNodeAddressSpaceInformation = (addressSpace:addressSpace, lowestAddress: Int(lowestAddress), highestAddress: Int(highestAddress), isReadOnly: isReadOnly, description: description)
+    let size = highestAddress - lowestAddress + 1
+    
+    let info : OpenLCBNodeAddressSpaceInformation = (addressSpace:addressSpace, lowestAddress: lowestAddress, highestAddress: highestAddress, size: size, isReadOnly: isReadOnly, description: description)
     
     addressSpaceInformation[addressSpace] = info
     

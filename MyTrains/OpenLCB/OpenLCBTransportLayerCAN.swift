@@ -718,7 +718,7 @@ public class OpenLCBTransportLayerCAN : OpenLCBTransportLayer, InterfaceDelegate
             errorMessage.destinationNIDAlias = message.sourceNIDAlias
             errorMessage.sourceNIDAlias = internalNode.alias!
             errorMessage.sourceNodeId = internalNode.node.nodeId
-            errorMessage.payload = OpenLCBErrorCode.temporaryErrorTimeOutWaitingForEndFrame.asData
+            errorMessage.payload = OpenLCBErrorCode.temporaryErrorTimeOutWaitingForEndFrame.bigEndianData
             addToOutputQueue(message: errorMessage)
           }
         }
@@ -750,7 +750,7 @@ public class OpenLCBTransportLayerCAN : OpenLCBTransportLayer, InterfaceDelegate
               errorMessage.destinationNIDAlias = message.sourceNIDAlias
               errorMessage.sourceNIDAlias = internalNode.alias!
               errorMessage.sourceNodeId = internalNode.node.nodeId
-              errorMessage.payload = OpenLCBErrorCode.temporaryErrorOutOfOrderStartFrameBeforeFinishingPreviousMessage.asData
+              errorMessage.payload = OpenLCBErrorCode.temporaryErrorOutOfOrderStartFrameBeforeFinishingPreviousMessage.bigEndianData
               addToOutputQueue(message: errorMessage)
             }
             datagrams.removeValue(forKey: oldMessage.datagramId)
@@ -772,7 +772,7 @@ public class OpenLCBTransportLayerCAN : OpenLCBTransportLayer, InterfaceDelegate
             errorMessage.destinationNIDAlias = message.sourceNIDAlias
             errorMessage.sourceNIDAlias = internalNode.alias!
             errorMessage.sourceNodeId = internalNode.node.nodeId
-            errorMessage.payload = OpenLCBErrorCode.temporaryErrorOutOfOrderMiddleOrEndFrameWithoutStartFrame.asData
+            errorMessage.payload = OpenLCBErrorCode.temporaryErrorOutOfOrderMiddleOrEndFrameWithoutStartFrame.bigEndianData
             addToOutputQueue(message: errorMessage)
           }
         default:

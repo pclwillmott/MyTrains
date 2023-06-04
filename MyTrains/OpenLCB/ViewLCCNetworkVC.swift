@@ -11,6 +11,8 @@ import Cocoa
 private enum Task {
   case getSNIP
   case getProtocols
+  case getConfigurationOptions
+  case getAddressSpaceInfo
 }
 class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLayerDelegate {
   
@@ -55,7 +57,7 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLayerD
 
   private var nodes : [UInt64:OpenLCBNode] = [:]
   
-  private var tasks : [(nodeId:UInt64, task:Task)] = []
+  private var tasks : [(nodeId:UInt64, task:Task, addressSpace:UInt8)] = []
   
   private var taskLock : NSLock = NSLock()
   
@@ -123,6 +125,10 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLayerD
           network.sendSimpleNodeInformationRequest(sourceNodeId: configurationToolNodeId, destinationNodeId: nextTask.nodeId)
         case .getProtocols:
           network.sendProtocolSupportInquiry(sourceNodeId: configurationToolNodeId, destinationNodeId: nextTask.nodeId)
+        case .getConfigurationOptions:
+          network.sendGetConfigurationOptionsCommand(sourceNodeId: configurationToolNodeId, destinationNodeId: nextTask.nodeId)
+        case .getAddressSpaceInfo:
+          network.sendGetMemorySpaceInformationRequest(sourceNodeId: configurationToolNodeId, destinationNodeId: nextTask.nodeId, addressSpace: nextTask.addressSpace)
         }
         
         startPacingTimer(timeInterval: GET_DELAY)
@@ -172,9 +178,16 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLayerD
         
         nodes[nodeId] = OpenLCBNode(nodeId: nodeId)
 
-        tasks.append((nodeId: nodeId, task: .getSNIP))
-        tasks.append((nodeId: nodeId, task: .getProtocols))
-        
+        tasks.append((nodeId: nodeId, task: .getSNIP, addressSpace:0))
+        tasks.append((nodeId: nodeId, task: .getProtocols, addressSpace:0))
+        tasks.append((nodeId: nodeId, task: .getConfigurationOptions, addressSpace:0))
+        tasks.append((nodeId: nodeId, task: .getAddressSpaceInfo, addressSpace:0xff))
+        tasks.append((nodeId: nodeId, task: .getAddressSpaceInfo, addressSpace:0xfe))
+        tasks.append((nodeId: nodeId, task: .getAddressSpaceInfo, addressSpace:0xfd))
+        tasks.append((nodeId: nodeId, task: .getAddressSpaceInfo, addressSpace:0xfc))
+        tasks.append((nodeId: nodeId, task: .getAddressSpaceInfo, addressSpace:0xfb))
+        tasks.append((nodeId: nodeId, task: .getAddressSpaceInfo, addressSpace:0x01))
+
         taskLock.unlock()
         
         reload()
@@ -204,6 +217,45 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLayerD
         doTask()
       }
 
+    case .datagram:
+      
+      if let datagramType = message.datagramType {
+        
+        switch datagramType {
+        case .getConfigurationOptionsReply:
+          
+          if message.destinationNodeId! == networkLayer!.configurationToolNode.nodeId, let node = nodes[message.sourceNodeId!] {
+            
+            stopPacingTimer()
+            
+            node.configurationOptions = OpenLCBNodeConfigurationOptions(message: message)
+            
+            /*
+            taskLock.lock()
+            for space in node.configurationOptions.lowestAddressSpace ... node.configurationOptions.highestAddressSpace {
+              tasks.append((nodeId: node.nodeId, task: .getAddressSpaceInfo, addressSpace:space))
+            }
+            taskLock.unlock()
+            */
+            
+            reload()
+            doTask()
+            
+          }
+
+        case .getAddressSpaceInformationReply, .getAddressSpaceInformationReplyLowAddressPresent:
+          if message.destinationNodeId! == networkLayer!.configurationToolNode.nodeId, let node = nodes[message.sourceNodeId!] {
+            stopPacingTimer()
+            _ = node.addAddressSpaceInformation(message: message)
+            reload()
+            doTask()
+          }
+        default:
+          break
+        }
+        
+      }
+      
     default:
       break
     }

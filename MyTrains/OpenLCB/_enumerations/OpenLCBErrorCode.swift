@@ -53,12 +53,9 @@ public enum OpenLCBErrorCode : UInt16 {
   case temporaryErrorReserved15                                              = 0x20f0
   case acceptFlag                                                            = 0x8000
   
-  public var asData : [UInt8] {
+  public var bigEndianData : [UInt8] {
     get {
-      var result : [UInt8] = []
-      result.append(UInt8(self.rawValue >> 8))
-      result.append(UInt8(self.rawValue & 0x00ff))
-      return result
+      return self.rawValue.bigEndianData
     }
   }
   

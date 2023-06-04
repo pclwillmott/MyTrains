@@ -168,7 +168,7 @@ class SqliteParameters {
     }
   }
 
-  public func addWithValue(key:String,value:[UInt8]?) {
+  public func _addWithValue(key:String,value:[UInt8]?) {
     if !key.isEmpty && key.hasPrefix("@") {
       if let data = value {
         var str = ""
@@ -176,6 +176,22 @@ class SqliteParameters {
           str += byte.toHex(numberOfDigits: 2)
         }
         self.parameters[key] = " X'\(str)' "
+      }
+      else {
+        addWithNull(key: key)
+      }
+    }
+  }
+
+  public func addWithValue(key:String,value:[UInt8]?) {
+    if !key.isEmpty && key.hasPrefix("@") {
+      if let data = value {
+        var str : String = ""
+        for byte in data {
+          str += byte.toHex(numberOfDigits: 2)
+        }
+        print("addWithValue Blob: \(str) count: \(str.count)")
+        addWithValue(key: key, value: str)
       }
       else {
         addWithNull(key: key)
@@ -352,7 +368,7 @@ public class SqliteDataReader {
     return String(cString: cString!)
   }
 
-  public func getBlob(index:Int) -> [UInt8]? {
+  public func _getBlob(index:Int) -> [UInt8]? {
     let size = Int(sqlite3_column_bytes(statement, (Int32)(index)))
     if !isDBNull(index: index) && size > 0, let blobPtr = sqlite3_column_blob(statement, (Int32)(index)) {
       var result : [UInt8] = []
@@ -360,6 +376,21 @@ public class SqliteDataReader {
         let byte = blobPtr.load(fromByteOffset: offset, as: UInt8.self)
         result.append(byte)
       }
+      return result
+    }
+    return nil
+  }
+  
+  public func getBlob(index:Int) -> [UInt8]? {
+    if let string = getString(index: index) {
+      print("getBlob: \"\(string)\" count: \(string.count)")
+      var result : [UInt8] = []
+      var blob = string
+      while !blob.isEmpty {
+        result.append(UInt8(hex: String(blob.prefix(2))))
+        blob.removeFirst(2)
+      }
+      print("blob: \(result)")
       return result
     }
     return nil

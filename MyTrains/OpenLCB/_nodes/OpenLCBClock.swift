@@ -67,8 +67,6 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
     
     self.type = type
     
-    self.configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: 512, isReadOnly: false, description: "")
-    
     super.init(nodeId: nodeId)
     
     self.date = Date()
@@ -79,9 +77,11 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
     
     self.nodeSoftwareVersion = "v0.1"
     
-    initCDI(filename: "MyTrains Clock")
+    self.cdiFilename = "FASTCLOCK"
     
-    memorySpaces[configuration.space] = configuration
+    if let cdi = self.cdi {
+      print("\(nodeModelName): OK")
+    }
     
   }
   
@@ -94,8 +94,6 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
   private let secPerDay : TimeInterval = 86400.0
   
   private var _clockState : OpenLCBClockState = .stopped
-  
-  private var configuration : OpenLCBMemorySpace
   
   private var _rate : Double = 1.0
   
