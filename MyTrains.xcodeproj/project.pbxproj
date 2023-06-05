@@ -151,6 +151,7 @@
 		DA6A0ADC27529D6600913F2B /* ModalWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6A0ADB27529D6600913F2B /* ModalWindow.swift */; };
 		DA6A0ADF2753B5CF00913F2B /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6A0ADE2753B5CF00913F2B /* UserDefaults.swift */; };
 		DA6A0AE12753D50A00913F2B /* GlobalVariables.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6A0AE02753D50A00913F2B /* GlobalVariables.swift */; };
+		DA6A3DE82A2E3506002631FF /* OpenLCBMemorySpaceDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6A3DE72A2E3506002631FF /* OpenLCBMemorySpaceDelegate.swift */; };
 		DA6E28DF285F827600772641 /* SwitchBoardItemPartType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6E28DE285F827600772641 /* SwitchBoardItemPartType.swift */; };
 		DA6E28E1285F86B900772641 /* Orientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6E28E0285F86B900772641 /* Orientation.swift */; };
 		DA6E28E3285F8F1A00772641 /* TrackElectrificationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6E28E2285F8F1A00772641 /* TrackElectrificationType.swift */; };
@@ -464,6 +465,7 @@
 		DA6A0ADB27529D6600913F2B /* ModalWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalWindow.swift; sourceTree = "<group>"; };
 		DA6A0ADE2753B5CF00913F2B /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
 		DA6A0AE02753D50A00913F2B /* GlobalVariables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalVariables.swift; sourceTree = "<group>"; };
+		DA6A3DE72A2E3506002631FF /* OpenLCBMemorySpaceDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBMemorySpaceDelegate.swift; sourceTree = "<group>"; };
 		DA6E28DE285F827600772641 /* SwitchBoardItemPartType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchBoardItemPartType.swift; sourceTree = "<group>"; };
 		DA6E28E0285F86B900772641 /* Orientation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Orientation.swift; sourceTree = "<group>"; };
 		DA6E28E2285F8F1A00772641 /* TrackElectrificationType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackElectrificationType.swift; sourceTree = "<group>"; };
@@ -1044,6 +1046,7 @@
 			children = (
 				DA56260829E19E6A00D465CC /* OpenLCBTransportLayerDelegate.swift */,
 				DABD30B529E4610A002A2C4B /* OpenLCBNetworkLayerDelegate.swift */,
+				DA6A3DE72A2E3506002631FF /* OpenLCBMemorySpaceDelegate.swift */,
 			);
 			path = _protocols;
 			sourceTree = "<group>";
@@ -1369,6 +1372,7 @@
 				DA1A040A2856108900FFD25F /* RollingStockDecoderExtensions.swift in Sources */,
 				DA8837842770B78C000B9A41 /* EditTrainsVC.swift in Sources */,
 				DA6A0ADC27529D6600913F2B /* ModalWindow.swift in Sources */,
+				DA6A3DE82A2E3506002631FF /* OpenLCBMemorySpaceDelegate.swift in Sources */,
 				DA467BA3281D501300AB9650 /* SwitchBoardDefs.swift in Sources */,
 				DA5550EA28392A6B00C4FE4E /* ProductCode.swift in Sources */,
 				DA60140529F4162500AD9ACD /* ViewLCCNetworkTableViewDS.swift in Sources */,

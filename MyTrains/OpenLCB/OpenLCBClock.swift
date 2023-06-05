@@ -71,17 +71,15 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
     
     super.init(nodeId: nodeId)
     
-    self.date = Date()
-    
-    self.manufacturerName = "Paul Willmott"
-    
-    self.nodeModelName = "MyTrains \(type)"
-    
-    self.nodeSoftwareVersion = "v0.1"
+    memorySpaces[configuration.space] = configuration
     
     initCDI(filename: "MyTrains Clock")
     
-    memorySpaces[configuration.space] = configuration
+    if !memorySpacesInitialized {
+      resetToFactoryDefaults()
+    }
+    
+    self.date = Date()
     
   }
   
@@ -165,7 +163,7 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
       components.minute            = minute
       components.second            = second
       
-      // Nulify the remaining fields to avoid confusion about what the date should be based on
+      // Nullify the remaining fields to avoid confusion about what the date should be based on
       
       components.yearForWeekOfYear = nil
       components.weekOfYear        = nil
@@ -206,6 +204,28 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
   
   // MARK: Private Methods
 
+  internal override func resetToFactoryDefaults() {
+    
+    acdiManufacturerSpaceVersion = 4
+    
+    manufacturerName    = "Paul Willmott"
+    nodeModelName       = "MyTrains Clock"
+    nodeHardwareVersion = "v0.1"
+    nodeSoftwareVersion = "v0.1"
+    
+    acdiUserSpaceVersion = 2
+    
+    userNodeName        = ""
+    userNodeDescription = ""
+    
+    for (_, memorySpace) in memorySpaces {
+      if memorySpace.space != OpenLCBNodeMemoryAddressSpace.cdi.rawValue {
+        memorySpace.save()
+      }
+    }
+    
+  }
+  
   private func isLeapYear(year:Int) -> Bool {
     return ( (year % 4 == 0) && (year % 100 != 0) ) || (year % 400 == 0)
   }

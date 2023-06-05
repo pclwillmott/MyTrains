@@ -19,19 +19,7 @@ public class OpenLCBNode : NSObject {
     
     self.nodeId = nodeId
     
-    acdiManufacturerSpace = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.acdiManufacturer.rawValue, defaultMemorySize: 125, isReadOnly: true, description: "")
-
-    acdiUserSpace = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.acdiUser.rawValue, defaultMemorySize: 128, isReadOnly: false, description: "")
-    
     super.init()
-    
-    self.memorySpaces[acdiManufacturerSpace.space] = acdiManufacturerSpace
-
-    self.memorySpaces[acdiUserSpace.space] = acdiUserSpace
-    
-    self.acdiManufacturerSpaceVersion = 4
-    
-    self.acdiUserSpaceVersion = 2
     
   }
   
@@ -41,88 +29,91 @@ public class OpenLCBNode : NSObject {
   
   private var _supportedProtocols : [UInt8]
   
-  internal var memorySpaces : [UInt8:OpenLCBMemorySpace] = [:]
+  // THESE VARIABLES ARE ONLY USED FOR THE RAW OpenLCBNode. THEY FAKE THE ACDI.
   
+  private var _acdiManufacturerSpaceVersion : UInt8 = 4
+  private var _manufacturerName             : String = ""
+  private var _nodeModelName                : String = ""
+  private var _nodeHardwareVersion          : String = ""
+  private var _nodeSoftwareVersion          : String = ""
+  private var _acdiUserSpaceVersion         : UInt8 = 2
+  private var _userNodeName                 : String = ""
+  private var _userNodeDescription          : String = ""
+           
   // MARK: Public Properties
   
   public var nodeId : UInt64
   
-  public var acdiManufacturerSpace : OpenLCBMemorySpace
-  
-  public var acdiUserSpace : OpenLCBMemorySpace
-  
   public var acdiManufacturerSpaceVersion : UInt8 {
     get {
-      var result = acdiManufacturerSpace.getUInt8(address: 0)!
-      return result == 0 ? 4 : result
+      return _acdiManufacturerSpaceVersion
     }
     set(value) {
-      acdiManufacturerSpace.setUInt(address: 0, value: value == 1 ? 4 : value)
+      _acdiManufacturerSpaceVersion = value
     }
   }
-  
+
   public var manufacturerName : String {
     get {
-      return acdiManufacturerSpace.getString(address: 1, count: 41)!
+      return _manufacturerName
     }
     set(value) {
-      acdiManufacturerSpace.setString(address: 1, value: String(value.prefix(40)), fieldSize: 41)
+      _manufacturerName = value
     }
   }
   
   public var nodeModelName : String {
     get {
-      return acdiManufacturerSpace.getString(address: 42, count: 41)!
+      return _nodeModelName
     }
     set(value) {
-      acdiManufacturerSpace.setString(address: 42, value: String(value.prefix(40)), fieldSize: 41)
+      _nodeModelName = value
     }
   }
   
   public var nodeHardwareVersion : String {
     get {
-      return acdiManufacturerSpace.getString(address: 83, count: 21)!
+      return _nodeHardwareVersion
     }
     set(value) {
-      acdiManufacturerSpace.setString(address: 83, value: String(value.prefix(20)), fieldSize: 21)
+      _nodeHardwareVersion = value
     }
   }
   
   public var nodeSoftwareVersion : String {
     get {
-      return acdiManufacturerSpace.getString(address: 104, count: 21)!
+      return _nodeSoftwareVersion
     }
     set(value) {
-      acdiManufacturerSpace.setString(address: 104, value: String(value.prefix(20)), fieldSize: 21)
+      _nodeSoftwareVersion = value
     }
 
   }
   
   public var acdiUserSpaceVersion : UInt8 {
     get {
-      var result = acdiUserSpace.getUInt8(address: 0)!
-      return result == 0 ? 2 : result
+      return _acdiUserSpaceVersion
     }
     set(value) {
-      acdiUserSpace.setUInt(address: 0, value: value == 1 ? 2 : value)
+      _acdiUserSpaceVersion = value
     }
   }
 
   public var userNodeName : String {
     get {
-      return acdiUserSpace.getString(address: 1, count: 63)!
+      return _userNodeName
     }
     set(value) {
-      acdiUserSpace.setString(address: 1, value: String(value.prefix(62)), fieldSize: 63)
+      _userNodeName = value
     }
   }
   
   public var userNodeDescription : String {
     get {
-      return acdiUserSpace.getString(address: 64, count: 64)!
+      return _userNodeDescription
     }
     set(value) {
-      acdiUserSpace.setString(address: 64, value: String(value.prefix(63)), fieldSize: 64)
+      _userNodeDescription = value
     }
   }
   

@@ -29,6 +29,8 @@ public class OpenLCBMemorySpace {
   
   // MARK: Public Properties
   
+  public var delegate : OpenLCBMemorySpaceDelegate?
+  
   public var primaryKey : Int = -1
   
   public var nodeId : UInt64 = 0
@@ -132,8 +134,18 @@ public class OpenLCBMemorySpace {
 
   }
 
+  public func getString(address:Int, count:Int) -> String? {
+    
+    if let data = getBlock(address: address, count: count) {
+      return String(cString: data)
+    }
+
+    return nil
+
+  }
+
   public func isWithinSpace(address:Int, count:Int) -> Bool {
-    return (address >= addressSpaceInformation.lowestAddress) && (address + count - 1 <= addressSpaceInformation.highestAddress)
+    return (address >= addressSpaceInformation.lowestAddress) && ((address + count - 1) <= addressSpaceInformation.highestAddress)
   }
   
   public func getBlock(address:Int, count:Int) -> [UInt8]? {
@@ -196,10 +208,10 @@ public class OpenLCBMemorySpace {
     var data : [UInt8] = []
 
     for byte in value.utf8 {
-      data.append(byte)
+      data.append(UInt8(byte))
     }
 
-    var index = value.utf8.count
+    var index = data.count
 
     while index < fieldSize {
       data.append(0)
@@ -240,29 +252,12 @@ public class OpenLCBMemorySpace {
       index += 1
     }
     
-    memoryChanged(startAddress: address, endAddress: address + data.count - 1)
+    memorySpaceChanged(startAddress: address, endAddress: address + data.count - 1)
     
   }
   
-  public func getString(address:Int, count:Int) -> String? {
-    
-    guard address + count - 1 < memory.count else {
-      print("getString: address + data.count - 1 >= memory.count" )
-      return nil
-    }
-    
-    var data : [UInt8] = []
-    
-    for index in address ... address + count - 1 {
-      data.append(memory[index])
-    }
-
-    return String(cString: data)
-
-  }
-
-  public func memoryChanged(startAddress:Int, endAddress:Int) {
-    save()
+  public func memorySpaceChanged(startAddress:Int, endAddress:Int) {
+    delegate?.memorySpaceChanged(memorySpace: self, startAddress: startAddress, endAddress: endAddress)
   }
 
   // MARK: Database Methods
@@ -280,7 +275,6 @@ public class OpenLCBMemorySpace {
       }
       
       if !reader.isDBNull(index: 3) {
-        print("\(nodeId.toHexDotFormat(numberOfBytes: 6)) 0x\(space.toHex(numberOfDigits: 2)) decode: \"\(reader.getString(index:3)!)\"")
         memory = reader.getBlob(index: 3)!
       }
       
@@ -290,37 +284,35 @@ public class OpenLCBMemorySpace {
 
   public func save() {
     
-    print("saving: \(primaryKey) \(self.memory)")
+    var sql = "UPDATE [\(TABLE.MEMORY_SPACE)] SET " +
+      "[\(MEMORY_SPACE.NODE_ID)] = @\(MEMORY_SPACE.NODE_ID), " +
+      "[\(MEMORY_SPACE.SPACE)] = @\(MEMORY_SPACE.SPACE), " +
+      "[\(MEMORY_SPACE.MEMORY)] = @\(MEMORY_SPACE.MEMORY) " +
+      "WHERE [\(MEMORY_SPACE.MEMORY_SPACE_ID)] = @\(MEMORY_SPACE.MEMORY_SPACE_ID)"
+
+    let conn = Database.getConnection()
     
-    let sql = "UPDATE [\(TABLE.MEMORY_SPACE)] SET " +
-       "[\(MEMORY_SPACE.NODE_ID)] = @\(MEMORY_SPACE.NODE_ID), " +
-       "[\(MEMORY_SPACE.SPACE)] = @\(MEMORY_SPACE.SPACE), " +
-       "[\(MEMORY_SPACE.MEMORY)] = @\(MEMORY_SPACE.MEMORY) " +
-       "WHERE [\(MEMORY_SPACE.MEMORY_SPACE_ID)] = @\(MEMORY_SPACE.MEMORY_SPACE_ID) = @\(MEMORY_SPACE.MEMORY_SPACE_ID)"
-
-     let conn = Database.getConnection()
+    let shouldClose = conn.state != .Open
      
-     let shouldClose = conn.state != .Open
-      
-     if shouldClose {
-        _ = conn.open()
-     }
-      
-     let cmd = conn.createCommand()
-      
-     cmd.commandText = sql
-     
-     cmd.parameters.addWithValue(key: "@\(MEMORY_SPACE.MEMORY_SPACE_ID)", value: self.primaryKey)
-     cmd.parameters.addWithValue(key: "@\(MEMORY_SPACE.NODE_ID)", value: self.nodeId)
-     cmd.parameters.addWithValue(key: "@\(MEMORY_SPACE.SPACE)", value: Int(self.space))
-     cmd.parameters.addWithValue(key: "@\(MEMORY_SPACE.MEMORY)", value: self.memory)
-
-    _ = cmd.executeNonQuery()
-
     if shouldClose {
-      conn.close()
+      _ = conn.open()
     }
+     
+    let cmd = conn.createCommand()
+     
+    cmd.commandText = sql
     
+    cmd.parameters.addWithValue(key: "@\(MEMORY_SPACE.MEMORY_SPACE_ID)", value: self.primaryKey)
+    cmd.parameters.addWithValue(key: "@\(MEMORY_SPACE.NODE_ID)", value: self.nodeId)
+    cmd.parameters.addWithValue(key: "@\(MEMORY_SPACE.SPACE)", value: Int(self.space))
+    cmd.parameters.addWithValue(key: "@\(MEMORY_SPACE.MEMORY)", value: self.memory)
+
+   _ = cmd.executeNonQuery()
+
+   if shouldClose {
+     conn.close()
+   }
+
   }
 
   // MARK: Class Properties
@@ -355,13 +347,11 @@ public class OpenLCBMemorySpace {
 
         result = OpenLCBMemorySpace(reader: reader, isReadOnly: isReadOnly, description: description)
 
-      print("found: \(result!.nodeId.toHexDotFormat(numberOfBytes: 6)) space:0x\(result!.space.toHex(numberOfDigits: 2)) \(result!.primaryKey) \(result!.memory)")
-
         reader.close()
   
     }
     else {
-        print("new")
+
       result = OpenLCBMemorySpace(nodeId: nodeId, space: space, isReadOnly: isReadOnly, description: description)
       
       if let memorySpace = result {
@@ -408,7 +398,38 @@ public class OpenLCBMemorySpace {
     return result!
 
   }
+
+  public static func getMemorySpaces() {
+    
+    let conn = Database.getConnection()
+    
+    let shouldClose = conn.state != .Open
+     
+    if shouldClose {
+      _ = conn.open()
+    }
+    
+    let cmd = conn.createCommand()
+     
+    cmd.commandText = "SELECT \(columnNames) FROM [\(TABLE.MEMORY_SPACE)] ORDER BY [\(MEMORY_SPACE.NODE_ID)], [\(MEMORY_SPACE.SPACE)]"
+
+    if let reader = cmd.executeReader() {
+      
+      while reader.read() {
+        let result = OpenLCBMemorySpace(reader: reader, isReadOnly: true, description: "")
+        print("*** \(result.nodeId.toHexDotFormat(numberOfBytes: 6)) - 0x\(result.space.toHex(numberOfDigits: 2)) PK: \(result.primaryKey) \(result.memory)")
+      }
+      
+      reader.close()
   
+    }
+    
+    if shouldClose {
+      conn.close()
+    }
+
+  }
+
   public static func delete(nodeId: UInt64, space:UInt8) {
     let sql = "DELETE FROM [\(TABLE.MEMORY_SPACE)] WHERE [\(MEMORY_SPACE.NODE_ID)] = \(nodeId) AND [\(MEMORY_SPACE.SPACE)] = \(space)"
     Database.execute(commands: [sql])

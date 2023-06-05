@@ -15,22 +15,43 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     
     super.init(nodeId: nodeId)
 
-    manufacturerName = "Paul Willmott"
-    
-    nodeModelName = "MyTrains"
-    
-    nodeHardwareVersion = ""
-    
-    nodeSoftwareVersion = "\(Bundle.main.releaseVersionNumberPretty)"
-    
     isDatagramProtocolSupported = true
-    
+
+    if !memorySpacesInitialized {
+      resetToFactoryDefaults()
+    }
+
   }
   
   // MARK: Private Properties
   
   // MARK: Public Properties
   
+  // MARK: Private Methods
+  
+  internal override func resetToFactoryDefaults() {
+    
+    acdiManufacturerSpaceVersion = 4
+    
+    manufacturerName    = "Paul Willmott"
+    nodeModelName       = "MyTrains"
+    nodeHardwareVersion = ""
+    nodeSoftwareVersion = "\(Bundle.main.releaseVersionNumberPretty)"
+    
+
+    acdiUserSpaceVersion = 2
+    
+    userNodeName         = ""
+    userNodeDescription  = ""
+    
+    for (_, memorySpace) in memorySpaces {
+      if memorySpace.space != OpenLCBNodeMemoryAddressSpace.cdi.rawValue {
+        memorySpace.save()
+      }
+    }
+
+  }
+
   // MARK: Public Methods
   
   // MARK: OpenLCBNetworkLayerDelegate Methods

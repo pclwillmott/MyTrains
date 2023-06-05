@@ -173,7 +173,7 @@ class SqliteParameters {
       if let data = value {
         var str = ""
         for byte in data {
-          str += byte.toHex(numberOfDigits: 2)
+          str += UInt8(byte).toHex(numberOfDigits: 2)
         }
         self.parameters[key] = " X'\(str)' "
       }
@@ -183,15 +183,14 @@ class SqliteParameters {
     }
   }
 
-  public func addWithValue(key:String,value:[UInt8]?) {
+  public func addWithValue(key:String, value:[UInt8]?) {
     if !key.isEmpty && key.hasPrefix("@") {
-      if let data = value {
+      if let data : [UInt8] = value {
         var str : String = ""
         for byte in data {
           str += byte.toHex(numberOfDigits: 2)
         }
-        print("addWithValue Blob: \(str) count: \(str.count)")
-        addWithValue(key: key, value: str)
+        self.parameters[key] = SqliteParameters.conditionString(value: str)
       }
       else {
         addWithNull(key: key)
@@ -383,14 +382,12 @@ public class SqliteDataReader {
   
   public func getBlob(index:Int) -> [UInt8]? {
     if let string = getString(index: index) {
-      print("getBlob: \"\(string)\" count: \(string.count)")
       var result : [UInt8] = []
       var blob = string
       while !blob.isEmpty {
         result.append(UInt8(hex: String(blob.prefix(2))))
         blob.removeFirst(2)
       }
-      print("blob: \(result)")
       return result
     }
     return nil

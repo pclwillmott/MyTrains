@@ -19,14 +19,6 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     
     super.init(nodeId: nodeId)
 
-    manufacturerName = NMRA.manufacturerName(code: _rollingStock.manufacturerId)
-    
-    nodeModelName = _rollingStock.rollingStockName
-    
-    nodeHardwareVersion = ""
-    
-    nodeSoftwareVersion = ""
-    
     isDatagramProtocolSupported = true
     
     isIdentificationSupported = true
@@ -36,7 +28,11 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     isTractionControlProtocolSupported = true
     
     isSimpleTrainNodeInformationProtocolSupported = true
-    
+
+    if !memorySpacesInitialized {
+      resetToFactoryDefaults()
+    }
+ 
   }
   
   // MARK: Private Properties
@@ -51,6 +47,30 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     }
   }
   
+  // MARK: Private Methods
+  
+  internal override func resetToFactoryDefaults() {
+    
+    acdiManufacturerSpaceVersion = 4
+    
+    manufacturerName     = NMRA.manufacturerName(code: _rollingStock.manufacturerId)
+    nodeModelName        = _rollingStock.rollingStockName
+    nodeHardwareVersion  = ""
+    nodeSoftwareVersion  = ""
+
+    acdiUserSpaceVersion = 2
+    
+    userNodeName         = ""
+    userNodeDescription  = ""
+    
+    for (_, memorySpace) in memorySpaces {
+      if memorySpace.space != OpenLCBNodeMemoryAddressSpace.cdi.rawValue {
+        memorySpace.save()
+      }
+    }
+
+  }
+ 
   // MARK: Public Methods
   
   // MARK: OpenLCBNetworkLayerDelegate Methods

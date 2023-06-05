@@ -17,8 +17,16 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate {
     
     self.lfsr2 = UInt32(nodeId & 0xffffff)
 
+    acdiManufacturerSpace = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.acdiManufacturer.rawValue, defaultMemorySize: 125, isReadOnly: true, description: "")
+
+    acdiUserSpace = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.acdiUser.rawValue, defaultMemorySize: 128, isReadOnly: false, description: "")
+    
     super.init(nodeId: nodeId)
 
+    self.memorySpaces[acdiManufacturerSpace.space] = acdiManufacturerSpace
+
+    self.memorySpaces[acdiUserSpace.space] = acdiUserSpace
+    
     isIdentificationSupported = true
     
     isSimpleNodeInformationProtocolSupported = true
@@ -27,11 +35,14 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate {
 
     isDatagramProtocolSupported = true
     
+    
   }
   
   // MARK: Private Properties
   
   private var lockedNodeId : UInt64 = 0
+  
+  internal var memorySpaces : [UInt8:OpenLCBMemorySpace] = [:]
   
   // MARK: Public Properties
   
@@ -42,7 +53,99 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate {
   public var state : OpenLCBTransportLayerState = .inhibited
   
   public var networkLayer : OpenLCBNetworkLayer?
+  
+  public var memorySpacesInitialized : Bool {
+    get {
+      return !manufacturerName.isEmpty
+    }
+  }
     
+  public var acdiManufacturerSpace : OpenLCBMemorySpace
+  
+  public var acdiUserSpace : OpenLCBMemorySpace
+  
+  public override var acdiManufacturerSpaceVersion : UInt8 {
+    get {
+      let result = acdiManufacturerSpace.getUInt8(address: 0)!
+      return result == 0 ? 4 : result
+    }
+    set(value) {
+      acdiManufacturerSpace.setUInt(address: 0, value: value == 1 ? 4 : value)
+    }
+  }
+  
+  public override var manufacturerName : String {
+    get {
+      let name = acdiManufacturerSpace.getString(address: 1, count: 41)!
+      return name // ********
+    }
+    set(value) {
+      acdiManufacturerSpace.setString(address: 1, value: String(value.prefix(40)), fieldSize: 41)
+    }
+  }
+  
+  public override var nodeModelName : String {
+    get {
+      return acdiManufacturerSpace.getString(address: 42, count: 41)!
+    }
+    set(value) {
+      acdiManufacturerSpace.setString(address: 42, value: String(value.prefix(40)), fieldSize: 41)
+    }
+  }
+  
+  public override var nodeHardwareVersion : String {
+    get {
+      return acdiManufacturerSpace.getString(address: 83, count: 21)!
+    }
+    set(value) {
+      acdiManufacturerSpace.setString(address: 83, value: String(value.prefix(20)), fieldSize: 21)
+    }
+  }
+  
+  public override var nodeSoftwareVersion : String {
+    get {
+      return acdiManufacturerSpace.getString(address: 104, count: 21)!
+    }
+    set(value) {
+      acdiManufacturerSpace.setString(address: 104, value: String(value.prefix(20)), fieldSize: 21)
+    }
+
+  }
+  
+  public override var acdiUserSpaceVersion : UInt8 {
+    get {
+      let result = acdiUserSpace.getUInt8(address: 0)!
+      return result == 0 ? 2 : result
+    }
+    set(value) {
+      acdiUserSpace.setUInt(address: 0, value: value == 1 ? 2 : value)
+    }
+  }
+
+  public override var userNodeName : String {
+    get {
+      return acdiUserSpace.getString(address: 1, count: 63)!
+    }
+    set(value) {
+      acdiUserSpace.setString(address: 1, value: String(value.prefix(62)), fieldSize: 63)
+    }
+  }
+  
+  public override var userNodeDescription : String {
+    get {
+      return acdiUserSpace.getString(address: 64, count: 64)!
+    }
+    set(value) {
+      acdiUserSpace.setString(address: 64, value: String(value.prefix(63)), fieldSize: 64)
+    }
+  }
+  
+  // MARK: Private Methods
+  
+  internal func resetToFactoryDefaults() {
+    
+  }
+  
   // MARK: Public Methods
   
   public func initCDI(filename:String) {
@@ -174,13 +277,6 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate {
 
           networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, replyPending: true, timeOut: 1.0)
 
-          print("here \(message.sourceNodeId!.toHexDotFormat(numberOfBytes: 6)) -> \(message.destinationNodeId!.toHexDotFormat(numberOfBytes: 6)) \(message.datagramType)")
-          print("payload: ", terminator: "")
-          for byte in message.payload {
-            print("\(byte.toHex(numberOfDigits: 2)) ", terminator: "")
-          }
-          print()
-          
           var data = message.payload
           
           var bytesToRemove = 6
@@ -194,7 +290,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate {
             space = 0xfe
           case .writeCommand0xFF:
             space = 0xff
-            //          case .readCommandGeneric:
+            // case .readCommandGeneric:
           default:
             space = data[6]
             bytesToRemove = 7
@@ -209,6 +305,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate {
             if memorySpace.isWithinSpace(address: Int(startAddress), count: data.count) {
               networkLayer?.sendWriteReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, addressSpace: space, startAddress: startAddress)
               memorySpace.setBlock(address: Int(startAddress), data: data)
+              memorySpace.save()
             }
             else {
               networkLayer?.sendWriteReplyFailure(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, addressSpace: space, startAddress: startAddress, errorCode: .permanentErrorAddressOutOfBounds)

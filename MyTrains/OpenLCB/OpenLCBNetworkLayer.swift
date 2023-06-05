@@ -33,6 +33,12 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
       }
     }
     
+    // **** TESTING STUFF ****
+    
+//    OpenLCBMemorySpace.getMemorySpaces()
+    
+
+    
   }
   
   // MARK: Private Properties

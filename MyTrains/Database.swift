@@ -311,9 +311,9 @@ class Database {
             
             // MARK: Updates
             
-            print("Version: \(Version)")
+   //         print("Version: \(Version)")
             
-            if Version == 24 {
+            if Version == 26 {
   
               let commands = [
         
@@ -426,7 +426,6 @@ class Database {
                 "ALTER TABLE [\(TABLE.SWITCHBOARD_ITEM)] ADD [\(SWITCHBOARD_ITEM.SW2_SENSOR1_ID)] INT",
                 "ALTER TABLE [\(TABLE.SWITCHBOARD_ITEM)] ADD [\(SWITCHBOARD_ITEM.SW2_SENSOR2_ID)] INT",
  */
-                 
                 "DROP TABLE IF EXISTS [\(TABLE.MEMORY_SPACE)]",
 
                 "CREATE TABLE [\(TABLE.MEMORY_SPACE)] (" +
@@ -436,13 +435,13 @@ class Database {
                   "[\(MEMORY_SPACE.MEMORY)]          TEXT NOT NULL" +
                 ")",
 
-                "UPDATE [\(TABLE.VERSION)] SET [\(VERSION.VERSION_NUMBER)] = 25 WHERE [\(VERSION.VERSION_ID)] = 1",
+                "UPDATE [\(TABLE.VERSION)] SET [\(VERSION.VERSION_NUMBER)] = 27 WHERE [\(VERSION.VERSION_ID)] = 1",
  
              ]
               
               execute(commands: commands)
               
-              Version = 25
+              Version = 27
 
             }
             
