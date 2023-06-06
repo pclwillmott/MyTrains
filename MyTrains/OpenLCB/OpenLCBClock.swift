@@ -67,12 +67,12 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
     
     self.type = type
     
-    self.configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: 512, isReadOnly: false, description: "")
+    configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: 512, isReadOnly: false, description: "")
     
     super.init(nodeId: nodeId)
     
     memorySpaces[configuration.space] = configuration
-    
+
     initCDI(filename: "MyTrains Clock")
     
     if !memorySpacesInitialized {
@@ -92,8 +92,6 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
   private let secPerDay : TimeInterval = 86400.0
   
   private var _clockState : OpenLCBClockState = .stopped
-  
-  private var configuration : OpenLCBMemorySpace
   
   private var _rate : Double = 1.0
   
@@ -128,6 +126,8 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
   // MARK: Public Properties
   
   public var type : OpenLCBClockType
+  
+  public var configuration : OpenLCBMemorySpace
   
   public var rate : Double {
     get {
@@ -204,6 +204,10 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
   
   // MARK: Private Methods
 
+  internal override func resetReboot() {
+    
+  }
+  
   internal override func resetToFactoryDefaults() {
     
     acdiManufacturerSpaceVersion = 4
@@ -218,11 +222,7 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
     userNodeName        = ""
     userNodeDescription = ""
     
-    for (_, memorySpace) in memorySpaces {
-      if memorySpace.space != OpenLCBNodeMemoryAddressSpace.cdi.rawValue {
-        memorySpace.save()
-      }
-    }
+    saveMemorySpaces()
     
   }
   
@@ -558,6 +558,14 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
     super.stop()
   }
   
+  // MARK: OpenLCBMemorySpaceDelegate Methods
+  
+  public override func memorySpaceChanged(memorySpace: OpenLCBMemorySpace, startAddress: Int, endAddress: Int) {
+    
+    super.memorySpaceChanged(memorySpace: memorySpace, startAddress: startAddress, endAddress: endAddress)
+    
+  }
+    
   // MARK: OpenLCBNetworkLayerDelegate Methods
   
   public override func openLCBMessageReceived(message: OpenLCBMessage) {

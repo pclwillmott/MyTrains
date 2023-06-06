@@ -32,7 +32,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     if !memorySpacesInitialized {
       resetToFactoryDefaults()
     }
- 
+    
   }
   
   // MARK: Private Properties
@@ -63,15 +63,13 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     userNodeName         = ""
     userNodeDescription  = ""
     
-    for (_, memorySpace) in memorySpaces {
-      if memorySpace.space != OpenLCBNodeMemoryAddressSpace.cdi.rawValue {
-        memorySpace.save()
-      }
-    }
-
+    saveMemorySpaces()
+    
   }
  
   // MARK: Public Methods
+  
+  // MARK: OpenLCBMemorySpaceDelegate Methods
   
   // MARK: OpenLCBNetworkLayerDelegate Methods
     

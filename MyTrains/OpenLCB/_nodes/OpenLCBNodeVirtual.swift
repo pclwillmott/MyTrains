@@ -7,26 +7,30 @@
 
 import Foundation
 
-public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate {
+public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, OpenLCBMemorySpaceDelegate {
   
   // MARK: Constructors
   
   public override init(nodeId:UInt64) {
     
-    self.lfsr1 = UInt32(nodeId >> 24)
+    lfsr1 = UInt32(nodeId >> 24)
     
-    self.lfsr2 = UInt32(nodeId & 0xffffff)
+    lfsr2 = UInt32(nodeId & 0xffffff)
 
     acdiManufacturerSpace = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.acdiManufacturer.rawValue, defaultMemorySize: 125, isReadOnly: true, description: "")
 
     acdiUserSpace = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.acdiUser.rawValue, defaultMemorySize: 128, isReadOnly: false, description: "")
     
     super.init(nodeId: nodeId)
-
-    self.memorySpaces[acdiManufacturerSpace.space] = acdiManufacturerSpace
-
-    self.memorySpaces[acdiUserSpace.space] = acdiUserSpace
     
+    acdiManufacturerSpace.delegate = self
+
+    memorySpaces[acdiManufacturerSpace.space] = acdiManufacturerSpace
+    
+    acdiUserSpace.delegate = self
+
+    memorySpaces[acdiUserSpace.space] = acdiUserSpace
+
     isIdentificationSupported = true
     
     isSimpleNodeInformationProtocolSupported = true
@@ -34,7 +38,6 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate {
     isSimpleProtocolSubsetSupported = true
 
     isDatagramProtocolSupported = true
-    
     
   }
   
@@ -56,7 +59,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate {
   
   public var memorySpacesInitialized : Bool {
     get {
-      return !manufacturerName.isEmpty
+      return acdiManufacturerSpace.getUInt8(address: 0) != 0
     }
   }
     
@@ -66,18 +69,16 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate {
   
   public override var acdiManufacturerSpaceVersion : UInt8 {
     get {
-      let result = acdiManufacturerSpace.getUInt8(address: 0)!
-      return result == 0 ? 4 : result
+      return acdiManufacturerSpace.getUInt8(address: 0)!
     }
     set(value) {
-      acdiManufacturerSpace.setUInt(address: 0, value: value == 1 ? 4 : value)
+      acdiManufacturerSpace.setUInt(address: 0, value: value)
     }
   }
   
   public override var manufacturerName : String {
     get {
-      let name = acdiManufacturerSpace.getString(address: 1, count: 41)!
-      return name // ********
+      return acdiManufacturerSpace.getString(address: 1, count: 41)!
     }
     set(value) {
       acdiManufacturerSpace.setString(address: 1, value: String(value.prefix(40)), fieldSize: 41)
@@ -114,11 +115,10 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate {
   
   public override var acdiUserSpaceVersion : UInt8 {
     get {
-      let result = acdiUserSpace.getUInt8(address: 0)!
-      return result == 0 ? 2 : result
+      return acdiUserSpace.getUInt8(address: 0)!
     }
     set(value) {
-      acdiUserSpace.setUInt(address: 0, value: value == 1 ? 2 : value)
+      acdiUserSpace.setUInt(address: 0, value: value)
     }
   }
 
@@ -142,8 +142,20 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate {
   
   // MARK: Private Methods
   
+  internal func resetReboot() {
+    
+  }
+  
   internal func resetToFactoryDefaults() {
     
+  }
+  
+  internal func saveMemorySpaces() {
+    for (_, memorySpace) in memorySpaces {
+      if memorySpace.space != OpenLCBNodeMemoryAddressSpace.cdi.rawValue {
+        memorySpace.save()
+      }
+    }
   }
   
   // MARK: Public Methods
@@ -177,6 +189,11 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate {
     state = .inhibited
   }
   
+  // MARK: OpenLCBMemorySpaceDelegate Methods
+  
+  public func memorySpaceChanged(memorySpace: OpenLCBMemorySpace, startAddress: Int, endAddress: Int) {
+  }
+    
   // MARK: OpenLCBNetworkLayerDelegate Methods
   
   public func networkLayerStateChanged(networkLayer: OpenLCBNetworkLayer) {
@@ -204,6 +221,14 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate {
       if message.destinationNodeId! == nodeId {
         
         switch message.datagramType {
+        case .reinitializeFactoryResetCommand:
+          networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, replyPending: false, timeOut: 0.0)
+          resetToFactoryDefaults()
+          
+        case .resetRebootCommand:
+          networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, replyPending: false, timeOut: 0.0)
+          resetReboot()
+          
         case.LockReserveCommand:
           message.payload.removeFirst(2)
           if let id = UInt64(bigEndianData: message.payload) {

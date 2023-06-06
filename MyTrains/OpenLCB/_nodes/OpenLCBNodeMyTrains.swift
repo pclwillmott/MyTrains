@@ -15,12 +15,10 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     
     super.init(nodeId: nodeId)
 
-    isDatagramProtocolSupported = true
-
     if !memorySpacesInitialized {
       resetToFactoryDefaults()
     }
-
+    
   }
   
   // MARK: Private Properties
@@ -38,21 +36,18 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     nodeHardwareVersion = ""
     nodeSoftwareVersion = "\(Bundle.main.releaseVersionNumberPretty)"
     
-
     acdiUserSpaceVersion = 2
     
     userNodeName         = ""
     userNodeDescription  = ""
     
-    for (_, memorySpace) in memorySpaces {
-      if memorySpace.space != OpenLCBNodeMemoryAddressSpace.cdi.rawValue {
-        memorySpace.save()
-      }
-    }
-
+    saveMemorySpaces()
+    
   }
 
   // MARK: Public Methods
+  
+  // MARK: OpenLCBMemorySpaceDelegate Methods
   
   // MARK: OpenLCBNetworkLayerDelegate Methods
   
