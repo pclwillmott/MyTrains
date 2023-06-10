@@ -52,6 +52,7 @@ class SetFastClockVC: NSViewController, NSWindowDelegate, OpenLCBClockDelegate {
   // MARK: OpenLCBClockDelegate Methods
   
   func clockTick(clock: OpenLCBClock) {
+    clockView.subState = clock.subState
     clockView.date = clock.date
   }
   

@@ -7,11 +7,12 @@
 
 import Foundation
 
-public enum OpenLCBClockType : UInt64 {
+public enum OpenLCBClockType : UInt8 {
   
-  case fastClock       = 0x0101000001000000
-  case realTimeClock   = 0x0101000001010000
-  case alternateClock1 = 0x0101000001020000
-  case alternateClock2 = 0x0101000001030000
-
+  case fastClock       = 0
+  case realTimeClock   = 1
+  case alternateClock1 = 2
+  case alternateClock2 = 3
+  case customClock     = 4
+  
 }

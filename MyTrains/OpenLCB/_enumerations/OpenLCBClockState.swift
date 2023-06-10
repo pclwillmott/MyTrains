@@ -7,9 +7,9 @@
 
 import Foundation
 
-public enum OpenLCBClockState {
+public enum OpenLCBClockState : UInt8 {
   
-  case stopped
-  case running
+  case stopped = 0
+  case running = 1
   
 }

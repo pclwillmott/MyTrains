@@ -12,6 +12,11 @@ private enum ClockDirection : Double {
   case backward = -1.0
 }
 
+public enum OpenLCBCustomClockEventPrefixType : UInt8 {
+  case clockNodeId   = 0
+  case userSpecified = 1
+}
+
 public enum OpenLCBFastClockEventIndex : Int {
   case startOrStopEvent = 0
   case reportRateEvent = 1
@@ -63,37 +68,49 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
   
   // MARK: Constructors & Destructors
   
-  public init(nodeId:UInt64, type:OpenLCBClockType) {
-    
-    self.type = type
+  public override init(nodeId:UInt64) {
     
     configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: 512, isReadOnly: false, description: "")
+    
+    variables = [addressOperatingMode              ,
+                 addressClockType                  ,
+                 addressCustomClockEventPrefixType ,
+                 addressUserSpecifiedEventPrefix   ,
+                 addressRunningState               ,
+                 addressCurrentDateTime            ,
+                 addressCurrentRate                ,
+                 addressResetToInitialState        ,
+                 addressResetToFactoryDefaults     ,
+                 addressPowerOnRunningState        ,
+                 addressInitialDateTime            ,
+                 addressDefaultDateTime            ,
+                 addressInitialRate
+    ]
     
     super.init(nodeId: nodeId)
     
     memorySpaces[configuration.space] = configuration
+    
+    configuration.delegate = self
 
     initCDI(filename: "MyTrains Clock")
+    
+    dateFormatter.timeZone = Date().dateComponents.timeZone
+    dateFormatter.formatOptions = [.withFullDate, .withTime, .withColonSeparatorInTime]
     
     if !memorySpacesInitialized {
       resetToFactoryDefaults()
     }
     
-    self.date = Date()
-    
   }
   
   deinit {
-    stoptimer()
+    stopTimer()
   }
   
   // MARK: Private Properties
   
   private let secPerDay : TimeInterval = 86400.0
-  
-  private var _clockState : OpenLCBClockState = .stopped
-  
-  private var _rate : Double = 1.0
   
   private var timer : Timer?
   
@@ -111,46 +128,204 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
     }
   }
   
+  private var dateFormatter = ISO8601DateFormatter()
+  
   private let specificUpperPartMask : UInt64 = 0xffffffffffff0000
   
   private var triggered : Bool = false
   
   private var lastSend : TimeInterval = 0
   
-  private var lastEvents : [UInt64] = []
+  private var lastEvents : [UInt64] = [UInt64](repeating: 0, count: 5)
   
   private var calendar : Calendar = Calendar(identifier: .gregorian)
   
   private var specificEvents : Set<UInt64> = []
   
-  // MARK: Public Properties
+  private let baseEventLookup : [OpenLCBClockType:UInt64] =
+  [
+    OpenLCBClockType.fastClock       : 0x0101000001000000,
+    OpenLCBClockType.realTimeClock   : 0x0101000001010000,
+    OpenLCBClockType.alternateClock1 : 0x0101000001020000,
+    OpenLCBClockType.alternateClock2 : 0x0101000001030000
+  ]
+
+  // Configuration varaible addresses
   
-  public var type : OpenLCBClockType
+  private let addressOperatingMode              : Int =  0
+  private let addressClockType                  : Int =  1
+  private let addressCustomClockEventPrefixType : Int =  2
+  private let addressUserSpecifiedEventPrefix   : Int =  3
+  private let addressRunningState               : Int = 11
+  private let addressCurrentDateTime            : Int = 12
+  private let addressCurrentRate                : Int = 32
+  private let addressResetToInitialState        : Int = 36
+  private let addressResetToFactoryDefaults     : Int = 37
+  private let addressPowerOnRunningState        : Int = 38
+  private let addressInitialDateTime            : Int = 39
+  private let addressDefaultDateTime            : Int = 40
+  private let addressInitialRate                : Int = 60
+  
+  private let variables : Set<Int>
+  
+  // MARK: Public Properties
   
   public var configuration : OpenLCBMemorySpace
   
-  public var rate : Double {
+  public var operatingMode : OpenLCBClockOperatingMode {
     get {
-      return _rate
+      return OpenLCBClockOperatingMode(rawValue: configuration.getUInt8(address: addressOperatingMode)!)!
     }
     set(value) {
-      if _rate != value {
-        _rate = value
-        if clockState == .running {
-          startTimer()
-        }
-      }
+      configuration.setUInt(address: addressOperatingMode, value: value.rawValue)
+    }
+  }
+  
+  public var setToFactoryDefaults : OpenLCBEnabledDisabledState {
+    get {
+      return OpenLCBEnabledDisabledState(rawValue: configuration.getUInt8(address: addressResetToFactoryDefaults)!)!
+    }
+    set(value) {
+      configuration.setUInt(address: addressResetToFactoryDefaults, value: value.rawValue)
+    }
+  }
+
+  public var setToInitialState : OpenLCBEnabledDisabledState {
+    get {
+      return OpenLCBEnabledDisabledState(rawValue: configuration.getUInt8(address: addressResetToInitialState)!)!
+    }
+    set(value) {
+      configuration.setUInt(address: addressResetToInitialState, value: value.rawValue)
+    }
+  }
+
+  public var subState : OpenLCBClockSubState = .rebooting
+  
+  public var isClockGenerator : Bool {
+    get {
+      return operatingMode == .master
+    }
+  }
+  
+  public var rate : Double {
+    get {
+      return Double(configuration.getFloat(address: addressCurrentRate)!)
+    }
+    set(value) {
+      configuration.setFloat(address: addressCurrentRate, value: Float(value))
+    }
+  }
+  
+  public var initialRate : Double {
+    get {
+      return Double(configuration.getFloat(address: addressInitialRate)!)
+    }
+    set(value) {
+      configuration.setFloat(address: addressInitialRate, value: Float(value))
     }
   }
   
   public var clockState : OpenLCBClockState {
     get {
-      return _clockState
+      return OpenLCBClockState(rawValue: configuration.getUInt8(address: addressRunningState)!)!
+    }
+    set(value) {
+      configuration.setUInt(address: addressRunningState, value: value.rawValue)
     }
   }
   
-  public var isClockGenerator : Bool = false
+  public var initialDateTime : OpenLCBClockInitialDateTime {
+    get {
+      return OpenLCBClockInitialDateTime(rawValue: configuration.getUInt8(address: addressInitialDateTime)!)!
+    }
+    set(value) {
+      configuration.setUInt(address: addressInitialDateTime, value: value.rawValue)
+    }
+  }
   
+  public var powerOnClockState : OpenLCBClockState {
+    get {
+      return OpenLCBClockState(rawValue: configuration.getUInt8(address: addressPowerOnRunningState)!)!
+    }
+    set(value) {
+      configuration.setUInt(address: addressPowerOnRunningState, value: value.rawValue)
+    }
+  }
+  
+  public var type : OpenLCBClockType {
+    get {
+      return OpenLCBClockType(rawValue: configuration.getUInt8(address: addressClockType)!)!
+    }
+    set(value) {
+      configuration.setUInt(address: addressClockType, value: value.rawValue)
+    }
+  }
+  
+  public var customClockEventPrefixType: OpenLCBCustomClockEventPrefixType {
+    get {
+      return OpenLCBCustomClockEventPrefixType(rawValue: configuration.getUInt8(address: addressCustomClockEventPrefixType)!)!
+    }
+    set(value) {
+      configuration.setUInt(address: addressCustomClockEventPrefixType, value: value.rawValue)
+    }
+  }
+  
+  public var customClockEventPrefixUserSpecified : UInt64 {
+    get {
+      return configuration.getUInt64(address: addressUserSpecifiedEventPrefix)!
+    }
+    set(value) {
+      configuration.setUInt(address: addressUserSpecifiedEventPrefix, value: value)
+    }
+  }
+  
+  public var baseEventId : UInt64 {
+    get {
+      if type == .customClock {
+        return customClockEventPrefixType == .clockNodeId ? nodeId : customClockEventPrefixUserSpecified
+      }
+      return baseEventLookup[type]!
+    }
+  }
+  
+  public var dateTime : String {
+    get {
+      return configuration.getString(address: addressCurrentDateTime, count: 20)!
+    }
+    set(value) {
+      print("dateTime: value = \(value)")
+      var newValue : String
+      var newDate : Date
+      if let date = dateFormatter.date(from: value) {
+        newValue = String(value.prefix(19))
+        newDate = date
+      }
+      else {
+        newValue = "1970-01-01T00:00:00"
+        newDate = Date(timeIntervalSince1970: 0.0)
+      }
+      print("dateTime: \(newValue) \(newDate)")
+      configuration.setString(address: addressCurrentDateTime, value: newValue, fieldSize: 20)
+      date = newDate
+    }
+  }
+
+  public var defaultDateTime : String {
+    get {
+      return configuration.getString(address: addressDefaultDateTime, count: 20)!
+    }
+    set(value) {
+      var newValue : String
+      if let date = dateFormatter.date(from: value) {
+        newValue = value
+      }
+      else {
+        newValue = "1970-01-01T00:00:00"
+      }
+      configuration.setString(address: addressDefaultDateTime, value: newValue, fieldSize: 20)
+    }
+  }
+
   public var date : Date {
     get {
       
@@ -206,6 +381,41 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
 
   internal override func resetReboot() {
     
+    if subState == .running {
+      stopClock()
+    }
+    
+    subState = .rebooting
+    
+    updateObservers()
+    
+    rate = initialRate
+    
+    clockState = .stopped
+    
+    switch operatingMode {
+    case .master:
+      switch initialDateTime {
+      case .computerDateTime:
+        let dt = dateFormatter.string(from: Date())
+        dateTime = dt
+      case .defaultDateTime:
+        dateTime = defaultDateTime
+      }
+      if powerOnClockState == .running {
+        subState = .running
+        startClock()
+      }
+      else {
+        subState = .stopped
+      }
+    case .slave:
+      subState = .idle
+      networkLayer?.sendClockQuery(sourceNodeId: nodeId, baseEventId: baseEventId)
+    }
+    
+    updateObservers()
+    
   }
   
   internal override func resetToFactoryDefaults() {
@@ -221,6 +431,26 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
     
     userNodeName        = ""
     userNodeDescription = ""
+    
+    operatingMode = .slave
+    
+    type = .fastClock
+    
+    customClockEventPrefixType = .clockNodeId
+    
+    customClockEventPrefixUserSpecified = (nodeId << 16)
+    
+    powerOnClockState = .stopped
+    
+    initialDateTime = .computerDateTime
+    
+    defaultDateTime = "1970-01-01T00:00:00"
+    
+    initialRate = 1.0
+    
+    rate = initialRate
+    
+    clockState = powerOnClockState
     
     saveMemorySpaces()
     
@@ -301,6 +531,10 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
       }
     }
     
+    let newFormatter = ISO8601DateFormatter()
+    let str = String(newFormatter.string(from: date).prefix(19))
+    configuration.setString(address: addressCurrentDateTime, value: str, fieldSize: 20)
+    
     let newDate = Date().timeIntervalSince1970
     triggered = triggered || (newDate - lastSend) > 59.0
     
@@ -329,21 +563,17 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
       }
 
     }
-        
-    for (_, observer) in observers {
-      DispatchQueue.main.async {
-        observer.clockTick(clock: self)
-      }
-    }
+       
+    updateObservers()
     
   }
   
   private func startTimer() {
     
-    stoptimer()
+    stopTimer()
     
     guard rate != 0.0 else {
-      _clockState = .stopped
+      clockState = .stopped
       return
     }
     
@@ -355,9 +585,17 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
 
   }
   
-  private func stoptimer() {
+  private func stopTimer() {
     timer?.invalidate()
     timer = nil
+  }
+  
+  private func updateObservers() {
+    for (_, observer) in observers {
+      DispatchQueue.main.async {
+        observer.clockTick(clock: self)
+      }
+    }
   }
 
   @objc func rolloverTimerAction() {
@@ -469,50 +707,44 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
   // MARK: Public Methods
 
   public func encodeTimeEvent(subCode:OpenLCBFastClockSubCode, hour:Int, minute:Int) -> UInt64 {
-    return type.rawValue | subCode.rawValue | (UInt64(hour) << 8) | UInt64(minute)
+    return baseEventId | subCode.rawValue | (UInt64(hour) << 8) | UInt64(minute)
   }
   
   public func encodeDateEvent(subCode:OpenLCBFastClockSubCode, month:Int, day:Int) -> UInt64 {
-    return type.rawValue | subCode.rawValue | (UInt64(month) << 8) | UInt64(day)
+    return baseEventId | subCode.rawValue | (UInt64(month) << 8) | UInt64(day)
   }
   
   public func encodeYearEvent(subCode:OpenLCBFastClockSubCode, year:Int) -> UInt64 {
-    return type.rawValue | subCode.rawValue | UInt64(year)
+    return baseEventId | subCode.rawValue | UInt64(year)
   }
 
   public func encodeRateEvent(subCode:OpenLCBFastClockSubCode, rate:Double) -> UInt64 {
-    return type.rawValue | subCode.rawValue | UInt64(rate.openLCBClockRate)
+    return baseEventId | subCode.rawValue | UInt64(rate.openLCBClockRate)
   }
 
   public func encodeStopStartEvent(state:OpenLCBClockState) -> UInt64 {
     let subCode : OpenLCBFastClockSubCode = (state == .stopped) ? .stopEventId : .startEventId
-    return type.rawValue | subCode.rawValue
+    return baseEventId | subCode.rawValue
   }
   
   public func encodeDateRolloverEvent() -> UInt64 {
     let subCode : OpenLCBFastClockSubCode = .dateRolloverEventId
-    return type.rawValue | subCode.rawValue
+    return baseEventId | subCode.rawValue
   }
 
   public func startClock() {
-    
-    guard clockState == .stopped else {
-      return
-    }
-    
-    _clockState = .running
-    
+        
     if let network = networkLayer {
       if isClockGenerator {
-        let eventId = type.rawValue | 0xffff
+        let eventId = baseEventId | 0xffff
         network.sendProducerRangeIdentified(sourceNodeId: nodeId, eventId: eventId)
         network.sendConsumerRangeIdentified(sourceNodeId: nodeId, eventId: eventId)
         sendSync()
       }
       else {
-        let eventId = type.rawValue | 0xffff
+        let eventId = baseEventId | 0xffff
         network.sendConsumerRangeIdentified(sourceNodeId: nodeId, eventId: eventId)
-        network.sendClockQuery(sourceNodeId: nodeId, clockType: type)
+        network.sendClockQuery(sourceNodeId: nodeId, baseEventId: baseEventId)
       }
     }
     
@@ -522,12 +754,9 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
   
   public func stopClock() {
     
-    guard clockState == .running else {
-      return
-    }
+    stopTimer()
     
-    _clockState = .stopped
-    stoptimer()
+    clockState = .stopped
     
     if isClockGenerator, let network = networkLayer {
       let eventId = encodeStopStartEvent(state: clockState)
@@ -550,7 +779,6 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
   
   public override func start() {
     super.start()
-    startClock()
   }
   
   public override func stop() {
@@ -563,6 +791,63 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
   public override func memorySpaceChanged(memorySpace: OpenLCBMemorySpace, startAddress: Int, endAddress: Int) {
     
     super.memorySpaceChanged(memorySpace: memorySpace, startAddress: startAddress, endAddress: endAddress)
+    
+    if memorySpace.space == configuration.space {
+      
+      for address in variables {
+        
+        if address >= startAddress && address <= endAddress {
+          
+          switch address {
+          case addressClockType:
+            break
+          case addressCurrentRate:
+            if clockState == .running {
+              stopTimer()
+              startTimer()
+            }
+            break
+          case addressInitialRate:
+            break
+          case addressRunningState:
+            clockState == .running ? startClock() : stopClock()
+            break
+          case addressOperatingMode:
+            break
+          case addressCurrentDateTime:
+            print("dateTime: \(dateTime)")
+            dateTime = dateTime
+          case addressDefaultDateTime:
+            break
+          case addressInitialDateTime:
+            break
+          case addressPowerOnRunningState:
+            break
+          case addressResetToInitialState:
+            if setToInitialState == .enabled {
+              resetReboot()
+              setToInitialState = .disabled
+            }
+          case addressResetToFactoryDefaults:
+            if setToFactoryDefaults == .enabled {
+              resetToFactoryDefaults()
+              setToFactoryDefaults = .disabled
+            }
+          case addressUserSpecifiedEventPrefix:
+            break
+          case addressCustomClockEventPrefixType:
+            break
+          default:
+            break
+          }
+          
+        }
+        
+      }
+      
+      updateObservers()
+      
+    }
     
   }
     
@@ -579,7 +864,7 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
         
         let eventId = message.eventId!
         
-        if let clockType = OpenLCBClockType(rawValue: eventId & specificUpperPartMask), type == clockType {
+        if (eventId & specificUpperPartMask) == baseEventId {
           specificEvents.insert(eventId)
         }
         
@@ -589,7 +874,7 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
       
       let eventId = message.eventId!
       
-      if let clockType = OpenLCBClockType(rawValue: eventId & specificUpperPartMask), type == clockType {
+      if (eventId & specificUpperPartMask) == baseEventId {
         
         var word = UInt16(eventId & ~specificUpperPartMask)
         
@@ -656,9 +941,9 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
               sendSync()
             }
           case .stopEventId:
-            stop()
+            stopClock()
           case .startEventId:
-            start()
+            startClock()
           case .dateRolloverEventId:
             if !isClockGenerator {
               switch clockDirection {

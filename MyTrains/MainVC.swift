@@ -135,6 +135,7 @@ class MainVC: NSViewController, NetworkControllerDelegate, LayoutDelegate, OpenL
   // MARK: OpenLCBClockDelegate Methods
   
   func clockTick(clock: OpenLCBClock) {
+    clockView.subState = clock.subState
     clockView.date = clock.date
     let dateFormatter = DateFormatter()
     dateFormatter.dateStyle = .full

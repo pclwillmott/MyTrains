@@ -8,7 +8,7 @@
 import Foundation
 import Cocoa
 
-enum SevenSegmentDigit : Int {
+private enum SevenSegmentDigit : Int {
   
   case digit0 = 0
   case digit1 = 1
@@ -40,6 +40,105 @@ enum SevenSegmentDigit : Int {
     
     return (segmentParts[self.rawValue] & mask) == mask
     
+    /*
+     const uint8_t SevenSegmentASCII[96] = {
+       0x00, /* (space) */
+       0x86, /* ! */
+       0x22, /* " */
+       0x7E, /* # */
+       0x6D, /* $ */
+       0xD2, /* % */
+       0x46, /* & */
+       0x20, /* ' */
+       0x29, /* ( */
+       0x0B, /* ) */
+       0x21, /* * */
+       0x70, /* + */
+       0x10, /* , */
+       0x40, /* - */
+       0x80, /* . */
+       0x52, /* / */
+       0x3F, /* 0 */
+       0x06, /* 1 */
+       0x5B, /* 2 */
+       0x4F, /* 3 */
+       0x66, /* 4 */
+       0x6D, /* 5 */
+       0x7D, /* 6 */
+       0x07, /* 7 */
+       0x7F, /* 8 */
+       0x6F, /* 9 */
+       0x09, /* : */
+       0x0D, /* ; */
+       0x61, /* < */
+       0x48, /* = */
+       0x43, /* > */
+       0xD3, /* ? */
+       0x5F, /* @ */
+       0x77, /* A */
+       0x7C, /* B */
+       0x39, /* C */
+       0x5E, /* D */
+       0x79, /* E */
+       0x71, /* F */
+       0x3D, /* G */
+       0x76, /* H */
+       0x30, /* I */
+       0x1E, /* J */
+       0x75, /* K */
+       0x38, /* L */
+       0x15, /* M */
+       0x37, /* N */
+       0x3F, /* O */
+       0x73, /* P */
+       0x6B, /* Q */
+       0x33, /* R */
+       0x6D, /* S */
+       0x78, /* T */
+       0x3E, /* U */
+       0x3E, /* V */
+       0x2A, /* W */
+       0x76, /* X */
+       0x6E, /* Y */
+       0x5B, /* Z */
+       0x39, /* [ */
+       0x64, /* \ */
+       0x0F, /* ] */
+       0x23, /* ^ */
+       0x08, /* _ */
+       0x02, /* ` */
+       0x5F, /* a */
+       0x7C, /* b */
+       0x58, /* c */
+       0x5E, /* d */
+       0x7B, /* e */
+       0x71, /* f */
+       0x6F, /* g */
+       0x74, /* h */
+       0x10, /* i */
+       0x0C, /* j */
+       0x75, /* k */
+       0x30, /* l */
+       0x14, /* m */
+       0x54, /* n */
+       0x5C, /* o */
+       0x73, /* p */
+       0x67, /* q */
+       0x50, /* r */
+       0x6D, /* s */
+       0x78, /* t */
+       0x1C, /* u */
+       0x1C, /* v */
+       0x14, /* w */
+       0x76, /* x */
+       0x6E, /* y */
+       0x5B, /* z */
+       0x46, /* { */
+       0x30, /* | */
+       0x70, /* } */
+       0x01, /* ~ */
+       0x00, /* (del) */
+     */
   }
   
 }
@@ -48,7 +147,6 @@ enum SevenSegmentDigit : Int {
 class ClockView: NSView {
   
   // MARK: Drawing Stuff
-  
   
   // https://aj-computing.co.uk/articles/html5-network-southeast-clock/
   
@@ -67,107 +165,126 @@ class ClockView: NSView {
     
     path.fill()
 
-    NSColor.setStrokeColor(color: .yellow)
-    NSColor.setFillColor(color: .yellow)
+    if subState == .idle || subState == .rebooting {
+      let text = (subState == .idle) ? "IDLE" : "BOOTING"
+      let font = NSFont.boldSystemFont(ofSize: 36)
+      let dw = bounds.width
+      let dh = bounds.height
+      let textRect = CGRect(x: (subState == .idle) ? 75 : 30, y: -5, width: dw , height: dh)
+      let textStyle = NSMutableParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
+      let textFontAttributes = [
+          NSAttributedString.Key.font: font,
+          NSAttributedString.Key.foregroundColor: NSColor.yellow,
+          NSAttributedString.Key.paragraphStyle: textStyle
+      ] as [NSAttributedString.Key : Any]
+      text.draw(in: textRect, withAttributes: textFontAttributes)
 
-    path = NSBezierPath()
-    
-    path.lineWidth = 1
-    
-    var xPos : CGFloat = bounds.width * 6.0 / 16.0
-    var yPos : CGFloat = bounds.height * 0.1 + ySize * 0.7
-    
-    var dotSize = 0.3 / 16.0 * bounds.width / 2.0
-    
-    path.appendArc(withCenter: NSPoint(x: xPos, y: yPos), radius: dotSize, startAngle: 0.0, endAngle: 360.0, clockwise: false)
-    
-    path.fill()
-    
-    path.stroke()
-
-    path = NSBezierPath()
-    
-    path.lineWidth = 1
-    
-    yPos = bounds.height * 0.1 + ySize * 0.3
-    
-    dotSize = 0.3 / 16.0 * bounds.width / 2.0
-    
-    path.appendArc(withCenter: NSPoint(x: xPos, y: yPos), radius: dotSize, startAngle: 0.0, endAngle: 360.0, clockwise: false)
-    
-    path.fill()
-    
-    path.stroke()
-
-    path = NSBezierPath()
-    
-    path.lineWidth = 1
-    
-    xPos = bounds.width * 11.72 / 16.0
-    yPos = bounds.height * 0.1 + ySize * 0.5
-    
-    dotSize = 0.3 / 16.0 * bounds.width / 2.0
-    
-    path.appendArc(withCenter: NSPoint(x: xPos, y: yPos), radius: dotSize, startAngle: 0.0, endAngle: 360.0, clockwise: false)
-    
-    path.fill()
-    
-    path.stroke()
-
-
-    var number = 0
-    
-    /*
-    var seconds = date.timeIntervalSince1970
-    
-    var sec = Int(seconds)
-    let days = sec / 86400
-    sec -= days * 86400
-    let hr = sec / 3600
-    sec -= hr * 3600
-    let min = sec / 60
-    sec -= min * 60
-
-    */
-    
-    let components = date.dateComponents
-    
- //   var calendar = Calendar(identifier: .gregorian)
- //   calendar.timeZone = TimeZone(secondsFromGMT: 0)!
- //   var components = calendar.dateComponents(in: TimeZone(secondsFromGMT: 0)!, from: date)
-    
-    let hr = components.hour!
-    let min = components.minute!
-    let sec = components.second!
-    
-    number += hr * 10000
-    number += min * 100
-    number += sec
-
-//    number = 888888
-    
-    let param : [(x:CGFloat, y:CGFloat, color:NSColor, size:CGFloat)] = [
-      (x:13.8 / 16.0, y:0.05, color:.red, size:1.5 / 2.0 ),
-      (x:12.2 / 16.0, y:0.05, color:.red, size:1.5 / 2.0 ),
-      (x:9.2 / 16.0, y:0.1, color:.yellow, size:1.0 ),
-      (x:6.7 / 16.0, y:0.1, color:.yellow, size:1.0 ),
-      (x:3.4 / 16.0, y:0.1, color:.yellow, size:1.0 ),
-      (x:0.9 / 16.0, y:0.1, color:.yellow, size:1.0 ),
-    ]
-    
-    for position in 0...5 {
+    }
+    else {
       
-      let p = param[position]
-
-      let xPos = bounds.width * p.x
-      let yPos = bounds.height * p.y
+      NSColor.setStrokeColor(color: .yellow)
+      NSColor.setFillColor(color: .yellow)
       
-      let digit = number % 10
+      path = NSBezierPath()
       
-      number /= 10
+      path.lineWidth = 1
       
-      drawDigit(xPos: xPos, yPos: yPos, xSize: xSize * p.size, ySize: ySize * p.size, color: p.color, digit: digit)
-
+      var xPos : CGFloat = bounds.width * 6.0 / 16.0
+      var yPos : CGFloat = bounds.height * 0.1 + ySize * 0.7
+      
+      var dotSize = 0.3 / 16.0 * bounds.width / 2.0
+      
+      path.appendArc(withCenter: NSPoint(x: xPos, y: yPos), radius: dotSize, startAngle: 0.0, endAngle: 360.0, clockwise: false)
+      
+      path.fill()
+      
+      path.stroke()
+      
+      path = NSBezierPath()
+      
+      path.lineWidth = 1
+      
+      yPos = bounds.height * 0.1 + ySize * 0.3
+      
+      dotSize = 0.3 / 16.0 * bounds.width / 2.0
+      
+      path.appendArc(withCenter: NSPoint(x: xPos, y: yPos), radius: dotSize, startAngle: 0.0, endAngle: 360.0, clockwise: false)
+      
+      path.fill()
+      
+      path.stroke()
+      
+      path = NSBezierPath()
+      
+      path.lineWidth = 1
+      
+      xPos = bounds.width * 11.72 / 16.0
+      yPos = bounds.height * 0.1 + ySize * 0.5
+      
+      dotSize = 0.3 / 16.0 * bounds.width / 2.0
+      
+      path.appendArc(withCenter: NSPoint(x: xPos, y: yPos), radius: dotSize, startAngle: 0.0, endAngle: 360.0, clockwise: false)
+      
+      path.fill()
+      
+      path.stroke()
+      
+      
+      var number = 0
+      
+      /*
+       var seconds = date.timeIntervalSince1970
+       
+       var sec = Int(seconds)
+       let days = sec / 86400
+       sec -= days * 86400
+       let hr = sec / 3600
+       sec -= hr * 3600
+       let min = sec / 60
+       sec -= min * 60
+       
+       */
+      
+      let components = date.dateComponents
+      
+      //   var calendar = Calendar(identifier: .gregorian)
+      //   calendar.timeZone = TimeZone(secondsFromGMT: 0)!
+      //   var components = calendar.dateComponents(in: TimeZone(secondsFromGMT: 0)!, from: date)
+      
+      let hr = components.hour!
+      let min = components.minute!
+      let sec = components.second!
+      
+      number += hr * 10000
+      number += min * 100
+      number += sec
+      
+      //    number = 888888
+      
+      let param : [(x:CGFloat, y:CGFloat, color:NSColor, size:CGFloat)] = [
+        (x:13.8 / 16.0, y:0.05, color:.red, size:1.5 / 2.0 ),
+        (x:12.2 / 16.0, y:0.05, color:.red, size:1.5 / 2.0 ),
+        (x:9.2 / 16.0, y:0.1, color:.yellow, size:1.0 ),
+        (x:6.7 / 16.0, y:0.1, color:.yellow, size:1.0 ),
+        (x:3.4 / 16.0, y:0.1, color:.yellow, size:1.0 ),
+        (x:0.9 / 16.0, y:0.1, color:.yellow, size:1.0 ),
+      ]
+      
+      for position in 0...5 {
+        
+        let p = param[position]
+        
+        let xPos = bounds.width * p.x
+        let yPos = bounds.height * p.y
+        
+        let digit = number % 10
+        
+        number /= 10
+        
+        drawDigit(xPos: xPos, yPos: yPos, xSize: xSize * p.size, ySize: ySize * p.size, color: p.color, digit: digit)
+        
+      }
+      
     }
     
   }
@@ -234,10 +351,24 @@ class ClockView: NSView {
 
   }
   
+  // MARK: Private Properties
+  
+  private var _subState : OpenLCBClockSubState = .rebooting
+  
   // MARK: Public Properties
   
   public var date : Date = Date() {
     didSet {
+      needsDisplay = true
+    }
+  }
+  
+  public var subState : OpenLCBClockSubState {
+    get {
+      return _subState
+    }
+    set(value) {
+      _subState = value
       needsDisplay = true
     }
   }

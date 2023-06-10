@@ -166,42 +166,42 @@ public class OpenLCBMemorySpace {
   }
   
   public func setUInt(address:Int, value:UInt8) {
-    setBlock(address: address, data: value.bigEndianData)
+    setBlock(address: address, data: value.bigEndianData, isInternal: true)
   }
 
   public func setUInt(address:Int, value:UInt16) {
-    setBlock(address: address, data: value.bigEndianData)
+    setBlock(address: address, data: value.bigEndianData, isInternal: true)
   }
 
   public func setUInt(address:Int, value:UInt32) {
-    setBlock(address: address, data: value.bigEndianData)
+    setBlock(address: address, data: value.bigEndianData, isInternal: true)
   }
 
   public func setUInt(address:Int, value:UInt64) {
-    setBlock(address: address, data: value.bigEndianData)
+    setBlock(address: address, data: value.bigEndianData, isInternal: true)
   }
   
   public func setFloat(address:Int, value:Float) {
-    setBlock(address: address, data: value.bigEndianData)
+    setBlock(address: address, data: value.bigEndianData, isInternal: true)
   }
   
   public func setDouble(address:Int, value:Double) {
-    setBlock(address: address, data: value.bigEndianData)
+    setBlock(address: address, data: value.bigEndianData, isInternal: true)
   }
 
   public func setFloat(address:Int, value:float16_t) {
-    setBlock(address: address, data: value.v.bigEndianData)
+    setBlock(address: address, data: value.v.bigEndianData, isInternal: true)
   }
 
   public func setString(address:Int, value:String, fieldSize:Int) {
   
     guard isWithinSpace(address: address, count: fieldSize) else {
-      print("setString: address + fieldSize - 1 < memory.count >= memory.count" )
+      print("setString: address + fieldSize - 1 < memory.count >= memory.count \"\(value)\"" )
       return
     }
     
     guard value.utf8.count < fieldSize else {
-      print("setString: value.utf8.count >= fieldSize" )
+      print("setString: value.utf8.count >= fieldSize \"\(value)\"" )
       return
     }
 
@@ -218,11 +218,11 @@ public class OpenLCBMemorySpace {
       index += 1
     }
 
-    setBlock(address: address, data: data)
+    setBlock(address: address, data: data, isInternal: true)
 
   }
   
-  public func setBlock(address:Int, data:[UInt8]) {
+  public func setBlock(address:Int, data:[UInt8], isInternal:Bool) {
     
     guard isWithinSpace(address: address, count: data.count) else {
       print("setBlock: address + data.count - 1 >= memory.count" )
@@ -252,12 +252,18 @@ public class OpenLCBMemorySpace {
       index += 1
     }
     
-    memorySpaceChanged(startAddress: address, endAddress: address + data.count - 1)
+    if !isInternal {
+      memorySpaceChanged(startAddress: address, endAddress: address + data.count - 1)
+    }
     
   }
   
   public func memorySpaceChanged(startAddress:Int, endAddress:Int) {
     delegate?.memorySpaceChanged(memorySpace: self, startAddress: startAddress, endAddress: endAddress)
+  }
+  
+  public func variableChanged(startAddress:Int, endAddress:Int, variableAddress:Int) -> Bool {
+    return variableAddress >= startAddress && variableAddress <= endAddress
   }
 
   // MARK: Database Methods

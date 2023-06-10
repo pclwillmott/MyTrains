@@ -17,7 +17,7 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
     
     configurationToolNode = OpenLCBNodeConfigurationTool(nodeId: 0x09000d000000)
     
-    fastClock = OpenLCBClock(nodeId: 0x09000d000001, type: .fastClock)
+    fastClock = OpenLCBClock(nodeId: 0x09000d000001)
     
     super.init()
 
@@ -25,13 +25,13 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
     
     registerNode(node: configurationToolNode)
     
-    registerNode(node: fastClock)
-    
     for (_, rollingStock) in RollingStock.rollingStock {
       if rollingStock.rollingStockType == .locomotive {
         registerNode(node: OpenLCBNodeRollingStock(rollingStock: rollingStock))
       }
     }
+    
+    registerNode(node: fastClock)
     
     // **** TESTING STUFF ****
     
@@ -179,13 +179,13 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
  
   }
 
-  public func sendClockQuery(sourceNodeId:UInt64, clockType:OpenLCBClockType) {
+  public func sendClockQuery(sourceNodeId:UInt64, baseEventId:UInt64) {
     
     let message = OpenLCBMessage(messageTypeIndicator: .producerConsumerEventReport)
     
     message.sourceNodeId = sourceNodeId
     
-    message.eventId = clockType.rawValue | 0xf000
+    message.eventId = baseEventId | 0xf000
     
     sendMessage(message: message)
     

@@ -181,6 +181,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     if let network = networkLayer {
       state = .permitted
       network.sendInitializationComplete(sourceNodeId: nodeId, isSimpleSetSufficient: false)
+      resetReboot()
     }
     
   }
@@ -329,7 +330,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
 
             if memorySpace.isWithinSpace(address: Int(startAddress), count: data.count) {
               networkLayer?.sendWriteReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, addressSpace: space, startAddress: startAddress)
-              memorySpace.setBlock(address: Int(startAddress), data: data)
+              memorySpace.setBlock(address: Int(startAddress), data: data, isInternal: false)
               memorySpace.save()
             }
             else {
