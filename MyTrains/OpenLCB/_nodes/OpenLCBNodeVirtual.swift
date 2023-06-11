@@ -275,8 +275,11 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
           
         case .resetRebootCommand:
           networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, replyPending: false, timeOut: 0.0)
-          resetReboot()
           
+          DispatchQueue.main.async {
+            self.stop()
+            self.start()
+          }
         case.LockReserveCommand:
           message.payload.removeFirst(2)
           if let id = UInt64(bigEndianData: message.payload) {
