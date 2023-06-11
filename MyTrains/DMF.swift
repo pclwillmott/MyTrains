@@ -191,7 +191,7 @@ public class DMF : NSObject {
     var current : UInt8 = 0xff
     var count = 0
     var maxCount = 0
-    var maxChar : UInt8 = 0xff
+//    var maxChar : UInt8 = 0xff
     
     var data : [UInt8] = []
     for record in dataRecords {
@@ -202,7 +202,7 @@ public class DMF : NSObject {
         }
         else {
           if count > maxCount {
-            maxChar = current
+ //           maxChar = current
             maxCount = count
           }
           current = byte
@@ -212,7 +212,7 @@ public class DMF : NSObject {
     }
 
     if count > maxCount {
-      maxChar = current
+//      maxChar = current
       maxCount = count
     }
 
@@ -299,11 +299,11 @@ public class DMF : NSObject {
     
     // 21  248  79  97
     
-    var numbers : Set<UInt8> = [21, 248, 79, 97]
+    let numbers : Set<UInt8> = [21, 248, 79, 97]
     
     for seed in 0...32767 {
       my_srand(UInt16(seed))
-      for block in 0...3000 {
+      for _ in 0...3000 {
         let k2 = UInt8(my_rand() & 0xff)
         let k1 = UInt8(my_rand() & 0xff)
         let k4 = UInt8(my_rand() & 0xff)

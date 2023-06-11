@@ -36,7 +36,6 @@ enum AppStoryboard : String {
   case PurgeProfiler                     = "PurgeProfiler"
   case LocomotiveRoster                  = "LocomotiveRoster"
   case RouteManager                      = "RouteManager"
-  case Bridge                            = "Bridge"
   case SetFastClock                      = "SetFastClock"
   case FastClockTester                   = "FastClockTester"
   case TC64Config                        = "TC64Config"
@@ -89,7 +88,6 @@ let storyboardLookup : [String:AppStoryboard] = [
   "PurgeProfiler"                     : AppStoryboard.PurgeProfiler,
   "LocomotiveRoster"                  : AppStoryboard.LocomotiveRoster,
   "RouteManager"                      : AppStoryboard.RouteManager,
-  "Bridge"                            : AppStoryboard.Bridge,
   "SetFastClock"                      : AppStoryboard.SetFastClock,
   "FastClockTester"                   : AppStoryboard.FastClockTester,
   "TC64Config"                        : AppStoryboard.TC64Config,
@@ -147,7 +145,6 @@ enum ModalWindow : String {
   case PurgeProfiler                     = "PurgeProfiler"
   case LocomotiveRoster                  = "LocomotiveRoster"
   case RouteManager                      = "RouteManager"
-  case Bridge                            = "Bridge"
   case SetFastClock                      = "SetFastClock"
   case FastClockTester                   = "FastClockTester"
   case TC64Config                        = "TC64Config"

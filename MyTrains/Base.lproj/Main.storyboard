@@ -531,12 +531,6 @@
                                                 <action selector="mnuThrottleAction:" target="Voe-Tx-rLC" id="Vc4-73-3MS"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Bridge" id="ngd-f8-vFc">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="mnuBridge:" target="Voe-Tx-rLC" id="YCy-J3-eZq"/>
-                                            </connections>
-                                        </menuItem>
                                     </items>
                                 </menu>
                             </menuItem>

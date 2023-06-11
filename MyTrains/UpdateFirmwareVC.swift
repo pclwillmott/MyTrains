@@ -118,7 +118,7 @@ class UpdateFirmwareVC: NSViewController, NSWindowDelegate, InterfaceDelegate, D
     
   }
   
-  func interfacesUpdated(interfaces: [Interface]) {
+  private func interfacesUpdated(interfaces: [Interface]) {
     
     if observerId != -1 {
       self.interface?.removeObserver(id: observerId)

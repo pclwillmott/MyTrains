@@ -135,11 +135,11 @@ class RouteManagerVC : NSViewController, NSWindowDelegate, InterfaceDelegate {
       
       var combined = Int(message.message[4])
       combined |= ((message.message[5] & 0b1) == 0b1) ? 0b10000000 : 0
-      let pageNumber = combined & (numberOfPages - 1)
-      let routeNumber = (combined >> (numberOfPages / 2)) + 1
+  //    let pageNumber = combined & (numberOfPages - 1)
+  //    let routeNumber = (combined >> (numberOfPages / 2)) + 1
       
       for index in 0...3 {
-        var entryNumber = pageNumber * 4 + index + 1
+  //      var entryNumber = pageNumber * 4 + index + 1
         var switchNumber = Int(message.message[7 + index * 2]) + 1
         switchNumber |= (Int(message.message[8 + index * 2]) & 0x0f)
         var switchState : TurnoutSwitchState = (message.message[8 + index * 2] & 0b100000) == 0 ? .thrown : .closed

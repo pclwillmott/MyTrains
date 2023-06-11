@@ -66,7 +66,7 @@ public class ViewLCCNetworkTableViewDS : NSObject, NSTableViewDataSource, NSTabl
     
     var text: String = ""
     
-    var isEditable = false
+    let isEditable = false
     
     let textColor : NSColor = .black
 

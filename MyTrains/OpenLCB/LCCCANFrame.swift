@@ -33,7 +33,7 @@ public class LCCCANFrame : NSObject {
     
     // Split into header and data sections
     
-    var temp1 = frame.split(separator: "N")
+    let temp1 = frame.split(separator: "N")
     
     // Extract header value
     

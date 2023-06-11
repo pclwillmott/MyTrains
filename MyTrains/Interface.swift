@@ -112,7 +112,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
 
   private func networkMessageReceived(message: NetworkMessage) {
     
-    let printOpSw = true
+//    let printOpSw = true
 
     switch message.messageType {
       
@@ -199,7 +199,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
       
       commandStation?.opSwBankA = message
       commandStation?.globalSystemTrackStatus = message.message[7]
-      
+    /*
       if printOpSw {
         
  //       <E7 0E 7F 00 03 30 02 47 01 08 00 1A 60 6C>
@@ -208,7 +208,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
         var opSw = 1
         var byte = 3
         
-        var mess : [UInt8] = message.message
+     //   var mess : [UInt8] = message.message
     //    mess = [0xE7, 0x0E, 0x7F, 0x00, 0x03, 0x30, 0x02, 0x47, 0x01, 0x08, 0x00, 0x1A, 0x60, 0x6C]
 
     //    print("DCS210+")
@@ -217,7 +217,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
           
           for shift in 0...7 {
             let mask : UInt8 = 1 << shift
-            let opSwState : Bool = (mess[byte] & mask) == mask
+       //     let opSwState : Bool = (mess[byte] & mask) == mask
             if opSw % 8 != 0 {
         //      print("\(opSw)\t\(opSwState ? "Closed" : "Thrown")")
             }
@@ -234,12 +234,12 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
  //       print("----------------")
         
       }
-      
+      */
     case .opSwDataBP1:
       
       commandStation?.opSwBankB = message
       commandStation?.globalSystemTrackStatus = message.message[7]
-      
+      /*
       if printOpSw {
         
         var opSw = 65
@@ -271,7 +271,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
     //    print("----------------")
         
       }
-
+*/
      
     case .fastClockData:
       commandStation?.globalSystemTrackStatus = message.message[7]
@@ -294,13 +294,6 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
 //    case .sensRepTurnOut:
   //    print("sensRepTurnOut: \(message.turnoutReportAddress) \(message.sensorState)")
     
-    case .transRep:
-      
-      if let sensor = transponderSensorLookup[message.transponderAddress] {
-       
-    
-      }
-      
     case .pmRepBXP88:
       
       for address in message.detectionSectionsSet.notSet {

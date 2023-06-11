@@ -14,7 +14,7 @@ class SwitchBoardShape {
   
   public static func drawShape(partType: SwitchBoardItemPartType, orientation: Orientation, location: SwitchBoardLocation, lineWidth:CGFloat, cellSize: CGFloat, isButton: Bool, isEnabled: Bool, offset: CGPoint, switchBoardItem: SwitchBoardItem?) {
     
-    var onlyTurnouts : Bool = switchBoardItem != nil
+    let onlyTurnouts : Bool = switchBoardItem != nil
     
     var isFeedback : Bool = false
     

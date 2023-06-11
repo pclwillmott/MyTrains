@@ -549,7 +549,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
               
               let flags = message.payload[0]
               
-              let replyPending = (flags & 0x80) == 0x80
+       //       let replyPending = (flags & 0x80) == 0x80
               
               let exponent = flags & 0x0f
               

@@ -137,7 +137,7 @@ extension Interface {
       
       let next = nextState.functions
 
-      if implementsProtocol2 || true {
+      if implementsProtocol2 {
         
         let useD5Group = true
         

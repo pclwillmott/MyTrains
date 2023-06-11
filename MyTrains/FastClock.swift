@@ -131,7 +131,7 @@ public class FastClock {
     
     if false && isEnabled && dec.seconds == 0 {
       
-      var data : [UInt8] =
+      let data : [UInt8] =
       [
         NetworkMessageOpcode.OPC_SL_RD_DATA.rawValue,
         0x0e,

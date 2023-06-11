@@ -157,7 +157,7 @@ class SlotViewVC : NSViewController, NSWindowDelegate, InterfaceDelegate {
 
     if message.messageType == .locoSlotDataP1 || message.messageType == .locoSlotDataP2 {
       
-      if let cs = commandStation, let interface = self.interface, let bounds = cs.maxSlotNumber {
+      if let cs = commandStation, let interface = self.interface {
 
         switch state {
         case .readAll:
@@ -273,7 +273,7 @@ class SlotViewVC : NSViewController, NSWindowDelegate, InterfaceDelegate {
     
     if index != -1 {
       
-      if let cs = commandStation {
+      if let _ = commandStation {
         
         state = .read
 

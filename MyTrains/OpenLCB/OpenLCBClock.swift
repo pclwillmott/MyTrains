@@ -72,26 +72,25 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
     
     configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: 512, isReadOnly: false, description: "")
     
-    variables = [addressOperatingMode              ,
-                 addressClockType                  ,
-                 addressCustomClockEventPrefixType ,
-                 addressUserSpecifiedEventPrefix   ,
-                 addressRunningState               ,
-                 addressCurrentDateTime            ,
-                 addressCurrentRate                ,
-                 addressResetToInitialState        ,
-                 addressResetToFactoryDefaults     ,
-                 addressPowerOnRunningState        ,
-                 addressInitialDateTime            ,
-                 addressDefaultDateTime            ,
-                 addressInitialRate
-    ]
-    
     super.init(nodeId: nodeId)
     
-    memorySpaces[configuration.space] = configuration
-    
     configuration.delegate = self
+
+    memorySpaces[configuration.space] = configuration
+
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressOperatingMode)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressClockType)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressCustomClockEventPrefixType)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressUserSpecifiedEventPrefix)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressRunningState)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressCurrentDateTime)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressCurrentRate)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressResetToInitialState)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressResetToFactoryDefaults)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressPowerOnRunningState)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressInitialDateTime)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDefaultDateTime)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressInitialRate)
 
     initCDI(filename: "MyTrains Clock")
     
@@ -152,21 +151,19 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
 
   // Configuration varaible addresses
   
-  private let addressOperatingMode              : Int =  0
-  private let addressClockType                  : Int =  1
-  private let addressCustomClockEventPrefixType : Int =  2
-  private let addressUserSpecifiedEventPrefix   : Int =  3
-  private let addressRunningState               : Int = 11
-  private let addressCurrentDateTime            : Int = 12
-  private let addressCurrentRate                : Int = 32
-  private let addressResetToInitialState        : Int = 36
-  private let addressResetToFactoryDefaults     : Int = 37
-  private let addressPowerOnRunningState        : Int = 38
-  private let addressInitialDateTime            : Int = 39
-  private let addressDefaultDateTime            : Int = 40
-  private let addressInitialRate                : Int = 60
-  
-  private let variables : Set<Int>
+  internal let addressOperatingMode              : Int =  0
+  internal let addressClockType                  : Int =  1
+  internal let addressCustomClockEventPrefixType : Int =  2
+  internal let addressUserSpecifiedEventPrefix   : Int =  3
+  internal let addressRunningState               : Int = 11
+  internal let addressCurrentDateTime            : Int = 12
+  internal let addressCurrentRate                : Int = 32
+  internal let addressResetToInitialState        : Int = 36
+  internal let addressResetToFactoryDefaults     : Int = 37
+  internal let addressPowerOnRunningState        : Int = 38
+  internal let addressInitialDateTime            : Int = 39
+  internal let addressDefaultDateTime            : Int = 40
+  internal let addressInitialRate                : Int = 60
   
   // MARK: Public Properties
   
@@ -316,7 +313,7 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
     }
     set(value) {
       var newValue : String
-      if let date = dateFormatter.date(from: value) {
+      if let _ = dateFormatter.date(from: value) {
         newValue = value
       }
       else {
@@ -786,71 +783,61 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
     super.stop()
   }
   
-  // MARK: OpenLCBMemorySpaceDelegate Methods
-  
-  public override func memorySpaceChanged(memorySpace: OpenLCBMemorySpace, startAddress: Int, endAddress: Int) {
+  public override func variableChanged(space: OpenLCBMemorySpace, address: Int) {
     
-    super.memorySpaceChanged(memorySpace: memorySpace, startAddress: startAddress, endAddress: endAddress)
-    
-    if memorySpace.space == configuration.space {
+    if space.space == configuration.space {
       
-      for address in variables {
-        
-        if address >= startAddress && address <= endAddress {
-          
-          switch address {
-          case addressClockType:
-            break
-          case addressCurrentRate:
-            if clockState == .running {
-              stopTimer()
-              startTimer()
-            }
-            break
-          case addressInitialRate:
-            break
-          case addressRunningState:
-            clockState == .running ? startClock() : stopClock()
-            break
-          case addressOperatingMode:
-            break
-          case addressCurrentDateTime:
-            print("dateTime: \(dateTime)")
-            dateTime = dateTime
-          case addressDefaultDateTime:
-            break
-          case addressInitialDateTime:
-            break
-          case addressPowerOnRunningState:
-            break
-          case addressResetToInitialState:
-            if setToInitialState == .enabled {
-              resetReboot()
-              setToInitialState = .disabled
-            }
-          case addressResetToFactoryDefaults:
-            if setToFactoryDefaults == .enabled {
-              resetToFactoryDefaults()
-              setToFactoryDefaults = .disabled
-            }
-          case addressUserSpecifiedEventPrefix:
-            break
-          case addressCustomClockEventPrefixType:
-            break
-          default:
-            break
-          }
-          
+      switch address {
+      case addressClockType:
+        break
+      case addressCurrentRate:
+        if clockState == .running {
+          stopTimer()
+          startTimer()
         }
-        
+        break
+      case addressInitialRate:
+        break
+      case addressRunningState:
+        clockState == .running ? startClock() : stopClock()
+        break
+      case addressOperatingMode:
+        break
+      case addressCurrentDateTime:
+        print("dateTime: \(dateTime)")
+        dateTime = dateTime
+      case addressDefaultDateTime:
+        break
+      case addressInitialDateTime:
+        break
+      case addressPowerOnRunningState:
+        break
+      case addressResetToInitialState:
+        if setToInitialState == .enabled {
+          resetReboot()
+          setToInitialState = .disabled
+        }
+      case addressResetToFactoryDefaults:
+        if setToFactoryDefaults == .enabled {
+          resetToFactoryDefaults()
+          setToFactoryDefaults = .disabled
+        }
+      case addressUserSpecifiedEventPrefix:
+        break
+      case addressCustomClockEventPrefixType:
+        break
+      default:
+        break
       }
-      
+
       updateObservers()
       
     }
-    
+
   }
-    
+  
+  // MARK: OpenLCBMemorySpaceDelegate Methods
+  
   // MARK: OpenLCBNetworkLayerDelegate Methods
   
   public override func openLCBMessageReceived(message: OpenLCBMessage) {

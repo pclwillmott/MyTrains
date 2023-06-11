@@ -60,9 +60,6 @@
 		DA32C97A294CB0E40034DB4F /* SampleRate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA32C979294CB0E40034DB4F /* SampleRate.swift */; };
 		DA33FC2027AFF9E500630227 /* OpSwDecoderType.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA33FC1F27AFF9E500630227 /* OpSwDecoderType.xib */; };
 		DA33FC2327AFFA1400630227 /* OpSwDecoderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA33FC2227AFFA1400630227 /* OpSwDecoderType.swift */; };
-		DA341C9729212F9600C3EF4F /* LocoNetBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA341C9629212F9600C3EF4F /* LocoNetBridge.swift */; };
-		DA341C9929212FD600C3EF4F /* Bridge.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA341C9829212FD600C3EF4F /* Bridge.storyboard */; };
-		DA341C9B29212FEE00C3EF4F /* BridgeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA341C9A29212FEE00C3EF4F /* BridgeVC.swift */; };
 		DA359850278219A400B81AD3 /* LocoSlotDataP2.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA35984F278219A400B81AD3 /* LocoSlotDataP2.swift */; };
 		DA3904092A349B3A00864157 /* OpenLCBClockInitialDateTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3904082A349B3A00864157 /* OpenLCBClockInitialDateTime.swift */; };
 		DA3AEF422788855800FF91D4 /* DecoderCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3AEF412788855800FF91D4 /* DecoderCV.swift */; };
@@ -375,9 +372,6 @@
 		DA32C979294CB0E40034DB4F /* SampleRate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleRate.swift; sourceTree = "<group>"; };
 		DA33FC1F27AFF9E500630227 /* OpSwDecoderType.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OpSwDecoderType.xib; sourceTree = "<group>"; };
 		DA33FC2227AFFA1400630227 /* OpSwDecoderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpSwDecoderType.swift; sourceTree = "<group>"; };
-		DA341C9629212F9600C3EF4F /* LocoNetBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoNetBridge.swift; sourceTree = "<group>"; };
-		DA341C9829212FD600C3EF4F /* Bridge.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Bridge.storyboard; sourceTree = "<group>"; };
-		DA341C9A29212FEE00C3EF4F /* BridgeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeVC.swift; sourceTree = "<group>"; };
 		DA35984F278219A400B81AD3 /* LocoSlotDataP2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoSlotDataP2.swift; sourceTree = "<group>"; };
 		DA3904082A349B3A00864157 /* OpenLCBClockInitialDateTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBClockInitialDateTime.swift; sourceTree = "<group>"; };
 		DA3AEF412788855800FF91D4 /* DecoderCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecoderCV.swift; sourceTree = "<group>"; };
@@ -659,6 +653,7 @@
 				DACA33582A18E0EF009E791F /* _enumerations */,
 				DA7B453C2A2C08240017D36B /* _nodes */,
 				DACA33592A18E207009E791F /* _protocols */,
+				DA8021E92A35503700CE2756 /* _types */,
 				DA60140629F43FD600AD9ACD /* ConfigureLCCNode.storyboard */,
 				DA60140829F4401300AD9ACD /* ConfigureLCCNodeVC.swift */,
 				DA51FB9B29D88320002CAAC1 /* LCCCANFrame.swift */,
@@ -764,6 +759,13 @@
 			path = _nodes;
 			sourceTree = "<group>";
 		};
+		DA8021E92A35503700CE2756 /* _types */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = _types;
+			sourceTree = "<group>";
+		};
 		DA8FC5E5272C3F8100FCCFCA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -816,8 +818,6 @@
 				DA8E6E922893FEB800093468 /* AddressTableViewDS.swift */,
 				DAA83DEA272C37670075CBCD /* AppDelegate.swift */,
 				DAA83DEE272C37680075CBCD /* Assets.xcassets */,
-				DA341C9829212FD600C3EF4F /* Bridge.storyboard */,
-				DA341C9A29212FEE00C3EF4F /* BridgeVC.swift */,
 				DADC21CD2944ABE2008A2F33 /* ClockView.swift */,
 				DA5B4606276F6917005CA03C /* ComboBoxDBDS.swift */,
 				DA0197242773500100350F71 /* ComboBoxDictDS.swift */,
@@ -915,7 +915,6 @@
 				DA6803AF28EA518B00DED1D8 /* LocomotiveRoster.storyboard */,
 				DA78875A28F039BF0093C647 /* LocomotiveRosterTableViewDS.swift */,
 				DA6803B128EA553900DED1D8 /* LocomotiveRosterVC.swift */,
-				DA341C9629212F9600C3EF4F /* LocoNetBridge.swift */,
 				DA28E5882824943200E1604C /* LocoNetDevice.swift */,
 				DA60D818295B617000B5A2C4 /* LocoNetDeviceCV.swift */,
 				DAA5F3CB295CA2C200C25028 /* LocoNetDeviceTC64Extensions.swift */,
@@ -1176,7 +1175,6 @@
 				DA8837762770B6F8000B9A41 /* EditLocomotives.storyboard in Resources */,
 				DA33FC2027AFF9E500630227 /* OpSwDecoderType.xib in Resources */,
 				DAB1DB8F2971CC9200918A5F /* IODeviceNew.storyboard in Resources */,
-				DA341C9929212FD600C3EF4F /* Bridge.storyboard in Resources */,
 				DA8D6E8E29703962004B9139 /* IODeviceManager.storyboard in Resources */,
 				DA412E122780948900748CCD /* Throttle.storyboard in Resources */,
 				DAF0CAD7298554A6009B392A /* IOFunctionTC64MkIIInputPropertySheet.storyboard in Resources */,
@@ -1265,7 +1263,6 @@
 				DA69E3932974581700447414 /* IOChannelDS64Output.swift in Sources */,
 				DADFFF902946025500CD2119 /* DateExtensions.swift in Sources */,
 				DAA7169B297C2B350080114F /* IODeviceBXP88PropertySheetVC.swift in Sources */,
-				DA341C9729212F9600C3EF4F /* LocoNetBridge.swift in Sources */,
 				DA5B6AAC29EAEDB20095F7D5 /* OpenLCBCANFrameFlag.swift in Sources */,
 				DA6403EF2A24EF62001CE29B /* OpenLCBMemorySpace.swift in Sources */,
 				DA60D819295B617000B5A2C4 /* LocoNetDeviceCV.swift in Sources */,
@@ -1304,7 +1301,6 @@
 				DAF4DD50289ABDDE000B848E /* SpeedProfileResultsType.swift in Sources */,
 				DA2502B9282671600002D4AF /* RollingStock.swift in Sources */,
 				DA0DD2152A2CA4AB003376F8 /* ViewNodeInfoMemorySpaceInfoTVDS.swift in Sources */,
-				DA341C9B29212FEE00C3EF4F /* BridgeVC.swift in Sources */,
 				DAE8DD55286754C00097C2D1 /* TrackCode.swift in Sources */,
 				DA467BAD281D56BC00AB9650 /* SwitchBoardOperationsView.swift in Sources */,
 				DA7A4912274AC25600C2A42B /* PeerXferMessage.swift in Sources */,

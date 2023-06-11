@@ -244,7 +244,7 @@ extension Interface {
     
     adr1 |= ((~(add >> 8) & 0x07) << 4)
     
-    var payload : [Int] = [
+    let payload : [Int] = [
       ((add >> 2) & 0b00111111) | 0b10000000,
       adr1,
     ]
@@ -265,7 +265,7 @@ extension Interface {
     
     adr1 |= ((~(add >> 8) & 0x07) << 4)
     
-    var payload : [Int] = [
+    let payload : [Int] = [
       (((add >> 2) + 1) & 0b00111111) | 0b10000000,
       adr1,
     ]
@@ -366,7 +366,7 @@ extension Interface {
     
     let shift = pagesPerRoute / 2
     
-    var combined : Int = pageNumber | (routeNumber - 1) << shift
+    let combined : Int = pageNumber | (routeNumber - 1) << shift
     
     let pageL = UInt8(combined & 0x7f)
     let pageH = UInt8(combined >> 7)
@@ -384,7 +384,7 @@ extension Interface {
     
     for pageNumber in 0...pagesPerRoute - 1 {
       
-      var combined : Int = pageNumber | (routeNumber - 1) << shift
+      let combined : Int = pageNumber | (routeNumber - 1) << shift
       
       let pageL = UInt8(combined & 0x7f)
       let pageH = UInt8(combined >> 7)
@@ -395,7 +395,7 @@ extension Interface {
       for entryNumber in (pageNumber * 4)...(pageNumber * 4 + 3) {
         let switchNumber = route[entryNumber].switchNumber - 1
         var part1 = switchNumber & 0x7f
-        var mask = route[entryNumber].switchState == .closed ? 0b100000 : 0
+        let mask = route[entryNumber].switchState == .closed ? 0b100000 : 0
         var part2 = (switchNumber >> 7) | 0b10000 | mask
         if route[entryNumber].switchNumber == 0x7f && route[entryNumber].switchState == .unknown {
           part1 = 0x7f
@@ -1230,7 +1230,7 @@ extension Interface {
 
   public func getFastClock() {
     
-    var data : [UInt8] =
+    let data : [UInt8] =
     [
       NetworkMessageOpcode.OPC_RQ_SL_DATA.rawValue,
       0x7b,
@@ -1247,7 +1247,7 @@ extension Interface {
     
     let comp = date.dateComponents
     
-    var data : [UInt8] =
+    let data : [UInt8] =
     [
       NetworkMessageOpcode.OPC_WR_SL_DATA.rawValue,
       0x0e,

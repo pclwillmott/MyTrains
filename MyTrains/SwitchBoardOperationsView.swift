@@ -85,8 +85,6 @@ class SwitchBoardOperationsView : SwitchBoardView {
   
   override func mouseDown(with event: NSEvent) {
 
-    if let layout = self.layout {
-      
       if let item = getItem(event: event) {
         
         switch event.modifierFlags.intersection(.deviceIndependentFlagsMask) {
@@ -126,6 +124,6 @@ class SwitchBoardOperationsView : SwitchBoardView {
 
     }
     
-  }
+
 
 }

@@ -532,7 +532,7 @@ class Database {
       if let reader = cmd.executeReader() {
         
         if reader.read() {
-          if let x = reader.getInt(index: 0) {
+          if let _ = reader.getInt(index: 0) {
             result = true
           }
         }

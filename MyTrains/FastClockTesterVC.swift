@@ -191,11 +191,11 @@ class FastClockTesterVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
           
       let minute = Int(message.message[6]) - 68
 
-      let mask = 0x3ff
+//      let mask = 0x3ff
       
       let combined = (Int(message.message[4]) | (Int(message.message[5]) << 7))
       
-      let s = combined < lastCombined ? "*" : ""
+ //     let s = combined < lastCombined ? "*" : ""
       
  //     print("\(combined) \(s)")
       
@@ -203,7 +203,7 @@ class FastClockTesterVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
       
       let seconds = ticks
       
-      let otherBits = combined & ~mask
+  //    let otherBits = combined & ~mask
       
       lblDays.stringValue = "\(message.message[9])"
       
@@ -260,7 +260,7 @@ class FastClockTesterVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
             
             lastTicks = combined
             
-            let elapsed = message.timeStamp - startTime
+      //      let elapsed = message.timeStamp - startTime
             
      //       let rate = TimeInterval(numberOfTicks) / elapsed
             

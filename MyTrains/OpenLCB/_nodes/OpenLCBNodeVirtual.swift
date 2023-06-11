@@ -27,9 +27,19 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
 
     memorySpaces[acdiManufacturerSpace.space] = acdiManufacturerSpace
     
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.acdiManufacturer.rawValue, address: addressACDIManufacturerSpaceVersion)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.acdiManufacturer.rawValue, address: addressACDIManufacturerName)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.acdiManufacturer.rawValue, address: addressACDIModelName)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.acdiManufacturer.rawValue, address: addressACDIHardwareVersion)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.acdiManufacturer.rawValue, address: addressACDISoftwareVersion)
+    
     acdiUserSpace.delegate = self
 
     memorySpaces[acdiUserSpace.space] = acdiUserSpace
+
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.acdiUser.rawValue, address: addressACDIUserSpaceVersion)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.acdiUser.rawValue, address: addressACDIUserNodeName)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.acdiUser.rawValue, address: addressACDIUserNodeDescription)
 
     isIdentificationSupported = true
     
@@ -47,6 +57,17 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   
   internal var memorySpaces : [UInt8:OpenLCBMemorySpace] = [:]
   
+  internal var registeredVariables : [UInt8:Set<Int>] = [:]
+  
+  internal let addressACDIManufacturerSpaceVersion : Int =  0
+  internal let addressACDIManufacturerName         : Int =  1
+  internal let addressACDIModelName                : Int =  42
+  internal let addressACDIHardwareVersion          : Int =  83
+  internal let addressACDISoftwareVersion          : Int =  104
+  internal let addressACDIUserSpaceVersion         : Int =  0
+  internal let addressACDIUserNodeName             : Int =  1
+  internal let addressACDIUserNodeDescription      : Int =  64
+
   // MARK: Public Properties
   
   public var lfsr1 : UInt32
@@ -59,7 +80,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   
   public var memorySpacesInitialized : Bool {
     get {
-      return acdiManufacturerSpace.getUInt8(address: 0) != 0
+      return acdiManufacturerSpace.getUInt8(address: addressACDIManufacturerSpaceVersion) != 0
     }
   }
     
@@ -69,74 +90,74 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   
   public override var acdiManufacturerSpaceVersion : UInt8 {
     get {
-      return acdiManufacturerSpace.getUInt8(address: 0)!
+      return acdiManufacturerSpace.getUInt8(address: addressACDIManufacturerSpaceVersion)!
     }
     set(value) {
-      acdiManufacturerSpace.setUInt(address: 0, value: value)
+      acdiManufacturerSpace.setUInt(address: addressACDIManufacturerSpaceVersion, value: value)
     }
   }
   
   public override var manufacturerName : String {
     get {
-      return acdiManufacturerSpace.getString(address: 1, count: 41)!
+      return acdiManufacturerSpace.getString(address: addressACDIManufacturerName, count: 41)!
     }
     set(value) {
-      acdiManufacturerSpace.setString(address: 1, value: String(value.prefix(40)), fieldSize: 41)
+      acdiManufacturerSpace.setString(address: addressACDIManufacturerName, value: String(value.prefix(40)), fieldSize: 41)
     }
   }
   
   public override var nodeModelName : String {
     get {
-      return acdiManufacturerSpace.getString(address: 42, count: 41)!
+      return acdiManufacturerSpace.getString(address: addressACDIModelName, count: 41)!
     }
     set(value) {
-      acdiManufacturerSpace.setString(address: 42, value: String(value.prefix(40)), fieldSize: 41)
+      acdiManufacturerSpace.setString(address: addressACDIModelName, value: String(value.prefix(40)), fieldSize: 41)
     }
   }
   
   public override var nodeHardwareVersion : String {
     get {
-      return acdiManufacturerSpace.getString(address: 83, count: 21)!
+      return acdiManufacturerSpace.getString(address: addressACDIHardwareVersion, count: 21)!
     }
     set(value) {
-      acdiManufacturerSpace.setString(address: 83, value: String(value.prefix(20)), fieldSize: 21)
+      acdiManufacturerSpace.setString(address: addressACDIHardwareVersion, value: String(value.prefix(20)), fieldSize: 21)
     }
   }
   
   public override var nodeSoftwareVersion : String {
     get {
-      return acdiManufacturerSpace.getString(address: 104, count: 21)!
+      return acdiManufacturerSpace.getString(address: addressACDISoftwareVersion, count: 21)!
     }
     set(value) {
-      acdiManufacturerSpace.setString(address: 104, value: String(value.prefix(20)), fieldSize: 21)
+      acdiManufacturerSpace.setString(address: addressACDISoftwareVersion, value: String(value.prefix(20)), fieldSize: 21)
     }
 
   }
   
   public override var acdiUserSpaceVersion : UInt8 {
     get {
-      return acdiUserSpace.getUInt8(address: 0)!
+      return acdiUserSpace.getUInt8(address: addressACDIUserSpaceVersion)!
     }
     set(value) {
-      acdiUserSpace.setUInt(address: 0, value: value)
+      acdiUserSpace.setUInt(address: addressACDIUserSpaceVersion, value: value)
     }
   }
 
   public override var userNodeName : String {
     get {
-      return acdiUserSpace.getString(address: 1, count: 63)!
+      return acdiUserSpace.getString(address: addressACDIUserNodeName, count: 63)!
     }
     set(value) {
-      acdiUserSpace.setString(address: 1, value: String(value.prefix(62)), fieldSize: 63)
+      acdiUserSpace.setString(address: addressACDIUserNodeName, value: String(value.prefix(62)), fieldSize: 63)
     }
   }
   
   public override var userNodeDescription : String {
     get {
-      return acdiUserSpace.getString(address: 64, count: 64)!
+      return acdiUserSpace.getString(address: addressACDIUserNodeDescription, count: 64)!
     }
     set(value) {
-      acdiUserSpace.setString(address: 64, value: String(value.prefix(63)), fieldSize: 64)
+      acdiUserSpace.setString(address: addressACDIUserNodeDescription, value: String(value.prefix(63)), fieldSize: 64)
     }
   }
   
@@ -190,9 +211,31 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     state = .inhibited
   }
   
+  public func registerVariable(space:UInt8, address:Int) {
+    var addresses  = Set<Int>()
+    if let temp = registeredVariables[space] {
+      addresses = temp
+    }
+    addresses.insert(address)
+    registeredVariables[space] = addresses
+  }
+  
+  public func variableChanged(space:OpenLCBMemorySpace, address:Int) {
+    
+  }
+  
   // MARK: OpenLCBMemorySpaceDelegate Methods
   
   public func memorySpaceChanged(memorySpace: OpenLCBMemorySpace, startAddress: Int, endAddress: Int) {
+    
+    if let addresses = self.registeredVariables[memorySpace.space] {
+      for address in addresses {
+        if address >= startAddress && address <= endAddress {
+          variableChanged(space: memorySpace, address: address)
+        }
+      }
+    }
+    
   }
     
   // MARK: OpenLCBNetworkLayerDelegate Methods

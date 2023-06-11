@@ -50,14 +50,14 @@ public class LCCCDITableViewDS : NSObject, NSTableViewDataSource, NSTableViewDel
     
     var text: String = ""
     
-    var isEditable = false
+    let isEditable = false
     
-    var textColor : NSColor = .black
+    let textColor : NSColor = .black
 
     enum ColumnIdentifiers {
       static let element = "Element"
       static let refresh = "Refresh"
-      static let write = "Write"
+      static let write   = "Write"
     }
 
     switch columnName {

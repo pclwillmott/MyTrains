@@ -195,12 +195,13 @@ public class Locomotive : RollingStock, InterfaceDelegate {
   
   public var originBlock : SwitchBoardItem? {
     didSet {
+      /*
       if let origin = originBlock, let destination = destinationBlock, let layout = networkController.layout {
   //      route = layout.findRoute(origin: origin, destination: destination, routeDirection: .next)
       }
       else {
  //       route = []
-      }
+      } */
     }
   }
   
@@ -208,13 +209,15 @@ public class Locomotive : RollingStock, InterfaceDelegate {
   
   public var destinationBlock : SwitchBoardItem? {
     didSet {
+      /*
       if let origin = originBlock, let destination = destinationBlock, let layout = networkController.layout {
   //      route = layout.findRoute(origin: origin, destination: destination, routeDirection: .next)
       }
       else {
   //      route = []
-      }
+      }*/
     }
+       
   }
 
   public var destinationBlockPosition : Double = 0.0

@@ -128,17 +128,17 @@ public class IODeviceTC64MkII : IODevice {
   override public func setBoardId(newBoardId:Int) {
     cvs[16].nextCVValue = newBoardId >> 8
     cvs[17].nextCVValue = newBoardId & 0xff
-    var selectedCVs : Set<Int> = [17, 18]
+    let selectedCVs : Set<Int> = [17, 18]
     writeCVs(selectedCVs: selectedCVs)
   }
 
   public func readDeviceCVs() {
-    var selectedCVs : Set<Int> = [7, 8, 9, 17, 18, 112, 113, 114, 115]
+    let selectedCVs : Set<Int> = [7, 8, 9, 17, 18, 112, 113, 114, 115]
     readCVs(selectedCVs: selectedCVs)
   }
   
   public func writeDeviceCVs() {
-    var selectedCVs : Set<Int> = [112]
+    let selectedCVs : Set<Int> = [112]
     writeCVs(selectedCVs: selectedCVs)
   }
 

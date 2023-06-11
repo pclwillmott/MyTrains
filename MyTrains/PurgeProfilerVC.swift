@@ -140,7 +140,7 @@ class PurgeProfilerVC : NSViewController, NSWindowDelegate, InterfaceDelegate {
       return
     }
     
-    if let interface = self.interface {
+//    if let interface = self.interface {
       /*
       interface.isStandardLocoAddressPurgeTime = safeIsStandardPurgeTime
       interface.doBeepsOnPurge = safeDoBeepsOnPurge
@@ -149,7 +149,7 @@ class PurgeProfilerVC : NSViewController, NSWindowDelegate, InterfaceDelegate {
       interface.setLocoSlotDataP1(slotData: interface.newOpSwDataAP1)
       interface.save()
 */
-    }
+//    }
     
     profilerState = .idle
     
@@ -208,7 +208,7 @@ class PurgeProfilerVC : NSViewController, NSWindowDelegate, InterfaceDelegate {
 
             stopTimer()
 
-            let time = message.timeStamp - startTime
+    //        let time = message.timeStamp - startTime
             
    //         print(time)
             
@@ -249,7 +249,7 @@ class PurgeProfilerVC : NSViewController, NSWindowDelegate, InterfaceDelegate {
             
             stopTimer()
             
-            let time = message.timeStamp - startTime
+      //      let time = message.timeStamp - startTime
             
       //      print(time)
             

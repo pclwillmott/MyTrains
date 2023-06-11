@@ -361,7 +361,7 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
     var item : String = ""
     var byteNumber : Int = 0
     
-    let timeNow = Date.timeIntervalSinceReferenceDate
+//    let timeNow = Date.timeIntervalSinceReferenceDate
     
     // ****************
     
@@ -482,9 +482,9 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
       
  //     let minute = -Int8(bitPattern: message.message[6] | 0b10000000)
 
-      let maxTick = 0xbff
+ //     let maxTick = 0xbff
       
-      let ticks = maxTick - (0x3fff - ((Int(message.message[4]) & 0x7f) - ((Int(message.message[5]) & 0x7f) << 7)))
+ //     let ticks = maxTick - (0x3fff - ((Int(message.message[4]) & 0x7f) - ((Int(message.message[5]) & 0x7f) << 7)))
       
       let second = (Int(message.message[4]) | (Int(message.message[5]) << 7)) & 0x3ff 
       

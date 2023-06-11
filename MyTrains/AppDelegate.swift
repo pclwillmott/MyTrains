@@ -170,12 +170,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     wc.showWindow(nil)
   }
   
-  @IBAction func mnuBridge(_ sender: NSMenuItem) {
-    let x = ModalWindow.Bridge
-    let wc = x.windowController
-    wc.showWindow(nil)
-  }
-  
   // MARK: View Menu
   
   @IBAction func mnuMonitorAction(_ sender: NSMenuItem) {

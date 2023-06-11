@@ -329,7 +329,7 @@ public class Layout : EditorObject {
           operationalGroups[item.groupId] = group
         }
         else {
-          var group : [SwitchBoardItem] = [item]
+          let group : [SwitchBoardItem] = [item]
           operationalGroups[item.groupId] = group
         }
         

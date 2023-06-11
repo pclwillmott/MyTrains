@@ -66,9 +66,9 @@ public class ViewNodeInfoMemorySpaceInfoTVDS : NSObject, NSTableViewDataSource, 
     
     var text: String = ""
     
-    var isEditable = false
+    let isEditable = false
     
-    var textColor : NSColor = .black
+    let textColor : NSColor = .black
     
     var alignment : NSTextAlignment = .left
 

@@ -566,18 +566,18 @@ public class LocoNetDevice : EditorObject {
   }
   
   private func makeSensors() {
-    
+    /*
     if let info = locoNetProductInfo {
- /*
+
       for index in 1...info.sensors {
         let sensor = Sensor()
         sensor.locoNetDeviceId = primaryKey
         sensor.channelNumber = index
         sensors.append(sensor)
       }
-      */
+      
     }
-    
+    */
   }
   
   private func makeCVs() {

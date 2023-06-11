@@ -290,7 +290,7 @@ public class OpenLCBMemorySpace {
 
   public func save() {
     
-    var sql = "UPDATE [\(TABLE.MEMORY_SPACE)] SET " +
+    let sql = "UPDATE [\(TABLE.MEMORY_SPACE)] SET " +
       "[\(MEMORY_SPACE.NODE_ID)] = @\(MEMORY_SPACE.NODE_ID), " +
       "[\(MEMORY_SPACE.SPACE)] = @\(MEMORY_SPACE.SPACE), " +
       "[\(MEMORY_SPACE.MEMORY)] = @\(MEMORY_SPACE.MEMORY) " +

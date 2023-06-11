@@ -53,7 +53,7 @@ class IODeviceManagerVC: NSViewController, NSWindowDelegate, UpdateDelegate {
   
   private func setupInterface() {
     
-    if let network = cboNetworkDS.editorObjectAt(index: cboNetwork.indexOfSelectedItem) as? Network, let interface = network.interface {
+    if let network = cboNetworkDS.editorObjectAt(index: cboNetwork.indexOfSelectedItem) as? Network {
       
       tableViewDS.ioFunctions = networkController.ioFunctions(networkId: network.primaryKey)
       tvTableView.dataSource = tableViewDS
