@@ -675,7 +675,6 @@
 				DA56260E29E1AC2B00D465CC /* OpenLCBNetworkLayer.swift */,
 				DACA33562A18D065009E791F /* OpenLCBNodeAddressSpaceInformation.swift */,
 				DA9B87252A2B686C00E9969E /* OpenLCBNodeConfigurationOptions.swift */,
-				DAA54F7E2A217CDA005CED7E /* OpenLCBNodeConfigurationTool.swift */,
 				DA56260A29E1A08500D465CC /* OpenLCBTransportLayer.swift */,
 				DAA36B9C2A110B6200F07D8E /* OpenLCBTransportLayerAlias.swift */,
 				DA51B8D729D9D5430074E881 /* OpenLCBTransportLayerCAN.swift */,
@@ -755,6 +754,7 @@
 				DA5BC9922A1A6CEA00D67ABE /* OpenLCBNodeRollingStock.swift */,
 				DAF3746E2A1A2A9B009E91F0 /* OpenLCBNodeVirtual.swift */,
 				DAA777C92A20C84C008EAF02 /* OpenLCBClock.swift */,
+				DAA54F7E2A217CDA005CED7E /* OpenLCBNodeConfigurationTool.swift */,
 			);
 			path = _nodes;
 			sourceTree = "<group>";

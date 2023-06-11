@@ -91,6 +91,8 @@
 <float size='4'>
 <name>Rate</name>
 <description>Current clock rate in resolution of 0.25. Valid range: -512.00 to 511.75.</description>
+<min>-512.0</min>
+<max>511.75</max>
 </float>
 
 <int size='1'>
@@ -156,6 +158,8 @@
 <float size='4'>
 <name>Rate</name>
 <description>Initial clock rate in resolution of 0.25. Valid range: -512.00 to 511.75.</description>
+<min>-512.0</min>
+<max>511.75</max>
 </float>
 
 </segment>

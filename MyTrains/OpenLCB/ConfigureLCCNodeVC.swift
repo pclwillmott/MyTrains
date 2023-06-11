@@ -1089,7 +1089,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
                 return
               }
               if let min = element.min, let minUInt8 = UInt8(min), uint8 < minUInt8 {
-                displayErrorMessage(message: "The value is greater than the minimum value of \(min).")
+                displayErrorMessage(message: "The value is less than the minimum value of \(min).")
                 return
               }
               data = uint8.bigEndianData
@@ -1105,7 +1105,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
                 return
               }
               if let min = element.min, let minUInt16 = UInt16(min), uint16 < minUInt16 {
-                displayErrorMessage(message: "The value is greater than the minimum value of \(min).")
+                displayErrorMessage(message: "The value is less than the minimum value of \(min).")
                 return
               }
               data = uint16.bigEndianData
@@ -1121,7 +1121,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
                 return
               }
               if let min = element.min, let minUInt32 = UInt32(min), uint32 < minUInt32 {
-                displayErrorMessage(message: "The value is greater than the minimum value of \(min).")
+                displayErrorMessage(message: "The value is less than the minimum value of \(min).")
                 return
               }
               data = uint32.bigEndianData
@@ -1137,7 +1137,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
                 return
               }
               if let min = element.min, let minUInt64 = UInt64(min), uint64 < minUInt64 {
-                displayErrorMessage(message: "The value is greater than the minimum value of \(min).")
+                displayErrorMessage(message: "The value is less than the minimum value of \(min).")
                 return
               }
               data = uint64.bigEndianData
@@ -1161,7 +1161,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
                 return
               }
               if let min = element.min, let minFloat32 = Float32(min), float32 < minFloat32 {
-                displayErrorMessage(message: "The value is greater than the minimum value of \(min).")
+                displayErrorMessage(message: "The value is less than the minimum value of \(min).")
                 return
               }
               let word = float32.float16.v
@@ -1178,7 +1178,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
                 return
               }
               if let min = element.min, let minFloat32 = Float32(min), float32 < minFloat32 {
-                displayErrorMessage(message: "The value is greater than the minimum value of \(min).")
+                displayErrorMessage(message: "The value is less than the minimum value of \(min).")
                 return
               }
               data = float32.bitPattern.bigEndianData
@@ -1194,7 +1194,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
                 return
               }
               if let min = element.min, let minFloat64 = Float64(min), float64 < minFloat64 {
-                displayErrorMessage(message: "The value is greater than the minimum value of \(min).")
+                displayErrorMessage(message: "The value is less than the minimum value of \(min).")
                 return
               }
               data = float64.bitPattern.bigEndianData

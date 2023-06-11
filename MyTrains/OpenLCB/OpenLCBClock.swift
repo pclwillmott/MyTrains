@@ -141,6 +141,8 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
   
   private var specificEvents : Set<UInt64> = []
   
+  private var rebooted = false
+  
   private let baseEventLookup : [OpenLCBClockType:UInt64] =
   [
     OpenLCBClockType.fastClock       : 0x0101000001000000,
@@ -290,7 +292,6 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
       return configuration.getString(address: addressCurrentDateTime, count: 20)!
     }
     set(value) {
-      print("dateTime: value = \(value)")
       var newValue : String
       var newDate : Date
       if let date = dateFormatter.date(from: value) {
@@ -301,7 +302,6 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
         newValue = "1970-01-01T00:00:00"
         newDate = Date(timeIntervalSince1970: 0.0)
       }
-      print("dateTime: \(newValue) \(newDate)")
       configuration.setString(address: addressCurrentDateTime, value: newValue, fieldSize: 20)
       date = newDate
     }
@@ -357,7 +357,7 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
       day    = components.day!
       hour   = components.hour!
       minute = components.minute!
-      second = components.second!
+      second = 0 // components.second!
       
     }
   }
@@ -378,12 +378,34 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
 
   internal override func resetReboot() {
     
-    if subState == .running {
-      stopClock()
-    }
+    rebooted = true
     
     subState = .rebooting
     
+    timer?.invalidate()
+    timer = nil
+    
+    syncTimer?.invalidate()
+    syncTimer = nil
+    
+    year = 1970
+    
+    month = 1
+    
+    day = 1
+    
+    hour = 0
+    
+    minute = 0
+    
+    second = 0
+
+    triggered = false
+    
+    lastSend  = 0
+    
+    lastEvents = [UInt64](repeating: 0, count: 5)
+
     updateObservers()
     
     rate = initialRate
@@ -408,7 +430,7 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
       }
     case .slave:
       subState = .idle
-      networkLayer?.sendClockQuery(sourceNodeId: nodeId, baseEventId: baseEventId)
+      networkLayer!.sendClockQuery(sourceNodeId: nodeId, baseEventId: baseEventId)
     }
     
     updateObservers()
@@ -453,6 +475,19 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
     
   }
   
+  private func sendStartClockPreamble() {
+    if let network = networkLayer {
+      makeSync()
+      var eventId = baseEventId | 0xffff
+      network.sendProducerRangeIdentified(sourceNodeId: nodeId, eventId: eventId)
+      network.sendConsumerRangeIdentified(sourceNodeId: nodeId, eventId: eventId)
+      eventId = encodeStopStartEvent(state: clockState)
+      lastEvents[OpenLCBFastClockEventIndex.startOrStopEvent.rawValue] = eventId
+      network.sendEvent(sourceNodeId: nodeId, eventId: eventId)
+      sendSync()
+    }
+  }
+  
   private func isLeapYear(year:Int) -> Bool {
     return ( (year % 4 == 0) && (year % 100 != 0) ) || (year % 400 == 0)
   }
@@ -469,12 +504,15 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
     
     var rollover = false
     
+    var minuteRollover = false
+    
     switch clockDirection {
     case .forward:
       second += 1
       if second == 60 {                                        // Seconds in the range 0 ... 59
         second = 0
         minute += 1
+        minuteRollover = true
         if minute == 60 {                                      // Minutes in the range 0 ... 59
           minute = 0
           hour += 1
@@ -503,6 +541,7 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
       if second == -1 {                                       // Seconds in the range 0 ... 59
         second = 59
         minute -= 1
+        minuteRollover = true
         if minute == -1 {                                     // Minutes in the range 0 ... 59
           minute = 59
           hour -= 1
@@ -528,14 +567,10 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
       }
     }
     
-    let newFormatter = ISO8601DateFormatter()
-    let str = String(newFormatter.string(from: date).prefix(19))
+    let str = String(dateFormatter.string(from: date).prefix(19))
     configuration.setString(address: addressCurrentDateTime, value: str, fieldSize: 20)
     
-    let newDate = Date().timeIntervalSince1970
-    triggered = triggered || (newDate - lastSend) > 59.0
-    
-    if isClockGenerator, let network = networkLayer {
+    if minuteRollover && isClockGenerator, let network = networkLayer {
       
       if rollover {
         network.sendEvent(sourceNodeId: nodeId, eventId: encodeDateRolloverEvent())
@@ -544,19 +579,18 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
 
       let eventId = encodeTimeEvent(subCode: .reportTimeEventId, hour: hour, minute: minute)
           
-      if lastEvents[OpenLCBFastClockEventIndex.reportTimeEvent.rawValue] != eventId {
-        
-        if specificEvents.contains(eventId) {
-          triggered = true
-        }
-        
-        if triggered || rollover {
-          lastEvents[OpenLCBFastClockEventIndex.reportTimeEvent.rawValue] = eventId
-          network.sendEvent(sourceNodeId: nodeId, eventId: eventId)
-          triggered = false
-          lastSend = newDate
-        }
-          
+      let newDate = Date().timeIntervalSince1970
+      triggered = triggered || (newDate - lastSend) > 59.0
+      
+      if specificEvents.contains(eventId) {
+        triggered = true
+      }
+      
+      if triggered || rollover {
+        lastEvents[OpenLCBFastClockEventIndex.reportTimeEvent.rawValue] = eventId
+        network.sendEvent(sourceNodeId: nodeId, eventId: eventId)
+        triggered = false
+        lastSend = newDate
       }
 
     }
@@ -685,10 +719,6 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
     
     if let network = networkLayer {
       
-      if lastEvents.isEmpty {
-        makeSync()
-      }
-      
       for index in 0 ... 4 {
         network.sendProducerIdentifiedValid(sourceNodeId: nodeId, eventId: lastEvents[index])
       }
@@ -730,13 +760,14 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
   }
 
   public func startClock() {
+   
+    clockState = .running
+    
+    subState = .running
         
     if let network = networkLayer {
       if isClockGenerator {
-        let eventId = baseEventId | 0xffff
-        network.sendProducerRangeIdentified(sourceNodeId: nodeId, eventId: eventId)
-        network.sendConsumerRangeIdentified(sourceNodeId: nodeId, eventId: eventId)
-        sendSync()
+        sendStartClockPreamble()
       }
       else {
         let eventId = baseEventId | 0xffff
@@ -754,6 +785,8 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
     stopTimer()
     
     clockState = .stopped
+    
+    subState = .stopped
     
     if isClockGenerator, let network = networkLayer {
       let eventId = encodeStopStartEvent(state: clockState)
@@ -804,8 +837,19 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
       case addressOperatingMode:
         break
       case addressCurrentDateTime:
-        print("dateTime: \(dateTime)")
         dateTime = dateTime
+        if isClockGenerator {
+          var eventToSend : [(index:OpenLCBFastClockEventIndex, eventId:UInt64)] = []
+          eventToSend.append((index: .reportTimeEvent, eventId:encodeTimeEvent(subCode: .reportTimeEventId, hour: hour, minute: minute)))
+          eventToSend.append((index: .reportDateEvent, eventId:encodeDateEvent(subCode: .reportDateEventId, month: month, day: day)))
+          eventToSend.append((index:.reportYearEvent, eventId:encodeYearEvent(subCode: .reportYearEventId, year: year)))
+          for (index, eventId) in eventToSend {
+            lastEvents[index.rawValue] = eventId
+            networkLayer?.sendEvent(sourceNodeId: nodeId, eventId: eventId)
+          }
+          startSyncTimer()
+       }
+
       case addressDefaultDateTime:
         break
       case addressInitialDateTime:
@@ -928,9 +972,13 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
               sendSync()
             }
           case .stopEventId:
-            stopClock()
+            if clockState == .running {
+              stopClock()
+            }
           case .startEventId:
-            startClock()
+            if clockState == .stopped {
+              startClock()
+            }
           case .dateRolloverEventId:
             if !isClockGenerator {
               switch clockDirection {

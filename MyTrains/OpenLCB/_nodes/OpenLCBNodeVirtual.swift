@@ -41,13 +41,17 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.acdiUser.rawValue, address: addressACDIUserNodeName)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.acdiUser.rawValue, address: addressACDIUserNodeDescription)
 
-    isIdentificationSupported = true
-    
     isSimpleNodeInformationProtocolSupported = true
     
-    isSimpleProtocolSubsetSupported = true
-
     isDatagramProtocolSupported = true
+    
+    isMemoryConfigurationProtocolSupported = true
+    
+    isAbbreviatedDefaultCDIProtocolSupported = true
+    
+    isEventExchangeProtocolSupported = true
+    
+    isSimpleProtocolSubsetSupported = true
     
   }
   
@@ -164,11 +168,9 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   // MARK: Private Methods
   
   internal func resetReboot() {
-    
   }
   
   internal func resetToFactoryDefaults() {
-    
   }
   
   internal func saveMemorySpaces() {
@@ -267,7 +269,9 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
         switch message.datagramType {
         case .reinitializeFactoryResetCommand:
           networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, replyPending: false, timeOut: 0.0)
-          resetToFactoryDefaults()
+          DispatchQueue.main.async {
+            self.resetToFactoryDefaults()
+          }
           
         case .resetRebootCommand:
           networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, replyPending: false, timeOut: 0.0)
@@ -281,6 +285,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
             }
             networkLayer?.sendLockReserveReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, reservedNodeId: lockedNodeId)
           }
+          
         case .getAddressSpaceInformationCommand:
           
           message.payload.removeFirst(2)
