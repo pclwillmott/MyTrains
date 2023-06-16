@@ -49,7 +49,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
     
     self.view.window?.delegate = self
     
-    networkLayer = networkController.openLCBNetworkLayer
+    networkLayer = myTrainsController.openLCBNetworkLayer
     
     if let network = self.networkLayer {
       observerId = network.addObserver(observer: self)
@@ -57,7 +57,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
     
     self.view.window?.title = "Configure \(node!.manufacturerName) - \(node!.nodeModelName) (\(node!.nodeId.toHexDotFormat(numberOfBytes: 6)))"
     
-    sourceNodeId = networkController.openLCBNetworkLayer!.myTrainsNode.nodeId
+    sourceNodeId = myTrainsController.openLCBNetworkLayer!.myTrainsNode.nodeId
     
     safeTextTop = txtValue.frame.origin.y
     

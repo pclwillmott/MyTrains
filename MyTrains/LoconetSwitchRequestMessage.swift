@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class LoconetSwitchRequestMessage : NetworkMessage {
+public class LoconetSwitchRequestMessage : LocoNetMessage {
   
   public var switchAddress : UInt16 {
     get {

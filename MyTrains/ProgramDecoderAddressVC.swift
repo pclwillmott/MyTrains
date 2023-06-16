@@ -35,11 +35,11 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, InterfaceDel
     
     self.view.window?.delegate = self
     
-    cboLocomotiveDS.dictionary = networkController.rollingStockWithDecoders
+    cboLocomotiveDS.dictionary = myTrainsController.rollingStockWithDecoders
     
     cboLocomotive.dataSource = cboLocomotiveDS
     
-    cboCommandStationDS.dictionary = networkController.programmers
+    cboCommandStationDS.dictionary = myTrainsController.programmers
     
     cboCommandStation.dataSource = cboCommandStationDS
     
@@ -119,7 +119,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, InterfaceDel
     get {
       var result : RollingStock? = nil
       if let editorObject = cboLocomotiveDS.editorObjectAt(index: cboLocomotive.indexOfSelectedItem) {
-        result = networkController.rollingStock[editorObject.primaryKey]
+        result = myTrainsController.rollingStock[editorObject.primaryKey]
       }
       return result
     }
@@ -190,7 +190,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, InterfaceDel
     
     if let programmer = cboCommandStationDS.editorObjectAt(index: cboCommandStation.indexOfSelectedItem) as? InterfaceLocoNet {
       if let info = programmer.locoNetProductInfo, info.attributes.contains(.CommandStation) {
-        commandStation = networkController.commandStationInterface(commandStation: programmer)
+        commandStation = myTrainsController.commandStationInterface(commandStation: programmer)
         needToSetPRMode = false
       }
       else {
@@ -407,7 +407,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, InterfaceDel
   
   // MARK: CommandStationDelegate Methods
   
-  @objc func progMessageReceived(message: NetworkMessage) {
+  @objc func progMessageReceived(message: LocoNetMessage) {
     
     switch message.messageType {
     case .timeout:

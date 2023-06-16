@@ -34,7 +34,7 @@ class AddressManagerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
     
     self.view.window?.delegate = self
     
-    cboNetworkDS.dictionary = networkController.networksForCurrentLayout
+    cboNetworkDS.dictionary = myTrainsController.networksForCurrentLayout
     
     cboNetwork.dataSource = cboNetworkDS
     
@@ -83,7 +83,7 @@ class AddressManagerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
         observerId = interface.addObserver(observer: self)
       }
 
-      tableViewDS.devices = networkController.devicesWithAddresses(networkId: network.primaryKey)
+      tableViewDS.devices = myTrainsController.devicesWithAddresses(networkId: network.primaryKey)
       tableView.dataSource = tableViewDS
       tableView.delegate = tableViewDS
       

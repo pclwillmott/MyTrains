@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class LocoSlotDataP1 : NetworkMessage {
+public class LocoSlotDataP1 : LocoNetMessage {
 
   // MARK: Public Properties
   

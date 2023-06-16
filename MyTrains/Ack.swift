@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class Ack : NetworkMessage {
+public class Ack : LocoNetMessage {
 
   var opCodeResponding : NetworkMessageOpcode {
     get {

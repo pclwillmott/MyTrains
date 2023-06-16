@@ -23,7 +23,7 @@ class ThrottleVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate,
 
   func windowWillClose(_ notification: Notification) {
     
-    networkController.removeDelegate(id: networkControllerDelegateId)
+    myTrainsController.removeDelegate(id: networkControllerDelegateId)
     
     if locomotiveDelegateId != -1 {
       locomotive?.removeDelegate(withKey: locomotiveDelegateId)
@@ -38,7 +38,7 @@ class ThrottleVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate,
     
     self.view.window?.delegate = self
     
-    networkControllerDelegateId = networkController.appendDelegate(delegate: self)
+    networkControllerDelegateId = myTrainsController.appendDelegate(delegate: self)
     
     let xStart : CGFloat = 110
     var xPos : CGFloat = xStart
@@ -66,7 +66,7 @@ class ThrottleVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate,
       
     }
 
-    dataSource.dictionary = networkController.locomotives
+    dataSource.dictionary = myTrainsController.locomotives
     
     cboLocomotive.dataSource = dataSource
     
@@ -231,7 +231,7 @@ class ThrottleVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate,
   
   // MARK: NetworkControllerDelegate Methods
   
-  @objc func networkControllerUpdated(netwokController: NetworkController) {
+  @objc func networkControllerUpdated(netwokController: MyTrainsController) {
   }
   
   // MARK: Outlets & Actions
@@ -340,7 +340,7 @@ class ThrottleVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate,
   @IBOutlet weak var btnSetRoute: NSButton!
   
   @IBAction func btnSetRouteAction(_ sender: NSButton) {
-    if let locomotive = self.locomotive, let layout = networkController.layout {
+    if let locomotive = self.locomotive, let layout = myTrainsController.layout {
       layout.setRoute(route: locomotive.route)
     }
   }

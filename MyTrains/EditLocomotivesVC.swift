@@ -34,7 +34,7 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     
     cboNetwork.dataSource = cboNetworkDS
     
-    editorView.dictionary = networkController.locomotives
+    editorView.dictionary = myTrainsController.locomotives
     
     UnitLength.populate(comboBox: cboLengthUnits)
     UnitLength.populate(comboBox: cboOccupancyFeedbackOffsetUnits)
@@ -230,8 +230,8 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     
     let locomotive = Locomotive(primaryKey: -1)
     setFields(locomotive: locomotive)
-    networkController.addRollingStock(rollingStock: locomotive)
-    editorView.dictionary = networkController.locomotives
+    myTrainsController.addRollingStock(rollingStock: locomotive)
+    editorView.dictionary = myTrainsController.locomotives
     editorView.setSelection(key: locomotive.primaryKey)
     return locomotive
     
@@ -240,16 +240,16 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   func saveExisting(dbEditorView: DBEditorView, editorObject: EditorObject) {
     if let locomotive = editorObject as? Locomotive {
       setFields(locomotive: locomotive)
-      editorView.dictionary = networkController.locomotives
+      editorView.dictionary = myTrainsController.locomotives
       editorView.setSelection(key: locomotive.primaryKey)
     }
   }
   
   func delete(dbEditorView: DBEditorView, primaryKey: Int) {
     
-    networkController.removeRollingStock(primaryKey: primaryKey)
+    myTrainsController.removeRollingStock(primaryKey: primaryKey)
     Locomotive.delete(primaryKey: primaryKey)
-    editorView.dictionary = networkController.locomotives
+    editorView.dictionary = myTrainsController.locomotives
      
   }
   

@@ -1,5 +1,5 @@
 //
-//  NetworkController.swift
+//  MyTrainsController.swift
 //  MyTrains
 //
 //  Created by Paul Willmott on 06/11/2021.
@@ -9,12 +9,12 @@ import Foundation
 
 @objc public protocol NetworkControllerDelegate {
   @objc optional func interfacesUpdated(interfaces:[Interface])
-  @objc optional func networkControllerUpdated(netwokController:NetworkController)
-  @objc optional func statusUpdated(networkController:NetworkController)
+  @objc optional func networkControllerUpdated(netwokController:MyTrainsController)
+  @objc optional func statusUpdated(myTrainsController:MyTrainsController)
   @objc optional func switchBoardUpdated()
 }
 
-public class NetworkController : NSObject, InterfaceDelegate, NSUserNotificationCenterDelegate, MTSerialPortManagerDelegate {
+public class MyTrainsController : NSObject, InterfaceDelegate, NSUserNotificationCenterDelegate, MTSerialPortManagerDelegate {
   
   // MARK: Constructor
   
@@ -106,7 +106,7 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
   public var connected : Bool = false {
     didSet {
       for delegate in controllerDelegates {
-        delegate.value.statusUpdated?(networkController: self)
+        delegate.value.statusUpdated?(myTrainsController: self)
       }
     }
   }
@@ -132,9 +132,9 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
       
       var result : [Int:Locomotive] = [:]
       
-      for kv in rollingStock {
-        if let rs = kv.value as? Locomotive, rs.rollingStockType == .locomotive {
-          result[rs.primaryKey] = rs
+      for (k, v) in rollingStock {
+        if let rs = v as? Locomotive {
+          result[k] = rs
         }
       }
       
@@ -506,7 +506,7 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
   
   public func networkControllerStatusUpdated() {
     for (_, value) in controllerDelegates {
-      value.statusUpdated?(networkController: self)
+      value.statusUpdated?(myTrainsController: self)
     }
   }
   
@@ -643,7 +643,7 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
   
   public func trackStatusChanged(commandStation: LocoNetDevice) {
     for delegate in controllerDelegates {
-      delegate.value.statusUpdated?(networkController: self)
+      delegate.value.statusUpdated?(myTrainsController: self)
     }
   }
 

@@ -28,7 +28,7 @@ class DashBoardVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate
       }
     }
     if delegateId != -1 {
-      networkController.removeDelegate(id: delegateId)
+      myTrainsController.removeDelegate(id: delegateId)
       delegateId = -1
     }
   }
@@ -77,9 +77,9 @@ class DashBoardVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate
 
     clearFields()
     
-    delegateId = networkController.appendDelegate(delegate: self)
+    delegateId = myTrainsController.appendDelegate(delegate: self)
     
-    interfacesUpdated(interfaces: networkController.networkInterfaces)
+    interfacesUpdated(interfaces: myTrainsController.networkInterfaces)
     
     startQuery()
     
@@ -102,7 +102,7 @@ class DashBoardVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate
   private var querySlot3 : [String:QuerySlot3] = [:]
   private var querySlot4 : [String:QuerySlot4] = [:]
   private var querySlot5 : [String:QuerySlot5] = [:]
-  private var names      : [String:NetworkMessage] = [:]
+  private var names      : [String:LocoNetMessage] = [:]
   
   private var nextQuery : Int = 0
 
@@ -168,10 +168,10 @@ class DashBoardVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate
   
   // MARK: NetworkControllerDelegate Methods
   
-  func statusUpdated(networkController: NetworkController) {
+  func statusUpdated(myTrainsController: MyTrainsController) {
   }
   
-  func networkControllerUpdated(netwokController: NetworkController) {
+  func networkControllerUpdated(netwokController: MyTrainsController) {
   }
   
   func interfacesUpdated(interfaces: [Interface]) {
@@ -204,7 +204,7 @@ class DashBoardVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate
 
   // MARK: NetworkMessengerDelegate Methods
   
-  @objc func networkMessageReceived(message: NetworkMessage) {
+  @objc func networkMessageReceived(message: LocoNetMessage) {
     
     var resetTimer : Bool = true
     
@@ -360,7 +360,7 @@ class DashBoardVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate
       }
     }
     
-    for x in networkController.networkInterfaces {
+    for x in myTrainsController.networkInterfaces {
       if x.deviceName == name, let y = x as? InterfaceLocoNet {
         interface = y
         observerId = interface?.addObserver(observer: self) ?? -1

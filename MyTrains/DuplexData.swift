@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class DuplexData : NetworkMessage {
+public class DuplexData : LocoNetMessage {
   
   // MARK: Constructors
   

@@ -28,7 +28,7 @@ class GroupSetupVC: NSViewController, NetworkControllerDelegate, InterfaceDelega
     }
     
     if delegateId != -1 {
-      networkController.removeDelegate(id: delegateId)
+      myTrainsController.removeDelegate(id: delegateId)
       delegateId = -1
     }
     
@@ -38,9 +38,9 @@ class GroupSetupVC: NSViewController, NetworkControllerDelegate, InterfaceDelega
     
     self.view.window?.delegate = self
 
-    delegateId = networkController.appendDelegate(delegate: self)
+    delegateId = myTrainsController.appendDelegate(delegate: self)
     
-    interfacesUpdated(interfaces: networkController.networkInterfaces)
+    interfacesUpdated(interfaces: myTrainsController.networkInterfaces)
     
     btnReadAction(btnRead)
 
@@ -145,7 +145,7 @@ class GroupSetupVC: NSViewController, NetworkControllerDelegate, InterfaceDelega
 
   // MARK: NetworkMessengerDelegate Methods
   
-  @objc func networkMessageReceived(message: NetworkMessage) {
+  @objc func networkMessageReceived(message: LocoNetMessage) {
   
     switch message.messageType {
     case .duplexGroupData:
@@ -203,7 +203,7 @@ class GroupSetupVC: NSViewController, NetworkControllerDelegate, InterfaceDelega
       }
     }
     
-    for (_, x) in networkController.locoNetInterfaces {
+    for (_, x) in myTrainsController.locoNetInterfaces {
       if x.deviceName == name {
         interface = x
         observerId = interface?.addObserver(observer: self) ?? -1

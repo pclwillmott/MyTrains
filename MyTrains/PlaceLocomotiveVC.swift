@@ -27,7 +27,7 @@ class PlaceLocomotiveVC: NSViewController, NSWindowDelegate {
     
     self.view.window?.delegate = self
     
-    cboLocomotiveDS.dictionary = networkController.locomotives
+    cboLocomotiveDS.dictionary = myTrainsController.locomotives
     
     cboLocomotive.dataSource = cboLocomotiveDS
  

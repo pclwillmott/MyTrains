@@ -52,7 +52,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
   var activity: NSObjectProtocol?
   
   func applicationWillTerminate(_ aNotification: Notification) {
-    networkController.openLCBNetworkLayer?.stop()
+    myTrainsController.openLCBNetworkLayer?.stop()
   }
 
   func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
@@ -145,7 +145,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
   }
   
   @IBAction func mnuSwitchBoardEditor(_ sender: NSMenuItem) {
-    if let _ = networkController.layout {
+    if let _ = myTrainsController.layout {
       ModalWindow.SwitchBoardEditor.runModel()
     }
   }

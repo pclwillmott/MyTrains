@@ -21,7 +21,7 @@ class SetFastClockVC: NSViewController, NSWindowDelegate, OpenLCBClockDelegate {
   }
   
   func windowWillClose(_ notification: Notification) {
-    if let fastClock = networkController.openLCBNetworkLayer?.fastClock {
+    if let fastClock = myTrainsController.openLCBNetworkLayer?.fastClock {
       fastClock.removeObserver(observerId: observerId)
       observerId = -1
     }
@@ -31,7 +31,7 @@ class SetFastClockVC: NSViewController, NSWindowDelegate, OpenLCBClockDelegate {
     
     self.view.window?.delegate = self
     
-    if let fastClock = networkController.openLCBNetworkLayer?.fastClock {
+    if let fastClock = myTrainsController.openLCBNetworkLayer?.fastClock {
       
       txtRate.stringValue = "\(fastClock.rate)"
       
@@ -70,7 +70,7 @@ class SetFastClockVC: NSViewController, NSWindowDelegate, OpenLCBClockDelegate {
   
   @IBAction func btnSetAction(_ sender: NSButton) {
     
-    if let networkLayer = networkController.openLCBNetworkLayer {
+    if let networkLayer = myTrainsController.openLCBNetworkLayer {
 
       let fastClock = networkLayer.fastClock
       
@@ -124,7 +124,7 @@ class SetFastClockVC: NSViewController, NSWindowDelegate, OpenLCBClockDelegate {
   
   @IBAction func swSwitchAction(_ sender: NSSwitch) {
 
-    if let networkLayer = networkController.openLCBNetworkLayer {
+    if let networkLayer = myTrainsController.openLCBNetworkLayer {
       let fastclock = networkLayer.fastClock
       let nodeId = networkLayer.configurationToolNode.nodeId
       networkLayer.sendEvent(sourceNodeId: nodeId, eventId: fastclock.encodeStopStartEvent(state: (swSwitch.state == .on ? .running : .stopped)))

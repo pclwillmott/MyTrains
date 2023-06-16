@@ -83,7 +83,7 @@ public class IODevice : LocoNetDevice, InterfaceDelegate {
   
   public var addressCollision : Bool {
     get {
-      for ioFunction in networkController.ioFunctions(networkId: networkId) {
+      for ioFunction in myTrainsController.ioFunctions(networkId: networkId) {
         let ioDevice = ioFunction.ioDevice
         if ioDevice != self {
           if !ioDevice.switchAddresses.intersection(self.switchAddresses).isEmpty || !ioDevice.sensorAddresses.intersection(self.sensorAddresses).isEmpty {
@@ -432,7 +432,7 @@ public class IODevice : LocoNetDevice, InterfaceDelegate {
 
   // MARK: InterfaceDelegate Methods
   
-  public func networkMessageReceived(message:NetworkMessage) {
+  public func networkMessageReceived(message:LocoNetMessage) {
     
     if isCVMode {
 

@@ -91,7 +91,7 @@ public class SwitchBoardItem : EditorObject {
   
   public var layout : Layout? {
     get {
-      return layoutId == -1 ? networkController.layout : networkController.layouts[layoutId]
+      return layoutId == -1 ? myTrainsController.layout : myTrainsController.layouts[layoutId]
     }
   }
   
@@ -534,7 +534,7 @@ public class SwitchBoardItem : EditorObject {
   */
   public var sw1 : TurnoutSwitch? {
     get {
-//      if let device = networkController.locoNetDevices[sw1LocoNetDeviceId], (1...device.turnoutSwitches.count).contains(sw1ChannelNumber) {
+//      if let device = myTrainsController.locoNetDevices[sw1LocoNetDeviceId], (1...device.turnoutSwitches.count).contains(sw1ChannelNumber) {
 //        return device.turnoutSwitches[sw1ChannelNumber - 1]
 //      }
       return nil
@@ -561,7 +561,7 @@ public class SwitchBoardItem : EditorObject {
   
   public var sw1Sensor1 : IOFunction? {
     get {
-//      if let device = networkController.locoNetDevices[sw1Sensor1Id], (1...device.sensors.count).contains(sw1Sensor1ChannelNumber) {
+//      if let device = myTrainsController.locoNetDevices[sw1Sensor1Id], (1...device.sensors.count).contains(sw1Sensor1ChannelNumber) {
 //        return device.sensors[sw1Sensor1ChannelNumber - 1]
 //      }
       return nil
@@ -582,7 +582,7 @@ public class SwitchBoardItem : EditorObject {
   */
   public var sw1Sensor2 : IOFunction? {
     get {
-//      if let device = networkController.locoNetDevices[sw1Sensor2Id], (1...device.sensors.count).contains(sw1Sensor2ChannelNumber) {
+//      if let device = myTrainsController.locoNetDevices[sw1Sensor2Id], (1...device.sensors.count).contains(sw1Sensor2ChannelNumber) {
 //        return device.sensors[sw1Sensor2ChannelNumber - 1]
 //      }
       return nil
@@ -597,7 +597,7 @@ public class SwitchBoardItem : EditorObject {
 
   public var sw2 : TurnoutSwitch? {
     get {
-//      if let device = networkController.locoNetDevices[sw2LocoNetDeviceId], (1...device.turnoutSwitches.count).contains(sw2ChannelNumber) {
+//      if let device = myTrainsController.locoNetDevices[sw2LocoNetDeviceId], (1...device.turnoutSwitches.count).contains(sw2ChannelNumber) {
 //        return device.turnoutSwitches[sw2ChannelNumber - 1]
 //      }
       return nil
@@ -618,7 +618,7 @@ public class SwitchBoardItem : EditorObject {
 
   public var sw2Sensor1 : IOFunction? {
     get {
-//      if let device = networkController.locoNetDevices[sw2Sensor1Id], (1...device.sensors.count).contains(sw2Sensor1ChannelNumber) {
+//      if let device = myTrainsController.locoNetDevices[sw2Sensor1Id], (1...device.sensors.count).contains(sw2Sensor1ChannelNumber) {
 //        return device.sensors[sw2Sensor1ChannelNumber - 1]
 //      }
       return nil
@@ -633,7 +633,7 @@ public class SwitchBoardItem : EditorObject {
 
   public var sw2Sensor2 : IOFunction? {
     get {
-//      if let device = networkController.locoNetDevices[sw2Sensor2Id], (1...device.sensors.count).contains(sw2Sensor2ChannelNumber) {
+//      if let device = myTrainsController.locoNetDevices[sw2Sensor2Id], (1...device.sensors.count).contains(sw2Sensor2ChannelNumber) {
 //        return device.sensors[sw2Sensor2ChannelNumber - 1]
 //      }
       return nil
@@ -660,7 +660,7 @@ public class SwitchBoardItem : EditorObject {
 
   public var generalSensor : IOFunction? {
     get {
-      return networkController.ioFunction(primaryKey: generalSensorId)
+      return myTrainsController.ioFunction(primaryKey: generalSensorId)
     }
   }
   
@@ -672,7 +672,7 @@ public class SwitchBoardItem : EditorObject {
   
   public var transponderSensor : IOFunction? {
     get {
-      return networkController.ioFunction(primaryKey: transponderSensorId)
+      return myTrainsController.ioFunction(primaryKey: transponderSensorId)
     }
   }
   
@@ -684,7 +684,7 @@ public class SwitchBoardItem : EditorObject {
   
   public var trackFaultSensor : IOFunction? {
     get {
-      return networkController.ioFunction(primaryKey: trackFaultSensorId)
+      return myTrainsController.ioFunction(primaryKey: trackFaultSensorId)
     }
   }
 

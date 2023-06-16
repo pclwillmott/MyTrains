@@ -32,7 +32,7 @@ class EditLayoutsVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
 
     editorView.tabView = self.tabView
     
-    editorView.dictionary = networkController.layouts
+    editorView.dictionary = myTrainsController.layouts
     
   }
   
@@ -76,8 +76,8 @@ class EditLayoutsVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   func saveNew(dbEditorView: DBEditorView) -> EditorObject {
     let layout = Layout()
     setFields(layout: layout)
-    networkController.addLayout(layout: layout)
-    editorView.dictionary = networkController.layouts
+    myTrainsController.addLayout(layout: layout)
+    editorView.dictionary = myTrainsController.layouts
     editorView.setSelection(key: layout.primaryKey)
     return layout
   }
@@ -85,15 +85,15 @@ class EditLayoutsVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   func saveExisting(dbEditorView: DBEditorView, editorObject: EditorObject) {
     if let layout = editorObject as? Layout {
       setFields(layout: layout)
-      editorView.dictionary = networkController.layouts
+      editorView.dictionary = myTrainsController.layouts
       editorView.setSelection(key: layout.primaryKey)
     }
   }
 
   func delete(dbEditorView: DBEditorView, primaryKey: Int) {
     Layout.delete(primaryKey: primaryKey)
-    networkController.removeLayout(primaryKey: primaryKey)
-    editorView.dictionary = networkController.layouts
+    myTrainsController.removeLayout(primaryKey: primaryKey)
+    editorView.dictionary = myTrainsController.layouts
   }
 
   // MARK: Outlets & Actions

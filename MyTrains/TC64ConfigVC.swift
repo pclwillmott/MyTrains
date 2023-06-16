@@ -38,7 +38,7 @@ class TC64ConfigVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
     
     self.view.window?.delegate = self
     
-    cboDeviceDS.dictionary = networkController.tc64s
+    cboDeviceDS.dictionary = myTrainsController.tc64s
     
     cboDevice.dataSource = cboDeviceDS
     
@@ -46,7 +46,7 @@ class TC64ConfigVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
 
     cboDevice.selectItem(at: cboDeviceDS.indexWithKey(key: deviceId) ?? -1)
     
-    cboProgrammerDS.dictionary = networkController.interfaceDevices
+    cboProgrammerDS.dictionary = myTrainsController.interfaceDevices
 
     cboProgrammer.dataSource = cboProgrammerDS
     
@@ -156,7 +156,7 @@ class TC64ConfigVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
 
 
       if let info = programmer.locoNetProductInfo, info.attributes.contains(.CommandStation) {
-        self.programmer = networkController.commandStationInterface(commandStation: programmer)
+        self.programmer = myTrainsController.commandStationInterface(commandStation: programmer)
         needToSetPRMode = false
       }
       else {
@@ -286,7 +286,7 @@ class TC64ConfigVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   
   // MARK: InterfaceDelegate Methods
   
-  @objc func networkMessageReceived(message:NetworkMessage) {
+  @objc func networkMessageReceived(message:LocoNetMessage) {
     
     switch message.messageType {
       

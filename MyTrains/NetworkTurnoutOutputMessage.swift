@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class NetworkTurnoutOutputMessage : NetworkMessage {
+public class NetworkTurnoutOutputMessage : LocoNetMessage {
   
   public var turnoutAddress : UInt16 {
     get {

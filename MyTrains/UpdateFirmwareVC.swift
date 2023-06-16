@@ -33,7 +33,7 @@ class UpdateFirmwareVC: NSViewController, NSWindowDelegate, InterfaceDelegate, D
     
     self.view.window?.delegate = self
     
-    interfacesUpdated(interfaces: networkController.networkInterfaces)
+    interfacesUpdated(interfaces: myTrainsController.networkInterfaces)
 
 //    dmfPath = UserDefaults.standard.string(forKey: DEFAULT.IPL_DMF_FILENAME) ?? ""
     
@@ -166,7 +166,7 @@ class UpdateFirmwareVC: NSViewController, NSWindowDelegate, InterfaceDelegate, D
   
   // MARK: InterfaceDelegate Methods
   
-  @objc func networkMessageReceived(message:NetworkMessage) {
+  @objc func networkMessageReceived(message:LocoNetMessage) {
     
     if let dmf = self.dmf {
       
@@ -333,7 +333,7 @@ class UpdateFirmwareVC: NSViewController, NSWindowDelegate, InterfaceDelegate, D
       }
     }
     
-    for x in networkController.networkInterfaces {
+    for x in myTrainsController.networkInterfaces {
       if x.deviceName == name, let y = x as? InterfaceLocoNet {
         interface = y
         observerId = interface?.addObserver(observer: self) ?? -1

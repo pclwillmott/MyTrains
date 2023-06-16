@@ -93,7 +93,7 @@ class IODeviceNewVC: NSViewController, NSWindowDelegate {
         
         device.save()
         
-        networkController.addDevice(device: device)
+        myTrainsController.addDevice(device: device)
         
         view.window?.close()
         

@@ -17,14 +17,6 @@ enum InterfaceState {
 
 public class InterfaceLocoNet : Interface {
   
-  // MARK: Constructors
-  
-  // MARK: Destructors
-  
-  deinit {
-    close()
-  }
-  
   // MARK: Private Properties
   
   private var outputQueue : [NetworkOutputQueueItem] = []
@@ -47,9 +39,9 @@ public class InterfaceLocoNet : Interface {
   
   public var turnoutLookup : [Int:TurnoutSwitch] = [:]
   
-  public var opSwBankA : NetworkMessage?
+  public var opSwBankA : LocoNetMessage?
   
-  public var opSwBankB : NetworkMessage?
+  public var opSwBankB : LocoNetMessage?
   
   public var globalSystemTrackStatus : UInt8?
   
@@ -73,7 +65,7 @@ public class InterfaceLocoNet : Interface {
     }
   }
   
-  private func networkMessageReceived(message: NetworkMessage) {
+  private func networkMessageReceived(message: LocoNetMessage) {
     
 //    let printOpSw = true
 
@@ -85,7 +77,7 @@ public class InterfaceLocoNet : Interface {
       
       var newDevice = true
       
-      for kv in networkController.locoNetDevices {
+      for kv in myTrainsController.locoNetDevices {
         
         let device = kv.value
         
@@ -141,7 +133,7 @@ public class InterfaceLocoNet : Interface {
               
               device.save()
               
-              networkController.addDevice(device: device)
+              myTrainsController.addDevice(device: device)
               
               if let net = network, info.attributes.contains(.CommandStation) {
                 net.commandStationId = device.primaryKey
@@ -156,7 +148,7 @@ public class InterfaceLocoNet : Interface {
         
       }
       
-      networkController.networkControllerStatusUpdated()
+      myTrainsController.networkControllerStatusUpdated()
 
     case .opSwDataAP1:
       
@@ -351,7 +343,7 @@ public class InterfaceLocoNet : Interface {
     
     var delay : TimeInterval = 0.0
     
-    var timeout : NetworkMessage?
+    var timeout : LocoNetMessage?
     
     outputQueueLock.lock()
     
@@ -381,7 +373,7 @@ public class InterfaceLocoNet : Interface {
       else {
         
         if item.timeoutCode != .none {
-          timeout = NetworkMessage(networkId: networkId, timeoutCode: item.timeoutCode)
+          timeout = LocoNetMessage(networkId: networkId, timeoutCode: item.timeoutCode)
         }
         
         outputQueue.remove(at: 0)
@@ -434,7 +426,7 @@ public class InterfaceLocoNet : Interface {
     transponderSensorLookup.removeAll()
     trackFaultSensorLookup.removeAll()
 
-    for (_, ioFunction) in networkController.sensors {
+    for (_, ioFunction) in myTrainsController.sensors {
       ioFunction.switchBoardItems.removeAll()
       switch ioFunction.sensorType {
       case .trackFault:
@@ -450,7 +442,7 @@ public class InterfaceLocoNet : Interface {
      
     turnoutLookup.removeAll()
     
-    if let layout = networkController.layout {
+    if let layout = myTrainsController.layout {
       
       layout.operationalTurnouts.removeAll()
       
@@ -492,7 +484,7 @@ public class InterfaceLocoNet : Interface {
     
   }
   
-  public func addToQueue(message:NetworkMessage, delay:TimeInterval, responses: Set<NetworkMessageType>, retryCount: Int, timeoutCode: TimeoutCode) {
+  public func addToQueue(message:LocoNetMessage, delay:TimeInterval, responses: Set<NetworkMessageType>, retryCount: Int, timeoutCode: TimeoutCode) {
     
     let item = NetworkOutputQueueItem(message: message, delay: delay, responses: responses, retryCount: retryCount, timeoutCode: timeoutCode)
     
@@ -504,7 +496,7 @@ public class InterfaceLocoNet : Interface {
     
   }
   
-  public func addToQueue(message:NetworkMessage, delay:TimeInterval) {
+  public func addToQueue(message:LocoNetMessage, delay:TimeInterval) {
     addToQueue(message: message, delay: delay, responses: [], retryCount: 0, timeoutCode: .none)
   }
   
@@ -594,7 +586,7 @@ public class InterfaceLocoNet : Interface {
           
           if !restart {
           
-            let networkMessage = NetworkMessage(networkId: networkId, data: message)
+            let networkMessage = LocoNetMessage(networkId: networkId, data: message)
             
             networkMessage.timeStamp = Date.timeIntervalSinceReferenceDate
             networkMessage.timeSinceLastMessage = networkMessage.timeStamp - lastTimeStamp

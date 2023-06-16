@@ -149,10 +149,10 @@ public class FastClock {
       ]
       
       
-      if let layout = networkController.layout {
+      if let layout = myTrainsController.layout {
         for network in layout.networks {
           if let interface = network.interface as? InterfaceLocoNet {
-            let message = NetworkMessage(networkId: interface.networkId, data: data, appendCheckSum: true)
+            let message = LocoNetMessage(networkId: interface.networkId, data: data, appendCheckSum: true)
             interface.addToQueue(message: message, delay: MessageTiming.STANDARD)
           }
         }

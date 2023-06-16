@@ -6,7 +6,7 @@
 //
 
 import Foundation
-public class LoconetRequestSlotDataMessage : NetworkMessage {
+public class LoconetRequestSlotDataMessage : LocoNetMessage {
   
   public var slotNumber : UInt8 {
     get {

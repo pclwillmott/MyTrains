@@ -16,7 +16,7 @@ public class IODeviceManagerTableViewDS : NSObject, NSTableViewDataSource, NSTab
     
     super.init()
     
-    cboNetworkDS.dictionary = networkController.networksForCurrentLayout
+    cboNetworkDS.dictionary = myTrainsController.networksForCurrentLayout
 
   }
   

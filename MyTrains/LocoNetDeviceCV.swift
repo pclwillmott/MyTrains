@@ -35,7 +35,7 @@ public class LocoNetDeviceCV : EditorObject {
   
   public var locoNetDevice : LocoNetDevice? {
     get {
-      return networkController.locoNetDevices[locoNetDeviceId]
+      return myTrainsController.locoNetDevices[locoNetDeviceId]
     }
   }
   

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class IPLDevData : NetworkMessage {
+public class IPLDevData : LocoNetMessage {
   
   // MARK: Public Properties
   

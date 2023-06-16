@@ -27,7 +27,7 @@ class IODeviceManagerVC: NSViewController, NSWindowDelegate, UpdateDelegate {
     
     self.view.window?.delegate = self
  
-    cboNetworkDS.dictionary = networkController.networksForCurrentLayout
+    cboNetworkDS.dictionary = myTrainsController.networksForCurrentLayout
     
     cboNetwork.dataSource = cboNetworkDS
     
@@ -55,7 +55,7 @@ class IODeviceManagerVC: NSViewController, NSWindowDelegate, UpdateDelegate {
     
     if let network = cboNetworkDS.editorObjectAt(index: cboNetwork.indexOfSelectedItem) as? Network {
       
-      tableViewDS.ioFunctions = networkController.ioFunctions(networkId: network.primaryKey)
+      tableViewDS.ioFunctions = myTrainsController.ioFunctions(networkId: network.primaryKey)
       tvTableView.dataSource = tableViewDS
       tvTableView.delegate = tableViewDS
       tvTableView.reloadData()
@@ -119,9 +119,9 @@ class IODeviceManagerVC: NSViewController, NSWindowDelegate, UpdateDelegate {
 
       if alert.runModal() == NSApplication.ModalResponse.alertSecondButtonReturn {
         if let network = cboNetworkDS.editorObjectAt(index: cboNetwork.indexOfSelectedItem) as? Network {
-          networkController.removeDevice(primaryKey: ioDevice.primaryKey)
+          myTrainsController.removeDevice(primaryKey: ioDevice.primaryKey)
           IODevice.delete(primaryKey: ioDevice.primaryKey)
-          tableViewDS.ioFunctions = networkController.ioFunctions(networkId: network.primaryKey)
+          tableViewDS.ioFunctions = myTrainsController.ioFunctions(networkId: network.primaryKey)
           tvTableView.reloadData()
         }
       }
@@ -168,7 +168,7 @@ class IODeviceManagerVC: NSViewController, NSWindowDelegate, UpdateDelegate {
     if let network = cboNetworkDS.editorObjectAt(index: sender.indexOfSelectedItem) as? Network, let ioFunctions = tableViewDS.ioFunctions {
       ioFunctions[sender.tag].ioDevice.networkId = network.primaryKey
       ioFunctions[sender.tag].ioDevice.save()
-      tableViewDS.ioFunctions = networkController.ioFunctions(networkId: network.primaryKey)
+      tableViewDS.ioFunctions = myTrainsController.ioFunctions(networkId: network.primaryKey)
       tvTableView.reloadData()
     }
   }
@@ -184,7 +184,7 @@ class IODeviceManagerVC: NSViewController, NSWindowDelegate, UpdateDelegate {
       if let window = wc.window {
         NSApplication.shared.runModal(for: window)
         window.close()
-        tableViewDS.ioFunctions = networkController.ioFunctions(networkId: network.primaryKey)
+        tableViewDS.ioFunctions = myTrainsController.ioFunctions(networkId: network.primaryKey)
         tvTableView.reloadData()
       }
 

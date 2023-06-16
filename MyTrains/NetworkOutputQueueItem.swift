@@ -9,7 +9,7 @@ import Foundation
 
 public class NetworkOutputQueueItem {
   
-  init(message: NetworkMessage, delay:TimeInterval, responses: Set<NetworkMessageType>, retryCount: Int, timeoutCode: TimeoutCode) {
+  init(message: LocoNetMessage, delay:TimeInterval, responses: Set<NetworkMessageType>, retryCount: Int, timeoutCode: TimeoutCode) {
     self.message = message
     self.delay = delay
     self.responses = responses
@@ -17,7 +17,7 @@ public class NetworkOutputQueueItem {
     self.timeoutCode = timeoutCode
   }
   
-  public var message : NetworkMessage
+  public var message : LocoNetMessage
   
   public var delay : TimeInterval
   

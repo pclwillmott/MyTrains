@@ -36,7 +36,7 @@ public class Network : EditorObject {
   
   public var interface : Interface? {
     get {
-      return networkController.interfaceDevices[interfaceId]
+      return myTrainsController.interfaceDevices[interfaceId]
     }
   }
   
@@ -57,7 +57,7 @@ public class Network : EditorObject {
   
   public var layout : Layout? {
     get {
-      return networkController.layouts[layoutId]
+      return myTrainsController.layouts[layoutId]
     }
   }
   
@@ -99,7 +99,7 @@ public class Network : EditorObject {
   
   public var commandStation : InterfaceLocoNet? {
     get {
-      return networkController.commandStations[commandStationId]
+      return myTrainsController.commandStations[commandStationId]
     }
   }
   

@@ -168,7 +168,7 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
         index += 1
       }
       
-      turnoutSwitches = networkController.turnoutSwitches
+      turnoutSwitches = myTrainsController.turnoutSwitches
       turnoutSwitch1DS.items = turnoutSwitches
       turnoutSwitch2DS.items = turnoutSwitches
       cboTurnoutSwitch1.dataSource = turnoutSwitch1DS
@@ -183,7 +183,7 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
       // FEEDBACK
      
       if item.isFeedback {
-        generalSensors = networkController.sensors(sensorTypes: [.position])
+        generalSensors = myTrainsController.sensors(sensorTypes: [.position])
         lblTransponderSensor.isHidden = true
         cboTransponderSensor.isHidden = true
         btnClearTransponderSensor.isHidden = true
@@ -192,7 +192,7 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
         btnClearTrackFaultSensor.isHidden = true
       }
       else {
-        generalSensors = networkController.sensors(sensorTypes: [.occupancy])
+        generalSensors = myTrainsController.sensors(sensorTypes: [.occupancy])
       }
         
       generalSensorDS.items = generalSensors
@@ -203,7 +203,7 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
         cboGeneralSensor.selectItem(at: index)
       }
       
-      transponderSensors = networkController.sensors(sensorTypes: [.transponder])
+      transponderSensors = myTrainsController.sensors(sensorTypes: [.transponder])
       
       transponderSensorDS.items = transponderSensors
       
@@ -213,7 +213,7 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
         cboTransponderSensor.selectItem(at: index)
       }
       
-      trackFaultSensors = networkController.sensors(sensorTypes: [.trackFault])
+      trackFaultSensors = myTrainsController.sensors(sensorTypes: [.trackFault])
       
       trackFaultSensorDS.items = trackFaultSensors
       
@@ -223,7 +223,7 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
         cboTrackFaultSensor.selectItem(at: index)
       }
       
-      turnoutSensors = networkController.sensors(sensorTypes: [.turnoutState])
+      turnoutSensors = myTrainsController.sensors(sensorTypes: [.turnoutState])
       
       sw1ClosedDS.items = turnoutSensors
       cboSW1Closed.dataSource = sw1ClosedDS

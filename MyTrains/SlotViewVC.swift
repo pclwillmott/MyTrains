@@ -33,7 +33,7 @@ class SlotViewVC : NSViewController, NSWindowDelegate, InterfaceDelegate {
     
     self.view.window?.delegate = self
     
-    cboCommandStationDS.dictionary = networkController.commandStations
+    cboCommandStationDS.dictionary = myTrainsController.commandStations
     
     cboCommandStation.dataSource = cboCommandStationDS
     
@@ -153,7 +153,7 @@ class SlotViewVC : NSViewController, NSWindowDelegate, InterfaceDelegate {
   
   // MARK: InterfaceDelegate Methods
   
-  @objc func networkMessageReceived(message:NetworkMessage) {
+  @objc func networkMessageReceived(message:LocoNetMessage) {
 
     if message.messageType == .locoSlotDataP1 || message.messageType == .locoSlotDataP2 {
       

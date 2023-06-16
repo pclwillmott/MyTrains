@@ -49,7 +49,7 @@ class EditInterfacesVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Ne
     
     editorView.tabView = self.tabView
     
-    editorView.dictionary = networkController.interfaceDevices
+    editorView.dictionary = myTrainsController.interfaceDevices
     
   }
   
@@ -173,8 +173,8 @@ class EditInterfacesVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Ne
     let device = Interface(primaryKey: -1)
     setFields(device: device)
     device.save()
-    networkController.addDevice(device: device)
-    editorView.dictionary = networkController.interfaceDevices
+    myTrainsController.addDevice(device: device)
+    editorView.dictionary = myTrainsController.interfaceDevices
     editorView.setSelection(key: device.primaryKey)
     return device
   }
@@ -183,20 +183,20 @@ class EditInterfacesVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Ne
     if let device = editorObject as? Interface {
       setFields(device: device)
       device.save()
-      editorView.dictionary = networkController.interfaceDevices
+      editorView.dictionary = myTrainsController.interfaceDevices
       editorView.setSelection(key: device.primaryKey)
     }
   }
   
   func delete(dbEditorView: DBEditorView, primaryKey: Int) {
     Interface.delete(primaryKey: primaryKey)
-    networkController.removeDevice(primaryKey: primaryKey)
-    editorView.dictionary = networkController.interfaceDevices
+    myTrainsController.removeDevice(primaryKey: primaryKey)
+    editorView.dictionary = myTrainsController.interfaceDevices
   }
   
   // MARK: InterfaceDelegate Methods
   
-  func networkMessageReceived(message:NetworkMessage) {
+  func networkMessageReceived(message:LocoNetMessage) {
     
     switch message.messageType {
     case .interfaceData:

@@ -25,7 +25,7 @@ public enum UnitSpeed : Int {
     get {
       var temp = UnitSpeed.toCMS(units: self)
       if self == .kilometersPerHour || self == .milesPerHour {
-        if let layout = networkController.layout {
+        if let layout = myTrainsController.layout {
           temp /= layout.scale
         }
       }
@@ -37,7 +37,7 @@ public enum UnitSpeed : Int {
     get {
       var temp = UnitSpeed.fromCMS(units: self)
       if self == .kilometersPerHour || self == .milesPerHour {
-        if let layout = networkController.layout {
+        if let layout = myTrainsController.layout {
           temp *= layout.scale
         }
       }

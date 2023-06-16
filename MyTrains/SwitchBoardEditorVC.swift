@@ -39,7 +39,7 @@ class SwitchBoardEditorVC: NSViewController, NSWindowDelegate, SwitchBoardViewDe
     groupButtons.append(btnAddToGroup)
     groupButtons.append(btnRemoveFromGroup)
     
-    switchBoardView.layout = networkController.layout
+    switchBoardView.layout = myTrainsController.layout
     
     panelsChanged()
 
@@ -71,7 +71,7 @@ class SwitchBoardEditorVC: NSViewController, NSWindowDelegate, SwitchBoardViewDe
   
   func panelsChanged() {
     cboPanelId.removeAllItems()
-    if let layout = networkController.layout {
+    if let layout = myTrainsController.layout {
       let panels = layout.switchBoardPanels
       for panel in panels {
         let name = "\(panel.panelId + 1): \(panel.panelName)"
@@ -216,7 +216,7 @@ class SwitchBoardEditorVC: NSViewController, NSWindowDelegate, SwitchBoardViewDe
   @IBOutlet weak var txtGridX: NSTextField!
   
   @IBAction func txtGridXAction(_ sender: NSTextField) {
-    if let layout = networkController.layout {
+    if let layout = myTrainsController.layout {
       let panels = layout.switchBoardPanels
       panels[switchBoardView.panelId].numberOfColumns = sender.integerValue
       switchBoardView.needsDisplay = true
@@ -226,7 +226,7 @@ class SwitchBoardEditorVC: NSViewController, NSWindowDelegate, SwitchBoardViewDe
   @IBOutlet weak var txtGridY: NSTextField!
   
   @IBAction func txtGridYAction(_ sender: NSTextField) {
-    if let layout = networkController.layout {
+    if let layout = myTrainsController.layout {
       let panels = layout.switchBoardPanels
       panels[switchBoardView.panelId].numberOfRows = sender.integerValue
       switchBoardView.needsDisplay = true
@@ -236,7 +236,7 @@ class SwitchBoardEditorVC: NSViewController, NSWindowDelegate, SwitchBoardViewDe
   @IBOutlet weak var txtPanelName: NSTextField!
   
   @IBAction func txtPanelNameAction(_ sender: NSTextField) {
-    if let layout = networkController.layout {
+    if let layout = myTrainsController.layout {
       let panels = layout.switchBoardPanels
       panels[switchBoardView.panelId].panelName = sender.stringValue
       switchBoardView.needsDisplay = true
@@ -244,16 +244,16 @@ class SwitchBoardEditorVC: NSViewController, NSWindowDelegate, SwitchBoardViewDe
   }
   
   @IBAction func btnCancelAction(_ sender: NSButton) {
-    if let layout = networkController.layout {
+    if let layout = myTrainsController.layout {
       layout.revertToSaved()
     }
     self.view.window?.close()
   }
   
   @IBAction func btnSaveAction(_ sender: NSButton) {
-    if let layout = networkController.layout {
+    if let layout = myTrainsController.layout {
       layout.save()
-      networkController.switchBoardUpdated()
+      myTrainsController.switchBoardUpdated()
       view.window?.close()
     }
   }

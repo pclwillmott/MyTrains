@@ -35,7 +35,7 @@ class LocomotiveRosterVC: NSViewController, InterfaceDelegate, NSWindowDelegate 
     
     self.view.window?.delegate = self
     
-    cboCommandStationDS.dictionary = networkController.commandStations
+    cboCommandStationDS.dictionary = myTrainsController.commandStations
     
     cboCommandStation.dataSource = cboCommandStationDS
     
@@ -114,7 +114,7 @@ class LocomotiveRosterVC: NSViewController, InterfaceDelegate, NSWindowDelegate 
   
   // MARK: InterfaceDelegate Methods
   
-  @objc func networkMessageReceived(message: NetworkMessage) {
+  @objc func networkMessageReceived(message: LocoNetMessage) {
     
     switch message.messageType {
     case .rosterEntry:

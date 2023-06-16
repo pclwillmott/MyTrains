@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class QuerySlot5 : NetworkMessage {
+public class QuerySlot5 : LocoNetMessage {
   
   // MARK: Constructors
   
@@ -28,7 +28,7 @@ public class QuerySlot5 : NetworkMessage {
   public var serialNumber : Int {
     get {
       let sn = Int(message[19] & 0b00111111) << 7 | Int(message[18])
-      if let device = networkController.deviceForQuerySlot(productCode: productCode, serialNumber: sn) {
+      if let device = myTrainsController.deviceForQuerySlot(productCode: productCode, serialNumber: sn) {
         return device.serialNumber
       }
       return 0

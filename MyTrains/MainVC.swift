@@ -31,33 +31,33 @@ class MainVC: NSViewController, NetworkControllerDelegate, LayoutDelegate, OpenL
 
   func windowWillClose(_ notification: Notification) {
     if controllerDelegateId != -1 {
-      networkController.removeDelegate(id: controllerDelegateId)
+      myTrainsController.removeDelegate(id: controllerDelegateId)
       controllerDelegateId = -1
     }
     if layoutDelegateId != -1 {
-      networkController.layout?.removeDelegate(delegateId: layoutDelegateId)
+      myTrainsController.layout?.removeDelegate(delegateId: layoutDelegateId)
     }
     if fastClockObserverId != -1 {
-      networkController.fastClock.removeObserver(observerId: fastClockObserverId)
+      myTrainsController.fastClock.removeObserver(observerId: fastClockObserverId)
     }
     
   }
   
   override func viewWillAppear() {
     
-    controllerDelegateId = networkController.appendDelegate(delegate: self)
+    controllerDelegateId = myTrainsController.appendDelegate(delegate: self)
     
-    switchBoardView.layout = networkController.layout
+    switchBoardView.layout = myTrainsController.layout
     
     scrollView.documentView?.frame = NSMakeRect(0.0, 0.0, 2000.0, 2000.0)
     scrollView.allowsMagnification = true
     scrollView.magnification = UserDefaults.standard.double(forKey: DEFAULT.SWITCHBOARD_EDITOR_MAG)
 
-    if let layout = networkController.layout {
+    if let layout = myTrainsController.layout {
       layoutDelegateId = layout.addDelegate(delegate: self)
     }
     
-    fastClockObserverId = networkController.openLCBNetworkLayer!.fastClock.addObserver(observer: self)
+    fastClockObserverId = myTrainsController.openLCBNetworkLayer!.fastClock.addObserver(observer: self)
     
   }
   
@@ -75,16 +75,16 @@ class MainVC: NSViewController, NetworkControllerDelegate, LayoutDelegate, OpenL
   
   private func updateStatus() {
     
- //   swConnect.state = networkController.connected ? .on : .off
+ //   swConnect.state = myTrainsController.connected ? .on : .off
     
-    if let _ = networkController.layout {
+    if let _ = myTrainsController.layout {
       
       boxStatus.contentView?.subviews.removeAll()
       
       var xPos : CGFloat = 20
       let yPos : CGFloat = 15
       
-      for (_, interface) in networkController.locoNetInterfaces {
+      for (_, interface) in myTrainsController.locoNetInterfaces {
         
         var color : NSColor = NSColor.black
         
@@ -149,9 +149,9 @@ class MainVC: NSViewController, NetworkControllerDelegate, LayoutDelegate, OpenL
     switchBoardView.needsDisplay = true
   }
   
-  // MARK: NetworkController Delegate Methods
+  // MARK: MyTrainsController Delegate Methods
   
-  func statusUpdated(networkController: NetworkController) {
+  func statusUpdated(myTrainsController: MyTrainsController) {
  
     updateStatus()
     
@@ -161,7 +161,7 @@ class MainVC: NSViewController, NetworkControllerDelegate, LayoutDelegate, OpenL
     switchBoardView.needsDisplay = true
   }
   
-  func networkControllerUpdated(netwokController: NetworkController) {
+  func networkControllerUpdated(netwokController: MyTrainsController) {
     
     cboLayout.deselectItem(at: cboLayout.indexOfSelectedItem)
     
@@ -169,7 +169,7 @@ class MainVC: NSViewController, NetworkControllerDelegate, LayoutDelegate, OpenL
     
     cboLayout.dataSource = cboLayoutDS
     
-    if let index = cboLayoutDS!.indexOfItemWithCodeValue(code: networkController.layoutId) {
+    if let index = cboLayoutDS!.indexOfItemWithCodeValue(code: myTrainsController.layoutId) {
       cboLayout.selectItem(at: index)
     }
     
@@ -183,7 +183,7 @@ class MainVC: NSViewController, NetworkControllerDelegate, LayoutDelegate, OpenL
   
   @IBAction func cboLayoutAction(_ sender: NSComboBox) {
     
-    networkController.layoutId = cboLayoutDS!.codeForItemAt(index: cboLayout.indexOfSelectedItem) ?? -1
+    myTrainsController.layoutId = cboLayoutDS!.codeForItemAt(index: cboLayout.indexOfSelectedItem) ?? -1
     
     updateStatus()
     
@@ -194,25 +194,25 @@ class MainVC: NSViewController, NetworkControllerDelegate, LayoutDelegate, OpenL
   @IBOutlet weak var swConnect: NSSwitch!
   
   @IBAction func swConnectAction(_ sender: NSSwitch) {
-    sender.state == .on ? networkController.connect() : networkController.disconnect()
+    sender.state == .on ? myTrainsController.connect() : myTrainsController.disconnect()
   }
   
   @IBOutlet weak var btnPowerOn: NSButton!
   
   @IBAction func btnPowerOnAction(_ sender: NSButton) {
-    networkController.powerOn()
+    myTrainsController.powerOn()
   }
   
   @IBOutlet weak var btnPowerOff: NSButton!
   
   @IBAction func btnPowerOffAction(_ sender: NSButton) {
-    networkController.powerOff()
+    myTrainsController.powerOff()
   }
   
   @IBOutlet weak var btnPause: NSButton!
   
   @IBAction func btnPauseAction(_ sender: NSButton) {
-    networkController.powerIdle()
+    myTrainsController.powerIdle()
   }
   
   @IBOutlet weak var scrollView: NSScrollView!

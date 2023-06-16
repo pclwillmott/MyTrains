@@ -131,7 +131,7 @@ public class Locomotive : RollingStock, InterfaceDelegate {
   
   public var network : Network? {
     get {
-      return networkController.networks[networkId]
+      return myTrainsController.networks[networkId]
     }
   }
   
@@ -196,7 +196,7 @@ public class Locomotive : RollingStock, InterfaceDelegate {
   public var originBlock : SwitchBoardItem? {
     didSet {
       /*
-      if let origin = originBlock, let destination = destinationBlock, let layout = networkController.layout {
+      if let origin = originBlock, let destination = destinationBlock, let layout = myTrainsController.layout {
   //      route = layout.findRoute(origin: origin, destination: destination, routeDirection: .next)
       }
       else {
@@ -210,7 +210,7 @@ public class Locomotive : RollingStock, InterfaceDelegate {
   public var destinationBlock : SwitchBoardItem? {
     didSet {
       /*
-      if let origin = originBlock, let destination = destinationBlock, let layout = networkController.layout {
+      if let origin = originBlock, let destination = destinationBlock, let layout = myTrainsController.layout {
   //      route = layout.findRoute(origin: origin, destination: destination, routeDirection: .next)
       }
       else {
@@ -513,7 +513,7 @@ public class Locomotive : RollingStock, InterfaceDelegate {
     }
   }
   
-  private func writeBack(message:NetworkMessage) -> [UInt8] {
+  private func writeBack(message:LocoNetMessage) -> [UInt8] {
 
     var slotData = message.slotData
 
@@ -561,7 +561,7 @@ public class Locomotive : RollingStock, InterfaceDelegate {
     
     self.route = []
 
-    if let layout = networkController.layout, let origin = originBlock, let destination = destinationBlock, let route = layout.findRoute(locomotive: self, origin: origin, originPosition: originBlockPosition, destination: destination, routeDirection: routeDirection) {
+    if let layout = myTrainsController.layout, let origin = originBlock, let destination = destinationBlock, let route = layout.findRoute(locomotive: self, origin: origin, originPosition: originBlockPosition, destination: destination, routeDirection: routeDirection) {
 
       self.route = route
       
@@ -772,12 +772,12 @@ public class Locomotive : RollingStock, InterfaceDelegate {
   
   // MARK: InterfaceDelegate Methods
   
-  @objc public func networkMessageReceived(message: NetworkMessage) {
+  @objc public func networkMessageReceived(message: LocoNetMessage) {
     
     if let network = self.network, let interface = network.interface as? InterfaceLocoNet {
       
       if _throttleID == nil {
-        _throttleID = networkController.softwareThrottleID
+        _throttleID = myTrainsController.softwareThrottleID
       }
             
       switch message.messageType {

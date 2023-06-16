@@ -8,11 +8,11 @@
 import Foundation
 
 @objc public protocol InterfaceDelegate {
-  @objc optional func networkMessageReceived(message:NetworkMessage)
+  @objc optional func networkMessageReceived(message:LocoNetMessage)
   @objc optional func interfaceWasDisconnected(interface:Interface)
   @objc optional func interfaceWasOpened(interface:Interface)
   @objc optional func interfaceWasClosed(interface:Interface)
-  @objc optional func progMessageReceived(message: NetworkMessage)
+  @objc optional func progMessageReceived(message: LocoNetMessage)
   @objc optional func slotsUpdated(interface:InterfaceLocoNet)
   @objc optional func trackStatusChanged(interface: InterfaceLocoNet)
   @objc optional func lccCANFrameReceived(frame:LCCCANFrame)

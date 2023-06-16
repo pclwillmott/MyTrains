@@ -75,7 +75,7 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
       return
     }
     
-    for (_, interface) in networkController.openLCBInterfaces {
+    for (_, interface) in myTrainsController.openLCBInterfaces {
       addTransportLayer(transportLayer: OpenLCBTransportLayerCAN(interface: interface))
     }
     

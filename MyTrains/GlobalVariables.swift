@@ -7,6 +7,4 @@
 
 import Foundation
 
-public var networkController : NetworkController = NetworkController()
-
-
+public var myTrainsController = MyTrainsController()

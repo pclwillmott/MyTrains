@@ -33,7 +33,7 @@ class PurgeProfilerVC : NSViewController, NSWindowDelegate, InterfaceDelegate {
     
     self.view.window?.delegate = self
     
-    cboCommandStationDS.dictionary = networkController.commandStations
+    cboCommandStationDS.dictionary = myTrainsController.commandStations
     
     cboCommandStation.dataSource = cboCommandStationDS
     
@@ -183,7 +183,7 @@ class PurgeProfilerVC : NSViewController, NSWindowDelegate, InterfaceDelegate {
   
   // MARK: InterfaceDelegate Methods
 
-  @objc func networkMessageReceived(message:NetworkMessage) {
+  @objc func networkMessageReceived(message:LocoNetMessage) {
     
     if let interface = self.interface {
       

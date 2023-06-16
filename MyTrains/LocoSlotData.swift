@@ -157,7 +157,7 @@ public class LocoSlotData {
   
   public var locomotiveName : String {
     get {
-      for locomotive in networkController.locomotives {
+      for locomotive in myTrainsController.locomotives {
         if address == locomotive.value.mDecoderAddress {
           return locomotive.value.rollingStockName
         }

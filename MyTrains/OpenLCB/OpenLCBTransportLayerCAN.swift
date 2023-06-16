@@ -155,7 +155,7 @@ public class OpenLCBTransportLayerCAN : OpenLCBTransportLayer, InterfaceDelegate
         
       }
       
-      if sendQuery, let alias = nodeIdLookup[networkController.openLCBNodeId] {
+      if sendQuery, let alias = nodeIdLookup[myTrainsController.openLCBNodeId] {
         sendAliasMappingEnquiryFrame(alias: alias)
       }
             

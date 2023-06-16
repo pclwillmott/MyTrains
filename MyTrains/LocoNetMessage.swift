@@ -1,5 +1,5 @@
 //
-//  NetworkMessage.swift
+//  LocoNetMessage.swift
 //  MyTrains
 //
 //  Created by Paul Willmott on 30/10/2021.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class NetworkMessage : NSObject {
+public class LocoNetMessage : NSObject {
   
   // MARK: Constructors
   
@@ -15,7 +15,7 @@ public class NetworkMessage : NSObject {
     self.networkId = networkId
     self.message = data
     if appendCheckSum {
-      self.message.append(NetworkMessage.checkSum(data: Data(message), length: data.count))
+      self.message.append(LocoNetMessage.checkSum(data: Data(message), length: data.count))
     }
     super.init()
   }
@@ -27,7 +27,7 @@ public class NetworkMessage : NSObject {
       self.message.append(UInt8(x & 0xff))
     }
     if appendCheckSum {
-      self.message.append(NetworkMessage.checkSum(data: Data(message), length: data.count))
+      self.message.append(LocoNetMessage.checkSum(data: Data(message), length: data.count))
     }
     super.init()
   }
@@ -38,7 +38,7 @@ public class NetworkMessage : NSObject {
     super.init()
   }
   
-  init(message: NetworkMessage) {
+  init(message: LocoNetMessage) {
     self.networkId = message.networkId
     self.message = message.message
     super.init()

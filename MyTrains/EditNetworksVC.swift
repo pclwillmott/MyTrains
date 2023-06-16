@@ -34,15 +34,15 @@ class EditNetworksVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     
     cboLayout.dataSource = cboLayoutDS
     
-    cboComputerInterfaceDS.dictionary = networkController.interfaceDevices
+    cboComputerInterfaceDS.dictionary = myTrainsController.interfaceDevices
     
     cboComputerInterface.dataSource = cboComputerInterfaceDS
     
-    cboCommandStationDS.dictionary = networkController.commandStations
+    cboCommandStationDS.dictionary = myTrainsController.commandStations
     
     cboCommandStation.dataSource = cboCommandStationDS
     
-    editorView.dictionary = networkController.networks
+    editorView.dictionary = myTrainsController.networks
     
   }
   
@@ -125,14 +125,14 @@ class EditNetworksVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     network.duplexGroupId = txtGroupId.integerValue
     network.locoNetId = txtLocoNetId.integerValue
     network.save()
-    networkController.connected ? networkController.connect() : networkController.disconnect()
+    myTrainsController.connected ? myTrainsController.connect() : myTrainsController.disconnect()
   }
   
   func saveNew(dbEditorView: DBEditorView) -> EditorObject {
     let network = Network()
     setFields(network: network)
-    networkController.addNetwork(network: network)
-    editorView.dictionary = networkController.networks
+    myTrainsController.addNetwork(network: network)
+    editorView.dictionary = myTrainsController.networks
     editorView.setSelection(key: network.primaryKey)
     return network
   }
@@ -140,15 +140,15 @@ class EditNetworksVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   func saveExisting(dbEditorView: DBEditorView, editorObject: EditorObject) {
     if let network = editorObject as? Network {
       setFields(network: network)
-      editorView.dictionary = networkController.networks
+      editorView.dictionary = myTrainsController.networks
       editorView.setSelection(key: network.primaryKey)
     }
   }
   
   func delete(dbEditorView: DBEditorView, primaryKey: Int) {
     Network.delete(primaryKey: primaryKey)
-    networkController.removeNetwork(primaryKey: primaryKey)
-    editorView.dictionary = networkController.networks
+    myTrainsController.removeNetwork(primaryKey: primaryKey)
+    editorView.dictionary = myTrainsController.networks
   }
   
   // MARK: Outlets & Actions

@@ -45,7 +45,7 @@ extension InterfaceLocoNet {
       
     ]
     
-    let message = NetworkMessage(networkId: networkId, data: data, appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: data, appendCheckSum: true)
     
     addToQueue(message: message, delay: dmf.setupDelayInSeconds)
     
@@ -86,7 +86,7 @@ extension InterfaceLocoNet {
       D8 & 0x7f
     ]
     
-    let message = NetworkMessage(networkId: networkId, data: data, appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: data, appendCheckSum: true)
     
     addToQueue(message: message, delay: 1.0 / 1000.0)
     
@@ -117,7 +117,7 @@ extension InterfaceLocoNet {
       0x00
     ]
     
-    let message = NetworkMessage(networkId: networkId, data: data, appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: data, appendCheckSum: true)
     
     addToQueue(message: message, delay: 1.0 / 1000.0)
     
@@ -158,7 +158,7 @@ extension InterfaceLocoNet {
       0x00
     ]
     
-    let message = NetworkMessage(networkId: networkId, data: data, appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: data, appendCheckSum: true)
     
     addToQueue(message: message, delay: 1.0 / 1000.0)
     

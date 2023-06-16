@@ -32,7 +32,7 @@ class EditCommandStationsVC: NSViewController, NSWindowDelegate, DBEditorDelegat
 
     editorView.tabView = self.tabView
     
-    editorView.dictionary = networkController.commandStations
+    editorView.dictionary = myTrainsController.commandStations
     
     cboDeviceTypeDS.dictionary = productDictionary
     
@@ -100,8 +100,8 @@ class EditCommandStationsVC: NSViewController, NSWindowDelegate, DBEditorDelegat
   func saveNew(dbEditorView: DBEditorView) -> EditorObject {
     let cs = LocoNetDevice(primaryKey: -1)
     setFields(cs: cs)
-    networkController.addDevice(device: cs)
-    editorView.dictionary = networkController.commandStations
+    myTrainsController.addDevice(device: cs)
+    editorView.dictionary = myTrainsController.commandStations
     editorView.setSelection(key: cs.primaryKey)
     return cs
   }
@@ -109,15 +109,15 @@ class EditCommandStationsVC: NSViewController, NSWindowDelegate, DBEditorDelegat
   func saveExisting(dbEditorView: DBEditorView, editorObject: EditorObject) {
     if let cs = editorObject as? LocoNetDevice {
       setFields(cs: cs)
-      editorView.dictionary = networkController.commandStations
+      editorView.dictionary = myTrainsController.commandStations
       editorView.setSelection(key: cs.primaryKey)
     }
   }
 
   func delete(dbEditorView: DBEditorView, primaryKey: Int) {
     LocoNetDevice.delete(primaryKey: primaryKey)
-    networkController.removeDevice(primaryKey: primaryKey)
-    editorView.dictionary = networkController.commandStations
+    myTrainsController.removeDevice(primaryKey: primaryKey)
+    editorView.dictionary = myTrainsController.commandStations
   }
 
   // MARK: Outlets & Actions

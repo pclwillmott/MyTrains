@@ -31,7 +31,7 @@ class RouteManagerVC : NSViewController, NSWindowDelegate, InterfaceDelegate {
     
     self.view.window?.delegate = self
     
-    cboHostDS.dictionary = networkController.routeHosts
+    cboHostDS.dictionary = myTrainsController.routeHosts
     
     cboHost.dataSource = cboHostDS
     
@@ -107,7 +107,7 @@ class RouteManagerVC : NSViewController, NSWindowDelegate, InterfaceDelegate {
   
   // MARK: InterfaceDelegate Methods
   
-  @objc func networkMessageReceived(message: NetworkMessage) {
+  @objc func networkMessageReceived(message: LocoNetMessage) {
     
     switch message.messageType {
     case .routeTableInfoA:

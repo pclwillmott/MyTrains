@@ -42,7 +42,7 @@ class FastClockTesterVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
     
     changeNetwork()
     
-    txtSetDate.dateValue = networkController.fastClock.scaleDate
+    txtSetDate.dateValue = myTrainsController.fastClock.scaleDate
     
     FastClockScaleFactor.populate(comboBox: cboScaleFactor)
     
@@ -117,7 +117,7 @@ class FastClockTesterVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
     
     UserDefaults.standard.set(networkId, forKey: DEFAULT.FC_TESTER_NETWORK_ID)
 
-    if let network = networkController.networks[networkId], let interface = network.interface as? InterfaceLocoNet {
+    if let network = myTrainsController.networks[networkId], let interface = network.interface as? InterfaceLocoNet {
       self.interface = interface
       observerId = interface.addObserver(observer: self)
     }
@@ -173,7 +173,7 @@ class FastClockTesterVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
 
   // MARK: InterfaceDelegate Methods
   
-  @objc func networkMessageReceived(message:NetworkMessage) {
+  @objc func networkMessageReceived(message:LocoNetMessage) {
     
     switch message.messageType {
     case .setSlotDataOKP1:
@@ -294,7 +294,7 @@ class FastClockTesterVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   
   @IBAction func btnFastClockTestAction(_ sender: NSButton) {
   
-    networkController.fastClock.isEnabled = false
+    myTrainsController.fastClock.isEnabled = false
     mode = .setClock
     interface?.setFastClock(date: txtSetDate.dateValue, scaleFactor: scaleFactor)
 
@@ -305,7 +305,7 @@ class FastClockTesterVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   // Tick Rate Test Start
   @IBAction func btnSetAndRunTestAction(_ sender: NSButton) {
     
-    networkController.fastClock.isEnabled = false
+    myTrainsController.fastClock.isEnabled = false
     mode = .findTickRate
     numberOfTicks = -1
     lastMinute = -1
@@ -323,7 +323,7 @@ class FastClockTesterVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
     
     stoptimer()
     mode = .idle
-    networkController.fastClock.isEnabled = true
+    myTrainsController.fastClock.isEnabled = true
     
   }
   

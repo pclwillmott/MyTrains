@@ -32,7 +32,7 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Interfa
     
     self.view.window?.delegate = self
     
-    cboNetworkDS.dictionary = networkController.networksForCurrentLayout
+    cboNetworkDS.dictionary = myTrainsController.networksForCurrentLayout
     
     cboNetwork.dataSource = cboNetworkDS
     
@@ -300,7 +300,7 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Interfa
           observerId = interface.addObserver(observer: self)
         }
         
-        cboCommandStationDS.dictionary = networkController.locoNetDevicesForNetworkWithAttributes(networkId: network.primaryKey, attributes: [.OptionSwitches])
+        cboCommandStationDS.dictionary = myTrainsController.locoNetDevicesForNetworkWithAttributes(networkId: network.primaryKey, attributes: [.OptionSwitches])
         
         cboCommandStation.dataSource = cboCommandStationDS
         
@@ -335,7 +335,7 @@ class CommandStationConfigurationVC: NSViewController, NSWindowDelegate, Interfa
   
   // MARK: InterfaceDelegate Methods
   
-  @objc func networkMessageReceived(message:NetworkMessage) {
+  @objc func networkMessageReceived(message:LocoNetMessage) {
     
     if let device = cboCommandStationDS.editorObjectAt(index: cboCommandStation.indexOfSelectedItem) as? LocoNetDevice {
  

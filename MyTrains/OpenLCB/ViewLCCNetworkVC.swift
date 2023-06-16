@@ -37,7 +37,7 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLayerD
     
     self.view.window?.delegate = self
     
-    networkLayer = networkController.openLCBNetworkLayer
+    networkLayer = myTrainsController.openLCBNetworkLayer
     
     if let network = self.networkLayer {
       observerId = network.addObserver(observer: self)

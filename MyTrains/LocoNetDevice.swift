@@ -218,7 +218,7 @@ public class LocoNetDevice : EditorObject {
   
   public var network : Network? {
     get {
-      return networkController.networks[networkId]
+      return myTrainsController.networks[networkId]
     }
   }
   
@@ -314,7 +314,7 @@ public class LocoNetDevice : EditorObject {
   
   public var isAddressClash : Bool {
     get {
-      for device in networkController.devicesWithAddresses(networkId: networkId) {
+      for device in myTrainsController.devicesWithAddresses(networkId: networkId) {
         if device.primaryKey != self.primaryKey && !addresses.intersection(device.addresses).isEmpty {
           return true
         }
@@ -644,7 +644,7 @@ public class LocoNetDevice : EditorObject {
     
   }
   
-  public func setState(cvNumber:Int, s7CVState:NetworkMessage) {
+  public func setState(cvNumber:Int, s7CVState:LocoNetMessage) {
 
     let baseSwitchNumber = (cvNumber - 11 ) * 8 + 1
     
@@ -753,7 +753,7 @@ public class LocoNetDevice : EditorObject {
     
   }
   
-  public func setState(opswDataAP1:NetworkMessage) {
+  public func setState(opswDataAP1:LocoNetMessage) {
    
     for switchNumber in 1...64 {
       
@@ -777,7 +777,7 @@ public class LocoNetDevice : EditorObject {
     
   }
 
-  public func setState(opswDataBP1:NetworkMessage) {
+  public func setState(opswDataBP1:LocoNetMessage) {
 
     for switchNumber in 65...128 {
       

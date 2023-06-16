@@ -36,7 +36,7 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
     
     SpeedProfileResultsType.populate(comboBox: cboResultsType)
     
-    cboLocomotiveDS.dictionary = networkController.locomotives
+    cboLocomotiveDS.dictionary = myTrainsController.locomotives
     
     cboLocomotive.dataSource = cboLocomotiveDS
     
@@ -54,7 +54,7 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
     }
     
     cboRoute.removeAllItems()
-    if let layout = networkController.layout {
+    if let layout = myTrainsController.layout {
       for loopName in layout.loopNames {
         cboRoute.addItem(withObjectValue: loopName)
       }
@@ -196,7 +196,7 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   
   // MARK: InterfaceDelegate Methods
   
-  @objc func networkMessageReceived(message:NetworkMessage) {
+  @objc func networkMessageReceived(message:LocoNetMessage) {
     
     switch message.messageType {
     case .sensRepGenIn:
@@ -394,7 +394,7 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
     
     lblRouteLength.stringValue = ""
     
-    if let layout = networkController.layout {
+    if let layout = myTrainsController.layout {
       let units = UnitLength.selected(comboBox: cboLengthUnits)
       lblRouteLength.stringValue = String(format: "%.1f", layout.loopLengths[cboRoute.indexOfSelectedItem] * units.fromCM)
     }
@@ -431,7 +431,7 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
         observerId = -1
       }
       
-      if let locomotive = self.locomotive, let layout = networkController.layout, cboRoute.indexOfSelectedItem != -1 {
+      if let locomotive = self.locomotive, let layout = myTrainsController.layout, cboRoute.indexOfSelectedItem != -1 {
         
         btnStartProfiler.title = "Stop Profiler"
         route = layout.loops[cboRoute.indexOfSelectedItem]
@@ -506,7 +506,7 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   
   @IBAction func btnSetRouteAction(_ sender: NSButton) {
     
-    if let layout = networkController.layout, cboRoute.indexOfSelectedItem != -1 {
+    if let layout = myTrainsController.layout, cboRoute.indexOfSelectedItem != -1 {
       layout.setRoute(route: layout.loops[cboRoute.indexOfSelectedItem])
     }
     

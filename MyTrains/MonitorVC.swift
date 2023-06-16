@@ -42,7 +42,7 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
       }
     }
     if delegateId != -1 {
-      networkController.removeDelegate(id: delegateId)
+      myTrainsController.removeDelegate(id: delegateId)
       delegateId = -1
     }
   }
@@ -51,9 +51,9 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
     
     self.view.window?.delegate = self
 
-    delegateId = networkController.appendDelegate(delegate: self)
+    delegateId = myTrainsController.appendDelegate(delegate: self)
     
-    interfacesUpdated(interfaces: networkController.networkInterfaces)
+    interfacesUpdated(interfaces: myTrainsController.networkInterfaces)
     
     sendFilename = UserDefaults.standard.string(forKey: DEFAULT.MONITOR_SEND_FILENAME) ?? ""
     
@@ -253,7 +253,7 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
     if good, let interface = interface {
       
       if isLocoNet {
-          let message = NetworkMessage(networkId: interface.networkId, data: numbers, appendCheckSum: true)
+          let message = LocoNetMessage(networkId: interface.networkId, data: numbers, appendCheckSum: true)
           interface.addToQueue(message: message, delay: MessageTiming.STANDARD)
       }
       else {
@@ -266,11 +266,11 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
   
   // MARK: NetworkControllerDelegate Methods
   
-  func statusUpdated(networkController: NetworkController) {
+  func statusUpdated(myTrainsController: MyTrainsController) {
     
   }
   
-  func networkControllerUpdated(netwokController: NetworkController) {
+  func networkControllerUpdated(netwokController: MyTrainsController) {
   }
   
   func interfacesUpdated(interfaces: [Interface]) {
@@ -356,7 +356,7 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
 
   }
 
-  @objc func networkMessageReceived(message: NetworkMessage) {
+  @objc func networkMessageReceived(message: LocoNetMessage) {
     
     var item : String = ""
     var byteNumber : Int = 0
@@ -611,7 +611,7 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
       }
     }
     
-    for x in networkController.networkInterfaces {
+    for x in myTrainsController.networkInterfaces {
       if x.deviceName == name, let y = x as? InterfaceLocoNet {
         interface = y
         observerId = interface?.addObserver(observer: self) ?? -1

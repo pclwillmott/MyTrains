@@ -15,7 +15,7 @@ public enum ProgStatus {
   case writeAckNotDetected
 }
 
-public class ProgSlotDataP1 : NetworkMessage {
+public class ProgSlotDataP1 : LocoNetMessage {
   
   // MARK: Public Properties
   
