@@ -137,7 +137,7 @@ public class IODeviceBXP88 : IODevice {
   
   override public func setBoardId(newBoardId:Int) {
 
-    if let network = network, let interface = network.interface {
+    if let network = network, let interface = network.interface as? InterfaceLocoNet {
       
       if let message = OptionSwitch.enterSetBoardIdModeInstructions[locoNetProductId] {
         

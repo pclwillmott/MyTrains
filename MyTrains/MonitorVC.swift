@@ -90,7 +90,7 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
   
   private var observerId : Int = -1
   
-  private var interface : Interface? = nil
+  private var interface : InterfaceLocoNet? = nil
   
   private var captureFilename : String {
     get {
@@ -291,9 +291,9 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
       
       cboInterface.addItem(withObjectValue: name)
       
-      if interfaceId == name {
+      if interfaceId == name, let temp = interface as? InterfaceLocoNet {
         cboInterface.selectItem(at: cboInterface.numberOfItems-1)
-        self.interface = interface
+        self.interface = temp
         observerId = interface.addObserver(observer: self)
       }
       
@@ -612,8 +612,8 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
     }
     
     for x in networkController.networkInterfaces {
-      if x.deviceName == name {
-        interface = x
+      if x.deviceName == name, let y = x as? InterfaceLocoNet {
+        interface = y
         observerId = interface?.addObserver(observer: self) ?? -1
       }
     }

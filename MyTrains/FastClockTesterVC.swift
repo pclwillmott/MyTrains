@@ -77,7 +77,7 @@ class FastClockTesterVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   
   private var networkId : Int = -1
   
-  private var interface : Interface?
+  private var interface : InterfaceLocoNet?
   
   private var observerId : Int = -1
   
@@ -117,7 +117,7 @@ class FastClockTesterVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
     
     UserDefaults.standard.set(networkId, forKey: DEFAULT.FC_TESTER_NETWORK_ID)
 
-    if let network = networkController.networks[networkId], let interface = network.interface {
+    if let network = networkController.networks[networkId], let interface = network.interface as? InterfaceLocoNet {
       self.interface = interface
       observerId = interface.addObserver(observer: self)
     }

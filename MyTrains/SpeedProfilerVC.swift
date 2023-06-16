@@ -122,7 +122,7 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   
   private var locomotive : Locomotive?
   
-  private var interface : Interface?
+  private var interface : InterfaceLocoNet?
   
   private var observerId : Int = -1
   
@@ -448,7 +448,7 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
         
         locomotive.targetSpeed = (speed: 20, direction:locomotiveDirection)
         
-        if let interface = locomotive.network?.interface {
+        if let interface = locomotive.network?.interface as? InterfaceLocoNet {
           self.interface = interface
           observerId = interface.addObserver(observer: self)
         }

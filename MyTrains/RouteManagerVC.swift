@@ -67,7 +67,7 @@ class RouteManagerVC : NSViewController, NSWindowDelegate, InterfaceDelegate {
 
   var observerId : Int = -1
   
-  var interface : Interface?
+  var interface : InterfaceLocoNet?
   
   var route : [SwitchRoute] = []
   
@@ -97,7 +97,7 @@ class RouteManagerVC : NSViewController, NSWindowDelegate, InterfaceDelegate {
     
     cboRouteNumber.removeAllItems()
 
-    if let host = self.host, let interface = host.network?.interface {
+    if let host = self.host, let interface = host.network?.interface as? InterfaceLocoNet {
       self.interface = interface
       observerId = interface.addObserver(observer: self)
       interface.getRouteTableInfoA()

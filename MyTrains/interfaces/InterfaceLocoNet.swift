@@ -1,8 +1,8 @@
 //
-//  Interface.swift
+//  InterfaceLocoNet.swift
 //  MyTrains
 //
-//  Created by Paul Willmott on 30/12/2021.
+//  Created by Paul Willmott on 16/06/2023.
 //
 
 import Foundation
@@ -15,7 +15,7 @@ enum InterfaceState {
   case waitingForResponse
 }
 
-public class Interface : LocoNetDevice, MTSerialPortDelegate {
+public class InterfaceLocoNet : Interface {
   
   // MARK: Constructors
   
@@ -27,34 +27,14 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
   
   // MARK: Private Properties
   
-  private var serialPort : MTSerialPort?
-  
-  private var buffer : [UInt8] = [UInt8](repeating: 0x00, count:0x1000)
-  
-  private var readPtr : Int = 0
-  
-  private var writePtr : Int = 0
-  
-  private var bufferCount : Int = 0
-  
-  private var bufferLock : NSLock = NSLock()
-  
   private var outputQueue : [NetworkOutputQueueItem] = []
   
   private var outputQueueLock : NSLock = NSLock()
   
   private var outputTimer : Timer?
   
-  private var observers : [Int:InterfaceDelegate] = [:]
-  
-  private var nextObserverKey : Int = 0
-  
-  private var nextObserverKeyLock : NSLock = NSLock()
-  
   private var interfaceState : InterfaceState = .idle
   
-  private var lastTimeStamp : TimeInterval = Date.timeIntervalSinceReferenceDate
-
   internal var _locoSlots : [Int:LocoSlotData] = [:]
   
   // MARK: Public Properties
@@ -75,23 +55,10 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
   
   public var isEdit : Bool = false
   
-  public var commandStation : Interface? {
+  public var commandStation : InterfaceLocoNet? {
     get {
       return network?.commandStation
     }
-  }
-  
-  public var isConnected : Bool {
-    get {
-      return serialPort != nil
-    }
-  }
-  
-  public var isOpen : Bool {
-    if let port = serialPort {
-      return port.isOpen
-    }
-    return false
   }
   
   public var partialSerialNumberLow : Int = -1
@@ -106,10 +73,6 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
     }
   }
   
-  @objc func lccCANFrameReceived(frame:LCCCANFrame) {
-
-  }
-
   private func networkMessageReceived(message: NetworkMessage) {
     
 //    let printOpSw = true
@@ -529,19 +492,6 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
     
   }
   
-  public func addObserver(observer:InterfaceDelegate) -> Int {
-    nextObserverKeyLock.lock()
-    let id : Int = nextObserverKey
-    nextObserverKey += 1
-    nextObserverKeyLock.unlock()
-    observers[id] = observer
-    return id
-  }
-  
-  public func removeObserver(id:Int) {
-    observers.removeValue(forKey: id)
-  }
-  
   public func addToQueue(message:NetworkMessage, delay:TimeInterval, responses: Set<NetworkMessageType>, retryCount: Int, timeoutCode: TimeoutCode) {
     
     let item = NetworkOutputQueueItem(message: message, delay: delay, responses: responses, retryCount: retryCount, timeoutCode: timeoutCode)
@@ -558,162 +508,12 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
     addToQueue(message: message, delay: delay, responses: [], retryCount: 0, timeoutCode: .none)
   }
   
-  public func open() {
-    
-    close()
-    
-    if let port = MTSerialPort(path: devicePath) {
-      port.baudRate = baudRate
- //     port.baudRate = .br115200
-      port.numberOfDataBits = 8
-      port.numberOfStopBits = 1
-      port.parity = .none
-      port.usesRTSCTSFlowControl = flowControl == .rtsCts
-      port.delegate = self
-      port.open()
-      serialPort = port
- //     print("open: \(self.deviceName)")
-    }
-
-  }
-  
-  public func close() {
-    serialPort?.close()
-    serialPort = nil
-  }
-  
-  public func send(data: [UInt8]) {
-    serialPort?.write(data:data)
-  }
-
-  public func send(data:String) {
-    serialPort?.write(data:[UInt8](data.utf8))
-  }
-
   // MARK: MTSerialPortDelegate Methods
   
-  public func serialPort(_ serialPort: MTSerialPort, didReceive data: [UInt8]) {
+  public override func parseInput() {
 
-    // Handle LCC
- 
-    bufferLock.lock()
-    bufferCount += data.count
-    for x in data {
-      buffer[writePtr] = x
-      writePtr = (writePtr + 1) & 0xfff
-    }
-    bufferLock.unlock()
-
-    let minFrameSize = 13
+    var doAgain = true
     
-    var doAgain : Bool = bufferCount >= minFrameSize
-    
-    if network!.networkType == .LCC {
-      
-      while doAgain {
-        
-        enum SearchState {
-          case searchingForColon
-          case searchingForSemiColon
-        }
-        
-        var state : SearchState = .searchingForColon
-          
-        bufferLock.lock()
-
-        var index = readPtr
-        
-        var tempCount = bufferCount
-        
-        var frame : String = ""
-
-        bufferLock.unlock()
-        
-        while tempCount > 0 {
-          
-          let char = String(format: "%C", buffer[index])
-          
-          switch state {
-            
-          case .searchingForColon:
-            
-            if char == ":" {
-              frame += char
-              state = .searchingForSemiColon
-            }
-            else {
-              bufferLock.lock()
-              readPtr = (readPtr + 1) & 0xfff
-              bufferCount -= 1
-              bufferLock.unlock()
-            }
-            
-          case .searchingForSemiColon:
-            
-            frame += char
-            
-            if char == ":" {
-              let increment = frame.count
-              bufferLock.lock()
-              readPtr = (readPtr + increment) & 0xfff
-              bufferCount -= increment
-              bufferLock.unlock()
-              frame = char
-            }
-            else if char == "\n" || char == "\r" {
-              let increment = frame.count
-              bufferLock.lock()
-              readPtr = (readPtr + increment) & 0xfff
-              bufferCount -= increment
-              bufferLock.unlock()
-              frame = ""
-              state = .searchingForColon
-            }
-            else if char == ";" {
-              
-              state = .searchingForColon
-              
-              let increment = frame.count
-              
-              bufferLock.lock()
-              readPtr = (readPtr + increment) & 0xfff
-              bufferCount -= increment
-              bufferLock.unlock()
-              
-              if let newframe = LCCCANFrame(networkId: networkId, message: frame) {
-                
-                frame = ""
-                
-                newframe.timeStamp = Date.timeIntervalSinceReferenceDate
-                newframe.timeSinceLastMessage = newframe.timeStamp - lastTimeStamp
-                lastTimeStamp = newframe.timeStamp
-                
-                for (_, observer) in observers {
-                  observer.lccCANFrameReceived?(frame: newframe)
-                }
-                
-              }
-
-            }
-            
-          }
-          
-          index = (index + 1) & 0xfff
-          tempCount -= 1
-          
-        }
-        
-        doAgain = bufferCount >= minFrameSize
-        
-      }
-      
-      return
-
-    }
-
-    // LocoNet from here onwards
-    
-
     while doAgain {
       
       doAgain = false
@@ -858,27 +658,11 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
     }
   }
   
-  public func serialPortWasRemovedFromSystem(_ serialPort: MTSerialPort) {
-    
-  }
-  
-  public func serialPortWasOpened(_ serialPort: MTSerialPort) {
-    self.serialPort = serialPort
-    for (_, observer) in observers {
-      observer.interfaceWasOpened?(interface: self)
-    }
-    if let network = self.network, network.networkType == .LocoNet {
-      if !isEdit {
-        iplDiscover()
-      }
+  public override func serialPortWasOpened(_ serialPort: MTSerialPort) {
+    super.serialPortWasOpened(serialPort)
+    if !isEdit {
+      iplDiscover()
     }
   }
   
-  public func serialPortWasClosed(_ serialPort: MTSerialPort) {
-    self.serialPort = nil
-    for (_, observer) in observers {
-      observer.interfaceWasClosed?(interface: self)
-    }
-  }
-
 }

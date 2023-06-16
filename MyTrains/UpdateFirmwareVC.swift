@@ -45,7 +45,7 @@ class UpdateFirmwareVC: NSViewController, NSWindowDelegate, InterfaceDelegate, D
   
   private var observerId : Int = -1
   
-  private var interface : Interface? = nil
+  private var interface : InterfaceLocoNet? = nil
   
   private var timer : Timer?
   
@@ -136,9 +136,9 @@ class UpdateFirmwareVC: NSViewController, NSWindowDelegate, InterfaceDelegate, D
       
       cboInterface.addItem(withObjectValue: name)
       
-      if interfaceId == name {
+      if interfaceId == name, let x = interface as? InterfaceLocoNet {
         cboInterface.selectItem(at: cboInterface.numberOfItems-1)
-        self.interface = interface
+        self.interface = x
         observerId = interface.addObserver(observer: self)
       }
       
@@ -334,8 +334,8 @@ class UpdateFirmwareVC: NSViewController, NSWindowDelegate, InterfaceDelegate, D
     }
     
     for x in networkController.networkInterfaces {
-      if x.deviceName == name {
-        interface = x
+      if x.deviceName == name, let y = x as? InterfaceLocoNet {
+        interface = y
         observerId = interface?.addObserver(observer: self) ?? -1
       }
     }

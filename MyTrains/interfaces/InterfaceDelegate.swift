@@ -12,8 +12,8 @@ import Foundation
   @objc optional func interfaceWasDisconnected(interface:Interface)
   @objc optional func interfaceWasOpened(interface:Interface)
   @objc optional func interfaceWasClosed(interface:Interface)
-  @objc optional func progMessageReceived(message: NetworkMessage) 
-  @objc optional func slotsUpdated(interface:Interface)
-  @objc optional func trackStatusChanged(interface: Interface)
+  @objc optional func progMessageReceived(message: NetworkMessage)
+  @objc optional func slotsUpdated(interface:InterfaceLocoNet)
+  @objc optional func trackStatusChanged(interface: InterfaceLocoNet)
   @objc optional func lccCANFrameReceived(frame:LCCCANFrame)
 }

@@ -41,11 +41,11 @@ class SlotViewVC : NSViewController, NSWindowDelegate, InterfaceDelegate {
       
       let key = UserDefaults.standard.integer(forKey: DEFAULT.SLOT_VIEW_COMMAND_STATION)
       
-      if let index = cboCommandStationDS.indexWithKey(key: key), let cs = cboCommandStationDS.editorObjectAt(index: index) as? Interface {
+      if let index = cboCommandStationDS.indexWithKey(key: key), let cs = cboCommandStationDS.editorObjectAt(index: index) as? InterfaceLocoNet {
         cboCommandStation.selectItem(at: index)
         commandStation = cs
       }
-      else if let cs = cboCommandStationDS.editorObjectAt(index: 0) as? Interface {
+      else if let cs = cboCommandStationDS.editorObjectAt(index: 0) as? InterfaceLocoNet {
         cboCommandStation.selectItem(at: 0)
         commandStation = cs
       }
@@ -70,9 +70,9 @@ class SlotViewVC : NSViewController, NSWindowDelegate, InterfaceDelegate {
   
   private var observerId : Int = -1
   
-  private var interface : Interface?
+  private var interface : InterfaceLocoNet?
   
-  private var commandStation : Interface? {
+  private var commandStation : InterfaceLocoNet? {
     willSet {
       stopTimer()
       if observerId != -1 {
@@ -82,7 +82,7 @@ class SlotViewVC : NSViewController, NSWindowDelegate, InterfaceDelegate {
       interface = nil
     }
     didSet {
-      if let cs = commandStation, let interface = cs.network?.interface {
+      if let cs = commandStation, let interface = cs.network?.interface as? InterfaceLocoNet {
         self.interface = interface
         observerId = interface.addObserver(observer: self)
         startTimer(timeInterval: 2.0)
@@ -198,7 +198,7 @@ class SlotViewVC : NSViewController, NSWindowDelegate, InterfaceDelegate {
     }
   }
 
-  @objc func slotsUpdated(interface: Interface) {
+  @objc func slotsUpdated(interface: InterfaceLocoNet) {
     slots = interface.locoSlots
   }
 
@@ -207,7 +207,7 @@ class SlotViewVC : NSViewController, NSWindowDelegate, InterfaceDelegate {
   @IBOutlet weak var cboCommandStation: NSComboBox!
   
   @IBAction func cboCommandStationAction(_ sender: NSComboBox) {
-    if let cs = cboCommandStationDS.editorObjectAt(index: cboCommandStation.indexOfSelectedItem) as? Interface {
+    if let cs = cboCommandStationDS.editorObjectAt(index: cboCommandStation.indexOfSelectedItem) as? InterfaceLocoNet {
       commandStation = cs
       UserDefaults.standard.set(cs.primaryKey, forKey: DEFAULT.SLOT_VIEW_COMMAND_STATION)
     }

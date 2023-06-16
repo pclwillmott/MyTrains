@@ -115,7 +115,7 @@ class TC64ConfigVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   
   private var observerId : Int = -1
   
-  private var programmer : Interface?
+  private var programmer : InterfaceLocoNet?
   
   private var needToSetPRMode : Bool = false
   

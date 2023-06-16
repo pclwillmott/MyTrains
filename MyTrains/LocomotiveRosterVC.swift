@@ -68,7 +68,7 @@ class LocomotiveRosterVC: NSViewController, InterfaceDelegate, NSWindowDelegate 
   
   private var observerId : Int = -1
   
-  private var interface : Interface?
+  private var interface : InterfaceLocoNet?
   
   private enum Mode {
     case idle
@@ -90,7 +90,7 @@ class LocomotiveRosterVC: NSViewController, InterfaceDelegate, NSWindowDelegate 
       interface = nil
     }
     didSet {
-      if let cs = commandStation, let interface = cs.network?.interface {
+      if let cs = commandStation, let interface = cs.network?.interface as? InterfaceLocoNet {
         self.interface = interface
         observerId = interface.addObserver(observer: self)
       }

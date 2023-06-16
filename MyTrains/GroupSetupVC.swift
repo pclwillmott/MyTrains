@@ -54,7 +54,7 @@ class GroupSetupVC: NSViewController, NetworkControllerDelegate, InterfaceDelega
   
   private var observerId : Int = -1
   
-  private var interface : Interface? = nil
+  private var interface : InterfaceLocoNet? = nil
   
   private var isFirst : Bool = true
   
@@ -135,7 +135,7 @@ class GroupSetupVC: NSViewController, NetworkControllerDelegate, InterfaceDelega
       
       if interfaceId == name {
         cboInterface.selectItem(at: cboInterface.numberOfItems-1)
-        self.interface = interface
+        self.interface = interface as? InterfaceLocoNet
         observerId = interface.addObserver(observer: self)
       }
       
@@ -203,7 +203,7 @@ class GroupSetupVC: NSViewController, NetworkControllerDelegate, InterfaceDelega
       }
     }
     
-    for x in networkController.networkInterfaces {
+    for (_, x) in networkController.locoNetInterfaces {
       if x.deviceName == name {
         interface = x
         observerId = interface?.addObserver(observer: self) ?? -1

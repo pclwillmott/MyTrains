@@ -52,7 +52,7 @@ class AddressManagerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
 
   private var observerId : Int = -1
   
-  private var interface : Interface?
+  private var interface : InterfaceLocoNet?
   
   private var tableViewDS : AddressTableViewDS = AddressTableViewDS()
   
@@ -78,7 +78,7 @@ class AddressManagerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
 
     if cboNetwork.indexOfSelectedItem != -1, let network = cboNetworkDS.editorObjectAt(index: cboNetwork.indexOfSelectedItem) as? Network {
         
-      if let interface = network.interface {
+      if let interface = network.interface as? InterfaceLocoNet {
         self.interface = interface
         observerId = interface.addObserver(observer: self)
       }

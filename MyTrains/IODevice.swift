@@ -106,7 +106,7 @@ public class IODevice : LocoNetDevice, InterfaceDelegate {
     
     noResponse = true
     
-    if let network = self.network, let interface = network.interface {
+    if let network = self.network, let interface = network.interface as? InterfaceLocoNet {
       
       if let method = methodForOpSw[.Series7], !method.intersection(selectedSwitches).isEmpty {
         
@@ -372,7 +372,7 @@ public class IODevice : LocoNetDevice, InterfaceDelegate {
     
     selectedSwitches = selectedCVs
     
-    if let network = self.network, let interface = network.interface {
+    if let network = self.network, let interface = network.interface as? InterfaceLocoNet {
       
       if observerId != -1 {
         interface.removeObserver(id: observerId)
@@ -404,7 +404,7 @@ public class IODevice : LocoNetDevice, InterfaceDelegate {
     
     selectedSwitches = selectedCVs
     
-    if let network = self.network, let interface = network.interface {
+    if let network = self.network, let interface = network.interface as? InterfaceLocoNet {
       
       if observerId != -1 {
         interface.removeObserver(id: observerId)
@@ -436,7 +436,7 @@ public class IODevice : LocoNetDevice, InterfaceDelegate {
     
     if isCVMode {
 
-      if let network = self.network, let interface = network.interface {
+      if let network = self.network, let interface = network.interface as? InterfaceLocoNet {
         
         switch message.messageType {
           

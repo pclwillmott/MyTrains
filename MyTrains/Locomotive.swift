@@ -144,7 +144,7 @@ public class Locomotive : RollingStock, InterfaceDelegate {
     set(value) {
       if value != _isInUse {
         _isInUse = value
-        if let network = self.network, let interface = network.interface {
+        if let network = self.network, let interface = network.interface as? InterfaceLocoNet {
           if _isInUse {
             interfaceDelegateId = interface.addObserver(observer: self)
             initState = .waitingForSlot
@@ -271,7 +271,7 @@ public class Locomotive : RollingStock, InterfaceDelegate {
 
   @objc func timerAction() {
     
-    if let network = self.network, let interface = network.interface, let throttle = _throttleID {
+    if let network = self.network, let interface = network.interface as? InterfaceLocoNet, let throttle = _throttleID {
       
       let newTimeStamp = Date.timeIntervalSinceReferenceDate
       
@@ -774,7 +774,7 @@ public class Locomotive : RollingStock, InterfaceDelegate {
   
   @objc public func networkMessageReceived(message: NetworkMessage) {
     
-    if let network = self.network, let interface = network.interface {
+    if let network = self.network, let interface = network.interface as? InterfaceLocoNet {
       
       if _throttleID == nil {
         _throttleID = networkController.softwareThrottleID

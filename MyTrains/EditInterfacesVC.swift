@@ -61,7 +61,7 @@ class EditInterfacesVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Ne
   
   private var interface : Interface?
   
-  private var tempInterface : Interface?
+  private var tempInterface : InterfaceLocoNet?
   
   private var initialState : InitialState = .inactive
 
@@ -302,7 +302,7 @@ class EditInterfacesVC: NSViewController, NSWindowDelegate, DBEditorDelegate, Ne
     else {
       initialState = .temporaryInterface
     }
-    tempInterface = Interface(primaryKey: -1)
+    tempInterface = InterfaceLocoNet(primaryKey: -1)
     if let device = tempInterface {
       device.isEdit = true
       setFields(device: device)

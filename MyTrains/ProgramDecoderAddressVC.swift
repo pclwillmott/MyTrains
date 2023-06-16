@@ -127,7 +127,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, InterfaceDel
   
   private var observerId : Int = -1
   
-  private var commandStation : Interface?
+  private var commandStation : InterfaceLocoNet?
   
   private var programmerState : ProgrammerState = .idle
   
@@ -188,7 +188,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, InterfaceDel
       commandStation = nil
     }
     
-    if let programmer = cboCommandStationDS.editorObjectAt(index: cboCommandStation.indexOfSelectedItem) as? Interface {
+    if let programmer = cboCommandStationDS.editorObjectAt(index: cboCommandStation.indexOfSelectedItem) as? InterfaceLocoNet {
       if let info = programmer.locoNetProductInfo, info.attributes.contains(.CommandStation) {
         commandStation = networkController.commandStationInterface(commandStation: programmer)
         needToSetPRMode = false

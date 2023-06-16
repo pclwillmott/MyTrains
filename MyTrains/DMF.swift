@@ -650,7 +650,7 @@ public class DMF : NSObject {
   
   // MARK: Private Properties
   
-  private var interface : Interface?
+  private var interface : InterfaceLocoNet?
   
   private var delegate : DMFDelegate?
   
@@ -850,7 +850,7 @@ public class DMF : NSObject {
 
   // MARK: Public Methods
   
-  public func start(interface: Interface, delegate: DMFDelegate) {
+  public func start(interface: InterfaceLocoNet, delegate: DMFDelegate) {
     
     _cancel = false
     

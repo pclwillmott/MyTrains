@@ -1132,8 +1132,12 @@ public class LocoNetDevice : EditorObject {
             
             if let info = device.locoNetProductInfo, !info.attributes.intersection([.CommandStation, .ComputerInterface]).isEmpty {
               
-              device = Interface(reader: reader)
-              
+              if info.attributes.contains(.LCC) {
+                device = InterfaceOpenLCBCAN(reader: reader)
+              }
+              else {
+                device = InterfaceLocoNet(reader: reader)
+              }
             }
             
           }

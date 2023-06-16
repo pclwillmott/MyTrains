@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension Interface {
+extension InterfaceLocoNet {
   
   // MARK: Public Properties
   

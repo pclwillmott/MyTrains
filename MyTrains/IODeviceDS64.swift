@@ -222,7 +222,7 @@ public class IODeviceDS64 : IODevice {
   
   @objc func next() {
     
-    if let network = self.network, let interface = network.interface {
+    if let network = self.network, let interface = network.interface as? InterfaceLocoNet {
       
       if nextAddr == 4 {
         
@@ -282,7 +282,7 @@ public class IODeviceDS64 : IODevice {
   
   override public func setBoardId(newBoardId:Int) {
 
-    if let network = network, let interface = network.interface {
+    if let network = network, let interface = network.interface as? InterfaceLocoNet {
       
       if let message = OptionSwitch.enterSetBoardIdModeInstructions[locoNetProductId] {
         

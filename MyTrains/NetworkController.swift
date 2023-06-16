@@ -159,13 +159,13 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
     }
   }
   
-  public var commandStations : [Int:Interface] {
+  public var commandStations : [Int:InterfaceLocoNet] {
     get {
       
-      var result : [Int:Interface] = [:]
+      var result : [Int:InterfaceLocoNet] = [:]
       
       for (_, device) in locoNetDevices {
-        if let info = device.locoNetProductInfo, info.attributes.contains(.CommandStation), let cs = device as? Interface {
+        if let info = device.locoNetProductInfo, info.attributes.contains(.CommandStation), let cs = device as? InterfaceLocoNet {
           result[cs.primaryKey] = cs
         }
       }
@@ -207,13 +207,13 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
     }
   }
   
-  public var locoNetInterfaces : [Int:Interface] {
+  public var locoNetInterfaces : [Int:InterfaceLocoNet] {
     get {
       
-      var interfaces : [Int:Interface] = [:]
+      var interfaces : [Int:InterfaceLocoNet] = [:]
       
-      for (_, interface) in interfaceDevices {
-        if let info = interface.locoNetProductInfo, info.attributes.contains(.LocoNetInterface) {
+      for (_, device) in interfaceDevices {
+        if let interface = device as? InterfaceLocoNet, let info = interface.locoNetProductInfo, info.attributes.contains(.LocoNetInterface) {
           interfaces[interface.primaryKey] = interface
         }
       }
@@ -223,13 +223,13 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
     }
   }
 
-  public var openLCBInterfaces : [Int:Interface] {
+  public var openLCBInterfaces : [Int:InterfaceOpenLCBCAN] {
     get {
       
-      var interfaces : [Int:Interface] = [:]
+      var interfaces : [Int:InterfaceOpenLCBCAN] = [:]
       
-      for (_, interface) in interfaceDevices {
-        if let info = interface.locoNetProductInfo, info.attributes.contains(.LCC) {
+      for (_, device) in interfaceDevices {
+        if let interface = device as? InterfaceOpenLCBCAN, let info = interface.locoNetProductInfo, info.attributes.contains(.LCC) {
           interfaces[interface.primaryKey] = interface
         }
       }
@@ -497,9 +497,9 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
     return result
   }
   
-  public func commandStationInterface(commandStation:Interface) -> Interface? {
+  public func commandStationInterface(commandStation:Interface) -> InterfaceLocoNet? {
     if let network = networks[commandStation.networkId] {
-      return network.interface
+      return network.interface as? InterfaceLocoNet
     }
     return nil
   }
@@ -520,7 +520,7 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
     openLCBNetworkLayer?.start()
     for interface in networkInterfaces {
       if let network = interface.network, network.networkType == .LocoNet {
-        interface.initSensorLookup()
+   //     interface.initSensorLookup()
         interface.open()
       }
     }
@@ -538,19 +538,19 @@ public class NetworkController : NSObject, InterfaceDelegate, NSUserNotification
   }
   
   public func powerOn() {
-    for interface in networkInterfaces {
+    for (_, interface) in locoNetInterfaces {
       interface.powerOn()
     }
   }
   
   public func powerOff() {
-    for interface in networkInterfaces {
+    for (_, interface) in locoNetInterfaces {
       interface.powerOff()
     }
   }
 
   public func powerIdle() {
-    for interface in networkInterfaces {
+    for (_, interface) in locoNetInterfaces {
       interface.powerIdle()
     }
   }

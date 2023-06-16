@@ -72,7 +72,7 @@ class PurgeProfilerVC : NSViewController, NSWindowDelegate, InterfaceDelegate {
 
   private var cboCommandStationDS : ComboBoxDictDS = ComboBoxDictDS()
   
-  private var interface : Interface?
+  private var interface : InterfaceLocoNet?
   
   private var locoSlot : Int = -1
   
@@ -101,7 +101,7 @@ class PurgeProfilerVC : NSViewController, NSWindowDelegate, InterfaceDelegate {
       interface = nil
     }
     didSet {
-      if let cs = commandStation, let interface = cs.network?.interface {
+      if let cs = commandStation, let interface = cs.network?.interface as? InterfaceLocoNet {
         self.interface = interface
         observerId = interface.addObserver(observer: self)
         safeIsStandardPurgeTime = interface.isStandardLocoAddressPurgeTime

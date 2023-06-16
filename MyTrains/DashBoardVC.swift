@@ -93,7 +93,7 @@ class DashBoardVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate
   
   private var observerId : Int = -1
   
-  private var interface : Interface?
+  private var interface : InterfaceLocoNet?
   
   private var delegateId : Int = -1
   
@@ -192,9 +192,9 @@ class DashBoardVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate
       
       cboInterface.addItem(withObjectValue: name)
       
-      if interfaceId == name {
+      if interfaceId == name, let x = interface as? InterfaceLocoNet {
         cboInterface.selectItem(at: cboInterface.numberOfItems-1)
-        self.interface = interface
+        self.interface = x
         observerId = interface.addObserver(observer: self)
       }
       
@@ -361,8 +361,8 @@ class DashBoardVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate
     }
     
     for x in networkController.networkInterfaces {
-      if x.deviceName == name {
-        interface = x
+      if x.deviceName == name, let y = x as? InterfaceLocoNet {
+        interface = y
         observerId = interface?.addObserver(observer: self) ?? -1
       }
     }

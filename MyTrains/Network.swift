@@ -97,7 +97,7 @@ public class Network : EditorObject {
     }
   }
   
-  public var commandStation : Interface? {
+  public var commandStation : InterfaceLocoNet? {
     get {
       return networkController.commandStations[commandStationId]
     }

@@ -84,7 +84,7 @@ class MainVC: NSViewController, NetworkControllerDelegate, LayoutDelegate, OpenL
       var xPos : CGFloat = 20
       let yPos : CGFloat = 15
       
-      for interface in networkController.networkInterfaces {
+      for (_, interface) in networkController.locoNetInterfaces {
         
         var color : NSColor = NSColor.black
         
