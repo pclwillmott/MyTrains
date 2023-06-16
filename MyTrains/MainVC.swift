@@ -7,7 +7,7 @@
 
 import Cocoa
 
-class MainVC: NSViewController, NetworkControllerDelegate, LayoutDelegate, OpenLCBClockDelegate {
+class MainVC: NSViewController, MyTrainsControllerDelegate, LayoutDelegate, OpenLCBClockDelegate {
 
   // MARK: Window & View Control
   
@@ -84,7 +84,7 @@ class MainVC: NSViewController, NetworkControllerDelegate, LayoutDelegate, OpenL
       var xPos : CGFloat = 20
       let yPos : CGFloat = 15
       
-      for (_, interface) in myTrainsController.locoNetInterfaces {
+      for interface in myTrainsController.networkInterfaces {
         
         var color : NSColor = NSColor.black
         
@@ -95,7 +95,7 @@ class MainVC: NSViewController, NetworkControllerDelegate, LayoutDelegate, OpenL
         color = interface.isOpen ? .systemGreen : .systemRed
         
         label1.textColor = color
-        label1.stringValue = "\(interface.deviceName) → "
+        label1.stringValue = "\(interface.deviceName) "
         label1.isEditable = false
         label1.isBezeled = false
         
@@ -105,7 +105,7 @@ class MainVC: NSViewController, NetworkControllerDelegate, LayoutDelegate, OpenL
         
         xPos += label1.frame.width + 0
 
-        if let cs = interface.commandStation {
+        if let locoNetInterface = interface as? InterfaceLocoNet, let cs = locoNetInterface.commandStation {
           
           let label2: NSTextField = NSTextField()
           label2.frame = NSRect(x: xPos, y: yPos, width: 200, height: 21)
@@ -115,7 +115,7 @@ class MainVC: NSViewController, NetworkControllerDelegate, LayoutDelegate, OpenL
    
           label2.textColor = color
           
-          label2.stringValue = "\(cs.deviceName)"
+          label2.stringValue = "→ \(cs.deviceName)"
           label2.isEditable = false
           label2.isBezeled = false
           label2.sizeToFit()
@@ -161,7 +161,7 @@ class MainVC: NSViewController, NetworkControllerDelegate, LayoutDelegate, OpenL
     switchBoardView.needsDisplay = true
   }
   
-  func networkControllerUpdated(netwokController: MyTrainsController) {
+  func myTrainsControllerUpdated(myTrainsController: MyTrainsController) {
     
     cboLayout.deselectItem(at: cboLayout.indexOfSelectedItem)
     

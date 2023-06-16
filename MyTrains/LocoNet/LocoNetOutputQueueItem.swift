@@ -1,5 +1,5 @@
 //
-//  NetworkOutputQueueItem.swift
+//  LocoNetOutputQueueItem.swift
 //  MyTrains
 //
 //  Created by Paul Willmott on 07/11/2021.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class NetworkOutputQueueItem {
+public class LocoNetOutputQueueItem {
   
   init(message: LocoNetMessage, delay:TimeInterval, responses: Set<LocoNetMessageType>, retryCount: Int, timeoutCode: TimeoutCode) {
     self.message = message

@@ -8,7 +8,7 @@
 import Foundation
 import Cocoa
 
-class GroupSetupVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate, NSWindowDelegate {
+class GroupSetupVC: NSViewController, MyTrainsControllerDelegate, InterfaceDelegate, NSWindowDelegate {
   
   // MARK: Window & View Control
   
@@ -113,7 +113,7 @@ class GroupSetupVC: NSViewController, NetworkControllerDelegate, InterfaceDelega
     timer = nil
   }
   
-  // MARK: NetworkControllerDelegate Methods
+  // MARK: MyTrainsControllerDelegate Methods
   
   func interfacesUpdated(interfaces: [Interface]) {
     

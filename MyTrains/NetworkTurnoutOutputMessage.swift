@@ -27,12 +27,12 @@ public class NetworkTurnoutOutputMessage : LocoNetMessage {
     }
   }
   
-  public var turnoutClosedOutput : NetworkTurnoutOutput {
+  public var turnoutClosedOutput : LocoNetTurnoutOutput {
     let status = (message[2] & 0b00110000) >> 4
     return (status & 0b10) != 0x00 ? .on : .off
   }
 
-  public var turnoutThrownOutput : NetworkTurnoutOutput {
+  public var turnoutThrownOutput : LocoNetTurnoutOutput {
     let status = (message[2] & 0b00110000) >> 4
     return (status & 0b01) != 0x00 ? .on : .off
   }

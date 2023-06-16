@@ -8,7 +8,7 @@
 import Foundation
 import Cocoa
 
-class DashBoardVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate, InterfaceDelegate {
+class DashBoardVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegate, InterfaceDelegate {
   
   // MARK: Window & View Control
 
@@ -166,12 +166,12 @@ class DashBoardVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate
     timer = nil
   }
   
-  // MARK: NetworkControllerDelegate Methods
+  // MARK: MyTrainsControllerDelegate Methods
   
   func statusUpdated(myTrainsController: MyTrainsController) {
   }
   
-  func networkControllerUpdated(netwokController: MyTrainsController) {
+  func myTrainsControllerUpdated(myTrainsController: MyTrainsController) {
   }
   
   func interfacesUpdated(interfaces: [Interface]) {

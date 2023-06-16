@@ -15,7 +15,7 @@ private enum InitialState {
   case inactive
 }
 
-class EditInterfacesVC: NSViewController, NSWindowDelegate, DBEditorDelegate, NetworkControllerDelegate, InterfaceDelegate {
+class EditInterfacesVC: NSViewController, NSWindowDelegate, DBEditorDelegate, MyTrainsControllerDelegate, InterfaceDelegate {
  
   // MARK: Window & View Control
   

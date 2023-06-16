@@ -22,7 +22,7 @@ public enum NumberBase : Int {
   case character = 5
 }
 
-class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate, NSWindowDelegate {
+class MonitorVC: NSViewController, MyTrainsControllerDelegate, InterfaceDelegate, NSWindowDelegate {
   
   // MARK: Window & View Control
   
@@ -264,13 +264,13 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
 
   }
   
-  // MARK: NetworkControllerDelegate Methods
+  // MARK: MyTrainsControllerDelegate Methods
   
   func statusUpdated(myTrainsController: MyTrainsController) {
     
   }
   
-  func networkControllerUpdated(netwokController: MyTrainsController) {
+  func myTrainsControllerUpdated(myTrainsController: MyTrainsController) {
   }
   
   func interfacesUpdated(interfaces: [Interface]) {

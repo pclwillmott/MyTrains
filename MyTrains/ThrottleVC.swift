@@ -9,7 +9,7 @@ import Foundation
 import Cocoa
 import AppKit
 
-class ThrottleVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate, LocomotiveDelegate {
+class ThrottleVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegate, LocomotiveDelegate {
 
   // MARK: Window & View Control
   
@@ -229,9 +229,9 @@ class ThrottleVC: NSViewController, NSWindowDelegate, NetworkControllerDelegate,
 
   }
   
-  // MARK: NetworkControllerDelegate Methods
+  // MARK: MyTrainsControllerDelegate Methods
   
-  @objc func networkControllerUpdated(netwokController: MyTrainsController) {
+  @objc func myTrainsControllerUpdated(myTrainsController: MyTrainsController) {
   }
   
   // MARK: Outlets & Actions

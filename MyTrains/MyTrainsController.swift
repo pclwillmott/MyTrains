@@ -7,13 +7,6 @@
 
 import Foundation
 
-@objc public protocol NetworkControllerDelegate {
-  @objc optional func interfacesUpdated(interfaces:[Interface])
-  @objc optional func networkControllerUpdated(netwokController:MyTrainsController)
-  @objc optional func statusUpdated(myTrainsController:MyTrainsController)
-  @objc optional func switchBoardUpdated()
-}
-
 public class MyTrainsController : NSObject, InterfaceDelegate, NSUserNotificationCenterDelegate, MTSerialPortManagerDelegate {
   
   // MARK: Constructor
@@ -41,7 +34,7 @@ public class MyTrainsController : NSObject, InterfaceDelegate, NSUserNotificatio
   
   // MARK: Private Properties
   
-  private var controllerDelegates : [Int:NetworkControllerDelegate] = [:]
+  private var controllerDelegates : [Int:MyTrainsControllerDelegate] = [:]
   
   private var _nextControllerDelegateId : Int = 0
   
@@ -105,8 +98,8 @@ public class MyTrainsController : NSObject, InterfaceDelegate, NSUserNotificatio
   
   public var connected : Bool = false {
     didSet {
-      for delegate in controllerDelegates {
-        delegate.value.statusUpdated?(myTrainsController: self)
+      for (_, delegate) in controllerDelegates {
+        delegate.statusUpdated?(myTrainsController: self)
       }
     }
   }
@@ -256,19 +249,17 @@ public class MyTrainsController : NSObject, InterfaceDelegate, NSUserNotificatio
       
       var interfaces : [Interface] = []
       
-      for (_, network) in networks {
+      for (networkId, network) in networks {
         if network.layoutId == layoutId {
-          for kv in locoNetInterfaces {
-            let interface = kv.value
-            if interface.primaryKey == network.interfaceId {
-              interface.networkId = network.primaryKey
+          for (interfaceId, interface) in locoNetInterfaces {
+            if interfaceId == network.interfaceId {
+              interface.networkId = networkId
               interfaces.append(interface)
             }
           }
-          for kv in openLCBInterfaces {
-            let interface = kv.value
-            if interface.primaryKey == network.interfaceId {
-              interface.networkId = network.primaryKey
+          for (interfaceId, interface) in openLCBInterfaces {
+            if interfaceId == network.interfaceId {
+              interface.networkId = networkId
               interfaces.append(interface)
             }
           }
@@ -398,9 +389,9 @@ public class MyTrainsController : NSObject, InterfaceDelegate, NSUserNotificatio
   
 // MARK: Private Methods
   
-  private func networkControllerUpdated() {
-    for kv in controllerDelegates {
-      kv.value.networkControllerUpdated?(netwokController: self)
+  private func myTrainsControllerUpdated() {
+    for (_, delegate) in controllerDelegates {
+      delegate.myTrainsControllerUpdated?(myTrainsController: self)
     }
   }
   
@@ -519,9 +510,8 @@ public class MyTrainsController : NSObject, InterfaceDelegate, NSUserNotificatio
   public func connect() {
     openLCBNetworkLayer?.start()
     for interface in networkInterfaces {
-      if let network = interface.network, network.networkType == .LocoNet {
-   //     interface.initSensorLookup()
-        interface.open()
+      if let locoNetInterface = interface as? InterfaceLocoNet {
+        locoNetInterface.open()
       }
     }
     connected = true
@@ -530,8 +520,8 @@ public class MyTrainsController : NSObject, InterfaceDelegate, NSUserNotificatio
   public func disconnect() {
     openLCBNetworkLayer?.stop()
     for interface in networkInterfaces {
-      if let network = interface.network, network.networkType == .LocoNet {
-        interface.close()
+      if let locoNetInterface = interface as? InterfaceLocoNet {
+        locoNetInterface.close()
       }
     }
     connected = false
@@ -557,55 +547,55 @@ public class MyTrainsController : NSObject, InterfaceDelegate, NSUserNotificatio
 
   public func addLayout(layout: Layout) {
     layouts[layout.primaryKey] = layout
-    networkControllerUpdated()
+    myTrainsControllerUpdated()
   }
   
   public func removeLayout(primaryKey:Int) {
     layouts.removeValue(forKey: primaryKey)
-    networkControllerUpdated()
+    myTrainsControllerUpdated()
   }
   
   public func addNetwork(network: Network) {
     networks[network.primaryKey] = network
     connected ? connect() : disconnect()
-    networkControllerUpdated()
+    myTrainsControllerUpdated()
   }
   
   public func removeNetwork(primaryKey:Int) {
     networks.removeValue(forKey: primaryKey)
     connected ? connect() : disconnect()
-    networkControllerUpdated()
+    myTrainsControllerUpdated()
   }
   
   public func addDevice(device: LocoNetDevice) {
     locoNetDevices[device.primaryKey] = device
     connected ? connect() : disconnect()
-    networkControllerUpdated()
+    myTrainsControllerUpdated()
   }
   
   public func removeDevice(primaryKey:Int) {
     locoNetDevices.removeValue(forKey: primaryKey)
     connected ? connect() : disconnect()
-    networkControllerUpdated()
+    myTrainsControllerUpdated()
   }
   
   public func addRollingStock(rollingStock: RollingStock) {
     self.rollingStock[rollingStock.primaryKey] = rollingStock
-    networkControllerUpdated()
+    myTrainsControllerUpdated()
   }
   
   public func removeRollingStock(primaryKey: Int) {
     self.rollingStock.removeValue(forKey: primaryKey)
-    networkControllerUpdated()
+    myTrainsControllerUpdated()
   }
   
-  public func appendDelegate(delegate:NetworkControllerDelegate) -> Int {
+  public func appendDelegate(delegate:MyTrainsControllerDelegate) -> Int {
     controllerDelegateLock.lock()
     let id = _nextControllerDelegateId
     _nextControllerDelegateId += 1
     controllerDelegates[id] = delegate
     controllerDelegateLock.unlock()
-    delegate.networkControllerUpdated?(netwokController: self)
+    delegate.myTrainsControllerUpdated?(myTrainsController: self)
     return id
   }
   
@@ -620,7 +610,7 @@ public class MyTrainsController : NSObject, InterfaceDelegate, NSUserNotificatio
   public func serialPortWasAdded(path: String) {
     if connected {
       for interface in networkInterfaces {
-        if interface.devicePath == path {
+        if interface.devicePath == path && !interface.isOpen {
           interface.open()
         }
       }
@@ -631,7 +621,7 @@ public class MyTrainsController : NSObject, InterfaceDelegate, NSUserNotificatio
   public func serialPortWasRemoved(path: String) {
     if connected {
       for interface in networkInterfaces {
-        if interface.devicePath == path {
+        if interface.devicePath == path && interface.isOpen {
           interface.close()
         }
       }
@@ -642,8 +632,8 @@ public class MyTrainsController : NSObject, InterfaceDelegate, NSUserNotificatio
   // MARK: CommandStationDelegate Methods
   
   public func trackStatusChanged(commandStation: LocoNetDevice) {
-    for delegate in controllerDelegates {
-      delegate.value.statusUpdated?(myTrainsController: self)
+    for (_, delegate) in controllerDelegates {
+      delegate.statusUpdated?(myTrainsController: self)
     }
   }
 

@@ -19,7 +19,7 @@ public class InterfaceLocoNet : Interface {
   
   // MARK: Private Properties
   
-  private var outputQueue : [NetworkOutputQueueItem] = []
+  private var outputQueue : [LocoNetOutputQueueItem] = []
   
   private var outputQueueLock : NSLock = NSLock()
   
@@ -486,7 +486,7 @@ public class InterfaceLocoNet : Interface {
   
   public func addToQueue(message:LocoNetMessage, delay:TimeInterval, responses: Set<LocoNetMessageType>, retryCount: Int, timeoutCode: TimeoutCode) {
     
-    let item = NetworkOutputQueueItem(message: message, delay: delay, responses: responses, retryCount: retryCount, timeoutCode: timeoutCode)
+    let item = LocoNetOutputQueueItem(message: message, delay: delay, responses: responses, retryCount: retryCount, timeoutCode: timeoutCode)
     
     outputQueueLock.lock()
     outputQueue.append(item)

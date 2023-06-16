@@ -9,12 +9,12 @@ import Foundation
 
 public class Interface : LocoNetDevice, MTSerialPortDelegate {
   
-  // MARK: Constructors
-  
   // MARK: Destructors
   
   deinit {
-    close()
+    if isOpen {
+      close()
+    }
   }
   
   // MARK: Private Properties
@@ -76,8 +76,6 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
   
   public func open() {
     
-    close()
-    
     if let port = MTSerialPort(path: devicePath) {
       port.baudRate = baudRate
       port.numberOfDataBits = 8
@@ -118,7 +116,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
 
     parseInput()
     
-   }
+  }
   
   public func serialPortWasRemovedFromSystem(_ serialPort: MTSerialPort) {
     for (_, observer) in observers {
