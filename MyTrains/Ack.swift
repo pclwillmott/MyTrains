@@ -15,9 +15,9 @@ public class Ack : LocoNetMessage {
     }
   }
   
-  var responseCode : LoconetResponse {
+  var responseCode : LocoNetResponse {
     get {
-      return LoconetResponse(rawValue: responseCodeRawValue) ?? .unknown
+      return LocoNetResponse(rawValue: responseCodeRawValue) ?? .unknown
     }
   }
   

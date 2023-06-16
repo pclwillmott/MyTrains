@@ -33,13 +33,13 @@ public class LoconetSwitchRequestMessage : LocoNetMessage {
     }
   }
   
-  public var switchDirection : LoconetSwitchDirection {
+  public var switchDirection : LocoNetSwitchDirection {
     get {
       return switchState & 0b10 != 0x00 ? .closed : .thrown
     }
   }
   
-  public var switchOutput : LoconetSwitchOutput {
+  public var switchOutput : LocoNetSwitchOutput {
     return switchState & 0b01 != 0x00 ? .on : .off
   }
 
