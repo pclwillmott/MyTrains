@@ -16,7 +16,7 @@
 		DA08B433278737540001307C /* ProgramDecoderAddressVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA08B432278737530001307C /* ProgramDecoderAddressVC.swift */; };
 		DA08B43727875FDD0001307C /* ProgSlotDataP1.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA08B43627875FDD0001307C /* ProgSlotDataP1.swift */; };
 		DA0946542843C06A00F1AB81 /* DMF.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0946532843C06A00F1AB81 /* DMF.swift */; };
-		DA0946562843EB4100F1AB81 /* InterfaceILocoNetPLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0946552843EB4100F1AB81 /* InterfaceILocoNetPLExtensions.swift */; };
+		DA0946562843EB4100F1AB81 /* InterfaceLocoNetIPLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0946552843EB4100F1AB81 /* InterfaceLocoNetIPLExtensions.swift */; };
 		DA0BBB7529FD4A91003E03EF /* LCCCDIElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0BBB7429FD4A91003E03EF /* LCCCDIElement.swift */; };
 		DA0BBB7929FD4B22003E03EF /* OpenLCBCDIElementType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0BBB7829FD4B22003E03EF /* OpenLCBCDIElementType.swift */; };
 		DA0BBB7B29FD4ED3003E03EF /* LCCCDIMapRelation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0BBB7A29FD4ED2003E03EF /* LCCCDIMapRelation.swift */; };
@@ -330,7 +330,7 @@
 		DA08B432278737530001307C /* ProgramDecoderAddressVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramDecoderAddressVC.swift; sourceTree = "<group>"; };
 		DA08B43627875FDD0001307C /* ProgSlotDataP1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgSlotDataP1.swift; sourceTree = "<group>"; };
 		DA0946532843C06A00F1AB81 /* DMF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMF.swift; sourceTree = "<group>"; };
-		DA0946552843EB4100F1AB81 /* InterfaceILocoNetPLExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceILocoNetPLExtensions.swift; sourceTree = "<group>"; };
+		DA0946552843EB4100F1AB81 /* InterfaceLocoNetIPLExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceLocoNetIPLExtensions.swift; sourceTree = "<group>"; };
 		DA0BBB7429FD4A91003E03EF /* LCCCDIElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCCCDIElement.swift; sourceTree = "<group>"; };
 		DA0BBB7829FD4B22003E03EF /* OpenLCBCDIElementType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBCDIElementType.swift; sourceTree = "<group>"; };
 		DA0BBB7A29FD4ED2003E03EF /* LCCCDIMapRelation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCCCDIMapRelation.swift; sourceTree = "<group>"; };
@@ -755,7 +755,7 @@
 			children = (
 				DA3CD9F1277DEF990065D0C4 /* Interface.swift */,
 				DA8B5D1C282FE31600D39F07 /* InterfaceDelegate.swift */,
-				DA0946552843EB4100F1AB81 /* InterfaceILocoNetPLExtensions.swift */,
+				DA0946552843EB4100F1AB81 /* InterfaceLocoNetIPLExtensions.swift */,
 				DA72DDE72A3C6FB20027BE50 /* InterfaceLocoNet.swift */,
 				DABD4F2D2A3C91E5000A25AB /* InterfaceLocoNetCommandStationExtensions.swift */,
 				DA72DDE52A3C6F2B0027BE50 /* InterfaceLocoNetExtensions.swift */,
@@ -1375,7 +1375,7 @@
 				DAA8CF00296857F500B07971 /* IOChannelInput.swift in Sources */,
 				DADD696A296EFE5500BA4402 /* IOFunctionType.swift in Sources */,
 				DA5BC98D2A1A4A6F00D67ABE /* softfloat.c in Sources */,
-				DA0946562843EB4100F1AB81 /* InterfaceILocoNetPLExtensions.swift in Sources */,
+				DA0946562843EB4100F1AB81 /* InterfaceLocoNetIPLExtensions.swift in Sources */,
 				DAF374712A1A2AB3009E91F0 /* OpenLCBNodeMyTrains.swift in Sources */,
 				DA53B252276E478400AB956C /* IPLDevData.swift in Sources */,
 				DA5B4609276F6CBF005CA03C /* Network.swift in Sources */,
