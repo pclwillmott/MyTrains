@@ -9,9 +9,9 @@ import Foundation
 
 public class Ack : LocoNetMessage {
 
-  var opCodeResponding : NetworkMessageOpcode {
+  var opCodeResponding : LocoNetMessageOpcode {
     get {
-      return NetworkMessageOpcode(rawValue: message[1] | 0x80) ?? .OPC_UNKNOWN
+      return LocoNetMessageOpcode(rawValue: message[1] | 0x80) ?? .OPC_UNKNOWN
     }
   }
   

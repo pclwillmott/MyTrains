@@ -27,7 +27,7 @@ extension InterfaceLocoNet {
 
     let data : [UInt8] = [
       
-      NetworkMessageOpcode.OPC_PEER_XFER.rawValue,
+      LocoNetMessageOpcode.OPC_PEER_XFER.rawValue,
       0x10,
       0x7f,
       0x7f,
@@ -69,7 +69,7 @@ extension InterfaceLocoNet {
 
     let data : [UInt8] = [
     
-      NetworkMessageOpcode.OPC_PEER_XFER.rawValue,
+      LocoNetMessageOpcode.OPC_PEER_XFER.rawValue,
       0x10,
       0x7f,
       0x7f,
@@ -100,7 +100,7 @@ extension InterfaceLocoNet {
     
     let data : [UInt8] = [
     
-      NetworkMessageOpcode.OPC_PEER_XFER.rawValue,
+      LocoNetMessageOpcode.OPC_PEER_XFER.rawValue,
       0x10,
       0x7f,
       0x7f,
@@ -141,7 +141,7 @@ extension InterfaceLocoNet {
     
     let data : [UInt8] = [
     
-      NetworkMessageOpcode.OPC_PEER_XFER.rawValue,
+      LocoNetMessageOpcode.OPC_PEER_XFER.rawValue,
       0x10,
       0x7f,
       0x7f,

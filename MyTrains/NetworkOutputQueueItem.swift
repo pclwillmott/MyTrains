@@ -9,7 +9,7 @@ import Foundation
 
 public class NetworkOutputQueueItem {
   
-  init(message: LocoNetMessage, delay:TimeInterval, responses: Set<NetworkMessageType>, retryCount: Int, timeoutCode: TimeoutCode) {
+  init(message: LocoNetMessage, delay:TimeInterval, responses: Set<LocoNetMessageType>, retryCount: Int, timeoutCode: TimeoutCode) {
     self.message = message
     self.delay = delay
     self.responses = responses
@@ -21,7 +21,7 @@ public class NetworkOutputQueueItem {
   
   public var delay : TimeInterval
   
-  public var responses : Set<NetworkMessageType>
+  public var responses : Set<LocoNetMessageType>
   
   public var responseExpected : Bool {
     get {
@@ -33,7 +33,7 @@ public class NetworkOutputQueueItem {
   
   public var timeoutCode : TimeoutCode
   
-  public func isValidResponse(messageType: NetworkMessageType) -> Bool {
+  public func isValidResponse(messageType: LocoNetMessageType) -> Bool {
     return responses.contains(messageType)
   }
   

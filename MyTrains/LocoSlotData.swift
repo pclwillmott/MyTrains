@@ -201,7 +201,7 @@ public class LocoSlotData {
       
       var slot : [UInt8] = [UInt8](repeating: 0x00, count: 20)
       
-      slot[0] = NetworkMessageOpcode.OPC_SL_RD_DATA_P2.rawValue
+      slot[0] = LocoNetMessageOpcode.OPC_SL_RD_DATA_P2.rawValue
       slot[1] = 0x15
       slot[2] = UInt8(slotPage)
       slot[3] = UInt8(slotNumber)

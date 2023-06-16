@@ -133,7 +133,7 @@ public class FastClock {
       
       let data : [UInt8] =
       [
-        NetworkMessageOpcode.OPC_SL_RD_DATA.rawValue,
+        LocoNetMessageOpcode.OPC_SL_RD_DATA.rawValue,
         0x0e,
         0x7b,
         UInt8(scaleFactor.rawValue),

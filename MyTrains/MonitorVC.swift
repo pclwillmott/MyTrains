@@ -466,7 +466,7 @@ class MonitorVC: NSViewController, NetworkControllerDelegate, InterfaceDelegate,
       }
     }
     
-    let fastClockMessages : Set<NetworkMessageType> = [.fastClockData, .setFastClockData]
+    let fastClockMessages : Set<LocoNetMessageType> = [.fastClockData, .setFastClockData]
     
     if fastClockMessages.contains(message.messageType) {
       

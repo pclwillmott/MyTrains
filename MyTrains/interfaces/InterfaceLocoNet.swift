@@ -484,7 +484,7 @@ public class InterfaceLocoNet : Interface {
     
   }
   
-  public func addToQueue(message:LocoNetMessage, delay:TimeInterval, responses: Set<NetworkMessageType>, retryCount: Int, timeoutCode: TimeoutCode) {
+  public func addToQueue(message:LocoNetMessage, delay:TimeInterval, responses: Set<LocoNetMessageType>, retryCount: Int, timeoutCode: TimeoutCode) {
     
     let item = NetworkOutputQueueItem(message: message, delay: delay, responses: responses, retryCount: retryCount, timeoutCode: timeoutCode)
     
@@ -627,7 +627,7 @@ public class InterfaceLocoNet : Interface {
                 
                 observer.value.networkMessageReceived?(message: networkMessage)
                 
-                let progMessages : Set<NetworkMessageType> = [.progCmdAccepted, .progSlotDataP1, .progCmdAcceptedBlind]
+                let progMessages : Set<LocoNetMessageType> = [.progCmdAccepted, .progSlotDataP1, .progCmdAcceptedBlind]
                 
                 if progMessages.contains(networkMessage.messageType) {
                   observer.value.progMessageReceived?(message: networkMessage)

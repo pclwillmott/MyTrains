@@ -53,7 +53,7 @@ public class LocoNetMessage : NSObject {
   
   // MARK: Private Properties
   
-  private var _messageType : NetworkMessageType = .uninitialized
+  private var _messageType : LocoNetMessageType = .uninitialized
   
   private var _slotsChanged : Set<Int> = []
   
@@ -95,9 +95,9 @@ public class LocoNetMessage : NSObject {
     }
   }
   
-  public var opCode : NetworkMessageOpcode {
+  public var opCode : LocoNetMessageOpcode {
     get {
-      return NetworkMessageOpcode.init(rawValue: opCodeRawValue) ?? .OPC_UNKNOWN
+      return LocoNetMessageOpcode.init(rawValue: opCodeRawValue) ?? .OPC_UNKNOWN
     }
   }
   
@@ -279,7 +279,7 @@ public class LocoNetMessage : NSObject {
   }
   
   
-  public var messageType : NetworkMessageType {
+  public var messageType : LocoNetMessageType {
     
     get {
       
@@ -1321,7 +1321,7 @@ public class LocoNetMessage : NSObject {
           
         // MARK: 0xED
           
-        case NetworkMessageOpcode.OPC_IMM_PACKET.rawValue:
+        case LocoNetMessageOpcode.OPC_IMM_PACKET.rawValue:
           
           if message[1] == 0x0b && message[2] == 0x7f {
             

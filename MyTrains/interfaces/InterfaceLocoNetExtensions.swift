@@ -13,7 +13,7 @@ extension InterfaceLocoNet {
   
   public func powerOn() {
     
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_GPON.rawValue], appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_GPON.rawValue], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.STANDARD)
     
@@ -21,7 +21,7 @@ extension InterfaceLocoNet {
   
   public func powerOff() {
     
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_GPOFF.rawValue], appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_GPOFF.rawValue], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.STANDARD)
 
@@ -29,7 +29,7 @@ extension InterfaceLocoNet {
   
   public func getOpSwDataAP1() {
     
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_RQ_SL_DATA.rawValue, 0x7f, 0x00], appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_RQ_SL_DATA.rawValue, 0x7f, 0x00], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.STANDARD)
 
@@ -59,7 +59,7 @@ extension InterfaceLocoNet {
       
       let opsw = UInt8(((switchNumber-1) << 1) & 0x7f)
       
-      let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_D0_GROUP.rawValue, high, low, bt, opsw], appendCheckSum: true)
+      let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_D0_GROUP.rawValue, high, low, bt, opsw], appendCheckSum: true)
       
       addToQueue(message: message, delay: MessageTiming.STANDARD)
 
@@ -91,7 +91,7 @@ extension InterfaceLocoNet {
       
       let opsw = UInt8((switchNumber-1) << 1) | (state == .closed ? 1 : 0)
       
-      let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_D0_GROUP.rawValue, high, low, bt, opsw], appendCheckSum: true)
+      let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_D0_GROUP.rawValue, high, low, bt, opsw], appendCheckSum: true)
       
       addToQueue(message: message, delay: MessageTiming.STANDARD)
 
@@ -127,7 +127,7 @@ extension InterfaceLocoNet {
     
     let mode : UInt8 = 0b01100100 | (isRead ? 0 : 0b1000)
     
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_IMM_PACKET.rawValue, 0x0b, 0x7f, 0x54, high, addA, addB, mode, cv & 0x7f, val & 0x7f], appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_IMM_PACKET.rawValue, 0x0b, 0x7f, 0x54, high, addA, addB, mode, cv & 0x7f, val & 0x7f], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.STANDARD)
 
@@ -161,7 +161,7 @@ extension InterfaceLocoNet {
     
     let mode : UInt8 = 0b01100100 | (isRead ? 0 : 0b1000)
     
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_IMM_PACKET.rawValue, 0x0b, 0x7f, 0x54, high, addA, addB, mode, cv & 0x7f, val & 0x7f], appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_IMM_PACKET.rawValue, 0x0b, 0x7f, 0x54, high, addA, addB, mode, cv & 0x7f, val & 0x7f], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.STANDARD)
 
@@ -181,7 +181,7 @@ extension InterfaceLocoNet {
       
       let highAddr = UInt8(device.baseAddress >> 7)
       
-     let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_WR_SL_DATA_P2.rawValue, 0x10, 0x02, 0x0f, 0x00, 0x00, 0x00, 0x00, 0x00, pc, 0x00, lowSN, highSN, lowAddr, highAddr], appendCheckSum: true)
+     let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_WR_SL_DATA_P2.rawValue, 0x10, 0x02, 0x0f, 0x00, 0x00, 0x00, 0x00, 0x00, pc, 0x00, lowSN, highSN, lowAddr, highAddr], appendCheckSum: true)
     
      addToQueue(message: message, delay: MessageTiming.STANDARD)
       
@@ -198,7 +198,7 @@ extension InterfaceLocoNet {
 
   public func getOpSwDataBP1() {
     
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_RQ_SL_DATA.rawValue, 0x7e, 0x00], appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_RQ_SL_DATA.rawValue, 0x7e, 0x00], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.STANDARD)
 
@@ -206,7 +206,7 @@ extension InterfaceLocoNet {
   
   public func getOpSwDataP2() {
     
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_RQ_SL_DATA.rawValue, 0x7f, 0x40], appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_RQ_SL_DATA.rawValue, 0x7f, 0x40], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.STANDARD)
 
@@ -214,7 +214,7 @@ extension InterfaceLocoNet {
   
   public func getProgSlotDataP1(timeoutCode: TimeoutCode) {
     
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_RQ_SL_DATA.rawValue, 0x7c, 0x00], appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_RQ_SL_DATA.rawValue, 0x7c, 0x00], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.CVOP, responses: [.progSlotDataP1], retryCount: 10, timeoutCode: timeoutCode)
 
@@ -222,7 +222,7 @@ extension InterfaceLocoNet {
   
   public func getLocoSlotDataP1(slotNumber: Int) {
     
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_RQ_SL_DATA.rawValue, UInt8(slotNumber), 0x00], appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_RQ_SL_DATA.rawValue, UInt8(slotNumber), 0x00], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.STANDARD)
 
@@ -230,7 +230,7 @@ extension InterfaceLocoNet {
   
   public func getLocoSlotDataP2(slotPage: Int, slotNumber: Int) {
     
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_RQ_SL_DATA.rawValue, UInt8(slotNumber), UInt8(slotPage) | 0b01000000], appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_RQ_SL_DATA.rawValue, UInt8(slotNumber), UInt8(slotPage) | 0b01000000], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.STANDARD)
 
@@ -284,7 +284,7 @@ extension InterfaceLocoNet {
     let param : Int = ((packet.count << 4) | repeatCount) & 0x7f
     
     var payload : [UInt8] = [
-      NetworkMessageOpcode.OPC_IMM_PACKET.rawValue,
+      LocoNetMessageOpcode.OPC_IMM_PACKET.rawValue,
       0x0b,
       0x7f,
       UInt8(param),
@@ -323,7 +323,7 @@ extension InterfaceLocoNet {
     let slotPage = 1
     let slotNumber = 0x78 + querySlot - 1
     
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_RQ_SL_DATA.rawValue, UInt8(slotNumber), UInt8(slotPage) | 0b01000000], appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_RQ_SL_DATA.rawValue, UInt8(slotNumber), UInt8(slotPage) | 0b01000000], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.STANDARD)
 
@@ -335,7 +335,7 @@ extension InterfaceLocoNet {
     
     let hi = UInt8(forAddress >> 7)
     
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_LOCO_ADR.rawValue, hi, lo], appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_LOCO_ADR.rawValue, hi, lo], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [.locoSlotDataP1, .noFreeSlotsP1, .slotNotImplemented], retryCount: 5, timeoutCode: timeoutCode)
 
@@ -347,7 +347,7 @@ extension InterfaceLocoNet {
     
     let hi = UInt8(forAddress >> 7)
     
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_LOCO_ADR_P2.rawValue, hi, lo], appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_LOCO_ADR_P2.rawValue, hi, lo], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [], retryCount: 0, timeoutCode: timeoutCode)
 
@@ -355,7 +355,7 @@ extension InterfaceLocoNet {
   
   public func getRouteTableInfoA() {
     
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_WR_SL_DATA_P2.rawValue,
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_WR_SL_DATA_P2.rawValue,
     0x10, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [], retryCount: 0, timeoutCode: .none)
@@ -371,7 +371,7 @@ extension InterfaceLocoNet {
     let pageL = UInt8(combined & 0x7f)
     let pageH = UInt8(combined >> 7)
     
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_WR_SL_DATA_P2.rawValue,
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_WR_SL_DATA_P2.rawValue,
     0x10, 0x01, 0x02, pageL, pageH, 0x0f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [], retryCount: 0, timeoutCode: .none)
@@ -389,7 +389,7 @@ extension InterfaceLocoNet {
       let pageL = UInt8(combined & 0x7f)
       let pageH = UInt8(combined >> 7)
       
-      var data : [UInt8] = [NetworkMessageOpcode.OPC_WR_SL_DATA_P2.rawValue,
+      var data : [UInt8] = [LocoNetMessageOpcode.OPC_WR_SL_DATA_P2.rawValue,
                             0x10, 0x01, 0x03, pageL, pageH, 0x0f]
       
       for entryNumber in (pageNumber * 4)...(pageNumber * 4 + 3) {
@@ -417,7 +417,7 @@ extension InterfaceLocoNet {
     
     let recNum : UInt8 = UInt8(recordNumber & 0x1f)
     
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_WR_SL_DATA_P2.rawValue,
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_WR_SL_DATA_P2.rawValue,
     0x10, 0x00, 0x02, recNum, 0x00, 0x0f, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [], retryCount: 0, timeoutCode: .none)
@@ -436,7 +436,7 @@ extension InterfaceLocoNet {
     
     let flag : UInt8 = (entryNumber & 0x01) == 0x01 ? 0x04 : 0x00
 
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_WR_SL_DATA_P2.rawValue,
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_WR_SL_DATA_P2.rawValue,
     0x10, 0x00, 0x43, UInt8(entryNumber >> 1), 0x00, flag, low1, high1, primary1, 0x00, low2, high2, primary2, 0x00], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [], retryCount: 0, timeoutCode: .none)
@@ -449,7 +449,7 @@ extension InterfaceLocoNet {
     
     let hi = UInt8((switchNumber - 1) >> 7)
     
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_SW_STATE.rawValue, lo, hi], appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_SW_STATE.rawValue, lo, hi], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [], retryCount: 0, timeoutCode: .none)
 
@@ -465,7 +465,7 @@ extension InterfaceLocoNet {
     
     let hi = UInt8(sn >> 7) | bit
     
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_SW_REQ.rawValue, lo, hi], appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_SW_REQ.rawValue, lo, hi], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.SWREQ)
 
@@ -477,7 +477,7 @@ extension InterfaceLocoNet {
       return
     }
     
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_SLOT_STAT1.rawValue, UInt8(slotNumber), stat1], appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_SLOT_STAT1.rawValue, UInt8(slotNumber), stat1], appendCheckSum: true)
 
     addToQueue(message: message, delay: MessageTiming.STANDARD)
 
@@ -487,7 +487,7 @@ extension InterfaceLocoNet {
 
     let page : UInt8 = 0b00111000 | UInt8(slotPage & 0b00000111)
     
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_D4_GROUP.rawValue, page, UInt8(slotNumber & 0x7f), 0x60, stat1], appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_D4_GROUP.rawValue, page, UInt8(slotNumber & 0x7f), 0x60, stat1], appendCheckSum: true)
 
     addToQueue(message: message, delay: MessageTiming.STANDARD)
 
@@ -503,7 +503,7 @@ extension InterfaceLocoNet {
     
     let hi = UInt8(sn >> 7) | bit
     
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_SW_ACK.rawValue, lo, hi], appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_SW_ACK.rawValue, lo, hi], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.SWREQ)
 
@@ -513,7 +513,7 @@ extension InterfaceLocoNet {
     
     var data = [UInt8](repeating: 0, count: 13)
     
-    data[0] = NetworkMessageOpcode.OPC_WR_SL_DATA.rawValue
+    data[0] = LocoNetMessageOpcode.OPC_WR_SL_DATA.rawValue
     data[1] = 14
     data[2] = 0x7f
     
@@ -531,7 +531,7 @@ extension InterfaceLocoNet {
     
     var data = [UInt8](repeating: 0, count: 13)
     
-    data[0] = NetworkMessageOpcode.OPC_WR_SL_DATA.rawValue
+    data[0] = LocoNetMessageOpcode.OPC_WR_SL_DATA.rawValue
     data[1] = 14
     data[2] = 0x7e
     
@@ -549,7 +549,7 @@ extension InterfaceLocoNet {
     
     var data = [UInt8](repeating: 0, count: 13)
     
-    data[0] = NetworkMessageOpcode.OPC_WR_SL_DATA.rawValue
+    data[0] = LocoNetMessageOpcode.OPC_WR_SL_DATA.rawValue
     data[1] = 14
     
     for index in 0...slotData.count-1 {
@@ -566,7 +566,7 @@ extension InterfaceLocoNet {
     
     var data = [UInt8](repeating: 0, count: 20)
     
-    data[0] = NetworkMessageOpcode.OPC_WR_SL_DATA_P2.rawValue
+    data[0] = LocoNetMessageOpcode.OPC_WR_SL_DATA_P2.rawValue
     data[1] = 21
     
     for index in 0...slotData.count-1 {
@@ -582,14 +582,14 @@ extension InterfaceLocoNet {
   public func resetQuerySlot4(timeoutCode: TimeoutCode) {
     let slotPage = 0x19
     let slotNumber = 0x7b
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_WR_SL_DATA_P2.rawValue, 0x15, UInt8(slotPage), UInt8(slotNumber), 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_WR_SL_DATA_P2.rawValue, 0x15, UInt8(slotPage), UInt8(slotNumber), 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [.setSlotDataOKP2], retryCount: 10, timeoutCode: timeoutCode)
   }
 
   public func clearLocoSlotDataP1(slotNumber:Int, timeoutCode: TimeoutCode) {
     
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_WR_SL_DATA.rawValue, 0x0e, UInt8(slotNumber), 0b00000011, 0x00, 0x00, 0b00100000, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_WR_SL_DATA.rawValue, 0x0e, UInt8(slotNumber), 0b00000011, 0x00, 0x00, 0b00100000, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [.setSlotDataOKP1], retryCount: 10, timeoutCode: timeoutCode)
 
@@ -597,7 +597,7 @@ extension InterfaceLocoNet {
   
   public func clearLocoSlotDataP2(slotPage: Int, slotNumber:Int, timeoutCode: TimeoutCode) {
     
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_WR_SL_DATA_P2.rawValue, 0x15, UInt8(slotPage), UInt8(slotNumber), 0b00000011, 0x00, 0x00, 0x00, 0x00, 0x00, 0b00100000, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_WR_SL_DATA_P2.rawValue, 0x15, UInt8(slotPage), UInt8(slotNumber), 0b00000011, 0x00, 0x00, 0x00, 0x00, 0x00, 0b00100000, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [.setSlotDataOKP2], retryCount: 10, timeoutCode: timeoutCode)
 
@@ -605,7 +605,7 @@ extension InterfaceLocoNet {
   
   public func moveSlotsP1(sourceSlotNumber: Int, destinationSlotNumber: Int, timeoutCode: TimeoutCode) {
     
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_MOVE_SLOTS.rawValue, UInt8(sourceSlotNumber), UInt8(destinationSlotNumber)], appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_MOVE_SLOTS.rawValue, UInt8(sourceSlotNumber), UInt8(destinationSlotNumber)], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [.locoSlotDataP1, .illegalMoveP1], retryCount: 0, timeoutCode: .none)
 
@@ -616,7 +616,7 @@ extension InterfaceLocoNet {
     let srcPage = UInt8(sourceSlotPage & 0b00000111) | 0b00111000
     let dstPage = UInt8(destinationSlotPage & 0b00000111)
     
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_D4_GROUP.rawValue, srcPage, UInt8(sourceSlotNumber), dstPage, UInt8(destinationSlotNumber)], appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_D4_GROUP.rawValue, srcPage, UInt8(sourceSlotNumber), dstPage, UInt8(destinationSlotNumber)], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [], retryCount: 0, timeoutCode: .none)
 
@@ -624,7 +624,7 @@ extension InterfaceLocoNet {
   
   public func getInterfaceData(timeoutCode: TimeoutCode) {
     
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_BUSY.rawValue], appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_BUSY.rawValue], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [.interfaceData], retryCount: 10, timeoutCode: timeoutCode)
     
@@ -633,7 +633,7 @@ extension InterfaceLocoNet {
   public func findReceiver() {
     
     let message = LocoNetMessage(networkId: networkId, data:
-      [NetworkMessageOpcode.OPC_DF_GROUP.rawValue,
+      [LocoNetMessageOpcode.OPC_DF_GROUP.rawValue,
        0x00, 0x00, 0x00, 0x00
     ], appendCheckSum: true)
     
@@ -646,7 +646,7 @@ extension InterfaceLocoNet {
     let lid : UInt8 = UInt8(locoNetID & 0x7)
     
     let message = LocoNetMessage(networkId: networkId, data:
-      [NetworkMessageOpcode.OPC_DF_GROUP.rawValue,
+      [LocoNetMessageOpcode.OPC_DF_GROUP.rawValue,
        0x40, 0x1f, lid, 0x00
     ], appendCheckSum: true)
     
@@ -657,7 +657,7 @@ extension InterfaceLocoNet {
   public func getDuplexData() {
     
     let message = LocoNetMessage(networkId: networkId, data:
-      [NetworkMessageOpcode.OPC_PEER_XFER.rawValue,
+      [LocoNetMessageOpcode.OPC_PEER_XFER.rawValue,
        0x14, 0x03, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
     ], appendCheckSum: true)
     
@@ -672,7 +672,7 @@ extension InterfaceLocoNet {
     let pxct1 : UInt8 = (cn & 0b10000000) == 0b10000000 ? 0b00000001 : 0
     
     let message = LocoNetMessage(networkId: networkId, data:
-      [NetworkMessageOpcode.OPC_PEER_XFER.rawValue,
+      [LocoNetMessageOpcode.OPC_PEER_XFER.rawValue,
        0x14, 0x02, 0x00, pxct1, cn, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
     ], appendCheckSum: true)
     
@@ -687,7 +687,7 @@ extension InterfaceLocoNet {
     let pxct1 : UInt8 = (gid & 0b10000000) == 0b10000000 ? 0b00000001 : 0
     
     let message = LocoNetMessage(networkId: networkId, data:
-      [NetworkMessageOpcode.OPC_PEER_XFER.rawValue,
+      [LocoNetMessageOpcode.OPC_PEER_XFER.rawValue,
        0x14, 0x04, 0x00, pxct1, gid, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
     ], appendCheckSum: true)
     
@@ -698,7 +698,7 @@ extension InterfaceLocoNet {
   public func getDuplexGroupID() {
     
     let message = LocoNetMessage(networkId: networkId, data:
-      [NetworkMessageOpcode.OPC_PEER_XFER.rawValue,
+      [LocoNetMessageOpcode.OPC_PEER_XFER.rawValue,
        0x14, 0x04, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
     ], appendCheckSum: true)
     
@@ -709,7 +709,7 @@ extension InterfaceLocoNet {
   public func getDuplexSignalStrength(duplexGroupChannel: Int) {
     
     let message = LocoNetMessage(networkId: networkId, data:
-      [NetworkMessageOpcode.OPC_PEER_XFER.rawValue,
+      [LocoNetMessageOpcode.OPC_PEER_XFER.rawValue,
        0x14, 0x10, 0x08, 0x00, UInt8(duplexGroupChannel & 0x7f), 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
     ], appendCheckSum: true)
     
@@ -724,7 +724,7 @@ extension InterfaceLocoNet {
     pxct1 |= ((signalStrength     & 0b10000000) == 0b10000000) ? 0b00000010 : 0
 
     let message = LocoNetMessage(networkId: networkId, data:
-      [NetworkMessageOpcode.OPC_PEER_XFER.rawValue,
+      [LocoNetMessageOpcode.OPC_PEER_XFER.rawValue,
        0x14, 0x10, 0x10, pxct1, UInt8(duplexGroupChannel & 0x7f), UInt8(signalStrength & 0x7f), 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
     ], appendCheckSum: true)
     
@@ -750,7 +750,7 @@ extension InterfaceLocoNet {
     pxct2 |= (data[7] & 0b10000000) == 0b10000000 ? 0b00001000 : 0
     
     let message = LocoNetMessage(networkId: networkId, data:
-      [NetworkMessageOpcode.OPC_PEER_XFER.rawValue,
+      [LocoNetMessageOpcode.OPC_PEER_XFER.rawValue,
        0x14, 0x03, 0x00, pxct1, data[0], data[1], data[2], data[3], pxct2, data[4], data[5], data[6], data[7], 0x00, 0x00, 0x00, 0x00, 0x00
     ], appendCheckSum: true)
     
@@ -770,7 +770,7 @@ extension InterfaceLocoNet {
     pxct1 |= (data[3] & 0b10000000) == 0b10000000 ? 0b00001000 : 0
 
     let message = LocoNetMessage(networkId: networkId, data:
-      [NetworkMessageOpcode.OPC_PEER_XFER.rawValue,
+      [LocoNetMessageOpcode.OPC_PEER_XFER.rawValue,
        0x14, 0x07, 0x00, pxct1, data[0] & 0x7f, data[1] & 0x7f, data[2] & 0x7f, data[3] & 0x7f, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
     ], appendCheckSum: true)
     
@@ -786,7 +786,7 @@ extension InterfaceLocoNet {
       prMode |= 0b10
     }
     
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_PR_MODE.rawValue, 0x10, prMode, 0x00, 0x00], appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_PR_MODE.rawValue, 0x10, prMode, 0x00, 0x00], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.PRMODE)
 
@@ -823,7 +823,7 @@ extension InterfaceLocoNet {
 
     let message = LocoNetMessage(networkId: networkId, data:
         [
-          NetworkMessageOpcode.OPC_WR_SL_DATA.rawValue,
+          LocoNetMessageOpcode.OPC_WR_SL_DATA.rawValue,
           0x0e,
           0x7c,
           pcmd,
@@ -879,7 +879,7 @@ extension InterfaceLocoNet {
 
     let message = LocoNetMessage(networkId: networkId, data:
         [
-          NetworkMessageOpcode.OPC_WR_SL_DATA.rawValue,
+          LocoNetMessageOpcode.OPC_WR_SL_DATA.rawValue,
           0x0e,
           0x7c,
           pcmd,
@@ -914,7 +914,7 @@ extension InterfaceLocoNet {
     dirf |= functions & maskF3 == maskF3 ? 0b00000100 : 0b00000000
     dirf |= functions & maskF4 == maskF4 ? 0b00001000 : 0b00000000
     
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_LOCO_DIRF.rawValue, slot, dirf], appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_LOCO_DIRF.rawValue, slot, dirf], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.STANDARD)
     
@@ -935,7 +935,7 @@ extension InterfaceLocoNet {
     dirf |= functions & maskF3 == maskF3 ? 0b00000100 : 0b00000000
     dirf |= functions & maskF4 == maskF4 ? 0b00001000 : 0b00000000
     
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_D4_GROUP.rawValue, page, slot, 0x06, dirf], appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_D4_GROUP.rawValue, page, slot, 0x06, dirf], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.STANDARD)
     
@@ -952,7 +952,7 @@ extension InterfaceLocoNet {
     fnx |= functions & maskF7 == maskF7 ? 0b00000100 : 0b00000000
     fnx |= functions & maskF8 == maskF8 ? 0b00001000 : 0b00000000
     
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_LOCO_SND.rawValue, slot, fnx], appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_LOCO_SND.rawValue, slot, fnx], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.STANDARD)
     
@@ -976,7 +976,7 @@ extension InterfaceLocoNet {
     fnx |= functions & maskF5 == maskF5 ? 0b00100000 : 0b00000000
     fnx |= functions & maskF6 == maskF6 ? 0b01000000 : 0b00000000
 
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_D5_GROUP.rawValue, page, slot, tid, fnx], appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_D5_GROUP.rawValue, page, slot, tid, fnx], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.STANDARD)
     
@@ -998,7 +998,7 @@ extension InterfaceLocoNet {
     dirf |= functions & maskF10 == maskF10 ? 0b00100000 : 0b00000000
     dirf |= functions & maskF11 == maskF11 ? 0b01000000 : 0b00000000
 
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_D4_GROUP.rawValue, page, slot, 0x07, dirf], appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_D4_GROUP.rawValue, page, slot, 0x07, dirf], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.STANDARD)
     
@@ -1022,7 +1022,7 @@ extension InterfaceLocoNet {
     fnx |= functions & maskF12 == maskF12 ? 0b00100000 : 0b00000000
     fnx |= functions & maskF13 == maskF13 ? 0b01000000 : 0b00000000
 
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_D5_GROUP.rawValue, page, slot, tid, fnx], appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_D5_GROUP.rawValue, page, slot, tid, fnx], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.STANDARD)
     
@@ -1040,7 +1040,7 @@ extension InterfaceLocoNet {
     dirf |= functions & maskF20 == maskF20  ? 0b00000010 : 0b00000000
     dirf |= functions & maskF28 == maskF28  ? 0b00000100 : 0b00000000
  
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_D4_GROUP.rawValue, page, slot, 0x05, dirf], appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_D4_GROUP.rawValue, page, slot, 0x05, dirf], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.STANDARD)
     
@@ -1062,7 +1062,7 @@ extension InterfaceLocoNet {
     dirf |= functions & maskF18 == maskF18 ? 0b00100000 : 0b00000000
     dirf |= functions & maskF19 == maskF19 ? 0b01000000 : 0b00000000
 
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_D4_GROUP.rawValue, page, slot, 0x08, dirf], appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_D4_GROUP.rawValue, page, slot, 0x08, dirf], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.STANDARD)
     
@@ -1086,7 +1086,7 @@ extension InterfaceLocoNet {
     fnx |= functions & maskF19 == maskF19 ? 0b00100000 : 0b00000000
     fnx |= functions & maskF20 == maskF20 ? 0b01000000 : 0b00000000
 
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_D5_GROUP.rawValue, page, slot, tid, fnx], appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_D5_GROUP.rawValue, page, slot, tid, fnx], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.STANDARD)
     
@@ -1108,7 +1108,7 @@ extension InterfaceLocoNet {
     dirf |= functions & maskF26 == maskF26 ? 0b00100000 : 0b00000000
     dirf |= functions & maskF27 == maskF27 ? 0b01000000 : 0b00000000
 
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_D4_GROUP.rawValue, page, slot, 0x09, dirf], appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_D4_GROUP.rawValue, page, slot, 0x09, dirf], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.STANDARD)
     
@@ -1132,7 +1132,7 @@ extension InterfaceLocoNet {
     fnx |= functions & maskF26 == maskF26 ? 0b00100000 : 0b00000000
     fnx |= functions & maskF27 == maskF27 ? 0b01000000 : 0b00000000
 
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_D5_GROUP.rawValue, page, slot, tid, fnx], appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_D5_GROUP.rawValue, page, slot, tid, fnx], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.STANDARD)
     
@@ -1144,7 +1144,7 @@ extension InterfaceLocoNet {
     
     let spd = UInt8(speed & 0x7f)
     
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_LOCO_SPD.rawValue, slot, spd], appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_LOCO_SPD.rawValue, slot, spd], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.STANDARD)
 
@@ -1160,7 +1160,7 @@ extension InterfaceLocoNet {
     
     let tid = UInt8(throttleID & 0x7f)
 
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_D5_GROUP.rawValue, page, slot, tid, spd], appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_D5_GROUP.rawValue, page, slot, tid, spd], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.STANDARD)
 
@@ -1174,7 +1174,7 @@ extension InterfaceLocoNet {
     
     let spd = UInt8(speed & 0x7f)
     
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_D4_GROUP.rawValue, page, slot, 0x04, spd], appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_D4_GROUP.rawValue, page, slot, 0x04, spd], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.STANDARD)
 
@@ -1182,7 +1182,7 @@ extension InterfaceLocoNet {
   
   public func powerIdle() {
     
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_IDLE.rawValue], appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_IDLE.rawValue], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.STANDARD)
 
@@ -1190,7 +1190,7 @@ extension InterfaceLocoNet {
   
   public func iplDiscover() {
     
-    let message = LocoNetMessage(networkId: networkId, data: [NetworkMessageOpcode.OPC_PEER_XFER.rawValue,
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_PEER_XFER.rawValue,
        0x14, 0x0f, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.DISCOVER)
@@ -1232,7 +1232,7 @@ extension InterfaceLocoNet {
     
     let data : [UInt8] =
     [
-      NetworkMessageOpcode.OPC_RQ_SL_DATA.rawValue,
+      LocoNetMessageOpcode.OPC_RQ_SL_DATA.rawValue,
       0x7b,
       0x00,
     ]
@@ -1249,7 +1249,7 @@ extension InterfaceLocoNet {
     
     let data : [UInt8] =
     [
-      NetworkMessageOpcode.OPC_WR_SL_DATA.rawValue,
+      LocoNetMessageOpcode.OPC_WR_SL_DATA.rawValue,
       0x0e,
       0x7b,
       UInt8(scaleFactor.rawValue),
