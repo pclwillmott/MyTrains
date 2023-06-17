@@ -37,7 +37,7 @@ extension InterfaceLocoNet {
   
   public func getBrdOpSwState(device:LocoNetDevice, switchNumber:Int) {
     
-    let boardType : [LocoNetProductId:UInt8] = [
+    let boardType : [DeviceId:UInt8] = [
       .PM4 : 0,
       .PM42 : 0,
       .BDL16 : 1,
@@ -69,7 +69,7 @@ extension InterfaceLocoNet {
 
   public func setBrdOpSwState(device:LocoNetDevice, switchNumber:Int, state:OptionSwitchState) {
     
-    let boardType : [LocoNetProductId:UInt8] = [
+    let boardType : [DeviceId:UInt8] = [
       .PM4 : 0,
       .PM42 : 0,
       .BDL16 : 1,

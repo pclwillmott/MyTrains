@@ -87,7 +87,7 @@ class EditCommandStationsVC: NSViewController, NSWindowDelegate, DBEditorDelegat
   func setFields(cs:LocoNetDevice) {
     cs.deviceName = txtCommandStationName.stringValue
     if let editorObject = cboDeviceTypeDS.editorObjectAt(index: cboCommandStationType.indexOfSelectedItem) {
-      cs.locoNetProductId = LocoNetProductId(rawValue: editorObject.primaryKey) ?? .UNKNOWN
+      cs.locoNetProductId = DeviceId(rawValue: editorObject.primaryKey) ?? .UNKNOWN
     }
     else {
       cs.locoNetProductId = .UNKNOWN

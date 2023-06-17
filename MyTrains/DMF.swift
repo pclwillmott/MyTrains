@@ -702,7 +702,7 @@ public class DMF : NSObject {
     }
   }
   
-  public var locoNetProductId : LocoNetProductId {
+  public var locoNetProductId : DeviceId {
     get {
       if let product = LocoNetProducts.product(productCode: productCode) {
         return product.id

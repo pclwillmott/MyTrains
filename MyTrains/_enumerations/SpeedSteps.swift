@@ -27,7 +27,7 @@ public enum SpeedSteps : Int {
     return UInt8(self.rawValue)
   }
   
-  public func opsw(locoNetProductId:LocoNetProductId) -> Int {
+  public func opsw(locoNetProductId:DeviceId) -> Int {
     
     let fx = self.rawValue & 0b100
     
@@ -70,7 +70,7 @@ public enum SpeedSteps : Int {
     comboBox.selectItem(at: value.rawValue)
   }
 
-  public static func select(comboBox:NSComboBox, opsw:Int, locoNetProductId:LocoNetProductId) {
+  public static func select(comboBox:NSComboBox, opsw:Int, locoNetProductId:DeviceId) {
     
     let value = SpeedSteps.speedStepFromOpSw(opsw: opsw, locoNetProductId: locoNetProductId)
     
@@ -82,13 +82,13 @@ public enum SpeedSteps : Int {
     return SpeedSteps(rawValue: comboBox.indexOfSelectedItem) ?? defaultValue
   }
   
-  public static var newStyleCommandStations : Set<LocoNetProductId> {
+  public static var newStyleCommandStations : Set<DeviceId> {
     get {
       return [.DCS210, .DCS240, .DCS210PLUS, .DCS240PLUS, .DCS52]
     }
   }
   
-  public static func speedStepFromOpSw(opsw:Int, locoNetProductId: LocoNetProductId) -> SpeedSteps {
+  public static func speedStepFromOpSw(opsw:Int, locoNetProductId: DeviceId) -> SpeedSteps {
     
     let fx = opsw & 0b100
     

@@ -242,13 +242,13 @@ public class OpenLCBNode : NSObject {
   
   public var supportedProtocols : [UInt8] {
     get {
+      while _supportedProtocols.count < 6 {
+        _supportedProtocols.append(0x00)
+      }
       return _supportedProtocols
     }
     set(value) {
       _supportedProtocols = value
-      while _supportedProtocols.count < UNDERSTOOD_BYTES {
-        _supportedProtocols.append(0x00)
-      }
     }
   }
   

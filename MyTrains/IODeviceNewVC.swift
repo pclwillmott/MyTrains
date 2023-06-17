@@ -66,7 +66,7 @@ class IODeviceNewVC: NSViewController, NSWindowDelegate {
   
   @IBAction func btnSaveAction(_ sender: NSButton) {
   
-    if let editorObject = cboDeviceTypeDS.editorObjectAt(index: cboDeviceType.indexOfSelectedItem), let locoNetProductId = LocoNetProductId(rawValue: editorObject.primaryKey) {
+    if let editorObject = cboDeviceTypeDS.editorObjectAt(index: cboDeviceType.indexOfSelectedItem), let locoNetProductId = DeviceId(rawValue: editorObject.primaryKey) {
 
       var ioDevice : IODevice?
 

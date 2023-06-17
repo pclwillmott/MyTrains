@@ -775,6 +775,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
                   }
                   
                 }
+                
                 else {
                   print("error: bad address - \(startAddress.toHex(numberOfDigits: 8))")
                   state = .idle
@@ -782,16 +783,36 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
                 
               }
 
+            case .readReplyFailure0xFF:
+              
+              if state == .gettingCDI {
+
+                print("\(message.datagramType)")
+
+                state = .idle
+                
+                let newData : Data = Data(CDI)
+                
+          //      print(String(cString: CDI))
+                
+                xmlParser = XMLParser(data: newData)
+                xmlParser?.delegate = self
+                xmlParser?.parse()
+                
+              }
+              
             case .getAddressSpaceInformationReply, .getAddressSpaceInformationReplyLowAddressPresent:
               
               if state == .gettingAddressSpaceInfo {
                 
                 if let info = node.addAddressSpaceInformation(message: message) {
                   
+                  
                   switch info.addressSpace {
                   case 0xff:
                     if state == .gettingAddressSpaceInfo {
-                      state = .gettingCDI
+                      print("addressSpaceInfo: \(info.lowestAddress) \(info.highestAddress) \(info.size)")
+                          state = .gettingCDI
                       totalBytesRead = 0
                       nextCDIStartAddress = Int(info.lowestAddress)
                       CDI = []

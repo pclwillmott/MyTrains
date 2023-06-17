@@ -246,7 +246,7 @@ public class LocoNetDevice : EditorObject {
     }
   }
   
-  public var locoNetProductId : LocoNetProductId = .UNKNOWN {
+  public var locoNetProductId : DeviceId = .UNKNOWN {
     didSet {
       modified = true
     }
@@ -487,7 +487,7 @@ public class LocoNetDevice : EditorObject {
   
   public var isIODevice : Bool {
     get {
-      let ioDevices : Set<LocoNetProductId> = [
+      let ioDevices : Set<DeviceId> = [
         .DS64
       ]
       return ioDevices.contains(locoNetProductId)
@@ -830,7 +830,7 @@ public class LocoNetDevice : EditorObject {
       }
 
       if !reader.isDBNull(index: 6) {
-        locoNetProductId = LocoNetProductId(rawValue: reader.getInt(index: 6)!) ?? .UNKNOWN
+        locoNetProductId = DeviceId(rawValue: reader.getInt(index: 6)!) ?? .UNKNOWN
       }
       
       if !reader.isDBNull(index: 7) {
@@ -1132,7 +1132,10 @@ public class LocoNetDevice : EditorObject {
             
             if let info = device.locoNetProductInfo, !info.attributes.intersection([.CommandStation, .ComputerInterface]).isEmpty {
               
-              if info.attributes.contains(.LCC) {
+              if info.attributes.contains(.OpenLCBCANWifi) {
+                device = InterfaceOpenLCBCANWiFi(reader: reader)
+              }
+              else if info.attributes.contains(.LCC) {
                 device = InterfaceOpenLCBCAN(reader: reader)
               }
               else {

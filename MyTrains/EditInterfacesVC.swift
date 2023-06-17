@@ -157,7 +157,7 @@ class EditInterfacesVC: NSViewController, NSWindowDelegate, DBEditorDelegate, My
   func setFields(device:Interface) {
     device.devicePath = cboPort.stringValue
     if let editorObject = cboDeviceTypeDS.editorObjectAt(index: cboDeviceType.indexOfSelectedItem) {
-      device.locoNetProductId = LocoNetProductId(rawValue: editorObject.primaryKey) ?? .UNKNOWN
+      device.locoNetProductId = DeviceId(rawValue: editorObject.primaryKey) ?? .UNKNOWN
     }
     else {
       device.locoNetProductId = .UNKNOWN

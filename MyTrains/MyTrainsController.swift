@@ -222,7 +222,7 @@ public class MyTrainsController : NSObject, InterfaceDelegate, NSUserNotificatio
       var interfaces : [Int:InterfaceOpenLCBCAN] = [:]
       
       for (_, device) in interfaceDevices {
-        if let interface = device as? InterfaceOpenLCBCAN, let info = interface.locoNetProductInfo, info.attributes.contains(.LCC) {
+        if let interface = device as? InterfaceOpenLCBCAN {
           interfaces[interface.primaryKey] = interface
         }
       }
@@ -272,7 +272,28 @@ public class MyTrainsController : NSObject, InterfaceDelegate, NSUserNotificatio
       
     }
   }
-  
+
+  public var networkLCCInterfaces : [Int:Interface] {
+    get {
+      
+      var interfaces : [Int:Interface] = [:]
+      
+      for (networkId, network) in networks {
+        if network.layoutId == layoutId {
+          for (interfaceId, interface) in openLCBInterfaces {
+            if interfaceId == network.interfaceId {
+              interface.networkId = networkId
+              interfaces[interface.primaryKey] = interface
+            }
+          }
+        }
+      }
+      
+      return interfaces
+      
+    }
+  }
+
   public var sensors : [Int:IOFunction] {
     get {
       

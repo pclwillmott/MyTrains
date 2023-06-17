@@ -250,7 +250,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     
     switch message.messageTypeIndicator {
     case .simpleNodeIdentInfoRequest:
-      if message.payload.isEmpty || message.payloadAsHex == nodeId.toHex(numberOfDigits: 12) {
+      if message.destinationNodeId! == nodeId {
         networkLayer?.sendSimpleNodeInformationReply(sourceNodeId: self.nodeId, destinationNodeId: message.sourceNodeId!, data: encodedNodeInformation)
       }
     case .verifyNodeIDNumberGlobal:

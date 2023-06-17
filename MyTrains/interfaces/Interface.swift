@@ -59,6 +59,23 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
   internal func parseInput() {
   }
   
+  internal func addToInputBuffer(data:[UInt8]) {
+    
+    bufferLock.lock()
+    
+    bufferCount += data.count
+    
+    for x in data {
+      buffer[writePtr] = x
+      writePtr = (writePtr + 1) & 0xfff
+    }
+    
+    bufferLock.unlock()
+
+    parseInput()
+
+  }
+  
   // MARK: Public Methods
       
   public func addObserver(observer:InterfaceDelegate) -> Int {
@@ -105,17 +122,7 @@ public class Interface : LocoNetDevice, MTSerialPortDelegate {
   // MARK: MTSerialPortDelegate Methods
   
   public func serialPort(_ serialPort: MTSerialPort, didReceive data: [UInt8]) {
-
-    bufferLock.lock()
-    bufferCount += data.count
-    for x in data {
-      buffer[writePtr] = x
-      writePtr = (writePtr + 1) & 0xfff
-    }
-    bufferLock.unlock()
-
-    parseInput()
-    
+    addToInputBuffer(data: data)
   }
   
   public func serialPortWasRemovedFromSystem(_ serialPort: MTSerialPort) {
