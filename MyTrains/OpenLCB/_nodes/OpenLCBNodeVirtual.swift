@@ -291,7 +291,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
           
         case .getAddressSpaceInformationCommand:
           
-          message.payload.removeFirst(2)
+          message.payload.removeFirst(2) 
           
           let space = message.payload[0]
           
