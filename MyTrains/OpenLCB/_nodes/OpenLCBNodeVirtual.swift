@@ -182,11 +182,17 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   }
   
   // MARK: Public Methods
-  
+
   public func initCDI(filename:String) {
+    initCDI(filename: filename, manufacturer: "", model: "")
+  }
+  
+  public func initCDI(filename:String, manufacturer:String, model:String) {
     if let filepath = Bundle.main.path(forResource: filename, ofType: "xml") {
       do {
-        let contents = try String(contentsOfFile: filepath)
+        var contents = try String(contentsOfFile: filepath)
+        contents = contents.replacingOccurrences(of: "%%MANUFACTURER%%", with: manufacturer)
+        contents = contents.replacingOccurrences(of: "%%MODEL%%", with: model)
         let memorySpace = OpenLCBMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.cdi.rawValue, isReadOnly: true, description: "")
         memorySpace.memory = [UInt8]()
         memorySpace.memory.append(contentsOf: contents.utf8)

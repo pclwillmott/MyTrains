@@ -70,7 +70,7 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
   
   public override init(nodeId:UInt64) {
     
-    configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: 512, isReadOnly: false, description: "")
+    configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: 64, isReadOnly: false, description: "")
     
     super.init(nodeId: nodeId)
     

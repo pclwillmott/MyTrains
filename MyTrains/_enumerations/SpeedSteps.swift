@@ -8,16 +8,16 @@
 import Foundation
 import Cocoa
 
-public enum SpeedSteps : Int {
+public enum SpeedSteps : UInt8 {
   
-  case dcc28      = 0b000
-  case trinary    = 0b001
-  case dcc14      = 0b010
-  case dcc128     = 0b011
-  case dcc28FX    = 0b100
-  case trinaryFX  = 0b101
-  case dcc14FX    = 0b110
-  case dcc128FX   = 0b111
+  case dcc28      = 0b000 // 0
+  case trinary    = 0b001 // 1
+  case dcc14      = 0b010 // 2
+  case dcc128     = 0b011 // 3
+  case dcc28FX    = 0b100 // 4
+  case trinaryFX  = 0b101 // 5
+  case dcc14FX    = 0b110 // 6
+  case dcc128FX   = 0b111 // 7
   
   public func protectMask() -> UInt8 {
     return 0b11111000
@@ -37,13 +37,13 @@ public enum SpeedSteps : Int {
       dt = (~dt) & 0b011
     }
     
-    return fx | dt
+    return Int(fx | dt)
     
   }
 
   public var title : String {
     get {
-      return SpeedSteps.titles[self.rawValue]
+      return SpeedSteps.titles[Int(self.rawValue)]
     }
   }
   
@@ -67,7 +67,7 @@ public enum SpeedSteps : Int {
   }
   
   public static func select(comboBox:NSComboBox, value:SpeedSteps) {
-    comboBox.selectItem(at: value.rawValue)
+    comboBox.selectItem(at: Int(value.rawValue))
   }
 
   public static func select(comboBox:NSComboBox, opsw:Int, locoNetProductId:DeviceId) {
@@ -79,7 +79,7 @@ public enum SpeedSteps : Int {
   }
 
   public static func selected(comboBox: NSComboBox) -> SpeedSteps {
-    return SpeedSteps(rawValue: comboBox.indexOfSelectedItem) ?? defaultValue
+    return SpeedSteps(rawValue: UInt8(comboBox.indexOfSelectedItem)) ?? defaultValue
   }
   
   public static var newStyleCommandStations : Set<DeviceId> {
@@ -90,9 +90,9 @@ public enum SpeedSteps : Int {
   
   public static func speedStepFromOpSw(opsw:Int, locoNetProductId: DeviceId) -> SpeedSteps {
     
-    let fx = opsw & 0b100
+    let fx = UInt8(opsw) & 0b100
     
-    var dt = opsw & 0b011
+    var dt = UInt8(opsw) & 0b011
     
     if !SpeedSteps.newStyleCommandStations.contains(locoNetProductId) {
       dt = (~dt) & 0b011

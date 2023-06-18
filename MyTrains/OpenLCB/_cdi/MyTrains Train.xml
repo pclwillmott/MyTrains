@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cdi xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://openlcb.org/schema/cdi/1/1/cdi.xsd">
+<identification>
+<manufacturer>%%MANUFACTURER%%</manufacturer>
+<model>%%MODEL%%</model>
+<hardwareVersion></hardwareVersion>
+<softwareVersion></softwareVersion>
+</identification>
+<acdi/>
+
+<segment space='251' origin='1'>
+<name>Train ID</name>
+<string size='63'>
+  <name>Name</name>
+  <description>Name to display on the throttle for this locomotive.</description>
+</string>
+<string size='64'>
+  <name>User Description</name>
+  <description>You can write additional notes about this locomotive here.</description>
+</string>
+</segment>
+
+<segment space='253' origin='0'>
+<name>Train</name>
+<description>Configures a single train</description>
+<int size='2'>
+<name>Address</name>
+<description>Address of this train on the track protocol.</description>
+<min>0</min>
+<max>10239</max>
+</int>
+<int size='1'>
+<name>Speed Step Mode</name>
+<description>Configures the Track Protocol options, such as speed step mode or which version of the track protocol to use.</description>
+<default>11</default>
+<map>
+  <relation><property>3</property><value>DCC 128-step</value></relation>
+  <relation><property>0</property><value>DCC 28-step</value></relation>
+  <relation><property>2</property><value>DCC 14-step</value></relation>
+  <relation><property>1</property><value>Marklin-Motorola I</value></relation>
+</map>
+</int>
+<group>
+<name>F0</name>
+<description>F0 is permanently assigned to Light.</description>
+<int size='1'>
+<name>Consist Behavior</name>
+<description>A 'Consist' function will react to changes from every cab. A 'Current Cab Only' function will only react if this Loco is the current cab on the throttle.</description>
+<default>0</default>
+<map>
+  <relation><property>0</property><value>Consist</value></relation>
+  <relation><property>1</property><value>Current Cab Only</value></relation>
+</map>
+</int>
+<int size='1'>
+<name>Directional</name>
+<description>When enabled, the F0 function needs to be separately turned on for forward and reverse direction.</description>
+<default>0</default>
+<map><relation><property>0</property><value>Disabled</value></relation><relation><property>1</property><value>Enabled</value></relation></map>
+</int>
+<int size='2'>
+<name>MU switch</name>
+<description>Set this according to where this unit is in a consist or train. As the direction is changed, the headlight will automatically turn off instead of shining onto a coupled train or engine.</description>
+<default>0</default>
+<map>
+  <relation><property>0</property><value>Solo Unit</value></relation>
+  <relation><property>1</property><value>Coupled at Rear</value></relation>
+  <relation><property>256</property><value>Coupled at Front</value></relation>
+  <relation><property>257</property><value>Middle Unit</value></relation>
+</map>
+</int>
+</group>
+<group replication='65'>
+<name>Functions</name>
+<description>Defines what each function button does.</description>
+<repname>F</repname>
+<int size='1'>
+<name>Display</name>
+<description>Defines how throttles display this function.</description>
+<default>0</default>
+<map>
+  <relation><property>0</property><value>Unassigned</value></relation>
+  <relation><property>1</property><value>Headlight</value></relation>
+  <relation><property>13</property><value>Bell</value></relation>
+  <relation><property>14</property><value>Horn</value></relation>
+  <relation><property>15</property><value>Whistle</value></relation>
+  <relation><property>11</property><value>Pantograph</value></relation>
+  <relation><property>10</property><value>Smoke</value></relation>
+  <relation><property>4</property><value>Engine</value></relation>
+  <relation><property>74</property><value>Light</value></relation>
+  <relation><property>28</property><value>Coupler Clank</value></relation>
+  <relation><property>122</property><value>Couple</value></relation>
+  <relation><property>9</property><value>Uncouple</value></relation>
+  <relation><property>7</property><value>Shunting Mode</value></relation>
+  <relation><property>8</property><value>Momentum</value></relation>
+  <relation><property>57</property><value>Brake</value></relation>
+  <relation><property>200</property><value>Brake Release</value></relation>
+  <relation><property>41</property><value>Dynamic Brake</value></relation>
+  <relation><property>31</property><value>Manual Notch Down</value></relation>
+  <relation><property>30</property><value>Manual Notch Up</value></relation>
+  <relation><property>69</property><value>Reverser</value></relation>
+  <relation><property>100</property><value>Mute</value></relation>
+  <relation><property>12</property><value>Far Light</value></relation>
+  <relation><property>3</property><value>Cab Light</value></relation>
+  <relation><property>48</property><value>Ditch Lights</value></relation>
+  <relation><property>98</property><value>Step Lights</value></relation>
+  <relation><property>62</property><value>Tail Lights</value></relation>
+  <relation><property>58</property><value>Switching Lights</value></relation>
+  <relation><property>51</property><value>Dimmer</value></relation>
+  <relation><property>2</property><value>Interior Lights</value></relation>
+  <relation><property>42</property><value>Air Compressor</value></relation>
+  <relation><property>45</property><value>Air Pump</value></relation>
+  <relation><property>60</property><value>Injector</value></relation>
+  <relation><property>108</property><value>Exhaust Fan</value></relation>
+  <relation><property>17</property><value>Radiator Fan</value></relation>
+  <relation><property>66</property><value>Steam Generator</value></relation>
+  <relation><property>105</property><value>Blower</value></relation>
+  <relation><property>56</property><value>Blow Down</value></relation>
+  <relation><property>38</property><value>Safety</value></relation>
+  <relation><property>55</property><value>Sanding</value></relation>
+  <relation><property>88</property><value>Ash Dump</value></relation>
+  <relation><property>18</property><value>Shoveling</value></relation>
+  <relation><property>35</property><value>Water Fill</value></relation>
+  <relation><property>103</property><value>Long Whistle</value></relation>
+  <relation><property>64</property><value>Short Whistle</value></relation>
+  <relation><property>63</property><value>Doppler Horn</value></relation>
+  <relation><property>36</property><value>Curve Squeal</value></relation>
+  <relation><property>21</property><value>Brake Squeal</value></relation>
+  <relation><property>6</property><value>Announce</value></relation>
+  <relation><property>27</property><value>Cab Chatter</value></relation>
+  <relation><property>255</property><value>Unavailable</value></relation>
+</map>
+</int>
+<int size='1'>
+<name>Momentary</name>
+<description>Momentary functions are automatically turned off when you release the respective button on the throttles.</description>
+<default>0</default>
+<map>
+  <relation><property>0</property><value>Latching</value></relation>
+  <relation><property>1</property><value>Momentary</value></relation>
+</map>
+</int>
+<int size='1'>
+<name>Consist Behavior</name>
+<description>A 'Consist' function will react to changes from every cab. A 'Current Cab Only' function will only react if this Loco is the current cab on the throttle.</description>
+<default>0</default>
+<map>
+  <relation><property>0</property><value>Consist</value></relation>
+  <relation><property>1</property><value>Current Cab Only</value></relation>
+</map>
+</int>
+<string size='32'>
+<name>Description</name>
+<description>Specifies a custom name of this function. To change back to the default function name, set this field to empty.</description>
+</string>
+</group>
+<int size='1'>
+<name>Delete From Roster?</name>
+<description>Selecting 'Delete' will remove all settings of this train (like name and function mapping) from the roster. WARNING: this operation cannot be undone.</description>
+<min>0</min>
+<max>1</max>
+<default>0</default>
+<map>
+  <relation><property>0</property><value>Keep</value></relation>
+  <relation><property>1</property><value>Delete All Settings</value></relation>
+</map>
+</int>
+</segment>
+</cdi>
+

@@ -64,7 +64,7 @@ public class LocoSlotDataP1 : LocoNetMessage {
   
   public var mobileDecoderType : SpeedSteps {
     get {
-      return SpeedSteps(rawValue: Int(message[3] & 0b111)) ?? SpeedSteps.defaultValue
+      return SpeedSteps(rawValue: message[3] & 0b111) ?? SpeedSteps.defaultValue
     }
   }
 

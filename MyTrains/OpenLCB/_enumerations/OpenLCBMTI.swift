@@ -35,10 +35,10 @@ public enum OpenLCBMTI : UInt16 {
   case identifyEventsGlobal                       = 0x0970
   case learnEvent                                 = 0x0594
   case producerConsumerEventReport                = 0x05B4
-  case tractionControlCommand                     = 0x05E8
-  case tractionControlReply                       = 0x01E8
-  case tractionProxyCommand_obsolete              = 0x09E9
-  case tractionProxyReply_obsolete                = 0x05E9
+  case tractionControlCommand                     = 0x05EB
+  case tractionControlReply                       = 0x01E9
+//  case tractionProxyCommand_obsolete              = 0x09E9
+//  case tractionProxyReply_obsolete                = 0x05E9
   case xpressnet                                  = 0x0820
   case remoteButtonRequest                        = 0x0948
   case remoteButtonReply                          = 0x0549

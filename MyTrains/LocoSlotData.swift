@@ -182,7 +182,7 @@ public class LocoSlotData {
     }
     set(stat1) {
       
-      mobileDecoderType = SpeedSteps(rawValue: Int(stat1 & 0x7)) ?? SpeedSteps.defaultValue
+      mobileDecoderType = SpeedSteps(rawValue: stat1 & 0x7) ?? SpeedSteps.defaultValue
       
       slotState = SlotState(rawValue: Int(stat1 >> 4) & 0b11) ?? SlotState.free
 

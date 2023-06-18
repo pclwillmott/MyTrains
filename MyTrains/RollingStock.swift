@@ -337,7 +337,7 @@ public class RollingStock : EditorObject, DecoderFunctionDelegate {
       }
       
       if !reader.isDBNull(index: 12) {
-        speedSteps = SpeedSteps(rawValue: reader.getInt(index: 12)!) ?? .dcc128
+        speedSteps = SpeedSteps(rawValue: UInt8(reader.getInt(index: 12)!)) ?? .dcc128
       }
       
       if !reader.isDBNull(index: 13) {
@@ -548,7 +548,7 @@ public class RollingStock : EditorObject, DecoderFunctionDelegate {
       cmd.parameters.addWithValue(key: "@\(ROLLING_STOCK.ADECODER_MANUFACTURER_ID)", value: aDecoderManufacturerId)
       cmd.parameters.addWithValue(key: "@\(ROLLING_STOCK.ADECODER_MODEL)", value: aDecoderModel)
       cmd.parameters.addWithValue(key: "@\(ROLLING_STOCK.ADECODER_ADDRESS)", value: aDecoderAddress)
-      cmd.parameters.addWithValue(key: "@\(ROLLING_STOCK.SPEED_STEPS)", value: speedSteps.rawValue)
+      cmd.parameters.addWithValue(key: "@\(ROLLING_STOCK.SPEED_STEPS)", value: Int(speedSteps.rawValue))
       cmd.parameters.addWithValue(key: "@\(ROLLING_STOCK.FBOFF_OCC_FRONT)", value: feedbackOccupancyOffsetFront)
       cmd.parameters.addWithValue(key: "@\(ROLLING_STOCK.FBOFF_OCC_REAR)", value: feedbackOccupancyOffsetRear)
       cmd.parameters.addWithValue(key: "@\(ROLLING_STOCK.SCALE)", value: scale)

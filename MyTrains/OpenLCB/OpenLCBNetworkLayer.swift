@@ -203,6 +203,10 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
     
   }
 
+  public func sendWellKnownEvent(sourceNodeId:UInt64, eventId:OpenLCBWellKnownEvent) {
+    sendEvent(sourceNodeId: sourceNodeId, eventId: eventId.rawValue)
+  }
+  
   public func sendProducerRangeIdentified(sourceNodeId:UInt64, eventId:UInt64) {
 
     let message = OpenLCBMessage(messageTypeIndicator: .producerRangeIdentified)

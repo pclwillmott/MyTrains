@@ -10,12 +10,12 @@ import Cocoa
 
 private enum State {
   case idle
-  case gettingAddressSpaceInfo
+//  case gettingAddressSpaceInfo
   case gettingCDI
   case readingMemory
   case refreshElement
   case writingMemory
-  case gettingLock
+//  case gettingLock
 }
 
 private typealias MemoryMapItem = (sortAddress:UInt64, space:UInt8, address: Int, size: Int, data: [UInt8], modified: Bool)
@@ -73,10 +73,23 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
     btnResetToDefaults.isHidden = true
 
     if let network = networkLayer {
-      
+      /*
       state = .gettingLock
       network.sendLockCommand(sourceNodeId: sourceNodeId, destinationNodeId: node!.nodeId)
       lblStatus.stringValue = "Getting Lock"
+*/
+
+      lblStatus.stringValue = "Getting CDI"
+      
+      state = .gettingCDI
+      
+      totalBytesRead = 0
+      
+      nextCDIStartAddress = 0
+      
+      CDI = []
+      
+      network.sendNodeMemoryReadRequest(sourceNodeId: sourceNodeId, destinationNodeId: node!.nodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cdi.rawValue, startAddress: nextCDIStartAddress, numberOfBytesToRead: 64)
 
     }
 
@@ -460,6 +473,12 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
         index += 1
       }
     }
+    /*
+    print()
+    for map in memoryMap {
+      print("expandTree: \(map.address) \(map.space) \(map.size)")
+    }
+*/
 
     dataBytesToRead = 0
     for map in memoryMap {
@@ -526,7 +545,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
       switch message.messageTypeIndicator {
        
       case .datagramRejected:
-        
+        /*
         if state == .gettingLock {
           
           state = .gettingAddressSpaceInfo
@@ -538,7 +557,8 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
           btnWrite.isEnabled = true
           
         }
-
+*/
+        break
       case .datagramReceivedOK:
         
         if let node = self.node {
@@ -591,7 +611,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
           if let datagramType = message.datagramType {
             
             switch datagramType {
-              
+            /*
             case .LockReserveReply:
               
               if state == .gettingLock {
@@ -616,7 +636,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
                 btnWrite.isEnabled = haveLock
                 
               }
-              
+            */
             case .writeReplyGeneric, .writeReply0xFD, .writeReply0xFE, .writeReply0xFF:
               
               if state == .writingMemory {
@@ -766,7 +786,9 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
                     
                     let newData : Data = Data(CDI)
                     
-                //    print(String(cString: CDI))
+              //      var pdata = CDI
+              //      pdata.append(0)
+              //      print(String(cString: pdata))
                     
                     xmlParser = XMLParser(data: newData)
                     xmlParser?.delegate = self
@@ -800,7 +822,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
                 xmlParser?.parse()
                 
               }
-              
+            /*
             case .getAddressSpaceInformationReply, .getAddressSpaceInformationReplyLowAddressPresent:
               
               if state == .gettingAddressSpaceInfo {
@@ -811,7 +833,6 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
                   switch info.addressSpace {
                   case 0xff:
                     if state == .gettingAddressSpaceInfo {
-                      print("addressSpaceInfo: \(info.lowestAddress) \(info.highestAddress) \(info.size)")
                           state = .gettingCDI
                       totalBytesRead = 0
                       nextCDIStartAddress = Int(info.lowestAddress)
@@ -829,7 +850,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
                 }
                 
               }
-              
+              */
             default:
               break
             }
@@ -1424,7 +1445,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
     
     dataToWrite = []
     
-    state = .gettingAddressSpaceInfo
+    state = .gettingCDI
     
     outlineView.dataSource = nil
     
