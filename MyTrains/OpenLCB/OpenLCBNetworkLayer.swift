@@ -215,7 +215,7 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
     
     message.eventId = eventId
     
-    sendMessage(message: message)
+    sendMessage(message: message) 
 
   }
 

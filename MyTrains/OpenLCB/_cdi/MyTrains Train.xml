@@ -20,7 +20,7 @@
 </string>
 </segment>
 
-<segment space='253' origin='0'>
+<segment space='253' origin='0'> 
 <name>Train</name>
 <description>Configures a single train</description>
 <int size='2'>

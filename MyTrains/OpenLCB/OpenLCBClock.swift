@@ -251,7 +251,7 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
     }
   }
   
-  public var type : OpenLCBClockType {
+  public var type : OpenLCBClockType { 
     get {
       return OpenLCBClockType(rawValue: configuration.getUInt8(address: addressClockType)!)!
     }

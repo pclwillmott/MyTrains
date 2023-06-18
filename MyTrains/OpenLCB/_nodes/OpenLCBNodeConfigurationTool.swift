@@ -25,7 +25,7 @@ public class OpenLCBNodeConfigurationTool : OpenLCBNodeVirtual {
   
   // MARK: Private Properties
   
-  // MARK: Public Properties
+  // MARK: Public Properties 
   
   // MARK: Private Methods
   

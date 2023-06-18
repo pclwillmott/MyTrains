@@ -464,7 +464,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
     // Combine adjacent blocks
     
     var index = 0
-    while index < memoryMap.count - 1 {
+    while index < memoryMap.count - 1 { 
       if memoryMap[index + 1].sortAddress == memoryMap[index].sortAddress + UInt64(memoryMap[index].size) {
         memoryMap[index].size += memoryMap[index + 1].size
         memoryMap.remove(at: index + 1)

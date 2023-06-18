@@ -220,7 +220,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
         
         temp = ""
         
-        for char in userNodeName {
+        for char in userNodeName { 
           switch char {
           case "0"..."9":
             temp += String(char)

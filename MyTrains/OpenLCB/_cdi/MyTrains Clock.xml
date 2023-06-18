@@ -8,7 +8,7 @@
 </identification>
 <acdi/>
 
-<segment space='251' origin='1'>
+<segment space='251' origin='1'> 
 <name>Node ID</name>
 <string size='63'>
 <name>User Name</name>
