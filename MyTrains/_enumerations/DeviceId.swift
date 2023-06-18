@@ -82,7 +82,7 @@ public enum DeviceId : Int {
   case DCS210PLUS = 70
   case DT602 = 71
   case DT602D = 72
-  case DT602DE = 73
+  case DT602DE = 73  
   case UT6 = 74
   case UT6D = 75
   case UT6DE = 76
