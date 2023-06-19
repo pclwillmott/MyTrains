@@ -56,7 +56,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     isTractionControlProtocolSupported = true
     
     isSimpleTrainNodeInformationProtocolSupported = true
-
+    
     if !memorySpacesInitialized {
       resetToFactoryDefaults()
     }
@@ -67,13 +67,13 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
   
   // MARK: Private Properties
   
-  let functionSpaceSize : Int
+  internal let functionSpaceSize : Int
   
-  private var _rollingStock : RollingStock
+  internal var _rollingStock : RollingStock
   
-  private var functions : OpenLCBMemorySpace
+  internal var functions : OpenLCBMemorySpace
   
-  private var configuration : OpenLCBMemorySpace
+  internal var configuration : OpenLCBMemorySpace
   
   internal let addressDCCAddress         : Int = 0
   internal let addressSpeedSteps         : Int = 2
@@ -85,8 +85,17 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
   internal let addressFNConsistBehaviour : Int = 9
   internal let addressFNDescription      : Int = 10
   
-  private let numberOfFunctions : Int = 65
-  private let functionGroupSize : Int = 35
+  internal let numberOfFunctions : Int = 65
+  internal let functionGroupSize : Int = 35
+  
+  internal var activeControllerNodeId : UInt64 = 0
+  
+  internal var listeners : [UInt64:OpenLCBTractionListenerNode] = [:]
+  
+  internal var setSpeed : Float = 0.0
+  internal var commandedSpeed : Float = 0.0
+  internal var actualSpeed : Float = 0.0
+  internal var emergencyStop : Bool = false
   
   // MARK: Public Properties
   
@@ -154,100 +163,316 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     
     super.openLCBMessageReceived(message: message)
     
-    let mask = OpenLCBWellKnownEvent.trainSearchEvent.rawValue
-    
-    if let id = message.eventId, (id & mask) == mask {
+    switch message.messageTypeIndicator {
       
-      print("\(message.messageTypeIndicator) \(id.toHexDotFormat(numberOfBytes: 8))")
+    case .tractionControlCommand:
       
-      let data = id.bigEndianData
-      
-      let tp = data[7] & OpenLCBTrackProtocol.trackProtocolMask
-      
-      if let trackProtocol = OpenLCBTrackProtocol(rawValue: tp), trackProtocol == .anyTrackProtocol || trackProtocol == .nativeOpenLCBNode {
+      if message.destinationNodeId == nodeId, let instruction = OpenLCBTractionControlInstructionType(rawValue: message.payload[0] & 0b01111111) {
         
-        let forceAllocateMask      : UInt8 = 0x80
-        let exactMatchOnlyMask     : UInt8 = 0x40
-        let matchOnlyInAddressMask : UInt8 = 0x20
-        
-        let forceAllocate      = (data[7] & forceAllocateMask)      == forceAllocateMask
-        let exactMatchOnly     = (data[7] & exactMatchOnlyMask)     == exactMatchOnlyMask
-        let matchOnlyInAddress = (data[7] & matchOnlyInAddressMask) == matchOnlyInAddressMask
-        
-        var nibbles : [UInt8] = []
-        
-        for index in 4...6 {
-          nibbles.append(data[index] >> 4)
-          nibbles.append(data[index] & 0x0f)
-        }
-        
-        var digitSequence : [String] = []
-        
-        var temp : String = ""
-        
-        for nibble in nibbles {
-          switch nibble {
-          case 0x0...0x9:
-            temp += "\(nibble)"
-          case 0xf:
-            if !temp.isEmpty {
-              digitSequence.append(temp)
-              temp = ""
-            }
-          default:
-            return
+        switch instruction {
+        case .setSpeedDirection:
+          
+          if let uint16 = UInt16(bigEndianData: [message.payload[1], message.payload[2]]) {
+            var f16 = float16_t()
+            f16.v = uint16
+            setSpeed = Float(float16: f16)
+            commandedSpeed = setSpeed
+            actualSpeed = setSpeed
+            emergencyStop = false
+            
+       //     print(setSpeed * 3600.0 / (1000.0 * 1.609344))
+            
           }
           
-        }
-        
-        if !temp.isEmpty {
-          digitSequence.append(temp)
-        }
+        case .setFunction:
+          
+          let bed = [
+            message.payload[1],
+            message.payload[2],
+            message.payload[3]
+          ]
+          
+          if let space = memorySpaces[OpenLCBNodeMemoryAddressSpace.functions.rawValue], let address = UInt32(bigEndianData: bed), space.isWithinSpace(address: Int(address), count: 1) {
+            
+            let value = message.payload[5]
+            
+            space.setUInt(address: Int(address), value: value)
+            
+          }
+          
+        case .emergencyStop:
+          emergencyStop = true
+        case .querySpeeds:
+          
+          networkLayer?.sendQuerySpeedReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, setSpeed: setSpeed, commandedSpeed: commandedSpeed, actualSpeed: actualSpeed, emergencyStop: emergencyStop)
+          
+        case .queryFunction:
+          
+          let bed = [
+            message.payload[1],
+            message.payload[2],
+            message.payload[3]
+          ]
+          
+          if let space = memorySpaces[OpenLCBNodeMemoryAddressSpace.functions.rawValue], let address = UInt32(bigEndianData: bed) {
+              
+            if space.isWithinSpace(address: Int(address), count: 1), let value = space.getUInt8(address: Int(address)) {
+              
+              networkLayer?.sendQueryFunctionReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, address: address, value: UInt16(value))
+              
+            }
 
-        let address = "\(dccAddress)"
-        
-        var addressMatch : Bool = digitSequence.count == 1 && (
-        speedSteps == .trinary ||
-        trackProtocol == .anyTrackProtocol ||
-        !trackProtocol.forceLongAddress ||
-        dccAddress >= 128
-        // long dccAddress < 128 is not supported by LocoNet, so it is not tested for
-        )
-        
-        addressMatch = addressMatch && ((exactMatchOnly && digitSequence[0] == address) || (!exactMatchOnly && address.prefix(digitSequence[0].count) == digitSequence[0]))
-        
-        var nameDigitSequence : [String] = []
-        
-        temp = ""
-        
-        for char in userNodeName { 
-          switch char {
-          case "0"..."9":
-            temp += String(char)
-            break
-          default:
-            if !temp.isEmpty {
-              nameDigitSequence.append(temp)
-              temp = ""
+          }
+          
+        case .controllerConfiguration:
+          
+          if let configurationType = OpenLCBTractionControllerConfigurationType(rawValue: message.payload[1]) {
+            
+            let bed = [
+              message.payload[3],
+              message.payload[4],
+              message.payload[5],
+              message.payload[6],
+              message.payload[7],
+              message.payload[8],
+            ]
+            
+            switch configurationType {
+              
+            case .assignController:
+              
+              if let controllerNodeId = UInt64(bigEndianData: bed) {
+
+                let lastActiveControllerNodeId = activeControllerNodeId
+                
+                activeControllerNodeId = controllerNodeId
+                
+                networkLayer?.sendAssignControllerReply(sourceNodeId: nodeId, destinationNodeId: controllerNodeId, result: 0)
+                
+                if lastActiveControllerNodeId != 0 {
+                  networkLayer?.sendControllerChangedNotify(sourceNodeId: nodeId, destinationNodeId: lastActiveControllerNodeId, newController: activeControllerNodeId)
+                }
+                
+              }
+              
+            case .releaseController:
+              
+              if let controllerNodeId = UInt64(bigEndianData: bed) {
+                
+                if controllerNodeId == activeControllerNodeId {
+                  activeControllerNodeId = 0
+                }
+                
+              }
+              
+           case .queryController:
+              networkLayer?.sendQueryControllerReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, activeController: activeControllerNodeId)
+            case .controllerChangingNotify:
+              break
             }
           }
-        }
-        if !temp.isEmpty {
-          nameDigitSequence.append(temp)
-        }
+        case .listenerConfiguration:
+          
+          if let configurationType = OpenLCBTractionListenerConfigurationType(rawValue: message.payload[1]) {
+          
+            let bed = [
+              message.payload[3],
+              message.payload[4],
+              message.payload[5],
+              message.payload[6],
+              message.payload[7],
+              message.payload[8],
+            ]
 
-        var nameMatch : Bool = digitSequence.count >= 1
-        
-        
-        for sequence in digitSequence {
-        
+            switch configurationType {
+            case .attachNode:
+              
+              if let listenerNodeId = UInt64(bigEndianData: bed) {
+                
+                if listenerNodeId == nodeId {
+                  networkLayer?.sendAssignListenerReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, listenerNodeId: listenerNodeId, replyCode: .permanentErrorAlreadyExists)
+                }
+                else if let listenerNode = listeners[listenerNodeId] {
+                  listenerNode.flags = message.payload[2]
+                  
+                  networkLayer?.sendAssignListenerReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, listenerNodeId: listenerNodeId, replyCode: .noError)
+                  
+                }
+                else {
+                  let listenerNode = OpenLCBTractionListenerNode(nodeId: listenerNodeId, flags: message.payload[2])
+                  listeners[listenerNodeId] = listenerNode
+                  networkLayer?.sendAssignListenerReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, listenerNodeId: listenerNodeId, replyCode: .noError)
+                }
+                
+              }
+              
+            case .detachNode:
+              
+              if let listenerNodeId = UInt64(bigEndianData: bed) {
+                
+                if let listener = listeners[listenerNodeId] {
+                  listeners.removeValue(forKey: listenerNodeId)
+                  networkLayer?.sendAssignListenerReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, listenerNodeId: listenerNodeId, replyCode: .noError)
+                }
+                else {
+                  networkLayer?.sendAssignListenerReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, listenerNodeId: listenerNodeId, replyCode: .permanentErrorNotFound)
+                }
+              }
+              
+            case .queryNodes:
+              break
+            }
+            
+          }
+          
+        case .tractionManagement:
+          break
         }
         
       }
-      else {
-        print("unknown track protocol found: 0x\(tp.toHex(numberOfDigits: 2))")
+      
+    case .producerConsumerEventReport:
+      
+      if let id = message.eventId, let eventType = OpenLCBWellKnownEvent(rawValue: id) {
+        
+        switch eventType {
+        case .emergencyOff:
+          break
+        case .clearEmergencyOff:
+          break
+        case .emergencyStopAllOperations:
+          break
+        case .clearEmergencyStopAllOperations:
+          break
+        default:
+          break
+        }
+        
       }
+
+    case .identifyProducer:
+      
+      if let id = message.eventId {
+        
+        // Train Search Protocol
+        
+        let mask = OpenLCBWellKnownEvent.trainSearchEvent.rawValue
+        
+        if (id & mask) == mask {
+ 
+          let data = id.bigEndianData
+          
+          let tp = data[7] & OpenLCBTrackProtocol.trackProtocolMask
+          
+          if let trackProtocol = OpenLCBTrackProtocol(rawValue: tp), trackProtocol == .anyTrackProtocol || trackProtocol == .nativeOpenLCBNode {
+            
+            let forceAllocateMask      : UInt8 = 0x80
+            let exactMatchOnlyMask     : UInt8 = 0x40
+            let matchOnlyInAddressMask : UInt8 = 0x20
+            
+            let forceAllocate      = (data[7] & forceAllocateMask)      == forceAllocateMask
+            let exactMatchOnly     = (data[7] & exactMatchOnlyMask)     == exactMatchOnlyMask
+            let matchOnlyInAddress = (data[7] & matchOnlyInAddressMask) == matchOnlyInAddressMask
+            
+            var nibbles : [UInt8] = []
+            
+            for index in 4...6 {
+              nibbles.append(data[index] >> 4)
+              nibbles.append(data[index] & 0x0f)
+            }
+            
+            var digitSequence : [String] = []
+            
+            var temp : String = ""
+            
+            for nibble in nibbles {
+              switch nibble {
+              case 0x0...0x9:
+                temp += "\(nibble)"
+              case 0xf:
+                if !temp.isEmpty {
+                  digitSequence.append(temp)
+                  temp = ""
+                }
+              default:
+                return
+              }
+              
+            }
+            
+            if !temp.isEmpty {
+              digitSequence.append(temp)
+            }
+            
+            let address = "\(dccAddress)"
+            
+            var addressMatch : Bool = digitSequence.count == 1 && (
+              speedSteps == .trinary ||
+              trackProtocol == .anyTrackProtocol ||
+              !trackProtocol.forceLongAddress ||
+              dccAddress >= 128
+              // long dccAddress < 128 is not supported by LocoNet, so it is not tested for
+            )
+            
+            addressMatch = addressMatch && ((exactMatchOnly && digitSequence[0] == address) || (!exactMatchOnly && address.prefix(digitSequence[0].count) == digitSequence[0]))
+            
+            var nameMatch : Bool = false
+            
+            if !matchOnlyInAddress {
+              
+              nameMatch = !digitSequence.isEmpty
+              
+              var nameDigitSequence : [String] = []
+              
+              temp = ""
+              
+              for char in userNodeName {
+                switch char {
+                case "0"..."9":
+                  temp += String(char)
+                  break
+                default:
+                  if !temp.isEmpty {
+                    nameDigitSequence.append(temp)
+                    temp = ""
+                  }
+                }
+              }
+              
+              if !temp.isEmpty {
+                nameDigitSequence.append(temp)
+              }
+              
+              for sequence in digitSequence {
+                var found = false
+                for nameSequence in nameDigitSequence {
+                  if (exactMatchOnly && sequence == nameSequence) || (!exactMatchOnly && sequence == nameSequence.prefix(sequence.count)) {
+                    found = true
+                    break
+                  }
+                }
+                nameMatch = nameMatch && found
+              }
+              
+            }
+            
+            if addressMatch || (!matchOnlyInAddress && nameMatch) {
+              networkLayer?.sendProducerIdentifiedValid(sourceNodeId: nodeId, eventId: id)
+            }
+            
+          }
+          else {
+            print("unknown track protocol found: 0x\(tp.toHex(numberOfDigits: 2))")
+          }
+
+        }
+        
+      }
+
+    default:
+      break
     }
+    
   }
   
 }
