@@ -9,11 +9,12 @@ import Foundation
 
 public enum OpenLCBErrorCode : UInt16 {
   
-  case nodeError                                                             = 0x0000
+  case noError                                                               = 0x0000
   case permanentError                                                        = 0x1000
   case permanentErrorReserved1                                               = 0x1010
   case permanentErrorSourceNotPermitted                                      = 0x1020
-  case permanentErrorReserved3                                               = 0x1030
+  case permanentErrorNotFound                                                = 0x1030
+  case permanentErrorAlreadyExists                                           = 0x1032
   case permanentErrorNotImplemented                                          = 0x1040
   case permanentErrorNotImplementedSubcommandUnknown                         = 0x1041
   case permanentErrorNotimplementedDatagramTypeStreamTypeOrCommandUnknown    = 0x1042
