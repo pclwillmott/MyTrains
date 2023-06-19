@@ -318,6 +318,24 @@ public class OpenLCBTransportLayerCAN : OpenLCBTransportLayer, InterfaceDelegate
     
   }
   
+  private func sendVerifyNodeIdNumberAddressed(sourceNodeId:UInt64, destinationNodeIdAlias:UInt16) {
+    
+    let message = OpenLCBMessage(messageTypeIndicator: .verifyNodeIDNumberAddressed)
+
+    if let sourceNIDAlias = nodeIdLookup[message.sourceNodeId!] {
+      
+      message.sourceNIDAlias = sourceNIDAlias
+      
+      message.destinationNIDAlias = destinationNodeIdAlias
+      
+      if let frame = LCCCANFrame(networkId: interface.networkId, message: message) {
+        interface.send(data: frame.message)
+      }
+      
+    }
+      
+  }
+
   private func addNodeIdAliasMapping(nodeId: UInt64, alias:UInt16) {
     aliasLookup[alias] = nodeId
     nodeIdLookup[nodeId] = alias
@@ -534,6 +552,19 @@ public class OpenLCBTransportLayerCAN : OpenLCBTransportLayer, InterfaceDelegate
     send(header: header.toHex(numberOfDigits: 8), data: "0101000000000201")
 
   }
+  
+  private func stealAlias(message:OpenLCBMessage) {
+    
+    switch message.messageTypeIndicator {
+    case .verifiedNodeIDNumberSimpleSetSufficient, .verifiedNodeIDNumberFullProtocolRequired, .initializationCompleteSimpleSetSufficient, .initializationCompleteFullProtocolRequired:
+      if let alias = message.sourceNIDAlias, let newNodeId = UInt64(bigEndianData: message.payload) {
+        addNodeIdAliasMapping(nodeId: newNodeId, alias: alias)
+      }
+    default:
+      break
+    }
+
+  }
 
   // MARK: Public Methods
   
@@ -727,6 +758,7 @@ public class OpenLCBTransportLayerCAN : OpenLCBTransportLayer, InterfaceDelegate
         case .globalAndAddressedMTI:
           switch message.flags {
           case .onlyFrame:
+            stealAlias(message: message)
             addToInputQueue(message: message)
           case .firstFrame:
             splitFrames[frame.splitFrameId] = frame
@@ -736,6 +768,7 @@ public class OpenLCBTransportLayerCAN : OpenLCBTransportLayer, InterfaceDelegate
               first.data += frame.data
               if message.flags == .lastFrame, let message = OpenLCBMessage(frame: first) {
                 message.flags = .onlyFrame
+                stealAlias(message: message)
                 addToInputQueue(message: message)
                 splitFrames.removeValue(forKey: first.splitFrameId)
               }
