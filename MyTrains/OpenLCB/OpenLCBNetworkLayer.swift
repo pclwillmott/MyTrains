@@ -243,6 +243,17 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
 
   }
 
+  public func sendProducerIdentifiedValidityUnknown(sourceNodeId:UInt64, eventId:UInt64) {
+
+    let message = OpenLCBMessage(messageTypeIndicator: .producerIdentifiedWithValidityUnknown)
+
+    message.sourceNodeId = sourceNodeId
+    
+    message.eventId = eventId
+    
+    sendMessage(message: message)
+
+  }
 
   public func sendVerifyNodeIdNumber(sourceNodeId:UInt64) {
     
@@ -690,6 +701,149 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
     
     sendMessage(message: message)
 
+  }
+  
+  public func sendQueryControllerReply(sourceNodeId:UInt64, destinationNodeId:UInt64, activeController:UInt64) {
+    
+    let message = OpenLCBMessage(messageTypeIndicator: .tractionControlReply)
+
+    message.sourceNodeId = sourceNodeId
+    
+    message.destinationNodeId = destinationNodeId
+    
+    message.payload = [
+      OpenLCBTractionControlInstructionType.controllerConfiguration.rawValue,
+      OpenLCBTractionControllerConfigurationType.queryController.rawValue,
+      0x00
+    ]
+    
+    var ac = activeController.bigEndianData
+    ac.removeFirst(2)
+    
+    message.payload.append(contentsOf: ac)
+    
+    message.payload.append(contentsOf: [0x00, 0x00])
+    
+    sendMessage(message: message)
+    
+  }
+
+  public func sendControllerChangedNotify(sourceNodeId:UInt64, destinationNodeId:UInt64, newController:UInt64) {
+    
+    let message = OpenLCBMessage(messageTypeIndicator: .tractionControlCommand)
+
+    message.sourceNodeId = sourceNodeId
+    
+    message.destinationNodeId = destinationNodeId
+    
+    message.payload = [
+      OpenLCBTractionControlInstructionType.controllerConfiguration.rawValue,
+      OpenLCBTractionControllerConfigurationType.controllerChangingNotify.rawValue,
+      0x00
+    ]
+    
+    var ac = newController.bigEndianData
+    ac.removeFirst(2)
+    
+    message.payload.append(contentsOf: ac)
+    
+    sendMessage(message: message)
+    
+  }
+
+  public func sendAssignControllerReply(sourceNodeId:UInt64, destinationNodeId:UInt64, result:UInt8) {
+    
+    let message = OpenLCBMessage(messageTypeIndicator: .tractionControlReply)
+
+    message.sourceNodeId = sourceNodeId
+    
+    message.destinationNodeId = destinationNodeId
+    
+    message.payload = [
+      OpenLCBTractionControlInstructionType.controllerConfiguration.rawValue,
+      OpenLCBTractionControllerConfigurationType.assignController.rawValue,
+      result,
+      0x00,
+      0x00,
+      0x00,
+      0x00,
+      0x00,
+      0x00,
+    ]
+    
+    sendMessage(message: message)
+    
+  }
+
+  public func sendQueryFunctionReply(sourceNodeId:UInt64, destinationNodeId:UInt64, address:UInt32, value:UInt16) {
+    
+    let message = OpenLCBMessage(messageTypeIndicator: .tractionControlReply)
+
+    message.sourceNodeId = sourceNodeId
+    
+    message.destinationNodeId = destinationNodeId
+    
+    message.payload = [
+      OpenLCBTractionControlInstructionType.queryFunction.rawValue
+    ]
+    
+    var bed = address.bigEndianData
+    bed.removeFirst()
+    
+    message.payload.append(contentsOf: bed)
+    
+    message.payload.append(contentsOf: value.bigEndianData)
+    
+    sendMessage(message: message)
+    
+  }
+
+  public func sendQuerySpeedReply(sourceNodeId:UInt64, destinationNodeId:UInt64, setSpeed:Float, commandedSpeed:Float, actualSpeed:Float, emergencyStop:Bool) {
+    
+    let message = OpenLCBMessage(messageTypeIndicator: .tractionControlReply)
+
+    message.sourceNodeId = sourceNodeId
+    
+    message.destinationNodeId = destinationNodeId
+    
+    message.payload = [
+      OpenLCBTractionControlInstructionType.querySpeeds.rawValue
+    ]
+    
+    message.payload.append(contentsOf: setSpeed.float16.v.bigEndianData)
+    message.payload.append(emergencyStop ? 0x01 : 0x00)
+    message.payload.append(contentsOf: commandedSpeed.float16.v.bigEndianData)
+    message.payload.append(contentsOf: actualSpeed.float16.v.bigEndianData)
+    message.payload.append(contentsOf: [0x00, 0x00, 0x00])
+    
+    sendMessage(message: message)
+    
+  }
+
+  public func sendAssignListenerReply(sourceNodeId:UInt64, destinationNodeId:UInt64, listenerNodeId:UInt64, replyCode:OpenLCBErrorCode) {
+    
+    let message = OpenLCBMessage(messageTypeIndicator: .tractionControlReply)
+
+    message.sourceNodeId = sourceNodeId
+    
+    message.destinationNodeId = destinationNodeId
+    
+    message.payload = [
+      OpenLCBTractionControlInstructionType.listenerConfiguration.rawValue,
+      OpenLCBTractionListenerConfigurationType.attachNode.rawValue,
+    ]
+    
+    var ln = listenerNodeId.bigEndianData
+    ln.removeFirst(2)
+    
+    message.payload.append(contentsOf: ln)
+    
+    message.payload.append(contentsOf: replyCode.rawValue.bigEndianData)
+    
+    message.payload.append(0)
+
+    sendMessage(message: message)
+    
   }
 
   // MARK: TransportLayerDelegate Methods
