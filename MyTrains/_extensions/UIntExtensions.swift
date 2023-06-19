@@ -151,7 +151,7 @@ extension UInt32 {
 
   init?(bigEndianData: [UInt8]) {
     
-    guard bigEndianData.count == 4 else {
+    guard bigEndianData.count <= 4 else {
       return nil
     }
     
@@ -213,7 +213,7 @@ extension UInt16 {
 
   init?(bigEndianData: [UInt8]) {
     
-    guard bigEndianData.count == 2 else {
+    guard bigEndianData.count <= 2 else {
       return nil
     }
     
