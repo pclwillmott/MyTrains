@@ -470,7 +470,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
         memoryMap.remove(at: index + 1)
       }
       else {
-        index += 1
+        index += 1 
       }
     }
     /*
