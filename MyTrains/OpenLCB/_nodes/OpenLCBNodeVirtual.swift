@@ -259,7 +259,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
       if message.destinationNodeId! == nodeId {
         networkLayer?.sendSimpleNodeInformationReply(sourceNodeId: self.nodeId, destinationNodeId: message.sourceNodeId!, data: encodedNodeInformation)
       }
-    case .verifyNodeIDNumberGlobal:
+    case .verifyNodeIDNumberGlobal, .verifyNodeIDNumberAddressed:
       if message.payload.isEmpty || message.payloadAsHex == nodeId.toHex(numberOfDigits: 12) {
         networkLayer?.sendVerifiedNodeIdNumber(sourceNodeId: nodeId, isSimpleSetSufficient: false)
       }
