@@ -88,14 +88,58 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
   internal let numberOfFunctions : Int = 65
   internal let functionGroupSize : Int = 35
   
-  internal var activeControllerNodeId : UInt64 = 0
+  internal var activeControllerNodeId : UInt64 = 0 {
+    didSet {
+      if activeControllerNodeId == 0 {
+        releaseNode()
+      }
+      else {
+        attachNode()
+      }
+    }
+  }
   
-  internal var listeners : [UInt64:OpenLCBTractionListenerNode] = [:]
+  internal var nextActiveControllerNodeId : UInt64 = 0
+  
+  internal var listeners : [OpenLCBTractionListenerNode] = []
   
   internal var setSpeed : Float = 0.0
+  
   internal var commandedSpeed : Float = 0.0
-  internal var actualSpeed : Float = 0.0
-  internal var emergencyStop : Bool = false
+  
+  internal var emergencyStop : Bool = false {
+    didSet {
+      speedChanged()
+    }
+  }
+  
+  internal var globalEmergencyStop : Bool = false {
+    didSet {
+      speedChanged()
+    }
+  }
+  
+  internal var globalEmergencyOff : Bool = false {
+    didSet {
+      speedChanged()
+    }
+  }
+  
+  internal var isStopped : Bool {
+    get {
+      return abs(setSpeed) == 0.0 || emergencyStop
+    }
+  }
+  
+  private enum HeartbeatMode {
+    case stopped
+    case waitingForCommand
+    case waitingForResponse
+  }
+  
+  private var heartbeatMode : HeartbeatMode = .stopped
+  
+  private var timer : Timer?
   
   // MARK: Public Properties
   
@@ -122,8 +166,21 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
       configuration.setUInt(address: addressDCCAddress, value: value.rawValue)
     }
   }
+  
+  public let heartbeatPeriod : UInt8 = 10
+  
+  public let heartbeatDeadline : UInt8 = 3
 
   // MARK: Private Methods
+  
+  private func isListener(nodeId:UInt64) -> Bool {
+    for listener in listeners {
+      if listener.nodeId == nodeId {
+        return true
+      }
+    }
+    return false
+  }
   
   internal override func resetToFactoryDefaults() {
     
@@ -144,7 +201,72 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     saveMemorySpaces()
     
   }
+  
+  internal func attachNode() {
+    
+  }
+  
+  internal func releaseNode() {
+    
+  }
  
+  internal func speedChanged() {
+    
+  }
+  
+  internal func functionChanged() {
+    
+  }
+  
+  @objc func timerAction() {
+ 
+    guard !isStopped else {
+      stopTimer()
+      return
+    }
+    
+    switch heartbeatMode {
+      
+    case .waitingForCommand:
+      
+      heartbeatMode = .waitingForResponse
+      
+      networkLayer?.sendHeartbeatRequest(sourceNodeId: nodeId, destinationNodeId: activeControllerNodeId, timeout: heartbeatDeadline)
+      
+      startTimer(interval: heartbeatDeadline)
+      
+    case .waitingForResponse:
+      
+      heartbeatMode = .stopped
+      
+      setSpeed = (setSpeed < 0.0) ? -0.0 : +0.0
+      
+      for listener in listeners {
+        networkLayer?.sendSetSpeedDirection(sourceNodeId: nodeId, destinationNodeId: listener.nodeId, setSpeed: setSpeed, isForwarded: true)
+      }
+      
+    default:
+      break
+    }
+    
+  }
+  
+  private func startTimer(interval:UInt8) {
+    
+    let deadline : TimeInterval = Double(interval)
+    
+    timer = Timer.scheduledTimer(timeInterval: deadline, target: self, selector: #selector(timerAction), userInfo: nil, repeats: false)
+    
+    RunLoop.current.add(timer!, forMode: .common)
+
+  }
+  
+  private func stopTimer() {
+    timer?.invalidate()
+    timer = nil
+    heartbeatMode = .stopped
+  }
+
   // MARK: Public Methods
   
   public override func start() {
@@ -169,42 +291,101 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
       
       if message.destinationNodeId == nodeId, let instruction = OpenLCBTractionControlInstructionType(rawValue: message.payload[0] & 0b01111111) {
         
+        stopTimer()
+        
+        let isForwarded = ((message.payload[0]) & 0x80 == 0x80) && isListener(nodeId: message.sourceNodeId!)
+        
         switch instruction {
+          
         case .setSpeedDirection:
           
-          if let uint16 = UInt16(bigEndianData: [message.payload[1], message.payload[2]]) {
+          if !isForwarded && message.sourceNodeId! != activeControllerNodeId {
+            networkLayer?.sendTerminateDueToError(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, errorCode: .permanentErrorSourceNotPermitted)
+          }
+          
+          else if let uint16 = UInt16(bigEndianData: [message.payload[1], message.payload[2]]) {
+            
             var f16 = float16_t()
             f16.v = uint16
             setSpeed = Float(float16: f16)
-            commandedSpeed = setSpeed
-            actualSpeed = setSpeed
+ 
             emergencyStop = false
             
-       //     print(setSpeed * 3600.0 / (1000.0 * 1.609344))
+            for listener in listeners {
+              if listener.nodeId != message.sourceNodeId! {
+                var forwardedSpeed = setSpeed
+                if listener.reverseDirection {
+                  if forwardedSpeed == 0.0 {
+                    forwardedSpeed = -0.0
+                  }
+                  else {
+                    forwardedSpeed *= -1.0
+                  }
+                }
+                networkLayer?.sendSetSpeedDirection(sourceNodeId: nodeId, destinationNodeId: listener.nodeId, setSpeed: forwardedSpeed, isForwarded: true)
+              }
+            }
             
           }
           
         case .setFunction:
           
-          let bed = [
-            message.payload[1],
-            message.payload[2],
-            message.payload[3]
-          ]
-          
-          if let space = memorySpaces[OpenLCBNodeMemoryAddressSpace.functions.rawValue], let address = UInt32(bigEndianData: bed), space.isWithinSpace(address: Int(address), count: 1) {
+          if !isForwarded && message.sourceNodeId! != activeControllerNodeId {
+            networkLayer?.sendTerminateDueToError(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, errorCode: .permanentErrorSourceNotPermitted)
+          }
+          else {
             
-            let value = message.payload[5]
+            let bed = [
+              message.payload[1],
+              message.payload[2],
+              message.payload[3]
+            ]
             
-            space.setUInt(address: Int(address), value: value)
+            if let space = memorySpaces[OpenLCBNodeMemoryAddressSpace.functions.rawValue], let address = UInt32(bigEndianData: bed) {
+              
+              let value = UInt16(bigEndianData: [message.payload[4], message.payload[5]])!
+              
+              if space.isWithinSpace(address: Int(address), count: 1) {
+                if address >= 0 && address <= 0x41 {
+                  space.setUInt(address: Int(address), value: UInt8(value & 0xff))
+                  functionChanged()
+                }
+              }
+              
+              for listener in listeners {
+                if listener.nodeId != message.sourceNodeId!, (address == 0 && listener.linkF0) || (address != 0 && listener.linkFN) {
+                  networkLayer?.sendSetFunction(sourceNodeId: nodeId, destinationNodeId: listener.nodeId, address: address, value: value, isForwarded: true)
+                }
+              }
+              
+            }
             
           }
           
         case .emergencyStop:
-          emergencyStop = true
+          
+          if !isForwarded && message.sourceNodeId! != activeControllerNodeId {
+            networkLayer?.sendTerminateDueToError(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, errorCode: .permanentErrorSourceNotPermitted)
+          }
+          else {
+            
+            if abs(setSpeed) != 0.0 {
+              setSpeed = (setSpeed < 0.0) ? -0.0 : +0.0
+            }
+            
+            emergencyStop = true
+            
+            for listener in listeners {
+              if listener.nodeId != message.sourceNodeId! {
+                networkLayer?.sendEmergencyStop(sourceNodeId: nodeId, destinationNodeId: listener.nodeId, isForwarded: true)
+              }
+            }
+            
+          }
+          
         case .querySpeeds:
           
-          networkLayer?.sendQuerySpeedReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, setSpeed: setSpeed, commandedSpeed: commandedSpeed, actualSpeed: actualSpeed, emergencyStop: emergencyStop)
+          networkLayer?.sendQuerySpeedReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, setSpeed: setSpeed, commandedSpeed: commandedSpeed, emergencyStop: emergencyStop)
           
         case .queryFunction:
           
@@ -243,15 +424,23 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
               
               if let controllerNodeId = UInt64(bigEndianData: bed) {
 
-                let lastActiveControllerNodeId = activeControllerNodeId
+                nextActiveControllerNodeId = 0
                 
-                activeControllerNodeId = controllerNodeId
-                
-                networkLayer?.sendAssignControllerReply(sourceNodeId: nodeId, destinationNodeId: controllerNodeId, result: 0)
-                
-                if lastActiveControllerNodeId != 0 {
-                  networkLayer?.sendControllerChangedNotify(sourceNodeId: nodeId, destinationNodeId: lastActiveControllerNodeId, newController: activeControllerNodeId)
+                if activeControllerNodeId == 0 {
+                  
+                  activeControllerNodeId = controllerNodeId
+                  
+                  networkLayer?.sendAssignControllerReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, result: 0)
+
                 }
+                else {
+                  
+                  nextActiveControllerNodeId = controllerNodeId
+                  
+                  networkLayer?.sendControllerChangedNotify(sourceNodeId: nodeId, destinationNodeId: activeControllerNodeId, newController: nextActiveControllerNodeId)
+                  
+                }
+                
                 
               }
               
@@ -265,11 +454,14 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
                 
               }
               
-           case .queryController:
+            case .queryController:
+              
               networkLayer?.sendQueryControllerReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, activeController: activeControllerNodeId)
+              
             case .controllerChangingNotify:
               break
             }
+            
           }
         case .listenerConfiguration:
           
@@ -285,23 +477,43 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
             ]
 
             switch configurationType {
+              
             case .attachNode:
               
               if let listenerNodeId = UInt64(bigEndianData: bed) {
                 
                 if listenerNodeId == nodeId {
-                  networkLayer?.sendAssignListenerReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, listenerNodeId: listenerNodeId, replyCode: .permanentErrorAlreadyExists)
-                }
-                else if let listenerNode = listeners[listenerNodeId] {
-                  listenerNode.flags = message.payload[2]
                   
-                  networkLayer?.sendAssignListenerReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, listenerNodeId: listenerNodeId, replyCode: .noError)
+                  networkLayer?.sendAssignListenerReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, listenerNodeId: listenerNodeId, replyCode: .permanentErrorAlreadyExists)
                   
                 }
                 else {
-                  let listenerNode = OpenLCBTractionListenerNode(nodeId: listenerNodeId, flags: message.payload[2])
-                  listeners[listenerNodeId] = listenerNode
-                  networkLayer?.sendAssignListenerReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, listenerNodeId: listenerNodeId, replyCode: .noError)
+                  
+                  var found = false
+                  
+                  for listener in listeners {
+                    
+                    if listener.nodeId == listenerNodeId {
+                      
+                      listener.flags = message.payload[2]
+                      
+                      networkLayer?.sendAssignListenerReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, listenerNodeId: listenerNodeId, replyCode: .success)
+                      
+                      found = true
+                      
+                    }
+                    
+                  }
+                  
+                  if !found {
+                    
+                    let listenerNode = OpenLCBTractionListenerNode(nodeId: listenerNodeId, flags: message.payload[2])
+                    
+                    listeners.append(listenerNode)
+                    
+                    networkLayer?.sendAssignListenerReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, listenerNodeId: listenerNodeId, replyCode: .success)
+                  }
+                  
                 }
                 
               }
@@ -310,22 +522,107 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
               
               if let listenerNodeId = UInt64(bigEndianData: bed) {
                 
-                if let listener = listeners[listenerNodeId] {
-                  listeners.removeValue(forKey: listenerNodeId)
-                  networkLayer?.sendAssignListenerReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, listenerNodeId: listenerNodeId, replyCode: .noError)
+                var index = 0
+                
+                var found = false
+                
+                for listener in listeners {
+                  
+                  if listener.nodeId == listenerNodeId {
+                    
+                    networkLayer?.sendAssignListenerReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, listenerNodeId: listenerNodeId, replyCode: .success)
+                    
+                    listeners.remove(at: index)
+                    
+                    found = true
+                    
+                    break
+                    
+                  }
+                  
+                  index += 1
                 }
-                else {
+                
+                if !found {
                   networkLayer?.sendAssignListenerReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, listenerNodeId: listenerNodeId, replyCode: .permanentErrorNotFound)
                 }
+                
               }
               
             case .queryNodes:
-              break
+              
+              var found = false
+              
+              if message.payload.count >= 3 {
+                
+                let index = Int(message.payload[2])
+                
+                if index < listeners.count {
+                  
+                  networkLayer?.sendListenerQueryNodeReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, nodeCount: listeners.count, nodeIndex: index, flags: listeners[index].flags, listenerNodeId: listeners[index].nodeId)
+                  
+                  found = true
+                  
+                }
+                
+              }
+ 
+              if !found {
+                networkLayer?.sendListenerQueryNodeReplyShort(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, nodeCount: listeners.count)
+              }
+              
             }
             
           }
           
         case .tractionManagement:
+          break
+        }
+      
+        if activeControllerNodeId != 0 && !isStopped {
+          heartbeatMode = .waitingForCommand
+          startTimer(interval: heartbeatPeriod)
+        }
+        
+      }
+      
+    case .tractionControlReply:
+      
+      if message.destinationNodeId == nodeId, let instruction = OpenLCBTractionControlInstructionType(rawValue: message.payload[0] & 0b01111111) {
+        
+        switch instruction {
+          
+        case .controllerConfiguration:
+          
+          if let configurationType = OpenLCBTractionControllerConfigurationType(rawValue: message.payload[1]) {
+            
+            switch configurationType {
+              
+            case .controllerChangingNotify:
+              
+              if nextActiveControllerNodeId != 0 {
+                
+                if message.payload[2] == 0 {
+                  
+                  activeControllerNodeId = nextActiveControllerNodeId
+                  
+                  networkLayer?.sendAssignControllerReply(sourceNodeId: nodeId, destinationNodeId: activeControllerNodeId, result: 0)
+                  
+                }
+                else {
+                  networkLayer?.sendAssignControllerReply(sourceNodeId: nodeId, destinationNodeId: nextActiveControllerNodeId, result: 0x01)
+                }
+                
+                nextActiveControllerNodeId = 0
+                
+              }
+              
+            default:
+              break
+            }
+          }
+          
+        default:
           break
         }
         
@@ -336,14 +633,14 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
       if let id = message.eventId, let eventType = OpenLCBWellKnownEvent(rawValue: id) {
         
         switch eventType {
-        case .emergencyOff:
-          break
-        case .clearEmergencyOff:
-          break
-        case .emergencyStopAllOperations:
-          break
-        case .clearEmergencyStopAllOperations:
-          break
+        case .emergencyOffAll:
+          globalEmergencyOff = true
+        case .clearEmergencyOffAll:
+          globalEmergencyOff = false
+        case .emergencyStopAll:
+          globalEmergencyStop = true
+        case .clearEmergencyStopAll:
+          globalEmergencyStop = false
         default:
           break
         }
