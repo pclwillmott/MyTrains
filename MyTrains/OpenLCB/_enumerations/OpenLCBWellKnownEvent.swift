@@ -11,10 +11,10 @@ public enum OpenLCBWellKnownEvent : UInt64 {
   
   // Automatically routed
   
-  case emergencyOff                        = 0x010000000000ffff // de-energize
-  case clearEmergencyOff                   = 0x010000000000fffe // energize
-  case emergencyStopAllOperations          = 0x010000000000fffd
-  case clearEmergencyStopAllOperations     = 0x010000000000fffc
+  case emergencyOffAll                     = 0x010000000000ffff // de-energize
+  case clearEmergencyOffAll                = 0x010000000000fffe // energize
+  case emergencyStopAll                    = 0x010000000000fffd
+  case clearEmergencyStopAll               = 0x010000000000fffc
   case nodeRecordedNewLogEntry             = 0x010000000000fff8
   case powerSupplyBrownoutDetectedNode     = 0x010000000000fff1 // below minimum required by node
   case powerSupplyBrownoutDetectedStandard = 0x010000000000fff0 // below minimum required by standard
