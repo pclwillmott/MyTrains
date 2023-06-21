@@ -9,7 +9,7 @@ import Foundation
 
 public enum OpenLCBErrorCode : UInt16 {
   
-  case noError                                                               = 0x0000
+  case success                                                               = 0x0000
   case permanentError                                                        = 0x1000
   case permanentErrorReserved1                                               = 0x1010
   case permanentErrorSourceNotPermitted                                      = 0x1020
