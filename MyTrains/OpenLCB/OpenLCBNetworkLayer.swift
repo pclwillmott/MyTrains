@@ -722,7 +722,7 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
     
     message.payload.append(contentsOf: ac)
     
-    message.payload.append(contentsOf: [0x00, 0x00])
+//    message.payload.append(contentsOf: [0x00, 0x00])
     
     sendMessage(message: message)
     
@@ -763,12 +763,12 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
       OpenLCBTractionControlInstructionType.controllerConfiguration.rawValue,
       OpenLCBTractionControllerConfigurationType.assignController.rawValue,
       result,
+/*    0x00,
       0x00,
       0x00,
       0x00,
       0x00,
-      0x00,
-      0x00,
+      0x00, */
     ]
     
     sendMessage(message: message)
@@ -798,7 +798,21 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
     
   }
 
-  public func sendQuerySpeedReply(sourceNodeId:UInt64, destinationNodeId:UInt64, setSpeed:Float, commandedSpeed:Float, actualSpeed:Float, emergencyStop:Bool) {
+  public func sendTerminateDueToError(sourceNodeId:UInt64, destinationNodeId:UInt64, errorCode:OpenLCBErrorCode) {
+    
+    let message = OpenLCBMessage(messageTypeIndicator: .terminateDueToError)
+
+    message.sourceNodeId = sourceNodeId
+    
+    message.destinationNodeId = destinationNodeId
+    
+    message.payload = errorCode.bigEndianData
+    
+    sendMessage(message: message)
+    
+  }
+
+  public func sendQuerySpeedReply(sourceNodeId:UInt64, destinationNodeId:UInt64, setSpeed:Float, commandedSpeed:Float, emergencyStop:Bool) {
     
     let message = OpenLCBMessage(messageTypeIndicator: .tractionControlReply)
 
@@ -813,8 +827,69 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
     message.payload.append(contentsOf: setSpeed.float16.v.bigEndianData)
     message.payload.append(emergencyStop ? 0x01 : 0x00)
     message.payload.append(contentsOf: commandedSpeed.float16.v.bigEndianData)
-    message.payload.append(contentsOf: actualSpeed.float16.v.bigEndianData)
-    message.payload.append(contentsOf: [0x00, 0x00, 0x00])
+    message.payload.append(contentsOf: [0xff, 0xff])
+//  message.payload.append(contentsOf: [0x00, 0x00, 0x00])
+    
+    sendMessage(message: message)
+    
+  }
+
+  public func sendSetSpeedDirection(sourceNodeId:UInt64, destinationNodeId:UInt64, setSpeed:Float, isForwarded: Bool) {
+    
+    let message = OpenLCBMessage(messageTypeIndicator: .tractionControlCommand)
+
+    message.sourceNodeId = sourceNodeId
+    
+    message.destinationNodeId = destinationNodeId
+    
+    message.payload = [
+      OpenLCBTractionControlInstructionType.setSpeedDirection.rawValue | (isForwarded ? 0x80 : 0x00)
+    ]
+    
+    message.payload.append(contentsOf: setSpeed.float16.v.bigEndianData)
+
+//  message.payload.append(contentsOf: [0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
+    
+    sendMessage(message: message)
+    
+  }
+
+  public func sendSetFunction(sourceNodeId:UInt64, destinationNodeId:UInt64, address:UInt32, value:UInt16, isForwarded: Bool) {
+    
+    let message = OpenLCBMessage(messageTypeIndicator: .tractionControlCommand)
+
+    message.sourceNodeId = sourceNodeId
+    
+    message.destinationNodeId = destinationNodeId
+    
+    message.payload = [
+      OpenLCBTractionControlInstructionType.setFunction.rawValue | (isForwarded ? 0x80 : 0x00)
+    ]
+    
+    var adr = address.bigEndianData
+    adr.removeFirst()
+    
+    message.payload.append(contentsOf: adr)
+    
+    message.payload.append(contentsOf: value.bigEndianData)
+
+//  message.payload.append(contentsOf: [0x00, 0x00, 0x00])
+    
+    sendMessage(message: message)
+    
+  }
+
+  public func sendEmergencyStop(sourceNodeId:UInt64, destinationNodeId:UInt64, isForwarded: Bool) {
+    
+    let message = OpenLCBMessage(messageTypeIndicator: .tractionControlCommand)
+
+    message.sourceNodeId = sourceNodeId
+    
+    message.destinationNodeId = destinationNodeId
+    
+    message.payload = [
+      OpenLCBTractionControlInstructionType.emergencyStop.rawValue | (isForwarded ? 0x80 : 0x00)
+    ]
     
     sendMessage(message: message)
     
@@ -840,8 +915,73 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
     
     message.payload.append(contentsOf: replyCode.rawValue.bigEndianData)
     
-    message.payload.append(0)
+//  message.payload.append(0)
 
+    sendMessage(message: message)
+    
+  }
+
+  public func sendListenerQueryNodeReply(sourceNodeId:UInt64, destinationNodeId:UInt64, nodeCount:Int, nodeIndex:Int, flags:UInt8, listenerNodeId:UInt64) {
+    
+    let message = OpenLCBMessage(messageTypeIndicator: .tractionControlReply)
+
+    message.sourceNodeId = sourceNodeId
+    
+    message.destinationNodeId = destinationNodeId
+    
+    let nc = UInt8(min(0xff, nodeCount) & 0xff)
+    
+    message.payload = [
+      OpenLCBTractionControlInstructionType.listenerConfiguration.rawValue,
+      OpenLCBTractionListenerConfigurationType.queryNodes.rawValue,
+      nc,
+      UInt8(nodeIndex),
+      flags
+    ]
+    
+    var ln = listenerNodeId.bigEndianData
+    ln.removeFirst(2)
+    
+    message.payload.append(contentsOf: ln)
+    
+    sendMessage(message: message)
+    
+  }
+
+  public func sendListenerQueryNodeReplyShort(sourceNodeId:UInt64, destinationNodeId:UInt64, nodeCount:Int) {
+    
+    let message = OpenLCBMessage(messageTypeIndicator: .tractionControlReply)
+
+    message.sourceNodeId = sourceNodeId
+    
+    message.destinationNodeId = destinationNodeId
+    
+    let nc = UInt8(min(0xff, nodeCount) & 0xff)
+    
+    message.payload = [
+      OpenLCBTractionControlInstructionType.listenerConfiguration.rawValue,
+      OpenLCBTractionListenerConfigurationType.queryNodes.rawValue,
+      nc,
+    ]
+    
+    sendMessage(message: message)
+    
+  }
+  
+  public func sendHeartbeatRequest(sourceNodeId:UInt64, destinationNodeId:UInt64, timeout:UInt8) {
+    
+    let message = OpenLCBMessage(messageTypeIndicator: .tractionControlReply)
+
+    message.sourceNodeId = sourceNodeId
+    
+    message.destinationNodeId = destinationNodeId
+    
+    message.payload = [
+      OpenLCBTractionControlInstructionType.tractionManagement.rawValue,
+      OpenLCBTractionManagementType.noopOrHeartbeatRequest.rawValue,
+      timeout
+    ]
+    
     sendMessage(message: message)
     
   }
