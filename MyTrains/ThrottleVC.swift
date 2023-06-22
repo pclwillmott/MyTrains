@@ -129,11 +129,11 @@ class ThrottleVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegate
         break
       }
       
-      vsThrottle.integerValue = locomotive.targetSpeed.speed
+      vsThrottle.integerValue = Int(locomotive.targetSpeed.speed)
       
       lblTargetStep.integerValue = vsThrottle.integerValue
       
-      lblSpeed.integerValue = locomotive.speed.speed
+      lblSpeed.integerValue = Int(locomotive.speed.speed)
       
       chkInertial.state = locomotive.isInertial ? .on : .off
       
@@ -277,7 +277,7 @@ class ThrottleVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegate
     radReverse.state = .off
  
     if let loco = locomotive {
-      let speed = lblTargetStep.integerValue
+      let speed = UInt8(lblTargetStep.integerValue)
       loco.targetSpeed = (speed: speed, direction: radForward.state == .on ? .forward : .reverse)
     }
     
@@ -291,7 +291,7 @@ class ThrottleVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegate
     radReverse.state = .on
  
     if let loco = locomotive {
-      let speed = lblTargetStep.integerValue
+      let speed = UInt8(lblTargetStep.integerValue)
       loco.targetSpeed = (speed: speed, direction: radForward.state == .on ? .forward : .reverse)
     }
     
@@ -305,7 +305,7 @@ class ThrottleVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegate
   
   @IBAction func vsThrottleAction(_ sender: NSSlider) {
     if let loco = locomotive {
-      let speed = sender.integerValue
+      let speed = UInt8(sender.integerValue)
       loco.targetSpeed = (speed: speed, direction: radForward.state == .on ? .forward : .reverse)
     }
     lblTargetStep.stringValue = "\(sender.integerValue)"
