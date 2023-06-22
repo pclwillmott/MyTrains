@@ -13,41 +13,80 @@ import Cocoa
   @objc optional func stealZap(locomotive: Locomotive)
 }
 
-public typealias LocomotiveSpeed = (speed: Int, direction: LocomotiveDirection)
+public typealias LocomotiveSpeed = (speed: UInt8, direction: LocomotiveDirection)
 
-public typealias LocomotiveState = (speed:Int, direction:LocomotiveDirection, functions:Int)
+public typealias LocomotiveStateWithTimeStamp = (state: LocoNetLocomotiveState, timeStamp: TimeInterval)
 
-public typealias LocomotiveStateWithTimeStamp = (state: LocomotiveState, timeStamp: TimeInterval?)
+public let maskF0  : UInt64 = 0b00000000000000000000000000000001
+public let maskF1  : UInt64 = 0b00000000000000000000000000000010
+public let maskF2  : UInt64 = 0b00000000000000000000000000000100
+public let maskF3  : UInt64 = 0b00000000000000000000000000001000
+public let maskF4  : UInt64 = 0b00000000000000000000000000010000
+public let maskF5  : UInt64 = 0b00000000000000000000000000100000
+public let maskF6  : UInt64 = 0b00000000000000000000000001000000
+public let maskF7  : UInt64 = 0b00000000000000000000000010000000
+public let maskF8  : UInt64 = 0b00000000000000000000000100000000
+public let maskF9  : UInt64 = 0b00000000000000000000001000000000
+public let maskF10 : UInt64 = 0b00000000000000000000010000000000
+public let maskF11 : UInt64 = 0b00000000000000000000100000000000
+public let maskF12 : UInt64 = 0b00000000000000000001000000000000
+public let maskF13 : UInt64 = 0b00000000000000000010000000000000
+public let maskF14 : UInt64 = 0b00000000000000000100000000000000
+public let maskF15 : UInt64 = 0b00000000000000001000000000000000
+public let maskF16 : UInt64 = 0b00000000000000010000000000000000
+public let maskF17 : UInt64 = 0b00000000000000100000000000000000
+public let maskF18 : UInt64 = 0b00000000000001000000000000000000
+public let maskF19 : UInt64 = 0b00000000000010000000000000000000
+public let maskF20 : UInt64 = 0b00000000000100000000000000000000
+public let maskF21 : UInt64 = 0b00000000001000000000000000000000
+public let maskF22 : UInt64 = 0b00000000010000000000000000000000
+public let maskF23 : UInt64 = 0b00000000100000000000000000000000
+public let maskF24 : UInt64 = 0b00000001000000000000000000000000
+public let maskF25 : UInt64 = 0b00000010000000000000000000000000
+public let maskF26 : UInt64 = 0b00000100000000000000000000000000
+public let maskF27 : UInt64 = 0b00001000000000000000000000000000
+public let maskF28 : UInt64 = 0b00010000000000000000000000000000
 
-public let maskF0  = 0b00000000000000000000000000000001
-public let maskF1  = 0b00000000000000000000000000000010
-public let maskF2  = 0b00000000000000000000000000000100
-public let maskF3  = 0b00000000000000000000000000001000
-public let maskF4  = 0b00000000000000000000000000010000
-public let maskF5  = 0b00000000000000000000000000100000
-public let maskF6  = 0b00000000000000000000000001000000
-public let maskF7  = 0b00000000000000000000000010000000
-public let maskF8  = 0b00000000000000000000000100000000
-public let maskF9  = 0b00000000000000000000001000000000
-public let maskF10 = 0b00000000000000000000010000000000
-public let maskF11 = 0b00000000000000000000100000000000
-public let maskF12 = 0b00000000000000000001000000000000
-public let maskF13 = 0b00000000000000000010000000000000
-public let maskF14 = 0b00000000000000000100000000000000
-public let maskF15 = 0b00000000000000001000000000000000
-public let maskF16 = 0b00000000000000010000000000000000
-public let maskF17 = 0b00000000000000100000000000000000
-public let maskF18 = 0b00000000000001000000000000000000
-public let maskF19 = 0b00000000000010000000000000000000
-public let maskF20 = 0b00000000000100000000000000000000
-public let maskF21 = 0b00000000001000000000000000000000
-public let maskF22 = 0b00000000010000000000000000000000
-public let maskF23 = 0b00000000100000000000000000000000
-public let maskF24 = 0b00000001000000000000000000000000
-public let maskF25 = 0b00000010000000000000000000000000
-public let maskF26 = 0b00000100000000000000000000000000
-public let maskF27 = 0b00001000000000000000000000000000
-public let maskF28 = 0b00010000000000000000000000000000
+public let maskF29 : UInt64 = 0b0000000000000000000000000000000000000001
+public let maskF30 : UInt64 = 0b0000000000000000000000000000000000000010
+public let maskF31 : UInt64 = 0b0000000000000000000000000000000000000100
+public let maskF32 : UInt64 = 0b0000000000000000000000000000000000001000
+public let maskF33 : UInt64 = 0b0000000000000000000000000000000000010000
+public let maskF34 : UInt64 = 0b0000000000000000000000000000000000100000
+public let maskF35 : UInt64 = 0b0000000000000000000000000000000001000000
+public let maskF36 : UInt64 = 0b0000000000000000000000000000000010000000
+public let maskF37 : UInt64 = 0b0000000000000000000000000000000100000000
+public let maskF38 : UInt64 = 0b0000000000000000000000000000001000000000
+public let maskF39 : UInt64 = 0b0000000000000000000000000000010000000000
+public let maskF40 : UInt64 = 0b0000000000000000000000000000100000000000
+public let maskF41 : UInt64 = 0b0000000000000000000000000001000000000000
+public let maskF42 : UInt64 = 0b0000000000000000000000000010000000000000
+public let maskF43 : UInt64 = 0b0000000000000000000000000100000000000000
+public let maskF44 : UInt64 = 0b0000000000000000000000001000000000000000
+public let maskF45 : UInt64 = 0b0000000000000000000000010000000000000000
+public let maskF46 : UInt64 = 0b0000000000000000000000100000000000000000
+public let maskF47 : UInt64 = 0b0000000000000000000001000000000000000000
+public let maskF48 : UInt64 = 0b0000000000000000000010000000000000000000
+public let maskF49 : UInt64 = 0b0000000000000000000100000000000000000000
+public let maskF50 : UInt64 = 0b0000000000000000001000000000000000000000
+public let maskF51 : UInt64 = 0b0000000000000000010000000000000000000000
+public let maskF52 : UInt64 = 0b0000000000000000100000000000000000000000
+public let maskF53 : UInt64 = 0b0000000000000001000000000000000000000000
+public let maskF54 : UInt64 = 0b0000000000000010000000000000000000000000
+public let maskF55 : UInt64 = 0b0000000000000100000000000000000000000000
+public let maskF56 : UInt64 = 0b0000000000001000000000000000000000000000
+public let maskF57 : UInt64 = 0b0000000000010000000000000000000000000000
+public let maskF58 : UInt64 = 0b0000000000100000000000000000000000000000
+public let maskF59 : UInt64 = 0b0000000001000000000000000000000000000000
+public let maskF60 : UInt64 = 0b0000000010000000000000000000000000000000
+public let maskF61 : UInt64 = 0b0000000100000000000000000000000000000000
+public let maskF62 : UInt64 = 0b0000001000000000000000000000000000000000
+public let maskF63 : UInt64 = 0b0000010000000000000000000000000000000000
+public let maskF64 : UInt64 = 0b0000100000000000000000000000000000000000
+public let maskF65 : UInt64 = 0b0001000000000000000000000000000000000000
+public let maskF66 : UInt64 = 0b0010000000000000000000000000000000000000
+public let maskF67 : UInt64 = 0b0100000000000000000000000000000000000000
+public let maskF68 : UInt64 = 0b1000000000000000000000000000000000000000
 
 public let locomotiveUpdateInterval : TimeInterval = 250.0 / 1000.0
 
@@ -95,7 +134,7 @@ public class Locomotive : RollingStock, InterfaceDelegate {
     }
   }
   
-  private var lastLocomotiveState : LocomotiveState = (speed: 0, direction: .forward, functions: 0)
+  private var lastLocomotiveState : LocoNetLocomotiveState = (speed: 0, direction: .forward, functions: 0, extendedFunctions: 0)
   
   private var lastTimeStamp : TimeInterval = -1.0
   
@@ -228,9 +267,9 @@ public class Locomotive : RollingStock, InterfaceDelegate {
   
   public var routeDirection : RouteDirection = .next
   
-  public var locomotiveState : LocomotiveState {
+  public var locomotiveState : LocoNetLocomotiveState {
     get {
-      var result : LocomotiveState
+      var result : LocoNetLocomotiveState
 
       if initState == .release {
         speed = (speed:0, direction: speed.direction)
@@ -240,7 +279,9 @@ public class Locomotive : RollingStock, InterfaceDelegate {
         result.functions = functionSettings
       }
       
-      result.speed = speed.speed == 0 ? 0 : speed.speed + 1
+      result.extendedFunctions = 0
+      
+      result.speed = (speed.speed == 0) ? 0 : speed.speed + 1
       result.direction = speed.direction
 
       return result
@@ -277,7 +318,7 @@ public class Locomotive : RollingStock, InterfaceDelegate {
       
       let spd = lastLocomotiveState.speed == 0 ? 0 : lastLocomotiveState.speed - 1
       
-      let velocity = (lastLocomotiveState.direction == .forward) ? speedProfile[spd].bestFitForward : speedProfile[spd].bestFitReverse
+      let velocity = (lastLocomotiveState.direction == .forward) ? speedProfile[Int(spd)].bestFitForward : speedProfile[Int(spd)].bestFitReverse
       
       let distance = ((newTimeStamp - lastTimeStamp) * velocity)
       
@@ -289,7 +330,7 @@ public class Locomotive : RollingStock, InterfaceDelegate {
         speed = targetSpeed
       }
       
-      let result = interface.updateLocomotiveState(slotNumber: slotNumber, slotPage: slotPage, previousState: lastLocomotiveState, nextState: locomotiveState, throttleID: throttle, forceRefresh: false && forceRefresh)
+      let result = interface.updateLocomotiveState(address: mDecoderAddress, slotNumber: slotNumber, slotPage: slotPage, previousState: lastLocomotiveState, nextState: locomotiveState, throttleID: throttle, forceRefresh: false && forceRefresh)
       
       lastLocomotiveState = result.state
       
@@ -300,9 +341,7 @@ public class Locomotive : RollingStock, InterfaceDelegate {
       if autoRouteActive {
  //       autoRouteLock.lock()
         autoRouteDistanceTravelled += distance
-        if let _ = result.timeStamp {
-          recentStates.append(result)
-        }
+        recentStates.append(result)
  //       autoRouteLock.unlock()
       }
     
@@ -350,7 +389,7 @@ public class Locomotive : RollingStock, InterfaceDelegate {
         // Stopping distance reached or overshot
         
         else if distanceToDestination <= autoRouteDistanceToStop(lastLocomotiveState:lastLocomotiveState, autoRouteIncrement: 1) + 1.5 {
-          speed.speed -= autoRouteStepIncToStop(lastLocomotiveState:lastLocomotiveState, distance:distanceToDestination)
+          speed.speed -= UInt8(autoRouteStepIncToStop(lastLocomotiveState:lastLocomotiveState, distance:distanceToDestination))
           speed.speed = max(1,speed.speed)
         }
         else {
@@ -385,7 +424,7 @@ public class Locomotive : RollingStock, InterfaceDelegate {
             
             let distanceToNextBlock = distance - autoRouteDistanceTravelled
             
-            speed.speed -= autoRouteStepIncToSpeedStep(lastLocomotiveState:lastLocomotiveState, distance: distanceToNextBlock, targetSpeed: nBlockStep)
+            speed.speed -= UInt8(autoRouteStepIncToSpeedStep(lastLocomotiveState:lastLocomotiveState, distance: distanceToNextBlock, targetSpeed: nBlockStep))
             
           }
           else {
@@ -419,15 +458,15 @@ public class Locomotive : RollingStock, InterfaceDelegate {
       }
       else if isInertial {
         let tsign = targetSpeed.direction == .forward ? 1 : -1
-        let ts = targetSpeed.speed * tsign
+        let ts = Int(targetSpeed.speed) * tsign
         let csign = speed.direction == .forward ? 1 : -1
-        var cs = speed.speed * csign
+        var cs = Int(speed.speed) * csign
         if ts != cs {
           let increment = ts <= cs ? -1 : 1
           cs += increment
           cs = increment < 0 ? max(ts,cs) : min(ts,cs)
           let newDirection : LocomotiveDirection = cs >= 0 ? .forward : .reverse
-          let newSpeed = abs(cs)
+          let newSpeed = UInt8(abs(cs))
           speed = (speed: newSpeed, direction: newDirection)
         }
       }
@@ -436,11 +475,11 @@ public class Locomotive : RollingStock, InterfaceDelegate {
     
   }
   
-  private func autoRouteDistanceToStop(lastLocomotiveState:LocomotiveState, autoRouteIncrement:Int) -> Double {
+  private func autoRouteDistanceToStop(lastLocomotiveState:LocoNetLocomotiveState, autoRouteIncrement:Int) -> Double {
     return autoRouteDistanceToSpeedStep(lastLocomotiveState:lastLocomotiveState, targetSpeed: 0, autoRouteIncrement: autoRouteIncrement)
   }
 
-  private func autoRouteDistanceToSpeedStep(lastLocomotiveState:LocomotiveState, targetSpeed: Int, autoRouteIncrement:Int) -> Double {
+  private func autoRouteDistanceToSpeedStep(lastLocomotiveState:LocoNetLocomotiveState, targetSpeed: Int, autoRouteIncrement:Int) -> Double {
     
     var distance = 0.0
     
@@ -448,13 +487,13 @@ public class Locomotive : RollingStock, InterfaceDelegate {
     
     while spd > targetSpeed {
       
-      let profile = speedProfile[spd]
+      let profile = speedProfile[Int(spd)]
       
       let velocity = (lastLocomotiveState.direction == .forward) ? profile.bestFitForward : profile.bestFitReverse
       
       distance += (locomotiveUpdateInterval * velocity)
       
-      spd -= autoRouteIncrement
+      spd -= UInt8(autoRouteIncrement)
       
     }
     
@@ -462,11 +501,11 @@ public class Locomotive : RollingStock, InterfaceDelegate {
     
   }
 
-  private func autoRouteStepIncToStop(lastLocomotiveState:LocomotiveState, distance:Double) -> Int {
+  private func autoRouteStepIncToStop(lastLocomotiveState:LocoNetLocomotiveState, distance:Double) -> Int {
     return autoRouteStepIncToSpeedStep(lastLocomotiveState:lastLocomotiveState, distance: distance, targetSpeed: 0)
   }
   
-  private func autoRouteStepIncToSpeedStep(lastLocomotiveState:LocomotiveState, distance:Double, targetSpeed: Int) -> Int {
+  private func autoRouteStepIncToSpeedStep(lastLocomotiveState:LocoNetLocomotiveState, distance:Double, targetSpeed: Int) -> Int {
     var increment : Int = 1
     while increment < 10 && autoRouteDistanceToSpeedStep(lastLocomotiveState:lastLocomotiveState, targetSpeed: targetSpeed, autoRouteIncrement: increment) > distance {
       increment += 1
@@ -788,7 +827,7 @@ public class Locomotive : RollingStock, InterfaceDelegate {
           slotPage = locoSlotDataP1.slotPage
           slotNumber = locoSlotDataP1.slotNumber
           if initState == .waitingForSlot {
-            let spd = locoSlotDataP1.speed < 2 ? 0 : locoSlotDataP1.speed - 1
+            let spd = UInt8(locoSlotDataP1.speed < 2 ? 0 : locoSlotDataP1.speed - 1)
             let dir = locoSlotDataP1.direction
             speed = (speed:spd, direction: dir)
             if locoSlotDataP1.slotState == .inUse {
@@ -860,7 +899,7 @@ public class Locomotive : RollingStock, InterfaceDelegate {
                 
             }
 
-            let spd = locoSlotDataP2.speed < 2 ? 0 : locoSlotDataP2.speed - 1
+            let spd = UInt8(locoSlotDataP2.speed < 2 ? 0 : locoSlotDataP2.speed - 1)
             let dir = locoSlotDataP2.direction
             speed = (speed:spd, direction: dir)
             
@@ -895,7 +934,7 @@ public class Locomotive : RollingStock, InterfaceDelegate {
         }
         
         // filter those blocks of interest.
-        
+        /*
         if let block = interface.generalSensorLookup[message.sensorAddress], message.sensorState && blocksInRoute.contains(block.primaryKey) && !blocksToIgnore.contains(block.primaryKey) {
           
           if block == destinationBlock {
@@ -1033,7 +1072,7 @@ public class Locomotive : RollingStock, InterfaceDelegate {
           autoRouteLock.unlock()
           
         }
-
+*/
       default:
         break
       }
