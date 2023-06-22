@@ -201,12 +201,12 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
     switch message.messageType {
     case .sensRepGenIn:
       
-      locomotive?.targetSpeed = (speed: currentStep, direction:locomotiveDirection)
+      locomotive?.targetSpeed = (speed: UInt8(currentStep), direction:locomotiveDirection)
 
       if mode == .idle || mode == .setupNextRun {
         return
       }
-      
+      /*
       if let block = interface?.generalSensorLookup[message.sensorAddress], message.sensorState {
         
         var newIndex : Int = -1
@@ -374,7 +374,7 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
         }
                 
       }
-
+*/
     default:
       break
     }
@@ -476,7 +476,7 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
 
         mode = .gettingUptoSpeed
         
-        locomotive.targetSpeed = (speed: currentStep, direction:locomotiveDirection)
+        locomotive.targetSpeed = (speed: UInt8(currentStep), direction:locomotiveDirection)
         
  //       locomotive.forceRefresh = true
         
