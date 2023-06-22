@@ -257,7 +257,11 @@ class MonitorVC: NSViewController, MyTrainsControllerDelegate, InterfaceDelegate
           interface.addToQueue(message: message, delay: MessageTiming.STANDARD)
       }
       else {
-        interface.immPacket(packet: numbers, repeatCount: cboIMMRepeat.integerValue)
+        var data : [UInt8] = []
+        for number in numbers {
+          data.append(UInt8(number & 0xff))
+        }
+        interface.immPacket(packet: data, repeatCount: cboIMMRepeat.integerValue)
       }
       
     }
@@ -377,7 +381,7 @@ class MonitorVC: NSViewController, MyTrainsControllerDelegate, InterfaceDelegate
       else {
  //       print("slot: \(message.message[2]) addr: \(addr)")
         addr += 1
-        interface?.getLocoSlot(forAddress: addr, locoNetProtocol: 1)
+ //       interface?.getLocoSlot(forAddress: addr, locoNetProtocol: 1)
       }
     }
     
@@ -388,7 +392,7 @@ class MonitorVC: NSViewController, MyTrainsControllerDelegate, InterfaceDelegate
       else {
    //     print("slot: \(message.message[2]).\(message.message[3]) addr: \(addr)")
         addr += 1
-        interface?.getLocoSlot(forAddress: addr, locoNetProtocol: 2)
+  //      interface?.getLocoSlot(forAddress: addr, locoNetProtocol: 2)
       }
     }
     
