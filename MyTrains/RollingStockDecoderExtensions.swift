@@ -11,10 +11,10 @@ extension RollingStock {
   
   // MARK: Public Properties
   
-  public var functionSettings : Int {
+  public var functionSettings : UInt64 {
     get {
-      var result = 0
-      var mask = 1
+      var result : UInt64 = 0
+      var mask : UInt64 = 1
       for locoFunc in functions {
         result |= locoFunc.stateToSend ? mask : 0
         mask <<= 1
