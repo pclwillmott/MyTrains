@@ -199,7 +199,7 @@ class SlotViewVC : NSViewController, NSWindowDelegate, InterfaceDelegate {
   }
 
   @objc func slotsUpdated(interface: InterfaceLocoNet) {
-    slots = interface.locoSlots
+  //  slots = interface.locoSlots
   }
 
   // MARK: Outlets & Actions
@@ -254,7 +254,7 @@ class SlotViewVC : NSViewController, NSWindowDelegate, InterfaceDelegate {
   @IBOutlet weak var btnReadAllSlots: NSButton!
   
   @IBAction func btnReadAllSlotsAction(_ sender: NSButton) {
-  
+  /*
     if let cs = commandStation, let interface = self.interface, let _ = cs.maxSlotNumber {
       state = .readAll
       slotPage = 0
@@ -262,7 +262,7 @@ class SlotViewVC : NSViewController, NSWindowDelegate, InterfaceDelegate {
       lblStatus.stringValue = "Reading \(slotPage).\(slotNumber)"
       interface.getLocoSlotDataP2(slotPage: slotPage, slotNumber: slotNumber)
     }
-    
+    */
   }
   
   @IBOutlet weak var btnClearSlot: NSButton!
