@@ -27,25 +27,9 @@ public class InterfaceLocoNet : Interface {
   
   private var interfaceState : InterfaceState = .idle
   
-  internal var _locoSlots : [Int:LocoSlotData] = [:]
+  internal var commandStationType : LocoNetCommandStationType = .DT200
   
   // MARK: Public Properties
-  
-  public var generalSensorLookup : [Int:IOFunction] = [:] // Key is address
-  
-  public var transponderSensorLookup : [Int:IOFunction] = [:] // Key is address
-  
-  public var trackFaultSensorLookup : [Int:IOFunction] = [:] // Key is address
-  
-  public var turnoutLookup : [Int:TurnoutSwitch] = [:]
-  
-  public var opSwBankA : LocoNetMessage?
-  
-  public var opSwBankB : LocoNetMessage?
-  
-  public var globalSystemTrackStatus : UInt8?
-  
-  public var isEdit : Bool = false
   
   public var commandStation : InterfaceLocoNet? {
     get {
@@ -53,288 +37,56 @@ public class InterfaceLocoNet : Interface {
     }
   }
   
-  public var partialSerialNumberLow : Int = -1
+  public var trackPowerOn : Bool = false
   
-  public var partialSerialNumberHigh : Int = -1
+  public var globalEmergencyStop : Bool = false
   
-  // MARK: Private Methods
-  
-  private func slotsUpdated() {
-    for kv in observers {
-      kv.value.slotsUpdated?(interface: self)
+  public var implementsProtocol0 : Bool {
+    get {
+      return commandStationType.protocolsSupported.contains(.protocol0)
     }
   }
   
+  public var implementsProtocol1 : Bool {
+    get {
+      return commandStationType.protocolsSupported.contains(.protocol1)
+    }
+  }
+
+  public var implementsProtocol2 : Bool {
+    get {
+      return commandStationType.protocolsSupported.contains(.protocol2)
+    }
+  }
+
+  // MARK: Private Methods
+  
   private func networkMessageReceived(message: LocoNetMessage) {
     
-//    let printOpSw = true
-
     switch message.messageType {
       
-    case .iplDevData:
-      
-      let iplDevData = IPLDevData(message: message)
-      
-      var newDevice = true
-      
-      for kv in myTrainsController.locoNetDevices {
-        
-        let device = kv.value
-        
-        if let info = device.locoNetProductInfo, info.productCode == iplDevData.productCode &&
-            device.serialNumber == iplDevData.serialNumber {
-  
-          newDevice = false
-          
-          device.softwareVersion = iplDevData.softwareVersion
-          device.boardId = iplDevData.boardId + 1
-   //       device.networkId = message.networkId
-          
-          device.save()
-          
-          if info.attributes.contains(.CommandStation) {
-
-            if let net = network {
-              net.commandStationId = device.primaryKey
-              net.save()
-            }
-          }
-          
-        }
-        
-      }
-      
-      if newDevice {
-        
-        if let info = iplDevData.productCode.product() {
-          
-          var dev : LocoNetDevice?
-          
-          if info.attributes.intersection([.ComputerInterface, .CommandStation]).isEmpty {
-            dev = LocoNetDevice(primaryKey: -1)
-          }
-          else if info.productCode == .BXP88 {
-            dev = IODeviceBXP88(primaryKey: -1)
-          }
-          else {
-            dev = Interface(primaryKey: -1)
-          }
-          
-          if let device = dev {
-            
-            device.networkId = message.networkId
-            device.boardId = iplDevData.boardId + 1
-            device.softwareVersion = iplDevData.softwareVersion
-            device.serialNumber = iplDevData.serialNumber
-            device.locoNetProductId = info.id
-            device.deviceName = device.iplName
-            
-            if !isEdit {
-              
-              device.save()
-              
-              myTrainsController.addDevice(device: device)
-              
-              if let net = network, info.attributes.contains(.CommandStation) {
-                net.commandStationId = device.primaryKey
-                net.save()
-              }
-              
-            }
-
-          }
-          
-        }
-        
-      }
-      
-      myTrainsController.networkControllerStatusUpdated()
-
     case .opSwDataAP1:
       
-      commandStation?.opSwBankA = message
-      commandStation?.globalSystemTrackStatus = message.message[7]
-    /*
-      if printOpSw {
-        
- //       <E7 0E 7F 00 03 30 02 47 01 08 00 1A 60 6C>
- //       <E7 0E 7E 11 00 22 00 47 33 00 44 00 60 0B>
-        
-        var opSw = 1
-        var byte = 3
-        
-     //   var mess : [UInt8] = message.message
-    //    mess = [0xE7, 0x0E, 0x7F, 0x00, 0x03, 0x30, 0x02, 0x47, 0x01, 0x08, 0x00, 0x1A, 0x60, 0x6C]
-
-    //    print("DCS210+")
-        
-        while byte < 12 {
-          
-          for shift in 0...7 {
-            let mask : UInt8 = 1 << shift
-       //     let opSwState : Bool = (mess[byte] & mask) == mask
-            if opSw % 8 != 0 {
-        //      print("\(opSw)\t\(opSwState ? "Closed" : "Thrown")")
-            }
-            opSw += 1
-          }
-          
-          byte += 1
-          if byte == 7 {
-            byte += 1
-          }
-          
-        }
-        
- //       print("----------------")
-        
-      }
-      */
-    case .opSwDataBP1:
+      let trackByte = message.message[7]
       
-      commandStation?.opSwBankB = message
-      commandStation?.globalSystemTrackStatus = message.message[7]
-      /*
-      if printOpSw {
-        
-        var opSw = 65
-        var byte = 3
-        
-        var mess : [UInt8] = message.message
-//        mess = [0xE7, 0x0E, 0x7E, 0x11, 0x00, 0x22, 0x00, 0x47, 0x33, 0x00, 0x44, 0x00, 0x60, 0x0B]
-        
-  //      print("DCS210+")
- 
-        while byte < 12 {
-          
-          for shift in 0...7 {
-            let mask : UInt8 = 1 << shift
-            let opSwState : Bool = (mess[byte] & mask) == mask
-            if opSw % 8 != 0 {
-         //     print("\(opSw)\t\(opSwState ? "Closed" : "Thrown")")
-            }
-            opSw += 1
-          }
-          
-          byte += 1
-          if byte == 7 {
-            byte += 1
-          }
-          
-        }
-        
-    //    print("----------------")
-        
-      }
-*/
-     
-    case .fastClockData:
-      commandStation?.globalSystemTrackStatus = message.message[7]
-      
-    case .locoSlotDataP1:
-      commandStation?.globalSystemTrackStatus = message.message[7]
-      let slot = LocoSlotData(locoSlotDataP1: LocoSlotDataP1(networkId: self.networkId, data: message.message))
-      _locoSlots[slot.slotID] = slot
-      slotsUpdated()
+      let mask_TrackPower    : UInt8 = 0b00000001
+      let mask_EmergencyStop : UInt8 = 0b00000010
+      let mask_Protocol1     : UInt8 = 0b00000100
 
-    case .locoSlotDataP2:
-      commandStation?.globalSystemTrackStatus = message.message[7]
-      let slot = LocoSlotData(locoSlotDataP2: LocoSlotDataP2(networkId: self.networkId, data: message.message))
-      _locoSlots[slot.slotID] = slot
-      slotsUpdated()
-
-//    case .sensRepTurnIn:
-  //    print("sensRepTurnIn: \(message.turnoutReportAddress) \(message.sensorState)")
-      
-//    case .sensRepTurnOut:
-  //    print("sensRepTurnOut: \(message.turnoutReportAddress) \(message.sensorState)")
-    
-    case .pmRepBXP88:
-      
-      for address in message.detectionSectionsSet.notSet {
-      
-        if let sensor = trackFaultSensorLookup[address] {
-
-          for item in sensor.switchBoardItems {
-            item.isTrackFault = false
-          }
-          
-        }
-        
-      }
-
-      for address in message.detectionSectionsSet.set {
-      
-        if let sensor = trackFaultSensorLookup[address] {
-
-          for item in sensor.switchBoardItems {
-            item.isTrackFault = true
-          }
-          
-        }
-        
+      if (trackByte & mask_Protocol1) == mask_Protocol1, let csType = LocoNetCommandStationType(rawValue: message.message[11]) {
+          commandStationType = csType
       }
       
-
-  
-    case .sensRepGenIn:
+      trackPowerOn = (trackByte & mask_TrackPower) == mask_TrackPower
       
-   //   print("sensRepGenIn: \(message.sensorAddress) \(message.sensorState)")
-      
-      if let sensor = generalSensorLookup[message.sensorAddress], let layout = network?.layout {
-        
-        let state = sensor.inverted ? !message.sensorState : message.sensorState
-        
-        for item in sensor.switchBoardItems {
-          switch sensor.sensorType {
-          case .position:
-            item.isOccupied = state
-            break
-          case .turnoutState:
-            if item.sw1Sensor1 == sensor {
-              item.sw1?.state = state ? .thrown : item.sw1Sensor2 == nil ? .closed : .unknown
-            }
-            else if item.sw1Sensor2 == sensor {
-              item.sw1?.state = state ? .closed : item.sw1Sensor1 == nil ? .thrown : .unknown
-            }
-            else if item.sw2Sensor1 == sensor {
-              item.sw2?.state = state ? .thrown : item.sw2Sensor2 == nil ? .closed : .unknown
-            }
-            else if item.sw2Sensor2 == sensor {
-              item.sw2?.state = state ? .closed : item.sw2Sensor1 == nil ? .thrown : .unknown
-            }
-            break
-          case .occupancy:
-            item.isOccupied = state
-          default:
-            break
-          }
-        }
-        
-        layout.needsDisplay()
-        
+      if commandStationType.idleSupportedByDefault {
+        globalEmergencyStop = (trackByte & mask_EmergencyStop) != mask_EmergencyStop
       }
+      
     default:
       break
     }
     
-    var newSlot = false
-    
-    for slotNumber in message.slotsChanged {
-      if let slot = _locoSlots[slotNumber] {
-        slot.isDirty = true
-      }
-      else {
-        let slot = LocoSlotData(slotID: slotNumber)
-        _locoSlots[slotNumber] = slot
-        newSlot = true
-      }
-    }
-    
-    if newSlot {
-      slotsUpdated()
-    }
-
   }
   
   private func sendMessage() {
@@ -419,71 +171,7 @@ public class InterfaceLocoNet : Interface {
   }
 
   // MARK: Public Methods
-      
-  public func initSensorLookup() {
-    
-    generalSensorLookup.removeAll()
-    transponderSensorLookup.removeAll()
-    trackFaultSensorLookup.removeAll()
-
-    for (_, ioFunction) in myTrainsController.sensors {
-      ioFunction.switchBoardItems.removeAll()
-      switch ioFunction.sensorType {
-      case .trackFault:
-        trackFaultSensorLookup[ioFunction.address] = ioFunction
-      case .transponder:
-        transponderSensorLookup[ioFunction.address] = ioFunction
-      case .occupancy, .position:
-        generalSensorLookup[ioFunction.address] = ioFunction
-      default:
-        break
-      }
-    }
-     
-    turnoutLookup.removeAll()
-    
-    if let layout = myTrainsController.layout {
-      
-      layout.operationalTurnouts.removeAll()
-      
-      for (_, item) in layout.switchBoardItems {
         
-        if item.isBlock || item.isFeedback || item.isTurnout {
-          
-          if let sensor = item.generalSensor {
-            sensor.switchBoardItems.append(item)
-          }
-          
-          if let sensor = item.transponderSensor {
-            sensor.switchBoardItems.append(item)
-          }
-          
-          if let sensor = item.trackFaultSensor {
-            sensor.switchBoardItems.append(item)
-          }
-          
-        }
-        else if item.isTurnout {
-          if let sensor = item.sw1Sensor1 {
-            sensor.switchBoardItems.append(item)
-          }
-          if let sensor = item.sw1Sensor2 {
-            sensor.switchBoardItems.append(item)
-          }
-   //       if let sensor = item.sw2Sensor1 {
-   //         sensor.switchBoardItems.append(item)
-   //       }
-   //       if let sensor = item.sw2Sensor2 {
-   //         sensor.switchBoardItems.append(item)
-   //       }
-        }
-        
-      }
-      
-    }
-    
-  }
-  
   public func addToQueue(message:LocoNetMessage, delay:TimeInterval, responses: Set<LocoNetMessageType>, retryCount: Int, timeoutCode: TimeoutCode) {
     
     let item = LocoNetOutputQueueItem(message: message, delay: delay, responses: responses, retryCount: retryCount, timeoutCode: timeoutCode)
@@ -651,10 +339,11 @@ public class InterfaceLocoNet : Interface {
   }
   
   public override func serialPortWasOpened(_ serialPort: MTSerialPort) {
+    
     super.serialPortWasOpened(serialPort)
-    if !isEdit {
-      iplDiscover()
-    }
+    
+    getOpSwDataAP1()
+    
   }
   
 }
