@@ -144,7 +144,7 @@ public class LocoSlotData {
   
   public var throttleID : Int
   
-  public var functions : Int
+  public var functions : UInt64
   
   public var isF9F28Available : Bool
   
@@ -287,7 +287,7 @@ public class LocoSlotData {
       
       speed = Int(data[8])
       
-      var fnx : Int = 0
+      var fnx : UInt64 = 0
       
       var byte = data[9]
 
@@ -352,7 +352,7 @@ public class LocoSlotData {
       return "?"
     }
     
-    let mask = 1 << functionNumber
+    let mask : UInt64 = 1 << functionNumber
     
     return (functions & mask) == mask ? "on" : "off"
     
