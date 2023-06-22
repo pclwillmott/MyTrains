@@ -100,10 +100,10 @@ public class LocoSlotDataP1 : LocoNetMessage {
     }
   }
   
-  public var functions : Int {
+  public var functions : UInt64 {
     get {
       
-      var fnx : Int = 0
+      var fnx : UInt64 = 0
       
       var byte = message[6]
       
