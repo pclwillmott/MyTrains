@@ -562,7 +562,7 @@ public class MyTrainsController : NSObject, InterfaceDelegate, NSUserNotificatio
 
   public func powerIdle() {
     for (_, interface) in locoNetInterfaces {
-      interface.powerIdle()
+      interface.emergencyStop()
     }
   }
 
