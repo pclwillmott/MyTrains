@@ -304,7 +304,7 @@ class EditInterfacesVC: NSViewController, NSWindowDelegate, DBEditorDelegate, My
     }
     tempInterface = InterfaceLocoNet(primaryKey: -1)
     if let device = tempInterface {
-      device.isEdit = true
+  //    device.isEdit = true
       setFields(device: device)
       observerId = device.addObserver(observer: self)
       device.open()
