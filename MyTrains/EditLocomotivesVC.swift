@@ -62,7 +62,7 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   
   private var cboModelManufacturerDS = ComboBoxDictDS()
   
-  private var fnTableViewDS = FNTableViewDS()
+//  private var fnTableViewDS = FNTableViewDS()
   
   // MARK: DBEditorDelegate Methods
   
@@ -125,9 +125,9 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
       cboModelManufacturer.selectItem(at: cboModelManufacturerDS.indexWithKey(key: locomotive.manufacturerId) ?? -1)
       txtPurchaseDate.stringValue = locomotive.purchaseDate
       txtNotes.string = locomotive.notes
-      fnTableViewDS.fns = locomotive.functions
-      fnTableView.dataSource = fnTableViewDS
-      fnTableView.delegate = fnTableViewDS
+  //    fnTableViewDS.fns = locomotive.functions
+  //    fnTableView.dataSource = fnTableViewDS
+  //    fnTableView.delegate = fnTableViewDS
       fnTableView.reloadData()
       cvTableViewDS.cvs = locomotive.cvsSorted
       cvTableView.dataSource = cvTableViewDS
@@ -391,14 +391,14 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   
   @IBAction func chkFNEnabledAction(_ sender: NSButton) {
     if let loco = editorView.editorObject as? Locomotive {
-      loco.functions[sender.tag].newIsEnabled = sender.state == .on
+ //     loco.functions[sender.tag].newIsEnabled = sender.state == .on
     }
     editorView.modified = true
   }
   
   @IBAction func chkFNMomentaryAction(_ sender: NSButton) {
     if let loco = editorView.editorObject as? Locomotive {
-      loco.functions[sender.tag].newIsMomentary = sender.state == .on
+//      loco.functions[sender.tag].newIsMomentary = sender.state == .on
     }
     editorView.modified = true
   }
@@ -408,12 +408,12 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
       var reset = true
       if let duration = Int(sender.stringValue) {
         if duration >= 0 {
-          loco.functions[sender.tag].newDuration = duration
+  //        loco.functions[sender.tag].newDuration = duration
           reset = false
         }
       }
       if reset {    
-        sender.stringValue = "\(loco.functions[sender.tag].newDuration)"
+ //       sender.stringValue = "\(loco.functions[sender.tag].newDuration)"
       }
     }
     editorView.modified = true
@@ -421,14 +421,14 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   
   @IBAction func chkFNInvertedAction(_ sender: NSButton) {
     if let loco = editorView.editorObject as? Locomotive {
-      loco.functions[sender.tag].newIsInverted = sender.state == .on
+//      loco.functions[sender.tag].newIsInverted = sender.state == .on
     }
     editorView.modified = true
   }
   
   @IBAction func cboDescriptionAction(_ sender: NSComboBox) {
     if let loco = editorView.editorObject as? Locomotive {
-      loco.functions[sender.tag].newFunctionDescription = sender.stringValue
+//      loco.functions[sender.tag].newFunctionDescription = sender.stringValue
     }
     editorView.modified = true
   }

@@ -136,7 +136,7 @@ class ThrottleVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegate
       lblSpeed.integerValue = Int(locomotive.speed.speed)
       
       chkInertial.state = locomotive.isInertial ? .on : .off
-      
+      /*
       for button in buttons {
         let locoFunc = locomotive.functions[button.tag]
         button.setButtonType(locoFunc.isMomentary ? .momentaryPushIn : .pushOnPushOff)
@@ -145,7 +145,7 @@ class ThrottleVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegate
         button.toolTip = locoFunc.toolTip
         button.allowsExpansionToolTips = true
       }
-      
+      */
       RouteDirection.select(comboBox: cboRouteDirection, value: locomotive.routeDirection)
       
       if let origin = locomotive.originBlock {
@@ -237,6 +237,7 @@ class ThrottleVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegate
   // MARK: Outlets & Actions
   
   @IBAction func buttonAction(_ sender: NSButton) {
+    /*
     if let loco = locomotive {
       let locoFunc = loco.functions[sender.tag]
       if locoFunc.isMomentary {
@@ -247,6 +248,7 @@ class ThrottleVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegate
         locoFunc.save()
       }
     }
+     */
   }
   
   @IBOutlet weak var cboLocomotive: NSComboBox!

@@ -7,31 +7,19 @@
 
 import Foundation
 
-public enum RollingStockType : Int {
-  case unknown = -1
-  case locomotive = 0
-  case wagon = 1
-}
-
-public class RollingStock : EditorObject, DecoderFunctionDelegate {
+public class RollingStock : EditorObject {
   
   // MARK: Constructors
 
   init(reader:SqliteDataReader) {
     super.init(primaryKey: -1)
     decode(sqliteDataReader: reader)
-    functions = DecoderFunction.functions(rollingStock: self, decoderType: .mobile)
     _cvs = DecoderCV.cvs(rollingStock: self, decoderType: .mobile)
     speedProfile = SpeedProfile.speedProfile(rollingStock: self)
   }
   
   override init(primaryKey:Int) {
     super.init(primaryKey: primaryKey)
-    for fn in 0...28 {
-      let decoderFunc = DecoderFunction(decoderType: .mobile, functionNumber: fn)
-      decoderFunc.delegate = self
-      functions.append(decoderFunc)
-    }
     for cvNumber in 1...256 {
       let cv = DecoderCV(decoderType: .mobile, cvNumber: cvNumber)
       _cvs[cv.cvNumber] = cv
@@ -47,8 +35,6 @@ public class RollingStock : EditorObject, DecoderFunctionDelegate {
   private var _cvs : [Int:DecoderCV] = [:]
   
   // MARK: Public Properties
-  
-  public var functions : [DecoderFunction] = []
   
   public var speedProfile : [SpeedProfile] = []
   
@@ -276,12 +262,6 @@ public class RollingStock : EditorObject, DecoderFunctionDelegate {
     cv.rollingStockId = self.primaryKey
     _cvs[cv.cvNumber] = cv
     cv.save()
-  }
-  
-  // MARK: Decoder Delegate Methods
-  
-  public func changeState(decoderFunction: DecoderFunction) {
-    
   }
   
   // MARK: Database Methods
@@ -568,11 +548,6 @@ public class RollingStock : EditorObject, DecoderFunctionDelegate {
       cmd.parameters.addWithValue(key: "@\(ROLLING_STOCK.BEST_FIT_METHOD)", value: bestFitMethod.rawValue)
 
       _ = cmd.executeNonQuery()
-      
-      for fn in functions {
-        fn.rollingStockId = primaryKey
-        fn.save()
-      }
       
       for (_, cv) in _cvs {
         cv.rollingStockId = primaryKey

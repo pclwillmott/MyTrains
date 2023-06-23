@@ -16,7 +16,7 @@ public class DecoderCV : EditorObject {
     decode(sqliteDataReader: reader)
   }
   
-  init(decoderType: DecoderType, cvNumber: Int) {
+  init(decoderType: DCCDecoderType, cvNumber: Int) {
     super.init(primaryKey: -1)
     self.decoderType = decoderType
     self.cvNumber = cvNumber
@@ -51,7 +51,7 @@ public class DecoderCV : EditorObject {
     }
   }
   
-  public var decoderType : DecoderType = .mobile {
+  public var decoderType : DCCDecoderType = .mobile {
     didSet {
       modified = true
     }
@@ -185,7 +185,7 @@ public class DecoderCV : EditorObject {
       }
       
       if !reader.isDBNull(index: 2) {
-        decoderType = DecoderType(rawValue: reader.getInt(index: 2)!) ?? .mobile
+        decoderType = DCCDecoderType(rawValue: reader.getInt(index: 2)!) ?? .mobile
       }
       
       if !reader.isDBNull(index: 3) {
@@ -311,6 +311,12 @@ public class DecoderCV : EditorObject {
     }
   }
   
+  public enum DecoderType : Int {
+    case mobile = 0
+    case accessory = 1
+  }
+
+
   public static func cvs(rollingStock: RollingStock, decoderType: DecoderType) -> [Int:DecoderCV] {
     
     let conn = Database.getConnection()

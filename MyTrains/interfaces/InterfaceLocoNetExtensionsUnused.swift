@@ -383,28 +383,6 @@ extension InterfaceLocoNet {
 
   }
   
-  public func setLocoSlotStat1P1(slotNumber:Int, stat1:UInt8) {
-
-    guard slotNumber > 0 && slotNumber < 120 else {
-      return
-    }
-    
-    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_SLOT_STAT1.rawValue, UInt8(slotNumber), stat1], appendCheckSum: true)
-
-    addToQueue(message: message, delay: MessageTiming.STANDARD)
-
-  }
-  
-  public func setLocoSlotStat1P2(slotPage:Int, slotNumber:Int, stat1:UInt8) {
-
-    let page : UInt8 = 0b00111000 | UInt8(slotPage & 0b00000111)
-    
-    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_D4_GROUP.rawValue, page, UInt8(slotNumber & 0x7f), 0x60, stat1], appendCheckSum: true)
-
-    addToQueue(message: message, delay: MessageTiming.STANDARD)
-
-  }
-  
   public func setSwWithAck(switchNumber: Int, state:OptionSwitchState) {
     
     let sn = switchNumber - 1
@@ -512,25 +490,6 @@ extension InterfaceLocoNet {
     let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_WR_SL_DATA_P2.rawValue, 0x15, UInt8(slotPage), UInt8(slotNumber), 0b00000011, 0x00, 0x00, 0x00, 0x00, 0x00, 0b00100000, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [.setSlotDataOKP2], retryCount: 10, timeoutCode: timeoutCode)
-
-  }
-  
-  public func moveSlotsP1(sourceSlotNumber: Int, destinationSlotNumber: Int, timeoutCode: TimeoutCode) {
-    
-    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_MOVE_SLOTS.rawValue, UInt8(sourceSlotNumber), UInt8(destinationSlotNumber)], appendCheckSum: true)
-    
-    addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [.locoSlotDataP1, .illegalMoveP1], retryCount: 0, timeoutCode: .none)
-
-  }
-  
-  public func moveSlotsP2(sourceSlotNumber: Int, sourceSlotPage: Int, destinationSlotNumber: Int, destinationSlotPage: Int, timeoutCode: TimeoutCode) {
-    
-    let srcPage = UInt8(sourceSlotPage & 0b00000111) | 0b00111000
-    let dstPage = UInt8(destinationSlotPage & 0b00000111)
-    
-    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_D4_GROUP.rawValue, srcPage, UInt8(sourceSlotNumber), dstPage, UInt8(destinationSlotNumber)], appendCheckSum: true)
-    
-    addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [], retryCount: 0, timeoutCode: .none)
 
   }
   

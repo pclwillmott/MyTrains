@@ -15,7 +15,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     
     let nodeId = 0x0801000d0000 + UInt64(rollingStock.primaryKey)
     
-    functionSpaceSize = 0x42
+    functionSpaceSize = 0x45
     
     _rollingStock = rollingStock
     
@@ -46,6 +46,10 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     functions.delegate = self
 
     memorySpaces[functions.space] = functions
+    
+    for fn in 0 ... numberOfFunctions - 1 {
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.functions.rawValue, address: fn)
+    }
 
     isDatagramProtocolSupported = true
     
@@ -85,7 +89,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
   internal let addressFNConsistBehaviour : Int = 9
   internal let addressFNDescription      : Int = 10
   
-  internal let numberOfFunctions : Int = 65
+  internal let numberOfFunctions : Int = 69
   internal let functionGroupSize : Int = 35
   
   internal var activeControllerNodeId : UInt64 = 0 {
@@ -277,6 +281,10 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     
   }
   
+  public override func variableChanged(space:OpenLCBMemorySpace, address:Int) {
+    
+  }
+
   // MARK: OpenLCBMemorySpaceDelegate Methods
   
   // MARK: OpenLCBNetworkLayerDelegate Methods

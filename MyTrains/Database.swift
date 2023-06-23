@@ -142,7 +142,7 @@ class Database {
               "[\(ROLLING_STOCK.ADECODER_INSTALLED)]       INT NOT NULL," +
               "[\(ROLLING_STOCK.BEST_FIT_METHOD)]          INT NOT NULL" +
             ")",
-
+/*
             "CREATE TABLE [\(TABLE.DECODER_FUNCTION)] (" +
               "[\(DECODER_FUNCTION.DECODER_FUNCTION_ID)]  INT PRIMARY KEY," +
               "[\(DECODER_FUNCTION.ROLLING_STOCK_ID)]     INT NOT NULL," +
@@ -155,7 +155,7 @@ class Database {
               "[\(DECODER_FUNCTION.INVERTED)]             INT NOT NULL," +
               "[\(DECODER_FUNCTION.STATE)]                INT NOT NULL" +
             ")",
-
+*/
             "CREATE TABLE [\(TABLE.DECODER_CV)] (" +
               "[\(DECODER_CV.DECODER_CV_ID)]      INT PRIMARY KEY," +
               "[\(DECODER_CV.ROLLING_STOCK_ID)]   INT NOT NULL," +
@@ -313,7 +313,7 @@ class Database {
             
    //         print("Version: \(Version)")
             
-            if Version == 26 {
+            if Version == 28 {
   
               let commands = [
         
@@ -425,23 +425,27 @@ class Database {
                 "ALTER TABLE [\(TABLE.SWITCHBOARD_ITEM)] ADD [\(SWITCHBOARD_ITEM.SW2_ID)] INT",
                 "ALTER TABLE [\(TABLE.SWITCHBOARD_ITEM)] ADD [\(SWITCHBOARD_ITEM.SW2_SENSOR1_ID)] INT",
                 "ALTER TABLE [\(TABLE.SWITCHBOARD_ITEM)] ADD [\(SWITCHBOARD_ITEM.SW2_SENSOR2_ID)] INT",
- */
-                "DROP TABLE IF EXISTS [\(TABLE.MEMORY_SPACE)]",
+ 
+                
 
-                "CREATE TABLE [\(TABLE.MEMORY_SPACE)] (" +
-                  "[\(MEMORY_SPACE.MEMORY_SPACE_ID)] INT PRIMARY KEY," +
-                  "[\(MEMORY_SPACE.NODE_ID)]         INT NOT NULL," +
-                  "[\(MEMORY_SPACE.SPACE)]           INT NOT NULL," +
-                  "[\(MEMORY_SPACE.MEMORY)]          TEXT NOT NULL" +
-                ")",
+                "DROP TABLE IF EXISTS [\(TABLE.DECODER_FUNCTION)]",
+*/
+ "DROP TABLE IF EXISTS [\(TABLE.MEMORY_SPACE)]",
 
-                "UPDATE [\(TABLE.VERSION)] SET [\(VERSION.VERSION_NUMBER)] = 27 WHERE [\(VERSION.VERSION_ID)] = 1",
+ "CREATE TABLE [\(TABLE.MEMORY_SPACE)] (" +
+   "[\(MEMORY_SPACE.MEMORY_SPACE_ID)] INT PRIMARY KEY," +
+   "[\(MEMORY_SPACE.NODE_ID)]         INT NOT NULL," +
+   "[\(MEMORY_SPACE.SPACE)]           INT NOT NULL," +
+   "[\(MEMORY_SPACE.MEMORY)]          TEXT NOT NULL" +
+ ")",
+
+                "UPDATE [\(TABLE.VERSION)] SET [\(VERSION.VERSION_NUMBER)] = 29 WHERE [\(VERSION.VERSION_ID)] = 1",
  
              ]
               
               execute(commands: commands)
               
-              Version = 27
+              Version = 29
 
             }
             
