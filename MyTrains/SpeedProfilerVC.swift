@@ -36,9 +36,9 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
     
     SpeedProfileResultsType.populate(comboBox: cboResultsType)
     
-    cboLocomotiveDS.dictionary = myTrainsController.locomotives
+//    cboLocomotiveDS.dictionary = myTrainsController.locomotives
     
-    cboLocomotive.dataSource = cboLocomotiveDS
+ //   cboLocomotive.dataSource = cboLocomotiveDS
     
     BestFitMethod.populate(comboBox: cboBestFitMethod)
     
@@ -120,7 +120,7 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   
   private var tableViewDS = SpeedProfileTableViewDS()
   
-  private var locomotive : Locomotive?
+//  private var locomotive : Locomotive?
   
   private var interface : InterfaceLocoNet?
   
@@ -159,6 +159,7 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
     
     if cboLocomotive.indexOfSelectedItem != -1 {
       
+      /*
       if let locomotive = cboLocomotiveDS.editorObjectAt(index: cboLocomotive.indexOfSelectedItem) as? Locomotive {
         
         self.locomotive = locomotive
@@ -187,7 +188,7 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
         resultsView.needsDisplay = true
 
       }
-
+*/
     }
     
     tableView.reloadData()
@@ -201,7 +202,7 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
     switch message.messageType {
     case .sensRepGenIn:
       
-      locomotive?.targetSpeed = (speed: UInt8(currentStep), direction:locomotiveDirection)
+   //   locomotive?.targetSpeed = (speed: UInt8(currentStep), direction:locomotiveDirection)
 
       if mode == .idle || mode == .setupNextRun {
         return
@@ -430,7 +431,7 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
         interface?.removeObserver(id: observerId)
         observerId = -1
       }
-      
+      /*
       if let locomotive = self.locomotive, let layout = myTrainsController.layout, cboRoute.indexOfSelectedItem != -1 {
         
         btnStartProfiler.title = "Stop Profiler"
@@ -447,6 +448,7 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
         tableView.reloadData()
         
         locomotive.targetSpeed = (speed: 20, direction:locomotiveDirection)
+        
         
         if let interface = locomotive.network?.interface as? InterfaceLocoNet {
           self.interface = interface
@@ -480,15 +482,17 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
         
  //       locomotive.forceRefresh = true
         
-      }
+      } */
     }
     else {
       btnStartProfiler.title = "Start Profiler"
       mode = .idle
+      /*
       if let locomotive = self.locomotive {
         locomotive.targetSpeed = (speed: 0, direction:.forward)
         locomotive.isInUse = false
       }
+       */
     }
     
   }
@@ -496,7 +500,7 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   @IBOutlet weak var btnSave: NSButton!
   
   @IBAction func btnSaveAction(_ sender: NSButton) {
-    locomotive?.save()
+//    locomotive?.save()
 //    self.view.window?.close()
   }
   
@@ -517,10 +521,12 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   @IBOutlet weak var cboBestFitMethod: NSComboBox!
   
   @IBAction func cboBestFitMethodAction(_ sender: NSComboBox) {
+    /*
     locomotive?.newBestFitMethod = BestFitMethod.selected(comboBox: sender)
     locomotive?.doBestFit()
     tableView.reloadData()
     resultsView.needsDisplay = true
+     */
   }
   
   @IBOutlet weak var cboResultsType: NSComboBox!

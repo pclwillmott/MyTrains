@@ -102,7 +102,7 @@ public class RollingStock : EditorObject {
     }
   }
   
-  public var mDecoderAddress : Int = 0 {
+  public var mDecoderAddress : UInt16 = 0 {
     didSet {
       modified = true
     }
@@ -301,7 +301,7 @@ public class RollingStock : EditorObject {
       }
       
       if !reader.isDBNull(index: 8) {
-        mDecoderAddress = reader.getInt(index: 8)!
+        mDecoderAddress = UInt16(reader.getInt(index: 8)!)
       }
       
       if !reader.isDBNull(index: 9) {
@@ -524,7 +524,7 @@ public class RollingStock : EditorObject {
       cmd.parameters.addWithValue(key: "@\(ROLLING_STOCK.MANUFACTURER_ID)", value: manufacturerId)
       cmd.parameters.addWithValue(key: "@\(ROLLING_STOCK.MDECODER_MANUFACTURER_ID)", value: mDecoderManufacturerId)
       cmd.parameters.addWithValue(key: "@\(ROLLING_STOCK.MDECODER_MODEL)", value: mDecoderModel)
-      cmd.parameters.addWithValue(key: "@\(ROLLING_STOCK.MDECODER_ADDRESS)", value: mDecoderAddress)
+      cmd.parameters.addWithValue(key: "@\(ROLLING_STOCK.MDECODER_ADDRESS)", value: Int(mDecoderAddress))
       cmd.parameters.addWithValue(key: "@\(ROLLING_STOCK.ADECODER_MANUFACTURER_ID)", value: aDecoderManufacturerId)
       cmd.parameters.addWithValue(key: "@\(ROLLING_STOCK.ADECODER_MODEL)", value: aDecoderModel)
       cmd.parameters.addWithValue(key: "@\(ROLLING_STOCK.ADECODER_ADDRESS)", value: aDecoderAddress)
@@ -640,13 +640,7 @@ public class RollingStock : EditorObject {
            
         while reader.read() {
           let rs = RollingStock(reader: reader)
-          if rs.rollingStockType == .locomotive {
-            let loco = Locomotive(reader: reader)
-            result[loco.primaryKey] = loco
-          }
-          else {
-            result[rs.primaryKey] = rs
-          }
+          result[rs.primaryKey] = rs
         }
            
         reader.close()

@@ -27,9 +27,6 @@ class PlaceLocomotiveVC: NSViewController, NSWindowDelegate {
     
     self.view.window?.delegate = self
     
-    cboLocomotiveDS.dictionary = myTrainsController.locomotives
-    
-    cboLocomotive.dataSource = cboLocomotiveDS
  
   }
   
@@ -57,10 +54,6 @@ class PlaceLocomotiveVC: NSViewController, NSWindowDelegate {
   @IBOutlet weak var btnSet: NSButton!
   
   @IBAction func btnSetAction(_ sender: NSButton) {
-    
-    if let locomotive = cboLocomotiveDS.editorObjectAt(index: cboLocomotive.indexOfSelectedItem) as? Locomotive, let block = switchBoardItem {
-      isOrigin ? locomotive.setOriginBlock(originBlock: block, originPosition: 0.0) : locomotive.setDestinationBlock(destinationBlock: block)
-    }
     
     self.view.window?.close()
     

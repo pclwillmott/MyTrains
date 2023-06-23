@@ -13,11 +13,13 @@ class SpeedResultsView: NSView {
 
   // MARK: Public Properties
 
+  /*
   public var locomotive : Locomotive? {
     didSet {
       needsDisplay = true
     }
   }
+  */
   
   public var speedUnits : UnitSpeed = .centimetersPerSecond {
     didSet {
@@ -110,6 +112,7 @@ class SpeedResultsView: NSView {
       }
     }
     
+    /*
     if let locomotive = self.locomotive {
       
       locomotive.doBestFit()
@@ -139,6 +142,7 @@ class SpeedResultsView: NSView {
 
       if dataSet != 0 {
 
+        
         for profile in locomotive.speedProfile {
         
           if profile.newSpeedReverse != 0.0 {
@@ -154,6 +158,7 @@ class SpeedResultsView: NSView {
             path.fill()
           }
 
+         
         }
         
       }
@@ -176,7 +181,8 @@ class SpeedResultsView: NSView {
             path.fill()
 
           }
-          /*
+           
+          
           let text = "R2 = \(String(format: "%.4f", locomotive.r2Forward))"
           let font = NSFont.boldSystemFont(ofSize: 12)
           let textRect = CGRect(x: xOffset * 2 + 4, y: bounds.height - 38, width: 200 , height: 30)
@@ -187,10 +193,11 @@ class SpeedResultsView: NSView {
               NSAttributedString.Key.paragraphStyle: textStyle,
           ] as [NSAttributedString.Key : Any]
           text.draw(in: textRect, withAttributes: textFontAttributes)
-          */
+          
         }
         
         if dataSet != 0 {
+          
           
           for profile in locomotive.speedProfile {
 
@@ -207,7 +214,7 @@ class SpeedResultsView: NSView {
 
           }
           
-          /*
+          
           let drop = (dataSet == 2) ? -68.0 : -38.0
 
           let text = "R2 = \(String(format: "%.4f", locomotive.r2Reverse))"
@@ -221,13 +228,13 @@ class SpeedResultsView: NSView {
           ] as [NSAttributedString.Key : Any]
           text.draw(in: textRect, withAttributes: textFontAttributes)
            
-           */
+           
           
         }
         
       }
     
-    }
+    } */
     
   }
   

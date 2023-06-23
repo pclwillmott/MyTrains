@@ -109,9 +109,9 @@ class SlotViewVC : NSViewController, NSWindowDelegate, InterfaceDelegate {
   
   private var state : State = .idle
   
-  private var slotPage : Int = 0
+  private var slotPage : UInt8 = 0
   
-  private var slotNumber : Int = 0
+  private var slotNumber : UInt8 = 0
   
   // MARK: Private Methods
   

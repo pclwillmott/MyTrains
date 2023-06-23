@@ -40,23 +40,23 @@ public class LocoSlotDataP1 : LocoNetMessage {
     }
   }
   
-  public var slotPage : Int {
+  public var slotPage : UInt8 {
     get {
       return 0
     }
   }
  
-  public var slotNumber : Int {
+  public var slotNumber : UInt8 {
     get {
-      return Int(message[2])
+      return message[2]
     }
   }
   
-  public var address : Int {
+  public var address : UInt16 {
     get {
-      var address = Int(message[4])
+      var address = UInt16(message[4])
       if message[9] != 0x7f {
-        address |= Int(message[9]) << 7
+        address |= UInt16(message[9]) << 7
       }
       return address
     }

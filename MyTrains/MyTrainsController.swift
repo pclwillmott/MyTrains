@@ -120,22 +120,6 @@ public class MyTrainsController : NSObject, InterfaceDelegate, NSUserNotificatio
     }
   }
   
-  public var locomotives : [Int:Locomotive] {
-    get {
-      
-      var result : [Int:Locomotive] = [:]
-      
-      for (k, v) in rollingStock {
-        if let rs = v as? Locomotive {
-          result[k] = rs
-        }
-      }
-      
-      return result
-      
-    }
-  }
-  
   public var rollingStockWithDecoders : [Int:RollingStock] {
     get {
       

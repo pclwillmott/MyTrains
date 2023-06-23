@@ -59,7 +59,7 @@ public class LocoNetMessage : NSObject {
   
   private var _dccPacket : [UInt8] = []
   
-  private var _dccPacketType : DCCPacketType = .dccUnitialized
+  private var _dccPacketType : DCCPacketType = .dccAnalogFunction
   
   // MARK: Public Properties
   
@@ -218,7 +218,7 @@ public class LocoNetMessage : NSObject {
       return nil
     }
   }
-  
+  /*
   public var dccPacketType : DCCPacketType? {
     get {
       if isIMMPacket {
@@ -277,7 +277,7 @@ public class LocoNetMessage : NSObject {
       return nil
     }
   }
-  
+  */
   
   public var messageType : LocoNetMessageType {
     

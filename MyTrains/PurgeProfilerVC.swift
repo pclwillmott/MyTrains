@@ -74,11 +74,11 @@ class PurgeProfilerVC : NSViewController, NSWindowDelegate, InterfaceDelegate {
   
   private var interface : InterfaceLocoNet?
   
-  private var locoSlot : Int = -1
+  private var locoSlot : UInt8 = 0
   
-  private var locoSlotPage : Int = -1
+  private var locoSlotPage : UInt8 = 0
   
-  private var locoAddress : Int = 1
+  private var locoAddress : UInt16 = 0
   
   private var isP1 : Bool = false
   
@@ -192,9 +192,9 @@ class PurgeProfilerVC : NSViewController, NSWindowDelegate, InterfaceDelegate {
         
         if profilerState == .waitingForSlot {
           isP1 = true
-          locoSlot = Int(message.message[2])
-          locoSlotPage = -1
-          interface.moveSlotsP1(sourceSlotNumber: locoSlot, destinationSlotNumber: locoSlot, timeoutCode: .none)
+          locoSlot = message.message[2]
+          locoSlotPage = 0
+          interface.moveSlotsP1(sourceSlotNumber: locoSlot, destinationSlotNumber: locoSlot)
           startTime = Date.timeIntervalSinceReferenceDate
           profilerState = .waitingForPurge
           interface.locoSpdP1(slotNumber: locoSlot, speed: 40)
@@ -218,8 +218,8 @@ class PurgeProfilerVC : NSViewController, NSWindowDelegate, InterfaceDelegate {
               restoreInitialState()
             }
             else {
-              locoSlot = -1
-              locoSlotPage = -1
+              locoSlot = 0
+              locoSlotPage = 0
               profilerState = .waitingForSlot
               locoAddress += 1
               interface.getLocoSlot(forAddress: locoAddress)
@@ -233,9 +233,9 @@ class PurgeProfilerVC : NSViewController, NSWindowDelegate, InterfaceDelegate {
         
         if profilerState == .waitingForSlot {
           isP1 = false
-          locoSlot = Int(message.message[3])
-          locoSlotPage = Int(message.message[2])
-          interface.moveSlotsP2(sourceSlotNumber: locoSlot, sourceSlotPage: locoSlotPage, destinationSlotNumber: locoSlot, destinationSlotPage: locoSlotPage, timeoutCode: .none)
+          locoSlot = message.message[3]
+          locoSlotPage = message.message[2]
+          interface.moveSlotsP2(sourceSlotNumber: locoSlot, sourceSlotPage: locoSlotPage, destinationSlotNumber: locoSlot, destinationSlotPage: locoSlotPage)
           startTime = Date.timeIntervalSinceReferenceDate
           profilerState = .waitingForPurge
           interface.locoSpdDirP2(slotNumber: locoSlot, slotPage: locoSlotPage, speed: 40, direction: .forward, throttleID: 0)
@@ -259,8 +259,8 @@ class PurgeProfilerVC : NSViewController, NSWindowDelegate, InterfaceDelegate {
               restoreInitialState()
             }
             else {
-              locoSlot = -1
-              locoSlotPage = -1
+              locoSlot = 0
+              locoSlotPage = 0
               profilerState = .waitingForSlot
               locoAddress += 1
               interface.getLocoSlot(forAddress: locoAddress)

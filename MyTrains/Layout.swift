@@ -533,7 +533,7 @@ public class Layout : EditorObject {
     }
     
   }
-
+/*
   public func findRouteFrom(locomotive:Locomotive, origin:SwitchBoardItem, destination:SwitchBoardItem, routeDirection:RouteDirection, routeSoFar: inout Route, inLoop: inout Set<Int>, next:RoutePart) -> Route? {
         
     if next.fromSwitchBoardItem.validLocomotiveTypes.contains(locomotive.locomotiveType) {
@@ -577,6 +577,8 @@ public class Layout : EditorObject {
 
   }
   
+ */
+  /*
   public func findRoute(locomotive:Locomotive, origin:SwitchBoardItem, originPosition: Double, destination:SwitchBoardItem, routeDirection:RouteDirection) -> Route? {
     
     if origin.validLocomotiveTypes.contains(locomotive.locomotiveType) && destination.validLocomotiveTypes.contains(locomotive.locomotiveType) {
@@ -612,7 +614,7 @@ public class Layout : EditorObject {
     return nil
     
   }
-  
+  */
   public func links(item:SwitchBoardItem) -> [Int:SwitchBoardItem] {
     var result : [Int:SwitchBoardItem] = [:]
     for (_, value) in switchBoardItems {

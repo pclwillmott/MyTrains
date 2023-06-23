@@ -196,17 +196,17 @@ extension InterfaceLocoNet {
 
   }
   
-  public func getLocoSlotDataP1(slotNumber: Int) {
+  public func getLocoSlotDataP1(slotNumber: UInt8) {
     
-    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_RQ_SL_DATA.rawValue, UInt8(slotNumber), 0x00], appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_RQ_SL_DATA.rawValue, slotNumber, 0x00], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.STANDARD)
 
   }
   
-  public func getLocoSlotDataP2(slotPage: Int, slotNumber: Int) {
+  public func getLocoSlotDataP2(slotPage: UInt8, slotNumber: UInt8) {
     
-    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_RQ_SL_DATA.rawValue, UInt8(slotNumber), UInt8(slotPage) | 0b01000000], appendCheckSum: true)
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_RQ_SL_DATA.rawValue, slotNumber, slotPage | 0b01000000], appendCheckSum: true)
     
     addToQueue(message: message, delay: MessageTiming.STANDARD)
 
@@ -663,7 +663,7 @@ extension InterfaceLocoNet {
 
   }
   
-  public func readCV(progMode:ProgrammingMode, cv:Int, address: Int) {
+  public func readCV(progMode:ProgrammingMode, cv:Int, address: UInt16) {
     
     var pcmd : UInt8 = 0
     
@@ -717,7 +717,7 @@ extension InterfaceLocoNet {
   }
   
   
-  public func writeCV(progMode: ProgrammingMode, cv:Int, address: Int, value: Int) {
+  public func writeCV(progMode: ProgrammingMode, cv:Int, address: Int, value: UInt16) {
     
     var pcmd : UInt8 = 0
     

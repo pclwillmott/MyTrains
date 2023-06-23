@@ -111,11 +111,11 @@ public class LocoSlotData {
   
   public var slotID : Int
   
-  public var slotPage : Int
+  public var slotPage : UInt8
   
-  public var slotNumber : Int
+  public var slotNumber : UInt8
   
-  public var address : Int
+  public var address : UInt16
   
   public var slotState : SlotState
   
@@ -157,11 +157,13 @@ public class LocoSlotData {
   
   public var locomotiveName : String {
     get {
+      /*
       for locomotive in myTrainsController.locomotives {
         if address == locomotive.value.mDecoderAddress {
           return locomotive.value.rollingStockName
         }
       }
+       */
       return "Unknown"
     }
   }
@@ -275,15 +277,15 @@ public class LocoSlotData {
     }
     set(data) {
       
-      slotPage = Int(data[2])
+      slotPage = data[2]
       
-      slotNumber = Int(data[3])
+      slotNumber = data[3]
       
       slotID = LocoSlotData.encodeID(slotPage: 0, slotNumber: UInt8(slotNumber))
 
       slotStatus1 = data[4]
       
-      address = Int(data[5]) | (Int(data[6]) << 7)
+      address = UInt16(data[5]) | (UInt16(data[6]) << 7)
       
       speed = Int(data[8])
       
@@ -365,9 +367,9 @@ public class LocoSlotData {
     return Int(slotPage & 0b00000111) << 8 | Int(slotNumber)
   }
   
-  public static func decodeID(slotID: Int) -> (page: Int, number: Int) {
-    let page = slotID >> 8
-    let number = slotID & 0xff
+  public static func decodeID(slotID: Int) -> (page: UInt8, number: UInt8) {
+    let page = UInt8(slotID >> 8)
+    let number = UInt8(slotID & 0xff)
     return (page: page, number: number)
   }
   

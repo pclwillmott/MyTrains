@@ -376,7 +376,7 @@ class MonitorVC: NSViewController, MyTrainsControllerDelegate, InterfaceDelegate
    
     if message.messageType == .locoSlotDataP1 && message.message[4] == addrLow  && message.message[9] == addrHigh {
       if (message.message[3] & 0b00110000) != 0b00110000 {
-        interface?.moveSlotsP1(sourceSlotNumber: Int(message.message[2]), destinationSlotNumber: Int(message.message[2]), timeoutCode: .none)
+  //      interface?.moveSlotsP1(sourceSlotNumber: Int(message.message[2]), destinationSlotNumber: Int(message.message[2]), timeoutCode: .none)
       }
       else {
  //       print("slot: \(message.message[2]) addr: \(addr)")
@@ -387,7 +387,7 @@ class MonitorVC: NSViewController, MyTrainsControllerDelegate, InterfaceDelegate
     
     if message.messageType == .locoSlotDataP2 && message.message[5] == addrLow && message.message[6] == addrHigh {
       if (message.message[4] & 0b00110000) != 0b00110000 {
-        interface?.moveSlotsP2(sourceSlotNumber: Int(message.message[3]), sourceSlotPage: Int(message.message[2]), destinationSlotNumber: Int(message.message[3]), destinationSlotPage: Int(message.message[2]), timeoutCode: .none)
+ //       interface?.moveSlotsP2(sourceSlotNumber: Int(message.message[3]), sourceSlotPage: Int(message.message[2]), destinationSlotNumber: Int(message.message[3]), destinationSlotPage: Int(message.message[2]), timeoutCode: .none)
       }
       else {
    //     print("slot: \(message.message[2]).\(message.message[3]) addr: \(addr)")
@@ -500,7 +500,7 @@ class MonitorVC: NSViewController, MyTrainsControllerDelegate, InterfaceDelegate
     }
     
     if addLabels {
-      
+      /*
       if message.isIMMPacket, let packetType = message.dccPacketType, let addressPartition = message.dccAddressPartition {
         
         if message.dccPacketType == .dccIdle {
@@ -539,7 +539,7 @@ class MonitorVC: NSViewController, MyTrainsControllerDelegate, InterfaceDelegate
 
         }
       }
-      
+      */
     }
     
     if message.messageType == .progCV {

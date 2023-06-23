@@ -9,6 +9,10 @@ import Foundation
 import Cocoa
 
 class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
+  func saveNew(dbEditorView: DBEditorView) -> EditorObject {
+    return EditorObject(primaryKey: -1)
+  }
+  
 
   // MARK: Window & View Control
   
@@ -34,7 +38,7 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     
     cboNetwork.dataSource = cboNetworkDS
     
-    editorView.dictionary = myTrainsController.locomotives
+ //   editorView.dictionary = myTrainsController.locomotives
     
     UnitLength.populate(comboBox: cboLengthUnits)
     UnitLength.populate(comboBox: cboOccupancyFeedbackOffsetUnits)
@@ -97,6 +101,7 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   }
   
   func setupFields(dbEditorView: DBEditorView, editorObject: EditorObject) {
+    /*
     if let locomotive = editorObject as? Locomotive {
       txtLocomotiveName.stringValue = locomotive.rollingStockName
       cboPowerSource.selectItem(at: locomotive.locomotiveType.rawValue)
@@ -134,6 +139,7 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
       cvTableView.delegate = cvTableViewDS
       cvTableView.reloadData()
     }
+     */
   }
   
   func validate(dbEditorView: DBEditorView) -> String? {
@@ -197,7 +203,7 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     }
     return nil
   }
-  
+  /*
   func setFields(locomotive:Locomotive) {
     locomotive.rollingStockName = txtLocomotiveName.stringValue
     locomotive.locomotiveType = LocomotiveType.getType(forName: cboPowerSource.stringValue)
@@ -225,7 +231,8 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     locomotive.notes = txtNotes.string
     locomotive.save()
   }
-
+*/
+  /*
   func saveNew(dbEditorView: DBEditorView) -> EditorObject {
     
     let locomotive = Locomotive(primaryKey: -1)
@@ -236,21 +243,23 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     return locomotive
     
   }
-  
+  */
   func saveExisting(dbEditorView: DBEditorView, editorObject: EditorObject) {
+    /*
     if let locomotive = editorObject as? Locomotive {
       setFields(locomotive: locomotive)
       editorView.dictionary = myTrainsController.locomotives
       editorView.setSelection(key: locomotive.primaryKey)
     }
+     */
   }
   
   func delete(dbEditorView: DBEditorView, primaryKey: Int) {
-    
+    /*
     myTrainsController.removeRollingStock(primaryKey: primaryKey)
     Locomotive.delete(primaryKey: primaryKey)
     editorView.dictionary = myTrainsController.locomotives
-     
+     */
   }
   
   // MARK: Outlets & Actions
@@ -390,20 +399,25 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   }
   
   @IBAction func chkFNEnabledAction(_ sender: NSButton) {
+    /*
     if let loco = editorView.editorObject as? Locomotive {
  //     loco.functions[sender.tag].newIsEnabled = sender.state == .on
     }
     editorView.modified = true
+     */
   }
   
   @IBAction func chkFNMomentaryAction(_ sender: NSButton) {
+    /*
     if let loco = editorView.editorObject as? Locomotive {
 //      loco.functions[sender.tag].newIsMomentary = sender.state == .on
     }
     editorView.modified = true
+     */
   }
   
   @IBAction func txtDurationAction(_ sender: NSTextField) {
+    /*
     if let loco = editorView.editorObject as? Locomotive {
       var reset = true
       if let duration = Int(sender.stringValue) {
@@ -417,20 +431,25 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
       }
     }
     editorView.modified = true
+     */
   }
   
   @IBAction func chkFNInvertedAction(_ sender: NSButton) {
+    /*
     if let loco = editorView.editorObject as? Locomotive {
 //      loco.functions[sender.tag].newIsInverted = sender.state == .on
     }
     editorView.modified = true
+     */
   }
   
   @IBAction func cboDescriptionAction(_ sender: NSComboBox) {
+    /*
     if let loco = editorView.editorObject as? Locomotive {
 //      loco.functions[sender.tag].newFunctionDescription = sender.stringValue
     }
     editorView.modified = true
+     */
   }
   
   @IBOutlet weak var cvTableView: NSTableView!

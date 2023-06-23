@@ -9,7 +9,7 @@ import Foundation
 import Cocoa
 import AppKit
 
-class ThrottleVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegate, LocomotiveDelegate {
+class ThrottleVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegate {
 
   // MARK: Window & View Control
   
@@ -26,10 +26,12 @@ class ThrottleVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegate
     myTrainsController.removeDelegate(id: networkControllerDelegateId)
     
     if locomotiveDelegateId != -1 {
+      /*
       locomotive?.removeDelegate(withKey: locomotiveDelegateId)
       locomotiveDelegateId = -1
       locomotive?.isInUse = false
       locomotive = nil
+       */
     }
     
   }
@@ -66,9 +68,9 @@ class ThrottleVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegate
       
     }
 
-    dataSource.dictionary = myTrainsController.locomotives
+//    dataSource.dictionary = myTrainsController.locomotives
     
-    cboLocomotive.dataSource = dataSource
+//    cboLocomotive.dataSource = dataSource
     
     RouteDirection.populate(comboBox: cboRouteDirection)
     
@@ -86,7 +88,7 @@ class ThrottleVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegate
   
   private var networkControllerDelegateId : Int = -1
   
-  private var locomotive : Locomotive?
+//  private var locomotive : Locomotive?
   
   private var buttons : [NSButton] = []
   
@@ -99,15 +101,18 @@ class ThrottleVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegate
   private func setupLocomotive() {
     
     if locomotiveDelegateId != -1 {
+      /*
       locomotive?.removeDelegate(withKey: locomotiveDelegateId)
       locomotive?.isInUse = false
       locomotiveDelegateId = -1
       locomotive = nil
+       */
     }
     
     lblOrigin.stringValue = ""
     lblDestination.stringValue = ""
     
+    /*
     if let locomotive = dataSource.editorObjectAt(index: cboLocomotive.indexOfSelectedItem) as? Locomotive {
       
       self.locomotive = locomotive
@@ -136,7 +141,7 @@ class ThrottleVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegate
       lblSpeed.integerValue = Int(locomotive.speed.speed)
       
       chkInertial.state = locomotive.isInertial ? .on : .off
-      /*
+      
       for button in buttons {
         let locoFunc = locomotive.functions[button.tag]
         button.setButtonType(locoFunc.isMomentary ? .momentaryPushIn : .pushOnPushOff)
@@ -145,7 +150,7 @@ class ThrottleVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegate
         button.toolTip = locoFunc.toolTip
         button.allowsExpansionToolTips = true
       }
-      */
+      
       RouteDirection.select(comboBox: cboRouteDirection, value: locomotive.routeDirection)
       
       if let origin = locomotive.originBlock {
@@ -183,20 +188,20 @@ class ThrottleVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegate
       enableControls()
       
     }
-        
+     */
   }
   
   private func enableControls() {
-    let enabled = locomotive?.isInUse ?? false
+//    let enabled = locomotive?.isInUse ?? false
     
-    boxMain.isHidden = !enabled
+//    boxMain.isHidden = !enabled
     
-    boxRoute.isHidden = ThrottleMode.selected(comboBox: cboThrottleMode) == .manual
+//    boxRoute.isHidden = ThrottleMode.selected(comboBox: cboThrottleMode) == .manual
     
   }
   
   // MARK: LocomotiveDelegate Methods
-  
+  /*
   func stateUpdated(locomotive: Locomotive) {
     lblSpeed.stringValue = "\(locomotive.speed.speed)"
     lblDistance.stringValue = String(format: "%.1f", locomotive.distanceTravelled)
@@ -210,7 +215,8 @@ class ThrottleVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegate
     }
 
   }
-  
+  */
+  /*
   func stealZap(locomotive: Locomotive) {
 
     locomotive.targetSpeed.speed = 0
@@ -228,7 +234,7 @@ class ThrottleVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegate
     cboLocomotive.deselectItem(at: cboLocomotive.indexOfSelectedItem)
 
   }
-  
+  */
   // MARK: MyTrainsControllerDelegate Methods
   
   @objc func myTrainsControllerUpdated(myTrainsController: MyTrainsController) {
@@ -260,6 +266,7 @@ class ThrottleVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegate
   @IBOutlet weak var swPower: NSSwitch!
   
   @IBAction func swPowerAction(_ sender: NSSwitch) {
+    /*
     if let loco = locomotive {
       if sender.state == .off {
         loco.targetSpeed = (speed: 0, direction: radForward.state == .on ? .forward : .reverse)
@@ -269,6 +276,7 @@ class ThrottleVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegate
       loco.isInUse = sender.state == .on
       enableControls()
     }
+     */
   }
   
   @IBOutlet weak var radForward: NSButton!
@@ -278,10 +286,12 @@ class ThrottleVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegate
     radForward.state = .on
     radReverse.state = .off
  
+    /*
     if let loco = locomotive {
       let speed = UInt8(lblTargetStep.integerValue)
       loco.targetSpeed = (speed: speed, direction: radForward.state == .on ? .forward : .reverse)
     }
+     */
     
   }
   
@@ -292,10 +302,12 @@ class ThrottleVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegate
     radForward.state = .off
     radReverse.state = .on
  
+    /*
     if let loco = locomotive {
       let speed = UInt8(lblTargetStep.integerValue)
       loco.targetSpeed = (speed: speed, direction: radForward.state == .on ? .forward : .reverse)
     }
+     */
     
   }
   
@@ -306,17 +318,19 @@ class ThrottleVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegate
   @IBOutlet weak var vsThrottle: NSSlider!
   
   @IBAction func vsThrottleAction(_ sender: NSSlider) {
+    /*
     if let loco = locomotive {
       let speed = UInt8(sender.integerValue)
       loco.targetSpeed = (speed: speed, direction: radForward.state == .on ? .forward : .reverse)
     }
     lblTargetStep.stringValue = "\(sender.integerValue)"
+     */
   }
   
   @IBOutlet weak var chkInertial: NSButton!
   
   @IBAction func chkInerialAction(_ sender: NSButton) {
-    locomotive?.isInertial = chkInertial.state == .on
+ //   locomotive?.isInertial = chkInertial.state == .on
   }
   
   @IBOutlet weak var lblTargetStep: NSTextField!
@@ -331,7 +345,7 @@ class ThrottleVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegate
   @IBOutlet weak var cboThrottleMode: NSComboBox!
   
   @IBAction func cboThrottleModeAction(_ sender: NSComboBox) {
-    locomotive?.throttleMode = ThrottleMode.selected(comboBox: cboThrottleMode)
+//    locomotive?.throttleMode = ThrottleMode.selected(comboBox: cboThrottleMode)
     enableControls()
   }
   
@@ -342,15 +356,17 @@ class ThrottleVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegate
   @IBOutlet weak var btnSetRoute: NSButton!
   
   @IBAction func btnSetRouteAction(_ sender: NSButton) {
+    /*
     if let locomotive = self.locomotive, let layout = myTrainsController.layout {
       layout.setRoute(route: locomotive.route)
     }
+     */
   }
   
   @IBOutlet weak var btnGo: NSButton!
   
   @IBAction func btnGoAction(_ sender: NSButton) {
-    locomotive?.startAutoRoute()
+ //   locomotive?.startAutoRoute()
   }
   
   @IBOutlet weak var boxMain: NSBox!

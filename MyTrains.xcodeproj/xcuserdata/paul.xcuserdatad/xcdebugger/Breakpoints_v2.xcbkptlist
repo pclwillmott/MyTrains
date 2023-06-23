@@ -14,9 +14,9 @@
             filePath = "MyTrains/MyTrainsController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "533"
-            endingLineNumber = "533"
-            landmarkName = "connect()"
+            startingLineNumber = "517"
+            endingLineNumber = "517"
+            landmarkName = "commandStationInterface(commandStation:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
