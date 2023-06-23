@@ -46,7 +46,7 @@ extension InterfaceLocoNet {
     }
     else {
       
-      immPacket(packet: [0xff, 0x00], repeatCount: 0x0f)
+      immPacket(packet: [DCCAddressPartition.dccIdle.rawValue, DCCPacketType.dccIdle.rawValue], repeatCount: 0x0f)
       
       globalEmergencyStop = true
       
@@ -63,8 +63,8 @@ extension InterfaceLocoNet {
     }
     else {
       
-      immPacket(packet: [0xff, 0x00], repeatCount: 0x00)
-      
+      immPacket(packet: [DCCAddressPartition.dccIdle.rawValue, DCCPacketType.dccIdle.rawValue], repeatCount: 0x00)
+
       globalEmergencyStop = false
       
     }
@@ -123,7 +123,7 @@ extension InterfaceLocoNet {
   
   // MARK: LOCOMOTIVE CONTROL COMMANDS
   
-  public func getLocoSlot(forAddress: Int) {
+  public func getLocoSlot(forAddress: UInt16) {
 
     if implementsProtocol2 {
       getLocoSlotDataP2(forAddress: forAddress, timeoutCode: .getLocoSlotData)
@@ -134,7 +134,7 @@ extension InterfaceLocoNet {
     
   }
 
-  public func getLocoSlotDataP1(forAddress: Int, timeoutCode: TimeoutCode) {
+  public func getLocoSlotDataP1(forAddress: UInt16, timeoutCode: TimeoutCode) {
     
     let lo = UInt8(forAddress & 0x7f)
     
@@ -146,7 +146,7 @@ extension InterfaceLocoNet {
 
   }
   
-  public func getLocoSlotDataP2(forAddress: Int, timeoutCode: TimeoutCode) {
+  public func getLocoSlotDataP2(forAddress: UInt16, timeoutCode: TimeoutCode) {
     
     let lo = UInt8(forAddress & 0x7f)
     
@@ -158,7 +158,59 @@ extension InterfaceLocoNet {
 
   }
   
-  public func setLocomotiveState(address:Int, slotNumber: Int, slotPage: Int, nextState:LocoNetLocomotiveState, throttleID: Int) -> LocomotiveStateWithTimeStamp {
+  public func setLocoSlotStat1(slotPage:UInt8, slotNumber:UInt8, stat1:UInt8) {
+    
+    if implementsProtocol2 {
+      setLocoSlotStat1P2(slotPage: slotPage, slotNumber: slotNumber, stat1: stat1)
+    }
+    else {
+      setLocoSlotStat1P1(slotNumber: slotNumber, stat1: stat1)
+    }
+    
+  }
+  
+  public func setLocoSlotStat1P1(slotNumber:UInt8, stat1:UInt8) {
+
+    guard slotNumber > 0 && slotNumber < 120 else {
+      return
+    }
+    
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_SLOT_STAT1.rawValue, UInt8(slotNumber), stat1], appendCheckSum: true)
+
+    addToQueue(message: message, delay: MessageTiming.STANDARD)
+
+  }
+  
+  public func setLocoSlotStat1P2(slotPage:UInt8, slotNumber:UInt8, stat1:UInt8) {
+
+    let page : UInt8 = 0b00111000 | UInt8(slotPage & 0b00000111)
+    
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_D4_GROUP.rawValue, page, UInt8(slotNumber & 0x7f), 0x60, stat1], appendCheckSum: true)
+
+    addToQueue(message: message, delay: MessageTiming.STANDARD)
+
+  }
+   
+  public func moveSlotsP1(sourceSlotNumber: UInt8, destinationSlotNumber: UInt8) {
+    
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_MOVE_SLOTS.rawValue, UInt8(sourceSlotNumber), UInt8(destinationSlotNumber)], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [.locoSlotDataP1, .illegalMoveP1], retryCount: 0, timeoutCode: .none)
+
+  }
+  
+  public func moveSlotsP2(sourceSlotNumber: UInt8, sourceSlotPage: UInt8, destinationSlotNumber: UInt8, destinationSlotPage: UInt8) {
+    
+    let srcPage = UInt8(sourceSlotPage & 0b00000111) | 0b00111000
+    let dstPage = UInt8(destinationSlotPage & 0b00000111)
+    
+    let message = LocoNetMessage(networkId: networkId, data: [LocoNetMessageOpcode.OPC_D4_GROUP.rawValue, srcPage, UInt8(sourceSlotNumber), dstPage, UInt8(destinationSlotNumber)], appendCheckSum: true)
+    
+    addToQueue(message: message, delay: MessageTiming.STANDARD, responses: [], retryCount: 0, timeoutCode: .none)
+
+  }
+  
+  public func setLocomotiveState(address:UInt16, slotNumber: UInt8, slotPage: UInt8, nextState:LocoNetLocomotiveState, throttleID: UInt16) -> LocomotiveStateWithTimeStamp {
     
     var next = nextState.functions
 
@@ -205,7 +257,7 @@ extension InterfaceLocoNet {
 
   }
   
-  public func updateLocomotiveState(address:Int, slotNumber: Int, slotPage: Int, previousState:LocoNetLocomotiveState, nextState:LocoNetLocomotiveState, throttleID: Int, forceRefresh: Bool) -> LocomotiveStateWithTimeStamp {
+  public func updateLocomotiveState(address:UInt16, slotNumber: UInt8, slotPage: UInt8, previousState:LocoNetLocomotiveState, nextState:LocoNetLocomotiveState, throttleID: UInt16, forceRefresh: Bool) -> LocomotiveStateWithTimeStamp {
  
     var previous = previousState.functions
     
@@ -320,12 +372,12 @@ extension InterfaceLocoNet {
 
   }
 
-  public func locoSpdDirP2(slotNumber: Int, slotPage: Int, speed: UInt8, direction: LocomotiveDirection, throttleID: Int) {
+  public func locoSpdDirP2(slotNumber: UInt8, slotPage: UInt8, speed: UInt8, direction: LocomotiveDirection, throttleID: UInt16) {
     
     let data : [UInt8] = [
       LocoNetMessageOpcode.OPC_D5_GROUP.rawValue,
-      UInt8(slotPage & 0x07) | (direction == .reverse ? 0b00001000 : 0b00000000),
-      UInt8(slotNumber & 0x7f),
+      (slotPage & 0x07) | (direction == .reverse ? 0b00001000 : 0b00000000),
+      slotNumber & 0x7f,
       UInt8(throttleID & 0x7f),
       speed & 0x7f
     ]
@@ -336,11 +388,11 @@ extension InterfaceLocoNet {
 
   }
   
-  public func locoSpdP1(slotNumber: Int, speed: UInt8) {
+  public func locoSpdP1(slotNumber: UInt8, speed: UInt8) {
     
     let data : [UInt8] = [
       LocoNetMessageOpcode.OPC_LOCO_SPD.rawValue,
-      UInt8(slotNumber & 0x7f),
+      slotNumber & 0x7f,
       speed & 0x7f
     ]
     
@@ -350,7 +402,7 @@ extension InterfaceLocoNet {
 
   }
   
-  public func locoF0F6P2(slotNumber: Int, slotPage: Int, functions: UInt64, throttleID: Int) {
+  public func locoF0F6P2(slotNumber: UInt8, slotPage: UInt8, functions: UInt64, throttleID: UInt16) {
     
     var fnx : UInt8 = 0
     
@@ -364,8 +416,8 @@ extension InterfaceLocoNet {
 
     let data : [UInt8] = [
       LocoNetMessageOpcode.OPC_D5_GROUP.rawValue,
-      UInt8(slotPage & 0x07) | 0b00010000,
-      UInt8(slotNumber & 0x7f),
+      (slotPage & 0x07) | 0b00010000,
+      slotNumber & 0x7f,
       UInt8(throttleID & 0x7f),
       fnx
     ]
@@ -376,7 +428,7 @@ extension InterfaceLocoNet {
     
   }
   
-  public func locoF7F13P2(slotNumber: Int, slotPage: Int, functions: UInt64, throttleID: Int) {
+  public func locoF7F13P2(slotNumber: UInt8, slotPage: UInt8, functions: UInt64, throttleID: UInt16) {
     
     var fnx : UInt8 = 0
     
@@ -390,8 +442,8 @@ extension InterfaceLocoNet {
     
     let data : [UInt8] = [
       LocoNetMessageOpcode.OPC_D5_GROUP.rawValue,
-      UInt8(slotPage & 0x07) | 0b00011000,
-      UInt8(slotNumber & 0x7f),
+      (slotPage & 0x07) | 0b00011000,
+      slotNumber & 0x7f,
       UInt8(throttleID & 0x7f),
       fnx
     ]
@@ -402,7 +454,7 @@ extension InterfaceLocoNet {
     
   }
   
-  public func locoF14F20P2(slotNumber: Int, slotPage: Int, functions: UInt64, throttleID: Int) {
+  public func locoF14F20P2(slotNumber: UInt8, slotPage: UInt8, functions: UInt64, throttleID: UInt16) {
     
     var fnx : UInt8 = 0
     
@@ -416,8 +468,8 @@ extension InterfaceLocoNet {
     
     let data : [UInt8] = [
       LocoNetMessageOpcode.OPC_D5_GROUP.rawValue,
-      UInt8(slotPage & 0x07) | 0b00100000,
-      UInt8(slotNumber & 0x7f),
+      (slotPage & 0x07) | 0b00100000,
+      slotNumber & 0x7f,
       UInt8(throttleID & 0x7f),
       fnx
     ]
@@ -428,7 +480,7 @@ extension InterfaceLocoNet {
     
   }
   
-  public func locoF21F28P2(slotNumber: Int, slotPage: Int, functions: UInt64, throttleID: Int) {
+  public func locoF21F28P2(slotNumber: UInt8, slotPage: UInt8, functions: UInt64, throttleID: UInt16) {
     
     var fnx : UInt8 = 0
     
@@ -442,8 +494,8 @@ extension InterfaceLocoNet {
     
     let data : [UInt8] = [
       LocoNetMessageOpcode.OPC_D5_GROUP.rawValue,
-      UInt8(slotPage & 0x07) | UInt8(functions & maskF28 == maskF28 ? 0b00110000 : 0b00101000),
-      UInt8(slotNumber & 0x7f),
+      (slotPage & 0x07) | UInt8(functions & maskF28 == maskF28 ? 0b00110000 : 0b00101000),
+      slotNumber & 0x7f,
       UInt8(throttleID & 0x7f),
       fnx]
 
@@ -453,7 +505,7 @@ extension InterfaceLocoNet {
     
   }
   
-  public func locoDirF0F4P1(slotNumber: Int, direction:LocomotiveDirection, functions: UInt64) {
+  public func locoDirF0F4P1(slotNumber: UInt8, direction:LocomotiveDirection, functions: UInt64) {
     
     var dirf : UInt8 = 0
     
@@ -466,7 +518,7 @@ extension InterfaceLocoNet {
     
     let data : [UInt8] = [
       LocoNetMessageOpcode.OPC_LOCO_DIRF.rawValue,
-      UInt8(slotNumber & 0x7f),
+      slotNumber & 0x7f,
       dirf
     ]
     
@@ -476,7 +528,7 @@ extension InterfaceLocoNet {
     
   }
   
-  public func locoF5F8P1(slotNumber: Int, functions: UInt64) {
+  public func locoF5F8P1(slotNumber: UInt8, functions: UInt64) {
     
     var fnx : UInt8 = 0
     
@@ -487,7 +539,7 @@ extension InterfaceLocoNet {
     
     let data : [UInt8] = [
       LocoNetMessageOpcode.OPC_LOCO_SND.rawValue,
-      UInt8(slotNumber & 0x7f),
+      slotNumber & 0x7f,
       fnx
     ]
     
@@ -497,21 +549,21 @@ extension InterfaceLocoNet {
     
   }
   
-  internal func dccAddress(address:Int) -> [UInt8] {
+  internal func dccAddress(address:UInt16) -> [UInt8] {
     
     if address < 128 {
       return [UInt8(address)]
     }
     
-    let temp = address + 49152
+    let temp = Int(address) + 49152
     
     return [UInt8(temp >> 8), UInt8(temp & 0xff)]
     
   }
   
-  public func dccF5F8(address:Int, functions: UInt64) {
+  public func dccF5F8(address:UInt16, functions: UInt64) {
     
-    var fx : UInt8 = 0b10110000
+    var fx : UInt8 = DCCPacketType.dccF5F8.rawValue
     
     fx |= functions & maskF5 == maskF5 ? 0b00000001 : 0b00000000
     fx |= functions & maskF6 == maskF6 ? 0b00000010 : 0b00000000
@@ -526,9 +578,9 @@ extension InterfaceLocoNet {
     
   }
 
-  public func dccF9F12(address:Int, functions: UInt64) {
+  public func dccF9F12(address:UInt16, functions: UInt64) {
     
-    var fx : UInt8 = 0b10100000
+    var fx : UInt8 = DCCPacketType.dccF9F12.rawValue
     
     fx |= functions & maskF9  == maskF9  ? 0b00000001 : 0b00000000
     fx |= functions & maskF10 == maskF10 ? 0b00000010 : 0b00000000
@@ -543,7 +595,7 @@ extension InterfaceLocoNet {
     
   }
 
-  public func dccF13F20(address:Int, functions: UInt64) {
+  public func dccF13F20(address:UInt16, functions: UInt64) {
     
     var fx : UInt8 = 0
     
@@ -558,14 +610,14 @@ extension InterfaceLocoNet {
 
     var data : [UInt8] = dccAddress(address: address)
     
-    data.append(0xde)
+    data.append(DCCPacketType.dccF13F20.rawValue)
     data.append(fx)
     
     immPacket(packet: data, repeatCount: 4)
     
   }
 
-  public func dccF21F28(address:Int, functions: UInt64) {
+  public func dccF21F28(address:UInt16, functions: UInt64) {
     
     var fx : UInt8 = 0
     
@@ -580,14 +632,14 @@ extension InterfaceLocoNet {
 
     var data : [UInt8] = dccAddress(address: address)
     
-    data.append(0xdf)
+    data.append(DCCPacketType.dccF21F28.rawValue)
     data.append(fx)
     
     immPacket(packet: data, repeatCount: 4)
     
   }
 
-  public func dccF29F36(address:Int, functions: UInt64) {
+  public func dccF29F36(address:UInt16, functions: UInt64) {
     
     var fx : UInt8 = 0
     
@@ -602,14 +654,14 @@ extension InterfaceLocoNet {
 
     var data : [UInt8] = dccAddress(address: address)
     
-    data.append(0xd8)
+    data.append(DCCPacketType.dccF29F36.rawValue)
     data.append(fx)
     
     immPacket(packet: data, repeatCount: 4)
     
   }
 
-  public func dccF37F44(address:Int, functions: UInt64) {
+  public func dccF37F44(address:UInt16, functions: UInt64) {
     
     var fx : UInt8 = 0
     
@@ -624,14 +676,14 @@ extension InterfaceLocoNet {
 
     var data : [UInt8] = dccAddress(address: address)
     
-    data.append(0xd9)
+    data.append(DCCPacketType.dccF37F44.rawValue)
     data.append(fx)
     
     immPacket(packet: data, repeatCount: 4)
     
   }
 
-  public func dccF45F52(address:Int, functions: UInt64) {
+  public func dccF45F52(address:UInt16, functions: UInt64) {
     
     var fx : UInt8 = 0
     
@@ -646,14 +698,14 @@ extension InterfaceLocoNet {
 
     var data : [UInt8] = dccAddress(address: address)
     
-    data.append(0xda)
+    data.append(DCCPacketType.dccF45F52.rawValue)
     data.append(fx)
     
     immPacket(packet: data, repeatCount: 4)
     
   }
 
-  public func dccF53F60(address:Int, functions: UInt64) {
+  public func dccF53F60(address:UInt16, functions: UInt64) {
     
     var fx : UInt8 = 0
     
@@ -668,14 +720,14 @@ extension InterfaceLocoNet {
 
     var data : [UInt8] = dccAddress(address: address)
     
-    data.append(0xdb)
+    data.append(DCCPacketType.dccF53F60.rawValue)
     data.append(fx)
     
     immPacket(packet: data, repeatCount: 4)
     
   }
 
-  public func dccF61F68(address:Int, functions: UInt64) {
+  public func dccF61F68(address:UInt16, functions: UInt64) {
     
     var fx : UInt8 = 0
     
@@ -690,8 +742,40 @@ extension InterfaceLocoNet {
 
     var data : [UInt8] = dccAddress(address: address)
     
-    data.append(0xdc)
+    data.append(DCCPacketType.dccF61F68.rawValue)
     data.append(fx)
+    
+    immPacket(packet: data, repeatCount: 4)
+    
+  }
+
+  public func dccBinaryState(address:UInt16, binaryStateAddress:UInt16, state:DCCBinaryState) {
+    
+    var data : [UInt8] = dccAddress(address: address)
+    
+    if binaryStateAddress < 128 {
+      data.append(DCCPacketType.dccBinaryStateShort.rawValue)
+      data.append(state.rawValue | UInt8(binaryStateAddress & 0x7f))
+    }
+    else {
+      data.append(DCCPacketType.dccBinaryStateLong.rawValue)
+      data.append(state.rawValue | UInt8(binaryStateAddress & 0x7f))
+      data.append(UInt8(binaryStateAddress >> 7))
+    }
+    
+    immPacket(packet: data, repeatCount: 4)
+    
+  }
+
+  public func dccAnalogFunction(address:UInt16, analogOutput:UInt8, value:UInt8) {
+    
+    var data : [UInt8] = dccAddress(address: address)
+
+    data.append(contentsOf: [
+      DCCPacketType.dccAnalogFunction.rawValue,
+      analogOutput,
+      value
+    ])
     
     immPacket(packet: data, repeatCount: 4)
     
