@@ -27,7 +27,7 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
     
     for (_, rollingStock) in RollingStock.rollingStock {
       if rollingStock.rollingStockType == .locomotive {
-        registerNode(node: OpenLCBNodeRollingStock(rollingStock: rollingStock))
+        registerNode(node: OpenLCBNodeRollingStockLocoNet(rollingStock: rollingStock))
       }
     }
     

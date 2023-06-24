@@ -207,6 +207,21 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
   }
   
   internal func attachNode() {
+  }
+  
+  internal func attachCompleted() {
+    
+    networkLayer?.sendAssignControllerReply(sourceNodeId: nodeId, destinationNodeId: activeControllerNodeId, result: 0)
+    
+  }
+  
+  internal func attachFailed() {
+  
+    networkLayer?.sendAssignControllerReply(sourceNodeId: nodeId, destinationNodeId: activeControllerNodeId, result: 0x02)
+
+    activeControllerNodeId = 0
+    
+    nextActiveControllerNodeId = 0
     
   }
   
@@ -243,7 +258,9 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
       
       heartbeatMode = .stopped
       
-      setSpeed = (setSpeed < 0.0) ? -0.0 : +0.0
+      setSpeedToZero()
+
+      speedChanged()
       
       for listener in listeners {
         networkLayer?.sendSetSpeedDirection(sourceNodeId: nodeId, destinationNodeId: listener.nodeId, setSpeed: setSpeed, isForwarded: true)
@@ -282,6 +299,12 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
   }
   
   public override func variableChanged(space:OpenLCBMemorySpace, address:Int) {
+    
+  }
+  
+  public func setSpeedToZero() {
+    
+    setSpeed = (setSpeed.bitPattern == (-0.0).bitPattern || setSpeed < 0.0) ? -0.0 : +0.0
     
   }
 
@@ -323,8 +346,11 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
               if listener.nodeId != message.sourceNodeId! {
                 var forwardedSpeed = setSpeed
                 if listener.reverseDirection {
-                  if forwardedSpeed == 0.0 {
+                  if forwardedSpeed.bitPattern == (+0.0).bitPattern {
                     forwardedSpeed = -0.0
+                  }
+                  else if forwardedSpeed.bitPattern == (-0.0).bitPattern {
+                    forwardedSpeed = +0.0
                   }
                   else {
                     forwardedSpeed *= -1.0
@@ -357,6 +383,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
                 if address >= 0 && address <= 0x41 {
                   space.setUInt(address: Int(address), value: UInt8(value & 0xff))
                   functionChanged()
+                  space.save()
                 }
               }
               
@@ -378,7 +405,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
           else {
             
             if abs(setSpeed) != 0.0 {
-              setSpeed = (setSpeed < 0.0) ? -0.0 : +0.0
+              setSpeedToZero()
             }
             
             emergencyStop = true
@@ -438,11 +465,11 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
                   
                   activeControllerNodeId = controllerNodeId
                   
-                  networkLayer?.sendAssignControllerReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, result: 0)
-
+                  attachNode()
+                  
                 }
                 else {
-                  
+
                   nextActiveControllerNodeId = controllerNodeId
                   
                   networkLayer?.sendControllerChangedNotify(sourceNodeId: nodeId, destinationNodeId: activeControllerNodeId, newController: nextActiveControllerNodeId)
@@ -475,19 +502,19 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
           
           if let configurationType = OpenLCBTractionListenerConfigurationType(rawValue: message.payload[1]) {
           
-            let bed = [
-              message.payload[3],
-              message.payload[4],
-              message.payload[5],
-              message.payload[6],
-              message.payload[7],
-              message.payload[8],
-            ]
-
             switch configurationType {
               
             case .attachNode:
               
+              let bed = [
+                message.payload[3],
+                message.payload[4],
+                message.payload[5],
+                message.payload[6],
+                message.payload[7],
+                message.payload[8],
+              ]
+
               if let listenerNodeId = UInt64(bigEndianData: bed) {
                 
                 if listenerNodeId == nodeId {
@@ -528,6 +555,15 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
               
             case .detachNode:
               
+              let bed = [
+                message.payload[3],
+                message.payload[4],
+                message.payload[5],
+                message.payload[6],
+                message.payload[7],
+                message.payload[8],
+              ]
+
               if let listenerNodeId = UInt64(bigEndianData: bed) {
                 
                 var index = 0
@@ -614,7 +650,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
                   
                   activeControllerNodeId = nextActiveControllerNodeId
                   
-                  networkLayer?.sendAssignControllerReply(sourceNodeId: nodeId, destinationNodeId: activeControllerNodeId, result: 0)
+                  attachNode()
                   
                 }
                 else {
@@ -671,11 +707,11 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
           
           if let trackProtocol = OpenLCBTrackProtocol(rawValue: tp), trackProtocol == .anyTrackProtocol || trackProtocol == .nativeOpenLCBNode {
             
-            let forceAllocateMask      : UInt8 = 0x80
+      //    let forceAllocateMask      : UInt8 = 0x80
             let exactMatchOnlyMask     : UInt8 = 0x40
             let matchOnlyInAddressMask : UInt8 = 0x20
             
-            let forceAllocate      = (data[7] & forceAllocateMask)      == forceAllocateMask
+      //    let forceAllocate      = (data[7] & forceAllocateMask)      == forceAllocateMask
             let exactMatchOnly     = (data[7] & exactMatchOnlyMask)     == exactMatchOnlyMask
             let matchOnlyInAddress = (data[7] & matchOnlyInAddressMask) == matchOnlyInAddressMask
             

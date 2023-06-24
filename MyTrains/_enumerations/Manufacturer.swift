@@ -11,7 +11,7 @@ public enum Manufacturer : Int {
   
   case digitrax = 118
   case rrCirKits = 77
-  case trainControlSystems = 144
+  case trainControlSystems = 141
   case peco = 163
   
   public var title : String {

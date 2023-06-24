@@ -117,7 +117,7 @@ extension InterfaceLocoNet {
     
     let message = LocoNetMessage(networkId: networkId, data: payload, appendCheckSum: true)
     
-    addToQueue(message: message, delay: MessageTiming.STANDARD)
+    addToQueue(message: message, delay: MessageTiming.IMMPACKET)
 
   }
   

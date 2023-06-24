@@ -19,12 +19,16 @@ public enum SpeedSteps : UInt8 {
   case dcc14FX    = 0b110 // 6
   case dcc128FX   = 0b111 // 7
   
-  public func protectMask() -> UInt8 {
-    return 0b11111000
+  public static var protectMask : UInt8 {
+    get {
+      return 0b11111000
+    }
   }
   
-  public func setMask() -> UInt8 {
-    return UInt8(self.rawValue)
+  public var setMask : UInt8 {
+    get {
+      return self.rawValue
+    }
   }
   
   public func opsw(locoNetProductId:DeviceId) -> Int {

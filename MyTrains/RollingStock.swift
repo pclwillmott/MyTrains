@@ -610,7 +610,6 @@ public class RollingStock : EditorObject {
   public static func delete(primaryKey: Int) {
     let sql = [
       "DELETE FROM [\(TABLE.DECODER_CV)] WHERE [\(DECODER_CV.ROLLING_STOCK_ID)] = \(primaryKey)",
-      "DELETE FROM [\(TABLE.DECODER_FUNCTION)] WHERE [\(DECODER_FUNCTION.ROLLING_STOCK_ID)] = \(primaryKey)",
       "DELETE FROM [\(TABLE.SPEED_PROFILE)] WHERE [\(SPEED_PROFILE.ROLLING_STOCK_ID)] = \(primaryKey)",
       "DELETE FROM [\(TABLE.ROLLING_STOCK)] WHERE [\(ROLLING_STOCK.ROLLING_STOCK_ID)] = \(primaryKey)",
     ]

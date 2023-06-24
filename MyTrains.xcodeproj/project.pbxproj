@@ -62,6 +62,7 @@
 		DA2E0E5827359ED300C7DA7A /* Ack.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2E0E5727359ED300C7DA7A /* Ack.swift */; };
 		DA2E0E5A2736B8AA00C7DA7A /* LoconetRequestSlotDataMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2E0E592736B8AA00C7DA7A /* LoconetRequestSlotDataMessage.swift */; };
 		DA2E0E5E2736EAF300C7DA7A /* MyTrainsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2E0E5D2736EAF300C7DA7A /* MyTrainsController.swift */; };
+		DA3254E52A4704BF006DF357 /* SwitchRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3254E42A4704BF006DF357 /* SwitchRoute.swift */; };
 		DA32C97A294CB0E40034DB4F /* SampleRate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA32C979294CB0E40034DB4F /* SampleRate.swift */; };
 		DA33FC2027AFF9E500630227 /* OpSwDecoderType.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA33FC1F27AFF9E500630227 /* OpSwDecoderType.xib */; };
 		DA33FC2327AFFA1400630227 /* OpSwDecoderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA33FC2227AFFA1400630227 /* OpSwDecoderType.swift */; };
@@ -147,8 +148,6 @@
 		DA613AC928A7DECD003218BA /* PlaceLocomotive.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA613AC828A7DECD003218BA /* PlaceLocomotive.storyboard */; };
 		DA613ACB28A7E02E003218BA /* PlaceLocomotiveVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA613ACA28A7E02E003218BA /* PlaceLocomotiveVC.swift */; };
 		DA6403EF2A24EF62001CE29B /* OpenLCBMemorySpace.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6403EE2A24EF62001CE29B /* OpenLCBMemorySpace.swift */; };
-		DA6803B028EA518B00DED1D8 /* LocomotiveRoster.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA6803AF28EA518B00DED1D8 /* LocomotiveRoster.storyboard */; };
-		DA6803B228EA553900DED1D8 /* LocomotiveRosterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6803B128EA553900DED1D8 /* LocomotiveRosterVC.swift */; };
 		DA69E3932974581700447414 /* IOChannelDS64Output.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA69E3922974581700447414 /* IOChannelDS64Output.swift */; };
 		DA69E3952974668700447414 /* IOFunctionDS64OutputPropertySheet.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA69E3942974668700447414 /* IOFunctionDS64OutputPropertySheet.storyboard */; };
 		DA69E397297466AA00447414 /* IOFunctionDS64OutputPropertySheetVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA69E396297466AA00447414 /* IOFunctionDS64OutputPropertySheetVC.swift */; };
@@ -173,15 +172,12 @@
 		DA72DDE62A3C6F2B0027BE50 /* InterfaceLocoNetExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA72DDE52A3C6F2B0027BE50 /* InterfaceLocoNetExtensions.swift */; };
 		DA72DDE82A3C6FB20027BE50 /* InterfaceLocoNet.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA72DDE72A3C6FB20027BE50 /* InterfaceLocoNet.swift */; };
 		DA72DDEA2A3C6FD20027BE50 /* InterfaceOpenLCBCAN.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA72DDE92A3C6FD20027BE50 /* InterfaceOpenLCBCAN.swift */; };
-		DA77750228DF1B4E00C07E24 /* PurgeProfiler.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA77750128DF1B4E00C07E24 /* PurgeProfiler.storyboard */; };
-		DA77750428DF290E00C07E24 /* PurgeProfilerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA77750328DF290E00C07E24 /* PurgeProfilerVC.swift */; };
 		DA77794C27AEA029007EEBE9 /* OptionSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA77794B27AEA029007EEBE9 /* OptionSwitch.swift */; };
 		DA77794F27AEE087007EEBE9 /* CommandStationConfiguration.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA77794E27AEE087007EEBE9 /* CommandStationConfiguration.storyboard */; };
 		DA77795127AEE0E5007EEBE9 /* CommandStationConfigurationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA77795027AEE0E5007EEBE9 /* CommandStationConfigurationVC.swift */; };
 		DA77795327AEEB3A007EEBE9 /* OpSwTCV.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA77795227AEEB3A007EEBE9 /* OpSwTCV.xib */; };
 		DA77795527AEEBBC007EEBE9 /* OpSwTCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA77795427AEEBBC007EEBE9 /* OpSwTCV.swift */; };
 		DA77795727AEF2E5007EEBE9 /* OpSwTableViewDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA77795627AEF2E5007EEBE9 /* OpSwTableViewDS.swift */; };
-		DA78875B28F039BF0093C647 /* LocomotiveRosterTableViewDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA78875A28F039BF0093C647 /* LocomotiveRosterTableViewDS.swift */; };
 		DA7A127429E2DCCD000DCE1C /* UIntExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7A127229E2DCB0000DCE1C /* UIntExtensions.swift */; };
 		DA7A127629E2E6DB000DCE1C /* OpenLCBCANControlFrameFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7A127529E2E6DB000DCE1C /* OpenLCBCANControlFrameFormat.swift */; };
 		DA7A127829E32E99000DCE1C /* OpenLCBMessageCANFrameType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7A127729E32E99000DCE1C /* OpenLCBMessageCANFrameType.swift */; };
@@ -244,9 +240,6 @@
 		DA9CF8FB2860952300825FA9 /* BlockType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9CF8FA2860952300825FA9 /* BlockType.swift */; };
 		DA9CF8FD2860978A00825FA9 /* TurnoutMotorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9CF8FC2860978A00825FA9 /* TurnoutMotorType.swift */; };
 		DA9CF8FF2860CA0100825FA9 /* SwitchBoardItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9CF8FE2860CA0100825FA9 /* SwitchBoardItemView.swift */; };
-		DA9ED4EC28F238CF00EA914A /* RouteManager.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA9ED4EB28F238CF00EA914A /* RouteManager.storyboard */; };
-		DA9ED4EE28F240A400EA914A /* RouteManagerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9ED4ED28F240A400EA914A /* RouteManagerVC.swift */; };
-		DA9ED4F028F24B7700EA914A /* RouteManagerTableViewDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9ED4EF28F24B7700EA914A /* RouteManagerTableViewDS.swift */; };
 		DAA36B9D2A110B6200F07D8E /* OpenLCBTransportLayerAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA36B9C2A110B6200F07D8E /* OpenLCBTransportLayerAlias.swift */; };
 		DAA36B9F2A110C0000F07D8E /* OpenLCBTransportLayerTransitionStateCAN.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA36B9E2A110C0000F07D8E /* OpenLCBTransportLayerTransitionStateCAN.swift */; };
 		DAA54F7F2A217CDA005CED7E /* OpenLCBNodeConfigurationTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA54F7E2A217CDA005CED7E /* OpenLCBNodeConfigurationTool.swift */; };
@@ -405,6 +398,7 @@
 		DA2E0E5727359ED300C7DA7A /* Ack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ack.swift; sourceTree = "<group>"; };
 		DA2E0E592736B8AA00C7DA7A /* LoconetRequestSlotDataMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoconetRequestSlotDataMessage.swift; sourceTree = "<group>"; };
 		DA2E0E5D2736EAF300C7DA7A /* MyTrainsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTrainsController.swift; sourceTree = "<group>"; };
+		DA3254E42A4704BF006DF357 /* SwitchRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchRoute.swift; sourceTree = "<group>"; };
 		DA32C979294CB0E40034DB4F /* SampleRate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleRate.swift; sourceTree = "<group>"; };
 		DA33FC1F27AFF9E500630227 /* OpSwDecoderType.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OpSwDecoderType.xib; sourceTree = "<group>"; };
 		DA33FC2227AFFA1400630227 /* OpSwDecoderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpSwDecoderType.swift; sourceTree = "<group>"; };
@@ -493,8 +487,6 @@
 		DA613AC828A7DECD003218BA /* PlaceLocomotive.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = PlaceLocomotive.storyboard; sourceTree = "<group>"; };
 		DA613ACA28A7E02E003218BA /* PlaceLocomotiveVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceLocomotiveVC.swift; sourceTree = "<group>"; };
 		DA6403EE2A24EF62001CE29B /* OpenLCBMemorySpace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBMemorySpace.swift; sourceTree = "<group>"; };
-		DA6803AF28EA518B00DED1D8 /* LocomotiveRoster.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LocomotiveRoster.storyboard; sourceTree = "<group>"; };
-		DA6803B128EA553900DED1D8 /* LocomotiveRosterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocomotiveRosterVC.swift; sourceTree = "<group>"; };
 		DA69E3922974581700447414 /* IOChannelDS64Output.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOChannelDS64Output.swift; sourceTree = "<group>"; };
 		DA69E3942974668700447414 /* IOFunctionDS64OutputPropertySheet.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = IOFunctionDS64OutputPropertySheet.storyboard; sourceTree = "<group>"; };
 		DA69E396297466AA00447414 /* IOFunctionDS64OutputPropertySheetVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOFunctionDS64OutputPropertySheetVC.swift; sourceTree = "<group>"; };
@@ -519,15 +511,12 @@
 		DA72DDE52A3C6F2B0027BE50 /* InterfaceLocoNetExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InterfaceLocoNetExtensions.swift; sourceTree = "<group>"; };
 		DA72DDE72A3C6FB20027BE50 /* InterfaceLocoNet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceLocoNet.swift; sourceTree = "<group>"; };
 		DA72DDE92A3C6FD20027BE50 /* InterfaceOpenLCBCAN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceOpenLCBCAN.swift; sourceTree = "<group>"; };
-		DA77750128DF1B4E00C07E24 /* PurgeProfiler.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = PurgeProfiler.storyboard; sourceTree = "<group>"; };
-		DA77750328DF290E00C07E24 /* PurgeProfilerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurgeProfilerVC.swift; sourceTree = "<group>"; };
 		DA77794B27AEA029007EEBE9 /* OptionSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionSwitch.swift; sourceTree = "<group>"; };
 		DA77794E27AEE087007EEBE9 /* CommandStationConfiguration.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = CommandStationConfiguration.storyboard; sourceTree = "<group>"; };
 		DA77795027AEE0E5007EEBE9 /* CommandStationConfigurationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandStationConfigurationVC.swift; sourceTree = "<group>"; };
 		DA77795227AEEB3A007EEBE9 /* OpSwTCV.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OpSwTCV.xib; sourceTree = "<group>"; };
 		DA77795427AEEBBC007EEBE9 /* OpSwTCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpSwTCV.swift; sourceTree = "<group>"; };
 		DA77795627AEF2E5007EEBE9 /* OpSwTableViewDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpSwTableViewDS.swift; sourceTree = "<group>"; };
-		DA78875A28F039BF0093C647 /* LocomotiveRosterTableViewDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocomotiveRosterTableViewDS.swift; sourceTree = "<group>"; };
 		DA7A127229E2DCB0000DCE1C /* UIntExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIntExtensions.swift; sourceTree = "<group>"; };
 		DA7A127529E2E6DB000DCE1C /* OpenLCBCANControlFrameFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBCANControlFrameFormat.swift; sourceTree = "<group>"; };
 		DA7A127729E32E99000DCE1C /* OpenLCBMessageCANFrameType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBMessageCANFrameType.swift; sourceTree = "<group>"; };
@@ -590,9 +579,6 @@
 		DA9CF8FA2860952300825FA9 /* BlockType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockType.swift; sourceTree = "<group>"; };
 		DA9CF8FC2860978A00825FA9 /* TurnoutMotorType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TurnoutMotorType.swift; sourceTree = "<group>"; };
 		DA9CF8FE2860CA0100825FA9 /* SwitchBoardItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchBoardItemView.swift; sourceTree = "<group>"; };
-		DA9ED4EB28F238CF00EA914A /* RouteManager.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = RouteManager.storyboard; sourceTree = "<group>"; };
-		DA9ED4ED28F240A400EA914A /* RouteManagerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteManagerVC.swift; sourceTree = "<group>"; };
-		DA9ED4EF28F24B7700EA914A /* RouteManagerTableViewDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteManagerTableViewDS.swift; sourceTree = "<group>"; };
 		DAA36B9C2A110B6200F07D8E /* OpenLCBTransportLayerAlias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBTransportLayerAlias.swift; sourceTree = "<group>"; };
 		DAA36B9E2A110C0000F07D8E /* OpenLCBTransportLayerTransitionStateCAN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBTransportLayerTransitionStateCAN.swift; sourceTree = "<group>"; };
 		DAA54F7E2A217CDA005CED7E /* OpenLCBNodeConfigurationTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBNodeConfigurationTool.swift; sourceTree = "<group>"; };
@@ -779,6 +765,7 @@
 				DA9325A5289C02C300CC317F /* LocomotiveDirection.swift */,
 				DAB4FF5D2854F8CF00D74920 /* LocomotiveType.swift */,
 				DAE8DD52286751BE0097C2D1 /* Manufacturer.swift */,
+				DA8B5D1A282FE23900D39F07 /* MessageTiming.swift */,
 				DA51FB9929D8807E002CAAC1 /* NetworkType.swift */,
 				DA6E28E0285F86B900772641 /* Orientation.swift */,
 				DA5550E928392A6B00C4FE4E /* ProductCode.swift */,
@@ -799,6 +786,14 @@
 				DA1B79F8285F3885009E1189 /* UnitSpeed.swift */,
 			);
 			path = _enumerations;
+			sourceTree = "<group>";
+		};
+		DA3254E62A4704E2006DF357 /* _types */ = {
+			isa = PBXGroup;
+			children = (
+				DA3254E42A4704BF006DF357 /* SwitchRoute.swift */,
+			);
+			path = _types;
 			sourceTree = "<group>";
 		};
 		DA57A6E72A449669005C72B0 /* _types */ = {
@@ -930,6 +925,7 @@
 		DAA83DE9272C37670075CBCD /* MyTrains */ = {
 			isa = PBXGroup;
 			children = (
+				DA3254E62A4704E2006DF357 /* _types */,
 				DA2CB4B32A0720C4000E197E /* _enumerations */,
 				DAA66BD02A09226E001804AC /* _extensions */,
 				DA2E0E5727359ED300C7DA7A /* Ack.swift */,
@@ -1027,9 +1023,6 @@
 				DA0DA2792779E96B00E4F23C /* Layout.swift */,
 				DADBBFE9285DF36700426CD5 /* LayoutSwitchBoardExtensions.swift */,
 				DA7B4726273803BA00BCD587 /* Locomotive.swift */,
-				DA6803AF28EA518B00DED1D8 /* LocomotiveRoster.storyboard */,
-				DA78875A28F039BF0093C647 /* LocomotiveRosterTableViewDS.swift */,
-				DA6803B128EA553900DED1D8 /* LocomotiveRosterVC.swift */,
 				DABD4F2F2A3C99B1000A25AB /* LocoNet */,
 				DA28E5882824943200E1604C /* LocoNetDevice.swift */,
 				DA60D818295B617000B5A2C4 /* LocoNetDeviceCV.swift */,
@@ -1044,7 +1037,6 @@
 				DA8FDB2C279C4AC000E15024 /* LocoSlotTableViewDS.swift */,
 				DAA83DF0272C37680075CBCD /* Main.storyboard */,
 				DAA83DEC272C37670075CBCD /* MainVC.swift */,
-				DA8B5D1A282FE23900D39F07 /* MessageTiming.swift */,
 				DA6A0ADB27529D6600913F2B /* ModalWindow.swift */,
 				DA6A0AD7275295BF00913F2B /* Monitor.storyboard */,
 				DA6A0AD92752976800913F2B /* MonitorVC.swift */,
@@ -1069,8 +1061,6 @@
 				DA08B430278734270001307C /* ProgramDecoderAddress.storyboard */,
 				DA08B432278737530001307C /* ProgramDecoderAddressVC.swift */,
 				DA08B43627875FDD0001307C /* ProgSlotDataP1.swift */,
-				DA77750128DF1B4E00C07E24 /* PurgeProfiler.storyboard */,
-				DA77750328DF290E00C07E24 /* PurgeProfilerVC.swift */,
 				DA28C2BE2801E46D00857471 /* QuerySlot1.swift */,
 				DA28C2C22801EB9400857471 /* QuerySlot2.swift */,
 				DA28C2C42801ED9700857471 /* QuerySlot3.swift */,
@@ -1079,9 +1069,6 @@
 				DAF5B4FE28A93D0E0015E758 /* RandomAccessCollectionExtensions.swift */,
 				DA2502B8282671600002D4AF /* RollingStock.swift */,
 				DA1A04092856108900FFD25F /* RollingStockDecoderExtensions.swift */,
-				DA9ED4EB28F238CF00EA914A /* RouteManager.storyboard */,
-				DA9ED4EF28F24B7700EA914A /* RouteManagerTableViewDS.swift */,
-				DA9ED4ED28F240A400EA914A /* RouteManagerVC.swift */,
 				DAEE9BEA2933E7B5005F553D /* SensorComboDS.swift */,
 				DA063396293CE8F400CEAFD1 /* SetFastClock.storyboard */,
 				DA063398293CEB8700CEAFD1 /* SetFastClockVC.swift */,
@@ -1309,10 +1296,8 @@
 				DAA7169D297C39640080114F /* IOFunctionBXP88InputPropertySheet.storyboard in Resources */,
 				DA7195FB2A3F2D40004D2D4B /* MyTrains Train.xml in Resources */,
 				DAC0194A289E79BF001152F6 /* EditCommandStations.storyboard in Resources */,
-				DA77750228DF1B4E00C07E24 /* PurgeProfiler.storyboard in Resources */,
 				DAAA9C232A0FDD8600A5B9D6 /* ViewNodeInfo.storyboard in Resources */,
 				DA1B79F5285F24B8009E1189 /* SwitchBoardItemPropertySheet.storyboard in Resources */,
-				DA6803B028EA518B00DED1D8 /* LocomotiveRoster.storyboard in Resources */,
 				DA08B431278734270001307C /* ProgramDecoderAddress.storyboard in Resources */,
 				DAFACF592A26C5E0007C10F0 /* MyTrains Clock.xml in Resources */,
 				DAF0CACF29855077009B392A /* IOChannelTC64MkIIInputPropertySheet.storyboard in Resources */,
@@ -1333,7 +1318,6 @@
 				DA69E399297466D200447414 /* IOFunctionDS64InputPropertySheet.storyboard in Resources */,
 				DA77794F27AEE087007EEBE9 /* CommandStationConfiguration.storyboard in Resources */,
 				DA88378C2770FBEC000B9A41 /* DBEditorView.xib in Resources */,
-				DA9ED4EC28F238CF00EA914A /* RouteManager.storyboard in Resources */,
 				DA8837782770B715000B9A41 /* EditWagons.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1381,7 +1365,6 @@
 				DAF374732A1A2D94009E91F0 /* BundleExtensions.swift in Sources */,
 				DA3D87A9295DF99A003398F5 /* TC64CVTableDS.swift in Sources */,
 				DA8B5D1D282FE31600D39F07 /* InterfaceDelegate.swift in Sources */,
-				DA77750428DF290E00C07E24 /* PurgeProfilerVC.swift in Sources */,
 				DA1767182A054C4A009D13C1 /* LCCCDITreeViewDS.swift in Sources */,
 				DA5BC9932A1A6CEA00D67ABE /* OpenLCBNodeRollingStock.swift in Sources */,
 				DAAA9C252A0FDD9800A5B9D6 /* ViewNodeInfoVC.swift in Sources */,
@@ -1518,6 +1501,7 @@
 				DAA7169F297C3AF40080114F /* IOFunctionBXP88InputPropertySheetVC.swift in Sources */,
 				DAF4DD4C289A90C1000B848E /* SpeedResultsView.swift in Sources */,
 				DAE9DBB728258E12004BC75D /* LocoNetProducts.swift in Sources */,
+				DA3254E52A4704BF006DF357 /* SwitchRoute.swift in Sources */,
 				DA69E397297466AA00447414 /* IOFunctionDS64OutputPropertySheetVC.swift in Sources */,
 				DACA33572A18D065009E791F /* OpenLCBNodeAddressSpaceInformation.swift in Sources */,
 				DAA867C627933265008B6EEC /* CSVParser.swift in Sources */,
@@ -1542,7 +1526,6 @@
 				DA1DA5EC28280FCD00E0F993 /* FlowControl.swift in Sources */,
 				DA93CAE62A40C4F10014D2E2 /* OpenLCBTractionListenerNode.swift in Sources */,
 				DAEA9CFA272D8FBE00C9B3EC /* LocoNetMessage.swift in Sources */,
-				DA6803B228EA553900DED1D8 /* LocomotiveRosterVC.swift in Sources */,
 				DA912743295F3C9900E9B96E /* InputOutput.swift in Sources */,
 				DABD4F322A3C99E2000A25AB /* LocoNetMessageOpcode.swift in Sources */,
 				DA9CF8FD2860978A00825FA9 /* TurnoutMotorType.swift in Sources */,
@@ -1573,7 +1556,6 @@
 				DADBBFEA285DF36700426CD5 /* LayoutSwitchBoardExtensions.swift in Sources */,
 				DA8B5D1B282FE23900D39F07 /* MessageTiming.swift in Sources */,
 				DA56260D29E1A13300D465CC /* OpenLCBTransportLayerState.swift in Sources */,
-				DA9ED4F028F24B7700EA914A /* RouteManagerTableViewDS.swift in Sources */,
 				DAB768F929339DCC00ECC41A /* SensorType.swift in Sources */,
 				DA28C2C52801ED9700857471 /* QuerySlot3.swift in Sources */,
 				DA434294283698CA00E8D555 /* SerialPort.c in Sources */,
@@ -1588,7 +1570,6 @@
 				DACB59312896CDCE006B1861 /* TurnoutSwitchState.swift in Sources */,
 				DA5BC9912A1A4CDF00D67ABE /* FileHandleExtensions.swift in Sources */,
 				DAFBC3ED29EC39A6003336BE /* OpenLCBErrorCode.swift in Sources */,
-				DA9ED4EE28F240A400EA914A /* RouteManagerVC.swift in Sources */,
 				DA912741295F315000E9B96E /* TC64ShortTiming.swift in Sources */,
 				DA0DA27A2779E96B00E4F23C /* Layout.swift in Sources */,
 				DA467BA9281D569300AB9650 /* SwitchBoardView.swift in Sources */,
@@ -1609,7 +1590,6 @@
 				DA412E14278099AF00748CCD /* ThrottleVC.swift in Sources */,
 				DA58F00D2A45AA3700D36E90 /* LocoNetFunctionConstants.swift in Sources */,
 				DA1DA5E82827EA6700E0F993 /* EditInterfacesVC.swift in Sources */,
-				DA78875B28F039BF0093C647 /* LocomotiveRosterTableViewDS.swift in Sources */,
 				DA9807C52789AFE300F73ACD /* NMRA.swift in Sources */,
 				DA7243F628A7F1E5003157CA /* RouteDirection.swift in Sources */,
 				DA6E28E1285F86B900772641 /* Orientation.swift in Sources */,

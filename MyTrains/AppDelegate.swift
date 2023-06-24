@@ -86,12 +86,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     wc.showWindow(nil)
   }
   
-  @IBAction func mnuLocomotiveRosterAction(_ sender: NSMenuItem) {
-    let x = ModalWindow.LocomotiveRoster
-    let wc = x.windowController
-    wc.showWindow(nil)
-  }
-  
   @IBAction func mnuEditLayoutsAction(_ sender: NSMenuItem) {
     ModalWindow.EditLayouts.runModel()
   }
@@ -103,13 +97,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
   @IBAction func mnuEditCommandStations(_ sender: NSMenuItem) {
     ModalWindow.EditCommandStations.runModel()
   }
-  
-  @IBAction func mnuPurgeProfiler(_ sender: NSMenuItem) {
-    let x = ModalWindow.PurgeProfiler
-    let wc = x.windowController
-    wc.showWindow(nil)
-  }
-  
+    
   @IBAction func mnuEditNetworksAction(_ sender: NSMenuItem) {
     ModalWindow.EditNetworks.runModel()
   }
@@ -155,12 +143,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     let wc = x.windowController
     wc.showWindow(nil)
   }
-  
-  @IBAction func mnuRouteManger(_ sender: NSMenuItem) {
-    let x = ModalWindow.RouteManager
-    let wc = x.windowController
-    wc.showWindow(nil)
- }
   
   // MARK: Control Menu
   

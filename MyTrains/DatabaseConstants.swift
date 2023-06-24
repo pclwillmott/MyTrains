@@ -13,7 +13,7 @@ enum TABLE {
   static let NETWORK                     = "NETWORK"
   static let LOCONET_DEVICE              = "LOCONET_DEVICE"
   static let ROLLING_STOCK               = "ROLLING_STOCK"
-  static let DECODER_FUNCTION            = "DECODER_FUNCTION"
+//  static let DECODER_FUNCTION            = "DECODER_FUNCTION"
   static let DECODER_CV                  = "DECODER_CV"
   static let SPEED_PROFILE               = "SPEED_PROFILE"
   static let TRAIN                       = "TRAIN"
@@ -113,7 +113,7 @@ enum ROLLING_STOCK {
   static let FLAGS                       = "FLAGS"
   static let BEST_FIT_METHOD             = "BEST_FIT_METHOD"
 }
-
+/*
 enum DECODER_FUNCTION {
   static let DECODER_FUNCTION_ID         = "DECODER_FUNCTION_ID"
   static let ROLLING_STOCK_ID            = "ROLLING_STOCK_ID"
@@ -126,7 +126,7 @@ enum DECODER_FUNCTION {
   static let INVERTED                    = "INVERTED"
   static let STATE                       = "STATE"
 }
-
+*/
 enum DECODER_CV {
   static let DECODER_CV_ID               = "DECODER_CV_ID"
   static let ROLLING_STOCK_ID            = "ROLLING_STOCK_ID"

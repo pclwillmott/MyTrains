@@ -9,11 +9,7 @@ import Foundation
 import Cocoa
 
 class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
-  func saveNew(dbEditorView: DBEditorView) -> EditorObject {
-    return EditorObject(primaryKey: -1)
-  }
   
-
   // MARK: Window & View Control
   
   override func viewDidLoad() {
@@ -38,7 +34,7 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     
     cboNetwork.dataSource = cboNetworkDS
     
- //   editorView.dictionary = myTrainsController.locomotives
+    editorView.dictionary = myTrainsController.rollingStock
     
     UnitLength.populate(comboBox: cboLengthUnits)
     UnitLength.populate(comboBox: cboOccupancyFeedbackOffsetUnits)
@@ -101,8 +97,8 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   }
   
   func setupFields(dbEditorView: DBEditorView, editorObject: EditorObject) {
-    /*
-    if let locomotive = editorObject as? Locomotive {
+    
+    if let locomotive = editorObject as? RollingStock {
       txtLocomotiveName.stringValue = locomotive.rollingStockName
       cboPowerSource.selectItem(at: locomotive.locomotiveType.rawValue)
       txtLength.stringValue = "\(locomotive.length)"
@@ -112,7 +108,7 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
       chkMobileDecoderInstalled.state = locomotive.mDecoderInstalled ? .on : .off
       chkAccessoryDecoderInstalled.state = locomotive.aDecoderInstalled ? .on : .off
       SpeedSteps.select(comboBox: cboDecoderType, value: locomotive.speedSteps)
-      txtAddress.stringValue = locomotive.mDecoderAddress == -1 ? "" : "\(locomotive.mDecoderAddress)"
+      txtAddress.stringValue = locomotive.mDecoderAddress == 0 ? "" : "\(locomotive.mDecoderAddress)"
       txtAccessoryDecoderAddress.stringValue = locomotive.aDecoderAddress == -1 ? "" : "\(locomotive.aDecoderAddress)"
       txtOccupancyFeedbackOffsetFront.stringValue = "\(locomotive.feedbackOccupancyOffsetFront)"
       txtOccupancyFeedbackOffsetRear.stringValue = "\(locomotive.feedbackOccupancyOffsetRear)"
@@ -139,7 +135,7 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
       cvTableView.delegate = cvTableViewDS
       cvTableView.reloadData()
     }
-     */
+     
   }
   
   func validate(dbEditorView: DBEditorView) -> String? {
@@ -203,8 +199,8 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     }
     return nil
   }
-  /*
-  func setFields(locomotive:Locomotive) {
+  
+  func setFields(locomotive:RollingStock) {
     locomotive.rollingStockName = txtLocomotiveName.stringValue
     locomotive.locomotiveType = LocomotiveType.getType(forName: cboPowerSource.stringValue)
     locomotive.length = Double(txtLength.stringValue) ?? 0.0
@@ -212,7 +208,7 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     locomotive.scale = Double(txtScale.stringValue) ?? 1.0
     locomotive.trackGauge = TrackGauge(rawValue: cboTrackGuage.indexOfSelectedItem) ?? TrackGauge.defaultValue
     locomotive.speedSteps = SpeedSteps.selected(comboBox: cboDecoderType)
-    locomotive.mDecoderAddress = Int(txtAddress.stringValue) ?? -1
+    locomotive.mDecoderAddress = UInt16(txtAddress.stringValue) ?? 0
     locomotive.aDecoderAddress = Int(txtAccessoryDecoderAddress.stringValue) ?? -1
     locomotive.mDecoderInstalled = chkMobileDecoderInstalled.state == .on
     locomotive.aDecoderInstalled = chkAccessoryDecoderInstalled.state == .on
@@ -231,35 +227,34 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     locomotive.notes = txtNotes.string
     locomotive.save()
   }
-*/
-  /*
+
   func saveNew(dbEditorView: DBEditorView) -> EditorObject {
     
-    let locomotive = Locomotive(primaryKey: -1)
+    let locomotive = RollingStock(primaryKey: -1)
     setFields(locomotive: locomotive)
     myTrainsController.addRollingStock(rollingStock: locomotive)
-    editorView.dictionary = myTrainsController.locomotives
+    editorView.dictionary = myTrainsController.rollingStock
     editorView.setSelection(key: locomotive.primaryKey)
     return locomotive
     
   }
-  */
+  
   func saveExisting(dbEditorView: DBEditorView, editorObject: EditorObject) {
-    /*
-    if let locomotive = editorObject as? Locomotive {
+    
+    if let locomotive = editorObject as? RollingStock {
       setFields(locomotive: locomotive)
-      editorView.dictionary = myTrainsController.locomotives
+      editorView.dictionary = myTrainsController.rollingStock
       editorView.setSelection(key: locomotive.primaryKey)
     }
-     */
+     
   }
   
   func delete(dbEditorView: DBEditorView, primaryKey: Int) {
-    /*
+    
     myTrainsController.removeRollingStock(primaryKey: primaryKey)
-    Locomotive.delete(primaryKey: primaryKey)
-    editorView.dictionary = myTrainsController.locomotives
-     */
+    RollingStock.delete(primaryKey: primaryKey)
+    editorView.dictionary = myTrainsController.rollingStock
+     
   }
   
   // MARK: Outlets & Actions
