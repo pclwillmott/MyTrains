@@ -31,6 +31,15 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
       }
     }
     
+    let numberOfThrottles : UInt8 = 8
+    
+    for throttleId in 1 ... numberOfThrottles {
+      let throttle = OpenLCBThrottle(throttleId: throttleId)
+      throttles.append(throttle)
+      freeThrottles.insert(throttleId)
+      registerNode(node: throttle)
+    }
+    
     registerNode(node: fastClock)
     
     // **** TESTING STUFF ****
@@ -50,6 +59,12 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
   private var observers : [Int:OpenLCBNetworkLayerDelegate] = [:]
   
   private var virtualNodes : [UInt64:OpenLCBNodeVirtual] = [:]
+  
+  private var throttles : [OpenLCBThrottle] = []
+  
+  private var throttlesInUse : Set<UInt8> = []
+  
+  private var freeThrottles : Set<UInt8> = []
 
   // MARK: Public Properties
   
@@ -132,6 +147,20 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
   public func deregisterNode(node:OpenLCBNodeVirtual) {
     virtualNodes.removeValue(forKey: node.nodeId)
     node.networkLayer = nil
+  }
+  
+  public func getThrottle() -> OpenLCBThrottle? {
+    if let throttleId = freeThrottles.first {
+      throttlesInUse.insert(throttleId)
+      freeThrottles.remove(throttleId)
+      return throttles[Int(throttleId) - 1]
+    }
+    return nil
+  }
+  
+  public func releaseThrottle(throttle:OpenLCBThrottle) {
+    freeThrottles.insert(throttle.throttleId)
+    throttlesInUse.remove(throttle.throttleId)
   }
 
   // MARK: Messages

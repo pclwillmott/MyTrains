@@ -63,6 +63,7 @@
 		DA2E0E5A2736B8AA00C7DA7A /* LoconetRequestSlotDataMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2E0E592736B8AA00C7DA7A /* LoconetRequestSlotDataMessage.swift */; };
 		DA2E0E5E2736EAF300C7DA7A /* MyTrainsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2E0E5D2736EAF300C7DA7A /* MyTrainsController.swift */; };
 		DA3254E52A4704BF006DF357 /* SwitchRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3254E42A4704BF006DF357 /* SwitchRoute.swift */; };
+		DA3254E82A4755AC006DF357 /* OpenLCBThrottle.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3254E72A4755AC006DF357 /* OpenLCBThrottle.swift */; };
 		DA32C97A294CB0E40034DB4F /* SampleRate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA32C979294CB0E40034DB4F /* SampleRate.swift */; };
 		DA33FC2027AFF9E500630227 /* OpSwDecoderType.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA33FC1F27AFF9E500630227 /* OpSwDecoderType.xib */; };
 		DA33FC2327AFFA1400630227 /* OpSwDecoderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA33FC2227AFFA1400630227 /* OpSwDecoderType.swift */; };
@@ -399,6 +400,7 @@
 		DA2E0E592736B8AA00C7DA7A /* LoconetRequestSlotDataMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoconetRequestSlotDataMessage.swift; sourceTree = "<group>"; };
 		DA2E0E5D2736EAF300C7DA7A /* MyTrainsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTrainsController.swift; sourceTree = "<group>"; };
 		DA3254E42A4704BF006DF357 /* SwitchRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchRoute.swift; sourceTree = "<group>"; };
+		DA3254E72A4755AC006DF357 /* OpenLCBThrottle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBThrottle.swift; sourceTree = "<group>"; };
 		DA32C979294CB0E40034DB4F /* SampleRate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleRate.swift; sourceTree = "<group>"; };
 		DA33FC1F27AFF9E500630227 /* OpSwDecoderType.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OpSwDecoderType.xib; sourceTree = "<group>"; };
 		DA33FC2227AFFA1400630227 /* OpSwDecoderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpSwDecoderType.swift; sourceTree = "<group>"; };
@@ -777,6 +779,7 @@
 				DAB768F829339DCC00ECC41A /* SensorType.swift */,
 				DA9325A7289C04CE00CC317F /* SlotState.swift */,
 				DAF5B4FC28A91A830015E758 /* SpeedSteps.swift */,
+				DA7243F728A81165003157CA /* ThrottleMode.swift */,
 				DAE8DD54286754C00097C2D1 /* TrackCode.swift */,
 				DA6E28E2285F8F1A00772641 /* TrackElectrificationType.swift */,
 				DA1B79FC285F3C5E009E1189 /* TrackGauge.swift */,
@@ -794,6 +797,14 @@
 				DA3254E42A4704BF006DF357 /* SwitchRoute.swift */,
 			);
 			path = _types;
+			sourceTree = "<group>";
+		};
+		DA3254E92A475D5F006DF357 /* _delegates */ = {
+			isa = PBXGroup;
+			children = (
+				DAD41AC52A3CA59D002EF847 /* MyTrainsControllerDelegate.swift */,
+			);
+			path = _delegates;
 			sourceTree = "<group>";
 		};
 		DA57A6E72A449669005C72B0 /* _types */ = {
@@ -870,6 +881,7 @@
 				DAF3746E2A1A2A9B009E91F0 /* OpenLCBNodeVirtual.swift */,
 				DAA777C92A20C84C008EAF02 /* OpenLCBClock.swift */,
 				DAA54F7E2A217CDA005CED7E /* OpenLCBNodeConfigurationTool.swift */,
+				DA3254E72A4755AC006DF357 /* OpenLCBThrottle.swift */,
 			);
 			path = _nodes;
 			sourceTree = "<group>";
@@ -925,9 +937,10 @@
 		DAA83DE9272C37670075CBCD /* MyTrains */ = {
 			isa = PBXGroup;
 			children = (
-				DA3254E62A4704E2006DF357 /* _types */,
+				DA3254E92A475D5F006DF357 /* _delegates */,
 				DA2CB4B32A0720C4000E197E /* _enumerations */,
 				DAA66BD02A09226E001804AC /* _extensions */,
+				DA3254E62A4704E2006DF357 /* _types */,
 				DA2E0E5727359ED300C7DA7A /* Ack.swift */,
 				DA2429742892FE94000D4ADE /* AddressManager.storyboard */,
 				DA2429762892FEDB000D4ADE /* AddressManagerVC.swift */,
@@ -948,6 +961,7 @@
 				DA5B4600276F4E38005CA03C /* DatabaseConstants.swift */,
 				DA9B87272A2B979E00E9969E /* DBEditorView.swift */,
 				DA88378B2770FBEC000B9A41 /* DBEditorView.xib */,
+				DA58F00E2A45AE4400D36E90 /* DCC */,
 				DA3AEF412788855800FF91D4 /* DecoderCV.swift */,
 				DAA71694297C1B580080114F /* DetectionSensitivity.swift */,
 				DA2429722892F7E1000D4ADE /* DeviceTCV.swift */,
@@ -979,7 +993,6 @@
 				DA95D6BC280833ED00D9F1B6 /* GroupSetupVC.swift */,
 				DA72DDE42A3C6E150027BE50 /* interfaces */,
 				DAA8CEF92968406000B07971 /* IOChannel.swift */,
-				DA58F00E2A45AE4400D36E90 /* DCC */,
 				DAA71696297C232D0080114F /* IOChannelBXP88Input.swift */,
 				DA69E3922974581700447414 /* IOChannelDS64Output.swift */,
 				DAA8CEFF296857F500B07971 /* IOChannelInput.swift */,
@@ -1043,7 +1056,6 @@
 				DA434291283698CA00E8D555 /* MyTrains-Bridging-Header.h */,
 				DAA83DF3272C37680075CBCD /* MyTrains.entitlements */,
 				DA2E0E5D2736EAF300C7DA7A /* MyTrainsController.swift */,
-				DAD41AC52A3CA59D002EF847 /* MyTrainsControllerDelegate.swift */,
 				DA5B4608276F6CBF005CA03C /* Network.swift */,
 				DA2E0E54273591A600C7DA7A /* NetworkTurnoutOutputMessage.swift */,
 				DA9807C42789AFE300F73ACD /* NMRA.swift */,
@@ -1113,7 +1125,6 @@
 				DA912740295F315000E9B96E /* TC64ShortTiming.swift */,
 				DA912744295F3DF300E9B96E /* TC64TransitionControl.swift */,
 				DA412E112780948900748CCD /* Throttle.storyboard */,
-				DA7243F728A81165003157CA /* ThrottleMode.swift */,
 				DA412E13278099AF00748CCD /* ThrottleVC.swift */,
 				DA8B5D16282FCE2700D39F07 /* TimeoutCode.swift */,
 				DAE8DD50286741BD0097C2D1 /* TrackPart.swift */,
@@ -1502,6 +1513,7 @@
 				DAF4DD4C289A90C1000B848E /* SpeedResultsView.swift in Sources */,
 				DAE9DBB728258E12004BC75D /* LocoNetProducts.swift in Sources */,
 				DA3254E52A4704BF006DF357 /* SwitchRoute.swift in Sources */,
+				DA3254E82A4755AC006DF357 /* OpenLCBThrottle.swift in Sources */,
 				DA69E397297466AA00447414 /* IOFunctionDS64OutputPropertySheetVC.swift in Sources */,
 				DACA33572A18D065009E791F /* OpenLCBNodeAddressSpaceInformation.swift in Sources */,
 				DAA867C627933265008B6EEC /* CSVParser.swift in Sources */,

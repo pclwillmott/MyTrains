@@ -9,7 +9,7 @@ import Foundation
 import Cocoa
 import AppKit
 
-class ThrottleVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegate {
+class ThrottleVC: NSViewController, NSWindowDelegate {
 
   // MARK: Window & View Control
   
@@ -39,8 +39,6 @@ class ThrottleVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegate
   override func viewWillAppear() {
     
     self.view.window?.delegate = self
-    
-    networkControllerDelegateId = myTrainsController.appendDelegate(delegate: self)
     
     let xStart : CGFloat = 110
     var xPos : CGFloat = xStart
@@ -86,13 +84,7 @@ class ThrottleVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegate
   
   private var first : Bool = true
   
-  private var networkControllerDelegateId : Int = -1
-  
-//  private var locomotive : Locomotive?
-  
   private var buttons : [NSButton] = []
-  
-  private var locomotiveDelegateId : Int = -1
   
   private var route : Route = []
   

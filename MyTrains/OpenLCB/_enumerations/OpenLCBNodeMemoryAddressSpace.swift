@@ -15,4 +15,5 @@ public enum OpenLCBNodeMemoryAddressSpace : UInt8 {
   case acdiUser         = 0xfb // 251
   case fdi              = 0xfa // 250
   case functions        = 0xf9 // 249
+  case cv               = 0xf8 // 248
 }
