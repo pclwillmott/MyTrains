@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Cocoa
 
 public enum OpenLCBTrackProtocol : UInt8 {
   
@@ -38,4 +39,59 @@ public enum OpenLCBTrackProtocol : UInt8 {
     return 0b00011111
   }
   
+  private static let titles : [OpenLCBTrackProtocol:String] = [
+    anyTrackProtocol                     : "Any Track Protocol",
+    nativeOpenLCBNode                    : "Native OpenLCB Train Node",
+    mfxM4                                : "MFX / M4 Track Protocol",
+    marklinMotorolaAny                   : "Marklin-Motorola Any Version",
+    marklinMotorolaProtocolVersionI      : "Marklin-Motorola Protocol Version I",
+    marklinMotorolaProtocolVersionII     : "Marklin-Motorola Protocol Version II",
+    marklinMotorolaProtocolVersionIIF5F8 : "Marklin-Motorola Protocol Version II + F5-F8",
+    dccDefaultAddressSpaceAnySpeedSteps  : "DCC Default Address Space Any Speed Steps",
+    dccDefaultAddressSpace14SpeedSteps   : "DCC Default Address Space 14 Speed Steps",
+    dccDefaultAddressSpace28SpeedSteps   : "DCC Default Address Space 28 Speed Steps",
+    dccDefaultAddressSpace128SpeedSteps  : "DCC Default Address Space 128 Speed Steps",
+    dccLongAddressSpaceAnySpeedSteps     : "DCC Long Address Space Any Speed Steps",
+    dccLongAddressSpace14SpeedSteps      : "DCC Long Address Space 14 Speed Steps",
+    dccLongAddressSpace28SpeedSteps      : "DCC Long Address Space 28 Speed Steps",
+    dccLongAddressSpace128SpeedSteps     : "DCC Long Address Space 128 Speed Steps",
+  ]
+  
+  // MARK: Static Methods
+  
+  public static let defaultValue : OpenLCBTrackProtocol = .anyTrackProtocol
+  
+  public static func populate(comboBox:NSComboBox) {
+    comboBox.removeAllItems()
+    var temp : [String] = []
+    for (_, title) in titles {
+      temp.append(title)
+    }
+    temp.sort {$0 < $1}
+    comboBox.addItems(withObjectValues: temp)
+    select(comboBox: comboBox, value: .defaultValue)
+  }
+  
+  public static func select(comboBox:NSComboBox, value:OpenLCBTrackProtocol) {
+    let key = titles[value]!
+    for index in 0 ... comboBox.numberOfItems - 1 {
+      if comboBox.itemObjectValue(at: index) as! String == key {
+        comboBox.selectItem(at: index)
+        return
+      }
+    }
+    comboBox.selectItem(at: Int(value.rawValue))
+  }
+
+  public static func selected(comboBox: NSComboBox) -> OpenLCBTrackProtocol {
+    let temp = comboBox.itemObjectValue(at: comboBox.indexOfSelectedItem) as! String
+    for (key, item) in titles {
+      if temp == item {
+        return key
+      }
+    }
+    return defaultValue
+  }
+
+
 }

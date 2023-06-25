@@ -272,6 +272,18 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
 
   }
 
+  public func sendIdentifyProducer(sourceNodeId:UInt64, eventId:UInt64) {
+
+    let message = OpenLCBMessage(messageTypeIndicator: .identifyProducer)
+
+    message.sourceNodeId = sourceNodeId
+    
+    message.eventId = eventId
+    
+    sendMessage(message: message)
+
+  }
+
   public func sendProducerIdentifiedValidityUnknown(sourceNodeId:UInt64, eventId:UInt64) {
 
     let message = OpenLCBMessage(messageTypeIndicator: .producerIdentifiedWithValidityUnknown)

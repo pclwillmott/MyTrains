@@ -761,38 +761,44 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
             
             if !matchOnlyInAddress {
               
-              nameMatch = !digitSequence.isEmpty
+              nameMatch = digitSequence.isEmpty
               
-              var nameDigitSequence : [String] = []
-              
-              temp = ""
-              
-              for char in userNodeName {
-                switch char {
-                case "0"..."9":
-                  temp += String(char)
-                  break
-                default:
-                  if !temp.isEmpty {
-                    nameDigitSequence.append(temp)
-                    temp = ""
-                  }
-                }
-              }
-              
-              if !temp.isEmpty {
-                nameDigitSequence.append(temp)
-              }
-              
-              for sequence in digitSequence {
-                var found = false
-                for nameSequence in nameDigitSequence {
-                  if (exactMatchOnly && sequence == nameSequence) || (!exactMatchOnly && sequence == nameSequence.prefix(sequence.count)) {
-                    found = true
+              if !nameMatch {
+                
+                nameMatch = true
+                
+                var nameDigitSequence : [String] = []
+                
+                temp = ""
+                
+                for char in userNodeName {
+                  switch char {
+                  case "0"..."9":
+                    temp += String(char)
                     break
+                  default:
+                    if !temp.isEmpty {
+                      nameDigitSequence.append(temp)
+                      temp = ""
+                    }
                   }
                 }
-                nameMatch = nameMatch && found
+                
+                if !temp.isEmpty {
+                  nameDigitSequence.append(temp)
+                }
+                
+                for sequence in digitSequence {
+                  var found = false
+                  for nameSequence in nameDigitSequence {
+                    if (exactMatchOnly && sequence == nameSequence) || (!exactMatchOnly && sequence == nameSequence.prefix(sequence.count)) {
+                      found = true
+                      break
+                    }
+                  }
+                  nameMatch = nameMatch && found
+                }
+                
               }
               
             }
