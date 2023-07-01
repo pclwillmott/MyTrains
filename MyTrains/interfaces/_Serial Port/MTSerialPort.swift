@@ -220,8 +220,3 @@ public class MTSerialPort {
   
 }
 
-public enum Parity : Int32 {
-  case none = 0
-  case even = 1
-  case odd = 2
-}

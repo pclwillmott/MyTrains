@@ -491,7 +491,19 @@ public class OpenLCBNode : NSObject {
       _supportedProtocols[2] |= value ? mask : 0x00
     }
   }
-  
+
+  public var isLocoNetGatewayProtocolSupported : Bool {
+    get {
+      let mask : UInt8 = 0x08
+      return (_supportedProtocols[2] & mask) == mask
+    }
+    set(value) {
+      let mask : UInt8 = 0x08
+      _supportedProtocols[2] &= ~mask
+      _supportedProtocols[2] |= value ? mask : 0x00
+    }
+  }
+
   public var supportedProtocolsInfo : [(protocol:String, supported:Bool)] {
     get {
       
@@ -517,6 +529,7 @@ public class OpenLCBNode : NSObject {
       result.append(("Function Configuration", isFunctionConfigurationProtocolSupported))
       result.append(("Firmware Upgrade Protocol", isFirmwareUpgradeProtocolSupported))
       result.append(("Firmware Upgrade Active", isFirmwareUpgradeActiveProtocolSupported))
+      result.append(("LocoNet Gateway Protocol", isLocoNetGatewayProtocolSupported))
       return result
       
     }

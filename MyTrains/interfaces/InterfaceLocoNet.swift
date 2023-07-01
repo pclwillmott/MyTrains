@@ -188,8 +188,6 @@ public class InterfaceLocoNet : Interface {
     addToQueue(message: message, delay: delay, responses: [], retryCount: 0, timeoutCode: .none)
   }
   
-  // MARK: MTSerialPortDelegate Methods
-  
   public override func parseInput() {
 
     var doAgain = true

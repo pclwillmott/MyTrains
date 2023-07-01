@@ -15,6 +15,7 @@ public enum OpenLCBErrorCode : UInt16 {
   case permanentErrorSourceNotPermitted                                      = 0x1020
   case permanentErrorNotFound                                                = 0x1030
   case permanentErrorAlreadyExists                                           = 0x1032
+  case permanentErrorLocoNetNotConnected                                     = 0x1033
   case permanentErrorNotImplemented                                          = 0x1040
   case permanentErrorNotImplementedSubcommandUnknown                         = 0x1041
   case permanentErrorNotimplementedDatagramTypeStreamTypeOrCommandUnknown    = 0x1042

@@ -36,5 +36,6 @@ public enum OpenLCBWellKnownEvent : UInt64 {
   case defaultRealTimeClock                = 0x0101000001010000
   case alternateClock1                     = 0x0101000001020000
   case alternateClock2                     = 0x0101000001030000
+  case nodeIsALocoNetGateway               = 0x0101000000000701
 
 }

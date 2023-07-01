@@ -232,6 +232,36 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
     
   }
 
+  public func sendLocoNetMessageReceived(sourceNodeId:UInt64, locoNetMessage:[UInt8]) {
+    
+    let message = OpenLCBMessage(messageTypeIndicator: .locoNetMessageReceived)
+    
+    message.sourceNodeId = sourceNodeId
+    
+    message.payload = locoNetMessage
+    
+    sendMessage(message: message)
+    
+  }
+
+  public func sendLocoNetMessage(sourceNodeId:UInt64, destinationNodeId:UInt64, locoNetMessage:[UInt8], spacingDelay:UInt8) {
+    
+    let message = OpenLCBMessage(messageTypeIndicator: .sendLocoNetMessage)
+    
+    message.sourceNodeId = sourceNodeId
+    
+    message.destinationNodeId = destinationNodeId
+    
+    message.payload = locoNetMessage
+    
+    if spacingDelay != 0 {
+      message.payload.append(spacingDelay)
+    }
+    
+    sendMessage(message: message)
+    
+  }
+
   public func sendWellKnownEvent(sourceNodeId:UInt64, eventId:OpenLCBWellKnownEvent) {
     sendEvent(sourceNodeId: sourceNodeId, eventId: eventId.rawValue)
   }
@@ -272,6 +302,10 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
 
   }
 
+  public func sendProducerIdentifiedValid(sourceNodeId:UInt64, wellKnownEvent: OpenLCBWellKnownEvent) {
+    sendProducerIdentifiedValid(sourceNodeId: sourceNodeId, eventId: wellKnownEvent.rawValue)
+  }
+  
   public func sendIdentifyProducer(sourceNodeId:UInt64, eventId:UInt64) {
 
     let message = OpenLCBMessage(messageTypeIndicator: .identifyProducer)

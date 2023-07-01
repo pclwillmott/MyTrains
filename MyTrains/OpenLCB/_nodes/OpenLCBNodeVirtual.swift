@@ -190,15 +190,25 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   public func initCDI(filename:String, manufacturer:String, model:String) {
     if let filepath = Bundle.main.path(forResource: filename, ofType: "xml") {
       do {
+        
         var contents = try String(contentsOfFile: filepath)
+        
         contents = contents.replacingOccurrences(of: "%%MANUFACTURER%%", with: manufacturer)
         contents = contents.replacingOccurrences(of: "%%MODEL%%", with: model)
+        
+        var ports = ""
+        for port in MTSerialPortManager.availablePorts() {
+          ports += "<relation><property>\(port)</property><value>\(port)</value></relation>\n"
+        }
+        contents = contents.replacingOccurrences(of: "%%PORTS%%", with: ports)
+
         let memorySpace = OpenLCBMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.cdi.rawValue, isReadOnly: true, description: "")
         memorySpace.memory = [UInt8]()
         memorySpace.memory.append(contentsOf: contents.utf8)
         memorySpace.memory.append(contentsOf: [UInt8](repeating: 0, count: 64))
         memorySpaces[memorySpace.space] = memorySpace
         isConfigurationDescriptionInformationProtocolSupported = true
+        
       }
       catch {
       }

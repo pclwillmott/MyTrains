@@ -32,8 +32,7 @@ public class LocoNetMessage : NSObject {
     super.init()
   }
 
-  init(networkId: Int, data:[UInt8]) {
-    self.networkId = networkId
+  init(data:[UInt8]) {
     self.message = data
     super.init()
   }
@@ -65,7 +64,7 @@ public class LocoNetMessage : NSObject {
   
   public var message : [UInt8]
   
-  public var networkId : Int
+  public var networkId : Int = 0
   
   public var checkSumOK : Bool {
     get {

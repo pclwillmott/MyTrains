@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <cdi xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://openlcb.org/schema/cdi/1/1/cdi.xsd">
 <identification>
-<manufacturer>Paul Willmott</manufacturer>
-<model>MyTrains Clock</model>
+	<manufacturer>%%MANUFACTURER%%</manufacturer>
+	<model>%%MODEL%%</model>
 <hardwareVersion>v0.1</hardwareVersion>
 <softwareVersion>v0.1</softwareVersion>
 </identification>
