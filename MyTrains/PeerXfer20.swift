@@ -9,9 +9,9 @@ import Foundation
 
 public class PeerXferMessage20 : LocoNetMessage {
   
-  override init(networkId: Int, data: [UInt8]) {
+  init(networkId: Int, data: [UInt8]) {
     
-    super.init(networkId: networkId, data: data)
+    super.init(networkId: networkId, data: data, appendCheckSum: false)
     
     let highBits1 = message[9] & 0x0f
     

@@ -1,0 +1,369 @@
+//
+//  LocoNet.swift
+//  MyTrains
+//
+//  Created by Paul Willmott on 02/07/2023.
+//
+
+import Foundation
+
+private typealias QueueItem = (message:LocoNetMessage, spacingDelay:UInt8, immPacketRetryCount:Int)
+
+private enum State {
+  case idle
+  case waitingForDatagramReceivedOK
+  case waitingForReply
+}
+
+public class LocoNet : NSObject, OpenLCBNetworkLayerDelegate {
+  
+  // MARK: Constructors & Destructors
+  
+  init(gatewayNodeId: UInt64, virtualNode: OpenLCBNodeVirtual) {
+    
+    self.gatewayNodeId = gatewayNodeId
+    
+    self.virtualNode = virtualNode
+    
+    self.networkLayer = virtualNode.networkLayer!
+    
+    self.nodeId = virtualNode.nodeId
+    
+    super.init()
+    
+    self.observerId = networkLayer.addObserver(observer: self)
+    
+    getOpSwDataAP1()
+    
+  }
+  
+  deinit {
+    networkLayer.removeObserver(observerId: observerId)
+  }
+  
+  // MARK: Private Properties
+  
+  private var gatewayNodeId : UInt64
+  
+  private var virtualNode : OpenLCBNodeVirtual
+  
+  private var networkLayer : OpenLCBNetworkLayer
+  
+  private var nodeId : UInt64
+  
+  private var observerId : Int = -1
+  
+  private var outputQueue : [QueueItem] = []
+  
+  private var immPacketQueue : [QueueItem] = []
+  
+  private var currentItem : QueueItem? = nil
+  
+  private var state : State = .idle
+  
+  private var retryCount : UInt16 = 10
+  
+  private var timeoutTimer : Timer? = nil
+  
+  private var tempErrorTimer : Timer? = nil
+  
+  private var immPacketTimer : Timer? = nil
+  
+  internal var commandStationType : LocoNetCommandStationType = .DT200
+
+  // MARK: Public Properties
+  
+  public var delegate : LocoNetDelegate?
+  
+  public var trackPowerOn : Bool = false
+  
+  public var globalEmergencyStop : Bool = false
+  
+  public var implementsProtocol0 : Bool {
+    get {
+      return commandStationType.protocolsSupported.contains(.protocol0)
+    }
+  }
+  
+  public var implementsProtocol1 : Bool {
+    get {
+      return commandStationType.protocolsSupported.contains(.protocol1)
+    }
+  }
+
+  public var implementsProtocol2 : Bool {
+    get {
+      return commandStationType.protocolsSupported.contains(.protocol2)
+    }
+  }
+
+  // MARK: Private Methods
+  
+  @objc func timeoutTimerAction() {
+    
+    delegate?.locoNetError?(gatewayNodeId: gatewayNodeId, errorCode: OpenLCBErrorCode.temporaryErrorTimeOut.rawValue)
+
+    currentItem = nil
+    
+    state = .idle
+    
+    send()
+    
+  }
+  
+  func startTimeoutTimer(timeInterval:TimeInterval) {
+    timeoutTimer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(timeoutTimerAction), userInfo: nil, repeats: false)
+    RunLoop.current.add(timeoutTimer!, forMode: .common)
+  }
+  
+  func stopTimeoutTimer() {
+    timeoutTimer?.invalidate()
+    timeoutTimer = nil
+  }
+
+  @objc func tempErrorTimerAction() {
+    
+    state = .waitingForDatagramReceivedOK
+    
+    networkLayer.sendLocoNetMessage(sourceNodeId: nodeId, destinationNodeId: gatewayNodeId, locoNetMessage: currentItem!.message.message, spacingDelay: currentItem!.spacingDelay)
+    
+  }
+  
+  func startTempErrorTimer(timeInterval:TimeInterval) {
+    tempErrorTimer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(tempErrorTimerAction), userInfo: nil, repeats: false)
+    RunLoop.current.add(tempErrorTimer!, forMode: .common)
+  }
+
+  @objc func immPacketTimerAction() {
+    
+    guard !immPacketQueue.isEmpty else {
+      return
+    }
+    
+    var item = immPacketQueue.removeFirst()
+    
+    item.immPacketRetryCount -= 1
+    
+    if item.immPacketRetryCount > 0 {
+      addToQueue(message: item.message, spacingDelay: item.spacingDelay, immPacketRetryCount: item.immPacketRetryCount)
+    }
+    
+    if !immPacketQueue.isEmpty {
+      startIMMPacketTimer(timeInterval: 0.1)
+    }
+    
+  }
+  
+  func startIMMPacketTimer(timeInterval:TimeInterval) {
+    immPacketTimer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(immPacketTimerAction), userInfo: nil, repeats: false)
+    RunLoop.current.add(immPacketTimer!, forMode: .common)
+  }
+
+  private func send() {
+    
+    guard !outputQueue.isEmpty else {
+      return
+    }
+    
+    currentItem = outputQueue.removeFirst()
+    
+    state = .waitingForDatagramReceivedOK
+    
+    retryCount = 10
+    
+    networkLayer.sendLocoNetMessage(sourceNodeId: nodeId, destinationNodeId: gatewayNodeId, locoNetMessage: currentItem!.message.message, spacingDelay: currentItem!.spacingDelay)
+    
+  }
+
+  internal func addToQueue(message:LocoNetMessage, spacingDelay:UInt8) {
+ 
+    addToQueue(message: message, spacingDelay: spacingDelay, immPacketRetryCount: 10)
+    
+  }
+ 
+  // MARK: Public Methods
+ 
+  public func addToQueue(message:LocoNetMessage, spacingDelay:UInt8, immPacketRetryCount:Int) {
+    
+    outputQueue.append((message:message, spacingDelay:spacingDelay, immPacketRetryCount:immPacketRetryCount))
+    
+    if outputQueue.count == 1 {
+      send()
+    }
+    
+  }
+
+  // MARK: OpenLCBNetworkLayerDelegate Methods
+  
+  public func networkLayerStateChanged(networkLayer: OpenLCBNetworkLayer) {
+    
+  }
+  
+  public func openLCBMessageReceived(message: OpenLCBMessage) {
+    
+    guard let sourceNodeId = message.sourceNodeId, sourceNodeId == gatewayNodeId else {
+      return
+    }
+    
+    switch message.messageTypeIndicator {
+    
+    case .datagramReceivedOK:
+      
+      if message.destinationNodeId! == nodeId, state != .idle {
+        
+        if let timeout = OpenLCBDatagramTimeout(rawValue: message.payload.count == 0 ? 0 : message.payload[0]) {
+
+          state = .waitingForReply
+
+          switch timeout {
+          case .ok, .replyPendingNoTimeout:
+            startTimeoutTimer(timeInterval: 2.0)
+          default:
+            startTimeoutTimer(timeInterval: timeout.timeout)
+          }
+          
+        }
+        
+      }
+      
+    case .datagramRejected:
+      
+      if message.destinationNodeId! == nodeId, state != .idle {
+        
+        if message.payload.count == 1 {
+          message.payload.append(0)
+        }
+        
+        let ec = UInt16(bigEndianData: [message.payload[0], message.payload[1]])!
+        
+        if let errorCode = OpenLCBErrorCode(rawValue: ec) {
+          
+          switch errorCode {
+          case .permanentErrorInvalidArguments:
+            delegate?.locoNetError?(gatewayNodeId: gatewayNodeId, errorCode: ec)
+            currentItem = nil
+            state = .idle
+            send()
+          case .permanentErrorNoConnection:
+            delegate?.locoNetError?(gatewayNodeId: gatewayNodeId, errorCode: ec)
+            currentItem = nil
+            outputQueue.removeAll()
+            state = .idle
+          case .temporaryErrorBufferUnavailable:
+            retryCount -= 1
+            if retryCount == 0 {
+              delegate?.locoNetError?(gatewayNodeId: gatewayNodeId, errorCode: ec)
+              currentItem = nil
+              outputQueue.removeAll()
+              state = .idle
+            }
+            else {
+              startTempErrorTimer(timeInterval: 0.1)
+            }
+          default:
+            if errorCode.isPermanent {
+              delegate?.locoNetError?(gatewayNodeId: gatewayNodeId, errorCode: ec)
+              currentItem = nil
+              state = .idle
+              send()
+            }
+            else if errorCode.isTemporary {
+              retryCount -= 1
+              if retryCount == 0 {
+                delegate?.locoNetError?(gatewayNodeId: gatewayNodeId, errorCode: ec)
+                currentItem = nil
+                state = .idle
+                send()
+              }
+              else {
+                startTempErrorTimer(timeInterval: 0.1)
+              }
+            }
+            break
+          }
+          
+        }
+        
+      }
+     
+    case .datagram:
+      
+      if message.destinationNodeId! == nodeId, let dt = message.datagramType, dt == .sendLocoNetMessageReply, state != .idle {
+        
+        while message.payload.count < 2 {
+          message.payload.append(0)
+        }
+        
+        if let errorCode = OpenLCBErrorCode(rawValue: UInt16(bigEndianData: [message.payload[0], message.payload[1]])!) {
+
+          stopTimeoutTimer()
+
+          if errorCode == .success {
+            if currentItem!.message.messageType == .immPacket {
+              immPacketQueue.append(currentItem!)
+            }
+          }
+          else {
+            delegate?.locoNetError?(gatewayNodeId: gatewayNodeId, errorCode: errorCode.rawValue)
+          }
+          
+          currentItem = nil
+          state = .idle
+          send()
+          
+        }
+        
+      }
+      
+    case .locoNetMessageReceived:
+      
+      if let locoNetMessage = LocoNetMessage(payload: message.payload) {
+        
+        if message.sourceNodeId! == gatewayNodeId {
+          delegate?.locoNetMessageReceived?(gatewayNodeId: gatewayNodeId, message: locoNetMessage)
+        }
+        
+        switch locoNetMessage.messageType {
+        
+        case .immPacketOK:
+          
+          if !immPacketQueue.isEmpty {
+            immPacketQueue.removeFirst()
+          }
+          
+        case .immPacketBufferFull:
+          
+          startIMMPacketTimer(timeInterval: 0.1)
+
+        case .opSwDataAP1:
+          
+          let trackByte = locoNetMessage.message[7]
+          
+          let mask_TrackPower    : UInt8 = 0b00000001
+          let mask_EmergencyStop : UInt8 = 0b00000010
+          let mask_Protocol1     : UInt8 = 0b00000100
+
+          if (trackByte & mask_Protocol1) == mask_Protocol1, let csType = LocoNetCommandStationType(rawValue: locoNetMessage.message[11]) {
+              commandStationType = csType
+          }
+          
+          trackPowerOn = (trackByte & mask_TrackPower) == mask_TrackPower
+          
+          if commandStationType.idleSupportedByDefault {
+            globalEmergencyStop = (trackByte & mask_EmergencyStop) != mask_EmergencyStop
+          }
+          
+        default:
+          break
+        }
+
+        
+      }
+      
+    default:
+      break
+    }
+    
+  }
+  
+}

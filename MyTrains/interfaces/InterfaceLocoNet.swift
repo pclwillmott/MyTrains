@@ -272,7 +272,7 @@ public class InterfaceLocoNet : Interface {
           
           if !restart {
           
-            let networkMessage = LocoNetMessage(networkId: networkId, data: message)
+            let networkMessage = LocoNetMessage(networkId: networkId, data: message, appendCheckSum: false)
             
             networkMessage.timeStamp = Date.timeIntervalSinceReferenceDate
             networkMessage.timeSinceLastMessage = networkMessage.timeStamp - lastTimeStamp

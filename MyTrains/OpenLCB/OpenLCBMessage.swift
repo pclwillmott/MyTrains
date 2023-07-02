@@ -95,11 +95,11 @@ public class OpenLCBMessage : NSObject {
   public var datagramType : OpenLCBDatagramType? {
     get {
       
-      guard messageTypeIndicator == .datagram && payload.count >= 2 && payload[0] == 0x20 else {
+      guard messageTypeIndicator == .datagram && payload.count >= 2 else {
         return nil
       }
       
-      return OpenLCBDatagramType(rawValue: payload[1])
+      return OpenLCBDatagramType(rawValue: UInt16(bigEndianData: [payload[0], payload[1]])!)
       
     }
   }

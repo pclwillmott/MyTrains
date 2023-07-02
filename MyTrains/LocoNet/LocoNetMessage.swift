@@ -20,6 +20,14 @@ public class LocoNetMessage : NSObject {
     super.init()
   }
 
+  init(data:[UInt8], appendCheckSum: Bool) {
+    self.message = data
+    if appendCheckSum {
+      self.message.append(LocoNetMessage.checkSum(data: Data(message), length: data.count))
+    }
+    super.init()
+  }
+
   init(networkId: Int, data:[Int], appendCheckSum: Bool) {
     self.networkId = networkId
     self.message = []
@@ -36,7 +44,15 @@ public class LocoNetMessage : NSObject {
     self.message = data
     super.init()
   }
-  
+
+  init?(payload:[UInt8]) {
+    self.message = payload
+    super.init()
+    if !checkSumOK {
+      return nil
+    }
+  }
+
   init(message: LocoNetMessage) {
     self.networkId = message.networkId
     self.message = message.message

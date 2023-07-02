@@ -604,7 +604,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
         
         if let node = self.node {
           
-          network.sendDatagramReceivedOK(sourceNodeId: sourceNodeId, destinationNodeId: node.nodeId, replyPending: false, timeOut: 0.0)
+          network.sendDatagramReceivedOK(sourceNodeId: sourceNodeId, destinationNodeId: node.nodeId, timeOut: .ok)
           
           var data = message.payload
           

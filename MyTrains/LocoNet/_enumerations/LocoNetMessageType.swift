@@ -56,7 +56,7 @@ public enum LocoNetMessageType {
   case illegalMoveP1
   case immPacket
   case immPacketOK
-  case immPacketLMOK
+  case immPacketLMOK // What does this do?
   case immPacketBufferFull
   case interfaceData
   case interfaceDataLB

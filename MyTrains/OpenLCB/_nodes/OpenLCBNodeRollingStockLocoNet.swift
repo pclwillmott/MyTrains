@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, InterfaceDelegate {
+public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDelegate {
   
   // MARK: Constructors
   
@@ -35,6 +35,8 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, Interface
   
   private var timeoutTimer : Timer?
   
+  private var locoNet : LocoNet?
+  
   private var slotState : LocoNetSlotState {
     get {
       return LocoNetSlotState(rawValue: stat1 & ~LocoNetSlotState.protectMask)!
@@ -51,20 +53,6 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, Interface
     
   private var expandedFunctions : UInt64 = 0
   
-  private var observerId : Int = -1
-  
-  private var network : Network {
-    get {
-      return myTrainsController.networks[_rollingStock.networkId]!
-    }
-  }
-  
-  private var interface : InterfaceLocoNet? {
-    get {
-      return network.interface as? InterfaceLocoNet
-    }
-  }
-
   // MARK: Public Properties
   
   // MARK: Private Methods
@@ -124,9 +112,8 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, Interface
     case .slotFetch, .setInUse:
       attachFailed()
     case .writeBack:
-      interface?.removeObserver(id: observerId)
       slotState = .common
-      interface?.setLocoSlotStat1(slotPage: slotPage, slotNumber: slotNumber, stat1: stat1)
+      locoNet?.setLocoSlotStat1(slotPage: slotPage, slotNumber: slotNumber, stat1: stat1)
       attachFailed()
     default:
       break
@@ -153,7 +140,7 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, Interface
 
   private func updateLocoState() {
     
-    if let interface = self.interface {
+    if let interface = self.locoNet {
       
       var step = UInt8(min(126, Int(abs(setSpeed) * 3600.0 / (1000.0 * 1.609344))))
       
@@ -195,9 +182,11 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, Interface
       releaseNode()
     }
     
-    if let interface = self.interface {
-      
-      observerId = interface.addObserver(observer: self)
+    locoNet = LocoNet(gatewayNodeId: networkLayer!.locoNetGateway.nodeId, virtualNode: self)
+    
+    locoNet?.delegate = self
+    
+    if let interface = self.locoNet {
       
       slotPage = 0
       
@@ -227,7 +216,7 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, Interface
   
   internal override func releaseNode() {
     
-    if let interface = self.interface {
+    if let interface = self.locoNet {
       
       stopRefreshTimer()
       
@@ -241,13 +230,13 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, Interface
       
       updateLocoState()
       
-      interface.removeObserver(id: observerId)
-      
       slotState = .common
       
       interface.setLocoSlotStat1(slotPage: slotPage, slotNumber: slotNumber, stat1: stat1)
 
       configState = .idle
+      
+      locoNet = nil
       
     }
     
@@ -271,9 +260,9 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, Interface
   
   // MARK: InterfaceDelegate Methods
   
-  public func networkMessageReceived(message:LocoNetMessage) {
+  @objc public func locoNetMessageReceived(gatewayNodeId:UInt64, message:LocoNetMessage) {
     
-    if let interface = self.interface {
+    if let interface = self.locoNet {
       
       switch message.messageType {
       case .locoSlotDataP1:
@@ -291,9 +280,9 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, Interface
               writeBackMessage[0] = LocoNetMessageOpcode.OPC_WR_SL_DATA.rawValue
               writeBackMessage[3] &= SpeedSteps.protectMask
               writeBackMessage[3] |= speedSteps.setMask
-              let wbm = LocoNetMessage(networkId: network.primaryKey, data: writeBackMessage, appendCheckSum: true)
+              let wbm = LocoNetMessage(data: writeBackMessage, appendCheckSum: true)
               configState = .writeBack
-              interface.addToQueue(message: wbm, delay: MessageTiming.STANDARD, responses: [], retryCount: 0, timeoutCode: .none)
+              interface.addToQueue(message: wbm, spacingDelay: 0)
               startTimeoutTimer()
             }
             else {
@@ -312,9 +301,9 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, Interface
               writeBackMessage[0] = LocoNetMessageOpcode.OPC_WR_SL_DATA.rawValue
               writeBackMessage[3] &= SpeedSteps.protectMask
               writeBackMessage[3] |= speedSteps.setMask
-              let wbm = LocoNetMessage(networkId: network.primaryKey, data: writeBackMessage, appendCheckSum: true)
+              let wbm = LocoNetMessage(data: writeBackMessage, appendCheckSum: true)
               configState = .writeBack
-              interface.addToQueue(message: wbm, delay: MessageTiming.STANDARD, responses: [], retryCount: 0, timeoutCode: .none)
+              interface.addToQueue(message: wbm, spacingDelay: 0)
               startTimeoutTimer()
             }
           default:
@@ -338,9 +327,9 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, Interface
               writeBackMessage[4] |= speedSteps.setMask
               writeBackMessage[18] = 0 // Throttle Id low
               writeBackMessage[19] = 0 // Throttle Id high
-              let wbm = LocoNetMessage(networkId: network.primaryKey, data: writeBackMessage, appendCheckSum: true)
+              let wbm = LocoNetMessage(data: writeBackMessage, appendCheckSum: true)
               configState = .writeBack
-              interface.addToQueue(message: wbm, delay: MessageTiming.STANDARD, responses: [], retryCount: 0, timeoutCode: .none)
+              interface.addToQueue(message: wbm, spacingDelay: 0)
               startTimeoutTimer()
             }
             else {
@@ -361,9 +350,9 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, Interface
               writeBackMessage[4] |= speedSteps.setMask
               writeBackMessage[18] = 0 // Throttle Id low
               writeBackMessage[19] = 0 // Throttle Id high
-              let wbm = LocoNetMessage(networkId: network.primaryKey, data: writeBackMessage, appendCheckSum: true)
+              let wbm = LocoNetMessage(data: writeBackMessage, appendCheckSum: true)
               configState = .writeBack
-              interface.addToQueue(message: wbm, delay: MessageTiming.STANDARD, responses: [], retryCount: 0, timeoutCode: .none)
+              interface.addToQueue(message: wbm, spacingDelay: 0)
               startTimeoutTimer()
             }
           default:

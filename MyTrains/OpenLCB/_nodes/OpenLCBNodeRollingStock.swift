@@ -21,7 +21,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     
     functions = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.functions.rawValue, defaultMemorySize: functionSpaceSize, isReadOnly: false, description: "")
     
-    configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: 2283, isReadOnly: false, description: "")
+    configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: 2291, isReadOnly: false, description: "")
     
     super.init(nodeId: nodeId)
     
@@ -34,6 +34,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressF0ConsistBehaviour)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressF0Directional)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressF0MUSwitch)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressLocoNetGateway)
 
     for fn in 1...numberOfFunctions {
       let groupOffset = (fn - 1) * functionGroupSize
@@ -88,6 +89,8 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
   internal let addressFNMomentary        : Int = 8
   internal let addressFNConsistBehaviour : Int = 9
   internal let addressFNDescription      : Int = 10
+  
+  internal let addressLocoNetGateway     : Int = 2283
   
   internal let numberOfFunctions : Int = 69
   internal let functionGroupSize : Int = 35

@@ -514,21 +514,25 @@ public class MyTrainsController : NSObject, InterfaceDelegate, NSUserNotificatio
   
   public func connect() {
     openLCBNetworkLayer?.start()
+    /*
     for interface in networkInterfaces {
       if let locoNetInterface = interface as? InterfaceLocoNet {
         locoNetInterface.open()
       }
     }
+     */
     connected = true
   }
   
   public func disconnect() {
     openLCBNetworkLayer?.stop()
+    /*
     for interface in networkInterfaces {
       if let locoNetInterface = interface as? InterfaceLocoNet {
         locoNetInterface.close()
       }
     }
+     */
     connected = false
   }
   

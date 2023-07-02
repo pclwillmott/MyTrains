@@ -202,6 +202,11 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
         }
         contents = contents.replacingOccurrences(of: "%%PORTS%%", with: ports)
 
+        var gateways = ""
+        gateways += "<relation><property>\(networkLayer?.locoNetGateway.nodeId)</property><value>\(networkLayer?.locoNetGateway.userNodeName)</value></relation>\n"
+        gateways += "<relation><property>\(networkLayer?.locoNetGateway2.nodeId)</property><value>\(networkLayer?.locoNetGateway2.userNodeName)</value></relation>\n"
+        contents = contents.replacingOccurrences(of: "%%LOCONET_GATEWAYS%%", with: gateways)
+
         let memorySpace = OpenLCBMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.cdi.rawValue, isReadOnly: true, description: "")
         memorySpace.memory = [UInt8]()
         memorySpace.memory.append(contentsOf: contents.utf8)
@@ -284,13 +289,13 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
         
         switch message.datagramType {
         case .reinitializeFactoryResetCommand:
-          networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, replyPending: false, timeOut: 0.0)
+          networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, timeOut: .ok)
           DispatchQueue.main.async {
             self.resetToFactoryDefaults()
           }
           
         case .resetRebootCommand:
-          networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, replyPending: false, timeOut: 0.0)
+          networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, timeOut: .ok)
           
           DispatchQueue.main.async {
             self.stop()
@@ -312,7 +317,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
           let space = message.payload[0]
           
           if let memorySpace = memorySpaces[space] {
-            networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, replyPending: true, timeOut: 1.0)
+            networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, timeOut: .replyPending2s)
             networkLayer?.sendGetAddressSpaceInformationReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, memorySpace: memorySpace)
           }
           else {
@@ -321,7 +326,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
           
         case .readCommandGeneric, .readCommand0xFD, .readCommand0xFE, .readCommand0xFF:
  
-          networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, replyPending: true, timeOut: 1.0)
+          networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, timeOut: .replyPending2s)
 
           var data = message.payload
           
@@ -368,7 +373,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
           
         case .writeCommandGeneric, .writeCommand0xFD, .writeCommand0xFE, .writeCommand0xFF:
 
-          networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, replyPending: true, timeOut: 1.0)
+          networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, timeOut: .replyPending2s)
 
           var data = message.payload
           

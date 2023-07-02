@@ -19,12 +19,20 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
     
     fastClock = OpenLCBClock(nodeId: 0x09000d000001)
     
+    locoNetGateway = OpenLCBLocoNetGateway(nodeId: 0x09000d000004)
+    
+    locoNetGateway2 = OpenLCBLocoNetGateway(nodeId: 0x09000d000005)
+    
     super.init()
 
     registerNode(node: myTrainsNode)
     
     registerNode(node: configurationToolNode)
     
+    registerNode(node: locoNetGateway)
+
+    registerNode(node: locoNetGateway2)
+
     for (_, rollingStock) in RollingStock.rollingStock {
       if rollingStock.rollingStockType == .locomotive {
         registerNode(node: OpenLCBNodeRollingStockLocoNet(rollingStock: rollingStock))
@@ -65,7 +73,7 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
   private var throttlesInUse : Set<UInt8> = []
   
   private var freeThrottles : Set<UInt8> = []
-
+  
   // MARK: Public Properties
   
   public var state : OpenLCBNetworkLayerState {
@@ -80,6 +88,10 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
   
   public var fastClock : OpenLCBClock
   
+  public var locoNetGateway : OpenLCBLocoNetGateway
+
+  public var locoNetGateway2 : OpenLCBLocoNetGateway
+
   public var transportLayers : [ObjectIdentifier:OpenLCBTransportLayer] = [:]
   
   // MARK: Public Methods
@@ -246,17 +258,35 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
 
   public func sendLocoNetMessage(sourceNodeId:UInt64, destinationNodeId:UInt64, locoNetMessage:[UInt8], spacingDelay:UInt8) {
     
-    let message = OpenLCBMessage(messageTypeIndicator: .sendLocoNetMessage)
+    let message = OpenLCBMessage(messageTypeIndicator: .datagram)
     
     message.sourceNodeId = sourceNodeId
     
     message.destinationNodeId = destinationNodeId
     
-    message.payload = locoNetMessage
+    message.payload = OpenLCBDatagramType.sendlocoNetMessage.rawValue.bigEndianData
+    
+    message.payload.append(contentsOf: locoNetMessage)
     
     if spacingDelay != 0 {
       message.payload.append(spacingDelay)
     }
+    
+    sendMessage(message: message)
+    
+  }
+
+  public func sendLocoNetMessageReply(sourceNodeId:UInt64, destinationNodeId:UInt64, errorCode:OpenLCBErrorCode) {
+    
+    let message = OpenLCBMessage(messageTypeIndicator: .datagram)
+    
+    message.sourceNodeId = sourceNodeId
+    
+    message.destinationNodeId = destinationNodeId
+    
+    message.payload = OpenLCBDatagramType.sendLocoNetMessageReply.rawValue.bigEndianData
+    
+    message.payload.append(contentsOf: errorCode.rawValue.bigEndianData)
     
     sendMessage(message: message)
     
@@ -382,19 +412,21 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
     
   }
   
-  public func sendDatagramReceivedOK(sourceNodeId:UInt64, destinationNodeId:UInt64, replyPending:Bool, timeOut: TimeInterval) {
+  public func sendDatagramReceivedOK(sourceNodeId:UInt64, destinationNodeId:UInt64, timeOut: OpenLCBDatagramTimeout) {
     
     let message = OpenLCBMessage(messageTypeIndicator: .datagramReceivedOK)
     
     message.destinationNodeId = destinationNodeId
     
     message.sourceNodeId = sourceNodeId
+
+    var data : [UInt8] = []
     
-    var data : UInt8 = replyPending ? 0b10000000 : 0
+    if timeOut != .ok {
+      data.append(timeOut.rawValue)
+    }
     
-    data |= timeOut != 0.0 ? (UInt8(log(timeOut) / log(2.0) + 0.9) & 0x0f) : 0x00
-    
-    message.payload = [data]
+    message.payload = data
     
     sendMessage(message: message)
     
@@ -433,19 +465,19 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
   
   public func sendReadReply(sourceNodeId:UInt64, destinationNodeId:UInt64, addressSpace:UInt8, startAddress:UInt32, data:[UInt8]) {
 
-    var payload : [UInt8] = [0x20]
+    var payload : [UInt8] = []
     
     var addAddressSpace = false
     
     switch addressSpace {
     case 0xff:
-      payload.append(OpenLCBDatagramType.readReply0xFF.rawValue)
+      payload.append(contentsOf: OpenLCBDatagramType.readReply0xFF.rawValue.bigEndianData)
     case 0xfe:
-      payload.append(OpenLCBDatagramType.readReply0xFE.rawValue)
+      payload.append(contentsOf: OpenLCBDatagramType.readReply0xFE.rawValue.bigEndianData)
     case 0xfd:
-      payload.append(OpenLCBDatagramType.readReply0xFD.rawValue)
+      payload.append(contentsOf: OpenLCBDatagramType.readReply0xFD.rawValue.bigEndianData)
     default:
-      payload.append(OpenLCBDatagramType.readReplyGeneric.rawValue)
+      payload.append(contentsOf: OpenLCBDatagramType.readReplyGeneric.rawValue.bigEndianData)
       addAddressSpace = true
     }
     
@@ -463,19 +495,19 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
 
   public func sendReadReplyFailure(sourceNodeId:UInt64, destinationNodeId:UInt64, addressSpace:UInt8, startAddress:UInt32, errorCode:OpenLCBErrorCode) {
 
-    var payload : [UInt8] = [0x20]
+    var payload : [UInt8] = []
     
     var addAddressSpace = false
     
     switch addressSpace {
     case 0xff:
-      payload.append(OpenLCBDatagramType.readReplyFailure0xFF.rawValue)
+      payload.append(contentsOf: OpenLCBDatagramType.readReplyFailure0xFF.rawValue.bigEndianData)
     case 0xfe:
-      payload.append(OpenLCBDatagramType.readReplyFailure0xFE.rawValue)
+      payload.append(contentsOf: OpenLCBDatagramType.readReplyFailure0xFE.rawValue.bigEndianData)
     case 0xfd:
-      payload.append(OpenLCBDatagramType.readReplyFailure0xFD.rawValue)
+      payload.append(contentsOf: OpenLCBDatagramType.readReplyFailure0xFD.rawValue.bigEndianData)
     default:
-      payload.append(OpenLCBDatagramType.readReplyFailureGeneric.rawValue)
+      payload.append(contentsOf: OpenLCBDatagramType.readReplyFailureGeneric.rawValue.bigEndianData)
       addAddressSpace = true
     }
     
@@ -493,19 +525,19 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
 
   public func sendWriteReply(sourceNodeId:UInt64, destinationNodeId:UInt64, addressSpace:UInt8, startAddress:UInt32) {
 
-    var payload : [UInt8] = [0x20]
+    var payload : [UInt8] = []
     
     var addAddressSpace = false
     
     switch addressSpace {
     case 0xff:
-      payload.append(OpenLCBDatagramType.writeReply0xFF.rawValue)
+      payload.append(contentsOf: OpenLCBDatagramType.writeReply0xFF.rawValue.bigEndianData)
     case 0xfe:
-      payload.append(OpenLCBDatagramType.writeReply0xFE.rawValue)
+      payload.append(contentsOf: OpenLCBDatagramType.writeReply0xFE.rawValue.bigEndianData)
     case 0xfd:
-      payload.append(OpenLCBDatagramType.writeReply0xFD.rawValue)
+      payload.append(contentsOf: OpenLCBDatagramType.writeReply0xFD.rawValue.bigEndianData)
     default:
-      payload.append(OpenLCBDatagramType.writeReplyGeneric.rawValue)
+      payload.append(contentsOf: OpenLCBDatagramType.writeReplyGeneric.rawValue.bigEndianData)
       addAddressSpace = true
     }
     
@@ -521,19 +553,19 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
 
   public func sendWriteReplyFailure(sourceNodeId:UInt64, destinationNodeId:UInt64, addressSpace:UInt8, startAddress:UInt32, errorCode:OpenLCBErrorCode) {
 
-    var payload : [UInt8] = [0x20]
+    var payload : [UInt8] = []
     
     var addAddressSpace = false
     
     switch addressSpace {
     case 0xff:
-      payload.append(OpenLCBDatagramType.writeReplyFailure0xFF.rawValue)
+      payload.append(contentsOf: OpenLCBDatagramType.writeReplyFailure0xFF.rawValue.bigEndianData)
     case 0xfe:
-      payload.append(OpenLCBDatagramType.writeReplyFailure0xFE.rawValue)
+      payload.append(contentsOf: OpenLCBDatagramType.writeReplyFailure0xFE.rawValue.bigEndianData)
     case 0xfd:
-      payload.append(OpenLCBDatagramType.writeReplyFailure0xFD.rawValue)
+      payload.append(contentsOf: OpenLCBDatagramType.writeReplyFailure0xFD.rawValue.bigEndianData)
     default:
-      payload.append(OpenLCBDatagramType.writeReplyFailureGeneric.rawValue)
+      payload.append(contentsOf: OpenLCBDatagramType.writeReplyFailureGeneric.rawValue.bigEndianData)
       addAddressSpace = true
     }
     
@@ -679,8 +711,7 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
     var data = sourceNodeId.bigEndianData
     data.removeFirst(2)
 
-    data.insert(OpenLCBDatagramType.LockReserveCommand.rawValue, at: 0)
-    data.insert(0x20, at: 0)
+    data.insert(contentsOf: OpenLCBDatagramType.LockReserveCommand.rawValue.bigEndianData, at: 0)
     
     sendDatagram(sourceNodeId: sourceNodeId, destinationNodeId: destinationNodeId, data: data)
     
@@ -688,7 +719,8 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
 
   public func sendUnLockCommand(sourceNodeId:UInt64, destinationNodeId:UInt64) {
 
-    let data = [0x20, OpenLCBDatagramType.LockReserveCommand.rawValue, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
+    var data = OpenLCBDatagramType.LockReserveCommand.rawValue.bigEndianData
+    data.append(contentsOf: [0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
     
     sendDatagram(sourceNodeId: sourceNodeId, destinationNodeId: destinationNodeId, data: data)
     
@@ -696,9 +728,7 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
 
   public func sendRebootCommand(sourceNodeId:UInt64, destinationNodeId:UInt64) {
 
-    let data = [0x20, OpenLCBDatagramType.resetRebootCommand.rawValue]
-    
-    sendDatagram(sourceNodeId: sourceNodeId, destinationNodeId: destinationNodeId, data: data)
+    sendDatagram(sourceNodeId: sourceNodeId, destinationNodeId: destinationNodeId, data: OpenLCBDatagramType.resetRebootCommand.rawValue.bigEndianData)
     
     removeAlias(nodeId: destinationNodeId)
     
@@ -706,9 +736,7 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
 
   public func sendGetConfigurationOptionsCommand(sourceNodeId:UInt64, destinationNodeId:UInt64) {
 
-    let data = [0x20, OpenLCBDatagramType.getConfigurationOptionsCommand.rawValue]
-    
-    sendDatagram(sourceNodeId: sourceNodeId, destinationNodeId: destinationNodeId, data: data)
+    sendDatagram(sourceNodeId: sourceNodeId, destinationNodeId: destinationNodeId, data: OpenLCBDatagramType.getConfigurationOptionsCommand.rawValue.bigEndianData)
     
   }
 
@@ -717,8 +745,7 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
     var data = destinationNodeId.bigEndianData
     data.removeFirst(2)
 
-    data.insert(OpenLCBDatagramType.reinitializeFactoryResetCommand.rawValue, at: 0)
-    data.insert(0x20, at: 0)
+    data.insert(contentsOf: OpenLCBDatagramType.reinitializeFactoryResetCommand.rawValue.bigEndianData, at: 0)
 
     sendDatagram(sourceNodeId: sourceNodeId, destinationNodeId: destinationNodeId, data: data)
     

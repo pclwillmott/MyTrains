@@ -7,7 +7,7 @@
 
 import Foundation
 
-private typealias QueueItem = (message:[UInt8], spacingDelay:UInt8)
+private typealias QueueItem = (nodeId:UInt64, message:[UInt8], spacingDelay:UInt8)
 
 public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
  
@@ -29,7 +29,7 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressFlowControl)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressBlockAllMessages)
 
-    initCDI(filename: "MyTrains LocoNet Gateway")
+    initCDI(filename: "MyTrains LocoNet Gateway", manufacturer: manufacturerName, model: nodeModelName)
     
     isLocoNetGatewayProtocolSupported = true
     
@@ -122,7 +122,11 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   
   private var spacingTimer : Timer?
   
+  private var timeoutTimer : Timer?
+  
   private var consumerIdentified : Bool = false
+  
+  private var currentItem : QueueItem? = nil
 
   // MARK: Public Properties
   
@@ -132,24 +136,28 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   
   @objc func spacingTimerAction() {
     
+    stopSpacingTimer()
+
     guard !outputQueue.isEmpty else {
-      stopSpacingTimer()
       return
     }
     
-    let item = outputQueue.removeFirst()
+    currentItem = outputQueue.removeFirst()
     
-    send(data: item.message)
-    
-    let interval : TimeInterval = Double(item.spacingDelay) / 1000.0
-    
-    startSpacingTimer(timeInterval: interval)
+    startTimeoutTimer(timeInterval: 1.5)
+
+    send(data: currentItem!.message)
     
   }
   
-  func startSpacingTimer(timeInterval:TimeInterval) {
+  func startSpacingTimer(spacingDelay:UInt8) {
+    
+    let timeInterval : TimeInterval = Double(spacingDelay) / 1000.0
+    
     spacingTimer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(spacingTimerAction), userInfo: nil, repeats: false)
+    
     RunLoop.current.add(spacingTimer!, forMode: .common)
+    
   }
   
   func stopSpacingTimer() {
@@ -157,6 +165,28 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     spacingTimer = nil
   }
 
+  @objc func timeoutTimerAction() {
+    
+    stopTimeoutTimer()
+    
+    networkLayer?.sendLocoNetMessageReply(sourceNodeId: nodeId, destinationNodeId: currentItem!.nodeId, errorCode: .temporaryErrorTimeOut)
+
+    currentItem = nil
+    
+    spacingTimerAction()
+    
+  }
+  
+  func startTimeoutTimer(timeInterval:TimeInterval) {
+    timeoutTimer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(timeoutTimerAction), userInfo: nil, repeats: false)
+    RunLoop.current.add(timeoutTimer!, forMode: .common)
+  }
+  
+  func stopTimeoutTimer() {
+    timeoutTimer?.invalidate()
+    timeoutTimer = nil
+  }
+  
   internal override func resetToFactoryDefaults() {
     
     acdiManufacturerSpaceVersion = 4
@@ -277,8 +307,19 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
         
         // Process message if no high bits set in data
         
-        if !blockAllMessages && consumerIdentified && !restart {
-          networkLayer?.sendLocoNetMessageReceived(sourceNodeId: nodeId, locoNetMessage: message)
+        if !restart {
+          
+          if let item = currentItem, item.message == message {
+            stopTimeoutTimer()
+            networkLayer?.sendLocoNetMessageReply(sourceNodeId: nodeId, destinationNodeId: currentItem!.nodeId, errorCode: .success)
+            currentItem = nil
+            startSpacingTimer(spacingDelay: item.spacingDelay)
+          }
+          
+          if !blockAllMessages && consumerIdentified {
+            networkLayer?.sendLocoNetMessageReceived(sourceNodeId: nodeId, locoNetMessage: message)
+          }
+          
         }
         
       }
@@ -317,42 +358,50 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
         consumerIdentified = true
       }
       
-    case .sendLocoNetMessage:
+    case .datagram:
       
-      if message.destinationNodeId! == nodeId {
+      if let dt = message.datagramType, dt == .sendlocoNetMessage && message.destinationNodeId! == nodeId {
         
         if !isOpen {
-          networkLayer?.sendTerminateDueToError(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, errorCode: .permanentErrorLocoNetNotConnected)
-          return
-        }
-        
-        let locoNetMessage = LocoNetMessage(data: message.payload)
-        
-        let length = locoNetMessage.messageLength
-        
-        var spacingDelay : UInt8 = 0
-        
-        if message.payload.count == length + 1 {
-          spacingDelay = locoNetMessage.message.last!
-          locoNetMessage.message.removeLast()
-        }
-        
-        if locoNetMessage.checkSumOK {
-          
-          if outputQueue.count == 3 {
-            networkLayer?.sendTerminateDueToError(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, errorCode: .temporaryErrorBufferUnavailable)
-            return
-          }
-          
-          outputQueue.append((message: locoNetMessage.message, spacingDelay: spacingDelay))
-          
-          if spacingTimer == nil {
-            spacingTimerAction()
-          }
-          
+          networkLayer?.sendDatagramRejected(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, errorCode: .permanentErrorNoConnection)
         }
         else {
-          networkLayer?.sendTerminateDueToError(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, errorCode: .permanentErrorInvalidArguments)
+          
+          var data = message.payload
+          data.removeFirst(2)
+          
+          let locoNetMessage = LocoNetMessage(data: data)
+          
+          let length = locoNetMessage.messageLength
+          
+          var spacingDelay : UInt8 = 0
+          
+          if message.payload.count == length + 1 {
+            spacingDelay = locoNetMessage.message.removeLast()
+          }
+          
+          if locoNetMessage.checkSumOK {
+            
+            if outputQueue.count == 3 {
+              networkLayer?.sendDatagramRejected(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, errorCode: .temporaryErrorBufferUnavailable)
+            }
+            else {
+              
+              networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, timeOut: .replyPending2s)
+              
+              outputQueue.append((nodeId: message.sourceNodeId!, message: locoNetMessage.message, spacingDelay: spacingDelay))
+              
+              if outputQueue.count == 1 {
+                spacingTimerAction()
+              }
+              
+            }
+            
+          }
+          else {
+            networkLayer?.sendDatagramRejected(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, errorCode: .permanentErrorInvalidArguments)
+          }
+          
         }
         
       }

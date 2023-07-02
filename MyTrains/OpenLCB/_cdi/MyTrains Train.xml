@@ -165,6 +165,13 @@
   <relation><property>1</property><value>Delete All Settings</value></relation>
 </map>
 </int>
+<event>
+  <name>LocoNet Gateway</name>
+  <map>
+    %%LOCONET_GATEWAYS%%
+  </map
+</event>
+  
 </segment>
 </cdi>
 
