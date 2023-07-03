@@ -188,13 +188,13 @@ public class MyTrainsController : NSObject, InterfaceDelegate, NSUserNotificatio
     get {
       
       var interfaces : [Int:InterfaceLocoNet] = [:]
-      
+      /*
       for (_, device) in interfaceDevices {
         if let interface = device as? InterfaceLocoNet, let info = interface.locoNetProductInfo, info.attributes.contains(.LocoNetInterface) {
           interfaces[interface.primaryKey] = interface
         }
       }
-
+*/
       return interfaces
       
     }
@@ -235,12 +235,14 @@ public class MyTrainsController : NSObject, InterfaceDelegate, NSUserNotificatio
       
       for (networkId, network) in networks {
         if network.layoutId == layoutId {
+          /*
           for (interfaceId, interface) in locoNetInterfaces {
             if interfaceId == network.interfaceId {
               interface.networkId = networkId
               interfaces.append(interface)
             }
           }
+           */
           for (interfaceId, interface) in openLCBInterfaces {
             if interfaceId == network.interfaceId {
               interface.networkId = networkId

@@ -405,6 +405,82 @@ public class OpenLCBMemorySpace {
 
   }
 
+  public static func getVirtualNodes() -> [OpenLCBNodeVirtual] {
+    
+    var result : [OpenLCBNodeVirtual] = []
+    
+    let conn = Database.getConnection()
+    
+    let shouldClose = conn.state != .Open
+     
+    if shouldClose {
+      _ = conn.open()
+    }
+    
+    let cmd = conn.createCommand()
+     
+    cmd.commandText = "SELECT \(columnNames) FROM [\(TABLE.MEMORY_SPACE)] ORDER BY [\(MEMORY_SPACE.NODE_ID)], [\(MEMORY_SPACE.SPACE)]"
+
+    if let reader = cmd.executeReader() {
+      
+      var nodeIds : Set<UInt64> = []
+      
+      while reader.read() {
+        let space = OpenLCBMemorySpace(reader: reader, isReadOnly: true, description: "")
+        nodeIds.insert(space.nodeId)
+      }
+      
+      reader.close()
+      
+      for nodeId in nodeIds {
+        
+        let temp = OpenLCBNodeVirtual(nodeId: nodeId)
+        
+        if let virtualNodeType = MyTrainsVirtualNodeType(rawValue: temp.nodeModelName) {
+          
+          var node : OpenLCBNodeVirtual
+          
+          switch virtualNodeType {
+          case .clockNode:
+            node = OpenLCBClock(nodeId: nodeId)
+          case .throttleNode:
+            node = OpenLCBThrottle(nodeId: nodeId)
+          case .locoNetGatewayNode:
+            node = OpenLCBLocoNetGateway(nodeId: nodeId)
+          case .trainNode:
+            node = OpenLCBNodeRollingStockLocoNet(nodeId: nodeId)
+          case .applicationNode:
+            node =  OpenLCBNodeMyTrains(nodeId: nodeId)
+          case .configurationToolNode:
+            node = OpenLCBNodeConfigurationTool(nodeId: nodeId)
+          case .genericVirtualNode:
+            node = OpenLCBNodeVirtual(nodeId: nodeId)
+          }
+          
+          result.append(node)
+          
+        }
+                
+      }
+      
+      result.sort { $0.nodeId < $1.nodeId }
+
+      /*
+      for node in result {
+        print("\(node.nodeId.toHexDotFormat(numberOfBytes: 6)) \(node.manufacturerName) \(node.nodeModelName) \(node.userNodeName)")
+      }
+       */
+
+    }
+    
+    if shouldClose {
+      conn.close()
+    }
+
+    return result
+    
+  }
+
   public static func getMemorySpaces() {
     
     let conn = Database.getConnection()
@@ -438,6 +514,11 @@ public class OpenLCBMemorySpace {
 
   public static func delete(nodeId: UInt64, space:UInt8) {
     let sql = "DELETE FROM [\(TABLE.MEMORY_SPACE)] WHERE [\(MEMORY_SPACE.NODE_ID)] = \(nodeId) AND [\(MEMORY_SPACE.SPACE)] = \(space)"
+    Database.execute(commands: [sql])
+  }
+
+  public static func deleteAllMemorySpaces(forNodeId: UInt64) {
+    let sql = "DELETE FROM [\(TABLE.MEMORY_SPACE)] WHERE [\(MEMORY_SPACE.NODE_ID)] = \(forNodeId)"
     Database.execute(commands: [sql])
   }
 

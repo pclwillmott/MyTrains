@@ -11,19 +11,21 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
   
   // MARK: Constructors
   
-  public init(rollingStock:RollingStock) {
+  public override init(nodeId:UInt64) {
     
-    let nodeId = 0x0801000d0000 + UInt64(rollingStock.primaryKey)
+//    let nodeId = 0x0801000d0000 + UInt64(rollingStock.primaryKey)
     
     functionSpaceSize = 0x45
     
-    _rollingStock = rollingStock
+//    _rollingStock = rollingStock
     
     functions = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.functions.rawValue, defaultMemorySize: functionSpaceSize, isReadOnly: false, description: "")
     
     configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: 2291, isReadOnly: false, description: "")
     
     super.init(nodeId: nodeId)
+    
+    virtualNodeType = MyTrainsVirtualNodeType.trainNode
     
     configuration.delegate = self
 
@@ -74,7 +76,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
   
   internal let functionSpaceSize : Int
   
-  internal var _rollingStock : RollingStock
+//  internal var _rollingStock : RollingStock
   
   internal var functions : OpenLCBMemorySpace
   
@@ -150,12 +152,13 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
   
   // MARK: Public Properties
   
+  /*
   public var rollingStock : RollingStock {
     get {
       return _rollingStock
     }
   }
-  
+  */
   public var dccAddress : UInt16 {
     get {
       return configuration.getUInt16(address: addressDCCAddress)!
@@ -174,6 +177,15 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     }
   }
   
+  public var locoNetGatewayNodeId : UInt64 {
+    get {
+      return configuration.getUInt64(address: addressLocoNetGateway)!
+    }
+    set(value) {
+      configuration.setUInt(address: addressLocoNetGateway, value: value)
+    }
+  }
+
   public let heartbeatPeriod : UInt8 = 10
   
   public let heartbeatDeadline : UInt8 = 3
@@ -193,8 +205,8 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     
     acdiManufacturerSpaceVersion = 4
     
-    manufacturerName     = NMRA.manufacturerName(code: _rollingStock.manufacturerId)
-    nodeModelName        = _rollingStock.rollingStockName
+    manufacturerName     = virtualNodeType.manufacturerName
+    nodeModelName        = virtualNodeType.name
     nodeHardwareVersion  = ""
     nodeSoftwareVersion  = ""
 
@@ -293,6 +305,11 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
 
   // MARK: Public Methods
   
+  public func reloadCDI() {
+    memorySpaces.removeValue(forKey: OpenLCBNodeMemoryAddressSpace.cdi.rawValue)
+    initCDI(filename: "MyTrains Train", manufacturer: manufacturerName, model: nodeModelName)
+  }
+
   public override func start() {
     
     super.start()

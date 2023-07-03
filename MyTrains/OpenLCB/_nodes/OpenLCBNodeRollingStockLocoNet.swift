@@ -174,7 +174,7 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
   
   internal override func attachNode() {
   
-    guard configState == .idle else {
+    guard configState == .idle && locoNetGatewayNodeId != 0 else {
       return
     }
     
@@ -182,7 +182,7 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
       releaseNode()
     }
     
-    locoNet = LocoNet(gatewayNodeId: networkLayer!.locoNetGateway.nodeId, virtualNode: self)
+    locoNet = LocoNet(gatewayNodeId: locoNetGatewayNodeId, virtualNode: self)
     
     locoNet?.delegate = self
     

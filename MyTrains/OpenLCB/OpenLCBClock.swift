@@ -74,6 +74,8 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
     
     super.init(nodeId: nodeId)
     
+    virtualNodeType = MyTrainsVirtualNodeType.clockNode
+    
     configuration.delegate = self
 
     memorySpaces[configuration.space] = configuration
@@ -441,8 +443,8 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
     
     acdiManufacturerSpaceVersion = 4
     
-    manufacturerName    = "Paul Willmott"
-    nodeModelName       = "MyTrains Clock"
+    manufacturerName    = virtualNodeType.manufacturerName
+    nodeModelName       = virtualNodeType.name
     nodeHardwareVersion = "v0.1"
     nodeSoftwareVersion = "v0.1"
     

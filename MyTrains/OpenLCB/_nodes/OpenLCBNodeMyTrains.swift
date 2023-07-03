@@ -15,6 +15,8 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     
     super.init(nodeId: nodeId)
 
+    virtualNodeType = MyTrainsVirtualNodeType.applicationNode
+    
     if !memorySpacesInitialized {
       resetToFactoryDefaults()
     }
@@ -31,8 +33,8 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     
     acdiManufacturerSpaceVersion = 4
     
-    manufacturerName    = "Paul Willmott"
-    nodeModelName       = "MyTrains"
+    manufacturerName    = virtualNodeType.manufacturerName
+    nodeModelName       = virtualNodeType.name
     nodeHardwareVersion = "\(Bundle.main.releaseVersionNumberPretty)"
     nodeSoftwareVersion = "\(Bundle.main.releaseVersionNumberPretty)"
     

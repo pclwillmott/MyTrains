@@ -13,48 +13,33 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
   
   public init(nodeId: UInt64) {
     
-    myTrainsNode = OpenLCBNodeMyTrains(nodeId: nodeId)
-    
-    configurationToolNode = OpenLCBNodeConfigurationTool(nodeId: 0x09000d000000)
-    
-    fastClock = OpenLCBClock(nodeId: 0x09000d000001)
-    
-    locoNetGateway = OpenLCBLocoNetGateway(nodeId: 0x09000d000004)
-    
-    locoNetGateway2 = OpenLCBLocoNetGateway(nodeId: 0x09000d000005)
-    
     super.init()
 
-    registerNode(node: myTrainsNode)
-    
-    registerNode(node: configurationToolNode)
-    
-    registerNode(node: locoNetGateway)
-
-    registerNode(node: locoNetGateway2)
-
-    for (_, rollingStock) in RollingStock.rollingStock {
-      if rollingStock.rollingStockType == .locomotive {
-        registerNode(node: OpenLCBNodeRollingStockLocoNet(rollingStock: rollingStock))
+    for node in OpenLCBMemorySpace.getVirtualNodes() {
+      
+      switch node.virtualNodeType {
+      case .applicationNode:
+        myTrainsNode = node as? OpenLCBNodeMyTrains
+      case .configurationToolNode:
+        configurationToolNode = node
+      case .clockNode:
+        fastClock = node as? OpenLCBClock
+      case .throttleNode:
+        let throttle = node as! OpenLCBThrottle
+        throttles.append(throttle)
+        freeThrottles.insert(throttle.throttleId)
+      case .locoNetGatewayNode:
+        let gateway = node as! OpenLCBLocoNetGateway
+        locoNetGateways.append(gateway)
+      default:
+        break
       }
-    }
-    
-    let numberOfThrottles : UInt8 = 8
-    
-    for throttleId in 1 ... numberOfThrottles {
-      let throttle = OpenLCBThrottle(throttleId: throttleId)
-      throttles.append(throttle)
-      freeThrottles.insert(throttleId)
-      registerNode(node: throttle)
-    }
-    
-    registerNode(node: fastClock)
-    
-    // **** TESTING STUFF ****
-    
-//    OpenLCBMemorySpace.getMemorySpaces()
-    
 
+      registerNode(node: node)
+      
+    }
+    
+    locoNetGateways.sort { $0.userNodeName < $1.userNodeName }
     
   }
   
@@ -82,16 +67,14 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
     }
   }
   
-  public var myTrainsNode : OpenLCBNodeMyTrains
+  public var myTrainsNode : OpenLCBNodeMyTrains?
   
-  public var configurationToolNode : OpenLCBNodeVirtual
+  public var configurationToolNode : OpenLCBNodeVirtual?
   
-  public var fastClock : OpenLCBClock
+  public var fastClock : OpenLCBClock?
   
-  public var locoNetGateway : OpenLCBLocoNetGateway
-
-  public var locoNetGateway2 : OpenLCBLocoNetGateway
-
+  public var locoNetGateways : [OpenLCBLocoNetGateway] = []
+  
   public var transportLayers : [ObjectIdentifier:OpenLCBTransportLayer] = [:]
   
   // MARK: Public Methods
@@ -154,11 +137,36 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
   public func registerNode(node:OpenLCBNodeVirtual) {
     virtualNodes[node.nodeId] = node
     node.networkLayer = self
+    if state == .initialized {
+      for (_, transportLayer) in transportLayers {
+        transportLayer.registerNode(node: node)
+      }
+    }
+    if node.virtualNodeType == .trainNode {
+      let trainNode = node as! OpenLCBNodeRollingStockLocoNet
+      trainNode.reloadCDI()
+    }
   }
   
   public func deregisterNode(node:OpenLCBNodeVirtual) {
+    if state == .initialized {
+      for (_, transportLayer) in transportLayers {
+        transportLayer.deregisterNode(node: node)
+      }
+    }
     virtualNodes.removeValue(forKey: node.nodeId)
     node.networkLayer = nil
+  }
+  
+  public func deleteNode(nodeId:UInt64) {
+    
+    for (_, virtualNode) in virtualNodes {
+      if virtualNode.nodeId == nodeId && virtualNode.virtualNodeType.isPublic {
+        deregisterNode(node: virtualNode)
+        OpenLCBMemorySpace.deleteAllMemorySpaces(forNodeId: nodeId)
+      }
+    }
+    
   }
   
   public func getThrottle() -> OpenLCBThrottle? {
@@ -173,6 +181,30 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
   public func releaseThrottle(throttle:OpenLCBThrottle) {
     freeThrottles.insert(throttle.throttleId)
     throttlesInUse.remove(throttle.throttleId)
+  }
+  
+  public func getNewNodeId(virtualNodeType:MyTrainsVirtualNodeType) -> UInt64 {
+    
+    var newNodeId = virtualNodeType.baseNodeId
+      
+    while true {
+      
+      var found = false
+      
+      for (nodeId, _) in virtualNodes {
+        if newNodeId == nodeId {
+          newNodeId += 1
+          found = true
+          break
+        }
+      }
+      
+      if !found {
+        return newNodeId
+      }
+      
+    }
+
   }
 
   // MARK: Messages

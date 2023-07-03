@@ -11,13 +11,13 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual {
  
   // MARK: Constructors & Destructors
   
-  public init(throttleId:UInt8) {
+  public override init(nodeId: UInt64) {
     
-    self.throttleId = throttleId
+    self.throttleId = UInt8(nodeId & 0xff)
     
-    let nodeId = 0x0801000dff00 + UInt64(throttleId)
-
     super.init(nodeId: nodeId)
+
+    virtualNodeType = MyTrainsVirtualNodeType.throttleNode
     
     if !memorySpacesInitialized {
       resetToFactoryDefaults()
@@ -77,8 +77,8 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual {
     
     acdiManufacturerSpaceVersion = 4
     
-    manufacturerName    = "Paul Willmott"
-    nodeModelName       = "MyTrains Throttle"
+    manufacturerName    = virtualNodeType.manufacturerName
+    nodeModelName       = virtualNodeType.name
     nodeHardwareVersion = "v0.1"
     nodeSoftwareVersion = "v0.1"
     

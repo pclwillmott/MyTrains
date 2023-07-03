@@ -72,7 +72,7 @@ class SetFastClockVC: NSViewController, NSWindowDelegate, OpenLCBClockDelegate {
     
     if let networkLayer = myTrainsController.openLCBNetworkLayer {
 
-      let fastClock = networkLayer.fastClock
+      let fastClock = networkLayer.fastClock!
       
       var events : [UInt64] = []
 
@@ -80,7 +80,7 @@ class SetFastClockVC: NSViewController, NSWindowDelegate, OpenLCBClockDelegate {
       
       let components = date.dateComponents
        
-      let nodeId = networkLayer.configurationToolNode.nodeId
+      let nodeId = networkLayer.configurationToolNode!.nodeId
 
       networkLayer.sendEvent(sourceNodeId: nodeId, eventId: fastClock.encodeStopStartEvent(state: .stopped))
 
@@ -125,8 +125,8 @@ class SetFastClockVC: NSViewController, NSWindowDelegate, OpenLCBClockDelegate {
   @IBAction func swSwitchAction(_ sender: NSSwitch) {
 
     if let networkLayer = myTrainsController.openLCBNetworkLayer {
-      let fastclock = networkLayer.fastClock
-      let nodeId = networkLayer.configurationToolNode.nodeId
+      let fastclock = networkLayer.fastClock!
+      let nodeId = networkLayer.configurationToolNode!.nodeId
       networkLayer.sendEvent(sourceNodeId: nodeId, eventId: fastclock.encodeStopStartEvent(state: (swSwitch.state == .on ? .running : .stopped)))
     }
     

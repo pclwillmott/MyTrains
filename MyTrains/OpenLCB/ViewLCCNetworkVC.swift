@@ -43,6 +43,8 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLayerD
       observerId = network.addObserver(observer: self)
     }
     
+    MyTrainsVirtualNodeType.populate(comboBox: cboNewNodeType)
+    
     reload()
     
     findAll()
@@ -69,6 +71,8 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLayerD
 
   private var pacingTimer : Timer?
   
+  private var spacingTimer : Timer?
+  
   // MARK: Private Methods
   
   private func findAll() {
@@ -83,12 +87,12 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLayerD
       tasks.removeAll()
       taskLock.unlock()
       
-      nodes[network.myTrainsNode.nodeId] = network.myTrainsNode
-      nodes[network.configurationToolNode.nodeId] = network.configurationToolNode
+      nodes[network.myTrainsNode!.nodeId] = network.myTrainsNode
+      nodes[network.configurationToolNode!.nodeId] = network.configurationToolNode
 
       startPacingTimer(timeInterval: TIMEOUT_DELAY)
 
-      network.sendVerifyNodeIdNumber(sourceNodeId: network.configurationToolNode.nodeId)
+      network.sendVerifyNodeIdNumber(sourceNodeId: network.configurationToolNode!.nodeId)
       
       
     }
@@ -118,7 +122,7 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLayerD
       
       if let network = networkLayer {
         
-        let configurationToolNodeId = network.configurationToolNode.nodeId
+        let configurationToolNodeId = network.configurationToolNode!.nodeId
 
         switch nextTask.task {
         case .getSNIP:
@@ -156,6 +160,32 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLayerD
     pacingTimer = nil
   }
   
+  @objc func spacingTimerAction() {
+    
+    stopSpacingTimer()
+
+    findAll()
+    
+  }
+  
+  func startSpacingTimer() {
+    
+    stopSpacingTimer()
+    
+    let timeInterval : TimeInterval = 0.5
+    
+    spacingTimer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(spacingTimerAction), userInfo: nil, repeats: false)
+    
+    RunLoop.current.add(spacingTimer!, forMode: .common)
+    
+  }
+  
+  func stopSpacingTimer() {
+    spacingTimer?.invalidate()
+    spacingTimer = nil
+  }
+
+  
   // MARK: LCCNetworkLayerDelegate Methods
   
   func networkLayerStateChanged(networkLayer: OpenLCBNetworkLayer) {
@@ -166,6 +196,10 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLayerD
     
     switch message.messageTypeIndicator {
       
+    case .initializationCompleteSimpleSetSufficient, .initializationCompleteFullProtocolRequired:
+      
+      stopSpacingTimer()
+
     case .verifiedNodeIDNumberSimpleSetSufficient, .verifiedNodeIDNumberFullProtocolRequired:
       
       taskLock.lock()
@@ -201,7 +235,7 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLayerD
       
     case .protocolSupportReply:
       
-      if message.destinationNodeId! == networkLayer!.configurationToolNode.nodeId, let node = nodes[message.sourceNodeId!] {
+      if message.destinationNodeId! == networkLayer!.configurationToolNode!.nodeId, let node = nodes[message.sourceNodeId!] {
         stopPacingTimer()
         node.supportedProtocols = message.payload
         reload()
@@ -210,7 +244,7 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLayerD
     
     case .simpleNodeIdentInfoReply:
       
-      if message.destinationNodeId! == networkLayer!.configurationToolNode.nodeId, let node = nodes[message.sourceNodeId!] {
+      if message.destinationNodeId! == networkLayer!.configurationToolNode!.nodeId, let node = nodes[message.sourceNodeId!] {
         stopPacingTimer()
         node.encodedNodeInformation = message.payload
         reload()
@@ -224,7 +258,7 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLayerD
         switch datagramType {
         case .getConfigurationOptionsReply:
           
-          if message.destinationNodeId! == networkLayer!.configurationToolNode.nodeId, let node = nodes[message.sourceNodeId!] {
+          if message.destinationNodeId! == networkLayer!.configurationToolNode!.nodeId, let node = nodes[message.sourceNodeId!] {
             
             stopPacingTimer()
             
@@ -244,7 +278,7 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLayerD
           }
 
         case .getAddressSpaceInformationReply, .getAddressSpaceInformationReplyLowAddressPresent:
-          if message.destinationNodeId! == networkLayer!.configurationToolNode.nodeId, let node = nodes[message.sourceNodeId!] {
+          if message.destinationNodeId! == networkLayer!.configurationToolNode!.nodeId, let node = nodes[message.sourceNodeId!] {
             stopPacingTimer()
             _ = node.addAddressSpaceInformation(message: message)
             reload()
@@ -295,6 +329,55 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLayerD
     vc.node = node
     wc.showWindow(nil)
 
+  }
+  
+  @IBAction func btnCreateNewNodeAction(_ sender: NSButton) {
+    
+    if let virtualNodeType = MyTrainsVirtualNodeType.selected(comboBox: cboNewNodeType), let networkLayer = self.networkLayer {
+      
+      let newNodeId = networkLayer.getNewNodeId(virtualNodeType: virtualNodeType)
+      
+      var node : OpenLCBNodeVirtual?
+      
+      let number = newNodeId & 0xffff
+      
+      switch virtualNodeType {
+      case .clockNode:
+        node = OpenLCBClock(nodeId: newNodeId)
+        node!.userNodeName = "Clock #\(number)"
+      case .throttleNode:
+        node = OpenLCBThrottle(nodeId: newNodeId)
+        node!.userNodeName = "Throttle #\(number)"
+      case .locoNetGatewayNode:
+        node = OpenLCBLocoNetGateway(nodeId: newNodeId)
+        node!.userNodeName = "LocoNet Gateway #\(number)"
+      case .trainNode:
+        node = OpenLCBNodeRollingStockLocoNet(nodeId: newNodeId)
+        node!.userNodeName = "Train #\(number)"
+      default:
+        break
+      }
+
+      node!.saveMemorySpaces()
+      
+      networkLayer.registerNode(node: node!)
+      
+      findAll()
+
+    }
+    
+  }
+  
+  @IBOutlet weak var cboNewNodeType: NSComboBox!
+  
+  @IBAction func btnDeleteAction(_ sender: NSButton) {
+    
+    let node = tableViewDS.nodes[sender.tag]
+
+    networkLayer?.deleteNode(nodeId: node.nodeId)
+    
+    startSpacingTimer()
+    
   }
   
 }

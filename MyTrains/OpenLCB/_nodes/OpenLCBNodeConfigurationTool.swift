@@ -15,6 +15,8 @@ public class OpenLCBNodeConfigurationTool : OpenLCBNodeVirtual {
     
     super.init(nodeId: nodeId)
 
+    virtualNodeType = MyTrainsVirtualNodeType.configurationToolNode
+    
     isDatagramProtocolSupported = true
 
     if !memorySpacesInitialized {
@@ -30,11 +32,11 @@ public class OpenLCBNodeConfigurationTool : OpenLCBNodeVirtual {
   // MARK: Private Methods
   
   internal override func resetToFactoryDefaults() {
-    
+
     acdiManufacturerSpaceVersion = 4
     
-    manufacturerName    = "Paul Willmott"
-    nodeModelName       = "Configuration Tool"
+    manufacturerName    = virtualNodeType.manufacturerName
+    nodeModelName       = virtualNodeType.name
     nodeHardwareVersion = "\(Bundle.main.releaseVersionNumberPretty)"
     nodeSoftwareVersion = "\(Bundle.main.releaseVersionNumberPretty)"
 

@@ -36,18 +36,18 @@
             <objects>
                 <viewController id="XKz-Ri-U20" customClass="ViewLCCNetworkVC" customModule="MyTrains" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="1mO-nv-HZ8">
-                        <rect key="frame" x="0.0" y="0.0" width="714" height="460"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1084" height="460"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="31" horizontalPageScroll="10" verticalLineScroll="31" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IUY-ed-hZ2">
-                                <rect key="frame" x="20" y="60" width="674" height="380"/>
+                                <rect key="frame" x="20" y="78" width="1044" height="362"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <clipView key="contentView" id="Mpg-2x-8wc">
-                                    <rect key="frame" x="1" y="1" width="672" height="378"/>
+                                    <rect key="frame" x="1" y="1" width="1042" height="360"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" multipleSelection="NO" typeSelect="NO" autosaveName="ViewLCCNetworkTableView" rowHeight="31" headerView="dhp-ag-POh" viewBased="YES" id="gvn-aO-OXg">
-                                            <rect key="frame" x="0.0" y="0.0" width="876" height="350"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="1042" height="332"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="17" height="0.0"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -352,7 +352,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView identifier="InfoCellID" id="1OX-my-cCm">
-                                                            <rect key="frame" x="806" y="0.0" width="61" height="24"/>
+                                                            <rect key="frame" x="806" y="0.0" width="64" height="24"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9To-mB-Tld">
@@ -370,12 +370,43 @@
                                                         </tableCellView>
                                                     </prototypeCellViews>
                                                 </tableColumn>
+                                                <tableColumn identifier="Delete" width="80" minWidth="10" maxWidth="3.4028234663852886e+38" id="sbQ-iG-2dn">
+                                                    <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
+                                                        <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    </tableHeaderCell>
+                                                    <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" alignment="left" title="Text Cell" id="j3e-Ko-IFl">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                    <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                                    <prototypeCellViews>
+                                                        <tableCellView identifier="DeleteCellID" id="FgE-IG-82q">
+                                                            <rect key="frame" x="887" y="0.0" width="77" height="24"/>
+                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                            <subviews>
+                                                                <button verticalHuggingPriority="750" id="Bus-15-7yP">
+                                                                    <rect key="frame" x="-2" y="-9" width="74" height="32"/>
+                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                    <buttonCell key="cell" type="push" title="Delete" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="IWM-ov-chR">
+                                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                        <font key="font" metaFont="system"/>
+                                                                    </buttonCell>
+                                                                    <connections>
+                                                                        <action selector="btnDeleteAction:" target="XKz-Ri-U20" id="OFY-qo-yXM"/>
+                                                                    </connections>
+                                                                </button>
+                                                            </subviews>
+                                                        </tableCellView>
+                                                    </prototypeCellViews>
+                                                </tableColumn>
                                             </tableColumns>
                                         </tableView>
                                     </subviews>
                                 </clipView>
-                                <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="Nsk-MG-eeQ">
-                                    <rect key="frame" x="1" y="363" width="672" height="16"/>
+                                <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="0.88888888888888884" horizontal="YES" id="Nsk-MG-eeQ">
+                                    <rect key="frame" x="1" y="345" width="1042" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="dY2-iJ-0Xi">
@@ -383,7 +414,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <tableHeaderView key="headerView" wantsLayer="YES" id="dhp-ag-POh">
-                                    <rect key="frame" x="0.0" y="0.0" width="876" height="28"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="1042" height="28"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableHeaderView>
                             </scrollView>
@@ -398,15 +429,51 @@
                                     <action selector="btnRefreshAction:" target="XKz-Ri-U20" id="nbI-Jj-xTD"/>
                                 </connections>
                             </button>
+                            <box fixedFrame="YES" title="Create New Virtual Mode" translatesAutoresizingMaskIntoConstraints="NO" id="CTV-Ir-E68">
+                                <rect key="frame" x="678" y="12" width="389" height="58"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
+                                <view key="contentView" id="lgA-Uc-DCA">
+                                    <rect key="frame" x="4" y="5" width="381" height="38"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wqf-1j-HEv">
+                                            <rect key="frame" x="293" y="2" width="75" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="push" title="Create" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="kaB-fw-OHj">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="btnCreateNewNodeAction:" target="XKz-Ri-U20" id="ynr-V6-SQr"/>
+                                            </connections>
+                                        </button>
+                                        <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jlZ-OG-1n1">
+                                            <rect key="frame" x="21" y="6" width="263" height="23"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="v7B-re-xaO">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                <objectValues>
+                                                    <string>Item 1</string>
+                                                    <string>Item 2</string>
+                                                    <string>Item 3</string>
+                                                </objectValues>
+                                            </comboBoxCell>
+                                        </comboBox>
+                                    </subviews>
+                                </view>
+                            </box>
                         </subviews>
                     </view>
                     <connections>
+                        <outlet property="cboNewNodeType" destination="jlZ-OG-1n1" id="LAa-Z3-UmI"/>
                         <outlet property="tableView" destination="gvn-aO-OXg" id="Ihh-Ek-7E3"/>
                     </connections>
                 </viewController>
                 <customObject id="frV-uh-OqE" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="556" y="179"/>
+            <point key="canvasLocation" x="741" y="179"/>
         </scene>
     </scenes>
 </document>

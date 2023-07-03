@@ -57,7 +57,7 @@ class MainVC: NSViewController, MyTrainsControllerDelegate, LayoutDelegate, Open
       layoutDelegateId = layout.addDelegate(delegate: self)
     }
     
-    fastClockObserverId = myTrainsController.openLCBNetworkLayer!.fastClock.addObserver(observer: self)
+    fastClockObserverId = myTrainsController.openLCBNetworkLayer!.fastClock!.addObserver(observer: self)
     
   }
   

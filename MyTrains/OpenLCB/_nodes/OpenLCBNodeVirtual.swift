@@ -71,9 +71,11 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   internal let addressACDIUserSpaceVersion         : Int =  0
   internal let addressACDIUserNodeName             : Int =  1
   internal let addressACDIUserNodeDescription      : Int =  64
-
+  
   // MARK: Public Properties
   
+  public var virtualNodeType : MyTrainsVirtualNodeType = .genericVirtualNode
+
   public var lfsr1 : UInt32
   
   public var lfsr2 : UInt32
@@ -188,6 +190,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   }
   
   public func initCDI(filename:String, manufacturer:String, model:String) {
+    
     if let filepath = Bundle.main.path(forResource: filename, ofType: "xml") {
       do {
         
@@ -203,8 +206,12 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
         contents = contents.replacingOccurrences(of: "%%PORTS%%", with: ports)
 
         var gateways = ""
-        gateways += "<relation><property>\(networkLayer?.locoNetGateway.nodeId)</property><value>\(networkLayer?.locoNetGateway.userNodeName)</value></relation>\n"
-        gateways += "<relation><property>\(networkLayer?.locoNetGateway2.nodeId)</property><value>\(networkLayer?.locoNetGateway2.userNodeName)</value></relation>\n"
+        if let networkLayer = self.networkLayer {
+          for gateway in networkLayer.locoNetGateways {
+            gateways += "<relation><property>\(gateway.nodeId.toHexDotFormat(numberOfBytes: 8))</property><value>\(gateway.userNodeName)</value></relation>\n"
+          }
+        }
+
         contents = contents.replacingOccurrences(of: "%%LOCONET_GATEWAYS%%", with: gateways)
 
         let memorySpace = OpenLCBMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.cdi.rawValue, isReadOnly: true, description: "")
@@ -218,6 +225,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
       catch {
       }
     }
+    
   }
   
   public func start() {

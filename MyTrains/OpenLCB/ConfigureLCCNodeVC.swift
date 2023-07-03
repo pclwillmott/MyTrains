@@ -57,7 +57,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
     
     self.view.window?.title = "Configure \(node!.manufacturerName) - \(node!.nodeModelName) (\(node!.nodeId.toHexDotFormat(numberOfBytes: 6)))"
     
-    sourceNodeId = myTrainsController.openLCBNetworkLayer!.myTrainsNode.nodeId
+    sourceNodeId = myTrainsController.openLCBNetworkLayer!.myTrainsNode!.nodeId
     
     safeTextTop = txtValue.frame.origin.y
     

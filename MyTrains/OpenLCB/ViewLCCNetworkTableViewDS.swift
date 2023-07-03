@@ -81,6 +81,7 @@ public class ViewLCCNetworkTableViewDS : NSObject, NSTableViewDataSource, NSTabl
       static let configure = "Configure"
       static let updateFirmware = "UpdateFirmware"
       static let info = "Info"
+      static let delete = "Delete"
     }
 
     switch columnName {
@@ -148,6 +149,21 @@ public class ViewLCCNetworkTableViewDS : NSObject, NSTableViewDataSource, NSTabl
         button.isEnabled = true
         
         return cell
+      }
+
+    case ColumnIdentifiers.delete:
+      
+      if let cell = tableView.makeView(withIdentifier:
+                                        NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil), let button = cell.subviews[0] as? NSButton {
+        
+        button.title = "Delete"
+        
+        button.tag = row
+        
+        button.isEnabled = true
+        
+        return cell
+        
       }
 
     default:

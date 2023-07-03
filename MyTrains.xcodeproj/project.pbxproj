@@ -157,6 +157,7 @@
 		DA60D81B295C6D4000B5A2C4 /* TC64Config.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA60D81A295C6D4000B5A2C4 /* TC64Config.storyboard */; };
 		DA613AC928A7DECD003218BA /* PlaceLocomotive.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA613AC828A7DECD003218BA /* PlaceLocomotive.storyboard */; };
 		DA613ACB28A7E02E003218BA /* PlaceLocomotiveVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA613ACA28A7E02E003218BA /* PlaceLocomotiveVC.swift */; };
+		DA631E2A2A52D263001AD638 /* MyTrainsVirtualNodeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA631E292A52D263001AD638 /* MyTrainsVirtualNodeType.swift */; };
 		DA6403EF2A24EF62001CE29B /* OpenLCBMemorySpace.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6403EE2A24EF62001CE29B /* OpenLCBMemorySpace.swift */; };
 		DA69E3932974581700447414 /* IOChannelDS64Output.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA69E3922974581700447414 /* IOChannelDS64Output.swift */; };
 		DA69E3952974668700447414 /* IOFunctionDS64OutputPropertySheet.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA69E3942974668700447414 /* IOFunctionDS64OutputPropertySheet.storyboard */; };
@@ -510,6 +511,7 @@
 		DA60D81A295C6D4000B5A2C4 /* TC64Config.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = TC64Config.storyboard; sourceTree = "<group>"; };
 		DA613AC828A7DECD003218BA /* PlaceLocomotive.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = PlaceLocomotive.storyboard; sourceTree = "<group>"; };
 		DA613ACA28A7E02E003218BA /* PlaceLocomotiveVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceLocomotiveVC.swift; sourceTree = "<group>"; };
+		DA631E292A52D263001AD638 /* MyTrainsVirtualNodeType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTrainsVirtualNodeType.swift; sourceTree = "<group>"; };
 		DA6403EE2A24EF62001CE29B /* OpenLCBMemorySpace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBMemorySpace.swift; sourceTree = "<group>"; };
 		DA69E3922974581700447414 /* IOChannelDS64Output.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOChannelDS64Output.swift; sourceTree = "<group>"; };
 		DA69E3942974668700447414 /* IOFunctionDS64OutputPropertySheet.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = IOFunctionDS64OutputPropertySheet.storyboard; sourceTree = "<group>"; };
@@ -1230,6 +1232,7 @@
 				DAACFC732A4336F7001743DA /* OpenLCBTractionManagementType.swift */,
 				DA0D3E0F2A48AA6F0042748C /* OpenLCBThrottleState.swift */,
 				DAEA212D2A5186EA008545A6 /* OpenLCBDatagramTimeout.swift */,
+				DA631E292A52D263001AD638 /* MyTrainsVirtualNodeType.swift */,
 			);
 			path = _enumerations;
 			sourceTree = "<group>";
@@ -1532,6 +1535,7 @@
 				DA5E173E272EB23100F9341F /* LoconetSensorMessage.swift in Sources */,
 				DA467BB1281D5ED400AB9650 /* SwitchBoardEditorVC.swift in Sources */,
 				DA04B8DA28F1AED70062D944 /* ConsistState.swift in Sources */,
+				DA631E2A2A52D263001AD638 /* MyTrainsVirtualNodeType.swift in Sources */,
 				DAE8DD5728675B040097C2D1 /* FrogType.swift in Sources */,
 				DA0197272773520400350F71 /* EditorObject.swift in Sources */,
 				DAF0CAD129855097009B392A /* IOChannelTC64MkIIInputPropertySheetVC.swift in Sources */,

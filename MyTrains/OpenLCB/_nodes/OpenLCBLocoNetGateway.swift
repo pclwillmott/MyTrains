@@ -19,6 +19,8 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     
     super.init(nodeId: nodeId)
     
+    virtualNodeType = MyTrainsVirtualNodeType.locoNetGatewayNode
+    
     configuration.delegate = self
 
     memorySpaces[configuration.space] = configuration
@@ -191,8 +193,8 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     
     acdiManufacturerSpaceVersion = 4
     
-    manufacturerName    = "Paul Willmott"
-    nodeModelName       = "MyTrains LocoNet Gateway"
+    manufacturerName    = virtualNodeType.manufacturerName
+    nodeModelName       = virtualNodeType.name
     nodeHardwareVersion = "v0.1"
     nodeSoftwareVersion = "v0.1"
     
@@ -284,42 +286,42 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
         length = buffer.count > 1 ? buffer[1] : 0xff
       }
       
-      if length < 0x80 && buffer.count >= length {
+      if length >= 0x80 || buffer.count < length {
+        break
+      }
+      
+      var message : [UInt8] = []
+       
+      var restart = false
+      
+      for index in 1 ... length {
         
-        var message : [UInt8] = []
-         
-        var restart = false
+        let cc = buffer.first!
         
-        for _ in 1 ... length {
-          
-          let cc = buffer.first!
-          
-          if ((cc & maskOpCode) == maskOpCode) {
-            restart = true
-            break
-          }
-          
-          message.append(cc)
-          
-          buffer.removeFirst()
-
+        if index > 1 && ((cc & maskOpCode) == maskOpCode) {
+          restart = true
+          break
         }
         
-        // Process message if no high bits set in data
+        message.append(cc)
         
-        if !restart {
-          
-          if let item = currentItem, item.message == message {
-            stopTimeoutTimer()
-            networkLayer?.sendLocoNetMessageReply(sourceNodeId: nodeId, destinationNodeId: currentItem!.nodeId, errorCode: .success)
-            currentItem = nil
-            startSpacingTimer(spacingDelay: item.spacingDelay)
-          }
-          
-          if !blockAllMessages && consumerIdentified {
-            networkLayer?.sendLocoNetMessageReceived(sourceNodeId: nodeId, locoNetMessage: message)
-          }
-          
+        buffer.removeFirst()
+        
+      }
+      
+      // Process message if no high bits set in data
+        
+      if !restart {
+        
+        if let item = currentItem, item.message == message {
+          stopTimeoutTimer()
+          networkLayer?.sendLocoNetMessageReply(sourceNodeId: nodeId, destinationNodeId: currentItem!.nodeId, errorCode: .success)
+          currentItem = nil
+          startSpacingTimer(spacingDelay: item.spacingDelay)
+        }
+        
+        if !blockAllMessages && consumerIdentified {
+          networkLayer?.sendLocoNetMessageReceived(sourceNodeId: nodeId, locoNetMessage: message)
         }
         
       }
@@ -419,13 +421,16 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   
   public func serialPortWasRemovedFromSystem(_ serialPort: MTSerialPort) {
     self.serialPort = nil
+//    print("port was removed from system")
   }
   
   public func serialPortWasOpened(_ serialPort: MTSerialPort) {
+ //   print("port was opened")
     networkLayer?.sendProducerIdentifiedValid(sourceNodeId: nodeId, wellKnownEvent: .nodeIsALocoNetGateway)
   }
   
   public func serialPortWasClosed(_ serialPort: MTSerialPort) {
+ //   print("port was closed")
     self.serialPort = nil
   }
 
