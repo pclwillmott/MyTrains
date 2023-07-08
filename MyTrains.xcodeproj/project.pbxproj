@@ -1205,6 +1205,7 @@
 		DACA33582A18E0EF009E791F /* _enumerations */ = {
 			isa = PBXGroup;
 			children = (
+				DA631E292A52D263001AD638 /* MyTrainsVirtualNodeType.swift */,
 				DA7A127529E2E6DB000DCE1C /* OpenLCBCANControlFrameFormat.swift */,
 				DA51FB9D29D8921B002CAAC1 /* OpenLCBCANFrameType.swift */,
 				DA0BBB7829FD4B22003E03EF /* OpenLCBCDIElementType.swift */,
@@ -1213,26 +1214,25 @@
 				DAA777CF2A20D734008EAF02 /* OpenLCBClockState.swift */,
 				DA8479962A34CA87003067E6 /* OpenLCBClockSubState.swift */,
 				DAA777CB2A20C861008EAF02 /* OpenLCBClockType.swift */,
+				DAEA212D2A5186EA008545A6 /* OpenLCBDatagramTimeout.swift */,
 				DAAA9C202A0FAE0100A5B9D6 /* OpenLCBDatagramType.swift */,
 				DA8A28652A34F0E8006AE024 /* OpenLCBEnabledDisabledState.swift */,
 				DAFBC3EC29EC39A6003336BE /* OpenLCBErrorCode.swift */,
 				DA56261429E1BE7800D465CC /* OpenLCBMTI.swift */,
 				DA56261229E1B64F00D465CC /* OpenLCBNetworkLayerState.swift */,
 				DA60140A29F448B000AD9ACD /* OpenLCBNodeMemoryAddressSpace.swift */,
-				DA56260C29E1A13300D465CC /* OpenLCBTransportLayerState.swift */,
-				DAA36B9E2A110C0000F07D8E /* OpenLCBTransportLayerTransitionStateCAN.swift */,
-				DA5F7A192A3F11A7004D7EBB /* OpenLCBWellKnownEvent.swift */,
-				DACE10AB2A3F5F310032E954 /* OpenLCBTrackProtocol.swift */,
-				DA0D3E072A485E570042748C /* OpenLCBSerachType.swift */,
-				DA0D3E092A485E770042748C /* OpenLCBSearchMatchType.swift */,
 				DA0D3E0B2A485E9A0042748C /* OpenLCBSearchMatchTarget.swift */,
+				DA0D3E092A485E770042748C /* OpenLCBSearchMatchType.swift */,
+				DA0D3E072A485E570042748C /* OpenLCBSerachType.swift */,
+				DA0D3E0F2A48AA6F0042748C /* OpenLCBThrottleState.swift */,
+				DACE10AB2A3F5F310032E954 /* OpenLCBTrackProtocol.swift */,
 				DA9C6A1D2A408F060069FED8 /* OpenLCBTractionControlInstructionType.swift */,
 				DAF479CA2A4092380054DA92 /* OpenLCBTractionControllerConfigurationType.swift */,
 				DA93CAE32A40C2800014D2E2 /* OpenLCBTractionListenerConfigurationType.swift */,
 				DAACFC732A4336F7001743DA /* OpenLCBTractionManagementType.swift */,
-				DA0D3E0F2A48AA6F0042748C /* OpenLCBThrottleState.swift */,
-				DAEA212D2A5186EA008545A6 /* OpenLCBDatagramTimeout.swift */,
-				DA631E292A52D263001AD638 /* MyTrainsVirtualNodeType.swift */,
+				DA56260C29E1A13300D465CC /* OpenLCBTransportLayerState.swift */,
+				DAA36B9E2A110C0000F07D8E /* OpenLCBTransportLayerTransitionStateCAN.swift */,
+				DA5F7A192A3F11A7004D7EBB /* OpenLCBWellKnownEvent.swift */,
 			);
 			path = _enumerations;
 			sourceTree = "<group>";

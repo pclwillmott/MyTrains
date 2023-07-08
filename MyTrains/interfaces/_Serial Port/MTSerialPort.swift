@@ -209,11 +209,13 @@ public class MTSerialPort {
         buffer.advanced(by: index).pointee = data[index]
       }
       
-      if writeSerialPort(fd, buffer, data.count) != data.count {
-        delegate?.serialPortWasRemovedFromSystem(self)
-        quit = true
-      }
+      let count = writeSerialPort(self.fd, buffer, data.count)
       
+      if count != data.count {
+        self.delegate?.serialPortWasRemovedFromSystem(self)
+        self.quit = true
+      }
+
     }
     
   }

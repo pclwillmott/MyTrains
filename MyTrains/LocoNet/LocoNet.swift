@@ -7,7 +7,7 @@
 
 import Foundation
 
-private typealias QueueItem = (message:LocoNetMessage, spacingDelay:UInt8, immPacketRetryCount:Int)
+private typealias QueueItem = (message:LocoNetMessage, spacingDelay:UInt8)
 
 private enum State {
   case idle
@@ -33,6 +33,8 @@ public class LocoNet : NSObject, OpenLCBNetworkLayerDelegate {
     
     self.observerId = networkLayer.addObserver(observer: self)
     
+    networkLayer.sendConsumerIdentifiedValid(sourceNodeId: nodeId, eventId: OpenLCBWellKnownEvent.locoNetMessage.rawValue)
+
     getOpSwDataAP1()
     
   }
@@ -55,8 +57,6 @@ public class LocoNet : NSObject, OpenLCBNetworkLayerDelegate {
   
   private var outputQueue : [QueueItem] = []
   
-  private var immPacketQueue : [QueueItem] = []
-  
   private var currentItem : QueueItem? = nil
   
   private var state : State = .idle
@@ -67,7 +67,7 @@ public class LocoNet : NSObject, OpenLCBNetworkLayerDelegate {
   
   private var tempErrorTimer : Timer? = nil
   
-  private var immPacketTimer : Timer? = nil
+  private var initComplete = false
   
   internal var commandStationType : LocoNetCommandStationType = .DT200
 
@@ -129,34 +129,10 @@ public class LocoNet : NSObject, OpenLCBNetworkLayerDelegate {
     
   }
   
-  func startTempErrorTimer(timeInterval:TimeInterval) {
+  func startTempErrorTimer() {
+    let timeInterval:TimeInterval = 0.1
     tempErrorTimer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(tempErrorTimerAction), userInfo: nil, repeats: false)
     RunLoop.current.add(tempErrorTimer!, forMode: .common)
-  }
-
-  @objc func immPacketTimerAction() {
-    
-    guard !immPacketQueue.isEmpty else {
-      return
-    }
-    
-    var item = immPacketQueue.removeFirst()
-    
-    item.immPacketRetryCount -= 1
-    
-    if item.immPacketRetryCount > 0 {
-      addToQueue(message: item.message, spacingDelay: item.spacingDelay, immPacketRetryCount: item.immPacketRetryCount)
-    }
-    
-    if !immPacketQueue.isEmpty {
-      startIMMPacketTimer(timeInterval: 0.1)
-    }
-    
-  }
-  
-  func startIMMPacketTimer(timeInterval:TimeInterval) {
-    immPacketTimer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(immPacketTimerAction), userInfo: nil, repeats: false)
-    RunLoop.current.add(immPacketTimer!, forMode: .common)
   }
 
   private func send() {
@@ -177,22 +153,16 @@ public class LocoNet : NSObject, OpenLCBNetworkLayerDelegate {
 
   internal func addToQueue(message:LocoNetMessage, spacingDelay:UInt8) {
  
-    addToQueue(message: message, spacingDelay: spacingDelay, immPacketRetryCount: 10)
-    
-  }
- 
-  // MARK: Public Methods
- 
-  public func addToQueue(message:LocoNetMessage, spacingDelay:UInt8, immPacketRetryCount:Int) {
-    
-    outputQueue.append((message:message, spacingDelay:spacingDelay, immPacketRetryCount:immPacketRetryCount))
+    outputQueue.append((message:message, spacingDelay:spacingDelay))
     
     if outputQueue.count == 1 {
       send()
     }
-    
-  }
 
+  }
+ 
+  // MARK: Public Methods
+ 
   // MARK: OpenLCBNetworkLayerDelegate Methods
   
   public func networkLayerStateChanged(networkLayer: OpenLCBNetworkLayer) {
@@ -258,7 +228,7 @@ public class LocoNet : NSObject, OpenLCBNetworkLayerDelegate {
               state = .idle
             }
             else {
-              startTempErrorTimer(timeInterval: 0.1)
+              startTempErrorTimer()
             }
           default:
             if errorCode.isPermanent {
@@ -276,7 +246,7 @@ public class LocoNet : NSObject, OpenLCBNetworkLayerDelegate {
                 send()
               }
               else {
-                startTempErrorTimer(timeInterval: 0.1)
+                startTempErrorTimer()
               }
             }
             break
@@ -290,51 +260,32 @@ public class LocoNet : NSObject, OpenLCBNetworkLayerDelegate {
       
       if message.destinationNodeId! == nodeId, let dt = message.datagramType, dt == .sendLocoNetMessageReply, state != .idle {
         
-        while message.payload.count < 2 {
+        while message.payload.count < 4 {
           message.payload.append(0)
         }
         
-        if let errorCode = OpenLCBErrorCode(rawValue: UInt16(bigEndianData: [message.payload[0], message.payload[1]])!) {
+        if let errorCode = OpenLCBErrorCode(rawValue: UInt16(bigEndianData: [message.payload[2], message.payload[3]])!) {
 
           stopTimeoutTimer()
 
-          if errorCode == .success {
-            if currentItem!.message.messageType == .immPacket {
-              immPacketQueue.append(currentItem!)
-            }
-          }
-          else {
+          if errorCode != .success {
             delegate?.locoNetError?(gatewayNodeId: gatewayNodeId, errorCode: errorCode.rawValue)
           }
           
           currentItem = nil
           state = .idle
           send()
-          
+
         }
         
       }
       
-    case .locoNetMessageReceived:
+    case .producerConsumerEventReport:
       
-      if let locoNetMessage = LocoNetMessage(payload: message.payload) {
-        
-        if message.sourceNodeId! == gatewayNodeId {
-          delegate?.locoNetMessageReceived?(gatewayNodeId: gatewayNodeId, message: locoNetMessage)
-        }
+      if message.eventId == OpenLCBWellKnownEvent.locoNetMessage.rawValue, let locoNetMessage = LocoNetMessage(payload: message.payload), message.sourceNodeId! == gatewayNodeId {
         
         switch locoNetMessage.messageType {
-        
-        case .immPacketOK:
           
-          if !immPacketQueue.isEmpty {
-            immPacketQueue.removeFirst()
-          }
-          
-        case .immPacketBufferFull:
-          
-          startIMMPacketTimer(timeInterval: 0.1)
-
         case .opSwDataAP1:
           
           let trackByte = locoNetMessage.message[7]
@@ -342,9 +293,9 @@ public class LocoNet : NSObject, OpenLCBNetworkLayerDelegate {
           let mask_TrackPower    : UInt8 = 0b00000001
           let mask_EmergencyStop : UInt8 = 0b00000010
           let mask_Protocol1     : UInt8 = 0b00000100
-
+          
           if (trackByte & mask_Protocol1) == mask_Protocol1, let csType = LocoNetCommandStationType(rawValue: locoNetMessage.message[11]) {
-              commandStationType = csType
+            commandStationType = csType
           }
           
           trackPowerOn = (trackByte & mask_TrackPower) == mask_TrackPower
@@ -352,18 +303,24 @@ public class LocoNet : NSObject, OpenLCBNetworkLayerDelegate {
           if commandStationType.idleSupportedByDefault {
             globalEmergencyStop = (trackByte & mask_EmergencyStop) != mask_EmergencyStop
           }
+
+          if !initComplete {
+            initComplete = true
+            self.delegate?.locoNetInitializationComplete?(locoNet: self)
+          }
           
         default:
           break
         }
+ 
+        self.delegate?.locoNetMessageReceived?(gatewayNodeId: self.gatewayNodeId, message: locoNetMessage)
 
-        
       }
       
     default:
       break
     }
-    
+
   }
   
 }

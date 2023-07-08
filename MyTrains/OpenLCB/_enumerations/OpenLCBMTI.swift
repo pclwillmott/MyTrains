@@ -54,6 +54,5 @@ public enum OpenLCBMTI : UInt16 {
   case streamDataSend                             = 0x1F88
   case streamDataProceed                          = 0x0888
   case streamDataComplete                         = 0x08A8
-  case locoNetMessageReceived                     = 0b0000001010000000
   case unknown                                    = 0xFFFF
 }

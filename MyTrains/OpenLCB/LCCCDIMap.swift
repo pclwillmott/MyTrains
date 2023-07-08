@@ -40,6 +40,8 @@ public class LCCCDIMap {
     
     var index = 0
     
+    comboBox.deselectItem(at: comboBox.indexOfSelectedItem)
+    
     for item in field.map {
       if property == item.property{
         comboBox.selectItem(at: index)

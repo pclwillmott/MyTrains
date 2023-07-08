@@ -124,12 +124,8 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   
   private var spacingTimer : Timer?
   
-  private var timeoutTimer : Timer?
-  
   private var consumerIdentified : Bool = false
   
-  private var currentItem : QueueItem? = nil
-
   // MARK: Public Properties
   
   public var configuration : OpenLCBMemorySpace
@@ -144,12 +140,14 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
       return
     }
     
-    currentItem = outputQueue.removeFirst()
+    let item = outputQueue.removeFirst()
     
-    startTimeoutTimer(timeInterval: 1.5)
+    send(data: item.message)
+    
+    networkLayer?.sendLocoNetMessageReply(sourceNodeId: nodeId, destinationNodeId: item.nodeId, errorCode: .success)
 
-    send(data: currentItem!.message)
-    
+    startSpacingTimer(spacingDelay: item.spacingDelay)
+
   }
   
   func startSpacingTimer(spacingDelay:UInt8) {
@@ -167,28 +165,6 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     spacingTimer = nil
   }
 
-  @objc func timeoutTimerAction() {
-    
-    stopTimeoutTimer()
-    
-    networkLayer?.sendLocoNetMessageReply(sourceNodeId: nodeId, destinationNodeId: currentItem!.nodeId, errorCode: .temporaryErrorTimeOut)
-
-    currentItem = nil
-    
-    spacingTimerAction()
-    
-  }
-  
-  func startTimeoutTimer(timeInterval:TimeInterval) {
-    timeoutTimer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(timeoutTimerAction), userInfo: nil, repeats: false)
-    RunLoop.current.add(timeoutTimer!, forMode: .common)
-  }
-  
-  func stopTimeoutTimer() {
-    timeoutTimer?.invalidate()
-    timeoutTimer = nil
-  }
-  
   internal override func resetToFactoryDefaults() {
     
     acdiManufacturerSpaceVersion = 4
@@ -246,7 +222,7 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   }
   
   private func send(data: [UInt8]) {
-    serialPort?.write(data:data)
+    self.serialPort?.write(data:data)
   }
 
   internal func addToInputBuffer(data:[UInt8]) {
@@ -313,13 +289,6 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
         
       if !restart {
         
-        if let item = currentItem, item.message == message {
-          stopTimeoutTimer()
-          networkLayer?.sendLocoNetMessageReply(sourceNodeId: nodeId, destinationNodeId: currentItem!.nodeId, errorCode: .success)
-          currentItem = nil
-          startSpacingTimer(spacingDelay: item.spacingDelay)
-        }
-        
         if !blockAllMessages && consumerIdentified {
           networkLayer?.sendLocoNetMessageReceived(sourceNodeId: nodeId, locoNetMessage: message)
         }
@@ -344,25 +313,25 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   // MARK: OpenLCBNetworkLayerDelegate Methods
   
   public override func openLCBMessageReceived(message: OpenLCBMessage) {
-    
+ 
     super.openLCBMessageReceived(message: message)
     
     switch message.messageTypeIndicator {
     case .identifyProducer:
       
-      if message.eventId == OpenLCBWellKnownEvent.nodeIsALocoNetGateway.rawValue {
-        networkLayer?.sendProducerIdentifiedValid(sourceNodeId: nodeId, wellKnownEvent: .nodeIsALocoNetGateway)
+      if message.eventId == OpenLCBWellKnownEvent.locoNetMessage.rawValue {
+        networkLayer?.sendProducerIdentifiedValid(sourceNodeId: nodeId, wellKnownEvent: .locoNetMessage)
       }
       
     case .consumerIdentifiedAsCurrentlyValid, .consumerIdentifiedAsCurrentlyInvalid, .consumerIdentifiedWithValidityUnknown:
       
-      if message.eventId == OpenLCBWellKnownEvent.nodeIsALocoNetGateway.rawValue {
+      if message.eventId == OpenLCBWellKnownEvent.locoNetMessage.rawValue {
         consumerIdentified = true
       }
       
     case .datagram:
       
-      if let dt = message.datagramType, dt == .sendlocoNetMessage && message.destinationNodeId! == nodeId {
+      if message.destinationNodeId! == nodeId, let dt = message.datagramType, dt == .sendlocoNetMessage  {
         
         if !isOpen {
           networkLayer?.sendDatagramRejected(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, errorCode: .permanentErrorNoConnection)
@@ -384,7 +353,7 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
           
           if locoNetMessage.checkSumOK {
             
-            if outputQueue.count == 3 {
+            if outputQueue.count == 99 {
               networkLayer?.sendDatagramRejected(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, errorCode: .temporaryErrorBufferUnavailable)
             }
             else {
@@ -410,7 +379,7 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     default:
       break
     }
-    
+ 
   }
 
   // MARK: MTSerialPortDelegate Methods
@@ -426,7 +395,7 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   
   public func serialPortWasOpened(_ serialPort: MTSerialPort) {
  //   print("port was opened")
-    networkLayer?.sendProducerIdentifiedValid(sourceNodeId: nodeId, wellKnownEvent: .nodeIsALocoNetGateway)
+    networkLayer?.sendProducerIdentifiedValid(sourceNodeId: nodeId, wellKnownEvent: .locoNetMessage)
   }
   
   public func serialPortWasClosed(_ serialPort: MTSerialPort) {

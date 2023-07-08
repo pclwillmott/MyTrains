@@ -234,23 +234,23 @@ extension LocoNet {
         locoF5F8P1(slotNumber: slotNumber, functions: next)
       }
       else {
-        dccF5F8(address: address, functions: next)
+    //    dccF5F8(address: address, functions: next)
       }
-      
+      /*
       dccF9F12(address:  address, functions: next)
       dccF13F20(address: address, functions: next)
       dccF21F28(address: address, functions: next)
-      
+      */
     }
     
     next = nextState.extendedFunctions
-    
+    /*
     dccF29F36(address: address, functions: next)
     dccF37F44(address: address, functions: next)
     dccF45F52(address: address, functions: next)
     dccF53F60(address: address, functions: next)
     dccF61F68(address: address, functions: next)
-
+*/
     return (state: nextState, timeStamp: timeStamp)
 
   }
@@ -317,11 +317,11 @@ extension LocoNet {
           locoF5F8P1(slotNumber: slotNumber, functions: next)
         }
         else {
-          dccF5F8(address: address, functions: next)
+     //     dccF5F8(address: address, functions: next)
         }
         
       }
-
+/*
       if previous & maskF9F12 != next & maskF9F12 {
         dccF9F12(address: address, functions: next)
       }
@@ -333,7 +333,7 @@ extension LocoNet {
       if previous & maskF21F28 != next & maskF21F28 {
         dccF21F28(address: address, functions: next)
       }
-
+*/
     }
     
     previous = previousState.extendedFunctions
@@ -345,7 +345,7 @@ extension LocoNet {
     let maskF45F52   : UInt64 = 0b0000000000000000111111110000000000000000
     let maskF53F60   : UInt64 = 0b0000000011111111000000000000000000000000
     let maskF61F68   : UInt64 = 0b1111111100000000000000000000000000000000
-
+/*
     if previous & maskF29F36 != next & maskF29F36 {
       dccF29F36(address: address, functions: next)
     }
@@ -365,7 +365,7 @@ extension LocoNet {
     if previous & maskF61F68 != next & maskF61F68 {
       dccF61F68(address: address, functions: next)
     }
-
+*/
     return (state: nextState, timeStamp: timeStamp)
 
   }

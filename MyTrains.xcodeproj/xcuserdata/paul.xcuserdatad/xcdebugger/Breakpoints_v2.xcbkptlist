@@ -62,8 +62,8 @@
             filePath = "MyTrains/OpenLCB/_nodes/OpenLCBLocoNetGateway.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "270"
-            endingLineNumber = "270"
+            startingLineNumber = "246"
+            endingLineNumber = "246"
             landmarkName = "addToInputBuffer(data:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -78,8 +78,8 @@
             filePath = "MyTrains/OpenLCB/_nodes/OpenLCBLocoNetGateway.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "312"
-            endingLineNumber = "312"
+            startingLineNumber = "288"
+            endingLineNumber = "288"
             landmarkName = "addToInputBuffer(data:)"
             landmarkType = "7">
             <Locations>
@@ -114,6 +114,22 @@
                   offsetFromSymbolStart = "2851">
                </Location>
             </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "766A4B80-9946-4E92-A2C0-1CB041B52246"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MyTrains/OpenLCB/_nodes/OpenLCBNodeRollingStockLocoNet.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "177"
+            endingLineNumber = "177"
+            landmarkName = "attachNode()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

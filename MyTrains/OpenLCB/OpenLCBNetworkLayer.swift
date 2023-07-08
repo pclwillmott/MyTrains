@@ -209,20 +209,22 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
 
   // MARK: Messages
   
-  internal func sendMessage(message:OpenLCBMessage) {
-    
-    guard state == .initialized else {
+  var spacingTimer : Timer?
+  
+  @objc func spacingTimerAction() {
+  
+    if outputQueue.isEmpty {
       return
     }
+    
+    let message = outputQueue.removeFirst()
     
     for (_, transportLayer) in transportLayers {
       transportLayer.addToOutputQueue(message: message)
     }
     
     for (_, observer) in observers {
-      DispatchQueue.main.async {
-        observer.openLCBMessageReceived(message: message)
-      }
+      observer.openLCBMessageReceived(message: message)
     }
     
     for (_, virtualNode) in virtualNodes {
@@ -231,6 +233,36 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
           virtualNode.openLCBMessageReceived(message: message)
         }
       }
+    }
+    
+    if !outputQueue.isEmpty {
+      startSpacingTimer()
+    }
+    
+  }
+  
+  func startSpacingTimer() {
+    
+    let timeInterval : TimeInterval = 0.0
+    
+    spacingTimer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(spacingTimerAction), userInfo: nil, repeats: false)
+    
+    RunLoop.current.add(spacingTimer!, forMode: .common)
+    
+  }
+
+  var outputQueue : [OpenLCBMessage] = []
+  
+  internal func sendMessage(message:OpenLCBMessage) {
+    
+    guard state == .initialized else {
+      return
+    }
+    
+    outputQueue.append(message)
+    
+    if outputQueue.count == 1 {
+      startSpacingTimer()
     }
     
   }
@@ -278,9 +310,11 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
 
   public func sendLocoNetMessageReceived(sourceNodeId:UInt64, locoNetMessage:[UInt8]) {
     
-    let message = OpenLCBMessage(messageTypeIndicator: .locoNetMessageReceived)
+    let message = OpenLCBMessage(messageTypeIndicator: .producerConsumerEventReport)
     
     message.sourceNodeId = sourceNodeId
+    
+    message.eventId = OpenLCBWellKnownEvent.locoNetMessage.rawValue
     
     message.payload = locoNetMessage
     
@@ -383,6 +417,18 @@ public class OpenLCBNetworkLayer : NSObject, OpenLCBTransportLayerDelegate {
   public func sendProducerIdentifiedValidityUnknown(sourceNodeId:UInt64, eventId:UInt64) {
 
     let message = OpenLCBMessage(messageTypeIndicator: .producerIdentifiedWithValidityUnknown)
+
+    message.sourceNodeId = sourceNodeId
+    
+    message.eventId = eventId
+    
+    sendMessage(message: message)
+
+  }
+  
+  public func sendConsumerIdentifiedValid(sourceNodeId:UInt64, eventId:UInt64) {
+
+    let message = OpenLCBMessage(messageTypeIndicator: .consumerIdentifiedAsCurrentlyValid)
 
     message.sourceNodeId = sourceNodeId
     

@@ -125,7 +125,7 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
   
   func startTimeoutTimer() {
     
-    let timeInterval : TimeInterval = 1.0
+    let timeInterval : TimeInterval = 2.0
     
     timeoutTimer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(timeoutTimerAction), userInfo: nil, repeats: false)
     
@@ -174,72 +174,60 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
   
   internal override func attachNode() {
   
-    guard configState == .idle && locoNetGatewayNodeId != 0 else {
-      return
-    }
-    
     if configState == .active {
       releaseNode()
+    }
+    
+    guard locoNetGatewayNodeId != 0 else {
+      return
     }
     
     locoNet = LocoNet(gatewayNodeId: locoNetGatewayNodeId, virtualNode: self)
     
     locoNet?.delegate = self
     
-    if let interface = self.locoNet {
-      
-      slotPage = 0
-      
-      slotNumber = 0
-      
-      stat1 = 0
-      
-      setSpeed = 0.0
-      
-      commandedSpeed = 0.0
-      
-      readStandardFunctions()
-      
-      readExpandedFunctions()
-      
-      lastLocomotiveState = nil
-      
-      configState = .slotFetch
-
-      interface.getLocoSlot(forAddress: dccAddress)
-      
-      startTimeoutTimer()
-      
-    }
+    slotPage = 0
     
+    slotNumber = 0
+    
+    stat1 = 0
+    
+    setSpeed = 0.0
+    
+    commandedSpeed = 0.0
+    
+    readStandardFunctions()
+    
+    readExpandedFunctions()
+    
+    lastLocomotiveState = nil
+    
+    configState = .idle
+
   }
   
   internal override func releaseNode() {
     
-    if let interface = self.locoNet {
-      
-      stopRefreshTimer()
-      
-      setSpeedToZero()
-      
-      commandedSpeed = setSpeed
-      
-      standardFunctions = 0
-      
-      expandedFunctions = 0
-      
-      updateLocoState()
-      
-      slotState = .common
-      
-      interface.setLocoSlotStat1(slotPage: slotPage, slotNumber: slotNumber, stat1: stat1)
-
-      configState = .idle
-      
-      locoNet = nil
-      
-    }
+    stopRefreshTimer()
     
+    setSpeedToZero()
+    
+    commandedSpeed = setSpeed
+    
+    standardFunctions = 0
+    
+    expandedFunctions = 0
+    
+    updateLocoState()
+    
+    slotState = .common
+
+    locoNet?.setLocoSlotStat1(slotPage: slotPage, slotNumber: slotNumber, stat1: stat1)
+
+    configState = .idle
+    
+    locoNet = nil
+
   }
  
   internal override func speedChanged() {
@@ -258,9 +246,27 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
   
   // MARK: Public Methods
   
-  // MARK: InterfaceDelegate Methods
+  // MARK: LocoNetDelegate Methods
   
+  @objc public func locoNetError(gatewayNodeId:UInt64, errorCode:UInt16) {
+    print("locoNetError: \(OpenLCBErrorCode(rawValue: errorCode))")
+  }
+
+  @objc public func locoNetInitializationComplete(locoNet:LocoNet) {
+    
+    configState = .slotFetch
+
+    startTimeoutTimer()
+    
+    locoNet.getLocoSlot(forAddress: dccAddress)
+    
+  }
+
   @objc public func locoNetMessageReceived(gatewayNodeId:UInt64, message:LocoNetMessage) {
+    
+    guard gatewayNodeId == self.locoNetGatewayNodeId else {
+      return
+    }
     
     if let interface = self.locoNet {
       
@@ -282,13 +288,13 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
               writeBackMessage[3] |= speedSteps.setMask
               let wbm = LocoNetMessage(data: writeBackMessage, appendCheckSum: true)
               configState = .writeBack
-              interface.addToQueue(message: wbm, spacingDelay: 0)
               startTimeoutTimer()
+              interface.addToQueue(message: wbm, spacingDelay: 0)
             }
             else {
               configState = .setInUse
-              interface.moveSlotsP1(sourceSlotNumber: slotNumber, destinationSlotNumber: slotNumber)
               startTimeoutTimer()
+              interface.moveSlotsP1(sourceSlotNumber: slotNumber, destinationSlotNumber: slotNumber)
             }
           case .setInUse:
             if slotState != .inUse {
@@ -303,8 +309,8 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
               writeBackMessage[3] |= speedSteps.setMask
               let wbm = LocoNetMessage(data: writeBackMessage, appendCheckSum: true)
               configState = .writeBack
-              interface.addToQueue(message: wbm, spacingDelay: 0)
               startTimeoutTimer()
+              interface.addToQueue(message: wbm, spacingDelay: 0)
             }
           default:
             break
@@ -329,13 +335,13 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
               writeBackMessage[19] = 0 // Throttle Id high
               let wbm = LocoNetMessage(data: writeBackMessage, appendCheckSum: true)
               configState = .writeBack
-              interface.addToQueue(message: wbm, spacingDelay: 0)
               startTimeoutTimer()
+              interface.addToQueue(message: wbm, spacingDelay: 0)
             }
             else {
               configState = .setInUse
-              interface.moveSlotsP2(sourceSlotNumber: slotNumber, sourceSlotPage: slotPage, destinationSlotNumber: slotNumber, destinationSlotPage: slotPage)
               startTimeoutTimer()
+              interface.moveSlotsP2(sourceSlotNumber: slotNumber, sourceSlotPage: slotPage, destinationSlotNumber: slotNumber, destinationSlotPage: slotPage)
             }
           case .setInUse:
             if slotState != .inUse {
@@ -352,8 +358,8 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
               writeBackMessage[19] = 0 // Throttle Id high
               let wbm = LocoNetMessage(data: writeBackMessage, appendCheckSum: true)
               configState = .writeBack
-              interface.addToQueue(message: wbm, spacingDelay: 0)
               startTimeoutTimer()
+              interface.addToQueue(message: wbm, spacingDelay: 0)
             }
           default:
             break
@@ -376,7 +382,9 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
           stopTimeoutTimer()
           configState = .active
           attachCompleted()
-          updateLocoState()
+ //         DispatchQueue.global(qos: .userInitiated).async {
+       //     self.updateLocoState()
+ //         }
           startRefreshTimer(timeInterval: 90.0)
         }
       default:

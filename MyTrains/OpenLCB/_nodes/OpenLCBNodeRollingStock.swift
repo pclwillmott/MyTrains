@@ -225,9 +225,9 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
   }
   
   internal func attachCompleted() {
-    
-    networkLayer?.sendAssignControllerReply(sourceNodeId: nodeId, destinationNodeId: activeControllerNodeId, result: 0)
-    
+    print("ack: \(activeControllerNodeId.toHexDotFormat(numberOfBytes: 6))")
+    networkLayer!.sendAssignControllerReply(sourceNodeId: nodeId, destinationNodeId: activeControllerNodeId, result: 0)
+    print("Ack Sent")
   }
   
   internal func attachFailed() {
@@ -335,7 +335,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
   public override func openLCBMessageReceived(message: OpenLCBMessage) {
     
     super.openLCBMessageReceived(message: message)
-    
+        
     switch message.messageTypeIndicator {
       
     case .tractionControlCommand:
@@ -481,11 +481,11 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
 
                 nextActiveControllerNodeId = 0
                 
-                if activeControllerNodeId == 0 {
+                if activeControllerNodeId == 0 || activeControllerNodeId == controllerNodeId {
                   
                   activeControllerNodeId = controllerNodeId
                   
-                  attachNode()
+          //        networkLayer?.sendAssignControllerReply(sourceNodeId: nodeId, destinationNodeId: activeControllerNodeId, result: 0)
                   
                 }
                 else {
@@ -495,7 +495,6 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
                   networkLayer?.sendControllerChangedNotify(sourceNodeId: nodeId, destinationNodeId: activeControllerNodeId, newController: nextActiveControllerNodeId)
                   
                 }
-                
                 
               }
               
@@ -653,6 +652,8 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     case .tractionControlReply:
       
       if message.destinationNodeId == nodeId, let instruction = OpenLCBTractionControlInstructionType(rawValue: message.payload[0] & 0b01111111) {
+
+        print("tractionControlReply: \(instruction) \(state)")
         
         switch instruction {
           
@@ -669,8 +670,6 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
                 if message.payload[2] == 0 {
                   
                   activeControllerNodeId = nextActiveControllerNodeId
-                  
-                  attachNode()
                   
                 }
                 else {

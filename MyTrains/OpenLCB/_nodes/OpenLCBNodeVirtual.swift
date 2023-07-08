@@ -207,6 +207,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
 
         var gateways = ""
         if let networkLayer = self.networkLayer {
+          gateways += "<relation><property>00.00.00.00.00.00.00.00</property><value>No Gateway Selected</value></relation>\n"
           for gateway in networkLayer.locoNetGateways {
             gateways += "<relation><property>\(gateway.nodeId.toHexDotFormat(numberOfBytes: 8))</property><value>\(gateway.userNodeName)</value></relation>\n"
           }
