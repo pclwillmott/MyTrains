@@ -207,7 +207,7 @@ public class OpenLCBTransportLayerCAN : OpenLCBTransportLayer, InterfaceDelegate
             datagramsAwaitingReceipt[message.datagramId] = message
 
             if message.payload.count <= 8 {
-              if let frame = LCCCANFrame(networkId: interface.networkId, message: message, canFrameType: .datagramCompleteInFrame, data: message.payload) {
+              if let frame = LCCCANFrame(message: message, canFrameType: .datagramCompleteInFrame, data: message.payload) {
                 interface.send(data: frame.message)
               }
             }
@@ -238,7 +238,7 @@ public class OpenLCBTransportLayerCAN : OpenLCBTransportLayer, InterfaceDelegate
                   count += 1
                 }
                 
-                if let frame = LCCCANFrame(networkId: interface.networkId, message: message, canFrameType: canFrameType, data: data) {
+                if let frame = LCCCANFrame(message: message, canFrameType: canFrameType, data: data) {
                   interface.send(data: frame.message)
                 }
                 
@@ -251,7 +251,7 @@ public class OpenLCBTransportLayerCAN : OpenLCBTransportLayer, InterfaceDelegate
           }
           else if message.isAddressPresent {
             
-            if let frame = LCCCANFrame(networkId: interface.networkId, message: message) {
+            if let frame = LCCCANFrame(message: message) {
               
               if frame.data.count <= 8 {
                 interface.send(data: frame.message)
@@ -271,7 +271,7 @@ public class OpenLCBTransportLayerCAN : OpenLCBTransportLayer, InterfaceDelegate
                     flags = .lastFrame
                   }
                   
-                  if let frame = LCCCANFrame(networkId: interface.networkId, message: message, flags: flags, frameNumber: frameNumber) {
+                  if let frame = LCCCANFrame(message: message, flags: flags, frameNumber: frameNumber) {
                     interface.send(data: frame.message)
                   }
                   
@@ -284,7 +284,7 @@ public class OpenLCBTransportLayerCAN : OpenLCBTransportLayer, InterfaceDelegate
             delete = true
             
           }
-          else if let frame = LCCCANFrame(networkId: interface.networkId, message: message) {
+          else if let frame = LCCCANFrame(message: message) {
             interface.send(data: frame.message)
             delete = true
           }
@@ -328,7 +328,7 @@ public class OpenLCBTransportLayerCAN : OpenLCBTransportLayer, InterfaceDelegate
       
       message.destinationNIDAlias = destinationNodeIdAlias
       
-      if let frame = LCCCANFrame(networkId: interface.networkId, message: message) {
+      if let frame = LCCCANFrame(message: message) {
         interface.send(data: frame.message)
       }
       
@@ -356,7 +356,7 @@ public class OpenLCBTransportLayerCAN : OpenLCBTransportLayer, InterfaceDelegate
       nodeIdLookup.removeValue(forKey: nodeId)
     }
   }
-  
+  /*
   private func nextAlias(node: OpenLCBNodeVirtual) -> UInt16 {
     
     // The PRNG state is stored in two 32-bit quantities:
@@ -390,7 +390,7 @@ public class OpenLCBTransportLayerCAN : OpenLCBTransportLayer, InterfaceDelegate
     return UInt16((node.lfsr1 ^ node.lfsr2 ^ (node.lfsr1 >> 12) ^ (node.lfsr2 >> 12) ) & 0xFFF)
     
   }
-  
+  */
   @objc func waitTimerTick() {
     
     stopWaitTimer()
@@ -405,12 +405,12 @@ public class OpenLCBTransportLayerCAN : OpenLCBTransportLayer, InterfaceDelegate
       case .reservingAlias:
         internalNode.transitionState = .mappingDeclared
         internalNode.state = .permitted
-        sendAliasMapDefinitionFrame(nodeId: internalNode.node.nodeId, alias: internalNode.alias!)
-        addNodeIdAliasMapping(nodeId: internalNode.node.nodeId, alias: internalNode.alias!)
+        sendAliasMapDefinitionFrame(nodeId: internalNode.nodeId, alias: internalNode.alias!)
+        addNodeIdAliasMapping(nodeId: internalNode.nodeId, alias: internalNode.alias!)
         managedAliasLookup[internalNode.alias!] = internalNode
-        managedNodeIdLookup[internalNode.node.nodeId] = internalNode
+        managedNodeIdLookup[internalNode.nodeId] = internalNode
         initNodeQueue.removeFirst()
-        internalNode.node.start()
+ //       internalNode.node.start()
         if !initNodeQueue.isEmpty {
           getAlias()
         }
@@ -440,7 +440,7 @@ public class OpenLCBTransportLayerCAN : OpenLCBTransportLayer, InterfaceDelegate
 
       if node.transitionState == .tryAgain {
         managedAliasLookup.removeValue(forKey: node.alias!)
-        managedNodeIdLookup.removeValue(forKey: node.node.nodeId)
+        managedNodeIdLookup.removeValue(forKey: node.nodeId)
         node.transitionState = .idle
       }
       
@@ -450,12 +450,12 @@ public class OpenLCBTransportLayerCAN : OpenLCBTransportLayer, InterfaceDelegate
         
         node.transitionState = .testingAlias
         
-        node.alias = nextAlias(node: node.node)
+   //     node.alias = nextAlias(node: <#T##OpenLCBNodeVirtual#>)
         
-        sendCheckIdFrame(format: .checkId7Frame, nodeId: node.node.nodeId, alias: node.alias!)
-        sendCheckIdFrame(format: .checkId6Frame, nodeId: node.node.nodeId, alias: node.alias!)
-        sendCheckIdFrame(format: .checkId5Frame, nodeId: node.node.nodeId, alias: node.alias!)
-        sendCheckIdFrame(format: .checkId4Frame, nodeId: node.node.nodeId, alias: node.alias!)
+        sendCheckIdFrame(format: .checkId7Frame, nodeId: node.nodeId, alias: node.alias!)
+        sendCheckIdFrame(format: .checkId6Frame, nodeId: node.nodeId, alias: node.alias!)
+        sendCheckIdFrame(format: .checkId5Frame, nodeId: node.nodeId, alias: node.alias!)
+        sendCheckIdFrame(format: .checkId4Frame, nodeId: node.nodeId, alias: node.alias!)
         
         startWaitTimer(interval: waitInterval)
         
@@ -600,9 +600,9 @@ public class OpenLCBTransportLayerCAN : OpenLCBTransportLayer, InterfaceDelegate
   
   override public func registerNode(node:OpenLCBNodeVirtual) {
     super.registerNode(node: node)
-    let alias = OpenLCBTransportLayerAlias(node: node)
+/*    let alias = OpenLCBTransportLayerAlias(node: node)
     initNodeQueue.append(alias)
-    getAlias()
+    getAlias() */
   }
   
   override public func deregisterNode(node:OpenLCBNodeVirtual) {
@@ -640,7 +640,7 @@ public class OpenLCBTransportLayerCAN : OpenLCBTransportLayer, InterfaceDelegate
         if frame.data.isEmpty {
           for (_, internalNode) in managedNodeIdLookup {
             if internalNode.state == .permitted {
-              sendAliasMapDefinitionFrame(nodeId: internalNode.node.nodeId, alias: internalNode.alias!)
+              sendAliasMapDefinitionFrame(nodeId: internalNode.nodeId, alias: internalNode.alias!)
             }
           }
         }
@@ -671,7 +671,7 @@ public class OpenLCBTransportLayerCAN : OpenLCBTransportLayer, InterfaceDelegate
           
           if internalNode.state == .permitted {
             
-            removeNodeIdAliasMapping(nodeId: internalNode.node.nodeId)
+            removeNodeIdAliasMapping(nodeId: internalNode.nodeId)
             internalNode.alias = nil
             internalNode.state = .inhibited
             internalNode.transitionState = .tryAgain
@@ -705,7 +705,7 @@ public class OpenLCBTransportLayerCAN : OpenLCBTransportLayer, InterfaceDelegate
           managedAliasLookup.removeValue(forKey: internalNode.alias!)
           managedNodeIdLookup.removeValue(forKey: nodeId)
           internalNode.alias = nil
-          internalNode.node.stop()
+   //       internalNode.node.stop()
           return
         }
         
@@ -748,7 +748,7 @@ public class OpenLCBTransportLayerCAN : OpenLCBTransportLayer, InterfaceDelegate
             let errorMessage = OpenLCBMessage(messageTypeIndicator: .datagramRejected)
             errorMessage.destinationNIDAlias = message.sourceNIDAlias
             errorMessage.sourceNIDAlias = internalNode.alias!
-            errorMessage.sourceNodeId = internalNode.node.nodeId
+            errorMessage.sourceNodeId = internalNode.nodeId
             errorMessage.payload = OpenLCBErrorCode.temporaryErrorTimeOutWaitingForEndFrame.bigEndianData
             addToOutputQueue(message: errorMessage)
           }
@@ -782,7 +782,7 @@ public class OpenLCBTransportLayerCAN : OpenLCBTransportLayer, InterfaceDelegate
               let errorMessage = OpenLCBMessage(messageTypeIndicator: .datagramRejected)
               errorMessage.destinationNIDAlias = message.sourceNIDAlias
               errorMessage.sourceNIDAlias = internalNode.alias!
-              errorMessage.sourceNodeId = internalNode.node.nodeId
+              errorMessage.sourceNodeId = internalNode.nodeId
               errorMessage.payload = OpenLCBErrorCode.temporaryErrorOutOfOrderStartFrameBeforeFinishingPreviousMessage.bigEndianData
               addToOutputQueue(message: errorMessage)
             }
@@ -804,7 +804,7 @@ public class OpenLCBTransportLayerCAN : OpenLCBTransportLayer, InterfaceDelegate
             let errorMessage = OpenLCBMessage(messageTypeIndicator: .datagramRejected)
             errorMessage.destinationNIDAlias = message.sourceNIDAlias
             errorMessage.sourceNIDAlias = internalNode.alias!
-            errorMessage.sourceNodeId = internalNode.node.nodeId
+            errorMessage.sourceNodeId = internalNode.nodeId
             errorMessage.payload = OpenLCBErrorCode.temporaryErrorOutOfOrderMiddleOrEndFrameWithoutStartFrame.bigEndianData
             addToOutputQueue(message: errorMessage)
           }

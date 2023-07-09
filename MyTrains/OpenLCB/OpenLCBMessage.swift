@@ -153,6 +153,8 @@ public class OpenLCBMessage : NSObject {
     }
   }
   
+  public var gatewayNodeId : UInt64?
+  
   public var sourceNodeId : UInt64?
   
   public var sourceNIDAlias : UInt16?

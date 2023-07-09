@@ -15,6 +15,7 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
   
   private enum ConfigState {
     case idle
+    case initializing
     case slotFetch
     case setInUse
     case writeBack
@@ -182,6 +183,8 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
       return
     }
     
+    configState = .initializing
+
     locoNet = LocoNet(gatewayNodeId: locoNetGatewayNodeId, virtualNode: self)
     
     locoNet?.delegate = self
@@ -202,8 +205,6 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
     
     lastLocomotiveState = nil
     
-    configState = .idle
-
   }
   
   internal override func releaseNode() {
@@ -246,152 +247,169 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
   
   // MARK: Public Methods
   
-  // MARK: LocoNetDelegate Methods
-  
-  @objc public func locoNetError(gatewayNodeId:UInt64, errorCode:UInt16) {
-    print("locoNetError: \(OpenLCBErrorCode(rawValue: errorCode))")
+  @objc public func locoNetMessageReceived(message:LocoNetMessage) {
+    
+    guard configState != .idle else {
+      return
+    }
+    
+    print(message.messageType)
+    
+    // Pass Through to Helper
+    locoNet?.locoNetMessageReceived(message: message)
+
+    switch message.messageType {
+    case .locoSlotDataP1:
+      let address : UInt16 = UInt16(message.message[4])
+      if address == dccAddress {
+        stopTimeoutTimer()
+        slotPage = 0
+        slotNumber = message.message[2]
+        stat1 = message.message[3]
+        switch configState {
+        case .slotFetch:
+          if slotState == .inUse {
+            var writeBackMessage = message.message
+            writeBackMessage.removeLast()
+            writeBackMessage[0] = LocoNetMessageOpcode.OPC_WR_SL_DATA.rawValue
+            writeBackMessage[3] &= SpeedSteps.protectMask
+            writeBackMessage[3] |= speedSteps.setMask
+            let wbm = LocoNetMessage(data: writeBackMessage, appendCheckSum: true)
+            configState = .writeBack
+            startTimeoutTimer()
+            networkLayer?.sendLocoNetMessage(sourceNodeId: nodeId, destinationNodeId: locoNetGatewayNodeId, locoNetMessage: wbm, spacingDelay: 0)
+          }
+          else {
+            configState = .setInUse
+            startTimeoutTimer()
+            locoNet?.moveSlotsP1(sourceSlotNumber: slotNumber, destinationSlotNumber: slotNumber)
+          }
+        case .setInUse:
+          if slotState != .inUse {
+            configState = .idle
+            attachFailed()
+          }
+          else {
+            var writeBackMessage = message.message
+            writeBackMessage.removeLast()
+            writeBackMessage[0] = LocoNetMessageOpcode.OPC_WR_SL_DATA.rawValue
+            writeBackMessage[3] &= SpeedSteps.protectMask
+            writeBackMessage[3] |= speedSteps.setMask
+            let wbm = LocoNetMessage(data: writeBackMessage, appendCheckSum: true)
+            configState = .writeBack
+            startTimeoutTimer()
+            locoNet?.addToQueue(message: wbm, spacingDelay: 0)
+          }
+        default:
+          break
+        }
+      }
+    case .locoSlotDataP2:
+      let address : UInt16 = (UInt16(message.message[6]) << 7) | UInt16(message.message[5])
+      if address == dccAddress {
+        stopTimeoutTimer()
+        slotPage = message.message[2]
+        slotNumber = message.message[3]
+        stat1 = message.message[4]
+        switch configState {
+        case .slotFetch:
+          if slotState == .inUse {
+            var writeBackMessage = message.message
+            writeBackMessage.removeLast()
+            writeBackMessage[0] = LocoNetMessageOpcode.OPC_WR_SL_DATA_P2.rawValue
+            writeBackMessage[4] &= SpeedSteps.protectMask
+            writeBackMessage[4] |= speedSteps.setMask
+            writeBackMessage[18] = 0 // Throttle Id low
+            writeBackMessage[19] = 0 // Throttle Id high
+            let wbm = LocoNetMessage(data: writeBackMessage, appendCheckSum: true)
+            configState = .writeBack
+            startTimeoutTimer()
+            locoNet?.addToQueue(message: wbm, spacingDelay: 0)
+          }
+          else {
+            configState = .setInUse
+            startTimeoutTimer()
+            locoNet?.moveSlotsP2(sourceSlotNumber: slotNumber, sourceSlotPage: slotPage, destinationSlotNumber: slotNumber, destinationSlotPage: slotPage)
+          }
+        case .setInUse:
+          if slotState != .inUse {
+            configState = .idle
+            attachFailed()
+          }
+          else {
+            var writeBackMessage = message.message
+            writeBackMessage.removeLast()
+            writeBackMessage[0] = LocoNetMessageOpcode.OPC_WR_SL_DATA_P2.rawValue
+            writeBackMessage[4] &= SpeedSteps.protectMask
+            writeBackMessage[4] |= speedSteps.setMask
+            writeBackMessage[18] = 0 // Throttle Id low
+            writeBackMessage[19] = 0 // Throttle Id high
+            let wbm = LocoNetMessage(data: writeBackMessage, appendCheckSum: true)
+            configState = .writeBack
+            startTimeoutTimer()
+            locoNet?.addToQueue(message: wbm, spacingDelay: 0)
+          }
+        default:
+          break
+        }
+      }
+    case .noFreeSlotsP1, .noFreeSlotsP2:
+      if configState == .slotFetch {
+        stopTimeoutTimer()
+        configState = .idle
+        attachFailed()
+      }
+    case .illegalMoveP1, .d4Error:
+      if configState == .setInUse {
+        stopTimeoutTimer()
+        configState = .idle
+        attachFailed()
+      }
+    case .setSlotDataOKP1, .setSlotDataOKP2:
+      if configState == .writeBack {
+        stopTimeoutTimer()
+        configState = .active
+ //       networkLayer?.sendAssignControllerReply(sourceNodeId: nodeId, destinationNodeId: activeControllerNodeId, result: 0)
+        updateLocoState()
+        startRefreshTimer(timeInterval: 90.0)
+      }
+    default:
+      break
+    }
+    
   }
 
-  @objc public func locoNetInitializationComplete(locoNet:LocoNet) {
+  // MARK: OpenLCBNetworkLayerDelegate Methods
+   
+  public override func openLCBMessageReceived(message: OpenLCBMessage) {
+    
+    super.openLCBMessageReceived(message: message)
+    
+    switch message.messageTypeIndicator {
+      
+    case .producerConsumerEventReport:
+      
+      if message.sourceNodeId! == locoNetGatewayNodeId {
+        let locoNetMessage = LocoNetMessage(data: message.payload)
+        locoNetMessageReceived(message: locoNetMessage)
+      }
+      
+    default:
+      break
+      
+    }
+    
+  }
+  
+  // MARK: LocoNetDelegate Methods
+  
+  @objc public func locoNetInitializationComplete() {
     
     configState = .slotFetch
 
     startTimeoutTimer()
     
-    locoNet.getLocoSlot(forAddress: dccAddress)
-    
-  }
-
-  @objc public func locoNetMessageReceived(gatewayNodeId:UInt64, message:LocoNetMessage) {
-    
-    guard gatewayNodeId == self.locoNetGatewayNodeId else {
-      return
-    }
-    
-    if let interface = self.locoNet {
-      
-      switch message.messageType {
-      case .locoSlotDataP1:
-        let address : UInt16 = UInt16(message.message[4])
-        if address == dccAddress {
-          stopTimeoutTimer()
-          slotPage = 0
-          slotNumber = message.message[2]
-          stat1 = message.message[3]
-          switch configState {
-          case .slotFetch:
-            if slotState == .inUse {
-              var writeBackMessage = message.message
-              writeBackMessage.removeLast()
-              writeBackMessage[0] = LocoNetMessageOpcode.OPC_WR_SL_DATA.rawValue
-              writeBackMessage[3] &= SpeedSteps.protectMask
-              writeBackMessage[3] |= speedSteps.setMask
-              let wbm = LocoNetMessage(data: writeBackMessage, appendCheckSum: true)
-              configState = .writeBack
-              startTimeoutTimer()
-              interface.addToQueue(message: wbm, spacingDelay: 0)
-            }
-            else {
-              configState = .setInUse
-              startTimeoutTimer()
-              interface.moveSlotsP1(sourceSlotNumber: slotNumber, destinationSlotNumber: slotNumber)
-            }
-          case .setInUse:
-            if slotState != .inUse {
-              configState = .idle
-              attachFailed()
-            }
-            else {
-              var writeBackMessage = message.message
-              writeBackMessage.removeLast()
-              writeBackMessage[0] = LocoNetMessageOpcode.OPC_WR_SL_DATA.rawValue
-              writeBackMessage[3] &= SpeedSteps.protectMask
-              writeBackMessage[3] |= speedSteps.setMask
-              let wbm = LocoNetMessage(data: writeBackMessage, appendCheckSum: true)
-              configState = .writeBack
-              startTimeoutTimer()
-              interface.addToQueue(message: wbm, spacingDelay: 0)
-            }
-          default:
-            break
-          }
-        }
-      case .locoSlotDataP2:
-        let address : UInt16 = (UInt16(message.message[6]) << 7) | UInt16(message.message[5])
-        if address == dccAddress {
-          stopTimeoutTimer()
-          slotPage = message.message[2]
-          slotNumber = message.message[3]
-          stat1 = message.message[4]
-          switch configState {
-          case .slotFetch:
-            if slotState == .inUse {
-              var writeBackMessage = message.message
-              writeBackMessage.removeLast()
-              writeBackMessage[0] = LocoNetMessageOpcode.OPC_WR_SL_DATA_P2.rawValue
-              writeBackMessage[4] &= SpeedSteps.protectMask
-              writeBackMessage[4] |= speedSteps.setMask
-              writeBackMessage[18] = 0 // Throttle Id low
-              writeBackMessage[19] = 0 // Throttle Id high
-              let wbm = LocoNetMessage(data: writeBackMessage, appendCheckSum: true)
-              configState = .writeBack
-              startTimeoutTimer()
-              interface.addToQueue(message: wbm, spacingDelay: 0)
-            }
-            else {
-              configState = .setInUse
-              startTimeoutTimer()
-              interface.moveSlotsP2(sourceSlotNumber: slotNumber, sourceSlotPage: slotPage, destinationSlotNumber: slotNumber, destinationSlotPage: slotPage)
-            }
-          case .setInUse:
-            if slotState != .inUse {
-              configState = .idle
-              attachFailed()
-            }
-            else {
-              var writeBackMessage = message.message
-              writeBackMessage.removeLast()
-              writeBackMessage[0] = LocoNetMessageOpcode.OPC_WR_SL_DATA_P2.rawValue
-              writeBackMessage[4] &= SpeedSteps.protectMask
-              writeBackMessage[4] |= speedSteps.setMask
-              writeBackMessage[18] = 0 // Throttle Id low
-              writeBackMessage[19] = 0 // Throttle Id high
-              let wbm = LocoNetMessage(data: writeBackMessage, appendCheckSum: true)
-              configState = .writeBack
-              startTimeoutTimer()
-              interface.addToQueue(message: wbm, spacingDelay: 0)
-            }
-          default:
-            break
-          }
-        }
-      case .noFreeSlotsP1, .noFreeSlotsP2:
-        if configState == .slotFetch {
-          stopTimeoutTimer()
-          configState = .idle
-          attachFailed()
-        }
-      case .illegalMoveP1, .d4Error:
-        if configState == .setInUse {
-          stopTimeoutTimer()
-          configState = .idle
-          attachFailed()
-        }
-      case .setSlotDataOKP1, .setSlotDataOKP2:
-        if configState == .writeBack {
-          stopTimeoutTimer()
-          configState = .active
-          attachCompleted()
- //         DispatchQueue.global(qos: .userInitiated).async {
-       //     self.updateLocoState()
- //         }
-          startRefreshTimer(timeInterval: 90.0)
-        }
-      default:
-        break
-      }
-      
-    }
+    locoNet?.getLocoSlot(forAddress: dccAddress)
     
   }
 

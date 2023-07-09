@@ -225,9 +225,6 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
   }
   
   internal func attachCompleted() {
-    print("ack: \(activeControllerNodeId.toHexDotFormat(numberOfBytes: 6))")
-    networkLayer!.sendAssignControllerReply(sourceNodeId: nodeId, destinationNodeId: activeControllerNodeId, result: 0)
-    print("Ack Sent")
   }
   
   internal func attachFailed() {
@@ -340,9 +337,11 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
       
     case .tractionControlCommand:
       
-      if message.destinationNodeId == nodeId, let instruction = OpenLCBTractionControlInstructionType(rawValue: message.payload[0] & 0b01111111) {
+      if message.destinationNodeId! == nodeId, let instruction = OpenLCBTractionControlInstructionType(rawValue: message.payload[0] & 0b01111111) {
         
         stopTimer()
+        
+        print("tractionControlCommand \(instruction) \(message.sourceNodeId!.toHexDotFormat(numberOfBytes: 6)) -> \(message.destinationNodeId!.toHexDotFormat(numberOfBytes: 6))")
         
         let isForwarded = ((message.payload[0]) & 0x80 == 0x80) && isListener(nodeId: message.sourceNodeId!)
         
@@ -485,7 +484,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
                   
                   activeControllerNodeId = controllerNodeId
                   
-          //        networkLayer?.sendAssignControllerReply(sourceNodeId: nodeId, destinationNodeId: activeControllerNodeId, result: 0)
+                  networkLayer?.sendAssignControllerReply(sourceNodeId: nodeId, destinationNodeId: activeControllerNodeId, result: 0)
                   
                 }
                 else {

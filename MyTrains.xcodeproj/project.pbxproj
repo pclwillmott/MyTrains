@@ -330,6 +330,8 @@
 		DAEA8F7D29FEB1B8003698A7 /* LCCCDITableCellViewString.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAEA8F7C29FEB1B8003698A7 /* LCCCDITableCellViewString.xib */; };
 		DAEA8F7F29FEB20E003698A7 /* LCCCDITableCellViewStringVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEA8F7E29FEB20E003698A7 /* LCCCDITableCellViewStringVC.swift */; };
 		DAEA9CFA272D8FBE00C9B3EC /* LocoNetMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEA9CF9272D8FBE00C9B3EC /* LocoNetMessage.swift */; };
+		DAED17202A5ABC8D0051C9AF /* OpenLCBCANGateway.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAED171F2A5ABC8D0051C9AF /* OpenLCBCANGateway.swift */; };
+		DAED17222A5ABF4A0051C9AF /* MyTrains CAN Gateway.xml in Resources */ = {isa = PBXBuildFile; fileRef = DAED17212A5ABF4A0051C9AF /* MyTrains CAN Gateway.xml */; };
 		DAEE9BEB2933E7B5005F553D /* SensorComboDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEE9BEA2933E7B5005F553D /* SensorComboDS.swift */; };
 		DAEF18712A3DFDE100AC227D /* DeviceId.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEF18702A3DFDE100AC227D /* DeviceId.swift */; };
 		DAEF18732A3DFEBF00AC227D /* DeviceAttribute.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEF18722A3DFEBF00AC227D /* DeviceAttribute.swift */; };
@@ -686,6 +688,8 @@
 		DAEA8F7C29FEB1B8003698A7 /* LCCCDITableCellViewString.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LCCCDITableCellViewString.xib; sourceTree = "<group>"; };
 		DAEA8F7E29FEB20E003698A7 /* LCCCDITableCellViewStringVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCCCDITableCellViewStringVC.swift; sourceTree = "<group>"; };
 		DAEA9CF9272D8FBE00C9B3EC /* LocoNetMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoNetMessage.swift; sourceTree = "<group>"; };
+		DAED171F2A5ABC8D0051C9AF /* OpenLCBCANGateway.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBCANGateway.swift; sourceTree = "<group>"; };
+		DAED17212A5ABF4A0051C9AF /* MyTrains CAN Gateway.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "MyTrains CAN Gateway.xml"; sourceTree = "<group>"; };
 		DAEE9BEA2933E7B5005F553D /* SensorComboDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorComboDS.swift; sourceTree = "<group>"; };
 		DAEF18702A3DFDE100AC227D /* DeviceId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceId.swift; sourceTree = "<group>"; };
 		DAEF18722A3DFEBF00AC227D /* DeviceAttribute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceAttribute.swift; sourceTree = "<group>"; };
@@ -913,6 +917,7 @@
 				DAA54F7E2A217CDA005CED7E /* OpenLCBNodeConfigurationTool.swift */,
 				DA3254E72A4755AC006DF357 /* OpenLCBThrottle.swift */,
 				DA123A502A50431B000E63E2 /* OpenLCBLocoNetGateway.swift */,
+				DAED171F2A5ABC8D0051C9AF /* OpenLCBCANGateway.swift */,
 			);
 			path = _nodes;
 			sourceTree = "<group>";
@@ -1255,6 +1260,7 @@
 				DA5F7A1B2A3F1A36004D7EBB /* MyTrains Blank.xml */,
 				DA123A522A5044C2000E63E2 /* MyTrains LocoNet Gateway.xml */,
 				DA7195FA2A3F2D40004D2D4B /* MyTrains Train.xml */,
+				DAED17212A5ABF4A0051C9AF /* MyTrains CAN Gateway.xml */,
 			);
 			path = _cdi;
 			sourceTree = "<group>";
@@ -1364,6 +1370,7 @@
 				DAF0CACF29855077009B392A /* IOChannelTC64MkIIInputPropertySheet.storyboard in Resources */,
 				DA95D6BF28083E9800D9F1B6 /* GroupSetup.storyboard in Resources */,
 				DAA83DF2272C37680075CBCD /* Main.storyboard in Resources */,
+				DAED17222A5ABF4A0051C9AF /* MyTrains CAN Gateway.xml in Resources */,
 				DA5CCB4C2897F58D00F99AE6 /* SpeedProfiler.storyboard in Resources */,
 				DADB6F72297D618C00B1796E /* IODeviceTC64MkIIPropertySheet.storyboard in Resources */,
 				DAF0CAD3298550B9009B392A /* IOChannelTC64MkIIOutputPropertySheet.storyboard in Resources */,
@@ -1482,6 +1489,7 @@
 				DAA71697297C232D0080114F /* IOChannelBXP88Input.swift in Sources */,
 				DA1B79F9285F3885009E1189 /* UnitSpeed.swift in Sources */,
 				DAA83DED272C37670075CBCD /* MainVC.swift in Sources */,
+				DAED17202A5ABC8D0051C9AF /* OpenLCBCANGateway.swift in Sources */,
 				DA3AEF422788855800FF91D4 /* DecoderCV.swift in Sources */,
 				DA33FC2327AFFA1400630227 /* OpSwDecoderType.swift in Sources */,
 				DA28C2BF2801E46D00857471 /* QuerySlot1.swift in Sources */,

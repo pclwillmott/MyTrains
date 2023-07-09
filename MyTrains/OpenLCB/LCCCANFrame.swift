@@ -11,7 +11,7 @@ public class LCCCANFrame : NSObject {
 
   // MARK: Constructors & Destructors
   
-  init?(networkId: Int, message:String) {
+  init?(message:String) {
     
     // Check that the message conforms to the standard
     
@@ -19,10 +19,6 @@ public class LCCCANFrame : NSObject {
       print("LCCCANFrame: Error")
       return nil
     }
-    
-    // Initialise Network Id
-    
-    self.networkId = networkId
     
     // Create frame string by striping the prefix and suffix
     
@@ -61,8 +57,8 @@ public class LCCCANFrame : NSObject {
     // Done.
     
   }
-  
-  init?(networkId: Int, message:OpenLCBMessage) {
+
+  init?(message:OpenLCBMessage) {
     
     // Check that the message is complete
     
@@ -70,10 +66,6 @@ public class LCCCANFrame : NSObject {
       return nil
     }
     
-    // Initialise Network Id
-    
-    self.networkId = networkId
-
     // Build CAN header
     
     header  = 0x18000000 // CAN Prefix
@@ -116,7 +108,7 @@ public class LCCCANFrame : NSObject {
     
   }
 
-  init?(networkId: Int, message:OpenLCBMessage, flags: OpenLCBCANFrameFlag, frameNumber: Int) {
+  init?(message:OpenLCBMessage, flags: OpenLCBCANFrameFlag, frameNumber: Int) {
     
     // Check that the message is complete
     
@@ -124,10 +116,6 @@ public class LCCCANFrame : NSObject {
       return nil
     }
     
-    // Initialise Network Id
-    
-    self.networkId = networkId
-
     // Build CAN header
     
     header  = 0x18000000 // CAN Prefix
@@ -181,7 +169,7 @@ public class LCCCANFrame : NSObject {
     
   }
 
-  init?(networkId: Int, message:OpenLCBMessage, canFrameType:OpenLCBMessageCANFrameType, data: [UInt8]) {
+  init?(message:OpenLCBMessage, canFrameType:OpenLCBMessageCANFrameType, data: [UInt8]) {
     
     // Check that the message is complete
     
@@ -189,10 +177,6 @@ public class LCCCANFrame : NSObject {
       return nil
     }
     
-    // Initialise Network Id
-    
-    self.networkId = networkId
-
     // Build CAN header
     
     header  = 0x18000000 // CAN Prefix
@@ -252,8 +236,6 @@ public class LCCCANFrame : NSObject {
     }
   }
   
-  public var networkId : Int
-
   public var timeStamp : TimeInterval = 0.0
   
   public var timeSinceLastMessage : TimeInterval = 0.0

@@ -455,6 +455,8 @@ public class OpenLCBMemorySpace {
             node = OpenLCBNodeConfigurationTool(nodeId: nodeId)
           case .genericVirtualNode:
             node = OpenLCBNodeVirtual(nodeId: nodeId)
+          case .canGatewayNode:
+            node = OpenLCBCANGateway(nodeId: nodeId)
           }
           
           result.append(node)
@@ -464,12 +466,6 @@ public class OpenLCBMemorySpace {
       }
       
       result.sort { $0.nodeId < $1.nodeId }
-
-      /*
-      for node in result {
-        print("\(node.nodeId.toHexDotFormat(numberOfBytes: 6)) \(node.manufacturerName) \(node.nodeModelName) \(node.userNodeName)")
-      }
-       */
 
     }
     

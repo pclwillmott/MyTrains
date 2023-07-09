@@ -78,7 +78,7 @@ public class InterfaceOpenLCBCAN : Interface {
             readPtr = (readPtr + increment) & 0xfff
             bufferCount -= increment
             bufferLock.unlock()
-            
+            /*
             if let newframe = LCCCANFrame(networkId: networkId, message: frame) {
               
               frame = ""
@@ -92,7 +92,7 @@ public class InterfaceOpenLCBCAN : Interface {
               }
               
             }
-            
+            */
             state = .searchingForColon
             
           }

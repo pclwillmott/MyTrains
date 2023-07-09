@@ -11,12 +11,16 @@ extension LocoNet {
   
   // MARK: COMMAND STATION COMMANDS
   
+  public func addToQueue(message:LocoNetMessage, spacingDelay:UInt8) {
+    networkLayer.sendLocoNetMessage(sourceNodeId: nodeId, destinationNodeId: gatewayNodeId, locoNetMessage: message, spacingDelay: 0)
+  }
+  
   public func powerOn() {
     
     let message = LocoNetMessage(data: [LocoNetMessageOpcode.OPC_GPON.rawValue], appendCheckSum: true)
     
     addToQueue(message: message, spacingDelay: 0)
-
+    
     getOpSwDataAP1()
     
   }

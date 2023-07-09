@@ -94,7 +94,6 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLayerD
 
       network.sendVerifyNodeIdNumber(sourceNodeId: network.configurationToolNode!.nodeId)
       
-      
     }
     
   }
@@ -354,6 +353,9 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLayerD
       case .trainNode:
         node = OpenLCBNodeRollingStockLocoNet(nodeId: newNodeId)
         node!.userNodeName = "Train #\(number)"
+      case .canGatewayNode:
+        node = OpenLCBCANGateway(nodeId: newNodeId)
+        node!.userNodeName = "CAN Gateway #\(number)"
       default:
         break
       }

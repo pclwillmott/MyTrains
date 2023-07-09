@@ -10,11 +10,12 @@ import Cocoa
 
 public enum MyTrainsVirtualNodeType : String {
   
+  case applicationNode       = "Application Node"
+  case canGatewayNode        = "CAN Gateway Node"
   case clockNode             = "Virtual Clock Node"
   case throttleNode          = "Virtual Throttle Node"
   case locoNetGatewayNode    = "Virtual LocoNet Gateway Node"
   case trainNode             = "Virtual Train Node"
-  case applicationNode       = "Application Node"
   case configurationToolNode = "Configuration Tool Node"
   case genericVirtualNode    = "Generic Virtual Node"
   
@@ -34,6 +35,7 @@ public enum MyTrainsVirtualNodeType : String {
     get {
       let publicNodeTypes : Set<MyTrainsVirtualNodeType> = [
         .clockNode,
+        .canGatewayNode,
         .locoNetGatewayNode,
         .throttleNode,
         .trainNode,
@@ -48,6 +50,7 @@ public enum MyTrainsVirtualNodeType : String {
       
       let baseId : [MyTrainsVirtualNodeType:UInt64] = [
         .applicationNode       : 0x09000d600001,
+        .canGatewayNode        : 0x09000d600101,
         .clockNode             : 0x09000d610001,
         .locoNetGatewayNode    : 0x09000d620001,
         .configurationToolNode : 0x09000d630001,
@@ -71,6 +74,7 @@ public enum MyTrainsVirtualNodeType : String {
     comboBox.deselectItem(at: comboBox.indexOfSelectedItem)
     
     let items = [
+      canGatewayNode.name,
       clockNode.name,
       locoNetGatewayNode.name,
       trainNode.name,
