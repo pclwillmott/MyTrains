@@ -17,7 +17,7 @@ public class MyTrainsController : NSObject, InterfaceDelegate, NSUserNotificatio
     
     openLCBNetworkLayer = OpenLCBNetworkLayer(nodeId: openLCBNodeId)
     
-    MTSerialPortManager.delegate = self
+    let _ = MTSerialPortManager.addObserver(observer: self)
     
     checkPortsTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(checkPortsTimerAction), userInfo: nil, repeats: true)
     

@@ -60,11 +60,13 @@ int openSerialPort(const char *path)
 
   // See fcntl(2) <x-man-page//2/fcntl> for details.
 
+  /*
   if (fcntl(fd, F_SETFL, 0) == -1) {
       printf("Error clearing O_NONBLOCK %s - %s(%d).\n", path, strerror(errno), errno);
       goto error;
   }
-
+  */
+  
   // Success
 
   return fd;

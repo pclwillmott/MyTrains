@@ -23,7 +23,7 @@ public class OpenLCBNetworkLayer : NSObject {
       case .applicationNode:
         myTrainsNode = node as? OpenLCBNodeMyTrains
       case .configurationToolNode:
-        configurationToolNode = node
+        configurationToolNode = node as? OpenLCBNodeConfigurationTool
       case .clockNode:
         fastClock = node as? OpenLCBClock
       case .throttleNode:
@@ -132,7 +132,7 @@ public class OpenLCBNetworkLayer : NSObject {
   public func deleteNode(nodeId:UInt64) {
     
     for (_, virtualNode) in virtualNodes {
-      if virtualNode.nodeId == nodeId && virtualNode.virtualNodeType.isPublic {
+      if virtualNode.nodeId == nodeId {
         deregisterNode(node: virtualNode)
         OpenLCBMemorySpace.deleteAllMemorySpaces(forNodeId: nodeId)
       }
@@ -911,8 +911,8 @@ public class OpenLCBNetworkLayer : NSObject {
       OpenLCBTractionControlInstructionType.controllerConfiguration.rawValue,
       OpenLCBTractionControllerConfigurationType.assignController.rawValue,
       result,
-/*    0x00,
       0x00,
+ /*   0x00,
       0x00,
       0x00,
       0x00,

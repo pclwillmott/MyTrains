@@ -363,6 +363,8 @@ class FastClockTesterVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
     
     changeSampleRate()
     
+//    lblDays.autoresizingMask = .height | .width
+    
   }
   
   

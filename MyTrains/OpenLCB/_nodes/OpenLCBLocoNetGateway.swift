@@ -124,7 +124,7 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   
   private var spacingTimer : Timer?
   
-  private var consumerIdentified : Bool = false
+  private var consumerIdentified : Bool = true
   
   // MARK: Public Properties
   
@@ -139,11 +139,8 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     }
     
     while !outputQueue.isEmpty {
-      
       let item = outputQueue.removeFirst()
-      
       send(data: item.message)
-      
     }
     
 //    startSpacingTimer(spacingDelay: item.spacingDelay)
@@ -336,8 +333,9 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     case .sendLocoNetMessage:
       
       if message.destinationNodeId! == nodeId {
-        
+
         if !isOpen {
+          print("LocoNet Gateway: No Connection")
           networkLayer?.sendTerminateDueToError(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, errorCode: .permanentErrorNoConnection)
         }
         else {
@@ -355,7 +353,7 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
           }
           
           if locoNetMessage.checkSumOK {
-            
+
             if outputQueue.count == 99 {
               networkLayer?.sendTerminateDueToError(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, errorCode: .temporaryErrorBufferUnavailable)
             }
@@ -390,18 +388,24 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   }
   
   public func serialPortWasRemovedFromSystem(_ serialPort: MTSerialPort) {
+    print("serial port was removed from system: \(serialPort.path)")
     self.serialPort = nil
-//    print("port was removed from system")
   }
   
   public func serialPortWasOpened(_ serialPort: MTSerialPort) {
- //   print("port was opened")
+    print("serial port was opened: \(serialPort.path)")
     networkLayer?.sendProducerIdentifiedValid(sourceNodeId: nodeId, wellKnownEvent: .locoNetMessage)
   }
   
   public func serialPortWasClosed(_ serialPort: MTSerialPort) {
- //   print("port was closed")
+    print("serial port was closed: \(serialPort.path)")
     self.serialPort = nil
   }
 
+  public func serialPortWasAdded(_ serialPort: MTSerialPort) {
+    if !isOpen {
+      resetReboot()
+    }
+  }
+  
 }

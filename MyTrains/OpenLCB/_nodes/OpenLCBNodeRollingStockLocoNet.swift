@@ -253,8 +253,6 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
       return
     }
     
-    print(message.messageType)
-    
     // Pass Through to Helper
     locoNet?.locoNetMessageReceived(message: message)
 
@@ -369,7 +367,7 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
       if configState == .writeBack {
         stopTimeoutTimer()
         configState = .active
- //       networkLayer?.sendAssignControllerReply(sourceNodeId: nodeId, destinationNodeId: activeControllerNodeId, result: 0)
+        attachCompleted()
         updateLocoState()
         startRefreshTimer(timeInterval: 90.0)
       }

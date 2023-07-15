@@ -13,13 +13,16 @@ public protocol MTSerialPortDelegate {
   func serialPortWasRemovedFromSystem(_ serialPort: MTSerialPort)
   func serialPortWasOpened(_ serialPort: MTSerialPort)
   func serialPortWasClosed(_ serialPort: MTSerialPort)
+  func serialPortWasAdded(_ serialPort: MTSerialPort)
 }
     
-public class MTSerialPort {
+public class MTSerialPort : MTSerialPortManagerDelegate {
   
   // MARK: Constructors
   
   init?(path: String) {
+    
+    _path = path
     
     let _fd = openSerialPort(path)
     
@@ -57,6 +60,8 @@ public class MTSerialPort {
     
     closeSerialPort(_fd)
     
+    observerId = MTSerialPortManager.addObserver(observer: self)
+    
   }
   
   // MARK: Destructors
@@ -82,6 +87,10 @@ public class MTSerialPort {
   private var _parity : Parity
   
   private var _usesRTSCTSFlowControl : Bool
+  
+  private var observerId : Int = -1
+  
+  private var _path : String = ""
   
   // MARK: Public Properties
 
@@ -220,5 +229,22 @@ public class MTSerialPort {
     
   }
   
+  // MARK: MTSerialPortManagerDelegate
+  
+  public func serialPortWasAdded(path: String) {
+    if path == _path {
+      delegate?.serialPortWasAdded(self)
+    }
+  }
+  
+  public func serialPortWasRemoved(path: String) {
+    
+    if path == _path {
+      self.delegate?.serialPortWasRemovedFromSystem(self)
+      self.quit = true
+    }
+    
+  }
+
 }
 

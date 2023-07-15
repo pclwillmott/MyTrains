@@ -8,6 +8,10 @@
 import Foundation
 
 public class Interface : LocoNetDevice, MTSerialPortDelegate {
+  public func serialPortWasAdded(_ serialPort: MTSerialPort) {
+    
+  }
+  
   
   // MARK: Destructors
   

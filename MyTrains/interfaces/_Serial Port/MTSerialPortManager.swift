@@ -21,9 +21,23 @@ class MTSerialPortManager {
   
   // MARK: Class Public Properties
   
-  public static var delegate : MTSerialPortManagerDelegate?
+  private static var observers : [Int:MTSerialPortManagerDelegate] = [:]
+  
+  private static var nextObserverId : Int = 0
   
   // MARK: Class Methods
+  
+  
+  public static func addObserver(observer:MTSerialPortManagerDelegate) -> Int {
+    let id = nextObserverId
+    nextObserverId += 1
+    observers[id] = observer
+    return id
+  }
+  
+  public static func removeObserver(observerId:Int) {
+    observers.removeValue(forKey: observerId)
+  }
   
   public static func checkPorts() {
     let _ = availablePorts()
@@ -52,7 +66,9 @@ class MTSerialPortManager {
         }
       }
       if !found {
-        delegate?.serialPortWasRemoved(path: last)
+        for (_, observer) in observers {
+          observer.serialPortWasRemoved(path: last)
+        }
       }
     }
     
@@ -67,7 +83,9 @@ class MTSerialPortManager {
         }
       }
       if !found {
-        delegate?.serialPortWasAdded(path: new)
+        for (_, observer) in observers {
+          observer.serialPortWasAdded(path: new)
+        }
       }
     }
     

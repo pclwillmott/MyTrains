@@ -87,8 +87,8 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLayerD
       tasks.removeAll()
       taskLock.unlock()
       
-      nodes[network.myTrainsNode!.nodeId] = network.myTrainsNode
-      nodes[network.configurationToolNode!.nodeId] = network.configurationToolNode
+//      nodes[network.myTrainsNode!.nodeId] = network.myTrainsNode
+//      nodes[network.configurationToolNode!.nodeId] = network.configurationToolNode
 
       startPacingTimer(timeInterval: TIMEOUT_DELAY)
 
@@ -356,6 +356,12 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLayerD
       case .canGatewayNode:
         node = OpenLCBCANGateway(nodeId: newNodeId)
         node!.userNodeName = "CAN Gateway #\(number)"
+      case .applicationNode:
+        node = OpenLCBNodeMyTrains(nodeId: newNodeId)
+        node!.userNodeName = "Application Node #\(number)"
+      case .configurationToolNode:
+        node = OpenLCBNodeConfigurationTool(nodeId: newNodeId)
+        node!.userNodeName = "Configuration Tool #\(number)"
       default:
         break
       }

@@ -127,6 +127,8 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
 
   private var waitTimer : Timer?
   
+  private var aliasTimer : Timer?
+  
   private var aliasLock : NSLock = NSLock()
   
   private var inGetAlias : Bool = false
@@ -204,11 +206,15 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   }
   
   public func send(data: [UInt8]) {
-    serialPort?.write(data:data)
+//    DispatchQueue.main.async {
+      self.serialPort?.write(data:data)
+//    }
   }
 
   public func send(data:String) {
-    serialPort?.write(data:[UInt8](data.utf8))
+//    DispatchQueue.main.async {
+      self.serialPort?.write(data:[UInt8](data.utf8))
+ //   }
   }
 
   internal func parseInput() {
@@ -275,7 +281,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
       // Testing an alias
       
       if let node = initNodeQueue.first, let alias = node.alias, (node.transitionState == .testingAlias || node.transitionState == .reservingAlias) && frame.sourceNIDAlias == alias {
-        stopWaitTimer()
+        stopAliasTimer()
         node.transitionState = .idle
         getAlias()
         return
@@ -363,6 +369,12 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     case .openLCBMessage:
       
       if let message = OpenLCBMessage(frame: frame) {
+        
+        if let _ = aliasLookup[message.sourceNIDAlias!] {
+        }
+        else if let alias = message.sourceNIDAlias {
+          sendVerifyNodeIdNumberAddressed(sourceNodeId: nodeId, destinationNodeIdAlias: alias)
+        }
         
         var deleteList : [LCCCANFrame] = []
         
@@ -470,6 +482,10 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
 
   private func processQueues() {
     
+    if !initNodeQueue.isEmpty {
+      return
+    }
+    
     processQueueLock.lock()
     let ok = !inProcessQueue
     if ok {
@@ -575,7 +591,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
         
       }
       
-      if sendQuery, let alias = nodeIdLookup[myTrainsController.openLCBNodeId] {
+      if sendQuery, let alias = nodeIdLookup[nodeId] {
         sendAliasMappingEnquiryFrame(alias: alias)
       }
             
@@ -614,8 +630,9 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
           for (nodeId, alias) in nodeIdLookup {
             print("\(nodeId.toHexDotFormat(numberOfBytes: 6)) - 0x\(alias.toHex(numberOfDigits: 3))")
           }
-          print("send source alias not found: \(message.sourceNodeId!.toHexDotFormat(numberOfBytes: 6))")
            */
+          print("send source alias not found: \(message.sourceNodeId!.toHexDotFormat(numberOfBytes: 6))")
+          
         }
         
         var delete = false
@@ -755,10 +772,10 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   
   private func sendVerifyNodeIdNumberAddressed(sourceNodeId:UInt64, destinationNodeIdAlias:UInt16) {
     
-    let message = OpenLCBMessage(messageTypeIndicator: .verifyNodeIDNumberAddressed)
-
-    if let sourceNIDAlias = nodeIdLookup[message.sourceNodeId!] {
+    if let sourceNIDAlias = nodeIdLookup[sourceNodeId] {
       
+      let message = OpenLCBMessage(messageTypeIndicator: .verifyNodeIDNumberAddressed)
+
       message.sourceNIDAlias = sourceNIDAlias
       
       message.destinationNIDAlias = destinationNodeIdAlias
@@ -826,37 +843,6 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     
   }
   
-  @objc func waitTimerTick() {
-    
-    stopWaitTimer()
-    
-    if let internalNode = initNodeQueue.first {
-      
-      switch internalNode.transitionState {
-      case .testingAlias:
-        internalNode.transitionState = .reservingAlias
-        sendReserveIdFrame(alias: internalNode.alias!)
-        startWaitTimer(interval: waitInterval)
-      case .reservingAlias:
-        internalNode.transitionState = .mappingDeclared
-        internalNode.state = .permitted
-        sendAliasMapDefinitionFrame(nodeId: internalNode.nodeId, alias: internalNode.alias!)
-        addNodeIdAliasMapping(nodeId: internalNode.nodeId, alias: internalNode.alias!)
-        managedAliasLookup[internalNode.alias!] = internalNode
-        managedNodeIdLookup[internalNode.nodeId] = internalNode
-        initNodeQueue.removeFirst()
-        if !initNodeQueue.isEmpty {
-          getAlias()
-        }
-      default:
-        break
-      }
-    }
-    
-    processQueues()
-
-  }
-  
   private func getAlias() {
     
     aliasLock.lock()
@@ -891,7 +877,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
         sendCheckIdFrame(format: .checkId5Frame, nodeId: node.nodeId, alias: node.alias!)
         sendCheckIdFrame(format: .checkId4Frame, nodeId: node.nodeId, alias: node.alias!)
         
-        startWaitTimer(interval: waitInterval)
+        startAliasTimer(interval: waitInterval)
         
       }
       
@@ -899,6 +885,11 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     
     inGetAlias = false
     
+  }
+  
+  @objc func waitTimerTick() {
+    stopWaitTimer()
+    processQueues()
   }
   
   private func startWaitTimer(interval: TimeInterval) {
@@ -911,6 +902,54 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     waitTimer = nil
   }
 
+  @objc func aliasTimerAction() {
+    
+    stopAliasTimer()
+    
+    if let internalNode = initNodeQueue.first {
+      
+      switch internalNode.transitionState {
+      case .testingAlias:
+        internalNode.transitionState = .reservingAlias
+        sendReserveIdFrame(alias: internalNode.alias!)
+        startAliasTimer(interval: waitInterval)
+      case .reservingAlias:
+        internalNode.transitionState = .mappingDeclared
+        internalNode.state = .permitted
+        sendAliasMapDefinitionFrame(nodeId: internalNode.nodeId, alias: internalNode.alias!)
+        addNodeIdAliasMapping(nodeId: internalNode.nodeId, alias: internalNode.alias!)
+        managedAliasLookup[internalNode.alias!] = internalNode
+        managedNodeIdLookup[internalNode.nodeId] = internalNode
+        initNodeQueue.removeFirst()
+        /*
+        for (alias, nodeId) in aliasLookup {
+          print("0x\(alias.toHex(numberOfDigits: 3)) -> \(nodeId.toHexDotFormat(numberOfBytes: 6))")
+        }
+        print()
+         */
+        if !initNodeQueue.isEmpty {
+          getAlias()
+        }
+        else {
+          processQueues()
+        }
+      default:
+        break
+      }
+    }
+    
+  }
+  
+  private func startAliasTimer(interval: TimeInterval) {
+    aliasTimer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(aliasTimerAction), userInfo: nil, repeats: false)
+    RunLoop.current.add(aliasTimer!, forMode: .common)
+  }
+  
+  private func stopAliasTimer() {
+    aliasTimer?.invalidate()
+    aliasTimer = nil
+  }
+  
   private func send(header: String, data:String) {
     send(data: ":X\(header)N\(data);")
   }
@@ -1056,25 +1095,38 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   // MARK: MTSerialPortDelegate Methods
   
   public func serialPort(_ serialPort: MTSerialPort, didReceive data: [UInt8]) {
-    
     buffer.append(contentsOf: data)
-    
     parseInput()
-    
-  }
-  
-  public func serialPortWasRemovedFromSystem(_ serialPort: MTSerialPort) {
-    self.serialPort = nil
-//    print("port was removed from system")
   }
   
   public func serialPortWasOpened(_ serialPort: MTSerialPort) {
-//    print("port was opened")
+
+    print("serial port was opened: \(serialPort.path)")
+ 
+    internalNodes.insert(nodeId)
+    
+    let alias = OpenLCBTransportLayerAlias(nodeId: nodeId)
+    
+    initNodeQueue.append(alias)
+    
+    getAlias()
+
+  }
+  
+  public func serialPortWasRemovedFromSystem(_ serialPort: MTSerialPort) {
+    print("serial port was removed from system: \(serialPort.path)")
+    self.serialPort = nil
   }
   
   public func serialPortWasClosed(_ serialPort: MTSerialPort) {
-//    print("port was closed")
+    print("serial port was closed: \(serialPort.path)")
     self.serialPort = nil
+  }
+
+  public func serialPortWasAdded(_ serialPort: MTSerialPort) {
+    if !isOpen {
+      resetReboot()
+    }
   }
 
 }
