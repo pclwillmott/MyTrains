@@ -253,9 +253,6 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
       return
     }
     
-    // Pass Through to Helper
-    locoNet?.locoNetMessageReceived(message: message)
-
     switch message.messageType {
     case .locoSlotDataP1:
       let address : UInt16 = UInt16(message.message[4])
@@ -275,7 +272,7 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
             let wbm = LocoNetMessage(data: writeBackMessage, appendCheckSum: true)
             configState = .writeBack
             startTimeoutTimer()
-            networkLayer?.sendLocoNetMessage(sourceNodeId: nodeId, destinationNodeId: locoNetGatewayNodeId, locoNetMessage: wbm, spacingDelay: 0)
+            networkLayer?.sendLocoNetMessage(sourceNodeId: nodeId, destinationNodeId: locoNetGatewayNodeId, locoNetMessage: wbm)
           }
           else {
             configState = .setInUse
@@ -296,7 +293,7 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
             let wbm = LocoNetMessage(data: writeBackMessage, appendCheckSum: true)
             configState = .writeBack
             startTimeoutTimer()
-            locoNet?.addToQueue(message: wbm, spacingDelay: 0)
+            locoNet?.addToQueue(message: wbm)
           }
         default:
           break
@@ -322,7 +319,7 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
             let wbm = LocoNetMessage(data: writeBackMessage, appendCheckSum: true)
             configState = .writeBack
             startTimeoutTimer()
-            locoNet?.addToQueue(message: wbm, spacingDelay: 0)
+            locoNet?.addToQueue(message: wbm)
           }
           else {
             configState = .setInUse
@@ -345,7 +342,7 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
             let wbm = LocoNetMessage(data: writeBackMessage, appendCheckSum: true)
             configState = .writeBack
             startTimeoutTimer()
-            locoNet?.addToQueue(message: wbm, spacingDelay: 0)
+            locoNet?.addToQueue(message: wbm)
           }
         default:
           break
@@ -385,11 +382,10 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
     
     switch message.messageTypeIndicator {
       
-    case .producerConsumerEventReport:
-      
+    case .locoNetMessageReceivedOnlyFrame, .locoNetMessageReceivedFirstFrame, .locoNetMessageReceivedMiddleFrame, .locoNetMessageReceivedLastFrame:
+    
       if message.sourceNodeId! == locoNetGatewayNodeId {
-        let locoNetMessage = LocoNetMessage(data: message.payload)
-        locoNetMessageReceived(message: locoNetMessage)
+        locoNet?.locoNetMessagePartReceived(message: message)
       }
       
     default:

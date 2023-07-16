@@ -184,6 +184,46 @@ public class OpenLCBMessage : NSObject {
     }
   }
   
+  public var isAutomaticallyRoutedEvent : Bool {
+    get {
+      if messageTypeIndicator == .producerConsumerEventReport {
+        let auto : UInt64 = 0x0100000000000000
+        let mask : UInt64 = 0xffff000000000000
+        return (eventId! & mask) == auto
+      }
+      return false
+    }
+  }
+  
+  public var eventRange : (startEventId:UInt64, endEventId:UInt64)? {
+    get {
+      
+      if let eventId {
+        
+        var temp = eventId
+        
+        let b0 : UInt64 = 0b1
+        
+        var firstBit = temp & b0
+        
+        var mask : UInt64 = 0
+        
+        while temp != 0 && (temp & b0) == firstBit {
+          mask = (mask << 1) | b0
+          temp >>= 1
+        }
+        
+        let base = eventId & ~mask
+        
+        return (startEventId: base, endEventId: base | mask)
+        
+      }
+      
+      return nil
+      
+    }
+  }
+  
   public var flags : OpenLCBCANFrameFlag = .onlyFrame
   
   public var eventId : UInt64?

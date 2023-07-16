@@ -225,7 +225,7 @@
                                                                 <rect key="frame" x="18" y="15" width="127" height="11"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="00.00.00.00.00.00.00.00.00" id="l14-nF-cTN">
-                                                                    <font key="font" metaFont="system" size="9"/>
+                                                                    <font key="font" metaFont="miniSystem"/>
                                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>

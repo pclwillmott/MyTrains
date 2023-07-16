@@ -296,19 +296,45 @@ public class OpenLCBNetworkLayer : NSObject {
 
   public func sendLocoNetMessageReceived(sourceNodeId:UInt64, locoNetMessage:[UInt8]) {
     
-    let message = OpenLCBMessage(messageTypeIndicator: .producerConsumerEventReport)
+    let numberOfFrames = 1 + (locoNetMessage.count - 1) / 8
     
-    message.sourceNodeId = sourceNodeId
-    
-    message.eventId = OpenLCBWellKnownEvent.locoNetMessage.rawValue
-    
-    message.payload = locoNetMessage
-    
-    sendMessage(message: message)
+    if numberOfFrames == 1 {
+      let message = OpenLCBMessage(messageTypeIndicator: .locoNetMessageReceivedOnlyFrame)
+      message.sourceNodeId = sourceNodeId
+      message.payload = locoNetMessage
+      sendMessage(message: message)
+    }
+    else {
+      
+      var buffer = locoNetMessage
+
+      for frameNumber in 1 ... numberOfFrames {
+        
+        var flags : OpenLCBMTI = .locoNetMessageReceivedMiddleFrame
+        if frameNumber == 1 {
+          flags = .locoNetMessageReceivedFirstFrame
+        }
+        else if frameNumber == numberOfFrames {
+          flags = .locoNetMessageReceivedLastFrame
+        }
+        
+        let message = OpenLCBMessage(messageTypeIndicator: flags)
+        
+        message.sourceNodeId = sourceNodeId
+        
+        message.payload.append(contentsOf: buffer.prefix(8))
+        
+        buffer.removeFirst(message.payload.count)
+        
+        sendMessage(message: message)
+        
+      }
+      
+    }
     
   }
 
-  public func sendLocoNetMessage(sourceNodeId:UInt64, destinationNodeId:UInt64, locoNetMessage:LocoNetMessage, spacingDelay:UInt8) {
+  public func sendLocoNetMessage(sourceNodeId:UInt64, destinationNodeId:UInt64, locoNetMessage:LocoNetMessage) {
     
     let message = OpenLCBMessage(messageTypeIndicator: .sendLocoNetMessage)
     
@@ -317,10 +343,6 @@ public class OpenLCBNetworkLayer : NSObject {
     message.destinationNodeId = destinationNodeId
     
     message.payload.append(contentsOf: locoNetMessage.message)
-    
-    if spacingDelay != 0 {
-      message.payload.append(spacingDelay)
-    }
     
     sendMessage(message: message)
     
@@ -911,8 +933,8 @@ public class OpenLCBNetworkLayer : NSObject {
       OpenLCBTractionControlInstructionType.controllerConfiguration.rawValue,
       OpenLCBTractionControllerConfigurationType.assignController.rawValue,
       result,
+/*    0x00,
       0x00,
- /*   0x00,
       0x00,
       0x00,
       0x00,

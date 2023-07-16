@@ -92,6 +92,8 @@ public class MTSerialPort : MTSerialPortManagerDelegate {
   
   private var _path : String = ""
   
+  private var writeLock = NSLock()
+  
   // MARK: Public Properties
 
   public var path : String
@@ -208,7 +210,7 @@ public class MTSerialPort : MTSerialPortManagerDelegate {
       
       let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: data.count)
       
-      buffer.initialize(repeating: 0, count: data.count)
+ //     buffer.initialize(repeating: 0, count: data.count)
        
       defer {
         buffer.deinitialize(count: data.count)
@@ -218,7 +220,9 @@ public class MTSerialPort : MTSerialPortManagerDelegate {
         buffer.advanced(by: index).pointee = data[index]
       }
       
+      writeLock.lock()
       let count = writeSerialPort(self.fd, buffer, data.count)
+      writeLock.unlock()
       
       if count != data.count {
         self.delegate?.serialPortWasRemovedFromSystem(self)
@@ -238,6 +242,8 @@ public class MTSerialPort : MTSerialPortManagerDelegate {
   }
   
   public func serialPortWasRemoved(path: String) {
+    
+    return
     
     if path == _path {
       self.delegate?.serialPortWasRemovedFromSystem(self)

@@ -113,6 +113,14 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   
   internal var internalNodes : Set<UInt64> = []
   
+  internal var externalConsumedEvents : Set<UInt64> = []
+  
+  internal var externalConsumedEventRanges : [(startEventId:UInt64, endEventId:UInt64)] = []
+  
+  internal var internalConsumedEvents : Set<UInt64> = []
+  
+  internal var internalConsumedEventRanges : [(startEventId:UInt64, endEventId:UInt64)] = []
+  
   private var initNodeQueue : [OpenLCBTransportLayerAlias] = []
   
   private var managedNodeIdLookup : [UInt64:OpenLCBTransportLayerAlias] = [:]
@@ -537,28 +545,88 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
         
         if message.isMessageComplete {
           
+          var route = true
+          
           switch message.messageTypeIndicator {
+            
           case .initializationCompleteSimpleSetSufficient, .initializationCompleteFullProtocolRequired:
+            
             for (key, datagram) in datagramsAwaitingReceipt {
               if datagram.destinationNodeId == message.sourceNodeId {
                 datagramsAwaitingReceipt.removeValue(forKey: key)
               }
             }
+            
           case .datagramReceivedOK:
+            
             datagramsAwaitingReceipt.removeValue(forKey: message.datagramIdReversed)
+            
           case .datagramRejected:
+            
             if let datagram = datagramsAwaitingReceipt[message.datagramIdReversed] {
               datagramsAwaitingReceipt.removeValue(forKey: message.datagramIdReversed)
               if message.errorCode.isTemporary {
                 addToOutputQueue(message: datagram)
               }
             }
+            
+          case .consumerIdentifiedAsCurrentlyValid, .consumerIdentifiedAsCurrentlyInvalid, .consumerIdentifiedWithValidityUnknown:
+            
+            externalConsumedEvents.insert(message.eventId!)
+
+          case .consumerRangeIdentified:
+            
+            if let range = message.eventRange {
+              
+              var found = false
+              
+              for r in externalConsumedEventRanges {
+                if r.startEventId == range.startEventId && r.endEventId == range.endEventId {
+                  found = true
+                  break
+                }
+              }
+              
+              if !found {
+                externalConsumedEventRanges.append(range)
+              }
+              
+            }
+
+          case .producerConsumerEventReport:
+            
+            if let eventId = message.eventId {
+              
+              if !(message.isAutomaticallyRoutedEvent || internalConsumedEvents.contains(eventId)) {
+                
+                var found = false
+                
+                for range in internalConsumedEventRanges {
+                  if eventId >= range.startEventId && eventId <= range.endEventId {
+                    found = true
+                    break
+                  }
+                }
+                
+                if !found {
+                  route = false
+                }
+                
+              }
+              
+            }
+            else {
+              print("producerConsumerEventReport without eventId")
+            }
+
           default:
             break
           }
 
-          networkLayer?.sendMessage(gatewayNodeId: nodeId, message: message)
- 
+          if route {
+            networkLayer?.sendMessage(gatewayNodeId: nodeId, message: message)
+          }
+          
           delete = true
           
         }
@@ -1083,9 +1151,64 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
       getAlias()
 
     }
-    
+
     if let destinationNodeId = message.destinationNodeId, internalNodes.contains(destinationNodeId) {
       return
+    }
+    
+    switch message.messageTypeIndicator {
+      
+    case .producerConsumerEventReport:
+      
+      if let eventId = message.eventId {
+        
+        if !(message.isAutomaticallyRoutedEvent || externalConsumedEvents.contains(eventId)) {
+          
+          var found = false
+          
+          for range in externalConsumedEventRanges {
+            if eventId >= range.startEventId && eventId <= range.endEventId {
+              found = true
+              break
+            }
+          }
+          
+          if !found {
+            return
+          }
+          
+        }
+        
+      }
+      else {
+        print("producerConsumerEventReport without eventId")
+      }
+      
+    case .consumerIdentifiedAsCurrentlyValid, .consumerIdentifiedAsCurrentlyInvalid, .consumerIdentifiedWithValidityUnknown:
+      
+      internalConsumedEvents.insert(message.eventId!)
+      
+    case .consumerRangeIdentified:
+      
+      if let range = message.eventRange {
+        
+        var found = false
+        
+        for r in internalConsumedEventRanges {
+          if r.startEventId == range.startEventId && r.endEventId == range.endEventId {
+            found = true
+            break
+          }
+        }
+        
+        if !found {
+          internalConsumedEventRanges.append(range)
+        }
+
+      }
+      
+    default:
+      break
     }
     
     addToOutputQueue(message: message)

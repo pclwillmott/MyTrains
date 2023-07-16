@@ -9,4 +9,5 @@ import Foundation
 
 @objc public protocol LocoNetDelegate {
   @objc optional func locoNetInitializationComplete()
+  @objc optional func locoNetMessageReceived(message:LocoNetMessage)
 }

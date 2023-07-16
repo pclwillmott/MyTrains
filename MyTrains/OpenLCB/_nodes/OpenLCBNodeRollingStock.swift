@@ -225,7 +225,6 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
   }
   
   internal func attachCompleted() {
-    print("attachCompleted: \(activeControllerNodeId.toHexDotFormat(numberOfBytes: 6))")
     networkLayer?.sendAssignControllerReply(sourceNodeId: nodeId, destinationNodeId: activeControllerNodeId, result: 0)
   }
   

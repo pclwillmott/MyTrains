@@ -28,7 +28,7 @@ public class LocoNet {
     
     self.nodeId = virtualNode.nodeId
     
-    networkLayer.sendConsumerIdentifiedValid(sourceNodeId: nodeId, eventId: OpenLCBWellKnownEvent.locoNetMessage.rawValue)
+    networkLayer.sendConsumerIdentifiedValid(sourceNodeId: nodeId, eventId: OpenLCBWellKnownEvent.nodeIsALocoNetGateway.rawValue)
 
     getOpSwDataAP1()
     
@@ -45,6 +45,10 @@ public class LocoNet {
   internal var nodeId : UInt64
   
   private var state : State = .idle
+  
+  private var buffer : [UInt8] = []
+  
+  internal var immPacketQueue : [LocoNetMessage] = []
   
   internal var commandStationType : LocoNetCommandStationType = .DT200
 
@@ -78,6 +82,38 @@ public class LocoNet {
   
   // MARK: Public Methods
  
+  public func locoNetMessagePartReceived(message:OpenLCBMessage) {
+    
+    switch message.messageTypeIndicator {
+      
+    case .locoNetMessageReceivedOnlyFrame:
+      
+      if let locoNetMessage = LocoNetMessage(payload: message.payload) {
+        locoNetMessageReceived(message: locoNetMessage)
+      }
+      
+    case .locoNetMessageReceivedFirstFrame:
+      
+      buffer = message.payload
+      
+    case .locoNetMessageReceivedMiddleFrame:
+      
+      buffer.append(contentsOf: message.payload)
+      
+    case .locoNetMessageReceivedLastFrame:
+      
+      buffer.append(contentsOf: message.payload)
+      
+      if let locoNetMessage = LocoNetMessage(payload: buffer) {
+        locoNetMessageReceived(message: locoNetMessage)
+      }
+      
+    default:
+      break
+    }
+        
+  }
+  
   public func locoNetMessageReceived(message:LocoNetMessage) {
     
     switch message.messageType {
@@ -105,9 +141,28 @@ public class LocoNet {
         self.delegate?.locoNetInitializationComplete?()
       }
 
+    case .immPacketOK:
+      
+      if !immPacketQueue.isEmpty {
+        immPacketQueue.removeFirst()
+      }
+      
+      if !immPacketQueue.isEmpty {
+        addToQueue(message: immPacketQueue.first!)
+      }
+      
+    case .immPacketBufferFull:
+
+      if !immPacketQueue.isEmpty {
+        addToQueue(message: immPacketQueue.first!)
+      }
+
     default:
       break
     }
+    
+    delegate?.locoNetMessageReceived?(message: message)
+    
   }
   
 }
