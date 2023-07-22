@@ -46,6 +46,7 @@ public enum OpenLCBErrorCode : UInt16 {
   case temporaryErrorReserved6                                               = 0x2060
   case temporaryErrorReserved7                                               = 0x2070
   case temporaryErrorTransferError                                           = 0x2080
+  case temporaryErrorLocoNetCollision                                        = 0x2081
   case temporaryErrorReserved9                                               = 0x2090
   case temporaryErrorReserved10                                              = 0x20a0
   case temporaryErrorReserved11                                              = 0x20b0

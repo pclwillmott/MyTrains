@@ -380,18 +380,7 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
     
     super.openLCBMessageReceived(message: message)
     
-    switch message.messageTypeIndicator {
-      
-    case .locoNetMessageReceivedOnlyFrame, .locoNetMessageReceivedFirstFrame, .locoNetMessageReceivedMiddleFrame, .locoNetMessageReceivedLastFrame:
-    
-      if message.sourceNodeId! == locoNetGatewayNodeId {
-        locoNet?.locoNetMessagePartReceived(message: message)
-      }
-      
-    default:
-      break
-      
-    }
+    locoNet?.openLCBMessageReceived(message: message)
     
   }
   

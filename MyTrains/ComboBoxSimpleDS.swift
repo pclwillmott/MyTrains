@@ -51,6 +51,19 @@ class ComboBoxSimpleDS : NSObject, NSComboBoxDataSource {
     return _items[index]
   }
   
+  public func keyForItemAt(index: Int) -> UInt64? {
+    if index < 0 || index >= _items.count {
+      return nil
+    }
+    let item = _items[index]
+    for (key, value) in _dictionary {
+      if value == item {
+        return key
+      }
+    }
+    return nil
+  }
+  
   public func indexWithKey(key: UInt64) -> Int? {
     
     if let value = _dictionary[key] {

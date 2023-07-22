@@ -10,11 +10,7 @@ import Foundation
 extension LocoNet {
   
   // MARK: COMMAND STATION COMMANDS
-  
-  public func addToQueue(message:LocoNetMessage) {
-    networkLayer.sendLocoNetMessage(sourceNodeId: nodeId, destinationNodeId: gatewayNodeId, locoNetMessage: message)
-  }
-  
+
   public func addToIMMPacketQueue(message:LocoNetMessage) {
     immPacketQueue.append(message)
     if immPacketQueue.count == 1 {

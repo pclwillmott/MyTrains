@@ -76,6 +76,10 @@ public enum OpenLCBDatagramType : UInt16 {
   case resetRebootCommand                               = 0x20a9
   case reinitializeFactoryResetCommand                  = 0x20aa
   case sendlocoNetMessage                               = 0x3000
-  case sendLocoNetMessageReply                          = 0x3010
   
+  public var bigEndianData : [UInt8] {
+    get {
+      return self.rawValue.bigEndianData
+    }
+  }
 }

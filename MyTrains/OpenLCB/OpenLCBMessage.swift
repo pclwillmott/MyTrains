@@ -177,8 +177,8 @@ public class OpenLCBMessage : NSObject {
 
   public var errorCode : OpenLCBErrorCode {
     get {
-      if let error = UInt16(bigEndianData: [payload[0], payload[1]]) {
-        return OpenLCBErrorCode(rawValue: error) ?? .success
+      if payload.count >= 2, let error = UInt16(bigEndianData: [payload[0], payload[1]]) {
+        return OpenLCBErrorCode(rawValue: error)!
       }
       return .success
     }

@@ -7,11 +7,17 @@
 
 import Foundation
 
-private typealias QueueItem = (message:LocoNetMessage, spacingDelay:UInt8)
+// private typealias QueueItem = (message:LocoNetMessage, spacingDelay:UInt8)
 
 private enum State {
   case idle
   case initialized
+}
+
+internal enum MessageState {
+  case idle
+  case waitingForDatagramReceivedOK
+  case waitingForSendLocoNetMessageReply
 }
 
 public class LocoNet {
@@ -50,7 +56,17 @@ public class LocoNet {
   
   internal var immPacketQueue : [LocoNetMessage] = []
   
+  internal var outputQueue : [LocoNetMessage] = []
+  
+  internal var currentMessage : LocoNetMessage?
+  
   internal var commandStationType : LocoNetCommandStationType = .DT200
+  
+  internal var timeoutTimer : Timer?
+  
+  internal var messageState : MessageState = .idle
+  
+  internal var retryCount : Int = 10
 
   // MARK: Public Properties
   
@@ -80,6 +96,62 @@ public class LocoNet {
 
   // MARK: Private Methods
   
+  @objc internal func timeoutTimerAction() {
+    
+    stopTimeoutTimer()
+    
+    switch messageState {
+    case .idle:
+      break
+    case .waitingForDatagramReceivedOK:
+//      print("timeout: \(messageState)")
+      currentMessage = nil
+      outputQueue.removeAll()
+    case .waitingForSendLocoNetMessageReply:
+ //     print("timeout: \(messageState)")
+      currentMessage = nil
+      sendNext()
+    }
+
+  }
+  
+  internal func startTimeoutTimer(interval: TimeInterval) {
+    guard currentMessage != nil else {
+      return
+    }
+    timeoutTimer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(timeoutTimerAction), userInfo: nil, repeats: false)
+    RunLoop.current.add(timeoutTimer!, forMode: .common)
+  }
+  
+  internal func stopTimeoutTimer() {
+    timeoutTimer?.invalidate()
+    timeoutTimer = nil
+  }
+
+  internal func sendNext() {
+    
+    guard currentMessage == nil && !outputQueue.isEmpty else {
+      return
+    }
+    
+    currentMessage = outputQueue.removeFirst()
+    
+    messageState = .waitingForDatagramReceivedOK
+    
+    retryCount = 10
+    
+    startTimeoutTimer(interval: 1.0)
+    
+    networkLayer.sendLocoNetMessage(sourceNodeId: nodeId, destinationNodeId: gatewayNodeId, locoNetMessage: currentMessage!)
+    
+  }
+  
+  internal func addToQueue(message:LocoNetMessage) {
+    outputQueue.append(message)
+    sendNext()
+  }
+  
+
   // MARK: Public Methods
  
   public func locoNetMessagePartReceived(message:OpenLCBMessage) {
@@ -165,4 +237,115 @@ public class LocoNet {
     
   }
   
+  public func openLCBMessageReceived(message: OpenLCBMessage) {
+    
+    switch message.messageTypeIndicator {
+    
+    case .sendLocoNetMessageReply:
+      
+      if message.destinationNodeId! == nodeId && message.sourceNodeId! == gatewayNodeId, let locoNetMessage = currentMessage {
+        
+        stopTimeoutTimer()
+        
+        let errorCode = message.errorCode
+        
+        switch errorCode {
+        case .success:
+          messageState = .idle
+          currentMessage = nil
+          sendNext()
+        case .temporaryErrorLocoNetCollision:
+          print("error: \(errorCode)")
+          retryCount -= 1
+          if retryCount == 0 {
+            print("max retries exceeded")
+            messageState = .idle
+            currentMessage = nil
+            sendNext()
+          }
+          else {
+            messageState = .waitingForDatagramReceivedOK
+            startTimeoutTimer(interval: 1.0)
+            networkLayer.sendLocoNetMessage(sourceNodeId: nodeId, destinationNodeId: gatewayNodeId, locoNetMessage: locoNetMessage)
+          }
+        default:
+          print("error: \(errorCode)")
+          messageState = .idle
+          currentMessage = nil
+          sendNext()
+        }
+        
+      }
+      
+    case .datagramReceivedOK:
+      
+      if message.destinationNodeId! == nodeId && message.sourceNodeId! == gatewayNodeId, let _ = currentMessage {
+        
+        stopTimeoutTimer()
+        
+        var data = message.payload
+        
+        if data.isEmpty {
+          data.append(0)
+        }
+        
+        if let flags = OpenLCBDatagramTimeout(rawValue: data[0]) {
+          
+          messageState = .waitingForSendLocoNetMessageReply
+          
+          startTimeoutTimer(interval: flags.timeout)
+          
+        }
+        
+      }
+      
+    case .datagramRejected:
+      
+      if message.destinationNodeId! == nodeId && message.sourceNodeId! == gatewayNodeId, let locoNetMessage = currentMessage {
+        
+        stopTimeoutTimer()
+        
+        let errorCode = message.errorCode
+        
+        switch errorCode {
+        case .permanentErrorNoConnection:
+          print("error: \(errorCode)")
+          currentMessage = nil
+          outputQueue.removeAll()
+        case .permanentErrorInvalidArguments:
+          print("error: \(errorCode)")
+          currentMessage = nil
+          sendNext()
+        case .temporaryErrorBufferUnavailable:
+          print("error: \(errorCode)")
+          retryCount -= 1
+          if retryCount == 0 {
+            print("max retries exceeded")
+            messageState = .idle
+            currentMessage = nil
+            sendNext()
+          }
+          else {
+            startTimeoutTimer(interval: 1.0)
+            networkLayer.sendLocoNetMessage(sourceNodeId: nodeId, destinationNodeId: gatewayNodeId, locoNetMessage: locoNetMessage)
+          }
+        default:
+          print("unexpected error: \(errorCode)")
+        }
+        
+      }
+      
+    case .locoNetMessageReceivedOnlyFrame, .locoNetMessageReceivedFirstFrame, .locoNetMessageReceivedMiddleFrame, .locoNetMessageReceivedLastFrame:
+    
+      if message.sourceNodeId! == gatewayNodeId {
+        locoNetMessagePartReceived(message: message)
+      }
+      
+    default:
+      break
+      
+    }
+    
+  }
+
 }

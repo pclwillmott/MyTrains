@@ -336,13 +336,29 @@ public class OpenLCBNetworkLayer : NSObject {
 
   public func sendLocoNetMessage(sourceNodeId:UInt64, destinationNodeId:UInt64, locoNetMessage:LocoNetMessage) {
     
-    let message = OpenLCBMessage(messageTypeIndicator: .sendLocoNetMessage)
+    let message = OpenLCBMessage(messageTypeIndicator: .datagram)
     
     message.sourceNodeId = sourceNodeId
     
     message.destinationNodeId = destinationNodeId
     
+    message.payload = OpenLCBDatagramType.sendlocoNetMessage.bigEndianData
+    
     message.payload.append(contentsOf: locoNetMessage.message)
+    
+    sendMessage(message: message)
+    
+  }
+
+  public func sendLocoNetMessageReply(sourceNodeId:UInt64, destinationNodeId:UInt64, errorCode:OpenLCBErrorCode) {
+    
+    let message = OpenLCBMessage(messageTypeIndicator: .sendLocoNetMessageReply)
+    
+    message.sourceNodeId = sourceNodeId
+    
+    message.destinationNodeId = destinationNodeId
+    
+    message.payload = errorCode.bigEndianData
     
     sendMessage(message: message)
     

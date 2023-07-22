@@ -100,10 +100,6 @@ class ThrottleVC: NSViewController, NSWindowDelegate, OpenLCBThrottleDelegate {
   
   // MARK: Private Methods
   
-  private func setupLocomotive() {
-    
-  }
-  
   private func enableControls() {
 //    let enabled = locomotive?.isInUse ?? false
     
@@ -194,23 +190,11 @@ class ThrottleVC: NSViewController, NSWindowDelegate, OpenLCBThrottleDelegate {
   @IBOutlet weak var cboLocomotive: NSComboBox!
   
   @IBAction func cboLocomotiveAction(_ sender: NSComboBox) {
-    setupLocomotive()
   }
   
   @IBOutlet weak var swPower: NSSwitch!
   
   @IBAction func swPowerAction(_ sender: NSSwitch) {
-    /*
-    if let loco = locomotive {
-      if sender.state == .off {
-        loco.targetSpeed = (speed: 0, direction: radForward.state == .on ? .forward : .reverse)
-        vsThrottle.integerValue = 0
-        lblTargetStep.stringValue = "0"
-      }
-      loco.isInUse = sender.state == .on
-      enableControls()
-    }
-     */
   }
   
   @IBOutlet weak var radForward: NSButton!
@@ -220,13 +204,6 @@ class ThrottleVC: NSViewController, NSWindowDelegate, OpenLCBThrottleDelegate {
     radForward.state = .on
     radReverse.state = .off
  
-    /*
-    if let loco = locomotive {
-      let speed = UInt8(lblTargetStep.integerValue)
-      loco.targetSpeed = (speed: speed, direction: radForward.state == .on ? .forward : .reverse)
-    }
-     */
-    
   }
   
   @IBOutlet weak var radReverse: NSButton!
@@ -236,13 +213,6 @@ class ThrottleVC: NSViewController, NSWindowDelegate, OpenLCBThrottleDelegate {
     radForward.state = .off
     radReverse.state = .on
  
-    /*
-    if let loco = locomotive {
-      let speed = UInt8(lblTargetStep.integerValue)
-      loco.targetSpeed = (speed: speed, direction: radForward.state == .on ? .forward : .reverse)
-    }
-     */
-    
   }
   
   @IBOutlet weak var lblSpeed: NSTextField!
@@ -250,13 +220,6 @@ class ThrottleVC: NSViewController, NSWindowDelegate, OpenLCBThrottleDelegate {
   @IBOutlet weak var vsThrottle: NSSlider!
   
   @IBAction func vsThrottleAction(_ sender: NSSlider) {
-    /*
-    if let loco = locomotive {
-      let speed = UInt8(sender.integerValue)
-      loco.targetSpeed = (speed: speed, direction: radForward.state == .on ? .forward : .reverse)
-    }
-    lblTargetStep.stringValue = "\(sender.integerValue)"
-     */
   }
   
   @IBOutlet weak var cboSearchType: NSComboBox!
@@ -318,6 +281,12 @@ class ThrottleVC: NSViewController, NSWindowDelegate, OpenLCBThrottleDelegate {
   @IBAction func btnGlobalEmergencyOffAction(_ sender: NSButton) {
   }
   
-  
+  @IBAction func btnSelectAction(_ sender: NSButton) {
+    
+    if let nodeId = cboLocomotiveDS.keyForItemAt(index: cboLocomotive.indexOfSelectedItem) {
+      throttle?.selectLocomotive(locomotiveNodeId: nodeId)
+    }
+    
+  }
   
 }

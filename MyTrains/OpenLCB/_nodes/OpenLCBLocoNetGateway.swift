@@ -7,6 +7,8 @@
 
 import Foundation
 
+private typealias QueueItem = (nodeId:UInt64, message:LocoNetMessage)
+
 public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
  
   // MARK: Constructors & Destructors
@@ -119,6 +121,12 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   
   private var consumerIdentified : Bool = false
   
+  private var queue : [QueueItem] = []
+  
+  private var timeoutTimer : Timer?
+  
+  private var currentItem : QueueItem?
+  
   // MARK: Public Properties
   
   public var configuration : OpenLCBMemorySpace
@@ -158,6 +166,8 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     close()
     
     buffer.removeAll()
+    
+    queue.removeAll()
     
     consumerIdentified = false
     
@@ -247,6 +257,13 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
         
       if !restart {
         
+        if let item = currentItem, message == item.message.message {
+          stopTimeoutTimer()
+          networkLayer?.sendLocoNetMessageReply(sourceNodeId: nodeId, destinationNodeId: item.nodeId, errorCode: .success)
+          currentItem = nil
+          sendNext()
+        }
+        
         if !blockAllMessages && consumerIdentified {
           networkLayer?.sendLocoNetMessageReceived(sourceNodeId: nodeId, locoNetMessage: message)
         }
@@ -255,6 +272,39 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
 
     }
     
+  }
+  
+  private func sendNext() {
+    
+    guard currentItem == nil && !queue.isEmpty else {
+      return
+    }
+    
+    currentItem = queue.removeFirst()
+    
+    startTimeoutTimer(interval: 1.0)
+    
+    send(data: currentItem!.message.message)
+    
+  }
+  
+  @objc func timeoutTimerAction() {
+    stopTimeoutTimer()
+    if let item = currentItem {
+      networkLayer?.sendLocoNetMessageReply(sourceNodeId: nodeId, destinationNodeId: item.nodeId, errorCode: .temporaryErrorLocoNetCollision)
+    }
+    currentItem = nil
+    sendNext()
+  }
+  
+  private func startTimeoutTimer(interval: TimeInterval) {
+    timeoutTimer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(timeoutTimerAction), userInfo: nil, repeats: false)
+    RunLoop.current.add(timeoutTimer!, forMode: .common)
+  }
+  
+  private func stopTimeoutTimer() {
+    timeoutTimer?.invalidate()
+    timeoutTimer = nil
   }
 
   // MARK: Public Methods
@@ -288,31 +338,34 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
         consumerIdentified = true
       }
       
-    case .sendLocoNetMessage:
+    case .datagram:
       
-      if message.destinationNodeId! == nodeId {
+      if let datagramType = message.datagramType, datagramType == .sendlocoNetMessage, message.destinationNodeId! == nodeId, let sourceNodeId = message.sourceNodeId {
 
         if !isOpen {
-          networkLayer?.sendTerminateDueToError(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, errorCode: .permanentErrorNoConnection)
+          networkLayer?.sendDatagramRejected(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, errorCode: .permanentErrorNoConnection)
+        }
+        else if queue.count == 100 {
+          networkLayer?.sendDatagramRejected(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, errorCode: .temporaryErrorBufferUnavailable)
         }
         else {
           
           var data = message.payload
-          
-          let locoNetMessage = LocoNetMessage(data: data)
-          
-          let length = locoNetMessage.messageLength
-          
-          if locoNetMessage.checkSumOK {
-            send(data: locoNetMessage.message)
+          data.removeFirst(2)
+
+          if let locoNetMessage = LocoNetMessage(payload: data) {
+            queue.append((nodeId:message.sourceNodeId!, message:locoNetMessage))
+            networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, timeOut: .replyPending2s)
+            sendNext()
           }
           else {
-            networkLayer?.sendTerminateDueToError(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, errorCode: .permanentErrorInvalidArguments)
+            networkLayer?.sendDatagramRejected(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, errorCode: .permanentErrorInvalidArguments)
           }
           
         }
         
       }
+      
     default:
       break
     }

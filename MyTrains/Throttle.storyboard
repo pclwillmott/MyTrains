@@ -151,7 +151,7 @@
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EW7-F5-3Xn">
-                                                                <rect key="frame" x="19" y="21" width="821" height="25"/>
+                                                                <rect key="frame" x="19" y="21" width="741" height="25"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                 <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="5" id="yeX-vT-yT3">
                                                                     <font key="font" metaFont="system"/>
@@ -162,6 +162,17 @@
                                                                     <action selector="cboLocomotiveAction:" target="JXj-8b-fbu" id="YaO-ku-XmL"/>
                                                                 </connections>
                                                             </comboBox>
+                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IAv-Hk-hsK">
+                                                                <rect key="frame" x="771" y="17" width="73" height="32"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="push" title="Select" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Rby-uS-Xdi">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                                <connections>
+                                                                    <action selector="btnSelectAction:" target="JXj-8b-fbu" id="mMF-SK-V31"/>
+                                                                </connections>
+                                                            </button>
                                                         </subviews>
                                                     </view>
                                                 </box>
