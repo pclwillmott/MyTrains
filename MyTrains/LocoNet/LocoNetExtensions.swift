@@ -51,7 +51,7 @@ extension LocoNet {
     }
     else {
       
-      immPacket(packet: [DCCAddressPartition.dccIdle.rawValue, DCCPacketType.dccIdle.rawValue], repeatCount: 0x0f)
+      immPacket(packet: [DCCAddressPartition.dccBroadcast.rawValue, DCCPacketType.dccIdle.rawValue], repeatCount: 0x0f)
       
       globalEmergencyStop = true
       

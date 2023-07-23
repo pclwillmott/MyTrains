@@ -252,10 +252,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
   
   @objc func timerAction() {
  
-    guard !isStopped else {
-      stopTimer()
-      return
-    }
+    timer?.invalidate()
     
     switch heartbeatMode {
       
@@ -263,9 +260,9 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
       
       heartbeatMode = .waitingForResponse
       
-      networkLayer?.sendHeartbeatRequest(sourceNodeId: nodeId, destinationNodeId: activeControllerNodeId, timeout: heartbeatDeadline)
-      
       startTimer(interval: heartbeatDeadline)
+      
+      networkLayer?.sendHeartbeatRequest(sourceNodeId: nodeId, destinationNodeId: activeControllerNodeId, timeout: heartbeatDeadline)
       
     case .waitingForResponse:
       
@@ -287,6 +284,8 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
   
   private func startTimer(interval:UInt8) {
     
+    timer?.invalidate()
+
     let deadline : TimeInterval = Double(interval)
     
     timer = Timer.scheduledTimer(timeInterval: deadline, target: self, selector: #selector(timerAction), userInfo: nil, repeats: false)
@@ -295,12 +294,6 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
 
   }
   
-  private func stopTimer() {
-    timer?.invalidate()
-    timer = nil
-    heartbeatMode = .stopped
-  }
-
   // MARK: Public Methods
   
   public func reloadCDI() {
@@ -340,7 +333,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
       
       if message.destinationNodeId! == nodeId, let instruction = OpenLCBTractionControlInstructionType(rawValue: message.payload[0] & 0b01111111) {
         
-        stopTimer()
+        timer?.invalidate()
         
         let isForwarded = ((message.payload[0]) & 0x80 == 0x80) && isListener(nodeId: message.sourceNodeId!)
         
@@ -421,10 +414,6 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
             networkLayer?.sendTerminateDueToError(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, errorCode: .permanentErrorSourceNotPermitted)
           }
           else {
-            
-            if abs(setSpeed) != 0.0 {
-              setSpeedToZero()
-            }
             
             emergencyStop = true
             

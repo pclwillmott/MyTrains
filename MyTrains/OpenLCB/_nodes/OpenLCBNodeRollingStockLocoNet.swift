@@ -149,6 +149,13 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
       
       step = step == 0 ? 0 : step + 1
       
+      if emergencyStop {
+        step = 1
+        if abs(setSpeed) != 0.0 {
+          setSpeedToZero()
+        }
+      }
+      
       let direction : LocomotiveDirection = (setSpeed.bitPattern == (-0.0).bitPattern || setSpeed < 0.0) ? .reverse : .forward
 
       let nextState = (
@@ -195,7 +202,7 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
     
     stat1 = 0
     
-    setSpeed = 0.0
+    setSpeedToZero()
     
     commandedSpeed = 0.0
     
@@ -210,6 +217,8 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
   internal override func releaseNode() {
     
     stopRefreshTimer()
+    
+    emergencyStop = true
     
     setSpeedToZero()
     

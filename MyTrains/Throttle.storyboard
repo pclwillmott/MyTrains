@@ -217,7 +217,7 @@
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gh0-Yn-Zng">
-                                                                <rect key="frame" x="18" y="34" width="438" height="20"/>
+                                                                <rect key="frame" x="18" y="34" width="401" height="20"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Unassigned" id="oQ0-T0-O7U">
                                                                     <font key="font" metaFont="system" size="17"/>
@@ -225,22 +225,26 @@
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="sxi-UP-own">
-                                                                <rect key="frame" x="472" y="24" width="42" height="25"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                                                <connections>
-                                                                    <action selector="swPowerAction:" target="JXj-8b-fbu" id="fo6-gz-AUf"/>
-                                                                </connections>
-                                                            </switch>
                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DDU-J4-Sex">
-                                                                <rect key="frame" x="18" y="15" width="127" height="11"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <rect key="frame" x="18" y="15" width="401" height="11"/>
+                                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="00.00.00.00.00.00.00.00.00" id="l14-nF-cTN">
                                                                     <font key="font" metaFont="miniSystem"/>
                                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
+                                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oy6-yB-wKr">
+                                                                <rect key="frame" x="427" y="27" width="82" height="32"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="push" title="Release" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="xTL-NK-I05">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                                <connections>
+                                                                    <action selector="btnReleaseAction:" target="JXj-8b-fbu" id="akQ-7n-0aQ"/>
+                                                                </connections>
+                                                            </button>
                                                         </subviews>
                                                     </view>
                                                 </box>
@@ -367,7 +371,7 @@
                         <outlet property="lblSpeed" destination="ggg-tP-LdL" id="zVr-w2-vZR"/>
                         <outlet property="radForward" destination="4k2-Ze-G4w" id="njE-iF-QX8"/>
                         <outlet property="radReverse" destination="eVi-ww-6As" id="ozy-BH-5rD"/>
-                        <outlet property="swPower" destination="sxi-UP-own" id="jEZ-XT-lG7"/>
+                        <outlet property="tabView" destination="yIO-DG-hz7" id="zZZ-JX-Ok6"/>
                         <outlet property="txtSearch" destination="PIa-FQ-cbs" id="NsK-JZ-2JQ"/>
                         <outlet property="viewBinaryAnalogStates" destination="qGz-SS-8Dw" id="Dfg-R5-aMA"/>
                         <outlet property="viewF0F28" destination="93L-R1-xQj" id="nVi-VH-7dY"/>

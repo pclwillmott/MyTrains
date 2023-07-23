@@ -241,6 +241,25 @@ public class LocoNet {
     
     switch message.messageTypeIndicator {
     
+    case .producerConsumerEventReport:
+      
+      if let event = OpenLCBWellKnownEvent(rawValue: message.eventId!) {
+        
+        switch event {
+        case .emergencyOffAll:
+          powerOff()
+        case .clearEmergencyOffAll:
+          powerOn()
+        case .emergencyStopAll:
+          emergencyStop()
+        case .clearEmergencyStopAll:
+          clearEmergencyStop()
+        default:
+          break
+        }
+        
+      }
+      
     case .sendLocoNetMessageReply:
       
       if message.destinationNodeId! == nodeId && message.sourceNodeId! == gatewayNodeId, let locoNetMessage = currentMessage {

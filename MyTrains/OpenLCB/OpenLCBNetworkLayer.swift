@@ -937,6 +937,29 @@ public class OpenLCBNetworkLayer : NSObject {
     
   }
 
+  public func sendAssignControllerCommand(sourceNodeId:UInt64, destinationNodeId:UInt64) {
+    
+    let message = OpenLCBMessage(messageTypeIndicator: .tractionControlCommand)
+
+    message.sourceNodeId = sourceNodeId
+    
+    message.destinationNodeId = destinationNodeId
+    
+    message.payload = [
+      OpenLCBTractionControlInstructionType.controllerConfiguration.rawValue,
+      OpenLCBTractionControllerConfigurationType.assignController.rawValue,
+      0x00
+    ]
+    
+    var nodeId = sourceNodeId.bigEndianData
+    nodeId.removeFirst(2)
+    
+    message.payload.append(contentsOf: nodeId)
+    
+    sendMessage(message: message)
+    
+  }
+
   public func sendAssignControllerReply(sourceNodeId:UInt64, destinationNodeId:UInt64, result:UInt8) {
     
     let message = OpenLCBMessage(messageTypeIndicator: .tractionControlReply)
@@ -956,6 +979,51 @@ public class OpenLCBNetworkLayer : NSObject {
       0x00,
       0x00, */
     ]
+    
+    sendMessage(message: message)
+    
+  }
+
+  public func sendReleaseControllerCommand(sourceNodeId:UInt64, destinationNodeId:UInt64) {
+    
+    let message = OpenLCBMessage(messageTypeIndicator: .tractionControlCommand)
+
+    message.sourceNodeId = sourceNodeId
+    
+    message.destinationNodeId = destinationNodeId
+    
+    message.payload = [
+      OpenLCBTractionControlInstructionType.controllerConfiguration.rawValue,
+      OpenLCBTractionControllerConfigurationType.releaseController.rawValue,
+      0x00
+    ]
+    
+    var nodeId = sourceNodeId.bigEndianData
+    nodeId.removeFirst(2)
+    
+    message.payload.append(contentsOf: nodeId)
+    
+    sendMessage(message: message)
+    
+  }
+
+
+  public func sendQueryFunctionCommand(sourceNodeId:UInt64, destinationNodeId:UInt64, address:UInt32) {
+    
+    let message = OpenLCBMessage(messageTypeIndicator: .tractionControlCommand)
+
+    message.sourceNodeId = sourceNodeId
+    
+    message.destinationNodeId = destinationNodeId
+    
+    message.payload = [
+      OpenLCBTractionControlInstructionType.queryFunction.rawValue
+    ]
+    
+    var bed = address.bigEndianData
+    bed.removeFirst()
+    
+    message.payload.append(contentsOf: bed)
     
     sendMessage(message: message)
     
@@ -1015,6 +1083,22 @@ public class OpenLCBNetworkLayer : NSObject {
     message.payload.append(contentsOf: commandedSpeed.float16.v.bigEndianData)
     message.payload.append(contentsOf: [0xff, 0xff])
 //  message.payload.append(contentsOf: [0x00, 0x00, 0x00])
+    
+    sendMessage(message: message)
+    
+  }
+
+  public func sendQuerySpeedCommand(sourceNodeId:UInt64, destinationNodeId:UInt64) {
+    
+    let message = OpenLCBMessage(messageTypeIndicator: .tractionControlCommand)
+
+    message.sourceNodeId = sourceNodeId
+    
+    message.destinationNodeId = destinationNodeId
+    
+    message.payload = [
+      OpenLCBTractionControlInstructionType.querySpeeds.rawValue
+    ]
     
     sendMessage(message: message)
     
@@ -1172,5 +1256,38 @@ public class OpenLCBNetworkLayer : NSObject {
     
   }
 
-  
+  public func sendTractionManagementNoOp(sourceNodeId:UInt64, destinationNodeId:UInt64) {
+    
+    let message = OpenLCBMessage(messageTypeIndicator: .tractionControlCommand)
+
+    message.sourceNodeId = sourceNodeId
+    
+    message.destinationNodeId = destinationNodeId
+    
+    message.payload = [
+      OpenLCBTractionControlInstructionType.tractionManagement.rawValue,
+      OpenLCBTractionManagementType.noopOrHeartbeatRequest.rawValue,
+    ]
+    
+    sendMessage(message: message)
+    
+  }
+
+  public func sendEmergencyStop(sourceNodeId:UInt64, destinationNodeId:UInt64) {
+    
+    let message = OpenLCBMessage(messageTypeIndicator: .tractionControlCommand)
+
+    message.sourceNodeId = sourceNodeId
+    
+    message.destinationNodeId = destinationNodeId
+    
+    message.payload = [
+      OpenLCBTractionControlInstructionType.emergencyStop.rawValue
+    ]
+    
+    sendMessage(message: message)
+    
+  }
+
+
 }

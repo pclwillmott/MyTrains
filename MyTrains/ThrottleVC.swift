@@ -41,7 +41,12 @@ class ThrottleVC: NSViewController, NSWindowDelegate, OpenLCBThrottleDelegate {
     throttle = myTrainsController.openLCBNetworkLayer?.getThrottle()
     throttle?.delegate = self
     txtSearchAction(txtSearch)
-
+    
+    globalEmergencyChanged(throttle: throttle!)
+    
+    vsThrottle.minValue = 0.0
+    vsThrottle.maxValue = 126.0
+    vsThrottle.doubleValue = 0.0
     
     let xStart : CGFloat = 0
     let yStart : CGFloat = 250.0
@@ -64,6 +69,7 @@ class ThrottleVC: NSViewController, NSWindowDelegate, OpenLCBThrottleDelegate {
       button.tag = fn
       button.setButtonType(.momentaryPushIn)
       button.allowsExpansionToolTips = true
+      button.setButtonType(.pushOnPushOff)
       
       if fn < 29 {
         viewF0F28.addSubview(button)
@@ -84,8 +90,6 @@ class ThrottleVC: NSViewController, NSWindowDelegate, OpenLCBThrottleDelegate {
       
     }
 
-//    setupLocomotive()
-
   }
   
   // MARK: Private Properties
@@ -100,50 +104,16 @@ class ThrottleVC: NSViewController, NSWindowDelegate, OpenLCBThrottleDelegate {
   
   // MARK: Private Methods
   
-  private func enableControls() {
-//    let enabled = locomotive?.isInUse ?? false
+  private func setSpeedDirection() {
     
-//    boxMain.isHidden = !enabled
+    let direction : Float = radForward.state == .on ? +1.0 : -1.0
     
-//    boxRoute.isHidden = ThrottleMode.selected(comboBox: cboThrottleMode) == .manual
-    
+    throttle?.speed = (vsThrottle.floatValue == 0.0 && direction == -1.0) ? -0.0 : vsThrottle.floatValue * direction
+
+    lblSpeed.stringValue = String(format: "%.0f", vsThrottle.floatValue)
+
   }
   
-  // MARK: LocomotiveDelegate Methods
-  /*
-  func stateUpdated(locomotive: Locomotive) {
-    lblSpeed.stringValue = "\(locomotive.speed.speed)"
-    lblDistance.stringValue = String(format: "%.1f", locomotive.distanceTravelled)
-    lblOrigin.stringValue = ""
-    if let origin = locomotive.originBlock {
-      lblOrigin.stringValue = "\(origin.blockName) \(String(format:"%.1f", locomotive.originBlockPosition))"
-    }
-    lblDestination.stringValue = ""
-    if let destination = locomotive.destinationBlock {
-      lblDestination.stringValue = "\(destination.blockName) \(String(format:"%.1f", locomotive.destinationBlockPosition))"
-    }
-
-  }
-  */
-  /*
-  func stealZap(locomotive: Locomotive) {
-
-    locomotive.targetSpeed.speed = 0
-    
-    locomotive.isInUse = false
-    
-    lblSpeed.intValue = 0
-    
-    locomotive.removeDelegate(withKey: locomotiveDelegateId)
-    
-    locomotiveDelegateId = -1
-    
-    self.locomotive = nil
-    
-    cboLocomotive.deselectItem(at: cboLocomotive.indexOfSelectedItem)
-
-  }
-  */
   // MARK: OpenLCBThrottleDelegate Methods
   
   @objc func trainSearchResultsReceived(throttle:OpenLCBThrottle, results:[UInt64:String]) {
@@ -155,16 +125,47 @@ class ThrottleVC: NSViewController, NSWindowDelegate, OpenLCBThrottleDelegate {
     }
   }
   
+  @objc func functionChanged(throttle:OpenLCBThrottle, address:UInt32, value:UInt16) {
+    
+    guard address < buttons.count else {
+      return
+    }
+    
+    buttons[Int(address)].state = value == 0 ? .off : .on
+    
+  }
+  
+  @objc func speedChanged(throttle:OpenLCBThrottle, speed:Float) {
+    
+    vsThrottle.floatValue = abs(speed)
+    
+    lblSpeed.stringValue = String(format: "%.0f", vsThrottle.floatValue)
+    
+    let isReverse = speed.bitPattern == (-0.0).bitPattern || speed < 0.0
+    
+    radForward.state = isReverse ? .off : .on
+    radReverse.state = isReverse ? .on : .off
+    
+  }
+
+  @objc func globalEmergencyChanged(throttle:OpenLCBThrottle) {
+    
+    btnGlobalEmergencyStop.title = throttle.globalEmergencyStop ? "Clear Global Emergency Stop" : "Global Emergency Stop"
+    
+    btnGlobalEmergencyOff.title = throttle.globalEmergencyOff ? "Clear Global Emergency Off" : "Global Emergency Off"
+
+  }
+
   @objc func throttleStateChanged(throttle:OpenLCBThrottle) {
     
     self.view.window?.title = "\(throttle.userNodeName) (\(throttle.nodeId.toHexDotFormat(numberOfBytes: 6)))"
     
     if let trainNode = throttle.trainNode {
       lblSelectedLocomotive.stringValue = trainNode.userNodeName
-      lblNodeId.stringValue = trainNode.nodeId.toHexDotFormat(numberOfBytes: 6)
+      lblNodeId.stringValue = "\(trainNode.nodeId.toHexDotFormat(numberOfBytes: 6)) - \(throttle.controllerInfo)"
     }
     else {
-      lblSelectedLocomotive.stringValue = "IDLE"
+      lblSelectedLocomotive.stringValue = "UNASSIGNED"
       lblNodeId.stringValue = ""
     }
     
@@ -173,28 +174,13 @@ class ThrottleVC: NSViewController, NSWindowDelegate, OpenLCBThrottleDelegate {
   // MARK: Outlets & Actions
   
   @IBAction func buttonAction(_ sender: NSButton) {
-    /*
-    if let loco = locomotive {
-      let locoFunc = loco.functions[sender.tag]
-      if locoFunc.isMomentary {
-        locoFunc.state = true
-      }
-      else {
-        locoFunc.state = sender.state == .on
-        locoFunc.save()
-      }
-    }
-     */
+    let address = UInt32(sender.tag)
+    throttle?.setFunction(address: address, value: sender.state == .on ? 0x0001 : 0x0000)
   }
   
   @IBOutlet weak var cboLocomotive: NSComboBox!
   
   @IBAction func cboLocomotiveAction(_ sender: NSComboBox) {
-  }
-  
-  @IBOutlet weak var swPower: NSSwitch!
-  
-  @IBAction func swPowerAction(_ sender: NSSwitch) {
   }
   
   @IBOutlet weak var radForward: NSButton!
@@ -204,6 +190,8 @@ class ThrottleVC: NSViewController, NSWindowDelegate, OpenLCBThrottleDelegate {
     radForward.state = .on
     radReverse.state = .off
  
+    setSpeedDirection()
+    
   }
   
   @IBOutlet weak var radReverse: NSButton!
@@ -212,6 +200,8 @@ class ThrottleVC: NSViewController, NSWindowDelegate, OpenLCBThrottleDelegate {
     
     radForward.state = .off
     radReverse.state = .on
+    
+    setSpeedDirection()
  
   }
   
@@ -220,6 +210,7 @@ class ThrottleVC: NSViewController, NSWindowDelegate, OpenLCBThrottleDelegate {
   @IBOutlet weak var vsThrottle: NSSlider!
   
   @IBAction func vsThrottleAction(_ sender: NSSlider) {
+    setSpeedDirection()
   }
   
   @IBOutlet weak var cboSearchType: NSComboBox!
@@ -256,6 +247,8 @@ class ThrottleVC: NSViewController, NSWindowDelegate, OpenLCBThrottleDelegate {
     txtSearchAction(txtSearch)
   }
   
+  @IBOutlet weak var tabView: NSTabView!
+  
   @IBOutlet weak var viewF0F28: NSView!
   
   @IBOutlet weak var viewF29F68: NSView!
@@ -269,24 +262,37 @@ class ThrottleVC: NSViewController, NSWindowDelegate, OpenLCBThrottleDelegate {
   @IBOutlet weak var btnEmergencyStop: NSButton!
   
   @IBAction func btnEmergencyStopAction(_ sender: NSButton) {
+    throttle?.emergencyStop()
   }
   
   @IBOutlet weak var btnGlobalEmergencyStop: NSButton!
   
   @IBAction func btnGlobalEmergencyStopAction(_ sender: NSButton) {
+    
+    sender.title == "Global Emergency Stop" ? throttle?.sendGlobalEmergencyStop() : throttle?.sendClearGlobalEmergencyStop()
+ 
   }
   
   @IBOutlet weak var btnGlobalEmergencyOff: NSButton!
   
   @IBAction func btnGlobalEmergencyOffAction(_ sender: NSButton) {
+    
+    sender.title == "Global Emergency Off" ? throttle?.sendGlobalEmergencyOff() : throttle?.sendClearGlobalEmergencyOff()
+ 
   }
   
   @IBAction func btnSelectAction(_ sender: NSButton) {
     
     if let nodeId = cboLocomotiveDS.keyForItemAt(index: cboLocomotive.indexOfSelectedItem) {
-      throttle?.selectLocomotive(locomotiveNodeId: nodeId)
+      throttle?.assignController(trainNodeId: nodeId)
+      tabView.selectTabViewItem(at: 1)
     }
     
+  }
+  
+  @IBAction func btnReleaseAction(_ sender: NSButton) {
+    throttle?.releaseController()
+    tabView.selectTabViewItem(at: 0)
   }
   
 }
