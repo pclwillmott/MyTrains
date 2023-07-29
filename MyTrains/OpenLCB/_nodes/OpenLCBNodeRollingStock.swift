@@ -76,8 +76,6 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
   
   internal let functionSpaceSize : Int
   
-//  internal var _rollingStock : RollingStock
-  
   internal var functions : OpenLCBMemorySpace
   
   internal var configuration : OpenLCBMemorySpace
@@ -191,7 +189,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
   public let heartbeatDeadline : UInt8 = 3
 
   // MARK: Private Methods
-  
+
   private func isListener(nodeId:UInt64) -> Bool {
     for listener in listeners {
       if listener.nodeId == nodeId {
@@ -315,7 +313,9 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
   
   public func setSpeedToZero() {
     
-    setSpeed = (setSpeed.bitPattern == (-0.0).bitPattern || setSpeed < 0.0) ? -0.0 : +0.0
+    let minusZero : Float = -0.0
+    
+    setSpeed = (setSpeed.bitPattern == minusZero.bitPattern || setSpeed < 0.0) ? -0.0 : +0.0
     
   }
 
@@ -341,7 +341,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
           
         case .setSpeedDirection:
           
-          if !isForwarded && message.sourceNodeId! != activeControllerNodeId {
+          if !isForwarded && false && message.sourceNodeId! != activeControllerNodeId {
             networkLayer?.sendTerminateDueToError(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, errorCode: .permanentErrorSourceNotPermitted)
           }
           
@@ -357,10 +357,13 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
               if listener.nodeId != message.sourceNodeId! {
                 var forwardedSpeed = setSpeed
                 if listener.reverseDirection {
-                  if forwardedSpeed.bitPattern == (+0.0).bitPattern {
+                  let minusZero : Float = -0.0
+                  let plusZero : Float = -0.0
+
+                  if forwardedSpeed.bitPattern == plusZero.bitPattern {
                     forwardedSpeed = -0.0
                   }
-                  else if forwardedSpeed.bitPattern == (-0.0).bitPattern {
+                  else if forwardedSpeed.bitPattern == minusZero.bitPattern {
                     forwardedSpeed = +0.0
                   }
                   else {
@@ -375,7 +378,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
           
         case .setFunction:
           
-          if !isForwarded && message.sourceNodeId! != activeControllerNodeId {
+          if !isForwarded && false && message.sourceNodeId! != activeControllerNodeId {
             networkLayer?.sendTerminateDueToError(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, errorCode: .permanentErrorSourceNotPermitted)
           }
           else {
@@ -410,7 +413,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
           
         case .emergencyStop:
           
-          if !isForwarded && message.sourceNodeId! != activeControllerNodeId {
+          if !isForwarded && false && message.sourceNodeId! != activeControllerNodeId {
             networkLayer?.sendTerminateDueToError(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, errorCode: .permanentErrorSourceNotPermitted)
           }
           else {
@@ -530,7 +533,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
                 
                 if listenerNodeId == nodeId {
                   
-                  networkLayer?.sendAssignListenerReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, listenerNodeId: listenerNodeId, replyCode: .permanentErrorAlreadyExists)
+                  networkLayer?.sendAttachListenerReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, listenerNodeId: listenerNodeId, replyCode: .permanentErrorAlreadyExists)
                   
                 }
                 else {
@@ -543,7 +546,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
                       
                       listener.flags = message.payload[2]
                       
-                      networkLayer?.sendAssignListenerReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, listenerNodeId: listenerNodeId, replyCode: .success)
+                      networkLayer?.sendAttachListenerReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, listenerNodeId: listenerNodeId, replyCode: .success)
                       
                       found = true
                       
@@ -557,7 +560,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
                     
                     listeners.append(listenerNode)
                     
-                    networkLayer?.sendAssignListenerReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, listenerNodeId: listenerNodeId, replyCode: .success)
+                    networkLayer?.sendAttachListenerReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, listenerNodeId: listenerNodeId, replyCode: .success)
                   }
                   
                 }
@@ -585,7 +588,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
                   
                   if listener.nodeId == listenerNodeId {
                     
-                    networkLayer?.sendAssignListenerReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, listenerNodeId: listenerNodeId, replyCode: .success)
+                    networkLayer?.sendAttachListenerReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, listenerNodeId: listenerNodeId, replyCode: .success)
                     
                     listeners.remove(at: index)
                     
@@ -599,7 +602,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
                 }
                 
                 if !found {
-                  networkLayer?.sendAssignListenerReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, listenerNodeId: listenerNodeId, replyCode: .permanentErrorNotFound)
+                  networkLayer?.sendAttachListenerReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, listenerNodeId: listenerNodeId, replyCode: .permanentErrorNotFound)
                 }
                 
               }
@@ -645,8 +648,6 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
       
       if message.destinationNodeId == nodeId, let instruction = OpenLCBTractionControlInstructionType(rawValue: message.payload[0] & 0b01111111) {
 
-        print("tractionControlReply: \(instruction) \(state)")
-        
         switch instruction {
           
         case .controllerConfiguration:
@@ -823,6 +824,13 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
             print("unknown track protocol found: 0x\(tp.toHex(numberOfDigits: 2))")
           }
 
+        }
+        else if let event = OpenLCBWellKnownEvent(rawValue: id) {
+          
+          if event == .nodeIsATrain {
+            networkLayer?.sendProducerIdentifiedValid(sourceNodeId: nodeId, eventId: id)
+          }
+          
         }
         
       }

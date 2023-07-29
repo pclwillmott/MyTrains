@@ -937,6 +937,24 @@ public class OpenLCBNetworkLayer : NSObject {
     
   }
 
+  public func sendControllerChangedNotifyReply(sourceNodeId:UInt64, destinationNodeId:UInt64, reject:Bool) {
+    
+    let message = OpenLCBMessage(messageTypeIndicator: .tractionControlReply)
+
+    message.sourceNodeId = sourceNodeId
+    
+    message.destinationNodeId = destinationNodeId
+    
+    message.payload = [
+      OpenLCBTractionControlInstructionType.controllerConfiguration.rawValue,
+      OpenLCBTractionControllerConfigurationType.controllerChangingNotify.rawValue,
+      reject ? 0x01 : 0x00
+    ]
+    
+    sendMessage(message: message)
+    
+  }
+
   public func sendAssignControllerCommand(sourceNodeId:UInt64, destinationNodeId:UInt64) {
     
     let message = OpenLCBMessage(messageTypeIndicator: .tractionControlCommand)
@@ -1165,7 +1183,7 @@ public class OpenLCBNetworkLayer : NSObject {
     
   }
 
-  public func sendAssignListenerReply(sourceNodeId:UInt64, destinationNodeId:UInt64, listenerNodeId:UInt64, replyCode:OpenLCBErrorCode) {
+  public func sendAttachListenerReply(sourceNodeId:UInt64, destinationNodeId:UInt64, listenerNodeId:UInt64, replyCode:OpenLCBErrorCode) {
     
     let message = OpenLCBMessage(messageTypeIndicator: .tractionControlReply)
 
@@ -1185,8 +1203,52 @@ public class OpenLCBNetworkLayer : NSObject {
     
     message.payload.append(contentsOf: replyCode.rawValue.bigEndianData)
     
-//  message.payload.append(0)
+    sendMessage(message: message)
+    
+  }
 
+  public func sendAttachListenerCommand(sourceNodeId:UInt64, destinationNodeId:UInt64, listenerNodeId:UInt64, flags:UInt8) {
+    
+    let message = OpenLCBMessage(messageTypeIndicator: .tractionControlCommand)
+
+    message.sourceNodeId = sourceNodeId
+    
+    message.destinationNodeId = destinationNodeId
+    
+    message.payload = [
+      OpenLCBTractionControlInstructionType.listenerConfiguration.rawValue,
+      OpenLCBTractionListenerConfigurationType.attachNode.rawValue,
+      flags,
+    ]
+    
+    var ln = listenerNodeId.bigEndianData
+    ln.removeFirst(2)
+    
+    message.payload.append(contentsOf: ln)
+    
+    sendMessage(message: message)
+    
+  }
+
+  public func sendDetachListenerCommand(sourceNodeId:UInt64, destinationNodeId:UInt64, listenerNodeId:UInt64, flags:UInt8) {
+    
+    let message = OpenLCBMessage(messageTypeIndicator: .tractionControlCommand)
+
+    message.sourceNodeId = sourceNodeId
+    
+    message.destinationNodeId = destinationNodeId
+    
+    message.payload = [
+      OpenLCBTractionControlInstructionType.listenerConfiguration.rawValue,
+      OpenLCBTractionListenerConfigurationType.detachNode.rawValue,
+      flags,
+    ]
+    
+    var ln = listenerNodeId.bigEndianData
+    ln.removeFirst(2)
+    
+    message.payload.append(contentsOf: ln)
+    
     sendMessage(message: message)
     
   }

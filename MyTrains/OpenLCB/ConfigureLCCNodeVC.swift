@@ -811,13 +811,9 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
               
               if state == .gettingCDI {
 
-                print("\(message.datagramType)")
-
                 state = .idle
                 
                 let newData : Data = Data(CDI)
-                
-          //      print(String(cString: CDI))
                 
                 xmlParser = XMLParser(data: newData)
                 xmlParser?.delegate = self
@@ -1043,7 +1039,6 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
   func parser(_ parser: XMLParser, validationErrorOccurred validationError: Error) {
     print("validationErrorOccurred: \(validationError)")
   }
-
   
   // MARK: Outlets & Actions
     

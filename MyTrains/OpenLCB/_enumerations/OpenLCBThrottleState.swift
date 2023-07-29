@@ -7,11 +7,24 @@
 
 import Foundation
 
-public enum OpenLCBThrottleState {
+public enum OpenLCBThrottleState : Int {
   
-  case idle
-  case selected
-  case listener
-  case activeController
+  case idle             = 0
+  case selected         = 1
+  case listener         = 2
+  case activeController = 3
   
+  public var title : String {
+    get {
+      return OpenLCBThrottleState.titles[self.rawValue]
+    }
+  }
+  
+  private static let titles = [
+    "IDLE",
+    "SELECTED",
+    "LISTENER",
+    "ACTIVE CONTROLLER",
+  ]
+
 }

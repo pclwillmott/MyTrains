@@ -138,6 +138,19 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
     timeoutTimer?.invalidate()
     timeoutTimer = nil
   }
+  
+  private func setSpeed(speedStep:UInt8, direction:LocomotiveDirection) {
+    var newSpeed : Float
+    if speedStep < 2 {
+      newSpeed = (direction == .forward) ? +0.0 : -0.0
+    }
+    else {
+      newSpeed = Float(speedStep - 1) / 3600.0 * (1000.0 * 1.609344)
+      newSpeed *= (direction == .forward) ? +1.0 : -1.0
+    }
+    setSpeed = newSpeed
+    speedChanged()
+  }
 
   private func updateLocoState() {
     
@@ -156,7 +169,9 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
         }
       }
       
-      let direction : LocomotiveDirection = (setSpeed.bitPattern == (-0.0).bitPattern || setSpeed < 0.0) ? .reverse : .forward
+      let minusZero : Float = -0.0
+      
+      let direction : LocomotiveDirection = (setSpeed.bitPattern == minusZero.bitPattern || setSpeed < 0.0) ? .reverse : .forward
 
       let nextState = (
         speed: step,
@@ -183,7 +198,8 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
   internal override func attachNode() {
   
     if configState == .active {
-      releaseNode()
+      attachCompleted()
+      return
     }
     
     guard locoNetGatewayNodeId != 0 else {
@@ -282,6 +298,9 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
             configState = .writeBack
             startTimeoutTimer()
             networkLayer?.sendLocoNetMessage(sourceNodeId: nodeId, destinationNodeId: locoNetGatewayNodeId, locoNetMessage: wbm)
+            let directionMask : UInt8 = 0b00100000
+            let direction : LocomotiveDirection = ((message.message[6] & directionMask) == directionMask) ? .reverse : .forward
+            setSpeed(speedStep: message.message[5], direction: direction)
           }
           else {
             configState = .setInUse

@@ -12,5 +12,7 @@ import Foundation
   @objc optional func throttleStateChanged(throttle:OpenLCBThrottle)
   @objc optional func functionChanged(throttle:OpenLCBThrottle, address:UInt32, value:UInt16)
   @objc optional func speedChanged(throttle:OpenLCBThrottle, speed:Float)
+  @objc optional func emergencyStopChanged(throttle:OpenLCBThrottle)
   @objc optional func globalEmergencyChanged(throttle:OpenLCBThrottle)
+  @objc optional func fdiAvailable(throttle:OpenLCBThrottle)
 }

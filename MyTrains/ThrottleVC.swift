@@ -44,6 +44,8 @@ class ThrottleVC: NSViewController, NSWindowDelegate, OpenLCBThrottleDelegate {
     
     globalEmergencyChanged(throttle: throttle!)
     
+    // Throttle is scaled in scale miles per hour
+    
     vsThrottle.minValue = 0.0
     vsThrottle.maxValue = 126.0
     vsThrottle.doubleValue = 0.0
@@ -108,7 +110,9 @@ class ThrottleVC: NSViewController, NSWindowDelegate, OpenLCBThrottleDelegate {
     
     let direction : Float = radForward.state == .on ? +1.0 : -1.0
     
-    throttle?.speed = (vsThrottle.floatValue == 0.0 && direction == -1.0) ? -0.0 : vsThrottle.floatValue * direction
+    let mph2smps : Float = (1000.0 * 1.609344) / 3600.0
+    
+    throttle?.speed = (vsThrottle.floatValue == 0.0 && direction == -1.0) ? -0.0 : vsThrottle.floatValue * direction * mph2smps
 
     lblSpeed.stringValue = String(format: "%.0f", vsThrottle.floatValue)
 
@@ -137,11 +141,17 @@ class ThrottleVC: NSViewController, NSWindowDelegate, OpenLCBThrottleDelegate {
   
   @objc func speedChanged(throttle:OpenLCBThrottle, speed:Float) {
     
-    vsThrottle.floatValue = abs(speed)
+    let smps2mph : Float = 3600.0 / (1000.0 * 1.609344)
+
+    let _speed = speed * smps2mph
+    
+    vsThrottle.floatValue = abs(_speed)
     
     lblSpeed.stringValue = String(format: "%.0f", vsThrottle.floatValue)
     
-    let isReverse = speed.bitPattern == (-0.0).bitPattern || speed < 0.0
+    let minusZero : Float = -0.0
+
+    let isReverse = speed.bitPattern == minusZero.bitPattern || speed < 0.0
     
     radForward.state = isReverse ? .off : .on
     radReverse.state = isReverse ? .on : .off
@@ -170,6 +180,23 @@ class ThrottleVC: NSViewController, NSWindowDelegate, OpenLCBThrottleDelegate {
     }
     
   }
+  
+  @objc func fdiAvailable(throttle:OpenLCBThrottle) {
+    
+    for button in buttons {
+      button.isEnabled = false
+    }
+    for item in throttle.fdiItems {
+      if item.number < 69 {
+        let button = buttons[item.number]
+        button.setButtonType(item.kind == .binary ? .pushOnPushOff : .momentaryLight)
+        button.title = "F\(item.number) - \(item.name)"
+        button.isEnabled = true
+      }
+    }
+    
+  }
+
 
   // MARK: Outlets & Actions
   
@@ -284,6 +311,12 @@ class ThrottleVC: NSViewController, NSWindowDelegate, OpenLCBThrottleDelegate {
   @IBAction func btnSelectAction(_ sender: NSButton) {
     
     if let nodeId = cboLocomotiveDS.keyForItemAt(index: cboLocomotive.indexOfSelectedItem) {
+      for button in buttons {
+        button.title = "F\(button.tag)"
+        button.isEnabled = true
+        button.setButtonType(.pushOnPushOff)
+      }
+ 
       throttle?.assignController(trainNodeId: nodeId)
       tabView.selectTabViewItem(at: 1)
     }

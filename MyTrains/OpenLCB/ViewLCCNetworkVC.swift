@@ -219,6 +219,9 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLayerD
         tasks.append((nodeId: nodeId, task: .getAddressSpaceInfo, addressSpace:0xfd))
         tasks.append((nodeId: nodeId, task: .getAddressSpaceInfo, addressSpace:0xfc))
         tasks.append((nodeId: nodeId, task: .getAddressSpaceInfo, addressSpace:0xfb))
+        tasks.append((nodeId: nodeId, task: .getAddressSpaceInfo, addressSpace:0xfa))
+        tasks.append((nodeId: nodeId, task: .getAddressSpaceInfo, addressSpace:0xf9))
+        tasks.append((nodeId: nodeId, task: .getAddressSpaceInfo, addressSpace:0xf8))
         tasks.append((nodeId: nodeId, task: .getAddressSpaceInfo, addressSpace:0x01))
 
         taskLock.unlock()
