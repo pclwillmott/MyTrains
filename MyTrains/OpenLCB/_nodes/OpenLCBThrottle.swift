@@ -653,7 +653,7 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
               for byte in data {
                 if byte == 0 {
                   isLast = true
-                  fdi.append(byte)
+              //    fdi.append(byte)
                   break
                 }
                 fdi.append(byte)

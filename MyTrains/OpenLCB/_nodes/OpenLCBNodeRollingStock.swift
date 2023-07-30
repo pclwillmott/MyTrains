@@ -13,11 +13,11 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
   
   public override init(nodeId:UInt64) {
     
-//    let nodeId = 0x0801000d0000 + UInt64(rollingStock.primaryKey)
+    //    let nodeId = 0x0801000d0000 + UInt64(rollingStock.primaryKey)
     
     functionSpaceSize = 0x45
     
-//    _rollingStock = rollingStock
+    //    _rollingStock = rollingStock
     
     functions = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.functions.rawValue, defaultMemorySize: functionSpaceSize, isReadOnly: false, description: "")
     
@@ -28,17 +28,17 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     virtualNodeType = MyTrainsVirtualNodeType.trainNode
     
     configuration.delegate = self
-
+    
     memorySpaces[configuration.space] = configuration
-
+    
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDCCAddress)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedSteps)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressF0ConsistBehaviour)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressF0Directional)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressF0MUSwitch)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressLocoNetGateway)
-
-    for fn in 1...numberOfFunctions {
+    
+    for fn in 1...numberOfFunctions - 1 {
       let groupOffset = (fn - 1) * functionGroupSize
       registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressFNDisplayName      + groupOffset)
       registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressFNMomentary        + groupOffset)
@@ -47,13 +47,13 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     }
     
     functions.delegate = self
-
+    
     memorySpaces[functions.space] = functions
     
     for fn in 0 ... numberOfFunctions - 1 {
       registerVariable(space: OpenLCBNodeMemoryAddressSpace.functions.rawValue, address: fn)
     }
-
+    
     isDatagramProtocolSupported = true
     
     isIdentificationSupported = true
@@ -69,6 +69,8 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     }
     
     initCDI(filename: "MyTrains Train", manufacturer: manufacturerName, model: nodeModelName)
+    
+    initFDI(filename: "FDI Generic")
     
   }
   
@@ -150,13 +152,6 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
   
   // MARK: Public Properties
   
-  /*
-  public var rollingStock : RollingStock {
-    get {
-      return _rollingStock
-    }
-  }
-  */
   public var dccAddress : UInt16 {
     get {
       return configuration.getUInt16(address: addressDCCAddress)!
@@ -165,7 +160,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
       configuration.setUInt(address: addressDCCAddress, value: value)
     }
   }
-
+  
   public var speedSteps : SpeedSteps {
     get {
       return SpeedSteps(rawValue: configuration.getUInt8(address: addressSpeedSteps)!)!
@@ -183,13 +178,73 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
       configuration.setUInt(address: addressLocoNetGateway, value: value)
     }
   }
-
+  
   public let heartbeatPeriod : UInt8 = 10
   
   public let heartbeatDeadline : UInt8 = 3
-
+  
   // MARK: Private Methods
+  
+  internal func isMomentary(number:Int) -> Bool {
+    
+    if number == 0 {
+      return false
+    }
+    
+    let baseAddress = (number - 1) * functionGroupSize
+    
+    if let value = configuration.getUInt8(address: baseAddress + addressFNMomentary) {
+      return value != 0
+    }
+    
+    return false
+    
+  }
+  
+  internal func initFDI(filename:String) {
+    
+    if let filepath = Bundle.main.path(forResource: filename, ofType: "xml") {
+      do {
+        
+        var contents = try String(contentsOfFile: filepath)
+        
+        var fnx = ""
+        
+        fnx += "<function size='1' kind='binary'>\n"
+        fnx += "<name>\(OpenLCBFunction.light.title)</name>\n"
+        fnx += "<number>0</number>\n"
+        fnx += "</function>"
 
+        for number in 1 ... numberOfFunctions - 1 {
+          let baseAddress = (number - 1) * functionGroupSize
+          if let displayNameId = configuration.getUInt8(address: baseAddress + addressFNDisplayName), let function = OpenLCBFunction(rawValue: displayNameId), let momentary = configuration.getUInt8(address: baseAddress + addressFNMomentary) {
+            if function != .unassigned {
+              let kind = momentary == 0 ? "binary" : "momentary"
+              fnx += "<function size='1' kind='\(kind)'>\n"
+              fnx += "<name>\(function.title)</name>\n"
+              fnx += "<number>\(number)</number>\n"
+              fnx += "</function>"
+            }
+          }
+        }
+        
+        contents = contents.replacingOccurrences(of: "%%FUNCTIONS%%", with: fnx)
+        
+        let memorySpace = OpenLCBMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.fdi.rawValue, isReadOnly: true, description: "")
+        memorySpace.memory = [UInt8]()
+        memorySpace.memory.append(contentsOf: contents.utf8)
+        memorySpace.memory.append(contentsOf: [UInt8](repeating: 0, count: 64))
+        memorySpaces[memorySpace.space] = memorySpace
+        isFunctionDescriptionInformationProtocolSupported = true
+        
+      }
+      catch {
+      }
+    }
+    
+  }
+  
+  
   private func isListener(nodeId:UInt64) -> Bool {
     for listener in listeners {
       if listener.nodeId == nodeId {
@@ -207,7 +262,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     nodeModelName        = virtualNodeType.name
     nodeHardwareVersion  = ""
     nodeSoftwareVersion  = ""
-
+    
     acdiUserSpaceVersion = 2
     
     userNodeName         = ""
@@ -227,9 +282,9 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
   }
   
   internal func attachFailed() {
-  
+    
     networkLayer?.sendAssignControllerReply(sourceNodeId: nodeId, destinationNodeId: activeControllerNodeId, result: 0x02)
-
+    
     activeControllerNodeId = 0
     
     nextActiveControllerNodeId = 0
@@ -239,7 +294,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
   internal func releaseNode() {
     
   }
- 
+  
   internal func speedChanged() {
     
   }
@@ -249,7 +304,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
   }
   
   @objc func timerAction() {
- 
+    
     timer?.invalidate()
     
     switch heartbeatMode {
@@ -267,7 +322,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
       heartbeatMode = .stopped
       
       setSpeedToZero()
-
+      
       speedChanged()
       
       for listener in listeners {
@@ -283,13 +338,13 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
   private func startTimer(interval:UInt8) {
     
     timer?.invalidate()
-
+    
     let deadline : TimeInterval = Double(interval)
     
     timer = Timer.scheduledTimer(timeInterval: deadline, target: self, selector: #selector(timerAction), userInfo: nil, repeats: false)
     
     RunLoop.current.add(timer!, forMode: .common)
-
+    
   }
   
   // MARK: Public Methods
@@ -298,7 +353,12 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     memorySpaces.removeValue(forKey: OpenLCBNodeMemoryAddressSpace.cdi.rawValue)
     initCDI(filename: "MyTrains Train", manufacturer: manufacturerName, model: nodeModelName)
   }
-
+  
+  public func reloadFDI() {
+    memorySpaces.removeValue(forKey: OpenLCBNodeMemoryAddressSpace.fdi.rawValue)
+    initCDI(filename: "FDI Generic", manufacturer: manufacturerName, model: nodeModelName)
+  }
+  
   public override func start() {
     
     super.start()
@@ -318,9 +378,19 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     setSpeed = (setSpeed.bitPattern == minusZero.bitPattern || setSpeed < 0.0) ? -0.0 : +0.0
     
   }
-
+  
   // MARK: OpenLCBMemorySpaceDelegate Methods
   
+  public override func memorySpaceChanged(memorySpace:OpenLCBMemorySpace, startAddress:Int, endAddress:Int) {
+    
+    super.memorySpaceChanged(memorySpace: memorySpace, startAddress: startAddress, endAddress: endAddress)
+    
+    if memorySpace.space == OpenLCBNodeMemoryAddressSpace.configuration.rawValue {
+      reloadFDI()
+    }
+    
+  }
+
   // MARK: OpenLCBNetworkLayerDelegate Methods
    
   public override func openLCBMessageReceived(message: OpenLCBMessage) {

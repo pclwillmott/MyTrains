@@ -67,6 +67,10 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
     for fn in 0 ... 28 {
       if let fx = functions.getUInt8(address: fn), fx != 0 {
         standardFunctions |= mask
+        if isMomentary(number: fn) {
+          functions.setUInt(address: fn, value: UInt8(0))
+          lastLocomotiveState?.functions &= ~mask
+        }
       }
       mask <<= 1
     }
@@ -82,6 +86,10 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
     for fn in 29 ... 68 {
       if let fx = functions.getUInt8(address: fn), fx != 0 {
         expandedFunctions |= mask
+        if isMomentary(number: fn) {
+          functions.setUInt(address: fn, value: UInt8(0))
+          lastLocomotiveState?.extendedFunctions &= ~mask
+        }
       }
       mask <<= 1
     }
@@ -239,6 +247,10 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
     setSpeedToZero()
     
     commandedSpeed = setSpeed
+    
+    lastLocomotiveState?.functions = ~0
+    
+    lastLocomotiveState?.extendedFunctions = ~0
     
     standardFunctions = 0
     

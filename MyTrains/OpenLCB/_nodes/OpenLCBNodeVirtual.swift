@@ -215,6 +215,8 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
 
         contents = contents.replacingOccurrences(of: "%%LOCONET_GATEWAYS%%", with: gateways)
 
+        contents = contents.replacingOccurrences(of: "%%FUNCTIONS_MAP%%", with: OpenLCBFunction.cdiMap)
+        
         let memorySpace = OpenLCBMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.cdi.rawValue, isReadOnly: true, description: "")
         memorySpace.memory = [UInt8]()
         memorySpace.memory.append(contentsOf: contents.utf8)

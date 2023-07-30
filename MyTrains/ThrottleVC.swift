@@ -181,22 +181,29 @@ class ThrottleVC: NSViewController, NSWindowDelegate, OpenLCBThrottleDelegate {
     
   }
   
+  private var momentary : Set<Int> = []
+  
   @objc func fdiAvailable(throttle:OpenLCBThrottle) {
     
     for button in buttons {
       button.isEnabled = false
     }
+    
+    momentary = []
+    
     for item in throttle.fdiItems {
       if item.number < 69 {
         let button = buttons[item.number]
         button.setButtonType(item.kind == .binary ? .pushOnPushOff : .momentaryLight)
         button.title = "F\(item.number) - \(item.name)"
         button.isEnabled = true
+        if item.kind == .momentary {
+          momentary.insert(button.tag)
+        }
       }
     }
     
   }
-
 
   // MARK: Outlets & Actions
   
