@@ -33,6 +33,10 @@ public class OpenLCBNetworkLayer : NSObject {
       case .locoNetGatewayNode:
         let gateway = node as! OpenLCBLocoNetGateway
         locoNetGateways.append(gateway)
+      case .locoNetMonitorNode:
+        let monitor = node as! OpenLCBLocoNetMonitorNode
+        locoNetMonitors.append(monitor)
+        freeLocoNetMonitors.insert(monitor.monitorId)
       default:
         break
       }
@@ -60,6 +64,12 @@ public class OpenLCBNetworkLayer : NSObject {
   private var throttlesInUse : Set<UInt8> = []
   
   private var freeThrottles : Set<UInt8> = []
+  
+  private var locoNetMonitors : [OpenLCBLocoNetMonitorNode] = []
+  
+  private var locoNetMonitorsInUse : Set<UInt8> = []
+  
+  private var freeLocoNetMonitors : Set<UInt8> = []
   
   // MARK: Public Properties
   
@@ -152,6 +162,21 @@ public class OpenLCBNetworkLayer : NSObject {
   public func releaseThrottle(throttle:OpenLCBThrottle) {
     freeThrottles.insert(throttle.throttleId)
     throttlesInUse.remove(throttle.throttleId)
+  }
+  
+  public func getLocoNetMonitor() -> OpenLCBLocoNetMonitorNode? {
+    if let monitorId = freeLocoNetMonitors.first {
+      locoNetMonitorsInUse.insert(monitorId)
+      freeLocoNetMonitors.remove(monitorId)
+      return locoNetMonitors[Int(monitorId) - 1]
+    }
+    return nil
+  }
+  
+  public func releaseLocoNetMonitor(monitor:OpenLCBLocoNetMonitorNode) {
+    monitor.delegate = nil
+    freeLocoNetMonitors.insert(monitor.monitorId)
+    locoNetMonitorsInUse.remove(monitor.monitorId)
   }
   
   public func getNewNodeId(virtualNodeType:MyTrainsVirtualNodeType) -> UInt64 {
@@ -415,6 +440,18 @@ public class OpenLCBNetworkLayer : NSObject {
     message.sourceNodeId = sourceNodeId
     
     message.eventId = eventId
+    
+    sendMessage(message: message)
+
+  }
+
+  public func sendIdentifyProducer(sourceNodeId:UInt64, event:OpenLCBWellKnownEvent) {
+
+    let message = OpenLCBMessage(messageTypeIndicator: .identifyProducer)
+
+    message.sourceNodeId = sourceNodeId
+    
+    message.eventId = event.rawValue
     
     sendMessage(message: message)
 

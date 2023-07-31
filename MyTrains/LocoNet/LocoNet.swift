@@ -67,6 +67,8 @@ public class LocoNet {
   internal var messageState : MessageState = .idle
   
   internal var retryCount : Int = 10
+  
+  private var lastTimeStamp : TimeInterval = Date().timeIntervalSinceReferenceDate
 
   // MARK: Public Properties
   
@@ -161,6 +163,9 @@ public class LocoNet {
     case .locoNetMessageReceivedOnlyFrame:
       
       if let locoNetMessage = LocoNetMessage(payload: message.payload) {
+        locoNetMessage.timeStamp = Date.timeIntervalSinceReferenceDate
+        locoNetMessage.timeSinceLastMessage = locoNetMessage.timeStamp - lastTimeStamp
+        lastTimeStamp = locoNetMessage.timeStamp
         locoNetMessageReceived(message: locoNetMessage)
       }
       
@@ -177,6 +182,9 @@ public class LocoNet {
       buffer.append(contentsOf: message.payload)
       
       if let locoNetMessage = LocoNetMessage(payload: buffer) {
+        locoNetMessage.timeStamp = Date.timeIntervalSinceReferenceDate
+        locoNetMessage.timeSinceLastMessage = locoNetMessage.timeStamp - lastTimeStamp
+        lastTimeStamp = locoNetMessage.timeStamp
         locoNetMessageReceived(message: locoNetMessage)
       }
       
@@ -274,10 +282,8 @@ public class LocoNet {
           currentMessage = nil
           sendNext()
         case .temporaryErrorLocoNetCollision:
-          print("error: \(errorCode)")
           retryCount -= 1
           if retryCount == 0 {
-            print("max retries exceeded")
             messageState = .idle
             currentMessage = nil
             sendNext()

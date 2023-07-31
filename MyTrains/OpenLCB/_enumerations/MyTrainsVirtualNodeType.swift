@@ -18,6 +18,7 @@ public enum MyTrainsVirtualNodeType : String {
   case trainNode             = "Virtual Train Node"
   case configurationToolNode = "Configuration Tool Node"
   case genericVirtualNode    = "Generic Virtual Node"
+  case locoNetMonitorNode    = "LocoNet Monitor Node"
   
   public var name : String {
     get {
@@ -51,6 +52,7 @@ public enum MyTrainsVirtualNodeType : String {
       let baseId : [MyTrainsVirtualNodeType:UInt64] = [
         .canGatewayNode        : 0x09000d590001,
         .applicationNode       : 0x09000d600001,
+        .locoNetMonitorNode    : 0x09000d60ff01,
         .clockNode             : 0x09000d610001,
         .locoNetGatewayNode    : 0x09000d620001,
         .configurationToolNode : 0x09000d630001,
@@ -81,6 +83,7 @@ public enum MyTrainsVirtualNodeType : String {
       throttleNode.name,
       applicationNode.name,
       configurationToolNode.name,
+      locoNetMonitorNode.name,
     ]
     
     comboBox.addItems(withObjectValues: items)

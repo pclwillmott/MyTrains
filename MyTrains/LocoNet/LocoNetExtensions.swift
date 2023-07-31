@@ -18,6 +18,10 @@ extension LocoNet {
     }
   }
   
+  public func sendMessage(message:LocoNetMessage) {
+    addToQueue(message: message)
+  }
+  
   public func powerOn() {
     
     let message = LocoNetMessage(data: [LocoNetMessageOpcode.OPC_GPON.rawValue], appendCheckSum: true)
@@ -376,6 +380,50 @@ extension LocoNet {
     return (state: nextState, timeStamp: timeStamp)
 
   }
+
+  public func clearLocomotiveState(address:UInt16, slotNumber: UInt8, slotPage: UInt8, previousState:LocoNetLocomotiveState, throttleID: UInt16) {
+    
+    let speed : UInt8 = 0
+    
+    let next : UInt64 = 0
+    
+    if implementsProtocol2 {
+      
+      locoSpdDirP2(slotNumber: slotNumber, slotPage: slotPage, speed: speed, direction: previousState.direction, throttleID: throttleID)
+
+      locoF0F6P2(slotNumber:   slotNumber, slotPage: slotPage, functions: next, throttleID: throttleID)
+      locoF7F13P2(slotNumber:  slotNumber, slotPage: slotPage, functions: next, throttleID: throttleID)
+      locoF14F20P2(slotNumber: slotNumber, slotPage: slotPage, functions: next, throttleID: throttleID)
+      locoF21F28P2(slotNumber: slotNumber, slotPage: slotPage, functions: next, throttleID: throttleID)
+
+    }
+    else {
+      
+      locoSpdP1(slotNumber: slotNumber, speed: speed)
+
+      locoDirF0F4P1(slotNumber: slotNumber, direction: previousState.direction, functions: next)
+      
+      if implementsProtocol1 {
+        locoF5F8P1(slotNumber: slotNumber, functions: next)
+      }
+      else {
+        dccF5F8(address: address, functions: next)
+      }
+      
+      dccF9F12(address:  address, functions: next)
+      dccF13F20(address: address, functions: next)
+      dccF21F28(address: address, functions: next)
+      
+    }
+    
+    dccF29F36(address: address, functions: next)
+    dccF37F44(address: address, functions: next)
+    dccF45F52(address: address, functions: next)
+    dccF53F60(address: address, functions: next)
+    dccF61F68(address: address, functions: next)
+
+  }
+  
 
   public func locoSpdDirP2(slotNumber: UInt8, slotPage: UInt8, speed: UInt8, direction: LocomotiveDirection, throttleID: UInt16) {
     

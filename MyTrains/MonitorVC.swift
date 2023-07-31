@@ -22,7 +22,7 @@ public enum NumberBase : Int {
   case character = 5
 }
 
-class MonitorVC: NSViewController, MyTrainsControllerDelegate, InterfaceDelegate, NSWindowDelegate {
+class MonitorVC: NSViewController, NSWindowDelegate, OpenLCBLocoNetMonitorDelegate {
   
   // MARK: Window & View Control
   
@@ -35,26 +35,29 @@ class MonitorVC: NSViewController, MyTrainsControllerDelegate, InterfaceDelegate
   }
 
   func windowWillClose(_ notification: Notification) {
-    if observerId != -1 {
-      if let mess = interface {
-        mess.removeObserver(id: observerId)
-        observerId = -1
-      }
+    
+    guard let monitorNode else {
+      return
     }
-    if delegateId != -1 {
-      myTrainsController.removeDelegate(id: delegateId)
-      delegateId = -1
-    }
+    
+    myTrainsController.openLCBNetworkLayer?.releaseLocoNetMonitor(monitor: monitorNode)
+    
   }
   
   override func viewWillAppear() {
     
     self.view.window?.delegate = self
+    
+    self.view.window?.title = "LocoNet Monitor"
+    
+    if let monitorNode {
+      self.view.window?.title = "\(monitorNode.userNodeName) (\(monitorNode.nodeId.toHexDotFormat(numberOfBytes: 6)))"
+    }
+    
+    networkLayer = monitorNode!.networkLayer
+    
+    monitorNode?.delegate = self
 
-    delegateId = myTrainsController.appendDelegate(delegate: self)
-    
-    interfacesUpdated(interfaces: myTrainsController.networkInterfaces)
-    
     sendFilename = UserDefaults.standard.string(forKey: DEFAULT.MONITOR_SEND_FILENAME) ?? ""
     
     captureFilename = UserDefaults.standard.string(forKey: DEFAULT.MONITOR_CAPTURE_FILENAME) ?? ""
@@ -62,8 +65,6 @@ class MonitorVC: NSViewController, MyTrainsControllerDelegate, InterfaceDelegate
     chkCaptureActive.state = .off
     
     cboTimeStampType.selectItem(at: UserDefaults.standard.integer(forKey: DEFAULT.MONITOR_TIMESTAMP_TYPE))
-
-    cboDataType.selectItem(at: UserDefaults.standard.integer(forKey: DEFAULT.MONITOR_DATA_TYPE))
 
     cboNumberBase.selectItem(at: UserDefaults.standard.integer(forKey: DEFAULT.MONITOR_NUMBER_BASE))
 
@@ -80,17 +81,15 @@ class MonitorVC: NSViewController, MyTrainsControllerDelegate, InterfaceDelegate
 
     txtMonitor.font = NSFont(name: "Menlo", size: 12)
     
-    cboIMMRepeat.selectItem(at: 4)
-    
   }
   
   // MARK: Private Properties
   
-  private var delegateId : Int = -1
+  private var updateLock : NSLock = NSLock()
   
-  private var observerId : Int = -1
+  private var networkLayer : OpenLCBNetworkLayer?
   
-  private var interface : InterfaceLocoNet? = nil
+  private var gatewayDS = ComboBoxSimpleDS()
   
   private var captureFilename : String {
     get {
@@ -169,6 +168,10 @@ class MonitorVC: NSViewController, MyTrainsControllerDelegate, InterfaceDelegate
       return btnPauseMonitor.state == .on
     }
   }
+  
+  // MARK: Public Properties
+  
+  public var monitorNode : OpenLCBLocoNetMonitorNode?
 
   // MARK: Private Methods
   
@@ -198,7 +201,7 @@ class MonitorVC: NSViewController, MyTrainsControllerDelegate, InterfaceDelegate
     
     let parts = rawMessage.split(separator: " ")
     
-    var numbers : [Int] = []
+    var numbers : [UInt8] = []
     
     var index = 0
     
@@ -207,7 +210,7 @@ class MonitorVC: NSViewController, MyTrainsControllerDelegate, InterfaceDelegate
       let part = String(p)
       
       if part.prefix(2) == "0x" {
-        if let nn = Int(part.suffix(part.count-2), radix: 16) {
+        if let nn = UInt8(part.suffix(part.count-2), radix: 16) {
           numbers.append(nn)
         }
         else {
@@ -215,7 +218,7 @@ class MonitorVC: NSViewController, MyTrainsControllerDelegate, InterfaceDelegate
         }
       }
       else if part.prefix(2) == "0b" {
-        if let nn = Int(part.suffix(part.count-2), radix: 2) {
+        if let nn = UInt8(part.suffix(part.count-2), radix: 2) {
           numbers.append(nn)
        }
         else {
@@ -223,7 +226,7 @@ class MonitorVC: NSViewController, MyTrainsControllerDelegate, InterfaceDelegate
         }
       }
       else if part.prefix(1) == "0" {
-        if let nn = Int(part.suffix(part.count), radix: 8) {
+        if let nn = UInt8(part.suffix(part.count), radix: 8) {
           numbers.append(nn)
        }
         else {
@@ -231,7 +234,7 @@ class MonitorVC: NSViewController, MyTrainsControllerDelegate, InterfaceDelegate
         }
       }
       else {
-        if let nn = Int(part.suffix(part.count), radix: 10) {
+        if let nn = UInt8(part.suffix(part.count), radix: 10) {
           numbers.append(nn)
         }
         else {
@@ -250,167 +253,35 @@ class MonitorVC: NSViewController, MyTrainsControllerDelegate, InterfaceDelegate
       
     }
     
-    if good, let interface = interface {
-      
-      if isLocoNet {
-          let message = LocoNetMessage(networkId: interface.networkId, data: numbers, appendCheckSum: true)
-          interface.addToQueue(message: message, delay: MessageTiming.STANDARD)
-      }
-      else {
-        var data : [UInt8] = []
-        for number in numbers {
-          data.append(UInt8(number & 0xff))
-        }
-        interface.immPacket(packet: data, repeatCount: cboIMMRepeat.integerValue)
-      }
-      
+    if good, let monitorNode {
+      let message = LocoNetMessage(data: numbers, appendCheckSum: true)
+      monitorNode.sendMessage(message: message)
     }
 
   }
   
-  // MARK: MyTrainsControllerDelegate Methods
+  // MARK: OpenLCBLocoNetMonitorDelegate Methods
   
-  func statusUpdated(myTrainsController: MyTrainsController) {
+  @objc public func locoNetGatewaysUpdated(monitorNode:OpenLCBLocoNetMonitorNode, gateways:[UInt64:String]) {
     
-  }
-  
-  func myTrainsControllerUpdated(myTrainsController: MyTrainsController) {
-  }
-  
-  func interfacesUpdated(interfaces: [Interface]) {
+    gatewayDS.dictionary = gateways
+    cboInterface.dataSource = gatewayDS
+    cboInterface.reloadData()
     
-    if observerId != -1 {
-      self.interface?.removeObserver(id: observerId)
-      observerId = -1
+    let gatewayId = UInt64(UserDefaults.standard.integer(forKey: DEFAULT.MONITOR_INTERFACE_ID))
+    
+    if let index = gatewayDS.indexWithKey(key: gatewayId) {
+      cboInterface.selectItem(at: index)
+      monitorNode.gatewayId = gatewayId
     }
-    
-    let interfaceId = UserDefaults.standard.string(forKey: DEFAULT.MONITOR_INTERFACE_ID) ?? ""
 
-    cboInterface.removeAllItems()
-    cboInterface.deselectItem(at: cboInterface.indexOfSelectedItem)
-    
-    for interface in interfaces {
-      
-      let name = interface.deviceName
-      
-      cboInterface.addItem(withObjectValue: name)
-      
-      if interfaceId == name, let temp = interface as? InterfaceLocoNet {
-        cboInterface.selectItem(at: cboInterface.numberOfItems-1)
-        self.interface = temp
-        observerId = interface.addObserver(observer: self)
-      }
-      
-    }
-    
   }
 
-  // MARK: NetworkMessengerDelegate Methods
-  
-  private var updateLock : NSLock = NSLock()
-  
-  @objc func lccCANFrameReceived(frame:LCCCANFrame) {
+  @objc public func locoNetMessageReceived(message:LocoNetMessage) {
 
     var item : String = ""
-
-    if addLabels {
-      
-      item += "\(frame.frameType)\n"
-            
-    }
     
-    switch timeStampType {
-    case .millisecondsSinceLastMessage:
-      let ms = (frame.timeSinceLastMessage) * 1000.0
-      item += String(format:"%10.1f", ms) + "ms "
-      break
-    default:
-      break
-    }
-    
-    item += "\(frame.message)\n\(frame.info)\n\(frame.data)"
-    
-    if !isPaused {
-      
-      txtMonitor.string += "\(item)\n"
-      
-      let maxSize = 1 << 15
-      
-      updateLock.lock()
-      if txtMonitor.string.count > maxSize {
-        var newString = ""
-        let temp = txtMonitor.string.split(separator: "\n")
-        var index = temp.count - 1
-        while index >= 0 && newString.count < maxSize {
-          newString = "\(temp[index])\n\(newString)"
-          index -= 1
-        }
-        txtMonitor.string = newString
-      }
-      updateLock.unlock()
-      
-      let range = NSMakeRange(txtMonitor.string.count - 1, 0)
-      txtMonitor.scrollRangeToVisible(range)
-      
-    }
-
-    item += "\n"
-
-    captureWrite(message: item)
-
-  }
-
-  @objc func networkMessageReceived(message: LocoNetMessage) {
-    
-    var item : String = ""
     var byteNumber : Int = 0
-    
-//    let timeNow = Date.timeIntervalSinceReferenceDate
-    
-    // ****************
-    
-    // This is a hack to be removed!
-    
-    let addrLow = UInt8(addr & 0x7f)
-    let addrHigh = UInt8(addr >> 7)
-   
-    if message.messageType == .locoSlotDataP1 && message.message[4] == addrLow  && message.message[9] == addrHigh {
-      if (message.message[3] & 0b00110000) != 0b00110000 {
-  //      interface?.moveSlotsP1(sourceSlotNumber: Int(message.message[2]), destinationSlotNumber: Int(message.message[2]), timeoutCode: .none)
-      }
-      else {
- //       print("slot: \(message.message[2]) addr: \(addr)")
-        addr += 1
- //       interface?.getLocoSlot(forAddress: addr, locoNetProtocol: 1)
-      }
-    }
-    
-    if message.messageType == .locoSlotDataP2 && message.message[5] == addrLow && message.message[6] == addrHigh {
-      if (message.message[4] & 0b00110000) != 0b00110000 {
- //       interface?.moveSlotsP2(sourceSlotNumber: Int(message.message[3]), sourceSlotPage: Int(message.message[2]), destinationSlotNumber: Int(message.message[3]), destinationSlotPage: Int(message.message[2]), timeoutCode: .none)
-      }
-      else {
-   //     print("slot: \(message.message[2]).\(message.message[3]) addr: \(addr)")
-        addr += 1
-  //      interface?.getLocoSlot(forAddress: addr, locoNetProtocol: 2)
-      }
-    }
-    
-    /*
-    if message.messageType == .locoSlotDataP1 && (message.message[3] & 0b00110000) != 0b00110000 {
-      let sn = Int(message.message[2])
-      messenger?.moveSlotsP1(sourceSlotNumber: sn, destinationSlotNumber: sn)
-      messenger?.getLocoSlotDataP2(forAddress: addr)
-    }
-
-    if message.messageType == .locoSlotDataP2 && (message.message[4] & 0b00110000) != 0b00110000 {
-      let sn = Int(message.message[3])
-      let sp = Int(message.message[2])
-      messenger?.moveSlotsP2(sourceSlotNumber: sn, sourceSlotPage: sp, destinationSlotNumber: sn, destinationSlotPage: sp)
-      messenger?.getLocoSlotDataP2(forAddress: addr)
-    }
-*/
-    // ****************
     
     if addLabels {
       
@@ -470,107 +341,6 @@ class MonitorVC: NSViewController, MyTrainsControllerDelegate, InterfaceDelegate
       }
     }
     
-    let fastClockMessages : Set<LocoNetMessageType> = [.fastClockData, .setFastClockData]
-    
-    if fastClockMessages.contains(message.messageType) {
-      
-  //    let hour = (24 - ((256 - Int(message.message[8])) & 0x7f) % 24) % 24
-      
-  //    let minute = (60 - ((256 - Int(message.message[6])) & 0x7f) % 60) % 60
-
-      let hour = (24 - ((256 - Int(message.message[8])) & 0x7f)) % 24
-          
-      let minute = (60 - ((256 - Int(message.message[6])) & 0x7f)) % 60
-
-  //    let hour = -Int8(bitPattern: message.message[8] | 0b10000000)
-      
- //     let minute = -Int8(bitPattern: message.message[6] | 0b10000000)
-
- //     let maxTick = 0xbff
-      
- //     let ticks = maxTick - (0x3fff - ((Int(message.message[4]) & 0x7f) - ((Int(message.message[5]) & 0x7f) << 7)))
-      
-      let second = (Int(message.message[4]) | (Int(message.message[5]) << 7)) & 0x3ff 
-      
-      let s = "\n\(hour):\(minute):\(second)\n"
-      
-      print(s)
-      
-      item += s
-    }
-    
-    if addLabels {
-      /*
-      if message.isIMMPacket, let packetType = message.dccPacketType, let addressPartition = message.dccAddressPartition {
-        
-        if message.dccPacketType == .dccIdle {
-          return
-        }
-        
-        item += "\n  \(addressPartition) \(packetType)\n  "
-        
-        for im in message.dccPacket {
-          
-          switch numberBase {
-          case .binary:
-            var padded = String(im, radix: 2)
-            for _ in 0..<(8 - padded.count) {
-              padded = "0" + padded
-            }
-            item += "0b" + padded + " "
-            break
-          case .decimal:
-            item += "\(String(format: "%d", im)) "
-            break
-          case .octal:
-            item += "\(String(format: "%03o", im)) "
-            break
-          case .hexBinary:
-            var padded = String(im, radix: 2)
-            for _ in 0..<(8 - padded.count) {
-              padded = "0" + padded
-            }
-            item += "0x\(String(format: "%02x", im)) " + "0b" + padded + " "
-            break
-          default:
-            item += "0x\(String(format: "%02x", im)) "
-            break
-          }
-
-        }
-      }
-      */
-    }
-    
-    if message.messageType == .progCV {
-      var cvNumber = Int(message.message[9])
-      
-      let mask1 : UInt8 = 0b00000001
-      let mask2 : UInt8 = 0b00010000
-      let mask3 : UInt8 = 0b00100000
-      
-      cvNumber |= ((message.message[8] & mask1) == mask1) ? 0b0000000010000000 : 0
-      cvNumber |= ((message.message[8] & mask2) == mask2) ? 0b0000000100000000 : 0
-      cvNumber |= ((message.message[8] & mask3) == mask3) ? 0b0000001000000000 : 0
-      
-      cvNumber += 1
-
-      item += "\nCV\(cvNumber)"
-
-    }
-    
-    if message.messageType == .sensRepGenIn || message.messageType == .sensRepTurnIn || message.messageType == .sensRepTurnOut {
-      item += "\n  address: \(message.sensorAddress) state: \(message.sensorState)"
-    }
-    
-    if message.messageType == .pmRepBXP88 {
-      item += "\n  board id: \(message.boardId) detection sections: \(message.detectionSectionsSet)"
-    }
-    
-    if message.messageType == .transRep {
-      item += "\n address: \(message.transponderAddress)"
-    }
-    
     if !isPaused {
       
       txtMonitor.string += "\(item)\n"
@@ -598,28 +368,19 @@ class MonitorVC: NSViewController, MyTrainsControllerDelegate, InterfaceDelegate
     item += "\n"
 
     captureWrite(message: item)
-    
+
   }
 
   // MARK: Outlets & Actions
   
   @IBAction func cboInterfaceAction(_ sender: NSComboBox) {
     
-    let name = cboInterface.stringValue
+    let id = gatewayDS.keyForItemAt(index: cboInterface.indexOfSelectedItem)
     
-    UserDefaults.standard.set(name, forKey: DEFAULT.MONITOR_INTERFACE_ID)
-    
-    if let x = interface {
-      if name != x.deviceName && observerId != -1 {
-        x.removeObserver(id: observerId)
-      }
-    }
-    
-    for x in myTrainsController.networkInterfaces {
-      if x.deviceName == name, let y = x as? InterfaceLocoNet {
-        interface = y
-        observerId = interface?.addObserver(observer: self) ?? -1
-      }
+    UserDefaults.standard.set(id, forKey: DEFAULT.MONITOR_INTERFACE_ID)
+
+    if let id, let monitorNode {
+      monitorNode.gatewayId = id
     }
 
   }
@@ -760,12 +521,6 @@ class MonitorVC: NSViewController, MyTrainsControllerDelegate, InterfaceDelegate
     UserDefaults.standard.set(cboTimeStampType.indexOfSelectedItem, forKey: DEFAULT.MONITOR_TIMESTAMP_TYPE)
   }
   
-  @IBOutlet weak var cboDataType: NSComboBox!
-  
-  @IBAction func cboDataTypeAction(_ sender: NSComboBox) {
-    UserDefaults.standard.set(cboDataType.indexOfSelectedItem, forKey: DEFAULT.MONITOR_DATA_TYPE)
-  }
-  
   @IBOutlet weak var cboNumberBase: NSComboBox!
   
   @IBAction func cboNumberBaseAction(_ sender: NSComboBox) {
@@ -818,22 +573,6 @@ class MonitorVC: NSViewController, MyTrainsControllerDelegate, InterfaceDelegate
     sendMessage(rawMessage: txtMessage4.stringValue, isLocoNet: true)
   }
   
-  @IBAction func btnIMM1(_ sender: NSButton) {
-    sendMessage(rawMessage: txtMessage1.stringValue, isLocoNet: false)
-  }
-  
-  @IBAction func btnIMM2(_ sender: NSButton) {
-    sendMessage(rawMessage: txtMessage2.stringValue, isLocoNet: false)
-  }
-  
-  @IBAction func btnIMM3(_ sender: NSButton) {
-    sendMessage(rawMessage: txtMessage3.stringValue, isLocoNet: false)
-  }
-  
-  @IBAction func btnIMM4(_ sender: NSButton) {
-    sendMessage(rawMessage: txtMessage4.stringValue, isLocoNet: false)
-  }
-  
   @IBOutlet weak var scvMonitor: NSScrollView!
  
   @IBOutlet var txtMonitor: NSTextView!
@@ -850,15 +589,7 @@ class MonitorVC: NSViewController, MyTrainsControllerDelegate, InterfaceDelegate
   @IBOutlet weak var btnTest: NSButton!
   
   @IBAction func btnTestAction(_ sender: NSButton) {
-    addr = 500
-//    interface?.getLocoSlot(forAddress: addr, locoNetProtocol: 1)
-    interface?.s7CVRW(boardId: 777, cvNumber: 1, isRead: true, value: 0)
-    interface?.testIMM(address: 777)
   }
-  
-  var addr : Int = 500
-  
-  @IBOutlet weak var cboIMMRepeat: NSComboBox!
   
 }
 

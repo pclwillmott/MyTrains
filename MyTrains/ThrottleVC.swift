@@ -199,6 +199,7 @@ class ThrottleVC: NSViewController, NSWindowDelegate, OpenLCBThrottleDelegate {
         button.isEnabled = true
         if item.kind == .momentary {
           momentary.insert(button.tag)
+          button.sendAction(on: [.leftMouseUp, .leftMouseDown])
         }
       }
     }
@@ -209,7 +210,20 @@ class ThrottleVC: NSViewController, NSWindowDelegate, OpenLCBThrottleDelegate {
   
   @IBAction func buttonAction(_ sender: NSButton) {
     let address = UInt32(sender.tag)
-    throttle?.setFunction(address: address, value: sender.state == .on ? 0x0001 : 0x0000)
+    if momentary.contains(sender.tag) {
+      if let x = NSApp.currentEvent?.type {
+        if x == .leftMouseUp {
+          throttle?.setFunction(address: address, value: 0x0000)
+        }
+        else if x == .leftMouseDown {
+          throttle?.setFunction(address: address, value: 0x0001)
+        }
+      }
+    }
+    else {
+      throttle?.setFunction(address: address, value: sender.state == .on ? 0x0001 : 0x0000)
+    }
+    
   }
   
   @IBOutlet weak var cboLocomotive: NSComboBox!

@@ -351,10 +351,22 @@ public class OpenLCBMemorySpace {
     
     if let reader = cmd.executeReader(), reader.read() {
 
-        result = OpenLCBMemorySpace(reader: reader, isReadOnly: isReadOnly, description: description)
+      result = OpenLCBMemorySpace(reader: reader, isReadOnly: isReadOnly, description: description)
 
-        reader.close()
-  
+      if let result {
+        
+        let extra = defaultMemorySize - result.memory.count
+        
+        if extra > 0 {
+          var data : [UInt8] = [UInt8](repeating: 0, count: extra)
+          result.memory.append(contentsOf: data)
+          result.save()
+        }
+        
+      }
+
+      reader.close()
+
     }
     else {
 
@@ -457,6 +469,8 @@ public class OpenLCBMemorySpace {
             node = OpenLCBNodeVirtual(nodeId: nodeId)
           case .canGatewayNode:
             node = OpenLCBCANGateway(nodeId: nodeId)
+          case .locoNetMonitorNode:
+            node = OpenLCBLocoNetMonitorNode(nodeId: nodeId)
           }
           
           result.append(node)

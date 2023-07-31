@@ -365,6 +365,9 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLayerD
       case .configurationToolNode:
         node = OpenLCBNodeConfigurationTool(nodeId: newNodeId)
         node!.userNodeName = "Configuration Tool #\(number)"
+      case .locoNetMonitorNode:
+        node = OpenLCBLocoNetMonitorNode(nodeId: newNodeId)
+        node!.userNodeName = "LocoNet Monitor #\(number & 0xff)"
       default:
         break
       }

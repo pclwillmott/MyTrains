@@ -516,11 +516,11 @@
                                     </items>
                                 </menu>
                             </menuItem>
-                            <menuItem title="View" id="H8h-7b-M4v">
+                            <menuItem title="LocoNet" id="Ehh-9X-vOU">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="View" id="HyV-fh-RgO">
+                                <menu key="submenu" title="LocoNet" id="d19-mc-xVn">
                                     <items>
-                                        <menuItem title="Monitor" id="xbj-MQ-iET">
+                                        <menuItem title="LocoNet Monitor" id="xbj-MQ-iET">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="mnuMonitorAction:" target="Voe-Tx-rLC" id="BwF-JG-aHq"/>
@@ -538,6 +538,25 @@
                                                 <action selector="mnuDashBoardAction:" target="Voe-Tx-rLC" id="Vd0-yF-3FP"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Group Setup" id="jYW-oF-LfI">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="SetupGroupAction:" target="Voe-Tx-rLC" id="NzS-cx-LX8"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Update Firmware" id="6h2-5y-PQH">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="mnuUpdateFirmware:" target="Voe-Tx-rLC" id="U2x-nb-Hrc"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
+                            <menuItem title="View" id="H8h-7b-M4v">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="View" id="HyV-fh-RgO">
+                                    <items>
                                         <menuItem isSeparatorItem="YES" id="mMq-k6-sOa"/>
                                         <menuItem title="Program Mobile Decoder" id="Hkv-Wv-hoh">
                                             <modifierMask key="keyEquivalentModifierMask"/>
@@ -545,22 +564,10 @@
                                                 <action selector="mnuProgramMobileDecoderAddress:" target="Voe-Tx-rLC" id="Rwy-HD-Aae"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Group Setup" id="jYW-oF-LfI">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="SetupGroupAction:" target="Voe-Tx-rLC" id="NzS-cx-LX8"/>
-                                            </connections>
-                                        </menuItem>
                                         <menuItem title="View LCC Network" id="fW3-Hc-Nf9">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="mnuViewLCCNetwork:" target="Voe-Tx-rLC" id="A5L-Mn-7Ym"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Update Firmware" id="6h2-5y-PQH">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="mnuUpdateFirmware:" target="Voe-Tx-rLC" id="U2x-nb-Hrc"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="muo-PM-TVl"/>

@@ -11,6 +11,10 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
   
   // MARK: Constructors
   
+  deinit {
+    locoNet = nil
+  }
+  
   // MARK: Private Properties
   
   private enum ConfigState {
@@ -67,10 +71,6 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
     for fn in 0 ... 28 {
       if let fx = functions.getUInt8(address: fn), fx != 0 {
         standardFunctions |= mask
-        if isMomentary(number: fn) {
-          functions.setUInt(address: fn, value: UInt8(0))
-          lastLocomotiveState?.functions &= ~mask
-        }
       }
       mask <<= 1
     }
@@ -86,10 +86,6 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
     for fn in 29 ... 68 {
       if let fx = functions.getUInt8(address: fn), fx != 0 {
         expandedFunctions |= mask
-        if isMomentary(number: fn) {
-          functions.setUInt(address: fn, value: UInt8(0))
-          lastLocomotiveState?.extendedFunctions &= ~mask
-        }
       }
       mask <<= 1
     }
@@ -162,45 +158,45 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
 
   private func updateLocoState() {
     
-    if let interface = self.locoNet {
-      
-      var step = UInt8(min(126, Int(abs(setSpeed) * 3600.0 / (1000.0 * 1.609344))))
-      
-      // THIS SHOULD BE DONE WITH A SPEED TABLE
-      
-      step = step == 0 ? 0 : step + 1
-      
-      if emergencyStop {
-        step = 1
-        if abs(setSpeed) != 0.0 {
-          setSpeedToZero()
-        }
-      }
-      
-      let minusZero : Float = -0.0
-      
-      let direction : LocomotiveDirection = (setSpeed.bitPattern == minusZero.bitPattern || setSpeed < 0.0) ? .reverse : .forward
-
-      let nextState = (
-        speed: step,
-        direction: direction,
-        functions: standardFunctions,
-        extendedFunctions: expandedFunctions
-      )
-      
-      if let last = lastLocomotiveState {
-        let temp = interface.updateLocomotiveState(address: dccAddress, slotNumber: slotNumber, slotPage: slotPage, previousState: last, nextState: nextState, throttleID: 0, forceRefresh: forceRefresh)
-        lastLocomotiveState = temp.state
-      }
-      else {
-        let temp = interface.setLocomotiveState(address: dccAddress, slotNumber: slotNumber, slotPage: slotPage, nextState: nextState, throttleID: 0)
-        lastLocomotiveState = temp.state
-      }
-      
-      forceRefresh = false
-      
+    guard let locoNet else {
+      return
     }
     
+    var step = UInt8(min(126, Int(abs(setSpeed) * 3600.0 / (1000.0 * 1.609344))))
+    
+    // THIS SHOULD BE DONE WITH A SPEED TABLE
+    
+    step = step == 0 ? 0 : step + 1
+    
+    if emergencyStop {
+      step = 1
+      if abs(setSpeed) != 0.0 {
+        setSpeedToZero()
+      }
+    }
+    
+    let minusZero : Float = -0.0
+    
+    let direction : LocomotiveDirection = (setSpeed.bitPattern == minusZero.bitPattern || setSpeed < 0.0) ? .reverse : .forward
+
+    let nextState = (
+      speed: step,
+      direction: direction,
+      functions: standardFunctions,
+      extendedFunctions: expandedFunctions
+    )
+    
+    if let last = lastLocomotiveState {
+      let temp = locoNet.updateLocomotiveState(address: dccAddress, slotNumber: slotNumber, slotPage: slotPage, previousState: last, nextState: nextState, throttleID: 0, forceRefresh: forceRefresh)
+      lastLocomotiveState = temp.state
+    }
+    else {
+      let temp = locoNet.setLocomotiveState(address: dccAddress, slotNumber: slotNumber, slotPage: slotPage, nextState: nextState, throttleID: 0)
+      lastLocomotiveState = temp.state
+    }
+    
+    forceRefresh = false
+
   }
   
   internal override func attachNode() {
@@ -215,6 +211,8 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
     }
     
     configState = .initializing
+    
+    locoNet = nil
 
     locoNet = LocoNet(gatewayNodeId: locoNetGatewayNodeId, virtualNode: self)
     
@@ -242,30 +240,24 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
     
     stopRefreshTimer()
     
+    guard let locoNet else {
+      return
+    }
+    
     emergencyStop = true
     
     setSpeedToZero()
     
-    commandedSpeed = setSpeed
+    emergencyStop = false
     
-    lastLocomotiveState?.functions = ~0
-    
-    lastLocomotiveState?.extendedFunctions = ~0
-    
-    standardFunctions = 0
-    
-    expandedFunctions = 0
-    
-    updateLocoState()
-    
+    locoNet.clearLocomotiveState(address: dccAddress, slotNumber: slotNumber, slotPage: slotPage, previousState: lastLocomotiveState!, throttleID: 0)
+
     slotState = .common
 
-    locoNet?.setLocoSlotStat1(slotPage: slotPage, slotNumber: slotNumber, stat1: stat1)
+    locoNet.setLocoSlotStat1(slotPage: slotPage, slotNumber: slotNumber, stat1: stat1)
 
     configState = .idle
     
-    locoNet = nil
-
   }
  
   internal override func speedChanged() {

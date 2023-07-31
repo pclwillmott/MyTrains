@@ -155,10 +155,17 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
   // MARK: View Menu
   
   @IBAction func mnuMonitorAction(_ sender: NSMenuItem) {
+    
+    guard let networkLayer = myTrainsController.openLCBNetworkLayer, let monitorNode = networkLayer.getLocoNetMonitor() else {
+      return
+    }
+    
     let x = ModalWindow.Monitor
     let wc = x.windowController
- // let vc = x.viewController(windowController: wc) as! MonitorVC
+    let vc = x.viewController(windowController: wc) as! MonitorVC
+    vc.monitorNode = monitorNode
     wc.showWindow(nil)
+    
   }
   
   @IBAction func mnuSlotView(_ sender: NSMenuItem) {

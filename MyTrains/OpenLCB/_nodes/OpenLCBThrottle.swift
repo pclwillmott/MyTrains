@@ -821,7 +821,7 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
   }
 
   public func parser(_ parser: XMLParser, foundProcessingInstructionWithTarget target: String, data: String?) {
-    print("parseFoundProcessingInstructionWithTarget: \(target)")
+//    print("parseFoundProcessingInstructionWithTarget: \(target)")
   }
 
   public func parser(_ parser: XMLParser, foundComment comment: String) {

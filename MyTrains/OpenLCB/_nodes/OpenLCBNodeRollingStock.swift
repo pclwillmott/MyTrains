@@ -21,7 +21,9 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     
     functions = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.functions.rawValue, defaultMemorySize: functionSpaceSize, isReadOnly: false, description: "")
     
-    configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: 2291, isReadOnly: false, description: "")
+    let configSize = addressFNDisplayName + (numberOfFunctions - 1) * functionGroupSize + 8 + 1
+    
+    configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: configSize, isReadOnly: false, description: "")
     
     super.init(nodeId: nodeId)
     
@@ -92,7 +94,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
   internal let addressFNConsistBehaviour : Int = 9
   internal let addressFNDescription      : Int = 10
   
-  internal let addressLocoNetGateway     : Int = 2283
+  internal let addressLocoNetGateway     : Int = 2388
   
   internal let numberOfFunctions : Int = 69
   internal let functionGroupSize : Int = 35

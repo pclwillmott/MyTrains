@@ -199,33 +199,8 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yFf-BC-8mv">
-                                            <rect key="frame" x="299" y="12" width="123" height="25"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="ZNc-Jc-xCr">
-                                                <font key="font" metaFont="system"/>
-                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                <objectValues>
-                                                    <string>Loconet</string>
-                                                    <string>Raw Bytes</string>
-                                                </objectValues>
-                                            </comboBoxCell>
-                                            <connections>
-                                                <action selector="cboDataTypeAction:" target="wI2-06-r3x" id="2RP-p4-UAP"/>
-                                            </connections>
-                                        </comboBox>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XCw-3H-m3u">
-                                            <rect key="frame" x="297" y="46" width="66" height="16"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Data Type" id="54P-9M-1Oc">
-                                                <font key="font" metaFont="system"/>
-                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
                                         <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="R7U-db-SDs">
-                                            <rect key="frame" x="439" y="12" width="178" height="25"/>
+                                            <rect key="frame" x="298" y="12" width="178" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="Kcl-K9-PTx">
                                                 <font key="font" metaFont="system"/>
@@ -245,7 +220,7 @@
                                             </connections>
                                         </comboBox>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ugm-0v-Vh4">
-                                            <rect key="frame" x="437" y="46" width="86" height="16"/>
+                                            <rect key="frame" x="296" y="46" width="86" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Number Base" id="Tta-6O-tOc">
                                                 <font key="font" metaFont="system"/>
@@ -275,42 +250,6 @@
                                                 <action selector="chkAddLabelsAction:" target="wI2-06-r3x" id="KDr-kk-49k"/>
                                             </connections>
                                         </button>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SpR-6F-Ohp">
-                                            <rect key="frame" x="635" y="46" width="77" height="16"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" title="IMM Repeat" id="TqH-T8-g1L">
-                                                <font key="font" metaFont="system"/>
-                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
-                                        <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fja-HS-Osf">
-                                            <rect key="frame" x="637" y="12" width="99" height="25"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="z86-ea-p0b">
-                                                <font key="font" metaFont="system"/>
-                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                <objectValues>
-                                                    <string>0</string>
-                                                    <string>1</string>
-                                                    <string>2</string>
-                                                    <string>3</string>
-                                                    <string>4</string>
-                                                    <string>5</string>
-                                                    <string>6</string>
-                                                    <string>7</string>
-                                                    <string>8</string>
-                                                    <string>9</string>
-                                                    <string>10</string>
-                                                    <string>11</string>
-                                                    <string>12</string>
-                                                    <string>13</string>
-                                                    <string>14</string>
-                                                    <string>15</string>
-                                                </objectValues>
-                                            </comboBoxCell>
-                                        </comboBox>
                                     </subviews>
                                 </view>
                             </box>
@@ -333,7 +272,7 @@
                                             </connections>
                                         </button>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dRB-DQ-27g">
-                                            <rect key="frame" x="20" y="102" width="768" height="21"/>
+                                            <rect key="frame" x="20" y="102" width="845" height="21"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Message to send to LocoNet" drawsBackground="YES" id="kQb-4Z-6bt">
                                                 <font key="font" size="12" name="Menlo-Regular"/>
@@ -356,7 +295,7 @@
                                             </connections>
                                         </button>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RGS-Qe-oKw">
-                                            <rect key="frame" x="20" y="72" width="768" height="21"/>
+                                            <rect key="frame" x="20" y="72" width="845" height="21"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Message to send to LocoNet" drawsBackground="YES" id="z49-E2-BEb">
                                                 <font key="font" size="12" name="Menlo-Regular"/>
@@ -379,7 +318,7 @@
                                             </connections>
                                         </button>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KFm-dY-fN6">
-                                            <rect key="frame" x="20" y="42" width="768" height="21"/>
+                                            <rect key="frame" x="20" y="42" width="845" height="21"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Message to send to LocoNet" drawsBackground="YES" id="vSe-uh-UHq">
                                                 <font key="font" size="12" name="Menlo-Regular"/>
@@ -402,7 +341,7 @@
                                             </connections>
                                         </button>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wE3-jL-7Qp">
-                                            <rect key="frame" x="20" y="12" width="768" height="21"/>
+                                            <rect key="frame" x="20" y="12" width="845" height="21"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Message to send to LocoNet" drawsBackground="YES" id="Glq-gu-jmY">
                                                 <font key="font" size="12" name="Menlo-Regular"/>
@@ -413,50 +352,6 @@
                                                 <action selector="txtMessage4Action:" target="wI2-06-r3x" id="fXo-Zj-qaa"/>
                                             </connections>
                                         </textField>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eQt-ae-PbQ">
-                                            <rect key="frame" x="794" y="95" width="82" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="push" title="IMM 1" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ciV-cM-cBW">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <connections>
-                                                <action selector="btnIMM1:" target="wI2-06-r3x" id="snU-RD-qqQ"/>
-                                            </connections>
-                                        </button>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VjQ-PP-JqC">
-                                            <rect key="frame" x="794" y="65" width="82" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="push" title="IMM 2" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="CH5-SB-yhC">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <connections>
-                                                <action selector="btnIMM2:" target="wI2-06-r3x" id="RYs-Uz-yLb"/>
-                                            </connections>
-                                        </button>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="h5h-G6-KRb">
-                                            <rect key="frame" x="794" y="35" width="82" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="push" title="IMM 3" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="gXz-DG-to2">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <connections>
-                                                <action selector="btnIMM3:" target="wI2-06-r3x" id="xFT-O3-cB9"/>
-                                            </connections>
-                                        </button>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vNj-Ea-tHZ">
-                                            <rect key="frame" x="794" y="5" width="82" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="push" title="IMM 4" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Fjd-Le-Z3W">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <connections>
-                                                <action selector="btnIMM4:" target="wI2-06-r3x" id="eHK-HA-ZV6"/>
-                                            </connections>
-                                        </button>
                                     </subviews>
                                 </view>
                             </box>
@@ -530,7 +425,7 @@
                                     </subviews>
                                 </view>
                             </box>
-                            <box fixedFrame="YES" title="Interface" translatesAutoresizingMaskIntoConstraints="NO" id="nWj-bQ-U5L">
+                            <box fixedFrame="YES" title="LocoNet Gateway" translatesAutoresizingMaskIntoConstraints="NO" id="nWj-bQ-U5L">
                                 <rect key="frame" x="17" y="898" width="977" height="70"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <view key="contentView" id="V34-PZ-J6J">
@@ -540,7 +435,7 @@
                                         <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="313-N7-ZNn">
                                             <rect key="frame" x="7" y="12" width="945" height="25"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                            <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="ozL-KO-rNf">
+                                            <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="5" id="ozL-KO-rNf">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -561,8 +456,6 @@
                         <outlet property="btnPauseMonitor" destination="wT4-cC-bIG" id="nV3-y1-22J"/>
                         <outlet property="btnSendFile" destination="hhp-Cn-ObI" id="aQe-nS-1Dz"/>
                         <outlet property="btnTest" destination="cbA-m5-kkX" id="JzK-jn-BN9"/>
-                        <outlet property="cboDataType" destination="yFf-BC-8mv" id="2t8-dq-fUZ"/>
-                        <outlet property="cboIMMRepeat" destination="fja-HS-Osf" id="LjL-2Q-tXu"/>
                         <outlet property="cboInterface" destination="313-N7-ZNn" id="98F-nt-PMH"/>
                         <outlet property="cboNumberBase" destination="R7U-db-SDs" id="ab3-Jc-LWh"/>
                         <outlet property="cboTimeStampType" destination="hTD-aA-KVA" id="6Y6-w4-2e1"/>
