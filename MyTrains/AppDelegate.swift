@@ -147,12 +147,36 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
   // MARK: Control Menu
   
   @IBAction func mnuThrottleAction(_ sender: Any) {
+    
+    guard let networkLayer = myTrainsController.openLCBNetworkLayer, let throttle = networkLayer.getThrottle()  else {
+      return
+    }
+    
     let x = ModalWindow.Throttle
     let wc = x.windowController
+    let vc = x.viewController(windowController: wc) as! ThrottleVC
+    vc.throttle = throttle
+    throttle.delegate = vc
     wc.showWindow(nil)
+    
   }
   
   // MARK: View Menu
+  
+  @IBAction func mnuProgrammerToolAction(_ sender: NSMenuItem) {
+    
+    guard let networkLayer = myTrainsController.openLCBNetworkLayer, let programmerTool = networkLayer.getProgrammerTool() else {
+      return
+    }
+    
+    let x = ModalWindow.ProgrammerTool
+    let wc = x.windowController
+    let vc = x.viewController(windowController: wc) as! ProgrammerToolVC
+    vc.programmerTool = programmerTool
+    programmerTool.delegate = vc
+    wc.showWindow(nil)
+
+  }
   
   @IBAction func mnuMonitorAction(_ sender: NSMenuItem) {
     
@@ -164,6 +188,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     let wc = x.windowController
     let vc = x.viewController(windowController: wc) as! MonitorVC
     vc.monitorNode = monitorNode
+    monitorNode.delegate = vc
     wc.showWindow(nil)
     
   }

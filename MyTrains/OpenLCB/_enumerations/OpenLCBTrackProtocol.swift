@@ -33,6 +33,38 @@ public enum OpenLCBTrackProtocol : UInt8 {
     return (self.rawValue & mask) == mask
   }
   
+  // MARK: Public Methods
+  
+  public func isMatch(address:UInt16, speedSteps:SpeedSteps) -> Bool {
+    
+    if (self.rawValue & 0b11000) != 0b01000 {
+      return self == .anyTrackProtocol
+    }
+    
+    var result : Bool
+    
+    if (self.rawValue & 0b00100) == 0b00100 {
+      result = address > 127
+    }
+    else {
+      result = address < 128
+    }
+    
+    switch self.rawValue & 0b11 {
+    case 0b01:
+      result = result && (speedSteps == .dcc14)
+    case 0b10:
+      result = result && (speedSteps == .dcc28)
+    case 0b11:
+      result = result && (speedSteps == .dcc128)
+    default:
+      break
+    }
+
+    return result
+    
+  }
+  
   // MARK: Static Properties
   
   public static var trackProtocolMask : UInt8 {

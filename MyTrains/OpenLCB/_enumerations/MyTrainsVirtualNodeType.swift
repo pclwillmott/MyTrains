@@ -19,6 +19,8 @@ public enum MyTrainsVirtualNodeType : String {
   case configurationToolNode = "Configuration Tool Node"
   case genericVirtualNode    = "Generic Virtual Node"
   case locoNetMonitorNode    = "LocoNet Monitor Node"
+  case programmerToolNode    = "DCC Programmer Tool Node"
+  case programmingTrackNode  = "DCC Programming Track Node"
   
   public var name : String {
     get {
@@ -40,6 +42,7 @@ public enum MyTrainsVirtualNodeType : String {
         .locoNetGatewayNode,
         .throttleNode,
         .trainNode,
+        .programmingTrackNode,
       ]
       return publicNodeTypes.contains(self)
     }
@@ -58,6 +61,8 @@ public enum MyTrainsVirtualNodeType : String {
         .configurationToolNode : 0x09000d630001,
         .trainNode             : 0x09000d640001,
         .throttleNode          : 0x09000d650001,
+        .programmerToolNode    : 0x09000d660001,
+        .programmingTrackNode  : 0x09000d670001,
         .genericVirtualNode    : 0x09000d6f0001,
       ]
       
@@ -84,6 +89,8 @@ public enum MyTrainsVirtualNodeType : String {
       applicationNode.name,
       configurationToolNode.name,
       locoNetMonitorNode.name,
+      programmerToolNode.name,
+      programmingTrackNode.name,
     ]
     
     comboBox.addItems(withObjectValues: items)

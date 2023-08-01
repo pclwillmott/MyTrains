@@ -51,6 +51,7 @@ enum AppStoryboard : String {
   case ViewLCCNetwork                        = "ViewLCCNetwork"
   case ConfigureLCCNode                      = "ConfigureLCCNode"
   case ViewNodeInfo                          = "ViewNodeInfo"
+  case ProgrammerTool                        = "ProgrammerTool"
 
   var instance : NSStoryboard {
     return NSStoryboard(name: self.rawValue, bundle: Bundle.main)
@@ -99,7 +100,8 @@ let storyboardLookup : [String:AppStoryboard] = [
   "IOFunctionTC64MkIIOutputPropertySheet" : AppStoryboard.IOFunctionTC64MkIIOutputPropertySheet,
   "ViewLCCNetwork"                        : AppStoryboard.ViewLCCNetwork,
   "ConfigureLCCNode"                      : AppStoryboard.ConfigureLCCNode,
-  "ViewNodeInfo"                          : AppStoryboard.ViewNodeInfo
+  "ViewNodeInfo"                          : AppStoryboard.ViewNodeInfo,
+  "ProgrammerTool"                        : AppStoryboard.ProgrammerTool
 ]
 
 /*
@@ -154,6 +156,7 @@ enum ModalWindow : String {
   case ViewLCCNetwork                        = "ViewLCCNetwork"
   case ConfigureLCCNode                      = "ConfigureLCCNode"
   case ViewNodeInfo                          = "ViewNodeInfo"
+  case ProgrammerTool                        = "ProgrammerTool"
 
   var windowController : NSWindowController {
     let storyboard = storyboardLookup[self.rawValue]!

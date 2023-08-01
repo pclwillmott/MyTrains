@@ -21,7 +21,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     
     functions = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.functions.rawValue, defaultMemorySize: functionSpaceSize, isReadOnly: false, description: "")
     
-    let configSize = addressFNDisplayName + (numberOfFunctions - 1) * functionGroupSize + 8 + 1
+    let configSize = addressLocoNetGateway + 8
     
     configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: configSize, isReadOnly: false, description: "")
     
@@ -39,7 +39,8 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressF0Directional)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressF0MUSwitch)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressLocoNetGateway)
-    
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDeleteFromRoster)
+
     for fn in 1...numberOfFunctions - 1 {
       let groupOffset = (fn - 1) * functionGroupSize
       registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressFNDisplayName      + groupOffset)
@@ -93,7 +94,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
   internal let addressFNMomentary        : Int = 8
   internal let addressFNConsistBehaviour : Int = 9
   internal let addressFNDescription      : Int = 10
-  
+  internal let addressDeleteFromRoster   : Int = 2387
   internal let addressLocoNetGateway     : Int = 2388
   
   internal let numberOfFunctions : Int = 69
@@ -789,7 +790,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
           
           let tp = data[7] & OpenLCBTrackProtocol.trackProtocolMask
           
-          if let trackProtocol = OpenLCBTrackProtocol(rawValue: tp), trackProtocol == .anyTrackProtocol || trackProtocol == .nativeOpenLCBNode {
+          if let trackProtocol = OpenLCBTrackProtocol(rawValue: tp), trackProtocol.isMatch(address: dccAddress, speedSteps: speedSteps) {
             
       //    let forceAllocateMask      : UInt8 = 0x80
             let exactMatchOnlyMask     : UInt8 = 0x40
@@ -893,7 +894,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
             
           }
           else {
-            print("unknown track protocol found: 0x\(tp.toHex(numberOfDigits: 2))")
+       //     print("train search did not match track protocol \(userNodeName): 0x\(tp.toHex(numberOfDigits: 2))")
           }
 
         }

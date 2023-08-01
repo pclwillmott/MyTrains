@@ -49,7 +49,6 @@ public class OpenLCBNodeConfigurationTool : OpenLCBNodeVirtual {
     
   }
 
-  
   // MARK: Public Methods
   
   // MARK: OpenLCBNetworkLayerDelegate Methods

@@ -71,4 +71,11 @@ public enum LocoNetCommandStationType : UInt8 {
     }
   }
   
+  public var programmingTrackExists : Bool {
+    get {
+      let commandStationsWithProgrammingTrack : Set<LocoNetCommandStationType> = [.DCS100_DCS200, .DCS50, .DCS51, .DCS52, .DCS210, .DCS210Plus, .DCS240, .DCS240Plus]
+      return commandStationsWithProgrammingTrack.contains(self)
+    }
+  }
+  
 }

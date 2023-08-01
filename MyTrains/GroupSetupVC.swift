@@ -203,13 +203,6 @@ class GroupSetupVC: NSViewController, MyTrainsControllerDelegate, InterfaceDeleg
       }
     }
     
-    for (_, x) in myTrainsController.locoNetInterfaces {
-      if x.deviceName == name {
-        interface = x
-        observerId = interface?.addObserver(observer: self) ?? -1
-        btnReadAction(btnRead)
-      }
-    }
 
  }
   

@@ -23,8 +23,7 @@ public enum OpenLCBWellKnownEvent : UInt64 {
   case linkErrorCode2                      = 0x010000000000fd02
   case linkErrorCode3                      = 0x010000000000fd03
   case linkErrorCode4                      = 0x010000000000fd04
-  case trainSearchEvent                    = 0x090099ff00000000
-  
+
   // Not automatically routed
   
   case duplicateNodeIdDetected             = 0x0101000000000201
@@ -37,5 +36,9 @@ public enum OpenLCBWellKnownEvent : UInt64 {
   case alternateClock1                     = 0x0101000001020000
   case alternateClock2                     = 0x0101000001030000
   case nodeIsALocoNetGateway               = 0x050101017b00ffff
+  case trainSearchEvent                    = 0x090099ff00000000
+  case nodeIsADCCProgrammingTrack          = 0x090099feffff0002
+  case trainSearchDCCShortAddress          = 0x090099ffffffff08
+  case trainSearchDCCLongAddress           = 0x090099ffffffff0c
 
 }

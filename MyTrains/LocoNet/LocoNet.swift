@@ -60,8 +60,6 @@ public class LocoNet {
   
   internal var currentMessage : LocoNetMessage?
   
-  internal var commandStationType : LocoNetCommandStationType = .DT200
-  
   internal var timeoutTimer : Timer?
   
   internal var messageState : MessageState = .idle
@@ -77,6 +75,8 @@ public class LocoNet {
   public var trackPowerOn : Bool = false
   
   public var globalEmergencyStop : Bool = false
+  
+  public var commandStationType : LocoNetCommandStationType = .DT200
   
   public var implementsProtocol0 : Bool {
     get {

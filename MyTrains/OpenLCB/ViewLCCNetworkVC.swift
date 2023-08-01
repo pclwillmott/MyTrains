@@ -368,6 +368,12 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLayerD
       case .locoNetMonitorNode:
         node = OpenLCBLocoNetMonitorNode(nodeId: newNodeId)
         node!.userNodeName = "LocoNet Monitor #\(number & 0xff)"
+      case .programmerToolNode:
+        node = OpenLCBProgrammerToolNode(nodeId: newNodeId)
+        node!.userNodeName = "DCC Programmer Tool #\(number)"
+      case .programmingTrackNode:
+        node = OpenLCBProgrammingTrackNode(nodeId: newNodeId)
+        node!.userNodeName = "DCC Programming Track #\(number)"
       default:
         break
       }

@@ -22,7 +22,7 @@ class ThrottleVC: NSViewController, NSWindowDelegate, OpenLCBThrottleDelegate {
   }
 
   func windowWillClose(_ notification: Notification) {
-    
+    myTrainsController.openLCBNetworkLayer?.releaseThrottle(throttle: throttle!)
   }
   
   override func viewWillAppear() {
@@ -38,7 +38,6 @@ class ThrottleVC: NSViewController, NSWindowDelegate, OpenLCBThrottleDelegate {
     cboLocomotive.dataSource = cboLocomotiveDS
     cboLocomotive.selectItem(at: -1)
 
-    throttle = myTrainsController.openLCBNetworkLayer?.getThrottle()
     throttle?.delegate = self
     txtSearchAction(txtSearch)
     
@@ -100,10 +99,12 @@ class ThrottleVC: NSViewController, NSWindowDelegate, OpenLCBThrottleDelegate {
   
   private var buttons : [NSButton] = []
   
-  private var throttle : OpenLCBThrottle?
-  
   private var cboLocomotiveDS = ComboBoxSimpleDS()
   
+  // MARK: Public Properties
+  
+  public var throttle : OpenLCBThrottle?
+
   // MARK: Private Methods
   
   private func setSpeedDirection() {
@@ -270,6 +271,9 @@ class ThrottleVC: NSViewController, NSWindowDelegate, OpenLCBThrottleDelegate {
   @IBOutlet weak var txtSearch: NSSearchField!
   
   @IBAction func txtSearchAction(_ sender: NSSearchField) {
+    cboLocomotiveDS.dictionary = [:]
+    cboLocomotive.reloadData()
+
     throttle?.trainSearch(searchString: sender.stringValue,
                           searchType: OpenLCBSearchType.selected(comboBox: cboSearchType),
                           searchMatchType: OpenLCBSearchMatchType.selected(comboBox: cboSearchMatchType),

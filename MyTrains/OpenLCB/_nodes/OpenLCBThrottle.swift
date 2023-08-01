@@ -354,53 +354,9 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
     
     delegate?.trainSearchResultsReceived?(throttle: self, results: [:])
     
-    var eventId : UInt64 = 0x090099ff00000000
+    searchEventId = networkLayer!.makeTrainSearchEventId(searchString: searchString, searchType: searchType, searchMatchType: searchMatchType, searchMatchTarget: searchMatchTarget, trackProtocol: trackProtocol)
     
-    var numbers : [String] = []
-    var temp : String = ""
-    for char in searchString {
-      switch char {
-      case "0"..."9":
-        temp += String(char)
-      default:
-        if !temp.isEmpty {
-          numbers.append(temp)
-          temp = ""
-        }
-      }
-    }
-    if !temp.isEmpty {
-      numbers.append(temp)
-    }
-    
-    var nibbles : [UInt8] = []
-    
-    for number in numbers {
-      for digit in number {
-        nibbles.append(UInt8(String(digit))!)
-      }
-      nibbles.append(0x0f)
-    }
-    
-    while nibbles.count < 6 {
-      nibbles.append(0x0f)
-    }
-    
-    while nibbles.count > 6 {
-      nibbles.removeLast()
-    }
-    
-    var shift = 28
-    for nibble in nibbles {
-      eventId |= UInt64(nibble) << shift
-      shift -= 4
-    }
-    
-    eventId |= UInt64(searchType.rawValue | searchMatchType.rawValue | searchMatchTarget.rawValue | trackProtocol.rawValue)
-    
-    searchEventId = eventId
-    
-    networkLayer?.sendIdentifyProducer(sourceNodeId: nodeId, eventId: eventId)
+    networkLayer?.sendIdentifyProducer(sourceNodeId: nodeId, eventId: searchEventId)
     
   }
 

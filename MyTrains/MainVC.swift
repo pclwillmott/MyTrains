@@ -200,19 +200,16 @@ class MainVC: NSViewController, MyTrainsControllerDelegate, LayoutDelegate, Open
   @IBOutlet weak var btnPowerOn: NSButton!
   
   @IBAction func btnPowerOnAction(_ sender: NSButton) {
-    myTrainsController.powerOn()
   }
   
   @IBOutlet weak var btnPowerOff: NSButton!
   
   @IBAction func btnPowerOffAction(_ sender: NSButton) {
-    myTrainsController.powerOff()
   }
   
   @IBOutlet weak var btnPause: NSButton!
   
   @IBAction func btnPauseAction(_ sender: NSButton) {
-    myTrainsController.powerIdle()
   }
   
   @IBOutlet weak var scrollView: NSScrollView!

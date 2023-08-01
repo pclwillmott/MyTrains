@@ -37,6 +37,10 @@ public class OpenLCBNetworkLayer : NSObject {
         let monitor = node as! OpenLCBLocoNetMonitorNode
         locoNetMonitors.append(monitor)
         freeLocoNetMonitors.insert(monitor.monitorId)
+      case .programmerToolNode:
+        let programmerTool = node as! OpenLCBProgrammerToolNode
+        programmerTools.append(programmerTool)
+        freeProgrammerTools.insert(programmerTool.programmerToolId)
       default:
         break
       }
@@ -70,6 +74,12 @@ public class OpenLCBNetworkLayer : NSObject {
   private var locoNetMonitorsInUse : Set<UInt8> = []
   
   private var freeLocoNetMonitors : Set<UInt8> = []
+  
+  private var programmerTools : [OpenLCBProgrammerToolNode] = []
+  
+  private var programmerToolsInUse : Set<Int> = []
+  
+  private var freeProgrammerTools : Set<Int> = []
   
   // MARK: Public Properties
   
@@ -127,9 +137,15 @@ public class OpenLCBNetworkLayer : NSObject {
   public func registerNode(node:OpenLCBNodeVirtual) {
     virtualNodes[node.nodeId] = node
     node.networkLayer = self
-    if node.virtualNodeType == .trainNode {
+    switch node.virtualNodeType {
+    case .trainNode:
       let trainNode = node as! OpenLCBNodeRollingStockLocoNet
       trainNode.reloadCDI()
+    case .programmingTrackNode:
+      let programmingTrack = node as! OpenLCBProgrammingTrackNode
+      programmingTrack.reloadCDI()
+    default:
+      break
     }
     node.start()
   }
@@ -160,6 +176,7 @@ public class OpenLCBNetworkLayer : NSObject {
   }
   
   public func releaseThrottle(throttle:OpenLCBThrottle) {
+    throttle.delegate = nil
     freeThrottles.insert(throttle.throttleId)
     throttlesInUse.remove(throttle.throttleId)
   }
@@ -177,6 +194,21 @@ public class OpenLCBNetworkLayer : NSObject {
     monitor.delegate = nil
     freeLocoNetMonitors.insert(monitor.monitorId)
     locoNetMonitorsInUse.remove(monitor.monitorId)
+  }
+  
+  public func getProgrammerTool() -> OpenLCBProgrammerToolNode? {
+    if let programmerToolId = freeProgrammerTools.first {
+      programmerToolsInUse.insert(programmerToolId)
+      freeProgrammerTools.remove(programmerToolId)
+      return programmerTools[Int(programmerToolId) - 1]
+    }
+    return nil
+  }
+  
+  public func releaseProgrammerTool(programmerTool:OpenLCBProgrammerToolNode) {
+    programmerTool.delegate = nil
+    freeProgrammerTools.insert(programmerTool.programmerToolId)
+    programmerToolsInUse.remove(programmerTool.programmerToolId)
   }
   
   public func getNewNodeId(virtualNodeType:MyTrainsVirtualNodeType) -> UInt64 {
@@ -432,7 +464,11 @@ public class OpenLCBNetworkLayer : NSObject {
   public func sendProducerIdentifiedValid(sourceNodeId:UInt64, wellKnownEvent: OpenLCBWellKnownEvent) {
     sendProducerIdentifiedValid(sourceNodeId: sourceNodeId, eventId: wellKnownEvent.rawValue)
   }
-  
+
+  public func sendProducerIdentifiedValidityUnknown(sourceNodeId:UInt64, wellKnownEvent: OpenLCBWellKnownEvent) {
+    sendProducerIdentifiedValidityUnknown(sourceNodeId: sourceNodeId, eventId: wellKnownEvent.rawValue)
+  }
+
   public func sendIdentifyProducer(sourceNodeId:UInt64, eventId:UInt64) {
 
     let message = OpenLCBMessage(messageTypeIndicator: .identifyProducer)
@@ -457,6 +493,56 @@ public class OpenLCBNetworkLayer : NSObject {
 
   }
 
+  public func makeTrainSearchEventId(searchString : String, searchType:OpenLCBSearchType, searchMatchType:OpenLCBSearchMatchType, searchMatchTarget:OpenLCBSearchMatchTarget, trackProtocol:OpenLCBTrackProtocol) -> UInt64 {
+    
+    var eventId : UInt64 = 0x090099ff00000000
+    
+    var numbers : [String] = []
+    var temp : String = ""
+    for char in searchString {
+      switch char {
+      case "0"..."9":
+        temp += String(char)
+      default:
+        if !temp.isEmpty {
+          numbers.append(temp)
+          temp = ""
+        }
+      }
+    }
+    if !temp.isEmpty {
+      numbers.append(temp)
+    }
+    
+    var nibbles : [UInt8] = []
+    
+    for number in numbers {
+      for digit in number {
+        nibbles.append(UInt8(String(digit))!)
+      }
+      nibbles.append(0x0f)
+    }
+    
+    while nibbles.count < 6 {
+      nibbles.append(0x0f)
+    }
+    
+    while nibbles.count > 6 {
+      nibbles.removeLast()
+    }
+    
+    var shift = 28
+    for nibble in nibbles {
+      eventId |= UInt64(nibble) << shift
+      shift -= 4
+    }
+
+    eventId |= (UInt64(searchType.rawValue | searchMatchType.rawValue | searchMatchTarget.rawValue | trackProtocol.rawValue))
+
+    return eventId
+    
+  }
+  
   public func sendProducerIdentifiedValidityUnknown(sourceNodeId:UInt64, eventId:UInt64) {
 
     let message = OpenLCBMessage(messageTypeIndicator: .producerIdentifiedWithValidityUnknown)

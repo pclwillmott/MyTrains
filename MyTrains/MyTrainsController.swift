@@ -184,22 +184,6 @@ public class MyTrainsController : NSObject, InterfaceDelegate, NSUserNotificatio
     }
   }
   
-  public var locoNetInterfaces : [Int:InterfaceLocoNet] {
-    get {
-      
-      var interfaces : [Int:InterfaceLocoNet] = [:]
-      /*
-      for (_, device) in interfaceDevices {
-        if let interface = device as? InterfaceLocoNet, let info = interface.locoNetProductInfo, info.attributes.contains(.LocoNetInterface) {
-          interfaces[interface.primaryKey] = interface
-        }
-      }
-*/
-      return interfaces
-      
-    }
-  }
-
   public var openLCBInterfaces : [Int:InterfaceOpenLCBCAN] {
     get {
       
@@ -538,24 +522,6 @@ public class MyTrainsController : NSObject, InterfaceDelegate, NSUserNotificatio
     connected = false
   }
   
-  public func powerOn() {
-    for (_, interface) in locoNetInterfaces {
-      interface.powerOn()
-    }
-  }
-  
-  public func powerOff() {
-    for (_, interface) in locoNetInterfaces {
-      interface.powerOff()
-    }
-  }
-
-  public func powerIdle() {
-    for (_, interface) in locoNetInterfaces {
-      interface.emergencyStop()
-    }
-  }
-
   public func addLayout(layout: Layout) {
     layouts[layout.primaryKey] = layout
     myTrainsControllerUpdated()

@@ -471,6 +471,11 @@ public class OpenLCBMemorySpace {
             node = OpenLCBCANGateway(nodeId: nodeId)
           case .locoNetMonitorNode:
             node = OpenLCBLocoNetMonitorNode(nodeId: nodeId)
+          case .programmerToolNode:
+            node = OpenLCBProgrammerToolNode(nodeId: nodeId)
+          case .programmingTrackNode:
+            print("getVirtualNodes: here")
+            node = OpenLCBProgrammingTrackNode(nodeId: nodeId)
           }
           
           result.append(node)

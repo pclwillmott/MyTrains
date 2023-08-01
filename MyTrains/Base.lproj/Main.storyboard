@@ -516,39 +516,58 @@
                                     </items>
                                 </menu>
                             </menuItem>
-                            <menuItem title="LocoNet" id="Ehh-9X-vOU">
+                            <menuItem title="Tools" id="9kk-Si-lYa">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="LocoNet" id="d19-mc-xVn">
+                                <menu key="submenu" title="Tools" id="ISf-GP-eA8">
                                     <items>
-                                        <menuItem title="LocoNet Monitor" id="xbj-MQ-iET">
+                                        <menuItem title="View LCC Network" id="fW3-Hc-Nf9">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
-                                                <action selector="mnuMonitorAction:" target="Voe-Tx-rLC" id="BwF-JG-aHq"/>
+                                                <action selector="mnuViewLCCNetwork:" target="Voe-Tx-rLC" id="A5L-Mn-7Ym"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Slot View" id="BKt-TR-rXk">
+                                        <menuItem title="DCC Programmer Tool" id="cN1-05-9vS">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
-                                                <action selector="mnuSlotView:" target="Voe-Tx-rLC" id="6gW-nV-tIL"/>
+                                                <action selector="mnuProgrammerToolAction:" target="Voe-Tx-rLC" id="I7m-ew-W0X"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Dashboard" id="97Z-9a-y1G">
+                                        <menuItem title="LocoNet" id="Ehh-9X-vOU">
                                             <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="mnuDashBoardAction:" target="Voe-Tx-rLC" id="Vd0-yF-3FP"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Group Setup" id="jYW-oF-LfI">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="SetupGroupAction:" target="Voe-Tx-rLC" id="NzS-cx-LX8"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Update Firmware" id="6h2-5y-PQH">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="mnuUpdateFirmware:" target="Voe-Tx-rLC" id="U2x-nb-Hrc"/>
-                                            </connections>
+                                            <menu key="submenu" title="LocoNet" id="d19-mc-xVn">
+                                                <items>
+                                                    <menuItem title="LocoNet Monitor" id="xbj-MQ-iET">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="mnuMonitorAction:" target="Voe-Tx-rLC" id="BwF-JG-aHq"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Slot View" id="BKt-TR-rXk">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="mnuSlotView:" target="Voe-Tx-rLC" id="6gW-nV-tIL"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Dashboard" id="97Z-9a-y1G">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="mnuDashBoardAction:" target="Voe-Tx-rLC" id="Vd0-yF-3FP"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Group Setup" id="jYW-oF-LfI">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="SetupGroupAction:" target="Voe-Tx-rLC" id="NzS-cx-LX8"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Update Firmware" id="6h2-5y-PQH">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="mnuUpdateFirmware:" target="Voe-Tx-rLC" id="U2x-nb-Hrc"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                </items>
+                                            </menu>
                                         </menuItem>
                                     </items>
                                 </menu>
@@ -562,12 +581,6 @@
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="mnuProgramMobileDecoderAddress:" target="Voe-Tx-rLC" id="Rwy-HD-Aae"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="View LCC Network" id="fW3-Hc-Nf9">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="mnuViewLCCNetwork:" target="Voe-Tx-rLC" id="A5L-Mn-7Ym"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="muo-PM-TVl"/>
