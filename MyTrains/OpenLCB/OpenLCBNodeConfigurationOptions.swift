@@ -113,7 +113,7 @@ public class OpenLCBNodeConfigurationOptions {
       writeLengths |= isAnyLengthWriteSupported ? maskAnyLengthWrite  : 0
       writeLengths |= isStreamSupported         ? maskStreamSupported : 0
       
-      var data : [UInt8] = [0x20, 0x82]
+      var data : [UInt8] = OpenLCBDatagramType.getConfigurationOptionsReply.rawValue.bigEndianData
       
       data.append(contentsOf: availableCommands.bigEndianData)
       

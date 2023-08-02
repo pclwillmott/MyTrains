@@ -22,6 +22,8 @@ public enum MyTrainsVirtualNodeType : String {
   case programmerToolNode    = "DCC Programmer Tool Node"
   case programmingTrackNode  = "DCC Programming Track Node"
   
+  // MARK: Public Properties
+  
   public var name : String {
     get {
       return self.rawValue
@@ -70,6 +72,12 @@ public enum MyTrainsVirtualNodeType : String {
       
     }
     
+  }
+  
+  // MARK: Public Methods
+  
+  public func defaultUserNodeName(nodeId:UInt64) -> String {
+    return "\(self.name) #\(nodeId - self.baseNodeId + 1)"
   }
   
   // MARK: Class Methods

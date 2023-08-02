@@ -557,6 +557,50 @@ class Database {
 
   }
 
+  public static func codeExists(tableName:String, primaryKey:String, code:UInt64) -> Bool {
+    
+    let conn = Database.getConnection()
+    var shouldClose = false
+    
+    if conn.state != .Open {
+      if conn.open() != .Open {
+        return true
+      }
+      shouldClose = true
+    }
+    
+    var result = false
+    
+    var _cmd : SqliteCommand? = conn.createCommand()
+    
+    if let cmd = _cmd {
+      
+      cmd.commandText = "SELECT [\(primaryKey)] FROM [\(tableName)] WHERE [\(primaryKey)] = \(code)"
+      
+      if let reader = cmd.executeReader() {
+        
+        if reader.read() {
+          if let _ = reader.getInt(index: 0) {
+            result = true
+          }
+        }
+        
+        reader.close()
+        
+      }
+      
+    }
+    
+    _cmd = nil
+    
+    if shouldClose {
+      conn.close()
+    }
+    
+    return result
+
+  }
+
   public static func execute(commands:[String]) {
     
     let conn = getConnection()

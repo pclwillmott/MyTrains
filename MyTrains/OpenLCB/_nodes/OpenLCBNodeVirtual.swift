@@ -52,6 +52,8 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     isEventExchangeProtocolSupported = true
     
     isSimpleProtocolSubsetSupported = true
+        
+    setupConfigurationOptions()
     
   }
   
@@ -170,6 +172,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   // MARK: Private Methods
   
   internal func resetReboot() {
+    setupConfigurationOptions()
   }
   
   internal func resetToFactoryDefaults() {
@@ -185,6 +188,38 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   
   // MARK: Public Methods
 
+  public func setupConfigurationOptions() {
+    
+    var minSpace : UInt8 = 0xff
+    var maxSpace : UInt8 = 0x00
+    
+    for (key, _) in memorySpaces {
+      if key < minSpace {
+        minSpace = key
+      }
+      if key > maxSpace {
+        maxSpace = key
+      }
+    }
+    
+    configurationOptions.highestAddressSpace = maxSpace
+    configurationOptions.lowestAddressSpace = minSpace
+    
+    configurationOptions.is1ByteWriteSupported = true
+    configurationOptions.is2ByteWriteSupported = true
+    configurationOptions.is4ByteWriteSupported = true
+    configurationOptions.isStreamSupported = false
+    configurationOptions.is64ByteWriteSupported = false
+    configurationOptions.isAnyLengthWriteSupported = true
+    configurationOptions.isReadFromACDIManufacturerAvailable = true
+    configurationOptions.isReadFromACDIUserAvailable = true
+    configurationOptions.isUnalignedReadsSupported = true
+    configurationOptions.isUnalignedWritesSupported = true
+    configurationOptions.isWriteUnderMaskSupported = false
+    configurationOptions.isWriteToACDIUserAvailable = true
+
+  }
+  
   public func initCDI(filename:String) {
     initCDI(filename: filename, manufacturer: "", model: "")
   }
@@ -281,24 +316,35 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   public func openLCBMessageReceived(message: OpenLCBMessage) {
     
     switch message.messageTypeIndicator {
+      
     case .simpleNodeIdentInfoRequest:
       if message.destinationNodeId! == nodeId {
         networkLayer?.sendSimpleNodeInformationReply(sourceNodeId: self.nodeId, destinationNodeId: message.sourceNodeId!, data: encodedNodeInformation)
       }
+      
     case .verifyNodeIDNumberGlobal, .verifyNodeIDNumberAddressed:
       if message.payload.isEmpty || message.payloadAsHex == nodeId.toHex(numberOfDigits: 12) {
         networkLayer?.sendVerifiedNodeIdNumber(sourceNodeId: nodeId, isSimpleSetSufficient: false)
       }
+      
     case .protocolSupportInquiry:
       if message.destinationNodeId! == nodeId {
         let data = supportedProtocols
         networkLayer?.sendProtocolSupportReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, data: data)
       }
+      
     case .datagram:
       
       if message.destinationNodeId! == nodeId {
         
         switch message.datagramType {
+          
+        case.getConfigurationOptionsCommand:
+
+          networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, timeOut: .ok)
+          
+          networkLayer?.sendGetConfigurationOptionsReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, node: self)
+
         case .reinitializeFactoryResetCommand:
           networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, timeOut: .ok)
           DispatchQueue.main.async {
@@ -312,6 +358,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
             self.stop()
             self.start()
           }
+          
         case.LockReserveCommand:
           message.payload.removeFirst(2)
           if let id = UInt64(bigEndianData: message.payload) {

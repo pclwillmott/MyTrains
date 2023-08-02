@@ -84,6 +84,8 @@
 		DA33FC2027AFF9E500630227 /* OpSwDecoderType.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA33FC1F27AFF9E500630227 /* OpSwDecoderType.xib */; };
 		DA33FC2327AFFA1400630227 /* OpSwDecoderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA33FC2227AFFA1400630227 /* OpSwDecoderType.swift */; };
 		DA359850278219A400B81AD3 /* LocoSlotDataP2.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA35984F278219A400B81AD3 /* LocoSlotDataP2.swift */; };
+		DA3866232A7A653900A0FAEB /* OpenLCBNodeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3866222A7A653900A0FAEB /* OpenLCBNodeManager.swift */; };
+		DA3866252A7A880A00A0FAEB /* OpenLCBConfigurationToolDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3866242A7A880A00A0FAEB /* OpenLCBConfigurationToolDelegate.swift */; };
 		DA3904092A349B3A00864157 /* OpenLCBClockInitialDateTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3904082A349B3A00864157 /* OpenLCBClockInitialDateTime.swift */; };
 		DA3AEF422788855800FF91D4 /* DecoderCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3AEF412788855800FF91D4 /* DecoderCV.swift */; };
 		DA3AEF442788B33F00FF91D4 /* CVTableViewDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3AEF432788B33F00FF91D4 /* CVTableViewDS.swift */; };
@@ -450,6 +452,8 @@
 		DA33FC1F27AFF9E500630227 /* OpSwDecoderType.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OpSwDecoderType.xib; sourceTree = "<group>"; };
 		DA33FC2227AFFA1400630227 /* OpSwDecoderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpSwDecoderType.swift; sourceTree = "<group>"; };
 		DA35984F278219A400B81AD3 /* LocoSlotDataP2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoSlotDataP2.swift; sourceTree = "<group>"; };
+		DA3866222A7A653900A0FAEB /* OpenLCBNodeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBNodeManager.swift; sourceTree = "<group>"; };
+		DA3866242A7A880A00A0FAEB /* OpenLCBConfigurationToolDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBConfigurationToolDelegate.swift; sourceTree = "<group>"; };
 		DA3904082A349B3A00864157 /* OpenLCBClockInitialDateTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBClockInitialDateTime.swift; sourceTree = "<group>"; };
 		DA3AEF412788855800FF91D4 /* DecoderCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecoderCV.swift; sourceTree = "<group>"; };
 		DA3AEF432788B33F00FF91D4 /* CVTableViewDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CVTableViewDS.swift; sourceTree = "<group>"; };
@@ -786,6 +790,7 @@
 				DA4406FD2A055B3700E7859C /* LCCCDITreeViewDelegate.swift */,
 				DA1767172A054C4A009D13C1 /* LCCCDITreeViewDS.swift */,
 				DA5B6AAB29EAEDB20095F7D5 /* OpenLCBCANFrameFlag.swift */,
+				DA3866222A7A653900A0FAEB /* OpenLCBNodeManager.swift */,
 				DAA777CD2A20CFE1008EAF02 /* OpenLCBClockDelegate.swift */,
 				DA6403EE2A24EF62001CE29B /* OpenLCBMemorySpace.swift */,
 				DA56261029E1AE2800D465CC /* OpenLCBMessage.swift */,
@@ -1285,6 +1290,7 @@
 				DA0D3E052A4850880042748C /* OpenLCBThrottleDelegate.swift */,
 				DA17E0872A77D7CC000154E0 /* OpenLCBLocoNetMonitorDelegate.swift */,
 				DAAC7E922A79514E001A424E /* OpenLCBProgrammerToolDelegate.swift */,
+				DA3866242A7A880A00A0FAEB /* OpenLCBConfigurationToolDelegate.swift */,
 			);
 			path = _protocols;
 			sourceTree = "<group>";
@@ -1520,6 +1526,7 @@
 				DA69E3932974581700447414 /* IOChannelDS64Output.swift in Sources */,
 				DADFFF902946025500CD2119 /* DateExtensions.swift in Sources */,
 				DAA7169B297C2B350080114F /* IODeviceBXP88PropertySheetVC.swift in Sources */,
+				DA3866232A7A653900A0FAEB /* OpenLCBNodeManager.swift in Sources */,
 				DA5B6AAC29EAEDB20095F7D5 /* OpenLCBCANFrameFlag.swift in Sources */,
 				DA6403EF2A24EF62001CE29B /* OpenLCBMemorySpace.swift in Sources */,
 				DA60D819295B617000B5A2C4 /* LocoNetDeviceCV.swift in Sources */,
@@ -1605,6 +1612,7 @@
 				DA2E0E5A2736B8AA00C7DA7A /* LoconetRequestSlotDataMessage.swift in Sources */,
 				DA2785402837EAE700EDCBB7 /* MTSerialPortManager.swift in Sources */,
 				DACE10AC2A3F5F310032E954 /* OpenLCBTrackProtocol.swift in Sources */,
+				DA3866252A7A880A00A0FAEB /* OpenLCBConfigurationToolDelegate.swift in Sources */,
 				DAA66BD22A092DC2001804AC /* StringExtensions.swift in Sources */,
 				DA15BE26289806BF00FD82FD /* SpeedProfileTableViewDS.swift in Sources */,
 				DAC0194C289E7B80001152F6 /* EditCommandStationsVC.swift in Sources */,

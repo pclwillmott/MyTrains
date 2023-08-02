@@ -81,9 +81,18 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
   }
   
   @IBAction func mnySetFastClock(_ sender: NSMenuItem) {
+    
+    guard let networkLayer = myTrainsController.openLCBNetworkLayer else {
+      return
+    }
+
     let x = ModalWindow.SetFastClock
     let wc = x.windowController
+    let vc = x.viewController(windowController: wc) as! SetFastClockVC
+    vc.configurationTool = networkLayer.getConfigurationTool()
+    vc.configurationTool?.delegate = vc
     wc.showWindow(nil)
+    
   }
   
   @IBAction func mnuEditLayoutsAction(_ sender: NSMenuItem) {
@@ -161,7 +170,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     
   }
   
-  // MARK: View Menu
+  // MARK: Tools Menu
   
   @IBAction func mnuProgrammerToolAction(_ sender: NSMenuItem) {
     
@@ -189,6 +198,21 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     let vc = x.viewController(windowController: wc) as! MonitorVC
     vc.monitorNode = monitorNode
     monitorNode.delegate = vc
+    wc.showWindow(nil)
+    
+  }
+  
+  @IBAction func mnuViewLCCNetwork(_ sender: NSMenuItem) {
+
+    guard let networkLayer = myTrainsController.openLCBNetworkLayer else {
+      return
+    }
+
+    let x = ModalWindow.ViewLCCNetwork
+    let wc = x.windowController
+    let vc = x.viewController(windowController: wc) as! ViewLCCNetworkVC
+    vc.configurationTool = networkLayer.getConfigurationTool()
+    vc.configurationTool?.delegate = vc
     wc.showWindow(nil)
     
   }
@@ -229,12 +253,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     wc.showWindow(nil)
   }
   
-  @IBAction func mnuViewLCCNetwork(_ sender: NSMenuItem) {
-    let x = ModalWindow.ViewLCCNetwork
-    let wc = x.windowController
- // let vc = x.viewController(windowController: wc) as! MonitorVC
-    wc.showWindow(nil)
-  }
   
 }
 

@@ -8,7 +8,7 @@
 import Foundation
 import Cocoa
 
-class SetFastClockVC: NSViewController, NSWindowDelegate, OpenLCBClockDelegate {
+class SetFastClockVC: NSViewController, NSWindowDelegate, OpenLCBClockDelegate, OpenLCBConfigurationToolDelegate {
   
   // MARK: Window & View Control
   
@@ -21,17 +21,32 @@ class SetFastClockVC: NSViewController, NSWindowDelegate, OpenLCBClockDelegate {
   }
   
   func windowWillClose(_ notification: Notification) {
-    if let fastClock = myTrainsController.openLCBNetworkLayer?.fastClock {
+    
+    guard let networkLayer, let configurationTool else {
+      return
+    }
+    
+    if let fastClock {
       fastClock.removeObserver(observerId: observerId)
       observerId = -1
     }
+    
+    configurationTool.delegate = nil
+    networkLayer.releaseConfigurationTool(configurationTool: configurationTool)
+    
   }
   
   override func viewWillAppear() {
     
     self.view.window?.delegate = self
     
-    if let fastClock = myTrainsController.openLCBNetworkLayer?.fastClock {
+    networkLayer = configurationTool!.networkLayer
+    
+    nodeId = configurationTool!.nodeId
+    
+    fastClock = networkLayer!.fastClock
+    
+    if let fastClock {
       
       txtRate.stringValue = "\(fastClock.rate)"
       
@@ -47,7 +62,17 @@ class SetFastClockVC: NSViewController, NSWindowDelegate, OpenLCBClockDelegate {
   
   // MARK: Private Properties
   
-  var observerId : Int = -1
+  private var observerId : Int = -1
+  
+  private var networkLayer : OpenLCBNetworkLayer?
+  
+  private var nodeId : UInt64 = 0
+  
+  private var fastClock : OpenLCBClock?
+  
+  // MARK: Public Properties
+  
+  public var configurationTool : OpenLCBNodeConfigurationTool?
   
   // MARK: OpenLCBClockDelegate Methods
   
@@ -70,69 +95,64 @@ class SetFastClockVC: NSViewController, NSWindowDelegate, OpenLCBClockDelegate {
   
   @IBAction func btnSetAction(_ sender: NSButton) {
     
-    if let networkLayer = myTrainsController.openLCBNetworkLayer {
+    guard let networkLayer, let fastClock else {
+      return
+    }
+    
+    var events : [UInt64] = []
 
-      let fastClock = networkLayer.fastClock!
+    let date = pckTime.dateValue
+    
+    let components = date.dateComponents
+     
+    networkLayer.sendEvent(sourceNodeId: nodeId, eventId: fastClock.encodeStopStartEvent(state: .stopped))
+
+    for index in 0 ... 4 {
       
-      var events : [UInt64] = []
-
-      let date = pckTime.dateValue
-      
-      let components = date.dateComponents
-       
-      let nodeId = networkLayer.configurationToolNode!.nodeId
-
-      networkLayer.sendEvent(sourceNodeId: nodeId, eventId: fastClock.encodeStopStartEvent(state: .stopped))
-
-      for index in 0 ... 4 {
+      if let eventIndex = OpenLCBFastClockEventIndex(rawValue: index) {
         
-        if let eventIndex = OpenLCBFastClockEventIndex(rawValue: index) {
-          
-          switch eventIndex {
-          case .startOrStopEvent:
-            events.append(fastClock.encodeStopStartEvent(state: swSwitch.state == .on ? .running : .stopped))
-          case .reportRateEvent:
-            if let rate = Double(txtRate.stringValue) {
-              var r = rate
-              if rate < -512.0 || rate > 511.75 {
-                txtRate.stringValue = "1.0"
-                r = 1.0
-              }
-              events.append(fastClock.encodeRateEvent(subCode: .setRateEventId, rate: r))
+        switch eventIndex {
+        case .startOrStopEvent:
+          events.append(fastClock.encodeStopStartEvent(state: swSwitch.state == .on ? .running : .stopped))
+        case .reportRateEvent:
+          if let rate = Double(txtRate.stringValue) {
+            var r = rate
+            if rate < -512.0 || rate > 511.75 {
+              txtRate.stringValue = "1.0"
+              r = 1.0
             }
-          case .reportYearEvent:
-            events.append(fastClock.encodeYearEvent(subCode: .setYearEventId, year: components.year!))
-          case .reportDateEvent:
-            events.append(fastClock.encodeDateEvent(subCode: .setDateEventId, month: components.month!, day: components.day!))
-          case .reportTimeEvent:
-            events.append(fastClock.encodeTimeEvent(subCode: .setTimeEventId, hour: components.hour!, minute: components.minute!))
+            events.append(fastClock.encodeRateEvent(subCode: .setRateEventId, rate: r))
           }
-          
+        case .reportYearEvent:
+          events.append(fastClock.encodeYearEvent(subCode: .setYearEventId, year: components.year!))
+        case .reportDateEvent:
+          events.append(fastClock.encodeDateEvent(subCode: .setDateEventId, month: components.month!, day: components.day!))
+        case .reportTimeEvent:
+          events.append(fastClock.encodeTimeEvent(subCode: .setTimeEventId, hour: components.hour!, minute: components.minute!))
         }
         
-        for eventId in events {
-          networkLayer.sendEvent(sourceNodeId: nodeId, eventId: eventId)
-        }
-
       }
       
+      for eventId in events {
+        networkLayer.sendEvent(sourceNodeId: nodeId, eventId: eventId)
+      }
+
     }
- 
+
   }
   
   @IBOutlet weak var swSwitch: NSSwitch!
   
   @IBAction func swSwitchAction(_ sender: NSSwitch) {
 
-    if let networkLayer = myTrainsController.openLCBNetworkLayer {
-      let fastclock = networkLayer.fastClock!
-      let nodeId = networkLayer.configurationToolNode!.nodeId
-      networkLayer.sendEvent(sourceNodeId: nodeId, eventId: fastclock.encodeStopStartEvent(state: (swSwitch.state == .on ? .running : .stopped)))
+    guard let networkLayer, let fastClock else {
+      return
     }
     
+    networkLayer.sendEvent(sourceNodeId: nodeId, eventId: fastClock.encodeStopStartEvent(state: (swSwitch.state == .on ? .running : .stopped)))
+
   }
   
   @IBOutlet weak var clockView: ClockView!
   
 }
-

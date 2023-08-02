@@ -27,7 +27,9 @@ public class OpenLCBNodeConfigurationTool : OpenLCBNodeVirtual {
   
   // MARK: Private Properties
   
-  // MARK: Public Properties 
+  // MARK: Public Properties
+  
+  public var delegate : OpenLCBConfigurationToolDelegate?
   
   // MARK: Private Methods
   
@@ -48,9 +50,16 @@ public class OpenLCBNodeConfigurationTool : OpenLCBNodeVirtual {
     saveMemorySpaces()
     
   }
-
+  
+  // MARK: Public Methods
+  
   // MARK: Public Methods
   
   // MARK: OpenLCBNetworkLayerDelegate Methods
+
+  public override func openLCBMessageReceived(message: OpenLCBMessage) {
+    super.openLCBMessageReceived(message: message)
+    delegate?.openLCBMessageReceived?(message: message)
+  }
   
 }
