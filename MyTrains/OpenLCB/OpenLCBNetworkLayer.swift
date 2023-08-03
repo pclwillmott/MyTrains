@@ -21,7 +21,6 @@ public class OpenLCBNetworkLayer : NSObject {
     nodeManagers.append(locoNetMonitorManager)
     nodeManagers.append(programmerToolManager)
     nodeManagers.append(configurationToolManager)
-    nodeManagers.append(locoNetGatewayManager)
 
     var virtualNodes = OpenLCBMemorySpace.getVirtualNodes()
     
@@ -96,10 +95,6 @@ public class OpenLCBNetworkLayer : NSObject {
   
   internal var _state : OpenLCBNetworkLayerState = .uninitialized
   
-  private var nextObserverId : Int = 0
-  
-  private var observers : [Int:OpenLCBNetworkLayerDelegate] = [:]
-  
   private var virtualNodes : [UInt64:OpenLCBNodeVirtual] = [:]
   
   private var nodeManagers : [OpenLCBNodeManager] = []
@@ -111,8 +106,6 @@ public class OpenLCBNetworkLayer : NSObject {
   private var programmerToolManager = OpenLCBNodeManager()
   
   private var configurationToolManager = OpenLCBNodeManager()
-  
-  private var locoNetGatewayManager = OpenLCBNodeManager()
   
   // MARK: Public Properties
   
@@ -126,19 +119,7 @@ public class OpenLCBNetworkLayer : NSObject {
   
   public var fastClock : OpenLCBClock?
   
-  public var locoNetGateways : [OpenLCBLocoNetGateway] {
-    
-    var result : [OpenLCBLocoNetGateway] = []
-    
-    for item in locoNetGatewayManager.members {
-      result.append(item as! OpenLCBLocoNetGateway)
-    }
-    
-    return result
-    
-  }
-  
-  public var transportLayers : [ObjectIdentifier:OpenLCBTransportLayer] = [:]
+//  public var transportLayers : [ObjectIdentifier:OpenLCBTransportLayer] = [:]
   
   // MARK: Public Methods
   
@@ -159,22 +140,11 @@ public class OpenLCBNetworkLayer : NSObject {
   }
   
   public func removeAlias(nodeId:UInt64) {
-    for (_, layer) in transportLayers {
+/*    for (_, layer) in transportLayers {
       layer.removeAlias(nodeId: nodeId)
-    }
+    } */
   }
 
-  public func addObserver(observer:OpenLCBNetworkLayerDelegate) -> Int{
-    let id = nextObserverId
-    nextObserverId += 1
-    observers[id] = observer
-    return id
-  }
-  
-  public func removeObserver(observerId:Int) {
-    observers.removeValue(forKey: observerId)
-  }
-  
   public func registerNode(node:OpenLCBNodeVirtual) {
     
     virtualNodes[node.nodeId] = node
@@ -193,19 +163,17 @@ public class OpenLCBNetworkLayer : NSObject {
     case .genericVirtualNode:
       break
     case .locoNetGatewayNode:
-      locoNetGatewayManager.addNode(node: node)
+      break
     case .locoNetMonitorNode:
       locoNetMonitorManager.addNode(node: node)
     case .programmerToolNode:
       programmerToolManager.addNode(node: node)
     case .programmingTrackNode:
-      let programmingTrack = node as! OpenLCBProgrammingTrackNode
-      programmingTrack.reloadCDI()
+      break
     case .throttleNode:
       throttleManager.addNode(node: node)
     case .trainNode:
-      let trainNode = node as! OpenLCBNodeRollingStockLocoNet
-      trainNode.reloadCDI()
+      break
     }
     
     node.start()
@@ -248,7 +216,7 @@ public class OpenLCBNetworkLayer : NSObject {
   }
   
   public func releaseLocoNetMonitor(monitor:OpenLCBLocoNetMonitorNode) {
-    locoNetMonitorManager.removeNode(node: monitor)
+    locoNetMonitorManager.releaseNode(node: monitor)
   }
   
   public func getProgrammerTool() -> OpenLCBProgrammerToolNode? {
@@ -280,7 +248,7 @@ public class OpenLCBNetworkLayer : NSObject {
   }
   
   public func releaseConfigurationTool(configurationTool:OpenLCBNodeConfigurationTool) {
-    configurationToolManager.removeNode(node: configurationTool)
+    configurationToolManager.releaseNode(node: configurationTool)
   }
   
   public func getNewNodeId(virtualNodeType:MyTrainsVirtualNodeType) -> UInt64 {
@@ -299,47 +267,7 @@ public class OpenLCBNetworkLayer : NSObject {
   }
 
   // MARK: Messages
-  
-  var spacingTimer : Timer?
-  
-  @objc func spacingTimerAction() {
-  
-    if outputQueue.isEmpty {
-      return
-    }
-    
-    let message = outputQueue.removeFirst()
-    
-//    print(message.messageTypeIndicator)
-    
-    for (_, observer) in observers {
-      observer.openLCBMessageReceived(message: message)
-    }
-    
-    for (_, virtualNode) in virtualNodes {
-      if virtualNode.nodeId != message.gatewayNodeId {
-        virtualNode.openLCBMessageReceived(message: message)
-      }
-    }
-    
-    if !outputQueue.isEmpty {
-      startSpacingTimer()
-    }
-    
-  }
-  
-  func startSpacingTimer() {
-    
-    let timeInterval : TimeInterval = 0.0
-    
-    spacingTimer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(spacingTimerAction), userInfo: nil, repeats: false)
-    
-    RunLoop.current.add(spacingTimer!, forMode: .common)
-    
-  }
 
-  var outputQueue : [OpenLCBMessage] = []
-  
   public func sendMessage(gatewayNodeId:UInt64, message:OpenLCBMessage) {
     
     guard state == .initialized else {
@@ -347,19 +275,6 @@ public class OpenLCBNetworkLayer : NSObject {
     }
     
     message.gatewayNodeId = gatewayNodeId
-    
-/*    outputQueue.append(message)
-    
-    if outputQueue.count == 1 {
-      startSpacingTimer()
-    }
-    */
-    
-//    print(message.messageTypeIndicator)
-    
-    for (_, observer) in observers {
-      observer.openLCBMessageReceived(message: message)
-    }
     
     for (_, virtualNode) in virtualNodes {
       if virtualNode.nodeId != message.gatewayNodeId {
@@ -397,18 +312,6 @@ public class OpenLCBNetworkLayer : NSObject {
     message.sourceNodeId = sourceNodeId
     
     message.eventId = baseEventId | 0xf000
-    
-    sendMessage(message: message)
-    
-  }
-
-  public func sendEvent(sourceNodeId:UInt64, eventId:UInt64) {
-    
-    let message = OpenLCBMessage(messageTypeIndicator: .producerConsumerEventReport)
-    
-    message.sourceNodeId = sourceNodeId
-    
-    message.eventId = eventId
     
     sendMessage(message: message)
     
@@ -484,78 +387,6 @@ public class OpenLCBNetworkLayer : NSObject {
     
   }
 
-  public func sendWellKnownEvent(sourceNodeId:UInt64, eventId:OpenLCBWellKnownEvent) {
-    sendEvent(sourceNodeId: sourceNodeId, eventId: eventId.rawValue)
-  }
-  
-  public func sendProducerRangeIdentified(sourceNodeId:UInt64, eventId:UInt64) {
-
-    let message = OpenLCBMessage(messageTypeIndicator: .producerRangeIdentified)
-
-    message.sourceNodeId = sourceNodeId
-    
-    message.eventId = eventId
-    
-    sendMessage(message: message) 
-
-  }
-
-  public func sendConsumerRangeIdentified(sourceNodeId:UInt64, eventId:UInt64) {
-
-    let message = OpenLCBMessage(messageTypeIndicator: .consumerRangeIdentified)
-
-    message.sourceNodeId = sourceNodeId
-    
-    message.eventId = eventId
-    
-    sendMessage(message: message)
-
-  }
-  
-  public func sendProducerIdentifiedValid(sourceNodeId:UInt64, eventId:UInt64) {
-
-    let message = OpenLCBMessage(messageTypeIndicator: .producerIdentifiedAsCurrentlyValid)
-
-    message.sourceNodeId = sourceNodeId
-    
-    message.eventId = eventId
-    
-    sendMessage(message: message)
-
-  }
-
-  public func sendProducerIdentifiedValid(sourceNodeId:UInt64, wellKnownEvent: OpenLCBWellKnownEvent) {
-    sendProducerIdentifiedValid(sourceNodeId: sourceNodeId, eventId: wellKnownEvent.rawValue)
-  }
-
-  public func sendProducerIdentifiedValidityUnknown(sourceNodeId:UInt64, wellKnownEvent: OpenLCBWellKnownEvent) {
-    sendProducerIdentifiedValidityUnknown(sourceNodeId: sourceNodeId, eventId: wellKnownEvent.rawValue)
-  }
-
-  public func sendIdentifyProducer(sourceNodeId:UInt64, eventId:UInt64) {
-
-    let message = OpenLCBMessage(messageTypeIndicator: .identifyProducer)
-
-    message.sourceNodeId = sourceNodeId
-    
-    message.eventId = eventId
-    
-    sendMessage(message: message)
-
-  }
-
-  public func sendIdentifyProducer(sourceNodeId:UInt64, event:OpenLCBWellKnownEvent) {
-
-    let message = OpenLCBMessage(messageTypeIndicator: .identifyProducer)
-
-    message.sourceNodeId = sourceNodeId
-    
-    message.eventId = event.rawValue
-    
-    sendMessage(message: message)
-
-  }
-
   public func makeTrainSearchEventId(searchString : String, searchType:OpenLCBSearchType, searchMatchType:OpenLCBSearchMatchType, searchMatchTarget:OpenLCBSearchMatchTarget, trackProtocol:OpenLCBTrackProtocol) -> UInt64 {
     
     var eventId : UInt64 = 0x090099ff00000000
@@ -606,30 +437,75 @@ public class OpenLCBNetworkLayer : NSObject {
     
   }
   
-  public func sendProducerIdentifiedValidityUnknown(sourceNodeId:UInt64, eventId:UInt64) {
-
-    let message = OpenLCBMessage(messageTypeIndicator: .producerIdentifiedWithValidityUnknown)
-
+  public func sendEvent(sourceNodeId:UInt64, eventId:UInt64) {
+    let message = OpenLCBMessage(messageTypeIndicator: .producerConsumerEventReport)
     message.sourceNodeId = sourceNodeId
-    
     message.eventId = eventId
-    
     sendMessage(message: message)
+  }
 
+  public func sendWellKnownEvent(sourceNodeId:UInt64, eventId:OpenLCBWellKnownEvent) {
+    sendEvent(sourceNodeId: sourceNodeId, eventId: eventId.rawValue)
+  }
+    
+  public func sendIdentifyProducer(sourceNodeId:UInt64, eventId:UInt64) {
+    let message = OpenLCBMessage(messageTypeIndicator: .identifyProducer)
+    message.sourceNodeId = sourceNodeId
+    message.eventId = eventId
+    sendMessage(message: message)
+  }
+
+  public func sendIdentifyProducer(sourceNodeId:UInt64, event:OpenLCBWellKnownEvent) {
+    sendIdentifyProducer(sourceNodeId: sourceNodeId, eventId: event.rawValue)
   }
   
-  public func sendConsumerIdentifiedValid(sourceNodeId:UInt64, eventId:UInt64) {
-
-    let message = OpenLCBMessage(messageTypeIndicator: .consumerIdentifiedAsCurrentlyValid)
-
+  public func sendProducerIdentified(sourceNodeId:UInt64, eventId:UInt64, validity:OpenLCBValidity) {
+    let message = OpenLCBMessage(messageTypeIndicator: validity.producerMTI)
     message.sourceNodeId = sourceNodeId
-    
     message.eventId = eventId
-    
     sendMessage(message: message)
-
   }
 
+  public func sendProducerIdentified(sourceNodeId:UInt64, wellKnownEvent: OpenLCBWellKnownEvent, validity:OpenLCBValidity) {
+    sendProducerIdentified(sourceNodeId: sourceNodeId, eventId: wellKnownEvent.rawValue, validity: validity)
+  }
+
+  public func sendProducerRangeIdentified(sourceNodeId:UInt64, eventId:UInt64) {
+    let message = OpenLCBMessage(messageTypeIndicator: .producerRangeIdentified)
+    message.sourceNodeId = sourceNodeId
+    message.eventId = eventId
+    sendMessage(message: message)
+  }
+
+  public func sendIdentifyConsumer(sourceNodeId:UInt64, eventId:UInt64) {
+    let message = OpenLCBMessage(messageTypeIndicator: .identifyConsumer)
+    message.sourceNodeId = sourceNodeId
+    message.eventId = eventId
+    sendMessage(message: message)
+  }
+
+  public func sendIdentifyConsumer(sourceNodeId:UInt64, event:OpenLCBWellKnownEvent) {
+    sendIdentifyConsumer(sourceNodeId: sourceNodeId, eventId: event.rawValue)
+  }
+  
+  public func sendConsumerIdentified(sourceNodeId:UInt64, eventId:UInt64, validity:OpenLCBValidity) {
+    let message = OpenLCBMessage(messageTypeIndicator: validity.consumerMTI)
+    message.sourceNodeId = sourceNodeId
+    message.eventId = eventId
+    sendMessage(message: message)
+  }
+
+  public func sendConsumerIdentified(sourceNodeId:UInt64, wellKnownEvent: OpenLCBWellKnownEvent, validity:OpenLCBValidity) {
+    sendConsumerIdentified(sourceNodeId: sourceNodeId, eventId: wellKnownEvent.rawValue, validity: validity)
+  }
+
+  public func sendConsumerRangeIdentified(sourceNodeId:UInt64, eventId:UInt64) {
+    let message = OpenLCBMessage(messageTypeIndicator: .consumerRangeIdentified)
+    message.sourceNodeId = sourceNodeId
+    message.eventId = eventId
+    sendMessage(message: message)
+  }
+  
   public func sendVerifyNodeIdNumber(sourceNodeId:UInt64) {
     
     let message = OpenLCBMessage(messageTypeIndicator: .verifyNodeIDNumberGlobal)

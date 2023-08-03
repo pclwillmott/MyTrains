@@ -318,8 +318,8 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <datePickerCell key="cell" borderStyle="bezel" alignment="left" useCurrentDate="YES" id="v7q-lu-cRd">
                                                 <font key="font" metaFont="system"/>
-                                                <date key="date" timeIntervalSinceReferenceDate="711037027.20198905">
-                                                    <!--2023-07-14 14:17:07 +0000-->
+                                                <date key="date" timeIntervalSinceReferenceDate="712750300.26767194">
+                                                    <!--2023-08-03 10:11:40 +0000-->
                                                 </date>
                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -425,7 +425,7 @@
                                                     <tabViewItems>
                                                         <tabViewItem label="Tab" identifier="" id="Whx-dH-10D">
                                                             <view key="view" id="bNg-w3-bR6">
-                                                                <rect key="frame" x="32" y="7" width="394" height="545"/>
+                                                                <rect key="frame" x="10" y="7" width="396" height="545"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             </view>
                                                         </tabViewItem>

@@ -21,7 +21,7 @@ public enum MyTrainsVirtualNodeType : String {
   case locoNetMonitorNode    = "LocoNet Monitor Node"
   case programmerToolNode    = "DCC Programmer Tool Node"
   case programmingTrackNode  = "DCC Programming Track Node"
-  
+ 
   // MARK: Public Properties
   
   public var name : String {
@@ -77,7 +77,9 @@ public enum MyTrainsVirtualNodeType : String {
   // MARK: Public Methods
   
   public func defaultUserNodeName(nodeId:UInt64) -> String {
-    return "\(self.name) #\(nodeId - self.baseNodeId + 1)"
+    var userName = self.name
+    userName.removeLast(5)
+    return "\(userName) #\(nodeId - self.baseNodeId + 1)"
   }
   
   // MARK: Class Methods

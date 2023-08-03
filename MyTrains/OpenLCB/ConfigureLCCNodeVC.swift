@@ -20,7 +20,7 @@ private enum State {
 
 private typealias MemoryMapItem = (sortAddress:UInt64, space:UInt8, address: Int, size: Int, data: [UInt8], modified: Bool)
 
-class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLayerDelegate, XMLParserDelegate {
+class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBConfigurationToolDelegate, XMLParserDelegate {
   
   // MARK: Window & View Methods
   
@@ -34,14 +34,12 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
   
   func windowWillClose(_ notification: Notification) {
     
-    if haveLock {
-      networkLayer?.sendUnLockCommand(sourceNodeId: sourceNodeId, destinationNodeId: node!.nodeId)
+    guard let networkLayer, let configurationTool else {
+      return
     }
     
-    if observerId != -1 {
-      networkLayer?.removeObserver(observerId: observerId)
-      observerId = -1
-    }
+    configurationTool.delegate = nil
+    networkLayer.releaseConfigurationTool(configurationTool: configurationTool)
     
   }
   
@@ -49,17 +47,13 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
     
     self.view.window?.delegate = self
     
-    networkLayer = myTrainsController.openLCBNetworkLayer
+    networkLayer = configurationTool!.networkLayer
     
-    if let network = self.networkLayer {
-      observerId = network.addObserver(observer: self)
-    }
+    nodeId = configurationTool!.nodeId
     
     let title = node!.userNodeName == "" ? "\(node!.manufacturerName) - \(node!.nodeModelName)" : node!.userNodeName
     
     self.view.window?.title = "Configure \(title) (\(node!.nodeId.toHexDotFormat(numberOfBytes: 6)))"
-    
-    sourceNodeId = myTrainsController.openLCBNetworkLayer!.myTrainsNode!.nodeId
     
     safeTextTop = txtValue.frame.origin.y
     
@@ -75,11 +69,6 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
     btnResetToDefaults.isHidden = true
 
     if let network = networkLayer {
-      /*
-      state = .gettingLock
-      network.sendLockCommand(sourceNodeId: sourceNodeId, destinationNodeId: node!.nodeId)
-      lblStatus.stringValue = "Getting Lock"
-*/
 
       lblStatus.stringValue = "Getting CDI"
       
@@ -91,7 +80,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
       
       CDI = []
       
-      network.sendNodeMemoryReadRequest(sourceNodeId: sourceNodeId, destinationNodeId: node!.nodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cdi.rawValue, startAddress: nextCDIStartAddress, numberOfBytesToRead: 64)
+      network.sendNodeMemoryReadRequest(sourceNodeId: nodeId, destinationNodeId: node!.nodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cdi.rawValue, startAddress: nextCDIStartAddress, numberOfBytesToRead: 64)
 
     }
 
@@ -101,15 +90,11 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
   
   private var networkLayer : OpenLCBNetworkLayer?
   
-  private var observerId : Int = -1
+  private var nodeId : UInt64 = 0
   
   private var nextCDIStartAddress : Int = 0
   
-  //private var bytesToGo : UInt32 = 0
-  
   private var CDI : [UInt8] = []
-  
-  private var sourceNodeId : UInt64 = 0
   
   private var state : State = .idle
   
@@ -157,11 +142,11 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
   
   private var dataToWrite : [(space: UInt8, address:Int, data:[UInt8])] = []
   
-  private var haveLock : Bool = false
-  
   // MARK: Public Properties
   
   public var node: OpenLCBNode?
+  
+  public var configurationTool : OpenLCBNodeConfigurationTool?
   
   // MARK: Private Methods
   
@@ -496,7 +481,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
     
     lblStatus.stringValue = "Reading Variables - \(totalBytesRead) bytes"
 
-    if let node = self.node, let network = networkLayer {
+    if let node, let networkLayer {
 
       state = .readingMemory
 
@@ -506,7 +491,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
       
       let bytesToRead = UInt8(min(64, memoryMap[currentMemoryBlock].size))
       
-      network.sendNodeMemoryReadRequest(sourceNodeId: sourceNodeId, destinationNodeId: node.nodeId, addressSpace: memoryMap[currentMemoryBlock].space, startAddress: nextCDIStartAddress, numberOfBytesToRead: bytesToRead)
+      networkLayer.sendNodeMemoryReadRequest(sourceNodeId: nodeId, destinationNodeId: node.nodeId, addressSpace: memoryMap[currentMemoryBlock].space, startAddress: nextCDIStartAddress, numberOfBytesToRead: bytesToRead)
       
     }
     
@@ -528,17 +513,11 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
     timer = nil
   }
 
-  // MARK: LCCNetworkLayerDelegate Methods
-  
-  func networkLayerStateChanged(networkLayer: OpenLCBNetworkLayer) {
-    
-  }
+  // MARK: OpenLCBConfigurationToolDelegate Methods
   
   func openLCBMessageReceived(message: OpenLCBMessage) {
     
- //   print("->\(message.messageTypeIndicator) \(message.datagramType)")
-    
-    guard message.destinationNodeId == sourceNodeId && message.sourceNodeId == node!.nodeId else {
+    guard message.destinationNodeId == nodeId && message.sourceNodeId == node!.nodeId else {
       return
     }
     
@@ -589,7 +568,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
               dataToWrite.removeFirst()
               
               if !dataToWrite.isEmpty {
-                network.sendNodeMemoryWriteRequest(sourceNodeId: sourceNodeId, destinationNodeId: node.nodeId, addressSpace: dataToWrite[0].space, startAddress: dataToWrite[0].address, dataToWrite: dataToWrite[0].data)
+                network.sendNodeMemoryWriteRequest(sourceNodeId: nodeId, destinationNodeId: node.nodeId, addressSpace: dataToWrite[0].space, startAddress: dataToWrite[0].address, dataToWrite: dataToWrite[0].data)
               }
               else {
                 state = .idle
@@ -606,7 +585,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
         
         if let node = self.node {
           
-          network.sendDatagramReceivedOK(sourceNodeId: sourceNodeId, destinationNodeId: node.nodeId, timeOut: .ok)
+          network.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: node.nodeId, timeOut: .ok)
           
           var data = message.payload
           
@@ -646,7 +625,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
                 dataToWrite.removeFirst()
                 
                 if !dataToWrite.isEmpty {
-                  network.sendNodeMemoryWriteRequest(sourceNodeId: sourceNodeId, destinationNodeId: node.nodeId, addressSpace: dataToWrite[0].space, startAddress: dataToWrite[0].address, dataToWrite: dataToWrite[0].data)
+                  network.sendNodeMemoryWriteRequest(sourceNodeId: nodeId, destinationNodeId: node.nodeId, addressSpace: dataToWrite[0].space, startAddress: dataToWrite[0].address, dataToWrite: dataToWrite[0].data)
                 }
                 else {
                   stopTimer()
@@ -704,7 +683,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
                     
                     nextCDIStartAddress += data.count
                     
-                    network.sendNodeMemoryReadRequest(sourceNodeId: sourceNodeId, destinationNodeId: node.nodeId, addressSpace: memoryMap[currentMemoryBlock].space, startAddress: nextCDIStartAddress, numberOfBytesToRead: bytesToRead)
+                    network.sendNodeMemoryReadRequest(sourceNodeId: nodeId, destinationNodeId: node.nodeId, addressSpace: memoryMap[currentMemoryBlock].space, startAddress: nextCDIStartAddress, numberOfBytesToRead: bytesToRead)
 
                   }
                   else {
@@ -717,7 +696,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
                       
                       let bytesToRead = UInt8(min(64, memoryMap[currentMemoryBlock].size))
                       
-                      network.sendNodeMemoryReadRequest(sourceNodeId: sourceNodeId, destinationNodeId: node.nodeId, addressSpace: memoryMap[currentMemoryBlock].space, startAddress: nextCDIStartAddress, numberOfBytesToRead: bytesToRead)
+                      network.sendNodeMemoryReadRequest(sourceNodeId: nodeId, destinationNodeId: node.nodeId, addressSpace: memoryMap[currentMemoryBlock].space, startAddress: nextCDIStartAddress, numberOfBytesToRead: bytesToRead)
                       
                     }
                     else {
@@ -779,7 +758,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
                     
                     nextCDIStartAddress += data.count
                     
-                    network.sendNodeMemoryReadRequest(sourceNodeId: sourceNodeId, destinationNodeId: node.nodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cdi.rawValue, startAddress: nextCDIStartAddress, numberOfBytesToRead: 64)
+                    network.sendNodeMemoryReadRequest(sourceNodeId: nodeId, destinationNodeId: node.nodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cdi.rawValue, startAddress: nextCDIStartAddress, numberOfBytesToRead: 64)
                     
                   }
                   else {
@@ -1097,7 +1076,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
         
         let bytesToRead = UInt8(min(64, memoryMap[currentMemoryBlock].size))
         
-        network.sendNodeMemoryReadRequest(sourceNodeId: sourceNodeId, destinationNodeId: node.nodeId, addressSpace: memoryMap[currentMemoryBlock].space, startAddress: nextCDIStartAddress, numberOfBytesToRead: bytesToRead)
+        network.sendNodeMemoryReadRequest(sourceNodeId: nodeId, destinationNodeId: node.nodeId, addressSpace: memoryMap[currentMemoryBlock].space, startAddress: nextCDIStartAddress, numberOfBytesToRead: bytesToRead)
         
       }
     }
@@ -1389,7 +1368,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
             address += data.count
           }
           
-          network.sendNodeMemoryWriteRequest(sourceNodeId: sourceNodeId, destinationNodeId: node.nodeId, addressSpace: dataToWrite[0].space, startAddress: dataToWrite[0].address, dataToWrite: dataToWrite[0].data)
+          network.sendNodeMemoryWriteRequest(sourceNodeId: nodeId, destinationNodeId: node.nodeId, addressSpace: dataToWrite[0].space, startAddress: dataToWrite[0].address, dataToWrite: dataToWrite[0].data)
           
         }
         
@@ -1456,16 +1435,23 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
     
     lblStatus.stringValue = "Reading Configuration Description Information - \(totalBytesRead) bytes"
 
-    if let network = networkLayer {
-      network.sendGetMemorySpaceInformationRequest(sourceNodeId: sourceNodeId, destinationNodeId: node!.nodeId, addressSpace: 0xff)
-    }
+    state = .gettingCDI
+    
+    totalBytesRead = 0
+    
+    nextCDIStartAddress = 0
+    
+    CDI = []
+    
+    networkLayer?.sendNodeMemoryReadRequest(sourceNodeId: nodeId, destinationNodeId: node!.nodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cdi.rawValue, startAddress: nextCDIStartAddress, numberOfBytesToRead: 64)
+    
   }
   
   @IBOutlet weak var btnReboot: NSButton!
   
   @IBAction func btnRebootAction(_ sender: NSButton) {
     if let network = networkLayer {
-      network.sendRebootCommand(sourceNodeId: sourceNodeId, destinationNodeId: node!.nodeId)
+      network.sendRebootCommand(sourceNodeId: nodeId, destinationNodeId: node!.nodeId)
     }
   }
   
@@ -1483,7 +1469,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBNetworkLaye
 
     if alert.runModal() == NSApplication.ModalResponse.alertSecondButtonReturn {
       if let network = networkLayer {
-        network.sendResetToDefaults(sourceNodeId: sourceNodeId, destinationNodeId: node!.nodeId)
+        network.sendResetToDefaults(sourceNodeId: nodeId, destinationNodeId: node!.nodeId)
       }
     }
 

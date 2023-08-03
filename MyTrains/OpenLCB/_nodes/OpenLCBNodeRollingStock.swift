@@ -17,8 +17,6 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     
     functionSpaceSize = 0x45
     
-    //    _rollingStock = rollingStock
-    
     functions = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.functions.rawValue, defaultMemorySize: functionSpaceSize, isReadOnly: false, description: "")
     
     let configSize = addressLocoNetGateway + 8
@@ -889,7 +887,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
             }
             
             if addressMatch || (!matchOnlyInAddress && nameMatch) {
-              networkLayer?.sendProducerIdentifiedValid(sourceNodeId: nodeId, eventId: id)
+              networkLayer?.sendProducerIdentified(sourceNodeId: nodeId, eventId: id, validity: .valid)
             }
             
           }
@@ -901,7 +899,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
         else if let event = OpenLCBWellKnownEvent(rawValue: id) {
           
           if event == .nodeIsATrain {
-            networkLayer?.sendProducerIdentifiedValid(sourceNodeId: nodeId, eventId: id)
+            networkLayer?.sendProducerIdentified(sourceNodeId: nodeId, eventId: id, validity: .valid)
           }
           
         }

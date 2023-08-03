@@ -380,6 +380,8 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
 
   internal override func resetReboot() {
     
+    super.resetReboot()
+    
     rebooted = true
     
     subState = .rebooting
@@ -722,7 +724,7 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
     if let network = networkLayer {
       
       for index in 0 ... 4 {
-        network.sendProducerIdentifiedValid(sourceNodeId: nodeId, eventId: lastEvents[index])
+        network.sendProducerIdentified(sourceNodeId: nodeId, eventId: lastEvents[index], validity: .valid)
       }
       
       triggered = true

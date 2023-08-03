@@ -358,7 +358,7 @@ public class OpenLCBMemorySpace {
         let extra = defaultMemorySize - result.memory.count
         
         if extra > 0 {
-          var data : [UInt8] = [UInt8](repeating: 0, count: extra)
+          let data : [UInt8] = [UInt8](repeating: 0, count: extra)
           result.memory.append(contentsOf: data)
           result.save()
         }
@@ -479,6 +479,9 @@ public class OpenLCBMemorySpace {
           
           result.append(node)
           
+        }
+        else {
+          print("Virtual Node Type Not Found: \(temp.nodeModelName)")
         }
                 
       }

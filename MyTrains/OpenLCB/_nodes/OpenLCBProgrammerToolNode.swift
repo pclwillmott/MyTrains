@@ -70,6 +70,7 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
   }
   
   internal override func resetReboot() {
+    super.resetReboot()
     programmingTracks = [0:"Programming on the Mainline"]
     networkLayer?.sendIdentifyProducer(sourceNodeId: nodeId, event: .nodeIsADCCProgrammingTrack)
     dccTrainNodes = [:]

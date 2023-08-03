@@ -40,6 +40,8 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
   
   private var timeoutTimer : Timer?
   
+  private var locoNetGateways : [UInt64:String] = [:]
+
   private var locoNet : LocoNet?
   
   private var slotState : LocoNetSlotState {
@@ -274,6 +276,51 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
     
   }
   
+  public override func initCDI(filename:String, manufacturer:String, model:String) {
+    
+    if let filepath = Bundle.main.path(forResource: filename, ofType: "xml") {
+      do {
+        
+        var contents = try String(contentsOfFile: filepath)
+        
+        contents = contents.replacingOccurrences(of: "%%MANUFACTURER%%", with: manufacturer)
+        contents = contents.replacingOccurrences(of: "%%MODEL%%", with: model)
+        
+        var sorted : [(nodeId:UInt64, name:String)] = []
+        
+        for (key, name) in locoNetGateways {
+          sorted.append((nodeId:key, name:name))
+        }
+        
+        sorted.sort {$0.name < $1.name}
+        
+        var gateways = "<relation><property>00.00.00.00.00.00.00.00</property><value>No Gateway Selected</value></relation>\n"
+        
+        for gateway in sorted {
+          gateways += "<relation><property>\(gateway.nodeId.toHexDotFormat(numberOfBytes: 8))</property><value>\(gateway.name)</value></relation>\n"
+        }
+
+        contents = contents.replacingOccurrences(of: "%%LOCONET_GATEWAYS%%", with: gateways)
+
+        contents = contents.replacingOccurrences(of: "%%FUNCTIONS_MAP%%", with: OpenLCBFunction.cdiMap)
+        
+        let memorySpace = OpenLCBMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.cdi.rawValue, isReadOnly: true, description: "")
+        memorySpace.memory = [UInt8]()
+        memorySpace.memory.append(contentsOf: contents.utf8)
+        memorySpace.memory.append(contentsOf: [UInt8](repeating: 0, count: 64))
+        memorySpaces[memorySpace.space] = memorySpace
+        isConfigurationDescriptionInformationProtocolSupported = true
+        
+        setupConfigurationOptions()
+        
+      }
+      catch {
+      }
+    }
+    
+  }
+
+  
   // MARK: Public Methods
   
   @objc public func locoNetMessageReceived(message:LocoNetMessage) {
@@ -413,6 +460,37 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
     super.openLCBMessageReceived(message: message)
     
     locoNet?.openLCBMessageReceived(message: message)
+    
+    switch message.messageTypeIndicator {
+      
+    case .producerIdentifiedAsCurrentlyValid, .producerIdentifiedAsCurrentlyInvalid, .producerIdentifiedWithValidityUnknown, .producerConsumerEventReport:
+      
+      if let event = OpenLCBWellKnownEvent(rawValue: message.eventId!) {
+        
+        switch event {
+        case .nodeIsALocoNetGateway:
+          
+          locoNetGateways[message.sourceNodeId!] = ""
+          networkLayer?.sendSimpleNodeInformationRequest(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!)
+          
+        default:
+          break
+        }
+        
+      }
+
+    case .simpleNodeIdentInfoReply:
+      
+      if let _ = locoNetGateways[message.sourceNodeId!] {
+        let node = OpenLCBNode(nodeId: message.sourceNodeId!)
+        node.encodedNodeInformation = message.payload
+        locoNetGateways[node.nodeId] = node.userNodeName
+        reloadCDI()
+      }
+
+    default:
+      break
+    }
     
   }
   

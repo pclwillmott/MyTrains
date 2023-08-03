@@ -34,7 +34,7 @@ public class LocoNet {
     
     self.nodeId = virtualNode.nodeId
     
-    networkLayer.sendConsumerIdentifiedValid(sourceNodeId: nodeId, eventId: OpenLCBWellKnownEvent.nodeIsALocoNetGateway.rawValue)
+    networkLayer.sendConsumerIdentified(sourceNodeId: nodeId, eventId: OpenLCBWellKnownEvent.nodeIsALocoNetGateway.rawValue, validity: .valid)
 
     getOpSwDataAP1()
     

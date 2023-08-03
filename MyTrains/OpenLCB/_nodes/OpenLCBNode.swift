@@ -549,6 +549,43 @@ public class OpenLCBNode : NSObject {
     
   }
   
+  public var possibleAddressSpaces : [UInt8] {
+    
+    var possibles : Set<UInt8> = []
+    
+    if isConfigurationDescriptionInformationProtocolSupported {
+      possibles.insert(OpenLCBNodeMemoryAddressSpace.cdi.rawValue)
+      possibles.insert(OpenLCBNodeMemoryAddressSpace.configuration.rawValue)
+    }
+    if isAbbreviatedDefaultCDIProtocolSupported {
+      possibles.insert(OpenLCBNodeMemoryAddressSpace.acdiManufacturer.rawValue)
+      possibles.insert(OpenLCBNodeMemoryAddressSpace.acdiUser.rawValue)
+    }
+    if isFunctionDescriptionInformationProtocolSupported {
+      possibles.insert(OpenLCBNodeMemoryAddressSpace.fdi.rawValue)
+    }
+    
+    let highest = Int(configurationOptions.highestAddressSpace)
+    
+    var lowest = Int(configurationOptions.lowestAddressSpace)
+    
+    while lowest <= highest {
+      possibles.insert(UInt8(lowest & 0xff))
+      lowest += 1
+    }
+    
+    var result : [UInt8] = []
+    
+    for possible in possibles {
+      result.append(possible)
+    }
+    
+    result.sort { $0 >= $1 }
+    
+    return result
+    
+  }
+  
   // MARK: Public Methods
   
   public func addAddressSpaceInformation(message:OpenLCBMessage) -> OpenLCBNodeAddressSpaceInformation? {
@@ -559,16 +596,7 @@ public class OpenLCBNode : NSObject {
     
     var highestAddress : UInt32 = 0
 
-    /*
-    print("\(message.sourceNodeId!.toHexDotFormat(numberOfBytes: 6)) -> ", terminator: "")
-    for byte in message.payload {
-      print("\(byte.toHex(numberOfDigits: 2)), ", terminator: "")
-    }
-    print()
-    */
-    
     guard message.payload.count >= 8 else {
-  //    print("addAddressSpaceInformation: payload too short.")
       return nil
     }
     

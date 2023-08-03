@@ -181,6 +181,10 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
       port.delegate = self
       port.open()
     }
+    
+    networkLayer?.sendProducerIdentified(sourceNodeId: nodeId, wellKnownEvent: .nodeIsALocoNetGateway, validity: .valid)
+
+    networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .nodeIsALocoNetGateway)
 
   }
   
@@ -329,7 +333,7 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     case .identifyProducer:
       
       if message.eventId == OpenLCBWellKnownEvent.nodeIsALocoNetGateway.rawValue {
-        networkLayer?.sendProducerIdentifiedValid(sourceNodeId: nodeId, wellKnownEvent: .nodeIsALocoNetGateway)
+        networkLayer?.sendProducerIdentified(sourceNodeId: nodeId, wellKnownEvent: .nodeIsALocoNetGateway, validity: .valid)
       }
     
     case .consumerIdentifiedAsCurrentlyValid, .consumerIdentifiedAsCurrentlyInvalid, .consumerIdentifiedWithValidityUnknown:
@@ -385,7 +389,6 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   
   public func serialPortWasOpened(_ serialPort: MTSerialPort) {
     print("serial port was opened: \(serialPort.path)")
-    networkLayer?.sendProducerIdentifiedValid(sourceNodeId: nodeId, wellKnownEvent: .nodeIsALocoNetGateway)
   }
   
   public func serialPortWasClosed(_ serialPort: MTSerialPort) {

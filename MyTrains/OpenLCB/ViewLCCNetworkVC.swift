@@ -49,15 +49,9 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBConfiguration
   
   // MARK: Private Properties
   
-  private let TIMEOUT_DELAY : TimeInterval = 1.0
-
   private var nodes : [UInt64:OpenLCBNode] = [:]
   
-  private var tasks : [(nodeId:UInt64, task:Task)] = []
-  
   private var tableViewDS : ViewLCCNetworkTableViewDS = ViewLCCNetworkTableViewDS()
-  
-  private var timeoutTimer : Timer?
   
   private var networkLayer : OpenLCBNetworkLayer?
   
@@ -75,14 +69,8 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBConfiguration
       return
     }
     
-    stopTimeoutTimer()
-    
     nodes.removeAll()
     
-    tasks.removeAll()
-    
-    startTimeoutTimer(timeInterval: TIMEOUT_DELAY)
-
     networkLayer.sendVerifyNodeIdNumber(sourceNodeId: nodeId)
 
   }
@@ -96,83 +84,39 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBConfiguration
     
   }
   
-  func doTask() {
+  public func openLCBMessageReceived(message: OpenLCBMessage) {
     
-    guard let networkLayer, !tasks.isEmpty else {
+    guard let networkLayer else {
       return
     }
-  
-    let nextTask = tasks.removeFirst()
-      
-    startTimeoutTimer(timeInterval: TIMEOUT_DELAY)
-    
-    switch nextTask.task {
-    case .getSNIP:
-      networkLayer.sendSimpleNodeInformationRequest(sourceNodeId: nodeId, destinationNodeId: nextTask.nodeId)
-    case .getProtocols:
-      networkLayer.sendProtocolSupportInquiry(sourceNodeId: nodeId, destinationNodeId: nextTask.nodeId)
-    }
-
-  }
-  
-  @objc func timeoutTimerAction() {
-    stopTimeoutTimer()
-    doTask()
-  }
-  
-  func startTimeoutTimer(timeInterval:TimeInterval) {
-    timeoutTimer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(timeoutTimerAction), userInfo: nil, repeats: false)
-    RunLoop.current.add(timeoutTimer!, forMode: .common)
-  }
-  
-  func stopTimeoutTimer() {
-    timeoutTimer?.invalidate()
-    timeoutTimer = nil
-  }
-  
-  public func openLCBMessageReceived(message: OpenLCBMessage) {
     
     switch message.messageTypeIndicator {
      
     case .initializationCompleteSimpleSetSufficient, .initializationCompleteFullProtocolRequired, .verifiedNodeIDNumberSimpleSetSufficient, .verifiedNodeIDNumberFullProtocolRequired:
       
-      let nodeId = message.sourceNodeId!
+      let newNodeId = message.sourceNodeId!
       
-      if !nodes.keys.contains(nodeId) {
- 
-        let start = tasks.isEmpty
-        
-        nodes[nodeId] = OpenLCBNode(nodeId: nodeId)
-
-        tasks.append((nodeId: nodeId, task: .getSNIP))
-        tasks.append((nodeId: nodeId, task: .getProtocols))
-        
+      if !nodes.keys.contains(newNodeId) {
+        nodes[newNodeId] = OpenLCBNode(nodeId: newNodeId)
+        networkLayer.sendSimpleNodeInformationRequest(sourceNodeId: nodeId, destinationNodeId: newNodeId)
+        networkLayer.sendProtocolSupportInquiry(sourceNodeId: nodeId, destinationNodeId: newNodeId)
         reload()
-        
-        if start {
-          doTask()
-        }
-        
       }
       
-    case .protocolSupportReply:
-      
-      if message.destinationNodeId! == nodeId, let node = nodes[message.sourceNodeId!] {
-        stopTimeoutTimer()
-        node.supportedProtocols = message.payload
-        reload()
-        doTask()
-      }
-    
     case .simpleNodeIdentInfoReply:
       
       if message.destinationNodeId! == nodeId, let node = nodes[message.sourceNodeId!] {
-        stopTimeoutTimer()
         node.encodedNodeInformation = message.payload
         reload()
-        doTask()
       }
 
+    case .protocolSupportReply:
+      
+      if message.destinationNodeId! == nodeId, let node = nodes[message.sourceNodeId!] {
+        node.supportedProtocols = message.payload
+        reload()
+      }
+    
     default:
       break
     }
@@ -189,11 +133,17 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBConfiguration
   
   @IBAction func btnConfigureAction(_ sender: NSButton) {
     
+    guard let networkLayer else {
+      return
+    }
+
     let node = tableViewDS.nodes[sender.tag]
     
     let x = ModalWindow.ConfigureLCCNode
     let wc = x.windowController
     let vc = x.viewController(windowController: wc) as! ConfigureLCCNodeVC
+    vc.configurationTool = networkLayer.getConfigurationTool()
+    vc.configurationTool?.delegate = vc
     vc.node = node
     wc.showWindow(nil)
 
@@ -204,11 +154,17 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBConfiguration
   
   @IBAction func btnInfoAction(_ sender: NSButton) {
     
+    guard let networkLayer else {
+      return
+    }
+
     let node = tableViewDS.nodes[sender.tag]
     
     let x = ModalWindow.ViewNodeInfo
     let wc = x.windowController
     let vc = x.viewController(windowController: wc) as! ViewNodeInfoVC
+    vc.configurationTool = networkLayer.getConfigurationTool()
+    vc.configurationTool?.delegate = vc
     vc.node = node
     wc.showWindow(nil)
 
@@ -255,8 +211,6 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBConfiguration
       networkLayer.registerNode(node: node)
     }
     
-    findAll()
-
   }
   
   @IBOutlet weak var cboNewNodeType: NSComboBox!

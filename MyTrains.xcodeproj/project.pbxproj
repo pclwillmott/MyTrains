@@ -78,6 +78,7 @@
 		DA2E0E5827359ED300C7DA7A /* Ack.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2E0E5727359ED300C7DA7A /* Ack.swift */; };
 		DA2E0E5A2736B8AA00C7DA7A /* LoconetRequestSlotDataMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2E0E592736B8AA00C7DA7A /* LoconetRequestSlotDataMessage.swift */; };
 		DA2E0E5E2736EAF300C7DA7A /* MyTrainsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2E0E5D2736EAF300C7DA7A /* MyTrainsController.swift */; };
+		DA311BAC2A7BB8CC0019FDCE /* OpenLCBValidity.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA311BAB2A7BB8CC0019FDCE /* OpenLCBValidity.swift */; };
 		DA3254E52A4704BF006DF357 /* SwitchRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3254E42A4704BF006DF357 /* SwitchRoute.swift */; };
 		DA3254E82A4755AC006DF357 /* OpenLCBThrottle.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3254E72A4755AC006DF357 /* OpenLCBThrottle.swift */; };
 		DA32C97A294CB0E40034DB4F /* SampleRate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA32C979294CB0E40034DB4F /* SampleRate.swift */; };
@@ -446,6 +447,7 @@
 		DA2E0E5727359ED300C7DA7A /* Ack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ack.swift; sourceTree = "<group>"; };
 		DA2E0E592736B8AA00C7DA7A /* LoconetRequestSlotDataMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoconetRequestSlotDataMessage.swift; sourceTree = "<group>"; };
 		DA2E0E5D2736EAF300C7DA7A /* MyTrainsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTrainsController.swift; sourceTree = "<group>"; };
+		DA311BAB2A7BB8CC0019FDCE /* OpenLCBValidity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBValidity.swift; sourceTree = "<group>"; };
 		DA3254E42A4704BF006DF357 /* SwitchRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchRoute.swift; sourceTree = "<group>"; };
 		DA3254E72A4755AC006DF357 /* OpenLCBThrottle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBThrottle.swift; sourceTree = "<group>"; };
 		DA32C979294CB0E40034DB4F /* SampleRate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleRate.swift; sourceTree = "<group>"; };
@@ -1277,6 +1279,7 @@
 				DA5F7A192A3F11A7004D7EBB /* OpenLCBWellKnownEvent.swift */,
 				DA1272C62A75773D00AB42F6 /* OpenLCBFDIFunctionKind.swift */,
 				DA0883FC2A76727700C2CFBD /* OpenLCBFunction.swift */,
+				DA311BAB2A7BB8CC0019FDCE /* OpenLCBValidity.swift */,
 			);
 			path = _enumerations;
 			sourceTree = "<group>";
@@ -1482,6 +1485,7 @@
 				DAF3746F2A1A2A9B009E91F0 /* OpenLCBNodeVirtual.swift in Sources */,
 				DA1272C72A75773D00AB42F6 /* OpenLCBFDIFunctionKind.swift in Sources */,
 				DAF374732A1A2D94009E91F0 /* BundleExtensions.swift in Sources */,
+				DA311BAC2A7BB8CC0019FDCE /* OpenLCBValidity.swift in Sources */,
 				DA3D87A9295DF99A003398F5 /* TC64CVTableDS.swift in Sources */,
 				DA8B5D1D282FE31600D39F07 /* InterfaceDelegate.swift in Sources */,
 				DA1767182A054C4A009D13C1 /* LCCCDITreeViewDS.swift in Sources */,

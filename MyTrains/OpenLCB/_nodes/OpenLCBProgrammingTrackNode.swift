@@ -54,6 +54,8 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
   internal let addressDeleteFromRoster : Int = 8
   
   private var locoNet : LocoNet?
+  
+  private var locoNetGateways : [UInt64:String] = [:]
 
   // MARK: Public Properties
   
@@ -90,6 +92,12 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
   
   internal override func resetReboot() {
     
+    super.resetReboot()
+    
+    networkLayer?.sendConsumerIdentified(sourceNodeId: nodeId, wellKnownEvent: .nodeIsALocoNetGateway, validity: .unknown)
+    
+    networkLayer?.sendIdentifyProducer(sourceNodeId: nodeId, event: .nodeIsALocoNetGateway)
+    
     guard locoNetGatewayNodeId != 0 else {
       return
     }
@@ -107,6 +115,49 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
     initCDI(filename: "MyTrains DCC Programming Track", manufacturer: manufacturerName, model: nodeModelName)
   }
 
+  public override func initCDI(filename:String, manufacturer:String, model:String) {
+    
+    if let filepath = Bundle.main.path(forResource: filename, ofType: "xml") {
+      do {
+        
+        var contents = try String(contentsOfFile: filepath)
+        
+        contents = contents.replacingOccurrences(of: "%%MANUFACTURER%%", with: manufacturer)
+        contents = contents.replacingOccurrences(of: "%%MODEL%%", with: model)
+        
+        var sorted : [(nodeId:UInt64, name:String)] = []
+        
+        for (key, name) in locoNetGateways {
+          sorted.append((nodeId:key, name:name))
+        }
+        
+        sorted.sort {$0.name < $1.name}
+        
+        var gateways = "<relation><property>00.00.00.00.00.00.00.00</property><value>No Gateway Selected</value></relation>\n"
+        
+        for gateway in sorted {
+          gateways += "<relation><property>\(gateway.nodeId.toHexDotFormat(numberOfBytes: 8))</property><value>\(gateway.name)</value></relation>\n"
+        }
+
+        contents = contents.replacingOccurrences(of: "%%LOCONET_GATEWAYS%%", with: gateways)
+
+        let memorySpace = OpenLCBMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.cdi.rawValue, isReadOnly: true, description: "")
+        memorySpace.memory = [UInt8]()
+        memorySpace.memory.append(contentsOf: contents.utf8)
+        memorySpace.memory.append(contentsOf: [UInt8](repeating: 0, count: 64))
+        memorySpaces[memorySpace.space] = memorySpace
+        
+        isConfigurationDescriptionInformationProtocolSupported = true
+        
+        setupConfigurationOptions()
+        
+      }
+      catch {
+      }
+    }
+    
+  }
+
   // MARK: OpenLCBNetworkLayerDelegate Methods
   
   public override func openLCBMessageReceived(message: OpenLCBMessage) {
@@ -116,7 +167,32 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
     locoNet?.openLCBMessageReceived(message: message)
     
     switch message.messageTypeIndicator {
+    
+    case .producerIdentifiedAsCurrentlyValid, .producerIdentifiedAsCurrentlyInvalid, .producerIdentifiedWithValidityUnknown, .producerConsumerEventReport:
       
+      if let event = OpenLCBWellKnownEvent(rawValue: message.eventId!) {
+        
+        switch event {
+        case .nodeIsALocoNetGateway:
+          
+          locoNetGateways[message.sourceNodeId!] = ""
+          networkLayer?.sendSimpleNodeInformationRequest(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!)
+          
+        default:
+          break
+        }
+        
+      }
+
+    case .simpleNodeIdentInfoReply:
+      
+      if let _ = locoNetGateways[message.sourceNodeId!] {
+        let node = OpenLCBNode(nodeId: message.sourceNodeId!)
+        node.encodedNodeInformation = message.payload
+        locoNetGateways[node.nodeId] = node.userNodeName
+        reloadCDI()
+      }
+
     case .identifyProducer:
       
       if let event = OpenLCBWellKnownEvent(rawValue: message.eventId!) {
@@ -124,7 +200,7 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
         switch event {
         case .nodeIsADCCProgrammingTrack:
           if locoNet!.commandStationType.programmingTrackExists {
-            networkLayer?.sendProducerIdentifiedValidityUnknown(sourceNodeId: nodeId, wellKnownEvent: .nodeIsADCCProgrammingTrack)
+            networkLayer?.sendProducerIdentified(sourceNodeId: nodeId, wellKnownEvent: .nodeIsADCCProgrammingTrack, validity: .unknown)
           }
         default:
           break

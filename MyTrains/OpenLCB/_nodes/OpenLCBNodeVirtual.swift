@@ -51,8 +51,6 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     
     isEventExchangeProtocolSupported = true
     
-    isSimpleProtocolSubsetSupported = true
-        
     setupConfigurationOptions()
     
   }
@@ -240,24 +238,14 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
         }
         contents = contents.replacingOccurrences(of: "%%PORTS%%", with: ports)
 
-        var gateways = ""
-        if let networkLayer = self.networkLayer {
-          gateways += "<relation><property>00.00.00.00.00.00.00.00</property><value>No Gateway Selected</value></relation>\n"
-          for gateway in networkLayer.locoNetGateways {
-            gateways += "<relation><property>\(gateway.nodeId.toHexDotFormat(numberOfBytes: 8))</property><value>\(gateway.userNodeName)</value></relation>\n"
-          }
-        }
-
-        contents = contents.replacingOccurrences(of: "%%LOCONET_GATEWAYS%%", with: gateways)
-
-        contents = contents.replacingOccurrences(of: "%%FUNCTIONS_MAP%%", with: OpenLCBFunction.cdiMap)
-        
         let memorySpace = OpenLCBMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.cdi.rawValue, isReadOnly: true, description: "")
         memorySpace.memory = [UInt8]()
         memorySpace.memory.append(contentsOf: contents.utf8)
         memorySpace.memory.append(contentsOf: [UInt8](repeating: 0, count: 64))
         memorySpaces[memorySpace.space] = memorySpace
         isConfigurationDescriptionInformationProtocolSupported = true
+        
+        setupConfigurationOptions()
         
       }
       catch {
