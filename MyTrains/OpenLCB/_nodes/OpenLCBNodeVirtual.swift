@@ -358,10 +358,11 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
           
         case .getAddressSpaceInformationCommand:
           
+          
           message.payload.removeFirst(2) 
           
           let space = message.payload[0]
-          
+
           if let memorySpace = memorySpaces[space] {
             networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, timeOut: .replyPending2s)
             networkLayer?.sendGetAddressSpaceInformationReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, memorySpace: memorySpace)

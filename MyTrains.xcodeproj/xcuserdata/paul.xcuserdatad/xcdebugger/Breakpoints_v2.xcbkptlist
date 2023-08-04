@@ -30,8 +30,8 @@
             filePath = "MyTrains/OpenLCB/_nodes/OpenLCBNode.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "569"
-            endingLineNumber = "569"
+            startingLineNumber = "572"
+            endingLineNumber = "572"
             landmarkName = "possibleAddressSpaces"
             landmarkType = "24">
          </BreakpointContent>

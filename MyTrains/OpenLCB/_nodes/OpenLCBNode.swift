@@ -564,6 +564,9 @@ public class OpenLCBNode : NSObject {
     if isFunctionDescriptionInformationProtocolSupported {
       possibles.insert(OpenLCBNodeMemoryAddressSpace.fdi.rawValue)
     }
+    if isTractionControlProtocolSupported {
+      possibles.insert(OpenLCBNodeMemoryAddressSpace.cv.rawValue)
+    }
     
     let highest = Int(configurationOptions.highestAddressSpace)
     

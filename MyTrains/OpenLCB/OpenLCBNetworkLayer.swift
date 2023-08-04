@@ -551,11 +551,13 @@ public class OpenLCBNetworkLayer : NSObject {
   }
 
   public func sendGetMemorySpaceInformationRequest(sourceNodeId:UInt64, destinationNodeId:UInt64,addressSpace:UInt8) {
-    
-    let data : [UInt8] = [0x20, 0x84, addressSpace]
-    
+    var data = OpenLCBDatagramType.getAddressSpaceInformationCommand.bigEndianData
+    data.append(addressSpace)
     sendDatagram(sourceNodeId: sourceNodeId, destinationNodeId: destinationNodeId, data: data)
-    
+  }
+  
+  public func sendGetMemorySpaceInformationRequest(sourceNodeId:UInt64, destinationNodeId:UInt64,wellKnownAddressSpace:OpenLCBNodeMemoryAddressSpace) {
+    sendGetMemorySpaceInformationRequest(sourceNodeId: sourceNodeId, destinationNodeId: destinationNodeId, addressSpace: wellKnownAddressSpace.rawValue)
   }
   
   public func sendDatagramReceivedOK(sourceNodeId:UInt64, destinationNodeId:UInt64, timeOut: OpenLCBDatagramTimeout) {

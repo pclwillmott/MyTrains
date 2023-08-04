@@ -1,0 +1,166 @@
+//
+//  ProgrammerToolTableViewDS.swift
+//  MyTrains
+//
+//  Created by Paul Willmott on 04/08/2023.
+//
+
+import Foundation
+import Cocoa
+
+public class ProgrammerToolTableViewDS : NSObject, NSTableViewDataSource, NSTableViewDelegate {
+
+  // MARK: Private Properties
+  
+  // MARK: Public Properties
+  
+  public var programmerTool : OpenLCBProgrammerToolNode?
+  
+  // MARK: NSTableViewDataSource Delegate Methods
+  
+  // MARK: NSTableViewDelegate Methods
+  
+  // Returns the number of records managed for aTableView by the data source object.
+   public func numberOfRows(in tableView: NSTableView) -> Int {
+     return min(programmerTool!.cvs.count, 1024)
+   }
+  
+  // Sets the data object for an item in the specified row and column.
+  public func tableView(_ tableView: NSTableView, setObjectValue object: Any?, for tableColumn: NSTableColumn?, row: Int) {
+  }
+  
+  public func tableView(_ tableView: NSTableView,
+                        viewFor tableColumn: NSTableColumn?,row: Int) -> NSView? {
+    
+    let item = programmerTool!.cvs[row]
+    
+    let columnName = tableColumn!.identifier.rawValue
+    
+    let cellIdentifier = "\(columnName)CellID"
+    
+    var text: String = ""
+    
+    var isEditable = false
+
+    enum ColumnIdentifiers {
+      static let CVNumberColumn      = "CVNumber"
+      static let DescriptionColumn   = "Description"
+      static let NumberBaseColumn    = "NumberBase"
+      static let DefaultColumn       = "Default"
+      static let DefaultStatusColumn = "DefaultStatus"
+      static let GetDefaultColumn    = "GetDefault"
+      static let SetDefaultColumn    = "SetDefault"
+      static let ValueColumn         = "Value"
+      static let ValueStatusColumn   = "ValueStatus"
+      static let GetValueColumn      = "GetValue"
+      static let SetValueColumn      = "SetValue"
+      static let SetToDefaultColumn  = "SetToDefault"
+    }
+
+    switch columnName {
+      
+    case ColumnIdentifiers.CVNumberColumn:
+      text = "\(row + 1)"
+      
+    case ColumnIdentifiers.DescriptionColumn:
+      text = NMRA.cvDescription(cv: row + 1)
+      
+    case ColumnIdentifiers.NumberBaseColumn:
+      if let cell = tableView.makeView(withIdentifier:
+        NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil) as? NSTableCellView {
+        if let cbo = cell.subviews[0] as? NSComboBox {
+          cbo.tag = row
+          cbo.selectItem(at: Int(programmerTool!.numberBase[row]))
+        }
+       return cell
+      }
+
+    case ColumnIdentifiers.DefaultColumn:
+      if programmerTool!.isDefaultSupported {
+        text = "\(programmerTool!.cvs[1024 + row])"
+        isEditable = true
+      }
+      
+    case ColumnIdentifiers.DefaultStatusColumn:
+      if programmerTool!.isDefaultSupported {
+        text = (programmerTool!.cvs[2048 + row] & 0x0f == 0) ? "?" : "✓"
+      }
+      
+    case ColumnIdentifiers.GetDefaultColumn:
+      if let cell = tableView.makeView(withIdentifier:
+        NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil) as? NSTableCellView {
+        if let button = cell.subviews[0] as? NSButton {
+          button.tag = row
+          button.isEnabled = programmerTool!.isDefaultSupported
+        }
+        return cell
+      }
+      
+    case ColumnIdentifiers.SetDefaultColumn:
+      if let cell = tableView.makeView(withIdentifier:
+        NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil) as? NSTableCellView {
+        if let button = cell.subviews[0] as? NSButton {
+          button.tag = row
+          button.isEnabled = programmerTool!.isDefaultSupported
+        }
+        return cell
+      }
+      
+    case ColumnIdentifiers.ValueColumn:
+      text = "\(programmerTool!.cvs[row])"
+      isEditable = true
+
+    case ColumnIdentifiers.ValueStatusColumn:
+      if programmerTool!.isDefaultSupported {
+        text = (programmerTool!.cvs[2048 + row] & 0xf0 == 0) ? "?" : "✓"
+      }
+      
+    case ColumnIdentifiers.GetValueColumn:
+      if let cell = tableView.makeView(withIdentifier:
+        NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil) as? NSTableCellView {
+        if let button = cell.subviews[0] as? NSButton {
+          button.tag = row
+        }
+        return cell
+      }
+      
+    case ColumnIdentifiers.SetValueColumn:
+      if let cell = tableView.makeView(withIdentifier:
+        NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil) as? NSTableCellView {
+        if let button = cell.subviews[0] as? NSButton {
+          button.tag = row
+        }
+        return cell
+      }
+      
+    case ColumnIdentifiers.SetToDefaultColumn:
+      if let cell = tableView.makeView(withIdentifier:
+        NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil) as? NSTableCellView {
+        if let button = cell.subviews[0] as? NSButton {
+          button.tag = row
+          button.isEnabled = programmerTool!.isDefaultSupported
+        }
+        return cell
+      }
+      
+    default:
+      break
+    }
+
+    if text != "" {
+      if let cell = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil) as? NSTableCellView {
+        if let textField = cell.subviews[0] as? NSTextField {
+          textField.tag = row
+          textField.stringValue = text
+          textField.isEditable = isEditable
+        }
+        return cell
+      }
+    }
+  
+    return nil
+    
+  }
+
+}
+

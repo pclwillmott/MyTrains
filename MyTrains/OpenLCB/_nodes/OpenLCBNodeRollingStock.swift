@@ -23,6 +23,10 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     
     configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: configSize, isReadOnly: false, description: "")
     
+    let cvSize = numberOfCVs * 3
+    
+    cvs = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.cv.rawValue, defaultMemorySize: cvSize, isReadOnly: false, description: "")
+        
     super.init(nodeId: nodeId)
     
     virtualNodeType = MyTrainsVirtualNodeType.trainNode
@@ -55,6 +59,14 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
       registerVariable(space: OpenLCBNodeMemoryAddressSpace.functions.rawValue, address: fn)
     }
     
+    cvs.delegate = self
+    
+    memorySpaces[cvs.space] = cvs
+    
+    for cv in 0 ... numberOfCVs - 1 {
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.cv.rawValue, address: cv)
+    }
+    
     isDatagramProtocolSupported = true
     
     isIdentificationSupported = true
@@ -83,6 +95,8 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
   
   internal var configuration : OpenLCBMemorySpace
   
+  internal var cvs : OpenLCBMemorySpace
+  
   internal let addressDCCAddress         : Int = 0
   internal let addressSpeedSteps         : Int = 2
   internal let addressF0ConsistBehaviour : Int = 3
@@ -97,6 +111,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
   
   internal let numberOfFunctions : Int = 69
   internal let functionGroupSize : Int = 35
+  internal let numberOfCVs : Int = 1024
   
   internal var activeControllerNodeId : UInt64 = 0 {
     didSet {
