@@ -38,6 +38,11 @@ public class ProgrammerToolTableViewDS : NSObject, NSTableViewDataSource, NSTabl
     
     let cellIdentifier = "\(columnName)CellID"
     
+    let numberBase = NumberBase(rawValue: Int(programmerTool!.numberBase[row])) ?? NumberBase.defaultValue
+    
+    let defaultOffset = 1024
+    let statusOffset  = 2048
+    
     var text: String = ""
     
     var isEditable = false
@@ -70,20 +75,21 @@ public class ProgrammerToolTableViewDS : NSObject, NSTableViewDataSource, NSTabl
         NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil) as? NSTableCellView {
         if let cbo = cell.subviews[0] as? NSComboBox {
           cbo.tag = row
-          cbo.selectItem(at: Int(programmerTool!.numberBase[row]))
+          NumberBase.populate(comboBox: cbo)
+          NumberBase.select(comboBox: cbo, value: numberBase)
         }
        return cell
       }
 
     case ColumnIdentifiers.DefaultColumn:
       if programmerTool!.isDefaultSupported {
-        text = "\(programmerTool!.cvs[1024 + row])"
+        text = "\(numberBase.toString(value: programmerTool!.cvs[defaultOffset + row]))"
         isEditable = true
       }
       
     case ColumnIdentifiers.DefaultStatusColumn:
       if programmerTool!.isDefaultSupported {
-        text = (programmerTool!.cvs[2048 + row] & 0x0f == 0) ? "?" : "✓"
+        text = (programmerTool!.isDefaultClean(cvNumber: row)) ? "✓" : "?"
       }
       
     case ColumnIdentifiers.GetDefaultColumn:
@@ -107,12 +113,12 @@ public class ProgrammerToolTableViewDS : NSObject, NSTableViewDataSource, NSTabl
       }
       
     case ColumnIdentifiers.ValueColumn:
-      text = "\(programmerTool!.cvs[row])"
+      text = "\(numberBase.toString(value: programmerTool!.cvs[row]))"
       isEditable = true
 
     case ColumnIdentifiers.ValueStatusColumn:
       if programmerTool!.isDefaultSupported {
-        text = (programmerTool!.cvs[2048 + row] & 0xf0 == 0) ? "?" : "✓"
+        text = (programmerTool!.isValueClean(cvNumber: row)) ? "✓" : "?"
       }
       
     case ColumnIdentifiers.GetValueColumn:

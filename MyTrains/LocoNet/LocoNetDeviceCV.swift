@@ -72,14 +72,14 @@ public class LocoNetDeviceCV : EditorObject {
   
   public var nextCustomDescription : String = ""
 
-  public var customNumberBase : CVNumberBase = .defaultValue {
+  public var customNumberBase : NumberBase = .defaultValue {
     didSet {
       modified = true
       nextCustomNumberBase = customNumberBase
     }
   }
   
-  public var nextCustomNumberBase : CVNumberBase = .defaultValue
+  public var nextCustomNumberBase : NumberBase = .defaultValue
   
   public var isEnabled : Bool = true {
     didSet {
@@ -107,13 +107,13 @@ public class LocoNetDeviceCV : EditorObject {
   
   public var displayDefaultValue : String {
     get {
-      return nextCustomNumberBase.toString(value: nextDefaultValue)
+      return nextCustomNumberBase.toString(value: UInt8(nextDefaultValue))
     }
   }
   
   public var displayCVValue : String {
     get {
-      return nextCustomNumberBase.toString(value: nextCVValue)
+      return nextCustomNumberBase.toString(value: UInt8(nextCVValue))
     }
   }
   
@@ -165,7 +165,7 @@ public class LocoNetDeviceCV : EditorObject {
       }
             
       if !reader.isDBNull(index: 6) {
-        customNumberBase = CVNumberBase(rawValue: reader.getInt(index: 6)!) ?? CVNumberBase.defaultValue
+        customNumberBase = NumberBase(rawValue: reader.getInt(index: 6)!) ?? NumberBase.defaultValue
       }
             
       if !reader.isDBNull(index: 7) {

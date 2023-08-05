@@ -31,6 +31,8 @@
 		DA0D3E102A48AA6F0042748C /* OpenLCBThrottleState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0D3E0F2A48AA6F0042748C /* OpenLCBThrottleState.swift */; };
 		DA0DA27A2779E96B00E4F23C /* Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0DA2792779E96B00E4F23C /* Layout.swift */; };
 		DA0DD2152A2CA4AB003376F8 /* ViewNodeInfoMemorySpaceInfoTVDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0DD2142A2CA4AB003376F8 /* ViewNodeInfoMemorySpaceInfoTVDS.swift */; };
+		DA1003232A7E81F7004CC86C /* OpenLCBProgrammingMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1003222A7E81F7004CC86C /* OpenLCBProgrammingMode.swift */; };
+		DA1003252A7E8F62004CC86C /* LocoNetProgrammingMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1003242A7E8F62004CC86C /* LocoNetProgrammingMode.swift */; };
 		DA123A512A50431B000E63E2 /* OpenLCBLocoNetGateway.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA123A502A50431B000E63E2 /* OpenLCBLocoNetGateway.swift */; };
 		DA123A532A5044C2000E63E2 /* MyTrains LocoNet Gateway.xml in Resources */ = {isa = PBXBuildFile; fileRef = DA123A522A5044C2000E63E2 /* MyTrains LocoNet Gateway.xml */; };
 		DA123A552A505102000E63E2 /* Parity.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA123A542A505102000E63E2 /* Parity.swift */; };
@@ -131,7 +133,7 @@
 		DA57A6E92A4496A1005C72B0 /* LocoNetLocomotiveState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA57A6E82A4496A1005C72B0 /* LocoNetLocomotiveState.swift */; };
 		DA58F00D2A45AA3700D36E90 /* LocoNetFunctionConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA58F00C2A45AA3700D36E90 /* LocoNetFunctionConstants.swift */; };
 		DA58F0112A45AE8400D36E90 /* DCCDecoderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA58F0102A45AE8400D36E90 /* DCCDecoderType.swift */; };
-		DA5A9F90295C89FC00950479 /* CVNumberBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5A9F8F295C89FC00950479 /* CVNumberBase.swift */; };
+		DA5A9F90295C89FC00950479 /* NumberBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5A9F8F295C89FC00950479 /* NumberBase.swift */; };
 		DA5A9F92295C950F00950479 /* TC64ConfigVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5A9F91295C950F00950479 /* TC64ConfigVC.swift */; };
 		DA5B4601276F4E38005CA03C /* DatabaseConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5B4600276F4E38005CA03C /* DatabaseConstants.swift */; };
 		DA5B4603276F5993005CA03C /* EditNetworks.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA5B4602276F5993005CA03C /* EditNetworks.storyboard */; };
@@ -401,6 +403,8 @@
 		DA0D3E0F2A48AA6F0042748C /* OpenLCBThrottleState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBThrottleState.swift; sourceTree = "<group>"; };
 		DA0DA2792779E96B00E4F23C /* Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Layout.swift; sourceTree = "<group>"; };
 		DA0DD2142A2CA4AB003376F8 /* ViewNodeInfoMemorySpaceInfoTVDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewNodeInfoMemorySpaceInfoTVDS.swift; sourceTree = "<group>"; };
+		DA1003222A7E81F7004CC86C /* OpenLCBProgrammingMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBProgrammingMode.swift; sourceTree = "<group>"; };
+		DA1003242A7E8F62004CC86C /* LocoNetProgrammingMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoNetProgrammingMode.swift; sourceTree = "<group>"; };
 		DA123A502A50431B000E63E2 /* OpenLCBLocoNetGateway.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBLocoNetGateway.swift; sourceTree = "<group>"; };
 		DA123A522A5044C2000E63E2 /* MyTrains LocoNet Gateway.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "MyTrains LocoNet Gateway.xml"; sourceTree = "<group>"; };
 		DA123A542A505102000E63E2 /* Parity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parity.swift; sourceTree = "<group>"; };
@@ -503,7 +507,7 @@
 		DA57A6E82A4496A1005C72B0 /* LocoNetLocomotiveState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoNetLocomotiveState.swift; sourceTree = "<group>"; };
 		DA58F00C2A45AA3700D36E90 /* LocoNetFunctionConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoNetFunctionConstants.swift; sourceTree = "<group>"; };
 		DA58F0102A45AE8400D36E90 /* DCCDecoderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DCCDecoderType.swift; sourceTree = "<group>"; };
-		DA5A9F8F295C89FC00950479 /* CVNumberBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CVNumberBase.swift; sourceTree = "<group>"; };
+		DA5A9F8F295C89FC00950479 /* NumberBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberBase.swift; sourceTree = "<group>"; };
 		DA5A9F91295C950F00950479 /* TC64ConfigVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TC64ConfigVC.swift; sourceTree = "<group>"; };
 		DA5B4600276F4E38005CA03C /* DatabaseConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseConstants.swift; sourceTree = "<group>"; };
 		DA5B4602276F5993005CA03C /* EditNetworks.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = EditNetworks.storyboard; sourceTree = "<group>"; };
@@ -822,7 +826,7 @@
 				DA6E28E4285F925C00772641 /* BlockDirection.swift */,
 				DA9CF8FA2860952300825FA9 /* BlockType.swift */,
 				DA04B8D928F1AEB60062D944 /* ConsistState.swift */,
-				DA5A9F8F295C89FC00950479 /* CVNumberBase.swift */,
+				DA5A9F8F295C89FC00950479 /* NumberBase.swift */,
 				DA48EE28293CEF16006C26A0 /* DayOfWeek.swift */,
 				DAEF18722A3DFEBF00AC227D /* DeviceAttribute.swift */,
 				DAEF18702A3DFDE100AC227D /* DeviceId.swift */,
@@ -1245,6 +1249,7 @@
 				DAD41AC12A3CA2F6002EF847 /* LocoNetSwitchOutput.swift */,
 				DAD41AC32A3CA350002EF847 /* LocoNetTurnoutOutput.swift */,
 				DA8B5D18282FDE1800D39F07 /* ProgrammerMode.swift */,
+				DA1003242A7E8F62004CC86C /* LocoNetProgrammingMode.swift */,
 			);
 			path = _enumerations;
 			sourceTree = "<group>";
@@ -1283,6 +1288,7 @@
 				DA1272C62A75773D00AB42F6 /* OpenLCBFDIFunctionKind.swift */,
 				DA0883FC2A76727700C2CFBD /* OpenLCBFunction.swift */,
 				DA311BAB2A7BB8CC0019FDCE /* OpenLCBValidity.swift */,
+				DA1003222A7E81F7004CC86C /* OpenLCBProgrammingMode.swift */,
 			);
 			path = _enumerations;
 			sourceTree = "<group>";
@@ -1471,6 +1477,7 @@
 				DA5E97722972CD48001453A1 /* UpdateDelegate.swift in Sources */,
 				DA8AE0F0279B3074001E9311 /* SlotViewVC.swift in Sources */,
 				DAB1DB912971CCA900918A5F /* IODeviceNewVC.swift in Sources */,
+				DA1003232A7E81F7004CC86C /* OpenLCBProgrammingMode.swift in Sources */,
 				DABD30B629E4610A002A2C4B /* OpenLCBNetworkLayerDelegate.swift in Sources */,
 				DA56260F29E1AC2B00D465CC /* OpenLCBNetworkLayer.swift in Sources */,
 				DA08B43727875FDD0001307C /* ProgSlotDataP1.swift in Sources */,
@@ -1499,7 +1506,7 @@
 				DA0D3E0E2A487A780042748C /* ComboBoxSimpleDS.swift in Sources */,
 				DA467BB3281D60E400AB9650 /* SwitchBoardShapeButton.swift in Sources */,
 				DA7B472A273824F700BCD587 /* LocoNetOutputQueueItem.swift in Sources */,
-				DA5A9F90295C89FC00950479 /* CVNumberBase.swift in Sources */,
+				DA5A9F90295C89FC00950479 /* NumberBase.swift in Sources */,
 				DAF5B4FF28A93D0E0015E758 /* RandomAccessCollectionExtensions.swift in Sources */,
 				DA0BBB7529FD4A91003E03EF /* LCCCDIElement.swift in Sources */,
 				DAEA21372A51BE65008545A6 /* LocoNetExtensions.swift in Sources */,
@@ -1528,6 +1535,7 @@
 				DABD4F342A3C9B1B000A25AB /* LocoNetMessageType.swift in Sources */,
 				DA0BBB7B29FD4ED3003E03EF /* LCCCDIMapRelation.swift in Sources */,
 				DA6E28E3285F8F1A00772641 /* TrackElectrificationType.swift in Sources */,
+				DA1003252A7E8F62004CC86C /* LocoNetProgrammingMode.swift in Sources */,
 				DAA8CEFC2968408700B07971 /* IOFunction.swift in Sources */,
 				DA28C2C92801EF6500857471 /* QuerySlot5.swift in Sources */,
 				DA69E3932974581700447414 /* IOChannelDS64Output.swift in Sources */,

@@ -69,9 +69,9 @@ public class TC64CVTableDS : NSObject, NSTableViewDataSource, NSTableViewDelegat
       if let cell = tableView.makeView(withIdentifier:
         NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil) as? NSTableCellView {
         if let cbo = cell.subviews[0] as? NSComboBox {
-          CVNumberBase.populate(comboBox: cbo)
+          NumberBase.populate(comboBox: cbo)
           cbo.tag = row
-          CVNumberBase.select(comboBox: cbo, value: item.nextCustomNumberBase)
+          NumberBase.select(comboBox: cbo, value: item.nextCustomNumberBase)
         }
        return cell
       }

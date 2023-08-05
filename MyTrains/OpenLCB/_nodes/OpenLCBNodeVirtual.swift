@@ -184,6 +184,44 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     }
   }
   
+  internal func readCVs(sourceNodeId:UInt64, memorySpace:OpenLCBMemorySpace, startAddress:UInt32, count:UInt8) {
+    
+    guard let progMode = OpenLCBProgrammingMode(rawValue: startAddress & OpenLCBProgrammingMode.modeMask) else {
+      networkLayer?.sendReadReplyFailure(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, addressSpace: memorySpace.space, startAddress: startAddress, errorCode: .permanentErrorInvalidArguments)
+      return
+    }
+    
+    let address = startAddress & OpenLCBProgrammingMode.addressMark
+    
+    if let data = memorySpace.getBlock(address: Int(address), count: Int(count)) {
+      networkLayer?.sendReadReply(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, addressSpace: memorySpace.space, startAddress: startAddress, data: data)
+    }
+    else {
+      networkLayer?.sendReadReplyFailure(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, addressSpace: memorySpace.space, startAddress: startAddress, errorCode: .permanentErrorAddressOutOfBounds)
+    }
+
+  }
+  
+  internal func writeCVs(sourceNodeId:UInt64, memorySpace:OpenLCBMemorySpace, startAddress:UInt32, data: [UInt8]) {
+    
+    guard let progMode = OpenLCBProgrammingMode(rawValue: startAddress & OpenLCBProgrammingMode.modeMask) else {
+      networkLayer?.sendReadReplyFailure(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, addressSpace: memorySpace.space, startAddress: startAddress, errorCode: .permanentErrorInvalidArguments)
+      return
+    }
+    
+    let address = startAddress & OpenLCBProgrammingMode.addressMark
+    
+    if memorySpace.isWithinSpace(address: Int(address), count: data.count) {
+      memorySpace.setBlock(address: Int(address), data: data, isInternal: false)
+      memorySpace.save()
+      networkLayer?.sendWriteReply(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, addressSpace: memorySpace.space, startAddress: startAddress)
+    }
+    else {
+      networkLayer?.sendWriteReplyFailure(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, addressSpace: memorySpace.space, startAddress: startAddress, errorCode: .permanentErrorAddressOutOfBounds)
+    }
+
+  }
+  
   // MARK: Public Methods
 
   public func setupConfigurationOptions() {
@@ -373,8 +411,8 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
           
         case .readCommandGeneric, .readCommand0xFD, .readCommand0xFE, .readCommand0xFF:
  
-          networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, timeOut: .replyPending2s)
-
+          networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, timeOut: .ok)
+          
           var data = message.payload
           
           var bytesToRemove = 6
@@ -388,40 +426,43 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
             space = 0xfe
           case .readCommand0xFF:
             space = 0xff
-            //          case .readCommandGeneric:
           default:
             space = data[6]
             bytesToRemove = 7
           }
-          
+
           let startAddress = UInt32(bigEndianData: [data[2], data[3], data[4], data[5]])!
-            
+          
           if let memorySpace = memorySpaces[space] {
-            
+
             data.removeFirst(bytesToRemove)
             let readCount = data[0] & 0x7f
-            
-            
             
             if readCount == 0 || readCount > 64 {
               networkLayer?.sendReadReplyFailure(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, addressSpace: space, startAddress: startAddress, errorCode: .permanentErrorInvalidArguments)
             }
-            else if let data = memorySpace.getBlock(address: Int(startAddress), count: Int(readCount)) {
-              networkLayer?.sendReadReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, addressSpace: space, startAddress: startAddress, data: data)
+            else if let spaceId = OpenLCBNodeMemoryAddressSpace(rawValue: space), spaceId == .cv {
+              readCVs(sourceNodeId: message.sourceNodeId!, memorySpace: memorySpace, startAddress: startAddress, count: readCount)
             }
             else {
-              networkLayer?.sendReadReplyFailure(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, addressSpace: space, startAddress: startAddress, errorCode: .permanentErrorAddressOutOfBounds)
-            }
+              
+              if let data = memorySpace.getBlock(address: Int(startAddress), count: Int(readCount)) {
+                networkLayer?.sendReadReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, addressSpace: space, startAddress: startAddress, data: data)
+              }
+              else {
+                networkLayer?.sendReadReplyFailure(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, addressSpace: space, startAddress: startAddress, errorCode: .permanentErrorAddressOutOfBounds)
+              }
             
+            }
           }
           else {
             networkLayer?.sendReadReplyFailure(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, addressSpace: space, startAddress: startAddress, errorCode: .permanentErrorAddressSpaceUnknown)
           }
-          
+
         case .writeCommandGeneric, .writeCommand0xFD, .writeCommand0xFE, .writeCommand0xFF:
 
-          networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, timeOut: .replyPending2s)
-
+          networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, timeOut: .ok)
+          
           var data = message.payload
           
           var bytesToRemove = 6
@@ -435,7 +476,6 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
             space = 0xfe
           case .writeCommand0xFF:
             space = 0xff
-            // case .readCommandGeneric:
           default:
             space = data[6]
             bytesToRemove = 7
@@ -447,10 +487,13 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
             
             data.removeFirst(bytesToRemove)
 
-            if memorySpace.isWithinSpace(address: Int(startAddress), count: data.count) {
-              networkLayer?.sendWriteReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, addressSpace: space, startAddress: startAddress)
+            if let spaceId = OpenLCBNodeMemoryAddressSpace(rawValue: space), spaceId == .cv {
+              writeCVs(sourceNodeId: message.sourceNodeId!, memorySpace: memorySpace, startAddress: startAddress, data: data)
+            }
+            else if memorySpace.isWithinSpace(address: Int(startAddress), count: data.count) {
               memorySpace.setBlock(address: Int(startAddress), data: data, isInternal: false)
               memorySpace.save()
+              networkLayer?.sendWriteReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, addressSpace: space, startAddress: startAddress)
             }
             else {
               networkLayer?.sendWriteReplyFailure(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, addressSpace: space, startAddress: startAddress, errorCode: .permanentErrorAddressOutOfBounds)

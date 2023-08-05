@@ -833,5 +833,153 @@ extension LocoNet {
     immPacket(packet: data, repeatCount: 4)
     
   }
+  
+  // MARK: CV PROGRAMMING
+  
+  public func s7CVRW(boardId: Int, cvNumber:Int, isRead:Bool, value:UInt8) {
+    
+    let cv = UInt8((cvNumber - 1) & 0xff)
+    
+    let val = isRead ? 0 : value
+    
+    let high = (0b00000111) | ((cv & 0x80) >> 4) | ((val & 0x80) >> 3)
+    
+    let b = boardId - 1
+    
+    let c = b % 4
+    
+    let d = b / 4
+    
+    let e = d % 64
+    
+    let addA = UInt8(e)
+    
+    let g = d / 64
+    
+    let h = 7 - g
+    
+    let i = h * 16 + c * 2 + 8
+    
+    let addB = UInt8(i)
+    
+    let mode : UInt8 = 0b01100100 | (isRead ? 0 : 0b1000)
+    
+    let message = LocoNetMessage(data: [LocoNetMessageOpcode.OPC_IMM_PACKET.rawValue, 0x0b, 0x7f, 0x54, high, addA, addB, mode, cv & 0x7f, val & 0x7f], appendCheckSum: true)
+    
+    addToQueue(message: message)
+
+  }
+
+  public func readCVOpsMode(cv:Int, cvValue: UInt8, address:UInt16) {
+    
+    var cmd : UInt8 = 0b11100000
+    
+    let maskcvBit9 = 0b001000000000
+    let maskcvBit8 = 0b000100000000
+    
+    cmd |= (cv & maskcvBit9) == maskcvBit9 ? 0b10 : 0
+    cmd |= (cv & maskcvBit8) == maskcvBit8 ? 0b01 : 0
+    
+    cmd |= 0b00000100 // read
+
+    var packet : [UInt8] = [
+      cv17(address: address),
+      cv18(address: address),
+      cmd,
+      UInt8(cv & 0xff),
+      cvValue,
+    ]
+    
+    immPacket(packet: packet, repeatCount: 4)
+    
+  }
+  
+  public func cv17(address: UInt16) -> UInt8 {
+    let temp = address + 49152
+    return UInt8(temp >> 8)
+  }
+  
+  public func cv18(address: UInt16) -> UInt8 {
+    let temp = address + 49152
+    return UInt8(temp & 0xff)
+  }
+
+  public func readCV(progMode:LocoNetProgrammingMode, cv:Int, address: UInt16) {
+    
+    var pcmd : UInt8 = progMode.readCommand
+    
+    var hopsa : UInt8 = 0
+    var lopsa : UInt8 = 0
+    
+    if progMode.isOperationsMode {
+      let addr = address + 49152
+      lopsa = UInt8(addr & 0x7f)
+      hopsa = UInt8((addr >> 7) & 0x7f)
+    }
+    
+    let cvh : Int = ((cv & 0b0000001000000000) == 0b0000001000000000 ? 0b00100000 : 0x00) |
+                    ((cv & 0b0000000100000000) == 0b0000000100000000 ? 0b00010000 : 0x00) |
+                    ((cv & 0b0000000010000000) == 0b0000000010000000 ? 0b00000001 : 0x00)
+
+    let message = LocoNetMessage(data:
+        [
+          LocoNetMessageOpcode.OPC_WR_SL_DATA.rawValue,
+          0x0e,
+          0x7c,
+          pcmd,
+          0x00,
+          hopsa, // HOPSA
+          lopsa, // LOPSA
+          0x00,
+          UInt8(cvh & 0x7f),
+          UInt8(cv & 0x7f),
+          0x00,
+          0x00,
+          0x00
+        ],
+        appendCheckSum: true)
+    
+    addToQueue(message: message)
+    
+  }
+  
+  public func writeCV(progMode: LocoNetProgrammingMode, cv:Int, address: Int, value: UInt16) {
+    
+    var pcmd : UInt8 = progMode.writeCommand
+    
+    var hopsa : UInt8 = 0
+    var lopsa : UInt8 = 0
+    
+    if progMode.isOperationsMode {
+      lopsa = UInt8(address & 0x7f)
+      hopsa = UInt8(address >> 7)
+    }
+    
+    let cvh : Int = ((cv & 0b0000001000000000) == 0b0000001000000000 ? 0b00100000 : 0x00) |
+                    ((cv & 0b0000000100000000) == 0b0000000100000000 ? 0b00010000 : 0x00) |
+                    ((cv & 0b0000000010000000) == 0b0000000010000000 ? 0b00000001 : 0x00) |
+                    ((value & 0b10000000) == 0b10000000 ? 0b00000010 : 0x00)
+
+    let message = LocoNetMessage(data:
+        [
+          LocoNetMessageOpcode.OPC_WR_SL_DATA.rawValue,
+          0x0e,
+          0x7c,
+          pcmd,
+          0x00,
+          hopsa,
+          lopsa,
+          0x00,
+          UInt8(cvh & 0x7f),
+          UInt8(cv & 0x7f),
+          UInt8(value & 0x7f),
+          0x7f,
+          0x7f
+        ],
+        appendCheckSum: true)
+
+    addToQueue(message: message)
+    
+  }
 
 }

@@ -8,13 +8,6 @@
 import Foundation
 import Cocoa
 
-public enum ProgrammingMode : Int {
-  case directMode = 0
-  case operationsMode = 1
-  case pagedMode = 2
-  case physicalRegister = 3
-}
-
 class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, InterfaceDelegate, CSVParserDelegate {
 
   // MARK: Window & View Control
@@ -47,7 +40,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, InterfaceDel
       cboCommandStation.selectItem(at: 0)
     }
     
-    programmingMode = ProgrammingMode(rawValue: UserDefaults.standard.integer(forKey: DEFAULT.PROGRAMMER_PROG_MODE)) ?? .directMode
+    programmingMode = LocoNetProgrammingMode(rawValue: UInt8(UserDefaults.standard.integer(forKey: DEFAULT.PROGRAMMER_PROG_MODE))) ?? .directModeByte
     
     tabView.isHidden = true
     
@@ -167,12 +160,12 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, InterfaceDel
   
   private var csvParser : CSVParser?
   
-  private var programmingMode : ProgrammingMode {
+  private var programmingMode : LocoNetProgrammingMode {
     get {
-      return ProgrammingMode(rawValue: cboProgMode.indexOfSelectedItem) ?? .directMode
+      return LocoNetProgrammingMode(rawValue: UInt8(cboProgMode.indexOfSelectedItem)) ?? .directModeByte
     }
     set(value) {
-      cboProgMode.selectItem(at: value.rawValue)
+  //    cboProgMode.selectItem(at: value.rawValue)
     }
   }
   
@@ -1265,7 +1258,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, InterfaceDel
   
   @IBAction func cboNumberBaseAction(_ sender: NSComboBox) {
     let cv = cvTableViewDS.cvs[sender.tag]
-    cv.customNumberBase = CVNumberBase(rawValue: sender.indexOfSelectedItem) ?? .decimal
+    cv.customNumberBase = NumberBase(rawValue: sender.indexOfSelectedItem) ?? .decimal
     cv.save()
     cvTableView.reloadData()
   }

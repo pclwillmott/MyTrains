@@ -26,6 +26,14 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
     case active
   }
   
+  private enum ProgState {
+    case idle
+    case readingCV
+    case writingCV
+    case readingCVs
+    case writingCVs
+  }
+  
   private var configState : ConfigState = .idle
   
   private var slotPage : UInt8 = 0
@@ -54,6 +62,14 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
     }
   }
   
+  private var progMode : OpenLCBProgrammingMode = .defaultProgrammingMode
+  
+  private var progState : ProgState = .idle
+  
+  private var currentCV : Int = 0
+  
+  private var lastCV : Int = 0
+  
   private var lastLocomotiveState : LocoNetLocomotiveState?
   
   private var standardFunctions : UInt64 = 0
@@ -64,6 +80,62 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
   
   // MARK: Private Methods
   
+  internal override func readCVs(sourceNodeId:UInt64, memorySpace:OpenLCBMemorySpace, startAddress:UInt32, count:UInt8) {
+    
+    guard let progMode = OpenLCBProgrammingMode(rawValue: startAddress & OpenLCBProgrammingMode.modeMask) else {
+      networkLayer?.sendReadReplyFailure(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, addressSpace: memorySpace.space, startAddress: startAddress, errorCode: .permanentErrorInvalidArguments)
+      return
+    }
+
+    let address = startAddress & OpenLCBProgrammingMode.addressMark
+    
+    if address < 1024 {
+      
+      self.progMode = progMode
+      
+      self.currentCV = Int(address)
+      
+      self.lastCV = Int(address) + Int(count) - 1
+      
+      self.progState = count == 1 ? .readingCV : .readingCVs
+      
+   //   locoNet?.readCVOpsMode(cv: self.currentCV, cvValue: 0, address: dccAddress)
+      
+      locoNet?.readCV(progMode: self.progMode.locoNetProgrammingMode(isProgrammingTrack: false), cv: self.currentCV, address: dccAddress)
+      
+    }
+    else if let data = memorySpace.getBlock(address: Int(address), count: Int(count)) {
+      networkLayer?.sendReadReply(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, addressSpace: memorySpace.space, startAddress: startAddress, data: data)
+    }
+    else {
+      networkLayer?.sendReadReplyFailure(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, addressSpace: memorySpace.space, startAddress: startAddress, errorCode: .permanentErrorAddressOutOfBounds)
+    }
+
+  }
+  
+  internal override func writeCVs(sourceNodeId:UInt64, memorySpace:OpenLCBMemorySpace, startAddress:UInt32, data: [UInt8]) {
+    
+    guard let progMode = OpenLCBProgrammingMode(rawValue: startAddress & OpenLCBProgrammingMode.modeMask) else {
+      networkLayer?.sendReadReplyFailure(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, addressSpace: memorySpace.space, startAddress: startAddress, errorCode: .permanentErrorInvalidArguments)
+      return
+    }
+    
+    let address = startAddress & OpenLCBProgrammingMode.addressMark
+    
+    if address < 1024 {
+      
+    }
+    else if memorySpace.isWithinSpace(address: Int(address), count: data.count) {
+      memorySpace.setBlock(address: Int(address), data: data, isInternal: false)
+      memorySpace.save()
+      networkLayer?.sendWriteReply(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, addressSpace: memorySpace.space, startAddress: startAddress)
+    }
+    else {
+      networkLayer?.sendWriteReplyFailure(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, addressSpace: memorySpace.space, startAddress: startAddress, errorCode: .permanentErrorAddressOutOfBounds)
+    }
+
+  }
+
   private func readStandardFunctions() {
     
     standardFunctions = 0
@@ -214,12 +286,6 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
     
     configState = .initializing
     
-    locoNet = nil
-
-    locoNet = LocoNet(gatewayNodeId: locoNetGatewayNodeId, virtualNode: self)
-    
-    locoNet?.delegate = self
-    
     slotPage = 0
     
     slotNumber = 0
@@ -235,6 +301,14 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
     readExpandedFunctions()
     
     lastLocomotiveState = nil
+    
+    configState = .slotFetch
+
+    startTimeoutTimer()
+    
+    locoNet?.getLocoSlot(forAddress: dccAddress)
+    
+
     
   }
   
@@ -319,9 +393,70 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
     }
     
   }
-
   
+  internal override func resetReboot() {
+    
+    super.resetReboot()
+    
+    guard locoNetGatewayNodeId != 0 else {
+      return
+    }
+    
+    locoNet = LocoNet(gatewayNodeId: locoNetGatewayNodeId, virtualNode: self)
+    
+    locoNet?.delegate = self
+
+  }
+
+
   // MARK: Public Methods
+  
+  // MARK: OpenLCBNetworkLayerDelegate Methods
+   
+  public override func openLCBMessageReceived(message: OpenLCBMessage) {
+    
+    super.openLCBMessageReceived(message: message)
+    
+    locoNet?.openLCBMessageReceived(message: message)
+    
+    switch message.messageTypeIndicator {
+      
+    case .producerIdentifiedAsCurrentlyValid, .producerIdentifiedAsCurrentlyInvalid, .producerIdentifiedWithValidityUnknown, .producerConsumerEventReport:
+      
+      if let event = OpenLCBWellKnownEvent(rawValue: message.eventId!) {
+        
+        switch event {
+        case .nodeIsALocoNetGateway:
+          
+          locoNetGateways[message.sourceNodeId!] = ""
+          networkLayer?.sendSimpleNodeInformationRequest(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!)
+          
+        default:
+          break
+        }
+        
+      }
+
+    case .simpleNodeIdentInfoReply:
+      
+      if let _ = locoNetGateways[message.sourceNodeId!] {
+        let node = OpenLCBNode(nodeId: message.sourceNodeId!)
+        node.encodedNodeInformation = message.payload
+        locoNetGateways[node.nodeId] = node.userNodeName
+        reloadCDI()
+      }
+
+    default:
+      break
+    }
+    
+  }
+  
+  // MARK: LocoNetDelegate Methods
+  
+  @objc public func locoNetInitializationComplete() {
+    
+  }
   
   @objc public func locoNetMessageReceived(message:LocoNetMessage) {
     
@@ -330,6 +465,18 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
     }
     
     switch message.messageType {
+      
+    case .progCmdAccepted:
+      print("progCmdAccepted")
+    case .programmerBusy:
+      print("programmerBusy")
+
+    case .progCmdAcceptedBlind:
+      print("progCmdAcceptedBlind")
+
+    case .progSlotDataP1:
+      print("progSlotDataP1: \(message.message[4]) \(message.cvNumber) \(message.cvValue))")
+
     case .locoSlotDataP1:
       let address : UInt16 = UInt16(message.message[4])
       if address == dccAddress {
@@ -453,57 +600,6 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
     
   }
 
-  // MARK: OpenLCBNetworkLayerDelegate Methods
-   
-  public override func openLCBMessageReceived(message: OpenLCBMessage) {
-    
-    super.openLCBMessageReceived(message: message)
-    
-    locoNet?.openLCBMessageReceived(message: message)
-    
-    switch message.messageTypeIndicator {
-      
-    case .producerIdentifiedAsCurrentlyValid, .producerIdentifiedAsCurrentlyInvalid, .producerIdentifiedWithValidityUnknown, .producerConsumerEventReport:
-      
-      if let event = OpenLCBWellKnownEvent(rawValue: message.eventId!) {
-        
-        switch event {
-        case .nodeIsALocoNetGateway:
-          
-          locoNetGateways[message.sourceNodeId!] = ""
-          networkLayer?.sendSimpleNodeInformationRequest(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!)
-          
-        default:
-          break
-        }
-        
-      }
 
-    case .simpleNodeIdentInfoReply:
-      
-      if let _ = locoNetGateways[message.sourceNodeId!] {
-        let node = OpenLCBNode(nodeId: message.sourceNodeId!)
-        node.encodedNodeInformation = message.payload
-        locoNetGateways[node.nodeId] = node.userNodeName
-        reloadCDI()
-      }
-
-    default:
-      break
-    }
-    
-  }
-  
-  // MARK: LocoNetDelegate Methods
-  
-  @objc public func locoNetInitializationComplete() {
-    
-    configState = .slotFetch
-
-    startTimeoutTimer()
-    
-    locoNet?.getLocoSlot(forAddress: dccAddress)
-    
-  }
 
 }

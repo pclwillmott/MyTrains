@@ -193,12 +193,6 @@
                                                                         <font key="font" metaFont="system"/>
                                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                        <objectValues>
-                                                                            <string>Decimal</string>
-                                                                            <string>Hex</string>
-                                                                            <string>Binary</string>
-                                                                            <string>Octal</string>
-                                                                        </objectValues>
                                                                     </comboBoxCell>
                                                                     <connections>
                                                                         <action selector="cboNumberBaseAction:" target="XN5-LU-TBh" id="HrI-91-c9f"/>

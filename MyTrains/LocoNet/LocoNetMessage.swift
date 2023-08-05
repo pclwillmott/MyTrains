@@ -70,8 +70,6 @@ public class LocoNetMessage : NSObject {
   
   private var _messageType : LocoNetMessageType = .uninitialized
   
-  private var _slotsChanged : Set<Int> = []
-  
   private var _dccPacket : [UInt8] = []
   
   private var _dccPacketType : DCCPacketType = .dccAnalogFunction
@@ -173,13 +171,6 @@ public class LocoNetMessage : NSObject {
     }
   }
   
-  public var slotsChanged : Set<Int> {
-    get {
-      let _ = messageType
-      return _slotsChanged
-    }
-  }
-  
   public var isIMMPacket : Bool {
     get {
       return messageType == .immPacket
@@ -233,66 +224,42 @@ public class LocoNetMessage : NSObject {
       return nil
     }
   }
-  /*
-  public var dccPacketType : DCCPacketType? {
-    get {
-      if isIMMPacket {
-        let packet = dccPacket
-        if _dccPacketType == .dccUnitialized && packet.count > 0 {
-          _dccPacketType = .dccUnknown
-          
-          switch dccAddressPartition {
-          case .dccBroadcast:
-            break
-          case .dccMFDPA, .dccMFDEA:
-            let instrByte = dccAddressPartition == .dccMFDPA ? 1 : 2
-            let ccc   = (packet[instrByte] & 0b11100000) >> 5
-            let ggggg = (packet[instrByte] & 0b00011111)
-            switch ccc {
-            case 0b001:
-              switch ggggg {
-              case 0b11111:
-                _dccPacketType = .dccSpdDir128
-              default:
-                break
-              }
-            case 0b010, 0b011:
-              _dccPacketType = .dccSpdDirF0
-            case 0b100:
-              _dccPacketType = .dccF0F4
-            case 0b101:
-              _dccPacketType = ((packet[1] & 0b00010000) == 0b00010000) ? .dccF5F8 : .dccF9F12
-            case 0b110:
-              switch ggggg {
-              case 0b11110:
-                _dccPacketType = .dccF13F20
-              case 0b11111:
-                _dccPacketType = .dccF21F28
-              default:
-                break
-              }
-            default:
-              break
-            }
-          case .dccIdle:
-            if packet[1] == 0x00 && packet[2] == 0xff {
-              _dccPacketType = .dccIdle
-            }
-          case .dccBAD11:
-            if (packet[1] & 0b10000000) == 0b10000000 {
-              _dccPacketType = .dccSetSw
-            }
-          default:
-            break
-          }
-          
-        }
-        return _dccPacketType
-      }
+  
+  public var cvValue : UInt8? {
+    
+    guard messageType == .progSlotDataP1 else {
       return nil
     }
+    
+    var result = message[10]
+    
+    let mask : UInt8 = 0b00000010
+    
+    result |= (message[8] & mask) == mask ? 0b10000000 : 0
+    
+    return result
+    
   }
-  */
+  
+  public var cvNumber : UInt16? {
+
+    guard messageType == .progSlotDataP1 else {
+      return nil
+    }
+    
+    var result = UInt16(message[9])
+
+    let maskCVBit9 : UInt8 = 0b00100000
+    let maskCVBit8 : UInt8 = 0b00010000
+    let maskCVBit7 : UInt8 = 0b00000001
+
+    result |= (message[8] & maskCVBit9) == maskCVBit9 ? 0b01000000000 : 0
+    result |= (message[8] & maskCVBit8) == maskCVBit8 ? 0b00100000000 : 0
+    result |= (message[8] & maskCVBit7) == maskCVBit7 ? 0b00010000000 : 0
+
+    return result
+    
+  }
   
   public var messageType : LocoNetMessageType {
     
@@ -340,7 +307,6 @@ public class LocoNetMessage : NSObject {
           
           if message[1] > 0 && message[1] < 0x78 {
             _messageType = .locoSpdP1
-            _slotsChanged.insert(LocoSlotData.encodeID(slotPage: 0, slotNumber: message[1]))
           }
 
         // MARK: 0xA1
@@ -349,7 +315,6 @@ public class LocoNetMessage : NSObject {
           
           if message[1] > 0 && message[1] < 0x78 && (message[2] & 0b01000000) == 0x00 {
             _messageType = .locoDirF0F4P1
-            _slotsChanged.insert(LocoSlotData.encodeID(slotPage: 0, slotNumber: message[1]))
           }
           
         // MARK: 0xA2
@@ -359,7 +324,6 @@ public class LocoNetMessage : NSObject {
           if message[1] > 0 && message[1] < 0x78 &&
             (message[2] & 0b11110000) == 0x00 {
             _messageType = .locoF5F8P1
-            _slotsChanged.insert(LocoSlotData.encodeID(slotPage: 0, slotNumber: message[1]))
           }
 
         // MARK: 0xA3
@@ -369,7 +333,6 @@ public class LocoNetMessage : NSObject {
           if message[1] > 0 && message[1] < 0x78 &&
             (message[2] & 0b11110000) == 0x00 {
             _messageType = .locoF9F12P1
-            _slotsChanged.insert(LocoSlotData.encodeID(slotPage: 0, slotNumber: message[1]))
           }
 
         // MARK: 0xB0
@@ -529,7 +492,6 @@ public class LocoNetMessage : NSObject {
           
           if message[1] > 0 && message[1] < 0x78 {
             _messageType = .setLocoSlotStat1P1
-            _slotsChanged.insert(LocoSlotData.encodeID(slotPage: 0, slotNumber: message[1]))
           }
 
         // MARK: 0xB6
@@ -538,7 +500,6 @@ public class LocoNetMessage : NSObject {
           
           if message[1] > 0 && message[1] < 0x78 && (message[2] & 0b11100000) == 0 {
             _messageType = .consistDirF0F4
-            _slotsChanged.insert(LocoSlotData.encodeID(slotPage: 0, slotNumber: message[1]))
           }
         
         // MARK: 0xB8
@@ -547,8 +508,6 @@ public class LocoNetMessage : NSObject {
           
           if message[1] > 0 && message[1] < 0x78 && message[2] > 0 && message[2] < 0x78 {
             _messageType = .unlinkSlotsP1
-            _slotsChanged.insert(LocoSlotData.encodeID(slotPage: 0, slotNumber: message[1]))
-            _slotsChanged.insert(LocoSlotData.encodeID(slotPage: 0, slotNumber: message[2]))
           }
           
         // MARK: 0xB9
@@ -558,8 +517,6 @@ public class LocoNetMessage : NSObject {
           if message[1] > 0 && message[1] < 0x78 &&
              message[2] > 0 && message[2] < 0x78 {
             _messageType = .linkSlotsP1
-            _slotsChanged.insert(LocoSlotData.encodeID(slotPage: 0, slotNumber: message[1]))
-            _slotsChanged.insert(LocoSlotData.encodeID(slotPage: 0, slotNumber: message[2]))
           }
           
        // MARK: 0xBA
@@ -574,12 +531,9 @@ public class LocoNetMessage : NSObject {
           }
           else if message[1] == message[2] && message[1] > 0 && message[1] < 0x78 {
             _messageType = .setLocoSlotInUseP1
-            _slotsChanged.insert(LocoSlotData.encodeID(slotPage: 0, slotNumber: message[1]))
           }
           else if message[1] < 0x78 && message[2] < 0x78 {
             _messageType = .moveSlotP1
-            _slotsChanged.insert(LocoSlotData.encodeID(slotPage: 0, slotNumber: message[1]))
-            _slotsChanged.insert(LocoSlotData.encodeID(slotPage: 0, slotNumber: message[2]))
           }
 
         // MARK: 0xBB
@@ -705,13 +659,10 @@ public class LocoNetMessage : NSObject {
             switch subCode {
             case 0x05 :
               _messageType = .locoF12F20F28P2
-              _slotsChanged.insert(LocoSlotData.encodeID(slotPage: srcPage, slotNumber: src))
             case 0x08:
               _messageType = .locoF13F19P2
-              _slotsChanged.insert(LocoSlotData.encodeID(slotPage: srcPage, slotNumber: src))
             case 0x09:
               _messageType = .locoF21F27P2
-              _slotsChanged.insert(LocoSlotData.encodeID(slotPage: srcPage, slotNumber: src))
             default:
               break
             }
@@ -736,35 +687,27 @@ public class LocoNetMessage : NSObject {
               }
               else if srcPage == dstPage && src == dst && src > 0 && src > 0 && src < 0x78 && (message[3] & 0b11111000) == 0 {
                 _messageType = .setLocoSlotInUseP2
-                _slotsChanged.insert(LocoSlotData.encodeID(slotPage: srcPage, slotNumber: src))
               }
               else if src > 0 && src < 0x78 && dst > 0 && dst < 0x78 && (message[3] & 0b11111000) == 0 {
                 _messageType = .moveSlotP2
-                _slotsChanged.insert(LocoSlotData.encodeID(slotPage: srcPage, slotNumber: src))
-                _slotsChanged.insert(LocoSlotData.encodeID(slotPage: dstPage, slotNumber: dst))
               }
               
             case 0b01000000:
               
               if src > 0 && src < 0x78 && dst > 0 && dst < 0x78 {
                 _messageType = .linkSlotsP2
-                _slotsChanged.insert(LocoSlotData.encodeID(slotPage: srcPage, slotNumber: src))
-                _slotsChanged.insert(LocoSlotData.encodeID(slotPage: dstPage, slotNumber: dst))
               }
               
             case 0b01100000:
               
               if src > 0 && src < 0x78 {
                 _messageType = .setLocoSlotStat1P2
-                _slotsChanged.insert(LocoSlotData.encodeID(slotPage: srcPage, slotNumber: src))
               }
               
             case 0b01010000:
               
               if src > 0 && src < 0x78 && dst > 0 && dst < 0x78 {
                 _messageType = .unlinkSlotsP2
-                _slotsChanged.insert(LocoSlotData.encodeID(slotPage: srcPage, slotNumber: src))
-                _slotsChanged.insert(LocoSlotData.encodeID(slotPage: dstPage, slotNumber: dst))
               }
               
             default:
@@ -794,10 +737,6 @@ public class LocoNetMessage : NSObject {
               _messageType = .locoF21F28P2
             default:
               break
-            }
-            
-            if _messageType != .unknown {
-              _slotsChanged.insert(LocoSlotData.encodeID(slotPage: message[1], slotNumber: message[2]))
             }
             
           }
@@ -1346,7 +1285,6 @@ public class LocoNetMessage : NSObject {
                 message[8] == 0 &&
                 message[9] == 0 {
               _messageType = .locoF9F12IMMLAdr
-              // TODO: Find slot from address
             }
             else if message[3] == 0x24 &&
                (message[4] & 0b11011111) == 0x2 &&
@@ -1355,14 +1293,12 @@ public class LocoNetMessage : NSObject {
                 message[8] == 0 &&
                 message[9] == 0 {
               _messageType = .locoF9F12IMMSAdr
-              // TODO: Find slot from address
             }
             else if message[3] == 0x44 &&
                (message[4] & 0b11010100) == 0b00000100 &&
                 message[7] == 0x5e &&
                 message[9] == 0 {
               _messageType = .locoF13F20IMMLAdr
-              // TODO: Find slot from address
             }
             else if message[3] == 0x34 &&
                (message[4] & 0b11011011) == 0b00000010 &&
@@ -1370,7 +1306,6 @@ public class LocoNetMessage : NSObject {
                 message[8] == 0 &&
                 message[9] == 0 {
               _messageType = .locoF13F20IMMSAdr
-              // TODO: Find slot from address
             }
             else if message[3] == 0x44 &&
                (message[4] & 0b11010100) == 0b00000100 &&
@@ -1378,7 +1313,6 @@ public class LocoNetMessage : NSObject {
                 (message[8] & 0b11110000) == 0 &&
                 message[9] == 0 {
               _messageType = .locoF21F28IMMLAdr
-              // TODO: Find slot from address
             }
             else if message[3] == 0x34 &&
                (message[4] & 0b11011011) == 0b00000010 &&
@@ -1386,7 +1320,6 @@ public class LocoNetMessage : NSObject {
                 message[8] == 0 &&
                 message[9] == 0 {
               _messageType = .locoF21F28IMMSAdr
-              // TODO: Find slot from address
             }
             else if (message[3] & 0b10001000) == 0 /* &&
                (message[4] & 0b11100000) == 0b00100000 */ {
@@ -1413,7 +1346,6 @@ public class LocoNetMessage : NSObject {
             }
             else if message[3] > 0 && message[3] < 0x78 {
               _messageType = .setLocoSlotDataP2
-              _slotsChanged.insert(LocoSlotData.encodeID(slotPage: message[2], slotNumber: message[3]))
             }
           }
           else if message[1] == 0x10 {
@@ -1526,7 +1458,6 @@ public class LocoNetMessage : NSObject {
               (message[ 8] &  0b11110010) == 0x00 && /* SS@  */
               (message[10] &  0b11110000) == 0x00    /* SND  */ {
               _messageType = .setLocoSlotDataP1
-              _slotsChanged.insert(LocoSlotData.encodeID(slotPage: 0, slotNumber: message[2]))
             }
             else if message[ 2] == 0x7b {
               _messageType = .setFastClockData

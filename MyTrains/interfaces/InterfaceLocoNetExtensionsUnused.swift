@@ -663,25 +663,14 @@ extension InterfaceLocoNet {
 
   }
   
-  public func readCV(progMode:ProgrammingMode, cv:Int, address: UInt16) {
+  public func readCV(progMode:LocoNetProgrammingMode, cv:Int, address: UInt16) {
     
-    var pcmd : UInt8 = 0
-    
-    switch progMode {
-    case .directMode:
-      pcmd = 0b00101011
-    case .operationsMode:
-      pcmd = 0b00101111
-    case .pagedMode:
-      pcmd = 0b00100011
-    case .physicalRegister:
-      pcmd = 0b00010011
-    }
+    var pcmd : UInt8 = progMode.readCommand
     
     var hopsa : UInt8 = 0
     var lopsa : UInt8 = 0
     
-    if progMode == .operationsMode {
+    if progMode.isOperationsMode {
       lopsa = UInt8(address & 0x7f)
       hopsa = UInt8(address >> 7)
     }
@@ -710,33 +699,21 @@ extension InterfaceLocoNet {
         ],
         appendCheckSum: true)
     
-    let timing = progMode == .operationsMode ? MessageTiming.STANDARD : MessageTiming.PRMODE
+    let timing = MessageTiming.STANDARD
     
     addToQueue(message: message, delay: timing, responses: [], retryCount: 0, timeoutCode: .none)
     
   }
   
   
-  public func writeCV(progMode: ProgrammingMode, cv:Int, address: Int, value: UInt16) {
+  public func writeCV(progMode: LocoNetProgrammingMode, cv:Int, address: Int, value: UInt16) {
     
-    var pcmd : UInt8 = 0
-    
-    switch progMode {
-    case .directMode:
-      pcmd = 0b01101011
-    case .operationsMode:
-//      pcmd = 0b01101111
-      pcmd = 0b01100111
-    case .pagedMode:
-      pcmd = 0b01100011
-    case .physicalRegister:
-      pcmd = 0b01010011
-    }
+    var pcmd : UInt8 = progMode.writeCommand
     
     var hopsa : UInt8 = 0
     var lopsa : UInt8 = 0
     
-    if progMode == .operationsMode {
+    if progMode.isOperationsMode {
       lopsa = UInt8(address & 0x7f)
       hopsa = UInt8(address >> 7)
     }
@@ -766,7 +743,7 @@ extension InterfaceLocoNet {
         ],
         appendCheckSum: true)
 
-    let timing = progMode == .operationsMode ? MessageTiming.STANDARD : MessageTiming.PRMODE
+    let timing = MessageTiming.STANDARD
 
     addToQueue(message: message, delay: timing, responses: [], retryCount: 0, timeoutCode: .none)
     

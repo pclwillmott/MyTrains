@@ -390,7 +390,7 @@ public class IODevice : LocoNetDevice, InterfaceDelegate {
         
         upDateDelegate?.displayUpdate?(update: "Reading CV #\(currentCV)")
         
-        interface.readCV(progMode: .operationsMode, cv: currentCV, address: UInt16(boardId))
+        interface.readCV(progMode: .operationsModeByteNoFeedback, cv: currentCV, address: UInt16(boardId))
 
       }
       
@@ -422,7 +422,7 @@ public class IODevice : LocoNetDevice, InterfaceDelegate {
         
         upDateDelegate?.displayUpdate?(update: "Writing CV #\(currentCV)")
         
-        interface.writeCV(progMode: .operationsMode, cv: currentCV, address: Int(boardId), value: UInt16(cvs[currentCV - 1].nextCVValue))
+        interface.writeCV(progMode: .operationsModeByteNoFeedback, cv: currentCV, address: Int(boardId), value: UInt16(cvs[currentCV - 1].nextCVValue))
 
       }
       
@@ -490,7 +490,7 @@ public class IODevice : LocoNetDevice, InterfaceDelegate {
 
               upDateDelegate?.displayUpdate?(update: "Writing CV #\(currentCV)")
               
-              interface.writeCV(progMode: .operationsMode, cv: currentCV, address: boardId, value: UInt16(cvs[currentCV - 1].nextCVValue))
+              interface.writeCV(progMode: .operationsModeByteNoFeedback, cv: currentCV, address: boardId, value: UInt16(cvs[currentCV - 1].nextCVValue))
               
             }
             
@@ -498,7 +498,7 @@ public class IODevice : LocoNetDevice, InterfaceDelegate {
           
         case .programmerBusy:
           
-          interface.writeCV(progMode: .operationsMode, cv: currentCV, address: boardId, value: UInt16(cvs[currentCV - 1].nextCVValue))
+          interface.writeCV(progMode: .operationsModeByteNoFeedback, cv: currentCV, address: boardId, value: UInt16(cvs[currentCV - 1].nextCVValue))
 
         case .progSlotDataP1:
           
@@ -547,7 +547,7 @@ public class IODevice : LocoNetDevice, InterfaceDelegate {
               currentCV = x.first!
 //              currentCV = selectedSwitches.first!
               upDateDelegate?.displayUpdate?(update: "Reading CV #\(currentCV)")
-              interface.readCV(progMode: .operationsMode, cv: currentCV, address: UInt16(boardId))
+              interface.readCV(progMode: .operationsModeByteNoFeedback, cv: currentCV, address: UInt16(boardId))
             }
             
           }

@@ -125,7 +125,7 @@ public class DecoderCV : EditorObject {
     }
   }
   
-  public var customNumberBase : CVNumberBase = .defaultValue {
+  public var customNumberBase : NumberBase = .defaultValue {
     didSet {
       modified = true
     }
@@ -154,13 +154,13 @@ public class DecoderCV : EditorObject {
   
   public var displayDefaultValue : String {
     get {
-      return customNumberBase.toString(value: defaultValue)
+      return customNumberBase.toString(value: UInt8(defaultValue))
     }
   }
   
   public var displayCVValue : String {
     get {
-      return customNumberBase.toString(value: cvValue)
+      return customNumberBase.toString(value: UInt8(cvValue))
     }
   }
   
@@ -205,7 +205,7 @@ public class DecoderCV : EditorObject {
       }
 
       if !reader.isDBNull(index: 7) {
-        customNumberBase = CVNumberBase(rawValue: reader.getInt(index: 7)!) ?? .decimal
+        customNumberBase = NumberBase(rawValue: reader.getInt(index: 7)!) ?? .decimal
       }
 
       if !reader.isDBNull(index: 8) {

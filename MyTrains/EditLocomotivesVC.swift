@@ -470,7 +470,7 @@ class EditLocomotivesVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   
   @IBAction func cboNumberBaseAction(_ sender: NSComboBox) {
     let cv = cvTableViewDS.cvs[sender.tag]
-    cv.customNumberBase = CVNumberBase(rawValue: sender.indexOfSelectedItem) ?? .decimal
+    cv.customNumberBase = NumberBase(rawValue: sender.indexOfSelectedItem) ?? .decimal
     cv.save()
     cvTableView.reloadData()
   }

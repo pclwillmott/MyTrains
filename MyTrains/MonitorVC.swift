@@ -8,18 +8,9 @@
 import Foundation
 import Cocoa
 
-public enum TimeStampType : Int {
+private enum TimeStampType : Int {
   case none = 0
   case millisecondsSinceLastMessage = 1
-}
-
-public enum NumberBase : Int {
-  case hex = 0
-  case decimal = 1
-  case binary = 2
-  case octal = 3
-  case hexBinary = 4
-  case character = 5
 }
 
 class MonitorVC: NSViewController, NSWindowDelegate, OpenLCBLocoNetMonitorDelegate {
@@ -42,6 +33,15 @@ class MonitorVC: NSViewController, NSWindowDelegate, OpenLCBLocoNetMonitorDelega
     
     myTrainsController.openLCBNetworkLayer?.releaseLocoNetMonitor(monitor: monitorNode)
     
+  }
+  
+  private enum NumberBase : Int {
+    case hex = 0
+    case decimal = 1
+    case binary = 2
+    case octal = 3
+    case hexBinary = 4
+    case character = 5
   }
   
   override func viewWillAppear() {

@@ -14,6 +14,7 @@ private enum State {
   case gettingCV
   case gettingCVs
   case gettingCachedCVs
+  case gettingDefault
 }
 
 public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
@@ -141,6 +142,114 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
   }
 
   // MARK: Public Methods
+
+  private let defaultCleanMask : UInt8 = 0b00010000
+  private let valueCleanMask   : UInt8 = 0b00000001
+  
+  private let defaultOffset = 1024
+  private let statusOffset  = 2048
+
+  public func isDefaultClean(cvNumber:Int) -> Bool {
+    let stat = cvs[statusOffset + cvNumber]
+    return (stat & defaultCleanMask) == defaultCleanMask
+  }
+  
+  public func isValueClean(cvNumber:Int) -> Bool {
+    let stat = cvs[statusOffset + cvNumber]
+    return (stat & valueCleanMask) == valueCleanMask
+  }
+  
+  public func setDefaultStatus(cvNumber:Int, isClean:Bool) {
+    var stat = cvs[statusOffset + cvNumber]
+    stat &= ~defaultCleanMask
+    stat |= isClean ? defaultCleanMask : 0
+    cvs[statusOffset + cvNumber] = stat
+  }
+  
+  public func setValueStatus(cvNumber:Int, isClean:Bool) {
+    var stat = cvs[statusOffset + cvNumber]
+    stat &= ~valueCleanMask
+    stat |= isClean ? valueCleanMask : 0
+    cvs[statusOffset + cvNumber] = stat
+  }
+  
+  public func getDefaultValue(cvNumber:Int) {
+    
+    if isDefaultSupported {
+      
+      operationState = .gettingDefault
+      
+      currentCV = defaultOffset + cvNumber
+      
+      networkLayer?.sendNodeMemoryReadRequest(sourceNodeId: nodeId, destinationNodeId: dccTrainNodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: currentCV, numberOfBytesToRead: 1)
+      
+    }
+    
+  }
+  
+  public func getValue(cvNumber:Int) {
+    
+    operationState = .gettingCV
+    
+    currentCV = cvNumber
+    
+    networkLayer?.sendNodeMemoryReadRequest(sourceNodeId: nodeId, destinationNodeId: dccTrainNodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: currentCV, numberOfBytesToRead: 1)
+    
+  }
+  
+  public func setDefaultValue(cvNumber:Int) {
+    
+    if isDefaultSupported {
+      
+      let defaultValue = cvs[defaultOffset + cvNumber]
+      
+      setDefaultStatus(cvNumber: cvNumber, isClean: true)
+      
+      networkLayer?.sendNodeMemoryWriteRequest(sourceNodeId: nodeId, destinationNodeId: dccTrainNodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: defaultOffset + cvNumber, dataToWrite: [defaultValue])
+      
+      networkLayer?.sendNodeMemoryWriteRequest(sourceNodeId: nodeId, destinationNodeId: dccTrainNodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: statusOffset + cvNumber, dataToWrite: [cvs[statusOffset + cvNumber]])
+      
+      delegate?.cvDataUpdated?(programmerTool: self, cvData: cvs)
+      
+    }
+    
+  }
+  
+  public func setValue(cvNumber:Int) {
+    
+    let value = cvs[cvNumber]
+      
+    networkLayer?.sendNodeMemoryWriteRequest(sourceNodeId: nodeId, destinationNodeId: dccTrainNodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: cvNumber, dataToWrite: [value])
+    
+    if isDefaultSupported {
+      
+      setValueStatus(cvNumber: cvNumber, isClean: true)
+      
+      if !isDefaultClean(cvNumber: cvNumber) {
+        cvs[defaultOffset + cvNumber] = value
+        setDefaultValue(cvNumber: cvNumber)
+      }
+      else {
+        networkLayer?.sendNodeMemoryWriteRequest(sourceNodeId: nodeId, destinationNodeId: dccTrainNodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: statusOffset + cvNumber, dataToWrite: [cvs[statusOffset + cvNumber]])
+      }
+      
+      delegate?.cvDataUpdated?(programmerTool: self, cvData: cvs)
+      
+    }
+
+  }
+  
+  public func setValueToDefault(cvNumber:Int) {
+    
+    if isDefaultSupported {
+      
+      cvs[cvNumber] = cvs[defaultOffset + cvNumber]
+      
+      setValue(cvNumber: cvNumber)
+      
+    }
+    
+  }
   
   // MARK: OpenLCBNetworkLayerDelegate Methods
 
@@ -167,6 +276,10 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
           operationState = .idle
           delegate?.statusUpdate?(ProgrammerTool: self, status: "Get Default & Status Values Failed: \(message.errorCode)")
 
+        case .gettingDefault:
+          operationState = .idle
+          delegate?.statusUpdate?(ProgrammerTool: self, status: "Get Default Value Failed: \(message.errorCode)")
+
         case .gettingCV, .gettingCVs, .gettingCachedCVs:
           operationState = .idle
           delegate?.statusUpdate?(ProgrammerTool: self, status: "Get CV Failed: \(message.errorCode)")
@@ -192,7 +305,7 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
               dataSize = info.highestAddress + 1
               if dataSize == 1024 * 3 {
                 cvs = [UInt8](repeating: 0, count: 1024)
-                currentAddress = 1024
+                currentAddress = UInt32(defaultOffset)
                 operationState = .gettingDefaults
                 networkLayer?.sendNodeMemoryReadRequest(sourceNodeId: nodeId, destinationNodeId: dccTrainNodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: Int(currentAddress), numberOfBytesToRead: 64)
               }
@@ -271,6 +384,39 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
                 }
               }
               
+            case .gettingDefault:
+              operationState = .idle
+              cvs[currentCV] = data[0]
+              delegate?.cvDataUpdated?(programmerTool: self, cvData: cvs)
+              delegate?.statusUpdate?(ProgrammerTool: self, status: "")
+              
+            case .gettingCV:
+              
+              operationState = .idle
+              
+              cvs[currentCV] = data[0]
+              
+              setValueStatus(cvNumber: currentCV, isClean: true)
+              
+              if isDefaultSupported {
+                
+                if !isDefaultClean(cvNumber: currentCV) {
+                  
+                  cvs[defaultOffset + currentCV] = data[0]
+                  
+                  setDefaultStatus(cvNumber: currentCV, isClean: true)
+                  
+                  networkLayer?.sendNodeMemoryWriteRequest(sourceNodeId: nodeId, destinationNodeId: dccTrainNodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: defaultOffset + currentCV, dataToWrite: [data[0]])
+                  
+                }
+                
+                networkLayer?.sendNodeMemoryWriteRequest(sourceNodeId: nodeId, destinationNodeId: dccTrainNodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: statusOffset + currentCV, dataToWrite: [cvs[statusOffset + currentCV]])
+                
+              }
+              
+              delegate?.cvDataUpdated?(programmerTool: self, cvData: cvs)
+              delegate?.statusUpdate?(ProgrammerTool: self, status: "")
+
             default:
               break
             }

@@ -8,7 +8,7 @@
 import Foundation
 import AppKit
 
-public enum CVNumberBase : Int {
+public enum NumberBase : Int {
   
   case decimal = 0
   case hexadecimal = 1
@@ -19,13 +19,13 @@ public enum CVNumberBase : Int {
   
   public var title : String {
     get {
-      return CVNumberBase.titles[self.rawValue]
+      return NumberBase.titles[self.rawValue]
     }
   }
   
   // MARK: Public Methods
   
-  public func toString(value:Int) -> String {
+  public func toString(value:UInt8) -> String {
     
     var item : String = ""
     
@@ -64,7 +64,7 @@ public enum CVNumberBase : Int {
   
   private static let titles = [
     "Decimal",
-    "Hexadecimal",
+    "Hex",
     "Binary",
     "Octal",
   ]
@@ -77,15 +77,43 @@ public enum CVNumberBase : Int {
     select(comboBox: comboBox, value: defaultValue)
   }
   
-  public static func select(comboBox: NSComboBox, value: CVNumberBase) {
+  public static func select(comboBox: NSComboBox, value: NumberBase) {
     comboBox.selectItem(at: value.rawValue)
   }
   
-  public static let defaultValue : CVNumberBase = .decimal
+  public static let defaultValue : NumberBase = .decimal
   
-  public static func selected(comboBox:NSComboBox) -> CVNumberBase {
-    return CVNumberBase(rawValue: comboBox.indexOfSelectedItem) ?? defaultValue
+  public static func selected(comboBox:NSComboBox) -> NumberBase {
+    return NumberBase(rawValue: comboBox.indexOfSelectedItem) ?? defaultValue
   }
+  
+  public static func toUInt8(string:String) -> UInt8? {
+    
+    let part = string.trimmingCharacters(in: .whitespacesAndNewlines)
+    
+    if part.prefix(2) == "0x" {
+      if let nn = UInt8(part.suffix(part.count-2), radix: 16) {
+        return nn
+      }
+    }
+    else if part.prefix(2) == "0b" {
+      if let nn = UInt8(part.suffix(part.count-2), radix: 2) {
+        return nn
+     }
+    }
+    else if part.prefix(1) == "0" {
+      if let nn = UInt8(part.suffix(part.count), radix: 8) {
+        return nn
+      }
+    }
+    else {
+      if let nn = UInt8(part.suffix(part.count), radix: 10) {
+        return nn
+      }
+    }
 
+    return nil
+    
+  }
+  
 }
-

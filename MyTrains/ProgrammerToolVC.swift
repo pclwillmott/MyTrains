@@ -119,21 +119,28 @@ class ProgrammerToolVC : NSViewController, NSWindowDelegate, OpenLCBProgrammerTo
   }
   
   @IBAction func btnGetDefaultAction(_ sender: NSButton) {
+    programmerTool?.getDefaultValue(cvNumber: sender.tag)
   }
   
   @IBAction func btnSetDefaultAction(_ sender: NSButton) {
+    programmerTool?.setDefaultValue(cvNumber: sender.tag)
   }
   
   @IBAction func btnGetValueAction(_ sender: NSButton) {
+    programmerTool?.getValue(cvNumber: sender.tag)
   }
   
   @IBAction func btnSetValueAction(_ sender: NSButton) {
+    programmerTool?.setValue(cvNumber: sender.tag)
   }
   
   @IBAction func btnSetToDefaultAction(_ sender: NSButton) {
+    programmerTool?.setValueToDefault(cvNumber: sender.tag)
   }
   
   @IBAction func cboNumberBaseAction(_ sender: NSComboBox) {
+    programmerTool!.numberBase[sender.tag] = UInt8(NumberBase.selected(comboBox: sender).rawValue)
+    tableView.reloadData()
   }
   
   @IBOutlet weak var tableView: NSTableView!
