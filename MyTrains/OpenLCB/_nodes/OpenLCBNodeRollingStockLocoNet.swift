@@ -99,8 +99,6 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
       
       self.progState = count == 1 ? .readingCV : .readingCVs
       
-   //   locoNet?.readCVOpsMode(cv: self.currentCV, cvValue: 0, address: dccAddress)
-      
       locoNet?.readCV(progMode: self.progMode.locoNetProgrammingMode(isProgrammingTrack: false), cv: self.currentCV, address: dccAddress)
       
     }
@@ -122,12 +120,12 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
     
     let address = startAddress & OpenLCBProgrammingMode.addressMark
     
-    if address < 1024 {
-      
-    }
-    else if memorySpace.isWithinSpace(address: Int(address), count: data.count) {
+    if memorySpace.isWithinSpace(address: Int(address), count: data.count) {
       memorySpace.setBlock(address: Int(address), data: data, isInternal: false)
       memorySpace.save()
+      if address < 1024 { // TODO: Allow for multi-byte writes
+        locoNet?.writeCV(progMode: .operations, cv: Int(address), address: Int(dccAddress), value: data[0])
+      }
       networkLayer?.sendWriteReply(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, addressSpace: memorySpace.space, startAddress: startAddress)
     }
     else {

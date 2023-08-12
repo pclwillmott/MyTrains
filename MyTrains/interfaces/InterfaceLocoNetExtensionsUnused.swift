@@ -665,12 +665,14 @@ extension InterfaceLocoNet {
   
   public func readCV(progMode:LocoNetProgrammingMode, cv:Int, address: UInt16) {
     
-    var pcmd : UInt8 = progMode.readCommand
+    guard let pcmd = progMode.command(isByte: true, isWrite: false) else {
+      return
+    }
     
     var hopsa : UInt8 = 0
     var lopsa : UInt8 = 0
     
-    if progMode.isOperationsMode {
+    if progMode == .operations {
       lopsa = UInt8(address & 0x7f)
       hopsa = UInt8(address >> 7)
     }
@@ -688,8 +690,8 @@ extension InterfaceLocoNet {
           0x7c,
           pcmd,
           0x00,
-          hopsa, // HOPSA
-          lopsa, // LOPSA
+          hopsa,
+          lopsa,
           0x00,
           UInt8(cvh & 0x7f),
           UInt8(cvAdjusted & 0x7f),
@@ -708,12 +710,14 @@ extension InterfaceLocoNet {
   
   public func writeCV(progMode: LocoNetProgrammingMode, cv:Int, address: Int, value: UInt16) {
     
-    var pcmd : UInt8 = progMode.writeCommand
+    guard let pcmd = progMode.command(isByte: true, isWrite: true) else {
+      return
+    }
     
     var hopsa : UInt8 = 0
     var lopsa : UInt8 = 0
     
-    if progMode.isOperationsMode {
+    if progMode == .operations {
       lopsa = UInt8(address & 0x7f)
       hopsa = UInt8(address >> 7)
     }

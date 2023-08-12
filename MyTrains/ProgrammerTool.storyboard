@@ -40,14 +40,14 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <box fixedFrame="YES" title="Programming Track" translatesAutoresizingMaskIntoConstraints="NO" id="H3z-hS-PKT">
-                                <rect key="frame" x="17" y="536" width="1257" height="69"/>
+                                <rect key="frame" x="17" y="536" width="1064" height="69"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <view key="contentView" id="fNq-0f-I7d">
-                                    <rect key="frame" x="4" y="5" width="1249" height="49"/>
+                                    <rect key="frame" x="4" y="5" width="1056" height="49"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XSb-kH-SBT">
-                                            <rect key="frame" x="14" y="14" width="1218" height="23"/>
+                                            <rect key="frame" x="14" y="14" width="1025" height="23"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                             <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="5" id="ATy-S3-4RC">
                                                 <font key="font" metaFont="system"/>
@@ -555,10 +555,38 @@
                                     <action selector="btnExportCSVAction:" target="XN5-LU-TBh" id="uhA-Bb-psB"/>
                                 </connections>
                             </button>
+                            <box fixedFrame="YES" title="Programming Track Mode" translatesAutoresizingMaskIntoConstraints="NO" id="ycM-vb-c0F">
+                                <rect key="frame" x="1091" y="536" width="183" height="69"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                <view key="contentView" id="muC-af-nRL">
+                                    <rect key="frame" x="4" y="5" width="175" height="49"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9jj-Wp-OY8">
+                                            <rect key="frame" x="19" y="13" width="139" height="23"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                            <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="9Al-qU-zmF">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                <objectValues>
+                                                    <string>Default</string>
+                                                    <string>Direct</string>
+                                                    <string>Paged</string>
+                                                </objectValues>
+                                            </comboBoxCell>
+                                            <connections>
+                                                <action selector="cboProgrammingTrackModeAction:" target="XN5-LU-TBh" id="wvl-af-Uzv"/>
+                                            </connections>
+                                        </comboBox>
+                                    </subviews>
+                                </view>
+                            </box>
                         </subviews>
                     </view>
                     <connections>
                         <outlet property="cboProgrammingTrack" destination="XSb-kH-SBT" id="Sp2-pQ-Fw0"/>
+                        <outlet property="cboProgrammingTrackMode" destination="9jj-Wp-OY8" id="SRt-GK-v89"/>
                         <outlet property="cboTrainNode" destination="Ln7-sY-Yjl" id="taR-FB-AsP"/>
                         <outlet property="lblStatus" destination="R3I-b9-vfs" id="TtA-fc-g4f"/>
                         <outlet property="tableView" destination="nAa-75-ewR" id="EF8-eN-9o7"/>

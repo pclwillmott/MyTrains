@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Cocoa
 
 public enum OpenLCBProgrammingMode : UInt32 {
   
@@ -27,15 +28,15 @@ public enum OpenLCBProgrammingMode : UInt32 {
   public func locoNetProgrammingMode(isProgrammingTrack:Bool) -> LocoNetProgrammingMode {
     switch self {
     case .defaultProgrammingMode:
-      return isProgrammingTrack ? .directModeByte : .operationsModeByteWithFeedback
+      return isProgrammingTrack ? .direct : .operations
     case .directModeProgramming:
-      return .directModeByte
+      return .direct
     case .pagedModeProgramming:
-      return .pagedModeByte
+      return .paged
     case .programOnTheMain:
-      return .operationsModeByteWithFeedback
+      return .operations
     default:
-      return isProgrammingTrack ? .directModeBit : .operationsModeBitWithFeedback
+      return isProgrammingTrack ? .direct : .operations
     }
   }
   
@@ -48,5 +49,5 @@ public enum OpenLCBProgrammingMode : UInt32 {
   public static var addressMark : UInt32 {
     return ~modeMask
   }
-
+  
 }

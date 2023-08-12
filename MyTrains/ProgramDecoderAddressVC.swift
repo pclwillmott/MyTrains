@@ -40,7 +40,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, InterfaceDel
       cboCommandStation.selectItem(at: 0)
     }
     
-    programmingMode = LocoNetProgrammingMode(rawValue: UInt8(UserDefaults.standard.integer(forKey: DEFAULT.PROGRAMMER_PROG_MODE))) ?? .directModeByte
+    programmingMode = LocoNetProgrammingMode(rawValue: UInt8(UserDefaults.standard.integer(forKey: DEFAULT.PROGRAMMER_PROG_MODE))) ?? .direct
     
     tabView.isHidden = true
     
@@ -162,7 +162,7 @@ class ProgramDecoderAddressVC : NSViewController, NSWindowDelegate, InterfaceDel
   
   private var programmingMode : LocoNetProgrammingMode {
     get {
-      return LocoNetProgrammingMode(rawValue: UInt8(cboProgMode.indexOfSelectedItem)) ?? .directModeByte
+      return LocoNetProgrammingMode(rawValue: UInt8(cboProgMode.indexOfSelectedItem)) ?? .direct
     }
     set(value) {
   //    cboProgMode.selectItem(at: value.rawValue)

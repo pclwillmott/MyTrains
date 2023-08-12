@@ -906,15 +906,16 @@ extension LocoNet {
 
   public func readCV(progMode:LocoNetProgrammingMode, cv:Int, address: UInt16) {
     
-    var pcmd : UInt8 = progMode.readCommand
+    guard let pcmd = progMode.command(isByte: true, isWrite: false) else {
+      return
+    }
     
     var hopsa : UInt8 = 0
     var lopsa : UInt8 = 0
     
-    if progMode.isOperationsMode {
-      let addr = address + 49152
-      lopsa = UInt8(addr & 0x7f)
-      hopsa = UInt8((addr >> 7) & 0x7f)
+    if progMode == .operations {
+      lopsa = UInt8(address & 0x7f)
+      hopsa = UInt8((address >> 7) & 0x7f)
     }
     
     let cvh : Int = ((cv & 0b0000001000000000) == 0b0000001000000000 ? 0b00100000 : 0x00) |
@@ -928,8 +929,8 @@ extension LocoNet {
           0x7c,
           pcmd,
           0x00,
-          hopsa, // HOPSA
-          lopsa, // LOPSA
+          hopsa,
+          lopsa,
           0x00,
           UInt8(cvh & 0x7f),
           UInt8(cv & 0x7f),
@@ -943,14 +944,16 @@ extension LocoNet {
     
   }
   
-  public func writeCV(progMode: LocoNetProgrammingMode, cv:Int, address: Int, value: UInt16) {
+  public func writeCV(progMode: LocoNetProgrammingMode, cv:Int, address: Int, value: UInt8) {
     
-    var pcmd : UInt8 = progMode.writeCommand
+    guard let pcmd = progMode.command(isByte: true, isWrite: true) else {
+      return
+    }
     
     var hopsa : UInt8 = 0
     var lopsa : UInt8 = 0
     
-    if progMode.isOperationsMode {
+    if progMode == .operations {
       lopsa = UInt8(address & 0x7f)
       hopsa = UInt8(address >> 7)
     }

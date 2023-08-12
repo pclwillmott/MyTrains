@@ -16,6 +16,7 @@ public enum OpenLCBErrorCode : UInt16 {
   case permanentErrorNotFound                                                = 0x1030
   case permanentErrorAlreadyExists                                           = 0x1032
   case permanentErrorNoConnection                                            = 0x1033
+  case permanentErrorNoDecoderDetected                                       = 0x1034
   case permanentErrorNotImplemented                                          = 0x1040
   case permanentErrorNotImplementedSubcommandUnknown                         = 0x1041
   case permanentErrorNotimplementedDatagramTypeStreamTypeOrCommandUnknown    = 0x1042
@@ -27,6 +28,8 @@ public enum OpenLCBErrorCode : UInt16 {
   case permanentErrorAddressSpaceUnknown                                     = 0x1081
   case permanentErrorAddressOutOfBounds                                      = 0x1082
   case permanentErrorWriteAccessToReadOnlySpace                              = 0x1083
+  case permanentErrorReadCVFailed                                            = 0x1084
+  case permanentErrorWriteCVFailed                                           = 0x1085
   case permanentErrorReserved9                                               = 0x1090
   case permanentErrorReserved10                                              = 0x10a0
   case permanentErrorReserved11                                              = 0x10b0

@@ -24,7 +24,7 @@
 		DA0BBB7929FD4B22003E03EF /* OpenLCBCDIElementType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0BBB7829FD4B22003E03EF /* OpenLCBCDIElementType.swift */; };
 		DA0BBB7B29FD4ED3003E03EF /* LCCCDIMapRelation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0BBB7A29FD4ED2003E03EF /* LCCCDIMapRelation.swift */; };
 		DA0D3E062A4850880042748C /* OpenLCBThrottleDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0D3E052A4850880042748C /* OpenLCBThrottleDelegate.swift */; };
-		DA0D3E082A485E570042748C /* OpenLCBSerachType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0D3E072A485E570042748C /* OpenLCBSerachType.swift */; };
+		DA0D3E082A485E570042748C /* OpenLCBSearchType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0D3E072A485E570042748C /* OpenLCBSearchType.swift */; };
 		DA0D3E0A2A485E770042748C /* OpenLCBSearchMatchType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0D3E092A485E770042748C /* OpenLCBSearchMatchType.swift */; };
 		DA0D3E0C2A485E9A0042748C /* OpenLCBSearchMatchTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0D3E0B2A485E9A0042748C /* OpenLCBSearchMatchTarget.swift */; };
 		DA0D3E0E2A487A780042748C /* ComboBoxSimpleDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0D3E0D2A487A780042748C /* ComboBoxSimpleDS.swift */; };
@@ -396,7 +396,7 @@
 		DA0BBB7829FD4B22003E03EF /* OpenLCBCDIElementType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBCDIElementType.swift; sourceTree = "<group>"; };
 		DA0BBB7A29FD4ED2003E03EF /* LCCCDIMapRelation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCCCDIMapRelation.swift; sourceTree = "<group>"; };
 		DA0D3E052A4850880042748C /* OpenLCBThrottleDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBThrottleDelegate.swift; sourceTree = "<group>"; };
-		DA0D3E072A485E570042748C /* OpenLCBSerachType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBSerachType.swift; sourceTree = "<group>"; };
+		DA0D3E072A485E570042748C /* OpenLCBSearchType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBSearchType.swift; sourceTree = "<group>"; };
 		DA0D3E092A485E770042748C /* OpenLCBSearchMatchType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBSearchMatchType.swift; sourceTree = "<group>"; };
 		DA0D3E0B2A485E9A0042748C /* OpenLCBSearchMatchTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBSearchMatchTarget.swift; sourceTree = "<group>"; };
 		DA0D3E0D2A487A780042748C /* ComboBoxSimpleDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComboBoxSimpleDS.swift; sourceTree = "<group>"; };
@@ -1275,7 +1275,7 @@
 				DA60140A29F448B000AD9ACD /* OpenLCBNodeMemoryAddressSpace.swift */,
 				DA0D3E0B2A485E9A0042748C /* OpenLCBSearchMatchTarget.swift */,
 				DA0D3E092A485E770042748C /* OpenLCBSearchMatchType.swift */,
-				DA0D3E072A485E570042748C /* OpenLCBSerachType.swift */,
+				DA0D3E072A485E570042748C /* OpenLCBSearchType.swift */,
 				DA0D3E0F2A48AA6F0042748C /* OpenLCBThrottleState.swift */,
 				DACE10AB2A3F5F310032E954 /* OpenLCBTrackProtocol.swift */,
 				DA9C6A1D2A408F060069FED8 /* OpenLCBTractionControlInstructionType.swift */,
@@ -1510,7 +1510,7 @@
 				DAF5B4FF28A93D0E0015E758 /* RandomAccessCollectionExtensions.swift in Sources */,
 				DA0BBB7529FD4A91003E03EF /* LCCCDIElement.swift in Sources */,
 				DAEA21372A51BE65008545A6 /* LocoNetExtensions.swift in Sources */,
-				DA0D3E082A485E570042748C /* OpenLCBSerachType.swift in Sources */,
+				DA0D3E082A485E570042748C /* OpenLCBSearchType.swift in Sources */,
 				DA08B433278737540001307C /* ProgramDecoderAddressVC.swift in Sources */,
 				DA1DC9FF28A1CE0D007A957A /* SamplePeriod.swift in Sources */,
 				DAFE981529858A6300AC2C4A /* TC64Direction.swift in Sources */,

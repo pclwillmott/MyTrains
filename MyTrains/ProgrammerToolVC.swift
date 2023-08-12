@@ -62,6 +62,10 @@ class ProgrammerToolVC : NSViewController, NSWindowDelegate, OpenLCBProgrammerTo
   
   // MARK: OpenLCBProgrammerToolDelegate Methods
   
+  @objc public func programmingModeUpdated(ProgrammerTool:OpenLCBProgrammerToolNode, programmingMode:Int) {
+    cboProgrammingTrackMode.selectItem(at: programmingMode)
+  }
+
   @objc public func programmingTracksUpdated(programmerTool:OpenLCBProgrammerToolNode, programmingTracks:[UInt64:String]) {
     
     cboProgrammingTrackDS.dictionary = programmingTracks
@@ -107,6 +111,7 @@ class ProgrammerToolVC : NSViewController, NSWindowDelegate, OpenLCBProgrammerTo
   }
   
   @IBAction func btnGetAllAction(_ sender: NSButton) {
+    programmerTool?.getAllValues()
   }
   
   @IBAction func btnSetAllAction(_ sender: NSButton) {
@@ -157,5 +162,11 @@ class ProgrammerToolVC : NSViewController, NSWindowDelegate, OpenLCBProgrammerTo
   }
   
   @IBOutlet weak var lblStatus: NSTextField!
+  
+  @IBOutlet weak var cboProgrammingTrackMode: NSComboBox!
+  
+  @IBAction func cboProgrammingTrackModeAction(_ sender: NSComboBox) {
+    programmerTool?.programmingMode = cboProgrammingTrackMode.indexOfSelectedItem
+  }
   
 }

@@ -498,7 +498,7 @@ class TC64ConfigVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
       maxCV = info.cvs
       deviceAddr = device.boardId
       lblStatus.stringValue = "Reading CV #\(currentCV)"
-      programmer?.readCV(progMode: .operationsModeByteNoFeedback, cv: currentCV, address: UInt16(deviceAddr))
+      programmer?.readCV(progMode: .operations, cv: currentCV, address: UInt16(deviceAddr))
     }
   }
   
@@ -522,7 +522,7 @@ class TC64ConfigVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
       lblStatus.stringValue = "Writing CV #\(currentCV)"
       currentCV = 0
       let newCVNumber = currentCV < specialCV.count ? specialCV[currentCV] : 123 + currentCV
-      programmer?.writeCV(progMode: .operationsModeByteNoFeedback, cv: newCVNumber, address: deviceAddr, value: UInt16(device.cvs[newCVNumber - 1].nextCVValue))
+      programmer?.writeCV(progMode: .operations, cv: newCVNumber, address: deviceAddr, value: UInt16(device.cvs[newCVNumber - 1].nextCVValue))
     }
   }
   
@@ -543,7 +543,7 @@ class TC64ConfigVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
       maxCV = info.cvs
       deviceAddr = device.boardId
       lblStatus.stringValue = "Reading CV #\(currentCV)"
-      programmer?.readCV(progMode: .operationsModeByteNoFeedback, cv: currentCV, address: UInt16(deviceAddr))
+      programmer?.readCV(progMode: .operations, cv: currentCV, address: UInt16(deviceAddr))
     }
   }
   
