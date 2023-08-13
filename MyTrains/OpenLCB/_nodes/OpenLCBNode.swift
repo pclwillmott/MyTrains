@@ -607,6 +607,12 @@ public class OpenLCBNode : NSObject {
       highestAddress = address
     }
     
+    var realHighestAddress = highestAddress
+    
+    if highestAddress == OpenLCBProgrammingMode.highestAddressModifier + 3 * 1024 - 1 {
+      realHighestAddress = 3 * 1024 - 1
+    }
+    
     let readOnlyMask : UInt8 = 0b00000001
     
     let isReadOnly = (data[7] & readOnlyMask) == readOnlyMask
@@ -635,7 +641,7 @@ public class OpenLCBNode : NSObject {
     
     let size = highestAddress - lowestAddress + 1
     
-    let info : OpenLCBNodeAddressSpaceInformation = (addressSpace:addressSpace, lowestAddress: lowestAddress, highestAddress: highestAddress, size: size, isReadOnly: isReadOnly, description: description)
+    let info : OpenLCBNodeAddressSpaceInformation = (addressSpace:addressSpace, lowestAddress: lowestAddress, highestAddress: highestAddress, realHighestAddress: realHighestAddress, size: size, isReadOnly: isReadOnly, description: description)
     
     addressSpaceInformation[addressSpace] = info
     

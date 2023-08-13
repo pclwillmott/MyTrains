@@ -201,6 +201,46 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
   
   // MARK: Private Methods
   
+  private let defaultCleanMask : UInt8 = 0b00010000
+  private let valueCleanMask   : UInt8 = 0b00000001
+  
+  internal let defaultOffset = 1024
+  internal let statusOffset  = 2048
+
+  internal func isDefaultClean(cvNumber:Int) -> Bool {
+    guard let stat = cvs.getUInt8(address: statusOffset + cvNumber) else {
+      return false
+    }
+    return (stat & defaultCleanMask) == defaultCleanMask
+  }
+  
+  internal func isValueClean(cvNumber:Int) -> Bool {
+    guard let stat = cvs.getUInt8(address: statusOffset + cvNumber) else {
+      return false
+    }
+    return (stat & valueCleanMask) == valueCleanMask
+  }
+  
+  internal func setDefaultStatus(cvNumber:Int, isClean:Bool) {
+    guard let stat = cvs.getUInt8(address: statusOffset + cvNumber) else {
+      return
+    }
+    var status = stat
+    status &= ~defaultCleanMask
+    status |= isClean ? defaultCleanMask : 0
+    cvs.setUInt(address: statusOffset + cvNumber, value: status)
+  }
+  
+  internal func setValueStatus(cvNumber:Int, isClean:Bool) {
+    guard let stat = cvs.getUInt8(address: statusOffset + cvNumber) else {
+      return
+    }
+    var status = stat
+    status &= ~valueCleanMask
+    status |= isClean ? valueCleanMask : 0
+    cvs.setUInt(address: statusOffset + cvNumber, value: status)
+  }
+  
   internal func isMomentary(number:Int) -> Bool {
     
     if number == 0 {

@@ -37,6 +37,13 @@ public class OpenLCBMemorySpace {
   
   public var space : UInt8 = 0
   
+  public var standardSpace : OpenLCBNodeMemoryAddressSpace? {
+    if let standard = OpenLCBNodeMemoryAddressSpace(rawValue: space) {
+      return standard
+    }
+    return nil
+  }
+  
   public var memory : [UInt8] = []
   
   public var description : String = ""
@@ -52,6 +59,12 @@ public class OpenLCBMemorySpace {
       var result : OpenLCBNodeAddressSpaceInformation
       result.addressSpace = space
       result.highestAddress = UInt32(memory.count - 1)
+      result.realHighestAddress = result.highestAddress
+      
+      if let standardSpace, standardSpace == .cv {
+        result.highestAddress |= OpenLCBProgrammingMode.defaultProgrammingModeBit7.rawValue
+      }
+    
       result.lowestAddress = UInt32(0)
       result.size = UInt32(memory.count)
       result.isReadOnly = isReadOnly
@@ -145,7 +158,7 @@ public class OpenLCBMemorySpace {
   }
 
   public func isWithinSpace(address:Int, count:Int) -> Bool {
-    return (address >= addressSpaceInformation.lowestAddress) && ((address + count - 1) <= addressSpaceInformation.highestAddress)
+    return (address >= addressSpaceInformation.lowestAddress) && ((address + count - 1) <= addressSpaceInformation.realHighestAddress)
   }
   
   public func getBlock(address:Int, count:Int) -> [UInt8]? {

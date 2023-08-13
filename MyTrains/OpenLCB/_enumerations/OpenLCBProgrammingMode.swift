@@ -23,6 +23,51 @@ public enum OpenLCBProgrammingMode : UInt32 {
   case defaultProgrammingModeBit6 = 0x16000000
   case defaultProgrammingModeBit7 = 0x17000000
   
+  // MARK: Public Properties
+  
+  public var isAllowedOnProgrammingTrack : Bool {
+    
+    let allowed : Set<OpenLCBProgrammingMode> = [
+      .defaultProgrammingMode,
+      .directModeProgramming,
+      .pagedModeProgramming,
+      /*
+      .defaultProgrammingModeBit0,
+      .defaultProgrammingModeBit1,
+      .defaultProgrammingModeBit2,
+      .defaultProgrammingModeBit3,
+      .defaultProgrammingModeBit4,
+      .defaultProgrammingModeBit5,
+      .defaultProgrammingModeBit6,
+      .defaultProgrammingModeBit7,
+       */
+    ]
+    
+    return allowed.contains(self)
+    
+  }
+  
+  public var isAllowedOnMainTrack : Bool {
+    
+    let allowed : Set<OpenLCBProgrammingMode> = [
+      .defaultProgrammingMode,
+      .programOnTheMain,
+      /*
+      .defaultProgrammingModeBit0,
+      .defaultProgrammingModeBit1,
+      .defaultProgrammingModeBit2,
+      .defaultProgrammingModeBit3,
+      .defaultProgrammingModeBit4,
+      .defaultProgrammingModeBit5,
+      .defaultProgrammingModeBit6,
+      .defaultProgrammingModeBit7,
+       */
+    ]
+    
+    return allowed.contains(self)
+    
+  }
+  
   // MARK: Public Methods
   
   public func locoNetProgrammingMode(isProgrammingTrack:Bool) -> LocoNetProgrammingMode {
@@ -46,8 +91,12 @@ public enum OpenLCBProgrammingMode : UInt32 {
     return 0xff000000
   }
   
-  public static var addressMark : UInt32 {
+  public static var addressMask : UInt32 {
     return ~modeMask
+  }
+  
+  public static var highestAddressModifier : UInt32 {
+    return OpenLCBProgrammingMode.defaultProgrammingModeBit7.rawValue
   }
   
 }

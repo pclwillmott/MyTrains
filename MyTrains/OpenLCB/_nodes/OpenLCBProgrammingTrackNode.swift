@@ -9,8 +9,10 @@ import Foundation
 
 private enum IOState {
   case idle
-  case reading
-  case writing
+  case readingCVWaitingForAck
+  case writingCVWaitingForAck
+  case readingCVWaitingForResult
+  case writingCVWaitingForResult
 }
 
 public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
@@ -90,6 +92,12 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
   private var ioStartAddress : UInt32 = 0
   
   private var ioSourceNodeId : UInt64 = 0
+  
+  private var timeoutTimer : Timer?
+  
+  private let ackTimeoutInterval : TimeInterval = 0.2
+  
+  private let resultTimeoutInterval : TimeInterval = 3.0
 
   // MARK: Public Properties
   
@@ -122,24 +130,53 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
     
   }
   
+  @objc internal func timeoutTimerAction() {
+    
+    stopTimeoutTimer()
+
+    ioState = .idle
+
+    switch ioState {
+    case .readingCVWaitingForAck, .readingCVWaitingForResult:
+      networkLayer?.sendReadReplyFailure(sourceNodeId: nodeId, destinationNodeId: ioSourceNodeId, addressSpace: cvs.space, startAddress: ioStartAddress, errorCode: .temporaryErrorTimeOut)
+    case .writingCVWaitingForAck, .writingCVWaitingForResult:
+      networkLayer?.sendWriteReplyFailure(sourceNodeId: nodeId, destinationNodeId: ioSourceNodeId, addressSpace: cvs.space, startAddress: ioStartAddress, errorCode: .temporaryErrorTimeOut)
+    default:
+      break
+    }
+    
+  }
+  
+  internal func startTimeoutTimer(interval: TimeInterval) {
+    timeoutTimer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(timeoutTimerAction), userInfo: nil, repeats: false)
+    RunLoop.current.add(timeoutTimer!, forMode: .common)
+  }
+  
+  internal func stopTimeoutTimer() {
+    timeoutTimer?.invalidate()
+    timeoutTimer = nil
+  }
+  
   internal override func readCVs(sourceNodeId:UInt64, memorySpace:OpenLCBMemorySpace, startAddress:UInt32, count:UInt8) {
     
-    guard let progMode = OpenLCBProgrammingMode(rawValue: startAddress & OpenLCBProgrammingMode.modeMask) else {
+    guard let progMode = OpenLCBProgrammingMode(rawValue: startAddress & OpenLCBProgrammingMode.modeMask), progMode.isAllowedOnProgrammingTrack else {
       networkLayer?.sendReadReplyFailure(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, addressSpace: memorySpace.space, startAddress: startAddress, errorCode: .permanentErrorInvalidArguments)
       return
     }
     
     self.progMode = progMode
     
-    self.ioState = .reading
+    self.ioState = .readingCVWaitingForAck
     
     self.ioCount = Int(count)
     
-    self.ioAddress = Int(startAddress & OpenLCBProgrammingMode.addressMark)
+    self.ioAddress = Int(startAddress & OpenLCBProgrammingMode.addressMask)
     
     self.ioStartAddress = startAddress
     
     self.ioSourceNodeId = sourceNodeId
+    
+    startTimeoutTimer(interval: ackTimeoutInterval)
     
     locoNet?.readCV(progMode: progMode.locoNetProgrammingMode(isProgrammingTrack: true), cv: self.ioAddress, address: 0)
     
@@ -148,17 +185,17 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
   internal override func writeCVs(sourceNodeId:UInt64, memorySpace:OpenLCBMemorySpace, startAddress:UInt32, data: [UInt8]) {
     
     guard let progMode = OpenLCBProgrammingMode(rawValue: startAddress & OpenLCBProgrammingMode.modeMask) else {
-      networkLayer?.sendReadReplyFailure(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, addressSpace: memorySpace.space, startAddress: startAddress, errorCode: .permanentErrorInvalidArguments)
+      networkLayer?.sendWriteReplyFailure(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, addressSpace: memorySpace.space, startAddress: startAddress, errorCode: .permanentErrorInvalidArguments)
       return
     }
     
     self.progMode = progMode
     
-    self.ioState = .writing
+    self.ioState = .writingCVWaitingForAck
     
     self.ioCount = data.count
     
-    self.ioAddress = Int(startAddress & OpenLCBProgrammingMode.addressMark)
+    self.ioAddress = Int(startAddress & OpenLCBProgrammingMode.addressMask)
     
     self.ioStartAddress = startAddress
     
@@ -166,6 +203,7 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
     
     if memorySpace.isWithinSpace(address: Int(ioAddress), count: data.count) {
       memorySpace.setBlock(address: ioAddress, data: data, isInternal: true)
+      startTimeoutTimer(interval: resultTimeoutInterval)
       locoNet?.writeCV(progMode: progMode.locoNetProgrammingMode(isProgrammingTrack: true), cv: ioAddress, address: 0, value: cvs.getUInt8(address: ioAddress)!)
     }
     else {
@@ -173,7 +211,6 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
     }
 
   }
-
 
   // MARK: Private Methods
   
@@ -320,24 +357,36 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
     switch message.messageType {
       
     case .progCmdAccepted:
-      break
-      
-    case .progCmdAcceptedBlind:
-      break
+      stopTimeoutTimer()
+      switch ioState {
+      case .readingCVWaitingForAck:
+        ioState = .readingCVWaitingForResult
+        startTimeoutTimer(interval: resultTimeoutInterval)
+      case .writingCVWaitingForAck:
+        ioState = .writingCVWaitingForResult
+        startTimeoutTimer(interval: resultTimeoutInterval)
+      default:
+        break
+      }
       
     case .programmerBusy:
+      stopTimeoutTimer()
       switch ioState {
-      case .idle:
-        break
-      case .reading:
+      case .readingCVWaitingForAck:
+        startTimeoutTimer(interval: ackTimeoutInterval)
         locoNet?.readCV(progMode: progMode.locoNetProgrammingMode(isProgrammingTrack: true), cv: self.ioAddress, address: 0)
-      case .writing:
+      case .writingCVWaitingForAck:
+        startTimeoutTimer(interval: ackTimeoutInterval)
         locoNet?.writeCV(progMode: progMode.locoNetProgrammingMode(isProgrammingTrack: true), cv: ioAddress, address: 0, value: cvs.getUInt8(address: ioAddress)!)
+      default:
+        break
       }
-
+      
     case .progSlotDataP1:
       
       if ioState != .idle {
+        
+        stopTimeoutTimer()
         
         var errorCode : OpenLCBErrorCode
         
@@ -356,48 +405,54 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
           errorCode = .success
         }
         
-      
         switch ioState {
-        case .idle:
-          break
           
-        case .reading:
+        case .readingCVWaitingForResult:
           if errorCode != .success {
-            networkLayer?.sendReadReplyFailure(sourceNodeId: nodeId, destinationNodeId: ioSourceNodeId, addressSpace: cvs.space, startAddress: ioStartAddress, errorCode: errorCode)
             ioState = .idle
+            networkLayer?.sendReadReplyFailure(sourceNodeId: nodeId, destinationNodeId: ioSourceNodeId, addressSpace: cvs.space, startAddress: ioStartAddress, errorCode: errorCode)
           }
-          else if let address = message.cvNumber, let value = message.cvValue {
+          else if let value = message.cvValue {
             cvs.setUInt(address: ioAddress, value: value)
             ioAddress += 1
-            if ioAddress < ioStartAddress + UInt32(ioCount) {
+            if ioAddress < (ioStartAddress & OpenLCBProgrammingMode.addressMask) + UInt32(ioCount) {
+              ioState = .readingCVWaitingForAck
+              startTimeoutTimer(interval: ackTimeoutInterval)
               locoNet?.readCV(progMode: progMode.locoNetProgrammingMode(isProgrammingTrack: true), cv: self.ioAddress, address: 0)
             }
             else {
-              if let data = cvs.getBlock(address: Int(ioStartAddress & OpenLCBProgrammingMode.addressMark), count: Int(ioCount)) {
+              if let data = cvs.getBlock(address: Int(ioStartAddress & OpenLCBProgrammingMode.addressMask), count: Int(ioCount)) {
+                ioState = .idle
                 networkLayer?.sendReadReply(sourceNodeId: nodeId, destinationNodeId: ioSourceNodeId, addressSpace: cvs.space, startAddress: ioStartAddress, data: data)
               }
               else {
-                networkLayer?.sendReadReplyFailure(sourceNodeId: nodeId, destinationNodeId: ioSourceNodeId, addressSpace: cvs.space, startAddress: ioStartAddress, errorCode: .permanentErrorAddressOutOfBounds)
                 ioState = .idle
+                networkLayer?.sendReadReplyFailure(sourceNodeId: nodeId, destinationNodeId: ioSourceNodeId, addressSpace: cvs.space, startAddress: ioStartAddress, errorCode: .permanentErrorAddressOutOfBounds)
               }
             }
-            
           }
-        case .writing:
+          
+        case .writingCVWaitingForResult:
+          stopTimeoutTimer()
           if errorCode != .success {
-            networkLayer?.sendWriteReplyFailure(sourceNodeId: nodeId, destinationNodeId: ioSourceNodeId, addressSpace: cvs.space, startAddress: ioStartAddress, errorCode: errorCode)
             ioState = .idle
+            networkLayer?.sendWriteReplyFailure(sourceNodeId: nodeId, destinationNodeId: ioSourceNodeId, addressSpace: cvs.space, startAddress: ioStartAddress, errorCode: errorCode)
           }
-          else if let address = message.cvNumber, Int(address) == ioAddress {
+          else {
             ioAddress += 1
-            if ioAddress < ioStartAddress + UInt32(ioCount) {
+            if ioAddress < (ioStartAddress & OpenLCBProgrammingMode.addressMask) + UInt32(ioCount) {
+              ioState = .writingCVWaitingForAck
+              startTimeoutTimer(interval: ackTimeoutInterval)
               locoNet?.writeCV(progMode: progMode.locoNetProgrammingMode(isProgrammingTrack: true), cv: ioAddress, address: 0, value: cvs.getUInt8(address: ioAddress)!)
             }
             else {
-              networkLayer?.sendWriteReply(sourceNodeId: nodeId, destinationNodeId: ioSourceNodeId, addressSpace: cvs.space, startAddress: ioStartAddress)
               ioState = .idle
+              networkLayer?.sendWriteReply(sourceNodeId: nodeId, destinationNodeId: ioSourceNodeId, addressSpace: cvs.space, startAddress: ioStartAddress)
             }
           }
+          
+        default:
+          break
         }
         
       }

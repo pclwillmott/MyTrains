@@ -191,7 +191,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
       return
     }
     
-    let address = startAddress & OpenLCBProgrammingMode.addressMark
+    let address = startAddress & OpenLCBProgrammingMode.addressMask
     
     if let data = memorySpace.getBlock(address: Int(address), count: Int(count)) {
       networkLayer?.sendReadReply(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, addressSpace: memorySpace.space, startAddress: startAddress, data: data)
@@ -205,11 +205,11 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   internal func writeCVs(sourceNodeId:UInt64, memorySpace:OpenLCBMemorySpace, startAddress:UInt32, data: [UInt8]) {
     
     guard let progMode = OpenLCBProgrammingMode(rawValue: startAddress & OpenLCBProgrammingMode.modeMask) else {
-      networkLayer?.sendReadReplyFailure(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, addressSpace: memorySpace.space, startAddress: startAddress, errorCode: .permanentErrorInvalidArguments)
+      networkLayer?.sendWriteReplyFailure(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, addressSpace: memorySpace.space, startAddress: startAddress, errorCode: .permanentErrorInvalidArguments)
       return
     }
     
-    let address = startAddress & OpenLCBProgrammingMode.addressMark
+    let address = startAddress & OpenLCBProgrammingMode.addressMask
     
     if memorySpace.isWithinSpace(address: Int(address), count: data.count) {
       memorySpace.setBlock(address: Int(address), data: data, isInternal: false)
@@ -441,7 +441,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
             if readCount == 0 || readCount > 64 {
               networkLayer?.sendReadReplyFailure(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, addressSpace: space, startAddress: startAddress, errorCode: .permanentErrorInvalidArguments)
             }
-            else if let spaceId = OpenLCBNodeMemoryAddressSpace(rawValue: space), spaceId == .cv {
+            else if let spaceId = memorySpace.standardSpace, spaceId == .cv {
               readCVs(sourceNodeId: message.sourceNodeId!, memorySpace: memorySpace, startAddress: startAddress, count: readCount)
             }
             else {
@@ -487,7 +487,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
             
             data.removeFirst(bytesToRemove)
 
-            if let spaceId = OpenLCBNodeMemoryAddressSpace(rawValue: space), spaceId == .cv {
+            if let spaceId = memorySpace.standardSpace, spaceId == .cv {
               writeCVs(sourceNodeId: message.sourceNodeId!, memorySpace: memorySpace, startAddress: startAddress, data: data)
             }
             else if memorySpace.isWithinSpace(address: Int(startAddress), count: data.count) {
