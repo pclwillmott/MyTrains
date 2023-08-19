@@ -383,7 +383,7 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
       }
       
     case .progSlotDataP1:
-      
+ 
       if ioState != .idle {
         
         stopTimeoutTimer()

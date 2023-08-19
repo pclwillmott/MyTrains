@@ -8,7 +8,7 @@
 import Foundation
 import Cocoa
 
-class ProgrammerToolVC : NSViewController, NSWindowDelegate, OpenLCBProgrammerToolDelegate {
+class ProgrammerToolVC : NSViewController, NSWindowDelegate, OpenLCBProgrammerToolDelegate, CSVParserDelegate {
   
   // MARK: Window & View Control
   
@@ -41,6 +41,7 @@ class ProgrammerToolVC : NSViewController, NSWindowDelegate, OpenLCBProgrammerTo
     
     self.view.window?.title = "\(programmerTool!.userNodeName) (\(programmerTool!.nodeId.toHexDotFormat(numberOfBytes: 6)))"
     
+    programmerTool?.cvs = []
     tableViewDS.programmerTool = programmerTool
     tableView.dataSource = tableViewDS
     tableView.delegate = tableViewDS
@@ -56,10 +57,55 @@ class ProgrammerToolVC : NSViewController, NSWindowDelegate, OpenLCBProgrammerTo
   
   private var tableViewDS = ProgrammerToolTableViewDS()
   
+  private var csvParser : CSVParser?
+  
   // MARK: Public Properties
   
   public var programmerTool : OpenLCBProgrammerToolNode?
   
+  // MARK: CSVParserDelegate Methods
+  
+  func csvParserDidStartDocument() {
+  }
+  
+  func csvParserDidEndDocument() {
+    tableView.reloadData()
+  }
+  
+  func csvParser(didStartRow row: Int) {
+    cvNumber = nil
+  }
+  
+  func csvParser(didEndRow row: Int) {
+  }
+  
+  private var cvNumber : Int?
+  
+  func csvParser(foundCharacters column: Int, string: String) {
+    if column == 0 {
+      if string == "CV" {
+        return
+      }
+      cvNumber = Int(string.trimmingCharacters(in: .whitespacesAndNewlines))
+    }
+    else if column == 1 {
+      if string == "Default Value" {
+        return
+      }
+      if let cvNumber, let value = UInt8(string.trimmingCharacters(in: .whitespacesAndNewlines)) {
+        programmerTool?.cvs[cvNumber - 1 + programmerTool!.defaultOffset] = value
+      }
+    }
+    else if column == 2 {
+      if string == "Value" {
+        return
+      }
+      if let cvNumber, let value = UInt8(string.trimmingCharacters(in: .whitespacesAndNewlines)) {
+        programmerTool?.cvs[cvNumber - 1] = value
+      }
+    }
+  }
+
   // MARK: OpenLCBProgrammerToolDelegate Methods
   
   @objc public func programmingModeUpdated(ProgrammerTool:OpenLCBProgrammerToolNode, programmingMode:Int) {
@@ -115,12 +161,92 @@ class ProgrammerToolVC : NSViewController, NSWindowDelegate, OpenLCBProgrammerTo
   }
   
   @IBAction func btnSetAllAction(_ sender: NSButton) {
+    programmerTool?.setAllValues()
+  }
+  
+  @IBAction func btnCancelAction(_ sender: NSButton) {
+    programmerTool?.cancelOperation()
   }
   
   @IBAction func btnImportCSVAction(_ sender: NSButton) {
+    
+    if let savedCVsPath = UserDefaults.standard.string(forKey: DEFAULT.SAVED_CVS_PATH) {
+    
+      let url = URL(fileURLWithPath: savedCVsPath)
+      
+      let fm = FileManager()
+      
+      try? fm.createDirectory(at: url, withIntermediateDirectories:true, attributes:nil)
+
+      let panel = NSOpenPanel()
+      
+      panel.directoryURL = url
+      panel.canChooseDirectories = false
+      panel.canChooseFiles = true
+      panel.allowsOtherFileTypes = true
+      panel.allowedFileTypes = ["csv"]
+      
+      if (panel.runModal() == .OK) {
+        
+        let newPath = panel.directoryURL!.deletingLastPathComponent()
+        
+        UserDefaults.standard.set(newPath, forKey: DEFAULT.SAVED_CVS_PATH)
+        
+        csvParser = CSVParser(withURL: panel.url!)
+        csvParser?.delegate = self
+        csvParser?.columnSeparator = ","
+        csvParser?.lineTerminator = "\n"
+        csvParser?.stringDelimiter = "\""
+        csvParser?.parse()
+      }
+
+    }
+
   }
   
   @IBAction func btnExportCSVAction(_ sender: NSButton) {
+    
+    if let savedCVsPath = UserDefaults.standard.string(forKey: DEFAULT.SAVED_CVS_PATH) {
+    
+      let url = URL(fileURLWithPath: savedCVsPath)
+      
+      let fm = FileManager()
+      
+      do{
+        try fm.createDirectory(at: url, withIntermediateDirectories:true, attributes:nil)
+      }
+      catch{
+        print("create directory failed")
+      }
+
+      let panel = NSSavePanel()
+      
+      panel.directoryURL = url
+      
+      panel.nameFieldStringValue = cboTrainNode.stringValue
+
+      panel.canCreateDirectories = true
+      
+      panel.allowedFileTypes = ["csv"]
+      
+      if (panel.runModal() == .OK) {
+        
+        let newPath = panel.directoryURL!.deletingLastPathComponent()
+        
+        UserDefaults.standard.set(newPath, forKey: DEFAULT.SAVED_CVS_PATH)
+        
+        var output = "\"CV\",\"Default Value\",\"Value\"\n"
+        
+        for cvNumber in 1...256 {
+          output += "\(cvNumber), \(programmerTool!.cvs[cvNumber - 1 + programmerTool!.defaultOffset]), \(programmerTool!.cvs[cvNumber - 1])\n"
+        }
+        
+        try? output.write(to: panel.url!, atomically: true, encoding: .utf8)
+
+      }
+
+    }
+
   }
   
   @IBAction func btnGetDefaultAction(_ sender: NSButton) {

@@ -882,7 +882,7 @@ extension LocoNet {
     
     cmd |= 0b00000100 // read
 
-    var packet : [UInt8] = [
+    let packet : [UInt8] = [
       cv17(address: address),
       cv18(address: address),
       cmd,

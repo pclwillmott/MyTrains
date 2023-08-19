@@ -118,6 +118,9 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
     }
   }
   
+  public let defaultOffset = 1024
+  public let statusOffset  = 2048
+
   // MARK: Private Methods
   
   private var targetNodeId : UInt64? {
@@ -176,12 +179,10 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
   
   // MARK: Public Methods
 
-  private let defaultCleanMask : UInt8 = 0b00010000
-  private let valueCleanMask   : UInt8 = 0b00000001
+  private let defaultCleanMask     : UInt8 = 0b00010000
+  private let valueCleanMask       : UInt8 = 0b00000001
+  private let valueWriteFailedMask : UInt8 = 0b00000010
   
-  private let defaultOffset = 1024
-  private let statusOffset  = 2048
-
   public func isDefaultClean(cvNumber:Int) -> Bool {
     let stat = cvs[statusOffset + cvNumber]
     return (stat & defaultCleanMask) == defaultCleanMask
@@ -191,7 +192,12 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
     let stat = cvs[statusOffset + cvNumber]
     return (stat & valueCleanMask) == valueCleanMask
   }
-  
+
+  public func isValueWriteFailure(cvNumber:Int) -> Bool {
+    let stat = cvs[statusOffset + cvNumber]
+    return (stat & valueWriteFailedMask) == valueWriteFailedMask
+  }
+
   public func setDefaultStatus(cvNumber:Int, isClean:Bool) {
     var stat = cvs[statusOffset + cvNumber]
     stat &= ~defaultCleanMask
@@ -205,7 +211,14 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
     stat |= isClean ? valueCleanMask : 0
     cvs[statusOffset + cvNumber] = stat
   }
-  
+
+  public func setValueWriteStatus(cvNumber:Int, isFailure:Bool) {
+    var stat = cvs[statusOffset + cvNumber]
+    stat &= ~valueWriteFailedMask
+    stat |= isFailure ? valueWriteFailedMask : 0
+    cvs[statusOffset + cvNumber] = stat
+  }
+
   public func getDefaultValue(cvNumber:Int) {
     
     if isDefaultSupported {
@@ -244,7 +257,7 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
   
   public func getAllValues() {
     
-    guard let target = targetNodeId, let progModeMask else {
+    guard let target = targetNodeId, let progModeMask, dccTrainNodeId != 0 else {
       return
     }
 
@@ -256,11 +269,72 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
     
     ioCount = 256
     
-    delegate?.statusUpdate?(ProgrammerTool: self, status: "Getting CV#\(ioAddress + 1)")
+    delegate?.statusUpdate?(ProgrammerTool: self, status: "Getting CV #\(ioAddress + 1)")
     
     networkLayer?.sendNodeMemoryReadRequest(sourceNodeId: nodeId, destinationNodeId: target, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: Int(ioStartAddress), numberOfBytesToRead: 1)
 
   }
+  
+  public func cancelOperation() {
+    
+    ioState = .idle
+
+    delegate?.statusUpdate?(ProgrammerTool: self, status: "")
+
+  }
+  
+  public func setAllValues() {
+    
+    guard let target = targetNodeId, let progModeMask, dccTrainNodeId != 0 else {
+      return
+    }
+
+    ioState = .writingCVWaitingForAck
+    
+    ioAddress = 0
+    
+    ioStartAddress = UInt32(ioAddress) | progModeMask
+    
+    ioCount = 256
+    
+    delegate?.statusUpdate?(ProgrammerTool: self, status: "Setting CV #\(ioAddress + 1)")
+    
+    networkLayer?.sendNodeMemoryWriteRequest(sourceNodeId: nodeId, destinationNodeId: target, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: Int(ioStartAddress), dataToWrite: [cvs[ioAddress]])
+
+  }
+  
+  public func setNextCV() {
+    
+    guard let target = targetNodeId else {
+      return
+    }
+    
+    ioAddress += 1
+    
+    if ioAddress == 6 {
+      setValueWriteStatus(cvNumber: ioAddress, isFailure: true)
+      ioAddress += 1
+    }
+    if ioAddress == 7  {
+      setValueWriteStatus(cvNumber: ioAddress, isFailure: true)
+      ioAddress += 1
+    }
+
+    if ioAddress < Int(ioStartAddress & OpenLCBProgrammingMode.addressMask) + ioCount {
+      ioState = .writingCVWaitingForAck
+      
+      delegate?.statusUpdate?(ProgrammerTool: self, status: "Setting CV #\(ioAddress + 1)")
+      
+      networkLayer?.sendNodeMemoryWriteRequest(sourceNodeId: nodeId, destinationNodeId: target, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: ioAddress | Int(progModeMask!), dataToWrite: [cvs[ioAddress]])
+
+    }
+    else {
+      ioState = .idle
+      delegate?.statusUpdate?(ProgrammerTool: self, status: "")
+    }
+    
+  }
+
   
   public func getNextCV() {
     
@@ -270,18 +344,17 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
     
     ioAddress += 1
     
-    if ioAddress < Int(ioStartAddress & OpenLCBProgrammingMode.addressMask) + ioCount - 1 {
-      ioState = .idle
-      delegate?.statusUpdate?(ProgrammerTool: self, status: "")
-    }
-    else {
-      
+    if ioAddress < Int(ioStartAddress & OpenLCBProgrammingMode.addressMask) + ioCount {
       ioState = .readingCVWaitingForAck
       
-      delegate?.statusUpdate?(ProgrammerTool: self, status: "Getting CV#\(ioAddress + 1)")
+      delegate?.statusUpdate?(ProgrammerTool: self, status: "Getting CV #\(ioAddress + 1)")
       
-      networkLayer?.sendNodeMemoryReadRequest(sourceNodeId: nodeId, destinationNodeId: target, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: Int(ioStartAddress), numberOfBytesToRead: 1)
+      networkLayer?.sendNodeMemoryReadRequest(sourceNodeId: nodeId, destinationNodeId: target, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: ioAddress | Int(progModeMask!), numberOfBytesToRead: 1)
 
+    }
+    else {
+      ioState = .idle
+      delegate?.statusUpdate?(ProgrammerTool: self, status: "")
     }
     
   }
@@ -304,13 +377,21 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
   
   public func setValue(cvNumber:Int) {
     
-    guard let target = targetNodeId else {
+    guard let target = targetNodeId, let progModeMask else {
       return
     }
     
+    ioState = .writingCVWaitingForAck
+    
+    ioAddress = cvNumber
+    
+    ioStartAddress = UInt32(ioAddress) | progModeMask
+    
+    ioCount = 1
+    
     let value = cvs[cvNumber]
       
-    networkLayer?.sendNodeMemoryWriteRequest(sourceNodeId: nodeId, destinationNodeId: target, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: cvNumber, dataToWrite: [value])
+    networkLayer?.sendNodeMemoryWriteRequest(sourceNodeId: nodeId, destinationNodeId: target, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: Int(ioStartAddress), dataToWrite: [value])
     
     if isDefaultSupported {
       
@@ -431,6 +512,16 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
             }
             
           }
+          
+        case .writeReplyFailureGeneric:
+          
+          if ioState != .idle {
+            delegate?.statusUpdate?(ProgrammerTool: self, status: "\(message.payload)")
+            
+            setValueWriteStatus(cvNumber: ioAddress, isFailure: true)
+            delegate?.cvDataUpdated?(programmerTool: self, cvData: cvs)
+            setNextCV()
+          }
         
         case .writeReplyGeneric:
           
@@ -438,9 +529,14 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
             
             switch ioState {
               
-            case .writingDefaultWaitingForReply, .writingCVWaitingForReply:
+            case .writingDefaultWaitingForReply:
               ioState = .idle
               delegate?.statusUpdate?(ProgrammerTool: self, status: "")
+            
+            case .writingCVWaitingForReply:
+              setValueWriteStatus(cvNumber: ioAddress, isFailure: false)
+              delegate?.cvDataUpdated?(programmerTool: self, cvData: cvs)
+              setNextCV()
               
             case .readingCVWaitingForWriteBackReply:
               getNextCV()
@@ -496,7 +592,7 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
 
               if message.sourceNodeId! == programmingTrackId {
                 
-                ioState = .readingCVWaitingForWriteBackAck
+                ioState = .readingCVWaitingForWriteBackReply
                 
                 networkLayer?.sendNodeMemoryWriteRequest(sourceNodeId: nodeId, destinationNodeId: dccTrainNodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: ioAddress, dataToWrite: [data[0]])
                 

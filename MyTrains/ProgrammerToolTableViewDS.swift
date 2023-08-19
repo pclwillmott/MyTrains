@@ -32,8 +32,6 @@ public class ProgrammerToolTableViewDS : NSObject, NSTableViewDataSource, NSTabl
   public func tableView(_ tableView: NSTableView,
                         viewFor tableColumn: NSTableColumn?,row: Int) -> NSView? {
     
-    let item = programmerTool!.cvs[row]
-    
     let columnName = tableColumn!.identifier.rawValue
     
     let cellIdentifier = "\(columnName)CellID"
@@ -41,7 +39,6 @@ public class ProgrammerToolTableViewDS : NSObject, NSTableViewDataSource, NSTabl
     let numberBase = NumberBase(rawValue: Int(programmerTool!.numberBase[row])) ?? NumberBase.defaultValue
     
     let defaultOffset = 1024
-    let statusOffset  = 2048
     
     var text: String = ""
     
@@ -65,7 +62,12 @@ public class ProgrammerToolTableViewDS : NSObject, NSTableViewDataSource, NSTabl
     switch columnName {
       
     case ColumnIdentifiers.CVNumberColumn:
-      text = "\(row + 1)"
+      if row > 255 && row < 512 {
+        text = "\(programmerTool!.cvs[30]).\(programmerTool!.cvs[31]).\(row + 1)"
+      }
+      else {
+        text = "\(row + 1)"
+      }
       
     case ColumnIdentifiers.DescriptionColumn:
       text = NMRA.cvDescription(cv: row + 1)
@@ -119,6 +121,9 @@ public class ProgrammerToolTableViewDS : NSObject, NSTableViewDataSource, NSTabl
     case ColumnIdentifiers.ValueStatusColumn:
       if programmerTool!.isDefaultSupported {
         text = (programmerTool!.isValueClean(cvNumber: row)) ? "✓" : "?"
+        if programmerTool!.isValueWriteFailure(cvNumber: row) {
+          text += "🔒"
+        }
       }
       
     case ColumnIdentifiers.GetValueColumn:

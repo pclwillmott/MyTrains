@@ -506,9 +506,9 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
   
   @objc public func locoNetMessageReceived(message:LocoNetMessage) {
     
-    guard configState != .idle else {
+/*    guard configState != .idle else {
       return
-    }
+    } */
     
     switch message.messageType {
       

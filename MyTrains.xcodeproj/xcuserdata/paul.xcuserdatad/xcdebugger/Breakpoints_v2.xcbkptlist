@@ -84,5 +84,113 @@
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "CEB43246-EE02-4408-A9C8-C141C8FFC551"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MyTrains/ProgrammerToolVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "95"
+            endingLineNumber = "95"
+            landmarkName = "csvParser(foundCharacters:string:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "CEB43246-EE02-4408-A9C8-C141C8FFC551 - 263ef1a38611a3cb"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MyTrains.ProgrammerToolVC.cboProgrammingTrack.getter : Swift.Optional&lt;__C.NSComboBox&gt;"
+                  moduleName = "MyTrains"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/Documents/MyTrains/MyTrains/ProgrammerToolVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "97"
+                  endingLineNumber = "97"
+                  offsetFromSymbolStart = "85">
+               </Location>
+               <Location
+                  uuid = "CEB43246-EE02-4408-A9C8-C141C8FFC551 - 9294c58c138ff43f"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MyTrains.ProgrammerToolVC.cboProgrammingTrack.setter : Swift.Optional&lt;__C.NSComboBox&gt;"
+                  moduleName = "MyTrains"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/Documents/MyTrains/MyTrains/ProgrammerToolVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "97"
+                  endingLineNumber = "97"
+                  offsetFromSymbolStart = "136">
+               </Location>
+               <Location
+                  uuid = "CEB43246-EE02-4408-A9C8-C141C8FFC551 - 9b8ccdd98b67c1ce"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MyTrains.ProgrammerToolVC.cboProgrammingTrack.modify : Swift.Optional&lt;__C.NSComboBox&gt;"
+                  moduleName = "MyTrains"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/Documents/MyTrains/MyTrains/ProgrammerToolVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "97"
+                  endingLineNumber = "97"
+                  offsetFromSymbolStart = "0">
+               </Location>
+               <Location
+                  uuid = "CEB43246-EE02-4408-A9C8-C141C8FFC551 - 85c41931d4eede65"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MyTrains.ProgrammerToolVC.cboProgrammingTrack.modify : Swift.Optional&lt;__C.NSComboBox&gt; with unmangled suffix &quot;.resume.0&quot;"
+                  moduleName = "MyTrains"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/Documents/MyTrains/MyTrains/ProgrammerToolVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "97"
+                  endingLineNumber = "97"
+                  offsetFromSymbolStart = "26">
+               </Location>
+               <Location
+                  uuid = "CEB43246-EE02-4408-A9C8-C141C8FFC551 - efaaede767cfcd0e"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MyTrains.ProgrammerToolVC.init(nibName: Swift.Optional&lt;Swift.String&gt;, bundle: Swift.Optional&lt;__C.NSBundle&gt;) -&gt; MyTrains.ProgrammerToolVC"
+                  moduleName = "MyTrains"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/Documents/MyTrains/MyTrains/ProgrammerToolVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "97"
+                  endingLineNumber = "97"
+                  offsetFromSymbolStart = "358">
+               </Location>
+               <Location
+                  uuid = "CEB43246-EE02-4408-A9C8-C141C8FFC551 - ff80144e6e16f6f9"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MyTrains.ProgrammerToolVC.init(coder: __C.NSCoder) -&gt; Swift.Optional&lt;MyTrains.ProgrammerToolVC&gt;"
+                  moduleName = "MyTrains"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/Documents/MyTrains/MyTrains/ProgrammerToolVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "97"
+                  endingLineNumber = "97"
+                  offsetFromSymbolStart = "315">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>
