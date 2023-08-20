@@ -78,5 +78,20 @@ public enum OpenLCBErrorCode : UInt16 {
       return (self.rawValue & mask) == mask
     }
   }
+  
+  public var userMessage : String {
+    
+    switch self {
+    case .permanentErrorNoDecoderDetected:
+      return "no decoder detected"
+    case .permanentErrorWriteCVFailed:
+      return "no write acknowledge from decoder"
+    case .permanentErrorReadCVFailed:
+      return "no read compare acknowledge from decoder"
+    default:
+      return "\(self)"
+    }
+    
+  }
 
 }

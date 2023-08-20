@@ -135,19 +135,19 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
   }
   
   internal override func writeCVs(sourceNodeId:UInt64, memorySpace:OpenLCBMemorySpace, startAddress:UInt32, data: [UInt8]) {
-    
+
     guard let progMode = OpenLCBProgrammingMode(rawValue: startAddress & OpenLCBProgrammingMode.modeMask), progMode.isAllowedOnMainTrack else {
       networkLayer?.sendWriteReplyFailure(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, addressSpace: memorySpace.space, startAddress: startAddress, errorCode: .permanentErrorInvalidArguments)
       return
     }
     
     let address = startAddress & OpenLCBProgrammingMode.addressMask
-    
+
     if memorySpace.isWithinSpace(address: Int(address), count: data.count) {
       
       memorySpace.setBlock(address: Int(address), data: data, isInternal: false)
       memorySpace.save()
-      
+
       if address < defaultOffset {
 
         ioAddress = Int(address)

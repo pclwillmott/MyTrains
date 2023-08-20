@@ -14,6 +14,7 @@ public enum NumberBase : Int {
   case hexadecimal = 1
   case binary = 2
   case octal = 3
+  case character = 4
   
   // MARK: Public Properties
   
@@ -54,6 +55,10 @@ public enum NumberBase : Int {
         item = "0\(item)"
       }
       
+    case .character:
+      
+      item = "\(String(format: "%C", value))"
+
     }
     
     return item
@@ -67,6 +72,7 @@ public enum NumberBase : Int {
     "Hex",
     "Binary",
     "Octal",
+    "Character",
   ]
   
   // MARK: Class Public Methods

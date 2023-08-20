@@ -183,7 +183,18 @@ public class OpenLCBMessage : NSObject {
       return .success
     }
   }
-  
+
+  public var rwReplyFailureErrorCode : OpenLCBErrorCode {
+    get {
+      if datagramType == .readReplyFailureGeneric || datagramType == .writeReplyFailureGeneric {
+        if let error = UInt16(bigEndianData: [payload[payload.count - 2], payload[payload.count - 1]]) {
+          return OpenLCBErrorCode(rawValue: error)!
+        }
+      }
+      return .success
+    }
+  }
+
   public var isAutomaticallyRoutedEvent : Bool {
     get {
       if messageTypeIndicator == .producerConsumerEventReport {

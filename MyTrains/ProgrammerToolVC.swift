@@ -8,6 +8,8 @@
 import Foundation
 import Cocoa
 
+// https://github.com/JMRI/JMRI/blob/master/xml/decoders/esu/v4decoderInfoCVs.xml
+
 class ProgrammerToolVC : NSViewController, NSWindowDelegate, OpenLCBProgrammerToolDelegate, CSVParserDelegate {
   
   // MARK: Window & View Control
@@ -132,10 +134,25 @@ class ProgrammerToolVC : NSViewController, NSWindowDelegate, OpenLCBProgrammerTo
   
   @objc public func cvDataUpdated(programmerTool:OpenLCBProgrammerToolNode, cvData:[UInt8]) {
     tableView.reloadData()
+    txtCV31.integerValue = Int(cvData[30])
+    txtCV32.integerValue = Int(cvData[31])
   }
 
   @objc public func statusUpdate(ProgrammerTool:OpenLCBProgrammerToolNode, status:String) {
-    lblStatus.stringValue = status
+    var text = txtActions.string
+    if status.isEmpty {
+      text = ""
+    }
+    if !txtActions.string.isEmpty && txtActions.string.last! != " " {
+      text += "\n"
+    }
+    text += status
+    txtActions.string = text
+    if !text.isEmpty {
+      let range = NSMakeRange(text.count - 1, 0)
+      txtActions.scrollRangeToVisible(range)
+    }
+
   }
   
   // MARK: Outlets & Actions
@@ -270,7 +287,7 @@ class ProgrammerToolVC : NSViewController, NSWindowDelegate, OpenLCBProgrammerTo
   }
   
   @IBAction func cboNumberBaseAction(_ sender: NSComboBox) {
-    programmerTool!.numberBase[sender.tag] = UInt8(NumberBase.selected(comboBox: sender).rawValue)
+    programmerTool!.setNumberBase(cvNumber: sender.tag, value: UInt8(NumberBase.selected(comboBox: sender).rawValue))
     tableView.reloadData()
   }
   
@@ -287,12 +304,46 @@ class ProgrammerToolVC : NSViewController, NSWindowDelegate, OpenLCBProgrammerTo
     programmerTool?.cvs[sender.tag] = UInt8(sender.integerValue & 0xff)
   }
   
-  @IBOutlet weak var lblStatus: NSTextField!
-  
   @IBOutlet weak var cboProgrammingTrackMode: NSComboBox!
   
   @IBAction func cboProgrammingTrackModeAction(_ sender: NSComboBox) {
     programmerTool?.programmingMode = cboProgrammingTrackMode.indexOfSelectedItem
   }
+  
+  @IBOutlet weak var txtCV31: NSTextField!
+  
+  @IBAction func txtCV31Action(_ sender: NSTextField) {
+    if let value = UInt8(sender.stringValue) {
+      programmerTool?.cvs[30] = value
+      programmerTool?.setValue(cvNumber: 30)
+    }
+  }
+  
+  @IBOutlet weak var txtCV32: NSTextField!
+  
+  @IBAction func txtCV32Action(_ sender: NSTextField) {
+    if let value = UInt8(sender.stringValue) {
+      programmerTool?.cvs[31] = value
+      programmerTool?.setValue(cvNumber: 31)
+    }
+  }
+  
+  @IBAction func btnGetAllIndexedAction(_ sender: NSButton) {
+    programmerTool?.getAllValuesIndexed()
+  }
+  
+  @IBAction func btnSetAllIndexedAction(_ sender: NSButton) {
+    programmerTool?.setAllValuesIndexed()
+  }
+  
+  @IBAction func btnGetAllExtendedAction(_ sender: NSButton) {
+    programmerTool?.getAllValuesExtended()
+  }
+  
+  @IBAction func btnSetAllExtendedAction(_ sender: NSButton) {
+    programmerTool?.setAllValuesExtended()
+  }
+  
+  @IBOutlet var txtActions: NSTextView!
   
 }

@@ -36,7 +36,7 @@ public class ProgrammerToolTableViewDS : NSObject, NSTableViewDataSource, NSTabl
     
     let cellIdentifier = "\(columnName)CellID"
     
-    let numberBase = NumberBase(rawValue: Int(programmerTool!.numberBase[row])) ?? NumberBase.defaultValue
+    let numberBase = NumberBase(rawValue: Int(programmerTool!.getNumberBase(cvNumber: row)!)) ?? NumberBase.defaultValue
     
     let defaultOffset = 1024
     
