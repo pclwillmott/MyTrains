@@ -203,6 +203,8 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBConfiguration
       node = OpenLCBProgrammingTrackNode(nodeId: newNodeId)
     case .genericVirtualNode:
       break
+    case .digitraxBXP88Node:
+      node = OpenLCBDigitraxBXP88Node(nodeId: newNodeId)
     }
 
     if let node {

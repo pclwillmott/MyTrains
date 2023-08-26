@@ -178,6 +178,12 @@ public class OpenLCBMemorySpace {
     
   }
   
+  public func zeroMemory() {
+    for address in 0 ... memory.count - 1 {
+      memory[address] = 0
+    }
+  }
+  
   public func setUInt(address:Int, value:UInt8) {
     setBlock(address: address, data: value.bigEndianData, isInternal: true)
   }
@@ -488,6 +494,8 @@ public class OpenLCBMemorySpace {
             node = OpenLCBProgrammerToolNode(nodeId: nodeId)
           case .programmingTrackNode:
             node = OpenLCBProgrammingTrackNode(nodeId: nodeId)
+          case .digitraxBXP88Node:
+            node = OpenLCBDigitraxBXP88Node(nodeId: nodeId)
           }
           
           result.append(node)

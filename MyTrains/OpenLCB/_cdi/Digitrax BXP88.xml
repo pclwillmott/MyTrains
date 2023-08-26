@@ -1,0 +1,210 @@
+<?xml version="1.0"?>
+<cdi xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://openlcb.org/schema/cdi/1/1/cdi.xsd">
+<identification>
+<manufacturer>Digitrax, Inc.</manufacturer>
+<model>BXP88</model>
+<hardwareVersion></hardwareVersion>
+<softwareVersion></softwareVersion>
+</identification>
+
+<acdi/>
+<segment space='251' origin='1'>
+<name>Node ID</name>
+<string size='63'>
+<name>User Name</name>
+<description>This name will appear in network browsers for this device.</description>
+</string>
+<string size='64'>
+<name>User Description</name>
+<description>This description will appear in network browsers for this device.</description>
+</string>
+</segment>
+
+<segment space='253' origin='0'>
+<name>BXP88 Configuration</name>
+
+<eventid>
+  <name>LocoNet Gateway</name>
+  <map>
+    %%LOCONET_GATEWAYS%%
+  </map>
+</eventid>
+
+<int size='2'>
+<name>Board ID</name>
+<min>1</min>
+<max>256</max>
+</int>
+
+<int size='1'>
+<name>Write board ID to BXP88</name>
+<map>
+  <relation><property>0</property><value>Keep</value></relation>
+  <relation><property>1</property><value>Write board ID to BXP88</value></relation>
+</map>
+</int>
+
+  <int size='1'>
+  <name>Reset to factory defaults</name>
+  <map>
+    <relation><property>0</property><value>Keep current settings</value></relation>
+    <relation><property>1</property><value>Reset BXP88 to factory defaults</value></relation>
+  </map>
+  </int>
+
+  <int size='1'>
+  <name>Write changes to BXP88</name>
+  <description>The changes that you have made will not become effective until they are written to the BXP88.</description>
+  <map>
+    <relation><property>0</property><value>Do not write changes to BXP88</value></relation>
+    <relation><property>1</property><value>Write changes to BXP88</value></relation>
+  </map>
+  </int>
+
+<group>
+<name>Power Manager</name>
+
+<int size='1'>
+<name>Power Manager Status</name>
+<map>
+  <relation><property>0</property><value>Disable power manager</value></relation>
+  <relation><property>1</property><value>Enable power manager</value></relation>
+</map>
+</int>
+
+<int size='1'>
+<name>Power Manager Reporting</name>
+<map>
+  <relation><property>0</property><value>Disable power manager reporting to LocoNet</value></relation>
+  <relation><property>1</property><value>Enable power manager reporting to LocoNet</value></relation>
+</map>
+</int>
+
+<int size='1'>
+<name>Short Circuit Detection</name>
+<map>
+  <relation><property>0</property><value>Normal short circuit detection</value></relation>
+  <relation><property>1</property><value>Slower short circuit detection</value></relation>
+</map>
+</int>
+
+</group>
+<group>
+<name>Occupancy Detection</name>
+
+<int size='1'>
+<name>Detection Sensitivity</name>
+<map>
+  <relation><property>0</property><value>Regular detection sensitivity</value></relation>
+  <relation><property>1</property><value>Higher detection sensitivity</value></relation>
+</map>
+</int>
+
+<int size='1'>
+<name>Occupied Message When Faulted</name>
+<map>
+  <relation><property>0</property><value>Send occupied message when faulted</value></relation>
+  <relation><property>1</property><value>Do not send occupied message when faulted</value></relation>
+</map>
+</int>
+
+</group>
+
+<group>
+<name>Transponding</name>
+
+<int size='1'>
+<name>Transponding State</name>
+<map>
+  <relation><property>0</property><value>Disable transponding</value></relation>
+  <relation><property>1</property><value>Enable transponding</value></relation>
+</map>
+</int>
+
+<int size='1'>
+<name>Fast Find</name>
+<map>
+  <relation><property>0</property><value>Enable fast find</value></relation>
+  <relation><property>1</property><value>Disable fast find</value></relation>
+</map>
+</int>
+
+<int size='1'>
+<name>Operations Mode Readback</name>
+<map>
+  <relation><property>0</property><value>Enable operations mode readback</value></relation>
+  <relation><property>1</property><value>Disable operations mode readback</value></relation>
+</map>
+</int>
+
+<int size='1'>
+<name>Selective Transponding State</name>
+<map>
+  <relation><property>0</property><value>Allow selective transponding disabling</value></relation>
+  <relation><property>1</property><value>Do not allow selective transponding disabling</value></relation>
+</map>
+</int>
+
+</group>
+
+<group replication='8'>
+<name>Detection Sections</name>
+<repname>Detection Section</repname>
+
+<int size='1'>
+<name>Occupancy Reporting</name>
+<map>
+  <relation><property>0</property><value>Enable occupancy reporting</value></relation>
+  <relation><property>1</property><value>Disable occupancy reporting</value></relation>
+</map>
+</int>
+
+<int size='1'>
+<name>Transponding Reporting</name>
+<map>
+  <relation><property>0</property><value>Enable transponding reporting</value></relation>
+  <relation><property>1</property><value>Disable transponding reporting</value></relation>
+</map>
+</int>
+
+<group replication='16'>
+<name>Events</name>
+<repname>Event</repname>
+
+<int size='1'>
+<name>LocoNet Event Type</name>
+<description>When this report is received from LocoNet</description>
+<map>
+  <relation><property>0</property><value>None</value></relation>
+  <relation><property>1</property><value>Locomotive found report</value></relation>
+  <relation><property>2</property><value>Short circuit detected report</value></relation>
+  <relation><property>3</property><value>Short circuit cleared report</value></relation>
+  <relation><property>4</property><value></value>Locomotive entered transponding zone report</relation>
+  <relation><property>5</property><value></value>Locomotive exited transponding zone report</relation>
+  <relation><property>6</property><value></value>Locomotive entered detection zone report</relation>
+  <relation><property>7</property><value></value>Locomotive exited detection zone report</relation>
+</map>
+</int>
+
+<eventid>
+  <name>Indicator Event Id</name>
+  <description>(P) this event will be sent</description>
+</eventid>
+
+<int size='1'>
+<name>Payload Type</name>
+<description>with this payload</description>
+<map>
+  <relation><property>0</property><value>None</value></relation>
+  <relation><property>1</property><value>Locomotive DCC Address</value></relation>
+  <relation><property>2</property><value>Locomotive node ID</value></relation>
+</map>
+</int>
+
+</group>
+
+</group>
+
+</segment>
+</cdi>
+

@@ -65,6 +65,8 @@ public class OpenLCBNetworkLayer : NSObject {
             node = OpenLCBThrottle(nodeId: newNodeId)
           case .trainNode:
             node = OpenLCBNodeRollingStockLocoNet(nodeId: newNodeId)
+          case .digitraxBXP88Node:
+            node = OpenLCBDigitraxBXP88Node(nodeId: newNodeId)
           }
           
           if let node {
@@ -173,6 +175,8 @@ public class OpenLCBNetworkLayer : NSObject {
     case .throttleNode:
       throttleManager.addNode(node: node)
     case .trainNode:
+      break
+    case .digitraxBXP88Node:
       break
     }
     
