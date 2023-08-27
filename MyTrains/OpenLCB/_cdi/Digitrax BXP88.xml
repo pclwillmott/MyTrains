@@ -44,6 +44,14 @@
 </map>
 </int>
 
+<int size='1'>
+<name>Read settings from BXP88</name>
+<map>
+  <relation><property>0</property><value>Keep</value></relation>
+  <relation><property>1</property><value>Read settings from BXP88</value></relation>
+</map>
+</int>
+
   <int size='1'>
   <name>Reset to factory defaults</name>
   <map>

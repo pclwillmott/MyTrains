@@ -221,9 +221,9 @@ class EditInterfacesVC: NSViewController, NSWindowDelegate, DBEditorDelegate, My
       let iplDevData = IPLDevData(message: message)
       
       if iplDevData.partialSerialNumberLow == partialSerialNumberLow &&   iplDevData.partialSerialNumberHigh == partialSerialNumberHigh &&
-        iplDevData.productCode.rawValue == productCode {
-        lblSerialNumber.stringValue = "\(iplDevData.serialNumber)"
-        txtInterfaceName.stringValue = "\(cboDeviceType.stringValue) SN: #\(iplDevData.serialNumber)"
+        iplDevData.productCode!.rawValue == productCode {
+        lblSerialNumber.stringValue = "\(iplDevData.serialNumber!)"
+        txtInterfaceName.stringValue = "\(cboDeviceType.stringValue) SN: #\(iplDevData.serialNumber!)"
       }
       
     default:

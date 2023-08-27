@@ -1493,21 +1493,82 @@ public class LocoNetMessage : NSObject {
     
   }
   
-  public var boardId : Int {
-    get {
-      if messageType == .pmRepBXP88 {
-        var bid = message[2]
-        bid |= (message[1] & 0b00000001) == 0b00000001 ? 0b10000000 : 0
-        return Int(bid) + 1
-      }
-      return -1
+  public var boardId : Int? {
+    switch messageType {
+    case .pmRepBXP88:
+      var bid = message[2]
+      bid |= (message[1] & 0b00000001) == 0b00000001 ? 0b10000000 : 0
+      return Int(bid) + 1
+    case .iplDevData:
+      var bid = message[15]
+      bid |= (message[14] & 0b00000001) == 0b00000001 ? 0b10000000 : 0
+      return Int(bid) + 1
+    case .locoRep:
+      return (transponderZone! / 8) + 1
+    default:
+      return nil
+    }
+  }
+  
+  public var transponderZone : Int? {
+    switch messageType {
+    case .locoRep:
+      return Int(message[6]) | (Int(message[5]) << 7)
+    default:
+      return nil
+    }
+  }
+  
+  public var locomotiveAddress : Int? {
+    switch messageType {
+    case .locoRep:
+      let highBits = message[3] == 0x7d ? 0 : Int(message[3]) << 7
+      return Int(message[4]) | highBits
+    default:
+      return nil
+    }
+  }
+  
+  public var productCode : ProductCode? {
+    switch messageType {
+    case .iplDevData:
+      let pc = message[5] | (message[4] & 0b00000001 != 0 ? 0b10000000 : 0b00000000)
+      return ProductCode(rawValue: pc)
+    default:
+      return nil
+    }
+  }
+  
+  public var softwareVersion : Double? {
+    switch messageType {
+    case .iplDevData:
+      let sv = message[8] | (message[4] & 0b00001000 != 0 ? 0b10000000 : 0b00000000)
+      return Double((sv & 0b11111000) >> 3) + Double (sv & 0b111) / 10.0
+    default:
+      return nil
+    }
+  }
+  
+  public var serialNumber : Int? {
+    switch messageType {
+    case .iplDevData:
+      let sn1 = message[11] | ((message[9] & 0b00000010) != 0 ? 0b10000000 : 0b00000000)
+      let sn2 = message[12] | ((message[9] & 0b00000100) != 0 ? 0b10000000 : 0b00000000)
+      return Int(sn1) | (Int(sn2) << 8)
+    default:
+      return nil
     }
   }
   
   public var detectionSectionsSet : (set:[Int], notSet:[Int]) {
     get {
+      
       var ds : [Int] = []
       var dns : [Int] = []
+      
+      guard let boardId else {
+        return (ds, dns)
+      }
       
       let addr = (boardId - 1) * 8
       if messageType == .pmRepBXP88 {
@@ -1565,6 +1626,15 @@ public class LocoNetMessage : NSObject {
     get {
       let mask : UInt8 = 0b00010000
       return (message[2] & mask) == mask
+    }
+  }
+  
+  public var swState : OptionSwitchState? {
+    switch messageType {
+    case .swState:
+      return ((message[2] & 0b00100000) != 0) ? .closed : .thrown
+    default:
+      return nil
     }
   }
   

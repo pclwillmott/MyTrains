@@ -984,5 +984,87 @@ extension LocoNet {
     addToQueue(message: message)
     
   }
+  
+  // MARK: IPL
+  
+  public func iplDiscover() {
+    
+    let message = LocoNetMessage(data: [LocoNetMessageOpcode.OPC_PEER_XFER.rawValue,
+       0x14, 0x0f, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], appendCheckSum: true)
+    
+    addToQueue(message: message)
+
+  }
+
+  public func iplDiscover(productCode:ProductCode) {
+    
+    let message = LocoNetMessage(data: [LocoNetMessageOpcode.OPC_PEER_XFER.rawValue,
+                                        0x14,
+                                        0x0f,
+                                        0x08,
+                                        0x00,
+                                        productCode.rawValue,
+                                        0x00,
+                                        0x00,
+                                        0x00,
+                                        0x00,
+                                        0x00,
+                                        0x01,
+                                        0x00,
+                                        0x00,
+                                        0x00,
+                                        0x00,
+                                        0x00,
+                                        0x00,
+                                        0x00],
+                                 appendCheckSum: true)
+    
+    addToQueue(message: message)
+
+  }
+
+  public func getSwState(switchNumber: Int) {
+    
+    let lo = UInt8((switchNumber - 1) & 0x7f)
+    
+    let hi = UInt8((switchNumber - 1) >> 7)
+    
+    let message = LocoNetMessage(data: [LocoNetMessageOpcode.OPC_SW_STATE.rawValue, lo, hi], appendCheckSum: true)
+    
+    addToQueue(message: message)
+
+  }
+  
+  public func setSw(switchNumber: Int, state:OptionSwitchState) {
+    
+    let sn = switchNumber - 1
+    
+    let lo = UInt8(sn & 0x7f)
+    
+    let bit : UInt8 = state == .closed ? 0x30 : 0x10
+    
+    let hi = UInt8(sn >> 7) | bit
+    
+    let message = LocoNetMessage(data: [LocoNetMessageOpcode.OPC_SW_REQ.rawValue, lo, hi], appendCheckSum: true)
+    
+    addToQueue(message: message)
+
+  }
+  
+  public func setSwWithAck(switchNumber: Int, state:OptionSwitchState) {
+    
+    let sn = switchNumber - 1
+    
+    let lo = UInt8(sn & 0x7f)
+    
+    let bit : UInt8 = state == .closed ? 0x30 : 0x10
+    
+    let hi = UInt8(sn >> 7) | bit
+    
+    let message = LocoNetMessage(data: [LocoNetMessageOpcode.OPC_SW_ACK.rawValue, lo, hi], appendCheckSum: true)
+    
+    addToQueue(message: message)
+
+  }
 
 }

@@ -39,17 +39,21 @@ public enum ProductCode : UInt8 {
   case softwareThrottle = 0x7f
   case none             = 0xff
   
-  func product() -> LocoNetProduct? {
-    if let product = LocoNetProducts.product(productCode: self.rawValue) {
-      return product
-    }
-    return nil
+  public var product : LocoNetProduct? {
+    return LocoNetProducts.product(productCode: self.rawValue)
   }
   
-  func productName() -> String {
+  public var locoNetProductId : DeviceId? {
+    guard let product else {
+      return nil
+    }
+    return product.id
+  }
+  
+  public var productName : String {
     
-    if let prod = self.product() {
-      return prod.productName
+    if let product {
+      return product.productName
     }
     
     switch self {

@@ -10,7 +10,7 @@ import Foundation
 public class IPLDevData : LocoNetMessage {
   
   // MARK: Public Properties
-  
+  /*
   public var productCode : ProductCode {
     
     get {
@@ -46,16 +46,16 @@ public class IPLDevData : LocoNetMessage {
     }
     
   }
-  
+  */
   public var partialSerialNumberLow : Int {
     get {
-      return serialNumber & 0x7f
+      return serialNumber! & 0x7f
     }
   }
   
   public var partialSerialNumberHigh : Int {
     get {
-      return (serialNumber >> 8) & 0x7f
+      return (serialNumber! >> 8) & 0x7f
     }
   }
   

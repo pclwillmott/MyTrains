@@ -13,18 +13,19 @@ public class QuerySlot3 : LocoNetMessage {
   
   // MARK: Public Properties
   
+  /*
   public var productCode : ProductCode {
     get {
       return ProductCode(rawValue: message[16]) ?? .none
     }
   }
-  
+  */
   public var productName : String {
     get {
-      return productCode.productName()
+      return productCode!.productName
     }
   }
-  
+  /*
   public var serialNumber : Int {
     get {
       let sn = Int(message[19] & 0b00111111) << 7 | Int(message[18])
@@ -34,7 +35,7 @@ public class QuerySlot3 : LocoNetMessage {
       return 0
     }
   }
-
+*/
   public var boardID : Int? {
     get {
       if productCode == .BXP88 {

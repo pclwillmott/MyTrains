@@ -96,19 +96,19 @@ public class QuerySlot1 : LocoNetMessage {
       return message[5] & 0b01000000 == 0b01000000
     }
   }
-  
+  /*
   public var productCode : ProductCode {
     get {
       return ProductCode(rawValue: message[14]) ?? .none
     }
   }
-  
+  */
   public var productName : String {
     get {
-      return productCode.productName()
+      return productCode!.productName
     }
   }
-  
+  /*
   public var serialNumber : Int {
     get {
       let sn = Int(message[19] & 0b00111111) << 7 | Int(message[18])
@@ -118,7 +118,7 @@ public class QuerySlot1 : LocoNetMessage {
       return 0
     }
   }
-  
+  */
   public var hardwareVersion : Double? {
     get {
       if productCode == .DCS240 || productCode == .DCS210 || productCode == .DCS210Plus || productCode == .PR4 || productCode == .DCS240Plus{
@@ -154,16 +154,16 @@ public class QuerySlot1 : LocoNetMessage {
       return "N/A"
     }
   }
-
+/*
   public var softwareVersion : Double {
     get {
       return Double(message[16] & 0x78) / 8.0 + Double(message[16] & 0x07) / 10.0
     }
   }
-  
+  */
   public var comboName : String {
     get {
-      return "Digitrax \(productName) SN: \(serialNumber)"
+      return "Digitrax \(productName) SN: \(serialNumber!)"
     }
   }
 

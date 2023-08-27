@@ -512,6 +512,15 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBConfigurati
     timer?.invalidate()
     timer = nil
   }
+  
+  private func resetScreen() {
+    
+    if let node = outlineView.item(atRow: 0) as? LCCCDIElement {
+      
+      displayEditElement(element: node)
+    }
+
+  }
 
   // MARK: OpenLCBConfigurationToolDelegate Methods
   
@@ -1065,7 +1074,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBConfigurati
       totalBytesRead = 0
       
       lblStatus.stringValue = "Reading Variables - \(totalBytesRead) bytes"
-      
+            
       if let node = self.node, let network = networkLayer {
         
         state = .refreshElement
@@ -1079,6 +1088,8 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBConfigurati
         network.sendNodeMemoryReadRequest(sourceNodeId: nodeId, destinationNodeId: node.nodeId, addressSpace: memoryMap[currentMemoryBlock].space, startAddress: nextCDIStartAddress, numberOfBytesToRead: bytesToRead)
         
       }
+      
+      resetScreen()
     }
     
   }
@@ -1383,6 +1394,8 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBConfigurati
   
   @IBAction func btnRefreshAllAction(_ sender: NSButton) {
     
+    resetScreen()
+    
     nextCDIStartAddress = 0
     
     CDI = []
@@ -1452,6 +1465,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBConfigurati
   @IBAction func btnRebootAction(_ sender: NSButton) {
     if let network = networkLayer {
       network.sendRebootCommand(sourceNodeId: nodeId, destinationNodeId: node!.nodeId)
+      resetScreen()
     }
   }
   
@@ -1470,6 +1484,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBConfigurati
     if alert.runModal() == NSApplication.ModalResponse.alertSecondButtonReturn {
       if let network = networkLayer {
         network.sendResetToDefaults(sourceNodeId: nodeId, destinationNodeId: node!.nodeId)
+        resetScreen()
       }
     }
 
