@@ -62,7 +62,7 @@ public class MyTrainsController : NSObject, InterfaceDelegate, NSUserNotificatio
   
   // MARK: Public Properties
   
-  public var fastClock : FastClock = FastClock()
+//  public var fastClock : FastClock = FastClock()
   
   public var networks : [Int:Network] = Network.networks
 

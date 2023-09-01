@@ -97,11 +97,11 @@ class DashBoardVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegat
   
   private var delegateId : Int = -1
   
-  private var querySlot1 : [String:QuerySlot1] = [:]
-  private var querySlot2 : [String:QuerySlot2] = [:]
-  private var querySlot3 : [String:QuerySlot3] = [:]
-  private var querySlot4 : [String:QuerySlot4] = [:]
-  private var querySlot5 : [String:QuerySlot5] = [:]
+  private var querySlot1 : [String:LocoNetMessage] = [:]
+  private var querySlot2 : [String:LocoNetMessage] = [:]
+  private var querySlot3 : [String:LocoNetMessage] = [:]
+  private var querySlot4 : [String:LocoNetMessage] = [:]
+  private var querySlot5 : [String:LocoNetMessage] = [:]
   private var names      : [String:LocoNetMessage] = [:]
   
   private var nextQuery : Int = 0
@@ -210,45 +210,40 @@ class DashBoardVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegat
     
     switch message.messageType {
     case .querySlot1:
-      let qs = QuerySlot1(message: message)
-      querySlot1[qs.comboName] = qs
-      if let _ = names[qs.comboName] {
+      querySlot1[message.comboName] = message
+      if let _ = names[message.comboName] {
         break
       }
-      names[qs.comboName] = qs
-      cboDevice.addItem(withObjectValue: qs.comboName)
+      names[message.comboName] = message
+      cboDevice.addItem(withObjectValue: message.comboName)
     case .querySlot2:
-      let qs = QuerySlot2(message: message)
-      querySlot2[qs.comboName] = qs
-      if let _ = names[qs.comboName] {
+      querySlot2[message.comboName] = message
+      if let _ = names[message.comboName] {
         break
       }
-      names[qs.comboName] = qs
-      cboDevice.addItem(withObjectValue: qs.comboName)
+      names[message.comboName] = message
+      cboDevice.addItem(withObjectValue: message.comboName)
     case .querySlot3:
-      let qs = QuerySlot3(message: message)
-      querySlot3[qs.comboName] = qs
-      if let _ = names[qs.comboName] {
+      querySlot3[message.comboName] = message
+      if let _ = names[message.comboName] {
         break
       }
-      names[qs.comboName] = qs
-      cboDevice.addItem(withObjectValue: qs.comboName)
+      names[message.comboName] = message
+      cboDevice.addItem(withObjectValue: message.comboName)
     case .querySlot4:
-      let qs = QuerySlot4(message: message)
-      querySlot4[qs.comboName] = qs
-      if let _ = names[qs.comboName] {
+      querySlot4[message.comboName] = message
+      if let _ = names[message.comboName] {
         break
       }
-      names[qs.comboName] = qs
-      cboDevice.addItem(withObjectValue: qs.comboName)
+      names[message.comboName] = message
+      cboDevice.addItem(withObjectValue: message.comboName)
     case .querySlot5:
-      let qs = QuerySlot5(message: message)
-      querySlot5[qs.comboName] = qs
-      if let _ = names[qs.comboName] {
+      querySlot5[message.comboName] = message
+      if let _ = names[message.comboName] {
         break
       }
-      names[qs.comboName] = qs
-      cboDevice.addItem(withObjectValue: qs.comboName)
+      names[message.comboName] = message
+      cboDevice.addItem(withObjectValue: message.comboName)
     default:
       resetTimer = false
       break
@@ -379,31 +374,31 @@ class DashBoardVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegat
     
     if let query1 = querySlot1[name] {
     
-      lbl40.stringValue = query1.bit40 ? "On" : "Off"
-      lbl41.stringValue = query1.bit41 ? "On" : "Off"
-      lbl42.stringValue = query1.bit42 ? "On" : "Off"
-      lbl43.stringValue = query1.bit43 ? "On" : "Off"
-      lbl44.stringValue = query1.bit44 ? "On" : "Off"
-      lbl45.stringValue = query1.bit45 ? "On" : "Off"
-      lbl46.stringValue = query1.bit46 ? "On" : "Off"
+      lbl40.stringValue = query1.bit40! ? "On" : "Off"
+      lbl41.stringValue = query1.bit41! ? "On" : "Off"
+      lbl42.stringValue = query1.bit42! ? "On" : "Off"
+      lbl43.stringValue = query1.bit43! ? "On" : "Off"
+      lbl44.stringValue = query1.bit44! ? "On" : "Off"
+      lbl45.stringValue = query1.bit45! ? "On" : "Off"
+      lbl46.stringValue = query1.bit46! ? "On" : "Off"
 
-      lbl50.stringValue = query1.bit50 ? "On" : "Off"
-      lbl51.stringValue = query1.bit51 ? "On" : "Off"
-      lbl52.stringValue = query1.bit52 ? "On" : "Off"
-      lbl53.stringValue = query1.bit53 ? "On" : "Off"
-      lbl54.stringValue = query1.bit54 ? "On" : "Off"
-      lbl55.stringValue = query1.bit55 ? "On" : "Off"
-      lbl56.stringValue = query1.bit56 ? "On" : "Off"
+      lbl50.stringValue = query1.bit50! ? "On" : "Off"
+      lbl51.stringValue = query1.bit51! ? "On" : "Off"
+      lbl52.stringValue = query1.bit52! ? "On" : "Off"
+      lbl53.stringValue = query1.bit53! ? "On" : "Off"
+      lbl54.stringValue = query1.bit54! ? "On" : "Off"
+      lbl55.stringValue = query1.bit55! ? "On" : "Off"
+      lbl56.stringValue = query1.bit56! ? "On" : "Off"
       
       setColours()
       
       lblProduct.stringValue = query1.productName
       
-      lblSerialNumber.stringValue = "\(query1.serialNumber)"
+      lblSerialNumber.stringValue = "\(query1.serialNumber!)"
       
-      lblHardwareVersion.stringValue = "\(query1.hardwareVersionString)"
+      lblHardwareVersion.stringValue = "\(query1.hardwareVersion!)"
       
-      lblSoftwareVersion.stringValue = "\(query1.softwareVersion)"
+      lblSoftwareVersion.stringValue = "\(query1.softwareVersion!)"
       
       lblBoardID.stringValue = "\(query1.boardIDString)"
       
@@ -413,19 +408,19 @@ class DashBoardVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegat
       
       lblProduct.stringValue = query2.productName
       
-      lblSerialNumber.stringValue = "\(query2.serialNumber)"
+      lblSerialNumber.stringValue = "\(query2.serialNumber!)"
       
-      lblTrackVoltage.stringValue = "\(query2.trackVoltage)"
+      lblTrackVoltage.stringValue = "\(query2.trackVoltage!)"
       
-      lblInputVoltage.stringValue = "\(query2.inputVoltage)"
+      lblInputVoltage.stringValue = "\(query2.inputVoltage!)"
       
-      lblCurrentDrawn.stringValue = "\(query2.currentDrawn)"
+      lblCurrentDrawn.stringValue = "\(query2.currentDrawn!)"
       
-      lblCurrentLimit.stringValue = "\(query2.currentLimit)"
+      lblCurrentLimit.stringValue = "\(query2.currentLimit!)"
       
-      lblRailSyncVoltage.stringValue = "\(query2.railSyncVoltage)"
+      lblRailSyncVoltage.stringValue = "\(query2.railSyncVoltage!)"
       
-      lblLocoNetVoltage.stringValue = "\(query2.locoNetVoltage)"
+      lblLocoNetVoltage.stringValue = "\(query2.locoNetVoltage!)"
       
       lblBoardID.stringValue = "\(query2.boardIDString)"
       
@@ -435,17 +430,17 @@ class DashBoardVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegat
       
       lblProduct.stringValue = query3.productName
       
-      lblSerialNumber.stringValue = "\(query3.serialNumber)"
+      lblSerialNumber.stringValue = "\(query3.serialNumber!)"
       
-      lblSlotsUsed.stringValue = "\(query3.slotsUsed)"
+      lblSlotsUsed.stringValue = "\(query3.slotsUsed!)"
       
-      lblIdleSlots.stringValue = "\(query3.idleSlots)"
+      lblIdleSlots.stringValue = "\(query3.idleSlots!)"
       
-      lblFreeSlots.stringValue = "\(query3.freeSlots)"
+      lblFreeSlots.stringValue = "\(query3.freeSlots!)"
       
-      lblConsists.stringValue = "\(query3.consists)"
+      lblConsists.stringValue = "\(query3.consists!)"
       
-      lblUplinked.stringValue = "\(query3.subMembers)"
+      lblUplinked.stringValue = "\(query3.subMembers!)"
       
       lblBoardID.stringValue = "\(query3.boardIDString)"
       
@@ -455,13 +450,13 @@ class DashBoardVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegat
       
       lblProduct.stringValue = query4.productName
       
-      lblSerialNumber.stringValue = "\(query4.serialNumber)"
+      lblSerialNumber.stringValue = "\(query4.serialNumber!)"
       
-      lblGoodMessages.stringValue = "\(query4.goodLocoNetMessages)"
+      lblGoodMessages.stringValue = "\(query4.goodLocoNetMessages!)"
       
-      lblBadMessages.stringValue = "\(query4.badLocoNetMessages)"
+      lblBadMessages.stringValue = "\(query4.badLocoNetMessages!)"
       
-      lblSleeps.stringValue = "\(query4.numberOfSleeps)"
+      lblSleeps.stringValue = "\(query4.numberOfSleeps!)"
       
       lblBoardID.stringValue = "\(query4.boardIDString)"
       
@@ -471,13 +466,13 @@ class DashBoardVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegat
       
       lblProduct.stringValue = query5.productName
       
-      lblSerialNumber.stringValue = "\(query5.serialNumber)"
+      lblSerialNumber.stringValue = "\(query5.serialNumber!)"
       
-      lblTrackFaults.stringValue = "\(query5.trackFaults)"
+      lblTrackFaults.stringValue = "\(query5.trackFaults!)"
       
-      lblAutoReverse.stringValue = "\(query5.autoReverseEvents)"
+      lblAutoReverse.stringValue = "\(query5.autoReverseEvents!)"
       
-      lblDisturbances.stringValue = "\(query5.disturbances)"
+      lblDisturbances.stringValue = "\(query5.disturbances!)"
       
       lblBoardID.stringValue = "\(query5.boardIDString)"
       

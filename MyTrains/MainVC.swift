@@ -37,9 +37,6 @@ class MainVC: NSViewController, MyTrainsControllerDelegate, LayoutDelegate, Open
     if layoutDelegateId != -1 {
       myTrainsController.layout?.removeDelegate(delegateId: layoutDelegateId)
     }
-    if fastClockObserverId != -1 {
-      myTrainsController.fastClock.removeObserver(observerId: fastClockObserverId)
-    }
     
   }
   

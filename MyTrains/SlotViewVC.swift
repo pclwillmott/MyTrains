@@ -138,7 +138,7 @@ class SlotViewVC : NSViewController, NSWindowDelegate, InterfaceDelegate {
         if let cs = commandStation, let interface = self.interface {
           
           if cs.implementsProtocol2 {
-            interface.getLocoSlotDataP2(slotPage: slot.slotPage, slotNumber: slot.slotNumber)
+            interface.getLocoSlotDataP2(slotPage: slot.slotBank, slotNumber: slot.slotNumber)
           }
           else {
             interface.getLocoSlotDataP1(slotNumber: slot.slotNumber)
@@ -237,7 +237,7 @@ class SlotViewVC : NSViewController, NSWindowDelegate, InterfaceDelegate {
         lblStatus.stringValue = "Reading \(slot.displaySlotNumber)"
 
         if cs.implementsProtocol2 {
-          slotPage = slot.slotPage
+          slotPage = slot.slotBank
           slotNumber = slot.slotNumber
           interface.getLocoSlotDataP2(slotPage: slotPage, slotNumber: slotNumber)
         }

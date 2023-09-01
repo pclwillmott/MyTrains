@@ -34,7 +34,6 @@ enum AppStoryboard : String {
   case SpeedProfiler                     = "SpeedProfiler"
   case PlaceLocomotive                   = "PlaceLocomotive"
   case SetFastClock                      = "SetFastClock"
-  case FastClockTester                   = "FastClockTester"
   case TC64Config                        = "TC64Config"
   case IODeviceManager                   = "IODeviceManager"
   case IODeviceNew                       = "IODeviceNew"
@@ -84,7 +83,6 @@ let storyboardLookup : [String:AppStoryboard] = [
   "SpeedProfiler"                     : AppStoryboard.SpeedProfiler,
   "PlaceLocomotive"                   : AppStoryboard.PlaceLocomotive,
   "SetFastClock"                      : AppStoryboard.SetFastClock,
-  "FastClockTester"                   : AppStoryboard.FastClockTester,
   "TC64Config"                        : AppStoryboard.TC64Config,
   "IODeviceManager"                   : AppStoryboard.IODeviceManager,
   "IODeviceNew"                       : AppStoryboard.IODeviceNew,
@@ -139,7 +137,6 @@ enum ModalWindow : String {
   case SpeedProfiler                     = "SpeedProfiler"
   case PlaceLocomotive                   = "PlaceLocomotive"
   case SetFastClock                      = "SetFastClock"
-  case FastClockTester                   = "FastClockTester"
   case TC64Config                        = "TC64Config"
   case IODeviceManager                   = "IODeviceManager"
   case IODeviceNew                       = "IODeviceNew"

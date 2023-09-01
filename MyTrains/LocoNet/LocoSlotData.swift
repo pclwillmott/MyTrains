@@ -11,63 +11,37 @@ public class LocoSlotData {
   
   // MARK: Constructors
   
-  init(locoSlotDataP1: LocoSlotDataP1) {
+  init?(message: LocoNetMessage) {
     
-    slotPage = 0
+    guard message.messageType == .locoSlotDataP1 || message.messageType == .locoSlotDataP2 else {
+      return nil
+    }
     
-    slotNumber = locoSlotDataP1.slotNumber
+    slotBank = message.slotBank!
     
-    slotID = LocoSlotData.encodeID(slotPage: 0, slotNumber: UInt8(slotNumber))
+    slotNumber = message.slotNumber!
     
-    address = locoSlotDataP1.address
+    slotID = LocoSlotData.encodeID(slotBank: slotBank, slotNumber: slotNumber)
     
-    slotState = locoSlotDataP1.slotState
+    address = message.locomotiveAddress!
     
-    consistState = locoSlotDataP1.consistState
-
-    mobileDecoderType = locoSlotDataP1.mobileDecoderType
+    slotState = message.slotState!
     
-    rawMobileDecodeType = locoSlotDataP1.rawMobileDecoderType
+    consistState = message.consistState!
     
-    direction = locoSlotDataP1.direction
+    mobileDecoderType = message.mobileDecoderType!
     
-    speed = locoSlotDataP1.speed
+    rawMobileDecodeType = message.rawMobileDecoderType!
     
-    throttleID = locoSlotDataP1.throttleID
+    direction = message.direction!
     
-    functions = locoSlotDataP1.functions
+    speed = message.speed!
     
-    isF9F28Available = locoSlotDataP1.isF9F28Available
+    throttleID = message.throttleID!
     
-  }
-  
-  init(locoSlotDataP2: LocoSlotDataP2) {
+    functions = message.functions!
     
-    slotPage = locoSlotDataP2.slotPage
-    
-    slotNumber = locoSlotDataP2.slotNumber
-    
-    slotID = LocoSlotData.encodeID(slotPage: UInt8(slotPage), slotNumber: UInt8(slotNumber))
-    
-    address = locoSlotDataP2.address
-    
-    slotState = locoSlotDataP2.slotState
-    
-    consistState = locoSlotDataP2.consistState
-    
-    mobileDecoderType = locoSlotDataP2.mobileDecoderType
-    
-    rawMobileDecodeType = locoSlotDataP2.rawMobileDecoderType
-    
-    direction = locoSlotDataP2.direction
-    
-    speed = locoSlotDataP2.speed
-    
-    throttleID = locoSlotDataP2.throttleID
-    
-    functions = locoSlotDataP2.functions
-    
-    isF9F28Available = locoSlotDataP2.isF9F28Available
+    isF9F28Available = message.isF9F28Available!
     
   }
   
@@ -77,7 +51,7 @@ public class LocoSlotData {
     
     let decoded = LocoSlotData.decodeID(slotID: slotID)
     
-    slotPage = decoded.page
+    slotBank = decoded.bank
     
     slotNumber = decoded.number
     
@@ -111,11 +85,11 @@ public class LocoSlotData {
   
   public var slotID : Int
   
-  public var slotPage : UInt8
+  public var slotBank : UInt8
   
   public var slotNumber : UInt8
   
-  public var address : UInt16
+  public var address : Int
   
   public var slotState : SlotState
   
@@ -123,7 +97,7 @@ public class LocoSlotData {
   
   public var mobileDecoderType : SpeedSteps
   
-  public var rawMobileDecodeType : Int
+  public var rawMobileDecodeType : UInt8
   
   public var direction : LocomotiveDirection
   
@@ -150,7 +124,7 @@ public class LocoSlotData {
   
   public var displaySlotNumber : String {
     get {
-      let bank = UnicodeScalar(65+slotPage) ?? "X"
+      let bank = UnicodeScalar(65+slotBank)
       return "\(bank).\(slotNumber)"
     }
   }
@@ -205,8 +179,8 @@ public class LocoSlotData {
       
       slot[0] = LocoNetMessageOpcode.OPC_SL_RD_DATA_P2.rawValue
       slot[1] = 0x15
-      slot[2] = UInt8(slotPage)
-      slot[3] = UInt8(slotNumber)
+      slot[2] = slotBank
+      slot[3] = slotNumber
       slot[4] = slotStatus1 & 0x7f
       slot[5] = UInt8(address & 0x7f)
       slot[6] = UInt8(address >> 7)
@@ -277,15 +251,15 @@ public class LocoSlotData {
     }
     set(data) {
       
-      slotPage = data[2]
+      slotBank = data[2]
       
       slotNumber = data[3]
       
-      slotID = LocoSlotData.encodeID(slotPage: 0, slotNumber: UInt8(slotNumber))
+      slotID = LocoSlotData.encodeID(slotBank: 0, slotNumber: slotNumber)
 
       slotStatus1 = data[4]
       
-      address = UInt16(data[5]) | (UInt16(data[6]) << 7)
+      address = Int(data[5]) | (Int(data[6]) << 7)
       
       speed = Int(data[8])
       
@@ -363,14 +337,14 @@ public class LocoSlotData {
   
   // MARK: Class Methods
   
-  public static func encodeID(slotPage: UInt8, slotNumber: UInt8) -> Int {
-    return Int(slotPage & 0b00000111) << 8 | Int(slotNumber)
+  public static func encodeID(slotBank: UInt8, slotNumber: UInt8) -> Int {
+    return Int(slotBank & 0b00000111) << 8 | Int(slotNumber)
   }
   
-  public static func decodeID(slotID: Int) -> (page: UInt8, number: UInt8) {
-    let page = UInt8(slotID >> 8)
+  public static func decodeID(slotID: Int) -> (bank: UInt8, number: UInt8) {
+    let bank = UInt8(slotID >> 8)
     let number = UInt8(slotID & 0xff)
-    return (page: page, number: number)
+    return (bank: bank, number: number)
   }
   
 }

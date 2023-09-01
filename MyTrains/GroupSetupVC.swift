@@ -150,11 +150,11 @@ class GroupSetupVC: NSViewController, MyTrainsControllerDelegate, InterfaceDeleg
     switch message.messageType {
     case .duplexGroupData:
       if isFirst {
-        let duplexData = DuplexData(message: message)
-        txtGroupName.stringValue = duplexData.groupName
-        txtGroupPassword.stringValue = duplexData.groupPassword
-        txtChannelNumber.integerValue = duplexData.channelNumber
-        txtGroupID.integerValue = duplexData.groupID
+        let duplexData = message
+        txtGroupName.stringValue = duplexData.groupName!
+        txtGroupPassword.stringValue = duplexData.groupPassword!
+        txtChannelNumber.integerValue = duplexData.channelNumber!
+        txtGroupID.integerValue = duplexData.groupID!
         isFirst = false
       }
     case .receiverRep:

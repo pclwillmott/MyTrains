@@ -74,12 +74,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     wc.showWindow(nil)
   }
   
-  @IBAction func mnuFastClockTester(_ sender: NSMenuItem) {
-    let x = ModalWindow.FastClockTester
-    let wc = x.windowController
-    wc.showWindow(nil)
-  }
-  
   @IBAction func mnySetFastClock(_ sender: NSMenuItem) {
     
     guard let networkLayer = myTrainsController.openLCBNetworkLayer else {
