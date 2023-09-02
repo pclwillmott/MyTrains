@@ -1503,8 +1503,6 @@ public class LocoNetMessage : NSObject {
       var bid = message[15]
       bid |= (message[14] & 0b00000001) == 0b00000001 ? 0b10000000 : 0
       return Int(bid) + 1
-    case .locoRep:
-      return (transponderZone! / 8) + 1
     case .querySlot1, .querySlot2, .querySlot3, .querySlot4, .querySlot5:
       if productCode == .BXP88 {
         return Int(message[17]) + 1
@@ -1519,6 +1517,9 @@ public class LocoNetMessage : NSObject {
     switch messageType {
     case .locoRep:
       return Int(message[6]) | (Int(message[5]) << 7)
+    case .transRep:
+      return Int(message[2]) | (Int(message[1] & 0b00001111) << 7)
+
     default:
       return nil
     }
@@ -1535,6 +1536,8 @@ public class LocoNetMessage : NSObject {
         address |= Int(message[9]) << 7
       }
       return address
+    case .transRep:
+      return Int(message[4]) | (Int(message[3]) << 7)
     case .locoSlotDataP2:
       return Int(message[5]) | (Int(message[6]) << 7)
     default:
@@ -1617,41 +1620,23 @@ public class LocoNetMessage : NSObject {
     return nil
   }
 
-  public var detectionSectionsSet : (set:[Int], notSet:[Int]) {
-    get {
-      
-      var ds : [Int] = []
-      var dns : [Int] = []
-      
-      guard let boardId else {
-        return (ds, dns)
-      }
-      
-      let addr = (boardId - 1) * 8
-      if messageType == .pmRepBXP88 {
+  public var detectionSectionShorted : [Bool]? {
+    switch messageType {
+    case .pmRepBXP88:
+      if (message[3] & 0b01100000) == 0x20 {
+        var shorted = [Bool](repeating: false, count: 8)
         var mask : UInt8 = 0b00000001
-        for index in 1...4 {
-          if (message[4] & mask) == mask {
-            ds.append(addr + index)
-          }
-          else {
-            dns.append(addr + index)
-          }
+        for index in 0...3 {
+          shorted[index + 0] = (message[3] & mask) == mask
+          shorted[index + 4] = (message[4] & mask) == mask
           mask <<= 1
         }
-        mask = 0b00000001
-        for index in 5...8 {
-          if (message[3] & mask) == mask {
-            ds.append(addr + index)
-          }
-          else {
-            dns.append(addr + index)
-          }
-          mask <<= 1
-        }
+        return shorted
       }
-      return (ds, dns)
+    default:
+      break
     }
+    return nil
   }
   
   public var transponderAddress : Int {
@@ -1684,6 +1669,9 @@ public class LocoNetMessage : NSObject {
     case .sensRepGenIn, .sensRepTurnIn:
       let mask : UInt8 = 0b00010000
       return (message[2] & mask) == mask
+    case .transRep:
+      let mask : UInt8 = 0b00100000
+      return (message[1] & mask) == mask
     default:
       break
     }

@@ -160,6 +160,37 @@ public class LCCCANFrame : NSObject {
     while data.count > 8 {
       data.removeLast()
     }
+
+    
+    // Init super
+    
+    super.init()
+    
+    // Done.
+    
+  }
+
+  init?(message:OpenLCBMessage, mti:OpenLCBMTI, payload:[UInt8]) {
+    
+    // Check that the message is complete
+    
+    guard message.isMessageComplete else {
+      return nil
+    }
+    
+    // Build CAN header
+    
+    header  = 0x18000000 // CAN Prefix
+    
+    header |= (OpenLCBMessage.canFrameType(message: message).rawValue & 0x07) << 24
+    
+    header |= UInt32(mti.rawValue & 0x0fff) << 12
+    
+    header |= UInt32(message.sourceNIDAlias! & 0xfff)
+    
+    // Build CAN data payload
+    
+    data = payload
     
     // Init super
     

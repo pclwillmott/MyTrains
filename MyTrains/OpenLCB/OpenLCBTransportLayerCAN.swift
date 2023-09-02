@@ -284,6 +284,30 @@ public class OpenLCBTransportLayerCAN : OpenLCBTransportLayer, InterfaceDelegate
             delete = true
             
           }
+          else if message.messageTypeIndicator == .producerConsumerEventReport && !message.payload.isEmpty {
+            
+            var data : [UInt8] = []
+            
+            data.append(contentsOf: message.eventId!.bigEndianData)
+            data.append(contentsOf: message.payload)
+            
+            var mti = OpenLCBMTI.producerConsumerEventReportWithPayloadFirstFrame
+            
+            while !data.isEmpty {
+              var payload : [UInt8] = []
+              index = 0
+              while index < data.count && payload.count < 8 {
+                payload.append(data[index])
+                index += 1
+              }
+              if let frame = LCCCANFrame(message: message, mti: mti, payload: payload) {
+                interface.send(data: frame.message)
+              }
+              mti = data.count > 8 ? .producerConsumerEventReportWithPayloadMiddleFrame : .producerConsumerEventReportWithPayloadFinalFrame
+              data.removeFirst(8)
+            }
+            
+          }
           else if let frame = LCCCANFrame(message: message) {
             interface.send(data: frame.message)
             delete = true
@@ -756,6 +780,9 @@ public class OpenLCBTransportLayerCAN : OpenLCBTransportLayer, InterfaceDelegate
 
         switch message.canFrameType {
         case .globalAndAddressedMTI:
+          
+          *** HERE ***
+          
           switch message.flags {
           case .onlyFrame:
             stealAlias(message: message)
@@ -774,6 +801,7 @@ public class OpenLCBTransportLayerCAN : OpenLCBTransportLayer, InterfaceDelegate
               }
             }
           }
+          
         case .datagramCompleteInFrame:
           addToInputQueue(message: message)
         case .datagramFirstFrame:

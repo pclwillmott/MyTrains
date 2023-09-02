@@ -165,6 +165,12 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
   
   private var configState : ConfigState = .idle
   
+  private var trainNodeIdLookup : [Int:UInt64] = [:]
+  
+  private var eventQueue : [(dccAddress:Int, eventId:UInt64, searchEventId:UInt64)] = []
+  
+  private var lastDetectionSectionShorted : [Bool] = []
+  
   private var timeoutTimer : Timer?
   
   private var activeEvents : [UInt64] {
@@ -440,16 +446,29 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
     return nil
   }
   
-  private func processEvents(zone:Int, eventType:LocoNetEventType, dccAddress:Int, trainNodeId:UInt64) {
+  private func processEvents(zone:Int, eventType:LocoNetEventType, dccAddress:Int?, trainNodeId:UInt64?) {
     
     guard let networkLayer, eventType != .none else {
       return
     }
     
+    print("processEvents - boardId: \(boardId) zone: \(zone) eventType: \(eventType) address: \(dccAddress)")
+    
     for event in 0 ... 15 {
       if locoNetEventType(zone: zone, event: event) == eventType, let eventId = indicatorEventId(zone: zone, event: event) {
-        networkLayer.sendEvent(sourceNodeId: nodeId, eventId: eventId )
+        networkLayer.sendEvent(sourceNodeId: nodeId, eventId: eventId)
         // TODO: Sort out payload construction
+        
+        if let dccAddress {
+          if let trainNodeId = trainNodeIdLookup[dccAddress] {
+            print("found: \(dccAddress) - \(trainNodeId.toHexDotFormat(numberOfBytes: 6))")
+          }
+          else {
+            let searchEventId = networkLayer.makeTrainSearchEventId(searchString: "\(dccAddress)", searchType: .searchExistingNodes, searchMatchType: .exactMatch, searchMatchTarget: .matchAddressOnly, trackProtocol: .anyTrackProtocol)
+            eventQueue.append((dccAddress:dccAddress, eventId:eventId, searchEventId:searchEventId))
+            networkLayer.sendIdentifyProducer(sourceNodeId: nodeId, eventId: searchEventId)
+          }
+        }
       }
     }
     
@@ -729,6 +748,22 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
         }
         
       }
+      else {
+        
+        var index = 0
+        while index < eventQueue.count {
+          let item = eventQueue[index]
+          if item.searchEventId == message.eventId! {
+            trainNodeIdLookup[item.dccAddress] = message.sourceNodeId!
+            eventQueue.remove(at: index)
+            print("success: \(item.dccAddress) \(message.sourceNodeId!.toHexDotFormat(numberOfBytes: 6))")
+          }
+          else {
+            index += 1
+          }
+        }
+        
+      }
 
     case .simpleNodeIdentInfoReply:
       
@@ -770,11 +805,45 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
   @objc public func locoNetMessageReceived(message:LocoNetMessage) {
     
     switch message.messageType {
+      
+    case .sensRepGenIn:
+      if let sensorAddres = message.sensorAddress {
+        let id = (sensorAddres - 1) / 8 + 1
+        if id == boardId, let sensorState = message.sensorState {
+          let zone = (sensorAddres - 1) % 8
+          processEvents(zone: zone, eventType: sensorState ? .locomotiveEnteredDetectionZone : .locomotiveExitedDetectionZone, dccAddress: nil, trainNodeId: nil)
+        }
+      }
+      
+    case .transRep:
+      let id = message.transponderZone! / 8 + 1
+      if id == boardId, let transponderZone = message.transponderZone, let locomotiveAddress = message.locomotiveAddress {
+        let zone = transponderZone % 8
+        processEvents(zone: zone, eventType: message.sensorState! ? .locomotiveEnteredTranspondingZone : .locomotiveExitedTranspondingZone, dccAddress: locomotiveAddress, trainNodeId: 0)
+      }
+      
+    case .pmRepBXP88:
+      if let id = message.boardId, id == boardId, let shorted = message.detectionSectionShorted {
+        if lastDetectionSectionShorted.isEmpty {
+          for zone in 0...7 {
+            lastDetectionSectionShorted.append(!shorted[zone])
+          }
+        }
+        for zone in 0...7 {
+          if lastDetectionSectionShorted[zone] != shorted[zone] {
+            processEvents(zone: zone, eventType: shorted[zone] ? .shortCircuitReport : .shortCircuitClearedReport, dccAddress: nil, trainNodeId: nil)
+          }
+        }
+        lastDetectionSectionShorted = shorted
+      }
+    
     case .locoRep:
-      if let id = message.boardId, id == boardId, let locomotiveAddress = message.locomotiveAddress, let transponderZone = message.transponderZone {
+      let id = message.transponderZone! / 8 + 1
+       if id == boardId, let locomotiveAddress = message.locomotiveAddress, let transponderZone = message.transponderZone {
         let zone = transponderZone % 8
         processEvents(zone: zone, eventType: .locomotiveReport, dccAddress: locomotiveAddress, trainNodeId: 0)
       }
+      
     case .iplDevData:
       if configState == .waitingForDeviceData, let prod = message.productCode, prod == .BXP88, let id = message.boardId, id == boardId {
         stopTimeoutTimer()
@@ -790,6 +859,7 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
         startTimeoutTimer(timeInterval: 1.0)
         locoNet?.getSwState(switchNumber: optionSwitchesToDo.first!.rawValue)
       }
+      
     case .setSwWithAckAccepted:
       if configState == .settingOptionSwitches {
         stopTimeoutTimer()
@@ -802,11 +872,13 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
           setOpSw()
         }
       }
+      
     case .setSwWithAckRejected:
       if configState == .settingOptionSwitches {
         stopTimeoutTimer()
         setOpSw()
       }
+      
     case .swState:
       if configState == .gettingOptionSwitches, let opSw = optionSwitchesToDo.first, let state = message.swState {
         
@@ -877,6 +949,7 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
           exitOpSwMode()
         }
       }
+      
     default:
       break
     }
