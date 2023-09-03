@@ -452,23 +452,48 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
       return
     }
     
-    print("processEvents - boardId: \(boardId) zone: \(zone) eventType: \(eventType) address: \(dccAddress)")
-    
     for event in 0 ... 15 {
-      if locoNetEventType(zone: zone, event: event) == eventType, let eventId = indicatorEventId(zone: zone, event: event) {
-        networkLayer.sendEvent(sourceNodeId: nodeId, eventId: eventId)
-        // TODO: Sort out payload construction
+      if locoNetEventType(zone: zone, event: event) == eventType, let eventId = indicatorEventId(zone: zone, event: event), let payloadType = eventPayloadType(zone: zone, event: event) {
         
-        if let dccAddress {
-          if let trainNodeId = trainNodeIdLookup[dccAddress] {
-            print("found: \(dccAddress) - \(trainNodeId.toHexDotFormat(numberOfBytes: 6))")
+        switch eventType {
+        case .locomotiveReport, .locomotiveEnteredTranspondingZone, .locomotiveExitedTranspondingZone:
+          if let dccAddress {
+            switch payloadType {
+            case .none:
+              networkLayer.sendEvent(sourceNodeId: nodeId, eventId: eventId)
+           case .dccAddress:
+              var payload : [UInt8] = []
+              if dccAddress < 128 {
+                let address = UInt8(dccAddress & 0x7f)
+                payload.append(contentsOf: [OpenLCBEventWithPayloadFormat.dccPrimaryAddress.rawValue, address])
+              }
+              else {
+                payload.append(contentsOf: [OpenLCBEventWithPayloadFormat.dccExtendedAddress.rawValue])
+                let address = UInt16(dccAddress)
+                payload.append(contentsOf: address.bigEndianData)
+              }
+              networkLayer.sendEventWithPayload(sourceNodeId: nodeId, eventId: eventId, payload: payload)
+            case .nodeId:
+              if let trainNodeId = trainNodeIdLookup[dccAddress] {
+                var payload : [UInt8] = []
+                payload.append(contentsOf: [OpenLCBEventWithPayloadFormat.openLCBNodeId.rawValue])
+                var id = trainNodeId.bigEndianData
+                id.removeFirst(2)
+                payload.append(contentsOf: id)
+                networkLayer.sendEventWithPayload(sourceNodeId: nodeId, eventId: eventId, payload: payload)
+              }
+              else {
+                let searchEventId = networkLayer.makeTrainSearchEventId(searchString: "\(dccAddress)", searchType: .searchExistingNodes, searchMatchType: .exactMatch, searchMatchTarget: .matchAddressOnly, trackProtocol: .anyTrackProtocol)
+                eventQueue.append((dccAddress:dccAddress, eventId:eventId, searchEventId:searchEventId))
+                networkLayer.sendIdentifyProducer(sourceNodeId: nodeId, eventId: searchEventId)
+              }
+            }
           }
-          else {
-            let searchEventId = networkLayer.makeTrainSearchEventId(searchString: "\(dccAddress)", searchType: .searchExistingNodes, searchMatchType: .exactMatch, searchMatchTarget: .matchAddressOnly, trackProtocol: .anyTrackProtocol)
-            eventQueue.append((dccAddress:dccAddress, eventId:eventId, searchEventId:searchEventId))
-            networkLayer.sendIdentifyProducer(sourceNodeId: nodeId, eventId: searchEventId)
-          }
+
+        default:
+          networkLayer.sendEvent(sourceNodeId: nodeId, eventId: eventId)
         }
+        
       }
     }
     
@@ -756,7 +781,12 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
           if item.searchEventId == message.eventId! {
             trainNodeIdLookup[item.dccAddress] = message.sourceNodeId!
             eventQueue.remove(at: index)
-            print("success: \(item.dccAddress) \(message.sourceNodeId!.toHexDotFormat(numberOfBytes: 6))")
+            var payload : [UInt8] = []
+            payload.append(contentsOf: [OpenLCBEventWithPayloadFormat.openLCBNodeId.rawValue])
+            var id = message.sourceNodeId!.bigEndianData
+            id.removeFirst(2)
+            payload.append(contentsOf: id)
+            networkLayer?.sendEventWithPayload(sourceNodeId: nodeId, eventId: item.eventId, payload: payload)
           }
           else {
             index += 1

@@ -35,7 +35,7 @@ public enum OpenLCBMTI : UInt16 {
   case identifyEventsGlobal                              = 0x0970
   case learnEvent                                        = 0x0594
   case producerConsumerEventReport                       = 0x05B4
-  case producerConsumerEventReportWithPayloadFinalFrame  = 0x05B5
+  case producerConsumerEventReportWithPayloadLastFrame   = 0x05B5
   case producerConsumerEventReportWithPayloadMiddleFrame = 0x05B6
   case producerConsumerEventReportWithPayloadFirstFrame  = 0x05B7
   case tractionControlCommand                            = 0x05EB
@@ -57,8 +57,8 @@ public enum OpenLCBMTI : UInt16 {
   case streamDataComplete                                = 0x08A8
   case sendLocoNetMessageReply                           = 0x0688   // 0b0000011010001000
   case locoNetMessageReceivedOnlyFrame                   = 0x0680   // 0b0000011010000000
-  case locoNetMessageReceivedFirstFrame                  = 0x0681   // 0b0000011010000001
-  case locoNetMessageReceivedLastFrame                   = 0x0682   // 0b0000011010000010
-  case locoNetMessageReceivedMiddleFrame                 = 0x0683   // 0b0000011010000011
+  case locoNetMessageReceivedLastFrame                   = 0x0681   // 0b0000011010000001
+  case locoNetMessageReceivedMiddleFrame                 = 0x0682   // 0b0000011010000010
+  case locoNetMessageReceivedFirstFrame                  = 0x0683   // 0b0000011010000011
   case unknown                                           = 0xFFFF
 }

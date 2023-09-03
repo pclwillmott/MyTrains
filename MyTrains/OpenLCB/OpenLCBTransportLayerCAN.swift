@@ -303,10 +303,11 @@ public class OpenLCBTransportLayerCAN : OpenLCBTransportLayer, InterfaceDelegate
               if let frame = LCCCANFrame(message: message, mti: mti, payload: payload) {
                 interface.send(data: frame.message)
               }
-              mti = data.count > 8 ? .producerConsumerEventReportWithPayloadMiddleFrame : .producerConsumerEventReportWithPayloadFinalFrame
+              mti = data.count > 8 ? .producerConsumerEventReportWithPayloadMiddleFrame : .producerConsumerEventReportWithPayloadLastFrame
               data.removeFirst(8)
             }
-            
+            delete = true
+
           }
           else if let frame = LCCCANFrame(message: message) {
             interface.send(data: frame.message)
@@ -781,23 +782,36 @@ public class OpenLCBTransportLayerCAN : OpenLCBTransportLayer, InterfaceDelegate
         switch message.canFrameType {
         case .globalAndAddressedMTI:
           
-          *** HERE ***
-          
-          switch message.flags {
-          case .onlyFrame:
-            stealAlias(message: message)
-            addToInputQueue(message: message)
-          case .firstFrame:
+          switch message.messageTypeIndicator {
+          case .producerConsumerEventReportWithPayloadFirstFrame:
             splitFrames[frame.splitFrameId] = frame
-          case .middleFrame, .lastFrame:
+          case .producerConsumerEventReportWithPayloadMiddleFrame, .producerConsumerEventReportWithPayloadLastFrame:
             if let first = splitFrames[frame.splitFrameId] {
-              frame.data.removeFirst(2)
               first.data += frame.data
-              if message.flags == .lastFrame, let message = OpenLCBMessage(frame: first) {
-                message.flags = .onlyFrame
+              if message.messageTypeIndicator == .producerConsumerEventReportWithPayloadLastFrame, let message = OpenLCBMessage(frame: first) {
+                message.messageTypeIndicator = .producerConsumerEventReport
                 stealAlias(message: message)
                 addToInputQueue(message: message)
                 splitFrames.removeValue(forKey: first.splitFrameId)
+              }
+            }
+          default:
+            switch message.flags {
+            case .onlyFrame:
+              stealAlias(message: message)
+              addToInputQueue(message: message)
+            case .firstFrame:
+              splitFrames[frame.splitFrameId] = frame
+            case .middleFrame, .lastFrame:
+              if let first = splitFrames[frame.splitFrameId] {
+                frame.data.removeFirst(2)
+                first.data += frame.data
+                if message.flags == .lastFrame, let message = OpenLCBMessage(frame: first) {
+                  message.flags = .onlyFrame
+                  stealAlias(message: message)
+                  addToInputQueue(message: message)
+                  splitFrames.removeValue(forKey: first.splitFrameId)
+                }
               }
             }
           }

@@ -286,6 +286,15 @@ class MonitorVC: NSViewController, NSWindowDelegate, OpenLCBLocoNetMonitorDelega
     if addLabels {
       
       item += "\(message.messageType)\n"
+      
+      switch message.messageType {
+      case .sensRepGenIn:
+        item += "sensorAddress: \(message.sensorAddress!) sensorState: \(message.sensorState!)\n"
+      case .setSw:
+        item += "switchAddress: \(message.switchAddress!) switchState: \(message.swState!)\n"
+      default:
+        break
+      }
             
     }
     

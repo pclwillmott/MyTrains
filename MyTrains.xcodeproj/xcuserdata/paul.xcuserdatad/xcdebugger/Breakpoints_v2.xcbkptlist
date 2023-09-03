@@ -204,8 +204,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1561"
             endingLineNumber = "1561"
-            landmarkName = "productCode"
-            landmarkType = "24">
+            landmarkName = "LocoNetMessage"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

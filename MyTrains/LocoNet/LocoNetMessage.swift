@@ -1664,6 +1664,16 @@ public class LocoNetMessage : NSObject {
     return nil
   }
   
+  public var switchAddress : Int? {
+    switch messageType {
+    case .setSw, .setSwWithAck:
+      return Int(message[1]) | (Int(message[2] & 0x0f) << 7)
+    default:
+      break
+    }
+    return nil
+  }
+  
   public var sensorState : Bool? {
     switch messageType {
     case .sensRepGenIn, .sensRepTurnIn:
@@ -1681,6 +1691,8 @@ public class LocoNetMessage : NSObject {
   public var swState : OptionSwitchState? {
     switch messageType {
     case .swState:
+      return ((message[2] & 0b00100000) != 0) ? .closed : .thrown
+    case .setSw, .setSwWithAck:
       return ((message[2] & 0b00100000) != 0) ? .closed : .thrown
     default:
       return nil

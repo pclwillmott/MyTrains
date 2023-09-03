@@ -201,7 +201,7 @@
 
 <int size='1'>
 <name>Payload Type</name>
-<description>with this payload</description>
+<description>with this payload. This should be set to None for all LocoNet reports apart from transponding reports.</description>
 <map>
   <relation><property>0</property><value>None</value></relation>
   <relation><property>1</property><value>Locomotive DCC Address</value></relation>

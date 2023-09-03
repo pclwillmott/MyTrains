@@ -303,6 +303,7 @@
 		DACB59272896A27E006B1861 /* TurnoutSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACB59262896A27E006B1861 /* TurnoutSwitch.swift */; };
 		DACB59292896A39E006B1861 /* TurnoutFeedbackType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACB59282896A39E006B1861 /* TurnoutFeedbackType.swift */; };
 		DACB59312896CDCE006B1861 /* TurnoutSwitchState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACB59302896CDCE006B1861 /* TurnoutSwitchState.swift */; };
+		DACC2D822AA4B72800433CA8 /* OpenLCBEventWithPayloadFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACC2D812AA4B72800433CA8 /* OpenLCBEventWithPayloadFormat.swift */; };
 		DACE0ED32A2FF98800FB79BC /* OpenLCBClockOperatingMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACE0ED22A2FF98800FB79BC /* OpenLCBClockOperatingMode.swift */; };
 		DACE10AC2A3F5F310032E954 /* OpenLCBTrackProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACE10AB2A3F5F310032E954 /* OpenLCBTrackProtocol.swift */; };
 		DAD41AB82A3C9E54002EF847 /* DCCAddressPartition.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD41AB72A3C9E54002EF847 /* DCCAddressPartition.swift */; };
@@ -664,6 +665,7 @@
 		DACB59262896A27E006B1861 /* TurnoutSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TurnoutSwitch.swift; sourceTree = "<group>"; };
 		DACB59282896A39E006B1861 /* TurnoutFeedbackType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TurnoutFeedbackType.swift; sourceTree = "<group>"; };
 		DACB59302896CDCE006B1861 /* TurnoutSwitchState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TurnoutSwitchState.swift; sourceTree = "<group>"; };
+		DACC2D812AA4B72800433CA8 /* OpenLCBEventWithPayloadFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBEventWithPayloadFormat.swift; sourceTree = "<group>"; };
 		DACE0ED22A2FF98800FB79BC /* OpenLCBClockOperatingMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBClockOperatingMode.swift; sourceTree = "<group>"; };
 		DACE10AB2A3F5F310032E954 /* OpenLCBTrackProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBTrackProtocol.swift; sourceTree = "<group>"; };
 		DAD41AB72A3C9E54002EF847 /* DCCAddressPartition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DCCAddressPartition.swift; sourceTree = "<group>"; };
@@ -1240,6 +1242,7 @@
 				DA0883FC2A76727700C2CFBD /* OpenLCBFunction.swift */,
 				DA311BAB2A7BB8CC0019FDCE /* OpenLCBValidity.swift */,
 				DA1003222A7E81F7004CC86C /* OpenLCBProgrammingMode.swift */,
+				DACC2D812AA4B72800433CA8 /* OpenLCBEventWithPayloadFormat.swift */,
 			);
 			path = _enumerations;
 			sourceTree = "<group>";
@@ -1503,6 +1506,7 @@
 				DA51B8D829D9D5430074E881 /* OpenLCBTransportLayerCAN.swift in Sources */,
 				DAA71697297C232D0080114F /* IOChannelBXP88Input.swift in Sources */,
 				DA1B79F9285F3885009E1189 /* UnitSpeed.swift in Sources */,
+				DACC2D822AA4B72800433CA8 /* OpenLCBEventWithPayloadFormat.swift in Sources */,
 				DAA83DED272C37670075CBCD /* MainVC.swift in Sources */,
 				DAED17202A5ABC8D0051C9AF /* OpenLCBCANGateway.swift in Sources */,
 				DA17E0862A77C83A000154E0 /* OpenLCBLocoNetMonitorNode.swift in Sources */,

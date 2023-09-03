@@ -448,6 +448,14 @@ public class OpenLCBNetworkLayer : NSObject {
     sendMessage(message: message)
   }
 
+  public func sendEventWithPayload(sourceNodeId:UInt64, eventId:UInt64, payload:[UInt8]) {
+    let message = OpenLCBMessage(messageTypeIndicator: .producerConsumerEventReport)
+    message.sourceNodeId = sourceNodeId
+    message.eventId = eventId
+    message.payload = payload
+    sendMessage(message: message)
+  }
+
   public func sendWellKnownEvent(sourceNodeId:UInt64, eventId:OpenLCBWellKnownEvent) {
     sendEvent(sourceNodeId: sourceNodeId, eventId: eventId.rawValue)
   }

@@ -243,12 +243,19 @@ public class LCCCANFrame : NSObject {
   public var data : [UInt8]
   
   public var splitFrameId : UInt64 {
-    get {
+    
+    let mti = OpenLCBMTI(rawValue: UInt16((header >> 12) & 0xfff))!
+    
+    switch mti {
+    case .producerConsumerEventReportWithPayloadFirstFrame, .producerConsumerEventReportWithPayloadMiddleFrame, .producerConsumerEventReportWithPayloadLastFrame:
+      return UInt64(header & 0xffcfff) << 16
+    default:
       var result = UInt64(header) << 16
       result |= UInt64(data[0] & 0x0f) << 8
       result |= UInt64(data[1])
       return result
     }
+    
   }
   
   public var dataAsHex : String {
