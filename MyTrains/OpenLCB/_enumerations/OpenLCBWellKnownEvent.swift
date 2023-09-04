@@ -23,6 +23,7 @@ public enum OpenLCBWellKnownEvent : UInt64 {
   case linkErrorCode2                      = 0x010000000000fd02
   case linkErrorCode3                      = 0x010000000000fd03
   case linkErrorCode4                      = 0x010000000000fd04
+  case locoNetMessage                      = 0x0181000000000000
 
   // Not automatically routed
   

@@ -350,6 +350,7 @@
 		DAF3746F2A1A2A9B009E91F0 /* OpenLCBNodeVirtual.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF3746E2A1A2A9B009E91F0 /* OpenLCBNodeVirtual.swift */; };
 		DAF374712A1A2AB3009E91F0 /* OpenLCBNodeMyTrains.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF374702A1A2AB3009E91F0 /* OpenLCBNodeMyTrains.swift */; };
 		DAF374732A1A2D94009E91F0 /* BundleExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF374722A1A2D94009E91F0 /* BundleExtensions.swift */; };
+		DAF442E72AA5FA9700654A51 /* Digitrax DS64.xml in Resources */ = {isa = PBXBuildFile; fileRef = DAF442E62AA5FA9700654A51 /* Digitrax DS64.xml */; };
 		DAF479CB2A4092380054DA92 /* OpenLCBTractionControllerConfigurationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF479CA2A4092380054DA92 /* OpenLCBTractionControllerConfigurationType.swift */; };
 		DAF4DD4C289A90C1000B848E /* SpeedResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF4DD4B289A90C1000B848E /* SpeedResultsView.swift */; };
 		DAF4DD4E289A9901000B848E /* BestFitMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF4DD4D289A9901000B848E /* BestFitMethod.swift */; };
@@ -712,6 +713,7 @@
 		DAF3746E2A1A2A9B009E91F0 /* OpenLCBNodeVirtual.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBNodeVirtual.swift; sourceTree = "<group>"; };
 		DAF374702A1A2AB3009E91F0 /* OpenLCBNodeMyTrains.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBNodeMyTrains.swift; sourceTree = "<group>"; };
 		DAF374722A1A2D94009E91F0 /* BundleExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundleExtensions.swift; sourceTree = "<group>"; };
+		DAF442E62AA5FA9700654A51 /* Digitrax DS64.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Digitrax DS64.xml"; sourceTree = "<group>"; };
 		DAF479CA2A4092380054DA92 /* OpenLCBTractionControllerConfigurationType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBTractionControllerConfigurationType.swift; sourceTree = "<group>"; };
 		DAF4DD4B289A90C1000B848E /* SpeedResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedResultsView.swift; sourceTree = "<group>"; };
 		DAF4DD4D289A9901000B848E /* BestFitMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BestFitMethod.swift; sourceTree = "<group>"; };
@@ -1273,6 +1275,7 @@
 				DA1272C22A7569AF00AB42F6 /* FDI Generic.xml */,
 				DAAC7E902A79308B001A424E /* MyTrains DCC Programming Track.xml */,
 				DAD73C1B2A9A298E002E7618 /* Digitrax BXP88.xml */,
+				DAF442E62AA5FA9700654A51 /* Digitrax DS64.xml */,
 			);
 			path = _cdi;
 			sourceTree = "<group>";
@@ -1386,6 +1389,7 @@
 				DAF0CACF29855077009B392A /* IOChannelTC64MkIIInputPropertySheet.storyboard in Resources */,
 				DA95D6BF28083E9800D9F1B6 /* GroupSetup.storyboard in Resources */,
 				DAA83DF2272C37680075CBCD /* Main.storyboard in Resources */,
+				DAF442E72AA5FA9700654A51 /* Digitrax DS64.xml in Resources */,
 				DAED17222A5ABF4A0051C9AF /* MyTrains CAN Gateway.xml in Resources */,
 				DA5CCB4C2897F58D00F99AE6 /* SpeedProfiler.storyboard in Resources */,
 				DADB6F72297D618C00B1796E /* IODeviceTC64MkIIPropertySheet.storyboard in Resources */,

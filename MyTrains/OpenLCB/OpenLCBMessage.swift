@@ -52,9 +52,14 @@ public class OpenLCBMessage : NSObject {
         mask = 0x0004
         
         if (messageTypeIndicator.rawValue & mask) == mask, let id = UInt64(bigEndianData: [UInt8](payload.prefix(8))) {
-          eventId = id
           
-          payload.removeFirst(8)
+          if (id & 0xffff000000000000) == OpenLCBWellKnownEvent.locoNetMessage.rawValue {
+            eventId = OpenLCBWellKnownEvent.locoNetMessage.rawValue
+          }
+          else {
+            eventId = id
+            payload.removeFirst(8)
+          }
         }
 
       case .datagramCompleteInFrame, .datagramFirstFrame, .datagramMiddleFrame, .datagramFinalFrame:
