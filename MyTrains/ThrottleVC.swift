@@ -150,6 +150,8 @@ class ThrottleVC: NSViewController, NSWindowDelegate, OpenLCBThrottleDelegate {
     
     lblSpeed.stringValue = String(format: "%.0f", vsThrottle.floatValue)
     
+    lblCurrentSpeed.stringValue = String(format: "%.1f", vsThrottle.floatValue)
+    
     let minusZero : Float = -0.0
 
     let isReverse = speed.bitPattern == minusZero.bitPattern || speed < 0.0
@@ -351,6 +353,37 @@ class ThrottleVC: NSViewController, NSWindowDelegate, OpenLCBThrottleDelegate {
   @IBAction func btnReleaseAction(_ sender: NSButton) {
     throttle?.releaseController()
     tabView.selectTabViewItem(at: 0)
+  }
+  
+  // Train Move Tester
+  
+  @IBOutlet weak var lblCurrentSpeed: NSTextField!
+  
+  @IBOutlet weak var txtCruiseSpeed: NSTextField!
+  
+  @IBOutlet weak var txtFinalSpeed: NSTextField!
+  
+  @IBOutlet weak var txtTargetDistance: NSTextField!
+  
+  @IBOutlet weak var chkAllowSteal: NSButton!
+  
+  @IBOutlet weak var chkSendPositionUpdates: NSButton!
+  
+  @IBAction func btnSetMoveAction(_ sender: NSButton) {
+    
+    throttle?.sendSetMove(distance: txtTargetDistance.floatValue, cruiseSpeed: txtCruiseSpeed.floatValue, finalSpeed: txtFinalSpeed.floatValue)
+    
+  }
+  
+  @IBAction func btnStartMoveAction(_ sender: NSButton) {
+    
+    throttle?.sendStartMove(isStealAllowed: chkAllowSteal.state == .on, isPositionUpdateRequired: chkSendPositionUpdates.state == .on)
+    
+  }
+  
+  @IBAction func btnStopMoveAction(_ sender: NSButton) {
+    
+    throttle?.sendStopMove()
   }
   
 }

@@ -294,6 +294,27 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
     networkLayer.sendSetFunction(sourceNodeId: nodeId, destinationNodeId: trainNode.nodeId, address: address, value: value, isForwarded: false)
   }
   
+  public func sendSetMove(distance:Float, cruiseSpeed:Float, finalSpeed:Float) {
+    guard let trainNode, let networkLayer else {
+      return
+    }
+    networkLayer.sendSetMoveCommand(sourceNodeId: nodeId, destinationNodeId: trainNode.nodeId, distance: distance, cruiseSpeed: cruiseSpeed, finalSpeed: finalSpeed)
+  }
+  
+  public func sendStartMove(isStealAllowed:Bool, isPositionUpdateRequired:Bool) {
+    guard let trainNode, let networkLayer else {
+      return
+    }
+    networkLayer.sendStartMoveCommand(sourceNodeId: nodeId, destinationNodeId: trainNode.nodeId, isStealAllowed: isStealAllowed, isPositionUpdateRequired: isPositionUpdateRequired)
+  }
+
+  public func sendStopMove() {
+    guard let trainNode, let networkLayer else {
+      return
+    }
+    networkLayer.sendStopMoveCommand(sourceNodeId: nodeId, destinationNodeId: trainNode.nodeId)
+  }
+
   public func sendGlobalEmergencyStop() {
     _globalEmergencyStop = true
     networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .emergencyStopAll)

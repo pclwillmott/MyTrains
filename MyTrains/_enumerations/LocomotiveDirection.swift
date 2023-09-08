@@ -39,5 +39,5 @@ public enum LocomotiveDirection : Int {
   public static func selected(comboBox: NSComboBox) -> LocomotiveDirection {
     return LocomotiveDirection(rawValue: comboBox.indexOfSelectedItem) ?? defaultValue
   }
-
+  
 }

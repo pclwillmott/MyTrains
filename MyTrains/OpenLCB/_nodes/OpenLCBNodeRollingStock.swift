@@ -156,6 +156,68 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     }
   }
   
+  // Train Movement Variables
+  
+  internal enum TrainMoveMode {
+    case manualControl
+    case stopped
+    case settingInitialSpeed
+    case atCruiseSpeed
+    case settingFinalSpeed
+    case moveComplete
+    
+    var isMoving : Bool {
+      let movingModes : Set<TrainMoveMode> = [.settingInitialSpeed, .atCruiseSpeed, .settingFinalSpeed]
+      return movingModes.contains(self)
+    }
+    
+  }
+  
+  internal var trainMoveMode : TrainMoveMode = .manualControl {
+    didSet {
+      switch trainMoveMode {
+      case .manualControl, .moveComplete:
+        moveTimer?.invalidate()
+        moveTimer = nil
+      default:
+        break
+      }
+    }
+  }
+  
+  // The acceleration rate is defined as the time from 0 to maximumSpeed in seconds.
+  internal var accelerationRate : Float = 10.0
+  
+  // The decleration rate is defined as the time from maximumSpeed to 0 in seconds.
+  internal var decelerationRate : Float = 10.0
+
+  // The maximum speed is the maximum speed of the locomotive in scale metres
+  // per second.
+  internal var maximumSpeed : Float = 126.0
+  
+  // The current speed is the current speed of the train in scale metres per second.
+  internal var currentSpeed : Float = 0.0
+  
+  // The cruise speed is the cruising speed of the train in the middle portion
+  // of a move in scale metres per second.
+  internal var cruiseSpeed : Float = 126.0
+  
+  // The final speed is the final speed of the train at the end of the move in
+  // scale metres per second.
+  internal var finalSpeed : Float = 0.0
+
+  // The move direction is the direction of movement of the train in the move.
+  internal var moveDirection : LocomotiveDirection = .forward
+  
+  // This is the number of speed changes allowed per second.
+  internal var stepsPerSecond : Float = 4.0
+  
+  internal var isStealAllowedInMove : Bool = false
+  
+  internal var isPositionUpdateRequiredInMove : Bool = false
+  
+  internal var moveTimer : Timer?
+  
   private enum HeartbeatMode {
     case stopped
     case waitingForCommand
@@ -359,6 +421,146 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     
   }
   
+  // Self-Driving Routines
+  
+  internal typealias MoveStep = (velocity:Float, duration:Float)
+  
+  internal typealias MovePart = (distance:Float, steps:[MoveStep])
+  
+  internal func getCruiseMovePart(distance:Float, initial:MovePart, final:MovePart) -> MovePart {
+    
+    let D = distance - initial.distance - final.distance
+    
+    let δT = D / abs(cruiseSpeed)
+
+    let N = Int(ceil(δT * stepsPerSecond))
+    
+    let stepDuration = 1.0 / stepsPerSecond
+
+    let d = Float(N - 1) * stepDuration * cruiseSpeed
+    
+    let δdT = (D - d) / abs(cruiseSpeed)
+    
+    var steps : [MoveStep] = []
+ 
+    var index = 0
+    while index < N {
+      index += 1
+      let duration = (index == N) ? δdT : stepDuration
+      steps.append((velocity: cruiseSpeed, duration: duration))
+    }
+
+    return (distance: distance, steps: steps)
+
+  }
+  
+  internal func getSpeedChangeMovePart(v1:Float, v2:Float) -> MovePart {
+    
+    let δV = v1 - v2
+    
+    let velocityChangeRate = (v1 == v2) ? 0.0 : (v1 < v2) ? accelerationRate : decelerationRate
+    
+    let δT = abs(δV) / maximumSpeed * velocityChangeRate
+    
+    let N = Int(ceil(δT * stepsPerSecond))
+    
+    var distance : Float = 0
+    
+    var steps : [MoveStep] = []
+    
+    if N > 0 {
+      
+      let δVPerStep = δV / Float(N)
+      
+      let stepDuration = 1.0 / stepsPerSecond
+      
+      var velocity = v1
+      
+      var index = 0
+      while index < N {
+        index += 1
+        velocity = (index == N) ? v2 : velocity + δVPerStep
+        steps.append((velocity: velocity, duration: stepDuration))
+      }
+      
+      steps = adjustMovePartSpeedSteps(steps: steps)
+      
+      for step in steps {
+        distance += step.duration * step.velocity
+      }
+      
+    }
+    
+    return (distance: distance, steps: steps)
+    
+  }
+
+  internal func getSpeedChangeMovePartForDistance(targetDistance:Float, v1:Float, v2:Float) -> MovePart {
+    
+    let δV = v1 - v2
+    
+    var velocityChangeRate = (v1 == v2) ? 0.0 : (v1 < v2) ? accelerationRate : decelerationRate
+    
+    var distance : Float = 0
+    
+    var steps : [MoveStep] = []
+
+    repeat {
+      
+      velocityChangeRate *= 0.99
+      
+      let δT = abs(δV) / maximumSpeed * velocityChangeRate
+      
+      let N = Int(ceil(δT * stepsPerSecond))
+      
+      steps = []
+      
+      if N > 0 {
+        
+        let δVPerStep = δV / Float(N)
+        
+        let stepDuration = 1.0 / stepsPerSecond
+        
+        var velocity = v1
+        
+        var index = 0
+        while index < N {
+          index += 1
+          velocity = (index == N) ? v2 : velocity + δVPerStep
+          steps.append((velocity: velocity, duration: stepDuration))
+        }
+        
+        steps = adjustMovePartSpeedSteps(steps: steps)
+        
+        distance = 0.0
+        for step in steps {
+          distance += step.duration * step.velocity
+        }
+        
+      }
+      
+    } while distance > targetDistance
+    
+    return (distance: distance, steps: steps)
+    
+  }
+
+  internal func normalizeVelocity(velocity:Float) -> Float {
+    return velocity
+  }
+  
+  internal func adjustMovePartSpeedSteps(steps:[MoveStep]) -> [MoveStep] {
+    
+    var normalized : [MoveStep] = []
+    
+    for step in steps {
+      normalized.append((velocity:normalizeVelocity(velocity: step.velocity), duration:step.duration))
+    }
+    
+    return normalized
+    
+  }
+  
   @objc func timerAction() {
     
     timer?.invalidate()
@@ -464,6 +666,99 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
         let isForwarded = ((message.payload[0]) & 0x80 == 0x80) && isListener(nodeId: message.sourceNodeId!)
         
         switch instruction {
+         
+        case .setMove:
+          
+          // Add zeros to the payload to allow for optional arguments.
+          
+          message.payload.append(contentsOf: [UInt8](repeating: 0, count: 8))
+
+          if let tempDistanceToGo = Float(bigEndianData: [message.payload[1], message.payload[2], message.payload[3], message.payload[4]]), let uint16CruiseSpeed = UInt16(bigEndianData: [message.payload[5], message.payload[6]]), let uint16FinalSpeed = UInt16(bigEndianData: [message.payload[7], message.payload[8]]) {
+            
+            // The distance sign bit controls the direction of travel and will
+            // override the direction bits of the two speeds.
+            
+            var trainDirection = tempDistanceToGo.direction
+            
+            var f16 = float16_t()
+            
+            f16.v = uint16CruiseSpeed
+            var tempCruiseSpeed = abs(Float(float16: f16))
+            
+            // If the cruise speed is zero then set it to the train's maximum speed.
+            
+            if tempCruiseSpeed == 0.0 {
+              tempCruiseSpeed = abs(maximumSpeed)
+            }
+            
+            f16.v = uint16FinalSpeed
+            var tempFinalSpeed = abs(Float(float16: f16))
+            
+            // If the train is currently moving in the opposite direction to the
+            // requested distance, then stop it immediately before starting the move.
+            
+            var tempCurrentSpeed = currentSpeed.direction == trainDirection ? abs(currentSpeed) : 0.0
+
+            if trainDirection == .reverse {
+              if tempCruiseSpeed == 0.0 {
+                tempCruiseSpeed = -0.0
+              }
+              else {
+                tempCruiseSpeed *= -1.0
+              }
+              if tempFinalSpeed == 0.0 {
+                tempFinalSpeed = -0.0
+              }
+              else {
+                tempFinalSpeed *= -1.0
+              }
+              if tempCurrentSpeed == 0.0 {
+                tempCurrentSpeed = -0.0
+              }
+              else {
+                tempCurrentSpeed *= -1.0
+              }
+            }
+            
+            tempCurrentSpeed = normalizeVelocity(velocity: tempCurrentSpeed)
+            tempCruiseSpeed = normalizeVelocity(velocity: tempCruiseSpeed)
+            tempFinalSpeed = normalizeVelocity(velocity: tempFinalSpeed)
+            
+            var initial = getSpeedChangeMovePart(v1: tempCurrentSpeed, v2: tempCruiseSpeed)
+            
+            var final = getSpeedChangeMovePart(v1: tempCruiseSpeed, v2: tempFinalSpeed)
+            
+            var move : [MovePart] = []
+            
+            if (initial.distance + final.distance) < abs(tempDistanceToGo) {
+              let cruise = getCruiseMovePart(distance: abs(tempDistanceToGo), initial: initial, final: final)
+              move.append(initial)
+              move.append(cruise)
+              move.append(final)
+            }
+            else if abs(tempCurrentSpeed ) == 0.0 && abs(tempFinalSpeed) == 0.0 {
+              var distance : Float
+              repeat {
+                tempCruiseSpeed *= 0.99
+                initial = getSpeedChangeMovePart(v1: tempCurrentSpeed, v2: tempCruiseSpeed)
+                final = getSpeedChangeMovePart(v1: tempCruiseSpeed, v2: tempFinalSpeed)
+                distance = initial.distance + final.distance
+              } while distance > abs(tempDistanceToGo)
+              move.append(initial)
+              move.append(final)
+            }
+            else {
+              final = getSpeedChangeMovePartForDistance(targetDistance: abs(tempDistanceToGo), v1: tempCurrentSpeed, v2: tempFinalSpeed)
+              move.append(final)
+            }
+
+          }
+ 
+        case .startMove:
+          break
+          
+        case .stopMove:
+          break
           
         case .setSpeedDirection:
           
@@ -484,7 +779,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
                 var forwardedSpeed = setSpeed
                 if listener.reverseDirection {
                   let minusZero : Float = -0.0
-                  let plusZero : Float = -0.0
+                  let plusZero : Float = +0.0
 
                   if forwardedSpeed.bitPattern == plusZero.bitPattern {
                     forwardedSpeed = -0.0

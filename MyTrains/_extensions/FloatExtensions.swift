@@ -57,7 +57,6 @@ extension Float {
     
   }
 
-  
   public var float16 : float16_t {
     get {
       return float_to_float16(self)
@@ -70,6 +69,16 @@ extension Float {
     }
   }
   
+  public var direction : LocomotiveDirection {
+    if self.bitPattern == Float(+0.0).bitPattern {
+      return .forward
+    }
+    if self.bitPattern == Float(-0.0).bitPattern {
+      return .reverse
+    }
+    return self < 0.0 ? .reverse : .forward
+  }
+
   public var bigEndianData : [UInt8] {
     get {
       var intValue : UInt32 = self.bitPattern

@@ -1224,6 +1224,67 @@ public class OpenLCBNetworkLayer : NSObject {
     
   }
 
+  public func sendSetMoveCommand(sourceNodeId:UInt64, destinationNodeId:UInt64, distance:Float, cruiseSpeed:Float, finalSpeed:Float) {
+    
+    let message = OpenLCBMessage(messageTypeIndicator: .tractionControlCommand)
+
+    message.sourceNodeId = sourceNodeId
+    
+    message.destinationNodeId = destinationNodeId
+    
+    message.payload = [
+      OpenLCBTractionControlInstructionType.setMove.rawValue
+    ]
+    
+    message.payload.append(contentsOf: cruiseSpeed.float16.v.bigEndianData)
+
+    message.payload.append(contentsOf: finalSpeed.float16.v.bigEndianData)
+
+    sendMessage(message: message)
+    
+  }
+
+  public func sendStartMoveCommand(sourceNodeId:UInt64, destinationNodeId:UInt64, isStealAllowed:Bool, isPositionUpdateRequired:Bool) {
+    
+    let message = OpenLCBMessage(messageTypeIndicator: .tractionControlCommand)
+
+    message.sourceNodeId = sourceNodeId
+    
+    message.destinationNodeId = destinationNodeId
+    
+    message.payload = [
+      OpenLCBTractionControlInstructionType.startMove.rawValue
+    ]
+    
+    var options : UInt8 = 0
+    
+    options |= isStealAllowed ? 0b00000001 : 0
+    options |= isPositionUpdateRequired ? 0b00000010 : 0
+
+    if options != 0 {
+      message.payload.append(options)
+    }
+    
+    sendMessage(message: message)
+    
+  }
+
+  public func sendStopMoveCommand(sourceNodeId:UInt64, destinationNodeId:UInt64) {
+    
+    let message = OpenLCBMessage(messageTypeIndicator: .tractionControlCommand)
+
+    message.sourceNodeId = sourceNodeId
+    
+    message.destinationNodeId = destinationNodeId
+    
+    message.payload = [
+      OpenLCBTractionControlInstructionType.stopMove.rawValue
+    ]
+    
+    sendMessage(message: message)
+    
+  }
+
   public func sendSetFunction(sourceNodeId:UInt64, destinationNodeId:UInt64, address:UInt32, value:UInt16, isForwarded: Bool) {
     
     let message = OpenLCBMessage(messageTypeIndicator: .tractionControlCommand)

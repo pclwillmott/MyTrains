@@ -243,8 +243,6 @@ public class MTSerialPort : MTSerialPortManagerDelegate {
   
   public func serialPortWasRemoved(path: String) {
     
-    return
-    
     if path == _path {
       self.delegate?.serialPortWasRemovedFromSystem(self)
       self.quit = true

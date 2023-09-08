@@ -41,5 +41,8 @@ public enum OpenLCBWellKnownEvent : UInt64 {
   case nodeIsADCCProgrammingTrack          = 0x090099feffff0002
   case trainSearchDCCShortAddress          = 0x090099ffffffff08
   case trainSearchDCCLongAddress           = 0x090099ffffffff0c
+  case trainMoveStart                      = 0x1000000000000000
+  case trainMoveComplete                   = 0x1001000000000000
+  case trainMoveUpdate                     = 0x1002000000000000
 
 }

@@ -1,0 +1,515 @@
+--------------------------------------------------
+DCS100
+--------------------------------------------------
+
+OpSw #44 Closed - Slots 1-119 can be used (tested)
+Using P1 Commands
+
+getLocoSlotDataSAdrP1
+<D0> 0xbf 0b10111111 
+<D1> 0x00 0b00000000 
+<D2> 0x01 0b00000001 
+<D3> 0x41 0b01000001 
+
+locoSlotDataP1
+<D0> 0xe7 0b11100111 
+<D1> 0x0e 0b00001110 
+<D2> 0x01 0b00000001 
+<D3> 0x03 0b00000011 
+<D4> 0x01 0b00000001 
+<D5> 0x00 0b00000000 
+<D6> 0x00 0b00000000 
+<D7> 0x04 0b00000100 <- <TRK> Implements Protocol 1
+<D8> 0x00 0b00000000 
+<D9> 0x00 0b00000000 
+<D10> 0x00 0b00000000 
+<D11> 0x00 0b00000000 
+<D12> 0x00 0b00000000 
+<D13> 0x11 0b00010001 
+
+OpSw #44 Thrown (default) - Slots 1 - 23 can be used (tested)
+
+getLocoSlotDataSAdrP1
+<D0> 0xbf 0b10111111 
+<D1> 0x00 0b00000000 
+<D2> 0x01 0b00000001 
+<D3> 0x41 0b01000001 
+
+locoSlotDataP1
+<D0> 0xe7 0b11100111 
+<D1> 0x0e 0b00001110 
+<D2> 0x01 0b00000001 
+<D3> 0x03 0b00000011 
+<D4> 0x01 0b00000001 
+<D5> 0x00 0b00000000 
+<D6> 0x00 0b00000000 
+<D7> 0x04 0b00000100 <- <TRK> - Implements Protocol 1
+<D8> 0x00 0b00000000 
+<D9> 0x00 0b00000000 
+<D10> 0x00 0b00000000 
+<D11> 0x00 0b00000000 
+<D12> 0x00 0b00000000 
+<D13> 0x11 0b00010001 
+
+--------------------------------------------------
+DCS210
+Hardware Version: 0.1
+Software Version: 0.3
+--------------------------------------------------
+
+OpSw #44 Closed - Slots 1-100 can be used (tested)
+OpSw #66 Thrown (default)
+Using P1 Commands
+
+getLocoSlotDataSAdrP1
+<D0> 0xbf 0b10111111 
+<D1> 0x00 0b00000000 
+<D2> 0x01 0b00000001 
+<D3> 0x41 0b01000001 
+
+locoSlotDataP1
+<D0> 0xe7 0b11100111 
+<D1> 0x0e 0b00001110 
+<D2> 0x07 0b00000111 
+<D3> 0x23 0b00100011 
+<D4> 0x01 0b00000001 
+<D5> 0x00 0b00000000 
+<D6> 0x00 0b00000000 
+<D7> 0x47 0b01000111 <- <TRK> Implements Protocol 1 and Protocol 2
+<D8> 0x00 0b00000000 
+<D9> 0x00 0b00000000 
+<D10> 0x00 0b00000000 
+<D11> 0x00 0b00000000 
+<D12> 0x00 0b00000000 
+<D13> 0x74 0b01110100 
+
+-----
+
+OpSw #44 Thrown - same results as Closed
+
+-----
+
+OpSw #44 Closed - Slots 1-100 can be used (tested)
+OpSw #66 Closed
+Using P1 Commands
+
+getLocoSlotDataSAdrP1
+<D0> 0xbf 0b10111111 
+<D1> 0x00 0b00000000 
+<D2> 0x01 0b00000001 
+<D3> 0x41 0b01000001 
+
+locoSlotDataP1
+<D0> 0xe7 0b11100111 
+<D1> 0x0e 0b00001110 
+<D2> 0x07 0b00000111 
+<D3> 0x33 0b00110011 
+<D4> 0x01 0b00000001 
+<D5> 0x00 0b00000000 
+<D6> 0x00 0b00000000 
+<D7> 0x47 0b01000111 <- <TRK> Implements Protocol 1 and Protocol 2
+<D8> 0x00 0b00000000 
+<D9> 0x00 0b00000000 
+<D10> 0x00 0b00000000 
+<D11> 0x00 0b00000000 
+<D12> 0x00 0b00000000 
+<D13> 0x64 0b01100100 
+
+-----
+
+OpSw #44 Closed
+OpSw #66 Closed
+Using P2 Commands
+
+getLocoSlotDataSAdrP2
+<D0> 0xbe 0b10111110 
+<D1> 0x00 0b00000000 
+<D2> 0x01 0b00000001 
+<D3> 0x40 0b01000000 
+
+noFreeSlotsP2
+<D0> 0xb4 0b10110100 
+<D1> 0x3e 0b00111110 
+<D2> 0x00 0b00000000 
+<D3> 0x75 0b01110101 
+
+doing a manual slot read:
+
+getLocoSlotData
+<D0> 0xbb 0b10111011 
+<D1> 0x01 0b00000001 
+<D2> 0x00 0b00000000 
+<D3> 0x45 0b01000101 
+
+locoSlotDataP1
+<D0> 0xe7 0b11100111 
+<D1> 0x0e 0b00001110 
+<D2> 0x01 0b00000001 
+<D3> 0x23 0b00100011 
+<D4> 0x02 0b00000010 
+<D5> 0x00 0b00000000 
+<D6> 0x00 0b00000000 
+<D7> 0x47 0b01000111 <- <TRK> Implements Protocol 1 and Protocol 2
+<D8> 0x00 0b00000000 
+<D9> 0x00 0b00000000 
+<D10> 0x00 0b00000000 
+<D11> 0x00 0b00000000 
+<D12> 0x00 0b00000000 
+<D13> 0x71 0b01110001 
+-----
+
+OpSw #44 Closed - Slots 1-100 can be used (tested)
+OpSw #66 Thrown
+Using P2 Commands
+
+getLocoSlotDataSAdrP2
+<D0> 0xbe 0b10111110 
+<D1> 0x00 0b00000000 
+<D2> 0x01 0b00000001 
+<D3> 0x40 0b01000000 
+
+locoSlotDataP2
+<D0> 0xe6 0b11100110 
+<D1> 0x15 0b00010101 
+<D2> 0x00 0b00000000 
+<D3> 0x07 0b00000111 
+<D4> 0x23 0b00100011 
+<D5> 0x01 0b00000001 
+<D6> 0x00 0b00000000 
+<D7> 0x47 0b01000111 <- <TRK> Implements Protocol 1 and Protocol 2
+<D8> 0x00 0b00000000 
+<D9> 0x00 0b00000000 
+<D10> 0x00 0b00000000 
+<D11> 0x00 0b00000000 
+<D12> 0x00 0b00000000 
+<D13> 0x00 0b00000000 
+<D14> 0x00 0b00000000 
+<D15> 0x00 0b00000000 
+<D16> 0x00 0b00000000 
+<D17> 0x00 0b00000000 
+<D18> 0x00 0b00000000 
+<D19> 0x00 0b00000000 
+<D20> 0x6e 0b01101110 
+
+--------------------------------------------------
+DCS240+
+Hardware Version: 0.1
+Software Version: 0.1
+--------------------------------------------------
+
+OpSw 44 Thrown (default)
+OpSw 66 Thrown 
+
+P2 Commands
+The following slots are returned in the following order
+
+1.1 to 1.119
+2.1 to 2.119
+3.1 to 3.48
+0.1 to 0.118
+
+A total of 404 slots
+
+getLocoSlotDataSAdrP2
+<D0> 0xbe 0b10111110 
+<D1> 0x00 0b00000000 
+<D2> 0x01 0b00000001 
+<D3> 0x40 0b01000000 
+
+locoSlotDataP2
+<D0> 0xe6 0b11100110 
+<D1> 0x15 0b00010101 
+<D2> 0x01 0b00000001 
+<D3> 0x01 0b00000001 
+<D4> 0x03 0b00000011 
+<D5> 0x01 0b00000001 
+<D6> 0x00 0b00000000 
+<D7> 0x47 0b01000111 <- <TRK> Implements Protocol 1 and Protocol 2
+<D8> 0x00 0b00000000 
+<D9> 0x00 0b00000000 
+<D10> 0x00 0b00000000 
+<D11> 0x00 0b00000000 
+<D12> 0x00 0b00000000 
+<D13> 0x00 0b00000000 
+<D14> 0x00 0b00000000 
+<D15> 0x00 0b00000000 
+<D16> 0x00 0b00000000 
+<D17> 0x00 0b00000000 
+<D18> 0x00 0b00000000 
+<D19> 0x00 0b00000000 
+<D20> 0x49 0b01001001 
+
+setLocoSlotInUseP2
+<D0> 0xd4 0b11010100 
+<D1> 0x39 0b00111001 
+<D2> 0x01 0b00000001 
+<D3> 0x01 0b00000001 
+<D4> 0x01 0b00000001 
+<D5> 0x13 0b00010011 
+
+locoSlotDataP2
+<D0> 0xe6 0b11100110 
+<D1> 0x15 0b00010101 
+<D2> 0x01 0b00000001 
+<D3> 0x01 0b00000001 
+<D4> 0x33 0b00110011 
+<D5> 0x01 0b00000001 
+<D6> 0x00 0b00000000 
+<D7> 0x47 0b01000111 <- <TRK> Implements Protocol 1 and Protocol 2
+<D8> 0x00 0b00000000 
+<D9> 0x00 0b00000000 
+<D10> 0x00 0b00000000 
+<D11> 0x00 0b00000000 
+<D12> 0x00 0b00000000 
+<D13> 0x00 0b00000000 
+<D14> 0x00 0b00000000 
+<D15> 0x00 0b00000000 
+<D16> 0x00 0b00000000 
+<D17> 0x00 0b00000000 
+<D18> 0x00 0b00000000 
+<D19> 0x00 0b00000000 
+<D20> 0x79 0b01111001 
+
+---
+
+OpSw 44 Thrown (default)
+OpSw 66 Closed
+
+P2 Commands
+
+getLocoSlotDataSAdrP2
+<D0> 0xbe 0b10111110 
+<D1> 0x00 0b00000000 
+<D2> 0x01 0b00000001 
+<D3> 0x40 0b01000000 
+
+unknown
+<D0> 0xe7 0b11100111 
+<D1> 0x0e 0b00001110 
+<D2> 0x01 0b00000001 
+<D3> 0x03 0b00000011 
+<D4> 0x01 0b00000001 
+<D5> 0x00 0b00000000 
+<D6> 0x00 0b00000000 
+<D7> 0x63 0b01100011 <- ????
+<D8> 0x00 0b00000000 
+<D9> 0x00 0b00000000 
+<D10> 0x00 0b00000000 
+<D11> 0x00 0b00000000 
+<D12> 0x00 0b00000000 
+<D13> 0x76 0b01110110 
+
+---
+
+OpSw 44 Thrown (default)
+OpSw 66 Closed
+
+P1 Commands
+
+getLocoSlotDataSAdrP1
+<D0> 0xbf 0b10111111 
+<D1> 0x00 0b00000000 
+<D2> 0x01 0b00000001 
+<D3> 0x41 0b01000001 
+
+unknown
+<D0> 0xe7 0b11100111 
+<D1> 0x0e 0b00001110 
+<D2> 0x01 0b00000001 
+<D3> 0x03 0b00000011 
+<D4> 0x01 0b00000001 
+<D5> 0x00 0b00000000 
+<D6> 0x00 0b00000000 
+<D7> 0x63 0b01100011 <- ?????
+<D8> 0x00 0b00000000 
+<D9> 0x00 0b00000000 
+<D10> 0x00 0b00000000 
+<D11> 0x00 0b00000000 
+<D12> 0x00 0b00000000 
+<D13> 0x76 0b01110110
+
+---
+
+OpSw 44 Thrown (default)
+OpSw 66 Thrown
+
+P1 Commands
+The following slots are returned in the following order
+
+0.1 - 0.118
+
+A total of 118 slots
+
+getLocoSlotDataSAdrP1
+<D0> 0xbf 0b10111111 
+<D1> 0x00 0b00000000 
+<D2> 0x01 0b00000001 
+<D3> 0x41 0b01000001 
+
+locoSlotDataP1
+<D0> 0xe7 0b11100111 
+<D1> 0x0e 0b00001110 
+<D2> 0x01 0b00000001 
+<D3> 0x03 0b00000011 
+<D4> 0x01 0b00000001 
+<D5> 0x00 0b00000000 
+<D6> 0x00 0b00000000 
+<D7> 0x47 0b01000111 <- <TRK> Implements Protocol 1 and Protocol 2
+<D8> 0x00 0b00000000 
+<D9> 0x00 0b00000000 
+<D10> 0x00 0b00000000 
+<D11> 0x00 0b00000000 
+<D12> 0x00 0b00000000 
+<D13> 0x52 0b01010010 
+
+setLocoSlotInUseP1
+<D0> 0xba 0b10111010 
+<D1> 0x01 0b00000001 
+<D2> 0x01 0b00000001 
+<D3> 0x45 0b01000101 
+
+locoSlotDataP1
+<D0> 0xe7 0b11100111 
+<D1> 0x0e 0b00001110 
+<D2> 0x01 0b00000001 
+<D3> 0x33 0b00110011 
+<D4> 0x01 0b00000001 
+<D5> 0x00 0b00000000 
+<D6> 0x00 0b00000000 
+<D7> 0x47 0b01000111 <- <TRK> Implements Protocol 1 and Protocol 2
+<D8> 0x00 0b00000000 
+<D9> 0x00 0b00000000 
+<D10> 0x00 0b00000000 
+<D11> 0x00 0b00000000 
+<D12> 0x00 0b00000000 
+<D13> 0x62 0b01100010 
+
+---
+
+OpSw 44 Closed
+OpSw 66 Thrown
+
+P2 Commands
+
+The following slots are returned in the following order
+
+0.1 - 0.118
+
+A total of 118 slots
+
+getLocoSlotDataSAdrP2
+<D0> 0xbe 0b10111110 
+<D1> 0x00 0b00000000 
+<D2> 0x01 0b00000001 
+<D3> 0x40 0b01000000 
+
+locoSlotDataP2
+<D0> 0xe6 0b11100110 
+<D1> 0x15 0b00010101 
+<D2> 0x00 0b00000000 
+<D3> 0x01 0b00000001 
+<D4> 0x03 0b00000011 
+<D5> 0x01 0b00000001 
+<D6> 0x00 0b00000000 
+<D7> 0x47 0b01000111 <- <TRK> Implements Protocol 1 and Protocol 2
+<D8> 0x00 0b00000000 
+<D9> 0x00 0b00000000 
+<D10> 0x00 0b00000000 
+<D11> 0x00 0b00000000 
+<D12> 0x00 0b00000000 
+<D13> 0x00 0b00000000 
+<D14> 0x00 0b00000000 
+<D15> 0x00 0b00000000 
+<D16> 0x00 0b00000000 
+<D17> 0x00 0b00000000 
+<D18> 0x00 0b00000000 
+<D19> 0x00 0b00000000 
+<D20> 0x48 0b01001000 
+
+setLocoSlotInUseP2
+<D0> 0xd4 0b11010100 
+<D1> 0x38 0b00111000 
+<D2> 0x01 0b00000001 
+<D3> 0x00 0b00000000 
+<D4> 0x01 0b00000001 
+<D5> 0x13 0b00010011 
+
+locoSlotDataP2
+<D0> 0xe6 0b11100110 
+<D1> 0x15 0b00010101 
+<D2> 0x00 0b00000000 
+<D3> 0x01 0b00000001 
+<D4> 0x33 0b00110011 
+<D5> 0x01 0b00000001 
+<D6> 0x00 0b00000000 
+<D7> 0x47 0b01000111 <- <TRK> Implements Protocol 1 and Protocol 2
+<D8> 0x00 0b00000000 
+<D9> 0x00 0b00000000 
+<D10> 0x00 0b00000000 
+<D11> 0x00 0b00000000 
+<D12> 0x00 0b00000000 
+<D13> 0x00 0b00000000 
+<D14> 0x00 0b00000000 
+<D15> 0x00 0b00000000 
+<D16> 0x00 0b00000000 
+<D17> 0x00 0b00000000 
+<D18> 0x00 0b00000000 
+<D19> 0x00 0b00000000 
+<D20> 0x78 0b01111000 
+
+---
+
+OpSw 44 Closed
+OpSw 66 Thrown
+
+P1 Commands
+
+The following slots are returned in the following order
+
+0.1 - 0.118
+
+A total of 118 slots
+
+getLocoSlotDataSAdrP1
+<D0> 0xbf 0b10111111 
+<D1> 0x00 0b00000000 
+<D2> 0x01 0b00000001 
+<D3> 0x41 0b01000001 
+
+locoSlotDataP1
+<D0> 0xe7 0b11100111 
+<D1> 0x0e 0b00001110 
+<D2> 0x01 0b00000001 
+<D3> 0x03 0b00000011 
+<D4> 0x01 0b00000001 
+<D5> 0x00 0b00000000 
+<D6> 0x00 0b00000000 
+<D7> 0x47 0b01000111 <- <TRK> Implements Protocol 1 and Protocol 2
+<D8> 0x00 0b00000000 
+<D9> 0x00 0b00000000 
+<D10> 0x00 0b00000000 
+<D11> 0x00 0b00000000 
+<D12> 0x00 0b00000000 
+<D13> 0x52 0b01010010 
+
+setLocoSlotInUseP1
+<D0> 0xba 0b10111010 
+<D1> 0x01 0b00000001 
+<D2> 0x01 0b00000001 
+<D3> 0x45 0b01000101 
+
+locoSlotDataP1
+<D0> 0xe7 0b11100111 
+<D1> 0x0e 0b00001110 
+<D2> 0x01 0b00000001 
+<D3> 0x33 0b00110011 
+<D4> 0x01 0b00000001 
+<D5> 0x00 0b00000000 
+<D6> 0x00 0b00000000 
+<D7> 0x47 0b01000111 <- <TRK> Implements Protocol 1 and Protocol 2
+<D8> 0x00 0b00000000 
+<D9> 0x00 0b00000000 
+<D10> 0x00 0b00000000 
+<D11> 0x00 0b00000000 
+<D12> 0x00 0b00000000 
+<D13> 0x62 0b01100010 
