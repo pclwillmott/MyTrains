@@ -1,0 +1,285 @@
+<?xml version="1.0"?>
+<cdi xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://openlcb.org/schema/cdi/1/1/cdi.xsd">
+<identification>
+<manufacturer>Digitrax, Inc.</manufacturer>
+<model>DS64</model>
+<hardwareVersion></hardwareVersion>
+<softwareVersion></softwareVersion>
+</identification>
+
+<acdi/>
+<segment space='251' origin='1'>
+<name>Node ID</name>
+<string size='63'>
+<name>User Name</name>
+<description>This name will appear in network browsers for this device.</description>
+</string>
+<string size='64'>
+<name>User Description</name>
+<description>This description will appear in network browsers for this device.</description>
+</string>
+</segment>
+
+<segment space='253' origin='0'> 
+<name>DS64 Configuration</name>
+
+<eventid>
+  <name>LocoNet Gateway</name>
+  <map>
+    %%LOCONET_GATEWAYS%%
+  </map>
+</eventid>
+
+<int size='2'>
+<name>Board ID</name>
+<min>1</min>
+<max>256</max>
+</int>
+
+<int size='1'>
+<name>Write board ID to DS64</name>
+<map>
+  <relation><property>0</property><value>Keep</value></relation>
+  <relation><property>1</property><value>Write board ID to DS64</value></relation>
+</map>
+</int>
+
+<int size='1'>
+<name>Read settings from DS64</name>
+<map>
+  <relation><property>0</property><value>Keep</value></relation>
+  <relation><property>1</property><value>Read settings from DS64</value></relation>
+</map>
+</int>
+
+  <int size='1'>
+  <name>Reset to factory defaults</name>
+  <map>
+    <relation><property>0</property><value>Keep current settings</value></relation>
+    <relation><property>1</property><value>Reset DS64 to factory defaults</value></relation>
+  </map>
+  </int>
+
+  <int size='1'>
+  <name>Write changes to DS64</name>
+  <description>The changes that you have made will not become effective until they are written to the DS64.</description>
+  <map>
+    <relation><property>0</property><value>Do not write changes to DS64</value></relation>
+    <relation><property>1</property><value>Write changes to DS64</value></relation>
+  </map>
+  </int>
+
+<group>
+<name>Commands</name>
+
+<int size='1'>
+<name>Computer and/or Throttle Inputs</name>
+<map>
+  <relation><property>0</property><value>The DS64 accepts both throttle and computer commands</value></relation>
+  <relation><property>1</property><value>The DS64 accepts computer commands only</value></relation>
+</map>
+</int>
+
+</group>
+
+<group>
+<name>Power</name>
+
+<int size='1'>
+<name>Power Management Options for DS64 Outputs</name>
+<map>
+  <relation><property>0</property><value>At power on, the DS64's 4 outputs power up to their last state</value></relation>
+  <relation><property>1</property><value>At power on, the DS64's 4 outputs do not power up until they receive a command</value></relation>
+</map>
+</int>
+
+<int size='1'>
+<name>Startup Delay</name>
+<description>The startup delay tells the DS64 to wait for a certain time after the layout is powered up before 'waking up'. This feature prevents multiple DS64s on your layout from powering up at the same instant and overwhelming your lay-outs power supply.</description>
+<map>
+  <relation><property>0</property><value>The DS64's startup delay is 65ms times the address of switch 1</value></relation>
+  <relation><property>1</property><value>The DS64's startup delay is 130ms times the address of switch 1</value></relation>
+</map>
+</int>
+
+<int size='1'>
+<name>Static Time Out Length</name>
+<description>This sets the static timeout length for slow motion turnout operation.</description>
+<map>
+  <relation><property>0</property><value>Outputs do not shut off</value></relation>
+  <relation><property>1</property><value>Outputs shut off after 16 seconds</value></relation>
+</map>
+</int>
+
+</group>
+
+<group>
+<name>Outputs</name>
+
+<int size='1'>
+<name>Output Type</name>
+<map>
+  <relation><property>0</property><value>Solenoid mode</value></relation>
+  <relation><property>1</property><value>Slow motion mode</value></relation>
+</map>
+</int>
+
+<int size='1'>
+<name>Solenoid Pulse Length/Crossing Gate Flashing Rate</name>
+<description>When in solenoid mode this defines the pulse length. When in slow motion mode this defines the timing of the crossing gate light flashing.</description>
+<map>
+  <relation><property>0</property><value>0 ms</value></relation>
+  <relation><property>1</property><value>200 ms</value></relation>
+  <relation><property>1</property><value>400 ms</value></relation>
+  <relation><property>1</property><value>600 ms</value></relation>
+  <relation><property>1</property><value>800 ms</value></relation>
+  <relation><property>1</property><value>1000 ms</value></relation>
+  <relation><property>1</property><value>1200 ms</value></relation>
+  <relation><property>1</property><value>1400 ms</value></relation>
+  <relation><property>1</property><value>1600 ms</value></relation>
+  <relation><property>1</property><value>1800 ms</value></relation>
+  <relation><property>1</property><value>2000 ms</value></relation>
+  <relation><property>1</property><value>2200 ms</value></relation>
+  <relation><property>1</property><value>2400 ms</value></relation>
+  <relation><property>1</property><value>2600 ms</value></relation>
+  <relation><property>1</property><value>2800 ms</value></relation>
+  <relation><property>1</property><value>3000 ms</value></relation>
+</map>
+</int>
+
+<group replication='4'>
+<name>Outputs</name>
+<repname>Output</repname>
+
+<int size='2'>
+<name>LocoNet Switch Address</name>
+<min>1</min>
+<max>2048</max>
+</int>
+
+<int size='1'>
+<name>Thrown Event Enable</name>
+<map>
+  <relation><property>0</property><value>Thrown event disabled</value></relation>
+  <relation><property>1</property><value>Thrown event enabled</value></relation>
+</map>
+</int>
+
+<eventid>
+  <name>Thrown Event Id</name>
+  <description>(C) When this event is received the output will be set to thrown.</description>
+</eventid>
+
+<int size='1'>
+<name>Closed Event Enable</name>
+<map>
+  <relation><property>0</property><value>Closed event disabled</value></relation>
+  <relation><property>1</property><value>Closed event enabled</value></relation>
+</map>
+</int>
+
+<eventid>
+  <name>Closed Event Id</name>
+  <description>(C) When this event is received the output will be set to closed.</description>
+</eventid>
+
+<int size='1'>
+<name>Crossing Gate Feature</name>
+<description>When the crossing gate feature is enabled, a high on either of the A or S inputs related to this output will cause the output to blink at the defined rate.</description>
+<map>
+  <relation><property>0</property><value>Crossing gate feature is disabled</value></relation>
+  <relation><property>1</property><value>Crossing gate feature is enabled</value></relation>
+</map>
+</int>
+
+</group>
+
+</group>
+
+<group>
+<name>Inputs</name>
+
+<int size='1'>
+<name>LocoNet Sensor Message Type</name>
+<map>
+  <relation><property>0</property><value>General sensor reporting</value></relation>
+  <relation><property>1</property><value>Turnout sensor state reporting</value></relation>
+</map>
+</int>
+
+<int size='1'>
+<name>Input Sensor Configuration</name>
+<map>
+  <relation><property>0</property><value>Configuration 1</value></relation>
+  <relation><property>1</property><value>Configuration 2</value></relation>
+  <relation><property>2</property><value>Configuration 3</value></relation>
+  <relation><property>3</property><value>Configuration 4</value></relation>
+  <relation><property>4</property><value>Configuration 5</value></relation>
+  <relation><property>5</property><value>Configuration 6</value></relation>
+  <relation><property>6</property><value>Configuration 7</value></relation>
+  <relation><property>7</property><value>Configuration 8</value></relation>
+</map>
+</int>
+
+<group replication='4'>
+<name>Inputs</name>
+<repname>Input</repname>
+
+<int size='1'>
+<name>"A" Sensor Thrown Event Enable</name>
+<map>
+  <relation><property>0</property><value>"A" sensor thrown event disabled</value></relation>
+  <relation><property>1</property><value>"A" sensor thrown event enabled</value></relation>
+</map>
+</int>
+
+<eventid>
+  <name>"A" Sensor Thrown Event Id</name>
+  <description>(P) This event will be sent when the "A" sensor is set to thrown.</description>
+</eventid>
+
+<int size='1'>
+<name>"A" Sensor Closed Event Enable</name>
+<map>
+  <relation><property>0</property><value>"A" sensor closed event disabled</value></relation>
+  <relation><property>1</property><value>"A" sensor closed event enabled</value></relation>
+</map>
+</int>
+
+<eventid>
+  <name>"A" Sensor Closed Event Id</name>
+  <description>(P) This event will be sent when the "A" sensor is set to closed.</description>
+</eventid>
+
+<int size='1'>
+<name>"S" Sensor Thrown Event Enable</name>
+<map>
+  <relation><property>0</property><value>"S" sensor thrown event disabled</value></relation>
+  <relation><property>1</property><value>"S" sensor thrown event enabled</value></relation>
+</map>
+</int>
+
+<eventid>
+  <name>"S" Sensor Thrown Event Id</name>
+  <description>(P) This event will be sent when the "S" sensor is set to thrown.</description>
+</eventid>
+
+<int size='1'>
+<name>"S" Sensor Closed Event Enable</name>
+<map>
+  <relation><property>0</property><value>"S" sensor closed event disabled</value></relation>
+  <relation><property>1</property><value>"S" sensor closed event enabled</value></relation>
+</map>
+</int>
+
+<eventid>
+  <name>"S" Sensor Closed Event Id</name>
+  <description>(P) This event will be sent when the "S" sensor is set to closed.</description>
+</eventid>
+
+</group>
+
+</group>
+
+</segment>
+</cdi>
