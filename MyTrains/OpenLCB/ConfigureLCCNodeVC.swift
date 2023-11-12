@@ -763,6 +763,12 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBConfigurati
                     CDI.append(byte)
                   }
                   
+                  var test = CDI
+                  test.append(0x00)
+                  let str = String(cString: test)
+             //     print(str)
+             //     print(CDI)
+                  
                   if !isLast {
                     
                     nextCDIStartAddress += data.count

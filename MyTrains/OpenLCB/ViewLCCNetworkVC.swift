@@ -150,6 +150,21 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBConfiguration
   }
   
   @IBAction func btnUpdateFirmwareAction(_ sender: NSButton) {
+    
+    guard let networkLayer else {
+      return
+    }
+
+    let node = tableViewDS.nodes[sender.tag]
+    
+    let x = ModalWindow.OpenLCBFirmwareUpdate
+    let wc = x.windowController
+    let vc = x.viewController(windowController: wc) as! OpenLCBFirmwareUpdateVC
+    vc.configurationTool = networkLayer.getConfigurationTool()
+    vc.configurationTool?.delegate = vc
+    vc.node = node
+    wc.showWindow(nil)
+
   }
   
   @IBAction func btnInfoAction(_ sender: NSButton) {

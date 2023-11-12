@@ -51,6 +51,8 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     
     isEventExchangeProtocolSupported = true
     
+    isFirmwareUpgradeProtocolSupported = true
+    
     setupConfigurationOptions()
     
   }
@@ -71,6 +73,14 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   internal let addressACDIUserSpaceVersion         : Int =  0
   internal let addressACDIUserNodeName             : Int =  1
   internal let addressACDIUserNodeDescription      : Int =  64
+  
+  internal var hardwareNodeState : OpenLCBHardwareNodeState = .operating {
+    didSet {
+      isFirmwareUpgradeActive = hardwareNodeState == .firmwareUpgrade
+    }
+  }
+  
+  internal var firmwareBuffer : [UInt8] = []
   
   // MARK: Public Properties
   
@@ -396,7 +406,6 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
           
         case .getAddressSpaceInformationCommand:
           
-          
           message.payload.removeFirst(2) 
           
           let space = message.payload[0]
@@ -459,6 +468,36 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
             networkLayer?.sendReadReplyFailure(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, addressSpace: space, startAddress: startAddress, errorCode: .permanentErrorAddressSpaceUnknown)
           }
 
+        case .unfreezeCommand:
+          
+          if let spaceId = OpenLCBNodeMemoryAddressSpace(rawValue: message.payload[2]), spaceId == .firmware {
+            
+            hardwareNodeState = .operating
+            
+            networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, timeOut: .ok)
+
+            networkLayer?.sendInitializationComplete(sourceNodeId: nodeId, isSimpleSetSufficient: false)
+
+          }
+          else {
+            networkLayer?.sendDatagramRejected(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, errorCode: .permanentErrorAddressSpaceUnknown)
+          }
+
+        case .freezeCommand:
+          
+          if let spaceId = OpenLCBNodeMemoryAddressSpace(rawValue: message.payload[2]), spaceId == .firmware {
+            
+            hardwareNodeState = .firmwareUpgrade
+            
+            networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, timeOut: .ok)
+
+            networkLayer?.sendInitializationComplete(sourceNodeId: nodeId, isSimpleSetSufficient: false)
+            
+          }
+          else {
+            networkLayer?.sendDatagramRejected(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, errorCode: .permanentErrorAddressSpaceUnknown)
+          }
+          
         case .writeCommandGeneric, .writeCommand0xFD, .writeCommand0xFE, .writeCommand0xFF:
 
           networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, timeOut: .ok)
@@ -482,11 +521,22 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
           }
           
           let startAddress = UInt32(bigEndianData: [data[2], data[3], data[4], data[5]])!
-            
-          if let memorySpace = memorySpaces[space] {
-            
-            data.removeFirst(bytesToRemove)
+          
+          data.removeFirst(bytesToRemove)
 
+          if let spaceId = OpenLCBNodeMemoryAddressSpace(rawValue: space), spaceId == .firmware &&  hardwareNodeState == .firmwareUpgrade {
+            
+            if startAddress == 0 {
+              firmwareBuffer.removeAll()
+            }
+            
+            firmwareBuffer.append(contentsOf: data)
+ 
+            networkLayer?.sendWriteReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, addressSpace: space, startAddress: startAddress)
+
+          }
+          else if let memorySpace = memorySpaces[space] {
+            
             if let spaceId = memorySpace.standardSpace, spaceId == .cv {
               writeCVs(sourceNodeId: message.sourceNodeId!, memorySpace: memorySpace, startAddress: startAddress, data: data)
             }

@@ -169,7 +169,13 @@ public class OpenLCBNode : NSObject {
       
     }
     
-    set(value) {
+    set(_value) {
+      
+      var value = _value
+      
+      for _ in 1...6 {
+        value.append(0)
+      }
       
       var index : Int = 0
 
@@ -205,7 +211,12 @@ public class OpenLCBNode : NSObject {
         default:
           break
         }
-
+        
+      }
+      
+      if index >= value.count {
+        print("overflow \(index)")
+        return
       }
       
       acdiUserSpaceVersion = value[index]
@@ -480,7 +491,7 @@ public class OpenLCBNode : NSObject {
     }
   }
   
-  public var isFirmwareUpgradeActiveProtocolSupported : Bool {
+  public var isFirmwareUpgradeActive : Bool {
     get {
       let mask : UInt8 = 0x10
       return (_supportedProtocols[2] & mask) == mask
@@ -509,6 +520,13 @@ public class OpenLCBNode : NSObject {
       
       var result : [(protocol:String, supported:Bool)] = []
       
+      for byte in 0...2 {
+        var mask : UInt8 = 0x80
+        for bit in 0...7 {
+          mask >>= 1
+        }
+      }
+
       result.append(("Simple Protocol Subset", isSimpleProtocolSubsetSupported))
       result.append(("Datagram Protocol", isDatagramProtocolSupported))
       result.append(("Stream Protocol", isStreamProtocolSupported))
@@ -528,7 +546,7 @@ public class OpenLCBNode : NSObject {
       result.append(("Simple Train Node Information Protocol", isSimpleTrainNodeInformationProtocolSupported))
       result.append(("Function Configuration", isFunctionConfigurationProtocolSupported))
       result.append(("Firmware Upgrade Protocol", isFirmwareUpgradeProtocolSupported))
-      result.append(("Firmware Upgrade Active", isFirmwareUpgradeActiveProtocolSupported))
+      result.append(("Firmware Upgrade Active", isFirmwareUpgradeActive))
       result.append(("LocoNet Gateway Protocol", isLocoNetGatewayProtocolSupported))
       return result
       

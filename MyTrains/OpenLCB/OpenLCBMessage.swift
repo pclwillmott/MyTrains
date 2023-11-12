@@ -25,41 +25,43 @@ public class OpenLCBMessage : NSObject {
 
     self.timeStamp = frame.timeStamp
     
-    if let canFrameType = OpenLCBMessageCANFrameType(rawValue: (frame.header & 0x07000000) >> 24) {
+    if let canFrameType = frame.openLCBMessageCANFrameType {
       
       self.canFrameType = canFrameType
       
       switch canFrameType {
       case .globalAndAddressedMTI:
         
-        messageTypeIndicator = OpenLCBMTI(rawValue: UInt16((frame.header >> 12) & 0xfff))!
+        messageTypeIndicator = frame.openLCBMessageTypeIndicator!
         
         sourceNIDAlias = UInt16(frame.header & 0xfff)
         
         payload = frame.data
         
-        var mask : UInt16 = 0x0008
-        
-        // isAddressPresent
-        
-        if (messageTypeIndicator.rawValue & mask) == mask, let alias = UInt16(bigEndianData: [payload[0] & 0x0f, payload[1]]) {
+        if messageTypeIndicator.isAddressPresent, let alias = UInt16(bigEndianData: [payload[0] & 0x0f, payload[1]]) {
           destinationNIDAlias = alias
           let temp = (payload[0] & 0x30) >> 4
           flags = OpenLCBCANFrameFlag(rawValue: temp)!
           payload.removeFirst(2)
         }
         
-        mask = 0x0004
+        // isEventPresent
         
-        if (messageTypeIndicator.rawValue & mask) == mask, let id = UInt64(bigEndianData: [UInt8](payload.prefix(8))) {
+        if messageTypeIndicator.isEventPresent {
           
-          if (id & 0xffff000000000000) == OpenLCBWellKnownEvent.locoNetMessage.rawValue {
+          let eventPrefix = UInt16(bigEndianData: [payload[0], payload[1]])
+          
+          switch eventPrefix {
+          case 0x0181: // LocoNet
             eventId = OpenLCBWellKnownEvent.locoNetMessage.rawValue
+            payload.removeFirst(2)
+          default:
+            if let id = UInt64(bigEndianData: [UInt8](payload.prefix(8))) {
+              eventId = id
+              payload.removeFirst(8)
+            }
           }
-          else {
-            eventId = id
-            payload.removeFirst(8)
-          }
+          
         }
 
       case .datagramCompleteInFrame, .datagramFirstFrame, .datagramMiddleFrame, .datagramFinalFrame:
@@ -97,6 +99,40 @@ public class OpenLCBMessage : NSObject {
     }
   }
   
+  public var isLocoNetEvent : Bool {
+    guard let eventId else {
+      return false
+    }
+    let result = messageTypeIndicator == .producerConsumerEventReport && ((eventId & 0xffff000000000000) == OpenLCBWellKnownEvent.locoNetMessage.rawValue)
+    return result
+  }
+  
+  public var locoNetMessage : LocoNetMessage? {
+    
+    guard let eventId, isLocoNetEvent else {
+      return nil
+    }
+
+    var data : [UInt8] = []
+    
+    var firstByte = true
+    
+    for byte in eventId.bigEndianData {
+      if !firstByte && byte == 0xff {
+        break
+      }
+      firstByte = false
+      data.append(byte)
+    }
+    
+    data.append(contentsOf: payload)
+    
+    data.removeFirst(2)
+    
+    return LocoNetMessage(payload: data)
+  
+  }
+  
   public var datagramType : OpenLCBDatagramType? {
     get {
       
@@ -107,6 +143,22 @@ public class OpenLCBMessage : NSObject {
       return OpenLCBDatagramType(rawValue: UInt16(bigEndianData: [payload[0], payload[1]])!)
       
     }
+  }
+  
+  public var datagramReplyTimeOut : OpenLCBDatagramTimeout? {
+
+    guard messageTypeIndicator == .datagramReceivedOK else {
+      return nil
+    }
+    
+    var flags : UInt8 = 0
+    
+    if payload.count > 0 {
+      flags = payload[0]
+    }
+    
+    return OpenLCBDatagramTimeout(rawValue: flags & 0x8f)
+
   }
   
   public var isStreamOrDatagram : Bool {

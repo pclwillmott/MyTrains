@@ -30,6 +30,8 @@ public enum OpenLCBErrorCode : UInt16 {
   case permanentErrorWriteAccessToReadOnlySpace                              = 0x1083
   case permanentErrorReadCVFailed                                            = 0x1084
   case permanentErrorWriteCVFailed                                           = 0x1085
+  case permanentErrorInvalidArgumentsFirmwareDataIncompatibleWithHardware    = 0x1088
+  case permanentErrorInvalidArgumentsFormwareDataInvalidOrCorrupted          = 0x1089
   case permanentErrorReserved9                                               = 0x1090
   case permanentErrorReserved10                                              = 0x10a0
   case permanentErrorReserved11                                              = 0x10b0
@@ -50,6 +52,7 @@ public enum OpenLCBErrorCode : UInt16 {
   case temporaryErrorReserved7                                               = 0x2070
   case temporaryErrorTransferError                                           = 0x2080
   case temporaryErrorLocoNetCollision                                        = 0x2081
+  case temporaryErrorTransferErrorFailedChecksum                             = 0x2088
   case temporaryErrorReserved9                                               = 0x2090
   case temporaryErrorReserved10                                              = 0x20a0
   case temporaryErrorReserved11                                              = 0x20b0

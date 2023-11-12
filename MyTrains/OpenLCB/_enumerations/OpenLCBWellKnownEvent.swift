@@ -31,7 +31,7 @@ public enum OpenLCBWellKnownEvent : UInt64 {
   case nodeIsATrain                        = 0x0101000000000303
   case nodeIsATractionProxy                = 0x0101000000000304
   case firmwareCorrupted                   = 0x0101000000000601
-  case firmwareUpgradeRequestBySwitch      = 0x0101000000000602
+  case firmwareUpgradeRequestedBySwitch    = 0x0101000000000602
   case defaultFastClock                    = 0x0101000001000000
   case defaultRealTimeClock                = 0x0101000001010000
   case alternateClock1                     = 0x0101000001020000

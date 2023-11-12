@@ -159,8 +159,8 @@ public class LocoNet {
   public func locoNetMessagePartReceived(message:OpenLCBMessage) {
     
     switch message.messageTypeIndicator {
-      
-    case .locoNetMessageReceivedOnlyFrame:
+    
+/*    case .locoNetMessageReceivedOnlyFrame:
       
       if let locoNetMessage = LocoNetMessage(payload: message.payload) {
         locoNetMessage.timeStamp = Date.timeIntervalSinceReferenceDate
@@ -187,7 +187,7 @@ public class LocoNet {
         lastTimeStamp = locoNetMessage.timeStamp
         locoNetMessageReceived(message: locoNetMessage)
       }
-      
+    */
     default:
       break
     }
@@ -265,7 +265,30 @@ public class LocoNet {
         default:
           break
         }
-        
+
+      }
+      
+      // Handle leading two byte event cases
+      
+      else if let event = OpenLCBWellKnownEvent(rawValue: message.eventId! & 0xffff000000000000) {
+
+        switch event {
+
+        case .locoNetMessage:
+
+          if message.sourceNodeId! == gatewayNodeId, let locoNetMessage = message.locoNetMessage {
+              
+            locoNetMessage.timeStamp = Date.timeIntervalSinceReferenceDate
+            locoNetMessage.timeSinceLastMessage = locoNetMessage.timeStamp - lastTimeStamp
+            lastTimeStamp = locoNetMessage.timeStamp
+            locoNetMessageReceived(message: locoNetMessage)
+            
+          }
+          
+        default:
+          break
+        }
+
       }
       
     case .sendLocoNetMessageReply:
@@ -359,13 +382,13 @@ public class LocoNet {
         }
         
       }
-      
+/*
     case .locoNetMessageReceivedOnlyFrame, .locoNetMessageReceivedFirstFrame, .locoNetMessageReceivedMiddleFrame, .locoNetMessageReceivedLastFrame:
     
       if message.sourceNodeId! == gatewayNodeId {
         locoNetMessagePartReceived(message: message)
       }
-      
+      */
     default:
       break
       

@@ -181,6 +181,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
 
   }
   
+  @IBAction func mnuLCCNetworkTrafficMonitor(_ sender: NSMenuItem) {
+    
+    let x = ModalWindow.OpenLCBMonitor
+    let wc = x.windowController
+    let vc = x.viewController(windowController: wc) as! OpenLCBMonitorVC
+    wc.showWindow(nil)
+
+  }
+  
   @IBAction func mnuMonitorAction(_ sender: NSMenuItem) {
     
     guard let networkLayer = myTrainsController.openLCBNetworkLayer, let monitorNode = networkLayer.getLocoNetMonitor() else {

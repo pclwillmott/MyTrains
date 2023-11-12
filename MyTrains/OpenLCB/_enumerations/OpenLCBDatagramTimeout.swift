@@ -27,6 +27,10 @@ public enum OpenLCBDatagramTimeout : UInt8 {
   case replyPending16384s    = 0x8e
   case replyPending32768s    = 0x8f
  
+  public var replyPending : Bool {
+    return self != .ok
+  }
+  
   public var timeout : TimeInterval {
     get {
       
@@ -54,4 +58,5 @@ public enum OpenLCBDatagramTimeout : UInt8 {
       
     }
   }
+  
 }

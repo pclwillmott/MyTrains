@@ -268,7 +268,7 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
           sendNext()
         }
         
-        if !blockAllMessages && consumerIdentified {
+        if !blockAllMessages {
           networkLayer?.sendLocoNetMessageReceived(sourceNodeId: nodeId, locoNetMessage: message)
         }
         

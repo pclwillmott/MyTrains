@@ -63,6 +63,9 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   internal let addressBaudRate         : Int =  256
   internal let addressParity           : Int =  257
   internal let addressFlowControl      : Int =  258
+  
+  internal var observers : [Int:OpenLCBCANDelegate] = [:]
+  internal var nextObserverId : Int = 1
 
   private var devicePath : String {
     get {
@@ -221,6 +224,9 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
 
   public func send(data:String) {
 //    DispatchQueue.main.async {
+    for (_, observer) in observers {
+      observer.rawCANPacketSent(packet: data)
+    }
       self.serialPort?.write(data:[UInt8](data.utf8))
  //   }
   }
@@ -264,10 +270,20 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
         buffer.removeFirst(frame.count)
 
         if let newframe = LCCCANFrame(message: frame) {
+          
           newframe.timeStamp = Date.timeIntervalSinceReferenceDate
           newframe.timeSinceLastMessage = newframe.timeStamp - lastTimeStamp
           lastTimeStamp = newframe.timeStamp
+          for (_, observer) in observers {
+            observer.openLCBCANPacketReceived(packet: newframe)
+          }
           canFrameReceived(frame: newframe)
+
+        }
+        else {
+          for (_, observer) in observers {
+            observer.rawCANPacketReceived(packet: frame)
+          }
         }
 
       }
@@ -315,6 +331,13 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
         return
 
       }
+      
+      // *** HUB TESTING ***
+      if (frame.sourceNIDAlias == 0xe46 ||  frame.sourceNIDAlias == 0x11e) && frame.canControlFrameFormat.isCheckIdFrame {
+    //    sendReserveIdFrame(alias: frame.sourceNIDAlias)
+        return
+      }
+
 
       for (_, internalNode) in managedNodeIdLookup {
         
@@ -423,21 +446,37 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
 
         switch message.canFrameType {
         case .globalAndAddressedMTI:
-          switch message.flags {
-          case .onlyFrame:
-            stealAlias(message: message)
-            addToInputQueue(message: message)
-          case .firstFrame:
+          switch message.messageTypeIndicator {
+          case .producerConsumerEventReportWithPayloadFirstFrame:
             splitFrames[frame.splitFrameId] = frame
-          case .middleFrame, .lastFrame:
+          case .producerConsumerEventReportWithPayloadMiddleFrame, .producerConsumerEventReportWithPayloadLastFrame:
             if let first = splitFrames[frame.splitFrameId] {
-              frame.data.removeFirst(2)
               first.data += frame.data
-              if message.flags == .lastFrame, let message = OpenLCBMessage(frame: first) {
+              if message.messageTypeIndicator == .producerConsumerEventReportWithPayloadLastFrame, let message = OpenLCBMessage(frame: first) {
                 message.flags = .onlyFrame
+                message.messageTypeIndicator = .producerConsumerEventReport
                 stealAlias(message: message)
                 addToInputQueue(message: message)
                 splitFrames.removeValue(forKey: first.splitFrameId)
+              }
+            }
+          default:
+            switch message.flags {
+            case .onlyFrame:
+              stealAlias(message: message)
+              addToInputQueue(message: message)
+            case .firstFrame:
+              splitFrames[frame.splitFrameId] = frame
+            case .middleFrame, .lastFrame:
+              if let first = splitFrames[frame.splitFrameId] {
+                frame.data.removeFirst(2)
+                first.data += frame.data
+                if message.flags == .lastFrame, let message = OpenLCBMessage(frame: first) {
+                  message.flags = .onlyFrame
+                  stealAlias(message: message)
+                  addToInputQueue(message: message)
+                  splitFrames.removeValue(forKey: first.splitFrameId)
+                }
               }
             }
           }
@@ -754,6 +793,46 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
             delete = true
             
           }
+          else if message.messageTypeIndicator == .producerConsumerEventReport {
+            
+            var data : [UInt8] = []
+            
+            data.append(contentsOf: message.eventId!.bigEndianData)
+            data.append(contentsOf: message.payload)
+            
+            let numberOfFrames = 1 + (data.count / 8)
+            
+            if numberOfFrames == 1 {
+              if let frame = LCCCANFrame(message: message) {
+                send(data: frame.message)
+              }
+            }
+            else {
+              
+              for frameNumber in 1 ... numberOfFrames {
+                
+                switch frameNumber {
+                case 1:
+                  message.messageTypeIndicator = .producerConsumerEventReportWithPayloadFirstFrame
+                case numberOfFrames:
+                  message.messageTypeIndicator = .producerConsumerEventReportWithPayloadLastFrame
+                default:
+                  message.messageTypeIndicator = .producerConsumerEventReportWithPayloadMiddleFrame
+                }
+                
+                var payload : [UInt8] = [UInt8](data.prefix(8))
+                
+                data.removeFirst(8)
+                
+                if let frame = LCCCANFrame(pcerMessage: message, payload: payload) {
+                  send(data: frame.message)
+                }
+              
+              }
+              
+            }
+            
+          }
           else if message.isAddressPresent {
             
             if let frame = LCCCANFrame(message: message) {
@@ -877,7 +956,53 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     }
   }
   
+  private func testPRNG() {
+    
+ //   let nodeId : UInt64 = 0x0000020203000540
+    let nodeId : UInt64   = 0x0000000000000000
+ //   let nodeId : UInt64   = 0x0000020121000012
+
+    var lfsr1 : UInt32
+    
+    var lfsr2 : UInt32
+
+    lfsr1 = UInt32(nodeId >> 24)
+    
+    lfsr2 = UInt32(nodeId & 0xffffff)
+    
+    for index in 0...15 {
+
+      print("\(index):  \(((UInt64(lfsr1) << 24) | UInt64(lfsr2)).toHexDotFormat(numberOfBytes: 6))  ",terminator: "")
+
+      let result = UInt16((lfsr1 ^ lfsr2 ^ (lfsr1 >> 12) ^ (lfsr2 >> 12) ) & 0xFFF)
+
+      let temp1 : UInt32 = ((lfsr1 << 9) | ((lfsr2 >> 15) & 0x1FF)) & 0xFFFFFF
+      let temp2 : UInt32 = (lfsr2 << 9) & 0xFFFFFF
+      
+      // add
+      
+      lfsr2 += temp2 + 0x7A4BA9
+      
+      lfsr1 += temp1 + 0x1B0CA3
+      
+      // carry
+      
+      lfsr1 = (lfsr1 & 0xFFFFFF) + ((lfsr2 & 0xFF000000) >> 24)
+      lfsr2 &= 0xFFFFFF
+      
+      // Form a 12-bit alias from the PRNG state:
+      
+//      let result = UInt16((lfsr1 ^ lfsr2 ^ (lfsr1 >> 12) ^ (lfsr2 >> 12) ) & 0xFFF)
+      
+      print(" 0x\(result.toHex(numberOfDigits: 3))   \(((UInt64(lfsr1) << 24) | UInt64(lfsr2)).toHexDotFormat(numberOfBytes: 6))")
+
+    }
+
+  }
+  
   private func nextAlias() -> UInt16 {
+        
+  //      print(testPRNG())
     
     // The PRNG state is stored in two 32-bit quantities:
     // uint32_t lfsr1, lfsr2; // sequence value: lfsr1 is upper 24 bits, lfsr2 lower
@@ -887,7 +1012,11 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     // To load the PRNG from the Node ID:
     // lfsr1 = (nid[0] << 16) | (nid[1] << 8) | nid[2]; // upper bits
     // lfsr2 = (nid[3] << 16) | (nid[4] << 8) | nid[5];
+
+    // Form a 12-bit alias from the PRNG state:
     
+    let result = UInt16((self.lfsr1 ^ self.lfsr2 ^ (self.lfsr1 >> 12) ^ (self.lfsr2 >> 12) ) & 0xFFF)
+
     // To step the PRNG:
     // First, form 2^9*val
     
@@ -905,9 +1034,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     self.lfsr1 = (self.lfsr1 & 0xFFFFFF) + ((self.lfsr2 & 0xFF000000) >> 24)
     self.lfsr2 &= 0xFFFFFF
     
-    // Form a 12-bit alias from the PRNG state:
-    
-    return UInt16((self.lfsr1 ^ self.lfsr2 ^ (self.lfsr1 >> 12) ^ (self.lfsr2 >> 12) ) & 0xFFF)
+    return result
     
   }
   
@@ -1019,7 +1146,8 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   }
   
   private func send(header: String, data:String) {
-    send(data: ":X\(header)N\(data);")
+    let packet = ":X\(header)N\(data);"
+    send(data: packet)
   }
 
   private func sendCheckIdFrame(format:OpenLCBCANControlFrameFormat, nodeId:UInt64, alias: UInt16) {
@@ -1116,6 +1244,17 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   public override func stop() {
     close()
     super.stop()
+  }
+  
+  public func addObserver(observer:OpenLCBCANDelegate) -> Int {
+    let id = nextObserverId
+    nextObserverId += 1
+    observers[id] = observer
+    return id
+  }
+  
+  public func removeObserver(id:Int) {
+    observers.removeValue(forKey: id)
   }
   
   public func addToOutputQueue(message: OpenLCBMessage) {

@@ -109,7 +109,23 @@ public class OpenLCBNetworkLayer : NSObject {
   
   private var configurationToolManager = OpenLCBNodeManager()
   
+  private var observers : [Int:OpenLCBCANDelegate] = [:]
+  
+  private var nextObserverId : Int = 1
+  
   // MARK: Public Properties
+  
+  public var defaultCANGateway : OpenLCBCANGateway? {
+  
+    for (_, node) in virtualNodes {
+      if node.virtualNodeType == .canGatewayNode {
+        return node as? OpenLCBCANGateway
+      }
+    }
+    
+    return nil
+    
+  }
   
   public var state : OpenLCBNetworkLayerState {
     get {
@@ -139,6 +155,17 @@ public class OpenLCBNetworkLayer : NSObject {
       return
     }
     
+  }
+  
+  public func addObserver(observer:OpenLCBCANDelegate) -> Int {
+    let id = nextObserverId
+    nextObserverId += 1
+    observers[id] = observer
+    return id
+  }
+  
+  public func removeObserver(id:Int) {
+    observers.removeValue(forKey: id)
   }
   
   public func removeAlias(nodeId:UInt64) {
@@ -280,6 +307,10 @@ public class OpenLCBNetworkLayer : NSObject {
     
     message.gatewayNodeId = gatewayNodeId
     
+    for (_, observer) in observers {
+      observer.OpenLCBMessageReceived(message: message)
+    }
+    
     for (_, virtualNode) in virtualNodes {
       if virtualNode.nodeId != message.gatewayNodeId {
         virtualNode.openLCBMessageReceived(message: message)
@@ -323,6 +354,30 @@ public class OpenLCBNetworkLayer : NSObject {
 
   public func sendLocoNetMessageReceived(sourceNodeId:UInt64, locoNetMessage:[UInt8]) {
     
+    let message = OpenLCBMessage(messageTypeIndicator: .producerConsumerEventReport)
+    
+    message.sourceNodeId = sourceNodeId
+    
+    var data = [UInt8](OpenLCBWellKnownEvent.locoNetMessage.rawValue.bigEndianData.prefix(2))
+    
+    data.append(contentsOf: locoNetMessage)
+    
+    var numberOfPaddingBytes = 8 - data.count
+    
+    while numberOfPaddingBytes > 0 {
+      data.append(0xff)
+      numberOfPaddingBytes -= 1
+    }
+    
+    message.eventId = UInt64(bigEndianData: [UInt8](data.prefix(8)))
+    
+    data.removeFirst(8)
+    
+    message.payload = data
+        
+    sendMessage(message: message)
+
+    /* 
     let numberOfFrames = 1 + (locoNetMessage.count - 1) / 8
     
     if numberOfFrames == 1 {
@@ -358,6 +413,7 @@ public class OpenLCBNetworkLayer : NSObject {
       }
       
     }
+    */
     
   }
 
@@ -592,6 +648,40 @@ public class OpenLCBNetworkLayer : NSObject {
     
   }
 
+  public func sendFreezeCommand(sourceNodeId:UInt64, destinationNodeId:UInt64) {
+    
+    var payload : [UInt8] = []
+
+    payload.append(contentsOf: OpenLCBDatagramType.freezeCommand.rawValue.bigEndianData)
+    
+    payload.append(OpenLCBNodeMemoryAddressSpace.firmware.rawValue)
+    
+    sendDatagram(sourceNodeId: sourceNodeId, destinationNodeId: destinationNodeId, data: payload)
+
+  }
+  
+  public func sendUnfreezeCommand(sourceNodeId:UInt64, destinationNodeId:UInt64) {
+    
+    var payload : [UInt8] = []
+
+    payload.append(contentsOf: OpenLCBDatagramType.unfreezeCommand.rawValue.bigEndianData)
+    
+    payload.append(OpenLCBNodeMemoryAddressSpace.firmware.rawValue)
+    
+    sendDatagram(sourceNodeId: sourceNodeId, destinationNodeId: destinationNodeId, data: payload)
+
+  }
+  
+  public func sendUpdateCompleteCommand(sourceNodeId:UInt64, destinationNodeId:UInt64) {
+    
+    var payload : [UInt8] = []
+
+    payload.append(contentsOf: OpenLCBDatagramType.updateCompleteCommand.rawValue.bigEndianData)
+    
+    sendDatagram(sourceNodeId: sourceNodeId, destinationNodeId: destinationNodeId, data: payload)
+
+  }
+  
   public func sendDatagram(sourceNodeId:UInt64, destinationNodeId:UInt64, data: [UInt8]) {
 
     guard data.count >= 0 && data.count <= 72 else {

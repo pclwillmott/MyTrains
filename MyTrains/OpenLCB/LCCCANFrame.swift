@@ -16,7 +16,6 @@ public class LCCCANFrame : NSObject {
     // Check that the message conforms to the standard
     
     guard LCCCANFrame.canMessageOK(message: message) else {
-      print("LCCCANFrame: Error")
       return nil
     }
     
@@ -99,6 +98,38 @@ public class LCCCANFrame : NSObject {
     for byte in message.payload {
       data.append(byte)
     }
+    
+    // Init super
+    
+    super.init()
+    
+    // Done.
+    
+  }
+
+  init?(pcerMessage:OpenLCBMessage, payload:[UInt8]) {
+    
+    // Check that the message is complete
+    
+    var message = pcerMessage
+    
+    guard message.isMessageComplete else {
+      return nil
+    }
+    
+    // Build CAN header
+    
+    header  = 0x18000000 // CAN Prefix
+    
+    header |= (OpenLCBMessage.canFrameType(message: message).rawValue & 0x07) << 24
+    
+    header |= UInt32(message.messageTypeIndicator.rawValue & 0x0fff) << 12
+    
+    header |= UInt32(message.sourceNIDAlias! & 0xfff)
+    
+    // Build CAN data payload
+    
+    data.append(contentsOf: payload)
     
     // Init super
     
@@ -240,7 +271,7 @@ public class LCCCANFrame : NSObject {
   
   public var header : UInt32
   
-  public var data : [UInt8]
+  public var data : [UInt8] = []
   
   public var splitFrameId : UInt64 {
     
@@ -282,6 +313,21 @@ public class LCCCANFrame : NSObject {
     get {
       return (header & mask_FrameType) == mask_FrameType ? .openLCBMessage : .canControlFrame
     }
+  }
+  
+  
+  public var openLCBMessageCANFrameType : OpenLCBMessageCANFrameType? {
+    guard frameType == .openLCBMessage else {
+      return nil
+    }
+    return OpenLCBMessageCANFrameType(rawValue: (header & 0x07000000) >> 24)
+  }
+  
+  public var openLCBMessageTypeIndicator : OpenLCBMTI? {
+    guard frameType == .openLCBMessage, let openLCBMessageCANFrameType, openLCBMessageCANFrameType == .globalAndAddressedMTI else {
+      return nil
+    }
+    return OpenLCBMTI(rawValue: UInt16((header >> 12) & 0xfff))!
   }
   
   public var variableField : UInt32 {
@@ -347,80 +393,7 @@ public class LCCCANFrame : NSObject {
   }
   
   public static func canMessageOK(message:String) -> Bool {
-    
-    // Check for minimum length (":XFN;")
-    
-    guard message.count >= 5 else {
-      print("LCCCANFrame.canMessageOK: \"\(message)\"")
-      return false
-    }
- 
-    // Check for valid prefix and suffix
-    
-    guard message.prefix(2) == ":X" && message.last == ";" else {
-      print("LCCCANFrame.canMessageOK: \"\(message)\"")
-      return false
-    }
-    
-    // Strip off prefix and suffix
-    
-    var temp1 = message
-    
-    temp1.removeFirst()
-    temp1.removeFirst()
-    temp1.removeLast()
-    
-    // Check that there is only one "N" and split into header and data strings
-    
-    let temp2 = temp1.split(separator: "N")
-    
-    guard temp2.count > 0 && temp2.count < 3 else {
-      print("LCCCANFrame.canMessageOK: \"\(message)\"")
-      return false
-    }
-    
-    if temp2.count == 1 && temp1.last != "N" {
-      print("LCCCANFrame.canMessageOK: \"\(message)\"")
-      return false
-    }
-    
-    // Check that the header is not greater than 8 hex digits
-    
-    if temp2[0].count > 8 {
-      print("LCCCANFrame.canMessageOK: \"\(message)\"")
-      return false
-    }
-    
-    // Check that the data section has two hex digits per byte
-    
-    if temp2.count > 1 && temp2[1].count % 2 != 0 {
-      print("LCCCANFrame.canMessageOK: \"\(message)\"")
-      return false
-    }
-    
-    // Check that the header and data sections only contain hex digits in upper case
-    
-    let hexDigits : Set<Character> = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"]
-    
-    var index = 0
- 
-    while index < temp2.count {
-      
-      for char in temp2[index] {
-        guard hexDigits.contains(char) else {
-          print("LCCCANFrame.canMessageOK: \"\(message)\"")
-          return false
-        }
-      }
-      
-      index += 1
-      
-    }
-    
-    // All is well, report success
-    
-    return true
-    
+    return message.prefix(2) == ":X" && message.last == ";"
   }
   
 }

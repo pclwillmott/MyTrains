@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="22155" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22155"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -520,6 +520,12 @@
                                                 <action selector="mnuViewLCCNetwork:" target="Voe-Tx-rLC" id="A5L-Mn-7Ym"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Network Traffic Monitor" id="VJK-z7-nwA">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="mnuLCCNetworkTrafficMonitor:" target="Voe-Tx-rLC" id="uSg-cZ-She"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="DCC Programmer Tool" id="cN1-05-9vS">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
@@ -692,7 +698,7 @@
                                     <rect key="frame" x="4" y="5" width="785" height="48"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <button toolTip="Track Power Off" fixedFrame="YES" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="McJ-kX-caF">
+                                        <button toolTip="Track Power Off" allowsExpansionToolTips="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="McJ-kX-caF">
                                             <rect key="frame" x="683" y="7" width="30" height="36"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="circle.fill" catalog="system" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="JfX-HO-gOf">
@@ -704,7 +710,7 @@
                                                 <action selector="btnPowerOffAction:" target="XfG-lQ-9wD" id="fOC-OG-I6c"/>
                                             </connections>
                                         </button>
-                                        <button toolTip="Track Power On" fixedFrame="YES" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8tU-Og-bFk">
+                                        <button toolTip="Track Power On" allowsExpansionToolTips="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8tU-Og-bFk">
                                             <rect key="frame" x="633" y="7" width="30" height="36"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="circle.fill" catalog="system" imagePosition="only" alignment="center" alternateImage="circle" imageScaling="proportionallyUpOrDown" inset="2" id="Gvo-tN-Fay">
@@ -716,7 +722,7 @@
                                                 <action selector="btnPowerOnAction:" target="XfG-lQ-9wD" id="mzK-gd-HMp"/>
                                             </connections>
                                         </button>
-                                        <button toolTip="Set Track to Idle" fixedFrame="YES" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gX1-7J-iGd">
+                                        <button toolTip="Set Track to Idle" allowsExpansionToolTips="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gX1-7J-iGd">
                                             <rect key="frame" x="733" y="7" width="30" height="36"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="pause.circle" catalog="system" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="JCt-Qa-HAq">
@@ -734,7 +740,7 @@
                                                 <action selector="swConnectAction:" target="XfG-lQ-9wD" id="N8P-iX-9uz"/>
                                             </connections>
                                         </switch>
-                                        <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FvV-6g-VOW">
+                                        <comboBox focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FvV-6g-VOW">
                                             <rect key="frame" x="20" y="12" width="426" height="25"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                             <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="5" id="XS8-6K-Yk7">
@@ -746,7 +752,7 @@
                                                 <action selector="cboLayoutAction:" target="XfG-lQ-9wD" id="kNJ-HQ-kr7"/>
                                             </connections>
                                         </comboBox>
-                                        <button toolTip="Zoom In" fixedFrame="YES" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TQD-qK-bW9">
+                                        <button toolTip="Zoom In" allowsExpansionToolTips="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TQD-qK-bW9">
                                             <rect key="frame" x="465" y="9.5" width="24" height="27"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="bM7-wK-5yz">
@@ -758,7 +764,7 @@
                                                 <action selector="btnZoomIn:" target="XfG-lQ-9wD" id="3HC-ng-edW"/>
                                             </connections>
                                         </button>
-                                        <button toolTip="Zoom Out" fixedFrame="YES" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Q4n-AY-BBa">
+                                        <button toolTip="Zoom Out" allowsExpansionToolTips="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Q4n-AY-BBa">
                                             <rect key="frame" x="499" y="8.5" width="24" height="28"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="I2B-d4-mmS">
@@ -771,7 +777,7 @@
                                                 <action selector="btnZoomOut:" target="XfG-lQ-9wD" id="X4x-2c-eP4"/>
                                             </connections>
                                         </button>
-                                        <button toolTip="Scale to Fit" fixedFrame="YES" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oeW-CB-kAA">
+                                        <button toolTip="Scale to Fit" allowsExpansionToolTips="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oeW-CB-kAA">
                                             <rect key="frame" x="533" y="9" width="24" height="28"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="Woq-Cj-kh4">
@@ -830,7 +836,7 @@
                                 <rect key="frame" x="547" y="19" width="220" height="55"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                             </customView>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SYz-3Q-vdS">
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SYz-3Q-vdS">
                                 <rect key="frame" x="545" y="5" width="224" height="11"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" id="vsf-TW-XPf">

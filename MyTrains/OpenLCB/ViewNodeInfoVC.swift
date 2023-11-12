@@ -61,6 +61,8 @@ class ViewNodeInfoVC: NSViewController, NSWindowDelegate, OpenLCBConfigurationTo
       self.view.window?.title = "\(node.manufacturerName) - \(node.nodeModelName) (\(node.nodeId.toHexDotFormat(numberOfBytes: 6)))"
     }
     
+    reload()
+    
     state = .waitingForGetConfigOptionsAck
     startTimeoutTimer()
     networkLayer?.sendGetConfigurationOptionsCommand(sourceNodeId: nodeId, destinationNodeId: node.nodeId)

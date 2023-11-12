@@ -56,9 +56,20 @@ public enum OpenLCBMTI : UInt16 {
   case streamDataProceed                                 = 0x0888
   case streamDataComplete                                = 0x08A8
   case sendLocoNetMessageReply                           = 0x0688   // 0b0000011010001000
-  case locoNetMessageReceivedOnlyFrame                   = 0x0680   // 0b0000011010000000
-  case locoNetMessageReceivedLastFrame                   = 0x0681   // 0b0000011010000001
-  case locoNetMessageReceivedMiddleFrame                 = 0x0682   // 0b0000011010000010
-  case locoNetMessageReceivedFirstFrame                  = 0x0683   // 0b0000011010000011
+//  case locoNetMessageReceivedOnlyFrame                   = 0x0680   // 0b0000011010000000
+//  case locoNetMessageReceivedLastFrame                   = 0x0681   // 0b0000011010000001
+//  case locoNetMessageReceivedMiddleFrame                 = 0x0682   // 0b0000011010000010
+//  case locoNetMessageReceivedFirstFrame                  = 0x0683   // 0b0000011010000011
   case unknown                                           = 0xFFFF
+  
+  public var isAddressPresent : Bool {
+    let mask : UInt16 = 0x0008
+    return (self.rawValue & mask) == mask
+  }
+  
+  public var isEventPresent : Bool {
+    let mask : UInt16 = 0x0004
+    return (self.rawValue & mask) == mask
+  }
+  
 }
