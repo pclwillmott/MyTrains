@@ -268,7 +268,7 @@ public class LocoNet {
 
       }
       
-      // Handle leading two byte event cases
+      // Handle leading two byte event id cases
       
       else if let event = OpenLCBWellKnownEvent(rawValue: message.eventId! & 0xffff000000000000) {
 
