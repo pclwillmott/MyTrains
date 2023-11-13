@@ -93,12 +93,14 @@ class OpenLCBMonitorVC: NSViewController, NSWindowDelegate, OpenLCBCANDelegate {
   
   private func addToConsole(message:String) {
   
-    lineBuffer.append(message)
-    
-    while lineBuffer.count > 2000 {
-      lineBuffer.removeFirst()
+    if !message.isEmpty {
+      lineBuffer.append(message)
+      
+      while lineBuffer.count > 2000 {
+        lineBuffer.removeFirst()
+      }
     }
-
+    
     if !isPaused {
       
       var newString = ""

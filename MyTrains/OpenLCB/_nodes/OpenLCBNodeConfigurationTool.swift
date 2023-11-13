@@ -35,6 +35,8 @@ public class OpenLCBNodeConfigurationTool : OpenLCBNodeVirtual {
   
   internal override func resetToFactoryDefaults() {
 
+    super.resetToFactoryDefaults()
+    
     acdiManufacturerSpaceVersion = 4
     
     manufacturerName    = virtualNodeType.manufacturerName

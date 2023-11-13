@@ -35,6 +35,8 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     
     isLocoNetGatewayProtocolSupported = true
     
+    datagramTypesSupported.insert(.sendlocoNetMessage)
+    
     if !memorySpacesInitialized {
       resetToFactoryDefaults()
     }
@@ -135,6 +137,8 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   
   internal override func resetToFactoryDefaults() {
     
+    super.resetToFactoryDefaults()
+    
     acdiManufacturerSpaceVersion = 4
     
     manufacturerName    = virtualNodeType.manufacturerName
@@ -163,6 +167,8 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   
   internal override func resetReboot() {
 
+    super.resetReboot()
+    
     close()
     
     buffer.removeAll()

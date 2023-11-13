@@ -168,6 +168,8 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   
   internal override func resetToFactoryDefaults() {
     
+    super.resetToFactoryDefaults()
+    
     acdiManufacturerSpaceVersion = 4
     
     manufacturerName    = virtualNodeType.manufacturerName
@@ -194,6 +196,8 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   
   internal override func resetReboot() {
 
+    super.resetReboot()
+    
     close()
     
     buffer.removeAll()

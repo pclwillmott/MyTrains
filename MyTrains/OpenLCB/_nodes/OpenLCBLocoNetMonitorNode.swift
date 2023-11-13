@@ -72,6 +72,8 @@ public class OpenLCBLocoNetMonitorNode : OpenLCBNodeVirtual, LocoNetDelegate {
   // MARK: Private Methods
   
   internal override func resetToFactoryDefaults() {
+    
+    super.resetToFactoryDefaults()
 
     acdiManufacturerSpaceVersion = 4
     
@@ -90,6 +92,8 @@ public class OpenLCBLocoNetMonitorNode : OpenLCBNodeVirtual, LocoNetDelegate {
   }
 
   internal override func resetReboot() {
+    
+    super.resetReboot()
     
     gateways.removeAll()
     

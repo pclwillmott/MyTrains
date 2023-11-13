@@ -11,8 +11,10 @@ import Cocoa
 private enum State {
   case idle
   case waitingForFreezeConfirmation
+  case waitingForProtocolSupportReply
   case waitingForWriteReply
   case waitingForUnfreezeConfirmation
+  case waitingToComplete
 }
 
 class OpenLCBFirmwareUpdateVC: NSViewController, NSWindowDelegate, OpenLCBConfigurationToolDelegate {
@@ -46,9 +48,7 @@ class OpenLCBFirmwareUpdateVC: NSViewController, NSWindowDelegate, OpenLCBConfig
     
     self.view.window?.title = "Update Firmware - \(title) (\(node.nodeId.toHexDotFormat(numberOfBytes: 6)))"
     
-    btnStart.isEnabled = false
-    btnCancel.isEnabled = false
-    barProgress.isHidden = true
+    state = .idle
     
 //    dmfPath = UserDefaults.standard.string(forKey: DEFAULT.IPL_DMF_FILENAME) ?? ""
 
@@ -67,6 +67,8 @@ class OpenLCBFirmwareUpdateVC: NSViewController, NSWindowDelegate, OpenLCBConfig
   private var data : [UInt8] = []
   
   private var startAddress : Int = 0
+  
+  private var timeoutTimer : Timer?
   
   private var dmfPath : String {
     get {
@@ -90,9 +92,13 @@ class OpenLCBFirmwareUpdateVC: NSViewController, NSWindowDelegate, OpenLCBConfig
     didSet {
       switch state {
       case .idle:
+        btnStart.isEnabled = !dmfPath.isEmpty
         btnCancel.isEnabled = false
+        barProgress.isHidden = true
       default:
+        btnStart.isEnabled = false
         btnCancel.isEnabled = true
+        barProgress.isHidden = false
       }
     }
   }
@@ -104,24 +110,77 @@ class OpenLCBFirmwareUpdateVC: NSViewController, NSWindowDelegate, OpenLCBConfig
   public var configurationTool : OpenLCBNodeConfigurationTool?
 
   // MARK: Private Methods
+ 
+  @objc func timeoutTimerAction() {
+    
+    stopTimeoutTimer()
+
+    let alert = NSAlert()
+    alert.informativeText = ""
+    alert.addButton(withTitle: "OK")
+    alert.alertStyle = .warning
+
+    if state == .waitingToComplete {
+      alert.messageText = "Firmware upgrade completed!"
+    }
+    else {
+      alert.messageText = "The device is not responding. Firmware upgrade has been aborted."
+    }
+    
+    alert.runModal()
+
+    state = .idle
+    
+  }
   
+  private func startTimeoutTimer(timeOut:OpenLCBDatagramTimeout) {
+    let interval = timeOut.timeout
+    timeoutTimer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(timeoutTimerAction), userInfo: nil, repeats: false)
+    RunLoop.current.add(timeoutTimer!, forMode: .common)
+  }
+  
+  private func stopTimeoutTimer() {
+    timeoutTimer?.invalidate()
+    timeoutTimer = nil
+  }
+
   private func transferNextPart() {
     
     guard let node else {
       return
     }
     
-    state = .waitingForWriteReply
-    
-    let size = min(64, buffer.count)
-    
-    data.removeAll()
-    
-    for index in 0...size - 1 {
-      data.append(buffer[index])
+    barProgress.doubleValue += Double(data.count)
+
+    if !data.isEmpty {
+      startAddress += data.count
+      buffer.removeFirst(data.count)
     }
     
-    networkLayer?.sendNodeMemoryWriteRequest(sourceNodeId: nodeId, destinationNodeId: node.nodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.firmware.rawValue, startAddress: startAddress, dataToWrite: data)
+    if buffer.isEmpty {
+      
+      state = .waitingForUnfreezeConfirmation
+      
+      networkLayer?.sendUnfreezeCommand(sourceNodeId: nodeId, destinationNodeId: node.nodeId)
+      
+    }
+    else {
+      
+      state = .waitingForWriteReply
+      
+      let size = min(64, buffer.count)
+      
+      data = []
+      
+      for index in 0...size - 1 {
+        data.append(buffer[index])
+      }
+      
+      DispatchQueue.main.async {
+        self.networkLayer?.sendNodeMemoryWriteRequest(sourceNodeId: self.nodeId, destinationNodeId: node.nodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.firmware.rawValue, startAddress: self.startAddress, dataToWrite: self.data)
+      }
+
+    }
     
   }
   
@@ -134,6 +193,73 @@ class OpenLCBFirmwareUpdateVC: NSViewController, NSWindowDelegate, OpenLCBConfig
     }
     
     switch message.messageTypeIndicator {
+    
+    case .datagramReceivedOK:
+      
+      if message.destinationNodeId! == nodeId && state == .waitingForWriteReply {
+        
+        if let result = message.datagramReplyTimeOut {
+          
+          switch result {
+          case .ok:
+            transferNextPart()
+          case .replyPendingNoTimeout:
+            break
+          default:
+            startTimeoutTimer(timeOut: result)
+          }
+        }
+        
+      }
+    case .datagramRejected:
+
+      if message.destinationNodeId! == nodeId && state == .waitingForWriteReply {
+        
+        state = .idle
+        
+        let error = OpenLCBErrorCode(rawValue: UInt16(bigEndianData: [message.payload[0], message.payload[1]])!)!
+        
+        let alert = NSAlert()
+
+        alert.messageText = "The device reported an error: \"\(error.userMessage)\". The firmware upgrade has been aborted"
+        alert.informativeText = ""
+        alert.addButton(withTitle: "OK")
+        alert.alertStyle = .warning
+
+        alert.runModal()
+        
+      }
+      
+    case .protocolSupportReply:
+      
+      if message.destinationNodeId! == nodeId && state == .waitingForProtocolSupportReply {
+        
+        var protocols = message.payload
+        while protocols.count < 3 {
+          protocols.append(0x00)
+        }
+        
+        let mask_FirmwareUpgradeActive : UInt8 = 0x10
+        
+        if (protocols[2] & mask_FirmwareUpgradeActive) == mask_FirmwareUpgradeActive {
+          transferNextPart()
+        }
+        else {
+          
+          state = .idle
+          
+          let alert = NSAlert()
+
+          alert.messageText = "The device is not in firmware upgarde mode. The firmware upgrade has been aborted."
+          alert.informativeText = ""
+          alert.addButton(withTitle: "OK")
+          alert.alertStyle = .warning
+
+          alert.runModal()
+
+        }
+        
+      }
       
     case .initializationCompleteSimpleSetSufficient, .initializationCompleteFullProtocolRequired:
       
@@ -141,9 +267,13 @@ class OpenLCBFirmwareUpdateVC: NSViewController, NSWindowDelegate, OpenLCBConfig
         
         switch state {
         case .waitingForFreezeConfirmation:
-          transferNextPart()
+          state = .waitingForProtocolSupportReply
+          networkLayer?.sendProtocolSupportInquiry(sourceNodeId: nodeId, destinationNodeId: node.nodeId)
         case .waitingForUnfreezeConfirmation:
-          state = .idle
+          
+          state = .waitingToComplete
+          startTimeoutTimer(timeOut: .ok)
+          
         default:
           break
         }
@@ -157,7 +287,34 @@ class OpenLCBFirmwareUpdateVC: NSViewController, NSWindowDelegate, OpenLCBConfig
         if let datagramType = message.datagramType {
           
           switch datagramType {
+          case .writeReplyGeneric:
             
+            if state == .waitingForWriteReply, let space = OpenLCBNodeMemoryAddressSpace(rawValue: message.payload[6]), space == .firmware {
+              stopTimeoutTimer()
+              transferNextPart()
+            }
+            
+          case .writeReplyFailureGeneric:
+            
+            if state == .waitingForWriteReply, let space = OpenLCBNodeMemoryAddressSpace(rawValue: message.payload[6]), space == .firmware {
+              
+              stopTimeoutTimer()
+              
+              state = .idle
+              
+              let error = OpenLCBErrorCode(rawValue: UInt16(bigEndianData: [message.payload[7], message.payload[8]])!)!
+              
+              let alert = NSAlert()
+
+              alert.messageText = "The device reported an error: \"\(error.userMessage)\". The firmware upgrade has been aborted"
+              alert.informativeText = ""
+              alert.addButton(withTitle: "OK")
+              alert.alertStyle = .warning
+
+              alert.runModal()
+
+            }
+
           default:
             break
           }
@@ -214,19 +371,22 @@ class OpenLCBFirmwareUpdateVC: NSViewController, NSWindowDelegate, OpenLCBConfig
   
   @IBAction func btnStartAction(_ sender: NSButton) {
     
+    buffer = []
+    data = []
+    state = .idle
+    barProgress.doubleValue = 0.0
+
     guard FileManager.default.fileExists(atPath: dmfPath), let node else {
       return
     }
     
     if let contents = NSData(contentsOfFile: dmfPath) {
       buffer.append(contentsOf: contents)
+      barProgress.minValue = 0.0
+      barProgress.maxValue = Double(buffer.count)
       startAddress = 0
       state = .waitingForFreezeConfirmation
       networkLayer?.sendFreezeCommand(sourceNodeId: nodeId, destinationNodeId: node.nodeId)
-    }
-    else {
-      buffer = []
-      state = .idle
     }
     
   }
@@ -234,6 +394,7 @@ class OpenLCBFirmwareUpdateVC: NSViewController, NSWindowDelegate, OpenLCBConfig
   @IBOutlet weak var btnCancel: NSButton!
   
   @IBAction func btnCancelAction(_ sender: NSButton) {
+    state = .idle
   }
   
   @IBOutlet weak var barProgress: NSProgressIndicator!

@@ -91,6 +91,8 @@ class MonitorVC: NSViewController, NSWindowDelegate, OpenLCBLocoNetMonitorDelega
   
   private var gatewayDS = ComboBoxSimpleDS()
   
+  private var lineBuffer : [String] = []
+  
   private var captureFilename : String {
     get {
       return lblCaptureFileName.stringValue
@@ -350,26 +352,26 @@ class MonitorVC: NSViewController, NSWindowDelegate, OpenLCBLocoNetMonitorDelega
       }
     }
     
+    if !item.isEmpty {
+      lineBuffer.append(item)
+      
+      while lineBuffer.count > 2000 {
+        lineBuffer.removeFirst()
+      }
+    }
+    
     if !isPaused {
       
-      txtMonitor.string += "\(item)\n"
-      
-      let maxSize = 1 << 15
-      
-      updateLock.lock()
-      if txtMonitor.string.count > maxSize {
-        var newString = ""
-        let temp = txtMonitor.string.split(separator: "\n")
-        var index = temp.count - 1
-        while index >= 0 && newString.count < maxSize {
-          newString = "\(temp[index])\n\(newString)"
-          index -= 1
-        }
-        txtMonitor.string = newString
+      var newString = ""
+
+      for line in lineBuffer {
+        newString += "\(line)\n\n"
       }
-      updateLock.unlock()
+
+      txtMonitor.string = "\(newString)"
       
       let range = NSMakeRange(txtMonitor.string.count - 1, 0)
+
       txtMonitor.scrollRangeToVisible(range)
       
     }

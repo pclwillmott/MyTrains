@@ -114,6 +114,8 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
   
   internal override func resetToFactoryDefaults() {
 
+    super.resetToFactoryDefaults()
+    
     acdiManufacturerSpaceVersion = 4
     
     manufacturerName    = virtualNodeType.manufacturerName

@@ -74,6 +74,30 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   internal let addressACDIUserNodeName             : Int =  1
   internal let addressACDIUserNodeDescription      : Int =  64
   
+  internal var datagramTypesSupported : Set<OpenLCBDatagramType> = [
+    .writeCommandGeneric,
+    .writeCommand0xFD,
+    .writeCommand0xFE,
+    .writeCommand0xFF,
+//  .writeUnderMaskCommandGeneric,
+//  .writeUnderMaskCommand0xFD,
+//  .writeUnderMaskCommand0xFE,
+//  .writeUnderMaskCommand0xFF,
+    .readCommandGeneric,
+    .readCommand0xFD,
+    .readCommand0xFE,
+    .readCommand0xFF,
+    .getConfigurationOptionsCommand,
+    .getAddressSpaceInformationCommand,
+    .LockReserveCommand,
+//  .getUniqueIDCommand,
+    .unfreezeCommand,
+    .freezeCommand,
+//   .updateCompleteCommand,
+    .resetRebootCommand,
+    .reinitializeFactoryResetCommand,
+  ]
+  
   internal var hardwareNodeState : OpenLCBHardwareNodeState = .operating {
     didSet {
       isFirmwareUpgradeActive = hardwareNodeState == .firmwareUpgrade
@@ -180,10 +204,12 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   // MARK: Private Methods
   
   internal func resetReboot() {
+    lockedNodeId = 0
     setupConfigurationOptions()
   }
   
   internal func resetToFactoryDefaults() {
+    lockedNodeId = 0
   }
   
   internal func saveMemorySpaces() {
@@ -371,13 +397,13 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
       
     case .datagram:
       
-      if message.destinationNodeId! == nodeId {
+      if message.destinationNodeId! == nodeId, let datagramType = message.datagramType {
         
-        switch message.datagramType {
+        switch datagramType {
           
         case.getConfigurationOptionsCommand:
 
-          networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, timeOut: .ok)
+          networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, timeOut: .replyPendingNoTimeout)
           
           networkLayer?.sendGetConfigurationOptionsReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, node: self)
 
@@ -388,6 +414,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
           }
           
         case .resetRebootCommand:
+          
           networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, timeOut: .ok)
           
           DispatchQueue.main.async {
@@ -396,14 +423,19 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
           }
           
         case.LockReserveCommand:
+          
+          networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, timeOut: .replyPendingNoTimeout)
+
           message.payload.removeFirst(2)
+          
           if let id = UInt64(bigEndianData: message.payload) {
-            if lockedNodeId == 0 {
+            if lockedNodeId == 0 || id == 0 {
               lockedNodeId = id
             }
-            networkLayer?.sendLockReserveReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, reservedNodeId: lockedNodeId)
           }
           
+          networkLayer?.sendLockReserveReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, reservedNodeId: lockedNodeId)
+
         case .getAddressSpaceInformationCommand:
           
           message.payload.removeFirst(2) 
@@ -411,7 +443,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
           let space = message.payload[0]
 
           if let memorySpace = memorySpaces[space] {
-            networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, timeOut: .replyPending2s)
+            networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, timeOut: .replyPendingNoTimeout)
             networkLayer?.sendGetAddressSpaceInformationReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, memorySpace: memorySpace)
           }
           else {
@@ -420,7 +452,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
           
         case .readCommandGeneric, .readCommand0xFD, .readCommand0xFE, .readCommand0xFF:
  
-          networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, timeOut: .ok)
+          networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, timeOut: .replyPendingNoTimeout)
           
           var data = message.payload
           
@@ -474,10 +506,13 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
             
             hardwareNodeState = .operating
             
-            networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, timeOut: .ok)
+//          networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, timeOut: .ok)
 
             networkLayer?.sendInitializationComplete(sourceNodeId: nodeId, isSimpleSetSufficient: false)
-
+            
+//            firmwareBuffer.append(0)
+//            print(String(cString: firmwareBuffer))
+            
           }
           else {
             networkLayer?.sendDatagramRejected(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, errorCode: .permanentErrorAddressSpaceUnknown)
@@ -493,6 +528,8 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
 
             networkLayer?.sendInitializationComplete(sourceNodeId: nodeId, isSimpleSetSufficient: false)
             
+            firmwareBuffer = []
+            
           }
           else {
             networkLayer?.sendDatagramRejected(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, errorCode: .permanentErrorAddressSpaceUnknown)
@@ -500,7 +537,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
           
         case .writeCommandGeneric, .writeCommand0xFD, .writeCommand0xFE, .writeCommand0xFF:
 
-          networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, timeOut: .ok)
+          networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, timeOut: .replyPendingNoTimeout)
           
           var data = message.payload
           
@@ -555,7 +592,11 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
           }
 
         default:
-          break
+          
+          if !datagramTypesSupported.contains(datagramType) {
+            networkLayer?.sendDatagramRejected(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, errorCode: .permanentErrorNotImplementedSubcommandUnknown)
+          }
+    
         }
         
       }

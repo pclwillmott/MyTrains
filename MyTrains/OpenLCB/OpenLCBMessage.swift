@@ -160,7 +160,7 @@ public class OpenLCBMessage : NSObject {
     return OpenLCBDatagramTimeout(rawValue: flags & 0x8f)
 
   }
-  
+    
   public var isStreamOrDatagram : Bool {
     get {
       let mask : UInt16 = 0x1000

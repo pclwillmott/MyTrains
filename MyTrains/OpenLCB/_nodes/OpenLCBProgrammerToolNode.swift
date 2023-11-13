@@ -158,6 +158,8 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
   
   internal override func resetToFactoryDefaults() {
 
+    super.resetToFactoryDefaults()
+    
     acdiManufacturerSpaceVersion = 4
     
     manufacturerName    = virtualNodeType.manufacturerName
@@ -175,7 +177,9 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
   }
   
   internal override func resetReboot() {
+    
     super.resetReboot()
+    
     programmingTracks = [0:"Programming on the Main"]
     programmingTrackId = 0
     programmingMode = 0
@@ -184,6 +188,7 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
     dccTrainNodes = [:]
     networkLayer?.sendIdentifyProducer(sourceNodeId: nodeId, event: .trainSearchDCCShortAddress)
     networkLayer?.sendIdentifyProducer(sourceNodeId: nodeId, event: .trainSearchDCCLongAddress)
+    
   }
   
   // MARK: Public Methods
