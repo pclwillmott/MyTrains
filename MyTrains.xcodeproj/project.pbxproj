@@ -329,6 +329,8 @@
 		DADC21CE2944ABE2008A2F33 /* ClockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADC21CD2944ABE2008A2F33 /* ClockView.swift */; };
 		DADD696A296EFE5500BA4402 /* IOFunctionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADD6969296EFE5500BA4402 /* IOFunctionType.swift */; };
 		DADFFF902946025500CD2119 /* DateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADFFF8F2946025500CD2119 /* DateExtensions.swift */; };
+		DAE2BAD92B09157100FC587A /* OpenLCBLocationServiceFlag.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE2BAD82B09157100FC587A /* OpenLCBLocationServiceFlag.swift */; };
+		DAE2BADB2B091EB200FC587A /* OpenLCBStandardContentBlockType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE2BADA2B091EB200FC587A /* OpenLCBStandardContentBlockType.swift */; };
 		DAE8DD51286741BD0097C2D1 /* TrackPart.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE8DD50286741BD0097C2D1 /* TrackPart.swift */; };
 		DAE8DD53286751BE0097C2D1 /* Manufacturer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE8DD52286751BE0097C2D1 /* Manufacturer.swift */; };
 		DAE8DD55286754C00097C2D1 /* TrackCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE8DD54286754C00097C2D1 /* TrackCode.swift */; };
@@ -699,6 +701,8 @@
 		DADC21CD2944ABE2008A2F33 /* ClockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClockView.swift; sourceTree = "<group>"; };
 		DADD6969296EFE5500BA4402 /* IOFunctionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOFunctionType.swift; sourceTree = "<group>"; };
 		DADFFF8F2946025500CD2119 /* DateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensions.swift; sourceTree = "<group>"; };
+		DAE2BAD82B09157100FC587A /* OpenLCBLocationServiceFlag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBLocationServiceFlag.swift; sourceTree = "<group>"; };
+		DAE2BADA2B091EB200FC587A /* OpenLCBStandardContentBlockType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBStandardContentBlockType.swift; sourceTree = "<group>"; };
 		DAE8DD50286741BD0097C2D1 /* TrackPart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackPart.swift; sourceTree = "<group>"; };
 		DAE8DD52286751BE0097C2D1 /* Manufacturer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Manufacturer.swift; sourceTree = "<group>"; };
 		DAE8DD54286754C00097C2D1 /* TrackCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackCode.swift; sourceTree = "<group>"; };
@@ -1263,6 +1267,8 @@
 				DA1003222A7E81F7004CC86C /* OpenLCBProgrammingMode.swift */,
 				DACC2D812AA4B72800433CA8 /* OpenLCBEventWithPayloadFormat.swift */,
 				DAA030952AEE94B600BC5659 /* OpenLCBHardwareNodeState.swift */,
+				DAE2BAD82B09157100FC587A /* OpenLCBLocationServiceFlag.swift */,
+				DAE2BADA2B091EB200FC587A /* OpenLCBStandardContentBlockType.swift */,
 			);
 			path = _enumerations;
 			sourceTree = "<group>";
@@ -1476,6 +1482,7 @@
 				DAF3746F2A1A2A9B009E91F0 /* OpenLCBNodeVirtual.swift in Sources */,
 				DA1272C72A75773D00AB42F6 /* OpenLCBFDIFunctionKind.swift in Sources */,
 				DAF374732A1A2D94009E91F0 /* BundleExtensions.swift in Sources */,
+				DAE2BAD92B09157100FC587A /* OpenLCBLocationServiceFlag.swift in Sources */,
 				DA311BAC2A7BB8CC0019FDCE /* OpenLCBValidity.swift in Sources */,
 				DA3D87A9295DF99A003398F5 /* TC64CVTableDS.swift in Sources */,
 				DA8B5D1D282FE31600D39F07 /* InterfaceDelegate.swift in Sources */,
@@ -1613,6 +1620,7 @@
 				DA51FB9A29D8807E002CAAC1 /* NetworkType.swift in Sources */,
 				DA5E977829730902001453A1 /* SensorMessageType.swift in Sources */,
 				DA56261529E1BE7800D465CC /* OpenLCBMTI.swift in Sources */,
+				DAE2BADB2B091EB200FC587A /* OpenLCBStandardContentBlockType.swift in Sources */,
 				DAA5F3CC295CA2C200C25028 /* LocoNetDeviceTC64Extensions.swift in Sources */,
 				DA77795727AEF2E5007EEBE9 /* OpSwTableViewDS.swift in Sources */,
 				DA0D3E0C2A485E9A0042748C /* OpenLCBSearchMatchTarget.swift in Sources */,

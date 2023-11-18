@@ -54,25 +54,32 @@ public enum MyTrainsVirtualNodeType : String {
   
   public var baseNodeId : UInt64 {
     
-    get {
-      
-      let baseId : [MyTrainsVirtualNodeType:UInt64] = [
-        .canGatewayNode        : 0x09000d590001,
-        .applicationNode       : 0x09000d600001,
-        .locoNetMonitorNode    : 0x09000d60ff01,
-        .clockNode             : 0x09000d610001,
-        .locoNetGatewayNode    : 0x09000d620001,
-        .configurationToolNode : 0x09000d630001,
-        .trainNode             : 0x09000d640001,
-        .throttleNode          : 0x09000d650001,
-        .programmerToolNode    : 0x09000d660001,
-        .programmingTrackNode  : 0x09000d670001,
-        .digitraxBXP88Node     : 0x09000d680001,
-        .genericVirtualNode    : 0x09000d6f0001,
-      ]
-      
-      return baseId[self]!
-      
+    let baseId : [MyTrainsVirtualNodeType:UInt64] = [
+      .canGatewayNode        : 0x09000d590001,
+      .applicationNode       : 0x09000d600001,
+      .locoNetMonitorNode    : 0x09000d60ff01,
+      .clockNode             : 0x09000d610001,
+      .locoNetGatewayNode    : 0x09000d620001,
+      .configurationToolNode : 0x09000d630001,
+      .trainNode             : 0x09000d640001,
+      .throttleNode          : 0x09000d650001,
+      .programmerToolNode    : 0x09000d660001,
+      .programmingTrackNode  : 0x09000d670001,
+      .digitraxBXP88Node     : 0x09000d680001,
+      .genericVirtualNode    : 0x09000d6f0001,
+    ]
+    
+    return baseId[self]!
+
+  }
+  
+  public var nodeIdIncrement : UInt64 {
+    
+    switch self {
+    case .digitraxBXP88Node:
+      return 8
+    default:
+      return 1
     }
     
   }

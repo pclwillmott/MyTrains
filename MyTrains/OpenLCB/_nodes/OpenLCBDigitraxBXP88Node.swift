@@ -46,23 +46,6 @@ private enum BXP88OptionSwitches : Int {
 
 }
 
-private enum LocoNetEventType : UInt8 {
-  case none = 0
-  case locomotiveReport = 1
-  case shortCircuitReport = 2
-  case shortCircuitClearedReport = 3
-  case locomotiveEnteredTranspondingZone = 4
-  case locomotiveExitedTranspondingZone = 5
-  case locomotiveEnteredDetectionZone = 6
-  case locomotiveExitedDetectionZone = 7
-}
-
-private enum EventPayloadType : UInt8 {
-  case none = 0
-  case dccAddress = 1
-  case nodeId = 2
-}
-
 public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
   
   // MARK: Constructors
@@ -105,21 +88,14 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
     
     for zone in 0 ... 7 {
 
-      let baseAddress = baseAddress(zone: zone, event: 0)
+      let baseAddress = baseAddress(zone: zone)
       
       registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressOccupancyReporting + baseAddress)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressOccupancyEventId + baseAddress)
       registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTranspondingReporting + baseAddress)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTranspondingEventId + baseAddress)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTrackFaultEventId + baseAddress)
 
-      for event in 0 ... 15 {
-        
-        let eventBaseAddress = self.baseAddress(zone: zone, event: event)
-        
-        registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressLocoNetEventType + eventBaseAddress)
-        registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressIndicatorEventId + eventBaseAddress)
-        registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressPayloadType + eventBaseAddress)
-
-      }
-      
     }
     
     if !memorySpacesInitialized {
@@ -154,10 +130,10 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
   internal let addressOperationsModeFeedback : Int = 21
   internal let addressSelectiveTransponding  : Int = 22
   internal let addressOccupancyReporting     : Int = 23
-  internal let addressTranspondingReporting  : Int = 24
-  internal let addressLocoNetEventType       : Int = 25
-  internal let addressIndicatorEventId       : Int = 26
-  internal let addressPayloadType            : Int = 34
+  internal let addressOccupancyEventId       : Int = 24
+  internal let addressTranspondingReporting  : Int = 32
+  internal let addressTranspondingEventId    : Int = 33
+  internal let addressTrackFaultEventId      : Int = 41
 
   private var locoNet : LocoNet?
   
@@ -167,7 +143,7 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
   
   private var trainNodeIdLookup : [Int:UInt64] = [:]
   
-  private var eventQueue : [(dccAddress:Int, eventId:UInt64, searchEventId:UInt64)] = []
+  private var eventQueue : [(message:LocoNetMessage, eventId:UInt64, searchEventId:UInt64)] = []
   
   private var lastDetectionSectionShorted : [Bool] = []
   
@@ -331,22 +307,22 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
   // MARK: Private Methods
   
   private func setOccupancyReportingState(zone:Int, value:Bool) {
-    let baseAddress = baseAddress(zone: zone, event: 0)
+    let baseAddress = baseAddress(zone: zone)
     configuration.setUInt(address: addressOccupancyReporting + baseAddress, value: UInt8(value ? 0 : 1))
   }
   
   private func getOccupancyReportingState(zone:Int) -> Bool {
-    let baseAddress = baseAddress(zone: zone, event: 0)
+    let baseAddress = baseAddress(zone: zone)
     return configuration.getUInt8(address: addressOccupancyReporting + baseAddress) == 0
   }
   
   private func setTranspondingReportingState(zone:Int, value:Bool) {
-    let baseAddress = baseAddress(zone: zone, event: 0)
+    let baseAddress = baseAddress(zone: zone)
     configuration.setUInt(address: addressTranspondingReporting + baseAddress, value: UInt8(value ? 0 : 1))
   }
   
   private func getTranspondingReportingState(zone:Int) -> Bool {
-    let baseAddress = baseAddress(zone: zone, event: 0)
+    let baseAddress = baseAddress(zone: zone)
     return configuration.getUInt8(address: addressTranspondingReporting + baseAddress) == 0
   }
   
@@ -421,83 +397,25 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
     
   }
   
-  private func baseAddress(zone:Int, event:Int) -> Int {
-    return zone * 162 + event * 10
+  private func baseAddress(zone:Int) -> Int {
+    return zone * 26
   }
   
-  private func locoNetEventType(zone:Int, event:Int) -> LocoNetEventType? {
-    let baseAddress = baseAddress(zone: zone, event: event)
-    if let et = configuration.getUInt8(address: addressLocoNetEventType + baseAddress) {
-      return LocoNetEventType(rawValue: et)
-    }
-    return nil
+  private func occupancyEventId(zone:Int) -> UInt64? {
+    let baseAddress = baseAddress(zone: zone)
+    return configuration.getUInt64(address: addressOccupancyEventId + baseAddress)
   }
-  
-  private func indicatorEventId(zone:Int, event:Int) -> UInt64? {
-    let baseAddress = baseAddress(zone: zone, event: event)
-    return configuration.getUInt64(address: addressIndicatorEventId + baseAddress)
-  }
-  
-  private func eventPayloadType(zone:Int, event:Int) -> EventPayloadType? {
-    let baseAddress = baseAddress(zone: zone, event: event)
-    if let pt = configuration.getUInt8(address: addressPayloadType + baseAddress) {
-      return EventPayloadType(rawValue: pt)
-    }
-    return nil
-  }
-  
-  private func processEvents(zone:Int, eventType:LocoNetEventType, dccAddress:Int?, trainNodeId:UInt64?) {
-    
-    guard let networkLayer, eventType != .none else {
-      return
-    }
-    
-    for event in 0 ... 15 {
-      if locoNetEventType(zone: zone, event: event) == eventType, let eventId = indicatorEventId(zone: zone, event: event), let payloadType = eventPayloadType(zone: zone, event: event) {
-        
-        switch eventType {
-        case .locomotiveReport, .locomotiveEnteredTranspondingZone, .locomotiveExitedTranspondingZone:
-          if let dccAddress {
-            switch payloadType {
-            case .none:
-              networkLayer.sendEvent(sourceNodeId: nodeId, eventId: eventId)
-           case .dccAddress:
-              var payload : [UInt8] = []
-              if dccAddress < 128 {
-                let address = UInt8(dccAddress & 0x7f)
-                payload.append(contentsOf: [OpenLCBEventWithPayloadFormat.dccPrimaryAddress.rawValue, address])
-              }
-              else {
-                payload.append(contentsOf: [OpenLCBEventWithPayloadFormat.dccExtendedAddress.rawValue])
-                let address = UInt16(dccAddress)
-                payload.append(contentsOf: address.bigEndianData)
-              }
-              networkLayer.sendEventWithPayload(sourceNodeId: nodeId, eventId: eventId, payload: payload)
-            case .nodeId:
-              if let trainNodeId = trainNodeIdLookup[dccAddress] {
-                var payload : [UInt8] = []
-                payload.append(contentsOf: [OpenLCBEventWithPayloadFormat.openLCBNodeId.rawValue])
-                var id = trainNodeId.bigEndianData
-                id.removeFirst(2)
-                payload.append(contentsOf: id)
-                networkLayer.sendEventWithPayload(sourceNodeId: nodeId, eventId: eventId, payload: payload)
-              }
-              else {
-                let searchEventId = networkLayer.makeTrainSearchEventId(searchString: "\(dccAddress)", searchType: .searchExistingNodes, searchMatchType: .exactMatch, searchMatchTarget: .matchAddressOnly, trackProtocol: .anyTrackProtocol)
-                eventQueue.append((dccAddress:dccAddress, eventId:eventId, searchEventId:searchEventId))
-                networkLayer.sendIdentifyProducer(sourceNodeId: nodeId, eventId: searchEventId)
-              }
-            }
-          }
 
-        default:
-          networkLayer.sendEvent(sourceNodeId: nodeId, eventId: eventId)
-        }
-        
-      }
-    }
-    
+  private func transpondingEventId(zone:Int) -> UInt64? {
+    let baseAddress = baseAddress(zone: zone)
+    return configuration.getUInt64(address: addressTranspondingEventId + baseAddress)
   }
+
+  private func trackFaultEventId(zone:Int) -> UInt64? {
+    let baseAddress = baseAddress(zone: zone)
+    return configuration.getUInt64(address: addressTrackFaultEventId + baseAddress)
+  }
+
   
   internal override func resetToFactoryDefaults() {
 
@@ -525,13 +443,15 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
     
     isPowerManagerReportingEnabled = true
     
-    var eventId = nodeId << 16
+    var eventId = 0x0102000000000000 | nodeId
     for zone in 0 ... 7 {
-      for event in 0 ... 15 {
-        let baseAddress = baseAddress(zone: zone, event: event)
-        configuration.setUInt(address: addressIndicatorEventId + baseAddress, value: eventId)
-        eventId += 1
-      }
+      let baseAddress = baseAddress(zone: zone)
+      configuration.setUInt(address: addressOccupancyEventId + baseAddress, value: eventId)
+      eventId += 1
+      configuration.setUInt(address: addressTranspondingEventId + baseAddress, value: eventId)
+      eventId += 1
+      configuration.setUInt(address: addressTrackFaultEventId + baseAddress, value: eventId)
+      eventId += 1
     }
     
     saveMemorySpaces()
@@ -781,14 +701,9 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
         while index < eventQueue.count {
           let item = eventQueue[index]
           if item.searchEventId == message.eventId! {
-            trainNodeIdLookup[item.dccAddress] = message.sourceNodeId!
+            trainNodeIdLookup[item.message.locomotiveAddress!] = message.sourceNodeId!
             eventQueue.remove(at: index)
-            var payload : [UInt8] = []
-            payload.append(contentsOf: [OpenLCBEventWithPayloadFormat.openLCBNodeId.rawValue])
-            var id = message.sourceNodeId!.bigEndianData
-            id.removeFirst(2)
-            payload.append(contentsOf: id)
-            networkLayer?.sendEventWithPayload(sourceNodeId: nodeId, eventId: item.eventId, payload: payload)
+            networkLayer?.sendLocationServiceEvent(sourceNodeId: nodeId, eventId: item.eventId, trainNodeId: message.sourceNodeId!, entryExit: item.message.sensorState! ? .entryWithState : .exit, motionRelative: .directionRelativeUnknown, motionAbsolute: .directionAbsoluteUnknown, contentFormat: .occupancyInformationOnly, typeOfContent: .none, content: [])
           }
           else {
             index += 1
@@ -843,7 +758,13 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
         let id = (sensorAddres - 1) / 8 + 1
         if id == boardId, let sensorState = message.sensorState {
           let zone = (sensorAddres - 1) % 8
-          processEvents(zone: zone, eventType: sensorState ? .locomotiveEnteredDetectionZone : .locomotiveExitedDetectionZone, dccAddress: nil, trainNodeId: nil)
+          
+          if let eventId = occupancyEventId(zone: zone) {
+            
+            networkLayer?.sendLocationServiceEvent(sourceNodeId: nodeId, eventId: eventId, trainNodeId: 0, entryExit: sensorState ? .entryWithState : .exit, motionRelative: .directionRelativeUnknown, motionAbsolute: .directionAbsoluteUnknown, contentFormat: .occupancyInformationOnly, typeOfContent: .none, content: [])
+            
+          }
+          
         }
       }
       

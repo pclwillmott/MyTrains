@@ -288,7 +288,7 @@ public class OpenLCBNetworkLayer : NSObject {
       
     while true {
       if Database.codeExists(tableName: TABLE.MEMORY_SPACE, primaryKey: MEMORY_SPACE.NODE_ID, code: newNodeId) {
-        newNodeId += 1
+        newNodeId += virtualNodeType.nodeIdIncrement
       }
       else {
         return newNodeId
@@ -510,6 +510,38 @@ public class OpenLCBNetworkLayer : NSObject {
     message.eventId = eventId
     message.payload = payload
     sendMessage(message: message)
+  }
+  
+  public func sendLocationServiceEvent(sourceNodeId:UInt64, eventId:UInt64, trainNodeId:UInt64, entryExit:OpenLCBLocationServiceFlagEntryExit, motionRelative:OpenLCBLocationServiceFlagDirectionRelative, motionAbsolute:OpenLCBLocationServiceFlagDirectionAbsolute, contentFormat:OpenLCBLocationServiceFlagContentFormat, typeOfContent:OpenLCBStandardContentBlockType, content:[UInt8] ) {
+    
+    var payload : [UInt8] = []
+    
+    var flags : UInt16 = 0
+    
+    flags |= entryExit.rawValue
+    
+    flags |= motionRelative.rawValue
+    
+    flags |= motionAbsolute.rawValue
+    
+    flags |= contentFormat.rawValue
+    
+    payload.append(contentsOf: flags.bigEndianData)
+
+    payload.append(contentsOf: trainNodeId.bigEndianData.suffix(6))
+    
+    if contentFormat == .standardContentForm {
+      
+      payload.append(UInt8(1 + content.count))
+      
+      payload.append(typeOfContent.rawValue)
+      
+      payload.append(contentsOf: content)
+      
+    }
+    
+    sendEventWithPayload(sourceNodeId: sourceNodeId, eventId: eventId, payload: payload)
+    
   }
 
   public func sendWellKnownEvent(sourceNodeId:UInt64, eventId:OpenLCBWellKnownEvent) {

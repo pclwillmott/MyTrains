@@ -167,6 +167,11 @@
 </map>
 </int>
 
+<eventid>
+  <name>Occupancy Event Id</name>
+  <description>(P) this event will be sent</description>
+</eventid>
+
 <int size='1'>
 <name>Transponding Reporting</name>
 <map>
@@ -175,41 +180,15 @@
 </map>
 </int>
 
-<group replication='16'>
-<name>Events</name>
-<repname>Event</repname>
-
-<int size='1'>
-<name>LocoNet Event Type</name>
-<description>When this report is received from LocoNet</description>
-<map>
-  <relation><property>0</property><value>None</value></relation>
-  <relation><property>1</property><value>Locomotive found report</value></relation>
-  <relation><property>2</property><value>Short circuit detected report</value></relation>
-  <relation><property>3</property><value>Short circuit cleared report</value></relation>
-  <relation><property>4</property><value></value>Locomotive entered transponding zone report</relation>
-  <relation><property>5</property><value></value>Locomotive exited transponding zone report</relation>
-  <relation><property>6</property><value></value>Locomotive entered detection zone report</relation>
-  <relation><property>7</property><value></value>Locomotive exited detection zone report</relation>
-</map>
-</int>
-
 <eventid>
-  <name>Indicator Event Id</name>
+  <name>Transponding Event Id</name>
   <description>(P) this event will be sent</description>
 </eventid>
 
-<int size='1'>
-<name>Payload Type</name>
-<description>with this payload. This should be set to None for all LocoNet reports apart from transponding reports.</description>
-<map>
-  <relation><property>0</property><value>None</value></relation>
-  <relation><property>1</property><value>Locomotive DCC Address</value></relation>
-  <relation><property>2</property><value>Locomotive node ID</value></relation>
-</map>
-</int>
-
-</group>
+<eventid>
+  <name>Track Fault Event Id</name>
+  <description>(P) this event will be sent</description>
+</eventid>
 
 </group>
 
