@@ -590,6 +590,7 @@ class MonitorVC: NSViewController, NSWindowDelegate, OpenLCBLocoNetMonitorDelega
   
   @IBAction func btnClearMonitorAction(_ sender: NSButton) {
     txtMonitor.string = ""
+    lineBuffer.removeAll()
   }
   
   @IBAction func btnPauseMonitorAction(_ sender: NSButton) {

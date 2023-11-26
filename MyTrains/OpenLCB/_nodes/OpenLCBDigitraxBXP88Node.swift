@@ -155,9 +155,9 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
     
     for zone in 0 ... 7 {
       for event in 0 ... 15 {
-        if let et = locoNetEventType(zone: zone, event: event), et != .none, let eventId = indicatorEventId(zone: zone, event: event) {
-          result.append(eventId)
-        }
+  //      if let et = locoNetEventType(zone: zone, event: event), et != .none, let eventId = indicatorEventId(zone: zone, event: event) {
+  //        result.append(eventId)
+  //      }
       }
     }
     
@@ -772,7 +772,7 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
       let id = message.transponderZone! / 8 + 1
       if id == boardId, let transponderZone = message.transponderZone, let locomotiveAddress = message.locomotiveAddress {
         let zone = transponderZone % 8
-        processEvents(zone: zone, eventType: message.sensorState! ? .locomotiveEnteredTranspondingZone : .locomotiveExitedTranspondingZone, dccAddress: locomotiveAddress, trainNodeId: 0)
+ //       processEvents(zone: zone, eventType: message.sensorState! ? .locomotiveEnteredTranspondingZone : .locomotiveExitedTranspondingZone, dccAddress: locomotiveAddress, trainNodeId: 0)
       }
       
     case .pmRepBXP88:
@@ -784,7 +784,7 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
         }
         for zone in 0...7 {
           if lastDetectionSectionShorted[zone] != shorted[zone] {
-            processEvents(zone: zone, eventType: shorted[zone] ? .shortCircuitReport : .shortCircuitClearedReport, dccAddress: nil, trainNodeId: nil)
+       //     processEvents(zone: zone, eventType: shorted[zone] ? .shortCircuitReport : .shortCircuitClearedReport, dccAddress: nil, trainNodeId: nil)
           }
         }
         lastDetectionSectionShorted = shorted
@@ -794,7 +794,7 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
       let id = message.transponderZone! / 8 + 1
        if id == boardId, let locomotiveAddress = message.locomotiveAddress, let transponderZone = message.transponderZone {
         let zone = transponderZone % 8
-        processEvents(zone: zone, eventType: .locomotiveReport, dccAddress: locomotiveAddress, trainNodeId: 0)
+  //      processEvents(zone: zone, eventType: .locomotiveReport, dccAddress: locomotiveAddress, trainNodeId: 0)
       }
       
     case .iplDevData:
