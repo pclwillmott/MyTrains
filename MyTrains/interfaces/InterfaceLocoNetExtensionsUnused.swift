@@ -225,7 +225,7 @@ extension InterfaceLocoNet {
       UInt8(adr1),
     ]
     
-    immPacket(packet: payload, repeatCount: 2)
+    immPacket(packet: payload, repeatCount: .repeat2)
     
   }
 
@@ -246,7 +246,7 @@ extension InterfaceLocoNet {
       UInt8(adr1),
     ]
     
-    immPacket(packet: payload, repeatCount: 2)
+    immPacket(packet: payload, repeatCount: .repeat2)
     
   }
   

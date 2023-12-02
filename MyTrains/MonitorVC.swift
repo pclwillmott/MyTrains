@@ -294,6 +294,21 @@ class MonitorVC: NSViewController, NSWindowDelegate, OpenLCBLocoNetMonitorDelega
         item += "sensorAddress: \(message.sensorAddress!) sensorState: \(message.sensorState!)\n"
       case .setSw:
         item += "switchAddress: \(message.switchAddress!) switchState: \(message.swState!)\n"
+      case .s7Info, .setS7BaseAddr:
+        item += "productCode: \(message.productCode!) serialNumber: \(UInt16(message.serialNumber!).toHex(numberOfDigits: 4)) baseAddress: \(message.baseAddress!)\n"
+      case .immPacket, .s7CVRW:
+        var result = ""
+        for byte in message.dccPacket! {
+          result += "\(byte.toHex(numberOfDigits: 2)) "
+        }
+        item += "repeat: \(message.immPacketRepeatCount!) dccPacket: \(result) partition: \(message.dccAddressPartition!)"
+        
+        if let address = message.dccBasicAccessoryDecoderAddress, let cvNumber = message.dccCVNumber, let cvValue = message.dccCVValue {
+          item += " decoderAddress: \(address) cvNumber: \(cvNumber) accessMode: \(message.dccCVAccessMode!) cvValue: \(cvValue)"
+        }
+        
+        item += "\n"
+        
       default:
         break
       }

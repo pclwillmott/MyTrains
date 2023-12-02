@@ -46,7 +46,7 @@ extension InterfaceLocoNet {
     }
     else {
       
-      immPacket(packet: [DCCAddressPartition.dccIdle.rawValue, DCCPacketType.dccIdle.rawValue], repeatCount: 0x0f)
+      immPacket(packet: [DCCAddressPartition.dccIdle.rawValue, DCCPacketType.dccIdle.rawValue], repeatCount: .repeatContinuous)
       
       globalEmergencyStop = true
       
@@ -63,7 +63,7 @@ extension InterfaceLocoNet {
     }
     else {
       
-      immPacket(packet: [DCCAddressPartition.dccIdle.rawValue, DCCPacketType.dccIdle.rawValue], repeatCount: 0x00)
+      immPacket(packet: [DCCAddressPartition.dccIdle.rawValue, DCCPacketType.dccIdle.rawValue], repeatCount: .repeat0)
 
       globalEmergencyStop = false
       
@@ -81,20 +81,20 @@ extension InterfaceLocoNet {
   
   // MARK: HELPER COMMANDS
   
-  public func immPacket(packet:[UInt8], repeatCount: Int) {
+  public func immPacket(packet:[UInt8], repeatCount: LocoNetIMMPacketRepeat) {
     
-    guard packet.count < 6 && repeatCount < 0x10 else {
+    guard packet.count < 6 else {
       print("invalid IMMPacket")
       return
     }
     
-    let param : Int = ((packet.count << 4) | repeatCount) & 0x7f
+    let param : UInt8 = ((UInt8(packet.count) << 4) | repeatCount.rawValue) & 0x7f
     
     var payload : [UInt8] = [
       LocoNetMessageOpcode.OPC_IMM_PACKET.rawValue,
       0x0b,
       0x7f,
-      UInt8(param),
+      param,
       0b00000000,
       0x00,
       0x00,
@@ -574,7 +574,7 @@ extension InterfaceLocoNet {
     
     data.append(fx)
     
-    immPacket(packet: data, repeatCount: 4)
+    immPacket(packet: data, repeatCount: .repeat4)
     
   }
 
@@ -591,7 +591,7 @@ extension InterfaceLocoNet {
     
     data.append(fx)
     
-    immPacket(packet: data, repeatCount: 4)
+    immPacket(packet: data, repeatCount: .repeat4)
     
   }
 
@@ -613,7 +613,7 @@ extension InterfaceLocoNet {
     data.append(DCCPacketType.dccF13F20.rawValue)
     data.append(fx)
     
-    immPacket(packet: data, repeatCount: 4)
+    immPacket(packet: data, repeatCount: .repeat4)
     
   }
 
@@ -635,7 +635,7 @@ extension InterfaceLocoNet {
     data.append(DCCPacketType.dccF21F28.rawValue)
     data.append(fx)
     
-    immPacket(packet: data, repeatCount: 4)
+    immPacket(packet: data, repeatCount: .repeat4)
     
   }
 
@@ -657,7 +657,7 @@ extension InterfaceLocoNet {
     data.append(DCCPacketType.dccF29F36.rawValue)
     data.append(fx)
     
-    immPacket(packet: data, repeatCount: 4)
+    immPacket(packet: data, repeatCount: .repeat4)
     
   }
 
@@ -679,7 +679,7 @@ extension InterfaceLocoNet {
     data.append(DCCPacketType.dccF37F44.rawValue)
     data.append(fx)
     
-    immPacket(packet: data, repeatCount: 4)
+    immPacket(packet: data, repeatCount: .repeat4)
     
   }
 
@@ -701,7 +701,7 @@ extension InterfaceLocoNet {
     data.append(DCCPacketType.dccF45F52.rawValue)
     data.append(fx)
     
-    immPacket(packet: data, repeatCount: 4)
+    immPacket(packet: data, repeatCount: .repeat4)
     
   }
 
@@ -723,7 +723,7 @@ extension InterfaceLocoNet {
     data.append(DCCPacketType.dccF53F60.rawValue)
     data.append(fx)
     
-    immPacket(packet: data, repeatCount: 4)
+    immPacket(packet: data, repeatCount: .repeat4)
     
   }
 
@@ -745,7 +745,7 @@ extension InterfaceLocoNet {
     data.append(DCCPacketType.dccF61F68.rawValue)
     data.append(fx)
     
-    immPacket(packet: data, repeatCount: 4)
+    immPacket(packet: data, repeatCount: .repeat4)
     
   }
 
@@ -763,7 +763,7 @@ extension InterfaceLocoNet {
       data.append(UInt8(binaryStateAddress >> 7))
     }
     
-    immPacket(packet: data, repeatCount: 4)
+    immPacket(packet: data, repeatCount: .repeat4)
     
   }
 
@@ -777,7 +777,7 @@ extension InterfaceLocoNet {
       value
     ])
     
-    immPacket(packet: data, repeatCount: 4)
+    immPacket(packet: data, repeatCount: .repeat4)
     
   }
 

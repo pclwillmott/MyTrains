@@ -70,9 +70,9 @@ public class LocoNetMessage : NSObject {
   
   private var _messageType : LocoNetMessageType = .uninitialized
   
-  private var _dccPacket : [UInt8] = []
+//  private var _dccPacket : [UInt8] = []
   
-  private var _dccPacketType : DCCPacketType = .dccAnalogFunction
+//  private var _dccPacketType : DCCPacketType = .dccAnalogFunction
   
   // MARK: Public Properties
   
@@ -171,58 +171,145 @@ public class LocoNetMessage : NSObject {
     }
   }
   
-  public var isIMMPacket : Bool {
-    get {
-      return messageType == .immPacket
+  public var immPacketRepeatCount : LocoNetIMMPacketRepeat? {
+  
+    guard messageType == .immPacket || messageType == .s7CVRW else {
+      return nil
     }
+    
+    return LocoNetIMMPacketRepeat(rawValue: message[3] & 0b00001111)
+    
   }
   
-  public var dccPacket : [UInt8] {
-    get {
-      if isIMMPacket && _dccPacket.count == 0 {
-        var mask : UInt8 = 1
-        let count = Int((message[3] & 0b01110000) >> 4)
-        for i in 0...count - 1 {
-          var im : UInt8 = message[5 + i]
-          im |= ((message[4] & mask) == mask) ? 0x80 : 0x00
-          _dccPacket.append(im)
-          mask <<= 1
-        }
-        var crc : UInt8 = 0
-        for im in _dccPacket {
-          crc ^= im
-        }
-        _dccPacket.append(crc)
-      }
-      return _dccPacket
+  public var dccPacket : [UInt8]? {
+    
+    guard messageType == .immPacket || messageType == .s7CVRW else {
+      return nil
     }
+    
+    var packet : [UInt8] = []
+    
+    var mask : UInt8 = 1
+    
+    let count = Int((message[3] & 0b01110000) >> 4)
+    
+    for i in 0...count - 1 {
+      var im : UInt8 = message[5 + i]
+      im |= ((message[4] & mask) == mask) ? 0x80 : 0x00
+      packet.append(im)
+      mask <<= 1
+    }
+    
+    var crc : UInt8 = 0
+    
+    for im in packet {
+      crc ^= im
+    }
+    
+    packet.append(crc)
+    
+    return packet
+    
+  }
+  
+  public var dccCVNumber : UInt16? {
+    
+    guard let packet = dccPacket, let partition = dccAddressPartition, partition == .dccBAD11 else {
+      return nil
+    }
+    
+    if (packet[1] & 0b10000000) == 0b10000000 && (packet[2] & 0b11110000) == 0b11100000 {
+      
+      var cvNumber : UInt16 = UInt16(packet[3])
+      
+      cvNumber |= UInt16(packet[2] & 0b00000011) << 8
+      
+      return cvNumber + 1
+      
+    }
+    
+    return nil
+    
+  }
+  
+  public var dccCVValue : UInt8? {
+    
+    guard let packet = dccPacket, let partition = dccAddressPartition, partition == .dccBAD11 else {
+      return nil
+    }
+    
+    if (packet[1] & 0b10000000) == 0b10000000 && (packet[2] & 0b11110000) == 0b11100000 {
+      
+      return packet[4]
+      
+    }
+    
+    return nil
+    
+  }
+  
+  public var dccCVAccessMode : DCCCVAccessMode? {
+    
+    guard let packet = dccPacket, let partition = dccAddressPartition, partition == .dccBAD11 else {
+      return nil
+    }
+    
+    if (packet[1] & 0b10000000) == 0b10000000 && (packet[2] & 0b11110000) == 0b11100000 {
+      
+      return DCCCVAccessMode(rawValue: packet[2] & 0b00001100)
+      
+    }
+    
+    return nil
+  }
+  
+  public var dccBasicAccessoryDecoderAddress : UInt16? {
+    
+    guard let packet = dccPacket, let partition = dccAddressPartition, partition == .dccBAD11 else {
+      return nil
+    }
+    
+    if (packet[1] & 0b10000000) == 0b10000000 {
+      
+      var address : UInt16 = (UInt16(packet[0]) & 0b00111111) << 2
+      
+      address |= (~UInt16(packet[1]) & 0b01110000) << 4
+      
+      address |= (UInt16(packet[1]) & 0b00000110) >> 1
+      
+      return address + 1
+      
+    }
+    
+    return nil
+    
   }
   
   public var dccAddressPartition : DCCAddressPartition? {
-    get {
-      if isIMMPacket {
-        let packet = dccPacket
-        switch packet[0] {
-        case 0:
-          return .dccBroadcast
-        case 1...127:
-          return .dccMFDPA
-        case 128...191:
-          return .dccBAD11
-        case 192...231:
-          return .dccMFDEA
-        case 232...252:
-          return .dccReserved
-        case 253...254:
-          return .dccAEPF
-        case 255:
-          return .dccIdle
-        default:
-          return nil
-        }
-      }
+    
+    guard let packet = dccPacket else {
       return nil
     }
+    
+    switch packet[0] {
+    case 0:
+      return .dccBroadcast
+    case 1...127:
+      return .dccMFDPA
+    case 128...191:
+      return .dccBAD11
+    case 192...231:
+      return .dccMFDEA
+    case 232...252:
+      return .dccReserved
+    case 253...254:
+      return .dccAEPF
+    case 255:
+      return .dccIdle
+    default:
+      return nil
+    }
+    
   }
   
   public var cvValue : UInt8? {
@@ -1220,12 +1307,9 @@ public class LocoNetMessage : NSObject {
             else if message[2] == 0x02 {
               
               if message[ 3] == 0x00 &&
-                 message[ 4] == 0x10 &&
                  message[ 5] == 0x00 &&
                  message[ 6] == 0x00 &&
                  message[ 7] == 0x02 &&
-                 message[ 8] == 0x08 &&
-                 message[10] == 0x00 &&
                  (message[12] & 0b11000000) == 0x00 &&
                  (message[14] & 0b11110000) == 0x00 {
                 _messageType = .s7Info
@@ -1321,16 +1405,18 @@ public class LocoNetMessage : NSObject {
                 message[9] == 0 {
               _messageType = .locoF21F28IMMSAdr
             }
+            else if message[3] == 0x54 &&
+              (message[4] & 0b10000111) == 0b00000111 &&
+              (message[5] & 0b11000000) == 0b00000000 &&
+              (message[6] & 0b10001000) == 0b00001000 &&
+              (message[7] & 0b11110100) == 0b01100100 {
+              _messageType = .s7CVRW
+            }
             else if (message[3] & 0b10001000) == 0 /* &&
                (message[4] & 0b11100000) == 0b00100000 */ {
               _messageType = .immPacket
             }
-            else if message[3] == 0x54 &&
-              (message[4] & 0b11100111) == 0b00000111 &&
-              (message[7] & 0b11110111) == 0b01100100 {
-              _messageType = .s7CVRW
-            }
-            
+
           }
 
         // MARK: 0xEE
@@ -1436,7 +1522,6 @@ public class LocoNetMessage : NSObject {
                  message[ 6] == 0x00 &&
                  message[ 7] == 0x00 &&
                  message[ 8] == 0x00 &&
-                 message[10] == 0x00 &&
                  (message[12] & 0b11000000) == 0x00 &&
                  (message[14] & 0b11110000) == 0x00 {
                 _messageType = .setS7BaseAddr
@@ -1512,6 +1597,15 @@ public class LocoNetMessage : NSObject {
     }
     return nil
   }
+  
+  public var baseAddress : UInt16? {
+    switch messageType {
+    case .s7Info, .setS7BaseAddr:
+      return (UInt16(message[13]) | (UInt16(message[14]) << 7)) + 1
+    default:
+      return nil
+    }
+  }
 
   public var transponderZone : Int? {
     switch messageType {
@@ -1554,6 +1648,8 @@ public class LocoNetMessage : NSObject {
       return ProductCode(rawValue: message[14])
     case .querySlot2, .querySlot3, .querySlot4, .querySlot5:
       return ProductCode(rawValue: message[16])
+    case .s7Info, .setS7BaseAddr:
+      return ProductCode(rawValue: message[9])
     default:
       return nil
     }
@@ -1567,10 +1663,11 @@ public class LocoNetMessage : NSObject {
       return Int(sn1) | (Int(sn2) << 8)
     case .querySlot1, .querySlot2, .querySlot3, .querySlot4, .querySlot5:
       return Int(message[19] & 0b00111111) << 7 | Int(message[18])
+    case .s7Info, .setS7BaseAddr:
+      return Int(message[11]) | (Int(message[12]) << 7)
     default:
-      break
+      return nil
     }
-    return nil
   }
 
   public var partialSerialNumberLow : Int? {
