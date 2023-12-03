@@ -186,10 +186,10 @@
             filePath = "MyTrains/LocoNet/LocoNetMessage.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1657"
-            endingLineNumber = "1657"
-            landmarkName = "productCode"
-            landmarkType = "24">
+            startingLineNumber = "1656"
+            endingLineNumber = "1656"
+            landmarkName = "LocoNetMessage"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -222,6 +222,22 @@
             endingLineNumber = "133"
             landmarkName = "locoNetMessage"
             landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6220A1FF-BADC-43E7-A03A-A322C5994164"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MyTrains/SlotViewVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "34"
+            endingLineNumber = "34"
+            landmarkName = "SlotViewVC"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

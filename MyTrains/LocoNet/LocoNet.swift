@@ -106,11 +106,9 @@ public class LocoNet {
     case .idle:
       break
     case .waitingForDatagramReceivedOK:
-//      print("timeout: \(messageState)")
       currentMessage = nil
       outputQueue.removeAll()
     case .waitingForSendLocoNetMessageReply:
- //     print("timeout: \(messageState)")
       currentMessage = nil
       sendNext()
     }
@@ -156,44 +154,6 @@ public class LocoNet {
 
   // MARK: Public Methods
  
-  public func locoNetMessagePartReceived(message:OpenLCBMessage) {
-    
-    switch message.messageTypeIndicator {
-    
-/*    case .locoNetMessageReceivedOnlyFrame:
-      
-      if let locoNetMessage = LocoNetMessage(payload: message.payload) {
-        locoNetMessage.timeStamp = Date.timeIntervalSinceReferenceDate
-        locoNetMessage.timeSinceLastMessage = locoNetMessage.timeStamp - lastTimeStamp
-        lastTimeStamp = locoNetMessage.timeStamp
-        locoNetMessageReceived(message: locoNetMessage)
-      }
-      
-    case .locoNetMessageReceivedFirstFrame:
-      
-      buffer = message.payload
-      
-    case .locoNetMessageReceivedMiddleFrame:
-      
-      buffer.append(contentsOf: message.payload)
-      
-    case .locoNetMessageReceivedLastFrame:
-      
-      buffer.append(contentsOf: message.payload)
-      
-      if let locoNetMessage = LocoNetMessage(payload: buffer) {
-        locoNetMessage.timeStamp = Date.timeIntervalSinceReferenceDate
-        locoNetMessage.timeSinceLastMessage = locoNetMessage.timeStamp - lastTimeStamp
-        lastTimeStamp = locoNetMessage.timeStamp
-        locoNetMessageReceived(message: locoNetMessage)
-      }
-    */
-    default:
-      break
-    }
-        
-  }
-  
   public func locoNetMessageReceived(message:LocoNetMessage) {
     
     switch message.messageType {

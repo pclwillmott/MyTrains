@@ -32,6 +32,7 @@ public class OpenLCBNetworkLayer : NSObject {
         (type:.configurationToolNode, number: 1),
         (type:.programmerToolNode, number: 1),
         (type:.throttleNode, number: 4),
+        (type:.locoNetMonitorNode, number: 4),
       ]
       
       for nodeDef in defaultNodes {

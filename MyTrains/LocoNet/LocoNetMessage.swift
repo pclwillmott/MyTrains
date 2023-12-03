@@ -212,42 +212,79 @@ public class LocoNetMessage : NSObject {
     
   }
   
-  public var dccCVNumber : UInt16? {
+  public var cvValue : UInt8? {
     
-    guard let packet = dccPacket, let partition = dccAddressPartition, partition == .dccBAD11 else {
-      return nil
+    switch messageType {
+      
+    case .progSlotDataP1:
+
+      var result = message[10]
+      let mask : UInt8 = 0b00000010
+      result |= (message[8] & mask) == mask ? 0b10000000 : 0
+      return result
+
+    case .immPacket, .s7CVRW:
+      
+      guard let packet = dccPacket, let partition = dccAddressPartition, partition == .dccBAD11 else {
+        return nil
+      }
+      
+      if (packet[1] & 0b10000000) == 0b10000000 && (packet[2] & 0b11110000) == 0b11100000 {
+        return packet[4]
+      }
+      
+    case .s7CVState:
+      
+      var result = message[2]
+      result |= (message[1] & 0b00000011) == 0b00000001 ? 0x80 : 0x00
+      return result
+      
+    default:
+      break
     }
-    
-    if (packet[1] & 0b10000000) == 0b10000000 && (packet[2] & 0b11110000) == 0b11100000 {
+
+    return nil
+
+  }
+  
+  public var cvNumber : UInt16? {
+
+    switch messageType {
       
-      var cvNumber : UInt16 = UInt16(packet[3])
+    case .progSlotDataP1:
       
-      cvNumber |= UInt16(packet[2] & 0b00000011) << 8
+      var result = UInt16(message[9])
+
+      let maskCVBit9 : UInt8 = 0b00100000
+      let maskCVBit8 : UInt8 = 0b00010000
+      let maskCVBit7 : UInt8 = 0b00000001
+
+      result |= (message[8] & maskCVBit9) == maskCVBit9 ? 0b01000000000 : 0
+      result |= (message[8] & maskCVBit8) == maskCVBit8 ? 0b00100000000 : 0
+      result |= (message[8] & maskCVBit7) == maskCVBit7 ? 0b00010000000 : 0
+
+      return result
+
+    case .immPacket, .s7CVRW:
       
-      return cvNumber + 1
+      guard let packet = dccPacket, let partition = dccAddressPartition, partition == .dccBAD11 else {
+        return nil
+      }
       
+      if (packet[1] & 0b10000000) == 0b10000000 && (packet[2] & 0b11110000) == 0b11100000 {
+        var cvNumber : UInt16 = UInt16(packet[3])
+        cvNumber |= UInt16(packet[2] & 0b00000011) << 8
+        return cvNumber + 1
+      }
+      
+    default:
+      break
     }
     
     return nil
     
   }
-  
-  public var dccCVValue : UInt8? {
-    
-    guard let packet = dccPacket, let partition = dccAddressPartition, partition == .dccBAD11 else {
-      return nil
-    }
-    
-    if (packet[1] & 0b10000000) == 0b10000000 && (packet[2] & 0b11110000) == 0b11100000 {
-      
-      return packet[4]
-      
-    }
-    
-    return nil
-    
-  }
-  
+
   public var dccCVAccessMode : DCCCVAccessMode? {
     
     guard let packet = dccPacket, let partition = dccAddressPartition, partition == .dccBAD11 else {
@@ -312,41 +349,6 @@ public class LocoNetMessage : NSObject {
     
   }
   
-  public var cvValue : UInt8? {
-    
-    guard messageType == .progSlotDataP1 else {
-      return nil
-    }
-    
-    var result = message[10]
-    
-    let mask : UInt8 = 0b00000010
-    
-    result |= (message[8] & mask) == mask ? 0b10000000 : 0
-    
-    return result
-    
-  }
-  
-  public var cvNumber : UInt16? {
-
-    guard messageType == .progSlotDataP1 else {
-      return nil
-    }
-    
-    var result = UInt16(message[9])
-
-    let maskCVBit9 : UInt8 = 0b00100000
-    let maskCVBit8 : UInt8 = 0b00010000
-    let maskCVBit7 : UInt8 = 0b00000001
-
-    result |= (message[8] & maskCVBit9) == maskCVBit9 ? 0b01000000000 : 0
-    result |= (message[8] & maskCVBit8) == maskCVBit8 ? 0b00100000000 : 0
-    result |= (message[8] & maskCVBit7) == maskCVBit7 ? 0b00010000000 : 0
-
-    return result
-    
-  }
   
   public var messageType : LocoNetMessageType {
     
@@ -740,9 +742,6 @@ public class LocoNetMessage : NSObject {
             
             let subCode = message[3]
   
-            let srcPage = message[1] & 0b00000111
-            let src = message[2]
-
             switch subCode {
             case 0x05 :
               _messageType = .locoF12F20F28P2
@@ -1655,29 +1654,29 @@ public class LocoNetMessage : NSObject {
     }
   }
 
-  public var serialNumber : Int? {
+  public var serialNumber : UInt16? {
     switch messageType {
     case .iplDevData:
       let sn1 = message[11] | ((message[9] & 0b00000010) != 0 ? 0b10000000 : 0b00000000)
       let sn2 = message[12] | ((message[9] & 0b00000100) != 0 ? 0b10000000 : 0b00000000)
-      return Int(sn1) | (Int(sn2) << 8)
+      return UInt16(sn1) | (UInt16(sn2) << 8)
     case .querySlot1, .querySlot2, .querySlot3, .querySlot4, .querySlot5:
-      return Int(message[19] & 0b00111111) << 7 | Int(message[18])
+      return UInt16(message[19] & 0b00111111) << 7 | UInt16(message[18])
     case .s7Info, .setS7BaseAddr:
-      return Int(message[11]) | (Int(message[12]) << 7)
+      return UInt16(message[11]) | (UInt16(message[12]) << 7)
     default:
       return nil
     }
   }
 
-  public var partialSerialNumberLow : Int? {
+  public var partialSerialNumberLow : UInt16? {
     guard let serialNumber else {
       return nil
     }
     return serialNumber & 0x7f
   }
   
-  public var partialSerialNumberHigh : Int? {
+  public var partialSerialNumberHigh : UInt16? {
     guard let serialNumber else {
       return nil
     }
@@ -1796,6 +1795,110 @@ public class LocoNetMessage : NSObject {
     }
   }
   
+  public var isSlotUpdate : Bool {
+    
+    guard let slotNumber else {
+      return false
+    }
+    
+    let notSlotUpdate : Set<LocoNetMessageType> = [
+      .locoSlotDataP1,
+      .locoSlotDataP2,
+      .getLocoSlotData
+    ]
+    
+    return !notSlotUpdate.contains(messageType)
+    
+  }
+  
+  public var slotBank : UInt8? {
+    switch messageType {
+    case .locoSlotDataP2:
+      return message[3]
+    case .setLocoSlotInUseP2:
+      return message[4]
+    case .setLocoSlotDataP2:
+      return message[2]
+    case .getLocoSlotData:
+      return message[2]
+    case .locoSpdDirP2:
+      return message[1]
+    case .locoF0F6P2:
+      return message[1]
+    case .locoF7F13P2:
+      return message[1]
+    case .locoF14F20P2:
+      return message[1]
+    case .locoF21F28P2:
+      return message[1]
+    case .setLocoSlotStat1P2:
+      return message[1]
+    case .moveSlotP2:
+      return message[3]
+    case .linkSlotsP2:
+      return message[1]
+    case .unlinkSlotsP2:
+      return message[1]
+    default:
+      return nil
+    }
+  }
+
+  public var slotNumber : UInt8? {
+    switch messageType {
+    case .locoSlotDataP1:
+      return message[2]
+    case .setLocoSlotInUseP1:
+      return message[2]
+    case .setLocoSlotDataP1:
+      return message[2]
+    case .locoSlotDataP2:
+      return message[3]
+    case .setLocoSlotInUseP2:
+      return message[4]
+    case .setLocoSlotDataP2:
+      return message[3]
+    case .getLocoSlotData:
+      return message[1]
+    case .locoSpdP1:
+      return message[1]
+    case .locoSpdDirP2:
+      return message[2]
+    case .locoDirF0F4P1:
+      return message[1]
+    case .locoF5F8P1:
+      return message[1]
+    case .locoF9F12P1:
+      return message[1]
+    case .locoF0F6P2:
+      return message[2]
+    case .locoF7F13P2:
+      return message[2]
+    case .locoF14F20P2:
+      return message[2]
+    case .locoF21F28P2:
+      return message[2]
+    case .setLocoSlotStat1P1:
+      return message[1]
+    case .setLocoSlotStat1P2:
+      return message[2]
+    case .moveSlotP1:
+      return message[2]
+    case .moveSlotP2:
+      return message[4]
+    case .linkSlotsP1:
+      return message[1]
+    case .unlinkSlotsP1:
+      return message[1]
+    case .linkSlotsP2:
+      return message[2]
+    case .unlinkSlotsP2:
+      return message[2]
+    default:
+      return nil
+    }
+  }
+
   public var trackVoltage : Double? {
     switch messageType {
     case .querySlot2:
@@ -2167,30 +2270,6 @@ public class LocoNetMessage : NSObject {
     return ConsistState(rawValue: state) ?? .NotLinked
   }
   
-  public var slotBank : UInt8? {
-    switch messageType {
-    case .locoSlotDataP1:
-      return 0
-    case .locoSlotDataP2:
-      return message[2]
-    default:
-      break
-    }
-    return nil
-  }
- 
-  public var slotNumber : UInt8? {
-    switch messageType {
-    case .locoSlotDataP1:
-      return message[2]
-    case .locoSlotDataP2:
-      return message[3]
-    default:
-      break
-    }
-    return nil
-  }
-  
   public var mobileDecoderType : SpeedSteps? {
     guard let rawMobileDecoderType else {
       return nil
@@ -2235,19 +2314,19 @@ public class LocoNetMessage : NSObject {
     return nil
   }
 
-  public var throttleID : Int? {
+  public var throttleID : UInt16? {
     switch messageType {
     case .locoSlotDataP1:
-      var id = Int(message[11])
+      var id = UInt16(message[11])
       if message[9] == 0x7f && (message[8] & 0b100) == 0b100 {
-        id |= Int(message[12]) << 7
+        id |= UInt16(message[12]) << 7
       }
       else {
-        id |= Int(message[12]) << 8
+        id |= UInt16(message[12]) << 8
       }
       return id
     case .locoSlotDataP2:
-      return Int(message[18]) | Int(message[19]) << 8
+      return UInt16(message[18]) | UInt16(message[19]) << 8
     case .iplDevData:
       return partialSerialNumberHigh! << 8 | partialSerialNumberLow!
     default:
@@ -2419,7 +2498,6 @@ public class LocoNetMessage : NSObject {
     }
   }
   
-
   // MARK: Class Methods
   
   public static func checkSum(data: Data, length: Int) -> UInt8 {

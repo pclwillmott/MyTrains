@@ -221,9 +221,18 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
   }
   
   @IBAction func mnuSlotView(_ sender: NSMenuItem) {
+    
+    guard let networkLayer = myTrainsController.openLCBNetworkLayer, let monitorNode = networkLayer.getLocoNetMonitor() else {
+      return
+    }
+    
     let x = ModalWindow.SlotView
     let wc = x.windowController
+    let vc = x.viewController(windowController: wc) as! SlotViewVC
+    vc.monitorNode = monitorNode
+    monitorNode.delegate = vc
     wc.showWindow(nil)
+    
   }
   
   @IBAction func mnuProgramMobileDecoderAddress(_ sender: NSMenuItem) {

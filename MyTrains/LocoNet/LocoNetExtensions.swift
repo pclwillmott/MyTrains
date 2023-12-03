@@ -55,7 +55,7 @@ extension LocoNet {
     }
     else {
       
-      immPacket(packet: [DCCAddressPartition.dccBroadcast.rawValue, DCCPacketType.dccIdle.rawValue], repeatCount: 0x0f)
+      immPacket(packet: [DCCAddressPartition.dccBroadcast.rawValue, DCCPacketType.dccIdle.rawValue], repeatCount: .repeatContinuous)
       
       globalEmergencyStop = true
       
@@ -72,7 +72,7 @@ extension LocoNet {
     }
     else {
       
-      immPacket(packet: [DCCAddressPartition.dccIdle.rawValue, DCCPacketType.dccIdle.rawValue], repeatCount: 0x00)
+      immPacket(packet: [DCCAddressPartition.dccIdle.rawValue, DCCPacketType.dccIdle.rawValue], repeatCount: .repeatNone)
 
       globalEmergencyStop = false
       
@@ -90,20 +90,19 @@ extension LocoNet {
 
   // MARK: HELPER COMMANDS
   
-  public func immPacket(packet:[UInt8], repeatCount: Int) {
+  public func immPacket(packet:[UInt8], repeatCount: LocoNetIMMPacketRepeat) {
     
-    guard packet.count < 6 && repeatCount < 0x10 else {
-      print("invalid IMMPacket")
+    guard packet.count < 6 else {
       return
     }
     
-    let param : Int = ((packet.count << 4) | repeatCount) & 0x7f
+    let param : UInt8 = ((UInt8(packet.count) << 4) | repeatCount.rawValue) & 0x7f
     
     var payload : [UInt8] = [
       LocoNetMessageOpcode.OPC_IMM_PACKET.rawValue,
       0x0b,
       0x7f,
-      UInt8(param),
+      param,
       0b00000000,
       0x00,
       0x00,
@@ -627,7 +626,7 @@ extension LocoNet {
     
     data.append(fx)
     
-    immPacket(packet: data, repeatCount: 4)
+    immPacket(packet: data, repeatCount: .repeat4)
     
   }
 
@@ -644,7 +643,7 @@ extension LocoNet {
     
     data.append(fx)
     
-    immPacket(packet: data, repeatCount: 4)
+    immPacket(packet: data, repeatCount: .repeat4)
     
   }
 
@@ -666,7 +665,7 @@ extension LocoNet {
     data.append(DCCPacketType.dccF13F20.rawValue)
     data.append(fx)
     
-    immPacket(packet: data, repeatCount: 4)
+    immPacket(packet: data, repeatCount: .repeat4)
     
   }
 
@@ -688,7 +687,7 @@ extension LocoNet {
     data.append(DCCPacketType.dccF21F28.rawValue)
     data.append(fx)
     
-    immPacket(packet: data, repeatCount: 4)
+    immPacket(packet: data, repeatCount: .repeat4)
     
   }
 
@@ -710,7 +709,7 @@ extension LocoNet {
     data.append(DCCPacketType.dccF29F36.rawValue)
     data.append(fx)
     
-    immPacket(packet: data, repeatCount: 4)
+    immPacket(packet: data, repeatCount: .repeat4)
     
   }
 
@@ -732,7 +731,7 @@ extension LocoNet {
     data.append(DCCPacketType.dccF37F44.rawValue)
     data.append(fx)
     
-    immPacket(packet: data, repeatCount: 4)
+    immPacket(packet: data, repeatCount: .repeat4)
     
   }
 
@@ -754,7 +753,7 @@ extension LocoNet {
     data.append(DCCPacketType.dccF45F52.rawValue)
     data.append(fx)
     
-    immPacket(packet: data, repeatCount: 4)
+    immPacket(packet: data, repeatCount: .repeat4)
     
   }
 
@@ -776,7 +775,7 @@ extension LocoNet {
     data.append(DCCPacketType.dccF53F60.rawValue)
     data.append(fx)
     
-    immPacket(packet: data, repeatCount: 4)
+    immPacket(packet: data, repeatCount: .repeat4)
     
   }
 
@@ -798,7 +797,7 @@ extension LocoNet {
     data.append(DCCPacketType.dccF61F68.rawValue)
     data.append(fx)
     
-    immPacket(packet: data, repeatCount: 4)
+    immPacket(packet: data, repeatCount: .repeat4)
     
   }
 
@@ -816,7 +815,7 @@ extension LocoNet {
       data.append(UInt8(binaryStateAddress >> 7))
     }
     
-    immPacket(packet: data, repeatCount: 4)
+    immPacket(packet: data, repeatCount: .repeat4)
     
   }
 
@@ -830,12 +829,53 @@ extension LocoNet {
       value
     ])
     
-    immPacket(packet: data, repeatCount: 4)
+    immPacket(packet: data, repeatCount: .repeat4)
     
   }
   
   // MARK: CV PROGRAMMING
   
+  private func s7CVRWPacket(address:UInt16, cvNumber:UInt16, mode:DCCCVAccessMode) -> [UInt8] {
+
+    var packet : [UInt8] = [
+      0b10000000,
+      0b10001000,
+      0b11100000,
+      0b00000000,
+      0b00000000,
+    ]
+    
+    var addr = address - 1
+    
+    var cv = cvNumber - 1
+    
+    packet[0] |= UInt8((addr >> 2) & 0b00111111)
+    
+    packet[1] |= UInt8((addr & 0b00000011) << 1)
+    
+    packet[1] |= UInt8(~(addr >> 4) & 0b01110000)
+    
+    packet[2] |= UInt8(cv >> 8)
+    
+    packet[2] |= mode.rawValue
+
+    packet[3] |= UInt8(cv & 0xff)
+    
+    return packet
+    
+  }
+  
+  public func s7CVReadByte(address:UInt16, cvNumber:UInt16) {
+    var packet = s7CVRWPacket(address: address, cvNumber: cvNumber, mode: .readByte)
+    immPacket(packet: packet, repeatCount: .repeat4)
+  }
+
+  public func s7CVWriteByte(address:UInt16, cvNumber:UInt16, cvValue:UInt8) {
+    var packet = s7CVRWPacket(address: address, cvNumber: cvNumber, mode: .writeByte)
+    packet[4] = cvValue
+    immPacket(packet: packet, repeatCount: .repeat4)
+  }
+
   public func s7CVRW(boardId: Int, cvNumber:Int, isRead:Bool, value:UInt8) {
     
     let cv = UInt8((cvNumber - 1) & 0xff)
@@ -890,7 +930,7 @@ extension LocoNet {
       cvValue,
     ]
     
-    immPacket(packet: packet, repeatCount: 4)
+    immPacket(packet: packet, repeatCount: .repeat4)
     
   }
   
@@ -1066,5 +1106,22 @@ extension LocoNet {
     addToQueue(message: message)
 
   }
+  
+  public func getLocoSlotDataP1(slotNumber: UInt8) {
+    
+    let message = LocoNetMessage(data: [LocoNetMessageOpcode.OPC_RQ_SL_DATA.rawValue, slotNumber, 0x00], appendCheckSum: true)
+    
+    addToQueue(message: message)
+
+  }
+  
+  public func getLocoSlotDataP2(bankNumber: UInt8, slotNumber: UInt8) {
+    
+    let message = LocoNetMessage(data: [LocoNetMessageOpcode.OPC_RQ_SL_DATA.rawValue, slotNumber, bankNumber | 0b01000000], appendCheckSum: true)
+    
+    addToQueue(message: message)
+
+  }
+
 
 }

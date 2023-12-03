@@ -35,9 +35,9 @@ public class OpenLCBLocoNetMonitorNode : OpenLCBNodeVirtual, LocoNetDelegate {
   
   private var _gatewayId : UInt64 = 0
   
-  private var locoNet : LocoNet?
-  
   // MARK: Public Properties
+  
+  public var locoNet : LocoNet?
   
   public var monitorId : UInt8
   

@@ -11,5 +11,6 @@ public enum DCCCVAccessMode : UInt8 {
   
   case readByte        = 0b0100
   case writeByte       = 0b1100
+  case bitManipulation = 0b1000
   
 }

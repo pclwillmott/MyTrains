@@ -116,7 +116,7 @@ public class LocoSlotData {
     }
   }
   
-  public var throttleID : Int
+  public var throttleID : UInt16
   
   public var functions : UInt64
   
@@ -311,7 +311,7 @@ public class LocoSlotData {
 
       functions = fnx
       
-      throttleID = Int(data[18]) | Int(data[19]) << 8
+      throttleID = UInt16(data[18]) | UInt16(data[19]) << 8
       
     }
   }

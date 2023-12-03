@@ -978,6 +978,17 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		DA9263942B1CD47400730ACC /* _tools */ = {
+			isa = PBXGroup;
+			children = (
+				DA6A0AD7275295BF00913F2B /* Monitor.storyboard */,
+				DA6A0AD92752976800913F2B /* MonitorVC.swift */,
+				DA8AE0EC279B2CCB001E9311 /* SlotView.storyboard */,
+				DA8AE0EF279B3074001E9311 /* SlotViewVC.swift */,
+			);
+			path = _tools;
+			sourceTree = "<group>";
+		};
 		DAA66BD02A09226E001804AC /* _extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -1111,8 +1122,6 @@
 				DAA83DF0272C37680075CBCD /* Main.storyboard */,
 				DAA83DEC272C37670075CBCD /* MainVC.swift */,
 				DA6A0ADB27529D6600913F2B /* ModalWindow.swift */,
-				DA6A0AD7275295BF00913F2B /* Monitor.storyboard */,
-				DA6A0AD92752976800913F2B /* MonitorVC.swift */,
 				DA434291283698CA00E8D555 /* MyTrains-Bridging-Header.h */,
 				DAA83DF3272C37680075CBCD /* MyTrains.entitlements */,
 				DA2E0E5D2736EAF300C7DA7A /* MyTrainsController.swift */,
@@ -1140,8 +1149,6 @@
 				DA063398293CEB8700CEAFD1 /* SetFastClockVC.swift */,
 				DAA71692297C19220080114F /* ShortCircuitDetectionType.swift */,
 				DA95D6C42809C00600D9F1B6 /* SignalStrengthView.swift */,
-				DA8AE0EC279B2CCB001E9311 /* SlotView.storyboard */,
-				DA8AE0EF279B3074001E9311 /* SlotViewVC.swift */,
 				DA5BC98A2A1A4A2000D67ABE /* SoftFloat */,
 				DA5CCB492897EBB800F99AE6 /* SpeedProfile.swift */,
 				DA5CCB4B2897F58D00F99AE6 /* SpeedProfiler.storyboard */,
@@ -1193,6 +1200,7 @@
 		DABD4F2F2A3C99B1000A25AB /* LocoNet */ = {
 			isa = PBXGroup;
 			children = (
+				DA9263942B1CD47400730ACC /* _tools */,
 				DAEA21312A5199AE008545A6 /* _protocols */,
 				DABD4F302A3C99BA000A25AB /* _enumerations */,
 				DA57A6E72A449669005C72B0 /* _types */,

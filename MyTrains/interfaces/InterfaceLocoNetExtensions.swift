@@ -63,7 +63,7 @@ extension InterfaceLocoNet {
     }
     else {
       
-      immPacket(packet: [DCCAddressPartition.dccIdle.rawValue, DCCPacketType.dccIdle.rawValue], repeatCount: .repeat0)
+      immPacket(packet: [DCCAddressPartition.dccIdle.rawValue, DCCPacketType.dccIdle.rawValue], repeatCount: .repeatNone)
 
       globalEmergencyStop = false
       

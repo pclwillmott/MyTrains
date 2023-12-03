@@ -9,7 +9,7 @@ import Foundation
 
 public enum LocoNetIMMPacketRepeat : UInt8 {
   
-  case repeat0 = 0x00
+  case repeatNone = 0x00
   case repeat1 = 0x01
   case repeat2 = 0x02
   case repeat3 = 0x03
