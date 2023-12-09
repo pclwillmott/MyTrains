@@ -168,4 +168,5 @@ public enum LocoNetMessageType {
   case trkShortRep
   case unlinkSlotsP1
   case unlinkSlotsP2
+  case zapped
 }

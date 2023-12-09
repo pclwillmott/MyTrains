@@ -160,16 +160,36 @@
 <repname>Detection Section</repname>
 
 <int size='1'>
+<name>Occupancy Detection</name>
+<map>
+  <relation><property>0</property><value>Enable hardware occupancy detection</value></relation>
+  <relation><property>1</property><value>Disable hardware occupancy detection</value></relation>
+</map>
+</int>
+
+<int size='1'>
 <name>Occupancy Reporting</name>
 <map>
-  <relation><property>0</property><value>Enable occupancy reporting</value></relation>
-  <relation><property>1</property><value>Disable occupancy reporting</value></relation>
+  <relation><property>0</property><value>Send enter and exit occupancy zone events only</value></relation>
+  <relation><property>1</property><value>Send location services occupancy events only</value></relation>
+  <relation><property>2</property><value>Send all types of occupancy events</value></relation>
+  <relation><property>3</property><value>Disable occupancy events</value></relation>
 </map>
 </int>
 
 <eventid>
-  <name>Occupancy Event Id</name>
-  <description>(P) this event will be sent</description>
+  <name>Enter Occupancy Zone Event Id</name>
+  <description>(P) this event will be sent when rolling stock is first detected in the zone.</description>
+</eventid>
+
+<eventid>
+  <name>Exit Occupancy Zone Event Id</name>
+  <description>(P) this event will be sent when rolling stock is no longer detected in the zone.</description>
+</eventid>
+
+<eventid>
+  <name>Location Services Occupancy Event Id</name>
+  <description>(P) this event will be sent when the zone occupancy state changes.</description>
 </eventid>
 
 <int size='1'>
@@ -181,13 +201,26 @@
 </int>
 
 <eventid>
-  <name>Transponding Event Id</name>
-  <description>(P) this event will be sent</description>
+  <name>Location Services Transponding Event Id</name>
+  <description>(P) this event will be sent when the transponding detection state changes.</description>
+</eventid>
+
+<int size='1'>
+<name>Track Fault Reporting</name>
+<map>
+  <relation><property>0</property><value>Enable track fault reporting</value></relation>
+  <relation><property>1</property><value>Disable track fault reporting</value></relation>
+</map>
+</int>
+
+<eventid>
+  <name>Track Fault Detected Event Id</name>
+  <description>(P) this event will be sent when a track fault is detected.</description>
 </eventid>
 
 <eventid>
-  <name>Track Fault Event Id</name>
-  <description>(P) this event will be sent</description>
+  <name>Track Fault Cleared Event Id</name>
+  <description>(P) this event will be sent when a track fault is cleared.</description>
 </eventid>
 
 </group>

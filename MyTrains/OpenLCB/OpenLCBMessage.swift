@@ -160,7 +160,87 @@ public class OpenLCBMessage : NSObject {
     return OpenLCBDatagramTimeout(rawValue: flags & 0x8f)
 
   }
+  
+  public var isLocationServicesEvent : Bool {
+    guard messageTypeIndicator == .producerConsumerEventReport, let eventId else {
+      return false
+    }
+    return (eventId & 0xffff000000000000) == 0x0102000000000000
+  }
+  
+  public var scannerNodeId : UInt64? {
+    if isLocationServicesEvent, let eventId {
+      return eventId & 0x0000ffffffffffff
+    }
+    return nil
+  }
+  
+  public var locationServicesFlags : UInt16? {
+    if isLocationServicesEvent {
+      return UInt16(bigEndianData: [payload[0], payload[1]])
+    }
+    return nil
+  }
+  
+  public var locationServicesFlagEntryExit : OpenLCBLocationServiceFlagEntryExit? {
+    if isLocationServicesEvent, let locationServicesFlags {
+      return OpenLCBLocationServiceFlagEntryExit(rawValue: locationServicesFlags & OpenLCBLocationServiceFlagEntryExit.mask)
+    }
+    return nil
+  }
     
+  public var locationServicesFlagDirectionRelative : OpenLCBLocationServiceFlagDirectionRelative? {
+    if isLocationServicesEvent, let locationServicesFlags {
+      return OpenLCBLocationServiceFlagDirectionRelative(rawValue: locationServicesFlags & OpenLCBLocationServiceFlagDirectionRelative.mask)
+    }
+    return nil
+  }
+  
+  public var locationServicesFlagDirectionAbsolute : OpenLCBLocationServiceFlagDirectionAbsolute? {
+    if isLocationServicesEvent, let locationServicesFlags {
+      return OpenLCBLocationServiceFlagDirectionAbsolute(rawValue: locationServicesFlags & OpenLCBLocationServiceFlagDirectionAbsolute.mask)
+    }
+    return nil
+  }
+  
+  public var locationServicesFlagContentFormat : OpenLCBLocationServiceFlagContentFormat? {
+    if isLocationServicesEvent, let locationServicesFlags {
+      return OpenLCBLocationServiceFlagContentFormat(rawValue: locationServicesFlags & OpenLCBLocationServiceFlagContentFormat.mask)
+    }
+    return nil
+  }
+  
+  public var trainNodeId : UInt64? {
+    if isLocationServicesEvent {
+      var id : [UInt8] = []
+      for index in 10 ... 15 {
+        id.append(payload[index])
+      }
+      return UInt64(bigEndianData: id)
+    }
+    return nil
+  }
+  
+  public typealias LocationServicesContentBlock = (blockType:OpenLCBStandardContentBlockType, content:[UInt8])
+  
+  public var locationServicesContent : [LocationServicesContentBlock]? {
+    if isLocationServicesEvent, let locationServicesFlagContentFormat, locationServicesFlagContentFormat == .standardContentForm {
+      var result : [LocationServicesContentBlock] = []
+      var data = payload
+      data.removeFirst(8)
+      while !data.isEmpty {
+        let length = Int(data.removeFirst())
+        if length > 0 , let blockType = OpenLCBStandardContentBlockType(rawValue: data.removeFirst()) {
+          var block : LocationServicesContentBlock = (blockType:blockType, content:[UInt8](data.prefix(length - 1)))
+          result.append(block)
+          data.removeFirst(length - 1)
+        }
+      }
+      return result
+    }
+    return nil
+  }
+  
   public var isStreamOrDatagram : Bool {
     get {
       let mask : UInt16 = 0x1000

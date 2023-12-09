@@ -151,6 +151,14 @@ class OpenLCBMonitorVC: NSViewController, NSWindowDelegate, OpenLCBCANDelegate {
         if let locoNetMessage = message.locoNetMessage {
           text += "\(locoNetMessage.messageType) "
         }
+        else if message.isLocationServicesEvent {
+          text += "\(message.locationServicesFlagEntryExit!) direction Relative: \(message.locationServicesFlagDirectionRelative!) direction Absoloute: \(message.locationServicesFlagDirectionAbsolute!) contentType: \(message.locationServicesFlagContentFormat!) "
+          if let blocks = message.locationServicesContent {
+            for block in blocks {
+              text += "\nblockType: \(block.blockType) content: \(block.content)"
+            }
+          }
+        }
       }
     }
     if !message.payload.isEmpty {

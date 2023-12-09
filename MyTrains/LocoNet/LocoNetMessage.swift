@@ -536,6 +536,8 @@ public class LocoNetMessage : NSObject {
             default:
               break
             }
+          case 0x55:
+            _messageType = .zapped
           case 0x6d:
             switch message[2] {
               case 0x00:
@@ -1618,21 +1620,21 @@ public class LocoNetMessage : NSObject {
     }
   }
   
-  public var locomotiveAddress : Int? {
+  public var locomotiveAddress : UInt16? {
     switch messageType {
     case .locoRep:
-      let highBits = message[3] == 0x7d ? 0 : Int(message[3]) << 7
-      return Int(message[4]) | highBits
+      let highBits = message[3] == 0x7d ? 0 : UInt16(message[3]) << 7
+      return UInt16(message[4]) | highBits
     case .locoSlotDataP1:
-      var address = Int(message[4])
+      var address = UInt16(message[4])
       if message[9] != 0x7f {
-        address |= Int(message[9]) << 7
+        address |= UInt16(message[9]) << 7
       }
       return address
     case .transRep:
-      return Int(message[4]) | (Int(message[3]) << 7)
+      return UInt16(message[4]) | (UInt16(message[3]) << 7)
     case .locoSlotDataP2:
-      return Int(message[5]) | (Int(message[6]) << 7)
+      return UInt16(message[5]) | (UInt16(message[6]) << 7)
     default:
       return nil
     }
@@ -1812,33 +1814,34 @@ public class LocoNetMessage : NSObject {
   }
   
   public var slotBank : UInt8? {
+    let bankMask : UInt8 = 0b00000111
     switch messageType {
     case .locoSlotDataP2:
-      return message[3]
+      return message[2] & bankMask
     case .setLocoSlotInUseP2:
-      return message[4]
+      return message[3] & bankMask
     case .setLocoSlotDataP2:
-      return message[2]
+      return message[2] & bankMask
     case .getLocoSlotData:
-      return message[2]
+      return message[2] & bankMask
     case .locoSpdDirP2:
-      return message[1]
+      return message[1] & bankMask
     case .locoF0F6P2:
-      return message[1]
+      return message[1] & bankMask
     case .locoF7F13P2:
-      return message[1]
+      return message[1] & bankMask
     case .locoF14F20P2:
-      return message[1]
+      return message[1] & bankMask
     case .locoF21F28P2:
-      return message[1]
+      return message[1] & bankMask
     case .setLocoSlotStat1P2:
-      return message[1]
+      return message[1] & bankMask
     case .moveSlotP2:
-      return message[3]
+      return message[3] & bankMask
     case .linkSlotsP2:
-      return message[1]
+      return message[1] & bankMask
     case .unlinkSlotsP2:
-      return message[1]
+      return message[1] & bankMask
     default:
       return nil
     }
@@ -1894,6 +1897,8 @@ public class LocoNetMessage : NSObject {
       return message[2]
     case .unlinkSlotsP2:
       return message[2]
+    case .consistDirF0F4:
+      return message[1]
     default:
       return nil
     }
@@ -2329,6 +2334,8 @@ public class LocoNetMessage : NSObject {
       return UInt16(message[18]) | UInt16(message[19]) << 8
     case .iplDevData:
       return partialSerialNumberHigh! << 8 | partialSerialNumberLow!
+    case .zapped:
+      return UInt16(message[2])
     default:
       break
     }

@@ -17,7 +17,7 @@ public class LocoSlotData {
       return nil
     }
     
-    slotBank = message.slotBank!
+    slotBank = message.slotBank ?? 0x00
     
     slotNumber = message.slotNumber!
     
@@ -89,7 +89,7 @@ public class LocoSlotData {
   
   public var slotNumber : UInt8
   
-  public var address : Int
+  public var address : UInt16
   
   public var slotState : SlotState
   
@@ -259,7 +259,7 @@ public class LocoSlotData {
 
       slotStatus1 = data[4]
       
-      address = Int(data[5]) | (Int(data[6]) << 7)
+      address = UInt16(data[5]) | (UInt16(data[6]) << 7)
       
       speed = Int(data[8])
       
