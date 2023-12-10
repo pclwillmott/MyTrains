@@ -19,10 +19,10 @@ public enum OpenLCBLocationServiceFlagEntryExit : UInt16 {
 
 public enum OpenLCBLocationServiceFlagDirectionRelative : UInt16 {
   
-  case directionRelativeStopped   = 0b0000000000000000
-  case directionRelativeForward   = 0b0000000000000100
-  case directionRelativeReverse   = 0b0000000000001000
-  case directionRelativeUnknown   = 0b0000000000001100
+  case stopped = 0b0000000000000000
+  case forward = 0b0000000000000100
+  case reverse = 0b0000000000001000
+  case unknown = 0b0000000000001100
   
   public static let mask : UInt16 = 0b0000000000001100
 
@@ -30,10 +30,10 @@ public enum OpenLCBLocationServiceFlagDirectionRelative : UInt16 {
 
 public enum OpenLCBLocationServiceFlagDirectionAbsolute : UInt16 {
   
-  case directionAbsoluteStopped   = 0b0000000000000000
-  case directionAbsoluteEastNorth = 0b0000000000010000
-  case directionAbsoluteWestSouth = 0b0000000000100000
-  case directionAbsoluteUnknown   = 0b0000000000110000
+  case stopped   = 0b0000000000000000
+  case eastNorth = 0b0000000000010000
+  case westSouth = 0b0000000000100000
+  case unknown   = 0b0000000000110000
 
   public static let mask : UInt16 = 0b0000000000110000
 

@@ -520,123 +520,15 @@ public class SwitchBoardItem : EditorObject {
     }
   }
  
-  public var sw1Id : Int = -1 {
-    didSet {
-      modified = true
-    }
-  }
-  /*
-  public var sw1ChannelNumber : Int = -1 {
-    didSet {
-      modified = true
-    }
-  }
-  */
-  public var sw1 : TurnoutSwitch? {
-    get {
-//      if let device = myTrainsController.locoNetDevices[sw1LocoNetDeviceId], (1...device.turnoutSwitches.count).contains(sw1ChannelNumber) {
-//        return device.turnoutSwitches[sw1ChannelNumber - 1]
-//      }
-      return nil
-    }
-  }
-  
   public var sw1TurnoutMotorType : TurnoutMotorType = TurnoutMotorType.defaultValue {
     didSet {
       modified = true
     }
   }
   
-  public var sw1Sensor1Id : Int = -1 {
-    didSet {
-      modified = true
-    }
-  }
-  
-  public var sw1Sensor1ChannelNumber : Int = -1 {
-    didSet {
-      modified = true
-    }
-  }
-  
-  public var sw1Sensor1 : IOFunction? {
-    get {
-//      if let device = myTrainsController.locoNetDevices[sw1Sensor1Id], (1...device.sensors.count).contains(sw1Sensor1ChannelNumber) {
-//        return device.sensors[sw1Sensor1ChannelNumber - 1]
-//      }
-      return nil
-    }
-  }
-  
-  public var sw1Sensor2Id : Int = -1 {
-    didSet {
-      modified = true
-    }
-  }
-  /*
-  public var sw1Sensor2ChannelNumber : Int = -1 {
-    didSet {
-      modified = true
-    }
-  }
-  */
-  public var sw1Sensor2 : IOFunction? {
-    get {
-//      if let device = myTrainsController.locoNetDevices[sw1Sensor2Id], (1...device.sensors.count).contains(sw1Sensor2ChannelNumber) {
-//        return device.sensors[sw1Sensor2ChannelNumber - 1]
-//      }
-      return nil
-    }
-  }
-
-  public var sw2Id : Int = -1 {
-    didSet {
-      modified = true
-    }
-  }
-
-  public var sw2 : TurnoutSwitch? {
-    get {
-//      if let device = myTrainsController.locoNetDevices[sw2LocoNetDeviceId], (1...device.turnoutSwitches.count).contains(sw2ChannelNumber) {
-//        return device.turnoutSwitches[sw2ChannelNumber - 1]
-//      }
-      return nil
-    }
-  }
-  
   public var sw2TurnoutMotorType : TurnoutMotorType = TurnoutMotorType.defaultValue {
     didSet {
       modified = true
-    }
-  }
-  
-  public var sw2Sensor1Id : Int = -1 {
-    didSet {
-      modified = true
-    }
-  }
-
-  public var sw2Sensor1 : IOFunction? {
-    get {
-//      if let device = myTrainsController.locoNetDevices[sw2Sensor1Id], (1...device.sensors.count).contains(sw2Sensor1ChannelNumber) {
-//        return device.sensors[sw2Sensor1ChannelNumber - 1]
-//      }
-      return nil
-    }
-  }
-
-  public var sw2Sensor2Id : Int = -1 {
-    didSet {
-      modified = true
-    }
-  }
-
-  public var sw2Sensor2 : IOFunction? {
-    get {
-//      if let device = myTrainsController.locoNetDevices[sw2Sensor2Id], (1...device.sensors.count).contains(sw2Sensor2ChannelNumber) {
-//        return device.sensors[sw2Sensor2ChannelNumber - 1]
-//      }
-      return nil
     }
   }
   
@@ -652,39 +544,81 @@ public class SwitchBoardItem : EditorObject {
     }
   }
   
-  public var generalSensorId : Int = -1 {
+  public var sw1ThrownEventId : UInt64? {
     didSet {
       modified = true
     }
   }
 
-  public var generalSensor : IOFunction? {
-    get {
-      return myTrainsController.ioFunction(primaryKey: generalSensorId)
+  public var sw1ClosedEventId : UInt64? {
+    didSet {
+      modified = true
     }
   }
-  
-  public var transponderSensorId : Int = -1 {
+
+  public var sw1ThrowEventId : UInt64? {
+    didSet {
+      modified = true
+    }
+  }
+
+  public var sw1CloseEventId : UInt64? {
+    didSet {
+      modified = true
+    }
+  }
+
+  public var sw2ThrownEventId : UInt64? {
+    didSet {
+      modified = true
+    }
+  }
+
+  public var sw2ClosedEventId : UInt64? {
+    didSet {
+      modified = true
+    }
+  }
+
+  public var sw2ThrowEventId : UInt64? {
+    didSet {
+      modified = true
+    }
+  }
+
+  public var sw2CloseEventId : UInt64? {
+    didSet {
+      modified = true
+    }
+  }
+
+  public var enterOccupancyZoneEventId : UInt64? {
     didSet {
       modified = true
     }
   }
   
-  public var transponderSensor : IOFunction? {
-    get {
-      return myTrainsController.ioFunction(primaryKey: transponderSensorId)
-    }
-  }
-  
-  public var trackFaultSensorId : Int = -1 {
+  public var exitOccupancyZoneEventId : UInt64? {
     didSet {
       modified = true
     }
   }
   
-  public var trackFaultSensor : IOFunction? {
-    get {
-      return myTrainsController.ioFunction(primaryKey: trackFaultSensorId)
+  public var transpondingZoneEventId : UInt64? {
+    didSet {
+      modified = true
+    }
+  }
+
+  public var trackFaultEventId : UInt64? {
+    didSet {
+      modified = true
+    }
+  }
+  
+  public var trackFaultClearedEventId : UInt64? {
+    didSet {
+      modified = true
     }
   }
 
@@ -697,15 +631,15 @@ public class SwitchBoardItem : EditorObject {
       
       var state1 : TurnoutSwitchSetting = (switchNumber:1, switchState: .closed)
       
-      if let sw1 = self.sw1 {
-        state1 = (switchNumber:1, switchState: sw1.state)
-      }
+//      if let sw1 = self.sw1 {
+//        state1 = (switchNumber:1, switchState: sw1.state)
+//      }
       
       var state2 : TurnoutSwitchSetting = (switchNumber:2, switchState: .closed)
 
-      if let sw2 = self.sw2 {
-        state2 = (switchNumber:1, switchState: sw2.state)
-      }
+ //     if let sw2 = self.sw2 {
+ //       state2 = (switchNumber:1, switchState: sw2.state)
+ //     }
       
       var index : Int = 0
       
@@ -750,7 +684,7 @@ public class SwitchBoardItem : EditorObject {
         _turnoutConnection = value
         
         for sw in itemPartType.connections[_turnoutConnection].switchSettings {
-          
+          /*
           switch sw.switchNumber {
           case 1:
             sw1?.requiredState = sw.switchState
@@ -759,7 +693,7 @@ public class SwitchBoardItem : EditorObject {
           default:
             break
           }
-          
+          */
         }
         
         layout?.needsDisplay()
@@ -1155,41 +1089,31 @@ public class SwitchBoardItem : EditorObject {
         sensorPositionUnits = UnitLength(rawValue: reader.getInt(index: 59)!) ?? .centimeters
       }
 
-      if !reader.isDBNull(index: 60) {
-        generalSensorId = reader.getInt(index: 60)!
-      }
+      enterOccupancyZoneEventId = reader.getUInt64(index: 60)
 
-      if !reader.isDBNull(index: 61) {
-        transponderSensorId = reader.getInt(index: 61)!
-      }
+      exitOccupancyZoneEventId = reader.getUInt64(index: 61)
 
-      if !reader.isDBNull(index: 62) {
-        trackFaultSensorId = reader.getInt(index: 62)!
-      }
+      transpondingZoneEventId = reader.getUInt64(index: 62)
 
-      if !reader.isDBNull(index: 63) {
-        sw1Id = reader.getInt(index: 63)!
-      }
+      trackFaultEventId = reader.getUInt64(index: 63)
 
-      if !reader.isDBNull(index: 64) {
-        sw1Sensor1Id = reader.getInt(index: 64)!
-      }
+      trackFaultClearedEventId = reader.getUInt64(index: 64)
 
-      if !reader.isDBNull(index: 65) {
-        sw1Sensor2Id = reader.getInt(index: 65)!
-      }
+      sw1ThrownEventId = reader.getUInt64(index: 65)
 
-      if !reader.isDBNull(index: 66) {
-        sw2Id = reader.getInt(index: 66)!
-      }
+      sw1ClosedEventId = reader.getUInt64(index: 66)
 
-      if !reader.isDBNull(index: 67) {
-        sw2Sensor1Id = reader.getInt(index: 67)!
-      }
+      sw1ThrowEventId = reader.getUInt64(index: 67)
 
-      if !reader.isDBNull(index: 68) {
-        sw2Sensor2Id = reader.getInt(index: 68)!
-      }
+      sw1CloseEventId = reader.getUInt64(index: 68)
+
+      sw2ThrownEventId = reader.getUInt64(index: 69)
+
+      sw2ClosedEventId = reader.getUInt64(index: 70)
+
+      sw2ThrowEventId = reader.getUInt64(index: 71)
+
+      sw2CloseEventId = reader.getUInt64(index: 72)
 
     }
     
@@ -1269,15 +1193,19 @@ public class SwitchBoardItem : EditorObject {
         "[\(SWITCHBOARD_ITEM.TURNOUT_CONNECTION)], " +
         "[\(SWITCHBOARD_ITEM.SENSOR_POSITION)], " +
         "[\(SWITCHBOARD_ITEM.UNITS_SENSOR_POSITION)], " +
-        "[\(SWITCHBOARD_ITEM.GEN_SENSOR_ID)], " +
-        "[\(SWITCHBOARD_ITEM.TRANSPONDER_SENSOR_ID)], " +
-        "[\(SWITCHBOARD_ITEM.TRACK_FAULT_SENSOR_ID)], " +
-        "[\(SWITCHBOARD_ITEM.SW1_ID)], " +
-        "[\(SWITCHBOARD_ITEM.SW1_SENSOR1_ID)], " +
-        "[\(SWITCHBOARD_ITEM.SW1_SENSOR2_ID)], " +
-        "[\(SWITCHBOARD_ITEM.SW2_ID)], " +
-        "[\(SWITCHBOARD_ITEM.SW2_SENSOR1_ID)], " +
-        "[\(SWITCHBOARD_ITEM.SW2_SENSOR2_ID)]" +
+        "[\(SWITCHBOARD_ITEM.ENTER_OCCUPANCY_EVENT_ID)], " +
+        "[\(SWITCHBOARD_ITEM.EXIT_OCCUPANCY_EVENT_ID)], " +
+        "[\(SWITCHBOARD_ITEM.TRANSPONDER_EVENT_ID)], " +
+        "[\(SWITCHBOARD_ITEM.TRACK_FAULT_EVENT_ID)], " +
+        "[\(SWITCHBOARD_ITEM.TRACK_FAULT_CLEARED_EVENT_ID)], " +
+        "[\(SWITCHBOARD_ITEM.SW1_THROWN_EVENT_ID)], " +
+        "[\(SWITCHBOARD_ITEM.SW1_CLOSED_EVENT_ID)], " +
+        "[\(SWITCHBOARD_ITEM.SW1_THROW_EVENT_ID)], " +
+        "[\(SWITCHBOARD_ITEM.SW1_CLOSE_EVENT_ID)], " +
+        "[\(SWITCHBOARD_ITEM.SW2_THROWN_EVENT_ID)], " +
+        "[\(SWITCHBOARD_ITEM.SW2_CLOSED_EVENT_ID)], " +
+        "[\(SWITCHBOARD_ITEM.SW2_THROW_EVENT_ID)], " +
+        "[\(SWITCHBOARD_ITEM.SW2_CLOSE_EVENT_ID)] " +
         ") VALUES (" +
         "@\(SWITCHBOARD_ITEM.SWITCHBOARD_ITEM_ID), " +
         "@\(SWITCHBOARD_ITEM.LAYOUT_ID), " +
@@ -1339,15 +1267,19 @@ public class SwitchBoardItem : EditorObject {
         "@\(SWITCHBOARD_ITEM.TURNOUT_CONNECTION), " +
         "@\(SWITCHBOARD_ITEM.SENSOR_POSITION), " +
         "@\(SWITCHBOARD_ITEM.UNITS_SENSOR_POSITION), " +
-        "@\(SWITCHBOARD_ITEM.GEN_SENSOR_ID), " +
-        "@\(SWITCHBOARD_ITEM.TRANSPONDER_SENSOR_ID), " +
-        "@\(SWITCHBOARD_ITEM.TRACK_FAULT_SENSOR_ID), " +
-        "@\(SWITCHBOARD_ITEM.SW1_ID), " +
-        "@\(SWITCHBOARD_ITEM.SW1_SENSOR1_ID), " +
-        "@\(SWITCHBOARD_ITEM.SW1_SENSOR2_ID), " +
-        "@\(SWITCHBOARD_ITEM.SW2_ID), " +
-        "@\(SWITCHBOARD_ITEM.SW2_SENSOR1_ID), " +
-        "@\(SWITCHBOARD_ITEM.SW2_SENSOR2_ID)" +
+        "@\(SWITCHBOARD_ITEM.ENTER_OCCUPANCY_EVENT_ID), " +
+        "@\(SWITCHBOARD_ITEM.EXIT_OCCUPANCY_EVENT_ID), " +
+        "@\(SWITCHBOARD_ITEM.TRANSPONDER_EVENT_ID), " +
+        "@\(SWITCHBOARD_ITEM.TRACK_FAULT_EVENT_ID), " +
+        "@\(SWITCHBOARD_ITEM.TRACK_FAULT_CLEARED_EVENT_ID), " +
+        "@\(SWITCHBOARD_ITEM.SW1_THROWN_EVENT_ID), " +
+        "@\(SWITCHBOARD_ITEM.SW1_CLOSED_EVENT_ID), " +
+        "@\(SWITCHBOARD_ITEM.SW1_THROW_EVENT_ID), " +
+        "@\(SWITCHBOARD_ITEM.SW1_CLOSE_EVENT_ID), " +
+        "@\(SWITCHBOARD_ITEM.SW2_THROWN_EVENT_ID), " +
+        "@\(SWITCHBOARD_ITEM.SW2_CLOSED_EVENT_ID), " +
+        "@\(SWITCHBOARD_ITEM.SW2_THROW_EVENT_ID), " +
+        "@\(SWITCHBOARD_ITEM.SW2_CLOSE_EVENT_ID)" +
         ")"
         
         primaryKey = Database.nextCode(tableName: TABLE.SWITCHBOARD_ITEM, primaryKey: SWITCHBOARD_ITEM.SWITCHBOARD_ITEM_ID)!
@@ -1413,15 +1345,19 @@ public class SwitchBoardItem : EditorObject {
         "[\(SWITCHBOARD_ITEM.TURNOUT_CONNECTION)] = @\(SWITCHBOARD_ITEM.TURNOUT_CONNECTION), " +
         "[\(SWITCHBOARD_ITEM.SENSOR_POSITION)] = @\(SWITCHBOARD_ITEM.SENSOR_POSITION), " +
         "[\(SWITCHBOARD_ITEM.UNITS_SENSOR_POSITION)] = @\(SWITCHBOARD_ITEM.UNITS_SENSOR_POSITION), " +
-        "[\(SWITCHBOARD_ITEM.GEN_SENSOR_ID)] = @\(SWITCHBOARD_ITEM.GEN_SENSOR_ID), " +
-        "[\(SWITCHBOARD_ITEM.TRANSPONDER_SENSOR_ID)] = @\(SWITCHBOARD_ITEM.TRANSPONDER_SENSOR_ID), " +
-        "[\(SWITCHBOARD_ITEM.TRACK_FAULT_SENSOR_ID)] = @\(SWITCHBOARD_ITEM.TRACK_FAULT_SENSOR_ID), " +
-        "[\(SWITCHBOARD_ITEM.SW1_ID)] = @\(SWITCHBOARD_ITEM.SW1_ID), " +
-        "[\(SWITCHBOARD_ITEM.SW1_SENSOR1_ID)] = @\(SWITCHBOARD_ITEM.SW1_SENSOR1_ID), " +
-        "[\(SWITCHBOARD_ITEM.SW1_SENSOR2_ID)] = @\(SWITCHBOARD_ITEM.SW1_SENSOR2_ID), " +
-        "[\(SWITCHBOARD_ITEM.SW2_ID)] = @\(SWITCHBOARD_ITEM.SW2_ID), " +
-        "[\(SWITCHBOARD_ITEM.SW2_SENSOR1_ID)] = @\(SWITCHBOARD_ITEM.SW2_SENSOR1_ID), " +
-        "[\(SWITCHBOARD_ITEM.SW2_SENSOR2_ID)] = @\(SWITCHBOARD_ITEM.SW2_SENSOR2_ID) " +
+        "[\(SWITCHBOARD_ITEM.ENTER_OCCUPANCY_EVENT_ID)] = @\(SWITCHBOARD_ITEM.ENTER_OCCUPANCY_EVENT_ID), " +
+        "[\(SWITCHBOARD_ITEM.EXIT_OCCUPANCY_EVENT_ID)] = @\(SWITCHBOARD_ITEM.EXIT_OCCUPANCY_EVENT_ID), " +
+        "[\(SWITCHBOARD_ITEM.TRANSPONDER_EVENT_ID)] = @\(SWITCHBOARD_ITEM.TRANSPONDER_EVENT_ID), " +
+        "[\(SWITCHBOARD_ITEM.TRACK_FAULT_EVENT_ID)] = @\(SWITCHBOARD_ITEM.TRACK_FAULT_EVENT_ID), " +
+        "[\(SWITCHBOARD_ITEM.TRACK_FAULT_CLEARED_EVENT_ID)] = @\(SWITCHBOARD_ITEM.TRACK_FAULT_CLEARED_EVENT_ID), " +
+        "[\(SWITCHBOARD_ITEM.SW1_THROWN_EVENT_ID)] = @\(SWITCHBOARD_ITEM.SW1_THROWN_EVENT_ID), " +
+        "[\(SWITCHBOARD_ITEM.SW1_CLOSED_EVENT_ID)] = @\(SWITCHBOARD_ITEM.SW1_CLOSED_EVENT_ID), " +
+        "[\(SWITCHBOARD_ITEM.SW1_THROW_EVENT_ID)] = @\(SWITCHBOARD_ITEM.SW1_THROW_EVENT_ID), " +
+        "[\(SWITCHBOARD_ITEM.SW1_CLOSE_EVENT_ID)] = @\(SWITCHBOARD_ITEM.SW1_CLOSE_EVENT_ID), " +
+        "[\(SWITCHBOARD_ITEM.SW2_THROWN_EVENT_ID)] = @\(SWITCHBOARD_ITEM.SW2_THROWN_EVENT_ID), " +
+        "[\(SWITCHBOARD_ITEM.SW2_CLOSED_EVENT_ID)] = @\(SWITCHBOARD_ITEM.SW2_CLOSED_EVENT_ID), " +
+        "[\(SWITCHBOARD_ITEM.SW2_THROW_EVENT_ID)] = @\(SWITCHBOARD_ITEM.SW2_THROW_EVENT_ID), " +
+        "[\(SWITCHBOARD_ITEM.SW2_CLOSE_EVENT_ID)] = @\(SWITCHBOARD_ITEM.SW2_CLOSE_EVENT_ID) " +
         "WHERE [\(SWITCHBOARD_ITEM.SWITCHBOARD_ITEM_ID)] = @\(SWITCHBOARD_ITEM.SWITCHBOARD_ITEM_ID)"
       }
 
@@ -1504,15 +1440,19 @@ public class SwitchBoardItem : EditorObject {
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.TURNOUT_CONNECTION)", value: turnoutConnection)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.SENSOR_POSITION)", value: sensorPosition)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.UNITS_SENSOR_POSITION)", value: sensorPositionUnits.rawValue)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.GEN_SENSOR_ID)", value: generalSensorId)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.TRANSPONDER_SENSOR_ID)", value: transponderSensorId)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.TRACK_FAULT_SENSOR_ID)", value: trackFaultSensorId)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.SW1_ID)", value: sw1Id)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.SW1_SENSOR1_ID)", value: sw1Sensor1Id)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.SW1_SENSOR2_ID)", value: sw1Sensor2Id)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.SW2_ID)", value: sw2Id)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.SW2_SENSOR1_ID)", value: sw2Sensor1Id)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.SW2_SENSOR2_ID)", value: sw2Sensor2Id)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.ENTER_OCCUPANCY_EVENT_ID)", value: enterOccupancyZoneEventId)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.EXIT_OCCUPANCY_EVENT_ID)", value: exitOccupancyZoneEventId)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.TRANSPONDER_EVENT_ID)", value: transpondingZoneEventId)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.TRACK_FAULT_EVENT_ID)", value: trackFaultEventId)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.TRACK_FAULT_CLEARED_EVENT_ID)", value: trackFaultClearedEventId)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.SW1_THROWN_EVENT_ID)", value: sw1ThrownEventId)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.SW1_CLOSED_EVENT_ID)", value: sw1ClosedEventId)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.SW1_THROW_EVENT_ID)", value: sw1ThrowEventId)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.SW1_CLOSE_EVENT_ID)", value: sw1CloseEventId)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.SW2_THROWN_EVENT_ID)", value: sw2ThrownEventId)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.SW2_CLOSED_EVENT_ID)", value: sw2ClosedEventId)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.SW2_THROW_EVENT_ID)", value: sw2ThrowEventId)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.SW2_CLOSE_EVENT_ID)", value: sw2CloseEventId)
 
       _ = cmd.executeNonQuery()
 
@@ -1591,15 +1531,19 @@ public class SwitchBoardItem : EditorObject {
         "[\(SWITCHBOARD_ITEM.TURNOUT_CONNECTION)], " +
         "[\(SWITCHBOARD_ITEM.SENSOR_POSITION)], " +
         "[\(SWITCHBOARD_ITEM.UNITS_SENSOR_POSITION)], " +
-        "[\(SWITCHBOARD_ITEM.GEN_SENSOR_ID)], " +
-        "[\(SWITCHBOARD_ITEM.TRANSPONDER_SENSOR_ID)], " +
-        "[\(SWITCHBOARD_ITEM.TRACK_FAULT_SENSOR_ID)], " +
-        "[\(SWITCHBOARD_ITEM.SW1_ID)], " +
-        "[\(SWITCHBOARD_ITEM.SW1_SENSOR1_ID)], " +
-        "[\(SWITCHBOARD_ITEM.SW1_SENSOR2_ID)], " +
-        "[\(SWITCHBOARD_ITEM.SW2_ID)], " +
-        "[\(SWITCHBOARD_ITEM.SW2_SENSOR1_ID)], " +
-        "[\(SWITCHBOARD_ITEM.SW2_SENSOR2_ID)]"
+        "[\(SWITCHBOARD_ITEM.ENTER_OCCUPANCY_EVENT_ID)], " +
+        "[\(SWITCHBOARD_ITEM.EXIT_OCCUPANCY_EVENT_ID)], " +
+        "[\(SWITCHBOARD_ITEM.TRANSPONDER_EVENT_ID)], " +
+        "[\(SWITCHBOARD_ITEM.TRACK_FAULT_EVENT_ID)], " +
+        "[\(SWITCHBOARD_ITEM.TRACK_FAULT_CLEARED_EVENT_ID)], " +
+        "[\(SWITCHBOARD_ITEM.SW1_THROWN_EVENT_ID)], " +
+        "[\(SWITCHBOARD_ITEM.SW1_CLOSED_EVENT_ID)], " +
+        "[\(SWITCHBOARD_ITEM.SW1_THROW_EVENT_ID)], " +
+        "[\(SWITCHBOARD_ITEM.SW1_CLOSE_EVENT_ID)], " +
+        "[\(SWITCHBOARD_ITEM.SW2_THROWN_EVENT_ID)], " +
+        "[\(SWITCHBOARD_ITEM.SW2_CLOSED_EVENT_ID)], " +
+        "[\(SWITCHBOARD_ITEM.SW2_THROW_EVENT_ID)], " +
+        "[\(SWITCHBOARD_ITEM.SW2_CLOSE_EVENT_ID)]"
 
     }
   }

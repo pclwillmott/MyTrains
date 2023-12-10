@@ -835,7 +835,7 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
           
           if occupancyReporting == .locationServices || occupancyReporting == .both {
             
-            networkLayer?.sendLocationServiceEvent(sourceNodeId: nodeId, eventId: locationServicesOccupancyEventId(zone: zone)!, trainNodeId: 0, entryExit: sensorState ? .entryWithState : .exit, motionRelative: .directionRelativeUnknown, motionAbsolute: .directionAbsoluteUnknown, contentFormat: .occupancyInformationOnly, typeOfContent: .none, content: [])
+            networkLayer?.sendLocationServiceEvent(sourceNodeId: nodeId, eventId: locationServicesOccupancyEventId(zone: zone)!, trainNodeId: 0, entryExit: sensorState ? .entryWithState : .exit, motionRelative: .unknown, motionAbsolute: .unknown, contentFormat: .occupancyInformationOnly, content: nil)
             
           }
           
@@ -844,10 +844,12 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
       }
       
     case .transRep:
+      
       let id = message.transponderZone! / numberOfChannels + 1
-      if id == boardId, let transponderZone = message.transponderZone, let locomotiveAddress = message.locomotiveAddress, let sensorState = message.sensorState {
+      
+      if id == boardId, let transponderZone = message.transponderZone, let locomotiveAddress = message.locomotiveAddress, let trainNodeId = OpenLCBNodeRollingStock.mapDCCAddressToID(address: locomotiveAddress), let sensorState = message.sensorState {
         let zone = transponderZone % numberOfChannels
-        networkLayer?.sendLocationServiceEvent(sourceNodeId: nodeId, eventId: locationServicesTranspondingEventId(zone: zone)!, trainNodeId: 0, entryExit: sensorState ? .entryWithState : .exit, motionRelative: .directionRelativeUnknown, motionAbsolute: .directionAbsoluteUnknown, contentFormat: .standardContentForm, typeOfContent: .digitraxTransponding, content: locomotiveAddress.bigEndianData)
+        networkLayer?.sendLocationServiceEvent(sourceNodeId: nodeId, eventId: locationServicesTranspondingEventId(zone: zone)!, trainNodeId: trainNodeId, entryExit: sensorState ? .entryWithState : .exit, motionRelative: .unknown, motionAbsolute: .unknown, contentFormat: .occupancyInformationOnly, content: nil)
       }
       
     case .pmRepBXP88:

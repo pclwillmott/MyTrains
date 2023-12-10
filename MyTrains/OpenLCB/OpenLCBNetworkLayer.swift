@@ -513,7 +513,7 @@ public class OpenLCBNetworkLayer : NSObject {
     sendMessage(message: message)
   }
   
-  public func sendLocationServiceEvent(sourceNodeId:UInt64, eventId:UInt64, trainNodeId:UInt64, entryExit:OpenLCBLocationServiceFlagEntryExit, motionRelative:OpenLCBLocationServiceFlagDirectionRelative, motionAbsolute:OpenLCBLocationServiceFlagDirectionAbsolute, contentFormat:OpenLCBLocationServiceFlagContentFormat, typeOfContent:OpenLCBStandardContentBlockType, content:[UInt8] ) {
+  public func sendLocationServiceEvent(sourceNodeId:UInt64, eventId:UInt64, trainNodeId:UInt64, entryExit:OpenLCBLocationServiceFlagEntryExit, motionRelative:OpenLCBLocationServiceFlagDirectionRelative, motionAbsolute:OpenLCBLocationServiceFlagDirectionAbsolute, contentFormat:OpenLCBLocationServiceFlagContentFormat, content: [OpenLCBLocationServicesContentBlock]? ) {
     
     var payload : [UInt8] = []
     
@@ -531,13 +531,15 @@ public class OpenLCBNetworkLayer : NSObject {
 
     payload.append(contentsOf: trainNodeId.bigEndianData.suffix(6))
     
-    if contentFormat == .standardContentForm {
+    if contentFormat == .standardContentForm, let content {
       
       payload.append(UInt8(1 + content.count))
       
-      payload.append(typeOfContent.rawValue)
-      
-      payload.append(contentsOf: content)
+      for block in content {
+        payload.append(UInt8(block.content.count + 1))
+        payload.append(block.blockType.rawValue)
+        payload.append(contentsOf: block.content)
+      }
       
     }
     

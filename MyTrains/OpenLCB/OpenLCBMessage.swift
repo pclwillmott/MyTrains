@@ -213,25 +213,24 @@ public class OpenLCBMessage : NSObject {
   public var trainNodeId : UInt64? {
     if isLocationServicesEvent {
       var id : [UInt8] = []
-      for index in 10 ... 15 {
+      for index in 2 ... 7 {
         id.append(payload[index])
       }
-      return UInt64(bigEndianData: id)
+      let idNumber = UInt64(bigEndianData: id)
+      return idNumber
     }
     return nil
   }
   
-  public typealias LocationServicesContentBlock = (blockType:OpenLCBStandardContentBlockType, content:[UInt8])
-  
-  public var locationServicesContent : [LocationServicesContentBlock]? {
+  public var locationServicesContent : [OpenLCBLocationServicesContentBlock]? {
     if isLocationServicesEvent, let locationServicesFlagContentFormat, locationServicesFlagContentFormat == .standardContentForm {
-      var result : [LocationServicesContentBlock] = []
+      var result : [OpenLCBLocationServicesContentBlock] = []
       var data = payload
       data.removeFirst(8)
       while !data.isEmpty {
         let length = Int(data.removeFirst())
         if length > 0 , let blockType = OpenLCBStandardContentBlockType(rawValue: data.removeFirst()) {
-          var block : LocationServicesContentBlock = (blockType:blockType, content:[UInt8](data.prefix(length - 1)))
+          var block : OpenLCBLocationServicesContentBlock = (blockType:blockType, content:[UInt8](data.prefix(length - 1)))
           result.append(block)
           data.removeFirst(length - 1)
         }

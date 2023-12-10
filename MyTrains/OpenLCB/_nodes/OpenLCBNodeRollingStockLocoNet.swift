@@ -354,8 +354,6 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
     
     locoNet?.getLocoSlot(forAddress: dccAddress)
     
-
-    
   }
   
   internal override func releaseNode() {

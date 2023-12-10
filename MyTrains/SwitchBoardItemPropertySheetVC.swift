@@ -183,75 +183,12 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
       // FEEDBACK
      
       if item.isFeedback {
-        generalSensors = myTrainsController.sensors(sensorTypes: [.position])
         lblTransponderSensor.isHidden = true
-        cboTransponderSensor.isHidden = true
-        btnClearTransponderSensor.isHidden = true
         lblTrackFaultSensor.isHidden = true
-        cboTrackFaultSensor.isHidden = true
-        btnClearTrackFaultSensor.isHidden = true
-      }
-      else {
-        generalSensors = myTrainsController.sensors(sensorTypes: [.occupancy])
-      }
-        
-      generalSensorDS.items = generalSensors
-      
-      cboGeneralSensor.dataSource = generalSensorDS
-      
-      if let index = generalSensorDS.indexWithKey(ioFunctionId: item.generalSensorId) {
-        cboGeneralSensor.selectItem(at: index)
-      }
-      
-      transponderSensors = myTrainsController.sensors(sensorTypes: [.transponder])
-      
-      transponderSensorDS.items = transponderSensors
-      
-      cboTransponderSensor.dataSource = transponderSensorDS
-      
-      if let index = transponderSensorDS.indexWithKey(ioFunctionId: item.transponderSensorId) {
-        cboTransponderSensor.selectItem(at: index)
-      }
-      
-      trackFaultSensors = myTrainsController.sensors(sensorTypes: [.trackFault])
-      
-      trackFaultSensorDS.items = trackFaultSensors
-      
-      cboTrackFaultSensor.dataSource = trackFaultSensorDS
-      
-      if let index = trackFaultSensorDS.indexWithKey(ioFunctionId: item.trackFaultSensorId) {
-        cboTrackFaultSensor.selectItem(at: index)
       }
       
       turnoutSensors = myTrainsController.sensors(sensorTypes: [.turnoutState])
       
-      sw1ClosedDS.items = turnoutSensors
-      cboSW1Closed.dataSource = sw1ClosedDS
-      
-      if let index = sw1ClosedDS.indexWithKey(ioFunctionId: item.sw1Sensor2Id) {
-        cboSW1Closed.selectItem(at: index)
-      }
-
-      sw1ThrownDS.items = turnoutSensors
-      cboSW1Thrown.dataSource = sw1ThrownDS
-
-      if let index = sw1ThrownDS.indexWithKey(ioFunctionId: item.sw1Sensor1Id) {
-        cboSW1Thrown.selectItem(at: index)
-      }
-
-      sw2ClosedDS.items = turnoutSensors
-      cboSW2Closed.dataSource = sw2ClosedDS
-
-      if let index = sw2ClosedDS.indexWithKey(ioFunctionId: item.sw2Sensor2Id) {
-        cboSW2Closed.selectItem(at: index)
-      }
-
-      sw2ThrownDS.items = turnoutSensors
-      cboSW2Thrown.dataSource = sw2ThrownDS
-
-      if let index = sw2ThrownDS.indexWithKey(ioFunctionId: item.sw2Sensor1Id) {
-        cboSW2Thrown.selectItem(at: index)
-      }
       
       UnitLength.populate(comboBox: cboPositionUnits)
       
@@ -326,16 +263,8 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
         tabs.removeTabViewItem(tabs.tabViewItems[1])
         lblSW1Closed.isHidden = true
         lblSW1Thrown.isHidden = true
-        cboSW1Closed.isHidden = true
-        cboSW1Thrown.isHidden = true
-        btnClearSW1Closed.isHidden = true
-        btnClearSW1Thrown.isHidden = true
         lblSW2Closed.isHidden = true
         lblSW2Thrown.isHidden = true
-        cboSW2Closed.isHidden = true
-        cboSW2Thrown.isHidden = true
-        btnClearSW2Closed.isHidden = true
-        btnClearSW2Thrown.isHidden = true
         if item.isFeedback {
           lblGeneralSensor.stringValue = "Position Sensor"
         }
@@ -359,10 +288,6 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
         if numberOfSwitches < 2 {
           lblSW2Closed.isHidden = true
           lblSW2Thrown.isHidden = true
-          cboSW2Closed.isHidden = true
-          cboSW2Thrown.isHidden = true
-          btnClearSW2Closed.isHidden = true
-          btnClearSW2Thrown.isHidden = true
           lblSW1Closed.stringValue = "Turnout Switch - Closed Sensor"
           lblSW1Thrown.stringValue = "Turnout Switch - Thrown Sensor"
         }
@@ -664,62 +589,6 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
     item.trackGauge = TrackGauge.selected(comboBox: cboTrackGauge)
     
     item.unitsDimension = UnitLength.selected(comboBox: cboDimensionUnits)
-
-    
-    item.sw1Id = -1
-    if cboTurnoutSwitch1.indexOfSelectedItem != -1 {
-      let turnoutSwitch = turnoutSwitches[cboTurnoutSwitch1.indexOfSelectedItem]
-      item.sw1Id = turnoutSwitch.locoNetDeviceId
-    }
-    
-    item.sw2Id = -1
-    if cboTurnoutSwitch2.indexOfSelectedItem != -1 {
-      let turnoutSwitch = turnoutSwitches[cboTurnoutSwitch2.indexOfSelectedItem]
-      item.sw2Id = turnoutSwitch.locoNetDeviceId
-    }
-    
-    item.generalSensorId = -1
-    if cboGeneralSensor.indexOfSelectedItem != -1 {
-      let sensor = generalSensors[cboGeneralSensor.indexOfSelectedItem]
-      item.generalSensorId = sensor.primaryKey
-    }
-
-    item.transponderSensorId = -1
-    if cboTransponderSensor.indexOfSelectedItem != -1 {
-      let transponderSensor = transponderSensors[cboTransponderSensor.indexOfSelectedItem]
-      item.transponderSensorId = transponderSensor.primaryKey
-    }
-    
-    item.trackFaultSensorId = -1
-    if cboTrackFaultSensor.indexOfSelectedItem != -1 {
-      let trackFaultSensor = trackFaultSensors[cboTrackFaultSensor.indexOfSelectedItem]
-      item.trackFaultSensorId = trackFaultSensor.primaryKey
-    }
-    
-    item.sw1Sensor1Id = -1
-    item.sw1Sensor2Id = -1
-    item.sw2Sensor1Id = -1
-    item.sw2Sensor2Id = -1
-    
-    if cboSW1Thrown.indexOfSelectedItem != -1 {
-      let sensor = turnoutSensors[cboSW1Thrown.indexOfSelectedItem]
-      item.sw1Sensor1Id = sensor.primaryKey
-    }
-
-    if cboSW1Closed.indexOfSelectedItem != -1 {
-      let sensor = turnoutSensors[cboSW1Closed.indexOfSelectedItem]
-      item.sw1Sensor2Id = sensor.primaryKey
-    }
-
-    if cboSW2Thrown.indexOfSelectedItem != -1 {
-      let sensor = turnoutSensors[cboSW2Thrown.indexOfSelectedItem]
-      item.sw2Sensor1Id = sensor.primaryKey
-    }
-
-    if cboSW2Closed.indexOfSelectedItem != -1 {
-      let sensor = turnoutSensors[cboSW2Closed.indexOfSelectedItem]
-      item.sw2Sensor2Id = sensor.primaryKey
-    }
     
     item.sensorPosition = txtGeneralSensorPosition.doubleValue
     
@@ -1045,89 +914,21 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
   
   @IBOutlet weak var lblGeneralSensor: NSTextField!
   
-  @IBOutlet weak var cboGeneralSensor: NSComboBox!
-  
-  @IBAction func cboGeneralSensorAction(_ sender: NSComboBox) {
-  }
   
   @IBOutlet weak var lblTransponderSensor: NSTextField!
   
-  @IBOutlet weak var cboTransponderSensor: NSComboBox!
-  
   @IBOutlet weak var lblTrackFaultSensor: NSTextField!
-  
-  @IBOutlet weak var cboTrackFaultSensor: NSComboBox!
   
   @IBOutlet weak var lblSW1Thrown: NSTextField!
   
-  @IBOutlet weak var cboSW1Thrown: NSComboBox!
-  
-  @IBAction func cboSW1ThrownAction(_ sender: NSComboBox) {
-  }
   
   @IBOutlet weak var lblSW1Closed: NSTextField!
   
-  @IBOutlet weak var cboSW1Closed: NSComboBox!
-  
-  @IBAction func cboSW1ClosedAction(_ sender: NSComboBox) {
-  }
-  
   @IBOutlet weak var lblSW2Thrown: NSTextField!
   
-  @IBOutlet weak var cboSW2Thrown: NSComboBox!
-  
-  @IBAction func cboSw2ThrownAction(_ sender: NSComboBox) {
-  }
   
   @IBOutlet weak var lblSW2Closed: NSTextField!
   
-  @IBOutlet weak var cboSW2Closed: NSComboBox!
-  
-  @IBAction func cboSW2ClosedAction(_ sender: NSComboBox) {
-  }
-  
-  @IBOutlet weak var btnClearGeneralSensor: NSButton!
-  
-  @IBAction func btnClearGeneralSensorAction(_ sender: NSButton) {
-    cboGeneralSensor.deselectItem(at: cboGeneralSensor.indexOfSelectedItem)
-  }
-  
-  @IBOutlet weak var btnClearTransponderSensor: NSButton!
-  
-  @IBAction func btnClearTransponderSensorAction(_ sender: NSButton) {
-  }
-  
-  @IBAction func btnClearTrackFaultSensor(_ sender: NSButton) {
-  }
-  
-  @IBOutlet weak var btnClearTrackFaultSensor: NSButton!
-  
-  
-  
-  @IBOutlet weak var btnClearSW1Thrown: NSButton!
-  
-  
-  @IBAction func btnClearSW1ThrownAction(_ sender: NSButton) {
-    cboSW1Thrown.deselectItem(at: cboSW1Thrown.indexOfSelectedItem)
-  }
-  
-  @IBOutlet weak var btnClearSW1Closed: NSButton!
-  
-  @IBAction func btnClearSW1ClosedAction(_ sender: NSButton) {
-    cboSW1Closed.deselectItem(at: cboSW1Closed.indexOfSelectedItem)
-  }
-  
-  @IBOutlet weak var btnClearSW2Thrown: NSButton!
-  
-  @IBAction func btnClearSW2ThrownAction(_ sender: NSButton) {
-    cboSW2Thrown.deselectItem(at: cboSW2Thrown.indexOfSelectedItem)
-  }
-  
-  @IBOutlet weak var btnClearSW2Closed: NSButton!
-  
-  @IBAction func btnClearSW2ClosedAction(_ sender: NSButton) {
-    cboSW2Closed.deselectItem(at: cboSW2Closed.indexOfSelectedItem)
-  }
   
   @IBOutlet weak var lblGeneralSensorPosition: NSTextField!
   
@@ -1143,6 +944,116 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
   @IBAction func cboPositionUnitsAction(_ sender: NSComboBox) {
   }
   
+  @IBOutlet weak var txtEnterDetectionZoneEventID: NSTextField!
   
+  @IBOutlet weak var lblExitDetectionZoneEventID: NSTextField!
+  
+  @IBOutlet weak var txtExitDetectionZoneEventID: NSTextField!
+  
+  @IBOutlet weak var txtTranspnderEventID: NSTextField!
+  
+  @IBOutlet weak var txtTrackFaultEventID: NSTextField!
+  
+  @IBOutlet weak var lblTrackFaultClearedEventID: NSTextField!
+  
+  @IBOutlet weak var txtTrackFaultClearedEventID: NSTextField!
+  
+  @IBOutlet weak var txtSW1ThrownEventID: NSTextField!
+  
+  @IBOutlet weak var txtSW1ClosedEventID: NSTextField!
+  
+  @IBOutlet weak var txtSW2ThrownEventID: NSTextField!
+  
+  @IBOutlet weak var txtSW2ClosedEventID: NSTextField!
+  
+  @IBOutlet weak var btnCopyEnterDetectionZoneEventID: NSButton!
+  
+  @IBAction func btnCopyEnterDetectionZoneEventIDAction(_ sender: NSButton) {
+  }
+  
+  @IBOutlet weak var btnPasteEnterDetectionZoneEventID: NSButton!
+  
+  @IBAction func btnPasteEnterDetectionZoneEventIDAction(_ sender: NSButton) {
+  }
+  
+  @IBOutlet weak var btnCopyExitDetectionZoneEventID: NSButton!
+  
+  @IBAction func btnCopyExitDetectionZoneEventIDAction(_ sender: NSButton) {
+  }
+  
+  @IBOutlet weak var btnPasteExitDetectionZoneEventID: NSButton!
+  
+  @IBAction func btnPasteExitDetectionZoneEventIDAction(_ sender: NSButton) {
+  }
+  
+  @IBOutlet weak var btnCopyTransponderEventID: NSButton!
+  
+  @IBAction func btnCopyTransponderEventIDAction(_ sender: NSButton) {
+  }
+  
+  @IBOutlet weak var btnPasteTransponderEventID: NSButton!
+  
+  @IBAction func btnPasteTransponderEventIDAction(_ sender: NSButton) {
+  }
+  
+  @IBOutlet weak var btnCopyTrackFaultEventID: NSButton!
+  
+  @IBAction func btnCopyTrackFaultEventIDAction(_ sender: NSButton) {
+  }
+  
+  @IBOutlet weak var btnPasteTrackFaultEventID: NSButton!
+  
+  @IBAction func btnPasteTrackFaultEventIDAction(_ sender: NSButton) {
+  }
+  
+  @IBOutlet weak var btnCopyTrackFaultClearedEventID: NSButton!
+  
+  @IBAction func btnCopyTrackFaultClearedEventIDAction(_ sender: NSButton) {
+  }
+  
+  @IBOutlet weak var btnPasteTrackFaultClearedEventID: NSButton!
+  
+  @IBAction func btnPasteTrackFaultClearedEventIDAction(_ sender: NSButton) {
+  }
+  
+  @IBOutlet weak var btnCopySW1ThrownEventID: NSButton!
+  
+  @IBAction func btnCopySW1ThrownEventIDAction(_ sender: NSButton) {
+  }
+  
+  @IBOutlet weak var btnPasteSW1ThrownEventID: NSButton!
+  
+  @IBAction func btnPasteSW1ThrownEventIDAction(_ sender: NSButton) {
+  }
+  
+  @IBOutlet weak var btnCopySW1ClosedEventID: NSButton!
+  
+  @IBAction func btnCopySW1ClosedEventIDAction(_ sender: NSButton) {
+  }
+  
+  @IBOutlet weak var btnPasteSW1ClosedEventID: NSButton!
+  
+  @IBAction func btnPasteSW1ClosedEventIDAction(_ sender: NSButton) {
+  }
+  
+  @IBOutlet weak var btnCopySW2ThrownEventID: NSButton!
+  
+  @IBAction func btnCopySW2ThrownEventIDAction(_ sender: NSButton) {
+  }
+  
+  @IBOutlet weak var btnPasteSW2ThrownEventID: NSButton!
+  
+  @IBAction func btnPasteSW2ThrownEventIDAction(_ sender: NSButton) {
+  }
+  
+  @IBOutlet weak var btnCopySW2ClosedEventID: NSButton!
+  
+  @IBAction func btnCopySW2ClosedEventIDAction(_ sender: NSButton) {
+  }
+  
+  @IBOutlet weak var btnPasteSW2ClosedEventID: NSButton!
+  
+  @IBAction func btnPasteSW2ClosedEventIDAction(_ sender: NSButton) {
+  }
   
 }

@@ -239,6 +239,10 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     }
   }
   
+  public var dccAddressUniqueId : UInt64? {
+    return OpenLCBNodeRollingStock.mapDCCAddressToID(address: dccAddress)
+  }
+  
   public var speedSteps : SpeedSteps {
     get {
       return SpeedSteps(rawValue: configuration.getUInt8(address: addressSpeedSteps)!)!
@@ -1125,6 +1129,23 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
         }
         
       }
+      else if message.isLocationServicesEvent, let trainNodeId = message.trainNodeId, let uniqueId = dccAddressUniqueId, trainNodeId == uniqueId {
+        
+        var motionRelative : OpenLCBLocationServiceFlagDirectionRelative
+        
+        if setSpeed < 0.0 {
+          motionRelative = .reverse
+        }
+        else if setSpeed > 0.0 {
+          motionRelative = .forward
+        }
+        else {
+          motionRelative = .stopped
+        }
+        
+        networkLayer?.sendLocationServiceEvent(sourceNodeId: nodeId, eventId: message.eventId!, trainNodeId: nodeId, entryExit: message.locationServicesFlagEntryExit!, motionRelative: motionRelative, motionAbsolute: message.locationServicesFlagDirectionAbsolute!, contentFormat: message.locationServicesFlagContentFormat!, content: message.locationServicesContent)
+        
+      }
 
     case .identifyProducer:
       
@@ -1261,6 +1282,24 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     default:
       break
     }
+    
+  }
+  
+  // MARK: Class Methods
+  
+  public static func mapDCCAddressToID(address:UInt16) -> UInt64? {
+    
+    guard address > 0 && address < 10240 else {
+      return nil
+    }
+    
+    var result : UInt64 = 0x0a0000000000 | UInt64(address)
+    
+    if address > 127 {
+      result += 0xc000
+    }
+    
+    return result
     
   }
   
