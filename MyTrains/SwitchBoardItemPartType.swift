@@ -114,6 +114,33 @@ public enum SwitchBoardItemPartType : Int {
     }
   }
   
+  public var eventsSupported : Set<SwitchBoardEventType> {
+    
+    var result : Set<SwitchBoardEventType> = []
+    
+    let turnouts = numberOfTurnoutSwitches
+    
+    if turnouts > 0 {
+      result = result.union([.sw1Thrown, .sw1Closed, .throwSW1, .closeSW1])
+    }
+    
+    if turnouts > 1 {
+      result = result.union([.sw2Thrown, .sw2Closed, .throwSW2, .closeSW2])
+    }
+    
+    let noFeedback : Set<SwitchBoardItemPartType> = [.buffer, .curve, .longCurve, .link, .none, .platform, .straight]
+    
+    if self == .feedback {
+      result = result.union([.enterDetectionZone, .exitDetectionZone])
+    }
+    else if !noFeedback.contains(self) {
+      result = result.union([.enterDetectionZone, .exitDetectionZone, .transponder, .trackFault, .trackFaultCleared])
+    }
+    
+    return result
+    
+  }
+  
   private static let connections : [SwitchBoardItemPartType:[SwitchBoardConnection]] = [
     .straight           : [(5, 1, [])],
     .curve              : [(5, 3, [])],

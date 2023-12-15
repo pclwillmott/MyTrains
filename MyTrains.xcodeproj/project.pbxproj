@@ -108,6 +108,7 @@
 		DA484A022933D09000D9EAF1 /* TurnoutSwitchComboDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA484A012933D09000D9EAF1 /* TurnoutSwitchComboDS.swift */; };
 		DA48EE29293CEF16006C26A0 /* DayOfWeek.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA48EE28293CEF16006C26A0 /* DayOfWeek.swift */; };
 		DA48EE2B293CEFEA006C26A0 /* FastClockScaleFactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA48EE2A293CEFEA006C26A0 /* FastClockScaleFactor.swift */; };
+		DA4DE5232B2CBC16000C74F1 /* SwitchBoardEventType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA4DE5222B2CBC16000C74F1 /* SwitchBoardEventType.swift */; };
 		DA4E254429607E1A00984D45 /* TC64DebounceTiming.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA4E254329607E1A00984D45 /* TC64DebounceTiming.swift */; };
 		DA4E254A2960894B00984D45 /* TC64LongTiming.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA4E25492960894B00984D45 /* TC64LongTiming.swift */; };
 		DA51B8D829D9D5430074E881 /* OpenLCBTransportLayerCAN.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA51B8D729D9D5430074E881 /* OpenLCBTransportLayerCAN.swift */; };
@@ -480,6 +481,7 @@
 		DA484A012933D09000D9EAF1 /* TurnoutSwitchComboDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TurnoutSwitchComboDS.swift; sourceTree = "<group>"; };
 		DA48EE28293CEF16006C26A0 /* DayOfWeek.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayOfWeek.swift; sourceTree = "<group>"; };
 		DA48EE2A293CEFEA006C26A0 /* FastClockScaleFactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastClockScaleFactor.swift; sourceTree = "<group>"; };
+		DA4DE5222B2CBC16000C74F1 /* SwitchBoardEventType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchBoardEventType.swift; sourceTree = "<group>"; };
 		DA4E254329607E1A00984D45 /* TC64DebounceTiming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TC64DebounceTiming.swift; sourceTree = "<group>"; };
 		DA4E25492960894B00984D45 /* TC64LongTiming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TC64LongTiming.swift; sourceTree = "<group>"; };
 		DA51B8D729D9D5430074E881 /* OpenLCBTransportLayerCAN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBTransportLayerCAN.swift; sourceTree = "<group>"; };
@@ -1164,6 +1166,7 @@
 				DA467BAE281D5D2F00AB9650 /* SwitchBoardEditor.storyboard */,
 				DA467BB0281D5ED400AB9650 /* SwitchBoardEditorVC.swift */,
 				DA467BAA281D56A700AB9650 /* SwitchBoardEditorView.swift */,
+				DA4DE5222B2CBC16000C74F1 /* SwitchBoardEventType.swift */,
 				DA467BA6281D534900AB9650 /* SwitchBoardItem.swift */,
 				DA6E28DE285F827600772641 /* SwitchBoardItemPartType.swift */,
 				DA1B79F4285F24B8009E1189 /* SwitchBoardItemPropertySheet.storyboard */,
@@ -1524,6 +1527,7 @@
 				DA4342962836996800E8D555 /* MTSerialPort.swift in Sources */,
 				DA1B79F7285F2540009E1189 /* SwitchBoardItemPropertySheetVC.swift in Sources */,
 				DA6A0ADF2753B5CF00913F2B /* UserDefaults.swift in Sources */,
+				DA4DE5232B2CBC16000C74F1 /* SwitchBoardEventType.swift in Sources */,
 				DAEF18712A3DFDE100AC227D /* DeviceId.swift in Sources */,
 				DAD73C1E2A9A4F64002E7618 /* OpenLCBDigitraxBXP88Node.swift in Sources */,
 				DA6A0AE12753D50A00913F2B /* GlobalVariables.swift in Sources */,
