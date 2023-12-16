@@ -8,8 +8,8 @@
 import Foundation
 
 @objc public protocol MyTrainsControllerDelegate {
-  @objc optional func interfacesUpdated(interfaces:[Interface])
+//  @objc optional func interfacesUpdated(interfaces:[Interface])
   @objc optional func myTrainsControllerUpdated(myTrainsController:MyTrainsController)
-  @objc optional func statusUpdated(myTrainsController:MyTrainsController)
+//  @objc optional func statusUpdated(myTrainsController:MyTrainsController)
   @objc optional func switchBoardUpdated()
 }

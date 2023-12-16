@@ -65,20 +65,7 @@ class Database {
               "[\(LAYOUT.LAYOUT_DESCRIPTION)] TEXT NOT NULL," +
               "[\(LAYOUT.LAYOUT_SCALE)]       REAL NOT NULL" +
             ")",
-
-            "CREATE TABLE [\(TABLE.NETWORK)] (" +
-              "[\(NETWORK.NETWORK_ID)]            INT PRIMARY KEY," +
-              "[\(NETWORK.NETWORK_NAME)]          TEXT NOT NULL," +
-              "[\(NETWORK.INTERFACE_ID)]          INT NOT NULL," +
-              "[\(NETWORK.LAYOUT_ID)]             INT NOT NULL," +
-              "[\(NETWORK.LOCONET_ID)]            INT NOT NULL," +
-              "[\(NETWORK.DUPLEX_GROUP_NAME)]     TEXT NOT NULL," +
-              "[\(NETWORK.DUPLEX_GROUP_PASSWORD)] TEXT NOT NULL," +
-              "[\(NETWORK.DUPLEX_GROUP_CHANNEL)]  INT NOT NULL," +
-              "[\(NETWORK.DUPLEX_GROUP_ID)]       INT NOT NULL," +
-              "[\(NETWORK.COMMAND_STATION_ID)]    INT NOT NULL" +
-            ")",
- 
+/*
             "CREATE TABLE [\(TABLE.LOCONET_DEVICE)] (" +
               "[\(LOCONET_DEVICE.LOCONET_DEVICE_ID)]      INT PRIMARY KEY," +
               "[\(LOCONET_DEVICE.NETWORK_ID)]             INT NOT NULL," +
@@ -141,7 +128,7 @@ class Database {
               "[\(ROLLING_STOCK.ADECODER_INSTALLED)]       INT NOT NULL," +
               "[\(ROLLING_STOCK.ADECODER_INSTALLED)]       INT NOT NULL," +
               "[\(ROLLING_STOCK.BEST_FIT_METHOD)]          INT NOT NULL" +
-            ")",
+            ")", */
 /*
             "CREATE TABLE [\(TABLE.DECODER_FUNCTION)] (" +
               "[\(DECODER_FUNCTION.DECODER_FUNCTION_ID)]  INT PRIMARY KEY," +
@@ -155,7 +142,7 @@ class Database {
               "[\(DECODER_FUNCTION.INVERTED)]             INT NOT NULL," +
               "[\(DECODER_FUNCTION.STATE)]                INT NOT NULL" +
             ")",
-*/
+
             "CREATE TABLE [\(TABLE.DECODER_CV)] (" +
               "[\(DECODER_CV.DECODER_CV_ID)]      INT PRIMARY KEY," +
               "[\(DECODER_CV.ROLLING_STOCK_ID)]   INT NOT NULL," +
@@ -175,7 +162,7 @@ class Database {
               "[\(SPEED_PROFILE.SPEED_FORWARD)]     REAL NOT NULL," +
               "[\(SPEED_PROFILE.SPEED_REVERSE)]     REAL NOT NULL" +
             ")",
-
+*/
             "CREATE TABLE [\(TABLE.SWITCHBOARD_PANEL)] (" +
               "[\(SWITCHBOARD_PANEL.SWITCHBOARD_PANEL_ID)] INT PRIMARY KEY," +
               "[\(SWITCHBOARD_PANEL.LAYOUT_ID)]            INT NOT NULL," +
@@ -260,7 +247,7 @@ class Database {
               "[\(SWITCHBOARD_ITEM.SW2_THROW_EVENT_ID)]           INT," +
               "[\(SWITCHBOARD_ITEM.SW2_CLOSE_EVENT_ID)]           INT" +
             ")",
-            
+            /*
             "CREATE TABLE [\(TABLE.SENSOR)] (" +
               "[\(SENSOR.SENSOR_ID)]           INT PRIMARY KEY," +
               "[\(SENSOR.LOCONET_DEVICE_ID)]   INT NOT NULL," +
@@ -280,7 +267,7 @@ class Database {
               "[\(TURNOUT_SWITCH.CHANNEL_NUMBER)]      INT NOT NULL," +
               "[\(TURNOUT_SWITCH.SWITCH_ADDRESS)]      INT NOT NULL" +
             ")",
-
+*/
             "CREATE TABLE [\(TABLE.MEMORY_SPACE)] (" +
               "[\(MEMORY_SPACE.MEMORY_SPACE_ID)] INT PRIMARY KEY," +
               "[\(MEMORY_SPACE.NODE_ID)]         INT NOT NULL," +
@@ -317,7 +304,7 @@ class Database {
             
    //         print("Version: \(Version)")
             
-            if Version == 30 {
+            if Version == 32 {
   
               let commands = [
         
@@ -459,8 +446,17 @@ class Database {
                 "ALTER TABLE [\(TABLE.SWITCHBOARD_ITEM)] ADD [\(SWITCHBOARD_ITEM.SW2_CLOSED_EVENT_ID)] INT",
                 "ALTER TABLE [\(TABLE.SWITCHBOARD_ITEM)] ADD [\(SWITCHBOARD_ITEM.SW2_THROW_EVENT_ID)] INT",
                 "ALTER TABLE [\(TABLE.SWITCHBOARD_ITEM)] ADD [\(SWITCHBOARD_ITEM.SW2_CLOSE_EVENT_ID)] INT",
-*/
-                "UPDATE [\(TABLE.VERSION)] SET [\(VERSION.VERSION_NUMBER)] = 31 WHERE [\(VERSION.VERSION_ID)] = 1",
+
+                
+                "DROP TABLE IF EXISTS [\(TABLE.TURNOUT_SWITCH)]",
+                "DROP TABLE IF EXISTS [\(TABLE.SENSOR)]",
+                "DROP TABLE IF EXISTS [\(TABLE.LOCONET_DEVICE_CV)]",
+                "DROP TABLE IF EXISTS [\(TABLE.LOCONET_DEVICE)]",
+                "DROP TABLE IF EXISTS [\(TABLE.SPEED_PROFILE)]",
+                "DROP TABLE IF EXISTS [\(TABLE.DECODER_CV)]",
+                "DROP TABLE IF EXISTS [\(TABLE.ROLLING_STOCK)]", */
+
+                "UPDATE [\(TABLE.VERSION)] SET [\(VERSION.VERSION_NUMBER)] = 33 WHERE [\(VERSION.VERSION_ID)] = 1",
  
              ]
               

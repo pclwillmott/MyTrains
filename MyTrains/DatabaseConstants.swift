@@ -10,18 +10,18 @@ import Foundation
 enum TABLE {
   static let VERSION                     = "VERSION"
   static let LAYOUT                      = "LAYOUT"
-  static let NETWORK                     = "NETWORK"
-  static let LOCONET_DEVICE              = "LOCONET_DEVICE"
-  static let ROLLING_STOCK               = "ROLLING_STOCK"
+//  static let NETWORK                     = "NETWORK"
+//  static let LOCONET_DEVICE              = "LOCONET_DEVICE"
+//  static let ROLLING_STOCK               = "ROLLING_STOCK"
 //  static let DECODER_FUNCTION            = "DECODER_FUNCTION"
-  static let DECODER_CV                  = "DECODER_CV"
-  static let SPEED_PROFILE               = "SPEED_PROFILE"
+//  static let DECODER_CV                  = "DECODER_CV"
+//  static let SPEED_PROFILE               = "SPEED_PROFILE"
   static let TRAIN                       = "TRAIN"
   static let SWITCHBOARD_PANEL           = "SWITCHBOARD_PANEL"
   static let SWITCHBOARD_ITEM            = "SWITCHBOARD_ITEM"
-  static let SENSOR                      = "SENSOR"
-  static let TURNOUT_SWITCH              = "TURNOUT_SWITCH"
-  static let LOCONET_DEVICE_CV           = "LOCONET_DEVICE_CV"
+//  static let SENSOR                      = "SENSOR"
+//  static let TURNOUT_SWITCH              = "TURNOUT_SWITCH"
+//  static let LOCONET_DEVICE_CV           = "LOCONET_DEVICE_CV"
   static let MEMORY_SPACE                = "MEMORY_SPACE"
 }
 
@@ -36,20 +36,7 @@ enum LAYOUT {
   static let LAYOUT_DESCRIPTION          = "LAYOUT_DESCRIPTION"
   static let LAYOUT_SCALE                = "LAYOUT_SCALE"
 }
-
-enum NETWORK {
-  static let NETWORK_ID                  = "NETWORK_ID"
-  static let NETWORK_NAME                = "NETWORK_NAME"
-  static let INTERFACE_ID                = "INTERFACE_ID"
-  static let LAYOUT_ID                   = "LAYOUT_ID"
-  static let LOCONET_ID                  = "LOCONET_ID"
-  static let DUPLEX_GROUP_NAME           = "DUPLEX_GROUP_NAME"
-  static let DUPLEX_GROUP_PASSWORD       = "DUPLEX_GROUP_PASSWORD"
-  static let DUPLEX_GROUP_CHANNEL        = "DUPLEX_GROUP_CHANNEL"
-  static let DUPLEX_GROUP_ID             = "DUPLEX_GROUP_ID"
-  static let COMMAND_STATION_ID          = "COMMAND_STATION_ID"
-}
-
+/*
 enum LOCONET_DEVICE {
   static let LOCONET_DEVICE_ID           = "LOCONET_DEVICE_ID"
   static let NETWORK_ID                  = "NETWORK_ID"
@@ -113,7 +100,7 @@ enum ROLLING_STOCK {
   static let FLAGS                       = "FLAGS"
   static let BEST_FIT_METHOD             = "BEST_FIT_METHOD"
 }
-/*
+
 enum DECODER_FUNCTION {
   static let DECODER_FUNCTION_ID         = "DECODER_FUNCTION_ID"
   static let ROLLING_STOCK_ID            = "ROLLING_STOCK_ID"
@@ -126,7 +113,7 @@ enum DECODER_FUNCTION {
   static let INVERTED                    = "INVERTED"
   static let STATE                       = "STATE"
 }
-*/
+
 enum DECODER_CV {
   static let DECODER_CV_ID               = "DECODER_CV_ID"
   static let ROLLING_STOCK_ID            = "ROLLING_STOCK_ID"
@@ -146,7 +133,7 @@ enum SPEED_PROFILE {
   static let SPEED_FORWARD               = "SPEED_FORWARD"
   static let SPEED_REVERSE               = "SPEED_REVERSE"
 }
-
+*/
 enum SWITCHBOARD_PANEL {
   static let SWITCHBOARD_PANEL_ID        = "SWITCHBOARD_PANEL_ID"
   static let LAYOUT_ID                   = "LAYOUT_ID"
@@ -234,6 +221,7 @@ enum SWITCHBOARD_ITEM {
 
 // THIS IS NOW IOFUNCTION
 
+/*
 enum SENSOR {
   static let SENSOR_ID                   = "SENSOR_ID"
   static let LOCONET_DEVICE_ID           = "LOCONET_DEVICE_ID"
@@ -253,7 +241,7 @@ enum TURNOUT_SWITCH {
   static let CHANNEL_NUMBER              = "CHANNEL_NUMBER"
   static let SWITCH_ADDRESS              = "SWITCH_ADDRESS"
 }
-
+*/
 enum MEMORY_SPACE {
   static let MEMORY_SPACE_ID             = "MEMORY_SPACE_ID"
   static let NODE_ID                     = "NODE_ID"

@@ -650,7 +650,7 @@ public class DMF : NSObject {
   
   // MARK: Private Properties
   
-  private var interface : InterfaceLocoNet?
+//  private var interface : InterfaceLocoNet?
   
   private var delegate : DMFDelegate?
   
@@ -768,7 +768,7 @@ public class DMF : NSObject {
   @objc func timerAction() {
     
     if _cancel {
-      interface?.iplEndLoad()
+  //    interface?.iplEndLoad()
       DispatchQueue.main.async { [self] in
         self.delegate?.aborted?()
       }
@@ -780,13 +780,13 @@ public class DMF : NSObject {
       break
     case .sendSetup:
       nextAction = .sendAddr
-      interface?.iplSetup(dmf: self)
+  //    interface?.iplSetup(dmf: self)
       startTimer(timeInterval: eraseDelayInSeconds, repeats: false)
     case .sendAddr:
       nextAction = .sendBlock
       let dataRecord = dataRecords[blockIndex]
       byteIndex = 0
-      interface?.iplSetAddr(loadAddress: dataRecord.loadOffset)
+ //    interface?.iplSetAddr(loadAddress: dataRecord.loadOffset)
       startTimer(timeInterval: setAddrDelayInSeconds, repeats: false)
       DispatchQueue.main.async { [self] in
         self.delegate?.update?(progress: Double(self.blockIndex) / Double(self.dataRecords.count) * 100.0)
@@ -801,7 +801,7 @@ public class DMF : NSObject {
       let d6 : UInt8 = dataRecord.data[byteIndex+5]
       let d7 : UInt8 = dataRecord.data[byteIndex+6]
       let d8 : UInt8 = dataRecord.data[byteIndex+7]
-      interface?.iplDataLoad(D1: d1, D2: d2, D3: d3, D4: d4, D5: d5, D6: d6, D7: d7, D8: d8)
+ //     interface?.iplDataLoad(D1: d1, D2: d2, D3: d3, D4: d4, D5: d5, D6: d6, D7: d7, D8: d8)
       byteIndex += 8
       var delay = blockDelayInSeconds
       if byteIndex == dataRecord.recordLength {
@@ -828,7 +828,7 @@ public class DMF : NSObject {
       startTimer(timeInterval: delay, repeats: false)
     case .sendEnd:
       nextAction = .idle
-      interface?.iplEndLoad()
+//      interface?.iplEndLoad()
       DispatchQueue.main.async { [self] in
         self.delegate?.update?(progress: 100.0)
         self.delegate?.completed?()
@@ -849,7 +849,7 @@ public class DMF : NSObject {
   
 
   // MARK: Public Methods
-  
+  /*
   public func start(interface: InterfaceLocoNet, delegate: DMFDelegate) {
     
     _cancel = false
@@ -878,7 +878,7 @@ public class DMF : NSObject {
     }
     
   }
-  
+  */
   public func cancel() {
     _cancel = true
   }

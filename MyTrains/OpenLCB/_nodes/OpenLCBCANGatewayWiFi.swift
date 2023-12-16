@@ -1,20 +1,19 @@
 //
-//  InterfaceOpenLCBCANWiFi.swift
+//  OpenLCBCANGatewayWiFi.swift
 //  MyTrains
 //
-//  Created by Paul Willmott on 17/06/2023.
+//  Created by Paul Willmott on 16/12/2023.
 //
 
 import Foundation
-
-public class InterfaceOpenLCBCANWiFi : InterfaceOpenLCBCAN {
-
+public class OpenLCBCANGatewayWiFi : OpenLCBCANGateway {
+  
   // MARK: Private Properties
     
   internal var client : Client?
   
   // MARK: Public Properties
-  
+/*
   public override var isConnected : Bool {
     get {
       return client != nil
@@ -74,6 +73,7 @@ public class InterfaceOpenLCBCANWiFi : InterfaceOpenLCBCAN {
       self.client?.connection.send(data: data.data(using: .utf8)!)
     }
   }
-
+*/
 }
+
 

@@ -8,7 +8,7 @@
 import Foundation
 import Cocoa
 
-class UpdateFirmwareVC: NSViewController, NSWindowDelegate, InterfaceDelegate, DMFDelegate {
+class UpdateFirmwareVC: NSViewController, NSWindowDelegate, DMFDelegate {
 
   // MARK: Window & View Control
   
@@ -23,7 +23,7 @@ class UpdateFirmwareVC: NSViewController, NSWindowDelegate, InterfaceDelegate, D
   func windowWillClose(_ notification: Notification) {
     
     if observerId != -1 {
-      interface?.removeObserver(id: observerId)
+ //     interface?.removeObserver(id: observerId)
       observerId = -1
     }
     
@@ -33,7 +33,7 @@ class UpdateFirmwareVC: NSViewController, NSWindowDelegate, InterfaceDelegate, D
     
     self.view.window?.delegate = self
     
-    interfacesUpdated(interfaces: myTrainsController.networkInterfaces)
+//    interfacesUpdated(interfaces: myTrainsController.networkInterfaces)
 
 //    dmfPath = UserDefaults.standard.string(forKey: DEFAULT.IPL_DMF_FILENAME) ?? ""
     
@@ -45,7 +45,7 @@ class UpdateFirmwareVC: NSViewController, NSWindowDelegate, InterfaceDelegate, D
   
   private var observerId : Int = -1
   
-  private var interface : InterfaceLocoNet? = nil
+//  private var interface : InterfaceLocoNet? = nil
   
   private var timer : Timer?
   
@@ -117,11 +117,11 @@ class UpdateFirmwareVC: NSViewController, NSWindowDelegate, InterfaceDelegate, D
     
     
   }
-  
+  /*
   private func interfacesUpdated(interfaces: [Interface]) {
     
     if observerId != -1 {
-      self.interface?.removeObserver(id: observerId)
+ //     self.interface?.removeObserver(id: observerId)
       observerId = -1
     }
     
@@ -145,7 +145,7 @@ class UpdateFirmwareVC: NSViewController, NSWindowDelegate, InterfaceDelegate, D
     }
     
   }
-  
+  */
   // MARK: DMFDelegate Methods
   
   func update(progress: Double) {
@@ -326,19 +326,13 @@ class UpdateFirmwareVC: NSViewController, NSWindowDelegate, InterfaceDelegate, D
     let name = cboInterface.stringValue
     
     UserDefaults.standard.set(name, forKey: DEFAULT.IPL_INTERFACE_ID)
-    
+    /*
     if let x = interface {
       if name != x.deviceName && observerId != -1 {
         x.removeObserver(id: observerId)
       }
     }
-    
-    for x in myTrainsController.networkInterfaces {
-      if x.deviceName == name, let y = x as? InterfaceLocoNet {
-        interface = y
-        observerId = interface?.addObserver(observer: self) ?? -1
-      }
-    }
+    */
 
   }
   
@@ -414,7 +408,7 @@ class UpdateFirmwareVC: NSViewController, NSWindowDelegate, InterfaceDelegate, D
   @IBAction func btnStartAction(_ sender: NSButton) {
     
     mode = .idle
-    dmf?.start(interface: interface!, delegate: self)
+//    dmf?.start(interface: interface!, delegate: self)
     
   }
   

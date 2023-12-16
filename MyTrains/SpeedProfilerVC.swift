@@ -8,7 +8,7 @@
 import Foundation
 import Cocoa
 
-class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
+class SpeedProfilerVC: NSViewController, NSWindowDelegate {
  
   // MARK: Window & View Control
   
@@ -22,7 +22,7 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
 
   func windowWillClose(_ notification: Notification) {
     if observerId != -1 {
-      interface?.removeObserver(id: observerId)
+//      interface?.removeObserver(id: observerId)
     }
   }
   
@@ -122,7 +122,7 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   
 //  private var locomotive : Locomotive?
   
-  private var interface : InterfaceLocoNet?
+//  private var interface : InterfaceLocoNet?
   
   private var observerId : Int = -1
   
@@ -153,7 +153,7 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
     scrollView.isHidden = true
     lblStatus.isHidden = true
     
-    tableViewDS.speedProfile = nil
+//    tableViewDS.speedProfile = nil
     tableView.dataSource = nil
     tableView.delegate = nil
     
@@ -428,7 +428,7 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
     if mode == .idle {
       
       if observerId != -1 {
-        interface?.removeObserver(id: observerId)
+   //     interface?.removeObserver(id: observerId)
         observerId = -1
       }
       /*
@@ -566,6 +566,7 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
   }
   
   @IBAction func btnResetResultsAction(_ sender: NSButton) {
+    /*
     for profile in tableViewDS.speedProfile! {
       if cboLocomotiveDirection.indexOfSelectedItem == 0 || cboLocomotiveDirection.indexOfSelectedItem == 2 {
         profile.newSpeedForward = 0.0
@@ -574,15 +575,18 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate, InterfaceDelegate {
         profile.newSpeedReverse = 0.0
       }
     }
+     */
     tableView.reloadData()
     resultsView.needsDisplay = true
   }
   
   @IBAction func btnDiscardResultsAction(_ sender: NSButton) {
+    /*
     for profile in tableViewDS.speedProfile! {
       profile.newSpeedForward = profile.speedForward
       profile.newSpeedReverse = profile.speedReverse
     }
+     */
 //    self.view.window?.close()
   }
   

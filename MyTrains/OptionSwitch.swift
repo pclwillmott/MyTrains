@@ -66,9 +66,9 @@ public class OptionSwitch {
   
   // MARK: Constructors
   
-  init(locoNetDevice: LocoNetDevice, switchDefinition:OptionSwitchDefinition) {
+  init(switchDefinition:OptionSwitchDefinition) {
     
-    self._locoNetDevice = locoNetDevice
+//    self._locoNetDevice = locoNetDevice
     
     self._switchNumber = switchDefinition.switchNumber
     
@@ -78,20 +78,20 @@ public class OptionSwitch {
   
   // MARK: Private Properties
   
-  private var _locoNetDevice : LocoNetDevice
+//  private var _locoNetDevice : LocoNetDevice
   
   private var _switchNumber : Int
   
   private var _switchDefinition : OptionSwitchDefinition
   
   // MARK: Public Properties
-  
+  /*
   public var locoNetDevice : LocoNetDevice {
     get {
       return _locoNetDevice
     }
   }
-  
+  */
   public var switchNumber : Int {
     get {
       return _switchNumber
@@ -106,19 +106,19 @@ public class OptionSwitch {
   
   public var state : OptionSwitchState {
     get {
-      return locoNetDevice.getState(switchNumber: self.switchNumber)
+      return .closed// locoNetDevice.getState(switchNumber: self.switchNumber)
     }
     set(value) {
-      locoNetDevice.setState(switchNumber: self.switchNumber, value: value)
+   //   locoNetDevice.setState(switchNumber: self.switchNumber, value: value)
     }
   }
   
   public var newState : OptionSwitchState {
     get {
-      return locoNetDevice.getNewState(switchNumber: self.switchNumber)
+      return .closed // locoNetDevice.getNewState(switchNumber: self.switchNumber)
     }
     set(value) {
-      locoNetDevice.setNewState(switchNumber: self.switchNumber, value: value)
+  //    locoNetDevice.setNewState(switchNumber: self.switchNumber, value: value)
     }
   }
   
@@ -128,20 +128,20 @@ public class OptionSwitch {
     get {
       
       var value : Int = 0
-      value |= (locoNetDevice.getState(switchNumber: 23).isClosed ? 1 : 0) << 2
-      value |= (locoNetDevice.getState(switchNumber: 22).isClosed ? 1 : 0) << 1
-      value |= (locoNetDevice.getState(switchNumber: 21).isClosed ? 1 : 0)
+ //     value |= (locoNetDevice.getState(switchNumber: 23).isClosed ? 1 : 0) << 2
+ //     value |= (locoNetDevice.getState(switchNumber: 22).isClosed ? 1 : 0) << 1
+ //     value |= (locoNetDevice.getState(switchNumber: 21).isClosed ? 1 : 0)
    
-      return SpeedSteps.speedStepFromOpSw(opsw: value, locoNetProductId: locoNetDevice.locoNetProductId)
+      return .dcc128 // SpeedSteps.speedStepFromOpSw(opsw: value, locoNetProductId: locoNetDevice.locoNetProductId)
       
     }
     set(value) {
       
-      let bits = value.opsw(locoNetProductId: locoNetDevice.locoNetProductId)
+   //   let bits = value.opsw(locoNetProductId: locoNetDevice.locoNetProductId)
       
-      locoNetDevice.setState(switchNumber: 23, value: (bits & 0b100) == 0b100 ? .closed : .thrown)
-      locoNetDevice.setState(switchNumber: 22, value: (bits & 0b010) == 0b010 ? .closed : .thrown)
-      locoNetDevice.setState(switchNumber: 21, value: (bits & 0b001) == 0b001 ? .closed : .thrown)
+ //     locoNetDevice.setState(switchNumber: 23, value: (bits & 0b100) == 0b100 ? .closed : .thrown)
+ //     locoNetDevice.setState(switchNumber: 22, value: (bits & 0b010) == 0b010 ? .closed : .thrown)
+ //     locoNetDevice.setState(switchNumber: 21, value: (bits & 0b001) == 0b001 ? .closed : .thrown)
       
       newDefaultDecoderType = value
       

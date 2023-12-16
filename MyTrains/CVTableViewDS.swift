@@ -12,7 +12,7 @@ public class CVTableViewDS : NSObject, NSTableViewDataSource, NSTableViewDelegat
 
   // MARK: Public Properties
   
-  public var cvs = [DecoderCV]()
+//  public var cvs = [DecoderCV]()
   
   // MARK: NSTableViewDataSource Delegate Methods
   
@@ -20,7 +20,7 @@ public class CVTableViewDS : NSObject, NSTableViewDataSource, NSTableViewDelegat
   
   // Returns the number of records managed for aTableView by the data source object.
    public func numberOfRows(in tableView: NSTableView) -> Int {
-     return cvs.count
+     return 0 // cvs.count
    }
   
   // Sets the data object for an item in the specified row and column.
@@ -30,7 +30,7 @@ public class CVTableViewDS : NSObject, NSTableViewDataSource, NSTableViewDelegat
   public func tableView(_ tableView: NSTableView,
                         viewFor tableColumn: NSTableColumn?,row: Int) -> NSView? {
     
-    let item = cvs[row]
+ //   let item = cvs[row]
     
     let columnName = tableColumn!.identifier.rawValue
     
@@ -52,36 +52,37 @@ public class CVTableViewDS : NSObject, NSTableViewDataSource, NSTableViewDelegat
 
     switch columnName {
     case ColumnIdentifiers.CVNumberColumn:
-      text = "\(item.displayCVNumber)"
+   //   text = "\(item.displayCVNumber)"
+      break
     case ColumnIdentifiers.EnabledColumn:
       if let cell = tableView.makeView(withIdentifier:
         NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil) as? NSTableCellView {
         if let button = cell.subviews[0] as? NSButton {
           button.tag = row
-          button.state = item.isEnabled ? .on : .off
+       //   button.state = item.isEnabled ? .on : .off
         }
         return cell
       }
     case ColumnIdentifiers.DescriptionColumn:
-      text = item.displayString()
+   //   text = item.displayString()
       isEditable = true
     case ColumnIdentifiers.NumberBaseColumn:
       if let cell = tableView.makeView(withIdentifier:
         NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil) as? NSTableCellView {
         if let cbo = cell.subviews[0] as? NSComboBox {
           cbo.tag = row
-          cbo.selectItem(at: item.customNumberBase.rawValue)
+     //     cbo.selectItem(at: item.customNumberBase.rawValue)
         }
        return cell
       }
     case ColumnIdentifiers.DefaultValueColumn:
-      text = "\(item.displayDefaultValue)"
+  //    text = "\(item.displayDefaultValue)"
       isEditable = true
     case ColumnIdentifiers.ValueColumn:
-      text = "\(item.displayCVValue)"
+ //     text = "\(item.displayCVValue)"
       isEditable = true
     case ColumnIdentifiers.NewValueColumn:
-      text = "\(item.newValue)"
+ //     text = "\(item.newValue)"
       isEditable = true
     default:
       break

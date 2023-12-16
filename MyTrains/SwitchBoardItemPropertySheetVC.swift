@@ -345,16 +345,6 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
 
   private var dimensions : [(label:NSTextField, value:NSTextField)] = []
   
-  private var turnoutSwitches : [TurnoutSwitch] = []
-  
-  private var generalSensors : [IOFunction] = []
-  
-  private var transponderSensors : [IOFunction] = []
-  
-  private var trackFaultSensors : [IOFunction] = []
-
-  private var turnoutSensors : [IOFunction] = []
-
   private var copyButtons : [NSButton] = []
   
   private var pasteButtons : [NSButton] = []

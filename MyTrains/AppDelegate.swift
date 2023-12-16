@@ -61,19 +61,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
 
   // MARK: Edit Menu
   
-  
-  @IBAction func mnuConfigTowerController(_ sender: NSMenuItem) {
-    let x = ModalWindow.TC64Config
-    let wc = x.windowController
-    wc.showWindow(nil)
-  }
-  
-  @IBAction func mnuIODeviceManager(_ sender: NSMenuItem) {
-    let x = ModalWindow.IODeviceManager
-    let wc = x.windowController
-    wc.showWindow(nil)
-  }
-  
   @IBAction func mnySetFastClock(_ sender: NSMenuItem) {
     
     guard let networkLayer = myTrainsController.openLCBNetworkLayer else {
@@ -93,46 +80,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     ModalWindow.EditLayouts.runModel()
   }
   
-  @IBAction func mnuEditComputerInterfaces(_ sender: NSMenuItem) {
-    ModalWindow.EditInterfaces.runModel()
-  }
-  
-  @IBAction func mnuEditCommandStations(_ sender: NSMenuItem) {
-    ModalWindow.EditCommandStations.runModel()
-  }
-    
-  @IBAction func mnuEditNetworksAction(_ sender: NSMenuItem) {
-    ModalWindow.EditNetworks.runModel()
-  }
-  
-  @IBAction func mnuEditLocomotivesAction(_ sender: NSMenuItem) {
-    ModalWindow.EditLocomotives.runModel()
-  }
-  
   @IBAction func mnuEditWagonsAction(_ sender: NSMenuItem) {
     ModalWindow.EditWagons.runModel()
   }
   
   @IBAction func mnuEditTrainsAction(_ sender: NSMenuItem) {
     ModalWindow.EditTrains.runModel()
-  }
-  
-  @IBAction func mnuEditSensorsAction(_ sender: NSMenuItem) {
-    let x = ModalWindow.EditSensors
-    let wc = x.windowController
-    wc.showWindow(nil)
-  }
-  
-  @IBAction func mnuEditSwitchesAction(_ sender: NSMenuItem) {
-    let x = ModalWindow.EditSwitches
-    let wc = x.windowController
-    wc.showWindow(nil)
-  }
-  
-  @IBAction func mnuAddressManagerAction(_ sender: NSMenuItem) {
-    let x = ModalWindow.AddressManager
-    let wc = x.windowController
-    wc.showWindow(nil)
   }
   
   @IBAction func mnuSwitchBoardEditor(_ sender: NSMenuItem) {
@@ -233,18 +186,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     monitorNode.delegate = vc
     wc.showWindow(nil)
     
-  }
-  
-  @IBAction func mnuProgramMobileDecoderAddress(_ sender: NSMenuItem) {
-    let x = ModalWindow.ProgramDecoderAddress
-    let wc = x.windowController
-    wc.showWindow(nil)
-  }
-  
-  @IBAction func mnuCommandStationConfiguration(_ sender: NSMenuItem) {
-    let x = ModalWindow.CommandStationConfiguration
-    let wc = x.windowController
-    wc.showWindow(nil)
   }
   
   @IBAction func mnuDashBoardAction(_ sender: NSMenuItem) {

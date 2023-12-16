@@ -7,10 +7,11 @@
 
 import Foundation
 
-extension InterfaceLocoNet {
+extension LocoNet {
   
   // MARK: Public Methods
-  
+ 
+  /*
   public func getBrdOpSwState(device:LocoNetDevice, switchNumber:Int) {
     
     let boardType : [DeviceId:UInt8] = [
@@ -953,5 +954,5 @@ extension InterfaceLocoNet {
     addToQueue(message: message, delay: MessageTiming.FAST)
 
   }
-  
+  */
 }

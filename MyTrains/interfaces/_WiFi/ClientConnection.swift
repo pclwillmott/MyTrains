@@ -13,16 +13,16 @@ public class ClientConnection {
 
   // MARK: Constructors
   
-  init(nwConnection: NWConnection, interface: Interface) {
+  init(nwConnection: NWConnection) {
     self.nwConnection = nwConnection
-    self.interface = interface
+ //   self.interface = interface
   }
 
   // MARK: Private Properties
   
   private let nwConnection : NWConnection
   
-  private let interface : Interface
+//  private let interface : Interface
   
   private let queue = DispatchQueue(label: "Client connection Q")
 
@@ -53,7 +53,7 @@ public class ClientConnection {
    //     let message = String(data: data, encoding: .utf8)
       //  print("connection did receive, data: \(data as NSData) string: \(message ?? "-" )")
         DispatchQueue.main.async {
-          self.interface.addToInputBuffer(data: bytes)
+      //    self.interface.addToInputBuffer(data: bytes)
         }
       }
       if isComplete {

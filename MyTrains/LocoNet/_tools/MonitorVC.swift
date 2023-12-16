@@ -293,7 +293,7 @@ class MonitorVC: NSViewController, NSWindowDelegate, OpenLCBLocoNetMonitorDelega
       case .sensRepGenIn:
         item += "sensorAddress: \(message.sensorAddress!) sensorState: \(message.sensorState!)\n"
       case .setSw:
-        item += "switchAddress: \(message.switchAddress!) switchState: \(message.swState!)\n"
+        item += "switchAddress: \(message.switchAddress!)\n"
       case .s7Info, .setS7BaseAddr:
         item += "productCode: \(message.productCode!) serialNumber: \(UInt16(message.serialNumber!).toHex(numberOfDigits: 4)) baseAddress: \(message.baseAddress!)\n"
       case .s7CVState:

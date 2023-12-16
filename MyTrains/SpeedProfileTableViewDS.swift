@@ -12,7 +12,7 @@ public class SpeedProfileTableViewDS : NSObject, NSTableViewDataSource, NSTableV
 
   // MARK: Public Properties
   
-  public var speedProfile : [SpeedProfile]?
+//  public var speedProfile : [SpeedProfile]?
   
   public var unitSpeed : UnitSpeed = .centimetersPerSecond 
   
@@ -23,6 +23,7 @@ public class SpeedProfileTableViewDS : NSObject, NSTableViewDataSource, NSTableV
   // MARK: NSTableViewDelegate Methods
   
   // Returns the number of records managed for aTableView by the data source object.
+  /*
    public func numberOfRows(in tableView: NSTableView) -> Int {
      return speedProfile!.count
    }
@@ -30,13 +31,13 @@ public class SpeedProfileTableViewDS : NSObject, NSTableViewDataSource, NSTableV
   // Sets the data object for an item in the specified row and column.
   public func tableView(_ tableView: NSTableView, setObjectValue object: Any?, for tableColumn: NSTableColumn?, row: Int) {
   }
-  
+  */
 
   
   public func tableView(_ tableView: NSTableView,
                         viewFor tableColumn: NSTableColumn?,row: Int) -> NSView? {
     
-    let item = speedProfile![row]
+  //  let item = speedProfile![row]
     
     let columnName = tableColumn!.identifier.rawValue
     
@@ -52,16 +53,16 @@ public class SpeedProfileTableViewDS : NSObject, NSTableViewDataSource, NSTableV
 
     switch columnName {
     case ColumnIdentifiers.Step:
-      text = "\(item.stepNumber)"
-      
+//      text = "\(item.stepNumber)"
+      break
     case ColumnIdentifiers.Forward:
-      let value = resultsType == .actual ? item.newSpeedForward : item.bestFitForward
-      text = String(format: "%.1f", value * unitSpeed.fromCMS)
-      
+//      let value = resultsType == .actual ? item.newSpeedForward : item.bestFitForward
+ //     text = String(format: "%.1f", value * unitSpeed.fromCMS)
+     break
     case ColumnIdentifiers.Reverse:
-      let value = resultsType == .actual ? item.newSpeedReverse : item.bestFitReverse
-      text = String(format: "%.1f", value * unitSpeed.fromCMS)
-
+ //     let value = resultsType == .actual ? item.newSpeedReverse : item.bestFitReverse
+ //     text = String(format: "%.1f", value * unitSpeed.fromCMS)
+break
     default:
       text = ""
     }

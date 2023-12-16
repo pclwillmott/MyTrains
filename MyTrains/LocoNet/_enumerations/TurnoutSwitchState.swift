@@ -7,6 +7,7 @@
 
 import Foundation
 import Cocoa
+import AppKit
 
 public enum TurnoutSwitchState : Int {
   

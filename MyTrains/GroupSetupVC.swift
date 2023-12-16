@@ -8,7 +8,7 @@
 import Foundation
 import Cocoa
 
-class GroupSetupVC: NSViewController, MyTrainsControllerDelegate, InterfaceDelegate, NSWindowDelegate {
+class GroupSetupVC: NSViewController, MyTrainsControllerDelegate, NSWindowDelegate {
   
   // MARK: Window & View Control
   
@@ -23,7 +23,7 @@ class GroupSetupVC: NSViewController, MyTrainsControllerDelegate, InterfaceDeleg
   func windowWillClose(_ notification: Notification) {
     
     if observerId != -1 {
-      interface?.removeObserver(id: observerId)
+ //     interface?.removeObserver(id: observerId)
       observerId = -1
     }
     
@@ -38,9 +38,9 @@ class GroupSetupVC: NSViewController, MyTrainsControllerDelegate, InterfaceDeleg
     
     self.view.window?.delegate = self
 
-    delegateId = myTrainsController.appendDelegate(delegate: self)
+    delegateId = myTrainsController.addDelegate(delegate: self)
     
-    interfacesUpdated(interfaces: myTrainsController.networkInterfaces)
+//    interfacesUpdated(interfaces: myTrainsController.networkInterfaces)
     
     btnReadAction(btnRead)
 
@@ -54,7 +54,7 @@ class GroupSetupVC: NSViewController, MyTrainsControllerDelegate, InterfaceDeleg
   
   private var observerId : Int = -1
   
-  private var interface : InterfaceLocoNet? = nil
+//  private var interface : InterfaceLocoNet? = nil
   
   private var isFirst : Bool = true
   
@@ -82,7 +82,7 @@ class GroupSetupVC: NSViewController, MyTrainsControllerDelegate, InterfaceDeleg
     
     lblNowScanning.stringValue = "Pass: \(pass) - Scanning Channel: \(duplexGroupChannel)"
     
-    interface?.getDuplexSignalStrength(duplexGroupChannel: duplexGroupChannel)
+//    interface?.getDuplexSignalStrength(duplexGroupChannel: duplexGroupChannel)
     
     duplexGroupChannel += 1
     
@@ -115,6 +115,7 @@ class GroupSetupVC: NSViewController, MyTrainsControllerDelegate, InterfaceDeleg
   
   // MARK: MyTrainsControllerDelegate Methods
   
+  /*
   func interfacesUpdated(interfaces: [Interface]) {
     
     if observerId != -1 {
@@ -142,7 +143,7 @@ class GroupSetupVC: NSViewController, MyTrainsControllerDelegate, InterfaceDeleg
     }
     
   }
-
+*/
   // MARK: NetworkMessengerDelegate Methods
   
   @objc func networkMessageReceived(message: LocoNetMessage) {
@@ -196,13 +197,13 @@ class GroupSetupVC: NSViewController, MyTrainsControllerDelegate, InterfaceDeleg
     let name = cboInterface.stringValue
     
     UserDefaults.standard.set(name, forKey: DEFAULT.MONITOR_INTERFACE_ID)
-    
+    /*
     if let x = interface {
       if name != x.deviceName && observerId != -1 {
         x.removeObserver(id: observerId)
       }
     }
-    
+    */
 
  }
   
@@ -230,20 +231,20 @@ class GroupSetupVC: NSViewController, MyTrainsControllerDelegate, InterfaceDeleg
   
   @IBAction func btnReadAction(_ sender: NSButton) {
     isFirst = true
-    interface?.findReceiver()
-    interface?.getDuplexData()
+//    interface?.findReceiver()
+//    interface?.getDuplexData()
   }
   
   @IBOutlet var btnWrite: NSButton!
   
   @IBAction func btnWriteAction(_ sender: NSButton) {
-    
+  /*
     interface?.setDuplexChannelNumber(channelNumber: txtChannelNumber.integerValue)
     interface?.setDuplexGroupID(groupID: txtGroupID.integerValue)
     interface?.setDuplexGroupName(groupName: txtGroupName.stringValue)
     interface?.setDuplexPassword(password: txtGroupPassword.stringValue)
     interface?.setLocoNetID(locoNetID: txtLocoNetID.integerValue)
-    
+   */
   }
   
   @IBOutlet var btnScan: NSButton!

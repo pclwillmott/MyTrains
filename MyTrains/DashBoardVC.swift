@@ -8,7 +8,7 @@
 import Foundation
 import Cocoa
 
-class DashBoardVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegate, InterfaceDelegate {
+class DashBoardVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegate {
   
   // MARK: Window & View Control
 
@@ -22,10 +22,10 @@ class DashBoardVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegat
 
   func windowWillClose(_ notification: Notification) {
     if observerId != -1 {
-      if let mess = interface {
+  /*    if let mess = interface {
         mess.removeObserver(id: observerId)
         observerId = -1
-      }
+      } */
     }
     if delegateId != -1 {
       myTrainsController.removeDelegate(id: delegateId)
@@ -77,9 +77,9 @@ class DashBoardVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegat
 
     clearFields()
     
-    delegateId = myTrainsController.appendDelegate(delegate: self)
+    delegateId = myTrainsController.addDelegate(delegate: self)
     
-    interfacesUpdated(interfaces: myTrainsController.networkInterfaces)
+//    interfacesUpdated(interfaces: myTrainsController.networkInterfaces)
     
     startQuery()
     
@@ -93,7 +93,7 @@ class DashBoardVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegat
   
   private var observerId : Int = -1
   
-  private var interface : InterfaceLocoNet?
+//  private var interface : InterfaceLocoNet?
   
   private var delegateId : Int = -1
   
@@ -141,7 +141,7 @@ class DashBoardVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegat
   private func query() {
     nextQuery += 1
     if nextQuery <= 5 {
-      interface?.getQuerySlot(querySlot: nextQuery)
+  //    interface?.getQuerySlot(querySlot: nextQuery)
       startTimer()
     }
     else {
@@ -174,6 +174,7 @@ class DashBoardVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegat
   func myTrainsControllerUpdated(myTrainsController: MyTrainsController) {
   }
   
+  /*
   func interfacesUpdated(interfaces: [Interface]) {
     
     if observerId != -1 {
@@ -201,7 +202,7 @@ class DashBoardVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegat
     }
     
   }
-
+*/
   // MARK: NetworkMessengerDelegate Methods
   
   @objc func networkMessageReceived(message: LocoNetMessage) {
@@ -320,7 +321,7 @@ class DashBoardVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegat
   @IBOutlet weak var btnReset: NSButton!
   
   @IBAction func btnResetAction(_ sender: Any) {
-    interface?.resetQuerySlot4(timeoutCode: .resetQuerySlot4)
+//    interface?.resetQuerySlot4(timeoutCode: .resetQuerySlot4)
   }
   
   @IBOutlet weak var lblGoodMessages: NSTextField!
@@ -348,19 +349,13 @@ class DashBoardVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegat
     let name = cboInterface.stringValue
     
     UserDefaults.standard.set(name, forKey: DEFAULT.MONITOR_INTERFACE_ID)
-    
+    /*
     if let x = interface {
       if name != x.deviceName && observerId != -1 {
         x.removeObserver(id: observerId)
       }
     }
-    
-    for x in myTrainsController.networkInterfaces {
-      if x.deviceName == name, let y = x as? InterfaceLocoNet {
-        interface = y
-        observerId = interface?.addObserver(observer: self) ?? -1
-      }
-    }
+    */
 
   }
   

@@ -322,6 +322,10 @@ public class LocoNetMessage : NSObject {
     
   }
   
+  public var swState : OptionSwitchState? {
+    return nil
+  }
+  
   public var dccAddressPartition : DCCAddressPartition? {
     
     guard let packet = dccPacket else {
@@ -1786,16 +1790,6 @@ public class LocoNetMessage : NSObject {
     return nil
   }
   
-  public var swState : OptionSwitchState? {
-    switch messageType {
-    case .swState:
-      return ((message[2] & 0b00100000) != 0) ? .closed : .thrown
-    case .setSw, .setSwWithAck:
-      return ((message[2] & 0b00100000) != 0) ? .closed : .thrown
-    default:
-      return nil
-    }
-  }
   
   public var isSlotUpdate : Bool {
     

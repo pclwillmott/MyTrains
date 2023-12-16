@@ -13,12 +13,12 @@ public class Client {
 
   // MARK: Constructors
   
-  init(host: String, port: UInt16, interface:Interface) {
+  init(host: String, port: UInt16) {
     self.host = NWEndpoint.Host(host)
     self.port = NWEndpoint.Port(rawValue: port)!
-    self.interface = interface
+//    self.interface = interface
     let nwConnection = NWConnection(host: self.host, port: self.port, using: .tcp)
-    connection = ClientConnection(nwConnection: nwConnection, interface: interface)
+//    connection = ClientConnection(nwConnection: nwConnection, interface: interface)
   }
   
   // MARK: Private Properties
@@ -27,11 +27,11 @@ public class Client {
   
   private let port : NWEndpoint.Port
   
-  private let interface : Interface
+//  private let interface : Interface
 
   // MARK: Public Properties
   
-  public let connection : ClientConnection
+//  public let connection : ClientConnection?
   
   // MARK: Private Methods
   
@@ -47,16 +47,16 @@ public class Client {
   
   public func start() {
 //    print("Client started \(host) \(port)")
-    connection.didStopCallback = didStopCallback(error:)
-    connection.start()
+ //   connection!.didStopCallback = didStopCallback(error:)
+//    connection!.start()
   }
 
   public func stop() {
-    connection.stop()
+//    connection!.stop()
   }
 
   public func send(data: Data) {
-    connection.send(data: data)
+//    connection!.send(data: data)
   }
 
 }

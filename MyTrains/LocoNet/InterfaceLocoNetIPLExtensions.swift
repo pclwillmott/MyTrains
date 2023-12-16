@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension InterfaceLocoNet {
+extension LocoNet {
   
   // MARK: Public Methods
   
@@ -45,9 +45,9 @@ extension InterfaceLocoNet {
       
     ]
     
-    let message = LocoNetMessage(networkId: networkId, data: data, appendCheckSum: true)
+    let message = LocoNetMessage(data: data, appendCheckSum: true)
     
-    addToQueue(message: message, delay: dmf.setupDelayInSeconds)
+    addToQueue(message: message)
     
   }
   
@@ -86,9 +86,9 @@ extension InterfaceLocoNet {
       D8 & 0x7f
     ]
     
-    let message = LocoNetMessage(networkId: networkId, data: data, appendCheckSum: true)
+    let message = LocoNetMessage(data: data, appendCheckSum: true)
     
-    addToQueue(message: message, delay: 1.0 / 1000.0)
+    addToQueue(message: message)
     
   }
   
@@ -117,9 +117,9 @@ extension InterfaceLocoNet {
       0x00
     ]
     
-    let message = LocoNetMessage(networkId: networkId, data: data, appendCheckSum: true)
+    let message = LocoNetMessage(data: data, appendCheckSum: true)
     
-    addToQueue(message: message, delay: 1.0 / 1000.0)
+    addToQueue(message: message)
     
   }
 
@@ -158,9 +158,9 @@ extension InterfaceLocoNet {
       0x00
     ]
     
-    let message = LocoNetMessage(networkId: networkId, data: data, appendCheckSum: true)
+    let message = LocoNetMessage(data: data, appendCheckSum: true)
     
-    addToQueue(message: message, delay: 1.0 / 1000.0)
+    addToQueue(message: message)
     
   }
 

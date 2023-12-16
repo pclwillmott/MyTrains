@@ -60,27 +60,11 @@ public class Layout : EditorObject {
   }
   
   public func removeDelegate(delegateId:Int) {
-    delegates[delegateId] = nil
+    delegates.removeValue(forKey: delegateId)
   }
   
   override public func displayString() -> String {
     return layoutName
-  }
-  
-  public var networks : [Network] {
-    get {
-      var networks : [Network] = []
-      for kv in myTrainsController.networks {
-        let network = kv.value
-        if network.layoutId == self.primaryKey {
-          networks.append(network)
-        }
-        networks.sort {
-          $0.networkName < $1.networkName
-        }
-      }
-      return networks
-    }
   }
   
   public var layoutName : String = "" {
@@ -141,7 +125,7 @@ public class Layout : EditorObject {
   
   public var operationalGroups : [Int:[SwitchBoardItem]] = [:]
   
-  public var operationalTurnouts : [Int:TurnoutSwitch] = [:]
+//  public var operationalTurnouts : [Int:TurnoutSwitch] = [:]
   
   // MARK: Public Methods
   

@@ -12,37 +12,24 @@ class MainVC: NSViewController, MyTrainsControllerDelegate, LayoutDelegate, Open
   // MARK: Window & View Control
   
   override func viewDidLoad() {
-    
     super.viewDidLoad()
-
-    // Do any additional setup after loading the view.
- 
   }
 
-  override var representedObject: Any? {
-    didSet {
-    // Update the view, if already loaded.
-    }
-  }
-  
   func windowShouldClose(_ sender: NSWindow) -> Bool {
     return true
   }
 
   func windowWillClose(_ notification: Notification) {
-    if controllerDelegateId != -1 {
-      myTrainsController.removeDelegate(id: controllerDelegateId)
-      controllerDelegateId = -1
-    }
-    if layoutDelegateId != -1 {
-      myTrainsController.layout?.removeDelegate(delegateId: layoutDelegateId)
-    }
-    
+    myTrainsController.layout?.removeDelegate(delegateId: layoutDelegateId)
+    myTrainsController.openLCBNetworkLayer!.fastClock!.removeObserver(observerId: fastClockObserverId)
+    myTrainsController.removeDelegate(id: controllerDelegateId)
   }
   
   override func viewWillAppear() {
     
-    controllerDelegateId = myTrainsController.appendDelegate(delegate: self)
+    controllerDelegateId = myTrainsController.addDelegate(delegate: self)
+    
+    fastClockObserverId = myTrainsController.openLCBNetworkLayer!.fastClock!.addObserver(observer: self)
     
     switchBoardView.layout = myTrainsController.layout
     
@@ -54,81 +41,20 @@ class MainVC: NSViewController, MyTrainsControllerDelegate, LayoutDelegate, Open
       layoutDelegateId = layout.addDelegate(delegate: self)
     }
     
-    fastClockObserverId = myTrainsController.openLCBNetworkLayer!.fastClock!.addObserver(observer: self)
-    
   }
   
   // MARK: Private Properties
-  
-  private var fastClockObserverId : Int = -1
   
   private var cboLayoutDS : ComboBoxDBDS? = nil
   
   private var controllerDelegateId : Int = -1
   
+  private var fastClockObserverId : Int = -1
+  
   private var layoutDelegateId : Int = -1
   
   // MARK: Private Methods
-  
-  private func updateStatus() {
     
- //   swConnect.state = myTrainsController.connected ? .on : .off
-    
-    if let _ = myTrainsController.layout {
-      
-      boxStatus.contentView?.subviews.removeAll()
-      
-      var xPos : CGFloat = 20
-      let yPos : CGFloat = 15
-      
-      for interface in myTrainsController.networkInterfaces {
-        
-        var color : NSColor = NSColor.black
-        
-        let label1: NSTextField = NSTextField()
-        label1.frame = NSRect(x: xPos, y: yPos, width: 200, height: 21)
-        label1.backgroundColor = boxStatus.fillColor
-        
-        color = interface.isOpen ? .systemGreen : .systemRed
-        
-        label1.textColor = color
-        label1.stringValue = "\(interface.deviceName) "
-        label1.isEditable = false
-        label1.isBezeled = false
-        
-        label1.sizeToFit()
-
-        boxStatus.contentView?.addSubview(label1)
-        
-        xPos += label1.frame.width + 0
-
-        if let locoNetInterface = interface as? InterfaceLocoNet, let cs = locoNetInterface.commandStation {
-          
-          let label2: NSTextField = NSTextField()
-          label2.frame = NSRect(x: xPos, y: yPos, width: 200, height: 21)
-          label2.backgroundColor = boxStatus.fillColor
-        
-       //   color =  cs.powerIsOn ? .systemGreen : device.commandStation.trackIsPaused ? .orange : .red
-   
-          label2.textColor = color
-          
-          label2.stringValue = "→ \(cs.deviceName)"
-          label2.isEditable = false
-          label2.isBezeled = false
-          label2.sizeToFit()
-
-          boxStatus.contentView?.addSubview(label2)
-          
-          xPos += label2.frame.width + 10
-
-        }
-
-      }
-      
-    }
-        
-  }
-  
   // MARK: OpenLCBClockDelegate Methods
   
   func clockTick(clock: OpenLCBClock) {
@@ -148,12 +74,6 @@ class MainVC: NSViewController, MyTrainsControllerDelegate, LayoutDelegate, Open
   
   // MARK: MyTrainsController Delegate Methods
   
-  func statusUpdated(myTrainsController: MyTrainsController) {
- 
-    updateStatus()
-    
-  }
-  
   func switchBoardUpdated() {
     switchBoardView.needsDisplay = true
   }
@@ -170,8 +90,6 @@ class MainVC: NSViewController, MyTrainsControllerDelegate, LayoutDelegate, Open
       cboLayout.selectItem(at: index)
     }
     
-    updateStatus()
-    
   }
   
   // MARK: Outlets & Actions
@@ -179,29 +97,15 @@ class MainVC: NSViewController, MyTrainsControllerDelegate, LayoutDelegate, Open
   @IBOutlet weak var cboLayout: NSComboBox!
   
   @IBAction func cboLayoutAction(_ sender: NSComboBox) {
-    
     myTrainsController.layoutId = cboLayoutDS!.codeForItemAt(index: cboLayout.indexOfSelectedItem) ?? -1
-    
-    updateStatus()
-    
   }
   
   @IBOutlet weak var boxStatus: NSBox!
   
-  @IBOutlet weak var swConnect: NSSwitch!
-  
-  @IBAction func swConnectAction(_ sender: NSSwitch) {
-    sender.state == .on ? myTrainsController.connect() : myTrainsController.disconnect()
-  }
-  
-  @IBOutlet weak var btnPowerOn: NSButton!
-  
-  @IBAction func btnPowerOnAction(_ sender: NSButton) {
-  }
-  
   @IBOutlet weak var btnPowerOff: NSButton!
   
   @IBAction func btnPowerOffAction(_ sender: NSButton) {
+    
   }
   
   @IBOutlet weak var btnPause: NSButton!

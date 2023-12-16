@@ -1062,7 +1062,7 @@ extension LocoNet {
     addToQueue(message: message)
 
   }
-
+/*
   public func getSwState(switchNumber: Int) {
     
     let lo = UInt8((switchNumber - 1) & 0x7f)
@@ -1106,7 +1106,7 @@ extension LocoNet {
     addToQueue(message: message)
 
   }
-  
+  */
   public func getLocoSlotDataP1(slotNumber: UInt8) {
     
     let message = LocoNetMessage(data: [LocoNetMessageOpcode.OPC_RQ_SL_DATA.rawValue, slotNumber, 0x00], appendCheckSum: true)
