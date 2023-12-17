@@ -321,7 +321,7 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
   
   // MARK: Public Properties
   
-  public let productCode : ProductCode = .BXP88
+  public let productCode : DigitraxProductCode = .BXP88
   
   public var locoNetGatewayNodeId : UInt64 {
     get {
@@ -559,7 +559,7 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
   
   private func enterOpSwMode() {
     
-    if let message = OptionSwitch.enterOptionSwitchModeInstructions[productCode.locoNetProductId!] {
+    if let message = OptionSwitch.enterOptionSwitchModeInstructions[productCode.locoNetDeviceId!] {
       
       let alert = NSAlert()
       
@@ -715,7 +715,7 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
       return
     }
     
-    if let message = OptionSwitch.enterSetBoardIdModeInstructions[productCode.locoNetProductId!] {
+    if let message = OptionSwitch.enterSetBoardIdModeInstructions[productCode.locoNetDeviceId!] {
       
       let alert = NSAlert()
 

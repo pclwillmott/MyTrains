@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Cocoa
+import AppKit
 
 public enum FlowControl : Int {
   
@@ -14,13 +14,11 @@ public enum FlowControl : Int {
   case rtsCts = 1
   
   public var title : String {
-    get {
-      switch self {
-      case .noFlowControl:
-        return "No Flow Control"
-      case .rtsCts:
-        return "RTS/CTS"
-      }
+    switch self {
+    case .noFlowControl:
+      return "No Flow Control"
+    case .rtsCts:
+      return "RTS/CTS"
     }
   }
   

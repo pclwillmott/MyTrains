@@ -186,8 +186,8 @@
             filePath = "MyTrains/LocoNet/LocoNetMessage.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1662"
-            endingLineNumber = "1662"
+            startingLineNumber = "1644"
+            endingLineNumber = "1644"
             landmarkName = "LocoNetMessage"
             landmarkType = "3">
          </BreakpointContent>

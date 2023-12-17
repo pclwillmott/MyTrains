@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22505"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Window Controller-->
+        <scene sceneID="CIl-3m-gOx">
+            <objects>
+                <windowController storyboardIdentifier="SetFastClockWC" id="l1l-kQ-X4L" sceneMemberID="viewController">
+                    <window key="window" title="Set Fast Clock" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" visibleAtLaunch="NO" frameAutosaveName="SetFastClock" animationBehavior="default" id="V6M-6s-fgX">
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
+                        <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+                        <rect key="contentRect" x="268" y="340" width="402" height="88"/>
+                        <rect key="screenRect" x="0.0" y="0.0" width="1792" height="1120"/>
+                        <value key="minSize" type="size" width="402" height="88"/>
+                        <value key="maxSize" type="size" width="402" height="88"/>
+                        <value key="minFullScreenContentSize" type="size" width="402" height="88"/>
+                        <value key="maxFullScreenContentSize" type="size" width="402" height="88"/>
+                        <view key="contentView" id="umV-4q-Bsu">
+                            <rect key="frame" x="0.0" y="0.0" width="402" height="88"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </view>
+                        <connections>
+                            <outlet property="delegate" destination="l1l-kQ-X4L" id="WlP-Qq-h4g"/>
+                        </connections>
+                    </window>
+                    <connections>
+                        <segue destination="nVt-4p-LyH" kind="relationship" relationship="window.shadowedContentViewController" id="K6W-uV-Jpu"/>
+                    </connections>
+                </windowController>
+                <customObject id="Ry4-ng-sS5" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-86" y="112"/>
+        </scene>
+        <!--Set Fast ClockVC-->
+        <scene sceneID="xlx-fQ-lcg">
+            <objects>
+                <viewController id="nVt-4p-LyH" customClass="SetFastClockVC" customModule="MyTrains" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="zdY-9U-ACF">
+                        <rect key="frame" x="0.0" y="0.0" width="566" height="229"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dju-4B-daR">
+                                <rect key="frame" x="314" y="155" width="75" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" title="Set" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="4Ma-B8-Zr8">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="btnSetAction:" target="nVt-4p-LyH" id="EFW-gk-Jpk"/>
+                                </connections>
+                            </button>
+                            <datePicker verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qvT-dG-Cei">
+                                <rect key="frame" x="20" y="161" width="184" height="28"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <datePickerCell key="cell" borderStyle="bezel" alignment="left" useCurrentDate="YES" id="c5D-Ti-4Ei">
+                                    <font key="font" metaFont="system"/>
+                                    <date key="date" timeIntervalSinceReferenceDate="724514521.19252002">
+                                        <!--2023-12-17 14:02:01 +0000-->
+                                    </date>
+                                    <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <datePickerElements key="datePickerElements" year="YES" month="YES" day="YES" hour="YES" minute="YES"/>
+                                </datePickerCell>
+                                <connections>
+                                    <action selector="pckTimeAction:" target="nVt-4p-LyH" id="e3Z-AT-ZAS"/>
+                                </connections>
+                            </datePicker>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cRt-XR-Qsu">
+                                <rect key="frame" x="18" y="193" width="42" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Epoch" id="eNf-lh-CJw">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qsy-V4-86z">
+                                <rect key="frame" x="220" y="193" width="32" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Rate" id="nDD-L2-8od">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="z8D-mE-FZA" customClass="ClockView" customModule="MyTrains" customModuleProvider="target">
+                                <rect key="frame" x="20" y="25" width="526" height="116"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            </customView>
+                            <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zpf-vp-N1d">
+                                <rect key="frame" x="222" y="162" width="77" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="0vH-RM-Z0I">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                                <connections>
+                                    <action selector="txtRateAction:" target="nVt-4p-LyH" id="eE7-3T-erP"/>
+                                </connections>
+                            </textField>
+                            <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="bpF-pd-ftR">
+                                <rect key="frame" x="506" y="159" width="42" height="25"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <connections>
+                                    <action selector="swSwitchAction:" target="nVt-4p-LyH" id="du3-nc-RDu"/>
+                                </connections>
+                            </switch>
+                        </subviews>
+                    </view>
+                    <connections>
+                        <outlet property="clockView" destination="z8D-mE-FZA" id="BHO-Ke-Wms"/>
+                        <outlet property="pckTime" destination="qvT-dG-Cei" id="aKo-y7-jOt"/>
+                        <outlet property="swSwitch" destination="bpF-pd-ftR" id="Jj8-Pm-GV8"/>
+                        <outlet property="txtRate" destination="Zpf-vp-N1d" id="Itt-cd-Lx3"/>
+                    </connections>
+                </viewController>
+                <customObject id="8Ke-l7-qVn" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="664" y="60.5"/>
+        </scene>
+    </scenes>
+</document>
