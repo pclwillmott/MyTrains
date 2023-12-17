@@ -250,50 +250,6 @@ extension LocoNet {
     
   }
   
-  public func getSwState(switchNumber: Int) {
-    
-    let lo = UInt8((switchNumber - 1) & 0x7f)
-    
-    let hi = UInt8((switchNumber - 1) >> 7)
-    
-    let message = LocoNetMessage(data: [LocoNetMessageOpcode.OPC_SW_STATE.rawValue, lo, hi], appendCheckSum: true)
-    
-    addToQueue(message: message)
-
-  }
-  
-  public func setSw(switchNumber: Int, state:OptionSwitchState) {
-    
-    let sn = switchNumber - 1
-    
-    let lo = UInt8(sn & 0x7f)
-    
-    let bit : UInt8 = state == .closed ? 0x30 : 0x10
-    
-    let hi = UInt8(sn >> 7) | bit
-    
-    let message = LocoNetMessage(data: [LocoNetMessageOpcode.OPC_SW_REQ.rawValue, lo, hi], appendCheckSum: true)
-    
-    addToQueue(message: message)
-
-  }
-  
-  public func setSwWithAck(switchNumber: Int, state:OptionSwitchState) {
-    
-    let sn = switchNumber - 1
-    
-    let lo = UInt8(sn & 0x7f)
-    
-    let bit : UInt8 = state == .closed ? 0x30 : 0x10
-    
-    let hi = UInt8(sn >> 7) | bit
-    
-    let message = LocoNetMessage(data: [LocoNetMessageOpcode.OPC_SW_ACK.rawValue, lo, hi], appendCheckSum: true)
-    
-    addToQueue(message: message)
-
-  }
-
   public func setOpSwDataAP1(state:Bool) {
     
     var data = [UInt8](repeating: 0, count: 13)

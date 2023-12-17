@@ -730,7 +730,7 @@ Gw
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fgf-VP-cli">
-                                                    <rect key="frame" x="438" y="497" width="53" height="16"/>
+                                                    <rect key="frame" x="510" y="497" width="53" height="16"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Position" id="Y8J-AM-e57">
                                                         <font key="font" metaFont="system"/>
@@ -739,7 +739,7 @@ Gw
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TwE-t9-Us4">
-                                                    <rect key="frame" x="440" y="469" width="96" height="21"/>
+                                                    <rect key="frame" x="512" y="469" width="96" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="F31-av-Dd3">
                                                         <font key="font" metaFont="system"/>
@@ -751,7 +751,7 @@ Gw
                                                     </connections>
                                                 </textField>
                                                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zf6-fg-7KA">
-                                                    <rect key="frame" x="554" y="497" width="36" height="16"/>
+                                                    <rect key="frame" x="626" y="497" width="36" height="16"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Units" id="hdR-m1-1sH">
                                                         <font key="font" metaFont="system"/>
@@ -760,7 +760,7 @@ Gw
                                                     </textFieldCell>
                                                 </textField>
                                                 <comboBox focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jkZ-p8-QTz">
-                                                    <rect key="frame" x="556" y="467" width="83" height="25"/>
+                                                    <rect key="frame" x="628" y="467" width="83" height="25"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="UlZ-GX-lvT">
                                                         <font key="font" metaFont="system"/>

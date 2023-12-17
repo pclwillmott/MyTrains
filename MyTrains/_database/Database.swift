@@ -173,79 +173,83 @@ class Database {
             ")",
 
             "CREATE TABLE [\(TABLE.SWITCHBOARD_ITEM)] (" +
-              "[\(SWITCHBOARD_ITEM.SWITCHBOARD_ITEM_ID)]          INT PRIMARY KEY," +
-              "[\(SWITCHBOARD_ITEM.LAYOUT_ID)]                    INT NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.PANEL_ID)]                     INT NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.GROUP_ID)]                     INT NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.ITEM_PART_TYPE)]               INT NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.ORIENTATION)]                  INT NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.XPOS)]                         INT NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.YPOS)]                         INT NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.BLOCK_NAME)]                   TEXT NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.BLOCK_DIRECTION)]              INT NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.TRACK_PART_ID)]                INT NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.DIMENSIONA)]                   REAL NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.DIMENSIONB)]                   REAL NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.DIMENSIONC)]                   REAL NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.DIMENSIOND)]                   REAL NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.DIMENSIONE)]                   REAL NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.DIMENSIONF)]                   REAL NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.DIMENSIONG)]                   REAL NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.DIMENSIONH)]                   REAL NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.UNITS_DIMENSION)]              INT NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.ALLOW_SHUNT)]                  INT NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.TRACK_GAUGE)]                  INT NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.TRACK_ELECTRIFICATION_TYPE)]   INT NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.GRADIENT)]                     REAL NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.IS_CRITICAL)]                  INT NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.UNITS_SPEED)]                  INT NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.DN_UNITS_POSITION)]            INT NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.DP_UNITS_POSITION)]            INT NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.DN_BRAKE_POSITION)]            REAL NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.DN_STOP_POSITION)]             REAL NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.DN_SPEED_MAX)]                 REAL NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.DN_SPEED_STOP_EXPECTED)]       REAL NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.DN_SPEED_RESTRICTED)]          REAL NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.DN_SPEED_BRAKE)]               REAL NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.DN_SPEED_SHUNT)]               REAL NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.DN_SPEED_MAX_UD)]              INT NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.DN_SPEED_STOP_EXPECTED_UD)]    INT NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.DN_SPEED_RESTRICTED_UD)]       INT NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.DN_SPEED_BRAKE_UD)]            INT NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.DN_SPEED_SHUNT_UD)]            INT NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.DP_BRAKE_POSITION)]            REAL NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.DP_STOP_POSITION)]             REAL NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.DP_SPEED_MAX)]                 REAL NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.DP_SPEED_STOP_EXPECTED)]       REAL NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.DP_SPEED_RESTRICTED)]          REAL NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.DP_SPEED_BRAKE)]               REAL NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.DP_SPEED_SHUNT)]               REAL NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.DP_SPEED_MAX_UD)]              INT NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.DP_SPEED_STOP_EXPECTED_UD)]    INT NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.DP_SPEED_RESTRICTED_UD)]       INT NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.DP_SPEED_BRAKE_UD)]            INT NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.DP_SPEED_SHUNT_UD)]            INT NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.SW1_TURNOUT_MOTOR_TYPE)]       INT NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.SW2_TURNOUT_MOTOR_TYPE)]       INT NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.IS_SCENIC_SECTION)]            INT NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.BLOCK_TYPE)]                   INT NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.LINK_ITEM)]                    INT NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.TURNOUT_CONNECTION)]           INT NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.SENSOR_POSITION)]              REAL NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.UNITS_SENSOR_POSITION)]        INT NOT NULL," +
-              "[\(SWITCHBOARD_ITEM.ENTER_OCCUPANCY_EVENT_ID)]     INT," +
-              "[\(SWITCHBOARD_ITEM.EXIT_OCCUPANCY_EVENT_ID)]      INT," +
-              "[\(SWITCHBOARD_ITEM.TRANSPONDER_EVENT_ID)]         INT," +
-              "[\(SWITCHBOARD_ITEM.TRACK_FAULT_EVENT_ID)]         INT," +
-              "[\(SWITCHBOARD_ITEM.TRACK_FAULT_CLEARED_EVENT_ID)] INT," +
-              "[\(SWITCHBOARD_ITEM.SW1_THROWN_EVENT_ID)]          INT," +
-              "[\(SWITCHBOARD_ITEM.SW1_CLOSED_EVENT_ID)]          INT," +
-              "[\(SWITCHBOARD_ITEM.SW1_THROW_EVENT_ID)]           INT," +
-              "[\(SWITCHBOARD_ITEM.SW1_CLOSE_EVENT_ID)]           INT," +
-              "[\(SWITCHBOARD_ITEM.SW2_THROWN_EVENT_ID)]          INT," +
-              "[\(SWITCHBOARD_ITEM.SW2_CLOSED_EVENT_ID)]          INT," +
-              "[\(SWITCHBOARD_ITEM.SW2_THROW_EVENT_ID)]           INT," +
-              "[\(SWITCHBOARD_ITEM.SW2_CLOSE_EVENT_ID)]           INT" +
+              "[\(SWITCHBOARD_ITEM.SWITCHBOARD_ITEM_ID)]           INT PRIMARY KEY," +
+              "[\(SWITCHBOARD_ITEM.LAYOUT_ID)]                     INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.PANEL_ID)]                      INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.GROUP_ID)]                      INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.ITEM_PART_TYPE)]                INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.ORIENTATION)]                   INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.XPOS)]                          INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.YPOS)]                          INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.BLOCK_NAME)]                    TEXT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.BLOCK_DIRECTION)]               INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.TRACK_PART_ID)]                 INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.DIMENSIONA)]                    REAL NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.DIMENSIONB)]                    REAL NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.DIMENSIONC)]                    REAL NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.DIMENSIOND)]                    REAL NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.DIMENSIONE)]                    REAL NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.DIMENSIONF)]                    REAL NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.DIMENSIONG)]                    REAL NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.DIMENSIONH)]                    REAL NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.UNITS_DIMENSION)]               INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.ALLOW_SHUNT)]                   INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.TRACK_GAUGE)]                   INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.TRACK_ELECTRIFICATION_TYPE)]    INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.GRADIENT)]                      REAL NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.IS_CRITICAL)]                   INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.UNITS_SPEED)]                   INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.DN_UNITS_POSITION)]             INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.DP_UNITS_POSITION)]             INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.DN_BRAKE_POSITION)]             REAL NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.DN_STOP_POSITION)]              REAL NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.DN_SPEED_MAX)]                  REAL NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.DN_SPEED_STOP_EXPECTED)]        REAL NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.DN_SPEED_RESTRICTED)]           REAL NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.DN_SPEED_BRAKE)]                REAL NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.DN_SPEED_SHUNT)]                REAL NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.DN_SPEED_MAX_UD)]               INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.DN_SPEED_STOP_EXPECTED_UD)]     INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.DN_SPEED_RESTRICTED_UD)]        INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.DN_SPEED_BRAKE_UD)]             INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.DN_SPEED_SHUNT_UD)]             INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.DP_BRAKE_POSITION)]             REAL NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.DP_STOP_POSITION)]              REAL NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.DP_SPEED_MAX)]                  REAL NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.DP_SPEED_STOP_EXPECTED)]        REAL NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.DP_SPEED_RESTRICTED)]           REAL NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.DP_SPEED_BRAKE)]                REAL NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.DP_SPEED_SHUNT)]                REAL NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.DP_SPEED_MAX_UD)]               INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.DP_SPEED_STOP_EXPECTED_UD)]     INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.DP_SPEED_RESTRICTED_UD)]        INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.DP_SPEED_BRAKE_UD)]             INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.DP_SPEED_SHUNT_UD)]             INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.SW1_TURNOUT_MOTOR_TYPE)]        INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.SW2_TURNOUT_MOTOR_TYPE)]        INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.IS_SCENIC_SECTION)]             INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.BLOCK_TYPE)]                    INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.LINK_ITEM)]                     INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.TURNOUT_CONNECTION)]            INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.SENSOR_POSITION)]               REAL NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.UNITS_SENSOR_POSITION)]         INT NOT NULL," +
+              "[\(SWITCHBOARD_ITEM.ENTER_OCCUPANCY_EVENT_ID)]      INT," +
+              "[\(SWITCHBOARD_ITEM.EXIT_OCCUPANCY_EVENT_ID)]       INT," +
+              "[\(SWITCHBOARD_ITEM.TRANSPONDER_EVENT_ID)]          INT," +
+              "[\(SWITCHBOARD_ITEM.TRACK_FAULT_EVENT_ID)]          INT," +
+              "[\(SWITCHBOARD_ITEM.TRACK_FAULT_CLEARED_EVENT_ID)]  INT," +
+              "[\(SWITCHBOARD_ITEM.SW1_THROWN_EVENT_ID)]           INT," +
+              "[\(SWITCHBOARD_ITEM.SW1_CLOSED_EVENT_ID)]           INT," +
+              "[\(SWITCHBOARD_ITEM.SW1_THROW_EVENT_ID)]            INT," +
+              "[\(SWITCHBOARD_ITEM.SW1_CLOSE_EVENT_ID)]            INT," +
+              "[\(SWITCHBOARD_ITEM.SW2_THROWN_EVENT_ID)]           INT," +
+              "[\(SWITCHBOARD_ITEM.SW2_CLOSED_EVENT_ID)]           INT," +
+              "[\(SWITCHBOARD_ITEM.SW2_THROW_EVENT_ID)]            INT," +
+              "[\(SWITCHBOARD_ITEM.SW2_CLOSE_EVENT_ID)]            INT," +
+              "[\(SWITCHBOARD_ITEM.SW1_COMMANDED_THROWN_EVENT_ID)] INT," +
+              "[\(SWITCHBOARD_ITEM.SW1_COMMANDED_CLOSED_EVENT_ID)] INT," +
+              "[\(SWITCHBOARD_ITEM.SW2_COMMANDED_THROWN_EVENT_ID)] INT," +
+              "[\(SWITCHBOARD_ITEM.SW2_COMMANDED_CLOSED_EVENT_ID)] INT" +
             ")",
             /*
             "CREATE TABLE [\(TABLE.SENSOR)] (" +
@@ -304,7 +308,7 @@ class Database {
             
    //         print("Version: \(Version)")
             
-            if Version == 32 {
+            if Version == 33 {
   
               let commands = [
         
@@ -456,7 +460,12 @@ class Database {
                 "DROP TABLE IF EXISTS [\(TABLE.DECODER_CV)]",
                 "DROP TABLE IF EXISTS [\(TABLE.ROLLING_STOCK)]", */
 
-                "UPDATE [\(TABLE.VERSION)] SET [\(VERSION.VERSION_NUMBER)] = 33 WHERE [\(VERSION.VERSION_ID)] = 1",
+                "ALTER TABLE [\(TABLE.SWITCHBOARD_ITEM)] ADD [\(SWITCHBOARD_ITEM.SW1_COMMANDED_THROWN_EVENT_ID)] INT",
+                "ALTER TABLE [\(TABLE.SWITCHBOARD_ITEM)] ADD [\(SWITCHBOARD_ITEM.SW1_COMMANDED_CLOSED_EVENT_ID)] INT",
+                "ALTER TABLE [\(TABLE.SWITCHBOARD_ITEM)] ADD [\(SWITCHBOARD_ITEM.SW2_COMMANDED_THROWN_EVENT_ID)] INT",
+                "ALTER TABLE [\(TABLE.SWITCHBOARD_ITEM)] ADD [\(SWITCHBOARD_ITEM.SW2_COMMANDED_CLOSED_EVENT_ID)] INT",
+
+                "UPDATE [\(TABLE.VERSION)] SET [\(VERSION.VERSION_NUMBER)] = 34 WHERE [\(VERSION.VERSION_ID)] = 1",
  
              ]
               

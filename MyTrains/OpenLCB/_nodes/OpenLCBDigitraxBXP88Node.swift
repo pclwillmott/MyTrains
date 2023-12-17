@@ -443,7 +443,7 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
       if let state, let locoNet {
         configState = .settingOptionSwitches
         startTimeoutTimer(timeInterval: 1.0)
-   //     locoNet.setSwWithAck(switchNumber: opSw.rawValue, state: state)
+        locoNet.setSwWithAck(switchNumber: opSw.rawValue, state: state)
       }
     }
     else {
@@ -574,8 +574,8 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
   }
   
   private func exitOpSwMode() {
-    /*
-    if let message = OptionSwitch.exitOptionSwitchModeInstructions[productCode.locoNetProductId!] {
+    
+    if let message = OptionSwitch.exitOptionSwitchModeInstructions[productCode.locoNetDeviceId!] {
       
       let alert = NSAlert()
       
@@ -586,7 +586,7 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
       
       alert.runModal()
     }
-    */
+    
   }
   
   @objc func timeoutTimerAction() {
@@ -728,7 +728,7 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
       
       while true {
         
-    //    locoNet.setSw(switchNumber: Int(boardId), state: .closed)
+        locoNet.setSw(switchNumber: Int(boardId), state: .closed)
         
         let alertCheck = NSAlert()
         alertCheck.messageText = "Has the set Board ID command been accepted?"
@@ -895,7 +895,7 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
         configState = .gettingOptionSwitches
         optionSwitchesToDo = allDataOptionSwitches
         startTimeoutTimer(timeInterval: 1.0)
-   //     locoNet?.getSwState(switchNumber: optionSwitchesToDo.first!.rawValue)
+        locoNet?.getSwState(switchNumber: optionSwitchesToDo.first!.rawValue)
       }
       
     case .setSwWithAckAccepted:
@@ -979,7 +979,7 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
         optionSwitchesToDo.removeFirst()
         if let opSw = optionSwitchesToDo.first {
           startTimeoutTimer(timeInterval: 1.0)
-   //       locoNet?.getSwState(switchNumber: opSw.rawValue)
+          locoNet?.getSwState(switchNumber: opSw.rawValue)
         }
         else {
           configState = .idle

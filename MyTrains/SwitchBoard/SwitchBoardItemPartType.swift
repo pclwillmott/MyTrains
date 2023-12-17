@@ -121,11 +121,11 @@ public enum SwitchBoardItemPartType : Int {
     let turnouts = numberOfTurnoutSwitches
     
     if turnouts > 0 {
-      result = result.union([.sw1Thrown, .sw1Closed, .throwSW1, .closeSW1])
+      result = result.union([.sw1Thrown, .sw1Closed, .throwSW1, .closeSW1, .sw1CommandedThrown, .sw1CommandedClosed])
     }
     
     if turnouts > 1 {
-      result = result.union([.sw2Thrown, .sw2Closed, .throwSW2, .closeSW2])
+      result = result.union([.sw2Thrown, .sw2Closed, .throwSW2, .closeSW2, .sw2CommandedThrown, .sw2CommandedClosed])
     }
     
     let noFeedback : Set<SwitchBoardItemPartType> = [.buffer, .curve, .longCurve, .link, .none, .platform, .straight]

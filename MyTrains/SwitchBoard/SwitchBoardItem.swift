@@ -556,6 +556,18 @@ public class SwitchBoardItem : EditorObject {
     }
   }
 
+  public var sw1CommandedThrownEventId : UInt64? {
+    didSet {
+      modified = true
+    }
+  }
+
+  public var sw1CommandedClosedEventId : UInt64? {
+    didSet {
+      modified = true
+    }
+  }
+
   public var sw1ThrowEventId : UInt64? {
     didSet {
       modified = true
@@ -575,6 +587,18 @@ public class SwitchBoardItem : EditorObject {
   }
 
   public var sw2ClosedEventId : UInt64? {
+    didSet {
+      modified = true
+    }
+  }
+
+  public var sw2CommandedThrownEventId : UInt64? {
+    didSet {
+      modified = true
+    }
+  }
+
+  public var sw2CommandedClosedEventId : UInt64? {
     didSet {
       modified = true
     }
@@ -1115,6 +1139,14 @@ public class SwitchBoardItem : EditorObject {
 
       sw2CloseEventId = reader.getUInt64(index: 72)
 
+      sw1CommandedThrownEventId = reader.getUInt64(index: 73)
+
+      sw1CommandedClosedEventId = reader.getUInt64(index: 74)
+
+      sw2CommandedThrownEventId = reader.getUInt64(index: 75)
+
+      sw2CommandedClosedEventId = reader.getUInt64(index: 76)
+
     }
     
     modified = false
@@ -1205,7 +1237,11 @@ public class SwitchBoardItem : EditorObject {
         "[\(SWITCHBOARD_ITEM.SW2_THROWN_EVENT_ID)], " +
         "[\(SWITCHBOARD_ITEM.SW2_CLOSED_EVENT_ID)], " +
         "[\(SWITCHBOARD_ITEM.SW2_THROW_EVENT_ID)], " +
-        "[\(SWITCHBOARD_ITEM.SW2_CLOSE_EVENT_ID)] " +
+        "[\(SWITCHBOARD_ITEM.SW2_CLOSE_EVENT_ID)], " +
+        "[\(SWITCHBOARD_ITEM.SW1_COMMANDED_THROWN_EVENT_ID)], " +
+        "[\(SWITCHBOARD_ITEM.SW1_COMMANDED_CLOSED_EVENT_ID)], " +
+        "[\(SWITCHBOARD_ITEM.SW2_COMMANDED_THROWN_EVENT_ID)], " +
+        "[\(SWITCHBOARD_ITEM.SW2_COMMANDED_CLOSED_EVENT_ID)]" +
         ") VALUES (" +
         "@\(SWITCHBOARD_ITEM.SWITCHBOARD_ITEM_ID), " +
         "@\(SWITCHBOARD_ITEM.LAYOUT_ID), " +
@@ -1279,7 +1315,11 @@ public class SwitchBoardItem : EditorObject {
         "@\(SWITCHBOARD_ITEM.SW2_THROWN_EVENT_ID), " +
         "@\(SWITCHBOARD_ITEM.SW2_CLOSED_EVENT_ID), " +
         "@\(SWITCHBOARD_ITEM.SW2_THROW_EVENT_ID), " +
-        "@\(SWITCHBOARD_ITEM.SW2_CLOSE_EVENT_ID)" +
+        "@\(SWITCHBOARD_ITEM.SW2_CLOSE_EVENT_ID), " +
+        "@\(SWITCHBOARD_ITEM.SW1_COMMANDED_THROWN_EVENT_ID), " +
+        "@\(SWITCHBOARD_ITEM.SW1_COMMANDED_CLOSED_EVENT_ID), " +
+        "@\(SWITCHBOARD_ITEM.SW2_COMMANDED_THROWN_EVENT_ID), " +
+        "@\(SWITCHBOARD_ITEM.SW2_COMMANDED_CLOSED_EVENT_ID)" +
         ")"
         
         primaryKey = Database.nextCode(tableName: TABLE.SWITCHBOARD_ITEM, primaryKey: SWITCHBOARD_ITEM.SWITCHBOARD_ITEM_ID)!
@@ -1357,7 +1397,11 @@ public class SwitchBoardItem : EditorObject {
         "[\(SWITCHBOARD_ITEM.SW2_THROWN_EVENT_ID)] = @\(SWITCHBOARD_ITEM.SW2_THROWN_EVENT_ID), " +
         "[\(SWITCHBOARD_ITEM.SW2_CLOSED_EVENT_ID)] = @\(SWITCHBOARD_ITEM.SW2_CLOSED_EVENT_ID), " +
         "[\(SWITCHBOARD_ITEM.SW2_THROW_EVENT_ID)] = @\(SWITCHBOARD_ITEM.SW2_THROW_EVENT_ID), " +
-        "[\(SWITCHBOARD_ITEM.SW2_CLOSE_EVENT_ID)] = @\(SWITCHBOARD_ITEM.SW2_CLOSE_EVENT_ID) " +
+        "[\(SWITCHBOARD_ITEM.SW2_CLOSE_EVENT_ID)] = @\(SWITCHBOARD_ITEM.SW2_CLOSE_EVENT_ID), " +
+        "[\(SWITCHBOARD_ITEM.SW1_COMMANDED_THROWN_EVENT_ID)] = @\(SWITCHBOARD_ITEM.SW1_COMMANDED_THROWN_EVENT_ID), " +
+        "[\(SWITCHBOARD_ITEM.SW1_COMMANDED_CLOSED_EVENT_ID)] = @\(SWITCHBOARD_ITEM.SW1_COMMANDED_CLOSED_EVENT_ID), " +
+        "[\(SWITCHBOARD_ITEM.SW2_COMMANDED_THROWN_EVENT_ID)] = @\(SWITCHBOARD_ITEM.SW2_COMMANDED_THROWN_EVENT_ID), " +
+        "[\(SWITCHBOARD_ITEM.SW2_COMMANDED_CLOSED_EVENT_ID)] = @\(SWITCHBOARD_ITEM.SW2_COMMANDED_CLOSED_EVENT_ID) " +
         "WHERE [\(SWITCHBOARD_ITEM.SWITCHBOARD_ITEM_ID)] = @\(SWITCHBOARD_ITEM.SWITCHBOARD_ITEM_ID)"
       }
 
@@ -1453,6 +1497,10 @@ public class SwitchBoardItem : EditorObject {
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.SW2_CLOSED_EVENT_ID)", value: sw2ClosedEventId)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.SW2_THROW_EVENT_ID)", value: sw2ThrowEventId)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.SW2_CLOSE_EVENT_ID)", value: sw2CloseEventId)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.SW1_COMMANDED_THROWN_EVENT_ID)", value: sw1CommandedThrownEventId)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.SW1_COMMANDED_CLOSED_EVENT_ID)", value: sw1CommandedClosedEventId)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.SW2_COMMANDED_THROWN_EVENT_ID)", value: sw2CommandedThrownEventId)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.SW2_COMMANDED_CLOSED_EVENT_ID)", value: sw2CommandedClosedEventId)
 
       _ = cmd.executeNonQuery()
 
@@ -1543,7 +1591,11 @@ public class SwitchBoardItem : EditorObject {
         "[\(SWITCHBOARD_ITEM.SW2_THROWN_EVENT_ID)], " +
         "[\(SWITCHBOARD_ITEM.SW2_CLOSED_EVENT_ID)], " +
         "[\(SWITCHBOARD_ITEM.SW2_THROW_EVENT_ID)], " +
-        "[\(SWITCHBOARD_ITEM.SW2_CLOSE_EVENT_ID)]"
+        "[\(SWITCHBOARD_ITEM.SW2_CLOSE_EVENT_ID)], " +
+        "[\(SWITCHBOARD_ITEM.SW1_COMMANDED_THROWN_EVENT_ID)], " +
+        "[\(SWITCHBOARD_ITEM.SW1_COMMANDED_CLOSED_EVENT_ID)], " +
+        "[\(SWITCHBOARD_ITEM.SW2_COMMANDED_THROWN_EVENT_ID)], " +
+        "[\(SWITCHBOARD_ITEM.SW2_COMMANDED_CLOSED_EVENT_ID)]"
 
     }
   }

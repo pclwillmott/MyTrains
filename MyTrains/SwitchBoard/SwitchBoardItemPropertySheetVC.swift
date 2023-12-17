@@ -110,6 +110,14 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
             eventText = item.sw2ThrowEventId?.toHexDotFormat(numberOfBytes: 8) ?? ""
           case .closeSW2:
             eventText = item.sw2CloseEventId?.toHexDotFormat(numberOfBytes: 8) ?? ""
+          case .sw1CommandedThrown:
+            eventText = item.sw1CommandedThrownEventId?.toHexDotFormat(numberOfBytes: 8) ?? ""
+          case .sw1CommandedClosed:
+            eventText = item.sw1CommandedClosedEventId?.toHexDotFormat(numberOfBytes: 8) ?? ""
+          case .sw2CommandedThrown:
+            eventText = item.sw2CommandedThrownEventId?.toHexDotFormat(numberOfBytes: 8) ?? ""
+          case .sw2CommandedClosed:
+            eventText = item.sw2CommandedClosedEventId?.toHexDotFormat(numberOfBytes: 8) ?? ""
           }
           
           let textField = NSTextField(string: eventText)
@@ -127,14 +135,14 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
           
           if requiredEvents.contains(eventType) {
             
-            label.frame = NSRect(x: x, y: y, width: 230.0, height: 16.0)
+            label.frame = NSRect(x: x, y: y, width: 320.0, height: 16.0)
             tabs.tabViewItems[tab].view?.addSubview(label)
             y -= 30.0
             textField.frame = NSRect(x: x, y: y, width: 160.0, height: 21.0)
             tabs.tabViewItems[tab].view?.addSubview(textField)
-            copyButton.frame = NSRect(x: x + 220, y: y, width: 60.0, height: 20.0)
+            copyButton.frame = NSRect(x: x + 300, y: y, width: 60.0, height: 20.0)
             tabs.tabViewItems[tab].view?.addSubview(copyButton)
-            pasteButton.frame = NSRect(x: x + 280, y: y, width: 60.0, height: 20.0)
+            pasteButton.frame = NSRect(x: x + 360, y: y, width: 60.0, height: 20.0)
             tabs.tabViewItems[tab].view?.addSubview(pasteButton)
             y -= 25.0
             
@@ -142,7 +150,7 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
           
           if index == SwitchBoardEventType.sw2Closed.rawValue {
             tab = 1
-            x = 232.0
+            x = 160.0
             y = 204.0
           }
           
@@ -670,6 +678,14 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
           item.sw2ThrowEventId = eventId
         case .closeSW2:
           item.sw2CloseEventId = eventId
+        case .sw1CommandedThrown:
+          item.sw1CommandedThrownEventId = eventId
+        case .sw1CommandedClosed:
+          item.sw1CommandedClosedEventId = eventId
+        case .sw2CommandedThrown:
+          item.sw2CommandedThrownEventId = eventId
+        case .sw2CommandedClosed:
+          item.sw2CommandedClosedEventId = eventId
         }
       }
       else {
