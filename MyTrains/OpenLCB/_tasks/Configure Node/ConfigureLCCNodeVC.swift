@@ -83,6 +83,9 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBConfigurati
       network.sendNodeMemoryReadRequest(sourceNodeId: nodeId, destinationNodeId: node!.nodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cdi.rawValue, startAddress: nextCDIStartAddress, numberOfBytesToRead: 64)
 
     }
+    
+    multiTabView.replicationName = "Tab"
+    multiTabView.tabs = 16
 
   }
   
@@ -1495,6 +1498,9 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBConfigurati
     }
 
   }
+  
+  @IBOutlet weak var multiTabView: MultiTabView!
+  
   
 }
 

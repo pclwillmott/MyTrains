@@ -107,7 +107,7 @@
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <clipView key="contentView" drawsBackground="NO" id="KWO-uR-9ht">
                                                                     <rect key="frame" x="0.0" y="0.0" width="424" height="134"/>
-                                                                    <autoresizingMask key="autoresizingMask"/>
+                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <textView wantsLayer="YES" importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="1yg-el-g85">
                                                                             <rect key="frame" x="0.0" y="0.0" width="424" height="134"/>
@@ -144,7 +144,7 @@
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <clipView key="contentView" drawsBackground="NO" id="Wlt-MX-cOg">
                                                                     <rect key="frame" x="0.0" y="0.0" width="423" height="145"/>
-                                                                    <autoresizingMask key="autoresizingMask"/>
+                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <textView wantsLayer="YES" importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="jUP-Wo-fkP">
                                                                             <rect key="frame" x="0.0" y="0.0" width="423" height="145"/>

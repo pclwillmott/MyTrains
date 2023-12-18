@@ -348,7 +348,6 @@ class ClockView: NSView {
 
     }
     
-
   }
   
   // MARK: Private Properties
