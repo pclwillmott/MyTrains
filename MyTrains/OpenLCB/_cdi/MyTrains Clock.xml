@@ -3,8 +3,8 @@
 <identification>
 	<manufacturer>%%MANUFACTURER%%</manufacturer>
 	<model>%%MODEL%%</model>
-<hardwareVersion>v0.1</hardwareVersion>
-<softwareVersion>v0.1</softwareVersion>
+  <hardwareVersion>v0.1</hardwareVersion>
+  <softwareVersion>v0.1</softwareVersion>
 </identification>
 <acdi/>
 

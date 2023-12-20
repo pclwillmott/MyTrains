@@ -74,11 +74,11 @@
                                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                     <prototypeCellViews>
                                                                         <tableCellView identifier="TreeViewNode" id="jr0-lr-Qra">
-                                                                            <rect key="frame" x="8" y="0.0" width="547" height="24"/>
+                                                                            <rect key="frame" x="8" y="0.0" width="995" height="24"/>
                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                             <subviews>
                                                                                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SJD-qx-OWS">
-                                                                                    <rect key="frame" x="0.0" y="4" width="547" height="16"/>
+                                                                                    <rect key="frame" x="0.0" y="4" width="995" height="16"/>
                                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                                                     <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="sT2-IN-Ies">
                                                                                         <font key="font" usesAppearanceFont="YES"/>
@@ -182,9 +182,9 @@
                                                     </subviews>
                                                 </view>
                                             </box>
-                                            <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xv0-Xn-aPX" customClass="MultiTabView" customModule="MyTrains" customModuleProvider="target">
-                                                <rect key="frame" x="257" y="20" width="326" height="382"/>
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fpD-z8-cHA" customClass="CDIContainerView" customModule="MyTrains" customModuleProvider="target">
+                                                <rect key="frame" x="267" y="44" width="316" height="344"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             </customView>
                                         </subviews>
                                     </customView>
@@ -251,9 +251,9 @@
                         <outlet property="btnResetToDefaults" destination="Eam-mN-aec" id="R1X-QC-zYI"/>
                         <outlet property="btnWrite" destination="Mwk-u3-MoC" id="hRr-MW-Zuo"/>
                         <outlet property="cboCombo" destination="UGZ-RE-3HG" id="jlU-0z-Gxc"/>
+                        <outlet property="containerView" destination="fpD-z8-cHA" id="lzM-8i-Wau"/>
                         <outlet property="lblDescription" destination="Xf2-KQ-UYM" id="CC7-Vb-gsM"/>
                         <outlet property="lblStatus" destination="Uhi-4h-WSR" id="ud4-kH-h0F"/>
-                        <outlet property="multiTabView" destination="Xv0-Xn-aPX" id="J3w-v3-xqC"/>
                         <outlet property="outlineView" destination="nFC-xu-7pu" id="zX1-kv-w8S"/>
                         <outlet property="txtValue" destination="2Rr-NO-QRW" id="YOn-BE-flt"/>
                     </connections>

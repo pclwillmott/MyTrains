@@ -84,9 +84,66 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBConfigurati
 
     }
     
-    multiTabView.replicationName = "Tab"
-    multiTabView.tabs = 16
+    var text1 = CDIStringView()
+    text1.stringValue = "text 1"
+    containerView.append(view: text1)
 
+    var text2 = CDIStringView()
+    text2.stringValue = "text 2"
+    containerView.append(view: text2)
+
+    var text3 = CDIStringView()
+    text3.stringValue = "text 3"
+    containerView.append(view: text3)
+
+    /*
+    var text1 = NSTextField()
+    text1.stringValue = "Text 1"
+    containerView.append(view: text1)
+ 
+    var text2 = NSTextField()
+    text2.stringValue = "Text 2"
+    containerView.append(view: text2)
+
+    var text3 = NSTextField()
+    text3.stringValue = "Text 3"
+    containerView.append(view: text3)
+*/
+    /*
+    scrollView.documentView = NSView()
+    scrollView.documentView!.addSubview(text1)
+    text1.translatesAutoresizingMaskIntoConstraints = false
+
+    var text2 = NSTextField()
+    text2.stringValue = "Text 2"
+    scrollView.documentView!.addSubview(text2)
+    text2.translatesAutoresizingMaskIntoConstraints = false
+
+    var text3 = NSTextField()
+    text3.stringValue = "Text 2"
+    scrollView.documentView!.addSubview(text3)
+    text3.translatesAutoresizingMaskIntoConstraints = false
+
+    NSLayoutConstraint.activate([
+      text1.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 0.0),
+      text1.leftAnchor.constraint(equalTo: scrollView.leftAnchor),
+      text1.rightAnchor.constraint(equalTo: scrollView.rightAnchor),
+    ])
+
+    NSLayoutConstraint.activate([
+      text2.topAnchor.constraint(equalTo: text1.bottomAnchor, constant: 0.0),
+      text2.leftAnchor.constraint(equalTo: scrollView.leftAnchor, constant: 20.0),
+      text2.rightAnchor.constraint(equalTo: scrollView.rightAnchor),
+    ])
+
+    NSLayoutConstraint.activate([
+      text3.topAnchor.constraint(equalTo: text2.bottomAnchor, constant: 0.0),
+      text3.leftAnchor.constraint(equalTo: scrollView.leftAnchor),
+      text3.rightAnchor.constraint(equalTo: scrollView.rightAnchor),
+    ])
+*/
+    
+    
   }
   
   // MARK: Private Properties
@@ -1499,8 +1556,8 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBConfigurati
 
   }
   
-  @IBOutlet weak var multiTabView: MultiTabView!
+  @IBOutlet weak var scrollView: NSScrollView!
   
-  
+  @IBOutlet weak var containerView: CDIContainerView!
 }
 
