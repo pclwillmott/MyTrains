@@ -93,8 +93,17 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBConfigurati
     containerView.append(view: text2)
 
     var text3 = CDIStringView()
-    text3.stringValue = "text 3"
+    text3.name = "Events"
+    text3.addDescription(description: "This is descriptive text. This is descriptive text. This is descriptive text. This is descriptive text. This is descriptive text. ")
+    text3.addDescription(description: "This is descriptive text. This is descriptive text. This is descriptive text. This is descriptive text. This is descriptive text. With different words. ")
     containerView.append(view: text3)
+    text3.stringValue = "text 3"
+
+    var text4 = CDIEventIdView()
+    text4.name = "Events"
+    text4.addDescription(description: "This is descriptive text. This is descriptive text. This is descriptive text. This is descriptive text. This is descriptive text. ")
+    containerView.append(view: text4)
+    text4.eventIdValue = 0xffffff
 
     /*
     var text1 = NSTextField()

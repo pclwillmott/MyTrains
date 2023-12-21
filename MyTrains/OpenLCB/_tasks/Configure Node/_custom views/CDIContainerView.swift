@@ -21,6 +21,8 @@ class CDIContainerView : NSView {
   
   internal var _scrollView : NSScrollView?
   
+  internal var last : NSLayoutYAxisAnchor?
+  
   internal var scrollView : NSScrollView {
     
     if _scrollView == nil {
@@ -30,7 +32,7 @@ class CDIContainerView : NSView {
       addSubview(scroll)
 
       scroll.documentView = NSView()
-      scroll.documentView?.frame = NSMakeRect(0.0, 0.0, frame.width, frame.height)
+      scroll.documentView?.frame = NSMakeRect(0.0, 0.0, frame.width, 2000.0)
       scroll.allowsMagnification = false
       scroll.autohidesScrollers = true
       scroll.hasVerticalScroller = true
@@ -43,8 +45,15 @@ class CDIContainerView : NSView {
         scroll.rightAnchor.constraint(equalTo: self.rightAnchor),
         scroll.bottomAnchor.constraint(equalTo: self.bottomAnchor)
       ])
-      
+
+      NSLayoutConstraint.activate([
+        scroll.documentView!.leftAnchor.constraint(equalTo: scroll.leftAnchor),
+        scroll.documentView!.rightAnchor.constraint(equalTo: scroll.rightAnchor),
+      ])
+
       _scrollView = scroll
+      
+      last = _scrollView!.documentView!.topAnchor
       
     }
     
@@ -61,22 +70,16 @@ class CDIContainerView : NSView {
     scrollView.documentView?.addSubview(view)
 
     view.translatesAutoresizingMaskIntoConstraints = false
-  
-    var constraints : [NSLayoutConstraint] = []
     
-    if views.count == 0 {
-      constraints.append(view.topAnchor.constraint(equalTo: scrollView.documentView!.topAnchor))
-    }
-    else {
-      constraints.append(view.topAnchor.constraint(equalTo: views.last!.bottomAnchor))
-    }
-
     views.append(view)
     
-    constraints.append(view.leftAnchor.constraint(equalTo: scrollView.documentView!.leftAnchor))
-    constraints.append(view.rightAnchor.constraint(equalTo: scrollView.documentView!.rightAnchor))
+    NSLayoutConstraint.activate([
+      view.topAnchor.constraint(equalTo: last!),
+      view.leftAnchor.constraint(equalTo: scrollView.documentView!.leftAnchor),
+      view.rightAnchor.constraint(equalTo: scrollView.documentView!.rightAnchor),
+    ])
 
-    NSLayoutConstraint.activate(constraints)
+    last = view.bottomAnchor
 
   }
   

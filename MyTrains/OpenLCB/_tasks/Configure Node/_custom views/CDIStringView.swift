@@ -8,48 +8,16 @@
 import Foundation
 import AppKit
 
-class CDIStringView: CDIView {
+class CDIStringView: CDITextView {
   
-  // MARK: Drawing Stuff
+  // MARK: Private & Internal Properties
   
-  override func draw(_ dirtyRect: NSRect) {
- //   initialize()
-  }
-  
-  // MARK: Private & Internal Methods
-  
-  override internal func viewType() -> OpenLCBCDIViewType? {
-    return .string
-  }
-  
-  internal var _textField : NSTextField?
-
-  internal var textField : NSTextField {
-    
-    if _textField == nil {
-      
-      let field = NSTextField()
-      
-      addSubview(field)
-      
-      field.translatesAutoresizingMaskIntoConstraints = false
-      
-      NSLayoutConstraint.activate([
-        field.topAnchor.constraint(equalTo: self.topAnchor),
-        field.leftAnchor.constraint(equalTo: self.leftAnchor),
-        field.rightAnchor.constraint(equalTo: self.rightAnchor),
-        field.bottomAnchor.constraint(equalTo: self.bottomAnchor)
-      ])
-
-      _textField = field
-
-    }
-    
-    return _textField!
-    
-  }
 
   // MARK: Public Properties
+
+  public var minValue : String?
+  
+  public var maxValue : String?
   
   public var stringValue : String {
     get {
@@ -58,6 +26,33 @@ class CDIStringView: CDIView {
     set(value) {
       textField.stringValue = value
     }
+  }
+
+  // MARK: Private & Internal Methods
+  
+  override internal func viewType() -> OpenLCBCDIViewType? {
+    return .string
+  }
+  
+  override internal func isValid(value:String) -> Bool {
+    
+    if let maxValue, value > maxValue {
+      displayErrorMessage(message: "The value is greater than the maximum value of \"\(maxValue)\".")
+      return false
+    }
+
+    if let minValue, value < minValue {
+      displayErrorMessage(message: "The value is less than the minimum value of \"\(minValue)\".")
+      return false
+    }
+    
+    if let elementSize, value.count >= elementSize {
+      displayErrorMessage(message: "Text has too many characters. The maximum length is \(elementSize - 1) characters.")
+      return false
+    }
+
+    return true
+    
   }
   
 }
