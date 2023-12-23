@@ -15,10 +15,6 @@ class CDIStringView: CDITextView {
 
   // MARK: Public Properties
 
-  public var minValue : String?
-  
-  public var maxValue : String?
-  
   public var stringValue : String {
     get {
       return textField.stringValue

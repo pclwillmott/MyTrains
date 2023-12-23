@@ -76,7 +76,7 @@ class CDITextView: CDIDataView {
       nextYGap = gap
 
       _textField = field
-   
+  
       NSLayoutConstraint.activate([
         box.bottomAnchor.constraint(equalTo: field.bottomAnchor, constant: 6.0),
         self.heightAnchor.constraint(equalTo: box.heightAnchor, constant: gap),
@@ -90,11 +90,15 @@ class CDITextView: CDIDataView {
 
   // MARK: Public Properties
 
+  public var minValue : String?
+  
+  public var maxValue : String?
+  
   // MARK: Private & Internal Methods
   
   override internal func addButtons() {
     
-    guard let viewType = self.viewType() else {
+    guard self.viewType() != nil else {
       return
     }
     

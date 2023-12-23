@@ -105,6 +105,13 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBConfigurati
     containerView.append(view: text4)
     text4.eventIdValue = 0xffffff
 
+    var text5 = CDIUIntView()
+    text5.name = "Integers"
+    text5.addDescription(description: "This is descriptive text. This is descriptive text. This is descriptive text. This is descriptive text. This is descriptive text. ")
+    containerView.append(view: text5)
+    text5.elementSize = 4
+    text5.unsignedIntegerValue = 1234
+
     /*
     var text1 = NSTextField()
     text1.stringValue = "Text 1"
