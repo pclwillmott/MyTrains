@@ -236,8 +236,8 @@
                                     <action selector="btnResetToDefaultsAction:" target="sxP-xp-Aif" id="Pma-aX-zT1"/>
                                 </connections>
                             </button>
-                            <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bHt-60-9xm" customClass="CDIContainerView" customModule="MyTrains" customModuleProvider="target">
-                                <rect key="frame" x="485" y="60" width="757" height="422"/>
+                            <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Acj-XF-wRu" customClass="ScrollVerticalStackView" customModule="MyTrains" customModuleProvider="target">
+                                <rect key="frame" x="433" y="57" width="804" height="425"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </customView>
                         </subviews>
@@ -251,7 +251,7 @@
                         <outlet property="btnResetToDefaults" destination="Eam-mN-aec" id="R1X-QC-zYI"/>
                         <outlet property="btnWrite" destination="Mwk-u3-MoC" id="hRr-MW-Zuo"/>
                         <outlet property="cboCombo" destination="UGZ-RE-3HG" id="jlU-0z-Gxc"/>
-                        <outlet property="containerView" destination="bHt-60-9xm" id="9Jf-a7-Cie"/>
+                        <outlet property="containerView" destination="Acj-XF-wRu" id="Z7E-yB-9Pp"/>
                         <outlet property="lblDescription" destination="Xf2-KQ-UYM" id="CC7-Vb-gsM"/>
                         <outlet property="lblStatus" destination="Uhi-4h-WSR" id="ud4-kH-h0F"/>
                         <outlet property="outlineView" destination="nFC-xu-7pu" id="zX1-kv-w8S"/>

@@ -83,7 +83,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBConfigurati
       network.sendNodeMemoryReadRequest(sourceNodeId: nodeId, destinationNodeId: node!.nodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cdi.rawValue, startAddress: nextCDIStartAddress, numberOfBytesToRead: 64)
 
     }
-    
+    /*
     var text1 = CDIStringView()
     text1.stringValue = "text 1"
     containerView.append(view: text1)
@@ -111,7 +111,8 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBConfigurati
     containerView.append(view: text5)
     text5.elementSize = 4
     text5.unsignedIntegerValue = 1234
-
+*/
+    
     /*
     var text1 = NSTextField()
     text1.stringValue = "Text 1"
@@ -1574,6 +1575,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBConfigurati
   
   @IBOutlet weak var scrollView: NSScrollView!
   
-  @IBOutlet weak var containerView: CDIContainerView!
+  
+  @IBOutlet weak var containerView: ScrollVerticalStackView!
 }
 

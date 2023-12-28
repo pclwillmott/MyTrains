@@ -20,6 +20,7 @@ class CDIEventIdView: CDITextView {
       return UInt64(dotHex: textField.stringValue) ?? 0
     }
     set(value) {
+      addTextField()
       textField.stringValue = value == 0 ? "" : value.toHexDotFormat(numberOfBytes: 8)
       textField.placeholderString = "00.00.00.00.00.00.00.00"
     }

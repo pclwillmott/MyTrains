@@ -38,38 +38,43 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate {
       containerView.rightAnchor.constraint(equalTo: self.view.rightAnchor),
     ])
     */
-    var text1 = CDIStringView()
-    text1.stringValue = "text 1"
-    containerView.append(view: text1)
-/*
-    var text2 = CDIStringView()
-    text2.stringValue = "text 2"
-    containerView.append(view: text2)
+    
+//    var dataI = CDIDataView()
+    
+ //   var text2 = CDIStringView()
+ //   text2.stringValue = "text 2"
+ //   containerView.addArrangedSubview(dataI)
 
-    var text3 = CDIStringView()
+
+    var text3 = CDIStringView(frame: .zero)
+    containerView.addArrangedSubview(text3)
     text3.name = "Events"
     text3.addDescription(description: "This is descriptive text. This is descriptive text. This is descriptive text. This is descriptive text. This is descriptive text. ")
     text3.addDescription(description: "This is descriptive text. This is descriptive text. This is descriptive text. This is descriptive text. This is descriptive text. With different words. ")
-    containerView.append(view: text3)
     text3.stringValue = "text 3"
 
-    var text4 = CDIEventIdView()
+    var text4 = CDIEventIdView(frame: .zero)
+    containerView.addArrangedSubview(text4)
     text4.name = "Events"
     text4.addDescription(description: "This is descriptive text. This is descriptive text. This is descriptive text. This is descriptive text. This is descriptive text. ")
-    containerView.append(view: text4)
     text4.eventIdValue = 0xffffff
 
-    var text5 = CDIUIntView()
+    
+    var segment1 = CDISegmentView()
+    containerView.addArrangedSubview(segment1)
+    segment1.name = "Segment 1"
+
+    
+    var text5 = CDIUIntView(frame: .zero)
+    containerView.addArrangedSubview(text5)
     text5.name = "Integers"
     text5.addDescription(description: "This is descriptive text. This is descriptive text. This is descriptive text. This is descriptive text. This is descriptive text. ")
-    containerView.append(view: text5)
     text5.elementSize = 4
     text5.unsignedIntegerValue = 1234
-*/
+
   }
   
   // Outlets & Actions
   
-  @IBOutlet weak var containerView: CDIContainerView!
-  
+  @IBOutlet weak var containerView: ScrollVerticalStackView!
 }

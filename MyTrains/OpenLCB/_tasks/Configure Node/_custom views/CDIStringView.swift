@@ -20,6 +20,7 @@ class CDIStringView: CDITextView {
       return textField.stringValue
     }
     set(value) {
+      addTextField()
       textField.stringValue = value
     }
   }

@@ -15,6 +15,8 @@ class CDITextView: CDIDataView {
   internal var copyButton = NSButton()
   
   internal var pasteButton = NSButton()
+  
+  internal var needsTextField = true
 
   internal var needsCopyPaste : Bool {
     guard let viewType = viewType() else {
@@ -24,70 +26,8 @@ class CDITextView: CDIDataView {
     return needs.contains(viewType)
   }
   
-  internal var _textField : NSTextField?
-
-  internal var textField : NSTextField {
-    
-    if _textField == nil {
-      
-      addButtons()
-      
-      let field = NSTextField()
-      
-      box.addSubview(field)
-      
-      field.translatesAutoresizingMaskIntoConstraints = false
-      
-      NSLayoutConstraint.activate([
-        field.topAnchor.constraint(equalTo: lastAnchor!, constant: nextYGap),
-        field.leftAnchor.constraint(equalTo: box.leftAnchor, constant: gap),
-      ])
-      
-      if needsCopyPaste {
-
-        if let viewType = self.viewType(), viewType == .eventid {
-          NSLayoutConstraint.activate([
-            field.widthAnchor.constraint(equalToConstant: 160)
-          ])
-        }
-        else {
-          NSLayoutConstraint.activate([
-            field.rightAnchor.constraint(equalTo: copyButton.leftAnchor, constant: -gap),
-          ])
-        }
-
-        copyButton.target = self
-        copyButton.action = #selector(self.btnCopyAction(_:))
-        
-        pasteButton.target = self
-        pasteButton.action = #selector(self.btnPasteAction(_:))
-        
-      }
-      else {
-        
-        NSLayoutConstraint.activate([
-          field.rightAnchor.constraint(equalTo: refreshButton.leftAnchor, constant: -gap),
-        ])
-        
-      }
-      
-      lastAnchor = field.bottomAnchor
-      
-      nextYGap = gap
-
-      _textField = field
+  internal var textField = NSTextField()
   
-      NSLayoutConstraint.activate([
-        box.bottomAnchor.constraint(equalTo: field.bottomAnchor, constant: 6.0),
-        self.heightAnchor.constraint(equalTo: box.heightAnchor, constant: gap),
-      ])
-      
-    }
-    
-    return _textField!
-    
-  }
-
   // MARK: Public Properties
 
   public var minValue : String?
@@ -111,9 +51,9 @@ class CDITextView: CDIDataView {
       pasteButton.translatesAutoresizingMaskIntoConstraints = false
       
       NSLayoutConstraint.activate([
-        pasteButton.topAnchor.constraint(equalTo: lastAnchor!, constant: nextYGap),
+        pasteButton.topAnchor.constraint(equalTo: nextTop!, constant: nextGap),
         pasteButton.rightAnchor.constraint(equalTo: refreshButton.leftAnchor, constant: -gap),
-        pasteButton.widthAnchor.constraint(equalTo: refreshButton.widthAnchor)
+        pasteButton.widthAnchor.constraint(equalTo: refreshButton.widthAnchor),
       ])
 
       box.addSubview(copyButton)
@@ -121,7 +61,7 @@ class CDITextView: CDIDataView {
       copyButton.translatesAutoresizingMaskIntoConstraints = false
       
       NSLayoutConstraint.activate([
-        copyButton.topAnchor.constraint(equalTo: lastAnchor!, constant: nextYGap),
+        copyButton.topAnchor.constraint(equalTo: nextTop!, constant: nextGap),
         copyButton.rightAnchor.constraint(equalTo: pasteButton.leftAnchor, constant: -gap),
         copyButton.widthAnchor.constraint(equalTo: refreshButton.widthAnchor)
       ])
@@ -146,6 +86,63 @@ class CDITextView: CDIDataView {
   internal func isValid(value:String) -> Bool {
     return true
   }
+
+  internal func addTextField() {
+    
+    guard needsTextField else {
+      return
+    }
+    
+    addButtons()
+    
+    textField.translatesAutoresizingMaskIntoConstraints = false
+    
+    box.addSubview(textField)
+
+    NSLayoutConstraint.activate([
+      textField.topAnchor.constraint(equalTo: nextTop!, constant: nextGap),
+      textField.leftAnchor.constraint(equalTo: box.leftAnchor, constant: gap),
+    ])
+
+    nextTop = textField.bottomAnchor
+    
+    nextGap = gap
+    
+    setBottomToLastItem(lastItem: nextTop!)
+
+    if needsCopyPaste {
+
+      if let viewType = self.viewType(), viewType == .eventid {
+        NSLayoutConstraint.activate([
+          textField.widthAnchor.constraint(equalToConstant: 160)
+        ])
+      }
+      else {
+        NSLayoutConstraint.activate([
+          textField.rightAnchor.constraint(equalTo: copyButton.leftAnchor, constant: -gap),
+        ])
+      }
+
+      copyButton.target = self
+      copyButton.action = #selector(self.btnCopyAction(_:))
+      
+      pasteButton.target = self
+      pasteButton.action = #selector(self.btnPasteAction(_:))
+      
+    }
+    else {
+      
+      NSLayoutConstraint.activate([
+        textField.rightAnchor.constraint(equalTo: refreshButton.leftAnchor, constant: -gap),
+      ])
+      
+    }
+    
+    needsTextField = false
+    
+  }
+  
+  // MARK: Public Methods
   
   // MARK: Outlets & Actions
   

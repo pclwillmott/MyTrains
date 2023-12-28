@@ -36,6 +36,7 @@ class CDIUIntView: CDITextView {
       return UInt64(textField.stringValue)!
     }
     set(value) {
+      addTextField()
       if let mask {
         textField.stringValue = "\(value & mask)"
       }
