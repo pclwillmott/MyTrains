@@ -1,8 +1,8 @@
 //
-//  CDIDataView.swift
+//  CDIDataView2.swift
 //  MyTrains
 //
-//  Created by Paul Willmott on 21/12/2023.
+//  Created by Paul Willmott on 29/12/2023.
 //
 
 import Foundation
@@ -10,25 +10,11 @@ import AppKit
 
 class CDIDataView: CDIView {
   
-  // MARK: Drawing Stuff
-  
-  override func draw(_ dirtyRect: NSRect) {
-    setup()
-  }
-  
   // MARK: Private & Internal Methods
   
-  internal let gap : CGFloat = 5.0
+  internal var box = NSBox()
   
-  internal var nextGap : CGFloat = 20.0
-  
-  internal var nextTop : NSLayoutYAxisAnchor?
-  
-  internal var refreshButton = NSButton()
-  
-  internal var writeButton = NSButton()
-  
-  internal var needsInit = true
+  internal var stackView = NSStackView()
   
   internal var elementSize : Int?
   
@@ -40,11 +26,13 @@ class CDIDataView: CDIView {
     return needs.contains(viewType)
   }
 
-  internal var box = NSBox()
-  
-  var boxBottomAnchorConstraint : NSLayoutConstraint?
-
-  var viewBottomAnchorConstraint : NSLayoutConstraint?
+  internal var needsCopyPaste : Bool {
+    guard let viewType = viewType() else {
+      return false
+    }
+    let needs : Set<OpenLCBCDIViewType> = [.eventid]
+    return needs.contains(viewType)
+  }
 
   // MARK: Public Properties
   
@@ -59,44 +47,78 @@ class CDIDataView: CDIView {
   
   // MARK: Private & Internal Methods
   
-  internal func addButtons() {
+  internal func addButtons(view:NSView) {
     
-    guard let viewType = self.viewType() else {
+    guard self.viewType() != nil else {
       return
     }
     
+    dataButtonView.translatesAutoresizingMaskIntoConstraints = false
+    
+    view.addSubview(dataButtonView)
+
+    var constraints : [NSLayoutConstraint] = []
+    
+    constraints.append(contentsOf: [
+      dataButtonView.topAnchor.constraint(equalTo: view.topAnchor),
+      dataButtonView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+      dataButtonView.heightAnchor.constraint(equalToConstant: 20.0),
+    ])
+    
+    var trailingAnchor = dataButtonView.trailingAnchor
+
+    if needsCopyPaste {
+      
+      dataButtonView.addSubview(pasteButton)
+      pasteButton.title = "Paste"
+      pasteButton.translatesAutoresizingMaskIntoConstraints = false
+      
+      dataButtonView.addSubview(copyButton)
+      copyButton.title = "Copy"
+      copyButton.translatesAutoresizingMaskIntoConstraints = false
+      
+      constraints.append(contentsOf: [
+        pasteButton.topAnchor.constraint(equalTo: dataButtonView.topAnchor),
+        pasteButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -gap),
+        copyButton.topAnchor.constraint(equalTo: dataButtonView.topAnchor),
+        copyButton.trailingAnchor.constraint(equalTo: pasteButton.leadingAnchor, constant: -gap),
+      ])
+      
+      trailingAnchor = copyButton.leadingAnchor
+
+    }
+
     if needsRefreshWrite {
       
-      box.addSubview(writeButton)
-      
+      dataButtonView.addSubview(writeButton)
       writeButton.title = "Write"
       writeButton.translatesAutoresizingMaskIntoConstraints = false
       
-      NSLayoutConstraint.activate([
-        writeButton.topAnchor.constraint(equalTo: nextTop!, constant: gap),
-        writeButton.rightAnchor.constraint(equalTo: box.rightAnchor, constant: -gap),
-      ])
-
-      box.addSubview(refreshButton)
-      
+      dataButtonView.addSubview(refreshButton)
       refreshButton.title = "Refresh"
       refreshButton.translatesAutoresizingMaskIntoConstraints = false
       
-      NSLayoutConstraint.activate([
-        refreshButton.topAnchor.constraint(equalTo: nextTop!, constant: gap),
-        refreshButton.rightAnchor.constraint(equalTo: writeButton.leftAnchor, constant:  -gap),
-        writeButton.widthAnchor.constraint(equalTo: refreshButton.widthAnchor),
+      constraints.append(contentsOf: [
+        writeButton.topAnchor.constraint(equalTo: dataButtonView.topAnchor),
+        writeButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -gap),
+        refreshButton.topAnchor.constraint(equalTo: dataButtonView.topAnchor),
+        refreshButton.trailingAnchor.constraint(equalTo: writeButton.leadingAnchor, constant:  -gap),
+        dataButtonView.leadingAnchor.constraint(equalTo: refreshButton.leadingAnchor)
       ])
-
+      
     }
+
+    NSLayoutConstraint.activate(constraints)
     
   }
   
-  internal func setup() {
+  override internal func setup() {
     
     guard needsInit else {
       return
     }
+    
+    super.setup()
     
     addSubview(box)
     
@@ -112,54 +134,22 @@ class CDIDataView: CDIView {
       box.leadingAnchor.constraint(equalTo: self.leadingAnchor),
       box.trailingAnchor.constraint(equalTo: self.trailingAnchor),
     ])
-        
-    nextTop = box.topAnchor
     
+    stackView.translatesAutoresizingMaskIntoConstraints = false
+    stackView.orientation = .vertical
+    stackView.alignment = .leading
+    
+    box.addSubview(stackView)
+
+    NSLayoutConstraint.activate([
+      stackView.topAnchor.constraint(equalTo: box.topAnchor, constant: 23.0),
+      stackView.leadingAnchor.constraint(equalTo: box.leadingAnchor, constant: gap),
+      stackView.trailingAnchor.constraint(equalTo: box.trailingAnchor, constant: -gap),
+      box.bottomAnchor.constraint(equalTo: stackView.bottomAnchor, constant: gap),
+      self.bottomAnchor.constraint(equalTo: box.bottomAnchor, constant: gap),
+    ])
+
     needsInit = false
-
-  }
-  
-  internal func setBottomToLastItem(lastItem:NSLayoutYAxisAnchor) {
-
-    // Remove any existing constants on the view and box bottoms
-    
-    if let viewBottomAnchorConstraint {
-      NSLayoutConstraint.deactivate([
-        viewBottomAnchorConstraint
-      ])
-    }
-    
-    // Remove any existing constants on the view and box bottoms
-    
-    if let boxBottomAnchorConstraint {
-      NSLayoutConstraint.deactivate([
-        boxBottomAnchorConstraint
-      ])
-    }
-    
-    // Calculate and store new box bottom constraint
-    
-    boxBottomAnchorConstraint = box.bottomAnchor.constraint(greaterThanOrEqualTo: lastItem, constant: gap)
-
-    if let boxBottomAnchorConstraint {
-      NSLayoutConstraint.activate([
-        boxBottomAnchorConstraint
-      ])
-    }
-
-    
-//    viewBottomAnchorConstraint = self.heightAnchor.constraint(equalTo: box.heightAnchor, constant: gap)
-    
-    viewBottomAnchorConstraint = self.heightAnchor.constraint(equalToConstant: box.fittingSize.height)
-
-    
-    if let viewBottomAnchorConstraint {
-      NSLayoutConstraint.activate([
-        viewBottomAnchorConstraint
-      ])
-    }
-
-    self.updateConstraints()
 
   }
   
@@ -180,24 +170,26 @@ class CDIDataView: CDIView {
     field.stringValue = description
     field.preferredMaxLayoutWidth = 500.0
 
-    box.addSubview(field)
+    stackView.addArrangedSubview(field)
     
     NSLayoutConstraint.activate([
-      
-      field.topAnchor.constraint(equalTo: nextTop == nil ? box.topAnchor : nextTop!, constant: nextGap),
-      field.leftAnchor.constraint(equalTo: box.leftAnchor, constant: gap),
-      field.rightAnchor.constraint(equalTo: box.rightAnchor, constant: -gap),
-      
+      field.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: gap),
+      field.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -gap),
     ])
 
-
-    nextTop = field.bottomAnchor
-    
-    nextGap = gap
-    
-    setBottomToLastItem(lastItem: nextTop!)
-
   }
+  
+  // MARK: Controls
+  
+  internal var refreshButton = NSButton()
+  
+  internal var writeButton = NSButton()
+  
+  internal var copyButton = NSButton()
+  
+  internal var pasteButton = NSButton()
+  
+  internal var dataButtonView = NSView()
   
 }
 

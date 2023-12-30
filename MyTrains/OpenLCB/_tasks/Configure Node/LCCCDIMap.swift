@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Cocoa
+import AppKit
 
 public class LCCCDIMap {
   
@@ -43,7 +43,7 @@ public class LCCCDIMap {
     comboBox.deselectItem(at: comboBox.indexOfSelectedItem)
     
     for item in field.map {
-      if property == item.property{
+      if property == item.property {
         comboBox.selectItem(at: index)
         return
       }

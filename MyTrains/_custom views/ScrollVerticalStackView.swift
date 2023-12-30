@@ -42,7 +42,7 @@ class ScrollVerticalStackView : NSView {
       scrollView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
       scrollView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
       scrollView.topAnchor.constraint(equalTo: self.topAnchor),
-      scrollView.heightAnchor.constraint(equalTo: self.heightAnchor),
+      scrollView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
     ])
     
     stackView.orientation = .vertical
@@ -52,9 +52,8 @@ class ScrollVerticalStackView : NSView {
     scrollView.documentView = stackView
 
     NSLayoutConstraint.activate([
-      stackView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 0.0),
+      stackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
       stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-//      stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
       stackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
     ])
 

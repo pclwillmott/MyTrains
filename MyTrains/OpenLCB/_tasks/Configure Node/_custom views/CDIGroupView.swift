@@ -1,14 +1,14 @@
 //
-//  CDISegmentView.swift
+//  CDIGroupView.swift
 //  MyTrains
 //
-//  Created by Paul Willmott on 28/12/2023.
+//  Created by Paul Willmott on 29/12/2023.
 //
 
 import Foundation
 import AppKit
 
-class CDISegmentView: CDIView {
+class CDIGroupView: CDIView {
   
   // MARK: Private & Internal Methods
   
@@ -132,6 +132,25 @@ class CDISegmentView: CDIView {
 
   }
   
+  public func addDescription(description:String) {
+    
+    let field = NSTextField(labelWithString: description)
+    
+    field.translatesAutoresizingMaskIntoConstraints = false
+    
+    field.lineBreakMode = .byWordWrapping
+    field.isEditable = false
+    field.isBordered = false
+    field.drawsBackground = false
+    field.font = NSFont(name: field.font!.familyName!, size: 11.0)
+    field.maximumNumberOfLines = 0
+    field.stringValue = description
+    field.preferredMaxLayoutWidth = 500.0
+
+    addArrangedSubview(field)
+    
+  }
+
   // MARK: Outlets & Actions
   
   @IBAction func btnDisclosureAction(_ sender: NSButton) {

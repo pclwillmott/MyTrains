@@ -14,25 +14,9 @@
             filePath = "MyTrains/_custom views/ScrollVerticalStackView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "81"
-            endingLineNumber = "81"
-            landmarkName = "ScrollVerticalStackView"
-            landmarkType = "3">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "254EF933-D106-48D3-90FF-CEA6EF35BA2D"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MyTrains/OpenLCB/_tasks/Configure Node/ConfigurationToolVC.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "44"
-            endingLineNumber = "44"
-            landmarkName = "viewWillAppear()"
+            startingLineNumber = "80"
+            endingLineNumber = "80"
+            landmarkName = "addArrangedSubview(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
