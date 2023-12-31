@@ -19,16 +19,16 @@ class MultiTabView: NSView {
   
   private var scrollViews : [NSScrollView] = []
   
+  private var nextButton : NSButton?
+  
+  private var previousButton : NSButton?
+  
   private var currentPage : Int {
     guard tabsToShow > 0 else {
       return 0
     }
     return currentTab / tabsToShow
   }
-  
-  private var nextButton : NSButton?
-  
-  private var previousButton : NSButton?
   
   private var currentTab : Int = 0 {
     didSet {

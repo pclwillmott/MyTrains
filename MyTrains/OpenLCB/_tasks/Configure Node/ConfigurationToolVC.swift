@@ -113,10 +113,17 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate {
     containerView.addArrangedSubview(segment1)
     segment1.name = "Segment 1"
 
+    var group2 = CDIGroupTabView()
+    segment1.addArrangedSubview(group2)
+    group2.name = "Tab View"
+    group2.addDescription(description: "another piece of text")
+    group2.numberOfTabViewItems = 16
+    group2.replicationName = "Channel"
+    
     var text2 = CDIStringView()
     text2.addDescription(description: "description")
     text2.stringValue = "text 2"
-    segment1.addArrangedSubview(text2)
+    group2.addViewToTabViewItem(tabItemIndex: 0, view: text2)
 
     var text4 = CDIEventIdView(frame: .zero)
     segment1.addArrangedSubview(text4)

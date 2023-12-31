@@ -174,6 +174,7 @@
 		DA95D6BF28083E9800D9F1B6 /* GroupSetup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA95D6BE28083E9800D9F1B6 /* GroupSetup.storyboard */; };
 		DA95D6C52809C00600D9F1B6 /* SignalStrengthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA95D6C42809C00600D9F1B6 /* SignalStrengthView.swift */; };
 		DA9807C52789AFE300F73ACD /* NMRA.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9807C42789AFE300F73ACD /* NMRA.swift */; };
+		DA98AC1E2B41870500CC423B /* CDIGroupTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA98AC1D2B41870500CC423B /* CDIGroupTabView.swift */; };
 		DA9B87262A2B686C00E9969E /* OpenLCBNodeConfigurationOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9B87252A2B686C00E9969E /* OpenLCBNodeConfigurationOptions.swift */; };
 		DA9B87282A2B979E00E9969E /* DBEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9B87272A2B979E00E9969E /* DBEditorView.swift */; };
 		DA9C6A1E2A408F060069FED8 /* OpenLCBTractionControlInstructionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9C6A1D2A408F060069FED8 /* OpenLCBTractionControlInstructionType.swift */; };
@@ -442,6 +443,7 @@
 		DA95D6BE28083E9800D9F1B6 /* GroupSetup.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = GroupSetup.storyboard; sourceTree = "<group>"; };
 		DA95D6C42809C00600D9F1B6 /* SignalStrengthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalStrengthView.swift; sourceTree = "<group>"; };
 		DA9807C42789AFE300F73ACD /* NMRA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NMRA.swift; sourceTree = "<group>"; };
+		DA98AC1D2B41870500CC423B /* CDIGroupTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDIGroupTabView.swift; sourceTree = "<group>"; };
 		DA9B87252A2B686C00E9969E /* OpenLCBNodeConfigurationOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBNodeConfigurationOptions.swift; sourceTree = "<group>"; };
 		DA9B87272A2B979E00E9969E /* DBEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBEditorView.swift; sourceTree = "<group>"; };
 		DA9C6A1D2A408F060069FED8 /* OpenLCBTractionControlInstructionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBTractionControlInstructionType.swift; sourceTree = "<group>"; };
@@ -994,6 +996,7 @@
 				DAB4A73A2B3F282100CD5256 /* CDIDataView.swift */,
 				DA1A7B292B34BB770099F763 /* CDIEventIdView.swift */,
 				DAB4A7382B3F0E7D00CD5256 /* CDIGroupView.swift */,
+				DA98AC1D2B41870500CC423B /* CDIGroupTabView.swift */,
 				DAB3C10C2B3DD4C500F4689A /* CDISegmentView.swift */,
 				DA7F23912B3328B1001E5C8C /* CDIStringView.swift */,
 				DAB4A73C2B3F30BA00CD5256 /* CDITextView.swift */,
@@ -1456,6 +1459,7 @@
 				DA51FB9C29D88320002CAAC1 /* LCCCANFrame.swift in Sources */,
 				DA56261529E1BE7800D465CC /* OpenLCBMTI.swift in Sources */,
 				DAE2BADB2B091EB200FC587A /* OpenLCBStandardContentBlockType.swift in Sources */,
+				DA98AC1E2B41870500CC423B /* CDIGroupTabView.swift in Sources */,
 				DA17297F2B25E7330013301B /* OpenLCBLocationServicesContentBlock.swift in Sources */,
 				DA0D3E0C2A485E9A0042748C /* OpenLCBSearchMatchTarget.swift in Sources */,
 				DA467BA7281D534900AB9650 /* SwitchBoardItem.swift in Sources */,
