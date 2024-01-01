@@ -73,7 +73,7 @@
 <group replication='68'>
 <name>Functions</name>
 <description>Defines what each function button does.</description>
-<repname>F</repname>
+<repname>F1</repname>
 <int size='1'>
   <name>Display</name>
   <description>Defines how throttles display this function.</description>

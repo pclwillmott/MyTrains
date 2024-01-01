@@ -29,27 +29,33 @@ class CDIMapView : CDIDataView {
     stackView.addArrangedSubview(comboView)
 
     NSLayoutConstraint.activate([
-      comboView.leftAnchor.constraint(equalTo: stackView.leftAnchor),
-      comboView.rightAnchor.constraint(equalTo: stackView.rightAnchor),
+      comboView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
+      comboView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
     ])
 
     addButtons(view:comboView)
     
     comboBox.translatesAutoresizingMaskIntoConstraints = false
     
+    comboBox.isEditable = false
+    
     comboView.addSubview(comboBox)
 
     NSLayoutConstraint.activate([
       comboBox.topAnchor.constraint(equalTo: comboView.topAnchor),
-      comboBox.leftAnchor.constraint(equalTo: comboView.leftAnchor, constant: gap),
-      comboBox.rightAnchor.constraint(equalTo: refreshButton.leftAnchor, constant: -gap),
+      comboBox.leadingAnchor.constraint(equalTo: comboView.leadingAnchor, constant: gap),
+      comboBox.widthAnchor.constraint(greaterThanOrEqualToConstant: 100),
       comboView.heightAnchor.constraint(equalTo: comboBox.heightAnchor),
     ])
     
     map.populate(comboBox: comboBox)
     
   }
-  
+
+  override internal func viewType() -> OpenLCBCDIViewType? {
+    return .string
+  }
+
   // MARK: Public Properties
   
   public var map : LCCCDIMap? {

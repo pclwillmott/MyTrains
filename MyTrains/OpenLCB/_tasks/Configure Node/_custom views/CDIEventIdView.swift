@@ -10,9 +10,6 @@ import AppKit
 
 class CDIEventIdView: CDITextView {
   
-  // MARK: Private & Internal Properties
-  
-
   // MARK: Public Properties
 
   public var eventIdValue : UInt64 {
@@ -32,16 +29,11 @@ class CDIEventIdView: CDITextView {
     return .eventid
   }
   
-  override internal func isValid(value:String) -> Bool {
-    
-    if UInt64(dotHex: value) == nil {
-      displayErrorMessage(message: "Invalid Event Id.")
-      return false
-    }
+  // MARK: NSTextFieldDelegate, NSControlTextEditingDelegate Methods
 
-    return true
-    
+  @objc func control(_ control: NSControl, textShouldEndEditing fieldEditor: NSText) -> Bool {
+    return UInt64(dotHex: control.stringValue) != nil
   }
-  
+
 }
 

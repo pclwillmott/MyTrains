@@ -69,7 +69,7 @@ class CDIGroupTabView : CDIGroupView {
   
   // MARK: Private & Internal Properties
   
-  internal var _tabViewItems : [NSStackView] = []
+  internal var _tabViewItems : [CDIStackView] = []
   
   internal var _tabs : [NSButton] = []
   
@@ -173,7 +173,7 @@ class CDIGroupTabView : CDIGroupView {
     
   }
   
-  public var tabViewItems : [NSStackView] {
+  public var tabViewItems : [CDIStackView] {
     return _tabViewItems
   }
   
@@ -191,9 +191,7 @@ class CDIGroupTabView : CDIGroupView {
       }
       
       while _tabViewItems.count < value {
-        let stackView = NSStackView()
-        stackView.orientation = .vertical
-        stackView.alignment = .leading
+        let stackView = CDIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.isHidden = true
         _tabViewItems.append(stackView)
@@ -274,23 +272,6 @@ class CDIGroupTabView : CDIGroupView {
   
   internal func tabTitle(tabItem:Int) -> String {
     return "\(_replicationName)\(_noStartNumberSpecified ? " " : "")\(_replicationStartNumber + tabItem)"
-  }
-  
-  // MARK: Public Methods
-  
-  public func addViewToTabViewItem(tabItemIndex:Int, view:NSView) {
-    
-    guard tabItemIndex >= 0 && tabItemIndex < _tabViewItems.count else {
-      return
-    }
-    
-    _tabViewItems[tabItemIndex].addArrangedSubview(view)
-    
-    NSLayoutConstraint.activate([
-      view.leadingAnchor.constraint(equalTo: _tabViewItems[tabItemIndex].leadingAnchor),
-      view.trailingAnchor.constraint(equalTo: _tabViewItems[tabItemIndex].trailingAnchor),
-    ])
-    
   }
   
   // MARK: Controls

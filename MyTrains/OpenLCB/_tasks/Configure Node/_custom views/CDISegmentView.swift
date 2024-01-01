@@ -8,7 +8,7 @@
 import Foundation
 import AppKit
 
-class CDISegmentView: CDIView {
+class CDISegmentView: CDIView, CDIStackViewManagerDelegate {
   
   // MARK: Private & Internal Methods
   

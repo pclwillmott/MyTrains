@@ -8,7 +8,7 @@
 import Foundation
 import AppKit
 
-class CDIGroupView: CDIView {
+class CDIGroupView: CDIView, CDIStackViewManagerDelegate {
   
   // MARK: Private & Internal Methods
   
@@ -133,6 +133,10 @@ class CDIGroupView: CDIView {
   }
   
   public func addDescription(description:String) {
+    
+    guard !description.trimmingCharacters(in: .whitespaces).isEmpty else {
+      return
+    }
     
     let field = NSTextField(labelWithString: description)
     

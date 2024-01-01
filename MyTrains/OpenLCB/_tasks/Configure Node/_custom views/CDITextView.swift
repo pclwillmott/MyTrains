@@ -8,7 +8,7 @@
 import Foundation
 import AppKit
 
-class CDITextView: CDIDataView {
+class CDITextView: CDIDataView, NSTextFieldDelegate, NSControlTextEditingDelegate {
   
   // MARK: Private & Internal Properties
 
@@ -26,23 +26,6 @@ class CDITextView: CDIDataView {
   
   // MARK: Private & Internal Methods
   
-  internal func displayErrorMessage(message: String) {
-    
-    let alert = NSAlert()
-
-    alert.messageText = "Error"
-    alert.informativeText = message
-    alert.addButton(withTitle: "OK")
-    alert.alertStyle = .critical
-
-    let _ = alert.runModal()
-
-  }
-
-  internal func isValid(value:String) -> Bool {
-    return true
-  }
-
   internal func addTextField() {
     
     guard needsTextField else {
@@ -59,6 +42,8 @@ class CDITextView: CDIDataView {
     ])
 
     addButtons(view:textView)
+    
+    textField.delegate = self
     
     textField.translatesAutoresizingMaskIntoConstraints = false
     
@@ -102,7 +87,15 @@ class CDITextView: CDIDataView {
     
   }
   
-  // MARK: Public Methods
+  // MARK: NSTextFieldDelegate, NSControlTextEditingDelegate Methods
+ 
+  @objc func controlTextDidBeginEditing(_ obj: Notification) {
+    writeButton.isEnabled = false
+  }
+  
+  @objc internal func controlTextDidEndEditing(_ obj: Notification) {
+    writeButton.isEnabled = true
+  }
   
   // MARK: Outlets & Actions
   

@@ -10,9 +10,6 @@ import AppKit
 
 class CDIStringView: CDITextView {
   
-  // MARK: Private & Internal Properties
-  
-
   // MARK: Public Properties
 
   public var stringValue : String {
@@ -31,26 +28,25 @@ class CDIStringView: CDITextView {
     return .string
   }
   
-  override internal func isValid(value:String) -> Bool {
+  // MARK: NSTextFieldDelegate, NSControlTextEditingDelegate Methods
+
+  @objc func control(_ control: NSControl, textShouldEndEditing fieldEditor: NSText) -> Bool {
     
-    if let maxValue, value > maxValue {
-      displayErrorMessage(message: "The value is greater than the maximum value of \"\(maxValue)\".")
+    if let maxValue, control.stringValue > maxValue {
       return false
     }
 
-    if let minValue, value < minValue {
-      displayErrorMessage(message: "The value is less than the minimum value of \"\(minValue)\".")
+    if let minValue, control.stringValue < minValue {
       return false
     }
     
-    if let elementSize, value.count >= elementSize {
-      displayErrorMessage(message: "Text has too many characters. The maximum length is \(elementSize - 1) characters.")
+    if let elementSize, control.stringValue.count >= elementSize {
       return false
     }
 
     return true
     
   }
-  
+
 }
 

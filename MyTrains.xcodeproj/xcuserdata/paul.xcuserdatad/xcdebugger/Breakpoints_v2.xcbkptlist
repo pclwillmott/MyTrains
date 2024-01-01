@@ -20,5 +20,113 @@
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "93FDB162-1EA3-4336-ABDA-E84BC017A498"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MyTrains/OpenLCB/_tasks/Configure Node/ConfigureLCCNodeVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "135"
+            endingLineNumber = "135"
+            landmarkName = "ConfigureLCCNodeVC"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  uuid = "93FDB162-1EA3-4336-ABDA-E84BC017A498 - 39ff186046e49122"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MyTrains.ConfigureLCCNodeVC.dataBytesToRead.getter : Swift.Int"
+                  moduleName = "MyTrains"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/Documents/MyTrains/MyTrains/OpenLCB/_tasks/Configure%20Node/ConfigureLCCNodeVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "16">
+               </Location>
+               <Location
+                  uuid = "93FDB162-1EA3-4336-ABDA-E84BC017A498 - 5d9c7e917f0b7bf1"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MyTrains.ConfigureLCCNodeVC.dataBytesToRead.setter : Swift.Int"
+                  moduleName = "MyTrains"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/Documents/MyTrains/MyTrains/OpenLCB/_tasks/Configure%20Node/ConfigureLCCNodeVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "135"
+                  endingLineNumber = "135"
+                  offsetFromSymbolStart = "0">
+               </Location>
+               <Location
+                  uuid = "93FDB162-1EA3-4336-ABDA-E84BC017A498 - 6fb50f3224696ac2"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MyTrains.ConfigureLCCNodeVC.dataBytesToRead.modify : Swift.Int"
+                  moduleName = "MyTrains"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/Documents/MyTrains/MyTrains/OpenLCB/_tasks/Configure%20Node/ConfigureLCCNodeVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "135"
+                  endingLineNumber = "135"
+                  offsetFromSymbolStart = "0">
+               </Location>
+               <Location
+                  uuid = "93FDB162-1EA3-4336-ABDA-E84BC017A498 - e3e93b5dab277a50"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MyTrains.ConfigureLCCNodeVC.dataBytesToRead.modify : Swift.Int with unmangled suffix &quot;.resume.0&quot;"
+                  moduleName = "MyTrains"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/Documents/MyTrains/%3Ccompiler-generated%3E"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "15">
+               </Location>
+               <Location
+                  uuid = "93FDB162-1EA3-4336-ABDA-E84BC017A498 - 532cf9a6ca1ee39e"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MyTrains.ConfigureLCCNodeVC.init(nibName: Swift.Optional&lt;Swift.String&gt;, bundle: Swift.Optional&lt;__C.NSBundle&gt;) -&gt; MyTrains.ConfigureLCCNodeVC"
+                  moduleName = "MyTrains"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/Documents/MyTrains/MyTrains/OpenLCB/_tasks/Configure%20Node/ConfigureLCCNodeVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "135"
+                  endingLineNumber = "135"
+                  offsetFromSymbolStart = "1280">
+               </Location>
+               <Location
+                  uuid = "93FDB162-1EA3-4336-ABDA-E84BC017A498 - c5f9f8504cdb27c8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MyTrains.ConfigureLCCNodeVC.init(coder: __C.NSCoder) -&gt; Swift.Optional&lt;MyTrains.ConfigureLCCNodeVC&gt;"
+                  moduleName = "MyTrains"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paul/Documents/MyTrains/MyTrains/OpenLCB/_tasks/Configure%20Node/ConfigureLCCNodeVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "135"
+                  endingLineNumber = "135"
+                  offsetFromSymbolStart = "1222">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

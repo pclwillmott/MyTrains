@@ -56,9 +56,9 @@ extension UInt64 {
     var value : UInt64 = 0
     
     for digits in split {
-      if let byte = UInt64(digits, radix: 16) {
+      if let byte = UInt8(digits, radix: 16) {
         value <<= 8
-        value |= byte
+        value |= UInt64(byte)
       }
       else {
         return nil

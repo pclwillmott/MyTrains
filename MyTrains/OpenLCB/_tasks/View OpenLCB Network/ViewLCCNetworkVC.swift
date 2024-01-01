@@ -142,9 +142,9 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBConfiguration
     let x = ModalWindow.ConfigurationTool
     let wc = x.windowController
     let vc = x.viewController(windowController: wc) as! ConfigurationToolVC
-//    vc.configurationTool = networkLayer.getConfigurationTool()
-//    vc.configurationTool?.delegate = vc
-//    vc.node = node
+    vc.configurationTool = networkLayer.getConfigurationTool()
+    vc.configurationTool?.delegate = vc
+    vc.node = node
     wc.showWindow(nil)
 
     /*
