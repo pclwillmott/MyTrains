@@ -127,7 +127,7 @@ class CDIDataView: CDIView {
     box.translatesAutoresizingMaskIntoConstraints = false
     box.cornerRadius = 5.0
     box.titlePosition = .atTop
-    box.titleFont = NSFont(name: box.titleFont.familyName!, size: 16.0)!
+    box.titleFont = NSFont(name: box.titleFont.familyName!, size: 13.0)!
 
     NSLayoutConstraint.activate([
       box.topAnchor.constraint(equalTo: self.topAnchor, constant: gap),

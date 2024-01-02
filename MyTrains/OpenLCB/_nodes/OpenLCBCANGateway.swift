@@ -28,7 +28,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressParity)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressFlowControl)
 
-    initCDI(filename: "MyTrains CAN Gateway", manufacturer: manufacturerName, model: nodeModelName)
+    initCDI(filename: "MyTrains CAN Gateway")
     
     if !memorySpacesInitialized {
       resetToFactoryDefaults()
@@ -174,9 +174,9 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     
     manufacturerName    = virtualNodeType.manufacturerName
     nodeModelName       = virtualNodeType.name
-    nodeHardwareVersion = "v0.1"
-    nodeSoftwareVersion = "v0.1"
-    
+    nodeHardwareVersion = "\(Bundle.main.releaseVersionNumberPretty)"
+    nodeSoftwareVersion = "\(Bundle.main.releaseVersionNumberPretty)"
+
     acdiUserSpaceVersion = 2
     
     userNodeName        = ""

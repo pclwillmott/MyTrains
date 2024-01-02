@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <cdi xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://openlcb.org/schema/cdi/1/1/cdi.xsd">
 <identification>
-<manufacturer>%%MANUFACTURER%%</manufacturer>
-<model>%%MODEL%%</model>
-<hardwareVersion></hardwareVersion>
-<softwareVersion></softwareVersion>
+  <manufacturer>%%MANUFACTURER%%</manufacturer>
+  <model>%%MODEL%%</model>
+  <hardwareVersion>%%HARDWARE_VERSION%%</hardwareVersion>
+  <softwareVersion>%%SOFTWARE_VERSION%%</softwareVersion>
 </identification>
 <acdi/>
 

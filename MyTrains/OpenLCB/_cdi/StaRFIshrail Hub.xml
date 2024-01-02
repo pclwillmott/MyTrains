@@ -3,8 +3,8 @@
 <identification>
   <manufacturer>StaRFIshrail</manufacturer>
   <model>Hub1</model>
-<hardwareVersion>1.3.10</hardwareVersion>
-<softwareVersion>1.3.20</softwareVersion>
+  <hardwareVersion>1.3.10</hardwareVersion>
+  <softwareVersion>1.3.20</softwareVersion>
 </identification>
 <acdi/>
 

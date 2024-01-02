@@ -46,6 +46,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
     self.view.window?.delegate = self
 
     containerView.translatesAutoresizingMaskIntoConstraints = false
+    containerView.scrollView.contentView.translatesAutoresizingMaskIntoConstraints = false
     btnWriteAll.translatesAutoresizingMaskIntoConstraints = false
     btnRefreshAll.translatesAutoresizingMaskIntoConstraints = false
     btnResetToDefaults.translatesAutoresizingMaskIntoConstraints = false
@@ -56,7 +57,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
     buttonView.translatesAutoresizingMaskIntoConstraints = false
     progressView.translatesAutoresizingMaskIntoConstraints = false
     statusView.translatesAutoresizingMaskIntoConstraints = false
-    
+  
     self.view.addSubview(stackView)
  
     NSLayoutConstraint.activate([
@@ -75,6 +76,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
     stackView.addArrangedSubview(buttonView)
 
     NSLayoutConstraint.activate([
+      containerView.topAnchor.constraint(equalTo: stackView.topAnchor),
       containerView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
       containerView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
       statusView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
@@ -355,6 +357,22 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
     var nextContainer = container
     let stackView = container as? CDIStackViewManagerDelegate
     
+    if element.type == .segment {
+      currentSpace = element.space
+      currentAddress = element.origin
+    }
+    else {
+      currentAddress += element.offset
+    }
+    
+    if element.type.isData {
+      element.space = currentSpace
+      element.address = currentAddress
+      currentAddress += element.size
+      let memoryMapItem : MemoryMapItem = (sortAddress: element.sortAddress, space: element.space, address: element.address, size: element.size, data: [], modified: false)
+      memoryMap.append(memoryMapItem)
+    }
+
     if element.map.count > 0 {
       let map = CDIMapView()
       stackView?.addArrangedSubview?(map)
@@ -389,7 +407,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
         string.elementSize = element.size
         string.stringValue = ""
       case .identification:
-        let identification = CDISegmentView()
+        let identification = CDIGroupView()
         containerView.addArrangedSubview(identification)
         identification.name = "Identification"
         nextContainer = identification
@@ -400,30 +418,31 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
         let item = CDIIdentificationItemView()
         stackView?.addArrangedSubview?(item)
         item.name = "Hardware Version:"
-        item.value = ""
+        item.value = element.stringValue
       case .softwareVersion:
         let item = CDIIdentificationItemView()
         stackView?.addArrangedSubview?(item)
         item.name = "Software Version:"
-        item.value = ""
+        item.value = element.stringValue
       case .manufacturer:
         let item = CDIIdentificationItemView()
         stackView?.addArrangedSubview?(item)
         item.name = "Manufacturer:"
-        item.value = ""
+        item.value = element.stringValue
       case .model:
         let item = CDIIdentificationItemView()
         stackView?.addArrangedSubview?(item)
         item.name = "Model:"
-        item.value = ""
+        item.value = element.stringValue
       case .acdi:
-        let item = CDISegmentView()
+        let item = CDIGroupView()
         containerView.addArrangedSubview(item)
         item.name = "ACDI"
       case .segment:
-        let segment = CDISegmentView()
+        let segment = CDIGroupView()
         containerView.addArrangedSubview(segment)
         segment.name = element.name
+        segment.addDescription(description: element.description)
         nextContainer = segment
         for childElement in element.childElements {
           makeInterface(container: nextContainer, element: childElement)
@@ -480,6 +499,61 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
     }
     
     makeInterface(container: nil, element: currentElement)
+
+    memoryMap.sort {$0.sortAddress < $1.sortAddress}
+
+    /*
+    for map in memoryMap {
+      print("expandTree: \(map.address) \(map.space) \(map.size)")
+    }
+    */
+    
+    // Combine adjacent blocks
+    
+    var index = 0
+    while index < memoryMap.count - 1 {
+      if memoryMap[index + 1].sortAddress == memoryMap[index].sortAddress + UInt64(memoryMap[index].size) {
+        memoryMap[index].size += memoryMap[index + 1].size
+        memoryMap.remove(at: index + 1)
+      }
+      else {
+        index += 1
+      }
+    }
+    /*
+    print()
+    for map in memoryMap {
+      print("expandTree: \(map.address) \(map.space) \(map.size)")
+    }
+*/
+
+    dataBytesToRead = 0
+    for map in memoryMap {
+      dataBytesToRead += map.size
+    }
+    
+    barProgress.minValue = 0.0
+    barProgress.maxValue = Double(dataBytesToRead)
+    barProgress.doubleValue = 0.0
+    barProgress.isHidden = false
+
+    totalBytesRead = 0
+    
+    lblStatus.stringValue = "Reading Variables - \(totalBytesRead) bytes"
+
+    if let node, let networkLayer {
+
+      state = .readingMemory
+
+      currentMemoryBlock = 0
+      
+      nextCDIStartAddress = memoryMap[currentMemoryBlock].address
+      
+      let bytesToRead = UInt8(min(64, memoryMap[currentMemoryBlock].size))
+      
+      networkLayer.sendNodeMemoryReadRequest(sourceNodeId: nodeId, destinationNodeId: node.nodeId, addressSpace: memoryMap[currentMemoryBlock].space, startAddress: nextCDIStartAddress, numberOfBytesToRead: bytesToRead)
+      
+    }
 
   }
   
@@ -1110,7 +1184,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
       case .value:
         relationValue = string
       case .description:
-        element.description = string
+        element.description.append(string)
       case .repname:
         element.repname = string
       case .min:

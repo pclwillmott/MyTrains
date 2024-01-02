@@ -58,7 +58,7 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
       resetToFactoryDefaults()
     }
     
-    initCDI(filename: "MyTrains DCC Programming Track", manufacturer: manufacturerName, model: nodeModelName)
+    initCDI(filename: "MyTrains DCC Programming Track")
 
   }
   
@@ -238,19 +238,21 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
   
   public func reloadCDI() {
     memorySpaces.removeValue(forKey: OpenLCBNodeMemoryAddressSpace.cdi.rawValue)
-    initCDI(filename: "MyTrains DCC Programming Track", manufacturer: manufacturerName, model: nodeModelName)
+    initCDI(filename: "MyTrains DCC Programming Track")
   }
 
-  public override func initCDI(filename:String, manufacturer:String, model:String) {
+  public override func initCDI(filename:String) {
     
     if let filepath = Bundle.main.path(forResource: filename, ofType: "xml") {
       do {
         
         var contents = try String(contentsOfFile: filepath)
         
-        contents = contents.replacingOccurrences(of: "%%MANUFACTURER%%", with: manufacturer)
-        contents = contents.replacingOccurrences(of: "%%MODEL%%", with: model)
-        
+        contents = contents.replacingOccurrences(of: "%%MANUFACTURER%%", with: manufacturerName)
+        contents = contents.replacingOccurrences(of: "%%MODEL%%", with: nodeModelName)
+        contents = contents.replacingOccurrences(of: "%%HARDWARE_VERSION%%", with: nodeHardwareVersion)
+        contents = contents.replacingOccurrences(of: "%%SOFTWARE_VERSION%%", with: nodeSoftwareVersion)
+
         var sorted : [(nodeId:UInt64, name:String)] = []
         
         for (key, name) in locoNetGateways {

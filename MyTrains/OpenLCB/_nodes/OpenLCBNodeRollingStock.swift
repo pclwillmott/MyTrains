@@ -81,7 +81,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
       resetToFactoryDefaults()
     }
     
-    initCDI(filename: "MyTrains Train", manufacturer: manufacturerName, model: nodeModelName)
+    initCDI(filename: "MyTrains Train")
     
     initFDI(filename: "FDI Generic")
     
@@ -384,9 +384,9 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     
     manufacturerName     = virtualNodeType.manufacturerName
     nodeModelName        = virtualNodeType.name
-    nodeHardwareVersion  = ""
-    nodeSoftwareVersion  = ""
-    
+    nodeHardwareVersion = "\(Bundle.main.releaseVersionNumberPretty)"
+    nodeSoftwareVersion = "\(Bundle.main.releaseVersionNumberPretty)"
+
     acdiUserSpaceVersion = 2
     
     userNodeName         = ""
@@ -615,12 +615,12 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
   
   public func reloadCDI() {
     memorySpaces.removeValue(forKey: OpenLCBNodeMemoryAddressSpace.cdi.rawValue)
-    initCDI(filename: "MyTrains Train", manufacturer: manufacturerName, model: nodeModelName)
+    initCDI(filename: "MyTrains Train")
   }
   
   public func reloadFDI() {
     memorySpaces.removeValue(forKey: OpenLCBNodeMemoryAddressSpace.fdi.rawValue)
-    initCDI(filename: "FDI Generic", manufacturer: manufacturerName, model: nodeModelName)
+    initCDI(filename: "FDI Generic")
   }
   
   public override func start() {

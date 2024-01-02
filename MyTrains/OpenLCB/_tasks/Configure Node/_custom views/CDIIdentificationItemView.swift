@@ -49,10 +49,10 @@ class CDIIdentificationItemView : CDIView {
     NSLayoutConstraint.activate([
       lblName.topAnchor.constraint(equalTo: self.topAnchor, constant: gap),
       lblName.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: gap),
-      lblName.widthAnchor.constraint(greaterThanOrEqualToConstant: 100.0),
+      lblName.widthAnchor.constraint(greaterThanOrEqualToConstant: 150.0),
       lblValue.topAnchor.constraint(equalTo: self.topAnchor, constant: gap),
       lblValue.leadingAnchor.constraint(equalTo: lblName.trailingAnchor, constant: gap),
-      lblValue.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -gap),
+//      lblValue.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -gap),
       self.bottomAnchor.constraint(equalTo: lblName.bottomAnchor, constant: gap),
     ])
     

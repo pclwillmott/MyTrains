@@ -37,7 +37,7 @@ public class LCCCDIElement {
   
   public var name : String = ""
   
-  public var description : String = ""
+  public var description : [String] = []
   
   public var repname : String = ""
   

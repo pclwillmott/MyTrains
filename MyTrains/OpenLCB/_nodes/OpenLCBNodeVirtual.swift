@@ -293,19 +293,17 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   }
   
   public func initCDI(filename:String) {
-    initCDI(filename: filename, manufacturer: "", model: "")
-  }
-  
-  public func initCDI(filename:String, manufacturer:String, model:String) {
     
     if let filepath = Bundle.main.path(forResource: filename, ofType: "xml") {
       do {
         
         var contents = try String(contentsOfFile: filepath)
         
-        contents = contents.replacingOccurrences(of: "%%MANUFACTURER%%", with: manufacturer)
-        contents = contents.replacingOccurrences(of: "%%MODEL%%", with: model)
-        
+        contents = contents.replacingOccurrences(of: "%%MANUFACTURER%%", with: manufacturerName)
+        contents = contents.replacingOccurrences(of: "%%MODEL%%", with: nodeModelName)
+        contents = contents.replacingOccurrences(of: "%%SOFTWARE_VERSION%%", with: nodeSoftwareVersion)
+        contents = contents.replacingOccurrences(of: "%%HARDWARE_VERSION%%", with: nodeHardwareVersion)
+
         var ports = ""
         for port in MTSerialPortManager.availablePorts() {
           ports += "<relation><property>\(port)</property><value>\(port)</value></relation>\n"

@@ -211,9 +211,9 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
     
     manufacturerName    = virtualNodeType.manufacturerName
     nodeModelName       = virtualNodeType.name
-    nodeHardwareVersion = "v0.1"
-    nodeSoftwareVersion = "v0.1"
-    
+    nodeHardwareVersion = "\(Bundle.main.releaseVersionNumberPretty)"
+    nodeSoftwareVersion = "\(Bundle.main.releaseVersionNumberPretty)"
+
     acdiUserSpaceVersion = 2
     
     userNodeName        = "Throttle #\(throttleId)"

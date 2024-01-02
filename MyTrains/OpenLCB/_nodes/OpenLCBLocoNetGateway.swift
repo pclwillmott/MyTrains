@@ -31,7 +31,7 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressFlowControl)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressBlockAllMessages)
 
-    initCDI(filename: "MyTrains LocoNet Gateway", manufacturer: manufacturerName, model: nodeModelName)
+    initCDI(filename: "MyTrains LocoNet Gateway")
     
     isLocoNetGatewayProtocolSupported = true
     
@@ -143,9 +143,9 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     
     manufacturerName    = virtualNodeType.manufacturerName
     nodeModelName       = virtualNodeType.name
-    nodeHardwareVersion = "v0.1"
-    nodeSoftwareVersion = "v0.1"
-    
+    nodeHardwareVersion = "\(Bundle.main.releaseVersionNumberPretty)"
+    nodeSoftwareVersion = "\(Bundle.main.releaseVersionNumberPretty)"
+
     acdiUserSpaceVersion = 2
     
     userNodeName        = ""

@@ -86,7 +86,7 @@ class CDIGroupView: CDIView, CDIStackViewManagerDelegate {
       contentView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -gap),
     ])
     
-    lastDisclosureConstraint = self.heightAnchor.constraint(equalToConstant: 25)
+    lastDisclosureConstraint = self.heightAnchor.constraint(equalToConstant: 26.0 + gap)
     
     NSLayoutConstraint.activate([
       lastDisclosureConstraint!,
@@ -108,7 +108,7 @@ class CDIGroupView: CDIView, CDIStackViewManagerDelegate {
       lastDisclosureConstraint = self.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: gap)
     }
     else {
-      lastDisclosureConstraint = self.heightAnchor.constraint(equalToConstant: 25.0)
+      lastDisclosureConstraint = self.heightAnchor.constraint(equalToConstant: 26.0 + gap)
     }
     
     contentView.isHidden = !disclosed
@@ -132,27 +132,28 @@ class CDIGroupView: CDIView, CDIStackViewManagerDelegate {
 
   }
   
-  public func addDescription(description:String) {
+  public func addDescription(description:[String]) {
     
-    guard !description.trimmingCharacters(in: .whitespaces).isEmpty else {
-      return
+    for desc in description {
+      
+      if !desc.trimmingCharacters(in: .whitespaces).isEmpty {
+        
+        let field = NSTextField(labelWithString: desc)
+        
+        field.translatesAutoresizingMaskIntoConstraints = false
+        
+        field.lineBreakMode = .byWordWrapping
+        field.isEditable = false
+        field.isBordered = false
+        field.drawsBackground = false
+        field.font = NSFont(name: field.font!.familyName!, size: 11.0)
+        field.maximumNumberOfLines = 0
+        field.preferredMaxLayoutWidth = 500.0
+        
+        addArrangedSubview(field)
+        
+      }
     }
-    
-    let field = NSTextField(labelWithString: description)
-    
-    field.translatesAutoresizingMaskIntoConstraints = false
-    
-    field.lineBreakMode = .byWordWrapping
-    field.isEditable = false
-    field.isBordered = false
-    field.drawsBackground = false
-    field.font = NSFont(name: field.font!.familyName!, size: 11.0)
-    field.maximumNumberOfLines = 0
-    field.stringValue = description
-    field.preferredMaxLayoutWidth = 500.0
-
-    addArrangedSubview(field)
-    
   }
 
   // MARK: Outlets & Actions

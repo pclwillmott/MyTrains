@@ -69,6 +69,12 @@ public class MyTrainsController : NSObject, NSUserNotificationCenterDelegate {
     return layouts[layoutId]
   }
   
+  public let manufacturer = "Sleeper Grime Software"
+  
+  public let softwareVersion = "v0.X"
+  
+  public let hardwareVersion = "V0.X"
+  
 // MARK: Private Methods
   
   private func myTrainsControllerUpdated() {

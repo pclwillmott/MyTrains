@@ -120,9 +120,9 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBConfigurati
   
   private var elementLookup : [Int:LCCCDIElement] = [:]
   
-  private var tableViewDS = LCCCDITableViewDS()
+//  private var tableViewDS = LCCCDITableViewDS()
   
-  private var outlineViewDS : LCCCDITreeViewDS?
+//  private var outlineViewDS : LCCCDITreeViewDS?
   
   private var editElement : LCCCDIElement?
   
@@ -245,7 +245,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBConfigurati
       
       boxBox.title = element.name
       
-      lblDescription.stringValue = element.description
+ //     lblDescription.stringValue = element.description
 
       var property : String = ""
       
@@ -436,9 +436,9 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBConfigurati
       element.childElements = makeChildren(template: element.childElements)
     }
     
-    outlineViewDS = LCCCDITreeViewDS(root: currentElement!)
-    outlineView.dataSource = outlineViewDS
-    outlineView.delegate = outlineViewDS
+//    outlineViewDS = LCCCDITreeViewDS(root: currentElement!)
+//    outlineView.dataSource = outlineViewDS
+//    outlineView.delegate = outlineViewDS
         
     memoryMap.sort {$0.sortAddress < $1.sortAddress}
 
@@ -988,7 +988,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBConfigurati
       case .value:
         relationValue = string
       case .description:
-        element.description = string
+        element.description.append(string)
       case .repname:
         element.repname = string
       case .min:
@@ -1424,7 +1424,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBConfigurati
     
     elementLookup  = [:]
     
-    outlineViewDS = nil
+ //   outlineViewDS = nil
     
     editElement = nil
     
