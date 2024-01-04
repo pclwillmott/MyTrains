@@ -12,13 +12,13 @@ public class LCCCDIMap {
   
   // MARK: Constructors
   
-  init(field:LCCCDIElement) {
+  init(field:CDIElement) {
     self.field = field
   }
   
   // MARK: Public Properties
   
-  public var field : LCCCDIElement
+  public var field : CDIElement
   
   // MARK: Public Methods
   

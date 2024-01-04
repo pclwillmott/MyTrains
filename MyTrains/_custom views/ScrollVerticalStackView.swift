@@ -8,7 +8,7 @@
 import Foundation
 import AppKit
 
-class ScrollVerticalStackView : NSView {
+class ScrollVerticalStackView : NSView, CDIStackViewManagerDelegate {
   
   // MARK: Drawing Methods
   

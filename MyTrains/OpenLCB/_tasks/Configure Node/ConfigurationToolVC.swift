@@ -18,7 +18,7 @@ private enum State {
 
 private typealias MemoryMapItem = (sortAddress:UInt64, space:UInt8, address: Int, size: Int, data: [UInt8], modified: Bool)
 
-class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurationToolDelegate, XMLParserDelegate {
+class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurationToolDelegate, XMLParserDelegate, CDIDataViewDelegate {
   
   // MARK: Window & View Methods
   
@@ -178,23 +178,23 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
   
   private var memoryMap : [MemoryMapItem] = []
   
+  private var dataViews : [CDIDataView] = []
+  
+  private var refreshDataView : CDIDataView?
+  
   private var currentMemoryBlock : Int = 0
   
-  private var editElement : LCCCDIElement?
+  private var editElement : CDIElement?
   
-  private var currentElement : LCCCDIElement?
+  private var currentElement : CDIElement?
   
   private var currentElementType : OpenLCBCDIElementType = .int
   
-  private var groupStack : [LCCCDIElement] = []
-  
-  private var elementLookup : [Int:LCCCDIElement] = [:]
+  private var groupStack : [CDIElement] = []
   
   private var currentSpace : UInt8 = 0
   
   private var currentAddress : Int = 0
-  
-  private var currentTag : Int = 0
   
   private var dataBytesToRead = 0
   
@@ -282,19 +282,16 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
     timer?.invalidate()
     timer = nil
   }
-  
-  private func xmakeChildren(template:[LCCCDIElement]) -> [LCCCDIElement] {
+  /*
+  private func xmakeChildren(template:[CDIElement]) -> [CDIElement] {
     
-    var result : [LCCCDIElement] = []
+    var result : [CDIElement] = []
     
     for childTemplate in template {
       
       if childTemplate.type == .group {
         currentAddress += childTemplate.offset
         let group = childTemplate.clone()
-        group.tag = currentTag
-        currentTag += 1
-        elementLookup[group.tag] = group
         result.append(group)
         if !group.description.isEmpty {
           group.name = "\(group.name) - \(group.description)"
@@ -305,9 +302,6 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
         else {
           for replicationNumber in 1...childTemplate.replication {
             let child = childTemplate.clone()
-            child.tag = currentTag
-            currentTag += 1
-            elementLookup[child.tag] = child
             group.childElements.append(child)
             if !child.repname.isEmpty {
               child.name = "\(child.repname) \(replicationNumber)"
@@ -319,9 +313,6 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
       }
       else {
         let child = childTemplate.clone()
-        child.tag = currentTag
-        currentTag += 1
-        elementLookup[child.tag] = child
         result.append(child)
         if child.type == .segment {
           currentSpace = child.space
@@ -345,168 +336,135 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
     return result
     
   }
-  
-  private func makeInterface(container:CDIView?, element:LCCCDIElement) {
+  */
+  private func makeInterface(stackView:CDIStackViewManagerDelegate, element:CDIElement) {
     
-    element.tag = currentTag
-    currentTag += 1
-    elementLookup[element.tag] = element
-    
-    print(element.type)
-    
-    var nextContainer = container
-    let stackView = container as? CDIStackViewManagerDelegate
-    
-    if element.type == .segment {
-      currentSpace = element.space
-      currentAddress = element.origin
-    }
-    else {
-      currentAddress += element.offset
-    }
-    
-    if element.type.isData {
-      element.space = currentSpace
-      element.address = currentAddress
-      currentAddress += element.size
-      let memoryMapItem : MemoryMapItem = (sortAddress: element.sortAddress, space: element.space, address: element.address, size: element.size, data: [], modified: false)
-      memoryMap.append(memoryMapItem)
-    }
+    currentAddress += element.offset
 
-    if element.map.count > 0 {
-      let map = CDIMapView()
-      stackView?.addArrangedSubview?(map)
-      map.name = element.name
-      map.elementSize = element.size
-      map.map = LCCCDIMap(field: element)
-    }
-    else {
-      switch element.type {
-      case .cdi:
-        for childElement in element.childElements {
-          makeInterface(container: nextContainer, element: childElement)
-        }
-      case .int:
-        let uInt = CDIUIntView()
-        stackView?.addArrangedSubview?(uInt)
-        uInt.name = element.name
-        uInt.elementSize = element.size
-        uInt.maxValue = element.max
-        uInt.minValue = element.min
-        uInt.unsignedIntegerValue = 0
-      case .eventid:
-        let eventId = CDIEventIdView()
-        stackView?.addArrangedSubview?(eventId)
-        eventId.name = element.name
-        eventId.elementSize = element.size
-        eventId.eventIdValue = 0
-      case .string:
-        let string = CDIStringView()
-        stackView?.addArrangedSubview?(string)
-        string.name = element.name
-        string.elementSize = element.size
-        string.stringValue = ""
-      case .identification:
-        let identification = CDIGroupView()
-        containerView.addArrangedSubview(identification)
-        identification.name = "Identification"
-        nextContainer = identification
-        for childElement in element.childElements {
-          makeInterface(container: nextContainer, element: childElement)
-        }
-      case .hardwareVersion:
-        let item = CDIIdentificationItemView()
-        stackView?.addArrangedSubview?(item)
-        item.name = "Hardware Version:"
-        item.value = element.stringValue
-      case .softwareVersion:
-        let item = CDIIdentificationItemView()
-        stackView?.addArrangedSubview?(item)
-        item.name = "Software Version:"
-        item.value = element.stringValue
-      case .manufacturer:
-        let item = CDIIdentificationItemView()
-        stackView?.addArrangedSubview?(item)
-        item.name = "Manufacturer:"
-        item.value = element.stringValue
-      case .model:
-        let item = CDIIdentificationItemView()
-        stackView?.addArrangedSubview?(item)
-        item.name = "Model:"
-        item.value = element.stringValue
-      case .acdi:
-        let item = CDIGroupView()
-        containerView.addArrangedSubview(item)
-        item.name = "ACDI"
-      case .segment:
-        let segment = CDIGroupView()
-        containerView.addArrangedSubview(segment)
-        segment.name = element.name
-        segment.addDescription(description: element.description)
-        nextContainer = segment
-        for childElement in element.childElements {
-          makeInterface(container: nextContainer, element: childElement)
-        }
-      case .group:
-        
-        if element.replication == 1 {
-          let group = CDIGroupView()
-          stackView?.addArrangedSubview?(group)
-          group.name = element.name
-          if !element.description.isEmpty {
-            group.addDescription(description: element.description)
-          }
-          nextContainer = group
-          for childElement in element.childElements {
-            makeInterface(container: nextContainer, element: childElement)
-          }
-        }
-        else {
-          let group = CDIGroupTabView()
-          stackView?.addArrangedSubview?(group)
-          group.name = element.name
-          group.addDescription(description: element.description)
-          group.replicationName = element.repname
-          group.numberOfTabViewItems = element.replication
-          for index in 0 ... element.replication - 1 {
-            for childElement in element.childElements {
-              makeInterface(container: group.tabViewItems[index], element: childElement)
-            }
-          }
-        }
-        
-      default:
-        break
+    switch element.type {
+      
+    case .cdi:
+      
+      for childElement in element.childElements {
+        makeInterface(stackView: stackView, element: childElement)
       }
       
+    case .identification, .segment, .group, .acdi:
       
+      if element.replication == 1 {
+        
+        let group = CDIGroupView()
+        
+        stackView.addArrangedSubview?(group)
+        
+        switch element.type {
+        case .identification:
+          group.name = "Identification"
+        case .acdi:
+          group.name = "ACDI"
+        case .segment:
+          currentSpace = element.space
+          currentAddress = element.origin
+          fallthrough
+        default:
+          group.name = element.name
+          break
+        }
+        
+        group.addDescription(description: element.description)
+        
+        for childElement in element.childElements {
+          makeInterface(stackView: group, element: childElement)
+        }
+        
+      }
+      else {
+        
+        let group = CDIGroupTabView()
+        
+        stackView.addArrangedSubview?(group)
+        
+        group.name = element.name
+        
+        group.addDescription(description: element.description)
+        
+        group.replicationName = element.repname
+        
+        group.numberOfTabViewItems = element.replication
+        
+        for index in 0 ... element.replication - 1 {
+          for childElement in element.childElements {
+            makeInterface(stackView: group.tabViewItems[index], element: childElement)
+          }
+        }
+        
+      }
+
+    case .manufacturer, .model, .hardwareVersion, .softwareVersion:
+      
+      let item = CDIIdentificationItemView()
+      
+      stackView.addArrangedSubview?(item)
+      
+      item.name = element.name
+      
+      item.value = element.stringValue
+
+    default:
+      
+      var dataView : CDIDataView = element.isMap ? CDIMapView() : CDITextView()
+ 
+      dataView.elementType = element.type
+      dataView.elementSize = element.size
+
+      stackView.addArrangedSubview?(dataView)
+
+      dataView.name = element.name
+      dataView.delegate = self
+      dataView.space = currentSpace
+      dataView.address = currentAddress
+      dataView.addDescription(description: element.description)
+      dataView.minValue = element.min
+      dataView.maxValue = element.max
+      dataView.defaultValue = element.defaultValue
+      dataView.floatFormat = element.floatFormat
+      
+      (dataView as? CDIMapView)?.map = LCCCDIMap(field: element)
+      
+      (dataView as? CDITextView)?.addTextField()
+
+      let memoryMapItem : MemoryMapItem = (sortAddress: dataView.sortAddress, space: dataView.space, address: dataView.address, size: dataView.elementSize!, data: [], modified: false)
+      
+      memoryMap.append(memoryMapItem)
+
+      currentAddress += element.size
+      
+      dataViews.append(dataView)
+
     }
     
   }
   
   private func expandTree() {
   
-    elementLookup.removeAll()
-    
     currentSpace = 0
     currentAddress = 0
-    currentTag = 0
     
     memoryMap.removeAll()
+    
+    dataViews.removeAll()
     
     guard let currentElement else {
       return
     }
     
-    makeInterface(container: nil, element: currentElement)
+    makeInterface(stackView: containerView, element: currentElement)
 
     memoryMap.sort {$0.sortAddress < $1.sortAddress}
 
-    /*
     for map in memoryMap {
-      print("expandTree: \(map.address) \(map.space) \(map.size)")
+      print("makeInterface: \(map.address) \(map.space) \(map.size)")
     }
-    */
     
     // Combine adjacent blocks
     
@@ -520,12 +478,11 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
         index += 1
       }
     }
-    /*
+    
     print()
     for map in memoryMap {
-      print("expandTree: \(map.address) \(map.space) \(map.size)")
+      print("combineBlocks: \(map.address) \(map.space) \(map.size)")
     }
-*/
 
     dataBytesToRead = 0
     for map in memoryMap {
@@ -557,81 +514,6 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
 
   }
   
-  private func xexpandTree() {
-    
-    elementLookup.removeAll()
-    currentSpace = 0
-    currentAddress = 0
-    currentTag = 0
-    memoryMap.removeAll()
-    if let element = currentElement {
-      element.tag = currentTag
-      currentTag += 1
-      elementLookup[element.tag] = element
-      element.childElements = xmakeChildren(template: element.childElements)
-    }
-    
-//    outlineViewDS = LCCCDITreeViewDS(root: currentElement!)
-//    outlineView.dataSource = outlineViewDS
-//    outlineView.delegate = outlineViewDS
-        
-    memoryMap.sort {$0.sortAddress < $1.sortAddress}
-
-    /*
-    for map in memoryMap {
-      print("expandTree: \(map.address) \(map.space) \(map.size)")
-    }
-    */
-    
-    // Combine adjacent blocks
-    
-    var index = 0
-    while index < memoryMap.count - 1 {
-      if memoryMap[index + 1].sortAddress == memoryMap[index].sortAddress + UInt64(memoryMap[index].size) {
-        memoryMap[index].size += memoryMap[index + 1].size
-        memoryMap.remove(at: index + 1)
-      }
-      else {
-        index += 1
-      }
-    }
-    /*
-    print()
-    for map in memoryMap {
-      print("expandTree: \(map.address) \(map.space) \(map.size)")
-    }
-*/
-
-    dataBytesToRead = 0
-    for map in memoryMap {
-      dataBytesToRead += map.size
-    }
-    
-    barProgress.minValue = 0.0
-    barProgress.maxValue = Double(dataBytesToRead)
-    barProgress.doubleValue = 0.0
-    barProgress.isHidden = false
-
-    totalBytesRead = 0
-    
-    lblStatus.stringValue = "Reading Variables - \(totalBytesRead) bytes"
-
-    if let node, let networkLayer {
-
-      state = .readingMemory
-
-      currentMemoryBlock = 0
-      
-      nextCDIStartAddress = memoryMap[currentMemoryBlock].address
-      
-      let bytesToRead = UInt8(min(64, memoryMap[currentMemoryBlock].size))
-      
-      networkLayer.sendNodeMemoryReadRequest(sourceNodeId: nodeId, destinationNodeId: node.nodeId, addressSpace: memoryMap[currentMemoryBlock].space, startAddress: nextCDIStartAddress, numberOfBytesToRead: bytesToRead)
-      
-    }
-    
-  }
-
   private func getMemoryBlockIndex(sortAddress: UInt64) -> Int? {
     
     var L = 0
@@ -791,6 +673,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
 
   }
 */
+  
   // MARK: OpenLCBConfigurationToolDelegate Methods
   
   func openLCBMessageReceived(message: OpenLCBMessage) {
@@ -939,18 +822,20 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
                     }
                     else {
                       
-                      if state == .refreshElement {
-                   //     displayEditElement(element: editElement!)
+                      if state == .readingMemory {
+                        for dataView in dataViews {
+                          if let data = getMemoryBlock(sortAddress: dataView.sortAddress, size: dataView.elementSize!) {
+                            dataView.bigEndianData = data
+                          }
+                        }
                       }
-                      
-                      barProgress.isHidden = true
-                      
-                      lblStatus.stringValue = ""
-                      
-                      btnRefreshAll.isHidden = false
-                      btnReboot.isHidden = false
-                      btnResetToDefaults.isHidden = false
-
+                      else if state == .refreshElement {
+                        if let refreshDataView, let data = getMemoryBlock(sortAddress: refreshDataView.sortAddress, size: refreshDataView.elementSize!) {
+                          refreshDataView.bigEndianData = data
+                        }
+                        refreshDataView = nil
+                      }
+ 
                       state = .idle
                       
                     }
@@ -1099,8 +984,8 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
       currentElementType = elementType
       
       if elementType.isNode {
-        
-        let element = LCCCDIElement(type: elementType)
+
+        let element = CDIElement(type: elementType)
         
         if let currentElement = self.currentElement {
           currentElement.childElements.append(element)
@@ -1230,6 +1115,20 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
     print("validationErrorOccurred: \(validationError)")
   }
   
+  // MARK: CDIDataViewDelegate Methods
+  
+  @objc func cdiDataViewReadData(_ dataView:CDIDataView) {
+    
+  }
+  
+  @objc func cdiDataViewWriteData(_ dataView:CDIDataView) {
+    
+  }
+  
+  @objc func cdiDataViewSetWriteAllEnabledState(_ isEnabled:Bool) {
+    btnWriteAll.isEnabled = isEnabled
+  }
+
   // MARK: Controls
   
   private var btnRefreshAll = NSButton()

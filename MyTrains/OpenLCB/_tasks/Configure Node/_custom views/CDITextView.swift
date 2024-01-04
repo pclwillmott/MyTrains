@@ -18,20 +18,42 @@ class CDITextView: CDIDataView, NSTextFieldDelegate, NSControlTextEditingDelegat
   
   internal var needsTextField = true
   
-  // MARK: Public Properties
-
-  public var minValue : String?
-  
-  public var maxValue : String?
-  
   // MARK: Private & Internal Methods
   
-  internal func addTextField() {
+  override internal func getData() -> [UInt8] {
     
-    guard needsTextField else {
+    guard let data = getData(string: textField.stringValue) else {
+      return []
+    }
+    
+    return data
+    
+  }
+  
+  // MARK: Private & Internal Methods
+
+  override internal func dataWasSet() {
+    
+    guard let string = setString() else {
       return
     }
     
+    if elementType == .eventid, let value = UInt64(bigEndianData: bigEndianData) {
+      textField.stringValue = value == 0 ? "" : value.toHexDotFormat(numberOfBytes: 8)
+      textField.placeholderString = "00.00.00.00.00.00.00.00"
+    }
+    else {
+      textField.stringValue = string
+    }
+    
+  }
+  
+  public func addTextField() {
+  
+    guard needsTextField else {
+      return
+    }
+
     textView.translatesAutoresizingMaskIntoConstraints = false
     
     stackView.addArrangedSubview(textView)
@@ -42,13 +64,13 @@ class CDITextView: CDIDataView, NSTextFieldDelegate, NSControlTextEditingDelegat
     ])
 
     addButtons(view:textView)
-    
-    textField.delegate = self
-    
+
     textField.translatesAutoresizingMaskIntoConstraints = false
     
     textView.addSubview(textField)
 
+    textField.delegate = self
+    
     NSLayoutConstraint.activate([
       textField.topAnchor.constraint(equalTo: textView.topAnchor),
       textField.leadingAnchor.constraint(equalTo: textView.leadingAnchor, constant: gap),
@@ -73,16 +95,16 @@ class CDITextView: CDIDataView, NSTextFieldDelegate, NSControlTextEditingDelegat
       
       pasteButton.target = self
       pasteButton.action = #selector(self.btnPasteAction(_:))
-      
+
     }
     else {
-      
+
       NSLayoutConstraint.activate([
         textField.trailingAnchor.constraint(equalTo: dataButtonView.leadingAnchor, constant: -gap),
       ])
-      
+
     }
-    
+
     needsTextField = false
     
   }
@@ -91,12 +113,18 @@ class CDITextView: CDIDataView, NSTextFieldDelegate, NSControlTextEditingDelegat
  
   @objc func controlTextDidBeginEditing(_ obj: Notification) {
     writeButton.isEnabled = false
+    delegate?.cdiDataViewSetWriteAllEnabledState?(false)
   }
   
   @objc internal func controlTextDidEndEditing(_ obj: Notification) {
     writeButton.isEnabled = true
+    delegate?.cdiDataViewSetWriteAllEnabledState?(true)
   }
   
+  @objc func control(_ control: NSControl, textShouldEndEditing fieldEditor: NSText) -> Bool {
+    return isValid(string: control.stringValue)
+  }
+
   // MARK: Outlets & Actions
   
   @IBAction func btnCopyAction(_ sender: NSButton) {
@@ -112,4 +140,3 @@ class CDITextView: CDIDataView, NSTextFieldDelegate, NSControlTextEditingDelegat
   }
 
 }
-

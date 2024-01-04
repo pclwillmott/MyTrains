@@ -100,17 +100,17 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBConfigurati
   
   private var xmlParser : XMLParser?
   
-  private var currentElement : LCCCDIElement?
+  private var currentElement : CDIElement?
   
   private var currentElementType : OpenLCBCDIElementType = .int
   
-  private var groupStack : [LCCCDIElement] = []
+  private var groupStack : [CDIElement] = []
   
   private var relationProperty : String?
   
   private var relationValue : String?
   
-  private var fieldTree : LCCCDIElement?
+  private var fieldTree : CDIElement?
   
   private var currentSpace : UInt8 = 0
   
@@ -118,13 +118,13 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBConfigurati
   
   private var currentTag : Int = 0
   
-  private var elementLookup : [Int:LCCCDIElement] = [:]
+  private var elementLookup : [Int:CDIElement] = [:]
   
 //  private var tableViewDS = LCCCDITableViewDS()
   
 //  private var outlineViewDS : LCCCDITreeViewDS?
   
-  private var editElement : LCCCDIElement?
+  private var editElement : CDIElement?
   
   private var memoryMap : [MemoryMapItem] = []
   
@@ -225,7 +225,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBConfigurati
 
   }
   
-  private func displayEditElement(element:LCCCDIElement) {
+  private func displayEditElement(element:CDIElement) {
     
     editElement = nil
     
@@ -238,7 +238,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBConfigurati
       btnWrite.isEnabled = false
       return
     }
-
+/*
     if let data = getMemoryBlock(sortAddress: element.sortAddress, size: element.size) {
       
       editElement = element
@@ -343,11 +343,13 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBConfigurati
       btnWrite.isEnabled = true
 
     }
-
+*/
   }
 
-  private func printDataElement(dataElement:LCCCDIElement, indent:String) {
+  private func printDataElement(dataElement:CDIElement, indent:String) {
+    /*
     print("\(indent) space: 0x\(dataElement.space.toHex(numberOfDigits: 2)) address: \(dataElement.address) name: \"\(dataElement.name)\" type: \(dataElement.type) size: \(dataElement.size) description: \"\(dataElement.description)\" replication: \(dataElement.replication) repname: \"\(dataElement.repname)\" stringValue: \"\(dataElement.stringValue)\"")
+     */
     if dataElement.map.count > 0 {
       print("\(indent) map:")
       for relation in dataElement.map {
@@ -359,18 +361,18 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBConfigurati
     }
   }
 
-  private func makeChildren(template:[LCCCDIElement]) -> [LCCCDIElement] {
-    
-    var result : [LCCCDIElement] = []
+  private func makeChildren(template:[CDIElement]) -> [CDIElement] {
+    var result : [CDIElement] = []
+/*
     
     for childTemplate in template {
       
       if childTemplate.type == .group {
         currentAddress += childTemplate.offset
         let group = childTemplate.clone()
-        group.tag = currentTag
-        currentTag += 1
-        elementLookup[group.tag] = group
+  //      group.tag = currentTag
+  //      currentTag += 1
+  //      elementLookup[group.tag] = group
         result.append(group)
         if !group.description.isEmpty {
           group.name = "\(group.name) - \(group.description)"
@@ -380,24 +382,24 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBConfigurati
         }
         else {
           for replicationNumber in 1...childTemplate.replication {
-            let child = childTemplate.clone()
-            child.tag = currentTag
-            currentTag += 1
-            elementLookup[child.tag] = child
+      //      let child = childTemplate.clone()
+      //      child.tag = currentTag
+      //      currentTag += 1
+      //      elementLookup[child.tag] = child
             group.childElements.append(child)
-            if !child.repname.isEmpty {
-              child.name = "\(child.repname) \(replicationNumber)"
+        //    if !child.repname.isEmpty {
+         //     child.name = "\(child.repname) \(replicationNumber)"
               // TODO: Add f0 case
-            }
-            child.childElements = makeChildren(template: childTemplate.childElements)
+        //    }
+        //    child.childElements = makeChildren(template: childTemplate.childElements)
           }
         }
       }
       else {
         let child = childTemplate.clone()
-        child.tag = currentTag
-        currentTag += 1
-        elementLookup[child.tag] = child
+   //     child.tag = currentTag
+   //     currentTag += 1
+   //     elementLookup[child.tag] = child
         result.append(child)
         if child.type == .segment {
           currentSpace = child.space
@@ -419,7 +421,8 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBConfigurati
     }
     
     return result
-    
+    */
+    return result
   }
   
   private func expandTree() {
@@ -430,9 +433,9 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBConfigurati
     currentTag = 0
     memoryMap.removeAll()
     if let element = currentElement {
-      element.tag = currentTag
-      currentTag += 1
-      elementLookup[element.tag] = element
+ //     element.tag = currentTag
+ //     currentTag += 1
+ //     elementLookup[element.tag] = element
       element.childElements = makeChildren(template: element.childElements)
     }
     
@@ -515,7 +518,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBConfigurati
   
   private func resetScreen() {
     
-    if let node = outlineView.item(atRow: 0) as? LCCCDIElement {
+    if let node = outlineView.item(atRow: 0) as? CDIElement {
       
       displayEditElement(element: node)
     }
@@ -904,7 +907,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBConfigurati
       
       if elementType.isNode {
         
-        let element = LCCCDIElement(type: elementType)
+        let element = CDIElement(type: elementType)
         
         if let currentElement = self.currentElement {
           currentElement.childElements.append(element)
@@ -1042,7 +1045,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBConfigurati
 
     let selectedIndex = outlineView.selectedRow
     
-    if let node = outlineView.item(atRow: selectedIndex) as? LCCCDIElement {
+    if let node = outlineView.item(atRow: selectedIndex) as? CDIElement {
       
       displayEditElement(element: node)
     }
@@ -1067,7 +1070,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBConfigurati
   @IBOutlet weak var btnRefresh: NSButton!
   
   @IBAction func btnRefreshAction(_ sender: NSButton) {
-    
+    /*
     if let element = editElement, let index = getMemoryBlockIndex(sortAddress: element.sortAddress) {
  
       memoryMap[index].data.removeAll()
@@ -1097,13 +1100,13 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBConfigurati
       
       resetScreen()
     }
-    
+    */
   }
   
   @IBOutlet weak var btnWrite: NSButton!
   
   @IBAction func btnWriteAction(_ sender: NSButton) {
-    
+    /*
     if let element = editElement, let index = getMemoryBlockIndex(sortAddress: element.sortAddress) {
       
       var data : [UInt8] = []
@@ -1362,7 +1365,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBConfigurati
       }
       
       if data.count > 0 {
-        
+      
         setMemoryBlock(sortAddress: element.sortAddress, data: data)
         
         if let node = self.node, let network = networkLayer {
@@ -1393,7 +1396,7 @@ class ConfigureLCCNodeVC: NSViewController, NSWindowDelegate, OpenLCBConfigurati
 
       
     }
-    
+*/
   }
   
   @IBOutlet weak var btnRefreshAll: NSButton!

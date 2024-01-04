@@ -104,17 +104,14 @@ extension UInt64 {
   }
   
   public var bigEndianData : [UInt8] {
-    get {
-      var intValue = self
-      var data : [UInt8] = []
-      for _ in 1...MemoryLayout<UInt64>.size {
-        let byte = UInt8(intValue & 0xff)
-        data.insert(byte, at: 0)
-        intValue >>= 8
-      }
-      return data
+    var intValue = self
+    var data : [UInt8] = []
+    for _ in 1...MemoryLayout<UInt64>.size {
+      let byte = UInt8(intValue & 0xff)
+      data.insert(byte, at: 0)
+      intValue >>= 8
     }
-
+    return data
   }
 
 }
@@ -166,17 +163,14 @@ extension UInt32 {
   }
 
   public var bigEndianData : [UInt8] {
-    get {
-      var intValue = self
-      var data : [UInt8] = []
-      for _ in 1...MemoryLayout<UInt32>.size {
-        let byte = UInt8(intValue & 0xff)
-        data.insert(byte, at: 0)
-        intValue >>= 8
-      }
-      return data
+    var intValue = self
+    var data : [UInt8] = []
+    for _ in 1...MemoryLayout<UInt32>.size {
+      let byte = UInt8(intValue & 0xff)
+      data.insert(byte, at: 0)
+      intValue >>= 8
     }
-
+    return data
   }
 
 }
@@ -228,17 +222,14 @@ extension UInt16 {
   }
   
   public var bigEndianData : [UInt8] {
-    get {
-      var intValue = self
-      var data : [UInt8] = []
-      for _ in 1...MemoryLayout<UInt16>.size {
-        let byte = UInt8(intValue & 0xff)
-        data.insert(byte, at: 0)
-        intValue >>= 8
-      }
-      return data
+    var intValue = self
+    var data : [UInt8] = []
+    for _ in 1...MemoryLayout<UInt16>.size {
+      let byte = UInt8(intValue & 0xff)
+      data.insert(byte, at: 0)
+      intValue >>= 8
     }
-
+    return data
   }
 
 }
@@ -286,9 +277,7 @@ extension UInt8 {
   }
   
   public var bigEndianData : [UInt8] {
-    get {
-      return [self]
-    }
+    return [self]
   }
 
 }

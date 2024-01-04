@@ -16,8 +16,6 @@ class CDIDataView: CDIView {
   
   internal var stackView = NSStackView()
   
-  internal var elementSize : Int?
-  
   internal var needsRefreshWrite : Bool {
     guard let viewType = viewType() else {
       return false
@@ -33,7 +31,7 @@ class CDIDataView: CDIView {
     let needs : Set<OpenLCBCDIViewType> = [.eventid]
     return needs.contains(viewType)
   }
-
+  
   // MARK: Public Properties
   
   public var name : String {
@@ -45,8 +43,335 @@ class CDIDataView: CDIView {
     }
   }
   
+  public var elementType : OpenLCBCDIElementType?
+  
+  public var space : UInt8 = 0
+  
+  public var address : Int = 0
+  
+  public var sortAddress : UInt64 {
+    return (UInt64(space) << 32) | UInt64(address)
+  }
+  
+  public var elementSize : Int?
+  
+  public var bigEndianData : [UInt8] = [] {
+    didSet {
+      dataWasSet()
+    }
+  }
+  
+  public var minValue : String?
+  
+  public var maxValue : String?
+  
+  public var defaultValue : String?
+  
+  public var floatFormat : String?
+  
+  public var delegate : CDIDataViewDelegate?
+
   // MARK: Private & Internal Methods
   
+  internal func dataWasSet() {
+  }
+  
+  internal func getData() -> [UInt8] {
+    return []
+  }
+  
+  internal func isValid(string:String) -> Bool {
+    
+    guard let elementType, let elementSize else {
+      return false
+    }
+    
+    switch elementType {
+      
+    case .int:
+      
+      switch elementSize {
+      case 1:
+        if let uint8 = UInt8(string) {
+          if let max = maxValue, let maxUInt8 = UInt8(max), uint8 > maxUInt8 {
+            return false
+          }
+          if let min = minValue, let minUInt8 = UInt8(min), uint8 < minUInt8 {
+            return false
+          }
+        }
+        else {
+          return false
+        }
+      case 2:
+        if let uint16 = UInt16(string) {
+          if let max = maxValue, let maxUInt16 = UInt16(max), uint16 > maxUInt16 {
+            return false
+          }
+          if let min = minValue, let minUInt16 = UInt16(min), uint16 < minUInt16 {
+            return false
+          }
+       }
+        else {
+          return false
+        }
+      case 4:
+        if let uint32 = UInt32(string) {
+          if let max = maxValue, let maxUInt32 = UInt32(max), uint32 > maxUInt32 {
+            return false
+          }
+          if let min = minValue, let minUInt32 = UInt32(min), uint32 < minUInt32 {
+            return false
+          }
+        }
+        else {
+          return false
+        }
+      case 8:
+        if let uint64 = UInt64(string) {
+          if let max = maxValue, let maxUInt64 = UInt64(max), uint64 > maxUInt64 {
+            return false
+          }
+          if let min = minValue, let minUInt64 = UInt64(min), uint64 < minUInt64 {
+            return false
+          }
+        }
+        else {
+          return false
+        }
+      default:
+        return false
+      }
+      
+    case .float:
+      
+      switch elementSize {
+      case 2:
+        if let float32 = Float32(string) {
+          if let max = maxValue, let maxFloat32 = Float32(max), float32 > maxFloat32 {
+            return false
+          }
+          if let min = minValue, let minFloat32 = Float32(min), float32 < minFloat32 {
+            return false
+          }
+        }
+        else {
+          return false
+        }
+      case 4:
+        if let float32 = Float32(string) {
+          if let max = maxValue, let maxFloat32 = Float32(max), float32 > maxFloat32 {
+            return false
+          }
+          if let min = minValue, let minFloat32 = Float32(min), float32 < minFloat32 {
+            return false
+          }
+        }
+        else {
+          return false
+        }
+      case 8:
+        if let float64 = Float64(string) {
+          if let max = maxValue, let maxFloat64 = Float64(max), float64 > maxFloat64 {
+            return false
+          }
+          if let min = minValue, let minFloat64 = Float64(min), float64 < minFloat64 {
+            return false
+          }
+        }
+        else {
+          return false
+        }
+      default:
+        return false
+      }
+      
+    case .string:
+      
+      if string.count >= elementSize {
+        return false
+      }
+      if let max = maxValue, string > max {
+        return false
+      }
+      if let min = minValue, string < min {
+        return false
+      }
+
+    case .eventid:
+      
+      if UInt64(dotHex: string) == nil {
+        return false
+      }
+      
+    default:
+      return false
+    }
+
+    return true
+    
+  }
+  
+  internal func setString() -> String? {
+    
+    guard let elementType, let elementSize else {
+      return nil
+    }
+    
+    switch elementType {
+      
+    case .eventid:
+      
+      if let eventId = UInt64(bigEndianData: bigEndianData) {
+        return eventId.toHexDotFormat(numberOfBytes: 8)
+      }
+      
+    case .float:
+      
+      if let floatValue = UInt64(bigEndianData:bigEndianData) {
+        
+        let format = floatFormat ?? "%f"
+
+        switch elementSize {
+        case 2:
+          let word = UInt16(floatValue & 0xffff)
+          let float16 : float16_t = float16_t(v: word)
+          let float32 = Float(float16: float16)
+          return String(format: format, float32)
+        case 4:
+          let dword = UInt32(floatValue & 0xffffffff)
+          let float32 = Float32(bitPattern: dword)
+          return String(format: format, float32)
+        case 8:
+          let float64 = Float64(bitPattern: floatValue)
+          return String(format: format, float64)
+        default:
+          print("CDIDataView.setString: bad float size: \(elementSize)")
+        }
+        
+      }
+      
+    case .int:
+      
+      if let intValue = UInt64(bigEndianData: bigEndianData) {
+        
+        switch elementSize {
+        case 1:
+          let byte = UInt8(intValue & 0xff)
+          return "\(byte)"
+        case 2:
+          let word = UInt16(intValue & 0xffff)
+          return "\(word)"
+        case 4:
+          let dword = UInt32(intValue & 0xffffffff)
+          return "\(dword)"
+        case 8:
+          return "\(intValue)"
+        default:
+          print("CDIDataView.setString: bad int size: \(elementSize)")
+        }
+        
+      }
+      
+    case .string:
+      
+      return String(cString: bigEndianData)
+
+    default:
+      print("CDIDataView.setString: unexpected element type: \(elementType)")
+    }
+
+    return nil
+    
+  }
+  
+  internal func getData(string:String) -> [UInt8]? {
+    
+    guard let elementType, let elementSize else {
+      return nil
+    }
+
+    switch elementType {
+      
+    case .int:
+      
+      switch elementSize {
+      case 1:
+        if let uint8 = UInt8(string) {
+          return uint8.bigEndianData
+        }
+      case 2:
+        if let uint16 = UInt16(string) {
+          return uint16.bigEndianData
+        }
+      case 4:
+        if let uint32 = UInt32(string) {
+          return uint32.bigEndianData
+        }
+      case 8:
+        if let uint64 = UInt64(string) {
+          return uint64.bigEndianData
+        }
+      default:
+        print("CDIDataView.getData: unexpected integer size: \(elementSize)")
+      }
+      
+    case .float:
+      
+      switch elementSize {
+      case 2:
+        if let float32 = Float32(string) {
+          let word = float32.float16.v
+          return word.bigEndianData
+        }
+      case 4:
+        if let float32 = Float32(string) {
+          return float32.bitPattern.bigEndianData
+        }
+      case 8:
+        if let float64 = Float64(string) {
+          return float64.bitPattern.bigEndianData
+        }
+      default:
+        print("CDIDataView.getData: unexpected float size: \(elementSize)")
+      }
+      
+    case .string:
+      
+      return string.padWithNull(length: elementSize)
+      
+    case .eventid:
+      
+      if let eventId = UInt64(dotHex: string) {
+        return eventId.bigEndianData
+      }
+      
+    default:
+      print("CDIDataView.getData: unexpected element type: \(elementType)")
+    }
+
+    return nil
+
+  }
+
+  override internal func viewType() -> OpenLCBCDIViewType? {
+    guard let elementType else {
+      return nil
+    }
+    switch elementType {
+    case .float:
+      return .float
+    case .int:
+      return .int
+    case .eventid:
+      return .eventid
+    case .string:
+      return .string
+    default:
+      return nil
+    }
+  }
+
   internal func addButtons(view:NSView) {
     
     guard self.viewType() != nil else {
@@ -106,6 +431,12 @@ class CDIDataView: CDIView {
         dataButtonView.leadingAnchor.constraint(equalTo: refreshButton.leadingAnchor)
       ])
       
+      writeButton.target = self
+      writeButton.action = #selector(self.btnWriteAction(_:))
+
+      refreshButton.target = self
+      refreshButton.action = #selector(self.btnRefreshAction(_:))
+
     }
 
     NSLayoutConstraint.activate(constraints)
@@ -154,31 +485,38 @@ class CDIDataView: CDIView {
   }
   
   // MARK: Public Methods
-  
-  public func addDescription(description:String) {
     
-    let field = NSTextField(labelWithString: description)
+  public func addDescription(description:[String]) {
     
-    field.translatesAutoresizingMaskIntoConstraints = false
-    
-    field.lineBreakMode = .byWordWrapping
-    field.isEditable = false
-    field.isBordered = false
-    field.drawsBackground = false
-    field.font = NSFont(name: field.font!.familyName!, size: 11.0)
-    field.maximumNumberOfLines = 0
-    field.stringValue = description
-    field.preferredMaxLayoutWidth = 500.0
+    for desc in description {
+      
+      if !desc.trimmingCharacters(in: .whitespaces).isEmpty {
+        
+        let field = NSTextField(labelWithString: desc)
+        
+        field.translatesAutoresizingMaskIntoConstraints = false
+        
+        field.lineBreakMode = .byWordWrapping
+        field.isEditable = false
+        field.isBordered = false
+        field.drawsBackground = false
+        field.font = NSFont(name: field.font!.familyName!, size: 11.0)
+        field.maximumNumberOfLines = 0
+        field.preferredMaxLayoutWidth = 500.0
+        
+        stackView.addArrangedSubview(field)
 
-    stackView.addArrangedSubview(field)
-    
-    NSLayoutConstraint.activate([
-      field.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: gap),
-      field.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -gap),
-    ])
+        NSLayoutConstraint.activate([
+          field.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: gap),
+          field.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -gap),
+        ])
 
+      }
+      
+    }
+    
   }
-  
+
   // MARK: Controls
   
   internal var refreshButton = NSButton()
@@ -191,5 +529,15 @@ class CDIDataView: CDIView {
   
   internal var dataButtonView = NSView()
   
+  // MARK: Actions
+  
+  @IBAction func btnWriteAction(_ sender: NSButton) {
+    delegate?.cdiDataViewWriteData?(self)
+  }
+
+  @IBAction func btnRefreshAction(_ sender: NSButton) {
+    delegate?.cdiDataViewReadData?(self)
+  }
+
 }
 
