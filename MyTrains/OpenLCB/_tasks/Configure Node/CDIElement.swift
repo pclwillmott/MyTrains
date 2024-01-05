@@ -33,7 +33,7 @@ public class CDIElement {
   
   public var floatFormat : String?
   
-  public var map : [LCCCDIMapRelation] = []
+  public var map : [CDIMapRelation] = []
   
   public var isMap : Bool {
     return map.count > 0

@@ -8,7 +8,7 @@
 import Foundation
 import AppKit
 
-public class LCCCDIMap {
+public class CDIMap {
   
   // MARK: Constructors
   

@@ -34,10 +34,6 @@ class CDIView: NSView {
   
   // MARK: Private & Internal Methods
   
-  internal func viewType() -> OpenLCBCDIViewType? {
-    return nil
-  }
-  
   internal func setup() {
     
   }

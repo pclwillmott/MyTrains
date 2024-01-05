@@ -10,30 +10,30 @@ import AppKit
 
 class CDIDataView: CDIView {
   
-  // MARK: Private & Internal Methods
-  
-  internal var box = NSBox()
-  
-  internal var stackView = NSStackView()
+  // MARK: Private & Internal properties
   
   internal var needsRefreshWrite : Bool {
-    guard let viewType = viewType() else {
+    guard let elementType else {
       return false
     }
-    let needs : Set<OpenLCBCDIViewType> = [.eventid, .float, .int, .string]
-    return needs.contains(viewType)
+    let needs : Set<OpenLCBCDIElementType> = [.eventid, .float, .int, .string]
+    return needs.contains(elementType)
   }
 
   internal var needsCopyPaste : Bool {
-    guard let viewType = viewType() else {
+    guard let elementType else {
       return false
     }
-    let needs : Set<OpenLCBCDIViewType> = [.eventid]
-    return needs.contains(viewType)
+    let needs : Set<OpenLCBCDIElementType> = [.eventid]
+    return needs.contains(elementType)
   }
   
   // MARK: Public Properties
   
+  public var getData : [UInt8] {
+    return []
+  }
+
   public var name : String {
     get {
       return box.title
@@ -74,10 +74,6 @@ class CDIDataView: CDIView {
   // MARK: Private & Internal Methods
   
   internal func dataWasSet() {
-  }
-  
-  internal func getData() -> [UInt8] {
-    return []
   }
   
   internal func isValid(string:String) -> Bool {
@@ -354,27 +350,9 @@ class CDIDataView: CDIView {
 
   }
 
-  override internal func viewType() -> OpenLCBCDIViewType? {
-    guard let elementType else {
-      return nil
-    }
-    switch elementType {
-    case .float:
-      return .float
-    case .int:
-      return .int
-    case .eventid:
-      return .eventid
-    case .string:
-      return .string
-    default:
-      return nil
-    }
-  }
-
   internal func addButtons(view:NSView) {
     
-    guard self.viewType() != nil else {
+    guard elementType != nil else {
       return
     }
     
@@ -519,6 +497,10 @@ class CDIDataView: CDIView {
 
   // MARK: Controls
   
+  internal var box = NSBox()
+  
+  internal var stackView = NSStackView()
+  
   internal var refreshButton = NSButton()
   
   internal var writeButton = NSButton()
@@ -540,4 +522,3 @@ class CDIDataView: CDIView {
   }
 
 }
-

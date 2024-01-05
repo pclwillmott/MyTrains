@@ -18,16 +18,6 @@ class CDIMapView : CDIDataView {
   
   // MARK: Private & Internal Methods
   
-  override internal func getData() -> [UInt8] {
-
-    guard let map, let textValue = map.selectedItem(comboBox: comboBox), let data = getData(string: textValue) else {
-      return []
-    }
-
-    return data
-    
-  }
-  
   override internal func dataWasSet() {
     
     guard let string = setString() else {
@@ -76,10 +66,20 @@ class CDIMapView : CDIDataView {
 
   // MARK: Public Properties
   
-  public var map : LCCCDIMap? {
+  public var map : CDIMap? {
     didSet {
       addComboBox()
     }
+  }
+
+  override public var getData : [UInt8] {
+
+    guard let map, let textValue = map.selectedItem(comboBox: comboBox), let data = getData(string: textValue) else {
+      return []
+    }
+
+    return data
+    
   }
 
 }

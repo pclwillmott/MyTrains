@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class LCCCDIMapRelation {
+public class CDIMapRelation {
   
   // MARK: Constructors
   

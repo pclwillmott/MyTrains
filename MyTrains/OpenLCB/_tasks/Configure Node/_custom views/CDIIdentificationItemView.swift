@@ -52,7 +52,6 @@ class CDIIdentificationItemView : CDIView {
       lblName.widthAnchor.constraint(greaterThanOrEqualToConstant: 150.0),
       lblValue.topAnchor.constraint(equalTo: self.topAnchor, constant: gap),
       lblValue.leadingAnchor.constraint(equalTo: lblName.trailingAnchor, constant: gap),
-//      lblValue.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -gap),
       self.bottomAnchor.constraint(equalTo: lblName.bottomAnchor, constant: gap),
     ])
     

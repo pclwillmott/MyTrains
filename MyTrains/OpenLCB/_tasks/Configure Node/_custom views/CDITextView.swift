@@ -18,10 +18,10 @@ class CDITextView: CDIDataView, NSTextFieldDelegate, NSControlTextEditingDelegat
   
   internal var needsTextField = true
   
-  // MARK: Private & Internal Methods
+  // MARK: Public Properties
   
-  override internal func getData() -> [UInt8] {
-    
+  override public var getData : [UInt8] {
+
     guard let data = getData(string: textField.stringValue) else {
       return []
     }
@@ -29,7 +29,7 @@ class CDITextView: CDIDataView, NSTextFieldDelegate, NSControlTextEditingDelegat
     return data
     
   }
-  
+    
   // MARK: Private & Internal Methods
 
   override internal func dataWasSet() {
@@ -40,7 +40,6 @@ class CDITextView: CDIDataView, NSTextFieldDelegate, NSControlTextEditingDelegat
     
     if elementType == .eventid, let value = UInt64(bigEndianData: bigEndianData) {
       textField.stringValue = value == 0 ? "" : value.toHexDotFormat(numberOfBytes: 8)
-      textField.placeholderString = "00.00.00.00.00.00.00.00"
     }
     else {
       textField.stringValue = string
@@ -79,10 +78,11 @@ class CDITextView: CDIDataView, NSTextFieldDelegate, NSControlTextEditingDelegat
 
     if needsCopyPaste {
 
-      if let viewType = self.viewType(), viewType == .eventid {
+      if let elementType, elementType == .eventid {
         NSLayoutConstraint.activate([
           textField.widthAnchor.constraint(equalToConstant: 160)
         ])
+        textField.placeholderString = "00.00.00.00.00.00.00.00"
       }
       else {
         NSLayoutConstraint.activate([

@@ -11,9 +11,11 @@ import AppKit
 private enum State {
   case idle
   case gettingCDI
-  case readingMemory
-  case refreshElement
+  case decodingCDI
+  case refreshMemory
   case writingMemory
+  case refreshElement
+  case writingElement
 }
 
 private typealias MemoryMapItem = (sortAddress:UInt64, space:UInt8, address: Int, size: Int, data: [UInt8], modified: Bool)
@@ -85,7 +87,6 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
       progressView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
       buttonView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
       buttonView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
-      buttonView.heightAnchor.constraint(equalToConstant: 20)
     ])
     
     statusView.addSubview(lblStatus)
@@ -97,8 +98,6 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
       lblStatus.trailingAnchor.constraint(equalTo: statusView.trailingAnchor),
     ])
     
-    isStatusViewHidden = false
-
     progressView.addSubview(barProgress)
 
     NSLayoutConstraint.activate([
@@ -107,8 +106,6 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
       barProgress.trailingAnchor.constraint(equalTo: progressView.trailingAnchor, constant: -gap),
     ])
       
-    isProgressViewHidden = false
-
     buttonView.addSubview(btnWriteAll)
     buttonView.addSubview(btnRefreshAll)
     buttonView.addSubview(btnResetToDefaults)
@@ -126,7 +123,17 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
       btnReboot.trailingAnchor.constraint(equalTo: btnResetToDefaults.leadingAnchor, constant: -gap),
     ])
     
-    isButtonViewHidden = false
+    btnResetToDefaults.target = self
+    btnResetToDefaults.action = #selector(self.btnResetToDefaultsAction(_:))
+
+    btnReboot.target = self
+    btnReboot.action = #selector(self.btnRebootAction(_:))
+
+    btnRefreshAll.target = self
+    btnRefreshAll.action = #selector(self.btnRefreshAllAction(_:))
+
+    btnWriteAll.target = self
+    btnWriteAll.action = #selector(self.btnWriteAllAction(_:))
 
     networkLayer = configurationTool!.networkLayer
     
@@ -138,8 +145,6 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
     
     if let network = networkLayer {
 
-      isStatusViewHidden = false
-      
       lblStatus.stringValue = "Getting CDI"
       
       state = .gettingCDI
@@ -164,7 +169,40 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
   
   private var CDI : [UInt8] = []
   
-  private var state : State = .idle
+  private var state : State = .idle {
+    didSet {
+      switch state {
+      case .idle:
+        isStatusViewHidden = true
+        isProgressViewHidden = true
+        isButtonViewHidden = false
+      case .gettingCDI:
+        isStatusViewHidden = false
+        isProgressViewHidden = true
+        isButtonViewHidden = true
+      case .decodingCDI:
+        isStatusViewHidden = false
+        isProgressViewHidden = false
+        isButtonViewHidden = true
+      case .refreshMemory:
+        isStatusViewHidden = false
+        isProgressViewHidden = false
+        isButtonViewHidden = true
+      case .writingMemory:
+        isStatusViewHidden = false
+        isProgressViewHidden = false
+        isButtonViewHidden = true
+      case .refreshElement:
+        isStatusViewHidden = false
+        isProgressViewHidden = false
+        isButtonViewHidden = false
+      case .writingElement:
+        isStatusViewHidden = false
+        isProgressViewHidden = false
+        isButtonViewHidden = false
+      }
+    }
+  }
   
   private var xmlParser : XMLParser?
   
@@ -241,7 +279,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
     set(value) {
       buttonViewHeightConstraint?.isActive = false
       buttonView.isHidden = value
-      buttonViewHeightConstraint = statusView.heightAnchor.constraint(equalToConstant: value ? 0.0 : 18.0)
+      buttonViewHeightConstraint = buttonView.heightAnchor.constraint(equalToConstant: value ? 0.0 : 18.0)
       buttonViewHeightConstraint?.isActive = true
     }
   }
@@ -282,61 +320,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
     timer?.invalidate()
     timer = nil
   }
-  /*
-  private func xmakeChildren(template:[CDIElement]) -> [CDIElement] {
-    
-    var result : [CDIElement] = []
-    
-    for childTemplate in template {
-      
-      if childTemplate.type == .group {
-        currentAddress += childTemplate.offset
-        let group = childTemplate.clone()
-        result.append(group)
-        if !group.description.isEmpty {
-          group.name = "\(group.name) - \(group.description)"
-        }
-        if childTemplate.replication == 1 {
-          group.childElements = xmakeChildren(template: childTemplate.childElements)
-        }
-        else {
-          for replicationNumber in 1...childTemplate.replication {
-            let child = childTemplate.clone()
-            group.childElements.append(child)
-            if !child.repname.isEmpty {
-              child.name = "\(child.repname) \(replicationNumber)"
-              // TODO: Add f0 case
-            }
-            child.childElements = xmakeChildren(template: childTemplate.childElements)
-          }
-        }
-      }
-      else {
-        let child = childTemplate.clone()
-        result.append(child)
-        if child.type == .segment {
-          currentSpace = child.space
-          currentAddress = child.origin
-        }
-        else {
-          currentAddress += child.offset
-        }
-        if child.type.isData {
-          child.space = currentSpace
-          child.address = currentAddress
-          currentAddress += child.size
-          let memoryMapItem : MemoryMapItem = (sortAddress: child.sortAddress, space: child.space, address: child.address, size: child.size, data: [], modified: false)
-          memoryMap.append(memoryMapItem)
-        }
-        child.childElements = xmakeChildren(template: childTemplate.childElements)
-      }
-      
-    }
-    
-    return result
-    
-  }
-  */
+
   private func makeInterface(stackView:CDIStackViewManagerDelegate, element:CDIElement) {
     
     currentAddress += element.offset
@@ -412,24 +396,26 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
 
     default:
       
-      var dataView : CDIDataView = element.isMap ? CDIMapView() : CDITextView()
+      let dataView : CDIDataView = element.isMap ? CDIMapView() : CDITextView()
  
+      dataViews.append(dataView)
+
       dataView.elementType = element.type
       dataView.elementSize = element.size
-
-      stackView.addArrangedSubview?(dataView)
-
       dataView.name = element.name
       dataView.delegate = self
       dataView.space = currentSpace
       dataView.address = currentAddress
-      dataView.addDescription(description: element.description)
       dataView.minValue = element.min
       dataView.maxValue = element.max
       dataView.defaultValue = element.defaultValue
       dataView.floatFormat = element.floatFormat
+
+      stackView.addArrangedSubview?(dataView)
+
+      dataView.addDescription(description: element.description)
       
-      (dataView as? CDIMapView)?.map = LCCCDIMap(field: element)
+      (dataView as? CDIMapView)?.map = CDIMap(field: element)
       
       (dataView as? CDITextView)?.addTextField()
 
@@ -439,14 +425,12 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
 
       currentAddress += element.size
       
-      dataViews.append(dataView)
-
     }
     
   }
   
   private func expandTree() {
-  
+      
     currentSpace = 0
     currentAddress = 0
     
@@ -462,10 +446,6 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
 
     memoryMap.sort {$0.sortAddress < $1.sortAddress}
 
-    for map in memoryMap {
-      print("makeInterface: \(map.address) \(map.space) \(map.size)")
-    }
-    
     // Combine adjacent blocks
     
     var index = 0
@@ -479,20 +459,26 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
       }
     }
     
-    print()
-    for map in memoryMap {
-      print("combineBlocks: \(map.address) \(map.space) \(map.size)")
-    }
-
+    refreshAll()
+    
+    barProgress.stopAnimation(self)
+    
+  }
+  
+  private func refreshAll() {
+    
     dataBytesToRead = 0
-    for map in memoryMap {
-      dataBytesToRead += map.size
+    var index = 0
+    while index < memoryMap.count {
+      dataBytesToRead += memoryMap[index].size
+      memoryMap[index].data.removeAll()
+      index += 1
     }
     
+    barProgress.isIndeterminate = false
     barProgress.minValue = 0.0
     barProgress.maxValue = Double(dataBytesToRead)
     barProgress.doubleValue = 0.0
-    barProgress.isHidden = false
 
     totalBytesRead = 0
     
@@ -500,7 +486,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
 
     if let node, let networkLayer {
 
-      state = .readingMemory
+      state = .refreshMemory
 
       currentMemoryBlock = 0
       
@@ -557,122 +543,23 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
     return nil
     
   }
-  /*
-  private func displayEditElement(element:LCCCDIElement) {
+
+  private func setMemoryBlock(sortAddress: UInt64, data: [UInt8]) {
     
-    editElement = nil
+    if let index = getMemoryBlockIndex(sortAddress: sortAddress) {
+      
+      var offset = Int(sortAddress - memoryMap[index].sortAddress)
+      
+      for byte in data {
+        memoryMap[index].data[offset] = byte
+        offset += 1
+      }
+      
+      memoryMap[index].modified = true
+      
+    }
     
-    if !element.type.isData {
-      return
-    }
-
-    if let data = getMemoryBlock(sortAddress: element.sortAddress, size: element.size) {
-      
-      editElement = element
-      
-      boxBox.title = element.name
-      
-      lblDescription.stringValue = element.description
-
-      var property : String = ""
-      
-      txtValue.stringValue = ""
-      
-      switch element.type {
-      case .eventid:
-        var eventId : UInt64 = 0
-        for byte in data {
-          eventId <<= 8
-          eventId |= UInt64(byte)
-        }
-        txtValue.stringValue = eventId.toHexDotFormat(numberOfBytes: 8)
-      case .float:
-        var floatValue : UInt64 = 0
-        for byte in data {
-          floatValue <<= 8
-          floatValue |= UInt64(byte)
-        }
-        var floatFormat = "%f"
-        if let format = element.floatFormat {
-          floatFormat = format
-        }
-        switch element.size {
-        case 2:
-          let word = UInt16(floatValue & 0xffff)
-          let float16 : float16_t = float16_t(v: word)
-          let float32 = Float(float16: float16)
-          txtValue.stringValue = String(format: floatFormat, float32)
-        case 4:
-          let dword = UInt32(floatValue & 0xffffffff)
-          let float32 = Float32(bitPattern: dword)
-          txtValue.stringValue = String(format: floatFormat, float32)
-        case 8:
-          let float64 = Float64(bitPattern: floatValue)
-          txtValue.stringValue = String(format: floatFormat, float64)
-        default:
-          print("displayEditElement: bad float size: \(element.size)")
-        }
-      case .int:
-        var intValue : UInt64 = 0
-        for byte in data {
-          intValue <<= 8
-          intValue |= UInt64(byte)
-        }
-        switch element.size {
-        case 1:
-          let byte = UInt8(intValue & 0xff)
-          txtValue.stringValue = "\(byte)"
-        case 2:
-          let word = UInt16(intValue & 0xffff)
-          txtValue.stringValue = "\(word)"
-        case 4:
-          let dword = UInt32(intValue & 0xffffffff)
-          txtValue.stringValue = "\(dword)"
-        case 8:
-          txtValue.stringValue = "\(intValue)"
-        default:
-          print("displayEditElement: bad integer size: \(element.size)")
-        }
-      case .string:
-        txtValue.stringValue = String(cString: data)
-        break
-      default:
-        print("displayEditElement: unexpected element type: \(element.type)")
-      }
-
-      property = txtValue.stringValue
-
-      cboCombo.removeAllItems()
-      
-      if element.map.count > 0 {
-        
-        let map = LCCCDIMap(field: element)
-        
-        map.populate(comboBox: cboCombo)
-        
-        map.selectItem(comboBox: cboCombo, property: property)
-        
-      }
-      
-      cboCombo.isHidden = cboCombo.numberOfItems == 0
-      
-      txtValue.frame.origin.y = safeTextTop
-
-      if cboCombo.isHidden {
-        txtValue.frame.origin.y = cboCombo.frame.origin.y
-      }
-
-      txtValue.isHidden = cboCombo.numberOfItems > 0
-
-      lblDescription.isHidden = lblDescription.stringValue.isEmpty
-      
-      btnRefresh.isEnabled = true
-      btnWrite.isEnabled = true
-
-    }
-
   }
-*/
   
   // MARK: OpenLCBConfigurationToolDelegate Methods
   
@@ -692,7 +579,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
         
         if let node = self.node {
           
-          if state == .writingMemory {
+          if state == .writingElement || state == .writingMemory {
             
             if !message.payload.isEmpty {
               
@@ -710,6 +597,11 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
               
             }
             else {
+              
+              totalBytesRead += dataToWrite[0].data.count
+              
+              lblStatus.stringValue = "Writing Variables - \(totalBytesRead) bytes"
+              barProgress.doubleValue = Double(totalBytesRead)
               
               dataToWrite.removeFirst()
               
@@ -741,8 +633,13 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
               
             case .writeReplyGeneric, .writeReply0xFD, .writeReply0xFE, .writeReply0xFF:
               
-              if state == .writingMemory {
+              if state == .writingElement || state == .writingMemory {
                 
+                totalBytesRead += dataToWrite[0].data.count
+                
+                lblStatus.stringValue = "Writing Variables - \(totalBytesRead) bytes"
+                barProgress.doubleValue = Double(totalBytesRead)
+
                 dataToWrite.removeFirst()
                 
                 if !dataToWrite.isEmpty {
@@ -765,7 +662,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
             
             case .readReplyGeneric, .readReply0xFD, .readReply0xFE:
               
-              if state == .readingMemory || state == .refreshElement {
+              if state == .refreshMemory || state == .refreshElement {
                 
                 let startAddress =
                 (UInt32(data[2]) << 24) |
@@ -793,7 +690,6 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
                   totalBytesRead += data.count
                   
                   lblStatus.stringValue = "Reading Variables - \(totalBytesRead) bytes"
-                  
                   barProgress.doubleValue = Double(totalBytesRead)
 
                   memoryMap[currentMemoryBlock].data.append(contentsOf: data)
@@ -811,7 +707,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
                     
                     currentMemoryBlock += 1
                     
-                    if state == .readingMemory && currentMemoryBlock < memoryMap.count {
+                    if state == .refreshMemory && currentMemoryBlock < memoryMap.count {
                       
                       nextCDIStartAddress = memoryMap[currentMemoryBlock].address
                       
@@ -822,7 +718,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
                     }
                     else {
                       
-                      if state == .readingMemory {
+                      if state == .refreshMemory {
                         for dataView in dataViews {
                           if let data = getMemoryBlock(sortAddress: dataView.sortAddress, size: dataView.elementSize!) {
                             dataView.bigEndianData = data
@@ -864,6 +760,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
                   data.removeFirst(6)
                   
                   totalBytesRead += data.count
+                  barProgress.doubleValue += Double(totalBytesRead)
                   lblStatus.stringValue = "Reading Configuration Description Information - \(totalBytesRead) bytes"
 
                   var isLast = false
@@ -878,7 +775,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
                   
                   var test = CDI
                   test.append(0x00)
-                  let str = String(cString: test)
+             //     let str = String(cString: test)
              //     print(str)
              //     print(CDI)
                   
@@ -893,6 +790,12 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
                     
                     state = .idle
                     
+                    state = .decodingCDI
+                    
+                    barProgress.isIndeterminate = true
+                    barProgress.startAnimation(self)
+                    lblStatus.stringValue = "Decoding CDI and building user interface"
+
                     let newData : Data = Data(CDI)
                     
                     xmlParser = XMLParser(data: newData)
@@ -916,6 +819,12 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
 
                 state = .idle
                 
+                state = .decodingCDI
+                
+                barProgress.isIndeterminate = true
+                barProgress.startAnimation(self)
+                lblStatus.stringValue = "Decoding CDI and building user interface"
+
                 let newData : Data = Data(CDI)
                 
                 xmlParser = XMLParser(data: newData)
@@ -944,7 +853,11 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
   
   func parserDidStartDocument(_ parser: XMLParser) {
 //    print("parserDidStartDocument")
+    state = .decodingCDI
+    lblStatus.stringValue = "Decoding CDI and building user interface"
     currentElement = nil
+    barProgress.isIndeterminate = true
+    barProgress.startAnimation(self)
   }
 
   func parserDidEndDocument(_ parser: XMLParser) {
@@ -1037,7 +950,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
       }
       else if elementType == .relation {
         if let property = relationProperty, let value = relationValue {
-          let relation = LCCCDIMapRelation(property: property, stringValue: value)
+          let relation = CDIMapRelation(property: property, stringValue: value)
           currentElement?.map.append(relation)
         }
         relationProperty = nil
@@ -1119,10 +1032,68 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
   
   @objc func cdiDataViewReadData(_ dataView:CDIDataView) {
     
+    guard let node, let networkLayer else {
+      return
+    }
+
+    if let index = getMemoryBlockIndex(sortAddress: dataView.sortAddress) {
+      
+      refreshDataView = dataView
+ 
+      state = .refreshElement
+      
+      memoryMap[index].data.removeAll()
+      
+      barProgress.minValue = 0.0
+      barProgress.maxValue = Double(memoryMap[index].size)
+      barProgress.doubleValue = 0.0
+      totalBytesRead = 0
+      
+      lblStatus.stringValue = "Reading Variables - \(totalBytesRead) bytes"
+            
+      currentMemoryBlock = index
+      
+      nextCDIStartAddress = memoryMap[currentMemoryBlock].address
+      
+      let bytesToRead = UInt8(min(64, memoryMap[currentMemoryBlock].size))
+      
+      networkLayer.sendNodeMemoryReadRequest(sourceNodeId: nodeId, destinationNodeId: node.nodeId, addressSpace: memoryMap[currentMemoryBlock].space, startAddress: nextCDIStartAddress, numberOfBytesToRead: bytesToRead)
+
+    }
+  
   }
   
   @objc func cdiDataViewWriteData(_ dataView:CDIDataView) {
     
+    guard let node, let networkLayer else {
+      return
+    }
+
+    if let index = getMemoryBlockIndex(sortAddress: dataView.sortAddress) {
+
+      var data = dataView.getData
+      
+      setMemoryBlock(sortAddress: dataView.sortAddress, data: data)
+      
+      state = .writingElement
+      
+      dataToWrite.removeAll()
+      
+      var address = dataView.address
+      while !data.isEmpty {
+        let numberToWrite = min(64, data.count)
+        var block : [UInt8] = []
+        for _ in 1...numberToWrite {
+          block.append(data.removeFirst())
+        }
+        dataToWrite.append((space: memoryMap[index].space, address: address, data: block))
+        address += block.count
+      }
+      
+      networkLayer.sendNodeMemoryWriteRequest(sourceNodeId: nodeId, destinationNodeId: node.nodeId, addressSpace: dataToWrite[0].space, startAddress: dataToWrite[0].address, dataToWrite: dataToWrite[0].data)
+
+    }
+
   }
   
   @objc func cdiDataViewSetWriteAllEnabledState(_ isEnabled:Bool) {
@@ -1155,4 +1126,76 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
   
   // MARK: Actions
   
+  @IBAction func btnRebootAction(_ sender: NSButton) {
+    if let network = networkLayer {
+      network.sendRebootCommand(sourceNodeId: nodeId, destinationNodeId: node!.nodeId)
+    }
+  }
+  
+  @IBAction func btnResetToDefaultsAction(_ sender: NSButton) {
+    
+    let alert = NSAlert()
+
+    alert.messageText = "Are you sure that you wish to reset this node to factory defaults?"
+    alert.informativeText = ""
+    alert.addButton(withTitle: "No")
+    alert.addButton(withTitle: "Yes")
+    alert.alertStyle = .warning
+
+    if alert.runModal() == NSApplication.ModalResponse.alertSecondButtonReturn {
+      if let network = networkLayer {
+        network.sendResetToDefaults(sourceNodeId: nodeId, destinationNodeId: node!.nodeId)
+      }
+    }
+
+  }
+  
+  @IBAction func btnRefreshAllAction(_ sender: NSButton) {
+    refreshAll()
+  }
+
+  @IBAction func btnWriteAllAction(_ sender: NSButton) {
+    
+    guard let node, let networkLayer else {
+      return
+    }
+
+    for dataView in dataViews {
+      setMemoryBlock(sortAddress: dataView.sortAddress, data: dataView.getData)
+    }
+    
+    dataToWrite.removeAll()
+    
+    var index = 0
+    dataBytesToRead = 0
+    while index < memoryMap.count {
+      var data = memoryMap[index].data
+      var address = memoryMap[index].address
+      while !data.isEmpty {
+        let numberToWrite = min(64, data.count)
+        var block : [UInt8] = []
+        for _ in 1...numberToWrite {
+          block.append(data.removeFirst())
+          dataBytesToRead += 1
+        }
+        dataToWrite.append((space: memoryMap[index].space, address: address, data: block))
+        address += block.count
+      }
+      index += 1
+    }
+    
+    barProgress.minValue = 0.0
+    barProgress.maxValue = Double(dataBytesToRead)
+    barProgress.doubleValue = 0.0
+
+    totalBytesRead = 0
+    
+    lblStatus.stringValue = "Writing Variables - \(totalBytesRead) bytes"
+    
+    state = .writingMemory
+    
+    networkLayer.sendNodeMemoryWriteRequest(sourceNodeId: nodeId, destinationNodeId: node.nodeId, addressSpace: dataToWrite[0].space, startAddress: dataToWrite[0].address, dataToWrite: dataToWrite[0].data)
+
+  }
+
 }

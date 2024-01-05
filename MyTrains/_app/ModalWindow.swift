@@ -28,7 +28,6 @@ enum AppStoryboard : String {
   case PlaceLocomotive                   = "PlaceLocomotive"
   case SetFastClock                      = "SetFastClock"
   case ViewLCCNetwork                    = "ViewLCCNetwork"
-  case ConfigureLCCNode                  = "ConfigureLCCNode"
   case ViewNodeInfo                      = "ViewNodeInfo"
   case ProgrammerTool                    = "ProgrammerTool"
   case OpenLCBFirmwareUpdate             = "OpenLCBFirmwareUpdate"
@@ -60,7 +59,6 @@ let storyboardLookup : [String:AppStoryboard] = [
   "PlaceLocomotive"                   : AppStoryboard.PlaceLocomotive,
   "SetFastClock"                      : AppStoryboard.SetFastClock,
   "ViewLCCNetwork"                    : AppStoryboard.ViewLCCNetwork,
-  "ConfigureLCCNode"                  : AppStoryboard.ConfigureLCCNode,
   "ViewNodeInfo"                      : AppStoryboard.ViewNodeInfo,
   "ProgrammerTool"                    : AppStoryboard.ProgrammerTool,
   "OpenLCBFirmwareUpdate"             : AppStoryboard.OpenLCBFirmwareUpdate,
@@ -97,7 +95,6 @@ enum ModalWindow : String {
   case PlaceLocomotive                   = "PlaceLocomotive"
   case SetFastClock                      = "SetFastClock"
   case ViewLCCNetwork                    = "ViewLCCNetwork"
-  case ConfigureLCCNode                  = "ConfigureLCCNode"
   case ViewNodeInfo                      = "ViewNodeInfo"
   case ProgrammerTool                    = "ProgrammerTool"
   case OpenLCBFirmwareUpdate             = "OpenLCBFirmwareUpdate"
