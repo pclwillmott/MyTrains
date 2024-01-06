@@ -804,7 +804,9 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
             data.append(contentsOf: message.eventId!.bigEndianData)
             data.append(contentsOf: message.payload)
             
-            let numberOfFrames = 1 + (data.count / 8)
+            let numberOfFrames = 1 + (data.count - 1) / 8
+            
+ //           print("data.count: \(data.count) numberOfFrames: \(numberOfFrames)")
             
             if numberOfFrames == 1 {
               if let frame = LCCCANFrame(message: message) {

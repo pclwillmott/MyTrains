@@ -88,6 +88,8 @@
 		DA51FB9E29D8921B002CAAC1 /* OpenLCBCANFrameType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA51FB9D29D8921B002CAAC1 /* OpenLCBCANFrameType.swift */; };
 		DA5225F92B307B09005DCBF4 /* MultiTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5225F82B307B09005DCBF4 /* MultiTabView.swift */; };
 		DA5550EA28392A6B00C4FE4E /* DigitraxProductCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5550E928392A6B00C4FE4E /* DigitraxProductCode.swift */; };
+		DA5563D62B499C3100D8BF90 /* CDITextView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA5563D52B499C3100D8BF90 /* CDITextView.storyboard */; };
+		DA5563D82B499C4600D8BF90 /* CDITextViewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5563D72B499C4600D8BF90 /* CDITextViewVC.swift */; };
 		DA56260D29E1A13300D465CC /* OpenLCBTransportLayerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA56260C29E1A13300D465CC /* OpenLCBTransportLayerState.swift */; };
 		DA56260F29E1AC2B00D465CC /* OpenLCBNetworkLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA56260E29E1AC2B00D465CC /* OpenLCBNetworkLayer.swift */; };
 		DA56261129E1AE2800D465CC /* OpenLCBMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA56261029E1AE2800D465CC /* OpenLCBMessage.swift */; };
@@ -346,6 +348,8 @@
 		DA51FB9D29D8921B002CAAC1 /* OpenLCBCANFrameType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBCANFrameType.swift; sourceTree = "<group>"; };
 		DA5225F82B307B09005DCBF4 /* MultiTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiTabView.swift; sourceTree = "<group>"; };
 		DA5550E928392A6B00C4FE4E /* DigitraxProductCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DigitraxProductCode.swift; sourceTree = "<group>"; };
+		DA5563D52B499C3100D8BF90 /* CDITextView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = CDITextView.storyboard; sourceTree = "<group>"; };
+		DA5563D72B499C4600D8BF90 /* CDITextViewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDITextViewVC.swift; sourceTree = "<group>"; };
 		DA56260C29E1A13300D465CC /* OpenLCBTransportLayerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBTransportLayerState.swift; sourceTree = "<group>"; };
 		DA56260E29E1AC2B00D465CC /* OpenLCBNetworkLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBNetworkLayer.swift; sourceTree = "<group>"; };
 		DA56261029E1AE2800D465CC /* OpenLCBMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBMessage.swift; sourceTree = "<group>"; };
@@ -739,6 +743,8 @@
 				DA0BBB7A29FD4ED2003E03EF /* CDIMapRelation.swift */,
 				DA7F89AE2B371BBE00F43819 /* ConfigurationTool.storyboard */,
 				DA7F89B02B371BDE00F43819 /* ConfigurationToolVC.swift */,
+				DA5563D52B499C3100D8BF90 /* CDITextView.storyboard */,
+				DA5563D72B499C4600D8BF90 /* CDITextViewVC.swift */,
 			);
 			path = "Configure Node";
 			sourceTree = "<group>";
@@ -1277,6 +1283,7 @@
 				DA6A0AD8275295BF00913F2B /* Monitor.storyboard in Resources */,
 				DA467BAF281D5D2F00AB9650 /* SwitchBoardEditor.storyboard in Resources */,
 				DAAC7E952A7966EE001A424E /* ProgrammerTool.storyboard in Resources */,
+				DA5563D62B499C3100D8BF90 /* CDITextView.storyboard in Resources */,
 				DA7195FB2A3F2D40004D2D4B /* MyTrains Train - OLD.xml in Resources */,
 				DA0B63D82AF7BB8B007C7CD6 /* OpenLCBMonitor.storyboard in Resources */,
 				DAAA9C232A0FDD8600A5B9D6 /* ViewNodeInfo.storyboard in Resources */,
@@ -1408,6 +1415,7 @@
 				DABC089B2B1B895B00260605 /* LocoNetIMMPacketRepeat.swift in Sources */,
 				DAB4A73F2B40483700CD5256 /* CDIMapView.swift in Sources */,
 				DAA777CC2A20C861008EAF02 /* OpenLCBClockType.swift in Sources */,
+				DA5563D82B499C4600D8BF90 /* CDITextViewVC.swift in Sources */,
 				DA9C6A1E2A408F060069FED8 /* OpenLCBTractionControlInstructionType.swift in Sources */,
 				DA7A127429E2DCCD000DCE1C /* UIntExtensions.swift in Sources */,
 				DAAC7E8D2A792693001A424E /* OpenLCBProgrammerToolNode.swift in Sources */,

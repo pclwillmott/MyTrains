@@ -18,3 +18,4 @@ extension Bundle {
         return "v\(releaseVersionNumber ?? "1.0.0")"
     }
 }
+

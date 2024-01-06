@@ -59,6 +59,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
     buttonView.translatesAutoresizingMaskIntoConstraints = false
     progressView.translatesAutoresizingMaskIntoConstraints = false
     statusView.translatesAutoresizingMaskIntoConstraints = false
+    btnShowCDIText.translatesAutoresizingMaskIntoConstraints = false
   
     self.view.addSubview(stackView)
  
@@ -102,27 +103,35 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
 
     NSLayoutConstraint.activate([
       barProgress.topAnchor.constraint(equalTo: progressView.topAnchor),
-      barProgress.leadingAnchor.constraint(equalTo: progressView.leadingAnchor, constant: gap),
-      barProgress.trailingAnchor.constraint(equalTo: progressView.trailingAnchor, constant: -gap),
     ])
+    
+    progressIndicatorConstraints = [
+      barProgress.centerXAnchor.constraint(equalTo: progressView.centerXAnchor),
+      progressView.bottomAnchor.constraint(equalTo: barProgress.bottomAnchor, constant: gap),
+    ]
+    
+    NSLayoutConstraint.activate(progressIndicatorConstraints)
       
     buttonView.addSubview(btnWriteAll)
     buttonView.addSubview(btnRefreshAll)
     buttonView.addSubview(btnResetToDefaults)
     buttonView.addSubview(btnReboot)
+    buttonView.addSubview(btnShowCDIText)
 
     btnWriteAll.title = "Write All"
     btnRefreshAll.title = "Refresh All"
     btnResetToDefaults.title = "Reset to Defaults"
     btnReboot.title = "Reboot"
+    btnShowCDIText.title = "Show CDI Text"
       
     NSLayoutConstraint.activate([
       btnRefreshAll.leadingAnchor.constraint(equalTo: buttonView.leadingAnchor, constant: gap),
       btnWriteAll.leadingAnchor.constraint(equalTo: btnRefreshAll.trailingAnchor, constant: gap),
       btnResetToDefaults.trailingAnchor.constraint(equalTo: buttonView.trailingAnchor, constant: -gap),
       btnReboot.trailingAnchor.constraint(equalTo: btnResetToDefaults.leadingAnchor, constant: -gap),
+      btnShowCDIText.trailingAnchor.constraint(equalTo: btnReboot.leadingAnchor, constant: -gap),
     ])
-    
+      
     btnResetToDefaults.target = self
     btnResetToDefaults.action = #selector(self.btnResetToDefaultsAction(_:))
 
@@ -135,6 +144,9 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
     btnWriteAll.target = self
     btnWriteAll.action = #selector(self.btnWriteAllAction(_:))
 
+    btnShowCDIText.target = self
+    btnShowCDIText.action = #selector(self.btnShowCDITextAction(_:))
+
     networkLayer = configurationTool!.networkLayer
     
     nodeId = configurationTool!.nodeId
@@ -145,7 +157,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
     
     if let network = networkLayer {
 
-      lblStatus.stringValue = "Getting CDI"
+      statusMessage("Getting CDI")
       
       state = .gettingCDI
       
@@ -153,6 +165,11 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
       
       nextCDIStartAddress = 0
       
+      barProgress.isIndeterminate = true
+      barProgress.usesThreadedAnimation = true
+      barProgress.style = .spinning
+      barProgress.startAnimation(self)
+
       CDI = []
       
       network.sendNodeMemoryReadRequest(sourceNodeId: nodeId, destinationNodeId: node!.nodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cdi.rawValue, startAddress: nextCDIStartAddress, numberOfBytesToRead: 64)
@@ -169,8 +186,21 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
   
   private var CDI : [UInt8] = []
   
+  private var cdiText : String {
+    var cdi = CDI
+    cdi.append(0)
+    return String(cString: cdi)
+  }
+  
+  private var isCDINullTerminated = false
+  
+  private var cdiInfo : String {
+    return "\(CDI.count) bytes \(isCDINullTerminated ? "NULL terminated" : "not NULL terminated")"
+  }
+  
   private var state : State = .idle {
     didSet {
+      
       switch state {
       case .idle:
         isStatusViewHidden = true
@@ -178,7 +208,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
         isButtonViewHidden = false
       case .gettingCDI:
         isStatusViewHidden = false
-        isProgressViewHidden = true
+        isProgressViewHidden = false
         isButtonViewHidden = true
       case .decodingCDI:
         isStatusViewHidden = false
@@ -201,6 +231,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
         isProgressViewHidden = false
         isButtonViewHidden = false
       }
+      
     }
   }
   
@@ -244,6 +275,8 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
   
   private var progressViewHeightConstraint : NSLayoutConstraint?
   
+  private var progressIndicatorConstraints : [NSLayoutConstraint] = []
+  
   private var isProgressViewHidden : Bool {
     get {
       return progressView.isHidden
@@ -251,7 +284,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
     set(value) {
       progressViewHeightConstraint?.isActive = false
       progressView.isHidden = value
-      progressViewHeightConstraint = progressView.heightAnchor.constraint(equalToConstant: value ? 0.0 : 18.0)
+      progressViewHeightConstraint = progressView.heightAnchor.constraint(equalToConstant: value ? 0.0 : state == .idle ? 18.0 : 40.0)
       progressViewHeightConstraint?.isActive = true
     }
   }
@@ -304,6 +337,36 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
     let _ = alert.runModal()
 
   }
+  
+  private func statusMessage(_ message:String) {
+    DispatchQueue.main.async {
+      self.lblStatus.stringValue = message
+    }
+  }
+  
+  private func updateProgressIndicator(_ value:Int) {
+    DispatchQueue.main.async {
+      self.barProgress.doubleValue = Double(value)
+    }
+  }
+  
+  private func decodeCDI() {
+    
+    statusMessage("Decoding CDI and building user interface")
+
+    state = .decodingCDI
+    
+    DispatchQueue.global(qos: .background).async {
+      
+      let newData : Data = Data(self.CDI)
+      
+      self.xmlParser = XMLParser(data: newData)
+      self.xmlParser?.delegate = self
+      self.xmlParser?.parse()
+
+    }
+    
+  }
 
   @objc func timeOutTimer() {
     stopTimer()
@@ -337,28 +400,32 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
       
       if element.replication == 1 {
         
-        let group = CDIGroupView()
-        
-        stackView.addArrangedSubview?(group)
-        
-        switch element.type {
-        case .identification:
-          group.name = "Identification"
-        case .acdi:
-          group.name = "ACDI"
-        case .segment:
-          currentSpace = element.space
-          currentAddress = element.origin
-          fallthrough
-        default:
-          group.name = element.name
-          break
-        }
-        
-        group.addDescription(description: element.description)
-        
-        for childElement in element.childElements {
-          makeInterface(stackView: group, element: childElement)
+        if element.childElements.count > 0 || element.description.count > 0 {
+          
+          let group = CDIGroupView()
+          
+          stackView.addArrangedSubview?(group)
+          
+          switch element.type {
+          case .identification:
+            group.name = "Identification"
+          case .acdi:
+            group.name = "ACDI"
+          case .segment:
+            currentSpace = element.space
+            currentAddress = element.origin
+            fallthrough
+          default:
+            group.name = element.name
+            break
+          }
+          
+          group.addDescription(description: element.description)
+          
+          for childElement in element.childElements {
+            makeInterface(stackView: group, element: childElement)
+          }
+          
         }
         
       }
@@ -461,8 +528,6 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
     
     refreshAll()
     
-    barProgress.stopAnimation(self)
-    
   }
   
   private func refreshAll() {
@@ -474,15 +539,27 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
       memoryMap[index].data.removeAll()
       index += 1
     }
-    
+
+    NSLayoutConstraint.deactivate(progressIndicatorConstraints)
+
+    barProgress.stopAnimation(self)
+    barProgress.style = .bar
     barProgress.isIndeterminate = false
     barProgress.minValue = 0.0
     barProgress.maxValue = Double(dataBytesToRead)
-    barProgress.doubleValue = 0.0
-
-    totalBytesRead = 0
     
-    lblStatus.stringValue = "Reading Variables - \(totalBytesRead) bytes"
+    totalBytesRead = 0
+
+    progressIndicatorConstraints = [
+      barProgress.leadingAnchor.constraint(equalTo: progressView.leadingAnchor, constant: gap),
+      barProgress.trailingAnchor.constraint(equalTo: progressView.trailingAnchor, constant: -gap),
+    ]
+    
+    NSLayoutConstraint.activate(progressIndicatorConstraints)
+
+    updateProgressIndicator(totalBytesRead)
+    
+    statusMessage("Reading Variables - \(totalBytesRead) bytes")
 
     if let node, let networkLayer {
 
@@ -600,8 +677,9 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
               
               totalBytesRead += dataToWrite[0].data.count
               
-              lblStatus.stringValue = "Writing Variables - \(totalBytesRead) bytes"
-              barProgress.doubleValue = Double(totalBytesRead)
+              updateProgressIndicator(totalBytesRead)
+              
+              statusMessage("Writing Variables - \(totalBytesRead) bytes")
               
               dataToWrite.removeFirst()
               
@@ -637,9 +715,10 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
                 
                 totalBytesRead += dataToWrite[0].data.count
                 
-                lblStatus.stringValue = "Writing Variables - \(totalBytesRead) bytes"
-                barProgress.doubleValue = Double(totalBytesRead)
-
+                updateProgressIndicator(totalBytesRead)
+                
+                statusMessage("Writing Variables - \(totalBytesRead) bytes")
+                
                 dataToWrite.removeFirst()
                 
                 if !dataToWrite.isEmpty {
@@ -689,9 +768,10 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
                   
                   totalBytesRead += data.count
                   
-                  lblStatus.stringValue = "Reading Variables - \(totalBytesRead) bytes"
-                  barProgress.doubleValue = Double(totalBytesRead)
-
+                  updateProgressIndicator(totalBytesRead)
+                  
+                  statusMessage("Reading Variables - \(totalBytesRead) bytes")
+                  
                   memoryMap[currentMemoryBlock].data.append(contentsOf: data)
                   
                   let bytesToRead = UInt8(min(64, memoryMap[currentMemoryBlock].size - memoryMap[currentMemoryBlock].data.count))
@@ -760,8 +840,10 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
                   data.removeFirst(6)
                   
                   totalBytesRead += data.count
-                  barProgress.doubleValue += Double(totalBytesRead)
-                  lblStatus.stringValue = "Reading Configuration Description Information - \(totalBytesRead) bytes"
+                  
+                  updateProgressIndicator(totalBytesRead)
+                  
+                  statusMessage("Reading Configuration Description Information - \(totalBytesRead) bytes")
 
                   var isLast = false
                   
@@ -773,35 +855,16 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
                     CDI.append(byte)
                   }
                   
-                  var test = CDI
-                  test.append(0x00)
-             //     let str = String(cString: test)
-             //     print(str)
-             //     print(CDI)
-                  
-                  if !isLast {
+                  if isLast {
+                    isCDINullTerminated = true
+                    decodeCDI()
+                  }
+                  else {
                     
                     nextCDIStartAddress += data.count
                     
                     network.sendNodeMemoryReadRequest(sourceNodeId: nodeId, destinationNodeId: node.nodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cdi.rawValue, startAddress: nextCDIStartAddress, numberOfBytesToRead: 64)
                     
-                  }
-                  else {
-                    
-                    state = .idle
-                    
-                    state = .decodingCDI
-                    
-                    barProgress.isIndeterminate = true
-                    barProgress.startAnimation(self)
-                    lblStatus.stringValue = "Decoding CDI and building user interface"
-
-                    let newData : Data = Data(CDI)
-                    
-                    xmlParser = XMLParser(data: newData)
-                    xmlParser?.delegate = self
-                    xmlParser?.parse()
-
                   }
                   
                 }
@@ -816,21 +879,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
             case .readReplyFailure0xFF:
               
               if state == .gettingCDI {
-
-                state = .idle
-                
-                state = .decodingCDI
-                
-                barProgress.isIndeterminate = true
-                barProgress.startAnimation(self)
-                lblStatus.stringValue = "Decoding CDI and building user interface"
-
-                let newData : Data = Data(CDI)
-                
-                xmlParser = XMLParser(data: newData)
-                xmlParser?.delegate = self
-                xmlParser?.parse()
-                
+                decodeCDI()
               }
               
             default:
@@ -853,15 +902,13 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
   
   func parserDidStartDocument(_ parser: XMLParser) {
 //    print("parserDidStartDocument")
-    state = .decodingCDI
-    lblStatus.stringValue = "Decoding CDI and building user interface"
     currentElement = nil
-    barProgress.isIndeterminate = true
-    barProgress.startAnimation(self)
   }
 
   func parserDidEndDocument(_ parser: XMLParser) {
-    expandTree()
+    DispatchQueue.main.async {
+      self.expandTree()
+    }
   }
 
   func parser(_ parser: XMLParser, foundNotationDeclarationWithName name: String, publicID: String?, systemID: String?) {
@@ -1049,7 +1096,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
       barProgress.doubleValue = 0.0
       totalBytesRead = 0
       
-      lblStatus.stringValue = "Reading Variables - \(totalBytesRead) bytes"
+      statusMessage("Reading Variables - \(totalBytesRead) bytes")
             
       currentMemoryBlock = index
       
@@ -1124,6 +1171,8 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
     
   private var buttonView = NSView()
   
+  private var btnShowCDIText = NSButton()
+  
   // MARK: Actions
   
   @IBAction func btnRebootAction(_ sender: NSButton) {
@@ -1186,16 +1235,32 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
     
     barProgress.minValue = 0.0
     barProgress.maxValue = Double(dataBytesToRead)
-    barProgress.doubleValue = 0.0
-
     totalBytesRead = 0
     
-    lblStatus.stringValue = "Writing Variables - \(totalBytesRead) bytes"
+    updateProgressIndicator(totalBytesRead)
+    
+    statusMessage("Writing Variables - \(totalBytesRead) bytes")
     
     state = .writingMemory
     
     networkLayer.sendNodeMemoryWriteRequest(sourceNodeId: nodeId, destinationNodeId: node.nodeId, addressSpace: dataToWrite[0].space, startAddress: dataToWrite[0].address, dataToWrite: dataToWrite[0].data)
 
   }
+
+  @IBAction func btnShowCDITextAction(_ sender: NSButton) {
+    
+    var title = node!.userNodeName == "" ? "\(node!.manufacturerName) - \(node!.nodeModelName)" : node!.userNodeName
+    
+    title = "CDI: \(title) (\(node!.nodeId.toHexDotFormat(numberOfBytes: 6)))"
+
+    let x = ModalWindow.CDITextView
+    let wc = x.windowController
+    let vc = x.viewController(windowController: wc) as! CDITextViewVC
+    vc.name = title
+    vc.cdiText = cdiText
+    vc.cdiInfo = cdiInfo
+    wc.showWindow(nil)
+  }
+
 
 }

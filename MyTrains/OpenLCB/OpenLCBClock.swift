@@ -594,6 +594,7 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
       
       if triggered || rollover {
         lastEvents[OpenLCBFastClockEventIndex.reportTimeEvent.rawValue] = eventId
+//        print("clock: \(eventId.toHexDotFormat(numberOfBytes: 8))")
         network.sendEvent(sourceNodeId: nodeId, eventId: eventId)
         triggered = false
         lastSend = newDate
