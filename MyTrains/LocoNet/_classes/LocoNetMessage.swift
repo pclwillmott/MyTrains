@@ -651,7 +651,7 @@ public class LocoNetMessage : NSObject {
         // MARK: 0xBC
           
         case 0xbc: // OPC_SW_STATE
-          if (message[2] & 0b11110000) == 0 {
+          if (message[2] & 0b01000000) == 0 {
             _messageType = .getSwState
           }
           
@@ -1745,7 +1745,7 @@ public class LocoNetMessage : NSObject {
   public var switchAddress : Int? {
     switch messageType {
     case .setSw, .setSwWithAck:
-      return Int(message[1]) | (Int(message[2] & 0x0f) << 7)
+      return Int(message[1]) | (Int(message[2] & 0x0f) << 7) + 1
     default:
       break
     }

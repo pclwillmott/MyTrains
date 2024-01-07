@@ -806,8 +806,6 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
             
             let numberOfFrames = 1 + (data.count - 1) / 8
             
- //           print("data.count: \(data.count) numberOfFrames: \(numberOfFrames)")
-            
             if numberOfFrames == 1 {
               if let frame = LCCCANFrame(message: message) {
                 send(data: frame.message)
@@ -826,9 +824,9 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
                   message.messageTypeIndicator = .producerConsumerEventReportWithPayloadMiddleFrame
                 }
                 
-                var payload : [UInt8] = [UInt8](data.prefix(8))
+                let payload : [UInt8] = [UInt8](data.prefix(8))
                 
-                data.removeFirst(8)
+                data.removeFirst(payload.count)
                 
                 if let frame = LCCCANFrame(pcerMessage: message, payload: payload) {
                   send(data: frame.message)

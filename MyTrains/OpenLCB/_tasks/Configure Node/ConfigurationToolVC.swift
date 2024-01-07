@@ -339,15 +339,11 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
   }
   
   private func statusMessage(_ message:String) {
-    DispatchQueue.main.async {
-      self.lblStatus.stringValue = message
-    }
+    self.lblStatus.stringValue = message
   }
   
   private func updateProgressIndicator(_ value:Int) {
-    DispatchQueue.main.async {
-      self.barProgress.doubleValue = Double(value)
-    }
+    self.barProgress.doubleValue = Double(value)
   }
   
   private func decodeCDI() {
@@ -356,16 +352,12 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
 
     state = .decodingCDI
     
-    DispatchQueue.global(qos: .background).async {
-      
-      let newData : Data = Data(self.CDI)
-      
-      self.xmlParser = XMLParser(data: newData)
-      self.xmlParser?.delegate = self
-      self.xmlParser?.parse()
-
-    }
+    let newData : Data = Data(self.CDI)
     
+    self.xmlParser = XMLParser(data: newData)
+    self.xmlParser?.delegate = self
+    self.xmlParser?.parse()
+
   }
 
   @objc func timeOutTimer() {
@@ -906,9 +898,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
   }
 
   func parserDidEndDocument(_ parser: XMLParser) {
-    DispatchQueue.main.async {
-      self.expandTree()
-    }
+    expandTree()
   }
 
   func parser(_ parser: XMLParser, foundNotationDeclarationWithName name: String, publicID: String?, systemID: String?) {
