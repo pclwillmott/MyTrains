@@ -20,8 +20,8 @@ public enum BestFitMethod : Int {
   }
   
   private static let titles = [
-    "Straight Line",
-    "Moving Average",
+    String(localized: "Straight Line", comment: "Used by combobox to select curve fitting method)"),
+    String(localized: "Moving Average", comment: "Used by combobox to select curve fitting method)"),
   ]
   
   public static let defaultValue : BestFitMethod = .straightLine

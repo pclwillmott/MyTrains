@@ -11,5 +11,5 @@ public enum OpenLCBFDIFunctionKind : String {
   
   case binary    = "binary"
   case momentary = "momentary"
-  
+
 }

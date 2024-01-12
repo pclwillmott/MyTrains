@@ -117,13 +117,21 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
     buttonView.addSubview(btnResetToDefaults)
     buttonView.addSubview(btnReboot)
     buttonView.addSubview(btnShowCDIText)
-
-    btnWriteAll.title = "Write All"
-    btnRefreshAll.title = "Refresh All"
-    btnResetToDefaults.title = "Reset to Defaults"
-    btnReboot.title = "Reboot"
-    btnShowCDIText.title = "Show CDI Text"
       
+    if #available(macOS 12, *) {
+      btnWriteAll.title = String(localized: "Write All")
+      btnRefreshAll.title = String(localized: "Refresh All")
+      btnResetToDefaults.title = String(localized: "Reset to Defaults")
+      btnReboot.title = String(localized: "Reboot")
+      btnShowCDIText.title = String(localized: "Show CDI Text")
+    } else {
+      btnWriteAll.title = "Write All"
+      btnRefreshAll.title = "Refresh All"
+      btnResetToDefaults.title = "Reset to Defaults"
+      btnReboot.title = "Reboot"
+      btnShowCDIText.title = "Show CDI Text"
+    }
+    
     NSLayoutConstraint.activate([
       btnRefreshAll.leadingAnchor.constraint(equalTo: buttonView.leadingAnchor, constant: gap),
       btnWriteAll.leadingAnchor.constraint(equalTo: btnRefreshAll.trailingAnchor, constant: gap),
@@ -153,11 +161,22 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
     
     let title = node!.userNodeName == "" ? "\(node!.manufacturerName) - \(node!.nodeModelName)" : node!.userNodeName
     
-    self.view.window?.title = "Configure \(title) (\(node!.nodeId.toHexDotFormat(numberOfBytes: 6)))"
+    
+    if #available(macOS 12, *) {
+      self.view.window?.title = String(localized: "Configure \(title) (\(node!.nodeId.toHexDotFormat(numberOfBytes: 6)))")
+    } 
+    else {
+      self.view.window?.title = "Configure \(title) (\(node!.nodeId.toHexDotFormat(numberOfBytes: 6)))"
+    }
     
     if let network = networkLayer {
 
-      statusMessage("Getting CDI")
+      if #available(macOS 12, *) {
+        statusMessage(String(localized: "Getting CDI"))
+      } 
+      else {
+        statusMessage("Getting CDI")
+      }
       
       state = .gettingCDI
       
@@ -195,7 +214,12 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
   private var isCDINullTerminated = false
   
   private var cdiInfo : String {
-    return "\(CDI.count) bytes \(isCDINullTerminated ? "NULL terminated" : "not NULL terminated")"
+    if #available(macOS 12, *) {
+      return String(localized: "\(CDI.count) bytes \(isCDINullTerminated ? "NULL terminated" : "not NULL terminated")")
+    } 
+    else {
+      return "\(CDI.count) bytes \(isCDINullTerminated ? "NULL terminated" : "not NULL terminated")"
+    }
   }
   
   private var state : State = .idle {
@@ -329,9 +353,15 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
     
     let alert = NSAlert()
 
-    alert.messageText = "Error"
+    if #available(macOS 12, *) {
+      alert.messageText = String(localized: "Error")
+      alert.addButton(withTitle: String(localized: "OK"))
+    }
+    else {
+      alert.messageText = "Error"
+      alert.addButton(withTitle: "OK")
+    }
     alert.informativeText = message
-    alert.addButton(withTitle: "OK")
     alert.alertStyle = .critical
 
     let _ = alert.runModal()
@@ -339,7 +369,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
   }
   
   private func statusMessage(_ message:String) {
-    self.lblStatus.stringValue = message
+    lblStatus.stringValue = message
   }
   
   private func updateProgressIndicator(_ value:Int) {
@@ -348,7 +378,12 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
   
   private func decodeCDI() {
     
-    statusMessage("Decoding CDI and building user interface")
+    if #available(macOS 12, *) {
+      statusMessage(String(localized: "Decoding CDI and building user interface"))
+    } 
+    else {
+      statusMessage("Decoding CDI and building user interface")
+    }
 
     state = .decodingCDI
     
@@ -362,7 +397,12 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
 
   @objc func timeOutTimer() {
     stopTimer()
-    displayErrorMessage(message: "TimeOut: - write failed")
+    if #available(macOS 12, *) {
+      displayErrorMessage(message: String(localized: "Timeout - write failed"))
+    }
+    else {
+      displayErrorMessage(message: "Timeout - write failed")
+    }
     state = .idle
   }
   
@@ -400,9 +440,19 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
           
           switch element.type {
           case .identification:
-            group.name = "Identification"
+            if #available(macOS 12, *) {
+              group.name = String(localized: "Identification")
+            } 
+            else {
+              group.name = "Identification"
+            }
           case .acdi:
-            group.name = "ACDI"
+            if #available(macOS 12, *) {
+              group.name = String(localized: "ACDI")
+            } 
+            else {
+              group.name = "ACDI"
+            }
           case .segment:
             currentSpace = element.space
             currentAddress = element.origin
@@ -551,7 +601,12 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
 
     updateProgressIndicator(totalBytesRead)
     
-    statusMessage("Reading Variables - \(totalBytesRead) bytes")
+    if #available(macOS 12, *) {
+      statusMessage(String(localized: "Reading Variables - \(totalBytesRead) bytes"))
+    } 
+    else {
+      statusMessage("Reading Variables - \(totalBytesRead) bytes")
+    }
 
     if let node, let networkLayer {
 
@@ -671,7 +726,12 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
               
               updateProgressIndicator(totalBytesRead)
               
-              statusMessage("Writing Variables - \(totalBytesRead) bytes")
+              if #available(macOS 12, *) {
+                statusMessage(String(localized: "Writing Variables - \(totalBytesRead) bytes"))
+              } 
+              else {
+                statusMessage("Writing Variables - \(totalBytesRead) bytes")
+              }
               
               dataToWrite.removeFirst()
               
@@ -709,8 +769,13 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
                 
                 updateProgressIndicator(totalBytesRead)
                 
-                statusMessage("Writing Variables - \(totalBytesRead) bytes")
-                
+                if #available(macOS 12, *) {
+                  statusMessage(String(localized: "Writing Variables - \(totalBytesRead) bytes"))
+                }
+                else {
+                  statusMessage("Writing Variables - \(totalBytesRead) bytes")
+                }
+
                 dataToWrite.removeFirst()
                 
                 if !dataToWrite.isEmpty {
@@ -729,8 +794,12 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
               
               state = .idle
 
-              displayErrorMessage(message: "Write failed")
-            
+              if #available(macOS 12, *) {
+                displayErrorMessage(message: String(localized: "Write failed"))
+              } else {
+                displayErrorMessage(message: "Write failed")
+              }
+              
             case .readReplyGeneric, .readReply0xFD, .readReply0xFE:
               
               if state == .refreshMemory || state == .refreshElement {
@@ -762,7 +831,12 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
                   
                   updateProgressIndicator(totalBytesRead)
                   
-                  statusMessage("Reading Variables - \(totalBytesRead) bytes")
+                  if #available(macOS 12, *) {
+                    statusMessage(String(localized: "Reading Variables - \(totalBytesRead) bytes"))
+                  } 
+                  else {
+                    statusMessage("Reading Variables - \(totalBytesRead) bytes")
+                  }
                   
                   memoryMap[currentMemoryBlock].data.append(contentsOf: data)
                   
@@ -835,7 +909,12 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
                   
                   updateProgressIndicator(totalBytesRead)
                   
-                  statusMessage("Reading Configuration Description Information - \(totalBytesRead) bytes")
+                  if #available(macOS 12, *) {
+                    statusMessage(String(localized: "Reading Configuration Description Information - \(totalBytesRead) bytes"))
+                  } 
+                  else {
+                    statusMessage("Reading Configuration Description Information - \(totalBytesRead) bytes")
+                  }
 
                   var isLast = false
                   
@@ -921,12 +1000,10 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
     print("parseFoundInternalEntityDeclarationWithName: \(name)")
   }
 
-  
   func parser(_ parser: XMLParser, foundExternalEntityDeclarationWithName name: String, publicID: String?, systemID: String?) {
     print("parseFoundExternalEntityDeclarationWithName: \(name)")
   }
 
-  
   func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
 
     if let elementType = OpenLCBCDIElementType(rawValue: elementName) {
@@ -1086,7 +1163,12 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
       barProgress.doubleValue = 0.0
       totalBytesRead = 0
       
-      statusMessage("Reading Variables - \(totalBytesRead) bytes")
+      if #available(macOS 12, *) {
+        statusMessage(String(localized: "Reading Variables - \(totalBytesRead) bytes"))
+      } 
+      else {
+        statusMessage("Reading Variables - \(totalBytesRead) bytes")
+      }
             
       currentMemoryBlock = index
       
@@ -1149,8 +1231,8 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
   
   private var barProgress = NSProgressIndicator()
   
-  private var lblStatus = NSTextField(labelWithString: "Status")
-  
+  private var lblStatus = NSTextField(labelWithString: "")
+
   private var containerView = ScrollVerticalStackView()
   
   private var stackView = NSStackView()
@@ -1174,11 +1256,21 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
   @IBAction func btnResetToDefaultsAction(_ sender: NSButton) {
     
     let alert = NSAlert()
-
-    alert.messageText = "Are you sure that you wish to reset this node to factory defaults?"
+    
     alert.informativeText = ""
-    alert.addButton(withTitle: "No")
-    alert.addButton(withTitle: "Yes")
+    
+    if #available(macOS 12, *) {
+      alert.messageText = String(localized: "Are you sure that you wish to reset this node to factory defaults?")
+      alert.addButton(withTitle: String(localized: "No"))
+      alert.addButton(withTitle: String(localized: "Yes"))
+    }
+    else {
+      alert.messageText = "Are you sure that you wish to reset this node to factory defaults?"
+      alert.addButton(withTitle: "No")
+      alert.addButton(withTitle: "Yes")
+    }
+  
+    
     alert.alertStyle = .warning
 
     if alert.runModal() == NSApplication.ModalResponse.alertSecondButtonReturn {
@@ -1229,7 +1321,12 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
     
     updateProgressIndicator(totalBytesRead)
     
-    statusMessage("Writing Variables - \(totalBytesRead) bytes")
+    if #available(macOS 12, *) {
+      statusMessage(String(localized: "Writing Variables - \(totalBytesRead) bytes"))
+    } 
+    else {
+      statusMessage("Writing Variables - \(totalBytesRead) bytes")
+    }
     
     state = .writingMemory
     
@@ -1241,7 +1338,12 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
     
     var title = node!.userNodeName == "" ? "\(node!.manufacturerName) - \(node!.nodeModelName)" : node!.userNodeName
     
-    title = "CDI: \(title) (\(node!.nodeId.toHexDotFormat(numberOfBytes: 6)))"
+    if #available(macOS 12, *) {
+      title = String(localized: "CDI: \(title) (\(node!.nodeId.toHexDotFormat(numberOfBytes: 6)))")
+    } 
+    else {
+      title = "CDI: \(title) (\(node!.nodeId.toHexDotFormat(numberOfBytes: 6)))"
+    }
 
     let x = ModalWindow.CDITextView
     let wc = x.windowController
@@ -1251,6 +1353,5 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
     vc.cdiInfo = cdiInfo
     wc.showWindow(nil)
   }
-
 
 }

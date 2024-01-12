@@ -552,76 +552,85 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
   
   @IBAction func btnDoneAction(_ sender: NSButton) {
     
-    item.blockType = BlockType.selected(comboBox: cboBlockType)
+    if let cboBlockType {
+      item.blockType = BlockType.selected(comboBox: cboBlockType)
+    }
     
     item.groupId = -1
     if cboGroupId.integerValue > 0 {
       item.groupId = cboGroupId.integerValue
     }
     
-    item.dirNextSpeedMaxAllowEdit = chkDNMaxUD.boolValue
-    item.dirNextSpeedStopExpectedAllowEdit = chkDNStopExpectedUD.boolValue
-    item.dirNextSpeedRestrictedAllowEdit = chkDNRestrictedUD.boolValue
-    item.dirNextSpeedBrakeAllowEdit = chkDNBrakeUD.boolValue
-    item.dirNextSpeedShuntAllowEdit = chkDNShuntUD.boolValue
-    
-    item.dirPreviousSpeedMaxAllowEdit = chkDPMaxUD.boolValue
-    item.dirPreviousSpeedStopExpectedAllowEdit = chkDPStopExpectedUD.boolValue
-    item.dirPreviousSpeedRestrictedAllowEdit = chkDPRestrictedUD.boolValue
-    item.dirPreviousSpeedBrakeAllowEdit = chkDPBrakeUD.boolValue
-    item.dirPreviousSpeedShuntAllowEdit = chkDPShuntUD.boolValue
-    
-    item.dirNextSpeedMax = txtDNMax.doubleValue
-    item.dirNextSpeedStopExpected = txtDNStopExpected.doubleValue
-    item.dirNextSpeedRestricted = txtDNRestricted.doubleValue
-    item.dirNextSpeedBrake = txtDNBrake.doubleValue
-    item.dirNextSpeedShunt = txtDNShunt.doubleValue
-    
-    item.dirPreviousSpeedMax = txtDPMax.doubleValue
-    item.dirPreviousSpeedStopExpected = txtDPStopExpected.doubleValue
-    item.dirPreviousSpeedRestricted = txtDPRestricted.doubleValue
-    item.dirPreviousSpeedBrake = txtDPBrake.doubleValue
-    item.dirPreviousSpeedShunt = txtDPShunt.doubleValue
-    
-    item.unitsSpeed = UnitSpeed.selected(comboBox: cboSpeedUnits)
-    
-    item.allowShunt = chkAllowShunt.boolValue
-    
-    item.blockDirection = BlockDirection.selected(comboBox: cboDirection)
+    if let chkDNMaxUD {
+      
+      item.dirNextSpeedMaxAllowEdit = chkDNMaxUD.boolValue
+      item.dirNextSpeedStopExpectedAllowEdit = chkDNStopExpectedUD.boolValue
+      item.dirNextSpeedRestrictedAllowEdit = chkDNRestrictedUD.boolValue
+      item.dirNextSpeedBrakeAllowEdit = chkDNBrakeUD.boolValue
+      item.dirNextSpeedShuntAllowEdit = chkDNShuntUD.boolValue
+      
+      item.dirPreviousSpeedMaxAllowEdit = chkDPMaxUD.boolValue
+      item.dirPreviousSpeedStopExpectedAllowEdit = chkDPStopExpectedUD.boolValue
+      item.dirPreviousSpeedRestrictedAllowEdit = chkDPRestrictedUD.boolValue
+      item.dirPreviousSpeedBrakeAllowEdit = chkDPBrakeUD.boolValue
+      item.dirPreviousSpeedShuntAllowEdit = chkDPShuntUD.boolValue
+      
+      item.dirNextSpeedMax = txtDNMax.doubleValue
+      item.dirNextSpeedStopExpected = txtDNStopExpected.doubleValue
+      item.dirNextSpeedRestricted = txtDNRestricted.doubleValue
+      item.dirNextSpeedBrake = txtDNBrake.doubleValue
+      item.dirNextSpeedShunt = txtDNShunt.doubleValue
+      
+      item.dirPreviousSpeedMax = txtDPMax.doubleValue
+      item.dirPreviousSpeedStopExpected = txtDPStopExpected.doubleValue
+      item.dirPreviousSpeedRestricted = txtDPRestricted.doubleValue
+      item.dirPreviousSpeedBrake = txtDPBrake.doubleValue
+      item.dirPreviousSpeedShunt = txtDPShunt.doubleValue
+      
+      item.unitsSpeed = UnitSpeed.selected(comboBox: cboSpeedUnits)
+
+      item.allowShunt = chkAllowShunt.boolValue
+      
+      item.blockDirection = BlockDirection.selected(comboBox: cboDirection)
+      
+    }
     
     item.blockName = txtName.stringValue
     
-    item.dirNextBrakePosition = txtDNBrakePosition.doubleValue
-    
-    item.dirNextStopPosition = txtDNStopPosition.doubleValue
-    
-    item.dirNextUnitsPosition = UnitLength.selected(comboBox: cboDNPositionUnits)
-    
-    item.dirPreviousBrakePosition = txtDPBrakePosition.doubleValue
-    
-    item.dirPreviousStopPosition = txtDPStopPosition.doubleValue
-    
-    item.dirPreviousUnitsPosition = UnitLength.selected(comboBox: cboDPPositionUnits)
-    
-    item.gradient = txtGradient.doubleValue
-    
-    item.isCritical = chkCriticalSection.boolValue
-    
-    item.isScenicSection = chkScenicSection.boolValue
-    
-    item.trackElectrificationType = TrackElectrificationType.selected(comboBox: cboTrackElectrificationType)
-    
-    item.trackGauge = TrackGauge.selected(comboBox: cboTrackGauge)
-    
-    item.unitsDimension = UnitLength.selected(comboBox: cboDimensionUnits)
-    
-    item.sensorPosition = txtGeneralSensorPosition.doubleValue
-    
-    item.sensorPositionUnits = UnitLength.selected(comboBox: cboPositionUnits)
-    
-    item.sw1TurnoutMotorType = TurnoutMotorType.selected(comboBox: cboTurnoutMotorType)
-    
-    item.sw2TurnoutMotorType = TurnoutMotorType.selected(comboBox: cboTurnoutMotorType2)
+    if let txtDNBrakePosition {
+      item.dirNextBrakePosition = txtDNBrakePosition.doubleValue
+      
+      item.dirNextStopPosition = txtDNStopPosition.doubleValue
+      
+      item.dirNextUnitsPosition = UnitLength.selected(comboBox: cboDNPositionUnits)
+      
+      item.dirPreviousBrakePosition = txtDPBrakePosition.doubleValue
+      
+      item.dirPreviousStopPosition = txtDPStopPosition.doubleValue
+      
+      item.dirPreviousUnitsPosition = UnitLength.selected(comboBox: cboDPPositionUnits)
+
+      item.gradient = txtGradient.doubleValue
+      
+      item.isCritical = chkCriticalSection.boolValue
+      
+      item.isScenicSection = chkScenicSection.boolValue
+      
+      item.trackElectrificationType = TrackElectrificationType.selected(comboBox: cboTrackElectrificationType)
+      
+      item.trackGauge = TrackGauge.selected(comboBox: cboTrackGauge)
+      
+      item.unitsDimension = UnitLength.selected(comboBox: cboDimensionUnits)
+      
+      item.sensorPosition = txtGeneralSensorPosition.doubleValue
+      
+      item.sensorPositionUnits = UnitLength.selected(comboBox: cboPositionUnits)
+      
+  //    item.sw1TurnoutMotorType = TurnoutMotorType.selected(comboBox: cboTurnoutMotorType)
+      
+  //    item.sw2TurnoutMotorType = TurnoutMotorType.selected(comboBox: cboTurnoutMotorType2)
+      
+    }
     
     item.location = (x: txtXPos.integerValue, y: txtYPos.integerValue)
     

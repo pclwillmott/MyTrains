@@ -858,7 +858,7 @@ public class SwitchBoardItem : EditorObject {
   }
   
   public func propertySheet() {
-    let x = ModalWindow.SwitchBoardItemPropertySheet
+/*    let x = ModalWindow.SwitchBoardItemPropertySheet
     let wc = x.windowController
     let vc = x.viewController(windowController: wc) as! SwitchBoardItemPropertySheetVC
     vc.switchBoardItem = self
@@ -866,6 +866,12 @@ public class SwitchBoardItem : EditorObject {
       NSApplication.shared.runModal(for: window)
       window.close()
     }
+ */
+    let x = ModalWindow.SwitchBoardItemPropertySheet
+    let wc = x.windowController
+    let vc = x.viewController(windowController: wc) as! SwitchBoardItemPropertySheetVC
+    vc.switchBoardItem = self
+    wc.showWindow(nil)
 
   }
   

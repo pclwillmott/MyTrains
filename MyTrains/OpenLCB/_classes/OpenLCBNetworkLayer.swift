@@ -68,6 +68,12 @@ public class OpenLCBNetworkLayer : NSObject {
             node = OpenLCBNodeRollingStockLocoNet(nodeId: newNodeId)
           case .digitraxBXP88Node:
             node = OpenLCBDigitraxBXP88Node(nodeId: newNodeId)
+          case .layoutNode:
+            node = LayoutNode(nodeId: newNodeId)
+          case .switchboardNode:
+            node = SwitchboardNode(nodeId: newNodeId)
+          case .switchboardItemNode:
+            node = SwitchboardItemNode(nodeId: newNodeId)
           }
           
           if let node {
@@ -205,6 +211,12 @@ public class OpenLCBNetworkLayer : NSObject {
     case .trainNode:
       break
     case .digitraxBXP88Node:
+      break
+    case .layoutNode:
+      break
+    case .switchboardNode:
+      break
+    case .switchboardItemNode:
       break
     }
     

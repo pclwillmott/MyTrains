@@ -22,28 +22,60 @@ public enum TrackGauge : Int {
   case tt         = 9
   case tt3        = 10
 
+  // MARK: Public Properties
+  
   public var title : String {
-    get {
-      return TrackGauge.titles[self.rawValue]
-    }
+    return TrackGauge.titles[self.rawValue]
   }
   
+  // MARK: Private Class Properties
+  
   private static let titles = [
-    "EM",
-    "N",
-    "O",
-    "O14",
-    "OO/HO",
-    "OOO",
-    "P4",
-    "S",
-    "Scale 7",
-    "TT",
-    "TT3",
+    String(localized: "EM", comment: "Used to indicate the track gauge"),
+    String(localized: "N", comment: "Used to indicate the track gauge"),
+    String(localized: "O", comment: "Used to indicate the track gauge"),
+    String(localized: "OO/HO", comment: "Used to indicate the track gauge"),
+    String(localized: "OOO", comment: "Used to indicate the track gauge"),
+    String(localized: "P4", comment: "Used to indicate the track gauge"),
+    String(localized: "S", comment: "Used to indicate the track gauge"),
+    String(localized: "Scale 7", comment: "Used to indicate the track gauge"),
+    String(localized: "TT", comment: "Used to indicate the track gauge"),
+    String(localized: "TT3", comment: "Used to indicate the track gauge"),
   ]
+  
+  private static var map : String {
+    
+    var items : [TrackGauge] = [
+      .em,
+      .n,
+      .o,
+      .ooho,
+      .ooo,
+      .p4,
+      .s,
+      .scaleSeven,
+      .tt,
+      .tt3,
+    ]
+    
+    var map = ""
+    
+    for item in items {
+      map += "<relation><property>\(item.rawValue)</property><value>\(item.title)</value></relation>\n"
+    }
+
+    return map
+    
+  }
+  
+  // MARK: Public Class Properties
   
   public static let defaultValue : TrackGauge = .ooho
 
+  public static let mapPlaceholder = "%%TRACK_GAUGE%%"
+
+  // MARK: Public Class Methods
+  
   public static func populate(comboBox: NSComboBox) {
     comboBox.removeAllItems()
     comboBox.addItems(withObjectValues: titles)
@@ -58,5 +90,9 @@ public enum TrackGauge : Int {
     return TrackGauge(rawValue: comboBox.indexOfSelectedItem) ?? defaultValue
   }
   
+  public static func insertMap(cdi:String) -> String {
+    return cdi.replacingOccurrences(of: mapPlaceholder, with: map)
+  }
+
 }
 

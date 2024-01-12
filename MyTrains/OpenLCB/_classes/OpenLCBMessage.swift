@@ -230,7 +230,7 @@ public class OpenLCBMessage : NSObject {
       while !data.isEmpty {
         let length = Int(data.removeFirst())
         if length > 0 , let blockType = OpenLCBStandardContentBlockType(rawValue: data.removeFirst()) {
-          var block : OpenLCBLocationServicesContentBlock = (blockType:blockType, content:[UInt8](data.prefix(length - 1)))
+          let block : OpenLCBLocationServicesContentBlock = (blockType:blockType, content:[UInt8](data.prefix(length - 1)))
           result.append(block)
           data.removeFirst(length - 1)
         }

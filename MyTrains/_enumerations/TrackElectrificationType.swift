@@ -11,22 +11,48 @@ import AppKit
 public enum TrackElectrificationType : Int {
   
   case notElectrified = 0
-  case thirdRail = 1
-  case overhead = 2
+  case thirdRail      = 1
+  case overhead       = 2
 
+  // MARK: Public Properties
+  
   public var title : String {
-    get {
-      return TrackElectrificationType.titles[self.rawValue]
-    }
+    return TrackElectrificationType.titles[self.rawValue]
   }
   
+  // MARK: Private Class Properties
+  
   private static let titles = [
-    "Not Electrified",
-    "Third Rail",
-    "Overhead"
+    String(localized: "Not Electrified", comment: "Used to indicate that the track is not electrified, i.e. only steam and diesels can use it"),
+    String(localized: "Third Rail", comment: "Used to indicate that the track models 3rd rail electrification"),
+    String(localized: "Overhead", comment: "Used to indicate that the track models overhead electrification"),
   ]
   
+  private static var map : String {
+    
+    var items : [TrackElectrificationType] = [
+      .notElectrified,
+      .thirdRail,
+      .overhead,
+    ]
+    
+    var map = ""
+    
+    for item in items {
+      map += "<relation><property>\(item.rawValue)</property><value>\(item.title)</value></relation>\n"
+    }
+
+    return map
+    
+  }
+  
+  // MARK: Public Class Properties
+  
   public static let defaultValue : TrackElectrificationType = .notElectrified
+  
+  public static let mapPlaceholder = "%%TRACK_ELECTRIFICATION_TYPE%%"
+
+  // MARK: Public Class Methods
   
   public static func populate(comboBox: NSComboBox) {
     comboBox.removeAllItems()
@@ -42,4 +68,8 @@ public enum TrackElectrificationType : Int {
     return TrackElectrificationType(rawValue: comboBox.indexOfSelectedItem) ?? defaultValue
   }
   
+  public static func insertMap(cdi:String) -> String {
+    return cdi.replacingOccurrences(of: mapPlaceholder, with: map)
+  }
+
 }

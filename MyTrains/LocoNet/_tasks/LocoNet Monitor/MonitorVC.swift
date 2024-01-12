@@ -430,7 +430,8 @@ class MonitorVC: NSViewController, NSWindowDelegate, OpenLCBLocoNetMonitorDelega
     dialog.canCreateDirectories      = true
     dialog.allowsMultipleSelection   = false
     dialog.canChooseFiles            = true
-    dialog.allowedFileTypes          = ["txt", "snd"]
+//    dialog.allowedFileTypes          = ["txt", "snd"]
+    dialog.allowedContentTypes       = [.text]
     dialog.allowsOtherFileTypes      = true
     
     if let url = sendURL {
@@ -487,7 +488,8 @@ class MonitorVC: NSViewController, NSWindowDelegate, OpenLCBLocoNetMonitorDelega
     dialog.showsResizeIndicator = true
     dialog.showsHiddenFiles     = false
     dialog.canCreateDirectories = true
-    dialog.allowedFileTypes     = ["txt", "cap"]
+//    dialog.allowedFileTypes     = ["txt", "cap"]
+    dialog.allowedContentTypes  = [.text]
     dialog.allowsOtherFileTypes = true
     
     if let url = captureURL {

@@ -68,11 +68,11 @@ public enum NumberBase : Int {
   // MARK: Class Private Properties
   
   private static let titles = [
-    "Decimal",
-    "Hex",
-    "Binary",
-    "Octal",
-    "Character",
+    String(localized: "Decimal", comment: "Used by combobox to select number base for display"),
+    String(localized: "Hex", comment: "Used by combobox to select number base for display"),
+    String(localized: "Binary", comment: "Used by combobox to select number base for display"),
+    String(localized: "Octal", comment: "Used by combobox to select number base for display"),
+    String(localized: "Character", comment: "Used by combobox to select option to display number as UTF8 character"),
   ]
   
   // MARK: Class Public Methods

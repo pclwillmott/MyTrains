@@ -11,8 +11,10 @@ import AppKit
 public enum FrogType : Int {
   
   case electroFrog = 0
-  case insulFrog = 1
-  case uniFrog = 2
+  case insulFrog   = 1
+  case uniFrog     = 2
+ 
+  // MARK: Public Properties
   
   public var title : String {
     get {
@@ -20,17 +22,39 @@ public enum FrogType : Int {
     }
   }
   
+  // MARK: Private Class Properties
+  
   private static let titles : [String] = [
-    "ElectroFrog",
-    "InsulFrog",
-    "UniFrog",
+    String(localized: "ElectroFrog", comment: "Used to indicate that a turnout has a powered frog"),
+    String(localized: "InsulFrog", comment: "Used to indicate that turnout has an insulated frog"),
+    String(localized: "UniFrog", comment: "Used to indicate that turnout can be configured to have a powered or insulated frog"),
   ]
   
-  public static var defaultValue : FrogType {
-    get {
-      return .insulFrog
+  private static var map : String {
+    
+    var items : [FrogType] = [
+      .electroFrog,
+      .insulFrog,
+      .uniFrog,
+    ]
+    
+    var map = ""
+    
+    for item in items {
+      map += "<relation><property>\(item.rawValue)</property><value>\(item.title)</value></relation>\n"
     }
+
+    return map
+    
   }
+
+  // MARK: Public Class Properties
+  
+  public static let defaultValue : FrogType = .insulFrog
+  
+  public static let mapPlaceholder = "%%FROG_TYPE%%"
+
+  // MARK: Public Class Methods
   
   public static func populate(comboBox:NSComboBox) {
     comboBox.removeAllItems()
@@ -46,4 +70,8 @@ public enum FrogType : Int {
     return FrogType(rawValue: comboBox.indexOfSelectedItem) ?? defaultValue
   }
   
+  public static func insertMap(cdi:String) -> String {
+    return cdi.replacingOccurrences(of: mapPlaceholder, with: map)
+  }
+
 }

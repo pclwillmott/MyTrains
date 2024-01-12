@@ -8,7 +8,7 @@
 import Foundation
 import AppKit
 
-public enum DayOfWeek : Int {
+public enum xDayOfWeek : Int {
   
   case monday = 0
   case tuesday = 1
@@ -20,7 +20,7 @@ public enum DayOfWeek : Int {
 
   public var title : String {
     get {
-      return DayOfWeek.titles[self.rawValue]
+      return xDayOfWeek.titles[self.rawValue]
     }
   }
   
@@ -34,7 +34,7 @@ public enum DayOfWeek : Int {
     "Sunday",
   ]
   
-  public static let defaultValue : DayOfWeek = .monday
+  public static let defaultValue : xDayOfWeek = .monday
   
   public static func populate(comboBox:NSComboBox) {
     comboBox.removeAllItems()
@@ -42,12 +42,12 @@ public enum DayOfWeek : Int {
     select(comboBox: comboBox, value: defaultValue)
   }
   
-  public static func select(comboBox:NSComboBox, value:DayOfWeek) {
+  public static func select(comboBox:NSComboBox, value:xDayOfWeek) {
     comboBox.selectItem(at: value.rawValue)
   }
   
-  public static func selected(comboBox:NSComboBox) -> DayOfWeek {
-    return DayOfWeek(rawValue: comboBox.indexOfSelectedItem) ?? .defaultValue
+  public static func selected(comboBox:NSComboBox) -> xDayOfWeek {
+    return xDayOfWeek(rawValue: comboBox.indexOfSelectedItem) ?? .defaultValue
   }
   
 }

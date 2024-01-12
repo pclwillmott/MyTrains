@@ -299,7 +299,10 @@ public class LocoNetMessage : NSObject {
   }
   
   public var swState : OptionSwitchState? {
-    return nil
+    guard messageType == .swState else {
+      return nil
+    }
+    return (message[2] & 0b00110000) == 0b00110000 ? .closed : .thrown
   }
   
   public var dccAddressPartition : DCCAddressPartition? {

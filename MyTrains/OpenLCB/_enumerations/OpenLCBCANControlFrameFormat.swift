@@ -23,6 +23,8 @@ public enum OpenLCBCANControlFrameFormat : UInt16 {
   case checkId5Frame            = 0x5000
   case checkId4Frame            = 0x4000
 
+  // MARK: Public Properties
+  
   public var isCheckIdFrame : Bool {
     get {
       return (self.rawValue & 0x7000) != 0 && self != .unknown

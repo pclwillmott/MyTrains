@@ -19,17 +19,15 @@ public enum SpeedSteps : UInt8 {
   case trinaryFX  = 0b101 // 5
   case dcc14FX    = 0b110 // 6
   case dcc128FX   = 0b111 // 7
+
+  // MARK: Public Properties
   
   public static var protectMask : UInt8 {
-    get {
-      return 0b11111000
-    }
+    return 0b11111000
   }
   
   public var setMask : UInt8 {
-    get {
-      return self.rawValue
-    }
+    return self.rawValue
   }
   
   public func opsw(locoNetDeviceId:LocoNetDeviceId) -> Int {
@@ -47,23 +45,27 @@ public enum SpeedSteps : UInt8 {
   }
 
   public var title : String {
-    get {
-      return SpeedSteps.titles[Int(self.rawValue)]
-    }
+    return SpeedSteps.titles[Int(self.rawValue)]
   }
   
+  // MARK: Private Class Properties
+  
   private static let titles = [
-    "DCC 28",
-    "Motorola Trinary",
-    "DCC 14",
-    "DCC 128",
-    "DCC 28 FX",
-    "Reserved 1",
-    "Reserved 2",
-    "DCC 128 FX",
+    String(localized: "DCC 28", comment: "Used for LocoNet train control protocol selection"),
+    String(localized: "Motorola Trinary", comment: "Used for LocoNet train control protocol selection"),
+    String(localized: "DCC 14", comment: "Used for LocoNet train control protocol selection"),
+    String(localized: "DCC 128", comment: "Used for LocoNet train control protocol selection"),
+    String(localized: "DCC 28 FX", comment: "Used for LocoNet train control protocol selection"),
+    String(localized: "Reserved 1", comment: "Used for LocoNet train control protocol selection"),
+    String(localized: "Reserved 2", comment: "Used for LocoNet train control protocol selection"),
+    String(localized: "DCC 128 FX", comment: "Used for LocoNet train control protocol selection"),
   ]
   
+  // MARK: Public Class Properties
+  
   public static let defaultValue : SpeedSteps = .dcc128
+  
+  // MARK: Public Class Methods
   
   public static func populate(comboBox:NSComboBox) {
     comboBox.removeAllItems()

@@ -230,6 +230,12 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBConfiguration
       break
     case .digitraxBXP88Node:
       node = OpenLCBDigitraxBXP88Node(nodeId: newNodeId)
+    case .layoutNode:
+      node = LayoutNode(nodeId: newNodeId)
+    case .switchboardNode:
+      node = SwitchboardNode(nodeId: newNodeId)
+    case .switchboardItemNode:
+      node = SwitchboardItemNode(nodeId: newNodeId)
     }
 
     if let node {

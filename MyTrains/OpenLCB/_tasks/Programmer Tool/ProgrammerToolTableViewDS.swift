@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Cocoa
+import AppKit
 
 public class ProgrammerToolTableViewDS : NSObject, NSTableViewDataSource, NSTableViewDelegate {
 

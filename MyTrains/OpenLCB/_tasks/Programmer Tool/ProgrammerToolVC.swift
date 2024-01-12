@@ -201,7 +201,8 @@ class ProgrammerToolVC : NSViewController, NSWindowDelegate, OpenLCBProgrammerTo
       panel.canChooseDirectories = false
       panel.canChooseFiles = true
       panel.allowsOtherFileTypes = true
-      panel.allowedFileTypes = ["csv"]
+  //    panel.allowedFileTypes = ["csv"]
+      panel.allowedContentTypes = [.csv]
       
       if (panel.runModal() == .OK) {
         
@@ -244,7 +245,8 @@ class ProgrammerToolVC : NSViewController, NSWindowDelegate, OpenLCBProgrammerTo
 
       panel.canCreateDirectories = true
       
-      panel.allowedFileTypes = ["csv"]
+    //  panel.allowedFileTypes = ["csv"]
+      panel.allowedContentTypes = [.csv]
       
       if (panel.runModal() == .OK) {
         

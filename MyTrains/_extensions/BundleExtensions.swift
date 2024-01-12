@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UniformTypeIdentifiers
 
 extension Bundle {
     var releaseVersionNumber: String? {
@@ -17,5 +18,10 @@ extension Bundle {
     var releaseVersionNumberPretty: String {
         return "v\(releaseVersionNumber ?? "1.0.0")"
     }
+}
+
+extension UTType {
+  public static let dmf = UTType(importedAs: "dmf")
+  public static let csv = UTType(importedAs: "csv")
 }
 

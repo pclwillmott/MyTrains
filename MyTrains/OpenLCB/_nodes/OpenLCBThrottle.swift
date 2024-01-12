@@ -210,7 +210,7 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
     acdiManufacturerSpaceVersion = 4
     
     manufacturerName    = virtualNodeType.manufacturerName
-    nodeModelName       = virtualNodeType.name
+    nodeModelName       = virtualNodeType.title
     nodeHardwareVersion = "\(Bundle.main.releaseVersionNumberPretty)"
     nodeSoftwareVersion = "\(Bundle.main.releaseVersionNumberPretty)"
 

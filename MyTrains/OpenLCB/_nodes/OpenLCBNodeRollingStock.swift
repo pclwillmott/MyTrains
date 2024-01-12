@@ -383,7 +383,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     acdiManufacturerSpaceVersion = 4
     
     manufacturerName     = virtualNodeType.manufacturerName
-    nodeModelName        = virtualNodeType.name
+    nodeModelName        = virtualNodeType.title
     nodeHardwareVersion = "\(Bundle.main.releaseVersionNumberPretty)"
     nodeSoftwareVersion = "\(Bundle.main.releaseVersionNumberPretty)"
 
@@ -1293,7 +1293,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
       return nil
     }
     
-    var result : UInt64 = 0x0a0000000000 | UInt64(address)
+    var result : UInt64 = 0x060100000000 | UInt64(address)
     
     if address > 127 {
       result += 0xc000

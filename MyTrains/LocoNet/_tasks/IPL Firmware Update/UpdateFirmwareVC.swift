@@ -351,7 +351,8 @@ class UpdateFirmwareVC: NSViewController, NSWindowDelegate, DMFDelegate {
     dialog.canCreateDirectories      = true
     dialog.allowsMultipleSelection   = false
     dialog.canChooseFiles            = true
-    dialog.allowedFileTypes          = ["dmf"]
+//    dialog.allowedFileTypes          = ["dmf"]
+    dialog.allowedContentTypes       = [.dmf]
     dialog.allowsOtherFileTypes      = true
     
     if let url = dmfURL {

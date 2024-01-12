@@ -10,25 +10,49 @@ import AppKit
 
 public enum TurnoutMotorType : Int {
   
-  case manual = 0
+  case manual     = 0
   case slowMotion = 1
-  case solenoid = 2
+  case solenoid   = 2
+
+  // MARK: Public Properties
   
   public var title : String {
-    get {
-      return TurnoutMotorType.titles[self.rawValue]
-    }
+    return TurnoutMotorType.titles[self.rawValue]
   }
   
+  // MARK: Private Class Properties
+  
   private static let titles = [
-    "Manual",
-    "Slow Motion",
-    "Solenoid",
+    String(localized: "Manual", comment: "Used to indicate turnout motor type"),
+    String(localized: "Slow Motion", comment: "Used to indicate turnout motor type"),
+    String(localized: "Solenoid", comment: "Used to indicate turnout motor type"),
   ]
 
-  private static let sequence : [TurnoutMotorType] = [.manual, .slowMotion, .solenoid]
+  private static var map : String {
+    
+    var items : [TurnoutMotorType] = [
+      .manual,
+      .slowMotion,
+      .solenoid,
+    ]
+    
+    var map = ""
+    
+    for item in items {
+      map += "<relation><property>\(item.rawValue)</property><value>\(item.title)</value></relation>\n"
+    }
+
+    return map
+    
+  }
+  
+  // MARK: Public Class Properties
   
   public static let defaultValue : TurnoutMotorType = .manual
+  
+  public static let mapPlaceholder = "%%TURNOUT_MOTOR_TYPE%%"
+
+  // MARK: Public Class Methods
   
   public static func populate(comboBox: NSComboBox) {
     comboBox.removeAllItems()
@@ -55,13 +79,19 @@ public enum TurnoutMotorType : Int {
     }
   }
   
-  public static func selected(comboBox: NSComboBox) -> TurnoutMotorType {
-    for value in sequence {
-      if comboBox.stringValue == value.title {
-        return value
+  public static func selected(comboBox: NSComboBox) -> TurnoutMotorType? {
+    var index = 0
+    while index < titles.count {
+      if comboBox.stringValue == titles[index] {
+        return TurnoutMotorType(rawValue: index)
       }
+      index += 1
     }
-    return .manual
+    return nil
+  }
+
+  public static func insertMap(cdi:String) -> String {
+    return cdi.replacingOccurrences(of: mapPlaceholder, with: map)
   }
 
 }

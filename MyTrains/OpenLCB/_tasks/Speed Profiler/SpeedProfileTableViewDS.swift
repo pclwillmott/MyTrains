@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Cocoa
+import AppKit
 
 public class SpeedProfileTableViewDS : NSObject, NSTableViewDataSource, NSTableViewDelegate {
 

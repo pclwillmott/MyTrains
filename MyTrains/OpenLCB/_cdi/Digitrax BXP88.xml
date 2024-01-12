@@ -157,7 +157,7 @@
 
 <group replication='8'>
 <name>Detection Sections</name>
-<repname>Detection Section</repname>
+<repname>Section</repname>
 
 <int size='1'>
 <name>Occupancy Detection</name>

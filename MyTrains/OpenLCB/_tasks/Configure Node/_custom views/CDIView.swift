@@ -14,7 +14,7 @@ class CDIView: NSView {
   
   override func draw(_ dirtyRect: NSRect) {
     
-    var path = NSBezierPath()
+    let path = NSBezierPath()
     
     path.appendRect(bounds)
     

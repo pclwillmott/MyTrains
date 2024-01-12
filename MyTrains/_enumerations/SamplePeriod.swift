@@ -23,10 +23,10 @@ public enum SamplePeriod : Int {
   case sec55 = 10
   case sec60 = 11
 
+  // MARK: Public Properties
+  
   public var title : String {
-    get {
-      return SamplePeriod.titles[self.rawValue]
-    }
+    return SamplePeriod.titles[self.rawValue]
   }
   
   public var samplePeriod : TimeInterval {
@@ -35,22 +35,57 @@ public enum SamplePeriod : Int {
     }
   }
   
+  // MARK: Private Class Properties
+  
   private static let titles = [
-    "5 seconds",
-    "10 seconds",
-    "15 seconds",
-    "20 seconds",
-    "25 seconds",
-    "30 seconds",
-    "35 seconds",
-    "40 seconds",
-    "45 seconds",
-    "50 seconds",
-    "55 seconds",
-    "1 minute",
+    String(localized: "5 seconds", comment: "Used to select a sampling period"),
+    String(localized: "10 seconds", comment: "Used to select a sampling period"),
+    String(localized: "15 seconds", comment: "Used to select a sampling period"),
+    String(localized: "20 seconds", comment: "Used to select a sampling period"),
+    String(localized: "25 seconds", comment: "Used to select a sampling period"),
+    String(localized: "30 seconds", comment: "Used to select a sampling period"),
+    String(localized: "35 seconds", comment: "Used to select a sampling period"),
+    String(localized: "40 seconds", comment: "Used to select a sampling period"),
+    String(localized: "45 seconds", comment: "Used to select a sampling period"),
+    String(localized: "50 seconds", comment: "Used to select a sampling period"),
+    String(localized: "55 seconds", comment: "Used to select a sampling period"),
+    String(localized: "1 minute", comment: "Used to select a sampling period"),
   ]
   
+  private static var map : String {
+    
+    var items : [SamplePeriod] = [
+      .sec5,
+      .sec10,
+      .sec15,
+      .sec20,
+      .sec25,
+      .sec30,
+      .sec35,
+      .sec40,
+      .sec45,
+      .sec50,
+      .sec55,
+      .sec60,
+    ]
+    
+    var map = ""
+    
+    for item in items {
+      map += "<relation><property>\(item.rawValue)</property><value>\(item.title)</value></relation>\n"
+    }
+
+    return map
+    
+  }
+
+  // MARK: Public Class Properties
+  
   public static let defaultValue : SamplePeriod = .sec15
+  
+  public static let mapPlaceholder = "%%SAMPLE_PERIOD%%"
+
+  // MARK: Public Class Methods
   
   public static func populate(comboBox:NSComboBox) {
     comboBox.removeAllItems()
@@ -66,4 +101,8 @@ public enum SamplePeriod : Int {
     return SamplePeriod(rawValue: comboBox.indexOfSelectedItem) ?? defaultValue
   }
   
+  public static func insertMap(cdi:String) -> String {
+    return cdi.replacingOccurrences(of: mapPlaceholder, with: map)
+  }
+
 }

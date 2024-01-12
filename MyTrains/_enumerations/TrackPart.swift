@@ -23,6 +23,7 @@ import Foundation
 public typealias TrackPartInfo = (trackPartId:TrackPart, manufacturer:Manufacturer, brandName:String, title: String, partNumber: String, itemPartType: SwitchBoardItemPartType, trackCode: TrackCode, trackGauge: TrackGauge, frogType:FrogType, dimensions: [Double])
 
 public enum TrackPart : Int {
+  
   case pecoStreamlineOOHOCode100CatchPointRightHand = 0
   case pecoStreamlineOOHOCode100CatchPointLeftHand = 1
   case pecoStreamlineOOHOCode100SmallRadiusTurnoutRightHand = 2
@@ -92,13 +93,13 @@ public enum TrackPart : Int {
   
   case custom = 9999
   
+  // MARK: Public Properties
+  
   public var title : String {
-    get {
-      if let info = partInfo {
-        return "\(info.brandName) \(info.trackGauge.title) \(info.trackCode.title) \(info.title) \(info.frogType.title) (\(info.partNumber))"
-      }
-      return "(Custom Dimensions)"
+    if let info = partInfo {
+      return "\(info.brandName) \(info.trackGauge.title) \(info.trackCode.title) \(info.title) \(info.frogType.title) (\(info.partNumber))"
     }
+    return "(Custom Dimensions)"
   }
   
   public var partInfo : TrackPartInfo? {
@@ -108,24 +109,7 @@ public enum TrackPart : Int {
     return TrackPart.info[self.rawValue]
   }
   
-  // MARK: Class Methods
-  
-  public static func dictionary(itemPartType:SwitchBoardItemPartType, trackGauge:TrackGauge) -> [Int:TrackPartEditorObject] {
-    
-    var result : [Int:TrackPartEditorObject] = [:]
-    
-    for part in info {
-      if part.trackPartId == .custom || (part.itemPartType == itemPartType && part.trackGauge == trackGauge) {
-        let editorObject = TrackPartEditorObject(trackPart: part.trackPartId)
-        result[editorObject.primaryKey] = editorObject
-      }
-    }
-    let editorObject = TrackPartEditorObject(trackPart: .custom)
-    result[editorObject.primaryKey] = editorObject
-    
-    return result
-    
-  }
+  // MARK: Private Class Properties
   
   private static let info : [TrackPartInfo] = [
     
@@ -856,6 +840,25 @@ public enum TrackPart : Int {
      dimensions: [16.8, 16.8]),
 
   ]
+  
+  // MARK: Public Class Methods
+  
+  public static func dictionary(itemPartType:SwitchBoardItemPartType, trackGauge:TrackGauge) -> [Int:TrackPartEditorObject] {
+    
+    var result : [Int:TrackPartEditorObject] = [:]
+    
+    for part in info {
+      if part.trackPartId == .custom || (part.itemPartType == itemPartType && part.trackGauge == trackGauge) {
+        let editorObject = TrackPartEditorObject(trackPart: part.trackPartId)
+        result[editorObject.primaryKey] = editorObject
+      }
+    }
+    let editorObject = TrackPartEditorObject(trackPart: .custom)
+    result[editorObject.primaryKey] = editorObject
+    
+    return result
+    
+  }
   
 }
 

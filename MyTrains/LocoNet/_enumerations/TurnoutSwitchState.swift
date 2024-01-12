@@ -15,20 +15,26 @@ public enum TurnoutSwitchState : Int {
   case closed  = 1
   case unknown = 2
 
+  // MARK: Public Properties
+  
   public var title : String {
-    get {
-      return TurnoutSwitchState.titles[self.rawValue]
-    }
+    return TurnoutSwitchState.titles[self.rawValue]
   }
   
+  // MARK: Private Class Properties
+  
   private static let titles = [
-    "Thrown",
-    "Closed",
-    "Unknown",
+    String(localized: "Thrown", comment: "Used to indicate the state of a turnout"),
+    String(localized: "Closed", comment: "Used to indicate the state of a turnout"),
+    String(localized: "Unknown", comment: "Used to indicate the state of a turnout"),
   ]
+  
+  // MARK: Public Class Properties
   
   public static let defaultValue : TurnoutSwitchState = .unknown
 
+  // MARK: Public Class Methods
+  
   public static func populate(comboBox: NSComboBox) {
     comboBox.removeAllItems()
     comboBox.addItems(withObjectValues: titles)

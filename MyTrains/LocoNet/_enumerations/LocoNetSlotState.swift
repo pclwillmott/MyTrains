@@ -14,19 +14,12 @@ public enum LocoNetSlotState : UInt8 {
   case idle   = 0b00100000
   case inUse  = 0b00110000
 
+  // MARK: Public Properties
+  
   public var title : String {
-    get {
-      return LocoNetSlotState.titles[Int(self.rawValue)]
-    }
+    return LocoNetSlotState.titles[Int(self.rawValue >> 4)]
   }
-  
-  private static let titles = [
-    "Free",
-    "Common",
-    "Idle",
-    "In Use",
-  ]
-  
+
   public var setMask : UInt8 {
     get {
       return self.rawValue
@@ -39,5 +32,14 @@ public enum LocoNetSlotState : UInt8 {
     }
   }
 
+  // MARK: Private Class Properties
+  
+  private static let titles = [
+    String(localized: "Free", comment: "Used to indicate a LocoNet command station slot status"),
+    String(localized: "Common", comment: "Used to indicate a LocoNet command station slot status"),
+    String(localized: "Idle", comment: "Used to indicate a LocoNet command station slot status"),
+    String(localized: "In Use", comment: "Used to indicate a LocoNet command station slot status"),
+  ]
+  
 }
 

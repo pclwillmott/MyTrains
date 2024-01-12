@@ -1,0 +1,800 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%@ #%llu" : {
+      "comment" : "Used to create a default virtual node name. The first parameter is the name, and the second is the number. e.g. CAN Gateway #2",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ #%2$llu"
+          }
+        }
+      }
+    },
+    "%lld bytes %@" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%1$lld byte %2$@"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "new",
+                  "value" : "%1$lld bytes %2$@"
+                }
+              }
+            }
+          }
+        },
+        "en-GB" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%1$lld byte %2$@"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "new",
+                  "value" : "%1$lld bytes %2$@"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "0°" : {
+      "comment" : "Used to indicate a rotation angle in degrees"
+    },
+    "1 minute" : {
+      "comment" : "Used to select a sampling period"
+    },
+    "1:%lf" : {
+      "comment" : "This is a ratio used for layout scale, e.g. 1:76.2"
+    },
+    "5 seconds" : {
+      "comment" : "Used to select a sampling period"
+    },
+    "10 seconds" : {
+      "comment" : "Used to select a sampling period"
+    },
+    "15 seconds" : {
+      "comment" : "Used to select a sampling period"
+    },
+    "20 seconds" : {
+      "comment" : "Used to select a sampling period"
+    },
+    "25 seconds" : {
+      "comment" : "Used to select a sampling period"
+    },
+    "30 seconds" : {
+      "comment" : "Used to select a sampling period"
+    },
+    "35 seconds" : {
+      "comment" : "Used to select a sampling period"
+    },
+    "40 seconds" : {
+      "comment" : "Used to select a sampling period"
+    },
+    "45 seconds" : {
+      "comment" : "Used to select a sampling period"
+    },
+    "45°" : {
+      "comment" : "Used to indicate a rotation angle in degrees"
+    },
+    "50 seconds" : {
+      "comment" : "Used to select a sampling period"
+    },
+    "55 seconds" : {
+      "comment" : "Used to select a sampling period"
+    },
+    "90°" : {
+      "comment" : "Used to indicate a rotation angle in degrees"
+    },
+    "135°" : {
+      "comment" : "Used to indicate a rotation angle in degrees"
+    },
+    "180°" : {
+      "comment" : "Used to indicate a rotation angle in degrees"
+    },
+    "225°" : {
+      "comment" : "Used to indicate a rotation angle in degrees"
+    },
+    "270°" : {
+      "comment" : "Used to indicate a rotation angle in degrees"
+    },
+    "315°" : {
+      "comment" : "Used to indicate a rotation angle in degrees"
+    },
+    "ACDI" : {
+
+    },
+    "Air Build Up" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Air Compressor" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Air Dump" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Air Pump" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Alternate Clock 1" : {
+      "comment" : "Used to indicate a clock's type"
+    },
+    "Alternate Clock 2" : {
+      "comment" : "Used to indicate a clock's type"
+    },
+    "Announce" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Application" : {
+      "comment" : "Used to create a default OpenLCB virtual name"
+    },
+    "Application Node" : {
+      "comment" : "Used to describe an OpenLCB virtual node"
+    },
+    "Are you sure that you wish to reset this node to factory defaults?" : {
+
+    },
+    "Ash Dump" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Auto Uncouple Cycle" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "AWS Bell" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "AWS Horn" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Bell" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Bidirectional" : {
+      "comment" : "Used by combobox to indicate that trains can travel in both directions in the track block"
+    },
+    "Binary" : {
+      "comment" : "Used by combobox to select number base for display"
+    },
+    "Blow Down" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Blower" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Brake" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Brake Release" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Brake Squeal" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Cab Chatter" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Cab Light" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "CAN Gateway" : {
+      "comment" : "Used to create a default OpenLCB virtual name"
+    },
+    "CAN Gateway Node" : {
+      "comment" : "Used to describe an OpenLCB virtual node"
+    },
+    "CDI: %@ (%@)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "CDI: %1$@ (%2$@)"
+          }
+        }
+      }
+    },
+    "Character" : {
+      "comment" : "Used by combobox to select option to display number as UTF8 character"
+    },
+    "Closed" : {
+      "comment" : "Used to indicate the state of a turnout"
+    },
+    "Coasting" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Code 55" : {
+      "comment" : "Used to indicate the track code"
+    },
+    "Code 60" : {
+      "comment" : "Used to indicate the track code"
+    },
+    "Code 70" : {
+      "comment" : "Used to indicate the track code"
+    },
+    "Code 75" : {
+      "comment" : "Used to indicate the track code"
+    },
+    "Code 80" : {
+      "comment" : "Used to indicate the track code"
+    },
+    "Code 83" : {
+      "comment" : "Used to indicate the track code"
+    },
+    "Code 100" : {
+      "comment" : "Used to indicate the track code"
+    },
+    "Code 124" : {
+      "comment" : "Used to indicate the track code"
+    },
+    "Code 143" : {
+      "comment" : "Used to indicate the track code"
+    },
+    "Code 200" : {
+      "comment" : "Used to indicate the track code"
+    },
+    "Code 250" : {
+      "comment" : "Used to indicate the track code"
+    },
+    "Common" : {
+      "comment" : "Used to indicate a LocoNet command station slot status"
+    },
+    "Computer Data & Time" : {
+      "comment" : "Used to indicate what is the initial date and time setting for a clock"
+    },
+    "Configuration Tool" : {
+      "comment" : "Used to create a default OpenLCB virtual name"
+    },
+    "Configuration Tool Node" : {
+      "comment" : "Used to describe an OpenLCB virtual node"
+    },
+    "Configure %@ (%@)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Configure %1$@ (%2$@)"
+          }
+        }
+      }
+    },
+    "Couple" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Coupler Clank" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Curve Squeal" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Custom Clock" : {
+      "comment" : "Used to indicate a clock's type"
+    },
+    "DCC 14" : {
+      "comment" : "Used for LocoNet train control protocol selection"
+    },
+    "DCC 28" : {
+      "comment" : "Used for LocoNet train control protocol selection"
+    },
+    "DCC 28 FX" : {
+      "comment" : "Used for LocoNet train control protocol selection"
+    },
+    "DCC 128" : {
+      "comment" : "Used for LocoNet train control protocol selection"
+    },
+    "DCC 128 FX" : {
+      "comment" : "Used for LocoNet train control protocol selection"
+    },
+    "DCC Programmer Tool" : {
+      "comment" : "Used to create a default OpenLCB virtual name"
+    },
+    "DCC Programmer Tool Node" : {
+      "comment" : "Used to describe an OpenLCB virtual node"
+    },
+    "DCC Programming Track" : {
+      "comment" : "Used to create a default OpenLCB virtual name"
+    },
+    "DCC Programming Track Node" : {
+      "comment" : "Used to describe an OpenLCB virtual node"
+    },
+    "Decimal" : {
+      "comment" : "Used by combobox to select number base for display"
+    },
+    "Decoding CDI and building user interface" : {
+
+    },
+    "Default Data & Time" : {
+      "comment" : "Used to indicate what is the initial date and time setting for a clock"
+    },
+    "Destination Blind Front" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Destination Blind Rear" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Diesel" : {
+      "comment" : "Used to indicate that a locomotive is diesel powered"
+    },
+    "Digitrax BXP88" : {
+      "comment" : "Used to create a default OpenLCB virtual name"
+    },
+    "Digitrax BXP88 Node" : {
+      "comment" : "Used to describe an OpenLCB virtual node"
+    },
+    "Dimmer" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Ditch Lights" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Doppler Horn" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Drive Hold" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Driver's Door" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Dynamic Brake" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Electric (Overhead)" : {
+      "comment" : "Used to indicate that a locomotive is electric powered by overhead cables"
+    },
+    "Electric (Third Rail)" : {
+      "comment" : "Used to indicate that a locomotive is electric powered by a third rail"
+    },
+    "Electro-diesel" : {
+      "comment" : "Used to indicate that a locomotive is can be powered by diesel or electric power"
+    },
+    "ElectroFrog" : {
+      "comment" : "Used to indicate that a turnout has a powered frog"
+    },
+    "EM" : {
+      "comment" : "Used to indicate the track gauge"
+    },
+    "Engine" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Error" : {
+
+    },
+    "Even Parity" : {
+      "comment" : "Used to indicate that the serial port is configured for even parity"
+    },
+    "Exhaust Fan" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Fan Operation" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Far Light" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Fast Clock" : {
+      "comment" : "Used to indicate a clock's type"
+    },
+    "Flange Squeal" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Forward" : {
+      "comment" : "Used to indicate that the train is moving in the forward direction"
+    },
+    "Free" : {
+      "comment" : "Used to indicate a LocoNet command station slot status"
+    },
+    "Generic Virtual" : {
+      "comment" : "Used to create a default OpenLCB virtual name"
+    },
+    "Generic Virtual Node" : {
+      "comment" : "Used to describe an OpenLCB virtual node"
+    },
+    "Getting CDI" : {
+
+    },
+    "Guard's Whistle" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Headlight" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Heavy Load" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Hex" : {
+      "comment" : "Used by combobox to select number base for display"
+    },
+    "Horn" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Identification" : {
+
+    },
+    "Idle" : {
+      "comment" : "Used to indicate a LocoNet command station slot status"
+    },
+    "In Use" : {
+      "comment" : "Used to indicate a LocoNet command station slot status"
+    },
+    "Injector" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "InsulFrog" : {
+      "comment" : "Used to indicate that turnout has an insulated frog"
+    },
+    "Interior Lights" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Layout" : {
+      "comment" : "Used to create a default OpenLCB virtual name"
+    },
+    "Layout Node" : {
+      "comment" : "Used to describe an OpenLCB virtual node"
+    },
+    "Light" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Lights Off Front" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Lights Off Rear" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "LocoNet Monitor" : {
+      "comment" : "Used to create a default OpenLCB virtual name"
+    },
+    "LocoNet Monitor Node" : {
+      "comment" : "Used to describe an OpenLCB virtual node"
+    },
+    "Long Whistle" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Machine Room Lights" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Manual" : {
+      "comment" : "Used to indicate turnout motor type"
+    },
+    "Manual Notch Down" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Manual Notch Up" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Manual Notching Logic" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Master" : {
+      "comment" : "Used to indicate a clock's operating mode"
+    },
+    "Maximum Revs" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Momentum" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Motorola Trinary" : {
+      "comment" : "Used for LocoNet train control protocol selection"
+    },
+    "Moving Average" : {
+      "comment" : "Used by combobox to select curve fitting method)"
+    },
+    "Mute" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "N" : {
+      "comment" : "Used to indicate the track gauge"
+    },
+    "Next" : {
+      "comment" : "Used to describe the direction of the next block in respect of a train route"
+    },
+    "No" : {
+
+    },
+    "No Flow Control" : {
+      "comment" : "Used to indicate that serial port does not use hardware flow control"
+    },
+    "No Parity" : {
+      "comment" : "Used to indicate that the serial port is configured for no parity bit"
+    },
+    "Not Electrified" : {
+      "comment" : "Used to indicate that the track is not electrified, i.e. only steam and diesels can use it"
+    },
+    "O" : {
+      "comment" : "Used to indicate the track gauge"
+    },
+    "Octal" : {
+      "comment" : "Used by combobox to select number base for display"
+    },
+    "Odd Parity" : {
+      "comment" : "Used to indicate that the serial port is configured for odd parity"
+    },
+    "OK" : {
+
+    },
+    "OO/HO" : {
+      "comment" : "Used to indicate the track gauge"
+    },
+    "OOO" : {
+      "comment" : "Used to indicate the track gauge"
+    },
+    "Overhead" : {
+      "comment" : "Used to indicate that the track models overhead electrification"
+    },
+    "P4" : {
+      "comment" : "Used to indicate the track gauge"
+    },
+    "Pantograph" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Passenger Door Slams" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Previous" : {
+      "comment" : "Used to describe the direction of the previous block in respect of a train route"
+    },
+    "Radiator Fan" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Rail Joints" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Reading Configuration Description Information - %lld bytes" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Reading Configuration Description Information - %lld byte"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "new",
+                  "value" : "Reading Configuration Description Information - %lld bytes"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Reading Variables - %lld bytes" : {
+      "localizations" : {
+        "en-GB" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Reading Variables - %lld byte"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "new",
+                  "value" : "Reading Variables - %lld bytes"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Real Time Clock" : {
+      "comment" : "Used to indicate a clock's type"
+    },
+    "Reboot" : {
+
+    },
+    "Refresh All" : {
+
+    },
+    "Reserved 1" : {
+      "comment" : "Used for LocoNet train control protocol selection"
+    },
+    "Reserved 2" : {
+      "comment" : "Used for LocoNet train control protocol selection"
+    },
+    "Reset to Defaults" : {
+
+    },
+    "Reverse" : {
+      "comment" : "Used to indicate that the train is moving in the reverse direction"
+    },
+    "Reverser" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "RTS/CTS" : {
+      "comment" : "Used to indicate that serial port uses the RTS/CTS lines for hardware flow control"
+    },
+    "S" : {
+      "comment" : "Used to indicate the track gauge"
+    },
+    "Safety" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Sanding" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Scale 7" : {
+      "comment" : "Used to indicate the track gauge"
+    },
+    "Short Whistle" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Shoveling" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Show CDI Text" : {
+
+    },
+    "Shunting Mode" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Slave" : {
+      "comment" : "Used to indicate a clock's operating mode"
+    },
+    "Slow Motion" : {
+      "comment" : "Used to indicate turnout motor type"
+    },
+    "Smoke" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Solenoid" : {
+      "comment" : "Used to indicate turnout motor type"
+    },
+    "Sound Enable" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Sound Fade" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Spirax Valve" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Steam" : {
+      "comment" : "Used to indicate that a locomotive is steam powered"
+    },
+    "Steam Generator" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Step Lights" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Stop" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Straight Line" : {
+      "comment" : "Used by combobox to select curve fitting method)"
+    },
+    "Switchboard" : {
+      "comment" : "Used to create a default OpenLCB virtual name"
+    },
+    "Switchboard Item" : {
+      "comment" : "Used to create a default OpenLCB virtual name"
+    },
+    "Switchboard Item Node" : {
+      "comment" : "Used to describe an OpenLCB virtual node"
+    },
+    "Switchboard Node" : {
+      "comment" : "Used to describe an OpenLCB virtual node"
+    },
+    "Switching Lights" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Tail Lights" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Third Rail" : {
+      "comment" : "Used to indicate that the track models 3rd rail electrification"
+    },
+    "Thrown" : {
+      "comment" : "Used to indicate the state of a turnout"
+    },
+    "Timeout - write failed" : {
+
+    },
+    "TT" : {
+      "comment" : "Used to indicate the track gauge"
+    },
+    "TT3" : {
+      "comment" : "Used to indicate the track gauge"
+    },
+    "Unassigned" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Unavaliable" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Uncouple" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Unidirectional" : {
+      "comment" : "Used by combobox to indicate that trains can travel in one direction only in the track block"
+    },
+    "UniFrog" : {
+      "comment" : "Used to indicate that turnout can be configured to have a powered or insulated frog"
+    },
+    "Unknown" : {
+      "comment" : "Used to indicate the state of a turnout\nUsed to indicate that the type of something is unknown"
+    },
+    "Virtual Clock" : {
+      "comment" : "Used to create a default OpenLCB virtual name"
+    },
+    "Virtual Clock Node" : {
+      "comment" : "Used to describe an OpenLCB virtual node"
+    },
+    "Virtual LocoNet Gateway" : {
+      "comment" : "Used to create a default OpenLCB virtual name"
+    },
+    "Virtual LocoNet Gateway Node" : {
+      "comment" : "Used to describe an OpenLCB virtual node"
+    },
+    "Virtual Throttle" : {
+      "comment" : "Used to create a default OpenLCB virtual name"
+    },
+    "Virtual Throttle Node" : {
+      "comment" : "Used to describe an OpenLCB virtual node"
+    },
+    "Virtual Train" : {
+      "comment" : "Used to create a default OpenLCB virtual name"
+    },
+    "Virtual Train Node" : {
+      "comment" : "Used to describe an OpenLCB virtual node"
+    },
+    "Water Fill" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Whistle" : {
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Write All" : {
+
+    },
+    "Write failed" : {
+
+    },
+    "Writing Variables - %lld bytes" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Writing Variables - %lld byte"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "new",
+                  "value" : "Writing Variables - %lld bytes"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Yes" : {
+
+    }
+  },
+  "version" : "1.0"
+}

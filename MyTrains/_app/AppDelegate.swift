@@ -90,7 +90,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
   
   @IBAction func mnuSwitchBoardEditor(_ sender: NSMenuItem) {
     if let _ = myTrainsController.layout {
-      ModalWindow.SwitchBoardEditor.runModel()
+      let x = ModalWindow.SwitchBoardEditor
+      let wc = x.windowController
+      wc.showWindow(nil)
     }
   }
   

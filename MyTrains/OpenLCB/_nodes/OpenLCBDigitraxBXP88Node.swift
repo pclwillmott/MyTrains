@@ -493,7 +493,7 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
     acdiManufacturerSpaceVersion = 4
     
     manufacturerName    = virtualNodeType.manufacturerName
-    nodeModelName       = virtualNodeType.name
+    nodeModelName       = virtualNodeType.title
     nodeHardwareVersion = "\(Bundle.main.releaseVersionNumberPretty)"
     nodeSoftwareVersion = "\(Bundle.main.releaseVersionNumberPretty)"
 
@@ -850,8 +850,11 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
       let id = message.transponderZone! / numberOfChannels + 1
       
       if id == boardId, let transponderZone = message.transponderZone, let locomotiveAddress = message.locomotiveAddress, let trainNodeId = OpenLCBNodeRollingStock.mapDCCAddressToID(address: locomotiveAddress), let sensorState = message.sensorState {
+        
         let zone = transponderZone % numberOfChannels
+        
         networkLayer?.sendLocationServiceEvent(sourceNodeId: nodeId, eventId: locationServicesTranspondingEventId(zone: zone)!, trainNodeId: trainNodeId, entryExit: sensorState ? .entryWithState : .exit, motionRelative: .unknown, motionAbsolute: .unknown, contentFormat: .occupancyInformationOnly, content: nil)
+        
       }
       
     case .pmRepBXP88:

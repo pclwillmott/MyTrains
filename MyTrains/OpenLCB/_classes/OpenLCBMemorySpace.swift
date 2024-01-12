@@ -467,7 +467,7 @@ public class OpenLCBMemorySpace {
         
         let temp = OpenLCBNodeVirtual(nodeId: nodeId)
         
-        if let virtualNodeType = MyTrainsVirtualNodeType(rawValue: temp.nodeModelName) {
+        if let virtualNodeType = MyTrainsVirtualNodeType.virtualNodeType(title: temp.nodeModelName) {
           
           var node : OpenLCBNodeVirtual
           
@@ -496,6 +496,12 @@ public class OpenLCBMemorySpace {
             node = OpenLCBProgrammingTrackNode(nodeId: nodeId)
           case .digitraxBXP88Node:
             node = OpenLCBDigitraxBXP88Node(nodeId: nodeId)
+          case .layoutNode:
+            node = LayoutNode(nodeId: nodeId)
+          case .switchboardNode:
+            node = SwitchboardNode(nodeId: nodeId)
+          case .switchboardItemNode:
+            node = SwitchboardItemNode(nodeId: nodeId)
           }
           
           result.append(node)
