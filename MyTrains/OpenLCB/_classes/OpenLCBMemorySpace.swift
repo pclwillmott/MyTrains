@@ -467,48 +467,45 @@ public class OpenLCBMemorySpace {
         
         let temp = OpenLCBNodeVirtual(nodeId: nodeId)
         
-        if let virtualNodeType = MyTrainsVirtualNodeType.virtualNodeType(title: temp.nodeModelName) {
-          
-          var node : OpenLCBNodeVirtual
-          
-          switch virtualNodeType {
-          case .clockNode:
-            node = OpenLCBClock(nodeId: nodeId)
-          case .throttleNode:
-            node = OpenLCBThrottle(nodeId: nodeId)
-          case .locoNetGatewayNode:
-            node = OpenLCBLocoNetGateway(nodeId: nodeId)
-          case .trainNode:
-            node = OpenLCBNodeRollingStockLocoNet(nodeId: nodeId)
-          case .applicationNode:
-            node =  OpenLCBNodeMyTrains(nodeId: nodeId)
-          case .configurationToolNode:
-            node = OpenLCBNodeConfigurationTool(nodeId: nodeId)
-          case .genericVirtualNode:
-            node = OpenLCBNodeVirtual(nodeId: nodeId)
-          case .canGatewayNode:
-            node = OpenLCBCANGateway(nodeId: nodeId)
-          case .locoNetMonitorNode:
-            node = OpenLCBLocoNetMonitorNode(nodeId: nodeId)
-          case .programmerToolNode:
-            node = OpenLCBProgrammerToolNode(nodeId: nodeId)
-          case .programmingTrackNode:
-            node = OpenLCBProgrammingTrackNode(nodeId: nodeId)
-          case .digitraxBXP88Node:
-            node = OpenLCBDigitraxBXP88Node(nodeId: nodeId)
-          case .layoutNode:
-            node = LayoutNode(nodeId: nodeId)
-          case .switchboardNode:
-            node = SwitchboardNode(nodeId: nodeId)
-          case .switchboardItemNode:
-            node = SwitchboardItemNode(nodeId: nodeId)
-          }
-          
-          result.append(node)
-          
+        var node : OpenLCBNodeVirtual?
+        
+        switch temp.virtualNodeType {
+        case .clockNode:
+          node = OpenLCBClock(nodeId: nodeId)
+        case .throttleNode:
+          node = OpenLCBThrottle(nodeId: nodeId)
+        case .locoNetGatewayNode:
+          node = OpenLCBLocoNetGateway(nodeId: nodeId)
+        case .trainNode:
+          node = OpenLCBNodeRollingStockLocoNet(nodeId: nodeId)
+        case .applicationNode:
+          node =  OpenLCBNodeMyTrains(nodeId: nodeId)
+        case .configurationToolNode:
+          node = OpenLCBNodeConfigurationTool(nodeId: nodeId)
+        case .genericVirtualNode:
+          node = OpenLCBNodeVirtual(nodeId: nodeId)
+        case .canGatewayNode:
+          node = OpenLCBCANGateway(nodeId: nodeId)
+        case .locoNetMonitorNode:
+          node = OpenLCBLocoNetMonitorNode(nodeId: nodeId)
+        case .programmerToolNode:
+          node = OpenLCBProgrammerToolNode(nodeId: nodeId)
+        case .programmingTrackNode:
+          node = OpenLCBProgrammingTrackNode(nodeId: nodeId)
+        case .digitraxBXP88Node:
+          node = OpenLCBDigitraxBXP88Node(nodeId: nodeId)
+        case .layoutNode:
+          node = LayoutNode(nodeId: nodeId)
+      //    deleteAllMemorySpaces(forNodeId: nodeId)
+          break
+        case .switchboardNode:
+          node = SwitchboardNode(nodeId: nodeId)
+        case .switchboardItemNode:
+          node = SwitchboardItemNode(nodeId: nodeId)
         }
-        else {
-          print("Virtual Node Type Not Found: \(temp.nodeModelName)")
+        
+        if let node {
+          result.append(node)
         }
                 
       }

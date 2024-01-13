@@ -20,9 +20,15 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     acdiManufacturerSpace = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.acdiManufacturer.rawValue, defaultMemorySize: 125, isReadOnly: true, description: "")
 
     acdiUserSpace = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.acdiUser.rawValue, defaultMemorySize: 128, isReadOnly: false, description: "")
-    
+
+    virtualNodeConfigSpace = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.virtualNodeConfig.rawValue, defaultMemorySize: 12, isReadOnly: false, description: "")
+
     super.init(nodeId: nodeId)
-    
+
+    if virtualNodeConfigSpaceVersion == 0 {
+      virtualNodeType = .genericVirtualNode
+    }
+
     acdiManufacturerSpace.delegate = self
 
     memorySpaces[acdiManufacturerSpace.space] = acdiManufacturerSpace
@@ -41,6 +47,14 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.acdiUser.rawValue, address: addressACDIUserNodeName)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.acdiUser.rawValue, address: addressACDIUserNodeDescription)
 
+    virtualNodeConfigSpace.delegate = self
+    
+    memorySpaces[virtualNodeConfigSpace.space] = virtualNodeConfigSpace
+
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.virtualNodeConfig.rawValue, address: addressVirtualNodeConfigSpaceVersion)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.virtualNodeConfig.rawValue, address: addressVirtualNodeConfigLayoutNodeId)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.virtualNodeConfig.rawValue, address: addressVirtualNodeConfigNodeType)
+
     isSimpleNodeInformationProtocolSupported = true
     
     isDatagramProtocolSupported = true
@@ -51,7 +65,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     
     isEventExchangeProtocolSupported = true
     
-    isFirmwareUpgradeProtocolSupported = true
+    isFirmwareUpgradeProtocolSupported = false
     
     setupConfigurationOptions()
     
@@ -65,15 +79,20 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   
   internal var registeredVariables : [UInt8:Set<Int>] = [:]
   
-  internal let addressACDIManufacturerSpaceVersion : Int =  0
-  internal let addressACDIManufacturerName         : Int =  1
-  internal let addressACDIModelName                : Int =  42
-  internal let addressACDIHardwareVersion          : Int =  83
-  internal let addressACDISoftwareVersion          : Int =  104
-  internal let addressACDIUserSpaceVersion         : Int =  0
-  internal let addressACDIUserNodeName             : Int =  1
-  internal let addressACDIUserNodeDescription      : Int =  64
+  internal let addressACDIManufacturerSpaceVersion  : Int = 0
+  internal let addressACDIManufacturerName          : Int = 1
+  internal let addressACDIModelName                 : Int = 42
+  internal let addressACDIHardwareVersion           : Int = 83
+  internal let addressACDISoftwareVersion           : Int = 104
   
+  internal let addressACDIUserSpaceVersion          : Int = 0
+  internal let addressACDIUserNodeName              : Int = 1
+  internal let addressACDIUserNodeDescription       : Int = 64
+  
+  internal let addressVirtualNodeConfigSpaceVersion : Int = 0
+  internal let addressVirtualNodeConfigLayoutNodeId : Int = 2
+  internal let addressVirtualNodeConfigNodeType     : Int = 10
+
   internal var datagramTypesSupported : Set<OpenLCBDatagramType> = [
     .writeCommandGeneric,
     .writeCommand0xFD,
@@ -108,8 +127,6 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   
   // MARK: Public Properties
   
-  public var virtualNodeType : MyTrainsVirtualNodeType = .genericVirtualNode
-
   public var lfsr1 : UInt32
   
   public var lfsr2 : UInt32
@@ -127,6 +144,8 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   public var acdiManufacturerSpace : OpenLCBMemorySpace
   
   public var acdiUserSpace : OpenLCBMemorySpace
+  
+  public var virtualNodeConfigSpace : OpenLCBMemorySpace
   
   public override var acdiManufacturerSpaceVersion : UInt8 {
     get {
@@ -191,7 +210,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
       acdiUserSpace.setString(address: addressACDIUserNodeName, value: String(value.prefix(62)), fieldSize: 63)
     }
   }
-  
+
   public override var userNodeDescription : String {
     get {
       return acdiUserSpace.getString(address: addressACDIUserNodeDescription, count: 64)!
@@ -201,15 +220,65 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     }
   }
   
+  public var virtualNodeConfigSpaceVersion : UInt16 {
+    get {
+      return virtualNodeConfigSpace.getUInt16(address: addressVirtualNodeConfigSpaceVersion)!
+    }
+    set(value) {
+      virtualNodeConfigSpace.setUInt(address: addressVirtualNodeConfigSpaceVersion, value:value)
+    }
+  }
+
+  public var layoutNodeId : UInt64 {
+    get {
+      return virtualNodeConfigSpace.getUInt64(address: addressVirtualNodeConfigLayoutNodeId)!
+    }
+    set(value) {
+      virtualNodeConfigSpace.setUInt(address: addressVirtualNodeConfigLayoutNodeId, value:value)
+    }
+  }
+
+  public var virtualNodeType : MyTrainsVirtualNodeType {
+    get {
+      return MyTrainsVirtualNodeType(rawValue: virtualNodeConfigSpace.getUInt16(address: addressVirtualNodeConfigNodeType)!)!
+    }
+    set(value) {
+      virtualNodeConfigSpace.setUInt(address: addressVirtualNodeConfigNodeType, value:value.rawValue)
+    }
+  }
+
   // MARK: Private Methods
   
   internal func resetReboot() {
+    
     lockedNodeId = 0
+    
+    if virtualNodeConfigSpaceVersion == 0, let networkLayer {
+      
+      if virtualNodeType == .layoutNode {
+        
+        virtualNodeConfigSpaceVersion = 2
+        self.layoutNodeId = self.nodeId
+        virtualNodeConfigSpace.save()
+
+      }
+      else if virtualNodeType != .genericVirtualNode, let layoutNodeId = networkLayer.layoutNodeId {
+        
+        virtualNodeConfigSpaceVersion = 2
+        self.layoutNodeId = layoutNodeId
+        virtualNodeConfigSpace.save()
+
+      }
+      
+    }
+    
     setupConfigurationOptions()
   }
   
   internal func resetToFactoryDefaults() {
+    
     lockedNodeId = 0
+    
   }
   
   internal func saveMemorySpaces() {

@@ -11,7 +11,7 @@
         <scene sceneID="JPo-4y-FX3">
             <objects>
                 <application id="hnw-xV-0zn" sceneMemberID="viewController">
-                    <menu key="mainMenu" title="Main Menu" systemMenu="main" id="AYu-sK-qS6">
+                    <menu key="mainMenu" title="Main Menu" systemMenu="main" autoenablesItems="NO" id="AYu-sK-qS6">
                         <items>
                             <menuItem title="MyTrains" id="1Xt-HY-uBw">
                                 <modifierMask key="keyEquivalentModifierMask"/>
@@ -57,11 +57,11 @@
                                     </items>
                                 </menu>
                             </menuItem>
-                            <menuItem title="File" hidden="YES" id="dMs-cI-mzQ">
+                            <menuItem title="File" id="dMs-cI-mzQ">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="File" autoenablesItems="NO" id="bib-Uj-vzu">
+                                <menu key="submenu" title="File" id="bib-Uj-vzu">
                                     <items>
-                                        <menuItem title="New" hidden="YES" keyEquivalent="n" id="Was-JA-tGl">
+                                        <menuItem title="New" keyEquivalent="n" id="Was-JA-tGl">
                                             <connections>
                                                 <action selector="newDocument:" target="Ady-hI-5gd" id="4Si-XN-c54"/>
                                             </connections>
@@ -73,7 +73,7 @@
                                         </menuItem>
                                         <menuItem title="Open Recent" id="tXI-mr-wws">
                                             <modifierMask key="keyEquivalentModifierMask"/>
-                                            <menu key="submenu" title="Open Recent" systemMenu="recentDocuments" id="oas-Oc-fiZ">
+                                            <menu key="submenu" title="Open Recent" systemMenu="recentDocuments" autoenablesItems="NO" id="oas-Oc-fiZ">
                                                 <items>
                                                     <menuItem title="Clear Menu" hidden="YES" id="vNY-rz-j42">
                                                         <modifierMask key="keyEquivalentModifierMask"/>
@@ -124,46 +124,6 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Edit" autoenablesItems="NO" id="W48-6f-4Dl">
                                     <items>
-                                        <menuItem title="Set Fast Clock" id="X1G-ZB-nO4">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="mnySetFastClock:" target="Voe-Tx-rLC" id="9zo-yi-LxJ"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Layouts" id="Jc2-oH-lkS">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="mnuEditLayoutsAction:" target="Voe-Tx-rLC" id="N5f-i0-p1e"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Speed Profiler" id="VKr-kh-cQQ">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="mnuSpeedProfiler:" target="Voe-Tx-rLC" id="8XF-o4-caX"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Wagons" id="2lc-br-ETR">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="mnuEditWagonsAction:" target="Voe-Tx-rLC" id="ArW-MK-qkw"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Trains" id="pCX-lg-S97">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="mnuEditTrainsAction:" target="Voe-Tx-rLC" id="cJY-DS-6X4"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Blocks" id="E2d-BR-mab">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                        </menuItem>
-                                        <menuItem title="Switch Board" id="SfZ-Dk-Pfh">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="mnuSwitchBoardEditor:" target="Voe-Tx-rLC" id="fm9-Cl-mdz"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem isSeparatorItem="YES" id="uyl-h8-XO2"/>
                                         <menuItem title="Cut" keyEquivalent="x" id="uRl-iY-unG">
                                             <connections>
                                                 <action selector="cut:" target="Ady-hI-5gd" id="YJe-68-I9s"/>
@@ -441,81 +401,6 @@
                                                         <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
                                                         <connections>
                                                             <action selector="pasteRuler:" target="Ady-hI-5gd" id="cSh-wd-qM2"/>
-                                                        </connections>
-                                                    </menuItem>
-                                                </items>
-                                            </menu>
-                                        </menuItem>
-                                    </items>
-                                </menu>
-                            </menuItem>
-                            <menuItem title="Control" id="TPi-Ta-FZe">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Control" id="hwj-Hb-krZ">
-                                    <items>
-                                        <menuItem title="Throttle" id="yDA-Sc-xvW">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="mnuThrottleAction:" target="Voe-Tx-rLC" id="Vc4-73-3MS"/>
-                                            </connections>
-                                        </menuItem>
-                                    </items>
-                                </menu>
-                            </menuItem>
-                            <menuItem title="Tools" id="9kk-Si-lYa">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Tools" id="ISf-GP-eA8">
-                                    <items>
-                                        <menuItem title="View LCC Network" id="fW3-Hc-Nf9">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="mnuViewLCCNetwork:" target="Voe-Tx-rLC" id="A5L-Mn-7Ym"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Network Traffic Monitor" id="VJK-z7-nwA">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="mnuLCCNetworkTrafficMonitor:" target="Voe-Tx-rLC" id="uSg-cZ-She"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="DCC Programmer Tool" id="cN1-05-9vS">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="mnuProgrammerToolAction:" target="Voe-Tx-rLC" id="I7m-ew-W0X"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="LocoNet" id="Ehh-9X-vOU">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <menu key="submenu" title="LocoNet" id="d19-mc-xVn">
-                                                <items>
-                                                    <menuItem title="LocoNet Monitor" id="xbj-MQ-iET">
-                                                        <modifierMask key="keyEquivalentModifierMask"/>
-                                                        <connections>
-                                                            <action selector="mnuMonitorAction:" target="Voe-Tx-rLC" id="BwF-JG-aHq"/>
-                                                        </connections>
-                                                    </menuItem>
-                                                    <menuItem title="Slot View" id="BKt-TR-rXk">
-                                                        <modifierMask key="keyEquivalentModifierMask"/>
-                                                        <connections>
-                                                            <action selector="mnuSlotView:" target="Voe-Tx-rLC" id="6gW-nV-tIL"/>
-                                                        </connections>
-                                                    </menuItem>
-                                                    <menuItem title="Dashboard" id="97Z-9a-y1G">
-                                                        <modifierMask key="keyEquivalentModifierMask"/>
-                                                        <connections>
-                                                            <action selector="mnuDashBoardAction:" target="Voe-Tx-rLC" id="Vd0-yF-3FP"/>
-                                                        </connections>
-                                                    </menuItem>
-                                                    <menuItem title="Group Setup" id="jYW-oF-LfI">
-                                                        <modifierMask key="keyEquivalentModifierMask"/>
-                                                        <connections>
-                                                            <action selector="SetupGroupAction:" target="Voe-Tx-rLC" id="NzS-cx-LX8"/>
-                                                        </connections>
-                                                    </menuItem>
-                                                    <menuItem title="Update Firmware" id="6h2-5y-PQH">
-                                                        <modifierMask key="keyEquivalentModifierMask"/>
-                                                        <connections>
-                                                            <action selector="mnuUpdateFirmware:" target="Voe-Tx-rLC" id="U2x-nb-Hrc"/>
                                                         </connections>
                                                     </menuItem>
                                                 </items>

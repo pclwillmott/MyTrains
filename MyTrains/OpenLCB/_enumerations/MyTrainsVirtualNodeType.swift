@@ -108,7 +108,28 @@ public enum MyTrainsVirtualNodeType : UInt16 {
   ]
 
   // MARK: Public Class Properties
-  
+ 
+  public static var newFileOpenLCBItems : [MyTrainsVirtualNodeType] {
+    
+    return [
+      .throttleNode,
+      .trainNode,
+      .canGatewayNode,
+      .clockNode,
+    ]
+    
+  }
+
+  public static var newFileLocoNetItems : [MyTrainsVirtualNodeType] {
+    
+    return [
+      .locoNetGatewayNode,
+      .programmingTrackNode,
+      .digitraxBXP88Node,
+    ]
+    
+  }
+
   public static let titles : [MyTrainsVirtualNodeType:String] = [
     .applicationNode:       String(localized: "Application Node", comment: "Used to describe an OpenLCB virtual node"),
     .canGatewayNode:        String(localized: "CAN Gateway Node", comment: "Used to describe an OpenLCB virtual node"),

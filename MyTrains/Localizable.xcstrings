@@ -254,6 +254,9 @@
     "Computer Data & Time" : {
       "comment" : "Used to indicate what is the initial date and time setting for a clock"
     },
+    "Configuration" : {
+      "comment" : "Used for the Configuration menu item title"
+    },
     "Configuration Tool" : {
       "comment" : "Used to create a default OpenLCB virtual name"
     },
@@ -298,7 +301,7 @@
       "comment" : "Used for LocoNet train control protocol selection"
     },
     "DCC Programmer Tool" : {
-      "comment" : "Used to create a default OpenLCB virtual name"
+      "comment" : "Used for the DCC Programmer Tool menu item title\nUsed to create a default OpenLCB virtual name"
     },
     "DCC Programmer Tool Node" : {
       "comment" : "Used to describe an OpenLCB virtual node"
@@ -351,6 +354,9 @@
     "Dynamic Brake" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
     },
+    "Edit" : {
+      "comment" : "Used for the Edit menu item title"
+    },
     "Electric (Overhead)" : {
       "comment" : "Used to indicate that a locomotive is electric powered by overhead cables"
     },
@@ -385,7 +391,10 @@
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
     },
     "Fast Clock" : {
-      "comment" : "Used to indicate a clock's type"
+      "comment" : "Used to indicate a clock's type\nUsed for the Fast Clock menu item title"
+    },
+    "File" : {
+      "comment" : "Used for the File menu item title"
     },
     "Flange Squeal" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
@@ -439,10 +448,16 @@
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
     },
     "Layout" : {
-      "comment" : "Used to create a default OpenLCB virtual name"
+      "comment" : "Used for the New Layout menu item title\nUsed to create a default OpenLCB virtual name"
     },
     "Layout Node" : {
       "comment" : "Used to describe an OpenLCB virtual node"
+    },
+    "LCC/OpenLCB Network" : {
+      "comment" : "Used for the LCC/OpenLCB Network menu item title"
+    },
+    "LCC/OpenLCB Traffic Monitor" : {
+      "comment" : "Used for the LCC/OpenLCB Traffic Monitor menu item title"
     },
     "Light" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
@@ -453,11 +468,26 @@
     "Lights Off Rear" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
     },
+    "LocoNet Dashboard" : {
+      "comment" : "Used for the LocoNet Dashboard menu item title"
+    },
+    "LocoNet Firmware Update" : {
+      "comment" : "Used for the LocoNet Firmware Update menu item title"
+    },
     "LocoNet Monitor" : {
       "comment" : "Used to create a default OpenLCB virtual name"
     },
     "LocoNet Monitor Node" : {
       "comment" : "Used to describe an OpenLCB virtual node"
+    },
+    "LocoNet Slot View" : {
+      "comment" : "Used for the LocoNet Slot View menu item title"
+    },
+    "LocoNet Traffic Monitor" : {
+      "comment" : "Used for the LocoNet Traffic Monitor menu item title"
+    },
+    "LocoNet Wireless Setup" : {
+      "comment" : "Used for the LocoNet Wireless Setup menu item title"
     },
     "Long Whistle" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
@@ -498,6 +528,9 @@
     "N" : {
       "comment" : "Used to indicate the track gauge"
     },
+    "New" : {
+      "comment" : "Used for the New menu item title"
+    },
     "Next" : {
       "comment" : "Used to describe the direction of the next block in respect of a train route"
     },
@@ -530,6 +563,9 @@
     },
     "OOO" : {
       "comment" : "Used to indicate the track gauge"
+    },
+    "Operations" : {
+      "comment" : "Used for the Operations menu item title"
     },
     "Overhead" : {
       "comment" : "Used to indicate that the track models overhead electrification"
@@ -683,6 +719,9 @@
     "Straight Line" : {
       "comment" : "Used by combobox to select curve fitting method)"
     },
+    "Switch Board" : {
+      "comment" : "Used for the Switch Board menu item title"
+    },
     "Switchboard" : {
       "comment" : "Used to create a default OpenLCB virtual name"
     },
@@ -704,11 +743,20 @@
     "Third Rail" : {
       "comment" : "Used to indicate that the track models 3rd rail electrification"
     },
+    "Throttle" : {
+      "comment" : "Used for the Throttle menu item title"
+    },
     "Thrown" : {
       "comment" : "Used to indicate the state of a turnout"
     },
     "Timeout - write failed" : {
 
+    },
+    "Tools" : {
+      "comment" : "Used for the Tools menu item title"
+    },
+    "Train Speed Profiler" : {
+      "comment" : "Used for the Train Speed Profiler menu item title"
     },
     "TT" : {
       "comment" : "Used to indicate the track gauge"

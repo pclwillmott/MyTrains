@@ -122,6 +122,10 @@ public class OpenLCBNetworkLayer : NSObject {
   
   // MARK: Public Properties
   
+  public var layoutNodeId : UInt64? {
+    return 0xfe0000000001
+  }
+  
   public var defaultCANGateway : OpenLCBCANGateway? {
   
     for (_, node) in virtualNodes {
