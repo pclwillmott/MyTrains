@@ -8,17 +8,7 @@
 </identification>
 <acdi/>
 
-<segment space='251' origin='1'>
-<name>Train ID</name>
-<string size='63'>
-  <name>Name</name>
-  <description>Name to display on the throttle for this locomotive.</description>
-</string>
-<string size='64'>
-  <name>User Description</name>
-  <description>You can write additional notes about this locomotive here.</description>
-</string>
-</segment>
+%%ACDI%%
 
 <segment space='253' origin='0'>
 <name>Train</name>
@@ -118,9 +108,7 @@
 </int>
 <eventid>
   <name>LocoNet Gateway</name>
-  <map>
     %%LOCONET_GATEWAYS%%
-  </map>
 </eventid>
   
 </segment>

@@ -8,7 +8,7 @@
 import Foundation
 import AppKit
 
-public enum FlowControl : Int {
+public enum FlowControl : UInt8 {
   
   case noFlowControl = 0
   case rtsCts        = 1
@@ -16,14 +16,14 @@ public enum FlowControl : Int {
   // MARK: Public Properties
   
   public var title : String {
-    return FlowControl.titles[self.rawValue]
+    return FlowControl.titles[Int(self.rawValue)]
   }
   
   // MARK: Public Class Properties
   
   public static let defaultValue : FlowControl = .noFlowControl
   
-  public static let mapPlaceholder = "%%FLOW_CONTROL%%"
+  public static let mapPlaceholder = CDI.FLOW_CONTROL
   
   // MARK: Private Class Properties
   
@@ -34,16 +34,18 @@ public enum FlowControl : Int {
 
   private static var map : String {
     
-    var items : [FlowControl] = [
+    let items : [FlowControl] = [
       .noFlowControl,
       .rtsCts,
     ]
     
-    var map = ""
-    
+    var map = "<default>\(defaultValue.rawValue)</default>\n<map>\n"
+
     for item in items {
       map += "<relation><property>\(item.rawValue)</property><value>\(item.title)</value></relation>\n"
     }
+    
+    map += "</map>\n"
 
     return map
     
@@ -58,11 +60,11 @@ public enum FlowControl : Int {
   }
   
   public static func select(comboBox: NSComboBox, value: FlowControl) {
-    comboBox.selectItem(at: value.rawValue)
+    comboBox.selectItem(at: Int(value.rawValue))
   }
   
   public static func selected(comboBox: NSComboBox) -> FlowControl {
-    return FlowControl(rawValue: comboBox.indexOfSelectedItem) ?? defaultValue
+    return FlowControl(rawValue: UInt8(comboBox.indexOfSelectedItem)) ?? defaultValue
   }
 
   public static func insertMap(cdi:String) -> String {

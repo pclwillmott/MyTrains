@@ -77,6 +77,12 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   
   internal var memorySpaces : [UInt8:OpenLCBMemorySpace] = [:]
   
+  internal var cdiFilename : String? {
+    didSet {
+      initCDI()
+    }
+  }
+  
   internal var registeredVariables : [UInt8:Set<Int>] = [:]
   
   internal let addressACDIManufacturerSpaceVersion  : Int = 0
@@ -249,6 +255,99 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
 
   // MARK: Private Methods
   
+  internal func standardACDI(cdi:String) -> String {
+ 
+    var acdi = "<acdi/>\n"
+    
+    acdi += "<segment space='251' origin='1'>\n"
+    
+    let nodeId = String(localized: "Node ID", comment: "Used for title of the Node ID segment of a CDI")
+    
+    acdi += "<name>\(nodeId)</name>\n"
+    acdi += "<string size='63'>\n"
+    
+    let userName = String(localized: "User Name", comment: "Used for the title of the User Name input field in CDI")
+    
+    acdi += "<name>\(userName)</name>\n"
+    
+    let userNameDescription = String(localized: "This name will appear in network browsers for this device.", comment: "Used for the description of the user name input field in the CDI")
+    
+    acdi += "<description>\(userNameDescription)</description>\n"
+    
+    acdi += "</string>\n"
+    
+    acdi += "<string size='64'>"
+
+    let userDescription = String(localized: "User Description", comment: "Used for the title of the User Description input field in CDI")
+
+    acdi += "<name>\(userDescription)</name>\n"
+
+    let userDescriptionDescription = String(localized: "This description will appear in network browsers for this device.", comment: "Used for the description of the user description input field in the CDI")
+
+    acdi += "<description>\(userDescriptionDescription)</description>\n"
+                                                                        
+    acdi += "</string>\n"
+    acdi += "</segment>\n"
+
+    return cdi.replacingOccurrences(of: CDI.ACDI, with: acdi)
+    
+  }
+  
+  internal func initCDI() {
+    
+    if let cdiFilename, let filepath = Bundle.main.path(forResource: cdiFilename, ofType: "xml") {
+      do {
+        
+        var cdi = try String(contentsOfFile: filepath)
+
+        // Apply substitutions for dynamic elements such as node ids.
+        
+        cdi = customizeDynamicCDI(cdi: cdi)
+
+        // Apply these after the previous call so that the previous call
+        // can override the substitutions if necessary.
+        
+        cdi = cdi.replacingOccurrences(of: CDI.MANUFACTURER, with: manufacturerName)
+        cdi = cdi.replacingOccurrences(of: CDI.MODEL, with: nodeModelName)
+        cdi = cdi.replacingOccurrences(of: CDI.SOFTWARE_VERSION, with: nodeSoftwareVersion)
+        cdi = cdi.replacingOccurrences(of: CDI.HARDWARE_VERSION, with: nodeHardwareVersion)
+        
+        cdi = standardACDI(cdi: cdi)
+        cdi = Scale.insertMap(cdi: cdi)
+        cdi = MTSerialPortManager.insertMap(cdi: cdi)
+        cdi = OpenLCBFunction.insertMap(cdi: cdi)
+        cdi = BaudRate.insertMap(cdi: cdi)
+        cdi = Parity.insertMap(cdi: cdi)
+        cdi = FlowControl.insertMap(cdi: cdi)
+        cdi = OpenLCBClockOperatingMode.insertMap(cdi: cdi)
+        cdi = OpenLCBClockType.insertMap(cdi: cdi)
+        cdi = OpenLCBClockState.insertMap(cdi: cdi)
+        cdi = EnableState.insertMap(cdi: cdi)
+        cdi = ClockCustomIdType.insertMap(cdi: cdi)
+        
+        let memorySpace = OpenLCBMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.cdi.rawValue, isReadOnly: true, description: "")
+        
+        memorySpace.memory = [UInt8]()
+        memorySpace.memory.append(contentsOf: cdi.utf8)
+        memorySpace.memory.append(contentsOf: [UInt8](repeating: 0, count: 64))
+        
+        memorySpaces[OpenLCBNodeMemoryAddressSpace.cdi.rawValue] = memorySpace
+        
+        isConfigurationDescriptionInformationProtocolSupported = true
+        
+        setupConfigurationOptions()
+        
+      }
+      catch {
+      }
+    }
+    
+  }
+  
+  internal func customizeDynamicCDI(cdi:String) -> String {
+    return cdi
+  }
+
   internal func resetReboot() {
     
     lockedNodeId = 0
@@ -273,6 +372,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     }
     
     setupConfigurationOptions()
+    
   }
   
   internal func resetToFactoryDefaults() {
@@ -327,9 +427,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
 
   }
   
-  // MARK: Public Methods
-
-  public func setupConfigurationOptions() {
+  internal func setupConfigurationOptions() {
     
     var minSpace : UInt8 = 0xff
     var maxSpace : UInt8 = 0x00
@@ -361,39 +459,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
 
   }
   
-  public func initCDI(filename:String) {
-    
-    if let filepath = Bundle.main.path(forResource: filename, ofType: "xml") {
-      do {
-        
-        var contents = try String(contentsOfFile: filepath)
-        
-        contents = contents.replacingOccurrences(of: "%%MANUFACTURER%%", with: manufacturerName)
-        contents = contents.replacingOccurrences(of: "%%MODEL%%", with: nodeModelName)
-        contents = contents.replacingOccurrences(of: "%%SOFTWARE_VERSION%%", with: nodeSoftwareVersion)
-        contents = contents.replacingOccurrences(of: "%%HARDWARE_VERSION%%", with: nodeHardwareVersion)
-
-        var ports = ""
-        for port in MTSerialPortManager.availablePorts() {
-          ports += "<relation><property>\(port)</property><value>\(port)</value></relation>\n"
-        }
-        contents = contents.replacingOccurrences(of: "%%PORTS%%", with: ports)
-
-        let memorySpace = OpenLCBMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.cdi.rawValue, isReadOnly: true, description: "")
-        memorySpace.memory = [UInt8]()
-        memorySpace.memory.append(contentsOf: contents.utf8)
-        memorySpace.memory.append(contentsOf: [UInt8](repeating: 0, count: 64))
-        memorySpaces[memorySpace.space] = memorySpace
-        isConfigurationDescriptionInformationProtocolSupported = true
-        
-        setupConfigurationOptions()
-        
-      }
-      catch {
-      }
-    }
-    
-  }
+  // MARK: Public Methods
   
   public func start() {
   

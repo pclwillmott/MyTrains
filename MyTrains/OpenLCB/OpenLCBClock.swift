@@ -94,15 +94,15 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDefaultDateTime)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressInitialRate)
 
-    initCDI(filename: "MyTrains Clock")
-    
     dateFormatter.timeZone = Date().dateComponents.timeZone
     dateFormatter.formatOptions = [.withFullDate, .withTime, .withColonSeparatorInTime]
     
     if !memorySpacesInitialized {
       resetToFactoryDefaults()
     }
-    
+
+    cdiFilename = "MyTrains Clock"
+
   }
   
   deinit {
@@ -153,7 +153,7 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
     OpenLCBClockType.alternateClock2 : 0x0101000001030000
   ]
 
-  // Configuration varaible addresses
+  // Configuration variable addresses
   
   internal let addressOperatingMode              : Int =  0
   internal let addressClockType                  : Int =  1

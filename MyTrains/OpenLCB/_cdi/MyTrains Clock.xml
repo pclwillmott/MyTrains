@@ -6,19 +6,8 @@
   <hardwareVersion>%%HARDWARE_VERSION%%</hardwareVersion>
   <softwareVersion>%%SOFTWARE_VERSION%%</softwareVersion>
 </identification>
-<acdi/>
 
-<segment space='251' origin='1'> 
-<name>Node ID</name>
-<string size='63'>
-<name>User Name</name>
-<description>This name will appear in network browsers for this device.</description>
-</string>
-<string size='64'>
-<name>User Description</name>
-<description>This description will appear in network browsers for this device.</description>
-</string>
-</segment>
+%%ACDI%%
 
 <segment space='253' origin='0'>
 <name>Clock Configuration</name>
@@ -26,38 +15,20 @@
 <int size='1'>
 <name>Operating Mode</name>
 <description>There can only be one Master (generator) per Clock ID.</description>
-<min>0</min>
-<max>1</max>
-<default>1</default>
-<map>
-	<relation><property>0</property><value>Master (generator)</value></relation>
-  <relation><property>1</property><value>Slave (consumer)</value></relation>
-</map>
+%%CLOCK_OPERATING_MODE%%
 </int>
 
 <int size='1'>
 <name>Clock Type</name>
 <description>This determines the clock type.</description>
-<default>0</default>
-<map>
-	<relation><property>0</property><value>Fast Clock</value></relation>
-	<relation><property>1</property><value>Real Time Clock</value></relation>
-	<relation><property>2</property><value>Alternate Clock 1</value></relation>
-	<relation><property>3</property><value>Alternate Clock 2</value></relation>
-	<relation><property>4</property><value>Custom</value></relation>
-</map>
+%%CLOCK_TYPE%%
 </int>
 
 <int size='1'>
 <name>Custom Clock ID</name>
 <description>This determines which clock ID will be used by the custom clock. If choosing option "Clock Node ID", this clock's own Unique ID will be used. If choosing "User Specified", the user can specify any ID of their choosing which is under their own control.</description>
-<default>0</default>
-<map>
-	<relation><property>0</property><value>Clock Node ID</value></relation>
-	<relation><property>1</property><value>User Specified</value></relation>
-</map>
+%%CLOCK_CUSTOM_ID_TYPE%%
 </int>
-
 
 <eventid>
 <name>Custom Clock ID Event Base</name>
@@ -66,7 +37,6 @@
 
 </segment>
 
-
 <segment space='253' origin='11'>
 <name>Current State</name>
 <description>The current clock state.</description>
@@ -74,13 +44,7 @@
 <int size='1'>
 <name>Running State</name>
 <description>Running state.</description>
-<min>0</min>
-<max>1</max>
-<default>1</default>
-<map>
-	<relation><property>0</property><value>Stopped</value></relation>
-	<relation><property>1</property><value>Running</value></relation>
-</map>
+%%CLOCK_STATE%%
 </int>
 
 <string size='20'>
@@ -98,29 +62,16 @@
 <int size='1'>
 <name>Reset to Initial State</name>
 <description>Reset the clock to the "Initial State".</description>
-<min>0</min>
-<max>1</max>
-<default>0</default>
-<map>
-	<relation><property>0</property><value>Disabled</value></relation>
-	<relation><property>1</property><value>Enabled</value></relation>
-</map>
+%%ENABLE_STATE%%
 </int>
 
 <int size='1'>
 <name>Reset to Factory Defaults</name>
 <description>Reset the clock to the factory default settings.</description>
-<min>0</min>
-<max>1</max>
-<default>0</default>
-<map>
-	<relation><property>0</property><value>Disabled</value></relation>
-	<relation><property>1</property><value>Enabled</value></relation>
-</map>
+%%ENABLE_STATE%%
 </int>
 
 </segment>
-
 
 <segment space='253' origin='38'>
 <name>Initial State</name>
@@ -129,25 +80,13 @@
 <int size='1'>
 <name>Running State</name>
 <description>Running state.</description>
-<min>0</min>
-<max>1</max>
-<default>1</default>
-<map>
-	<relation><property>0</property><value>Stopped</value></relation>
-	<relation><property>1</property><value>Running</value></relation>
-</map>
+%%CLOCK_STATE%%
 </int>
 
 <int size='1'>
 <name>Initial Date and Time</name>
 <description>The user may choose to set the initial clock date and time to the computer clock or a user specified default date and time.</description>
-<min>0</min>
-<max>1</max>
-<default>1</default>
-<map>
-	<relation><property>0</property><value>Computer Clock</value></relation>
-	<relation><property>1</property><value>Default Date and Time</value></relation>
-</map>
+%%CLOCK_INITIAL_DATE_TIME%%
 </int>
 
 <string size='20'>

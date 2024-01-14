@@ -8,7 +8,7 @@
 import Foundation
 import AppKit
 
-public enum BaudRate : Int {
+public enum BaudRate : UInt8 {
   
   case br9600   = 0
   case br19200  = 1
@@ -23,43 +23,29 @@ public enum BaudRate : Int {
   case br576000 = 10
   case br921600 = 11
   
+  // MARK: Public Properties
+  
   public var baudRate : speed_t {
-    
-    get {
-      return BaudRate.rates[self.rawValue]
-    }
-    
+    return BaudRate.rates[Int(self.rawValue)]
   }
   
   public var title : String {
     
-    get {
-      
-      let formatter = NumberFormatter()
-      
-      formatter.usesGroupingSeparator = true
-      formatter.groupingSize = 3
-
-      formatter.alwaysShowsDecimalSeparator = false
-      formatter.minimumFractionDigits = 0
-      formatter.maximumFractionDigits = 0
-
-      let x = Double(BaudRate.rates[self.rawValue])
-      if let string = formatter.string(from: x as NSNumber) {
-        return string
-      }
-      
-      return ""
-      
-    }
+    let formatter = NumberFormatter()
     
+    formatter.usesGroupingSeparator = true
+    formatter.groupingSize = 3
+
+    formatter.alwaysShowsDecimalSeparator = false
+    formatter.minimumFractionDigits = 0
+    formatter.maximumFractionDigits = 0
+
+    let x = Double(BaudRate.rates[Int(self.rawValue)])
+    return formatter.string(from: x as NSNumber)!
+
   }
   
-  public static var numberOfRates : Int {
-    get {
-      return BaudRate.rates.count
-    }
-  }
+  // MARK: Private Class Properties
   
   private static let rates : [speed_t] =
   [
@@ -77,10 +63,49 @@ public enum BaudRate : Int {
    921600,
   ]
   
+  // MARK: Public Class Properties
+  
+  public static let mapPlaceholder = CDI.BAUD_RATE
+  
+  public static var numberOfRates : Int {
+    return BaudRate.rates.count
+  }
+  
+  private static var map : String {
+    
+    let items : [BaudRate] = [
+      .br9600,
+      .br19200,
+      .br28800,
+      .br38400,
+      .br57600,
+      .br76800,
+      .br115200,
+      .br125000,
+      .br230400,
+      .br460800,
+      .br576000,
+      .br921600,
+    ]
+    
+    var map = "<map>\n"
+    
+    for item in items {
+      map += "<relation><property>\(item.rawValue)</property><value>\(item.title)</value></relation>\n"
+    }
+    
+    map += "</map>\n"
+
+    return map
+    
+  }
+  
+  // MARK: Public Class Methods
+
   public static func baudRate(speed: speed_t) -> BaudRate {
     for index in 0...rates.count-1 {
       if rates[index] == speed {
-        return BaudRate(rawValue: index)!
+        return BaudRate(rawValue: UInt8(index))!
       }
     }
     return .br19200
@@ -94,6 +119,10 @@ public enum BaudRate : Int {
       comboBox.addItem(withObjectValue: "\(rate)")
     }
     
+  }
+
+  public static func insertMap(cdi:String) -> String {
+    return cdi.replacingOccurrences(of: mapPlaceholder, with: map)
   }
 
 }

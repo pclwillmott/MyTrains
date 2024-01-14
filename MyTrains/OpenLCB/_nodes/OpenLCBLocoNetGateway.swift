@@ -31,8 +31,6 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressFlowControl)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressBlockAllMessages)
 
-    initCDI(filename: "MyTrains LocoNet Gateway")
-    
     isLocoNetGatewayProtocolSupported = true
     
     datagramTypesSupported.insert(.sendlocoNetMessage)
@@ -40,7 +38,9 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     if !memorySpacesInitialized {
       resetToFactoryDefaults()
     }
-    
+
+    cdiFilename = "MyTrains LocoNet Gateway"
+
   }
   
   deinit {
@@ -83,31 +83,28 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   
   private var baudRate : BaudRate {
     get {
-      return BaudRate(rawValue: Int(configuration.getUInt8(address: addressBaudRate)!))!
+      return BaudRate(rawValue: configuration.getUInt8(address: addressBaudRate)!)!
     }
     set(value) {
-      let uInt : UInt8 = UInt8(value.rawValue & 0xff)
-      configuration.setUInt(address: addressBaudRate, value: uInt)
+      configuration.setUInt(address: addressBaudRate, value: value.rawValue)
     }
   }
   
   private var parity : Parity {
     get {
-      return Parity(rawValue: Int32(configuration.getUInt8(address: addressParity)!))!
+      return Parity(rawValue: configuration.getUInt8(address: addressParity)!)!
     }
     set(value) {
-      let uInt : UInt8 = UInt8(value.rawValue & 0xff)
-      configuration.setUInt(address: addressBaudRate, value: uInt)
+      configuration.setUInt(address: addressBaudRate, value: value.rawValue)
     }
   }
   
   private var flowControl : FlowControl {
     get {
-      return FlowControl(rawValue: Int(configuration.getUInt8(address: addressFlowControl)!))!
+      return FlowControl(rawValue: configuration.getUInt8(address: addressFlowControl)!)!
     }
     set(value) {
-      let uInt : UInt8 = UInt8(value.rawValue & 0xff)
-      configuration.setUInt(address: addressBaudRate, value: uInt)
+      configuration.setUInt(address: addressBaudRate, value: value.rawValue)
     }
   }
   

@@ -7,17 +7,6 @@
   <softwareVersion>%%SOFTWARE_VERSION%%</softwareVersion>
 </identification>
 
-<acdi/>
-<segment space='251' origin='1'> 
-<name>Node ID</name>
-<string size='63'>
-<name>User Name</name>
-<description>This name will appear in network browsers for this device.</description>
-</string>
-<string size='64'>
-<name>User Description</name>
-<description>This description will appear in network browsers for this device.</description>
-</string>
-</segment>
+%%ACDI%%
 
 </cdi>

@@ -8,7 +8,7 @@
 import Foundation
 import AppKit
 
-public enum Parity : Int32 {
+public enum Parity : UInt8 {
   
   case none = 0
   case even = 1
@@ -36,12 +36,14 @@ public enum Parity : Int32 {
       .odd,
     ]
     
-    var map = ""
-    
+    var map = "<default>\(defaultValue.rawValue)</default>\n<map>\n"
+
     for item in items {
       map += "<relation><property>\(item.rawValue)</property><value>\(item.title)</value></relation>\n"
     }
 
+    map += "</map>"
+    
     return map
     
   }
@@ -50,7 +52,7 @@ public enum Parity : Int32 {
   
   public static let defaultValue : Parity = .none
   
-  public static let mapPlaceholder = "%%PARITY%%"
+  public static let mapPlaceholder = CDI.PARITY
 
   // MARK: Public Class Methods
   
@@ -65,7 +67,7 @@ public enum Parity : Int32 {
   }
   
   public static func selected(comboBox: NSComboBox) -> Parity {
-    return Parity(rawValue: Int32(comboBox.indexOfSelectedItem)) ?? defaultValue
+    return Parity(rawValue: UInt8(comboBox.indexOfSelectedItem)) ?? defaultValue
   }
   
   public static func insertMap(cdi:String) -> String {

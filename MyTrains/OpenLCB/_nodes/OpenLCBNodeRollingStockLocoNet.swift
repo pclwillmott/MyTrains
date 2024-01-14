@@ -394,52 +394,30 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
     
   }
   
-  public override func initCDI(filename:String) {
+  internal override func customizeDynamicCDI(cdi:String) -> String {
     
-    if let filepath = Bundle.main.path(forResource: filename, ofType: "xml") {
-      do {
-        
-        var contents = try String(contentsOfFile: filepath)
-        
-        contents = contents.replacingOccurrences(of: "%%MANUFACTURER%%", with: manufacturerName)
-        contents = contents.replacingOccurrences(of: "%%MODEL%%", with: nodeModelName)
-        contents = contents.replacingOccurrences(of: "%%HARDWARE_VERSION%%", with: nodeHardwareVersion)
-        contents = contents.replacingOccurrences(of: "%%SOFTWARE_VERSION%%", with: nodeSoftwareVersion)
-
-        var sorted : [(nodeId:UInt64, name:String)] = []
-        
-        for (key, name) in locoNetGateways {
-          sorted.append((nodeId:key, name:name))
-        }
-        
-        sorted.sort {$0.name < $1.name}
-        
-        var gateways = "<relation><property>00.00.00.00.00.00.00.00</property><value>No Gateway Selected</value></relation>\n"
-        
-        for gateway in sorted {
-          gateways += "<relation><property>\(gateway.nodeId.toHexDotFormat(numberOfBytes: 8))</property><value>\(gateway.name)</value></relation>\n"
-        }
-
-        contents = contents.replacingOccurrences(of: "%%LOCONET_GATEWAYS%%", with: gateways)
-
-        contents = contents.replacingOccurrences(of: "%%FUNCTIONS_MAP%%", with: OpenLCBFunction.cdiMap)
-        
-        let memorySpace = OpenLCBMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.cdi.rawValue, isReadOnly: true, description: "")
-        memorySpace.memory = [UInt8]()
-        memorySpace.memory.append(contentsOf: contents.utf8)
-        memorySpace.memory.append(contentsOf: [UInt8](repeating: 0, count: 64))
-        memorySpaces[memorySpace.space] = memorySpace
-        isConfigurationDescriptionInformationProtocolSupported = true
-        
-        setupConfigurationOptions()
-        
-      }
-      catch {
-      }
+    // Do mappings for LocoNet Gateways
+    
+    var sorted : [(nodeId:UInt64, name:String)] = []
+    
+    for (key, name) in locoNetGateways {
+      sorted.append((nodeId:key, name:name))
     }
     
+    sorted.sort {$0.name < $1.name}
+    
+    var gateways = "<map>\n<relation><property>00.00.00.00.00.00.00.00</property><value>No Gateway Selected</value></relation>\n"
+    
+    for gateway in sorted {
+      gateways += "<relation><property>\(gateway.nodeId.toHexDotFormat(numberOfBytes: 8))</property><value>\(gateway.name)</value></relation>\n"
+    }
+
+    gateways += "</map>\n"
+    
+    return cdi.replacingOccurrences(of: CDI.LOCONET_GATEWAYS, with: gateways)
+
   }
-  
+
   internal override func resetReboot() {
     
     super.resetReboot()
@@ -489,7 +467,7 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
         let node = OpenLCBNode(nodeId: message.sourceNodeId!)
         node.encodedNodeInformation = message.payload
         locoNetGateways[node.nodeId] = node.userNodeName
-        reloadCDI()
+        initCDI()
       }
 
     default:

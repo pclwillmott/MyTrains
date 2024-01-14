@@ -41,11 +41,13 @@ public enum OpenLCBClockType : UInt8 {
       .customClock,
     ]
     
-    var map = ""
-    
+    var map = "<default>\(defaultValue.rawValue)</default>\n<map>\n"
+
     for item in items {
       map += "<relation><property>\(item.rawValue)</property><value>\(item.title)</value></relation>\n"
     }
+
+    map += "</map>\n"
 
     return map
     
@@ -53,9 +55,9 @@ public enum OpenLCBClockType : UInt8 {
   
   // MARK: Public Class Properties
   
-  public static let defaultValue : TurnoutMotorType = .manual
+  public static let defaultValue : OpenLCBClockType = .fastClock
   
-  public static let mapPlaceholder = "%%CLOCK_TYPE%%"
+  public static let mapPlaceholder = CDI.CLOCK_TYPE
 
   // MARK: Public Class Methods
   

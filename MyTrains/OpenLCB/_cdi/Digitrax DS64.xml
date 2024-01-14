@@ -7,27 +7,14 @@
   <softwareVersion>%%SOFTWARE_VERSION%%</softwareVersion>
 </identification>
 
-<acdi/>
-<segment space='251' origin='1'>
-<name>Node ID</name>
-<string size='63'>
-<name>User Name</name>
-<description>This name will appear in network browsers for this device.</description>
-</string>
-<string size='64'>
-<name>User Description</name>
-<description>This description will appear in network browsers for this device.</description>
-</string>
-</segment>
+%%ACDI%%
 
 <segment space='253' origin='0'> 
 <name>DS64 Configuration</name>
 
 <eventid>
   <name>LocoNet Gateway</name>
-  <map>
     %%LOCONET_GATEWAYS%%
-  </map>
 </eventid>
 
 <int size='2'>

@@ -86,49 +86,41 @@ public enum OpenLCBFunction : UInt8 {
   case unavailable         = 255
 
   public var title : String {
-    get {
-      return OpenLCBFunction.titles[self]!
-    }
+    return OpenLCBFunction.titles[self]!
   }
   
   public static var keyValues : [(key:OpenLCBFunction, value:String)] {
-    get {
-      
-      var result : [(key:OpenLCBFunction, value:String)] = []
-      
-      for (key, value) in titles {
-        if key != .unassigned && key != .unavailable {
-          result.append((key:key, value:value))
-        }
+    
+    var result : [(key:OpenLCBFunction, value:String)] = []
+    
+    for (key, value) in titles {
+      if key != .unassigned && key != .unavailable {
+        result.append((key:key, value:value))
       }
-      
-      result.sort {$0.value < $1.value}
-      
-      result.insert((key:OpenLCBFunction.unassigned, value:OpenLCBFunction.unassigned.title), at: 0)
-      
-      result.append((key:OpenLCBFunction.unavailable, value:OpenLCBFunction.unavailable.title))
-      
-      return result
-      
     }
+    
+    result.sort {$0.value < $1.value}
+    
+    result.insert((key:OpenLCBFunction.unassigned, value:OpenLCBFunction.unassigned.title), at: 0)
+    
+    result.append((key:OpenLCBFunction.unavailable, value:OpenLCBFunction.unavailable.title))
+    
+    return result
+    
   }
   
-  public static var cdiMap : String {
+  private static var map : String {
+      
+    var result = "<map>\n"
     
-    get {
-      
-      var result = "<map>\n"
-      
-      for item in keyValues {
-        result += "<relation><property>\(item.key.rawValue)</property><value>\(item.value)</value></relation>\n"
-      }
-      
-      result += "</map>\n"
-      
-      return result
-      
+    for item in keyValues {
+      result += "<relation><property>\(item.key.rawValue)</property><value>\(item.value)</value></relation>\n"
     }
     
+    result += "</map>\n"
+    
+    return result
+
   }
   
   public static let titles : [OpenLCBFunction:String] = [
@@ -209,5 +201,9 @@ public enum OpenLCBFunction : UInt8 {
     .stop                : String(localized: "Stop", comment: "Used as a label for a button that controls a trains's functions such as sound effects"),
 
   ]
+  
+  public static func insertMap(cdi:String) -> String {
+    return cdi.replacingOccurrences(of: CDI.FUNCTIONS_MAP, with: map)
+  }
   
 }

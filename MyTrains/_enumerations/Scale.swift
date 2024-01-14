@@ -128,8 +128,20 @@ public enum Scale : UInt8 {
   }
   
   public var title : String {
-    return String(localized: "1:\(ratio)", comment: "This is a ratio used for layout scale, e.g. 1:76.2")
+    
+    let formatter = NumberFormatter()
+    
+    formatter.usesGroupingSeparator = true
+    formatter.groupingSize = 3
+
+    formatter.alwaysShowsDecimalSeparator = false
+    formatter.minimumFractionDigits = 0
+    formatter.maximumFractionDigits = 2
+
+    return String(localized: "1 : \(formatter.string(from: self.ratio as NSNumber)!)", comment: "This is a ratio used for layout scale, e.g. 1 : 76.2")
+
   }
+
   
   // MARK: Private Class Properties
   
@@ -176,19 +188,23 @@ public enum Scale : UInt8 {
     
     scales.sort {$0.ratio > $1.ratio}
     
-    var map = ""
+    var map = "<default>\(defaultValue.rawValue)</default>\n<map>\n"
     
     for scale in scales {
       map += "<relation><property>\(scale.rawValue)</property><value>\(scale.title)</value></relation>\n"
     }
 
+    map += "</map>"
+
     return map
-    
+
   }
   
   // MARK: Public Class Properties
   
-  public static let mapPlaceholder = "%%LAYOUT_SCALE%%"
+  public static let defaultValue : Scale = .scale1to76dot2
+  
+  public static let mapPlaceholder = CDI.LAYOUT_SCALE
   
   // MARK: Public Class Methods
   

@@ -28,11 +28,11 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressParity)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressFlowControl)
 
-    initCDI(filename: "MyTrains CAN Gateway")
-    
     if !memorySpacesInitialized {
       resetToFactoryDefaults()
     }
+
+    cdiFilename = "MyTrains CAN Gateway"
     
   }
   
@@ -78,31 +78,28 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   
   private var baudRate : BaudRate {
     get {
-      return BaudRate(rawValue: Int(configuration.getUInt8(address: addressBaudRate)!))!
+      return BaudRate(rawValue: configuration.getUInt8(address: addressBaudRate)!)!
     }
     set(value) {
-      let uInt : UInt8 = UInt8(value.rawValue & 0xff)
-      configuration.setUInt(address: addressBaudRate, value: uInt)
+      configuration.setUInt(address: addressBaudRate, value: value.rawValue)
     }
   }
-  
+
   private var parity : Parity {
     get {
-      return Parity(rawValue: Int32(configuration.getUInt8(address: addressParity)!))!
+      return Parity(rawValue: configuration.getUInt8(address: addressParity)!)!
     }
     set(value) {
-      let uInt : UInt8 = UInt8(value.rawValue & 0xff)
-      configuration.setUInt(address: addressBaudRate, value: uInt)
+      configuration.setUInt(address: addressBaudRate, value: value.rawValue)
     }
   }
   
   private var flowControl : FlowControl {
     get {
-      return FlowControl(rawValue: Int(configuration.getUInt8(address: addressFlowControl)!))!
+      return FlowControl(rawValue: configuration.getUInt8(address: addressFlowControl)!)!
     }
     set(value) {
-      let uInt : UInt8 = UInt8(value.rawValue & 0xff)
-      configuration.setUInt(address: addressBaudRate, value: uInt)
+      configuration.setUInt(address: addressBaudRate, value: value.rawValue)
     }
   }
   

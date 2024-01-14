@@ -1,35 +1,36 @@
 //
-//  OpenLCBClockState.swift
+//  EnableState.swift
 //  MyTrains
 //
-//  Created by Paul Willmott on 26/05/2023.
+//  Created by Paul Willmott on 14/01/2024.
 //
 
 import Foundation
+import AppKit
 
-public enum OpenLCBClockState : UInt8 {
+public enum EnableState : UInt8 {
   
-  case stopped = 0
-  case running = 1
+  case disabled = 0
+  case enabled  = 1
 
   // MARK: Public Properties
   
   public var title : String {
-    return OpenLCBClockState.titles[Int(self.rawValue)]
+    return EnableState.titles[Int(self.rawValue)]
   }
   
   // MARK: Private Class Properties
   
   private static let titles = [
-    String(localized: "Stopped", comment: "Used to indicate a clock is stopped"),
-    String(localized: "Running", comment: "Used to indicate a clock is running"),
+    String(localized: "Disabled", comment: "Used to indicate that something is disabled"),
+    String(localized: "Enabled", comment: "Used to indicate that something is not disabled"),
   ]
-
+  
   private static var map : String {
     
-    var items : [OpenLCBClockState] = [
-      .stopped,
-      .running,
+    var items : [EnableState] = [
+      .disabled,
+      .enabled,
     ]
     
     var map = "<default>\(defaultValue.rawValue)</default>\n<map>\n"
@@ -38,17 +39,17 @@ public enum OpenLCBClockState : UInt8 {
       map += "<relation><property>\(item.rawValue)</property><value>\(item.title)</value></relation>\n"
     }
 
-    map += "</map>\n"
-
+    map += "</map>"
+    
     return map
     
   }
   
-  // MARK: Public Class Properties
+  // MARK: Public Class Prooperties
   
-  public static let defaultValue : OpenLCBClockState = .running
+  public static let defaultValue : EnableState = .disabled
   
-  public static let mapPlaceholder = CDI.CLOCK_STATE
+  public static let mapPlaceholder = CDI.ENABLE_STATE
 
   // MARK: Public Class Methods
   

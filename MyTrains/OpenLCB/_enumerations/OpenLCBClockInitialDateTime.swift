@@ -10,7 +10,7 @@ import Foundation
 public enum OpenLCBClockInitialDateTime : UInt8 {
   
   case computerDateTime = 0
-  case defaultDateTime = 1
+  case defaultDateTime  = 1
   
   // MARK: Public Properties
   
@@ -21,8 +21,8 @@ public enum OpenLCBClockInitialDateTime : UInt8 {
   // MARK: Private Class Properties
   
   private static let titles = [
-    String(localized: "Computer Data & Time", comment: "Used to indicate what is the initial date and time setting for a clock"),
-    String(localized: "Default Data & Time", comment: "Used to indicate what is the initial date and time setting for a clock"),
+    String(localized: "Computer Date & Time", comment: "Used to indicate what is the initial date and time setting for a clock"),
+    String(localized: "Default Date & Time", comment: "Used to indicate what is the initial date and time setting for a clock"),
   ]
 
   private static var map : String {
@@ -32,11 +32,13 @@ public enum OpenLCBClockInitialDateTime : UInt8 {
       .defaultDateTime,
     ]
     
-    var map = ""
-    
+    var map = "<default>\(defaultValue.rawValue)</default>\n<map>\n"
+
     for item in items {
       map += "<relation><property>\(item.rawValue)</property><value>\(item.title)</value></relation>\n"
     }
+
+    map += "</map>\n"
 
     return map
     
@@ -44,9 +46,9 @@ public enum OpenLCBClockInitialDateTime : UInt8 {
   
   // MARK: Public Class Properties
   
-  public static let defaultValue : TurnoutMotorType = .manual
+  public static let defaultValue : OpenLCBClockInitialDateTime = .computerDateTime
   
-  public static let mapPlaceholder = "%%CLOCK_INITIAL_DATE_TIME%%"
+  public static let mapPlaceholder = CDI.CLOCK_INITIAL_DATE_TIME
 
   // MARK: Public Class Methods
   

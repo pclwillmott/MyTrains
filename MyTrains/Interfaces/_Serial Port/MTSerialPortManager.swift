@@ -103,5 +103,19 @@ class MTSerialPortManager {
       comboBox.addItem(withObjectValue: ports[index])
     }
   }
+  
+  public static func insertMap(cdi:String) -> String {
+    
+    var map = "<map>\n"
+
+    for port in availablePorts() {
+      map += "<relation><property>\(port)</property><value>\(port)</value></relation>\n"
+    }
+
+    map += "</map>"
+
+    return cdi.replacingOccurrences(of: CDI.PORTS, with: map)
+
+  }
 
 }

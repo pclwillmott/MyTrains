@@ -10,34 +10,15 @@
 %%ACDI%%
 
 <segment space='253' origin='0'>
-<name>Configuration</name>
-<group>
-<name>Serial Port</name>
-<description>Configures the serial port</description>
-<string size='256'>
-<name>Port</name>
-  %%PORTS%%
-</string>
+<name>Layout Configuration</name>
 
 <int size='1'>
-<name>Baud Rate</name>
-%%BAUD_RATE%%
+<name>Scale</name>
+<description>The layout scale.</description>
+  %%LAYOUT_SCALE%%
 </int>
 
-<int size='1'>
-<name>Parity</name>
-%%PARITY%%
-</int>
-
-<int size='1'>
-<name>Flow Control</name>
-%%FLOW_CONTROL%%
-</int>
-</group>
 </segment>
 
 </cdi>
-
-
-
 

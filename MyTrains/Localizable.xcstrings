@@ -55,11 +55,11 @@
     "0°" : {
       "comment" : "Used to indicate a rotation angle in degrees"
     },
+    "1 : %@" : {
+      "comment" : "This is a ratio used for layout scale, e.g. 1 : 76.2"
+    },
     "1 minute" : {
       "comment" : "Used to select a sampling period"
-    },
-    "1:%lf" : {
-      "comment" : "This is a ratio used for layout scale, e.g. 1:76.2"
     },
     "5 seconds" : {
       "comment" : "Used to select a sampling period"
@@ -209,6 +209,9 @@
     "Character" : {
       "comment" : "Used by combobox to select option to display number as UTF8 character"
     },
+    "Clock Node ID" : {
+      "comment" : "Used to indicate that a custom clock should use the clock node Id"
+    },
     "Closed" : {
       "comment" : "Used to indicate the state of a turnout"
     },
@@ -251,7 +254,7 @@
     "Common" : {
       "comment" : "Used to indicate a LocoNet command station slot status"
     },
-    "Computer Data & Time" : {
+    "Computer Date & Time" : {
       "comment" : "Used to indicate what is the initial date and time setting for a clock"
     },
     "Configuration" : {
@@ -301,7 +304,7 @@
       "comment" : "Used for LocoNet train control protocol selection"
     },
     "DCC Programmer Tool" : {
-      "comment" : "Used for the DCC Programmer Tool menu item title\nUsed to create a default OpenLCB virtual name"
+      "comment" : "Used to create a default OpenLCB virtual name\nUsed for the DCC Programmer Tool menu item title"
     },
     "DCC Programmer Tool Node" : {
       "comment" : "Used to describe an OpenLCB virtual node"
@@ -318,7 +321,7 @@
     "Decoding CDI and building user interface" : {
 
     },
-    "Default Data & Time" : {
+    "Default Date & Time" : {
       "comment" : "Used to indicate what is the initial date and time setting for a clock"
     },
     "Destination Blind Front" : {
@@ -338,6 +341,9 @@
     },
     "Dimmer" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Disabled" : {
+      "comment" : "Used to indicate that something is disabled"
     },
     "Ditch Lights" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
@@ -371,6 +377,9 @@
     },
     "EM" : {
       "comment" : "Used to indicate the track gauge"
+    },
+    "Enabled" : {
+      "comment" : "Used to indicate that something is not disabled"
     },
     "Engine" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
@@ -448,7 +457,7 @@
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
     },
     "Layout" : {
-      "comment" : "Used for the New Layout menu item title\nUsed to create a default OpenLCB virtual name"
+      "comment" : "Used to create a default OpenLCB virtual name\nUsed for the New Layout menu item title"
     },
     "Layout Node" : {
       "comment" : "Used to describe an OpenLCB virtual node"
@@ -507,7 +516,7 @@
     "Manual Notching Logic" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
     },
-    "Master" : {
+    "Master (generator)" : {
       "comment" : "Used to indicate a clock's operating mode"
     },
     "Maximum Revs" : {
@@ -542,6 +551,9 @@
     },
     "No Parity" : {
       "comment" : "Used to indicate that the serial port is configured for no parity bit"
+    },
+    "Node ID" : {
+      "comment" : "Used for title of the Node ID segment of a CDI"
     },
     "Not Electrified" : {
       "comment" : "Used to indicate that the track is not electrified, i.e. only steam and diesels can use it"
@@ -659,6 +671,9 @@
     "RTS/CTS" : {
       "comment" : "Used to indicate that serial port uses the RTS/CTS lines for hardware flow control"
     },
+    "Running" : {
+      "comment" : "Used to indicate a clock is running"
+    },
     "S" : {
       "comment" : "Used to indicate the track gauge"
     },
@@ -683,7 +698,7 @@
     "Shunting Mode" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
     },
-    "Slave" : {
+    "Slave (consumer)" : {
       "comment" : "Used to indicate a clock's operating mode"
     },
     "Slow Motion" : {
@@ -716,6 +731,9 @@
     "Stop" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
     },
+    "Stopped" : {
+      "comment" : "Used to indicate a clock is stopped"
+    },
     "Straight Line" : {
       "comment" : "Used by combobox to select curve fitting method)"
     },
@@ -742,6 +760,12 @@
     },
     "Third Rail" : {
       "comment" : "Used to indicate that the track models 3rd rail electrification"
+    },
+    "This description will appear in network browsers for this device." : {
+      "comment" : "Used for the description of the user description input field in the CDI"
+    },
+    "This name will appear in network browsers for this device." : {
+      "comment" : "Used for the description of the user name input field in the CDI"
     },
     "Throttle" : {
       "comment" : "Used for the Throttle menu item title"
@@ -780,7 +804,16 @@
       "comment" : "Used to indicate that turnout can be configured to have a powered or insulated frog"
     },
     "Unknown" : {
-      "comment" : "Used to indicate the state of a turnout\nUsed to indicate that the type of something is unknown"
+      "comment" : "Used to indicate that the type of something is unknown\nUsed to indicate the state of a turnout"
+    },
+    "User Description" : {
+      "comment" : "Used for the title of the User Description input field in CDI"
+    },
+    "User Name" : {
+      "comment" : "Used for the title of the User Name input field in CDI"
+    },
+    "User Specified" : {
+      "comment" : "Used to indicate that a custom clock should use the user specified node Id"
     },
     "Virtual Clock" : {
       "comment" : "Used to create a default OpenLCB virtual name"

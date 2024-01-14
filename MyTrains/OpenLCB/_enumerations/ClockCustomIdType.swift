@@ -1,35 +1,35 @@
 //
-//  OpenLCBClockState.swift
+//  ClockCustomIdType.swift
 //  MyTrains
 //
-//  Created by Paul Willmott on 26/05/2023.
+//  Created by Paul Willmott on 14/01/2024.
 //
 
 import Foundation
 
-public enum OpenLCBClockState : UInt8 {
+public enum ClockCustomIdType : UInt8 {
   
-  case stopped = 0
-  case running = 1
-
+  case clockNodeId   = 0
+  case userSpecified = 1
+  
   // MARK: Public Properties
   
   public var title : String {
-    return OpenLCBClockState.titles[Int(self.rawValue)]
+    return ClockCustomIdType.titles[Int(self.rawValue)]
   }
   
   // MARK: Private Class Properties
   
   private static let titles = [
-    String(localized: "Stopped", comment: "Used to indicate a clock is stopped"),
-    String(localized: "Running", comment: "Used to indicate a clock is running"),
+    String(localized: "Clock Node ID", comment: "Used to indicate that a custom clock should use the clock node Id"),
+    String(localized: "User Specified", comment: "Used to indicate that a custom clock should use the user specified node Id"),
   ]
 
   private static var map : String {
     
-    var items : [OpenLCBClockState] = [
-      .stopped,
-      .running,
+    var items : [ClockCustomIdType] = [
+      .clockNodeId,
+      .userSpecified,
     ]
     
     var map = "<default>\(defaultValue.rawValue)</default>\n<map>\n"
@@ -46,9 +46,9 @@ public enum OpenLCBClockState : UInt8 {
   
   // MARK: Public Class Properties
   
-  public static let defaultValue : OpenLCBClockState = .running
+  public static let defaultValue : ClockCustomIdType = .clockNodeId
   
-  public static let mapPlaceholder = CDI.CLOCK_STATE
+  public static let mapPlaceholder = CDI.CLOCK_CUSTOM_ID_TYPE
 
   // MARK: Public Class Methods
   

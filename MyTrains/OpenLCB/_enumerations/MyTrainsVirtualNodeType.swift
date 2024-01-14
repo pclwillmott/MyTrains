@@ -33,9 +33,7 @@ public enum MyTrainsVirtualNodeType : UInt16 {
   }
   
   public var manufacturerName : String {
-    get {
-      return "MyTrains"
-    }
+    return "MyTrains"
   }
   
   public var isInternal : Bool {

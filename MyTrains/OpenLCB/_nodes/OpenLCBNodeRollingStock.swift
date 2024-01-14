@@ -81,7 +81,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
       resetToFactoryDefaults()
     }
     
-    initCDI(filename: "MyTrains Train")
+    cdiFilename = "MyTrains Train"
     
     initFDI(filename: "FDI Generic")
     
@@ -613,14 +613,9 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
   
   // MARK: Public Methods
   
-  public func reloadCDI() {
-    memorySpaces.removeValue(forKey: OpenLCBNodeMemoryAddressSpace.cdi.rawValue)
-    initCDI(filename: "MyTrains Train")
-  }
-  
   public func reloadFDI() {
     memorySpaces.removeValue(forKey: OpenLCBNodeMemoryAddressSpace.fdi.rawValue)
-    initCDI(filename: "FDI Generic")
+    initFDI(filename: "FDI Generic")
   }
   
   public override func start() {

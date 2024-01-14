@@ -37,6 +37,8 @@ class MainVC: NSViewController, MyTrainsControllerDelegate, LayoutDelegate, Open
     scrollView.allowsMagnification = true
     scrollView.magnification = UserDefaults.standard.double(forKey: DEFAULT.SWITCHBOARD_EDITOR_MAG)
 
+    lblFastClock.addSubview(btnZoomIn2)
+    
     if let layout = myTrainsController.layout {
       layoutDelegateId = layout.addDelegate(delegate: self)
     }
@@ -153,6 +155,14 @@ class MainVC: NSViewController, MyTrainsControllerDelegate, LayoutDelegate, Open
   @IBOutlet weak var lblFastClock: NSTextField!
   
   @IBOutlet weak var clockView: ClockView!
+  
+  // MARK: Controls
+  
+  let topView = NSView()
+  
+  let cboLayout2 = NSComboBox()
+  
+  let btnZoomIn2 = NSButton(image: NSImage(systemSymbolName: "pencil", accessibilityDescription: nil)!, target: nil, action: nil)
   
 }
 

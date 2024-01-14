@@ -48,7 +48,7 @@ public class MTSerialPort : MTSerialPortManagerDelegate {
     self._baudRate = BaudRate.baudRate(speed: speed)
     self._numberOfDataBits = dataBits
     self._numberOfStopBits = stopBits
-    self._parity = Parity(rawValue: par_value) ?? .none
+    self._parity = Parity(rawValue: UInt8(par_value)) ?? .none
     self._usesRTSCTSFlowControl = ctsrts == 1
     
     self.path = path
@@ -162,7 +162,7 @@ public class MTSerialPort : MTSerialPortManagerDelegate {
     
     // try and restore previous options
     
-    setSerialPortOptions(fd, _baudRate.baudRate, _numberOfDataBits, _numberOfStopBits, _parity.rawValue, _usesRTSCTSFlowControl ? 1 : 0)
+    setSerialPortOptions(fd, _baudRate.baudRate, _numberOfDataBits, _numberOfStopBits, Int32(_parity.rawValue), _usesRTSCTSFlowControl ? 1 : 0)
     
     closeSerialPort(fd);
     
@@ -184,7 +184,7 @@ public class MTSerialPort : MTSerialPortManagerDelegate {
     
     if fd != -1 {
       
-      if setSerialPortOptions(fd, baudRate.baudRate, numberOfDataBits, numberOfStopBits, parity.rawValue, usesRTSCTSFlowControl ? 1 : 0) == 0 {
+      if setSerialPortOptions(fd, baudRate.baudRate, numberOfDataBits, numberOfStopBits, Int32(parity.rawValue), usesRTSCTSFlowControl ? 1 : 0) == 0 {
       
         DispatchQueue.global(qos: .background /* .utility*/).async {
           self.monitorPort()
