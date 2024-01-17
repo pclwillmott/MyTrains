@@ -105,7 +105,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
           configurationMenu.submenu = NSMenu()
           mainMenu.addItem(configurationMenu)
 
-          // Create the LCC/OpenLCB Network Menu Item
+          // Create the Master Node Menu Item
+
+          let workstationMenuItem = NSMenuItem()
+          workstationMenuItem.title = String(localized: "Workstation", comment: "Used for the Workstation menu item title")
+          workstationMenuItem.target = self
+          workstationMenuItem.action = #selector(self.mnuWorkstationAction(_:))
+          configurationMenu.submenu?.addItem(workstationMenuItem)
 
           let networkMenuItem = NSMenuItem()
           networkMenuItem.title = String(localized: "LCC/OpenLCB Network", comment: "Used for the LCC/OpenLCB Network menu item title")
@@ -459,6 +465,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
   @IBAction func mnuDashBoardAction(_ sender: NSMenuItem) {
     let x = ModalWindow.DashBoard
     let wc = x.windowController
+    wc.showWindow(nil)
+  }
+
+  @IBAction func mnuWorkstationAction(_ sender: NSMenuItem) {
+    let x = ModalWindow.SelectMasterNode
+    let wc = x.windowController
+    let vc = x.viewController(windowController: wc) as! SelectMasterNodeVC
+    vc.controller = myTrainsController
     wc.showWindow(nil)
   }
 

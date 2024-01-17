@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import AppKit
 
 // MARK: Global Declaration of MyTrainsController Instance
 
@@ -20,6 +21,8 @@ public class MyTrainsController : NSObject, NSUserNotificationCenterDelegate {
   override init() {
     
     super.init()
+    
+//    masterNodeId = nil
     
     checkPortsTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(checkPortsTimerAction), userInfo: nil, repeats: true)
     
@@ -45,8 +48,31 @@ public class MyTrainsController : NSObject, NSUserNotificationCenterDelegate {
   
   // MARK: Public Properties
   
+  public var masterNodeId : UInt64? {
+    get {
+      let id = UserDefaults.standard.integer(forKey: DEFAULT.MASTER_NODE_ID)
+      return id == 0 ? nil : UInt64(id)
+    }
+    set(value) {
+      if value != masterNodeId {
+        UserDefaults.standard.set(Int(value ?? 0), forKey: DEFAULT.MASTER_NODE_ID)
+      }
+    }
+  }
+  
+  public var workstationType : WorkstationType? {
+    get {
+      return WorkstationType(rawValue: UserDefaults.standard.integer(forKey: DEFAULT.WORKSTATION_TYPE))
+    }
+    set(value) {
+      UserDefaults.standard.set(value?.rawValue ?? 0, forKey: DEFAULT.WORKSTATION_TYPE)
+    }
+  }
+  
   public var layouts : [Int:Layout] = Layout.layouts
 
+  // 0x050101017b00
+  
   public var openLCBNodeId : UInt64 {
     get {
       return 0x050101017b00 // Paul Willmott's Start of range
@@ -69,7 +95,7 @@ public class MyTrainsController : NSObject, NSUserNotificationCenterDelegate {
     return layouts[layoutId]
   }
   
-  public let manufacturer = "Sleeper Grime Software"
+  public let manufacturer = "Paul C. L. Willmott"
   
   public let softwareVersion = "v0.X"
   

@@ -70,7 +70,33 @@ extension UInt64 {
     self = value
     
   }
-  
+
+  init?(dotHex:String, numberOfBytes:Int) {
+    
+    let split = dotHex.trimmingCharacters(in: .whitespacesAndNewlines).split(separator: ".", omittingEmptySubsequences: true)
+    
+    if split.count != numberOfBytes {
+      return nil
+    }
+    
+    var value : UInt64 = 0
+    
+    for digits in split {
+      if let byte = UInt8(digits, radix: 16) {
+        value <<= 8
+        value |= UInt64(byte)
+      }
+      else {
+        return nil
+      }
+    }
+    
+    self.init()
+    
+    self = value
+    
+  }
+
   init(hex:String) {
     
     self.init()

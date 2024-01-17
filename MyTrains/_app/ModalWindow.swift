@@ -34,6 +34,7 @@ enum AppStoryboard : String {
   case OpenLCBMonitor                    = "OpenLCBMonitor"
   case ConfigurationTool                 = "ConfigurationTool"
   case CDITextView                       = "CDITextView"
+  case SelectMasterNode                  = "SelectMasterNode"
 
   var instance : NSStoryboard {
     return NSStoryboard(name: self.rawValue, bundle: Bundle.main)
@@ -66,6 +67,7 @@ let storyboardLookup : [String:AppStoryboard] = [
   "OpenLCBMonitor"                    : AppStoryboard.OpenLCBMonitor,
   "ConfigurationTool"                 : AppStoryboard.ConfigurationTool,
   "CDITextView"                       : AppStoryboard.CDITextView,
+  "SelectMasterNode"                  : AppStoryboard.SelectMasterNode,
 ]
 
 /*
@@ -103,6 +105,7 @@ enum ModalWindow : String {
   case OpenLCBMonitor                    = "OpenLCBMonitor"
   case ConfigurationTool                 = "ConfigurationTool"
   case CDITextView                       = "CDITextView"
+  case SelectMasterNode                  = "SelectMasterNode"
 
   var windowController : NSWindowController {
     let storyboard = storyboardLookup[self.rawValue]!

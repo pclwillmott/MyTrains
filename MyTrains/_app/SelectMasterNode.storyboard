@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22505"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Window Controller-->
+        <scene sceneID="Gpf-1w-qWq">
+            <objects>
+                <windowController storyboardIdentifier="SelectMasterNodeWC" id="kmx-3t-wsS" sceneMemberID="viewController">
+                    <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" visibleAtLaunch="NO" frameAutosaveName="SelectMasterNode" animationBehavior="default" id="zVX-e5-Izb">
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
+                        <rect key="contentRect" x="268" y="330" width="191" height="106"/>
+                        <rect key="screenRect" x="0.0" y="0.0" width="1792" height="1095"/>
+                        <view key="contentView" id="0sx-E5-0XB">
+                            <rect key="frame" x="0.0" y="0.0" width="191" height="106"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </view>
+                        <connections>
+                            <outlet property="delegate" destination="kmx-3t-wsS" id="g0C-ed-0Wo"/>
+                        </connections>
+                    </window>
+                    <connections>
+                        <segue destination="ink-WW-0eZ" kind="relationship" relationship="window.shadowedContentViewController" id="C3N-sQ-DI5"/>
+                    </connections>
+                </windowController>
+                <customObject id="PIt-Ve-UxX" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-142.5" y="59"/>
+        </scene>
+        <!--Select Master NodeVC-->
+        <scene sceneID="D1d-Pr-5OY">
+            <objects>
+                <viewController id="ink-WW-0eZ" customClass="SelectMasterNodeVC" customModule="MyTrains" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="a8Y-ai-OQ1">
+                        <rect key="frame" x="0.0" y="0.0" width="160" height="88"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </view>
+                </viewController>
+                <customObject id="xdf-EP-3vR" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="549" y="19"/>
+        </scene>
+    </scenes>
+</document>

@@ -37,8 +37,6 @@ class MainVC: NSViewController, MyTrainsControllerDelegate, LayoutDelegate, Open
     scrollView.allowsMagnification = true
     scrollView.magnification = UserDefaults.standard.double(forKey: DEFAULT.SWITCHBOARD_EDITOR_MAG)
 
-    lblFastClock.addSubview(btnZoomIn2)
-    
     if let layout = myTrainsController.layout {
       layoutDelegateId = layout.addDelegate(delegate: self)
     }

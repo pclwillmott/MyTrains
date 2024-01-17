@@ -12,6 +12,10 @@ enum DEFAULT {
   static let DATABASE_PATH                      = "DatabasePath"
   static let SAVED_CVS_PATH                     = "SavedCVsPath"
   static let DMF_PATH                           = "DMFPath"
+  
+  static let MASTER_NODE_ID                     = "MASTER_NODE_ID"
+  static let WORKSTATION_TYPE                   = "WORKSTATION_TYPE"
+  
   static let MONITOR_INTERFACE_ID               = "MonitorInterfaceId"
   static let MONITOR_SEND_FILENAME              = "MonitorSendFileName"
   static let MONITOR_CAPTURE_FILENAME           = "MonitorCaptureFileName"

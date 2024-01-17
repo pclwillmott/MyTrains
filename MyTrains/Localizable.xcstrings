@@ -276,6 +276,9 @@
         }
       }
     },
+    "Configure Workstation" : {
+      "comment" : "Used for the title of the configure workstation window"
+    },
     "Couple" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
     },
@@ -323,6 +326,9 @@
     },
     "Default Date & Time" : {
       "comment" : "Used to indicate what is the initial date and time setting for a clock"
+    },
+    "Delegate" : {
+      "comment" : "Used to indicate that the workstation is not the master system controller but can be delegated some of its functions"
     },
     "Destination Blind Front" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
@@ -516,8 +522,14 @@
     "Manual Notching Logic" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
     },
+    "Master" : {
+      "comment" : "Used to indicate that the workstation is the master system controller"
+    },
     "Master (generator)" : {
       "comment" : "Used to indicate a clock's operating mode"
+    },
+    "Master Workstation Node ID" : {
+      "comment" : "Used for the title of the Master Workstation Node ID Input field"
     },
     "Maximum Revs" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
@@ -568,7 +580,7 @@
       "comment" : "Used to indicate that the serial port is configured for odd parity"
     },
     "OK" : {
-
+      "comment" : "Used for the OK button title to say that all is complete"
     },
     "OO/HO" : {
       "comment" : "Used to indicate the track gauge"
@@ -683,6 +695,9 @@
     "Sanding" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
     },
+    "Save" : {
+      "comment" : "Used for the Save button title to say that all is complete"
+    },
     "Scale 7" : {
       "comment" : "Used to indicate the track gauge"
     },
@@ -767,6 +782,9 @@
     "This name will appear in network browsers for this device." : {
       "comment" : "Used for the description of the user name input field in the CDI"
     },
+    "This Workstation Type" : {
+      "comment" : "Used for the title of the Workstation Type combo box"
+    },
     "Throttle" : {
       "comment" : "Used for the Throttle menu item title"
     },
@@ -844,6 +862,9 @@
     },
     "Whistle" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Workstation" : {
+      "comment" : "Used for the Workstation menu item title"
     },
     "Write All" : {
 
