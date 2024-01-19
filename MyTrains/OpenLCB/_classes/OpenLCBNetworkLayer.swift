@@ -11,91 +11,17 @@ public class OpenLCBNetworkLayer : NSObject {
   
   // MARK: Constructors
   
-  public init(nodeId: UInt64) {
+  public init(appNodeId:UInt64?) {
     
     super.init()
 
-    _state = .initialized
-    
     nodeManagers.append(throttleManager)
     nodeManagers.append(locoNetMonitorManager)
     nodeManagers.append(programmerToolManager)
     nodeManagers.append(configurationToolManager)
 
-    var virtualNodes = OpenLCBMemorySpace.getVirtualNodes()
-    
-    if virtualNodes.isEmpty {
-      
-      let defaultNodes : [(type:MyTrainsVirtualNodeType, number:Int)] = [
-        (type:.applicationNode, number: 1),
-        (type:.clockNode, number: 1),
-        (type:.configurationToolNode, number: 1),
-        (type:.programmerToolNode, number: 1),
-        (type:.throttleNode, number: 4),
-        (type:.locoNetMonitorNode, number: 4),
-      ]
-      
-      for nodeDef in defaultNodes {
-        
-        for _ in 1...nodeDef.number {
-          
-          let newNodeId = getNewNodeId(virtualNodeType: nodeDef.type)
-          
-          var node : OpenLCBNodeVirtual?
-          
-          switch nodeDef.type {
-          case .applicationNode:
-            node = OpenLCBNodeMyTrains(nodeId: newNodeId)
-          case .canGatewayNode:
-            node = OpenLCBCANGateway(nodeId: newNodeId)
-          case .clockNode:
-            node = OpenLCBClock(nodeId: newNodeId)
-          case .configurationToolNode:
-            node = OpenLCBNodeConfigurationTool(nodeId: newNodeId)
-          case .genericVirtualNode:
-            break
-          case .locoNetGatewayNode:
-            node = OpenLCBLocoNetGateway(nodeId: newNodeId)
-          case .locoNetMonitorNode:
-            node = OpenLCBLocoNetMonitorNode(nodeId: newNodeId)
-          case .programmerToolNode:
-            node = OpenLCBProgrammerToolNode(nodeId: newNodeId)
-          case .programmingTrackNode:
-            node = OpenLCBProgrammingTrackNode(nodeId: newNodeId)
-          case .throttleNode:
-            node = OpenLCBThrottle(nodeId: newNodeId)
-          case .trainNode:
-            node = OpenLCBNodeRollingStockLocoNet(nodeId: newNodeId)
-          case .digitraxBXP88Node:
-            node = OpenLCBDigitraxBXP88Node(nodeId: newNodeId)
-          case .layoutNode:
-            node = LayoutNode(nodeId: newNodeId)
-          case .switchboardNode:
-            node = SwitchboardNode(nodeId: newNodeId)
-          case .switchboardItemNode:
-            node = SwitchboardItemNode(nodeId: newNodeId)
-          }
-          
-          if let node {
-            
-            node.userNodeName = nodeDef.type.defaultUserNodeName(nodeId: newNodeId)
-            
-            node.saveMemorySpaces()
-            
-            virtualNodes.append(node)
-            
-          }
-          
-        }
-        
-      }
-      
-      virtualNodes.sort { $0.nodeId < $1.nodeId }
-      
-    }
-    
-    for node in virtualNodes {
-      registerNode(node: node)
+    if let appNodeId {
+      start()
     }
     
   }
@@ -148,9 +74,14 @@ public class OpenLCBNetworkLayer : NSObject {
   
   public var fastClock : OpenLCBClock?
   
-//  public var transportLayers : [ObjectIdentifier:OpenLCBTransportLayer] = [:]
-  
   // MARK: Public Methods
+  
+  public func createAppNode(newNodeId:UInt64) {
+    let node = OpenLCBNodeMyTrains(nodeId: newNodeId)
+    node.userNodeName = node.virtualNodeType.defaultUserNodeName
+    node.saveMemorySpaces()
+    start()
+  }
   
   public func start() {
     
@@ -158,6 +89,19 @@ public class OpenLCBNetworkLayer : NSObject {
       return
     }
     
+    _state = .initialized
+    
+    for node in OpenLCBMemorySpace.getVirtualNodes() {
+      switch node.virtualNodeType {
+      case .applicationNode, .throttleNode, .trainNode:
+        registerNode(node: node)
+      default:
+        break
+      }
+    }
+    
+    menuUpdate()
+
   }
   
   public func stop() {
@@ -165,6 +109,16 @@ public class OpenLCBNetworkLayer : NSObject {
     guard state == .initialized else {
       return
     }
+    
+    var nodes = virtualNodes
+    
+    for (_, node) in nodes {
+      deregisterNode(node: node)
+    }
+    
+    _state = .uninitialized
+    
+    menuUpdate()
     
   }
   
@@ -285,7 +239,7 @@ public class OpenLCBNetworkLayer : NSObject {
     
     let node = OpenLCBNodeConfigurationTool(nodeId: newNodeId)
       
-    node.userNodeName = node.virtualNodeType.defaultUserNodeName(nodeId: newNodeId)
+    node.userNodeName = node.virtualNodeType.defaultUserNodeName
     
     node.saveMemorySpaces()
     

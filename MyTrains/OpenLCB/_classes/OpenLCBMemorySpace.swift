@@ -179,9 +179,7 @@ public class OpenLCBMemorySpace {
   }
   
   public func zeroMemory() {
-    for address in 0 ... memory.count - 1 {
-      memory[address] = 0
-    }
+    memory = [UInt8](repeating: 0, count: memory.count)
   }
   
   public func setUInt(address:Int, value:UInt8) {

@@ -1,17 +1,6 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "%@ #%llu" : {
-      "comment" : "Used to create a default virtual node name. The first parameter is the name, and the second is the number. e.g. CAN Gateway #2",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ #%2$llu"
-          }
-        }
-      }
-    },
     "%lld bytes %@" : {
       "localizations" : {
         "en" : {
@@ -145,6 +134,9 @@
     "Application Node" : {
       "comment" : "Used to describe an OpenLCB virtual node"
     },
+    "Application Node ID" : {
+      "comment" : "Used for the title of the Application Node ID box"
+    },
     "Are you sure that you wish to reset this node to factory defaults?" : {
 
     },
@@ -205,6 +197,12 @@
           }
         }
       }
+    },
+    "Change to Delegate Mode" : {
+
+    },
+    "Change to Master Mode" : {
+
     },
     "Character" : {
       "comment" : "Used by combobox to select option to display number as UTF8 character"
@@ -276,14 +274,17 @@
         }
       }
     },
-    "Configure Workstation" : {
-      "comment" : "Used for the title of the configure workstation window"
-    },
     "Couple" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
     },
     "Coupler Clank" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "Create" : {
+      "comment" : "Used for the Create Application Node button title"
+    },
+    "Create Application Node" : {
+      "comment" : "Used for the Create Application Node menu item title\nUsed for the title of the Create Application Node window"
     },
     "Curve Squeal" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
@@ -307,7 +308,7 @@
       "comment" : "Used for LocoNet train control protocol selection"
     },
     "DCC Programmer Tool" : {
-      "comment" : "Used to create a default OpenLCB virtual name\nUsed for the DCC Programmer Tool menu item title"
+      "comment" : "Used for the DCC Programmer Tool menu item title\nUsed to create a default OpenLCB virtual name"
     },
     "DCC Programmer Tool Node" : {
       "comment" : "Used to describe an OpenLCB virtual node"
@@ -390,6 +391,9 @@
     "Engine" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
     },
+    "Enter a node ID from your personal OpenLCB Unique ID Range. This must be a unique value and not be used by any other OpenLCB node. OpenLCB Unique ID Ranges are available on request from the OpenLCB website. The Application Node create process cannot be undone so check the node ID carefully before you press the Create button." : {
+
+    },
     "Error" : {
 
     },
@@ -406,7 +410,7 @@
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
     },
     "Fast Clock" : {
-      "comment" : "Used to indicate a clock's type\nUsed for the Fast Clock menu item title"
+      "comment" : "Used for the Fast Clock menu item title\nUsed to indicate a clock's type"
     },
     "File" : {
       "comment" : "Used for the File menu item title"
@@ -463,7 +467,7 @@
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
     },
     "Layout" : {
-      "comment" : "Used to create a default OpenLCB virtual name\nUsed for the New Layout menu item title"
+      "comment" : "Used for the New Layout menu item title\nUsed to create a default OpenLCB virtual name"
     },
     "Layout Node" : {
       "comment" : "Used to describe an OpenLCB virtual node"
@@ -527,9 +531,6 @@
     },
     "Master (generator)" : {
       "comment" : "Used to indicate a clock's operating mode"
-    },
-    "Master Workstation Node ID" : {
-      "comment" : "Used for the title of the Master Workstation Node ID Input field"
     },
     "Maximum Revs" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
@@ -695,9 +696,6 @@
     "Sanding" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
     },
-    "Save" : {
-      "comment" : "Used for the Save button title to say that all is complete"
-    },
     "Scale 7" : {
       "comment" : "Used to indicate the track gauge"
     },
@@ -782,9 +780,6 @@
     "This name will appear in network browsers for this device." : {
       "comment" : "Used for the description of the user name input field in the CDI"
     },
-    "This Workstation Type" : {
-      "comment" : "Used for the title of the Workstation Type combo box"
-    },
     "Throttle" : {
       "comment" : "Used for the Throttle menu item title"
     },
@@ -862,9 +857,6 @@
     },
     "Whistle" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
-    },
-    "Workstation" : {
-      "comment" : "Used for the Workstation menu item title"
     },
     "Write All" : {
 

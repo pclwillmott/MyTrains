@@ -15,6 +15,10 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     
     virtualNodeType = .switchboardItemNode
     
+    if !memorySpacesInitialized {
+      resetToFactoryDefaults()
+    }
+
   }
 
 }

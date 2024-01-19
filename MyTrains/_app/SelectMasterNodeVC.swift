@@ -28,66 +28,63 @@ class SelectMasterNodeVC: NSViewController, NSWindowDelegate, NSTextFieldDelegat
     
     self.view.window?.delegate = self
     
-    self.view.window?.title = String(localized: "Configure Workstation", comment: "Used for the title of the configure workstation window")
+    self.view.window?.title = String(localized: "Create Application Node", comment: "Used for the title of the Create Application Node window")
     
-    lblMasterNodeId.translatesAutoresizingMaskIntoConstraints = false
-    txtMasterNodeId.translatesAutoresizingMaskIntoConstraints = false
-    lblWorkstationType.translatesAutoresizingMaskIntoConstraints = false
-    cboWorkstationType.translatesAutoresizingMaskIntoConstraints = false
+    boxAppNodeId.translatesAutoresizingMaskIntoConstraints = false
     btnOK.translatesAutoresizingMaskIntoConstraints = false
+    boxView.translatesAutoresizingMaskIntoConstraints = false
+    lblAppNodeId.translatesAutoresizingMaskIntoConstraints = false
+    txtAppNodeId.translatesAutoresizingMaskIntoConstraints = false
+
+    boxAppNodeId.title = String(localized: "Application Node ID", comment: "Used for the title of the Application Node ID box")
+    boxAppNodeId.boxType = .primary
     
-    lblMasterNodeId.stringValue = String(localized: "Master Workstation Node ID", comment: "Used for the title of the Master Workstation Node ID Input field")
+    lblAppNodeId.stringValue = String(localized: "Enter a node ID from your personal OpenLCB Unique ID Range. This must be a unique value and not be used by any other OpenLCB node. OpenLCB Unique ID Ranges are available on request from the OpenLCB website. The Application Node create process cannot be undone so check the node ID carefully before you press the Create button.")
     
-    lblWorkstationType.stringValue = String(localized: "This Workstation Type", comment: "Used for the title of the Workstation Type combo box")
+    lblAppNodeId.lineBreakMode = .byWordWrapping
+    lblAppNodeId.maximumNumberOfLines = 0
+    lblAppNodeId.preferredMaxLayoutWidth = 300.0
+    lblAppNodeId.font = NSFont(name: lblAppNodeId.font!.familyName!, size: 11.0)
+
+    txtAppNodeId.delegate = self
     
-    btnOK.title = String(localized: "Save", comment: "Used for the Save button title to say that all is complete")
-    
-    txtMasterNodeId.delegate = self
-    
+    btnOK.title = String(localized: "Create", comment: "Used for the Create Application Node button title")
     btnOK.target = self
     btnOK.action = #selector(self.btnOKAction(_:))
 
-    view.addSubview(lblMasterNodeId)
-    view.addSubview(txtMasterNodeId)
-    view.addSubview(lblWorkstationType)
-    view.addSubview(cboWorkstationType)
+    view.addSubview(boxAppNodeId)
     view.addSubview(btnOK)
-    
-    WorkstationType.populate(comboBox: cboWorkstationType)
-    
-    cboWorkstationType.isEditable = false
-    
+
+    boxAppNodeId.addSubview(boxView)
+
+    boxView.addSubview(lblAppNodeId)
+    boxView.addSubview(txtAppNodeId)
+
     NSLayoutConstraint.activate([
-      lblMasterNodeId.widthAnchor.constraint(greaterThanOrEqualTo: lblWorkstationType.widthAnchor),
-      lblWorkstationType.widthAnchor.constraint(greaterThanOrEqualTo: lblMasterNodeId.widthAnchor),
-      lblMasterNodeId.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: 1.0),
-      lblMasterNodeId.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 1.0),
-      txtMasterNodeId.topAnchor.constraint(equalToSystemSpacingBelow: lblMasterNodeId.bottomAnchor, multiplier: 1.0),
-      txtMasterNodeId.leadingAnchor.constraint(equalTo: lblMasterNodeId.leadingAnchor),
-      txtMasterNodeId.widthAnchor.constraint(equalToConstant: 120),
-      lblWorkstationType.topAnchor.constraint(equalToSystemSpacingBelow: txtMasterNodeId.bottomAnchor, multiplier: 1.0),
-      lblWorkstationType.leadingAnchor.constraint(equalTo: lblMasterNodeId.leadingAnchor),
-      cboWorkstationType.topAnchor.constraint(equalToSystemSpacingBelow: lblWorkstationType.bottomAnchor, multiplier: 1.0),
-      cboWorkstationType.leadingAnchor.constraint(equalTo: lblWorkstationType.leadingAnchor),
-      cboWorkstationType.widthAnchor.constraint(equalToConstant: 120),
-      btnOK.leadingAnchor.constraint(equalToSystemSpacingAfter: lblMasterNodeId.trailingAnchor, multiplier: 2.0),
+      boxAppNodeId.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: 1.0),
+      boxAppNodeId.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 1.0),
+      boxAppNodeId.widthAnchor.constraint(equalTo: boxView.widthAnchor),
+      boxAppNodeId.heightAnchor.constraint(equalTo: boxView.heightAnchor, constant: 0.0),
+      boxView.topAnchor.constraint(equalTo: boxAppNodeId.topAnchor),
+      boxView.leadingAnchor.constraint(equalTo: boxAppNodeId.leadingAnchor),
+      boxView.trailingAnchor.constraint(equalToSystemSpacingAfter: lblAppNodeId.trailingAnchor, multiplier: 1.0),
+      boxView.bottomAnchor.constraint(equalToSystemSpacingBelow: txtAppNodeId.bottomAnchor, multiplier: 1.0),
+      lblAppNodeId.topAnchor.constraint(equalToSystemSpacingBelow: boxView.topAnchor, multiplier: 1.0),
+      lblAppNodeId.leadingAnchor.constraint(equalToSystemSpacingAfter: boxView.leadingAnchor, multiplier: 1.0),
+      txtAppNodeId.topAnchor.constraint(equalToSystemSpacingBelow: lblAppNodeId.bottomAnchor, multiplier: 1.0),
+      txtAppNodeId.leadingAnchor.constraint(equalTo: lblAppNodeId.leadingAnchor),
+      txtAppNodeId.widthAnchor.constraint(equalToConstant: 120),
+      btnOK.leadingAnchor.constraint(equalToSystemSpacingAfter: boxAppNodeId.trailingAnchor, multiplier: 2.0),
       btnOK.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: 1.0),
-      view.bottomAnchor.constraint(equalToSystemSpacingBelow: cboWorkstationType.bottomAnchor, multiplier: 1.0),
+      view.bottomAnchor.constraint(equalToSystemSpacingBelow: boxAppNodeId.bottomAnchor, multiplier: 1.0),
       view.trailingAnchor.constraint(equalToSystemSpacingAfter: btnOK.trailingAnchor, multiplier: 1.0),
     ])
     
-    if let masterNodeId = controller?.masterNodeId {
-      txtMasterNodeId.stringValue = masterNodeId.toHexDotFormat(numberOfBytes: 6)
-    }
-    else {
-      btnOK.isEnabled = false
-      txtMasterNodeId.becomeFirstResponder()
-    }
-    txtMasterNodeId.placeholderString = "00.00.00.00.00.00"
-    
-    lblWorkstationType.isEnabled = false
-    cboWorkstationType.isEnabled = false
-    
+    txtAppNodeId.becomeFirstResponder()
+    txtAppNodeId.placeholderString = "00.00.00.00.00.00"
+
+    btnOK.isEnabled = false
+
   }
   
   // MARK: Public Properties
@@ -96,47 +93,33 @@ class SelectMasterNodeVC: NSViewController, NSWindowDelegate, NSTextFieldDelegat
   
   // MARK: NSTextFieldDelegate, NSControlTextEditingDelegate Methods
  
-  @objc func controlTextDidBeginEditing(_ obj: Notification) {
+  @objc func controlTextDidChange(_ obj: Notification) {
     btnOK.isEnabled = false
-  }
-  
-  @objc internal func controlTextDidEndEditing(_ obj: Notification) {
-    btnOK.isEnabled = true
-  }
-  
-  @objc func control(_ control: NSControl, textShouldEndEditing fieldEditor: NSText) -> Bool {
-    if let id = UInt64(dotHex: control.stringValue, numberOfBytes: 6) {
+    if let id = UInt64(dotHex: txtAppNodeId.stringValue, numberOfBytes: 6) {
       let group = id.bigEndianData[2]
       let ok : Set<UInt8> = [2, 3, 5, 8, 9]
-      return ok.contains(group)
+      btnOK.isEnabled = ok.contains(group)
     }
-    return false
   }
-  
+
   // MARK: Controls
   
-  let lblMasterNodeId = NSTextField(labelWithString: "")
+  let lblAppNodeId = NSTextField(labelWithString: "")
   
-  let txtMasterNodeId = NSTextField()
-  
-  let lblWorkstationType = NSTextField(labelWithString: "")
-  
-  let cboWorkstationType = NSComboBox()
+  let txtAppNodeId = NSTextField()
   
   let btnOK = NSButton()
+  
+  let boxAppNodeId = NSBox()
+  
+  let boxView = NSView()
   
   // MARK: Actions
   
   @IBAction func btnOKAction(_ sender: NSButton) {
-    
-    controller?.masterNodeId = UInt64(dotHex: txtMasterNodeId.stringValue, numberOfBytes: 6)
-    
-    controller?.workstationType = WorkstationType(rawValue: cboWorkstationType.indexOfSelectedItem)
-    
     view.window?.close()
-    
+    controller?.createApplicationNode(nodeId: UInt64(dotHex: txtAppNodeId.stringValue, numberOfBytes: 6)!)
   }
-
 
 }
 

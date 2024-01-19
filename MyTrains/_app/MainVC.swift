@@ -29,7 +29,9 @@ class MainVC: NSViewController, MyTrainsControllerDelegate, LayoutDelegate, Open
     
     controllerDelegateId = myTrainsController.addDelegate(delegate: self)
     
-    fastClockObserverId = myTrainsController.openLCBNetworkLayer!.fastClock!.addObserver(observer: self)
+    if let fastClock = myTrainsController.openLCBNetworkLayer!.fastClock {
+      fastClockObserverId = fastClock.addObserver(observer: self)
+    }
     
     switchBoardView.layout = myTrainsController.layout
     

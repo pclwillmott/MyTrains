@@ -218,8 +218,8 @@
             filePath = "MyTrains/OpenLCB/_nodes/OpenLCBNodeVirtual.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "430"
-            endingLineNumber = "430"
+            startingLineNumber = "449"
+            endingLineNumber = "449"
             landmarkName = "setupConfigurationOptions()"
             landmarkType = "7">
          </BreakpointContent>
@@ -298,8 +298,8 @@
             filePath = "MyTrains/OpenLCB/_nodes/OpenLCBNodeVirtual.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "273"
-            endingLineNumber = "273"
+            startingLineNumber = "302"
+            endingLineNumber = "302"
             landmarkName = "standardACDI(cdi:)"
             landmarkType = "7">
          </BreakpointContent>

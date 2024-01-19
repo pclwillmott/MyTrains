@@ -229,7 +229,7 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBConfiguration
     }
 
     if let node {
-      node.userNodeName = node.virtualNodeType.defaultUserNodeName(nodeId: node.nodeId)
+      node.userNodeName = node.virtualNodeType.defaultUserNodeName
       node.saveMemorySpaces()
       networkLayer.registerNode(node: node)
     }

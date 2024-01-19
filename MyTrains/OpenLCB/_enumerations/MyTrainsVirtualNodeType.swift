@@ -10,14 +10,13 @@ import AppKit
 
 public enum MyTrainsVirtualNodeType : UInt16 {
   
-  case applicationNode       = 0
+  case genericVirtualNode    = 0
   case canGatewayNode        = 1
   case clockNode             = 2
   case throttleNode          = 3
   case locoNetGatewayNode    = 4
   case trainNode             = 5
   case configurationToolNode = 6
-  case genericVirtualNode    = 7
   case locoNetMonitorNode    = 8
   case programmerToolNode    = 9
   case programmingTrackNode  = 10
@@ -25,7 +24,8 @@ public enum MyTrainsVirtualNodeType : UInt16 {
   case layoutNode            = 12
   case switchboardNode       = 13
   case switchboardItemNode   = 14
- 
+  case applicationNode       = 15
+
   // MARK: Public Properties
   
   public var title : String {
@@ -67,6 +67,10 @@ public enum MyTrainsVirtualNodeType : UInt16 {
     return MyTrainsVirtualNodeType.baseId[self]!
   }
   
+  public var startupOrder : Int {
+    return MyTrainsVirtualNodeType._startupOrder[self] ?? 0x7FFFFFFFFFFFFFFF
+  }
+  
   public var nodeIdIncrement : UInt64 {
     
     switch self {
@@ -80,9 +84,8 @@ public enum MyTrainsVirtualNodeType : UInt16 {
   
   // MARK: Public Methods
   
-  public func defaultUserNodeName(nodeId:UInt64) -> String {
-    var userName = MyTrainsVirtualNodeType.defaultNames[self]!
-    return String(localized: "\(userName) #\(nodeId - self.baseNodeId + 1)", comment: "Used to create a default virtual node name. The first parameter is the name, and the second is the number. e.g. CAN Gateway #2")
+  public var defaultUserNodeName : String {
+    return MyTrainsVirtualNodeType.defaultNames[self]!
   }
   
   // MARK: Private Class Properties
@@ -105,26 +108,66 @@ public enum MyTrainsVirtualNodeType : UInt16 {
     .switchboardItemNode:   String(localized: "Switchboard Item", comment: "Used to create a default OpenLCB virtual name"),
   ]
 
+  private static let _startupOrder : [MyTrainsVirtualNodeType:Int] = [
+    .canGatewayNode        : 0,
+    .applicationNode       : 1,
+    .locoNetMonitorNode    : 2,
+    .clockNode             : 3,
+    .locoNetGatewayNode    : 4,
+    .configurationToolNode : 5,
+    .trainNode             : 6,
+    .throttleNode          : 7,
+    .programmerToolNode    : 8,
+    .programmingTrackNode  : 9,
+    .digitraxBXP88Node     : 10,
+    .genericVirtualNode    : 11,
+    .layoutNode            : 12,
+    .switchboardNode       : 13,
+    .switchboardItemNode   : 14,
+  ]
+
   // MARK: Public Class Properties
  
   public static var newFileOpenLCBItems : [MyTrainsVirtualNodeType] {
     
-    return [
-      .throttleNode,
-      .trainNode,
-      .canGatewayNode,
-      .clockNode,
-    ]
+    guard let appMode else {
+      return []
+    }
     
+    switch appMode {
+    case .master:
+      return [
+        .throttleNode,
+        .trainNode,
+        .canGatewayNode,
+        .clockNode,
+      ]
+    case .delegate:
+      return [
+        .throttleNode,
+        .trainNode,
+      ]
+    }
+
   }
 
   public static var newFileLocoNetItems : [MyTrainsVirtualNodeType] {
     
-    return [
-      .locoNetGatewayNode,
-      .programmingTrackNode,
-      .digitraxBXP88Node,
-    ]
+    guard let appMode else {
+      return []
+    }
+    
+    switch appMode {
+    case .master:
+      return [
+         .locoNetGatewayNode,
+         .programmingTrackNode,
+         .digitraxBXP88Node,
+      ]
+    case .delegate:
+      return [
+      ]
+    }
     
   }
 
@@ -163,7 +206,7 @@ public enum MyTrainsVirtualNodeType : UInt16 {
     .switchboardNode       : 0xfd0000000001,
     .switchboardItemNode   : 0xfc0000000001,
   ]
-  
+
   // MARK: Public Class Methods
   
   public static func populate(comboBox:NSComboBox) {

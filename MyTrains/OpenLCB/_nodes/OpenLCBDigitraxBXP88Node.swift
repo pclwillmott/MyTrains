@@ -490,18 +490,6 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
 
     super.resetToFactoryDefaults()
     
-    acdiManufacturerSpaceVersion = 4
-    
-    manufacturerName    = virtualNodeType.manufacturerName
-    nodeModelName       = virtualNodeType.title
-    nodeHardwareVersion = "\(Bundle.main.releaseVersionNumberPretty)"
-    nodeSoftwareVersion = "\(Bundle.main.releaseVersionNumberPretty)"
-
-    acdiUserSpaceVersion = 2
-    
-    userNodeName = virtualNodeType.defaultUserNodeName(nodeId: nodeId)
-    userNodeDescription = ""
-    
     configuration.zeroMemory()
     
     boardId = 1
@@ -512,23 +500,31 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
     
     isPowerManagerReportingEnabled = true
     
-    var locationServicesEventId = 0x0102000000000000 | nodeId
-    
-    var eventId = nodeId << 16
+    var allZero = true
     
     for zone in 0 ... numberOfChannels - 1 {
-      let baseAddress = baseAddress(zone: zone)
-      configuration.setUInt(address: addressEnterOccupancyEventId + baseAddress, value: eventId)
-      eventId += 1
-      configuration.setUInt(address: addressExitOccupancyEventId + baseAddress, value: eventId)
-      eventId += 1
-      configuration.setUInt(address: addressLocationServicesOccupancyEventId + baseAddress, value: locationServicesEventId)
-      configuration.setUInt(address: addressLocationServicesTranspondingEventId + baseAddress, value: locationServicesEventId)
-      locationServicesEventId += 1
-      configuration.setUInt(address: addressTrackFaultEventId + baseAddress, value: eventId)
-      eventId += 1
-      configuration.setUInt(address: addressTrackFaultClearedEventId + baseAddress, value: eventId)
-      eventId += 1
+      allZero = allZero && enterOccupancyEventId(zone: zone) == 0
+      allZero = allZero && exitOccupancyEventId(zone: zone) == 0
+      allZero = allZero && locationServicesOccupancyEventId(zone: zone) == 0
+      allZero = allZero && locationServicesTranspondingEventId(zone: zone) == 0
+      allZero = allZero && trackFaultEventId(zone: zone) == 0
+      allZero = allZero && trackFaultClearedEventId(zone: zone) == 0
+    }
+    
+    if allZero {
+      
+      var locationServicesEventId = 0x0102000000000000 | nodeId
+      
+      for zone in 0 ... numberOfChannels - 1 {
+        let baseAddress = baseAddress(zone: zone)
+        configuration.setUInt(address: addressEnterOccupancyEventId + baseAddress, value: nextUniqueEventId)
+        configuration.setUInt(address: addressExitOccupancyEventId + baseAddress, value: nextUniqueEventId)
+        configuration.setUInt(address: addressTrackFaultEventId + baseAddress, value: nextUniqueEventId)
+        configuration.setUInt(address: addressTrackFaultClearedEventId + baseAddress, value: nextUniqueEventId)
+        configuration.setUInt(address: addressLocationServicesOccupancyEventId + baseAddress, value: locationServicesEventId + UInt64(zone))
+        configuration.setUInt(address: addressLocationServicesTranspondingEventId + baseAddress, value: locationServicesEventId + UInt64(zone))
+      }
+      
     }
     
     saveMemorySpaces()
@@ -864,7 +860,7 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
     case .iplDevData:
       if configState == .waitingForDeviceData, let prod = message.productCode, prod == .BXP88, let id = message.boardId, id == boardId {
         stopTimeoutTimer()
-        if userNodeName == virtualNodeType.defaultUserNodeName(nodeId: nodeId) {
+        if userNodeName == virtualNodeType.defaultUserNodeName {
           userNodeName = "Digitrax BXP88 S/N: \(message.serialNumber!)"
         }
         nodeSoftwareVersion = "v\(message.softwareVersion!)"

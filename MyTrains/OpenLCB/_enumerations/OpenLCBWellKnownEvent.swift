@@ -38,12 +38,16 @@ public enum OpenLCBWellKnownEvent : UInt64 {
   case alternateClock2                     = 0x0101000001030000
   case locationServicesReport              = 0x0102000000000000
   case nodeIsALocoNetGateway               = 0x050101017b00ffff
+  case myTrainsMasterActivated             = 0x050101017b00fffe
+  case myTrainsMasterDeactivated           = 0x050101017b00fffd
+  case myTrainsLayoutActivated             = 0x050101017b00fffc
+  case myTrainsLayoutDeactivated           = 0x050101017b00fffb
   case trainSearchEvent                    = 0x090099ff00000000
   case nodeIsADCCProgrammingTrack          = 0x090099feffff0002
   case trainSearchDCCShortAddress          = 0x090099ffffffff08
   case trainSearchDCCLongAddress           = 0x090099ffffffff0c
-  case trainMoveStart                      = 0x1000000000000000
-  case trainMoveComplete                   = 0x1001000000000000
-  case trainMoveUpdate                     = 0x1002000000000000
+  case trainMoveStart                      = 0x1000000000000000 // ?
+  case trainMoveComplete                   = 0x1001000000000000 // ?
+  case trainMoveUpdate                     = 0x1002000000000000 // ?
 
 }

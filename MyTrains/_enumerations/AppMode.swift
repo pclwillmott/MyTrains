@@ -8,7 +8,7 @@
 import Foundation
 import AppKit
 
-public enum WorkstationType : Int {
+public enum AppMode : Int {
   
   case master   = 0
   case delegate = 1
@@ -16,7 +16,7 @@ public enum WorkstationType : Int {
   // MARK: Public Properties
   
   public var title : String {
-    return WorkstationType.titles[Int(self.rawValue)]
+    return AppMode.titles[Int(self.rawValue)]
   }
   
   // MARK: Private Class Properties
@@ -28,7 +28,7 @@ public enum WorkstationType : Int {
   
   // MARK: Public Class Prooperties
   
-  public static let defaultValue : WorkstationType = .master
+  public static let defaultValue : AppMode = .master
   
   // MARK: Public Class Methods
   
@@ -38,12 +38,12 @@ public enum WorkstationType : Int {
     select(comboBox: comboBox, value: .defaultValue)
   }
   
-  public static func select(comboBox:NSComboBox, value:WorkstationType) {
+  public static func select(comboBox:NSComboBox, value:AppMode) {
     comboBox.selectItem(at: value.rawValue)
   }
   
-  public static func selected(comboBox: NSComboBox) -> WorkstationType {
-    return WorkstationType(rawValue: comboBox.indexOfSelectedItem) ?? defaultValue
+  public static func selected(comboBox: NSComboBox) -> AppMode {
+    return AppMode(rawValue: comboBox.indexOfSelectedItem) ?? defaultValue
   }
   
 }

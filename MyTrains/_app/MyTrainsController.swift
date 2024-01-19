@@ -8,6 +8,34 @@
 import Foundation
 import AppKit
 
+public var appNodeId : UInt64? {
+  get {
+    let id = UserDefaults.standard.integer(forKey: DEFAULT.APP_NODE_ID)
+    return id == 0 ? nil : UInt64(id)
+  }
+  set(value) {
+    if value != appNodeId {
+      UserDefaults.standard.set(Int(value ?? 0), forKey: DEFAULT.APP_NODE_ID)
+    }
+  }
+}
+
+public var appMode : AppMode? {
+  get {
+    return AppMode(rawValue: UserDefaults.standard.integer(forKey: DEFAULT.APP_MODE))
+  }
+  set(value) {
+    UserDefaults.standard.set(value?.rawValue ?? 0, forKey: DEFAULT.APP_MODE)
+    appModeMenuItem.title = appModeMenuTitle
+    myTrainsController.openLCBNetworkLayer?.stop()
+    myTrainsController.openLCBNetworkLayer?.start()
+  }
+}
+
+public var appModeMenuTitle : String {
+  return (appMode ?? .master) == .master ? String(localized: "Change to Delegate Mode") : String(localized: "Change to Master Mode")
+}
+
 // MARK: Global Declaration of MyTrainsController Instance
 
 public var myTrainsController = MyTrainsController()
@@ -21,14 +49,14 @@ public class MyTrainsController : NSObject, NSUserNotificationCenterDelegate {
   override init() {
     
     super.init()
-    
-//    masterNodeId = nil
-    
+
+//    appNodeId = nil
+
     checkPortsTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(checkPortsTimerAction), userInfo: nil, repeats: true)
     
     RunLoop.current.add(checkPortsTimer!, forMode: .common)
     
-    openLCBNetworkLayer = OpenLCBNetworkLayer(nodeId: openLCBNodeId)
+    openLCBNetworkLayer = OpenLCBNetworkLayer(appNodeId: appNodeId)
     
   }
   
@@ -48,31 +76,11 @@ public class MyTrainsController : NSObject, NSUserNotificationCenterDelegate {
   
   // MARK: Public Properties
   
-  public var masterNodeId : UInt64? {
-    get {
-      let id = UserDefaults.standard.integer(forKey: DEFAULT.MASTER_NODE_ID)
-      return id == 0 ? nil : UInt64(id)
-    }
-    set(value) {
-      if value != masterNodeId {
-        UserDefaults.standard.set(Int(value ?? 0), forKey: DEFAULT.MASTER_NODE_ID)
-      }
-    }
-  }
-  
-  public var workstationType : WorkstationType? {
-    get {
-      return WorkstationType(rawValue: UserDefaults.standard.integer(forKey: DEFAULT.WORKSTATION_TYPE))
-    }
-    set(value) {
-      UserDefaults.standard.set(value?.rawValue ?? 0, forKey: DEFAULT.WORKSTATION_TYPE)
-    }
-  }
-  
   public var layouts : [Int:Layout] = Layout.layouts
 
   // 0x050101017b00
-  
+  // 05.01.01.01.7b.00
+
   public var openLCBNodeId : UInt64 {
     get {
       return 0x050101017b00 // Paul Willmott's Start of range
@@ -141,6 +149,16 @@ public class MyTrainsController : NSObject, NSUserNotificationCenterDelegate {
   
   public func removeDelegate(id:Int) {
     controllerDelegates.removeValue(forKey: id)
+  }
+  
+  public func createApplicationNode(nodeId:UInt64) {
+    
+    appNodeId = nodeId
+    
+    menuUpdate()
+    
+    openLCBNetworkLayer?.createAppNode(newNodeId: nodeId)
+    
   }
   
 }

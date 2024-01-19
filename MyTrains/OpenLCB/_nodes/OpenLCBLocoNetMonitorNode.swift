@@ -75,18 +75,6 @@ public class OpenLCBLocoNetMonitorNode : OpenLCBNodeVirtual, LocoNetDelegate {
     
     super.resetToFactoryDefaults()
 
-    acdiManufacturerSpaceVersion = 4
-    
-    manufacturerName    = virtualNodeType.manufacturerName
-    nodeModelName       = virtualNodeType.title
-    nodeHardwareVersion = "\(Bundle.main.releaseVersionNumberPretty)"
-    nodeSoftwareVersion = "\(Bundle.main.releaseVersionNumberPretty)"
-
-    acdiUserSpaceVersion = 2
-    
-    userNodeName        = ""
-    userNodeDescription = ""
-    
     saveMemorySpaces()
     
   }

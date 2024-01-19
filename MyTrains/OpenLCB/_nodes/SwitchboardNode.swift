@@ -14,7 +14,11 @@ public class SwitchboardNode : OpenLCBNodeVirtual {
     super.init(nodeId: nodeId)
     
     virtualNodeType = .switchboardNode
-    
+
+    if !memorySpacesInitialized {
+      resetToFactoryDefaults()
+    }
+
   }
 
 }

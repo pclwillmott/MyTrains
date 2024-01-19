@@ -380,19 +380,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     
     super.resetToFactoryDefaults()
     
-    acdiManufacturerSpaceVersion = 4
-    
-    manufacturerName     = virtualNodeType.manufacturerName
-    nodeModelName        = virtualNodeType.title
-    nodeHardwareVersion = "\(Bundle.main.releaseVersionNumberPretty)"
-    nodeSoftwareVersion = "\(Bundle.main.releaseVersionNumberPretty)"
-
-    acdiUserSpaceVersion = 2
-    
-    userNodeName         = ""
-    userNodeDescription  = ""
-    
-    functions.memory = [UInt8](repeating: 0, count: functionSpaceSize)
+    functions.zeroMemory()
     
     saveMemorySpaces()
     

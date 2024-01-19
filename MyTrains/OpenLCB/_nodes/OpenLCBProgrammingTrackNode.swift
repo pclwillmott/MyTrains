@@ -113,23 +113,8 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
   // MARK: Private Methods
   
   internal override func resetToFactoryDefaults() {
-
     super.resetToFactoryDefaults()
-    
-    acdiManufacturerSpaceVersion = 4
-    
-    manufacturerName    = virtualNodeType.manufacturerName
-    nodeModelName       = virtualNodeType.title
-    nodeHardwareVersion = "\(Bundle.main.releaseVersionNumberPretty)"
-    nodeSoftwareVersion = "\(Bundle.main.releaseVersionNumberPretty)"
-
-    acdiUserSpaceVersion = 2
-    
-    userNodeName        = ""
-    userNodeDescription = ""
-    
     saveMemorySpaces()
-    
   }
   
   @objc internal func timeoutTimerAction() {

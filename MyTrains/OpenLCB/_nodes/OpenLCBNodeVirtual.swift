@@ -21,12 +21,13 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
 
     acdiUserSpace = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.acdiUser.rawValue, defaultMemorySize: 128, isReadOnly: false, description: "")
 
-    virtualNodeConfigSpace = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.virtualNodeConfig.rawValue, defaultMemorySize: 12, isReadOnly: false, description: "")
+    virtualNodeConfigSpace = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.virtualNodeConfig.rawValue, defaultMemorySize: 28, isReadOnly: false, description: "")
 
     super.init(nodeId: nodeId)
 
-    if virtualNodeConfigSpaceVersion == 0 {
-      virtualNodeType = .genericVirtualNode
+    if nextUniqueEventId == 0 {
+      nextUniqueEventId = nodeId << 16
+      nextUniqueNodeIdSeed = nodeId
     }
 
     acdiManufacturerSpace.delegate = self
@@ -54,7 +55,11 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.virtualNodeConfig.rawValue, address: addressVirtualNodeConfigSpaceVersion)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.virtualNodeConfig.rawValue, address: addressVirtualNodeConfigLayoutNodeId)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.virtualNodeConfig.rawValue, address: addressVirtualNodeConfigNodeType)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.virtualNodeConfig.rawValue, address: addressVirtualNodeConfigUniqueEventId)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.virtualNodeConfig.rawValue, address: addressVirtualNodeConfigNextNodeIdSeed)
 
+    virtualNodeConfigSpaceVersion = 5
+    
     isSimpleNodeInformationProtocolSupported = true
     
     isDatagramProtocolSupported = true
@@ -85,19 +90,21 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   
   internal var registeredVariables : [UInt8:Set<Int>] = [:]
   
-  internal let addressACDIManufacturerSpaceVersion  : Int = 0
-  internal let addressACDIManufacturerName          : Int = 1
-  internal let addressACDIModelName                 : Int = 42
-  internal let addressACDIHardwareVersion           : Int = 83
-  internal let addressACDISoftwareVersion           : Int = 104
+  internal let addressACDIManufacturerSpaceVersion    : Int = 0
+  internal let addressACDIManufacturerName            : Int = 1
+  internal let addressACDIModelName                   : Int = 42
+  internal let addressACDIHardwareVersion             : Int = 83
+  internal let addressACDISoftwareVersion             : Int = 104
   
-  internal let addressACDIUserSpaceVersion          : Int = 0
-  internal let addressACDIUserNodeName              : Int = 1
-  internal let addressACDIUserNodeDescription       : Int = 64
+  internal let addressACDIUserSpaceVersion            : Int = 0
+  internal let addressACDIUserNodeName                : Int = 1
+  internal let addressACDIUserNodeDescription         : Int = 64
   
-  internal let addressVirtualNodeConfigSpaceVersion : Int = 0
-  internal let addressVirtualNodeConfigLayoutNodeId : Int = 2
-  internal let addressVirtualNodeConfigNodeType     : Int = 10
+  internal let addressVirtualNodeConfigSpaceVersion   : Int = 0
+  internal let addressVirtualNodeConfigLayoutNodeId   : Int = 2
+  internal let addressVirtualNodeConfigNodeType       : Int = 10
+  internal let addressVirtualNodeConfigUniqueEventId  : Int = 12
+  internal let addressVirtualNodeConfigNextNodeIdSeed : Int = 20
 
   internal var datagramTypesSupported : Set<OpenLCBDatagramType> = [
     .writeCommandGeneric,
@@ -115,7 +122,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     .getConfigurationOptionsCommand,
     .getAddressSpaceInformationCommand,
     .LockReserveCommand,
-//  .getUniqueIDCommand,
+    .getUniqueIDCommand,
     .unfreezeCommand,
     .freezeCommand,
 //   .updateCompleteCommand,
@@ -253,6 +260,28 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     }
   }
 
+  public var nextUniqueEventId : UInt64 {
+    get {
+      let id = virtualNodeConfigSpace.getUInt64(address: addressVirtualNodeConfigUniqueEventId)!
+      self.nextUniqueEventId = id + 1
+      return id
+    }
+    set(value) {
+      virtualNodeConfigSpace.setUInt(address: addressVirtualNodeConfigUniqueEventId, value:value)
+      virtualNodeConfigSpace.save()
+    }
+  }
+
+  public var nextUniqueNodeIdSeed : UInt64 {
+    get {
+      return virtualNodeConfigSpace.getUInt64(address: addressVirtualNodeConfigNextNodeIdSeed)!
+    }
+    set(value) {
+      virtualNodeConfigSpace.setUInt(address: addressVirtualNodeConfigNextNodeIdSeed, value:value)
+      virtualNodeConfigSpace.save()
+    }
+  }
+
   // MARK: Private Methods
   
   internal func standardACDI(cdi:String) -> String {
@@ -349,36 +378,26 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   }
 
   internal func resetReboot() {
-    
     lockedNodeId = 0
-    
-    if virtualNodeConfigSpaceVersion == 0, let networkLayer {
-      
-      if virtualNodeType == .layoutNode {
-        
-        virtualNodeConfigSpaceVersion = 2
-        self.layoutNodeId = self.nodeId
-        virtualNodeConfigSpace.save()
-
-      }
-      else if virtualNodeType != .genericVirtualNode, let layoutNodeId = networkLayer.layoutNodeId {
-        
-        virtualNodeConfigSpaceVersion = 2
-        self.layoutNodeId = layoutNodeId
-        virtualNodeConfigSpace.save()
-
-      }
-      
-    }
-    
     setupConfigurationOptions()
-    
   }
   
   internal func resetToFactoryDefaults() {
     
-    lockedNodeId = 0
+    acdiManufacturerSpaceVersion = 4
     
+    manufacturerName     = virtualNodeType.manufacturerName
+    nodeModelName        = virtualNodeType.title
+    nodeHardwareVersion  = "\(Bundle.main.releaseVersionNumberPretty)"
+    nodeSoftwareVersion  = "\(Bundle.main.releaseVersionNumberPretty)"
+
+    acdiUserSpaceVersion = 2
+    
+    userNodeName         = virtualNodeType.defaultUserNodeName
+    userNodeDescription  = ""
+    
+    lockedNodeId = 0
+
   }
   
   internal func saveMemorySpaces() {
@@ -517,8 +536,14 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
         networkLayer?.sendSimpleNodeInformationReply(sourceNodeId: self.nodeId, destinationNodeId: message.sourceNodeId!, data: encodedNodeInformation)
       }
       
-    case .verifyNodeIDNumberGlobal, .verifyNodeIDNumberAddressed:
-      if message.payload.isEmpty || message.payloadAsHex == nodeId.toHex(numberOfDigits: 12) {
+    case .verifyNodeIDNumberAddressed:
+      if message.destinationNodeId! == nodeId {
+        networkLayer?.sendVerifiedNodeIdNumber(sourceNodeId: nodeId, isSimpleSetSufficient: false)
+      }
+      
+    case .verifyNodeIDNumberGlobal:
+      let id = UInt64(bigEndianData: message.payload)
+      if message.payload.isEmpty || id! == nodeId {
         networkLayer?.sendVerifiedNodeIdNumber(sourceNodeId: nodeId, isSimpleSetSufficient: false)
       }
       
@@ -533,7 +558,19 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
       if message.destinationNodeId! == nodeId, let datagramType = message.datagramType {
         
         switch datagramType {
+        
+        case .getUniqueIDCommand:
           
+          networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, timeOut: .replyPendingNoTimeout)
+          
+          var payload : [UInt8] = OpenLCBDatagramType.getUniqueIDReply.rawValue.bigEndianData
+
+          for _ in 1 ... message.payload[2] {
+            payload.append(contentsOf: nextUniqueEventId.bigEndianData)
+          }
+          
+          networkLayer?.sendDatagram(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, data: payload)
+
         case.getConfigurationOptionsCommand:
 
           networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, timeOut: .replyPendingNoTimeout)
