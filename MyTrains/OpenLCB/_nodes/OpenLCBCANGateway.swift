@@ -33,7 +33,9 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     }
 
     cdiFilename = "MyTrains CAN Gateway"
-    
+   
+    internalNodes.insert(networkLayerNodeId)
+
   }
   
   deinit {
@@ -1283,7 +1285,11 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     if let destinationNodeId = message.destinationNodeId, internalNodes.contains(destinationNodeId) {
       return
     }
-    
+
+    if let sourceNodeId = message.sourceNodeId, sourceNodeId == networkLayerNodeId {
+      return
+    }
+
     switch message.messageTypeIndicator {
       
     case .producerConsumerEventReport:

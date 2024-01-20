@@ -7,6 +7,17 @@
 
 import Cocoa
 import Foundation
+import AppKit
+
+public var mainMenuItems : [AppMode:[NSMenuItem]] = [:]
+
+public func menuUpdate() {
+
+  if !mainMenuItems.isEmpty, let mainMenu = NSApplication.shared.mainMenu {
+    mainMenu.items = mainMenuItems[appMode]!
+  }
+  
+}
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDelegate {
@@ -15,188 +26,301 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
   
   func applicationDidFinishLaunching(_ aNotification: Notification) {
     
-//    myTrainsController.appNodeId = nil
+ //   appMode = .initializing
+ //   appNodeId = nil
     
     if let mainMenu = NSApplication.shared.mainMenu {
       
-      var menuItems = mainMenu.items
-      
-      mainMenu.removeAllItems()
-      
-      for item in menuItems {
+      mainMenuItems[.initializing] = []
+      mainMenuItems[.master]       = []
+      mainMenuItems[.delegate]     = []
+
+      for item in mainMenu.items {
         
         switch item.title {
           
         case "MyTrains":
           
           // Add back in the MyTrains Menu
-          
-          mainMenu.addItem(item)
+ 
+          mainMenuItems[.initializing]!.append(item)
+          mainMenuItems[.master]!.append(item)
+          mainMenuItems[.delegate]!.append(item)
           
           // Create the File Menu
           
-          fileMenu.title = String(localized: "File", comment: "Used for the File menu item title")
-          fileMenu.submenu = NSMenu()
-          mainMenu.addItem(fileMenu)
+          /*
+          let fileMenuMaster = NSMenuItem()
+          fileMenuMaster.title = String(localized: "File", comment: "Used for the File menu item title")
+          fileMenuMaster.submenu = NSMenu()
+          mainMenuItems[.master]!.append(fileMenuMaster)
+
+          let fileMenuDelegate = NSMenuItem()
+          fileMenuDelegate.title = fileMenuMaster.title
+          fileMenuDelegate.submenu = NSMenu()
+          mainMenuItems[.delegate]!.append(fileMenuDelegate)
+          */
           
           // Create the New Menu
 
-          newMenu.title = String(localized: "New", comment: "Used for the New menu item title")
-          newMenu.submenu = NSMenu()
-          fileMenu.submenu?.addItem(newMenu)
-          
-          // Add the Layout Menu Item
-          
-          layoutMenuItem.title = String(localized: "Layout", comment: "Used for the New Layout menu item title")
-          newMenu.submenu?.addItem(layoutMenuItem)
-          layoutMenuItem.target = self
-          layoutMenuItem.action = #selector(self.mnuCreateNewNodeAction(_:))
-          layoutMenuItem.tag = Int(MyTrainsVirtualNodeType.layoutNode.rawValue)
-
-          // Add the LCC/OpenLCB Menu Items
-          
-          for nodeType in MyTrainsVirtualNodeType.newFileOpenLCBItems {
-            let menuItem = NSMenuItem()
-            menuItem.title = nodeType.title
-            menuItem.tag = Int(nodeType.rawValue)
+          let newMenuMaster = NSMenuItem()
+          newMenuMaster.title = String(localized: "New", comment: "Used for the New menu item title")
+          newMenuMaster.submenu = NSMenu()
+          for menuItem in MyTrainsVirtualNodeType.newSubMenuItems(appMode: .master) {
+            newMenuMaster.submenu?.addItem(menuItem)
             menuItem.target = self
             menuItem.action = #selector(self.mnuCreateNewNodeAction(_:))
-            newMenu.submenu?.addItem(menuItem)
           }
+          mainMenuItems[.master]!.append(newMenuMaster)
 
-          // Add the LocoNet Menu Items
-          
-          for nodeType in MyTrainsVirtualNodeType.newFileLocoNetItems {
-            let menuItem = NSMenuItem()
-            menuItem.title = nodeType.title
-            menuItem.tag = Int(nodeType.rawValue)
+          let newMenuDelegate = NSMenuItem()
+          newMenuDelegate.title = newMenuMaster.title
+          newMenuDelegate.submenu = NSMenu()
+          for menuItem in MyTrainsVirtualNodeType.newSubMenuItems(appMode: .delegate) {
+            newMenuDelegate.submenu?.addItem(menuItem)
             menuItem.target = self
             menuItem.action = #selector(self.mnuCreateNewNodeAction(_:))
-            newMenu.submenu?.addItem(menuItem)
           }
-        
+          mainMenuItems[.delegate]!.append(newMenuDelegate)
+
         case "Edit":
   
           // Add back in the Menu item
           
-          mainMenu.addItem(item)
           item.title = String(localized: "Edit", comment: "Used for the Edit menu item title")
+
+          mainMenuItems[.initializing]!.append(item)
+          mainMenuItems[.master]!.append(item)
+          mainMenuItems[.delegate]!.append(item)
 
           // Create the Operations Menu
           
-          operationsMenu.title = String(localized: "Operations", comment: "Used for the Operations menu item title")
-          operationsMenu.submenu = NSMenu()
-          mainMenu.addItem(operationsMenu)
+          let operationsMenuMaster = NSMenuItem()
+          operationsMenuMaster.title = String(localized: "Operations", comment: "Used for the Operations menu item title")
+          operationsMenuMaster.submenu = NSMenu()
+          mainMenuItems[.master]!.append(operationsMenuMaster)
+
+          let operationsMenuDelegate = NSMenuItem()
+          operationsMenuDelegate.title = operationsMenuMaster.title
+          operationsMenuDelegate.submenu = NSMenu()
+          mainMenuItems[.delegate]!.append(operationsMenuDelegate)
 
           // Create the Throttle Menu Item
 
-          throttleMenuItem.title = String(localized: "Throttle", comment: "Used for the Throttle menu item title")
-          throttleMenuItem.target = self
-          throttleMenuItem.action = #selector(self.mnuThrottleAction(_:))
-          operationsMenu.submenu?.addItem(throttleMenuItem)
+          let throttleMenuItemMaster = NSMenuItem()
+          throttleMenuItemMaster.title = String(localized: "Throttle", comment: "Used for the Throttle menu item title")
+          throttleMenuItemMaster.target = self
+          throttleMenuItemMaster.action = #selector(self.mnuThrottleAction(_:))
+          operationsMenuMaster.submenu?.addItem(throttleMenuItemMaster)
 
-          appModeMenuItem.title = appModeMenuTitle
-          appModeMenuItem.target = self
-          appModeMenuItem.action = #selector(self.mnuAppModeAction(_:))
-          operationsMenu.submenu?.addItem(appModeMenuItem)
+          let throttleMenuItemDelegate = NSMenuItem()
+          throttleMenuItemDelegate.title = throttleMenuItemMaster.title
+          throttleMenuItemDelegate.target = self
+          throttleMenuItemDelegate.action = #selector(self.mnuThrottleAction(_:))
+          operationsMenuDelegate.submenu?.addItem(throttleMenuItemDelegate)
+
+          let appModeMenuItemMaster = NSMenuItem()
+          appModeMenuItemMaster.title = String(localized: "Switch to Delegate Mode")
+          appModeMenuItemMaster.target = self
+          appModeMenuItemMaster.action = #selector(self.mnuAppModeAction(_:))
+          operationsMenuMaster.submenu?.addItem(appModeMenuItemMaster)
+
+          let appModeMenuItemDelegate = NSMenuItem()
+          appModeMenuItemDelegate.title = String(localized: "Switch to Master Mode")
+          appModeMenuItemDelegate.target = self
+          appModeMenuItemDelegate.action = #selector(self.mnuAppModeAction(_:))
+          operationsMenuDelegate.submenu?.addItem(appModeMenuItemDelegate)
 
           // Create the Configuration Menu
           
-          configurationMenu.title = String(localized: "Configuration", comment: "Used for the Configuration menu item title")
-          configurationMenu.submenu = NSMenu()
-          mainMenu.addItem(configurationMenu)
+          
+          let configurationMenuInitializing = NSMenuItem()
+          configurationMenuInitializing.title = String(localized: "Configuration", comment: "Used for the Configuration menu item title")
+          configurationMenuInitializing.submenu = NSMenu()
+          mainMenuItems[.initializing]!.append(configurationMenuInitializing)
+          
+          
+          let configurationMenuMaster = NSMenuItem()
+          configurationMenuMaster.title = String(localized: "Configuration", comment: "Used for the Configuration menu item title")
+          configurationMenuMaster.submenu = NSMenu()
+          mainMenuItems[.master]!.append(configurationMenuMaster)
+
+          let configurationMenuDelegate = NSMenuItem()
+          configurationMenuDelegate.title = configurationMenuMaster.title
+          configurationMenuDelegate.submenu = NSMenu()
+          mainMenuItems[.delegate]!.append(configurationMenuDelegate)
 
           // Create the Master Node Menu Item
 
+          let createAppNodeMenuItem = NSMenuItem()
           createAppNodeMenuItem.title = String(localized: "Create Application Node", comment: "Used for the Create Application Node menu item title")
           createAppNodeMenuItem.target = self
           createAppNodeMenuItem.action = #selector(self.mnuCreateApplicationNodeAction(_:))
-          configurationMenu.submenu?.addItem(createAppNodeMenuItem)
+          configurationMenuInitializing.submenu?.addItem(createAppNodeMenuItem)
+          
+          let networkMenuItemMaster = NSMenuItem()
+          networkMenuItemMaster.title = String(localized: "LCC/OpenLCB Network", comment: "Used for the LCC/OpenLCB Network menu item title")
+          networkMenuItemMaster.target = self
+          networkMenuItemMaster.action = #selector(self.mnuViewLCCNetwork(_:))
+          configurationMenuMaster.submenu?.addItem(networkMenuItemMaster)
 
-          networkMenuItem.title = String(localized: "LCC/OpenLCB Network", comment: "Used for the LCC/OpenLCB Network menu item title")
-          networkMenuItem.target = self
-          networkMenuItem.action = #selector(self.mnuViewLCCNetwork(_:))
-          configurationMenu.submenu?.addItem(networkMenuItem)
+          let networkMenuItemDelegate = NSMenuItem()
+          networkMenuItemDelegate.title = networkMenuItemMaster.title
+          networkMenuItemDelegate.target = self
+          networkMenuItemDelegate.action = #selector(self.mnuViewLCCNetwork(_:))
+          configurationMenuDelegate.submenu?.addItem(networkMenuItemDelegate)
 
           // Create the Fast Clock Menu Item
 
-          fastClockMenuItem.title = String(localized: "Fast Clock", comment: "Used for the Fast Clock menu item title")
-          fastClockMenuItem.target = self
-          fastClockMenuItem.action = #selector(self.mnuSetFastClock(_:))
-          configurationMenu.submenu?.addItem(fastClockMenuItem)
+          let fastClockMenuItemMaster = NSMenuItem()
+          fastClockMenuItemMaster.title = String(localized: "Fast Clock", comment: "Used for the Fast Clock menu item title")
+          fastClockMenuItemMaster.target = self
+          fastClockMenuItemMaster.action = #selector(self.mnuSetFastClock(_:))
+          configurationMenuMaster.submenu?.addItem(fastClockMenuItemMaster)
+
+          let fastClockMenuItemDelegate = NSMenuItem()
+          fastClockMenuItemDelegate.title = fastClockMenuItemMaster.title
+          fastClockMenuItemDelegate.target = self
+          fastClockMenuItemDelegate.action = #selector(self.mnuSetFastClock(_:))
+          configurationMenuDelegate.submenu?.addItem(fastClockMenuItemDelegate)
 
           // Create the DCC Programmer Tool Menu Item
 
-          dccProgrammerToolMenuItem.title = String(localized: "DCC Programmer Tool", comment: "Used for the DCC Programmer Tool menu item title")
-          dccProgrammerToolMenuItem.target = self
-          dccProgrammerToolMenuItem.action = #selector(self.mnuProgrammerToolAction(_:))
-          configurationMenu.submenu?.addItem(dccProgrammerToolMenuItem)
+          let dccProgrammerToolMenuItemMaster = NSMenuItem()
+          dccProgrammerToolMenuItemMaster.title = String(localized: "DCC Programmer Tool", comment: "Used for the DCC Programmer Tool menu item title")
+          dccProgrammerToolMenuItemMaster.target = self
+          dccProgrammerToolMenuItemMaster.action = #selector(self.mnuProgrammerToolAction(_:))
+          configurationMenuMaster.submenu?.addItem(dccProgrammerToolMenuItemMaster)
+
+          let dccProgrammerToolMenuItemDelegate = NSMenuItem()
+          dccProgrammerToolMenuItemDelegate.title = dccProgrammerToolMenuItemMaster.title
+          dccProgrammerToolMenuItemDelegate.target = self
+          dccProgrammerToolMenuItemDelegate.action = #selector(self.mnuProgrammerToolAction(_:))
+          configurationMenuDelegate.submenu?.addItem(dccProgrammerToolMenuItemDelegate)
 
           // Create the Switch Board Menu Item
 
+          let switchBoardMenuItem = NSMenuItem()
           switchBoardMenuItem.title = String(localized: "Switch Board", comment: "Used for the Switch Board menu item title")
           switchBoardMenuItem.target = self
           switchBoardMenuItem.action = #selector(self.mnuSwitchBoardEditor(_:))
-          configurationMenu.submenu?.addItem(switchBoardMenuItem)
+          configurationMenuMaster.submenu?.addItem(switchBoardMenuItem)
 
           // Create the Train Speed Profiler Menu Item
 
-          speedProfilerMenuItem.title = String(localized: "Train Speed Profiler", comment: "Used for the Train Speed Profiler menu item title")
-          speedProfilerMenuItem.target = self
-          speedProfilerMenuItem.action = #selector(self.mnuSpeedProfiler(_:))
-          configurationMenu.submenu?.addItem(speedProfilerMenuItem)
+          let speedProfilerMenuItemMaster = NSMenuItem()
+          speedProfilerMenuItemMaster.title = String(localized: "Train Speed Profiler", comment: "Used for the Train Speed Profiler menu item title")
+          speedProfilerMenuItemMaster.target = self
+          speedProfilerMenuItemMaster.action = #selector(self.mnuSpeedProfiler(_:))
+          configurationMenuMaster.submenu?.addItem(speedProfilerMenuItemMaster)
 
-          configurationMenu.submenu?.addItem(.separator())
+          let speedProfilerMenuItemDelegate = NSMenuItem()
+          speedProfilerMenuItemDelegate.title = speedProfilerMenuItemMaster.title
+          speedProfilerMenuItemDelegate.target = self
+          speedProfilerMenuItemDelegate.action = #selector(self.mnuSpeedProfiler(_:))
+          configurationMenuDelegate.submenu?.addItem(speedProfilerMenuItemDelegate)
+
+          configurationMenuMaster.submenu?.addItem(.separator())
+          configurationMenuDelegate.submenu?.addItem(.separator())
 
           // Create the LocoNet Firmware Update Menu Item
 
-          locoNetFirmwareUpdateMenuItem.title = String(localized: "LocoNet Firmware Update", comment: "Used for the LocoNet Firmware Update menu item title")
-          locoNetFirmwareUpdateMenuItem.target = self
-          locoNetFirmwareUpdateMenuItem.action = #selector(self.mnuUpdateFirmware(_:))
-          configurationMenu.submenu?.addItem(locoNetFirmwareUpdateMenuItem)
+          let locoNetFirmwareUpdateMenuItemMaster = NSMenuItem()
+          locoNetFirmwareUpdateMenuItemMaster.title = String(localized: "LocoNet Firmware Update", comment: "Used for the LocoNet Firmware Update menu item title")
+          locoNetFirmwareUpdateMenuItemMaster.target = self
+          locoNetFirmwareUpdateMenuItemMaster.action = #selector(self.mnuUpdateFirmware(_:))
+          configurationMenuMaster.submenu?.addItem(locoNetFirmwareUpdateMenuItemMaster)
+
+          let locoNetFirmwareUpdateMenuItemDelegate = NSMenuItem()
+          locoNetFirmwareUpdateMenuItemDelegate.title = locoNetFirmwareUpdateMenuItemMaster.title
+          locoNetFirmwareUpdateMenuItemDelegate.target = self
+          locoNetFirmwareUpdateMenuItemDelegate.action = #selector(self.mnuUpdateFirmware(_:))
+          configurationMenuDelegate.submenu?.addItem(locoNetFirmwareUpdateMenuItemDelegate)
 
           // Create the LocoNet Wireless Setup Menu Item
 
-          locoNetWirelessSetupMenuItem.title = String(localized: "LocoNet Wireless Setup", comment: "Used for the LocoNet Wireless Setup menu item title")
-          locoNetWirelessSetupMenuItem.target = self
-          locoNetWirelessSetupMenuItem.action = #selector(self.SetupGroupAction(_:))
-          configurationMenu.submenu?.addItem(locoNetWirelessSetupMenuItem)
+          let locoNetWirelessSetupMenuItemMaster = NSMenuItem()
+          locoNetWirelessSetupMenuItemMaster.title = String(localized: "LocoNet Wireless Setup", comment: "Used for the LocoNet Wireless Setup menu item title")
+          locoNetWirelessSetupMenuItemMaster.target = self
+          locoNetWirelessSetupMenuItemMaster.action = #selector(self.SetupGroupAction(_:))
+          configurationMenuMaster.submenu?.addItem(locoNetWirelessSetupMenuItemMaster)
+
+          let locoNetWirelessSetupMenuItemDelegate = NSMenuItem()
+          locoNetWirelessSetupMenuItemDelegate.title = locoNetWirelessSetupMenuItemMaster.title
+          locoNetWirelessSetupMenuItemDelegate.target = self
+          locoNetWirelessSetupMenuItemDelegate.action = #selector(self.SetupGroupAction(_:))
+          configurationMenuDelegate.submenu?.addItem(locoNetWirelessSetupMenuItemDelegate)
 
           // Create the Tools Menu
           
-          toolsMenu.title = String(localized: "Tools", comment: "Used for the Tools menu item title")
-          toolsMenu.submenu = NSMenu()
-          mainMenu.addItem(toolsMenu)
+          let toolsMenuMaster = NSMenuItem()
+          toolsMenuMaster.title = String(localized: "Tools", comment: "Used for the Tools menu item title")
+          toolsMenuMaster.submenu = NSMenu()
+          mainMenuItems[.master]!.append(toolsMenuMaster)
+
+          let toolsMenuDelegate = NSMenuItem()
+          toolsMenuDelegate.title = toolsMenuMaster.title
+          toolsMenuDelegate.submenu = NSMenu()
+          mainMenuItems[.delegate]!.append(toolsMenuDelegate)
 
           // Create the OpenLCB Traffic Monitor Menu Item
 
-          openLCBTrafficMonitorMenuItem.title = String(localized: "LCC/OpenLCB Traffic Monitor", comment: "Used for the LCC/OpenLCB Traffic Monitor menu item title")
-          openLCBTrafficMonitorMenuItem.target = self
-          openLCBTrafficMonitorMenuItem.action = #selector(self.mnuLCCNetworkTrafficMonitor(_:))
-          toolsMenu.submenu?.addItem(openLCBTrafficMonitorMenuItem)
+          let openLCBTrafficMonitorMenuItemMaster = NSMenuItem()
+          openLCBTrafficMonitorMenuItemMaster.title = String(localized: "LCC/OpenLCB Traffic Monitor", comment: "Used for the LCC/OpenLCB Traffic Monitor menu item title")
+          openLCBTrafficMonitorMenuItemMaster.target = self
+          openLCBTrafficMonitorMenuItemMaster.action = #selector(self.mnuLCCNetworkTrafficMonitor(_:))
+          toolsMenuMaster.submenu?.addItem(openLCBTrafficMonitorMenuItemMaster)
 
-          toolsMenu.submenu?.addItem(.separator())
+          let openLCBTrafficMonitorMenuItemDelegate = NSMenuItem()
+          openLCBTrafficMonitorMenuItemDelegate.title = openLCBTrafficMonitorMenuItemMaster.title
+          openLCBTrafficMonitorMenuItemDelegate.target = self
+          openLCBTrafficMonitorMenuItemDelegate.action = #selector(self.mnuLCCNetworkTrafficMonitor(_:))
+          toolsMenuDelegate.submenu?.addItem(openLCBTrafficMonitorMenuItemDelegate)
+
+          toolsMenuMaster.submenu?.addItem(.separator())
+          toolsMenuDelegate.submenu?.addItem(.separator())
 
           // Create the LocoNet Traffic Monitor Menu Item
 
-          locoNetTrafficMonitorMenuItem.title = String(localized: "LocoNet Traffic Monitor", comment: "Used for the LocoNet Traffic Monitor menu item title")
-          locoNetTrafficMonitorMenuItem.target = self
-          locoNetTrafficMonitorMenuItem.action = #selector(self.mnuMonitorAction(_:))
-          toolsMenu.submenu?.addItem(locoNetTrafficMonitorMenuItem)
+          let locoNetTrafficMonitorMenuItemMaster = NSMenuItem()
+          locoNetTrafficMonitorMenuItemMaster.title = String(localized: "LocoNet Traffic Monitor", comment: "Used for the LocoNet Traffic Monitor menu item title")
+          locoNetTrafficMonitorMenuItemMaster.target = self
+          locoNetTrafficMonitorMenuItemMaster.action = #selector(self.mnuMonitorAction(_:))
+          toolsMenuMaster.submenu?.addItem(locoNetTrafficMonitorMenuItemMaster)
+
+          let locoNetTrafficMonitorMenuItemDelegate = NSMenuItem()
+          locoNetTrafficMonitorMenuItemDelegate.title = locoNetTrafficMonitorMenuItemMaster.title
+          locoNetTrafficMonitorMenuItemDelegate.target = self
+          locoNetTrafficMonitorMenuItemDelegate.action = #selector(self.mnuMonitorAction(_:))
+          toolsMenuDelegate.submenu?.addItem(locoNetTrafficMonitorMenuItemDelegate)
 
           // Create the LocoNet Slot View Menu Item
 
-          locoNetSlotViewMenuItem.title = String(localized: "LocoNet Slot View", comment: "Used for the LocoNet Slot View menu item title")
-          locoNetSlotViewMenuItem.target = self
-          locoNetSlotViewMenuItem.action = #selector(self.mnuSlotView(_:))
-          toolsMenu.submenu?.addItem(locoNetSlotViewMenuItem)
+          let locoNetSlotViewMenuItemMaster = NSMenuItem()
+          locoNetSlotViewMenuItemMaster.title = String(localized: "LocoNet Slot View", comment: "Used for the LocoNet Slot View menu item title")
+          locoNetSlotViewMenuItemMaster.target = self
+          locoNetSlotViewMenuItemMaster.action = #selector(self.mnuSlotView(_:))
+          toolsMenuMaster.submenu?.addItem(locoNetSlotViewMenuItemMaster)
+
+          let locoNetSlotViewMenuItemDelegate = NSMenuItem()
+          locoNetSlotViewMenuItemDelegate.title = locoNetSlotViewMenuItemMaster.title
+          locoNetSlotViewMenuItemDelegate.target = self
+          locoNetSlotViewMenuItemDelegate.action = #selector(self.mnuSlotView(_:))
+          toolsMenuDelegate.submenu?.addItem(locoNetSlotViewMenuItemDelegate)
 
           // Create the LocoNet Dashboard Menu Item
 
-          locoNetDashboardMenuItem.title = String(localized: "LocoNet Dashboard", comment: "Used for the LocoNet Dashboard menu item title")
-          locoNetDashboardMenuItem.target = self
-          locoNetDashboardMenuItem.action = #selector(self.mnuDashBoardAction(_:))
-          toolsMenu.submenu?.addItem(locoNetDashboardMenuItem)
+          let locoNetDashboardMenuItemMaster = NSMenuItem()
+          locoNetDashboardMenuItemMaster.title = String(localized: "LocoNet Dashboard", comment: "Used for the LocoNet Dashboard menu item title")
+          locoNetDashboardMenuItemMaster.target = self
+          locoNetDashboardMenuItemMaster.action = #selector(self.mnuDashBoardAction(_:))
+          toolsMenuMaster.submenu?.addItem(locoNetDashboardMenuItemMaster)
+
+          let locoNetDashboardMenuItemDelegate = NSMenuItem()
+          locoNetDashboardMenuItemDelegate.title = locoNetDashboardMenuItemMaster.title
+          locoNetDashboardMenuItemDelegate.target = self
+          locoNetDashboardMenuItemDelegate.action = #selector(self.mnuDashBoardAction(_:))
+          toolsMenuDelegate.submenu?.addItem(locoNetDashboardMenuItemDelegate)
 
         case "File", "Format", "Help":
          
@@ -208,8 +332,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
           
           // Add back in the Menu item
           
-          mainMenu.addItem(item)
-          
+          mainMenuItems[.initializing]!.append(item)
+          mainMenuItems[.master]!.append(item)
+          mainMenuItems[.delegate]!.append(item)
+
         }
         
       }
@@ -264,51 +390,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
 
   // MARK: File Menu
   
-  @IBAction func mnuCreateNewNodeAction(_ sender: NSMenuItem) {
+  func newNodeCompletion(node:OpenLCBNodeVirtual) {
     
-    guard let networkLayer = myTrainsController.openLCBNetworkLayer, let virtualNodeType = MyTrainsVirtualNodeType(rawValue: UInt16(sender.tag)) else {
+    guard let networkLayer = myTrainsController.openLCBNetworkLayer else {
       return
     }
-    
-    let newNodeId = networkLayer.getNewNodeId(virtualNodeType: virtualNodeType)
-    
-    var node : OpenLCBNodeVirtual?
-    
-    switch virtualNodeType {
-    case .clockNode:
-      node = OpenLCBClock(nodeId: newNodeId)
-    case .throttleNode:
-      node = OpenLCBThrottle(nodeId: newNodeId)
-    case .locoNetGatewayNode:
-      node = OpenLCBLocoNetGateway(nodeId: newNodeId)
-    case .trainNode:
-      node = OpenLCBNodeRollingStockLocoNet(nodeId: newNodeId)
-    case .canGatewayNode:
-      node = OpenLCBCANGateway(nodeId: newNodeId)
-    case .applicationNode:
-      node = OpenLCBNodeMyTrains(nodeId: newNodeId)
-    case .configurationToolNode:
-      node = OpenLCBNodeConfigurationTool(nodeId: newNodeId)
-    case .locoNetMonitorNode:
-      node = OpenLCBLocoNetMonitorNode(nodeId: newNodeId)
-    case .programmerToolNode:
-      node = OpenLCBProgrammerToolNode(nodeId: newNodeId)
-    case .programmingTrackNode:
-      node = OpenLCBProgrammingTrackNode(nodeId: newNodeId)
-    case .genericVirtualNode:
-      break
-    case .digitraxBXP88Node:
-      node = OpenLCBDigitraxBXP88Node(nodeId: newNodeId)
-    case .layoutNode:
-      node = LayoutNode(nodeId: newNodeId)
-    case .switchboardNode:
-      node = SwitchboardNode(nodeId: newNodeId)
-    case .switchboardItemNode:
-      node = SwitchboardItemNode(nodeId: newNodeId)
-    }
 
-    if let node {
-      networkLayer.registerNode(node: node)
+    if node.isConfigurationDescriptionInformationProtocolSupported {
       let x = ModalWindow.ConfigurationTool
       let wc = x.windowController
       let vc = x.viewController(windowController: wc) as! ConfigurationToolVC
@@ -317,7 +405,17 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
       vc.node = node
       wc.showWindow(nil)
     }
-
+    
+  }
+  
+  @IBAction func mnuCreateNewNodeAction(_ sender: NSMenuItem) {
+    
+    guard let networkLayer = myTrainsController.openLCBNetworkLayer, let virtualNodeType = MyTrainsVirtualNodeType(rawValue: UInt16(sender.tag)) else {
+      return
+    }
+    
+    networkLayer.createVirtualNode(virtualNodeType: virtualNodeType, completion: newNodeCompletion(node:))
+    
   }
 
   // MARK: Operations Menu
@@ -338,7 +436,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
   }
 
   @IBAction func mnuAppModeAction(_ sender: Any) {
-    appMode = (appMode ?? .master) == .master ? .delegate : .master
+    appMode = (appMode == .master) ? .delegate : .master
   }
   
   // MARK: Configuration Menu

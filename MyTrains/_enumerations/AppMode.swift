@@ -10,8 +10,9 @@ import AppKit
 
 public enum AppMode : Int {
   
-  case master   = 0
-  case delegate = 1
+  case initializing = 0
+  case master       = 1
+  case delegate     = 2
 
   // MARK: Public Properties
   
@@ -22,13 +23,14 @@ public enum AppMode : Int {
   // MARK: Private Class Properties
   
   private static let titles = [
-    String(localized: "Master", comment: "Used to indicate that the workstation is the master system controller"),
-    String(localized: "Delegate", comment: "Used to indicate that the workstation is not the master system controller but can be delegated some of its functions"),
+    String(localized: "Initializing", comment: "Used to indicate that the workstation is initializing"),
+    String(localized: "Master", comment: "Used to indicate that the workstation is the master mode"),
+    String(localized: "Delegate", comment: "Used to indicate that the workstation is delegate mode"),
   ]
   
   // MARK: Public Class Prooperties
   
-  public static let defaultValue : AppMode = .master
+  public static let defaultValue : AppMode = .initializing
   
   // MARK: Public Class Methods
   

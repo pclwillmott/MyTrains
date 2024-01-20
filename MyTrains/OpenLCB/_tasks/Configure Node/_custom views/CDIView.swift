@@ -20,6 +20,10 @@ class CDIView: NSView {
     
     NSColor.setStrokeColor(color: .gray)
 
+//    NSColor.setFillColor(color: .darkGray)
+    
+//    path.fill()
+    
     path.stroke()
     
     setup()

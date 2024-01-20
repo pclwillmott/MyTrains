@@ -39,8 +39,6 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBConfiguration
     
     nodeId = configurationTool!.nodeId
     
-    MyTrainsVirtualNodeType.populate(comboBox: cboNewNodeType)
-    
     reload()
     
     findAll()
@@ -184,60 +182,7 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBConfiguration
     wc.showWindow(nil)
 
   }
-  
-  @IBAction func btnCreateNewNodeAction(_ sender: NSButton) {
     
-    guard let networkLayer, let virtualNodeType = MyTrainsVirtualNodeType.selected(comboBox: cboNewNodeType) else {
-      return
-    }
-    
-    let newNodeId = networkLayer.getNewNodeId(virtualNodeType: virtualNodeType)
-    
-    var node : OpenLCBNodeVirtual?
-    
-    switch virtualNodeType {
-    case .clockNode:
-      node = OpenLCBClock(nodeId: newNodeId)
-    case .throttleNode:
-      node = OpenLCBThrottle(nodeId: newNodeId)
-    case .locoNetGatewayNode:
-      node = OpenLCBLocoNetGateway(nodeId: newNodeId)
-    case .trainNode:
-      node = OpenLCBNodeRollingStockLocoNet(nodeId: newNodeId)
-    case .canGatewayNode:
-      node = OpenLCBCANGateway(nodeId: newNodeId)
-    case .applicationNode:
-      node = OpenLCBNodeMyTrains(nodeId: newNodeId)
-    case .configurationToolNode:
-      node = OpenLCBNodeConfigurationTool(nodeId: newNodeId)
-    case .locoNetMonitorNode:
-      node = OpenLCBLocoNetMonitorNode(nodeId: newNodeId)
-    case .programmerToolNode:
-      node = OpenLCBProgrammerToolNode(nodeId: newNodeId)
-    case .programmingTrackNode:
-      node = OpenLCBProgrammingTrackNode(nodeId: newNodeId)
-    case .genericVirtualNode:
-      break
-    case .digitraxBXP88Node:
-      node = OpenLCBDigitraxBXP88Node(nodeId: newNodeId)
-    case .layoutNode:
-      node = LayoutNode(nodeId: newNodeId)
-    case .switchboardNode:
-      node = SwitchboardNode(nodeId: newNodeId)
-    case .switchboardItemNode:
-      node = SwitchboardItemNode(nodeId: newNodeId)
-    }
-
-    if let node {
-      node.userNodeName = node.virtualNodeType.defaultUserNodeName
-      node.saveMemorySpaces()
-      networkLayer.registerNode(node: node)
-    }
-    
-  }
-  
-  @IBOutlet weak var cboNewNodeType: NSComboBox!
-  
   @IBAction func btnDeleteAction(_ sender: NSButton) {
     
     guard let networkLayer else {

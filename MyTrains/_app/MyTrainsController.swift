@@ -20,20 +20,18 @@ public var appNodeId : UInt64? {
   }
 }
 
-public var appMode : AppMode? {
+public var appMode : AppMode {
   get {
-    return AppMode(rawValue: UserDefaults.standard.integer(forKey: DEFAULT.APP_MODE))
+    return AppMode(rawValue: UserDefaults.standard.integer(forKey: DEFAULT.APP_MODE))!
   }
   set(value) {
-    UserDefaults.standard.set(value?.rawValue ?? 0, forKey: DEFAULT.APP_MODE)
-    appModeMenuItem.title = appModeMenuTitle
-    myTrainsController.openLCBNetworkLayer?.stop()
-    myTrainsController.openLCBNetworkLayer?.start()
+    UserDefaults.standard.set(value.rawValue, forKey: DEFAULT.APP_MODE)
+    menuUpdate()
+    if value != .initializing {
+      myTrainsController.openLCBNetworkLayer?.stop()
+      myTrainsController.openLCBNetworkLayer?.start()
+    }
   }
-}
-
-public var appModeMenuTitle : String {
-  return (appMode ?? .master) == .master ? String(localized: "Change to Delegate Mode") : String(localized: "Change to Master Mode")
 }
 
 // MARK: Global Declaration of MyTrainsController Instance
@@ -152,13 +150,7 @@ public class MyTrainsController : NSObject, NSUserNotificationCenterDelegate {
   }
   
   public func createApplicationNode(nodeId:UInt64) {
-    
-    appNodeId = nodeId
-    
-    menuUpdate()
-    
     openLCBNetworkLayer?.createAppNode(newNodeId: nodeId)
-    
   }
   
 }

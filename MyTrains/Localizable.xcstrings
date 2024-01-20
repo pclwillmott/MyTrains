@@ -198,12 +198,6 @@
         }
       }
     },
-    "Change to Delegate Mode" : {
-
-    },
-    "Change to Master Mode" : {
-
-    },
     "Character" : {
       "comment" : "Used by combobox to select option to display number as UTF8 character"
     },
@@ -284,7 +278,7 @@
       "comment" : "Used for the Create Application Node button title"
     },
     "Create Application Node" : {
-      "comment" : "Used for the Create Application Node menu item title\nUsed for the title of the Create Application Node window"
+      "comment" : "Used for the title of the Create Application Node window\nUsed for the Create Application Node menu item title"
     },
     "Curve Squeal" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
@@ -329,7 +323,7 @@
       "comment" : "Used to indicate what is the initial date and time setting for a clock"
     },
     "Delegate" : {
-      "comment" : "Used to indicate that the workstation is not the master system controller but can be delegated some of its functions"
+      "comment" : "Used to indicate that the workstation is delegate mode"
     },
     "Destination Blind Front" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
@@ -412,9 +406,6 @@
     "Fast Clock" : {
       "comment" : "Used for the Fast Clock menu item title\nUsed to indicate a clock's type"
     },
-    "File" : {
-      "comment" : "Used for the File menu item title"
-    },
     "Flange Squeal" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
     },
@@ -457,6 +448,9 @@
     "In Use" : {
       "comment" : "Used to indicate a LocoNet command station slot status"
     },
+    "Initializing" : {
+      "comment" : "Used to indicate that the workstation is initializing"
+    },
     "Injector" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
     },
@@ -467,7 +461,7 @@
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
     },
     "Layout" : {
-      "comment" : "Used for the New Layout menu item title\nUsed to create a default OpenLCB virtual name"
+      "comment" : "Used to create a default OpenLCB virtual name"
     },
     "Layout Node" : {
       "comment" : "Used to describe an OpenLCB virtual node"
@@ -527,7 +521,7 @@
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
     },
     "Master" : {
-      "comment" : "Used to indicate that the workstation is the master system controller"
+      "comment" : "Used to indicate that the workstation is the master mode"
     },
     "Master (generator)" : {
       "comment" : "Used to indicate a clock's operating mode"
@@ -753,6 +747,12 @@
     "Switch Board" : {
       "comment" : "Used for the Switch Board menu item title"
     },
+    "Switch to Delegate Mode" : {
+
+    },
+    "Switch to Master Mode" : {
+
+    },
     "Switchboard" : {
       "comment" : "Used to create a default OpenLCB virtual name"
     },
@@ -817,7 +817,7 @@
       "comment" : "Used to indicate that turnout can be configured to have a powered or insulated frog"
     },
     "Unknown" : {
-      "comment" : "Used to indicate that the type of something is unknown\nUsed to indicate the state of a turnout"
+      "comment" : "Used to indicate the state of a turnout\nUsed to indicate that the type of something is unknown"
     },
     "User Description" : {
       "comment" : "Used for the title of the User Description input field in CDI"

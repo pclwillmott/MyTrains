@@ -61,6 +61,8 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
     statusView.translatesAutoresizingMaskIntoConstraints = false
     btnShowCDIText.translatesAutoresizingMaskIntoConstraints = false
   
+    containerView.scrollView.backgroundColor = self.view.window!.backgroundColor
+    
     self.view.addSubview(stackView)
  
     NSLayoutConstraint.activate([

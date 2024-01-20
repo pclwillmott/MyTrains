@@ -71,6 +71,14 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
 
   }
   
+  internal typealias getUniqueNodeIdQueueItem = (requester:UInt64, candidate:UInt64)
+  
+  internal var getUniqueNodeIdQueue : [getUniqueNodeIdQueueItem] = []
+  
+  internal var getUniqueNodeIdInProgress = false
+  
+  internal var timeoutTimer : Timer?
+  
   // MARK: Private Methods
   
   internal override func resetToFactoryDefaults() {
@@ -82,10 +90,40 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     
     super.resetReboot()
     
-    if appMode == .master {
-      networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .myTrainsMasterActivated)
+  }
+
+  private func tryCandidate() {
+    getUniqueNodeIdInProgress = !getUniqueNodeIdQueue.isEmpty
+    if let item = getUniqueNodeIdQueue.first {
+      getUniqueNodeIdInProgress = true
+      startTimeoutTimer(interval: 1.0)
+      networkLayer?.sendVerifyNodeIdNumberAddressed(sourceNodeId: nodeId, destinationNodeId: item.candidate)
+    }
+  }
+  
+  @objc func timeoutTimerAction() {
+
+    stopTimeoutTimer()
+
+    if getUniqueNodeIdInProgress {
+      let item = getUniqueNodeIdQueue.removeFirst()
+      networkLayer?.sendGetUniqueNodeIdReply(sourceNodeId: nodeId, destinationNodeId: item.requester, newNodeId: item.candidate)
+      tryCandidate()
     }
     
+  }
+  
+  private func startTimeoutTimer(interval: TimeInterval) {
+
+    timeoutTimer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(timeoutTimerAction), userInfo: nil, repeats: false)
+
+    RunLoop.current.add(timeoutTimer!, forMode: .common)
+    
+  }
+  
+  private func stopTimeoutTimer() {
+    timeoutTimer?.invalidate()
+    timeoutTimer = nil
   }
 
   // MARK: Public Methods
@@ -100,13 +138,46 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     
     switch message.messageTypeIndicator {
       
+    case .verifiedNodeIDNumberSimpleSetSufficient, .verifiedNodeIDNumberFullProtocolRequired:
+      
+      if getUniqueNodeIdInProgress, let id = UInt64(bigEndianData: message.payload) {
+        
+        if (id & 0x0000ffffffffffff) == getUniqueNodeIdQueue[0].candidate {
+          stopTimeoutTimer()
+          getUniqueNodeIdQueue[0].candidate = nextUniqueNodeIdCandidate
+          tryCandidate()
+        }
+        
+      }
+      
     case .identifyProducer:
       
       switch message.eventId! {
-      case OpenLCBWellKnownEvent.myTrainsMasterActivated.rawValue:
-        networkLayer?.sendProducerIdentified(sourceNodeId: nodeId, wellKnownEvent: .myTrainsMasterActivated, validity: appMode == .master ? .valid : .invalid)
       default:
         break
+      }
+    case .datagram:
+      
+      if message.destinationNodeId! == nodeId, let datagramType = message.datagramType {
+        
+        switch datagramType {
+          
+        case .getUniqueNodeIDCommand:
+          
+          networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, timeOut: .replyPendingNoTimeout)
+          
+          var item : getUniqueNodeIdQueueItem = (message.sourceNodeId!, nextUniqueNodeIdCandidate)
+          
+          getUniqueNodeIdQueue.append(item)
+          
+          if !getUniqueNodeIdInProgress {
+            tryCandidate()
+          }
+          
+        default:
+          break
+        }
+        
       }
       
     default:

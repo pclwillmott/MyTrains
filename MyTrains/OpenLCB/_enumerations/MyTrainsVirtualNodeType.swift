@@ -128,49 +128,6 @@ public enum MyTrainsVirtualNodeType : UInt16 {
 
   // MARK: Public Class Properties
  
-  public static var newFileOpenLCBItems : [MyTrainsVirtualNodeType] {
-    
-    guard let appMode else {
-      return []
-    }
-    
-    switch appMode {
-    case .master:
-      return [
-        .throttleNode,
-        .trainNode,
-        .canGatewayNode,
-        .clockNode,
-      ]
-    case .delegate:
-      return [
-        .throttleNode,
-        .trainNode,
-      ]
-    }
-
-  }
-
-  public static var newFileLocoNetItems : [MyTrainsVirtualNodeType] {
-    
-    guard let appMode else {
-      return []
-    }
-    
-    switch appMode {
-    case .master:
-      return [
-         .locoNetGatewayNode,
-         .programmingTrackNode,
-         .digitraxBXP88Node,
-      ]
-    case .delegate:
-      return [
-      ]
-    }
-    
-  }
-
   public static let titles : [MyTrainsVirtualNodeType:String] = [
     .applicationNode:       String(localized: "Application Node", comment: "Used to describe an OpenLCB virtual node"),
     .canGatewayNode:        String(localized: "CAN Gateway Node", comment: "Used to describe an OpenLCB virtual node"),
@@ -208,6 +165,48 @@ public enum MyTrainsVirtualNodeType : UInt16 {
   ]
 
   // MARK: Public Class Methods
+  
+  public static func newSubMenuItems(appMode:AppMode) -> [NSMenuItem] {
+    
+    var nodeTypes : [MyTrainsVirtualNodeType]
+    
+    switch appMode {
+    case .master:
+      nodeTypes = [
+        .layoutNode,
+        .throttleNode,
+        .trainNode,
+        .canGatewayNode,
+        .clockNode,
+        .locoNetGatewayNode,
+        .programmingTrackNode,
+        .digitraxBXP88Node,
+      ]
+    case .delegate:
+      nodeTypes = [
+        .throttleNode,
+        .trainNode,
+        .canGatewayNode,
+        .clockNode,
+        .locoNetGatewayNode,
+        .programmingTrackNode,
+      ]
+    case .initializing:
+      nodeTypes = []
+    }
+    
+    var result : [NSMenuItem] = []
+    
+    for nodeType in nodeTypes {
+      let menuItem = NSMenuItem()
+      menuItem.title = nodeType.title
+      menuItem.tag = Int(nodeType.rawValue)
+      result.append(menuItem)
+    }
+    
+    return result
+
+  }
   
   public static func populate(comboBox:NSComboBox) {
     

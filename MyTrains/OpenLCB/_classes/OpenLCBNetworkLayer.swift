@@ -7,6 +7,8 @@
 
 import Foundation
 
+public let networkLayerNodeId : UInt64 = 0xfdffffffffff
+
 public class OpenLCBNetworkLayer : NSObject {
   
   // MARK: Constructors
@@ -20,7 +22,7 @@ public class OpenLCBNetworkLayer : NSObject {
     nodeManagers.append(programmerToolManager)
     nodeManagers.append(configurationToolManager)
 
-    if let appNodeId {
+    if appNodeId != nil {
       start()
     }
     
@@ -77,9 +79,10 @@ public class OpenLCBNetworkLayer : NSObject {
   // MARK: Public Methods
   
   public func createAppNode(newNodeId:UInt64) {
+    appNodeId = newNodeId
+    appMode = .master
     let node = OpenLCBNodeMyTrains(nodeId: newNodeId)
-    node.userNodeName = node.virtualNodeType.defaultUserNodeName
-    node.saveMemorySpaces()
+    stop()
     start()
   }
   
@@ -92,16 +95,9 @@ public class OpenLCBNetworkLayer : NSObject {
     _state = .initialized
     
     for node in OpenLCBMemorySpace.getVirtualNodes() {
-      switch node.virtualNodeType {
-      case .applicationNode, .throttleNode, .trainNode:
-        registerNode(node: node)
-      default:
-        break
-      }
+      registerNode(node: node)
     }
     
-    menuUpdate()
-
   }
   
   public func stop() {
@@ -205,7 +201,15 @@ public class OpenLCBNetworkLayer : NSObject {
   }
   
   public func getThrottle() -> OpenLCBThrottle? {
-    return throttleManager.getNode() as? OpenLCBThrottle
+    
+    var result = throttleManager.getNode() as? OpenLCBThrottle
+    
+    if throttleManager.numberOfFreeNodes == 0 {
+      createVirtualNode(virtualNodeType: .throttleNode, completion: dummyCompletion(node:))
+    }
+    
+    return result
+    
   }
   
   public func releaseThrottle(throttle:OpenLCBThrottle) {
@@ -229,51 +233,107 @@ public class OpenLCBNetworkLayer : NSObject {
     programmerToolManager.releaseNode(node: programmerTool)
   }
   
-  public func getConfigurationTool() -> OpenLCBNodeConfigurationTool {
+  private func dummyCompletion(node:OpenLCBNodeVirtual) {
+  }
+  
+  public func getConfigurationTool() -> OpenLCBNodeConfigurationTool? {
     
-    if let configurationTool = configurationToolManager.getNode() as? OpenLCBNodeConfigurationTool {
-      return configurationTool
+    var result = configurationToolManager.getNode() as? OpenLCBNodeConfigurationTool
+    
+    if configurationToolManager.numberOfFreeNodes == 0 {
+      createVirtualNode(virtualNodeType: .configurationToolNode, completion: dummyCompletion(node:))
     }
     
-    let newNodeId = getNewNodeId(virtualNodeType: .configurationToolNode)
+    return result
     
-    let node = OpenLCBNodeConfigurationTool(nodeId: newNodeId)
-      
-    node.userNodeName = node.virtualNodeType.defaultUserNodeName
-    
-    node.saveMemorySpaces()
-    
-    registerNode(node: node)
-    
-    return node
-
   }
   
   public func releaseConfigurationTool(configurationTool:OpenLCBNodeConfigurationTool) {
     configurationToolManager.releaseNode(node: configurationTool)
   }
   
-  public func getNewNodeId(virtualNodeType:MyTrainsVirtualNodeType) -> UInt64 {
+  public var newNodeQueue : [(virtualNodeType:MyTrainsVirtualNodeType, completion:(OpenLCBNodeVirtual) -> Void)] = []
+  
+  public func createVirtualNode(virtualNodeType:MyTrainsVirtualNodeType, completion: @escaping (OpenLCBNodeVirtual) -> Void) {
+    newNodeQueue.append((virtualNodeType, completion))
+    sendGetUniqueNodeIdCommand(sourceNodeId: networkLayerNodeId, destinationNodeId: appNodeId!)
+  }
+  
+  public func createVirtualNode(message:OpenLCBMessage) {
     
-    var newNodeId = virtualNodeType.baseNodeId
-      
-    while true {
-      if Database.codeExists(tableName: TABLE.MEMORY_SPACE, primaryKey: MEMORY_SPACE.NODE_ID, code: newNodeId) {
-        newNodeId += virtualNodeType.nodeIdIncrement
-      }
-      else {
-        return newNodeId
-      }
+    guard !newNodeQueue.isEmpty else {
+      return
+    }
+    
+    let item = newNodeQueue.removeFirst()
+    
+    let newNodeId = UInt64(bigEndianData: message.payload)! & 0x0000ffffffffffff
+    
+    var node : OpenLCBNodeVirtual?
+    
+    switch item.virtualNodeType {
+    case .clockNode:
+      node = OpenLCBClock(nodeId: newNodeId)
+    case .throttleNode:
+      node = OpenLCBThrottle(nodeId: newNodeId)
+    case .locoNetGatewayNode:
+      node = OpenLCBLocoNetGateway(nodeId: newNodeId)
+    case .trainNode:
+      node = OpenLCBNodeRollingStockLocoNet(nodeId: newNodeId)
+    case .canGatewayNode:
+      node = OpenLCBCANGateway(nodeId: newNodeId)
+    case .applicationNode:
+      node = OpenLCBNodeMyTrains(nodeId: newNodeId)
+    case .configurationToolNode:
+      node = OpenLCBNodeConfigurationTool(nodeId: newNodeId)
+    case .locoNetMonitorNode:
+      node = OpenLCBLocoNetMonitorNode(nodeId: newNodeId)
+    case .programmerToolNode:
+      node = OpenLCBProgrammerToolNode(nodeId: newNodeId)
+    case .programmingTrackNode:
+      node = OpenLCBProgrammingTrackNode(nodeId: newNodeId)
+    case .genericVirtualNode:
+      break
+    case .digitraxBXP88Node:
+      node = OpenLCBDigitraxBXP88Node(nodeId: newNodeId)
+    case .layoutNode:
+      node = LayoutNode(nodeId: newNodeId)
+    case .switchboardNode:
+      node = SwitchboardNode(nodeId: newNodeId)
+    case .switchboardItemNode:
+      node = SwitchboardItemNode(nodeId: newNodeId)
+    }
+
+    if let node {
+      registerNode(node: node)
+      item.completion(node)
     }
 
   }
-
+  
   // MARK: Messages
 
   public func sendMessage(gatewayNodeId:UInt64, message:OpenLCBMessage) {
     
     guard state == .initialized else {
       return
+    }
+    
+    if let destinationNodeId = message.destinationNodeId, destinationNodeId == networkLayerNodeId {
+      
+      switch message.messageTypeIndicator {
+      case .datagram:
+        switch message.datagramType {
+        case .getUniqueNodeIDReply:
+          createVirtualNode(message: message)
+          return
+        default:
+          break
+        }
+      default:
+        break
+      }
+      
     }
     
     message.gatewayNodeId = gatewayNodeId
@@ -579,6 +639,23 @@ public class OpenLCBNetworkLayer : NSObject {
     sendMessage(message: message)
   }
   
+  public func sendVerifyNodeIdNumberAddressed(sourceNodeId:UInt64, destinationNodeId:UInt64) {
+    
+    let message = OpenLCBMessage(messageTypeIndicator: .verifyNodeIDNumberAddressed)
+
+    message.sourceNodeId = sourceNodeId
+    
+    message.destinationNodeId = destinationNodeId
+
+    var data = destinationNodeId.bigEndianData
+    data.removeFirst(2)
+
+    message.payload = data
+
+    sendMessage(message: message)
+    
+  }
+
   public func sendVerifyNodeIdNumber(sourceNodeId:UInt64) {
     
     let message = OpenLCBMessage(messageTypeIndicator: .verifyNodeIDNumberGlobal)
@@ -687,6 +764,31 @@ public class OpenLCBNetworkLayer : NSObject {
 
   }
   
+  public func sendGetUniqueNodeIdCommand(sourceNodeId:UInt64, destinationNodeId:UInt64) {
+    
+    var payload : [UInt8] = []
+
+    payload.append(contentsOf: OpenLCBDatagramType.getUniqueNodeIDCommand.rawValue.bigEndianData)
+    
+    sendDatagram(sourceNodeId: sourceNodeId, destinationNodeId: destinationNodeId, data: payload)
+
+  }
+  
+  public func sendGetUniqueNodeIdReply(sourceNodeId:UInt64, destinationNodeId:UInt64, newNodeId:UInt64) {
+    
+    var payload : [UInt8] = []
+    
+    payload.append(contentsOf: OpenLCBDatagramType.getUniqueNodeIDReply.rawValue.bigEndianData)
+    
+    var id = newNodeId.bigEndianData
+    id.removeFirst(2)
+    
+    payload.append(contentsOf: id)
+
+    sendDatagram(sourceNodeId: sourceNodeId, destinationNodeId: destinationNodeId, data: payload)
+
+  }
+
   public func sendDatagram(sourceNodeId:UInt64, destinationNodeId:UInt64, data: [UInt8]) {
 
     guard data.count >= 0 && data.count <= 72 else {

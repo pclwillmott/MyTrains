@@ -27,6 +27,10 @@ public class OpenLCBNodeManager {
   
   // MARK: Public Properties
   
+  public var numberOfFreeNodes : Int {
+    return freeNodes.count
+  }
+  
   public var members : [OpenLCBNodeVirtual] {
     
     var result : [OpenLCBNodeVirtual] = []
