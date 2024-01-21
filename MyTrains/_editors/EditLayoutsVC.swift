@@ -41,7 +41,6 @@ class EditLayoutsVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   func clearFields(dbEditorView: DBEditorView) {
     txtLayoutName.stringValue = ""
     txtDescription.stringValue = ""
-    txtScale.stringValue = "\(UserDefaults.standard.double(forKey: DEFAULT.SCALE))"
   }
   
   func setupFields(dbEditorView: DBEditorView, editorObject: EditorObject) {
@@ -118,9 +117,6 @@ class EditLayoutsVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   
   @IBAction func txtScaleAction(_ sender: NSTextField) {
     editorView.modified = true
-    if let scale = Double(txtScale.stringValue) {
-      UserDefaults.standard.set(scale, forKey: DEFAULT.SCALE)
-    }
   }
   
 }

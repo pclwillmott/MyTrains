@@ -8,14 +8,17 @@
 import Foundation
 
 enum DEFAULT {
-  static let VERSION                            = "Version"
-  static let DATABASE_PATH                      = "DatabasePath"
-  static let SAVED_CVS_PATH                     = "SavedCVsPath"
-  static let DMF_PATH                           = "DMFPath"
-  
+
   static let APP_NODE_ID                        = "APP_NODE_ID"
   static let APP_MODE                           = "APP_MODE"
   
+  static let DATABASE_PATH                      = "DATABASE_PATH"
+  static let LAST_CSV_PATH                      = "LAST_CSV_PATH"
+  static let LAST_DMF_PATH                      = "LAST_DMF_PATH"
+
+  static let SWITCHBOARD_EDITOR_MAG             = "SWITCHBOARD_EDITOR_MAG"
+  static let MAIN_SWITCHBOARD_MAG               = "MAIN_SWITCHBOARD_MAG"
+
   static let MONITOR_INTERFACE_ID               = "MonitorInterfaceId"
   static let MONITOR_SEND_FILENAME              = "MonitorSendFileName"
   static let MONITOR_CAPTURE_FILENAME           = "MonitorCaptureFileName"
@@ -29,17 +32,11 @@ enum DEFAULT {
   static let MONITOR_MESSAGE3                   = "MonitorMessage3"
   static let MONITOR_MESSAGE4                   = "MonitorMessage4"
   static let MONITOR_NOTE                       = "MonitorNote"
-  static let UNITS_LENGTH                       = "UnitsLength"
-  static let UNITS_FBOFF_OCC                    = "UnitsFBOffOcc"
-  static let UNITS_SPEED                        = "UnitsSpeed"
-  static let SCALE                              = "Scale"
-  static let TRACK_GAUGE                        = "TrackGauge"
+
   static let MAIN_CURRENT_LAYOUT_ID             = "MainCurrentLayoutId"
   static let PROGRAMMER_PROG_MODE               = "ProgrammerProgMode"
   static let IPL_INTERFACE_ID                   = "IPLInterfaceId"
   static let IPL_DMF_FILENAME                   = "IPLDMFFileName"
-  static let SWITCHBOARD_EDITOR_MAG             = "SWITCHBOARD_EDITOR_MAG"
-  static let MAIN_SWITCHBOARD_MAG               = "MAIN_SWITCHBOARD_MAG"
   static let SPEED_PROFILER_TRENDLINE           = "SPEED_PROFILER_TRENDLINE"
   static let SPEED_PROFILER_LENGTH_UNITS        = "SPEED_PROFILER_LENGTH_UNITS"
   static let SPEED_PROFILER_RESULTS_TYPE        = "SPEED_PROFILER_RESULTS_TYPE"
@@ -65,4 +62,93 @@ enum DEFAULT {
   static let TC64_CONFIG_LAST_DEVICE            = "TC64_CONFIG_LAST_DEVICE"
   static let IODEVICE_MANAGER_NETWORK           = "IODEVICE_MANAGER_NETWORK"
   static let PROGRAMMING_TRACK_ID               = "PROGRAMMING_TRACK_ID"
+}
+
+public var appNodeId : UInt64? {
+  get {
+    let id = UserDefaults.standard.integer(forKey: DEFAULT.APP_NODE_ID)
+    return id == 0 ? nil : UInt64(id)
+  }
+  set(value) {
+    if value != appNodeId {
+      UserDefaults.standard.set(Int(value ?? 0), forKey: DEFAULT.APP_NODE_ID)
+    }
+  }
+}
+
+public var appMode : AppMode {
+  get {
+    return AppMode(rawValue: UserDefaults.standard.integer(forKey: DEFAULT.APP_MODE))!
+  }
+  set(value) {
+    UserDefaults.standard.set(value.rawValue, forKey: DEFAULT.APP_MODE)
+    menuUpdate()
+    if value != .initializing {
+      myTrainsController.openLCBNetworkLayer?.stop()
+      myTrainsController.openLCBNetworkLayer?.start()
+    }
+  }
+}
+
+public var databasePath : String? {
+  get {
+    return UserDefaults.standard.string(forKey: DEFAULT.DATABASE_PATH)
+  }
+  set(path) {
+    if path == nil {
+      UserDefaults.standard.removeObject(forKey: DEFAULT.DATABASE_PATH)
+    }
+    else {
+      UserDefaults.standard.set(path, forKey: DEFAULT.DATABASE_PATH)
+    }
+  }
+}
+
+public var documentsPath : String {
+  let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true) as [String]
+  return paths[0]
+}
+
+public var lastCSVPath : URL? {
+  get {
+    if let path = UserDefaults.standard.url(forKey: DEFAULT.LAST_CSV_PATH) {
+      return path
+    }
+    return URL(fileURLWithPath: documentsPath)
+  }
+  set(path) {
+    UserDefaults.standard.set(path, forKey: DEFAULT.LAST_CSV_PATH)
+  }
+}
+
+public var lastDMFPath : URL? {
+  get {
+    if let path = UserDefaults.standard.url(forKey: DEFAULT.LAST_DMF_PATH) {
+      return path
+    }
+    return URL(fileURLWithPath: documentsPath)
+  }
+  set(path) {
+    UserDefaults.standard.set(path, forKey: DEFAULT.LAST_DMF_PATH)
+  }
+}
+
+public var switchboardEditorMagnification : CGFloat {
+  get {
+    let result = UserDefaults.standard.double(forKey: DEFAULT.SWITCHBOARD_EDITOR_MAG)
+    return result == 0.0 ? 1.0 : result
+  }
+  set(value) {
+    UserDefaults.standard.set(value, forKey: DEFAULT.SWITCHBOARD_EDITOR_MAG)
+  }
+}
+
+public var mainSwitchboardMagnification : CGFloat {
+  get {
+    let result = UserDefaults.standard.double(forKey: DEFAULT.MAIN_SWITCHBOARD_MAG)
+    return result == 0.0 ? 1.0 : result
+  }
+  set(value) {
+    UserDefaults.standard.set(value, forKey: DEFAULT.MAIN_SWITCHBOARD_MAG)
+  }
 }

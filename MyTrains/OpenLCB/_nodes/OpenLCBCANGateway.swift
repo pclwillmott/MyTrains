@@ -34,8 +34,6 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
 
     cdiFilename = "MyTrains CAN Gateway"
    
-    internalNodes.insert(networkLayerNodeId)
-
   }
   
   deinit {
@@ -199,6 +197,12 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
       port.delegate = self
       port.open()
     }
+    
+    nodeIdLookup = [:]
+    
+    aliasLookup = [:]
+    
+    internalNodes = []
 
   }
   
@@ -208,18 +212,14 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   }
   
   public func send(data: [UInt8]) {
-//    DispatchQueue.main.async {
-      self.serialPort?.write(data:data)
-//    }
+    self.serialPort?.write(data:data)
   }
 
   public func send(data:String) {
-//    DispatchQueue.main.async {
     for (_, observer) in observers {
       observer.rawCANPacketSent(packet: data)
     }
-      self.serialPort?.write(data:[UInt8](data.utf8))
- //   }
+    self.serialPort?.write(data:[UInt8](data.utf8))
   }
 
   internal func parseInput() {
@@ -1233,8 +1233,22 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   }
   
   public override func stop() {
+    
+    var nodeIds : [UInt64] = []
+    
+    for (nodeId, _) in nodeIdLookup {
+      nodeIds.append(nodeId)
+    }
+    
+    while !nodeIds.isEmpty {
+      let nodeId = nodeIds.removeFirst()
+      removeNodeIdAliasMapping(nodeId: nodeId)
+    }
+    
     close()
+    
     super.stop()
+    
   }
   
   public func addObserver(observer:OpenLCBCANDelegate) -> Int {
@@ -1282,7 +1296,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
 
     }
 
-    if let destinationNodeId = message.destinationNodeId, internalNodes.contains(destinationNodeId) {
+    if let destinationNodeId = message.destinationNodeId, internalNodes.contains(destinationNodeId) || destinationNodeId == networkLayerNodeId {
       return
     }
 

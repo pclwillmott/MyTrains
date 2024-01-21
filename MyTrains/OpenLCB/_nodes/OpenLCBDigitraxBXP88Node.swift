@@ -513,7 +513,7 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
     
     if allZero {
       
-      var locationServicesEventId = 0x0102000000000000 | nodeId
+      let locationServicesEventId = 0x0102000000000000 | nodeId
       
       for zone in 0 ... numberOfChannels - 1 {
         let baseAddress = baseAddress(zone: zone)

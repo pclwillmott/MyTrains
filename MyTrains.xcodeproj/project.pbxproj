@@ -271,6 +271,13 @@
 		DAF6778E2B433BC2009707A4 /* CDIIdentificationItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF6778D2B433BC2009707A4 /* CDIIdentificationItemView.swift */; };
 		DAFACF592A26C5E0007C10F0 /* MyTrains Clock.xml in Resources */ = {isa = PBXBuildFile; fileRef = DAFACF582A26C5E0007C10F0 /* MyTrains Clock.xml */; };
 		DAFBC3ED29EC39A6003336BE /* OpenLCBErrorCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAFBC3EC29EC39A6003336BE /* OpenLCBErrorCode.swift */; };
+		DAFFB6592B5D49040035AC74 /* CreateVirtualNode.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DAFFB6582B5D49040035AC74 /* CreateVirtualNode.storyboard */; };
+		DAFFB65B2B5D49680035AC74 /* CreateVirtualNodeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAFFB65A2B5D49680035AC74 /* CreateVirtualNodeVC.swift */; };
+		DAFFB65D2B5D877F0035AC74 /* SelectLayout.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DAFFB65C2B5D877F0035AC74 /* SelectLayout.storyboard */; };
+		DAFFB65F2B5D87C80035AC74 /* SelectLayoutVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAFFB65E2B5D87C80035AC74 /* SelectLayoutVC.swift */; };
+		DAFFB6612B5D88CA0035AC74 /* MyTrainsAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAFFB6602B5D88CA0035AC74 /* MyTrainsAppDelegate.swift */; };
+		DAFFB6642B5D8AA50035AC74 /* LayoutListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAFFB6632B5D8AA50035AC74 /* LayoutListItem.swift */; };
+		DAFFB6662B5D8F650035AC74 /* LayoutState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAFFB6652B5D8F650035AC74 /* LayoutState.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -547,6 +554,13 @@
 		DAF6778D2B433BC2009707A4 /* CDIIdentificationItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDIIdentificationItemView.swift; sourceTree = "<group>"; };
 		DAFACF582A26C5E0007C10F0 /* MyTrains Clock.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "MyTrains Clock.xml"; sourceTree = "<group>"; usesTabs = 1; };
 		DAFBC3EC29EC39A6003336BE /* OpenLCBErrorCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBErrorCode.swift; sourceTree = "<group>"; };
+		DAFFB6582B5D49040035AC74 /* CreateVirtualNode.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = CreateVirtualNode.storyboard; sourceTree = "<group>"; };
+		DAFFB65A2B5D49680035AC74 /* CreateVirtualNodeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateVirtualNodeVC.swift; sourceTree = "<group>"; };
+		DAFFB65C2B5D877F0035AC74 /* SelectLayout.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SelectLayout.storyboard; sourceTree = "<group>"; };
+		DAFFB65E2B5D87C80035AC74 /* SelectLayoutVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectLayoutVC.swift; sourceTree = "<group>"; };
+		DAFFB6602B5D88CA0035AC74 /* MyTrainsAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTrainsAppDelegate.swift; sourceTree = "<group>"; };
+		DAFFB6632B5D8AA50035AC74 /* LayoutListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutListItem.swift; sourceTree = "<group>"; };
+		DAFFB6652B5D8F650035AC74 /* LayoutState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutState.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -621,6 +635,7 @@
 			isa = PBXGroup;
 			children = (
 				DA3254E42A4704BF006DF357 /* SwitchRoute.swift */,
+				DAFFB6632B5D8AA50035AC74 /* LayoutListItem.swift */,
 			);
 			path = _types;
 			sourceTree = "<group>";
@@ -703,6 +718,10 @@
 				DA6A0ADE2753B5CF00913F2B /* UserDefaults.swift */,
 				DA408A5B2B582DB6005EBBDE /* SelectMasterNode.storyboard */,
 				DA408A5D2B582DF9005EBBDE /* SelectMasterNodeVC.swift */,
+				DAFFB6582B5D49040035AC74 /* CreateVirtualNode.storyboard */,
+				DAFFB65A2B5D49680035AC74 /* CreateVirtualNodeVC.swift */,
+				DAFFB65C2B5D877F0035AC74 /* SelectLayout.storyboard */,
+				DAFFB65E2B5D87C80035AC74 /* SelectLayoutVC.swift */,
 			);
 			path = _app;
 			sourceTree = "<group>";
@@ -1187,6 +1206,7 @@
 				DA311BAB2A7BB8CC0019FDCE /* OpenLCBValidity.swift */,
 				DA5F7A192A3F11A7004D7EBB /* OpenLCBWellKnownEvent.swift */,
 				DAF4DD4F289ABDDE000B848E /* SpeedProfileResultsType.swift */,
+				DAFFB6652B5D8F650035AC74 /* LayoutState.swift */,
 			);
 			path = _enumerations;
 			sourceTree = "<group>";
@@ -1203,6 +1223,7 @@
 				DA3866242A7A880A00A0FAEB /* OpenLCBConfigurationToolDelegate.swift */,
 				DA0B63DB2AF7CB04007C7CD6 /* OpenLCBCANDelegate.swift */,
 				DAF6778B2B432372009707A4 /* CDIStackViewManagerDelegate.swift */,
+				DAFFB6602B5D88CA0035AC74 /* MyTrainsAppDelegate.swift */,
 			);
 			path = _protocols;
 			sourceTree = "<group>";
@@ -1310,6 +1331,7 @@
 				DA1272C32A7569AF00AB42F6 /* FDI Generic.xml in Resources */,
 				DAF059B32B5AE3A200CA9622 /* MyTrains Application.xml in Resources */,
 				DA5F7A1C2A3F1A36004D7EBB /* MyTrains Blank.xml in Resources */,
+				DAFFB6592B5D49040035AC74 /* CreateVirtualNode.storyboard in Resources */,
 				DA8AE0ED279B2CCB001E9311 /* SlotView.storyboard in Resources */,
 				DA613AC928A7DECD003218BA /* PlaceLocomotive.storyboard in Resources */,
 				DA28C2BA2801CC0300857471 /* DashBoard.storyboard in Resources */,
@@ -1328,6 +1350,7 @@
 				DAA7BEC62B5067AE00508140 /* ConfigurationTool.storyboard in Resources */,
 				DAB5250C2B52E9AA00EEE9A0 /* Main.storyboard in Resources */,
 				DAF442E72AA5FA9700654A51 /* Digitrax DS64.xml in Resources */,
+				DAFFB65D2B5D877F0035AC74 /* SelectLayout.storyboard in Resources */,
 				DAA7BEBB2B504EE900508140 /* Localizable.xcstrings in Resources */,
 				DAED17222A5ABF4A0051C9AF /* MyTrains CAN Gateway.xml in Resources */,
 				DA5CCB4C2897F58D00F99AE6 /* SpeedProfiler.storyboard in Resources */,
@@ -1357,6 +1380,7 @@
 				DA0197252773500100350F71 /* ComboBoxDictDS.swift in Sources */,
 				DA7F238E2B331A12001E5C8C /* CDIView.swift in Sources */,
 				DA408A5A2B5829C3005EBBDE /* AppMode.swift in Sources */,
+				DAFFB65B2B5D49680035AC74 /* CreateVirtualNodeVC.swift in Sources */,
 				DA8AE0F0279B3074001E9311 /* SlotViewVC.swift in Sources */,
 				DA1003232A7E81F7004CC86C /* OpenLCBProgrammingMode.swift in Sources */,
 				DABD30B629E4610A002A2C4B /* OpenLCBNetworkLayerDelegate.swift in Sources */,
@@ -1365,6 +1389,7 @@
 				DA467B9D281CAFDA00AB9650 /* NSColorExtensions.swift in Sources */,
 				DA7F89B12B371BDE00F43819 /* ConfigurationToolVC.swift in Sources */,
 				DA467B9F281CBAF900AB9650 /* NSRectExtensions.swift in Sources */,
+				DAFFB6612B5D88CA0035AC74 /* MyTrainsAppDelegate.swift in Sources */,
 				DAD394BD2B2E15D300403040 /* OpenLCBCANGatewayWiFi.swift in Sources */,
 				DA9325A6289C02C300CC317F /* LocomotiveDirection.swift in Sources */,
 				DA408A5E2B582DF9005EBBDE /* SelectMasterNodeVC.swift in Sources */,
@@ -1436,6 +1461,7 @@
 				DA613ACB28A7E02E003218BA /* PlaceLocomotiveVC.swift in Sources */,
 				DA1B949F2A3DE8E000E2CE6A /* Client.swift in Sources */,
 				DA8FDB2D279C4AC000E15024 /* LocoSlotTableViewDS.swift in Sources */,
+				DAFFB6662B5D8F650035AC74 /* LayoutState.swift in Sources */,
 				DA95D6BD280833FE00D9F1B6 /* GroupSetupVC.swift in Sources */,
 				DA9B87282A2B979E00E9969E /* DBEditorView.swift in Sources */,
 				DA48EE29293CEF16006C26A0 /* DayOfWeek.swift in Sources */,
@@ -1548,6 +1574,7 @@
 				DAA777D02A20D734008EAF02 /* OpenLCBClockState.swift in Sources */,
 				DA9CF8F9286089B000825FA9 /* NSButtonExtensions.swift in Sources */,
 				DA6E28DF285F827600772641 /* SwitchBoardItemPartType.swift in Sources */,
+				DAFFB65F2B5D87C80035AC74 /* SelectLayoutVC.swift in Sources */,
 				DA8479972A34CA87003067E6 /* OpenLCBClockSubState.swift in Sources */,
 				DA0946542843C06A00F1AB81 /* DMF.swift in Sources */,
 				DAA030962AEE94B600BC5659 /* OpenLCBHardwareNodeState.swift in Sources */,
@@ -1570,6 +1597,7 @@
 				DA48EE2B293CEFEA006C26A0 /* LocoNetFastClockScaleFactor.swift in Sources */,
 				DA0BBB7929FD4B22003E03EF /* OpenLCBCDIElementType.swift in Sources */,
 				DA413FF02A45CCF600675AD4 /* OpenLCBNodeRollingStockLocoNet.swift in Sources */,
+				DAFFB6642B5D8AA50035AC74 /* LayoutListItem.swift in Sources */,
 				DAF5BCD9281EF086000B61CA /* SwitchBoardPanel.swift in Sources */,
 				DA8837722770B371000B9A41 /* EditLayoutsVC.swift in Sources */,
 				DAF479CB2A4092380054DA92 /* OpenLCBTractionControllerConfigurationType.swift in Sources */,

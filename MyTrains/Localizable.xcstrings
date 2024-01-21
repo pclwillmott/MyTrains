@@ -107,6 +107,9 @@
     "ACDI" : {
 
     },
+    "Activated" : {
+      "comment" : "Used to indicate a layout's state"
+    },
     "Air Build Up" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
     },
@@ -280,6 +283,9 @@
     "Create Application Node" : {
       "comment" : "Used for the title of the Create Application Node window\nUsed for the Create Application Node menu item title"
     },
+    "Creating virtual node. This may take several seconds to complete." : {
+
+    },
     "Curve Squeal" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
     },
@@ -302,7 +308,7 @@
       "comment" : "Used for LocoNet train control protocol selection"
     },
     "DCC Programmer Tool" : {
-      "comment" : "Used for the DCC Programmer Tool menu item title\nUsed to create a default OpenLCB virtual name"
+      "comment" : "Used to create a default OpenLCB virtual name\nUsed for the DCC Programmer Tool menu item title"
     },
     "DCC Programmer Tool Node" : {
       "comment" : "Used to describe an OpenLCB virtual node"
@@ -312,6 +318,9 @@
     },
     "DCC Programming Track Node" : {
       "comment" : "Used to describe an OpenLCB virtual node"
+    },
+    "Deactivated" : {
+      "comment" : "Used to indicate a layout's state"
     },
     "Decimal" : {
       "comment" : "Used by combobox to select number base for display"
@@ -404,7 +413,7 @@
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
     },
     "Fast Clock" : {
-      "comment" : "Used for the Fast Clock menu item title\nUsed to indicate a clock's type"
+      "comment" : "Used to indicate a clock's type\nUsed for the Fast Clock menu item title"
     },
     "Flange Squeal" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
@@ -693,6 +702,9 @@
     "Scale 7" : {
       "comment" : "Used to indicate the track gauge"
     },
+    "Select Layout" : {
+      "comment" : "Used for the title of the Select Layout window"
+    },
     "Short Whistle" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
     },
@@ -817,7 +829,7 @@
       "comment" : "Used to indicate that turnout can be configured to have a powered or insulated frog"
     },
     "Unknown" : {
-      "comment" : "Used to indicate the state of a turnout\nUsed to indicate that the type of something is unknown"
+      "comment" : "Used to indicate that the type of something is unknown\nUsed to indicate the state of a turnout"
     },
     "User Description" : {
       "comment" : "Used for the title of the User Description input field in CDI"

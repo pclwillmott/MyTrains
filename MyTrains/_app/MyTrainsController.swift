@@ -8,32 +8,6 @@
 import Foundation
 import AppKit
 
-public var appNodeId : UInt64? {
-  get {
-    let id = UserDefaults.standard.integer(forKey: DEFAULT.APP_NODE_ID)
-    return id == 0 ? nil : UInt64(id)
-  }
-  set(value) {
-    if value != appNodeId {
-      UserDefaults.standard.set(Int(value ?? 0), forKey: DEFAULT.APP_NODE_ID)
-    }
-  }
-}
-
-public var appMode : AppMode {
-  get {
-    return AppMode(rawValue: UserDefaults.standard.integer(forKey: DEFAULT.APP_MODE))!
-  }
-  set(value) {
-    UserDefaults.standard.set(value.rawValue, forKey: DEFAULT.APP_MODE)
-    menuUpdate()
-    if value != .initializing {
-      myTrainsController.openLCBNetworkLayer?.stop()
-      myTrainsController.openLCBNetworkLayer?.start()
-    }
-  }
-}
-
 // MARK: Global Declaration of MyTrainsController Instance
 
 public var myTrainsController = MyTrainsController()
@@ -48,7 +22,9 @@ public class MyTrainsController : NSObject, NSUserNotificationCenterDelegate {
     
     super.init()
 
-//    appNodeId = nil
+#if DEBUG
+  print("MyTrainsController: init - \(Date.timeIntervalSinceReferenceDate)")
+#endif
 
     checkPortsTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(checkPortsTimerAction), userInfo: nil, repeats: true)
     

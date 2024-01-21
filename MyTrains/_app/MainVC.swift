@@ -25,7 +25,21 @@ class MainVC: NSViewController, MyTrainsControllerDelegate, LayoutDelegate, Open
     myTrainsController.removeDelegate(id: controllerDelegateId)
   }
   
+  private func resetToClean() {
+    appNodeId = nil
+    appMode = .initializing
+    databasePath = nil
+  }
+  
   override func viewWillAppear() {
+ 
+    // This is the first statement executed by the App
+    
+    if databasePath == nil {
+      databasePath = documentsPath + "/MyTrains/database"
+    }
+
+    // This starts the myTrainsController
     
     controllerDelegateId = myTrainsController.addDelegate(delegate: self)
     
@@ -37,12 +51,12 @@ class MainVC: NSViewController, MyTrainsControllerDelegate, LayoutDelegate, Open
     
     scrollView.documentView?.frame = NSMakeRect(0.0, 0.0, 2000.0, 2000.0)
     scrollView.allowsMagnification = true
-    scrollView.magnification = UserDefaults.standard.double(forKey: DEFAULT.SWITCHBOARD_EDITOR_MAG)
+    scrollView.magnification = mainSwitchboardMagnification
 
     if let layout = myTrainsController.layout {
       layoutDelegateId = layout.addDelegate(delegate: self)
     }
-    
+
   }
   
   // MARK: Private Properties
@@ -120,13 +134,13 @@ class MainVC: NSViewController, MyTrainsControllerDelegate, LayoutDelegate, Open
   @IBOutlet weak var switchBoardView: SwitchBoardOperationsView!
   
   @IBAction func btnZoomIn(_ sender: NSButton) {
-    scrollView.magnification += 0.25
-    UserDefaults.standard.set(scrollView.magnification, forKey: DEFAULT.MAIN_SWITCHBOARD_MAG)
+    mainSwitchboardMagnification += 0.25
+    scrollView.magnification = mainSwitchboardMagnification
   }
   
   @IBAction func btnZoomOut(_ sender: NSButton) {
-    scrollView.magnification -= 0.25
-    UserDefaults.standard.set(scrollView.magnification, forKey: DEFAULT.MAIN_SWITCHBOARD_MAG)
+    mainSwitchboardMagnification -= 0.25
+    scrollView.magnification = mainSwitchboardMagnification
   }
   
   @IBAction func btnZoomToFit(_ sender: NSButton) {
@@ -147,9 +161,9 @@ class MainVC: NSViewController, MyTrainsControllerDelegate, LayoutDelegate, Open
       scale = sHeight / gHeight
     }
     
-    scrollView.magnification = scale
-    UserDefaults.standard.set(scrollView.magnification, forKey: DEFAULT.MAIN_SWITCHBOARD_MAG)
-    
+    mainSwitchboardMagnification = scale
+    scrollView.magnification = mainSwitchboardMagnification
+
   }
   
   @IBOutlet weak var lblFastClock: NSTextField!

@@ -25,7 +25,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
   // MARK: App Control
   
   func applicationDidFinishLaunching(_ aNotification: Notification) {
-    
+
+#if DEBUG
+  print("AppDelegate: applicationDidFinishLaunching - \(Date.timeIntervalSinceReferenceDate)")
+#endif
+
  //   appMode = .initializing
  //   appNodeId = nil
     
@@ -343,38 +347,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     }
     
     menuUpdate()
-
-    if let _ = UserDefaults.standard.string(forKey: DEFAULT.VERSION) {
-    }
-    else {
-      
-      let appFolder  = "/MyTrains"
-      let dataFolder = "/MyTrains Database"
-      let savedCVsFolder = "/MyTrains Saved CVs"
-      let DMFFolder = "/MyTrains DMF Files"
-
-      UserDefaults.standard.set("Version 1.0", forKey: DEFAULT.VERSION)
-      
-      let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true) as [String]
-      
-      UserDefaults.standard.set(paths[0] + appFolder + dataFolder, forKey: DEFAULT.DATABASE_PATH)
-      UserDefaults.standard.set(paths[0] + appFolder + savedCVsFolder, forKey: DEFAULT.SAVED_CVS_PATH)
-      UserDefaults.standard.set(paths[0] + appFolder + DMFFolder, forKey: DEFAULT.DMF_PATH)
-      UserDefaults.standard.set(UnitLength.defaultValue, forKey: DEFAULT.UNITS_LENGTH)
-      UserDefaults.standard.set(UnitLength.defaultValue.rawValue, forKey: DEFAULT.UNITS_FBOFF_OCC)
-      UserDefaults.standard.set(UnitSpeed.defaultValue.rawValue, forKey: DEFAULT.UNITS_SPEED)
-      UserDefaults.standard.set(76.2, forKey: DEFAULT.SCALE)
-      UserDefaults.standard.set(TrackGauge.defaultValue.rawValue, forKey: DEFAULT.TRACK_GAUGE)
-      UserDefaults.standard.set(1.0, forKey: DEFAULT.SWITCHBOARD_EDITOR_MAG)
-
-    }
     
     // KEEP ALIVE
     
     activity = ProcessInfo.processInfo.beginActivity(options: .userInitiatedAllowingIdleSystemSleep, reason: "Good Reason")
 
 //    ProcessInfo.processInfo.endActivity(activity)
-
     
   }
   
@@ -406,7 +384,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
       wc.showWindow(nil)
     }
     
+    createVirtualNodeVC?.stop()
+    
   }
+  
+  private var createVirtualNodeVC : CreateVirtualNodeVC?
   
   @IBAction func mnuCreateNewNodeAction(_ sender: NSMenuItem) {
     
@@ -414,6 +396,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
       return
     }
     
+    let x = ModalWindow.CreateVirtualNode
+    let wc = x.windowController
+    createVirtualNodeVC = x.viewController(windowController: wc) as! CreateVirtualNodeVC
+    wc.showWindow(nil)
+
     networkLayer.createVirtualNode(virtualNodeType: virtualNodeType, completion: newNodeCompletion(node:))
     
   }

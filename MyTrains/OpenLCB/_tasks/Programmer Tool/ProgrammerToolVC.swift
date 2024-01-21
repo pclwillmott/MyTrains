@@ -187,82 +187,51 @@ class ProgrammerToolVC : NSViewController, NSWindowDelegate, OpenLCBProgrammerTo
   
   @IBAction func btnImportCSVAction(_ sender: NSButton) {
     
-    if let savedCVsPath = UserDefaults.standard.string(forKey: DEFAULT.SAVED_CVS_PATH) {
+    let panel = NSOpenPanel()
     
-      let url = URL(fileURLWithPath: savedCVsPath)
+    panel.directoryURL = lastCSVPath
+    panel.canChooseDirectories = false
+    panel.canChooseFiles = true
+    panel.allowsOtherFileTypes = true
+    panel.allowedContentTypes = [.csv]
+    
+    if (panel.runModal() == .OK) {
       
-      let fm = FileManager()
+      lastCSVPath = panel.directoryURL!.deletingLastPathComponent()
       
-      try? fm.createDirectory(at: url, withIntermediateDirectories:true, attributes:nil)
-
-      let panel = NSOpenPanel()
-      
-      panel.directoryURL = url
-      panel.canChooseDirectories = false
-      panel.canChooseFiles = true
-      panel.allowsOtherFileTypes = true
-  //    panel.allowedFileTypes = ["csv"]
-      panel.allowedContentTypes = [.csv]
-      
-      if (panel.runModal() == .OK) {
-        
-        let newPath = panel.directoryURL!.deletingLastPathComponent()
-        
-        UserDefaults.standard.set(newPath, forKey: DEFAULT.SAVED_CVS_PATH)
-        
-        csvParser = CSVParser(withURL: panel.url!)
-        csvParser?.delegate = self
-        csvParser?.columnSeparator = ","
-        csvParser?.lineTerminator = "\n"
-        csvParser?.stringDelimiter = "\""
-        csvParser?.parse()
-      }
-
+      csvParser = CSVParser(withURL: panel.url!)
+      csvParser?.delegate = self
+      csvParser?.columnSeparator = ","
+      csvParser?.lineTerminator = "\n"
+      csvParser?.stringDelimiter = "\""
+      csvParser?.parse()
     }
 
   }
   
   @IBAction func btnExportCSVAction(_ sender: NSButton) {
     
-    if let savedCVsPath = UserDefaults.standard.string(forKey: DEFAULT.SAVED_CVS_PATH) {
+    let panel = NSSavePanel()
     
-      let url = URL(fileURLWithPath: savedCVsPath)
-      
-      let fm = FileManager()
-      
-      do{
-        try fm.createDirectory(at: url, withIntermediateDirectories:true, attributes:nil)
-      }
-      catch{
-        print("create directory failed")
-      }
+    panel.directoryURL = lastCSVPath
+    
+    panel.nameFieldStringValue = cboTrainNode.stringValue
 
-      let panel = NSSavePanel()
+    panel.canCreateDirectories = true
+    
+    panel.allowedContentTypes = [.csv]
+    
+    if (panel.runModal() == .OK) {
       
-      panel.directoryURL = url
+      lastCSVPath = panel.directoryURL!.deletingLastPathComponent()
       
-      panel.nameFieldStringValue = cboTrainNode.stringValue
-
-      panel.canCreateDirectories = true
+      var output = "\"CV\",\"Default Value\",\"Value\"\n"
       
-    //  panel.allowedFileTypes = ["csv"]
-      panel.allowedContentTypes = [.csv]
-      
-      if (panel.runModal() == .OK) {
-        
-        let newPath = panel.directoryURL!.deletingLastPathComponent()
-        
-        UserDefaults.standard.set(newPath, forKey: DEFAULT.SAVED_CVS_PATH)
-        
-        var output = "\"CV\",\"Default Value\",\"Value\"\n"
-        
-        for cvNumber in 1...256 {
-          output += "\(cvNumber), \(programmerTool!.cvs[cvNumber - 1 + programmerTool!.defaultOffset]), \(programmerTool!.cvs[cvNumber - 1])\n"
-        }
-        
-        try? output.write(to: panel.url!, atomically: true, encoding: .utf8)
-
+      for cvNumber in 1...256 {
+        output += "\(cvNumber), \(programmerTool!.cvs[cvNumber - 1 + programmerTool!.defaultOffset]), \(programmerTool!.cvs[cvNumber - 1])\n"
       }
+      
+      try? output.write(to: panel.url!, atomically: true, encoding: .utf8)
 
     }
 

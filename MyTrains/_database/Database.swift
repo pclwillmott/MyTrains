@@ -18,6 +18,10 @@ class Database {
   
   public static func getConnection() -> SqliteConnection {
     
+    #if DEBUG
+      print("Database: getConnection - \(Date.timeIntervalSinceReferenceDate)")
+    #endif
+    
     if (connection == nil) {
 
       /*

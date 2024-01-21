@@ -18,6 +18,12 @@
   %%LAYOUT_SCALE%%
 </int>
 
+<int size='1'>
+<name>Layout State</name>
+<description>The layout state.</description>
+  %%LAYOUT_STATE%%
+</int>
+
 </segment>
 
 </cdi>

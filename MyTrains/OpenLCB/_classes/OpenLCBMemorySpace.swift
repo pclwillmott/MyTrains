@@ -494,7 +494,6 @@ public class OpenLCBMemorySpace {
           node = OpenLCBDigitraxBXP88Node(nodeId: nodeId)
         case .layoutNode:
           node = LayoutNode(nodeId: nodeId)
-      //    deleteAllMemorySpaces(forNodeId: nodeId)
           break
         case .switchboardNode:
           node = SwitchboardNode(nodeId: nodeId)
@@ -508,7 +507,7 @@ public class OpenLCBMemorySpace {
                 
       }
       
-      result.sort { $0.nodeId < $1.nodeId }
+      result.sort { $0.virtualNodeType.startupOrder < $1.virtualNodeType.startupOrder }
 
     }
     

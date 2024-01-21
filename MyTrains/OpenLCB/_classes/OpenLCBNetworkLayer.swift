@@ -14,7 +14,11 @@ public class OpenLCBNetworkLayer : NSObject {
   // MARK: Constructors
   
   public init(appNodeId:UInt64?) {
-    
+ 
+#if DEBUG
+    print("OpenLCBNetworkLayer: init - \(Date.timeIntervalSinceReferenceDate)")
+#endif
+
     super.init()
 
     nodeManagers.append(throttleManager)
@@ -32,7 +36,7 @@ public class OpenLCBNetworkLayer : NSObject {
   
   internal var _state : OpenLCBNetworkLayerState = .uninitialized
   
-  private var virtualNodes : [UInt64:OpenLCBNodeVirtual] = [:]
+  private var virtualNodes : [OpenLCBNodeVirtual] = []
   
   private var nodeManagers : [OpenLCBNodeManager] = []
   
@@ -56,7 +60,7 @@ public class OpenLCBNetworkLayer : NSObject {
   
   public var defaultCANGateway : OpenLCBCANGateway? {
   
-    for (_, node) in virtualNodes {
+    for node in virtualNodes {
       if node.virtualNodeType == .canGatewayNode {
         return node as? OpenLCBCANGateway
       }
@@ -79,11 +83,27 @@ public class OpenLCBNetworkLayer : NSObject {
   // MARK: Public Methods
   
   public func createAppNode(newNodeId:UInt64) {
+
     appNodeId = newNodeId
+
     appMode = .master
+
     let node = OpenLCBNodeMyTrains(nodeId: newNodeId)
+
+    registerNode(node: node)
+
     stop()
+
     start()
+
+    if throttleManager.numberOfFreeNodes == 0 {
+      createVirtualNode(virtualNodeType: .throttleNode, completion: dummyCompletion(node:))
+    }
+    
+    if configurationToolManager.numberOfFreeNodes == 0 {
+      createVirtualNode(virtualNodeType: .configurationToolNode, completion: dummyCompletion(node:))
+    }
+    
   }
   
   public func start() {
@@ -108,7 +128,7 @@ public class OpenLCBNetworkLayer : NSObject {
     
     var nodes = virtualNodes
     
-    for (_, node) in nodes {
+    for node in nodes {
       deregisterNode(node: node)
     }
     
@@ -137,7 +157,9 @@ public class OpenLCBNetworkLayer : NSObject {
 
   public func registerNode(node:OpenLCBNodeVirtual) {
     
-    virtualNodes[node.nodeId] = node
+    virtualNodes.append(node)
+    
+    virtualNodes.sort {$0.virtualNodeType.startupOrder > $1.virtualNodeType.startupOrder}
     
     node.networkLayer = self
     
@@ -184,17 +206,25 @@ public class OpenLCBNetworkLayer : NSObject {
       nodeManager.removeNode(node: node)
     }
     
-    virtualNodes.removeValue(forKey: node.nodeId)
+    node.stop()
     node.networkLayer = nil
-    
+
+    for index in 0 ... virtualNodes.count - 1 {
+      if virtualNodes[index].nodeId == node.nodeId {
+        virtualNodes.remove(at: index)
+        break
+      }
+    }
+        
   }
   
   public func deleteNode(nodeId:UInt64) {
     
-    for (_, virtualNode) in virtualNodes {
+    for virtualNode in virtualNodes {
       if virtualNode.nodeId == nodeId {
         deregisterNode(node: virtualNode)
         OpenLCBMemorySpace.deleteAllMemorySpaces(forNodeId: nodeId)
+        break
       }
     }
     
@@ -342,7 +372,7 @@ public class OpenLCBNetworkLayer : NSObject {
       observer.OpenLCBMessageReceived(message: message)
     }
     
-    for (_, virtualNode) in virtualNodes {
+    for virtualNode in virtualNodes {
       if virtualNode.nodeId != message.gatewayNodeId {
         virtualNode.openLCBMessageReceived(message: message)
       }
@@ -528,21 +558,6 @@ public class OpenLCBNetworkLayer : NSObject {
     
   }
   
-  public func sendEvent(sourceNodeId:UInt64, eventId:UInt64) {
-    let message = OpenLCBMessage(messageTypeIndicator: .producerConsumerEventReport)
-    message.sourceNodeId = sourceNodeId
-    message.eventId = eventId
-    sendMessage(message: message)
-  }
-
-  public func sendEventWithPayload(sourceNodeId:UInt64, eventId:UInt64, payload:[UInt8]) {
-    let message = OpenLCBMessage(messageTypeIndicator: .producerConsumerEventReport)
-    message.sourceNodeId = sourceNodeId
-    message.eventId = eventId
-    message.payload = payload
-    sendMessage(message: message)
-  }
-  
   public func sendLocationServiceEvent(sourceNodeId:UInt64, eventId:UInt64, trainNodeId:UInt64, entryExit:OpenLCBLocationServiceFlagEntryExit, motionRelative:OpenLCBLocationServiceFlagDirectionRelative, motionAbsolute:OpenLCBLocationServiceFlagDirectionAbsolute, contentFormat:OpenLCBLocationServiceFlagContentFormat, content: [OpenLCBLocationServicesContentBlock]? ) {
     
     var payload : [UInt8] = []
@@ -573,12 +588,20 @@ public class OpenLCBNetworkLayer : NSObject {
       
     }
     
-    sendEventWithPayload(sourceNodeId: sourceNodeId, eventId: eventId, payload: payload)
+    sendEvent(sourceNodeId: sourceNodeId, eventId: eventId, payload: payload)
     
   }
 
-  public func sendWellKnownEvent(sourceNodeId:UInt64, eventId:OpenLCBWellKnownEvent) {
-    sendEvent(sourceNodeId: sourceNodeId, eventId: eventId.rawValue)
+  public func sendEvent(sourceNodeId:UInt64, eventId:UInt64, payload:[UInt8] = []) {
+    let message = OpenLCBMessage(messageTypeIndicator: .producerConsumerEventReport)
+    message.sourceNodeId = sourceNodeId
+    message.eventId = eventId
+    message.payload = payload
+    sendMessage(message: message)
+  }
+
+  public func sendWellKnownEvent(sourceNodeId:UInt64, eventId:OpenLCBWellKnownEvent, payload:[UInt8] = []) {
+    sendEvent(sourceNodeId: sourceNodeId, eventId: eventId.rawValue, payload: payload)
   }
     
   public func sendIdentifyProducer(sourceNodeId:UInt64, eventId:UInt64) {

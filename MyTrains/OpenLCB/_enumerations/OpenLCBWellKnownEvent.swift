@@ -40,6 +40,7 @@ public enum OpenLCBWellKnownEvent : UInt64 {
   case nodeIsALocoNetGateway               = 0x050101017b00ffff
   case myTrainsLayoutActivated             = 0x050101017b00fffe
   case myTrainsLayoutDeactivated           = 0x050101017b00fffd
+  case identifyMyTrainsLayouts             = 0x050101017b00fffc
   case trainSearchEvent                    = 0x090099ff00000000
   case nodeIsADCCProgrammingTrack          = 0x090099feffff0002
   case trainSearchDCCShortAddress          = 0x090099ffffffff08

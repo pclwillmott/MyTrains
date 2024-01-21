@@ -26,5 +26,6 @@ enum CDI {
   static let CLOCK_INITIAL_DATE_TIME = "%%CLOCK_INITIAL_DATE_TIME%%"
   static let CLOCK_CUSTOM_ID_TYPE    = "%%CLOCK_CUSTOM_ID_TYPE%%"
   static let ENABLE_STATE            = "%%ENABLE_STATE%%"
+  static let LAYOUT_STATE            = "%%LAYOUT_STATE%%"
 }
 

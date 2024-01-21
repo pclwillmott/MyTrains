@@ -79,6 +79,12 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   
   internal var timeoutTimer : Timer?
   
+  internal var layoutList : [LayoutListItem] = []
+  
+  internal var nextObserverId : Int = 0
+  
+  internal var observers : [Int:MyTrainsAppDelegate] = [:]
+  
   // MARK: Private Methods
   
   internal override func resetToFactoryDefaults() {
@@ -89,6 +95,14 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   internal override func resetReboot() {
     
     super.resetReboot()
+    
+    networkLayer?.sendIdentifyConsumer(sourceNodeId: nodeId, event: .identifyMyTrainsLayouts)
+    
+    networkLayer?.sendIdentifyProducer(sourceNodeId: nodeId, event: .myTrainsLayoutActivated)
+    
+    networkLayer?.sendIdentifyProducer(sourceNodeId: nodeId, event: .myTrainsLayoutDeactivated)
+    
+    networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .identifyMyTrainsLayouts)
     
   }
 
@@ -125,8 +139,26 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     timeoutTimer?.invalidate()
     timeoutTimer = nil
   }
+  
+  private func layoutListUpdated() {
+    for (_, observer) in observers {
+      observer.LayoutListUpdated(layoutList: layoutList)
+    }
+  }
 
   // MARK: Public Methods
+  
+  public func addObserver(observer:MyTrainsAppDelegate) -> Int {
+    let id = nextObserverId
+    nextObserverId += 1
+    observers[id] = observer
+    layoutListUpdated()
+    return id
+  }
+  
+  public func removeObserver(observerId:Int) {
+    observers.removeValue(forKey: observerId)
+  }
   
   // MARK: OpenLCBMemorySpaceDelegate Methods
   
@@ -150,12 +182,122 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
         
       }
       
+    case .simpleNodeIdentInfoReply:
+      
+      var index = 0
+      while index < layoutList.count {
+        if layoutList[index].layoutId == message.sourceNodeId! {
+          let layoutNode = OpenLCBNode(nodeId: message.sourceNodeId!)
+          layoutNode.encodedNodeInformation = message.payload
+          layoutList[index].layoutName = layoutNode.userNodeName
+          break
+        }
+        index += 1
+      }
+      
+      layoutList.sort {$0.layoutName < $1.layoutName}
+      
+      layoutListUpdated()
+      
+    case .producerConsumerEventReport:
+      
+      if let event = OpenLCBWellKnownEvent(rawValue: message.eventId!) {
+        
+        switch event {
+         
+        case .myTrainsLayoutActivated, .myTrainsLayoutDeactivated:
+          
+          let layoutNodeId = message.sourceNodeId!
+          
+          let layoutState : LayoutState = message.eventId! == OpenLCBWellKnownEvent.myTrainsLayoutActivated.rawValue ? .activated : .deactivated
+          
+          let masterNodeId = UInt64(bigEndianData: message.payload)!
+          
+          var found = false
+          
+          var index = 0
+          while index < layoutList.count {
+            if layoutList[index].layoutId == layoutNodeId {
+              found = true
+              layoutList[index].layoutState = layoutState
+              layoutListUpdated()
+            }
+            index += 1
+          }
+          
+          if !found {
+            layoutList.append((masterNodeId:appNodeId!, layoutId:layoutNodeId, layoutName:"", layoutState:layoutState))
+            networkLayer?.sendSimpleNodeInformationRequest(sourceNodeId: nodeId, destinationNodeId: layoutNodeId)
+          }
+          
+        default:
+          break
+        }
+        
+      }
+
+    case .identifyConsumer:
+      
+      if let event = OpenLCBWellKnownEvent(rawValue: message.eventId!) {
+        
+        switch event {
+          
+        case .myTrainsLayoutActivated:
+          
+          var found = false
+          
+          for item in layoutList {
+            if item.layoutId == message.sourceNodeId! {
+              let validity : OpenLCBValidity = item.layoutState == .activated ? .valid : .invalid
+              networkLayer?.sendConsumerIdentified(sourceNodeId: nodeId, eventId: message.eventId!, validity: validity)
+              found = true
+              break
+            }
+          }
+          
+          if !found {
+            networkLayer?.sendConsumerIdentified(sourceNodeId: nodeId, eventId: message.eventId!, validity: .unknown)
+          }
+          
+        case .myTrainsLayoutDeactivated:
+          
+          var found = false
+          
+          for item in layoutList {
+            if item.layoutId == message.sourceNodeId! {
+              let validity : OpenLCBValidity = item.layoutState == .deactivated ? .valid : .invalid
+              networkLayer?.sendConsumerIdentified(sourceNodeId: nodeId, eventId: message.eventId!, validity: validity)
+              found = true
+              break
+            }
+          }
+          
+          if !found {
+            networkLayer?.sendConsumerIdentified(sourceNodeId: nodeId, eventId: message.eventId!, validity: .unknown)
+          }
+          
+        default:
+          break
+        }
+        
+      }
+
     case .identifyProducer:
       
-      switch message.eventId! {
-      default:
-        break
+      if let event = OpenLCBWellKnownEvent(rawValue: message.eventId!) {
+        
+        switch event {
+          
+        case .identifyMyTrainsLayouts:
+          
+          networkLayer?.sendProducerIdentified(sourceNodeId: nodeId, eventId: message.eventId!, validity: .valid)
+          
+        default:
+          break
+        }
+        
       }
+      
     case .datagram:
       
       if message.destinationNodeId! == nodeId, let datagramType = message.datagramType {
