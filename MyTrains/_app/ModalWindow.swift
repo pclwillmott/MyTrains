@@ -36,6 +36,7 @@ enum AppStoryboard : String {
   case CDITextView                       = "CDITextView"
   case SelectMasterNode                  = "SelectMasterNode"
   case CreateVirtualNode                 = "CreateVirtualNode"
+  case SelectLayout                      = "SelectLayout"
 
   var instance : NSStoryboard {
     return NSStoryboard(name: self.rawValue, bundle: Bundle.main)
@@ -70,6 +71,7 @@ let storyboardLookup : [String:AppStoryboard] = [
   "CDITextView"                       : AppStoryboard.CDITextView,
   "SelectMasterNode"                  : AppStoryboard.SelectMasterNode,
   "CreateVirtualNode"                 : AppStoryboard.CreateVirtualNode,
+  "SelectLayout"                      : AppStoryboard.SelectLayout,
 ]
 
 /*
@@ -109,6 +111,7 @@ enum ModalWindow : String {
   case CDITextView                       = "CDITextView"
   case SelectMasterNode                  = "SelectMasterNode"
   case CreateVirtualNode                 = "CreateVirtualNode"
+  case SelectLayout                      = "SelectLayout"
 
   var windowController : NSWindowController {
     let storyboard = storyboardLookup[self.rawValue]!

@@ -34,7 +34,52 @@ class MainVC: NSViewController, MyTrainsControllerDelegate, LayoutDelegate, Open
   override func viewWillAppear() {
  
     // This is the first statement executed by the App
+
+    if appMode == .delegate {
+      appMode = .master
+    }
     
+    scrollView.isHidden = true
+    clockView.isHidden = true
+    boxStatus.isHidden = true
+    
+    barProgress.translatesAutoresizingMaskIntoConstraints = false
+    barProgress.isIndeterminate = true
+    barProgress.usesThreadedAnimation = true
+    barProgress.style = .spinning
+    barProgress.startAnimation(self)
+
+    view.addSubview(barProgress)
+    
+    NSLayoutConstraint.activate([
+      barProgress.heightAnchor.constraint(equalToConstant: 30),
+      barProgress.widthAnchor.constraint(equalToConstant: 30),
+      barProgress.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+      barProgress.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+    ])
+
+    timeoutTimer = Timer.scheduledTimer(timeInterval: 0.0, target: self, selector: #selector(timeoutTimerAction), userInfo: nil, repeats: false)
+
+    RunLoop.current.add(timeoutTimer!, forMode: .common)
+
+  }
+  
+  // MARK: Private Properties
+  
+  private var cboLayoutDS : ComboBoxDBDS? = nil
+  
+  private var controllerDelegateId : Int = -1
+  
+  private var fastClockObserverId : Int = -1
+  
+  private var layoutDelegateId : Int = -1
+  
+  private var timeoutTimer : Timer?
+  
+  // MARK: Private Methods
+    
+  @objc func timeoutTimerAction() {
+
     if databasePath == nil {
       databasePath = documentsPath + "/MyTrains/database"
     }
@@ -56,21 +101,15 @@ class MainVC: NSViewController, MyTrainsControllerDelegate, LayoutDelegate, Open
     if let layout = myTrainsController.layout {
       layoutDelegateId = layout.addDelegate(delegate: self)
     }
+    
+    scrollView.isHidden = false
+    clockView.isHidden = false
+    boxStatus.isHidden = false
+    barProgress.stopAnimation(self)
+    barProgress.isHidden = true
 
   }
   
-  // MARK: Private Properties
-  
-  private var cboLayoutDS : ComboBoxDBDS? = nil
-  
-  private var controllerDelegateId : Int = -1
-  
-  private var fastClockObserverId : Int = -1
-  
-  private var layoutDelegateId : Int = -1
-  
-  // MARK: Private Methods
-    
   // MARK: OpenLCBClockDelegate Methods
   
   func clockTick(clock: OpenLCBClock) {
@@ -117,17 +156,6 @@ class MainVC: NSViewController, MyTrainsControllerDelegate, LayoutDelegate, Open
   }
   
   @IBOutlet weak var boxStatus: NSBox!
-  
-  @IBOutlet weak var btnPowerOff: NSButton!
-  
-  @IBAction func btnPowerOffAction(_ sender: NSButton) {
-    
-  }
-  
-  @IBOutlet weak var btnPause: NSButton!
-  
-  @IBAction func btnPauseAction(_ sender: NSButton) {
-  }
   
   @IBOutlet weak var scrollView: NSScrollView!
   
@@ -177,6 +205,8 @@ class MainVC: NSViewController, MyTrainsControllerDelegate, LayoutDelegate, Open
   let cboLayout2 = NSComboBox()
   
   let btnZoomIn2 = NSButton(image: NSImage(systemSymbolName: "pencil", accessibilityDescription: nil)!, target: nil, action: nil)
+  
+  let barProgress = NSProgressIndicator()
   
 }
 

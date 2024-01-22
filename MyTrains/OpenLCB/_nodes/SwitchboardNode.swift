@@ -9,6 +9,8 @@ import Foundation
 
 public class SwitchboardNode : OpenLCBNodeVirtual {
  
+  // MARK: Constructors
+  
   public override init(nodeId:UInt64) {
     
     super.init(nodeId: nodeId)
@@ -19,6 +21,13 @@ public class SwitchboardNode : OpenLCBNodeVirtual {
       resetToFactoryDefaults()
     }
 
+  }
+
+  // MARK: Private Methods
+
+  internal override func resetToFactoryDefaults() {
+    super.resetToFactoryDefaults()
+    saveMemorySpaces()
   }
 
 }

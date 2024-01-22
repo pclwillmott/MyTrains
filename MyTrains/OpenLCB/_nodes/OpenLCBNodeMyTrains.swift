@@ -98,9 +98,13 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     
     networkLayer?.sendIdentifyConsumer(sourceNodeId: nodeId, event: .identifyMyTrainsLayouts)
     
+    networkLayer?.sendIdentifyConsumer(sourceNodeId: nodeId, event: .identifyMyTrainsSwitchboardItems)
+    
     networkLayer?.sendIdentifyProducer(sourceNodeId: nodeId, event: .myTrainsLayoutActivated)
     
     networkLayer?.sendIdentifyProducer(sourceNodeId: nodeId, event: .myTrainsLayoutDeactivated)
+    
+    networkLayer?.sendIdentifyProducer(sourceNodeId: nodeId, event: .myTrainsLayoutDeleted)
     
     networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .identifyMyTrainsLayouts)
     
@@ -160,6 +164,22 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     observers.removeValue(forKey: observerId)
   }
   
+  public func sendGlobalEmergencyStop() {
+    networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .emergencyStopAll)
+  }
+
+  public func sendClearGlobalEmergencyStop() {
+    networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .clearEmergencyStopAll)
+  }
+
+  public func sendGlobalPowerOff() {
+    networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .emergencyOffAll)
+  }
+  
+  public func sendGlobalPowerOn() {
+    networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .clearEmergencyOffAll)
+  }
+  
   // MARK: OpenLCBMemorySpaceDelegate Methods
   
   // MARK: OpenLCBNetworkLayerDelegate Methods
@@ -205,19 +225,42 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
         
         switch event {
          
+        case .myTrainsLayoutDeleted:
+
+          if message.sourceNodeId! == appLayoutId {
+            networkLayer?.layoutNodeId = nil
+          }
+
+          var index = 0
+          while index < layoutList.count {
+            if layoutList[index].layoutId == message.sourceNodeId! {
+              layoutList.remove(at: index)
+              layoutListUpdated()
+              break
+            }
+            index += 1
+          }
+
         case .myTrainsLayoutActivated, .myTrainsLayoutDeactivated:
           
-          let layoutNodeId = message.sourceNodeId!
+          let tempNodeId = message.sourceNodeId!
           
           let layoutState : LayoutState = message.eventId! == OpenLCBWellKnownEvent.myTrainsLayoutActivated.rawValue ? .activated : .deactivated
           
           let masterNodeId = UInt64(bigEndianData: message.payload)!
-          
+
+          if layoutState == .activated {
+            networkLayer?.layoutNodeId = tempNodeId
+          }
+          else if let appLayoutId, appLayoutId == tempNodeId {
+            networkLayer?.layoutNodeId = nil
+          }
+
           var found = false
           
           var index = 0
           while index < layoutList.count {
-            if layoutList[index].layoutId == layoutNodeId {
+            if layoutList[index].layoutId == tempNodeId {
               found = true
               layoutList[index].layoutState = layoutState
               layoutListUpdated()
@@ -226,8 +269,8 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
           }
           
           if !found {
-            layoutList.append((masterNodeId:appNodeId!, layoutId:layoutNodeId, layoutName:"", layoutState:layoutState))
-            networkLayer?.sendSimpleNodeInformationRequest(sourceNodeId: nodeId, destinationNodeId: layoutNodeId)
+            layoutList.append((masterNodeId:appNodeId!, layoutId:tempNodeId, layoutName:"", layoutState:layoutState))
+            networkLayer?.sendSimpleNodeInformationRequest(sourceNodeId: nodeId, destinationNodeId: tempNodeId)
           }
           
         default:
@@ -242,6 +285,10 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
         
         switch event {
           
+        case .myTrainsLayoutDeleted:
+          
+          networkLayer?.sendConsumerIdentified(sourceNodeId: nodeId, eventId: message.eventId!, validity: .unknown)
+
         case .myTrainsLayoutActivated:
           
           var found = false
@@ -288,7 +335,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
         
         switch event {
           
-        case .identifyMyTrainsLayouts:
+        case .identifyMyTrainsLayouts, .identifyMyTrainsSwitchboardItems:
           
           networkLayer?.sendProducerIdentified(sourceNodeId: nodeId, eventId: message.eventId!, validity: .valid)
           

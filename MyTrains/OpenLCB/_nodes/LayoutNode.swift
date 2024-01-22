@@ -32,8 +32,6 @@ public class LayoutNode : OpenLCBNodeVirtual {
 
     cdiFilename = "MyTrains Layout"
     
-    saveMemorySpaces()
-
   }
   
   // MARK: Private Properties
@@ -59,7 +57,7 @@ public class LayoutNode : OpenLCBNodeVirtual {
 
   public var layoutState : LayoutState {
     get {
-      return LayoutState(rawValue: configuration.getUInt8(address: addressScale)!)!
+      return LayoutState(rawValue: configuration.getUInt8(address: addressLayoutState)!)!
     }
     set(value) {
       configuration.setUInt(address: addressLayoutState, value: value.rawValue)
@@ -78,23 +76,34 @@ public class LayoutNode : OpenLCBNodeVirtual {
     
     super.resetReboot()
     
-    networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: layoutState == .activated ? .myTrainsLayoutActivated : .myTrainsLayoutDeactivated, payload: appNodeId!.bigEndianData)
-    
     networkLayer?.sendIdentifyConsumer(sourceNodeId: nodeId, event: .myTrainsLayoutActivated)
 
     networkLayer?.sendIdentifyConsumer(sourceNodeId: nodeId, event: .myTrainsLayoutDeactivated)
 
+    networkLayer?.sendIdentifyConsumer(sourceNodeId: nodeId, event: .myTrainsLayoutDeleted)
+
     networkLayer?.sendIdentifyProducer(sourceNodeId: nodeId, event: .identifyMyTrainsLayouts)
+    
+    networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: layoutState == .activated ? .myTrainsLayoutActivated : .myTrainsLayoutDeactivated, payload: appNodeId!.bigEndianData)
     
   }
   
   public override func variableChanged(space: OpenLCBMemorySpace, address: Int) {
     
+    guard let networkLayer else {
+      return
+    }
+    
     if space.space == configuration.space {
       
       switch address {
       case addressLayoutState:
-        networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: layoutState == .activated ? .myTrainsLayoutActivated : .myTrainsLayoutDeactivated, payload: appNodeId!.bigEndianData)
+        if layoutState == .activated {
+          networkLayer.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .myTrainsLayoutActivated, payload: appNodeId!.bigEndianData)
+        }
+        else if networkLayer.layoutNodeId == nodeId {
+          networkLayer.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .myTrainsLayoutDeactivated, payload: appNodeId!.bigEndianData)
+        }
       default:
         break
       }
@@ -103,6 +112,23 @@ public class LayoutNode : OpenLCBNodeVirtual {
     
   }
   
+  override internal func willDelete() {
+    
+    if layoutState == .activated {
+      networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .myTrainsLayoutDeactivated, payload: appNodeId!.bigEndianData)
+    }
+    
+    networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .myTrainsLayoutDeleted)
+
+  }
+
+  internal override func customizeDynamicCDI(cdi:String) -> String {
+    var result = cdi
+    result = Scale.insertMap(cdi: result)
+    result = LayoutState.insertMap(cdi: result)
+    return result
+  }
+
   // MARK: OpenLCBNetworkLayerDelegate Methods
   
   public override func openLCBMessageReceived(message: OpenLCBMessage) {
@@ -116,6 +142,10 @@ public class LayoutNode : OpenLCBNodeVirtual {
       if let event = OpenLCBWellKnownEvent(rawValue: message.eventId!) {
         
         switch event {
+          
+        case .myTrainsLayoutDeleted:
+          
+          networkLayer?.sendProducerIdentified(sourceNodeId: nodeId, wellKnownEvent: .myTrainsLayoutDeleted, validity: .invalid)
           
         case .myTrainsLayoutActivated:
           

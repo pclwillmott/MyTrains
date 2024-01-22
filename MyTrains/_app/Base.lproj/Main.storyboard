@@ -527,28 +527,6 @@
                                     <rect key="frame" x="4" y="5" width="785" height="48"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <button toolTip="Track Power On/Off" allowsExpansionToolTips="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="McJ-kX-caF">
-                                            <rect key="frame" x="683" y="7" width="30" height="36.5"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="poweron" catalog="system" imagePosition="only" alignment="center" alternateImage="poweroff" imageScaling="proportionallyUpOrDown" inset="2" id="JfX-HO-gOf">
-                                                <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <connections>
-                                                <action selector="btnPowerOffAction:" target="XfG-lQ-9wD" id="fOC-OG-I6c"/>
-                                            </connections>
-                                        </button>
-                                        <button toolTip="Emergency Stop / Clear Emergency Stop" allowsExpansionToolTips="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gX1-7J-iGd">
-                                            <rect key="frame" x="733" y="7" width="30" height="36"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="pause.circle" catalog="system" imagePosition="only" alignment="center" alternateImage="play.fill" imageScaling="proportionallyUpOrDown" inset="2" id="JCt-Qa-HAq">
-                                                <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <connections>
-                                                <action selector="btnPauseAction:" target="XfG-lQ-9wD" id="sNg-0d-lw1"/>
-                                            </connections>
-                                        </button>
                                         <comboBox focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FvV-6g-VOW">
                                             <rect key="frame" x="20" y="12" width="426" height="25"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
@@ -658,8 +636,6 @@
                     </view>
                     <connections>
                         <outlet property="boxStatus" destination="ELL-xv-dmg" id="ueX-KJ-uz1"/>
-                        <outlet property="btnPause" destination="gX1-7J-iGd" id="t7M-A2-0T4"/>
-                        <outlet property="btnPowerOff" destination="McJ-kX-caF" id="G0z-Rl-kBD"/>
                         <outlet property="cboLayout" destination="FvV-6g-VOW" id="tiD-sk-BfD"/>
                         <outlet property="clockView" destination="YnO-dt-gsD" id="vfE-uc-aIh"/>
                         <outlet property="lblFastClock" destination="SYz-3Q-vdS" id="vfF-e8-7V4"/>
@@ -675,10 +651,6 @@
     <resources>
         <image name="NSEnterFullScreenTemplate" width="13" height="12"/>
         <image name="minus.magnifyingglass" catalog="system" width="12" height="12"/>
-        <image name="pause.circle" catalog="system" width="15" height="15"/>
-        <image name="play.fill" catalog="system" width="12" height="13"/>
         <image name="plus.magnifyingglass" catalog="system" width="12" height="12"/>
-        <image name="poweroff" catalog="system" width="15" height="15"/>
-        <image name="poweron" catalog="system" width="5" height="15"/>
     </resources>
 </document>

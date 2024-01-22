@@ -10,8 +10,8 @@
         <scene sceneID="GsJ-ox-VVe">
             <objects>
                 <windowController storyboardIdentifier="SelectLayoutWC" id="gTx-Ml-HIZ" sceneMemberID="viewController">
-                    <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="hgI-5b-wjL">
-                        <windowStyleMask key="styleMask" titled="YES" closable="YES" resizable="YES"/>
+                    <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" visibleAtLaunch="NO" frameAutosaveName="SelectLayout" animationBehavior="default" id="hgI-5b-wjL">
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="268" y="330" width="480" height="270"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1792" height="1095"/>
@@ -36,13 +36,13 @@
             <objects>
                 <viewController id="y7w-xM-VmD" customClass="SelectLayoutVC" customModule="MyTrains" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="zNJ-N9-Oi9">
-                        <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                        <rect key="frame" x="0.0" y="0.0" width="391" height="213"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </view>
                 </viewController>
                 <customObject id="m5k-1U-Qz9" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="731" y="106"/>
+            <point key="canvasLocation" x="686.5" y="77.5"/>
         </scene>
     </scenes>
 </document>

@@ -97,6 +97,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
           mainMenuItems[.master]!.append(item)
           mainMenuItems[.delegate]!.append(item)
 
+        case "View":
+
+          item.title = String(localized: "View", comment: "Used for the View menu item title")
+
+          mainMenuItems[.initializing]!.append(item)
+          mainMenuItems[.master]!.append(item)
+          mainMenuItems[.delegate]!.append(item)
+
           // Create the Operations Menu
           
           let operationsMenuMaster = NSMenuItem()
@@ -109,34 +117,111 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
           operationsMenuDelegate.submenu = NSMenu()
           mainMenuItems[.delegate]!.append(operationsMenuDelegate)
 
+          let globalEmergencyStopMenuItemMaster = NSMenuItem()
+          globalEmergencyStopMenuItemMaster.title = String(localized: "Global Emergency Stop", comment: "Used for the Global Emergency Stop menu item title")
+          globalEmergencyStopMenuItemMaster.keyEquivalent = String(localized: "s", comment: "Used for the Global Emergency Stop menu key equivalent")
+          globalEmergencyStopMenuItemMaster.keyEquivalentModifierMask = [.control]
+          globalEmergencyStopMenuItemMaster.target = self
+          globalEmergencyStopMenuItemMaster.action = #selector(self.mnuGlobalEmergencyStopAction(_:))
+          operationsMenuMaster.submenu?.addItem(globalEmergencyStopMenuItemMaster)
+
+          let globalEmergencyStopMenuItemDelegate = NSMenuItem()
+          globalEmergencyStopMenuItemDelegate.title = globalEmergencyStopMenuItemMaster.title
+          globalEmergencyStopMenuItemDelegate.keyEquivalent = globalEmergencyStopMenuItemMaster.keyEquivalent
+          globalEmergencyStopMenuItemDelegate.keyEquivalentModifierMask = [.control]
+          globalEmergencyStopMenuItemDelegate.target = self
+          globalEmergencyStopMenuItemDelegate.action = #selector(self.mnuGlobalEmergencyStopAction(_:))
+          operationsMenuDelegate.submenu?.addItem(globalEmergencyStopMenuItemDelegate)
+
+          let clearGlobalEmergencyStopMenuItemMaster = NSMenuItem()
+          clearGlobalEmergencyStopMenuItemMaster.title = String(localized: "Clear Global Emergency Stop", comment: "Used for the Clear Global Emergency Stop menu item title")
+          clearGlobalEmergencyStopMenuItemMaster.keyEquivalent = String(localized: "c", comment: "Used for the Clear Global Emergency Stop menu key equivalent")
+          clearGlobalEmergencyStopMenuItemMaster.keyEquivalentModifierMask = [.control]
+          clearGlobalEmergencyStopMenuItemMaster.target = self
+          clearGlobalEmergencyStopMenuItemMaster.action = #selector(self.mnuClearGlobalEmergencyStopAction(_:))
+          operationsMenuMaster.submenu?.addItem(clearGlobalEmergencyStopMenuItemMaster)
+
+          let clearGlobalEmergencyStopMenuItemDelegate = NSMenuItem()
+          clearGlobalEmergencyStopMenuItemDelegate.title = clearGlobalEmergencyStopMenuItemMaster.title
+          clearGlobalEmergencyStopMenuItemDelegate.keyEquivalent = clearGlobalEmergencyStopMenuItemMaster.keyEquivalent
+          clearGlobalEmergencyStopMenuItemDelegate.keyEquivalentModifierMask = [.control]
+          clearGlobalEmergencyStopMenuItemDelegate.target = self
+          clearGlobalEmergencyStopMenuItemDelegate.action = #selector(self.mnuClearGlobalEmergencyStopAction(_:))
+          operationsMenuDelegate.submenu?.addItem(clearGlobalEmergencyStopMenuItemDelegate)
+
+          let globalPowerOffMenuItemMaster = NSMenuItem()
+          globalPowerOffMenuItemMaster.title = String(localized: "Global Power Off", comment: "Used for the Global Power Off menu item title")
+          globalPowerOffMenuItemMaster.keyEquivalent = String(localized: "o", comment: "Used for the Global Power Off menu key equivalent")
+          globalPowerOffMenuItemMaster.keyEquivalentModifierMask = [.control]
+          globalPowerOffMenuItemMaster.target = self
+          globalPowerOffMenuItemMaster.action = #selector(self.mnuGlobalPowerOffAction(_:))
+          operationsMenuMaster.submenu?.addItem(globalPowerOffMenuItemMaster)
+
+          let globalPowerOffMenuItemDelegate = NSMenuItem()
+          globalPowerOffMenuItemDelegate.title = globalPowerOffMenuItemMaster.title
+          globalPowerOffMenuItemDelegate.keyEquivalent = globalPowerOffMenuItemMaster.keyEquivalent
+          globalPowerOffMenuItemDelegate.keyEquivalentModifierMask = [.control]
+          globalPowerOffMenuItemDelegate.target = self
+          globalPowerOffMenuItemDelegate.action = #selector(self.mnuGlobalPowerOffAction(_:))
+          operationsMenuDelegate.submenu?.addItem(globalPowerOffMenuItemDelegate)
+
+          let globalPowerOnMenuItemMaster = NSMenuItem()
+          globalPowerOnMenuItemMaster.title = String(localized: "Global Power On", comment: "Used for the Global Power On menu item title")
+          globalPowerOnMenuItemMaster.keyEquivalent = String(localized: "p", comment: "Used for the Global Power On menu key equivalent")
+          globalPowerOnMenuItemMaster.keyEquivalentModifierMask = [.control]
+          globalPowerOnMenuItemMaster.target = self
+          globalPowerOnMenuItemMaster.action = #selector(self.mnuGlobalPowerOnAction(_:))
+          operationsMenuMaster.submenu?.addItem(globalPowerOnMenuItemMaster)
+
+          let globalPowerOnMenuItemDelegate = NSMenuItem()
+          globalPowerOnMenuItemDelegate.title = globalPowerOnMenuItemDelegate.title
+          globalPowerOnMenuItemDelegate.keyEquivalent = globalPowerOnMenuItemMaster.keyEquivalent
+          globalPowerOnMenuItemDelegate.keyEquivalentModifierMask = [.control]
+          globalPowerOnMenuItemDelegate.target = self
+          globalPowerOnMenuItemDelegate.action = #selector(self.mnuGlobalPowerOnAction(_:))
+          operationsMenuDelegate.submenu?.addItem(globalPowerOnMenuItemDelegate)
+
+          operationsMenuMaster.submenu?.addItem(.separator())
+          operationsMenuDelegate.submenu?.addItem(.separator())
+
           // Create the Throttle Menu Item
 
           let throttleMenuItemMaster = NSMenuItem()
           throttleMenuItemMaster.title = String(localized: "Throttle", comment: "Used for the Throttle menu item title")
+          throttleMenuItemMaster.keyEquivalent = "t"
+          throttleMenuItemMaster.keyEquivalentModifierMask = [.command]
           throttleMenuItemMaster.target = self
           throttleMenuItemMaster.action = #selector(self.mnuThrottleAction(_:))
           operationsMenuMaster.submenu?.addItem(throttleMenuItemMaster)
 
           let throttleMenuItemDelegate = NSMenuItem()
           throttleMenuItemDelegate.title = throttleMenuItemMaster.title
+          throttleMenuItemDelegate.keyEquivalent = String(localized: "t", comment: "Used for the Throttle menu key equivalent")
+          throttleMenuItemDelegate.keyEquivalentModifierMask = [.command]
           throttleMenuItemDelegate.target = self
           throttleMenuItemDelegate.action = #selector(self.mnuThrottleAction(_:))
           operationsMenuDelegate.submenu?.addItem(throttleMenuItemDelegate)
 
-          let appModeMenuItemMaster = NSMenuItem()
-          appModeMenuItemMaster.title = String(localized: "Switch to Delegate Mode")
-          appModeMenuItemMaster.target = self
-          appModeMenuItemMaster.action = #selector(self.mnuAppModeAction(_:))
-          operationsMenuMaster.submenu?.addItem(appModeMenuItemMaster)
+          operationsMenuMaster.submenu?.addItem(.separator())
+          operationsMenuDelegate.submenu?.addItem(.separator())
 
-          let appModeMenuItemDelegate = NSMenuItem()
-          appModeMenuItemDelegate.title = String(localized: "Switch to Master Mode")
-          appModeMenuItemDelegate.target = self
-          appModeMenuItemDelegate.action = #selector(self.mnuAppModeAction(_:))
-          operationsMenuDelegate.submenu?.addItem(appModeMenuItemDelegate)
+          let selectLayoutMenuItemMaster = NSMenuItem()
+          selectLayoutMenuItemMaster.title = String(localized: "Select Layout", comment: "Used for the Select Layout menu item")
+          selectLayoutMenuItemMaster.keyEquivalent = String(localized: "l", comment: "Used for the Select Layout menu key equivalent")
+          selectLayoutMenuItemMaster.keyEquivalentModifierMask = [.command]
+          selectLayoutMenuItemMaster.target = self
+          selectLayoutMenuItemMaster.action = #selector(self.mnuSelectLayoutAction(_:))
+          operationsMenuMaster.submenu?.addItem(selectLayoutMenuItemMaster)
+
+          let selectLayoutMenuItemDelegate = NSMenuItem()
+          selectLayoutMenuItemDelegate.title = selectLayoutMenuItemMaster.title
+          selectLayoutMenuItemMaster.keyEquivalent = selectLayoutMenuItemMaster.keyEquivalent
+          selectLayoutMenuItemMaster.keyEquivalentModifierMask = [.command]
+          selectLayoutMenuItemDelegate.target = self
+          selectLayoutMenuItemDelegate.action = #selector(self.mnuSelectLayoutAction(_:))
+          operationsMenuDelegate.submenu?.addItem(selectLayoutMenuItemDelegate)
 
           // Create the Configuration Menu
-          
           
           let configurationMenuInitializing = NSMenuItem()
           configurationMenuInitializing.title = String(localized: "Configuration", comment: "Used for the Configuration menu item title")
@@ -406,6 +491,36 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
   }
 
   // MARK: Operations Menu
+
+  @IBAction func mnuGlobalEmergencyStopAction(_ sender: Any) {
+    guard let appNode = myTrainsController.openLCBNetworkLayer?.myTrainsNode else {
+      return
+    }
+    appNode.sendGlobalEmergencyStop()
+    print("Global Emergency Stop")
+  }
+  
+  @IBAction func mnuClearGlobalEmergencyStopAction(_ sender: Any) {
+    guard let appNode = myTrainsController.openLCBNetworkLayer?.myTrainsNode else {
+      return
+    }
+    appNode.sendClearGlobalEmergencyStop()
+    print("Clear Global Emergency Stop")
+  }
+  
+  @IBAction func mnuGlobalPowerOffAction(_ sender: Any) {
+    guard let appNode = myTrainsController.openLCBNetworkLayer?.myTrainsNode else {
+      return
+    }
+    appNode.sendGlobalPowerOff()
+  }
+  
+  @IBAction func mnuGlobalPowerOnAction(_ sender: Any) {
+    guard let appNode = myTrainsController.openLCBNetworkLayer?.myTrainsNode else {
+      return
+    }
+    appNode.sendGlobalPowerOn()
+  }
   
   @IBAction func mnuThrottleAction(_ sender: Any) {
     
@@ -422,10 +537,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     
   }
 
-  @IBAction func mnuAppModeAction(_ sender: Any) {
-    appMode = (appMode == .master) ? .delegate : .master
+  @IBAction func mnuSelectLayoutAction(_ sender: Any) {
+    
+    let x = ModalWindow.SelectLayout
+    let wc = x.windowController
+    let vc = x.viewController(windowController: wc) as! SelectLayoutVC
+    wc.showWindow(nil)
+    
   }
-  
+
   // MARK: Configuration Menu
   
   @IBAction func mnuViewLCCNetwork(_ sender: NSMenuItem) {

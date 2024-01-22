@@ -55,7 +55,21 @@ public class OpenLCBNetworkLayer : NSObject {
   // MARK: Public Properties
   
   public var layoutNodeId : UInt64? {
-    return 0xfe0000000001
+    get {
+      return appLayoutId
+    }
+    set(id) {
+      if id != layoutNodeId {
+        appLayoutId = id
+        if let id {
+          appMode = isInternalVirtualNode(nodeId: id) ? .master : .delegate
+        }
+        else {
+          appMode = .master
+        }
+        updateVirtualNodeList()
+      }
+    }
   }
   
   public var defaultCANGateway : OpenLCBCANGateway? {
@@ -71,14 +85,63 @@ public class OpenLCBNetworkLayer : NSObject {
   }
   
   public var state : OpenLCBNetworkLayerState {
-    get {
-      return _state
-    }
+    return _state
   }
   
   public var myTrainsNode : OpenLCBNodeMyTrains?
   
   public var fastClock : OpenLCBClock?
+  
+  // MARK: Private Methods
+  
+  private func isInternalVirtualNode(nodeId:UInt64) -> Bool {
+  
+    for node in virtualNodes {
+      if node.nodeId == nodeId {
+        return true
+      }
+    }
+    
+    return false
+    
+  }
+  
+  private func updateVirtualNodeList() {
+    
+    let list = virtualNodes
+    
+    for node in list {
+      switch node.virtualNodeType {
+      case .layoutNode:
+        (node as? LayoutNode)?.layoutState = node.nodeId == layoutNodeId ? .activated : .deactivated
+      case .switchboardItemNode:
+        deregisterNode(node: node)
+      default:
+        break
+      }
+    }
+    
+    if let layoutNodeId {
+      
+      switch appMode {
+        
+      case .master:
+        for node in OpenLCBMemorySpace.getVirtualNodes() {
+          if node.virtualNodeType == .switchboardItemNode && node.layoutNodeId == layoutNodeId {
+            registerNode(node: node)
+          }
+        }
+        
+      case .delegate:
+        break // MARK: TODO Add the delegate switchboard items
+        
+      default:
+        break
+      }
+      
+    }
+    
+  }
   
   // MARK: Public Methods
   
@@ -87,23 +150,19 @@ public class OpenLCBNetworkLayer : NSObject {
     appNodeId = newNodeId
 
     appMode = .master
-
+    
     let node = OpenLCBNodeMyTrains(nodeId: newNodeId)
-
-    registerNode(node: node)
-
-    stop()
 
     start()
 
-    if throttleManager.numberOfFreeNodes == 0 {
-      createVirtualNode(virtualNodeType: .throttleNode, completion: dummyCompletion(node:))
-    }
-    
-    if configurationToolManager.numberOfFreeNodes == 0 {
-      createVirtualNode(virtualNodeType: .configurationToolNode, completion: dummyCompletion(node:))
-    }
-    
+    registerNode(node: node)
+
+    createVirtualNode(virtualNodeType: .throttleNode, completion: dummyCompletion(node:))
+
+    createVirtualNode(virtualNodeType: .configurationToolNode, completion: dummyCompletion(node:))
+
+    createVirtualNode(virtualNodeType: .clockNode, completion: dummyCompletion(node:))
+
   }
   
   public func start() {
@@ -115,8 +174,12 @@ public class OpenLCBNetworkLayer : NSObject {
     _state = .initialized
     
     for node in OpenLCBMemorySpace.getVirtualNodes() {
-      registerNode(node: node)
+      if node.virtualNodeType != .switchboardItemNode {
+        registerNode(node: node)
+      }
     }
+    
+    updateVirtualNodeList()
     
   }
   
@@ -221,11 +284,19 @@ public class OpenLCBNetworkLayer : NSObject {
   public func deleteNode(nodeId:UInt64) {
     
     for virtualNode in virtualNodes {
+      
       if virtualNode.nodeId == nodeId {
+        
+        virtualNode.willDelete()
+        
         deregisterNode(node: virtualNode)
+        
         OpenLCBMemorySpace.deleteAllMemorySpaces(forNodeId: nodeId)
+        
         break
+        
       }
+      
     }
     
   }

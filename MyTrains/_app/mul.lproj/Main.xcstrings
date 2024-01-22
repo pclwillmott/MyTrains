@@ -669,7 +669,7 @@
     },
     "gX1-7J-iGd.ibShadowedToolTip" : {
       "comment" : "Class = \"NSButton\"; ibShadowedToolTip = \"Emergency Stop / Clear Emergency Stop\"; ObjectID = \"gX1-7J-iGd\";",
-      "extractionState" : "extracted_with_value",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1047,7 +1047,7 @@
     },
     "McJ-kX-caF.ibShadowedToolTip" : {
       "comment" : "Class = \"NSButton\"; ibShadowedToolTip = \"Track Power On/Off\"; ObjectID = \"McJ-kX-caF\";",
-      "extractionState" : "extracted_with_value",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

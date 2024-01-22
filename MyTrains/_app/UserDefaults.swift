@@ -11,7 +11,8 @@ enum DEFAULT {
 
   static let APP_NODE_ID                        = "APP_NODE_ID"
   static let APP_MODE                           = "APP_MODE"
-  
+  static let APP_LAYOUT_ID                      = "APP_LAYOUT_ID"
+
   static let DATABASE_PATH                      = "DATABASE_PATH"
   static let LAST_CSV_PATH                      = "LAST_CSV_PATH"
   static let LAST_DMF_PATH                      = "LAST_DMF_PATH"
@@ -67,11 +68,23 @@ enum DEFAULT {
 public var appNodeId : UInt64? {
   get {
     let id = UserDefaults.standard.integer(forKey: DEFAULT.APP_NODE_ID)
-    return id == 0 ? nil : UInt64(id)
+    return id == 0 ? nil : UInt64(bitPattern: Int64(id))
   }
   set(value) {
     if value != appNodeId {
-      UserDefaults.standard.set(Int(value ?? 0), forKey: DEFAULT.APP_NODE_ID)
+      UserDefaults.standard.set(Int64(bitPattern: value ?? 0), forKey: DEFAULT.APP_NODE_ID)
+    }
+  }
+}
+
+public var appLayoutId : UInt64? {
+  get {
+    let id = UserDefaults.standard.integer(forKey: DEFAULT.APP_LAYOUT_ID)
+    return id == 0 ? nil : UInt64(bitPattern: Int64(id))
+  }
+  set(value) {
+    if value != appLayoutId {
+      UserDefaults.standard.set(Int64(bitPattern: value ?? 0), forKey: DEFAULT.APP_LAYOUT_ID)
     }
   }
 }
@@ -83,10 +96,6 @@ public var appMode : AppMode {
   set(value) {
     UserDefaults.standard.set(value.rawValue, forKey: DEFAULT.APP_MODE)
     menuUpdate()
-    if value != .initializing {
-      myTrainsController.openLCBNetworkLayer?.stop()
-      myTrainsController.openLCBNetworkLayer?.start()
-    }
   }
 }
 

@@ -342,7 +342,6 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
         cdi = cdi.replacingOccurrences(of: CDI.HARDWARE_VERSION, with: nodeHardwareVersion)
         
         cdi = standardACDI(cdi: cdi)
-        cdi = Scale.insertMap(cdi: cdi)
         cdi = MTSerialPortManager.insertMap(cdi: cdi)
         cdi = OpenLCBFunction.insertMap(cdi: cdi)
         cdi = BaudRate.insertMap(cdi: cdi)
@@ -476,6 +475,9 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     configurationOptions.isWriteUnderMaskSupported = false
     configurationOptions.isWriteToACDIUserAvailable = true
 
+  }
+  
+  internal func willDelete() {
   }
   
   // MARK: Public Methods

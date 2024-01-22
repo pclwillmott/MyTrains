@@ -179,6 +179,9 @@
     "Brake Squeal" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
     },
+    "c" : {
+      "comment" : "Used for the Clear Global Emergency Stop menu key equivalent"
+    },
     "Cab Chatter" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
     },
@@ -203,6 +206,12 @@
     },
     "Character" : {
       "comment" : "Used by combobox to select option to display number as UTF8 character"
+    },
+    "Clear" : {
+      "comment" : "Used for the Clear Layout Selection button title"
+    },
+    "Clear Global Emergency Stop" : {
+      "comment" : "Used for the Clear Global Emergency Stop menu item title"
     },
     "Clock Node ID" : {
       "comment" : "Used to indicate that a custom clock should use the clock node Id"
@@ -281,7 +290,7 @@
       "comment" : "Used for the Create Application Node button title"
     },
     "Create Application Node" : {
-      "comment" : "Used for the title of the Create Application Node window\nUsed for the Create Application Node menu item title"
+      "comment" : "Used for the Create Application Node menu item title\nUsed for the title of the Create Application Node window"
     },
     "Creating virtual node. This may take several seconds to complete." : {
 
@@ -308,7 +317,7 @@
       "comment" : "Used for LocoNet train control protocol selection"
     },
     "DCC Programmer Tool" : {
-      "comment" : "Used to create a default OpenLCB virtual name\nUsed for the DCC Programmer Tool menu item title"
+      "comment" : "Used for the DCC Programmer Tool menu item title\nUsed to create a default OpenLCB virtual name"
     },
     "DCC Programmer Tool Node" : {
       "comment" : "Used to describe an OpenLCB virtual node"
@@ -433,6 +442,15 @@
     "Getting CDI" : {
 
     },
+    "Global Emergency Stop" : {
+      "comment" : "Used for the Global Emergency Stop menu item title"
+    },
+    "Global Power Off" : {
+      "comment" : "Used for the Global Power Off menu item title"
+    },
+    "Global Power On" : {
+      "comment" : "Used for the Global Power On menu item title"
+    },
     "Guard's Whistle" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
     },
@@ -468,6 +486,9 @@
     },
     "Interior Lights" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "l" : {
+      "comment" : "Used for the Select Layout menu key equivalent"
     },
     "Layout" : {
       "comment" : "Used to create a default OpenLCB virtual name"
@@ -574,6 +595,9 @@
     "Not Electrified" : {
       "comment" : "Used to indicate that the track is not electrified, i.e. only steam and diesels can use it"
     },
+    "o" : {
+      "comment" : "Used for the Global Power Off menu key equivalent"
+    },
     "O" : {
       "comment" : "Used to indicate the track gauge"
     },
@@ -597,6 +621,9 @@
     },
     "Overhead" : {
       "comment" : "Used to indicate that the track models overhead electrification"
+    },
+    "p" : {
+      "comment" : "Used for the Global Power On menu key equivalent"
     },
     "P4" : {
       "comment" : "Used to indicate the track gauge"
@@ -690,6 +717,9 @@
     "Running" : {
       "comment" : "Used to indicate a clock is running"
     },
+    "s" : {
+      "comment" : "Used for the Global Emergency Stop menu key equivalent"
+    },
     "S" : {
       "comment" : "Used to indicate the track gauge"
     },
@@ -702,8 +732,11 @@
     "Scale 7" : {
       "comment" : "Used to indicate the track gauge"
     },
+    "Select" : {
+      "comment" : "Used for the Select Layout button title"
+    },
     "Select Layout" : {
-      "comment" : "Used for the title of the Select Layout window"
+      "comment" : "Used for the Select Layout menu item\nUsed for the title of the Select Layout window"
     },
     "Short Whistle" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
@@ -759,12 +792,6 @@
     "Switch Board" : {
       "comment" : "Used for the Switch Board menu item title"
     },
-    "Switch to Delegate Mode" : {
-
-    },
-    "Switch to Master Mode" : {
-
-    },
     "Switchboard" : {
       "comment" : "Used to create a default OpenLCB virtual name"
     },
@@ -779,6 +806,9 @@
     },
     "Switching Lights" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+    },
+    "t" : {
+      "comment" : "Used for the Throttle menu key equivalent"
     },
     "Tail Lights" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
@@ -840,6 +870,9 @@
     "User Specified" : {
       "comment" : "Used to indicate that a custom clock should use the user specified node Id"
     },
+    "View" : {
+      "comment" : "Used for the View menu item title"
+    },
     "Virtual Clock" : {
       "comment" : "Used to create a default OpenLCB virtual name"
     },
@@ -899,6 +932,9 @@
       }
     },
     "Yes" : {
+
+    },
+    "You may either select any layout stored locally on this MyTrains workstation or an active layout stored on another MyTrains workstation connected to this LCC/OpenLCB network. You can only modify layouts that are stored locally." : {
 
     }
   },

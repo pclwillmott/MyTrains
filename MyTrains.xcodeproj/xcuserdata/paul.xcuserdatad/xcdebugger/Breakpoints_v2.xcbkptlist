@@ -218,8 +218,8 @@
             filePath = "MyTrains/OpenLCB/_nodes/OpenLCBNodeVirtual.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "449"
-            endingLineNumber = "449"
+            startingLineNumber = "448"
+            endingLineNumber = "448"
             landmarkName = "setupConfigurationOptions()"
             landmarkType = "7">
          </BreakpointContent>
@@ -314,9 +314,25 @@
             filePath = "MyTrains/OpenLCB/_nodes/OpenLCBNodeMyTrains.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "287"
-            endingLineNumber = "287"
+            startingLineNumber = "334"
+            endingLineNumber = "334"
             landmarkName = "openLCBMessageReceived(message:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F1575390-116D-42C5-9D1F-3F38E8491559"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MyTrains/OpenLCB/_nodes/LayoutNode.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "128"
+            endingLineNumber = "128"
+            landmarkName = "customizeDynamicCDI(cdi:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
