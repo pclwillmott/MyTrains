@@ -14,7 +14,23 @@ public var mainMenuItems : [AppMode:[NSMenuItem]] = [:]
 public func menuUpdate() {
 
   if !mainMenuItems.isEmpty, let mainMenu = NSApplication.shared.mainMenu {
+    
+    let showNewPanel = appMode == .master && appLayoutId != nil
+
+    for item in mainMenuItems[appMode]! {
+      
+      if item.tag == 9999 {
+        for node in item.submenu!.items {
+          if let virtualNodeType = MyTrainsVirtualNodeType(rawValue: UInt16(node.tag)), virtualNodeType == .switchboardPanelNode {
+            node.isHidden = !showNewPanel
+          }
+        }
+      }
+      
+    }
+    
     mainMenu.items = mainMenuItems[appMode]!
+    
   }
   
 }
@@ -70,6 +86,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
           let newMenuMaster = NSMenuItem()
           newMenuMaster.title = String(localized: "New", comment: "Used for the New menu item title")
           newMenuMaster.submenu = NSMenu()
+          newMenuMaster.tag = 9999
           for menuItem in MyTrainsVirtualNodeType.newSubMenuItems(appMode: .master) {
             newMenuMaster.submenu?.addItem(menuItem)
             menuItem.target = self
@@ -80,6 +97,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
           let newMenuDelegate = NSMenuItem()
           newMenuDelegate.title = newMenuMaster.title
           newMenuDelegate.submenu = NSMenu()
+          newMenuDelegate.tag = 9999
           for menuItem in MyTrainsVirtualNodeType.newSubMenuItems(appMode: .delegate) {
             newMenuDelegate.submenu?.addItem(menuItem)
             menuItem.target = self
@@ -458,6 +476,17 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     guard let networkLayer = myTrainsController.openLCBNetworkLayer else {
       return
     }
+    
+    switch node.virtualNodeType {
+    case .layoutNode:
+      node.layoutNodeId = node.nodeId
+      node.saveMemorySpaces()
+    case .switchboardItemNode, .switchboardPanelNode:
+      node.layoutNodeId = appLayoutId!
+      node.saveMemorySpaces()
+    default:
+      break
+    }
 
     if node.isConfigurationDescriptionInformationProtocolSupported {
       let x = ModalWindow.ConfigurationTool
@@ -483,7 +512,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     
     let x = ModalWindow.CreateVirtualNode
     let wc = x.windowController
-    createVirtualNodeVC = x.viewController(windowController: wc) as! CreateVirtualNodeVC
+    createVirtualNodeVC = x.viewController(windowController: wc) as? CreateVirtualNodeVC
     wc.showWindow(nil)
 
     networkLayer.createVirtualNode(virtualNodeType: virtualNodeType, completion: newNodeCompletion(node:))
@@ -497,7 +526,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
       return
     }
     appNode.sendGlobalEmergencyStop()
-    print("Global Emergency Stop")
   }
   
   @IBAction func mnuClearGlobalEmergencyStopAction(_ sender: Any) {
@@ -505,7 +533,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
       return
     }
     appNode.sendClearGlobalEmergencyStop()
-    print("Clear Global Emergency Stop")
   }
   
   @IBAction func mnuGlobalPowerOffAction(_ sender: Any) {

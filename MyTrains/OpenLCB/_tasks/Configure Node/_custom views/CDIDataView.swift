@@ -439,7 +439,9 @@ class CDIDataView: CDIView {
     box.titleFont = NSFont(name: box.titleFont.familyName!, size: 13.0)!
 
     NSLayoutConstraint.activate([
+ //     box.topAnchor.constraint(equalToSystemSpacingBelow: self.topAnchor, multiplier: 1.0),
       box.topAnchor.constraint(equalTo: self.topAnchor, constant: gap),
+ //     box.leadingAnchor.constraint(equalToSystemSpacingAfter: self.leadingAnchor, multiplier: 1.0),
       box.leadingAnchor.constraint(equalTo: self.leadingAnchor),
       box.trailingAnchor.constraint(equalTo: self.trailingAnchor),
     ])

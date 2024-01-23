@@ -10,18 +10,9 @@ import Foundation
 enum TABLE {
   static let VERSION                     = "VERSION"
   static let LAYOUT                      = "LAYOUT"
-//  static let NETWORK                     = "NETWORK"
-//  static let LOCONET_DEVICE              = "LOCONET_DEVICE"
-//  static let ROLLING_STOCK               = "ROLLING_STOCK"
-//  static let DECODER_FUNCTION            = "DECODER_FUNCTION"
-//  static let DECODER_CV                  = "DECODER_CV"
-//  static let SPEED_PROFILE               = "SPEED_PROFILE"
   static let TRAIN                       = "TRAIN"
   static let SWITCHBOARD_PANEL           = "SWITCHBOARD_PANEL"
   static let SWITCHBOARD_ITEM            = "SWITCHBOARD_ITEM"
-//  static let SENSOR                      = "SENSOR"
-//  static let TURNOUT_SWITCH              = "TURNOUT_SWITCH"
-//  static let LOCONET_DEVICE_CV           = "LOCONET_DEVICE_CV"
   static let MEMORY_SPACE                = "MEMORY_SPACE"
 }
 
@@ -36,104 +27,7 @@ enum LAYOUT {
   static let LAYOUT_DESCRIPTION          = "LAYOUT_DESCRIPTION"
   static let LAYOUT_SCALE                = "LAYOUT_SCALE"
 }
-/*
-enum LOCONET_DEVICE {
-  static let LOCONET_DEVICE_ID           = "LOCONET_DEVICE_ID"
-  static let NETWORK_ID                  = "NETWORK_ID"
-  static let SERIAL_NUMBER               = "SERIAL_NUMBER"
-  static let SOFTWARE_VERSION            = "SOFTWARE_VERSION"
-  static let HARDWARE_VERSION            = "HARDWARE_VERSION"
-  static let BOARD_ID                    = "BOARD_ID"
-  static let LOCONET_PRODUCT_ID          = "LOCONET_PRODUCT_ID"
-  static let OPTION_SWITCHES_0           = "OPTION_SWITCHES_0"
-  static let OPTION_SWITCHES_1           = "OPTION_SWITCHES_1"
-  static let OPTION_SWITCHES_2           = "OPTION_SWITCHES_2"
-  static let OPTION_SWITCHES_3           = "OPTION_SWITCHES_3"
-  static let DEVICE_PATH                 = "DEVICE_PATH"
-  static let BAUD_RATE                   = "BAUD_RATE"
-  static let DEVICE_NAME                 = "DEVICE_NAME"
-  static let FLOW_CONTROL                = "FLOW_CONTROL"
-  static let IS_STAND_ALONE_LOCONET      = "IS_STAND_ALONE_LOCONET"
-  static let FLAGS                       = "FLAGS"
-}
 
-enum LOCONET_DEVICE_CV {
-  static let LOCONET_DEVICE_CV_ID        = "LOCONET_DEVICE_CV_ID"
-  static let LOCONET_DEVICE_ID           = "LOCONET_DEVICE_ID"
-  static let CV_NUMBER                   = "CV_NUMBER"
-  static let CV_VALUE                    = "CV_VALUE"
-  static let DEFAULT_VALUE               = "DEFAULT_VALUE"
-  static let CUSTOM_DESCRIPTION          = "CUSTOM_DESCRIPTION"
-  static let CUSTOM_NUMBER_BASE          = "CUSTOM_NUMBER_BASE"
-  static let ENABLED                     = "ENABLED"
-}
-
-enum ROLLING_STOCK {
-  static let ROLLING_STOCK_ID            = "ROLLING_STOCK_ID"
-  static let ROLLING_STOCK_NAME          = "ROLLING_STOCK_NAME"
-  static let NETWORK_ID                  = "NETWORK_ID"
-  static let LENGTH                      = "LENGTH"
-  static let ROLLING_STOCK_TYPE          = "ROLLING_STOCK_TYPE"
-  static let MANUFACTURER_ID             = "MANUFACTURER_ID"
-  static let MDECODER_MANUFACTURER_ID    = "MDECODER_MANUFACTURER_ID"
-  static let MDECODER_MODEL              = "MDECODER_MODEL"
-  static let MDECODER_ADDRESS            = "MDECODER_ADDRESS"
-  static let ADECODER_MANUFACTURER_ID    = "ADECODER_MANUFACTURER_ID"
-  static let ADECODER_MODEL              = "ADECODER_MODEL"
-  static let ADECODER_ADDRESS            = "ADECODER_ADDRESS"
-  static let SPEED_STEPS                 = "SPEED_STEPS"
-  static let FBOFF_OCC_FRONT             = "FBOFF_OCC_FRONT"
-  static let FBOFF_OCC_REAR              = "FBOFF_OCC_REAR"
-  static let SCALE                       = "SCALE"
-  static let TRACK_GAUGE                 = "TRACK_GUAGE"
-  static let MAX_FORWARD_SPEED           = "MAX_FORWARD_SPEED"
-  static let MAX_BACKWARD_SPEED          = "MAX_BACKWARD_SPEED"
-  static let UNITS_LENGTH                = "UNITS_LENGTH"
-  static let UNITS_FBOFF_OCC             = "UNITS_FBOFF_OCC"
-  static let UNITS_SPEED                 = "UNITS_SPEED"
-  static let INVENTORY_CODE              = "INVENTORY_CODE"
-  static let PURCHASE_DATE               = "PURCHASE_DATE"
-  static let NOTES                       = "NOTES"
-  static let LOCOMOTIVE_TYPE             = "LOCOMOTIVE_TYPE"
-  static let MDECODER_INSTALLED          = "MDECODER_INSTALLED"
-  static let ADECODER_INSTALLED          = "ADECODER_INSTALLED"
-  static let FLAGS                       = "FLAGS"
-  static let BEST_FIT_METHOD             = "BEST_FIT_METHOD"
-}
-
-enum DECODER_FUNCTION {
-  static let DECODER_FUNCTION_ID         = "DECODER_FUNCTION_ID"
-  static let ROLLING_STOCK_ID            = "ROLLING_STOCK_ID"
-  static let DECODER_TYPE                = "DECODER_TYPE"
-  static let FUNCTION_NUMBER             = "FUNCTION_NUMBER"
-  static let ENABLED                     = "ENABLED"
-  static let FUNCTION_DESCRIPTION        = "FUNCTION_DESCRIPTION"
-  static let MOMENTARY                   = "MOMENTARY"
-  static let DURATION                    = "DURATION"
-  static let INVERTED                    = "INVERTED"
-  static let STATE                       = "STATE"
-}
-
-enum DECODER_CV {
-  static let DECODER_CV_ID               = "DECODER_CV_ID"
-  static let ROLLING_STOCK_ID            = "ROLLING_STOCK_ID"
-  static let DECODER_TYPE                = "DECODER_TYPE"
-  static let CV_NUMBER                   = "CV_NUMBER"
-  static let CV_VALUE                    = "CV_VALUE"
-  static let DEFAULT_VALUE               = "DEFAULT_VALUE"
-  static let CUSTOM_DESCRIPTION          = "CUSTOM_DESCRIPTION"
-  static let CUSTOM_NUMBER_BASE          = "CUSTOM_NUMBER_BASE"
-  static let ENABLED                     = "ENABLED"
-}
-
-enum SPEED_PROFILE {
-  static let SPEED_PROFILE_ID            = "SPEED_PROFILE_ID"
-  static let ROLLING_STOCK_ID            = "ROLLING_STOCK_ID"
-  static let STEP_NUMBER                 = "STEP_NUMBER"
-  static let SPEED_FORWARD               = "SPEED_FORWARD"
-  static let SPEED_REVERSE               = "SPEED_REVERSE"
-}
-*/
 enum SWITCHBOARD_PANEL {
   static let SWITCHBOARD_PANEL_ID        = "SWITCHBOARD_PANEL_ID"
   static let LAYOUT_ID                   = "LAYOUT_ID"
@@ -223,29 +117,6 @@ enum SWITCHBOARD_ITEM {
   static let SW2_COMMANDED_CLOSED_EVENT_ID = "SW2_COMMANDED_CLOSED_EVENT_ID"
 }
 
-// THIS IS NOW IOFUNCTION
-
-/*
-enum SENSOR {
-  static let SENSOR_ID                   = "SENSOR_ID"
-  static let LOCONET_DEVICE_ID           = "LOCONET_DEVICE_ID"
-  static let CHANNEL_NUMBER              = "CHANNEL_NUMBER"
-  static let SENSOR_TYPE                 = "SENSOR_TYPE"
-  static let SENSOR_ADDRESS              = "SENSOR_ADDRESS"
-  static let DELAY_ON                    = "DELAY_ON"
-  static let DELAY_OFF                   = "DELAY_OFF"
-  static let INVERTED                    = "INVERTED"
-  static let FUNCTION_NUMBER             = "FUNCTION_NUMBER"
-  static let FUNCTION_TYPE               = "FUNCTION_TYPE"
-}
-
-enum TURNOUT_SWITCH {
-  static let TURNOUT_SWITCH_ID           = "TURNOUT_SWITCH_ID"
-  static let LOCONET_DEVICE_ID           = "LOCONET_DEVICE_ID"
-  static let CHANNEL_NUMBER              = "CHANNEL_NUMBER"
-  static let SWITCH_ADDRESS              = "SWITCH_ADDRESS"
-}
-*/
 enum MEMORY_SPACE {
   static let MEMORY_SPACE_ID             = "MEMORY_SPACE_ID"
   static let NODE_ID                     = "NODE_ID"

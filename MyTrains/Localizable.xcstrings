@@ -736,7 +736,7 @@
       "comment" : "Used for the Select Layout button title"
     },
     "Select Layout" : {
-      "comment" : "Used for the Select Layout menu item\nUsed for the title of the Select Layout window"
+      "comment" : "Used for the title of the Select Layout window\nUsed for the Select Layout menu item"
     },
     "Short Whistle" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
@@ -792,16 +792,16 @@
     "Switch Board" : {
       "comment" : "Used for the Switch Board menu item title"
     },
-    "Switchboard" : {
-      "comment" : "Used to create a default OpenLCB virtual name"
-    },
     "Switchboard Item" : {
       "comment" : "Used to create a default OpenLCB virtual name"
     },
     "Switchboard Item Node" : {
       "comment" : "Used to describe an OpenLCB virtual node"
     },
-    "Switchboard Node" : {
+    "Switchboard Panel" : {
+      "comment" : "Used to create a default OpenLCB virtual name"
+    },
+    "Switchboard Panel Node" : {
       "comment" : "Used to describe an OpenLCB virtual node"
     },
     "Switching Lights" : {
@@ -859,7 +859,7 @@
       "comment" : "Used to indicate that turnout can be configured to have a powered or insulated frog"
     },
     "Unknown" : {
-      "comment" : "Used to indicate that the type of something is unknown\nUsed to indicate the state of a turnout"
+      "comment" : "Used to indicate the state of a turnout\nUsed to indicate that the type of something is unknown"
     },
     "User Description" : {
       "comment" : "Used for the title of the User Description input field in CDI"

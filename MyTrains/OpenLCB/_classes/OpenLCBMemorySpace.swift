@@ -495,8 +495,8 @@ public class OpenLCBMemorySpace {
         case .layoutNode:
           node = LayoutNode(nodeId: nodeId)
           break
-        case .switchboardNode:
-          node = SwitchboardNode(nodeId: nodeId)
+        case .switchboardPanelNode:
+          node = SwitchboardPanelNode(nodeId: nodeId)
         case .switchboardItemNode:
           node = SwitchboardItemNode(nodeId: nodeId)
         }

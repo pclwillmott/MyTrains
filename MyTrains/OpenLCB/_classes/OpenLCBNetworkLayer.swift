@@ -173,12 +173,11 @@ public class OpenLCBNetworkLayer : NSObject {
     
     _state = .initialized
     
+    print("fred")
     for node in OpenLCBMemorySpace.getVirtualNodes() {
-      if node.virtualNodeType != .switchboardItemNode {
-        registerNode(node: node)
-      }
+      registerNode(node: node)
     }
-    
+
     updateVirtualNodeList()
     
   }
@@ -253,7 +252,7 @@ public class OpenLCBNetworkLayer : NSObject {
       break
     case .layoutNode:
       break
-    case .switchboardNode:
+    case .switchboardPanelNode:
       break
     case .switchboardItemNode:
       break
@@ -399,8 +398,8 @@ public class OpenLCBNetworkLayer : NSObject {
       node = OpenLCBDigitraxBXP88Node(nodeId: newNodeId)
     case .layoutNode:
       node = LayoutNode(nodeId: newNodeId)
-    case .switchboardNode:
-      node = SwitchboardNode(nodeId: newNodeId)
+    case .switchboardPanelNode:
+      node = SwitchboardPanelNode(nodeId: newNodeId)
     case .switchboardItemNode:
       node = SwitchboardItemNode(nodeId: newNodeId)
     }

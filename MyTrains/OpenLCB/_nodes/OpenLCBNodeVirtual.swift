@@ -82,11 +82,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   
   internal var memorySpaces : [UInt8:OpenLCBMemorySpace] = [:]
   
-  internal var cdiFilename : String? {
-    didSet {
-      initCDI()
-    }
-  }
+  internal var cdiFilename : String? 
   
   internal var registeredVariables : [UInt8:Set<Int>] = [:]
   
@@ -321,7 +317,49 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     return cdi.replacingOccurrences(of: CDI.ACDI, with: acdi)
     
   }
-  
+
+  internal func standardVirtualNodeConfig(cdi:String) -> String {
+ 
+    var config = ""
+    
+    #if DEBUG
+    
+    config += "<segment space='0' origin='0'>\n<name>Virtual Node Configuration</name>\n"
+
+    config += "<int size='2'>\n"
+    config += "<name>Configuration Space Version</name>\n"
+    config += "<description>This is the number of items in the configuration space.</description>\n"
+    config += "</int>\n"
+
+    config += "<eventid>\n"
+    config += "  <name>Layout Node</name>\n"
+    config += "  %%LAYOUT_NODES%%\n"
+    config += "</eventid>\n"
+
+    config += "<int size='2'>\n"
+    config += "<name>Virtual Node Type</name>\n"
+    config += "<description>The type of this node.</description>\n"
+    config += "%%VIRTUAL_NODE_TYPE%%"
+    config += "</int>\n"
+
+    config += "<eventid>\n"
+    config += "<name>This is the next Unique Event ID that will be returned upon request.</name>\n"
+    config += "<description>This is the next unique event ID.</description>\n"
+    config += "</eventid>\n"
+
+    config += "<eventid>\n"
+    config += "<name>Next Unique Node ID Seed</name>\n"
+    config += "<description>This is the seed that will be used to generate the next unique node ID.</description>\n"
+    config += "</eventid>\n"
+
+    config += "</segment>\n"
+
+    #endif
+    
+    return cdi.replacingOccurrences(of: CDI.VIRTUAL_NODE_CONFIG, with: config)
+    
+  }
+
   internal func initCDI() {
     
     if let cdiFilename, let filepath = Bundle.main.path(forResource: cdiFilename, ofType: "xml") {
@@ -332,7 +370,9 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
         // Apply substitutions for dynamic elements such as node ids.
         
         cdi = customizeDynamicCDI(cdi: cdi)
-
+        
+          // Do mappings for Layouts
+          
         // Apply these after the previous call so that the previous call
         // can override the substitutions if necessary.
         
@@ -342,6 +382,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
         cdi = cdi.replacingOccurrences(of: CDI.HARDWARE_VERSION, with: nodeHardwareVersion)
         
         cdi = standardACDI(cdi: cdi)
+        cdi = standardVirtualNodeConfig(cdi: cdi)
         cdi = MTSerialPortManager.insertMap(cdi: cdi)
         cdi = OpenLCBFunction.insertMap(cdi: cdi)
         cdi = BaudRate.insertMap(cdi: cdi)
@@ -352,7 +393,32 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
         cdi = OpenLCBClockState.insertMap(cdi: cdi)
         cdi = EnableState.insertMap(cdi: cdi)
         cdi = ClockCustomIdType.insertMap(cdi: cdi)
+        cdi = MyTrainsVirtualNodeType.insertMap(cdi: cdi)
+                  
+        var sorted : [(nodeId:UInt64, name:String)] = []
+
+        if let app = networkLayer?.myTrainsNode {
+          
+          for item in app.layoutList {
+            if item.masterNodeId == app.nodeId {
+              sorted.append((nodeId:item.layoutId, name:item.layoutName))
+            }
+          }
+          
+          sorted.sort {$0.name < $1.name}
+          
+        }
+          
+        var layouts = "<map>\n<relation><property>00.00.00.00.00.00.00.00</property><value>No Layout Selected</value></relation>\n"
         
+        for item in sorted {
+          layouts += "<relation><property>\(item.nodeId.toHexDotFormat(numberOfBytes: 8))</property><value>\(item.name)</value></relation>\n"
+        }
+
+        layouts += "</map>\n"
+
+        cdi = cdi.replacingOccurrences(of: CDI.LAYOUT_NODES, with: layouts)
+
         let memorySpace = OpenLCBMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.cdi.rawValue, isReadOnly: true, description: "")
         
         memorySpace.memory = [UInt8]()
@@ -486,8 +552,9 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   
     if let network = networkLayer {
       state = .permitted
-      network.sendInitializationComplete(sourceNodeId: nodeId, isSimpleSetSufficient: false)
       resetReboot()
+      initCDI()
+      network.sendInitializationComplete(sourceNodeId: nodeId, isSimpleSetSufficient: false)
     }
     
   }

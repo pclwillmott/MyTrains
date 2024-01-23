@@ -140,6 +140,7 @@ class SelectLayoutVC: NSViewController, NSWindowDelegate, MyTrainsAppDelegate {
   @IBAction func btnOKAction(_ sender: NSButton) {
     if let networkLayer = myTrainsController.openLCBNetworkLayer {
       networkLayer.layoutNodeId = (cboLayout.indexOfSelectedItem == -1) ? nil : layoutList[cboLayout.indexOfSelectedItem].layoutId
+      menuUpdate()
     }
     view.window?.close()
   }

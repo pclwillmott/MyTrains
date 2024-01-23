@@ -12,6 +12,7 @@
 		DA04B8DA28F1AED70062D944 /* ConsistState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA04B8D928F1AEB60062D944 /* ConsistState.swift */; };
 		DA063397293CE8F400CEAFD1 /* SetFastClock.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA063396293CE8F400CEAFD1 /* SetFastClock.storyboard */; };
 		DA063399293CEB8700CEAFD1 /* SetFastClockVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA063398293CEB8700CEAFD1 /* SetFastClockVC.swift */; };
+		DA073F072B5FEBB20040067A /* MyTrains Switchboard Panel.xml in Resources */ = {isa = PBXBuildFile; fileRef = DA073F062B5FEBB20040067A /* MyTrains Switchboard Panel.xml */; };
 		DA0883FD2A76727700C2CFBD /* OpenLCBFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0883FC2A76727700C2CFBD /* OpenLCBFunction.swift */; };
 		DA0883FF2A768F2400C2CFBD /* MyTrains Train.xml in Resources */ = {isa = PBXBuildFile; fileRef = DA0883FE2A768F2400C2CFBD /* MyTrains Train.xml */; };
 		DA0946542843C06A00F1AB81 /* DMF.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0946532843C06A00F1AB81 /* DMF.swift */; };
@@ -190,7 +191,7 @@
 		DAA777D02A20D734008EAF02 /* OpenLCBClockState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA777CF2A20D734008EAF02 /* OpenLCBClockState.swift */; };
 		DAA7BEB32B501FCA00508140 /* Scale.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA7BEB22B501FCA00508140 /* Scale.swift */; };
 		DAA7BEB52B50328800508140 /* LayoutNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA7BEB42B50328800508140 /* LayoutNode.swift */; };
-		DAA7BEB72B50338800508140 /* SwitchboardNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA7BEB62B50338800508140 /* SwitchboardNode.swift */; };
+		DAA7BEB72B50338800508140 /* SwitchboardPanelNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA7BEB62B50338800508140 /* SwitchboardPanelNode.swift */; };
 		DAA7BEB92B5033A700508140 /* SwitchboardItemNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA7BEB82B5033A700508140 /* SwitchboardItemNode.swift */; };
 		DAA7BEBB2B504EE900508140 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = DAA7BEBA2B504EE900508140 /* Localizable.xcstrings */; };
 		DAA7BEC22B50664B00508140 /* CDITextView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DAA7BEC42B50664B00508140 /* CDITextView.storyboard */; };
@@ -286,6 +287,7 @@
 		DA04B8D928F1AEB60062D944 /* ConsistState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsistState.swift; sourceTree = "<group>"; };
 		DA063396293CE8F400CEAFD1 /* SetFastClock.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SetFastClock.storyboard; sourceTree = "<group>"; };
 		DA063398293CEB8700CEAFD1 /* SetFastClockVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetFastClockVC.swift; sourceTree = "<group>"; };
+		DA073F062B5FEBB20040067A /* MyTrains Switchboard Panel.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "MyTrains Switchboard Panel.xml"; sourceTree = "<group>"; };
 		DA0883FC2A76727700C2CFBD /* OpenLCBFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBFunction.swift; sourceTree = "<group>"; };
 		DA0883FE2A768F2400C2CFBD /* MyTrains Train.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "MyTrains Train.xml"; sourceTree = "<group>"; };
 		DA0946532843C06A00F1AB81 /* DMF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMF.swift; sourceTree = "<group>"; };
@@ -467,7 +469,7 @@
 		DAA777CF2A20D734008EAF02 /* OpenLCBClockState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBClockState.swift; sourceTree = "<group>"; };
 		DAA7BEB22B501FCA00508140 /* Scale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scale.swift; sourceTree = "<group>"; };
 		DAA7BEB42B50328800508140 /* LayoutNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutNode.swift; sourceTree = "<group>"; };
-		DAA7BEB62B50338800508140 /* SwitchboardNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchboardNode.swift; sourceTree = "<group>"; };
+		DAA7BEB62B50338800508140 /* SwitchboardPanelNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchboardPanelNode.swift; sourceTree = "<group>"; };
 		DAA7BEB82B5033A700508140 /* SwitchboardItemNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchboardItemNode.swift; sourceTree = "<group>"; };
 		DAA7BEBA2B504EE900508140 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		DAA7BEC32B50664B00508140 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CDITextView.storyboard; sourceTree = "<group>"; };
@@ -1007,7 +1009,7 @@
 				DAAC7E8E2A7926D2001A424E /* OpenLCBProgrammingTrackNode.swift */,
 				DA3254E72A4755AC006DF357 /* OpenLCBThrottle.swift */,
 				DAA7BEB42B50328800508140 /* LayoutNode.swift */,
-				DAA7BEB62B50338800508140 /* SwitchboardNode.swift */,
+				DAA7BEB62B50338800508140 /* SwitchboardPanelNode.swift */,
 				DAA7BEB82B5033A700508140 /* SwitchboardItemNode.swift */,
 			);
 			path = _nodes;
@@ -1231,20 +1233,21 @@
 		DACDBA102A2CE07D0003B78C /* _cdi */ = {
 			isa = PBXGroup;
 			children = (
-				DAFACF582A26C5E0007C10F0 /* MyTrains Clock.xml */,
-				DA5F7A1B2A3F1A36004D7EBB /* MyTrains Blank.xml */,
-				DA123A522A5044C2000E63E2 /* MyTrains LocoNet Gateway.xml */,
-				DA7195FA2A3F2D40004D2D4B /* MyTrains Train - OLD.xml */,
-				DA0883FE2A768F2400C2CFBD /* MyTrains Train.xml */,
-				DAED17212A5ABF4A0051C9AF /* MyTrains CAN Gateway.xml */,
-				DA1272C22A7569AF00AB42F6 /* FDI Generic.xml */,
-				DAAC7E902A79308B001A424E /* MyTrains DCC Programming Track.xml */,
+				DA8A05662B540B2E003A39D7 /* CDI.swift */,
 				DAD73C1B2A9A298E002E7618 /* Digitrax BXP88.xml */,
 				DAF442E62AA5FA9700654A51 /* Digitrax DS64.xml */,
-				DAC8FB2E2AED5F5E00456C40 /* StaRFIshrail Hub.xml */,
-				DA8A05642B53FE1A003A39D7 /* MyTrains Layout.xml */,
-				DA8A05662B540B2E003A39D7 /* CDI.swift */,
+				DA1272C22A7569AF00AB42F6 /* FDI Generic.xml */,
 				DAF059B22B5AE3A200CA9622 /* MyTrains Application.xml */,
+				DA5F7A1B2A3F1A36004D7EBB /* MyTrains Blank.xml */,
+				DAED17212A5ABF4A0051C9AF /* MyTrains CAN Gateway.xml */,
+				DAFACF582A26C5E0007C10F0 /* MyTrains Clock.xml */,
+				DAAC7E902A79308B001A424E /* MyTrains DCC Programming Track.xml */,
+				DA8A05642B53FE1A003A39D7 /* MyTrains Layout.xml */,
+				DA123A522A5044C2000E63E2 /* MyTrains LocoNet Gateway.xml */,
+				DA073F062B5FEBB20040067A /* MyTrains Switchboard Panel.xml */,
+				DA7195FA2A3F2D40004D2D4B /* MyTrains Train - OLD.xml */,
+				DA0883FE2A768F2400C2CFBD /* MyTrains Train.xml */,
+				DAC8FB2E2AED5F5E00456C40 /* StaRFIshrail Hub.xml */,
 			);
 			path = _cdi;
 			sourceTree = "<group>";
@@ -1359,6 +1362,7 @@
 				DA123A532A5044C2000E63E2 /* MyTrains LocoNet Gateway.xml in Resources */,
 				DAA030922AEE87B100BC5659 /* OpenLCBFirmwareUpdate.storyboard in Resources */,
 				DA88378C2770FBEC000B9A41 /* DBEditorView.xib in Resources */,
+				DA073F072B5FEBB20040067A /* MyTrains Switchboard Panel.xml in Resources */,
 				DAC8FB2F2AED5F5E00456C40 /* StaRFIshrail Hub.xml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1533,7 +1537,7 @@
 				DA0D3E0A2A485E770042748C /* OpenLCBSearchMatchType.swift in Sources */,
 				DA9CF8FD2860978A00825FA9 /* TurnoutMotorType.swift in Sources */,
 				DA7A127829E32E99000DCE1C /* OpenLCBMessageCANFrameType.swift in Sources */,
-				DAA7BEB72B50338800508140 /* SwitchboardNode.swift in Sources */,
+				DAA7BEB72B50338800508140 /* SwitchboardPanelNode.swift in Sources */,
 				DA6A0ADC27529D6600913F2B /* ModalWindow.swift in Sources */,
 				DAF6778A2B431EAF009707A4 /* CDIStackView.swift in Sources */,
 				DA6A3DE82A2E3506002631FF /* OpenLCBMemorySpaceDelegate.swift in Sources */,
@@ -1766,7 +1770,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = DKK8LC6ZQC;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1782,7 +1786,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 0.1;
+				MARKETING_VERSION = 0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = Oswalds.MyTrains;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -1802,7 +1806,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = DKK8LC6ZQC;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1818,7 +1822,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 0.1;
+				MARKETING_VERSION = 0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = Oswalds.MyTrains;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

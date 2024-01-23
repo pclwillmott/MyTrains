@@ -27,5 +27,8 @@ enum CDI {
   static let CLOCK_CUSTOM_ID_TYPE    = "%%CLOCK_CUSTOM_ID_TYPE%%"
   static let ENABLE_STATE            = "%%ENABLE_STATE%%"
   static let LAYOUT_STATE            = "%%LAYOUT_STATE%%"
+  static let VIRTUAL_NODE_TYPE       = "%%VIRTUAL_NODE_TYPE%%"
+  static let LAYOUT_NODES            = "%%LAYOUT_NODES%%"
+  static let VIRTUAL_NODE_CONFIG     = "%%VIRTUAL_NODE_CONFIG%%"
 }
 

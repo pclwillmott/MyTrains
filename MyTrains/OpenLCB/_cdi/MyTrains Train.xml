@@ -112,6 +112,9 @@
 </eventid>
   
 </segment>
+
+%%VIRTUAL_NODE_CONFIG%%
+
 </cdi>
 
 

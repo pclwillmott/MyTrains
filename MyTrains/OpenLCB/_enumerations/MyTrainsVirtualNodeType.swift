@@ -22,7 +22,7 @@ public enum MyTrainsVirtualNodeType : UInt16 {
   case programmingTrackNode  = 10
   case digitraxBXP88Node     = 11
   case layoutNode            = 12
-  case switchboardNode       = 13
+  case switchboardPanelNode  = 13
   case switchboardItemNode   = 14
   case applicationNode       = 15
 
@@ -62,23 +62,23 @@ public enum MyTrainsVirtualNodeType : UInt16 {
     .programmingTrackNode:  String(localized: "DCC Programming Track", comment: "Used to create a default OpenLCB virtual name"),
     .digitraxBXP88Node:     String(localized: "Digitrax BXP88", comment: "Used to create a default OpenLCB virtual name"),
     .layoutNode:            String(localized: "Layout", comment: "Used to create a default OpenLCB virtual name"),
-    .switchboardNode:       String(localized: "Switchboard", comment: "Used to create a default OpenLCB virtual name"),
+    .switchboardPanelNode:  String(localized: "Switchboard Panel", comment: "Used to create a default OpenLCB virtual name"),
     .switchboardItemNode:   String(localized: "Switchboard Item", comment: "Used to create a default OpenLCB virtual name"),
   ]
 
   private static let _startupOrder : [MyTrainsVirtualNodeType:Int] = [
     .canGatewayNode        : 0,
     .applicationNode       : 1,
-    .locoNetMonitorNode    : 2,
-    .locoNetGatewayNode    : 3,
-    .clockNode             : 4,
-    .configurationToolNode : 5,
-    .trainNode             : 6,
-    .throttleNode          : 7,
-    .programmerToolNode    : 8,
-    .programmingTrackNode  : 9,
-    .layoutNode            : 10,
-    .switchboardNode       : 11,
+    .layoutNode            : 2,
+    .locoNetMonitorNode    : 3,
+    .locoNetGatewayNode    : 4,
+    .clockNode             : 5,
+    .configurationToolNode : 6,
+    .trainNode             : 7,
+    .throttleNode          : 8,
+    .programmerToolNode    : 9,
+    .programmingTrackNode  : 10,
+    .switchboardPanelNode  : 11,
     .switchboardItemNode   : 12,
     .digitraxBXP88Node     : 13,
     .genericVirtualNode    : 14,
@@ -100,10 +100,56 @@ public enum MyTrainsVirtualNodeType : UInt16 {
     .programmingTrackNode:  String(localized: "DCC Programming Track Node", comment: "Used to describe an OpenLCB virtual node"),
     .digitraxBXP88Node:     String(localized: "Digitrax BXP88 Node", comment: "Used to describe an OpenLCB virtual node"),
     .layoutNode:            String(localized: "Layout Node", comment: "Used to describe an OpenLCB virtual node"),
-    .switchboardNode:       String(localized: "Switchboard Node", comment: "Used to describe an OpenLCB virtual node"),
+    .switchboardPanelNode:  String(localized: "Switchboard Panel Node", comment: "Used to describe an OpenLCB virtual node"),
     .switchboardItemNode:   String(localized: "Switchboard Item Node", comment: "Used to describe an OpenLCB virtual node"),
   ]
   
+  // MARK: Public Class Properties
+  
+  public static let defaultValue : MyTrainsVirtualNodeType = .genericVirtualNode
+  
+  public static let mapPlaceholder = CDI.VIRTUAL_NODE_TYPE
+
+  // MARK: Private Class Methods
+  
+  private static var map : String {
+    
+    var items : [MyTrainsVirtualNodeType] = [
+      .canGatewayNode        ,
+      .applicationNode       ,
+      .locoNetMonitorNode    ,
+      .locoNetGatewayNode    ,
+      .clockNode             ,
+      .configurationToolNode ,
+      .trainNode             ,
+      .throttleNode          ,
+      .programmerToolNode    ,
+      .programmingTrackNode  ,
+      .layoutNode            ,
+      .switchboardPanelNode  ,
+      .switchboardItemNode   ,
+      .digitraxBXP88Node     ,
+      .genericVirtualNode    ,
+    ]
+    
+    var map = "<default>\(defaultValue.rawValue)</default>\n<map>\n"
+
+    for item in items {
+      map += "<relation><property>\(item.rawValue)</property><value>\(item.title)</value></relation>\n"
+    }
+
+    map += "</map>\n"
+
+    return map
+    
+  }
+
+  // MARK: Public Class Methods
+  
+  public static func insertMap(cdi:String) -> String {
+    return cdi.replacingOccurrences(of: mapPlaceholder, with: map)
+  }
+
   // MARK: Public Class Methods
   
   public static func newSubMenuItems(appMode:AppMode) -> [NSMenuItem] {
@@ -114,6 +160,7 @@ public enum MyTrainsVirtualNodeType : UInt16 {
     case .master:
       nodeTypes = [
         .layoutNode,
+        .switchboardPanelNode,
         .throttleNode,
         .trainNode,
         .canGatewayNode,
