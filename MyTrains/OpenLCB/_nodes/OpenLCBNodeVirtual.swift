@@ -25,11 +25,6 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
 
     super.init(nodeId: nodeId)
 
-    if nextUniqueEventId == 0 {
-      nextUniqueEventId = nodeId << 16
-      nextUniqueNodeIdSeed = nodeId
-    }
-
     acdiManufacturerSpace.delegate = self
 
     memorySpaces[acdiManufacturerSpace.space] = acdiManufacturerSpace
@@ -58,8 +53,6 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.virtualNodeConfig.rawValue, address: addressVirtualNodeConfigUniqueEventId)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.virtualNodeConfig.rawValue, address: addressVirtualNodeConfigNextNodeIdSeed)
 
-    virtualNodeConfigSpaceVersion = 5
-    
     isSimpleNodeInformationProtocolSupported = true
     
     isDatagramProtocolSupported = true
@@ -462,6 +455,12 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     userNodeDescription  = ""
     
     lockedNodeId = 0
+
+    if virtualNodeConfigSpaceVersion == 0 {
+      virtualNodeConfigSpaceVersion = 4
+      nextUniqueEventId = nodeId << 16
+      nextUniqueNodeIdSeed = nodeId
+    }
 
   }
   
