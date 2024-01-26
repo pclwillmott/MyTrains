@@ -10,63 +10,79 @@ import AppKit
 
 public enum UnitSpeed : Int {
   
-  case kilometersPerHour = 0
-  case milesPerHour = 1
-  case metersPerSecond = 2
-  case centimetersPerSecond = 3
+  case centimetersPerSecond = 0
+  case metersPerSecond = 1
+  case kilometersPerHour = 2
+  case inchesPerSecond = 3
+  case feetPerSecond = 4
+  case milesPerHour = 5
+
+  // MARK: Public Properties
   
   public var title : String {
-    get {
-      return UnitSpeed.titles[self.rawValue]
-    }
+    return UnitSpeed.titles[self.rawValue]
   }
   
   public var toCMS : Double {
-    get {
-      var temp = UnitSpeed.toCMS(units: self)
-      if self == .kilometersPerHour || self == .milesPerHour {
-        if let layout = myTrainsController.layout {
-          temp /= layout.scale
-        }
+    var temp = UnitSpeed.toCMS(units: self)
+    if self == .kilometersPerHour || self == .milesPerHour {
+      if let layout = myTrainsController.layout {
+        temp /= layout.scale
       }
-      return temp
     }
+    return temp
   }
   
   public var fromCMS : Double {
-    get {
-      var temp = UnitSpeed.fromCMS(units: self)
-      if self == .kilometersPerHour || self == .milesPerHour {
-        if let layout = myTrainsController.layout {
-          temp *= layout.scale
-        }
+    var temp = UnitSpeed.fromCMS(units: self)
+    if self == .kilometersPerHour || self == .milesPerHour {
+      if let layout = myTrainsController.layout {
+        temp *= layout.scale
       }
-      return temp
     }
+    return temp
   }
   
+  // MARK: Private Class Properties
+  
   private static let titles = [
-    "km/h",
-    "mph",
-    "m/s",
-    "cm/s"
+    String(localized: "Centimeters/Second"),
+    String(localized: "Meters/Second"),
+    String(localized: "Kilometers/Hour"),
+    String(localized: "Inches/Second"),
+    String(localized: "Feet/Second"),
+    String(localized: "Miles/Hour"),
   ]
+  
+  private static var map : String {
+    
+    let items : [UnitSpeed] = [
+      .centimetersPerSecond,
+      .metersPerSecond,
+      .kilometersPerHour,
+      .inchesPerSecond,
+      .feetPerSecond,
+      .milesPerHour,
+    ]
+    
+    var map = "<default>\(defaultValue.rawValue)</default>\n<map>\n"
+
+    for item in items {
+      map += "<relation><property>\(item.rawValue)</property><value>\(item.title)</value></relation>\n"
+    }
+
+    map += "</map>"
+    
+    return map
+    
+  }
+  // MARK: Public Class Properties
   
   public static let defaultValue : UnitSpeed = .milesPerHour
 
-  public static func populate(comboBox: NSComboBox) {
-    comboBox.removeAllItems()
-    comboBox.addItems(withObjectValues: titles)
-    select(comboBox: comboBox, value: defaultValue)
-  }
-  
-  public static func select(comboBox: NSComboBox, value: UnitSpeed) {
-    comboBox.selectItem(at: value.rawValue)
-  }
-  
-  public static func selected(comboBox: NSComboBox) -> UnitSpeed {
-    return UnitSpeed(rawValue: comboBox.indexOfSelectedItem) ?? defaultValue
-  }
+  public static let mapPlaceholder = CDI.UNIT_SPEED
+
+  // MARK: Public Class Methods
   
   // The factor to be applied to a speed in units to get a speed in cm/s.
   // This factor does not take into account the layout scale.
@@ -87,6 +103,8 @@ public enum UnitSpeed : Int {
       return m2cm
     case .centimetersPerSecond:
       return 1.0
+    default:
+      return 1.0
     }
     
   }
@@ -96,6 +114,24 @@ public enum UnitSpeed : Int {
   public static func fromCMS(units: UnitSpeed) -> Double {
     return 1.0 / toCMS(units: units)
   }
+
+  public static func populate(comboBox: NSComboBox) {
+    comboBox.removeAllItems()
+    comboBox.addItems(withObjectValues: titles)
+    select(comboBox: comboBox, value: defaultValue)
+  }
   
+  public static func select(comboBox: NSComboBox, value: UnitSpeed) {
+    comboBox.selectItem(at: value.rawValue)
+  }
+  
+  public static func selected(comboBox: NSComboBox) -> UnitSpeed {
+    return UnitSpeed(rawValue: comboBox.indexOfSelectedItem) ?? defaultValue
+  }
+  
+  public static func insertMap(cdi:String) -> String {
+    return cdi.replacingOccurrences(of: mapPlaceholder, with: map)
+  }
+
 }
 

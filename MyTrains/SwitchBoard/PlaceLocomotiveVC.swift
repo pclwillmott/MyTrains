@@ -14,7 +14,7 @@ class PlaceLocomotiveVC: NSViewController, NSWindowDelegate {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-  }
+  } 
   
   func windowShouldClose(_ sender: NSWindow) -> Bool {
     return true

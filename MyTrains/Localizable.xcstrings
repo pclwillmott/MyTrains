@@ -42,157 +42,869 @@
       }
     },
     "0°" : {
-      "comment" : "Used to indicate a rotation angle in degrees"
+      "comment" : "Used to indicate a rotation angle in degrees",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "0°"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "0°"
+          }
+        }
+      }
     },
     "1 : %@" : {
-      "comment" : "This is a ratio used for layout scale, e.g. 1 : 76.2"
+      "comment" : "This is a ratio used for layout scale, e.g. 1 : 76.2",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 : %@"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 : %@"
+          }
+        }
+      }
     },
     "1 minute" : {
-      "comment" : "Used to select a sampling period"
+      "comment" : "Used to select a sampling period",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 minute"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 minute"
+          }
+        }
+      }
     },
     "5 seconds" : {
-      "comment" : "Used to select a sampling period"
+      "comment" : "Used to select a sampling period",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "5 seconds"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "5 seconds"
+          }
+        }
+      }
     },
     "10 seconds" : {
-      "comment" : "Used to select a sampling period"
+      "comment" : "Used to select a sampling period",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "10 seconds"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "10 seconds"
+          }
+        }
+      }
     },
     "15 seconds" : {
-      "comment" : "Used to select a sampling period"
+      "comment" : "Used to select a sampling period",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "15 seconds"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "15 seconds"
+          }
+        }
+      }
     },
     "20 seconds" : {
-      "comment" : "Used to select a sampling period"
+      "comment" : "Used to select a sampling period",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "20 seconds"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "20 seconds"
+          }
+        }
+      }
     },
     "25 seconds" : {
-      "comment" : "Used to select a sampling period"
+      "comment" : "Used to select a sampling period",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "25 seconds"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "25 seconds"
+          }
+        }
+      }
     },
     "30 seconds" : {
-      "comment" : "Used to select a sampling period"
+      "comment" : "Used to select a sampling period",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "30 seconds"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "30 seconds"
+          }
+        }
+      }
     },
     "35 seconds" : {
-      "comment" : "Used to select a sampling period"
+      "comment" : "Used to select a sampling period",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "35 seconds"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "35 seconds"
+          }
+        }
+      }
     },
     "40 seconds" : {
-      "comment" : "Used to select a sampling period"
+      "comment" : "Used to select a sampling period",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "40 seconds"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "40 seconds"
+          }
+        }
+      }
     },
     "45 seconds" : {
-      "comment" : "Used to select a sampling period"
+      "comment" : "Used to select a sampling period",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "45 seconds"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "45 seconds"
+          }
+        }
+      }
     },
     "45°" : {
-      "comment" : "Used to indicate a rotation angle in degrees"
+      "comment" : "Used to indicate a rotation angle in degrees",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "45°"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "45°"
+          }
+        }
+      }
     },
     "50 seconds" : {
-      "comment" : "Used to select a sampling period"
+      "comment" : "Used to select a sampling period",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "50 seconds"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "50 seconds"
+          }
+        }
+      }
     },
     "55 seconds" : {
-      "comment" : "Used to select a sampling period"
+      "comment" : "Used to select a sampling period",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "55 seconds"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "55 seconds"
+          }
+        }
+      }
     },
     "90°" : {
-      "comment" : "Used to indicate a rotation angle in degrees"
+      "comment" : "Used to indicate a rotation angle in degrees",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "90°"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "90°"
+          }
+        }
+      }
     },
     "135°" : {
-      "comment" : "Used to indicate a rotation angle in degrees"
+      "comment" : "Used to indicate a rotation angle in degrees",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "135°"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "135°"
+          }
+        }
+      }
     },
     "180°" : {
-      "comment" : "Used to indicate a rotation angle in degrees"
+      "comment" : "Used to indicate a rotation angle in degrees",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "180°"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "180°"
+          }
+        }
+      }
     },
     "225°" : {
-      "comment" : "Used to indicate a rotation angle in degrees"
+      "comment" : "Used to indicate a rotation angle in degrees",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "225°"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "225°"
+          }
+        }
+      }
     },
     "270°" : {
-      "comment" : "Used to indicate a rotation angle in degrees"
+      "comment" : "Used to indicate a rotation angle in degrees",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "270°"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "270°"
+          }
+        }
+      }
     },
     "315°" : {
-      "comment" : "Used to indicate a rotation angle in degrees"
+      "comment" : "Used to indicate a rotation angle in degrees",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "315°"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "315°"
+          }
+        }
+      }
     },
     "ACDI" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ACDI"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ACDI"
+          }
+        }
+      }
     },
     "Activated" : {
-      "comment" : "Used to indicate a layout's state"
+      "comment" : "Used to indicate a layout's state",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activated"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activated"
+          }
+        }
+      }
     },
     "Air Build Up" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Air Build Up"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Air Build Up"
+          }
+        }
+      }
     },
     "Air Compressor" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Air Compressor"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Air Compressor"
+          }
+        }
+      }
     },
     "Air Dump" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Air Dump"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Air Dump"
+          }
+        }
+      }
     },
     "Air Pump" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Air Pump"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Air Pump"
+          }
+        }
+      }
     },
     "Alternate Clock 1" : {
-      "comment" : "Used to indicate a clock's type"
+      "comment" : "Used to indicate a clock's type",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alternate Clock 1"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alternate Clock 1"
+          }
+        }
+      }
     },
     "Alternate Clock 2" : {
-      "comment" : "Used to indicate a clock's type"
+      "comment" : "Used to indicate a clock's type",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alternate Clock 2"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alternate Clock 2"
+          }
+        }
+      }
     },
     "Announce" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Announce"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Announce"
+          }
+        }
+      }
     },
     "Application" : {
-      "comment" : "Used to create a default OpenLCB virtual name"
+      "comment" : "Used to create a default OpenLCB virtual name",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Application"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Application"
+          }
+        }
+      }
     },
     "Application Node" : {
-      "comment" : "Used to describe an OpenLCB virtual node"
+      "comment" : "Used to describe an OpenLCB virtual node",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Application Node"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Application Node"
+          }
+        }
+      }
     },
     "Application Node ID" : {
-      "comment" : "Used for the title of the Application Node ID box"
+      "comment" : "Used for the title of the Application Node ID box",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Application Node ID"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Application Node ID"
+          }
+        }
+      }
     },
     "Are you sure that you wish to reset this node to factory defaults?" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Are you sure that you wish to reset this node to factory defaults?"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Are you sure that you wish to reset this node to factory defaults?"
+          }
+        }
+      }
     },
     "Ash Dump" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ash Dump"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ash Dump"
+          }
+        }
+      }
     },
     "Auto Uncouple Cycle" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auto Uncouple Cycle"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auto Uncouple Cycle"
+          }
+        }
+      }
     },
     "AWS Bell" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AWS Bell"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AWS Bell"
+          }
+        }
+      }
     },
     "AWS Horn" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AWS Horn"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AWS Horn"
+          }
+        }
+      }
     },
     "Bell" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bell"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bell"
+          }
+        }
+      }
     },
     "Bidirectional" : {
-      "comment" : "Used by combobox to indicate that trains can travel in both directions in the track block"
+      "comment" : "Used by combobox to indicate that trains can travel in both directions in the track block",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bidirectional"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bidirectional"
+          }
+        }
+      }
     },
     "Binary" : {
-      "comment" : "Used by combobox to select number base for display"
+      "comment" : "Used by combobox to select number base for display",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Binary"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Binary"
+          }
+        }
+      }
     },
     "Blow Down" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blow Down"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blow Down"
+          }
+        }
+      }
     },
     "Blower" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blower"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blower"
+          }
+        }
+      }
     },
     "Brake" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brake"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brake"
+          }
+        }
+      }
     },
     "Brake Release" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brake Release"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brake Release"
+          }
+        }
+      }
     },
     "Brake Squeal" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brake Squeal"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brake Squeal"
+          }
+        }
+      }
     },
     "c" : {
-      "comment" : "Used for the Clear Global Emergency Stop menu key equivalent"
+      "comment" : "Used for the Clear Global Emergency Stop menu key equivalent",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "c"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "c"
+          }
+        }
+      }
     },
     "Cab Chatter" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cab Chatter"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cab Chatter"
+          }
+        }
+      }
     },
     "Cab Light" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cab Light"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cab Light"
+          }
+        }
+      }
     },
     "CAN Gateway" : {
-      "comment" : "Used to create a default OpenLCB virtual name"
+      "comment" : "Used to create a default OpenLCB virtual name",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CAN Gateway"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CAN Gateway"
+          }
+        }
+      }
     },
     "CAN Gateway Node" : {
-      "comment" : "Used to describe an OpenLCB virtual node"
+      "comment" : "Used to describe an OpenLCB virtual node",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CAN Gateway Node"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CAN Gateway Node"
+          }
+        }
+      }
     },
     "CDI: %@ (%@)" : {
       "localizations" : {
@@ -201,74 +913,420 @@
             "state" : "new",
             "value" : "CDI: %1$@ (%2$@)"
           }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CDI: %@ (%@)"
+          }
+        }
+      }
+    },
+    "Centimeters" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Centimeters"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Centimetres"
+          }
+        }
+      }
+    },
+    "Centimeters/Second" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Centimeters/Second"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Centimetres/Second"
+          }
         }
       }
     },
     "Character" : {
-      "comment" : "Used by combobox to select option to display number as UTF8 character"
+      "comment" : "Used by combobox to select option to display number as UTF8 character",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Character"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Character"
+          }
+        }
+      }
     },
     "Clear" : {
-      "comment" : "Used for the Clear Layout Selection button title"
+      "comment" : "Used for the Clear Layout Selection button title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clear"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clear"
+          }
+        }
+      }
     },
     "Clear Global Emergency Stop" : {
-      "comment" : "Used for the Clear Global Emergency Stop menu item title"
+      "comment" : "Used for the Clear Global Emergency Stop menu item title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clear Global Emergency Stop"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clear Global Emergency Stop"
+          }
+        }
+      }
     },
     "Clock Node ID" : {
-      "comment" : "Used to indicate that a custom clock should use the clock node Id"
+      "comment" : "Used to indicate that a custom clock should use the clock node Id",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clock Node ID"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clock Node ID"
+          }
+        }
+      }
     },
     "Closed" : {
-      "comment" : "Used to indicate the state of a turnout"
+      "comment" : "Used to indicate the state of a turnout",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Closed"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Closed"
+          }
+        }
+      }
     },
     "Coasting" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Coasting"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Coasting"
+          }
+        }
+      }
     },
     "Code 55" : {
-      "comment" : "Used to indicate the track code"
+      "comment" : "Used to indicate the track code",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Code 55"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Code 55"
+          }
+        }
+      }
     },
     "Code 60" : {
-      "comment" : "Used to indicate the track code"
+      "comment" : "Used to indicate the track code",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Code 60"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Code 60"
+          }
+        }
+      }
     },
     "Code 70" : {
-      "comment" : "Used to indicate the track code"
+      "comment" : "Used to indicate the track code",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Code 70"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Code 70"
+          }
+        }
+      }
     },
     "Code 75" : {
-      "comment" : "Used to indicate the track code"
+      "comment" : "Used to indicate the track code",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Code 75"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Code 75"
+          }
+        }
+      }
     },
     "Code 80" : {
-      "comment" : "Used to indicate the track code"
+      "comment" : "Used to indicate the track code",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Code 80"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Code 80"
+          }
+        }
+      }
     },
     "Code 83" : {
-      "comment" : "Used to indicate the track code"
+      "comment" : "Used to indicate the track code",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Code 83"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Code 83"
+          }
+        }
+      }
     },
     "Code 100" : {
-      "comment" : "Used to indicate the track code"
+      "comment" : "Used to indicate the track code",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Code 100"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Code 100"
+          }
+        }
+      }
     },
     "Code 124" : {
-      "comment" : "Used to indicate the track code"
+      "comment" : "Used to indicate the track code",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Code 124"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Code 124"
+          }
+        }
+      }
     },
     "Code 143" : {
-      "comment" : "Used to indicate the track code"
+      "comment" : "Used to indicate the track code",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Code 143"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Code 143"
+          }
+        }
+      }
     },
     "Code 200" : {
-      "comment" : "Used to indicate the track code"
+      "comment" : "Used to indicate the track code",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Code 200"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Code 200"
+          }
+        }
+      }
     },
     "Code 250" : {
-      "comment" : "Used to indicate the track code"
+      "comment" : "Used to indicate the track code",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Code 250"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Code 250"
+          }
+        }
+      }
     },
     "Common" : {
-      "comment" : "Used to indicate a LocoNet command station slot status"
+      "comment" : "Used to indicate a LocoNet command station slot status",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Common"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Common"
+          }
+        }
+      }
     },
     "Computer Date & Time" : {
-      "comment" : "Used to indicate what is the initial date and time setting for a clock"
+      "comment" : "Used to indicate what is the initial date and time setting for a clock",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Computer Date & Time"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Computer Date & Time"
+          }
+        }
+      }
     },
     "Configuration" : {
-      "comment" : "Used for the Configuration menu item title"
+      "comment" : "Used for the Configuration menu item title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configuration"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configuration"
+          }
+        }
+      }
     },
     "Configuration Tool" : {
-      "comment" : "Used to create a default OpenLCB virtual name"
+      "comment" : "Used to create a default OpenLCB virtual name",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configuration Tool"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configuration Tool"
+          }
+        }
+      }
     },
     "Configuration Tool Node" : {
-      "comment" : "Used to describe an OpenLCB virtual node"
+      "comment" : "Used to describe an OpenLCB virtual node",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configuration Tool Node"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configuration Tool Node"
+          }
+        }
+      }
     },
     "Configure %@ (%@)" : {
       "localizations" : {
@@ -277,371 +1335,2256 @@
             "state" : "new",
             "value" : "Configure %1$@ (%2$@)"
           }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configure %@ (%@)"
+          }
         }
       }
     },
     "Couple" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couple"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couple"
+          }
+        }
+      }
     },
     "Coupler Clank" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Coupler Clank"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Coupler Clank"
+          }
+        }
+      }
     },
     "Create" : {
-      "comment" : "Used for the Create Application Node button title"
+      "comment" : "Used for the Create Application Node button title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create"
+          }
+        }
+      }
     },
     "Create Application Node" : {
-      "comment" : "Used for the title of the Create Application Node window\nUsed for the Create Application Node menu item title"
+      "comment" : "Used for the Create Application Node menu item title\nUsed for the title of the Create Application Node window",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create Application Node"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create Application Node"
+          }
+        }
+      }
     },
     "Creating virtual node. This may take several seconds to complete." : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Creating virtual node. This may take several seconds to complete."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Creating virtual node. This may take several seconds to complete."
+          }
+        }
+      }
     },
     "Curve Squeal" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Curve Squeal"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Curve Squeal"
+          }
+        }
+      }
     },
     "Custom Clock" : {
-      "comment" : "Used to indicate a clock's type"
+      "comment" : "Used to indicate a clock's type",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Custom Clock"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Custom Clock"
+          }
+        }
+      }
     },
     "DCC 14" : {
-      "comment" : "Used for LocoNet train control protocol selection"
+      "comment" : "Used for LocoNet train control protocol selection",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DCC 14"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DCC 14"
+          }
+        }
+      }
     },
     "DCC 28" : {
-      "comment" : "Used for LocoNet train control protocol selection"
+      "comment" : "Used for LocoNet train control protocol selection",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DCC 28"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DCC 28"
+          }
+        }
+      }
     },
     "DCC 28 FX" : {
-      "comment" : "Used for LocoNet train control protocol selection"
+      "comment" : "Used for LocoNet train control protocol selection",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DCC 28 FX"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DCC 28 FX"
+          }
+        }
+      }
     },
     "DCC 128" : {
-      "comment" : "Used for LocoNet train control protocol selection"
+      "comment" : "Used for LocoNet train control protocol selection",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DCC 128"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DCC 128"
+          }
+        }
+      }
     },
     "DCC 128 FX" : {
-      "comment" : "Used for LocoNet train control protocol selection"
+      "comment" : "Used for LocoNet train control protocol selection",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DCC 128 FX"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DCC 128 FX"
+          }
+        }
+      }
     },
     "DCC Programmer Tool" : {
-      "comment" : "Used to create a default OpenLCB virtual name\nUsed for the DCC Programmer Tool menu item title"
+      "comment" : "Used for the DCC Programmer Tool menu item title\nUsed to create a default OpenLCB virtual name",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DCC Programmer Tool"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DCC Programmer Tool"
+          }
+        }
+      }
     },
     "DCC Programmer Tool Node" : {
-      "comment" : "Used to describe an OpenLCB virtual node"
+      "comment" : "Used to describe an OpenLCB virtual node",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DCC Programmer Tool Node"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DCC Programmer Tool Node"
+          }
+        }
+      }
     },
     "DCC Programming Track" : {
-      "comment" : "Used to create a default OpenLCB virtual name"
+      "comment" : "Used to create a default OpenLCB virtual name",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DCC Programming Track"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DCC Programming Track"
+          }
+        }
+      }
     },
     "DCC Programming Track Node" : {
-      "comment" : "Used to describe an OpenLCB virtual node"
+      "comment" : "Used to describe an OpenLCB virtual node",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DCC Programming Track Node"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DCC Programming Track Node"
+          }
+        }
+      }
     },
     "Deactivated" : {
-      "comment" : "Used to indicate a layout's state"
+      "comment" : "Used to indicate a layout's state",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deactivated"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deactivated"
+          }
+        }
+      }
     },
     "Decimal" : {
-      "comment" : "Used by combobox to select number base for display"
+      "comment" : "Used by combobox to select number base for display",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Decimal"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Decimal"
+          }
+        }
+      }
     },
     "Decoding CDI and building user interface" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Decoding CDI and building user interface"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Decoding CDI and building user interface"
+          }
+        }
+      }
     },
     "Default Date & Time" : {
-      "comment" : "Used to indicate what is the initial date and time setting for a clock"
+      "comment" : "Used to indicate what is the initial date and time setting for a clock",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Default Date & Time"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Default Date & Time"
+          }
+        }
+      }
     },
     "Delegate" : {
-      "comment" : "Used to indicate that the workstation is delegate mode"
+      "comment" : "Used to indicate that the workstation is delegate mode",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delegate"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delegate"
+          }
+        }
+      }
     },
     "Destination Blind Front" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Destination Blind Front"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Destination Blind Front"
+          }
+        }
+      }
     },
     "Destination Blind Rear" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Destination Blind Rear"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Destination Blind Rear"
+          }
+        }
+      }
     },
     "Diesel" : {
-      "comment" : "Used to indicate that a locomotive is diesel powered"
+      "comment" : "Used to indicate that a locomotive is diesel powered",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diesel"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diesel"
+          }
+        }
+      }
     },
     "Digitrax BXP88" : {
-      "comment" : "Used to create a default OpenLCB virtual name"
+      "comment" : "Used to create a default OpenLCB virtual name",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Digitrax BXP88"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Digitrax BXP88"
+          }
+        }
+      }
     },
     "Digitrax BXP88 Node" : {
-      "comment" : "Used to describe an OpenLCB virtual node"
+      "comment" : "Used to describe an OpenLCB virtual node",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Digitrax BXP88 Node"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Digitrax BXP88 Node"
+          }
+        }
+      }
     },
     "Dimmer" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dimmer"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dimmer"
+          }
+        }
+      }
     },
     "Disabled" : {
-      "comment" : "Used to indicate that something is disabled"
+      "comment" : "Used to indicate that something is disabled",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disabled"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disabled"
+          }
+        }
+      }
     },
     "Ditch Lights" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ditch Lights"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ditch Lights"
+          }
+        }
+      }
     },
     "Doppler Horn" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Doppler Horn"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Doppler Horn"
+          }
+        }
+      }
     },
     "Drive Hold" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drive Hold"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drive Hold"
+          }
+        }
+      }
     },
     "Driver's Door" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Driver's Door"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Driver's Door"
+          }
+        }
+      }
     },
     "Dynamic Brake" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dynamic Brake"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dynamic Brake"
+          }
+        }
+      }
     },
     "Edit" : {
-      "comment" : "Used for the Edit menu item title"
+      "comment" : "Used for the Edit menu item title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit"
+          }
+        }
+      }
     },
     "Electric (Overhead)" : {
-      "comment" : "Used to indicate that a locomotive is electric powered by overhead cables"
+      "comment" : "Used to indicate that a locomotive is electric powered by overhead cables",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Electric (Overhead)"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Electric (Overhead)"
+          }
+        }
+      }
     },
     "Electric (Third Rail)" : {
-      "comment" : "Used to indicate that a locomotive is electric powered by a third rail"
+      "comment" : "Used to indicate that a locomotive is electric powered by a third rail",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Electric (Third Rail)"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Electric (Third Rail)"
+          }
+        }
+      }
     },
     "Electro-diesel" : {
-      "comment" : "Used to indicate that a locomotive is can be powered by diesel or electric power"
+      "comment" : "Used to indicate that a locomotive is can be powered by diesel or electric power",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Electro-diesel"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Electro-diesel"
+          }
+        }
+      }
     },
     "ElectroFrog" : {
-      "comment" : "Used to indicate that a turnout has a powered frog"
+      "comment" : "Used to indicate that a turnout has a powered frog",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ElectroFrog"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ElectroFrog"
+          }
+        }
+      }
     },
     "EM" : {
-      "comment" : "Used to indicate the track gauge"
+      "comment" : "Used to indicate the track gauge",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EM"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EM"
+          }
+        }
+      }
     },
     "Enabled" : {
-      "comment" : "Used to indicate that something is not disabled"
+      "comment" : "Used to indicate that something is not disabled",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enabled"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enabled"
+          }
+        }
+      }
     },
     "Engine" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Engine"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Engine"
+          }
+        }
+      }
     },
     "Enter a node ID from your personal OpenLCB Unique ID Range. This must be a unique value and not be used by any other OpenLCB node. OpenLCB Unique ID Ranges are available on request from the OpenLCB website. The Application Node create process cannot be undone so check the node ID carefully before you press the Create button." : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter a node ID from your personal OpenLCB Unique ID Range. This must be a unique value and not be used by any other OpenLCB node. OpenLCB Unique ID Ranges are available on request from the OpenLCB website. The Application Node create process cannot be undone so check the node ID carefully before you press the Create button."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter a node ID from your personal OpenLCB Unique ID Range. This must be a unique value and not be used by any other OpenLCB node. OpenLCB Unique ID Ranges are available on request from the OpenLCB website. The Application Node create process cannot be undone so check the node ID carefully before you press the Create button."
+          }
+        }
+      }
     },
     "Error" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error"
+          }
+        }
+      }
     },
     "Even Parity" : {
-      "comment" : "Used to indicate that the serial port is configured for even parity"
+      "comment" : "Used to indicate that the serial port is configured for even parity",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Even Parity"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Even Parity"
+          }
+        }
+      }
     },
     "Exhaust Fan" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exhaust Fan"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exhaust Fan"
+          }
+        }
+      }
     },
     "Fan Operation" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fan Operation"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fan Operation"
+          }
+        }
+      }
     },
     "Far Light" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Far Light"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Far Light"
+          }
+        }
+      }
     },
     "Fast Clock" : {
-      "comment" : "Used to indicate a clock's type\nUsed for the Fast Clock menu item title"
+      "comment" : "Used for the Fast Clock menu item title\nUsed to indicate a clock's type",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fast Clock"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fast Clock"
+          }
+        }
+      }
+    },
+    "Feet" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feet"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feet"
+          }
+        }
+      }
+    },
+    "Feet/Second" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feet/Second"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feet/Second"
+          }
+        }
+      }
     },
     "Flange Squeal" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Flange Squeal"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Flange Squeal"
+          }
+        }
+      }
     },
     "Forward" : {
-      "comment" : "Used to indicate that the train is moving in the forward direction"
+      "comment" : "Used to indicate that the train is moving in the forward direction",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forward"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forward"
+          }
+        }
+      }
     },
     "Free" : {
-      "comment" : "Used to indicate a LocoNet command station slot status"
+      "comment" : "Used to indicate a LocoNet command station slot status",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Free"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Free"
+          }
+        }
+      }
     },
     "Generic Virtual" : {
-      "comment" : "Used to create a default OpenLCB virtual name"
+      "comment" : "Used to create a default OpenLCB virtual name",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Generic Virtual"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Generic Virtual"
+          }
+        }
+      }
     },
     "Generic Virtual Node" : {
-      "comment" : "Used to describe an OpenLCB virtual node"
+      "comment" : "Used to describe an OpenLCB virtual node",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Generic Virtual Node"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Generic Virtual Node"
+          }
+        }
+      }
     },
     "Getting CDI" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Getting CDI"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Getting CDI"
+          }
+        }
+      }
     },
     "Global Emergency Stop" : {
-      "comment" : "Used for the Global Emergency Stop menu item title"
+      "comment" : "Used for the Global Emergency Stop menu item title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Global Emergency Stop"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Global Emergency Stop"
+          }
+        }
+      }
     },
     "Global Power Off" : {
-      "comment" : "Used for the Global Power Off menu item title"
+      "comment" : "Used for the Global Power Off menu item title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Global Power Off"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Global Power Off"
+          }
+        }
+      }
     },
     "Global Power On" : {
-      "comment" : "Used for the Global Power On menu item title"
+      "comment" : "Used for the Global Power On menu item title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Global Power On"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Global Power On"
+          }
+        }
+      }
     },
     "Guard's Whistle" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guard's Whistle"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guard's Whistle"
+          }
+        }
+      }
     },
     "Headlight" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Headlight"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Headlight"
+          }
+        }
+      }
     },
     "Heavy Load" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Heavy Load"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Heavy Load"
+          }
+        }
+      }
     },
     "Hex" : {
-      "comment" : "Used by combobox to select number base for display"
+      "comment" : "Used by combobox to select number base for display",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hex"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hex"
+          }
+        }
+      }
     },
     "Horn" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Horn"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Horn"
+          }
+        }
+      }
     },
     "Identification" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Identification"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Identification"
+          }
+        }
+      }
     },
     "Idle" : {
-      "comment" : "Used to indicate a LocoNet command station slot status"
+      "comment" : "Used to indicate a LocoNet command station slot status",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Idle"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Idle"
+          }
+        }
+      }
     },
     "In Use" : {
-      "comment" : "Used to indicate a LocoNet command station slot status"
+      "comment" : "Used to indicate a LocoNet command station slot status",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In Use"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In Use"
+          }
+        }
+      }
+    },
+    "Inches" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inches"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inches"
+          }
+        }
+      }
+    },
+    "Inches/Second" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inches/Second"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inches/Second"
+          }
+        }
+      }
     },
     "Initializing" : {
-      "comment" : "Used to indicate that the workstation is initializing"
+      "comment" : "Used to indicate that the workstation is initializing",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Initializing"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Initializing"
+          }
+        }
+      }
     },
     "Injector" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Injector"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Injector"
+          }
+        }
+      }
     },
     "InsulFrog" : {
-      "comment" : "Used to indicate that turnout has an insulated frog"
+      "comment" : "Used to indicate that turnout has an insulated frog",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "InsulFrog"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "InsulFrog"
+          }
+        }
+      }
     },
     "Interior Lights" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Interior Lights"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Interior Lights"
+          }
+        }
+      }
+    },
+    "Kilometers" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kilometers"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Kilometres"
+          }
+        }
+      }
+    },
+    "Kilometers/Hour" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kilometers/Hour"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Kilometres/Hour"
+          }
+        }
+      }
     },
     "l" : {
-      "comment" : "Used for the Select Layout menu key equivalent"
+      "comment" : "Used for the Select Layout menu key equivalent",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "l"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "l"
+          }
+        }
+      }
     },
     "Layout" : {
-      "comment" : "Used to create a default OpenLCB virtual name"
+      "comment" : "Used to create a default OpenLCB virtual name",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Layout"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Layout"
+          }
+        }
+      }
     },
     "Layout Node" : {
-      "comment" : "Used to describe an OpenLCB virtual node"
+      "comment" : "Used to describe an OpenLCB virtual node",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Layout Node"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Layout Node"
+          }
+        }
+      }
     },
     "LCC/OpenLCB Network" : {
-      "comment" : "Used for the LCC/OpenLCB Network menu item title"
+      "comment" : "Used for the LCC/OpenLCB Network menu item title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LCC/OpenLCB Network"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LCC/OpenLCB Network"
+          }
+        }
+      }
     },
     "LCC/OpenLCB Traffic Monitor" : {
-      "comment" : "Used for the LCC/OpenLCB Traffic Monitor menu item title"
+      "comment" : "Used for the LCC/OpenLCB Traffic Monitor menu item title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LCC/OpenLCB Traffic Monitor"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LCC/OpenLCB Traffic Monitor"
+          }
+        }
+      }
     },
     "Light" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Light"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Light"
+          }
+        }
+      }
     },
     "Lights Off Front" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lights Off Front"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lights Off Front"
+          }
+        }
+      }
     },
     "Lights Off Rear" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lights Off Rear"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lights Off Rear"
+          }
+        }
+      }
     },
     "LocoNet Dashboard" : {
-      "comment" : "Used for the LocoNet Dashboard menu item title"
+      "comment" : "Used for the LocoNet Dashboard menu item title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LocoNet Dashboard"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LocoNet Dashboard"
+          }
+        }
+      }
     },
     "LocoNet Firmware Update" : {
-      "comment" : "Used for the LocoNet Firmware Update menu item title"
+      "comment" : "Used for the LocoNet Firmware Update menu item title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LocoNet Firmware Update"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LocoNet Firmware Update"
+          }
+        }
+      }
     },
     "LocoNet Monitor" : {
-      "comment" : "Used to create a default OpenLCB virtual name"
+      "comment" : "Used to create a default OpenLCB virtual name",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LocoNet Monitor"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LocoNet Monitor"
+          }
+        }
+      }
     },
     "LocoNet Monitor Node" : {
-      "comment" : "Used to describe an OpenLCB virtual node"
+      "comment" : "Used to describe an OpenLCB virtual node",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LocoNet Monitor Node"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LocoNet Monitor Node"
+          }
+        }
+      }
     },
     "LocoNet Slot View" : {
-      "comment" : "Used for the LocoNet Slot View menu item title"
+      "comment" : "Used for the LocoNet Slot View menu item title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LocoNet Slot View"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LocoNet Slot View"
+          }
+        }
+      }
     },
     "LocoNet Traffic Monitor" : {
-      "comment" : "Used for the LocoNet Traffic Monitor menu item title"
+      "comment" : "Used for the LocoNet Traffic Monitor menu item title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LocoNet Traffic Monitor"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LocoNet Traffic Monitor"
+          }
+        }
+      }
     },
     "LocoNet Wireless Setup" : {
-      "comment" : "Used for the LocoNet Wireless Setup menu item title"
+      "comment" : "Used for the LocoNet Wireless Setup menu item title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LocoNet Wireless Setup"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LocoNet Wireless Setup"
+          }
+        }
+      }
     },
     "Long Whistle" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Long Whistle"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Long Whistle"
+          }
+        }
+      }
     },
     "Machine Room Lights" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Machine Room Lights"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Machine Room Lights"
+          }
+        }
+      }
     },
     "Manual" : {
-      "comment" : "Used to indicate turnout motor type"
+      "comment" : "Used to indicate turnout motor type",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manual"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manual"
+          }
+        }
+      }
     },
     "Manual Notch Down" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manual Notch Down"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manual Notch Down"
+          }
+        }
+      }
     },
     "Manual Notch Up" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manual Notch Up"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manual Notch Up"
+          }
+        }
+      }
     },
     "Manual Notching Logic" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manual Notching Logic"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manual Notching Logic"
+          }
+        }
+      }
     },
     "Master" : {
-      "comment" : "Used to indicate that the workstation is the master mode"
+      "comment" : "Used to indicate that the workstation is the master mode",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Master"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Master"
+          }
+        }
+      }
     },
     "Master (generator)" : {
-      "comment" : "Used to indicate a clock's operating mode"
+      "comment" : "Used to indicate a clock's operating mode",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Master (generator)"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Master (generator)"
+          }
+        }
+      }
     },
     "Maximum Revs" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maximum Revs"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maximum Revs"
+          }
+        }
+      }
+    },
+    "Meters" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meters"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Metres"
+          }
+        }
+      }
+    },
+    "Meters/Second" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meters/Second"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Metres/Second"
+          }
+        }
+      }
+    },
+    "Miles" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Miles"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Miles"
+          }
+        }
+      }
+    },
+    "Miles.Chains" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Miles.Chains"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Miles.Chains"
+          }
+        }
+      }
+    },
+    "Miles/Hour" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Miles/Hour"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Miles/Hour"
+          }
+        }
+      }
+    },
+    "Millimeters" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Millimeters"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Millimetres"
+          }
+        }
+      }
     },
     "Momentum" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Momentum"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Momentum"
+          }
+        }
+      }
     },
     "Motorola Trinary" : {
-      "comment" : "Used for LocoNet train control protocol selection"
+      "comment" : "Used for LocoNet train control protocol selection",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Motorola Trinary"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Motorola Trinary"
+          }
+        }
+      }
     },
     "Moving Average" : {
-      "comment" : "Used by combobox to select curve fitting method)"
+      "comment" : "Used by combobox to select curve fitting method)",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Moving Average"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Moving Average"
+          }
+        }
+      }
     },
     "Mute" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mute"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mute"
+          }
+        }
+      }
     },
     "N" : {
-      "comment" : "Used to indicate the track gauge"
+      "comment" : "Used to indicate the track gauge",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "N"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "N"
+          }
+        }
+      }
     },
     "New" : {
-      "comment" : "Used for the New menu item title"
+      "comment" : "Used for the New menu item title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New"
+          }
+        }
+      }
     },
     "Next" : {
-      "comment" : "Used to describe the direction of the next block in respect of a train route"
+      "comment" : "Used to describe the direction of the next block in respect of a train route",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next"
+          }
+        }
+      }
     },
     "No" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No"
+          }
+        }
+      }
     },
     "No Flow Control" : {
-      "comment" : "Used to indicate that serial port does not use hardware flow control"
+      "comment" : "Used to indicate that serial port does not use hardware flow control",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Flow Control"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Flow Control"
+          }
+        }
+      }
     },
     "No Parity" : {
-      "comment" : "Used to indicate that the serial port is configured for no parity bit"
+      "comment" : "Used to indicate that the serial port is configured for no parity bit",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Parity"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Parity"
+          }
+        }
+      }
     },
     "Node ID" : {
-      "comment" : "Used for title of the Node ID segment of a CDI"
+      "comment" : "Used for title of the Node ID segment of a CDI",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Node ID"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Node ID"
+          }
+        }
+      }
     },
     "Not Electrified" : {
-      "comment" : "Used to indicate that the track is not electrified, i.e. only steam and diesels can use it"
+      "comment" : "Used to indicate that the track is not electrified, i.e. only steam and diesels can use it",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not Electrified"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not Electrified"
+          }
+        }
+      }
     },
     "o" : {
-      "comment" : "Used for the Global Power Off menu key equivalent"
+      "comment" : "Used for the Global Power Off menu key equivalent",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "o"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "o"
+          }
+        }
+      }
     },
     "O" : {
-      "comment" : "Used to indicate the track gauge"
+      "comment" : "Used to indicate the track gauge",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O"
+          }
+        }
+      }
     },
     "Octal" : {
-      "comment" : "Used by combobox to select number base for display"
+      "comment" : "Used by combobox to select number base for display",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Octal"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Octal"
+          }
+        }
+      }
     },
     "Odd Parity" : {
-      "comment" : "Used to indicate that the serial port is configured for odd parity"
+      "comment" : "Used to indicate that the serial port is configured for odd parity",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Odd Parity"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Odd Parity"
+          }
+        }
+      }
     },
     "OK" : {
-      "comment" : "Used for the OK button title to say that all is complete"
+      "comment" : "Used for the OK button title to say that all is complete",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        }
+      }
     },
     "OO/HO" : {
-      "comment" : "Used to indicate the track gauge"
+      "comment" : "Used to indicate the track gauge",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OO/HO"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OO/HO"
+          }
+        }
+      }
     },
     "OOO" : {
-      "comment" : "Used to indicate the track gauge"
+      "comment" : "Used to indicate the track gauge",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OOO"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OOO"
+          }
+        }
+      }
     },
     "Operations" : {
-      "comment" : "Used for the Operations menu item title"
+      "comment" : "Used for the Operations menu item title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Operations"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Operations"
+          }
+        }
+      }
     },
     "Overhead" : {
-      "comment" : "Used to indicate that the track models overhead electrification"
+      "comment" : "Used to indicate that the track models overhead electrification",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Overhead"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Overhead"
+          }
+        }
+      }
     },
     "p" : {
-      "comment" : "Used for the Global Power On menu key equivalent"
+      "comment" : "Used for the Global Power On menu key equivalent",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "p"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "p"
+          }
+        }
+      }
     },
     "P4" : {
-      "comment" : "Used to indicate the track gauge"
+      "comment" : "Used to indicate the track gauge",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "P4"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "P4"
+          }
+        }
+      }
     },
     "Pantograph" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pantograph"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pantograph"
+          }
+        }
+      }
     },
     "Passenger Door Slams" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Passenger Door Slams"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Passenger Door Slams"
+          }
+        }
+      }
     },
     "Previous" : {
-      "comment" : "Used to describe the direction of the previous block in respect of a train route"
+      "comment" : "Used to describe the direction of the previous block in respect of a train route",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Previous"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Previous"
+          }
+        }
+      }
     },
     "Radiator Fan" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Radiator Fan"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Radiator Fan"
+          }
+        }
+      }
     },
     "Rail Joints" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rail Joints"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rail Joints"
+          }
+        }
+      }
     },
     "Reading Configuration Description Information - %lld bytes" : {
       "localizations" : {
@@ -662,11 +3605,35 @@
               }
             }
           }
+        },
+        "en-GB" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Reading Configuration Description Information - %lld byte"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Reading Configuration Description Information - %lld bytes"
+                }
+              }
+            }
+          }
         }
       }
     },
     "Reading Variables - %lld bytes" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reading Variables - %lld bytes"
+          }
+        },
         "en-GB" : {
           "variations" : {
             "plural" : {
@@ -688,226 +3655,1255 @@
       }
     },
     "Real Time Clock" : {
-      "comment" : "Used to indicate a clock's type"
+      "comment" : "Used to indicate a clock's type",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Real Time Clock"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Real Time Clock"
+          }
+        }
+      }
     },
     "Reboot" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reboot"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reboot"
+          }
+        }
+      }
     },
     "Refresh All" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Refresh All"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Refresh All"
+          }
+        }
+      }
     },
     "Reserved 1" : {
-      "comment" : "Used for LocoNet train control protocol selection"
+      "comment" : "Used for LocoNet train control protocol selection",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reserved 1"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reserved 1"
+          }
+        }
+      }
     },
     "Reserved 2" : {
-      "comment" : "Used for LocoNet train control protocol selection"
+      "comment" : "Used for LocoNet train control protocol selection",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reserved 2"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reserved 2"
+          }
+        }
+      }
     },
     "Reset to Defaults" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reset to Defaults"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reset to Defaults"
+          }
+        }
+      }
     },
     "Reverse" : {
-      "comment" : "Used to indicate that the train is moving in the reverse direction"
+      "comment" : "Used to indicate that the train is moving in the reverse direction",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reverse"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reverse"
+          }
+        }
+      }
     },
     "Reverser" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reverser"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reverser"
+          }
+        }
+      }
     },
     "RTS/CTS" : {
-      "comment" : "Used to indicate that serial port uses the RTS/CTS lines for hardware flow control"
+      "comment" : "Used to indicate that serial port uses the RTS/CTS lines for hardware flow control",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RTS/CTS"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RTS/CTS"
+          }
+        }
+      }
     },
     "Running" : {
-      "comment" : "Used to indicate a clock is running"
+      "comment" : "Used to indicate a clock is running",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Running"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Running"
+          }
+        }
+      }
     },
     "s" : {
-      "comment" : "Used for the Global Emergency Stop menu key equivalent"
+      "comment" : "Used for the Global Emergency Stop menu key equivalent",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "s"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "s"
+          }
+        }
+      }
     },
     "S" : {
-      "comment" : "Used to indicate the track gauge"
+      "comment" : "Used to indicate the track gauge",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "S"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "S"
+          }
+        }
+      }
     },
     "Safety" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Safety"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Safety"
+          }
+        }
+      }
     },
     "Sanding" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sanding"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sanding"
+          }
+        }
+      }
     },
     "Scale 7" : {
-      "comment" : "Used to indicate the track gauge"
+      "comment" : "Used to indicate the track gauge",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scale 7"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scale 7"
+          }
+        }
+      }
     },
     "Select" : {
-      "comment" : "Used for the Select Layout button title"
+      "comment" : "Used for the Select Layout button title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select"
+          }
+        }
+      }
     },
     "Select Layout" : {
-      "comment" : "Used for the title of the Select Layout window\nUsed for the Select Layout menu item"
+      "comment" : "Used for the title of the Select Layout window\nUsed for the Select Layout menu item",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select Layout"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select Layout"
+          }
+        }
+      }
     },
     "Short Whistle" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Short Whistle"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Short Whistle"
+          }
+        }
+      }
     },
     "Shoveling" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shoveling"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shoveling"
+          }
+        }
+      }
     },
     "Show CDI Text" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show CDI Text"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show CDI Text"
+          }
+        }
+      }
     },
     "Shunting Mode" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shunting Mode"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shunting Mode"
+          }
+        }
+      }
     },
     "Slave (consumer)" : {
-      "comment" : "Used to indicate a clock's operating mode"
+      "comment" : "Used to indicate a clock's operating mode",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Slave (consumer)"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Slave (consumer)"
+          }
+        }
+      }
     },
     "Slow Motion" : {
-      "comment" : "Used to indicate turnout motor type"
+      "comment" : "Used to indicate turnout motor type",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Slow Motion"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Slow Motion"
+          }
+        }
+      }
     },
     "Smoke" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Smoke"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Smoke"
+          }
+        }
+      }
     },
     "Solenoid" : {
-      "comment" : "Used to indicate turnout motor type"
+      "comment" : "Used to indicate turnout motor type",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solenoid"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solenoid"
+          }
+        }
+      }
     },
     "Sound Enable" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sound Enable"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sound Enable"
+          }
+        }
+      }
     },
     "Sound Fade" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sound Fade"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sound Fade"
+          }
+        }
+      }
     },
     "Spirax Valve" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spirax Valve"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spirax Valve"
+          }
+        }
+      }
     },
     "Steam" : {
-      "comment" : "Used to indicate that a locomotive is steam powered"
+      "comment" : "Used to indicate that a locomotive is steam powered",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Steam"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Steam"
+          }
+        }
+      }
     },
     "Steam Generator" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Steam Generator"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Steam Generator"
+          }
+        }
+      }
     },
     "Step Lights" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Step Lights"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Step Lights"
+          }
+        }
+      }
     },
     "Stop" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stop"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stop"
+          }
+        }
+      }
     },
     "Stopped" : {
-      "comment" : "Used to indicate a clock is stopped"
+      "comment" : "Used to indicate a clock is stopped",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stopped"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stopped"
+          }
+        }
+      }
     },
     "Straight Line" : {
-      "comment" : "Used by combobox to select curve fitting method)"
+      "comment" : "Used by combobox to select curve fitting method)",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Straight Line"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Straight Line"
+          }
+        }
+      }
     },
     "Switch Board" : {
-      "comment" : "Used for the Switch Board menu item title"
+      "comment" : "Used for the Switch Board menu item title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Switch Board"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Switch Board"
+          }
+        }
+      }
     },
     "Switchboard Item" : {
-      "comment" : "Used to create a default OpenLCB virtual name"
+      "comment" : "Used to create a default OpenLCB virtual name",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Switchboard Item"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Switchboard Item"
+          }
+        }
+      }
     },
     "Switchboard Item Node" : {
-      "comment" : "Used to describe an OpenLCB virtual node"
+      "comment" : "Used to describe an OpenLCB virtual node",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Switchboard Item Node"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Switchboard Item Node"
+          }
+        }
+      }
     },
     "Switchboard Panel" : {
-      "comment" : "Used to create a default OpenLCB virtual name"
+      "comment" : "Used to create a default OpenLCB virtual name",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Switchboard Panel"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Switchboard Panel"
+          }
+        }
+      }
     },
     "Switchboard Panel Node" : {
-      "comment" : "Used to describe an OpenLCB virtual node"
+      "comment" : "Used to describe an OpenLCB virtual node",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Switchboard Panel Node"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Switchboard Panel Node"
+          }
+        }
+      }
     },
     "Switching Lights" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Switching Lights"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Switching Lights"
+          }
+        }
+      }
     },
     "t" : {
-      "comment" : "Used for the Throttle menu key equivalent"
+      "comment" : "Used for the Throttle menu key equivalent",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "t"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "t"
+          }
+        }
+      }
     },
     "Tail Lights" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tail Lights"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tail Lights"
+          }
+        }
+      }
     },
     "Third Rail" : {
-      "comment" : "Used to indicate that the track models 3rd rail electrification"
+      "comment" : "Used to indicate that the track models 3rd rail electrification",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Third Rail"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Third Rail"
+          }
+        }
+      }
     },
     "This description will appear in network browsers for this device." : {
-      "comment" : "Used for the description of the user description input field in the CDI"
+      "comment" : "Used for the description of the user description input field in the CDI",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This description will appear in network browsers for this device."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This description will appear in network browsers for this device."
+          }
+        }
+      }
     },
     "This name will appear in network browsers for this device." : {
-      "comment" : "Used for the description of the user name input field in the CDI"
+      "comment" : "Used for the description of the user name input field in the CDI",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This name will appear in network browsers for this device."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This name will appear in network browsers for this device."
+          }
+        }
+      }
     },
     "Throttle" : {
-      "comment" : "Used for the Throttle menu item title"
+      "comment" : "Used for the Throttle menu item title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Throttle"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Throttle"
+          }
+        }
+      }
     },
     "Thrown" : {
-      "comment" : "Used to indicate the state of a turnout"
+      "comment" : "Used to indicate the state of a turnout",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thrown"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thrown"
+          }
+        }
+      }
     },
     "Timeout - write failed" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timeout - write failed"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timeout - write failed"
+          }
+        }
+      }
     },
     "Tools" : {
-      "comment" : "Used for the Tools menu item title"
+      "comment" : "Used for the Tools menu item title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tools"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tools"
+          }
+        }
+      }
     },
     "Train Speed Profiler" : {
-      "comment" : "Used for the Train Speed Profiler menu item title"
+      "comment" : "Used for the Train Speed Profiler menu item title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Train Speed Profiler"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Train Speed Profiler"
+          }
+        }
+      }
     },
     "TT" : {
-      "comment" : "Used to indicate the track gauge"
+      "comment" : "Used to indicate the track gauge",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TT"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TT"
+          }
+        }
+      }
     },
     "TT3" : {
-      "comment" : "Used to indicate the track gauge"
+      "comment" : "Used to indicate the track gauge",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TT3"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TT3"
+          }
+        }
+      }
     },
     "Unassigned" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unassigned"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unassigned"
+          }
+        }
+      }
     },
     "Unavaliable" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unavaliable"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unavaliable"
+          }
+        }
+      }
     },
     "Uncouple" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uncouple"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uncouple"
+          }
+        }
+      }
     },
     "Unidirectional" : {
-      "comment" : "Used by combobox to indicate that trains can travel in one direction only in the track block"
+      "comment" : "Used by combobox to indicate that trains can travel in one direction only in the track block",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unidirectional"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unidirectional"
+          }
+        }
+      }
     },
     "UniFrog" : {
-      "comment" : "Used to indicate that turnout can be configured to have a powered or insulated frog"
+      "comment" : "Used to indicate that turnout can be configured to have a powered or insulated frog",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "UniFrog"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "UniFrog"
+          }
+        }
+      }
     },
     "Unknown" : {
-      "comment" : "Used to indicate the state of a turnout\nUsed to indicate that the type of something is unknown"
+      "comment" : "Used to indicate that the type of something is unknown\nUsed to indicate the state of a turnout",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unknown"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unknown"
+          }
+        }
+      }
     },
     "User Description" : {
-      "comment" : "Used for the title of the User Description input field in CDI"
+      "comment" : "Used for the title of the User Description input field in CDI",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "User Description"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "User Description"
+          }
+        }
+      }
     },
     "User Name" : {
-      "comment" : "Used for the title of the User Name input field in CDI"
+      "comment" : "Used for the title of the User Name input field in CDI",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "User Name"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "User Name"
+          }
+        }
+      }
     },
     "User Specified" : {
-      "comment" : "Used to indicate that a custom clock should use the user specified node Id"
+      "comment" : "Used to indicate that a custom clock should use the user specified node Id",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "User Specified"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "User Specified"
+          }
+        }
+      }
     },
     "View" : {
-      "comment" : "Used for the View menu item title"
+      "comment" : "Used for the View menu item title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "View"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "View"
+          }
+        }
+      }
     },
     "Virtual Clock" : {
-      "comment" : "Used to create a default OpenLCB virtual name"
+      "comment" : "Used to create a default OpenLCB virtual name",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Virtual Clock"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Virtual Clock"
+          }
+        }
+      }
     },
     "Virtual Clock Node" : {
-      "comment" : "Used to describe an OpenLCB virtual node"
+      "comment" : "Used to describe an OpenLCB virtual node",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Virtual Clock Node"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Virtual Clock Node"
+          }
+        }
+      }
     },
     "Virtual LocoNet Gateway" : {
-      "comment" : "Used to create a default OpenLCB virtual name"
+      "comment" : "Used to create a default OpenLCB virtual name",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Virtual LocoNet Gateway"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Virtual LocoNet Gateway"
+          }
+        }
+      }
     },
     "Virtual LocoNet Gateway Node" : {
-      "comment" : "Used to describe an OpenLCB virtual node"
+      "comment" : "Used to describe an OpenLCB virtual node",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Virtual LocoNet Gateway Node"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Virtual LocoNet Gateway Node"
+          }
+        }
+      }
     },
     "Virtual Throttle" : {
-      "comment" : "Used to create a default OpenLCB virtual name"
+      "comment" : "Used to create a default OpenLCB virtual name",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Virtual Throttle"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Virtual Throttle"
+          }
+        }
+      }
     },
     "Virtual Throttle Node" : {
-      "comment" : "Used to describe an OpenLCB virtual node"
+      "comment" : "Used to describe an OpenLCB virtual node",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Virtual Throttle Node"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Virtual Throttle Node"
+          }
+        }
+      }
     },
     "Virtual Train" : {
-      "comment" : "Used to create a default OpenLCB virtual name"
+      "comment" : "Used to create a default OpenLCB virtual name",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Virtual Train"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Virtual Train"
+          }
+        }
+      }
     },
     "Virtual Train Node" : {
-      "comment" : "Used to describe an OpenLCB virtual node"
+      "comment" : "Used to describe an OpenLCB virtual node",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Virtual Train Node"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Virtual Train Node"
+          }
+        }
+      }
     },
     "Water Fill" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Water Fill"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Water Fill"
+          }
+        }
+      }
     },
     "Whistle" : {
-      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects"
+      "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Whistle"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Whistle"
+          }
+        }
+      }
     },
     "Write All" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Write All"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Write All"
+          }
+        }
+      }
     },
     "Write failed" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Write failed"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Write failed"
+          }
+        }
+      }
     },
     "Writing Variables - %lld bytes" : {
       "localizations" : {
@@ -928,14 +4924,58 @@
               }
             }
           }
+        },
+        "en-GB" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Writing Variables - %lld byte"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Writing Variables - %lld bytes"
+                }
+              }
+            }
+          }
         }
       }
     },
     "Yes" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yes"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yes"
+          }
+        }
+      }
     },
     "You may either select any layout stored locally on this MyTrains workstation or an active layout stored on another MyTrains workstation connected to this LCC/OpenLCB network. You can only modify layouts that are stored locally." : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You may either select any layout stored locally on this MyTrains workstation or an active layout stored on another MyTrains workstation connected to this LCC/OpenLCB network. You can only modify layouts that are stored locally."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You may either select any layout stored locally on this MyTrains workstation or an active layout stored on another MyTrains workstation connected to this LCC/OpenLCB network. You can only modify layouts that are stored locally."
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

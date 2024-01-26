@@ -13,11 +13,24 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   
   public override init(nodeId:UInt64) {
     
+    configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: 6, isReadOnly: false, description: "")
+    
     super.init(nodeId: nodeId)
 
     virtualNodeType = MyTrainsVirtualNodeType.applicationNode
+
+    configuration.delegate = self
+
+    memorySpaces[configuration.space] = configuration
+
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressUnitsActualLength)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressUnitsScaleLength)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressUnitsActualDistance)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressUnitsScaleDistance)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressUnitsActualSpeed)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressUnitsScaleSpeed)
     
-    if !memorySpacesInitialized {
+    if true || !memorySpacesInitialized {
       resetToFactoryDefaults()
     }
     
@@ -26,6 +39,73 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   }
   
   // MARK: Private Properties
+  
+  // Configuration variable addresses
+  
+  internal let addressUnitsActualLength   : Int =  0
+  internal let addressUnitsScaleLength    : Int =  1
+  internal let addressUnitsActualDistance : Int =  2
+  internal let addressUnitsScaleDistance  : Int =  3
+  internal let addressUnitsActualSpeed    : Int =  4
+  internal let addressUnitsScaleSpeed     : Int =  5
+
+  internal var configuration : OpenLCBMemorySpace
+
+  // MARK: Public Properties
+  
+  public var unitsActualLength : UnitLength {
+    get {
+      return UnitLength(rawValue: Int(configuration.getUInt8(address: addressUnitsActualLength)!))!
+    }
+    set(value) {
+      configuration.setUInt(address: addressUnitsActualLength, value: UInt8(value.rawValue))
+    }
+  }
+
+  public var unitsScaleLength : UnitLength {
+    get {
+      return UnitLength(rawValue: Int(configuration.getUInt8(address: addressUnitsScaleLength)!))!
+    }
+    set(value) {
+      configuration.setUInt(address: addressUnitsScaleLength, value: UInt8(value.rawValue))
+    }
+  }
+
+  public var unitsActualDistance : UnitLength {
+    get {
+      return UnitLength(rawValue: Int(configuration.getUInt8(address: addressUnitsActualDistance)!))!
+    }
+    set(value) {
+      configuration.setUInt(address: addressUnitsActualDistance, value: UInt8(value.rawValue))
+    }
+  }
+
+  public var unitsScaleDistance : UnitLength {
+    get {
+      return UnitLength(rawValue: Int(configuration.getUInt8(address: addressUnitsScaleDistance)!))!
+    }
+    set(value) {
+      configuration.setUInt(address: addressUnitsScaleDistance, value: UInt8(value.rawValue))
+    }
+  }
+
+  public var unitsActualSpeed : UnitSpeed {
+    get {
+      return UnitSpeed(rawValue: Int(configuration.getUInt8(address: addressUnitsActualSpeed)!))!
+    }
+    set(value) {
+      configuration.setUInt(address: addressUnitsActualSpeed, value: UInt8(value.rawValue))
+    }
+  }
+
+  public var unitsScaleSpeed : UnitSpeed {
+    get {
+      return UnitSpeed(rawValue: Int(configuration.getUInt8(address: addressUnitsScaleSpeed)!))!
+    }
+    set(value) {
+      configuration.setUInt(address: addressUnitsScaleSpeed, value: UInt8(value.rawValue))
+    }
+  }
   
   internal var nextUniqueNodeIdCandidate : UInt64 {
     
@@ -88,8 +168,18 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   // MARK: Private Methods
   
   internal override func resetToFactoryDefaults() {
+    
     super.resetToFactoryDefaults()
+    
+    unitsActualLength   = .centimeters
+    unitsScaleLength    = .meters
+    unitsActualDistance = .centimeters
+    unitsScaleDistance  = .kilometers
+    unitsActualSpeed    = .centimetersPerSecond
+    unitsScaleSpeed     = .kilometersPerHour
+    
     saveMemorySpaces()
+    
   }
   
   internal override func resetReboot() {

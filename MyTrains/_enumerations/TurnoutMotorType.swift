@@ -50,7 +50,7 @@ public enum TurnoutMotorType : Int {
   
   public static let defaultValue : TurnoutMotorType = .manual
   
-  public static let mapPlaceholder = "%%TURNOUT_MOTOR_TYPE%%"
+  public static let mapPlaceholder = CDI.TURNOUT_MOTOR_TYPE
 
   // MARK: Public Class Methods
   

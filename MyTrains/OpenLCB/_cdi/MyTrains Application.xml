@@ -9,6 +9,47 @@
 
 %%ACDI%%
 
+<segment space='253' origin='0'>
+<name>Data Entry and Display Units</name>
+
+<int size='1'>
+<name>Actual Length</name>
+<description>This is used for actual physical lengths on the layout, e.g. the length of a model locomotive or a piece of model track.</description>
+%%UNIT_LENGTH%%
+</int>
+
+<int size='1'>
+<name>Scale Length</name>
+<description>This is used for lengths in the real world, e.g. the length of a prototype locomotive.</description>
+%%UNIT_LENGTH%%
+</int>
+
+<int size='1'>
+<name>Actual Distance</name>
+<description>This is used for actual physical distances on the layout, e.g. the distance of an optical sensor from the start of a piece of track.</description>
+%%UNIT_LENGTH%%
+</int>
+
+<int size='1'>
+<name>Scale Distance</name>
+<description>This is used for distances in the real world, e.g. the distance between 2 prototype stations.</description>
+%%UNIT_LENGTH%%
+</int>
+
+<int size='1'>
+<name>Actual Speed</name>
+<description>This is used for actual speeds on the layout, e.g. the actual speed of a model locomotive moving on the layout.</description>
+%%UNIT_SPEED%%
+</int>
+
+<int size='1'>
+<name>Scale Speed</name>
+<description>This is used for scale speeds, e.g. the speed a model locomotive would be running at in the real world.</description>
+%%UNIT_SPEED%%
+</int>
+
+</segment>
+
 %%VIRTUAL_NODE_CONFIG%%
 
 </cdi>

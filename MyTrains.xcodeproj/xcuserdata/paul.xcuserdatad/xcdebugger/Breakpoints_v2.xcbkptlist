@@ -218,10 +218,10 @@
             filePath = "MyTrains/OpenLCB/_nodes/OpenLCBNodeVirtual.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "513"
-            endingLineNumber = "513"
-            landmarkName = "OpenLCBNodeVirtual"
-            landmarkType = "3">
+            startingLineNumber = "515"
+            endingLineNumber = "515"
+            landmarkName = "setupConfigurationOptions()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -314,8 +314,8 @@
             filePath = "MyTrains/OpenLCB/_nodes/OpenLCBNodeMyTrains.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "334"
-            endingLineNumber = "334"
+            startingLineNumber = "424"
+            endingLineNumber = "424"
             landmarkName = "openLCBMessageReceived(message:)"
             landmarkType = "7">
          </BreakpointContent>

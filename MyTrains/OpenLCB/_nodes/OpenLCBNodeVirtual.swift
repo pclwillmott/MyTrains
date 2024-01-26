@@ -387,6 +387,8 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
         cdi = EnableState.insertMap(cdi: cdi)
         cdi = ClockCustomIdType.insertMap(cdi: cdi)
         cdi = MyTrainsVirtualNodeType.insertMap(cdi: cdi)
+        cdi = UnitLength.insertMap(cdi: cdi)
+        cdi = UnitSpeed.insertMap(cdi: cdi)
                   
         var sorted : [(nodeId:UInt64, name:String)] = []
 

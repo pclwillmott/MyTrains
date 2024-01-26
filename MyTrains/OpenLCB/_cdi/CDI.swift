@@ -30,5 +30,8 @@ enum CDI {
   static let VIRTUAL_NODE_TYPE       = "%%VIRTUAL_NODE_TYPE%%"
   static let LAYOUT_NODES            = "%%LAYOUT_NODES%%"
   static let VIRTUAL_NODE_CONFIG     = "%%VIRTUAL_NODE_CONFIG%%"
+  static let TURNOUT_MOTOR_TYPE      = "%%TURNOUT_MOTOR_TYPE%%"
+  static let UNIT_LENGTH             = "%%UNIT_LENGTH%%"
+  static let UNIT_SPEED              = "%%UNIT_SPEED%%"
 }
 
