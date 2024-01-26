@@ -51,11 +51,13 @@ public enum Orientation : Int {
       .deg315,
     ]
     
-    var map = ""
-    
+    var map = "<default>\(defaultValue.rawValue)</default>\n<map>\n"
+
     for item in items {
       map += "<relation><property>\(item.rawValue)</property><value>\(item.title)</value></relation>\n"
     }
+
+    map += "</map>\n"
 
     return map
     
@@ -65,7 +67,7 @@ public enum Orientation : Int {
   
   public static let defaultValue : Orientation = .deg0
   
-  public static let mapPlaceholder = "%%ORIENTATION%%"
+  public static let mapPlaceholder = CDI.ORIENTATION
 
   // MARK: Public Class Methods
   

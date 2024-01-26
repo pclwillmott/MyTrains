@@ -617,6 +617,9 @@
         }
       }
     },
+    "Argentina" : {
+      "comment" : "This is the name of a country."
+    },
     "Ash Dump" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -633,6 +636,9 @@
           }
         }
       }
+    },
+    "Australia" : {
+      "comment" : "This is the name of a country."
     },
     "Auto Uncouple Cycle" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -821,6 +827,9 @@
         }
       }
     },
+    "Brazil" : {
+      "comment" : "This is the name of a country."
+    },
     "c" : {
       "comment" : "Used for the Clear Global Emergency Stop menu key equivalent",
       "localizations" : {
@@ -906,6 +915,9 @@
         }
       }
     },
+    "Canada" : {
+      "comment" : "This is the name of a country."
+    },
     "CDI: %@ (%@)" : {
       "localizations" : {
         "en" : {
@@ -924,15 +936,9 @@
     },
     "Centimeters" : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Centimeters"
-          }
-        },
         "en-GB" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Centimetres"
           }
         }
@@ -940,15 +946,9 @@
     },
     "Centimeters/Second" : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Centimeters/Second"
-          }
-        },
         "en-GB" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Centimetres/Second"
           }
         }
@@ -970,6 +970,9 @@
           }
         }
       }
+    },
+    "China" : {
+      "comment" : "This is the name of a country."
     },
     "Clear" : {
       "comment" : "Used for the Clear Layout Selection button title",
@@ -2222,6 +2225,9 @@
         }
       }
     },
+    "France" : {
+      "comment" : "This is the name of a country."
+    },
     "Free" : {
       "comment" : "Used to indicate a LocoNet command station slot status",
       "localizations" : {
@@ -2272,6 +2278,9 @@
           }
         }
       }
+    },
+    "Germany" : {
+      "comment" : "This is the name of a country."
     },
     "Getting CDI" : {
       "localizations" : {
@@ -2507,6 +2516,9 @@
         }
       }
     },
+    "India" : {
+      "comment" : "This is the name of a country."
+    },
     "Initializing" : {
       "comment" : "Used to indicate that the workstation is initializing",
       "localizations" : {
@@ -2574,6 +2586,15 @@
           }
         }
       }
+    },
+    "Iran" : {
+      "comment" : "This is the name of a country."
+    },
+    "Italy" : {
+      "comment" : "This is the name of a country."
+    },
+    "Japan" : {
+      "comment" : "This is the name of a country."
     },
     "Kilometers" : {
       "localizations" : {
@@ -3017,12 +3038,6 @@
     },
     "Meters" : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Meters"
-          }
-        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "needs_review",
@@ -3033,12 +3048,6 @@
     },
     "Meters/Second" : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Meters/Second"
-          }
-        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "needs_review",
@@ -3046,6 +3055,9 @@
           }
         }
       }
+    },
+    "Mexico" : {
+      "comment" : "This is the name of a country."
     },
     "Miles" : {
       "localizations" : {
@@ -3348,6 +3360,9 @@
         }
       }
     },
+    "O14" : {
+      "comment" : "Used to indicate the track gauge"
+    },
     "Octal" : {
       "comment" : "Used by combobox to select number base for display",
       "localizations" : {
@@ -3534,6 +3549,9 @@
           }
         }
       }
+    },
+    "Poland" : {
+      "comment" : "This is the name of a country."
     },
     "Previous" : {
       "comment" : "Used to describe the direction of the previous block in respect of a train route",
@@ -3787,6 +3805,9 @@
         }
       }
     },
+    "Romania" : {
+      "comment" : "This is the name of a country."
+    },
     "RTS/CTS" : {
       "comment" : "Used to indicate that serial port uses the RTS/CTS lines for hardware flow control",
       "localizations" : {
@@ -3820,6 +3841,9 @@
           }
         }
       }
+    },
+    "Russia" : {
+      "comment" : "This is the name of a country."
     },
     "s" : {
       "comment" : "Used for the Global Emergency Stop menu key equivalent",
@@ -3924,7 +3948,7 @@
       }
     },
     "Select Layout" : {
-      "comment" : "Used for the title of the Select Layout window\nUsed for the Select Layout menu item",
+      "comment" : "Used for the Select Layout menu item\nUsed for the title of the Select Layout window",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -4108,6 +4132,12 @@
           }
         }
       }
+    },
+    "South Africa" : {
+      "comment" : "This is the name of a country."
+    },
+    "Spain" : {
+      "comment" : "This is the name of a country."
     },
     "Spirax Valve" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -4533,6 +4563,9 @@
         }
       }
     },
+    "Ukraine" : {
+      "comment" : "This is the name of a country."
+    },
     "Unassigned" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -4617,6 +4650,12 @@
           }
         }
       }
+    },
+    "United Kingdom" : {
+      "comment" : "This is the name of a country."
+    },
+    "United States of America" : {
+      "comment" : "This is the name of a country."
     },
     "Unknown" : {
       "comment" : "Used to indicate that the type of something is unknown\nUsed to indicate the state of a turnout",

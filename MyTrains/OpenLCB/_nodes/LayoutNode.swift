@@ -13,7 +13,7 @@ public class LayoutNode : OpenLCBNodeVirtual {
   
   public override init(nodeId:UInt64) {
     
-    configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: 2, isReadOnly: false, description: "")
+    configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: 4, isReadOnly: false, description: "")
     
     super.init(nodeId: nodeId)
     
@@ -25,6 +25,7 @@ public class LayoutNode : OpenLCBNodeVirtual {
 
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressScale)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressLayoutState)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressCountryCode)
 
     if !memorySpacesInitialized {
       resetToFactoryDefaults()
@@ -40,10 +41,20 @@ public class LayoutNode : OpenLCBNodeVirtual {
   
   internal let addressScale       : Int =  0
   internal let addressLayoutState : Int =  1
+  internal let addressCountryCode : Int =  2
 
   // MARK: Public Properties
   
   public var configuration : OpenLCBMemorySpace
+
+  public var countryCode : CountryCode {
+    get {
+      return CountryCode(rawValue: configuration.getUInt16(address: addressCountryCode)!)!
+    }
+    set(value) {
+      configuration.setUInt(address: addressCountryCode, value: value.rawValue)
+    }
+  }
 
   public var scale : Scale {
     get {
@@ -69,6 +80,7 @@ public class LayoutNode : OpenLCBNodeVirtual {
 
   internal override func resetToFactoryDefaults() {
     super.resetToFactoryDefaults()
+    countryCode = .unitedStates
     saveMemorySpaces()
   }
   

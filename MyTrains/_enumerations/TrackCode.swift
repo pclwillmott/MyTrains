@@ -10,13 +10,13 @@ import AppKit
 
 public enum TrackCode : Int {
 
-  case code55  = 0
-  case code60  = 1
-  case code70  = 2
-  case code75  = 3
-  case code80  = 4
-  case code83  = 5
-  case code100 = 6
+  case code100 = 0
+  case code55  = 1
+  case code60  = 2
+  case code70  = 3
+  case code75  = 4
+  case code80  = 5
+  case code83  = 6
   case code124 = 7
   case code143 = 8
   case code200 = 9
@@ -31,13 +31,13 @@ public enum TrackCode : Int {
   // MARK: Private Class Properties
   
   private static let titles : [String] = [
+    String(localized: "Code 100", comment: "Used to indicate the track code"),
     String(localized: "Code 55", comment: "Used to indicate the track code"),
     String(localized: "Code 60", comment: "Used to indicate the track code"),
     String(localized: "Code 70", comment: "Used to indicate the track code"),
     String(localized: "Code 75", comment: "Used to indicate the track code"),
     String(localized: "Code 80", comment: "Used to indicate the track code"),
     String(localized: "Code 83", comment: "Used to indicate the track code"),
-    String(localized: "Code 100", comment: "Used to indicate the track code"),
     String(localized: "Code 124", comment: "Used to indicate the track code"),
     String(localized: "Code 143", comment: "Used to indicate the track code"),
     String(localized: "Code 200", comment: "Used to indicate the track code"),
@@ -60,21 +60,23 @@ public enum TrackCode : Int {
       .code250,
     ]
     
-    var map = ""
-    
+    var map = "<default>\(defaultValue.rawValue)</default>\n<map>\n"
+
     for item in items {
       map += "<relation><property>\(item.rawValue)</property><value>\(item.title)</value></relation>\n"
     }
 
+    map += "</map>\n"
+
     return map
-    
+
   }
   
   // MARK: Public Class Properties
   
   public static var defaultValue : TrackCode = .code100
   
-  public static let mapPlaceholder = "%%TRACK_CODE%%"
+  public static let mapPlaceholder = CDI.TRACK_CODE
 
   // MARK: Public Class Methods
   
@@ -101,4 +103,3 @@ public enum TrackCode : Int {
   }
 
 }
-

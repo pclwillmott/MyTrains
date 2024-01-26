@@ -39,7 +39,7 @@ public enum EnableState : UInt8 {
       map += "<relation><property>\(item.rawValue)</property><value>\(item.title)</value></relation>\n"
     }
 
-    map += "</map>"
+    map += "</map>\n"
     
     return map
     

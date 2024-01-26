@@ -320,8 +320,8 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     config += "<segment space='0' origin='0'>\n<name>Virtual Node Configuration</name>\n"
 
     config += "<int size='2'>\n"
-    config += "<name>Configuration Space Version</name>\n"
-    config += "<description>This is the number of items in the configuration space.</description>\n"
+    config += "  <name>Configuration Space Version</name>\n"
+    config += "  <description>This is the number of items in the configuration space.</description>\n"
     config += "</int>\n"
 
     config += "<eventid>\n"
@@ -330,19 +330,19 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     config += "</eventid>\n"
 
     config += "<int size='2'>\n"
-    config += "<name>Virtual Node Type</name>\n"
-    config += "<description>The type of this node.</description>\n"
+    config += "  <name>Virtual Node Type</name>\n"
+    config += "  <description>The type of this node.</description>\n"
     config += "%%VIRTUAL_NODE_TYPE%%"
     config += "</int>\n"
 
     config += "<eventid>\n"
-    config += "<name>This is the next Unique Event ID that will be returned upon request.</name>\n"
-    config += "<description>This is the next unique event ID.</description>\n"
+    config += "  <name>This is the next Unique Event ID that will be returned upon request.</name>\n"
+    config += "  <description>This is the next unique event ID.</description>\n"
     config += "</eventid>\n"
 
     config += "<eventid>\n"
-    config += "<name>Next Unique Node ID Seed</name>\n"
-    config += "<description>This is the seed that will be used to generate the next unique node ID.</description>\n"
+    config += "  <name>Next Unique Node ID Seed</name>\n"
+    config += "  <description>This is the seed that will be used to generate the next unique node ID.</description>\n"
     config += "</eventid>\n"
 
     config += "</segment>\n"
@@ -389,6 +389,12 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
         cdi = MyTrainsVirtualNodeType.insertMap(cdi: cdi)
         cdi = UnitLength.insertMap(cdi: cdi)
         cdi = UnitSpeed.insertMap(cdi: cdi)
+        cdi = TrackCode.insertMap(cdi: cdi)
+        cdi = TrackGauge.insertMap(cdi: cdi)
+        cdi = TrackElectrificationType.insertMap(cdi: cdi)
+        cdi = TurnoutMotorType.insertMap(cdi: cdi)
+        cdi = Orientation.insertMap(cdi: cdi)
+        cdi = CountryCode.insertMap(cdi: cdi)
                   
         var sorted : [(nodeId:UInt64, name:String)] = []
 

@@ -194,7 +194,7 @@ public enum Scale : UInt8 {
       map += "<relation><property>\(scale.rawValue)</property><value>\(scale.title)</value></relation>\n"
     }
 
-    map += "</map>"
+    map += "</map>\n"
 
     return map
 

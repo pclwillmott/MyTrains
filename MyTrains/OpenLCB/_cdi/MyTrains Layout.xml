@@ -24,6 +24,12 @@
   %%LAYOUT_STATE%%
 </int>
 
+<int size='2'>
+<name>Country</name>
+<description>The prototype country for this layout.</description>
+  %%COUNTRY_CODE%%
+</int>
+
 </segment>
 
 %%VIRTUAL_NODE_CONFIG%%

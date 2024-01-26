@@ -34,6 +34,7 @@ public enum TrackGauge : Int {
     String(localized: "EM", comment: "Used to indicate the track gauge"),
     String(localized: "N", comment: "Used to indicate the track gauge"),
     String(localized: "O", comment: "Used to indicate the track gauge"),
+    String(localized: "O14", comment: "Used to indicate the track gauge"),
     String(localized: "OO/HO", comment: "Used to indicate the track gauge"),
     String(localized: "OOO", comment: "Used to indicate the track gauge"),
     String(localized: "P4", comment: "Used to indicate the track gauge"),
@@ -49,6 +50,7 @@ public enum TrackGauge : Int {
       .em,
       .n,
       .o,
+      .o14,
       .ooho,
       .ooo,
       .p4,
@@ -58,21 +60,23 @@ public enum TrackGauge : Int {
       .tt3,
     ]
     
-    var map = ""
-    
+    var map = "<default>\(defaultValue.rawValue)</default>\n<map>\n"
+
     for item in items {
       map += "<relation><property>\(item.rawValue)</property><value>\(item.title)</value></relation>\n"
     }
 
+    map += "</map>\n"
+
     return map
-    
+
   }
   
   // MARK: Public Class Properties
   
   public static let defaultValue : TrackGauge = .ooho
 
-  public static let mapPlaceholder = "%%TRACK_GAUGE%%"
+  public static let mapPlaceholder = CDI.TRACK_GAUGE
 
   // MARK: Public Class Methods
   

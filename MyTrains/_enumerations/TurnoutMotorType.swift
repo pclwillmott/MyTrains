@@ -36,14 +36,16 @@ public enum TurnoutMotorType : Int {
       .solenoid,
     ]
     
-    var map = ""
-    
+    var map = "<default>\(defaultValue.rawValue)</default>\n<map>\n"
+
     for item in items {
       map += "<relation><property>\(item.rawValue)</property><value>\(item.title)</value></relation>\n"
     }
 
+    map += "</map>\n"
+
     return map
-    
+
   }
   
   // MARK: Public Class Properties

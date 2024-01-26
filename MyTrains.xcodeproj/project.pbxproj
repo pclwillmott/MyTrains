@@ -177,6 +177,7 @@
 		DA9CF8FB2860952300825FA9 /* BlockType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9CF8FA2860952300825FA9 /* BlockType.swift */; };
 		DA9CF8FD2860978A00825FA9 /* TurnoutMotorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9CF8FC2860978A00825FA9 /* TurnoutMotorType.swift */; };
 		DA9CF8FF2860CA0100825FA9 /* SwitchBoardItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9CF8FE2860CA0100825FA9 /* SwitchBoardItemView.swift */; };
+		DA9DBA032B643774004F8EB9 /* CountryCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9DBA022B643774004F8EB9 /* CountryCode.swift */; };
 		DAA030922AEE87B100BC5659 /* OpenLCBFirmwareUpdate.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DAA030912AEE87B100BC5659 /* OpenLCBFirmwareUpdate.storyboard */; };
 		DAA030942AEE884F00BC5659 /* OpenLCBFirmwareUpdateVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA030932AEE884F00BC5659 /* OpenLCBFirmwareUpdateVC.swift */; };
 		DAA030962AEE94B600BC5659 /* OpenLCBHardwareNodeState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA030952AEE94B600BC5659 /* OpenLCBHardwareNodeState.swift */; };
@@ -455,6 +456,7 @@
 		DA9CF8FA2860952300825FA9 /* BlockType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockType.swift; sourceTree = "<group>"; };
 		DA9CF8FC2860978A00825FA9 /* TurnoutMotorType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TurnoutMotorType.swift; sourceTree = "<group>"; };
 		DA9CF8FE2860CA0100825FA9 /* SwitchBoardItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchBoardItemView.swift; sourceTree = "<group>"; };
+		DA9DBA022B643774004F8EB9 /* CountryCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryCode.swift; sourceTree = "<group>"; };
 		DAA030912AEE87B100BC5659 /* OpenLCBFirmwareUpdate.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = OpenLCBFirmwareUpdate.storyboard; sourceTree = "<group>"; };
 		DAA030932AEE884F00BC5659 /* OpenLCBFirmwareUpdateVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBFirmwareUpdateVC.swift; sourceTree = "<group>"; };
 		DAA030952AEE94B600BC5659 /* OpenLCBHardwareNodeState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBHardwareNodeState.swift; sourceTree = "<group>"; };
@@ -629,6 +631,7 @@
 				DAA7BEB22B501FCA00508140 /* Scale.swift */,
 				DA8A05682B544087003A39D7 /* EnableState.swift */,
 				DA408A592B5829C3005EBBDE /* AppMode.swift */,
+				DA9DBA022B643774004F8EB9 /* CountryCode.swift */,
 			);
 			path = _enumerations;
 			sourceTree = "<group>";
@@ -1600,6 +1603,7 @@
 				DA60140329F408F100AD9ACD /* ViewLCCNetworkVC.swift in Sources */,
 				DA48EE2B293CEFEA006C26A0 /* LocoNetFastClockScaleFactor.swift in Sources */,
 				DA0BBB7929FD4B22003E03EF /* OpenLCBCDIElementType.swift in Sources */,
+				DA9DBA032B643774004F8EB9 /* CountryCode.swift in Sources */,
 				DA413FF02A45CCF600675AD4 /* OpenLCBNodeRollingStockLocoNet.swift in Sources */,
 				DAFFB6642B5D8AA50035AC74 /* LayoutListItem.swift in Sources */,
 				DAF5BCD9281EF086000B61CA /* SwitchBoardPanel.swift in Sources */,
