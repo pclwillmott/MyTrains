@@ -47,12 +47,12 @@ class CDIIdentificationItemView : CDIView {
     lblValue.translatesAutoresizingMaskIntoConstraints = false
     
     NSLayoutConstraint.activate([
-      lblName.topAnchor.constraint(equalTo: self.topAnchor, constant: gap),
-      lblName.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: gap),
+      lblName.topAnchor.constraint(equalTo: self.topAnchor, constant: parentGap),
+      lblName.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: parentGap),
       lblName.widthAnchor.constraint(greaterThanOrEqualToConstant: 150.0),
-      lblValue.topAnchor.constraint(equalTo: self.topAnchor, constant: gap),
-      lblValue.leadingAnchor.constraint(equalTo: lblName.trailingAnchor, constant: gap),
-      self.bottomAnchor.constraint(equalTo: lblName.bottomAnchor, constant: gap),
+      lblValue.topAnchor.constraint(equalTo: self.topAnchor, constant: parentGap),
+      lblValue.leadingAnchor.constraint(equalTo: lblName.trailingAnchor, constant: parentGap),
+      self.bottomAnchor.constraint(equalTo: lblName.bottomAnchor, constant: parentGap),
     ])
     
   }

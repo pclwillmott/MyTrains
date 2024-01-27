@@ -26,7 +26,6 @@ public func menuUpdate() {
           }
         }
       }
-      
     }
     
     mainMenu.items = mainMenuItems[appMode]!
@@ -67,6 +66,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
           mainMenuItems[.master]!.append(item)
           mainMenuItems[.delegate]!.append(item)
           
+          for node in item.submenu!.items {
+            if node.tag == 9998 {
+              node.title = String(localized: "About MyTrains")
+              node.target = self
+              node.action = #selector(self.mnuAboutAction(_:))
+            }
+          }
+
           // Create the File Menu
           
           /*
@@ -693,11 +700,18 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
   }
 
   @IBAction func mnuCreateApplicationNodeAction(_ sender: NSMenuItem) {
+    if !eulaAccepted {
+      ModalWindow.License.runModel()
+    }
     let x = ModalWindow.SelectMasterNode
     let wc = x.windowController
     let vc = x.viewController(windowController: wc) as! SelectMasterNodeVC
     vc.controller = myTrainsController
     wc.showWindow(nil)
+  }
+
+  @IBAction func mnuAboutAction(_ sender: NSMenuItem) {
+    let x = ModalWindow.About.windowController.showWindow(nil)
   }
 
 }

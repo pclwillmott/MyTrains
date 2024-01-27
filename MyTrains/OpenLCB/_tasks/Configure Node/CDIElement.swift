@@ -47,13 +47,13 @@ public class CDIElement {
     get {
       switch type {
       case .manufacturer:
-        return "Manufacturer"
+        return String(localized: "Manufacturer")
       case .model:
-        return "Model"
+        return String(localized: "Model")
       case .softwareVersion:
-        return "Software Version"
+        return String(localized: "Software Version")
       case .hardwareVersion:
-        return "Hardware Version"
+        return String(localized: "Hardware Version")
       default:
         return _name
       }

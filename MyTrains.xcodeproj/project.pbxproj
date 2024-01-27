@@ -110,6 +110,14 @@
 		DA5BC9912A1A4CDF00D67ABE /* FileHandleExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5BC9902A1A4CDF00D67ABE /* FileHandleExtensions.swift */; };
 		DA5BC9932A1A6CEA00D67ABE /* OpenLCBNodeRollingStock.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5BC9922A1A6CEA00D67ABE /* OpenLCBNodeRollingStock.swift */; };
 		DA5BC9952A1A741900D67ABE /* ComboBoxDictEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5BC9942A1A741900D67ABE /* ComboBoxDictEntry.swift */; };
+		DA5BD1E92B65434200CEA5BA /* License.txt in Resources */ = {isa = PBXBuildFile; fileRef = DA5BD1E82B65434200CEA5BA /* License.txt */; };
+		DA5BD1EB2B65536D00CEA5BA /* License.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA5BD1EA2B65536D00CEA5BA /* License.storyboard */; };
+		DA5BD1ED2B6553EB00CEA5BA /* LicenseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5BD1EC2B6553EB00CEA5BA /* LicenseVC.swift */; };
+		DA5BD1EF2B65720F00CEA5BA /* About.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA5BD1EE2B65720F00CEA5BA /* About.storyboard */; };
+		DA5BD1F12B65736600CEA5BA /* AboutVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5BD1F02B65736600CEA5BA /* AboutVC.swift */; };
+		DA5BD1F32B65870900CEA5BA /* Acknowledgements.txt in Resources */ = {isa = PBXBuildFile; fileRef = DA5BD1F22B65870900CEA5BA /* Acknowledgements.txt */; };
+		DA5BD1F52B6588FA00CEA5BA /* TextView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA5BD1F42B6588FA00CEA5BA /* TextView.storyboard */; };
+		DA5BD1F72B65893600CEA5BA /* TextViewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5BD1F62B65893600CEA5BA /* TextViewVC.swift */; };
 		DA5CCB4C2897F58D00F99AE6 /* SpeedProfiler.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA5CCB4B2897F58D00F99AE6 /* SpeedProfiler.storyboard */; };
 		DA5CCB4E2897F6B200F99AE6 /* SpeedProfilerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5CCB4D2897F6B200F99AE6 /* SpeedProfilerVC.swift */; };
 		DA5F7A1A2A3F11A7004D7EBB /* OpenLCBWellKnownEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5F7A192A3F11A7004D7EBB /* OpenLCBWellKnownEvent.swift */; };
@@ -388,6 +396,14 @@
 		DA5BC9902A1A4CDF00D67ABE /* FileHandleExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileHandleExtensions.swift; sourceTree = "<group>"; };
 		DA5BC9922A1A6CEA00D67ABE /* OpenLCBNodeRollingStock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBNodeRollingStock.swift; sourceTree = "<group>"; };
 		DA5BC9942A1A741900D67ABE /* ComboBoxDictEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComboBoxDictEntry.swift; sourceTree = "<group>"; };
+		DA5BD1E82B65434200CEA5BA /* License.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = License.txt; sourceTree = "<group>"; };
+		DA5BD1EA2B65536D00CEA5BA /* License.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = License.storyboard; sourceTree = "<group>"; };
+		DA5BD1EC2B6553EB00CEA5BA /* LicenseVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicenseVC.swift; sourceTree = "<group>"; };
+		DA5BD1EE2B65720F00CEA5BA /* About.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = About.storyboard; sourceTree = "<group>"; };
+		DA5BD1F02B65736600CEA5BA /* AboutVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutVC.swift; sourceTree = "<group>"; };
+		DA5BD1F22B65870900CEA5BA /* Acknowledgements.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Acknowledgements.txt; sourceTree = "<group>"; };
+		DA5BD1F42B6588FA00CEA5BA /* TextView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = TextView.storyboard; sourceTree = "<group>"; };
+		DA5BD1F62B65893600CEA5BA /* TextViewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextViewVC.swift; sourceTree = "<group>"; };
 		DA5CCB4B2897F58D00F99AE6 /* SpeedProfiler.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SpeedProfiler.storyboard; sourceTree = "<group>"; };
 		DA5CCB4D2897F6B200F99AE6 /* SpeedProfilerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedProfilerVC.swift; sourceTree = "<group>"; };
 		DA5F7A192A3F11A7004D7EBB /* OpenLCBWellKnownEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBWellKnownEvent.swift; sourceTree = "<group>"; };
@@ -727,6 +743,14 @@
 				DAFFB65A2B5D49680035AC74 /* CreateVirtualNodeVC.swift */,
 				DAFFB65C2B5D877F0035AC74 /* SelectLayout.storyboard */,
 				DAFFB65E2B5D87C80035AC74 /* SelectLayoutVC.swift */,
+				DA5BD1E82B65434200CEA5BA /* License.txt */,
+				DA5BD1F22B65870900CEA5BA /* Acknowledgements.txt */,
+				DA5BD1EA2B65536D00CEA5BA /* License.storyboard */,
+				DA5BD1EC2B6553EB00CEA5BA /* LicenseVC.swift */,
+				DA5BD1EE2B65720F00CEA5BA /* About.storyboard */,
+				DA5BD1F02B65736600CEA5BA /* AboutVC.swift */,
+				DA5BD1F42B6588FA00CEA5BA /* TextView.storyboard */,
+				DA5BD1F62B65893600CEA5BA /* TextViewVC.swift */,
 			);
 			path = _app;
 			sourceTree = "<group>";
@@ -1329,6 +1353,7 @@
 			files = (
 				DAA83DEF272C37680075CBCD /* Assets.xcassets in Resources */,
 				DA60140129F408D800AD9ACD /* ViewLCCNetwork.storyboard in Resources */,
+				DA5BD1EB2B65536D00CEA5BA /* License.storyboard in Resources */,
 				DA1ECC9328439D4600C4F963 /* UpdateFirmware.storyboard in Resources */,
 				DAAC7E912A79308B001A424E /* MyTrains DCC Programming Track.xml in Resources */,
 				DA408A5C2B582DB6005EBBDE /* SelectMasterNode.storyboard in Resources */,
@@ -1340,11 +1365,15 @@
 				DAFFB6592B5D49040035AC74 /* CreateVirtualNode.storyboard in Resources */,
 				DA8AE0ED279B2CCB001E9311 /* SlotView.storyboard in Resources */,
 				DA613AC928A7DECD003218BA /* PlaceLocomotive.storyboard in Resources */,
+				DA5BD1E92B65434200CEA5BA /* License.txt in Resources */,
+				DA5BD1EF2B65720F00CEA5BA /* About.storyboard in Resources */,
 				DA28C2BA2801CC0300857471 /* DashBoard.storyboard in Resources */,
 				DA0883FF2A768F2400C2CFBD /* MyTrains Train.xml in Resources */,
 				DA6A0AD8275295BF00913F2B /* Monitor.storyboard in Resources */,
 				DA467BAF281D5D2F00AB9650 /* SwitchBoardEditor.storyboard in Resources */,
+				DA5BD1F52B6588FA00CEA5BA /* TextView.storyboard in Resources */,
 				DAAC7E952A7966EE001A424E /* ProgrammerTool.storyboard in Resources */,
+				DA5BD1F32B65870900CEA5BA /* Acknowledgements.txt in Resources */,
 				DAA7BEC22B50664B00508140 /* CDITextView.storyboard in Resources */,
 				DA7195FB2A3F2D40004D2D4B /* MyTrains Train - OLD.xml in Resources */,
 				DA0B63D82AF7BB8B007C7CD6 /* OpenLCBMonitor.storyboard in Resources */,
@@ -1468,6 +1497,7 @@
 				DA613ACB28A7E02E003218BA /* PlaceLocomotiveVC.swift in Sources */,
 				DA1B949F2A3DE8E000E2CE6A /* Client.swift in Sources */,
 				DA8FDB2D279C4AC000E15024 /* LocoSlotTableViewDS.swift in Sources */,
+				DA5BD1F12B65736600CEA5BA /* AboutVC.swift in Sources */,
 				DAFFB6662B5D8F650035AC74 /* LayoutState.swift in Sources */,
 				DA95D6BD280833FE00D9F1B6 /* GroupSetupVC.swift in Sources */,
 				DA9B87282A2B979E00E9969E /* DBEditorView.swift in Sources */,
@@ -1496,6 +1526,7 @@
 				DA631E2A2A52D263001AD638 /* MyTrainsVirtualNodeType.swift in Sources */,
 				DAE8DD5728675B040097C2D1 /* FrogType.swift in Sources */,
 				DA0197272773520400350F71 /* EditorObject.swift in Sources */,
+				DA5BD1F72B65893600CEA5BA /* TextViewVC.swift in Sources */,
 				DA063399293CEB8700CEAFD1 /* SetFastClockVC.swift in Sources */,
 				DA3904092A349B3A00864157 /* OpenLCBClockInitialDateTime.swift in Sources */,
 				DA2785402837EAE700EDCBB7 /* MTSerialPortManager.swift in Sources */,
@@ -1511,6 +1542,7 @@
 				DAE2BADB2B091EB200FC587A /* OpenLCBStandardContentBlockType.swift in Sources */,
 				DA98AC1E2B41870500CC423B /* CDIGroupTabView.swift in Sources */,
 				DA17297F2B25E7330013301B /* OpenLCBLocationServicesContentBlock.swift in Sources */,
+				DA5BD1ED2B6553EB00CEA5BA /* LicenseVC.swift in Sources */,
 				DA0D3E0C2A485E9A0042748C /* OpenLCBSearchMatchTarget.swift in Sources */,
 				DA467BA7281D534900AB9650 /* SwitchBoardItem.swift in Sources */,
 				DA5B4607276F6917005CA03C /* ComboBoxDBDS.swift in Sources */,
@@ -1774,7 +1806,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = DKK8LC6ZQC;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1782,7 +1814,7 @@
 				INFOPLIST_FILE = MyTrains/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = MyTrains;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2024 Paul C. L. Willmott. All Rights Reserved.";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1810,7 +1842,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = DKK8LC6ZQC;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1818,7 +1850,7 @@
 				INFOPLIST_FILE = MyTrains/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = MyTrains;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2024 Paul C. L. Willmott. All Rights Reserved.";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (

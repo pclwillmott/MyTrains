@@ -30,7 +30,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressUnitsActualSpeed)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressUnitsScaleSpeed)
     
-    if true || !memorySpacesInitialized {
+    if !memorySpacesInitialized {
       resetToFactoryDefaults()
     }
     

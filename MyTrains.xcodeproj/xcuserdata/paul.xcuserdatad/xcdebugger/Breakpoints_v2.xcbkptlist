@@ -220,8 +220,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "521"
             endingLineNumber = "521"
-            landmarkName = "OpenLCBNodeVirtual"
-            landmarkType = "3">
+            landmarkName = "setupConfigurationOptions()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -346,24 +346,8 @@
             filePath = "MyTrains/OpenLCB/_tasks/Configure Node/_custom views/CDIDataView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "445"
-            endingLineNumber = "445"
-            landmarkName = "setup()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "60AA5C7A-6F84-4352-B0AC-01064A546C12"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MyTrains/OpenLCB/_tasks/Configure Node/_custom views/CDIDataView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "446"
-            endingLineNumber = "446"
+            startingLineNumber = "441"
+            endingLineNumber = "441"
             landmarkName = "setup()"
             landmarkType = "7">
          </BreakpointContent>

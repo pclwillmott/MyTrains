@@ -16,6 +16,7 @@ enum DEFAULT {
   static let DATABASE_PATH                      = "DATABASE_PATH"
   static let LAST_CSV_PATH                      = "LAST_CSV_PATH"
   static let LAST_DMF_PATH                      = "LAST_DMF_PATH"
+  static let EULA_ACCEPTED                      = "EULA_ACCEPTED"
 
   static let SWITCHBOARD_EDITOR_MAG             = "SWITCHBOARD_EDITOR_MAG"
   static let MAIN_SWITCHBOARD_MAG               = "MAIN_SWITCHBOARD_MAG"
@@ -97,6 +98,26 @@ public var appMode : AppMode {
     UserDefaults.standard.set(value.rawValue, forKey: DEFAULT.APP_MODE)
     menuUpdate()
   }
+}
+
+public var eulaAccepted : Bool {
+  get {
+    return UserDefaults.standard.bool(forKey: DEFAULT.EULA_ACCEPTED)
+  }
+  set(value) {
+    UserDefaults.standard.set(value, forKey: DEFAULT.EULA_ACCEPTED)
+  }
+}
+
+public var appVersion : String {
+  return "Version \(Bundle.main.releaseVersionNumber!) (Build \(Bundle.main.buildVersionNumber!))"
+}
+
+public var appCopyright : String {
+  if let result = Bundle.main.infoDictionary!["NSHumanReadableCopyright"] as? String {
+    return result
+  }
+  return ""
 }
 
 public var databasePath : String? {

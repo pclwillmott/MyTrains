@@ -65,11 +65,13 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
     
     self.view.addSubview(stackView)
  
+    stackView.spacing = parentGap
+    
     NSLayoutConstraint.activate([
-      stackView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: gap),
-      stackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: gap),
-      stackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -gap),
-      self.view.bottomAnchor.constraint(equalTo: stackView.bottomAnchor, constant: gap),
+      stackView.topAnchor.constraint(equalToSystemSpacingBelow: self.view.topAnchor, multiplier: 1.0),
+      stackView.leadingAnchor.constraint(equalToSystemSpacingAfter: self.view.leadingAnchor, multiplier: 1.0),
+      stackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -parentGap),
+      self.view.bottomAnchor.constraint(equalTo: stackView.bottomAnchor, constant: parentGap),
     ])
 
     stackView.orientation = .vertical
@@ -109,7 +111,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
     
     progressIndicatorConstraints = [
       barProgress.centerXAnchor.constraint(equalTo: progressView.centerXAnchor),
-      progressView.bottomAnchor.constraint(equalTo: barProgress.bottomAnchor, constant: gap),
+      progressView.bottomAnchor.constraint(equalTo: barProgress.bottomAnchor, constant: parentGap),
     ]
     
     NSLayoutConstraint.activate(progressIndicatorConstraints)
@@ -135,11 +137,11 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
     }
     
     NSLayoutConstraint.activate([
-      btnRefreshAll.leadingAnchor.constraint(equalTo: buttonView.leadingAnchor, constant: gap),
-      btnWriteAll.leadingAnchor.constraint(equalTo: btnRefreshAll.trailingAnchor, constant: gap),
-      btnResetToDefaults.trailingAnchor.constraint(equalTo: buttonView.trailingAnchor, constant: -gap),
-      btnReboot.trailingAnchor.constraint(equalTo: btnResetToDefaults.leadingAnchor, constant: -gap),
-      btnShowCDIText.trailingAnchor.constraint(equalTo: btnReboot.leadingAnchor, constant: -gap),
+      btnRefreshAll.leadingAnchor.constraint(equalTo: buttonView.leadingAnchor),
+      btnWriteAll.leadingAnchor.constraint(equalToSystemSpacingAfter: btnRefreshAll.trailingAnchor, multiplier: 1.0),
+      btnResetToDefaults.trailingAnchor.constraint(equalTo: buttonView.trailingAnchor),
+      btnReboot.trailingAnchor.constraint(equalTo: btnResetToDefaults.leadingAnchor, constant: -siblingGap),
+      btnShowCDIText.trailingAnchor.constraint(equalTo: btnReboot.leadingAnchor, constant: -siblingGap),
     ])
       
     btnResetToDefaults.target = self
@@ -297,7 +299,9 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
   
   private var relationValue : String?
   
-  private let gap : CGFloat = 5.0
+  private let siblingGap : CGFloat = 8.0
+  
+  private let parentGap : CGFloat = 20.0
   
   private var progressViewHeightConstraint : NSLayoutConstraint?
   
@@ -595,8 +599,8 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
     totalBytesRead = 0
 
     progressIndicatorConstraints = [
-      barProgress.leadingAnchor.constraint(equalTo: progressView.leadingAnchor, constant: gap),
-      barProgress.trailingAnchor.constraint(equalTo: progressView.trailingAnchor, constant: -gap),
+      barProgress.leadingAnchor.constraint(equalTo: progressView.leadingAnchor, constant: parentGap),
+      barProgress.trailingAnchor.constraint(equalTo: progressView.trailingAnchor, constant: -parentGap),
     ]
     
     NSLayoutConstraint.activate(progressIndicatorConstraints)
@@ -1165,13 +1169,8 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
       barProgress.doubleValue = 0.0
       totalBytesRead = 0
       
-      if #available(macOS 12, *) {
-        statusMessage(String(localized: "Reading Variables - \(totalBytesRead) bytes"))
-      } 
-      else {
-        statusMessage("Reading Variables - \(totalBytesRead) bytes")
-      }
-            
+      statusMessage(String(localized: "Reading Variables - \(totalBytesRead) bytes"))
+
       currentMemoryBlock = index
       
       nextCDIStartAddress = memoryMap[currentMemoryBlock].address
@@ -1261,17 +1260,9 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
     
     alert.informativeText = ""
     
-    if #available(macOS 12, *) {
-      alert.messageText = String(localized: "Are you sure that you wish to reset this node to factory defaults?")
-      alert.addButton(withTitle: String(localized: "No"))
-      alert.addButton(withTitle: String(localized: "Yes"))
-    }
-    else {
-      alert.messageText = "Are you sure that you wish to reset this node to factory defaults?"
-      alert.addButton(withTitle: "No")
-      alert.addButton(withTitle: "Yes")
-    }
-  
+    alert.messageText = String(localized: "Are you sure that you wish to reset this node to factory defaults?")
+    alert.addButton(withTitle: String(localized: "No"))
+    alert.addButton(withTitle: String(localized: "Yes"))
     
     alert.alertStyle = .warning
 
@@ -1323,13 +1314,8 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
     
     updateProgressIndicator(totalBytesRead)
     
-    if #available(macOS 12, *) {
-      statusMessage(String(localized: "Writing Variables - \(totalBytesRead) bytes"))
-    } 
-    else {
-      statusMessage("Writing Variables - \(totalBytesRead) bytes")
-    }
-    
+    statusMessage(String(localized: "Writing Variables - \(totalBytesRead) bytes"))
+
     state = .writingMemory
     
     networkLayer.sendNodeMemoryWriteRequest(sourceNodeId: nodeId, destinationNodeId: node.nodeId, addressSpace: dataToWrite[0].space, startAddress: dataToWrite[0].address, dataToWrite: dataToWrite[0].data)
@@ -1340,12 +1326,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
     
     var title = node!.userNodeName == "" ? "\(node!.manufacturerName) - \(node!.nodeModelName)" : node!.userNodeName
     
-    if #available(macOS 12, *) {
-      title = String(localized: "CDI: \(title) (\(node!.nodeId.toHexDotFormat(numberOfBytes: 6)))")
-    } 
-    else {
-      title = "CDI: \(title) (\(node!.nodeId.toHexDotFormat(numberOfBytes: 6)))"
-    }
+    title = String(localized: "CDI: \(title) (\(node!.nodeId.toHexDotFormat(numberOfBytes: 6)))")
 
     let x = ModalWindow.CDITextView
     let wc = x.windowController

@@ -55,7 +55,7 @@ class CDIMapView : CDIDataView {
 
     NSLayoutConstraint.activate([
       comboBox.topAnchor.constraint(equalTo: comboView.topAnchor),
-      comboBox.leadingAnchor.constraint(equalTo: comboView.leadingAnchor, constant: gap),
+      comboBox.leadingAnchor.constraint(equalTo: comboView.leadingAnchor),
       comboBox.widthAnchor.constraint(greaterThanOrEqualToConstant: 100),
       comboView.heightAnchor.constraint(equalTo: comboBox.heightAnchor),
     ])

@@ -398,6 +398,12 @@
         }
       }
     },
+    "About MyTrains" : {
+
+    },
+    "Accept" : {
+      "comment" : "Used to accept license agreement"
+    },
     "ACDI" : {
       "localizations" : {
         "en" : {
@@ -413,6 +419,9 @@
           }
         }
       }
+    },
+    "Acknowledgements" : {
+
     },
     "Activated" : {
       "comment" : "Used to indicate a layout's state",
@@ -1399,7 +1408,7 @@
       }
     },
     "Create Application Node" : {
-      "comment" : "Used for the Create Application Node menu item title\nUsed for the title of the Create Application Node window",
+      "comment" : "Used for the title of the Create Application Node window\nUsed for the Create Application Node menu item title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1651,6 +1660,9 @@
           }
         }
       }
+    },
+    "Decline" : {
+      "comment" : "Used to decline license agreement"
     },
     "Decoding CDI and building user interface" : {
       "localizations" : {
@@ -2025,6 +2037,9 @@
         }
       }
     },
+    "End User License Agreement" : {
+
+    },
     "Engine" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -2365,6 +2380,9 @@
           }
         }
       }
+    },
+    "Hardware Version" : {
+
     },
     "Headlight" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -2713,6 +2731,9 @@
         }
       }
     },
+    "License Agreement" : {
+
+    },
     "Light" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -2985,6 +3006,9 @@
         }
       }
     },
+    "Manufacturer" : {
+
+    },
     "Master" : {
       "comment" : "Used to indicate that the workstation is the master mode",
       "localizations" : {
@@ -3122,6 +3146,9 @@
           }
         }
       }
+    },
+    "Model" : {
+
     },
     "Momentum" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -4082,6 +4109,9 @@
         }
       }
     },
+    "Software Version" : {
+
+    },
     "Solenoid" : {
       "comment" : "Used to indicate turnout motor type",
       "localizations" : {
@@ -4658,7 +4688,7 @@
       "comment" : "This is the name of a country."
     },
     "Unknown" : {
-      "comment" : "Used to indicate that the type of something is unknown\nUsed to indicate the state of a turnout",
+      "comment" : "Used to indicate the state of a turnout\nUsed to indicate that the type of something is unknown",
       "localizations" : {
         "en" : {
           "stringUnit" : {

@@ -27,10 +27,10 @@ class CDIStackView : CDIView, CDIStackViewManagerDelegate {
     addSubview(stackView)
     
     NSLayoutConstraint.activate([
-      stackView.topAnchor.constraint(equalTo: self.topAnchor, constant: gap),
-      stackView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: gap),
-      stackView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -gap),
-      self.bottomAnchor.constraint(equalTo: stackView.bottomAnchor, constant: gap),
+      stackView.topAnchor.constraint(equalTo: self.topAnchor, constant: parentGap),
+      stackView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: parentGap),
+      stackView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -parentGap),
+      self.bottomAnchor.constraint(equalTo: stackView.bottomAnchor, constant: parentGap),
     ])
     
   }
@@ -42,8 +42,8 @@ class CDIStackView : CDIView, CDIStackViewManagerDelegate {
     stackView.addArrangedSubview(view)
  
     NSLayoutConstraint.activate([
-      view.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: gap),
-      view.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -gap),
+      view.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
+      view.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
     ])
 
   }

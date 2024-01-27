@@ -1,0 +1,9 @@
+MyTrains End User License Agreement
+
+%%COPYRIGHT%%
+    
+This is a legally binding contract between you and the authors and copyright holders of MyTrains. By accepting this agreement, you confirm that you agree to be bound by this contract. Please make sure you read it.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of the MyTrains application and associated documentation files (the “Software”), the rights to use, copy, publish, and/or distribute copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The Software is provided "as is", without warranty of any kind, express or implied, including without limitation to the warranties of merchantability, fitness for a particular purpose, reliability, and non-infringement, or that the Software will be free of errors. In no event shall the authors and/or copyright holders be liable for any claim, damages or other liability of whatsoever nature, whether in an action of contract, tort or otherwise, arising from, out of or in connection with the Software or the use of or other dealings in the Software. In no event shall the authors and/or copyright holders of the Software be liable for any damage to your computer and/or devices connected to your computer, data loss, or any other material loss caused directly or indirectly from the use of the Software. You understand that you use the Software at your own discretion and risk.

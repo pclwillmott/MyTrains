@@ -72,7 +72,7 @@ class CDITextView: CDIDataView, NSTextFieldDelegate, NSControlTextEditingDelegat
     
     NSLayoutConstraint.activate([
       textField.topAnchor.constraint(equalTo: textView.topAnchor),
-      textField.leadingAnchor.constraint(equalTo: textView.leadingAnchor, constant: gap),
+      textField.leadingAnchor.constraint(equalTo: textView.leadingAnchor),
       textView.heightAnchor.constraint(equalTo: textField.heightAnchor),
     ])
 
@@ -86,7 +86,8 @@ class CDITextView: CDIDataView, NSTextFieldDelegate, NSControlTextEditingDelegat
       }
       else {
         NSLayoutConstraint.activate([
-          textField.trailingAnchor.constraint(equalTo: dataButtonView.leadingAnchor, constant: -gap),
+   //       textField.trailingAnchor.constraint(equalTo: dataButtonView.leadingAnchor, constant: -gap),
+          dataButtonView.leadingAnchor.constraint(equalToSystemSpacingAfter: textField.trailingAnchor, multiplier: 1.0),
         ])
       }
 
@@ -100,7 +101,8 @@ class CDITextView: CDIDataView, NSTextFieldDelegate, NSControlTextEditingDelegat
     else {
 
       NSLayoutConstraint.activate([
-        textField.trailingAnchor.constraint(equalTo: dataButtonView.leadingAnchor, constant: -gap),
+ //       textField.trailingAnchor.constraint(equalTo: dataButtonView.leadingAnchor, constant: -gap),
+        dataButtonView.leadingAnchor.constraint(equalToSystemSpacingAfter: textField.trailingAnchor, multiplier: 1.0),
       ])
 
     }
@@ -110,19 +112,14 @@ class CDITextView: CDIDataView, NSTextFieldDelegate, NSControlTextEditingDelegat
   }
   
   // MARK: NSTextFieldDelegate, NSControlTextEditingDelegate Methods
- 
-  @objc func controlTextDidBeginEditing(_ obj: Notification) {
-    writeButton.isEnabled = false
-    delegate?.cdiDataViewSetWriteAllEnabledState?(false)
-  }
-  
-  @objc internal func controlTextDidEndEditing(_ obj: Notification) {
-    writeButton.isEnabled = true
-    delegate?.cdiDataViewSetWriteAllEnabledState?(true)
-  }
-  
+
   @objc func control(_ control: NSControl, textShouldEndEditing fieldEditor: NSText) -> Bool {
     return isValid(string: control.stringValue)
+  }
+
+  @objc func controlTextDidChange(_ obj: Notification) {
+    writeButton.isEnabled = isValid(string: textField.stringValue)
+    delegate?.cdiDataViewSetWriteAllEnabledState?(writeButton.isEnabled)
   }
 
   // MARK: Outlets & Actions

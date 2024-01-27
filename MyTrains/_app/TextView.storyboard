@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22505"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Window Controller-->
+        <scene sceneID="XoA-Op-sTR">
+            <objects>
+                <windowController storyboardIdentifier="TextViewWC" id="aaJ-Xe-0Gx" sceneMemberID="viewController">
+                    <window key="window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="TextView" animationBehavior="default" titlebarAppearsTransparent="YES" id="ZwU-My-MFU">
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES" resizable="YES"/>
+                        <rect key="contentRect" x="268" y="330" width="480" height="270"/>
+                        <rect key="screenRect" x="0.0" y="0.0" width="1792" height="1095"/>
+                        <view key="contentView" id="nH4-a9-nSf">
+                            <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </view>
+                        <connections>
+                            <outlet property="delegate" destination="aaJ-Xe-0Gx" id="UnE-vD-HAr"/>
+                        </connections>
+                    </window>
+                    <connections>
+                        <segue destination="zcQ-7K-ojL" kind="relationship" relationship="window.shadowedContentViewController" id="X2p-mT-b2H"/>
+                    </connections>
+                </windowController>
+                <customObject id="P2i-lR-mNM" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-8" y="144"/>
+        </scene>
+        <!--Text ViewVC-->
+        <scene sceneID="k7Y-Ta-Pwb">
+            <objects>
+                <viewController id="zcQ-7K-ojL" customClass="TextViewVC" customModule="MyTrains" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="bPw-mz-CDm">
+                        <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </view>
+                </viewController>
+                <customObject id="SUl-yM-vmE" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="699" y="113"/>
+        </scene>
+    </scenes>
+</document>

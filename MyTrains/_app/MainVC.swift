@@ -29,6 +29,7 @@ class MainVC: NSViewController, MyTrainsControllerDelegate, LayoutDelegate, Open
     appNodeId = nil
     appMode = .initializing
     databasePath = nil
+    eulaAccepted = false
   }
   
   override func viewWillAppear() {

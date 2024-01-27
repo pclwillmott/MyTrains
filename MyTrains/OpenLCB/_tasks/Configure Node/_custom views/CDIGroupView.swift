@@ -54,7 +54,7 @@ class CDIGroupView: CDIView, CDIStackViewManagerDelegate {
     addSubview(disclosureButton)
  
     NSLayoutConstraint.activate([
-      disclosureButton.topAnchor.constraint(equalTo: self.topAnchor, constant: gap),
+      disclosureButton.topAnchor.constraint(equalTo: self.topAnchor, constant: parentGap),
       disclosureButton.leadingAnchor.constraint(equalTo: self.leadingAnchor),
       disclosureButton.heightAnchor.constraint(equalToConstant: 20),
       disclosureButton.widthAnchor.constraint(equalToConstant: 20),
@@ -68,9 +68,9 @@ class CDIGroupView: CDIView, CDIStackViewManagerDelegate {
     addSubview(title)
 
     NSLayoutConstraint.activate([
-      title.topAnchor.constraint(equalTo: self.topAnchor, constant: gap),
-      title.leadingAnchor.constraint(equalTo: disclosureButton.trailingAnchor, constant: gap),
-      title.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: gap),
+      title.topAnchor.constraint(equalTo: self.topAnchor, constant: parentGap),
+      title.leadingAnchor.constraint(equalTo: disclosureButton.trailingAnchor, constant: siblingGap),
+      title.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: parentGap),
     ])
     
     contentView.orientation = .vertical
@@ -81,13 +81,13 @@ class CDIGroupView: CDIView, CDIStackViewManagerDelegate {
     addSubview(contentView)
     
     NSLayoutConstraint.activate([
-      contentView.topAnchor.constraint(equalTo: title.bottomAnchor, constant: gap),
-      contentView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: gap),
-      contentView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -gap),
+      contentView.topAnchor.constraint(equalTo: title.bottomAnchor, constant: siblingGap),
+      contentView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: parentGap),
+      contentView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -parentGap),
     ])
     
-    lastDisclosureConstraint = self.heightAnchor.constraint(equalToConstant: 26.0 + gap)
-    
+    lastDisclosureConstraint = self.bottomAnchor.constraint(equalToSystemSpacingBelow: title.bottomAnchor, multiplier: 1.0)
+
     NSLayoutConstraint.activate([
       lastDisclosureConstraint!,
     ])
@@ -105,10 +105,10 @@ class CDIGroupView: CDIView, CDIStackViewManagerDelegate {
     let disclosed = disclosureButton.state == .on
     
     if disclosed {
-      lastDisclosureConstraint = self.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: gap)
+      lastDisclosureConstraint = self.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: parentGap)
     }
     else {
-      lastDisclosureConstraint = self.heightAnchor.constraint(equalToConstant: 26.0 + gap)
+      lastDisclosureConstraint = self.bottomAnchor.constraint(equalToSystemSpacingBelow: title.bottomAnchor, multiplier: 1.0)
     }
     
     contentView.isHidden = !disclosed
@@ -126,8 +126,8 @@ class CDIGroupView: CDIView, CDIStackViewManagerDelegate {
     contentView.addArrangedSubview(view)
  
     NSLayoutConstraint.activate([
-      view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: gap),
-      view.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -gap),
+      view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+      view.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
     ])
 
   }

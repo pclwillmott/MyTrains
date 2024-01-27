@@ -32,7 +32,9 @@ class CDIView: NSView {
   
   // MARK: Private & Internal Properties
   
-  internal let gap : CGFloat = 5.0
+  internal let parentGap : CGFloat = 20.0
+  
+  internal let siblingGap : CGFloat = 8.0
 
   internal var needsInit = true
   
