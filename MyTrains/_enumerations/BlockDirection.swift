@@ -8,7 +8,7 @@
 import Foundation
 import AppKit
 
-public enum BlockDirection : Int {
+public enum BlockDirection : UInt8 {
 
   case bidirectional  = 0
   case unidirectional = 1
@@ -16,7 +16,7 @@ public enum BlockDirection : Int {
   // MARK: Public Properties
   
   public var title : String {
-    return BlockDirection.titles[self.rawValue]
+    return BlockDirection.titles[Int(self.rawValue)]
   }
   
   // MARK: Private Class Properties
@@ -33,21 +33,23 @@ public enum BlockDirection : Int {
       .unidirectional,
     ]
     
-    var map = ""
-    
+    var map = "<default>\(defaultValue.rawValue)</default>\n<map>\n"
+
     for item in items {
       map += "<relation><property>\(item.rawValue)</property><value>\(item.title)</value></relation>\n"
     }
 
+    map += "</map>\n"
+
     return map
-    
+
   }
 
   // MARK: Public Class Properties
   
   public static let defaultValue : BlockDirection = .bidirectional
 
-  public static let mapPlaceholder = "%%BLOCK_DIRECTION%%"
+  public static let mapPlaceholder = CDI.DIRECTIONALITY
 
   // MARK: Public Class Methods
   
@@ -58,11 +60,11 @@ public enum BlockDirection : Int {
   }
   
   public static func select(comboBox: NSComboBox, value: BlockDirection) {
-    comboBox.selectItem(at: value.rawValue)
+    comboBox.selectItem(at: Int(value.rawValue))
   }
   
   public static func selected(comboBox: NSComboBox) -> BlockDirection {
-    return BlockDirection(rawValue: comboBox.indexOfSelectedItem) ?? defaultValue
+    return BlockDirection(rawValue: UInt8(comboBox.indexOfSelectedItem)) ?? defaultValue
   }
 
   public static func insertMap(cdi:String) -> String {

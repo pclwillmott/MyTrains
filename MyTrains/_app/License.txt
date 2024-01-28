@@ -1,4 +1,4 @@
-MyTrains End User License Agreement
+End User License Agreement
 
 %%COPYRIGHT%%
     

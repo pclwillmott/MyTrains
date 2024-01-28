@@ -8,7 +8,7 @@
 import Foundation
 import AppKit
 
-public enum TrackElectrificationType : Int {
+public enum TrackElectrificationType : UInt8 {
   
   case notElectrified = 0
   case thirdRail      = 1
@@ -17,7 +17,7 @@ public enum TrackElectrificationType : Int {
   // MARK: Public Properties
   
   public var title : String {
-    return TrackElectrificationType.titles[self.rawValue]
+    return TrackElectrificationType.titles[Int(self.rawValue)]
   }
   
   // MARK: Private Class Properties
@@ -63,11 +63,11 @@ public enum TrackElectrificationType : Int {
   }
   
   public static func select(comboBox:NSComboBox, value: TrackElectrificationType) {
-    comboBox.selectItem(at: value.rawValue)
+    comboBox.selectItem(at: Int(value.rawValue))
   }
   
   public static func selected(comboBox: NSComboBox) -> TrackElectrificationType {
-    return TrackElectrificationType(rawValue: comboBox.indexOfSelectedItem) ?? defaultValue
+    return TrackElectrificationType(rawValue: UInt8(comboBox.indexOfSelectedItem)) ?? defaultValue
   }
   
   public static func insertMap(cdi:String) -> String {

@@ -8,7 +8,7 @@
 import Foundation
 import AppKit
 
-public enum TrackGauge : Int {
+public enum TrackGauge : UInt8 {
   
   case em         = 0
   case n          = 1
@@ -25,7 +25,7 @@ public enum TrackGauge : Int {
   // MARK: Public Properties
   
   public var title : String {
-    return TrackGauge.titles[self.rawValue]
+    return TrackGauge.titles[Int(self.rawValue)]
   }
   
   // MARK: Private Class Properties
@@ -87,11 +87,11 @@ public enum TrackGauge : Int {
   }
   
   public static func select(comboBox: NSComboBox, value: TrackGauge) {
-    comboBox.selectItem(at: value.rawValue)
+    comboBox.selectItem(at: Int(value.rawValue))
   }
   
   public static func selected(comboBox: NSComboBox) -> TrackGauge {
-    return TrackGauge(rawValue: comboBox.indexOfSelectedItem) ?? defaultValue
+    return TrackGauge(rawValue: UInt8(comboBox.indexOfSelectedItem)) ?? defaultValue
   }
   
   public static func insertMap(cdi:String) -> String {

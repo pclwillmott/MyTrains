@@ -575,7 +575,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     
     let x = ModalWindow.SelectLayout
     let wc = x.windowController
-    let vc = x.viewController(windowController: wc) as! SelectLayoutVC
     wc.showWindow(nil)
     
   }
@@ -659,7 +658,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     
     let x = ModalWindow.OpenLCBMonitor
     let wc = x.windowController
-    let vc = x.viewController(windowController: wc) as! OpenLCBMonitorVC
     wc.showWindow(nil)
   }
   

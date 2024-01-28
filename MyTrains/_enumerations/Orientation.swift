@@ -8,7 +8,7 @@
 import Foundation
 import AppKit
 
-public enum Orientation : Int {
+public enum Orientation : UInt8 {
   
   case deg0   = 0
   case deg45  = 1
@@ -22,7 +22,7 @@ public enum Orientation : Int {
   // MARK: Public Properties
   
   public var title : String {
-    return Orientation.titles[self.rawValue]
+    return Orientation.titles[Int(self.rawValue)]
   }
   
   // MARK: Private Class Properties
@@ -40,7 +40,7 @@ public enum Orientation : Int {
   
   private static var map : String {
     
-    var items : [Orientation] = [
+    let items : [Orientation] = [
       .deg0,
       .deg45,
       .deg90,
@@ -78,11 +78,11 @@ public enum Orientation : Int {
   }
   
   public static func select(comboBox:NSComboBox, value:Orientation) {
-    comboBox.selectItem(at: value.rawValue)
+    comboBox.selectItem(at: Int(value.rawValue))
   }
   
   public static func selected(comboBox: NSComboBox) -> Orientation {
-    return Orientation(rawValue: comboBox.indexOfSelectedItem) ?? defaultValue
+    return Orientation(rawValue: UInt8(comboBox.indexOfSelectedItem)) ?? defaultValue
   }
   
   public static func insertMap(cdi:String) -> String {

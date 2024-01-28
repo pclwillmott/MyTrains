@@ -35,7 +35,7 @@ public class SwitchBoardItem : EditorObject {
     decode(sqliteDataReader: reader)
   }
   
-  init(location: SwitchBoardLocation, itemPartType: SwitchBoardItemPartType, orientation: Orientation, groupId: Int, panelId: Int, layoutId: Int) {
+  init(location: SwitchBoardLocation, itemPartType: SwitchBoardItemType, orientation: Orientation, groupId: Int, panelId: Int, layoutId: Int) {
     super.init(primaryKey: -1)
     self.location = location
     self.itemPartType = itemPartType
@@ -109,7 +109,7 @@ public class SwitchBoardItem : EditorObject {
   
   public var isEliminated : Bool = false
   
-  public var itemPartType : SwitchBoardItemPartType = .none {
+  public var itemPartType : SwitchBoardItemType = .none {
     didSet {
       if isTurnout {
         blockType = .turnout
@@ -133,7 +133,7 @@ public class SwitchBoardItem : EditorObject {
   
   public var isTurnout : Bool {
     get {
-      let turnouts : Set<SwitchBoardItemPartType> = [
+      let turnouts : Set<SwitchBoardItemType> = [
         .cross,
         .rightCurvedTurnout,
         .leftCurvedTurnout,
@@ -151,7 +151,7 @@ public class SwitchBoardItem : EditorObject {
   
   public var isScenic : Bool {
     get {
-      let scenics : Set<SwitchBoardItemPartType> = [
+      let scenics : Set<SwitchBoardItemType> = [
         .platform,
       ]
       return scenics.contains(itemPartType)
@@ -178,7 +178,7 @@ public class SwitchBoardItem : EditorObject {
   
   public var isTrack : Bool {
     get {
-      let track : Set<SwitchBoardItemPartType> = [
+      let track : Set<SwitchBoardItemType> = [
         .curve,
         .feedback,
         .longCurve,
@@ -215,7 +215,7 @@ public class SwitchBoardItem : EditorObject {
     }
   }
   
-  public var trackPartId : Int = TrackPart.custom.rawValue {
+  public var trackPartId : Int = Int(TrackPart.custom.rawValue) {
     didSet {
       modified = true
     }
@@ -765,8 +765,8 @@ public class SwitchBoardItem : EditorObject {
   public func exitPoint(entryPoint:Int) -> [NodeLink] {
     var result : [NodeLink] = []
     for connection in itemPartType.connections {
-      let to = (connection.to + orientation.rawValue) % 8
-      let from = (connection.from + orientation.rawValue) % 8
+      let to = (connection.to + Int(orientation.rawValue)) % 8
+      let from = (connection.from + Int(orientation.rawValue)) % 8
       if entryPoint == to {
         result.append(nodeLinks[from])
       }
@@ -896,11 +896,11 @@ public class SwitchBoardItem : EditorObject {
       }
       
       if !reader.isDBNull(index: 4) {
-        itemPartType = SwitchBoardItemPartType(rawValue: reader.getInt(index: 4)!) ?? .none
+        itemPartType = SwitchBoardItemType(rawValue: UInt16(reader.getInt(index: 4)!)) ?? .none
       }
       
       if !reader.isDBNull(index: 5) {
-        orientation = Orientation(rawValue: reader.getInt(index: 5)!) ?? Orientation.defaultValue
+        orientation = Orientation(rawValue: UInt8(reader.getInt(index: 5)!)) ?? Orientation.defaultValue
       }
 
       if !reader.isDBNull(index: 6) {
@@ -916,7 +916,7 @@ public class SwitchBoardItem : EditorObject {
       }
       
       if !reader.isDBNull(index: 9) {
-        blockDirection = BlockDirection(rawValue: reader.getInt(index: 9)!) ?? BlockDirection.defaultValue
+        blockDirection = BlockDirection(rawValue: UInt8(reader.getInt(index: 9)!)) ?? BlockDirection.defaultValue
       }
       
       if !reader.isDBNull(index: 10) {
@@ -964,11 +964,11 @@ public class SwitchBoardItem : EditorObject {
       }
 
       if !reader.isDBNull(index: 21) {
-        trackGauge = TrackGauge(rawValue: reader.getInt(index: 21)!) ?? TrackGauge.defaultValue
+        trackGauge = TrackGauge(rawValue: UInt8(reader.getInt(index: 21)!)) ?? TrackGauge.defaultValue
       }
 
       if !reader.isDBNull(index: 22) {
-        trackElectrificationType = TrackElectrificationType(rawValue: reader.getInt(index: 22)!) ?? TrackElectrificationType.defaultValue
+        trackElectrificationType = TrackElectrificationType(rawValue: UInt8(reader.getInt(index: 22)!)) ?? TrackElectrificationType.defaultValue
       }
 
       if !reader.isDBNull(index: 23) {
@@ -1427,12 +1427,12 @@ public class SwitchBoardItem : EditorObject {
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.LAYOUT_ID)", value: layoutId)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.PANEL_ID)", value: panelId)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.GROUP_ID)", value: groupId)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.ITEM_PART_TYPE)", value: itemPartType.rawValue)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.ORIENTATION)", value: orientation.rawValue)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.ITEM_PART_TYPE)", value: Int(itemPartType.rawValue))
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.ORIENTATION)", value: Int(orientation.rawValue))
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.XPOS)", value: location.x)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.YPOS)", value: location.y)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.BLOCK_NAME)", value: blockName)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.BLOCK_DIRECTION)", value: blockDirection.rawValue)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.BLOCK_DIRECTION)", value: Int(blockDirection.rawValue))
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.TRACK_PART_ID)", value: trackPartId)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DIMENSIONA)", value: dimensionA)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DIMENSIONB)", value: dimensionB)
@@ -1444,8 +1444,8 @@ public class SwitchBoardItem : EditorObject {
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DIMENSIONH)", value: dimensionH)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.UNITS_DIMENSION)", value: unitsDimension.rawValue)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.ALLOW_SHUNT)", value: allowShunt)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.TRACK_GAUGE)", value: trackGauge.rawValue)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.TRACK_ELECTRIFICATION_TYPE)", value: trackElectrificationType.rawValue)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.TRACK_GAUGE)", value: Int(trackGauge.rawValue))
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.TRACK_ELECTRIFICATION_TYPE)", value: Int(trackElectrificationType.rawValue))
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.GRADIENT)", value: gradient)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.IS_CRITICAL)", value: isCritical)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.UNITS_SPEED)", value: unitsSpeed.rawValue)

@@ -149,6 +149,22 @@ public class LayoutNode : OpenLCBNodeVirtual {
     
     switch message.messageTypeIndicator {
    
+    case .identifyConsumer:
+      
+      if let event = OpenLCBWellKnownEvent(rawValue: message.eventId!) {
+        
+        switch event {
+          
+        case .identifyMyTrainsLayouts:
+          
+          networkLayer?.sendConsumerIdentified(sourceNodeId: nodeId, wellKnownEvent: .identifyMyTrainsLayouts, validity: .valid)
+          
+        default:
+          break
+        }
+        
+      }
+
     case .identifyProducer:
       
       if let event = OpenLCBWellKnownEvent(rawValue: message.eventId!) {

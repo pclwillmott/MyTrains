@@ -43,7 +43,7 @@ class AboutVC: NSViewController, NSWindowDelegate {
     view.addSubview(btnAck)
     view.addSubview(btnEULA)
     
-    imgIcon.image = NSImage(named: "BigIcon")
+    imgIcon.image = NSImage(named: "AppIcon")
     imgIcon.imageScaling = .scaleProportionallyUpOrDown
     
     lblTitle.stringValue = "MyTrains"
@@ -74,7 +74,6 @@ class AboutVC: NSViewController, NSWindowDelegate {
       imgIcon.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 1.0),
       imgIcon.heightAnchor.constraint(equalToConstant: 170),
       imgIcon.widthAnchor.constraint(equalToConstant: 170),
- //     imgIcon.centerYAnchor.constraint(equalTo: view.centerYAnchor),
       imgIcon.topAnchor.constraint(equalTo: lblVersion.topAnchor),
       lblTitle.leadingAnchor.constraint(equalToSystemSpacingAfter: imgIcon.trailingAnchor, multiplier: 3.0),
       lblTitle.topAnchor.constraint(equalTo: view.topAnchor),

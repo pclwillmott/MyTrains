@@ -103,9 +103,15 @@ class SelectLayoutVC: NSViewController, NSWindowDelegate, MyTrainsAppDelegate {
   private var observerId : Int = -1
   
   // MARK: MyTrainsAppDelete Methods
+ 
+  func panelListUpdated(panelList: [PanelListItem]) {
+  }
+
+  func switchboardItemListUpdated(switchboardItemList: [SwitchboardItemListItem]) {
+  }
   
-  func LayoutListUpdated(layoutList: [LayoutListItem]) {
-    
+  func layoutListUpdated(layoutList: [LayoutListItem]) {
+
     cboLayout.removeAllItems()
     self.layoutList.removeAll()
     

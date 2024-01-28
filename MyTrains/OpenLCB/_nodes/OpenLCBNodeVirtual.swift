@@ -237,6 +237,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     }
     set(value) {
       virtualNodeConfigSpace.setUInt(address: addressVirtualNodeConfigLayoutNodeId, value:value)
+      initCDI()
     }
   }
 
@@ -395,31 +396,17 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
         cdi = TurnoutMotorType.insertMap(cdi: cdi)
         cdi = Orientation.insertMap(cdi: cdi)
         cdi = CountryCode.insertMap(cdi: cdi)
-                  
-        var sorted : [(nodeId:UInt64, name:String)] = []
+        cdi = OpenLCBClockInitialDateTime.insertMap(cdi: cdi)
+        cdi = SwitchBoardItemType.insertMap(cdi: cdi)
+        cdi = BlockDirection.insertMap(cdi: cdi)
+        cdi = YesNo.insertMap(cdi: cdi)
 
         if let app = networkLayer?.myTrainsNode {
-          
-          for item in app.layoutList {
-            if item.masterNodeId == app.nodeId {
-              sorted.append((nodeId:item.layoutId, name:item.layoutName))
-            }
-          }
-          
-          sorted.sort {$0.name < $1.name}
-          
+          cdi = app.insertLayoutMap(cdi: cdi)
+          cdi = app.insertPanelMap(cdi: cdi, layoutId: layoutNodeId)
+          cdi = app.insertGroupMap(cdi: cdi, layoutId: layoutNodeId)
         }
-          
-        var layouts = "<map>\n<relation><property>00.00.00.00.00.00.00.00</property><value>No Layout Selected</value></relation>\n"
         
-        for item in sorted {
-          layouts += "<relation><property>\(item.nodeId.toHexDotFormat(numberOfBytes: 8))</property><value>\(item.name)</value></relation>\n"
-        }
-
-        layouts += "</map>\n"
-
-        cdi = cdi.replacingOccurrences(of: CDI.LAYOUT_NODES, with: layouts)
-
         let memorySpace = OpenLCBMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.cdi.rawValue, isReadOnly: true, description: "")
         
         memorySpace.memory = [UInt8]()

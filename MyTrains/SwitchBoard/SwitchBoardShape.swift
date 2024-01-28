@@ -12,7 +12,7 @@ class SwitchBoardShape {
   
   // MARK: Class Methods
   
-  public static func drawShape(partType: SwitchBoardItemPartType, orientation: Orientation, location: SwitchBoardLocation, lineWidth:CGFloat, cellSize: CGFloat, isButton: Bool, isEnabled: Bool, offset: CGPoint, switchBoardItem: SwitchBoardItem?) {
+  public static func drawShape(partType: SwitchBoardItemType, orientation: Orientation, location: SwitchBoardLocation, lineWidth:CGFloat, cellSize: CGFloat, isButton: Bool, isEnabled: Bool, offset: CGPoint, switchBoardItem: SwitchBoardItem?) {
     
     let onlyTurnouts : Bool = switchBoardItem != nil
     
@@ -212,14 +212,14 @@ class SwitchBoardShape {
 
   }
   
-  public static func getShape(part: SwitchBoardItemPartType, orientation: Orientation) -> Shape? {
+  public static func getShape(part: SwitchBoardItemType, orientation: Orientation) -> Shape? {
     if let shape = shapes[part] {
-      return shape[shape.count == 1 ? 0 : orientation.rawValue & 1]
-    } 
+      return shape[shape.count == 1 ? 0 : Int(orientation.rawValue & 1)]
+    }
     return nil
   }
   
-  private static let shapes : [SwitchBoardItemPartType: [Shape]] = [
+  private static let shapes : [SwitchBoardItemType: [Shape]] = [
     .straight : [[
       (type: .line, coordinates:[CGPoint(x: 0.0, y: -0.5), CGPoint(x: 0.0, y: 0.5)], parameters: [], actionColors: [:])
     ],

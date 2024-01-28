@@ -88,6 +88,21 @@ public class SwitchboardPanelNode : OpenLCBNodeVirtual {
     }
 
   }
+  
+  internal override func resetReboot() {
+    
+    super.resetReboot()
+    
+    networkLayer?.sendIdentifyProducer(sourceNodeId: nodeId, event: .identifyMyTrainsSwitchboardPanels)
+    
+    networkLayer?.sendIdentifyConsumer(sourceNodeId: nodeId, event: .nodeIsASwitchboardPanel)
+    
+    var payload = layoutNodeId.bigEndianData
+    payload.removeFirst(2)
+    
+    networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .nodeIsASwitchboardPanel, payload: payload)
+
+  }
 
  // MARK: Public Methods
   
@@ -104,6 +119,75 @@ public class SwitchboardPanelNode : OpenLCBNodeVirtual {
   public override func openLCBMessageReceived(message: OpenLCBMessage) {
     
     super.openLCBMessageReceived(message: message)
+    
+    switch message.messageTypeIndicator {
+     
+    case .identifyProducer:
+      
+      if let eventId = message.eventId {
+        
+        if let event = OpenLCBWellKnownEvent(rawValue: eventId) {
+          
+          switch event {
+            
+          case .nodeIsASwitchboardPanel:
+            
+            networkLayer?.sendProducerIdentified(sourceNodeId: nodeId, wellKnownEvent: .nodeIsASwitchboardPanel, validity: .valid)
+            
+          default:
+            break
+          }
+          
+        }
+        
+      }
+
+   case .identifyConsumer:
+      
+      if let eventId = message.eventId {
+        
+        if let event = OpenLCBWellKnownEvent(rawValue: eventId) {
+          
+          switch event {
+            
+          case .identifyMyTrainsSwitchboardPanels:
+            
+            networkLayer?.sendConsumerIdentified(sourceNodeId: nodeId, wellKnownEvent: .identifyMyTrainsSwitchboardPanels, validity: .valid)
+            
+          default:
+            break
+          }
+          
+        }
+        
+      }
+
+    case .producerConsumerEventReport:
+      
+      if let eventId = message.eventId {
+        
+        if let event = OpenLCBWellKnownEvent(rawValue: eventId) {
+          
+          switch event {
+            
+          case .identifyMyTrainsSwitchboardPanels:
+            
+            var payload = layoutNodeId.bigEndianData
+            payload.removeFirst(2)
+            
+            networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .nodeIsASwitchboardPanel, payload: payload)
+
+          default:
+            break
+          }
+          
+        }
+        
+      }
+      
+    default:
+      break
+    }
     
   }
   

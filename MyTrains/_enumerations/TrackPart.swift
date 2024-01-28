@@ -20,9 +20,9 @@ import Foundation
  ]
 
  */
-public typealias TrackPartInfo = (trackPartId:TrackPart, manufacturer:Manufacturer, brandName:String, title: String, partNumber: String, itemPartType: SwitchBoardItemPartType, trackCode: TrackCode, trackGauge: TrackGauge, frogType:FrogType, dimensions: [Double])
+public typealias TrackPartInfo = (trackPartId:TrackPart, manufacturer:Manufacturer, brandName:String, title: String, partNumber: String, itemPartType: SwitchBoardItemType, trackCode: TrackCode, trackGauge: TrackGauge, frogType:FrogType, dimensions: [Double])
 
-public enum TrackPart : Int {
+public enum TrackPart : UInt16 {
   
   case pecoStreamlineOOHOCode100CatchPointRightHand = 0
   case pecoStreamlineOOHOCode100CatchPointLeftHand = 1
@@ -106,7 +106,7 @@ public enum TrackPart : Int {
     if self == .custom {
       return nil
     }
-    return TrackPart.info[self.rawValue]
+    return TrackPart.info[Int(self.rawValue)]
   }
   
   // MARK: Private Class Properties
@@ -841,9 +841,37 @@ public enum TrackPart : Int {
 
   ]
   
+  public static let mapPlaceholder = CDI.TRACK_PART
+
+  private static func map(itemType:SwitchBoardItemType) -> String {
+    
+    var items : [TrackPart] = []
+    
+    for item in info {
+      if item.itemPartType == itemType {
+        items.append(item.trackPartId)
+      }
+    }
+    
+    var map = "<map>\n"
+
+    for item in items {
+      map += "<relation><property>\(item.rawValue)</property><value>\(item.title)</value></relation>\n"
+    }
+
+    map += "</map>\n"
+
+    return map
+
+  }
+
   // MARK: Public Class Methods
   
-  public static func dictionary(itemPartType:SwitchBoardItemPartType, trackGauge:TrackGauge) -> [Int:TrackPartEditorObject] {
+  public static func insertMap(cdi:String, itemType:SwitchBoardItemType) -> String {
+    return cdi.replacingOccurrences(of: mapPlaceholder, with: map(itemType: itemType))
+  }
+
+  public static func dictionary(itemPartType:SwitchBoardItemType, trackGauge:TrackGauge) -> [Int:TrackPartEditorObject] {
     
     var result : [Int:TrackPartEditorObject] = [:]
     
@@ -870,7 +898,7 @@ public class TrackPartEditorObject : EditorObject {
   
   init(trackPart:TrackPart) {
     self.trackPart = trackPart
-    super.init(primaryKey: trackPart.rawValue)
+    super.init(primaryKey: Int(trackPart.rawValue))
   }
   
   // MARK: Public Properties

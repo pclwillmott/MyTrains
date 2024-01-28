@@ -60,7 +60,7 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
         cboGroupId.addItem(withObjectValue: "\(id)")
       }
       
-      lblPartType.stringValue = item.itemPartType.partName
+      lblPartType.stringValue = item.itemPartType.title
       
       
       var x : CGFloat = 60.0

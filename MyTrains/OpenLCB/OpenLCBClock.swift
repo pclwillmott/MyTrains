@@ -214,6 +214,10 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
     }
     set(value) {
       configuration.setFloat(address: addressCurrentRate, value: Float(value))
+      if clockState == .running {
+        stopTimer()
+        startTimer()
+      }
     }
   }
   
@@ -582,7 +586,6 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
       
       if triggered || rollover {
         lastEvents[OpenLCBFastClockEventIndex.reportTimeEvent.rawValue] = eventId
-//        print("clock: \(eventId.toHexDotFormat(numberOfBytes: 8))")
         network.sendEvent(sourceNodeId: nodeId, eventId: eventId)
         triggered = false
         lastSend = newDate
@@ -804,6 +807,7 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
   
   public override func start() {
     super.start()
+    startClock()
   }
   
   public override func stop() {
@@ -823,7 +827,6 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
           stopTimer()
           startTimer()
         }
-        break
       case addressInitialRate:
         break
       case addressRunningState:

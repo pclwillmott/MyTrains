@@ -161,6 +161,7 @@ public enum MyTrainsVirtualNodeType : UInt16 {
       nodeTypes = [
         .layoutNode,
         .switchboardPanelNode,
+        .switchboardItemNode,
         .throttleNode,
         .trainNode,
         .canGatewayNode,

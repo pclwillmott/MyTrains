@@ -327,9 +327,9 @@ public class Layout : EditorObject {
       
       for connection in block.itemPartType.connections {
         
-        let from = (connection.from + block.orientation.rawValue) % 8
+        let from = (connection.from + Int(block.orientation.rawValue)) % 8
         
-        let to = (connection.to + block.orientation.rawValue) % 8
+        let to = (connection.to + Int(block.orientation.rawValue)) % 8
         
         if let fromNode = block.nodeLinks[from].switchBoardItem, let toNode = block.nodeLinks[to].switchBoardItem {
           

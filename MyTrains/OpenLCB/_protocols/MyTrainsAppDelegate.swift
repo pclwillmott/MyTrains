@@ -8,5 +8,7 @@
 import Foundation
 
 public protocol MyTrainsAppDelegate {
-  func LayoutListUpdated(layoutList:[LayoutListItem])
+  func layoutListUpdated(layoutList:[LayoutListItem])
+  func panelListUpdated(panelList:[PanelListItem])
+  func switchboardItemListUpdated(switchboardItemList:[SwitchboardItemListItem])
 }

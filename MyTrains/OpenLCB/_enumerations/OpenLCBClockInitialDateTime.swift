@@ -21,8 +21,8 @@ public enum OpenLCBClockInitialDateTime : UInt8 {
   // MARK: Private Class Properties
   
   private static let titles = [
-    String(localized: "Computer Date & Time", comment: "Used to indicate what is the initial date and time setting for a clock"),
-    String(localized: "Default Date & Time", comment: "Used to indicate what is the initial date and time setting for a clock"),
+    String(localized: "Computer Date and Time", comment: "Used to indicate what is the initial date and time setting for a clock"),
+    String(localized: "Default Date and Time", comment: "Used to indicate what is the initial date and time setting for a clock"),
   ]
 
   private static var map : String {

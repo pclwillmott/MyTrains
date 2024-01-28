@@ -43,25 +43,25 @@ class SwitchBoardShapeButton: NSButton {
       
     }
     
-    toolTip = partType.partName
+    toolTip = partType.title
 
   }
   
   // MARK: Public Properties
   
-  public var partType : SwitchBoardItemPartType = .none {
+  public var partType : SwitchBoardItemType = .none {
     didSet {
       needsDisplay = true
     }
   }
   
   @IBInspectable
-  public var partTypeRawValue : Int {
+  public var partTypeRawValue : UInt16 {
     get {
       return partType.rawValue
     }
     set(value) {
-      if let part = SwitchBoardItemPartType(rawValue: value) {
+      if let part = SwitchBoardItemType(rawValue: value) {
         partType = part
       }
       else {

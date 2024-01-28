@@ -13,17 +13,17 @@
 <name>Switchboard Panel Configuration</name>
 
 <int size='2'>
-<name>Number of Columns</name>
-<description>The number of columns for this panel.</description>
-<min>1</min>
-<max>65535</max>
+  <name>Number of Columns</name>
+  <description>The number of columns for this panel.</description>
+  <min>1</min>
+  <max>65535</max>
 </int>
 
 <int size='2'>
-<name>Number of Rows</name>
-<description>The number of rows for this panel.</description>
-<min>1</min>
-<max>65535</max>
+  <name>Number of Rows</name>
+  <description>The number of rows for this panel.</description>
+  <min>1</min>
+  <max>65535</max>
 </int>
 
 </segment>

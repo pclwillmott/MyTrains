@@ -133,7 +133,7 @@ class SwitchBoardEditorView: SwitchBoardView {
     }
   }
   
-  public var nextPart : SwitchBoardItemPartType = .none
+  public var nextPart : SwitchBoardItemType = .none
   
   public var isGroupMode : Bool {
     get {

@@ -38,5 +38,11 @@ enum CDI {
   static let TRACK_ELECTRIFICATION_TYPE = "%%TRACK_ELECTRIFICATION_TYPE%%"
   static let ORIENTATION                = "%%ORIENTATION%%"
   static let COUNTRY_CODE               = "%%COUNTRY_CODE%%"
+  static let SWITCHBOARD_ITEM_TYPE      = "%%SWITCHBOARD_ITEM_TYPE%%"
+  static let SWITCHBOARD_PANEL_NODES    = "%%SWITCHBOARD_PANEL_NODES%%"
+  static let DIRECTIONALITY             = "%%DIRECTIONALITY%%"
+  static let YES_NO                     = "%%YES_NO%%"
+  static let SWITCHBOARD_GROUP_NODES    = "%%SWITCHBOARD_GROUP_NODES%%"
+  static let TRACK_PART                 = "%%TRACK_PART%%"
 }
 
