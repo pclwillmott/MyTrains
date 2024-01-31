@@ -1,6 +1,12 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "'" : {
+
+    },
+    "\"" : {
+
+    },
     "%lld bytes %@" : {
       "localizations" : {
         "en" : {
@@ -60,6 +66,7 @@
     },
     "1 : %@" : {
       "comment" : "This is a ratio used for layout scale, e.g. 1 : 76.2",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -91,6 +98,9 @@
           }
         }
       }
+    },
+    "1:%@" : {
+      "comment" : "This is a ratio used for layout scale, e.g. 1:76.2"
     },
     "3-Way Turnout" : {
       "comment" : "This is used to describe a piece of track."
@@ -1060,6 +1070,9 @@
         }
       }
     },
+    "cm" : {
+
+    },
     "Coasting" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -1421,7 +1434,7 @@
       }
     },
     "Create Application Node" : {
-      "comment" : "Used for the Create Application Node menu item title\nUsed for the title of the Create Application Node window",
+      "comment" : "Used for the title of the Create Application Node window\nUsed for the Create Application Node menu item title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1579,7 +1592,7 @@
       }
     },
     "DCC Programmer Tool" : {
-      "comment" : "Used for the DCC Programmer Tool menu item title\nUsed to create a default OpenLCB virtual name",
+      "comment" : "Used to create a default OpenLCB virtual name\nUsed for the DCC Programmer Tool menu item title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2034,6 +2047,7 @@
     },
     "EM" : {
       "comment" : "Used to indicate the track gauge",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2187,7 +2201,7 @@
       }
     },
     "Fast Clock" : {
-      "comment" : "Used for the Fast Clock menu item title\nUsed to indicate a clock's type",
+      "comment" : "Used to indicate a clock's type\nUsed for the Fast Clock menu item title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2678,6 +2692,9 @@
         }
       }
     },
+    "km" : {
+
+    },
     "l" : {
       "comment" : "Used for the Select Layout menu key equivalent",
       "localizations" : {
@@ -2962,6 +2979,9 @@
         }
       }
     },
+    "m" : {
+
+    },
     "Machine Room Lights" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -3124,6 +3144,12 @@
     "Mexico" : {
       "comment" : "This is the name of a country."
     },
+    "mi." : {
+
+    },
+    "mi.ch" : {
+
+    },
     "Miles" : {
       "localizations" : {
         "en" : {
@@ -3187,6 +3213,9 @@
           }
         }
       }
+    },
+    "mm" : {
+
     },
     "Model" : {
 
@@ -3261,6 +3290,7 @@
     },
     "N" : {
       "comment" : "Used to indicate the track gauge",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3417,6 +3447,7 @@
     },
     "O" : {
       "comment" : "Used to indicate the track gauge",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3431,9 +3462,6 @@
           }
         }
       }
-    },
-    "O14" : {
-      "comment" : "Used to indicate the track gauge"
     },
     "Octal" : {
       "comment" : "Used by combobox to select number base for display",
@@ -3488,6 +3516,7 @@
     },
     "OO/HO" : {
       "comment" : "Used to indicate the track gauge",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3505,6 +3534,7 @@
     },
     "OOO" : {
       "comment" : "Used to indicate the track gauge",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3573,6 +3603,7 @@
     },
     "P4" : {
       "comment" : "Used to indicate the track gauge",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3942,6 +3973,7 @@
     },
     "S" : {
       "comment" : "Used to indicate the track gauge",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3993,6 +4025,7 @@
     },
     "Scale 7" : {
       "comment" : "Used to indicate the track gauge",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -4026,7 +4059,7 @@
       }
     },
     "Select Layout" : {
-      "comment" : "Used for the Select Layout menu item\nUsed for the title of the Select Layout window",
+      "comment" : "Used for the title of the Select Layout window\nUsed for the Select Layout menu item",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -4618,6 +4651,7 @@
     },
     "TT" : {
       "comment" : "Used to indicate the track gauge",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -4635,6 +4669,7 @@
     },
     "TT3" : {
       "comment" : "Used to indicate the track gauge",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -4751,7 +4786,7 @@
       "comment" : "This is the name of a country."
     },
     "Unknown" : {
-      "comment" : "Used to indicate the state of a turnout\nUsed to indicate that the type of something is unknown",
+      "comment" : "Used to indicate that the type of something is unknown\nUsed to indicate the state of a turnout",
       "localizations" : {
         "en" : {
           "stringUnit" : {

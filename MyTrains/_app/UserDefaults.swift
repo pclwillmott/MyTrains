@@ -78,6 +78,13 @@ public var appNodeId : UInt64? {
   }
 }
 
+public var appNode : OpenLCBNodeMyTrains? {
+  guard let networkLayer = myTrainsController.openLCBNetworkLayer else {
+    return nil
+  }
+  return networkLayer.myTrainsNode
+}
+
 public var appLayoutId : UInt64? {
   get {
     let id = UserDefaults.standard.integer(forKey: DEFAULT.APP_LAYOUT_ID)

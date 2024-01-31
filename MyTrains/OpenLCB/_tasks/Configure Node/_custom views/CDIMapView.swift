@@ -58,6 +58,7 @@ class CDIMapView : CDIDataView {
       comboBox.leadingAnchor.constraint(equalTo: comboView.leadingAnchor),
       comboBox.widthAnchor.constraint(greaterThanOrEqualToConstant: 100),
       comboView.heightAnchor.constraint(equalTo: comboBox.heightAnchor),
+      comboBox.trailingAnchor.constraint(lessThanOrEqualTo: dataButtonView.leadingAnchor, constant: -8.0),
     ])
     
     map.populate(comboBox: comboBox)

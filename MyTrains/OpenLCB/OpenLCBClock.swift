@@ -473,6 +473,19 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
     
   }
   
+  override internal func customizeDynamicCDI(cdi:String) -> String {
+    
+    var result = OpenLCBClockOperatingMode.insertMap(cdi: cdi)
+    result = OpenLCBClockType.insertMap(cdi: result)
+    result = ClockCustomIdType.insertMap(cdi: result)
+    result = OpenLCBClockState.insertMap(cdi: result)
+    result = EnableState.insertMap(cdi: result)
+    result = OpenLCBClockInitialDateTime.insertMap(cdi: result)
+
+    return result
+    
+  }
+  
   private func sendStartClockPreamble() {
     if let network = networkLayer {
       makeSync()

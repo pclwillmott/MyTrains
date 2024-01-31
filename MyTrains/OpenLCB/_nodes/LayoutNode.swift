@@ -13,7 +13,7 @@ public class LayoutNode : OpenLCBNodeVirtual {
   
   public override init(nodeId:UInt64) {
     
-    configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: 4, isReadOnly: false, description: "")
+    configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: 6, isReadOnly: false, description: "")
     
     super.init(nodeId: nodeId)
     
@@ -26,6 +26,8 @@ public class LayoutNode : OpenLCBNodeVirtual {
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressScale)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressLayoutState)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressCountryCode)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressUsesMultipleTrackGauges)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDefaultTrackGuage)
 
     if !memorySpacesInitialized {
       resetToFactoryDefaults()
@@ -39,22 +41,15 @@ public class LayoutNode : OpenLCBNodeVirtual {
   
   // Configuration variable addresses
   
-  internal let addressScale       : Int =  0
-  internal let addressLayoutState : Int =  1
-  internal let addressCountryCode : Int =  2
+  internal let addressScale                   : Int = 0 // 1
+  internal let addressLayoutState             : Int = 1 // 2
+  internal let addressCountryCode             : Int = 2 // 4
+  internal let addressUsesMultipleTrackGauges : Int = 4 // 5
+  internal let addressDefaultTrackGuage       : Int = 5 // 6
 
   // MARK: Public Properties
   
   public var configuration : OpenLCBMemorySpace
-
-  public var countryCode : CountryCode {
-    get {
-      return CountryCode(rawValue: configuration.getUInt16(address: addressCountryCode)!)!
-    }
-    set(value) {
-      configuration.setUInt(address: addressCountryCode, value: value.rawValue)
-    }
-  }
 
   public var scale : Scale {
     get {
@@ -76,12 +71,46 @@ public class LayoutNode : OpenLCBNodeVirtual {
     }
   }
 
+  public var countryCode : CountryCode {
+    get {
+      return CountryCode(rawValue: configuration.getUInt16(address: addressCountryCode)!)!
+    }
+    set(value) {
+      configuration.setUInt(address: addressCountryCode, value: value.rawValue)
+    }
+  }
+
+  public var usesMultipleTrackGauges : Bool {
+    get {
+      return configuration.getUInt8(address: addressUsesMultipleTrackGauges)! == 1
+    }
+    set(value) {
+      configuration.setUInt(address: addressUsesMultipleTrackGauges, value: value ? UInt8(1) : UInt8(0))
+    }
+  }
+
+  public var defaultTrackGuage : TrackGauge {
+    get {
+      return TrackGauge(rawValue: configuration.getUInt8(address: addressDefaultTrackGuage)!)!
+    }
+    set(value) {
+      configuration.setUInt(address: addressDefaultTrackGuage, value: value.rawValue)
+    }
+  }
+
   // MARK: Private Methods
 
   internal override func resetToFactoryDefaults() {
+    
     super.resetToFactoryDefaults()
+    
     countryCode = .unitedStates
+    scale = .scale1to87dot1
+    usesMultipleTrackGauges = false
+    defaultTrackGuage = .ho
+    
     saveMemorySpaces()
+    
   }
   
   internal override func resetReboot() {
@@ -100,6 +129,17 @@ public class LayoutNode : OpenLCBNodeVirtual {
     
   }
   
+  internal override func customizeDynamicCDI(cdi:String) -> String {
+    var result = cdi
+    result = Scale.insertMap(cdi: result)
+    result = LayoutState.insertMap(cdi: result)
+    result = CountryCode.insertMap(cdi: result)
+    result = YesNo.insertMap(cdi: result)
+    result = TrackGauge.insertMap(cdi: result)
+    return result
+  }
+
+
   public override func variableChanged(space: OpenLCBMemorySpace, address: Int) {
     
     guard let networkLayer else {
@@ -116,6 +156,8 @@ public class LayoutNode : OpenLCBNodeVirtual {
         else if networkLayer.layoutNodeId == nodeId {
           networkLayer.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .myTrainsLayoutDeactivated, payload: appNodeId!.bigEndianData)
         }
+      case addressScale, addressCountryCode, addressDefaultTrackGuage, addressUsesMultipleTrackGauges:
+        networkLayer.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .rebuildCDI)
       default:
         break
       }
@@ -132,13 +174,6 @@ public class LayoutNode : OpenLCBNodeVirtual {
     
     networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .myTrainsLayoutDeleted)
 
-  }
-
-  internal override func customizeDynamicCDI(cdi:String) -> String {
-    var result = cdi
-    result = Scale.insertMap(cdi: result)
-    result = LayoutState.insertMap(cdi: result)
-    return result
   }
 
   // MARK: OpenLCBNetworkLayerDelegate Methods
@@ -183,6 +218,10 @@ public class LayoutNode : OpenLCBNodeVirtual {
           
           networkLayer?.sendProducerIdentified(sourceNodeId: nodeId, wellKnownEvent: .myTrainsLayoutDeactivated, validity: layoutState == .deactivated ? .valid : .invalid)
           
+        case .rebuildCDI:
+ 
+          networkLayer?.sendProducerIdentified(sourceNodeId: nodeId, wellKnownEvent: .rebuildCDI, validity: .invalid)
+ 
         default:
           break
         }

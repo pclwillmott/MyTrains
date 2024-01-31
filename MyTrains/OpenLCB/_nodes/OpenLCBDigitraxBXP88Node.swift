@@ -486,6 +486,37 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
     return configuration.getUInt64(address: addressTrackFaultClearedEventId + baseAddress)
   }
 
+  internal override func customizeDynamicCDI(cdi:String) -> String {
+    
+    // Do mappings for LocoNet Gateways
+    
+    var sorted : [(nodeId:UInt64, name:String)] = []
+    
+    for (key, name) in locoNetGateways {
+      sorted.append((nodeId:key, name:name))
+    }
+    
+    sorted.sort {$0.name < $1.name}
+    
+    var gateways = "<map>\n<relation><property>00.00.00.00.00.00.00.00</property><value>No Gateway Selected</value></relation>\n"
+    
+    for gateway in sorted {
+      gateways += "<relation><property>\(gateway.nodeId.toHexDotFormat(numberOfBytes: 8))</property><value>\(gateway.name)</value></relation>\n"
+    }
+
+    gateways += "</map>\n"
+    
+    var result = cdi.replacingOccurrences(of: CDI.LOCONET_GATEWAYS, with: gateways)
+
+    // Do other replacement mappings
+    
+    result = EnableState.insertMap(cdi: result)
+
+    return result
+    
+  }
+  
+
   internal override func resetToFactoryDefaults() {
 
     super.resetToFactoryDefaults()
@@ -617,30 +648,6 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
   func stopTimeoutTimer() {
     timeoutTimer?.invalidate()
     timeoutTimer = nil
-  }
-  
-  internal override func customizeDynamicCDI(cdi:String) -> String {
-    
-    // Do mappings for LocoNet Gateways
-    
-    var sorted : [(nodeId:UInt64, name:String)] = []
-    
-    for (key, name) in locoNetGateways {
-      sorted.append((nodeId:key, name:name))
-    }
-    
-    sorted.sort {$0.name < $1.name}
-    
-    var gateways = "<map>\n<relation><property>00.00.00.00.00.00.00.00</property><value>No Gateway Selected</value></relation>\n"
-    
-    for gateway in sorted {
-      gateways += "<relation><property>\(gateway.nodeId.toHexDotFormat(numberOfBytes: 8))</property><value>\(gateway.name)</value></relation>\n"
-    }
-
-    gateways += "</map>\n"
-    
-    return cdi.replacingOccurrences(of: CDI.LOCONET_GATEWAYS, with: gateways)
-
   }
   
   // MARK: Public Methods

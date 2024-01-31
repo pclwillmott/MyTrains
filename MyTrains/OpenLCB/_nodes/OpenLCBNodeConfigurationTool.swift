@@ -41,6 +41,10 @@ public class OpenLCBNodeConfigurationTool : OpenLCBNodeVirtual {
     
   }
   
+  internal override func customizeDynamicCDI(cdi:String) -> String {
+    return cdi
+  }
+  
   // MARK: Public Methods
   
   // MARK: Public Methods

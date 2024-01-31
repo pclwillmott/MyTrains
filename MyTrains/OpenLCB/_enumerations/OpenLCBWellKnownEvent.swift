@@ -46,6 +46,7 @@ public enum OpenLCBWellKnownEvent : UInt64 {
   case identifyMyTrainsSwitchboardItems    = 0x050101017b00fff9
   case nodeIsASwitchboardPanel             = 0x050101017b00fff8
   case nodeIsASwitchboardItem              = 0x050101017b00fff7
+  case rebuildCDI                          = 0x050101017b00fff6
   case trainSearchEvent                    = 0x090099ff00000000
   case nodeIsADCCProgrammingTrack          = 0x090099feffff0002
   case trainSearchDCCShortAddress          = 0x090099ffffffff08

@@ -413,9 +413,13 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
     }
 
     gateways += "</map>\n"
-    
-    return cdi.replacingOccurrences(of: CDI.LOCONET_GATEWAYS, with: gateways)
+ 
+    var result = cdi.replacingOccurrences(of: CDI.LOCONET_GATEWAYS, with: gateways)
 
+    result = OpenLCBFunction.insertMap(cdi: result)
+
+    return result
+    
   }
 
   internal override func resetReboot() {

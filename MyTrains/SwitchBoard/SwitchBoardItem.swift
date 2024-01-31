@@ -281,7 +281,7 @@ public class SwitchBoardItem : EditorObject {
     }
   }
   
-  public var trackGauge : TrackGauge = .ooho {
+  public var trackGauge : TrackGauge = .ho {
     didSet {
       modified = true
     }
@@ -825,17 +825,17 @@ public class SwitchBoardItem : EditorObject {
   
   public func stopPositionInCM(routeDirection: RouteDirection) -> Double {
     
-    var stopPosition : Double = (routeDirection == .next)
-    ? (dirNextStopPosition * dirNextUnitsPosition.toCM)
-    : (dirPreviousStopPosition * dirPreviousUnitsPosition.toCM)
+//    var stopPosition : Double = (routeDirection == .next)
+//    ? (dirNextStopPosition * dirNextUnitsPosition.toCM)
+//    : (dirPreviousStopPosition * dirPreviousUnitsPosition.toCM)
     
     // A stop position is always in a block. Blocks only have one dimension, so we use a fixed index of 0.
     
-    if stopPosition < 0.0 {
-      stopPosition += (getDimension(index: 0) * unitsDimension.toCM)
-    }
+//    if stopPosition < 0.0 {
+//      stopPosition += (getDimension(index: 0) * unitsDimension.toCM)
+//    }
 
-    return stopPosition
+    return 0.0 //stopPosition
     
   }
   
@@ -964,7 +964,7 @@ public class SwitchBoardItem : EditorObject {
       }
 
       if !reader.isDBNull(index: 21) {
-        trackGauge = TrackGauge(rawValue: UInt8(reader.getInt(index: 21)!)) ?? TrackGauge.defaultValue
+ //       trackGauge = TrackGauge(rawValue: UInt8(reader.getInt(index: 21)!)) ?? TrackGauge.defaultValue
       }
 
       if !reader.isDBNull(index: 22) {

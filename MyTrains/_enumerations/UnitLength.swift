@@ -24,15 +24,11 @@ public enum UnitLength : Int {
   public var title : String {
     return UnitLength.titles[self.rawValue]
   }
-  
-  public var toCM : Double {
-    return UnitLength.toCM(units: self)
+
+  public var symbol : String {
+    return UnitLength.symbols[self.rawValue]
   }
-  
-  public var fromCM : Double {
-    return UnitLength.fromCM(units: self)
-  }
-  
+
   // MARK: Private Class Properties
   
   private static let titles = [
@@ -45,7 +41,18 @@ public enum UnitLength : Int {
     String(localized: "Miles"),
     String(localized: "Miles.Chains"),
   ]
-  
+
+  private static let symbols = [
+    String(localized: "mm"),
+    String(localized: "cm"),
+    String(localized: "m"),
+    String(localized: "km"),
+    String(localized: "\""),
+    String(localized: "\'"),
+    String(localized: "mi."),
+    String(localized: "mi.ch"),
+  ]
+
   private static var map : String {
     
     let items : [UnitLength] = [
@@ -80,30 +87,62 @@ public enum UnitLength : Int {
   // MARK: Public Class Methods
   
   // The factor to be applied to a length in units to get a length in cm.
-  // This factor does not take into account the layout scale.
-  public static func toCM(units: UnitLength) -> Double {
+  public static func toCM(units: UnitLength) -> Double? {
     
     switch units {
     case .millimeters:
       return 1.0 / 10.0
     case .centimeters:
       return 1.0
-    case .feet:
-      return 12.0 * 2.54
     case .meters:
       return 100.0
+    case .kilometers:
+      return 100000.0
     case .inches:
       return 2.54
-    default:
-      return 1.0
+    case .feet:
+      return 30.48
+    case .miles:
+      return 160934.4
+    case .mileschains:
+      return nil
     }
     
   }
   
-  // The factor to be applied to a length in cm/s to get a length in units.
-  // This factor does not take into account the layout scale.
-  public static func fromCM(units: UnitLength) -> Double {
-    return 1.0 / toCM(units: units)
+  // The factor to be applied to a length in cm to get a length in units.
+  public static func fromCM(units: UnitLength) -> Double? {
+    guard let multiplier = toCM(units: units) else {
+      return nil
+    }
+    return 1.0 / multiplier
+  }
+  
+  public static func convert(fromValue:Double, fromUnits:UnitLength, toUnits:UnitLength) -> Double {
+
+    var temp = fromValue
+    
+    var from = fromUnits
+    
+    if fromUnits == .mileschains {
+      var miles = temp.rounded(.towardZero)
+      let chains = temp - miles
+      temp = miles + chains / 80.0
+      from = .miles
+    }
+    
+    temp *= toCM(units: from)!
+    
+    temp *= fromCM(units: toUnits == .mileschains ? .miles : toUnits)!
+    
+    if toUnits == .mileschains {
+      var miles = temp.rounded(.towardZero)
+      let chains = (temp - miles) * 0.80
+      temp = miles + chains
+    }
+    
+    return temp
+
   }
 
   public static func populate(comboBox: NSComboBox) {

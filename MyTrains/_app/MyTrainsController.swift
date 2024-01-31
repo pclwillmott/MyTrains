@@ -29,7 +29,7 @@ public class MyTrainsController : NSObject, NSUserNotificationCenterDelegate {
     checkPortsTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(checkPortsTimerAction), userInfo: nil, repeats: true)
     
     RunLoop.current.add(checkPortsTimer!, forMode: .common)
-    
+  
     openLCBNetworkLayer = OpenLCBNetworkLayer(appNodeId: appNodeId)
     
   }

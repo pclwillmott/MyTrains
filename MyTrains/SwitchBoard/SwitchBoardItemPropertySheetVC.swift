@@ -185,8 +185,8 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
       
       tabs.tabViewItems[1].view?.isHidden = item.isTrack || item.isScenic
 
-      TrackGauge.populate(comboBox: cboTrackGauge)
-      TrackGauge.select(comboBox: cboTrackGauge, value: item.trackGauge)
+  //    TrackGauge.populate(comboBox: cboTrackGauge)
+  //    TrackGauge.select(comboBox: cboTrackGauge, value: item.trackGauge)
       
       TrackElectrificationType.populate(comboBox: cboTrackElectrificationType)
       TrackElectrificationType.select(comboBox: cboTrackElectrificationType, value: item.trackElectrificationType)
@@ -392,9 +392,9 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
       }
     }
     
-    let trackGauge = TrackGauge.selected(comboBox: cboTrackGauge)
+//    let trackGauge = TrackGauge.selected(comboBox: cboTrackGauge)
     let lastValue = cboTrackPartType.stringValue
-    cboTrackPartTypeDS.dictionary = TrackPart.dictionary(itemPartType: item.itemPartType, trackGauge: trackGauge)
+//    cboTrackPartTypeDS.dictionary = TrackPart.dictionary(itemPartType: item.itemPartType, trackGauge: trackGauge)
     cboTrackPartType.dataSource = cboTrackPartTypeDS
     cboTrackPartType.stringValue = lastValue
     
@@ -618,7 +618,7 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
       
       item.trackElectrificationType = TrackElectrificationType.selected(comboBox: cboTrackElectrificationType)
       
-      item.trackGauge = TrackGauge.selected(comboBox: cboTrackGauge)
+  //    item.trackGauge = TrackGauge.selected(comboBox: cboTrackGauge)
       
       item.unitsDimension = UnitLength.selected(comboBox: cboDimensionUnits)
       

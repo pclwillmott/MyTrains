@@ -30,6 +30,18 @@
   %%COUNTRY_CODE%%
 </int>
 
+<int size='1'>
+<name>Track Gauges Used</name>
+<description>Does this layout use more than one track gauge?</description>
+  %%YES_NO%%
+</int>
+
+<int size='1'>
+  <name>Default Track Gauge</name>
+  <description>This will be used as the default track guage when configuring the switchboard for this layout.</description>
+  %%ALL_TRACK_GAUGES%%
+</int>
+
 </segment>
 
 %%VIRTUAL_NODE_CONFIG%%

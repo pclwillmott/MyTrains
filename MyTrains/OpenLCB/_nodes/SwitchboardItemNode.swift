@@ -81,9 +81,9 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
   internal let addressTrackFaultEventId            : Int = 60 // 68
   internal let addressTrackFaultClearedEventId     : Int = 68 // 76
   internal let addressLocationServicesEventId      : Int = 76 // 84
-  internal let addressTrackGauge                   : Int = 84 // 85
-  internal let addressTrackGradient                : Int = 85 // 89
-  internal let addressTrackPart                    : Int = 89 // 91
+  internal let addressTrackGradient                : Int = 84 // 88
+  internal let addressTrackPart                    : Int = 88 // 90
+  internal let addressTrackGauge                   : Int = 90 // 91
   internal let addressDimensionA                   : Int = 91 // 99
   internal let addressDimensionB                   : Int = 99 // 107
   internal let addressDimensionC                   : Int = 107 // 115
@@ -94,6 +94,10 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
   internal let addressDimensionH                   : Int = 147 // 155
 
   private var configuration : OpenLCBMemorySpace
+  
+  private var layoutNode : LayoutNode {
+    return networkLayer!.virtualNodeLookup[layoutNodeId]! as! LayoutNode
+  }
 
   // MARK: Public Properties
   
@@ -394,7 +398,7 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     trackFaultClearedEventId = 0
     locationServicesEventId = 0
     
-    trackGauge = .ooho
+    trackGauge = .ho
     
     trackGradient = 0.0
     
@@ -414,8 +418,22 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
   }
   
   override internal func customizeDynamicCDI(cdi:String) -> String {
-    
-    return TrackPart.insertMap(cdi: cdi, itemType: itemType)
+ 
+    var result = SwitchBoardItemType.insertMap(cdi: cdi)
+    result = Orientation.insertMap(cdi: result)
+    result = BlockDirection.insertMap(cdi: result)
+    result = YesNo.insertMap(cdi: result)
+    result = TrackElectrificationType.insertMap(cdi: result)
+    result = TrackPart.insertMap(cdi: result, itemType: itemType)
+    result = TrackGauge.insertMap(cdi: result, scale: layoutNode.scale)
+    result = TurnoutMotorType.insertMap(cdi: result)
+
+    if let app = networkLayer?.myTrainsNode {
+      result = app.insertPanelMap(cdi: result, layoutId: layoutNodeId)
+      result = app.insertGroupMap(cdi: result, layoutId: layoutNodeId)
+    }
+
+    return result
     
   }
 
@@ -496,7 +514,7 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
 
     case .producerConsumerEventReport:
       
-      if let eventId = message.eventId, let event = OpenLCBWellKnownEvent(rawValue: eventId) {
+      if let event = OpenLCBWellKnownEvent(rawValue: message.eventId!) {
       
         switch event {
         case .identifyMyTrainsSwitchboardItems:
@@ -507,6 +525,12 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
           
           networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .nodeIsASwitchboardItem, payload: payload)
 
+        case .rebuildCDI:
+          
+          if message.sourceNodeId! == layoutNodeId {
+            initCDI()
+          }
+          
         default:
           break
         }

@@ -484,6 +484,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
       return
     }
     
+    node.hostAppNodeId = node.virtualNodeType == .applicationNode ? node.nodeId : appNodeId!
+    
     switch node.virtualNodeType {
     case .layoutNode:
       node.layoutNodeId = node.nodeId
@@ -709,7 +711,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
   }
 
   @IBAction func mnuAboutAction(_ sender: NSMenuItem) {
-    let x = ModalWindow.About.windowController.showWindow(nil)
+    ModalWindow.About.windowController.showWindow(nil)
   }
 
 }

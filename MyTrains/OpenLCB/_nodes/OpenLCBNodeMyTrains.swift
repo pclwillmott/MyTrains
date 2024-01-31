@@ -196,6 +196,8 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     
     switchboardItemList = []
     
+    networkLayer?.sendIdentifyConsumer(sourceNodeId: nodeId, event: .rebuildCDI)
+    
     networkLayer?.sendIdentifyConsumer(sourceNodeId: nodeId, event: .identifyMyTrainsLayouts)
     
     networkLayer?.sendIdentifyConsumer(sourceNodeId: nodeId, event: .identifyMyTrainsSwitchboardPanels)
@@ -220,6 +222,25 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     
   }
 
+  internal override func customizeDynamicCDI(cdi:String) -> String {
+    
+    var result = UnitLength.insertMap(cdi: cdi)
+    result = UnitSpeed.insertMap(cdi: result)
+
+    return result
+    
+  }
+  
+  override public func variableChanged(space:OpenLCBMemorySpace, address:Int) {
+    
+    switch address {
+    case addressUnitsActualLength, addressUnitsScaleSpeed, addressUnitsActualSpeed, addressUnitsScaleLength, addressUnitsScaleDistance, addressUnitsActualDistance:
+      networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .rebuildCDI)
+    default:
+      break
+    }
+  }
+  
   private func tryCandidate() {
     getUniqueNodeIdInProgress = !getUniqueNodeIdQueue.isEmpty
     if let item = getUniqueNodeIdQueue.first {
@@ -625,7 +646,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
         
         switch event {
           
-        case .identifyMyTrainsLayouts, .identifyMyTrainsSwitchboardItems, .identifyMyTrainsSwitchboardPanels:
+        case .identifyMyTrainsLayouts, .identifyMyTrainsSwitchboardItems, .identifyMyTrainsSwitchboardPanels, .rebuildCDI:
           
           networkLayer?.sendProducerIdentified(sourceNodeId: nodeId, eventId: message.eventId!, validity: .valid)
           

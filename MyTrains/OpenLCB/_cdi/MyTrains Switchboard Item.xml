@@ -114,11 +114,6 @@
 <group>
   <name>Track Configuration</name>
 
-  <int size='1'>
-    <name>Track Gauge</name>
-    %%TRACK_GAUGE%%
-  </int>
-
   <float size='4'>
     <name>Track Gradient %</name>
     <min>0.0</min>
@@ -128,6 +123,11 @@
   <int size='2'>
     <name>Track Part</name>
     %%TRACK_PART%%
+  </int>
+
+  <int size='1'>
+    <name>Track Gauge</name>
+    %%TRACK_GAUGE%%
   </int>
 
   <float size='4'>

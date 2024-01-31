@@ -120,7 +120,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-84",
      itemPartType: .turnoutRight,
      trackCode: .code100,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .insulFrog,
      dimensions: [9.8, 9.8]),
 
@@ -131,7 +131,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-85",
      itemPartType: .turnoutLeft,
      trackCode: .code100,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .insulFrog,
      dimensions: [9.8, 9.8]),
 
@@ -142,7 +142,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-91",
      itemPartType: .turnoutRight,
      trackCode: .code100,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .insulFrog,
      dimensions: [18.5, 18.5]),
 
@@ -153,7 +153,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-92",
      itemPartType: .turnoutLeft,
      trackCode: .code100,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .insulFrog,
      dimensions: [18.5, 18.5]),
 
@@ -164,7 +164,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-E91",
      itemPartType: .turnoutRight,
      trackCode: .code100,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .electroFrog,
      dimensions: [18.5, 18.5]),
 
@@ -175,7 +175,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-E92",
      itemPartType: .turnoutLeft,
      trackCode: .code100,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .electroFrog,
      dimensions: [18.5, 18.5]),
 
@@ -186,7 +186,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-93",
      itemPartType: .cross,
      trackCode: .code100,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .insulFrog,
      dimensions: [12.7, 12.7]),
 
@@ -197,7 +197,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-95",
      itemPartType: .turnoutRight,
      trackCode: .code100,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .insulFrog,
      dimensions: [21.9, 21.9]),
 
@@ -208,7 +208,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-96",
      itemPartType: .turnoutLeft,
      trackCode: .code100,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .insulFrog,
      dimensions: [21.9, 21.9]),
 
@@ -219,7 +219,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-E95",
      itemPartType: .turnoutRight,
      trackCode: .code100,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .electroFrog,
      dimensions: [21.9, 21.9]),
 
@@ -230,7 +230,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-E96",
      itemPartType: .turnoutLeft,
      trackCode: .code100,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .electroFrog,
      dimensions: [21.9, 21.9]),
 
@@ -241,7 +241,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-88",
      itemPartType: .turnoutRight,
      trackCode: .code100,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .insulFrog,
      dimensions: [25.9, 25.9]),
 
@@ -252,7 +252,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-89",
      itemPartType: .turnoutLeft,
      trackCode: .code100,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .insulFrog,
      dimensions: [25.9, 25.9]),
 
@@ -263,7 +263,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-E88",
      itemPartType: .turnoutRight,
      trackCode: .code100,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .electroFrog,
      dimensions: [25.9, 25.9]),
 
@@ -274,7 +274,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-E89",
      itemPartType: .turnoutLeft,
      trackCode: .code100,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .electroFrog,
      dimensions: [25.9, 25.9]),
 
@@ -285,7 +285,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-U76",
      itemPartType: .rightCurvedTurnout,
      trackCode: .code100,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .uniFrog,
      dimensions: [16.8, 16.8]),
 
@@ -296,7 +296,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-U77",
      itemPartType: .leftCurvedTurnout,
      trackCode: .code100,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .uniFrog,
      dimensions: [16.8, 16.8]),
 
@@ -307,7 +307,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-86",
      itemPartType: .rightCurvedTurnout,
      trackCode: .code100,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .insulFrog,
      dimensions: [25.8, 25.8]),
 
@@ -318,7 +318,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-87",
      itemPartType: .leftCurvedTurnout,
      trackCode: .code100,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .insulFrog,
      dimensions: [25.8, 25.8]),
 
@@ -329,7 +329,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-E86",
      itemPartType: .rightCurvedTurnout,
      trackCode: .code100,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .electroFrog,
      dimensions: [25.8, 25.8]),
 
@@ -340,7 +340,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-E87",
      itemPartType: .leftCurvedTurnout,
      trackCode: .code100,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .electroFrog,
      dimensions: [25.8, 25.8]),
 
@@ -351,7 +351,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-97",
      itemPartType: .yTurnout,
      trackCode: .code100,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .insulFrog,
      dimensions: [14.8, 14.8]),
 
@@ -362,7 +362,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-E97",
      itemPartType: .yTurnout,
      trackCode: .code100,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .electroFrog,
      dimensions: [14.8, 14.8]),
 
@@ -373,7 +373,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-98",
      itemPartType: .yTurnout,
      trackCode: .code100,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .insulFrog,
      dimensions: [22.0, 22.0]),
 
@@ -384,7 +384,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-E98",
      itemPartType: .yTurnout,
      trackCode: .code100,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .electroFrog,
      dimensions: [22.0, 22.0]),
 
@@ -395,7 +395,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-94",
      itemPartType: .cross,
      trackCode: .code100,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .insulFrog,
      dimensions: [24.9, 24.9]),
 
@@ -406,7 +406,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-80",
      itemPartType: .singleSlip,
      trackCode: .code100,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .insulFrog,
      dimensions: [24.9, 24.9, 24.9]),
 
@@ -417,7 +417,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-90",
      itemPartType: .doubleSlip,
      trackCode: .code100,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .insulFrog,
      dimensions: [24.9, 24.9, 24.9, 24.9]),
 
@@ -428,7 +428,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-99",
      itemPartType: .turnout3Way,
      trackCode: .code100,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .insulFrog,
      dimensions: [22.0, 22.0, 22.0]),
 
@@ -439,7 +439,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-E99",
      itemPartType: .turnout3Way,
      trackCode: .code100,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .electroFrog,
      dimensions: [22.0, 22.0, 22.0]),
 
@@ -450,7 +450,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-184",
      itemPartType: .turnoutRight,
      trackCode: .code75,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .insulFrog,
      dimensions: [9.1, 9.1]),
 
@@ -461,7 +461,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-185",
      itemPartType: .turnoutLeft,
      trackCode: .code75,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .insulFrog,
      dimensions: [9.1, 9.1]),
 
@@ -472,7 +472,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-E191",
      itemPartType: .turnoutRight,
      trackCode: .code75,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .electroFrog,
      dimensions: [18.5, 18.5]),
 
@@ -483,7 +483,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-E192",
      itemPartType: .turnoutLeft,
      trackCode: .code75,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .electroFrog,
      dimensions: [18.5, 18.5]),
 
@@ -494,7 +494,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-E195",
      itemPartType: .turnoutRight,
      trackCode: .code75,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .electroFrog,
      dimensions: [21.9, 21.9]),
 
@@ -505,7 +505,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-E196",
      itemPartType: .turnoutLeft,
      trackCode: .code75,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .electroFrog,
      dimensions: [21.9, 21.9]),
 
@@ -516,7 +516,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-E1095",
      itemPartType: .turnoutRight,
      trackCode: .code75,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .electroFrog,
      dimensions: [21.9, 21.9]),
 
@@ -527,7 +527,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-E1096",
      itemPartType: .turnoutLeft,
      trackCode: .code75,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .electroFrog,
      dimensions: [21.9, 21.9]),
 
@@ -538,7 +538,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-E188",
      itemPartType: .turnoutRight,
      trackCode: .code75,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .electroFrog,
      dimensions: [25.9, 25.9]),
 
@@ -549,7 +549,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-E189",
      itemPartType: .turnoutLeft,
      trackCode: .code75,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .electroFrog,
      dimensions: [25.9, 25.9]),
 
@@ -560,7 +560,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-E186",
      itemPartType: .rightCurvedTurnout,
      trackCode: .code75,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .electroFrog,
      dimensions: [25.8, 25.8]),
 
@@ -571,7 +571,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-E187",
      itemPartType: .leftCurvedTurnout,
      trackCode: .code75,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .electroFrog,
      dimensions: [25.8, 25.8]),
 
@@ -582,7 +582,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-E198",
      itemPartType: .yTurnout,
      trackCode: .code75,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .electroFrog,
      dimensions: [22.0, 22.0]),
 
@@ -593,7 +593,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-E197",
      itemPartType: .yTurnout,
      trackCode: .code75,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .electroFrog,
      dimensions: [14.8, 14.8]),
 
@@ -604,7 +604,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-E199",
      itemPartType: .turnout3Way,
      trackCode: .code75,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .electroFrog,
      dimensions: [27.3, 27.3, 27.3]),
 
@@ -615,7 +615,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-193",
      itemPartType: .cross,
      trackCode: .code75,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .insulFrog,
      dimensions: [12.7, 12.7]),
 
@@ -626,7 +626,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-E193",
      itemPartType: .cross,
      trackCode: .code75,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .electroFrog,
      dimensions: [12.7, 12.7]),
 
@@ -637,7 +637,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-194",
      itemPartType: .cross,
      trackCode: .code75,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .insulFrog,
      dimensions: [24.9, 24.9]),
 
@@ -648,7 +648,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-E194",
      itemPartType: .cross,
      trackCode: .code75,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .insulFrog,
      dimensions: [24.9, 24.9]),
 
@@ -659,7 +659,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-180",
      itemPartType: .singleSlip,
      trackCode: .code75,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .insulFrog,
      dimensions: [24.9, 24.9, 24.9]),
 
@@ -670,7 +670,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-E180",
      itemPartType: .singleSlip,
      trackCode: .code75,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .electroFrog,
      dimensions: [24.9, 24.9, 24.9]),
 
@@ -681,7 +681,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-190",
      itemPartType: .doubleSlip,
      trackCode: .code75,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .insulFrog,
      dimensions: [24.9, 24.9, 24.9, 24.9]),
 
@@ -692,7 +692,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-E190",
      itemPartType: .doubleSlip,
      trackCode: .code75,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .electroFrog,
      dimensions: [24.9, 24.9, 24.9, 24.9]),
 
@@ -703,7 +703,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-U1188",
      itemPartType: .turnoutRight,
      trackCode: .code75,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .uniFrog,
      dimensions: [25.9, 25.9]),
 
@@ -714,7 +714,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-U1189",
      itemPartType: .turnoutLeft,
      trackCode: .code75,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .uniFrog,
      dimensions: [25.9, 25.9]),
 
@@ -725,7 +725,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-U1195",
      itemPartType: .turnoutRight,
      trackCode: .code75,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .uniFrog,
      dimensions: [21.9, 21.9]),
 
@@ -736,7 +736,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-U1196",
      itemPartType: .turnoutLeft,
      trackCode: .code75,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .uniFrog,
      dimensions: [21.9, 21.9]),
 
@@ -747,7 +747,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-U1194",
      itemPartType: .cross,
      trackCode: .code75,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .uniFrog,
      dimensions: [24.9, 24.9]),
 
@@ -758,7 +758,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-U1180",
      itemPartType: .singleSlip,
      trackCode: .code75,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .uniFrog,
      dimensions: [24.9, 24.9, 24.9]),
 
@@ -769,7 +769,7 @@ public enum TrackPart : UInt16 {
      partNumber: "SL-U1180",
      itemPartType: .doubleSlip,
      trackCode: .code75,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .uniFrog,
      dimensions: [24.9, 24.9, 24.9, 24.9]),
 
@@ -780,7 +780,7 @@ public enum TrackPart : UInt16 {
      partNumber: "ST-240",
      itemPartType: .turnoutRight,
      trackCode: .code100,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .insulFrog,
      dimensions: [16.8, 16.8]),
 
@@ -791,7 +791,7 @@ public enum TrackPart : UInt16 {
      partNumber: "ST-241",
      itemPartType: .turnoutLeft,
      trackCode: .code100,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .insulFrog,
      dimensions: [16.8, 16.8]),
 
@@ -802,7 +802,7 @@ public enum TrackPart : UInt16 {
      partNumber: "ST-241",
      itemPartType: .yTurnout,
      trackCode: .code100,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .insulFrog,
      dimensions: [17.0, 17.0]),
 
@@ -813,7 +813,7 @@ public enum TrackPart : UInt16 {
      partNumber: "ST-244",
      itemPartType: .rightCurvedTurnout,
      trackCode: .code100,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .insulFrog,
      dimensions: [16.8, 16.8]), // these values are incorrect
 
@@ -824,7 +824,7 @@ public enum TrackPart : UInt16 {
      partNumber: "ST-245",
      itemPartType: .leftCurvedTurnout,
      trackCode: .code100,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .insulFrog,
      dimensions: [16.8, 16.8]), // these values are incorrect
 
@@ -835,7 +835,7 @@ public enum TrackPart : UInt16 {
      partNumber: "ST-250",
      itemPartType: .cross,
      trackCode: .code100,
-     trackGauge: .ooho,
+     trackGauge: .ho,
      frogType: .insulFrog,
      dimensions: [16.8, 16.8]),
 

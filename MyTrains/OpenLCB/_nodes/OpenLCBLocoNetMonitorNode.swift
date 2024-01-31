@@ -91,6 +91,10 @@ public class OpenLCBLocoNetMonitorNode : OpenLCBNodeVirtual, LocoNetDelegate {
     
   }
   
+  internal override func customizeDynamicCDI(cdi:String) -> String {
+    return cdi
+  }
+  
   // MARK: Public Methods
   
   public func sendMessage(message:LocoNetMessage) {

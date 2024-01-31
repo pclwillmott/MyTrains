@@ -45,6 +45,9 @@ public enum Scale : UInt8 {
   case scale1to8       = 33
   case scale1to7dot5   = 34
   case scale1to5dot5   = 35
+  case scale1to101dot6 = 36
+  case scale1to43      = 37
+  case scale1to55      = 38
 
   // MARK: Public Properties
   
@@ -73,6 +76,8 @@ public enum Scale : UInt8 {
       return 110.0
     case .scale1to102:
       return 102.0
+    case .scale1to101dot6:
+      return 101.6
     case .scale1to87dot1:
       return 87.1
     case .scale1to87:
@@ -87,6 +92,8 @@ public enum Scale : UInt8 {
       return 64.0
     case .scale1to60:
       return 60.0
+    case .scale1to55:
+      return 55.0
     case .scale1to50:
       return 50.0
     case .scale1to48:
@@ -95,6 +102,8 @@ public enum Scale : UInt8 {
       return 45.0
     case .scale1to43dot5:
       return 43.5
+    case .scale1to43:
+      return 43
     case .scale1to35:
       return 35.0
     case .scale1to32:
@@ -138,7 +147,7 @@ public enum Scale : UInt8 {
     formatter.minimumFractionDigits = 0
     formatter.maximumFractionDigits = 2
 
-    return String(localized: "1 : \(formatter.string(from: self.ratio as NSNumber)!)", comment: "This is a ratio used for layout scale, e.g. 1 : 76.2")
+    return String(localized: "1:\(formatter.string(from: self.ratio as NSNumber)!)", comment: "This is a ratio used for layout scale, e.g. 1:76.2")
 
   }
 
@@ -159,6 +168,7 @@ public enum Scale : UInt8 {
       scale1to120,
       scale1to110,
       scale1to102,
+      scale1to101dot6,
       scale1to87dot1,
       scale1to87,
       scale1to80,
@@ -170,6 +180,7 @@ public enum Scale : UInt8 {
       scale1to48,
       scale1to45,
       scale1to43dot5,
+      scale1to43,
       scale1to35,
       scale1to32,
       scale1to30,

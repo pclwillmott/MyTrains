@@ -397,7 +397,7 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate {
     
     if let layout = myTrainsController.layout {
       let units = UnitLength.selected(comboBox: cboLengthUnits)
-      lblRouteLength.stringValue = String(format: "%.1f", layout.loopLengths[cboRoute.indexOfSelectedItem] * units.fromCM)
+  //    lblRouteLength.stringValue = String(format: "%.1f", layout.loopLengths[cboRoute.indexOfSelectedItem] * units.fromCM)
     }
     
   }

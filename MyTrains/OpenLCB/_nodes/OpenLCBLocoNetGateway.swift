@@ -179,6 +179,16 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
 
   }
   
+  internal override func customizeDynamicCDI(cdi:String) -> String {
+    
+    var result = MTSerialPortManager.insertMap(cdi: cdi)
+    result = BaudRate.insertMap(cdi: result)
+    result = Parity.insertMap(cdi: result)
+    result = FlowControl.insertMap(cdi: result)
+    return result
+    
+  }
+  
   private func close() {
     serialPort?.close()
     serialPort = nil

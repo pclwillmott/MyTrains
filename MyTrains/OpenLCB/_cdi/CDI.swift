@@ -35,6 +35,7 @@ enum CDI {
   static let UNIT_SPEED                 = "%%UNIT_SPEED%%"
   static let TRACK_CODE                 = "%%TRACK_CODE%%"
   static let TRACK_GAUGE                = "%%TRACK_GAUGE%%"
+  static let ALL_TRACK_GAUGES           = "%%ALL_TRACK_GAUGES%%"
   static let TRACK_ELECTRIFICATION_TYPE = "%%TRACK_ELECTRIFICATION_TYPE%%"
   static let ORIENTATION                = "%%ORIENTATION%%"
   static let COUNTRY_CODE               = "%%COUNTRY_CODE%%"

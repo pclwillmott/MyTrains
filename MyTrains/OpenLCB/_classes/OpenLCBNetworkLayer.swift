@@ -21,15 +21,6 @@ public class OpenLCBNetworkLayer : NSObject {
 
     super.init()
 
-    nodeManagers.append(throttleManager)
-    nodeManagers.append(locoNetMonitorManager)
-    nodeManagers.append(programmerToolManager)
-    nodeManagers.append(configurationToolManager)
-
-    if appNodeId != nil {
-      start()
-    }
-    
   }
   
   // MARK: Private Properties
@@ -53,6 +44,8 @@ public class OpenLCBNetworkLayer : NSObject {
   private var nextObserverId : Int = 1
   
   // MARK: Public Properties
+
+  public var virtualNodeLookup : [UInt64:OpenLCBNodeVirtual] = [:]
   
   public var layoutNodeId : UInt64? {
     get {
@@ -94,18 +87,6 @@ public class OpenLCBNetworkLayer : NSObject {
   
   // MARK: Private Methods
   
-  private func isInternalVirtualNode(nodeId:UInt64) -> Bool {
-  
-    for node in virtualNodes {
-      if node.nodeId == nodeId {
-        return true
-      }
-    }
-    
-    return false
-    
-  }
-  
   private func updateVirtualNodeList() {
     
     let list = virtualNodes
@@ -145,6 +126,16 @@ public class OpenLCBNetworkLayer : NSObject {
   
   // MARK: Public Methods
   
+  public func isInternalVirtualNode(nodeId:UInt64) -> Bool {
+  
+    if let _ = virtualNodeLookup[nodeId] {
+      return true
+    }
+    
+    return false
+    
+  }
+  
   public func createAppNode(newNodeId:UInt64) {
 
     appNodeId = newNodeId
@@ -154,6 +145,8 @@ public class OpenLCBNetworkLayer : NSObject {
     let node = OpenLCBNodeMyTrains(nodeId: newNodeId)
 
     start()
+
+    node.hostAppNodeId = newNodeId
 
     registerNode(node: node)
 
@@ -165,6 +158,19 @@ public class OpenLCBNetworkLayer : NSObject {
 
   }
   
+  public func initialStart() {
+    
+    nodeManagers.append(throttleManager)
+    nodeManagers.append(locoNetMonitorManager)
+    nodeManagers.append(programmerToolManager)
+    nodeManagers.append(configurationToolManager)
+
+    if appNodeId != nil {
+      start()
+    }
+    
+  }
+  
   public func start() {
     
     guard state == .uninitialized else {
@@ -173,7 +179,6 @@ public class OpenLCBNetworkLayer : NSObject {
     
     _state = .initialized
     
-    print("fred")
     for node in OpenLCBMemorySpace.getVirtualNodes() {
       registerNode(node: node)
     }
@@ -188,7 +193,7 @@ public class OpenLCBNetworkLayer : NSObject {
       return
     }
     
-    var nodes = virtualNodes
+    let nodes = virtualNodes
     
     for node in nodes {
       deregisterNode(node: node)
@@ -220,6 +225,8 @@ public class OpenLCBNetworkLayer : NSObject {
   public func registerNode(node:OpenLCBNodeVirtual) {
     
     virtualNodes.append(node)
+    
+    virtualNodeLookup[node.nodeId] = node
     
     virtualNodes.sort {$0.virtualNodeType.startupOrder > $1.virtualNodeType.startupOrder}
     
@@ -258,6 +265,11 @@ public class OpenLCBNetworkLayer : NSObject {
       break
     }
     
+    /*
+    node.virtualNodeConfigSpaceVersion = 5
+    node.saveMemorySpaces()
+    */
+    
     node.start()
     
   }
@@ -271,13 +283,15 @@ public class OpenLCBNetworkLayer : NSObject {
     node.stop()
     node.networkLayer = nil
 
+    virtualNodeLookup.removeValue(forKey: node.nodeId)
+        
     for index in 0 ... virtualNodes.count - 1 {
       if virtualNodes[index].nodeId == node.nodeId {
         virtualNodes.remove(at: index)
         break
       }
     }
-        
+    
   }
   
   public func deleteNode(nodeId:UInt64) {
@@ -1192,7 +1206,13 @@ public class OpenLCBNetworkLayer : NSObject {
 
   public func sendGetConfigurationOptionsReply(sourceNodeId:UInt64, destinationNodeId:UInt64, node:OpenLCBNodeVirtual) {
 
-    sendDatagram(sourceNodeId: sourceNodeId, destinationNodeId: destinationNodeId, data: node.configurationOptions.encodedOptions )
+    var data = node.configurationOptions.encodedOptions
+    
+    if node.isSwitchboardNode && !isInternalVirtualNode(nodeId: destinationNodeId) && OpenLCBNodeMemoryAddressSpace.cdi.rawValue == data[5] {
+      data[5] = OpenLCBNodeMemoryAddressSpace.acdiManufacturer.rawValue
+    }
+    
+    sendDatagram(sourceNodeId: sourceNodeId, destinationNodeId: destinationNodeId, data: data )
     
   }
 
