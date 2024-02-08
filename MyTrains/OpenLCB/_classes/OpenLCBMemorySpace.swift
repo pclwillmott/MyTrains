@@ -27,6 +27,8 @@ public class OpenLCBMemorySpace {
   
   private var _isReadOnly : Bool
   
+  private var unitConversions : [Int:UnitConversionType] = [:]
+  
   // MARK: Public Properties
   
   public var delegate : OpenLCBMemorySpaceDelegate?
@@ -161,10 +163,12 @@ public class OpenLCBMemorySpace {
     return (address >= addressSpaceInformation.lowestAddress) && ((address + count - 1) <= addressSpaceInformation.realHighestAddress)
   }
   
-  public func getBlock(address:Int, count:Int) -> [UInt8]? {
+  public func getBlock(address:Int, count:Int, isInternal:Bool = true) -> [UInt8]? {
     
     guard isWithinSpace(address: address, count: count) else {
+      #if DEBUG
       print("getBlock: address:\(address) count:\(count) \(addressSpaceInformation)" )
+      #endif
       return nil
     }
     
@@ -172,6 +176,90 @@ public class OpenLCBMemorySpace {
     
     for index in address ... address + count - 1 {
       result.append(memory[index])
+    }
+    
+    if !isInternal, let appNode {
+      
+      let startAddress = address
+      let endAddress = address + count - 1
+      
+      for (floatAddress, unitConversionType) in unitConversions {
+        
+        if unitConversionType != .none, requiresReadConversion(startAddress: startAddress, endAddress: endAddress, variableAddress: floatAddress, size: unitConversionType.numberOfBytes) {
+          
+          var floatBytes : [UInt8] = []
+          
+          for index in floatAddress ... floatAddress + unitConversionType.numberOfBytes - 1 {
+            floatBytes.append(memory[index])
+          }
+          
+          var floatValue : Double = 0.0
+          
+          switch unitConversionType.numberOfBytes {
+          case 2:
+            let temp = UInt16(bigEndianData: floatBytes)!
+            let float16 : float16_t = float16_t(v: temp)
+            floatValue = Double(Float(float16: float16))
+          case 4:
+            floatValue = Double(Float32(bigEndianData: floatBytes)!)
+          case 8:
+            floatValue = Double(bigEndianData: floatBytes)!
+          default:
+            #if DEBUG
+            print("OpenLCBMemorySpace.getBlock: unexpected unitConversionType.numberOfBytes - \(unitConversionType.numberOfBytes)")
+            #endif
+          }
+          
+          var newValue : Double = 0.0
+          
+          switch unitConversionType.baseType {
+          case .actualLength:
+            newValue = UnitLength.convert(fromValue: floatValue, fromUnits: UnitLength.defaultValueActualLength, toUnits: appNode.unitsActualLength)
+          case .scaleLength:
+            newValue = UnitLength.convert(fromValue: floatValue, fromUnits: UnitLength.defaultValueScaleLength, toUnits: appNode.unitsScaleLength)
+          case .actualDistance:
+            newValue = UnitLength.convert(fromValue: floatValue, fromUnits: UnitLength.defaultValueActualDistance, toUnits: appNode.unitsActualDistance)
+          case .scaleDistance:
+            newValue = UnitLength.convert(fromValue: floatValue, fromUnits: UnitLength.defaultValueScaleDistance, toUnits: appNode.unitsScaleDistance)
+          case .actualSpeed:
+            newValue = UnitSpeed.convert(fromValue: floatValue, fromUnits: UnitSpeed.defaultValueActualSpeed, toUnits: appNode.unitsActualSpeed)
+          case .scaleSpeed:
+            newValue = UnitSpeed.convert(fromValue: floatValue, fromUnits: UnitSpeed.defaultValueScaleSpeed, toUnits: appNode.unitsScaleSpeed)
+          default:
+            break
+          }
+          
+          floatBytes.removeAll()
+          
+          switch unitConversionType.numberOfBytes {
+          case 2:
+            floatBytes = Float32(newValue).float16.v.bigEndianData
+          case 4:
+            floatBytes = Float32(newValue).bigEndianData
+          case 8:
+            floatBytes = newValue.bigEndianData
+          default:
+            #if DEBUG
+            print("OpenLCBMemorySpace.getBlock: unexpected unitConversionType.numberOfBytes - \(unitConversionType.numberOfBytes)")
+            #endif
+          }
+
+          let offset = floatAddress - address
+          
+          var indexIntoResult = max(0, offset)
+          
+          var indexIntoFloatBytes = max (0, -offset)
+          
+          while indexIntoResult < result.count && indexIntoFloatBytes < floatBytes.count {
+            result[indexIntoResult] = floatBytes[indexIntoFloatBytes]
+            indexIntoResult += 1
+            indexIntoFloatBytes += 1
+          }
+
+        }
+        
+      }
+      
     }
 
     return result
@@ -213,12 +301,16 @@ public class OpenLCBMemorySpace {
   public func setString(address:Int, value:String, fieldSize:Int) {
   
     guard isWithinSpace(address: address, count: fieldSize) else {
+      #if DEBUG
       print("setString: address + fieldSize - 1 < memory.count >= memory.count \"\(value)\"" )
+      #endif
       return
     }
     
     guard value.utf8.count < fieldSize else {
+      #if DEBUG
       print("setString: value.utf8.count >= fieldSize \"\(value)\"" )
+      #endif
       return
     }
 
@@ -242,35 +334,79 @@ public class OpenLCBMemorySpace {
   public func setBlock(address:Int, data:[UInt8], isInternal:Bool) {
     
     guard isWithinSpace(address: address, count: data.count) else {
+      #if DEBUG
       print("setBlock: address + data.count - 1 >= memory.count" )
+      #endif
       return
     }
-    
-    let oldData = getBlock(address: address, count: data.count)!
-    
-    var isChanged = false
     
     var index = 0
-    while index < data.count {
-      if oldData[index] != data[index] {
-        isChanged = true
-        break
-      }
-      index += 1
-    }
-    
-    if !isChanged {
-      return
-    }
-    
-    index = 0
     for byte in data {
       memory[address + index] = byte
       index += 1
     }
     
-    if !isInternal {
-      memorySpaceChanged(startAddress: address, endAddress: address + data.count - 1)
+    if !isInternal, let appNode {
+      
+      let endAddress = address + data.count - 1
+      
+      for (floatAddress, unitConversionType) in unitConversions {
+        
+        if unitConversionType != .none, requiresWriteConversion(startAddress: address, endAddress: endAddress, variableAddress: floatAddress, size: unitConversionType.numberOfBytes) {
+          
+          var floatValue : Double = 0.0
+          
+          switch unitConversionType.numberOfBytes {
+          case 2:
+            floatValue = Double(Float(float16: getFloat16(address: floatAddress)!))
+          case 4:
+            floatValue = Double(getFloat(address: floatAddress)!)
+          case 8:
+            floatValue = getDouble(address: floatAddress)!
+          default:
+            #if DEBUG
+            print("OpenLCBMemorySpace.setBlock: unexpected unitConversionType.numberOfBytes - \(unitConversionType.numberOfBytes)")
+            #endif
+          }
+          
+          var newValue : Double = 0.0
+          
+          switch unitConversionType.baseType {
+          case .actualLength:
+            newValue = UnitLength.convert(fromValue: floatValue, fromUnits: appNode.unitsActualLength, toUnits: UnitLength.defaultValueActualLength)
+          case .scaleLength:
+            newValue = UnitLength.convert(fromValue: floatValue, fromUnits: appNode.unitsScaleLength, toUnits: UnitLength.defaultValueScaleLength)
+          case .actualDistance:
+            newValue = UnitLength.convert(fromValue: floatValue, fromUnits: appNode.unitsActualDistance, toUnits: UnitLength.defaultValueActualDistance)
+          case .scaleDistance:
+            newValue = UnitLength.convert(fromValue: floatValue, fromUnits: appNode.unitsScaleDistance, toUnits: UnitLength.defaultValueScaleDistance)
+          case .actualSpeed:
+            newValue = UnitSpeed.convert(fromValue: floatValue, fromUnits: appNode.unitsActualSpeed, toUnits: UnitSpeed.defaultValueActualSpeed)
+          case .scaleSpeed:
+            newValue = UnitSpeed.convert(fromValue: floatValue, fromUnits: appNode.unitsScaleSpeed, toUnits: UnitSpeed.defaultValueScaleSpeed)
+          default:
+            break
+          }
+          
+          switch unitConversionType.numberOfBytes {
+          case 2:
+            setFloat(address: floatAddress, value: Float32(newValue).float16)
+          case 4:
+            setFloat(address: floatAddress, value: Float32(newValue))
+          case 8:
+            setDouble(address: floatAddress, value: newValue)
+          default:
+            #if DEBUG
+            print("OpenLCBMemorySpace.setBlock: unexpected unitConversionType.numberOfBytes - \(unitConversionType.numberOfBytes)")
+            #endif
+          }
+
+        }
+        
+      }
+
+      memorySpaceChanged(startAddress: address, endAddress: endAddress)
+
     }
     
   }
@@ -279,8 +415,26 @@ public class OpenLCBMemorySpace {
     delegate?.memorySpaceChanged(memorySpace: self, startAddress: startAddress, endAddress: endAddress)
   }
   
+  public func requiresReadConversion(startAddress:Int, endAddress:Int, variableAddress:Int, size:Int) -> Bool {
+    return ((variableAddress + size - 1) >= startAddress && variableAddress <= endAddress)
+  }
+  
+  public func requiresWriteConversion(startAddress:Int, endAddress:Int, variableAddress:Int, size:Int) -> Bool {
+    let variableEndAddress = variableAddress + size - 1
+    return (variableEndAddress >= startAddress && variableEndAddress <= endAddress)
+  }
+  
   public func variableChanged(startAddress:Int, endAddress:Int, variableAddress:Int) -> Bool {
     return variableAddress >= startAddress && variableAddress <= endAddress
+  }
+  
+  public func registerUnitConversion(address:Int, unitConversionType:UnitConversionType) {
+    if unitConversionType == .none {
+      unitConversions.removeValue(forKey: address)
+    }
+    else {
+      unitConversions[address] = unitConversionType
+    }
   }
 
   // MARK: Database Methods

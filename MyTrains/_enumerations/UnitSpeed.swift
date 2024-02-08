@@ -22,7 +22,11 @@ public enum UnitSpeed : Int {
   public var title : String {
     return UnitSpeed.titles[self.rawValue]
   }
-  
+
+  public var symbol : String {
+    return UnitSpeed.symbols[self.rawValue]
+  }
+
   public var toCMS : Double {
     var temp = UnitSpeed.toCMS(units: self)
     if self == .kilometersPerHour || self == .milesPerHour {
@@ -53,7 +57,16 @@ public enum UnitSpeed : Int {
     String(localized: "Feet/Second"),
     String(localized: "Miles/Hour"),
   ]
-  
+
+  private static let symbols = [
+    String(localized: "cm/s", comment: "Used for the abbreviation of centimeters per second"),
+    String(localized: "m/s", comment: "Used for the abbreviation of meters per second"),
+    String(localized: "km/h", comment: "Used for the abbreviation of kilometers per hour"),
+    String(localized: "ips", comment: "Used for the abbreviation of inches per second"),
+    String(localized: "ft/s", comment: "Used for the abbreviation of feet (length) per second"),
+    String(localized: "mph", comment: "Used for the abbreviation of miles per hour"),
+  ]
+
   private static var map : String {
     
     let items : [UnitSpeed] = [
@@ -80,6 +93,9 @@ public enum UnitSpeed : Int {
   
   public static let defaultValue : UnitSpeed = .milesPerHour
 
+  public static let defaultValueActualSpeed : UnitSpeed = .centimetersPerSecond
+  public static let defaultValueScaleSpeed  : UnitSpeed = .kilometersPerHour
+
   public static let mapPlaceholder = CDI.UNIT_SPEED
 
   // MARK: Public Class Methods
@@ -89,22 +105,21 @@ public enum UnitSpeed : Int {
   public static func toCMS(units: UnitSpeed) -> Double {
     
     let secondsPerHour : Double = 60.0 * 60.0
-    let km2m           : Double = 1000.0
-    let m2cm           : Double = 100.0
-    let km2cm          : Double = km2m * m2cm
-    let miles2cm       : Double = 1.609344 * km2cm
+    let km2cm : Double = 1000.0 * 100.0
     
     switch units {
-    case .kilometersPerHour:
-      return 1.0 / secondsPerHour * km2cm
-    case .milesPerHour:
-      return 1.0 / secondsPerHour * miles2cm
-    case .metersPerSecond:
-      return m2cm
     case .centimetersPerSecond:
       return 1.0
-    default:
-      return 1.0
+    case .metersPerSecond:
+      return 100.0
+    case .kilometersPerHour:
+      return km2cm / secondsPerHour
+    case .inchesPerSecond:
+      return 2.54
+    case .feetPerSecond:
+      return 12.0 * 2.54
+    case .milesPerHour:
+      return (1.609344 * km2cm) / secondsPerHour
     }
     
   }
@@ -113,6 +128,10 @@ public enum UnitSpeed : Int {
   // This factor does not take into account the layout scale.
   public static func fromCMS(units: UnitSpeed) -> Double {
     return 1.0 / toCMS(units: units)
+  }
+  
+  public static func convert(fromValue:Double, fromUnits:UnitSpeed, toUnits:UnitSpeed) -> Double {
+    return fromValue * toCMS(units: fromUnits) * fromCMS(units: toUnits)
   }
 
   public static func populate(comboBox: NSComboBox) {

@@ -125,51 +125,56 @@
     %%TRACK_PART%%
   </int>
 
-  <int size='1'>
-    <name>Track Gauge</name>
-    %%TRACK_GAUGE%%
-  </int>
+  <group>
+    <name>Custom Dimensions</name>
+    
+    <int size='1'>
+      <name>Track Gauge</name>
+      %%TRACK_GAUGE%%
+    </int>
 
-  <float size='4'>
-    <name>Dimension A</name>
-    <min>0.0</min>
-  </float>
+    <float size='8'>
+      <name>Dimension A (%%ACTUAL_LENGTH_UNITS%%)</name>
+      <min>0.0</min>
+    </float>
 
-  <float size='4'>
-    <name>Dimension B</name>
-    <min>0.0</min>
-  </float>
-  
-  <float size='4'>
-    <name>Dimension C</name>
-    <min>0.0</min>
-  </float>
-  
-  <float size='4'>
-    <name>Dimension D</name>
-    <min>0.0</min>
-  </float>
-  
-  <float size='4'>
-    <name>Dimension E</name>
-    <min>0.0</min>
-  </float>
-  
-  <float size='4'>
-    <name>Dimension F</name>
-    <min>0.0</min>
-  </float>
-  
-  <float size='4'>
-    <name>Dimension G</name>
-    <min>0.0</min>
-  </float>
-  
-  <float size='4'>
-    <name>Dimension H</name>
-    <min>0.0</min>
-  </float>
-  
+    <float size='8'>
+      <name>Dimension B (%%ACTUAL_LENGTH_UNITS%%)</name>
+      <min>0.0</min>
+    </float>
+    
+    <float size='8'>
+      <name>Dimension C (%%ACTUAL_LENGTH_UNITS%%)</name>
+      <min>0.0</min>
+    </float>
+    
+    <float size='8'>
+      <name>Dimension D (%%ACTUAL_LENGTH_UNITS%%)</name>
+      <min>0.0</min>
+    </float>
+    
+    <float size='8'>
+      <name>Dimension E (%%ACTUAL_LENGTH_UNITS%%)</name>
+      <min>0.0</min>
+    </float>
+    
+    <float size='8'>
+      <name>Dimension F (%%ACTUAL_LENGTH_UNITS%%)</name>
+      <min>0.0</min>
+    </float>
+    
+    <float size='8'>
+      <name>Dimension G (%%ACTUAL_LENGTH_UNITS%%)</name>
+      <min>0.0</min>
+    </float>
+    
+    <float size='8'>
+      <name>Dimension H (%%ACTUAL_LENGTH_UNITS%%)</name>
+      <min>0.0</min>
+    </float>
+
+</group>
+
 </group>
 
 </segment>

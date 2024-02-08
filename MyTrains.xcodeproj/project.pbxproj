@@ -66,6 +66,7 @@
 		DA3866232A7A653900A0FAEB /* OpenLCBNodeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3866222A7A653900A0FAEB /* OpenLCBNodeManager.swift */; };
 		DA3866252A7A880A00A0FAEB /* OpenLCBConfigurationToolDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3866242A7A880A00A0FAEB /* OpenLCBConfigurationToolDelegate.swift */; };
 		DA3904092A349B3A00864157 /* OpenLCBClockInitialDateTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3904082A349B3A00864157 /* OpenLCBClockInitialDateTime.swift */; };
+		DA3D9A672B74FEED00451EFB /* UnitConversionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3D9A662B74FEED00451EFB /* UnitConversionType.swift */; };
 		DA408A5A2B5829C3005EBBDE /* AppMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA408A592B5829C3005EBBDE /* AppMode.swift */; };
 		DA408A5C2B582DB6005EBBDE /* SelectMasterNode.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA408A5B2B582DB6005EBBDE /* SelectMasterNode.storyboard */; };
 		DA408A5E2B582DF9005EBBDE /* SelectMasterNodeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA408A5D2B582DF9005EBBDE /* SelectMasterNodeVC.swift */; };
@@ -354,6 +355,7 @@
 		DA3866222A7A653900A0FAEB /* OpenLCBNodeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBNodeManager.swift; sourceTree = "<group>"; };
 		DA3866242A7A880A00A0FAEB /* OpenLCBConfigurationToolDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBConfigurationToolDelegate.swift; sourceTree = "<group>"; };
 		DA3904082A349B3A00864157 /* OpenLCBClockInitialDateTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBClockInitialDateTime.swift; sourceTree = "<group>"; };
+		DA3D9A662B74FEED00451EFB /* UnitConversionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitConversionType.swift; sourceTree = "<group>"; };
 		DA408A592B5829C3005EBBDE /* AppMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMode.swift; sourceTree = "<group>"; };
 		DA408A5B2B582DB6005EBBDE /* SelectMasterNode.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SelectMasterNode.storyboard; sourceTree = "<group>"; };
 		DA408A5D2B582DF9005EBBDE /* SelectMasterNodeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectMasterNodeVC.swift; sourceTree = "<group>"; };
@@ -657,6 +659,7 @@
 				DA9CF8FC2860978A00825FA9 /* TurnoutMotorType.swift */,
 				DA1B79FA285F3AD0009E1189 /* UnitLength.swift */,
 				DA1B79F8285F3885009E1189 /* UnitSpeed.swift */,
+				DA3D9A662B74FEED00451EFB /* UnitConversionType.swift */,
 				DA92E0772B66B09800762058 /* YesNo.swift */,
 			);
 			path = _enumerations;
@@ -1510,6 +1513,7 @@
 				DA613ACB28A7E02E003218BA /* PlaceLocomotiveVC.swift in Sources */,
 				DA1B949F2A3DE8E000E2CE6A /* Client.swift in Sources */,
 				DA8FDB2D279C4AC000E15024 /* LocoSlotTableViewDS.swift in Sources */,
+				DA3D9A672B74FEED00451EFB /* UnitConversionType.swift in Sources */,
 				DA5BD1F12B65736600CEA5BA /* AboutVC.swift in Sources */,
 				DAFFB6662B5D8F650035AC74 /* LayoutState.swift in Sources */,
 				DA95D6BD280833FE00D9F1B6 /* GroupSetupVC.swift in Sources */,

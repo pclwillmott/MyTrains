@@ -9,13 +9,17 @@ import Foundation
 
 public class SwitchboardItemNode : OpenLCBNodeVirtual {
 
-  public override init(nodeId:UInt64) {
-    
+  public init(nodeId:UInt64, layoutNodeId:UInt64 = 0) {
+
     configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: 155, isReadOnly: false, description: "")
     
     super.init(nodeId: nodeId)
     
     virtualNodeType = MyTrainsVirtualNodeType.switchboardItemNode
+    
+    if layoutNodeId != 0 {
+      self.layoutNodeId = layoutNodeId
+    }
     
     configuration.delegate = self
 
@@ -42,6 +46,7 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTrackGauge)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTrackGradient)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTrackPart)
+    
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDimensionA)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDimensionB)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDimensionC)
@@ -50,6 +55,15 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDimensionF)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDimensionG)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDimensionH)
+    
+    configuration.registerUnitConversion(address: addressDimensionA, unitConversionType: .actualLength8)
+    configuration.registerUnitConversion(address: addressDimensionB, unitConversionType: .actualLength8)
+    configuration.registerUnitConversion(address: addressDimensionC, unitConversionType: .actualLength8)
+    configuration.registerUnitConversion(address: addressDimensionD, unitConversionType: .actualLength8)
+    configuration.registerUnitConversion(address: addressDimensionE, unitConversionType: .actualLength8)
+    configuration.registerUnitConversion(address: addressDimensionF, unitConversionType: .actualLength8)
+    configuration.registerUnitConversion(address: addressDimensionG, unitConversionType: .actualLength8)
+    configuration.registerUnitConversion(address: addressDimensionH, unitConversionType: .actualLength8)
 
     if !memorySpacesInitialized {
       resetToFactoryDefaults()
@@ -95,8 +109,8 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
 
   private var configuration : OpenLCBMemorySpace
   
-  private var layoutNode : LayoutNode {
-    return networkLayer!.virtualNodeLookup[layoutNodeId]! as! LayoutNode
+  private var layoutNode : LayoutNode? {
+    return networkLayer!.virtualNodeLookup[layoutNodeId] as? LayoutNode
   }
 
   // MARK: Public Properties
@@ -424,8 +438,8 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     result = BlockDirection.insertMap(cdi: result)
     result = YesNo.insertMap(cdi: result)
     result = TrackElectrificationType.insertMap(cdi: result)
-    result = TrackPart.insertMap(cdi: result, itemType: itemType)
-    result = TrackGauge.insertMap(cdi: result, scale: layoutNode.scale)
+    result = TrackPart.insertMap(cdi: result, itemType: itemType, layout: layoutNode)
+    result = TrackGauge.insertMap(cdi: result, layout: layoutNode)
     result = TurnoutMotorType.insertMap(cdi: result)
 
     if let app = networkLayer?.myTrainsNode {

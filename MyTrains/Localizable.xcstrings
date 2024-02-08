@@ -1,12 +1,6 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "'" : {
-
-    },
-    "\"" : {
-
-    },
     "%lld bytes %@" : {
       "localizations" : {
         "en" : {
@@ -1071,7 +1065,10 @@
       }
     },
     "cm" : {
-
+      "comment" : "Used for the abbreviation of centimeters"
+    },
+    "cm/s" : {
+      "comment" : "Used for the abbreviation of centimeters per second"
     },
     "Coasting" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -1366,6 +1363,9 @@
         }
       }
     },
+    "Configuration Tool Unavailable" : {
+
+    },
     "Configure %@ (%@)" : {
       "localizations" : {
         "en" : {
@@ -1434,7 +1434,7 @@
       }
     },
     "Create Application Node" : {
-      "comment" : "Used for the title of the Create Application Node window\nUsed for the Create Application Node menu item title",
+      "comment" : "Used for the Create Application Node menu item title\nUsed for the title of the Create Application Node window",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1592,7 +1592,7 @@
       }
     },
     "DCC Programmer Tool" : {
-      "comment" : "Used to create a default OpenLCB virtual name\nUsed for the DCC Programmer Tool menu item title",
+      "comment" : "Used for the DCC Programmer Tool menu item title\nUsed to create a default OpenLCB virtual name",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2201,7 +2201,7 @@
       }
     },
     "Fast Clock" : {
-      "comment" : "Used to indicate a clock's type\nUsed for the Fast Clock menu item title",
+      "comment" : "Used for the Fast Clock menu item title\nUsed to indicate a clock's type",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2305,6 +2305,12 @@
           }
         }
       }
+    },
+    "ft." : {
+      "comment" : "Used for the abbreviation of feet (length)"
+    },
+    "ft/s" : {
+      "comment" : "Used for the abbreviation of feet (length) per second"
     },
     "Generic Virtual" : {
       "comment" : "Used to create a default OpenLCB virtual name",
@@ -2548,6 +2554,9 @@
         }
       }
     },
+    "in." : {
+      "comment" : "Used for the abbreviation of inches"
+    },
     "Inches" : {
       "localizations" : {
         "en" : {
@@ -2651,6 +2660,9 @@
         }
       }
     },
+    "ips" : {
+      "comment" : "Used for the abbreviation of inches per second"
+    },
     "Iran" : {
       "comment" : "This is the name of a country."
     },
@@ -2693,7 +2705,10 @@
       }
     },
     "km" : {
-
+      "comment" : "Used for the abbreviation of kilometers"
+    },
+    "km/h" : {
+      "comment" : "Used for the abbreviation of kilometers per hour"
     },
     "l" : {
       "comment" : "Used for the Select Layout menu key equivalent",
@@ -2745,6 +2760,9 @@
           }
         }
       }
+    },
+    "Layout Not Selected" : {
+
     },
     "LCC/OpenLCB Network" : {
       "comment" : "Used for the LCC/OpenLCB Network menu item title",
@@ -2980,7 +2998,10 @@
       }
     },
     "m" : {
-
+      "comment" : "Used for the abbreviation of meters"
+    },
+    "m/s" : {
+      "comment" : "Used for the abbreviation of meters per second"
     },
     "Machine Room Lights" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -3145,10 +3166,10 @@
       "comment" : "This is the name of a country."
     },
     "mi." : {
-
+      "comment" : "Used for the abbreviation of miles"
     },
     "mi.ch" : {
-
+      "comment" : "Used for the abbreviation of miles.chains"
     },
     "Miles" : {
       "localizations" : {
@@ -3215,7 +3236,7 @@
       }
     },
     "mm" : {
-
+      "comment" : "Used for the abbreviation of millimeters"
     },
     "Model" : {
 
@@ -3270,6 +3291,9 @@
           }
         }
       }
+    },
+    "mph" : {
+      "comment" : "Used for the abbreviation of miles per hour"
     },
     "Mute" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -4059,7 +4083,7 @@
       }
     },
     "Select Layout" : {
-      "comment" : "Used for the title of the Select Layout window\nUsed for the Select Layout menu item",
+      "comment" : "Used for the Select Layout menu item\nUsed for the title of the Select Layout window",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -4786,7 +4810,7 @@
       "comment" : "This is the name of a country."
     },
     "Unknown" : {
-      "comment" : "Used to indicate that the type of something is unknown\nUsed to indicate the state of a turnout",
+      "comment" : "Used to indicate the state of a turnout\nUsed to indicate that the type of something is unknown",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -4801,6 +4825,9 @@
           }
         }
       }
+    },
+    "Use Custom Dimensions" : {
+      "comment" : "Used as the title for custom dimensions of a track part."
     },
     "User Description" : {
       "comment" : "Used for the title of the User Description input field in CDI",

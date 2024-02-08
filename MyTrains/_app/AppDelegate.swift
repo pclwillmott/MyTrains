@@ -21,7 +21,7 @@ public func menuUpdate() {
       
       if item.tag == 9999 {
         for node in item.submenu!.items {
-          if let virtualNodeType = MyTrainsVirtualNodeType(rawValue: UInt16(node.tag)), virtualNodeType == .switchboardPanelNode {
+          if let virtualNodeType = MyTrainsVirtualNodeType(rawValue: UInt16(node.tag)), virtualNodeType == .switchboardPanelNode || virtualNodeType == .switchboardItemNode {
             node.isHidden = !showNewPanel
           }
         }
@@ -517,6 +517,36 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     
     guard let networkLayer = myTrainsController.openLCBNetworkLayer, let virtualNodeType = MyTrainsVirtualNodeType(rawValue: UInt16(sender.tag)) else {
       return
+    }
+    
+    if virtualNodeType == .switchboardPanelNode || virtualNodeType == .switchboardItemNode, appLayoutId == nil {
+      
+      let alert = NSAlert()
+      
+      alert.messageText = String(localized: "Layout Not Selected")
+      alert.informativeText = "You must create and select a layout before you can add switchboard panels and items."
+      alert.addButton(withTitle: "OK")
+      alert.alertStyle = .informational
+      
+      alert.runModal()
+
+      return
+      
+    }
+    
+    if networkLayer.configurationToolManager.isLocked {
+      
+      let alert = NSAlert()
+      
+      alert.messageText = String(localized: "Configuration Tool Unavailable")
+      alert.informativeText = "A configuration tool has exclusive use of the configuration mechanism. Try again after you have finished with the configuration tool."
+      alert.addButton(withTitle: "OK")
+      alert.alertStyle = .informational
+      
+      alert.runModal()
+
+      return
+      
     }
     
     let x = ModalWindow.CreateVirtualNode

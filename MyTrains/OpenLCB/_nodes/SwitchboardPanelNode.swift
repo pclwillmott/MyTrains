@@ -11,11 +11,15 @@ public class SwitchboardPanelNode : OpenLCBNodeVirtual {
  
   // MARK: Constructors
   
-  public override init(nodeId:UInt64) {
+  public init(nodeId:UInt64, layoutNodeId:UInt64 = 0) {
     
     configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: 4, isReadOnly: false, description: "")
     
     super.init(nodeId: nodeId)
+    
+    if layoutNodeId != 0 {
+      self.layoutNodeId = layoutNodeId
+    }
     
     virtualNodeType = MyTrainsVirtualNodeType.switchboardPanelNode
     

@@ -13,6 +13,8 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   
   public override init(nodeId:UInt64) {
     
+    networkLayer = myTrainsController.openLCBNetworkLayer
+    
     lfsr1 = UInt32(nodeId >> 24)
     
     lfsr2 = UInt32(nodeId & 0xffffff)
@@ -79,6 +81,8 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   internal var cdiFilename : String? 
   
   internal var registeredVariables : [UInt8:Set<Int>] = [:]
+  
+  internal var unitConversions : [UInt8:[Int:UnitConversionType]] = [:]
   
   internal let addressACDIManufacturerSpaceVersion    : Int = 0
   internal let addressACDIManufacturerName            : Int = 1
@@ -407,7 +411,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
         cdi = cdi.replacingOccurrences(of: CDI.MODEL, with: nodeModelName)
         cdi = cdi.replacingOccurrences(of: CDI.SOFTWARE_VERSION, with: nodeSoftwareVersion)
         cdi = cdi.replacingOccurrences(of: CDI.HARDWARE_VERSION, with: nodeHardwareVersion)
-        
+        cdi = cdi.replacingOccurrences(of: CDI.ACTUAL_LENGTH_UNITS, with: appNode!.unitsActualLength.symbol)
         cdi = standardACDI(cdi: cdi)
         cdi = standardVirtualNodeConfig(cdi: cdi)
 /*
@@ -588,7 +592,10 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     if let networkLayer {
       state = .permitted
       resetReboot()
-      initCDI()
+//      initCDI()
+      if let cdiFilename {
+        isConfigurationDescriptionInformationProtocolSupported = true
+      }
       networkLayer.sendInitializationComplete(sourceNodeId: nodeId, isSimpleSetSufficient: false)
       networkLayer.sendIdentifyProducer(sourceNodeId: nodeId, event: .rebuildCDI)
       
@@ -600,13 +607,15 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     state = .inhibited
   }
   
-  public func registerVariable(space:UInt8, address:Int) {
+  public func registerVariable(space:UInt8, address:Int, unitConversionType:UnitConversionType = .none) {
+    
     var addresses  = Set<Int>()
     if let temp = registeredVariables[space] {
       addresses = temp
     }
     addresses.insert(address)
     registeredVariables[space] = addresses
+    
   }
   
   public func variableChanged(space:OpenLCBMemorySpace, address:Int) {
@@ -757,10 +766,15 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
           
           let space = message.payload[0]
           
-          if isSwitchboardNode && (OpenLCBNodeMemoryAddressSpace.cdi.rawValue == space || OpenLCBNodeMemoryAddressSpace.configuration.rawValue == space) && !networkLayer.isInternalVirtualNode(nodeId: message.sourceNodeId!) {
+          let isCDI = OpenLCBNodeMemoryAddressSpace.cdi.rawValue == space
+          
+          if isSwitchboardNode && (isCDI || OpenLCBNodeMemoryAddressSpace.configuration.rawValue == space) && !networkLayer.isInternalVirtualNode(nodeId: message.sourceNodeId!) {
             networkLayer.sendDatagramRejected(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, errorCode: .permanentErrorAddressSpaceUnknown)
           }
           else {
+            if isCDI {
+              initCDI()
+            }
             if let memorySpace = memorySpaces[space] {
               networkLayer.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, timeOut: .replyPendingNoTimeout)
               networkLayer.sendGetAddressSpaceInformationReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, memorySpace: memorySpace)
@@ -793,7 +807,13 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
           }
 
           let startAddress = UInt32(bigEndianData: [data[2], data[3], data[4], data[5]])!
-          
+
+          let isCDI = OpenLCBNodeMemoryAddressSpace.cdi.rawValue == space
+
+          if isCDI && startAddress == 0 {
+            initCDI()
+          }
+
           if let memorySpace = memorySpaces[space] {
             
             if let spaceId = memorySpace.standardSpace, spaceId == .cdi, isSwitchboardNode && !networkLayer.isInternalVirtualNode(nodeId: message.sourceNodeId!) {
@@ -811,7 +831,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
               }
               else {
                 
-                if let data = memorySpace.getBlock(address: Int(startAddress), count: Int(readCount)) {
+                if let data = memorySpace.getBlock(address: Int(startAddress), count: Int(readCount), isInternal: false) {
                   networkLayer.sendReadReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, addressSpace: space, startAddress: startAddress, data: data)
                 }
                 else {

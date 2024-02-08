@@ -37,14 +37,14 @@ public class OpenLCBNetworkLayer : NSObject {
   
   private var programmerToolManager = OpenLCBNodeManager()
   
-  private var configurationToolManager = OpenLCBNodeManager()
-  
   private var observers : [Int:OpenLCBCANDelegate] = [:]
   
   private var nextObserverId : Int = 1
   
   // MARK: Public Properties
 
+  public var configurationToolManager = OpenLCBNodeManager()
+  
   public var virtualNodeLookup : [UInt64:OpenLCBNodeVirtual] = [:]
   
   public var layoutNodeId : UInt64? {
@@ -180,7 +180,12 @@ public class OpenLCBNetworkLayer : NSObject {
     _state = .initialized
     
     for node in OpenLCBMemorySpace.getVirtualNodes() {
-      registerNode(node: node)
+ //     if node.virtualNodeType == .switchboardItemNode {
+ //       deleteNode(nodeId: node.nodeId)
+ //     }
+ //     else {
+        registerNode(node: node)
+  //    }
     }
 
     updateVirtualNodeList()
@@ -350,15 +355,19 @@ public class OpenLCBNetworkLayer : NSObject {
   private func dummyCompletion(node:OpenLCBNodeVirtual) {
   }
   
-  public func getConfigurationTool() -> OpenLCBNodeConfigurationTool? {
+  public func getConfigurationTool(exclusive:Bool = false) -> OpenLCBNodeConfigurationTool? {
     
-    var result = configurationToolManager.getNode() as? OpenLCBNodeConfigurationTool
-    
-    if configurationToolManager.numberOfFreeNodes == 0 {
-      createVirtualNode(virtualNodeType: .configurationToolNode, completion: dummyCompletion(node:))
+    if let result = configurationToolManager.getNode(exclusive: exclusive) as? OpenLCBNodeConfigurationTool {
+      
+      if configurationToolManager.numberOfFreeNodes == 0 {
+        createVirtualNode(virtualNodeType: .configurationToolNode, completion: dummyCompletion(node:))
+      }
+      
+      return result
+      
     }
     
-    return result
+    return nil
     
   }
   
@@ -413,12 +422,18 @@ public class OpenLCBNetworkLayer : NSObject {
     case .layoutNode:
       node = LayoutNode(nodeId: newNodeId)
     case .switchboardPanelNode:
-      node = SwitchboardPanelNode(nodeId: newNodeId)
+      if let layoutNodeId {
+        node = SwitchboardPanelNode(nodeId: newNodeId, layoutNodeId: layoutNodeId)
+      }
     case .switchboardItemNode:
-      node = SwitchboardItemNode(nodeId: newNodeId)
+      if let layoutNodeId {
+        node = SwitchboardItemNode(nodeId: newNodeId, layoutNodeId: layoutNodeId)
+      }
+      node?.layoutNodeId = layoutNodeId!
     }
 
     if let node {
+      node.hostAppNodeId = appNodeId!
       registerNode(node: node)
       item.completion(node)
     }

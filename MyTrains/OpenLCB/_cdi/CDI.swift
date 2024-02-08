@@ -45,5 +45,6 @@ enum CDI {
   static let YES_NO                     = "%%YES_NO%%"
   static let SWITCHBOARD_GROUP_NODES    = "%%SWITCHBOARD_GROUP_NODES%%"
   static let TRACK_PART                 = "%%TRACK_PART%%"
+  static let ACTUAL_LENGTH_UNITS        = "%%ACTUAL_LENGTH_UNITS%%"
 }
 

@@ -12,11 +12,11 @@ public enum UnitLength : Int {
   
   case millimeters = 0
   case centimeters = 1
-  case meters = 2
-  case kilometers = 3
-  case inches = 4
-  case feet = 5
-  case miles = 6
+  case meters      = 2
+  case kilometers  = 3
+  case inches      = 4
+  case feet        = 5
+  case miles       = 6
   case mileschains = 7
 
   // MARK: Public Properties
@@ -43,14 +43,14 @@ public enum UnitLength : Int {
   ]
 
   private static let symbols = [
-    String(localized: "mm"),
-    String(localized: "cm"),
-    String(localized: "m"),
-    String(localized: "km"),
-    String(localized: "\""),
-    String(localized: "\'"),
-    String(localized: "mi."),
-    String(localized: "mi.ch"),
+    String(localized: "mm", comment: "Used for the abbreviation of millimeters"),
+    String(localized: "cm", comment: "Used for the abbreviation of centimeters"),
+    String(localized: "m", comment: "Used for the abbreviation of meters"),
+    String(localized: "km", comment: "Used for the abbreviation of kilometers"),
+    String(localized: "in.", comment: "Used for the abbreviation of inches"),
+    String(localized: "ft.", comment: "Used for the abbreviation of feet (length)"),
+    String(localized: "mi.", comment: "Used for the abbreviation of miles"),
+    String(localized: "mi.ch", comment: "Used for the abbreviation of miles.chains"),
   ]
 
   private static var map : String {
@@ -81,7 +81,12 @@ public enum UnitLength : Int {
   // MARK: Public Class Properties
   
   public static let defaultValue : UnitLength = .centimeters
-  
+
+  public static let defaultValueActualLength   : UnitLength = .centimeters
+  public static let defaultValueScaleLength    : UnitLength = .meters
+  public static let defaultValueActualDistance : UnitLength = .centimeters
+  public static let defaultValueScaleDistance  : UnitLength = .kilometers
+
   public static let mapPlaceholder = CDI.UNIT_LENGTH
 
   // MARK: Public Class Methods

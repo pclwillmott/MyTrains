@@ -137,14 +137,29 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBConfiguration
 
     let node = tableViewDS.nodes[sender.tag]
     
-    let x = ModalWindow.ConfigurationTool
-    let wc = x.windowController
-    let vc = x.viewController(windowController: wc) as! ConfigurationToolVC
-    vc.configurationTool = networkLayer.getConfigurationTool()
-    vc.configurationTool?.delegate = vc
-    vc.node = node
-    wc.showWindow(nil)
-
+    var exclusive = false
+    
+    if let internalNode = networkLayer.virtualNodeLookup[node.nodeId] {
+      
+      let requireExclusive : Set<MyTrainsVirtualNodeType> = [
+        .applicationNode,
+        .layoutNode,
+      ]
+      
+      exclusive = requireExclusive.contains(internalNode.virtualNodeType)
+      
+    }
+    
+    if let ct = networkLayer.getConfigurationTool(exclusive: exclusive) {
+      let x = ModalWindow.ConfigurationTool
+      let wc = x.windowController
+      let vc = x.viewController(windowController: wc) as! ConfigurationToolVC
+      vc.configurationTool = ct
+      vc.configurationTool?.delegate = vc
+      vc.node = node
+      wc.showWindow(nil)
+    }
+    
   }
   
   @IBAction func btnUpdateFirmwareAction(_ sender: NSButton) {

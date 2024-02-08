@@ -68,9 +68,9 @@ public enum TrackGauge : UInt8 {
     
   }
   
-  // MARK: Private Class Properties
+  // MARK: Public Class Properties
   
-  private static let data : [TrackGauge:(gauge:TrackGauge, title:String, ratio:Scale, scale:Double, track:Double)] = [
+  public static let data : [TrackGauge:(gauge:TrackGauge, title:String, ratio:Scale, scale:Double, track:Double)] = [
     .t:(.t, "T", .scale1to450, 0.64, 3.0),
     .z:(.z, "Z", .scale1to220, 1.4, 6.0),
     .nEurope:(.nEurope, "N", .scale1to160, 1.9, 9.0),
@@ -107,17 +107,19 @@ public enum TrackGauge : UInt8 {
     .p7dot83:(.p7dot83, "P7.83", .scale1to76, 4.0, 7.83),
   ]
   
-  private static func map(scale:Scale?) -> String {
+  // MARK: Private Class Methods
+  
+  private static func map(layout:LayoutNode?) -> String {
     
     var items : [TrackGauge] = []
     
-    if let scale {
-      if scale == .scale1to76dot2 {
+    if let layout {
+      if layout.scale == .scale1to76dot2 {
         items.append(.ho)
       }
       
       for (id, data) in TrackGauge.data {
-        if data.ratio == scale {
+        if data.ratio == layout.scale && (data.gauge == layout.defaultTrackGuage || layout.usesMultipleTrackGauges) {
           items.append(id)
         }
       }
@@ -144,12 +146,12 @@ public enum TrackGauge : UInt8 {
   
   // MARK: Public Class Methods
   
-  public static func insertMap(cdi:String, scale:Scale) -> String {
-    return cdi.replacingOccurrences(of: CDI.TRACK_GAUGE, with: map(scale: scale))
+  public static func insertMap(cdi:String, layout:LayoutNode?) -> String {
+    return cdi.replacingOccurrences(of: CDI.TRACK_GAUGE, with: map(layout: layout))
   }
 
   public static func insertMap(cdi:String) -> String {
-    return cdi.replacingOccurrences(of: CDI.ALL_TRACK_GAUGES, with: map(scale: nil))
+    return cdi.replacingOccurrences(of: CDI.ALL_TRACK_GAUGES, with: map(layout: nil))
   }
 
 }

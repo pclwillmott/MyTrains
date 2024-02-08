@@ -24,7 +24,7 @@ public typealias TrackPartInfo = (trackPartId:TrackPart, manufacturer:Manufactur
 
 public enum TrackPart : UInt16 {
   
-  case pecoStreamlineOOHOCode100CatchPointRightHand = 0
+  case custom = 0
   case pecoStreamlineOOHOCode100CatchPointLeftHand = 1
   case pecoStreamlineOOHOCode100SmallRadiusTurnoutRightHand = 2
   case pecoStreamlineOOHOCode100SmallRadiusTurnoutLeftHand = 3
@@ -90,29 +90,29 @@ public enum TrackPart : UInt16 {
   case pecoSetrackOOHOCode100CurvedTurnoutRightHand = 63
   case pecoSetrackOOHOCode100CurvedTurnoutLeftHand = 64
   case pecoSetrackOOHOCode100Crossing = 65
-  
-  case custom = 9999
-  
+  case pecoStreamlineOOHOCode100CatchPointRightHand = 66
+
   // MARK: Public Properties
   
   public var title : String {
     if let info = partInfo {
       return "\(info.brandName) \(info.trackGauge.title) \(info.trackCode.title) \(info.title) \(info.frogType.title) (\(info.partNumber))"
     }
-    return "(Custom Dimensions)"
+    return String(localized: "Use Custom Dimensions", comment: "Used as the title for custom dimensions of a track part.")
   }
   
   public var partInfo : TrackPartInfo? {
-    if self == .custom {
-      return nil
+    if let partInfo = TrackPart.info[self] {
+      return partInfo
     }
-    return TrackPart.info[Int(self.rawValue)]
+    return nil
   }
   
   // MARK: Private Class Properties
   
-  private static let info : [TrackPartInfo] = [
-    
+  private static let info : [TrackPart:TrackPartInfo] = [
+
+    .pecoStreamlineOOHOCode100CatchPointRightHand:
     (trackPartId: .pecoStreamlineOOHOCode100CatchPointRightHand,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -124,6 +124,7 @@ public enum TrackPart : UInt16 {
      frogType: .insulFrog,
      dimensions: [9.8, 9.8]),
 
+    .pecoStreamlineOOHOCode100CatchPointLeftHand:
     (trackPartId: .pecoStreamlineOOHOCode100CatchPointLeftHand,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -135,6 +136,7 @@ public enum TrackPart : UInt16 {
      frogType: .insulFrog,
      dimensions: [9.8, 9.8]),
 
+    .pecoStreamlineOOHOCode100SmallRadiusTurnoutRightHand:
     (trackPartId: .pecoStreamlineOOHOCode100SmallRadiusTurnoutRightHand,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -146,6 +148,7 @@ public enum TrackPart : UInt16 {
      frogType: .insulFrog,
      dimensions: [18.5, 18.5]),
 
+    .pecoStreamlineOOHOCode100SmallRadiusTurnoutLeftHand:
     (trackPartId: .pecoStreamlineOOHOCode100SmallRadiusTurnoutLeftHand,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -157,6 +160,7 @@ public enum TrackPart : UInt16 {
      frogType: .insulFrog,
      dimensions: [18.5, 18.5]),
 
+    .pecoStreamlineOOHOCode100SmallRadiusTurnoutRightHandEF:
     (trackPartId: .pecoStreamlineOOHOCode100SmallRadiusTurnoutRightHandEF,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -168,6 +172,7 @@ public enum TrackPart : UInt16 {
      frogType: .electroFrog,
      dimensions: [18.5, 18.5]),
 
+    .pecoStreamlineOOHOCode100SmallRadiusTurnoutLeftHandEF:
     (trackPartId: .pecoStreamlineOOHOCode100SmallRadiusTurnoutLeftHandEF,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -179,6 +184,7 @@ public enum TrackPart : UInt16 {
      frogType: .electroFrog,
      dimensions: [18.5, 18.5]),
 
+    .pecoStreamlineOOHOCode100ShortCrossing:
     (trackPartId: .pecoStreamlineOOHOCode100ShortCrossing,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -190,6 +196,7 @@ public enum TrackPart : UInt16 {
      frogType: .insulFrog,
      dimensions: [12.7, 12.7]),
 
+    .pecoStreamlineOOHOCode100MediumRadiusTurnoutRightHand:
     (trackPartId: .pecoStreamlineOOHOCode100MediumRadiusTurnoutRightHand,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -201,6 +208,7 @@ public enum TrackPart : UInt16 {
      frogType: .insulFrog,
      dimensions: [21.9, 21.9]),
 
+    .pecoStreamlineOOHOCode100MediumRadiusTurnoutLeftHand:
     (trackPartId: .pecoStreamlineOOHOCode100MediumRadiusTurnoutLeftHand,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -212,6 +220,7 @@ public enum TrackPart : UInt16 {
      frogType: .insulFrog,
      dimensions: [21.9, 21.9]),
 
+    .pecoStreamlineOOHOCode100MediumRadiusTurnoutRightHandEF:
     (trackPartId: .pecoStreamlineOOHOCode100MediumRadiusTurnoutRightHandEF,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -223,6 +232,7 @@ public enum TrackPart : UInt16 {
      frogType: .electroFrog,
      dimensions: [21.9, 21.9]),
 
+    .pecoStreamlineOOHOCode100MediumRadiusTurnoutLeftHandEF:
     (trackPartId: .pecoStreamlineOOHOCode100MediumRadiusTurnoutLeftHandEF,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -234,6 +244,7 @@ public enum TrackPart : UInt16 {
      frogType: .electroFrog,
      dimensions: [21.9, 21.9]),
 
+    .pecoStreamlineOOHOCode100LargeRadiusTurnoutRightHand:
     (trackPartId: .pecoStreamlineOOHOCode100LargeRadiusTurnoutRightHand,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -245,6 +256,7 @@ public enum TrackPart : UInt16 {
      frogType: .insulFrog,
      dimensions: [25.9, 25.9]),
 
+    .pecoStreamlineOOHOCode100LargeRadiusTurnoutLeftHand:
     (trackPartId: .pecoStreamlineOOHOCode100LargeRadiusTurnoutLeftHand,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -256,6 +268,7 @@ public enum TrackPart : UInt16 {
      frogType: .insulFrog,
      dimensions: [25.9, 25.9]),
 
+    .pecoStreamlineOOHOCode100LargeRadiusTurnoutRightHandEF:
     (trackPartId: .pecoStreamlineOOHOCode100LargeRadiusTurnoutRightHandEF,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -267,6 +280,7 @@ public enum TrackPart : UInt16 {
      frogType: .electroFrog,
      dimensions: [25.9, 25.9]),
 
+    .pecoStreamlineOOHOCode100LargeRadiusTurnoutLeftHandEF:
     (trackPartId: .pecoStreamlineOOHOCode100LargeRadiusTurnoutLeftHandEF,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -278,6 +292,7 @@ public enum TrackPart : UInt16 {
      frogType: .electroFrog,
      dimensions: [25.9, 25.9]),
 
+    .pecoStreamlineOOHOCode100CurvedSmallRadiusTurnoutRightHandUF:
     (trackPartId: .pecoStreamlineOOHOCode100CurvedSmallRadiusTurnoutRightHandUF,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -289,6 +304,7 @@ public enum TrackPart : UInt16 {
      frogType: .uniFrog,
      dimensions: [16.8, 16.8]),
 
+    .pecoStreamlineOOHOCode100CurvedSmallRadiusTurnoutLeftHandUF:
     (trackPartId: .pecoStreamlineOOHOCode100CurvedSmallRadiusTurnoutLeftHandUF,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -300,6 +316,7 @@ public enum TrackPart : UInt16 {
      frogType: .uniFrog,
      dimensions: [16.8, 16.8]),
 
+    .pecoStreamlineOOHOCode100CurvedTurnoutRightHand:
     (trackPartId: .pecoStreamlineOOHOCode100CurvedTurnoutRightHand,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -311,6 +328,7 @@ public enum TrackPart : UInt16 {
      frogType: .insulFrog,
      dimensions: [25.8, 25.8]),
 
+    .pecoStreamlineOOHOCode100CurvedTurnoutLeftHand:
     (trackPartId: .pecoStreamlineOOHOCode100CurvedTurnoutLeftHand,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -322,6 +340,7 @@ public enum TrackPart : UInt16 {
      frogType: .insulFrog,
      dimensions: [25.8, 25.8]),
 
+    .pecoStreamlineOOHOCode100CurvedTurnoutRightHandEF:
     (trackPartId: .pecoStreamlineOOHOCode100CurvedTurnoutRightHandEF,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -333,6 +352,7 @@ public enum TrackPart : UInt16 {
      frogType: .electroFrog,
      dimensions: [25.8, 25.8]),
 
+    .pecoStreamlineOOHOCode100CurvedTurnoutLeftHandEF:
     (trackPartId: .pecoStreamlineOOHOCode100CurvedTurnoutLeftHandEF,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -344,6 +364,7 @@ public enum TrackPart : UInt16 {
      frogType: .electroFrog,
      dimensions: [25.8, 25.8]),
 
+    .pecoStreamlineOOHOCode100SmallRadiusYTurnout:
     (trackPartId: .pecoStreamlineOOHOCode100SmallRadiusYTurnout,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -355,6 +376,7 @@ public enum TrackPart : UInt16 {
      frogType: .insulFrog,
      dimensions: [14.8, 14.8]),
 
+    .pecoStreamlineOOHOCode100SmallRadiusYTurnoutEF:
     (trackPartId: .pecoStreamlineOOHOCode100SmallRadiusYTurnoutEF,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -366,6 +388,7 @@ public enum TrackPart : UInt16 {
      frogType: .electroFrog,
      dimensions: [14.8, 14.8]),
 
+    .pecoStreamlineOOHOCode100LargeRadiusYTurnout:
     (trackPartId: .pecoStreamlineOOHOCode100LargeRadiusYTurnout,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -377,6 +400,7 @@ public enum TrackPart : UInt16 {
      frogType: .insulFrog,
      dimensions: [22.0, 22.0]),
 
+    .pecoStreamlineOOHOCode100LargeRadiusYTurnoutEF:
     (trackPartId: .pecoStreamlineOOHOCode100LargeRadiusYTurnoutEF,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -388,6 +412,7 @@ public enum TrackPart : UInt16 {
      frogType: .electroFrog,
      dimensions: [22.0, 22.0]),
 
+    .pecoStreamlineOOHOCode100LongCrossing:
     (trackPartId: .pecoStreamlineOOHOCode100LongCrossing,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -399,6 +424,7 @@ public enum TrackPart : UInt16 {
      frogType: .insulFrog,
      dimensions: [24.9, 24.9]),
 
+    .pecoStreamlineOOHOCode100SingleSlip:
     (trackPartId: .pecoStreamlineOOHOCode100SingleSlip,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -410,6 +436,7 @@ public enum TrackPart : UInt16 {
      frogType: .insulFrog,
      dimensions: [24.9, 24.9, 24.9]),
 
+    .pecoStreamlineOOHOCode100DoubleSlip:
     (trackPartId: .pecoStreamlineOOHOCode100DoubleSlip,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -421,6 +448,7 @@ public enum TrackPart : UInt16 {
      frogType: .insulFrog,
      dimensions: [24.9, 24.9, 24.9, 24.9]),
 
+    .pecoStreamlineOOHOCode1003WayTurnout:
     (trackPartId: .pecoStreamlineOOHOCode1003WayTurnout,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -432,6 +460,7 @@ public enum TrackPart : UInt16 {
      frogType: .insulFrog,
      dimensions: [22.0, 22.0, 22.0]),
 
+    .pecoStreamlineOOHOCode1003WayTurnoutEF:
     (trackPartId: .pecoStreamlineOOHOCode1003WayTurnoutEF,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -443,6 +472,7 @@ public enum TrackPart : UInt16 {
      frogType: .electroFrog,
      dimensions: [22.0, 22.0, 22.0]),
 
+    .pecoStreamlineOOHOCode75CatchPointRightHand:
     (trackPartId: .pecoStreamlineOOHOCode75CatchPointRightHand,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -454,6 +484,7 @@ public enum TrackPart : UInt16 {
      frogType: .insulFrog,
      dimensions: [9.1, 9.1]),
 
+    .pecoStreamlineOOHOCode75CatchPointLeftHand:
     (trackPartId: .pecoStreamlineOOHOCode75CatchPointLeftHand,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -465,6 +496,7 @@ public enum TrackPart : UInt16 {
      frogType: .insulFrog,
      dimensions: [9.1, 9.1]),
 
+    .pecoStreamlineOOHOCode75SmallRadiusTurnoutRightHandEF:
     (trackPartId: .pecoStreamlineOOHOCode75SmallRadiusTurnoutRightHandEF,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -476,6 +508,7 @@ public enum TrackPart : UInt16 {
      frogType: .electroFrog,
      dimensions: [18.5, 18.5]),
 
+    .pecoStreamlineOOHOCode75SmallRadiusTurnoutLeftHandEF:
     (trackPartId: .pecoStreamlineOOHOCode75SmallRadiusTurnoutLeftHandEF,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -487,6 +520,7 @@ public enum TrackPart : UInt16 {
      frogType: .electroFrog,
      dimensions: [18.5, 18.5]),
 
+    .pecoStreamlineOOHOCode75MediumRadiusTurnoutRightHandEF:
     (trackPartId: .pecoStreamlineOOHOCode75MediumRadiusTurnoutRightHandEF,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -498,6 +532,7 @@ public enum TrackPart : UInt16 {
      frogType: .electroFrog,
      dimensions: [21.9, 21.9]),
 
+    .pecoStreamlineOOHOCode75MediumRadiusTurnoutLeftHandEF:
     (trackPartId: .pecoStreamlineOOHOCode75MediumRadiusTurnoutLeftHandEF,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -509,6 +544,7 @@ public enum TrackPart : UInt16 {
      frogType: .electroFrog,
      dimensions: [21.9, 21.9]),
 
+    .pecoStreamlineOOHOCode75MediumRadiusTurnoutRightHandEFConcrete:
     (trackPartId: .pecoStreamlineOOHOCode75MediumRadiusTurnoutRightHandEFConcrete,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -520,6 +556,7 @@ public enum TrackPart : UInt16 {
      frogType: .electroFrog,
      dimensions: [21.9, 21.9]),
 
+    .pecoStreamlineOOHOCode75MediumRadiusTurnoutLeftHandEFConcrete:
     (trackPartId: .pecoStreamlineOOHOCode75MediumRadiusTurnoutLeftHandEFConcrete,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -531,6 +568,7 @@ public enum TrackPart : UInt16 {
      frogType: .electroFrog,
      dimensions: [21.9, 21.9]),
 
+    .pecoStreamlineOOHOCode75LargeRadiusTurnoutRightHandEF:
     (trackPartId: .pecoStreamlineOOHOCode75LargeRadiusTurnoutRightHandEF,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -542,6 +580,7 @@ public enum TrackPart : UInt16 {
      frogType: .electroFrog,
      dimensions: [25.9, 25.9]),
 
+    .pecoStreamlineOOHOCode75LargeRadiusTurnoutLeftHandEF:
     (trackPartId: .pecoStreamlineOOHOCode75LargeRadiusTurnoutLeftHandEF,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -553,6 +592,7 @@ public enum TrackPart : UInt16 {
      frogType: .electroFrog,
      dimensions: [25.9, 25.9]),
 
+    .pecoStreamlineOOHOCode75CurvedTurnoutRightHandEF:
     (trackPartId: .pecoStreamlineOOHOCode75CurvedTurnoutRightHandEF,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -564,6 +604,7 @@ public enum TrackPart : UInt16 {
      frogType: .electroFrog,
      dimensions: [25.8, 25.8]),
 
+    .pecoStreamlineOOHOCode75CurvedTurnoutLeftHandEF:
     (trackPartId: .pecoStreamlineOOHOCode75CurvedTurnoutLeftHandEF,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -575,6 +616,7 @@ public enum TrackPart : UInt16 {
      frogType: .electroFrog,
      dimensions: [25.8, 25.8]),
 
+    .pecoStreamlineOOHOCode75LargeRadiusYTurnoutEF:
     (trackPartId: .pecoStreamlineOOHOCode75LargeRadiusYTurnoutEF,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -586,6 +628,7 @@ public enum TrackPart : UInt16 {
      frogType: .electroFrog,
      dimensions: [22.0, 22.0]),
 
+    .pecoStreamlineOOHOCode75SmallRadiusYTurnoutEF:
     (trackPartId: .pecoStreamlineOOHOCode75SmallRadiusYTurnoutEF,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -597,6 +640,7 @@ public enum TrackPart : UInt16 {
      frogType: .electroFrog,
      dimensions: [14.8, 14.8]),
 
+    .pecoStreamlineOOHOCode75Asymmetric3WayTurnoutEF:
     (trackPartId: .pecoStreamlineOOHOCode75Asymmetric3WayTurnoutEF,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -608,6 +652,7 @@ public enum TrackPart : UInt16 {
      frogType: .electroFrog,
      dimensions: [27.3, 27.3, 27.3]),
 
+    .pecoStreamlineOOHOCode75ShortCrossing:
     (trackPartId: .pecoStreamlineOOHOCode75ShortCrossing,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -619,6 +664,7 @@ public enum TrackPart : UInt16 {
      frogType: .insulFrog,
      dimensions: [12.7, 12.7]),
 
+    .pecoStreamlineOOHOCode75ShortCrossingEF:
     (trackPartId: .pecoStreamlineOOHOCode75ShortCrossingEF,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -630,6 +676,7 @@ public enum TrackPart : UInt16 {
      frogType: .electroFrog,
      dimensions: [12.7, 12.7]),
 
+    .pecoStreamlineOOHOCode75LongCrossing:
     (trackPartId: .pecoStreamlineOOHOCode75LongCrossing,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -641,6 +688,7 @@ public enum TrackPart : UInt16 {
      frogType: .insulFrog,
      dimensions: [24.9, 24.9]),
 
+    .pecoStreamlineOOHOCode75LongCrossingEF:
     (trackPartId: .pecoStreamlineOOHOCode75LongCrossingEF,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -652,6 +700,7 @@ public enum TrackPart : UInt16 {
      frogType: .insulFrog,
      dimensions: [24.9, 24.9]),
 
+    .pecoStreamlineOOHOCode75SingleSlip:
     (trackPartId: .pecoStreamlineOOHOCode75SingleSlip,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -663,6 +712,7 @@ public enum TrackPart : UInt16 {
      frogType: .insulFrog,
      dimensions: [24.9, 24.9, 24.9]),
 
+    .pecoStreamlineOOHOCode75SingleSlipEF:
     (trackPartId: .pecoStreamlineOOHOCode75SingleSlipEF,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -674,6 +724,7 @@ public enum TrackPart : UInt16 {
      frogType: .electroFrog,
      dimensions: [24.9, 24.9, 24.9]),
 
+    .pecoStreamlineOOHOCode75DoubleSlip:
     (trackPartId: .pecoStreamlineOOHOCode75DoubleSlip,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -685,6 +736,7 @@ public enum TrackPart : UInt16 {
      frogType: .insulFrog,
      dimensions: [24.9, 24.9, 24.9, 24.9]),
 
+    .pecoStreamlineOOHOCode75DoubleSlipEF:
     (trackPartId: .pecoStreamlineOOHOCode75DoubleSlipEF,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -696,6 +748,7 @@ public enum TrackPart : UInt16 {
      frogType: .electroFrog,
      dimensions: [24.9, 24.9, 24.9, 24.9]),
 
+    .pecoStreamlineOOHOCode75LargeRadiusTurnoutRightHandUFBullhead:
     (trackPartId: .pecoStreamlineOOHOCode75LargeRadiusTurnoutRightHandUFBullhead,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -707,6 +760,7 @@ public enum TrackPart : UInt16 {
      frogType: .uniFrog,
      dimensions: [25.9, 25.9]),
 
+    .pecoStreamlineOOHOCode75LargeRadiusTurnoutLeftHandUFBullhead:
     (trackPartId: .pecoStreamlineOOHOCode75LargeRadiusTurnoutLeftHandUFBullhead,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -718,6 +772,7 @@ public enum TrackPart : UInt16 {
      frogType: .uniFrog,
      dimensions: [25.9, 25.9]),
 
+    .pecoStreamlineOOHOCode75MediumRadiusTurnoutRightHandUFBullhead:
     (trackPartId: .pecoStreamlineOOHOCode75MediumRadiusTurnoutRightHandUFBullhead,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -729,6 +784,7 @@ public enum TrackPart : UInt16 {
      frogType: .uniFrog,
      dimensions: [21.9, 21.9]),
 
+    .pecoStreamlineOOHOCode75MediumRadiusTurnoutLeftHandUFBullhead:
     (trackPartId: .pecoStreamlineOOHOCode75MediumRadiusTurnoutLeftHandUFBullhead,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -740,6 +796,7 @@ public enum TrackPart : UInt16 {
      frogType: .uniFrog,
      dimensions: [21.9, 21.9]),
 
+    .pecoStreamlineOOHOCode75LongCrossingUFBullhead:
     (trackPartId: .pecoStreamlineOOHOCode75LongCrossingUFBullhead,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -751,6 +808,7 @@ public enum TrackPart : UInt16 {
      frogType: .uniFrog,
      dimensions: [24.9, 24.9]),
 
+    .pecoStreamlineOOHOCode75SingleSlipUFBullhead:
     (trackPartId: .pecoStreamlineOOHOCode75SingleSlipUFBullhead,
      manufacturer: .peco,
      brandName: "PECO Streamline",
@@ -762,17 +820,19 @@ public enum TrackPart : UInt16 {
      frogType: .uniFrog,
      dimensions: [24.9, 24.9, 24.9]),
 
+    .pecoStreamlineOOHOCode75DoubleSlipUFBullhead:
     (trackPartId: .pecoStreamlineOOHOCode75DoubleSlipUFBullhead,
      manufacturer: .peco,
      brandName: "PECO Streamline",
      title: "Double Slip Bullhead",
-     partNumber: "SL-U1180",
+     partNumber: "SL-U1190",
      itemPartType: .doubleSlip,
      trackCode: .code75,
      trackGauge: .ho,
      frogType: .uniFrog,
      dimensions: [24.9, 24.9, 24.9, 24.9]),
 
+    .pecoSetrackOOHOCode100No2RadiusTurnoutRightHand:
     (trackPartId: .pecoSetrackOOHOCode100No2RadiusTurnoutRightHand,
      manufacturer: .peco,
      brandName: "PECO Setrack",
@@ -784,6 +844,7 @@ public enum TrackPart : UInt16 {
      frogType: .insulFrog,
      dimensions: [16.8, 16.8]),
 
+    .pecoSetrackOOHOCode100No2RadiusTurnoutLeftHand:
     (trackPartId: .pecoSetrackOOHOCode100No2RadiusTurnoutLeftHand,
      manufacturer: .peco,
      brandName: "PECO Setrack",
@@ -795,17 +856,19 @@ public enum TrackPart : UInt16 {
      frogType: .insulFrog,
      dimensions: [16.8, 16.8]),
 
-    (trackPartId: .pecoSetrackOOHOCode100No2RadiusTurnoutLeftHand,
+    .pecoSetrackOOHOCode100MediumRadiusYTurnout:
+    (trackPartId: .pecoSetrackOOHOCode100MediumRadiusYTurnout,
      manufacturer: .peco,
      brandName: "PECO Setrack",
      title: "Medium Radius Y Turnout",
-     partNumber: "ST-241",
+     partNumber: "ST-247",
      itemPartType: .yTurnout,
      trackCode: .code100,
      trackGauge: .ho,
      frogType: .insulFrog,
      dimensions: [17.0, 17.0]),
 
+    .pecoSetrackOOHOCode100CurvedTurnoutRightHand:
     (trackPartId: .pecoSetrackOOHOCode100CurvedTurnoutRightHand,
      manufacturer: .peco,
      brandName: "PECO Setrack",
@@ -817,6 +880,7 @@ public enum TrackPart : UInt16 {
      frogType: .insulFrog,
      dimensions: [16.8, 16.8]), // these values are incorrect
 
+    .pecoSetrackOOHOCode100CurvedTurnoutLeftHand:
     (trackPartId: .pecoSetrackOOHOCode100CurvedTurnoutLeftHand,
      manufacturer: .peco,
      brandName: "PECO Setrack",
@@ -828,6 +892,7 @@ public enum TrackPart : UInt16 {
      frogType: .insulFrog,
      dimensions: [16.8, 16.8]), // these values are incorrect
 
+    .pecoSetrackOOHOCode100Crossing:
     (trackPartId: .pecoSetrackOOHOCode100Crossing,
      manufacturer: .peco,
      brandName: "PECO Setrack",
@@ -843,15 +908,31 @@ public enum TrackPart : UInt16 {
   
   public static let mapPlaceholder = CDI.TRACK_PART
 
-  private static func map(itemType:SwitchBoardItemType) -> String {
+  private static func map(itemType:SwitchBoardItemType, layout:LayoutNode) -> String {
+
+    var gauges : Set<TrackGauge> = []
     
+    if layout.scale == .scale1to76dot2 && (layout.defaultTrackGuage == .ho || layout.usesMultipleTrackGauges) {
+      gauges.insert(.ho)
+    }
+    
+    for (id, data) in TrackGauge.data {
+      if data.ratio == layout.scale && (data.gauge == layout.defaultTrackGuage || layout.usesMultipleTrackGauges) {
+        gauges.insert(id)
+      }
+    }
+
     var items : [TrackPart] = []
     
-    for item in info {
-      if item.itemPartType == itemType {
+    for (_, item) in info {
+      if item.itemPartType == itemType && gauges.contains(item.trackGauge) {
         items.append(item.trackPartId)
       }
     }
+    
+    items.sort {$0.title < $1.title}
+    
+    items.insert(.custom, at: 0)
     
     var map = "<map>\n"
 
@@ -867,15 +948,18 @@ public enum TrackPart : UInt16 {
 
   // MARK: Public Class Methods
   
-  public static func insertMap(cdi:String, itemType:SwitchBoardItemType) -> String {
-    return cdi.replacingOccurrences(of: mapPlaceholder, with: map(itemType: itemType))
+  public static func insertMap(cdi:String, itemType:SwitchBoardItemType, layout:LayoutNode?) -> String {
+    guard let layout else {
+      return cdi
+    }
+    return cdi.replacingOccurrences(of: mapPlaceholder, with: map(itemType: itemType, layout: layout))
   }
 
   public static func dictionary(itemPartType:SwitchBoardItemType, trackGauge:TrackGauge) -> [Int:TrackPartEditorObject] {
     
     var result : [Int:TrackPartEditorObject] = [:]
     
-    for part in info {
+    for (_, part) in info {
       if part.trackPartId == .custom || (part.itemPartType == itemPartType && part.trackGauge == trackGauge) {
         let editorObject = TrackPartEditorObject(trackPart: part.trackPartId)
         result[editorObject.primaryKey] = editorObject

@@ -557,7 +557,6 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
           
           let tempNodeId = message.sourceNodeId!
           
-          print(message.payload)
           let itemType = SwitchBoardItemType(rawValue: UInt16(bigEndianData: [message.payload[6], message.payload[7]])!)!
           
           message.payload.removeLast(2)
