@@ -49,8 +49,6 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
   
   private var cvTimeoutTimer : Timer?
   
-  private var locoNetGateways : [UInt64:String] = [:]
-
   private var locoNet : LocoNet?
   
   private var slotState : LocoNetSlotState {
@@ -395,30 +393,14 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
   }
   
   internal override func customizeDynamicCDI(cdi:String) -> String {
+   
+    var result = cdi
     
-    // Do mappings for LocoNet Gateways
-    
-    var sorted : [(nodeId:UInt64, name:String)] = []
-    
-    for (key, name) in locoNetGateways {
-      sorted.append((nodeId:key, name:name))
-    }
-    
-    sorted.sort {$0.name < $1.name}
-    
-    var gateways = "<map>\n<relation><property>00.00.00.00.00.00.00.00</property><value>No Gateway Selected</value></relation>\n"
-    
-    for gateway in sorted {
-      gateways += "<relation><property>\(gateway.nodeId.toHexDotFormat(numberOfBytes: 8))</property><value>\(gateway.name)</value></relation>\n"
+    if let appNode {
+      result = appNode.insertLocoNetGatewayMap(cdi: result)
     }
 
-    gateways += "</map>\n"
- 
-    var result = cdi.replacingOccurrences(of: CDI.LOCONET_GATEWAYS, with: gateways)
-
-    result = OpenLCBFunction.insertMap(cdi: result)
-
-    return result
+    return OpenLCBFunction.insertMap(cdi: result)
     
   }
 
@@ -442,55 +424,16 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
   // MARK: OpenLCBNetworkLayerDelegate Methods
    
   public override func openLCBMessageReceived(message: OpenLCBMessage) {
-    
     super.openLCBMessageReceived(message: message)
-    
     locoNet?.openLCBMessageReceived(message: message)
-    
-    switch message.messageTypeIndicator {
-      
-    case .producerIdentifiedAsCurrentlyValid, .producerIdentifiedAsCurrentlyInvalid, .producerIdentifiedWithValidityUnknown, .producerConsumerEventReport:
-      
-      if let event = OpenLCBWellKnownEvent(rawValue: message.eventId!) {
-        
-        switch event {
-        case .nodeIsALocoNetGateway:
-          
-          locoNetGateways[message.sourceNodeId!] = ""
-          networkLayer?.sendSimpleNodeInformationRequest(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!)
-          
-        default:
-          break
-        }
-        
-      }
-
-    case .simpleNodeIdentInfoReply:
-      
-      if let _ = locoNetGateways[message.sourceNodeId!] {
-        let node = OpenLCBNode(nodeId: message.sourceNodeId!)
-        node.encodedNodeInformation = message.payload
-        locoNetGateways[node.nodeId] = node.userNodeName
-        initCDI()
-      }
-
-    default:
-      break
-    }
-    
   }
   
   // MARK: LocoNetDelegate Methods
   
   @objc public func locoNetInitializationComplete() {
-    
   }
   
   @objc public func locoNetMessageReceived(message:LocoNetMessage) {
-    
-/*    guard configState != .idle else {
-      return
-    } */
     
     switch message.messageType {
       
@@ -665,7 +608,5 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
     }
     
   }
-
-
 
 }

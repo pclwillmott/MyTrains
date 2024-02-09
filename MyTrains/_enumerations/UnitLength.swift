@@ -130,7 +130,7 @@ public enum UnitLength : Int {
     var from = fromUnits
     
     if fromUnits == .mileschains {
-      var miles = temp.rounded(.towardZero)
+      let miles = temp.rounded(.towardZero)
       let chains = temp - miles
       temp = miles + chains / 80.0
       from = .miles
@@ -141,7 +141,7 @@ public enum UnitLength : Int {
     temp *= fromCM(units: toUnits == .mileschains ? .miles : toUnits)!
     
     if toUnits == .mileschains {
-      var miles = temp.rounded(.towardZero)
+      let miles = temp.rounded(.towardZero)
       let chains = (temp - miles) * 0.80
       temp = miles + chains
     }

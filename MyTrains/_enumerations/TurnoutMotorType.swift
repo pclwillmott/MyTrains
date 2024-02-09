@@ -8,7 +8,7 @@
 import Foundation
 import AppKit
 
-public enum TurnoutMotorType : Int {
+public enum TurnoutMotorType : UInt8 {
   
   case manual     = 0
   case slowMotion = 1
@@ -17,7 +17,7 @@ public enum TurnoutMotorType : Int {
   // MARK: Public Properties
   
   public var title : String {
-    return TurnoutMotorType.titles[self.rawValue]
+    return TurnoutMotorType.titles[Int(self.rawValue)]
   }
   
   // MARK: Private Class Properties
@@ -85,7 +85,7 @@ public enum TurnoutMotorType : Int {
     var index = 0
     while index < titles.count {
       if comboBox.stringValue == titles[index] {
-        return TurnoutMotorType(rawValue: index)
+        return TurnoutMotorType(rawValue: UInt8(index))
       }
       index += 1
     }

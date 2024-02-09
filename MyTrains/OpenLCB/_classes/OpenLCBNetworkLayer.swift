@@ -321,7 +321,7 @@ public class OpenLCBNetworkLayer : NSObject {
   
   public func getThrottle() -> OpenLCBThrottle? {
     
-    var result = throttleManager.getNode() as? OpenLCBThrottle
+    let result = throttleManager.getNode() as? OpenLCBThrottle
     
     if throttleManager.numberOfFreeNodes == 0 {
       createVirtualNode(virtualNodeType: .throttleNode, completion: dummyCompletion(node:))

@@ -8,6 +8,5 @@
 import Foundation
 
 @objc public protocol OpenLCBLocoNetMonitorDelegate {
-  @objc optional func locoNetGatewaysUpdated(monitorNode:OpenLCBLocoNetMonitorNode, gateways:[UInt64:String])
   @objc optional func locoNetMessageReceived(message:LocoNetMessage)
 }

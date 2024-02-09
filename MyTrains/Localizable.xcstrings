@@ -2201,7 +2201,7 @@
       }
     },
     "Fast Clock" : {
-      "comment" : "Used for the Fast Clock menu item title\nUsed to indicate a clock's type",
+      "comment" : "Used to indicate a clock's type\nUsed for the Fast Clock menu item title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -4083,7 +4083,7 @@
       }
     },
     "Select Layout" : {
-      "comment" : "Used for the Select Layout menu item\nUsed for the title of the Select Layout window",
+      "comment" : "Used for the title of the Select Layout window\nUsed for the Select Layout menu item",
       "localizations" : {
         "en" : {
           "stringUnit" : {

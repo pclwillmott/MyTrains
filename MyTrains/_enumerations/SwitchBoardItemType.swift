@@ -79,18 +79,23 @@ public enum SwitchBoardItemType : UInt16 {
     }
   }
   
+  public var numberOfDimensionsRequired : Int {
+    if isGroup, let connections = SwitchBoardItemType.connections[self] {
+      return connections.count
+    }
+    return 0
+  }
+  
   public var numberOfTurnoutSwitches : Int {
-    get {
-      var used : Set<Int> = []
-      if let connections = SwitchBoardItemType.connections[self] {
-        for connection in connections {
-          for item in connection.switchSettings {
-            used.insert(item.switchNumber)
-          }
+    var used : Set<Int> = []
+    if let connections = SwitchBoardItemType.connections[self] {
+      for connection in connections {
+        for item in connection.switchSettings {
+          used.insert(item.switchNumber)
         }
       }
-      return used.count
     }
+    return used.count
   }
   
   public var eventsSupported : Set<SwitchBoardEventType> {

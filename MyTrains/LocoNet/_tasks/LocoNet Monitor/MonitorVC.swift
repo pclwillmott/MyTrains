@@ -13,7 +13,7 @@ private enum TimeStampType : Int {
   case millisecondsSinceLastMessage = 1
 }
 
-class MonitorVC: NSViewController, NSWindowDelegate, OpenLCBLocoNetMonitorDelegate {
+class MonitorVC: NSViewController, NSWindowDelegate, OpenLCBLocoNetMonitorDelegate, MyTrainsAppDelegate {
   
   // MARK: Window & View Control
   
@@ -32,6 +32,8 @@ class MonitorVC: NSViewController, NSWindowDelegate, OpenLCBLocoNetMonitorDelega
     }
     
     myTrainsController.openLCBNetworkLayer?.releaseLocoNetMonitor(monitor: monitorNode)
+    
+    appNode?.removeObserver(observerId: observerId)
     
   }
   
@@ -81,9 +83,13 @@ class MonitorVC: NSViewController, NSWindowDelegate, OpenLCBLocoNetMonitorDelega
 
     txtMonitor.font = NSFont(name: "Menlo", size: 12)
     
+    observerId = appNode!.addObserver(observer: self)
+    
   }
   
   // MARK: Private Properties
+  
+  private var observerId : Int = -1
   
   private var updateLock : NSLock = NSLock()
   
@@ -109,40 +115,28 @@ class MonitorVC: NSViewController, NSWindowDelegate, OpenLCBLocoNetMonitorDelega
   }
   
   private var captureURL : URL? {
-    get {
-      let cfn = captureFilename
-      return cfn == "" ? nil : URL(fileURLWithPath: cfn)
-    }
+    let cfn = captureFilename
+    return cfn == "" ? nil : URL(fileURLWithPath: cfn)
   }
   
   private var isCaptureActive : Bool {
-    get {
-      return chkCaptureActive.state == .on
-    }
+    return chkCaptureActive.state == .on
   }
   
   private var addLabels : Bool {
-    get {
-      return chkAddLabels.state == .on
-    }
+    return chkAddLabels.state == .on
   }
   
   private var timeStampType : TimeStampType {
-    get {
-      return TimeStampType(rawValue: cboTimeStampType.indexOfSelectedItem) ?? .none
-    }
+    return TimeStampType(rawValue: cboTimeStampType.indexOfSelectedItem) ?? .none
   }
   
   private var addByteNumber : Bool {
-    get {
-      return chkAddByteNumber.state == .on
-    }
+    return chkAddByteNumber.state == .on
   }
   
   private var numberBase : NumberBase {
-    get {
-      return NumberBase(rawValue: cboNumberBase.indexOfSelectedItem) ?? .hex
-    }
+    return NumberBase(rawValue: cboNumberBase.indexOfSelectedItem) ?? .hex
   }
   
   private var sendFilename : String {
@@ -159,16 +153,12 @@ class MonitorVC: NSViewController, NSWindowDelegate, OpenLCBLocoNetMonitorDelega
   }
 
   private var sendURL : URL? {
-    get {
-      let sfn = sendFilename
-      return sfn == "" ? nil : URL(fileURLWithPath: sfn)
-    }
+    let sfn = sendFilename
+    return sfn == "" ? nil : URL(fileURLWithPath: sfn)
   }
   
   private var isPaused : Bool {
-    get {
-      return btnPauseMonitor.state == .on
-    }
+    return btnPauseMonitor.state == .on
   }
   
   // MARK: Public Properties
@@ -262,11 +252,11 @@ class MonitorVC: NSViewController, NSWindowDelegate, OpenLCBLocoNetMonitorDelega
 
   }
   
-  // MARK: OpenLCBLocoNetMonitorDelegate Methods
+  // MARK: MyTrainsAppDelegate Methods
   
-  @objc public func locoNetGatewaysUpdated(monitorNode:OpenLCBLocoNetMonitorNode, gateways:[UInt64:String]) {
+  @objc func locoNetGatewayListUpdated(appNode: OpenLCBNodeMyTrains) {
     
-    gatewayDS.dictionary = gateways
+    gatewayDS.dictionary = appNode.locoNetGateways
     cboInterface.dataSource = gatewayDS
     cboInterface.reloadData()
     
@@ -274,11 +264,13 @@ class MonitorVC: NSViewController, NSWindowDelegate, OpenLCBLocoNetMonitorDelega
     
     if let index = gatewayDS.indexWithKey(key: gatewayId) {
       cboInterface.selectItem(at: index)
-      monitorNode.gatewayId = gatewayId
+      monitorNode?.gatewayId = gatewayId
     }
-
+    
   }
-
+  
+  // MARK: OpenLCBLocoNetMonitorDelegate Methods
+  
   @objc public func locoNetMessageReceived(message:LocoNetMessage) {
 
     var item : String = ""

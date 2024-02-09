@@ -840,21 +840,21 @@ public class SwitchBoardItem : EditorObject {
   }
   
   public func rotateRight() {
-    var orientation = self.orientation.rawValue
+    var orientation = Int(self.orientation.rawValue)
     orientation += 1
     if orientation > 7 {
       orientation = 0
     }
-    self.orientation = Orientation(rawValue: orientation) ?? Orientation.defaultValue
+    self.orientation = Orientation(rawValue: UInt8(orientation)) ?? Orientation.defaultValue
   }
   
   public func rotateLeft() {
-    var orientation = self.orientation.rawValue
+    var orientation = Int(self.orientation.rawValue)
     orientation -= 1
     if orientation < 0 {
       orientation = 7
     }
-    self.orientation = Orientation(rawValue: orientation) ?? Orientation.defaultValue
+    self.orientation = Orientation(rawValue: UInt8(orientation)) ?? Orientation.defaultValue
   }
   
   public func propertySheet() {
@@ -1088,11 +1088,11 @@ public class SwitchBoardItem : EditorObject {
       }
 
       if !reader.isDBNull(index: 52) {
-        sw1TurnoutMotorType = TurnoutMotorType(rawValue: reader.getInt(index: 52)!) ?? TurnoutMotorType.defaultValue
+        sw1TurnoutMotorType = TurnoutMotorType(rawValue: UInt8(reader.getInt(index: 52)!)) ?? TurnoutMotorType.defaultValue
       }
 
       if !reader.isDBNull(index: 53) {
-        sw2TurnoutMotorType = TurnoutMotorType(rawValue: reader.getInt(index: 53)!) ?? TurnoutMotorType.defaultValue
+        sw2TurnoutMotorType = TurnoutMotorType(rawValue: UInt8(reader.getInt(index: 53)!)) ?? TurnoutMotorType.defaultValue
       }
 
       if !reader.isDBNull(index: 54) {
@@ -1482,8 +1482,8 @@ public class SwitchBoardItem : EditorObject {
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DP_SPEED_BRAKE)", value: dirPreviousSpeedBrake)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DP_SPEED_SHUNT)", value: dirPreviousSpeedShunt)
       
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.SW1_TURNOUT_MOTOR_TYPE)", value: sw1TurnoutMotorType.rawValue)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.SW2_TURNOUT_MOTOR_TYPE)", value: sw2TurnoutMotorType.rawValue)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.SW1_TURNOUT_MOTOR_TYPE)", value: UInt(sw1TurnoutMotorType.rawValue))
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.SW2_TURNOUT_MOTOR_TYPE)", value: UInt(sw2TurnoutMotorType.rawValue))
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.IS_SCENIC_SECTION)", value: isScenicSection)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.BLOCK_TYPE)", value: blockType.rawValue)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.LINK_ITEM)", value: linkItem)

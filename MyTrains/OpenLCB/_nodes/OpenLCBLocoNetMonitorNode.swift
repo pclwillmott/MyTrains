@@ -29,10 +29,6 @@ public class OpenLCBLocoNetMonitorNode : OpenLCBNodeVirtual, LocoNetDelegate {
   
   // MARK: Private Properties
   
-  private var gateways : [UInt64:String] = [:]
-  
-  private var _delegate : OpenLCBLocoNetMonitorDelegate?
-  
   private var _gatewayId : UInt64 = 0
   
   // MARK: Public Properties
@@ -52,49 +48,15 @@ public class OpenLCBLocoNetMonitorNode : OpenLCBNodeVirtual, LocoNetDelegate {
     }
   }
   
-  public var delegate : OpenLCBLocoNetMonitorDelegate? {
-    get {
-      return _delegate
-    }
-    set(value) {
-      
-      _delegate = value
-      
-      gateways.removeAll()
-      
-      networkLayer?.sendIdentifyProducer(sourceNodeId: nodeId, event: .nodeIsALocoNetGateway)
-      
-      delegate?.locoNetGatewaysUpdated?(monitorNode: self, gateways: gateways)
-      
-    }
-  }
+  public var delegate : OpenLCBLocoNetMonitorDelegate?
   
   // MARK: Private Methods
   
   internal override func resetToFactoryDefaults() {
-    
     super.resetToFactoryDefaults()
-
     saveMemorySpaces()
-    
   }
 
-  internal override func resetReboot() {
-    
-    super.resetReboot()
-    
-    gateways.removeAll()
-    
-    networkLayer?.sendIdentifyProducer(sourceNodeId: nodeId, event: .nodeIsALocoNetGateway)
-    
-    delegate?.locoNetGatewaysUpdated?(monitorNode: self, gateways: gateways)
-    
-  }
-  
-  internal override func customizeDynamicCDI(cdi:String) -> String {
-    return cdi
-  }
-  
   // MARK: Public Methods
   
   public func sendMessage(message:LocoNetMessage) {
@@ -103,10 +65,6 @@ public class OpenLCBLocoNetMonitorNode : OpenLCBNodeVirtual, LocoNetDelegate {
   
   // MARK: LocoNetDelegate Methods
   
-  @objc public func locoNetInitializationComplete() {
-    
-  }
-  
   @objc public func locoNetMessageReceived(message:LocoNetMessage) {
     delegate?.locoNetMessageReceived?(message: message)
   }
@@ -114,42 +72,8 @@ public class OpenLCBLocoNetMonitorNode : OpenLCBNodeVirtual, LocoNetDelegate {
   // MARK: OpenLCBNetworkLayerDelegate Methods
   
   public override func openLCBMessageReceived(message: OpenLCBMessage) {
-    
     super.openLCBMessageReceived(message: message)
-    
     locoNet?.openLCBMessageReceived(message: message)
-
-    switch message.messageTypeIndicator {
-    
-    case .simpleNodeIdentInfoReply:
-      
-      if let _ = gateways[message.sourceNodeId!] {
-        
-        let gateway = OpenLCBNode(nodeId: message.sourceNodeId!)
-        gateway.encodedNodeInformation = message.payload
-        
-        gateways[gateway.nodeId] = gateway.userNodeName
-        
-        delegate?.locoNetGatewaysUpdated?(monitorNode: self, gateways: gateways)
-        
-      }
-      
-    case .producerIdentifiedAsCurrentlyValid, .producerIdentifiedAsCurrentlyInvalid, .producerIdentifiedWithValidityUnknown:
-      
-      if let event = OpenLCBWellKnownEvent(rawValue: message.eventId!) {
-        switch event {
-        case .nodeIsALocoNetGateway:
-          gateways[message.sourceNodeId!] = ""
-          networkLayer?.sendSimpleNodeInformationRequest(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!)
-        default:
-          break
-        }
-      }
-      
-    default:
-      break
-    }
-    
   }
   
 }

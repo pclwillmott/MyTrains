@@ -845,9 +845,9 @@ extension LocoNet {
       0b00000000,
     ]
     
-    var addr = address - 1
+    let addr = address - 1
     
-    var cv = cvNumber - 1
+    let cv = cvNumber - 1
     
     packet[0] |= UInt8((addr >> 2) & 0b00111111)
     
@@ -866,7 +866,7 @@ extension LocoNet {
   }
   
   public func s7CVReadByte(address:UInt16, cvNumber:UInt16) {
-    var packet = s7CVRWPacket(address: address, cvNumber: cvNumber, mode: .readByte)
+    let packet = s7CVRWPacket(address: address, cvNumber: cvNumber, mode: .readByte)
     immPacket(packet: packet, repeatCount: .repeat4)
   }
 

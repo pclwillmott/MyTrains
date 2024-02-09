@@ -263,7 +263,7 @@ class SlotViewVC : NSViewController, NSWindowDelegate, OpenLCBLocoNetMonitorDele
     if index != -1, let locoNet = monitorNode?.locoNet {
       currentIndex = index
       let slot = slots[index]
-      var stat1 = (slot.slotStatus1 & 0b11001111) | 0b00010000
+      let stat1 = (slot.slotStatus1 & 0b11001111) | 0b00010000
       if locoNet.implementsProtocol2 {
         locoNet.locoSpdDirP2(slotNumber: slot.slotNumber, slotPage: slot.slotBank, speed: 0, direction: slot.direction, throttleID: slot.throttleID)
         locoNet.setLocoSlotStat1P2(slotPage: slot.slotBank, slotNumber: slot.slotNumber, stat1: stat1)

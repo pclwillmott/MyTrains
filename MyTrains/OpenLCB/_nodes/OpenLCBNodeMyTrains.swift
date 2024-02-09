@@ -59,11 +59,11 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   
   internal var timeoutTimer : Timer?
   
-  internal var layoutList : [LayoutListItem] = []
+  internal var layoutList : [UInt64:LayoutListItem] = [:]
   
-  internal var panelList : [PanelListItem] = []
+  internal var panelList : [UInt64:PanelListItem] = [:]
   
-  internal var switchboardItemList : [SwitchboardItemListItem] = []
+  internal var switchboardItemList : [UInt64:SwitchboardItemListItem] = [:]
   
   internal var nextObserverId : Int = 0
   
@@ -71,6 +71,8 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   
   // MARK: Public Properties
   
+  public var locoNetGateways : [UInt64:String] = [:]
+
   public var unitsActualLength : UnitLength {
     get {
       return UnitLength(rawValue: Int(configuration.getUInt8(address: addressUnitsActualLength)!))!
@@ -175,12 +177,12 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     
     super.resetToFactoryDefaults()
     
-    unitsActualLength   = .centimeters
-    unitsScaleLength    = .meters
-    unitsActualDistance = .centimeters
-    unitsScaleDistance  = .kilometers
-    unitsActualSpeed    = .centimetersPerSecond
-    unitsScaleSpeed     = .kilometersPerHour
+    unitsActualLength   = UnitLength.defaultValueActualLength
+    unitsScaleLength    = UnitLength.defaultValueScaleLength
+    unitsActualDistance = UnitLength.defaultValueActualDistance
+    unitsScaleDistance  = UnitLength.defaultValueScaleDistance
+    unitsActualSpeed    = UnitSpeed.defaultValueActualSpeed
+    unitsScaleSpeed     = UnitSpeed.defaultValueScaleSpeed
     
     saveMemorySpaces()
     
@@ -190,13 +192,13 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     
     super.resetReboot()
     
-    layoutList = []
+    layoutList.removeAll()
     
-    panelList = []
+    panelList.removeAll()
     
-    switchboardItemList = []
+    switchboardItemList.removeAll()
     
-    networkLayer?.sendIdentifyConsumer(sourceNodeId: nodeId, event: .rebuildCDI)
+    locoNetGateways.removeAll()
     
     networkLayer?.sendIdentifyConsumer(sourceNodeId: nodeId, event: .identifyMyTrainsLayouts)
     
@@ -214,6 +216,8 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     
     networkLayer?.sendIdentifyProducer(sourceNodeId: nodeId, event: .nodeIsASwitchboardItem)
     
+    networkLayer?.sendIdentifyProducer(sourceNodeId: nodeId, event: .nodeIsALocoNetGateway)
+    
     networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .identifyMyTrainsLayouts)
     
     networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .identifyMyTrainsSwitchboardPanels)
@@ -229,16 +233,6 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
 
     return result
     
-  }
-  
-  override public func variableChanged(space:OpenLCBMemorySpace, address:Int) {
-    
-    switch address {
-    case addressUnitsActualLength, addressUnitsScaleSpeed, addressUnitsActualSpeed, addressUnitsScaleLength, addressUnitsScaleDistance, addressUnitsActualDistance:
-      networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .rebuildCDI)
-    default:
-      break
-    }
   }
   
   private func tryCandidate() {
@@ -277,30 +271,45 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   
   private func layoutListUpdated() {
     for (_, observer) in observers {
-      observer.layoutListUpdated(layoutList: layoutList)
+      observer.layoutListUpdated?(appNode: self)
     }
   }
 
   private func panelListUpdated() {
     for (_, observer) in observers {
-      observer.panelListUpdated(panelList: panelList)
+      observer.panelListUpdated?(appNode: self)
     }
   }
 
   private func switchboardItemListUpdated() {
     for (_, observer) in observers {
-      observer.switchboardItemListUpdated(switchboardItemList: switchboardItemList)
+      observer.switchboardItemListUpdated?(appNode: self)
+    }
+  }
+
+  private func locoNetGatewayListUpdated() {
+    for (_, observer) in observers {
+      observer.locoNetGatewayListUpdated?(appNode: self)
     }
   }
 
   // MARK: Public Methods
   
   public func addObserver(observer:MyTrainsAppDelegate) -> Int {
+    
     let id = nextObserverId
     nextObserverId += 1
     observers[id] = observer
-    layoutListUpdated()
+    
+    for (_, observer) in observers {
+      observer.layoutListUpdated?(appNode: self)
+      observer.switchboardItemListUpdated?(appNode: self)
+      observer.switchboardItemListUpdated?(appNode: self)
+      observer.locoNetGatewayListUpdated?(appNode: self)
+    }
+    
     return id
+    
   }
   
   public func removeObserver(observerId:Int) {
@@ -327,9 +336,9 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     
     var sorted : [(nodeId:UInt64, name:String)] = []
 
-    for item in layoutList {
+    for (nodeId, item) in layoutList {
       if item.masterNodeId == nodeId {
-        sorted.append((nodeId:item.layoutId, name:item.layoutName))
+        sorted.append((nodeId:nodeId, name:item.layoutName))
       }
     }
     
@@ -351,9 +360,9 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     
     var sorted : [(nodeId:UInt64, name:String)] = []
 
-    for item in panelList {
+    for (nodeId, item) in panelList {
       if item.layoutId == layoutId {
-        sorted.append((nodeId:item.panelId, name:item.panelName))
+        sorted.append((nodeId:nodeId, name:item.panelName))
       }
     }
     
@@ -375,9 +384,9 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     
     var sorted : [(nodeId:UInt64, name:String)] = []
 
-    for item in switchboardItemList {
+    for (nodeId, item) in switchboardItemList {
       if item.layoutId == layoutId && item.itemType.isGroup {
-        sorted.append((nodeId:item.itemId, name:item.itemName))
+        sorted.append((nodeId:nodeId, name:item.itemName))
       }
     }
     
@@ -392,6 +401,28 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     items += "</map>\n"
 
     return cdi.replacingOccurrences(of: CDI.SWITCHBOARD_GROUP_NODES, with: items)
+
+  }
+
+  public func insertLocoNetGatewayMap(cdi:String) -> String {
+    
+    var sorted : [(nodeId:UInt64, name:String)] = []
+    
+    for (nodeId, name) in locoNetGateways {
+      sorted.append((nodeId, name))
+    }
+    
+    sorted.sort {$0.name < $1.name}
+    
+    var map = "<map>\n<relation><property>00.00.00.00.00.00.00.00</property><value>No LocoNet Gateway Selected</value></relation>\n"
+    
+    for item in sorted {
+      map += "<relation><property>\(item.nodeId.toHexDotFormat(numberOfBytes: 8))</property><value>\(item.name)</value></relation>\n"
+    }
+
+    map += "</map>\n"
+
+    return cdi.replacingOccurrences(of: CDI.LOCONET_GATEWAYS, with: map)
 
   }
 
@@ -419,65 +450,32 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
       
     case .simpleNodeIdentInfoReply:
       
-      var found = false
+      let node = OpenLCBNode(nodeId: message.sourceNodeId!)
+      node.encodedNodeInformation = message.payload
       
-      var index = 0
-      while index < layoutList.count {
-        if layoutList[index].layoutId == message.sourceNodeId! {
-          let layoutNode = OpenLCBNode(nodeId: message.sourceNodeId!)
-          layoutNode.encodedNodeInformation = message.payload
-          layoutList[index].layoutName = layoutNode.userNodeName
-          found = true
-          break
-        }
-        index += 1
-      }
-      
-      if found {
-        layoutList.sort {$0.layoutName < $1.layoutName}
+      if let item = layoutList[node.nodeId] {
+        var layout = item
+        layout.layoutName = node.userNodeName
+        layoutList[node.nodeId] = layout
         layoutListUpdated()
       }
-      else {
-
-        index = 0
-        while index < panelList.count {
-          if panelList[index].panelId == message.sourceNodeId! {
-            let panelNode = OpenLCBNode(nodeId: message.sourceNodeId!)
-            panelNode.encodedNodeInformation = message.payload
-            panelList[index].panelName = panelNode.userNodeName
-            found = true
-            break
-          }
-          index += 1
-        }
-
-        if found {
-          panelList.sort {$0.panelName < $1.panelName}
-          panelListUpdated()
-        }
-        else {
-          
-          index = 0
-          while index < switchboardItemList.count {
-            if switchboardItemList[index].itemId == message.sourceNodeId! {
-              let itemNode = OpenLCBNode(nodeId: message.sourceNodeId!)
-              itemNode.encodedNodeInformation = message.payload
-              switchboardItemList[index].itemName = itemNode.userNodeName
-              found = true
-              break
-            }
-            index += 1
-          }
-
-          if found {
-            switchboardItemList.sort {$0.itemName < $1.itemName}
-            switchboardItemListUpdated()
-          }
-
-        }
-
+      else if let item = panelList[node.nodeId] {
+        var panel = item
+        panel.panelName = node.userNodeName
+        panelList[node.nodeId] = panel
+        panelListUpdated()
       }
-      
+      else if let item = switchboardItemList[node.nodeId] {
+        var switchboardItem = item
+        switchboardItem.itemName = node.userNodeName
+        switchboardItemList[node.nodeId] = switchboardItem
+        switchboardItemListUpdated()
+      }
+      else if let _ = locoNetGateways[node.nodeId] {
+        locoNetGateways[node.nodeId] = node.userNodeName
+        locoNetGatewayListUpdated()
+      }
+
     case .producerConsumerEventReport:
       
       if let event = OpenLCBWellKnownEvent(rawValue: message.eventId!) {
@@ -486,96 +484,99 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
          
         case .myTrainsLayoutDeleted:
 
-          if message.sourceNodeId! == appLayoutId {
-            networkLayer?.layoutNodeId = nil
-          }
+          if let layoutId = message.sourceNodeId {
 
-          var index = 0
-          while index < layoutList.count {
-            if layoutList[index].layoutId == message.sourceNodeId! {
-              layoutList.remove(at: index)
-              layoutListUpdated()
-              break
+            if layoutId == appLayoutId {
+              networkLayer?.layoutNodeId = nil
             }
-            index += 1
+            
+            layoutList.removeValue(forKey: layoutId)
+            
+            layoutListUpdated()
+
           }
+          
 
         case .myTrainsLayoutActivated, .myTrainsLayoutDeactivated:
           
-          let tempNodeId = message.sourceNodeId!
-          
-          let layoutState : LayoutState = message.eventId! == OpenLCBWellKnownEvent.myTrainsLayoutActivated.rawValue ? .activated : .deactivated
-          
-          let masterNodeId = UInt64(bigEndianData: message.payload)!
-
-          if layoutState == .activated {
-            networkLayer?.layoutNodeId = tempNodeId
-          }
-          else if let appLayoutId, appLayoutId == tempNodeId {
-            networkLayer?.layoutNodeId = nil
-          }
-
-          var found = false
-          
-          var index = 0
-          while index < layoutList.count {
-            if layoutList[index].layoutId == tempNodeId {
-              found = true
-              layoutList[index].layoutState = layoutState
+          if let tempNodeId = message.sourceNodeId {
+            
+            let layoutState : LayoutState = (event == .myTrainsLayoutActivated) ? .activated : .deactivated
+            
+            if layoutState == .activated {
+              networkLayer?.layoutNodeId = tempNodeId
+            }
+            else if let appLayoutId, appLayoutId == tempNodeId {
+              networkLayer?.layoutNodeId = nil
+            }
+            
+            if let item = layoutList[tempNodeId] {
+              var layout = item
+              layout.layoutState = layoutState
+              layoutList[tempNodeId] = layout
               layoutListUpdated()
             }
-            index += 1
+            else {
+              layoutList[tempNodeId] = (masterNodeId:appNodeId!, layoutId:tempNodeId, layoutName:"", layoutState:layoutState)
+              networkLayer?.sendSimpleNodeInformationRequest(sourceNodeId: nodeId, destinationNodeId: tempNodeId)
+            }
+            
           }
           
-          if !found {
-            layoutList.append((masterNodeId:appNodeId!, layoutId:tempNodeId, layoutName:"", layoutState:layoutState))
-            networkLayer?.sendSimpleNodeInformationRequest(sourceNodeId: nodeId, destinationNodeId: tempNodeId)
-          }
-
         case .nodeIsASwitchboardPanel:
           
-          let tempNodeId = message.sourceNodeId!
-          
-          let layoutNodeId = UInt64(bigEndianData: message.payload)!
-
-          var found = false
-          
-          var index = 0
-          while index < panelList.count {
-            if panelList[index].panelId == tempNodeId {
-              found = true
+          if let tempNodeId = message.sourceNodeId, let layoutNodeId = UInt64(bigEndianData: message.payload) {
+            
+            if let _ = panelList[tempNodeId] {} else {
+              panelList[tempNodeId] = (layoutId:layoutNodeId, panelId: tempNodeId, panelName:"")
+              networkLayer?.sendSimpleNodeInformationRequest(sourceNodeId: nodeId, destinationNodeId: tempNodeId)
             }
-            index += 1
+            
           }
           
-          if !found {
-            panelList.append((layoutId:layoutNodeId, panelId: tempNodeId, panelName:""))
-            networkLayer?.sendSimpleNodeInformationRequest(sourceNodeId: nodeId, destinationNodeId: tempNodeId)
-          }
-
         case .nodeIsASwitchboardItem:
           
-          let tempNodeId = message.sourceNodeId!
-          
-          let itemType = SwitchBoardItemType(rawValue: UInt16(bigEndianData: [message.payload[6], message.payload[7]])!)!
-          
-          message.payload.removeLast(2)
-          
-          let layoutNodeId = UInt64(bigEndianData: message.payload)!
-
-          var found = false
-          
-          var index = 0
-          while index < switchboardItemList.count {
-            if switchboardItemList[index].itemId == tempNodeId {
-              found = true
+          if let tempNodeId = message.sourceNodeId, let itemType = SwitchBoardItemType(rawValue: UInt16(bigEndianData: [message.payload[6], message.payload[7]])!), let layoutNodeId = UInt64(bigEndianData: [message.payload[0], message.payload[1], message.payload[2], message.payload[3], message.payload[4], message.payload[5]]) {
+            
+            if let _ = switchboardItemList[tempNodeId] {} else {
+              switchboardItemList[tempNodeId] = (layoutId:layoutNodeId, itemId: tempNodeId, itemName:"", itemType:itemType)
+              networkLayer?.sendSimpleNodeInformationRequest(sourceNodeId: nodeId, destinationNodeId: tempNodeId)
             }
-            index += 1
+            
           }
           
-          if !found {
-            switchboardItemList.append((layoutId:layoutNodeId, itemId: tempNodeId, itemName:"", itemType:itemType))
-            networkLayer?.sendSimpleNodeInformationRequest(sourceNodeId: nodeId, destinationNodeId: tempNodeId)
+        case .nodeIsALocoNetGateway:
+          
+          if let tempNodeId = message.sourceNodeId {
+            
+            if let _ = locoNetGateways[tempNodeId] {} else {
+              locoNetGateways[tempNodeId] = ""
+              networkLayer?.sendSimpleNodeInformationRequest(sourceNodeId: nodeId, destinationNodeId: tempNodeId)
+            }
+            
+          }
+          
+        default:
+          break
+        }
+        
+      }
+
+    case .producerIdentifiedAsCurrentlyValid, .producerIdentifiedAsCurrentlyInvalid, .producerIdentifiedWithValidityUnknown:
+      
+      if let event = OpenLCBWellKnownEvent(rawValue: message.eventId!) {
+        
+        switch event {
+        case .nodeIsALocoNetGateway:
+          
+          if let tempNodeId = message.sourceNodeId {
+            
+            if let _ = locoNetGateways[tempNodeId] {}
+            else {
+              locoNetGateways[tempNodeId] = ""
+              networkLayer?.sendSimpleNodeInformationRequest(sourceNodeId: nodeId, destinationNodeId: tempNodeId)
+            }
+            
           }
 
         default:
@@ -584,54 +585,15 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
         
       }
 
-      
     case .identifyConsumer:
       
       if let event = OpenLCBWellKnownEvent(rawValue: message.eventId!) {
         
         switch event {
         
-        case .nodeIsASwitchboardPanel, .nodeIsASwitchboardItem:
+        case .nodeIsASwitchboardPanel, .nodeIsASwitchboardItem, .nodeIsALocoNetGateway, .myTrainsLayoutDeleted, .myTrainsLayoutActivated, .myTrainsLayoutDeactivated:
           
           networkLayer?.sendConsumerIdentified(sourceNodeId: nodeId, eventId: message.eventId!, validity: .unknown)
-
-        case .myTrainsLayoutDeleted:
-          
-          networkLayer?.sendConsumerIdentified(sourceNodeId: nodeId, eventId: message.eventId!, validity: .unknown)
-
-        case .myTrainsLayoutActivated:
-          
-          var found = false
-          
-          for item in layoutList {
-            if item.layoutId == message.sourceNodeId! {
-              let validity : OpenLCBValidity = item.layoutState == .activated ? .valid : .invalid
-              networkLayer?.sendConsumerIdentified(sourceNodeId: nodeId, eventId: message.eventId!, validity: validity)
-              found = true
-              break
-            }
-          }
-          
-          if !found {
-            networkLayer?.sendConsumerIdentified(sourceNodeId: nodeId, eventId: message.eventId!, validity: .unknown)
-          }
-          
-        case .myTrainsLayoutDeactivated:
-          
-          var found = false
-          
-          for item in layoutList {
-            if item.layoutId == message.sourceNodeId! {
-              let validity : OpenLCBValidity = item.layoutState == .deactivated ? .valid : .invalid
-              networkLayer?.sendConsumerIdentified(sourceNodeId: nodeId, eventId: message.eventId!, validity: validity)
-              found = true
-              break
-            }
-          }
-          
-          if !found {
-            networkLayer?.sendConsumerIdentified(sourceNodeId: nodeId, eventId: message.eventId!, validity: .unknown)
-          }
           
         default:
           break
@@ -639,22 +601,6 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
         
       }
 
-    case .identifyProducer:
-      
-      if let event = OpenLCBWellKnownEvent(rawValue: message.eventId!) {
-        
-        switch event {
-          
-        case .identifyMyTrainsLayouts, .identifyMyTrainsSwitchboardItems, .identifyMyTrainsSwitchboardPanels, .rebuildCDI:
-          
-          networkLayer?.sendProducerIdentified(sourceNodeId: nodeId, eventId: message.eventId!, validity: .valid)
-          
-        default:
-          break
-        }
-        
-      }
-      
     case .datagram:
       
       if message.destinationNodeId! == nodeId, let datagramType = message.datagramType {

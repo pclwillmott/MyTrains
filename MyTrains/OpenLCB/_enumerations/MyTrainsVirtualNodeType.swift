@@ -169,6 +169,7 @@ public enum MyTrainsVirtualNodeType : UInt16 {
         .locoNetGatewayNode,
         .programmingTrackNode,
         .digitraxBXP88Node,
+        .locoNetMonitorNode,
       ]
     case .delegate:
       nodeTypes = [

@@ -156,8 +156,6 @@ public class LayoutNode : OpenLCBNodeVirtual {
         else if networkLayer.layoutNodeId == nodeId {
           networkLayer.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .myTrainsLayoutDeactivated, payload: appNodeId!.bigEndianData)
         }
-      case addressScale, addressCountryCode, addressDefaultTrackGuage, addressUsesMultipleTrackGauges:
-        networkLayer.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .rebuildCDI)
       default:
         break
       }
@@ -218,10 +216,6 @@ public class LayoutNode : OpenLCBNodeVirtual {
           
           networkLayer?.sendProducerIdentified(sourceNodeId: nodeId, wellKnownEvent: .myTrainsLayoutDeactivated, validity: layoutState == .deactivated ? .valid : .invalid)
           
-        case .rebuildCDI:
- 
-          networkLayer?.sendProducerIdentified(sourceNodeId: nodeId, wellKnownEvent: .rebuildCDI, validity: .invalid)
- 
         default:
           break
         }

@@ -11,7 +11,7 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
 
   public init(nodeId:UInt64, layoutNodeId:UInt64 = 0) {
 
-    configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: 155, isReadOnly: false, description: "")
+    configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: 285, isReadOnly: false, description: "")
     
     super.init(nodeId: nodeId)
     
@@ -45,7 +45,6 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressLocationServicesEventId)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTrackGauge)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTrackGradient)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTrackPart)
     
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDimensionA)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDimensionB)
@@ -64,6 +63,30 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     configuration.registerUnitConversion(address: addressDimensionF, unitConversionType: .actualLength8)
     configuration.registerUnitConversion(address: addressDimensionG, unitConversionType: .actualLength8)
     configuration.registerUnitConversion(address: addressDimensionH, unitConversionType: .actualLength8)
+
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW1TurnoutMotorType)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW1ThrowEventId)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW1ThrownEventId)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW1CloseEventId)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW1ClosedEventId)
+
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW2TurnoutMotorType)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW2ThrowEventId)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW2ThrownEventId)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW2CloseEventId)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW2ClosedEventId)
+
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW3TurnoutMotorType)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW3ThrowEventId)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW3ThrownEventId)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW3CloseEventId)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW3ClosedEventId)
+
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW4TurnoutMotorType)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW4ThrowEventId)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW4ThrownEventId)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW4CloseEventId)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW4ClosedEventId)
 
     if !memorySpacesInitialized {
       resetToFactoryDefaults()
@@ -96,16 +119,35 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
   internal let addressTrackFaultClearedEventId     : Int = 68 // 76
   internal let addressLocationServicesEventId      : Int = 76 // 84
   internal let addressTrackGradient                : Int = 84 // 88
-  internal let addressTrackPart                    : Int = 88 // 90
-  internal let addressTrackGauge                   : Int = 90 // 91
-  internal let addressDimensionA                   : Int = 91 // 99
-  internal let addressDimensionB                   : Int = 99 // 107
-  internal let addressDimensionC                   : Int = 107 // 115
-  internal let addressDimensionD                   : Int = 115 // 123
-  internal let addressDimensionE                   : Int = 123 // 131
-  internal let addressDimensionF                   : Int = 131 // 139
-  internal let addressDimensionG                   : Int = 139 // 147
-  internal let addressDimensionH                   : Int = 147 // 155
+  internal let addressTrackGauge                   : Int = 88 // 89
+  internal let addressDimensionA                   : Int = 89 // 97
+  internal let addressDimensionB                   : Int = 97 // 105
+  internal let addressDimensionC                   : Int = 105 // 113
+  internal let addressDimensionD                   : Int = 113 // 121
+  internal let addressDimensionE                   : Int = 121 // 129
+  internal let addressDimensionF                   : Int = 129 // 137
+  internal let addressDimensionG                   : Int = 137 // 145
+  internal let addressDimensionH                   : Int = 145 // 153
+  internal let addressSW1TurnoutMotorType          : Int = 153 // 154
+  internal let addressSW1ThrowEventId              : Int = 154 // 162
+  internal let addressSW1CloseEventId              : Int = 162 // 170
+  internal let addressSW1ThrownEventId             : Int = 170 // 178
+  internal let addressSW1ClosedEventId             : Int = 178 // 186
+  internal let addressSW2TurnoutMotorType          : Int = 186 // 187
+  internal let addressSW2ThrowEventId              : Int = 187 // 195
+  internal let addressSW2CloseEventId              : Int = 195 // 203
+  internal let addressSW2ThrownEventId             : Int = 203 // 211
+  internal let addressSW2ClosedEventId             : Int = 211 // 219
+  internal let addressSW3TurnoutMotorType          : Int = 219 // 220
+  internal let addressSW3ThrowEventId              : Int = 220 // 228
+  internal let addressSW3CloseEventId              : Int = 228 // 236
+  internal let addressSW3ThrownEventId             : Int = 236 // 244
+  internal let addressSW3ClosedEventId             : Int = 244 // 252
+  internal let addressSW4TurnoutMotorType          : Int = 252 // 253
+  internal let addressSW4ThrowEventId              : Int = 253 // 261
+  internal let addressSW4CloseEventId              : Int = 261 // 269
+  internal let addressSW4ThrownEventId             : Int = 269 // 277
+  internal let addressSW4ClosedEventId             : Int = 277 // 285
 
   private var configuration : OpenLCBMemorySpace
   
@@ -295,88 +337,6 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     }
   }
 
-  public var trackPart : TrackPart {
-    get {
-      return TrackPart(rawValue: configuration.getUInt16(address: addressTrackPart)!)!
-    }
-    set(value) {
-      configuration.setUInt(address: addressTrackPart, value: value.rawValue)
-      initCDI()
-    }
-  }
-
-  public var dimensionA : Float32 {
-    get {
-      return configuration.getFloat(address: addressDimensionA)!
-    }
-    set(value) {
-      configuration.setFloat(address: addressDimensionA, value: value)
-    }
-  }
-
-  public var dimensionB : Float32 {
-    get {
-      return configuration.getFloat(address: addressDimensionB)!
-    }
-    set(value) {
-      configuration.setFloat(address: addressDimensionB, value: value)
-    }
-  }
-
-  public var dimensionC : Float32 {
-    get {
-      return configuration.getFloat(address: addressDimensionC)!
-    }
-    set(value) {
-      configuration.setFloat(address: addressDimensionC, value: value)
-    }
-  }
-
-  public var dimensionD : Float32 {
-    get {
-      return configuration.getFloat(address: addressDimensionD)!
-    }
-    set(value) {
-      configuration.setFloat(address: addressDimensionD, value: value)
-    }
-  }
-
-  public var dimensionE : Float32 {
-    get {
-      return configuration.getFloat(address: addressDimensionE)!
-    }
-    set(value) {
-      configuration.setFloat(address: addressDimensionE, value: value)
-    }
-  }
-
-  public var dimensionF : Float32 {
-    get {
-      return configuration.getFloat(address: addressDimensionF)!
-    }
-    set(value) {
-      configuration.setFloat(address: addressDimensionF, value: value)
-    }
-  }
-
-  public var dimensionG : Float32 {
-    get {
-      return configuration.getFloat(address: addressDimensionG)!
-    }
-    set(value) {
-      configuration.setFloat(address: addressDimensionG, value: value)
-    }
-  }
-
-  public var dimensionH : Float32 {
-    get {
-      return configuration.getFloat(address: addressDimensionH)!
-    }
-    set(value) {
-      configuration.setFloat(address: addressDimensionH, value: value)
-    }
-  }
-
   // MARK: Private Methods
 
   internal override func resetToFactoryDefaults() {
@@ -416,16 +376,17 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     
     trackGradient = 0.0
     
-    trackPart = .custom
+    for routeNumber in 1...8 {
+      setDimension(routeNumber: routeNumber, value: 0.0)
+    }
     
-    dimensionA = 0.0
-    dimensionB = 0.0
-    dimensionC = 0.0
-    dimensionD = 0.0
-    dimensionE = 0.0
-    dimensionF = 0.0
-    dimensionG = 0.0
-    dimensionH = 0.0
+    for turnoutNumber in 1...4 {
+      setTurnoutMotorType(turnoutNumber: turnoutNumber, motorType: .manual)
+      setTurnoutThrowEventId(turnoutNumber: turnoutNumber, eventId: 0)
+      setTurnoutThrownEventId(turnoutNumber: turnoutNumber, eventId: 0)
+      setTurnoutCloseEventId(turnoutNumber: turnoutNumber, eventId: 0)
+      setTurnoutClosedEventId(turnoutNumber: turnoutNumber, eventId: 0)
+    }
 
     saveMemorySpaces()
 
@@ -438,34 +399,86 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     result = BlockDirection.insertMap(cdi: result)
     result = YesNo.insertMap(cdi: result)
     result = TrackElectrificationType.insertMap(cdi: result)
-    result = TrackPart.insertMap(cdi: result, itemType: itemType, layout: layoutNode)
     result = TrackGauge.insertMap(cdi: result, layout: layoutNode)
-    result = TurnoutMotorType.insertMap(cdi: result)
 
     if let app = networkLayer?.myTrainsNode {
       result = app.insertPanelMap(cdi: result, layoutId: layoutNodeId)
       result = app.insertGroupMap(cdi: result, layoutId: layoutNodeId)
     }
+    
+    var routes = ""
+    
+    if itemType.numberOfDimensionsRequired > 0 {
+      
+      for route in 1 ... itemType.numberOfDimensionsRequired {
+        routes += "<float size='8'>\n"
+        if itemType.isBlock {
+          routes += "<name>Length of Block (%%ACTUAL_LENGTH_UNITS%%)</name>\n"
+        }
+        else {
+          routes += "<name>Length of Route #\(route) (%%ACTUAL_LENGTH_UNITS%%)</name>\n"
+        }
+        routes += "<min>0.0</min>\n"
+        routes += "</float>\n\n"
+      }
+      
+    }
+    
+    if itemType.numberOfDimensionsRequired < 8 {
+      for route in itemType.numberOfDimensionsRequired + 1 ... 8 {
+        routes += "<group offset='8'/>\n"
+      }
+    }
+    
+    result = result.replacingOccurrences(of: CDI.ROUTE_DIMENSION, with: routes)
+
+    var turnouts = ""
+    
+    if itemType.numberOfTurnoutSwitches > 0 {
+ 
+      turnouts += "<group replication='\(itemType.numberOfTurnoutSwitches)'>\n"
+      turnouts += "  <name>Switch Configuration</name>\n"
+      turnouts += "  <repname>Switch #</repname>\n"
+
+      turnouts += "<int size='1'>\n"
+      turnouts += "  <name>Turnout Motor Type</name>\n"
+      turnouts += "  %%TURNOUT_MOTOR_TYPE%%"
+      turnouts += "</int>\n"
+
+      turnouts += "<eventid>\n"
+      turnouts += "  <name>Throw Switch Event ID</name>\n"
+      turnouts += "</eventid>\n"
+
+      turnouts += "<eventid>"
+      turnouts += "  <name>Close Switch Event ID</name>\n"
+      turnouts += "</eventid>\n"
+
+      turnouts += "<eventid>\n"
+      turnouts += "  <name>Switch Thrown Confirmation Event ID</name>\n"
+      turnouts += "</eventid>\n"
+
+      turnouts += "<eventid>\n"
+      turnouts += "  <name>Switch Closed Confirmation Event ID</name>\n"
+      turnouts += "</eventid>\n"
+
+      turnouts += "</group>\n"
+
+    }
+    
+    if itemType.numberOfTurnoutSwitches < 4 {
+      for route in itemType.numberOfTurnoutSwitches + 1 ... 4 {
+        turnouts += "<group offset='33'/>\n"
+      }
+    }
+
+    result = result.replacingOccurrences(of: CDI.TURNOUT_SWITCHES, with: turnouts)
+
+    result = TurnoutMotorType.insertMap(cdi: result)
 
     return result
     
   }
 
-  public override func variableChanged(space: OpenLCBMemorySpace, address: Int) {
-    
-    if space.space == configuration.space {
-      
-      switch address {
-      case addressItemType:
-        initCDI()
-      default:
-        break
-      }
-
-    }
-
-  }
-  
   internal override func resetReboot() {
     
     super.resetReboot()
@@ -484,6 +497,85 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
 
  // MARK: Public Methods
   
+  public func getDimension(routeNumber:Int) -> Double?
+  {
+    guard routeNumber > 0 && routeNumber <= 8 else {
+      return nil
+    }
+    return configuration.getDouble(address: addressDimensionA + (routeNumber - 1) * 8)!
+  }
+  
+  public func setDimension(routeNumber:Int, value:Double) {
+    if routeNumber > 0 && routeNumber <= 8 {
+      configuration.setDouble(address: addressDimensionA + (routeNumber - 1) * 8, value: value)
+    }
+  }
+  
+  public func getTurnoutMotorType(turnoutNumber:Int) -> TurnoutMotorType? {
+    guard turnoutNumber > 0 && turnoutNumber <= 4 else {
+      return nil
+    }
+    return TurnoutMotorType(rawValue: configuration.getUInt8(address: addressSW1TurnoutMotorType + (turnoutNumber - 1) * 33)!)
+  }
+  
+  public func setTurnoutMotorType(turnoutNumber:Int, motorType:TurnoutMotorType) {
+    if turnoutNumber > 0 && turnoutNumber <= 4 {
+      configuration.setUInt(address: addressSW1TurnoutMotorType + (turnoutNumber - 1) * 33, value: motorType.rawValue)
+    }
+  }
+  
+  public func getTurnoutThrowEventId(turnoutNumber:Int) -> UInt64? {
+    guard turnoutNumber > 0 && turnoutNumber <= 4 else {
+      return nil
+    }
+    return configuration.getUInt64(address: addressSW1ThrowEventId + (turnoutNumber - 1) * 33)
+  }
+  
+  public func setTurnoutThrowEventId(turnoutNumber:Int, eventId:UInt64) {
+    if turnoutNumber > 0 && turnoutNumber <= 4 {
+      configuration.setUInt(address: addressSW1ThrowEventId + (turnoutNumber - 1) * 33, value: eventId)
+    }
+  }
+  
+  public func getTurnoutThrownEventId(turnoutNumber:Int) -> UInt64? {
+    guard turnoutNumber > 0 && turnoutNumber <= 4 else {
+      return nil
+    }
+    return configuration.getUInt64(address: addressSW1ThrownEventId + (turnoutNumber - 1) * 33)
+  }
+  
+  public func setTurnoutThrownEventId(turnoutNumber:Int, eventId:UInt64) {
+    if turnoutNumber > 0 && turnoutNumber <= 4 {
+      configuration.setUInt(address: addressSW1ThrownEventId + (turnoutNumber - 1) * 33, value: eventId)
+    }
+  }
+
+  public func getTurnoutCloseEventId(turnoutNumber:Int) -> UInt64? {
+    guard turnoutNumber > 0 && turnoutNumber <= 4 else {
+      return nil
+    }
+    return configuration.getUInt64(address: addressSW1CloseEventId + (turnoutNumber - 1) * 33)
+  }
+  
+  public func setTurnoutCloseEventId(turnoutNumber:Int, eventId:UInt64) {
+    if turnoutNumber > 0 && turnoutNumber <= 4 {
+      configuration.setUInt(address: addressSW1CloseEventId + (turnoutNumber - 1) * 33, value: eventId)
+    }
+  }
+  
+  public func getTurnoutClosedEventId(turnoutNumber:Int) -> UInt64? {
+    guard turnoutNumber > 0 && turnoutNumber <= 4 else {
+      return nil
+    }
+    return configuration.getUInt64(address: addressSW1ClosedEventId + (turnoutNumber - 1) * 33)
+  }
+  
+  public func setTurnoutClosedEventId(turnoutNumber:Int, eventId:UInt64) {
+    if turnoutNumber > 0 && turnoutNumber <= 4 {
+      configuration.setUInt(address: addressSW1ClosedEventId + (turnoutNumber - 1) * 33, value: eventId)
+    }
+  }
+
   public override func start() {
     super.start()
   }
@@ -539,12 +631,6 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
           
           networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .nodeIsASwitchboardItem, payload: payload)
 
-        case .rebuildCDI:
-          
-          if message.sourceNodeId! == layoutNodeId {
-            initCDI()
-          }
-          
         default:
           break
         }

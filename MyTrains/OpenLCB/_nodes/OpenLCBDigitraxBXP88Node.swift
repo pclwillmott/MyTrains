@@ -149,8 +149,6 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
   
   private var locoNet : LocoNet?
   
-  private var locoNetGateways : [UInt64:String] = [:]
-  
   private var configState : ConfigState = .idle
   
   private var trainNodeIdLookup : [Int:UInt64] = [:]
@@ -488,27 +486,11 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
 
   internal override func customizeDynamicCDI(cdi:String) -> String {
     
-    // Do mappings for LocoNet Gateways
+    var result = cdi
     
-    var sorted : [(nodeId:UInt64, name:String)] = []
-    
-    for (key, name) in locoNetGateways {
-      sorted.append((nodeId:key, name:name))
+    if let appNode {
+      result = appNode.insertLocoNetGatewayMap(cdi: result)
     }
-    
-    sorted.sort {$0.name < $1.name}
-    
-    var gateways = "<map>\n<relation><property>00.00.00.00.00.00.00.00</property><value>No Gateway Selected</value></relation>\n"
-    
-    for gateway in sorted {
-      gateways += "<relation><property>\(gateway.nodeId.toHexDotFormat(numberOfBytes: 8))</property><value>\(gateway.name)</value></relation>\n"
-    }
-
-    gateways += "</map>\n"
-    
-    var result = cdi.replacingOccurrences(of: CDI.LOCONET_GATEWAYS, with: gateways)
-
-    // Do other replacement mappings
     
     result = EnableState.insertMap(cdi: result)
 
@@ -565,10 +547,6 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
   internal override func resetReboot() {
     
     super.resetReboot()
-    
-    networkLayer?.sendConsumerIdentified(sourceNodeId: nodeId, wellKnownEvent: .nodeIsALocoNetGateway, validity: .unknown)
-    
-    networkLayer?.sendIdentifyProducer(sourceNodeId: nodeId, event: .nodeIsALocoNetGateway)
     
     for eventId in activeEvents {
       networkLayer?.sendProducerIdentified(sourceNodeId: nodeId, eventId: eventId, validity: .unknown)
@@ -736,31 +714,6 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
     
     switch message.messageTypeIndicator {
     
-    case .producerIdentifiedAsCurrentlyValid, .producerIdentifiedAsCurrentlyInvalid, .producerIdentifiedWithValidityUnknown, .producerConsumerEventReport:
-      
-      if let event = OpenLCBWellKnownEvent(rawValue: message.eventId!) {
-        
-        switch event {
-        case .nodeIsALocoNetGateway:
-          
-          locoNetGateways[message.sourceNodeId!] = ""
-          networkLayer?.sendSimpleNodeInformationRequest(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!)
-          
-        default:
-          break
-        }
-        
-      }
-
-    case .simpleNodeIdentInfoReply:
-      
-      if let _ = locoNetGateways[message.sourceNodeId!] {
-        let node = OpenLCBNode(nodeId: message.sourceNodeId!)
-        node.encodedNodeInformation = message.payload
-        locoNetGateways[node.nodeId] = node.userNodeName
-        initCDI()
-      }
-
     case .identifyProducer:
       
       guard let networkLayer else {
@@ -780,10 +733,6 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
   }
   
   // MARK: LocoNetDelegate Methods
-  
-  @objc public func locoNetInitializationComplete() {
-    
-  }
   
   @objc public func locoNetMessageReceived(message:LocoNetMessage) {
     

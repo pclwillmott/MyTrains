@@ -120,62 +120,16 @@
     <max>100.0</max>
   </float>
 
-  <int size='2'>
-    <name>Track Part</name>
-    %%TRACK_PART%%
+  <int size='1'>
+    <name>Track Gauge</name>
+    %%TRACK_GAUGE%%
   </int>
 
-  <group>
-    <name>Custom Dimensions</name>
-    
-    <int size='1'>
-      <name>Track Gauge</name>
-      %%TRACK_GAUGE%%
-    </int>
-
-    <float size='8'>
-      <name>Dimension A (%%ACTUAL_LENGTH_UNITS%%)</name>
-      <min>0.0</min>
-    </float>
-
-    <float size='8'>
-      <name>Dimension B (%%ACTUAL_LENGTH_UNITS%%)</name>
-      <min>0.0</min>
-    </float>
-    
-    <float size='8'>
-      <name>Dimension C (%%ACTUAL_LENGTH_UNITS%%)</name>
-      <min>0.0</min>
-    </float>
-    
-    <float size='8'>
-      <name>Dimension D (%%ACTUAL_LENGTH_UNITS%%)</name>
-      <min>0.0</min>
-    </float>
-    
-    <float size='8'>
-      <name>Dimension E (%%ACTUAL_LENGTH_UNITS%%)</name>
-      <min>0.0</min>
-    </float>
-    
-    <float size='8'>
-      <name>Dimension F (%%ACTUAL_LENGTH_UNITS%%)</name>
-      <min>0.0</min>
-    </float>
-    
-    <float size='8'>
-      <name>Dimension G (%%ACTUAL_LENGTH_UNITS%%)</name>
-      <min>0.0</min>
-    </float>
-    
-    <float size='8'>
-      <name>Dimension H (%%ACTUAL_LENGTH_UNITS%%)</name>
-      <min>0.0</min>
-    </float>
+  %%ROUTE_DIMENSION%%
 
 </group>
 
-</group>
+%%TURNOUT_SWITCHES%%
 
 </segment>
 

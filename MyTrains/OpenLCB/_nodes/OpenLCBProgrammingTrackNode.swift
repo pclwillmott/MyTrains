@@ -79,8 +79,6 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
 
   private var locoNet : LocoNet?
   
-  private var locoNetGateways : [UInt64:String] = [:]
-  
   private var progMode : OpenLCBProgrammingMode = .defaultProgrammingMode
   
   private var ioState : IOState = .idle
@@ -205,10 +203,6 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
     
     super.resetReboot()
     
-    networkLayer?.sendConsumerIdentified(sourceNodeId: nodeId, wellKnownEvent: .nodeIsALocoNetGateway, validity: .unknown)
-    
-    networkLayer?.sendIdentifyProducer(sourceNodeId: nodeId, event: .nodeIsALocoNetGateway)
-    
     guard locoNetGatewayNodeId != 0 else {
       return
     }
@@ -217,30 +211,20 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
     
     locoNet?.delegate = self
     
+    networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .nodeIsADCCProgrammingTrack)
+    
   }
  
   internal override func customizeDynamicCDI(cdi:String) -> String {
+  
+    var result = ""
     
-    // Do mappings for LocoNet Gateways
-    
-    var sorted : [(nodeId:UInt64, name:String)] = []
-    
-    for (key, name) in locoNetGateways {
-      sorted.append((nodeId:key, name:name))
+    if let appNode {
+      result = appNode.insertLocoNetGatewayMap(cdi: cdi)
     }
     
-    sorted.sort {$0.name < $1.name}
+    return result
     
-    var gateways = "<map>\n<relation><property>00.00.00.00.00.00.00.00</property><value>No Gateway Selected</value></relation>\n"
-    
-    for gateway in sorted {
-      gateways += "<relation><property>\(gateway.nodeId.toHexDotFormat(numberOfBytes: 8))</property><value>\(gateway.name)</value></relation>\n"
-    }
-
-    gateways += "</map>\n"
-    
-    return cdi.replacingOccurrences(of: CDI.LOCONET_GATEWAYS, with: gateways)
-
   }
 
   // MARK: Public Methods
@@ -255,31 +239,6 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
     
     switch message.messageTypeIndicator {
     
-    case .producerIdentifiedAsCurrentlyValid, .producerIdentifiedAsCurrentlyInvalid, .producerIdentifiedWithValidityUnknown, .producerConsumerEventReport:
-      
-      if let event = OpenLCBWellKnownEvent(rawValue: message.eventId!) {
-        
-        switch event {
-        case .nodeIsALocoNetGateway:
-          
-          locoNetGateways[message.sourceNodeId!] = ""
-          networkLayer?.sendSimpleNodeInformationRequest(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!)
-          
-        default:
-          break
-        }
-        
-      }
-
-    case .simpleNodeIdentInfoReply:
-      
-      if let _ = locoNetGateways[message.sourceNodeId!] {
-        let node = OpenLCBNode(nodeId: message.sourceNodeId!)
-        node.encodedNodeInformation = message.payload
-        locoNetGateways[node.nodeId] = node.userNodeName
-        initCDI()
-      }
-
     case .identifyProducer:
       
       if let event = OpenLCBWellKnownEvent(rawValue: message.eventId!) {

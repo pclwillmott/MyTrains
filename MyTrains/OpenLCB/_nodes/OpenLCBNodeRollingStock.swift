@@ -667,7 +667,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
             // The distance sign bit controls the direction of travel and will
             // override the direction bits of the two speeds.
             
-            var trainDirection = tempDistanceToGo.direction
+            let trainDirection = tempDistanceToGo.direction
             
             var f16 = float16_t()
             

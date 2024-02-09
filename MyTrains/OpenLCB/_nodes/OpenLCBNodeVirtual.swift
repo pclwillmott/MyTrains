@@ -243,7 +243,6 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     }
     set(value) {
       virtualNodeConfigSpace.setUInt(address: addressVirtualNodeConfigLayoutNodeId, value:value)
-      initCDI()
     }
   }
 
@@ -592,12 +591,10 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     if let networkLayer {
       state = .permitted
       resetReboot()
-//      initCDI()
-      if let cdiFilename {
+      if cdiFilename != nil {
         isConfigurationDescriptionInformationProtocolSupported = true
       }
       networkLayer.sendInitializationComplete(sourceNodeId: nodeId, isSimpleSetSufficient: false)
-      networkLayer.sendIdentifyProducer(sourceNodeId: nodeId, event: .rebuildCDI)
       
     }
     
@@ -650,32 +647,6 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     
     switch message.messageTypeIndicator {
       
-    case .producerConsumerEventReport:
-      
-      if let event = OpenLCBWellKnownEvent(rawValue: message.eventId!) {
-        
-        switch event {
-        case .rebuildCDI:
-          if message.sourceNodeId! == hostAppNodeId {
-            initCDI()
-          }
-        default:
-          break
-        }
-      }
-      
-    case .identifyConsumer:
-      
-      if let event = OpenLCBWellKnownEvent(rawValue: message.eventId!) {
-        
-        switch event {
-        case .rebuildCDI:
-          networkLayer.sendConsumerIdentified(sourceNodeId: nodeId, wellKnownEvent: .rebuildCDI, validity: .valid)
-        default:
-          break
-        }
-      }
-
     case .simpleNodeIdentInfoRequest:
       if message.destinationNodeId! == nodeId {
         networkLayer.sendSimpleNodeInformationReply(sourceNodeId: self.nodeId, destinationNodeId: message.sourceNodeId!, data: encodedNodeInformation)
