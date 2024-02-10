@@ -52,8 +52,6 @@ public enum TurnoutMotorType : UInt8 {
   
   public static let defaultValue : TurnoutMotorType = .manual
   
-  public static let mapPlaceholder = CDI.TURNOUT_MOTOR_TYPE
-
   // MARK: Public Class Methods
   
   public static func populate(comboBox: NSComboBox) {
@@ -93,7 +91,7 @@ public enum TurnoutMotorType : UInt8 {
   }
 
   public static func insertMap(cdi:String) -> String {
-    return cdi.replacingOccurrences(of: mapPlaceholder, with: map)
+    return cdi.replacingOccurrences(of: CDI.TURNOUT_MOTOR_TYPE, with: map)
   }
 
 }

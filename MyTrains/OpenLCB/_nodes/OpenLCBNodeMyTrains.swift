@@ -13,7 +13,17 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   
   public override init(nodeId:UInt64) {
     
-    configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: 7, isReadOnly: false, description: "")
+    var configurationSize = 0
+    
+    initSpaceAddress(&addressUnitsActualLength,   1, &configurationSize)
+    initSpaceAddress(&addressUnitsScaleLength,    1, &configurationSize)
+    initSpaceAddress(&addressUnitsActualDistance, 1, &configurationSize)
+    initSpaceAddress(&addressUnitsScaleDistance,  1, &configurationSize)
+    initSpaceAddress(&addressUnitsActualSpeed,    1, &configurationSize)
+    initSpaceAddress(&addressUnitsScaleSpeed,     1, &configurationSize)
+    initSpaceAddress(&addressUnitsTime,           1, &configurationSize)
+
+    configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: configurationSize, isReadOnly: false, description: "")
     
     super.init(nodeId: nodeId)
 
@@ -43,13 +53,13 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   
   // Configuration variable addresses
   
-  internal let addressUnitsActualLength   : Int =  0 // 1
-  internal let addressUnitsScaleLength    : Int =  1 // 2
-  internal let addressUnitsActualDistance : Int =  2 // 3
-  internal let addressUnitsScaleDistance  : Int =  3 // 4
-  internal let addressUnitsActualSpeed    : Int =  4 // 5
-  internal let addressUnitsScaleSpeed     : Int =  5 // 6
-  internal let addressUnitsTime           : Int =  6 // 7
+  internal var addressUnitsActualLength   = 0
+  internal var addressUnitsScaleLength    = 0
+  internal var addressUnitsActualDistance = 0
+  internal var addressUnitsScaleDistance  = 0
+  internal var addressUnitsActualSpeed    = 0
+  internal var addressUnitsScaleSpeed     = 0
+  internal var addressUnitsTime           = 0
 
   internal var configuration : OpenLCBMemorySpace
 
@@ -417,6 +427,30 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
 
   }
 
+  public func insertLinkMap(cdi:String, layoutId:UInt64, excludeLinkId:UInt64) -> String {
+    
+    var sorted : [(nodeId:UInt64, name:String)] = []
+
+    for (nodeId, item) in switchboardItemList {
+      if item.itemType == .link && item.layoutId == layoutId && item.itemId != excludeLinkId {
+        sorted.append((nodeId:nodeId, name:item.itemName))
+      }
+    }
+    
+    sorted.sort {$0.name < $1.name}
+
+    var items = "<map>\n<relation><property>00.00.00.00.00.00.00.00</property><value>No Link Selected</value></relation>\n"
+    
+    for item in sorted {
+      items += "<relation><property>\(item.nodeId.toHexDotFormat(numberOfBytes: 8))</property><value>\(item.name)</value></relation>\n"
+    }
+
+    items += "</map>\n"
+
+    return cdi.replacingOccurrences(of: CDI.SWITCHBOARD_LINKS, with: items)
+
+  }
+
   public func insertLocoNetGatewayMap(cdi:String) -> String {
     
     var sorted : [(nodeId:UInt64, name:String)] = []
@@ -551,11 +585,16 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
           
           if let tempNodeId = message.sourceNodeId, let itemType = SwitchBoardItemType(rawValue: UInt16(bigEndianData: [message.payload[6], message.payload[7]])!), let layoutNodeId = UInt64(bigEndianData: [message.payload[0], message.payload[1], message.payload[2], message.payload[3], message.payload[4], message.payload[5]]) {
             
-            if let _ = switchboardItemList[tempNodeId] {} else {
-              switchboardItemList[tempNodeId] = (layoutId:layoutNodeId, itemId: tempNodeId, itemName:"", itemType:itemType)
-              networkLayer?.sendSimpleNodeInformationRequest(sourceNodeId: nodeId, destinationNodeId: tempNodeId)
+            if let item = switchboardItemList[tempNodeId] {
+              var modifiedItem = item
+              modifiedItem.itemType = itemType
+              switchboardItemList[tempNodeId] = modifiedItem
             }
-            
+            else {
+              switchboardItemList[tempNodeId] = (layoutId:layoutNodeId, itemId: tempNodeId, itemName:"", itemType:itemType)
+            }
+            networkLayer?.sendSimpleNodeInformationRequest(sourceNodeId: nodeId, destinationNodeId: tempNodeId)
+
           }
           
         case .nodeIsALocoNetGateway:

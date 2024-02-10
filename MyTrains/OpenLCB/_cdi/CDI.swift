@@ -49,5 +49,13 @@ enum CDI {
   static let ROUTE_DIMENSION            = "%%ROUTE_DIMENSION%%"
   static let TURNOUT_SWITCHES           = "%%TURNOUT_SWITCHES%%"
   static let UNIT_TIME                  = "%%UNIT_TIME%%"
+  static let SENSOR_TYPE                = "%%SENSOR_TYPE%%"
+  static let SPECIAL_SENSOR             = "%%SPECIAL_SENSOR%%"
+  static let TIME_UNITS                 = "%%TIME_UNITS%%"
+  static let SWITCHBOARD_LINKS          = "%%SWITCHBOARD_LINKS%%"
+  static let LINK                       = "%%LINK%%"
+  static let SIGNAL_TYPE                = "%%SIGNAL_TYPE%%"
+  static let SIGNAL                     = "%%SIGNAL%%"
+  static let ROUTE_DIRECTION            = "%%ROUTE_DIRECTION%%"
 }
 

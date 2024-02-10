@@ -8,7 +8,7 @@
 import Foundation
 import AppKit
 
-public enum RouteDirection : Int {
+public enum RouteDirection : UInt8 {
   
   case next     = 0
   case previous = 1
@@ -16,7 +16,7 @@ public enum RouteDirection : Int {
   // MARK: Public Properties
   
   public var title : String {
-    return RouteDirection.titles[self.rawValue]
+    return RouteDirection.titles[Int(self.rawValue)]
   }
   
   // MARK: Private Class Properties
@@ -33,11 +33,13 @@ public enum RouteDirection : Int {
       .previous,
     ]
     
-    var map = ""
-    
+    var map = "<map>\n"
+
     for item in items {
       map += "<relation><property>\(item.rawValue)</property><value>\(item.title)</value></relation>\n"
     }
+
+    map += "</map>\n"
 
     return map
     
@@ -47,8 +49,6 @@ public enum RouteDirection : Int {
   
   public static let defaultValue : RouteDirection = .next
   
-  public static let mapPlaceholder = "%%ROUTE_DIRECTION%%"
-
   // MARK: Public Class Methods
   
   public static func populate(comboBox:NSComboBox) {
@@ -58,15 +58,15 @@ public enum RouteDirection : Int {
   }
   
   public static func select(comboBox:NSComboBox, value:RouteDirection) {
-    comboBox.selectItem(at: value.rawValue)
+    comboBox.selectItem(at: Int(value.rawValue))
   }
   
   public static func selected(comboBox: NSComboBox) -> RouteDirection {
-    return RouteDirection(rawValue: comboBox.indexOfSelectedItem) ?? defaultValue
+    return RouteDirection(rawValue: UInt8(comboBox.indexOfSelectedItem)) ?? defaultValue
   }
   
   public static func insertMap(cdi:String) -> String {
-    return cdi.replacingOccurrences(of: mapPlaceholder, with: map)
+    return cdi.replacingOccurrences(of: CDI.ROUTE_DIRECTION, with: map)
   }
 
 }

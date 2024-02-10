@@ -309,14 +309,14 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
       UnitSpeed.populate(comboBox: cboSpeedUnits)
       UnitSpeed.select(comboBox: cboSpeedUnits, value: item.unitsSpeed)
       
-      if !(item.isBlock || item.isTurnout || item.isFeedback) {
+      if !(item.isBlock || item.isTurnout || item.isSensor) {
         tabs.removeTabViewItem(tabs.tabViewItems[5])
         tabs.removeTabViewItem(tabs.tabViewItems[4])
         tabs.removeTabViewItem(tabs.tabViewItems[3])
         tabs.removeTabViewItem(tabs.tabViewItems[2])
         tabs.removeTabViewItem(tabs.tabViewItems[1])
       }
-      else if item.isFeedback || item.isBlock {
+      else if item.isSensor || item.isBlock {
         tabs.removeTabViewItem(tabs.tabViewItems[5])
         tabs.removeTabViewItem(tabs.tabViewItems[4])
         tabs.removeTabViewItem(tabs.tabViewItems[3])
@@ -329,10 +329,10 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
         boxSpeedNext.title = ""
 
       }
-      lblGeneralSensorPosition.isHidden = item.itemPartType != .feedback
-      txtGeneralSensorPosition.isHidden = item.itemPartType != .feedback
-      lblPositionUnits.isHidden = item.itemPartType != .feedback
-      cboPositionUnits.isHidden = item.itemPartType != .feedback
+      lblGeneralSensorPosition.isHidden = item.itemPartType != .sensor
+      txtGeneralSensorPosition.isHidden = item.itemPartType != .sensor
+      lblPositionUnits.isHidden = item.itemPartType != .sensor
+      cboPositionUnits.isHidden = item.itemPartType != .sensor
     }
     
     setupControls()

@@ -18,7 +18,7 @@ class SwitchBoardShape {
     
     var isFeedback : Bool = false
     
-    if let item = switchBoardItem, item.isFeedback {
+    if let item = switchBoardItem, item.isSensor {
       isFeedback = true
     }
     
@@ -240,7 +240,7 @@ class SwitchBoardShape {
     .platform : [[
       (type: .rectangle, coordinates:[CGPoint(x: -0.5, y: -0.50), CGPoint(x: +0.5, y: +0.50)], parameters: [], actionColors: [.fill:NSColor.lightGray])
     ]],
-    .feedback : [[
+    .sensor : [[
       (type: .line, coordinates:[CGPoint(x: 0.0, y: -0.5), CGPoint(x: 0.0, y: 0.5)], parameters: [], actionColors: [:]),
       (type: .circle, coordinates:[CGPoint(x: 0.0, y: 0.0),], parameters: [0.3], actionColors: [.fill:NSColor.red])
     ],

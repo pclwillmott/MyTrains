@@ -67,8 +67,6 @@ public enum Orientation : UInt8 {
   
   public static let defaultValue : Orientation = .deg0
   
-  public static let mapPlaceholder = CDI.ORIENTATION
-
   // MARK: Public Class Methods
   
   public static func populate(comboBox:NSComboBox) {
@@ -86,7 +84,7 @@ public enum Orientation : UInt8 {
   }
   
   public static func insertMap(cdi:String) -> String {
-    return cdi.replacingOccurrences(of: mapPlaceholder, with: map)
+    return cdi.replacingOccurrences(of: CDI.ORIENTATION, with: map)
   }
 
 }

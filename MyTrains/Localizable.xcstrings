@@ -1274,6 +1274,15 @@
         }
       }
     },
+    "Colour-light 2 aspect" : {
+
+    },
+    "Colour-light 3 aspect" : {
+
+    },
+    "Colour-light 4 aspect" : {
+
+    },
     "Common" : {
       "comment" : "Used to indicate a LocoNet command station slot status",
       "localizations" : {
@@ -1434,7 +1443,7 @@
       }
     },
     "Create Application Node" : {
-      "comment" : "Used for the Create Application Node menu item title\nUsed for the title of the Create Application Node window",
+      "comment" : "Used for the title of the Create Application Node window\nUsed for the Create Application Node menu item title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1592,7 +1601,7 @@
       }
     },
     "DCC Programmer Tool" : {
-      "comment" : "Used for the DCC Programmer Tool menu item title\nUsed to create a default OpenLCB virtual name",
+      "comment" : "Used to create a default OpenLCB virtual name\nUsed for the DCC Programmer Tool menu item title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2201,7 +2210,7 @@
       }
     },
     "Fast Clock" : {
-      "comment" : "Used for the Fast Clock menu item title\nUsed to indicate a clock's type",
+      "comment" : "Used to indicate a clock's type\nUsed for the Fast Clock menu item title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2216,9 +2225,6 @@
           }
         }
       }
-    },
-    "Feedback" : {
-      "comment" : "This is used to describe a switchboard item."
     },
     "Feet" : {
       "localizations" : {
@@ -2416,6 +2422,9 @@
         }
       }
     },
+    "Great Britain" : {
+      "comment" : "This is the name of a country."
+    },
     "Guard's Whistle" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -2432,6 +2441,9 @@
           }
         }
       }
+    },
+    "h" : {
+      "comment" : "Used for the abbreviation of hours"
     },
     "Hardware Version" : {
 
@@ -2503,6 +2515,9 @@
           }
         }
       }
+    },
+    "Hours" : {
+
     },
     "Identification" : {
       "localizations" : {
@@ -2820,6 +2835,9 @@
           }
         }
       }
+    },
+    "Light Sensor" : {
+
     },
     "Lights Off Front" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -3235,6 +3253,9 @@
         }
       }
     },
+    "Milliseconds" : {
+
+    },
     "mm" : {
       "comment" : "Used for the abbreviation of millimeters"
     },
@@ -3294,6 +3315,9 @@
     },
     "mph" : {
       "comment" : "Used for the abbreviation of miles per hour"
+    },
+    "ms" : {
+      "comment" : "Used for the abbreviation of milliseconds"
     },
     "Mute" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -3434,6 +3458,12 @@
     },
     "None" : {
 
+    },
+    "None Selected" : {
+
+    },
+    "Northern Ireland" : {
+      "comment" : "This is the name of a country."
     },
     "Not Electrified" : {
       "comment" : "Used to indicate that the track is not electrified, i.e. only steam and diesels can use it",
@@ -3591,6 +3621,9 @@
         }
       }
     },
+    "Other" : {
+
+    },
     "Overhead" : {
       "comment" : "Used to indicate that the track models overhead electrification",
       "localizations" : {
@@ -3699,6 +3732,9 @@
           }
         }
       }
+    },
+    "Push Button" : {
+
     },
     "Radiator Fan" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -3835,6 +3871,9 @@
         }
       }
     },
+    "Reed Switch" : {
+
+    },
     "Refresh All" : {
       "localizations" : {
         "en" : {
@@ -3935,6 +3974,9 @@
         }
       }
     },
+    "RFID Reader" : {
+
+    },
     "Right Curved Turnout" : {
       "comment" : "This is used to describe a piece of track."
     },
@@ -3979,7 +4021,7 @@
       "comment" : "This is the name of a country."
     },
     "s" : {
-      "comment" : "Used for the Global Emergency Stop menu key equivalent",
+      "comment" : "Used for the abbreviation of seconds\nUsed for the Global Emergency Stop menu key equivalent",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -4065,6 +4107,9 @@
         }
       }
     },
+    "Seconds" : {
+
+    },
     "Select" : {
       "comment" : "Used for the Select Layout button title",
       "localizations" : {
@@ -4098,6 +4143,9 @@
           }
         }
       }
+    },
+    "Sensor" : {
+      "comment" : "This is used to describe a switchboard item."
     },
     "Short Whistle" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -4165,6 +4213,9 @@
           }
         }
       }
+    },
+    "Signal" : {
+      "comment" : "This is used to describe a switchboard item."
     },
     "Single Slip" : {
       "comment" : "This is used to describe a piece of track."
@@ -4803,14 +4854,11 @@
         }
       }
     },
-    "United Kingdom" : {
-      "comment" : "This is the name of a country."
-    },
     "United States of America" : {
       "comment" : "This is the name of a country."
     },
     "Unknown" : {
-      "comment" : "Used to indicate that the type of something is unknown\nUsed to indicate the state of a turnout",
+      "comment" : "Used to indicate the state of a turnout\nUsed to indicate that the type of something is unknown",
       "localizations" : {
         "en" : {
           "stringUnit" : {

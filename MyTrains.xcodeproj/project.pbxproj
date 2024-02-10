@@ -90,6 +90,8 @@
 		DA48EE2B293CEFEA006C26A0 /* LocoNetFastClockScaleFactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA48EE2A293CEFEA006C26A0 /* LocoNetFastClockScaleFactor.swift */; };
 		DA4DE5232B2CBC16000C74F1 /* SwitchBoardEventType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA4DE5222B2CBC16000C74F1 /* SwitchBoardEventType.swift */; };
 		DA50C2F32B77AC1A00C2F6A1 /* UnitTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA50C2F22B77AC1A00C2F6A1 /* UnitTime.swift */; };
+		DA50C2F52B77B8D400C2F6A1 /* SensorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA50C2F42B77B8D400C2F6A1 /* SensorType.swift */; };
+		DA50C2F72B77F09F00C2F6A1 /* SignalType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA50C2F62B77F09F00C2F6A1 /* SignalType.swift */; };
 		DA51FB9C29D88320002CAAC1 /* LCCCANFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA51FB9B29D88320002CAAC1 /* LCCCANFrame.swift */; };
 		DA51FB9E29D8921B002CAAC1 /* OpenLCBCANFrameType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA51FB9D29D8921B002CAAC1 /* OpenLCBCANFrameType.swift */; };
 		DA5225F92B307B09005DCBF4 /* MultiTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5225F82B307B09005DCBF4 /* MultiTabView.swift */; };
@@ -382,6 +384,8 @@
 		DA48EE2A293CEFEA006C26A0 /* LocoNetFastClockScaleFactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoNetFastClockScaleFactor.swift; sourceTree = "<group>"; };
 		DA4DE5222B2CBC16000C74F1 /* SwitchBoardEventType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchBoardEventType.swift; sourceTree = "<group>"; };
 		DA50C2F22B77AC1A00C2F6A1 /* UnitTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitTime.swift; sourceTree = "<group>"; };
+		DA50C2F42B77B8D400C2F6A1 /* SensorType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorType.swift; sourceTree = "<group>"; };
+		DA50C2F62B77F09F00C2F6A1 /* SignalType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalType.swift; sourceTree = "<group>"; };
 		DA51FB9B29D88320002CAAC1 /* LCCCANFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LCCCANFrame.swift; sourceTree = "<group>"; };
 		DA51FB9D29D8921B002CAAC1 /* OpenLCBCANFrameType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBCANFrameType.swift; sourceTree = "<group>"; };
 		DA5225F82B307B09005DCBF4 /* MultiTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiTabView.swift; sourceTree = "<group>"; };
@@ -651,8 +655,10 @@
 				DA7243F528A7F1E5003157CA /* RouteDirection.swift */,
 				DA1DC9FE28A1CE0D007A957A /* SamplePeriod.swift */,
 				DA32C979294CB0E40034DB4F /* SampleRate.swift */,
+				DA50C2F42B77B8D400C2F6A1 /* SensorType.swift */,
 				DAA7BEB22B501FCA00508140 /* Scale.swift */,
 				DA6E28DE285F827600772641 /* SwitchBoardItemType.swift */,
+				DA50C2F62B77F09F00C2F6A1 /* SignalType.swift */,
 				DA7243F728A81165003157CA /* ThrottleMode.swift */,
 				DAE8DD54286754C00097C2D1 /* TrackCode.swift */,
 				DA6E28E2285F8F1A00772641 /* TrackElectrificationType.swift */,
@@ -1335,7 +1341,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1310;
-				LastUpgradeCheck = 1430;
+				LastUpgradeCheck = 1520;
 				TargetAttributes = {
 					DAA83DE6272C37670075CBCD = {
 						CreatedOnToolsVersion = 13.1;
@@ -1532,6 +1538,7 @@
 				DAF4DD4E289A9901000B848E /* BestFitMethod.swift in Sources */,
 				DA50C2F32B77AC1A00C2F6A1 /* UnitTime.swift in Sources */,
 				DAA777CA2A20C84C008EAF02 /* OpenLCBClock.swift in Sources */,
+				DA50C2F72B77F09F00C2F6A1 /* SignalType.swift in Sources */,
 				DAA54F7F2A217CDA005CED7E /* OpenLCBNodeConfigurationTool.swift in Sources */,
 				DABC089B2B1B895B00260605 /* LocoNetIMMPacketRepeat.swift in Sources */,
 				DAB4A73F2B40483700CD5256 /* CDIMapView.swift in Sources */,
@@ -1540,6 +1547,7 @@
 				DA9C6A1E2A408F060069FED8 /* OpenLCBTractionControlInstructionType.swift in Sources */,
 				DA7A127429E2DCCD000DCE1C /* UIntExtensions.swift in Sources */,
 				DAAC7E8D2A792693001A424E /* OpenLCBProgrammerToolNode.swift in Sources */,
+				DA50C2F52B77B8D400C2F6A1 /* SensorType.swift in Sources */,
 				DA6A0ADA2752976800913F2B /* MonitorVC.swift in Sources */,
 				DAA36B9D2A110B6200F07D8E /* OpenLCBTransportLayerAlias.swift in Sources */,
 				DA467BB1281D5ED400AB9650 /* SwitchBoardEditorVC.swift in Sources */,
@@ -1706,6 +1714,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -1740,6 +1749,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1768,6 +1778,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -1802,6 +1813,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;

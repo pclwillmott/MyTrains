@@ -410,7 +410,6 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
         cdi = cdi.replacingOccurrences(of: CDI.MODEL, with: nodeModelName)
         cdi = cdi.replacingOccurrences(of: CDI.SOFTWARE_VERSION, with: nodeSoftwareVersion)
         cdi = cdi.replacingOccurrences(of: CDI.HARDWARE_VERSION, with: nodeHardwareVersion)
-        cdi = cdi.replacingOccurrences(of: CDI.ACTUAL_LENGTH_UNITS, with: appNode!.unitsActualLength.symbol)
         cdi = standardACDI(cdi: cdi)
         cdi = standardVirtualNodeConfig(cdi: cdi)
 /*

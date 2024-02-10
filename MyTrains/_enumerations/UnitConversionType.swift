@@ -16,6 +16,7 @@ public enum BaseUnitConversionType : UInt8 {
   case scaleDistance  = 0x40
   case actualSpeed    = 0x50
   case scaleSpeed     = 0x60
+  case time           = 0x70
 }
 
 public enum UnitConversionType : UInt8 {
@@ -39,6 +40,9 @@ public enum UnitConversionType : UInt8 {
   case scaleSpeed2     = 0x62
   case scaleSpeed4     = 0x64
   case scaleSpeed8     = 0x68
+  case time2           = 0x72
+  case time4           = 0x74
+  case time8           = 0x78
 
   // MARK: Public Properties
   

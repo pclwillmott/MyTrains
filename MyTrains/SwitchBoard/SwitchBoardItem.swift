@@ -158,9 +158,9 @@ public class SwitchBoardItem : EditorObject {
     }
   }
   
-  public var isFeedback : Bool {
+  public var isSensor : Bool {
     get {
-      return itemPartType == .feedback
+      return itemPartType == .sensor
     }
   }
   
@@ -180,7 +180,7 @@ public class SwitchBoardItem : EditorObject {
     get {
       let track : Set<SwitchBoardItemType> = [
         .curve,
-        .feedback,
+        .sensor,
         .longCurve,
         .straight,
         .buffer,

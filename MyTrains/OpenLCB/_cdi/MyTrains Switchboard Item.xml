@@ -131,6 +131,12 @@
 
 %%TURNOUT_SWITCHES%%
 
+%%SPECIAL_SENSOR%%
+
+%%LINK%%
+
+%%SIGNAL%%
+
 </segment>
 
 %%VIRTUAL_NODE_CONFIG%%

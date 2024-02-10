@@ -29,9 +29,10 @@ public enum SwitchBoardItemType : UInt16 {
   case doubleSlip         = 12
   case buffer             = 13
   case block              = 14
-  case feedback           = 15
+  case sensor             = 15
   case link               = 16
   case platform           = 17
+  case signal             = 18
   case none               = 0xffff
 
   // MARK: Public Properties
@@ -114,7 +115,7 @@ public enum SwitchBoardItemType : UInt16 {
     
     let noFeedback : Set<SwitchBoardItemType> = [.buffer, .curve, .longCurve, .link, .none, .platform, .straight]
     
-    if self == .feedback {
+    if self == .sensor {
       result = result.union([.enterDetectionZone, .exitDetectionZone])
     }
     else if !noFeedback.contains(self) {
@@ -202,9 +203,10 @@ public enum SwitchBoardItemType : UInt16 {
                            (5, 0, [(1, .thrown), (2, .thrown)])],
     .buffer             : [(5, -1, [])],
     .block              : [(5, 1, [])],
-    .feedback           : [(5, 1, [])],
+    .sensor             : [(5, 1, [])],
     .link               : [(5, -1, [])],
     .platform           : [],
+    .signal             : [],
     .none               : [],
   ]
   
@@ -224,16 +226,15 @@ public enum SwitchBoardItemType : UInt16 {
     String(localized: "Double Slip", comment: "This is used to describe a piece of track."),
     String(localized: "Buffer", comment: "This is used to describe a piece of track."),
     String(localized: "Block", comment: "This is used to describe a piece of track."),
-    String(localized: "Feedback", comment: "This is used to describe a switchboard item."),
+    String(localized: "Sensor", comment: "This is used to describe a switchboard item."),
     String(localized: "Link", comment: "This is used to describe a switchboard item."),
     String(localized: "Platform", comment: "This is used to describe a switchboard item."),
+    String(localized: "Signal", comment: "This is used to describe a switchboard item."),
   ]
   
   // MARK: Public Class Properties
   
   public static let defaultValue : SwitchBoardItemType = .straight
-
-  public static let mapPlaceholder = CDI.SWITCHBOARD_ITEM_TYPE
 
   // MARK: Private Class Methods
   
@@ -255,9 +256,10 @@ public enum SwitchBoardItemType : UInt16 {
       .doubleSlip,
       .buffer,
       .block,
-      .feedback,
+      .sensor,
       .link,
       .platform,
+      .signal,
     ]
     
     var map = "<default>\(defaultValue.rawValue)</default>\n<map>\n"
@@ -288,7 +290,7 @@ public enum SwitchBoardItemType : UInt16 {
   }
   
   public static func insertMap(cdi:String) -> String {
-    return cdi.replacingOccurrences(of: mapPlaceholder, with: map)
+    return cdi.replacingOccurrences(of: CDI.SWITCHBOARD_ITEM_TYPE, with: map)
   }
 
 }

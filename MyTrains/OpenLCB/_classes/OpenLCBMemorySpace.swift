@@ -225,6 +225,8 @@ public class OpenLCBMemorySpace {
             newValue = UnitSpeed.convert(fromValue: floatValue, fromUnits: UnitSpeed.defaultValueActualSpeed, toUnits: appNode.unitsActualSpeed)
           case .scaleSpeed:
             newValue = UnitSpeed.convert(fromValue: floatValue, fromUnits: UnitSpeed.defaultValueScaleSpeed, toUnits: appNode.unitsScaleSpeed)
+          case .time:
+            newValue = UnitTime.convert(fromValue: floatValue, fromUnits: UnitTime.defaultValue, toUnits: appNode.unitsTime)
           default:
             break
           }
@@ -384,6 +386,8 @@ public class OpenLCBMemorySpace {
             newValue = UnitSpeed.convert(fromValue: floatValue, fromUnits: appNode.unitsActualSpeed, toUnits: UnitSpeed.defaultValueActualSpeed)
           case .scaleSpeed:
             newValue = UnitSpeed.convert(fromValue: floatValue, fromUnits: appNode.unitsScaleSpeed, toUnits: UnitSpeed.defaultValueScaleSpeed)
+          case .time:
+            newValue = UnitTime.convert(fromValue: floatValue, fromUnits: appNode.unitsTime, toUnits: UnitTime.defaultValue)
           default:
             break
           }

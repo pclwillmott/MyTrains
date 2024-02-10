@@ -52,8 +52,6 @@ public enum TrackElectrificationType : UInt8 {
   
   public static let defaultValue : TrackElectrificationType = .notElectrified
   
-  public static let mapPlaceholder = CDI.TRACK_ELECTRIFICATION_TYPE
-
   // MARK: Public Class Methods
   
   public static func populate(comboBox: NSComboBox) {
@@ -71,7 +69,7 @@ public enum TrackElectrificationType : UInt8 {
   }
   
   public static func insertMap(cdi:String) -> String {
-    return cdi.replacingOccurrences(of: mapPlaceholder, with: map)
+    return cdi.replacingOccurrences(of: CDI.TRACK_ELECTRIFICATION_TYPE, with: map)
   }
 
 }
