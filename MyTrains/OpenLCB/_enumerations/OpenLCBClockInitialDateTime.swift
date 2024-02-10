@@ -27,7 +27,7 @@ public enum OpenLCBClockInitialDateTime : UInt8 {
 
   private static var map : String {
     
-    var items : [OpenLCBClockInitialDateTime] = [
+    let items : [OpenLCBClockInitialDateTime] = [
       .computerDateTime,
       .defaultDateTime,
     ]

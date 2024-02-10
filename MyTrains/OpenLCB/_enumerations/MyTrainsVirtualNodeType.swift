@@ -114,7 +114,7 @@ public enum MyTrainsVirtualNodeType : UInt16 {
   
   private static var map : String {
     
-    var items : [MyTrainsVirtualNodeType] = [
+    let items : [MyTrainsVirtualNodeType] = [
       .canGatewayNode        ,
       .applicationNode       ,
       .locoNetMonitorNode    ,

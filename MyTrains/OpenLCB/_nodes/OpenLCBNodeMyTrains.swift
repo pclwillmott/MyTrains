@@ -13,7 +13,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   
   public override init(nodeId:UInt64) {
     
-    configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: 6, isReadOnly: false, description: "")
+    configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: 7, isReadOnly: false, description: "")
     
     super.init(nodeId: nodeId)
 
@@ -29,7 +29,8 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressUnitsScaleDistance)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressUnitsActualSpeed)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressUnitsScaleSpeed)
-    
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressUnitsTime)
+
     if !memorySpacesInitialized {
       resetToFactoryDefaults()
     }
@@ -42,12 +43,13 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   
   // Configuration variable addresses
   
-  internal let addressUnitsActualLength   : Int =  0
-  internal let addressUnitsScaleLength    : Int =  1
-  internal let addressUnitsActualDistance : Int =  2
-  internal let addressUnitsScaleDistance  : Int =  3
-  internal let addressUnitsActualSpeed    : Int =  4
-  internal let addressUnitsScaleSpeed     : Int =  5
+  internal let addressUnitsActualLength   : Int =  0 // 1
+  internal let addressUnitsScaleLength    : Int =  1 // 2
+  internal let addressUnitsActualDistance : Int =  2 // 3
+  internal let addressUnitsScaleDistance  : Int =  3 // 4
+  internal let addressUnitsActualSpeed    : Int =  4 // 5
+  internal let addressUnitsScaleSpeed     : Int =  5 // 6
+  internal let addressUnitsTime           : Int =  6 // 7
 
   internal var configuration : OpenLCBMemorySpace
 
@@ -75,55 +77,64 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
 
   public var unitsActualLength : UnitLength {
     get {
-      return UnitLength(rawValue: Int(configuration.getUInt8(address: addressUnitsActualLength)!))!
+      return UnitLength(rawValue: configuration.getUInt8(address: addressUnitsActualLength)!)!
     }
     set(value) {
-      configuration.setUInt(address: addressUnitsActualLength, value: UInt8(value.rawValue))
+      configuration.setUInt(address: addressUnitsActualLength, value: value.rawValue)
     }
   }
 
   public var unitsScaleLength : UnitLength {
     get {
-      return UnitLength(rawValue: Int(configuration.getUInt8(address: addressUnitsScaleLength)!))!
+      return UnitLength(rawValue: configuration.getUInt8(address: addressUnitsScaleLength)!)!
     }
     set(value) {
-      configuration.setUInt(address: addressUnitsScaleLength, value: UInt8(value.rawValue))
+      configuration.setUInt(address: addressUnitsScaleLength, value: value.rawValue)
     }
   }
 
   public var unitsActualDistance : UnitLength {
     get {
-      return UnitLength(rawValue: Int(configuration.getUInt8(address: addressUnitsActualDistance)!))!
+      return UnitLength(rawValue: configuration.getUInt8(address: addressUnitsActualDistance)!)!
     }
     set(value) {
-      configuration.setUInt(address: addressUnitsActualDistance, value: UInt8(value.rawValue))
+      configuration.setUInt(address: addressUnitsActualDistance, value: value.rawValue)
     }
   }
 
   public var unitsScaleDistance : UnitLength {
     get {
-      return UnitLength(rawValue: Int(configuration.getUInt8(address: addressUnitsScaleDistance)!))!
+      return UnitLength(rawValue: configuration.getUInt8(address: addressUnitsScaleDistance)!)!
     }
     set(value) {
-      configuration.setUInt(address: addressUnitsScaleDistance, value: UInt8(value.rawValue))
+      configuration.setUInt(address: addressUnitsScaleDistance, value: value.rawValue)
     }
   }
 
   public var unitsActualSpeed : UnitSpeed {
     get {
-      return UnitSpeed(rawValue: Int(configuration.getUInt8(address: addressUnitsActualSpeed)!))!
+      return UnitSpeed(rawValue: configuration.getUInt8(address: addressUnitsActualSpeed)!)!
     }
     set(value) {
-      configuration.setUInt(address: addressUnitsActualSpeed, value: UInt8(value.rawValue))
+      configuration.setUInt(address: addressUnitsActualSpeed, value: value.rawValue)
     }
   }
 
   public var unitsScaleSpeed : UnitSpeed {
     get {
-      return UnitSpeed(rawValue: Int(configuration.getUInt8(address: addressUnitsScaleSpeed)!))!
+      return UnitSpeed(rawValue: configuration.getUInt8(address: addressUnitsScaleSpeed)!)!
     }
     set(value) {
-      configuration.setUInt(address: addressUnitsScaleSpeed, value: UInt8(value.rawValue))
+      configuration.setUInt(address: addressUnitsScaleSpeed, value: value.rawValue)
+    }
+  }
+  
+  public var unitsTime : UnitTime {
+    get {
+      return UnitTime(rawValue: configuration.getUInt8(address: addressUnitsTime)!)!
+    }
+    set(value) {
+      configuration.setUInt(address: addressUnitsTime, value: value.rawValue)
     }
   }
   
@@ -183,6 +194,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     unitsScaleDistance  = UnitLength.defaultValueScaleDistance
     unitsActualSpeed    = UnitSpeed.defaultValueActualSpeed
     unitsScaleSpeed     = UnitSpeed.defaultValueScaleSpeed
+    unitsTime           = UnitTime.defaultValue
     
     saveMemorySpaces()
     
@@ -230,7 +242,8 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     
     var result = UnitLength.insertMap(cdi: cdi)
     result = UnitSpeed.insertMap(cdi: result)
-
+    result = UnitTime.insertMap(cdi: result)
+    
     return result
     
   }

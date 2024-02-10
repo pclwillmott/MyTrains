@@ -27,7 +27,7 @@ public enum ClockCustomIdType : UInt8 {
 
   private static var map : String {
     
-    var items : [ClockCustomIdType] = [
+    let items : [ClockCustomIdType] = [
       .clockNodeId,
       .userSpecified,
     ]

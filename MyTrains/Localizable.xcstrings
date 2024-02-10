@@ -2201,7 +2201,7 @@
       }
     },
     "Fast Clock" : {
-      "comment" : "Used to indicate a clock's type\nUsed for the Fast Clock menu item title",
+      "comment" : "Used for the Fast Clock menu item title\nUsed to indicate a clock's type",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -4810,7 +4810,7 @@
       "comment" : "This is the name of a country."
     },
     "Unknown" : {
-      "comment" : "Used to indicate the state of a turnout\nUsed to indicate that the type of something is unknown",
+      "comment" : "Used to indicate that the type of something is unknown\nUsed to indicate the state of a turnout",
       "localizations" : {
         "en" : {
           "stringUnit" : {

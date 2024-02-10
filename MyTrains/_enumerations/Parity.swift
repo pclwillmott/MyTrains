@@ -30,7 +30,7 @@ public enum Parity : UInt8 {
   
   private static var map : String {
     
-    var items : [Parity] = [
+    let items : [Parity] = [
       .none,
       .even,
       .odd,

@@ -27,7 +27,7 @@ public enum OpenLCBClockState : UInt8 {
 
   private static var map : String {
     
-    var items : [OpenLCBClockState] = [
+    let items : [OpenLCBClockState] = [
       .stopped,
       .running,
     ]

@@ -239,7 +239,7 @@ public enum SwitchBoardItemType : UInt16 {
   
   private static var map : String {
     
-    var items : [SwitchBoardItemType] = [
+    let items : [SwitchBoardItemType] = [
       .straight,
       .curve,
       .longCurve,

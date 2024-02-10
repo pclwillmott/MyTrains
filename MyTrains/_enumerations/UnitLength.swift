@@ -8,7 +8,7 @@
 import Foundation
 import AppKit
 
-public enum UnitLength : Int {
+public enum UnitLength : UInt8 {
   
   case millimeters = 0
   case centimeters = 1
@@ -22,11 +22,11 @@ public enum UnitLength : Int {
   // MARK: Public Properties
   
   public var title : String {
-    return UnitLength.titles[self.rawValue]
+    return UnitLength.titles[Int(self.rawValue)]
   }
 
   public var symbol : String {
-    return UnitLength.symbols[self.rawValue]
+    return UnitLength.symbols[Int(self.rawValue)]
   }
 
   // MARK: Private Class Properties
@@ -157,11 +157,11 @@ public enum UnitLength : Int {
   }
   
   public static func select(comboBox: NSComboBox, value: UnitLength) {
-    comboBox.selectItem(at: value.rawValue)
+    comboBox.selectItem(at: Int(value.rawValue))
   }
   
   public static func selected(comboBox:NSComboBox) -> UnitLength {
-    return UnitLength(rawValue: comboBox.indexOfSelectedItem) ?? defaultValue
+    return UnitLength(rawValue: UInt8(comboBox.indexOfSelectedItem)) ?? defaultValue
   }
   
   public static func insertMap(cdi:String) -> String {

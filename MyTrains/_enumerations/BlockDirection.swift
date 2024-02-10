@@ -28,7 +28,7 @@ public enum BlockDirection : UInt8 {
   
   private static var map : String {
     
-    var items : [BlockDirection] = [
+    let items : [BlockDirection] = [
       .bidirectional,
       .unidirectional,
     ]

@@ -48,5 +48,6 @@ enum CDI {
   static let ACTUAL_LENGTH_UNITS        = "%%ACTUAL_LENGTH_UNITS%%"
   static let ROUTE_DIMENSION            = "%%ROUTE_DIMENSION%%"
   static let TURNOUT_SWITCHES           = "%%TURNOUT_SWITCHES%%"
+  static let UNIT_TIME                  = "%%UNIT_TIME%%"
 }
 

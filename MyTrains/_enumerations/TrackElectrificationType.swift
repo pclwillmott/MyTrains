@@ -30,7 +30,7 @@ public enum TrackElectrificationType : UInt8 {
   
   private static var map : String {
     
-    var items : [TrackElectrificationType] = [
+    let items : [TrackElectrificationType] = [
       .notElectrified,
       .thirdRail,
       .overhead,

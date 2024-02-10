@@ -30,7 +30,7 @@ public enum TurnoutMotorType : UInt8 {
 
   private static var map : String {
     
-    var items : [TurnoutMotorType] = [
+    let items : [TurnoutMotorType] = [
       .manual,
       .slowMotion,
       .solenoid,

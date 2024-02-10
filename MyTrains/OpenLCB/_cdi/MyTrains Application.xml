@@ -48,6 +48,12 @@
 %%UNIT_SPEED%%
 </int>
 
+<int size='1'>
+<name>Time</name>
+<description>This is used for time duration values, e.g. sensor activation latency.</description>
+%%UNIT_TIME%%
+</int>
+
 </segment>
 
 %%VIRTUAL_NODE_CONFIG%%

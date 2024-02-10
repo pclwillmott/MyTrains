@@ -956,7 +956,7 @@ public class SwitchBoardItem : EditorObject {
       }
 
       if !reader.isDBNull(index: 19) {
-        unitsDimension = UnitLength(rawValue: reader.getInt(index: 19)!) ?? UnitLength.defaultValue
+        unitsDimension = UnitLength(rawValue: UInt8(reader.getInt(index: 19)!)) ?? UnitLength.defaultValue
       }
 
       if !reader.isDBNull(index: 20) {
@@ -980,15 +980,15 @@ public class SwitchBoardItem : EditorObject {
       }
 
       if !reader.isDBNull(index: 25) {
-        unitsSpeed = UnitSpeed(rawValue: reader.getInt(index: 25)!) ?? UnitSpeed.defaultValue
+        unitsSpeed = UnitSpeed(rawValue: UInt8(reader.getInt(index: 25)!)) ?? UnitSpeed.defaultValue
       }
 
       if !reader.isDBNull(index: 26) {
-        dirNextUnitsPosition = UnitLength(rawValue: reader.getInt(index: 26)!) ?? UnitLength.defaultValue
+        dirNextUnitsPosition = UnitLength(rawValue: UInt8(reader.getInt(index: 26)!)) ?? UnitLength.defaultValue
       }
 
       if !reader.isDBNull(index: 27) {
-        dirPreviousUnitsPosition = UnitLength(rawValue: reader.getInt(index: 27)!) ?? UnitLength.defaultValue
+        dirPreviousUnitsPosition = UnitLength(rawValue: UInt8(reader.getInt(index: 27)!)) ?? UnitLength.defaultValue
       }
 
       if !reader.isDBNull(index: 28) {
@@ -1116,7 +1116,7 @@ public class SwitchBoardItem : EditorObject {
       }
 
       if !reader.isDBNull(index: 59) {
-        sensorPositionUnits = UnitLength(rawValue: reader.getInt(index: 59)!) ?? .centimeters
+        sensorPositionUnits = UnitLength(rawValue: UInt8(reader.getInt(index: 59)!)) ?? .centimeters
       }
 
       enterOccupancyZoneEventId = reader.getUInt64(index: 60)
@@ -1442,15 +1442,15 @@ public class SwitchBoardItem : EditorObject {
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DIMENSIONF)", value: dimensionF)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DIMENSIONG)", value: dimensionG)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DIMENSIONH)", value: dimensionH)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.UNITS_DIMENSION)", value: unitsDimension.rawValue)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.UNITS_DIMENSION)", value: Int(unitsDimension.rawValue))
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.ALLOW_SHUNT)", value: allowShunt)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.TRACK_GAUGE)", value: Int(trackGauge.rawValue))
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.TRACK_ELECTRIFICATION_TYPE)", value: Int(trackElectrificationType.rawValue))
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.GRADIENT)", value: gradient)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.IS_CRITICAL)", value: isCritical)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.UNITS_SPEED)", value: unitsSpeed.rawValue)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DN_UNITS_POSITION)", value: dirNextUnitsPosition.rawValue)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DP_UNITS_POSITION)", value: dirPreviousUnitsPosition.rawValue)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.UNITS_SPEED)", value: Int(unitsSpeed.rawValue))
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DN_UNITS_POSITION)", value: Int(dirNextUnitsPosition.rawValue))
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DP_UNITS_POSITION)", value: Int(dirPreviousUnitsPosition.rawValue))
 
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DN_SPEED_MAX_UD)", value: dirNextSpeedMaxAllowEdit)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.DN_SPEED_STOP_EXPECTED_UD)", value: dirNextSpeedStopExpectedAllowEdit)
@@ -1489,7 +1489,7 @@ public class SwitchBoardItem : EditorObject {
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.LINK_ITEM)", value: linkItem)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.TURNOUT_CONNECTION)", value: turnoutConnection)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.SENSOR_POSITION)", value: sensorPosition)
-      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.UNITS_SENSOR_POSITION)", value: sensorPositionUnits.rawValue)
+      cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.UNITS_SENSOR_POSITION)", value: Int(sensorPositionUnits.rawValue))
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.ENTER_OCCUPANCY_EVENT_ID)", value: enterOccupancyZoneEventId)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.EXIT_OCCUPANCY_EVENT_ID)", value: exitOccupancyZoneEventId)
       cmd.parameters.addWithValue(key: "@\(SWITCHBOARD_ITEM.TRANSPONDER_EVENT_ID)", value: transpondingZoneEventId)

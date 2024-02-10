@@ -33,7 +33,7 @@ public enum OpenLCBClockType : UInt8 {
 
   private static var map : String {
     
-    var items : [OpenLCBClockType] = [
+    let items : [OpenLCBClockType] = [
       .fastClock,
       .realTimeClock,
       .alternateClock1,

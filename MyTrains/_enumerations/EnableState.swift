@@ -28,7 +28,7 @@ public enum EnableState : UInt8 {
   
   private static var map : String {
     
-    var items : [EnableState] = [
+    let items : [EnableState] = [
       .disabled,
       .enabled,
     ]

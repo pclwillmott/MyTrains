@@ -46,7 +46,7 @@ public enum TrackCode : Int {
   
   private static var map : String {
     
-    var items : [TrackCode] = [
+    let items : [TrackCode] = [
       .code55,
       .code60,
       .code70,

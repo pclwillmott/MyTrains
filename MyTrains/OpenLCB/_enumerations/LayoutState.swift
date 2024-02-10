@@ -27,7 +27,7 @@ public enum LayoutState : UInt8 {
 
   private static var map : String {
     
-    var items : [LayoutState] = [
+    let items : [LayoutState] = [
       .activated,
       .deactivated,
     ]

@@ -8,7 +8,7 @@
 import Foundation
 import AppKit
 
-public enum UnitSpeed : Int {
+public enum UnitSpeed : UInt8 {
   
   case centimetersPerSecond = 0
   case metersPerSecond = 1
@@ -20,11 +20,11 @@ public enum UnitSpeed : Int {
   // MARK: Public Properties
   
   public var title : String {
-    return UnitSpeed.titles[self.rawValue]
+    return UnitSpeed.titles[Int(self.rawValue)]
   }
 
   public var symbol : String {
-    return UnitSpeed.symbols[self.rawValue]
+    return UnitSpeed.symbols[Int(self.rawValue)]
   }
 
   public var toCMS : Double {
@@ -141,11 +141,11 @@ public enum UnitSpeed : Int {
   }
   
   public static func select(comboBox: NSComboBox, value: UnitSpeed) {
-    comboBox.selectItem(at: value.rawValue)
+    comboBox.selectItem(at: Int(value.rawValue))
   }
   
   public static func selected(comboBox: NSComboBox) -> UnitSpeed {
-    return UnitSpeed(rawValue: comboBox.indexOfSelectedItem) ?? defaultValue
+    return UnitSpeed(rawValue: UInt8(comboBox.indexOfSelectedItem)) ?? defaultValue
   }
   
   public static func insertMap(cdi:String) -> String {
