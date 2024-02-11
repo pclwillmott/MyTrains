@@ -278,6 +278,7 @@
 		DAF374732A1A2D94009E91F0 /* BundleExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF374722A1A2D94009E91F0 /* BundleExtensions.swift */; };
 		DAF442E72AA5FA9700654A51 /* Digitrax DS64.xml in Resources */ = {isa = PBXBuildFile; fileRef = DAF442E62AA5FA9700654A51 /* Digitrax DS64.xml */; };
 		DAF479CB2A4092380054DA92 /* OpenLCBTractionControllerConfigurationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF479CA2A4092380054DA92 /* OpenLCBTractionControllerConfigurationType.swift */; };
+		DAF4D2D72B78F42A00759539 /* SpeedConstraintType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF4D2D62B78F42A00759539 /* SpeedConstraintType.swift */; };
 		DAF4DD4C289A90C1000B848E /* SpeedResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF4DD4B289A90C1000B848E /* SpeedResultsView.swift */; };
 		DAF4DD4E289A9901000B848E /* BestFitMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF4DD4D289A9901000B848E /* BestFitMethod.swift */; };
 		DAF4DD50289ABDDE000B848E /* SpeedProfileResultsType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF4DD4F289ABDDE000B848E /* SpeedProfileResultsType.swift */; };
@@ -579,6 +580,7 @@
 		DAF374722A1A2D94009E91F0 /* BundleExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundleExtensions.swift; sourceTree = "<group>"; };
 		DAF442E62AA5FA9700654A51 /* Digitrax DS64.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Digitrax DS64.xml"; sourceTree = "<group>"; };
 		DAF479CA2A4092380054DA92 /* OpenLCBTractionControllerConfigurationType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBTractionControllerConfigurationType.swift; sourceTree = "<group>"; };
+		DAF4D2D62B78F42A00759539 /* SpeedConstraintType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedConstraintType.swift; sourceTree = "<group>"; };
 		DAF4DD4B289A90C1000B848E /* SpeedResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedResultsView.swift; sourceTree = "<group>"; };
 		DAF4DD4D289A9901000B848E /* BestFitMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BestFitMethod.swift; sourceTree = "<group>"; };
 		DAF4DD4F289ABDDE000B848E /* SpeedProfileResultsType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedProfileResultsType.swift; sourceTree = "<group>"; };
@@ -655,20 +657,21 @@
 				DA7243F528A7F1E5003157CA /* RouteDirection.swift */,
 				DA1DC9FE28A1CE0D007A957A /* SamplePeriod.swift */,
 				DA32C979294CB0E40034DB4F /* SampleRate.swift */,
-				DA50C2F42B77B8D400C2F6A1 /* SensorType.swift */,
 				DAA7BEB22B501FCA00508140 /* Scale.swift */,
-				DA6E28DE285F827600772641 /* SwitchBoardItemType.swift */,
+				DA50C2F42B77B8D400C2F6A1 /* SensorType.swift */,
 				DA50C2F62B77F09F00C2F6A1 /* SignalType.swift */,
+				DAF4D2D62B78F42A00759539 /* SpeedConstraintType.swift */,
+				DA6E28DE285F827600772641 /* SwitchBoardItemType.swift */,
 				DA7243F728A81165003157CA /* ThrottleMode.swift */,
 				DAE8DD54286754C00097C2D1 /* TrackCode.swift */,
 				DA6E28E2285F8F1A00772641 /* TrackElectrificationType.swift */,
 				DA1B79FC285F3C5E009E1189 /* TrackGauge.swift */,
 				DAE8DD50286741BD0097C2D1 /* TrackPart.swift */,
 				DA9CF8FC2860978A00825FA9 /* TurnoutMotorType.swift */,
+				DA3D9A662B74FEED00451EFB /* UnitConversionType.swift */,
 				DA1B79FA285F3AD0009E1189 /* UnitLength.swift */,
 				DA1B79F8285F3885009E1189 /* UnitSpeed.swift */,
 				DA50C2F22B77AC1A00C2F6A1 /* UnitTime.swift */,
-				DA3D9A662B74FEED00451EFB /* UnitConversionType.swift */,
 				DA92E0772B66B09800762058 /* YesNo.swift */,
 			);
 			path = _enumerations;
@@ -1443,6 +1446,7 @@
 				DA408A5A2B5829C3005EBBDE /* AppMode.swift in Sources */,
 				DAFFB65B2B5D49680035AC74 /* CreateVirtualNodeVC.swift in Sources */,
 				DA8AE0F0279B3074001E9311 /* SlotViewVC.swift in Sources */,
+				DAF4D2D72B78F42A00759539 /* SpeedConstraintType.swift in Sources */,
 				DA1003232A7E81F7004CC86C /* OpenLCBProgrammingMode.swift in Sources */,
 				DABD30B629E4610A002A2C4B /* OpenLCBNetworkLayerDelegate.swift in Sources */,
 				DA56260F29E1AC2B00D465CC /* OpenLCBNetworkLayer.swift in Sources */,

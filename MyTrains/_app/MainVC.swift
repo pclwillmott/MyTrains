@@ -210,5 +210,115 @@ class MainVC: NSViewController, MyTrainsControllerDelegate, LayoutDelegate, Open
   
   let barProgress = NSProgressIndicator()
   
+  // MARK: Temp Stuff
+  
+  @IBAction func btnConvertAction(_ sender: NSButton) {
+    
+    
+    
+    if let layout = myTrainsController.layout, let networkLayer = myTrainsController.openLCBNetworkLayer {
+      
+      for (key, node) in networkLayer.virtualNodeLookup {
+        if node.isSwitchboardNode {
+          networkLayer.deleteNode(nodeId: node.nodeId)
+        }
+      }
+
+      for panel in layout.switchBoardPanels {
+        panels.append(panel)
+        networkLayer.createVirtualNode(virtualNodeType: .switchboardPanelNode, completion: newNodeCompletion(node:))
+      }
+
+      for (key, item) in layout.switchBoardItems {
+        items.append(item)
+        networkLayer.createVirtualNode(virtualNodeType: .switchboardItemNode, completion: newNodeCompletion(node:))
+      }
+ 
+    }
+  }
+  
+  var panels : [SwitchBoardPanel] = []
+  
+  var panelLookup : [Int:SwitchboardPanelNode] = [:]
+  
+  var items : [SwitchBoardItem] = []
+
+  var nodes : [(node:SwitchboardItemNode, groupId:Int)] = []
+  
+  var groupLookup : [Int:SwitchboardItemNode] = [:]
+  
+  func newNodeCompletion(node:OpenLCBNodeVirtual) {
+    
+    guard let networkLayer = myTrainsController.openLCBNetworkLayer else {
+      return
+    }
+    
+    node.hostAppNodeId = node.virtualNodeType == .applicationNode ? node.nodeId : appNodeId!
+    
+    switch node.virtualNodeType {
+    case .layoutNode:
+      node.layoutNodeId = node.nodeId
+      node.saveMemorySpaces()
+    case .switchboardPanelNode:
+      if !panels.isEmpty, let panelNode = node as? SwitchboardPanelNode {
+        let panel = panels.removeFirst()
+        panelNode.layoutNodeId = appLayoutId!
+        panelNode.userNodeName = panel.panelName
+        panelNode.numberOfRows = UInt16(panel.numberOfRows)
+        panelNode.numberOfColumns = UInt16(panel.numberOfColumns)
+        panelNode.saveMemorySpaces()
+        panelLookup[panel.panelId] = panelNode
+        print("\(panelNode.nodeId.toHexDotFormat(numberOfBytes: 6)) - \"\(panelNode.userNodeName)\"")
+      }
+    case .switchboardItemNode:
+      if !items.isEmpty, let itemNode = node as? SwitchboardItemNode {
+        let item = items.removeFirst()
+        itemNode.layoutNodeId = appLayoutId!
+        itemNode.userNodeName = item.displayString().isEmpty ? "\(item.itemPartType.title)" : "\(item.itemPartType.title) - \(item.displayString())"
+        itemNode.itemType = item.itemPartType
+        itemNode.setDimension(routeNumber: 1, value: item.dimensionA)
+        itemNode.setDimension(routeNumber: 2, value: item.dimensionB)
+        itemNode.setDimension(routeNumber: 3, value: item.dimensionC)
+        itemNode.setDimension(routeNumber: 4, value: item.dimensionD)
+        itemNode.setDimension(routeNumber: 5, value: item.dimensionE)
+        itemNode.setDimension(routeNumber: 6, value: item.dimensionF)
+        itemNode.setDimension(routeNumber: 7, value: item.dimensionG)
+        itemNode.setDimension(routeNumber: 8, value: item.dimensionH)
+        itemNode.isCriticalSection = item.isCritical
+        itemNode.orientation = item.orientation
+        itemNode.isReverseShuntAllowed = item.allowShunt
+        itemNode.trackElectrificationType = item.trackElectrificationType
+        itemNode.directionality = item.blockDirection
+        itemNode.xPos = UInt16(item.location.x)
+        itemNode.yPos = UInt16(item.location.y)
+        itemNode.trackGradient = 0.0
+        itemNode.trackGauge = item.trackGauge
+        if let panel = panelLookup[item.panelId] {
+          itemNode.panelId = panel.nodeId
+        }
+        if itemNode.itemType.isGroup {
+          groupLookup[item.groupId] = itemNode
+        }
+        itemNode.saveMemorySpaces()
+        print("\(itemNode.nodeId.toHexDotFormat(numberOfBytes: 6)) - \"\(itemNode.userNodeName)\"")
+        nodes.append((itemNode, item.groupId))
+      }
+    default:
+      break
+    }
+    
+    for (groupId, item) in groupLookup {
+      if groupId > 0 {
+        for node in nodes {
+          if node.groupId == groupId {
+            node.node.groupId = item.nodeId
+            node.node.saveMemorySpaces()
+          }
+        }
+      }
+    }
+    
+  }
+  
 }
 

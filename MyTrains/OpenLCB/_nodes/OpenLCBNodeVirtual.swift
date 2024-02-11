@@ -380,8 +380,9 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     config += "</segment>\n"
 
     config = MyTrainsVirtualNodeType.insertMap(cdi: config)
-    if let app = networkLayer?.myTrainsNode {
-      config = app.insertLayoutMap(cdi: config)
+    
+    if let appNode {
+      config = appNode.insertLayoutMap(cdi: config)
     }
 
     #endif

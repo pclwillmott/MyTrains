@@ -109,6 +109,72 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     initSpaceAddress(&addressSignalSetState30EventId, 8, &configurationSize)
     initSpaceAddress(&addressSignalSetState31EventId, 8, &configurationSize)
 
+    initSpaceAddress(&addressSpeedConstraintDPType0, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDPValue0, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDPType1, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDPValue1, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDPType2, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDPValue2, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDPType3, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDPValue3, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDPType4, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDPValue4, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDPType5, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDPValue5, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDPType6, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDPValue6, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDPType7, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDPValue7, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDPType8, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDPValue8, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDPType9, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDPValue9, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDPType10, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDPValue10, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDPType11, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDPValue11, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDPType12, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDPValue12, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDPType13, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDPValue13, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDPType14, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDPValue14, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDPType15, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDPValue15, 2, &configurationSize)
+
+    initSpaceAddress(&addressSpeedConstraintDNType0, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDNValue0, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDNType1, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDNValue1, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDNType2, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDNValue2, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDNType3, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDNValue3, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDNType4, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDNValue4, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDNType5, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDNValue5, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDNType6, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDNValue6, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDNType7, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDNValue7, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDNType8, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDNValue8, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDNType9, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDNValue9, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDNType10, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDNValue10, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDNType11, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDNValue11, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDNType12, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDNValue12, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDNType13, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDNValue13, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDNType14, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDNValue14, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDNType15, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedConstraintDNValue15, 2, &configurationSize)
+
     configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: configurationSize, isReadOnly: false, description: "")
     
     super.init(nodeId: nodeId)
@@ -236,6 +302,107 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState30EventId)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState31EventId)
 
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType0)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue0)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType1)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue1)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType2)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue2)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType3)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue3)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType4)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue4)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType5)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue5)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType6)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue6)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType7)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue7)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType8)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue8)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType9)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue9)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType10)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue10)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType11)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue11)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType12)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue12)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType13)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue13)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType14)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue14)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType15)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue15)
+
+    configuration.registerUnitConversion(address: addressSpeedConstraintDPValue0, unitConversionType: .scaleSpeed2)
+    configuration.registerUnitConversion(address: addressSpeedConstraintDPValue1, unitConversionType: .scaleSpeed2)
+    configuration.registerUnitConversion(address: addressSpeedConstraintDPValue2, unitConversionType: .scaleSpeed2)
+    configuration.registerUnitConversion(address: addressSpeedConstraintDPValue3, unitConversionType: .scaleSpeed2)
+    configuration.registerUnitConversion(address: addressSpeedConstraintDPValue4, unitConversionType: .scaleSpeed2)
+    configuration.registerUnitConversion(address: addressSpeedConstraintDPValue5, unitConversionType: .scaleSpeed2)
+    configuration.registerUnitConversion(address: addressSpeedConstraintDPValue6, unitConversionType: .scaleSpeed2)
+    configuration.registerUnitConversion(address: addressSpeedConstraintDPValue7, unitConversionType: .scaleSpeed2)
+    configuration.registerUnitConversion(address: addressSpeedConstraintDPValue8, unitConversionType: .scaleSpeed2)
+    configuration.registerUnitConversion(address: addressSpeedConstraintDPValue9, unitConversionType: .scaleSpeed2)
+    configuration.registerUnitConversion(address: addressSpeedConstraintDPValue10, unitConversionType: .scaleSpeed2)
+    configuration.registerUnitConversion(address: addressSpeedConstraintDPValue11, unitConversionType: .scaleSpeed2)
+    configuration.registerUnitConversion(address: addressSpeedConstraintDPValue12, unitConversionType: .scaleSpeed2)
+    configuration.registerUnitConversion(address: addressSpeedConstraintDPValue13, unitConversionType: .scaleSpeed2)
+    configuration.registerUnitConversion(address: addressSpeedConstraintDPValue14, unitConversionType: .scaleSpeed2)
+    configuration.registerUnitConversion(address: addressSpeedConstraintDPValue15, unitConversionType: .scaleSpeed2)
+
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType0)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue0)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType1)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue1)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType2)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue2)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType3)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue3)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType4)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue4)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType5)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue5)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType6)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue6)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType7)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue7)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType8)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue8)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType9)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue9)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType10)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue10)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType11)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue11)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType12)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue12)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType13)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue13)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType14)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue14)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType15)
+    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue15)
+
+    configuration.registerUnitConversion(address: addressSpeedConstraintDNValue0, unitConversionType: .scaleSpeed2)
+    configuration.registerUnitConversion(address: addressSpeedConstraintDNValue1, unitConversionType: .scaleSpeed2)
+    configuration.registerUnitConversion(address: addressSpeedConstraintDNValue2, unitConversionType: .scaleSpeed2)
+    configuration.registerUnitConversion(address: addressSpeedConstraintDNValue3, unitConversionType: .scaleSpeed2)
+    configuration.registerUnitConversion(address: addressSpeedConstraintDNValue4, unitConversionType: .scaleSpeed2)
+    configuration.registerUnitConversion(address: addressSpeedConstraintDNValue5, unitConversionType: .scaleSpeed2)
+    configuration.registerUnitConversion(address: addressSpeedConstraintDNValue6, unitConversionType: .scaleSpeed2)
+    configuration.registerUnitConversion(address: addressSpeedConstraintDNValue7, unitConversionType: .scaleSpeed2)
+    configuration.registerUnitConversion(address: addressSpeedConstraintDNValue8, unitConversionType: .scaleSpeed2)
+    configuration.registerUnitConversion(address: addressSpeedConstraintDNValue9, unitConversionType: .scaleSpeed2)
+    configuration.registerUnitConversion(address: addressSpeedConstraintDNValue10, unitConversionType: .scaleSpeed2)
+    configuration.registerUnitConversion(address: addressSpeedConstraintDNValue11, unitConversionType: .scaleSpeed2)
+    configuration.registerUnitConversion(address: addressSpeedConstraintDNValue12, unitConversionType: .scaleSpeed2)
+    configuration.registerUnitConversion(address: addressSpeedConstraintDNValue13, unitConversionType: .scaleSpeed2)
+    configuration.registerUnitConversion(address: addressSpeedConstraintDNValue14, unitConversionType: .scaleSpeed2)
+    configuration.registerUnitConversion(address: addressSpeedConstraintDNValue15, unitConversionType: .scaleSpeed2)
+
+
     if !memorySpacesInitialized {
       resetToFactoryDefaults()
     }
@@ -345,6 +512,70 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
   internal var addressSignalSetState29EventId       = 0
   internal var addressSignalSetState30EventId       = 0
   internal var addressSignalSetState31EventId       = 0
+  internal var addressSpeedConstraintDPType0        = 0
+  internal var addressSpeedConstraintDPValue0       = 0
+  internal var addressSpeedConstraintDPType1        = 0
+  internal var addressSpeedConstraintDPValue1       = 0
+  internal var addressSpeedConstraintDPType2        = 0
+  internal var addressSpeedConstraintDPValue2       = 0
+  internal var addressSpeedConstraintDPType3        = 0
+  internal var addressSpeedConstraintDPValue3       = 0
+  internal var addressSpeedConstraintDPType4        = 0
+  internal var addressSpeedConstraintDPValue4       = 0
+  internal var addressSpeedConstraintDPType5        = 0
+  internal var addressSpeedConstraintDPValue5       = 0
+  internal var addressSpeedConstraintDPType6        = 0
+  internal var addressSpeedConstraintDPValue6       = 0
+  internal var addressSpeedConstraintDPType7        = 0
+  internal var addressSpeedConstraintDPValue7       = 0
+  internal var addressSpeedConstraintDPType8        = 0
+  internal var addressSpeedConstraintDPValue8       = 0
+  internal var addressSpeedConstraintDPType9        = 0
+  internal var addressSpeedConstraintDPValue9       = 0
+  internal var addressSpeedConstraintDPType10       = 0
+  internal var addressSpeedConstraintDPValue10      = 0
+  internal var addressSpeedConstraintDPType11       = 0
+  internal var addressSpeedConstraintDPValue11      = 0
+  internal var addressSpeedConstraintDPType12       = 0
+  internal var addressSpeedConstraintDPValue12      = 0
+  internal var addressSpeedConstraintDPType13       = 0
+  internal var addressSpeedConstraintDPValue13      = 0
+  internal var addressSpeedConstraintDPType14       = 0
+  internal var addressSpeedConstraintDPValue14      = 0
+  internal var addressSpeedConstraintDPType15       = 0
+  internal var addressSpeedConstraintDPValue15      = 0
+  internal var addressSpeedConstraintDNType0        = 0
+  internal var addressSpeedConstraintDNValue0       = 0
+  internal var addressSpeedConstraintDNType1        = 0
+  internal var addressSpeedConstraintDNValue1       = 0
+  internal var addressSpeedConstraintDNType2        = 0
+  internal var addressSpeedConstraintDNValue2       = 0
+  internal var addressSpeedConstraintDNType3        = 0
+  internal var addressSpeedConstraintDNValue3       = 0
+  internal var addressSpeedConstraintDNType4        = 0
+  internal var addressSpeedConstraintDNValue4       = 0
+  internal var addressSpeedConstraintDNType5        = 0
+  internal var addressSpeedConstraintDNValue5       = 0
+  internal var addressSpeedConstraintDNType6        = 0
+  internal var addressSpeedConstraintDNValue6       = 0
+  internal var addressSpeedConstraintDNType7        = 0
+  internal var addressSpeedConstraintDNValue7       = 0
+  internal var addressSpeedConstraintDNType8        = 0
+  internal var addressSpeedConstraintDNValue8       = 0
+  internal var addressSpeedConstraintDNType9        = 0
+  internal var addressSpeedConstraintDNValue9       = 0
+  internal var addressSpeedConstraintDNType10       = 0
+  internal var addressSpeedConstraintDNValue10      = 0
+  internal var addressSpeedConstraintDNType11       = 0
+  internal var addressSpeedConstraintDNValue11      = 0
+  internal var addressSpeedConstraintDNType12       = 0
+  internal var addressSpeedConstraintDNValue12      = 0
+  internal var addressSpeedConstraintDNType13       = 0
+  internal var addressSpeedConstraintDNValue13      = 0
+  internal var addressSpeedConstraintDNType14       = 0
+  internal var addressSpeedConstraintDNValue14      = 0
+  internal var addressSpeedConstraintDNType15       = 0
+  internal var addressSpeedConstraintDNValue15      = 0
 
   private var configuration : OpenLCBMemorySpace
   
@@ -368,7 +599,7 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
       return SwitchBoardItemType(rawValue: configuration.getUInt16(address: addressItemType)!)!
     }
     set(value) {
-      configuration.setUInt(address: addressPanelId, value: value.rawValue)
+      configuration.setUInt(address: addressItemType, value: value.rawValue)
     }
   }
 
@@ -539,7 +770,7 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
       return SensorType(rawValue: configuration.getUInt8(address: addressSensorType)!)!
     }
     set(value) {
-      configuration.setUInt(address: addressTrackGradient, value: value.rawValue)
+      configuration.setUInt(address: addressSensorType, value: value.rawValue)
     }
   }
 
@@ -593,7 +824,7 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
       return configuration.getUInt64(address: addressSensorLocationServicesEventId)!
     }
     set(value) {
-      configuration.setUInt(address: addressSensorDeactivatedEventId, value: value)
+      configuration.setUInt(address: addressSensorLocationServicesEventId, value: value)
     }
   }
 
@@ -659,20 +890,39 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
   
   override internal func customizeDynamicCDI(cdi:String) -> String {
  
-    var result = SwitchBoardItemType.insertMap(cdi: cdi)
-    result = Orientation.insertMap(cdi: result)
-    result = BlockDirection.insertMap(cdi: result)
-    result = YesNo.insertMap(cdi: result)
-    result = TrackElectrificationType.insertMap(cdi: result)
-    result = TrackGauge.insertMap(cdi: result, layout: layoutNode)
+    var result = cdi
 
-    if let app = networkLayer?.myTrainsNode {
-      result = app.insertPanelMap(cdi: result, layoutId: layoutNodeId)
-      result = app.insertGroupMap(cdi: result, layoutId: layoutNodeId)
-    }
-    
     var sub = ""
     
+    if itemType.isGroup {
+      
+      sub += "<group>\n"
+      sub += "  <name>Track Configuration</name>\n"
+
+      sub += "  <float size='4'>\n"
+      sub += "    <name>Track Gradient %</name>\n"
+      sub += "    <min>0.0</min>\n"
+      sub += "    <max>100.0</max>\n"
+      sub += "  </float>\n"
+
+      sub += "  <int size='1'>\n"
+      sub += "    <name>Track Gauge</name>\n"
+      sub += "    \(CDI.TRACK_GAUGE)"
+      sub += "  </int>\n"
+
+      sub += "  \(CDI.ROUTE_DIMENSION)"
+
+      sub += "</group>\n"
+
+    }
+    else {
+      sub += "<group offset='\(69)'/>\n"
+    }
+
+    result = result.replacingOccurrences(of: CDI.SBI_TRACK_CONFIGURATION, with: sub)
+
+    sub = ""
+
     if itemType.numberOfDimensionsRequired > 0 {
       
       for route in 1 ... itemType.numberOfDimensionsRequired {
@@ -845,18 +1095,216 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     }
 
     result = result.replacingOccurrences(of: CDI.SIGNAL, with: sub)
+    
+    sub = ""
+    
+    if itemType.isGroup {
 
+      sub += "<group>\n"
+      sub += "  <name>Speed Constraints</name>\n"
+
+      sub += "<group replication='16'>\n"
+      
+      sub += "  <name>Direction Previous</name>\n"
+      sub += "  <description>Defines the custom speed constraints for this block in the direction previous. These constraints will override any constraint of the same type set in the layout configuration.</description>\n"
+      sub += "  <repname>Constraint #</repname>\n"
+
+      sub += "<int size='2'>\n"
+      sub += "  <name>Speed Constraint Type</name>\n"
+      sub += "  <default>0</default>\n"
+      sub += "  %%SPEED_CONSTRAINT_TYPE%%\n"
+      sub += "</int>\n"
+
+      sub += "<float size='2'>\n"
+      sub += "  <name>Speed Constraint Value (%%SCALE_SPEED_UNITS%%)</name>\n"
+      sub += "  <default>0.0</default>\n"
+      sub += "  <min>0.0</min>\n"
+      sub += "</float>\n"
+
+      sub += "</group>\n"
+
+      sub += "<group replication='16'>\n"
+      
+      sub += "  <name>Direction Next</name>\n"
+      sub += "  <description>Defines the custom speed constraints for this block in the direction next. These constraints will override any constraint of the same type set in the layout configuration.</description>\n"
+      sub += "  <repname>Constraint #</repname>\n"
+
+      sub += "<int size='2'>\n"
+      sub += "  <name>Speed Constraint Type</name>\n"
+      sub += "  <default>0</default>\n"
+      sub += "  %%SPEED_CONSTRAINT_TYPE%%\n"
+      sub += "</int>\n"
+
+      sub += "<float size='2'>\n"
+      sub += "  <name>Speed Constraint Value (%%SCALE_SPEED_UNITS%%)</name>\n"
+      sub += "  <default>0.0</default>\n"
+      sub += "  <min>0.0</min>\n"
+      sub += "</float>\n"
+
+      sub += "</group>\n"
+
+      sub += "</group>\n"
+
+    }
+    else {
+      sub += "<group offset='128'/>\n"
+    }
+    
+    result = result.replacingOccurrences(of: CDI.SPEED_CONSTRAINTS, with: sub)
+
+    sub = ""
+    
+    #if DEBUG
+    
+    sub += "<group>\n"
+    sub += "  <name>General Settings</name>\n"
+
+    sub += "<eventid>\n"
+    sub += "  <name>Switchboard Panel</name>\n"
+    sub += "    \(CDI.SWITCHBOARD_PANEL_NODES)"
+    sub += "</eventid>\n"
+
+    sub += "<int size='2'>\n"
+    sub += "  <name>Switchboard Item Type</name>\n"
+    sub += "  \(CDI.SWITCHBOARD_ITEM_TYPE)"
+    sub += "</int>\n"
+
+    sub += "<int size='2'>\n"
+    sub += "  <name>X Coordinate</name>\n"
+    sub += "  <min>1</min>\n"
+    sub += "  <max>65535</max>\n"
+    sub += "</int>\n"
+
+    sub += "<int size='2'>\n"
+    sub += "  <name>Y Coordinate</name>\n"
+    sub += "  <min>1</min>\n"
+    sub += "  <max>65535</max>\n"
+    sub += "</int>\n"
+
+    sub += "<int size='1'>\n"
+    sub += "  <name>Orientation</name>\n"
+    sub += "  \(CDI.ORIENTATION)\n"
+    sub += "</int>\n"
+
+    sub += "<eventid>\n"
+    sub += "  <name>Group</name>\n"
+    sub += "  \(CDI.SWITCHBOARD_GROUP_NODES)"
+    sub += "</eventid>\n"
+
+    sub += "</group>\n"
+
+    #else
+    sub += "<group offset='23'/>\n"
+    #endif
+
+    result = result.replacingOccurrences(of: CDI.SBI_GENERAL_SETTINGS, with: sub)
+
+    sub = ""
+    
+    if itemType.isGroup {
+      
+      sub += "<group>\n"
+      sub += "  <name>Block Configuration</name>\n"
+        
+      sub += "  <int size='1'>\n"
+      sub += "    <name>Directionality</name>\n"
+      sub += "    \(CDI.DIRECTIONALITY)"
+      sub += "  </int>\n"
+        
+      sub += "  <int size='1'>\n"
+      sub += "    <name>Allow Shunt</name>\n"
+      sub += "    \(CDI.YES_NO)"
+      sub += "  </int>\n"
+        
+      sub += "  <int size='1'>\n"
+      sub += "    <name>Track Electrification Type</name>\n"
+      sub += "    \(CDI.TRACK_ELECTRIFICATION_TYPE)"
+      sub += "  </int>\n"
+        
+      sub += "  <int size='1'>\n"
+      sub += "    <name>Is Critical Section</name>\n"
+      sub += "    \(CDI.YES_NO)"
+      sub += "  </int>\n"
+        
+      sub += "  <int size='1'>\n"
+      sub += "    <name>Is Hidden Section</name>\n"
+      sub += "    \(CDI.YES_NO)"
+      sub += "  </int>\n"
+        
+      sub += "</group>\n"
+
+    }
+    else {
+      sub += "<group offset='5'/>\n"
+    }
+
+    result = result.replacingOccurrences(of: CDI.SBI_BLOCK_CONFIGURATION, with: sub)
+    
+    sub = ""
+
+    if itemType.isGroup {
+      
+      sub += "<group>\n"
+      sub += "  <name>Block Events</name>\n"
+        
+      sub += "  <eventid>\n"
+      sub += "    <name>Enter Detection Zone Event ID</name>\n"
+      sub += "  </eventid>\n"
+        
+      sub += "  <eventid>\n"
+      sub += "    <name>Exit Detection Zone Event ID</name>\n"
+      sub += "  </eventid>\n"
+
+      sub += "  <eventid>\n"
+      sub += "    <name>Enter Transponding Zone Event ID</name>\n"
+      sub += "  </eventid>\n"
+        
+      sub += "  <eventid>\n"
+      sub += "    <name>Exit Transponding Zone Event ID</name>\n"
+      sub += "  </eventid>\n"
+
+      sub += "  <eventid>\n"
+      sub += "    <name>Track Fault Event ID</name>\n"
+      sub += "  </eventid>\n"
+
+      sub += "  <eventid>\n"
+      sub += "    <name>Track Fault Cleared Event ID</name>\n"
+      sub += "  </eventid>\n"
+
+      sub += "  <eventid>\n"
+      sub += "    <name>Location Services Event ID</name>\n"
+      sub += "  </eventid>\n"
+
+      sub += "</group>\n"
+
+    }
+    else {
+      sub += "<group offset='56'/>\n"
+    }
+
+    result = result.replacingOccurrences(of: CDI.SBI_BLOCK_EVENTS, with: sub)
+
+    sub = ""
+    
+    result = SwitchBoardItemType.insertMap(cdi: result)
+    result = Orientation.insertMap(cdi: result)
+    result = BlockDirection.insertMap(cdi: result)
+    result = YesNo.insertMap(cdi: result)
+    result = TrackElectrificationType.insertMap(cdi: result)
+    result = TrackGauge.insertMap(cdi: result, layout: layoutNode)
     result = TurnoutMotorType.insertMap(cdi: result)
-    
     result = SensorType.insertMap(cdi: result)
-    
     result = RouteDirection.insertMap(cdi: result)
-    
     result = SignalType.insertMap(cdi: result, countryCode: layoutNode!.countryCode)
-    
-    result = result.replacingOccurrences(of: CDI.ACTUAL_LENGTH_UNITS, with: appNode!.unitsActualLength.symbol)
-    
-    result = result.replacingOccurrences(of: CDI.TIME_UNITS, with: appNode!.unitsTime.symbol)
+    result = SpeedConstraintType.insertMap(cdi: result)
+
+    if let appNode {
+      result = appNode.insertPanelMap(cdi: result, layoutId: layoutNodeId)
+      result = appNode.insertGroupMap(cdi: result, layoutId: layoutNodeId)
+      result = result.replacingOccurrences(of: CDI.ACTUAL_LENGTH_UNITS, with: appNode.unitsActualLength.symbol)
+      result = result.replacingOccurrences(of: CDI.SCALE_SPEED_UNITS, with: appNode.unitsScaleSpeed.symbol)
+      result = result.replacingOccurrences(of: CDI.TIME_UNITS, with: appNode.unitsTime.symbol)
+    }
 
     return result
     

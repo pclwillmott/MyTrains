@@ -211,9 +211,9 @@ public enum SwitchBoardItemType : UInt16 {
   ]
   
   private static let titles = [
-    String(localized: "Straight", comment: "This is used to describe a piece of track."),
-    String(localized: "Curve", comment: "This is used to describe a piece of track."),
-    String(localized: "Long Curve", comment: "This is used to describe a piece of track."),
+    String(localized: "Straight Track", comment: "This is used to describe a piece of track."),
+    String(localized: "Curved Track", comment: "This is used to describe a piece of track."),
+    String(localized: "Long Curved Track", comment: "This is used to describe a piece of track."),
     String(localized: "Turnout Right", comment: "This is used to describe a piece of track."),
     String(localized: "Turnout Left", comment: "This is used to describe a piece of track."),
     String(localized: "Cross", comment: "This is used to describe a piece of track."),
@@ -224,7 +224,7 @@ public enum SwitchBoardItemType : UInt16 {
     String(localized: "Right Curved Turnout", comment: "This is used to describe a piece of track."),
     String(localized: "Single Slip", comment: "This is used to describe a piece of track."),
     String(localized: "Double Slip", comment: "This is used to describe a piece of track."),
-    String(localized: "Buffer", comment: "This is used to describe a piece of track."),
+    String(localized: "Buffer Stop", comment: "This is used to describe a piece of track."),
     String(localized: "Block", comment: "This is used to describe a piece of track."),
     String(localized: "Sensor", comment: "This is used to describe a switchboard item."),
     String(localized: "Link", comment: "This is used to describe a switchboard item."),

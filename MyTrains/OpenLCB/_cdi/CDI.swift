@@ -57,5 +57,12 @@ enum CDI {
   static let SIGNAL_TYPE                = "%%SIGNAL_TYPE%%"
   static let SIGNAL                     = "%%SIGNAL%%"
   static let ROUTE_DIRECTION            = "%%ROUTE_DIRECTION%%"
+  static let SPEED_CONSTRAINT_TYPE      = "%%SPEED_CONSTRAINT_TYPE%%"
+  static let SCALE_SPEED_UNITS          = "%%SCALE_SPEED_UNITS%%"
+  static let SPEED_CONSTRAINTS          = "%%SPEED_CONSTRAINTS%%"
+  static let SBI_GENERAL_SETTINGS       = "%%SBI_GENERAL_SETTINGS%%"
+  static let SBI_BLOCK_CONFIGURATION    = "%%SBI_BLOCK_CONFIGURATION%%"
+  static let SBI_BLOCK_EVENTS           = "%%SBI_BLOCK_EVENTS%%"
+  static let SBI_TRACK_CONFIGURATION    = "%%SBI_TRACK_CONFIGURATION%%"
 }
 

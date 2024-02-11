@@ -228,19 +228,27 @@ class CDIDataView: CDIView {
         
         let format = floatFormat ?? "%f"
 
+        let formatter = NumberFormatter()
+        
+        formatter.usesGroupingSeparator = true
+        formatter.groupingSize = 3
+        formatter.alwaysShowsDecimalSeparator = false
+        formatter.minimumFractionDigits = 0
+        formatter.maximumFractionDigits = 8
+
         switch elementSize {
         case 2:
           let word = UInt16(floatValue & 0xffff)
           let float16 : float16_t = float16_t(v: word)
           let float32 = Float(float16: float16)
-          return String(format: format, float32)
+          return formatter.string(from: float32 as NSNumber)!
         case 4:
           let dword = UInt32(floatValue & 0xffffffff)
           let float32 = Float32(bitPattern: dword)
-          return String(format: format, float32)
+          return formatter.string(from: float32 as NSNumber)!
         case 8:
           let float64 = Float64(bitPattern: floatValue)
-          return String(format: format, float64)
+          return formatter.string(from: float64 as NSNumber)!
         default:
           print("CDIDataView.setString: bad float size: \(elementSize)")
         }

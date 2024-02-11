@@ -42,6 +42,25 @@
   %%ALL_TRACK_GAUGES%%
 </int>
 
+<group replication='16'>
+<name>Speed Constraints</name>
+<description>Defines the default speed constraints for this layout. These constraints will apply unless overriden by a constraint set on a particular block or turnout.</description>
+<repname>Constraint #</repname>
+
+<int size='2'>
+  <name>Speed Constraint Type</name>
+  <default>0</default>
+  %%SPEED_CONSTRAINT_TYPE%%
+</int>
+
+<float size='2'>
+  <name>Speed Constraint Value (%%SCALE_SPEED_UNITS%%)</name>
+  <default>0.0</default>
+  <min>0.0</min>
+</float>
+
+</group>
+
 </segment>
 
 %%VIRTUAL_NODE_CONFIG%%

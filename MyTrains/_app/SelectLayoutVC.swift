@@ -104,18 +104,12 @@ class SelectLayoutVC: NSViewController, NSWindowDelegate, MyTrainsAppDelegate {
   
   // MARK: MyTrainsAppDelete Methods
  
-  func panelListUpdated(panelList: [PanelListItem]) {
-  }
-
-  func switchboardItemListUpdated(switchboardItemList: [SwitchboardItemListItem]) {
-  }
-  
-  func layoutListUpdated(layoutList: [LayoutListItem]) {
-
+  @objc func layoutListUpdated(appNode:OpenLCBNodeMyTrains) {
+    
     cboLayout.removeAllItems()
     self.layoutList.removeAll()
     
-    for item in layoutList {
+    for (key, item) in appNode.layoutList {
       if item.masterNodeId == appNodeId! || item.layoutState == .activated {
         self.layoutList.append(item)
         cboLayout.addItem(withObjectValue: item.layoutName)
@@ -124,9 +118,9 @@ class SelectLayoutVC: NSViewController, NSWindowDelegate, MyTrainsAppDelegate {
         }
       }
     }
-
+    
   }
-  
+
   // MARK: Controls
   
   let boxSelectLayout = NSBox()

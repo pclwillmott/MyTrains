@@ -580,10 +580,10 @@
                                 </view>
                             </box>
                             <box fixedFrame="YES" title="Box" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="ELL-xv-dmg">
-                                <rect key="frame" x="-3" y="3" width="529" height="73"/>
+                                <rect key="frame" x="-3" y="3" width="365" height="73"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <view key="contentView" id="TZD-lO-klV">
-                                    <rect key="frame" x="4" y="5" width="521" height="65"/>
+                                    <rect key="frame" x="4" y="5" width="357" height="65"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </box>
@@ -632,6 +632,17 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fcQ-j7-sqo">
+                                <rect key="frame" x="379" y="30" width="82" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" title="Convert" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="KDp-qa-AWZ">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="btnConvertAction:" target="XfG-lQ-9wD" id="ZMH-aQ-hll"/>
+                                </connections>
+                            </button>
                         </subviews>
                     </view>
                     <connections>

@@ -849,7 +849,7 @@
     "Brazil" : {
       "comment" : "This is the name of a country."
     },
-    "Buffer" : {
+    "Buffer Stop" : {
       "comment" : "This is used to describe a piece of track."
     },
     "c" : {
@@ -1478,9 +1478,6 @@
     "Cross" : {
       "comment" : "This is used to describe a piece of track."
     },
-    "Curve" : {
-      "comment" : "This is used to describe a piece of track."
-    },
     "Curve Squeal" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -1497,6 +1494,9 @@
           }
         }
       }
+    },
+    "Curved Track" : {
+      "comment" : "This is used to describe a piece of track."
     },
     "Custom Clock" : {
       "comment" : "Used to indicate a clock's type",
@@ -1601,7 +1601,7 @@
       }
     },
     "DCC Programmer Tool" : {
-      "comment" : "Used to create a default OpenLCB virtual name\nUsed for the DCC Programmer Tool menu item title",
+      "comment" : "Used for the DCC Programmer Tool menu item title\nUsed to create a default OpenLCB virtual name",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2995,7 +2995,7 @@
         }
       }
     },
-    "Long Curve" : {
+    "Long Curved Track" : {
       "comment" : "This is used to describe a piece of track."
     },
     "Long Whistle" : {
@@ -3159,6 +3159,18 @@
           }
         }
       }
+    },
+    "Maximum speed at any time" : {
+
+    },
+    "Maximum speed when restrictions apply" : {
+
+    },
+    "Maximum speed when shunting" : {
+
+    },
+    "Maximum speed when stop expected" : {
+
     },
     "Meters" : {
       "localizations" : {
@@ -3404,6 +3416,9 @@
           }
         }
       }
+    },
+    "No constraint selected" : {
+
     },
     "No Flow Control" : {
       "comment" : "Used to indicate that serial port does not use hardware flow control",
@@ -4433,9 +4448,6 @@
         }
       }
     },
-    "Straight" : {
-      "comment" : "This is used to describe a piece of track."
-    },
     "Straight Line" : {
       "comment" : "Used by combobox to select curve fitting method)",
       "localizations" : {
@@ -4452,6 +4464,9 @@
           }
         }
       }
+    },
+    "Straight Track" : {
+      "comment" : "This is used to describe a piece of track."
     },
     "Switch Board" : {
       "comment" : "Used for the Switch Board menu item title",
@@ -4858,7 +4873,7 @@
       "comment" : "This is the name of a country."
     },
     "Unknown" : {
-      "comment" : "Used to indicate the state of a turnout\nUsed to indicate that the type of something is unknown",
+      "comment" : "Used to indicate that the type of something is unknown\nUsed to indicate the state of a turnout",
       "localizations" : {
         "en" : {
           "stringUnit" : {

@@ -973,6 +973,18 @@
         }
       }
     },
+    "KDp-qa-AWZ.title" : {
+      "comment" : "Class = \"NSButtonCell\"; title = \"Convert\"; ObjectID = \"KDp-qa-AWZ\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Convert"
+          }
+        }
+      }
+    },
     "kIP-vf-haE.title" : {
       "comment" : "Class = \"NSMenuItem\"; title = \"Show Sidebar\"; ObjectID = \"kIP-vf-haE\";",
       "extractionState" : "extracted_with_value",

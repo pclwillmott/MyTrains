@@ -360,7 +360,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     var sorted : [(nodeId:UInt64, name:String)] = []
 
     for (nodeId, item) in layoutList {
-      if item.masterNodeId == nodeId {
+      if item.masterNodeId == self.nodeId {
         sorted.append((nodeId:nodeId, name:item.layoutName))
       }
     }
@@ -564,7 +564,8 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
               layoutListUpdated()
             }
             else {
-              layoutList[tempNodeId] = (masterNodeId:appNodeId!, layoutId:tempNodeId, layoutName:"", layoutState:layoutState)
+              let masterNodeId = UInt64(bigEndianData: message.payload)!
+              layoutList[tempNodeId] = (masterNodeId:masterNodeId, layoutId:tempNodeId, layoutName:"", layoutState:layoutState)
               networkLayer?.sendSimpleNodeInformationRequest(sourceNodeId: nodeId, destinationNodeId: tempNodeId)
             }
             

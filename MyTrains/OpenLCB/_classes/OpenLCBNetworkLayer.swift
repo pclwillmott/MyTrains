@@ -300,23 +300,11 @@ public class OpenLCBNetworkLayer : NSObject {
   }
   
   public func deleteNode(nodeId:UInt64) {
-    
-    for virtualNode in virtualNodes {
-      
-      if virtualNode.nodeId == nodeId {
-        
-        virtualNode.willDelete()
-        
-        deregisterNode(node: virtualNode)
-        
-        OpenLCBMemorySpace.deleteAllMemorySpaces(forNodeId: nodeId)
-        
-        break
-        
-      }
-      
+    if let virtualNode = virtualNodeLookup[nodeId] {
+      virtualNode.willDelete()
+      deregisterNode(node: virtualNode)
+      OpenLCBMemorySpace.deleteAllMemorySpaces(forNodeId: nodeId)
     }
-    
   }
   
   public func getThrottle() -> OpenLCBThrottle? {

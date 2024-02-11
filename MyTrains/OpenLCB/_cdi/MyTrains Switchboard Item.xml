@@ -12,122 +12,13 @@
 <segment space='253' origin='0'>
 <name>Switchboard Item Configuration</name>
 
-<group>
-  <name>General Settings</name>
+%%SBI_GENERAL_SETTINGS%%
 
-<eventid>
-  <name>Switchboard Panel</name>
-    %%SWITCHBOARD_PANEL_NODES%%
-</eventid>
+%%SBI_BLOCK_CONFIGURATION%%
 
-<int size='2'>
-  <name>Switchboard Item Type</name>
-  %%SWITCHBOARD_ITEM_TYPE%%
-</int>
+%%SBI_BLOCK_EVENTS%%
 
-<int size='2'>
-  <name>X Coordinate</name>
-  <min>1</min>
-  <max>65535</max>
-</int>
-
-<int size='2'>
-  <name>Y Coordinate</name>
-  <min>1</min>
-  <max>65535</max>
-</int>
-
-<int size='1'>
-  <name>Orientation</name>
-  %%ORIENTATION%%
-</int>
-</group>
-
-<group>
-  <name>Block Configuration</name>
-  
-  <eventid>
-    <name>Group</name>
-    %%SWITCHBOARD_GROUP_NODES%%
-  </eventid>
-  
-  <int size='1'>
-    <name>Directionality</name>
-    %%DIRECTIONALITY%%
-  </int>
-  
-  <int size='1'>
-    <name>Allow Shunt</name>
-    %%YES_NO%%
-  </int>
-  
-  <int size='1'>
-    <name>Track Electrification Type</name>
-    %%TRACK_ELECTRIFICATION_TYPE%%
-  </int>
-  
-  <int size='1'>
-    <name>Is Critical Section</name>
-    %%YES_NO%%
-  </int>
-  
-  <int size='1'>
-    <name>Is Hidden Section</name>
-    %%YES_NO%%
-  </int>
-  
-</group>
-
-<group>
-  <name>Block Events</name>
-  
-  <eventid>
-    <name>Enter Detection Zone Event ID</name>
-  </eventid>
-  
-  <eventid>
-    <name>Exit Detection Zone Event ID</name>
-  </eventid>
-
-  <eventid>
-    <name>Enter Transponding Zone Event ID</name>
-  </eventid>
-  
-  <eventid>
-    <name>Exit Transponding Zone Event ID</name>
-  </eventid>
-
-  <eventid>
-    <name>Track Fault Event ID</name>
-  </eventid>
-
-  <eventid>
-    <name>Track Fault Cleared Event ID</name>
-  </eventid>
-
-  <eventid>
-    <name>Location Services Event ID</name>
-  </eventid>
-
-</group>
-
-<group>
-  <name>Track Configuration</name>
-
-  <float size='4'>
-    <name>Track Gradient %</name>
-    <min>0.0</min>
-    <max>100.0</max>
-  </float>
-
-  <int size='1'>
-    <name>Track Gauge</name>
-    %%TRACK_GAUGE%%
-  </int>
-
-  %%ROUTE_DIMENSION%%
-
-</group>
+%%SBI_TRACK_CONFIGURATION%%
 
 %%TURNOUT_SWITCHES%%
 
@@ -136,6 +27,8 @@
 %%LINK%%
 
 %%SIGNAL%%
+
+%%SPEED_CONSTRAINTS%%
 
 </segment>
 
