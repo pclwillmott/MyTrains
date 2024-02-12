@@ -185,6 +185,9 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
       self.layoutNodeId = layoutNodeId
     }
     
+    eventsConsumed.insert(.identifyMyTrainsSwitchboardItems)
+    eventsProduced.insert(.nodeIsASwitchboardItem)
+    
     configuration.delegate = self
 
     memorySpaces[configuration.space] = configuration
@@ -877,10 +880,10 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
 
   internal override func resetToFactoryDefaults() {
 
-    super.resetToFactoryDefaults()
- 
     configuration.zeroMemory()
     
+    super.resetToFactoryDefaults()
+ 
     xPos = 1
     yPos = 1
     
@@ -888,6 +891,40 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
 
   }
   
+  internal override func resetReboot() {
+    
+    super.resetReboot()
+    
+    let consumerAddresses : [Int] = [
+      addressEnterDetectionZoneEventId,
+      addressExitDetectionZoneEventId,
+      addressEnterTranspondingZoneEventId,
+      addressExitTranspondingZoneEventId,
+      addressTrackFaultEventId,
+      addressTrackFaultClearedEventId,
+      addressLocationServicesEventId,
+    ]
+    
+    for address in consumerAddresses {
+      if let eventId = configuration.getUInt64(address: address), eventId != 0 {
+        
+      }
+    }
+  }
+
+  internal override func completeStartUp() {
+    sendNodeIsASwitchboardItemEvent()
+  }
+  
+  internal func sendNodeIsASwitchboardItemEvent() {
+    
+    var payload = layoutNodeId.nodeIdBigEndianData
+    payload.append(contentsOf: itemType.rawValue.bigEndianData)
+    
+    networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .nodeIsASwitchboardItem, payload: payload)
+
+  }
+
   override internal func customizeDynamicCDI(cdi:String) -> String {
  
     var result = cdi
@@ -1310,28 +1347,6 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     
   }
 
-  internal override func resetReboot() {
-    
-    super.resetReboot()
-    
-    networkLayer?.sendIdentifyProducer(sourceNodeId: nodeId, event: .identifyMyTrainsSwitchboardItems)
-    
-    networkLayer?.sendIdentifyConsumer(sourceNodeId: nodeId, event: .nodeIsASwitchboardItem)
-    
-    sendNodeIsASwitchboardItemEvent()
-    
-  }
-  
-  internal func sendNodeIsASwitchboardItemEvent() {
-    
-    var payload = layoutNodeId.bigEndianData
-    payload.removeFirst(2)
-    payload.append(contentsOf: itemType.rawValue.bigEndianData)
-    
-    networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .nodeIsASwitchboardItem, payload: payload)
-
-  }
-
  // MARK: Public Methods
   
   public func getDimension(routeNumber:Int) -> Double?
@@ -1413,14 +1428,6 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     }
   }
 
-  public override func start() {
-    super.start()
-  }
-  
-  public override func stop() {
-    super.stop()
-  }
-
   // MARK: OpenLCBNetworkLayerDelegate Methods
   
   public override func openLCBMessageReceived(message: OpenLCBMessage) {
@@ -1429,45 +1436,13 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     
     switch message.messageTypeIndicator {
      
-    case .identifyProducer:
-      
-      if let eventId = message.eventId, let event = OpenLCBWellKnownEvent(rawValue: eventId) {
-          
-        switch event {
-        case .nodeIsASwitchboardItem:
-          networkLayer?.sendProducerIdentified(sourceNodeId: nodeId, wellKnownEvent: .nodeIsASwitchboardItem, validity: .valid)
-        default:
-          break
-        }
-
-      }
-
-    case .identifyConsumer:
-
-      if let eventId = message.eventId, let event = OpenLCBWellKnownEvent(rawValue: eventId) {
-      
-        switch event {
-        case .identifyMyTrainsSwitchboardItems:
-          networkLayer?.sendConsumerIdentified(sourceNodeId: nodeId, wellKnownEvent: .identifyMyTrainsSwitchboardItems, validity: .valid)
-        default:
-          break
-        }
-        
-      }
-
     case .producerConsumerEventReport:
       
-      if let event = OpenLCBWellKnownEvent(rawValue: message.eventId!) {
+      if let eventId = message.eventId, let event = OpenLCBWellKnownEvent(rawValue: eventId) {
       
         switch event {
         case .identifyMyTrainsSwitchboardItems:
-          
-          var payload = layoutNodeId.bigEndianData
-          payload.removeFirst(2)
-          payload.append(contentsOf: itemType.rawValue.bigEndianData)
-          
-          networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .nodeIsASwitchboardItem, payload: payload)
-
+          sendNodeIsASwitchboardItemEvent()
         default:
           break
         }

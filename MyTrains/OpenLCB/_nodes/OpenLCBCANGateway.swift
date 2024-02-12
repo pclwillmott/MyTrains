@@ -572,7 +572,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
           }
         }
         
-        if (message.isAddressPresent || message.messageTypeIndicator == .datagram) && message.destinationNodeId == nil, let alias = message.destinationNIDAlias {
+        if (message.messageTypeIndicator.isAddressPresent || message.messageTypeIndicator == .datagram) && message.destinationNodeId == nil, let alias = message.destinationNIDAlias {
           if let id = aliasLookup[alias] {
        //     print("dest id found: \(id.toHexDotFormat(numberOfBytes: 6))")
             message.destinationNodeId = id
@@ -721,7 +721,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
           
           message.sourceNIDAlias = alias
           
-          if (message.messageTypeIndicator == .datagram ) || message.isAddressPresent, let destinationNodeId = message.destinationNodeId {
+          if (message.messageTypeIndicator == .datagram ) || message.messageTypeIndicator.isAddressPresent, let destinationNodeId = message.destinationNodeId {
             
             if let alias = nodeIdLookup[destinationNodeId] {
          //     print("dest alias found: \(destinationNodeId.toHexDotFormat(numberOfBytes: 6)) - \(alias.toHex(numberOfDigits: 3))")
@@ -836,7 +836,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
             }
             
           }
-          else if message.isAddressPresent {
+          else if message.messageTypeIndicator.isAddressPresent {
             
             if let frame = LCCCANFrame(message: message) {
               
@@ -924,7 +924,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     
     if let sourceNIDAlias = nodeIdLookup[sourceNodeId] {
       
-      let message = OpenLCBMessage(messageTypeIndicator: .verifyNodeIDNumberAddressed)
+      let message = OpenLCBMessage(messageTypeIndicator: .verifyNodeIDAddressed)
 
       message.sourceNIDAlias = sourceNIDAlias
       

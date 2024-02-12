@@ -23,7 +23,6 @@ public enum OpenLCBWellKnownEvent : UInt64 {
   case linkErrorCode2                      = 0x010000000000fd02
   case linkErrorCode3                      = 0x010000000000fd03
   case linkErrorCode4                      = 0x010000000000fd04
-  case locoNetMessage                      = 0x0181000000000000
 
   // Not automatically routed
   
@@ -37,6 +36,7 @@ public enum OpenLCBWellKnownEvent : UInt64 {
   case alternateClock1                     = 0x0101000001020000
   case alternateClock2                     = 0x0101000001030000
   case locationServicesReport              = 0x0102000000000000
+  case locoNetMessage                      = 0x0181000000000000
   case nodeIsALocoNetGateway               = 0x050101017b00ffff
   case myTrainsLayoutActivated             = 0x050101017b00fffe
   case myTrainsLayoutDeactivated           = 0x050101017b00fffd
@@ -54,4 +54,10 @@ public enum OpenLCBWellKnownEvent : UInt64 {
   case trainMoveComplete                   = 0x1001000000000000 // ?
   case trainMoveUpdate                     = 0x1002000000000000 // ?
 
+  // MARK: Public Properties
+  
+  public var isAutomaticallyRouted : Bool {
+    return (self.rawValue & 0xffff000000000000) == 0x0100000000000000
+  }
+  
 }

@@ -139,6 +139,10 @@ extension UInt64 {
     }
     return data
   }
+  
+  public var nodeIdBigEndianData : [UInt8] {
+    return [UInt8](self.bigEndianData.suffix(6))
+  }
 
 }
 

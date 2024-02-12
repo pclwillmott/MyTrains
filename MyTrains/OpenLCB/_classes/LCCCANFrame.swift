@@ -79,14 +79,14 @@ public class LCCCANFrame : NSObject {
     
     data = []
     
-    if message.isAddressPresent {
+    if message.messageTypeIndicator.isAddressPresent {
       var temp = message.destinationNIDAlias! & 0x0fff
       temp |= UInt16(OpenLCBCANFrameFlag.onlyFrame.rawValue & 0x0f) << 12
       data.append(UInt8(temp >> 8))
       data.append(UInt8(temp & 0xff))
     }
     
-    if message.isEventPresent {
+    if message.messageTypeIndicator.isEventPresent {
       var mask : UInt64 = 0xff00000000000000
       let eventId = message.eventId!
       for index in 0...7 {
@@ -161,14 +161,14 @@ public class LCCCANFrame : NSObject {
     
     data = []
     
-    if message.isAddressPresent {
+    if message.messageTypeIndicator.isAddressPresent {
       var temp = message.destinationNIDAlias! & 0x0fff
       temp |= UInt16(flags.rawValue & 0x0f) << 12
       data.append(UInt8(temp >> 8))
       data.append(UInt8(temp & 0xff))
     }
     
-    if message.isEventPresent {
+    if message.messageTypeIndicator.isEventPresent {
       var mask : UInt64 = 0xff00000000000000
       let eventId = message.eventId!
       for index in 0...7 {
@@ -327,7 +327,7 @@ public class LCCCANFrame : NSObject {
     guard frameType == .openLCBMessage, let openLCBMessageCANFrameType, openLCBMessageCANFrameType == .globalAndAddressedMTI else {
       return nil
     }
-    return OpenLCBMTI(rawValue: UInt16((header >> 12) & 0xfff))!
+    return OpenLCBMTI(rawValue: UInt16((header >> 12) & 0xfff))
   }
   
   public var variableField : UInt32 {

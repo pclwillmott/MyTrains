@@ -23,6 +23,9 @@ public class SwitchboardPanelNode : OpenLCBNodeVirtual {
     
     virtualNodeType = MyTrainsVirtualNodeType.switchboardPanelNode
     
+    eventsConsumed.insert(.identifyMyTrainsSwitchboardPanels)
+    eventsProduced.insert(.nodeIsASwitchboardPanel)
+    
     configuration.delegate = self
 
     memorySpaces[configuration.space] = configuration
@@ -73,6 +76,8 @@ public class SwitchboardPanelNode : OpenLCBNodeVirtual {
 
     super.resetToFactoryDefaults()
     
+    configuration.zeroMemory()
+    
     numberOfColumns = 30
     numberOfRows    = 30
     
@@ -80,44 +85,14 @@ public class SwitchboardPanelNode : OpenLCBNodeVirtual {
 
   }
   
-  public override func variableChanged(space: OpenLCBMemorySpace, address: Int) {
-    
-    if space.space == configuration.space {
-      
-      switch address {
-      default:
-        break
-      }
-
-    }
-
+  internal func sendNodeIsASwitchboardPanel() {
+    networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .nodeIsASwitchboardPanel, payload: layoutNodeId.nodeIdBigEndianData)
   }
   
-  internal override func resetReboot() {
-    
-    super.resetReboot()
-    
-    networkLayer?.sendIdentifyProducer(sourceNodeId: nodeId, event: .identifyMyTrainsSwitchboardPanels)
-    
-    networkLayer?.sendIdentifyConsumer(sourceNodeId: nodeId, event: .nodeIsASwitchboardPanel)
-    
-    var payload = layoutNodeId.bigEndianData
-    payload.removeFirst(2)
-    
-    networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .nodeIsASwitchboardPanel, payload: payload)
-
-  }
-
- // MARK: Public Methods
-  
-  public override func start() {
-    super.start()
+  override internal func completeStartUp() {
+    sendNodeIsASwitchboardPanel()
   }
   
-  public override func stop() {
-    super.stop()
-  }
-
   // MARK: OpenLCBNetworkLayerDelegate Methods
   
   public override func openLCBMessageReceived(message: OpenLCBMessage) {
@@ -126,67 +101,17 @@ public class SwitchboardPanelNode : OpenLCBNodeVirtual {
     
     switch message.messageTypeIndicator {
      
-    case .identifyProducer:
-      
-      if let eventId = message.eventId {
-        
-        if let event = OpenLCBWellKnownEvent(rawValue: eventId) {
-          
-          switch event {
-            
-          case .nodeIsASwitchboardPanel:
-            
-            networkLayer?.sendProducerIdentified(sourceNodeId: nodeId, wellKnownEvent: .nodeIsASwitchboardPanel, validity: .valid)
-            
-          default:
-            break
-          }
-          
-        }
-        
-      }
-
-   case .identifyConsumer:
-      
-      if let eventId = message.eventId {
-        
-        if let event = OpenLCBWellKnownEvent(rawValue: eventId) {
-          
-          switch event {
-            
-          case .identifyMyTrainsSwitchboardPanels:
-            
-            networkLayer?.sendConsumerIdentified(sourceNodeId: nodeId, wellKnownEvent: .identifyMyTrainsSwitchboardPanels, validity: .valid)
-            
-          default:
-            break
-          }
-          
-        }
-        
-      }
-
     case .producerConsumerEventReport:
       
-      if let eventId = message.eventId {
-        
-        if let event = OpenLCBWellKnownEvent(rawValue: eventId) {
+      if let eventId = message.eventId, let event = OpenLCBWellKnownEvent(rawValue: eventId) {
           
-          switch event {
-            
-          case .identifyMyTrainsSwitchboardPanels:
-            
-            var payload = layoutNodeId.bigEndianData
-            payload.removeFirst(2)
-            
-            networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .nodeIsASwitchboardPanel, payload: payload)
-
-          default:
-            break
-          }
-          
+        switch event {
+        case .identifyMyTrainsSwitchboardPanels:
+          sendNodeIsASwitchboardPanel()
+        default:
+          break
         }
-        
+
       }
       
     default:

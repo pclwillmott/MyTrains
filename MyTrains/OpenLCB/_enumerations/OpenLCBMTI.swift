@@ -11,8 +11,8 @@ public enum OpenLCBMTI : UInt16 {
   
   case initializationCompleteFullProtocolRequired        = 0x0100
   case initializationCompleteSimpleSetSufficient         = 0x0101
-  case verifyNodeIDNumberAddressed                       = 0x0488
-  case verifyNodeIDNumberGlobal                          = 0x0490
+  case verifyNodeIDAddressed                             = 0x0488
+  case verifyNodeIDGlobal                                = 0x0490
   case verifiedNodeIDNumberFullProtocolRequired          = 0x0170
   case verifiedNodeIDNumberSimpleSetSufficient           = 0x0171
   case optionalInteractionRejected                       = 0x0068
@@ -56,10 +56,6 @@ public enum OpenLCBMTI : UInt16 {
   case streamDataProceed                                 = 0x0888
   case streamDataComplete                                = 0x08A8
   case sendLocoNetMessageReply                           = 0x0688   // 0b0000011010001000
-//  case locoNetMessageReceivedOnlyFrame                   = 0x0680   // 0b0000011010000000
-//  case locoNetMessageReceivedLastFrame                   = 0x0681   // 0b0000011010000001
-//  case locoNetMessageReceivedMiddleFrame                 = 0x0682   // 0b0000011010000010
-//  case locoNetMessageReceivedFirstFrame                  = 0x0683   // 0b0000011010000011
   case unknown                                           = 0xFFFF
   
   public var isAddressPresent : Bool {
@@ -69,6 +65,36 @@ public enum OpenLCBMTI : UInt16 {
   
   public var isEventPresent : Bool {
     let mask : UInt16 = 0x0004
+    return (self.rawValue & mask) == mask
+  }
+  
+  public var isStreamOrDatagram : Bool {
+    let mask : UInt16 = 0x1000
+    return (self.rawValue & mask) == mask
+  }
+  
+  public var priority : UInt16 {
+    let mask : UInt16 = 0x0c00
+    return (self.rawValue & mask) >> 10
+  }
+  
+  public var typeWithinPriority : UInt16 {
+    let mask : UInt16 = 0x03e0
+    return (self.rawValue & mask) >> 5
+  }
+  
+  public var isSimpleProtocol : Bool {
+    let mask : UInt16 = 0x0010
+    return (self.rawValue & mask) == mask
+  }
+
+  public var modifier : UInt16 {
+    let mask : UInt16 = 0x0003
+    return self.rawValue & mask
+  }
+  
+  public var isSpecial : Bool {
+    let mask : UInt16 = 0x2000
     return (self.rawValue & mask) == mask
   }
   

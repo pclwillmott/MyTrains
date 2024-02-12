@@ -22,89 +22,88 @@ public class OpenLCBMessage : NSObject {
   }
   
   init?(frame:LCCCANFrame) {
+    
+    guard let canFrameType = frame.openLCBMessageCANFrameType else {
+      return nil
+    }
 
     self.timeStamp = frame.timeStamp
     
-    if let canFrameType = frame.openLCBMessageCANFrameType {
+    self.canFrameType = canFrameType
+    
+    switch canFrameType {
       
-      self.canFrameType = canFrameType
+    case .globalAndAddressedMTI:
       
-      switch canFrameType {
-      case .globalAndAddressedMTI:
-        
-        messageTypeIndicator = frame.openLCBMessageTypeIndicator!
-        
-        sourceNIDAlias = UInt16(frame.header & 0xfff)
-        
-        payload = frame.data
-        
-        if messageTypeIndicator.isAddressPresent, let alias = UInt16(bigEndianData: [payload[0] & 0x0f, payload[1]]) {
-          destinationNIDAlias = alias
-          let temp = (payload[0] & 0x30) >> 4
-          flags = OpenLCBCANFrameFlag(rawValue: temp)!
-          payload.removeFirst(2)
-        }
-        
-        // isEventPresent
-        
-        if messageTypeIndicator.isEventPresent {
-          
-          let eventPrefix = UInt16(bigEndianData: [payload[0], payload[1]])
-          
-          switch eventPrefix {
-          case 0x0181: // LocoNet
-            eventId = OpenLCBWellKnownEvent.locoNetMessage.rawValue
-            payload.removeFirst(2)
-          default:
-            if let id = UInt64(bigEndianData: [UInt8](payload.prefix(8))) {
-              eventId = id
-              payload.removeFirst(8)
-            }
-          }
-          
-        }
-
-      case .datagramCompleteInFrame, .datagramFirstFrame, .datagramMiddleFrame, .datagramFinalFrame:
-        
-        messageTypeIndicator = .datagram
-        
-        sourceNIDAlias = UInt16(frame.header & 0xfff)
-
-        destinationNIDAlias = UInt16((frame.header & 0xfff000) >> 12)
-        
-        payload = frame.data
-
-      default: // Reserved
-        messageTypeIndicator = .unknown
+      messageTypeIndicator = frame.openLCBMessageTypeIndicator!
+      
+      sourceNIDAlias = UInt16(frame.header & 0xfff)
+      
+      payload = frame.data
+      
+      if messageTypeIndicator.isAddressPresent, let alias = UInt16(bigEndianData: [payload[0] & 0x0f, payload[1]]) {
+        destinationNIDAlias = alias
+        flags = OpenLCBCANFrameFlag(rawValue: (payload[0] & 0x30) >> 4)!
+        payload.removeFirst(2)
       }
       
-      super.init()
+      if messageTypeIndicator.isEventPresent, let eventPrefix = UInt16(bigEndianData: [payload[0], payload[1]]) {
+        switch eventPrefix {
+        case 0x0181: // LocoNet
+          eventId = OpenLCBWellKnownEvent.locoNetMessage.rawValue
+          payload.removeFirst(2)
+        default:
+          if let id = UInt64(bigEndianData: [UInt8](payload.prefix(8))) {
+            eventId = id
+            payload.removeFirst(8)
+          }
+        }
+      }
+
+    case .datagramCompleteInFrame, .datagramFirstFrame, .datagramMiddleFrame, .datagramFinalFrame:
       
-    }
-    else {
-      print("failed to find can frame type")
+      messageTypeIndicator = .datagram
+      sourceNIDAlias = UInt16(frame.header & 0xfff)
+      destinationNIDAlias = UInt16((frame.header & 0xfff000) >> 12)
+      payload = frame.data
+
+    default:
       return nil
     }
     
+    super.init()
+
   }
   
   // MARK: Public Properties
   
   public var messageTypeIndicator : OpenLCBMTI
   
-  public var isSpecial : Bool {
-    get {
-      let mask : UInt16 = 0x2000
-      return (messageTypeIndicator.rawValue & mask) == mask
-    }
-  }
+  public var canFrameType : OpenLCBMessageCANFrameType
+
+  public var timeStamp : TimeInterval = 0
+  
+  public var gatewayNodeId : UInt64?
+  
+  public var sourceNodeId : UInt64?
+  
+  public var sourceNIDAlias : UInt16?
+  
+  public var destinationNodeId : UInt64?
+  
+  public var destinationNIDAlias : UInt16?
+
+  public var flags : OpenLCBCANFrameFlag = .onlyFrame
+  
+  public var eventId : UInt64?
+  
+  public var payload : [UInt8] = []
   
   public var isLocoNetEvent : Bool {
     guard let eventId else {
       return false
     }
-    let result = messageTypeIndicator == .producerConsumerEventReport && ((eventId & 0xffff000000000000) == OpenLCBWellKnownEvent.locoNetMessage.rawValue)
-    return result
+    return messageTypeIndicator == .producerConsumerEventReport && ((eventId & 0xffff000000000000) == OpenLCBWellKnownEvent.locoNetMessage.rawValue)
   }
   
   public var locoNetMessage : LocoNetMessage? {
@@ -134,15 +133,13 @@ public class OpenLCBMessage : NSObject {
   }
   
   public var datagramType : OpenLCBDatagramType? {
-    get {
-      
-      guard messageTypeIndicator == .datagram && payload.count >= 2 else {
-        return nil
-      }
-      
-      return OpenLCBDatagramType(rawValue: UInt16(bigEndianData: [payload[0], payload[1]])!)
-      
+    
+    guard messageTypeIndicator == .datagram && payload.count >= 2, let rawValue = UInt16(bigEndianData: [payload[0], payload[1]]) else {
+      return nil
     }
+    
+    return OpenLCBDatagramType(rawValue: rawValue)
+    
   }
   
   public var datagramReplyTimeOut : OpenLCBDatagramTimeout? {
@@ -240,106 +237,37 @@ public class OpenLCBMessage : NSObject {
     return nil
   }
   
-  public var isStreamOrDatagram : Bool {
-    get {
-      let mask : UInt16 = 0x1000
-      return (messageTypeIndicator.rawValue & mask) == mask
-    }
-  }
-  
-  public var priority : UInt16 {
-    get {
-      let mask : UInt16 = 0x0C00
-      return (messageTypeIndicator.rawValue & mask) >> 10
-    }
-  }
-  
-  public var typeWithinPriority : UInt16 {
-    get {
-      let mask : UInt16 = 0x03E0
-      return (messageTypeIndicator.rawValue & mask) >> 5
-    }
-  }
-  
-  public var isSimpleProtocol : Bool {
-    get {
-      let mask : UInt16 = 0x0010
-      return (messageTypeIndicator.rawValue & mask) == mask
-    }
-  }
-
-  public var isAddressPresent : Bool {
-    get {
-      let mask : UInt16 = 0x0008
-      return (messageTypeIndicator.rawValue & mask) == mask
-    }
-  }
-
-  public var isEventPresent : Bool {
-    get {
-      let mask : UInt16 = 0x0004
-      return (messageTypeIndicator.rawValue & mask) == mask
-    }
-  }
-
-  public var modifier : UInt16 {
-    get {
-      let mask : UInt16 = 0x0003
-      return messageTypeIndicator.rawValue & mask
-    }
-  }
-  
-  public var gatewayNodeId : UInt64?
-  
-  public var sourceNodeId : UInt64?
-  
-  public var sourceNIDAlias : UInt16?
-  
-  public var destinationNodeId : UInt64?
-  
-  public var destinationNIDAlias : UInt16?
-  
   public var datagramId : UInt32 {
-    get {
-      return (UInt32(destinationNIDAlias!) << 12) | UInt32(sourceNIDAlias!)
-    }
+    return (UInt32(destinationNIDAlias!) << 12) | UInt32(sourceNIDAlias!)
   }
 
   public var datagramIdReversed : UInt32 {
-    get {
-      return (UInt32(sourceNIDAlias!) << 12) | UInt32(destinationNIDAlias!)
-    }
+    return (UInt32(sourceNIDAlias!) << 12) | UInt32(destinationNIDAlias!)
   }
 
   public var errorCode : OpenLCBErrorCode {
-    get {
-      if payload.count >= 2, let error = UInt16(bigEndianData: [payload[0], payload[1]]) {
-        return OpenLCBErrorCode(rawValue: error)!
-      }
-      return .success
+    if payload.count >= 2, let error = UInt16(bigEndianData: [payload[0], payload[1]]) {
+      return OpenLCBErrorCode(rawValue: error)!
     }
+    return .success
   }
 
   public var rwReplyFailureErrorCode : OpenLCBErrorCode {
-    get {
-      if datagramType == .readReplyFailureGeneric || datagramType == .writeReplyFailureGeneric {
-        if let error = UInt16(bigEndianData: [payload[payload.count - 2], payload[payload.count - 1]]) {
-          return OpenLCBErrorCode(rawValue: error)!
-        }
+    if datagramType == .readReplyFailureGeneric || datagramType == .writeReplyFailureGeneric {
+      if let error = UInt16(bigEndianData: [payload[payload.count - 2], payload[payload.count - 1]]) {
+        return OpenLCBErrorCode(rawValue: error)!
       }
-      return .success
     }
+    return .success
   }
 
   public var isAutomaticallyRoutedEvent : Bool {
-    get {
-      if messageTypeIndicator == .producerConsumerEventReport {
-        let auto : UInt64 = 0x0100000000000000
-        let mask : UInt64 = 0xffff000000000000
-        return (eventId! & mask) == auto
-      }
-      return false
+    if messageTypeIndicator == .producerConsumerEventReport {
+      let auto : UInt64 = 0x0100000000000000
+      let mask : UInt64 = 0xffff000000000000
+      return (eventId! & mask) == auto
     }
+    return false
   }
   
   public var eventRange : (startEventId:UInt64, endEventId:UInt64)? {
@@ -371,12 +299,6 @@ public class OpenLCBMessage : NSObject {
     }
   }
   
-  public var flags : OpenLCBCANFrameFlag = .onlyFrame
-  
-  public var eventId : UInt64?
-  
-  public var payload : [UInt8] = []
-  
   public var payloadAsHex : String {
     get {
       var result = ""
@@ -389,37 +311,31 @@ public class OpenLCBMessage : NSObject {
   
   public var isMessageComplete : Bool {
     
-    get {
-      var result = sourceNodeId != nil && sourceNIDAlias != nil
-      let isDatagram = messageTypeIndicator == .datagram
-      if isAddressPresent || isDatagram {
-        result = result && destinationNodeId != nil && destinationNIDAlias != nil
-      }
-      if isEventPresent && !isDatagram {
-        result = result && eventId != nil
-      }
-      return result
+    var result = sourceNodeId != nil && sourceNIDAlias != nil
+    let isDatagram = messageTypeIndicator == .datagram
+    if messageTypeIndicator.isAddressPresent || isDatagram {
+      result = result && destinationNodeId != nil && destinationNIDAlias != nil
     }
-    
+    if messageTypeIndicator.isEventPresent && !isDatagram {
+      result = result && eventId != nil
+    }
+    return result
+
   }
-  
-  public var canFrameType : OpenLCBMessageCANFrameType
- 
-  // MARK: Public Methods
   
   // MARK: Class Methods
   
   public static func canFrameType(message:OpenLCBMessage) -> OpenLCBMessageCANFrameType {
     
-    if !message.isStreamOrDatagram && !message.isSpecial {
+    if !message.messageTypeIndicator.isStreamOrDatagram && !message.messageTypeIndicator.isSpecial {
       return .globalAndAddressedMTI
     }
     else if message.messageTypeIndicator == .datagram {
       return .datagramFirstFrame
     }
+    
     return .reserved1
+    
   }
-  
-  public var timeStamp : TimeInterval = 0
   
 }

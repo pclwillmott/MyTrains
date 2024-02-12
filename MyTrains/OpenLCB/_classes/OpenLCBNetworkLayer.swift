@@ -28,7 +28,11 @@ public class OpenLCBNetworkLayer : NSObject {
   internal var _state : OpenLCBNetworkLayerState = .uninitialized
   
   private var virtualNodes : [OpenLCBNodeVirtual] = []
-  
+
+  private var gatewayNodes : [UInt64:OpenLCBNodeVirtual] = [:]
+
+  private var regularNodes : [UInt64:OpenLCBNodeVirtual] = [:]
+
   private var nodeManagers : [OpenLCBNodeManager] = []
   
   private var throttleManager = OpenLCBNodeManager()
@@ -127,13 +131,7 @@ public class OpenLCBNetworkLayer : NSObject {
   // MARK: Public Methods
   
   public func isInternalVirtualNode(nodeId:UInt64) -> Bool {
-  
-    if let _ = virtualNodeLookup[nodeId] {
-      return true
-    }
-    
-    return false
-    
+    return virtualNodeLookup[nodeId] != nil
   }
   
   public func createAppNode(newNodeId:UInt64) {
@@ -180,12 +178,7 @@ public class OpenLCBNetworkLayer : NSObject {
     _state = .initialized
     
     for node in OpenLCBMemorySpace.getVirtualNodes() {
- //     if node.virtualNodeType == .switchboardItemNode {
- //       deleteNode(nodeId: node.nodeId)
- //     }
- //     else {
-        registerNode(node: node)
-  //    }
+      registerNode(node: node)
     }
 
     updateVirtualNodeList()
@@ -198,9 +191,7 @@ public class OpenLCBNetworkLayer : NSObject {
       return
     }
     
-    let nodes = virtualNodes
-    
-    for node in nodes {
+    for node in virtualNodes {
       deregisterNode(node: node)
     }
     
@@ -270,10 +261,12 @@ public class OpenLCBNetworkLayer : NSObject {
       break
     }
     
-    /*
-    node.virtualNodeConfigSpaceVersion = 5
-    node.saveMemorySpaces()
-    */
+    if node.virtualNodeType == .canGatewayNode {
+      gatewayNodes[node.nodeId] = node
+    }
+    else {
+      regularNodes[node.nodeId] = node
+    }
     
     node.start()
     
@@ -459,9 +452,23 @@ public class OpenLCBNetworkLayer : NSObject {
       observer.OpenLCBMessageReceived(message: message)
     }
     
-    for virtualNode in virtualNodes {
-      if virtualNode.nodeId != message.gatewayNodeId {
+    if message.messageTypeIndicator.isAddressPresent {
+      if let virtualNode = regularNodes[message.destinationNodeId!] {
         virtualNode.openLCBMessageReceived(message: message)
+      }
+      else {
+        for (virtualNodeId, virtualNode) in gatewayNodes {
+          if virtualNodeId != message.gatewayNodeId {
+            virtualNode.openLCBMessageReceived(message: message)
+          }
+        }
+      }
+    }
+    else {
+      for virtualNode in virtualNodes {
+        if virtualNode.nodeId != message.gatewayNodeId {
+          virtualNode.openLCBMessageReceived(message: message)
+        }
       }
     }
 
@@ -751,7 +758,7 @@ public class OpenLCBNetworkLayer : NSObject {
   
   public func sendVerifyNodeIdNumberAddressed(sourceNodeId:UInt64, destinationNodeId:UInt64) {
     
-    let message = OpenLCBMessage(messageTypeIndicator: .verifyNodeIDNumberAddressed)
+    let message = OpenLCBMessage(messageTypeIndicator: .verifyNodeIDAddressed)
 
     message.sourceNodeId = sourceNodeId
     
@@ -768,7 +775,7 @@ public class OpenLCBNetworkLayer : NSObject {
 
   public func sendVerifyNodeIdNumber(sourceNodeId:UInt64) {
     
-    let message = OpenLCBMessage(messageTypeIndicator: .verifyNodeIDNumberGlobal)
+    let message = OpenLCBMessage(messageTypeIndicator: .verifyNodeIDGlobal)
 
     message.sourceNodeId = sourceNodeId
     
@@ -778,7 +785,7 @@ public class OpenLCBNetworkLayer : NSObject {
 
   public func sendVerifyNodeIdNumber(sourceNodeId:UInt64, destinationNodeId:UInt64) {
     
-    let message = OpenLCBMessage(messageTypeIndicator: .verifyNodeIDNumberGlobal)
+    let message = OpenLCBMessage(messageTypeIndicator: .verifyNodeIDGlobal)
 
     message.sourceNodeId = sourceNodeId
     

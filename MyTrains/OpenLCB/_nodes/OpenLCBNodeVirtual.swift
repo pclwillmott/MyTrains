@@ -76,6 +76,9 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   
   private var lockedNodeId : UInt64 = 0
   
+  internal var eventsConsumed : Set<OpenLCBWellKnownEvent> = []
+  internal var eventsProduced : Set<OpenLCBWellKnownEvent> = []
+
   internal var memorySpaces : [UInt8:OpenLCBMemorySpace] = [:]
   
   internal var cdiFilename : String? 
@@ -144,9 +147,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   public var networkLayer : OpenLCBNetworkLayer?
   
   public var memorySpacesInitialized : Bool {
-    get {
-      return acdiManufacturerSpace.getUInt8(address: addressACDIManufacturerSpaceVersion) != 0
-    }
+    return acdiManufacturerSpace.getUInt8(address: addressACDIManufacturerSpaceVersion) != 0
   }
     
   public var acdiManufacturerSpace : OpenLCBMemorySpace
@@ -513,7 +514,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   
   internal func readCVs(sourceNodeId:UInt64, memorySpace:OpenLCBMemorySpace, startAddress:UInt32, count:UInt8) {
     
-    guard let progMode = OpenLCBProgrammingMode(rawValue: startAddress & OpenLCBProgrammingMode.modeMask) else {
+    guard OpenLCBProgrammingMode(rawValue: startAddress & OpenLCBProgrammingMode.modeMask) != nil else {
       networkLayer?.sendReadReplyFailure(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, addressSpace: memorySpace.space, startAddress: startAddress, errorCode: .permanentErrorInvalidArguments)
       return
     }
@@ -531,7 +532,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   
   internal func writeCVs(sourceNodeId:UInt64, memorySpace:OpenLCBMemorySpace, startAddress:UInt32, data: [UInt8]) {
     
-    guard let progMode = OpenLCBProgrammingMode(rawValue: startAddress & OpenLCBProgrammingMode.modeMask) else {
+    guard OpenLCBProgrammingMode(rawValue: startAddress & OpenLCBProgrammingMode.modeMask) != nil else {
       networkLayer?.sendWriteReplyFailure(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, addressSpace: memorySpace.space, startAddress: startAddress, errorCode: .permanentErrorInvalidArguments)
       return
     }
@@ -587,16 +588,38 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   // MARK: Public Methods
   
   public func start() {
-  
-    if let networkLayer {
-      state = .permitted
-      resetReboot()
-      if cdiFilename != nil {
-        isConfigurationDescriptionInformationProtocolSupported = true
-      }
-      networkLayer.sendInitializationComplete(sourceNodeId: nodeId, isSimpleSetSufficient: false)
-      
+    
+    guard let networkLayer else {
+      return
     }
+  
+    state = .permitted
+    
+    if cdiFilename != nil {
+      isConfigurationDescriptionInformationProtocolSupported = true
+    }
+    
+    networkLayer.sendInitializationComplete(sourceNodeId: nodeId, isSimpleSetSufficient: false)
+    
+    resetReboot()
+    
+    for event in eventsConsumed {
+      if !event.isAutomaticallyRouted {
+        networkLayer.sendConsumerIdentified(sourceNodeId: nodeId, eventId: event.rawValue, validity: .unknown)
+      }
+    }
+
+    for event in eventsProduced {
+      if !event.isAutomaticallyRouted {
+        networkLayer.sendProducerIdentified(sourceNodeId: nodeId, eventId: event.rawValue, validity: .unknown)
+      }
+    }
+    
+    completeStartUp()
+
+  }
+  
+  internal func completeStartUp() {
     
   }
   
@@ -636,7 +659,6 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   // MARK: OpenLCBNetworkLayerDelegate Methods
   
   public func networkLayerStateChanged(networkLayer: OpenLCBNetworkLayer) {
-    
   }
   
   public func openLCBMessageReceived(message: OpenLCBMessage) {
@@ -648,16 +670,12 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     switch message.messageTypeIndicator {
       
     case .simpleNodeIdentInfoRequest:
-      if message.destinationNodeId! == nodeId {
-        networkLayer.sendSimpleNodeInformationReply(sourceNodeId: self.nodeId, destinationNodeId: message.sourceNodeId!, data: encodedNodeInformation)
-      }
-      
-    case .verifyNodeIDNumberAddressed:
-      if message.destinationNodeId! == nodeId {
-        networkLayer.sendVerifiedNodeIdNumber(sourceNodeId: nodeId, isSimpleSetSufficient: false)
-      }
-      
-    case .verifyNodeIDNumberGlobal:
+      networkLayer.sendSimpleNodeInformationReply(sourceNodeId: self.nodeId, destinationNodeId: message.sourceNodeId!, data: encodedNodeInformation)
+
+    case .verifyNodeIDAddressed:
+      networkLayer.sendVerifiedNodeIdNumber(sourceNodeId: nodeId, isSimpleSetSufficient: false)
+
+    case .verifyNodeIDGlobal:
       let id = UInt64(bigEndianData: message.payload)
       if message.payload.isEmpty || id! == nodeId {
         networkLayer.sendVerifiedNodeIdNumber(sourceNodeId: nodeId, isSimpleSetSufficient: false)
@@ -665,22 +683,18 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
       
     case .protocolSupportInquiry:
       
-      if message.destinationNodeId! == nodeId {
-        
-        var data = supportedProtocols
-        
-        if isSwitchboardNode && !networkLayer.isInternalVirtualNode(nodeId: message.sourceNodeId!) {
-          let mask : UInt8 = 0x08
-          data[1] = data[1] & ~mask
-        }
-        
-        networkLayer.sendProtocolSupportReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, data: data)
-        
+      var data = supportedProtocols
+      
+      if isSwitchboardNode && !networkLayer.isInternalVirtualNode(nodeId: message.sourceNodeId!) {
+        let mask : UInt8 = 0x08
+        data[1] = data[1] & ~mask
       }
       
+      networkLayer.sendProtocolSupportReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, data: data)
+
     case .datagram:
       
-      if message.destinationNodeId! == nodeId, let datagramType = message.datagramType {
+      if let datagramType = message.datagramType {
         
         switch datagramType {
         
@@ -703,7 +717,9 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
           networkLayer.sendGetConfigurationOptionsReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, node: self)
 
         case .reinitializeFactoryResetCommand:
+          
           networkLayer.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, timeOut: .ok)
+          
           DispatchQueue.main.async {
             self.resetToFactoryDefaults()
           }
@@ -921,6 +937,32 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
         
       }
       
+    case .identifyConsumer:
+      
+      if let event = OpenLCBWellKnownEvent(rawValue: message.eventId!), !event.isAutomaticallyRouted && eventsConsumed.contains(event) {
+        networkLayer.sendConsumerIdentified(sourceNodeId: nodeId, eventId: event.rawValue, validity: .unknown)
+      }
+
+    case .identifyProducer:
+      
+      if let event = OpenLCBWellKnownEvent(rawValue: message.eventId!), !event.isAutomaticallyRouted && eventsProduced.contains(event) {
+        networkLayer.sendProducerIdentified(sourceNodeId: nodeId, eventId: event.rawValue, validity: .unknown)
+      }
+
+    case .identifyEventsAddressed, .identifyEventsGlobal:
+      
+      for event in eventsConsumed {
+        if !event.isAutomaticallyRouted {
+          networkLayer.sendConsumerIdentified(sourceNodeId: nodeId, eventId: event.rawValue, validity: .unknown)
+        }
+      }
+
+      for event in eventsProduced {
+        if !event.isAutomaticallyRouted {
+          networkLayer.sendProducerIdentified(sourceNodeId: nodeId, eventId: event.rawValue, validity: .unknown)
+        }
+      }
+
     default:
       break
     }
