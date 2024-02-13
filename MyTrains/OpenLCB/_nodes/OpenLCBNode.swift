@@ -516,55 +516,47 @@ public class OpenLCBNode : NSObject {
   }
 
   public var supportedProtocolsInfo : [(protocol:String, supported:Bool)] {
-    get {
-      
-      var result : [(protocol:String, supported:Bool)] = []
-      
-      for byte in 0...2 {
-        var mask : UInt8 = 0x80
-        for bit in 0...7 {
-          mask >>= 1
-        }
-      }
 
-      result.append(("Simple Protocol Subset", isSimpleProtocolSubsetSupported))
-      result.append(("Datagram Protocol", isDatagramProtocolSupported))
-      result.append(("Stream Protocol", isStreamProtocolSupported))
-      result.append(("Memory Configuration Protocol", isMemoryConfigurationProtocolSupported))
-      result.append(("Reservation Protocol", isReservationProtocolSupported))
-      result.append(("Event Exchange Protocol", isEventExchangeProtocolSupported))
-      result.append(("Identification Protocol", isIdentificationSupported))
-      result.append(("Teaching/Learning Configuration Protocol", isTeachingLearningConfigurationProtocolSupported))
-      result.append(("Remote Button Protocol", isRemoteButtonProtocolSupported))
-      result.append(("Abbreviated Default CDI Protocol", isAbbreviatedDefaultCDIProtocolSupported))
-      result.append(("Display Protocol", isDisplayProtocolSupported))
-      result.append(("Simple Node Information Protocol", isSimpleNodeInformationProtocolSupported))
-      result.append(("Configuration Description Information", isConfigurationDescriptionInformationProtocolSupported))
-      result.append(("Traction Control Protocol", isTractionControlProtocolSupported))
-      result.append(("Function Description Information", isFunctionDescriptionInformationProtocolSupported))
-      result.append(("DCC Command Station Protocol", isDCCCommandStationProtocolSupported))
-      result.append(("Simple Train Node Information Protocol", isSimpleTrainNodeInformationProtocolSupported))
-      result.append(("Function Configuration", isFunctionConfigurationProtocolSupported))
-      result.append(("Firmware Upgrade Protocol", isFirmwareUpgradeProtocolSupported))
-      result.append(("Firmware Upgrade Active", isFirmwareUpgradeActive))
-      result.append(("LocoNet Gateway Protocol", isLocoNetGatewayProtocolSupported))
-      return result
-      
-    }
+    var result : [(protocol:String, supported:Bool)] = []
+
+    result.append((String(localized:"Simple Protocol Subset"), isSimpleProtocolSubsetSupported))
+    result.append((String(localized:"Datagram Protocol"), isDatagramProtocolSupported))
+    result.append((String(localized:"Stream Protocol"), isStreamProtocolSupported))
+    result.append((String(localized:"Memory Configuration Protocol"), isMemoryConfigurationProtocolSupported))
+    result.append((String(localized:"Reservation Protocol"), isReservationProtocolSupported))
+    result.append((String(localized:"Event Exchange Protocol"), isEventExchangeProtocolSupported))
+    result.append((String(localized:"Identification Protocol"), isIdentificationSupported))
+    result.append((String(localized:"Teaching/Learning Configuration Protocol"), isTeachingLearningConfigurationProtocolSupported))
+    result.append((String(localized:"Remote Button Protocol"), isRemoteButtonProtocolSupported))
+    result.append((String(localized:"Abbreviated Default CDI Protocol"), isAbbreviatedDefaultCDIProtocolSupported))
+    result.append((String(localized:"Display Protocol"), isDisplayProtocolSupported))
+    result.append((String(localized:"Simple Node Information Protocol"), isSimpleNodeInformationProtocolSupported))
+    result.append((String(localized:"Configuration Description Information"), isConfigurationDescriptionInformationProtocolSupported))
+    result.append((String(localized:"Traction Control Protocol"), isTractionControlProtocolSupported))
+    result.append((String(localized:"Function Description Information"), isFunctionDescriptionInformationProtocolSupported))
+    result.append((String(localized:"DCC Command Station Protocol"), isDCCCommandStationProtocolSupported))
+    result.append((String(localized:"Simple Train Node Information Protocol"), isSimpleTrainNodeInformationProtocolSupported))
+    result.append((String(localized:"Function Configuration"), isFunctionConfigurationProtocolSupported))
+    result.append((String(localized:"Firmware Upgrade Protocol"), isFirmwareUpgradeProtocolSupported))
+    result.append((String(localized:"Firmware Upgrade Active"), isFirmwareUpgradeActive))
+    result.append((String(localized:"LocoNet Gateway Protocol"), isLocoNetGatewayProtocolSupported))
+    
+    return result
+
   }
   
   public var supportedProtocolsAsString : String {
     
-    get {
-      var result : String = ""
-      for proto in supportedProtocolsInfo {
-        if proto.supported {
-          result += "\(proto.protocol)\n"
-        }
+    var result : String = ""
+    
+    for proto in supportedProtocolsInfo {
+      if proto.supported {
+        result += "\(proto.protocol)\n"
       }
-      return result
     }
     
+    return result
+
   }
   
   public var possibleAddressSpaces : [UInt8] {

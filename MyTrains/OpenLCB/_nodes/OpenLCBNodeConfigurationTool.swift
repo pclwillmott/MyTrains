@@ -25,8 +25,6 @@ public class OpenLCBNodeConfigurationTool : OpenLCBNodeVirtual {
 
   }
   
-  // MARK: Private Properties
-  
   // MARK: Public Properties
   
   public var delegate : OpenLCBConfigurationToolDelegate?
@@ -34,20 +32,9 @@ public class OpenLCBNodeConfigurationTool : OpenLCBNodeVirtual {
   // MARK: Private Methods
   
   internal override func resetToFactoryDefaults() {
-
     super.resetToFactoryDefaults()
-    
     saveMemorySpaces()
-    
   }
-  
-  internal override func customizeDynamicCDI(cdi:String) -> String {
-    return cdi
-  }
-  
-  // MARK: Public Methods
-  
-  // MARK: Public Methods
   
   // MARK: OpenLCBNetworkLayerDelegate Methods
 

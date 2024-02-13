@@ -767,6 +767,18 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
             
             switch datagramType {
               
+            case .getUniqueEventIDReply:
+              
+              if let getNewEventIdTextField {
+                
+                message.payload.removeFirst(2)
+                
+                getNewEventIdTextField.stringValue = UInt64(bigEndianData: [UInt8](message.payload.prefix(8)))!.toHexDotFormat(numberOfBytes: 8)
+                
+                self.getNewEventIdTextField = nil
+                
+              }
+              
             case .writeReplyGeneric, .writeReply0xFD, .writeReply0xFE, .writeReply0xFF:
               
               if state == .writingElement || state == .writingMemory {
@@ -1219,6 +1231,21 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
   @objc func cdiDataViewSetWriteAllEnabledState(_ isEnabled:Bool) {
     btnWriteAll.isEnabled = isEnabled
   }
+  
+  private var getNewEventIdTextField : NSTextField?
+  
+  @objc func cdiDataViewGetNewEventId(textField:NSTextField) {
+    
+    guard let node, let networkLayer else {
+      return
+    }
+
+    getNewEventIdTextField = textField
+    
+    networkLayer.sendGetUniqueEventIdCommand(sourceNodeId: nodeId, destinationNodeId: node.nodeId, numberOfEventIds: 1)
+    
+  }
+
 
   // MARK: Controls
   

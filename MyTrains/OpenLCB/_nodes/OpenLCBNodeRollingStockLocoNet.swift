@@ -83,8 +83,6 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
     
   private var expandedFunctions : UInt64 = 0
   
-  // MARK: Public Properties
-  
   // MARK: Private Methods
   
   @objc internal func cvTimeoutTimerAction() {

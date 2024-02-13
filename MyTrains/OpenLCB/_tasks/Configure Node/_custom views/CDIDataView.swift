@@ -226,8 +226,6 @@ class CDIDataView: CDIView {
       
       if let floatValue = UInt64(bigEndianData:bigEndianData) {
         
-        let format = floatFormat ?? "%f"
-
         let formatter = NumberFormatter()
         
         formatter.usesGroupingSeparator = true
@@ -250,7 +248,9 @@ class CDIDataView: CDIView {
           let float64 = Float64(bitPattern: floatValue)
           return formatter.string(from: float64 as NSNumber)!
         default:
+          #if DEBUG
           print("CDIDataView.setString: bad float size: \(elementSize)")
+          #endif
         }
         
       }
@@ -272,7 +272,9 @@ class CDIDataView: CDIView {
         case 8:
           return "\(intValue)"
         default:
+          #if DEBUG
           print("CDIDataView.setString: bad int size: \(elementSize)")
+          #endif
         }
         
       }
@@ -282,7 +284,9 @@ class CDIDataView: CDIView {
       return String(cString: bigEndianData)
 
     default:
+      #if DEBUG
       print("CDIDataView.setString: unexpected element type: \(elementType)")
+      #endif
     }
 
     return nil
@@ -317,7 +321,9 @@ class CDIDataView: CDIView {
           return uint64.bigEndianData
         }
       default:
+        #if DEBUG
         print("CDIDataView.getData: unexpected integer size: \(elementSize)")
+        #endif
       }
       
     case .float:
@@ -337,7 +343,9 @@ class CDIDataView: CDIView {
           return float64.bitPattern.bigEndianData
         }
       default:
+        #if DEBUG
         print("CDIDataView.getData: unexpected float size: \(elementSize)")
+        #endif
       }
       
     case .string:
@@ -351,7 +359,9 @@ class CDIDataView: CDIView {
       }
       
     default:
+      #if DEBUG
       print("CDIDataView.getData: unexpected element type: \(elementType)")
+      #endif
     }
 
     return nil
@@ -393,7 +403,13 @@ class CDIDataView: CDIView {
         refreshButton.trailingAnchor.constraint(equalTo: writeButton.leadingAnchor, constant:  -siblingGap),
         dataButtonView.leadingAnchor.constraint(equalTo: refreshButton.leadingAnchor)
       ])
-      
+
+      if !needsCopyPaste {
+        constraints.append(contentsOf: [
+          dataButtonView.leadingAnchor.constraint(equalTo: refreshButton.leadingAnchor)
+        ])
+      }
+
       writeButton.target = self
       writeButton.action = #selector(self.btnWriteAction(_:))
 
@@ -405,18 +421,24 @@ class CDIDataView: CDIView {
     if needsCopyPaste {
       
       dataButtonView.addSubview(pasteButton)
-      pasteButton.title = "Paste"
+      pasteButton.title = String(localized: "Paste", comment: "Used for the title of a button that pastes from the clipboard")
       pasteButton.translatesAutoresizingMaskIntoConstraints = false
       
       dataButtonView.addSubview(copyButton)
-      copyButton.title = "Copy"
+      copyButton.title = String(localized: "Copy", comment: "Used for the title of a button copies to the clipboard")
       copyButton.translatesAutoresizingMaskIntoConstraints = false
+
+      dataButtonView.addSubview(newEventId)
+      newEventId.title = String(localized: "New Event ID", comment: "Used for the title of a button that creates a new event ID")
+      newEventId.translatesAutoresizingMaskIntoConstraints = false
       
       constraints.append(contentsOf: [
         pasteButton.topAnchor.constraint(equalTo: dataButtonView.topAnchor),
         pasteButton.trailingAnchor.constraint(equalTo: refreshButton.leadingAnchor, constant: -siblingGap),
         copyButton.topAnchor.constraint(equalTo: dataButtonView.topAnchor),
         copyButton.trailingAnchor.constraint(equalTo: pasteButton.leadingAnchor, constant: -siblingGap),
+        newEventId.topAnchor.constraint(equalTo: dataButtonView.topAnchor),
+        newEventId.trailingAnchor.constraint(equalTo: copyButton.leadingAnchor, constant: -siblingGap),
       ])
       
     }
@@ -514,6 +536,8 @@ class CDIDataView: CDIView {
   internal var copyButton = NSButton()
   
   internal var pasteButton = NSButton()
+  
+  internal var newEventId = NSButton()
   
   internal var dataButtonView = NSView()
   

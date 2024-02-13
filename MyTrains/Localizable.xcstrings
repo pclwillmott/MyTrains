@@ -405,6 +405,9 @@
         }
       }
     },
+    "Abbreviated Default CDI Protocol" : {
+
+    },
     "About MyTrains" : {
 
     },
@@ -1338,6 +1341,9 @@
         }
       }
     },
+    "Configuration Description Information" : {
+
+    },
     "Configuration Tool" : {
       "comment" : "Used to create a default OpenLCB virtual name",
       "localizations" : {
@@ -1390,6 +1396,9 @@
           }
         }
       }
+    },
+    "Copy" : {
+      "comment" : "Used for the title of a button copies to the clipboard"
     },
     "Couple" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -1515,6 +1524,9 @@
         }
       }
     },
+    "Datagram Protocol" : {
+
+    },
     "DCC 14" : {
       "comment" : "Used for LocoNet train control protocol selection",
       "localizations" : {
@@ -1599,6 +1611,9 @@
           }
         }
       }
+    },
+    "DCC Command Station Protocol" : {
+
     },
     "DCC Programmer Tool" : {
       "comment" : "Used for the DCC Programmer Tool menu item title\nUsed to create a default OpenLCB virtual name",
@@ -1881,6 +1896,9 @@
         }
       }
     },
+    "Display Protocol" : {
+
+    },
     "Ditch Lights" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -2158,6 +2176,9 @@
         }
       }
     },
+    "Event Exchange Protocol" : {
+
+    },
     "Exhaust Fan" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -2210,7 +2231,7 @@
       }
     },
     "Fast Clock" : {
-      "comment" : "Used for the Fast Clock menu item title\nUsed to indicate a clock's type",
+      "comment" : "Used to indicate a clock's type\nUsed for the Fast Clock menu item title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2257,6 +2278,12 @@
           }
         }
       }
+    },
+    "Firmware Upgrade Active" : {
+
+    },
+    "Firmware Upgrade Protocol" : {
+
     },
     "Flange Squeal" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -2317,6 +2344,12 @@
     },
     "ft/s" : {
       "comment" : "Used for the abbreviation of feet (length) per second"
+    },
+    "Function Configuration" : {
+
+    },
+    "Function Description Information" : {
+
     },
     "Generic Virtual" : {
       "comment" : "Used to create a default OpenLCB virtual name",
@@ -2534,6 +2567,9 @@
           }
         }
       }
+    },
+    "Identification Protocol" : {
+
     },
     "Idle" : {
       "comment" : "Used to indicate a LocoNet command station slot status",
@@ -2910,6 +2946,9 @@
         }
       }
     },
+    "LocoNet Gateway Protocol" : {
+
+    },
     "LocoNet Monitor" : {
       "comment" : "Used to create a default OpenLCB virtual name",
       "localizations" : {
@@ -3172,6 +3211,9 @@
     "Maximum speed when stop expected" : {
 
     },
+    "Memory Configuration Protocol" : {
+
+    },
     "Meters" : {
       "localizations" : {
         "en-GB" : {
@@ -3382,6 +3424,9 @@
           }
         }
       }
+    },
+    "New Event ID" : {
+      "comment" : "Used for the title of a button that creates a new event ID"
     },
     "Next" : {
       "comment" : "Used to describe the direction of the next block in respect of a train route",
@@ -3725,6 +3770,9 @@
         }
       }
     },
+    "Paste" : {
+      "comment" : "Used for the title of a button that pastes from the clipboard"
+    },
     "Platform" : {
       "comment" : "This is used to describe a switchboard item."
     },
@@ -3905,6 +3953,12 @@
         }
       }
     },
+    "Remote Button Protocol" : {
+
+    },
+    "Reservation Protocol" : {
+
+    },
     "Reserved 1" : {
       "comment" : "Used for LocoNet train control protocol selection",
       "localizations" : {
@@ -4036,7 +4090,7 @@
       "comment" : "This is the name of a country."
     },
     "s" : {
-      "comment" : "Used for the Global Emergency Stop menu key equivalent\nUsed for the abbreviation of seconds",
+      "comment" : "Used for the abbreviation of seconds\nUsed for the Global Emergency Stop menu key equivalent",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -4231,6 +4285,15 @@
     },
     "Signal" : {
       "comment" : "This is used to describe a switchboard item."
+    },
+    "Simple Node Information Protocol" : {
+
+    },
+    "Simple Protocol Subset" : {
+
+    },
+    "Simple Train Node Information Protocol" : {
+
     },
     "Single Slip" : {
       "comment" : "This is used to describe a piece of track."
@@ -4468,6 +4531,9 @@
     "Straight Track" : {
       "comment" : "This is used to describe a piece of track."
     },
+    "Stream Protocol" : {
+
+    },
     "Switch Board" : {
       "comment" : "Used for the Switch Board menu item title",
       "localizations" : {
@@ -4604,6 +4670,9 @@
         }
       }
     },
+    "Teaching/Learning Configuration Protocol" : {
+
+    },
     "Third Rail" : {
       "comment" : "Used to indicate that the track models 3rd rail electrification",
       "localizations" : {
@@ -4721,6 +4790,9 @@
           }
         }
       }
+    },
+    "Traction Control Protocol" : {
+
     },
     "Train Speed Profiler" : {
       "comment" : "Used for the Train Speed Profiler menu item title",
@@ -4873,7 +4945,7 @@
       "comment" : "This is the name of a country."
     },
     "Unknown" : {
-      "comment" : "Used to indicate that the type of something is unknown\nUsed to indicate the state of a turnout",
+      "comment" : "Used to indicate the state of a turnout\nUsed to indicate that the type of something is unknown",
       "localizations" : {
         "en" : {
           "stringUnit" : {

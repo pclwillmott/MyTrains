@@ -13,6 +13,8 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   
   public override init(nodeId:UInt64) {
     
+    super.init(nodeId: nodeId)
+
     var configurationSize = 0
     
     initSpaceAddress(&addressUnitsActualLength,   1, &configurationSize)
@@ -25,39 +27,45 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
 
     configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: configurationSize, isReadOnly: false, description: "")
     
-    super.init(nodeId: nodeId)
-
-    virtualNodeType = MyTrainsVirtualNodeType.applicationNode
-
-    eventsConsumed.insert(.myTrainsLayoutActivated)
-    eventsConsumed.insert(.myTrainsLayoutDeactivated)
-    eventsConsumed.insert(.myTrainsLayoutDeleted)
-    eventsConsumed.insert(.nodeIsASwitchboardPanel)
-    eventsConsumed.insert(.nodeIsASwitchboardItem)
-    eventsConsumed.insert(.nodeIsALocoNetGateway)
-    
-    eventsProduced.insert(.identifyMyTrainsLayouts)
-    eventsProduced.insert(.identifyMyTrainsSwitchboardPanels)
-    eventsProduced.insert(.identifyMyTrainsSwitchboardItems)
-
-    configuration.delegate = self
-
-    memorySpaces[configuration.space] = configuration
-
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressUnitsActualLength)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressUnitsScaleLength)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressUnitsActualDistance)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressUnitsScaleDistance)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressUnitsActualSpeed)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressUnitsScaleSpeed)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressUnitsTime)
-
-    if !memorySpacesInitialized {
-      resetToFactoryDefaults()
+    if let configuration {
+      
+      virtualNodeType = MyTrainsVirtualNodeType.applicationNode
+      
+      eventsConsumed = [
+        OpenLCBWellKnownEvent.myTrainsLayoutActivated.rawValue,
+        OpenLCBWellKnownEvent.myTrainsLayoutDeactivated.rawValue,
+        OpenLCBWellKnownEvent.myTrainsLayoutDeleted.rawValue,
+        OpenLCBWellKnownEvent.nodeIsASwitchboardPanel.rawValue,
+        OpenLCBWellKnownEvent.nodeIsASwitchboardItem.rawValue,
+        OpenLCBWellKnownEvent.nodeIsALocoNetGateway.rawValue,
+      ]
+      
+      eventsProduced = [
+        OpenLCBWellKnownEvent.identifyMyTrainsLayouts.rawValue,
+        OpenLCBWellKnownEvent.identifyMyTrainsSwitchboardPanels.rawValue,
+        OpenLCBWellKnownEvent.identifyMyTrainsSwitchboardItems.rawValue,
+      ]
+      
+      configuration.delegate = self
+      
+      memorySpaces[configuration.space] = configuration
+      
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressUnitsActualLength)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressUnitsScaleLength)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressUnitsActualDistance)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressUnitsScaleDistance)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressUnitsActualSpeed)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressUnitsScaleSpeed)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressUnitsTime)
+      
+      if !memorySpacesInitialized {
+        resetToFactoryDefaults()
+      }
+      
+      cdiFilename = "MyTrains Application"
+      
     }
     
-    cdiFilename = "MyTrains Application"
-
   }
   
   // MARK: Private Properties
@@ -71,8 +79,6 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   internal var addressUnitsActualSpeed    = 0
   internal var addressUnitsScaleSpeed     = 0
   internal var addressUnitsTime           = 0
-
-  internal var configuration : OpenLCBMemorySpace
 
   internal typealias getUniqueNodeIdQueueItem = (requester:UInt64, candidate:UInt64)
   
@@ -98,64 +104,64 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
 
   public var unitsActualLength : UnitLength {
     get {
-      return UnitLength(rawValue: configuration.getUInt8(address: addressUnitsActualLength)!)!
+      return UnitLength(rawValue: configuration!.getUInt8(address: addressUnitsActualLength)!)!
     }
     set(value) {
-      configuration.setUInt(address: addressUnitsActualLength, value: value.rawValue)
+      configuration!.setUInt(address: addressUnitsActualLength, value: value.rawValue)
     }
   }
 
   public var unitsScaleLength : UnitLength {
     get {
-      return UnitLength(rawValue: configuration.getUInt8(address: addressUnitsScaleLength)!)!
+      return UnitLength(rawValue: configuration!.getUInt8(address: addressUnitsScaleLength)!)!
     }
     set(value) {
-      configuration.setUInt(address: addressUnitsScaleLength, value: value.rawValue)
+      configuration!.setUInt(address: addressUnitsScaleLength, value: value.rawValue)
     }
   }
 
   public var unitsActualDistance : UnitLength {
     get {
-      return UnitLength(rawValue: configuration.getUInt8(address: addressUnitsActualDistance)!)!
+      return UnitLength(rawValue: configuration!.getUInt8(address: addressUnitsActualDistance)!)!
     }
     set(value) {
-      configuration.setUInt(address: addressUnitsActualDistance, value: value.rawValue)
+      configuration!.setUInt(address: addressUnitsActualDistance, value: value.rawValue)
     }
   }
 
   public var unitsScaleDistance : UnitLength {
     get {
-      return UnitLength(rawValue: configuration.getUInt8(address: addressUnitsScaleDistance)!)!
+      return UnitLength(rawValue: configuration!.getUInt8(address: addressUnitsScaleDistance)!)!
     }
     set(value) {
-      configuration.setUInt(address: addressUnitsScaleDistance, value: value.rawValue)
+      configuration!.setUInt(address: addressUnitsScaleDistance, value: value.rawValue)
     }
   }
 
   public var unitsActualSpeed : UnitSpeed {
     get {
-      return UnitSpeed(rawValue: configuration.getUInt8(address: addressUnitsActualSpeed)!)!
+      return UnitSpeed(rawValue: configuration!.getUInt8(address: addressUnitsActualSpeed)!)!
     }
     set(value) {
-      configuration.setUInt(address: addressUnitsActualSpeed, value: value.rawValue)
+      configuration!.setUInt(address: addressUnitsActualSpeed, value: value.rawValue)
     }
   }
 
   public var unitsScaleSpeed : UnitSpeed {
     get {
-      return UnitSpeed(rawValue: configuration.getUInt8(address: addressUnitsScaleSpeed)!)!
+      return UnitSpeed(rawValue: configuration!.getUInt8(address: addressUnitsScaleSpeed)!)!
     }
     set(value) {
-      configuration.setUInt(address: addressUnitsScaleSpeed, value: value.rawValue)
+      configuration!.setUInt(address: addressUnitsScaleSpeed, value: value.rawValue)
     }
   }
   
   public var unitsTime : UnitTime {
     get {
-      return UnitTime(rawValue: configuration.getUInt8(address: addressUnitsTime)!)!
+      return UnitTime(rawValue: configuration!.getUInt8(address: addressUnitsTime)!)!
     }
     set(value) {
-      configuration.setUInt(address: addressUnitsTime, value: value.rawValue)
+      configuration!.setUInt(address: addressUnitsTime, value: value.rawValue)
     }
   }
   

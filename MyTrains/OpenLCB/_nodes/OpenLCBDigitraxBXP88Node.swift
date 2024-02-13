@@ -52,62 +52,304 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
   
   public override init(nodeId:UInt64) {
     
-    let configSize = 439
-    
-    configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: configSize, isReadOnly: false, description: "")
-    
     super.init(nodeId: nodeId)
     
-    virtualNodeType = MyTrainsVirtualNodeType.digitraxBXP88Node
+    var configurationSize = 0
+ 
+    initSpaceAddress(&addressLocoNetGateway, 8, &configurationSize)
+    initSpaceAddress(&addressBoardId, 2, &configurationSize)
+    initSpaceAddress(&addressWriteBoardId, 1, &configurationSize)
+    initSpaceAddress(&addressReadSettings, 1, &configurationSize)
+    initSpaceAddress(&addressResetToDefaults, 1, &configurationSize)
+    initSpaceAddress(&addressWriteChanges, 1, &configurationSize)
+    initSpaceAddress(&addressPowerManagerStatus, 1, &configurationSize)
+    initSpaceAddress(&addressPowerManagerReporting, 1, &configurationSize)
+    initSpaceAddress(&addressShortCircuitDetection, 1, &configurationSize)
+    initSpaceAddress(&addressDetectionSensitivity, 1, &configurationSize)
+    initSpaceAddress(&addressOccupiedWhenFaulted, 1, &configurationSize)
+    initSpaceAddress(&addressTranspondingState, 1, &configurationSize)
+    initSpaceAddress(&addressFastFind, 1, &configurationSize)
+    initSpaceAddress(&addressOperationsModeFeedback, 1, &configurationSize)
+    initSpaceAddress(&addressSelectiveTransponding, 1, &configurationSize)
     
-    isDatagramProtocolSupported = true
-    
-    isIdentificationSupported = true
-    
-    isSimpleNodeInformationProtocolSupported = true
-    
-    configuration.delegate = self
-    
-    memorySpaces[configuration.space] = configuration
-    
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressLocoNetGateway)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressBoardId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressWriteBoardId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressReadSettings)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressResetToDefaults)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressWriteChanges)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressPowerManagerStatus)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressPowerManagerReporting)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressShortCircuitDetection)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDetectionSensitivity)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressOccupiedWhenFaulted)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTranspondingState)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressFastFind)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressOperationsModeFeedback)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSelectiveTransponding)
-    
-    for zone in 0 ... numberOfChannels - 1 {
+    initSpaceAddress(&addressHardwareOccupancyDetection0, 1, &configurationSize)
+    initSpaceAddress(&addressOccupancyReporting0, 1, &configurationSize)
+    initSpaceAddress(&addressEnterOccupancyEventId0, 8, &configurationSize)
+    initSpaceAddress(&addressExitOccupancyEventId0, 8, &configurationSize)
+    initSpaceAddress(&addressLocationServicesOccupancyEventId0, 8, &configurationSize)
+    initSpaceAddress(&addressTranspondingReporting0, 1, &configurationSize)
+    initSpaceAddress(&addressLocationServicesTranspondingEventId0, 8, &configurationSize)
+    initSpaceAddress(&addressTrackFaultReporting0, 1, &configurationSize)
+    initSpaceAddress(&addressTrackFaultEventId0, 8, &configurationSize)
+    initSpaceAddress(&addressTrackFaultClearedEventId0, 8, &configurationSize)
 
-      let baseAddress = baseAddress(zone: zone)
+    initSpaceAddress(&addressHardwareOccupancyDetection1, 1, &configurationSize)
+    initSpaceAddress(&addressOccupancyReporting1, 1, &configurationSize)
+    initSpaceAddress(&addressEnterOccupancyEventId1, 8, &configurationSize)
+    initSpaceAddress(&addressExitOccupancyEventId1, 8, &configurationSize)
+    initSpaceAddress(&addressLocationServicesOccupancyEventId1, 8, &configurationSize)
+    initSpaceAddress(&addressTranspondingReporting1, 1, &configurationSize)
+    initSpaceAddress(&addressLocationServicesTranspondingEventId1, 8, &configurationSize)
+    initSpaceAddress(&addressTrackFaultReporting1, 1, &configurationSize)
+    initSpaceAddress(&addressTrackFaultEventId1, 8, &configurationSize)
+    initSpaceAddress(&addressTrackFaultClearedEventId1, 8, &configurationSize)
+
+    initSpaceAddress(&addressHardwareOccupancyDetection2, 1, &configurationSize)
+    initSpaceAddress(&addressOccupancyReporting2, 1, &configurationSize)
+    initSpaceAddress(&addressEnterOccupancyEventId2, 8, &configurationSize)
+    initSpaceAddress(&addressExitOccupancyEventId2, 8, &configurationSize)
+    initSpaceAddress(&addressLocationServicesOccupancyEventId2, 8, &configurationSize)
+    initSpaceAddress(&addressTranspondingReporting2, 1, &configurationSize)
+    initSpaceAddress(&addressLocationServicesTranspondingEventId2, 8, &configurationSize)
+    initSpaceAddress(&addressTrackFaultReporting2, 1, &configurationSize)
+    initSpaceAddress(&addressTrackFaultEventId2, 8, &configurationSize)
+    initSpaceAddress(&addressTrackFaultClearedEventId2, 8, &configurationSize)
+
+    initSpaceAddress(&addressHardwareOccupancyDetection3, 1, &configurationSize)
+    initSpaceAddress(&addressOccupancyReporting3, 1, &configurationSize)
+    initSpaceAddress(&addressEnterOccupancyEventId3, 8, &configurationSize)
+    initSpaceAddress(&addressExitOccupancyEventId3, 8, &configurationSize)
+    initSpaceAddress(&addressLocationServicesOccupancyEventId3, 8, &configurationSize)
+    initSpaceAddress(&addressTranspondingReporting3, 1, &configurationSize)
+    initSpaceAddress(&addressLocationServicesTranspondingEventId3, 8, &configurationSize)
+    initSpaceAddress(&addressTrackFaultReporting3, 1, &configurationSize)
+    initSpaceAddress(&addressTrackFaultEventId3, 8, &configurationSize)
+    initSpaceAddress(&addressTrackFaultClearedEventId3, 8, &configurationSize)
+
+    initSpaceAddress(&addressHardwareOccupancyDetection4, 1, &configurationSize)
+    initSpaceAddress(&addressOccupancyReporting4, 1, &configurationSize)
+    initSpaceAddress(&addressEnterOccupancyEventId4, 8, &configurationSize)
+    initSpaceAddress(&addressExitOccupancyEventId4, 8, &configurationSize)
+    initSpaceAddress(&addressLocationServicesOccupancyEventId4, 8, &configurationSize)
+    initSpaceAddress(&addressTranspondingReporting4, 1, &configurationSize)
+    initSpaceAddress(&addressLocationServicesTranspondingEventId4, 8, &configurationSize)
+    initSpaceAddress(&addressTrackFaultReporting4, 1, &configurationSize)
+    initSpaceAddress(&addressTrackFaultEventId4, 8, &configurationSize)
+    initSpaceAddress(&addressTrackFaultClearedEventId4, 8, &configurationSize)
+
+    initSpaceAddress(&addressHardwareOccupancyDetection5, 1, &configurationSize)
+    initSpaceAddress(&addressOccupancyReporting5, 1, &configurationSize)
+    initSpaceAddress(&addressEnterOccupancyEventId5, 8, &configurationSize)
+    initSpaceAddress(&addressExitOccupancyEventId5, 8, &configurationSize)
+    initSpaceAddress(&addressLocationServicesOccupancyEventId5, 8, &configurationSize)
+    initSpaceAddress(&addressTranspondingReporting5, 1, &configurationSize)
+    initSpaceAddress(&addressLocationServicesTranspondingEventId5, 8, &configurationSize)
+    initSpaceAddress(&addressTrackFaultReporting5, 1, &configurationSize)
+    initSpaceAddress(&addressTrackFaultEventId5, 8, &configurationSize)
+    initSpaceAddress(&addressTrackFaultClearedEventId5, 8, &configurationSize)
+
+    initSpaceAddress(&addressHardwareOccupancyDetection6, 1, &configurationSize)
+    initSpaceAddress(&addressOccupancyReporting6, 1, &configurationSize)
+    initSpaceAddress(&addressEnterOccupancyEventId6, 8, &configurationSize)
+    initSpaceAddress(&addressExitOccupancyEventId6, 8, &configurationSize)
+    initSpaceAddress(&addressLocationServicesOccupancyEventId6, 8, &configurationSize)
+    initSpaceAddress(&addressTranspondingReporting6, 1, &configurationSize)
+    initSpaceAddress(&addressLocationServicesTranspondingEventId6, 8, &configurationSize)
+    initSpaceAddress(&addressTrackFaultReporting6, 1, &configurationSize)
+    initSpaceAddress(&addressTrackFaultEventId6, 8, &configurationSize)
+    initSpaceAddress(&addressTrackFaultClearedEventId6, 8, &configurationSize)
+
+    initSpaceAddress(&addressHardwareOccupancyDetection7, 1, &configurationSize)
+    initSpaceAddress(&addressOccupancyReporting7, 1, &configurationSize)
+    initSpaceAddress(&addressEnterOccupancyEventId7, 8, &configurationSize)
+    initSpaceAddress(&addressExitOccupancyEventId7, 8, &configurationSize)
+    initSpaceAddress(&addressLocationServicesOccupancyEventId7, 8, &configurationSize)
+    initSpaceAddress(&addressTranspondingReporting7, 1, &configurationSize)
+    initSpaceAddress(&addressLocationServicesTranspondingEventId7, 8, &configurationSize)
+    initSpaceAddress(&addressTrackFaultReporting7, 1, &configurationSize)
+    initSpaceAddress(&addressTrackFaultEventId7, 8, &configurationSize)
+    initSpaceAddress(&addressTrackFaultClearedEventId7, 8, &configurationSize)
+
+    configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: configurationSize, isReadOnly: false, description: "")
+    
+    if let configuration {
       
-      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressHardwareOccupancyDetection + baseAddress)
-      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressOccupancyReporting + baseAddress)
-      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressEnterOccupancyEventId + baseAddress)
-      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressExitOccupancyEventId + baseAddress)
-      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressLocationServicesOccupancyEventId + baseAddress)
-      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTranspondingReporting + baseAddress)
-      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressLocationServicesTranspondingEventId + baseAddress)
-      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTrackFaultReporting + baseAddress)
-      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTrackFaultEventId + baseAddress)
-      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTrackFaultClearedEventId + baseAddress)
+      virtualNodeType = MyTrainsVirtualNodeType.digitraxBXP88Node
+      
+      isDatagramProtocolSupported = true
+      
+      isIdentificationSupported = true
+      
+      isSimpleNodeInformationProtocolSupported = true
+      
+      configuration.delegate = self
+      
+      memorySpaces[configuration.space] = configuration
+      
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressLocoNetGateway)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressBoardId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressWriteBoardId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressReadSettings)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressResetToDefaults)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressWriteChanges)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressPowerManagerStatus)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressPowerManagerReporting)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressShortCircuitDetection)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDetectionSensitivity)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressOccupiedWhenFaulted)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTranspondingState)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressFastFind)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressOperationsModeFeedback)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSelectiveTransponding)
+      
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressHardwareOccupancyDetection0)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressOccupancyReporting0)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressEnterOccupancyEventId0)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressExitOccupancyEventId0)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressLocationServicesOccupancyEventId0)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTranspondingReporting0)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressLocationServicesTranspondingEventId0)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTrackFaultReporting0)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTrackFaultEventId0)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTrackFaultClearedEventId0)
 
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressHardwareOccupancyDetection1)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressOccupancyReporting1)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressEnterOccupancyEventId1)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressExitOccupancyEventId1)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressLocationServicesOccupancyEventId1)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTranspondingReporting1)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressLocationServicesTranspondingEventId1)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTrackFaultReporting1)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTrackFaultEventId1)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTrackFaultClearedEventId1)
+
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressHardwareOccupancyDetection2)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressOccupancyReporting2)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressEnterOccupancyEventId2)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressExitOccupancyEventId2)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressLocationServicesOccupancyEventId2)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTranspondingReporting2)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressLocationServicesTranspondingEventId2)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTrackFaultReporting2)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTrackFaultEventId2)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTrackFaultClearedEventId2)
+
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressHardwareOccupancyDetection3)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressOccupancyReporting3)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressEnterOccupancyEventId3)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressExitOccupancyEventId3)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressLocationServicesOccupancyEventId3)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTranspondingReporting3)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressLocationServicesTranspondingEventId3)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTrackFaultReporting3)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTrackFaultEventId3)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTrackFaultClearedEventId3)
+
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressHardwareOccupancyDetection4)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressOccupancyReporting4)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressEnterOccupancyEventId4)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressExitOccupancyEventId4)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressLocationServicesOccupancyEventId4)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTranspondingReporting4)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressLocationServicesTranspondingEventId4)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTrackFaultReporting4)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTrackFaultEventId4)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTrackFaultClearedEventId4)
+
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressHardwareOccupancyDetection5)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressOccupancyReporting5)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressEnterOccupancyEventId5)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressExitOccupancyEventId5)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressLocationServicesOccupancyEventId5)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTranspondingReporting5)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressLocationServicesTranspondingEventId5)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTrackFaultReporting5)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTrackFaultEventId5)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTrackFaultClearedEventId5)
+
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressHardwareOccupancyDetection6)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressOccupancyReporting6)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressEnterOccupancyEventId6)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressExitOccupancyEventId6)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressLocationServicesOccupancyEventId6)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTranspondingReporting6)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressLocationServicesTranspondingEventId6)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTrackFaultReporting6)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTrackFaultEventId6)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTrackFaultClearedEventId6)
+
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressHardwareOccupancyDetection7)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressOccupancyReporting7)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressEnterOccupancyEventId7)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressExitOccupancyEventId7)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressLocationServicesOccupancyEventId7)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTranspondingReporting7)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressLocationServicesTranspondingEventId7)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTrackFaultReporting7)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTrackFaultEventId7)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTrackFaultClearedEventId7)
+
+      userConfigEventConsumedAddresses = [
+      ]
+      
+      userConfigEventProducedAddresses = [
+
+        addressEnterOccupancyEventId0,
+        addressExitOccupancyEventId0,
+        addressLocationServicesOccupancyEventId0,
+        addressLocationServicesTranspondingEventId0,
+        addressTrackFaultEventId0,
+        addressTrackFaultClearedEventId0,
+
+        addressEnterOccupancyEventId1,
+        addressExitOccupancyEventId1,
+        addressLocationServicesOccupancyEventId1,
+        addressLocationServicesTranspondingEventId1,
+        addressTrackFaultEventId1,
+        addressTrackFaultClearedEventId1,
+
+        addressEnterOccupancyEventId2,
+        addressExitOccupancyEventId2,
+        addressLocationServicesOccupancyEventId2,
+        addressLocationServicesTranspondingEventId2,
+        addressTrackFaultEventId2,
+        addressTrackFaultClearedEventId2,
+
+        addressEnterOccupancyEventId3,
+        addressExitOccupancyEventId3,
+        addressLocationServicesOccupancyEventId3,
+        addressLocationServicesTranspondingEventId3,
+        addressTrackFaultEventId3,
+        addressTrackFaultClearedEventId3,
+
+        addressEnterOccupancyEventId4,
+        addressExitOccupancyEventId4,
+        addressLocationServicesOccupancyEventId4,
+        addressLocationServicesTranspondingEventId4,
+        addressTrackFaultEventId4,
+        addressTrackFaultClearedEventId4,
+
+        addressEnterOccupancyEventId5,
+        addressExitOccupancyEventId5,
+        addressLocationServicesOccupancyEventId5,
+        addressLocationServicesTranspondingEventId5,
+        addressTrackFaultEventId5,
+        addressTrackFaultClearedEventId5,
+
+        addressEnterOccupancyEventId6,
+        addressExitOccupancyEventId6,
+        addressLocationServicesOccupancyEventId6,
+        addressLocationServicesTranspondingEventId6,
+        addressTrackFaultEventId6,
+        addressTrackFaultClearedEventId6,
+
+        addressEnterOccupancyEventId7,
+        addressExitOccupancyEventId7,
+        addressLocationServicesOccupancyEventId7,
+        addressLocationServicesTranspondingEventId7,
+        addressTrackFaultEventId7,
+        addressTrackFaultClearedEventId7,
+
+      ]
+      
+      if !memorySpacesInitialized {
+        resetToFactoryDefaults()
+      }
+      
+      cdiFilename = "Digitrax BXP88"
+      
     }
-    
-    if !memorySpacesInitialized {
-      resetToFactoryDefaults()
-    }
-    
-    cdiFilename = "Digitrax BXP88"
     
   }
   
@@ -117,33 +359,109 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
   
   // MARK: Private Properties
   
-  internal var configuration : OpenLCBMemorySpace
+  internal var addressLocoNetGateway                       = 0
+  internal var addressBoardId                              = 0
+  internal var addressWriteBoardId                         = 0
+  internal var addressReadSettings                         = 0
+  internal var addressResetToDefaults                      = 0
+  internal var addressWriteChanges                         = 0
+  internal var addressPowerManagerStatus                   = 0
+  internal var addressPowerManagerReporting                = 0
+  internal var addressShortCircuitDetection                = 0
+  internal var addressDetectionSensitivity                 = 0
+  internal var addressOccupiedWhenFaulted                  = 0
+  internal var addressTranspondingState                    = 0
+  internal var addressFastFind                             = 0
+  internal var addressOperationsModeFeedback               = 0
+  internal var addressSelectiveTransponding                = 0
   
-  internal let addressLocoNetGateway                      : Int = 0
-  internal let addressBoardId                             : Int = 8
-  internal let addressWriteBoardId                        : Int = 10
-  internal let addressReadSettings                        : Int = 11
-  internal let addressResetToDefaults                     : Int = 12
-  internal let addressWriteChanges                        : Int = 13
-  internal let addressPowerManagerStatus                  : Int = 14
-  internal let addressPowerManagerReporting               : Int = 15
-  internal let addressShortCircuitDetection               : Int = 16
-  internal let addressDetectionSensitivity                : Int = 17
-  internal let addressOccupiedWhenFaulted                 : Int = 18
-  internal let addressTranspondingState                   : Int = 19
-  internal let addressFastFind                            : Int = 20
-  internal let addressOperationsModeFeedback              : Int = 21
-  internal let addressSelectiveTransponding               : Int = 22
-  internal let addressHardwareOccupancyDetection          : Int = 23
-  internal let addressOccupancyReporting                  : Int = 24
-  internal let addressEnterOccupancyEventId               : Int = 25
-  internal let addressExitOccupancyEventId                : Int = 33
-  internal let addressLocationServicesOccupancyEventId    : Int = 41
-  internal let addressTranspondingReporting               : Int = 49
-  internal let addressLocationServicesTranspondingEventId : Int = 50
-  internal let addressTrackFaultReporting                 : Int = 58
-  internal let addressTrackFaultEventId                   : Int = 59
-  internal let addressTrackFaultClearedEventId            : Int = 67
+  internal var addressHardwareOccupancyDetection0          = 0
+  internal var addressOccupancyReporting0                  = 0
+  internal var addressEnterOccupancyEventId0               = 0
+  internal var addressExitOccupancyEventId0                = 0
+  internal var addressLocationServicesOccupancyEventId0    = 0
+  internal var addressTranspondingReporting0               = 0
+  internal var addressLocationServicesTranspondingEventId0 = 0
+  internal var addressTrackFaultReporting0                 = 0
+  internal var addressTrackFaultEventId0                   = 0
+  internal var addressTrackFaultClearedEventId0            = 0
+
+  internal var addressHardwareOccupancyDetection1          = 0
+  internal var addressOccupancyReporting1                  = 0
+  internal var addressEnterOccupancyEventId1               = 0
+  internal var addressExitOccupancyEventId1                = 0
+  internal var addressLocationServicesOccupancyEventId1    = 0
+  internal var addressTranspondingReporting1               = 0
+  internal var addressLocationServicesTranspondingEventId1 = 0
+  internal var addressTrackFaultReporting1                 = 0
+  internal var addressTrackFaultEventId1                   = 0
+  internal var addressTrackFaultClearedEventId1            = 0
+
+  internal var addressHardwareOccupancyDetection2          = 0
+  internal var addressOccupancyReporting2                  = 0
+  internal var addressEnterOccupancyEventId2               = 0
+  internal var addressExitOccupancyEventId2                = 0
+  internal var addressLocationServicesOccupancyEventId2    = 0
+  internal var addressTranspondingReporting2               = 0
+  internal var addressLocationServicesTranspondingEventId2 = 0
+  internal var addressTrackFaultReporting2                 = 0
+  internal var addressTrackFaultEventId2                   = 0
+  internal var addressTrackFaultClearedEventId2            = 0
+
+  internal var addressHardwareOccupancyDetection3          = 0
+  internal var addressOccupancyReporting3                  = 0
+  internal var addressEnterOccupancyEventId3               = 0
+  internal var addressExitOccupancyEventId3                = 0
+  internal var addressLocationServicesOccupancyEventId3    = 0
+  internal var addressTranspondingReporting3               = 0
+  internal var addressLocationServicesTranspondingEventId3 = 0
+  internal var addressTrackFaultReporting3                 = 0
+  internal var addressTrackFaultEventId3                   = 0
+  internal var addressTrackFaultClearedEventId3            = 0
+
+  internal var addressHardwareOccupancyDetection4          = 0
+  internal var addressOccupancyReporting4                  = 0
+  internal var addressEnterOccupancyEventId4               = 0
+  internal var addressExitOccupancyEventId4                = 0
+  internal var addressLocationServicesOccupancyEventId4    = 0
+  internal var addressTranspondingReporting4               = 0
+  internal var addressLocationServicesTranspondingEventId4 = 0
+  internal var addressTrackFaultReporting4                 = 0
+  internal var addressTrackFaultEventId4                   = 0
+  internal var addressTrackFaultClearedEventId4            = 0
+
+  internal var addressHardwareOccupancyDetection5          = 0
+  internal var addressOccupancyReporting5                  = 0
+  internal var addressEnterOccupancyEventId5               = 0
+  internal var addressExitOccupancyEventId5                = 0
+  internal var addressLocationServicesOccupancyEventId5    = 0
+  internal var addressTranspondingReporting5               = 0
+  internal var addressLocationServicesTranspondingEventId5 = 0
+  internal var addressTrackFaultReporting5                 = 0
+  internal var addressTrackFaultEventId5                   = 0
+  internal var addressTrackFaultClearedEventId5            = 0
+
+  internal var addressHardwareOccupancyDetection6          = 0
+  internal var addressOccupancyReporting6                  = 0
+  internal var addressEnterOccupancyEventId6               = 0
+  internal var addressExitOccupancyEventId6                = 0
+  internal var addressLocationServicesOccupancyEventId6    = 0
+  internal var addressTranspondingReporting6               = 0
+  internal var addressLocationServicesTranspondingEventId6 = 0
+  internal var addressTrackFaultReporting6                 = 0
+  internal var addressTrackFaultEventId6                   = 0
+  internal var addressTrackFaultClearedEventId6            = 0
+
+  internal var addressHardwareOccupancyDetection7          = 0
+  internal var addressOccupancyReporting7                  = 0
+  internal var addressEnterOccupancyEventId7               = 0
+  internal var addressExitOccupancyEventId7                = 0
+  internal var addressLocationServicesOccupancyEventId7    = 0
+  internal var addressTranspondingReporting7               = 0
+  internal var addressLocationServicesTranspondingEventId7 = 0
+  internal var addressTrackFaultReporting7                 = 0
+  internal var addressTrackFaultEventId7                   = 0
+  internal var addressTrackFaultClearedEventId7            = 0
 
   internal var numberOfChannels : Int = 8
   
@@ -159,125 +477,93 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
   
   private var timeoutTimer : Timer?
   
-  private var activeEvents : [UInt64] {
-    
-    var result : [UInt64] = []
-    
-    for zone in 0 ... numberOfChannels - 1 {
-      
-      let occupancyReport = getOccupancyReportingState(zone: zone)
-      
-      if occupancyReport == .enterExit || occupancyReport == .both {
-        result.append(enterOccupancyEventId(zone: zone)!)
-        result.append(exitOccupancyEventId(zone: zone)!)
-      }
-      
-      if occupancyReport == .locationServices || occupancyReport == .both {
-        result.append(locationServicesOccupancyEventId(zone: zone)!)
-      }
-      
-      if getTranspondingReportingState(zone: zone) {
-        result.append(locationServicesTranspondingEventId(zone: zone)!)
-      }
-      
-      if getTrackFaultReportingState(zone: zone) {
-        result.append(trackFaultEventId(zone: zone)!)
-        result.append(trackFaultClearedEventId(zone: zone)!)
-      }
-      
-    }
-    
-    return result
-    
-  }
-  
   private var boardId : UInt16 {
     get {
-      return configuration.getUInt16(address: addressBoardId)!
+      return configuration!.getUInt16(address: addressBoardId)!
     }
     set(value) {
-      configuration.setUInt(address: addressBoardId, value: value)
+      configuration!.setUInt(address: addressBoardId, value: value)
     }
   }
   
   private var isShortCircuitDetectionNormal : Bool {
     get {
-      return configuration.getUInt8(address: addressShortCircuitDetection)! == 0
+      return configuration!.getUInt8(address: addressShortCircuitDetection)! == 0
     }
     set(value) {
-      configuration.setUInt(address: addressShortCircuitDetection, value: UInt8(value ? 0 : 1))
+      configuration!.setUInt(address: addressShortCircuitDetection, value: UInt8(value ? 0 : 1))
     }
   }
   
   private var isTranspondingEnabled : Bool {
     get {
-      return configuration.getUInt8(address: addressTranspondingState)! != 0
+      return configuration!.getUInt8(address: addressTranspondingState)! != 0
     }
     set(value) {
-      configuration.setUInt(address: addressTranspondingState, value: UInt8(value ? 1 : 0))
+      configuration!.setUInt(address: addressTranspondingState, value: UInt8(value ? 1 : 0))
     }
   }
   
   private var isFastFindEnabled : Bool {
     get {
-      return configuration.getUInt8(address: addressFastFind)! == 0
+      return configuration!.getUInt8(address: addressFastFind)! == 0
     }
     set(value) {
-      configuration.setUInt(address: addressFastFind, value: UInt8(value ? 0 : 1))
+      configuration!.setUInt(address: addressFastFind, value: UInt8(value ? 0 : 1))
     }
   }
   
   private var isPowerManagerEnabled : Bool {
     get {
-      return configuration.getUInt8(address: addressPowerManagerStatus)! != 0
+      return configuration!.getUInt8(address: addressPowerManagerStatus)! != 0
     }
     set(value) {
-      configuration.setUInt(address: addressPowerManagerStatus, value: UInt8(value ? 1 : 0))
+      configuration!.setUInt(address: addressPowerManagerStatus, value: UInt8(value ? 1 : 0))
     }
   }
   
   private var isPowerManagerReportingEnabled : Bool {
     get {
-      return configuration.getUInt8(address: addressPowerManagerReporting)! != 0
+      return configuration!.getUInt8(address: addressPowerManagerReporting)! != 0
     }
     set(value) {
-      configuration.setUInt(address: addressPowerManagerReporting, value: UInt8(value ? 1 : 0))
+      configuration!.setUInt(address: addressPowerManagerReporting, value: UInt8(value ? 1 : 0))
     }
   }
   
   private var isDetectionSensitivityRegular : Bool {
     get {
-      return configuration.getUInt8(address: addressDetectionSensitivity) == 0
+      return configuration!.getUInt8(address: addressDetectionSensitivity) == 0
     }
     set(value) {
-      configuration.setUInt(address: addressDetectionSensitivity, value: UInt8(value ? 0 : 1))
+      configuration!.setUInt(address: addressDetectionSensitivity, value: UInt8(value ? 0 : 1))
     }
   }
   
   private var isOccupiedMessageSentWhenFaulted : Bool {
     get {
-      return configuration.getUInt8(address: addressOccupiedWhenFaulted) == 0
+      return configuration!.getUInt8(address: addressOccupiedWhenFaulted) == 0
     }
     set(value) {
-      configuration.setUInt(address: addressOccupiedWhenFaulted, value: UInt8(value ? 0 : 1))
+      configuration!.setUInt(address: addressOccupiedWhenFaulted, value: UInt8(value ? 0 : 1))
     }
   }
   
   private var isOperationsModeReadbackEnabled : Bool {
     get {
-      return configuration.getUInt8(address: addressOperationsModeFeedback) == 0
+      return configuration!.getUInt8(address: addressOperationsModeFeedback) == 0
     }
     set(value) {
-      configuration.setUInt(address: addressOperationsModeFeedback, value: UInt8(value ? 0 : 1))
+      configuration!.setUInt(address: addressOperationsModeFeedback, value: UInt8(value ? 0 : 1))
     }
   }
   
   private var isSelectiveTranspondingDisablingAllowed : Bool {
     get {
-      return configuration.getUInt8(address: addressSelectiveTransponding) == 0
+      return configuration!.getUInt8(address: addressSelectiveTransponding) == 0
     }
     set(value) {
-      configuration.setUInt(address: addressSelectiveTransponding, value: UInt8(value ? 0 : 1))
+      configuration!.setUInt(address: addressSelectiveTransponding, value: UInt8(value ? 0 : 1))
     }
   }
   
@@ -323,10 +609,10 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
   
   public var locoNetGatewayNodeId : UInt64 {
     get {
-      return configuration.getUInt64(address: addressLocoNetGateway)!
+      return configuration!.getUInt64(address: addressLocoNetGateway)!
     }
     set(value) {
-      configuration.setUInt(address: addressLocoNetGateway, value: value)
+      configuration!.setUInt(address: addressLocoNetGateway, value: value)
     }
   }
 
@@ -334,12 +620,12 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
   
   private func setHardwareOccupancyDetectionState(zone:Int, value:Bool) {
     let baseAddress = baseAddress(zone: zone)
-    configuration.setUInt(address: addressHardwareOccupancyDetection + baseAddress, value: UInt8(value ? 0 : 1))
+    configuration!.setUInt(address: addressHardwareOccupancyDetection0 + baseAddress, value: UInt8(value ? 0 : 1))
   }
   
   private func getHardwareOccupancyDetectionState(zone:Int) -> Bool {
     let baseAddress = baseAddress(zone: zone)
-    return configuration.getUInt8(address: addressHardwareOccupancyDetection + baseAddress) == 0
+    return configuration!.getUInt8(address: addressHardwareOccupancyDetection0 + baseAddress) == 0
   }
 
   internal enum OccupancyReport : UInt8 {
@@ -351,32 +637,32 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
   
   private func setOccupancyReportingState(zone:Int, value:OccupancyReport) {
     let baseAddress = baseAddress(zone: zone)
-    configuration.setUInt(address: addressOccupancyReporting + baseAddress, value: value.rawValue)
+    configuration!.setUInt(address: addressOccupancyReporting0 + baseAddress, value: value.rawValue)
   }
   
   private func getOccupancyReportingState(zone:Int) -> OccupancyReport {
     let baseAddress = baseAddress(zone: zone)
-    return OccupancyReport(rawValue: configuration.getUInt8(address: addressOccupancyReporting + baseAddress)!)!
+    return OccupancyReport(rawValue: configuration!.getUInt8(address: addressOccupancyReporting0 + baseAddress)!)!
   }
   
   private func setTranspondingReportingState(zone:Int, value:Bool) {
     let baseAddress = baseAddress(zone: zone)
-    configuration.setUInt(address: addressTranspondingReporting + baseAddress, value: UInt8(value ? 0 : 1))
+    configuration!.setUInt(address: addressTranspondingReporting0 + baseAddress, value: UInt8(value ? 0 : 1))
   }
   
   private func getTranspondingReportingState(zone:Int) -> Bool {
     let baseAddress = baseAddress(zone: zone)
-    return configuration.getUInt8(address: addressTranspondingReporting + baseAddress) == 0
+    return configuration!.getUInt8(address: addressTranspondingReporting0 + baseAddress) == 0
   }
 
   private func setTrackFaultReportingState(zone:Int, value:Bool) {
     let baseAddress = baseAddress(zone: zone)
-    configuration.setUInt(address: addressTrackFaultReporting + baseAddress, value: UInt8(value ? 0 : 1))
+    configuration!.setUInt(address: addressTrackFaultReporting0 + baseAddress, value: UInt8(value ? 0 : 1))
   }
   
   private func getTrackFaultReportingState(zone:Int) -> Bool {
     let baseAddress = baseAddress(zone: zone)
-    return configuration.getUInt8(address: addressTrackFaultReporting + baseAddress) == 0
+    return configuration!.getUInt8(address: addressTrackFaultReporting0 + baseAddress) == 0
   }
 
   private func setOpSw() {
@@ -456,32 +742,32 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
   
   private func enterOccupancyEventId(zone:Int) -> UInt64? {
     let baseAddress = baseAddress(zone: zone)
-    return configuration.getUInt64(address: addressEnterOccupancyEventId + baseAddress)
+    return configuration!.getUInt64(address: addressEnterOccupancyEventId0 + baseAddress)
   }
 
   private func exitOccupancyEventId(zone:Int) -> UInt64? {
     let baseAddress = baseAddress(zone: zone)
-    return configuration.getUInt64(address: addressExitOccupancyEventId + baseAddress)
+    return configuration!.getUInt64(address: addressExitOccupancyEventId0 + baseAddress)
   }
 
   private func locationServicesOccupancyEventId(zone:Int) -> UInt64? {
     let baseAddress = baseAddress(zone: zone)
-    return configuration.getUInt64(address: addressLocationServicesOccupancyEventId + baseAddress)
+    return configuration!.getUInt64(address: addressLocationServicesOccupancyEventId0 + baseAddress)
   }
 
   private func locationServicesTranspondingEventId(zone:Int) -> UInt64? {
     let baseAddress = baseAddress(zone: zone)
-    return configuration.getUInt64(address: addressLocationServicesTranspondingEventId + baseAddress)
+    return configuration!.getUInt64(address: addressLocationServicesTranspondingEventId0 + baseAddress)
   }
 
   private func trackFaultEventId(zone:Int) -> UInt64? {
     let baseAddress = baseAddress(zone: zone)
-    return configuration.getUInt64(address: addressTrackFaultEventId + baseAddress)
+    return configuration!.getUInt64(address: addressTrackFaultEventId0 + baseAddress)
   }
 
   private func trackFaultClearedEventId(zone:Int) -> UInt64? {
     let baseAddress = baseAddress(zone: zone)
-    return configuration.getUInt64(address: addressTrackFaultClearedEventId + baseAddress)
+    return configuration!.getUInt64(address: addressTrackFaultClearedEventId0 + baseAddress)
   }
 
   internal override func customizeDynamicCDI(cdi:String) -> String {
@@ -501,9 +787,9 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
 
   internal override func resetToFactoryDefaults() {
 
-    super.resetToFactoryDefaults()
+    configuration!.zeroMemory()
     
-    configuration.zeroMemory()
+    super.resetToFactoryDefaults()
     
     boardId = 1
     
@@ -513,31 +799,12 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
     
     isPowerManagerReportingEnabled = true
     
-    var allZero = true
+    let locationServicesEventId = 0x0102000000000000 | nodeId
     
     for zone in 0 ... numberOfChannels - 1 {
-      allZero = allZero && enterOccupancyEventId(zone: zone) == 0
-      allZero = allZero && exitOccupancyEventId(zone: zone) == 0
-      allZero = allZero && locationServicesOccupancyEventId(zone: zone) == 0
-      allZero = allZero && locationServicesTranspondingEventId(zone: zone) == 0
-      allZero = allZero && trackFaultEventId(zone: zone) == 0
-      allZero = allZero && trackFaultClearedEventId(zone: zone) == 0
-    }
-    
-    if allZero {
-      
-      let locationServicesEventId = 0x0102000000000000 | nodeId
-      
-      for zone in 0 ... numberOfChannels - 1 {
-        let baseAddress = baseAddress(zone: zone)
-        configuration.setUInt(address: addressEnterOccupancyEventId + baseAddress, value: nextUniqueEventId)
-        configuration.setUInt(address: addressExitOccupancyEventId + baseAddress, value: nextUniqueEventId)
-        configuration.setUInt(address: addressTrackFaultEventId + baseAddress, value: nextUniqueEventId)
-        configuration.setUInt(address: addressTrackFaultClearedEventId + baseAddress, value: nextUniqueEventId)
-        configuration.setUInt(address: addressLocationServicesOccupancyEventId + baseAddress, value: locationServicesEventId + UInt64(zone))
-        configuration.setUInt(address: addressLocationServicesTranspondingEventId + baseAddress, value: locationServicesEventId + UInt64(zone))
-      }
-      
+      let baseAddress = baseAddress(zone: zone)
+      configuration!.setUInt(address: addressLocationServicesOccupancyEventId0 + baseAddress, value: locationServicesEventId + UInt64(zone))
+      configuration!.setUInt(address: addressLocationServicesTranspondingEventId0 + baseAddress, value: locationServicesEventId + UInt64(zone))
     }
     
     saveMemorySpaces()
@@ -547,10 +814,6 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
   internal override func resetReboot() {
     
     super.resetReboot()
-    
-    for eventId in activeEvents {
-      networkLayer?.sendProducerIdentified(sourceNodeId: nodeId, eventId: eventId, validity: .unknown)
-    }
     
     guard locoNetGatewayNodeId != 0 else {
       return
@@ -634,30 +897,30 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
     
     switch address {
     case addressReadSettings:
-      if configuration.getUInt8(address: addressReadSettings) != 0 {
-        configuration.setUInt(address: addressReadSettings, value: UInt8(0))
-        configuration.save()
+      if configuration!.getUInt8(address: addressReadSettings) != 0 {
+        configuration!.setUInt(address: addressReadSettings, value: UInt8(0))
+        configuration!.save()
         configState = .waitingForDeviceData
         startTimeoutTimer(timeInterval: 3.0)
         locoNet?.iplDiscover(productCode: productCode)
       }
     case addressWriteChanges:
-      if configuration.getUInt8(address: addressWriteChanges) != 0 {
-        configuration.setUInt(address: addressWriteChanges, value: UInt8(0))
-        configuration.save()
+      if configuration!.getUInt8(address: addressWriteChanges) != 0 {
+        configuration!.setUInt(address: addressWriteChanges, value: UInt8(0))
+        configuration!.save()
         enterOpSwMode()
         optionSwitchesToDo = allDataOptionSwitches
         setOpSw()
       }
     case addressWriteBoardId:
-      if configuration.getUInt8(address: addressWriteBoardId) != 0 {
-        configuration.setUInt(address: addressWriteBoardId, value: UInt8(0))
-        configuration.save()
+      if configuration!.getUInt8(address: addressWriteBoardId) != 0 {
+        configuration!.setUInt(address: addressWriteBoardId, value: UInt8(0))
+        configuration!.save()
         setBoardId()
       }
     case addressResetToDefaults:
-      if configuration.getUInt8(address: addressResetToDefaults) != 0 {
-        configuration.setUInt(address: addressResetToDefaults, value: UInt8(0))
+      if configuration!.getUInt8(address: addressResetToDefaults) != 0 {
+        configuration!.setUInt(address: addressResetToDefaults, value: UInt8(0))
         resetToFactoryDefaults()
       }
     default:
@@ -707,29 +970,8 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
   // MARK: OpenLCBNetworkLayerDelegate Methods
   
   public override func openLCBMessageReceived(message: OpenLCBMessage) {
-    
     super.openLCBMessageReceived(message: message)
-    
     locoNet?.openLCBMessageReceived(message: message)
-    
-    switch message.messageTypeIndicator {
-    
-    case .identifyProducer:
-      
-      guard let networkLayer else {
-        return
-      }
-      
-      for eventId in activeEvents {
-        if message.eventId == eventId {
-          networkLayer.sendProducerIdentified(sourceNodeId: nodeId, eventId: eventId, validity: .unknown)
-        }
-      }
-      
-    default:
-      break
-    }
-    
   }
   
   // MARK: LocoNetDelegate Methods
@@ -914,7 +1156,7 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
         }
         else {
           configState = .idle
-          configuration.save()
+          configuration!.save()
           exitOpSwMode()
         }
       }

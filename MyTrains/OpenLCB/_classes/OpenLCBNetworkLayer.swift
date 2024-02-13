@@ -1105,7 +1105,9 @@ public class OpenLCBNetworkLayer : NSObject {
   public func sendNodeMemoryReadRequest(sourceNodeId:UInt64, destinationNodeId:UInt64, addressSpace:UInt8, startAddress:Int, numberOfBytesToRead: UInt8) {
     
     guard numberOfBytesToRead > 0 && numberOfBytesToRead <= 64 else {
+      #if DEBUG
       print("sendNodeMemoryReadRequest: invalid number of bytes to read - \(numberOfBytesToRead)")
+      #endif
       return
     }
     
@@ -1140,11 +1142,30 @@ public class OpenLCBNetworkLayer : NSObject {
     sendDatagram(sourceNodeId: sourceNodeId, destinationNodeId: destinationNodeId, data: data)
     
   }
-  
+
+  public func sendGetUniqueEventIdCommand(sourceNodeId:UInt64, destinationNodeId:UInt64, numberOfEventIds:UInt8) {
+    
+    guard numberOfEventIds > 0 && numberOfEventIds <= 8 else {
+      #if DEBUG
+      print("sendGetUniqueEventIdCommand: invalid number of event ids to get - \(numberOfEventIds)")
+      #endif
+      return
+    }
+    
+    var data = OpenLCBDatagramType.getUniqueEventIDCommand.bigEndianData
+    
+    data.append(numberOfEventIds & 0x0f)
+        
+    sendDatagram(sourceNodeId: sourceNodeId, destinationNodeId: destinationNodeId, data: data)
+    
+  }
+
   public func sendNodeMemoryWriteRequest(sourceNodeId:UInt64, destinationNodeId:UInt64, addressSpace:UInt8, startAddress:Int, dataToWrite: [UInt8]) {
     
     guard dataToWrite.count > 0 && dataToWrite.count <= 64 else {
+      #if DEBUG
       print("sendNodeMemoryWriteRequest: invalid number of bytes to write - \(dataToWrite.count)")
+      #endif
       return
     }
     

@@ -16,7 +16,9 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
 
   public init(nodeId:UInt64, layoutNodeId:UInt64 = 0) {
 
-    configurationSize = 0
+    super.init(nodeId: nodeId)
+    
+    var configurationSize = 0
     initSpaceAddress(&addressPanelId, 8, &configurationSize)
     initSpaceAddress(&addressItemType, 2, &configurationSize)
     initSpaceAddress(&addressXPos, 2, &configurationSize)
@@ -177,252 +179,318 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
 
     configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: configurationSize, isReadOnly: false, description: "")
     
-    super.init(nodeId: nodeId)
-    
-    virtualNodeType = MyTrainsVirtualNodeType.switchboardItemNode
-    
-    if layoutNodeId != 0 {
-      self.layoutNodeId = layoutNodeId
+    if let configuration {
+      
+      virtualNodeType = MyTrainsVirtualNodeType.switchboardItemNode
+      
+      if layoutNodeId != 0 {
+        self.layoutNodeId = layoutNodeId
+      }
+      
+      eventsConsumed.insert(OpenLCBWellKnownEvent.identifyMyTrainsSwitchboardItems.rawValue)
+      eventsProduced.insert(OpenLCBWellKnownEvent.nodeIsASwitchboardItem.rawValue)
+      
+      configuration.delegate = self
+      
+      memorySpaces[configuration.space] = configuration
+      
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressPanelId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressItemType)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressXPos)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressYPos)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressOrientation)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressGroupId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDirectionality)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressAllowShunt)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressElectrificationType)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressIsCriticalSection)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressIsHiddenSection)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressEnterDetectionZoneEventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressExitDetectionZoneEventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressEnterTranspondingZoneEventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressExitTranspondingZoneEventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTrackFaultEventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTrackFaultClearedEventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressLocationServicesEventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTrackGauge)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTrackGradient)
+      
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDimensionA)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDimensionB)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDimensionC)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDimensionD)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDimensionE)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDimensionF)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDimensionG)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDimensionH)
+      
+      configuration.registerUnitConversion(address: addressDimensionA, unitConversionType: .actualLength8)
+      configuration.registerUnitConversion(address: addressDimensionB, unitConversionType: .actualLength8)
+      configuration.registerUnitConversion(address: addressDimensionC, unitConversionType: .actualLength8)
+      configuration.registerUnitConversion(address: addressDimensionD, unitConversionType: .actualLength8)
+      configuration.registerUnitConversion(address: addressDimensionE, unitConversionType: .actualLength8)
+      configuration.registerUnitConversion(address: addressDimensionF, unitConversionType: .actualLength8)
+      configuration.registerUnitConversion(address: addressDimensionG, unitConversionType: .actualLength8)
+      configuration.registerUnitConversion(address: addressDimensionH, unitConversionType: .actualLength8)
+      
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW1TurnoutMotorType)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW1ThrowEventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW1ThrownEventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW1CloseEventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW1ClosedEventId)
+      
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW2TurnoutMotorType)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW2ThrowEventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW2ThrownEventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW2CloseEventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW2ClosedEventId)
+      
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW3TurnoutMotorType)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW3ThrowEventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW3ThrownEventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW3CloseEventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW3ClosedEventId)
+      
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW4TurnoutMotorType)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW4ThrowEventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW4ThrownEventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW4CloseEventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW4ClosedEventId)
+      
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSensorType)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSensorPosition)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSensorActivatedEventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSensorActivateLatency)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSensorDeactivatedEventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSensorDeactivateLatency)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSensorLocationServicesEventId)
+      
+      configuration.registerUnitConversion(address: addressSensorPosition, unitConversionType: .actualLength8)
+      configuration.registerUnitConversion(address: addressSensorActivateLatency, unitConversionType: .time8)
+      configuration.registerUnitConversion(address: addressSensorDeactivateLatency, unitConversionType: .time8)
+      
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressLink)
+      
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalType)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalRouteDirection)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalPosition)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState0EventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState1EventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState2EventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState3EventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState4EventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState5EventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState6EventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState7EventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState8EventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState9EventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState10EventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState11EventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState12EventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState13EventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState14EventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState15EventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState16EventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState17EventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState18EventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState19EventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState20EventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState21EventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState22EventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState23EventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState24EventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState25EventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState26EventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState27EventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState28EventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState29EventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState30EventId)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState31EventId)
+      
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType0)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue0)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType1)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue1)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType2)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue2)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType3)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue3)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType4)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue4)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType5)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue5)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType6)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue6)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType7)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue7)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType8)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue8)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType9)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue9)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType10)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue10)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType11)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue11)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType12)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue12)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType13)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue13)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType14)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue14)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType15)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue15)
+      
+      configuration.registerUnitConversion(address: addressSpeedConstraintDPValue0, unitConversionType: .scaleSpeed2)
+      configuration.registerUnitConversion(address: addressSpeedConstraintDPValue1, unitConversionType: .scaleSpeed2)
+      configuration.registerUnitConversion(address: addressSpeedConstraintDPValue2, unitConversionType: .scaleSpeed2)
+      configuration.registerUnitConversion(address: addressSpeedConstraintDPValue3, unitConversionType: .scaleSpeed2)
+      configuration.registerUnitConversion(address: addressSpeedConstraintDPValue4, unitConversionType: .scaleSpeed2)
+      configuration.registerUnitConversion(address: addressSpeedConstraintDPValue5, unitConversionType: .scaleSpeed2)
+      configuration.registerUnitConversion(address: addressSpeedConstraintDPValue6, unitConversionType: .scaleSpeed2)
+      configuration.registerUnitConversion(address: addressSpeedConstraintDPValue7, unitConversionType: .scaleSpeed2)
+      configuration.registerUnitConversion(address: addressSpeedConstraintDPValue8, unitConversionType: .scaleSpeed2)
+      configuration.registerUnitConversion(address: addressSpeedConstraintDPValue9, unitConversionType: .scaleSpeed2)
+      configuration.registerUnitConversion(address: addressSpeedConstraintDPValue10, unitConversionType: .scaleSpeed2)
+      configuration.registerUnitConversion(address: addressSpeedConstraintDPValue11, unitConversionType: .scaleSpeed2)
+      configuration.registerUnitConversion(address: addressSpeedConstraintDPValue12, unitConversionType: .scaleSpeed2)
+      configuration.registerUnitConversion(address: addressSpeedConstraintDPValue13, unitConversionType: .scaleSpeed2)
+      configuration.registerUnitConversion(address: addressSpeedConstraintDPValue14, unitConversionType: .scaleSpeed2)
+      configuration.registerUnitConversion(address: addressSpeedConstraintDPValue15, unitConversionType: .scaleSpeed2)
+      
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType0)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue0)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType1)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue1)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType2)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue2)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType3)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue3)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType4)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue4)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType5)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue5)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType6)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue6)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType7)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue7)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType8)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue8)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType9)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue9)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType10)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue10)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType11)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue11)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType12)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue12)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType13)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue13)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType14)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue14)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType15)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue15)
+      
+      configuration.registerUnitConversion(address: addressSpeedConstraintDNValue0, unitConversionType: .scaleSpeed2)
+      configuration.registerUnitConversion(address: addressSpeedConstraintDNValue1, unitConversionType: .scaleSpeed2)
+      configuration.registerUnitConversion(address: addressSpeedConstraintDNValue2, unitConversionType: .scaleSpeed2)
+      configuration.registerUnitConversion(address: addressSpeedConstraintDNValue3, unitConversionType: .scaleSpeed2)
+      configuration.registerUnitConversion(address: addressSpeedConstraintDNValue4, unitConversionType: .scaleSpeed2)
+      configuration.registerUnitConversion(address: addressSpeedConstraintDNValue5, unitConversionType: .scaleSpeed2)
+      configuration.registerUnitConversion(address: addressSpeedConstraintDNValue6, unitConversionType: .scaleSpeed2)
+      configuration.registerUnitConversion(address: addressSpeedConstraintDNValue7, unitConversionType: .scaleSpeed2)
+      configuration.registerUnitConversion(address: addressSpeedConstraintDNValue8, unitConversionType: .scaleSpeed2)
+      configuration.registerUnitConversion(address: addressSpeedConstraintDNValue9, unitConversionType: .scaleSpeed2)
+      configuration.registerUnitConversion(address: addressSpeedConstraintDNValue10, unitConversionType: .scaleSpeed2)
+      configuration.registerUnitConversion(address: addressSpeedConstraintDNValue11, unitConversionType: .scaleSpeed2)
+      configuration.registerUnitConversion(address: addressSpeedConstraintDNValue12, unitConversionType: .scaleSpeed2)
+      configuration.registerUnitConversion(address: addressSpeedConstraintDNValue13, unitConversionType: .scaleSpeed2)
+      configuration.registerUnitConversion(address: addressSpeedConstraintDNValue14, unitConversionType: .scaleSpeed2)
+      configuration.registerUnitConversion(address: addressSpeedConstraintDNValue15, unitConversionType: .scaleSpeed2)
+      
+      userConfigEventConsumedAddresses = [
+        
+        addressEnterDetectionZoneEventId,
+        addressExitDetectionZoneEventId,
+        addressEnterTranspondingZoneEventId,
+        addressExitTranspondingZoneEventId,
+        addressTrackFaultEventId,
+        addressTrackFaultClearedEventId,
+        addressLocationServicesEventId,
+        
+        addressSW1ThrownEventId,
+        addressSW1ClosedEventId,
+        addressSW2ThrownEventId,
+        addressSW2ClosedEventId,
+        addressSW3ThrownEventId,
+        addressSW3ClosedEventId,
+        addressSW4ThrownEventId,
+        addressSW4ClosedEventId,
+        
+        addressSensorActivatedEventId,
+        addressSensorDeactivatedEventId,
+        addressSensorLocationServicesEventId,
+        
+      ]
+      
+      userConfigEventProducedAddresses = [
+        
+        addressSW1ThrowEventId,
+        addressSW1CloseEventId,
+        addressSW2ThrowEventId,
+        addressSW2CloseEventId,
+        addressSW3ThrowEventId,
+        addressSW3CloseEventId,
+        addressSW4ThrowEventId,
+        addressSW4CloseEventId,
+        
+        addressSignalSetState0EventId,
+        addressSignalSetState1EventId,
+        addressSignalSetState2EventId,
+        addressSignalSetState3EventId,
+        addressSignalSetState4EventId,
+        addressSignalSetState5EventId,
+        addressSignalSetState6EventId,
+        addressSignalSetState7EventId,
+        addressSignalSetState8EventId,
+        addressSignalSetState9EventId,
+        addressSignalSetState10EventId,
+        addressSignalSetState11EventId,
+        addressSignalSetState12EventId,
+        addressSignalSetState13EventId,
+        addressSignalSetState14EventId,
+        addressSignalSetState15EventId,
+        addressSignalSetState16EventId,
+        addressSignalSetState17EventId,
+        addressSignalSetState18EventId,
+        addressSignalSetState19EventId,
+        addressSignalSetState20EventId,
+        addressSignalSetState21EventId,
+        addressSignalSetState22EventId,
+        addressSignalSetState23EventId,
+        addressSignalSetState24EventId,
+        addressSignalSetState25EventId,
+        addressSignalSetState26EventId,
+        addressSignalSetState27EventId,
+        addressSignalSetState28EventId,
+        addressSignalSetState29EventId,
+        addressSignalSetState30EventId,
+        addressSignalSetState31EventId,
+        
+      ]
+      
+      if !memorySpacesInitialized {
+        resetToFactoryDefaults()
+      }
+      
+      cdiFilename = "MyTrains Switchboard Item"
+      
     }
     
-    eventsConsumed.insert(.identifyMyTrainsSwitchboardItems)
-    eventsProduced.insert(.nodeIsASwitchboardItem)
-    
-    configuration.delegate = self
-
-    memorySpaces[configuration.space] = configuration
-
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressPanelId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressItemType)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressXPos)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressYPos)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressOrientation)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressGroupId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDirectionality)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressAllowShunt)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressElectrificationType)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressIsCriticalSection)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressIsHiddenSection)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressEnterDetectionZoneEventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressExitDetectionZoneEventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressEnterTranspondingZoneEventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressExitTranspondingZoneEventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTrackFaultEventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTrackFaultClearedEventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressLocationServicesEventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTrackGauge)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressTrackGradient)
-    
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDimensionA)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDimensionB)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDimensionC)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDimensionD)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDimensionE)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDimensionF)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDimensionG)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDimensionH)
-    
-    configuration.registerUnitConversion(address: addressDimensionA, unitConversionType: .actualLength8)
-    configuration.registerUnitConversion(address: addressDimensionB, unitConversionType: .actualLength8)
-    configuration.registerUnitConversion(address: addressDimensionC, unitConversionType: .actualLength8)
-    configuration.registerUnitConversion(address: addressDimensionD, unitConversionType: .actualLength8)
-    configuration.registerUnitConversion(address: addressDimensionE, unitConversionType: .actualLength8)
-    configuration.registerUnitConversion(address: addressDimensionF, unitConversionType: .actualLength8)
-    configuration.registerUnitConversion(address: addressDimensionG, unitConversionType: .actualLength8)
-    configuration.registerUnitConversion(address: addressDimensionH, unitConversionType: .actualLength8)
-
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW1TurnoutMotorType)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW1ThrowEventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW1ThrownEventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW1CloseEventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW1ClosedEventId)
-
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW2TurnoutMotorType)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW2ThrowEventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW2ThrownEventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW2CloseEventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW2ClosedEventId)
-
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW3TurnoutMotorType)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW3ThrowEventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW3ThrownEventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW3CloseEventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW3ClosedEventId)
-
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW4TurnoutMotorType)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW4ThrowEventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW4ThrownEventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW4CloseEventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSW4ClosedEventId)
-
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSensorType)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSensorPosition)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSensorActivatedEventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSensorActivateLatency)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSensorDeactivatedEventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSensorDeactivateLatency)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSensorLocationServicesEventId)
-
-    configuration.registerUnitConversion(address: addressSensorPosition, unitConversionType: .actualLength8)
-    configuration.registerUnitConversion(address: addressSensorActivateLatency, unitConversionType: .time8)
-    configuration.registerUnitConversion(address: addressSensorDeactivateLatency, unitConversionType: .time8)
-
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressLink)
-
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalType)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalRouteDirection)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalPosition)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState0EventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState1EventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState2EventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState3EventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState4EventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState5EventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState6EventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState7EventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState8EventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState9EventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState10EventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState11EventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState12EventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState13EventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState14EventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState15EventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState16EventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState17EventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState18EventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState19EventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState20EventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState21EventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState22EventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState23EventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState24EventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState25EventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState26EventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState27EventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState28EventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState29EventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState30EventId)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState31EventId)
-
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType0)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue0)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType1)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue1)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType2)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue2)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType3)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue3)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType4)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue4)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType5)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue5)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType6)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue6)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType7)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue7)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType8)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue8)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType9)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue9)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType10)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue10)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType11)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue11)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType12)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue12)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType13)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue13)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType14)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue14)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPType15)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDPValue15)
-
-    configuration.registerUnitConversion(address: addressSpeedConstraintDPValue0, unitConversionType: .scaleSpeed2)
-    configuration.registerUnitConversion(address: addressSpeedConstraintDPValue1, unitConversionType: .scaleSpeed2)
-    configuration.registerUnitConversion(address: addressSpeedConstraintDPValue2, unitConversionType: .scaleSpeed2)
-    configuration.registerUnitConversion(address: addressSpeedConstraintDPValue3, unitConversionType: .scaleSpeed2)
-    configuration.registerUnitConversion(address: addressSpeedConstraintDPValue4, unitConversionType: .scaleSpeed2)
-    configuration.registerUnitConversion(address: addressSpeedConstraintDPValue5, unitConversionType: .scaleSpeed2)
-    configuration.registerUnitConversion(address: addressSpeedConstraintDPValue6, unitConversionType: .scaleSpeed2)
-    configuration.registerUnitConversion(address: addressSpeedConstraintDPValue7, unitConversionType: .scaleSpeed2)
-    configuration.registerUnitConversion(address: addressSpeedConstraintDPValue8, unitConversionType: .scaleSpeed2)
-    configuration.registerUnitConversion(address: addressSpeedConstraintDPValue9, unitConversionType: .scaleSpeed2)
-    configuration.registerUnitConversion(address: addressSpeedConstraintDPValue10, unitConversionType: .scaleSpeed2)
-    configuration.registerUnitConversion(address: addressSpeedConstraintDPValue11, unitConversionType: .scaleSpeed2)
-    configuration.registerUnitConversion(address: addressSpeedConstraintDPValue12, unitConversionType: .scaleSpeed2)
-    configuration.registerUnitConversion(address: addressSpeedConstraintDPValue13, unitConversionType: .scaleSpeed2)
-    configuration.registerUnitConversion(address: addressSpeedConstraintDPValue14, unitConversionType: .scaleSpeed2)
-    configuration.registerUnitConversion(address: addressSpeedConstraintDPValue15, unitConversionType: .scaleSpeed2)
-
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType0)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue0)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType1)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue1)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType2)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue2)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType3)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue3)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType4)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue4)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType5)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue5)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType6)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue6)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType7)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue7)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType8)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue8)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType9)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue9)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType10)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue10)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType11)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue11)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType12)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue12)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType13)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue13)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType14)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue14)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNType15)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedConstraintDNValue15)
-
-    configuration.registerUnitConversion(address: addressSpeedConstraintDNValue0, unitConversionType: .scaleSpeed2)
-    configuration.registerUnitConversion(address: addressSpeedConstraintDNValue1, unitConversionType: .scaleSpeed2)
-    configuration.registerUnitConversion(address: addressSpeedConstraintDNValue2, unitConversionType: .scaleSpeed2)
-    configuration.registerUnitConversion(address: addressSpeedConstraintDNValue3, unitConversionType: .scaleSpeed2)
-    configuration.registerUnitConversion(address: addressSpeedConstraintDNValue4, unitConversionType: .scaleSpeed2)
-    configuration.registerUnitConversion(address: addressSpeedConstraintDNValue5, unitConversionType: .scaleSpeed2)
-    configuration.registerUnitConversion(address: addressSpeedConstraintDNValue6, unitConversionType: .scaleSpeed2)
-    configuration.registerUnitConversion(address: addressSpeedConstraintDNValue7, unitConversionType: .scaleSpeed2)
-    configuration.registerUnitConversion(address: addressSpeedConstraintDNValue8, unitConversionType: .scaleSpeed2)
-    configuration.registerUnitConversion(address: addressSpeedConstraintDNValue9, unitConversionType: .scaleSpeed2)
-    configuration.registerUnitConversion(address: addressSpeedConstraintDNValue10, unitConversionType: .scaleSpeed2)
-    configuration.registerUnitConversion(address: addressSpeedConstraintDNValue11, unitConversionType: .scaleSpeed2)
-    configuration.registerUnitConversion(address: addressSpeedConstraintDNValue12, unitConversionType: .scaleSpeed2)
-    configuration.registerUnitConversion(address: addressSpeedConstraintDNValue13, unitConversionType: .scaleSpeed2)
-    configuration.registerUnitConversion(address: addressSpeedConstraintDNValue14, unitConversionType: .scaleSpeed2)
-    configuration.registerUnitConversion(address: addressSpeedConstraintDNValue15, unitConversionType: .scaleSpeed2)
-
-
-    if !memorySpacesInitialized {
-      resetToFactoryDefaults()
-    }
-
-    cdiFilename = "MyTrains Switchboard Item"
-
   }
 
-  internal func setupConfigurationAddresses() {
-    configurationSize = 4
-  }
-  
   // MARK: Private Properties
 
   // Configuration varaible addresses
-  
-  internal var configurationSize : Int
   
   internal var addressPanelId                       = 0
   internal var addressItemType                      = 0
@@ -580,8 +648,6 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
   internal var addressSpeedConstraintDNType15       = 0
   internal var addressSpeedConstraintDNValue15      = 0
 
-  private var configuration : OpenLCBMemorySpace
-  
   private var layoutNode : LayoutNode? {
     return networkLayer!.virtualNodeLookup[layoutNodeId] as? LayoutNode
   }
@@ -590,262 +656,262 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
   
   public var panelId : UInt64 {
     get {
-      return configuration.getUInt64(address: addressPanelId)!
+      return configuration!.getUInt64(address: addressPanelId)!
     }
     set(value) {
-      configuration.setUInt(address: addressPanelId, value: value)
+      configuration!.setUInt(address: addressPanelId, value: value)
     }
   }
 
   public var itemType : SwitchBoardItemType {
     get {
-      return SwitchBoardItemType(rawValue: configuration.getUInt16(address: addressItemType)!)!
+      return SwitchBoardItemType(rawValue: configuration!.getUInt16(address: addressItemType)!)!
     }
     set(value) {
-      configuration.setUInt(address: addressItemType, value: value.rawValue)
+      configuration!.setUInt(address: addressItemType, value: value.rawValue)
     }
   }
 
   public var xPos : UInt16 {
     get {
-      return configuration.getUInt16(address: addressXPos)!
+      return configuration!.getUInt16(address: addressXPos)!
     }
     set(value) {
-      configuration.setUInt(address: addressXPos, value: value)
+      configuration!.setUInt(address: addressXPos, value: value)
     }
   }
 
   public var yPos : UInt16 {
     get {
-      return configuration.getUInt16(address: addressYPos)!
+      return configuration!.getUInt16(address: addressYPos)!
     }
     set(value) {
-      configuration.setUInt(address: addressYPos, value: value)
+      configuration!.setUInt(address: addressYPos, value: value)
     }
   }
 
   public var orientation : Orientation {
     get {
-      return Orientation(rawValue: configuration.getUInt8(address: addressOrientation)!)!
+      return Orientation(rawValue: configuration!.getUInt8(address: addressOrientation)!)!
     }
     set(value) {
-      configuration.setUInt(address: addressOrientation, value: value.rawValue)
+      configuration!.setUInt(address: addressOrientation, value: value.rawValue)
     }
   }
 
   public var groupId : UInt64 {
     get {
-      return configuration.getUInt64(address: addressGroupId)!
+      return configuration!.getUInt64(address: addressGroupId)!
     }
     set(value) {
-      configuration.setUInt(address: addressGroupId, value: value)
+      configuration!.setUInt(address: addressGroupId, value: value)
     }
   }
 
   public var directionality : BlockDirection {
     get {
-      return BlockDirection(rawValue: configuration.getUInt8(address: addressDirectionality)!)!
+      return BlockDirection(rawValue: configuration!.getUInt8(address: addressDirectionality)!)!
     }
     set(value) {
-      configuration.setUInt(address: addressDirectionality, value: value.rawValue)
+      configuration!.setUInt(address: addressDirectionality, value: value.rawValue)
     }
   }
 
   public var isReverseShuntAllowed : Bool {
     get {
-      return configuration.getUInt8(address: addressAllowShunt)! == 1
+      return configuration!.getUInt8(address: addressAllowShunt)! == 1
     }
     set(value) {
-      configuration.setUInt(address: addressAllowShunt, value: value ? UInt8(1) : UInt8(0))
+      configuration!.setUInt(address: addressAllowShunt, value: value ? UInt8(1) : UInt8(0))
     }
   }
 
   public var trackElectrificationType : TrackElectrificationType {
     get {
-      return TrackElectrificationType(rawValue: configuration.getUInt8(address: addressElectrificationType)!)!
+      return TrackElectrificationType(rawValue: configuration!.getUInt8(address: addressElectrificationType)!)!
     }
     set(value) {
-      configuration.setUInt(address: addressElectrificationType, value: value.rawValue)
+      configuration!.setUInt(address: addressElectrificationType, value: value.rawValue)
     }
   }
 
   public var isCriticalSection : Bool {
     get {
-      return configuration.getUInt8(address: addressIsCriticalSection)! == 1
+      return configuration!.getUInt8(address: addressIsCriticalSection)! == 1
     }
     set(value) {
-      configuration.setUInt(address: addressIsCriticalSection, value: value ? UInt8(1) : UInt8(0))
+      configuration!.setUInt(address: addressIsCriticalSection, value: value ? UInt8(1) : UInt8(0))
     }
   }
 
   public var isHiddenSection : Bool {
     get {
-      return configuration.getUInt8(address: addressIsHiddenSection)! == 1
+      return configuration!.getUInt8(address: addressIsHiddenSection)! == 1
     }
     set(value) {
-      configuration.setUInt(address: addressIsHiddenSection, value: value ? UInt8(1) : UInt8(0))
+      configuration!.setUInt(address: addressIsHiddenSection, value: value ? UInt8(1) : UInt8(0))
     }
   }
 
   public var enterDetectionZoneEventId : UInt64 {
     get {
-      return configuration.getUInt64(address: addressEnterDetectionZoneEventId)!
+      return configuration!.getUInt64(address: addressEnterDetectionZoneEventId)!
     }
     set(value) {
-      configuration.setUInt(address: addressEnterDetectionZoneEventId, value: value)
+      configuration!.setUInt(address: addressEnterDetectionZoneEventId, value: value)
     }
   }
 
   public var exitDetectionZoneEventId : UInt64 {
     get {
-      return configuration.getUInt64(address: addressExitDetectionZoneEventId)!
+      return configuration!.getUInt64(address: addressExitDetectionZoneEventId)!
     }
     set(value) {
-      configuration.setUInt(address: addressExitDetectionZoneEventId, value: value)
+      configuration!.setUInt(address: addressExitDetectionZoneEventId, value: value)
     }
   }
 
   public var enterTranspondingZoneEventId : UInt64 {
     get {
-      return configuration.getUInt64(address: addressEnterTranspondingZoneEventId)!
+      return configuration!.getUInt64(address: addressEnterTranspondingZoneEventId)!
     }
     set(value) {
-      configuration.setUInt(address: addressEnterTranspondingZoneEventId, value: value)
+      configuration!.setUInt(address: addressEnterTranspondingZoneEventId, value: value)
     }
   }
 
   public var exitTranspondingZoneEventId : UInt64 {
     get {
-      return configuration.getUInt64(address: addressExitTranspondingZoneEventId)!
+      return configuration!.getUInt64(address: addressExitTranspondingZoneEventId)!
     }
     set(value) {
-      configuration.setUInt(address: addressExitTranspondingZoneEventId, value: value)
+      configuration!.setUInt(address: addressExitTranspondingZoneEventId, value: value)
     }
   }
 
   public var trackFaultEventId : UInt64 {
     get {
-      return configuration.getUInt64(address: addressTrackFaultEventId)!
+      return configuration!.getUInt64(address: addressTrackFaultEventId)!
     }
     set(value) {
-      configuration.setUInt(address: addressTrackFaultEventId, value: value)
+      configuration!.setUInt(address: addressTrackFaultEventId, value: value)
     }
   }
 
   public var trackFaultClearedEventId : UInt64 {
     get {
-      return configuration.getUInt64(address: addressTrackFaultClearedEventId)!
+      return configuration!.getUInt64(address: addressTrackFaultClearedEventId)!
     }
     set(value) {
-      configuration.setUInt(address: addressTrackFaultClearedEventId, value: value)
+      configuration!.setUInt(address: addressTrackFaultClearedEventId, value: value)
     }
   }
 
   public var locationServicesEventId : UInt64 {
     get {
-      return configuration.getUInt64(address: addressLocationServicesEventId)!
+      return configuration!.getUInt64(address: addressLocationServicesEventId)!
     }
     set(value) {
-      configuration.setUInt(address: addressLocationServicesEventId, value: value)
+      configuration!.setUInt(address: addressLocationServicesEventId, value: value)
     }
   }
 
   public var trackGauge : TrackGauge {
     get {
-      return TrackGauge(rawValue: configuration.getUInt8(address: addressTrackGauge)!)!
+      return TrackGauge(rawValue: configuration!.getUInt8(address: addressTrackGauge)!)!
     }
     set(value) {
-      configuration.setUInt(address: addressTrackGauge, value: value.rawValue)
+      configuration!.setUInt(address: addressTrackGauge, value: value.rawValue)
     }
   }
 
   public var trackGradient : Float32 {
     get {
-      return configuration.getFloat(address: addressTrackGradient)!
+      return configuration!.getFloat(address: addressTrackGradient)!
     }
     set(value) {
-      configuration.setFloat(address: addressTrackGradient, value: value)
+      configuration!.setFloat(address: addressTrackGradient, value: value)
     }
   }
 
   public var sensorType : SensorType {
     get {
-      return SensorType(rawValue: configuration.getUInt8(address: addressSensorType)!)!
+      return SensorType(rawValue: configuration!.getUInt8(address: addressSensorType)!)!
     }
     set(value) {
-      configuration.setUInt(address: addressSensorType, value: value.rawValue)
+      configuration!.setUInt(address: addressSensorType, value: value.rawValue)
     }
   }
 
   public var sensorPosition : Double {
     get {
-      return configuration.getDouble(address: addressSensorPosition)!
+      return configuration!.getDouble(address: addressSensorPosition)!
     }
     set(value) {
-      configuration.setDouble(address: addressSensorPosition, value: value)
+      configuration!.setDouble(address: addressSensorPosition, value: value)
     }
   }
 
   public var sensorActivatedEventId : UInt64 {
     get {
-      return configuration.getUInt64(address: addressSensorActivatedEventId)!
+      return configuration!.getUInt64(address: addressSensorActivatedEventId)!
     }
     set(value) {
-      configuration.setUInt(address: addressSensorActivatedEventId, value: value)
+      configuration!.setUInt(address: addressSensorActivatedEventId, value: value)
     }
   }
 
   public var sensorActivateLatency : Double {
     get {
-      return configuration.getDouble(address: addressSensorActivateLatency)!
+      return configuration!.getDouble(address: addressSensorActivateLatency)!
     }
     set(value) {
-      configuration.setDouble(address: addressSensorActivateLatency, value: value)
+      configuration!.setDouble(address: addressSensorActivateLatency, value: value)
     }
   }
 
   public var sensorDeactivatedEventId : UInt64 {
     get {
-      return configuration.getUInt64(address: addressSensorDeactivatedEventId)!
+      return configuration!.getUInt64(address: addressSensorDeactivatedEventId)!
     }
     set(value) {
-      configuration.setUInt(address: addressSensorDeactivatedEventId, value: value)
+      configuration!.setUInt(address: addressSensorDeactivatedEventId, value: value)
     }
   }
 
   public var sensorDectivateLatency : Double {
     get {
-      return configuration.getDouble(address: addressSensorDeactivateLatency)!
+      return configuration!.getDouble(address: addressSensorDeactivateLatency)!
     }
     set(value) {
-      configuration.setDouble(address: addressSensorDeactivateLatency, value: value)
+      configuration!.setDouble(address: addressSensorDeactivateLatency, value: value)
     }
   }
 
   public var sensorLocationServicesEventId : UInt64 {
     get {
-      return configuration.getUInt64(address: addressSensorLocationServicesEventId)!
+      return configuration!.getUInt64(address: addressSensorLocationServicesEventId)!
     }
     set(value) {
-      configuration.setUInt(address: addressSensorLocationServicesEventId, value: value)
+      configuration!.setUInt(address: addressSensorLocationServicesEventId, value: value)
     }
   }
 
   public var linkId : UInt64 {
     get {
-      return configuration.getUInt64(address: addressLink)!
+      return configuration!.getUInt64(address: addressLink)!
     }
     set(value) {
-      configuration.setUInt(address: addressLink, value: value)
+      configuration!.setUInt(address: addressLink, value: value)
     }
   }
 
   public var signalType : SignalType {
     get {
-      return SignalType(rawValue: configuration.getUInt16(address: addressSignalType)!)!
+      return SignalType(rawValue: configuration!.getUInt16(address: addressSignalType)!)!
     }
     set(value) {
-      configuration.setUInt(address: addressSignalType, value: value.rawValue)
+      configuration!.setUInt(address: addressSignalType, value: value.rawValue)
     }
   }
 
@@ -880,7 +946,7 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
 
   internal override func resetToFactoryDefaults() {
 
-    configuration.zeroMemory()
+    configuration!.zeroMemory()
     
     super.resetToFactoryDefaults()
  
@@ -891,27 +957,6 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
 
   }
   
-  internal override func resetReboot() {
-    
-    super.resetReboot()
-    
-    let consumerAddresses : [Int] = [
-      addressEnterDetectionZoneEventId,
-      addressExitDetectionZoneEventId,
-      addressEnterTranspondingZoneEventId,
-      addressExitTranspondingZoneEventId,
-      addressTrackFaultEventId,
-      addressTrackFaultClearedEventId,
-      addressLocationServicesEventId,
-    ]
-    
-    for address in consumerAddresses {
-      if let eventId = configuration.getUInt64(address: address), eventId != 0 {
-        
-      }
-    }
-  }
-
   internal override func completeStartUp() {
     sendNodeIsASwitchboardItemEvent()
   }
@@ -1354,12 +1399,12 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     guard routeNumber > 0 && routeNumber <= 8 else {
       return nil
     }
-    return configuration.getDouble(address: addressDimensionA + (routeNumber - 1) * 8)!
+    return configuration!.getDouble(address: addressDimensionA + (routeNumber - 1) * 8)!
   }
   
   public func setDimension(routeNumber:Int, value:Double) {
     if routeNumber > 0 && routeNumber <= 8 {
-      configuration.setDouble(address: addressDimensionA + (routeNumber - 1) * 8, value: value)
+      configuration!.setDouble(address: addressDimensionA + (routeNumber - 1) * 8, value: value)
     }
   }
   
@@ -1367,12 +1412,12 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     guard turnoutNumber > 0 && turnoutNumber <= 4 else {
       return nil
     }
-    return TurnoutMotorType(rawValue: configuration.getUInt8(address: addressSW1TurnoutMotorType + (turnoutNumber - 1) * 33)!)
+    return TurnoutMotorType(rawValue: configuration!.getUInt8(address: addressSW1TurnoutMotorType + (turnoutNumber - 1) * 33)!)
   }
   
   public func setTurnoutMotorType(turnoutNumber:Int, motorType:TurnoutMotorType) {
     if turnoutNumber > 0 && turnoutNumber <= 4 {
-      configuration.setUInt(address: addressSW1TurnoutMotorType + (turnoutNumber - 1) * 33, value: motorType.rawValue)
+      configuration!.setUInt(address: addressSW1TurnoutMotorType + (turnoutNumber - 1) * 33, value: motorType.rawValue)
     }
   }
   
@@ -1380,12 +1425,12 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     guard turnoutNumber > 0 && turnoutNumber <= 4 else {
       return nil
     }
-    return configuration.getUInt64(address: addressSW1ThrowEventId + (turnoutNumber - 1) * 33)
+    return configuration!.getUInt64(address: addressSW1ThrowEventId + (turnoutNumber - 1) * 33)
   }
   
   public func setTurnoutThrowEventId(turnoutNumber:Int, eventId:UInt64) {
     if turnoutNumber > 0 && turnoutNumber <= 4 {
-      configuration.setUInt(address: addressSW1ThrowEventId + (turnoutNumber - 1) * 33, value: eventId)
+      configuration!.setUInt(address: addressSW1ThrowEventId + (turnoutNumber - 1) * 33, value: eventId)
     }
   }
   
@@ -1393,12 +1438,12 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     guard turnoutNumber > 0 && turnoutNumber <= 4 else {
       return nil
     }
-    return configuration.getUInt64(address: addressSW1ThrownEventId + (turnoutNumber - 1) * 33)
+    return configuration!.getUInt64(address: addressSW1ThrownEventId + (turnoutNumber - 1) * 33)
   }
   
   public func setTurnoutThrownEventId(turnoutNumber:Int, eventId:UInt64) {
     if turnoutNumber > 0 && turnoutNumber <= 4 {
-      configuration.setUInt(address: addressSW1ThrownEventId + (turnoutNumber - 1) * 33, value: eventId)
+      configuration!.setUInt(address: addressSW1ThrownEventId + (turnoutNumber - 1) * 33, value: eventId)
     }
   }
 
@@ -1406,12 +1451,12 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     guard turnoutNumber > 0 && turnoutNumber <= 4 else {
       return nil
     }
-    return configuration.getUInt64(address: addressSW1CloseEventId + (turnoutNumber - 1) * 33)
+    return configuration!.getUInt64(address: addressSW1CloseEventId + (turnoutNumber - 1) * 33)
   }
   
   public func setTurnoutCloseEventId(turnoutNumber:Int, eventId:UInt64) {
     if turnoutNumber > 0 && turnoutNumber <= 4 {
-      configuration.setUInt(address: addressSW1CloseEventId + (turnoutNumber - 1) * 33, value: eventId)
+      configuration!.setUInt(address: addressSW1CloseEventId + (turnoutNumber - 1) * 33, value: eventId)
     }
   }
   
@@ -1419,12 +1464,12 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     guard turnoutNumber > 0 && turnoutNumber <= 4 else {
       return nil
     }
-    return configuration.getUInt64(address: addressSW1ClosedEventId + (turnoutNumber - 1) * 33)
+    return configuration!.getUInt64(address: addressSW1ClosedEventId + (turnoutNumber - 1) * 33)
   }
   
   public func setTurnoutClosedEventId(turnoutNumber:Int, eventId:UInt64) {
     if turnoutNumber > 0 && turnoutNumber <= 4 {
-      configuration.setUInt(address: addressSW1ClosedEventId + (turnoutNumber - 1) * 33, value: eventId)
+      configuration!.setUInt(address: addressSW1ClosedEventId + (turnoutNumber - 1) * 33, value: eventId)
     }
   }
 

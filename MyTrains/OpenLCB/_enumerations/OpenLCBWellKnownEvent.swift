@@ -57,7 +57,13 @@ public enum OpenLCBWellKnownEvent : UInt64 {
   // MARK: Public Properties
   
   public var isAutomaticallyRouted : Bool {
-    return (self.rawValue & 0xffff000000000000) == 0x0100000000000000
+    return OpenLCBWellKnownEvent.isAutomaticallyRouted(eventId: self.rawValue)
+  }
+  
+  // MARK: Public Class Properties
+  
+  public static func isAutomaticallyRouted(eventId:UInt64) -> Bool {
+    return (eventId & 0xffff000000000000) == 0x0100000000000000
   }
   
 }

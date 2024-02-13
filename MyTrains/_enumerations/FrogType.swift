@@ -32,7 +32,7 @@ public enum FrogType : Int {
   
   private static var map : String {
     
-    var items : [FrogType] = [
+    let items : [FrogType] = [
       .electroFrog,
       .insulFrog,
       .uniFrog,

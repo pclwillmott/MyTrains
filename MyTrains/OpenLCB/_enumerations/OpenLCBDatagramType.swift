@@ -68,8 +68,8 @@ public enum OpenLCBDatagramType : UInt16 {
   case getAddressSpaceInformationReplyLowAddressPresent = 0x2087
   case LockReserveCommand                               = 0x2088
   case LockReserveReply                                 = 0x208a
-  case getUniqueIDCommand                               = 0x208c
-  case getUniqueIDReply                                 = 0x208d
+  case getUniqueEventIDCommand                          = 0x208c
+  case getUniqueEventIDReply                            = 0x208d
   case unfreezeCommand                                  = 0x20a0
   case freezeCommand                                    = 0x20a1
   case updateCompleteCommand                            = 0x20a8

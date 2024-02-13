@@ -13,6 +13,8 @@ public enum OpenLCBValidity : UInt16 {
   case invalid = 1
   case unknown = 3
   
+  // MARK: Public Properties
+  
   public var consumerMTI : OpenLCBMTI {
     let rawValue = OpenLCBMTI.consumerIdentifiedAsCurrentlyValid.rawValue + self.rawValue
     return OpenLCBMTI(rawValue: rawValue)!

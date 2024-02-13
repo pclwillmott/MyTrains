@@ -13,60 +13,71 @@ public class SwitchboardPanelNode : OpenLCBNodeVirtual {
   
   public init(nodeId:UInt64, layoutNodeId:UInt64 = 0) {
     
-    configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: 4, isReadOnly: false, description: "")
-    
     super.init(nodeId: nodeId)
     
-    if layoutNodeId != 0 {
-      self.layoutNodeId = layoutNodeId
+    var configurationSize = 0
+    initSpaceAddress(&addressNumberOfColumns, 2, &configurationSize)
+    initSpaceAddress(&addressNumberOfRows, 2, &configurationSize)
+
+    configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: configurationSize, isReadOnly: false, description: "")
+    
+    if let configuration {
+      
+      if layoutNodeId != 0 {
+        self.layoutNodeId = layoutNodeId
+      }
+      
+      virtualNodeType = MyTrainsVirtualNodeType.switchboardPanelNode
+      
+      eventsConsumed = [
+        OpenLCBWellKnownEvent.identifyMyTrainsSwitchboardPanels.rawValue,
+      ]
+      
+      eventsProduced = [
+        OpenLCBWellKnownEvent.nodeIsASwitchboardPanel.rawValue,
+      ]
+      
+      configuration.delegate = self
+      
+      memorySpaces[configuration.space] = configuration
+      
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressNumberOfColumns)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressNumberOfRows)
+      
+      if !memorySpacesInitialized {
+        resetToFactoryDefaults()
+      }
+      
+      cdiFilename = "MyTrains Switchboard Panel"
+      
     }
     
-    virtualNodeType = MyTrainsVirtualNodeType.switchboardPanelNode
-    
-    eventsConsumed.insert(.identifyMyTrainsSwitchboardPanels)
-    eventsProduced.insert(.nodeIsASwitchboardPanel)
-    
-    configuration.delegate = self
-
-    memorySpaces[configuration.space] = configuration
-
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressNumberOfColumns)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressNumberOfRows)
-
-    if !memorySpacesInitialized {
-      resetToFactoryDefaults()
-    }
-
-    cdiFilename = "MyTrains Switchboard Panel"
-
   }
 
   // MARK: Private Properties
 
   // Configuration varaible addresses
   
-  internal let addressNumberOfColumns  : Int =  0
-  internal let addressNumberOfRows     : Int =  2
-
-  private var configuration : OpenLCBMemorySpace
+  internal var addressNumberOfColumns = 0
+  internal var addressNumberOfRows    = 0
 
   // MARK: Public Properties
   
   public var numberOfColumns : UInt16 {
     get {
-      return configuration.getUInt16(address: addressNumberOfColumns)!
+      return configuration!.getUInt16(address: addressNumberOfColumns)!
     }
     set(value) {
-      configuration.setUInt(address: addressNumberOfColumns, value: value)
+      configuration!.setUInt(address: addressNumberOfColumns, value: value)
     }
   }
 
   public var numberOfRows : UInt16 {
     get {
-      return configuration.getUInt16(address: addressNumberOfRows)!
+      return configuration!.getUInt16(address: addressNumberOfRows)!
     }
     set(value) {
-      configuration.setUInt(address: addressNumberOfRows, value: value)
+      configuration!.setUInt(address: addressNumberOfRows, value: value)
     }
   }
 
@@ -74,9 +85,9 @@ public class SwitchboardPanelNode : OpenLCBNodeVirtual {
 
   internal override func resetToFactoryDefaults() {
 
-    super.resetToFactoryDefaults()
+    configuration!.zeroMemory()
     
-    configuration.zeroMemory()
+    super.resetToFactoryDefaults()
     
     numberOfColumns = 30
     numberOfRows    = 30

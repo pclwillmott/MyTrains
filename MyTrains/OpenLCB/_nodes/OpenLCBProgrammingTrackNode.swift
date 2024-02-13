@@ -21,45 +21,58 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
   
   public override init(nodeId:UInt64) {
     
-    let configSize = addressDeleteFromRoster + 1
-    
-    configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: configSize, isReadOnly: false, description: "")
-    
     let cvSize = numberOfCVs
     
     cvs = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.cv.rawValue, defaultMemorySize: cvSize, isReadOnly: false, description: "")
         
     super.init(nodeId: nodeId)
 
-    virtualNodeType = MyTrainsVirtualNodeType.programmingTrackNode
+    var configurationSize = 0
     
-    isDatagramProtocolSupported = true
+    initSpaceAddress(&addressLocoNetGateway, 8, &configurationSize)
+    initSpaceAddress(&addressDeleteFromRoster, 1, &configurationSize)
 
-    isIdentificationSupported = true
+    configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: configurationSize, isReadOnly: false, description: "")
     
-    isSimpleNodeInformationProtocolSupported = true
-    
-    configuration.delegate = self
-    
-    memorySpaces[configuration.space] = configuration
-    
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressLocoNetGateway)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDeleteFromRoster)
-
-    cvs.delegate = self
-    
-    memorySpaces[cvs.space] = cvs
-    
-    for cv in 0 ... numberOfCVs - 1 {
-      registerVariable(space: OpenLCBNodeMemoryAddressSpace.cv.rawValue, address: cv)
+    if let configuration {
+      
+      virtualNodeType = MyTrainsVirtualNodeType.programmingTrackNode
+      
+      eventsConsumed = []
+      
+      eventsProduced = [
+        OpenLCBWellKnownEvent.nodeIsADCCProgrammingTrack.rawValue
+      ]
+      
+      isDatagramProtocolSupported = true
+      
+      isIdentificationSupported = true
+      
+      isSimpleNodeInformationProtocolSupported = true
+      
+      configuration.delegate = self
+      
+      memorySpaces[configuration.space] = configuration
+      
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressLocoNetGateway)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDeleteFromRoster)
+      
+      cvs.delegate = self
+      
+      memorySpaces[cvs.space] = cvs
+      
+      for cv in 0 ... numberOfCVs - 1 {
+        registerVariable(space: OpenLCBNodeMemoryAddressSpace.cv.rawValue, address: cv)
+      }
+      
+      if !memorySpacesInitialized {
+        resetToFactoryDefaults()
+      }
+      
+      cdiFilename = "MyTrains DCC Programming Track"
+      
     }
     
-    if !memorySpacesInitialized {
-      resetToFactoryDefaults()
-    }
-    
-    cdiFilename = "MyTrains DCC Programming Track"
-
   }
   
   deinit {
@@ -68,12 +81,10 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
   
   // MARK: Private Properties
   
-  internal var configuration : OpenLCBMemorySpace
-
   internal var cvs : OpenLCBMemorySpace
   
-  internal let addressLocoNetGateway   : Int = 0
-  internal let addressDeleteFromRoster : Int = 8
+  internal var addressLocoNetGateway   = 0
+  internal var addressDeleteFromRoster = 0
   
   internal let numberOfCVs : Int = 1024
 
@@ -101,10 +112,10 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
   
   public var locoNetGatewayNodeId : UInt64 {
     get {
-      return configuration.getUInt64(address: addressLocoNetGateway)!
+      return configuration!.getUInt64(address: addressLocoNetGateway)!
     }
     set(value) {
-      configuration.setUInt(address: addressLocoNetGateway, value: value)
+      configuration!.setUInt(address: addressLocoNetGateway, value: value)
     }
   }
 
@@ -211,8 +222,10 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
     
     locoNet?.delegate = self
     
+  }
+  
+  internal override func completeStartUp() {
     networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .nodeIsADCCProgrammingTrack)
-    
   }
  
   internal override func customizeDynamicCDI(cdi:String) -> String {
@@ -232,32 +245,8 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
   // MARK: OpenLCBNetworkLayerDelegate Methods
   
   public override func openLCBMessageReceived(message: OpenLCBMessage) {
-    
     super.openLCBMessageReceived(message: message)
-    
     locoNet?.openLCBMessageReceived(message: message)
-    
-    switch message.messageTypeIndicator {
-    
-    case .identifyProducer:
-      
-      if let event = OpenLCBWellKnownEvent(rawValue: message.eventId!) {
-        
-        switch event {
-        case .nodeIsADCCProgrammingTrack:
-          if locoNet!.commandStationType.programmingTrackExists {
-            networkLayer?.sendProducerIdentified(sourceNodeId: nodeId, wellKnownEvent: .nodeIsADCCProgrammingTrack, validity: .unknown)
-          }
-        default:
-          break
-        }
-        
-      }
-      
-    default:
-      break
-    }
-    
   }
   
   // MARK: LocoNetDelegate Methods

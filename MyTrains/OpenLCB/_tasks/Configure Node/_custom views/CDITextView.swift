@@ -83,6 +83,10 @@ class CDITextView: CDIDataView, NSTextFieldDelegate, NSControlTextEditingDelegat
           textField.widthAnchor.constraint(equalToConstant: 160)
         ])
         textField.placeholderString = "00.00.00.00.00.00.00.00"
+        NSLayoutConstraint.activate([
+          dataButtonView.leadingAnchor.constraint(equalTo: newEventId.leadingAnchor)
+        ])
+
       }
       else {
         NSLayoutConstraint.activate([
@@ -90,13 +94,16 @@ class CDITextView: CDIDataView, NSTextFieldDelegate, NSControlTextEditingDelegat
           dataButtonView.leadingAnchor.constraint(equalToSystemSpacingAfter: textField.trailingAnchor, multiplier: 1.0),
         ])
       }
-
+      
       copyButton.target = self
       copyButton.action = #selector(self.btnCopyAction(_:))
       
       pasteButton.target = self
       pasteButton.action = #selector(self.btnPasteAction(_:))
 
+      newEventId.target = self
+      newEventId.action = #selector(self.newEventIdAction(_:))
+      
     }
     else {
 
@@ -134,6 +141,11 @@ class CDITextView: CDIDataView, NSTextFieldDelegate, NSControlTextEditingDelegat
     let pasteboard = NSPasteboard.general
     let value = pasteboard.string(forType: .string) ?? ""
     textField.stringValue = value
+  }
+
+  @IBAction func newEventIdAction(_ sender: NSButton) {
+    print("here")
+    delegate?.cdiDataViewGetNewEventId?(textField: textField)
   }
 
 }

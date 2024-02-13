@@ -15,32 +15,51 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   
   public override init(nodeId:UInt64) {
     
-    configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: 260, isReadOnly: false, description: "")
-    
     super.init(nodeId: nodeId)
     
-    virtualNodeType = MyTrainsVirtualNodeType.locoNetGatewayNode
-    
-    configuration.delegate = self
+    var configurationSize = 0
 
-    memorySpaces[configuration.space] = configuration
+    initSpaceAddress(&addressDevicePath, 256, &configurationSize)
+    initSpaceAddress(&addressBaudRate, 1, &configurationSize)
+    initSpaceAddress(&addressParity, 1, &configurationSize)
+    initSpaceAddress(&addressFlowControl, 1, &configurationSize)
+    initSpaceAddress(&addressBlockAllMessages, 1, &configurationSize)
 
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDevicePath)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressBaudRate)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressParity)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressFlowControl)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressBlockAllMessages)
-
-    isLocoNetGatewayProtocolSupported = true
+    configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: configurationSize, isReadOnly: false, description: "")
     
-    datagramTypesSupported.insert(.sendlocoNetMessage)
-    
-    if !memorySpacesInitialized {
-      resetToFactoryDefaults()
+    if let configuration {
+      
+      virtualNodeType = MyTrainsVirtualNodeType.locoNetGatewayNode
+      
+      eventsConsumed = [
+      ]
+      
+      eventsProduced = [
+        OpenLCBWellKnownEvent.nodeIsALocoNetGateway.rawValue,
+      ]
+      
+      configuration.delegate = self
+      
+      memorySpaces[configuration.space] = configuration
+      
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDevicePath)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressBaudRate)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressParity)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressFlowControl)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressBlockAllMessages)
+      
+      isLocoNetGatewayProtocolSupported = true
+      
+      datagramTypesSupported.insert(.sendlocoNetMessage)
+      
+      if !memorySpacesInitialized {
+        resetToFactoryDefaults()
+      }
+      
+      cdiFilename = "MyTrains LocoNet Gateway"
+      
     }
-
-    cdiFilename = "MyTrains LocoNet Gateway"
-
+    
   }
   
   deinit {
@@ -66,55 +85,55 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
 
   // Configuration varaible addresses
   
-  internal let addressDevicePath       : Int =  0
-  internal let addressBaudRate         : Int =  256
-  internal let addressParity           : Int =  257
-  internal let addressFlowControl      : Int =  258
-  internal let addressBlockAllMessages : Int =  259
+  internal var addressDevicePath       = 0
+  internal var addressBaudRate         = 0
+  internal var addressParity           = 0
+  internal var addressFlowControl      = 0
+  internal var addressBlockAllMessages = 0
 
   private var devicePath : String {
     get {
-      return configuration.getString(address: addressDevicePath, count: 256)!
+      return configuration!.getString(address: addressDevicePath, count: 256)!
     }
     set(value) {
-      configuration.setString(address: addressDevicePath, value: value, fieldSize: 256)
+      configuration!.setString(address: addressDevicePath, value: value, fieldSize: 256)
     }
   }
   
   private var baudRate : BaudRate {
     get {
-      return BaudRate(rawValue: configuration.getUInt8(address: addressBaudRate)!)!
+      return BaudRate(rawValue: configuration!.getUInt8(address: addressBaudRate)!)!
     }
     set(value) {
-      configuration.setUInt(address: addressBaudRate, value: value.rawValue)
+      configuration!.setUInt(address: addressBaudRate, value: value.rawValue)
     }
   }
   
   private var parity : Parity {
     get {
-      return Parity(rawValue: configuration.getUInt8(address: addressParity)!)!
+      return Parity(rawValue: configuration!.getUInt8(address: addressParity)!)!
     }
     set(value) {
-      configuration.setUInt(address: addressBaudRate, value: value.rawValue)
+      configuration!.setUInt(address: addressBaudRate, value: value.rawValue)
     }
   }
   
   private var flowControl : FlowControl {
     get {
-      return FlowControl(rawValue: configuration.getUInt8(address: addressFlowControl)!)!
+      return FlowControl(rawValue: configuration!.getUInt8(address: addressFlowControl)!)!
     }
     set(value) {
-      configuration.setUInt(address: addressBaudRate, value: value.rawValue)
+      configuration!.setUInt(address: addressBaudRate, value: value.rawValue)
     }
   }
   
   private var blockAllMessages : Bool {
     get {
-      return configuration.getUInt8(address: addressBlockAllMessages)! != 0
+      return configuration!.getUInt8(address: addressBlockAllMessages)! != 0
     }
     set(value) {
       let uInt : UInt8 = value ? 1 : 0
-      configuration.setUInt(address: addressBaudRate, value: uInt)
+      configuration!.setUInt(address: addressBaudRate, value: uInt)
     }
   }
   
@@ -126,10 +145,6 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   
   private var currentItem : QueueItem?
   
-  // MARK: Public Properties
-  
-  public var configuration : OpenLCBMemorySpace
-
   // MARK: Private Methods
   
   internal override func resetToFactoryDefaults() {
@@ -331,12 +346,6 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     
     switch message.messageTypeIndicator {
       
-    case .identifyProducer:
-      
-      if message.eventId == OpenLCBWellKnownEvent.nodeIsALocoNetGateway.rawValue {
-        networkLayer?.sendProducerIdentified(sourceNodeId: nodeId, wellKnownEvent: .nodeIsALocoNetGateway, validity: .valid)
-      }
-    
     case .consumerIdentifiedAsCurrentlyValid, .consumerIdentifiedAsCurrentlyInvalid, .consumerIdentifiedWithValidityUnknown:
       
       if message.eventId == OpenLCBWellKnownEvent.nodeIsALocoNetGateway.rawValue {
@@ -345,7 +354,7 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
       
     case .datagram:
       
-      if let datagramType = message.datagramType, datagramType == .sendlocoNetMessage, message.destinationNodeId! == nodeId, let sourceNodeId = message.sourceNodeId {
+      if let datagramType = message.datagramType, datagramType == .sendlocoNetMessage, let sourceNodeId = message.sourceNodeId {
 
         if !isOpen {
           networkLayer?.sendDatagramRejected(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, errorCode: .permanentErrorNoConnection)

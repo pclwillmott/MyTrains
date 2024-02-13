@@ -13,15 +13,9 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
   
   public override init(nodeId:UInt64) {
     
-    //    let nodeId = 0x0801000d0000 + UInt64(rollingStock.primaryKey)
-    
     functionSpaceSize = 0x45
     
     functions = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.functions.rawValue, defaultMemorySize: functionSpaceSize, isReadOnly: false, description: "")
-    
-    let configSize = addressLocoNetGateway + 8
-    
-    configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: configSize, isReadOnly: false, description: "")
     
     let cvSize = numberOfCVs * 3
     
@@ -29,61 +23,90 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
         
     super.init(nodeId: nodeId)
     
-    virtualNodeType = MyTrainsVirtualNodeType.trainNode
-    
-    configuration.delegate = self
-    
-    memorySpaces[configuration.space] = configuration
-    
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDCCAddress)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedSteps)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressF0ConsistBehaviour)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressF0Directional)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressF0MUSwitch)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressLocoNetGateway)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDeleteFromRoster)
+    var configurationSize = 0
 
-    for fn in 1...numberOfFunctions - 1 {
-      let groupOffset = (fn - 1) * functionGroupSize
-      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressFNDisplayName      + groupOffset)
-      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressFNMomentary        + groupOffset)
-      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressFNConsistBehaviour + groupOffset)
-      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressFNDescription      + groupOffset)
+    initSpaceAddress(&addressLocoNetGateway, 8, &configurationSize)
+
+    initSpaceAddress(&addressDCCAddress, 2, &configurationSize)
+    initSpaceAddress(&addressSpeedSteps, 1, &configurationSize)
+    initSpaceAddress(&addressF0ConsistBehaviour, 1, &configurationSize)
+    initSpaceAddress(&addressF0Directional, 1, &configurationSize)
+    initSpaceAddress(&addressF0MUSwitch, 2, &configurationSize)
+    
+    initSpaceAddress(&addressFNDisplayName, 1, &configurationSize) // F1
+    initSpaceAddress(&addressFNMomentary, 1, &configurationSize)
+    initSpaceAddress(&addressFNConsistBehaviour, 1, &configurationSize)
+    initSpaceAddress(&addressFNDescription, 32, &configurationSize)
+
+    var temp = 0
+    for fn in 2 ... numberOfFunctions - 1 { // F2 to F68
+      initSpaceAddress(&temp, functionGroupSize, &configurationSize)
     }
     
-    functions.delegate = self
+    initSpaceAddress(&addressDeleteFromRoster, 1, &configurationSize)
+    initSpaceAddress(&addressLocoNetGateway, 8, &configurationSize)
+
+    configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: configurationSize, isReadOnly: false, description: "")
     
-    memorySpaces[functions.space] = functions
-    
-    for fn in 0 ... numberOfFunctions - 1 {
-      registerVariable(space: OpenLCBNodeMemoryAddressSpace.functions.rawValue, address: fn)
+    if let configuration {
+      
+      virtualNodeType = MyTrainsVirtualNodeType.trainNode
+      
+      configuration.delegate = self
+      
+      memorySpaces[configuration.space] = configuration
+      
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDCCAddress)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSpeedSteps)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressF0ConsistBehaviour)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressF0Directional)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressF0MUSwitch)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressLocoNetGateway)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDeleteFromRoster)
+      
+      for fn in 1 ... numberOfFunctions - 1 {
+        let groupOffset = (fn - 1) * functionGroupSize
+        registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressFNDisplayName      + groupOffset)
+        registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressFNMomentary        + groupOffset)
+        registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressFNConsistBehaviour + groupOffset)
+        registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressFNDescription      + groupOffset)
+      }
+      
+      functions.delegate = self
+      
+      memorySpaces[functions.space] = functions
+      
+      for fn in 0 ... numberOfFunctions - 1 {
+        registerVariable(space: OpenLCBNodeMemoryAddressSpace.functions.rawValue, address: fn)
+      }
+      
+      cvs.delegate = self
+      
+      memorySpaces[cvs.space] = cvs
+      
+      for cv in 0 ... numberOfCVs - 1 {
+        registerVariable(space: OpenLCBNodeMemoryAddressSpace.cv.rawValue, address: cv)
+      }
+      
+      isDatagramProtocolSupported = true
+      
+      isIdentificationSupported = true
+      
+      isSimpleNodeInformationProtocolSupported = true
+      
+      isTractionControlProtocolSupported = true
+      
+      isSimpleTrainNodeInformationProtocolSupported = true
+      
+      if !memorySpacesInitialized {
+        resetToFactoryDefaults()
+      }
+      
+      cdiFilename = "MyTrains Train"
+      
+      initFDI(filename: "FDI Generic")
+      
     }
-    
-    cvs.delegate = self
-    
-    memorySpaces[cvs.space] = cvs
-    
-    for cv in 0 ... numberOfCVs - 1 {
-      registerVariable(space: OpenLCBNodeMemoryAddressSpace.cv.rawValue, address: cv)
-    }
-    
-    isDatagramProtocolSupported = true
-    
-    isIdentificationSupported = true
-    
-    isSimpleNodeInformationProtocolSupported = true
-    
-    isTractionControlProtocolSupported = true
-    
-    isSimpleTrainNodeInformationProtocolSupported = true
-    
-    if !memorySpacesInitialized {
-      resetToFactoryDefaults()
-    }
-    
-    cdiFilename = "MyTrains Train"
-    
-    initFDI(filename: "FDI Generic")
     
   }
   
@@ -93,21 +116,19 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
   
   internal var functions : OpenLCBMemorySpace
   
-  internal var configuration : OpenLCBMemorySpace
-  
   internal var cvs : OpenLCBMemorySpace
   
-  internal let addressDCCAddress         : Int = 0
-  internal let addressSpeedSteps         : Int = 2
-  internal let addressF0ConsistBehaviour : Int = 3
-  internal let addressF0Directional      : Int = 4
-  internal let addressF0MUSwitch         : Int = 5
-  internal let addressFNDisplayName      : Int = 7
-  internal let addressFNMomentary        : Int = 8
-  internal let addressFNConsistBehaviour : Int = 9
-  internal let addressFNDescription      : Int = 10
-  internal let addressDeleteFromRoster   : Int = 2387
-  internal let addressLocoNetGateway     : Int = 2388
+  internal var addressDCCAddress         = 0
+  internal var addressSpeedSteps         = 0
+  internal var addressF0ConsistBehaviour = 0
+  internal var addressF0Directional      = 0
+  internal var addressF0MUSwitch         = 0
+  internal var addressFNDisplayName      = 0
+  internal var addressFNMomentary        = 0
+  internal var addressFNConsistBehaviour = 0
+  internal var addressFNDescription      = 0
+  internal var addressDeleteFromRoster   = 0
+  internal var addressLocoNetGateway     = 0
   
   internal let numberOfFunctions : Int = 69
   internal let functionGroupSize : Int = 35
@@ -232,10 +253,10 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
   
   public var dccAddress : UInt16 {
     get {
-      return configuration.getUInt16(address: addressDCCAddress)!
+      return configuration!.getUInt16(address: addressDCCAddress)!
     }
     set(value) {
-      configuration.setUInt(address: addressDCCAddress, value: value)
+      configuration!.setUInt(address: addressDCCAddress, value: value)
     }
   }
   
@@ -245,19 +266,19 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
   
   public var speedSteps : SpeedSteps {
     get {
-      return SpeedSteps(rawValue: configuration.getUInt8(address: addressSpeedSteps)!)!
+      return SpeedSteps(rawValue: configuration!.getUInt8(address: addressSpeedSteps)!)!
     }
     set(value) {
-      configuration.setUInt(address: addressDCCAddress, value: value.rawValue)
+      configuration!.setUInt(address: addressDCCAddress, value: value.rawValue)
     }
   }
   
   public var locoNetGatewayNodeId : UInt64 {
     get {
-      return configuration.getUInt64(address: addressLocoNetGateway)!
+      return configuration!.getUInt64(address: addressLocoNetGateway)!
     }
     set(value) {
-      configuration.setUInt(address: addressLocoNetGateway, value: value)
+      configuration!.setUInt(address: addressLocoNetGateway, value: value)
     }
   }
   
@@ -315,7 +336,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     
     let baseAddress = (number - 1) * functionGroupSize
     
-    if let value = configuration.getUInt8(address: baseAddress + addressFNMomentary) {
+    if let value = configuration!.getUInt8(address: baseAddress + addressFNMomentary) {
       return value != 0
     }
     
@@ -339,7 +360,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
 
         for number in 1 ... numberOfFunctions - 1 {
           let baseAddress = (number - 1) * functionGroupSize
-          if let displayNameId = configuration.getUInt8(address: baseAddress + addressFNDisplayName), let function = OpenLCBFunction(rawValue: displayNameId), let momentary = configuration.getUInt8(address: baseAddress + addressFNMomentary) {
+          if let displayNameId = configuration!.getUInt8(address: baseAddress + addressFNDisplayName), let function = OpenLCBFunction(rawValue: displayNameId), let momentary = configuration!.getUInt8(address: baseAddress + addressFNMomentary) {
             if function != .unassigned {
               let kind = momentary == 0 ? "binary" : "momentary"
               fnx += "<function size='1' kind='\(kind)'>\n"

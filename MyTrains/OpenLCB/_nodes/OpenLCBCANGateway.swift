@@ -13,27 +13,38 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   
   public override init(nodeId:UInt64) {
     
-    configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: 259, isReadOnly: false, description: "")
-    
     super.init(nodeId: nodeId)
+
+    var configurationSize = 0
+
+    initSpaceAddress(&addressDevicePath, 256, &configurationSize)
+    initSpaceAddress(&addressBaudRate, 1, &configurationSize)
+    initSpaceAddress(&addressParity, 1, &configurationSize)
+    initSpaceAddress(&addressFlowControl, 1, &configurationSize)
+
+    configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: configurationSize, isReadOnly: false, description: "")
     
-    virtualNodeType = MyTrainsVirtualNodeType.canGatewayNode
-    
-    configuration.delegate = self
-
-    memorySpaces[configuration.space] = configuration
-
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDevicePath)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressBaudRate)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressParity)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressFlowControl)
-
-    if !memorySpacesInitialized {
-      resetToFactoryDefaults()
+    if let configuration {
+      
+      virtualNodeType = MyTrainsVirtualNodeType.canGatewayNode
+      
+      configuration.delegate = self
+      
+      memorySpaces[configuration.space] = configuration
+      
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDevicePath)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressBaudRate)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressParity)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressFlowControl)
+      
+      if !memorySpacesInitialized {
+        resetToFactoryDefaults()
+      }
+      
+      cdiFilename = "MyTrains CAN Gateway"
+      
     }
-
-    cdiFilename = "MyTrains CAN Gateway"
-   
+    
   }
   
   deinit {
@@ -59,47 +70,47 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
 
   // Configuration varaible addresses
   
-  internal let addressDevicePath       : Int =  0
-  internal let addressBaudRate         : Int =  256
-  internal let addressParity           : Int =  257
-  internal let addressFlowControl      : Int =  258
+  internal var addressDevicePath  = 0
+  internal var addressBaudRate    = 0
+  internal var addressParity      = 0
+  internal var addressFlowControl = 0
   
   internal var observers : [Int:OpenLCBCANDelegate] = [:]
   internal var nextObserverId : Int = 1
 
   private var devicePath : String {
     get {
-      return configuration.getString(address: addressDevicePath, count: 256)!
+      return configuration!.getString(address: addressDevicePath, count: 256)!
     }
     set(value) {
-      configuration.setString(address: addressDevicePath, value: value, fieldSize: 256)
+      configuration!.setString(address: addressDevicePath, value: value, fieldSize: 256)
     }
   }
   
   private var baudRate : BaudRate {
     get {
-      return BaudRate(rawValue: configuration.getUInt8(address: addressBaudRate)!)!
+      return BaudRate(rawValue: configuration!.getUInt8(address: addressBaudRate)!)!
     }
     set(value) {
-      configuration.setUInt(address: addressBaudRate, value: value.rawValue)
+      configuration!.setUInt(address: addressBaudRate, value: value.rawValue)
     }
   }
 
   private var parity : Parity {
     get {
-      return Parity(rawValue: configuration.getUInt8(address: addressParity)!)!
+      return Parity(rawValue: configuration!.getUInt8(address: addressParity)!)!
     }
     set(value) {
-      configuration.setUInt(address: addressBaudRate, value: value.rawValue)
+      configuration!.setUInt(address: addressBaudRate, value: value.rawValue)
     }
   }
   
   private var flowControl : FlowControl {
     get {
-      return FlowControl(rawValue: configuration.getUInt8(address: addressFlowControl)!)!
+      return FlowControl(rawValue: configuration!.getUInt8(address: addressFlowControl)!)!
     }
     set(value) {
-      configuration.setUInt(address: addressBaudRate, value: value.rawValue)
+      configuration!.setUInt(address: addressBaudRate, value: value.rawValue)
     }
   }
   
@@ -157,10 +168,6 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   
   private var lastTimeStamp : TimeInterval = 0.0
   
-  // MARK: Public Properties
-  
-  public var configuration : OpenLCBMemorySpace
-
   // MARK: Private Methods
   
   internal override func resetToFactoryDefaults() {

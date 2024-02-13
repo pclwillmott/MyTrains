@@ -70,39 +70,59 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
   
   public override init(nodeId:UInt64) {
     
-    configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: 64, isReadOnly: false, description: "")
-    
     super.init(nodeId: nodeId)
-    
-    virtualNodeType = MyTrainsVirtualNodeType.clockNode
-    
-    configuration.delegate = self
 
-    memorySpaces[configuration.space] = configuration
-
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressOperatingMode)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressClockType)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressCustomClockEventPrefixType)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressUserSpecifiedEventPrefix)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressRunningState)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressCurrentDateTime)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressCurrentRate)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressResetToInitialState)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressResetToFactoryDefaults)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressPowerOnRunningState)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressInitialDateTime)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDefaultDateTime)
-    registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressInitialRate)
-
-    dateFormatter.timeZone = Date().dateComponents.timeZone
-    dateFormatter.formatOptions = [.withFullDate, .withTime, .withColonSeparatorInTime]
+    var configurationSize = 0
     
-    if !memorySpacesInitialized {
-      resetToFactoryDefaults()
+    initSpaceAddress(&addressOperatingMode, 1, &configurationSize)
+    initSpaceAddress(&addressClockType, 1, &configurationSize)
+    initSpaceAddress(&addressCustomClockEventPrefixType, 1, &configurationSize)
+    initSpaceAddress(&addressUserSpecifiedEventPrefix, 8, &configurationSize)
+    initSpaceAddress(&addressRunningState, 1, &configurationSize)
+    initSpaceAddress(&addressCurrentDateTime, 20, &configurationSize)
+    initSpaceAddress(&addressCurrentRate, 4, &configurationSize)
+    initSpaceAddress(&addressResetToInitialState, 1, &configurationSize)
+    initSpaceAddress(&addressResetToFactoryDefaults, 1, &configurationSize)
+    initSpaceAddress(&addressPowerOnRunningState, 1, &configurationSize)
+    initSpaceAddress(&addressInitialDateTime, 1, &configurationSize)
+    initSpaceAddress(&addressDefaultDateTime, 20, &configurationSize)
+    initSpaceAddress(&addressInitialRate, 4, &configurationSize)
+
+    configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: configurationSize, isReadOnly: false, description: "")
+    
+    if let configuration {
+      
+      virtualNodeType = MyTrainsVirtualNodeType.clockNode
+      
+      configuration.delegate = self
+      
+      memorySpaces[configuration.space] = configuration
+      
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressOperatingMode)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressClockType)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressCustomClockEventPrefixType)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressUserSpecifiedEventPrefix)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressRunningState)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressCurrentDateTime)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressCurrentRate)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressResetToInitialState)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressResetToFactoryDefaults)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressPowerOnRunningState)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressInitialDateTime)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDefaultDateTime)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressInitialRate)
+      
+      dateFormatter.timeZone = Date().dateComponents.timeZone
+      dateFormatter.formatOptions = [.withFullDate, .withTime, .withColonSeparatorInTime]
+      
+      if !memorySpacesInitialized {
+        resetToFactoryDefaults()
+      }
+      
+      cdiFilename = "MyTrains Clock"
+      
     }
-
-    cdiFilename = "MyTrains Clock"
-
+    
   }
   
   deinit {
@@ -155,65 +175,61 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
 
   // Configuration variable addresses
   
-  internal let addressOperatingMode              : Int =  0
-  internal let addressClockType                  : Int =  1
-  internal let addressCustomClockEventPrefixType : Int =  2
-  internal let addressUserSpecifiedEventPrefix   : Int =  3
-  internal let addressRunningState               : Int = 11
-  internal let addressCurrentDateTime            : Int = 12
-  internal let addressCurrentRate                : Int = 32
-  internal let addressResetToInitialState        : Int = 36
-  internal let addressResetToFactoryDefaults     : Int = 37
-  internal let addressPowerOnRunningState        : Int = 38
-  internal let addressInitialDateTime            : Int = 39
-  internal let addressDefaultDateTime            : Int = 40
-  internal let addressInitialRate                : Int = 60
+  internal var addressOperatingMode              = 0
+  internal var addressClockType                  = 0
+  internal var addressCustomClockEventPrefixType = 0
+  internal var addressUserSpecifiedEventPrefix   = 0
+  internal var addressRunningState               = 0
+  internal var addressCurrentDateTime            = 0
+  internal var addressCurrentRate                = 0
+  internal var addressResetToInitialState        = 0
+  internal var addressResetToFactoryDefaults     = 0
+  internal var addressPowerOnRunningState        = 0
+  internal var addressInitialDateTime            = 0
+  internal var addressDefaultDateTime            = 0
+  internal var addressInitialRate                = 0
   
   // MARK: Public Properties
   
-  public var configuration : OpenLCBMemorySpace
-  
   public var operatingMode : OpenLCBClockOperatingMode {
     get {
-      return OpenLCBClockOperatingMode(rawValue: configuration.getUInt8(address: addressOperatingMode)!)!
+      return OpenLCBClockOperatingMode(rawValue: configuration!.getUInt8(address: addressOperatingMode)!)!
     }
     set(value) {
-      configuration.setUInt(address: addressOperatingMode, value: value.rawValue)
+      configuration!.setUInt(address: addressOperatingMode, value: value.rawValue)
     }
   }
   
   public var setToFactoryDefaults : OpenLCBEnabledDisabledState {
     get {
-      return OpenLCBEnabledDisabledState(rawValue: configuration.getUInt8(address: addressResetToFactoryDefaults)!)!
+      return OpenLCBEnabledDisabledState(rawValue: configuration!.getUInt8(address: addressResetToFactoryDefaults)!)!
     }
     set(value) {
-      configuration.setUInt(address: addressResetToFactoryDefaults, value: value.rawValue)
+      configuration!.setUInt(address: addressResetToFactoryDefaults, value: value.rawValue)
     }
   }
 
   public var setToInitialState : OpenLCBEnabledDisabledState {
     get {
-      return OpenLCBEnabledDisabledState(rawValue: configuration.getUInt8(address: addressResetToInitialState)!)!
+      return OpenLCBEnabledDisabledState(rawValue: configuration!.getUInt8(address: addressResetToInitialState)!)!
     }
     set(value) {
-      configuration.setUInt(address: addressResetToInitialState, value: value.rawValue)
+      configuration!.setUInt(address: addressResetToInitialState, value: value.rawValue)
     }
   }
 
   public var subState : OpenLCBClockSubState = .rebooting
   
   public var isClockGenerator : Bool {
-    get {
-      return operatingMode == .master
-    }
+    return operatingMode == .master
   }
   
   public var rate : Double {
     get {
-      return Double(configuration.getFloat(address: addressCurrentRate)!)
+      return Double(configuration!.getFloat(address: addressCurrentRate)!)
     }
     set(value) {
-      configuration.setFloat(address: addressCurrentRate, value: Float(value))
+      configuration!.setFloat(address: addressCurrentRate, value: Float(value))
       if clockState == .running {
         stopTimer()
         startTimer()
@@ -223,79 +239,77 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
   
   public var initialRate : Double {
     get {
-      return Double(configuration.getFloat(address: addressInitialRate)!)
+      return Double(configuration!.getFloat(address: addressInitialRate)!)
     }
     set(value) {
-      configuration.setFloat(address: addressInitialRate, value: Float(value))
+      configuration!.setFloat(address: addressInitialRate, value: Float(value))
     }
   }
   
   public var clockState : OpenLCBClockState {
     get {
-      return OpenLCBClockState(rawValue: configuration.getUInt8(address: addressRunningState)!)!
+      return OpenLCBClockState(rawValue: configuration!.getUInt8(address: addressRunningState)!)!
     }
     set(value) {
-      configuration.setUInt(address: addressRunningState, value: value.rawValue)
+      configuration!.setUInt(address: addressRunningState, value: value.rawValue)
     }
   }
   
   public var initialDateTime : OpenLCBClockInitialDateTime {
     get {
-      return OpenLCBClockInitialDateTime(rawValue: configuration.getUInt8(address: addressInitialDateTime)!)!
+      return OpenLCBClockInitialDateTime(rawValue: configuration!.getUInt8(address: addressInitialDateTime)!)!
     }
     set(value) {
-      configuration.setUInt(address: addressInitialDateTime, value: value.rawValue)
+      configuration!.setUInt(address: addressInitialDateTime, value: value.rawValue)
     }
   }
   
   public var powerOnClockState : OpenLCBClockState {
     get {
-      return OpenLCBClockState(rawValue: configuration.getUInt8(address: addressPowerOnRunningState)!)!
+      return OpenLCBClockState(rawValue: configuration!.getUInt8(address: addressPowerOnRunningState)!)!
     }
     set(value) {
-      configuration.setUInt(address: addressPowerOnRunningState, value: value.rawValue)
+      configuration!.setUInt(address: addressPowerOnRunningState, value: value.rawValue)
     }
   }
   
   public var type : OpenLCBClockType { 
     get {
-      return OpenLCBClockType(rawValue: configuration.getUInt8(address: addressClockType)!)!
+      return OpenLCBClockType(rawValue: configuration!.getUInt8(address: addressClockType)!)!
     }
     set(value) {
-      configuration.setUInt(address: addressClockType, value: value.rawValue)
+      configuration!.setUInt(address: addressClockType, value: value.rawValue)
     }
   }
   
   public var customClockEventPrefixType: OpenLCBCustomClockEventPrefixType {
     get {
-      return OpenLCBCustomClockEventPrefixType(rawValue: configuration.getUInt8(address: addressCustomClockEventPrefixType)!)!
+      return OpenLCBCustomClockEventPrefixType(rawValue: configuration!.getUInt8(address: addressCustomClockEventPrefixType)!)!
     }
     set(value) {
-      configuration.setUInt(address: addressCustomClockEventPrefixType, value: value.rawValue)
+      configuration!.setUInt(address: addressCustomClockEventPrefixType, value: value.rawValue)
     }
   }
   
   public var customClockEventPrefixUserSpecified : UInt64 {
     get {
-      return configuration.getUInt64(address: addressUserSpecifiedEventPrefix)!
+      return configuration!.getUInt64(address: addressUserSpecifiedEventPrefix)!
     }
     set(value) {
-      configuration.setUInt(address: addressUserSpecifiedEventPrefix, value: value)
+      configuration!.setUInt(address: addressUserSpecifiedEventPrefix, value: value)
     }
   }
   
   public var baseEventId : UInt64 {
-    get {
-      if type == .customClock {
-        return customClockEventPrefixType == .clockNodeId ? nodeId : customClockEventPrefixUserSpecified
-      }
-      return baseEventLookup[type]!
+    if type == .customClock {
+      return customClockEventPrefixType == .clockNodeId ? nodeId : customClockEventPrefixUserSpecified
     }
+    return baseEventLookup[type]!
   }
   
   public var dateTime : String {
     get {
-      return configuration.getString(address: addressCurrentDateTime, count: 20)!
+      return configuration!.getString(address: addressCurrentDateTime, count: 20)!
     }
     set(value) {
       var newValue : String
@@ -308,14 +322,14 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
         newValue = "1970-01-01T00:00:00"
         newDate = Date(timeIntervalSince1970: 0.0)
       }
-      configuration.setString(address: addressCurrentDateTime, value: newValue, fieldSize: 20)
+      configuration!.setString(address: addressCurrentDateTime, value: newValue, fieldSize: 20)
       date = newDate
     }
   }
 
   public var defaultDateTime : String {
     get {
-      return configuration.getString(address: addressDefaultDateTime, count: 20)!
+      return configuration!.getString(address: addressDefaultDateTime, count: 20)!
     }
     set(value) {
       var newValue : String
@@ -325,7 +339,7 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
       else {
         newValue = "1970-01-01T00:00:00"
       }
-      configuration.setString(address: addressDefaultDateTime, value: newValue, fieldSize: 20)
+      configuration!.setString(address: addressDefaultDateTime, value: newValue, fieldSize: 20)
     }
   }
 
@@ -579,7 +593,7 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
     }
     
     let str = String(dateFormatter.string(from: date).prefix(19))
-    configuration.setString(address: addressCurrentDateTime, value: str, fieldSize: 20)
+    configuration!.setString(address: addressCurrentDateTime, value: str, fieldSize: 20)
     
     if minuteRollover && isClockGenerator, let network = networkLayer {
       
@@ -830,7 +844,7 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
   
   public override func variableChanged(space: OpenLCBMemorySpace, address: Int) {
     
-    if space.space == configuration.space {
+    if space.space == configuration!.space {
       
       switch address {
       case addressClockType:
