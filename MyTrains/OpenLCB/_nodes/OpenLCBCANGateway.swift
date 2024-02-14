@@ -126,11 +126,11 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   
   internal var externalConsumedEvents : Set<UInt64> = []
   
-  internal var externalConsumedEventRanges : [(startEventId:UInt64, endEventId:UInt64)] = []
+  internal var externalConsumedEventRanges : [EventRange] = []
   
   internal var internalConsumedEvents : Set<UInt64> = []
   
-  internal var internalConsumedEventRanges : [(startEventId:UInt64, endEventId:UInt64)] = []
+  internal var internalConsumedEventRanges : [EventRange] = []
   
   private var initNodeQueue : [OpenLCBTransportLayerAlias] = []
   
@@ -348,7 +348,6 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
         return
       }
 
-
       for (_, internalNode) in managedNodeIdLookup {
         
         // Node Id Collision Handling
@@ -388,7 +387,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
         return
       }
         
-        // Check for Duplicate NodeId
+      // Check for Duplicate NodeId
         
       if frame.canControlFrameFormat == .aliasMapDefinitionFrame, let nodeId = UInt64(bigEndianData: frame.data) {
 
@@ -411,8 +410,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
       
       if let message = OpenLCBMessage(frame: frame) {
         
-        if let _ = aliasLookup[message.sourceNIDAlias!] {
-        }
+        if let _ = aliasLookup[message.sourceNIDAlias!] { }
         else if let alias = message.sourceNIDAlias {
           sendVerifyNodeIdNumberAddressed(sourceNodeId: nodeId, destinationNodeIdAlias: alias)
         }
@@ -529,9 +527,6 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
         }
         
       }
-      else {
-        print("*\(frame.header.toHex(numberOfDigits: 4))")
-      }
       
     }
     
@@ -570,22 +565,18 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
         
         if message.sourceNodeId == nil, let alias = message.sourceNIDAlias {
           if let id = aliasLookup[alias] {
-       //     print("source id found: \(id.toHexDotFormat(numberOfBytes: 6))")
             message.sourceNodeId = id
           }
           else {
-       //     print("source id not found: \(alias.toHex(numberOfDigits: 3))")
             sendQuery = true
           }
         }
         
         if (message.messageTypeIndicator.isAddressPresent || message.messageTypeIndicator == .datagram) && message.destinationNodeId == nil, let alias = message.destinationNIDAlias {
           if let id = aliasLookup[alias] {
-       //     print("dest id found: \(id.toHexDotFormat(numberOfBytes: 6))")
             message.destinationNodeId = id
           }
           else {
-      //      print("dest id not found: \(alias.toHex(numberOfDigits: 3))")
             sendQuery = true
           }
         }
@@ -630,7 +621,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
               var found = false
               
               for r in externalConsumedEventRanges {
-                if r.startEventId == range.startEventId && r.endEventId == range.endEventId {
+                if r.eventId == range.eventId {
                   found = true
                   break
                 }
@@ -651,7 +642,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
                 var found = false
                 
                 for range in internalConsumedEventRanges {
-                  if eventId >= range.startEventId && eventId <= range.endEventId {
+                  if eventId >= range.startId && eventId <= range.endId {
                     found = true
                     break
                   }
@@ -665,7 +656,9 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
               
             }
             else {
-              print("producerConsumerEventReport without eventId")
+              #if DEBUG
+              print("OpenLCBCANGateway.processQueues: producerConsumerEventReport without eventId")
+              #endif
             }
 
           default:
@@ -680,20 +673,6 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
           
         }
         else if (referenceDate - message.timeStamp) > timeoutInterval {
-          
-          var source = "0x\(message.sourceNIDAlias!.toHex(numberOfDigits: 4)) "
-          if let sourceNodeId = message.sourceNodeId {
-            source += "(\(sourceNodeId.toHex(numberOfDigits: 6)))"
-          }
-          var dest = ""
-          if let alias = message.destinationNIDAlias  {
-            dest += "0x\(alias.toHex(numberOfDigits: 4)) "
-            if let destinationNodeId = message.destinationNodeId {
-              dest += "(\(destinationNodeId.toHex(numberOfDigits: 6)))"
-            }
-          }
-          print("input timeout: \(message.messageTypeIndicator) \(source) -> \(dest)")
-          
           delete = true
         }
         
@@ -731,11 +710,9 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
           if (message.messageTypeIndicator == .datagram ) || message.messageTypeIndicator.isAddressPresent, let destinationNodeId = message.destinationNodeId {
             
             if let alias = nodeIdLookup[destinationNodeId] {
-         //     print("dest alias found: \(destinationNodeId.toHexDotFormat(numberOfBytes: 6)) - \(alias.toHex(numberOfDigits: 3))")
               message.destinationNIDAlias = alias
             }
             else {
-         //     print("dest id not found: \(destinationNodeId.toHexDotFormat(numberOfBytes: 6)))")
               sendAliasMappingEnquiryFrame(nodeId: destinationNodeId, alias: alias)
             }
             
@@ -743,13 +720,9 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
           
         }
         else {
-          /*
-          for (nodeId, alias) in nodeIdLookup {
-            print("\(nodeId.toHexDotFormat(numberOfBytes: 6)) - 0x\(alias.toHex(numberOfDigits: 3))")
-          }
-           */
-          print("send source alias not found: \(message.sourceNodeId!.toHexDotFormat(numberOfBytes: 6))")
-          
+          #if DEBUG
+          print("OpenLCBCANGateway.processQueues: send source alias not found: \(message.sourceNodeId!.toHexDotFormat(numberOfBytes: 6))")
+          #endif
         }
         
         var delete = false
@@ -842,6 +815,8 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
               
             }
             
+            delete = true
+            
           }
           else if message.messageTypeIndicator.isAddressPresent {
             
@@ -885,21 +860,6 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
           
         }
         else if (referenceDate - message.timeStamp) > timeoutInterval {
-
-          var source = message.sourceNodeId!.toHexDotFormat(numberOfBytes: 6)
-          if let alias = message.sourceNIDAlias {
-            source += " (0x\(alias.toHex(numberOfDigits: 4))"
-          }
-          var dest = ""
-          if let nodeId = message.destinationNodeId {
-            dest += nodeId.toHexDotFormat(numberOfBytes: 6)
-            if let alias = message.destinationNIDAlias {
-              dest += " (0x\(alias.toHex(numberOfDigits: 4))"
-            }
-          }
-          
-          print("output timeout: \(message.messageTypeIndicator) \(source) -> \(dest)")
-          
           delete = true
         }
         
@@ -1334,7 +1294,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
           var found = false
           
           for range in externalConsumedEventRanges {
-            if eventId >= range.startEventId && eventId <= range.endEventId {
+            if eventId >= range.startId && eventId <= range.endId {
               found = true
               break
             }
@@ -1348,7 +1308,9 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
         
       }
       else {
-        print("producerConsumerEventReport without eventId")
+        #if DEBUG
+        print("OpenLCBCANGateway.openLCBMessageReceived: producerConsumerEventReport without eventId")
+        #endif
       }
       
     case .consumerIdentifiedAsCurrentlyValid, .consumerIdentifiedAsCurrentlyInvalid, .consumerIdentifiedWithValidityUnknown:
@@ -1362,7 +1324,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
         var found = false
         
         for r in internalConsumedEventRanges {
-          if r.startEventId == range.startEventId && r.endEventId == range.endEventId {
+          if r.eventId == range.eventId {
             found = true
             break
           }
@@ -1391,8 +1353,10 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   
   public func serialPortWasOpened(_ serialPort: MTSerialPort) {
 
+    #if DEBUG
     print("serial port was opened: \(serialPort.path)")
- 
+    #endif
+    
     internalNodes.insert(nodeId)
     
     let alias = OpenLCBTransportLayerAlias(nodeId: nodeId)
@@ -1404,12 +1368,16 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   }
   
   public func serialPortWasRemovedFromSystem(_ serialPort: MTSerialPort) {
+    #if DEBUG
     print("serial port was removed from system: \(serialPort.path)")
+    #endif
     self.serialPort = nil
   }
   
   public func serialPortWasClosed(_ serialPort: MTSerialPort) {
+    #if DEBUG
     print("serial port was closed: \(serialPort.path)")
+    #endif
     self.serialPort = nil
   }
 

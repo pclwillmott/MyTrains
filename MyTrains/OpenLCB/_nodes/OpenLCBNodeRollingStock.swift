@@ -102,6 +102,21 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
         resetToFactoryDefaults()
       }
       
+      eventsConsumed = [
+      ]
+      
+      eventsProduced = [
+        OpenLCBWellKnownEvent.nodeIsATrain.rawValue,
+      ]
+      
+      eventRangesConsumed = [
+        EventRange(startId: OpenLCBWellKnownEvent.locationServicesReport.rawValue, mask: 0x0000ffffffffffff)!,
+      ]
+
+      eventRangesProduced = [
+        EventRange(startId: OpenLCBWellKnownEvent.locationServicesReport.rawValue, mask: 0x0000ffffffffffff)!,
+      ]
+
       cdiFilename = "MyTrains Train"
       
       initFDI(filename: "FDI Generic")
@@ -631,7 +646,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     
     super.start()
     
-    networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .nodeIsATrain)
+    networkLayer?.sendWellKnownEvent(sourceNode: self, eventId: .nodeIsATrain)
     
   }
   
@@ -900,8 +915,6 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
               
               if let controllerNodeId = UInt64(bigEndianData: bed) {
                 
- //               print("controllerNodeId: \(controllerNodeId.toHexDotFormat(numberOfBytes: 6))")
-
                 nextActiveControllerNodeId = 0
                 
                 if activeControllerNodeId == 0 || activeControllerNodeId == controllerNodeId {
@@ -1147,7 +1160,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
           motionRelative = .stopped
         }
         
-        networkLayer?.sendLocationServiceEvent(sourceNodeId: nodeId, eventId: message.eventId!, trainNodeId: nodeId, entryExit: message.locationServicesFlagEntryExit!, motionRelative: motionRelative, motionAbsolute: message.locationServicesFlagDirectionAbsolute!, contentFormat: message.locationServicesFlagContentFormat!, content: message.locationServicesContent)
+        networkLayer?.sendLocationServiceEvent(sourceNode: self, eventId: message.eventId!, trainNodeId: nodeId, entryExit: message.locationServicesFlagEntryExit!, motionRelative: motionRelative, motionAbsolute: message.locationServicesFlagDirectionAbsolute!, contentFormat: message.locationServicesFlagContentFormat!, content: message.locationServicesContent)
         
       }
 

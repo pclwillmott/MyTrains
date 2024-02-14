@@ -10,6 +10,14 @@ import Foundation
 public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDelegate {
   
   // MARK: Constructors
+
+  public override init(nodeId:UInt64) {
+    
+    super.init(nodeId: nodeId)
+    
+    eventRangesConsumed.append(EventRange(startId: OpenLCBWellKnownEvent.locoNetMessage.rawValue, mask: 0x0000ffffffffffff)!)
+    
+  }
   
   deinit {
     locoNet = nil

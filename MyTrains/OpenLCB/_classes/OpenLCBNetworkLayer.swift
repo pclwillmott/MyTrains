@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import AppKit
 
 public let networkLayerNodeId : UInt64 = 0xfdffffffffff
 
@@ -507,11 +508,11 @@ public class OpenLCBNetworkLayer : NSObject {
     
   }
 
-  public func sendLocoNetMessageReceived(sourceNodeId:UInt64, locoNetMessage:[UInt8]) {
+  public func sendLocoNetMessageReceived(sourceNode:OpenLCBNodeVirtual, locoNetMessage:[UInt8]) {
     
     let message = OpenLCBMessage(messageTypeIndicator: .producerConsumerEventReport)
     
-    message.sourceNodeId = sourceNodeId
+    message.sourceNodeId = sourceNode.nodeId
     
     var data = [UInt8](OpenLCBWellKnownEvent.locoNetMessage.rawValue.bigEndianData.prefix(2))
     
@@ -524,51 +525,11 @@ public class OpenLCBNetworkLayer : NSObject {
       numberOfPaddingBytes -= 1
     }
     
-    message.eventId = UInt64(bigEndianData: [UInt8](data.prefix(8)))
+    let eventId = UInt64(bigEndianData: [UInt8](data.prefix(8)))!
     
     data.removeFirst(8)
     
-    message.payload = data
-        
-    sendMessage(message: message)
-
-    /* 
-    let numberOfFrames = 1 + (locoNetMessage.count - 1) / 8
-    
-    if numberOfFrames == 1 {
-      let message = OpenLCBMessage(messageTypeIndicator: .locoNetMessageReceivedOnlyFrame)
-      message.sourceNodeId = sourceNodeId
-      message.payload = locoNetMessage
-      sendMessage(message: message)
-    }
-    else {
-      
-      var buffer = locoNetMessage
-
-      for frameNumber in 1 ... numberOfFrames {
-        
-        var flags : OpenLCBMTI = .locoNetMessageReceivedMiddleFrame
-        if frameNumber == 1 {
-          flags = .locoNetMessageReceivedFirstFrame
-        }
-        else if frameNumber == numberOfFrames {
-          flags = .locoNetMessageReceivedLastFrame
-        }
-        
-        let message = OpenLCBMessage(messageTypeIndicator: flags)
-        
-        message.sourceNodeId = sourceNodeId
-        
-        message.payload.append(contentsOf: buffer.prefix(8))
-        
-        buffer.removeFirst(message.payload.count)
-        
-        sendMessage(message: message)
-        
-      }
-      
-    }
-    */
+    sendEvent(sourceNode: sourceNode, eventId: eventId, payload: data)
     
   }
 
@@ -604,7 +565,7 @@ public class OpenLCBNetworkLayer : NSObject {
 
   public func makeTrainSearchEventId(searchString : String, searchType:OpenLCBSearchType, searchMatchType:OpenLCBSearchMatchType, searchMatchTarget:OpenLCBSearchMatchTarget, trackProtocol:OpenLCBTrackProtocol) -> UInt64 {
     
-    var eventId : UInt64 = 0x090099ff00000000
+    var eventId : UInt64 = OpenLCBWellKnownEvent.trainSearchEvent.rawValue // 0x090099ff00000000
     
     var numbers : [String] = []
     var temp : String = ""
@@ -652,7 +613,7 @@ public class OpenLCBNetworkLayer : NSObject {
     
   }
   
-  public func sendLocationServiceEvent(sourceNodeId:UInt64, eventId:UInt64, trainNodeId:UInt64, entryExit:OpenLCBLocationServiceFlagEntryExit, motionRelative:OpenLCBLocationServiceFlagDirectionRelative, motionAbsolute:OpenLCBLocationServiceFlagDirectionAbsolute, contentFormat:OpenLCBLocationServiceFlagContentFormat, content: [OpenLCBLocationServicesContentBlock]? ) {
+  public func sendLocationServiceEvent(sourceNode:OpenLCBNodeVirtual, eventId:UInt64, trainNodeId:UInt64, entryExit:OpenLCBLocationServiceFlagEntryExit, motionRelative:OpenLCBLocationServiceFlagDirectionRelative, motionAbsolute:OpenLCBLocationServiceFlagDirectionAbsolute, contentFormat:OpenLCBLocationServiceFlagContentFormat, content: [OpenLCBLocationServicesContentBlock]? ) {
     
     var payload : [UInt8] = []
     
@@ -682,20 +643,52 @@ public class OpenLCBNetworkLayer : NSObject {
       
     }
     
-    sendEvent(sourceNodeId: sourceNodeId, eventId: eventId, payload: payload)
+    sendEvent(sourceNode: sourceNode, eventId: eventId, payload: payload)
     
   }
 
-  public func sendEvent(sourceNodeId:UInt64, eventId:UInt64, payload:[UInt8] = []) {
+  public func sendEvent(sourceNode:OpenLCBNodeVirtual, eventId:UInt64, payload:[UInt8] = []) {
+    
+    #if DEBUG
+    
+    if !OpenLCBWellKnownEvent.isAutomaticallyRouted(eventId: eventId) && !sourceNode.eventsProduced.union(sourceNode.userConfigEventsProduced).contains(eventId) {
+      
+      var found = false
+      
+      for eventRange in sourceNode.eventRangesProduced {
+        if eventId >= eventRange.startId && eventId <= eventRange.endId {
+          found = true
+          break
+        }
+      }
+      
+      if !found {
+        
+        let alert = NSAlert()
+        
+        alert.messageText = String(localized: "Sending unadvertised event")
+        alert.informativeText = String(localized: "The node \"\(sourceNode.userNodeName)\" (\(sourceNode.nodeId.toHexDotFormat(numberOfBytes: 6))) is attempting to send the unadvertised event: \(eventId.toHexDotFormat(numberOfBytes: 8))")
+        alert.addButton(withTitle: "OK")
+        alert.alertStyle = .informational
+        
+        alert.runModal()
+        
+      }
+      
+    }
+    
+    #endif
+    
     let message = OpenLCBMessage(messageTypeIndicator: .producerConsumerEventReport)
-    message.sourceNodeId = sourceNodeId
+    message.sourceNodeId = sourceNode.nodeId
     message.eventId = eventId
     message.payload = payload
     sendMessage(message: message)
+    
   }
 
-  public func sendWellKnownEvent(sourceNodeId:UInt64, eventId:OpenLCBWellKnownEvent, payload:[UInt8] = []) {
-    sendEvent(sourceNodeId: sourceNodeId, eventId: eventId.rawValue, payload: payload)
+  public func sendWellKnownEvent(sourceNode:OpenLCBNodeVirtual, eventId:OpenLCBWellKnownEvent, payload:[UInt8] = []) {
+    sendEvent(sourceNode: sourceNode, eventId: eventId.rawValue, payload: payload)
   }
     
   public func sendIdentifyProducer(sourceNodeId:UInt64, eventId:UInt64) {
@@ -1145,7 +1138,7 @@ public class OpenLCBNetworkLayer : NSObject {
 
   public func sendGetUniqueEventIdCommand(sourceNodeId:UInt64, destinationNodeId:UInt64, numberOfEventIds:UInt8) {
     
-    guard numberOfEventIds > 0 && numberOfEventIds <= 8 else {
+    guard numberOfEventIds >= 0 && numberOfEventIds < 8 else {
       #if DEBUG
       print("sendGetUniqueEventIdCommand: invalid number of event ids to get - \(numberOfEventIds)")
       #endif
@@ -1154,7 +1147,7 @@ public class OpenLCBNetworkLayer : NSObject {
     
     var data = OpenLCBDatagramType.getUniqueEventIDCommand.bigEndianData
     
-    data.append(numberOfEventIds & 0x0f)
+    data.append(numberOfEventIds & 0x07)
         
     sendDatagram(sourceNodeId: sourceNodeId, destinationNodeId: destinationNodeId, data: data)
     

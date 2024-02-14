@@ -176,9 +176,9 @@ class OpenLCBFirmwareUpdateVC: NSViewController, NSWindowDelegate, OpenLCBConfig
         data.append(buffer[index])
       }
       
-      DispatchQueue.main.async {
+ //     DispatchQueue.main.async {
         self.networkLayer?.sendNodeMemoryWriteRequest(sourceNodeId: self.nodeId, destinationNodeId: node.nodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.firmware.rawValue, startAddress: self.startAddress, dataToWrite: self.data)
-      }
+ //     }
 
     }
     

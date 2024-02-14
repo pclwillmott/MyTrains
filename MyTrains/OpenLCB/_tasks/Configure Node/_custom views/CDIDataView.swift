@@ -401,9 +401,8 @@ class CDIDataView: CDIView {
         writeButton.trailingAnchor.constraint(equalTo: dataButtonView.trailingAnchor),
         refreshButton.topAnchor.constraint(equalTo: dataButtonView.topAnchor),
         refreshButton.trailingAnchor.constraint(equalTo: writeButton.leadingAnchor, constant:  -siblingGap),
-        dataButtonView.leadingAnchor.constraint(equalTo: refreshButton.leadingAnchor)
       ])
-
+      
       if !needsCopyPaste {
         constraints.append(contentsOf: [
           dataButtonView.leadingAnchor.constraint(equalTo: refreshButton.leadingAnchor)
@@ -439,6 +438,7 @@ class CDIDataView: CDIView {
         copyButton.trailingAnchor.constraint(equalTo: pasteButton.leadingAnchor, constant: -siblingGap),
         newEventId.topAnchor.constraint(equalTo: dataButtonView.topAnchor),
         newEventId.trailingAnchor.constraint(equalTo: copyButton.leadingAnchor, constant: -siblingGap),
+        dataButtonView.leadingAnchor.constraint(equalTo: newEventId.leadingAnchor, constant: -siblingGap),
       ])
       
     }

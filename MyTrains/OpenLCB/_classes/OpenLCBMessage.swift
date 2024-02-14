@@ -270,33 +270,14 @@ public class OpenLCBMessage : NSObject {
     return false
   }
   
-  public var eventRange : (startEventId:UInt64, endEventId:UInt64)? {
-    get {
+  public var eventRange : EventRange? {
       
-      if let eventId {
-        
-        var temp = eventId
-        
-        let b0 : UInt64 = 0b1
-        
-        var firstBit = temp & b0
-        
-        var mask : UInt64 = 0
-        
-        while temp != 0 && (temp & b0) == firstBit {
-          mask = (mask << 1) | b0
-          temp >>= 1
-        }
-        
-        let base = eventId & ~mask
-        
-        return (startEventId: base, endEventId: base | mask)
-        
-      }
-      
+    guard let eventId else {
       return nil
-      
     }
+    
+    return EventRange(eventId: eventId)
+    
   }
   
   public var payloadAsHex : String {

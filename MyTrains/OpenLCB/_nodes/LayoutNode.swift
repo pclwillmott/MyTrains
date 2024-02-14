@@ -271,7 +271,7 @@ public class LayoutNode : OpenLCBNodeVirtual {
     guard let networkLayer, let appNodeId else {
       return
     }
-    networkLayer.sendWellKnownEvent(sourceNodeId: nodeId, eventId: layoutState == .activated ? .myTrainsLayoutActivated : .myTrainsLayoutDeactivated, payload: appNodeId.nodeIdBigEndianData)
+    networkLayer.sendWellKnownEvent(sourceNode: self, eventId: layoutState == .activated ? .myTrainsLayoutActivated : .myTrainsLayoutDeactivated, payload: appNodeId.nodeIdBigEndianData)
   }
   
   internal override func customizeDynamicCDI(cdi:String) -> String {
@@ -297,10 +297,10 @@ public class LayoutNode : OpenLCBNodeVirtual {
       switch address {
       case addressLayoutState:
         if layoutState == .activated {
-          networkLayer.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .myTrainsLayoutActivated, payload: appNodeId.nodeIdBigEndianData)
+          networkLayer.sendWellKnownEvent(sourceNode: self, eventId: .myTrainsLayoutActivated, payload: appNodeId.nodeIdBigEndianData)
         }
         else if networkLayer.layoutNodeId == nodeId {
-          networkLayer.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .myTrainsLayoutDeactivated, payload: appNodeId.nodeIdBigEndianData)
+          networkLayer.sendWellKnownEvent(sourceNode: self, eventId: .myTrainsLayoutDeactivated, payload: appNodeId.nodeIdBigEndianData)
         }
       default:
         break
@@ -317,10 +317,10 @@ public class LayoutNode : OpenLCBNodeVirtual {
     }
     
     if layoutState == .activated {
-      networkLayer.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .myTrainsLayoutDeactivated, payload: appNodeId.nodeIdBigEndianData)
+      networkLayer.sendWellKnownEvent(sourceNode: self, eventId: .myTrainsLayoutDeactivated, payload: appNodeId.nodeIdBigEndianData)
     }
     
-    networkLayer.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .myTrainsLayoutDeleted)
+    networkLayer.sendWellKnownEvent(sourceNode: self, eventId: .myTrainsLayoutDeleted)
 
   }
 
@@ -339,7 +339,7 @@ public class LayoutNode : OpenLCBNodeVirtual {
         switch event {
         case .identifyMyTrainsLayouts:
           
-          networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: layoutState == .activated ? .myTrainsLayoutActivated : .myTrainsLayoutDeactivated, payload: appNodeId!.nodeIdBigEndianData)
+          networkLayer?.sendWellKnownEvent(sourceNode: self, eventId: layoutState == .activated ? .myTrainsLayoutActivated : .myTrainsLayoutDeactivated, payload: appNodeId!.nodeIdBigEndianData)
 
         default:
           break

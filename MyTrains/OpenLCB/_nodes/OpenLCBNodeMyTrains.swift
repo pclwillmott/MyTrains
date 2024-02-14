@@ -242,9 +242,9 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   }
   
   override internal func completeStartUp() {
-    networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .identifyMyTrainsLayouts)
-    networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .identifyMyTrainsSwitchboardPanels)
-    networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .identifyMyTrainsSwitchboardItems)
+    networkLayer?.sendWellKnownEvent(sourceNode: self, eventId: .identifyMyTrainsLayouts)
+    networkLayer?.sendWellKnownEvent(sourceNode: self, eventId: .identifyMyTrainsSwitchboardPanels)
+    networkLayer?.sendWellKnownEvent(sourceNode: self, eventId: .identifyMyTrainsSwitchboardItems)
     networkLayer?.sendIdentifyProducer(sourceNodeId: nodeId, event: .nodeIsALocoNetGateway)
   }
   
@@ -340,19 +340,19 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   }
   
   public func sendGlobalEmergencyStop() {
-    networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .emergencyStopAll)
+    networkLayer?.sendWellKnownEvent(sourceNode: self, eventId: .emergencyStopAll)
   }
 
   public func sendClearGlobalEmergencyStop() {
-    networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .clearEmergencyStopAll)
+    networkLayer?.sendWellKnownEvent(sourceNode: self, eventId: .clearEmergencyStopAll)
   }
 
   public func sendGlobalPowerOff() {
-    networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .emergencyOffAll)
+    networkLayer?.sendWellKnownEvent(sourceNode: self, eventId: .emergencyOffAll)
   }
   
   public func sendGlobalPowerOn() {
-    networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .clearEmergencyOffAll)
+    networkLayer?.sendWellKnownEvent(sourceNode: self, eventId: .clearEmergencyOffAll)
   }
   
   public func insertLayoutMap(cdi:String) -> String {

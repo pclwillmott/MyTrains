@@ -119,6 +119,17 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
         resetToFactoryDefaults()
       }
       
+      if operatingMode == .master {
+        eventRangesProduced = [
+          EventRange(startId: baseEventId, mask: 0xffff)!,
+        ]
+      }
+      else {
+        eventRangesConsumed = [
+          EventRange(startId: baseEventId, mask: 0xffff)!,
+        ]
+      }
+      
       cdiFilename = "MyTrains Clock"
       
     }
@@ -167,10 +178,10 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
   
   private let baseEventLookup : [OpenLCBClockType:UInt64] =
   [
-    OpenLCBClockType.fastClock       : 0x0101000001000000,
-    OpenLCBClockType.realTimeClock   : 0x0101000001010000,
-    OpenLCBClockType.alternateClock1 : 0x0101000001020000,
-    OpenLCBClockType.alternateClock2 : 0x0101000001030000
+    .fastClock       : 0x0101000001000000,
+    .realTimeClock   : 0x0101000001010000,
+    .alternateClock1 : 0x0101000001020000,
+    .alternateClock2 : 0x0101000001030000,
   ]
 
   // Configuration variable addresses
@@ -301,10 +312,13 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
   }
   
   public var baseEventId : UInt64 {
+
     if type == .customClock {
       return customClockEventPrefixType == .clockNodeId ? nodeId : customClockEventPrefixUserSpecified
     }
+    
     return baseEventLookup[type]!
+    
   }
   
   public var dateTime : String {
@@ -504,11 +518,9 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
     if let network = networkLayer {
       makeSync()
       var eventId = baseEventId | 0xffff
-      network.sendProducerRangeIdentified(sourceNodeId: nodeId, eventId: eventId)
-      network.sendConsumerRangeIdentified(sourceNodeId: nodeId, eventId: eventId)
       eventId = encodeStopStartEvent(state: clockState)
       lastEvents[OpenLCBFastClockEventIndex.startOrStopEvent.rawValue] = eventId
-      network.sendEvent(sourceNodeId: nodeId, eventId: eventId)
+      network.sendEvent(sourceNode: self, eventId: eventId)
       sendSync()
     }
   }
@@ -598,7 +610,7 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
     if minuteRollover && isClockGenerator, let network = networkLayer {
       
       if rollover {
-        network.sendEvent(sourceNodeId: nodeId, eventId: encodeDateRolloverEvent())
+        network.sendEvent(sourceNode: self, eventId: encodeDateRolloverEvent())
         startRolloverTimer()
       }
 
@@ -613,7 +625,7 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
       
       if triggered || rollover {
         lastEvents[OpenLCBFastClockEventIndex.reportTimeEvent.rawValue] = eventId
-        network.sendEvent(sourceNodeId: nodeId, eventId: eventId)
+        network.sendEvent(sourceNode: self, eventId: eventId)
         triggered = false
         lastSend = newDate
       }
@@ -648,9 +660,9 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
   
   private func updateObservers() {
     for (_, observer) in observers {
-      DispatchQueue.main.async {
+ //     DispatchQueue.main.async {
         observer.clockTick(clock: self)
-      }
+ //     }
     }
   }
 
@@ -669,7 +681,7 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
       
       for (index, eventId) in eventsToSend {
         lastEvents[index.rawValue] = eventId
-        networkLayer.sendEvent(sourceNodeId: nodeId, eventId: eventId)
+        networkLayer.sendEvent(sourceNode: self, eventId: eventId)
       }
       
     }
@@ -775,7 +787,9 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
   }
 
   public func encodeStopStartEvent(state:OpenLCBClockState) -> UInt64 {
+    
     let subCode : OpenLCBFastClockSubCode = (state == .stopped) ? .stopEventId : .startEventId
+    
     return baseEventId | subCode.rawValue
   }
   
@@ -796,7 +810,6 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
       }
       else {
         let eventId = baseEventId | 0xffff
-        network.sendConsumerRangeIdentified(sourceNodeId: nodeId, eventId: eventId)
         network.sendClockQuery(sourceNodeId: nodeId, baseEventId: baseEventId)
       }
     }
@@ -816,7 +829,7 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
     if isClockGenerator, let network = networkLayer {
       let eventId = encodeStopStartEvent(state: clockState)
       lastEvents[OpenLCBFastClockEventIndex.startOrStopEvent.rawValue] = eventId
-      network.sendEvent(sourceNodeId: nodeId, eventId: eventId)
+      network.sendEvent(sourceNode: self, eventId: eventId)
     }
     
   }
@@ -846,9 +859,11 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
     
     if space.space == configuration!.space {
       
+      var eventRangesMayHaveChanged = false
+      
       switch address {
       case addressClockType:
-        break
+        eventRangesMayHaveChanged = true
       case addressCurrentRate:
         if clockState == .running {
           stopTimer()
@@ -860,7 +875,7 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
         clockState == .running ? startClock() : stopClock()
         break
       case addressOperatingMode:
-        break
+        eventRangesMayHaveChanged = true
       case addressCurrentDateTime:
         dateTime = dateTime
         if isClockGenerator {
@@ -870,7 +885,7 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
           eventToSend.append((index:.reportYearEvent, eventId:encodeYearEvent(subCode: .reportYearEventId, year: year)))
           for (index, eventId) in eventToSend {
             lastEvents[index.rawValue] = eventId
-            networkLayer?.sendEvent(sourceNodeId: nodeId, eventId: eventId)
+            networkLayer?.sendEvent(sourceNode: self, eventId: eventId)
           }
           startSyncTimer()
        }
@@ -892,11 +907,37 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
           setToFactoryDefaults = .disabled
         }
       case addressUserSpecifiedEventPrefix:
-        break
+        eventRangesMayHaveChanged = true
       case addressCustomClockEventPrefixType:
-        break
+        eventRangesMayHaveChanged = true
       default:
         break
+      }
+      
+      if eventRangesMayHaveChanged, let networkLayer {
+        
+        eventRangesConsumed = []
+        eventRangesProduced = []
+        
+        if operatingMode == .master {
+          eventRangesProduced = [
+            EventRange(startId: baseEventId, mask: 0xffff)!,
+          ]
+        }
+        else {
+          eventRangesConsumed = [
+            EventRange(startId: baseEventId, mask: 0xffff)!,
+          ]
+        }
+       
+        for eventRange in eventRangesConsumed {
+          networkLayer.sendConsumerRangeIdentified(sourceNodeId: nodeId, eventId: eventRange.eventId)
+        }
+
+        for eventRange in eventRangesProduced {
+          networkLayer.sendProducerRangeIdentified(sourceNodeId: nodeId, eventId: eventRange.eventId)
+        }
+
       }
 
       updateObservers()
@@ -1039,7 +1080,7 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
           
           if let (index, eventId) = eventToSend.first {
             lastEvents[index.rawValue] = eventId
-            networkLayer?.sendEvent(sourceNodeId: nodeId, eventId: eventId)
+            networkLayer?.sendEvent(sourceNode: self, eventId: eventId)
             startSyncTimer()
           }
           

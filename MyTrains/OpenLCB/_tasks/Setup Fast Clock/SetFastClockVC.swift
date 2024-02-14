@@ -105,7 +105,7 @@ class SetFastClockVC: NSViewController, NSWindowDelegate, OpenLCBClockDelegate, 
     
     let components = date.dateComponents
      
-    networkLayer.sendEvent(sourceNodeId: nodeId, eventId: fastClock.encodeStopStartEvent(state: .stopped))
+    networkLayer.sendEvent(sourceNode: configurationTool!, eventId: fastClock.encodeStopStartEvent(state: .stopped))
 
     for index in 0 ... 4 {
       
@@ -134,7 +134,7 @@ class SetFastClockVC: NSViewController, NSWindowDelegate, OpenLCBClockDelegate, 
       }
       
       for eventId in events {
-        networkLayer.sendEvent(sourceNodeId: nodeId, eventId: eventId)
+        networkLayer.sendEvent(sourceNode: configurationTool!, eventId: eventId)
       }
 
     }
@@ -149,7 +149,7 @@ class SetFastClockVC: NSViewController, NSWindowDelegate, OpenLCBClockDelegate, 
       return
     }
     
-    networkLayer.sendEvent(sourceNodeId: nodeId, eventId: fastClock.encodeStopStartEvent(state: (swSwitch.state == .on ? .running : .stopped)))
+    networkLayer.sendEvent(sourceNode: configurationTool!, eventId: fastClock.encodeStopStartEvent(state: (swSwitch.state == .on ? .running : .stopped)))
 
   }
   

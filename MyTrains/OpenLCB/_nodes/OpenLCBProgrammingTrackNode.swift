@@ -225,7 +225,7 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
   }
   
   internal override func completeStartUp() {
-    networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .nodeIsADCCProgrammingTrack)
+    networkLayer?.sendWellKnownEvent(sourceNode: self, eventId: .nodeIsADCCProgrammingTrack)
   }
  
   internal override func customizeDynamicCDI(cdi:String) -> String {
@@ -258,7 +258,7 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
     }
     
     if locoNet.commandStationType.programmingTrackExists {
-      networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .nodeIsADCCProgrammingTrack)
+      networkLayer?.sendWellKnownEvent(sourceNode: self, eventId: .nodeIsADCCProgrammingTrack)
     }
     
   }

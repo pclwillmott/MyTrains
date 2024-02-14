@@ -97,7 +97,7 @@ public class SwitchboardPanelNode : OpenLCBNodeVirtual {
   }
   
   internal func sendNodeIsASwitchboardPanel() {
-    networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .nodeIsASwitchboardPanel, payload: layoutNodeId.nodeIdBigEndianData)
+    networkLayer?.sendWellKnownEvent(sourceNode: self, eventId: .nodeIsASwitchboardPanel, payload: layoutNodeId.nodeIdBigEndianData)
   }
   
   override internal func completeStartUp() {

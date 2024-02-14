@@ -84,14 +84,14 @@ class CDITextView: CDIDataView, NSTextFieldDelegate, NSControlTextEditingDelegat
         ])
         textField.placeholderString = "00.00.00.00.00.00.00.00"
         NSLayoutConstraint.activate([
-          dataButtonView.leadingAnchor.constraint(equalTo: newEventId.leadingAnchor)
+//          dataButtonView.leadingAnchor.constraint(equalTo: newEventId.leadingAnchor)
         ])
 
       }
       else {
         NSLayoutConstraint.activate([
-   //       textField.trailingAnchor.constraint(equalTo: dataButtonView.leadingAnchor, constant: -gap),
-          dataButtonView.leadingAnchor.constraint(equalToSystemSpacingAfter: textField.trailingAnchor, multiplier: 1.0),
+   //       textField.trailingAnchor.constraint(equalTo: dataButtonView.leadingAnchor, constant: -siblingGap),
+          dataButtonView.leadingAnchor.constraint(lessThanOrEqualTo: dataButtonView.leadingAnchor, constant: -siblingGap),
         ])
       }
       

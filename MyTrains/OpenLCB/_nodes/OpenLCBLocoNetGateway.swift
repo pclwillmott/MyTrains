@@ -31,13 +31,6 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
       
       virtualNodeType = MyTrainsVirtualNodeType.locoNetGatewayNode
       
-      eventsConsumed = [
-      ]
-      
-      eventsProduced = [
-        OpenLCBWellKnownEvent.nodeIsALocoNetGateway.rawValue,
-      ]
-      
       configuration.delegate = self
       
       memorySpaces[configuration.space] = configuration
@@ -55,6 +48,17 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
       if !memorySpacesInitialized {
         resetToFactoryDefaults()
       }
+      
+      eventsConsumed = [
+      ]
+      
+      eventsProduced = [
+        OpenLCBWellKnownEvent.nodeIsALocoNetGateway.rawValue,
+      ]
+      
+      eventRangesProduced = [
+        EventRange(startId: OpenLCBWellKnownEvent.locoNetMessage.rawValue, mask: 0x0000ffffffffffff)!
+      ]
       
       cdiFilename = "MyTrains LocoNet Gateway"
       
@@ -188,10 +192,10 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
       port.open()
     }
     
-    networkLayer?.sendProducerIdentified(sourceNodeId: nodeId, wellKnownEvent: .nodeIsALocoNetGateway, validity: .valid)
-
-    networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .nodeIsALocoNetGateway)
-
+  }
+  
+  internal override func completeStartUp() {
+    networkLayer?.sendWellKnownEvent(sourceNode: self, eventId: .nodeIsALocoNetGateway)
   }
   
   internal override func customizeDynamicCDI(cdi:String) -> String {
@@ -285,7 +289,7 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
         }
         
         if !blockAllMessages {
-          networkLayer?.sendLocoNetMessageReceived(sourceNodeId: nodeId, locoNetMessage: message)
+          networkLayer?.sendLocoNetMessageReceived(sourceNode: self, locoNetMessage: message)
         }
         
       }

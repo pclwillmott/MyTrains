@@ -966,7 +966,7 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     var payload = layoutNodeId.nodeIdBigEndianData
     payload.append(contentsOf: itemType.rawValue.bigEndianData)
     
-    networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .nodeIsASwitchboardItem, payload: payload)
+    networkLayer?.sendWellKnownEvent(sourceNode: self, eventId: .nodeIsASwitchboardItem, payload: payload)
 
   }
 

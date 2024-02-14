@@ -57,12 +57,10 @@ public enum OpenLCBClockType : UInt8 {
   
   public static let defaultValue : OpenLCBClockType = .fastClock
   
-  public static let mapPlaceholder = CDI.CLOCK_TYPE
-
   // MARK: Public Class Methods
   
   public static func insertMap(cdi:String) -> String {
-    return cdi.replacingOccurrences(of: mapPlaceholder, with: map)
+    return cdi.replacingOccurrences(of: CDI.CLOCK_TYPE, with: map)
   }
 
 }

@@ -56,9 +56,6 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.virtualNodeConfig.rawValue, address: addressVirtualNodeConfigNextNodeIdSeed)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.virtualNodeConfig.rawValue, address: addressVirtualNodeConfigHostAppNodeId)
 
-    userConfigEventsConsumed = getUserConfigEvents(eventAddresses: userConfigEventConsumedAddresses)
-    userConfigEventsProduced = getUserConfigEvents(eventAddresses: userConfigEventProducedAddresses)
-    
     isSimpleNodeInformationProtocolSupported = true
     
     isDatagramProtocolSupported = true
@@ -79,12 +76,6 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   
   private var lockedNodeId : UInt64 = 0
   
-  internal var eventsConsumed : Set<UInt64> = []
-  internal var eventsProduced : Set<UInt64> = []
-  
-  internal var userConfigEventsConsumed : Set<UInt64> = []
-  internal var userConfigEventsProduced : Set<UInt64> = []
-
   internal var userConfigEventConsumedAddresses : Set<Int> = []
   internal var userConfigEventProducedAddresses : Set<Int> = []
 
@@ -146,7 +137,19 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   internal var firmwareBuffer : [UInt8] = []
   
   // MARK: Public Properties
+
+  public var eventsConsumed : Set<UInt64> = []
   
+  public var eventsProduced : Set<UInt64> = []
+  
+  public var userConfigEventsConsumed : Set<UInt64> = []
+  
+  public var userConfigEventsProduced : Set<UInt64> = []
+  
+  public var eventRangesConsumed : [EventRange] = []
+  
+  public var eventRangesProduced : [EventRange] = []
+
   public var lfsr1 : UInt32
   
   public var lfsr2 : UInt32
@@ -631,7 +634,10 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     networkLayer.sendInitializationComplete(sourceNodeId: nodeId, isSimpleSetSufficient: false)
     
     resetReboot()
-    
+
+    userConfigEventsConsumed = getUserConfigEvents(eventAddresses: userConfigEventConsumedAddresses)
+    userConfigEventsProduced = getUserConfigEvents(eventAddresses: userConfigEventProducedAddresses)
+
     for eventId in eventsConsumed.union(userConfigEventsConsumed) {
       if !OpenLCBWellKnownEvent.isAutomaticallyRouted(eventId: eventId) {
         var validity : OpenLCBValidity = .unknown
@@ -646,6 +652,14 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
         setValidity(eventId: eventId, validity: &validity)
         networkLayer.sendProducerIdentified(sourceNodeId: nodeId, eventId: eventId, validity: validity)
       }
+    }
+    
+    for eventRange in eventRangesConsumed {
+      networkLayer.sendConsumerRangeIdentified(sourceNodeId: nodeId, eventId: eventRange.eventId)
+    }
+
+    for eventRange in eventRangesProduced {
+      networkLayer.sendProducerRangeIdentified(sourceNodeId: nodeId, eventId: eventRange.eventId)
     }
 
     completeStartUp()
@@ -773,17 +787,21 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
       if let datagramType = message.datagramType {
         
         switch datagramType {
-        
+          
         case .getUniqueEventIDCommand:
           
           networkLayer.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, timeOut: .replyPendingNoTimeout)
           
-          var payload : [UInt8] = OpenLCBDatagramType.getUniqueEventIDReply.rawValue.bigEndianData
-
-          for _ in 1 ... message.payload[2] {
-            payload.append(contentsOf: nextUniqueEventId.bigEndianData)
-          }
+          var payload = OpenLCBDatagramType.getUniqueEventIDReply.bigEndianData
           
+          let numberRequested = message.payload.count >= 3 ? (message.payload[2] & 0b00000111) : 0
+          
+          if numberRequested > 0 {
+            for _ in 1 ... numberRequested {
+              payload.append(contentsOf: nextUniqueEventId.bigEndianData)
+            }
+          }
+        
           networkLayer.sendDatagram(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, data: payload)
 
         case.getConfigurationOptionsCommand:
@@ -796,18 +814,18 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
           
           networkLayer.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, timeOut: .ok)
           
-          DispatchQueue.main.async {
+     //     DispatchQueue.main.async {
             self.resetToFactoryDefaults()
-          }
+      //    }
           
         case .resetRebootCommand:
           
           networkLayer.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, timeOut: .ok)
           
-          DispatchQueue.main.async {
+     //     DispatchQueue.main.async {
             self.stop()
             self.start()
-          }
+     //     }
           
         case.LockReserveCommand:
           

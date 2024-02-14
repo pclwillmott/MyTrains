@@ -304,25 +304,25 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
 
   public func sendGlobalEmergencyStop() {
     _globalEmergencyStop = true
-    networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId: .emergencyStopAll)
+    networkLayer?.sendWellKnownEvent(sourceNode: self, eventId: .emergencyStopAll)
     delegate?.globalEmergencyChanged?(throttle: self)
   }
   
   public func sendClearGlobalEmergencyStop() {
     _globalEmergencyStop = false
-    networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId:.clearEmergencyStopAll )
+    networkLayer?.sendWellKnownEvent(sourceNode: self, eventId:.clearEmergencyStopAll )
     delegate?.globalEmergencyChanged?(throttle: self)
   }
   
   public func sendGlobalEmergencyOff() {
     _globalEmergencyOff = true
-    networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId:.emergencyOffAll )
+    networkLayer?.sendWellKnownEvent(sourceNode: self, eventId:.emergencyOffAll )
     delegate?.globalEmergencyChanged?(throttle: self)
   }
   
   public func sendClearGlobalEmergencyOff() {
     _globalEmergencyOff = false
-    networkLayer?.sendWellKnownEvent(sourceNodeId: nodeId, eventId:.clearEmergencyOffAll )
+    networkLayer?.sendWellKnownEvent(sourceNode: self, eventId:.clearEmergencyOffAll )
     delegate?.globalEmergencyChanged?(throttle: self)
   }
   
