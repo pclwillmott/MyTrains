@@ -36,6 +36,13 @@ public enum MyTrainsVirtualNodeType : UInt16 {
     return "MyTrains"
   }
   
+  public var visibility : OpenLCBNodeVisibility {
+    guard let result = MyTrainsVirtualNodeType.visibilityType[self] else {
+      return .visibilityNone
+    }
+    return result
+  }
+  
   public var startupOrder : Int {
     return MyTrainsVirtualNodeType._startupOrder[self] ?? 0x7FFFFFFFFFFFFFFF
   }
@@ -48,6 +55,24 @@ public enum MyTrainsVirtualNodeType : UInt16 {
   
   // MARK: Private Class Properties
   
+  private static let visibilityType : [MyTrainsVirtualNodeType:OpenLCBNodeVisibility] = [
+    .genericVirtualNode    : .visibilityNone,
+    .canGatewayNode        : .visibilityPublic,
+    .clockNode             : .visibilityPublic,
+    .throttleNode          : .visibilityPublic,
+    .locoNetGatewayNode    : .visibilityPublic,
+    .trainNode             : .visibilityPublic,
+    .configurationToolNode : .visibilityPublic,
+    .locoNetMonitorNode    : .visibilityPublic,
+    .programmerToolNode    : .visibilityPublic,
+    .programmingTrackNode  : .visibilityPublic,
+    .digitraxBXP88Node     : .visibilityPublic,
+    .layoutNode            : .visibilityInternal,
+    .switchboardPanelNode  : .visibilityInternal,
+    .switchboardItemNode   : .visibilityInternal,
+    .applicationNode       : .visibilityPublic,
+  ]
+
   public static let defaultNames : [MyTrainsVirtualNodeType:String] = [
     .applicationNode:       String(localized: "Application", comment: "Used to create a default OpenLCB virtual name"),
     .canGatewayNode:        String(localized: "CAN Gateway", comment: "Used to create a default OpenLCB virtual name"),

@@ -453,24 +453,63 @@ public class OpenLCBNetworkLayer : NSObject {
       observer.OpenLCBMessageReceived(message: message)
     }
     
-    if message.messageTypeIndicator.isAddressPresent {
-      if let virtualNode = regularNodes[message.destinationNodeId!] {
-        virtualNode.openLCBMessageReceived(message: message)
+    if let sourceNodeId = message.sourceNodeId, let sourceNode = virtualNodeLookup[sourceNodeId] {
+      
+      if let destinationNodeId = message.destinationNodeId {
+        if let virtualNode = regularNodes[destinationNodeId] {
+          virtualNode.openLCBMessageReceived(message: message)
+        }
+        else if sourceNode.visibility == .visibilityPublic {
+          for (virtualNodeId, virtualNode) in gatewayNodes {
+            if virtualNodeId != message.gatewayNodeId {
+              virtualNode.openLCBMessageReceived(message: message)
+            }
+          }
+        }
       }
       else {
+        for (virtualNodeId, virtualNode) in regularNodes {
+          if virtualNode.nodeId != message.gatewayNodeId {
+            virtualNode.openLCBMessageReceived(message: message)
+          }
+        }
+        if sourceNode.visibility == .visibilityPublic {
+          for (virtualNodeId, virtualNode) in gatewayNodes {
+            if virtualNodeId != message.gatewayNodeId {
+              virtualNode.openLCBMessageReceived(message: message)
+            }
+          }
+        }
+      }
+
+    }
+    else {
+      
+      if let destinationNodeId = message.destinationNodeId {
+        if let virtualNode = regularNodes[destinationNodeId] {
+          virtualNode.openLCBMessageReceived(message: message)
+        }
+        else {
+          for (virtualNodeId, virtualNode) in gatewayNodes {
+            if virtualNodeId != message.gatewayNodeId {
+              virtualNode.openLCBMessageReceived(message: message)
+            }
+          }
+        }
+      }
+      else {
+        for (virtualNodeId, virtualNode) in regularNodes {
+          if virtualNode.nodeId != message.gatewayNodeId {
+            virtualNode.openLCBMessageReceived(message: message)
+          }
+        }
         for (virtualNodeId, virtualNode) in gatewayNodes {
           if virtualNodeId != message.gatewayNodeId {
             virtualNode.openLCBMessageReceived(message: message)
           }
         }
       }
-    }
-    else {
-      for virtualNode in virtualNodes {
-        if virtualNode.nodeId != message.gatewayNodeId {
-          virtualNode.openLCBMessageReceived(message: message)
-        }
-      }
+
     }
 
   }

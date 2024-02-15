@@ -53,7 +53,7 @@ public class EventRange {
     
     let invert = (startId & firstBitOfBase) != 0
     
-    eventId = startId | (invert ? ~mask : mask)
+    eventId = startId | (invert ? 0 : mask)
     
   }
   

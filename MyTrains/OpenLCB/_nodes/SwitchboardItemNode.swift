@@ -654,6 +654,10 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
 
   // MARK: Public Properties
   
+  public override var visibility : OpenLCBNodeVisibility {
+    return itemType.visibility
+  }
+
   public var panelId : UInt64 {
     get {
       return configuration!.getUInt64(address: addressPanelId)!

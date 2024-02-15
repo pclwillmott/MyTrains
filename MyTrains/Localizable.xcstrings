@@ -1452,7 +1452,7 @@
       }
     },
     "Create Application Node" : {
-      "comment" : "Used for the Create Application Node menu item title\nUsed for the title of the Create Application Node window",
+      "comment" : "Used for the title of the Create Application Node window\nUsed for the Create Application Node menu item title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2231,7 +2231,7 @@
       }
     },
     "Fast Clock" : {
-      "comment" : "Used for the Fast Clock menu item title\nUsed to indicate a clock's type",
+      "comment" : "Used to indicate a clock's type\nUsed for the Fast Clock menu item title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -4090,7 +4090,7 @@
       "comment" : "This is the name of a country."
     },
     "s" : {
-      "comment" : "Used for the Global Emergency Stop menu key equivalent\nUsed for the abbreviation of seconds",
+      "comment" : "Used for the abbreviation of seconds\nUsed for the Global Emergency Stop menu key equivalent",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -4197,7 +4197,7 @@
       }
     },
     "Select Layout" : {
-      "comment" : "Used for the Select Layout menu item\nUsed for the title of the Select Layout window",
+      "comment" : "Used for the title of the Select Layout window\nUsed for the Select Layout menu item",
       "localizations" : {
         "en" : {
           "stringUnit" : {

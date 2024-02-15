@@ -138,7 +138,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   
   private var managedAliasLookup : [UInt16:OpenLCBTransportLayerAlias] = [:]
   
-  private let waitInterval : TimeInterval = 200.0 / 1000.0
+  private let waitInterval : TimeInterval = 400.0 /* 200.0 */  / 1000.0
   
   private let timeoutInterval : TimeInterval = 3.0
   
@@ -192,7 +192,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     
     close()
     
-    buffer.removeAll()
+//    buffer.removeAll()
     
     if let port = MTSerialPort(path: devicePath) {
       serialPort = port
@@ -205,11 +205,11 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
       port.open()
     }
     
-    nodeIdLookup = [:]
+//    nodeIdLookup = [:]
     
-    aliasLookup = [:]
+//    aliasLookup = [:]
     
-    internalNodes = []
+//    internalNodes = []
 
   }
   
@@ -343,10 +343,10 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
       }
       
       // *** HUB TESTING ***
-      if (frame.sourceNIDAlias == 0xe46 ||  frame.sourceNIDAlias == 0x11e) && frame.canControlFrameFormat.isCheckIdFrame {
+ //     if (frame.sourceNIDAlias == 0xe46 ||  frame.sourceNIDAlias == 0x11e) && frame.canControlFrameFormat.isCheckIdFrame {
     //    sendReserveIdFrame(alias: frame.sourceNIDAlias)
-        return
-      }
+ //       return
+  //    }
 
       for (_, internalNode) in managedNodeIdLookup {
         
@@ -377,7 +377,6 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
           
         }
         
-        
       }
       
       // Remove lookups for reset mappings
@@ -392,6 +391,9 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
       if frame.canControlFrameFormat == .aliasMapDefinitionFrame, let nodeId = UInt64(bigEndianData: frame.data) {
 
         if let internalNode = managedNodeIdLookup[nodeId] {
+          #if DEBUG
+          print("OpenLCBCANGateway.canFrameReceived: Duplicate Node ID \(nodeId.toHexDotFormat(numberOfBytes: 6))")
+          #endif
           sendDuplicateNodeIdErrorFrame(alias: internalNode.alias!)
           removeNodeIdAliasMapping(nodeId: nodeId)
           internalNode.state = .stopped
@@ -421,7 +423,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
         
         for (_, frame) in splitFrames {
           if (now - frame.timeStamp) > 3.0 {
-            deleteList.append(frame)
+     //       deleteList.append(frame)
           }
         }
         
@@ -434,7 +436,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
         
         for (_, message) in datagrams {
           if (now - message.timeStamp) > 3.0 {
-            timeOutList.append(message)
+        //    timeOutList.append(message)
           }
         }
         
@@ -673,7 +675,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
           
         }
         else if (referenceDate - message.timeStamp) > timeoutInterval {
-          delete = true
+       //   delete = true
         }
         
         if delete {
@@ -860,7 +862,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
           
         }
         else if (referenceDate - message.timeStamp) > timeoutInterval {
-          delete = true
+   //       delete = true
         }
         
         if delete {
@@ -1086,12 +1088,12 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
         managedAliasLookup[internalNode.alias!] = internalNode
         managedNodeIdLookup[internalNode.nodeId] = internalNode
         initNodeQueue.removeFirst()
-        /*
+        
         for (alias, nodeId) in aliasLookup {
           print("0x\(alias.toHex(numberOfDigits: 3)) -> \(nodeId.toHexDotFormat(numberOfBytes: 6))")
         }
         print()
-         */
+         
         if !initNodeQueue.isEmpty {
           getAlias()
         }
@@ -1116,8 +1118,11 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   }
   
   private func send(header: String, data:String) {
-    let packet = ":X\(header)N\(data);"
-    send(data: packet)
+    if let serialPort, serialPort.isOpen {
+      let packet = ":X\(header)N\(data);"
+      print("\(packet) \((aliasLookup[0x534] ?? 0).toHexDotFormat(numberOfBytes: 6))")
+      send(data: packet)
+    }
   }
 
   private func sendCheckIdFrame(format:OpenLCBCANControlFrameFormat, nodeId:UInt64, alias: UInt16) {
@@ -1275,10 +1280,9 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
 
     }
 
-    if let destinationNodeId = message.destinationNodeId, internalNodes.contains(destinationNodeId) || destinationNodeId == networkLayerNodeId {
+    if let destinationNodeId = message.destinationNodeId, destinationNodeId == networkLayerNodeId {
       return
     }
-
     if let sourceNodeId = message.sourceNodeId, sourceNodeId == networkLayerNodeId {
       return
     }
@@ -1357,13 +1361,17 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     print("serial port was opened: \(serialPort.path)")
     #endif
     
-    internalNodes.insert(nodeId)
-    
-    let alias = OpenLCBTransportLayerAlias(nodeId: nodeId)
-    
-    initNodeQueue.append(alias)
-    
-    getAlias()
+    if !internalNodes.contains(nodeId) {
+      
+      internalNodes.insert(nodeId)
+      
+      let alias = OpenLCBTransportLayerAlias(nodeId: nodeId)
+      
+      initNodeQueue.append(alias)
+      
+      getAlias()
+      
+    }
 
   }
   

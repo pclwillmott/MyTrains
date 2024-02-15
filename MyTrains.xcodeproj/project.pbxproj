@@ -157,6 +157,7 @@
 		DA7F89B12B371BDE00F43819 /* ConfigurationToolVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7F89B02B371BDE00F43819 /* ConfigurationToolVC.swift */; };
 		DA80205B2B7CEE730090DEC8 /* EventRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA80205A2B7CEE730090DEC8 /* EventRange.swift */; };
 		DA8479972A34CA87003067E6 /* OpenLCBClockSubState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8479962A34CA87003067E6 /* OpenLCBClockSubState.swift */; };
+		DA8601BB2B7E268A00B73C16 /* OpenLCBNodeVisibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8601BA2B7E268A00B73C16 /* OpenLCBNodeVisibility.swift */; };
 		DA877B0F29FEC13B00F8546D /* CDIMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA877B0E29FEC13B00F8546D /* CDIMap.swift */; };
 		DA8837702770B35B000B9A41 /* EditLayouts.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA88376F2770B35B000B9A41 /* EditLayouts.storyboard */; };
 		DA8837722770B371000B9A41 /* EditLayoutsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8837712770B371000B9A41 /* EditLayoutsVC.swift */; };
@@ -454,6 +455,7 @@
 		DA7F89B02B371BDE00F43819 /* ConfigurationToolVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationToolVC.swift; sourceTree = "<group>"; };
 		DA80205A2B7CEE730090DEC8 /* EventRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventRange.swift; sourceTree = "<group>"; };
 		DA8479962A34CA87003067E6 /* OpenLCBClockSubState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBClockSubState.swift; sourceTree = "<group>"; };
+		DA8601BA2B7E268A00B73C16 /* OpenLCBNodeVisibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBNodeVisibility.swift; sourceTree = "<group>"; };
 		DA877B0E29FEC13B00F8546D /* CDIMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDIMap.swift; sourceTree = "<group>"; };
 		DA88376F2770B35B000B9A41 /* EditLayouts.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = EditLayouts.storyboard; sourceTree = "<group>"; };
 		DA8837712770B371000B9A41 /* EditLayoutsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditLayoutsVC.swift; sourceTree = "<group>"; };
@@ -1265,6 +1267,7 @@
 				DA5F7A192A3F11A7004D7EBB /* OpenLCBWellKnownEvent.swift */,
 				DAF4DD4F289ABDDE000B848E /* SpeedProfileResultsType.swift */,
 				DAFFB6652B5D8F650035AC74 /* LayoutState.swift */,
+				DA8601BA2B7E268A00B73C16 /* OpenLCBNodeVisibility.swift */,
 			);
 			path = _enumerations;
 			sourceTree = "<group>";
@@ -1582,6 +1585,7 @@
 				DA5BD1ED2B6553EB00CEA5BA /* LicenseVC.swift in Sources */,
 				DA0D3E0C2A485E9A0042748C /* OpenLCBSearchMatchTarget.swift in Sources */,
 				DA467BA7281D534900AB9650 /* SwitchBoardItem.swift in Sources */,
+				DA8601BB2B7E268A00B73C16 /* OpenLCBNodeVisibility.swift in Sources */,
 				DA5B4607276F6917005CA03C /* ComboBoxDBDS.swift in Sources */,
 				DAA7BEB92B5033A700508140 /* SwitchboardItemNode.swift in Sources */,
 				DA0883FD2A76727700C2CFBD /* OpenLCBFunction.swift in Sources */,

@@ -137,6 +137,10 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   internal var firmwareBuffer : [UInt8] = []
   
   // MARK: Public Properties
+  
+  public var visibility : OpenLCBNodeVisibility {
+    return virtualNodeType.visibility
+  }
 
   public var eventsConsumed : Set<UInt64> = []
   
@@ -633,6 +637,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     
     networkLayer.sendInitializationComplete(sourceNodeId: nodeId, isSimpleSetSufficient: false)
     
+    print("Start Initialisation: \(userNodeName) - \(nodeId.toHexDotFormat(numberOfBytes: 6))")
     resetReboot()
 
     userConfigEventsConsumed = getUserConfigEvents(eventAddresses: userConfigEventConsumedAddresses)
@@ -663,6 +668,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     }
 
     completeStartUp()
+//    print("End Initialisation: \(userNodeName) - \(nodeId.toHexDotFormat(numberOfBytes: 6))")
 
   }
   
@@ -774,12 +780,13 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     case .protocolSupportInquiry:
       
       var data = supportedProtocols
-      
+      /*
       if isSwitchboardNode && !networkLayer.isInternalVirtualNode(nodeId: sourceNodeId) {
         let mask : UInt8 = 0x08
         data[1] = data[1] & ~mask
       }
-      
+      */
+      print("\(userNodeName) - \(nodeId.toHexDotFormat(numberOfBytes: 6))")
       networkLayer.sendProtocolSupportReply(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, data: data)
 
     case .datagram:

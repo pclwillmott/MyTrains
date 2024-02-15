@@ -30,8 +30,8 @@
             filePath = "MyTrains/OpenLCB/_nodes/SwitchboardItemNode.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1008"
-            endingLineNumber = "1008"
+            startingLineNumber = "1012"
+            endingLineNumber = "1012"
             landmarkName = "customizeDynamicCDI(cdi:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -46,8 +46,8 @@
             filePath = "MyTrains/OpenLCB/_nodes/SwitchboardItemNode.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1071"
-            endingLineNumber = "1071"
+            startingLineNumber = "1075"
+            endingLineNumber = "1075"
             landmarkName = "customizeDynamicCDI(cdi:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -78,8 +78,8 @@
             filePath = "MyTrains/OpenLCB/_nodes/OpenLCBNodeVirtual.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "524"
-            endingLineNumber = "524"
+            startingLineNumber = "528"
+            endingLineNumber = "528"
             landmarkName = "resetToFactoryDefaults()"
             landmarkType = "7">
          </BreakpointContent>
@@ -94,8 +94,8 @@
             filePath = "MyTrains/OpenLCB/_nodes/OpenLCBNodeVirtual.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "522"
-            endingLineNumber = "522"
+            startingLineNumber = "526"
+            endingLineNumber = "526"
             landmarkName = "resetToFactoryDefaults()"
             landmarkType = "7">
          </BreakpointContent>
@@ -110,8 +110,8 @@
             filePath = "MyTrains/OpenLCB/_classes/OpenLCBNetworkLayer.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "659"
-            endingLineNumber = "659"
+            startingLineNumber = "698"
+            endingLineNumber = "698"
             landmarkName = "sendEvent(sourceNode:eventId:payload:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -145,6 +145,22 @@
             startingLineNumber = "442"
             endingLineNumber = "442"
             landmarkName = "locoNetMessageReceived(message:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "ED869FA3-4069-4B88-8E1A-108DA35C6B7A"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MyTrains/OpenLCB/_nodes/OpenLCBCANGateway.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "241"
+            endingLineNumber = "241"
+            landmarkName = "send(data:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

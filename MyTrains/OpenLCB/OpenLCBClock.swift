@@ -660,9 +660,9 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
   
   private func updateObservers() {
     for (_, observer) in observers {
- //     DispatchQueue.main.async {
+      DispatchQueue.main.async {
         observer.clockTick(clock: self)
- //     }
+      }
     }
   }
 

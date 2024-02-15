@@ -37,6 +37,13 @@ public enum SwitchBoardItemType : UInt16 {
 
   // MARK: Public Properties
   
+  public var visibility : OpenLCBNodeVisibility {
+    guard let result = SwitchBoardItemType.visibility[self] else {
+      return .visibilityNone
+    }
+    return result
+  }
+  
   public var isTurnout : Bool {
   
     let turnouts : Set<SwitchBoardItemType> = [
@@ -183,6 +190,29 @@ public enum SwitchBoardItemType : UInt16 {
   }
   
   // MARK: Private Class Properties
+  
+  private static let visibility : [SwitchBoardItemType:OpenLCBNodeVisibility] = [
+    .straight           : .visibilityInternal,
+    .curve              : .visibilityInternal,
+    .longCurve          : .visibilityInternal,
+    .turnoutRight       : .visibilityPublic,
+    .turnoutLeft        : .visibilityPublic,
+    .cross              : .visibilityInternal,
+    .diagonalCross      : .visibilityInternal,
+    .yTurnout           : .visibilityPublic,
+    .turnout3Way        : .visibilityPublic,
+    .leftCurvedTurnout  : .visibilityPublic,
+    .rightCurvedTurnout : .visibilityPublic,
+    .singleSlip         : .visibilityPublic,
+    .doubleSlip         : .visibilityPublic,
+    .buffer             : .visibilityInternal,
+    .block              : .visibilityPublic,
+    .sensor             : .visibilityPublic,
+    .link               : .visibilityInternal,
+    .platform           : .visibilityInternal,
+    .signal             : .visibilityPublic,
+    .none               : .visibilityNone,
+  ]
   
   private static let connections : [SwitchBoardItemType:[SwitchBoardConnection]] = [
     .straight           : [(5, 1, [])],
