@@ -1616,7 +1616,7 @@
 
     },
     "DCC Programmer Tool" : {
-      "comment" : "Used to create a default OpenLCB virtual name\nUsed for the DCC Programmer Tool menu item title",
+      "comment" : "Used for the DCC Programmer Tool menu item title\nUsed to create a default OpenLCB virtual name",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -4197,7 +4197,7 @@
       }
     },
     "Select Layout" : {
-      "comment" : "Used for the title of the Select Layout window\nUsed for the Select Layout menu item",
+      "comment" : "Used for the Select Layout menu item\nUsed for the title of the Select Layout window",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -4958,7 +4958,7 @@
       "comment" : "This is the name of a country."
     },
     "Unknown" : {
-      "comment" : "Used to indicate that the type of something is unknown\nUsed to indicate the state of a turnout",
+      "comment" : "Used to indicate the state of a turnout\nUsed to indicate that the type of something is unknown",
       "localizations" : {
         "en" : {
           "stringUnit" : {

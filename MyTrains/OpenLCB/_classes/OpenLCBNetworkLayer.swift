@@ -834,7 +834,7 @@ public class OpenLCBNetworkLayer : NSObject {
 
   public func sendVerifiedNodeIdNumber(sourceNodeId:UInt64, isSimpleSetSufficient:Bool) {
     
-    let mti : OpenLCBMTI = isSimpleSetSufficient ? .verifiedNodeIDNumberSimpleSetSufficient : .verifiedNodeIDNumberFullProtocolRequired
+    let mti : OpenLCBMTI = isSimpleSetSufficient ? .verifiedNodeIDSimpleSetSufficient : .verifiedNodeIDFullProtocolRequired
     
     let message = OpenLCBMessage(messageTypeIndicator: mti)
 

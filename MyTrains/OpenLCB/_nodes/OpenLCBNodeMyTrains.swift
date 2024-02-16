@@ -485,7 +485,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     
     switch message.messageTypeIndicator {
       
-    case .verifiedNodeIDNumberSimpleSetSufficient, .verifiedNodeIDNumberFullProtocolRequired:
+    case .verifiedNodeIDSimpleSetSufficient, .verifiedNodeIDFullProtocolRequired:
       
       if getUniqueNodeIdInProgress, let id = UInt64(bigEndianData: message.payload) {
         

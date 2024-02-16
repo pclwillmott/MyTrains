@@ -25,7 +25,7 @@ public enum OpenLCBWellKnownEvent : UInt64 {
   case linkErrorCode4                      = 0x010000000000fd04
 
   // Not automatically routed
-  
+
   case duplicateNodeIdDetected             = 0x0101000000000201
   case nodeIsATrain                        = 0x0101000000000303
   case nodeIsATractionProxy                = 0x0101000000000304

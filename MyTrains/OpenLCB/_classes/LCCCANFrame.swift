@@ -265,8 +265,6 @@ public class LCCCANFrame : NSObject {
   
   private let mask_FrameType : UInt32 = 0x08000000
   
-  private let mask_VariableField : UInt32 = 0x07fff000
-  
   // MARK: Public Properties
   
   public var header : UInt32
@@ -278,13 +276,18 @@ public class LCCCANFrame : NSObject {
     let mti = OpenLCBMTI(rawValue: UInt16((header >> 12) & 0xfff))!
     
     switch mti {
+      
     case .producerConsumerEventReportWithPayloadFirstFrame, .producerConsumerEventReportWithPayloadMiddleFrame, .producerConsumerEventReportWithPayloadLastFrame:
+      
       return UInt64(header & 0xffcfff) << 16
+      
     default:
+      
       var result = UInt64(header) << 16
       result |= UInt64(data[0] & 0x0f) << 8
       result |= UInt64(data[1])
       return result
+      
     }
     
   }
@@ -330,38 +333,28 @@ public class LCCCANFrame : NSObject {
     return OpenLCBMTI(rawValue: UInt16((header >> 12) & 0xfff))
   }
   
-  public var variableField : UInt32 {
-    get {
-      return (header & mask_VariableField) >> 12
-    }
+  public var contentField : UInt32 {
+    return (header & 0x07fff000) >> 12
   }
   
   public var sourceNIDAlias : UInt16 {
-    return UInt16(header & 0x00000FFF)
+    return UInt16(header & 0x00000fff)
   }
   
-  public var canControlFrameFormat : OpenLCBCANControlFrameFormat {
+  public var controlFrameFormat : OpenLCBCANControlFrameFormat? {
     
-    get {
-      
-      if frameType == .canControlFrame {
-        
-        let vf = variableField
-        
-        if let format = OpenLCBCANControlFrameFormat(rawValue: UInt16(vf & 0x7000)) {
-          return format
-        }
-        
-        if let format = OpenLCBCANControlFrameFormat(rawValue: UInt16(vf)) {
-          return format
-        }
-        
-      }
-      
-      return .unknown
-      
+    guard frameType == .canControlFrame else {
+      return nil
     }
     
+    let cf = contentField
+    
+    if let format = OpenLCBCANControlFrameFormat(rawValue: UInt16(cf & 0x7000)) {
+      return format
+    }
+    
+    return OpenLCBCANControlFrameFormat(rawValue: UInt16(cf))
+
   }
   
   public var info : String {
@@ -371,20 +364,20 @@ public class LCCCANFrame : NSObject {
         return "Frame Type: \(frameType) Alias: \(sourceNIDAlias.toHex(numberOfDigits: 3)) \n"
 
       case .canControlFrame:
-        return "Frame Type: \(frameType) Alias: \(sourceNIDAlias.toHex(numberOfDigits: 3)) CAN Control Frame Format: \(canControlFrameFormat))\n"
+        return "Frame Type: \(frameType) Alias: \(sourceNIDAlias.toHex(numberOfDigits: 3)) CAN Control Frame Format: \(controlFrameFormat))\n"
       }
     }
   }
   
   // MARK: Public Class Methods
   
-  public static func createFrameHeader(frameType: OpenLCBCANFrameType, variableField: UInt16, sourceNIDAlias: UInt16) -> String {
+  public static func createFrameHeader(frameType: OpenLCBCANFrameType, contentField: UInt16, sourceNIDAlias: UInt16) -> String {
     
     var header : UInt32 = 0x10000000
     
     header |= (frameType == .openLCBMessage) ? 0x08000000 : 0
     
-    header |= UInt32((variableField & 0x07fff)) << 12
+    header |= UInt32((contentField & 0x07fff)) << 12
     
     header |= UInt32(sourceNIDAlias & 0x0fff)
     

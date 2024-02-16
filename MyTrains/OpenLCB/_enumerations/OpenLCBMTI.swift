@@ -13,8 +13,8 @@ public enum OpenLCBMTI : UInt16 {
   case initializationCompleteSimpleSetSufficient         = 0x0101
   case verifyNodeIDAddressed                             = 0x0488
   case verifyNodeIDGlobal                                = 0x0490
-  case verifiedNodeIDNumberFullProtocolRequired          = 0x0170
-  case verifiedNodeIDNumberSimpleSetSufficient           = 0x0171
+  case verifiedNodeIDFullProtocolRequired                = 0x0170
+  case verifiedNodeIDSimpleSetSufficient                 = 0x0171
   case optionalInteractionRejected                       = 0x0068
   case terminateDueToError                               = 0x00A8
   case protocolSupportInquiry                            = 0x0828

@@ -9,7 +9,6 @@ import Foundation
 
 public enum OpenLCBCANControlFrameFormat : UInt16 {
   
-  case unknown                  = 0xffff
   case reserveIdFrame           = 0x0700
   case aliasMapDefinitionFrame  = 0x0701
   case aliasMappingEnquiryFrame = 0x0702
@@ -22,12 +21,11 @@ public enum OpenLCBCANControlFrameFormat : UInt16 {
   case checkId6Frame            = 0x6000
   case checkId5Frame            = 0x5000
   case checkId4Frame            = 0x4000
-
+  
   // MARK: Public Properties
   
   public var isCheckIdFrame : Bool {
-    get {
-      return (self.rawValue & 0x7000) != 0 && self != .unknown
-    }
+    return (self.rawValue & 0x7000) != 0
   }
+  
 }

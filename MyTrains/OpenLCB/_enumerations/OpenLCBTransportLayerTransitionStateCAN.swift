@@ -12,6 +12,6 @@ public enum OpenLCBTransportTransitionStateCAN {
   case testingAlias
   case reservingAlias
   case mappingDeclared
-  case tryAgain
+//  case tryAgain
 }
 
