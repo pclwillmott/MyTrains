@@ -10,7 +10,7 @@ import AppKit
 
 public let networkLayerNodeId : UInt64 = 0xfdffffffffff
 
-public class OpenLCBNetworkLayer : NSObject {
+public class OpenLCBNetworkLayer : NSObject, MTPipeDelegate {
   
   // MARK: Constructors
   
@@ -45,6 +45,8 @@ public class OpenLCBNetworkLayer : NSObject {
   private var observers : [Int:OpenLCBCANDelegate] = [:]
   
   private var nextObserverId : Int = 1
+  
+  private var rxPipe : MTPipe?
   
   // MARK: Public Properties
 
@@ -177,6 +179,9 @@ public class OpenLCBNetworkLayer : NSObject {
     }
     
     _state = .initialized
+    
+    rxPipe = MTPipe(name: "Network Layer")
+    rxPipe?.open(delegate: self)
     
     for node in OpenLCBMemorySpace.getVirtualNodes() {
       registerNode(node: node)
@@ -518,7 +523,7 @@ public class OpenLCBNetworkLayer : NSObject {
     sendMessage(gatewayNodeId: message.sourceNodeId!, message: message)
   }
   
-  public func sendInitializationComplete(sourceNodeId:UInt64, isSimpleSetSufficient:Bool) {
+  public func sendInitializationComplete(txPipe:MTPipe, sourceNodeId:UInt64, isSimpleSetSufficient:Bool) {
     
     let mti : OpenLCBMTI = isSimpleSetSufficient ? .initializationCompleteSimpleSetSufficient : .initializationCompleteFullProtocolRequired
     
@@ -530,6 +535,8 @@ public class OpenLCBNetworkLayer : NSObject {
     data.removeFirst(2)
     
     message.payload = data
+    
+    txPipe.sendOpenLCBMessage(message: message)
     
     sendMessage(message: message)
  
@@ -1867,5 +1874,10 @@ public class OpenLCBNetworkLayer : NSObject {
     
   }
 
-
+  // MARK: MTPipeDelegate Methods
+  
+  public func pipe(_ pipe: MTPipe, message: OpenLCBMessage) {
+    print("RX: \(message.messageTypeIndicator)")
+  }
+  
 }

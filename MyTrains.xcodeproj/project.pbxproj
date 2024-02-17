@@ -21,6 +21,8 @@
 		DA09493E2B7F795B00545650 /* OpenLCBCANGateway - RX.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA09493D2B7F795B00545650 /* OpenLCBCANGateway - RX.swift */; };
 		DA0949402B7F7AF500545650 /* OpenLCBCANGateway - TX.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA09493F2B7F7AF500545650 /* OpenLCBCANGateway - TX.swift */; };
 		DA0949422B7F940100545650 /* DebugLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0949412B7F940100545650 /* DebugLog.swift */; };
+		DA0949452B81078D00545650 /* MTPipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0949442B81078D00545650 /* MTPipe.swift */; };
+		DA0949482B81085C00545650 /* mtpipe.c in Sources */ = {isa = PBXBuildFile; fileRef = DA0949472B81085C00545650 /* mtpipe.c */; };
 		DA0B63D82AF7BB8B007C7CD6 /* OpenLCBMonitor.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA0B63D72AF7BB8B007C7CD6 /* OpenLCBMonitor.storyboard */; };
 		DA0B63DA2AF7C612007C7CD6 /* OpenLCBMonitorVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0B63D92AF7C612007C7CD6 /* OpenLCBMonitorVC.swift */; };
 		DA0B63DC2AF7CB04007C7CD6 /* OpenLCBCANDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0B63DB2AF7CB04007C7CD6 /* OpenLCBCANDelegate.swift */; };
@@ -321,6 +323,9 @@
 		DA09493D2B7F795B00545650 /* OpenLCBCANGateway - RX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OpenLCBCANGateway - RX.swift"; sourceTree = "<group>"; };
 		DA09493F2B7F7AF500545650 /* OpenLCBCANGateway - TX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OpenLCBCANGateway - TX.swift"; sourceTree = "<group>"; };
 		DA0949412B7F940100545650 /* DebugLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLog.swift; sourceTree = "<group>"; };
+		DA0949442B81078D00545650 /* MTPipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTPipe.swift; sourceTree = "<group>"; };
+		DA0949462B81085C00545650 /* mtpipe.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mtpipe.h; sourceTree = "<group>"; };
+		DA0949472B81085C00545650 /* mtpipe.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = mtpipe.c; sourceTree = "<group>"; };
 		DA0B63D72AF7BB8B007C7CD6 /* OpenLCBMonitor.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = OpenLCBMonitor.storyboard; sourceTree = "<group>"; };
 		DA0B63D92AF7C612007C7CD6 /* OpenLCBMonitorVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBMonitorVC.swift; sourceTree = "<group>"; };
 		DA0B63DB2AF7CB04007C7CD6 /* OpenLCBCANDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBCANDelegate.swift; sourceTree = "<group>"; };
@@ -638,6 +643,16 @@
 			path = "CAN Gateway";
 			sourceTree = "<group>";
 		};
+		DA0949432B81076200545650 /* _Pipe */ = {
+			isa = PBXGroup;
+			children = (
+				DA0949442B81078D00545650 /* MTPipe.swift */,
+				DA0949462B81085C00545650 /* mtpipe.h */,
+				DA0949472B81085C00545650 /* mtpipe.c */,
+			);
+			path = _Pipe;
+			sourceTree = "<group>";
+		};
 		DA1B949B2A3DE84700E2CE6A /* _WiFi */ = {
 			isa = PBXGroup;
 			children = (
@@ -765,6 +780,7 @@
 		DA72DDE42A3C6E150027BE50 /* Interfaces */ = {
 			isa = PBXGroup;
 			children = (
+				DA0949432B81076200545650 /* _Pipe */,
 				DA5BC9892A1A492100D67ABE /* _Serial Port */,
 				DA1B949B2A3DE84700E2CE6A /* _WiFi */,
 			);
@@ -1517,6 +1533,7 @@
 				DA1B79F7285F2540009E1189 /* SwitchBoardItemPropertySheetVC.swift in Sources */,
 				DA6A0ADF2753B5CF00913F2B /* UserDefaults.swift in Sources */,
 				DA4DE5232B2CBC16000C74F1 /* SwitchBoardEventType.swift in Sources */,
+				DA0949452B81078D00545650 /* MTPipe.swift in Sources */,
 				DAEF18712A3DFDE100AC227D /* LocoNetDeviceId.swift in Sources */,
 				DAD73C1E2A9A4F64002E7618 /* OpenLCBDigitraxBXP88Node.swift in Sources */,
 				DADC21CE2944ABE2008A2F33 /* ClockView.swift in Sources */,
@@ -1565,6 +1582,7 @@
 				DAFFB6662B5D8F650035AC74 /* LayoutState.swift in Sources */,
 				DA95D6BD280833FE00D9F1B6 /* GroupSetupVC.swift in Sources */,
 				DA9B87282A2B979E00E9969E /* DBEditorView.swift in Sources */,
+				DA0949482B81085C00545650 /* mtpipe.c in Sources */,
 				DA48EE29293CEF16006C26A0 /* DayOfWeek.swift in Sources */,
 				DAF4DD50289ABDDE000B848E /* SpeedProfileResultsType.swift in Sources */,
 				DAAC7E932A79514E001A424E /* OpenLCBProgrammerToolDelegate.swift in Sources */,

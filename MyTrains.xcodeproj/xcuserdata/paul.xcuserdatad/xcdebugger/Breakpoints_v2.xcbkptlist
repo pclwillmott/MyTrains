@@ -62,8 +62,8 @@
             filePath = "MyTrains/OpenLCB/_classes/OpenLCBMessage.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "240"
-            endingLineNumber = "240"
+            startingLineNumber = "296"
+            endingLineNumber = "296"
             landmarkName = "datagramId"
             landmarkType = "24">
          </BreakpointContent>
@@ -72,6 +72,22 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "F90FE59C-54E8-45AF-AF81-9C3BC497DA18"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MyTrains/OpenLCB/_nodes/OpenLCBNodeVirtual.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "530"
+            endingLineNumber = "530"
+            landmarkName = "resetToFactoryDefaults()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9BA818CF-D724-48A3-98D2-F0999EB35F3E"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
@@ -87,22 +103,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "9BA818CF-D724-48A3-98D2-F0999EB35F3E"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MyTrains/OpenLCB/_nodes/OpenLCBNodeVirtual.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "526"
-            endingLineNumber = "526"
-            landmarkName = "resetToFactoryDefaults()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "E2F2D8DF-D7CD-4557-A608-4A883AE889FA"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -110,8 +110,8 @@
             filePath = "MyTrains/OpenLCB/_classes/OpenLCBNetworkLayer.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "698"
-            endingLineNumber = "698"
+            startingLineNumber = "705"
+            endingLineNumber = "705"
             landmarkName = "sendEvent(sourceNode:eventId:payload:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -167,16 +167,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "C4048BB4-20A5-4C86-B3F9-67A730035C7E"
+            uuid = "DB7E0F74-DFD4-4D00-AA06-DAF69E540114"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "MyTrains/OpenLCB/_nodes/CAN Gateway/OpenLCBCANGateway - RX.swift"
+            filePath = "MyTrains/OpenLCB/_nodes/CAN Gateway/OpenLCBCANGateway.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "377"
-            endingLineNumber = "377"
-            landmarkName = "processInputQueue()"
+            startingLineNumber = "391"
+            endingLineNumber = "391"
+            landmarkName = "serialPortWasOpened(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

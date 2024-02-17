@@ -21,6 +21,62 @@ public class OpenLCBMessage : NSObject {
     
   }
   
+  init?(fullMessage:[UInt8]) {
+    
+    var data = fullMessage
+    
+    _fullMessage = data
+    
+    guard data.count >= 8 else {
+      return nil
+    }
+    
+    guard let temp = UInt16(bigEndianData: [UInt8](data.prefix(2))), let mti = OpenLCBMTI(rawValue: temp) else {
+      return nil
+    }
+    
+    messageTypeIndicator = mti
+
+    data.removeFirst(2)
+
+    canFrameType = messageTypeIndicator == .datagram ? .datagramCompleteInFrame : .globalAndAddressedMTI
+
+    guard let sid = UInt64(bigEndianData: [UInt8](data.prefix(6))) else {
+      return nil
+    }
+    
+    sourceNodeId = sid
+    
+    data.removeFirst(6)
+    
+    if messageTypeIndicator.isAddressPresent {
+      
+      guard let did = UInt64(bigEndianData: [UInt8](data.prefix(6))) else {
+        return nil
+      }
+      
+      destinationNodeId = did
+      
+      data.removeFirst(6)
+      
+    }
+    
+    if messageTypeIndicator.isEventPresent {
+
+      guard let eid = UInt64(bigEndianData: [UInt8](data.prefix(8))) else {
+        return nil
+      }
+      
+      eventId = eid
+      
+      data.removeFirst(8)
+
+    }
+    
+    payload = data
+    
+  }
+  
   init?(frame:LCCCANFrame) {
     
     guard let canFrameType = frame.openLCBMessageCANFrameType else {
@@ -302,6 +358,52 @@ public class OpenLCBMessage : NSObject {
     }
     return result
 
+  }
+  
+  private var _fullMessage : [UInt8]?
+  
+  public var fullMessage : [UInt8]? {
+    
+    if let _fullMessage {
+      return _fullMessage
+    }
+    
+    guard let sourceNodeId else {
+      return nil
+    }
+    
+    var data : [UInt8] = []
+    
+    data.append(contentsOf: messageTypeIndicator.rawValue.bigEndianData)
+    
+    data.append(contentsOf: sourceNodeId.nodeIdBigEndianData)
+    
+    if messageTypeIndicator.isAddressPresent {
+      
+      guard let destinationNodeId else {
+        return nil
+      }
+      
+      data.append(contentsOf: destinationNodeId.nodeIdBigEndianData)
+      
+    }
+    
+    if messageTypeIndicator.isEventPresent {
+      
+      guard let eventId else {
+        return nil
+      }
+      
+      data.append(contentsOf: eventId.bigEndianData)
+      
+    }
+    
+    data.append(contentsOf: payload)
+    
+    _fullMessage = data
+    
+    return data
+    
   }
   
   // MARK: Class Methods

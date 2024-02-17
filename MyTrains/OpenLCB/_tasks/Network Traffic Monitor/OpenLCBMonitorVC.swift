@@ -168,8 +168,8 @@ class OpenLCBMonitorVC: NSViewController, NSWindowDelegate, OpenLCBCANDelegate {
       }
     }
 
-    addToConsole(message: text)
-    
+    self.addToConsole(message: text)
+
   }
   
   private func canFrame(frame:LCCCANFrame) {

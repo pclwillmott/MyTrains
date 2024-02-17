@@ -153,6 +153,10 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   
   internal var aliasLock : NSLock = NSLock()
   
+  internal var inputTriggerTimer : Timer?
+  
+  internal var outputTriggerTimer : Timer?
+  
   internal var inGetAlias : Bool = false
     
   internal var aliasLookup : [UInt16:UInt64] = [:]
@@ -163,7 +167,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   
   internal var datagrams : [UInt32:OpenLCBMessage] = [:]
   
-  internal var datagramsAwaitingReceipt : [UInt32:OpenLCBMessage] = [:]
+  // internal var datagramsAwaitingReceipt : [UInt32:OpenLCBMessage] = [:]
   
   internal var isProcessingInputQueue : Bool = false
   internal var isProcessingOutputQueue : Bool = false
@@ -235,364 +239,10 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     serialPort = nil
   }
   
-  internal func processQueues() {
-    
-    if !initNodeQueue.isEmpty {
-      return
-    }
-    
-    processQueueLock.lock()
-    let ok = !inProcessQueue
-    if ok {
-      inProcessQueue = true
-    }
-    processQueueLock.unlock()
-    
-    if !ok {
-      return
-    }
-    
-    // Input Queue
-    
-    let referenceDate = Date.timeIntervalSinceReferenceDate
-    
-    if !inputQueue.isEmpty {
-      
-      var sendQuery = false
-      
-      var index = 0
-      
-      while index < inputQueue.count {
-        
-        let message = inputQueue[index]
-        
-        if message.sourceNodeId == nil, let alias = message.sourceNIDAlias {
-          if let id = aliasLookup[alias] {
-            message.sourceNodeId = id
-          }
-          else {
-            sendQuery = true
-          }
-        }
-        
-        if (message.messageTypeIndicator.isAddressPresent || message.messageTypeIndicator == .datagram) && message.destinationNodeId == nil, let alias = message.destinationNIDAlias {
-          if let id = aliasLookup[alias] {
-            message.destinationNodeId = id
-          }
-          else {
-            sendQuery = true
-          }
-        }
-        
-        var delete = false
-        
-        if message.isMessageComplete {
-          
-          var route = true
-          
-          switch message.messageTypeIndicator {
-            
-          case .initializationCompleteSimpleSetSufficient, .initializationCompleteFullProtocolRequired:
-            
-            for (key, datagram) in datagramsAwaitingReceipt {
-              if datagram.destinationNodeId == message.sourceNodeId {
-                datagramsAwaitingReceipt.removeValue(forKey: key)
-              }
-            }
-            
-          case .datagramReceivedOK:
-            
-            datagramsAwaitingReceipt.removeValue(forKey: message.datagramIdReversed)
-            
-          case .datagramRejected:
-            
-            if let datagram = datagramsAwaitingReceipt[message.datagramIdReversed] {
-              datagramsAwaitingReceipt.removeValue(forKey: message.datagramIdReversed)
-              if message.errorCode.isTemporary {
-                addToOutputQueue(message: datagram)
-              }
-            }
-            
-          case .consumerIdentifiedAsCurrentlyValid, .consumerIdentifiedAsCurrentlyInvalid, .consumerIdentifiedWithValidityUnknown:
-            
-            externalConsumedEvents.insert(message.eventId!)
-
-          case .consumerRangeIdentified:
-            
-            if let range = message.eventRange {
-              
-              var found = false
-              
-              for r in externalConsumedEventRanges {
-                if r.eventId == range.eventId {
-                  found = true
-                  break
-                }
-              }
-              
-              if !found {
-                externalConsumedEventRanges.append(range)
-              }
-              
-            }
-
-          case .producerConsumerEventReport:
-            
-            if let eventId = message.eventId {
-              
-              if !(message.isAutomaticallyRoutedEvent || internalConsumedEvents.contains(eventId)) {
-                
-                var found = false
-                
-                for range in internalConsumedEventRanges {
-                  if eventId >= range.startId && eventId <= range.endId {
-                    found = true
-                    break
-                  }
-                }
-                
-                if !found {
-                  route = false
-                }
-                
-              }
-              
-            }
-            else {
-              #if DEBUG
-              print("OpenLCBCANGateway.processQueues: producerConsumerEventReport without eventId")
-              #endif
-            }
-
-          default:
-            break
-          }
-
-          if route {
-            networkLayer?.sendMessage(gatewayNodeId: nodeId, message: message)
-          }
-          
-          delete = true
-          
-        }
-        else if (referenceDate - message.timeStamp) > timeoutInterval {
-       //   delete = true
-        }
-        
-        if delete {
-          inputQueueLock.lock()
-          inputQueue.remove(at: index)
-          inputQueueLock.unlock()
-        }
-        else {
-          index += 1
-        }
-        
-      }
-      
-      if sendQuery, let alias = nodeIdLookup[nodeId] {
-        sendAliasMappingEnquiryFrame(alias: alias)
-      }
-            
-    }
-    
-    // Output Queue
-    
-    if !outputQueue.isEmpty {
-      
-      var index = 0
-      
-      while index < outputQueue.count {
-        
-        let message = outputQueue[index]
-        
-        if let alias = nodeIdLookup[message.sourceNodeId!] {
-          
-          message.sourceNIDAlias = alias
-          
-          if (message.messageTypeIndicator == .datagram ) || message.messageTypeIndicator.isAddressPresent, let destinationNodeId = message.destinationNodeId {
-            
-            if let alias = nodeIdLookup[destinationNodeId] {
-              message.destinationNIDAlias = alias
-            }
-            else {
-              sendAliasMappingEnquiryFrame(nodeId: destinationNodeId, alias: alias)
-            }
-            
-          }
-          
-        }
-        else {
-          #if DEBUG
-          print("OpenLCBCANGateway.processQueues: send source alias not found: \(message.sourceNodeId!.toHexDotFormat(numberOfBytes: 6))")
-          #endif
-        }
-        
-        var delete = false
-        
-        if message.isMessageComplete {
-          
-          if message.messageTypeIndicator == .datagram {
-
-            datagramsAwaitingReceipt[message.datagramId] = message
-
-            if message.payload.count <= 8 {
-              if let frame = LCCCANFrame(message: message, canFrameType: .datagramCompleteInFrame, data: message.payload) {
-                send(data: frame.message)
-              }
-            }
-            else {
-              
-              let numberOfFrames = message.payload.count == 0 ? 1 : 1 + (message.payload.count - 1) / 8
-              
-              for frameNumber in 1...numberOfFrames {
-                
-                var canFrameType : OpenLCBMessageCANFrameType = .datagramMiddleFrame
-                
-                if frameNumber == 1 {
-                  canFrameType = .datagramFirstFrame
-                }
-                else if frameNumber == numberOfFrames {
-                  canFrameType = .datagramFinalFrame
-                }
-                
-                var data : [UInt8] = []
-                
-                var index = (frameNumber - 1) * 8
-                
-                var count = 0
-                
-                while index < message.payload.count && count < 8 {
-                  data.append(message.payload[index])
-                  index += 1
-                  count += 1
-                }
-                
-                if let frame = LCCCANFrame(message: message, canFrameType: canFrameType, data: data) {
-                  send(data: frame.message)
-                }
-                
-              }
-              
-            }
-            
-            delete = true
-            
-          }
-          else if message.messageTypeIndicator == .producerConsumerEventReport {
-            
-            var data : [UInt8] = []
-            
-            data.append(contentsOf: message.eventId!.bigEndianData)
-            data.append(contentsOf: message.payload)
-            
-            let numberOfFrames = 1 + (data.count - 1) / 8
-            
-            if numberOfFrames == 1 {
-              if let frame = LCCCANFrame(message: message) {
-                send(data: frame.message)
-              }
-            }
-            else {
-              
-              for frameNumber in 1 ... numberOfFrames {
-                
-                switch frameNumber {
-                case 1:
-                  message.messageTypeIndicator = .producerConsumerEventReportWithPayloadFirstFrame
-                case numberOfFrames:
-                  message.messageTypeIndicator = .producerConsumerEventReportWithPayloadLastFrame
-                default:
-                  message.messageTypeIndicator = .producerConsumerEventReportWithPayloadMiddleFrame
-                }
-                
-                let payload : [UInt8] = [UInt8](data.prefix(8))
-                
-                data.removeFirst(payload.count)
-                
-                if let frame = LCCCANFrame(pcerMessage: message, payload: payload) {
-                  send(data: frame.message)
-                }
-              
-              }
-              
-            }
-            
-            delete = true
-            
-          }
-          else if message.messageTypeIndicator.isAddressPresent {
-            
-            if let frame = LCCCANFrame(message: message) {
-              
-              if frame.data.count <= 8 {
-                send(data: frame.message)
-              }
-              else {
-                
-                let numberOfFrames = 1 + (frame.data.count - 3 ) / 6
-                
-                for frameNumber in 1...numberOfFrames {
-                  
-                  var flags : OpenLCBCANFrameFlag = .middleFrame
-                  
-                  if frameNumber == 1 {
-                    flags = .firstFrame
-                  }
-                  else if frameNumber == numberOfFrames {
-                    flags = .lastFrame
-                  }
-                  
-                  if let frame = LCCCANFrame(message: message, flags: flags, frameNumber: frameNumber) {
-                    send(data: frame.message)
-                  }
-                  
-                }
-                
-              }
-              
-            }
-            
-            delete = true
-            
-          }
-          else if let frame = LCCCANFrame(message: message) {
-            send(data: frame.message)
-            delete = true
-          }
-          
-        }
-        else if (referenceDate - message.timeStamp) > timeoutInterval {
-   //       delete = true
-        }
-        
-        if delete {
-          outputQueueLock.lock()
-          outputQueue.remove(at: index)
-          outputQueueLock.unlock()
-        }
-        else {
-          index += 1
-        }
-        
-      }
-      
-    }
-
-    if !inputQueue.isEmpty || !outputQueue.isEmpty {
-      startWaitTimer(interval: aliasWaitInterval)
-    }
-    else if isStopping {
-      close()
-    }
-    
-    inProcessQueue = false
-    
-  }
   
   @objc func waitTimerTick() {
     stopWaitTimer()
-    processQueues()
+//    processQueues()
   }
   
   internal func startWaitTimer(interval: TimeInterval) {
@@ -727,7 +377,6 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     
   }
 
-
   // MARK: MTSerialPortDelegate Methods
   
   public func serialPort(_ serialPort: MTSerialPort, didReceive data: [UInt8]) {
@@ -738,7 +387,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   public func serialPortWasOpened(_ serialPort: MTSerialPort) {
 
     #if DEBUG
-    print("serial port was opened: \(serialPort.path)")
+    debugLog(message: "\(serialPort.path)")
     #endif
     
     if !internalNodes.contains(nodeId) {
@@ -757,19 +406,22 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   
   public func serialPortWasRemovedFromSystem(_ serialPort: MTSerialPort) {
     #if DEBUG
-    print("serial port was removed from system: \(serialPort.path)")
+    debugLog(message: "\(serialPort.path)")
     #endif
     self.serialPort = nil
   }
   
   public func serialPortWasClosed(_ serialPort: MTSerialPort) {
     #if DEBUG
-    print("serial port was closed: \(serialPort.path)")
+    debugLog(message: "\(serialPort.path)")
     #endif
     self.serialPort = nil
   }
 
   public func serialPortWasAdded(_ serialPort: MTSerialPort) {
+    #if DEBUG
+    debugLog(message: "\(serialPort.path)")
+    #endif
     if !isOpen {
       resetReboot()
     }

@@ -76,8 +76,8 @@ extension OpenLCBCANGateway {
 
   internal func canFrameReceived(frame:LCCCANFrame) {
     
-    // The node shall restart the process at the beginning if, before completion of the process, a frame is
-    // received that carries a source Node ID alias value that is identical to the alias value being tested by this
+    // The node shall restart the [alias allocation] process at the beginning if, before completion of the process, a
+    // frame is received that carries a source Node ID alias value that is identical to the alias value being tested by this
     // procedure.
     
     // Items in the initNodeQueue are all in inhibited state, and only the first is attempting to get an alias.
@@ -85,6 +85,10 @@ extension OpenLCBCANGateway {
     if let item = initNodeQueue.first, let alias = item.alias, alias == frame.sourceNIDAlias {
       stopAliasTimer()
       item.transitionState = .idle
+      #if DEBUG
+      debugLog(message: "Restarting alias allocation due to alias already allocated: 0x\(alias.toHex(numberOfDigits: 6))")
+      #endif
+      item.alias = nil
       getAlias()
     }
     
@@ -108,9 +112,9 @@ extension OpenLCBCANGateway {
       // ID alias.
       
       else {
-        item.alias = nil
         item.state = .inhibited
         item.transitionState = .idle
+        item.alias = nil
         removeNodeIdAliasMapping(nodeId: item.nodeId)
         removeManagedNodeIdAliasMapping(nodeId: item.nodeId)
         sendAliasMapResetFrame(nodeId: nodeId, alias: frame.sourceNIDAlias)
@@ -189,22 +193,23 @@ extension OpenLCBCANGateway {
           
           return
           
-        case .errorInformationReport0:
-          #if DEBUG
-          debugLog(message: "\(controlFrameFormat)")
-          #endif
-        case .errorInformationReport1:
-          #if DEBUG
-          debugLog(message: "\(controlFrameFormat)")
-          #endif
-        case .errorInformationReport2:
-          #if DEBUG
-          debugLog(message: "\(controlFrameFormat)")
-          #endif
-        case .errorInformationReport3:
-          #if DEBUG
-          debugLog(message: "\(controlFrameFormat)")
-          #endif
+        case .errorInformationReport0, .errorInformationReport1, .errorInformationReport2, .errorInformationReport3:
+          
+          // The node shall restart the process at the beginning if, before completion of the process, any error is
+          // encountered during frame transmission.
+          
+          // Items in the initNodeQueue are all in inhibited state, and only the first is attempting to get an alias.
+          
+          if let item = initNodeQueue.first {
+            stopAliasTimer()
+            item.transitionState = .idle
+            #if DEBUG
+            debugLog(message: "Restarting alias allocation due to transmission error: 0x\(item.alias!.toHex(numberOfDigits: 6))")
+            #endif
+            item.alias = nil
+            getAlias()
+          }
+          
         default:
           break
         }
@@ -352,7 +357,7 @@ extension OpenLCBCANGateway {
 
   public func addToInputQueue(message: OpenLCBMessage) {
     inputQueue.append(message)
-    processInputQueue()
+    startInputTriggerTimer(interval: 0.0)
   }
   
   internal func processInputQueue() {
@@ -361,29 +366,17 @@ extension OpenLCBCANGateway {
       return
     }
     
-    processInputQueueLock.lock()
-    
-    let ok = !isProcessingInputQueue
-    
-    if ok {
-      isProcessingInputQueue = true
-    }
-    
-    processInputQueueLock.unlock()
-
-    guard ok else {
-      return
-    }
+//    processInputQueueLock.lock()
     
     for message in inputQueue {
       
       inputQueue.removeFirst()
       
-      if message.sourceNodeId == nil, let alias = message.sourceNIDAlias {
+      if let alias = message.sourceNIDAlias, message.sourceNodeId == nil {
         message.sourceNodeId = aliasLookup[alias]
       }
       
-      if message.destinationNodeId == nil, let alias = message.destinationNIDAlias {
+      if let alias = message.destinationNIDAlias, message.destinationNodeId == nil {
         message.destinationNodeId = aliasLookup[alias]
       }
       
@@ -396,27 +389,27 @@ extension OpenLCBCANGateway {
 
         switch message.messageTypeIndicator {
           
-        case .initializationCompleteSimpleSetSufficient, .initializationCompleteFullProtocolRequired:
-          
+ //       case .initializationCompleteSimpleSetSufficient, .initializationCompleteFullProtocolRequired:
+          /*
           for (key, datagram) in datagramsAwaitingReceipt {
             if datagram.destinationNodeId == message.sourceNodeId {
               datagramsAwaitingReceipt.removeValue(forKey: key)
             }
           }
+          */
+ //       case .datagramReceivedOK:
           
-        case .datagramReceivedOK:
+ //         datagramsAwaitingReceipt.removeValue(forKey: message.datagramIdReversed)
           
-          datagramsAwaitingReceipt.removeValue(forKey: message.datagramIdReversed)
-          
-        case .datagramRejected:
-          
+ //       case .datagramRejected:
+          /*
           if let datagram = datagramsAwaitingReceipt[message.datagramIdReversed] {
             datagramsAwaitingReceipt.removeValue(forKey: message.datagramIdReversed)
             if message.errorCode.isTemporary {
               addToOutputQueue(message: datagram)
             }
           }
-          
+          */
         case .consumerIdentifiedAsCurrentlyValid, .consumerIdentifiedAsCurrentlyInvalid, .consumerIdentifiedWithValidityUnknown:
           
           externalConsumedEvents.insert(message.eventId!)
@@ -480,8 +473,23 @@ extension OpenLCBCANGateway {
       
     }
     
-    isProcessingInputQueue = false
-    
+//    processInputQueueLock.unlock()
+
+  }
+
+  @objc func inputTriggerAction() {
+    processInputQueue()
+  }
+  
+  internal func startInputTriggerTimer(interval: TimeInterval) {
+    stopInputTriggerTimer()
+    inputTriggerTimer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(inputTriggerAction), userInfo: nil, repeats: false)
+    RunLoop.current.add(inputTriggerTimer!, forMode: .common)
+  }
+  
+  internal func stopInputTriggerTimer() {
+    inputTriggerTimer?.invalidate()
+    inputTriggerTimer = nil
   }
 
 }

@@ -34,6 +34,10 @@ class MainVC: NSViewController, MyTrainsControllerDelegate, LayoutDelegate, Open
   
   override func viewWillAppear() {
  
+    let x = Pipe()
+    
+    x.fileHandleForReading.readInBackgroundAndNotify()
+    
     // This is the first statement executed by the App
 
     if appMode == .delegate {

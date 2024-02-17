@@ -136,6 +136,8 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   
   internal var firmwareBuffer : [UInt8] = []
   
+  private var txPipe : MTPipe?
+  
   // MARK: Public Properties
   
   public var visibility : OpenLCBNodeVisibility {
@@ -631,11 +633,14 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   
     state = .permitted
     
+    txPipe = MTPipe(name: "Network Layer")
+    txPipe?.open()
+    
     if cdiFilename != nil {
       isConfigurationDescriptionInformationProtocolSupported = true
     }
     
-    networkLayer.sendInitializationComplete(sourceNodeId: nodeId, isSimpleSetSufficient: false)
+    networkLayer.sendInitializationComplete(txPipe: txPipe!, sourceNodeId: nodeId, isSimpleSetSufficient: false)
     
     print("Start Initialisation: \(userNodeName) - \(nodeId.toHexDotFormat(numberOfBytes: 6))")
     resetReboot()
@@ -942,7 +947,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
             
 //          networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, timeOut: .ok)
 
-            networkLayer.sendInitializationComplete(sourceNodeId: nodeId, isSimpleSetSufficient: false)
+            networkLayer.sendInitializationComplete(txPipe: txPipe!, sourceNodeId: nodeId, isSimpleSetSufficient: false)
             
 //            firmwareBuffer.append(0)
 //            print(String(cString: firmwareBuffer))
@@ -960,7 +965,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
             
             networkLayer.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, timeOut: .ok)
 
-            networkLayer.sendInitializationComplete(sourceNodeId: nodeId, isSimpleSetSufficient: false)
+            networkLayer.sendInitializationComplete(txPipe: txPipe!, sourceNodeId: nodeId, isSimpleSetSufficient: false)
             
             firmwareBuffer = []
             

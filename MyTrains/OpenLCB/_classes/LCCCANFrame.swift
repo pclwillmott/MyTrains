@@ -303,9 +303,7 @@ public class LCCCANFrame : NSObject {
   }
   
   public var message : String {
-    get {
-      return ":X\(header.toHex(numberOfDigits: 8))N\(dataAsHex);"
-    }
+    return ":X\(header.toHex(numberOfDigits: 8))N\(dataAsHex);"
   }
   
   public var timeStamp : TimeInterval = 0.0
@@ -313,12 +311,9 @@ public class LCCCANFrame : NSObject {
   public var timeSinceLastMessage : TimeInterval = 0.0
 
   public var frameType : OpenLCBCANFrameType {
-    get {
-      return (header & mask_FrameType) == mask_FrameType ? .openLCBMessage : .canControlFrame
-    }
+    return (header & mask_FrameType) == mask_FrameType ? .openLCBMessage : .canControlFrame
   }
-  
-  
+    
   public var openLCBMessageCANFrameType : OpenLCBMessageCANFrameType? {
     guard frameType == .openLCBMessage else {
       return nil
@@ -368,7 +363,7 @@ public class LCCCANFrame : NSObject {
       }
     }
   }
-  
+    
   // MARK: Public Class Methods
   
   public static func createFrameHeader(frameType: OpenLCBCANFrameType, contentField: UInt16, sourceNIDAlias: UInt16) -> String {
