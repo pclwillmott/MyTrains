@@ -466,7 +466,7 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
       }
     case .slave:
       subState = .idle
-      networkLayer!.sendClockQuery(sourceNodeId: nodeId, baseEventId: baseEventId)
+      sendClockQuery(baseEventId: baseEventId)
     }
     
     updateObservers()
@@ -515,14 +515,12 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
   }
   
   private func sendStartClockPreamble() {
-    if let network = networkLayer {
-      makeSync()
-      var eventId = baseEventId | 0xffff
-      eventId = encodeStopStartEvent(state: clockState)
-      lastEvents[OpenLCBFastClockEventIndex.startOrStopEvent.rawValue] = eventId
-      network.sendEvent(sourceNode: self, eventId: eventId)
-      sendSync()
-    }
+    makeSync()
+    var eventId = baseEventId | 0xffff
+    eventId = encodeStopStartEvent(state: clockState)
+    lastEvents[OpenLCBFastClockEventIndex.startOrStopEvent.rawValue] = eventId
+    sendEvent(eventId: eventId)
+    sendSync()
   }
   
   private func isLeapYear(year:Int) -> Bool {
@@ -607,10 +605,10 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
     let str = String(dateFormatter.string(from: date).prefix(19))
     configuration!.setString(address: addressCurrentDateTime, value: str, fieldSize: 20)
     
-    if minuteRollover && isClockGenerator, let network = networkLayer {
+    if minuteRollover && isClockGenerator {
       
       if rollover {
-        network.sendEvent(sourceNode: self, eventId: encodeDateRolloverEvent())
+        sendEvent(eventId: encodeDateRolloverEvent())
         startRolloverTimer()
       }
 
@@ -625,7 +623,7 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
       
       if triggered || rollover {
         lastEvents[OpenLCBFastClockEventIndex.reportTimeEvent.rawValue] = eventId
-        network.sendEvent(sourceNode: self, eventId: eventId)
+        sendEvent(eventId: eventId)
         triggered = false
         lastSend = newDate
       }
@@ -671,21 +669,17 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
     syncTimer?.invalidate()
     syncTimer = nil
     
-    if let networkLayer = networkLayer {
-      
-      var eventsToSend : [(index:OpenLCBFastClockEventIndex, eventId:UInt64)] = []
-      
-      eventsToSend.append((index: .reportYearEvent, eventId: encodeYearEvent(subCode: .reportYearEventId, year: year)))
-      
-      eventsToSend.append((index: .reportDateEvent, eventId: encodeDateEvent(subCode: .reportDateEventId, month: month, day: day)))
-      
-      for (index, eventId) in eventsToSend {
-        lastEvents[index.rawValue] = eventId
-        networkLayer.sendEvent(sourceNode: self, eventId: eventId)
-      }
-      
-    }
+    var eventsToSend : [(index:OpenLCBFastClockEventIndex, eventId:UInt64)] = []
     
+    eventsToSend.append((index: .reportYearEvent, eventId: encodeYearEvent(subCode: .reportYearEventId, year: year)))
+    
+    eventsToSend.append((index: .reportDateEvent, eventId: encodeDateEvent(subCode: .reportDateEventId, month: month, day: day)))
+    
+    for (index, eventId) in eventsToSend {
+      lastEvents[index.rawValue] = eventId
+      sendEvent(eventId: eventId)
+    }
+
   }
   
   private func startRolloverTimer() {
@@ -754,18 +748,14 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
   
   private func sendSync() {
     
-    if let network = networkLayer {
-      
-      for index in 0 ... 4 {
-        network.sendProducerIdentified(sourceNodeId: nodeId, eventId: lastEvents[index], validity: .valid)
-      }
-      
-      triggered = true
-      
-      lastSend = 0.0
-      
+    for index in 0 ... 4 {
+      sendProducerIdentified(eventId: lastEvents[index], validity: .valid)
     }
     
+    triggered = true
+    
+    lastSend = 0.0
+
   }
   
   // MARK: Public Methods
@@ -804,16 +794,14 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
     
     subState = .running
         
-    if let network = networkLayer {
-      if isClockGenerator {
-        sendStartClockPreamble()
-      }
-      else {
-        let eventId = baseEventId | 0xffff
-        network.sendClockQuery(sourceNodeId: nodeId, baseEventId: baseEventId)
-      }
+    if isClockGenerator {
+      sendStartClockPreamble()
     }
-    
+    else {
+      let eventId = baseEventId | 0xffff
+      sendClockQuery(baseEventId: baseEventId)
+    }
+
     startTimer()
 
   }
@@ -826,10 +814,10 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
     
     subState = .stopped
     
-    if isClockGenerator, let network = networkLayer {
+    if isClockGenerator {
       let eventId = encodeStopStartEvent(state: clockState)
       lastEvents[OpenLCBFastClockEventIndex.startOrStopEvent.rawValue] = eventId
-      network.sendEvent(sourceNode: self, eventId: eventId)
+      sendEvent(eventId: eventId)
     }
     
   }
@@ -885,7 +873,7 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
           eventToSend.append((index:.reportYearEvent, eventId:encodeYearEvent(subCode: .reportYearEventId, year: year)))
           for (index, eventId) in eventToSend {
             lastEvents[index.rawValue] = eventId
-            networkLayer?.sendEvent(sourceNode: self, eventId: eventId)
+            sendEvent(eventId: eventId)
           }
           startSyncTimer()
        }
@@ -914,7 +902,7 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
         break
       }
       
-      if eventRangesMayHaveChanged, let networkLayer {
+      if eventRangesMayHaveChanged {
         
         eventRangesConsumed = []
         eventRangesProduced = []
@@ -931,11 +919,11 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
         }
        
         for eventRange in eventRangesConsumed {
-          networkLayer.sendConsumerRangeIdentified(sourceNodeId: nodeId, eventId: eventRange.eventId)
+          sendConsumerRangeIdentified(eventId: eventRange.eventId)
         }
 
         for eventRange in eventRangesProduced {
-          networkLayer.sendProducerRangeIdentified(sourceNodeId: nodeId, eventId: eventRange.eventId)
+          sendProducerRangeIdentified(eventId: eventRange.eventId)
         }
 
       }
@@ -1080,7 +1068,7 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
           
           if let (index, eventId) = eventToSend.first {
             lastEvents[index.rawValue] = eventId
-            networkLayer?.sendEvent(sourceNode: self, eventId: eventId)
+            sendEvent(eventId: eventId)
             startSyncTimer()
           }
           

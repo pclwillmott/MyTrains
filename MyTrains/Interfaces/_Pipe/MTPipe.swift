@@ -31,7 +31,7 @@ public class MTPipe : NSObject {
   
   private var _name = ""
   
-  private var _fd : Int32 = -1
+  public var _fd : Int32 = -1
   
   private var _delegate : MTPipeDelegate?
   
@@ -62,7 +62,7 @@ public class MTPipe : NSObject {
       let nbyte = readPipe(_fd, buffer, kInitialBufferSize)
       
       if nbyte == -1 {
-        quit = true
+    //    quit = true
       }
       else if nbyte > 0 {
         
@@ -84,9 +84,11 @@ public class MTPipe : NSObject {
         
       }
       
-    } while !quit;
+    } while !quit
     
     closePipe(_fd);
+    
+    debugLog(message: "quit")
     
     _fd = -1
     
@@ -127,9 +129,17 @@ public class MTPipe : NSObject {
   
   public func close() {
     quit = true
+    if _fd != -1 {
+      closePipe(_fd)
+    }
   }
   
+  
   public func sendOpenLCBMessage(message:OpenLCBMessage) {
+    guard _fd != -1 else {
+      debugLog(message: "pipe not open")
+      return
+    }
     if let fullMessage = message.fullMessage {
       write(data: fullMessage)
     }

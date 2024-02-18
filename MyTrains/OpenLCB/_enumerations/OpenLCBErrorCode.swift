@@ -62,24 +62,20 @@ public enum OpenLCBErrorCode : UInt16 {
   case temporaryErrorReserved15                                              = 0x20f0
   case acceptFlag                                                            = 0x8000
   
+  // MARK: Public Properties
+  
   public var bigEndianData : [UInt8] {
-    get {
-      return self.rawValue.bigEndianData
-    }
+    return self.rawValue.bigEndianData
   }
   
   public var isPermanent : Bool {
-    get {
-      let mask : UInt16 = 0x1000
-      return (self.rawValue & mask) == mask
-    }
+    let mask : UInt16 = 0x1000
+    return (self.rawValue & mask) == mask
   }
 
   public var isTemporary : Bool {
-    get {
-      let mask : UInt16 = 0x2000
-      return (self.rawValue & mask) == mask
-    }
+    let mask : UInt16 = 0x2000
+    return (self.rawValue & mask) == mask
   }
   
   public var userMessage : String {

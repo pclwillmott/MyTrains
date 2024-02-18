@@ -101,9 +101,9 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
 
     switch ioState {
     case .readingCVWaitingForAck, .readingCVWaitingForResult:
-      networkLayer?.sendReadReplyFailure(sourceNodeId: nodeId, destinationNodeId: ioSourceNodeId, addressSpace: cvs.space, startAddress: ioStartAddress, errorCode: .temporaryErrorTimeOut)
+      sendReadReplyFailure(destinationNodeId: ioSourceNodeId, addressSpace: cvs.space, startAddress: ioStartAddress, errorCode: .temporaryErrorTimeOut)
     case .writingCVWaitingForAck:
-      networkLayer?.sendWriteReplyFailure(sourceNodeId: nodeId, destinationNodeId: ioSourceNodeId, addressSpace: cvs.space, startAddress: ioStartAddress, errorCode: .temporaryErrorTimeOut)
+      sendWriteReplyFailure(destinationNodeId: ioSourceNodeId, addressSpace: cvs.space, startAddress: ioStartAddress, errorCode: .temporaryErrorTimeOut)
     default:
       break
     }
@@ -123,17 +123,17 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
   internal override func readCVs(sourceNodeId:UInt64, memorySpace:OpenLCBMemorySpace, startAddress:UInt32, count:UInt8) {
     
     guard let progMode = OpenLCBProgrammingMode(rawValue: startAddress & OpenLCBProgrammingMode.modeMask), progMode.isAllowedOnMainTrack else {
-      networkLayer?.sendReadReplyFailure(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, addressSpace: memorySpace.space, startAddress: startAddress, errorCode: .permanentErrorInvalidArguments)
+      sendReadReplyFailure(destinationNodeId: sourceNodeId, addressSpace: memorySpace.space, startAddress: startAddress, errorCode: .permanentErrorInvalidArguments)
       return
     }
 
     let address = startAddress & OpenLCBProgrammingMode.addressMask
     
     if let data = memorySpace.getBlock(address: Int(address), count: Int(count)) {
-      networkLayer?.sendReadReply(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, addressSpace: memorySpace.space, startAddress: startAddress, data: data)
+      sendReadReply(destinationNodeId: sourceNodeId, addressSpace: memorySpace.space, startAddress: startAddress, data: data)
     }
     else {
-      networkLayer?.sendReadReplyFailure(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, addressSpace: memorySpace.space, startAddress: startAddress, errorCode: .permanentErrorAddressOutOfBounds)
+      sendReadReplyFailure(destinationNodeId: sourceNodeId, addressSpace: memorySpace.space, startAddress: startAddress, errorCode: .permanentErrorAddressOutOfBounds)
     }
 
   }
@@ -141,7 +141,7 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
   internal override func writeCVs(sourceNodeId:UInt64, memorySpace:OpenLCBMemorySpace, startAddress:UInt32, data: [UInt8]) {
 
     guard let progMode = OpenLCBProgrammingMode(rawValue: startAddress & OpenLCBProgrammingMode.modeMask), progMode.isAllowedOnMainTrack else {
-      networkLayer?.sendWriteReplyFailure(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, addressSpace: memorySpace.space, startAddress: startAddress, errorCode: .permanentErrorInvalidArguments)
+      sendWriteReplyFailure(destinationNodeId: sourceNodeId, addressSpace: memorySpace.space, startAddress: startAddress, errorCode: .permanentErrorInvalidArguments)
       return
     }
     
@@ -176,12 +176,12 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
           }
           cvs.save()
         }
-        networkLayer?.sendWriteReply(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, addressSpace: memorySpace.space, startAddress: startAddress)
+        sendWriteReply(destinationNodeId: sourceNodeId, addressSpace: memorySpace.space, startAddress: startAddress)
       }
       
     }
     else {
-      networkLayer?.sendWriteReplyFailure(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, addressSpace: memorySpace.space, startAddress: startAddress, errorCode: .permanentErrorAddressOutOfBounds)
+      sendWriteReplyFailure(destinationNodeId: sourceNodeId, addressSpace: memorySpace.space, startAddress: startAddress, errorCode: .permanentErrorAddressOutOfBounds)
     }
 
   }
@@ -485,7 +485,7 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
           locoNet?.writeCV(progMode: progMode.locoNetProgrammingMode(isProgrammingTrack: false), cv: Int(ioAddress), address: Int(dccAddress), value: cvs.getUInt8(address: ioAddress)!)
         }
         else {
-          networkLayer?.sendWriteReply(sourceNodeId: nodeId, destinationNodeId: ioSourceNodeId, addressSpace: cvs.space, startAddress: ioStartAddress)
+          sendWriteReply(destinationNodeId: ioSourceNodeId, addressSpace: cvs.space, startAddress: ioStartAddress)
         }
 
       default:
@@ -510,7 +510,7 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
             let wbm = LocoNetMessage(data: writeBackMessage, appendCheckSum: true)
             configState = .writeBack
             startTimeoutTimer()
-            networkLayer?.sendLocoNetMessage(sourceNodeId: nodeId, destinationNodeId: locoNetGatewayNodeId, locoNetMessage: wbm)
+            sendLocoNetMessage(destinationNodeId: locoNetGatewayNodeId, locoNetMessage: wbm)
             let directionMask : UInt8 = 0b00100000
             let direction : LocomotiveDirection = ((message.message[6] & directionMask) == directionMask) ? .reverse : .forward
             setSpeed(speedStep: message.message[5], direction: direction)

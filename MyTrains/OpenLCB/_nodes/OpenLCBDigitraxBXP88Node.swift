@@ -995,17 +995,17 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
           if occupancyReporting == .enterExit || occupancyReporting == .both {
             
             if sensorState {
-              networkLayer?.sendEvent(sourceNode: self, eventId: enterOccupancyEventId(zone: zone)!)
+              sendEvent(eventId: enterOccupancyEventId(zone: zone)!)
             }
             else {
-              networkLayer?.sendEvent(sourceNode: self, eventId: exitOccupancyEventId(zone: zone)!)
+              sendEvent(eventId: exitOccupancyEventId(zone: zone)!)
             }
             
           }
           
           if occupancyReporting == .locationServices || occupancyReporting == .both {
             
-            networkLayer?.sendLocationServiceEvent(sourceNode: self, eventId: locationServicesOccupancyEventId(zone: zone)!, trainNodeId: 0, entryExit: sensorState ? .entryWithState : .exit, motionRelative: .unknown, motionAbsolute: .unknown, contentFormat: .occupancyInformationOnly, content: nil)
+            sendLocationServiceEvent(eventId: locationServicesOccupancyEventId(zone: zone)!, trainNodeId: 0, entryExit: sensorState ? .entryWithState : .exit, motionRelative: .unknown, motionAbsolute: .unknown, contentFormat: .occupancyInformationOnly, content: nil)
             
           }
           
@@ -1021,7 +1021,7 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
         
         let zone = transponderZone % numberOfChannels
         
-        networkLayer?.sendLocationServiceEvent(sourceNode: self, eventId: locationServicesTranspondingEventId(zone: zone)!, trainNodeId: trainNodeId, entryExit: sensorState ? .entryWithState : .exit, motionRelative: .unknown, motionAbsolute: .unknown, contentFormat: .occupancyInformationOnly, content: nil)
+        sendLocationServiceEvent(eventId: locationServicesTranspondingEventId(zone: zone)!, trainNodeId: trainNodeId, entryExit: sensorState ? .entryWithState : .exit, motionRelative: .unknown, motionAbsolute: .unknown, contentFormat: .occupancyInformationOnly, content: nil)
         
       }
       
@@ -1035,10 +1035,10 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
         for zone in 0...numberOfChannels - 1 {
           if getTrackFaultReportingState(zone: zone) && lastDetectionSectionShorted[zone] != shorted[zone] {
             if shorted[zone] {
-              networkLayer?.sendEvent(sourceNode: self, eventId: trackFaultEventId(zone: zone)!)
+              sendEvent(eventId: trackFaultEventId(zone: zone)!)
             }
             else {
-              networkLayer?.sendEvent(sourceNode: self, eventId: trackFaultClearedEventId(zone: zone)!)
+              sendEvent(eventId: trackFaultClearedEventId(zone: zone)!)
             }
           }
         }

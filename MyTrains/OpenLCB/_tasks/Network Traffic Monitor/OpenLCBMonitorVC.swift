@@ -96,7 +96,7 @@ class OpenLCBMonitorVC: NSViewController, NSWindowDelegate, OpenLCBCANDelegate {
     if !message.isEmpty {
       lineBuffer.append(message)
       
-      while lineBuffer.count > 2000 {
+      while lineBuffer.count > 50 {
         lineBuffer.removeFirst()
       }
     }

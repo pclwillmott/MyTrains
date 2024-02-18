@@ -247,6 +247,7 @@
 		DAB5250C2B52E9AA00EEE9A0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DAB5250E2B52E9AA00EEE9A0 /* Main.storyboard */; };
 		DABC089B2B1B895B00260605 /* LocoNetIMMPacketRepeat.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABC089A2B1B895B00260605 /* LocoNetIMMPacketRepeat.swift */; };
 		DABC089D2B1B8DBF00260605 /* DCCCVAccessMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABC089C2B1B8DBF00260605 /* DCCCVAccessMode.swift */; };
+		DABC52002B821DD400C45423 /* OpenLCBNodeVirtual - Messages.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABC51FF2B821DD400C45423 /* OpenLCBNodeVirtual - Messages.swift */; };
 		DABD30B629E4610A002A2C4B /* OpenLCBNetworkLayerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABD30B529E4610A002A2C4B /* OpenLCBNetworkLayerDelegate.swift */; };
 		DABD4F322A3C99E2000A25AB /* LocoNetMessageOpcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABD4F312A3C99E2000A25AB /* LocoNetMessageOpcode.swift */; };
 		DABD4F342A3C9B1B000A25AB /* LocoNetMessageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABD4F332A3C9B1B000A25AB /* LocoNetMessageType.swift */; };
@@ -559,6 +560,7 @@
 		DAB5250F2B52E9AA00EEE9A0 /* mul */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; name = mul; path = mul.lproj/Main.xcstrings; sourceTree = "<group>"; };
 		DABC089A2B1B895B00260605 /* LocoNetIMMPacketRepeat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoNetIMMPacketRepeat.swift; sourceTree = "<group>"; };
 		DABC089C2B1B8DBF00260605 /* DCCCVAccessMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DCCCVAccessMode.swift; sourceTree = "<group>"; };
+		DABC51FF2B821DD400C45423 /* OpenLCBNodeVirtual - Messages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OpenLCBNodeVirtual - Messages.swift"; sourceTree = "<group>"; };
 		DABD30B529E4610A002A2C4B /* OpenLCBNetworkLayerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBNetworkLayerDelegate.swift; sourceTree = "<group>"; };
 		DABD4F312A3C99E2000A25AB /* LocoNetMessageOpcode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoNetMessageOpcode.swift; sourceTree = "<group>"; };
 		DABD4F332A3C9B1B000A25AB /* LocoNetMessageType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoNetMessageType.swift; sourceTree = "<group>"; };
@@ -1090,6 +1092,7 @@
 		DA7B453C2A2C08240017D36B /* _nodes */ = {
 			isa = PBXGroup;
 			children = (
+				DABC51FE2B8218E300C45423 /* Virtual Node */,
 				DA0949382B7F6EC900545650 /* CAN Gateway */,
 				DAD394BC2B2E15D300403040 /* OpenLCBCANGatewayWiFi.swift */,
 				DAA777C92A20C84C008EAF02 /* OpenLCBClock.swift */,
@@ -1101,7 +1104,6 @@
 				DAF374702A1A2AB3009E91F0 /* OpenLCBNodeMyTrains.swift */,
 				DA5BC9922A1A6CEA00D67ABE /* OpenLCBNodeRollingStock.swift */,
 				DA413FEF2A45CCF600675AD4 /* OpenLCBNodeRollingStockLocoNet.swift */,
-				DAF3746E2A1A2A9B009E91F0 /* OpenLCBNodeVirtual.swift */,
 				DAAC7E8C2A792693001A424E /* OpenLCBProgrammerToolNode.swift */,
 				DAAC7E8E2A7926D2001A424E /* OpenLCBProgrammingTrackNode.swift */,
 				DA3254E72A4755AC006DF357 /* OpenLCBThrottle.swift */,
@@ -1225,6 +1227,15 @@
 				DAA7BEBA2B504EE900508140 /* Localizable.xcstrings */,
 			);
 			path = MyTrains;
+			sourceTree = "<group>";
+		};
+		DABC51FE2B8218E300C45423 /* Virtual Node */ = {
+			isa = PBXGroup;
+			children = (
+				DAF3746E2A1A2A9B009E91F0 /* OpenLCBNodeVirtual.swift */,
+				DABC51FF2B821DD400C45423 /* OpenLCBNodeVirtual - Messages.swift */,
+			);
+			path = "Virtual Node";
 			sourceTree = "<group>";
 		};
 		DABD4F2F2A3C99B1000A25AB /* LocoNet */ = {
@@ -1616,6 +1627,7 @@
 				DA3904092A349B3A00864157 /* OpenLCBClockInitialDateTime.swift in Sources */,
 				DA2785402837EAE700EDCBB7 /* MTSerialPortManager.swift in Sources */,
 				DACE10AC2A3F5F310032E954 /* OpenLCBTrackProtocol.swift in Sources */,
+				DABC52002B821DD400C45423 /* OpenLCBNodeVirtual - Messages.swift in Sources */,
 				DA8A05672B540B2E003A39D7 /* CDI.swift in Sources */,
 				DA3866252A7A880A00A0FAEB /* OpenLCBConfigurationToolDelegate.swift in Sources */,
 				DAA66BD22A092DC2001804AC /* StringExtensions.swift in Sources */,

@@ -153,10 +153,6 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   
   internal var aliasLock : NSLock = NSLock()
   
-  internal var inputTriggerTimer : Timer?
-  
-  internal var outputTriggerTimer : Timer?
-  
   internal var inGetAlias : Bool = false
     
   internal var aliasLookup : [UInt16:UInt64] = [:]
@@ -342,7 +338,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
       }
       else {
         #if DEBUG
-        print("OpenLCBCANGateway.openLCBMessageReceived: producerConsumerEventReport without eventId")
+        debugLog(message: "Producer Consumer Event Report without Event Id")
         #endif
       }
       

@@ -242,10 +242,10 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   }
   
   override internal func completeStartUp() {
-    networkLayer?.sendWellKnownEvent(sourceNode: self, eventId: .identifyMyTrainsLayouts)
-    networkLayer?.sendWellKnownEvent(sourceNode: self, eventId: .identifyMyTrainsSwitchboardPanels)
-    networkLayer?.sendWellKnownEvent(sourceNode: self, eventId: .identifyMyTrainsSwitchboardItems)
-    networkLayer?.sendIdentifyProducer(sourceNodeId: nodeId, event: .nodeIsALocoNetGateway)
+    sendWellKnownEvent(eventId: .identifyMyTrainsLayouts)
+    sendWellKnownEvent(eventId: .identifyMyTrainsSwitchboardPanels)
+    sendWellKnownEvent(eventId: .identifyMyTrainsSwitchboardItems)
+    sendIdentifyProducer(event: .nodeIsALocoNetGateway)
   }
   
   internal override func customizeDynamicCDI(cdi:String) -> String {
@@ -263,7 +263,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     if let item = getUniqueNodeIdQueue.first {
       getUniqueNodeIdInProgress = true
       startTimeoutTimer(interval: 1.0)
-      networkLayer?.sendVerifyNodeIdNumberAddressed(sourceNodeId: nodeId, destinationNodeId: item.candidate)
+      sendVerifyNodeIdNumberAddressed(destinationNodeId: item.candidate)
     }
   }
   
@@ -273,7 +273,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
 
     if getUniqueNodeIdInProgress {
       let item = getUniqueNodeIdQueue.removeFirst()
-      networkLayer?.sendGetUniqueNodeIdReply(sourceNodeId: nodeId, destinationNodeId: item.requester, newNodeId: item.candidate)
+      sendGetUniqueNodeIdReply(destinationNodeId: item.requester, newNodeId: item.candidate)
       tryCandidate()
     }
     
@@ -340,19 +340,19 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   }
   
   public func sendGlobalEmergencyStop() {
-    networkLayer?.sendWellKnownEvent(sourceNode: self, eventId: .emergencyStopAll)
+    sendWellKnownEvent(eventId: .emergencyStopAll)
   }
 
   public func sendClearGlobalEmergencyStop() {
-    networkLayer?.sendWellKnownEvent(sourceNode: self, eventId: .clearEmergencyStopAll)
+    sendWellKnownEvent(eventId: .clearEmergencyStopAll)
   }
 
   public func sendGlobalPowerOff() {
-    networkLayer?.sendWellKnownEvent(sourceNode: self, eventId: .emergencyOffAll)
+    sendWellKnownEvent(eventId: .emergencyOffAll)
   }
   
   public func sendGlobalPowerOn() {
-    networkLayer?.sendWellKnownEvent(sourceNode: self, eventId: .clearEmergencyOffAll)
+    sendWellKnownEvent(eventId: .clearEmergencyOffAll)
   }
   
   public func insertLayoutMap(cdi:String) -> String {
@@ -561,7 +561,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
           else {
             let masterNodeId = UInt64(bigEndianData: message.payload)!
             layoutList[sourceNodeId] = (masterNodeId:masterNodeId, layoutId:sourceNodeId, layoutName:"", layoutState:layoutState)
-            networkLayer?.sendSimpleNodeInformationRequest(sourceNodeId: nodeId, destinationNodeId: sourceNodeId)
+            sendSimpleNodeInformationRequest(destinationNodeId: sourceNodeId)
           }
 
         case .nodeIsASwitchboardPanel:
@@ -570,7 +570,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
             
             if let _ = panelList[sourceNodeId] {} else {
               panelList[sourceNodeId] = (layoutId:layoutNodeId, panelId: sourceNodeId, panelName:"")
-              networkLayer?.sendSimpleNodeInformationRequest(sourceNodeId: nodeId, destinationNodeId: sourceNodeId)
+              sendSimpleNodeInformationRequest(destinationNodeId: sourceNodeId)
             }
             
           }
@@ -587,7 +587,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
             else {
               switchboardItemList[sourceNodeId] = (layoutId:layoutNodeId, itemId: sourceNodeId, itemName:"", itemType:itemType)
             }
-            networkLayer?.sendSimpleNodeInformationRequest(sourceNodeId: nodeId, destinationNodeId: sourceNodeId)
+            sendSimpleNodeInformationRequest(destinationNodeId: sourceNodeId)
 
           }
           
@@ -595,7 +595,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
           
           if let _ = locoNetGateways[sourceNodeId] {} else {
             locoNetGateways[sourceNodeId] = ""
-            networkLayer?.sendSimpleNodeInformationRequest(sourceNodeId: nodeId, destinationNodeId: sourceNodeId)
+            sendSimpleNodeInformationRequest(destinationNodeId: sourceNodeId)
           }
           
         default:
@@ -614,7 +614,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
           
           if let _ = locoNetGateways[sourceNodeId] {} else {
             locoNetGateways[sourceNodeId] = ""
-            networkLayer?.sendSimpleNodeInformationRequest(sourceNodeId: nodeId, destinationNodeId: sourceNodeId)
+            sendSimpleNodeInformationRequest(destinationNodeId: sourceNodeId)
           }
 
         default:
@@ -631,7 +631,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
           
         case .getUniqueNodeIDCommand:
           
-          networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, timeOut: .replyPendingNoTimeout)
+          sendDatagramReceivedOK(destinationNodeId: sourceNodeId, timeOut: .replyPendingNoTimeout)
           
           let item : getUniqueNodeIdQueueItem = (sourceNodeId, nextUniqueNodeIdCandidate)
           

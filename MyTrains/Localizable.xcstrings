@@ -1452,7 +1452,7 @@
       }
     },
     "Create Application Node" : {
-      "comment" : "Used for the title of the Create Application Node window\nUsed for the Create Application Node menu item title",
+      "comment" : "Used for the Create Application Node menu item title\nUsed for the title of the Create Application Node window",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -4213,9 +4213,6 @@
         }
       }
     },
-    "Sending unadvertised event" : {
-
-    },
     "Sensor" : {
       "comment" : "This is used to describe a switchboard item."
     },
@@ -4676,16 +4673,6 @@
     "Teaching/Learning Configuration Protocol" : {
 
     },
-    "The node \"%@\" (%@) is attempting to send the unadvertised event: %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "The node \"%1$@\" (%2$@) is attempting to send the unadvertised event: %3$@"
-          }
-        }
-      }
-    },
     "Third Rail" : {
       "comment" : "Used to indicate that the track models 3rd rail electrification",
       "localizations" : {
@@ -4958,7 +4945,7 @@
       "comment" : "This is the name of a country."
     },
     "Unknown" : {
-      "comment" : "Used to indicate the state of a turnout\nUsed to indicate that the type of something is unknown",
+      "comment" : "Used to indicate that the type of something is unknown\nUsed to indicate the state of a turnout",
       "localizations" : {
         "en" : {
           "stringUnit" : {

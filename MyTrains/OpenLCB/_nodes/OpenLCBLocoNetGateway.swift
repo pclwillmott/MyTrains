@@ -195,7 +195,7 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   }
   
   internal override func completeStartUp() {
-    networkLayer?.sendWellKnownEvent(sourceNode: self, eventId: .nodeIsALocoNetGateway)
+    sendWellKnownEvent(eventId: .nodeIsALocoNetGateway)
   }
   
   internal override func customizeDynamicCDI(cdi:String) -> String {
@@ -283,13 +283,13 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
         
         if let item = currentItem, message == item.message.message {
           stopTimeoutTimer()
-          networkLayer?.sendLocoNetMessageReply(sourceNodeId: nodeId, destinationNodeId: item.nodeId, errorCode: .success)
+          sendLocoNetMessageReply(destinationNodeId: item.nodeId, errorCode: .success)
           currentItem = nil
           sendNext()
         }
         
         if !blockAllMessages {
-          networkLayer?.sendLocoNetMessageReceived(sourceNode: self, locoNetMessage: message)
+          sendLocoNetMessageReceived(locoNetMessage: message)
         }
         
       }
@@ -315,7 +315,7 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   @objc func timeoutTimerAction() {
     stopTimeoutTimer()
     if let item = currentItem {
-      networkLayer?.sendLocoNetMessageReply(sourceNodeId: nodeId, destinationNodeId: item.nodeId, errorCode: .temporaryErrorLocoNetCollision)
+      sendLocoNetMessageReply(destinationNodeId: item.nodeId, errorCode: .temporaryErrorLocoNetCollision)
     }
     currentItem = nil
     sendNext()
@@ -361,10 +361,10 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
       if let datagramType = message.datagramType, datagramType == .sendlocoNetMessage, let sourceNodeId = message.sourceNodeId {
 
         if !isOpen {
-          networkLayer?.sendDatagramRejected(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, errorCode: .permanentErrorNoConnection)
+          sendDatagramRejected(destinationNodeId: sourceNodeId, errorCode: .permanentErrorNoConnection)
         }
         else if queue.count == 100 {
-          networkLayer?.sendDatagramRejected(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, errorCode: .temporaryErrorBufferUnavailable)
+          sendDatagramRejected(destinationNodeId: sourceNodeId, errorCode: .temporaryErrorBufferUnavailable)
         }
         else {
           
@@ -373,11 +373,11 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
 
           if let locoNetMessage = LocoNetMessage(payload: data) {
             queue.append((nodeId:message.sourceNodeId!, message:locoNetMessage))
-            networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, timeOut: .replyPending2s)
+            sendDatagramReceivedOK(destinationNodeId: sourceNodeId, timeOut: .replyPending2s)
             sendNext()
           }
           else {
-            networkLayer?.sendDatagramRejected(sourceNodeId: nodeId, destinationNodeId: sourceNodeId, errorCode: .permanentErrorInvalidArguments)
+            sendDatagramRejected(destinationNodeId: sourceNodeId, errorCode: .permanentErrorInvalidArguments)
           }
           
         }

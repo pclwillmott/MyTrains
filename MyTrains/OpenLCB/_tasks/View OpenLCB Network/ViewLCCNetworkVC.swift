@@ -63,13 +63,13 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBConfiguration
   
   private func findAll() {
     
-    guard let networkLayer else {
+    guard let configurationTool else {
       return
     }
     
     nodes.removeAll()
     
-    networkLayer.sendVerifyNodeIdNumber(sourceNodeId: nodeId)
+    configurationTool.sendVerifyNodeIdNumber()
 
   }
   
@@ -84,7 +84,7 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBConfiguration
   
   public func openLCBMessageReceived(message: OpenLCBMessage) {
     
-    guard let networkLayer else {
+    guard let configurationTool else {
       return
     }
     
@@ -96,8 +96,8 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBConfiguration
       
       if !nodes.keys.contains(newNodeId) {
         nodes[newNodeId] = OpenLCBNode(nodeId: newNodeId)
-        networkLayer.sendSimpleNodeInformationRequest(sourceNodeId: nodeId, destinationNodeId: newNodeId)
-        networkLayer.sendProtocolSupportInquiry(sourceNodeId: nodeId, destinationNodeId: newNodeId)
+        configurationTool.sendSimpleNodeInformationRequest(destinationNodeId: newNodeId)
+        configurationTool.sendProtocolSupportInquiry(destinationNodeId: newNodeId)
         reload()
       }
       

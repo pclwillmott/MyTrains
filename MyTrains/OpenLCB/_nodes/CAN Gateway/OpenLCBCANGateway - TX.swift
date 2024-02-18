@@ -29,7 +29,7 @@ extension OpenLCBCANGateway {
 
   public func addToOutputQueue(message: OpenLCBMessage) {
     outputQueue.append(message)
-    startOutputTriggerTimer(interval: 0.0)
+    processOutputQueue()
   }
 
   internal func processOutputQueue() {
@@ -189,21 +189,6 @@ extension OpenLCBCANGateway {
     
 //    processOutputQueueLock.unlock()
     
-  }
-
-  @objc func outputTriggerAction() {
-    processOutputQueue()
-  }
-  
-  internal func startOutputTriggerTimer(interval: TimeInterval) {
-    stopOutputTriggerTimer()
-    outputTriggerTimer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(outputTriggerAction), userInfo: nil, repeats: false)
-    RunLoop.current.add(outputTriggerTimer!, forMode: .common)
-  }
-  
-  internal func stopOutputTriggerTimer() {
-    outputTriggerTimer?.invalidate()
-    outputTriggerTimer = nil
   }
 
 }

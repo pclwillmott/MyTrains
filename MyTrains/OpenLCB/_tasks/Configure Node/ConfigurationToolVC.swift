@@ -122,19 +122,11 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
     buttonView.addSubview(btnReboot)
     buttonView.addSubview(btnShowCDIText)
       
-    if #available(macOS 12, *) {
-      btnWriteAll.title = String(localized: "Write All")
-      btnRefreshAll.title = String(localized: "Refresh All")
-      btnResetToDefaults.title = String(localized: "Reset to Defaults")
-      btnReboot.title = String(localized: "Reboot")
-      btnShowCDIText.title = String(localized: "Show CDI Text")
-    } else {
-      btnWriteAll.title = "Write All"
-      btnRefreshAll.title = "Refresh All"
-      btnResetToDefaults.title = "Reset to Defaults"
-      btnReboot.title = "Reboot"
-      btnShowCDIText.title = "Show CDI Text"
-    }
+    btnWriteAll.title = String(localized: "Write All")
+    btnRefreshAll.title = String(localized: "Refresh All")
+    btnResetToDefaults.title = String(localized: "Reset to Defaults")
+    btnReboot.title = String(localized: "Reboot")
+    btnShowCDIText.title = String(localized: "Show CDI Text")
     
     NSLayoutConstraint.activate([
       btnRefreshAll.leadingAnchor.constraint(equalTo: buttonView.leadingAnchor),
@@ -173,7 +165,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
       self.view.window?.title = "Configure \(title) (\(node!.nodeId.toHexDotFormat(numberOfBytes: 6)))"
     }
     
-    if let network = networkLayer {
+    if let configurationTool {
 
       if #available(macOS 12, *) {
         statusMessage(String(localized: "Getting CDI"))
@@ -195,7 +187,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
 
       CDI = []
       
-      network.sendNodeMemoryReadRequest(sourceNodeId: nodeId, destinationNodeId: node!.nodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cdi.rawValue, startAddress: nextCDIStartAddress, numberOfBytesToRead: 64)
+      configurationTool.sendNodeMemoryReadRequest(destinationNodeId: node!.nodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cdi.rawValue, startAddress: nextCDIStartAddress, numberOfBytesToRead: 64)
 
     }
 
@@ -614,7 +606,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
       statusMessage("Reading Variables - \(totalBytesRead) bytes")
     }
 
-    if let node, let networkLayer {
+    if let node, let configurationTool {
 
       state = .refreshMemory
 
@@ -624,7 +616,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
       
       let bytesToRead = UInt8(min(64, memoryMap[currentMemoryBlock].size))
       
-      networkLayer.sendNodeMemoryReadRequest(sourceNodeId: nodeId, destinationNodeId: node.nodeId, addressSpace: memoryMap[currentMemoryBlock].space, startAddress: nextCDIStartAddress, numberOfBytesToRead: bytesToRead)
+      configurationTool.sendNodeMemoryReadRequest(destinationNodeId: node.nodeId, addressSpace: memoryMap[currentMemoryBlock].space, startAddress: nextCDIStartAddress, numberOfBytesToRead: bytesToRead)
       
     }
 
@@ -699,7 +691,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
       return
     }
     
-    if let network = networkLayer {
+    if let configurationTool {
       
       switch message.messageTypeIndicator {
        
@@ -742,7 +734,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
               dataToWrite.removeFirst()
               
               if !dataToWrite.isEmpty {
-                network.sendNodeMemoryWriteRequest(sourceNodeId: nodeId, destinationNodeId: node.nodeId, addressSpace: dataToWrite[0].space, startAddress: dataToWrite[0].address, dataToWrite: dataToWrite[0].data)
+                configurationTool.sendNodeMemoryWriteRequest(destinationNodeId: node.nodeId, addressSpace: dataToWrite[0].space, startAddress: dataToWrite[0].address, dataToWrite: dataToWrite[0].data)
               }
               else {
                 state = .idle
@@ -759,7 +751,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
         
         if let node = self.node {
           
-          network.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: node.nodeId, timeOut: .ok)
+          configurationTool.sendDatagramReceivedOK(destinationNodeId: node.nodeId, timeOut: .ok)
           
           var data = message.payload
           
@@ -797,7 +789,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
                 dataToWrite.removeFirst()
                 
                 if !dataToWrite.isEmpty {
-                  network.sendNodeMemoryWriteRequest(sourceNodeId: nodeId, destinationNodeId: node.nodeId, addressSpace: dataToWrite[0].space, startAddress: dataToWrite[0].address, dataToWrite: dataToWrite[0].data)
+                  configurationTool.sendNodeMemoryWriteRequest(destinationNodeId: node.nodeId, addressSpace: dataToWrite[0].space, startAddress: dataToWrite[0].address, dataToWrite: dataToWrite[0].data)
                 }
                 else {
                   stopTimer()
@@ -864,7 +856,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
                     
                     nextCDIStartAddress += data.count
                     
-                    network.sendNodeMemoryReadRequest(sourceNodeId: nodeId, destinationNodeId: node.nodeId, addressSpace: memoryMap[currentMemoryBlock].space, startAddress: nextCDIStartAddress, numberOfBytesToRead: bytesToRead)
+                    configurationTool.sendNodeMemoryReadRequest(destinationNodeId: node.nodeId, addressSpace: memoryMap[currentMemoryBlock].space, startAddress: nextCDIStartAddress, numberOfBytesToRead: bytesToRead)
 
                   }
                   else {
@@ -877,7 +869,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
                       
                       let bytesToRead = UInt8(min(64, memoryMap[currentMemoryBlock].size))
                       
-                      network.sendNodeMemoryReadRequest(sourceNodeId: nodeId, destinationNodeId: node.nodeId, addressSpace: memoryMap[currentMemoryBlock].space, startAddress: nextCDIStartAddress, numberOfBytesToRead: bytesToRead)
+                      configurationTool.sendNodeMemoryReadRequest(destinationNodeId: node.nodeId, addressSpace: memoryMap[currentMemoryBlock].space, startAddress: nextCDIStartAddress, numberOfBytesToRead: bytesToRead)
                       
                     }
                     else {
@@ -952,7 +944,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
                     
                     nextCDIStartAddress += data.count
                     
-                    network.sendNodeMemoryReadRequest(sourceNodeId: nodeId, destinationNodeId: node.nodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cdi.rawValue, startAddress: nextCDIStartAddress, numberOfBytesToRead: 64)
+                    configurationTool.sendNodeMemoryReadRequest(destinationNodeId: node.nodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cdi.rawValue, startAddress: nextCDIStartAddress, numberOfBytesToRead: 64)
                     
                   }
                   
@@ -1164,7 +1156,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
   
   @objc func cdiDataViewReadData(_ dataView:CDIDataView) {
     
-    guard let node, let networkLayer else {
+    guard let node, let configurationTool else {
       return
     }
 
@@ -1189,7 +1181,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
       
       let bytesToRead = UInt8(min(64, memoryMap[currentMemoryBlock].size))
       
-      networkLayer.sendNodeMemoryReadRequest(sourceNodeId: nodeId, destinationNodeId: node.nodeId, addressSpace: memoryMap[currentMemoryBlock].space, startAddress: nextCDIStartAddress, numberOfBytesToRead: bytesToRead)
+      configurationTool.sendNodeMemoryReadRequest(destinationNodeId: node.nodeId, addressSpace: memoryMap[currentMemoryBlock].space, startAddress: nextCDIStartAddress, numberOfBytesToRead: bytesToRead)
 
     }
   
@@ -1197,7 +1189,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
   
   @objc func cdiDataViewWriteData(_ dataView:CDIDataView) {
     
-    guard let node, let networkLayer else {
+    guard let node, let configurationTool else {
       return
     }
 
@@ -1222,7 +1214,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
         address += block.count
       }
       
-      networkLayer.sendNodeMemoryWriteRequest(sourceNodeId: nodeId, destinationNodeId: node.nodeId, addressSpace: dataToWrite[0].space, startAddress: dataToWrite[0].address, dataToWrite: dataToWrite[0].data)
+      configurationTool.sendNodeMemoryWriteRequest(destinationNodeId: node.nodeId, addressSpace: dataToWrite[0].space, startAddress: dataToWrite[0].address, dataToWrite: dataToWrite[0].data)
 
     }
 
@@ -1236,13 +1228,13 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
   
   @objc func cdiDataViewGetNewEventId(textField:NSTextField) {
     
-    guard let node, let networkLayer else {
+    guard let node, let configurationTool else {
       return
     }
 
     getNewEventIdTextField = textField
     
-    networkLayer.sendGetUniqueEventIdCommand(sourceNodeId: nodeId, destinationNodeId: node.nodeId, numberOfEventIds: 1)
+    configurationTool.sendGetUniqueEventIdCommand(destinationNodeId: node.nodeId, numberOfEventIds: 1)
     
   }
 
@@ -1276,8 +1268,8 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
   // MARK: Actions
   
   @IBAction func btnRebootAction(_ sender: NSButton) {
-    if let network = networkLayer {
-      network.sendRebootCommand(sourceNodeId: nodeId, destinationNodeId: node!.nodeId)
+    if let configurationTool {
+      configurationTool.sendRebootCommand(destinationNodeId: node!.nodeId)
     }
   }
   
@@ -1294,8 +1286,8 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
     alert.alertStyle = .warning
 
     if alert.runModal() == NSApplication.ModalResponse.alertSecondButtonReturn {
-      if let network = networkLayer {
-        network.sendResetToDefaults(sourceNodeId: nodeId, destinationNodeId: node!.nodeId)
+      if let configurationTool {
+        configurationTool.sendResetToDefaults(destinationNodeId: node!.nodeId)
       }
     }
 
@@ -1307,7 +1299,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
 
   @IBAction func btnWriteAllAction(_ sender: NSButton) {
     
-    guard let node, let networkLayer else {
+    guard let node, let configurationTool else {
       return
     }
 
@@ -1345,7 +1337,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
 
     state = .writingMemory
     
-    networkLayer.sendNodeMemoryWriteRequest(sourceNodeId: nodeId, destinationNodeId: node.nodeId, addressSpace: dataToWrite[0].space, startAddress: dataToWrite[0].address, dataToWrite: dataToWrite[0].data)
+    configurationTool.sendNodeMemoryWriteRequest(destinationNodeId: node.nodeId, addressSpace: dataToWrite[0].space, startAddress: dataToWrite[0].address, dataToWrite: dataToWrite[0].data)
 
   }
 

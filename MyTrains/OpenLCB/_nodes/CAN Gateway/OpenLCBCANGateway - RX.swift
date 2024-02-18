@@ -86,7 +86,7 @@ extension OpenLCBCANGateway {
       stopAliasTimer()
       item.transitionState = .idle
       #if DEBUG
-      debugLog(message: "Restarting alias allocation due to alias already allocated: 0x\(alias.toHex(numberOfDigits: 6))")
+      debugLog(message: "Restarting alias allocation due to alias already allocated: 0x\(alias.toHex(numberOfDigits: 3))")
       #endif
       item.alias = nil
       getAlias()
@@ -204,7 +204,7 @@ extension OpenLCBCANGateway {
             stopAliasTimer()
             item.transitionState = .idle
             #if DEBUG
-            debugLog(message: "Restarting alias allocation due to transmission error: 0x\(item.alias!.toHex(numberOfDigits: 6))")
+            debugLog(message: "Restarting alias allocation due to transmission error: 0x\(item.alias!.toHex(numberOfDigits: 3))")
             #endif
             item.alias = nil
             getAlias()
@@ -357,7 +357,7 @@ extension OpenLCBCANGateway {
 
   public func addToInputQueue(message: OpenLCBMessage) {
     inputQueue.append(message)
-    startInputTriggerTimer(interval: 0.0)
+    processInputQueue()
   }
   
   internal func processInputQueue() {
@@ -466,7 +466,7 @@ extension OpenLCBCANGateway {
         }
 
         if route {
-          networkLayer?.sendMessage(gatewayNodeId: nodeId, message: message)
+          sendMessage(gatewayNodeId: nodeId, message: message)
         }
         
       }
@@ -475,21 +475,6 @@ extension OpenLCBCANGateway {
     
 //    processInputQueueLock.unlock()
 
-  }
-
-  @objc func inputTriggerAction() {
-    processInputQueue()
-  }
-  
-  internal func startInputTriggerTimer(interval: TimeInterval) {
-    stopInputTriggerTimer()
-    inputTriggerTimer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(inputTriggerAction), userInfo: nil, repeats: false)
-    RunLoop.current.add(inputTriggerTimer!, forMode: .common)
-  }
-  
-  internal func stopInputTriggerTimer() {
-    inputTriggerTimer?.invalidate()
-    inputTriggerTimer = nil
   }
 
 }

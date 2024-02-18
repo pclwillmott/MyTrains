@@ -27,10 +27,26 @@ public class OpenLCBMessage : NSObject {
     
     _fullMessage = data
     
-    guard data.count >= 8 else {
+    guard data.count >= 22 else {
+      return nil
+    }
+
+    guard let gatewayId = UInt64(bigEndianData: [UInt8](data.prefix(6))) else {
       return nil
     }
     
+    gatewayNodeId = gatewayId == 0 ? nil : gatewayId
+    
+    data.removeFirst(6)
+    
+    guard let temp = UInt64(bigEndianData: [UInt8](data.prefix(8))) else {
+      return nil
+    }
+    
+    timeStamp = Double(bitPattern: temp)
+    
+    data.removeFirst(8)
+
     guard let temp = UInt16(bigEndianData: [UInt8](data.prefix(2))), let mti = OpenLCBMTI(rawValue: temp) else {
       return nil
     }
@@ -373,6 +389,10 @@ public class OpenLCBMessage : NSObject {
     }
     
     var data : [UInt8] = []
+    
+    data.append(contentsOf: (gatewayNodeId ?? 0).nodeIdBigEndianData)
+    
+    data.append(contentsOf: timeStamp.bitPattern.bigEndianData)
     
     data.append(contentsOf: messageTypeIndicator.rawValue.bigEndianData)
     

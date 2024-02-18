@@ -161,7 +161,7 @@ class OpenLCBFirmwareUpdateVC: NSViewController, NSWindowDelegate, OpenLCBConfig
       
       state = .waitingForUnfreezeConfirmation
       
-      networkLayer?.sendUnfreezeCommand(sourceNodeId: nodeId, destinationNodeId: node.nodeId)
+ //     networkLayer?.sendUnfreezeCommand(sourceNodeId: nodeId, destinationNodeId: node.nodeId)
       
     }
     else {
@@ -177,7 +177,7 @@ class OpenLCBFirmwareUpdateVC: NSViewController, NSWindowDelegate, OpenLCBConfig
       }
       
  //     DispatchQueue.main.async {
-        self.networkLayer?.sendNodeMemoryWriteRequest(sourceNodeId: self.nodeId, destinationNodeId: node.nodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.firmware.rawValue, startAddress: self.startAddress, dataToWrite: self.data)
+   //     self.networkLayer?.sendNodeMemoryWriteRequest(sourceNodeId: self.nodeId, destinationNodeId: node.nodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.firmware.rawValue, startAddress: self.startAddress, dataToWrite: self.data)
  //     }
 
     }
@@ -268,7 +268,7 @@ class OpenLCBFirmwareUpdateVC: NSViewController, NSWindowDelegate, OpenLCBConfig
         switch state {
         case .waitingForFreezeConfirmation:
           state = .waitingForProtocolSupportReply
-          networkLayer?.sendProtocolSupportInquiry(sourceNodeId: nodeId, destinationNodeId: node.nodeId)
+     //     networkLayer?.sendProtocolSupportInquiry(sourceNodeId: nodeId, destinationNodeId: node.nodeId)
         case .waitingForUnfreezeConfirmation:
           
           state = .waitingToComplete
@@ -386,7 +386,7 @@ class OpenLCBFirmwareUpdateVC: NSViewController, NSWindowDelegate, OpenLCBConfig
       barProgress.maxValue = Double(buffer.count)
       startAddress = 0
       state = .waitingForFreezeConfirmation
-      networkLayer?.sendFreezeCommand(sourceNodeId: nodeId, destinationNodeId: node.nodeId)
+ //     networkLayer?.sendFreezeCommand(sourceNodeId: nodeId, destinationNodeId: node.nodeId)
     }
     
   }

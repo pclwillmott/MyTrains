@@ -34,8 +34,6 @@ public class LocoNet {
     
     self.nodeId = virtualNode.nodeId
     
-    networkLayer.sendConsumerIdentified(sourceNodeId: nodeId, eventId: OpenLCBWellKnownEvent.nodeIsALocoNetGateway.rawValue, validity: .valid)
-
     getOpSwDataAP1()
     
   }
@@ -142,7 +140,7 @@ public class LocoNet {
     
     startTimeoutTimer(interval: 1.0)
     
-    networkLayer.sendLocoNetMessage(sourceNodeId: nodeId, destinationNodeId: gatewayNodeId, locoNetMessage: currentMessage!)
+//    networkLayer.sendLocoNetMessage(sourceNodeId: nodeId, destinationNodeId: gatewayNodeId, locoNetMessage: currentMessage!)
     
   }
   
@@ -274,7 +272,7 @@ public class LocoNet {
           else {
             messageState = .waitingForDatagramReceivedOK
             startTimeoutTimer(interval: 1.0)
-            networkLayer.sendLocoNetMessage(sourceNodeId: nodeId, destinationNodeId: gatewayNodeId, locoNetMessage: locoNetMessage)
+ //           networkLayer.sendLocoNetMessage(sourceNodeId: nodeId, destinationNodeId: gatewayNodeId, locoNetMessage: locoNetMessage)
           }
         default:
           print("error: \(errorCode)")
@@ -335,7 +333,7 @@ public class LocoNet {
           }
           else {
             startTimeoutTimer(interval: 1.0)
-            networkLayer.sendLocoNetMessage(sourceNodeId: nodeId, destinationNodeId: gatewayNodeId, locoNetMessage: locoNetMessage)
+     //       networkLayer.sendLocoNetMessage(sourceNodeId: nodeId, destinationNodeId: gatewayNodeId, locoNetMessage: locoNetMessage)
           }
         default:
           print("unexpected error: \(errorCode)")

@@ -156,10 +156,10 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
     }
     set(value) {
       _speed = value
-      guard let trainNode, let networkLayer else {
+      guard let trainNode else {
         return
       }
-      networkLayer.sendSetSpeedDirection(sourceNodeId: nodeId, destinationNodeId: trainNode.nodeId, setSpeed: _speed, isForwarded: false)
+      sendSetSpeedDirection(destinationNodeId: trainNode.nodeId, setSpeed: _speed, isForwarded: false)
     }
   }
   
@@ -181,14 +181,14 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
   
   private func getSpeedFNX() {
   
-    guard let trainNode, let networkLayer else {
+    guard let trainNode else {
       return
     }
     
-    networkLayer.sendQuerySpeedCommand(sourceNodeId: nodeId, destinationNodeId: trainNode.nodeId)
+    sendQuerySpeedCommand(destinationNodeId: trainNode.nodeId)
     
     for address : UInt32 in 0...68 {
-      networkLayer.sendQueryFunctionCommand(sourceNodeId: nodeId, destinationNodeId: trainNode.nodeId, address: address)
+      sendQueryFunctionCommand(destinationNodeId: trainNode.nodeId, address: address)
     }
     
     fdiState = .gettingFDI
@@ -199,7 +199,7 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
     
     fdi = []
     
-    networkLayer.sendNodeMemoryReadRequest(sourceNodeId: nodeId, destinationNodeId: trainNode.nodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.fdi.rawValue, startAddress: nextFDIStartAddress, numberOfBytesToRead: 64)
+   sendNodeMemoryReadRequest(destinationNodeId: trainNode.nodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.fdi.rawValue, startAddress: nextFDIStartAddress, numberOfBytesToRead: 64)
 
   }
   
@@ -225,7 +225,7 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
     
     listenerState = .awaitingAttachListenerReply
     
-    networkLayer?.sendAttachListenerCommand(sourceNodeId: nodeId, destinationNodeId: trainNode.nodeId, listenerNodeId: nodeId, flags: flags)
+    sendAttachListenerCommand(destinationNodeId: trainNode.nodeId, listenerNodeId: nodeId, flags: flags)
 
   }
   
@@ -243,17 +243,13 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
   // MARK: Public Methods
   
   public func emergencyStop() {
-    guard let trainNode, let networkLayer else {
+    guard let trainNode else {
       return
     }
-    networkLayer.sendEmergencyStop(sourceNodeId: nodeId, destinationNodeId: trainNode.nodeId)
+    sendEmergencyStop(destinationNodeId: trainNode.nodeId)
   }
   
   public func assignController(trainNodeId:UInt64) {
-    
-    guard let networkLayer else {
-      return
-    }
     
     releaseController()
     
@@ -270,72 +266,72 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
     
     startTimeoutTimer()
     
-    networkLayer.sendAssignControllerCommand(sourceNodeId: nodeId, destinationNodeId: trainNode!.nodeId)
+    sendAssignControllerCommand(destinationNodeId: trainNode!.nodeId)
     
   }
   
   public func setFunction(address:UInt32, value:UInt16) {
-    guard let trainNode, let networkLayer else {
+    guard let trainNode else {
       return
     }
-    networkLayer.sendSetFunction(sourceNodeId: nodeId, destinationNodeId: trainNode.nodeId, address: address, value: value, isForwarded: false)
+    sendSetFunction(destinationNodeId: trainNode.nodeId, address: address, value: value, isForwarded: false)
   }
   
   public func sendSetMove(distance:Float, cruiseSpeed:Float, finalSpeed:Float) {
-    guard let trainNode, let networkLayer else {
+    guard let trainNode else {
       return
     }
-    networkLayer.sendSetMoveCommand(sourceNodeId: nodeId, destinationNodeId: trainNode.nodeId, distance: distance, cruiseSpeed: cruiseSpeed, finalSpeed: finalSpeed)
+    sendSetMoveCommand(destinationNodeId: trainNode.nodeId, distance: distance, cruiseSpeed: cruiseSpeed, finalSpeed: finalSpeed)
   }
   
   public func sendStartMove(isStealAllowed:Bool, isPositionUpdateRequired:Bool) {
-    guard let trainNode, let networkLayer else {
+    guard let trainNode else {
       return
     }
-    networkLayer.sendStartMoveCommand(sourceNodeId: nodeId, destinationNodeId: trainNode.nodeId, isStealAllowed: isStealAllowed, isPositionUpdateRequired: isPositionUpdateRequired)
+    sendStartMoveCommand(destinationNodeId: trainNode.nodeId, isStealAllowed: isStealAllowed, isPositionUpdateRequired: isPositionUpdateRequired)
   }
 
   public func sendStopMove() {
-    guard let trainNode, let networkLayer else {
+    guard let trainNode else {
       return
     }
-    networkLayer.sendStopMoveCommand(sourceNodeId: nodeId, destinationNodeId: trainNode.nodeId)
+    sendStopMoveCommand(destinationNodeId: trainNode.nodeId)
   }
 
   public func sendGlobalEmergencyStop() {
     _globalEmergencyStop = true
-    networkLayer?.sendWellKnownEvent(sourceNode: self, eventId: .emergencyStopAll)
+    sendWellKnownEvent(eventId: .emergencyStopAll)
     delegate?.globalEmergencyChanged?(throttle: self)
   }
   
   public func sendClearGlobalEmergencyStop() {
     _globalEmergencyStop = false
-    networkLayer?.sendWellKnownEvent(sourceNode: self, eventId:.clearEmergencyStopAll )
+    sendWellKnownEvent(eventId:.clearEmergencyStopAll )
     delegate?.globalEmergencyChanged?(throttle: self)
   }
   
   public func sendGlobalEmergencyOff() {
     _globalEmergencyOff = true
-    networkLayer?.sendWellKnownEvent(sourceNode: self, eventId:.emergencyOffAll )
+    sendWellKnownEvent(eventId:.emergencyOffAll )
     delegate?.globalEmergencyChanged?(throttle: self)
   }
   
   public func sendClearGlobalEmergencyOff() {
     _globalEmergencyOff = false
-    networkLayer?.sendWellKnownEvent(sourceNode: self, eventId:.clearEmergencyOffAll )
+    sendWellKnownEvent(eventId:.clearEmergencyOffAll )
     delegate?.globalEmergencyChanged?(throttle: self)
   }
   
   public func releaseController() {
 
-    guard let trainNode, let networkLayer else {
+    guard let trainNode else {
       return
     }
     
     switch listenerState {
     case .listenerAttached:
       
-      networkLayer.sendDetachListenerCommand(sourceNodeId: nodeId, destinationNodeId: trainNode.nodeId, listenerNodeId: nodeId, flags: 0x00)
+      sendDetachListenerCommand(destinationNodeId: trainNode.nodeId, listenerNodeId: nodeId, flags: 0x00)
       
     default:
       break
@@ -345,7 +341,7 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
 
     switch controllerState {
     case .controllerAssigned:
-      networkLayer.sendReleaseControllerCommand(sourceNodeId: nodeId, destinationNodeId: trainNode.nodeId)
+      sendReleaseControllerCommand(destinationNodeId: trainNode.nodeId)
     default:
       break
     }
@@ -362,9 +358,9 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
     
     delegate?.trainSearchResultsReceived?(throttle: self, results: [:])
     
-    searchEventId = networkLayer!.makeTrainSearchEventId(searchString: searchString, searchType: searchType, searchMatchType: searchMatchType, searchMatchTarget: searchMatchTarget, trackProtocol: trackProtocol)
+    searchEventId = makeTrainSearchEventId(searchString: searchString, searchType: searchType, searchMatchType: searchMatchType, searchMatchTarget: searchMatchTarget, trackProtocol: trackProtocol)
     
-    networkLayer?.sendIdentifyProducer(sourceNodeId: nodeId, eventId: searchEventId)
+    sendIdentifyProducer(eventId: searchEventId)
     
   }
 
@@ -439,7 +435,7 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
             switch configurationType {
             case .controllerChangingNotify:
               
-              networkLayer?.sendControllerChangedNotifyReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, reject: false)
+              sendControllerChangedNotifyReply(destinationNodeId: message.sourceNodeId!, reject: false)
               
               controllerState = .zapped
               
@@ -506,7 +502,7 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
               
               listenerState = .awaitingAttachListenerReply
               
-              networkLayer?.sendAttachListenerCommand(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, listenerNodeId: nodeId, flags: flags)
+              sendAttachListenerCommand(destinationNodeId: message.sourceNodeId!, listenerNodeId: nodeId, flags: flags)
 
             case .queryController:
               break
@@ -555,7 +551,7 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
           
         case .tractionManagement:
           if let subType = OpenLCBTractionManagementType(rawValue: message.payload[1]), subType == .noopOrHeartbeatRequest {
-              networkLayer?.sendTractionManagementNoOp(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!)
+            sendTractionManagementNoOp(destinationNodeId: message.sourceNodeId!)
           }
         default:
           break
@@ -569,7 +565,7 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
         if let _ = searchResults[message.sourceNodeId!] {} else {
           let newNode = OpenLCBNode(nodeId: message.sourceNodeId!)
           searchResults[newNode.nodeId] = newNode
-          networkLayer?.sendSimpleNodeInformationRequest(sourceNodeId: nodeId, destinationNodeId: newNode.nodeId)
+          sendSimpleNodeInformationRequest(destinationNodeId: newNode.nodeId)
         }
       }
       
@@ -596,13 +592,11 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
       
       if message.destinationNodeId! == nodeId, let datagramType = message.datagramType {
         
- //       print("datagram: \(message.datagramType)")
-        
         if fdiState == .gettingFDI {
           
           if datagramType == .readReplyGeneric {
             
-            networkLayer?.sendDatagramReceivedOK(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, timeOut: .ok)
+            sendDatagramReceivedOK(destinationNodeId: message.sourceNodeId!, timeOut: .ok)
           
             var data = message.payload
           
@@ -627,7 +621,7 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
                 
                 nextFDIStartAddress += data.count
                 
-                networkLayer?.sendNodeMemoryReadRequest(sourceNodeId: nodeId, destinationNodeId: trainNode!.nodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.fdi.rawValue, startAddress: nextFDIStartAddress, numberOfBytesToRead: 64)
+                sendNodeMemoryReadRequest(destinationNodeId: trainNode!.nodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.fdi.rawValue, startAddress: nextFDIStartAddress, numberOfBytesToRead: 64)
                 
               }
               else {

@@ -426,12 +426,12 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
   }
   
   internal func attachCompleted() {
-    networkLayer?.sendAssignControllerReply(sourceNodeId: nodeId, destinationNodeId: activeControllerNodeId, result: 0)
+    sendAssignControllerReply(destinationNodeId: activeControllerNodeId, result: 0)
   }
   
   internal func attachFailed() {
     
-    networkLayer?.sendAssignControllerReply(sourceNodeId: nodeId, destinationNodeId: activeControllerNodeId, result: 0x02)
+    sendAssignControllerReply(destinationNodeId: activeControllerNodeId, result: 0x02)
     
     activeControllerNodeId = 0
     
@@ -603,7 +603,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
       
       startTimer(interval: heartbeatDeadline)
       
-      networkLayer?.sendHeartbeatRequest(sourceNodeId: nodeId, destinationNodeId: activeControllerNodeId, timeout: heartbeatDeadline)
+      sendHeartbeatRequest(destinationNodeId: activeControllerNodeId, timeout: heartbeatDeadline)
       
     case .waitingForResponse:
       
@@ -614,7 +614,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
       speedChanged()
       
       for listener in listeners {
-        networkLayer?.sendSetSpeedDirection(sourceNodeId: nodeId, destinationNodeId: listener.nodeId, setSpeed: setSpeed, isForwarded: true)
+        sendSetSpeedDirection(destinationNodeId: listener.nodeId, setSpeed: setSpeed, isForwarded: true)
       }
       
     default:
@@ -646,7 +646,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     
     super.start()
     
-    networkLayer?.sendWellKnownEvent(sourceNode: self, eventId: .nodeIsATrain)
+    sendWellKnownEvent(eventId: .nodeIsATrain)
     
   }
   
@@ -788,7 +788,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
         case .setSpeedDirection:
           
           if !isForwarded && false && message.sourceNodeId! != activeControllerNodeId {
-            networkLayer?.sendTerminateDueToError(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, errorCode: .permanentErrorSourceNotPermitted)
+            sendTerminateDueToError(destinationNodeId: message.sourceNodeId!, errorCode: .permanentErrorSourceNotPermitted)
           }
           
           else if let uint16 = UInt16(bigEndianData: [message.payload[1], message.payload[2]]) {
@@ -816,7 +816,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
                     forwardedSpeed *= -1.0
                   }
                 }
-                networkLayer?.sendSetSpeedDirection(sourceNodeId: nodeId, destinationNodeId: listener.nodeId, setSpeed: forwardedSpeed, isForwarded: true)
+                sendSetSpeedDirection(destinationNodeId: listener.nodeId, setSpeed: forwardedSpeed, isForwarded: true)
               }
             }
             
@@ -825,7 +825,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
         case .setFunction:
           
           if !isForwarded && false && message.sourceNodeId! != activeControllerNodeId {
-            networkLayer?.sendTerminateDueToError(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, errorCode: .permanentErrorSourceNotPermitted)
+            sendTerminateDueToError(destinationNodeId: message.sourceNodeId!, errorCode: .permanentErrorSourceNotPermitted)
           }
           else {
             
@@ -849,7 +849,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
               
               for listener in listeners {
                 if listener.nodeId != message.sourceNodeId!, (address == 0 && listener.linkF0) || (address != 0 && listener.linkFN) {
-                  networkLayer?.sendSetFunction(sourceNodeId: nodeId, destinationNodeId: listener.nodeId, address: address, value: value, isForwarded: true)
+                  sendSetFunction(destinationNodeId: listener.nodeId, address: address, value: value, isForwarded: true)
                 }
               }
               
@@ -860,7 +860,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
         case .emergencyStop:
           
           if !isForwarded && false && message.sourceNodeId! != activeControllerNodeId {
-            networkLayer?.sendTerminateDueToError(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, errorCode: .permanentErrorSourceNotPermitted)
+            sendTerminateDueToError(destinationNodeId: message.sourceNodeId!, errorCode: .permanentErrorSourceNotPermitted)
           }
           else {
             
@@ -868,7 +868,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
             
             for listener in listeners {
               if listener.nodeId != message.sourceNodeId! {
-                networkLayer?.sendEmergencyStop(sourceNodeId: nodeId, destinationNodeId: listener.nodeId, isForwarded: true)
+                sendEmergencyStop(destinationNodeId: listener.nodeId, isForwarded: true)
               }
             }
             
@@ -876,7 +876,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
           
         case .querySpeeds:
           
-          networkLayer?.sendQuerySpeedReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, setSpeed: setSpeed, commandedSpeed: commandedSpeed, emergencyStop: emergencyStop)
+          sendQuerySpeedReply(destinationNodeId: message.sourceNodeId!, setSpeed: setSpeed, commandedSpeed: commandedSpeed, emergencyStop: emergencyStop)
           
         case .queryFunction:
           
@@ -890,7 +890,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
               
             if space.isWithinSpace(address: Int(address), count: 1), let value = space.getUInt8(address: Int(address)) {
               
-              networkLayer?.sendQueryFunctionReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, address: address, value: UInt16(value))
+              sendQueryFunctionReply(destinationNodeId: message.sourceNodeId!, address: address, value: UInt16(value))
               
             }
 
@@ -920,7 +920,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
                 if activeControllerNodeId == 0 || activeControllerNodeId == controllerNodeId {
                   
                   if activeControllerNodeId != 0 {
-                    networkLayer?.sendAssignControllerReply(sourceNodeId: nodeId, destinationNodeId: controllerNodeId, result: 0)
+                    sendAssignControllerReply(destinationNodeId: controllerNodeId, result: 0)
                   }
                   else {
                     activeControllerNodeId = controllerNodeId
@@ -931,7 +931,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
 
                   nextActiveControllerNodeId = controllerNodeId
                   
-                  networkLayer?.sendControllerChangedNotify(sourceNodeId: nodeId, destinationNodeId: activeControllerNodeId, newController: nextActiveControllerNodeId)
+                  sendControllerChangedNotify(destinationNodeId: activeControllerNodeId, newController: nextActiveControllerNodeId)
                   
                 }
                 
@@ -949,7 +949,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
               
             case .queryController:
               
-              networkLayer?.sendQueryControllerReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, activeController: activeControllerNodeId)
+              sendQueryControllerReply(destinationNodeId: message.sourceNodeId!, activeController: activeControllerNodeId)
               
             case .controllerChangingNotify:
               break
@@ -977,7 +977,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
                 
                 if listenerNodeId == nodeId {
                   
-                  networkLayer?.sendAttachListenerReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, listenerNodeId: listenerNodeId, replyCode: .permanentErrorAlreadyExists)
+                  sendAttachListenerReply(destinationNodeId: message.sourceNodeId!, listenerNodeId: listenerNodeId, replyCode: .permanentErrorAlreadyExists)
                   
                 }
                 else {
@@ -990,7 +990,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
                       
                       listener.flags = message.payload[2]
                       
-                      networkLayer?.sendAttachListenerReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, listenerNodeId: listenerNodeId, replyCode: .success)
+                      sendAttachListenerReply(destinationNodeId: message.sourceNodeId!, listenerNodeId: listenerNodeId, replyCode: .success)
                       
                       found = true
                       
@@ -1004,7 +1004,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
                     
                     listeners.append(listenerNode)
                     
-                    networkLayer?.sendAttachListenerReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, listenerNodeId: listenerNodeId, replyCode: .success)
+                    sendAttachListenerReply(destinationNodeId: message.sourceNodeId!, listenerNodeId: listenerNodeId, replyCode: .success)
                   }
                   
                 }
@@ -1032,7 +1032,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
                   
                   if listener.nodeId == listenerNodeId {
                     
-                    networkLayer?.sendAttachListenerReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, listenerNodeId: listenerNodeId, replyCode: .success)
+                    sendAttachListenerReply(destinationNodeId: message.sourceNodeId!, listenerNodeId: listenerNodeId, replyCode: .success)
                     
                     listeners.remove(at: index)
                     
@@ -1046,7 +1046,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
                 }
                 
                 if !found {
-                  networkLayer?.sendAttachListenerReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, listenerNodeId: listenerNodeId, replyCode: .permanentErrorNotFound)
+                  sendAttachListenerReply(destinationNodeId: message.sourceNodeId!, listenerNodeId: listenerNodeId, replyCode: .permanentErrorNotFound)
                 }
                 
               }
@@ -1061,7 +1061,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
                 
                 if index < listeners.count {
                   
-                  networkLayer?.sendListenerQueryNodeReply(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, nodeCount: listeners.count, nodeIndex: index, flags: listeners[index].flags, listenerNodeId: listeners[index].nodeId)
+                  sendListenerQueryNodeReply(destinationNodeId: message.sourceNodeId!, nodeCount: listeners.count, nodeIndex: index, flags: listeners[index].flags, listenerNodeId: listeners[index].nodeId)
                   
                   found = true
                   
@@ -1070,7 +1070,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
               }
  
               if !found {
-                networkLayer?.sendListenerQueryNodeReplyShort(sourceNodeId: nodeId, destinationNodeId: message.sourceNodeId!, nodeCount: listeners.count)
+                sendListenerQueryNodeReplyShort(destinationNodeId: message.sourceNodeId!, nodeCount: listeners.count)
               }
               
             }
@@ -1110,7 +1110,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
                   
                 }
                 else {
-                  networkLayer?.sendAssignControllerReply(sourceNodeId: nodeId, destinationNodeId: nextActiveControllerNodeId, result: 0x01)
+                  sendAssignControllerReply(destinationNodeId: nextActiveControllerNodeId, result: 0x01)
                 }
                 
                 nextActiveControllerNodeId = 0
@@ -1160,7 +1160,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
           motionRelative = .stopped
         }
         
-        networkLayer?.sendLocationServiceEvent(sourceNode: self, eventId: message.eventId!, trainNodeId: nodeId, entryExit: message.locationServicesFlagEntryExit!, motionRelative: motionRelative, motionAbsolute: message.locationServicesFlagDirectionAbsolute!, contentFormat: message.locationServicesFlagContentFormat!, content: message.locationServicesContent)
+        sendLocationServiceEvent(eventId: message.eventId!, trainNodeId: nodeId, entryExit: message.locationServicesFlagEntryExit!, motionRelative: motionRelative, motionAbsolute: message.locationServicesFlagDirectionAbsolute!, contentFormat: message.locationServicesFlagContentFormat!, content: message.locationServicesContent)
         
       }
 
@@ -1277,7 +1277,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
             }
             
             if addressMatch || (!matchOnlyInAddress && nameMatch) {
-              networkLayer?.sendProducerIdentified(sourceNodeId: nodeId, eventId: id, validity: .valid)
+              sendProducerIdentified(eventId: id, validity: .valid)
             }
             
           }
@@ -1289,7 +1289,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
         else if let event = OpenLCBWellKnownEvent(rawValue: id) {
           
           if event == .nodeIsATrain {
-            networkLayer?.sendProducerIdentified(sourceNodeId: nodeId, eventId: id, validity: .valid)
+            sendProducerIdentified(eventId: id, validity: .valid)
           }
           
         }

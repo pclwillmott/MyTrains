@@ -65,7 +65,7 @@ class ViewNodeInfoVC: NSViewController, NSWindowDelegate, OpenLCBConfigurationTo
     
     state = .waitingForGetConfigOptionsAck
     startTimeoutTimer()
-    networkLayer?.sendGetConfigurationOptionsCommand(sourceNodeId: nodeId, destinationNodeId: node.nodeId)
+//    networkLayer?.sendGetConfigurationOptionsCommand(sourceNodeId: nodeId, destinationNodeId: node.nodeId)
 
   }
   
@@ -153,7 +153,7 @@ class ViewNodeInfoVC: NSViewController, NSWindowDelegate, OpenLCBConfigurationTo
           
           startTimeoutTimer()
           
-          networkLayer.sendGetMemorySpaceInformationRequest(sourceNodeId: nodeId, destinationNodeId: node.nodeId, addressSpace: currentAddressSpace)
+    //      networkLayer.sendGetMemorySpaceInformationRequest(sourceNodeId: nodeId, destinationNodeId: node.nodeId, addressSpace: currentAddressSpace)
           
         }
         else {
@@ -200,7 +200,7 @@ class ViewNodeInfoVC: NSViewController, NSWindowDelegate, OpenLCBConfigurationTo
             
             startTimeoutTimer()
             
-            networkLayer.sendGetMemorySpaceInformationRequest(sourceNodeId: nodeId, destinationNodeId: node.nodeId, addressSpace: currentAddressSpace)
+     //       networkLayer.sendGetMemorySpaceInformationRequest(sourceNodeId: nodeId, destinationNodeId: node.nodeId, addressSpace: currentAddressSpace)
             
           }
           
@@ -218,7 +218,7 @@ class ViewNodeInfoVC: NSViewController, NSWindowDelegate, OpenLCBConfigurationTo
             
             startTimeoutTimer()
             
-            networkLayer.sendGetMemorySpaceInformationRequest(sourceNodeId: nodeId, destinationNodeId: node.nodeId, addressSpace: currentAddressSpace)
+     //       networkLayer.sendGetMemorySpaceInformationRequest(sourceNodeId: nodeId, destinationNodeId: node.nodeId, addressSpace: currentAddressSpace)
             
           }
           else {
