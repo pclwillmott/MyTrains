@@ -8,15 +8,19 @@
 import Foundation
 import Cocoa
 
-public protocol MTSerialPortDelegate {
-  func serialPort(_ serialPort: MTSerialPort, didReceive data: [UInt8])
-  func serialPortWasRemovedFromSystem(_ serialPort: MTSerialPort)
-  func serialPortWasOpened(_ serialPort: MTSerialPort)
-  func serialPortWasClosed(_ serialPort: MTSerialPort)
-  func serialPortWasAdded(_ serialPort: MTSerialPort)
+@objc public protocol MTSerialPortDelegate {
+  @objc optional func serialPort(_ serialPort: MTSerialPort, didReceive data: [UInt8])
 }
-    
-public class MTSerialPort : MTSerialPortManagerDelegate {
+   
+public enum SerialPortState {
+  
+  case closed
+  case open
+  case removed
+  
+}
+
+public class MTSerialPort : NSObject, MTSerialPortManagerDelegate, MTPipeDelegate {
   
   // MARK: Constructors
   
@@ -29,7 +33,7 @@ public class MTSerialPort : MTSerialPortManagerDelegate {
     guard _fd != -1 else {
       return nil
     }
-
+    
     var speed : speed_t = 0
     
     var dataBits : Int32 = 0
@@ -60,6 +64,14 @@ public class MTSerialPort : MTSerialPortManagerDelegate {
     
     closeSerialPort(_fd)
     
+    let pipeName = "\((path as NSString).lastPathComponent)"
+    
+    txPipe = MTPipe(name: MTSerialPort.pipeName(path: path))
+    
+    super.init()
+    
+    txPipe.open(delegate: self)
+    
     observerId = MTSerialPortManager.addObserver(observer: self)
     
   }
@@ -67,6 +79,8 @@ public class MTSerialPort : MTSerialPortManagerDelegate {
   // MARK: Destructors
   
   deinit {
+    
+    txPipe.close()
     
     close()
     
@@ -88,14 +102,14 @@ public class MTSerialPort : MTSerialPortManagerDelegate {
   
   private var _usesRTSCTSFlowControl : Bool
   
+  private var _path : String
+  
   private var observerId : Int = -1
   
-  private var _path : String = ""
-  
-  private var writeLock = NSLock()
+  private var txPipe : MTPipe
   
   // MARK: Public Properties
-
+  
   public var path : String
   
   public var baudRate : BaudRate = .br115200
@@ -111,37 +125,32 @@ public class MTSerialPort : MTSerialPortManagerDelegate {
   public var delegate : MTSerialPortDelegate?
   
   public var isOpen : Bool {
-    get {
-      return fd != -1
-    }
+    return state == .open
   }
+  
+  public var state : SerialPortState = .closed
   
   // MARK: Private Methods
   
+  // This is called from inside a background thread
   private func monitorPort() {
     
-    let kInitialBufferSize = 0x100000
+    let kInitialBufferSize = 0x1000
     
     let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: kInitialBufferSize)
     
     buffer.initialize(repeating: 0, count: kInitialBufferSize)
-     
+    
     defer {
       buffer.deinitialize(count: kInitialBufferSize)
     }
-
-    DispatchQueue.main.async {
-      self.delegate?.serialPortWasOpened(self)
-    }
-
+    
     repeat {
       
       let nbyte = readSerialPort(fd, buffer, kInitialBufferSize)
       
       if nbyte == -1 {
-        DispatchQueue.main.async {
-          self.delegate?.serialPortWasRemovedFromSystem(self)
-        }
+        state = .removed
         quit = true
       }
       else if nbyte > 0 {
@@ -151,10 +160,9 @@ public class MTSerialPort : MTSerialPortManagerDelegate {
         for index in 0...nbyte-1 {
           data.append(buffer.advanced(by: index).pointee)
         }
-      
-        DispatchQueue.main.async {
-          self.delegate?.serialPort(self, didReceive: data)
-        }
+        
+        // This is sent on the background thread
+        self.delegate?.serialPort?(self, didReceive: data)
         
       }
       
@@ -168,11 +176,37 @@ public class MTSerialPort : MTSerialPortManagerDelegate {
     
     fd = -1
     
-    DispatchQueue.main.async {
-      self.delegate?.serialPortWasClosed(self)
+    if state == .open {
+      state = .closed
     }
     
   }
+  
+  private func write(data:[UInt8]) {
+    
+    if state == .open {
+      
+      let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: data.count)
+      
+      defer {
+        buffer.deinitialize(count: data.count)
+      }
+      
+      for index in 0...data.count-1 {
+        buffer.advanced(by: index).pointee = data[index]
+      }
+      
+      let count = writeSerialPort(self.fd, buffer, data.count)
+      
+      if count != data.count {
+        state = .removed
+        self.quit = true
+      }
+      
+    }
+    
+  }
+
   
   // MARK: Public Methods
   
@@ -185,7 +219,9 @@ public class MTSerialPort : MTSerialPortManagerDelegate {
     if fd != -1 {
       
       if setSerialPortOptions(fd, baudRate.baudRate, numberOfDataBits, numberOfStopBits, Int32(parity.rawValue), usesRTSCTSFlowControl ? 1 : 0) == 0 {
-      
+        
+        state = .open
+        
         DispatchQueue.global(qos: .background /* .utility*/).async {
           self.monitorPort()
         }
@@ -195,7 +231,7 @@ public class MTSerialPort : MTSerialPortManagerDelegate {
         closeSerialPort(fd)
         fd = -1
       }
-
+      
     }
     
   }
@@ -203,52 +239,30 @@ public class MTSerialPort : MTSerialPortManagerDelegate {
   public func close() {
     quit = true
   }
-  
-  public func write(data:[UInt8]) {
     
-    if fd != -1 {
-      
-      let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: data.count)
-      
- //     buffer.initialize(repeating: 0, count: data.count)
-       
-      defer {
-        buffer.deinitialize(count: data.count)
-      }
-      
-      for index in 0...data.count-1 {
-        buffer.advanced(by: index).pointee = data[index]
-      }
-      
-      writeLock.lock()
-      let count = writeSerialPort(self.fd, buffer, data.count)
-      writeLock.unlock()
-      
-      if count != data.count {
-        self.delegate?.serialPortWasRemovedFromSystem(self)
-        self.quit = true
-      }
-
+  // MARK: MTSerialPortManagerDelegate Methods
+  
+  @objc public func serialPortWasAdded(path:String) {
+    
+    guard path == self.path && state == .removed else {
+      return
     }
+    
+    open()
     
   }
   
-  // MARK: MTSerialPortManagerDelegate
+  // MARK: MTPipeDelegate Methods
   
-  public func serialPortWasAdded(path: String) {
-    if path == _path {
-      delegate?.serialPortWasAdded(self)
-    }
-  }
-  
-  public func serialPortWasRemoved(path: String) {
-    
-    if path == _path {
-      self.delegate?.serialPortWasRemovedFromSystem(self)
-      self.quit = true
-    }
-    
+  // This is run in the pipe's background thread and is atomic
+  @objc public func pipe(_ pipe: MTPipe, data: [UInt8]) {
+    write(data: data)
   }
 
+  // MARK: Public Class Methods
+  
+  public static func pipeName(path:String) -> String {
+    return "MyTrains_SerialPort_\((path as NSString).lastPathComponent)"
+  }
+  
 }
-

@@ -429,7 +429,7 @@ public class OpenLCBNetworkLayer : NSObject, MTPipeDelegate {
   
   // MARK: Messages
 
-  public func sendMessage(gatewayNodeId:UInt64, message:OpenLCBMessage) {
+  public func sendMessage(message:OpenLCBMessage) {
     
     guard state == .initialized else {
       return
@@ -456,69 +456,26 @@ public class OpenLCBNetworkLayer : NSObject, MTPipeDelegate {
     
 //    message.gatewayNodeId = gatewayNodeId
     
-    for (_, observer) in observers {
-      observer.OpenLCBMessageReceived(message: message)
-    }
+//    for (_, observer) in observers {
+//      observer.OpenLCBMessageReceived(message: message)
+//    }
     
-    // Messages from internal nodes
-    
-    if let internalSourceNode = virtualNodeLookup[message.sourceNodeId!] {
+    if let destinationNodeId = message.destinationNodeId {
 
-      if let destinationNodeId = message.destinationNodeId {
-        if let virtualNode = virtualNodeLookup[destinationNodeId] {
-          virtualNode.openLCBMessageReceived(message: message)
-        }
-        else {
-          if internalSourceNode.visibility == .visibilityPublic {
-            for (key, virtualNode) in gatewayNodes {
-              if key != message.gatewayNodeId! {
-                virtualNode.openLCBMessageReceived(message: message)
-              }
-            }
-          }
-        }
+      if let virtualNode = virtualNodeLookup[destinationNodeId] {
+        virtualNode.openLCBMessageReceived(message: message)
       }
       else {
-        for (key, virtualNode) in regularNodes {
-          if virtualNode.nodeId != message.gatewayNodeId! {
-            virtualNode.openLCBMessageReceived(message: message)
-          }
-        }
-        if internalSourceNode.visibility == .visibilityPublic {
-          for (key, virtualNode) in gatewayNodes {
-            if key != message.gatewayNodeId! {
-              virtualNode.openLCBMessageReceived(message: message)
-            }
-          }
+        for (_, virtualNode) in gatewayNodes {
+          virtualNode.openLCBMessageReceived(message: message)
         }
       }
-
+      
     }
-    
-    // Messages from external nodes
-    
     else {
-
-      if let destinationNodeId = message.destinationNodeId {
-        if let virtualNode = virtualNodeLookup[destinationNodeId] {
-          virtualNode.openLCBMessageReceived(message: message)
-        }
-        else {
-          for (key, virtualNode) in gatewayNodes {
-            if key != message.gatewayNodeId! {
-              virtualNode.openLCBMessageReceived(message: message)
-            }
-          }
-        }
+      for virtualNode in virtualNodes {
+        virtualNode.openLCBMessageReceived(message: message)
       }
-      else {
-        for virtualNode in virtualNodes {
-          if virtualNode.nodeId != message.gatewayNodeId! {
-            virtualNode.openLCBMessageReceived(message: message)
-          }
-        }
-      }
-
     }
     
   }
@@ -526,9 +483,23 @@ public class OpenLCBNetworkLayer : NSObject, MTPipeDelegate {
   // MARK: MTPipeDelegate Methods
   
   public func pipe(_ pipe: MTPipe, message: OpenLCBMessage) {
-    let gatewayId = message.gatewayNodeId ?? message.sourceNodeId!
-//    debugLog(message: "TX: \(message.timeStamp) \(message.sourceNodeId!.toHexDotFormat(numberOfBytes: 6))")
-    sendMessage(gatewayNodeId: gatewayId, message: message)
+    
+    guard let appNodeId else {
+      return
+    }
+    
+    let postOfficeNodeId = appNodeId + 1
+    
+    guard !message.routing.contains(postOfficeNodeId) else {
+      return
+    }
+    
+    message.routing.insert(postOfficeNodeId)
+    
+    DispatchQueue.main.async {
+      self.sendMessage(message: message)
+    }
+    
   }
   
 }

@@ -69,10 +69,14 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     isFirmwareUpgradeProtocolSupported = false
     
     setupConfigurationOptions()
-    
+
   }
   
   // MARK: Private Properties
+  
+  public var pipeName : String {
+    return "MyTrains_Node_\(nodeId.toHex(numberOfDigits: 12))"
+  }
   
   private var lockedNodeId : UInt64 = 0
   
@@ -137,10 +141,6 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   internal var firmwareBuffer : [UInt8] = []
   
   internal var txPipe : MTPipe?
-  
-  internal var rxPipe : MTPipe?
-  
-  public var sendPipe : MTPipe?
   
   // MARK: Public Properties
   
@@ -685,6 +685,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   }
 
   public func stop() {
+    txPipe?.close()
     state = .inhibited
   }
   
@@ -766,9 +767,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
       debugLog(message: "no sourceNodeId")
       return
     }
-    
-//    debugLog(message: "RX: \(message.timeStamp) \(message.sourceNodeId!.toHexDotFormat(numberOfBytes: 6))")
-    
+
     switch message.messageTypeIndicator {
       
     case .simpleNodeIdentInfoRequest:
@@ -1043,5 +1042,5 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     }
     
   }
-  
+
 }

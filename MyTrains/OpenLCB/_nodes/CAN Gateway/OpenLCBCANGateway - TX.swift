@@ -10,14 +10,14 @@ import Foundation
 extension OpenLCBCANGateway {
   
   public func send(data: [UInt8]) {
-    self.serialPort?.write(data:data)
+    //    for (_, observer) in observers {
+    //      observer.rawCANPacketSent(packet: data)
+    //    }
+    sendToSerialPortPipe?.write(data: data)
   }
 
   public func send(data:String) {
-    for (_, observer) in observers {
-      observer.rawCANPacketSent(packet: data)
-    }
-    self.serialPort?.write(data:[UInt8](data.utf8))
+    send(data: [UInt8](data.utf8))
   }
 
   internal func send(header: String, data:String) {
@@ -37,8 +37,6 @@ extension OpenLCBCANGateway {
     guard !outputQueue.isEmpty else {
       return
     }
-    
-//    processOutputQueueLock.lock()
     
     for message in outputQueue {
       
@@ -186,8 +184,6 @@ extension OpenLCBCANGateway {
       }
       
     }
-    
-//    processOutputQueueLock.unlock()
     
   }
 

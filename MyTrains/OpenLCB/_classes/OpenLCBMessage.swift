@@ -25,19 +25,22 @@ public class OpenLCBMessage : NSObject {
     
     var data = fullMessage
     
-    _fullMessage = data
-    
-    guard data.count >= 22 else {
-      return nil
-    }
-
-    guard let gatewayId = UInt64(bigEndianData: [UInt8](data.prefix(6))) else {
+    guard data.count >= 28 else {
+      debugLog(message: "decode error \(data.count)")
       return nil
     }
     
-    gatewayNodeId = gatewayId == 0 ? nil : gatewayId
+    guard let nodeCount = UInt64(bigEndianData: [UInt8](data.prefix(6))) else {
+      return nil
+    }
     
     data.removeFirst(6)
+    
+    for _ in 1 ... nodeCount {
+      let id = UInt64(bigEndianData: [UInt8](data.prefix(6)))!
+      routing.insert(id)
+      data.removeFirst(6)
+    }
     
     guard let temp = UInt64(bigEndianData: [UInt8](data.prefix(8))) else {
       return nil
@@ -155,7 +158,7 @@ public class OpenLCBMessage : NSObject {
 
   public var timeStamp : TimeInterval = 0
   
-  public var gatewayNodeId : UInt64?
+  public var routing : Set<UInt64> = []
   
   public var sourceNodeId : UInt64?
   
@@ -376,21 +379,19 @@ public class OpenLCBMessage : NSObject {
 
   }
   
-  private var _fullMessage : [UInt8]?
-  
   public var fullMessage : [UInt8]? {
-    
-    if let _fullMessage {
-      return _fullMessage
-    }
     
     guard let sourceNodeId else {
       return nil
     }
     
     var data : [UInt8] = []
+
+    data.append(contentsOf: UInt64(routing.count).nodeIdBigEndianData)
     
-    data.append(contentsOf: (gatewayNodeId ?? 0).nodeIdBigEndianData)
+    for id in routing {
+      data.append(contentsOf: id.nodeIdBigEndianData)
+    }
     
     data.append(contentsOf: timeStamp.bitPattern.bigEndianData)
     
@@ -419,8 +420,6 @@ public class OpenLCBMessage : NSObject {
     }
     
     data.append(contentsOf: payload)
-    
-    _fullMessage = data
     
     return data
     

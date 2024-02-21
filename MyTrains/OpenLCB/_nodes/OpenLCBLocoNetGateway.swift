@@ -9,7 +9,7 @@ import Foundation
 
 private typealias QueueItem = (nodeId:UInt64, message:LocoNetMessage)
 
-public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
+public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSerialPortManagerDelegate {
  
   // MARK: Constructors & Destructors
   
@@ -79,6 +79,8 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   internal var serialPort : MTSerialPort?
   
   internal var buffer : [UInt8] = []
+  
+  internal var sendToSerialPortPipe : MTPipe?
   
   internal var isOpen : Bool {
     if let port = serialPort {
@@ -169,6 +171,31 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     
   }
   
+  internal func openSerialPort() {
+    
+    if let port = MTSerialPort(path: devicePath) {
+      
+      serialPort = port
+      port.baudRate = baudRate
+      port.numberOfDataBits = 8
+      port.numberOfStopBits = 1
+      port.parity = parity
+      port.usesRTSCTSFlowControl = flowControl == .rtsCts
+      port.delegate = self
+      port.open()
+      
+      if port.isOpen {
+        
+        if sendToSerialPortPipe == nil {
+          sendToSerialPortPipe = MTPipe(name: MTSerialPort.pipeName(path: devicePath))
+          sendToSerialPortPipe?.open()
+        }
+        
+      }
+      
+    }
+
+  }
   internal override func resetReboot() {
 
     super.resetReboot()
@@ -181,16 +208,7 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     
     consumerIdentified = false
     
-    if let port = MTSerialPort(path: devicePath) {
-      serialPort = port
-      port.baudRate = baudRate
-      port.numberOfDataBits = 8
-      port.numberOfStopBits = 1
-      port.parity = parity
-      port.usesRTSCTSFlowControl = flowControl == .rtsCts
-      port.delegate = self
-      port.open()
-    }
+    openSerialPort()
     
   }
   
@@ -208,13 +226,14 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     
   }
   
-  private func close() {
+  internal func close() {
+    sendToSerialPortPipe?.close()
     serialPort?.close()
     serialPort = nil
   }
-  
+
   private func send(data: [UInt8]) {
-    self.serialPort?.write(data:data)
+    sendToSerialPortPipe?.write(data: data)
   }
 
   internal func addToInputBuffer(data:[UInt8]) {
@@ -392,28 +411,21 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
 
   // MARK: MTSerialPortDelegate Methods
   
+  // This is running in the serial port's background thread
   public func serialPort(_ serialPort: MTSerialPort, didReceive data: [UInt8]) {
     addToInputBuffer(data: data)
   }
   
-  public func serialPortWasRemovedFromSystem(_ serialPort: MTSerialPort) {
-    print("serial port was removed from system: \(serialPort.path)")
-    self.serialPort = nil
-  }
+  // MARK: MTSerialPortManagerDelegate Methods
   
-  public func serialPortWasOpened(_ serialPort: MTSerialPort) {
-    print("serial port was opened: \(serialPort.path)")
-  }
-  
-  public func serialPortWasClosed(_ serialPort: MTSerialPort) {
-    print("serial port was closed: \(serialPort.path)")
-    self.serialPort = nil
+  @objc public func serialPortWasAdded(path:String) {
+    
+    guard path == devicePath, serialPort == nil else {
+      return
+    }
+    
+    openSerialPort()
+    
   }
 
-  public func serialPortWasAdded(_ serialPort: MTSerialPort) {
-    if !isOpen {
-      resetReboot()
-    }
-  }
-  
 }

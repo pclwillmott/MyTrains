@@ -52,16 +52,16 @@ extension OpenLCBCANGateway {
           newframe.timeStamp = Date.timeIntervalSinceReferenceDate
           newframe.timeSinceLastMessage = newframe.timeStamp - lastTimeStamp
           lastTimeStamp = newframe.timeStamp
-          for (_, observer) in observers {
-            observer.openLCBCANPacketReceived(packet: newframe)
-          }
+    //      for (_, observer) in observers {
+    //        observer.openLCBCANPacketReceived(packet: newframe)
+    //      }
           canFrameReceived(frame: newframe)
 
         }
         else {
-          for (_, observer) in observers {
-            observer.rawCANPacketReceived(packet: frame)
-          }
+     //     for (_, observer) in observers {
+     //       observer.rawCANPacketReceived(packet: frame)
+     //     }
         }
 
       }
@@ -366,8 +366,6 @@ extension OpenLCBCANGateway {
       return
     }
     
-//    processInputQueueLock.lock()
-    
     for message in inputQueue {
       
       inputQueue.removeFirst()
@@ -473,8 +471,6 @@ extension OpenLCBCANGateway {
       
     }
     
-//    processInputQueueLock.unlock()
-
   }
 
 }

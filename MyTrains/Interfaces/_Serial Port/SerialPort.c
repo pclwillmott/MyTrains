@@ -337,7 +337,7 @@ static kern_return_t findModems(io_iterator_t *matchingServices)
 
   // Get an iterator across all matching devices.
 
-  kernResult = IOServiceGetMatchingServices(kIOMasterPortDefault, classesToMatch, matchingServices);
+  kernResult = IOServiceGetMatchingServices(kIOMainPortDefault, classesToMatch, matchingServices);
 
   if (KERN_SUCCESS != kernResult) {
     printf("IOServiceGetMatchingServices returned %d\n", kernResult);

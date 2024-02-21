@@ -13,7 +13,7 @@ import Cocoa
   @objc optional func serialPortWasRemoved(path:String)
 }
 
-class MTSerialPortManager {
+class MTSerialPortManager : NSObject {
   
   // MARK: Class Private Properties
   
@@ -38,6 +38,7 @@ class MTSerialPortManager {
     observers.removeValue(forKey: observerId)
   }
   
+  // This is called from a timer thread
   public static func checkPorts() {
     let _ = availablePorts()
   }

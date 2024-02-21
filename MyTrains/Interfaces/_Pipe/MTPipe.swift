@@ -18,7 +18,7 @@ public class MTPipe : NSObject {
   // MARK: Constructors
   
   init(name:String) {
-    _name = "/tmp/name"
+    _name = "/tmp/\(name)"
   }
   
   // MARK: Destructors
@@ -31,7 +31,7 @@ public class MTPipe : NSObject {
   
   private var _name = ""
   
-  public var _fd : Int32 = -1
+  private var _fd : Int32 = -1
   
   private var _delegate : MTPipeDelegate?
   
@@ -62,7 +62,6 @@ public class MTPipe : NSObject {
       let nbyte = readPipe(_fd, buffer, kInitialBufferSize)
       
       if nbyte == -1 {
-    //    quit = true
       }
       else if nbyte > 0 {
         
@@ -72,23 +71,19 @@ public class MTPipe : NSObject {
           data.append(buffer.advanced(by: index).pointee)
         }
       
-        DispatchQueue.main.async {
-          
-          self._delegate?.pipe?(self, data: data)
-
-          if let message = OpenLCBMessage(fullMessage: data) {
-            self._delegate?.pipe?(self, message: message)
-          }
-          
-        }
+        // These are sent in the background thread
         
+        self._delegate?.pipe?(self, data: data)
+
+        if let message = OpenLCBMessage(fullMessage: data) {
+          self._delegate?.pipe?(self, message: message)
+        }
+
       }
       
     } while !quit
     
     closePipe(_fd);
-    
-    debugLog(message: "quit")
     
     _fd = -1
     
@@ -98,11 +93,11 @@ public class MTPipe : NSObject {
   
   public func open(delegate:MTPipeDelegate? = nil) {
     
-    self._delegate = delegate
-    
     createPipe(_name)
     
-    if let delegate {
+    self._delegate = delegate
+    
+    if delegate != nil {
       
       _fd = openReadPipe(_name)
       
@@ -116,38 +111,35 @@ public class MTPipe : NSObject {
       
     }
     else {
-      
       _fd = openWritePipe(_name)
-      
-      if _fd == -1 {
-        return
-      }
-      
     }
 
   }
   
   public func close() {
     quit = true
-    if _fd != -1 {
+    if _delegate == nil && _fd != -1 {
       closePipe(_fd)
     }
   }
   
   
   public func sendOpenLCBMessage(message:OpenLCBMessage) {
-    guard _fd != -1 else {
+    guard isOpen else {
       debugLog(message: "pipe not open")
       return
     }
     if let fullMessage = message.fullMessage {
       write(data: fullMessage)
     }
+    else {
+      debugLog(message: "fullMessage failed")
+    }
   }
   
   public func write(data:[UInt8]) {
     
-    if _fd != -1 {
+    if isOpen {
       
       let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: data.count)
       
@@ -162,11 +154,31 @@ public class MTPipe : NSObject {
       let count = writePipe(self._fd, buffer, data.count)
       
       if count != data.count {
-        self.quit = true
+        close()
       }
 
     }
     
   }
   
+  // MARK: Public Class Methods
+  
+  public static func sendOpenLCBMessage(node:OpenLCBNodeVirtual, message:OpenLCBMessage) {
+    
+    let pipe = MTPipe(name: node.pipeName)
+    
+    pipe.open()
+    
+    guard pipe.isOpen, let data = message.fullMessage else {
+      debugLog(message: "fail")
+      return
+    }
+    
+    pipe.write(data: data)
+    
+    pipe.close()
+    
+    debugLog(message: "TX: \(node.nodeId.toHexDotFormat(numberOfBytes: 6))")
+  }
+
 }

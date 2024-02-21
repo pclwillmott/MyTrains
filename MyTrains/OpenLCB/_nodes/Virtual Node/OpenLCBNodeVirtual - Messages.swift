@@ -10,16 +10,22 @@ import AppKit
 
 extension OpenLCBNodeVirtual {
 
+  // This is used by new messages sent by this node
   internal func sendMessage(message:OpenLCBMessage) {
-    message.sourceNodeId = nodeId
-    message.gatewayNodeId = nodeId
+    if let appNodeId, message.messageTypeIndicator == .producerConsumerEventReport {
+      message.sourceNodeId = visibility == .visibilityPublic ? nodeId : appNodeId
+    }
+    else {
+      message.sourceNodeId = nodeId
+    }
+    message.routing.insert(nodeId)
     message.timeStamp = Date.timeIntervalSinceReferenceDate
-    txPipe?.sendOpenLCBMessage(message: message)
+    txPipe!.sendOpenLCBMessage(message: message)
   }
   
   internal func sendMessage(gatewayNodeId: UInt64, message: OpenLCBMessage) {
-    message.gatewayNodeId = nodeId
-    txPipe?.sendOpenLCBMessage(message: message)
+    message.routing.insert(gatewayNodeId)
+    txPipe!.sendOpenLCBMessage(message: message)
   }
 
   public func sendInitializationComplete(isSimpleSetSufficient:Bool) {

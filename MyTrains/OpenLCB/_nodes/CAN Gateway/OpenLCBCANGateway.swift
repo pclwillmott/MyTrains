@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
+public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSerialPortManagerDelegate {
  
   // MARK: Constructors & Destructors
   
@@ -102,6 +102,8 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   
   internal var serialPort : MTSerialPort?
   
+  internal var sendToSerialPortPipe : MTPipe?
+  
   internal var buffer : [UInt8] = []
   
   internal var isOpen : Bool {
@@ -110,7 +112,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     }
     return false
   }
-
+  
   internal var observers : [Int:OpenLCBCANDelegate] = [:]
 
   internal var nextObserverId : Int = 0
@@ -125,11 +127,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   
   internal var outputQueue : [OpenLCBMessage] = []
   
-  internal var outputQueueLock : NSLock = NSLock()
-  
   internal var inputQueue : [OpenLCBMessage] = []
-  
-  internal var inputQueueLock : NSLock = NSLock()
   
   internal var internalNodes : Set<UInt64> = []
   
@@ -165,12 +163,6 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   
   // internal var datagramsAwaitingReceipt : [UInt32:OpenLCBMessage] = [:]
   
-  internal var isProcessingInputQueue : Bool = false
-  internal var isProcessingOutputQueue : Bool = false
-
-  internal var processInputQueueLock : NSLock = NSLock()
-  internal var processOutputQueueLock : NSLock = NSLock()
-
   internal var lastTimeStamp : TimeInterval = 0.0
   
   // MARK: internal Methods
@@ -191,6 +183,44 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     
   }
   
+  internal func openSerialPort() {
+    
+    if let port = MTSerialPort(path: devicePath) {
+      
+      serialPort = port
+      port.baudRate = baudRate
+      port.numberOfDataBits = 8
+      port.numberOfStopBits = 1
+      port.parity = parity
+      port.usesRTSCTSFlowControl = flowControl == .rtsCts
+      port.delegate = self
+      port.open()
+      
+      if port.isOpen {
+        
+        if sendToSerialPortPipe == nil {
+          sendToSerialPortPipe = MTPipe(name: MTSerialPort.pipeName(path: devicePath))
+          sendToSerialPortPipe?.open()
+        }
+        
+        if !internalNodes.contains(nodeId) {
+          
+          internalNodes.insert(nodeId)
+          
+          let alias = OpenLCBTransportLayerAlias(nodeId: nodeId)
+          
+          initNodeQueue.append(alias)
+          
+          getAlias()
+          
+        }
+        
+      }
+      
+    }
+
+  }
+  
   internal override func resetReboot() {
 
     super.resetReboot()
@@ -205,16 +235,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     
     internalNodes.removeAll()
 
-    if let port = MTSerialPort(path: devicePath) {
-      serialPort = port
-      port.baudRate = baudRate
-      port.numberOfDataBits = 8
-      port.numberOfStopBits = 1
-      port.parity = parity
-      port.usesRTSCTSFlowControl = flowControl == .rtsCts
-      port.delegate = self
-      port.open()
-    }
+    openSerialPort()
     
   }
   
@@ -231,11 +252,11 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   }
 
   internal func close() {
+    sendToSerialPortPipe?.close()
     serialPort?.close()
     serialPort = nil
   }
-  
-  
+    
   @objc func waitTimerTick() {
     stopWaitTimer()
 //    processQueues()
@@ -254,7 +275,9 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   // MARK: Public Methods
   
   public override func start() {
+    
     super.start()
+    
   }
   
   public override func stop() {
@@ -291,6 +314,10 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   
   public override func openLCBMessageReceived(message: OpenLCBMessage) {
  
+    guard !message.routing.contains(nodeId) else {
+      return
+    }
+    
     super.openLCBMessageReceived(message: message)
     
     if let sourceNodeId = message.sourceNodeId, !internalNodes.contains(sourceNodeId) {
@@ -375,52 +402,22 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
 
   // MARK: MTSerialPortDelegate Methods
   
+  // This is running in the serial port's background thread
   public func serialPort(_ serialPort: MTSerialPort, didReceive data: [UInt8]) {
     buffer.append(contentsOf: data)
     parseInput()
   }
   
-  public func serialPortWasOpened(_ serialPort: MTSerialPort) {
-
-    #if DEBUG
-    debugLog(message: "\(serialPort.path)")
-    #endif
+  // MARK: MTSerialPortManagerDelegate Methods
+  
+  @objc public func serialPortWasAdded(path:String) {
     
-    if !internalNodes.contains(nodeId) {
-      
-      internalNodes.insert(nodeId)
-      
-      let alias = OpenLCBTransportLayerAlias(nodeId: nodeId)
-      
-      initNodeQueue.append(alias)
-      
-      getAlias()
-      
+    guard path == devicePath, serialPort == nil else {
+      return
     }
-
+    
+    openSerialPort()
+    
   }
   
-  public func serialPortWasRemovedFromSystem(_ serialPort: MTSerialPort) {
-    #if DEBUG
-    debugLog(message: "\(serialPort.path)")
-    #endif
-    self.serialPort = nil
-  }
-  
-  public func serialPortWasClosed(_ serialPort: MTSerialPort) {
-    #if DEBUG
-    debugLog(message: "\(serialPort.path)")
-    #endif
-    self.serialPort = nil
-  }
-
-  public func serialPortWasAdded(_ serialPort: MTSerialPort) {
-    #if DEBUG
-    debugLog(message: "\(serialPort.path)")
-    #endif
-    if !isOpen {
-      resetReboot()
-    }
-  }
-
 }

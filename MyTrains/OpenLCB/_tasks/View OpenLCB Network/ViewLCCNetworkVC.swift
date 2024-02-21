@@ -39,6 +39,8 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBConfiguration
     
     nodeId = configurationTool!.nodeId
     
+    configurationTool?.delegate = self
+    
     reload()
     
     findAll()
@@ -82,7 +84,7 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBConfiguration
     
   }
   
-  public func openLCBMessageReceived(message: OpenLCBMessage) {
+  public func openLCBMessageReceived(message:OpenLCBMessage) {
     
     guard let configurationTool else {
       return
