@@ -1452,7 +1452,7 @@
       }
     },
     "Create Application Node" : {
-      "comment" : "Used for the title of the Create Application Node window\nUsed for the Create Application Node menu item title",
+      "comment" : "Used for the Create Application Node menu item title\nUsed for the title of the Create Application Node window",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2231,7 +2231,7 @@
       }
     },
     "Fast Clock" : {
-      "comment" : "Used to indicate a clock's type\nUsed for the Fast Clock menu item title",
+      "comment" : "Used for the Fast Clock menu item title\nUsed to indicate a clock's type",
       "localizations" : {
         "en" : {
           "stringUnit" : {

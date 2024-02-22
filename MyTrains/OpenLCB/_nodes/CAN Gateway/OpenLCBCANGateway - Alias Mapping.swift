@@ -10,8 +10,28 @@ import Foundation
 extension OpenLCBCANGateway {
   
   internal func addNodeIdAliasMapping(nodeId: UInt64, alias:UInt16) {
+    
     aliasLookup[alias] = nodeId
     nodeIdLookup[nodeId] = alias
+    
+    for item in inputQueue {
+      if let sourceAlias = item.sourceNIDAlias, sourceAlias == alias {
+        item.sourceNodeId = nodeId
+      }
+      if let destAlias = item.destinationNIDAlias, destAlias == alias {
+        item.destinationNodeId = nodeId
+      }
+    }
+    
+    for item in outputQueue {
+      if let sourceId = item.sourceNodeId, sourceId == nodeId {
+        item.sourceNIDAlias = alias
+      }
+      if let destId = item.destinationNodeId, destId == nodeId {
+        item.destinationNIDAlias = alias
+      }
+    }
+    
   }
   
   internal func removeNodeIdAliasMapping(nodeId:UInt64) {

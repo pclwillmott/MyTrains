@@ -12,20 +12,16 @@ extension OpenLCBNodeVirtual {
 
   // This is used by new messages sent by this node
   internal func sendMessage(message:OpenLCBMessage) {
-    if let appNodeId, message.messageTypeIndicator == .producerConsumerEventReport {
-      message.sourceNodeId = visibility == .visibilityPublic ? nodeId : appNodeId
-    }
-    else {
-      message.sourceNodeId = nodeId
-    }
-    message.routing.insert(nodeId)
     message.timeStamp = Date.timeIntervalSinceReferenceDate
-    txPipe!.sendOpenLCBMessage(message: message)
+    message.sourceNodeId = nodeId
+    message.routing.insert(nodeId)
+    message.visibility = visibility
+    networkLayer?.sendMessage(message: message)
   }
   
   internal func sendMessage(gatewayNodeId: UInt64, message: OpenLCBMessage) {
     message.routing.insert(gatewayNodeId)
-    txPipe!.sendOpenLCBMessage(message: message)
+    networkLayer?.sendMessage(message: message)
   }
 
   public func sendInitializationComplete(isSimpleSetSufficient:Bool) {
@@ -42,8 +38,6 @@ extension OpenLCBNodeVirtual {
   }
 
   public func sendLocoNetMessageReceived(locoNetMessage:[UInt8]) {
-    
-    let message = OpenLCBMessage(messageTypeIndicator: .producerConsumerEventReport)
     
     var data = [UInt8](OpenLCBWellKnownEvent.locoNetMessage.rawValue.bigEndianData.prefix(2))
     

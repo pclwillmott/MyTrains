@@ -75,10 +75,6 @@ public class MTPipe : NSObject {
         
         self._delegate?.pipe?(self, data: data)
 
-        if let message = OpenLCBMessage(fullMessage: data) {
-          self._delegate?.pipe?(self, message: message)
-        }
-
       }
       
     } while !quit

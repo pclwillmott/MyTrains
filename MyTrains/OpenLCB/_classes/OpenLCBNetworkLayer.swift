@@ -46,7 +46,7 @@ public class OpenLCBNetworkLayer : NSObject, MTPipeDelegate {
   
   private var nextObserverId : Int = 1
   
-  private var rxPipe : MTPipe?
+//  private var rxPipe : MTPipe?
   
   // MARK: Public Properties
 
@@ -180,14 +180,14 @@ public class OpenLCBNetworkLayer : NSObject, MTPipeDelegate {
     
     _state = .initialized
     
-    rxPipe = MTPipe(name: "MyTrains Network Layer")
-    rxPipe?.open(delegate: self)
+//    rxPipe = MTPipe(name: "MyTrains Network Layer")
+//    rxPipe?.open(delegate: self)
     
     for node in OpenLCBMemorySpace.getVirtualNodes() {
       registerNode(node: node)
     }
 
-    updateVirtualNodeList()
+//    updateVirtualNodeList()
     
   }
   
@@ -429,11 +429,21 @@ public class OpenLCBNetworkLayer : NSObject, MTPipeDelegate {
   
   // MARK: Messages
 
+  // This is running in the main thread
+  
   public func sendMessage(message:OpenLCBMessage) {
     
-    guard state == .initialized else {
+    guard state == .initialized, let appNodeId else {
       return
     }
+    
+    let postOfficeNodeId = appNodeId + 1
+    
+    guard !message.routing.contains(postOfficeNodeId) else {
+      return
+    }
+    
+    message.routing.insert(postOfficeNodeId)
     
     /*
     if let destinationNodeId = message.destinationNodeId, destinationNodeId == networkLayerNodeId {
@@ -454,8 +464,6 @@ public class OpenLCBNetworkLayer : NSObject, MTPipeDelegate {
     }
     */
     
-//    message.gatewayNodeId = gatewayNodeId
-    
 //    for (_, observer) in observers {
 //      observer.OpenLCBMessageReceived(message: message)
 //    }
@@ -463,18 +471,29 @@ public class OpenLCBNetworkLayer : NSObject, MTPipeDelegate {
     if let destinationNodeId = message.destinationNodeId {
 
       if let virtualNode = virtualNodeLookup[destinationNodeId] {
-        virtualNode.openLCBMessageReceived(message: message)
-      }
-      else {
-        for (_, virtualNode) in gatewayNodes {
+        if !message.routing.contains(virtualNode.nodeId) {
           virtualNode.openLCBMessageReceived(message: message)
+        }
+      }
+      else if message.visibility.rawValue > OpenLCBNodeVisibility.visibilityPrivate.rawValue {
+        for (_, virtualNode) in gatewayNodes {
+          if !message.routing.contains(virtualNode.nodeId) && message.visibility.rawValue >= virtualNode.visibility.rawValue {
+            virtualNode.openLCBMessageReceived(message: message)
+          }
         }
       }
       
     }
     else {
-      for virtualNode in virtualNodes {
-        virtualNode.openLCBMessageReceived(message: message)
+      for (_, virtualNode) in regularNodes {
+        if !message.routing.contains(virtualNode.nodeId) {
+          virtualNode.openLCBMessageReceived(message: message)
+        }
+      }
+      for (_, virtualNode) in gatewayNodes {
+        if !message.routing.contains(virtualNode.nodeId) && message.visibility.rawValue >= virtualNode.visibility.rawValue {
+          virtualNode.openLCBMessageReceived(message: message)
+        }
       }
     }
     

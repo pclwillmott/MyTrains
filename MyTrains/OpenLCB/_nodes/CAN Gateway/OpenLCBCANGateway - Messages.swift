@@ -9,22 +9,36 @@ import Foundation
 
 extension OpenLCBCANGateway {
   
-  internal func sendVerifyNodeIdNumberAddressed(sourceNodeId:UInt64, destinationNodeIdAlias:UInt16) {
+  internal func sendVerifyNodeIdNumberAddressed(destinationNodeIdAlias:UInt16) {
     
-    if let sourceNIDAlias = nodeIdLookup[sourceNodeId] {
-      
-      let message = OpenLCBMessage(messageTypeIndicator: .verifyNodeIDAddressed)
-
-      message.sourceNIDAlias = sourceNIDAlias
-      
-      message.destinationNIDAlias = destinationNodeIdAlias
-      
-      if let frame = LCCCANFrame(message: message) {
-        send(data: frame.message)
-      }
-      
+    guard let sourceNIDAlias = nodeIdLookup[nodeId] else {
+      return
     }
       
+    let message = OpenLCBMessage(messageTypeIndicator: .verifyNodeIDAddressed)
+    message.sourceNIDAlias = sourceNIDAlias
+    message.destinationNIDAlias = destinationNodeIdAlias
+
+    if let frame = LCCCANFrame(message: message) {
+      send(data: frame.message)
+    }
+
+  }
+
+  internal func sendVerifyNodeIdGlobal(destinationNodeId:UInt64) {
+    
+    guard let sourceNIDAlias = nodeIdLookup[nodeId] else {
+      return
+    }
+      
+    let message = OpenLCBMessage(messageTypeIndicator: .verifyNodeIDGlobal)
+    message.sourceNIDAlias = sourceNIDAlias
+    message.payload = destinationNodeId.nodeIdBigEndianData
+    
+    if let frame = LCCCANFrame(message: message) {
+      send(data: frame.message)
+    }
+
   }
 
   internal func sendCheckIdFrame(format:OpenLCBCANControlFrameFormat, nodeId:UInt64, alias: UInt16) {

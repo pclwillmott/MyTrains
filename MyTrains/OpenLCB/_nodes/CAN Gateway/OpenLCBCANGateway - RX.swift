@@ -74,6 +74,8 @@ extension OpenLCBCANGateway {
     
   }
 
+  // This is running in the serail port's background thread
+  
   internal func canFrameReceived(frame:LCCCANFrame) {
     
     // The node shall restart the [alias allocation] process at the beginning if, before completion of the process, a
@@ -103,7 +105,6 @@ extension OpenLCBCANGateway {
 
       if let controlFrameFormat = frame.controlFrameFormat, controlFrameFormat.isCheckIdFrame {
         sendReserveIdFrame(alias: frame.sourceNIDAlias)
-        return
       }
       
       // • If the frame is not a Check ID (CID) frame, the node is in Permitted state, and the received
@@ -152,12 +153,10 @@ extension OpenLCBCANGateway {
             item.transitionState = .idle
             item.alias = nil
             stoppedNodesLookup[item.nodeId] = item
-            return
           }
-          
-          addNodeIdAliasMapping(nodeId: nodeId, alias: frame.sourceNIDAlias)
-          processInputQueue()
-          return
+          else {
+            addNodeIdAliasMapping(nodeId: nodeId, alias: frame.sourceNIDAlias)
+          }
           
         case .aliasMappingEnquiryFrame:
           
@@ -182,16 +181,12 @@ extension OpenLCBCANGateway {
             }
           }
           
-          return
-          
         case .aliasMapResetFrame:
           
           // If a node receives an Alias Map Reset (AMR) frame referencing an alias for another node, the
           // receiving node shall stop using that alias to refer to the AMR-sending node within 100 milliseconds.
           
           removeNodeIdAliasMapping(alias: frame.sourceNIDAlias)
-          
-          return
           
         case .errorInformationReport0, .errorInformationReport1, .errorInformationReport2, .errorInformationReport3:
           
@@ -214,8 +209,6 @@ extension OpenLCBCANGateway {
           break
         }
         
-        return
-        
       }
       
     case .openLCBMessage:
@@ -228,7 +221,7 @@ extension OpenLCBCANGateway {
         message.sourceNodeId = nodeId
       }
       else {
-        sendVerifyNodeIdNumberAddressed(sourceNodeId: nodeId, destinationNodeIdAlias: sourceNIDAlias)
+        sendVerifyNodeIdNumberAddressed(destinationNodeIdAlias: sourceNIDAlias)
       }
       
       if let destinationNIDAlias = message.destinationNIDAlias {
@@ -236,7 +229,7 @@ extension OpenLCBCANGateway {
           message.destinationNodeId = nodeId
         }
         else {
-          sendVerifyNodeIdNumberAddressed(sourceNodeId: nodeId, destinationNodeIdAlias: destinationNIDAlias)
+          sendVerifyNodeIdNumberAddressed(destinationNodeIdAlias: destinationNIDAlias)
         }
       }
       
@@ -300,8 +293,13 @@ extension OpenLCBCANGateway {
                 newMessage.flags = .onlyFrame
                 newMessage.sourceNodeId = message.sourceNodeId
                 newMessage.destinationNodeId = message.destinationNodeId
-                addToInputQueue(message: message)
+                addToInputQueue(message: newMessage)
               }
+            }
+            else {
+              #if DEBUG
+              debugLog(message: "first frame not found")
+              #endif
             }
             
           }
@@ -353,18 +351,27 @@ extension OpenLCBCANGateway {
       
     }
     
+    DispatchQueue.main.async {
+      self.processInputQueue()
+    }
+    
   }
 
   public func addToInputQueue(message: OpenLCBMessage) {
     inputQueue.append(message)
-    processInputQueue()
   }
   
+  // This is running in the serial port's background thread
+  
   internal func processInputQueue() {
+    
+    stopWaitInputTimer()
     
     guard !inputQueue.isEmpty else {
       return
     }
+    
+    inputQueue.sort {$0.timeStamp < $1.timeStamp}
     
     for message in inputQueue {
       
@@ -379,7 +386,7 @@ extension OpenLCBCANGateway {
       }
       
       if !message.isMessageComplete {
-        inputQueue.append(message)
+        inputQueue.insert(message, at: 0)
       }
       else {
         
@@ -464,12 +471,16 @@ extension OpenLCBCANGateway {
         }
 
         if route {
-          sendMessage(gatewayNodeId: nodeId, message: message)
+     //     DispatchQueue.main.async {
+            self.sendMessage(gatewayNodeId: self.nodeId, message: message)
+     //     }
         }
         
       }
       
     }
+    
+    startWaitInputTimer(interval: 10.0 / 1000.0)
     
   }
 

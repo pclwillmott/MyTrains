@@ -186,6 +186,11 @@ public class MTSerialPort : NSObject, MTSerialPortManagerDelegate, MTPipeDelegat
     
     if state == .open {
       
+      var temp = data
+      temp.append(0)
+      let packet = String(cString: temp)
+      debugLog(message: "\"\(packet)\"")
+
       let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: data.count)
       
       defer {
@@ -256,7 +261,18 @@ public class MTSerialPort : NSObject, MTSerialPortManagerDelegate, MTPipeDelegat
   
   // This is run in the pipe's background thread and is atomic
   @objc public func pipe(_ pipe: MTPipe, data: [UInt8]) {
-    write(data: data)
+
+    var temp = data
+    temp.append(0)
+    let packets = String(cString: temp)
+    let items = packets.split(separator: ";")
+    
+    for item in items {
+      let data = [UInt8]((item + ";").utf8)
+      write(data: data)
+    }
+
+
   }
 
   // MARK: Public Class Methods

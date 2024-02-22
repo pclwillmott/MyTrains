@@ -9,6 +9,7 @@ import Foundation
 
 extension OpenLCBCANGateway {
   
+  // This is may or may not be running in the main thread
   public func send(data: [UInt8]) {
     //    for (_, observer) in observers {
     //      observer.rawCANPacketSent(packet: data)
@@ -29,37 +30,50 @@ extension OpenLCBCANGateway {
 
   public func addToOutputQueue(message: OpenLCBMessage) {
     outputQueue.append(message)
-    processOutputQueue()
   }
 
+  // This is running in the main thread
+  
   internal func processOutputQueue() {
+   
+    stopWaitTimer()
     
     guard !outputQueue.isEmpty else {
       return
     }
+    
+    outputQueue.sort {$0.timeStamp < $1.timeStamp}
     
     for message in outputQueue {
       
       outputQueue.removeFirst()
       
       if message.sourceNIDAlias == nil, let id = message.sourceNodeId {
-        message.sourceNIDAlias = nodeIdLookup[id]
+        if let alias = nodeIdLookup[id] {
+          message.sourceNIDAlias = alias
+        }
+        else {
+          sendVerifyNodeIdGlobal(destinationNodeId: id)
+        }
       }
       
-      if message.destinationNIDAlias == nil, let id = message.destinationNodeId {
-        message.destinationNIDAlias = nodeIdLookup[id]
+      if let id = message.destinationNodeId, message.destinationNIDAlias == nil {
+        if let alias = nodeIdLookup[id] {
+          message.destinationNIDAlias = alias
+        }
+        else {
+          sendVerifyNodeIdGlobal(destinationNodeId: id)
+        }
       }
       
       if !message.isMessageComplete {
-        outputQueue.append(message)
+        outputQueue.insert(message, at: 0)
       }
       else {
         
         switch message.messageTypeIndicator {
           
         case .datagram:
-          
-     //     datagramsAwaitingReceipt[message.datagramId] = message
           
           if message.payload.count <= 8 {
             if let frame = LCCCANFrame(message: message, canFrameType: .datagramCompleteInFrame, data: message.payload) {
@@ -184,6 +198,8 @@ extension OpenLCBCANGateway {
       }
       
     }
+    
+    startWaitTimer(interval: 10.0 / 1000.0)
     
   }
 

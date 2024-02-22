@@ -27,7 +27,7 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBConfiguration
   
   func windowWillClose(_ notification: Notification) {
     configurationTool?.delegate = nil
-    networkLayer?.releaseConfigurationTool(configurationTool: configurationTool!)
+    configurationTool?.networkLayer?.releaseConfigurationTool(configurationTool: configurationTool!)
     configurationTool = nil
   }
   
@@ -35,14 +35,12 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBConfiguration
     
     self.view.window?.delegate = self
     
-    networkLayer = configurationTool!.networkLayer
-    
-    nodeId = configurationTool!.nodeId
-    
     configurationTool?.delegate = self
     
+    tableView.dataSource = tableViewDS
+    tableView.delegate = tableViewDS
     reload()
-    
+
     findAll()
     
   }
@@ -53,10 +51,6 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBConfiguration
   
   private var tableViewDS : ViewLCCNetworkTableViewDS = ViewLCCNetworkTableViewDS()
   
-  private var networkLayer : OpenLCBNetworkLayer?
-  
-  private var nodeId : UInt64 = 0
-  
   // MARK: Public Properties
   
   public var configurationTool : OpenLCBNodeConfigurationTool?
@@ -65,23 +59,19 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBConfiguration
   
   private func findAll() {
     
+    nodes.removeAll()
+    
     guard let configurationTool else {
       return
     }
-    
-    nodes.removeAll()
     
     configurationTool.sendVerifyNodeIdNumber()
 
   }
   
   private func reload() {
-    
     tableViewDS.dictionary = nodes
-    tableView.dataSource = tableViewDS
-    tableView.delegate = tableViewDS
     tableView.reloadData()
-    
   }
   
   public func openLCBMessageReceived(message:OpenLCBMessage) {
@@ -97,22 +87,26 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBConfiguration
       let newNodeId = message.sourceNodeId!
       
       if !nodes.keys.contains(newNodeId) {
+        
         nodes[newNodeId] = OpenLCBNode(nodeId: newNodeId)
+        
+        reload()
+        
         configurationTool.sendSimpleNodeInformationRequest(destinationNodeId: newNodeId)
         configurationTool.sendProtocolSupportInquiry(destinationNodeId: newNodeId)
-        reload()
+        
       }
       
     case .simpleNodeIdentInfoReply:
       
-      if message.destinationNodeId! == nodeId, let node = nodes[message.sourceNodeId!] {
+      if let node = nodes[message.sourceNodeId!] {
         node.encodedNodeInformation = message.payload
         reload()
       }
 
     case .protocolSupportReply:
       
-      if message.destinationNodeId! == nodeId, let node = nodes[message.sourceNodeId!] {
+      if let node = nodes[message.sourceNodeId!] {
         node.supportedProtocols = message.payload
         reload()
       }
@@ -133,7 +127,7 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBConfiguration
   
   @IBAction func btnConfigureAction(_ sender: NSButton) {
     
-    guard let networkLayer else {
+    guard let networkLayer = configurationTool?.networkLayer else {
       return
     }
 
@@ -166,7 +160,7 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBConfiguration
   
   @IBAction func btnUpdateFirmwareAction(_ sender: NSButton) {
     
-    guard let networkLayer else {
+    guard let networkLayer = configurationTool?.networkLayer else {
       return
     }
 
@@ -184,7 +178,7 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBConfiguration
   
   @IBAction func btnInfoAction(_ sender: NSButton) {
     
-    guard let networkLayer else {
+    guard let networkLayer = configurationTool?.networkLayer else {
       return
     }
 
@@ -202,7 +196,7 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBConfiguration
     
   @IBAction func btnDeleteAction(_ sender: NSButton) {
     
-    guard let networkLayer else {
+    guard let networkLayer = configurationTool?.networkLayer else {
       return
     }
     

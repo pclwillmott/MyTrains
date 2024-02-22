@@ -140,7 +140,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   
   internal var firmwareBuffer : [UInt8] = []
   
-  internal var txPipe : MTPipe?
+//  internal var txPipe : MTPipe?
   
   // MARK: Public Properties
   
@@ -633,8 +633,8 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     
     state = .permitted
 
-    txPipe = MTPipe(name: "MyTrains Network Layer")
-    txPipe?.open()
+//    txPipe = MTPipe(name: "MyTrains Network Layer")
+//    txPipe?.open()
     
     if cdiFilename != nil {
       isConfigurationDescriptionInformationProtocolSupported = true
@@ -685,7 +685,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   }
 
   public func stop() {
-    txPipe?.close()
+//    txPipe?.close()
     state = .inhibited
   }
   
@@ -771,7 +771,9 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     switch message.messageTypeIndicator {
       
     case .simpleNodeIdentInfoRequest:
-      sendSimpleNodeInformationReply(destinationNodeId: sourceNodeId, data: encodedNodeInformation)
+      if let data = encodedNodeInformation {
+        sendSimpleNodeInformationReply(destinationNodeId: sourceNodeId, data: data)
+      }
 
     case .verifyNodeIDAddressed:
       sendVerifiedNodeIdNumber(isSimpleSetSufficient: false)

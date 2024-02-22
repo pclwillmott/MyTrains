@@ -25,10 +25,18 @@ public class OpenLCBMessage : NSObject {
     
     var data = fullMessage
     
-    guard data.count >= 28 else {
+    guard data.count >= 29 else {
       debugLog(message: "decode error \(data.count)")
       return nil
     }
+    
+    guard let vis = OpenLCBNodeVisibility(rawValue: data[0]) else {
+      return nil
+    }
+
+    visibility = vis
+    
+    data.removeFirst()
     
     guard let nodeCount = UInt64(bigEndianData: [UInt8](data.prefix(6))) else {
       return nil
@@ -159,6 +167,8 @@ public class OpenLCBMessage : NSObject {
   public var timeStamp : TimeInterval = 0
   
   public var routing : Set<UInt64> = []
+  
+  public var visibility : OpenLCBNodeVisibility = .visibilityPublic
   
   public var sourceNodeId : UInt64?
   
@@ -386,6 +396,8 @@ public class OpenLCBMessage : NSObject {
     }
     
     var data : [UInt8] = []
+    
+    data.append(contentsOf: visibility.bigEndianData)
 
     data.append(contentsOf: UInt64(routing.count).nodeIdBigEndianData)
     

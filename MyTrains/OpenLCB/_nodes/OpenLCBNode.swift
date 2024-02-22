@@ -58,7 +58,7 @@ public class OpenLCBNode : NSObject {
       return _manufacturerName
     }
     set(value) {
-      _manufacturerName = value
+      _manufacturerName = String(value.prefix(40))
     }
   }
   
@@ -67,7 +67,7 @@ public class OpenLCBNode : NSObject {
       return _nodeModelName
     }
     set(value) {
-      _nodeModelName = value
+      _nodeModelName = String(value.prefix(40))
     }
   }
   
@@ -76,7 +76,7 @@ public class OpenLCBNode : NSObject {
       return _nodeHardwareVersion
     }
     set(value) {
-      _nodeHardwareVersion = value
+      _nodeHardwareVersion = String(value.prefix(20))
     }
   }
   
@@ -85,7 +85,7 @@ public class OpenLCBNode : NSObject {
       return _nodeSoftwareVersion
     }
     set(value) {
-      _nodeSoftwareVersion = value
+      _nodeSoftwareVersion = String(value.prefix(20))
     }
 
   }
@@ -104,7 +104,7 @@ public class OpenLCBNode : NSObject {
       return _userNodeName
     }
     set(value) {
-      _userNodeName = value
+      _userNodeName = String(value.prefix(62))
     }
   }
   
@@ -113,138 +113,153 @@ public class OpenLCBNode : NSObject {
       return _userNodeDescription
     }
     set(value) {
-      _userNodeDescription = value
+      _userNodeDescription = String(value.prefix(63))
     }
   }
   
   public var addressSpaceInformation : [UInt8:OpenLCBNodeAddressSpaceInformation] = [:]
   
-  public var encodedNodeInformation : [UInt8] {
+  public var encodedNodeInformation : [UInt8]? {
     
     get {
       
+      guard acdiManufacturerSpaceVersion == 0x01 || acdiManufacturerSpaceVersion == 0x04 else {
+        #if DEBUG
+        debugLog(message: "invalid acdiManufacturerSpaceVersion: 0x\(acdiManufacturerSpaceVersion.toHex(numberOfDigits: 2))")
+        #endif
+        return nil
+      }
+
       var data : [UInt8] = []
       
       data.append(acdiManufacturerSpaceVersion)
       
-      for stringNumber in 1 ... acdiManufacturerSpaceVersion {
-        var string : String = ""
-        switch stringNumber {
+      for index in 1 ... max(acdiManufacturerSpaceVersion, 0x04) {
+        
+        var temp = ""
+        
+        switch index {
         case 1:
-          string = manufacturerName
+          temp = String(manufacturerName.prefix(40))
         case 2:
-          string = nodeModelName
+          temp = String(nodeModelName.prefix(40))
         case 3:
-          string = nodeHardwareVersion
+          temp = String(nodeHardwareVersion.prefix(20))
         case 4:
-          string = nodeSoftwareVersion
+          temp = String(nodeSoftwareVersion.prefix(20))
         default:
           break
         }
-        for byte in string.utf8 {
-          data.append(byte)
-        }
+        
+        data.append(contentsOf: temp.utf8)
         data.append(0)
+        
       }
       
+      guard acdiUserSpaceVersion == 0x01 || acdiUserSpaceVersion == 0x02 else {
+        #if DEBUG
+        debugLog(message: "invalid acdiUserSpaceVersion: 0x\(acdiUserSpaceVersion.toHex(numberOfDigits: 2))")
+        #endif
+        return nil
+      }
+
       data.append(acdiUserSpaceVersion)
       
-      for stringNumber in 1 ... acdiUserSpaceVersion {
-        var string : String = ""
-        switch stringNumber {
+      for index in 1 ... max(acdiUserSpaceVersion, 0x02) {
+        
+        var temp = ""
+        
+        switch index {
         case 1:
-          string = userNodeName
+          temp = String(userNodeName.prefix(62))
         case 2:
-          string = userNodeDescription
+          temp = String(userNodeDescription.prefix(63))
         default:
           break
         }
-        for byte in string.utf8 {
-          data.append(byte)
-        }
+
+        data.append(contentsOf: temp.utf8)
         data.append(0)
+        
       }
       
       return data
       
     }
     
-    set(_value) {
+    set(value) {
       
-      var value = _value
-      
-      for _ in 1...6 {
-        value.append(0)
+      #if DEBUG
+      guard let value, !value.isEmpty else {
+        debugLog(message: "nil or no data bytes")
+        return
       }
+      #endif
       
-      var index : Int = 0
+      var _value = value
+      
+      acdiManufacturerSpaceVersion = _value.removeFirst()
+      
+      guard acdiManufacturerSpaceVersion == 0x01 || acdiManufacturerSpaceVersion == 0x04 else {
+        #if DEBUG
+        debugLog(message: "invalid acdiManufacturerSpaceVersion: 0x\(acdiManufacturerSpaceVersion.toHex(numberOfDigits: 2)) id: \(nodeId.toHexDotFormat(numberOfBytes: 6))")
+        debugLog(message: "\(value)")
+        #endif
+        return
+      }
 
-      acdiManufacturerSpaceVersion = value[index]
-      
-      index += 1
-      
-      var stringNumber = 0
-            
-      while stringNumber < acdiManufacturerSpaceVersion && index < value.count {
+      for index in 1 ... max(acdiManufacturerSpaceVersion, 0x04) {
         
-        var current : [UInt8] = []
+        let temp = String(cString: _value)
+        _value.removeFirst(temp.utf8.count + 1)
         
-        while value[index] != UInt8(0) {
-          current.append(value[index])
-          index += 1
-        }
-        
-        current.append(value[index])
-        index += 1
-        
-        let string = String(cString: current)
-        stringNumber += 1
-        switch stringNumber {
+        switch index {
         case 1:
-          manufacturerName = string
+          manufacturerName = temp
         case 2:
-          nodeModelName = string
+          nodeModelName = temp
         case 3:
-          nodeHardwareVersion = string
+          nodeHardwareVersion = temp
         case 4:
-          nodeSoftwareVersion = string
+          nodeSoftwareVersion = temp
         default:
           break
         }
         
       }
       
-      if index >= value.count {
-        print("overflow \(index)")
+      #if DEBUG
+      guard !value.isEmpty else {
+        debugLog(message: "no data bytes")
+        return
+      }
+      #endif
+      
+      acdiUserSpaceVersion = _value.removeFirst()
+      
+      guard acdiUserSpaceVersion == 0x01 || acdiUserSpaceVersion == 0x02 else {
+        #if DEBUG
+        debugLog(message: "invalid acdiUserSpaceVersion: 0x(\(acdiUserSpaceVersion.toHex(numberOfDigits: 2))")
+        #endif
         return
       }
       
-      acdiUserSpaceVersion = value[index]
-      
-      index += 1
-
-      stringNumber = 0
-            
-      while stringNumber < acdiUserSpaceVersion && index < value.count {
-        var current : [UInt8] = []
-        while value[index] != 0 {
-          current.append(value[index])
-          index += 1
-        }
-        current.append(value[index])
-        index += 1
-        let string = String(cString: current)
-        stringNumber += 1
-        switch stringNumber {
+      for index in 1 ... max(acdiUserSpaceVersion, 0x02) {
+        
+        let temp = String(cString: _value)
+        _value.removeFirst(temp.utf8.count + 1)
+        
+        switch index {
         case 1:
-          userNodeName = string
+          userNodeName = temp
         case 2:
-          userNodeDescription = string
+          userNodeDescription = temp
         default:
           break
         }
+        
       }
-
+      
     }
     
   }

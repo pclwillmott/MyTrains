@@ -147,6 +147,8 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
 
   internal var waitTimer : Timer?
   
+  internal var waitInputTimer : Timer?
+  
   internal var aliasTimer : Timer?
   
   internal var aliasLock : NSLock = NSLock()
@@ -259,7 +261,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
     
   @objc func waitTimerTick() {
     stopWaitTimer()
-//    processQueues()
+    processOutputQueue()
   }
   
   internal func startWaitTimer(interval: TimeInterval) {
@@ -270,6 +272,21 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
   internal func stopWaitTimer() {
     waitTimer?.invalidate()
     waitTimer = nil
+  }
+
+  @objc func waitInputTimerTick() {
+    stopWaitInputTimer()
+    processInputQueue()
+  }
+  
+  internal func startWaitInputTimer(interval: TimeInterval) {
+    waitInputTimer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(waitInputTimerTick), userInfo: nil, repeats: false)
+    RunLoop.current.add(waitInputTimer!, forMode: .common)
+  }
+  
+  internal func stopWaitInputTimer() {
+    waitInputTimer?.invalidate()
+    waitInputTimer = nil
   }
 
   // MARK: Public Methods
@@ -312,29 +329,22 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
   
   // MARK: OpenLCBNetworkLayerDelegate Methods
   
+  // This is running in the main thread
   public override func openLCBMessageReceived(message: OpenLCBMessage) {
  
-    guard !message.routing.contains(nodeId) else {
-      return
-    }
-    
     super.openLCBMessageReceived(message: message)
     
     if let sourceNodeId = message.sourceNodeId, !internalNodes.contains(sourceNodeId) {
-      
       internalNodes.insert(sourceNodeId)
-      
       let alias = OpenLCBTransportLayerAlias(nodeId: sourceNodeId)
-      
       initNodeQueue.append(alias)
-      
       getAlias()
-
     }
 
     if let destinationNodeId = message.destinationNodeId, destinationNodeId == networkLayerNodeId {
       return
     }
+    
     if let sourceNodeId = message.sourceNodeId, sourceNodeId == networkLayerNodeId {
       return
     }
@@ -398,6 +408,8 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
     
     addToOutputQueue(message: message)
     
+    processOutputQueue()
+
   }
 
   // MARK: MTSerialPortDelegate Methods
