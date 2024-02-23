@@ -65,7 +65,7 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBConfiguration
       return
     }
     
-    configurationTool.sendVerifyNodeIdNumber()
+    configurationTool.sendVerifyNodeIdGlobal()
 
   }
   

@@ -78,6 +78,8 @@ extension OpenLCBCANGateway {
   
   internal func canFrameReceived(frame:LCCCANFrame) {
     
+//    debugLog(message: frame.message)
+    
     // The node shall restart the [alias allocation] process at the beginning if, before completion of the process, a
     // frame is received that carries a source Node ID alias value that is identical to the alias value being tested by this
     // procedure.
@@ -88,7 +90,7 @@ extension OpenLCBCANGateway {
       stopAliasTimer()
       item.transitionState = .idle
       #if DEBUG
-      debugLog(message: "Restarting alias allocation due to alias already allocated: 0x\(alias.toHex(numberOfDigits: 3))")
+      debugLog("Restarting alias allocation due to alias already allocated: 0x\(alias.toHex(numberOfDigits: 3))")
       #endif
       item.alias = nil
       getAlias()
@@ -199,7 +201,7 @@ extension OpenLCBCANGateway {
             stopAliasTimer()
             item.transitionState = .idle
             #if DEBUG
-            debugLog(message: "Restarting alias allocation due to transmission error: 0x\(item.alias!.toHex(numberOfDigits: 3))")
+            debugLog("Restarting alias allocation due to transmission error: 0x\(item.alias!.toHex(numberOfDigits: 3))")
             #endif
             item.alias = nil
             getAlias()
@@ -256,7 +258,7 @@ extension OpenLCBCANGateway {
               newMessage.messageTypeIndicator = .producerConsumerEventReport
               newMessage.sourceNodeId = message.sourceNodeId
               newMessage.destinationNodeId = message.destinationNodeId
-              addToInputQueue(message: newMessage)
+              inputQueue.append(newMessage)
             }
             
           }
@@ -276,8 +278,8 @@ extension OpenLCBCANGateway {
             
           case .onlyFrame:
             
-            addToInputQueue(message: message)
-            
+            inputQueue.append(message)
+
           case .firstFrame:
             
             splitFrames[frame.splitFrameId] = frame
@@ -293,12 +295,12 @@ extension OpenLCBCANGateway {
                 newMessage.flags = .onlyFrame
                 newMessage.sourceNodeId = message.sourceNodeId
                 newMessage.destinationNodeId = message.destinationNodeId
-                addToInputQueue(message: newMessage)
-              }
+                inputQueue.append(newMessage)
+             }
             }
             else {
               #if DEBUG
-              debugLog(message: "first frame not found")
+              debugLog("first frame not found")
               #endif
             }
             
@@ -308,8 +310,8 @@ extension OpenLCBCANGateway {
         
       case .datagramCompleteInFrame:
         
-        addToInputQueue(message: message)
-        
+        inputQueue.append(message)
+
       case .datagramFirstFrame:
         
         if let oldMessage = datagrams[message.datagramId] {
@@ -319,7 +321,7 @@ extension OpenLCBCANGateway {
             errorMessage.sourceNIDAlias = internalNode.alias!
             errorMessage.sourceNodeId = internalNode.nodeId
             errorMessage.payload = OpenLCBErrorCode.temporaryErrorOutOfOrderStartFrameBeforeFinishingPreviousMessage.bigEndianData
-            addToOutputQueue(message: errorMessage)
+            outputQueue.append(errorMessage)
           }
           datagrams.removeValue(forKey: oldMessage.datagramId)
         }
@@ -333,7 +335,7 @@ extension OpenLCBCANGateway {
           first.payload += message.payload
           if message.canFrameType == .datagramFinalFrame {
             datagrams.removeValue(forKey: first.datagramId)
-            addToInputQueue(message: first)
+            inputQueue.append(first)
           }
         }
         else if let internalNode = managedAliasLookup[message.destinationNIDAlias!] {
@@ -342,7 +344,7 @@ extension OpenLCBCANGateway {
           errorMessage.sourceNIDAlias = internalNode.alias!
           errorMessage.sourceNodeId = internalNode.nodeId
           errorMessage.payload = OpenLCBErrorCode.temporaryErrorOutOfOrderMiddleOrEndFrameWithoutStartFrame.bigEndianData
-          addToOutputQueue(message: errorMessage)
+          outputQueue.append(errorMessage)
         }
         
       default:
@@ -351,16 +353,10 @@ extension OpenLCBCANGateway {
       
     }
     
-    DispatchQueue.main.async {
-      self.processInputQueue()
-    }
-    
+    self.processInputQueue()
+
   }
 
-  public func addToInputQueue(message: OpenLCBMessage) {
-    inputQueue.append(message)
-  }
-  
   // This is running in the serial port's background thread
   
   internal func processInputQueue() {
@@ -371,11 +367,13 @@ extension OpenLCBCANGateway {
       return
     }
     
-    inputQueue.sort {$0.timeStamp < $1.timeStamp}
+    inputQueueLock.lock()
     
-    for message in inputQueue {
+    var index = 0
+    
+    while index < inputQueue.count {
       
-      inputQueue.removeFirst()
+      let message = inputQueue[index]
       
       if let alias = message.sourceNIDAlias, message.sourceNodeId == nil {
         message.sourceNodeId = aliasLookup[alias]
@@ -386,7 +384,7 @@ extension OpenLCBCANGateway {
       }
       
       if !message.isMessageComplete {
-        inputQueue.insert(message, at: 0)
+        index += 1
       }
       else {
         
@@ -462,7 +460,7 @@ extension OpenLCBCANGateway {
           }
           else {
             #if DEBUG
-            debugLog(message: "Producer Consumer Event Report without Event Id")
+            debugLog("Producer Consumer Event Report without Event Id")
             #endif
           }
 
@@ -471,16 +469,22 @@ extension OpenLCBCANGateway {
         }
 
         if route {
-     //     DispatchQueue.main.async {
+          DispatchQueue.main.async {
             self.sendMessage(gatewayNodeId: self.nodeId, message: message)
-     //     }
+          }
         }
+        
+        inputQueue.remove(at: index)
         
       }
       
     }
     
-    startWaitInputTimer(interval: 10.0 / 1000.0)
+    inputQueueLock.unlock()
+    
+    DispatchQueue.main.async {
+      self.startWaitInputTimer(interval: 0.100)
+    }
     
   }
 

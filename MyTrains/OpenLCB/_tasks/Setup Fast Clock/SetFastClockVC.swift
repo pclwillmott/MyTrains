@@ -95,7 +95,7 @@ class SetFastClockVC: NSViewController, NSWindowDelegate, OpenLCBClockDelegate, 
   
   @IBAction func btnSetAction(_ sender: NSButton) {
     
-    guard let networkLayer, let fastClock else {
+    guard let fastClock else {
       return
     }
     
@@ -145,7 +145,7 @@ class SetFastClockVC: NSViewController, NSWindowDelegate, OpenLCBClockDelegate, 
   
   @IBAction func swSwitchAction(_ sender: NSSwitch) {
 
-    guard let networkLayer, let fastClock else {
+    guard let fastClock else {
       return
     }
     

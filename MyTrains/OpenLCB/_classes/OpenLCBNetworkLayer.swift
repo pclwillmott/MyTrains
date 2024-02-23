@@ -15,13 +15,7 @@ public class OpenLCBNetworkLayer : NSObject, MTPipeDelegate {
   // MARK: Constructors
   
   public init(appNodeId:UInt64?) {
- 
-    #if DEBUG
-    debugLog(message: "init - \(Date.timeIntervalSinceReferenceDate)")
-    #endif
-
     super.init()
-
   }
   
   // MARK: Private Properties

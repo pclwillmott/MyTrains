@@ -876,7 +876,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
           
         case .querySpeeds:
           
-          sendQuerySpeedReply(destinationNodeId: message.sourceNodeId!, setSpeed: setSpeed, commandedSpeed: commandedSpeed, emergencyStop: emergencyStop)
+          sendQuerySpeedsReply(destinationNodeId: message.sourceNodeId!, setSpeed: setSpeed, commandedSpeed: commandedSpeed, emergencyStop: emergencyStop)
           
         case .queryFunction:
           

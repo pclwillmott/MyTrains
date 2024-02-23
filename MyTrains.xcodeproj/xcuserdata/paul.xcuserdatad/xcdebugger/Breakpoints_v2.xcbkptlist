@@ -62,8 +62,8 @@
             filePath = "MyTrains/OpenLCB/_classes/OpenLCBMessage.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "325"
-            endingLineNumber = "325"
+            startingLineNumber = "327"
+            endingLineNumber = "327"
             landmarkName = "datagramId"
             landmarkType = "24">
          </BreakpointContent>
@@ -146,6 +146,22 @@
             endingLineNumber = "241"
             landmarkName = "send(data:)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "70F863F8-17F5-46E0-B46B-92DC6AFB0681"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MyTrains/OpenLCB/_nodes/Virtual Node/OpenLCBNodeVirtual - Messages - Memory Configuration.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "325"
+            endingLineNumber = "325"
+            landmarkName = "OpenLCBNodeVirtual"
+            landmarkType = "21">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

@@ -125,7 +125,7 @@ public class OpenLCBNode : NSObject {
       
       guard acdiManufacturerSpaceVersion == 0x01 || acdiManufacturerSpaceVersion == 0x04 else {
         #if DEBUG
-        debugLog(message: "invalid acdiManufacturerSpaceVersion: 0x\(acdiManufacturerSpaceVersion.toHex(numberOfDigits: 2))")
+        debugLog("invalid acdiManufacturerSpaceVersion: 0x\(acdiManufacturerSpaceVersion.toHex(numberOfDigits: 2))")
         #endif
         return nil
       }
@@ -158,7 +158,7 @@ public class OpenLCBNode : NSObject {
       
       guard acdiUserSpaceVersion == 0x01 || acdiUserSpaceVersion == 0x02 else {
         #if DEBUG
-        debugLog(message: "invalid acdiUserSpaceVersion: 0x\(acdiUserSpaceVersion.toHex(numberOfDigits: 2))")
+        debugLog("invalid acdiUserSpaceVersion: 0x\(acdiUserSpaceVersion.toHex(numberOfDigits: 2))")
         #endif
         return nil
       }
@@ -191,7 +191,7 @@ public class OpenLCBNode : NSObject {
       
       #if DEBUG
       guard let value, !value.isEmpty else {
-        debugLog(message: "nil or no data bytes")
+        debugLog("nil or no data bytes")
         return
       }
       #endif
@@ -202,8 +202,8 @@ public class OpenLCBNode : NSObject {
       
       guard acdiManufacturerSpaceVersion == 0x01 || acdiManufacturerSpaceVersion == 0x04 else {
         #if DEBUG
-        debugLog(message: "invalid acdiManufacturerSpaceVersion: 0x\(acdiManufacturerSpaceVersion.toHex(numberOfDigits: 2)) id: \(nodeId.toHexDotFormat(numberOfBytes: 6))")
-        debugLog(message: "\(value)")
+        debugLog("invalid acdiManufacturerSpaceVersion: 0x\(acdiManufacturerSpaceVersion.toHex(numberOfDigits: 2)) id: \(nodeId.toHexDotFormat(numberOfBytes: 6))")
+        debugLog("\(value)")
         #endif
         return
       }
@@ -229,8 +229,8 @@ public class OpenLCBNode : NSObject {
       }
       
       #if DEBUG
-      guard !value.isEmpty else {
-        debugLog(message: "no data bytes")
+      guard !_value.isEmpty else {
+        debugLog("no data bytes")
         return
       }
       #endif
@@ -239,7 +239,7 @@ public class OpenLCBNode : NSObject {
       
       guard acdiUserSpaceVersion == 0x01 || acdiUserSpaceVersion == 0x02 else {
         #if DEBUG
-        debugLog(message: "invalid acdiUserSpaceVersion: 0x(\(acdiUserSpaceVersion.toHex(numberOfDigits: 2))")
+        debugLog("invalid acdiUserSpaceVersion: 0x(\(acdiUserSpaceVersion.toHex(numberOfDigits: 2))")
         #endif
         return
       }

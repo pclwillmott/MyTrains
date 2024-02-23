@@ -127,6 +127,10 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
   
   internal var outputQueue : [OpenLCBMessage] = []
   
+  internal var outputQueueLock = NSLock()
+  
+  internal var inputQueueLock = NSLock()
+  
   internal var inputQueue : [OpenLCBMessage] = []
   
   internal var internalNodes : Set<UInt64> = []
@@ -276,7 +280,10 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
 
   @objc func waitInputTimerTick() {
     stopWaitInputTimer()
-    processInputQueue()
+    DispatchQueue.global(qos: .userInteractive).async {
+      self.processInputQueue()
+    }
+    
   }
   
   internal func startWaitInputTimer(interval: TimeInterval) {
@@ -375,7 +382,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
       }
       else {
         #if DEBUG
-        debugLog(message: "Producer Consumer Event Report without Event Id")
+        debugLog("Producer Consumer Event Report without Event Id")
         #endif
       }
       
@@ -406,8 +413,8 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
       break
     }
     
-    addToOutputQueue(message: message)
-    
+    outputQueue.append(message)
+
     processOutputQueue()
 
   }

@@ -25,7 +25,7 @@ extension OpenLCBCANGateway {
 
   }
 
-  internal func sendVerifyNodeIdGlobal(destinationNodeId:UInt64) {
+  internal func sendVerifyNodeIdGlobalCAN(destinationNodeId:UInt64) {
     
     guard let sourceNIDAlias = nodeIdLookup[nodeId] else {
       return

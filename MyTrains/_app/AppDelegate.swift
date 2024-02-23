@@ -41,10 +41,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
   
   func applicationDidFinishLaunching(_ aNotification: Notification) {
 
-#if DEBUG
-  print("AppDelegate: applicationDidFinishLaunching - \(Date.timeIntervalSinceReferenceDate)")
-#endif
-
  //   appMode = .initializing
  //   appNodeId = nil
     

@@ -112,6 +112,12 @@
 		DA57A6E92A4496A1005C72B0 /* LocoNetLocomotiveState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA57A6E82A4496A1005C72B0 /* LocoNetLocomotiveState.swift */; };
 		DA58F00D2A45AA3700D36E90 /* LocoNetFunctionConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA58F00C2A45AA3700D36E90 /* LocoNetFunctionConstants.swift */; };
 		DA58F0112A45AE8400D36E90 /* DCCDecoderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA58F0102A45AE8400D36E90 /* DCCDecoderType.swift */; };
+		DA595E122B89084900ADF87B /* OpenLCBNodeVirtual - Messages - Simple Node Information Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA595E112B89084900ADF87B /* OpenLCBNodeVirtual - Messages - Simple Node Information Protocol.swift */; };
+		DA595E142B890AD700ADF87B /* OpenLCBNodeVirtual - Messages - Memory Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA595E132B890AD700ADF87B /* OpenLCBNodeVirtual - Messages - Memory Configuration.swift */; };
+		DA595E162B891D1D00ADF87B /* OpenLCBNodeVirtual - Messages - Traction Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA595E152B891D1D00ADF87B /* OpenLCBNodeVirtual - Messages - Traction Protocol.swift */; };
+		DA595E182B8924E600ADF87B /* OpenLCBNodeVirtual - Messages - Datagram Transport.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA595E172B8924E600ADF87B /* OpenLCBNodeVirtual - Messages - Datagram Transport.swift */; };
+		DA595E1A2B89270B00ADF87B /* OpenLCBNodeVirtual - Messages - Event Transport.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA595E192B89270B00ADF87B /* OpenLCBNodeVirtual - Messages - Event Transport.swift */; };
+		DA595E1C2B892C5D00ADF87B /* OpenLCBNodeVirtual - Messages - Message Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA595E1B2B892C5D00ADF87B /* OpenLCBNodeVirtual - Messages - Message Network.swift */; };
 		DA5A9F90295C89FC00950479 /* NumberBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5A9F8F295C89FC00950479 /* NumberBase.swift */; };
 		DA5B4601276F4E38005CA03C /* DatabaseConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5B4600276F4E38005CA03C /* DatabaseConstants.swift */; };
 		DA5B4607276F6917005CA03C /* ComboBoxDBDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5B4606276F6917005CA03C /* ComboBoxDBDS.swift */; };
@@ -418,6 +424,12 @@
 		DA57A6E82A4496A1005C72B0 /* LocoNetLocomotiveState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoNetLocomotiveState.swift; sourceTree = "<group>"; };
 		DA58F00C2A45AA3700D36E90 /* LocoNetFunctionConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoNetFunctionConstants.swift; sourceTree = "<group>"; };
 		DA58F0102A45AE8400D36E90 /* DCCDecoderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DCCDecoderType.swift; sourceTree = "<group>"; };
+		DA595E112B89084900ADF87B /* OpenLCBNodeVirtual - Messages - Simple Node Information Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OpenLCBNodeVirtual - Messages - Simple Node Information Protocol.swift"; sourceTree = "<group>"; };
+		DA595E132B890AD700ADF87B /* OpenLCBNodeVirtual - Messages - Memory Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OpenLCBNodeVirtual - Messages - Memory Configuration.swift"; sourceTree = "<group>"; };
+		DA595E152B891D1D00ADF87B /* OpenLCBNodeVirtual - Messages - Traction Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OpenLCBNodeVirtual - Messages - Traction Protocol.swift"; sourceTree = "<group>"; };
+		DA595E172B8924E600ADF87B /* OpenLCBNodeVirtual - Messages - Datagram Transport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OpenLCBNodeVirtual - Messages - Datagram Transport.swift"; sourceTree = "<group>"; };
+		DA595E192B89270B00ADF87B /* OpenLCBNodeVirtual - Messages - Event Transport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OpenLCBNodeVirtual - Messages - Event Transport.swift"; sourceTree = "<group>"; };
+		DA595E1B2B892C5D00ADF87B /* OpenLCBNodeVirtual - Messages - Message Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OpenLCBNodeVirtual - Messages - Message Network.swift"; sourceTree = "<group>"; };
 		DA5A9F8F295C89FC00950479 /* NumberBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberBase.swift; sourceTree = "<group>"; };
 		DA5B4600276F4E38005CA03C /* DatabaseConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseConstants.swift; sourceTree = "<group>"; };
 		DA5B4606276F6917005CA03C /* ComboBoxDBDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComboBoxDBDS.swift; sourceTree = "<group>"; };
@@ -1232,8 +1244,14 @@
 		DABC51FE2B8218E300C45423 /* Virtual Node */ = {
 			isa = PBXGroup;
 			children = (
-				DAF3746E2A1A2A9B009E91F0 /* OpenLCBNodeVirtual.swift */,
+				DA595E172B8924E600ADF87B /* OpenLCBNodeVirtual - Messages - Datagram Transport.swift */,
+				DA595E192B89270B00ADF87B /* OpenLCBNodeVirtual - Messages - Event Transport.swift */,
+				DA595E1B2B892C5D00ADF87B /* OpenLCBNodeVirtual - Messages - Message Network.swift */,
+				DA595E132B890AD700ADF87B /* OpenLCBNodeVirtual - Messages - Memory Configuration.swift */,
+				DA595E112B89084900ADF87B /* OpenLCBNodeVirtual - Messages - Simple Node Information Protocol.swift */,
+				DA595E152B891D1D00ADF87B /* OpenLCBNodeVirtual - Messages - Traction Protocol.swift */,
 				DABC51FF2B821DD400C45423 /* OpenLCBNodeVirtual - Messages.swift */,
+				DAF3746E2A1A2A9B009E91F0 /* OpenLCBNodeVirtual.swift */,
 			);
 			path = "Virtual Node";
 			sourceTree = "<group>";
@@ -1567,6 +1585,7 @@
 				DA467BAB281D56A700AB9650 /* SwitchBoardEditorView.swift in Sources */,
 				DA1B79F9285F3885009E1189 /* UnitSpeed.swift in Sources */,
 				DACC2D822AA4B72800433CA8 /* OpenLCBEventWithPayloadFormat.swift in Sources */,
+				DA595E1A2B89270B00ADF87B /* OpenLCBNodeVirtual - Messages - Event Transport.swift in Sources */,
 				DAA83DED272C37670075CBCD /* MainVC.swift in Sources */,
 				DA80205B2B7CEE730090DEC8 /* EventRange.swift in Sources */,
 				DAED17202A5ABC8D0051C9AF /* OpenLCBCANGateway.swift in Sources */,
@@ -1594,6 +1613,7 @@
 				DA95D6BD280833FE00D9F1B6 /* GroupSetupVC.swift in Sources */,
 				DA9B87282A2B979E00E9969E /* DBEditorView.swift in Sources */,
 				DA0949482B81085C00545650 /* mtpipe.c in Sources */,
+				DA595E142B890AD700ADF87B /* OpenLCBNodeVirtual - Messages - Memory Configuration.swift in Sources */,
 				DA48EE29293CEF16006C26A0 /* DayOfWeek.swift in Sources */,
 				DAF4DD50289ABDDE000B848E /* SpeedProfileResultsType.swift in Sources */,
 				DAAC7E932A79514E001A424E /* OpenLCBProgrammerToolDelegate.swift in Sources */,
@@ -1605,6 +1625,8 @@
 				DAF4DD4E289A9901000B848E /* BestFitMethod.swift in Sources */,
 				DA50C2F32B77AC1A00C2F6A1 /* UnitTime.swift in Sources */,
 				DAA777CA2A20C84C008EAF02 /* OpenLCBClock.swift in Sources */,
+				DA595E122B89084900ADF87B /* OpenLCBNodeVirtual - Messages - Simple Node Information Protocol.swift in Sources */,
+				DA595E182B8924E600ADF87B /* OpenLCBNodeVirtual - Messages - Datagram Transport.swift in Sources */,
 				DA50C2F72B77F09F00C2F6A1 /* SignalType.swift in Sources */,
 				DAA54F7F2A217CDA005CED7E /* OpenLCBNodeConfigurationTool.swift in Sources */,
 				DABC089B2B1B895B00260605 /* LocoNetIMMPacketRepeat.swift in Sources */,
@@ -1612,6 +1634,7 @@
 				DAA777CC2A20C861008EAF02 /* OpenLCBClockType.swift in Sources */,
 				DA5563D82B499C4600D8BF90 /* CDITextViewVC.swift in Sources */,
 				DA9C6A1E2A408F060069FED8 /* OpenLCBTractionControlInstructionType.swift in Sources */,
+				DA595E162B891D1D00ADF87B /* OpenLCBNodeVirtual - Messages - Traction Protocol.swift in Sources */,
 				DA7A127429E2DCCD000DCE1C /* UIntExtensions.swift in Sources */,
 				DAAC7E8D2A792693001A424E /* OpenLCBProgrammerToolNode.swift in Sources */,
 				DA50C2F52B77B8D400C2F6A1 /* SensorType.swift in Sources */,
@@ -1686,6 +1709,7 @@
 				DAB4A7392B3F0E7D00CD5256 /* CDIGroupView.swift in Sources */,
 				DA60140529F4162500AD9ACD /* ViewLCCNetworkTableViewDS.swift in Sources */,
 				DAAC7E8F2A7926D2001A424E /* OpenLCBProgrammingTrackNode.swift in Sources */,
+				DA595E1C2B892C5D00ADF87B /* OpenLCBNodeVirtual - Messages - Message Network.swift in Sources */,
 				DA123A552A505102000E63E2 /* Parity.swift in Sources */,
 				DA467BA5281D519700AB9650 /* SwitchBoardShape.swift in Sources */,
 				DA6A0BCC2A45C01E00BF40C9 /* DCCBinaryState.swift in Sources */,

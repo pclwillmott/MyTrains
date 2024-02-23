@@ -51,31 +51,29 @@ public class OpenLCBMemorySpace {
   public var description : String = ""
   
   public var isReadOnly : Bool {
-    get {
-      return _isReadOnly
-    }
+    return _isReadOnly
   }
   
   public var addressSpaceInformation: OpenLCBNodeAddressSpaceInformation {
-    get {
-      var result : OpenLCBNodeAddressSpaceInformation
-      result.addressSpace = space
-      result.highestAddress = UInt32(memory.count - 1)
-      result.realHighestAddress = result.highestAddress
-      
-      if let standardSpace, standardSpace == .cv {
-        result.highestAddress |= OpenLCBProgrammingMode.defaultProgrammingModeBit7.rawValue
-      }
     
-      result.lowestAddress = UInt32(0)
-      result.size = UInt32(memory.count)
-      result.isReadOnly = isReadOnly
-      result.description = description
-      return result
+    var result : OpenLCBNodeAddressSpaceInformation
+    
+    result.addressSpace = space
+    result.highestAddress = UInt32(memory.count - 1)
+    result.realHighestAddress = result.highestAddress
+    
+    if let standardSpace, standardSpace == .cv {
+      result.highestAddress |= OpenLCBProgrammingMode.defaultProgrammingModeBit7.rawValue
     }
-  }
   
-  // MARK: Private Methods
+    result.lowestAddress = UInt32(0)
+    result.size = UInt32(memory.count)
+    result.isReadOnly = isReadOnly
+    result.description = description
+    
+    return result
+    
+  }
   
   // MARK: Public Methods
   
@@ -167,7 +165,7 @@ public class OpenLCBMemorySpace {
     
     guard isWithinSpace(address: address, count: count) else {
       #if DEBUG
-      print("getBlock: address:\(address) count:\(count) \(addressSpaceInformation)" )
+      debugLog("address:\(address) count:\(count) \(addressSpaceInformation)" )
       #endif
       return nil
     }
@@ -206,7 +204,7 @@ public class OpenLCBMemorySpace {
             floatValue = Double(bigEndianData: floatBytes)!
           default:
             #if DEBUG
-            print("OpenLCBMemorySpace.getBlock: unexpected unitConversionType.numberOfBytes - \(unitConversionType.numberOfBytes)")
+            debugLog("unexpected unitConversionType.numberOfBytes - \(unitConversionType.numberOfBytes)")
             #endif
           }
           
@@ -242,7 +240,7 @@ public class OpenLCBMemorySpace {
             floatBytes = newValue.bigEndianData
           default:
             #if DEBUG
-            print("OpenLCBMemorySpace.getBlock: unexpected unitConversionType.numberOfBytes - \(unitConversionType.numberOfBytes)")
+            debugLog("unexpected unitConversionType.numberOfBytes - \(unitConversionType.numberOfBytes)")
             #endif
           }
 
@@ -304,23 +302,21 @@ public class OpenLCBMemorySpace {
   
     guard isWithinSpace(address: address, count: fieldSize) else {
       #if DEBUG
-      print("setString: address + fieldSize - 1 < memory.count >= memory.count \"\(value)\"" )
+      debugLog("address + fieldSize - 1 < memory.count >= memory.count \"\(value)\"" )
       #endif
       return
     }
     
     guard value.utf8.count < fieldSize else {
       #if DEBUG
-      print("setString: value.utf8.count >= fieldSize \"\(value)\"" )
+      debugLog("value.utf8.count >= fieldSize \"\(value)\"" )
       #endif
       return
     }
 
     var data : [UInt8] = []
 
-    for byte in value.utf8 {
-      data.append(UInt8(byte))
-    }
+    data.append(contentsOf: value.utf8)
 
     var index = data.count
 
@@ -337,7 +333,7 @@ public class OpenLCBMemorySpace {
     
     guard isWithinSpace(address: address, count: data.count) else {
       #if DEBUG
-      print("setBlock: address + data.count - 1 >= memory.count" )
+      debugLog("address + data.count - 1 >= memory.count" )
       #endif
       return
     }
@@ -367,7 +363,7 @@ public class OpenLCBMemorySpace {
             floatValue = getDouble(address: floatAddress)!
           default:
             #if DEBUG
-            print("OpenLCBMemorySpace.setBlock: unexpected unitConversionType.numberOfBytes - \(unitConversionType.numberOfBytes)")
+            debugLog("unexpected unitConversionType.numberOfBytes - \(unitConversionType.numberOfBytes)")
             #endif
           }
           
@@ -401,7 +397,7 @@ public class OpenLCBMemorySpace {
             setDouble(address: floatAddress, value: newValue)
           default:
             #if DEBUG
-            print("OpenLCBMemorySpace.setBlock: unexpected unitConversionType.numberOfBytes - \(unitConversionType.numberOfBytes)")
+            debugLog("unexpected unitConversionType.numberOfBytes - \(unitConversionType.numberOfBytes)")
             #endif
           }
 
@@ -695,7 +691,9 @@ public class OpenLCBMemorySpace {
       
       while reader.read() {
         let result = OpenLCBMemorySpace(reader: reader, isReadOnly: true, description: "")
-        print("*** \(result.nodeId.toHexDotFormat(numberOfBytes: 6)) - 0x\(result.space.toHex(numberOfDigits: 2)) PK: \(result.primaryKey) \(result.memory)")
+        
+ //       print("*** \(result.nodeId.toHexDotFormat(numberOfBytes: 6)) - 0x\(result.space.toHex(numberOfDigits: 2)) PK: \(result.primaryKey) \(result.memory)")
+        
       }
       
       reader.close()

@@ -22,10 +22,6 @@ public class MyTrainsController : NSObject, NSUserNotificationCenterDelegate {
     
     super.init()
 
-#if DEBUG
-  print("MyTrainsController: init - \(Date.timeIntervalSinceReferenceDate)")
-#endif
-
     checkPortsTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(checkPortsTimerAction), userInfo: nil, repeats: true)
     
     RunLoop.current.add(checkPortsTimer!, forMode: .common)

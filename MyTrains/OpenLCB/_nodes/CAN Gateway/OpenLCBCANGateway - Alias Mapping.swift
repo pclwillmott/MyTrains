@@ -13,7 +13,7 @@ extension OpenLCBCANGateway {
     
     aliasLookup[alias] = nodeId
     nodeIdLookup[nodeId] = alias
-    
+    /*
     for item in inputQueue {
       if let sourceAlias = item.sourceNIDAlias, sourceAlias == alias {
         item.sourceNodeId = nodeId
@@ -31,7 +31,7 @@ extension OpenLCBCANGateway {
         item.destinationNIDAlias = alias
       }
     }
-    
+    */
   }
   
   internal func removeNodeIdAliasMapping(nodeId:UInt64) {

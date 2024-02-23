@@ -47,7 +47,7 @@ public class MTPipe : NSObject {
   
   private func monitorPipe() {
     
-    let kInitialBufferSize = 0x1000
+    let kInitialBufferSize = 0x10000
     
     let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: kInitialBufferSize)
     
@@ -101,7 +101,7 @@ public class MTPipe : NSObject {
         return
       }
 
-      DispatchQueue.global(qos: .background).async {
+      DispatchQueue.global(qos: .userInitiated /*.background */).async {
         self.monitorPipe()
       }
       
@@ -122,14 +122,14 @@ public class MTPipe : NSObject {
   
   public func sendOpenLCBMessage(message:OpenLCBMessage) {
     guard isOpen else {
-      debugLog(message: "pipe not open")
+      debugLog("pipe not open")
       return
     }
     if let fullMessage = message.fullMessage {
       write(data: fullMessage)
     }
     else {
-      debugLog(message: "fullMessage failed")
+      debugLog("fullMessage failed")
     }
   }
   
@@ -159,6 +159,7 @@ public class MTPipe : NSObject {
   
   // MARK: Public Class Methods
   
+  /*
   public static func sendOpenLCBMessage(node:OpenLCBNodeVirtual, message:OpenLCBMessage) {
     
     let pipe = MTPipe(name: node.pipeName)
@@ -166,7 +167,7 @@ public class MTPipe : NSObject {
     pipe.open()
     
     guard pipe.isOpen, let data = message.fullMessage else {
-      debugLog(message: "fail")
+      debugLog("fail")
       return
     }
     
@@ -174,7 +175,8 @@ public class MTPipe : NSObject {
     
     pipe.close()
     
-    debugLog(message: "TX: \(node.nodeId.toHexDotFormat(numberOfBytes: 6))")
+    debugLog("TX: \(node.nodeId.toHexDotFormat(numberOfBytes: 6))")
   }
-
+  */
+  
 }

@@ -222,7 +222,7 @@ class MainVC: NSViewController, MyTrainsControllerDelegate, LayoutDelegate, Open
     
     if let layout = myTrainsController.layout, let networkLayer = myTrainsController.openLCBNetworkLayer {
       
-      for (key, node) in networkLayer.virtualNodeLookup {
+      for (_, node) in networkLayer.virtualNodeLookup {
         if node.isSwitchboardNode {
           networkLayer.deleteNode(nodeId: node.nodeId)
         }
@@ -233,7 +233,7 @@ class MainVC: NSViewController, MyTrainsControllerDelegate, LayoutDelegate, Open
         networkLayer.createVirtualNode(virtualNodeType: .switchboardPanelNode, completion: newNodeCompletion(node:))
       }
 
-      for (key, item) in layout.switchBoardItems {
+      for (_, item) in layout.switchBoardItems {
         items.append(item)
         networkLayer.createVirtualNode(virtualNodeType: .switchboardItemNode, completion: newNodeCompletion(node:))
       }
@@ -252,10 +252,6 @@ class MainVC: NSViewController, MyTrainsControllerDelegate, LayoutDelegate, Open
   var groupLookup : [Int:SwitchboardItemNode] = [:]
   
   func newNodeCompletion(node:OpenLCBNodeVirtual) {
-    
-    guard let networkLayer = myTrainsController.openLCBNetworkLayer else {
-      return
-    }
     
     node.hostAppNodeId = node.virtualNodeType == .applicationNode ? node.nodeId : appNodeId!
     

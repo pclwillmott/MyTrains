@@ -1452,7 +1452,7 @@
       }
     },
     "Create Application Node" : {
-      "comment" : "Used for the Create Application Node menu item title\nUsed for the title of the Create Application Node window",
+      "comment" : "Used for the title of the Create Application Node window\nUsed for the Create Application Node menu item title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1616,7 +1616,7 @@
 
     },
     "DCC Programmer Tool" : {
-      "comment" : "Used for the DCC Programmer Tool menu item title\nUsed to create a default OpenLCB virtual name",
+      "comment" : "Used to create a default OpenLCB virtual name\nUsed for the DCC Programmer Tool menu item title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2231,7 +2231,7 @@
       }
     },
     "Fast Clock" : {
-      "comment" : "Used for the Fast Clock menu item title\nUsed to indicate a clock's type",
+      "comment" : "Used to indicate a clock's type\nUsed for the Fast Clock menu item title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -4197,7 +4197,7 @@
       }
     },
     "Select Layout" : {
-      "comment" : "Used for the Select Layout menu item\nUsed for the title of the Select Layout window",
+      "comment" : "Used for the title of the Select Layout window\nUsed for the Select Layout menu item",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -4212,6 +4212,9 @@
           }
         }
       }
+    },
+    "Sending unadvertised event" : {
+
     },
     "Sensor" : {
       "comment" : "This is used to describe a switchboard item."
@@ -4673,6 +4676,16 @@
     "Teaching/Learning Configuration Protocol" : {
 
     },
+    "The node \"%@\" (%@) is attempting to send the unadvertised event: %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The node \"%1$@\" (%2$@) is attempting to send the unadvertised event: %3$@"
+          }
+        }
+      }
+    },
     "Third Rail" : {
       "comment" : "Used to indicate that the track models 3rd rail electrification",
       "localizations" : {
@@ -4945,7 +4958,7 @@
       "comment" : "This is the name of a country."
     },
     "Unknown" : {
-      "comment" : "Used to indicate the state of a turnout\nUsed to indicate that the type of something is unknown",
+      "comment" : "Used to indicate that the type of something is unknown\nUsed to indicate the state of a turnout",
       "localizations" : {
         "en" : {
           "stringUnit" : {

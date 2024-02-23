@@ -263,7 +263,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     if let item = getUniqueNodeIdQueue.first {
       getUniqueNodeIdInProgress = true
       startTimeoutTimer(interval: 1.0)
-      sendVerifyNodeIdNumberAddressed(destinationNodeId: item.candidate)
+      sendVerifyNodeIdAddressed(destinationNodeId: item.candidate)
     }
   }
   

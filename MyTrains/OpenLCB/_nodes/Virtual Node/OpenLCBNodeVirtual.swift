@@ -708,10 +708,6 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   
   public func memorySpaceChanged(memorySpace: OpenLCBMemorySpace, startAddress: Int, endAddress: Int) {
     
-    guard let networkLayer else {
-      return
-    }
-    
     var newUserConfigEventsConsumed = userConfigEventsConsumed
     var newUserConfigEventsProduced = userConfigEventsProduced
     
@@ -764,7 +760,9 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   public func openLCBMessageReceived(message: OpenLCBMessage) {
     
     guard let sourceNodeId = message.sourceNodeId else {
-      debugLog(message: "no sourceNodeId")
+      #if DEBUG
+      debugLog("no sourceNodeId")
+      #endif
       return
     }
 
@@ -776,12 +774,12 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
       }
 
     case .verifyNodeIDAddressed:
-      sendVerifiedNodeIdNumber(isSimpleSetSufficient: false)
+      sendVerifiedNodeId(isSimpleSetSufficient: false)
 
     case .verifyNodeIDGlobal:
       let id = UInt64(bigEndianData: message.payload)
       if message.payload.isEmpty || id! == nodeId {
-       sendVerifiedNodeIdNumber(isSimpleSetSufficient: false)
+       sendVerifiedNodeId(isSimpleSetSufficient: false)
       }
       
     case .protocolSupportInquiry:
@@ -902,9 +900,11 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
               readCVs(sourceNodeId: sourceNodeId, memorySpace: memorySpace, startAddress: startAddress, count: readCount)
             }
             else {
-              
-              if let data = memorySpace.getBlock(address: Int(startAddress), count: Int(readCount), isInternal: false) {
-                sendReadReply(destinationNodeId: sourceNodeId, addressSpace: space, startAddress: startAddress, data: data)
+              if memorySpace.isWithinSpace(address: Int(startAddress), count: 1) {
+                let remaining = memorySpace.addressSpaceInformation.realHighestAddress - startAddress + 1
+                if let data = memorySpace.getBlock(address: Int(startAddress), count: min(Int(remaining), Int(readCount)), isInternal: false) {
+                  sendReadReply(destinationNodeId: sourceNodeId, addressSpace: space, startAddress: startAddress, data: data)
+                }
               }
               else {
                 sendReadReplyFailure(destinationNodeId: sourceNodeId, addressSpace: space, startAddress: startAddress, errorCode: .permanentErrorAddressOutOfBounds)

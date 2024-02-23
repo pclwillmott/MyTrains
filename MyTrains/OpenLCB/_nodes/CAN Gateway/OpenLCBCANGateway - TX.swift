@@ -28,10 +28,6 @@ extension OpenLCBCANGateway {
     }
   }
 
-  public func addToOutputQueue(message: OpenLCBMessage) {
-    outputQueue.append(message)
-  }
-
   // This is running in the main thread
   
   internal func processOutputQueue() {
@@ -42,18 +38,20 @@ extension OpenLCBCANGateway {
       return
     }
     
-    outputQueue.sort {$0.timeStamp < $1.timeStamp}
+    outputQueueLock.lock()
     
-    for message in outputQueue {
+    var index = 0
+    
+    while index < outputQueue.count {
       
-      outputQueue.removeFirst()
+      let message = outputQueue[index]
       
       if message.sourceNIDAlias == nil, let id = message.sourceNodeId {
         if let alias = nodeIdLookup[id] {
           message.sourceNIDAlias = alias
         }
         else {
-          sendVerifyNodeIdGlobal(destinationNodeId: id)
+          sendVerifyNodeIdGlobalCAN(destinationNodeId: id)
         }
       }
       
@@ -62,12 +60,12 @@ extension OpenLCBCANGateway {
           message.destinationNIDAlias = alias
         }
         else {
-          sendVerifyNodeIdGlobal(destinationNodeId: id)
+          sendVerifyNodeIdGlobalCAN(destinationNodeId: id)
         }
       }
       
       if !message.isMessageComplete {
-        outputQueue.insert(message, at: 0)
+        index += 1
       }
       else {
         
@@ -195,11 +193,15 @@ extension OpenLCBCANGateway {
           
         }
         
+        outputQueue.remove(at: index)
+        
       }
       
     }
     
-    startWaitTimer(interval: 10.0 / 1000.0)
+    outputQueueLock.unlock()
+    
+    startWaitTimer(interval: 0.100)
     
   }
 

@@ -268,7 +268,7 @@ public class LayoutNode : OpenLCBNodeVirtual {
   }
   
   internal override func completeStartUp() {
-    guard let networkLayer, let appNodeId else {
+    guard let appNodeId else {
       return
     }
     sendWellKnownEvent(eventId: layoutState == .activated ? .myTrainsLayoutActivated : .myTrainsLayoutDeactivated, payload: appNodeId.nodeIdBigEndianData)

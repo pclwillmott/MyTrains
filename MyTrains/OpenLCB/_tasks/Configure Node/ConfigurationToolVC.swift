@@ -187,7 +187,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
 
       CDI = []
       
-      configurationTool.sendNodeMemoryReadRequest(destinationNodeId: node!.nodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cdi.rawValue, startAddress: nextCDIStartAddress, numberOfBytesToRead: 64)
+      configurationTool.sendReadCommand(destinationNodeId: node!.nodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cdi.rawValue, startAddress: nextCDIStartAddress, numberOfBytesToRead: 64)
 
     }
 
@@ -616,7 +616,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
       
       let bytesToRead = UInt8(min(64, memoryMap[currentMemoryBlock].size))
       
-      configurationTool.sendNodeMemoryReadRequest(destinationNodeId: node.nodeId, addressSpace: memoryMap[currentMemoryBlock].space, startAddress: nextCDIStartAddress, numberOfBytesToRead: bytesToRead)
+      configurationTool.sendReadCommand(destinationNodeId: node.nodeId, addressSpace: memoryMap[currentMemoryBlock].space, startAddress: nextCDIStartAddress, numberOfBytesToRead: bytesToRead)
       
     }
 
@@ -734,7 +734,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
               dataToWrite.removeFirst()
               
               if !dataToWrite.isEmpty {
-                configurationTool.sendNodeMemoryWriteRequest(destinationNodeId: node.nodeId, addressSpace: dataToWrite[0].space, startAddress: dataToWrite[0].address, dataToWrite: dataToWrite[0].data)
+                configurationTool.sendWriteCommand(destinationNodeId: node.nodeId, addressSpace: dataToWrite[0].space, startAddress: dataToWrite[0].address, dataToWrite: dataToWrite[0].data)
               }
               else {
                 state = .idle
@@ -789,7 +789,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
                 dataToWrite.removeFirst()
                 
                 if !dataToWrite.isEmpty {
-                  configurationTool.sendNodeMemoryWriteRequest(destinationNodeId: node.nodeId, addressSpace: dataToWrite[0].space, startAddress: dataToWrite[0].address, dataToWrite: dataToWrite[0].data)
+                  configurationTool.sendWriteCommand(destinationNodeId: node.nodeId, addressSpace: dataToWrite[0].space, startAddress: dataToWrite[0].address, dataToWrite: dataToWrite[0].data)
                 }
                 else {
                   stopTimer()
@@ -856,7 +856,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
                     
                     nextCDIStartAddress += data.count
                     
-                    configurationTool.sendNodeMemoryReadRequest(destinationNodeId: node.nodeId, addressSpace: memoryMap[currentMemoryBlock].space, startAddress: nextCDIStartAddress, numberOfBytesToRead: bytesToRead)
+                    configurationTool.sendReadCommand(destinationNodeId: node.nodeId, addressSpace: memoryMap[currentMemoryBlock].space, startAddress: nextCDIStartAddress, numberOfBytesToRead: bytesToRead)
 
                   }
                   else {
@@ -869,7 +869,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
                       
                       let bytesToRead = UInt8(min(64, memoryMap[currentMemoryBlock].size))
                       
-                      configurationTool.sendNodeMemoryReadRequest(destinationNodeId: node.nodeId, addressSpace: memoryMap[currentMemoryBlock].space, startAddress: nextCDIStartAddress, numberOfBytesToRead: bytesToRead)
+                      configurationTool.sendReadCommand(destinationNodeId: node.nodeId, addressSpace: memoryMap[currentMemoryBlock].space, startAddress: nextCDIStartAddress, numberOfBytesToRead: bytesToRead)
                       
                     }
                     else {
@@ -944,14 +944,16 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
                     
                     nextCDIStartAddress += data.count
                     
-                    configurationTool.sendNodeMemoryReadRequest(destinationNodeId: node.nodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cdi.rawValue, startAddress: nextCDIStartAddress, numberOfBytesToRead: 64)
+                    configurationTool.sendReadCommand(destinationNodeId: node.nodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cdi.rawValue, startAddress: nextCDIStartAddress, numberOfBytesToRead: 64)
                     
                   }
                   
                 }
                 
                 else {
-                  print("error: bad address - \(startAddress.toHex(numberOfDigits: 8))")
+                  #if DEBUG
+                  debugLog("bad address - \(startAddress.toHex(numberOfDigits: 8))")
+                  #endif
                   state = .idle
                 }
                 
@@ -1181,7 +1183,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
       
       let bytesToRead = UInt8(min(64, memoryMap[currentMemoryBlock].size))
       
-      configurationTool.sendNodeMemoryReadRequest(destinationNodeId: node.nodeId, addressSpace: memoryMap[currentMemoryBlock].space, startAddress: nextCDIStartAddress, numberOfBytesToRead: bytesToRead)
+      configurationTool.sendReadCommand(destinationNodeId: node.nodeId, addressSpace: memoryMap[currentMemoryBlock].space, startAddress: nextCDIStartAddress, numberOfBytesToRead: bytesToRead)
 
     }
   
@@ -1214,7 +1216,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
         address += block.count
       }
       
-      configurationTool.sendNodeMemoryWriteRequest(destinationNodeId: node.nodeId, addressSpace: dataToWrite[0].space, startAddress: dataToWrite[0].address, dataToWrite: dataToWrite[0].data)
+      configurationTool.sendWriteCommand(destinationNodeId: node.nodeId, addressSpace: dataToWrite[0].space, startAddress: dataToWrite[0].address, dataToWrite: dataToWrite[0].data)
 
     }
 
@@ -1234,7 +1236,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
 
     getNewEventIdTextField = textField
     
-    configurationTool.sendGetUniqueEventIdCommand(destinationNodeId: node.nodeId, numberOfEventIds: 1)
+    configurationTool.sendGetUniqueIDCommand(destinationNodeId: node.nodeId, numberOfEventIds: 1)
     
   }
 
@@ -1269,7 +1271,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
   
   @IBAction func btnRebootAction(_ sender: NSButton) {
     if let configurationTool {
-      configurationTool.sendRebootCommand(destinationNodeId: node!.nodeId)
+      configurationTool.sendResetRebootCommand(destinationNodeId: node!.nodeId)
     }
   }
   
@@ -1287,7 +1289,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
 
     if alert.runModal() == NSApplication.ModalResponse.alertSecondButtonReturn {
       if let configurationTool {
-        configurationTool.sendResetToDefaults(destinationNodeId: node!.nodeId)
+        configurationTool.sendReinitializeFactoryResetCommand(destinationNodeId: node!.nodeId)
       }
     }
 
@@ -1337,7 +1339,7 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
 
     state = .writingMemory
     
-    configurationTool.sendNodeMemoryWriteRequest(destinationNodeId: node.nodeId, addressSpace: dataToWrite[0].space, startAddress: dataToWrite[0].address, dataToWrite: dataToWrite[0].data)
+    configurationTool.sendWriteCommand(destinationNodeId: node.nodeId, addressSpace: dataToWrite[0].space, startAddress: dataToWrite[0].address, dataToWrite: dataToWrite[0].data)
 
   }
 

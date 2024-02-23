@@ -135,7 +135,7 @@ class ViewNodeInfoVC: NSViewController, NSWindowDelegate, OpenLCBConfigurationTo
   
   func openLCBMessageReceived(message: OpenLCBMessage) {
     
-    guard let networkLayer, let node, message.destinationNodeId == nodeId && message.sourceNodeId == node.nodeId else {
+    guard let node, message.destinationNodeId == nodeId && message.sourceNodeId == node.nodeId else {
       return
     }
     

@@ -26,7 +26,9 @@ public class OpenLCBMessage : NSObject {
     var data = fullMessage
     
     guard data.count >= 29 else {
-      debugLog(message: "decode error \(data.count)")
+      #if DEBUG
+      debugLog("decode error \(data.count)")
+      #endif
       return nil
     }
     

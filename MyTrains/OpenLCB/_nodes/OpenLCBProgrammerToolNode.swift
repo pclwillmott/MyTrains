@@ -123,7 +123,7 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
       _dccTrainNodeId = value
       ioState = .readingMemorySpaceInformationWaitingForAck
       delegate?.statusUpdate?(ProgrammerTool: self, status: "")
-      sendGetMemorySpaceInformationRequest(destinationNodeId: _dccTrainNodeId, wellKnownAddressSpace: .cv)
+      sendGetMemorySpaceInformationCommand(destinationNodeId: _dccTrainNodeId, wellKnownAddressSpace: .cv)
     }
   }
   
@@ -233,7 +233,7 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
       
       ioCount = 1
       
-      sendNodeMemoryReadRequest(destinationNodeId: dccTrainNodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: ioAddress, numberOfBytesToRead: 1)
+      sendReadCommand(destinationNodeId: dccTrainNodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: ioAddress, numberOfBytesToRead: 1)
       
     }
     
@@ -256,7 +256,7 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
     delegate?.statusUpdate?(ProgrammerTool: self, status: "")
     delegate?.statusUpdate?(ProgrammerTool: self, status: "Get CV\(ioAddress + 1): ")
 
-    sendNodeMemoryReadRequest(destinationNodeId: target, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: Int(ioStartAddress), numberOfBytesToRead: 1)
+    sendReadCommand(destinationNodeId: target, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: Int(ioStartAddress), numberOfBytesToRead: 1)
 
   }
   
@@ -278,7 +278,7 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
     
     delegate?.statusUpdate?(ProgrammerTool: self, status: "Get CV\(ioAddress + 1): ")
     
-    sendNodeMemoryReadRequest(destinationNodeId: target, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: Int(ioStartAddress), numberOfBytesToRead: 1)
+    sendReadCommand(destinationNodeId: target, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: Int(ioStartAddress), numberOfBytesToRead: 1)
 
   }
   
@@ -300,7 +300,7 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
     
     delegate?.statusUpdate?(ProgrammerTool: self, status: "Get CV\(ioAddress + 1): ")
     
-    sendNodeMemoryReadRequest(destinationNodeId: target, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: Int(ioStartAddress), numberOfBytesToRead: 1)
+    sendReadCommand(destinationNodeId: target, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: Int(ioStartAddress), numberOfBytesToRead: 1)
 
   }
 
@@ -322,7 +322,7 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
     
     delegate?.statusUpdate?(ProgrammerTool: self, status: "Get CV\(ioAddress + 1): ")
     
-    sendNodeMemoryReadRequest(destinationNodeId: target, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: Int(ioStartAddress), numberOfBytesToRead: 1)
+    sendReadCommand(destinationNodeId: target, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: Int(ioStartAddress), numberOfBytesToRead: 1)
 
   }
 
@@ -350,7 +350,7 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
     delegate?.statusUpdate?(ProgrammerTool: self, status: "")
     delegate?.statusUpdate?(ProgrammerTool: self, status: "Set CV\(ioAddress + 1): ")
     
-    sendNodeMemoryWriteRequest(destinationNodeId: target, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: Int(ioStartAddress), dataToWrite: [cvs[ioAddress]])
+    sendWriteCommand(destinationNodeId: target, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: Int(ioStartAddress), dataToWrite: [cvs[ioAddress]])
 
   }
 
@@ -371,7 +371,7 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
     delegate?.statusUpdate?(ProgrammerTool: self, status: "")
     delegate?.statusUpdate?(ProgrammerTool: self, status: "Set CV\(ioAddress + 1): ")
     
-    sendNodeMemoryWriteRequest(destinationNodeId: target, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: Int(ioStartAddress), dataToWrite: [cvs[ioAddress]])
+    sendWriteCommand(destinationNodeId: target, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: Int(ioStartAddress), dataToWrite: [cvs[ioAddress]])
 
   }
 
@@ -392,7 +392,7 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
     delegate?.statusUpdate?(ProgrammerTool: self, status: "")
     delegate?.statusUpdate?(ProgrammerTool: self, status: "Set CV\(ioAddress + 1): ")
     
-    sendNodeMemoryWriteRequest(destinationNodeId: target, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: Int(ioStartAddress), dataToWrite: [cvs[ioAddress]])
+    sendWriteCommand(destinationNodeId: target, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: Int(ioStartAddress), dataToWrite: [cvs[ioAddress]])
 
   }
 
@@ -419,7 +419,7 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
       
       delegate?.statusUpdate?(ProgrammerTool: self, status: "Set CV\(ioAddress + 1): ")
       
-      sendNodeMemoryWriteRequest(destinationNodeId: target, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: ioAddress | Int(progModeMask!), dataToWrite: [cvs[ioAddress]])
+      sendWriteCommand(destinationNodeId: target, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: ioAddress | Int(progModeMask!), dataToWrite: [cvs[ioAddress]])
 
     }
     else {
@@ -441,7 +441,7 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
       
       delegate?.statusUpdate?(ProgrammerTool: self, status: "Get CV\(ioAddress + 1): ")
       
-      sendNodeMemoryReadRequest(destinationNodeId: target, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: ioAddress | Int(progModeMask!), numberOfBytesToRead: 1)
+      sendReadCommand(destinationNodeId: target, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: ioAddress | Int(progModeMask!), numberOfBytesToRead: 1)
 
     }
     else {
@@ -458,7 +458,7 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
       
       setDefaultStatus(cvNumber: cvNumber, isClean: true)
       
-      sendNodeMemoryWriteRequest(destinationNodeId: dccTrainNodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: defaultOffset + cvNumber, dataToWrite: [defaultValue])
+      sendWriteCommand(destinationNodeId: dccTrainNodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: defaultOffset + cvNumber, dataToWrite: [defaultValue])
       
       delegate?.cvDataUpdated?(programmerTool: self, cvData: cvs)
       
@@ -485,7 +485,7 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
     delegate?.statusUpdate?(ProgrammerTool: self, status: "")
     delegate?.statusUpdate?(ProgrammerTool: self, status: "Set CV\(ioAddress + 1): ")
 
-    sendNodeMemoryWriteRequest(destinationNodeId: target, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: Int(ioStartAddress), dataToWrite: [value])
+    sendWriteCommand(destinationNodeId: target, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: Int(ioStartAddress), dataToWrite: [value])
     
     if isDefaultSupported {
       
@@ -608,7 +608,7 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
                 cvs = []
                 currentAddress = UInt32(0)
                 ioState = .readingDefaultsWaitingForAck
-                sendNodeMemoryReadRequest(destinationNodeId: dccTrainNodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: Int(currentAddress), numberOfBytesToRead: 64)
+                sendReadCommand(destinationNodeId: dccTrainNodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: Int(currentAddress), numberOfBytesToRead: 64)
               }
               else {
                 cvs = [UInt8](repeating: 0, count: 1024)
@@ -651,7 +651,7 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
               
               ioState = .writingCVWaitingForWriteBackAck
               
-              sendNodeMemoryWriteRequest(destinationNodeId: dccTrainNodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: ioAddress, dataToWrite: [cvs[ioAddress]])
+              sendWriteCommand(destinationNodeId: dccTrainNodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: ioAddress, dataToWrite: [cvs[ioAddress]])
             
             case .writingCVWaitingForWriteBackReply:
               setNextCV()
@@ -690,7 +690,7 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
               
               if bytesToGo > 0 {
                 ioState = .readingDefaultsWaitingForAck
-                sendNodeMemoryReadRequest(destinationNodeId: dccTrainNodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: Int(currentAddress), numberOfBytesToRead: UInt8(bytesToGo))
+                sendReadCommand(destinationNodeId: dccTrainNodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: Int(currentAddress), numberOfBytesToRead: UInt8(bytesToGo))
               }
               else {
                 ioState = .idle
@@ -710,7 +710,7 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
                 
                 ioState = .readingCVWaitingForWriteBackReply
                 
-                sendNodeMemoryWriteRequest(destinationNodeId: dccTrainNodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: ioAddress, dataToWrite: [data[0]])
+                sendWriteCommand(destinationNodeId: dccTrainNodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.cv.rawValue, startAddress: ioAddress, dataToWrite: [data[0]])
                 
                 if isDefaultSupported && !isDefaultClean(cvNumber: ioAddress) {
                   cvs[defaultOffset + ioAddress] = data[0]

@@ -64,8 +64,6 @@ public class MTSerialPort : NSObject, MTSerialPortManagerDelegate, MTPipeDelegat
     
     closeSerialPort(_fd)
     
-    let pipeName = "\((path as NSString).lastPathComponent)"
-    
     txPipe = MTPipe(name: MTSerialPort.pipeName(path: path))
     
     super.init()
@@ -135,7 +133,7 @@ public class MTSerialPort : NSObject, MTSerialPortManagerDelegate, MTPipeDelegat
   // This is called from inside a background thread
   private func monitorPort() {
     
-    let kInitialBufferSize = 0x1000
+    let kInitialBufferSize = 0x10000
     
     let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: kInitialBufferSize)
     
@@ -186,11 +184,6 @@ public class MTSerialPort : NSObject, MTSerialPortManagerDelegate, MTPipeDelegat
     
     if state == .open {
       
-      var temp = data
-      temp.append(0)
-      let packet = String(cString: temp)
-      debugLog(message: "\"\(packet)\"")
-
       let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: data.count)
       
       defer {
@@ -227,7 +220,7 @@ public class MTSerialPort : NSObject, MTSerialPortManagerDelegate, MTPipeDelegat
         
         state = .open
         
-        DispatchQueue.global(qos: .background /* .utility*/).async {
+        DispatchQueue.global(qos: .userInteractive /* .background */ /* .utility*/).async {
           self.monitorPort()
         }
         
@@ -261,18 +254,7 @@ public class MTSerialPort : NSObject, MTSerialPortManagerDelegate, MTPipeDelegat
   
   // This is run in the pipe's background thread and is atomic
   @objc public func pipe(_ pipe: MTPipe, data: [UInt8]) {
-
-    var temp = data
-    temp.append(0)
-    let packets = String(cString: temp)
-    let items = packets.split(separator: ";")
-    
-    for item in items {
-      let data = [UInt8]((item + ";").utf8)
-      write(data: data)
-    }
-
-
+    write(data: data)
   }
 
   // MARK: Public Class Methods

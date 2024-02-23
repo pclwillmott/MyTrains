@@ -185,7 +185,7 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
       return
     }
     
-    sendQuerySpeedCommand(destinationNodeId: trainNode.nodeId)
+    sendQuerySpeedsCommand(destinationNodeId: trainNode.nodeId)
     
     for address : UInt32 in 0...68 {
       sendQueryFunctionCommand(destinationNodeId: trainNode.nodeId, address: address)
@@ -199,7 +199,7 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
     
     fdi = []
     
-   sendNodeMemoryReadRequest(destinationNodeId: trainNode.nodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.fdi.rawValue, startAddress: nextFDIStartAddress, numberOfBytesToRead: 64)
+   sendReadCommand(destinationNodeId: trainNode.nodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.fdi.rawValue, startAddress: nextFDIStartAddress, numberOfBytesToRead: 64)
 
   }
   
@@ -621,7 +621,7 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
                 
                 nextFDIStartAddress += data.count
                 
-                sendNodeMemoryReadRequest(destinationNodeId: trainNode!.nodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.fdi.rawValue, startAddress: nextFDIStartAddress, numberOfBytesToRead: 64)
+                sendReadCommand(destinationNodeId: trainNode!.nodeId, addressSpace: OpenLCBNodeMemoryAddressSpace.fdi.rawValue, startAddress: nextFDIStartAddress, numberOfBytesToRead: 64)
                 
               }
               else {
