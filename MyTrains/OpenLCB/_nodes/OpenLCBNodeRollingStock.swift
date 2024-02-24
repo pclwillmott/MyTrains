@@ -39,7 +39,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     initSpaceAddress(&addressFNDescription, 32, &configurationSize)
 
     var temp = 0
-    for fn in 2 ... numberOfFunctions - 1 { // F2 to F68
+    for _ in 2 ... numberOfFunctions - 1 { // F2 to F68
       initSpaceAddress(&temp, functionGroupSize, &configurationSize)
     }
     
@@ -187,9 +187,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
   }
   
   internal var isStopped : Bool {
-    get {
-      return abs(setSpeed) == 0.0 || emergencyStop
-    }
+    return abs(setSpeed) == 0.0 || emergencyStop
   }
   
   // Train Movement Variables
@@ -684,7 +682,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
       
     case .tractionControlCommand:
       
-      if message.destinationNodeId! == nodeId, let instruction = OpenLCBTractionControlInstructionType(rawValue: message.payload[0] & 0b01111111) {
+      if let instruction = OpenLCBTractionControlInstructionType(rawValue: message.payload[0] & 0b01111111) {
         
         timer?.invalidate()
         
@@ -1090,7 +1088,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
       
     case .tractionControlReply:
       
-      if message.destinationNodeId == nodeId, let instruction = OpenLCBTractionControlInstructionType(rawValue: message.payload[0] & 0b01111111) {
+      if let instruction = OpenLCBTractionControlInstructionType(rawValue: message.payload[0] & 0b01111111) {
 
         switch instruction {
           

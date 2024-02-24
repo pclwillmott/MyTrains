@@ -28,6 +28,8 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
       
       virtualNodeType = MyTrainsVirtualNodeType.canGatewayNode
       
+      isFullProtocolRequired = true
+      
       configuration.delegate = self
       
       memorySpaces[configuration.space] = configuration
@@ -113,10 +115,6 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
     return false
   }
   
-  internal var observers : [Int:OpenLCBCANDelegate] = [:]
-
-  internal var nextObserverId : Int = 0
-
   internal var initNodeQueue : [OpenLCBTransportLayerAlias] = []
   
   internal var managedNodeIdLookup : [UInt64:OpenLCBTransportLayerAlias] = [:]
@@ -321,17 +319,6 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
     
     super.stop()
     
-  }
-  
-  public func addObserver(observer:OpenLCBCANDelegate) -> Int {
-    let id = nextObserverId
-    nextObserverId += 1
-    observers[id] = observer
-    return id
-  }
-  
-  public func removeObserver(id:Int) {
-    observers.removeValue(forKey: id)
   }
   
   // MARK: OpenLCBNetworkLayerDelegate Methods

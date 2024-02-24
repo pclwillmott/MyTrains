@@ -41,6 +41,8 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
 
     virtualNodeType = MyTrainsVirtualNodeType.programmerToolNode
     
+    isFullProtocolRequired = true
+    
     isDatagramProtocolSupported = true
 
     numberBase.delegate = self
@@ -592,7 +594,7 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
       
     case .datagram:
       
-      if message.destinationNodeId! == nodeId, let datagramType = message.datagramType {
+      if let datagramType = message.datagramType {
         
         switch datagramType {
           

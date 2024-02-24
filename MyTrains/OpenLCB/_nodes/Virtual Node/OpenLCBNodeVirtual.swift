@@ -148,6 +148,8 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     return virtualNodeType.visibility
   }
 
+  public var isFullProtocolRequired = false
+  
   public var eventsConsumed : Set<UInt64> = []
   
   public var eventsProduced : Set<UInt64> = []
@@ -640,7 +642,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
       isConfigurationDescriptionInformationProtocolSupported = true
     }
     
-    sendInitializationComplete(isSimpleSetSufficient: false)
+    sendInitializationComplete()
     
     resetReboot()
 
@@ -921,7 +923,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
           
           if let spaceId = OpenLCBNodeMemoryAddressSpace(rawValue: message.payload[2]), spaceId == .firmware {
             hardwareNodeState = .operating
-            sendInitializationComplete(isSimpleSetSufficient: false)
+            sendInitializationComplete()
           }
           else {
             sendDatagramRejected(destinationNodeId: sourceNodeId, errorCode: .permanentErrorAddressSpaceUnknown)
@@ -932,7 +934,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
           if let spaceId = OpenLCBNodeMemoryAddressSpace(rawValue: message.payload[2]), spaceId == .firmware {
             hardwareNodeState = .firmwareUpgrade
             sendDatagramReceivedOK(destinationNodeId: sourceNodeId, timeOut: .ok)
-            sendInitializationComplete(isSimpleSetSufficient: false)
+            sendInitializationComplete()
             firmwareBuffer = []
           }
           else {

@@ -94,6 +94,8 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
       
       virtualNodeType = MyTrainsVirtualNodeType.clockNode
       
+      isFullProtocolRequired = true
+      
       configuration.delegate = self
       
       memorySpaces[configuration.space] = configuration

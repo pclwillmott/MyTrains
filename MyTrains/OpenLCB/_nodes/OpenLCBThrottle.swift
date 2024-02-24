@@ -40,6 +40,8 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
 
     virtualNodeType = MyTrainsVirtualNodeType.throttleNode
     
+    isFullProtocolRequired = true
+    
     if !memorySpacesInitialized {
       resetToFactoryDefaults()
     }
@@ -133,21 +135,15 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
   }
   
   public var throttleState : OpenLCBThrottleState {
-    get {
-      return _throttleState
-    }
+    return _throttleState
   }
   
   public var trainNode : OpenLCBNode? {
-    get {
-      return _trainNode
-    }
+    return _trainNode
   }
   
   public var controllerInfo : String {
-    get {
-      return "\(throttleState.title)"
-    }
+    return "\(throttleState.title)"
   }
   
   public var speed : Float {
@@ -164,15 +160,11 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
   }
   
   public var globalEmergencyStop : Bool {
-    get {
-      return _globalEmergencyStop
-    }
+    return _globalEmergencyStop
   }
 
   public var globalEmergencyOff : Bool {
-    get {
-      return _globalEmergencyOff
-    }
+    return _globalEmergencyOff
   }
   
   public var fdiItems : [OpenLCBFDIItem] = []
@@ -397,7 +389,7 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
      
     case .tractionControlCommand:
       
-      if message.destinationNodeId! == nodeId, let instruction = OpenLCBTractionControlInstructionType(rawValue: message.payload[0] & 0b01111111) {
+      if let instruction = OpenLCBTractionControlInstructionType(rawValue: message.payload[0] & 0b01111111) {
         
         switch instruction {
         case .setSpeedDirection:
@@ -457,7 +449,7 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
       
     case .tractionControlReply:
       
-      if message.destinationNodeId! == nodeId, let instruction = OpenLCBTractionControlInstructionType(rawValue: message.payload[0] & 0b01111111) {
+      if let instruction = OpenLCBTractionControlInstructionType(rawValue: message.payload[0] & 0b01111111) {
         
         switch instruction {
         case .querySpeeds:

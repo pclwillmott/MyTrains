@@ -52,9 +52,6 @@ extension OpenLCBCANGateway {
           newframe.timeStamp = Date.timeIntervalSinceReferenceDate
           newframe.timeSinceLastMessage = newframe.timeStamp - lastTimeStamp
           lastTimeStamp = newframe.timeStamp
-    //      for (_, observer) in observers {
-    //        observer.openLCBCANPacketReceived(packet: newframe)
-    //      }
           canFrameReceived(frame: newframe)
 
         }
@@ -78,7 +75,7 @@ extension OpenLCBCANGateway {
   
   internal func canFrameReceived(frame:LCCCANFrame) {
     
-//    debugLog(message: frame.message)
+    networkLayer?.canFrameReceived(gateway: self, frame: frame)
     
     // The node shall restart the [alias allocation] process at the beginning if, before completion of the process, a
     // frame is received that carries a source Node ID alias value that is identical to the alias value being tested by this
@@ -120,7 +117,7 @@ extension OpenLCBCANGateway {
         item.alias = nil
         removeNodeIdAliasMapping(nodeId: item.nodeId)
         removeManagedNodeIdAliasMapping(nodeId: item.nodeId)
-        sendAliasMapResetFrame(nodeId: nodeId, alias: frame.sourceNIDAlias)
+        sendAliasMapResetFrame(nodeId: nodeId, alias: frame.sourceNIDAlias, isBackgroundThread: true)
         initNodeQueue.append(item)
         getAlias()
       }
@@ -148,7 +145,7 @@ extension OpenLCBCANGateway {
           // Items in the managed alias and nodeId lookups are all in permitted state.
           
           if let nodeId = UInt64(bigEndianData: frame.data), let item = managedNodeIdLookup[nodeId], let alias = item.alias {
-            sendDuplicateNodeIdErrorFrame(alias: alias)
+            sendDuplicateNodeIdErrorFrame(alias: alias, isBackgroundThread: true)
             removeNodeIdAliasMapping(nodeId: nodeId)
             removeManagedNodeIdAliasMapping(nodeId: nodeId)
             item.state = .stopped
@@ -223,7 +220,7 @@ extension OpenLCBCANGateway {
         message.sourceNodeId = nodeId
       }
       else {
-        sendVerifyNodeIdNumberAddressed(destinationNodeIdAlias: sourceNIDAlias)
+        sendVerifyNodeIdNumberAddressed(destinationNodeIdAlias: sourceNIDAlias, isBackgroundThread: true)
       }
       
       if let destinationNIDAlias = message.destinationNIDAlias {
@@ -231,7 +228,7 @@ extension OpenLCBCANGateway {
           message.destinationNodeId = nodeId
         }
         else {
-          sendVerifyNodeIdNumberAddressed(destinationNodeIdAlias: destinationNIDAlias)
+          sendVerifyNodeIdNumberAddressed(destinationNodeIdAlias: destinationNIDAlias, isBackgroundThread: true)
         }
       }
       
@@ -483,7 +480,7 @@ extension OpenLCBCANGateway {
     inputQueueLock.unlock()
     
     DispatchQueue.main.async {
-      self.startWaitInputTimer(interval: 0.100)
+      self.startWaitInputTimer(interval: 1.00)
     }
     
   }

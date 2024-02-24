@@ -25,7 +25,7 @@
 		DA0949482B81085C00545650 /* mtpipe.c in Sources */ = {isa = PBXBuildFile; fileRef = DA0949472B81085C00545650 /* mtpipe.c */; };
 		DA0B63D82AF7BB8B007C7CD6 /* OpenLCBMonitor.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA0B63D72AF7BB8B007C7CD6 /* OpenLCBMonitor.storyboard */; };
 		DA0B63DA2AF7C612007C7CD6 /* OpenLCBMonitorVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0B63D92AF7C612007C7CD6 /* OpenLCBMonitorVC.swift */; };
-		DA0B63DC2AF7CB04007C7CD6 /* OpenLCBCANDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0B63DB2AF7CB04007C7CD6 /* OpenLCBCANDelegate.swift */; };
+		DA0B63DC2AF7CB04007C7CD6 /* OpenLCBNetworkObserverDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0B63DB2AF7CB04007C7CD6 /* OpenLCBNetworkObserverDelegate.swift */; };
 		DA0BBB7529FD4A91003E03EF /* CDIElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0BBB7429FD4A91003E03EF /* CDIElement.swift */; };
 		DA0BBB7929FD4B22003E03EF /* OpenLCBCDIElementType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0BBB7829FD4B22003E03EF /* OpenLCBCDIElementType.swift */; };
 		DA0BBB7B29FD4ED3003E03EF /* CDIMapRelation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0BBB7A29FD4ED2003E03EF /* CDIMapRelation.swift */; };
@@ -335,7 +335,7 @@
 		DA0949472B81085C00545650 /* mtpipe.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = mtpipe.c; sourceTree = "<group>"; };
 		DA0B63D72AF7BB8B007C7CD6 /* OpenLCBMonitor.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = OpenLCBMonitor.storyboard; sourceTree = "<group>"; };
 		DA0B63D92AF7C612007C7CD6 /* OpenLCBMonitorVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBMonitorVC.swift; sourceTree = "<group>"; };
-		DA0B63DB2AF7CB04007C7CD6 /* OpenLCBCANDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBCANDelegate.swift; sourceTree = "<group>"; };
+		DA0B63DB2AF7CB04007C7CD6 /* OpenLCBNetworkObserverDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBNetworkObserverDelegate.swift; sourceTree = "<group>"; };
 		DA0BBB7429FD4A91003E03EF /* CDIElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDIElement.swift; sourceTree = "<group>"; };
 		DA0BBB7829FD4B22003E03EF /* OpenLCBCDIElementType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBCDIElementType.swift; sourceTree = "<group>"; };
 		DA0BBB7A29FD4ED2003E03EF /* CDIMapRelation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDIMapRelation.swift; sourceTree = "<group>"; };
@@ -1350,7 +1350,7 @@
 				DA17E0872A77D7CC000154E0 /* OpenLCBLocoNetMonitorDelegate.swift */,
 				DAAC7E922A79514E001A424E /* OpenLCBProgrammerToolDelegate.swift */,
 				DA3866242A7A880A00A0FAEB /* OpenLCBConfigurationToolDelegate.swift */,
-				DA0B63DB2AF7CB04007C7CD6 /* OpenLCBCANDelegate.swift */,
+				DA0B63DB2AF7CB04007C7CD6 /* OpenLCBNetworkObserverDelegate.swift */,
 				DAF6778B2B432372009707A4 /* CDIStackViewManagerDelegate.swift */,
 				DAFFB6602B5D88CA0035AC74 /* MyTrainsAppDelegate.swift */,
 			);
@@ -1683,7 +1683,7 @@
 				DA56261329E1B64F00D465CC /* OpenLCBNetworkLayerState.swift in Sources */,
 				DAA867C427930C62008B6EEC /* IntExtensions.swift in Sources */,
 				DA57A6E92A4496A1005C72B0 /* LocoNetLocomotiveState.swift in Sources */,
-				DA0B63DC2AF7CB04007C7CD6 /* OpenLCBCANDelegate.swift in Sources */,
+				DA0B63DC2AF7CB04007C7CD6 /* OpenLCBNetworkObserverDelegate.swift in Sources */,
 				DA28C2BD2801CC4800857471 /* DashBoardVC.swift in Sources */,
 				DA1ECC9828439DE500C4F963 /* UpdateFirmwareVC.swift in Sources */,
 				DA1DA5EC28280FCD00E0F993 /* FlowControl.swift in Sources */,

@@ -4090,7 +4090,7 @@
       "comment" : "This is the name of a country."
     },
     "s" : {
-      "comment" : "Used for the Global Emergency Stop menu key equivalent\nUsed for the abbreviation of seconds",
+      "comment" : "Used for the abbreviation of seconds\nUsed for the Global Emergency Stop menu key equivalent",
       "localizations" : {
         "en" : {
           "stringUnit" : {

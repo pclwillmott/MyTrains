@@ -40,9 +40,7 @@ public class OpenLCBNodeConfigurationTool : OpenLCBNodeVirtual {
 
   public override func openLCBMessageReceived(message: OpenLCBMessage) {
     super.openLCBMessageReceived(message: message)
-//    DispatchQueue.main.async {
-      self.delegate?.openLCBMessageReceived?(message: message)
-//    }
+    self.delegate?.openLCBMessageReceived?(message: message)
   }
   
 }

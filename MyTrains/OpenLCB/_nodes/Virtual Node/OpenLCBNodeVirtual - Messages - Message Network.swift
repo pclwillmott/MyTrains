@@ -15,9 +15,8 @@ extension OpenLCBNodeVirtual {
   // whether the node requires delivery of all the messages in the full protocol,
   // or whether delivery of the Simple Protocol subset is sufficient.
   
-  public func sendInitializationComplete(isSimpleSetSufficient:Bool) {
-    let mti : OpenLCBMTI = isSimpleSetSufficient ? .initializationCompleteSimpleSetSufficient : .initializationCompleteFullProtocolRequired
-    let message = OpenLCBMessage(messageTypeIndicator: mti)
+  public func sendInitializationComplete() {
+    let message = OpenLCBMessage(messageTypeIndicator: isFullProtocolRequired ? .initializationCompleteFullProtocolRequired : .initializationCompleteSimpleSetSufficient)
     message.payload = nodeId.nodeIdBigEndianData
     sendMessage(message: message)
   }

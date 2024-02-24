@@ -236,7 +236,7 @@ public class LocoNet {
 
           if message.sourceNodeId! == gatewayNodeId, let locoNetMessage = message.locoNetMessage {
               
-            locoNetMessage.timeStamp = Date.timeIntervalSinceReferenceDate
+            locoNetMessage.timeStamp = message.timeStamp
             locoNetMessage.timeSinceLastMessage = locoNetMessage.timeStamp - lastTimeStamp
             lastTimeStamp = locoNetMessage.timeStamp
             locoNetMessageReceived(message: locoNetMessage)
@@ -251,7 +251,7 @@ public class LocoNet {
       
     case .sendLocoNetMessageReply:
       
-      if message.destinationNodeId! == nodeId && message.sourceNodeId! == gatewayNodeId, let locoNetMessage = currentMessage {
+      if message.sourceNodeId! == gatewayNodeId, let locoNetMessage = currentMessage {
         
         stopTimeoutTimer()
         
@@ -275,7 +275,9 @@ public class LocoNet {
  //           networkLayer.sendLocoNetMessage(sourceNodeId: nodeId, destinationNodeId: gatewayNodeId, locoNetMessage: locoNetMessage)
           }
         default:
-          print("error: \(errorCode)")
+          #if DEBUG
+          debugLog("error: \(errorCode)")
+          #endif
           messageState = .idle
           currentMessage = nil
           sendNext()
@@ -315,18 +317,26 @@ public class LocoNet {
         
         switch errorCode {
         case .permanentErrorNoConnection:
-          print("error: \(errorCode)")
+          #if DEBUG
+          debugLog("error: \(errorCode)")
+          #endif
           currentMessage = nil
           outputQueue.removeAll()
         case .permanentErrorInvalidArguments:
-          print("error: \(errorCode)")
+          #if DEBUG
+          debugLog("error: \(errorCode)")
+          #endif
           currentMessage = nil
           sendNext()
         case .temporaryErrorBufferUnavailable:
-          print("error: \(errorCode)")
+          #if DEBUG
+          debugLog("error: \(errorCode)")
+          #endif
           retryCount -= 1
           if retryCount == 0 {
-            print("max retries exceeded")
+            #if DEBUG
+            debugLog("max retries exceeded")
+            #endif
             messageState = .idle
             currentMessage = nil
             sendNext()
@@ -336,17 +346,12 @@ public class LocoNet {
      //       networkLayer.sendLocoNetMessage(sourceNodeId: nodeId, destinationNodeId: gatewayNodeId, locoNetMessage: locoNetMessage)
           }
         default:
-          print("unexpected error: \(errorCode)")
+          #if DEBUG
+          debugLog("unexpected error: \(errorCode)")
+          #endif
         }
         
       }
-/*
-    case .locoNetMessageReceivedOnlyFrame, .locoNetMessageReceivedFirstFrame, .locoNetMessageReceivedMiddleFrame, .locoNetMessageReceivedLastFrame:
-    
-      if message.sourceNodeId! == gatewayNodeId {
-        locoNetMessagePartReceived(message: message)
-      }
-      */
     default:
       break
       

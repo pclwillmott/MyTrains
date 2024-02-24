@@ -120,7 +120,7 @@ public class OpenLCBMessage : NSObject {
       
     case .globalAndAddressedMTI:
       
-      messageTypeIndicator = frame.openLCBMessageTypeIndicator!
+      messageTypeIndicator = frame.messageTypeIndicator!
       
       sourceNIDAlias = UInt16(frame.header & 0xfff)
       

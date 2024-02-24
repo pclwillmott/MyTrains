@@ -31,6 +31,8 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, M
       
       virtualNodeType = MyTrainsVirtualNodeType.locoNetGatewayNode
       
+      isFullProtocolRequired = true
+      
       configuration.delegate = self
       
       memorySpaces[configuration.space] = configuration

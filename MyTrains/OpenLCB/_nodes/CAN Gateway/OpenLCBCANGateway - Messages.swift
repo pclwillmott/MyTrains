@@ -9,7 +9,7 @@ import Foundation
 
 extension OpenLCBCANGateway {
   
-  internal func sendVerifyNodeIdNumberAddressed(destinationNodeIdAlias:UInt16) {
+  internal func sendVerifyNodeIdNumberAddressed(destinationNodeIdAlias:UInt16, isBackgroundThread:Bool) {
     
     guard let sourceNIDAlias = nodeIdLookup[nodeId] else {
       return
@@ -20,12 +20,12 @@ extension OpenLCBCANGateway {
     message.destinationNIDAlias = destinationNodeIdAlias
 
     if let frame = LCCCANFrame(message: message) {
-      send(data: frame.message)
+      send(data: frame.message, isBackgroundThread: isBackgroundThread)
     }
 
   }
 
-  internal func sendVerifyNodeIdGlobalCAN(destinationNodeId:UInt64) {
+  internal func sendVerifyNodeIdGlobalCAN(destinationNodeId:UInt64, isBackgroundThread:Bool) {
     
     guard let sourceNIDAlias = nodeIdLookup[nodeId] else {
       return
@@ -36,7 +36,7 @@ extension OpenLCBCANGateway {
     message.payload = destinationNodeId.nodeIdBigEndianData
     
     if let frame = LCCCANFrame(message: message) {
-      send(data: frame.message)
+      send(data: frame.message, isBackgroundThread: isBackgroundThread)
     }
 
   }
@@ -44,42 +44,42 @@ extension OpenLCBCANGateway {
   internal func sendCheckIdFrame(format:OpenLCBCANControlFrameFormat, nodeId:UInt64, alias: UInt16) {
     let cf = format.rawValue | UInt16((nodeId >> (((format.rawValue >> 12) - 4) * 12)) & 0x0fff)
     let header = LCCCANFrame.createFrameHeader(frameType: .canControlFrame, contentField: cf, sourceNIDAlias: alias)
-    send(header: header, data: "")
+    send(header: header, data: "", isBackgroundThread: true)
   }
 
   internal func sendReserveIdFrame(alias:UInt16) {
     let cf = OpenLCBCANControlFrameFormat.reserveIdFrame.rawValue
     let header = LCCCANFrame.createFrameHeader(frameType: .canControlFrame, contentField: cf, sourceNIDAlias: alias)
-    send(header: header, data: "")
+    send(header: header, data: "", isBackgroundThread: true)
   }
 
   internal func sendAliasMapDefinitionFrame(nodeId:UInt64, alias:UInt16) {
     let cf = OpenLCBCANControlFrameFormat.aliasMapDefinitionFrame.rawValue
     let header = LCCCANFrame.createFrameHeader(frameType: .canControlFrame, contentField: cf, sourceNIDAlias: alias)
-    send(header: header, data: nodeId.toHex(numberOfDigits: 12))
+    send(header: header, data: nodeId.toHex(numberOfDigits: 12), isBackgroundThread: true)
   }
 
-  internal func sendAliasMapResetFrame(nodeId:UInt64, alias:UInt16) {
+  internal func sendAliasMapResetFrame(nodeId:UInt64, alias:UInt16, isBackgroundThread:Bool) {
     let cf = OpenLCBCANControlFrameFormat.aliasMapResetFrame.rawValue
     let header = LCCCANFrame.createFrameHeader(frameType: .canControlFrame, contentField: cf, sourceNIDAlias: alias)
-    send(header: header, data: nodeId.toHex(numberOfDigits: 12))
+    send(header: header, data: nodeId.toHex(numberOfDigits: 12), isBackgroundThread: isBackgroundThread)
   }
 
-  internal func sendAliasMappingEnquiryFrame(nodeId:UInt64, alias:UInt16) {
+  internal func sendAliasMappingEnquiryFrame(nodeId:UInt64, alias:UInt16, isBackgroundThread:Bool) {
     let cf = OpenLCBCANControlFrameFormat.aliasMappingEnquiryFrame.rawValue
     let header = LCCCANFrame.createFrameHeader(frameType: .canControlFrame, contentField: cf, sourceNIDAlias: alias)
-    send(header: header, data: nodeId.toHex(numberOfDigits: 12))
+    send(header: header, data: nodeId.toHex(numberOfDigits: 12), isBackgroundThread: isBackgroundThread)
   }
 
-  internal func sendAliasMappingEnquiryFrame(alias:UInt16) {
+  internal func sendAliasMappingEnquiryFrame(alias:UInt16, isBackgroundThread:Bool) {
     let cf = OpenLCBCANControlFrameFormat.aliasMappingEnquiryFrame.rawValue
     let header = LCCCANFrame.createFrameHeader(frameType: .canControlFrame, contentField: cf, sourceNIDAlias: alias)
-    send(header: header, data: "")
+    send(header: header, data: "", isBackgroundThread: isBackgroundThread)
   }
 
-  internal func sendDuplicateNodeIdErrorFrame(alias:UInt16) {
+  internal func sendDuplicateNodeIdErrorFrame(alias:UInt16, isBackgroundThread:Bool) {
     var header = 0x195B4000 | UInt32(alias & 0x0fff)
-    send(header: header.toHex(numberOfDigits: 8), data: OpenLCBWellKnownEvent.duplicateNodeIdDetected.rawValue.toHex(numberOfDigits: 16))
+    send(header: header.toHex(numberOfDigits: 8), data: OpenLCBWellKnownEvent.duplicateNodeIdDetected.rawValue.toHex(numberOfDigits: 16), isBackgroundThread: isBackgroundThread)
   }
 
 }

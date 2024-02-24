@@ -10,21 +10,27 @@ import Foundation
 extension OpenLCBCANGateway {
   
   // This is may or may not be running in the main thread
-  public func send(data: [UInt8]) {
-    //    for (_, observer) in observers {
-    //      observer.rawCANPacketSent(packet: data)
-    //    }
+  public func send(data: [UInt8], isBackgroundThread:Bool) {
+    
+    var temp = data
+    temp.append(0)
+    
+    if let frame = LCCCANFrame(message: String(cString: temp)) {
+      networkLayer?.canFrameSent(gateway: self, frame: frame, isBackgroundThread: isBackgroundThread)
+    }
+    
     sendToSerialPortPipe?.write(data: data)
+    
   }
 
-  public func send(data:String) {
-    send(data: [UInt8](data.utf8))
+  public func send(data:String, isBackgroundThread:Bool) {
+    send(data: [UInt8](data.utf8), isBackgroundThread: isBackgroundThread)
   }
 
-  internal func send(header: String, data:String) {
+  internal func send(header: String, data:String, isBackgroundThread:Bool) {
     if let serialPort, serialPort.isOpen {
       let packet = ":X\(header)N\(data);"
-      send(data: packet)
+      send(data: packet, isBackgroundThread: isBackgroundThread)
     }
   }
 
@@ -51,7 +57,7 @@ extension OpenLCBCANGateway {
           message.sourceNIDAlias = alias
         }
         else {
-          sendVerifyNodeIdGlobalCAN(destinationNodeId: id)
+          sendVerifyNodeIdGlobalCAN(destinationNodeId: id, isBackgroundThread: false)
         }
       }
       
@@ -60,7 +66,7 @@ extension OpenLCBCANGateway {
           message.destinationNIDAlias = alias
         }
         else {
-          sendVerifyNodeIdGlobalCAN(destinationNodeId: id)
+          sendVerifyNodeIdGlobalCAN(destinationNodeId: id, isBackgroundThread: false)
         }
       }
       
@@ -75,7 +81,7 @@ extension OpenLCBCANGateway {
           
           if message.payload.count <= 8 {
             if let frame = LCCCANFrame(message: message, canFrameType: .datagramCompleteInFrame, data: message.payload) {
-              send(data: frame.message)
+              send(data: frame.message, isBackgroundThread: false)
             }
           }
           else {
@@ -106,7 +112,7 @@ extension OpenLCBCANGateway {
               }
               
               if let frame = LCCCANFrame(message: message, canFrameType: canFrameType, data: data) {
-                send(data: frame.message)
+                send(data: frame.message, isBackgroundThread: false)
               }
               
             }
@@ -124,7 +130,7 @@ extension OpenLCBCANGateway {
           
           if numberOfFrames == 1 {
             if let frame = LCCCANFrame(message: message) {
-              send(data: frame.message)
+              send(data: frame.message, isBackgroundThread: false)
             }
           }
           else {
@@ -145,7 +151,7 @@ extension OpenLCBCANGateway {
               data.removeFirst(payload.count)
               
               if let frame = LCCCANFrame(pcerMessage: message, payload: payload) {
-                send(data: frame.message)
+                send(data: frame.message, isBackgroundThread: false)
               }
               
             }
@@ -159,7 +165,7 @@ extension OpenLCBCANGateway {
             if let frame = LCCCANFrame(message: message) {
               
               if frame.data.count <= 8 {
-                send(data: frame.message)
+                send(data: frame.message, isBackgroundThread: false)
               }
               else {
                 
@@ -177,7 +183,7 @@ extension OpenLCBCANGateway {
                   }
                   
                   if let frame = LCCCANFrame(message: message, flags: flags, frameNumber: frameNumber) {
-                    send(data: frame.message)
+                    send(data: frame.message, isBackgroundThread: false)
                   }
                   
                 }
@@ -188,7 +194,7 @@ extension OpenLCBCANGateway {
             
           }
           else if let frame = LCCCANFrame(message: message) {
-            send(data: frame.message)
+            send(data: frame.message, isBackgroundThread: false)
           }
           
         }
@@ -201,7 +207,7 @@ extension OpenLCBCANGateway {
     
     outputQueueLock.unlock()
     
-    startWaitTimer(interval: 0.100)
+    startWaitTimer(interval: 1.00)
     
   }
 

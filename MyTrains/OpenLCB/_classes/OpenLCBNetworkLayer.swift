@@ -26,7 +26,9 @@ public class OpenLCBNetworkLayer : NSObject, MTPipeDelegate {
 
   private var gatewayNodes : [UInt64:OpenLCBNodeVirtual] = [:]
 
-  private var regularNodes : [UInt64:OpenLCBNodeVirtual] = [:]
+  private var nodesSimpleSetSufficient : [UInt64:OpenLCBNodeVirtual] = [:]
+
+  private var nodesFullProtocolRequired : [UInt64:OpenLCBNodeVirtual] = [:]
 
   private var nodeManagers : [OpenLCBNodeManager] = []
   
@@ -36,11 +38,9 @@ public class OpenLCBNetworkLayer : NSObject, MTPipeDelegate {
   
   private var programmerToolManager = OpenLCBNodeManager()
   
-  private var observers : [Int:OpenLCBCANDelegate] = [:]
+  private var observers : [Int:OpenLCBNetworkObserverDelegate] = [:]
   
-  private var nextObserverId : Int = 1
-  
-//  private var rxPipe : MTPipe?
+  private var nextObserverId : Int = 0
   
   // MARK: Public Properties
 
@@ -64,18 +64,6 @@ public class OpenLCBNetworkLayer : NSObject, MTPipeDelegate {
         updateVirtualNodeList()
       }
     }
-  }
-  
-  public var defaultCANGateway : OpenLCBCANGateway? {
-  
-    for node in virtualNodes {
-      if node.virtualNodeType == .canGatewayNode {
-        return node as? OpenLCBCANGateway
-      }
-    }
-    
-    return nil
-    
   }
   
   public var state : OpenLCBNetworkLayerState {
@@ -174,9 +162,6 @@ public class OpenLCBNetworkLayer : NSObject, MTPipeDelegate {
     
     _state = .initialized
     
-//    rxPipe = MTPipe(name: "MyTrains Network Layer")
-//    rxPipe?.open(delegate: self)
-    
     for node in OpenLCBMemorySpace.getVirtualNodes() {
       registerNode(node: node)
     }
@@ -201,7 +186,7 @@ public class OpenLCBNetworkLayer : NSObject, MTPipeDelegate {
     
   }
   
-  public func addObserver(observer:OpenLCBCANDelegate) -> Int {
+  public func addObserver(observer:OpenLCBNetworkObserverDelegate) -> Int {
     let id = nextObserverId
     nextObserverId += 1
     observers[id] = observer
@@ -264,8 +249,11 @@ public class OpenLCBNetworkLayer : NSObject, MTPipeDelegate {
     if node.virtualNodeType == .canGatewayNode {
       gatewayNodes[node.nodeId] = node
     }
+    else if node.isFullProtocolRequired {
+      nodesFullProtocolRequired[node.nodeId] = node
+    }
     else {
-      regularNodes[node.nodeId] = node
+      nodesSimpleSetSufficient[node.nodeId] = node
     }
     
     node.start()
@@ -282,7 +270,10 @@ public class OpenLCBNetworkLayer : NSObject, MTPipeDelegate {
     node.networkLayer = nil
 
     virtualNodeLookup.removeValue(forKey: node.nodeId)
-        
+    gatewayNodes.removeValue(forKey: node.nodeId)
+    nodesSimpleSetSufficient.removeValue(forKey: node.nodeId)
+    nodesFullProtocolRequired.removeValue(forKey: node.nodeId)
+
     for index in 0 ... virtualNodes.count - 1 {
       if virtualNodes[index].nodeId == node.nodeId {
         virtualNodes.remove(at: index)
@@ -423,6 +414,29 @@ public class OpenLCBNetworkLayer : NSObject, MTPipeDelegate {
   
   // MARK: Messages
 
+  // This is running in a background thread
+  
+  public func canFrameReceived(gateway:OpenLCBCANGateway, frame:LCCCANFrame) {
+    for (_, observer) in observers {
+      observer.canFrameReceived?(gateway: gateway, frame: frame)
+    }
+  }
+  
+  public func canFrameSent(gateway:OpenLCBCANGateway, frame:LCCCANFrame, isBackgroundThread:Bool) {
+    if isBackgroundThread {
+      for (_, observer) in observers {
+        observer.canFrameSent?(gateway: gateway, frame: frame)
+      }
+    }
+    else {
+      DispatchQueue.global(qos: .background).async {
+        for (_, observer) in self.observers {
+          observer.canFrameSent?(gateway: gateway, frame: frame)
+        }
+      }
+    }
+  }
+  
   // This is running in the main thread
   
   public func sendMessage(message:OpenLCBMessage) {
@@ -458,10 +472,14 @@ public class OpenLCBNetworkLayer : NSObject, MTPipeDelegate {
     }
     */
     
-//    for (_, observer) in observers {
-//      observer.OpenLCBMessageReceived(message: message)
-//    }
+    // Dispatch message to observers in a background thread
     
+    DispatchQueue.global(qos: .background).async {
+      for (_, observer) in self.observers {
+        observer.openLCBMessageReceived?(message: message)
+      }
+    }
+
     if let destinationNodeId = message.destinationNodeId {
 
       if let virtualNode = virtualNodeLookup[destinationNodeId] {
@@ -479,9 +497,18 @@ public class OpenLCBNetworkLayer : NSObject, MTPipeDelegate {
       
     }
     else {
-      for (_, virtualNode) in regularNodes {
-        if !message.routing.contains(virtualNode.nodeId) {
-          virtualNode.openLCBMessageReceived(message: message)
+      if message.messageTypeIndicator.isSimpleProtocol {
+        for (_, virtualNode) in nodesSimpleSetSufficient {
+          if !message.routing.contains(virtualNode.nodeId) {
+            virtualNode.openLCBMessageReceived(message: message)
+          }
+        }
+      }
+      else {
+        for (_, virtualNode) in nodesFullProtocolRequired {
+          if !message.routing.contains(virtualNode.nodeId) {
+            virtualNode.openLCBMessageReceived(message: message)
+          }
         }
       }
       for (_, virtualNode) in gatewayNodes {

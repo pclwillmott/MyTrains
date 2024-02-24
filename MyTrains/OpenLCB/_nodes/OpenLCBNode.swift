@@ -32,13 +32,13 @@ public class OpenLCBNode : NSObject {
   // THESE VARIABLES ARE ONLY USED FOR THE RAW OpenLCBNode. THEY FAKE THE ACDI.
   
   private var _acdiManufacturerSpaceVersion : UInt8 = 4
-  private var _manufacturerName             : String = ""
-  private var _nodeModelName                : String = ""
-  private var _nodeHardwareVersion          : String = ""
-  private var _nodeSoftwareVersion          : String = ""
+  private var _manufacturerName             = ""
+  private var _nodeModelName                = ""
+  private var _nodeHardwareVersion          = ""
+  private var _nodeSoftwareVersion          = ""
   private var _acdiUserSpaceVersion         : UInt8 = 2
-  private var _userNodeName                 : String = ""
-  private var _userNodeDescription          : String = ""
+  private var _userNodeName                 = ""
+  private var _userNodeDescription          = ""
            
   // MARK: Public Properties
   

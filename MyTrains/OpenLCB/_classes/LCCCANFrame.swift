@@ -10,7 +10,7 @@ import Foundation
 public class LCCCANFrame : NSObject {
 
   // MARK: Constructors & Destructors
-  
+    
   init?(message:String) {
     
     // Check that the message conforms to the standard
@@ -321,7 +321,7 @@ public class LCCCANFrame : NSObject {
     return OpenLCBMessageCANFrameType(rawValue: (header & 0x07000000) >> 24)
   }
   
-  public var openLCBMessageTypeIndicator : OpenLCBMTI? {
+  public var messageTypeIndicator : OpenLCBMTI? {
     guard frameType == .openLCBMessage, let openLCBMessageCANFrameType, openLCBMessageCANFrameType == .globalAndAddressedMTI else {
       return nil
     }
@@ -353,15 +353,61 @@ public class LCCCANFrame : NSObject {
   }
   
   public var info : String {
-    get {
-      switch frameType {
-      case .openLCBMessage:
-        return "Frame Type: \(frameType) Alias: \(sourceNIDAlias.toHex(numberOfDigits: 3)) \n"
+    
+    var result = ""
+    for byte in data {
+      result += " \(byte.toHex(numberOfDigits: 2))"
+    }
+    result = "[[\(header.toHex(numberOfDigits: 8))]\(result)"
+    result += String(repeating: " ", count: 35 - result.count) + "] "
+    
+    var showPayload = true
+    
+    switch frameType {
+    case .openLCBMessage:
+      
+      if let message = OpenLCBMessage(frame: self) {
+        
+        switch message.canFrameType {
+        case .globalAndAddressedMTI:
+          if let messageTypeIndicator {
+            result += "\(messageTypeIndicator) "
+            switch messageTypeIndicator {
+            case .producerConsumerEventReport:
+              if let event = OpenLCBWellKnownEvent(rawValue: message.eventId!) {
+                result += "\(event)"
+              }
+              else {
+                result += message.eventId!.toHexDotFormat(numberOfBytes: 8)
+              }
+              showPayload = false
+            default:
+              break
+            }
+          }
+        default:
+          result += "\(message.canFrameType) "
+        }
+        
+      }
 
-      case .canControlFrame:
-        return "Frame Type: \(frameType) Alias: \(sourceNIDAlias.toHex(numberOfDigits: 3)) CAN Control Frame Format: \(controlFrameFormat))\n"
+    case .canControlFrame:
+      if let controlFrameFormat {
+        result += "\(controlFrameFormat) "
       }
     }
+    
+    if showPayload {
+      if data.isEmpty {
+        result += "with no payload"
+      }
+      else {
+        result += "with payload \(dataAsHex)"
+      }
+    }
+    
+    return result
+    
   }
     
   // MARK: Public Class Methods

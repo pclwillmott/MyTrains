@@ -31,6 +31,8 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
       
       virtualNodeType = MyTrainsVirtualNodeType.applicationNode
       
+      isFullProtocolRequired = true
+      
       eventsConsumed = [
         OpenLCBWellKnownEvent.myTrainsLayoutActivated.rawValue,
         OpenLCBWellKnownEvent.myTrainsLayoutDeactivated.rawValue,
