@@ -359,7 +359,7 @@ public class LCCCANFrame : NSObject {
       result += " \(byte.toHex(numberOfDigits: 2))"
     }
     result = "[[\(header.toHex(numberOfDigits: 8))]\(result)"
-    result += String(repeating: " ", count: 35 - result.count) + "] "
+    result += String(repeating: " ", count: max(0, 35 - result.count)) + "] "
     
     var showPayload = true
     
@@ -371,29 +371,33 @@ public class LCCCANFrame : NSObject {
         switch message.canFrameType {
         case .globalAndAddressedMTI:
           if let messageTypeIndicator {
-            result += "\(messageTypeIndicator) "
-            switch messageTypeIndicator {
-            case .producerConsumerEventReport:
+            result += "\(messageTypeIndicator.title) "
+            if messageTypeIndicator.isEventPresent {
               if let event = OpenLCBWellKnownEvent(rawValue: message.eventId!) {
-                result += "\(event)"
+                result += "\"\(event.title)\""
               }
               else {
                 result += message.eventId!.toHexDotFormat(numberOfBytes: 8)
               }
+              showPayload = false
+            }
+            switch messageTypeIndicator {
+            case .initializationCompleteSimpleSetSufficient, .initializationCompleteFullProtocolRequired, .verifiedNodeIDSimpleSetSufficient, .verifiedNodeIDFullProtocolRequired:
+              result += "\(UInt64(bigEndianData: message.payload)!.toHexDotFormat(numberOfBytes: 6))"
               showPayload = false
             default:
               break
             }
           }
         default:
-          result += "\(message.canFrameType) "
+          result += "\(message.canFrameType.title) "
         }
         
       }
 
     case .canControlFrame:
       if let controlFrameFormat {
-        result += "\(controlFrameFormat) "
+        result += "\(controlFrameFormat.title) "
       }
     }
     

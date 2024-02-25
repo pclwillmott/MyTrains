@@ -305,13 +305,13 @@ extension OpenLCBNodeVirtual {
   // whether it successfully reserved the node. 
   
   public func sendLockReserveCommand(destinationNodeId:UInt64) {
-    var data = OpenLCBDatagramType.LockReserveCommand.bigEndianData
+    var data = OpenLCBDatagramType.lockReserveCommand.bigEndianData
     data.append(contentsOf: nodeId.nodeIdBigEndianData)
     sendDatagram(destinationNodeId: destinationNodeId, data: data)
   }
 
   public func sendLockReserveReply(destinationNodeId:UInt64, reservedNodeId:UInt64) {
-    var data = OpenLCBDatagramType.LockReserveReply.bigEndianData
+    var data = OpenLCBDatagramType.lockReserveReply.bigEndianData
     data.append(contentsOf: reservedNodeId.nodeIdBigEndianData)
     sendDatagram(destinationNodeId: destinationNodeId, data: data)
   }
@@ -323,7 +323,7 @@ extension OpenLCBNodeVirtual {
   // unlocked.
   
   public func sendUnLockCommand(destinationNodeId:UInt64) {
-    var data = OpenLCBDatagramType.LockReserveCommand.bigEndianData
+    var data = OpenLCBDatagramType.lockReserveCommand.bigEndianData
     data.append(contentsOf: UInt64(0).nodeIdBigEndianData)
     sendDatagram(destinationNodeId: destinationNodeId, data: data)
   }

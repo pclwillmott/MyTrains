@@ -60,6 +60,54 @@ public enum OpenLCBWellKnownEvent : UInt64 {
     return OpenLCBWellKnownEvent.isAutomaticallyRouted(eventId: self.rawValue)
   }
   
+  public var title : String {
+    return OpenLCBWellKnownEvent.titles[self]!
+  }
+  
+  // MARK: Private Class Properties
+  
+  private static let titles : [OpenLCBWellKnownEvent:String] = [
+    .emergencyOffAll : String(localized: "Emergency Off All"),
+    .clearEmergencyOffAll : String(localized: "Clear Emergency Off All"),
+    .emergencyStopAll : String(localized: "Emergency Stop All"),
+    .clearEmergencyStopAll : String(localized: "Clear Emergency Stop All"),
+    .nodeRecordedNewLogEntry : String(localized: "Node Recorded New Log Entry"),
+    .powerSupplyBrownoutDetectedNode : String(localized: "Power Supply Brownout Detected Node"),
+    .powerSupplyBrownoutDetectedStandard : String(localized: "Power Supply Brownout Detected Standard"),
+    .identButtonCombinationPressed : String(localized: "Ident Button Combination Pressed"),
+    .linkErrorCode1 : String(localized: "Link Error Code 1"),
+    .linkErrorCode2 : String(localized: "Link Error Code 2"),
+    .linkErrorCode3 : String(localized: "Link Error Code 3"),
+    .linkErrorCode4 : String(localized: "Link Error Code 4"),
+    .duplicateNodeIdDetected : String(localized: "Duplicate Node ID Detected"),
+    .nodeIsATrain : String(localized: "Node Is A Train"),
+    .nodeIsATractionProxy : String(localized: "Node Is A Traction Proxy"),
+    .firmwareCorrupted : String(localized: "Firmware Corrupted"),
+    .firmwareUpgradeRequestedBySwitch : String(localized: "Firmware Upgrade Requested By Switch"),
+    .defaultFastClock : String(localized: "Default Fast Clock"),
+    .defaultRealTimeClock : String(localized: "Default Real-Time Clock"),
+    .alternateClock1 : String(localized: "Alternate Clock 1"),
+    .alternateClock2 : String(localized: "Alternate Clock 2"),
+    .locationServicesReport : String(localized: "Location Services Report"),
+    .locoNetMessage : String(localized: "LocoNet Message"),
+    .nodeIsALocoNetGateway : String(localized: "Node Is A LocoNet Gateway"),
+    .myTrainsLayoutActivated : String(localized: "MyTrains Layout Activated"),
+    .myTrainsLayoutDeactivated : String(localized: "MyTrains Layout Deactivated"),
+    .myTrainsLayoutDeleted : String(localized: "MyTrains Layout Deleted"),
+    .identifyMyTrainsLayouts : String(localized: "Identify MyTrains Layouts"),
+    .identifyMyTrainsSwitchboardPanels : String(localized: "Identify MyTrains Switchboard Panels"),
+    .identifyMyTrainsSwitchboardItems : String(localized: "Identify MyTrains Switchboard Items"),
+    .nodeIsASwitchboardPanel : String(localized: "Node Is A Switchboard Panel"),
+    .nodeIsASwitchboardItem : String(localized: "Node Is A Switchboard Item"),
+    .trainSearchEvent : String(localized: "Train Search"),
+    .nodeIsADCCProgrammingTrack : String(localized: "Node Is A DCC Programming Track"),
+    .trainSearchDCCShortAddress : String(localized: "Train Search DCC Short Address"),
+    .trainSearchDCCLongAddress : String(localized: "Train Search DCC Long Address"),
+    .trainMoveStart : String(localized: "Train Move Start"),
+    .trainMoveComplete : String(localized: "Train Move Complete"),
+    .trainMoveUpdate : String(localized: "Train Move Update"),
+  ]
+  
   // MARK: Public Class Properties
   
   public static func isAutomaticallyRouted(eventId:UInt64) -> Bool {

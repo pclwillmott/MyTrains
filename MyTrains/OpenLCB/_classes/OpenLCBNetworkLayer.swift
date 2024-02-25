@@ -42,6 +42,12 @@ public class OpenLCBNetworkLayer : NSObject, MTPipeDelegate {
   
   private var nextObserverId : Int = 0
   
+  private var monitorBuffer : [MonitorItem] = []
+  
+  private var monitorBufferLock = NSLock()
+  
+  private var monitorTimer : Timer?
+  
   // MARK: Public Properties
 
   public var configurationToolManager = OpenLCBNodeManager()
@@ -414,29 +420,6 @@ public class OpenLCBNetworkLayer : NSObject, MTPipeDelegate {
   
   // MARK: Messages
 
-  // This is running in a background thread
-  
-  public func canFrameReceived(gateway:OpenLCBCANGateway, frame:LCCCANFrame) {
-    for (_, observer) in observers {
-      observer.canFrameReceived?(gateway: gateway, frame: frame)
-    }
-  }
-  
-  public func canFrameSent(gateway:OpenLCBCANGateway, frame:LCCCANFrame, isBackgroundThread:Bool) {
-    if isBackgroundThread {
-      for (_, observer) in observers {
-        observer.canFrameSent?(gateway: gateway, frame: frame)
-      }
-    }
-    else {
-      DispatchQueue.global(qos: .background).async {
-        for (_, observer) in self.observers {
-          observer.canFrameSent?(gateway: gateway, frame: frame)
-        }
-      }
-    }
-  }
-  
   // This is running in the main thread
   
   public func sendMessage(message:OpenLCBMessage) {
@@ -472,13 +455,9 @@ public class OpenLCBNetworkLayer : NSObject, MTPipeDelegate {
     }
     */
     
-    // Dispatch message to observers in a background thread
-    
-    DispatchQueue.global(qos: .background).async {
-      for (_, observer) in self.observers {
-        observer.openLCBMessageReceived?(message: message)
-      }
-    }
+    let monitorItem = MonitorItem()
+    monitorItem.message = message
+    addToMonitorBuffer(item: monitorItem, isBackgroundThread: false)
 
     if let destinationNodeId = message.destinationNodeId {
 
@@ -520,6 +499,88 @@ public class OpenLCBNetworkLayer : NSObject, MTPipeDelegate {
     
   }
   
+  // This is running in a background thread
+  
+  public func canFrameReceived(gateway:OpenLCBCANGateway, frame:LCCCANFrame) {
+    let monitorItem = MonitorItem()
+    monitorItem.frame = frame
+    monitorItem.direction = .received
+    addToMonitorBuffer(item: monitorItem, isBackgroundThread: true)
+  }
+  
+  public func canFrameSent(gateway:OpenLCBCANGateway, frame:LCCCANFrame, isBackgroundThread:Bool) {
+    let monitorItem = MonitorItem()
+    monitorItem.frame = frame
+    monitorItem.direction = .sent
+    addToMonitorBuffer(item: monitorItem, isBackgroundThread: isBackgroundThread)
+  }
+  
+  public func clearMonitorBuffer() {
+    monitorBufferLock.lock()
+    monitorBuffer.removeAll()
+    monitorBufferLock.unlock()
+    startMonitorTimer()
+  }
+  
+  public func addToMonitorBuffer(item:MonitorItem, isBackgroundThread:Bool) {
+    
+    monitorBufferLock.lock()
+    monitorBuffer.append(item)
+    monitorBufferLock.unlock()
+    
+    if isBackgroundThread {
+      DispatchQueue.main.async {
+        self.startMonitorTimer()
+      }
+    }
+    else {
+      startMonitorTimer()
+    }
+  }
+  
+  internal func startMonitorTimer() {
+    
+    guard monitorTimer == nil else {
+      return
+    }
+    
+    monitorTimer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(monitorTimerTick), userInfo: nil, repeats: false)
+    
+    RunLoop.current.add(monitorTimer!, forMode: .common)
+    
+  }
+  
+  public var isMonitorPaused = false {
+    didSet {
+      startMonitorTimer()
+    }
+  }
+  
+  // This is running in the main thread
+  
+  @objc func monitorTimerTick() {
+    
+    monitorBufferLock.lock()
+    monitorBuffer.removeFirst(max(0, monitorBuffer.count - 10000))
+    monitorBufferLock.unlock()
+    
+    if !isMonitorPaused && !observers.isEmpty {
+      
+      var text = ""
+      for item in monitorBuffer {
+        text += "\(item.info)\n"
+      }
+      
+      for (_, observer) in self.observers {
+        observer.updateMonitor?(text: text)
+      }
+
+    }
+    
+    monitorTimer = nil
+    
+  }
+
   // MARK: MTPipeDelegate Methods
   
   public func pipe(_ pipe: MTPipe, message: OpenLCBMessage) {

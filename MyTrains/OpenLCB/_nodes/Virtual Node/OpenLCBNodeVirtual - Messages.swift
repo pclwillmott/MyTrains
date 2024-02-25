@@ -54,7 +54,7 @@ extension OpenLCBNodeVirtual {
   public func sendLocoNetMessage(destinationNodeId:UInt64, locoNetMessage:LocoNetMessage) {
     let message = OpenLCBMessage(messageTypeIndicator: .datagram)
     message.destinationNodeId = destinationNodeId
-    message.payload = OpenLCBDatagramType.sendlocoNetMessage.bigEndianData
+    message.payload = OpenLCBDatagramType.sendLocoNetMessage.bigEndianData
     message.payload.append(contentsOf: locoNetMessage.message)
     sendMessage(message: message)
   }

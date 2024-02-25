@@ -377,6 +377,63 @@ public class OpenLCBMessage : NSObject {
     }
   }
   
+  public var info : String {
+    
+    var text = ""
+    
+    if let sourceNodeId {
+      text += "\(sourceNodeId.toHexDotFormat(numberOfBytes: 6))"
+    }
+    if let destinationNodeId {
+      text += " → \(destinationNodeId.toHexDotFormat(numberOfBytes: 6)) "
+    }
+    
+    text += String(repeating: " ", count: 39 - text.count)
+    
+    text += "\(messageTypeIndicator.title) "
+
+    if messageTypeIndicator.isEventPresent, let eventId {
+      if let event = OpenLCBWellKnownEvent(rawValue: eventId) {
+        text += "\"\(event.title)\""
+      }
+      else {
+        text += eventId.toHexDotFormat(numberOfBytes: 8)
+      }
+    }
+    
+    switch messageTypeIndicator {
+    case .datagram:
+      if let datagramType {
+        text += "\(datagramType.title) "
+      }
+      else {
+        text += String(localized: "Datagram Type Unknown")
+      }
+    case .datagramRejected:
+      var temp = payload
+      temp.append(contentsOf: [0,0])
+      if let errorCode = UInt16(bigEndianData: [UInt8](payload.prefix(2))) {
+        if let error = OpenLCBErrorCode(rawValue: errorCode) {
+          text += "\"\(error.title)\""
+        }
+        else {
+          text += "0x\(errorCode.toHex(numberOfDigits: 4))"
+        }
+      }
+    case .initializationCompleteSimpleSetSufficient, .initializationCompleteFullProtocolRequired, .verifiedNodeIDSimpleSetSufficient, .verifiedNodeIDFullProtocolRequired:
+      text += "\(UInt64(bigEndianData: payload)!.toHexDotFormat(numberOfBytes: 6))"
+    case .simpleNodeIdentInfoReply:
+      let node = OpenLCBNode(nodeId: 0)
+      node.encodedNodeInformation = payload
+      text += "\"\(node.manufacturerName)\",\"\(node.nodeModelName)\",\"\(node.nodeHardwareVersion)\",\"\(node.nodeSoftwareVersion)\",\"\(node.userNodeName)\",\"\(node.userNodeDescription)\""
+    default:
+      break
+    }
+
+    return text
+    
+  }
+  
   public var isMessageComplete : Bool {
     
     var result = sourceNodeId != nil && sourceNIDAlias != nil

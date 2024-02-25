@@ -8,7 +8,5 @@
 import Foundation
 
 @objc public protocol OpenLCBNetworkObserverDelegate {
-  @objc optional func openLCBMessageReceived(message:OpenLCBMessage)
-  @objc optional func canFrameReceived(gateway:OpenLCBCANGateway, frame:LCCCANFrame)
-  @objc optional func canFrameSent(gateway:OpenLCBCANGateway, frame:LCCCANFrame)
+  @objc optional func updateMonitor(text:String)
 }

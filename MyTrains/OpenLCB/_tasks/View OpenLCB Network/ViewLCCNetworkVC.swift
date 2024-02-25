@@ -84,9 +84,7 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBConfiguration
      
     case .initializationCompleteSimpleSetSufficient, .initializationCompleteFullProtocolRequired, .verifiedNodeIDSimpleSetSufficient, .verifiedNodeIDFullProtocolRequired:
       
-      let newNodeId = message.sourceNodeId!
-      
-      if !nodes.keys.contains(newNodeId) {
+      if let newNodeId = UInt64(bigEndianData: message.payload), !nodes.keys.contains(newNodeId) {
         
         nodes[newNodeId] = OpenLCBNode(nodeId: newNodeId)
         

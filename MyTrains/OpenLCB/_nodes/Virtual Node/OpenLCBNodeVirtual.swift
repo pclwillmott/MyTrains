@@ -123,7 +123,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     .readCommand0xFF,
     .getConfigurationOptionsCommand,
     .getAddressSpaceInformationCommand,
-    .LockReserveCommand,
+    .lockReserveCommand,
     .getUniqueEventIDCommand,
     .unfreezeCommand,
     .freezeCommand,
@@ -830,7 +830,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
           self.stop()
           self.start()
 
-        case.LockReserveCommand:
+        case.lockReserveCommand:
           
           sendDatagramReceivedOK(destinationNodeId: sourceNodeId, timeOut: .replyPendingNoTimeout)
 
@@ -1000,6 +1000,9 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
         default:
           
           if !datagramTypesSupported.contains(datagramType) {
+            #if DEBUG
+            debugLog("\(datagramType.title)")
+            #endif
             sendDatagramRejected(destinationNodeId: sourceNodeId, errorCode: .permanentErrorNotImplementedSubcommandUnknown)
           }
     

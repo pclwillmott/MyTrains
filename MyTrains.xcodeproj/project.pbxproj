@@ -270,6 +270,7 @@
 		DAD41AC62A3CA59D002EF847 /* MyTrainsControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD41AC52A3CA59D002EF847 /* MyTrainsControllerDelegate.swift */; };
 		DAD73C1C2A9A298E002E7618 /* Digitrax BXP88.xml in Resources */ = {isa = PBXBuildFile; fileRef = DAD73C1B2A9A298E002E7618 /* Digitrax BXP88.xml */; };
 		DAD73C1E2A9A4F64002E7618 /* OpenLCBDigitraxBXP88Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD73C1D2A9A4F64002E7618 /* OpenLCBDigitraxBXP88Node.swift */; };
+		DAD89F962B8B5B7E00F611CD /* MonitorItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD89F952B8B5B7E00F611CD /* MonitorItem.swift */; };
 		DADC21CE2944ABE2008A2F33 /* ClockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADC21CD2944ABE2008A2F33 /* ClockView.swift */; };
 		DADFFF902946025500CD2119 /* DateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADFFF8F2946025500CD2119 /* DateExtensions.swift */; };
 		DAE2BAD92B09157100FC587A /* OpenLCBLocationServiceFlag.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE2BAD82B09157100FC587A /* OpenLCBLocationServiceFlag.swift */; };
@@ -589,6 +590,7 @@
 		DAD41AC52A3CA59D002EF847 /* MyTrainsControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTrainsControllerDelegate.swift; sourceTree = "<group>"; };
 		DAD73C1B2A9A298E002E7618 /* Digitrax BXP88.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Digitrax BXP88.xml"; sourceTree = "<group>"; };
 		DAD73C1D2A9A4F64002E7618 /* OpenLCBDigitraxBXP88Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBDigitraxBXP88Node.swift; sourceTree = "<group>"; };
+		DAD89F952B8B5B7E00F611CD /* MonitorItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonitorItem.swift; sourceTree = "<group>"; };
 		DADC21CD2944ABE2008A2F33 /* ClockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClockView.swift; sourceTree = "<group>"; };
 		DADFFF8F2946025500CD2119 /* DateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensions.swift; sourceTree = "<group>"; };
 		DAE2BAD82B09157100FC587A /* OpenLCBLocationServiceFlag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBLocationServiceFlag.swift; sourceTree = "<group>"; };
@@ -976,6 +978,7 @@
 				DA93CAE52A40C4F10014D2E2 /* OpenLCBTractionListenerNode.swift */,
 				DAA36B9C2A110B6200F07D8E /* OpenLCBTransportLayerAlias.swift */,
 				DA80205A2B7CEE730090DEC8 /* EventRange.swift */,
+				DAD89F952B8B5B7E00F611CD /* MonitorItem.swift */,
 			);
 			path = _classes;
 			sourceTree = "<group>";
@@ -1510,6 +1513,7 @@
 			files = (
 				DA51FB9E29D8921B002CAAC1 /* OpenLCBCANFrameType.swift in Sources */,
 				DA0949402B7F7AF500545650 /* OpenLCBCANGateway - TX.swift in Sources */,
+				DAD89F962B8B5B7E00F611CD /* MonitorItem.swift in Sources */,
 				DA1B79FD285F3C5E009E1189 /* TrackGauge.swift in Sources */,
 				DA93CAE42A40C2800014D2E2 /* OpenLCBTractionListenerConfigurationType.swift in Sources */,
 				DA8FDB2A279C2B3600E15024 /* LocoSlotData.swift in Sources */,

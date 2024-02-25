@@ -28,4 +28,25 @@ public enum OpenLCBCANControlFrameFormat : UInt16 {
     return (self.rawValue & 0x7000) != 0
   }
   
+  public var title : String {
+    return OpenLCBCANControlFrameFormat.titles[self]!
+  }
+  
+  // MARK: Private Class Properties
+  
+  private static let titles : [OpenLCBCANControlFrameFormat:String] = [
+    .reserveIdFrame : String(localized: "Reserve ID Frame"),
+    .aliasMapDefinitionFrame : String(localized: "Alias Map Definition Frame"),
+    .aliasMappingEnquiryFrame : String(localized: "Alias Mapping Enquiry Frame"),
+    .aliasMapResetFrame : String(localized: "Alias Map Reset Frame"),
+    .errorInformationReport0 : String(localized: "Error Information Report 0"),
+    .errorInformationReport1 : String(localized: "Error Information Report 1"),
+    .errorInformationReport2 : String(localized: "Error Information Report 2"),
+    .errorInformationReport3 : String(localized: "Error Information Report 3"),
+    .checkId7Frame : String(localized: "Check ID 7 Frame"),
+    .checkId6Frame : String(localized: "Check ID 6 Frame"),
+    .checkId5Frame : String(localized: "Check ID 5 Frame"),
+    .checkId4Frame : String(localized: "Check ID 4 Frame"),
+  ]
+  
 }

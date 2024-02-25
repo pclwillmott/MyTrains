@@ -58,6 +58,12 @@ public enum OpenLCBMTI : UInt16 {
   case sendLocoNetMessageReply                           = 0x0688   // 0b0000011010001000
   case unknown                                           = 0xFFFF
   
+  // MARK: Public Properties
+  
+  public var title : String {
+    return OpenLCBMTI.titles[self]!
+  }
+  
   public var isAddressPresent : Bool {
     let mask : UInt16 = 0x0008
     return (self.rawValue & mask) == mask
@@ -97,5 +103,58 @@ public enum OpenLCBMTI : UInt16 {
     let mask : UInt16 = 0x2000
     return (self.rawValue & mask) == mask
   }
+  
+  // MARK: Private Class Properties
+  
+  private static let titles : [OpenLCBMTI:String] = [
+    .initializationCompleteFullProtocolRequired : String(localized: "Initialization Complete Full Protocol Required"),
+    .initializationCompleteSimpleSetSufficient : String(localized: "Initialization Complete Simple Set Sufficient"),
+    .verifyNodeIDAddressed : String(localized: "Verify Node ID Addressed"),
+    .verifyNodeIDGlobal : String(localized: "Verify Node ID Global"),
+    .verifiedNodeIDFullProtocolRequired : String(localized: "Verified Node ID Full Protocol Required"),
+    .verifiedNodeIDSimpleSetSufficient : String(localized: "Verified Node ID Simple Set Sufficient"),
+    .optionalInteractionRejected : String(localized: "Optional Interaction Rejected"),
+    .terminateDueToError : String(localized: "Terminate Due To Error"),
+    .protocolSupportInquiry : String(localized: "Protocol Support Inquiry"),
+    .protocolSupportReply : String(localized: "Protocol Support Reply"),
+    .identifyConsumer : String(localized: "Identify Consumer"),
+    .consumerRangeIdentified : String(localized: "Consumer Range Identified"),
+    .consumerIdentifiedWithValidityUnknown : String(localized: "Consumer Identified With Validity Unknown"),
+    .consumerIdentifiedAsCurrentlyValid : String(localized: "Consumer Identified As Currently Valid"),
+    .consumerIdentifiedAsCurrentlyInvalid : String(localized: "Consumer Identified As Currently Invalid"),
+    .consumerIdentified_reserved : String(localized: "Consumer Identified Reserved"),
+    .identifyProducer : String(localized: "Identify Producer"),
+    .producerRangeIdentified : String(localized: "Producer Range Identified"),
+    .producerIdentifiedWithValidityUnknown : String(localized: "Producer Identified With Validity Unknown"),
+    .producerIdentifiedAsCurrentlyValid : String(localized: "Producer Identified As Currently Valid"),
+    .producerIdentifiedAsCurrentlyInvalid : String(localized: "Producer Identified As Currently Invalid"),
+    .producerIdentified_reserved : String(localized: "Producer Identified Reserved"),
+    .identifyEventsAddressed : String(localized: "Identify Events Addressed"),
+    .identifyEventsGlobal : String(localized: "Identify Events Global"),
+    .learnEvent : String(localized: "Learn Event"),
+    .producerConsumerEventReport : String(localized: "Producer Consumer Event Report"),
+    .producerConsumerEventReportWithPayloadLastFrame : String(localized: "Producer Consumer Event Report With Payload Last Frame"),
+    .producerConsumerEventReportWithPayloadMiddleFrame : String(localized: "Producer Consumer Event Report With Payload Middle Frame"),
+    .producerConsumerEventReportWithPayloadFirstFrame : String(localized: "Producer Consumer Event Report With Payload First Frame"),
+    .tractionControlCommand : String(localized: "Traction Control Command"),
+    .tractionControlReply : String(localized: "Traction Control Reply"),
+    .xpressnet : String(localized: "Xpressnet"),
+    .remoteButtonRequest : String(localized: "Remote Button Request"),
+    .remoteButtonReply : String(localized: "Remote Button Reply"),
+    .simpleTrainNodeIdentInfoRequest : String(localized: "Simple Train Node Ident Info Request"),
+    .simpleTrainNodeIdentInfoReply : String(localized: "Simple Train Node Ident Info Reply"),
+    .simpleNodeIdentInfoRequest : String(localized: "Simple Node Ident Info Request"),
+    .simpleNodeIdentInfoReply : String(localized: "Simple Node Ident Info Reply"),
+    .datagram : String(localized: "Datagram"),
+    .datagramReceivedOK : String(localized: "Datagram Received OK"),
+    .datagramRejected : String(localized: "Datagram Rejected"),
+    .streamInitiateRequest : String(localized: "Stream Initiate Request"),
+    .streamInitiateReply : String(localized: "Stream Initiate Reply"),
+    .streamDataSend : String(localized: "Stream Data Send"),
+    .streamDataProceed : String(localized: "Stream Data Proceed"),
+    .streamDataComplete : String(localized: "Stream Data Complete"),
+    .sendLocoNetMessageReply : String(localized: "Send LocoNet Message Reply"),
+    .unknown : String(localized: "Unknown"),
+  ]
   
 }

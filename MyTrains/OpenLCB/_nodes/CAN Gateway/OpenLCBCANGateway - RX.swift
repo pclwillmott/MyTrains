@@ -66,7 +66,6 @@ extension OpenLCBCANGateway {
         break
       }
 
-      
     }
     
   }
@@ -75,7 +74,12 @@ extension OpenLCBCANGateway {
   
   internal func canFrameReceived(frame:LCCCANFrame) {
     
-    networkLayer?.canFrameReceived(gateway: self, frame: frame)
+    // Send a clone to the monitor system. It has to be a clone as the multi-part
+    // message decode damages the original frame.
+    
+    if let networkLayer, let cloneFrame = LCCCANFrame(message: frame.message) {
+      networkLayer.canFrameReceived(gateway: self, frame: cloneFrame)
+    }
     
     // The node shall restart the [alias allocation] process at the beginning if, before completion of the process, a
     // frame is received that carries a source Node ID alias value that is identical to the alias value being tested by this

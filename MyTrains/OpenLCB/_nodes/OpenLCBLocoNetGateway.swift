@@ -45,7 +45,7 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, M
       
       isLocoNetGatewayProtocolSupported = true
       
-      datagramTypesSupported.insert(.sendlocoNetMessage)
+      datagramTypesSupported.insert(.sendLocoNetMessage)
       
       if !memorySpacesInitialized {
         resetToFactoryDefaults()
@@ -379,7 +379,7 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, M
       
     case .datagram:
       
-      if let datagramType = message.datagramType, datagramType == .sendlocoNetMessage, let sourceNodeId = message.sourceNodeId {
+      if let datagramType = message.datagramType, datagramType == .sendLocoNetMessage, let sourceNodeId = message.sourceNodeId {
 
         if !isOpen {
           sendDatagramRejected(destinationNodeId: sourceNodeId, errorCode: .permanentErrorNoConnection)

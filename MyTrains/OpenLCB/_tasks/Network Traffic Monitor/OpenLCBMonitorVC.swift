@@ -26,6 +26,10 @@ class OpenLCBMonitorVC: NSViewController, NSWindowDelegate, OpenLCBNetworkObserv
   
   override func viewWillAppear() {
     
+    guard let networkLayer = myTrainsController.openLCBNetworkLayer else {
+      return
+    }
+    
     self.view.window?.delegate = self
     
     txtMonitor.font = NSFont(name: "Menlo", size: 12)
@@ -34,14 +38,14 @@ class OpenLCBMonitorVC: NSViewController, NSWindowDelegate, OpenLCBNetworkObserv
     
     cboOpenLCBOptions.selectItem(at: 3)
     
-    observerId = myTrainsController.openLCBNetworkLayer!.addObserver(observer: self)
-        
+    observerId = networkLayer.addObserver(observer: self)
+    
+    networkLayer.isMonitorPaused = false
+    
   }
   
   // MARK: Private Properties
 
-  private var isPaused = false
-  
   private var showCANReceived : Bool {
     let index = cboCANOptions.indexOfSelectedItem
     return index == 1 || index == 3
@@ -64,70 +68,14 @@ class OpenLCBMonitorVC: NSViewController, NSWindowDelegate, OpenLCBNetworkObserv
   
   private var observerId : Int = -1
 
-  private var lineBuffer : [String] = []
-
   // MARK: Private Methods
-  
-  // This is running in a background thread
-  private func addToConsole(message:String) {
-  
-    if !message.isEmpty && !isPaused {
-      
-      // Update UI in main thread
-      DispatchQueue.main.async {
-        
-        self.lineBuffer.append(message)
-        
-        while self.lineBuffer.count > 200 {
-          self.lineBuffer.removeFirst()
-        }
-        
-        var newString = ""
-
-        for line in self.lineBuffer {
-          newString += "\(line)\n"
-        }
-        
-        self.txtMonitor.string = "\(newString)"
-        let range = NSMakeRange(self.txtMonitor.string.count - 1, 0)
-        self.txtMonitor.scrollRangeToVisible(range)
-        
-      }
-      
-    }
-
-  }
   
   // MARK: OpenLCBNetworkObserverDelegate Methods
   
-  // This is running in a background thread
-  @objc func openLCBMessageReceived(message: OpenLCBMessage) {
-    
-    var text = ""
-    
-    if let sourceNodeId = message.sourceNodeId {
-      text += "\(sourceNodeId.toHexDotFormat(numberOfBytes: 6))"
-    }
-    if let destinationNodeId = message.destinationNodeId {
-      text += " → \(destinationNodeId.toHexDotFormat(numberOfBytes: 6)) "
-    }
-    
-    text += String(repeating: " ", count: 39 - text.count)
-    
-    text += "\(message.messageTypeIndicator)"
-
-    self.addToConsole(message: text)
-    
-  }
-  
-  // This is running in a background thread
-  @objc func canFrameReceived(gateway:OpenLCBCANGateway, frame:LCCCANFrame) {
-    addToConsole(message: "→ \(frame.info)")
-  }
-  
-  // This is running in a background thread
-  @objc func canFrameSent(gateway:OpenLCBCANGateway, frame:LCCCANFrame) {
-    addToConsole(message: "← \(frame.info)")
+  @objc func updateMonitor(text: String) {
+    txtMonitor.string = text
+    let range = NSMakeRange(text.count - 1, 0)
+    txtMonitor.scrollRangeToVisible(range)
   }
 
   // MARK: Outlets & Actions
@@ -137,17 +85,20 @@ class OpenLCBMonitorVC: NSViewController, NSWindowDelegate, OpenLCBNetworkObserv
   @IBOutlet var txtMonitor: NSTextView!
   
   @IBAction func btnClearAction(_ sender: NSButton) {
-    lineBuffer.removeAll()
-    txtMonitor.string = ""
+    guard let networkLayer = myTrainsController.openLCBNetworkLayer else {
+      return
+    }
+    networkLayer.clearMonitorBuffer()
   }
   
   @IBOutlet weak var btnPause: NSButton!
   
   @IBAction func btnPauseAction(_ sender: NSButton) {
-    isPaused = sender.state == .on
+    guard let networkLayer = myTrainsController.openLCBNetworkLayer else {
+      return
+    }
+    networkLayer.isMonitorPaused = sender.state == .on
   }
-  
-  private var _isPaused = false
   
   @IBOutlet weak var cboCANOptions: NSComboBox!
   

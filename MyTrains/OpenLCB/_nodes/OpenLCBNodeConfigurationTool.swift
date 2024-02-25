@@ -19,6 +19,11 @@ public class OpenLCBNodeConfigurationTool : OpenLCBNodeVirtual {
     
     isDatagramProtocolSupported = true
 
+    datagramTypesSupported.insert(.readReply0xFD)
+    datagramTypesSupported.insert(.readReply0xFE)
+    datagramTypesSupported.insert(.readReply0xFF)
+    datagramTypesSupported.insert(.readReplyGeneric)
+
     if !memorySpacesInitialized {
       resetToFactoryDefaults()
     }

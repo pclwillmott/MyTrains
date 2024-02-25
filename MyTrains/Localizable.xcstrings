@@ -414,6 +414,9 @@
     "Accept" : {
       "comment" : "Used to accept license agreement"
     },
+    "Accept Flag" : {
+
+    },
     "ACDI" : {
       "localizations" : {
         "en" : {
@@ -517,6 +520,15 @@
           }
         }
       }
+    },
+    "Alias Map Definition Frame" : {
+
+    },
+    "Alias Map Reset Frame" : {
+
+    },
+    "Alias Mapping Enquiry Frame" : {
+
     },
     "Alternate Clock 1" : {
       "comment" : "Used to indicate a clock's type",
@@ -996,6 +1008,18 @@
         }
       }
     },
+    "Check ID 4 Frame" : {
+
+    },
+    "Check ID 5 Frame" : {
+
+    },
+    "Check ID 6 Frame" : {
+
+    },
+    "Check ID 7 Frame" : {
+
+    },
     "China" : {
       "comment" : "This is the name of a country."
     },
@@ -1015,6 +1039,12 @@
           }
         }
       }
+    },
+    "Clear Emergency Off All" : {
+
+    },
+    "Clear Emergency Stop All" : {
+
     },
     "Clear Global Emergency Stop" : {
       "comment" : "Used for the Clear Global Emergency Stop menu item title",
@@ -1397,6 +1427,21 @@
         }
       }
     },
+    "Consumer Identified As Currently Invalid" : {
+
+    },
+    "Consumer Identified As Currently Valid" : {
+
+    },
+    "Consumer Identified Reserved" : {
+
+    },
+    "Consumer Identified With Validity Unknown" : {
+
+    },
+    "Consumer Range Identified" : {
+
+    },
     "Copy" : {
       "comment" : "Used for the title of a button copies to the clipboard"
     },
@@ -1524,7 +1569,31 @@
         }
       }
     },
+    "Datagram" : {
+
+    },
+    "Datagram Complete In Frame" : {
+
+    },
+    "Datagram Final Frame" : {
+
+    },
+    "Datagram First Frame" : {
+
+    },
+    "Datagram Middle Frame" : {
+
+    },
     "Datagram Protocol" : {
+
+    },
+    "Datagram Received OK" : {
+
+    },
+    "Datagram Rejected" : {
+
+    },
+    "Datagram Type Unknown" : {
 
     },
     "DCC 14" : {
@@ -1757,6 +1826,12 @@
     "Default Date and Time" : {
       "comment" : "Used to indicate what is the initial date and time setting for a clock"
     },
+    "Default Fast Clock" : {
+
+    },
+    "Default Real-Time Clock" : {
+
+    },
     "Delegate" : {
       "comment" : "Used to indicate that the workstation is delegate mode",
       "localizations" : {
@@ -1970,6 +2045,9 @@
         }
       }
     },
+    "Duplicate Node ID Detected" : {
+
+    },
     "Dynamic Brake" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -2090,6 +2168,12 @@
         }
       }
     },
+    "Emergency Off All" : {
+
+    },
+    "Emergency Stop All" : {
+
+    },
     "Enabled" : {
       "comment" : "Used to indicate that something is not disabled",
       "localizations" : {
@@ -2158,6 +2242,18 @@
           }
         }
       }
+    },
+    "Error Information Report 0" : {
+
+    },
+    "Error Information Report 1" : {
+
+    },
+    "Error Information Report 2" : {
+
+    },
+    "Error Information Report 3" : {
+
     },
     "Even Parity" : {
       "comment" : "Used to indicate that the serial port is configured for even parity",
@@ -2279,10 +2375,16 @@
         }
       }
     },
+    "Firmware Corrupted" : {
+
+    },
     "Firmware Upgrade Active" : {
 
     },
     "Firmware Upgrade Protocol" : {
+
+    },
+    "Firmware Upgrade Requested By Switch" : {
 
     },
     "Flange Squeal" : {
@@ -2339,6 +2441,9 @@
         }
       }
     },
+    "Freeze Command" : {
+
+    },
     "ft." : {
       "comment" : "Used for the abbreviation of feet (length)"
     },
@@ -2388,6 +2493,33 @@
     "Germany" : {
       "comment" : "This is the name of a country."
     },
+    "Get Address Space Information Command" : {
+
+    },
+    "Get Address Space Information Reply" : {
+
+    },
+    "Get Address Space Information Reply Low Address Present" : {
+
+    },
+    "Get Configuration Options Command" : {
+
+    },
+    "Get Configuration Options Reply" : {
+
+    },
+    "Get Unique Event ID Command" : {
+
+    },
+    "Get Unique Event ID Reply" : {
+
+    },
+    "Get Unique Node ID Command" : {
+
+    },
+    "Get Unique Node ID Reply" : {
+
+    },
     "Getting CDI" : {
       "localizations" : {
         "en" : {
@@ -2403,6 +2535,9 @@
           }
         }
       }
+    },
+    "Global And Addressed MTI" : {
+
     },
     "Global Emergency Stop" : {
       "comment" : "Used for the Global Emergency Stop menu item title",
@@ -2552,6 +2687,9 @@
     "Hours" : {
 
     },
+    "Ident Button Combination Pressed" : {
+
+    },
     "Identification" : {
       "localizations" : {
         "en" : {
@@ -2569,6 +2707,27 @@
       }
     },
     "Identification Protocol" : {
+
+    },
+    "Identify Consumer" : {
+
+    },
+    "Identify Events Addressed" : {
+
+    },
+    "Identify Events Global" : {
+
+    },
+    "Identify MyTrains Layouts" : {
+
+    },
+    "Identify MyTrains Switchboard Items" : {
+
+    },
+    "Identify MyTrains Switchboard Panels" : {
+
+    },
+    "Identify Producer" : {
 
     },
     "Idle" : {
@@ -2642,6 +2801,12 @@
     },
     "India" : {
       "comment" : "This is the name of a country."
+    },
+    "Initialization Complete Full Protocol Required" : {
+
+    },
+    "Initialization Complete Simple Set Sufficient" : {
+
     },
     "Initializing" : {
       "comment" : "Used to indicate that the workstation is initializing",
@@ -2849,6 +3014,9 @@
         }
       }
     },
+    "Learn Event" : {
+
+    },
     "Left Curved Turnout" : {
       "comment" : "This is used to describe a piece of track."
     },
@@ -2912,6 +3080,27 @@
     "Link" : {
       "comment" : "This is used to describe a switchboard item."
     },
+    "Link Error Code 1" : {
+
+    },
+    "Link Error Code 2" : {
+
+    },
+    "Link Error Code 3" : {
+
+    },
+    "Link Error Code 4" : {
+
+    },
+    "Location Services Report" : {
+
+    },
+    "Lock Reserve Command" : {
+
+    },
+    "Lock Reserve Reply" : {
+
+    },
     "LocoNet Dashboard" : {
       "comment" : "Used for the LocoNet Dashboard menu item title",
       "localizations" : {
@@ -2947,6 +3136,9 @@
       }
     },
     "LocoNet Gateway Protocol" : {
+
+    },
+    "LocoNet Message" : {
 
     },
     "LocoNet Monitor" : {
@@ -3390,6 +3582,15 @@
         }
       }
     },
+    "MyTrains Layout Activated" : {
+
+    },
+    "MyTrains Layout Deactivated" : {
+
+    },
+    "MyTrains Layout Deleted" : {
+
+    },
     "N" : {
       "comment" : "Used to indicate the track gauge",
       "extractionState" : "stale",
@@ -3515,6 +3716,27 @@
           }
         }
       }
+    },
+    "Node Is A DCC Programming Track" : {
+
+    },
+    "Node Is A LocoNet Gateway" : {
+
+    },
+    "Node Is A Switchboard Item" : {
+
+    },
+    "Node Is A Switchboard Panel" : {
+
+    },
+    "Node Is A Traction Proxy" : {
+
+    },
+    "Node Is A Train" : {
+
+    },
+    "Node Recorded New Log Entry" : {
+
     },
     "None" : {
 
@@ -3681,6 +3903,9 @@
         }
       }
     },
+    "Optional Interaction Rejected" : {
+
+    },
     "Other" : {
 
     },
@@ -3773,11 +3998,104 @@
     "Paste" : {
       "comment" : "Used for the title of a button that pastes from the clipboard"
     },
+    "Permanent Error" : {
+
+    },
+    "Permanent Error Address Out Of Bounds" : {
+
+    },
+    "Permanent Error Address Space Unknown" : {
+
+    },
+    "Permanent Error Already Exists" : {
+
+    },
+    "Permanent Error Invalid Arguments" : {
+
+    },
+    "Permanent Error Invalid Arguments Firmware Data Incompatible With Hardware" : {
+
+    },
+    "Permanent Error Invalid Arguments Firmware Data Invalid Or Corrupted" : {
+
+    },
+    "Permanent Error No Connection" : {
+
+    },
+    "Permanent Error No Decoder Detected" : {
+
+    },
+    "Permanent Error Not Found" : {
+
+    },
+    "Permanent Error Not Implemented" : {
+
+    },
+    "Permanent Error Not Implemented Datagram Type, Stream Type, Or Command Unknown" : {
+
+    },
+    "Permanent Error Not Implemented Subcommand Unknown" : {
+
+    },
+    "Permanent Error Not Implemented Unknown MTI Or Transport Protocol Not Supported" : {
+
+    },
+    "Permanent Error Read CV Failed" : {
+
+    },
+    "Permanent Error Reserved 1" : {
+
+    },
+    "Permanent Error Reserved 5" : {
+
+    },
+    "Permanent Error Reserved 6" : {
+
+    },
+    "Permanent Error Reserved 7" : {
+
+    },
+    "Permanent Error Reserved 9" : {
+
+    },
+    "Permanent Error Reserved 10" : {
+
+    },
+    "Permanent Error Reserved 11" : {
+
+    },
+    "Permanent Error Reserved 12" : {
+
+    },
+    "Permanent Error Reserved 13" : {
+
+    },
+    "Permanent Error Reserved 14" : {
+
+    },
+    "Permanent Error Reserved 15" : {
+
+    },
+    "Permanent Error Source Not Permitted" : {
+
+    },
+    "Permanent Error Write Access To Read Only Space" : {
+
+    },
+    "Permanent Error Write CV Failed" : {
+
+    },
     "Platform" : {
       "comment" : "This is used to describe a switchboard item."
     },
     "Poland" : {
       "comment" : "This is the name of a country."
+    },
+    "Power Supply Brownout Detected Node" : {
+
+    },
+    "Power Supply Brownout Detected Standard" : {
+
     },
     "Previous" : {
       "comment" : "Used to describe the direction of the previous block in respect of a train route",
@@ -3795,6 +4113,39 @@
           }
         }
       }
+    },
+    "Producer Consumer Event Report" : {
+
+    },
+    "Producer Consumer Event Report With Payload First Frame" : {
+
+    },
+    "Producer Consumer Event Report With Payload Last Frame" : {
+
+    },
+    "Producer Consumer Event Report With Payload Middle Frame" : {
+
+    },
+    "Producer Identified As Currently Invalid" : {
+
+    },
+    "Producer Identified As Currently Valid" : {
+
+    },
+    "Producer Identified Reserved" : {
+
+    },
+    "Producer Identified With Validity Unknown" : {
+
+    },
+    "Producer Range Identified" : {
+
+    },
+    "Protocol Support Inquiry" : {
+
+    },
+    "Protocol Support Reply" : {
+
     },
     "Push Button" : {
 
@@ -3832,6 +4183,78 @@
           }
         }
       }
+    },
+    "Read Command" : {
+
+    },
+    "Read Command (All Memory)" : {
+
+    },
+    "Read Command (CDI)" : {
+
+    },
+    "Read Command (Configuration Space)" : {
+
+    },
+    "Read Reply" : {
+
+    },
+    "Read Reply (All Memory)" : {
+
+    },
+    "Read Reply (CDI)" : {
+
+    },
+    "Read Reply (Configuration Space)" : {
+
+    },
+    "Read Reply Failure" : {
+
+    },
+    "Read Reply Failure (All Memory)" : {
+
+    },
+    "Read Reply Failure (CDI)" : {
+
+    },
+    "Read Reply Failure (Configuration Space)" : {
+
+    },
+    "Read Stream Command" : {
+
+    },
+    "Read Stream Command (All Memory)" : {
+
+    },
+    "Read Stream Command (CDI)" : {
+
+    },
+    "Read Stream Command (Configuration Space)" : {
+
+    },
+    "Read Stream Reply" : {
+
+    },
+    "Read Stream Reply (All Memory)" : {
+
+    },
+    "Read Stream Reply (CDI)" : {
+
+    },
+    "Read Stream Reply (Configuration Space)" : {
+
+    },
+    "Read Stream Reply Failure" : {
+
+    },
+    "Read Stream Reply Failure (All Memory)" : {
+
+    },
+    "Read Stream Reply Failure (CDI)" : {
+
+    },
+    "Read Stream Reply Failure (Configuration Space)" : {
+
     },
     "Reading Configuration Description Information - %lld bytes" : {
       "localizations" : {
@@ -3953,10 +4376,22 @@
         }
       }
     },
+    "Reinitialize/Factory Reset Command" : {
+
+    },
     "Remote Button Protocol" : {
 
     },
+    "Remote Button Reply" : {
+
+    },
+    "Remote Button Request" : {
+
+    },
     "Reservation Protocol" : {
+
+    },
+    "Reserve ID Frame" : {
 
     },
     "Reserved 1" : {
@@ -3992,6 +4427,9 @@
           }
         }
       }
+    },
+    "Reset Reboot Command" : {
+
     },
     "Reset to Defaults" : {
       "localizations" : {
@@ -4213,6 +4651,12 @@
         }
       }
     },
+    "Send LocoNet Message Command" : {
+
+    },
+    "Send LocoNet Message Reply" : {
+
+    },
     "Sending unadvertised event" : {
 
     },
@@ -4289,10 +4733,22 @@
     "Signal" : {
       "comment" : "This is used to describe a switchboard item."
     },
+    "Simple Node Ident Info Reply" : {
+
+    },
+    "Simple Node Ident Info Request" : {
+
+    },
     "Simple Node Information Protocol" : {
 
     },
     "Simple Protocol Subset" : {
+
+    },
+    "Simple Train Node Ident Info Reply" : {
+
+    },
+    "Simple Train Node Ident Info Request" : {
 
     },
     "Simple Train Node Information Protocol" : {
@@ -4534,7 +4990,28 @@
     "Straight Track" : {
       "comment" : "This is used to describe a piece of track."
     },
+    "Stream Data" : {
+
+    },
+    "Stream Data Complete" : {
+
+    },
+    "Stream Data Proceed" : {
+
+    },
+    "Stream Data Send" : {
+
+    },
+    "Stream Initiate Reply" : {
+
+    },
+    "Stream Initiate Request" : {
+
+    },
     "Stream Protocol" : {
+
+    },
+    "Success" : {
 
     },
     "Switch Board" : {
@@ -4676,6 +5153,72 @@
     "Teaching/Learning Configuration Protocol" : {
 
     },
+    "Temporary Error Buffer Unavailable" : {
+
+    },
+    "Temporary Error LocoNet Collision" : {
+
+    },
+    "Temporary Error Not Further Specified" : {
+
+    },
+    "Temporary Error Out Of Order" : {
+
+    },
+    "Temporary Error Out Of Order Middle Or End Frame Without Start Frame" : {
+
+    },
+    "Temporary Error Out Of Order Start Frame Before Finishing Previous Message" : {
+
+    },
+    "Temporary Error Reserved 3" : {
+
+    },
+    "Temporary Error Reserved 5" : {
+
+    },
+    "Temporary Error Reserved 6" : {
+
+    },
+    "Temporary Error Reserved 7" : {
+
+    },
+    "Temporary Error Reserved 9" : {
+
+    },
+    "Temporary Error Reserved 10" : {
+
+    },
+    "Temporary Error Reserved 11" : {
+
+    },
+    "Temporary Error Reserved 12" : {
+
+    },
+    "Temporary Error Reserved 13" : {
+
+    },
+    "Temporary Error Reserved 14" : {
+
+    },
+    "Temporary Error Reserved 15" : {
+
+    },
+    "Temporary Error Time Out" : {
+
+    },
+    "Temporary Error Time Out Waiting For End Frame" : {
+
+    },
+    "Temporary Error Transfer Error" : {
+
+    },
+    "Temporary Error Transfer Error Failed Checksum" : {
+
+    },
+    "Terminate Due To Error" : {
+
+    },
     "The node \"%@\" (%@) is attempting to send the unadvertised event: %@" : {
       "localizations" : {
         "en" : {
@@ -4804,7 +5347,31 @@
         }
       }
     },
+    "Traction Control Command" : {
+
+    },
     "Traction Control Protocol" : {
+
+    },
+    "Traction Control Reply" : {
+
+    },
+    "Train Move Complete" : {
+
+    },
+    "Train Move Start" : {
+
+    },
+    "Train Move Update" : {
+
+    },
+    "Train Search" : {
+
+    },
+    "Train Search DCC Long Address" : {
+
+    },
+    "Train Search DCC Short Address" : {
 
     },
     "Train Speed Profiler" : {
@@ -4920,6 +5487,9 @@
         }
       }
     },
+    "Unfreeze Command" : {
+
+    },
     "Unidirectional" : {
       "comment" : "Used by combobox to indicate that trains can travel in one direction only in the track block",
       "localizations" : {
@@ -4958,7 +5528,7 @@
       "comment" : "This is the name of a country."
     },
     "Unknown" : {
-      "comment" : "Used to indicate that the type of something is unknown\nUsed to indicate the state of a turnout",
+      "comment" : "Used to indicate the state of a turnout\nUsed to indicate that the type of something is unknown",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -4973,6 +5543,9 @@
           }
         }
       }
+    },
+    "Update Complete Command" : {
+
     },
     "Use Custom Dimensions" : {
       "comment" : "Used as the title for custom dimensions of a track part."
@@ -5027,6 +5600,18 @@
           }
         }
       }
+    },
+    "Verified Node ID Full Protocol Required" : {
+
+    },
+    "Verified Node ID Simple Set Sufficient" : {
+
+    },
+    "Verify Node ID Addressed" : {
+
+    },
+    "Verify Node ID Global" : {
+
     },
     "View" : {
       "comment" : "Used for the View menu item title",
@@ -5231,6 +5816,18 @@
         }
       }
     },
+    "Write Command" : {
+
+    },
+    "Write Command (All Memory)" : {
+
+    },
+    "Write Command (CDI)" : {
+
+    },
+    "Write Command (Configuration Space)" : {
+
+    },
     "Write failed" : {
       "localizations" : {
         "en" : {
@@ -5246,6 +5843,78 @@
           }
         }
       }
+    },
+    "Write Reply" : {
+
+    },
+    "Write Reply (All Memory)" : {
+
+    },
+    "Write Reply (CDI)" : {
+
+    },
+    "Write Reply (Configuration Space)" : {
+
+    },
+    "Write Reply Failure" : {
+
+    },
+    "Write Reply Failure (All Memory)" : {
+
+    },
+    "Write Reply Failure (CDI)" : {
+
+    },
+    "Write Reply Failure (Configuration Space)" : {
+
+    },
+    "Write Stream Command" : {
+
+    },
+    "Write Stream Command (All Memory)" : {
+
+    },
+    "Write Stream Command (CDI)" : {
+
+    },
+    "Write Stream Command (Configuration Space)" : {
+
+    },
+    "Write Stream Reply" : {
+
+    },
+    "Write Stream Reply (All Memory)" : {
+
+    },
+    "Write Stream Reply (CDI)" : {
+
+    },
+    "Write Stream Reply (Configuration Space)" : {
+
+    },
+    "Write Stream Reply Failure" : {
+
+    },
+    "Write Stream Reply Failure (All Memory)" : {
+
+    },
+    "Write Stream Reply Failure (CDI)" : {
+
+    },
+    "Write Stream Reply Failure (Configuration Space)" : {
+
+    },
+    "Write Under Mask Command" : {
+
+    },
+    "Write Under Mask Command (All Memory)" : {
+
+    },
+    "Write Under Mask Command (CDI)" : {
+
+    },
+    "Write Under Mask Command (Configuration Space)" : {
+
     },
     "Writing Variables - %lld bytes" : {
       "localizations" : {
@@ -5286,6 +5955,9 @@
           }
         }
       }
+    },
+    "Xpressnet" : {
+
     },
     "Y Turnout" : {
       "comment" : "This is used to describe a piece of track."
