@@ -1685,7 +1685,7 @@
 
     },
     "DCC Programmer Tool" : {
-      "comment" : "Used to create a default OpenLCB virtual name\nUsed for the DCC Programmer Tool menu item title",
+      "comment" : "Used for the DCC Programmer Tool menu item title\nUsed to create a default OpenLCB virtual name",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2327,7 +2327,7 @@
       }
     },
     "Fast Clock" : {
-      "comment" : "Used to indicate a clock's type\nUsed for the Fast Clock menu item title",
+      "comment" : "Used for the Fast Clock menu item title\nUsed to indicate a clock's type",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -4528,7 +4528,7 @@
       "comment" : "This is the name of a country."
     },
     "s" : {
-      "comment" : "Used for the abbreviation of seconds\nUsed for the Global Emergency Stop menu key equivalent",
+      "comment" : "Used for the Global Emergency Stop menu key equivalent\nUsed for the abbreviation of seconds",
       "localizations" : {
         "en" : {
           "stringUnit" : {

@@ -13,69 +13,45 @@ public class LCCCANFrame : NSObject {
     
   init?(message:String) {
     
-    // Check that the message conforms to the standard
-    
-    guard LCCCANFrame.canMessageOK(message: message) else {
+    guard message.prefix(2) == ":X" && message.last == ";" else {
       return nil
     }
     
-    // Create frame string by striping the prefix and suffix
-    
     var frame = message
-    frame.removeFirst()
-    frame.removeFirst()
+    frame.removeFirst(2)
     frame.removeLast()
     
-    // Split into header and data sections
+    let section = frame.split(separator: "N", omittingEmptySubsequences: true)
     
-    let temp1 = frame.split(separator: "N")
+    header = UInt32(hex: section[0])
     
-    // Extract header value
-    
-    self.header = UInt32(hex: temp1[0])
-    
-    // Extract data if present
-    
-    data = []
-    
-    if temp1.count == 2 {
+    if section.count == 2 {
       
-      var temp2 = temp1[1]
+      var temp = section[1]
       
-      while temp2.count > 0 {
-        data.append(UInt8(hex:temp2.prefix(2)))
-        temp2.removeFirst(2)
+      while temp.count > 0 {
+        data.append(UInt8(hex:temp.prefix(2)))
+        temp.removeFirst(2)
       }
       
     }
     
-    // Init super
-    
     super.init()
     
-    // Done.
-    
+  }
+  
+  init(header:UInt32, data:[UInt8]) {
+    self.header = header
+    self.data = data
+    super.init()
   }
 
   init?(message:OpenLCBMessage) {
     
-    // Check that the message is complete
-    
-    guard message.isMessageComplete else {
-      return nil
-    }
-    
-    // Build CAN header
-    
     header  = 0x18000000 // CAN Prefix
-    
     header |= (OpenLCBMessage.canFrameType(message: message).rawValue & 0x07) << 24
-    
     header |= UInt32(message.messageTypeIndicator.rawValue & 0x0fff) << 12
-    
     header |= UInt32(message.sourceNIDAlias! & 0xfff)
-    
-    // Build CAN data payload
     
     data = []
     
@@ -86,80 +62,39 @@ public class LCCCANFrame : NSObject {
       data.append(UInt8(temp & 0xff))
     }
     
-    if message.messageTypeIndicator.isEventPresent {
-      var mask : UInt64 = 0xff00000000000000
-      let eventId = message.eventId!
-      for index in 0...7 {
-        data.append(UInt8((eventId & mask) >> ((7 - index) * 8)))
-        mask >>= 8
-      }
+    if message.messageTypeIndicator.isEventPresent, let eventId = message.eventId {
+      data.append(contentsOf: eventId.bigEndianData)
     }
 
-    for byte in message.payload {
-      data.append(byte)
-    }
+    data.append(contentsOf: message.payload)
     
-    // Init super
+    timeStamp = message.timeStamp
     
     super.init()
-    
-    // Done.
     
   }
 
   init?(pcerMessage:OpenLCBMessage, payload:[UInt8]) {
     
-    // Check that the message is complete
-    
-    var message = pcerMessage
-    
-    guard message.isMessageComplete else {
-      return nil
-    }
-    
-    // Build CAN header
-    
     header  = 0x18000000 // CAN Prefix
+    header |= (OpenLCBMessage.canFrameType(message: pcerMessage).rawValue & 0x07) << 24
+    header |= UInt32(pcerMessage.messageTypeIndicator.rawValue & 0x0fff) << 12
+    header |= UInt32(pcerMessage.sourceNIDAlias! & 0xfff)
     
-    header |= (OpenLCBMessage.canFrameType(message: message).rawValue & 0x07) << 24
+    data = payload
     
-    header |= UInt32(message.messageTypeIndicator.rawValue & 0x0fff) << 12
-    
-    header |= UInt32(message.sourceNIDAlias! & 0xfff)
-    
-    // Build CAN data payload
-    
-    data.append(contentsOf: payload)
-    
-    // Init super
+    timeStamp = pcerMessage.timeStamp
     
     super.init()
     
-    // Done.
-    
   }
 
-  init?(message:OpenLCBMessage, flags: OpenLCBCANFrameFlag, frameNumber: Int) {
-    
-    // Check that the message is complete
-    
-    guard message.isMessageComplete else {
-      return nil
-    }
-    
-    // Build CAN header
+  init?(message:OpenLCBMessage, flags: OpenLCBCANFrameFlag, payload:[UInt8]) {
     
     header  = 0x18000000 // CAN Prefix
-    
     header |= (OpenLCBMessage.canFrameType(message: message).rawValue & 0x07) << 24
-    
     header |= UInt32(message.messageTypeIndicator.rawValue & 0x0fff) << 12
-    
     header |= UInt32(message.sourceNIDAlias! & 0xfff)
-    
-    // Build CAN data payload
-    
-    data = []
     
     if message.messageTypeIndicator.isAddressPresent {
       var temp = message.destinationNIDAlias! & 0x0fff
@@ -168,96 +103,45 @@ public class LCCCANFrame : NSObject {
       data.append(UInt8(temp & 0xff))
     }
     
-    if message.messageTypeIndicator.isEventPresent {
-      var mask : UInt64 = 0xff00000000000000
-      let eventId = message.eventId!
-      for index in 0...7 {
-        data.append(UInt8((eventId & mask) >> ((7 - index) * 8)))
-        mask >>= 8
-      }
+    if message.messageTypeIndicator.isEventPresent, let eventId = message.eventId {
+      data.append(contentsOf: eventId.bigEndianData)
     }
 
-    for byte in message.payload {
-      data.append(byte)
-    }
+    data.append(contentsOf: payload)
     
-    var numberToRemove = (frameNumber - 1) * 6
-    
-    while numberToRemove > 0 {
-      data.remove(at: 2)
-      numberToRemove -= 1
-    }
-    
-    while data.count > 8 {
-      data.removeLast()
-    }
+    timeStamp = message.timeStamp
 
-    
-    // Init super
-    
     super.init()
-    
-    // Done.
-    
+
   }
 
   init?(message:OpenLCBMessage, mti:OpenLCBMTI, payload:[UInt8]) {
     
-    // Check that the message is complete
-    
-    guard message.isMessageComplete else {
-      return nil
-    }
-    
-    // Build CAN header
-    
     header  = 0x18000000 // CAN Prefix
-    
     header |= (OpenLCBMessage.canFrameType(message: message).rawValue & 0x07) << 24
-    
     header |= UInt32(mti.rawValue & 0x0fff) << 12
-    
     header |= UInt32(message.sourceNIDAlias! & 0xfff)
-    
-    // Build CAN data payload
     
     data = payload
     
-    // Init super
+    timeStamp = message.timeStamp
     
     super.init()
-    
-    // Done.
     
   }
 
   init?(message:OpenLCBMessage, canFrameType:OpenLCBMessageCANFrameType, data: [UInt8]) {
     
-    // Check that the message is complete
-    
-    guard message.isMessageComplete else {
-      return nil
-    }
-    
-    // Build CAN header
-    
     header  = 0x18000000 // CAN Prefix
-    
     header |= (canFrameType.rawValue & 0x07) << 24
-    
     header |= UInt32(message.destinationNIDAlias! & 0x0fff) << 12
-    
     header |= UInt32(message.sourceNIDAlias! & 0xfff)
-    
-    // Build CAN data payload
     
     self.data = data
     
-    // Init super
+    timeStamp = message.timeStamp
     
     super.init()
-    
-    // Done.
     
   }
 
@@ -267,9 +151,15 @@ public class LCCCANFrame : NSObject {
   
   // MARK: Public Properties
   
+  public var clone : LCCCANFrame {
+    return LCCCANFrame(header: header, data: data)
+  }
+  
   public var header : UInt32
   
   public var data : [UInt8] = []
+  
+  public var timeStamp : TimeInterval = 0.0
   
   public var splitFrameId : UInt64 {
     
@@ -293,23 +183,17 @@ public class LCCCANFrame : NSObject {
   }
   
   public var dataAsHex : String {
-    get {
-      var result = ""
-      for byte in data {
-        result += byte.toHex(numberOfDigits: 2)
-      }
-      return result
+    var result = ""
+    for byte in data {
+      result += byte.toHex(numberOfDigits: 2)
     }
+    return result
   }
   
   public var message : String {
     return ":X\(header.toHex(numberOfDigits: 8))N\(dataAsHex);"
   }
   
-  public var timeStamp : TimeInterval = 0.0
-  
-  public var timeSinceLastMessage : TimeInterval = 0.0
-
   public var frameType : OpenLCBCANFrameType {
     return (header & mask_FrameType) == mask_FrameType ? .openLCBMessage : .canControlFrame
   }
@@ -416,17 +300,13 @@ public class LCCCANFrame : NSObject {
     
   // MARK: Public Class Methods
   
-  public static func createFrameHeader(frameType: OpenLCBCANFrameType, contentField: UInt16, sourceNIDAlias: UInt16) -> String {
+  public static func createFrameHeader(frameType: OpenLCBCANFrameType, contentField: UInt16, sourceNIDAlias: UInt16) -> UInt32 {
     
     var header : UInt32 = 0x10000000
-    
     header |= (frameType == .openLCBMessage) ? 0x08000000 : 0
-    
     header |= UInt32((contentField & 0x07fff)) << 12
-    
     header |= UInt32(sourceNIDAlias & 0x0fff)
-    
-    return header.toHex(numberOfDigits: 8)
+    return header
     
   }
   

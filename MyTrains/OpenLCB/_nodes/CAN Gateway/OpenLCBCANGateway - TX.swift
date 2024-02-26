@@ -10,32 +10,24 @@ import Foundation
 extension OpenLCBCANGateway {
   
   // This is may or may not be running in the main thread
-  public func send(data: [UInt8], isBackgroundThread:Bool) {
+  public func send(frames:[LCCCANFrame], isBackgroundThread:Bool) {
     
-    var temp = data
-    temp.append(0)
-    
-    if let frame = LCCCANFrame(message: String(cString: temp)) {
-      networkLayer?.canFrameSent(gateway: self, frame: frame, isBackgroundThread: isBackgroundThread)
+    guard let networkLayer else {
+      return
     }
     
-    sendToSerialPortPipe?.write(data: data)
-    
-  }
+    var buffer = ""
 
-  public func send(data:String, isBackgroundThread:Bool) {
-    send(data: [UInt8](data.utf8), isBackgroundThread: isBackgroundThread)
-  }
-
-  internal func send(header: String, data:String, isBackgroundThread:Bool) {
-    if let serialPort, serialPort.isOpen {
-      let packet = ":X\(header)N\(data);"
-      send(data: packet, isBackgroundThread: isBackgroundThread)
+    for frame in frames {
+      buffer += frame.message
+      networkLayer.canFrameSent(gateway: self, frame: frame, isBackgroundThread: isBackgroundThread)
     }
+
+    sendToSerialPortPipe?.write(data: [UInt8](buffer.utf8))
+
   }
 
   // This is running in the main thread
-  
   internal func processOutputQueue() {
    
     stopWaitTimer()
@@ -75,44 +67,41 @@ extension OpenLCBCANGateway {
       }
       else {
         
+        var frames : [LCCCANFrame] = []
+        
         switch message.messageTypeIndicator {
           
         case .datagram:
           
-          if message.payload.count <= 8 {
-            if let frame = LCCCANFrame(message: message, canFrameType: .datagramCompleteInFrame, data: message.payload) {
-              send(data: frame.message, isBackgroundThread: false)
+          var payload = message.payload
+          
+          let numberOfFrames = payload.count == 0 ? 1 : 1 + (payload.count - 1) / 8
+          
+          if numberOfFrames == 1 {
+            if let frame = LCCCANFrame(message: message, canFrameType: .datagramCompleteInFrame, data: payload) {
+              frames.append(frame)
             }
           }
           else {
             
-            let numberOfFrames = message.payload.count == 0 ? 1 : 1 + (message.payload.count - 1) / 8
-            
-            for frameNumber in 1...numberOfFrames {
+            for frameNumber in 1 ... numberOfFrames {
               
-              var canFrameType : OpenLCBMessageCANFrameType = .datagramMiddleFrame
+              var canFrameType : OpenLCBMessageCANFrameType 
               
-              if frameNumber == 1 {
+              switch frameNumber {
+              case 1:
                 canFrameType = .datagramFirstFrame
-              }
-              else if frameNumber == numberOfFrames {
+              case numberOfFrames:
                 canFrameType = .datagramFinalFrame
+              default:
+                canFrameType = .datagramMiddleFrame
               }
               
-              var data : [UInt8] = []
-              
-              var index = (frameNumber - 1) * 8
-              
-              var count = 0
-              
-              while index < message.payload.count && count < 8 {
-                data.append(message.payload[index])
-                index += 1
-                count += 1
-              }
+              let data = [UInt8](payload.prefix(8))
+              payload.removeFirst(data.count)
               
               if let frame = LCCCANFrame(message: message, canFrameType: canFrameType, data: data) {
-                send(data: frame.message, isBackgroundThread: false)
+                frames.append(frame)
               }
               
             }
@@ -121,16 +110,14 @@ extension OpenLCBCANGateway {
           
         case .producerConsumerEventReport:
           
-          var data : [UInt8] = []
+          var payload = message.eventId!.bigEndianData
+          payload.append(contentsOf: message.payload)
           
-          data.append(contentsOf: message.eventId!.bigEndianData)
-          data.append(contentsOf: message.payload)
-          
-          let numberOfFrames = 1 + (data.count - 1) / 8
+          let numberOfFrames = 1 + (payload.count - 1) / 8
           
           if numberOfFrames == 1 {
             if let frame = LCCCANFrame(message: message) {
-              send(data: frame.message, isBackgroundThread: false)
+              frames.append(frame)
             }
           }
           else {
@@ -146,12 +133,11 @@ extension OpenLCBCANGateway {
                 message.messageTypeIndicator = .producerConsumerEventReportWithPayloadMiddleFrame
               }
               
-              let payload : [UInt8] = [UInt8](data.prefix(8))
-              
-              data.removeFirst(payload.count)
+              let data = [UInt8](payload.prefix(8))
+              payload.removeFirst(data.count)
               
               if let frame = LCCCANFrame(pcerMessage: message, payload: payload) {
-                send(data: frame.message, isBackgroundThread: false)
+                frames.append(frame)
               }
               
             }
@@ -160,44 +146,54 @@ extension OpenLCBCANGateway {
           
         default:
           
-          if message.messageTypeIndicator.isAddressPresent {
+          if let frame = LCCCANFrame(message: message) {
             
-            if let frame = LCCCANFrame(message: message) {
+            if message.messageTypeIndicator.isAddressPresent {
+
+              var payload = frame.data
+              payload.removeFirst(2)
+
+              let numberOfFrames = 1 + (payload.count - 1 ) / 6
               
-              if frame.data.count <= 8 {
-                send(data: frame.message, isBackgroundThread: false)
+              if numberOfFrames == 1 {
+                frames.append(frame)
               }
               else {
                 
-                let numberOfFrames = 1 + (frame.data.count - 3 ) / 6
-                
                 for frameNumber in 1...numberOfFrames {
                   
-                  var flags : OpenLCBCANFrameFlag = .middleFrame
+                  var flags : OpenLCBCANFrameFlag
                   
-                  if frameNumber == 1 {
+                  switch frameNumber {
+                  case 1:
                     flags = .firstFrame
-                  }
-                  else if frameNumber == numberOfFrames {
+                  case numberOfFrames:
                     flags = .lastFrame
+                  default:
+                    flags = .middleFrame
                   }
                   
-                  if let frame = LCCCANFrame(message: message, flags: flags, frameNumber: frameNumber) {
-                    send(data: frame.message, isBackgroundThread: false)
+                  let data = [UInt8](payload.prefix(6))
+                  payload.removeFirst(data.count)
+                  
+                  if let frame = LCCCANFrame(message: message, flags: flags, payload: data) {
+                    frames.append(frame)
                   }
                   
                 }
-                
+
               }
-              
+
+            }
+            else {
+              frames.append(frame)
             }
             
           }
-          else if let frame = LCCCANFrame(message: message) {
-            send(data: frame.message, isBackgroundThread: false)
-          }
-          
+
         }
+        
+        send(frames: frames, isBackgroundThread: false)
         
         outputQueue.remove(at: index)
         
@@ -207,7 +203,7 @@ extension OpenLCBCANGateway {
     
     outputQueueLock.unlock()
     
-    startWaitTimer(interval: 1.00)
+    startWaitTimer(interval: 1.0)
     
   }
 

@@ -47,12 +47,10 @@ extension OpenLCBCANGateway {
         
         buffer.removeFirst(frame.count)
 
-        if let newframe = LCCCANFrame(message: frame) {
+        if let frame = LCCCANFrame(message: frame) {
           
-          newframe.timeStamp = Date.timeIntervalSinceReferenceDate
-          newframe.timeSinceLastMessage = newframe.timeStamp - lastTimeStamp
-          lastTimeStamp = newframe.timeStamp
-          canFrameReceived(frame: newframe)
+          frame.timeStamp = Date.timeIntervalSinceReferenceDate
+          canFrameReceived(frame: frame)
 
         }
         else {
@@ -77,10 +75,8 @@ extension OpenLCBCANGateway {
     // Send a clone to the monitor system. It has to be a clone as the multi-part
     // message decode damages the original frame.
     
-    if let networkLayer, let cloneFrame = LCCCANFrame(message: frame.message) {
-      networkLayer.canFrameReceived(gateway: self, frame: cloneFrame)
-    }
-    
+    networkLayer?.canFrameReceived(gateway: self, frame: frame.clone)
+
     // The node shall restart the [alias allocation] process at the beginning if, before completion of the process, a
     // frame is received that carries a source Node ID alias value that is identical to the alias value being tested by this
     // procedure.
@@ -94,7 +90,7 @@ extension OpenLCBCANGateway {
       debugLog("Restarting alias allocation due to alias already allocated: 0x\(alias.toHex(numberOfDigits: 3))")
       #endif
       item.alias = nil
-      getAlias()
+      getAlias(isBackgroundThread: true)
     }
     
     // A node shall compare the source Node ID alias in each received frame against all reserved Node ID
@@ -107,7 +103,7 @@ extension OpenLCBCANGateway {
       // • If the frame is a Check ID (CID) frame, send a Reserve ID (RID) frame in response.
 
       if let controlFrameFormat = frame.controlFrameFormat, controlFrameFormat.isCheckIdFrame {
-        sendReserveIdFrame(alias: frame.sourceNIDAlias)
+        sendReserveIdFrame(alias: frame.sourceNIDAlias, isBackgroundThread: true)
       }
       
       // • If the frame is not a Check ID (CID) frame, the node is in Permitted state, and the received
@@ -123,7 +119,7 @@ extension OpenLCBCANGateway {
         removeManagedNodeIdAliasMapping(nodeId: item.nodeId)
         sendAliasMapResetFrame(nodeId: nodeId, alias: frame.sourceNIDAlias, isBackgroundThread: true)
         initNodeQueue.append(item)
-        getAlias()
+        getAlias(isBackgroundThread: true)
       }
 
     }
@@ -175,12 +171,12 @@ extension OpenLCBCANGateway {
           
           if frame.data.isEmpty {
             for (alias, item) in managedAliasLookup {
-              sendAliasMapDefinitionFrame(nodeId: item.nodeId, alias: alias)
+              sendAliasMapDefinitionFrame(nodeId: item.nodeId, alias: alias, isBackgroundThread: true)
             }
           }
           else {
             if let nodeId = UInt64(bigEndianData: frame.data), let item = managedNodeIdLookup[nodeId], let alias = item.alias {
-              sendAliasMapDefinitionFrame(nodeId: nodeId, alias: alias)
+              sendAliasMapDefinitionFrame(nodeId: nodeId, alias: alias, isBackgroundThread: true)
             }
           }
           
@@ -205,7 +201,7 @@ extension OpenLCBCANGateway {
             debugLog("Restarting alias allocation due to transmission error: 0x\(item.alias!.toHex(numberOfDigits: 3))")
             #endif
             item.alias = nil
-            getAlias()
+            getAlias(isBackgroundThread: true)
           }
           
         default:
@@ -393,27 +389,6 @@ extension OpenLCBCANGateway {
 
         switch message.messageTypeIndicator {
           
- //       case .initializationCompleteSimpleSetSufficient, .initializationCompleteFullProtocolRequired:
-          /*
-          for (key, datagram) in datagramsAwaitingReceipt {
-            if datagram.destinationNodeId == message.sourceNodeId {
-              datagramsAwaitingReceipt.removeValue(forKey: key)
-            }
-          }
-          */
- //       case .datagramReceivedOK:
-          
- //         datagramsAwaitingReceipt.removeValue(forKey: message.datagramIdReversed)
-          
- //       case .datagramRejected:
-          /*
-          if let datagram = datagramsAwaitingReceipt[message.datagramIdReversed] {
-            datagramsAwaitingReceipt.removeValue(forKey: message.datagramIdReversed)
-            if message.errorCode.isTemporary {
-              addToOutputQueue(message: datagram)
-            }
-          }
-          */
         case .consumerIdentifiedAsCurrentlyValid, .consumerIdentifiedAsCurrentlyInvalid, .consumerIdentifiedWithValidityUnknown:
           
           externalConsumedEvents.insert(message.eventId!)
@@ -484,7 +459,7 @@ extension OpenLCBCANGateway {
     inputQueueLock.unlock()
     
     DispatchQueue.main.async {
-      self.startWaitInputTimer(interval: 1.00)
+      self.startWaitInputTimer(interval: 1.0)
     }
     
   }

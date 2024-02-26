@@ -157,26 +157,4 @@ public class MTPipe : NSObject {
     
   }
   
-  // MARK: Public Class Methods
-  
-  /*
-  public static func sendOpenLCBMessage(node:OpenLCBNodeVirtual, message:OpenLCBMessage) {
-    
-    let pipe = MTPipe(name: node.pipeName)
-    
-    pipe.open()
-    
-    guard pipe.isOpen, let data = message.fullMessage else {
-      debugLog("fail")
-      return
-    }
-    
-    pipe.write(data: data)
-    
-    pipe.close()
-    
-    debugLog("TX: \(node.nodeId.toHexDotFormat(numberOfBytes: 6))")
-  }
-  */
-  
 }

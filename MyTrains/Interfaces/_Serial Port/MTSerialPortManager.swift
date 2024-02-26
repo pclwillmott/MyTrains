@@ -40,20 +40,8 @@ class MTSerialPortManager : NSObject {
   
   // This is called from a timer thread
   public static func checkPorts() {
-    let _ = availablePorts()
-  }
-  
-  public static func availablePorts() -> [String] {
     
-    var result : [String] = []
-    
-    for i in 0...findSerialPorts()-1 {
-      
-      let path = String(cString: getSerialPortPath(i))
-      
-      result.append(path)
-
-    }
+    let result = availablePorts()
     
     // Check for removals
     
@@ -66,8 +54,10 @@ class MTSerialPortManager : NSObject {
         }
       }
       if !found {
-        for (_, observer) in observers {
-          observer.serialPortWasRemoved?(path: last)
+        DispatchQueue.main.async {
+          for (_, observer) in observers {
+            observer.serialPortWasRemoved?(path: last)
+          }
         }
       }
     }
@@ -83,13 +73,26 @@ class MTSerialPortManager : NSObject {
         }
       }
       if !found {
-        for (_, observer) in observers {
-          observer.serialPortWasAdded?(path: new)
+        DispatchQueue.main.async {
+          for (_, observer) in observers {
+            observer.serialPortWasAdded?(path: new)
+          }
         }
       }
     }
     
     _lastPorts = result
+    
+  }
+  
+  public static func availablePorts() -> [String] {
+    
+    var result : [String] = []
+    
+    for i in 0...findSerialPorts()-1 {
+      let path = String(cString: getSerialPortPath(i))
+      result.append(path)
+    }
     
     clearSerialPorts()
     

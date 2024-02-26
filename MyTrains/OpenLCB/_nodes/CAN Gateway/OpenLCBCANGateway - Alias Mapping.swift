@@ -151,7 +151,7 @@ extension OpenLCBCANGateway {
     
   }
   
-  internal func getAlias() {
+  internal func getAlias(isBackgroundThread:Bool) {
    
     guard let item = initNodeQueue.first, item.transitionState == .idle else {
       return
@@ -162,12 +162,23 @@ extension OpenLCBCANGateway {
     let alias = nextAlias()
     item.alias = alias
     
-    sendCheckIdFrame(format: .checkId7Frame, nodeId: item.nodeId, alias: alias)
-    sendCheckIdFrame(format: .checkId6Frame, nodeId: item.nodeId, alias: alias)
-    sendCheckIdFrame(format: .checkId5Frame, nodeId: item.nodeId, alias: alias)
-    sendCheckIdFrame(format: .checkId4Frame, nodeId: item.nodeId, alias: alias)
+    let frames : [LCCCANFrame] = [
+      createCheckIdFrame(format: .checkId7Frame, nodeId: item.nodeId, alias: alias),
+      createCheckIdFrame(format: .checkId6Frame, nodeId: item.nodeId, alias: alias),
+      createCheckIdFrame(format: .checkId5Frame, nodeId: item.nodeId, alias: alias),
+      createCheckIdFrame(format: .checkId4Frame, nodeId: item.nodeId, alias: alias),
+    ]
     
-    startAliasTimer(interval: aliasWaitInterval)
+    send(frames: frames, isBackgroundThread: isBackgroundThread)
+    
+    if isBackgroundThread {
+      DispatchQueue.main.async {
+        self.startAliasTimer(interval: self.aliasWaitInterval)
+      }
+    }
+    else {
+      startAliasTimer(interval: aliasWaitInterval)
+    }
 
   }
   
@@ -183,6 +194,7 @@ extension OpenLCBCANGateway {
     aliasTimer = nil
   }
   
+  // This is running in the main thread
   @objc internal func aliasTimerAction() {
     
     aliasTimer = nil
@@ -200,7 +212,7 @@ extension OpenLCBCANGateway {
       //  NID Alias field.
       
       item.transitionState = .reservingAlias
-      sendReserveIdFrame(alias: alias)
+      sendReserveIdFrame(alias: alias, isBackgroundThread: false)
       
       // The standard does not say how long to wait after sending the Reserve ID frame (RID), so just
       // use the same 200 milliseconds as the previous wait.
@@ -221,9 +233,9 @@ extension OpenLCBCANGateway {
       addNodeIdAliasMapping(nodeId: item.nodeId, alias: alias)
       addManagedNodeIdAliasMapping(item: item)
 
-      sendAliasMapDefinitionFrame(nodeId: item.nodeId, alias: alias)
+      sendAliasMapDefinitionFrame(nodeId: item.nodeId, alias: alias, isBackgroundThread: false)
       
-      getAlias()
+      getAlias(isBackgroundThread: false)
       
     default:
       break

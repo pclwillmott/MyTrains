@@ -155,8 +155,6 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
   
   internal var aliasLock : NSLock = NSLock()
   
-  internal var inGetAlias : Bool = false
-    
   internal var aliasLookup : [UInt16:UInt64] = [:]
   
   internal var nodeIdLookup : [UInt64:UInt16] = [:]
@@ -164,10 +162,6 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
   internal var splitFrames : [UInt64:LCCCANFrame] = [:]
   
   internal var datagrams : [UInt32:OpenLCBMessage] = [:]
-  
-  // internal var datagramsAwaitingReceipt : [UInt32:OpenLCBMessage] = [:]
-  
-  internal var lastTimeStamp : TimeInterval = 0.0
   
   // MARK: internal Methods
   
@@ -187,6 +181,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
     
   }
   
+  // This is running in the main thread
   internal func openSerialPort() {
     
     if let port = MTSerialPort(path: devicePath) {
@@ -215,7 +210,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
           
           initNodeQueue.append(alias)
           
-          getAlias()
+          getAlias(isBackgroundThread: false)
           
         }
         
@@ -332,7 +327,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
       internalNodes.insert(sourceNodeId)
       let alias = OpenLCBTransportLayerAlias(nodeId: sourceNodeId)
       initNodeQueue.append(alias)
-      getAlias()
+      getAlias(isBackgroundThread: false)
     }
 
     if let destinationNodeId = message.destinationNodeId, destinationNodeId == networkLayerNodeId {
@@ -416,6 +411,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
   
   // MARK: MTSerialPortManagerDelegate Methods
   
+  // This is running in the main thread
   @objc public func serialPortWasAdded(path:String) {
     
     guard path == devicePath, serialPort == nil else {
