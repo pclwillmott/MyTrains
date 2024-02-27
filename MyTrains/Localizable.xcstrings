@@ -1497,7 +1497,7 @@
       }
     },
     "Create Application Node" : {
-      "comment" : "Used for the title of the Create Application Node window\nUsed for the Create Application Node menu item title",
+      "comment" : "Used for the Create Application Node menu item title\nUsed for the title of the Create Application Node window",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3663,6 +3663,9 @@
         }
       }
     },
+    "No available gateway node IDs" : {
+
+    },
     "No constraint selected" : {
 
     },
@@ -4635,7 +4638,7 @@
       }
     },
     "Select Layout" : {
-      "comment" : "Used for the title of the Select Layout window\nUsed for the Select Layout menu item",
+      "comment" : "Used for the Select Layout menu item\nUsed for the title of the Select Layout window",
       "localizations" : {
         "en" : {
           "stringUnit" : {

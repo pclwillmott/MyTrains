@@ -123,8 +123,16 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
   
   internal var stoppedNodesLookup : [UInt64:OpenLCBTransportLayerAlias] = [:]
   
+  internal var aliasLookup : [UInt16:UInt64] = [:]
+  
+  internal var nodeIdLookup : [UInt64:UInt16] = [:]
+  
   internal var outputQueue : [OpenLCBMessage] = []
   
+  internal var waitingForNodeId : Set<UInt16> = []
+
+  internal var waitingForAlias : Set<UInt64> = []
+
   internal var outputQueueLock = NSLock()
   
   internal var inputQueueLock = NSLock()
@@ -141,9 +149,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
   
   internal var internalConsumedEventRanges : [EventRange] = []
   
-  internal let aliasWaitInterval : TimeInterval = 0.2
-  
-  internal let timeoutInterval : TimeInterval = 3.0
+  internal let aliasWaitInterval : TimeInterval = 0.2 /* should be 0.2 but adding some latency */
   
   internal var isStopping : Bool = false
 
@@ -154,10 +160,6 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
   internal var aliasTimer : Timer?
   
   internal var aliasLock : NSLock = NSLock()
-  
-  internal var aliasLookup : [UInt16:UInt64] = [:]
-  
-  internal var nodeIdLookup : [UInt64:UInt16] = [:]
   
   internal var splitFrames : [UInt64:LCCCANFrame] = [:]
   
@@ -210,19 +212,24 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
           
           initNodeQueue.append(alias)
           
-          getAlias(isBackgroundThread: false)
+          send(frames: getAlias(isBackgroundThread: false), isBackgroundThread: false) 
           
         }
         
       }
       
     }
+    else {
+      networkLayer?.gatewayIsInitialized(nodeId: nodeId)
+    }
 
   }
   
-  internal override func resetReboot() {
+  public override func completeStartUp() {
+    networkLayer?.gatewayIsInitialized(nodeId: nodeId)
+  }
 
-    super.resetReboot()
+  public override func gatewayStart() {
     
     close()
     
@@ -234,7 +241,17 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
     
     internalNodes.removeAll()
 
+    setupConfigurationOptions()
+
+    isConfigurationDescriptionInformationProtocolSupported = true
+
     openSerialPort()
+    
+  }
+  
+  internal override func resetReboot() {
+
+    super.resetReboot()
     
   }
   
@@ -291,12 +308,6 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
 
   // MARK: Public Methods
   
-  public override func start() {
-    
-    super.start()
-    
-  }
-  
   public override func stop() {
     
     var nodeIds : [UInt64] = []
@@ -321,9 +332,15 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
   // This is running in the main thread
   public override func openLCBMessageReceived(message: OpenLCBMessage) {
  
+    if state != .permitted {
+      return
+    }
+    
     super.openLCBMessageReceived(message: message)
     
-    if let sourceNodeId = message.sourceNodeId, !internalNodes.contains(sourceNodeId) {
+    // A message at this point could have come internally or externally from another gateway
+    if let sourceNodeId = message.sourceNodeId, !waitingForAlias.contains(sourceNodeId) && !nodeIdLookup.keys.contains(sourceNodeId) {
+      waitingForAlias.insert(sourceNodeId)
       internalNodes.insert(sourceNodeId)
       let alias = OpenLCBTransportLayerAlias(nodeId: sourceNodeId)
       initNodeQueue.append(alias)

@@ -64,5 +64,6 @@ enum CDI {
   static let SBI_BLOCK_CONFIGURATION    = "%%SBI_BLOCK_CONFIGURATION%%"
   static let SBI_BLOCK_EVENTS           = "%%SBI_BLOCK_EVENTS%%"
   static let SBI_TRACK_CONFIGURATION    = "%%SBI_TRACK_CONFIGURATION%%"
+  static let MAX_GATEWAYS               = "%%MAX_GATEWAYS%%"
 }
 

@@ -24,4 +24,6 @@ ssize_t writePipe(int fd, unsigned char *buffer, ssize_t nbyte);
 
 void closePipe(int fd);
 
+int pipebufsize(void);
+
 #endif /* mtpipe_h */

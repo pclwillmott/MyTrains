@@ -24,6 +24,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     initSpaceAddress(&addressUnitsActualSpeed,    1, &configurationSize)
     initSpaceAddress(&addressUnitsScaleSpeed,     1, &configurationSize)
     initSpaceAddress(&addressUnitsTime,           1, &configurationSize)
+    initSpaceAddress(&addressMaxNumberOfGateways, 1, &configurationSize)
 
     configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: configurationSize, isReadOnly: false, description: "")
     
@@ -81,6 +82,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   internal var addressUnitsActualSpeed    = 0
   internal var addressUnitsScaleSpeed     = 0
   internal var addressUnitsTime           = 0
+  internal var addressMaxNumberOfGateways = 0
 
   internal typealias getUniqueNodeIdQueueItem = (requester:UInt64, candidate:UInt64)
   
@@ -167,6 +169,15 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     }
   }
   
+  public var maximumNumberOfGateways : UInt8 {
+    get {
+      return configuration!.getUInt8(address: addressMaxNumberOfGateways)!
+    }
+    set(value) {
+      configuration!.setUInt(address: addressMaxNumberOfGateways, value: value)
+    }
+  }
+  
   internal var nextUniqueNodeIdCandidate : UInt64 {
     
     let seed = nextUniqueNodeIdSeed
@@ -211,6 +222,26 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
 
   }
   
+  // MARK: Public Properties
+  
+  public var nextGatewayNodeId : UInt64? {
+    
+    guard let networkLayer else {
+      return nil
+    }
+    
+    let firstGatewayNodeId = nodeId + 2
+    
+    for candidate in firstGatewayNodeId ... min(nodeId + 0xff, firstGatewayNodeId + UInt64(maximumNumberOfGateways) - 1) {
+      if !networkLayer.virtualNodeLookup.keys.contains(candidate) {
+        return candidate
+      }
+    }
+    
+    return nil
+    
+  }
+  
   // MARK: Private Methods
   
   internal override func resetToFactoryDefaults() {
@@ -224,6 +255,8 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     unitsActualSpeed    = UnitSpeed.defaultValueActualSpeed
     unitsScaleSpeed     = UnitSpeed.defaultValueScaleSpeed
     unitsTime           = UnitTime.defaultValue
+    
+    maximumNumberOfGateways = 1
     
     saveMemorySpaces()
     
@@ -256,6 +289,10 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     result = UnitSpeed.insertMap(cdi: result)
     result = UnitTime.insertMap(cdi: result)
     
+    let maxPossibleGatewayNodes = 256 - (nodeId & 0xff) - 2
+    
+    result = result.replacingOccurrences(of: CDI.MAX_GATEWAYS, with: "\(maxPossibleGatewayNodes)")
+
     return result
     
   }

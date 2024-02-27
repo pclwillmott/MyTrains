@@ -8,12 +8,69 @@
 import Foundation
 
 extension OpenLCBCANGateway {
+
+  internal func insertNodeId(message:OpenLCBMessage) -> [LCCCANFrame] {
+    
+    var frames : [LCCCANFrame] = []
+    
+    if let sourceAlias = message.sourceNIDAlias, message.sourceNodeId == nil {
+      if let sourceNodeId = aliasLookup[sourceAlias] {
+        message.sourceNodeId = sourceNodeId
+      }
+      else if !waitingForNodeId.contains(sourceAlias) {
+        waitingForNodeId.insert(sourceAlias)
+        frames.append(contentsOf: createVerifyNodeIdAddressedCANFrame(destinationNodeIdAlias: sourceAlias))
+      }
+    }
+
+    if let destinationAlias = message.destinationNIDAlias, message.destinationNodeId == nil {
+      if let nodeId = aliasLookup[destinationAlias] {
+        message.destinationNodeId = nodeId
+      }
+      else if !waitingForNodeId.contains(destinationAlias) {
+        waitingForNodeId.insert(destinationAlias)
+        frames.append(contentsOf: createVerifyNodeIdAddressedCANFrame(destinationNodeIdAlias: destinationAlias))
+      }
+    }
+
+    return frames
+    
+  }
+
+  internal func insertAlias(message:OpenLCBMessage) -> [LCCCANFrame] {
+    
+    var frames : [LCCCANFrame] = []
+    
+    if let sourceNodeId = message.sourceNodeId, message.sourceNIDAlias == nil {
+      if let alias = nodeIdLookup[sourceNodeId] {
+        message.sourceNIDAlias = alias
+      }
+      else if !waitingForAlias.contains(sourceNodeId) {
+        #if DEBUG
+        debugLog("message without a source id alias")
+        #endif
+      }
+    }
+
+    if let destinationNodeId = message.destinationNodeId, message.destinationNIDAlias == nil {
+      if let alias = nodeIdLookup[destinationNodeId] {
+        message.destinationNIDAlias = alias
+      }
+      else if !waitingForAlias.contains(destinationNodeId) {
+        waitingForAlias.insert(destinationNodeId)
+        frames.append(contentsOf: createVerifyNodeIdGlobalCANFrame(destinationNodeId: destinationNodeId))
+      }
+    }
+
+    return frames
+    
+  }
   
   internal func addNodeIdAliasMapping(nodeId: UInt64, alias:UInt16) {
     
     aliasLookup[alias] = nodeId
     nodeIdLookup[nodeId] = alias
-    /*
+    
     for item in inputQueue {
       if let sourceAlias = item.sourceNIDAlias, sourceAlias == alias {
         item.sourceNodeId = nodeId
@@ -31,13 +88,18 @@ extension OpenLCBCANGateway {
         item.destinationNIDAlias = alias
       }
     }
-    */
+    
+    waitingForNodeId.remove(alias)
+    waitingForAlias.remove(nodeId)
+    
   }
   
   internal func removeNodeIdAliasMapping(nodeId:UInt64) {
     if let alias = nodeIdLookup[nodeId] {
       aliasLookup.removeValue(forKey: alias)
       nodeIdLookup.removeValue(forKey: nodeId)
+      waitingForNodeId.remove(alias)
+      waitingForAlias.remove(nodeId)
     }
   }
   
@@ -45,6 +107,9 @@ extension OpenLCBCANGateway {
     if let nodeId = aliasLookup[alias] {
       aliasLookup.removeValue(forKey: alias)
       nodeIdLookup.removeValue(forKey: nodeId)
+      waitingForNodeId.remove(alias)
+      waitingForNodeId.remove(alias)
+      waitingForAlias.remove(nodeId)
     }
   }
   
@@ -151,10 +216,10 @@ extension OpenLCBCANGateway {
     
   }
   
-  internal func getAlias(isBackgroundThread:Bool) {
+  internal func getAlias(isBackgroundThread:Bool) -> [LCCCANFrame] {
    
     guard let item = initNodeQueue.first, item.transitionState == .idle else {
-      return
+      return []
     }
       
     item.transitionState = .testingAlias
@@ -169,8 +234,6 @@ extension OpenLCBCANGateway {
       createCheckIdFrame(format: .checkId4Frame, nodeId: item.nodeId, alias: alias),
     ]
     
-    send(frames: frames, isBackgroundThread: isBackgroundThread)
-    
     if isBackgroundThread {
       DispatchQueue.main.async {
         self.startAliasTimer(interval: self.aliasWaitInterval)
@@ -180,6 +243,8 @@ extension OpenLCBCANGateway {
       startAliasTimer(interval: aliasWaitInterval)
     }
 
+    return frames
+    
   }
   
   // MARK: Alias Timer Methods
@@ -212,8 +277,8 @@ extension OpenLCBCANGateway {
       //  NID Alias field.
       
       item.transitionState = .reservingAlias
-      sendReserveIdFrame(alias: alias, isBackgroundThread: false)
-      
+      send(frames: createReserveIdFrame(alias: alias), isBackgroundThread: false)
+
       // The standard does not say how long to wait after sending the Reserve ID frame (RID), so just
       // use the same 200 milliseconds as the previous wait.
       
@@ -233,14 +298,24 @@ extension OpenLCBCANGateway {
       addNodeIdAliasMapping(nodeId: item.nodeId, alias: alias)
       addManagedNodeIdAliasMapping(item: item)
 
-      sendAliasMapDefinitionFrame(nodeId: item.nodeId, alias: alias, isBackgroundThread: false)
-      
-      getAlias(isBackgroundThread: false)
-      
+      send(frames: createAliasMapDefinitionFrame(nodeId: item.nodeId, alias: alias), isBackgroundThread: false)
+
+      if item.nodeId == nodeId {
+        let message = OpenLCBMessage(messageTypeIndicator: .initializationCompleteFullProtocolRequired)
+        message.payload = nodeId.nodeIdBigEndianData
+        message.sourceNIDAlias = alias
+        if let frame = LCCCANFrame(message: message) {
+          send(frames: [frame], isBackgroundThread: false)
+        }
+        start()
+      }
+
+      send(frames: getAlias(isBackgroundThread: false), isBackgroundThread: false)
+
     default:
       break
     }
-    
+        
   }
   
 }

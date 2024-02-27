@@ -10,6 +10,12 @@
 #include <sys/fcntl.h>
 #include <errno.h>
 #include <strings.h>
+#include <limits.h>
+
+int pipebufsize(void) 
+{
+  return PIPE_BUF;
+}
 
 int createPipe(const char *name)
 {

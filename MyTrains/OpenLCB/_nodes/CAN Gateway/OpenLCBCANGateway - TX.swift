@@ -16,14 +16,24 @@ extension OpenLCBCANGateway {
       return
     }
     
-    var buffer = ""
+    var buffer : [UInt8] = []
 
     for frame in frames {
-      buffer += frame.message
+      
+      let item = [UInt8](frame.message.utf8)
+      
+      if buffer.count + item.count > MTPipe.pipeBufferSize {
+        sendToSerialPortPipe?.write(data: buffer)
+        buffer.removeAll()
+      }
+      
+      buffer.append(contentsOf: item)
+      
       networkLayer.canFrameSent(gateway: self, frame: frame, isBackgroundThread: isBackgroundThread)
+      
     }
-
-    sendToSerialPortPipe?.write(data: [UInt8](buffer.utf8))
+    
+    sendToSerialPortPipe?.write(data: buffer)
 
   }
 
@@ -38,36 +48,20 @@ extension OpenLCBCANGateway {
     
     outputQueueLock.lock()
     
+    var frames : [LCCCANFrame] = []
+    
     var index = 0
     
     while index < outputQueue.count {
       
       let message = outputQueue[index]
       
-      if message.sourceNIDAlias == nil, let id = message.sourceNodeId {
-        if let alias = nodeIdLookup[id] {
-          message.sourceNIDAlias = alias
-        }
-        else {
-          sendVerifyNodeIdGlobalCAN(destinationNodeId: id, isBackgroundThread: false)
-        }
-      }
-      
-      if let id = message.destinationNodeId, message.destinationNIDAlias == nil {
-        if let alias = nodeIdLookup[id] {
-          message.destinationNIDAlias = alias
-        }
-        else {
-          sendVerifyNodeIdGlobalCAN(destinationNodeId: id, isBackgroundThread: false)
-        }
-      }
+      frames.append(contentsOf: insertAlias(message: message))
       
       if !message.isMessageComplete {
         index += 1
       }
       else {
-        
-        var frames : [LCCCANFrame] = []
         
         switch message.messageTypeIndicator {
           
@@ -193,13 +187,13 @@ extension OpenLCBCANGateway {
 
         }
         
-        send(frames: frames, isBackgroundThread: false)
-        
         outputQueue.remove(at: index)
         
       }
       
     }
+    
+    send(frames: frames, isBackgroundThread: false)
     
     outputQueueLock.unlock()
     

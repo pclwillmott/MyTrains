@@ -160,6 +160,22 @@ public class OpenLCBNetworkLayer : NSObject, MTPipeDelegate {
     
   }
   
+  private var uninitializedGateways : Set<UInt64> = []
+  
+  public func gatewayIsInitialized(nodeId:UInt64) {
+    
+    uninitializedGateways.remove(nodeId)
+    
+    if uninitializedGateways.isEmpty {
+      for node in OpenLCBMemorySpace.getVirtualNodes() {
+        if node.virtualNodeType != .canGatewayNode {
+          registerNode(node: node)
+        }
+      }
+    }
+    
+  }
+  
   public func start() {
     
     guard state == .uninitialized else {
@@ -169,7 +185,10 @@ public class OpenLCBNetworkLayer : NSObject, MTPipeDelegate {
     _state = .initialized
     
     for node in OpenLCBMemorySpace.getVirtualNodes() {
-      registerNode(node: node)
+      if node.virtualNodeType == .canGatewayNode {
+        uninitializedGateways.insert(node.nodeId)
+        registerNode(node: node)
+      }
     }
 
 //    updateVirtualNodeList()
@@ -254,6 +273,8 @@ public class OpenLCBNetworkLayer : NSObject, MTPipeDelegate {
     
     if node.virtualNodeType == .canGatewayNode {
       gatewayNodes[node.nodeId] = node
+      node.gatewayStart()
+      return
     }
     else if node.isFullProtocolRequired {
       nodesFullProtocolRequired[node.nodeId] = node
@@ -358,6 +379,46 @@ public class OpenLCBNetworkLayer : NSObject, MTPipeDelegate {
   public func createVirtualNode(virtualNodeType:MyTrainsVirtualNodeType, completion: @escaping (OpenLCBNodeVirtual) -> Void) {
     newNodeQueue.append((virtualNodeType, completion))
 //    sendGetUniqueNodeIdCommand(sourceNodeId: networkLayerNodeId, destinationNodeId: appNodeId!)
+  }
+  
+  public func createGatewayNode() {
+    
+    guard let appNode else {
+      return
+    }
+    
+    if let newNodeId = appNode.nextGatewayNodeId {
+      
+      let node = OpenLCBCANGateway(nodeId: newNodeId)
+      
+      node.hostAppNodeId = appNode.nodeId
+      
+      registerNode(node: node)
+
+      if node.isConfigurationDescriptionInformationProtocolSupported {
+        let x = ModalWindow.ConfigurationTool
+        let wc = x.windowController
+        let vc = x.viewController(windowController: wc) as! ConfigurationToolVC
+        vc.configurationTool = getConfigurationTool()
+        vc.configurationTool?.delegate = vc
+        vc.node = node
+        wc.showWindow(nil)
+      }
+
+    }
+    else {
+      
+      let alert = NSAlert()
+      
+      alert.messageText = String(localized: "No available gateway node IDs")
+      alert.informativeText = "Your application has run out of gateway node IDs. Increase the maximum number of gateways in the application node using the configuration tool."
+      alert.addButton(withTitle: "OK")
+      alert.alertStyle = .informational
+      
+      alert.runModal()
+
+    }
+
   }
   
   public func createVirtualNode(message:OpenLCBMessage) {
@@ -483,11 +544,9 @@ public class OpenLCBNetworkLayer : NSObject, MTPipeDelegate {
           }
         }
       }
-      else {
-        for (_, virtualNode) in nodesFullProtocolRequired {
-          if !message.routing.contains(virtualNode.nodeId) {
-            virtualNode.openLCBMessageReceived(message: message)
-          }
+      for (_, virtualNode) in nodesFullProtocolRequired {
+        if !message.routing.contains(virtualNode.nodeId) {
+          virtualNode.openLCBMessageReceived(message: message)
         }
       }
       for (_, virtualNode) in gatewayNodes {

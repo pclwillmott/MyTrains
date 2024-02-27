@@ -9,36 +9,50 @@ import Foundation
 
 extension OpenLCBCANGateway {
   
-  internal func sendVerifyNodeIdNumberAddressed(destinationNodeIdAlias:UInt16, isBackgroundThread:Bool) {
+  internal func createVerifyNodeIdAddressedCANFrame(destinationNodeIdAlias:UInt16) -> [LCCCANFrame] {
     
     guard let sourceNIDAlias = nodeIdLookup[nodeId] else {
-      return
+      #if DEBUG
+      debugLog("the gateway \"\(userNodeName)\" has no alias")
+      #endif
+      return []
     }
+
+    var frames : [LCCCANFrame] = []
       
     let message = OpenLCBMessage(messageTypeIndicator: .verifyNodeIDAddressed)
     message.sourceNIDAlias = sourceNIDAlias
     message.destinationNIDAlias = destinationNodeIdAlias
 
     if let frame = LCCCANFrame(message: message) {
-      send(frames: [frame], isBackgroundThread: isBackgroundThread)
+      frames.append(frame)
     }
+
+    return frames
 
   }
 
-  internal func sendVerifyNodeIdGlobalCAN(destinationNodeId:UInt64, isBackgroundThread:Bool) {
+  internal func createVerifyNodeIdGlobalCANFrame(destinationNodeId:UInt64) -> [LCCCANFrame] {
     
     guard let sourceNIDAlias = nodeIdLookup[nodeId] else {
-      return
+      #if DEBUG
+      debugLog("the gateway \"\(userNodeName)\" has no alias")
+      #endif
+      return []
     }
+    
+    var frames : [LCCCANFrame] = []
       
     let message = OpenLCBMessage(messageTypeIndicator: .verifyNodeIDGlobal)
     message.sourceNIDAlias = sourceNIDAlias
     message.payload = destinationNodeId.nodeIdBigEndianData
     
     if let frame = LCCCANFrame(message: message) {
-      send(frames: [frame], isBackgroundThread: isBackgroundThread)
+      frames.append(frame)
     }
 
+    return frames
+    
   }
 
   internal func createCheckIdFrame(format:OpenLCBCANControlFrameFormat, nodeId:UInt64, alias: UInt16) -> LCCCANFrame {
@@ -47,39 +61,39 @@ extension OpenLCBCANGateway {
     return LCCCANFrame(header: header, data: [])
   }
 
-  internal func sendReserveIdFrame(alias:UInt16, isBackgroundThread:Bool) {
+  internal func createReserveIdFrame(alias:UInt16) -> [LCCCANFrame] {
     let cf = OpenLCBCANControlFrameFormat.reserveIdFrame.rawValue
     let header = LCCCANFrame.createFrameHeader(frameType: .canControlFrame, contentField: cf, sourceNIDAlias: alias)
-    send(frames: [LCCCANFrame(header: header, data: [])], isBackgroundThread: isBackgroundThread)
+    return [LCCCANFrame(header: header, data: [])]
   }
 
-  internal func sendAliasMapDefinitionFrame(nodeId:UInt64, alias:UInt16, isBackgroundThread:Bool) {
+  internal func createAliasMapDefinitionFrame(nodeId:UInt64, alias:UInt16) -> [LCCCANFrame] {
     let cf = OpenLCBCANControlFrameFormat.aliasMapDefinitionFrame.rawValue
     let header = LCCCANFrame.createFrameHeader(frameType: .canControlFrame, contentField: cf, sourceNIDAlias: alias)
-    send(frames: [LCCCANFrame(header: header, data: nodeId.nodeIdBigEndianData)], isBackgroundThread: isBackgroundThread)
+    return [LCCCANFrame(header: header, data: nodeId.nodeIdBigEndianData)]
   }
 
-  internal func sendAliasMapResetFrame(nodeId:UInt64, alias:UInt16, isBackgroundThread:Bool) {
+  internal func createAliasMapResetFrame(nodeId:UInt64, alias:UInt16) -> [LCCCANFrame] {
     let cf = OpenLCBCANControlFrameFormat.aliasMapResetFrame.rawValue
     let header = LCCCANFrame.createFrameHeader(frameType: .canControlFrame, contentField: cf, sourceNIDAlias: alias)
-    send(frames: [LCCCANFrame(header: header, data: nodeId.nodeIdBigEndianData)], isBackgroundThread: isBackgroundThread)
+    return [LCCCANFrame(header: header, data: nodeId.nodeIdBigEndianData)]
   }
 
-  internal func sendAliasMappingEnquiryFrame(nodeId:UInt64, alias:UInt16, isBackgroundThread:Bool) {
+  internal func createAliasMappingEnquiryFrame(nodeId:UInt64, alias:UInt16) -> [LCCCANFrame] {
     let cf = OpenLCBCANControlFrameFormat.aliasMappingEnquiryFrame.rawValue
     let header = LCCCANFrame.createFrameHeader(frameType: .canControlFrame, contentField: cf, sourceNIDAlias: alias)
-    send(frames: [LCCCANFrame(header: header, data: nodeId.nodeIdBigEndianData)], isBackgroundThread: isBackgroundThread)
+    return [LCCCANFrame(header: header, data: nodeId.nodeIdBigEndianData)]
   }
 
-  internal func sendAliasMappingEnquiryFrame(alias:UInt16, isBackgroundThread:Bool) {
+  internal func createAliasMappingEnquiryFrame(alias:UInt16) -> [LCCCANFrame] {
     let cf = OpenLCBCANControlFrameFormat.aliasMappingEnquiryFrame.rawValue
     let header = LCCCANFrame.createFrameHeader(frameType: .canControlFrame, contentField: cf, sourceNIDAlias: alias)
-    send(frames: [LCCCANFrame(header: header, data: [])], isBackgroundThread: isBackgroundThread)
+    return [LCCCANFrame(header: header, data: [])]
   }
 
-  internal func sendDuplicateNodeIdErrorFrame(alias:UInt16, isBackgroundThread:Bool) {
+  internal func createDuplicateNodeIdErrorFrame(alias:UInt16) -> [LCCCANFrame] {
     let header = 0x195B4000 | UInt32(alias & 0x0fff)
-    send(frames: [LCCCANFrame(header: header, data: OpenLCBWellKnownEvent.duplicateNodeIdDetected.rawValue.bigEndianData)], isBackgroundThread: isBackgroundThread)
+    return [LCCCANFrame(header: header, data: OpenLCBWellKnownEvent.duplicateNodeIdDetected.rawValue.bigEndianData)]
   }
 
 }

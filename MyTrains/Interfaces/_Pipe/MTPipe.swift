@@ -135,6 +135,10 @@ public class MTPipe : NSObject {
   
   public func write(data:[UInt8]) {
     
+    guard !data.isEmpty else {
+      return
+    }
+    
     if isOpen {
       
       let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: data.count)
@@ -155,6 +159,10 @@ public class MTPipe : NSObject {
 
     }
     
+  }
+  
+  public static var pipeBufferSize : Int {
+    return Int(pipebufsize())
   }
   
 }

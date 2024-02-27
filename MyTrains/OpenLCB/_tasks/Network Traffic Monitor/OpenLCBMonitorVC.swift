@@ -73,6 +73,9 @@ class OpenLCBMonitorVC: NSViewController, NSWindowDelegate, OpenLCBNetworkObserv
   // MARK: OpenLCBNetworkObserverDelegate Methods
   
   @objc func updateMonitor(text: String) {
+    guard !text.isEmpty else {
+      return
+    }
     txtMonitor.string = text
     let range = NSMakeRange(text.count - 1, 0)
     txtMonitor.scrollRangeToVisible(range)

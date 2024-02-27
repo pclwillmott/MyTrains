@@ -113,6 +113,14 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     .writeCommand0xFD,
     .writeCommand0xFE,
     .writeCommand0xFF,
+    .writeReply0xFD,
+    .writeReply0xFE,
+    .writeReply0xFF,
+    .writeReplyGeneric,
+    .writeReplyFailure0xFD,
+    .writeReplyFailure0xFE,
+    .writeReplyFailure0xFF,
+    .writeReplyFailureGeneric,
 //  .writeUnderMaskCommandGeneric,
 //  .writeUnderMaskCommand0xFD,
 //  .writeUnderMaskCommand0xFE,
@@ -121,13 +129,26 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     .readCommand0xFD,
     .readCommand0xFE,
     .readCommand0xFF,
+    .readReply0xFD,
+    .readReply0xFE,
+    .readReply0xFF,
+    .readReplyGeneric,
+    .readReplyFailure0xFD,
+    .readReplyFailure0xFE,
+    .readReplyFailure0xFF,
+    .readReplyFailureGeneric,
     .getConfigurationOptionsCommand,
+    .getConfigurationOptionsReply,
     .getAddressSpaceInformationCommand,
+    .getAddressSpaceInformationReply,
+    .getAddressSpaceInformationReplyLowAddressPresent,
     .lockReserveCommand,
+    .lockReserveReply,
     .getUniqueEventIDCommand,
+    .getUniqueEventIDReply,
     .unfreezeCommand,
     .freezeCommand,
-//   .updateCompleteCommand,
+    .updateCompleteCommand,
     .resetRebootCommand,
     .reinitializeFactoryResetCommand,
   ]
@@ -631,17 +652,17 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   
   // MARK: Public Methods
   
+  public func gatewayStart() {
+  }
+  
   public func start() {
     
     state = .permitted
 
-//    txPipe = MTPipe(name: "MyTrains Network Layer")
-//    txPipe?.open()
-    
     if cdiFilename != nil {
       isConfigurationDescriptionInformationProtocolSupported = true
     }
-    
+
     sendInitializationComplete()
     
     resetReboot()

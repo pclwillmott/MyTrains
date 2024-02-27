@@ -793,6 +793,14 @@
 			path = "_Serial Port";
 			sourceTree = "<group>";
 		};
+		DA5C20042B8E321C00D3BFEB /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				DAF374702A1A2AB3009E91F0 /* OpenLCBNodeMyTrains.swift */,
+			);
+			path = Application;
+			sourceTree = "<group>";
+		};
 		DA72DDE42A3C6E150027BE50 /* Interfaces */ = {
 			isa = PBXGroup;
 			children = (
@@ -1107,6 +1115,7 @@
 		DA7B453C2A2C08240017D36B /* _nodes */ = {
 			isa = PBXGroup;
 			children = (
+				DA5C20042B8E321C00D3BFEB /* Application */,
 				DABC51FE2B8218E300C45423 /* Virtual Node */,
 				DA0949382B7F6EC900545650 /* CAN Gateway */,
 				DAD394BC2B2E15D300403040 /* OpenLCBCANGatewayWiFi.swift */,
@@ -1116,7 +1125,6 @@
 				DA17E0852A77C83A000154E0 /* OpenLCBLocoNetMonitorNode.swift */,
 				DA5B6AA929EAC2D90095F7D5 /* OpenLCBNode.swift */,
 				DAA54F7E2A217CDA005CED7E /* OpenLCBNodeConfigurationTool.swift */,
-				DAF374702A1A2AB3009E91F0 /* OpenLCBNodeMyTrains.swift */,
 				DA5BC9922A1A6CEA00D67ABE /* OpenLCBNodeRollingStock.swift */,
 				DA413FEF2A45CCF600675AD4 /* OpenLCBNodeRollingStockLocoNet.swift */,
 				DAAC7E8C2A792693001A424E /* OpenLCBProgrammerToolNode.swift */,

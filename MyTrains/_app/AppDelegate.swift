@@ -545,6 +545,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
       
     }
     
+    if virtualNodeType == .canGatewayNode {
+      networkLayer.createGatewayNode()
+      return
+    }
+        
     let x = ModalWindow.CreateVirtualNode
     let wc = x.windowController
     createVirtualNodeVC = x.viewController(windowController: wc) as? CreateVirtualNodeVC
