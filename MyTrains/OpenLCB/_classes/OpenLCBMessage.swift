@@ -221,7 +221,7 @@ public class OpenLCBMessage : NSObject {
   
   public var datagramType : OpenLCBDatagramType? {
     
-    guard messageTypeIndicator == .datagram && payload.count >= 2, let rawValue = UInt16(bigEndianData: [payload[0], payload[1]]) else {
+    guard messageTypeIndicator == .datagram && payload.count >= 2, let rawValue = UInt16(bigEndianData: [UInt8](payload.prefix(2))) else {
       return nil
     }
     
@@ -407,8 +407,9 @@ public class OpenLCBMessage : NSObject {
         text += "\(datagramType.title) "
       }
       else {
-        text += String(localized: "Datagram Type Unknown")
+        text += String(localized: "Datagram Type Unknown: 0x\(UInt16(bigEndianData: [UInt8](payload.prefix(2)))!.toHex(numberOfDigits: 4)) ")
       }
+      text += payloadAsHex
     case .datagramRejected:
       var temp = payload
       temp.append(contentsOf: [0,0])

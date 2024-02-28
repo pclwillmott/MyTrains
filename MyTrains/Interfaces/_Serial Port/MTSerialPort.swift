@@ -133,7 +133,7 @@ public class MTSerialPort : NSObject, MTSerialPortManagerDelegate, MTPipeDelegat
   // This is called from inside a background thread
   private func monitorPort() {
     
-    let kInitialBufferSize = 0x10000
+    let kInitialBufferSize = 512
     
     let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: kInitialBufferSize)
     
@@ -148,8 +148,8 @@ public class MTSerialPort : NSObject, MTSerialPortManagerDelegate, MTPipeDelegat
       let nbyte = readSerialPort(fd, buffer, kInitialBufferSize)
       
       if nbyte == -1 {
-        state = .removed
-        quit = true
+        debugLog("RX quit!")
+        quit  = true
       }
       else if nbyte > 0 {
         
@@ -184,21 +184,33 @@ public class MTSerialPort : NSObject, MTSerialPortManagerDelegate, MTPipeDelegat
     
     if state == .open {
       
-      let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: data.count)
+      var _data = data
       
-      defer {
-        buffer.deinitialize(count: data.count)
-      }
+      let maxBlock = 512
       
-      for index in 0...data.count-1 {
-        buffer.advanced(by: index).pointee = data[index]
-      }
-      
-      let count = writeSerialPort(self.fd, buffer, data.count)
-      
-      if count != data.count {
-        state = .removed
-        self.quit = true
+      while !_data.isEmpty {
+        
+        let size = min(maxBlock, _data.count)
+        
+        let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: size)
+        
+        defer {
+          buffer.deinitialize(count: size_t())
+        }
+        
+        for index in 0 ... size - 1 {
+          buffer.advanced(by: index).pointee = _data[index]
+        }
+        
+        let count = writeSerialPort(self.fd, buffer, size)
+        
+        if count < 0 {
+          debugLog("TX Quit!")
+          break
+        }
+        
+        _data.removeFirst(max(count,0))
+        
       }
       
     }

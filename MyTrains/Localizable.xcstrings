@@ -1593,7 +1593,7 @@
     "Datagram Rejected" : {
 
     },
-    "Datagram Type Unknown" : {
+    "Datagram Type Unknown: 0x%@ " : {
 
     },
     "DCC 14" : {
@@ -2387,6 +2387,9 @@
     "Firmware Upgrade Requested By Switch" : {
 
     },
+    "First Frame" : {
+
+    },
     "Flange Squeal" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -2943,6 +2946,9 @@
         }
       }
     },
+    "Last Frame" : {
+
+    },
     "Layout" : {
       "comment" : "Used to create a default OpenLCB virtual name",
       "localizations" : {
@@ -3435,6 +3441,9 @@
     "mi.ch" : {
       "comment" : "Used for the abbreviation of miles.chains"
     },
+    "Middle Frame" : {
+
+    },
     "Miles" : {
       "localizations" : {
         "en" : {
@@ -3852,6 +3861,9 @@
           }
         }
       }
+    },
+    "Only Frame" : {
+
     },
     "OO/HO" : {
       "comment" : "Used to indicate the track gauge",

@@ -289,8 +289,32 @@ ssize_t readSerialPort(int fd, unsigned char *buffer, ssize_t nbyte) {
   // Go to sleep for 1 second or until something arrives
   
   if (select (FD_SETSIZE, &set, NULL, NULL, &timeout)) {
+    
     ssize_t nb = read(fd, buffer, nbyte);
+    
+    if (nb == -1) {
+      
+      switch (errno) {
+        case EAGAIN:
+          printf("RX - EAGAIN\n");
+          break;
+        case EBADF:
+          printf("RX - EBADF\n");
+        case EINTR:
+          printf("RX - EINTR\n");
+        case EIO:
+          printf("RX - EIO\n");
+        case EINVAL:
+          printf("RX - EINVAL\n");
+        default:
+          printf("RX - errno: %i\n", errno);
+          break;
+      }
+      
+    }
+    
     return  nb;
+    
   }
   
   return 0L;
@@ -298,7 +322,39 @@ ssize_t readSerialPort(int fd, unsigned char *buffer, ssize_t nbyte) {
 }
 
 ssize_t writeSerialPort(int fd, unsigned char *buffer, ssize_t nbyte) {
-  return write(fd, buffer, nbyte);
+  
+  ssize_t nb = write(fd, buffer, nbyte);
+  
+  if (nb == -1) {
+    
+    switch (errno) {
+      case EAGAIN:
+ //       printf("EAGAIN\n");
+        nb = 0;
+        break;
+      case EBADF:
+        printf("TX - EBADF\n");
+      case EFBIG:
+        printf("TX - EFBIG\n");
+      case EINTR:
+        printf("TX - EINTR\n");
+      case EIO:
+        printf("TX - EIO\n");
+      case ENOSPC:
+        printf("TX - ENOSPC\n");
+      case EPIPE:
+        printf("TX - EPIPE\n");
+      case EINVAL:
+        printf("TX - EINVAL\n");
+      default:
+        printf("TX - errno: %i\n", errno);
+        break;
+    }
+    
+  }
+  
+  return nb;
+  
 }
 
 // Returns an iterator across all known modems. Caller is responsible for releasing the iterator when iteration is complete.

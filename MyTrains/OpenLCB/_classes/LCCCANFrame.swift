@@ -256,6 +256,16 @@ public class LCCCANFrame : NSObject {
         case .globalAndAddressedMTI:
           if let messageTypeIndicator {
             result += "\(messageTypeIndicator.title) "
+            if messageTypeIndicator.isAddressPresent {
+              result += "\(message.flags.title) "
+              if message.payload.isEmpty {
+                result += "with no payload "
+              }
+              else {
+                result += "with payload \(message.payloadAsHex) "
+              }
+              showPayload = false
+            }
             if messageTypeIndicator.isEventPresent {
               if let event = OpenLCBWellKnownEvent(rawValue: message.eventId!) {
                 result += "\"\(event.title)\""
@@ -269,6 +279,17 @@ public class LCCCANFrame : NSObject {
             case .initializationCompleteSimpleSetSufficient, .initializationCompleteFullProtocolRequired, .verifiedNodeIDSimpleSetSufficient, .verifiedNodeIDFullProtocolRequired:
               result += "\(UInt64(bigEndianData: message.payload)!.toHexDotFormat(numberOfBytes: 6))"
               showPayload = false
+            case .datagramRejected:
+              let numberOfBytesToAdd = 2 - min(2, message.payload.count)
+              message.payload.append(contentsOf: [UInt8](repeating: 0x00, count: numberOfBytesToAdd))
+              let errorCode = UInt16(bigEndianData: [UInt8](message.payload.prefix(2)))!
+              if let error = OpenLCBErrorCode(rawValue: errorCode) {
+                result += "\"\(error.title)\""
+              }
+              else {
+                result += "0x\(errorCode.toHex(numberOfDigits: 4))"
+                showPayload = false
+              }
             default:
               break
             }

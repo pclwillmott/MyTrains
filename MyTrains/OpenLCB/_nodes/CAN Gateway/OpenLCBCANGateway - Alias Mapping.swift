@@ -98,8 +98,6 @@ extension OpenLCBCANGateway {
     if let alias = nodeIdLookup[nodeId] {
       aliasLookup.removeValue(forKey: alias)
       nodeIdLookup.removeValue(forKey: nodeId)
-      waitingForNodeId.remove(alias)
-      waitingForAlias.remove(nodeId)
     }
   }
   
@@ -107,22 +105,17 @@ extension OpenLCBCANGateway {
     if let nodeId = aliasLookup[alias] {
       aliasLookup.removeValue(forKey: alias)
       nodeIdLookup.removeValue(forKey: nodeId)
-      waitingForNodeId.remove(alias)
-      waitingForNodeId.remove(alias)
-      waitingForAlias.remove(nodeId)
     }
   }
   
   internal func addManagedNodeIdAliasMapping(item:OpenLCBTransportLayerAlias) {
-    if let alias = item.alias {
-      managedAliasLookup[alias] = item
-      managedNodeIdLookup[item.nodeId] = item
-    }
+    managedAliasLookup[item.alias] = item
+    managedNodeIdLookup[item.nodeId] = item
   }
   
   internal func removeManagedNodeIdAliasMapping(nodeId:UInt64) {
     if let item = managedNodeIdLookup[nodeId] {
-      managedAliasLookup.removeValue(forKey: item.alias!)
+      managedAliasLookup.removeValue(forKey: item.alias)
       managedNodeIdLookup.removeValue(forKey: nodeId)
     }
   }
@@ -215,42 +208,11 @@ extension OpenLCBCANGateway {
     return result
     
   }
-  
-  internal func getAlias(isBackgroundThread:Bool) -> [LCCCANFrame] {
-   
-    guard let item = initNodeQueue.first, item.transitionState == .idle else {
-      return []
-    }
-      
-    item.transitionState = .testingAlias
-    item.state = .inhibited
-    let alias = nextAlias()
-    item.alias = alias
     
-    let frames : [LCCCANFrame] = [
-      createCheckIdFrame(format: .checkId7Frame, nodeId: item.nodeId, alias: alias),
-      createCheckIdFrame(format: .checkId6Frame, nodeId: item.nodeId, alias: alias),
-      createCheckIdFrame(format: .checkId5Frame, nodeId: item.nodeId, alias: alias),
-      createCheckIdFrame(format: .checkId4Frame, nodeId: item.nodeId, alias: alias),
-    ]
-    
-    if isBackgroundThread {
-      DispatchQueue.main.async {
-        self.startAliasTimer(interval: self.aliasWaitInterval)
-      }
-    }
-    else {
-      startAliasTimer(interval: aliasWaitInterval)
-    }
-
-    return frames
-    
-  }
-  
   // MARK: Alias Timer Methods
   
-  internal func startAliasTimer(interval: TimeInterval) {
-    aliasTimer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(aliasTimerAction), userInfo: nil, repeats: false)
+  internal func startAliasTimer() {
+    aliasTimer = Timer.scheduledTimer(timeInterval: 0.3, target: self, selector: #selector(aliasTimerAction), userInfo: nil, repeats: true)
     RunLoop.current.add(aliasTimer!, forMode: .common)
   }
   
@@ -262,60 +224,121 @@ extension OpenLCBCANGateway {
   // This is running in the main thread
   @objc internal func aliasTimerAction() {
     
-    aliasTimer = nil
+    aliasLock.lock()
     
-    guard let item = initNodeQueue.first, let alias = item.alias else {
-      return
+    let now = Date.timeIntervalSinceReferenceDate
+    
+    var frames : [LCCCANFrame] = []
+    
+    for (alias, item) in managedAliases {
+
+      // Wait at least 200 milliseconds
+      // Transmit a Reserve ID frame (RID) with the tentative source Node ID
+      // alias value in the Source NID Alias field.
+
+      if item.state == .testingAlias && now - item.timeStamp > 0.2 {
+        item.state = .aliasReserved
+        frames.append(contentsOf: createReserveIdFrame(alias: alias))
+      }
+      
     }
     
-    switch item.transitionState {
-      
-    case .testingAlias:
-      
-      //  Wait at least 200 milliseconds
-      //  Transmit a Reserve ID frame (RID) with the tentative source Node ID alias value in the Source
-      //  NID Alias field.
-      
-      item.transitionState = .reservingAlias
-      send(frames: createReserveIdFrame(alias: alias), isBackgroundThread: false)
-
-      // The standard does not say how long to wait after sending the Reserve ID frame (RID), so just
-      // use the same 200 milliseconds as the previous wait.
-      
-      startAliasTimer(interval: aliasWaitInterval)
-      
-    case .reservingAlias:
-      
+    var startGateway = false
+    
+    for nodeId in waitingForAlias {
+ 
       // The alias is reserved when that sequence completes without error.
       // To transition from the Inhibited state to the Permitted state, a node shall, in order:
       // • Have or obtain a validly reserved Node ID alias
       // • Transmit an Alias Map Definition (AMD) frame with the node's Node ID alias and Node ID
+
+      var found = false
       
-      initNodeQueue.removeFirst()
-
-      item.transitionState = .mappingDeclared
-      item.state = .permitted
-      addNodeIdAliasMapping(nodeId: item.nodeId, alias: alias)
-      addManagedNodeIdAliasMapping(item: item)
-
-      send(frames: createAliasMapDefinitionFrame(nodeId: item.nodeId, alias: alias), isBackgroundThread: false)
-
-      if item.nodeId == nodeId {
-        let message = OpenLCBMessage(messageTypeIndicator: .initializationCompleteFullProtocolRequired)
-        message.payload = nodeId.nodeIdBigEndianData
-        message.sourceNIDAlias = alias
-        if let frame = LCCCANFrame(message: message) {
-          send(frames: [frame], isBackgroundThread: false)
-        }
-        start()
-      }
-
-      send(frames: getAlias(isBackgroundThread: false), isBackgroundThread: false)
-
-    default:
-      break
-    }
+      for (alias, item) in managedAliases {
         
+        if item.state == .aliasReserved {
+
+          item.nodeId = nodeId
+          item.state = .mappingDeclared
+          addNodeIdAliasMapping(nodeId: item.nodeId, alias: alias)
+          addManagedNodeIdAliasMapping(item: item)
+          frames.append(contentsOf: createAliasMapDefinitionFrame(nodeId: nodeId, alias: alias))
+          
+          if nodeId == self.nodeId {
+            let message = OpenLCBMessage(messageTypeIndicator: .initializationCompleteFullProtocolRequired)
+            message.payload = nodeId.nodeIdBigEndianData
+            message.sourceNIDAlias = alias
+            if let frame = LCCCANFrame(message: message) {
+              frames.append(frame)
+            }
+            startGateway = true
+          }
+          
+          found = true
+          
+          break
+          
+        }
+        
+      }
+      
+      if !found {
+        break
+      }
+      
+    }
+    
+    var numberOfAliasesBeingTested = 0
+    
+    var numberOfUnusedAliases = 0
+    
+    for (_, item) in managedAliases {
+      if item.state != .mappingDeclared {
+        numberOfUnusedAliases += 1
+        if item.state == .testingAlias {
+          numberOfAliasesBeingTested += 1
+        }
+      }
+    }
+    
+    if numberOfUnusedAliases < 4 {
+      
+      for _ in 1 ... 16 - numberOfUnusedAliases {
+        
+        let alias = nextAlias()
+        
+        let item = OpenLCBTransportLayerAlias(alias: alias, nodeId: nodeId)
+        
+        managedAliases[alias] = item
+        
+        frames.append(contentsOf: [
+          createCheckIdFrame(format: .checkId7Frame, nodeId: nodeId, alias: alias),
+          createCheckIdFrame(format: .checkId6Frame, nodeId: nodeId, alias: alias),
+          createCheckIdFrame(format: .checkId5Frame, nodeId: nodeId, alias: alias),
+          createCheckIdFrame(format: .checkId4Frame, nodeId: nodeId, alias: alias),
+        ])
+        
+        numberOfAliasesBeingTested += 1
+        
+      }
+      
+    }
+    
+    aliasLock.unlock()
+    
+    send(frames: frames, isBackgroundThread: false)
+    
+    if startGateway {
+      start()
+    }
+    
+    if numberOfAliasesBeingTested == 0 && waitingForAlias.count == 0 {
+      stopAliasTimer()
+    }
+    else if aliasTimer == nil {
+      startAliasTimer()
+    }
+    
   }
   
 }

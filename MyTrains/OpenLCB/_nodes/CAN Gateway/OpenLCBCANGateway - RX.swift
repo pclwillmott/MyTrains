@@ -85,27 +85,26 @@ extension OpenLCBCANGateway {
     
     // Items in the initNodeQueue are all in inhibited state, and only the first is attempting to get an alias.
     
-    if let item = initNodeQueue.first, let alias = item.alias, alias == frame.sourceNIDAlias {
-      stopAliasTimer()
-      item.transitionState = .idle
-      #if DEBUG
-      debugLog("Restarting alias allocation due to alias already allocated: 0x\(alias.toHex(numberOfDigits: 3))")
-      #endif
-      item.alias = nil
-      frames.append(contentsOf: getAlias(isBackgroundThread: true))
+    aliasLock.lock()
+    for (alias, item) in managedAliases {
+      if alias == frame.sourceNIDAlias && item.state != .mappingDeclared {
+        managedAliases.removeValue(forKey: alias)
+      }
     }
+    aliasLock.unlock()
     
     // A node shall compare the source Node ID alias in each received frame against all reserved Node ID
     // aliases it currently holds. In case of a match, the receiving node shall:
 
-    // Items in the managed alias and nodeId lookups are all in permitted state.
+    // At this point any alias clash with a non-mapping assigned alias would have been removed
+    // from the managedAliases dictionary
     
-    if let item = managedAliasLookup[frame.sourceNIDAlias] {
+    if let item = managedAliases[frame.sourceNIDAlias] {
 
       // • If the frame is a Check ID (CID) frame, send a Reserve ID (RID) frame in response.
 
       if let controlFrameFormat = frame.controlFrameFormat, controlFrameFormat.isCheckIdFrame {
-        frames.append(contentsOf: createReserveIdFrame(alias: frame.sourceNIDAlias))
+        frames.append(contentsOf: createReserveIdFrame(alias: item.alias))
       }
       
       // • If the frame is not a Check ID (CID) frame, the node is in Permitted state, and the received
@@ -114,14 +113,13 @@ extension OpenLCBCANGateway {
       // ID alias.
       
       else {
-        item.state = .inhibited
-        item.transitionState = .idle
-        item.alias = nil
+        aliasLock.lock()
+        managedAliases.removeValue(forKey: item.alias)
         removeNodeIdAliasMapping(nodeId: item.nodeId)
         removeManagedNodeIdAliasMapping(nodeId: item.nodeId)
-        frames.append(contentsOf: createAliasMapResetFrame(nodeId: nodeId, alias: frame.sourceNIDAlias))
-        initNodeQueue.append(item)
-        frames.append(contentsOf: getAlias(isBackgroundThread: true))
+        waitingForAlias.insert(item.nodeId)
+        aliasLock.unlock()
+        frames.append(contentsOf: createAliasMapResetFrame(nodeId: item.nodeId, alias: item.alias))
       }
 
     }
@@ -146,13 +144,11 @@ extension OpenLCBCANGateway {
           
           // Items in the managed alias and nodeId lookups are all in permitted state.
           
-          if let nodeId = UInt64(bigEndianData: frame.data), let item = managedNodeIdLookup[nodeId], let alias = item.alias {
-            frames.append(contentsOf: createDuplicateNodeIdErrorFrame(alias: alias))
+          if let nodeId = UInt64(bigEndianData: frame.data), let item = managedNodeIdLookup[nodeId] {
+            frames.append(contentsOf: createDuplicateNodeIdErrorFrame(alias: item.alias))
+            managedAliases.removeValue(forKey: item.alias)
             removeNodeIdAliasMapping(nodeId: nodeId)
             removeManagedNodeIdAliasMapping(nodeId: nodeId)
-            item.state = .stopped
-            item.transitionState = .idle
-            item.alias = nil
             stoppedNodesLookup[item.nodeId] = item
           }
           else {
@@ -177,8 +173,8 @@ extension OpenLCBCANGateway {
             }
           }
           else {
-            if let nodeId = UInt64(bigEndianData: frame.data), let item = managedNodeIdLookup[nodeId], let alias = item.alias {
-              frames.append(contentsOf: createAliasMapDefinitionFrame(nodeId: nodeId, alias: alias))
+            if let nodeId = UInt64(bigEndianData: frame.data), let item = managedNodeIdLookup[nodeId] {
+              frames.append(contentsOf: createAliasMapDefinitionFrame(nodeId: nodeId, alias: item.alias))
             }
           }
           
@@ -194,17 +190,9 @@ extension OpenLCBCANGateway {
           // The node shall restart the process at the beginning if, before completion of the process, any error is
           // encountered during frame transmission.
           
-          // Items in the initNodeQueue are all in inhibited state, and only the first is attempting to get an alias.
-          
-          if let item = initNodeQueue.first {
-            stopAliasTimer()
-            item.transitionState = .idle
-            #if DEBUG
-            debugLog("Restarting alias allocation due to transmission error: 0x\(item.alias!.toHex(numberOfDigits: 3))")
-            #endif
-            item.alias = nil
-            frames.append(contentsOf: getAlias(isBackgroundThread: true))
-          }
+          aliasLock.lock()
+          managedAliases.removeAll()
+          aliasLock.unlock()
           
         default:
           break
@@ -299,7 +287,7 @@ extension OpenLCBCANGateway {
           if let internalNode = managedAliasLookup[oldMessage.destinationNIDAlias!] {
             let errorMessage = OpenLCBMessage(messageTypeIndicator: .datagramRejected)
             errorMessage.destinationNIDAlias = message.sourceNIDAlias
-            errorMessage.sourceNIDAlias = internalNode.alias!
+            errorMessage.sourceNIDAlias = internalNode.alias
             errorMessage.sourceNodeId = internalNode.nodeId
             errorMessage.payload = OpenLCBErrorCode.temporaryErrorOutOfOrderStartFrameBeforeFinishingPreviousMessage.bigEndianData
             outputQueue.append(errorMessage)
@@ -322,7 +310,7 @@ extension OpenLCBCANGateway {
         else if let internalNode = managedAliasLookup[message.destinationNIDAlias!] {
           let errorMessage = OpenLCBMessage(messageTypeIndicator: .datagramRejected)
           errorMessage.destinationNIDAlias = message.sourceNIDAlias
-          errorMessage.sourceNIDAlias = internalNode.alias!
+          errorMessage.sourceNIDAlias = internalNode.alias
           errorMessage.sourceNodeId = internalNode.nodeId
           errorMessage.payload = OpenLCBErrorCode.temporaryErrorOutOfOrderMiddleOrEndFrameWithoutStartFrame.bigEndianData
           outputQueue.append(errorMessage)
@@ -337,6 +325,10 @@ extension OpenLCBCANGateway {
     send(frames: frames, isBackgroundThread: true)
     
     self.processInputQueue()
+    
+    if !waitingForAlias.isEmpty && aliasTimer == nil {
+      startAliasTimer()
+    }
 
   }
 

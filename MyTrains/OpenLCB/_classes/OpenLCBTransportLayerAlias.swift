@@ -11,18 +11,20 @@ public class OpenLCBTransportLayerAlias {
   
   // MARK: Constructors
   
-  init(nodeId:UInt64) {
+  init(alias:UInt16, nodeId:UInt64) {
+    self.alias = alias
     self.nodeId = nodeId
+    self.timeStamp = Date.timeIntervalSinceReferenceDate
   }
   
   // MARK: Public Properties
   
   public var nodeId : UInt64
   
-  public var alias : UInt16?
+  public var alias : UInt16
   
-  public var transitionState : OpenLCBTransportTransitionStateCAN = .idle
+  public var state : OpenLCBAliasState = .testingAlias
+  
+  public var timeStamp : TimeInterval
 
-  public var state : OpenLCBTransportLayerState = .inhibited
-  
 }

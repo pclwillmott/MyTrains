@@ -214,7 +214,7 @@
 		DAA030962AEE94B600BC5659 /* OpenLCBHardwareNodeState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA030952AEE94B600BC5659 /* OpenLCBHardwareNodeState.swift */; };
 		DAA3338D2A7D2B31005E4C8B /* ProgrammerToolTableViewDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA3338C2A7D2B31005E4C8B /* ProgrammerToolTableViewDS.swift */; };
 		DAA36B9D2A110B6200F07D8E /* OpenLCBTransportLayerAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA36B9C2A110B6200F07D8E /* OpenLCBTransportLayerAlias.swift */; };
-		DAA36B9F2A110C0000F07D8E /* OpenLCBTransportLayerTransitionStateCAN.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA36B9E2A110C0000F07D8E /* OpenLCBTransportLayerTransitionStateCAN.swift */; };
+		DAA36B9F2A110C0000F07D8E /* OpenLCBAliasState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA36B9E2A110C0000F07D8E /* OpenLCBAliasState.swift */; };
 		DAA54F7F2A217CDA005CED7E /* OpenLCBNodeConfigurationTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA54F7E2A217CDA005CED7E /* OpenLCBNodeConfigurationTool.swift */; };
 		DAA66BD22A092DC2001804AC /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA66BD12A092DC2001804AC /* StringExtensions.swift */; };
 		DAA777CA2A20C84C008EAF02 /* OpenLCBClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA777C92A20C84C008EAF02 /* OpenLCBClock.swift */; };
@@ -528,7 +528,7 @@
 		DAA030952AEE94B600BC5659 /* OpenLCBHardwareNodeState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBHardwareNodeState.swift; sourceTree = "<group>"; };
 		DAA3338C2A7D2B31005E4C8B /* ProgrammerToolTableViewDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgrammerToolTableViewDS.swift; sourceTree = "<group>"; };
 		DAA36B9C2A110B6200F07D8E /* OpenLCBTransportLayerAlias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBTransportLayerAlias.swift; sourceTree = "<group>"; };
-		DAA36B9E2A110C0000F07D8E /* OpenLCBTransportLayerTransitionStateCAN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBTransportLayerTransitionStateCAN.swift; sourceTree = "<group>"; };
+		DAA36B9E2A110C0000F07D8E /* OpenLCBAliasState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBAliasState.swift; sourceTree = "<group>"; };
 		DAA54F7E2A217CDA005CED7E /* OpenLCBNodeConfigurationTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBNodeConfigurationTool.swift; sourceTree = "<group>"; };
 		DAA66BD12A092DC2001804AC /* StringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		DAA777C92A20C84C008EAF02 /* OpenLCBClock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OpenLCBClock.swift; path = ../OpenLCBClock.swift; sourceTree = "<group>"; };
@@ -1341,7 +1341,7 @@
 				DA93CAE32A40C2800014D2E2 /* OpenLCBTractionListenerConfigurationType.swift */,
 				DAACFC732A4336F7001743DA /* OpenLCBTractionManagementType.swift */,
 				DA56260C29E1A13300D465CC /* OpenLCBTransportLayerState.swift */,
-				DAA36B9E2A110C0000F07D8E /* OpenLCBTransportLayerTransitionStateCAN.swift */,
+				DAA36B9E2A110C0000F07D8E /* OpenLCBAliasState.swift */,
 				DA311BAB2A7BB8CC0019FDCE /* OpenLCBValidity.swift */,
 				DA5F7A192A3F11A7004D7EBB /* OpenLCBWellKnownEvent.swift */,
 				DAF4DD4F289ABDDE000B848E /* SpeedProfileResultsType.swift */,
@@ -1546,7 +1546,7 @@
 				DAD394BD2B2E15D300403040 /* OpenLCBCANGatewayWiFi.swift in Sources */,
 				DA9325A6289C02C300CC317F /* LocomotiveDirection.swift in Sources */,
 				DA408A5E2B582DF9005EBBDE /* SelectMasterNodeVC.swift in Sources */,
-				DAA36B9F2A110C0000F07D8E /* OpenLCBTransportLayerTransitionStateCAN.swift in Sources */,
+				DAA36B9F2A110C0000F07D8E /* OpenLCBAliasState.swift in Sources */,
 				DA8A05692B544087003A39D7 /* EnableState.swift in Sources */,
 				DAF5B4FD28A91A830015E758 /* SpeedSteps.swift in Sources */,
 				DAF3746F2A1A2A9B009E91F0 /* OpenLCBNodeVirtual.swift in Sources */,

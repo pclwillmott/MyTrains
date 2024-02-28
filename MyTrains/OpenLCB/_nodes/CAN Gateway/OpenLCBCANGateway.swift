@@ -115,7 +115,13 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
     return false
   }
   
-  internal var initNodeQueue : [OpenLCBTransportLayerAlias] = []
+  internal var waitingForNodeId : Set<UInt16> = []
+
+  internal var waitingForAlias : Set<UInt64> = []
+
+  internal var managedAliases : [UInt16:OpenLCBTransportLayerAlias] = [:]
+  
+  internal var aliasLock = NSLock()
   
   internal var managedNodeIdLookup : [UInt64:OpenLCBTransportLayerAlias] = [:]
   
@@ -129,10 +135,6 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
   
   internal var outputQueue : [OpenLCBMessage] = []
   
-  internal var waitingForNodeId : Set<UInt16> = []
-
-  internal var waitingForAlias : Set<UInt64> = []
-
   internal var outputQueueLock = NSLock()
   
   internal var inputQueueLock = NSLock()
@@ -158,8 +160,6 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
   internal var waitInputTimer : Timer?
   
   internal var aliasTimer : Timer?
-  
-  internal var aliasLock : NSLock = NSLock()
   
   internal var splitFrames : [UInt64:LCCCANFrame] = [:]
   
@@ -206,13 +206,11 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
         
         if !internalNodes.contains(nodeId) {
           
+          waitingForAlias.insert(nodeId)
+          
           internalNodes.insert(nodeId)
           
-          let alias = OpenLCBTransportLayerAlias(nodeId: nodeId)
-          
-          initNodeQueue.append(alias)
-          
-          send(frames: getAlias(isBackgroundThread: false), isBackgroundThread: false) 
+          aliasTimerAction()
           
         }
         
@@ -335,16 +333,19 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
     if state != .permitted {
       return
     }
-    
-    super.openLCBMessageReceived(message: message)
+
+    if let destinationNodeId = message.destinationNodeId, destinationNodeId == nodeId {
+      super.openLCBMessageReceived(message: message)
+    }
+    else if !message.messageTypeIndicator.isAddressPresent {
+      super.openLCBMessageReceived(message: message)
+    }
     
     // A message at this point could have come internally or externally from another gateway
     if let sourceNodeId = message.sourceNodeId, !waitingForAlias.contains(sourceNodeId) && !nodeIdLookup.keys.contains(sourceNodeId) {
       waitingForAlias.insert(sourceNodeId)
       internalNodes.insert(sourceNodeId)
-      let alias = OpenLCBTransportLayerAlias(nodeId: sourceNodeId)
-      initNodeQueue.append(alias)
-      getAlias(isBackgroundThread: false)
+      aliasTimerAction()
     }
 
     if let destinationNodeId = message.destinationNodeId, destinationNodeId == networkLayerNodeId {
