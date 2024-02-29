@@ -287,7 +287,7 @@ public class LCCCANFrame : NSObject {
                 result += "\"\(error.title)\""
               }
               else {
-                result += "0x\(errorCode.toHex(numberOfDigits: 4))"
+                result += "\(errorCode.toHex(numberOfDigits: 4))"
                 showPayload = false
               }
             default:
@@ -296,6 +296,10 @@ public class LCCCANFrame : NSObject {
           }
         default:
           result += "\(message.canFrameType.title) "
+          for byte in data {
+            result += "\(byte.toHex(numberOfDigits: 2)) "
+          }
+          showPayload = false
         }
         
       }

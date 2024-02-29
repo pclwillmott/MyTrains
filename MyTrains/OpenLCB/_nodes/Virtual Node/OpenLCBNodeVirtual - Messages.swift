@@ -100,17 +100,6 @@ extension OpenLCBNodeVirtual {
     
   }
 
-  public func sendGetUniqueNodeIdCommand(destinationNodeId:UInt64) {
-    let payload = OpenLCBDatagramType.getUniqueNodeIDCommand.bigEndianData
-    sendDatagram(destinationNodeId: destinationNodeId, data: payload)
-  }
-  
-  public func sendGetUniqueNodeIdReply(destinationNodeId:UInt64, newNodeId:UInt64) {
-    var payload = OpenLCBDatagramType.getUniqueNodeIDReply.bigEndianData
-    payload.append(contentsOf: newNodeId.nodeIdBigEndianData)
-    sendDatagram(destinationNodeId: destinationNodeId, data: payload)
-  }
-
   public func sendSetMoveCommand(destinationNodeId:UInt64, distance:Float, cruiseSpeed:Float, finalSpeed:Float) {
     let message = OpenLCBMessage(messageTypeIndicator: .tractionControlCommand)
     message.destinationNodeId = destinationNodeId

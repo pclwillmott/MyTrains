@@ -21,6 +21,8 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
     initSpaceAddress(&addressBaudRate, 1, &configurationSize)
     initSpaceAddress(&addressParity, 1, &configurationSize)
     initSpaceAddress(&addressFlowControl, 1, &configurationSize)
+    initSpaceAddress(&addressMaxAliasesToCache, 1, &configurationSize)
+    initSpaceAddress(&addressMinAliasesToCache, 1, &configurationSize)
 
     configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: configurationSize, isReadOnly: false, description: "")
     
@@ -59,10 +61,12 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
   
   // Configuration varaible addresses
   
-  internal var addressDevicePath  = 0
-  internal var addressBaudRate    = 0
-  internal var addressParity      = 0
-  internal var addressFlowControl = 0
+  internal var addressDevicePath        = 0
+  internal var addressBaudRate          = 0
+  internal var addressParity            = 0
+  internal var addressFlowControl       = 0
+  internal var addressMaxAliasesToCache = 0
+  internal var addressMinAliasesToCache = 0
 
   internal var devicePath : String {
     get {
@@ -97,6 +101,24 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
     }
     set(value) {
       configuration!.setUInt(address: addressBaudRate, value: value.rawValue)
+    }
+  }
+  
+  internal var maxAliasesToCache : UInt8 {
+    get {
+      return configuration!.getUInt8(address: addressMaxAliasesToCache)!
+    }
+    set(value) {
+      configuration!.setUInt(address: addressMaxAliasesToCache, value: value)
+    }
+  }
+  
+  internal var minAliasesToCache : UInt8 {
+    get {
+      return configuration!.getUInt8(address: addressMinAliasesToCache)!
+    }
+    set(value) {
+      configuration!.setUInt(address: addressMinAliasesToCache, value: value)
     }
   }
   
@@ -178,6 +200,10 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
     flowControl = .noFlowControl
     
     parity = .none
+    
+    minAliasesToCache = 16
+    
+    maxAliasesToCache = 64
     
     saveMemorySpaces()
     
@@ -278,7 +304,14 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
   
   internal func startWaitTimer(interval: TimeInterval) {
     waitTimer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(waitTimerTick), userInfo: nil, repeats: false)
-    RunLoop.current.add(waitTimer!, forMode: .common)
+    if let waitTimer {
+      RunLoop.current.add(waitTimer, forMode: .common)
+    }
+    else {
+      #if DEBUG
+      debugLog("failed to create waitTimer")
+      #endif
+    }
   }
   
   internal func stopWaitTimer() {
@@ -296,7 +329,14 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
   
   internal func startWaitInputTimer(interval: TimeInterval) {
     waitInputTimer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(waitInputTimerTick), userInfo: nil, repeats: false)
-    RunLoop.current.add(waitInputTimer!, forMode: .common)
+    if let waitInputTimer {
+      RunLoop.current.add(waitInputTimer, forMode: .common)
+    }
+    else {
+      #if DEBUG
+      debugLog("failed to create waitInputTimer")
+      #endif
+    }
   }
   
   internal func stopWaitInputTimer() {
@@ -334,26 +374,42 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
       return
     }
 
-    if let destinationNodeId = message.destinationNodeId, destinationNodeId == nodeId {
-      super.openLCBMessageReceived(message: message)
-    }
-    else if !message.messageTypeIndicator.isAddressPresent {
+    // A message might be for the gateway node itself
+    if !message.messageTypeIndicator.isAddressPresent || (message.destinationNodeId != nil && message.destinationNodeId! == nodeId) {
       super.openLCBMessageReceived(message: message)
     }
     
+    if message.visibility.rawValue < OpenLCBNodeVisibility.visibilitySemiPublic.rawValue {
+      return
+    }
+    else if let appNode, message.visibility == .visibilitySemiPublic {
+      
+      let validMessageTypes : Set<OpenLCBMTI> = [
+        .producerConsumerEventReport,
+        .producerIdentifiedAsCurrentlyValid,
+        .producerIdentifiedAsCurrentlyInvalid,
+        .producerIdentifiedWithValidityUnknown,
+        .producerRangeIdentified,
+        .consumerIdentifiedAsCurrentlyValid,
+        .consumerIdentifiedAsCurrentlyInvalid,
+        .consumerIdentifiedWithValidityUnknown,
+        .consumerRangeIdentified,
+      ]
+      
+      if !validMessageTypes.contains(message.messageTypeIndicator) {
+        return
+      }
+      
+      message.sourceNodeId = appNode.nodeId
+      
+    }
+    
+
     // A message at this point could have come internally or externally from another gateway
     if let sourceNodeId = message.sourceNodeId, !waitingForAlias.contains(sourceNodeId) && !nodeIdLookup.keys.contains(sourceNodeId) {
       waitingForAlias.insert(sourceNodeId)
       internalNodes.insert(sourceNodeId)
       aliasTimerAction()
-    }
-
-    if let destinationNodeId = message.destinationNodeId, destinationNodeId == networkLayerNodeId {
-      return
-    }
-    
-    if let sourceNodeId = message.sourceNodeId, sourceNodeId == networkLayerNodeId {
-      return
     }
 
     switch message.messageTypeIndicator {

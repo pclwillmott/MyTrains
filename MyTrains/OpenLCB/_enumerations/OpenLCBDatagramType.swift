@@ -76,8 +76,6 @@ public enum OpenLCBDatagramType : UInt16 {
   case resetRebootCommand                               = 0x20a9
   case reinitializeFactoryResetCommand                  = 0x20aa
   case sendLocoNetMessage                               = 0x3000 // Unofficial
-  case getUniqueNodeIDCommand                           = 0x3001 // Unofficial
-  case getUniqueNodeIDReply                             = 0x3002 // Unofficial
   
   // MARK: Public Properties
   
@@ -159,8 +157,6 @@ public enum OpenLCBDatagramType : UInt16 {
     .resetRebootCommand : String(localized: "Reset Reboot Command"),
     .reinitializeFactoryResetCommand : String(localized: "Reinitialize/Factory Reset Command"),
     .sendLocoNetMessage : String(localized: "Send LocoNet Message Command"),
-    .getUniqueNodeIDCommand : String(localized: "Get Unique Node ID Command"),
-    .getUniqueNodeIDReply : String(localized: "Get Unique Node ID Reply"),
   ]
   
 }

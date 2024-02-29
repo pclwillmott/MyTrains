@@ -22,9 +22,9 @@ public enum OpenLCBCANFrameFlag : UInt8 {
   // MARK: Private Class Properties
   
   private static let titles : [OpenLCBCANFrameFlag:String] = [
-    .onlyFrame : String(localized: "Only Frame"),
-    .firstFrame : String(localized: "First Frame"),
-    .lastFrame : String(localized: "Last Frame"),
+    .onlyFrame   : String(localized: "Only Frame  "),
+    .firstFrame  : String(localized: "First Frame "),
+    .lastFrame   : String(localized: "Last Frame  "),
     .middleFrame : String(localized: "Middle Frame"),
   ]
   

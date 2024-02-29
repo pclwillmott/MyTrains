@@ -1593,7 +1593,7 @@
     "Datagram Rejected" : {
 
     },
-    "Datagram Type Unknown: 0x%@ " : {
+    "Datagram Type Unknown: %@ " : {
 
     },
     "DCC 14" : {
@@ -2515,12 +2515,6 @@
 
     },
     "Get Unique Event ID Reply" : {
-
-    },
-    "Get Unique Node ID Command" : {
-
-    },
-    "Get Unique Node ID Reply" : {
 
     },
     "Getting CDI" : {
@@ -5543,7 +5537,7 @@
       "comment" : "This is the name of a country."
     },
     "Unknown" : {
-      "comment" : "Used to indicate the state of a turnout\nUsed to indicate that the type of something is unknown",
+      "comment" : "Used to indicate that the type of something is unknown\nUsed to indicate the state of a turnout",
       "localizations" : {
         "en" : {
           "stringUnit" : {

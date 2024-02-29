@@ -379,6 +379,8 @@ public class OpenLCBMessage : NSObject {
   
   public var info : String {
     
+    let padding = String(repeating: " ", count: 39)
+
     var text = ""
     
     if let sourceNodeId {
@@ -394,39 +396,327 @@ public class OpenLCBMessage : NSObject {
 
     if messageTypeIndicator.isEventPresent, let eventId {
       if let event = OpenLCBWellKnownEvent(rawValue: eventId) {
-        text += "\"\(event.title)\""
+        text += "\"\(event.title)\" "
       }
       else {
-        text += eventId.toHexDotFormat(numberOfBytes: 8)
+        text += "\(eventId.toHexDotFormat(numberOfBytes: 8)) "
       }
     }
     
     switch messageTypeIndicator {
+      
+    case .datagramReceivedOK:
+      
+      let replyCode = payload.count == 0 ? 0 : payload[0]
+      
+      if let timeout = OpenLCBDatagramTimeout(rawValue: replyCode) {
+        switch timeout {
+        case .ok:
+          text += "no reply pending "
+        case .replyPendingNoTimeout:
+          text += "reply pending "
+        default:
+          text += "reply pending with timeout \(timeout.timeout)s "
+        }
+      }
+      
     case .datagram:
       if let datagramType {
         text += "\(datagramType.title) "
+        switch datagramType {
+        case .writeUnderMaskCommandGeneric:
+          break
+        case .writeUnderMaskCommand0xFD:
+          break
+        case .writeUnderMaskCommand0xFE:
+          break
+        case .writeUnderMaskCommand0xFF:
+          break
+        case .writeStreamCommandGeneric:
+          break
+        case .writeStreamCommand0xFD:
+          break
+        case .writeStreamCommand0xFE:
+          break
+        case .writeStreamCommand0xFF:
+          break
+        case .writeStreamReplyGeneric:
+          break
+        case .writeStreamReply0xFD:
+          break
+        case .writeStreamReply0xFE:
+          break
+        case .writeStreamReply0xFF:
+          break
+        case .writeStreamReplyFailureGeneric:
+          break
+        case .writeStreamReplyFailure0xFD:
+          break
+        case .writeStreamReplyFailure0xFE:
+          break
+        case .writeStreamReplyFailure0xFF:
+          break
+        case .writeReplyGeneric, .writeReply0xFD, .writeReply0xFE, .writeReply0xFF:
+
+          var space : UInt8
+          
+          switch datagramType {
+          case .writeReply0xFD:
+            space = 0xfd
+          case .writeReply0xFE:
+            space = 0xfe
+          case .writeReply0xFF:
+            space = 0xff
+          default:
+            space = payload[6]
+          }
+          
+          let startAddress = UInt32(bigEndianData: [payload[2], payload[3], payload[4], payload[5]])!
+                                                    
+          text += "\(space.toHex(numberOfDigits: 2)) \(startAddress.toHex(numberOfDigits: 8))"
+          
+        case .readCommand0xFD, .readCommand0xFE, .readCommand0xFF, .readCommandGeneric:
+          
+          var space : UInt8
+          
+          switch datagramType {
+          case .readCommand0xFD:
+            space = 0xfd
+          case .readCommand0xFE:
+            space = 0xfe
+          case .readCommand0xFF:
+            space = 0xff
+          default:
+            space = payload[6]
+          }
+          
+          let startAddress = UInt32(bigEndianData: [payload[2], payload[3], payload[4], payload[5]])!
+                                                    
+          let count = payload[datagramType == .readCommandGeneric ? 7 : 6]
+          
+          text += "\(space.toHex(numberOfDigits: 2)) \(startAddress.toHex(numberOfDigits: 8)) \(count)"
+          
+        case .readReply0xFD, .readReply0xFE, .readReply0xFF, .readReplyGeneric, .writeCommandGeneric, .writeCommand0xFD, .writeCommand0xFE, .writeCommand0xFF:
+
+          var space : UInt8
+          
+          switch datagramType {
+          case .readReply0xFD, .writeCommand0xFD:
+            space = 0xfd
+          case .readReply0xFE, .writeCommand0xFE:
+            space = 0xfe
+          case .readReply0xFF, .writeCommand0xFF:
+            space = 0xff
+          default:
+            space = payload[6]
+          }
+
+          let startAddress = UInt32(bigEndianData: [payload[2], payload[3], payload[4], payload[5]])!
+          
+          var data : [UInt8] = []
+          
+          for index in Int((space < 0xfd) ? 7 : 6) ... payload.count - 1 {
+            data.append(payload[index])
+          }
+          
+          text += hexDump(space: space, startAddress: startAddress, data: data)
+
+        case .readReplyFailure0xFD, .readReplyFailure0xFE, .readReplyFailure0xFF, .readReplyFailureGeneric, .writeReplyFailureGeneric, .writeReplyFailure0xFD, .writeReplyFailure0xFE, .writeReplyFailure0xFF:
+
+          var space : UInt8
+          
+          switch datagramType {
+          case .readReplyFailure0xFD, .writeReplyFailure0xFD:
+            space = 0xfd
+          case .readReplyFailure0xFE, .writeReplyFailure0xFE:
+            space = 0xfe
+          case .readReplyFailure0xFF, .writeReplyFailure0xFF:
+            space = 0xff
+          default:
+            space = payload[6]
+          }
+
+          let startAddress = UInt32(bigEndianData: [payload[2], payload[3], payload[4], payload[5]])!
+          
+          let index = space < 0xfd ? 7 : 6
+          
+          text += "\(space.toHex(numberOfDigits: 2)) \(startAddress.toHex(numberOfDigits: 8)) "
+          
+          if let errorCode = UInt16(bigEndianData: [UInt8]([payload[index], payload[index + 1]])) {
+            if let error = OpenLCBErrorCode(rawValue: errorCode) {
+              text += "\"\(error.title)\""
+            }
+            else {
+              text += "0x\(errorCode.toHex(numberOfDigits: 4))"
+            }
+          }
+
+        case .readStreamCommandGeneric:
+          break
+        case .readStreamCommand0xFD:
+          break
+        case .readStreamCommand0xFE:
+          break
+        case .readStreamCommand0xFF:
+          break
+        case .readStreamReplyGeneric:
+          break
+        case .readStreamReply0xFD:
+          break
+        case .readStreamReply0xFE:
+          break
+        case .readStreamReply0xFF:
+          break
+        case .readStreamReplyFailureGeneric:
+          break
+        case .readStreamReplyFailure0xFD:
+          break
+        case .readStreamReplyFailure0xFE:
+          break
+        case .readStreamReplyFailure0xFF:
+          break
+        case .getConfigurationOptionsCommand:
+          break
+        case .getConfigurationOptionsReply:
+          break
+        case .getAddressSpaceInformationCommand:
+          text += "\(payload[2].toHex(numberOfDigits: 2))"
+          
+        case .getAddressSpaceInformationReply, .getAddressSpaceInformationReplyLowAddressPresent:
+ 
+          let highestAddress = UInt32(bigEndianData: [payload[3], payload[4], payload[5], payload[6]])!
+          
+          let space = payload[2]
+          
+          let flags = payload.count >= 8 ? payload[7] : 0
+
+          let mask : UInt8 = 0b00000001
+          
+          var lowestAddress : UInt32 = 0
+          
+          if flags & mask == mask {
+            lowestAddress = UInt32(bigEndianData: [payload[8], payload[9], payload[10], payload[11]])!
+          }
+          
+          text += "\(space.toHex(numberOfDigits: 2)) \(lowestAddress.toHex(numberOfDigits: 8)) \(highestAddress.toHex(numberOfDigits: 8)) \(flags.toHex(numberOfDigits: 2)) "
+          
+        case .lockReserveCommand, .lockReserveReply:
+          
+          var data = payload
+          data.removeFirst(2)
+          
+          let nodeId = UInt64(bigEndianData: [UInt8](data.prefix(6)))!
+          
+          text += "\(nodeId.toHexDotFormat(numberOfBytes: 6)) "
+          
+        case .getUniqueEventIDCommand:
+          
+          let number = payload.count > 2 ? payload[2] : 0x00
+          
+          text += "\(number) "
+          
+        case .getUniqueEventIDReply:
+          
+          var data = payload
+          data.removeFirst(2)
+          
+          let number = data.count / 8
+          
+          if number > 0 {
+            
+            for _ in 1 ... number {
+              let eventId = UInt64(bigEndianData: [UInt8](data.prefix(8)))!
+              text += "\n\(padding) \(eventId.toHexDotFormat(numberOfBytes: 8))"
+              data.removeFirst(8)
+            }
+            
+          }
+          
+        case .unfreezeCommand, .freezeCommand:
+          
+          text += "\(payload[2].toHex(numberOfDigits: 2))"
+          
+        case .updateCompleteCommand:
+          break
+        case .resetRebootCommand:
+          break
+        case .reinitializeFactoryResetCommand:
+          var data = payload
+          data.removeFirst(2)
+          let nodeId = UInt64(bigEndianData: [UInt8](data.prefix(6)))!
+          text += "\(nodeId.toHexDotFormat(numberOfBytes: 6))"
+        case .sendLocoNetMessage:
+          break
+        }
       }
       else {
-        text += String(localized: "Datagram Type Unknown: 0x\(UInt16(bigEndianData: [UInt8](payload.prefix(2)))!.toHex(numberOfDigits: 4)) ")
+        text += String(localized: "Datagram Type Unknown: \(UInt16(bigEndianData: [UInt8](payload.prefix(2)))!.toHex(numberOfDigits: 4)) ")
       }
-      text += payloadAsHex
     case .datagramRejected:
       var temp = payload
       temp.append(contentsOf: [0,0])
-      if let errorCode = UInt16(bigEndianData: [UInt8](payload.prefix(2))) {
+      if let errorCode = UInt16(bigEndianData: [UInt8](temp.prefix(2))) {
         if let error = OpenLCBErrorCode(rawValue: errorCode) {
           text += "\"\(error.title)\""
         }
         else {
-          text += "0x\(errorCode.toHex(numberOfDigits: 4))"
+          text += "\(errorCode.toHex(numberOfDigits: 4))"
         }
       }
+      
     case .initializationCompleteSimpleSetSufficient, .initializationCompleteFullProtocolRequired, .verifiedNodeIDSimpleSetSufficient, .verifiedNodeIDFullProtocolRequired:
       text += "\(UInt64(bigEndianData: payload)!.toHexDotFormat(numberOfBytes: 6))"
+    
+    case .verifyNodeIDGlobal, .verifyNodeIDAddressed:
+      
+      if !payload.isEmpty {
+        let nodeId = UInt64(bigEndianData: payload)!
+        text += "\(nodeId.toHexDotFormat(numberOfBytes: 6)) "
+      }
+      
+    case .optionalInteractionRejected, .terminateDueToError:
+      
+      var data = payload
+      
+      if let errorCode = UInt16(bigEndianData: [UInt8](data.prefix(2))) {
+        if let error = OpenLCBErrorCode(rawValue: errorCode) {
+          text += "\"\(error.title)\" "
+        }
+        else {
+          text += "\(errorCode.toHex(numberOfDigits: 4)) "
+        }
+      }
+      
+      data.removeFirst(2)
+      
+      let mti = UInt16(bigEndianData: [UInt8](data.prefix(2)))!
+      
+      text += "\(mti.toHex(numberOfDigits: 4)) "
+      
+      data.removeFirst(2)
+      
+      for byte in data {
+        text += "\(byte.toHex(numberOfDigits: 2)) "
+      }
+      
     case .simpleNodeIdentInfoReply:
+      
       let node = OpenLCBNode(nodeId: 0)
       node.encodedNodeInformation = payload
-      text += "\"\(node.manufacturerName)\",\"\(node.nodeModelName)\",\"\(node.nodeHardwareVersion)\",\"\(node.nodeSoftwareVersion)\",\"\(node.userNodeName)\",\"\(node.userNodeDescription)\""
+      text += "\n\(padding)\"\(node.manufacturerName)\",\"\(node.nodeModelName)\",\"\(node.nodeHardwareVersion)\",\"\(node.nodeSoftwareVersion)\",\"\(node.userNodeName)\",\"\(node.userNodeDescription)\""
+    
+    case .protocolSupportReply:
+      
+      for byte in payload {
+        text += "\(byte.toHex(numberOfDigits: 2)) "
+      }
+
+    case .identifyEventsAddressed:
+      
+      let nodeId = UInt64(bigEndianData: payload)
+      
+      text += "\(nodeId!.toHexDotFormat(numberOfBytes: 6)) "
+      
     default:
       break
     }
@@ -434,6 +724,53 @@ public class OpenLCBMessage : NSObject {
     return text
     
   }
+  
+  public func hexDump(space:UInt8, startAddress:UInt32, data:[UInt8]) -> String {
+    
+    var dump = "\n"
+    
+    let bytesPerRow : UInt32 = 16
+    
+    var address = startAddress
+    var bytesSoFar : UInt32 = 0
+    var bytes : String = ""
+    var chars : String = ""
+    
+    let padding = String(repeating: " ", count: 39)
+    
+    for byte in data {
+      
+      if bytesSoFar == bytesPerRow {
+        dump += "\(padding)\(space.toHex(numberOfDigits: 2)) \(address.toHex(numberOfDigits: 8)): \(bytes) \(chars)\n"
+        address += bytesPerRow
+        bytesSoFar = 0
+        bytes = ""
+        chars = ""
+      }
+
+      bytes += "\(byte.toHex(numberOfDigits: 2)) "
+
+      let char = Character(UnicodeScalar(byte))
+      let isPrintable = char.isLetter || char.isNumber || char.isSymbol || char.isPunctuation || char == " "
+      
+      chars += "\(isPrintable ? char : ".")"
+      
+      bytesSoFar += 1
+      
+    }
+    
+    if bytesSoFar > 0 {
+      while bytesSoFar < bytesPerRow {
+        bytes += "   "
+        bytesSoFar += 1
+      }
+      dump += "\(padding)\(space.toHex(numberOfDigits: 2)) \(address.toHex(numberOfDigits: 8)): \(bytes) \(chars)"
+    }
+    
+    return dump
+    
+  }
+
   
   public var isMessageComplete : Bool {
     

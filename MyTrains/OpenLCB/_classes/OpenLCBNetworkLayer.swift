@@ -8,8 +8,6 @@
 import Foundation
 import AppKit
 
-public let networkLayerNodeId : UInt64 = 0xfdffffffffff
-
 public class OpenLCBNetworkLayer : NSObject, MTPipeDelegate {
   
   // MARK: Constructors
@@ -377,8 +375,14 @@ public class OpenLCBNetworkLayer : NSObject, MTPipeDelegate {
   public var newNodeQueue : [(virtualNodeType:MyTrainsVirtualNodeType, completion:(OpenLCBNodeVirtual) -> Void)] = []
   
   public func createVirtualNode(virtualNodeType:MyTrainsVirtualNodeType, completion: @escaping (OpenLCBNodeVirtual) -> Void) {
+    
+    guard let appNode else {
+      return
+    }
+    
     newNodeQueue.append((virtualNodeType, completion))
-//    sendGetUniqueNodeIdCommand(sourceNodeId: networkLayerNodeId, destinationNodeId: appNodeId!)
+    appNode.getUniqueNodeId()
+    
   }
   
   public func createGatewayNode() {
@@ -421,15 +425,13 @@ public class OpenLCBNetworkLayer : NSObject, MTPipeDelegate {
 
   }
   
-  public func createVirtualNode(message:OpenLCBMessage) {
+  public func createVirtualNode(newNodeId:UInt64) {
     
     guard !newNodeQueue.isEmpty else {
       return
     }
     
     let item = newNodeQueue.removeFirst()
-    
-    let newNodeId = UInt64(bigEndianData: message.payload)! & 0x0000ffffffffffff
     
     var node : OpenLCBNodeVirtual?
     
@@ -443,7 +445,7 @@ public class OpenLCBNetworkLayer : NSObject, MTPipeDelegate {
     case .trainNode:
       node = OpenLCBNodeRollingStockLocoNet(nodeId: newNodeId)
     case .canGatewayNode:
-      node = OpenLCBCANGateway(nodeId: newNodeId)
+      break
     case .applicationNode:
       node = OpenLCBNodeMyTrains(nodeId: newNodeId)
     case .configurationToolNode:
@@ -497,25 +499,6 @@ public class OpenLCBNetworkLayer : NSObject, MTPipeDelegate {
     
     message.routing.insert(postOfficeNodeId)
     
-    /*
-    if let destinationNodeId = message.destinationNodeId, destinationNodeId == networkLayerNodeId {
-      
-      switch message.messageTypeIndicator {
-      case .datagram:
-        switch message.datagramType {
-        case .getUniqueNodeIDReply:
-          createVirtualNode(message: message)
-          return
-        default:
-          break
-        }
-      default:
-        break
-      }
-      
-    }
-    */
-    
     let monitorItem = MonitorItem()
     monitorItem.message = message
     addToMonitorBuffer(item: monitorItem, isBackgroundThread: false)
@@ -529,7 +512,7 @@ public class OpenLCBNetworkLayer : NSObject, MTPipeDelegate {
       }
       else if message.visibility.rawValue > OpenLCBNodeVisibility.visibilityPrivate.rawValue {
         for (_, virtualNode) in gatewayNodes {
-          if !message.routing.contains(virtualNode.nodeId) && message.visibility.rawValue >= virtualNode.visibility.rawValue {
+          if !message.routing.contains(virtualNode.nodeId) {
             virtualNode.openLCBMessageReceived(message: message)
           }
         }
@@ -550,7 +533,7 @@ public class OpenLCBNetworkLayer : NSObject, MTPipeDelegate {
         }
       }
       for (_, virtualNode) in gatewayNodes {
-        if !message.routing.contains(virtualNode.nodeId) && message.visibility.rawValue >= virtualNode.visibility.rawValue {
+        if !message.routing.contains(virtualNode.nodeId) {
           virtualNode.openLCBMessageReceived(message: message)
         }
       }

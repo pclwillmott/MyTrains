@@ -301,9 +301,9 @@ extension OpenLCBCANGateway {
       }
     }
     
-    if numberOfUnusedAliases < 4 {
+    if numberOfUnusedAliases < Int(minAliasesToCache) {
       
-      for _ in 1 ... 16 - numberOfUnusedAliases {
+      for _ in 1 ... Int(maxAliasesToCache) - numberOfUnusedAliases {
         
         let alias = nextAlias()
         

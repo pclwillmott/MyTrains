@@ -104,9 +104,19 @@ extension OpenLCBNodeVirtual {
     message.eventId = eventId
     sendMessage(message: message)
   }
-
-  // MARK: PLACEHOLDER FOR sendIdentifyEvents
   
+  public func sendIdentifyEventsGlobal() {
+    let message = OpenLCBMessage(messageTypeIndicator: .identifyEventsGlobal)
+    sendMessage(message: message)
+  }
+
+  public func sendIdentifyEventsAddressed(destinationNodeId:UInt64) {
+    let message = OpenLCBMessage(messageTypeIndicator: .identifyEventsAddressed)
+    message.destinationNodeId = destinationNodeId
+    message.payload = destinationNodeId.nodeIdBigEndianData
+    sendMessage(message: message)
+  }
+
   // MARK: PLACEHOLDER FOR sendLearnEvent
 
 }

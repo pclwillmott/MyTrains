@@ -27,36 +27,36 @@ public enum OpenLCBDatagramTimeout : UInt8 {
   case replyPending16384s    = 0x8e
   case replyPending32768s    = 0x8f
  
+  // MARK: Public Properties
+  
   public var replyPending : Bool {
     return self != .ok
   }
   
   public var timeout : TimeInterval {
-    get {
-      
-      let timeouts : [OpenLCBDatagramTimeout:TimeInterval] = [
-        .ok                    : 0.0,
-        .replyPendingNoTimeout : 0.0,
-        .replyPending2s        : 2.0,
-        .replyPending4s        : 4.0,
-        .replyPending8s        : 8.0,
-        .replyPending16s       : 16.0,
-        .replyPending32s       : 32.0,
-        .replyPending64s       : 64.0,
-        .replyPending128s      : 128.0,
-        .replyPending256s      : 256.0,
-        .replyPending512s      : 512.0,
-        .replyPending1024s     : 1024.0,
-        .replyPending2048s     : 2048.0,
-        .replyPending4096s     : 4096.0,
-        .replyPending8192s     : 8192.0,
-        .replyPending16384s    : 16384.0,
-        .replyPending32768s    : 32768.0,
-      ]
-      
-      return timeouts[self]!
-      
-    }
+    
+    let timeouts : [OpenLCBDatagramTimeout:TimeInterval] = [
+      .ok                    : 0.0,
+      .replyPendingNoTimeout : 0.0,
+      .replyPending2s        : 2.0,
+      .replyPending4s        : 4.0,
+      .replyPending8s        : 8.0,
+      .replyPending16s       : 16.0,
+      .replyPending32s       : 32.0,
+      .replyPending64s       : 64.0,
+      .replyPending128s      : 128.0,
+      .replyPending256s      : 256.0,
+      .replyPending512s      : 512.0,
+      .replyPending1024s     : 1024.0,
+      .replyPending2048s     : 2048.0,
+      .replyPending4096s     : 4096.0,
+      .replyPending8192s     : 8192.0,
+      .replyPending16384s    : 16384.0,
+      .replyPending32768s    : 32768.0,
+    ]
+    
+    return timeouts[self]!
+
   }
   
 }

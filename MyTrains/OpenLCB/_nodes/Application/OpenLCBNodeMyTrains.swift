@@ -84,13 +84,11 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   internal var addressUnitsTime           = 0
   internal var addressMaxNumberOfGateways = 0
 
-  internal typealias getUniqueNodeIdQueueItem = (requester:UInt64, candidate:UInt64)
+  private var getUniqueNodeIdQueue : [UInt64] = []
   
-  internal var getUniqueNodeIdQueue : [getUniqueNodeIdQueueItem] = []
+  private var getUniqueNodeIdInProgress = false
   
-  internal var getUniqueNodeIdInProgress = false
-  
-  internal var timeoutTimer : Timer?
+  private var timeoutTimer : Timer?
   
   internal var layoutList : [UInt64:LayoutListItem] = [:]
   
@@ -298,21 +296,32 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   }
   
   private func tryCandidate() {
+    
     getUniqueNodeIdInProgress = !getUniqueNodeIdQueue.isEmpty
-    if let item = getUniqueNodeIdQueue.first {
-      getUniqueNodeIdInProgress = true
-      startTimeoutTimer(interval: 1.0)
-      sendVerifyNodeIdAddressed(destinationNodeId: item.candidate)
+    
+    guard getUniqueNodeIdInProgress else {
+      return
     }
+    
+    startTimeoutTimer(interval: 0.8)
+    
+    sendVerifyNodeIdAddressed(destinationNodeId: getUniqueNodeIdQueue[0])
+    
   }
   
+  public func getUniqueNodeId() {
+    getUniqueNodeIdQueue.append(nextUniqueNodeIdCandidate)
+    tryCandidate()
+  }
+  
+
   @objc func timeoutTimerAction() {
 
     stopTimeoutTimer()
 
     if getUniqueNodeIdInProgress {
-      let item = getUniqueNodeIdQueue.removeFirst()
-      sendGetUniqueNodeIdReply(destinationNodeId: item.requester, newNodeId: item.candidate)
+      let newNodeId = getUniqueNodeIdQueue.removeFirst()
+      networkLayer?.createVirtualNode(newNodeId: newNodeId)
       tryCandidate()
     }
     
@@ -320,9 +329,18 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   
   private func startTimeoutTimer(interval: TimeInterval) {
 
+    stopTimeoutTimer()
+    
     timeoutTimer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(timeoutTimerAction), userInfo: nil, repeats: false)
 
-    RunLoop.current.add(timeoutTimer!, forMode: .common)
+    if let timeoutTimer {
+      RunLoop.current.add(timeoutTimer, forMode: .common)
+    }
+    else {
+      #if DEBUG
+      debugLog("failed to create timeoutTimer")
+      #endif
+    }
     
   }
   
@@ -515,8 +533,8 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   // MARK: OpenLCBNetworkLayerDelegate Methods
   
   public override func openLCBMessageReceived(message: OpenLCBMessage) {
-    
-    guard let sourceNodeId = message.sourceNodeId else {
+
+    guard let networkLayer, let sourceNodeId = message.sourceNodeId else {
       return
     }
     
@@ -528,9 +546,9 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
       
       if getUniqueNodeIdInProgress, let id = UInt64(bigEndianData: message.payload) {
         
-        if (id & 0x0000ffffffffffff) == getUniqueNodeIdQueue[0].candidate {
+        if (id & 0x0000ffffffffffff) == getUniqueNodeIdQueue[0] {
           stopTimeoutTimer()
-          getUniqueNodeIdQueue[0].candidate = nextUniqueNodeIdCandidate
+          getUniqueNodeIdQueue[0] = nextUniqueNodeIdCandidate
           tryCandidate()
         }
         
@@ -573,7 +591,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
         case .myTrainsLayoutDeleted:
 
           if sourceNodeId == appLayoutId {
-            networkLayer?.layoutNodeId = nil
+            networkLayer.layoutNodeId = nil
           }
           
           layoutList.removeValue(forKey: sourceNodeId)
@@ -585,10 +603,10 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
           let layoutState : LayoutState = (event == .myTrainsLayoutActivated) ? .activated : .deactivated
           
           if layoutState == .activated {
-            networkLayer?.layoutNodeId = sourceNodeId
+            networkLayer.layoutNodeId = sourceNodeId
           }
           else if let appLayoutId, appLayoutId == sourceNodeId {
-            networkLayer?.layoutNodeId = nil
+            networkLayer.layoutNodeId = nil
           }
           
           if let item = layoutList[sourceNodeId] {
@@ -661,29 +679,13 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
         }
         
       }
-
-    case .datagram:
+     
+    case .identifyEventsGlobal, .identifyEventsAddressed:
       
-      if let datagramType = message.datagramType {
-        
-        switch datagramType {
-          
-        case .getUniqueNodeIDCommand:
-          
-          sendDatagramReceivedOK(destinationNodeId: sourceNodeId, timeOut: .replyPendingNoTimeout)
-          
-          let item : getUniqueNodeIdQueueItem = (sourceNodeId, nextUniqueNodeIdCandidate)
-          
-          getUniqueNodeIdQueue.append(item)
-          
-          if !getUniqueNodeIdInProgress {
-            tryCandidate()
-          }
-          
-        default:
-          break
+      for (nodeId, node) in networkLayer.virtualNodeLookup {
+        if node.visibility == .visibilitySemiPublic {
+          sendIdentifyEventsAddressed(destinationNodeId: nodeId)
         }
-        
       }
       
     default:

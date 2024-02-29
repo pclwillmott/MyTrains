@@ -1031,24 +1031,11 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
         
       }
       
-    case .identifyConsumer:
-      // TODO: Event Ranges
-      if let eventId = message.eventId, !OpenLCBWellKnownEvent.isAutomaticallyRouted(eventId: eventId) && eventsConsumed.union(userConfigEventsConsumed).contains(eventId) {
-        var validity : OpenLCBValidity = .unknown
-        setValidity(eventId: eventId, validity: &validity)
-        sendConsumerIdentified(eventId: eventId, validity: validity)
-      }
+    case .identifyEventsGlobal, .identifyEventsAddressed:
+      
+      userConfigEventsConsumed = getUserConfigEvents(eventAddresses: userConfigEventConsumedAddresses)
+      userConfigEventsProduced = getUserConfigEvents(eventAddresses: userConfigEventProducedAddresses)
 
-    case .identifyProducer:
-      // TODO: Event Ranges
-      if let eventId = message.eventId, !OpenLCBWellKnownEvent.isAutomaticallyRouted(eventId: eventId) && eventsProduced.union(userConfigEventsProduced).contains(eventId) {
-        var validity : OpenLCBValidity = .unknown
-        setValidity(eventId: eventId, validity: &validity)
-        sendProducerIdentified(eventId: eventId, validity: validity)
-      }
-
-    case .identifyEventsAddressed, .identifyEventsGlobal:
-      // TODO: Event Ranges
       for eventId in eventsConsumed.union(userConfigEventsConsumed) {
         if !OpenLCBWellKnownEvent.isAutomaticallyRouted(eventId: eventId) {
           var validity : OpenLCBValidity = .unknown
@@ -1063,6 +1050,30 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
           setValidity(eventId: eventId, validity: &validity)
           sendProducerIdentified(eventId: eventId, validity: validity)
         }
+      }
+      
+      for eventRange in eventRangesConsumed {
+        sendConsumerRangeIdentified(eventId: eventRange.eventId)
+      }
+
+      for eventRange in eventRangesProduced {
+        sendProducerRangeIdentified(eventId: eventRange.eventId)
+      }
+
+    case .identifyConsumer:
+      // TODO: Event Ranges
+      if let eventId = message.eventId, !OpenLCBWellKnownEvent.isAutomaticallyRouted(eventId: eventId) && eventsConsumed.union(userConfigEventsConsumed).contains(eventId) {
+        var validity : OpenLCBValidity = .unknown
+        setValidity(eventId: eventId, validity: &validity)
+        sendConsumerIdentified(eventId: eventId, validity: validity)
+      }
+
+    case .identifyProducer:
+      // TODO: Event Ranges
+      if let eventId = message.eventId, !OpenLCBWellKnownEvent.isAutomaticallyRouted(eventId: eventId) && eventsProduced.union(userConfigEventsProduced).contains(eventId) {
+        var validity : OpenLCBValidity = .unknown
+        setValidity(eventId: eventId, validity: &validity)
+        sendProducerIdentified(eventId: eventId, validity: validity)
       }
 
     default:

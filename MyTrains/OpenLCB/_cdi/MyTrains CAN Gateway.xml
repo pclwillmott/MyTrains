@@ -10,30 +10,47 @@
 %%ACDI%%
 
 <segment space='253' origin='0'>
+  
 <name>Configuration</name>
-<group>
-<name>Serial Port</name>
-<description>Configures the serial port</description>
-<string size='256'>
-<name>Port</name>
-  %%PORTS%%
-</string>
 
-<int size='1'>
-<name>Baud Rate</name>
-%%BAUD_RATE%%
-</int>
+  <group>
+    <name>Serial Port</name>
+    <description>Configures the serial port</description>
+    <string size='256'>
+    <name>Port</name>
+      %%PORTS%%
+    </string>
 
-<int size='1'>
-<name>Parity</name>
-%%PARITY%%
-</int>
+    <int size='1'>
+    <name>Baud Rate</name>
+    %%BAUD_RATE%%
+    </int>
 
-<int size='1'>
-<name>Flow Control</name>
-%%FLOW_CONTROL%%
-</int>
-</group>
+    <int size='1'>
+    <name>Parity</name>
+    %%PARITY%%
+    </int>
+
+    <int size='1'>
+    <name>Flow Control</name>
+    %%FLOW_CONTROL%%
+    </int>
+  </group>
+
+  <group>
+    <name>Alias Cache</name>
+    <int size='1'>
+    <name>Maximum number of aliases to cache</name>
+    <min>1</min>
+    <max>255</max>
+    </int>
+    <int size='1'>
+    <name>Minimum number of aliases to cache</name>
+    <min>1</min>
+    <max>255</max>
+    </int>
+  </group>
+  
 </segment>
 
 %%VIRTUAL_NODE_CONFIG%%
