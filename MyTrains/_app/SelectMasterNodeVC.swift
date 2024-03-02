@@ -39,7 +39,7 @@ class SelectMasterNodeVC: NSViewController, NSWindowDelegate, NSTextFieldDelegat
     boxAppNodeId.title = String(localized: "Application Node ID", comment: "Used for the title of the Application Node ID box")
     boxAppNodeId.boxType = .primary
     
-    lblAppNodeId.stringValue = String(localized: "Enter a node ID from your personal OpenLCB Unique ID Range. This must be a unique value and not be used by any other OpenLCB node. OpenLCB Unique ID Ranges are available on request from the OpenLCB website. The Application Node create process cannot be undone so check the node ID carefully before you press the Create button.")
+    lblAppNodeId.stringValue = String(localized: "Enter a node ID from your personal OpenLCB Unique ID Range. This must be a unique value and not be used by any other OpenLCB node. MyTrains requires in total a minimum of 2 node IDs plus 1 node ID for each gateway node, all of which must be consecutive with the node ID that you enter here. OpenLCB Unique ID Ranges are available on request from the OpenLCB website. The Application Node create process cannot be undone so check the node ID carefully before you press the Create button.")
     
     lblAppNodeId.lineBreakMode = .byWordWrapping
     lblAppNodeId.maximumNumberOfLines = 0
@@ -116,7 +116,7 @@ class SelectMasterNodeVC: NSViewController, NSWindowDelegate, NSTextFieldDelegat
   
   // MARK: Actions
   
-  @IBAction func btnOKAction(_ sender: NSButton) {
+  @objc func btnOKAction(_ sender: NSButton) {
     view.window?.close()
     controller?.createApplicationNode(nodeId: UInt64(dotHex: txtAppNodeId.stringValue, numberOfBytes: 6)!)
   }

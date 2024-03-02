@@ -81,11 +81,11 @@ public class MyTrainsController : NSObject, NSUserNotificationCenterDelegate {
   
 // MARK: Private Methods
   
-  private func myTrainsControllerUpdated() {
-    for (_, delegate) in controllerDelegates {
-      delegate.myTrainsControllerUpdated?(myTrainsController: self)
-    }
-  }
+//  private func myTrainsControllerUpdated() {
+//    for (_, delegate) in controllerDelegates {
+//      delegate.myTrainsControllerUpdated?(myTrainsController: self)
+//    }
+//  }
   
   @objc func checkPortsTimerAction() {
     MTSerialPortManager.checkPorts()
@@ -101,19 +101,19 @@ public class MyTrainsController : NSObject, NSUserNotificationCenterDelegate {
   
   public func addLayout(layout: Layout) {
     layouts[layout.primaryKey] = layout
-    myTrainsControllerUpdated()
+//    myTrainsControllerUpdated()
   }
   
   public func removeLayout(primaryKey:Int) {
     layouts.removeValue(forKey: primaryKey)
-    myTrainsControllerUpdated()
+//    myTrainsControllerUpdated()
   }
   
   public func addDelegate(delegate:MyTrainsControllerDelegate) -> Int {
     let id = _nextControllerDelegateId
     _nextControllerDelegateId += 1
     controllerDelegates[id] = delegate
-    delegate.myTrainsControllerUpdated?(myTrainsController: self)
+//    delegate.myTrainsControllerUpdated?(myTrainsController: self)
     return id
   }
   

@@ -409,7 +409,7 @@
 
     },
     "About MyTrains" : {
-
+      "comment" : "Used for a menu title"
     },
     "Accept" : {
       "comment" : "Used to accept license agreement"
@@ -864,11 +864,15 @@
     "Brazil" : {
       "comment" : "This is the name of a country."
     },
+    "Bring All to Front" : {
+      "comment" : "Used for a menu title"
+    },
     "Buffer Stop" : {
       "comment" : "This is used to describe a piece of track."
     },
     "c" : {
       "comment" : "Used for the Clear Global Emergency Stop menu key equivalent",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -919,7 +923,7 @@
       }
     },
     "CAN Gateway" : {
-      "comment" : "Used to create a default OpenLCB virtual name",
+      "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1047,7 +1051,7 @@
 
     },
     "Clear Global Emergency Stop" : {
-      "comment" : "Used for the Clear Global Emergency Stop menu item title",
+      "comment" : "Used for a menu title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1062,6 +1066,9 @@
           }
         }
       }
+    },
+    "Clock" : {
+      "comment" : "Used for a menu title"
     },
     "Clock Node ID" : {
       "comment" : "Used to indicate that a custom clock should use the clock node Id",
@@ -1355,7 +1362,7 @@
       "comment" : "Used to indicate what is the initial date and time setting for a clock"
     },
     "Configuration" : {
-      "comment" : "Used for the Configuration menu item title",
+      "comment" : "Used for a menu title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1443,7 +1450,7 @@
 
     },
     "Copy" : {
-      "comment" : "Used for the title of a button copies to the clipboard"
+      "comment" : "Used for the title of a button copies to the clipboard\nUsed for a menu title"
     },
     "Couple" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -1497,7 +1504,7 @@
       }
     },
     "Create Application Node" : {
-      "comment" : "Used for the Create Application Node menu item title\nUsed for the title of the Create Application Node window",
+      "comment" : "Used for a menu title\nUsed for the title of the Create Application Node window",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1569,19 +1576,22 @@
         }
       }
     },
+    "Cut" : {
+      "comment" : "Used for a menu title"
+    },
     "Datagram" : {
 
     },
     "Datagram Complete In Frame" : {
 
     },
-    "Datagram Final Frame" : {
+    "Datagram Final Frame      " : {
 
     },
-    "Datagram First Frame" : {
+    "Datagram First Frame      " : {
 
     },
-    "Datagram Middle Frame" : {
+    "Datagram Middle Frame     " : {
 
     },
     "Datagram Protocol" : {
@@ -1685,7 +1695,7 @@
 
     },
     "DCC Programmer Tool" : {
-      "comment" : "Used for the DCC Programmer Tool menu item title\nUsed to create a default OpenLCB virtual name",
+      "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1717,6 +1727,9 @@
           }
         }
       }
+    },
+    "DCC Programmer Track" : {
+      "comment" : "Used for a menu title"
     },
     "DCC Programming Track" : {
       "comment" : "Used to create a default OpenLCB virtual name",
@@ -1904,7 +1917,7 @@
       }
     },
     "Digitrax BXP88" : {
-      "comment" : "Used to create a default OpenLCB virtual name",
+      "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2066,7 +2079,7 @@
       }
     },
     "Edit" : {
-      "comment" : "Used for the Edit menu item title",
+      "comment" : "Used for a menu title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2211,7 +2224,11 @@
         }
       }
     },
+    "Enter a node ID from your personal OpenLCB Unique ID Range. This must be a unique value and not be used by any other OpenLCB node. MyTrains requires in total a minimum of 2 node IDs plus 1 node ID for each gateway node, all of which must be consecutive with the node ID that you enter here. OpenLCB Unique ID Ranges are available on request from the OpenLCB website. The Application Node create process cannot be undone so check the node ID carefully before you press the Create button." : {
+
+    },
     "Enter a node ID from your personal OpenLCB Unique ID Range. This must be a unique value and not be used by any other OpenLCB node. OpenLCB Unique ID Ranges are available on request from the OpenLCB website. The Application Node create process cannot be undone so check the node ID carefully before you press the Create button." : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2226,6 +2243,9 @@
           }
         }
       }
+    },
+    "Enter Full Screen" : {
+      "comment" : "Used for a menu title"
     },
     "Error" : {
       "localizations" : {
@@ -2327,7 +2347,7 @@
       }
     },
     "Fast Clock" : {
-      "comment" : "Used for the Fast Clock menu item title\nUsed to indicate a clock's type",
+      "comment" : "Used to indicate a clock's type",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2387,7 +2407,7 @@
     "Firmware Upgrade Requested By Switch" : {
 
     },
-    "First Frame" : {
+    "First Frame " : {
 
     },
     "Flange Squeal" : {
@@ -2533,11 +2553,11 @@
         }
       }
     },
-    "Global And Addressed MTI" : {
+    "Global And Addressed MTI  " : {
 
     },
     "Global Emergency Stop" : {
-      "comment" : "Used for the Global Emergency Stop menu item title",
+      "comment" : "Used for a menu title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2554,7 +2574,7 @@
       }
     },
     "Global Power Off" : {
-      "comment" : "Used for the Global Power Off menu item title",
+      "comment" : "Used for a menu title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2571,7 +2591,7 @@
       }
     },
     "Global Power On" : {
-      "comment" : "Used for the Global Power On menu item title",
+      "comment" : "Used for a menu title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2663,6 +2683,12 @@
           }
         }
       }
+    },
+    "Hide MyTrains" : {
+      "comment" : "Used for a menu title"
+    },
+    "Hide Others" : {
+      "comment" : "Used for a menu title"
     },
     "Horn" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -2925,6 +2951,7 @@
     },
     "l" : {
       "comment" : "Used for the Select Layout menu key equivalent",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2940,11 +2967,11 @@
         }
       }
     },
-    "Last Frame" : {
+    "Last Frame  " : {
 
     },
     "Layout" : {
-      "comment" : "Used to create a default OpenLCB virtual name",
+      "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2981,7 +3008,7 @@
 
     },
     "LCC/OpenLCB Network" : {
-      "comment" : "Used for the LCC/OpenLCB Network menu item title",
+      "comment" : "Used for a menu title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2998,7 +3025,7 @@
       }
     },
     "LCC/OpenLCB Traffic Monitor" : {
-      "comment" : "Used for the LCC/OpenLCB Traffic Monitor menu item title",
+      "comment" : "Used for a menu title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3102,7 +3129,7 @@
 
     },
     "LocoNet Dashboard" : {
-      "comment" : "Used for the LocoNet Dashboard menu item title",
+      "comment" : "Used for a menu title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3119,7 +3146,7 @@
       }
     },
     "LocoNet Firmware Update" : {
-      "comment" : "Used for the LocoNet Firmware Update menu item title",
+      "comment" : "Used for a menu title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3135,6 +3162,9 @@
         }
       }
     },
+    "LocoNet Gateway" : {
+      "comment" : "Used for a menu title"
+    },
     "LocoNet Gateway Protocol" : {
 
     },
@@ -3142,7 +3172,7 @@
 
     },
     "LocoNet Monitor" : {
-      "comment" : "Used to create a default OpenLCB virtual name",
+      "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3176,7 +3206,7 @@
       }
     },
     "LocoNet Slot View" : {
-      "comment" : "Used for the LocoNet Slot View menu item title",
+      "comment" : "Used for a menu title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3193,7 +3223,7 @@
       }
     },
     "LocoNet Traffic Monitor" : {
-      "comment" : "Used for the LocoNet Traffic Monitor menu item title",
+      "comment" : "Used for a menu title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3210,7 +3240,7 @@
       }
     },
     "LocoNet Wireless Setup" : {
-      "comment" : "Used for the LocoNet Wireless Setup menu item title",
+      "comment" : "Used for a menu title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3505,6 +3535,9 @@
     "Milliseconds" : {
 
     },
+    "Minimize" : {
+      "comment" : "Used for a menu title"
+    },
     "mm" : {
       "comment" : "Used for the abbreviation of millimeters"
     },
@@ -3585,6 +3618,9 @@
         }
       }
     },
+    "MyTrains" : {
+      "comment" : "Used for a menu title"
+    },
     "MyTrains Layout Activated" : {
 
     },
@@ -3613,7 +3649,7 @@
       }
     },
     "New" : {
-      "comment" : "Used for the New menu item title",
+      "comment" : "Used for a menu title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3772,6 +3808,7 @@
     },
     "o" : {
       "comment" : "Used for the Global Power Off menu key equivalent",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3856,7 +3893,7 @@
         }
       }
     },
-    "Only Frame" : {
+    "Only Frame  " : {
 
     },
     "OO/HO" : {
@@ -3896,7 +3933,7 @@
       }
     },
     "Operations" : {
-      "comment" : "Used for the Operations menu item title",
+      "comment" : "Used for a menu title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3937,6 +3974,7 @@
     },
     "p" : {
       "comment" : "Used for the Global Power On menu key equivalent",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -4005,7 +4043,7 @@
       }
     },
     "Paste" : {
-      "comment" : "Used for the title of a button that pastes from the clipboard"
+      "comment" : "Used for the title of a button that pastes from the clipboard\nUsed for a menu title"
     },
     "Permanent Error" : {
 
@@ -4106,6 +4144,9 @@
     "Power Supply Brownout Detected Standard" : {
 
     },
+    "Preferences" : {
+      "comment" : "Used for a menu title"
+    },
     "Previous" : {
       "comment" : "Used to describe the direction of the previous block in respect of a train route",
       "localizations" : {
@@ -4126,10 +4167,10 @@
     "Producer Consumer Event Report" : {
 
     },
-    "Producer Consumer Event Report With Payload First Frame" : {
+    "Producer Consumer Event Report With Payload First Frame " : {
 
     },
-    "Producer Consumer Event Report With Payload Last Frame" : {
+    "Producer Consumer Event Report With Payload Last Frame  " : {
 
     },
     "Producer Consumer Event Report With Payload Middle Frame" : {
@@ -4158,6 +4199,9 @@
     },
     "Push Button" : {
 
+    },
+    "Quit MyTrains" : {
+      "comment" : "Used for a menu title"
     },
     "Radiator Fan" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -4366,6 +4410,9 @@
         }
       }
     },
+    "Reboot Application" : {
+      "comment" : "Used for a menu title"
+    },
     "Reed Switch" : {
 
     },
@@ -4420,6 +4467,9 @@
         }
       }
     },
+    "Reserved 1                " : {
+
+    },
     "Reserved 2" : {
       "comment" : "Used for LocoNet train control protocol selection",
       "localizations" : {
@@ -4436,6 +4486,12 @@
           }
         }
       }
+    },
+    "Reserved 2                " : {
+
+    },
+    "Reset Application to Factory Defaults" : {
+      "comment" : "Used for a menu title"
     },
     "Reset Reboot Command" : {
 
@@ -4537,7 +4593,7 @@
       "comment" : "This is the name of a country."
     },
     "s" : {
-      "comment" : "Used for the Global Emergency Stop menu key equivalent\nUsed for the abbreviation of seconds",
+      "comment" : "Used for the abbreviation of seconds",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -4643,8 +4699,11 @@
         }
       }
     },
+    "Select All" : {
+      "comment" : "Used for a menu title"
+    },
     "Select Layout" : {
-      "comment" : "Used for the Select Layout menu item\nUsed for the title of the Select Layout window",
+      "comment" : "Used for a menu title\nUsed for the title of the Select Layout window",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -4705,6 +4764,9 @@
           }
         }
       }
+    },
+    "Show All" : {
+      "comment" : "Used for a menu title"
     },
     "Show CDI Text" : {
       "localizations" : {
@@ -4999,7 +5061,7 @@
     "Straight Track" : {
       "comment" : "This is used to describe a piece of track."
     },
-    "Stream Data" : {
+    "Stream Data               " : {
 
     },
     "Stream Data Complete" : {
@@ -5025,6 +5087,7 @@
     },
     "Switch Board" : {
       "comment" : "Used for the Switch Board menu item title",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -5040,8 +5103,11 @@
         }
       }
     },
+    "Switchboard" : {
+      "comment" : "Used for a menu title"
+    },
     "Switchboard Item" : {
-      "comment" : "Used to create a default OpenLCB virtual name",
+      "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -5075,7 +5141,7 @@
       }
     },
     "Switchboard Panel" : {
-      "comment" : "Used to create a default OpenLCB virtual name",
+      "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -5127,6 +5193,7 @@
     },
     "t" : {
       "comment" : "Used for the Throttle menu key equivalent",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -5290,7 +5357,7 @@
       }
     },
     "Throttle" : {
-      "comment" : "Used for the Throttle menu item title",
+      "comment" : "Used for a menu title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -5340,7 +5407,7 @@
       }
     },
     "Tools" : {
-      "comment" : "Used for the Tools menu item title",
+      "comment" : "Used for a menu title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -5365,6 +5432,9 @@
     "Traction Control Reply" : {
 
     },
+    "Train" : {
+      "comment" : "Used for a menu title"
+    },
     "Train Move Complete" : {
 
     },
@@ -5384,7 +5454,7 @@
 
     },
     "Train Speed Profiler" : {
-      "comment" : "Used for the Train Speed Profiler menu item title",
+      "comment" : "Used for a menu title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -5537,7 +5607,7 @@
       "comment" : "This is the name of a country."
     },
     "Unknown" : {
-      "comment" : "Used to indicate that the type of something is unknown\nUsed to indicate the state of a turnout",
+      "comment" : "Used to indicate the state of a turnout\nUsed to indicate that the type of something is unknown",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -5623,7 +5693,7 @@
 
     },
     "View" : {
-      "comment" : "Used for the View menu item title",
+      "comment" : "Used for a menu title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -5808,6 +5878,9 @@
           }
         }
       }
+    },
+    "Window" : {
+      "comment" : "Used for a menu title"
     },
     "Write All" : {
       "localizations" : {

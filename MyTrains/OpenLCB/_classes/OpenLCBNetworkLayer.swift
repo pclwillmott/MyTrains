@@ -205,7 +205,7 @@ public class OpenLCBNetworkLayer : NSObject, MTPipeDelegate {
     
     _state = .uninitialized
     
-    menuUpdate()
+//    menuUpdate()
     
   }
   

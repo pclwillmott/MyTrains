@@ -103,7 +103,7 @@ public var appMode : AppMode {
   }
   set(value) {
     UserDefaults.standard.set(value.rawValue, forKey: DEFAULT.APP_MODE)
-    menuUpdate()
+//    menuUpdate()
   }
 }
 

@@ -209,6 +209,8 @@
 		DA9CF8FD2860978A00825FA9 /* TurnoutMotorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9CF8FC2860978A00825FA9 /* TurnoutMotorType.swift */; };
 		DA9CF8FF2860CA0100825FA9 /* SwitchBoardItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9CF8FE2860CA0100825FA9 /* SwitchBoardItemView.swift */; };
 		DA9DBA032B643774004F8EB9 /* CountryCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9DBA022B643774004F8EB9 /* CountryCode.swift */; };
+		DA9FDD012B935908003C6672 /* MyTrainsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9FDD002B935908003C6672 /* MyTrainsViewController.swift */; };
+		DA9FDD032B9364D6003C6672 /* MenuTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9FDD022B9364D6003C6672 /* MenuTag.swift */; };
 		DAA030922AEE87B100BC5659 /* OpenLCBFirmwareUpdate.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DAA030912AEE87B100BC5659 /* OpenLCBFirmwareUpdate.storyboard */; };
 		DAA030942AEE884F00BC5659 /* OpenLCBFirmwareUpdateVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA030932AEE884F00BC5659 /* OpenLCBFirmwareUpdateVC.swift */; };
 		DAA030962AEE94B600BC5659 /* OpenLCBHardwareNodeState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA030952AEE94B600BC5659 /* OpenLCBHardwareNodeState.swift */; };
@@ -523,6 +525,8 @@
 		DA9CF8FC2860978A00825FA9 /* TurnoutMotorType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TurnoutMotorType.swift; sourceTree = "<group>"; };
 		DA9CF8FE2860CA0100825FA9 /* SwitchBoardItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchBoardItemView.swift; sourceTree = "<group>"; };
 		DA9DBA022B643774004F8EB9 /* CountryCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryCode.swift; sourceTree = "<group>"; };
+		DA9FDD002B935908003C6672 /* MyTrainsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTrainsViewController.swift; sourceTree = "<group>"; };
+		DA9FDD022B9364D6003C6672 /* MenuTag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuTag.swift; sourceTree = "<group>"; };
 		DAA030912AEE87B100BC5659 /* OpenLCBFirmwareUpdate.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = OpenLCBFirmwareUpdate.storyboard; sourceTree = "<group>"; };
 		DAA030932AEE884F00BC5659 /* OpenLCBFirmwareUpdateVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBFirmwareUpdateVC.swift; sourceTree = "<group>"; };
 		DAA030952AEE94B600BC5659 /* OpenLCBHardwareNodeState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBHardwareNodeState.swift; sourceTree = "<group>"; };
@@ -825,8 +829,10 @@
 			isa = PBXGroup;
 			children = (
 				DAA83DEA272C37670075CBCD /* AppDelegate.swift */,
+				DA9FDD022B9364D6003C6672 /* MenuTag.swift */,
 				DAB5250E2B52E9AA00EEE9A0 /* Main.storyboard */,
 				DAA83DEC272C37670075CBCD /* MainVC.swift */,
+				DA9FDD002B935908003C6672 /* MyTrainsViewController.swift */,
 				DA6A0ADB27529D6600913F2B /* ModalWindow.swift */,
 				DA2E0E5D2736EAF300C7DA7A /* MyTrainsController.swift */,
 				DA6A0ADE2753B5CF00913F2B /* UserDefaults.swift */,
@@ -1569,6 +1575,7 @@
 				DAEA21372A51BE65008545A6 /* LocoNet Extensions.swift in Sources */,
 				DA0D3E082A485E570042748C /* OpenLCBSearchType.swift in Sources */,
 				DA1DC9FF28A1CE0D007A957A /* SamplePeriod.swift in Sources */,
+				DA9FDD032B9364D6003C6672 /* MenuTag.swift in Sources */,
 				DAD41AC62A3CA59D002EF847 /* MyTrainsControllerDelegate.swift in Sources */,
 				DA4342962836996800E8D555 /* MTSerialPort.swift in Sources */,
 				DA1B79F7285F2540009E1189 /* SwitchBoardItemPropertySheetVC.swift in Sources */,
@@ -1612,6 +1619,7 @@
 				DA09493E2B7F795B00545650 /* OpenLCBCANGateway - RX.swift in Sources */,
 				DAD394C12B2E238A00403040 /* OptionSwitch.swift in Sources */,
 				DAB4FF5E2854F8CF00D74920 /* LocomotiveType.swift in Sources */,
+				DA9FDD012B935908003C6672 /* MyTrainsViewController.swift in Sources */,
 				DAA83DEB272C37670075CBCD /* AppDelegate.swift in Sources */,
 				DAF6778C2B432372009707A4 /* CDIStackViewManagerDelegate.swift in Sources */,
 				DA0D3E062A4850880042748C /* OpenLCBThrottleDelegate.swift in Sources */,

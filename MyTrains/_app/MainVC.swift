@@ -7,39 +7,12 @@
 
 import Cocoa
 
-class MainVC: NSViewController, MyTrainsControllerDelegate, LayoutDelegate, OpenLCBClockDelegate {
+class MainVC: MyTrainsViewController, MyTrainsControllerDelegate, LayoutDelegate, OpenLCBClockDelegate {
 
-  // MARK: Window & View Control
-  
-  override func viewDidLoad() {
-    super.viewDidLoad()
-  }
-
-  func windowShouldClose(_ sender: NSWindow) -> Bool {
-    return true
-  }
-
-  func windowWillClose(_ notification: Notification) {
-    myTrainsController.layout?.removeDelegate(delegateId: layoutDelegateId)
-    myTrainsController.openLCBNetworkLayer!.fastClock!.removeObserver(observerId: fastClockObserverId)
-    myTrainsController.removeDelegate(id: controllerDelegateId)
-  }
-  
-  private func resetToClean() {
-    appNodeId = nil
-    appMode = .initializing
-    databasePath = nil
-    eulaAccepted = false
-  }
-  
   override func viewWillAppear() {
- 
-    let x = Pipe()
-    
-    x.fileHandleForReading.readInBackgroundAndNotify()
-    
-    // This is the first statement executed by the App
 
+    super.viewWillAppear()
+    
     if appMode == .delegate {
       appMode = .master
     }
@@ -69,6 +42,20 @@ class MainVC: NSViewController, MyTrainsControllerDelegate, LayoutDelegate, Open
 
   }
   
+  override func viewWillDisappear() {
+    super.viewWillDisappear()
+    myTrainsController.layout?.removeDelegate(delegateId: layoutDelegateId)
+    myTrainsController.openLCBNetworkLayer!.fastClock!.removeObserver(observerId: fastClockObserverId)
+    myTrainsController.removeDelegate(id: controllerDelegateId)
+  }
+
+  private func resetToClean() {
+    appNodeId = nil
+    appMode = .initializing
+    databasePath = nil
+    eulaAccepted = false
+  }
+    
   // MARK: Private Properties
   
   private var cboLayoutDS : ComboBoxDBDS? = nil

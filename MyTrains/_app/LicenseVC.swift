@@ -75,7 +75,8 @@ class LicenseVC: NSViewController, NSWindowDelegate {
     
     if let filepath = Bundle.main.path(forResource: "License", ofType: "txt") {
       do {
-        textView.string = try String(contentsOfFile: filepath)
+        let text = try String(contentsOfFile: filepath)
+        textView.string = text.replacingOccurrences(of: "%%COPYRIGHT%%", with: appCopyright)
       }
       catch {
       }
