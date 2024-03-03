@@ -8,29 +8,22 @@
 import Foundation
 import AppKit
 
-class SelectLayoutVC: NSViewController, NSWindowDelegate, MyTrainsAppDelegate {
+class SelectLayoutVC: MyTrainsViewController, MyTrainsAppDelegate {
   
   // MARK: Window & View Control
   
-  override func viewDidLoad() {
-    super.viewDidLoad()
-  }
-  
-  func windowShouldClose(_ sender: NSWindow) -> Bool {
-    return true
-  }
-  
-  func windowWillClose(_ notification: Notification) {
-    myTrainsController.openLCBNetworkLayer?.myTrainsNode?.removeObserver(observerId: observerId)
+  override func windowWillClose(_ notification: Notification) {
+ //   appDelegate.networkLayer?.myTrainsNode?.removeObserver(observerId: observerId)
+    super.windowWillClose(notification)
   }
   
   override func viewWillAppear() {
     
-    self.view.window?.delegate = self
+    super.viewWillAppear()
     
     self.view.window?.title = String(localized: "Select Layout", comment: "Used for the title of the Select Layout window")
     
-    if let appNode = myTrainsController.openLCBNetworkLayer?.myTrainsNode {
+    if let appNode {
       observerId = appNode.addObserver(observer: self)
     }
     
@@ -138,10 +131,10 @@ class SelectLayoutVC: NSViewController, NSWindowDelegate, MyTrainsAppDelegate {
   // MARK: Actions
   
   @IBAction func btnOKAction(_ sender: NSButton) {
-    if let networkLayer = myTrainsController.openLCBNetworkLayer {
+     let networkLayer = appDelegate.networkLayer
       networkLayer.layoutNodeId = (cboLayout.indexOfSelectedItem == -1) ? nil : layoutList[cboLayout.indexOfSelectedItem].layoutId
 //      menuUpdate()
-    }
+    
     view.window?.close()
   }
 

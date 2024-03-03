@@ -8,24 +8,13 @@
 import Foundation
 import AppKit
 
-class AboutVC: NSViewController, NSWindowDelegate {
+class AboutVC: MyTrainsViewController {
   
   // MARK: Window & View Control
   
-  override func viewDidLoad() {
-    super.viewDidLoad()
-  }
-  
-  func windowShouldClose(_ sender: NSWindow) -> Bool {
-    return true
-  }
-  
-  func windowWillClose(_ notification: Notification) {
-  }
-  
   override func viewWillAppear() {
     
-    self.view.window?.delegate = self
+    super.viewWillAppear()
     
     self.view.window?.title = ""
     
@@ -109,9 +98,7 @@ class AboutVC: NSViewController, NSWindowDelegate {
   
   @IBAction func btnAckAction(_ sender: NSButton) {
     
-    let x = ModalWindow.TextView
-    let wc = x.windowController
-    let vc = x.viewController(windowController: wc) as! TextViewVC
+    let vc = MyTrainsWindow.textView.viewController as! TextViewVC
     vc.viewTitle = String(localized: "Acknowledgements")
     
     if let filepath = Bundle.main.path(forResource: "Acknowledgements", ofType: "txt") {
@@ -122,15 +109,13 @@ class AboutVC: NSViewController, NSWindowDelegate {
       }
     }
 
-    wc.showWindow(nil)
+    vc.showWindow()
 
   }
   
   @IBAction func btnEULAAction(_ sender: NSButton) {
     
-    let x = ModalWindow.TextView
-    let wc = x.windowController
-    let vc = x.viewController(windowController: wc) as! TextViewVC
+    let vc = MyTrainsWindow.textView.viewController as! TextViewVC
     vc.viewTitle = String(localized: "End User License Agreement")
     
     if let filepath = Bundle.main.path(forResource: "License", ofType: "txt") {
@@ -141,7 +126,7 @@ class AboutVC: NSViewController, NSWindowDelegate {
       }
     }
 
-    wc.showWindow(nil)
+    vc.showWindow()
 
   }
 

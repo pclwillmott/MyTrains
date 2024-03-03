@@ -8,11 +8,11 @@
 import Foundation
 import AppKit
 
-class MyTrainsViewController: NSViewController, NSWindowDelegate {
+public class MyTrainsViewController: NSViewController, NSWindowDelegate {
   
   // MARK: View Control
   
-  override func viewDidLoad() {
+  public override func viewDidLoad() {
 
     super.viewDidLoad()
 
@@ -22,7 +22,7 @@ class MyTrainsViewController: NSViewController, NSWindowDelegate {
 
   }
   
-  override func viewWillAppear() {
+  public override func viewWillAppear() {
 
     super.viewWillAppear()
     
@@ -31,6 +31,16 @@ class MyTrainsViewController: NSViewController, NSWindowDelegate {
     #endif
 
     view.window?.delegate = self
+    
+  }
+  
+  public override func viewDidAppear() {
+    
+    super.viewDidAppear()
+    
+    #if DEBUG
+    debugLog("viewDidAppear")
+    #endif
     
   }
   
@@ -44,17 +54,17 @@ class MyTrainsViewController: NSViewController, NSWindowDelegate {
     
   }
   
-  override func viewDidAppear() {
-    
-    super.viewDidAppear()
+  public func windowWillClose(_ notification: Notification) {
     
     #if DEBUG
-    debugLog("viewDidAppear")
+    debugLog("windowWillClose")
     #endif
+    
+    appDelegate.removeViewController(self)
     
   }
   
-  override func viewWillDisappear() {
+  public override func viewWillDisappear() {
     
     super.viewWillDisappear()
     
@@ -64,7 +74,7 @@ class MyTrainsViewController: NSViewController, NSWindowDelegate {
     
   }
 
-  override func viewDidDisappear() {
+  public override func viewDidDisappear() {
     
     super.viewWillDisappear()
     
@@ -72,6 +82,20 @@ class MyTrainsViewController: NSViewController, NSWindowDelegate {
     debugLog("viewDidDisappear")
     #endif
     
+  }
+  
+  // MARK: Public Properties
+  
+  public var objectIdentifier : ObjectIdentifier?
+
+  // MARK: Public Methods
+  
+  public func showWindow() {
+    view.window?.windowController?.showWindow(nil)
+  }
+  
+  public func closeWindow() {
+    view.window?.close()
   }
 
 }

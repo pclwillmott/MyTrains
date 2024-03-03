@@ -8,26 +8,7 @@
 import Foundation
 import AppKit
 
-class CDITextViewVC: NSViewController, NSWindowDelegate {
-  
-  // MARK: Window & View Methods
-  
-  override func viewDidLoad() {
-    super.viewDidLoad()
-  }
-  
-  func windowShouldClose(_ sender: NSWindow) -> Bool {
-    return true
-  }
-  
-  func windowWillClose(_ notification: Notification) {
-  }
-  
-  override func viewWillAppear() {
-    
-    self.view.window?.delegate = self
-    
-  }
+class CDITextViewVC: MyTrainsViewController {
   
   // MARK: Public Properties
   

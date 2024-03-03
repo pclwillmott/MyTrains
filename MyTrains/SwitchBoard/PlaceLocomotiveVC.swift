@@ -6,30 +6,10 @@
 //
 
 import Foundation
-import Cocoa
+import AppKit
 
-class PlaceLocomotiveVC: NSViewController, NSWindowDelegate {
+class PlaceLocomotiveVC: MyTrainsViewController {
    
-  // MARK: Window & View Control
-  
-  override func viewDidLoad() {
-    super.viewDidLoad()
-  } 
-  
-  func windowShouldClose(_ sender: NSWindow) -> Bool {
-    return true
-  }
-
-  func windowWillClose(_ notification: Notification) {
-  }
-  
-  override func viewWillAppear() {
-    
-    self.view.window?.delegate = self
-    
- 
-  }
-  
   // MARK: Private Properties
   
   private var cboLocomotiveDS : ComboBoxDictDS = ComboBoxDictDS()

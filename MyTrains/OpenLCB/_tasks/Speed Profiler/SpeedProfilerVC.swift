@@ -8,28 +8,21 @@
 import Foundation
 import Cocoa
 
-class SpeedProfilerVC: NSViewController, NSWindowDelegate {
+class SpeedProfilerVC: MyTrainsViewController {
  
   // MARK: Window & View Control
   
-  override func viewDidLoad() {
-    super.viewDidLoad()
-  }
-  
-  func windowShouldClose(_ sender: NSWindow) -> Bool {
-    return true
-  }
-
-  func windowWillClose(_ notification: Notification) {
+  override func windowWillClose(_ notification: Notification) {
     if observerId != -1 {
 //      interface?.removeObserver(id: observerId)
     }
+    super.windowWillClose(notification)
   }
   
   override func viewWillAppear() {
     
-    self.view.window?.delegate = self
-        
+    super.viewWillAppear()
+    
     cboProfilerMode.selectItem(at: 0)
     
     UnitSpeed.populate(comboBox: cboUnits)
@@ -54,11 +47,11 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate {
     }
     
     cboRoute.removeAllItems()
-    if let layout = myTrainsController.layout {
-      for loopName in layout.loopNames {
-        cboRoute.addItem(withObjectValue: loopName)
-      }
-    }
+//    if let layout = myTrainsController.layout {
+//      for loopName in layout.loopNames {
+//        cboRoute.addItem(withObjectValue: loopName)
+//      }
+//    }
     if cboRoute.numberOfItems > 0 {
       cboRoute.selectItem(at: 0)
       cboRouteAction(cboRoute)
@@ -395,10 +388,10 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate {
     
     lblRouteLength.stringValue = ""
     
-    if let layout = myTrainsController.layout {
-      let units = UnitLength.selected(comboBox: cboLengthUnits)
+//    if let layout = myTrainsController.layout {
+//      let units = UnitLength.selected(comboBox: cboLengthUnits)
   //    lblRouteLength.stringValue = String(format: "%.1f", layout.loopLengths[cboRoute.indexOfSelectedItem] * units.fromCM)
-    }
+ //   }
     
   }
   
@@ -510,9 +503,9 @@ class SpeedProfilerVC: NSViewController, NSWindowDelegate {
   
   @IBAction func btnSetRouteAction(_ sender: NSButton) {
     
-    if let layout = myTrainsController.layout, cboRoute.indexOfSelectedItem != -1 {
-      layout.setRoute(route: layout.loops[cboRoute.indexOfSelectedItem])
-    }
+//    if let layout = myTrainsController.layout, cboRoute.indexOfSelectedItem != -1 {
+//      layout.setRoute(route: layout.loops[cboRoute.indexOfSelectedItem])
+//    }
     
   }
   

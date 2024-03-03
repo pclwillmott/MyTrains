@@ -8,7 +8,7 @@
 import Foundation
 import Cocoa
 
-class EditLayoutsVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
+class EditLayoutsVC: MyTrainsViewController, DBEditorDelegate {
 
   // MARK: Window & View Control
   
@@ -16,23 +16,20 @@ class EditLayoutsVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
     super.viewDidLoad()
   }
   
-  func windowShouldClose(_ sender: NSWindow) -> Bool {
-    return true
-  }
-
-  func windowWillClose(_ notification: Notification) {
+  override func windowWillClose(_ notification: Notification) {
     stopModal()
+    super.windowWillClose(notification)
   }
   
   override func viewWillAppear() {
     
-    self.view.window?.delegate = self
+    super.viewWillAppear()
     
     editorView.delegate = self
 
     editorView.tabView = self.tabView
     
-    editorView.dictionary = myTrainsController.layouts
+//    editorView.dictionary = myTrainsController.layouts
     
   }
   
@@ -75,8 +72,8 @@ class EditLayoutsVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   func saveNew(dbEditorView: DBEditorView) -> EditorObject {
     let layout = Layout()
     setFields(layout: layout)
-    myTrainsController.addLayout(layout: layout)
-    editorView.dictionary = myTrainsController.layouts
+//    myTrainsController.addLayout(layout: layout)
+//    editorView.dictionary = myTrainsController.layouts
     editorView.setSelection(key: layout.primaryKey)
     return layout
   }
@@ -84,15 +81,15 @@ class EditLayoutsVC: NSViewController, NSWindowDelegate, DBEditorDelegate {
   func saveExisting(dbEditorView: DBEditorView, editorObject: EditorObject) {
     if let layout = editorObject as? Layout {
       setFields(layout: layout)
-      editorView.dictionary = myTrainsController.layouts
+//      editorView.dictionary = myTrainsController.layouts
       editorView.setSelection(key: layout.primaryKey)
     }
   }
 
   func delete(dbEditorView: DBEditorView, primaryKey: Int) {
     Layout.delete(primaryKey: primaryKey)
-    myTrainsController.removeLayout(primaryKey: primaryKey)
-    editorView.dictionary = myTrainsController.layouts
+ //   myTrainsController.removeLayout(primaryKey: primaryKey)
+//    editorView.dictionary = myTrainsController.layouts
   }
 
   // MARK: Outlets & Actions

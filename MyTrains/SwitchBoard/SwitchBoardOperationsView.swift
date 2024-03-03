@@ -91,25 +91,19 @@ class SwitchBoardOperationsView : SwitchBoardView {
           
         case [.control]:
           if item.itemPartType == .block {
-            let x = ModalWindow.PlaceLocomotive
-            let wc = x.windowController
-            if let vc = wc.contentViewController as? PlaceLocomotiveVC {
-              vc.switchBoardItem = item
-              vc.isOrigin = false
-            }
-            wc.showWindow(nil)
+            let vc = MyTrainsWindow.placeLocomotive.viewController as! PlaceLocomotiveVC
+            vc.switchBoardItem = item
+            vc.isOrigin = false
+            vc.showWindow()
           }
         case [.option]:
           break
         case [.shift]:
           if item.itemPartType == .block {
-            let x = ModalWindow.PlaceLocomotive
-            let wc = x.windowController
-            if let vc = wc.contentViewController as? PlaceLocomotiveVC {
-              vc.switchBoardItem = item
-              vc.isOrigin = true
-            }
-            wc.showWindow(nil)
+            let vc = MyTrainsWindow.placeLocomotive.viewController as! PlaceLocomotiveVC
+            vc.switchBoardItem = item
+            vc.isOrigin = true
+            vc.showWindow()
           }
         default:
           if item.isTurnout {

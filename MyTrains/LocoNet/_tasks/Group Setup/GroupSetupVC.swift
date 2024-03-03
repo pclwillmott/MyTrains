@@ -6,21 +6,13 @@
 //
 
 import Foundation
-import Cocoa
+import AppKit
 
-class GroupSetupVC: NSViewController, MyTrainsControllerDelegate, NSWindowDelegate {
+class GroupSetupVC: MyTrainsViewController, MyTrainsControllerDelegate {
   
   // MARK: Window & View Control
   
-  override func viewDidLoad() {
-    super.viewDidLoad()
-  }
-   
-  func windowShouldClose(_ sender: NSWindow) -> Bool {
-    return true
-  }
-
-  func windowWillClose(_ notification: Notification) {
+  override func windowWillClose(_ notification: Notification) {
     
     if observerId != -1 {
  //     interface?.removeObserver(id: observerId)
@@ -28,17 +20,19 @@ class GroupSetupVC: NSViewController, MyTrainsControllerDelegate, NSWindowDelega
     }
     
     if delegateId != -1 {
-      myTrainsController.removeDelegate(id: delegateId)
+ //     myTrainsController.removeDelegate(id: delegateId)
       delegateId = -1
     }
+    
+    super.windowWillClose(notification)
     
   }
   
   override func viewWillAppear() {
     
-    self.view.window?.delegate = self
-
-    delegateId = myTrainsController.addDelegate(delegate: self)
+    super.viewWillAppear()
+    
+//    delegateId = myTrainsController.addDelegate(delegate: self)
     
 //    interfacesUpdated(interfaces: myTrainsController.networkInterfaces)
     

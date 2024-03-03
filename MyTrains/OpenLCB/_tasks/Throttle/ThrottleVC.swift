@@ -6,29 +6,21 @@
 //
 
 import Foundation
-import Cocoa
 import AppKit
 
-class ThrottleVC: NSViewController, NSWindowDelegate, OpenLCBThrottleDelegate {
+class ThrottleVC: MyTrainsViewController, OpenLCBThrottleDelegate {
 
   // MARK: Window & View Control
   
-  override func viewDidLoad() {
-    super.viewDidLoad()
-  }
-  
-  func windowShouldClose(_ sender: NSWindow) -> Bool {
-    return true
-  }
-
-  func windowWillClose(_ notification: Notification) {
-    myTrainsController.openLCBNetworkLayer?.releaseThrottle(throttle: throttle!)
+  override func windowWillClose(_ notification: Notification) {
+//    appDelegate.networkLayer?.releaseThrottle(throttle: throttle!)
+    super.windowWillClose(notification)
   }
   
   override func viewWillAppear() {
     
-    self.view.window?.delegate = self
-  
+    super.viewWillAppear()
+    
     OpenLCBSearchType.populate(comboBox: cboSearchType)
     OpenLCBSearchMatchType.populate(comboBox: cboSearchMatchType)
     OpenLCBSearchMatchTarget.populate(comboBox: cboSeatchMatchTarget)

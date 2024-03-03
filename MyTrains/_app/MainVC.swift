@@ -7,7 +7,7 @@
 
 import Cocoa
 
-class MainVC: MyTrainsViewController, MyTrainsControllerDelegate, LayoutDelegate, OpenLCBClockDelegate {
+class MainVC: NSViewController, MyTrainsControllerDelegate, LayoutDelegate, OpenLCBClockDelegate {
 
   override func viewWillAppear() {
 
@@ -44,9 +44,9 @@ class MainVC: MyTrainsViewController, MyTrainsControllerDelegate, LayoutDelegate
   
   override func viewWillDisappear() {
     super.viewWillDisappear()
-    myTrainsController.layout?.removeDelegate(delegateId: layoutDelegateId)
-    myTrainsController.openLCBNetworkLayer!.fastClock!.removeObserver(observerId: fastClockObserverId)
-    myTrainsController.removeDelegate(id: controllerDelegateId)
+//    myTrainsController.layout?.removeDelegate(delegateId: layoutDelegateId)
+//    appDelegate.networkLayer!.fastClock!.removeObserver(observerId: fastClockObserverId)
+//    myTrainsController.removeDelegate(id: controllerDelegateId)
   }
 
   private func resetToClean() {
@@ -72,28 +72,20 @@ class MainVC: MyTrainsViewController, MyTrainsControllerDelegate, LayoutDelegate
     
   @objc func timeoutTimerAction() {
 
-    if databasePath == nil {
-      databasePath = documentsPath + "/MyTrains/database"
-    }
 
-    // This starts the myTrainsController
+//    if let fastClock = appDelegate.networkLayer!.fastClock {
+//      fastClockObserverId = fastClock.addObserver(observer: self)
+//    }
     
-    controllerDelegateId = myTrainsController.addDelegate(delegate: self)
-    myTrainsController.openLCBNetworkLayer?.initialStart()
-
-    if let fastClock = myTrainsController.openLCBNetworkLayer!.fastClock {
-      fastClockObserverId = fastClock.addObserver(observer: self)
-    }
-    
-    switchBoardView.layout = myTrainsController.layout
+//    switchBoardView.layout = myTrainsController.layout
     
     scrollView.documentView?.frame = NSMakeRect(0.0, 0.0, 2000.0, 2000.0)
     scrollView.allowsMagnification = true
     scrollView.magnification = mainSwitchboardMagnification
 
-    if let layout = myTrainsController.layout {
-      layoutDelegateId = layout.addDelegate(delegate: self)
-    }
+//    if let layout = myTrainsController.layout {
+//      layoutDelegateId = layout.addDelegate(delegate: self)
+//    }
     
     scrollView.isHidden = false
     clockView.isHidden = false
@@ -145,7 +137,7 @@ class MainVC: MyTrainsViewController, MyTrainsControllerDelegate, LayoutDelegate
   @IBOutlet weak var cboLayout: NSComboBox!
   
   @IBAction func cboLayoutAction(_ sender: NSComboBox) {
-    myTrainsController.layoutId = cboLayoutDS!.codeForItemAt(index: cboLayout.indexOfSelectedItem) ?? -1
+ //   myTrainsController.layoutId = cboLayoutDS!.codeForItemAt(index: cboLayout.indexOfSelectedItem) ?? -1
   }
   
   @IBOutlet weak var boxStatus: NSBox!
@@ -205,9 +197,11 @@ class MainVC: MyTrainsViewController, MyTrainsControllerDelegate, LayoutDelegate
   
   @IBAction func btnConvertAction(_ sender: NSButton) {
     
+    appDelegate.closeAllWindows()
     
-    
-    if let layout = myTrainsController.layout, let networkLayer = myTrainsController.openLCBNetworkLayer {
+    return
+    /*
+    if let layout = myTrainsController.layout, let networkLayer = appDelegate.networkLayer {
       
       for (_, node) in networkLayer.virtualNodeLookup {
         if node.isSwitchboardNode {
@@ -226,6 +220,7 @@ class MainVC: MyTrainsViewController, MyTrainsControllerDelegate, LayoutDelegate
       }
  
     }
+     */
   }
   
   var panels : [SwitchBoardPanel] = []

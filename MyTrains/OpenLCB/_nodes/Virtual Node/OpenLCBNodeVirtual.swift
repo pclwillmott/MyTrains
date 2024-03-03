@@ -13,7 +13,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   
   public override init(nodeId:UInt64) {
     
-    networkLayer = myTrainsController.openLCBNetworkLayer
+    networkLayer = appDelegate.networkLayer
     
     lfsr1 = UInt32(nodeId >> 24)
     

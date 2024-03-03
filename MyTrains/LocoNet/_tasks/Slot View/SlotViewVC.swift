@@ -8,32 +8,26 @@
 import Foundation
 import Cocoa
 
-class SlotViewVC : NSViewController, NSWindowDelegate, OpenLCBLocoNetMonitorDelegate {
+class SlotViewVC : MyTrainsViewController, OpenLCBLocoNetMonitorDelegate {
   
   // MARK: Window & View Control
   
-  override func viewDidLoad() {
-    super.viewDidLoad()
-  }
-   
-  func windowShouldClose(_ sender: NSWindow) -> Bool {
-    return true
-  }
-
-  func windowWillClose(_ notification: Notification) {
+  override func windowWillClose(_ notification: Notification) {
     
     guard let monitorNode else {
       return
     }
     
-    myTrainsController.openLCBNetworkLayer?.releaseLocoNetMonitor(monitor: monitorNode)
+//    appDelegate.networkLayer?.releaseLocoNetMonitor(monitor: monitorNode)
+    
+    super.windowWillClose(notification)
     
   }
   
   override func viewWillAppear() {
     
-    self.view.window?.delegate = self
-
+    super.viewWillAppear()
+    
     self.view.window?.title = "LocoNet Slot Monitor"
     
     if let monitorNode {

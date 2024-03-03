@@ -8,25 +8,18 @@
 import Foundation
 import AppKit
 
-class LicenseVC: NSViewController, NSWindowDelegate {
+class LicenseVC: MyTrainsViewController {
   
   // MARK: Window & View Control
   
-  override func viewDidLoad() {
-    super.viewDidLoad()
-  }
-  
-  func windowShouldClose(_ sender: NSWindow) -> Bool {
-    return true
-  }
-  
-  func windowWillClose(_ notification: Notification) {
+  override func windowWillClose(_ notification: Notification) {
     stopModal()
+    super.windowWillClose(notification)
   }
   
   override func viewWillAppear() {
     
-    self.view.window?.delegate = self
+    super.viewWillAppear()
     
     self.view.window?.title = String(localized: "Select Layout", comment: "Used for the title of the Select Layout window")
     

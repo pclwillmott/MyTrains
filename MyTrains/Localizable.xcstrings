@@ -405,6 +405,9 @@
         }
       }
     },
+    "A configuration tool has exclusive use of the configuration mechanism. Try again after you have finished with the configuration tool." : {
+
+    },
     "Abbreviated Default CDI Protocol" : {
 
     },
@@ -923,7 +926,7 @@
       }
     },
     "CAN Gateway" : {
-      "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name",
+      "comment" : "Used to create a default OpenLCB virtual name\nUsed for a menu title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1504,7 +1507,7 @@
       }
     },
     "Create Application Node" : {
-      "comment" : "Used for a menu title\nUsed for the title of the Create Application Node window",
+      "comment" : "Used for the title of the Create Application Node window\nUsed for a menu title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1695,7 +1698,7 @@
 
     },
     "DCC Programmer Tool" : {
-      "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name",
+      "comment" : "Used to create a default OpenLCB virtual name\nUsed for a menu title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1917,7 +1920,7 @@
       }
     },
     "Digitrax BXP88" : {
-      "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name",
+      "comment" : "Used to create a default OpenLCB virtual name\nUsed for a menu title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2971,7 +2974,7 @@
 
     },
     "Layout" : {
-      "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name",
+      "comment" : "Used to create a default OpenLCB virtual name\nUsed for a menu title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3172,7 +3175,7 @@
 
     },
     "LocoNet Monitor" : {
-      "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name",
+      "comment" : "Used to create a default OpenLCB virtual name\nUsed for a menu title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -4703,7 +4706,7 @@
       "comment" : "Used for a menu title"
     },
     "Select Layout" : {
-      "comment" : "Used for a menu title\nUsed for the title of the Select Layout window",
+      "comment" : "Used for the title of the Select Layout window\nUsed for a menu title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -5107,7 +5110,7 @@
       "comment" : "Used for a menu title"
     },
     "Switchboard Item" : {
-      "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name",
+      "comment" : "Used to create a default OpenLCB virtual name\nUsed for a menu title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -5141,7 +5144,7 @@
       }
     },
     "Switchboard Panel" : {
-      "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name",
+      "comment" : "Used to create a default OpenLCB virtual name\nUsed for a menu title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -6076,6 +6079,9 @@
           }
         }
       }
+    },
+    "You must create and select a layout before you can add switchboard panels and items." : {
+
     }
   },
   "version" : "1.0"

@@ -20,19 +20,11 @@ private enum State {
 
 private typealias MemoryMapItem = (sortAddress:UInt64, space:UInt8, address: Int, size: Int, data: [UInt8], modified: Bool)
 
-class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurationToolDelegate, XMLParserDelegate, CDIDataViewDelegate {
+class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate, XMLParserDelegate, CDIDataViewDelegate {
   
   // MARK: Window & View Methods
   
-  override func viewDidLoad() {
-    super.viewDidLoad()
-  }
-  
-  func windowShouldClose(_ sender: NSWindow) -> Bool {
-    return true
-  }
-  
-  func windowWillClose(_ notification: Notification) {
+  override func windowWillClose(_ notification: Notification) {
     
     guard let networkLayer, let configurationTool else {
       return
@@ -41,12 +33,14 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
     configurationTool.delegate = nil
     networkLayer.releaseConfigurationTool(configurationTool: configurationTool)
 
+    super.windowWillClose(notification)
+    
   }
   
   override func viewWillAppear() {
     
-    self.view.window?.delegate = self
-
+    super.viewWillAppear()
+    
     containerView.translatesAutoresizingMaskIntoConstraints = false
     containerView.scrollView.contentView.translatesAutoresizingMaskIntoConstraints = false
     btnWriteAll.translatesAutoresizingMaskIntoConstraints = false
@@ -1349,13 +1343,11 @@ class ConfigurationToolVC: NSViewController, NSWindowDelegate, OpenLCBConfigurat
     
     title = String(localized: "CDI: \(title) (\(node!.nodeId.toHexDotFormat(numberOfBytes: 6)))")
 
-    let x = ModalWindow.CDITextView
-    let wc = x.windowController
-    let vc = x.viewController(windowController: wc) as! CDITextViewVC
+    let vc = MyTrainsWindow.cdiTextView.viewController as! CDITextViewVC
     vc.name = title
     vc.cdiText = cdiText
     vc.cdiInfo = cdiInfo
-    wc.showWindow(nil)
+    vc.showWindow()
   }
 
 }

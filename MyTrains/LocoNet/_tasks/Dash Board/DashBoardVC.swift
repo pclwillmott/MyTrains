@@ -8,19 +8,12 @@
 import Foundation
 import Cocoa
 
-class DashBoardVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegate {
+class DashBoardVC: MyTrainsViewController, MyTrainsControllerDelegate {
   
   // MARK: Window & View Control
 
-  override func viewDidLoad() {
-    super.viewDidLoad()
-  }
-  
-  func windowShouldClose(_ sender: NSWindow) -> Bool {
-    return true
-  }
-
-  func windowWillClose(_ notification: Notification) {
+  override func windowWillClose(_ notification: Notification) {
+    
     if observerId != -1 {
   /*    if let mess = interface {
         mess.removeObserver(id: observerId)
@@ -28,14 +21,17 @@ class DashBoardVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegat
       } */
     }
     if delegateId != -1 {
-      myTrainsController.removeDelegate(id: delegateId)
+  //    myTrainsController.removeDelegate(id: delegateId)
       delegateId = -1
     }
+    
+    super.windowWillClose(notification)
+    
   }
 
   override func viewWillAppear() {
     
-    self.view.window?.delegate = self
+    super.viewWillAppear()
     
     bits.append(lbl40)
     bits.append(lbl41)
@@ -77,7 +73,7 @@ class DashBoardVC: NSViewController, NSWindowDelegate, MyTrainsControllerDelegat
 
     clearFields()
     
-    delegateId = myTrainsController.addDelegate(delegate: self)
+//    delegateId = myTrainsController.addDelegate(delegate: self)
     
 //    interfacesUpdated(interfaces: myTrainsController.networkInterfaces)
     

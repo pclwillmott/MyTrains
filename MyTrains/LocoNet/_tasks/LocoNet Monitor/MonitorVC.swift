@@ -6,14 +6,14 @@
 //
 
 import Foundation
-import Cocoa
+import AppKit
 
 private enum TimeStampType : Int {
   case none = 0
   case millisecondsSinceLastMessage = 1
 }
 
-class MonitorVC: NSViewController, NSWindowDelegate, OpenLCBLocoNetMonitorDelegate, MyTrainsAppDelegate {
+class MonitorVC: MyTrainsViewController, OpenLCBLocoNetMonitorDelegate, MyTrainsAppDelegate {
   
   // MARK: Window & View Control
   
@@ -21,19 +21,17 @@ class MonitorVC: NSViewController, NSWindowDelegate, OpenLCBLocoNetMonitorDelega
     super.viewDidLoad()
   }
    
-  func windowShouldClose(_ sender: NSWindow) -> Bool {
-    return true
-  }
-
-  func windowWillClose(_ notification: Notification) {
+  override func windowWillClose(_ notification: Notification) {
     
     guard let monitorNode else {
       return
     }
     
-    myTrainsController.openLCBNetworkLayer?.releaseLocoNetMonitor(monitor: monitorNode)
+//    appDelegate.networkLayer?.releaseLocoNetMonitor(monitor: monitorNode)
     
     appNode?.removeObserver(observerId: observerId)
+    
+    super.windowWillClose(notification)
     
   }
   
@@ -48,7 +46,7 @@ class MonitorVC: NSViewController, NSWindowDelegate, OpenLCBLocoNetMonitorDelega
   
   override func viewWillAppear() {
     
-    self.view.window?.delegate = self
+    super.viewWillAppear()
     
     self.view.window?.title = "LocoNet Monitor"
     

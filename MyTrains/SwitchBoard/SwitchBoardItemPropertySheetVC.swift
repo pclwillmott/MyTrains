@@ -8,27 +8,20 @@
 import Cocoa
 import SQLite3
 
-class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
+class SwitchBoardItemPropertySheetVC: MyTrainsViewController {
 
   // MARK: Window & View Control
   
-  override func viewDidLoad() {
-      super.viewDidLoad()
-      // Do view setup here.
-  }
-
-  @objc func windowShouldClose(_ sender: NSWindow) -> Bool {
-    return true
-  }
-
-  @objc func windowWillClose(_ notification: Notification) {
+  override func windowWillClose(_ notification: Notification) {
     stopModal()
+    super.windowWillClose(notification)
   }
   
   override func viewWillAppear() {
-        
-    self.view.window?.delegate = self
     
+    super.viewWillAppear()
+     
+    /*
     if let layout = item.layout {
       
       // GENERAL TAB
@@ -334,7 +327,7 @@ class SwitchBoardItemPropertySheetVC: NSViewController, NSWindowDelegate {
       lblPositionUnits.isHidden = item.itemPartType != .sensor
       cboPositionUnits.isHidden = item.itemPartType != .sensor
     }
-    
+    */
     setupControls()
 
   }

@@ -89,11 +89,11 @@ public class SwitchBoardItem : EditorObject {
     }
   }
   
-  public var layout : Layout? {
-    get {
-      return layoutId == -1 ? myTrainsController.layout : myTrainsController.layouts[layoutId]
-    }
-  }
+//  public var layout : Layout? {
+//    get {
+//      return layoutId == -1 ? myTrainsController.layout : myTrainsController.layouts[layoutId]
+//    }
+//  }
   
   public var panelId : Int = -1 {
     didSet {
@@ -121,13 +121,13 @@ public class SwitchBoardItem : EditorObject {
   
   public var isOccupied : Bool = false {
     didSet {
-      layout?.needsDisplay()
+   //   layout?.needsDisplay()
     }
   }
   
   public var isTrackFault : Bool = false {
     didSet {
-      layout?.needsDisplay()
+   //   layout?.needsDisplay()
     }
   }
   
@@ -720,7 +720,7 @@ public class SwitchBoardItem : EditorObject {
           */
         }
         
-        layout?.needsDisplay()
+     //   layout?.needsDisplay()
         
       }
       
@@ -867,11 +867,9 @@ public class SwitchBoardItem : EditorObject {
       window.close()
     }
  */
-    let x = ModalWindow.SwitchBoardItemPropertySheet
-    let wc = x.windowController
-    let vc = x.viewController(windowController: wc) as! SwitchBoardItemPropertySheetVC
+    let vc = MyTrainsWindow.switchBoardItemPropertySheet.viewController as! SwitchBoardItemPropertySheetVC
     vc.switchBoardItem = self
-    wc.showWindow(nil)
+    vc.showWindow()
 
   }
   
@@ -1162,7 +1160,7 @@ public class SwitchBoardItem : EditorObject {
   public func save() {
     
     if blockName.isEmpty {
-      blockName = layout!.nextItemName(switchBoardItem: self)
+  //    blockName = layout!.nextItemName(switchBoardItem: self)
     }
     
     if modified {

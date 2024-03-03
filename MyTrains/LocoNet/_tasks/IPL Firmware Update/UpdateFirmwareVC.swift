@@ -8,30 +8,24 @@
 import Foundation
 import Cocoa
 
-class UpdateFirmwareVC: NSViewController, NSWindowDelegate, DMFDelegate {
+class UpdateFirmwareVC: MyTrainsViewController, DMFDelegate {
 
   // MARK: Window & View Control
   
-  override func viewDidLoad() {
-    super.viewDidLoad()
-  }
-  
-  func windowShouldClose(_ sender: NSWindow) -> Bool {
-    return true
-  }
-
-  func windowWillClose(_ notification: Notification) {
+  override func windowWillClose(_ notification: Notification) {
     
     if observerId != -1 {
  //     interface?.removeObserver(id: observerId)
       observerId = -1
     }
     
+    super.windowWillClose(notification)
+    
   }
 
   override func viewWillAppear() {
     
-    self.view.window?.delegate = self
+    super.viewWillAppear()
     
 //    interfacesUpdated(interfaces: myTrainsController.networkInterfaces)
 

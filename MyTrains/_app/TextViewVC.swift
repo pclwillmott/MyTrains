@@ -8,24 +8,13 @@
 import Foundation
 import AppKit
 
-class TextViewVC: NSViewController, NSWindowDelegate {
+class TextViewVC: MyTrainsViewController {
     
   // MARK: Window & View Control
   
-  override func viewDidLoad() {
-    super.viewDidLoad()
-  }
-  
-  func windowShouldClose(_ sender: NSWindow) -> Bool {
-    return true
-  }
-  
-  func windowWillClose(_ notification: Notification) {
-  }
-  
   override func viewWillAppear() {
     
-    self.view.window?.delegate = self
+    super.viewWillAppear()
     
 //    self.view.window?.title = viewTitle
     

@@ -79,9 +79,7 @@ public var appNodeId : UInt64? {
 }
 
 public var appNode : OpenLCBNodeMyTrains? {
-  guard let networkLayer = myTrainsController.openLCBNetworkLayer else {
-    return nil
-  }
+  let networkLayer = appDelegate.networkLayer 
   return networkLayer.myTrainsNode
 }
 

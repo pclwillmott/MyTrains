@@ -8,7 +8,7 @@
 import Foundation
 import AppKit
 
-public class OpenLCBNetworkLayer : NSObject, MTPipeDelegate {
+public class OpenLCBNetworkLayer : NSObject {
   
   // MARK: Constructors
   
@@ -400,13 +400,11 @@ public class OpenLCBNetworkLayer : NSObject, MTPipeDelegate {
       registerNode(node: node)
 
       if node.isConfigurationDescriptionInformationProtocolSupported {
-        let x = ModalWindow.ConfigurationTool
-        let wc = x.windowController
-        let vc = x.viewController(windowController: wc) as! ConfigurationToolVC
+        let vc = MyTrainsWindow.configurationTool.viewController as! ConfigurationToolVC
         vc.configurationTool = getConfigurationTool()
         vc.configurationTool?.delegate = vc
         vc.node = node
-        wc.showWindow(nil)
+        vc.showWindow()
       }
 
     }
@@ -623,26 +621,4 @@ public class OpenLCBNetworkLayer : NSObject, MTPipeDelegate {
     
   }
 
-  // MARK: MTPipeDelegate Methods
-  
-  public func pipe(_ pipe: MTPipe, message: OpenLCBMessage) {
-    
-    guard let appNodeId else {
-      return
-    }
-    
-    let postOfficeNodeId = appNodeId + 1
-    
-    guard !message.routing.contains(postOfficeNodeId) else {
-      return
-    }
-    
-    message.routing.insert(postOfficeNodeId)
-    
-    DispatchQueue.main.async {
-      self.sendMessage(message: message)
-    }
-    
-  }
-  
 }

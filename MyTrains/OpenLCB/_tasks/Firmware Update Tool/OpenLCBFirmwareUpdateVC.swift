@@ -17,24 +17,13 @@ private enum State {
   case waitingToComplete
 }
 
-class OpenLCBFirmwareUpdateVC: NSViewController, NSWindowDelegate, OpenLCBConfigurationToolDelegate {
+class OpenLCBFirmwareUpdateVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate {
   
   // MARK: Window & View Methods
   
-  override func viewDidLoad() {
-    super.viewDidLoad()
-  }
-  
-  func windowShouldClose(_ sender: NSWindow) -> Bool {
-    return true
-  }
-  
-  func windowWillClose(_ notification: Notification) {
-  }
-  
   override func viewWillAppear() {
     
-    self.view.window?.delegate = self
+    super.viewWillAppear()
     
     guard let node, let configurationTool else {
       return

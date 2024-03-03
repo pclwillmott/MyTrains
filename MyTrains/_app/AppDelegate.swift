@@ -5,34 +5,29 @@
 //  Created by Paul Willmott on 29/10/2021.
 //
 
-import Cocoa
 import Foundation
 import AppKit
+
+// 05.01.01.01.7b.00
 
 private var menuItems : [MenuTag:NSMenuItem] = [:]
 
 public enum MenuItemProperty {
-  
   case isEnabled
   case isHidden
-  
 }
 
-public func setMenuItemProperty(menuTag:MenuTag, property:MenuItemProperty, value:Bool) {
+public func setMenuItemProperty(menuTag:MenuTag, properties:Set<MenuItemProperty>) {
   
   if let item = menuItems[menuTag] {
-    switch property {
-    case .isEnabled:
-      item.isEnabled = value
-    case .isHidden:
-      item.isHidden = value
-    }
+    item.isEnabled = properties.contains(.isEnabled)
+    item.isHidden = properties.contains(.isHidden)
   }
   
 }
 
-public var appDelegate : AppDelegate? {
-  return NSApplication.shared.delegate as? AppDelegate
+public var appDelegate : AppDelegate {
+  return NSApplication.shared.delegate as! AppDelegate
 }
 
 @main
@@ -42,9 +37,30 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
   
   private var activity: NSObjectProtocol?
   
-  internal var activeViewControllers : [MyTrainsViewController] = []
+  private var activeViewControllers : [ObjectIdentifier:MyTrainsViewController] = [:]
 
   private var createVirtualNodeVC : CreateVirtualNodeVC?
+
+  private var checkPortsTimer : Timer?
+  
+  // MARK: Public Properties
+  
+  public var networkLayer = OpenLCBNetworkLayer(appNodeId: appNodeId)
+  
+  public var isSafeToTerminate : Bool {
+  
+    var isSafeToTerminate = true
+    
+    for (_, vc) in activeViewControllers {
+      if let wc = vc.view.window {
+        let isSafe = vc.windowShouldClose(wc)
+        isSafeToTerminate = isSafeToTerminate && isSafe
+      }
+    }
+    
+    return isSafeToTerminate
+
+  }
   
   // MARK: App Control
   
@@ -95,9 +111,23 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
       gatherMenuItems(menu: mainMenu)
     }
     
+    checkPortsTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(checkPortsTimerAction), userInfo: nil, repeats: true)
+    if let checkPortsTimer {
+      RunLoop.current.add(checkPortsTimer, forMode: .common)
+    }
+    else {
+      #if DEBUG
+      debugLog("failed to create checkPortsTimer")
+      #endif
+    }
+
+    if databasePath == nil {
+      databasePath = documentsPath + "/MyTrains/database"
+    }
+
+    networkLayer.initialStart()
+
   }
-  
-  #if DEBUG
   
   /*
   func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
@@ -106,22 +136,11 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
   }
   */
   
-  #endif
-
   public func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
     
     #if DEBUG
     debugLog("applicationShouldTerminate")
     #endif
-    
-    var isSafeToTerminate = true
-    
-    for vc in activeViewControllers {
-      if let window = vc.view.window {
-        let isSafe = vc.windowShouldClose(window)
-        isSafeToTerminate = isSafeToTerminate && isSafe
-      }
-    }
     
     return isSafeToTerminate ? .terminateNow : .terminateCancel
     
@@ -133,25 +152,25 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
     debugLog("applicationWillTerminate")
     #endif
     
-    myTrainsController.openLCBNetworkLayer?.stop()
+    networkLayer.stop()
     
+    checkPortsTimer?.invalidate()
+
     if let activity {
       ProcessInfo.processInfo.endActivity(activity)
     }
 
   }
 
-//  func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
-//    return true
-//  }
-
   // MARK: Private Methods
   
+  @objc func checkPortsTimerAction() {
+    MTSerialPortManager.checkPorts()
+  }
+
   func newNodeCompletion(node:OpenLCBNodeVirtual) {
     
-    guard let networkLayer = myTrainsController.openLCBNetworkLayer else {
-      return
-    }
+    let networkLayer = appDelegate.networkLayer
     
     node.hostAppNodeId = node.virtualNodeType == .applicationNode ? node.nodeId : appNodeId!
     
@@ -167,17 +186,34 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
     }
 
     if node.isConfigurationDescriptionInformationProtocolSupported {
-      let x = ModalWindow.ConfigurationTool
-      let wc = x.windowController
-      let vc = x.viewController(windowController: wc) as! ConfigurationToolVC
+      let vc = MyTrainsWindow.configurationTool.viewController as! ConfigurationToolVC
       vc.configurationTool = networkLayer.getConfigurationTool()
       vc.configurationTool?.delegate = vc
       vc.node = node
-      wc.showWindow(nil)
+      vc.showWindow()
     }
     
     createVirtualNodeVC?.stop()
     
+  }
+  
+  // MARK: Public Methods
+  
+  public func addViewController(_ viewController:MyTrainsViewController) {
+    activeViewControllers[viewController.objectIdentifier!] = viewController
+  }
+  
+  public func removeViewController(_ viewController:MyTrainsViewController) {
+    debugLog("\(viewController.objectIdentifier!)")
+    activeViewControllers.removeValue(forKey: viewController.objectIdentifier!)
+  }
+  
+  public func closeAllWindows() {
+    if isSafeToTerminate {
+      for (_, vc) in activeViewControllers {
+        vc.closeWindow()
+      }
+    }
   }
   
   // MARK: Actions
@@ -189,160 +225,127 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
       switch tag {
 
       case .globalEmergencyStop:
-        guard let appNode = myTrainsController.openLCBNetworkLayer?.myTrainsNode else {
+        guard let appNode else {
           return
         }
         appNode.sendGlobalEmergencyStop()
         
       case .clearGlobalEmergencyStop:
-        guard let appNode = myTrainsController.openLCBNetworkLayer?.myTrainsNode else {
+        guard let appNode else {
           return
         }
         appNode.sendClearGlobalEmergencyStop()
         
       case .globalPowerOff:
-        guard let appNode = myTrainsController.openLCBNetworkLayer?.myTrainsNode else {
+        guard let appNode else {
           return
         }
         appNode.sendGlobalPowerOff()
         
       case .globalPowerOn:
-        guard let appNode = myTrainsController.openLCBNetworkLayer?.myTrainsNode else {
+        guard let appNode else {
           return
         }
         appNode.sendGlobalPowerOn()
 
       case .throttle:
-        guard let networkLayer = myTrainsController.openLCBNetworkLayer, let throttle = networkLayer.getThrottle()  else {
+        let networkLayer = appDelegate.networkLayer
+        guard let throttle = networkLayer.getThrottle()  else {
           return
         }
-        let x = ModalWindow.Throttle
-        let wc = x.windowController
-        let vc = x.viewController(windowController: wc) as! ThrottleVC
+        let vc = MyTrainsWindow.throttle.viewController as! ThrottleVC
         vc.throttle = throttle
         throttle.delegate = vc
-        wc.showWindow(nil)
+        vc.showWindow()
         
       case .selectLayout:
-        let x = ModalWindow.SelectLayout
-        let wc = x.windowController
-        wc.showWindow(nil)
+        MyTrainsWindow.selectLayout.showWindow()
         
       case .configLCCNetwork:
-        guard let networkLayer = myTrainsController.openLCBNetworkLayer else {
-          return
-        }
-        let x = ModalWindow.ViewLCCNetwork
-        let wc = x.windowController
-        let vc = x.viewController(windowController: wc) as! ViewLCCNetworkVC
+        let networkLayer = appDelegate.networkLayer
+        
+        let vc = MyTrainsWindow.viewLCCNetwork.viewController as! ViewLCCNetworkVC
         vc.configurationTool = networkLayer.getConfigurationTool()
         vc.configurationTool?.delegate = vc
-        wc.showWindow(nil)
+        vc.showWindow()
         
       case .configClock:
-        guard let networkLayer = myTrainsController.openLCBNetworkLayer else {
-          return
-        }
-        let x = ModalWindow.SetFastClock
-        let wc = x.windowController
-        let vc = x.viewController(windowController: wc) as! SetFastClockVC
+        let networkLayer = appDelegate.networkLayer
+        
+        let vc = MyTrainsWindow.setFastClock.viewController as! SetFastClockVC
         vc.configurationTool = networkLayer.getConfigurationTool()
         vc.configurationTool?.delegate = vc
-        wc.showWindow(nil)
+        vc.showWindow()
         
       case .dccProgrammerTool:
-        guard let networkLayer = myTrainsController.openLCBNetworkLayer, let programmerTool = networkLayer.getProgrammerTool() else {
+        guard let programmerTool = networkLayer.getProgrammerTool() else {
           return
         }
-        let x = ModalWindow.ProgrammerTool
-        let wc = x.windowController
-        let vc = x.viewController(windowController: wc) as! ProgrammerToolVC
+        let vc = MyTrainsWindow.programmerTool.viewController as! ProgrammerToolVC
         vc.programmerTool = programmerTool
         programmerTool.delegate = vc
-        wc.showWindow(nil)
+        vc.showWindow()
         
       case .configSwitchboard:
-        if let _ = myTrainsController.layout {
-          let x = ModalWindow.SwitchBoardEditor
-          let wc = x.windowController
-          wc.showWindow(nil)
-        }
+    //    if let _ = myTrainsController.layout {
+          MyTrainsWindow.switchBoardEditor.showWindow()
+     //   }
 
       case .trainSpeedProfiler:
-        let x = ModalWindow.SpeedProfiler
-        let wc = x.windowController
-        wc.showWindow(nil)
+        MyTrainsWindow.speedProfiler.showWindow()
 
-      case .loocoNetFirmwareUpdate:
-        let x = ModalWindow.UpdateFirmware
-        let wc = x.windowController
-        wc.showWindow(nil)
+      case .locoNetFirmwareUpdate:
+        MyTrainsWindow.updateFirmware.showWindow()
 
-      case .locoNetWirelessSEtup:
-        let x = ModalWindow.GroupSetup
-        let wc = x.windowController
-        wc.showWindow(nil)
+      case .locoNetWirelessSetup:
+        MyTrainsWindow.groupSetup.showWindow()
         
       case .lccTrafficMonitor:
-        let x = ModalWindow.OpenLCBMonitor
-        let wc = x.windowController
-        wc.showWindow(nil)
+        MyTrainsWindow.openLCBMonitor.showWindow()
         
       case .locoNetSlotView:
-        guard let networkLayer = myTrainsController.openLCBNetworkLayer, let monitorNode = networkLayer.getLocoNetMonitor() else {
+        guard let monitorNode = networkLayer.getLocoNetMonitor() else {
           return
         }
-        let x = ModalWindow.SlotView
-        let wc = x.windowController
-        let vc = x.viewController(windowController: wc) as! SlotViewVC
+        let vc = MyTrainsWindow.slotView.viewController as! SlotViewVC
         vc.monitorNode = monitorNode
         monitorNode.delegate = vc
-        wc.showWindow(nil)
+        vc.showWindow()
         
       case .locoNetTrafficMonitor:
-        guard let networkLayer = myTrainsController.openLCBNetworkLayer, let monitorNode = networkLayer.getLocoNetMonitor() else {
+        guard let monitorNode = networkLayer.getLocoNetMonitor() else {
           return
         }
-        let x = ModalWindow.Monitor
-        let wc = x.windowController
-        let vc = x.viewController(windowController: wc) as! MonitorVC
+        let vc = MyTrainsWindow.monitor.viewController as! MonitorVC
         vc.monitorNode = monitorNode
         monitorNode.delegate = vc
-        wc.showWindow(nil)
+        vc.showWindow()
 
       case .locoNetDashboard:
-        let x = ModalWindow.DashBoard
-        let wc = x.windowController
-        wc.showWindow(nil)
+        MyTrainsWindow.dashBoard.showWindow()
 
       case .about:
-        ModalWindow.About.windowController.showWindow(nil)
+        MyTrainsWindow.about.showWindow()
         
       case .createApplicationNode:
         if !eulaAccepted {
-          ModalWindow.License.runModel()
+          MyTrainsWindow.license.runModel()
         }
-        let x = ModalWindow.SelectMasterNode
-        let wc = x.windowController
-        let vc = x.viewController(windowController: wc) as! SelectMasterNodeVC
-        vc.controller = myTrainsController
-        wc.showWindow(nil)
+        let vc = MyTrainsWindow.selectMasterNode.viewController as! SelectMasterNodeVC
+   //     vc.controller = myTrainsController
+        vc.showWindow()
 
       default:
         
         if let virtualNodeType = MyTrainsVirtualNodeType(rawValue: UInt16(sender.tag)) {
-          
-          guard let networkLayer = myTrainsController.openLCBNetworkLayer else {
-            return
-          }
           
           if virtualNodeType == .switchboardPanelNode || virtualNodeType == .switchboardItemNode, appLayoutId == nil {
             
             let alert = NSAlert()
             
             alert.messageText = String(localized: "Layout Not Selected")
-            alert.informativeText = "You must create and select a layout before you can add switchboard panels and items."
-            alert.addButton(withTitle: "OK")
+            alert.informativeText = String(localized: "You must create and select a layout before you can add switchboard panels and items.")
+            alert.addButton(withTitle: String(localized: "OK"))
             alert.alertStyle = .informational
             
             alert.runModal()
@@ -356,8 +359,8 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
             let alert = NSAlert()
             
             alert.messageText = String(localized: "Configuration Tool Unavailable")
-            alert.informativeText = "A configuration tool has exclusive use of the configuration mechanism. Try again after you have finished with the configuration tool."
-            alert.addButton(withTitle: "OK")
+            alert.informativeText = String(localized: "A configuration tool has exclusive use of the configuration mechanism. Try again after you have finished with the configuration tool.")
+            alert.addButton(withTitle: String(localized: "OK"))
             alert.alertStyle = .informational
             
             alert.runModal()
@@ -371,10 +374,9 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
             return
           }
               
-          let x = ModalWindow.CreateVirtualNode
-          let wc = x.windowController
-          createVirtualNodeVC = x.viewController(windowController: wc) as? CreateVirtualNodeVC
-          wc.showWindow(nil)
+          let vc = MyTrainsWindow.createVirtualNode.viewController as? CreateVirtualNodeVC
+          createVirtualNodeVC = vc
+          vc?.showWindow()
 
           networkLayer.createVirtualNode(virtualNodeType: virtualNodeType, completion: newNodeCompletion(node:))
 
@@ -384,6 +386,82 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
     }
     
   }
+  
+}
 
+public enum MyTrainsWindow : String {
+  
+  case monitor                           = "Monitor"
+  case main                              = "Main"                         
+  case editLayouts                       = "EditLayouts"                  
+  case throttle                          = "Throttle"                     
+  case slotView                          = "SlotView"                     
+  case dashBoard                         = "DashBoard"                   
+  case groupSetup                        = "GroupSetup"                   
+  case switchBoardEditor                 = "SwitchBoardEditor"            
+  case updateFirmware                    = "UpdateFirmware"               
+  case switchBoardItemPropertySheet      = "SwitchBoardItemPropertySheet" 
+  case speedProfiler                     = "SpeedProfiler"               
+  case placeLocomotive                   = "PlaceLocomotive"              
+  case setFastClock                      = "SetFastClock"                 
+  case viewLCCNetwork                    = "ViewLCCNetwork"               
+  case viewNodeInfo                      = "ViewNodeInfo"                
+  case programmerTool                    = "ProgrammerTool"               
+  case openLCBFirmwareUpdate             = "OpenLCBFirmwareUpdate"        
+  case openLCBMonitor                    = "OpenLCBMonitor"               
+  case configurationTool                 = "ConfigurationTool"           
+  case cdiTextView                       = "CDITextView"                 
+  case selectMasterNode                  = "SelectMasterNode"             
+  case createVirtualNode                 = "CreateVirtualNode"            
+  case selectLayout                      = "SelectLayout"                 
+  case license                           = "License"                      
+  case about                             = "About"                        
+  case textView                          = "TextView"
+  
+  // MARK: Private Properties
+  
+  private var windowController : NSWindowController {
+    let storyboard = NSStoryboard(name: self.rawValue, bundle: Bundle.main)
+    let wc = storyboard.instantiateController(withIdentifier: "\(self.rawValue)WC") as! NSWindowController
+    let vc = viewController(windowController: wc)
+    vc.objectIdentifier = ObjectIdentifier(vc)
+    appDelegate.addViewController(vc)
+    return wc
+  }
+  
+  // MARK: Public Properties
+  
+  public var viewController : MyTrainsViewController {
+    let wc = windowController
+    return viewController(windowController: wc)
+  }
+
+  // MARK: Private Methods
+  
+  private func viewController(windowController: NSWindowController) -> MyTrainsViewController {
+    return windowController.window!.contentViewController! as! MyTrainsViewController
+  }
+
+  private func runModal(windowController: NSWindowController) {
+    if let wc = windowController.window {
+      NSApplication.shared.runModal(for: wc)
+      wc.close()
+    }
+  }
+  
+  // MARK: Public Methods
+  
+  public func showWindow() {
+    windowController.showWindow(nil)
+  }
+  
+  public func runModel() {
+    runModal(windowController: self.windowController)
+  }
+  
+}
+
+func stopModal() {
+  NSApplication.shared.stopModal()
 }
 

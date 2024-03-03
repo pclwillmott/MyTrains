@@ -19,19 +19,11 @@ private enum State {
 
 }
 
-class ViewNodeInfoVC: NSViewController, NSWindowDelegate, OpenLCBConfigurationToolDelegate {
+class ViewNodeInfoVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate {
   
   // MARK: Window & View Methods
   
-  override func viewDidLoad() {
-    super.viewDidLoad()
-  }
-  
-  func windowShouldClose(_ sender: NSWindow) -> Bool {
-    return true
-  }
-  
-  func windowWillClose(_ notification: Notification) {
+  override func windowWillClose(_ notification: Notification) {
     
     guard let networkLayer, let configurationTool else {
       return
@@ -40,11 +32,13 @@ class ViewNodeInfoVC: NSViewController, NSWindowDelegate, OpenLCBConfigurationTo
     configurationTool.delegate = nil
     networkLayer.releaseConfigurationTool(configurationTool: configurationTool)
     
+    super.windowWillClose(notification)
+    
   }
   
   override func viewWillAppear() {
     
-    self.view.window?.delegate = self
+    super.viewWillAppear()
     
     guard let node, let configurationTool else {
       return

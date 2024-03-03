@@ -30,9 +30,9 @@ public enum UnitSpeed : UInt8 {
   public var toCMS : Double {
     var temp = UnitSpeed.toCMS(units: self)
     if self == .kilometersPerHour || self == .milesPerHour {
-      if let layout = myTrainsController.layout {
-        temp /= layout.scale
-      }
+//      if let layout = myTrainsController.layout {
+//        temp /= layout.scale
+//      }
     }
     return temp
   }
@@ -40,9 +40,9 @@ public enum UnitSpeed : UInt8 {
   public var fromCMS : Double {
     var temp = UnitSpeed.fromCMS(units: self)
     if self == .kilometersPerHour || self == .milesPerHour {
-      if let layout = myTrainsController.layout {
-        temp *= layout.scale
-      }
+  //    if let layout = myTrainsController.layout {
+  //      temp *= layout.scale
+  //    }
     }
     return temp
   }

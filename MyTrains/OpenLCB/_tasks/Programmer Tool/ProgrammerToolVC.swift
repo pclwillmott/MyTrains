@@ -10,25 +10,18 @@ import Cocoa
 
 // https://github.com/JMRI/JMRI/blob/master/xml/decoders/esu/v4decoderInfoCVs.xml
 
-class ProgrammerToolVC : NSViewController, NSWindowDelegate, OpenLCBProgrammerToolDelegate, CSVParserDelegate {
+class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, CSVParserDelegate {
   
   // MARK: Window & View Control
   
-  override func viewDidLoad() {
-    super.viewDidLoad()
-  }
-  
-  func windowShouldClose(_ sender: NSWindow) -> Bool {
-    return true
-  }
-  
-  func windowWillClose(_ notification: Notification) {
-    myTrainsController.openLCBNetworkLayer?.releaseProgrammerTool(programmerTool: programmerTool!)
+  override func windowWillClose(_ notification: Notification) {
+//    appDelegate.networkLayer?.releaseProgrammerTool(programmerTool: programmerTool!)
+    super.windowWillClose(notification)
   }
   
   override func viewWillAppear() {
     
-    self.view.window?.delegate = self
+    super.viewWillAppear()
     
     cboProgrammingTrack.dataSource = cboProgrammingTrackDS
 

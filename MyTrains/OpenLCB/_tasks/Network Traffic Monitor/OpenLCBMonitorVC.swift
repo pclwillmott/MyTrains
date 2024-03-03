@@ -8,29 +8,20 @@
 import Foundation
 import Cocoa
 
-class OpenLCBMonitorVC: NSViewController, NSWindowDelegate, OpenLCBNetworkObserverDelegate {
+class OpenLCBMonitorVC: MyTrainsViewController, OpenLCBNetworkObserverDelegate {
   
   // MARK: Window & View Methods
   
-  override func viewDidLoad() {
-    super.viewDidLoad()
-  }
-  
-  func windowShouldClose(_ sender: NSWindow) -> Bool {
-    return true
-  }
-  
-  func windowWillClose(_ notification: Notification) {
-    myTrainsController.openLCBNetworkLayer?.removeObserver(id: observerId)
+  override func windowWillClose(_ notification: Notification) {
+    appDelegate.networkLayer.removeObserver(id: observerId)
+    super.windowWillClose(notification)
   }
   
   override func viewWillAppear() {
     
-    guard let networkLayer = myTrainsController.openLCBNetworkLayer else {
-      return
-    }
+    super.viewWillAppear()
     
-    self.view.window?.delegate = self
+    let networkLayer = appDelegate.networkLayer
     
     txtMonitor.font = NSFont(name: "Menlo", size: 12)
     
@@ -88,18 +79,16 @@ class OpenLCBMonitorVC: NSViewController, NSWindowDelegate, OpenLCBNetworkObserv
   @IBOutlet var txtMonitor: NSTextView!
   
   @IBAction func btnClearAction(_ sender: NSButton) {
-    guard let networkLayer = myTrainsController.openLCBNetworkLayer else {
-      return
-    }
+    let networkLayer = appDelegate.networkLayer
+    
     networkLayer.clearMonitorBuffer()
   }
   
   @IBOutlet weak var btnPause: NSButton!
   
   @IBAction func btnPauseAction(_ sender: NSButton) {
-    guard let networkLayer = myTrainsController.openLCBNetworkLayer else {
-      return
-    }
+    let networkLayer = appDelegate.networkLayer
+    
     networkLayer.isMonitorPaused = sender.state == .on
   }
   

@@ -7,27 +7,19 @@
 
 import Cocoa
 
-class SwitchBoardEditorVC: NSViewController, NSWindowDelegate, SwitchBoardViewDelegate {
+class SwitchBoardEditorVC: MyTrainsViewController, SwitchBoardViewDelegate {
 
   // MARK: Window & View Control
   
-  override func viewDidLoad() {
-      super.viewDidLoad()
-      // Do view setup here.
-  }
-
-  @objc func windowShouldClose(_ sender: NSWindow) -> Bool {
-    return true
-  }
-
-  @objc func windowWillClose(_ notification: Notification) {
+  override func windowWillClose(_ notification: Notification) {
     stopModal()
+    super.windowWillClose(notification)
   }
   
   override func viewWillAppear() {
-        
-    self.view.window?.delegate = self
     
+    super.viewWillAppear()
+        
     for x in self.view.subviews {
       if x is SwitchBoardShapeButton {
         let button = x as! SwitchBoardShapeButton
@@ -39,7 +31,7 @@ class SwitchBoardEditorVC: NSViewController, NSWindowDelegate, SwitchBoardViewDe
     groupButtons.append(btnAddToGroup)
     groupButtons.append(btnRemoveFromGroup)
     
-    switchBoardView.layout = myTrainsController.layout
+ //   switchBoardView.layout = myTrainsController.layout
     
     panelsChanged()
 
@@ -71,6 +63,7 @@ class SwitchBoardEditorVC: NSViewController, NSWindowDelegate, SwitchBoardViewDe
   
   func panelsChanged() {
     cboPanelId.removeAllItems()
+    /*
     if let layout = myTrainsController.layout {
       let panels = layout.switchBoardPanels
       for panel in panels {
@@ -82,6 +75,7 @@ class SwitchBoardEditorVC: NSViewController, NSWindowDelegate, SwitchBoardViewDe
       txtGridY.integerValue = panels[switchBoardView.panelId].numberOfRows
       txtPanelName.stringValue = panels[switchBoardView.panelId].panelName
     }
+     */
   }
   
   // MARK: Outlets & Actions
@@ -216,46 +210,46 @@ class SwitchBoardEditorVC: NSViewController, NSWindowDelegate, SwitchBoardViewDe
   @IBOutlet weak var txtGridX: NSTextField!
   
   @IBAction func txtGridXAction(_ sender: NSTextField) {
-    if let layout = myTrainsController.layout {
-      let panels = layout.switchBoardPanels
-      panels[switchBoardView.panelId].numberOfColumns = sender.integerValue
-      switchBoardView.needsDisplay = true
-    }
+//    if let layout = myTrainsController.layout {
+//      let panels = layout.switchBoardPanels
+//      panels[switchBoardView.panelId].numberOfColumns = sender.integerValue
+//      switchBoardView.needsDisplay = true
+//    }
   }
   
   @IBOutlet weak var txtGridY: NSTextField!
   
   @IBAction func txtGridYAction(_ sender: NSTextField) {
-    if let layout = myTrainsController.layout {
-      let panels = layout.switchBoardPanels
-      panels[switchBoardView.panelId].numberOfRows = sender.integerValue
-      switchBoardView.needsDisplay = true
-    }
+//    if let layout = myTrainsController.layout {
+//      let panels = layout.switchBoardPanels
+//      panels[switchBoardView.panelId].numberOfRows = sender.integerValue
+//      switchBoardView.needsDisplay = true
+//    }
   }
   
   @IBOutlet weak var txtPanelName: NSTextField!
   
   @IBAction func txtPanelNameAction(_ sender: NSTextField) {
-    if let layout = myTrainsController.layout {
-      let panels = layout.switchBoardPanels
-      panels[switchBoardView.panelId].panelName = sender.stringValue
-      switchBoardView.needsDisplay = true
-    }
+//    if let layout = myTrainsController.layout {
+//      let panels = layout.switchBoardPanels
+//      panels[switchBoardView.panelId].panelName = sender.stringValue
+//      switchBoardView.needsDisplay = true
+//    }
   }
   
   @IBAction func btnCancelAction(_ sender: NSButton) {
-    if let layout = myTrainsController.layout {
-      layout.revertToSaved()
-    }
-    self.view.window?.close()
+//    if let layout = myTrainsController.layout {
+//      layout.revertToSaved()
+//    }
+//    self.view.window?.close()
   }
   
   @IBAction func btnSaveAction(_ sender: NSButton) {
-    if let layout = myTrainsController.layout {
-      layout.save()
-      myTrainsController.switchBoardUpdated()
-      view.window?.close()
-    }
+//    if let layout = myTrainsController.layout {
+//      layout.save()
+  //    myTrainsController.switchBoardUpdated()
+ //     view.window?.close()
+ //   }
   }
   
 }

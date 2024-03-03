@@ -10,7 +10,7 @@ import AppKit
 
 // MARK: Global Declaration of MyTrainsController Instance
 
-public var myTrainsController = MyTrainsController()
+public var xmyTrainsController = MyTrainsController()
 
 // MARK: MyTrainsController Class
 
@@ -22,9 +22,6 @@ public class MyTrainsController : NSObject, NSUserNotificationCenterDelegate {
     
     super.init()
 
-    checkPortsTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(checkPortsTimerAction), userInfo: nil, repeats: true)
-    
-    RunLoop.current.add(checkPortsTimer!, forMode: .common)
   
     openLCBNetworkLayer = OpenLCBNetworkLayer(appNodeId: appNodeId)
     
@@ -32,31 +29,17 @@ public class MyTrainsController : NSObject, NSUserNotificationCenterDelegate {
   
   // MARK: Destructor
   
-  deinit {
-    checkPortsTimer?.invalidate()
-  }
   
   // MARK: Private Properties
   
-  private var controllerDelegates : [Int:MyTrainsControllerDelegate] = [:]
+//  private var controllerDelegates : [Int:MyTrainsControllerDelegate] = [:]
   
-  private var _nextControllerDelegateId : Int = 0
-  
-  private var checkPortsTimer : Timer?
+//  private var _nextControllerDelegateId : Int = 0
   
   // MARK: Public Properties
   
   public var layouts : [Int:Layout] = Layout.layouts
 
-  // 0x050101017b00
-  // 05.01.01.01.7b.00
-
-  public var openLCBNodeId : UInt64 {
-    get {
-      return 0x050101017b00 // Paul Willmott's Start of range
-    }
-  }
-  
   public var openLCBNetworkLayer : OpenLCBNetworkLayer?
     
   public var layoutId : Int {
@@ -73,53 +56,35 @@ public class MyTrainsController : NSObject, NSUserNotificationCenterDelegate {
     return layouts[layoutId]
   }
   
-  public let manufacturer = "Paul C. L. Willmott"
-  
-  public let softwareVersion = "v0.X"
-  
-  public let hardwareVersion = "V0.X"
-  
-// MARK: Private Methods
-  
-//  private func myTrainsControllerUpdated() {
-//    for (_, delegate) in controllerDelegates {
-//      delegate.myTrainsControllerUpdated?(myTrainsController: self)
+  // MARK: Public Methods
+
+//  public func switchBoardUpdated() {
+//    for (_, value) in controllerDelegates {
+//      value.switchBoardUpdated?()
 //    }
 //  }
   
-  @objc func checkPortsTimerAction() {
-    MTSerialPortManager.checkPorts()
-  }
-  
-  // MARK: Public Methods
-
-  public func switchBoardUpdated() {
-    for (_, value) in controllerDelegates {
-      value.switchBoardUpdated?()
-    }
-  }
-  
-  public func addLayout(layout: Layout) {
-    layouts[layout.primaryKey] = layout
+//  public func addLayout(layout: Layout) {
+//    layouts[layout.primaryKey] = layout
 //    myTrainsControllerUpdated()
-  }
+//  }
   
-  public func removeLayout(primaryKey:Int) {
-    layouts.removeValue(forKey: primaryKey)
+//  public func removeLayout(primaryKey:Int) {
+//    layouts.removeValue(forKey: primaryKey)
 //    myTrainsControllerUpdated()
-  }
+//  }
   
-  public func addDelegate(delegate:MyTrainsControllerDelegate) -> Int {
-    let id = _nextControllerDelegateId
-    _nextControllerDelegateId += 1
-    controllerDelegates[id] = delegate
+//  public func addDelegate(delegate:MyTrainsControllerDelegate) -> Int {
+//    let id = _nextControllerDelegateId
+//    _nextControllerDelegateId += 1
+//    controllerDelegates[id] = delegate
 //    delegate.myTrainsControllerUpdated?(myTrainsController: self)
-    return id
-  }
+//    return id
+//  }
   
-  public func removeDelegate(id:Int) {
-    controllerDelegates.removeValue(forKey: id)
-  }
+//  public func removeDelegate(id:Int) {
+//    controllerDelegates.removeValue(forKey: id)
+//  }
   
   public func createApplicationNode(nodeId:UInt64) {
     openLCBNetworkLayer?.createAppNode(newNodeId: nodeId)

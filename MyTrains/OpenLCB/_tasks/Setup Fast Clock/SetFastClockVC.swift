@@ -8,19 +8,11 @@
 import Foundation
 import Cocoa
 
-class SetFastClockVC: NSViewController, NSWindowDelegate, OpenLCBClockDelegate, OpenLCBConfigurationToolDelegate {
+class SetFastClockVC: MyTrainsViewController, OpenLCBClockDelegate, OpenLCBConfigurationToolDelegate {
   
   // MARK: Window & View Control
   
-  override func viewDidLoad() {
-    super.viewDidLoad()
-  }
-  
-  func windowShouldClose(_ sender: NSWindow) -> Bool {
-    return true
-  }
-  
-  func windowWillClose(_ notification: Notification) {
+  override func windowWillClose(_ notification: Notification) {
     
     guard let networkLayer, let configurationTool else {
       return
@@ -34,11 +26,13 @@ class SetFastClockVC: NSViewController, NSWindowDelegate, OpenLCBClockDelegate, 
     configurationTool.delegate = nil
     networkLayer.releaseConfigurationTool(configurationTool: configurationTool)
     
+    super.windowWillClose(notification)
+    
   }
   
   override func viewWillAppear() {
     
-    self.view.window?.delegate = self
+    super.viewWillAppear()
     
     networkLayer = configurationTool!.networkLayer
     

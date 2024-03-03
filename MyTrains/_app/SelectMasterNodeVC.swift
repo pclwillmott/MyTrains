@@ -8,25 +8,18 @@
 import Foundation
 import AppKit
 
-class SelectMasterNodeVC: NSViewController, NSWindowDelegate, NSTextFieldDelegate, NSControlTextEditingDelegate {
+class SelectMasterNodeVC: MyTrainsViewController, NSTextFieldDelegate, NSControlTextEditingDelegate {
   
   // MARK: Window & View Control
   
-  override func viewDidLoad() {
-    super.viewDidLoad()
-  }
-  
-  func windowShouldClose(_ sender: NSWindow) -> Bool {
-    return true
-  }
-  
-  func windowWillClose(_ notification: Notification) {
+  override func windowWillClose(_ notification: Notification) {
     stopModal()
+    super.windowWillClose(notification)
   }
   
   override func viewWillAppear() {
     
-    self.view.window?.delegate = self
+    super.viewWillAppear()
     
     self.view.window?.title = String(localized: "Create Application Node", comment: "Used for the title of the Create Application Node window")
     

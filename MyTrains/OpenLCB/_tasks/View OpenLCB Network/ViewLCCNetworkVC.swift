@@ -13,27 +13,20 @@ private enum Task {
   case getProtocols
 }
 
-class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBConfigurationToolDelegate {
+class ViewLCCNetworkVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate {
   
   // MARK: Window & View Methods
   
-  override func viewDidLoad() {
-    super.viewDidLoad()
-  }
-  
-  func windowShouldClose(_ sender: NSWindow) -> Bool {
-    return true
-  }
-  
-  func windowWillClose(_ notification: Notification) {
+  override func windowWillClose(_ notification: Notification) {
     configurationTool?.delegate = nil
     configurationTool?.networkLayer?.releaseConfigurationTool(configurationTool: configurationTool!)
     configurationTool = nil
+    super.windowWillClose(notification)
   }
   
   override func viewWillAppear() {
     
-    self.view.window?.delegate = self
+    super.viewWillAppear()
     
     configurationTool?.delegate = self
     
@@ -145,13 +138,11 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBConfiguration
     }
     
     if let ct = networkLayer.getConfigurationTool(exclusive: exclusive) {
-      let x = ModalWindow.ConfigurationTool
-      let wc = x.windowController
-      let vc = x.viewController(windowController: wc) as! ConfigurationToolVC
+      let vc = MyTrainsWindow.configurationTool.viewController as! ConfigurationToolVC
       vc.configurationTool = ct
       vc.configurationTool?.delegate = vc
       vc.node = node
-      wc.showWindow(nil)
+      vc.showWindow()
     }
     
   }
@@ -164,13 +155,11 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBConfiguration
 
     let node = tableViewDS.nodes[sender.tag]
     
-    let x = ModalWindow.OpenLCBFirmwareUpdate
-    let wc = x.windowController
-    let vc = x.viewController(windowController: wc) as! OpenLCBFirmwareUpdateVC
+    let vc = MyTrainsWindow.openLCBFirmwareUpdate.viewController as! OpenLCBFirmwareUpdateVC
     vc.configurationTool = networkLayer.getConfigurationTool()
     vc.configurationTool?.delegate = vc
     vc.node = node
-    wc.showWindow(nil)
+    vc.showWindow()
 
   }
   
@@ -182,13 +171,11 @@ class ViewLCCNetworkVC: NSViewController, NSWindowDelegate, OpenLCBConfiguration
 
     let node = tableViewDS.nodes[sender.tag]
     
-    let x = ModalWindow.ViewNodeInfo
-    let wc = x.windowController
-    let vc = x.viewController(windowController: wc) as! ViewNodeInfoVC
+    let vc = MyTrainsWindow.viewNodeInfo.viewController as! ViewNodeInfoVC
     vc.configurationTool = networkLayer.getConfigurationTool()
     vc.configurationTool?.delegate = vc
     vc.node = node
-    wc.showWindow(nil)
+    vc.showWindow()
 
   }
     

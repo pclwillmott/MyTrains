@@ -46,8 +46,8 @@ public enum MenuTag : Int {
   case dccProgrammerTool        = 3019
   case configSwitchboard        = 3020
   case trainSpeedProfiler       = 3021
-  case loocoNetFirmwareUpdate   = 3022
-  case locoNetWirelessSEtup     = 3023
+  case locoNetFirmwareUpdate    = 3022
+  case locoNetWirelessSetup     = 3023
   case lccTrafficMonitor        = 3024
   case locoNetSlotView          = 3025
   case locoNetTrafficMonitor    = 3026
@@ -132,8 +132,8 @@ public enum MenuTag : Int {
     .dccProgrammerTool        : String(localized: "DCC Programmer Tool",                   comment: "Used for a menu title"),
     .configSwitchboard        : String(localized: "Switchboard",                           comment: "Used for a menu title"),
     .trainSpeedProfiler       : String(localized: "Train Speed Profiler",                  comment: "Used for a menu title"),
-    .loocoNetFirmwareUpdate   : String(localized: "LocoNet Firmware Update",               comment: "Used for a menu title"),
-    .locoNetWirelessSEtup     : String(localized: "LocoNet Wireless Setup",                comment: "Used for a menu title"),
+    .locoNetFirmwareUpdate    : String(localized: "LocoNet Firmware Update",               comment: "Used for a menu title"),
+    .locoNetWirelessSetup     : String(localized: "LocoNet Wireless Setup",                comment: "Used for a menu title"),
     .lccTrafficMonitor        : String(localized: "LCC/OpenLCB Traffic Monitor",           comment: "Used for a menu title"),
     .locoNetSlotView          : String(localized: "LocoNet Slot View",                     comment: "Used for a menu title"),
     .locoNetTrafficMonitor    : String(localized: "LocoNet Traffic Monitor",               comment: "Used for a menu title"),
