@@ -10,11 +10,25 @@ import Foundation
 
 class Database {
   
+  // MARK: Private Class Properties
+  
+  private static var connection : SqliteConnection? = nil
+  
+  // MARK: Public Class Properties
+  
   public static var __number : Int = 0
   
   public static var Version : Int = 0
   
-  private static var connection : SqliteConnection? = nil
+  public static var databaseFilename : String {
+    return "MyTrains.db3"
+  }
+  
+  public static var databaseFullPath : String {
+    return "\(databasePath!)/\(databaseFilename)"
+  }
+  
+  // MARK: Public Class Methods
   
   public static func getConnection() -> SqliteConnection {
     
@@ -34,14 +48,16 @@ class Database {
           try fm.createDirectory(at: url, withIntermediateDirectories:true, attributes:nil)
         }
         catch{
-          print("create directory failed")
+          #if DEBUG
+          debugLog("create directory failed")
+          #endif
         }
         
         /*
          * Create database connection.
          */
         
-        url.appendPathComponent("MyTrains.db3")
+        url.appendPathComponent(databaseFilename)
         
         let newfile = !fm.fileExists(atPath: url.path)
         

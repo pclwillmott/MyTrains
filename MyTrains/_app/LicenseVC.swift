@@ -48,8 +48,8 @@ class LicenseVC: MyTrainsViewController {
     buttonDecline.title = String(localized: "Decline", comment: "Used to decline license agreement")
 
     buttonDecline.setButtonType(.momentaryPushIn)
-    buttonDecline.keyEquivalent = "\r"
     buttonDecline.keyEquivalentModifierMask = []
+    buttonDecline.keyEquivalent = "\r"
 
     NSLayoutConstraint.activate([
       scrollView.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: 1.0),

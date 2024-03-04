@@ -80,7 +80,7 @@ public var appNodeId : UInt64? {
 
 public var appNode : OpenLCBNodeMyTrains? {
   let networkLayer = appDelegate.networkLayer 
-  return networkLayer.myTrainsNode
+  return networkLayer.appNode
 }
 
 public var appLayoutId : UInt64? {
@@ -105,12 +105,17 @@ public var appMode : AppMode {
   }
 }
 
-public var eulaAccepted : Bool {
+public var eulaAccepted : Bool? {
   get {
     return UserDefaults.standard.bool(forKey: DEFAULT.EULA_ACCEPTED)
   }
   set(value) {
-    UserDefaults.standard.set(value, forKey: DEFAULT.EULA_ACCEPTED)
+    if value == nil {
+      UserDefaults.standard.removeObject(forKey: DEFAULT.EULA_ACCEPTED)
+    }
+    else {
+      UserDefaults.standard.set(value, forKey: DEFAULT.EULA_ACCEPTED)
+    }
   }
 }
 

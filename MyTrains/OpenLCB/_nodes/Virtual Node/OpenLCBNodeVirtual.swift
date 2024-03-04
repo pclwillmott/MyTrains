@@ -161,8 +161,6 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   
   internal var firmwareBuffer : [UInt8] = []
   
-//  internal var txPipe : MTPipe?
-  
   // MARK: Public Properties
   
   public var visibility : OpenLCBNodeVisibility {
@@ -171,6 +169,21 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
 
   public var isFullProtocolRequired = false
   
+  public var isGatewayNode : Bool {
+    let gatewayTypes : Set<MyTrainsVirtualNodeType> = [
+      .canGatewayNode,
+    ]
+    return gatewayTypes.contains(virtualNodeType)
+  }
+  
+  public var isSwitchboardNode : Bool {
+    let switchboardNodeTypes : Set<MyTrainsVirtualNodeType> = [
+      .switchboardPanelNode,
+      .switchboardItemNode,
+    ]
+    return switchboardNodeTypes.contains(virtualNodeType)
+  }
+
   public var eventsConsumed : Set<UInt64> = []
   
   public var eventsProduced : Set<UInt64> = []
@@ -303,17 +316,6 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     }
   }
   
-  public var isSwitchboardNode : Bool {
-    
-    let switchboardNodeTypes : Set<MyTrainsVirtualNodeType> = [
-      .switchboardPanelNode,
-      .switchboardItemNode,
-    ]
-    
-    return switchboardNodeTypes.contains(virtualNodeType)
-    
-  }
-
   public var nextUniqueEventId : UInt64 {
     get {
       let id = virtualNodeConfigSpace.getUInt64(address: addressVirtualNodeConfigUniqueEventId)!
@@ -663,10 +665,12 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
       isConfigurationDescriptionInformationProtocolSupported = true
     }
 
+    resetReboot()
+    
+    networkLayer?.nodeInitializationComplete(node: self)
+
     sendInitializationComplete()
     
-    resetReboot()
-
     userConfigEventsConsumed = getUserConfigEvents(eventAddresses: userConfigEventConsumedAddresses)
     userConfigEventsProduced = getUserConfigEvents(eventAddresses: userConfigEventProducedAddresses)
 
@@ -708,8 +712,8 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   }
 
   public func stop() {
-//    txPipe?.close()
     state = .inhibited
+    networkLayer?.nodeDidStop(node: self)
   }
   
   public func registerVariable(space:UInt8, address:Int, unitConversionType:UnitConversionType = .none) {
@@ -724,7 +728,6 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   }
   
   public func variableChanged(space:OpenLCBMemorySpace, address:Int) {
-    
   }
   
   // MARK: OpenLCBMemorySpaceDelegate Methods

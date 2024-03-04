@@ -10,24 +10,14 @@ import AppKit
 
 public class OpenLCBNetworkLayer : NSObject {
   
-  // MARK: Constructors
+  // MARK: Constructors & Destructors
   
-  public init(appNodeId:UInt64?) {
-    super.init()
+  deinit {
+    removeAll()
   }
   
   // MARK: Private Properties
   
-  internal var _state : OpenLCBNetworkLayerState = .uninitialized
-  
-  private var virtualNodes : [OpenLCBNodeVirtual] = []
-
-  private var gatewayNodes : [UInt64:OpenLCBNodeVirtual] = [:]
-
-  private var nodesSimpleSetSufficient : [UInt64:OpenLCBNodeVirtual] = [:]
-
-  private var nodesFullProtocolRequired : [UInt64:OpenLCBNodeVirtual] = [:]
-
   private var nodeManagers : [OpenLCBNodeManager] = []
   
   private var throttleManager = OpenLCBNodeManager()
@@ -35,6 +25,26 @@ public class OpenLCBNetworkLayer : NSObject {
   private var locoNetMonitorManager = OpenLCBNodeManager()
   
   private var programmerToolManager = OpenLCBNodeManager()
+  
+  private var virtualNodes : [OpenLCBNodeVirtual] = []
+
+  private var uninitializedGateways : [UInt64:OpenLCBNodeVirtual] = [:]
+
+  private var uninitializedNodes : [UInt64:OpenLCBNodeVirtual] = [:]
+
+  private var gatewayNodes : [UInt64:OpenLCBNodeVirtual] = [:]
+
+  private var nodesSimpleSetSufficient : [UInt64:OpenLCBNodeVirtual] = [:]
+
+  private var nodesFullProtocolRequired : [UInt64:OpenLCBNodeVirtual] = [:]
+  
+  private var nodesInhibited : [UInt64:OpenLCBNodeVirtual] = [:]
+
+  internal var _state : OpenLCBNetworkLayerState = .uninitialized {
+    didSet {
+      appDelegate.networkLayerStateHasChanged(networkLayer: self)
+    }
+  }
   
   private var observers : [Int:OpenLCBNetworkObserverDelegate] = [:]
   
@@ -74,11 +84,33 @@ public class OpenLCBNetworkLayer : NSObject {
     return _state
   }
   
-  public var myTrainsNode : OpenLCBNodeMyTrains?
+  public var appNode : OpenLCBNodeMyTrains?
   
   public var fastClock : OpenLCBClock?
   
   // MARK: Private Methods
+  
+  private func removeAll() {
+    appNode = nil
+    fastClock = nil
+    observers.removeAll()
+    monitorTimer?.invalidate()
+    monitorBuffer.removeAll()
+    nodeManagers.removeAll()
+    throttleManager.removeAll()
+    locoNetMonitorManager.removeAll()
+    programmerToolManager.removeAll()
+    configurationToolManager.removeAll()
+    virtualNodes.removeAll()
+    virtualNodeLookup.removeAll()
+    nodesSimpleSetSufficient.removeAll()
+    nodesSimpleSetSufficient.removeAll()
+    nodesInhibited.removeAll()
+    gatewayNodes.removeAll()
+    uninitializedGateways.removeAll()
+    uninitializedNodes.removeAll()
+    _state = .uninitialized
+  }
   
   private func updateVirtualNodeList() {
     
@@ -120,7 +152,7 @@ public class OpenLCBNetworkLayer : NSObject {
   // MARK: Public Methods
   
   public func isInternalVirtualNode(nodeId:UInt64) -> Bool {
-    return virtualNodeLookup[nodeId] != nil
+    return virtualNodeLookup.keys.contains(nodeId)
   }
   
   public func createAppNode(newNodeId:UInt64) {
@@ -137,75 +169,120 @@ public class OpenLCBNetworkLayer : NSObject {
 
     registerNode(node: node)
 
-    createVirtualNode(virtualNodeType: .throttleNode, completion: dummyCompletion(node:))
+//    createVirtualNode(virtualNodeType: .throttleNode, completion: dummyCompletion(node:))
 
-    createVirtualNode(virtualNodeType: .configurationToolNode, completion: dummyCompletion(node:))
+//    createVirtualNode(virtualNodeType: .configurationToolNode, completion: dummyCompletion(node:))
 
-    createVirtualNode(virtualNodeType: .clockNode, completion: dummyCompletion(node:))
+//    createVirtualNode(virtualNodeType: .clockNode, completion: dummyCompletion(node:))
 
-  }
-  
-  public func initialStart() {
-    
-    nodeManagers.append(throttleManager)
-    nodeManagers.append(locoNetMonitorManager)
-    nodeManagers.append(programmerToolManager)
-    nodeManagers.append(configurationToolManager)
-
-    if appNodeId != nil {
-      start()
-    }
-    
-  }
-  
-  private var uninitializedGateways : Set<UInt64> = []
-  
-  public func gatewayIsInitialized(nodeId:UInt64) {
-    
-    uninitializedGateways.remove(nodeId)
-    
-    if uninitializedGateways.isEmpty {
-      for node in OpenLCBMemorySpace.getVirtualNodes() {
-        if node.virtualNodeType != .canGatewayNode {
-          registerNode(node: node)
-        }
-      }
-    }
-    
   }
   
   public func start() {
     
-    guard state == .uninitialized else {
-      return
-    }
+    removeAll()
     
-    _state = .initialized
+    nodeManagers.append(configurationToolManager)
+    nodeManagers.append(throttleManager)
+    nodeManagers.append(locoNetMonitorManager)
+    nodeManagers.append(programmerToolManager)
     
-    for node in OpenLCBMemorySpace.getVirtualNodes() {
-      if node.virtualNodeType == .canGatewayNode {
-        uninitializedGateways.insert(node.nodeId)
-        registerNode(node: node)
+    virtualNodes = OpenLCBMemorySpace.getVirtualNodes()
+    
+    for node in virtualNodes {
+      virtualNodeLookup[node.nodeId] = node
+      node.networkLayer = self
+      if node.isGatewayNode {
+        uninitializedGateways[node.nodeId] = node
+      }
+      else {
+        uninitializedNodes[node.nodeId] = node
       }
     }
+    
+    startNodes()
+    
+  }
+  
+  public func nodeInitializationComplete(node:OpenLCBNodeVirtual) {
 
-//    updateVirtualNodeList()
+    uninitializedGateways.removeValue(forKey: node.nodeId)
+    uninitializedNodes.removeValue(forKey: node.nodeId)
+    
+    if node.state == .inhibited {
+      nodesInhibited[node.nodeId] = node
+    }
+    else if node.isGatewayNode {
+      gatewayNodes[node.nodeId] = node
+    }
+    else {
+      
+      switch node.virtualNodeType {
+      case .applicationNode:
+        appNode = node as? OpenLCBNodeMyTrains
+      case .clockNode:
+        fastClock = node as? OpenLCBClock
+      case .configurationToolNode:
+        configurationToolManager.addNode(node: node)
+      case .locoNetMonitorNode:
+        locoNetMonitorManager.addNode(node: node)
+      case .programmerToolNode:
+        programmerToolManager.addNode(node: node)
+      case .throttleNode:
+        throttleManager.addNode(node: node)
+      default:
+        break
+      }
+
+      if node.isFullProtocolRequired {
+        nodesFullProtocolRequired[node.nodeId] = node
+      }
+      else {
+        nodesSimpleSetSufficient[node.nodeId] = node
+      }
+      
+    }
+    
+    startNodes()
+    
+  }
+  
+  private func startNodes() {
+    
+    if state == .uninitialized && !uninitializedGateways.isEmpty {
+      _state = .initializingGateways
+      for (_, node) in uninitializedGateways {
+        node.gatewayStart()
+      }
+    }
+    else if state != .initializingGateways && state != .initializingNodes && !uninitializedNodes.isEmpty {
+      _state = .initializingNodes
+      for (_, node) in uninitializedNodes {
+        node.start()
+      }
+    }
+    else if let appNode {
+      _state = gatewayNodes.isEmpty ? .runningLocal : .runningNetwork
+    }
     
   }
   
   public func stop() {
     
-    guard state == .initialized else {
+    guard state == .runningLocal || state == .runningNetwork else {
       return
     }
     
-    for node in virtualNodes {
+    for (_, node) in nodesSimpleSetSufficient {
       deregisterNode(node: node)
     }
-    
-    _state = .uninitialized
-    
-//    menuUpdate()
+    for (_, node) in nodesFullProtocolRequired {
+      deregisterNode(node: node)
+    }
+    for (_, node) in gatewayNodes {
+      deregisterNode(node: node)
+    }
+
+    _state = .stopped
     
   }
   
@@ -229,71 +306,26 @@ public class OpenLCBNetworkLayer : NSObject {
   public func registerNode(node:OpenLCBNodeVirtual) {
     
     virtualNodes.append(node)
-    
     virtualNodeLookup[node.nodeId] = node
-    
-    virtualNodes.sort {$0.virtualNodeType.startupOrder > $1.virtualNodeType.startupOrder}
-    
     node.networkLayer = self
     
-    switch node.virtualNodeType {
-    case .applicationNode:
-      myTrainsNode = node as? OpenLCBNodeMyTrains
-    case .canGatewayNode:
-      break
-    case .clockNode:
-      fastClock = node as? OpenLCBClock
-    case .configurationToolNode:
-      configurationToolManager.addNode(node: node)
-    case .genericVirtualNode:
-      break
-    case .locoNetGatewayNode:
-      break
-    case .locoNetMonitorNode:
-      locoNetMonitorManager.addNode(node: node)
-    case .programmerToolNode:
-      programmerToolManager.addNode(node: node)
-    case .programmingTrackNode:
-      break
-    case .throttleNode:
-      throttleManager.addNode(node: node)
-    case .trainNode:
-      break
-    case .digitraxBXP88Node:
-      break
-    case .layoutNode:
-      break
-    case .switchboardPanelNode:
-      break
-    case .switchboardItemNode:
-      break
-    }
-    
     if node.virtualNodeType == .canGatewayNode {
-      gatewayNodes[node.nodeId] = node
-      node.gatewayStart()
-      return
-    }
-    else if node.isFullProtocolRequired {
-      nodesFullProtocolRequired[node.nodeId] = node
+      uninitializedGateways[node.nodeId] = node
     }
     else {
-      nodesSimpleSetSufficient[node.nodeId] = node
+      uninitializedNodes[node.nodeId] = node
     }
     
-    node.start()
+    startNodes()
     
   }
   
-  public func deregisterNode(node:OpenLCBNodeVirtual) {
-    
+  public func nodeDidStop(node:OpenLCBNodeVirtual) {
+
     for nodeManager in nodeManagers {
       nodeManager.removeNode(node: node)
     }
     
-    node.stop()
-    node.networkLayer = nil
-
     virtualNodeLookup.removeValue(forKey: node.nodeId)
     gatewayNodes.removeValue(forKey: node.nodeId)
     nodesSimpleSetSufficient.removeValue(forKey: node.nodeId)
@@ -306,6 +338,10 @@ public class OpenLCBNetworkLayer : NSObject {
       }
     }
     
+  }
+  
+  public func deregisterNode(node:OpenLCBNodeVirtual) {
+    node.stop()
   }
   
   public func deleteNode(nodeId:UInt64) {
@@ -485,7 +521,7 @@ public class OpenLCBNetworkLayer : NSObject {
   
   public func sendMessage(message:OpenLCBMessage) {
     
-    guard state == .initialized, let appNodeId else {
+    guard let appNodeId else {
       return
     }
     

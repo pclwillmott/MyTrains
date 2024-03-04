@@ -13,9 +13,7 @@ public class OpenLCBNodeManager {
   // MARK: Constructors & Destructors
   
   deinit {
-    freeNodes = []
-    nodesInUse = []
-    nodes.removeAll()
+    removeAll()
   }
   
   // MARK: Private Properties
@@ -52,10 +50,15 @@ public class OpenLCBNodeManager {
     
   }
   
-  // MARK: Private Methods
-  
   // MARK: Public Methods
 
+  public func removeAll() {
+    freeNodes.removeAll()
+    nodesInUse.removeAll()
+    nodes.removeAll()
+    exclusiveLock = false
+  }
+  
   public func addNode(node:OpenLCBNodeVirtual) {
     nodes[node.nodeId] = node
     freeNodes.insert(node.nodeId)
@@ -79,8 +82,8 @@ public class OpenLCBNodeManager {
         let alert = NSAlert()
         
         alert.messageText = String(localized: "Configuration Tool Unavailable")
-        alert.informativeText = "This device requires exclusive use of the configuration mechanism. If you have any other configuration tools open for other devices please close them all and try again."
-        alert.addButton(withTitle: "OK")
+        alert.informativeText = String(localized: "This device requires exclusive use of the configuration mechanism. If you have any other configuration tools open for other devices please close them all and try again.")
+        alert.addButton(withTitle: String(localized: "OK"))
         alert.alertStyle = .informational
         
         alert.runModal()
@@ -95,8 +98,8 @@ public class OpenLCBNodeManager {
       let alert = NSAlert()
       
       alert.messageText = String(localized: "Configuration Tool Unavailable")
-      alert.informativeText = "Another configuration tool has exclusive use of the configuration mechanism. Try again after you have finished with the other configuration tool."
-      alert.addButton(withTitle: "OK")
+      alert.informativeText = String(localized: "Another configuration tool has exclusive use of the configuration mechanism. Try again after you have finished with the other configuration tool.")
+      alert.addButton(withTitle: String(localized: "OK"))
       alert.alertStyle = .informational
       
       alert.runModal()
@@ -110,7 +113,9 @@ public class OpenLCBNodeManager {
       freeNodes.remove(id)
       return nodes[id]
     }
+    
     return nil
+    
   }
   
   public func releaseNode(node:OpenLCBNodeVirtual) {

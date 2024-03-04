@@ -408,6 +408,9 @@
     "A configuration tool has exclusive use of the configuration mechanism. Try again after you have finished with the configuration tool." : {
 
     },
+    "A critical task is running that cannot be interrupted. Try again when the task has completed." : {
+
+    },
     "Abbreviated Default CDI Protocol" : {
 
     },
@@ -584,6 +587,9 @@
         }
       }
     },
+    "Another configuration tool has exclusive use of the configuration mechanism. Try again after you have finished with the other configuration tool." : {
+
+    },
     "Application" : {
       "comment" : "Used to create a default OpenLCB virtual name",
       "localizations" : {
@@ -635,6 +641,9 @@
         }
       }
     },
+    "Are you sure that you want to reset MyTrains to the factory defaults? This will delete all layouts and all virtual nodes managed by this workstation. This action cannot be undone!" : {
+
+    },
     "Are you sure that you wish to reset this node to factory defaults?" : {
       "localizations" : {
         "en" : {
@@ -650,6 +659,9 @@
           }
         }
       }
+    },
+    "Are You Sure?" : {
+
     },
     "Argentina" : {
       "comment" : "This is the name of a country."
@@ -926,7 +938,7 @@
       }
     },
     "CAN Gateway" : {
-      "comment" : "Used to create a default OpenLCB virtual name\nUsed for a menu title",
+      "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1453,7 +1465,7 @@
 
     },
     "Copy" : {
-      "comment" : "Used for the title of a button copies to the clipboard\nUsed for a menu title"
+      "comment" : "Used for a menu title\nUsed for the title of a button copies to the clipboard"
     },
     "Couple" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -1538,6 +1550,9 @@
           }
         }
       }
+    },
+    "Critical Task Running" : {
+
     },
     "Cross" : {
       "comment" : "This is used to describe a piece of track."
@@ -1698,7 +1713,7 @@
 
     },
     "DCC Programmer Tool" : {
-      "comment" : "Used to create a default OpenLCB virtual name\nUsed for a menu title",
+      "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1920,7 +1935,7 @@
       }
     },
     "Digitrax BXP88" : {
-      "comment" : "Used to create a default OpenLCB virtual name\nUsed for a menu title",
+      "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2974,7 +2989,7 @@
 
     },
     "Layout" : {
-      "comment" : "Used to create a default OpenLCB virtual name\nUsed for a menu title",
+      "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3175,7 +3190,7 @@
 
     },
     "LocoNet Monitor" : {
-      "comment" : "Used to create a default OpenLCB virtual name\nUsed for a menu title",
+      "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -4046,7 +4061,7 @@
       }
     },
     "Paste" : {
-      "comment" : "Used for the title of a button that pastes from the clipboard\nUsed for a menu title"
+      "comment" : "Used for a menu title\nUsed for the title of a button that pastes from the clipboard"
     },
     "Permanent Error" : {
 
@@ -5110,7 +5125,7 @@
       "comment" : "Used for a menu title"
     },
     "Switchboard Item" : {
-      "comment" : "Used to create a default OpenLCB virtual name\nUsed for a menu title",
+      "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -5144,7 +5159,7 @@
       }
     },
     "Switchboard Panel" : {
-      "comment" : "Used to create a default OpenLCB virtual name\nUsed for a menu title",
+      "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -5341,6 +5356,9 @@
           }
         }
       }
+    },
+    "This device requires exclusive use of the configuration mechanism. If you have any other configuration tools open for other devices please close them all and try again." : {
+
     },
     "This name will appear in network browsers for this device." : {
       "comment" : "Used for the description of the user name input field in the CDI",

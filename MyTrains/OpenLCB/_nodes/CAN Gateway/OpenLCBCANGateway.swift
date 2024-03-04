@@ -244,15 +244,11 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
       
     }
     else {
-      networkLayer?.gatewayIsInitialized(nodeId: nodeId)
+      networkLayer?.nodeInitializationComplete(node: self)
     }
 
   }
   
-  public override func completeStartUp() {
-    networkLayer?.gatewayIsInitialized(nodeId: nodeId)
-  }
-
   public override func gatewayStart() {
     
     close()
@@ -270,12 +266,6 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
     isConfigurationDescriptionInformationProtocolSupported = true
 
     openSerialPort()
-    
-  }
-  
-  internal override func resetReboot() {
-
-    super.resetReboot()
     
   }
   
@@ -370,15 +360,15 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
   // This is running in the main thread
   public override func openLCBMessageReceived(message: OpenLCBMessage) {
  
-    if state != .permitted {
-      return
-    }
-
     // A message might be for the gateway node itself
     if !message.messageTypeIndicator.isAddressPresent || (message.destinationNodeId != nil && message.destinationNodeId! == nodeId) {
       super.openLCBMessageReceived(message: message)
     }
     
+    if state != .permitted {
+      return
+    }
+
     if message.visibility.rawValue < OpenLCBNodeVisibility.visibilitySemiPublic.rawValue {
       return
     }

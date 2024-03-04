@@ -16,20 +16,6 @@ public var xmyTrainsController = MyTrainsController()
 
 public class MyTrainsController : NSObject, NSUserNotificationCenterDelegate {
   
-  // MARK: Constructor
-  
-  override init() {
-    
-    super.init()
-
-  
-    openLCBNetworkLayer = OpenLCBNetworkLayer(appNodeId: appNodeId)
-    
-  }
-  
-  // MARK: Destructor
-  
-  
   // MARK: Private Properties
   
 //  private var controllerDelegates : [Int:MyTrainsControllerDelegate] = [:]

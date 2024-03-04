@@ -10,22 +10,6 @@ import AppKit
 
 // 05.01.01.01.7b.00
 
-private var menuItems : [MenuTag:NSMenuItem] = [:]
-
-public enum MenuItemProperty {
-  case isEnabled
-  case isHidden
-}
-
-public func setMenuItemProperty(menuTag:MenuTag, properties:Set<MenuItemProperty>) {
-  
-  if let item = menuItems[menuTag] {
-    item.isEnabled = properties.contains(.isEnabled)
-    item.isHidden = properties.contains(.isHidden)
-  }
-  
-}
-
 public var appDelegate : AppDelegate {
   return NSApplication.shared.delegate as! AppDelegate
 }
@@ -34,7 +18,9 @@ public var appDelegate : AppDelegate {
 public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDelegate {
 
   // MARK: Private Properties
-  
+
+  private var menuItems : [MenuTag:NSMenuItem] = [:]
+
   private var activity: NSObjectProtocol?
   
   private var activeViewControllers : [ObjectIdentifier:MyTrainsViewController] = [:]
@@ -43,9 +29,11 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
 
   private var checkPortsTimer : Timer?
   
+  private var state : OpenLCBNetworkLayerState = .uninitialized
+  
   // MARK: Public Properties
   
-  public var networkLayer = OpenLCBNetworkLayer(appNodeId: appNodeId)
+  public var networkLayer = OpenLCBNetworkLayer()
   
   public var isSafeToTerminate : Bool {
   
@@ -102,6 +90,12 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
       
     }
 
+    // Do the legal stuff, if they don't accept the agreement stop the app.
+    
+    if !eulaAccepted! {
+      MyTrainsWindow.license.runModel()
+    }
+
     // KEEP ALIVE - This is to stop the app and the timers going to sleep when
     // app is not in view.
     
@@ -124,8 +118,8 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
     if databasePath == nil {
       databasePath = documentsPath + "/MyTrains/database"
     }
-
-    networkLayer.initialStart()
+    
+    networkLayer.start()
 
   }
   
@@ -167,6 +161,67 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
   @objc func checkPortsTimerAction() {
     MTSerialPortManager.checkPorts()
   }
+  
+  func updateMenuItems(state:OpenLCBNetworkLayerState) {
+    for (key, menuItem) in menuItems {
+      menuItem.isHidden = !key.isValid(state: state)
+    }
+  }
+  
+  func initiateResetToFactoryDefaults() {
+    
+    if isSafeToTerminate {
+ 
+      let alert = NSAlert()
+      
+      alert.messageText = String(localized: "Are You Sure?")
+      alert.informativeText = String(localized: "Are you sure that you want to reset MyTrains to the factory defaults? This will delete all layouts and all virtual nodes managed by this workstation. This action cannot be undone!")
+      alert.addButton(withTitle: String(localized: "Yes"))
+      alert.addButton(withTitle: String(localized: "No"))
+      alert.alertStyle = .informational
+      
+      switch alert.runModal() {
+      case .alertFirstButtonReturn:
+        state = .resetToFactoryDefaults
+        closeAllWindows()
+      default:
+        break
+      }
+      
+    }
+    else {
+      
+      let alert = NSAlert()
+      
+      alert.messageText = String(localized: "Critical Task Running")
+      alert.informativeText = String(localized: "A critical task is running that cannot be interrupted. Try again when the task has completed.")
+      alert.addButton(withTitle: String(localized: "OK"))
+      alert.alertStyle = .informational
+      
+      alert.runModal()
+
+    }
+    
+  }
+  
+  func completeResetToFactoryDefaults() {
+    
+    guard state == .resetToFactoryDefaults else {
+      return
+    }
+    
+    do{
+      try FileManager().removeItem(atPath: Database.databaseFullPath)
+      try FileManager().removeItem(atPath: databasePath!)
+      databasePath = nil
+    }
+    catch{
+      #if DEBUG
+      debugLog("delete database failed")
+      #endif
+    }
+
+  }
 
   func newNodeCompletion(node:OpenLCBNodeVirtual) {
     
@@ -206,14 +261,56 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
   public func removeViewController(_ viewController:MyTrainsViewController) {
     debugLog("\(viewController.objectIdentifier!)")
     activeViewControllers.removeValue(forKey: viewController.objectIdentifier!)
+    if activeViewControllers.isEmpty {
+      windowsDidClose()
+    }
+  }
+  
+  public func windowsDidClose() {
+    switch state {
+    case .stopping, .rebooting, .resetToFactoryDefaults:
+      networkLayer.stop()
+    default:
+      break
+    }
   }
   
   public func closeAllWindows() {
     if isSafeToTerminate {
-      for (_, vc) in activeViewControllers {
-        vc.closeWindow()
+      if activeViewControllers.isEmpty {
+        windowsDidClose()
+      }
+      else {
+        for (_, vc) in activeViewControllers {
+          vc.closeWindow()
+        }
       }
     }
+  }
+  
+  public func networkLayerStateHasChanged(networkLayer:OpenLCBNetworkLayer) {
+    
+    updateMenuItems(state: networkLayer.state)
+    
+    switch self.state {
+    case .uninitialized, .runningLocal, .runningNetwork:
+      self.state = networkLayer.state
+    case .stopping:
+      break
+    case .stopped:
+      break
+    case .rebooting:
+      break
+    case .resetToFactoryDefaults:
+      if networkLayer.state == .stopped {
+        initiateResetToFactoryDefaults()
+      }
+    case .initializingGateways:
+      break
+    case .initializingNodes:
+      break
+    }
+    
   }
   
   // MARK: Actions
@@ -328,13 +425,13 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
         MyTrainsWindow.about.showWindow()
         
       case .createApplicationNode:
-        if !eulaAccepted {
-          MyTrainsWindow.license.runModel()
-        }
         let vc = MyTrainsWindow.selectMasterNode.viewController as! SelectMasterNodeVC
    //     vc.controller = myTrainsController
         vc.showWindow()
 
+      case .resetToFactoryDefaults:
+        initiateResetToFactoryDefaults()
+        
       default:
         
         if let virtualNodeType = MyTrainsVirtualNodeType(rawValue: UInt16(sender.tag)) {

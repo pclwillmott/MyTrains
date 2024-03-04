@@ -96,6 +96,21 @@ public enum MenuTag : Int {
     
   }
   
+  // MARK: Public Methods
+  
+  public func isValid(state:OpenLCBNetworkLayerState) -> Bool {
+    
+    guard let validStates = MenuTag.validStates[self] else {
+      #if DEBUG
+      debugLog("menu tag not found in \"validStates\"")
+      #endif
+      return false
+    }
+    
+    return validStates.contains(state)
+    
+  }
+  
   // MARK: Private Static Properties
   
   private static let titles : [MenuTag:String] = [
@@ -154,6 +169,62 @@ public enum MenuTag : Int {
     .createApplicationNode    : String(localized: "Create Application Node",               comment: "Used for a menu title"),
     .rebootApplication        : String(localized: "Reboot Application",                    comment: "Used for a menu title"),
     .resetToFactoryDefaults   : String(localized: "Reset Application to Factory Defaults", comment: "Used for a menu title"),
+  ]
+  
+  private static let validStates : [MenuTag:Set<OpenLCBNetworkLayerState>] = [
+    .newCANGateway            : [.runningLocal, .runningNetwork],
+    .newClock                 : [.runningNetwork],
+    .newThrottle              : [.runningNetwork],
+    .newLocoNetGateway        : [.runningNetwork],
+    .newTrain                 : [.runningNetwork],
+    .newLocoNetMonitor        : [.runningNetwork],
+    .newDCCProgrammerTrack    : [.runningNetwork],
+    .newDigitraxBXP88         : [.runningNetwork],
+    .newLayout                : [.runningNetwork],
+    .newSwitchboardPanel      : [.runningNetwork],
+    .newSwitchboardItem       : [.runningNetwork],
+    .myTrains                 : [.uninitialized, .runningLocal, .runningNetwork, .stopping, .stopped, .rebooting],
+    .new                      : [.uninitialized, .runningLocal, .runningNetwork, .stopping, .stopped, .rebooting],
+    .edit                     : [.uninitialized, .runningLocal, .runningNetwork, .stopping, .stopped, .rebooting],
+    .view                     : [.uninitialized, .runningLocal, .runningNetwork, .stopping, .stopped, .rebooting],
+    .operations               : [.uninitialized, .runningLocal, .runningNetwork, .stopping, .stopped, .rebooting],
+    .configuration            : [.uninitialized, .runningLocal, .runningNetwork, .stopping, .stopped, .rebooting],
+    .tools                    : [.uninitialized, .runningLocal, .runningNetwork, .stopping, .stopped, .rebooting],
+    .window                   : [.uninitialized, .runningLocal, .runningNetwork, .stopping, .stopped, .rebooting],
+    .globalEmergencyStop      : [.runningLocal, .runningNetwork],
+    .clearGlobalEmergencyStop : [.runningLocal, .runningNetwork],
+    .globalPowerOff           : [.runningLocal, .runningNetwork],
+    .globalPowerOn            : [.runningLocal, .runningNetwork],
+    .throttle                 : [.runningLocal, .runningNetwork],
+    .selectLayout             : [.runningLocal, .runningNetwork],
+    .configLCCNetwork         : [.runningLocal, .runningNetwork],
+    .configClock              : [.runningLocal, .runningNetwork],
+    .dccProgrammerTool        : [.runningLocal, .runningNetwork],
+    .configSwitchboard        : [.runningLocal, .runningNetwork],
+    .trainSpeedProfiler       : [.runningLocal, .runningNetwork],
+    .locoNetFirmwareUpdate    : [.runningLocal, .runningNetwork],
+    .locoNetWirelessSetup     : [.runningLocal, .runningNetwork],
+    .lccTrafficMonitor        : [.runningLocal, .runningNetwork],
+    .locoNetSlotView          : [.runningLocal, .runningNetwork],
+    .locoNetTrafficMonitor    : [.runningLocal, .runningNetwork],
+    .locoNetDashboard         : [.runningLocal, .runningNetwork],
+    .about                    : [.uninitialized, .runningLocal, .runningNetwork, .stopping, .stopped, .rebooting],
+    .preferences              : [.runningLocal, .runningNetwork],
+    .quit                     : [.uninitialized, .runningLocal, .runningNetwork, .stopping, .stopped, .rebooting],
+    .separator                : [.uninitialized, .runningLocal, .runningNetwork, .stopping, .stopped, .rebooting],
+    .hideMyTrains             : [.uninitialized, .runningLocal, .runningNetwork, .stopping, .stopped, .rebooting],
+    .hideOthers               : [.uninitialized, .runningLocal, .runningNetwork, .stopping, .stopped, .rebooting],
+    .showAll                  : [.uninitialized, .runningLocal, .runningNetwork, .stopping, .stopped, .rebooting],
+    .cut                      : [.uninitialized, .runningLocal, .runningNetwork, .stopping, .stopped, .rebooting],
+    .copy                     : [.uninitialized, .runningLocal, .runningNetwork, .stopping, .stopped, .rebooting],
+    .paste                    : [.uninitialized, .runningLocal, .runningNetwork, .stopping, .stopped, .rebooting],
+    .selectAll                : [.uninitialized, .runningLocal, .runningNetwork, .stopping, .stopped, .rebooting],
+    .enterFullScreen          : [.uninitialized, .runningLocal, .runningNetwork, .stopping, .stopped, .rebooting],
+    .minimize                 : [.uninitialized, .runningLocal, .runningNetwork, .stopping, .stopped, .rebooting],
+    .bringAllToFront          : [.uninitialized, .runningLocal, .runningNetwork, .stopping, .stopped, .rebooting],
+    .createApplicationNode    : [.uninitialized],
+    .resetToFactoryDefaults   : [.runningLocal, .runningNetwork],
+    .rebootApplication        : [.runningLocal, .runningNetwork],
   ]
   
 }
