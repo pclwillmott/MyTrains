@@ -592,6 +592,7 @@
     },
     "Application" : {
       "comment" : "Used to create a default OpenLCB virtual name",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -938,7 +939,7 @@
       }
     },
     "CAN Gateway" : {
-      "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name",
+      "comment" : "Used to create a default OpenLCB virtual name\nUsed for a menu title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1083,7 +1084,7 @@
       }
     },
     "Clock" : {
-      "comment" : "Used for a menu title"
+      "comment" : "Used to create a default OpenLCB virtual name\nUsed for a menu title"
     },
     "Clock Node ID" : {
       "comment" : "Used to indicate that a custom clock should use the clock node Id",
@@ -1465,7 +1466,7 @@
 
     },
     "Copy" : {
-      "comment" : "Used for a menu title\nUsed for the title of a button copies to the clipboard"
+      "comment" : "Used for the title of a button copies to the clipboard\nUsed for a menu title"
     },
     "Couple" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -1713,7 +1714,7 @@
 
     },
     "DCC Programmer Tool" : {
-      "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name",
+      "comment" : "Used to create a default OpenLCB virtual name\nUsed for a menu title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1935,7 +1936,7 @@
       }
     },
     "Digitrax BXP88" : {
-      "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name",
+      "comment" : "Used to create a default OpenLCB virtual name\nUsed for a menu title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2989,7 +2990,7 @@
 
     },
     "Layout" : {
-      "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name",
+      "comment" : "Used to create a default OpenLCB virtual name\nUsed for a menu title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3181,7 +3182,7 @@
       }
     },
     "LocoNet Gateway" : {
-      "comment" : "Used for a menu title"
+      "comment" : "Used to create a default OpenLCB virtual name\nUsed for a menu title"
     },
     "LocoNet Gateway Protocol" : {
 
@@ -3190,7 +3191,7 @@
 
     },
     "LocoNet Monitor" : {
-      "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name",
+      "comment" : "Used to create a default OpenLCB virtual name\nUsed for a menu title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3639,6 +3640,9 @@
     "MyTrains" : {
       "comment" : "Used for a menu title"
     },
+    "MyTrains Application" : {
+      "comment" : "Used to create a default OpenLCB virtual name"
+    },
     "MyTrains Layout Activated" : {
 
     },
@@ -4061,7 +4065,7 @@
       }
     },
     "Paste" : {
-      "comment" : "Used for a menu title\nUsed for the title of a button that pastes from the clipboard"
+      "comment" : "Used for the title of a button that pastes from the clipboard\nUsed for a menu title"
     },
     "Permanent Error" : {
 
@@ -5125,7 +5129,7 @@
       "comment" : "Used for a menu title"
     },
     "Switchboard Item" : {
-      "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name",
+      "comment" : "Used to create a default OpenLCB virtual name\nUsed for a menu title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -5159,7 +5163,7 @@
       }
     },
     "Switchboard Panel" : {
-      "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name",
+      "comment" : "Used to create a default OpenLCB virtual name\nUsed for a menu title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -5378,7 +5382,7 @@
       }
     },
     "Throttle" : {
-      "comment" : "Used for a menu title",
+      "comment" : "Used to create a default OpenLCB virtual name\nUsed for a menu title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -5454,7 +5458,7 @@
 
     },
     "Train" : {
-      "comment" : "Used for a menu title"
+      "comment" : "Used to create a default OpenLCB virtual name\nUsed for a menu title"
     },
     "Train Move Complete" : {
 
@@ -5732,6 +5736,7 @@
     },
     "Virtual Clock" : {
       "comment" : "Used to create a default OpenLCB virtual name",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -5766,6 +5771,7 @@
     },
     "Virtual LocoNet Gateway" : {
       "comment" : "Used to create a default OpenLCB virtual name",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -5800,6 +5806,7 @@
     },
     "Virtual Throttle" : {
       "comment" : "Used to create a default OpenLCB virtual name",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -5834,6 +5841,7 @@
     },
     "Virtual Train" : {
       "comment" : "Used to create a default OpenLCB virtual name",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

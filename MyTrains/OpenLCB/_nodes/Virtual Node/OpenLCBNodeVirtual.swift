@@ -654,10 +654,11 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   
   // MARK: Public Methods
   
-  public func gatewayStart() {
+  public func start() {
+    startComplete()
   }
   
-  public func start() {
+  public func startComplete() {
     
     state = .permitted
 
@@ -667,7 +668,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
 
     resetReboot()
     
-    networkLayer?.nodeInitializationComplete(node: self)
+    networkLayer?.nodeDidStart(node: self)
 
     sendInitializationComplete()
     
@@ -698,11 +699,6 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
       sendProducerRangeIdentified(eventId: eventRange.eventId)
     }
 
-    completeStartUp()
-
-  }
-  
-  internal func completeStartUp() {
   }
   
   internal func setValidity(eventId:UInt64, validity: inout OpenLCBValidity) {

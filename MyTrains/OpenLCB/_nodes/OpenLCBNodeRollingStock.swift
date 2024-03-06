@@ -1279,9 +1279,6 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
             }
             
           }
-          else {
-       //     print("train search did not match track protocol \(userNodeName): 0x\(tp.toHex(numberOfDigits: 2))")
-          }
 
         }
         else if let event = OpenLCBWellKnownEvent(rawValue: id) {

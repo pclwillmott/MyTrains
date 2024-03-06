@@ -250,7 +250,6 @@ class MainVC: NSViewController, MyTrainsControllerDelegate, LayoutDelegate, Open
         panelNode.numberOfColumns = UInt16(panel.numberOfColumns)
         panelNode.saveMemorySpaces()
         panelLookup[panel.panelId] = panelNode
-        print("\(panelNode.nodeId.toHexDotFormat(numberOfBytes: 6)) - \"\(panelNode.userNodeName)\"")
       }
     case .switchboardItemNode:
       if !items.isEmpty, let itemNode = node as? SwitchboardItemNode {
@@ -282,7 +281,6 @@ class MainVC: NSViewController, MyTrainsControllerDelegate, LayoutDelegate, Open
           groupLookup[item.groupId] = itemNode
         }
         itemNode.saveMemorySpaces()
-        print("\(itemNode.nodeId.toHexDotFormat(numberOfBytes: 6)) - \"\(itemNode.userNodeName)\"")
         nodes.append((itemNode, item.groupId))
       }
     default:

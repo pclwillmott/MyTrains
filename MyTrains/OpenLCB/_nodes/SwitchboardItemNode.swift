@@ -961,10 +961,6 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
 
   }
   
-  internal override func completeStartUp() {
-    sendNodeIsASwitchboardItemEvent()
-  }
-  
   internal func sendNodeIsASwitchboardItemEvent() {
     
     var payload = layoutNodeId.nodeIdBigEndianData

@@ -351,7 +351,6 @@ public class Layout : EditorObject {
         
       }
       /*
-      print("\(block.blockName)")
       
       var index = 0
       for node in block.nodeLinks {
@@ -369,15 +368,6 @@ public class Layout : EditorObject {
     }
     
     findLoops()
-    /*
-    for loop in loops {
-      for routePart in loop {
-        print("\(routePart.fromSwitchBoardItem.blockName)", terminator: " ")
-      }
-      print("\n")
-    }
-    */
-//    print(loops)
     
     /*
     for (_, item) in switchBoardItems {

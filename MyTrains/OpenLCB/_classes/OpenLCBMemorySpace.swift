@@ -661,8 +661,6 @@ public class OpenLCBMemorySpace {
                 
       }
       
-      result.sort { $0.virtualNodeType.startupOrder < $1.virtualNodeType.startupOrder }
-
     }
     
     if shouldClose {

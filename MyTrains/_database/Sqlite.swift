@@ -253,7 +253,9 @@ class SqliteCommand {
     errorCode = sqlite3_exec(connection.db, sqlText.cString(using: String.Encoding.utf8), nil, nil, nil)
     errorMessage = String(cString: sqlite3_errmsg(connection.db)!)
     if errorCode != SQLITE_OK {
-      print(errorCode, errorMessage)
+      #if DEBUG
+      debugLog("\(errorCode), \(errorMessage)")
+      #endif
     }
     return errorCode == SQLITE_OK
   }

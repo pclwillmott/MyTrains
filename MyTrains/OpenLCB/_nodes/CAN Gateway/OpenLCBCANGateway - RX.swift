@@ -11,6 +11,10 @@ extension OpenLCBCANGateway {
   
   internal func parseInput() {
 
+    if isStopping {
+      return
+    }
+    
     while !buffer.isEmpty {
       
       var found = false

@@ -9,8 +9,7 @@ import Foundation
 
 public enum OpenLCBNetworkLayerState {
   case uninitialized
-  case initializingGateways
-  case initializingNodes
+  case initializing
   case runningLocal
   case runningNetwork
   case stopping

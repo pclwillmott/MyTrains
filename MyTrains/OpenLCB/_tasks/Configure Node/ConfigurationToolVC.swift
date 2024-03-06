@@ -889,7 +889,9 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
                   }
                 }
                 else {
-                  print("error: bad space or address - 0x\(thisSpace.toHex(numberOfDigits: 2))  0x\(startAddress.toHex(numberOfDigits: 8))")
+                  #if DEBUG
+                  debugLog("error: bad space or address - 0x\(thisSpace.toHex(numberOfDigits: 2))  0x\(startAddress.toHex(numberOfDigits: 8))")
+                  #endif
                   state = .idle
                 }
                 
@@ -978,7 +980,6 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
   // MARK: XMLParserDelegate Methods
   
   func parserDidStartDocument(_ parser: XMLParser) {
-//    print("parserDidStartDocument")
     currentElement = nil
   }
 
@@ -986,30 +987,34 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
     expandTree()
   }
 
+  #if DEBUG
+  
   func parser(_ parser: XMLParser, foundNotationDeclarationWithName name: String, publicID: String?, systemID: String?) {
-    print("parseFoundNotationDeclarationWithName: \(name)")
+    debugLog("parseFoundNotationDeclarationWithName: \(name)")
   }
 
   func parser(_ parser: XMLParser, foundUnparsedEntityDeclarationWithName name: String, publicID: String?, systemID: String?, notationName: String?) {
-    print("parseFoundUnparsedEntityDeclarationWithName: \(name)")
+    debugLog("parseFoundUnparsedEntityDeclarationWithName: \(name)")
   }
 
   func parser(_ parser: XMLParser, foundAttributeDeclarationWithName attributeName: String, forElement elementName: String, type: String?, defaultValue: String?) {
-    print("parseFoundAttributeDeclarationWithName: \(attributeName)")
+    debugLog("parseFoundAttributeDeclarationWithName: \(attributeName)")
   }
 
   func parser(_ parser: XMLParser, foundElementDeclarationWithName elementName: String, model: String) {
-    print("parseFoundElementDeclarationWithName: \(elementName)")
+    debugLog("parseFoundElementDeclarationWithName: \(elementName)")
   }
 
   func parser(_ parser: XMLParser, foundInternalEntityDeclarationWithName name: String, value: String?) {
-    print("parseFoundInternalEntityDeclarationWithName: \(name)")
+    debugLog("parseFoundInternalEntityDeclarationWithName: \(name)")
   }
 
   func parser(_ parser: XMLParser, foundExternalEntityDeclarationWithName name: String, publicID: String?, systemID: String?) {
-    print("parseFoundExternalEntityDeclarationWithName: \(name)")
+    debugLog("parseFoundExternalEntityDeclarationWithName: \(name)")
   }
 
+  #endif
+  
   func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
 
     if let elementType = OpenLCBCDIElementType(rawValue: elementName) {
@@ -1053,7 +1058,9 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
       
     }
     else {
-      print("UNKNOWN ELEMENT TYPE: \"\(elementName)\"")
+      #if DEBUG
+      debugLog("UNKNOWN ELEMENT TYPE: \"\(elementName)\"")
+      #endif
     }
     
   }
@@ -1081,13 +1088,17 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
     
   }
   
+  #if DEBUG
+  
   func parser(_ parser: XMLParser, didStartMappingPrefix prefix: String, toURI namespaceURI: String) {
-    print("parseDidStartMappingPrefix: \(prefix)")
+    debugLog("parseDidStartMappingPrefix: \(prefix)")
   }
 
   func parser(_ parser: XMLParser, didEndMappingPrefix prefix: String) {
-    print("parseDidEndMappingPrefix: \(prefix)")
+    debugLog("parseDidEndMappingPrefix: \(prefix)")
   }
+  
+  #endif
 
   func parser(_ parser: XMLParser, foundCharacters string: String) {
     if let element = currentElement {
@@ -1120,33 +1131,39 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
     currentElementType = .none
   }
 
+  #if DEBUG
+  
   func parser(_ parser: XMLParser, foundIgnorableWhitespace whitespaceString: String) {
-    print("foundIgnorableWhiteSpace: \(whitespaceString)")
+    debugLog("foundIgnorableWhiteSpace: \(whitespaceString)")
   }
 
   func parser(_ parser: XMLParser, foundProcessingInstructionWithTarget target: String, data: String?) {
-    print("parseFoundProcessingInstructionWithTarget: \(target)")
+    debugLog("parseFoundProcessingInstructionWithTarget: \(target)")
   }
 
   func parser(_ parser: XMLParser, foundComment comment: String) {
-    print("parseFoundComment: \(comment)")
+    debugLog("parseFoundComment: \(comment)")
   }
 
   func parser(_ parser: XMLParser, foundCDATA CDATABlock: Data) {
-    print("parseFoundCDATA")
+    debugLog("parseFoundCDATA")
   }
 
+  #endif
+  
   func parser(_ parser: XMLParser, resolveExternalEntityName name: String, systemID: String?) -> Data? {
     return nil
   }
 
+  #if DEBUG
   func parser(_ parser: XMLParser, parseErrorOccurred parseError: Error) {
-    print("parseErrorOccurred: \(parseError)")
+    debugLog("parseErrorOccurred: \(parseError)")
   }
 
   func parser(_ parser: XMLParser, validationErrorOccurred validationError: Error) {
-    print("validationErrorOccurred: \(validationError)")
+    debugLog("validationErrorOccurred: \(validationError)")
   }
+  #endif
   
   // MARK: CDIDataViewDelegate Methods
   

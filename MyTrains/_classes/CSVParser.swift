@@ -67,17 +67,23 @@ class CSVParser {
   public func parse() {
     
     guard let del = delegate else {
-      print("CSVParser: no delegate")
+      #if DEBUG
+      debugLog("no delegate")
+      #endif
       return
     }
     
     guard let fp = FileHandle.openFile(path: url.path, mode: O_RDONLY) else {
-      print("CSVParser: can't open file \"\(url.path)\"")
+      #if DEBUG
+      debugLog("can't open file \"\(url.path)\"")
+      #endif
       return
     }
 
     guard let text = String(bytes: fp.readDataToEndOfFile(), encoding: encoding) else {
-      print("CSVParser: file read failed")
+      #if DEBUG
+      debugLog("file read failed")
+      #endif
       fp.closeFile()
       return
     }

@@ -168,6 +168,15 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
     }
   }
   
+  func initiateRebootApplication() {
+    
+    if isSafeToTerminate {
+      state = .rebooting
+      closeAllWindows()
+    }
+    
+  }
+  
   func initiateResetToFactoryDefaults() {
     
     if isSafeToTerminate {
@@ -259,11 +268,14 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
   }
   
   public func removeViewController(_ viewController:MyTrainsViewController) {
-    debugLog("\(viewController.objectIdentifier!)")
     activeViewControllers.removeValue(forKey: viewController.objectIdentifier!)
     if activeViewControllers.isEmpty {
       windowsDidClose()
     }
+  }
+  
+  public func rebootRequest() {
+    initiateRebootApplication()
   }
   
   public func windowsDidClose() {
@@ -290,26 +302,31 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
   
   public func networkLayerStateHasChanged(networkLayer:OpenLCBNetworkLayer) {
     
-    updateMenuItems(state: networkLayer.state)
-    
-    switch self.state {
-    case .uninitialized, .runningLocal, .runningNetwork:
-      self.state = networkLayer.state
-    case .stopping:
-      break
-    case .stopped:
-      break
-    case .rebooting:
-      break
-    case .resetToFactoryDefaults:
-      if networkLayer.state == .stopped {
-        initiateResetToFactoryDefaults()
+    switch networkLayer.state {
+    case .runningLocal, .runningNetwork:
+      switch self.state {
+      case .uninitialized, .runningLocal, .runningNetwork:
+        self.state = networkLayer.state
+      default:
+        break
       }
-    case .initializingGateways:
-      break
-    case .initializingNodes:
+    case .stopped:
+      switch self.state {
+      case .stopping:
+        self.state = .stopped
+      case .rebooting:
+        self.state = .uninitialized
+        networkLayer.start()
+      case .resetToFactoryDefaults:
+        self.state = .stopped
+      default:
+        break
+      }
+    default:
       break
     }
+
+    updateMenuItems(state: state)
     
   }
   
@@ -426,11 +443,13 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
         
       case .createApplicationNode:
         let vc = MyTrainsWindow.selectMasterNode.viewController as! SelectMasterNodeVC
-   //     vc.controller = myTrainsController
         vc.showWindow()
 
       case .resetToFactoryDefaults:
         initiateResetToFactoryDefaults()
+        
+      case .rebootApplication:
+        initiateRebootApplication()
         
       default:
         

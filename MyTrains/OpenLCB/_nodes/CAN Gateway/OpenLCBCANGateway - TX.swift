@@ -40,7 +40,7 @@ extension OpenLCBCANGateway {
   // This is running in the main thread
   internal func processOutputQueue() {
    
-    stopWaitTimer()
+    stopWaitOutputTimer()
     
     guard !outputQueue.isEmpty else {
       return
@@ -197,7 +197,9 @@ extension OpenLCBCANGateway {
     
     outputQueueLock.unlock()
     
-    startWaitTimer(interval: 1.0)
+    if !isStopping {
+      startWaitTimer(interval: 1.0)
+    }
     
   }
 

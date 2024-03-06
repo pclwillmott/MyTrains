@@ -224,10 +224,6 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
     
   }
   
-  internal override func completeStartUp() {
-    sendWellKnownEvent(eventId: .nodeIsADCCProgrammingTrack)
-  }
- 
   internal override func customizeDynamicCDI(cdi:String) -> String {
   
     var result = ""

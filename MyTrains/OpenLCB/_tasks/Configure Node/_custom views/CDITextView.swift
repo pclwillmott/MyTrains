@@ -144,7 +144,6 @@ class CDITextView: CDIDataView, NSTextFieldDelegate, NSControlTextEditingDelegat
   }
 
   @IBAction func newEventIdAction(_ sender: NSButton) {
-    print("here")
     delegate?.cdiDataViewGetNewEventId?(textField: textField)
   }
 

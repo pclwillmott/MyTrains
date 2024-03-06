@@ -214,10 +214,6 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, M
     
   }
   
-  internal override func completeStartUp() {
-    sendWellKnownEvent(eventId: .nodeIsALocoNetGateway)
-  }
-  
   internal override func customizeDynamicCDI(cdi:String) -> String {
     
     var result = MTSerialPortManager.insertMap(cdi: cdi)

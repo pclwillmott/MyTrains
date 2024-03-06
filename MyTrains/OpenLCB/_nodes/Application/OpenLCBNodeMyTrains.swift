@@ -274,13 +274,6 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     
   }
   
-  override internal func completeStartUp() {
-    sendWellKnownEvent(eventId: .identifyMyTrainsLayouts)
-    sendWellKnownEvent(eventId: .identifyMyTrainsSwitchboardPanels)
-    sendWellKnownEvent(eventId: .identifyMyTrainsSwitchboardItems)
-    sendIdentifyProducer(event: .nodeIsALocoNetGateway)
-  }
-  
   internal override func customizeDynamicCDI(cdi:String) -> String {
     
     var result = UnitLength.insertMap(cdi: cdi)

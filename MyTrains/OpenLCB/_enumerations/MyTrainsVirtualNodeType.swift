@@ -43,8 +43,8 @@ public enum MyTrainsVirtualNodeType : UInt16 {
     return result
   }
   
-  public var startupOrder : Int {
-    return MyTrainsVirtualNodeType._startupOrder[self] ?? 0x7FFFFFFFFFFFFFFF
+  public var startupGroup : Int {
+    return MyTrainsVirtualNodeType._startupGroup[self]!
   }
   
   // MARK: Public Methods
@@ -74,12 +74,12 @@ public enum MyTrainsVirtualNodeType : UInt16 {
   ]
 
   public static let defaultNames : [MyTrainsVirtualNodeType:String] = [
-    .applicationNode:       String(localized: "Application", comment: "Used to create a default OpenLCB virtual name"),
+    .applicationNode:       String(localized: "MyTrains Application", comment: "Used to create a default OpenLCB virtual name"),
     .canGatewayNode:        String(localized: "CAN Gateway", comment: "Used to create a default OpenLCB virtual name"),
-    .clockNode:             String(localized: "Virtual Clock", comment: "Used to create a default OpenLCB virtual name"),
-    .throttleNode:          String(localized: "Virtual Throttle", comment: "Used to create a default OpenLCB virtual name"),
-    .locoNetGatewayNode:    String(localized: "Virtual LocoNet Gateway", comment: "Used to create a default OpenLCB virtual name"),
-    .trainNode:             String(localized: "Virtual Train", comment: "Used to create a default OpenLCB virtual name"),
+    .clockNode:             String(localized: "Clock", comment: "Used to create a default OpenLCB virtual name"),
+    .throttleNode:          String(localized: "Throttle", comment: "Used to create a default OpenLCB virtual name"),
+    .locoNetGatewayNode:    String(localized: "LocoNet Gateway", comment: "Used to create a default OpenLCB virtual name"),
+    .trainNode:             String(localized: "Train", comment: "Used to create a default OpenLCB virtual name"),
     .configurationToolNode: String(localized: "Configuration Tool", comment: "Used to create a default OpenLCB virtual name"),
     .genericVirtualNode:    String(localized: "Generic Virtual", comment: "Used to create a default OpenLCB virtual name"),
     .locoNetMonitorNode:    String(localized: "LocoNet Monitor", comment: "Used to create a default OpenLCB virtual name"),
@@ -91,26 +91,27 @@ public enum MyTrainsVirtualNodeType : UInt16 {
     .switchboardItemNode:   String(localized: "Switchboard Item", comment: "Used to create a default OpenLCB virtual name"),
   ]
 
-  private static let _startupOrder : [MyTrainsVirtualNodeType:Int] = [
-    .canGatewayNode        : 0,
-    .applicationNode       : 1,
-    .layoutNode            : 2,
-    .locoNetMonitorNode    : 3,
-    .locoNetGatewayNode    : 4,
-    .clockNode             : 5,
-    .configurationToolNode : 6,
-    .trainNode             : 7,
-    .throttleNode          : 8,
-    .programmerToolNode    : 9,
-    .programmingTrackNode  : 10,
-    .switchboardPanelNode  : 11,
-    .switchboardItemNode   : 12,
-    .digitraxBXP88Node     : 13,
-    .genericVirtualNode    : 14,
+  private static let _startupGroup : [MyTrainsVirtualNodeType:Int] = [
+    .canGatewayNode        : 1,
+    .applicationNode       : 2,
+    .locoNetGatewayNode    : 3,
+    .clockNode             : 3,
+    .configurationToolNode : 3,
+    .throttleNode          : 3,
+    .switchboardItemNode   : 3,
+    .switchboardPanelNode  : 4, // SBI
+    .trainNode             : 4, // LocoNet
+    .programmingTrackNode  : 4, // LocoNet
+    .digitraxBXP88Node     : 4, // LocoNet
+    .locoNetMonitorNode    : 4, // LocoNet
+    .programmerToolNode    : 5, // Programming Track
+    .layoutNode            : 5, // Panel
   ]
 
   // MARK: Public Class Properties
  
+  public static let numberOfStartupGroups = 5
+  
   public static let titles : [MyTrainsVirtualNodeType:String] = [
     .applicationNode:       String(localized: "Application Node", comment: "Used to describe an OpenLCB virtual node"),
     .canGatewayNode:        String(localized: "CAN Gateway Node", comment: "Used to describe an OpenLCB virtual node"),

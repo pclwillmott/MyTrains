@@ -322,8 +322,6 @@ class Database {
             
             // MARK: Updates
             
-   //         print("Version: \(Version)")
-            
             if Version == 33 {
   
               let commands = [

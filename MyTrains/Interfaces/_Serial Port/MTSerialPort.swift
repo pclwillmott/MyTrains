@@ -10,6 +10,7 @@ import Cocoa
 
 @objc public protocol MTSerialPortDelegate {
   @objc optional func serialPort(_ serialPort: MTSerialPort, didReceive data: [UInt8])
+  @objc optional func serialPortDidClose(_ serialPort: MTSerialPort)
 }
    
 public enum SerialPortState {
@@ -64,23 +65,9 @@ public class MTSerialPort : NSObject, MTSerialPortManagerDelegate, MTPipeDelegat
     
     closeSerialPort(_fd)
     
-    txPipe = MTPipe(name: MTSerialPort.pipeName(path: path))
-    
     super.init()
     
-    txPipe.open(delegate: self)
-    
     observerId = MTSerialPortManager.addObserver(observer: self)
-    
-  }
-  
-  // MARK: Destructors
-  
-  deinit {
-    
-    txPipe.close()
-    
-    close()
     
   }
   
@@ -104,7 +91,7 @@ public class MTSerialPort : NSObject, MTSerialPortManagerDelegate, MTPipeDelegat
   
   private var observerId : Int = -1
   
-  private var txPipe : MTPipe
+  private var txPipe : MTPipe?
   
   // MARK: Public Properties
   
@@ -148,7 +135,9 @@ public class MTSerialPort : NSObject, MTSerialPortManagerDelegate, MTPipeDelegat
       let nbyte = readSerialPort(fd, buffer, kInitialBufferSize)
       
       if nbyte == -1 {
+        #if DEBUG
         debugLog("RX quit!")
+        #endif
         quit  = true
       }
       else if nbyte > 0 {
@@ -166,6 +155,8 @@ public class MTSerialPort : NSObject, MTSerialPortManagerDelegate, MTPipeDelegat
       
     } while !quit;
     
+    txPipe?.close()
+    
     // try and restore previous options
     
     setSerialPortOptions(fd, _baudRate.baudRate, _numberOfDataBits, _numberOfStopBits, Int32(_parity.rawValue), _usesRTSCTSFlowControl ? 1 : 0)
@@ -176,6 +167,10 @@ public class MTSerialPort : NSObject, MTSerialPortManagerDelegate, MTPipeDelegat
     
     if state == .open {
       state = .closed
+    }
+    
+    DispatchQueue.main.async {
+      self.delegate?.serialPortDidClose?(self)
     }
     
   }
@@ -232,6 +227,10 @@ public class MTSerialPort : NSObject, MTSerialPortManagerDelegate, MTPipeDelegat
         
         state = .open
         
+        txPipe = MTPipe(name: MTSerialPort.pipeName(path: path))
+        
+        txPipe?.open(delegate: self)
+
         DispatchQueue.global(qos: .userInteractive /* .background */ /* .utility*/).async {
           self.monitorPort()
         }
@@ -258,7 +257,7 @@ public class MTSerialPort : NSObject, MTSerialPortManagerDelegate, MTPipeDelegat
       return
     }
     
-    open()
+//    open()
     
   }
   

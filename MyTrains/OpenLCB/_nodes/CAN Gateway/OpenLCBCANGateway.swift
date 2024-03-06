@@ -51,12 +51,6 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
     
   }
   
-  deinit {
-    if isOpen {
-      close()
-    }
-  }
-
   // MARK: internal Properties
   
   // Configuration varaible addresses
@@ -173,11 +167,11 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
   
   internal var internalConsumedEventRanges : [EventRange] = []
   
-  internal let aliasWaitInterval : TimeInterval = 0.2 /* should be 0.2 but adding some latency */
+  internal let aliasWaitInterval : TimeInterval = 0.2
   
   internal var isStopping : Bool = false
 
-  internal var waitTimer : Timer?
+  internal var waitOutputTimer : Timer?
   
   internal var waitInputTimer : Timer?
   
@@ -195,7 +189,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
     
     devicePath = ""
     
-    baudRate = .br9600
+    baudRate = .br125000
     
     flowControl = .noFlowControl
     
@@ -218,8 +212,8 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
       port.baudRate = baudRate
       port.numberOfDataBits = 8
       port.numberOfStopBits = 1
-      port.parity = parity
-      port.usesRTSCTSFlowControl = flowControl == .rtsCts
+      port.parity = .none
+      port.usesRTSCTSFlowControl = false
       port.delegate = self
       port.open()
       
@@ -244,27 +238,21 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
       
     }
     else {
-      networkLayer?.nodeInitializationComplete(node: self)
+      networkLayer?.nodeDidStart(node: self)
     }
 
   }
   
-  public override func gatewayStart() {
+  public override func start() {
     
-    close()
+    isStopping = false
     
-    buffer.removeAll()
-    
-    nodeIdLookup.removeAll()
-    
-    aliasLookup.removeAll()
-    
-    internalNodes.removeAll()
-
     setupConfigurationOptions()
 
     isConfigurationDescriptionInformationProtocolSupported = true
 
+    buffer.removeAll()
+    
     openSerialPort()
     
   }
@@ -281,32 +269,25 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
     
   }
 
-  internal func close() {
-    sendToSerialPortPipe?.close()
-    serialPort?.close()
-    serialPort = nil
-  }
-    
-  @objc func waitTimerTick() {
-    stopWaitTimer()
+  @objc func waitOutputTimerTick() {
     processOutputQueue()
   }
   
   internal func startWaitTimer(interval: TimeInterval) {
-    waitTimer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(waitTimerTick), userInfo: nil, repeats: false)
-    if let waitTimer {
-      RunLoop.current.add(waitTimer, forMode: .common)
+    waitOutputTimer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(waitOutputTimerTick), userInfo: nil, repeats: false)
+    if let waitOutputTimer {
+      RunLoop.current.add(waitOutputTimer, forMode: .common)
     }
     else {
       #if DEBUG
-      debugLog("failed to create waitTimer")
+      debugLog("failed to create waitOutputTimer")
       #endif
     }
   }
   
-  internal func stopWaitTimer() {
-    waitTimer?.invalidate()
-    waitTimer = nil
+  internal func stopWaitOutputTimer() {
+    waitOutputTimer?.invalidate()
+    waitOutputTimer = nil
   }
 
   @objc func waitInputTimerTick() {
@@ -337,22 +318,63 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
   // MARK: Public Methods
   
   public override func stop() {
+ 
+    isStopping = true
+
+    // There are no nodes left open to deliver a message to, so
+    // kill the input queue.
     
-    var nodeIds : [UInt64] = []
+    waitInputTimer?.invalidate()
+    waitInputTimer = nil
+    inputQueue = []
+    aliasTimer?.invalidate()
+    aliasTimer = nil
+    waitingForNodeId = []
+    splitFrames = [:]
+    datagrams = [:]
+
+    // Last chance to send anything in the output queue.
     
-    for (nodeId, _) in nodeIdLookup {
-      nodeIds.append(nodeId)
+    waitOutputTimerTick()
+    outputQueue = []
+    waitingForAlias = []
+
+    // Send alias map reset for all managed aliases.
+    
+    var frames : [LCCCANFrame] = []
+    
+    for (_, item) in managedAliases {
+      frames.append(contentsOf: createAliasMapResetFrame(nodeId: item.nodeId, alias: item.alias))
     }
     
-    while !nodeIds.isEmpty {
-      let nodeId = nodeIds.removeFirst()
-      removeNodeIdAliasMapping(nodeId: nodeId)
+    send(frames: frames, isBackgroundThread: false)
+    
+    // Reset everything else to start-up state.
+    
+    managedAliases = [:]
+    managedNodeIdLookup = [:]
+    managedAliasLookup = [:]
+    stoppedNodesLookup = [:]
+    aliasLookup = [:]
+    nodeIdLookup = [:]
+    internalNodes = []
+    externalConsumedEvents = []
+    externalConsumedEventRanges = []
+    internalConsumedEvents = []
+    internalConsumedEventRanges = []
+    
+    // Close the port.
+    
+    sendToSerialPortPipe?.close()
+    sendToSerialPortPipe = nil
+    
+    if let serialPort {
+      serialPort.close()
     }
-    
-    close()
-    
-    super.stop()
-    
+    else {
+      super.stop()
+    }
+
   }
   
   // MARK: OpenLCBNetworkLayerDelegate Methods
@@ -471,6 +493,18 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
   public func serialPort(_ serialPort: MTSerialPort, didReceive data: [UInt8]) {
     buffer.append(contentsOf: data)
     parseInput()
+  }
+  
+  //This is running in the main thread
+  public func serialPortDidClose(_ serialPort: MTSerialPort) {
+    if isStopping {
+      super.stop()
+    }
+    else {
+      #if DEBUG
+      debugLog("serial port closed unexpectedly ")
+      #endif
+    }
   }
   
   // MARK: MTSerialPortManagerDelegate Methods

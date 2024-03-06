@@ -96,12 +96,16 @@ public class DMF : NSObject {
           case "Erase Dly":
             eraseDelay = value
           default:
-            print("unknown key: \(key)")
+            #if DEBUG
+            debugLog("unknown key: \(key)")
+            #endif
           }
           
         }
         else {
-          print("invalid value: \(valuePart)")
+          #if DEBUG
+          debugLog("invalid value: \(valuePart)")
+          #endif
           return nil
         }
         
@@ -145,7 +149,9 @@ public class DMF : NSObject {
                 }
                 else if index < 11 {
                   if value != 0 {
-                    print("invalid record type: \(value)")
+                    #if DEBUG
+                    debugLog("invalid record type: \(value)")
+                    #endif
                     return nil
                   }
                 }
@@ -154,7 +160,9 @@ public class DMF : NSObject {
                   dataByteCount += 1
                 }
                 else if (checksumCheck & 0xff) != 0 {
-                  print("checksum error:")
+                  #if DEBUG
+                  debugLog("checksum error:")
+                  #endif
                   return nil
                 }
                 
@@ -184,7 +192,9 @@ public class DMF : NSObject {
     }
     
     guard bootloaderVersion >= 0 && bootloaderVersion <= 2 else {
-      print("bootloader version not supported: \(bootloaderVersion)")
+      #if DEBUG
+      debugLog("bootloader version not supported: \(bootloaderVersion)")
+      #endif
       return nil
     }
     
@@ -309,7 +319,9 @@ public class DMF : NSObject {
         let k4 = UInt8(my_rand() & 0xff)
         let k3 = UInt8(my_rand() & 0xff)
         if numbers.contains(k1) && numbers.contains(k2) && numbers.contains(k3) && numbers.contains(k4) {
-          print("found with seed: \(seed) \(k1) \(k2) \(k3) \(k4)")
+          #if DEBUG
+          debugLog("found with seed: \(seed) \(k1) \(k2) \(k3) \(k4)")
+          #endif
         }
       }
     }

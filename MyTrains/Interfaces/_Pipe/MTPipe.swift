@@ -119,7 +119,6 @@ public class MTPipe : NSObject {
     }
   }
   
-  
   public func sendOpenLCBMessage(message:OpenLCBMessage) {
     guard isOpen else {
       debugLog("pipe not open")

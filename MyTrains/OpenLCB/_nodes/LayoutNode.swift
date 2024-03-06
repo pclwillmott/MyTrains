@@ -267,13 +267,6 @@ public class LayoutNode : OpenLCBNodeVirtual {
     
   }
   
-  internal override func completeStartUp() {
-    guard let appNodeId else {
-      return
-    }
-    sendWellKnownEvent(eventId: layoutState == .activated ? .myTrainsLayoutActivated : .myTrainsLayoutDeactivated, payload: appNodeId.nodeIdBigEndianData)
-  }
-  
   internal override func customizeDynamicCDI(cdi:String) -> String {
     var result = cdi
     result = Scale.insertMap(cdi: result)

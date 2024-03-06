@@ -249,7 +249,7 @@ class CDIDataView: CDIView {
           return formatter.string(from: float64 as NSNumber)!
         default:
           #if DEBUG
-          print("CDIDataView.setString: bad float size: \(elementSize)")
+          debugLog("CDIDataView.setString: bad float size: \(elementSize)")
           #endif
         }
         
@@ -273,7 +273,7 @@ class CDIDataView: CDIView {
           return "\(intValue)"
         default:
           #if DEBUG
-          print("CDIDataView.setString: bad int size: \(elementSize)")
+          debugLog("CDIDataView.setString: bad int size: \(elementSize)")
           #endif
         }
         
@@ -285,7 +285,7 @@ class CDIDataView: CDIView {
 
     default:
       #if DEBUG
-      print("CDIDataView.setString: unexpected element type: \(elementType)")
+      debugLog("CDIDataView.setString: unexpected element type: \(elementType)")
       #endif
     }
 
@@ -322,7 +322,7 @@ class CDIDataView: CDIView {
         }
       default:
         #if DEBUG
-        print("CDIDataView.getData: unexpected integer size: \(elementSize)")
+        debugLog("CDIDataView.getData: unexpected integer size: \(elementSize)")
         #endif
       }
       
@@ -344,7 +344,7 @@ class CDIDataView: CDIView {
         }
       default:
         #if DEBUG
-        print("CDIDataView.getData: unexpected float size: \(elementSize)")
+        debugLog("CDIDataView.getData: unexpected float size: \(elementSize)")
         #endif
       }
       
@@ -360,7 +360,7 @@ class CDIDataView: CDIView {
       
     default:
       #if DEBUG
-      print("CDIDataView.getData: unexpected element type: \(elementType)")
+      debugLog("CDIDataView.getData: unexpected element type: \(elementType)")
       #endif
     }
 

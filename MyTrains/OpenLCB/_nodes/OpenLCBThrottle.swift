@@ -620,10 +620,6 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
                 
                 fdiState = .done
 
-          //      var pdata = fdi
-          //      pdata.append(0)
-          //      print(String(cString: pdata))
-                
                 let newData : Data = Data(fdi)
                 xmlParser = XMLParser(data: newData)
                 xmlParser?.delegate = self
@@ -639,9 +635,6 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
             fdiState = .done
 
             if !fdi.isEmpty {
-              //      var pdata = fdi
-              //      pdata.append(0)
-              //      print(String(cString: pdata))
               let newData : Data = Data(fdi)
               xmlParser = XMLParser(data: newData)
               xmlParser?.delegate = self
@@ -662,39 +655,43 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
   
   // MARK: XMLParserDelegate Methods
   
-  public func parserDidStartDocument(_ parser: XMLParser) {
-//    print("parserDidStartDocument")
-  }
-
   public func parserDidEndDocument(_ parser: XMLParser) {
 //    print("parserDidEndDocument")
 //    print(fdiItems)
     delegate?.fdiAvailable?(throttle: self)
   }
 
+  #if DEBUG
+  
+  public func parserDidStartDocument(_ parser: XMLParser) {
+    debugLog("parserDidStartDocument")
+  }
+
   public func parser(_ parser: XMLParser, foundNotationDeclarationWithName name: String, publicID: String?, systemID: String?) {
-    print("parseFoundNotationDeclarationWithName: \(name)")
+    debugLog("parseFoundNotationDeclarationWithName: \(name)")
   }
 
   public func parser(_ parser: XMLParser, foundUnparsedEntityDeclarationWithName name: String, publicID: String?, systemID: String?, notationName: String?) {
-    print("parseFoundUnparsedEntityDeclarationWithName: \(name)")
+    debugLog("parseFoundUnparsedEntityDeclarationWithName: \(name)")
   }
 
   public func parser(_ parser: XMLParser, foundAttributeDeclarationWithName attributeName: String, forElement elementName: String, type: String?, defaultValue: String?) {
-    print("parseFoundAttributeDeclarationWithName: \(attributeName)")
+    debugLog("parseFoundAttributeDeclarationWithName: \(attributeName)")
   }
 
   public func parser(_ parser: XMLParser, foundElementDeclarationWithName elementName: String, model: String) {
-    print("parseFoundElementDeclarationWithName: \(elementName)")
+    debugLog("parseFoundElementDeclarationWithName: \(elementName)")
   }
 
   public func parser(_ parser: XMLParser, foundInternalEntityDeclarationWithName name: String, value: String?) {
-    print("parseFoundInternalEntityDeclarationWithName: \(name)")
+    debugLog("parseFoundInternalEntityDeclarationWithName: \(name)")
   }
 
   public func parser(_ parser: XMLParser, foundExternalEntityDeclarationWithName name: String, publicID: String?, systemID: String?) {
-    print("parseFoundExternalEntityDeclarationWithName: \(name)")
+    debugLog("parseFoundExternalEntityDeclarationWithName: \(name)")
   }
+  
+  #endif
   
   private var inFunction = false
   private var inName = false
@@ -720,14 +717,14 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
     case "number":
       inNumber = inFunction
     default:
-      print("parse FDI: unknown elemnt - \(elementName)")
+      #if DEBUG
+      debugLog("parse FDI: unknown elemnt - \(elementName)")
+      #endif
     }
 
   }
 
   public func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
-    
-//    print("parseDidEndElement: \(elementName)")
     
     switch elementName {
     case "function":
@@ -744,20 +741,23 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
     case "number":
       inNumber = false
     default:
-      print("parse FDI: unknown elemnt - \(elementName)")
+      #if DEBUG
+      debugLog("parse FDI: unknown elemnt - \(elementName)")
+      #endif
     }
   }
   
+  #if DEBUG
   public func parser(_ parser: XMLParser, didStartMappingPrefix prefix: String, toURI namespaceURI: String) {
-    print("parseDidStartMappingPrefix: \(prefix)")
+    debugLog("parseDidStartMappingPrefix: \(prefix)")
   }
 
   public func parser(_ parser: XMLParser, didEndMappingPrefix prefix: String) {
-    print("parseDidEndMappingPrefix: \(prefix)")
+    debugLog("parseDidEndMappingPrefix: \(prefix)")
   }
+  #endif
 
   public func parser(_ parser: XMLParser, foundCharacters string: String) {
-//    print("parseFoundCharacters: \(string)")
     if inName {
       fdiItem.name = string
     }
@@ -766,32 +766,36 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
     }
   }
 
+  #if DEBUG
+  
   public func parser(_ parser: XMLParser, foundIgnorableWhitespace whitespaceString: String) {
-    print("foundIgnorableWhiteSpace: \(whitespaceString)")
+    debugLog("foundIgnorableWhiteSpace: \(whitespaceString)")
   }
 
   public func parser(_ parser: XMLParser, foundProcessingInstructionWithTarget target: String, data: String?) {
-//    print("parseFoundProcessingInstructionWithTarget: \(target)")
+    debugLog("parseFoundProcessingInstructionWithTarget: \(target)")
   }
 
   public func parser(_ parser: XMLParser, foundComment comment: String) {
-    print("parseFoundComment: \(comment)")
+    debugLog("parseFoundComment: \(comment)")
   }
 
   public func parser(_ parser: XMLParser, foundCDATA CDATABlock: Data) {
-    print("parseFoundCDATA")
+    debugLog("parseFoundCDATA")
   }
-
-  public func parser(_ parser: XMLParser, resolveExternalEntityName name: String, systemID: String?) -> Data? {
-    return nil
-  }
-
+  
   public func parser(_ parser: XMLParser, parseErrorOccurred parseError: Error) {
-    print("parseErrorOccurred: \(parseError)")
+    debugLog("parseErrorOccurred: \(parseError)")
   }
 
   public func parser(_ parser: XMLParser, validationErrorOccurred validationError: Error) {
-    print("validationErrorOccurred: \(validationError)")
+    debugLog("validationErrorOccurred: \(validationError)")
+  }
+
+  #endif
+  
+  public func parser(_ parser: XMLParser, resolveExternalEntityName name: String, systemID: String?) -> Data? {
+    return nil
   }
 
 }

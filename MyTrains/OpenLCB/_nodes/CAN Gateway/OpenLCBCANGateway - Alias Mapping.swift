@@ -144,7 +144,7 @@ extension OpenLCBCANGateway {
     
     for index in 0...15 {
       
-      print("\(index):  \(((UInt64(lfsr1) << 24) | UInt64(lfsr2)).toHexDotFormat(numberOfBytes: 6))  ",terminator: "")
+      debugLog("\(index):  \(((UInt64(lfsr1) << 24) | UInt64(lfsr2)).toHexDotFormat(numberOfBytes: 6)) ,terminator: ")
       
       let result = UInt16((lfsr1 ^ lfsr2 ^ (lfsr1 >> 12) ^ (lfsr2 >> 12) ) & 0xFFF)
       
@@ -166,7 +166,7 @@ extension OpenLCBCANGateway {
       
       //      let result = UInt16((lfsr1 ^ lfsr2 ^ (lfsr1 >> 12) ^ (lfsr2 >> 12) ) & 0xFFF)
       
-      print(" 0x\(result.toHex(numberOfDigits: 3))   \(((UInt64(lfsr1) << 24) | UInt64(lfsr2)).toHexDotFormat(numberOfBytes: 6))")
+      debugLog(" 0x\(result.toHex(numberOfDigits: 3))   \(((UInt64(lfsr1) << 24) | UInt64(lfsr2)).toHexDotFormat(numberOfBytes: 6))")
       
     }
     
@@ -329,7 +329,7 @@ extension OpenLCBCANGateway {
     send(frames: frames, isBackgroundThread: false)
     
     if startGateway {
-      start()
+      startComplete()
     }
     
     if numberOfAliasesBeingTested == 0 && waitingForAlias.count == 0 {
