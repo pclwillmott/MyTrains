@@ -8,7 +8,7 @@
 import Foundation
 import AppKit
 
-public class OpenLCBNetworkLayer : NSObject {
+public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
   
   // MARK: Constructors & Destructors
   
@@ -49,6 +49,8 @@ public class OpenLCBNetworkLayer : NSObject {
   private var monitorBufferLock = NSLock()
   
   private var monitorTimer : Timer?
+  
+  private var serialPortManagerObserverId : Int = -1
   
   // MARK: Public Properties
 
@@ -192,11 +194,13 @@ public class OpenLCBNetworkLayer : NSObject {
 //    locoNetMonitorManager.removeAll()
 //    programmerToolManager.removeAll()
 //    configurationToolManager.removeAll()
-//    virtualNodeLookup.removeAll()
+    virtualNodeLookup.removeAll()
 //    nodesSimpleSetSufficient.removeAll()
 //    nodesInhibited.removeAll()
 //    gatewayNodes.removeAll()
 //    startupGroup.removeAll()
+    
+    serialPortManagerObserverId = MTSerialPortManager.addObserver(observer: self)
     
     initializationLevel = 0
     
@@ -214,8 +218,6 @@ public class OpenLCBNetworkLayer : NSObject {
       }
       
       for node in OpenLCBMemorySpace.getVirtualNodes() {
-        virtualNodeLookup[node.nodeId] = node
-        node.networkLayer = self
         if let group = startupGroup[node.virtualNodeType.startupGroup] {
           group.add(node)
         }
@@ -249,6 +251,8 @@ public class OpenLCBNetworkLayer : NSObject {
       
       if let group = startupGroup[initializationLevel], !group.uninitializedIsEmpty {
         for node in group.uninitializedNodes {
+          virtualNodeLookup[node.nodeId] = node
+          node.networkLayer = self
           node.start()
         }
         return
@@ -293,11 +297,22 @@ public class OpenLCBNetworkLayer : NSObject {
     
     if initializationLevel == 0 {
       state = .stopped
+      MTSerialPortManager.removeObserver(observerId: serialPortManagerObserverId)
+      serialPortManagerObserverId = -1
     }
     
   }
-  
+
   public func nodeDidStart(node:OpenLCBNodeVirtual) {
+    if node.virtualNodeType.startupGroup < initializationLevel {
+      appDelegate.rebootRequest()
+    }
+    else {
+      startNodes()
+    }
+  }
+
+  public func nodeDidInitialize(node:OpenLCBNodeVirtual) {
 
     startupGroup[node.virtualNodeType.startupGroup]?.initialize(node)
     
@@ -335,8 +350,6 @@ public class OpenLCBNetworkLayer : NSObject {
       
     }
     
-    startNodes()
-    
   }
   
   public func nodeDidStop(node:OpenLCBNodeVirtual) {
@@ -345,6 +358,8 @@ public class OpenLCBNetworkLayer : NSObject {
       nodeManager.removeNode(node: node)
     }
     
+    virtualNodeLookup.removeValue(forKey: node.nodeId)
+    node.networkLayer = nil
     gatewayNodes.removeValue(forKey: node.nodeId)
     nodesSimpleSetSufficient.removeValue(forKey: node.nodeId)
     nodesFullProtocolRequired.removeValue(forKey: node.nodeId)
@@ -353,6 +368,23 @@ public class OpenLCBNetworkLayer : NSObject {
     startupGroup[node.virtualNodeType.startupGroup]?.uninitialize(node)
     
     stopNodes()
+    
+  }
+
+  public func nodeDidDetach(node:OpenLCBNodeVirtual) {
+
+    for nodeManager in nodeManagers {
+      nodeManager.removeNode(node: node)
+    }
+    
+    gatewayNodes.removeValue(forKey: node.nodeId)
+    nodesSimpleSetSufficient.removeValue(forKey: node.nodeId)
+    nodesFullProtocolRequired.removeValue(forKey: node.nodeId)
+    nodesInhibited[node.nodeId] = node
+
+    if node.virtualNodeType == .canGatewayNode {
+      appDelegate.rebootRequest()
+    }
     
   }
 
@@ -582,15 +614,11 @@ public class OpenLCBNetworkLayer : NSObject {
     if let destinationNodeId = message.destinationNodeId {
 
       if let virtualNode = virtualNodeLookup[destinationNodeId] {
-        if !message.routing.contains(virtualNode.nodeId) {
-          virtualNode.openLCBMessageReceived(message: message)
-        }
+        virtualNode.openLCBMessageReceived(message: message)
       }
       else if message.visibility.rawValue > OpenLCBNodeVisibility.visibilityPrivate.rawValue {
-        for (_, virtualNode) in gatewayNodes {
-          if !message.routing.contains(virtualNode.nodeId) {
-            virtualNode.openLCBMessageReceived(message: message)
-          }
+        for (nodeId, virtualNode) in gatewayNodes {
+          virtualNode.openLCBMessageReceived(message: message)
         }
       }
       
@@ -608,10 +636,8 @@ public class OpenLCBNetworkLayer : NSObject {
           virtualNode.openLCBMessageReceived(message: message)
         }
       }
-      for (_, virtualNode) in gatewayNodes {
-        if !message.routing.contains(virtualNode.nodeId) {
-          virtualNode.openLCBMessageReceived(message: message)
-        }
+      for (nodeId, virtualNode) in gatewayNodes {
+        virtualNode.openLCBMessageReceived(message: message)
       }
       for (_, virtualNode) in nodesInhibited {
         if !message.routing.contains(virtualNode.nodeId) {
@@ -684,7 +710,7 @@ public class OpenLCBNetworkLayer : NSObject {
   @objc func monitorTimerTick() {
     
     monitorBufferLock.lock()
-    monitorBuffer.removeFirst(max(0, monitorBuffer.count - 10000))
+    monitorBuffer.removeFirst(max(0, monitorBuffer.count - 100000))
     monitorBufferLock.unlock()
     
     if !isMonitorPaused && !observers.isEmpty {
@@ -703,6 +729,21 @@ public class OpenLCBNetworkLayer : NSObject {
     monitorTimer = nil
     
   }
+
+  // MARK: MTSerialPortManagerDelegate Methods
+  
+  @objc public func serialPortWasAdded(path:String) {
+    
+    for (_, node) in nodesInhibited {
+      if let gateway = node as? OpenLCBCANGateway, path == gateway.devicePath {
+        gateway.start()
+        break
+      }
+    }
+    
+  }
+
+
 
 }
 

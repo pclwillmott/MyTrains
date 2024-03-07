@@ -39,7 +39,7 @@ public class MonitorItem : NSObject {
         return _info!
      }
       if let message {
-        _info = message.info
+        _info = "\(message.info)"
         return _info!
       }
     }

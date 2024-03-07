@@ -172,7 +172,8 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
     
     if isSafeToTerminate {
       state = .rebooting
-      closeAllWindows()
+ //     closeAllWindows()
+      windowsDidClose()
     }
     
   }

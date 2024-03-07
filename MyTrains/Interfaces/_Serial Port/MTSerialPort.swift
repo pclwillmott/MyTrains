@@ -11,6 +11,7 @@ import Cocoa
 @objc public protocol MTSerialPortDelegate {
   @objc optional func serialPort(_ serialPort: MTSerialPort, didReceive data: [UInt8])
   @objc optional func serialPortDidClose(_ serialPort: MTSerialPort)
+  @objc optional func serialPortDidDetach(_ serialPort: MTSerialPort)
 }
    
 public enum SerialPortState {
@@ -21,7 +22,7 @@ public enum SerialPortState {
   
 }
 
-public class MTSerialPort : NSObject, MTSerialPortManagerDelegate, MTPipeDelegate {
+public class MTSerialPort : NSObject, MTPipeDelegate {
   
   // MARK: Constructors
   
@@ -67,8 +68,6 @@ public class MTSerialPort : NSObject, MTSerialPortManagerDelegate, MTPipeDelegat
     
     super.init()
     
-    observerId = MTSerialPortManager.addObserver(observer: self)
-    
   }
   
   // MARK: Private Properties
@@ -88,8 +87,6 @@ public class MTSerialPort : NSObject, MTSerialPortManagerDelegate, MTPipeDelegat
   private var _usesRTSCTSFlowControl : Bool
   
   private var _path : String
-  
-  private var observerId : Int = -1
   
   private var txPipe : MTPipe?
   
@@ -130,14 +127,14 @@ public class MTSerialPort : NSObject, MTSerialPortManagerDelegate, MTPipeDelegat
       buffer.deinitialize(count: kInitialBufferSize)
     }
     
+    var didDetach = false
+    
     repeat {
       
       let nbyte = readSerialPort(fd, buffer, kInitialBufferSize)
       
       if nbyte == -1 {
-        #if DEBUG
-        debugLog("RX quit!")
-        #endif
+        didDetach = true
         quit  = true
       }
       else if nbyte > 0 {
@@ -165,14 +162,12 @@ public class MTSerialPort : NSObject, MTSerialPortManagerDelegate, MTPipeDelegat
     
     fd = -1
     
-    if state == .open {
-      state = .closed
-    }
-    
+    state = didDetach ? .removed : .closed
+
     DispatchQueue.main.async {
-      self.delegate?.serialPortDidClose?(self)
+      didDetach ? self.delegate?.serialPortDidDetach?(self) : self.delegate?.serialPortDidClose?(self)
     }
-    
+
   }
   
   private func write(data:[UInt8]) {
@@ -200,7 +195,6 @@ public class MTSerialPort : NSObject, MTSerialPortManagerDelegate, MTPipeDelegat
         let count = writeSerialPort(self.fd, buffer, size)
         
         if count < 0 {
-          debugLog("TX Quit!")
           break
         }
         
@@ -249,18 +243,6 @@ public class MTSerialPort : NSObject, MTSerialPortManagerDelegate, MTPipeDelegat
     quit = true
   }
     
-  // MARK: MTSerialPortManagerDelegate Methods
-  
-  @objc public func serialPortWasAdded(path:String) {
-    
-    guard path == self.path && state == .removed else {
-      return
-    }
-    
-//    open()
-    
-  }
-  
   // MARK: MTPipeDelegate Methods
   
   // This is run in the pipe's background thread and is atomic

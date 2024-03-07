@@ -660,6 +660,10 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   
   public func startComplete() {
     
+    guard let networkLayer else {
+      return
+    }
+    
     state = .permitted
 
     if cdiFilename != nil {
@@ -668,7 +672,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
 
     resetReboot()
     
-    networkLayer?.nodeDidStart(node: self)
+    networkLayer.nodeDidInitialize(node: self)
 
     sendInitializationComplete()
     
@@ -698,6 +702,10 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     for eventRange in eventRangesProduced {
       sendProducerRangeIdentified(eventId: eventRange.eventId)
     }
+    
+    // TODO: Add events sent on initialization here!
+    
+    networkLayer.nodeDidStart(node: self)
 
   }
   

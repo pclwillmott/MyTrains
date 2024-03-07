@@ -328,15 +328,15 @@ extension OpenLCBCANGateway {
     
     send(frames: frames, isBackgroundThread: false)
     
-    if startGateway {
-      startComplete()
-    }
-    
     if numberOfAliasesBeingTested == 0 && waitingForAlias.count == 0 {
       stopAliasTimer()
     }
     else if aliasTimer == nil {
       startAliasTimer()
+    }
+    
+    if startGateway {
+      startComplete()
     }
     
   }

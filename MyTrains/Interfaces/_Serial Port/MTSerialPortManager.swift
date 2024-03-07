@@ -121,5 +121,5 @@ class MTSerialPortManager : NSObject {
     return cdi.replacingOccurrences(of: CDI.PORTS, with: map)
 
   }
-
+  
 }

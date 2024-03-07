@@ -238,6 +238,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
       
     }
     else {
+      networkLayer?.nodeDidInitialize(node: self)
       networkLayer?.nodeDidStart(node: self)
     }
 
@@ -382,19 +383,17 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
   // This is running in the main thread
   public override func openLCBMessageReceived(message: OpenLCBMessage) {
  
-    // A message might be for the gateway node itself
-    if !message.messageTypeIndicator.isAddressPresent || (message.destinationNodeId != nil && message.destinationNodeId! == nodeId) {
+    if message.sourceNodeId! != nodeId && (message.destinationNodeId == nil || message.destinationNodeId! == nodeId) {
       super.openLCBMessageReceived(message: message)
     }
     
-    if state != .permitted {
+    if (state != .permitted) ||
+       (message.routing.contains(nodeId) && message.sourceNodeId! != nodeId) ||
+       (message.visibility.rawValue < OpenLCBNodeVisibility.visibilitySemiPublic.rawValue) {
       return
     }
 
-    if message.visibility.rawValue < OpenLCBNodeVisibility.visibilitySemiPublic.rawValue {
-      return
-    }
-    else if let appNode, message.visibility == .visibilitySemiPublic {
+    if let appNode, message.visibility == .visibilitySemiPublic {
       
       let validMessageTypes : Set<OpenLCBMTI> = [
         .producerConsumerEventReport,
@@ -416,7 +415,6 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
       
     }
     
-
     // A message at this point could have come internally or externally from another gateway
     if let sourceNodeId = message.sourceNodeId, !waitingForAlias.contains(sourceNodeId) && !nodeIdLookup.keys.contains(sourceNodeId) {
       waitingForAlias.insert(sourceNodeId)
@@ -505,6 +503,54 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
       debugLog("serial port closed unexpectedly ")
       #endif
     }
+  }
+  
+  public func serialPortDidDetach(_ serialPort: MTSerialPort) {
+
+    state = .inhibited
+    
+    isStopping = true
+
+    // There is no serial port connection so reset everything to
+    // start-up state.
+    
+    waitInputTimer?.invalidate()
+    waitInputTimer = nil
+    waitOutputTimer?.invalidate()
+    waitOutputTimer = nil
+    aliasTimer?.invalidate()
+    aliasTimer = nil
+    inputQueueLock.lock()
+    inputQueue = []
+    inputQueueLock.unlock()
+    waitingForNodeId = []
+    splitFrames = [:]
+    datagrams = [:]
+    outputQueueLock.lock()
+    outputQueue = []
+    outputQueueLock.unlock()
+    waitingForAlias = []
+    managedAliases = [:]
+    managedNodeIdLookup = [:]
+    managedAliasLookup = [:]
+    stoppedNodesLookup = [:]
+    aliasLookup = [:]
+    nodeIdLookup = [:]
+    internalNodes = []
+    externalConsumedEvents = []
+    externalConsumedEventRanges = []
+    internalConsumedEvents = []
+    internalConsumedEventRanges = []
+    
+    // Close the port.
+    
+    sendToSerialPortPipe?.close()
+    sendToSerialPortPipe = nil
+    
+    self.serialPort = nil
+    
+    networkLayer?.nodeDidDetach(node: self)
+    
   }
   
   // MARK: MTSerialPortManagerDelegate Methods

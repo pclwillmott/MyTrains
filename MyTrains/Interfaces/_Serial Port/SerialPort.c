@@ -43,7 +43,7 @@ int openSerialPort(const char *path)
 
 
   if ((fd = open(path, O_RDWR | O_NOCTTY | O_NONBLOCK)) == -1) {
-      printf("Error opening serial port %s - %s(%d).\n", path, strerror(errno), errno);
+//      printf("Error opening serial port %s - %s(%d).\n", path, strerror(errno), errno);
       goto error;
   }
 
@@ -294,22 +294,33 @@ ssize_t readSerialPort(int fd, unsigned char *buffer, ssize_t nbyte) {
     
     if (nb == -1) {
       
+#ifdef DEBUG
+      /*
       switch (errno) {
         case EAGAIN:
           printf("RX - EAGAIN\n");
           break;
         case EBADF:
           printf("RX - EBADF\n");
+          break;
         case EINTR:
           printf("RX - EINTR\n");
+          break;
         case EIO:
           printf("RX - EIO\n");
+          break;
         case EINVAL:
           printf("RX - EINVAL\n");
+          break;
+        case ENXIO:
+          printf("RX - ENXIO\n");
+          break;
         default:
           printf("RX - errno: %i\n", errno);
           break;
       }
+      */
+#endif
       
     }
     
@@ -328,27 +339,36 @@ ssize_t writeSerialPort(int fd, unsigned char *buffer, ssize_t nbyte) {
   if (nb == -1) {
     
     switch (errno) {
+        
       case EAGAIN:
- //       printf("EAGAIN\n");
         nb = 0;
         break;
+/*
       case EBADF:
         printf("TX - EBADF\n");
+        break;
       case EFBIG:
         printf("TX - EFBIG\n");
+        break;
       case EINTR:
         printf("TX - EINTR\n");
+        break;
       case EIO:
         printf("TX - EIO\n");
+        break;
       case ENOSPC:
         printf("TX - ENOSPC\n");
+        break;
       case EPIPE:
         printf("TX - EPIPE\n");
+        break;
       case EINVAL:
         printf("TX - EINVAL\n");
+        break;
       default:
         printf("TX - errno: %i\n", errno);
         break;
+ */
     }
     
   }

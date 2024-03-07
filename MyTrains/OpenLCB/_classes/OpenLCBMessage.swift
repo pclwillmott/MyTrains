@@ -713,9 +713,12 @@ public class OpenLCBMessage : NSObject {
 
     case .identifyEventsAddressed:
       
-      let nodeId = UInt64(bigEndianData: payload)
-      
-      text += "\(nodeId!.toHexDotFormat(numberOfBytes: 6)) "
+      if let nodeId = UInt64(bigEndianData: payload) {
+        text += "\(nodeId.toHexDotFormat(numberOfBytes: 6)) "
+      }
+      else {
+        text += payloadAsHex + " "
+      }
       
     default:
       break
