@@ -385,6 +385,9 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
  
     if message.sourceNodeId! != nodeId && (message.destinationNodeId == nil || message.destinationNodeId! == nodeId) {
       super.openLCBMessageReceived(message: message)
+      if let id = message.destinationNodeId, id == nodeId {
+        return
+      }
     }
     
     if (state != .permitted) ||

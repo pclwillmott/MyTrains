@@ -29,7 +29,11 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
 
   private var checkPortsTimer : Timer?
   
-  private var state : OpenLCBNetworkLayerState = .uninitialized
+  private var state : OpenLCBNetworkLayerState = .uninitialized {
+    didSet {
+      updateMenuItems(state: state)
+    }
+  }
   
   // MARK: Public Properties
   
@@ -58,6 +62,29 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
   }
   #endif
 
+  public func startApp() {
+
+    // KEEP ALIVE - This is to stop the app and the timers going to sleep when
+    // app is not in view.
+    
+    activity = ProcessInfo.processInfo.beginActivity(options: .userInitiatedAllowingIdleSystemSleep, reason: "Good Reason")
+
+    checkPortsTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(checkPortsTimerAction), userInfo: nil, repeats: true)
+    if let checkPortsTimer {
+      RunLoop.current.add(checkPortsTimer, forMode: .common)
+    }
+    else {
+      #if DEBUG
+      debugLog("failed to create checkPortsTimer")
+      #endif
+    }
+
+    state = .uninitialized
+    
+    networkLayer.start()
+
+  }
+  
   public func applicationDidFinishLaunching(_ aNotification: Notification) {
     
     #if DEBUG
@@ -90,37 +117,20 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
       
     }
 
-    // Do the legal stuff, if they don't accept the agreement stop the app.
-    
-    if !eulaAccepted! {
-      MyTrainsWindow.license.runModel()
-    }
-
-    // KEEP ALIVE - This is to stop the app and the timers going to sleep when
-    // app is not in view.
-    
-    activity = ProcessInfo.processInfo.beginActivity(options: .userInitiatedAllowingIdleSystemSleep, reason: "Good Reason")
-
     if let mainMenu = NSApplication.shared.mainMenu {
       gatherMenuItems(menu: mainMenu)
     }
     
-    checkPortsTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(checkPortsTimerAction), userInfo: nil, repeats: true)
-    if let checkPortsTimer {
-      RunLoop.current.add(checkPortsTimer, forMode: .common)
-    }
-    else {
-      #if DEBUG
-      debugLog("failed to create checkPortsTimer")
-      #endif
-    }
-
     if databasePath == nil {
       databasePath = documentsPath + "/MyTrains/database"
     }
     
-    networkLayer.start()
-
+    state = .uninitialized
+ 
+    if Database.numberOfRows(tableName: TABLE.MEMORY_SPACE) != 0 {
+      startApp()
+    }
+    
   }
   
   /*
@@ -172,8 +182,7 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
     
     if isSafeToTerminate {
       state = .rebooting
- //     closeAllWindows()
-      windowsDidClose()
+      closeAllWindows()
     }
     
   }
@@ -220,24 +229,27 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
       return
     }
     
-    do{
-      try FileManager().removeItem(atPath: Database.databaseFullPath)
-      try FileManager().removeItem(atPath: databasePath!)
-      databasePath = nil
-    }
-    catch{
-      #if DEBUG
-      debugLog("delete database failed")
-      #endif
-    }
+    checkPortsTimer?.invalidate()
 
+    Database.deleteAllRows()
+    
+    appLayoutId = nil
+    eulaAccepted = nil
+    lastCSVPath = nil
+    lastDMFPath = nil
+    appMode = nil
+    
+    networkLayer = OpenLCBNetworkLayer()
+
+    state = .uninitialized
+    
   }
 
   func newNodeCompletion(node:OpenLCBNodeVirtual) {
     
     let networkLayer = appDelegate.networkLayer
     
-    node.hostAppNodeId = node.virtualNodeType == .applicationNode ? node.nodeId : appNodeId!
+    node.hostAppNodeId = node.virtualNodeType == .applicationNode ? node.nodeId : appNode!.nodeId
     
     switch node.virtualNodeType {
     case .layoutNode:
@@ -273,6 +285,11 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
     if activeViewControllers.isEmpty {
       windowsDidClose()
     }
+  }
+  
+  public func createAppNodeComplete() {
+    state = .uninitialized
+    startApp()
   }
   
   public func rebootRequest() {
@@ -319,7 +336,7 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
         self.state = .uninitialized
         networkLayer.start()
       case .resetToFactoryDefaults:
-        self.state = .stopped
+        completeResetToFactoryDefaults()
       default:
         break
       }
@@ -443,7 +460,15 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
         MyTrainsWindow.about.showWindow()
         
       case .createApplicationNode:
+        
+        // Do the legal stuff, if they don't accept the agreement stop the app.
+        
+        if !eulaAccepted! {
+          MyTrainsWindow.license.runModel()
+        }
+
         let vc = MyTrainsWindow.selectMasterNode.viewController as! SelectMasterNodeVC
+        vc.networkLayer = networkLayer
         vc.showWindow()
 
       case .resetToFactoryDefaults:

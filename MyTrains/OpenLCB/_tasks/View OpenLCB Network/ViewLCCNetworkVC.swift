@@ -28,7 +28,7 @@ class ViewLCCNetworkVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate
     
     super.viewWillAppear()
     
-    configurationTool?.delegate = self
+    configurationTool!.delegate = self
     
     tableView.dataSource = tableViewDS
     tableView.delegate = tableViewDS

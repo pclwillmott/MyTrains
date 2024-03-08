@@ -215,22 +215,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "2DACF327-7A81-4180-BFAB-53682CEABD69"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MyTrains/OpenLCB/_enumerations/MyTrainsVirtualNodeType.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "107"
-            endingLineNumber = "107"
-            landmarkName = "_startupGroup"
-            landmarkType = "24">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "ADA97C1E-D842-4D53-B0B0-16E2D6E21BD4"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -254,9 +238,9 @@
             filePath = "MyTrains/_app/AppDelegate.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "173"
-            endingLineNumber = "173"
-            landmarkName = "initiateRebootApplication()"
+            startingLineNumber = "183"
+            endingLineNumber = "183"
+            landmarkName = "updateMenuItems(state:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

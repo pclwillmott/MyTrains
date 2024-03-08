@@ -9,7 +9,6 @@ import Foundation
 
 enum DEFAULT {
 
-  static let APP_NODE_ID                        = "APP_NODE_ID"
   static let APP_MODE                           = "APP_MODE"
   static let APP_LAYOUT_ID                      = "APP_LAYOUT_ID"
 
@@ -66,18 +65,6 @@ enum DEFAULT {
   static let PROGRAMMING_TRACK_ID               = "PROGRAMMING_TRACK_ID"
 }
 
-public var appNodeId : UInt64? {
-  get {
-    let id = UserDefaults.standard.integer(forKey: DEFAULT.APP_NODE_ID)
-    return id == 0 ? nil : UInt64(bitPattern: Int64(id))
-  }
-  set(value) {
-    if value != appNodeId {
-      UserDefaults.standard.set(Int64(bitPattern: value ?? 0), forKey: DEFAULT.APP_NODE_ID)
-    }
-  }
-}
-
 public var appNode : OpenLCBNodeMyTrains? {
   let networkLayer = appDelegate.networkLayer 
   return networkLayer.appNode
@@ -90,18 +77,27 @@ public var appLayoutId : UInt64? {
   }
   set(value) {
     if value != appLayoutId {
-      UserDefaults.standard.set(Int64(bitPattern: value ?? 0), forKey: DEFAULT.APP_LAYOUT_ID)
+      if value == nil {
+        UserDefaults.standard.removeObject(forKey: DEFAULT.APP_LAYOUT_ID)
+      }
+      else {
+        UserDefaults.standard.set(Int64(bitPattern: value ?? 0), forKey: DEFAULT.APP_LAYOUT_ID)
+      }
     }
   }
 }
 
-public var appMode : AppMode {
+public var appMode : AppMode? {
   get {
-    return AppMode(rawValue: UserDefaults.standard.integer(forKey: DEFAULT.APP_MODE))!
+    return AppMode(rawValue: UserDefaults.standard.integer(forKey: DEFAULT.APP_MODE))
   }
   set(value) {
-    UserDefaults.standard.set(value.rawValue, forKey: DEFAULT.APP_MODE)
-//    menuUpdate()
+    if value == nil {
+      UserDefaults.standard.removeObject(forKey: DEFAULT.APP_MODE)
+    }
+    else {
+      UserDefaults.standard.set(value!.rawValue, forKey: DEFAULT.APP_MODE)
+    }
   }
 }
 
@@ -157,7 +153,12 @@ public var lastCSVPath : URL? {
     return URL(fileURLWithPath: documentsPath)
   }
   set(path) {
-    UserDefaults.standard.set(path, forKey: DEFAULT.LAST_CSV_PATH)
+    if path == nil {
+      UserDefaults.standard.removeObject(forKey: DEFAULT.LAST_CSV_PATH)
+    }
+    else {
+      UserDefaults.standard.set(path, forKey: DEFAULT.LAST_CSV_PATH)
+    }
   }
 }
 
@@ -169,9 +170,16 @@ public var lastDMFPath : URL? {
     return URL(fileURLWithPath: documentsPath)
   }
   set(path) {
-    UserDefaults.standard.set(path, forKey: DEFAULT.LAST_DMF_PATH)
+    if path == nil {
+      UserDefaults.standard.removeObject(forKey: DEFAULT.LAST_DMF_PATH)
+    }
+    else {
+      UserDefaults.standard.set(path, forKey: DEFAULT.LAST_DMF_PATH)
+    }
   }
 }
+
+// MARK: Deprecated
 
 public var switchboardEditorMagnification : CGFloat {
   get {

@@ -96,16 +96,16 @@ public enum MyTrainsVirtualNodeType : UInt16 {
     .applicationNode       : 2,
     .locoNetGatewayNode    : 3,
     .clockNode             : 3,
-    .configurationToolNode : 3,
-    .throttleNode          : 3,
     .switchboardItemNode   : 3,
     .switchboardPanelNode  : 4, // SBI
     .trainNode             : 4, // LocoNet
     .programmingTrackNode  : 4, // LocoNet
     .digitraxBXP88Node     : 4, // LocoNet
-    .locoNetMonitorNode    : 4, // LocoNet
-    .programmerToolNode    : 5, // Programming Track
     .layoutNode            : 5, // Panel
+    .configurationToolNode : 5,
+    .throttleNode          : 5,
+    .locoNetMonitorNode    : 5, // LocoNet
+    .programmerToolNode    : 5, // Programming Track
   ]
 
   // MARK: Public Class Properties

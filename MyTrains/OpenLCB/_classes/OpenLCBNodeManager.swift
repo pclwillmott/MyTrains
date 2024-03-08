@@ -108,6 +108,7 @@ public class OpenLCBNodeManager {
 
     }
     
+    debugLog("\(nodesInUse) - \(freeNodes)")
     if let id = freeNodes.first {
       nodesInUse.insert(id)
       freeNodes.remove(id)

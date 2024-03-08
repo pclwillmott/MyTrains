@@ -103,7 +103,7 @@ class SelectLayoutVC: MyTrainsViewController, MyTrainsAppDelegate {
     self.layoutList.removeAll()
     
     for (key, item) in appNode.layoutList {
-      if item.masterNodeId == appNodeId! || item.layoutState == .activated {
+      if item.masterNodeId == appNode.nodeId || item.layoutState == .activated {
         self.layoutList.append(item)
         cboLayout.addItem(withObjectValue: item.layoutName)
         if item.layoutId == appLayoutId {

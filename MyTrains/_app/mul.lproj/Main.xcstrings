@@ -1015,18 +1015,6 @@
         }
       }
     },
-    "Iht-Gt-J03.title" : {
-      "comment" : "Class = \"NSMenuItem\"; title = \"LocoNet Monitor\"; ObjectID = \"Iht-Gt-J03\";",
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "LocoNet Monitor"
-          }
-        }
-      }
-    },
     "IIs-Sm-PQF.title" : {
       "comment" : "Class = \"NSMenuItem\"; title = \"Clear Global Emergency Stop\"; ObjectID = \"IIs-Sm-PQF\";",
       "extractionState" : "extracted_with_value",
@@ -1209,18 +1197,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Format"
-          }
-        }
-      }
-    },
-    "k2G-b1-0ZD.title" : {
-      "comment" : "Class = \"NSMenuItem\"; title = \"Throttle\"; ObjectID = \"k2G-b1-0ZD\";",
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Throttle"
           }
         }
       }
@@ -1562,13 +1538,13 @@
       }
     },
     "Omk-Fl-Own.title" : {
-      "comment" : "Class = \"NSMenuItem\"; title = \"Create Application Node\"; ObjectID = \"Omk-Fl-Own\";",
+      "comment" : "Class = \"NSMenuItem\"; title = \"Application Node\"; ObjectID = \"Omk-Fl-Own\";",
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Create Application Node"
+            "value" : "Application Node"
           }
         }
       }

@@ -124,6 +124,9 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="New" id="2Nm-mq-nmS">
                                     <items>
+                                        <menuItem title="Application Node" tag="3041" id="Omk-Fl-Own">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                        </menuItem>
                                         <menuItem title="Layout" tag="12" id="mXf-1G-VXA">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                         </menuItem>
@@ -131,9 +134,6 @@
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                         </menuItem>
                                         <menuItem title="Switchboard Item" tag="14" id="aNN-8G-AJf">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                        </menuItem>
-                                        <menuItem title="Throttle" tag="3" id="k2G-b1-0ZD">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                         </menuItem>
                                         <menuItem title="Train" tag="5" id="t7i-s0-NIc">
@@ -152,9 +152,6 @@
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                         </menuItem>
                                         <menuItem title="Digitrax BXP88" tag="11" id="zt7-Tz-hwr">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                        </menuItem>
-                                        <menuItem title="LocoNet Monitor" tag="8" id="Iht-Gt-J03">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                         </menuItem>
                                     </items>
@@ -253,16 +250,6 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Configuration" id="1QS-9a-oig">
                                     <items>
-                                        <menuItem title="Create Application Node" tag="3041" id="Omk-Fl-Own">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                        </menuItem>
-                                        <menuItem title="Reboot Application" tag="3043" id="meB-vD-Pbb">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                        </menuItem>
-                                        <menuItem title="Reset Application to Factory Defaults" tag="3042" id="F6u-aU-Ru5">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                        </menuItem>
-                                        <menuItem isSeparatorItem="YES" tag="9999" id="ctB-ed-GvG"/>
                                         <menuItem title="LCC/OpenLCB Network" tag="3017" id="05V-nJ-XAs">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                         </menuItem>
@@ -283,6 +270,13 @@
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                         </menuItem>
                                         <menuItem title="LocoNet Wireless Setup" tag="3023" id="sjc-eq-5NZ">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" tag="9999" id="ctB-ed-GvG"/>
+                                        <menuItem title="Reboot Application" tag="3043" id="meB-vD-Pbb">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                        </menuItem>
+                                        <menuItem title="Reset Application to Factory Defaults" tag="3042" id="F6u-aU-Ru5">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                         </menuItem>
                                     </items>

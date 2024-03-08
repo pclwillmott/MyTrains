@@ -35,13 +35,13 @@
             <objects>
                 <viewController id="W85-ah-t1F" customClass="LicenseVC" customModule="MyTrains" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="6Vp-6l-KGe">
-                        <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                        <rect key="frame" x="0.0" y="0.0" width="545" height="391"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </view>
                 </viewController>
                 <customObject id="Grn-Bz-XHx" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="702" y="99"/>
+            <point key="canvasLocation" x="734.5" y="159.5"/>
         </scene>
     </scenes>
 </document>

@@ -50,7 +50,6 @@ class MainVC: NSViewController, MyTrainsControllerDelegate, LayoutDelegate, Open
   }
 
   private func resetToClean() {
-    appNodeId = nil
     appMode = .initializing
     databasePath = nil
     eulaAccepted = false
@@ -235,7 +234,7 @@ class MainVC: NSViewController, MyTrainsControllerDelegate, LayoutDelegate, Open
   
   func newNodeCompletion(node:OpenLCBNodeVirtual) {
     
-    node.hostAppNodeId = node.virtualNodeType == .applicationNode ? node.nodeId : appNodeId!
+    node.hostAppNodeId = node.virtualNodeType == .applicationNode ? node.nodeId : appNode!.nodeId
     
     switch node.virtualNodeType {
     case .layoutNode:

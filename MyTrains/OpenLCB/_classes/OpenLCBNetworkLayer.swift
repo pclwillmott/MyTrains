@@ -162,23 +162,11 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
   
   public func createAppNode(newNodeId:UInt64) {
 
-    appNodeId = newNodeId
-
     appMode = .master
-    
     let node = OpenLCBNodeMyTrains(nodeId: newNodeId)
-
-    start()
-
     node.hostAppNodeId = newNodeId
-
-    registerNode(node: node)
-
-//    createVirtualNode(virtualNodeType: .throttleNode, completion: dummyCompletion(node:))
-
-//    createVirtualNode(virtualNodeType: .configurationToolNode, completion: dummyCompletion(node:))
-
-//    createVirtualNode(virtualNodeType: .clockNode, completion: dummyCompletion(node:))
+    
+    appDelegate.createAppNodeComplete()
 
   }
   
@@ -186,19 +174,6 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
     
     appNode = nil
     fastClock = nil
-//    observers.removeAll()
-//    monitorTimer?.invalidate()
-//    monitorBuffer.removeAll()
-//    nodeManagers.removeAll()
-//    throttleManager.removeAll()
-//    locoNetMonitorManager.removeAll()
-//    programmerToolManager.removeAll()
-//    configurationToolManager.removeAll()
-    virtualNodeLookup.removeAll()
-//    nodesSimpleSetSufficient.removeAll()
-//    nodesInhibited.removeAll()
-//    gatewayNodes.removeAll()
-//    startupGroup.removeAll()
     
     serialPortManagerObserverId = MTSerialPortManager.addObserver(observer: self)
     
@@ -263,6 +238,10 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
     if initializationLevel > MyTrainsVirtualNodeType.numberOfStartupGroups {
       if appNode != nil {
         state = gatewayNodes.isEmpty ? .runningLocal : .runningNetwork
+        createVirtualNode(virtualNodeType: .configurationToolNode, completion: dummyCompletion)
+        createVirtualNode(virtualNodeType: .throttleNode, completion: dummyCompletion)
+        createVirtualNode(virtualNodeType: .locoNetMonitorNode, completion: dummyCompletion)
+        createVirtualNode(virtualNodeType: .programmerToolNode, completion: dummyCompletion)
       }
       else {
         initializationLevel = 0
@@ -296,20 +275,21 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
     }
     
     if initializationLevel == 0 {
-      state = .stopped
       MTSerialPortManager.removeObserver(observerId: serialPortManagerObserverId)
       serialPortManagerObserverId = -1
+      for (_, group) in startupGroup {
+        group.delete(type: .configurationToolNode)
+        group.delete(type: .throttleNode)
+        group.delete(type: .programmerToolNode)
+        group.delete(type: .locoNetMonitorNode)
+      }
+      state = .stopped
     }
     
   }
 
   public func nodeDidStart(node:OpenLCBNodeVirtual) {
-    if node.virtualNodeType.startupGroup < initializationLevel {
-      appDelegate.rebootRequest()
-    }
-    else {
-      startNodes()
-    }
+    startNodes()
   }
 
   public func nodeDidInitialize(node:OpenLCBNodeVirtual) {
@@ -401,13 +381,12 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
   
   public func registerNode(node:OpenLCBNodeVirtual) {
     
-    virtualNodeLookup[node.nodeId] = node
-    node.networkLayer = self
-    
     if let appNode, node.virtualNodeType.startupGroup < appNode.virtualNodeType.startupGroup {
       appDelegate.rebootRequest()
     }
     else if let group = startupGroup[node.virtualNodeType.startupGroup] {
+      virtualNodeLookup[node.nodeId] = node
+      node.networkLayer = self
       group.add(node)
       node.start()
     }
@@ -582,7 +561,7 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
     }
 
     if let node {
-      node.hostAppNodeId = appNodeId!
+      node.hostAppNodeId = appNode!.nodeId
       registerNode(node: node)
       item.completion(node)
     }
@@ -595,11 +574,11 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
   
   public func sendMessage(message:OpenLCBMessage) {
     
-    guard let appNodeId else {
+    guard let appNode else {
       return
     }
     
-    let postOfficeNodeId = appNodeId + 1
+    let postOfficeNodeId = appNode.nodeId + 1
     
     guard !message.routing.contains(postOfficeNodeId) else {
       return
@@ -792,6 +771,23 @@ class StartupGroup {
   public func add(_ node:OpenLCBNodeVirtual) {
     nodes[node.nodeId] = node
     uninitialized.insert(node.nodeId)
+  }
+  
+  public func remove(type:MyTrainsVirtualNodeType) {
+    for (_, node) in nodes {
+      if node.virtualNodeType == type {
+        remove(node)
+      }
+    }
+  }
+  
+  public func delete(type:MyTrainsVirtualNodeType) {
+    for (_, node) in nodes {
+      if node.virtualNodeType == type {
+        remove(node)
+        OpenLCBMemorySpace.deleteAllMemorySpaces(forNodeId: node.nodeId)
+      }
+    }
   }
   
   public func remove(_ node:OpenLCBNodeVirtual) {

@@ -609,7 +609,7 @@
       }
     },
     "Application Node" : {
-      "comment" : "Used to describe an OpenLCB virtual node",
+      "comment" : "Used to describe an OpenLCB virtual node\nUsed for a menu title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1466,7 +1466,7 @@
 
     },
     "Copy" : {
-      "comment" : "Used for the title of a button copies to the clipboard\nUsed for a menu title"
+      "comment" : "Used for a menu title\nUsed for the title of a button copies to the clipboard"
     },
     "Couple" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -1520,7 +1520,7 @@
       }
     },
     "Create Application Node" : {
-      "comment" : "Used for the title of the Create Application Node window\nUsed for a menu title",
+      "comment" : "Used for the title of the Create Application Node window",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -4065,7 +4065,7 @@
       }
     },
     "Paste" : {
-      "comment" : "Used for the title of a button that pastes from the clipboard\nUsed for a menu title"
+      "comment" : "Used for a menu title\nUsed for the title of a button that pastes from the clipboard"
     },
     "Permanent Error" : {
 

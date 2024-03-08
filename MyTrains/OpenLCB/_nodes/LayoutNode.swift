@@ -281,7 +281,7 @@ public class LayoutNode : OpenLCBNodeVirtual {
 
   public override func variableChanged(space: OpenLCBMemorySpace, address: Int) {
     
-    guard let networkLayer, let appNodeId else {
+    guard let networkLayer, let appNode else {
       return
     }
     
@@ -290,10 +290,10 @@ public class LayoutNode : OpenLCBNodeVirtual {
       switch address {
       case addressLayoutState:
         if layoutState == .activated {
-          sendWellKnownEvent(eventId: .myTrainsLayoutActivated, payload: appNodeId.nodeIdBigEndianData)
+          sendWellKnownEvent(eventId: .myTrainsLayoutActivated, payload: appNode.nodeId.nodeIdBigEndianData)
         }
         else if networkLayer.layoutNodeId == nodeId {
-          sendWellKnownEvent(eventId: .myTrainsLayoutDeactivated, payload: appNodeId.nodeIdBigEndianData)
+          sendWellKnownEvent(eventId: .myTrainsLayoutDeactivated, payload: appNode.nodeId.nodeIdBigEndianData)
         }
       default:
         break
@@ -305,12 +305,12 @@ public class LayoutNode : OpenLCBNodeVirtual {
   
   override internal func willDelete() {
     
-    guard let appNodeId else {
+    guard let appNode else {
       return
     }
     
     if layoutState == .activated {
-      sendWellKnownEvent(eventId: .myTrainsLayoutDeactivated, payload: appNodeId.nodeIdBigEndianData)
+      sendWellKnownEvent(eventId: .myTrainsLayoutDeactivated, payload: appNode.nodeId.nodeIdBigEndianData)
     }
     
     sendWellKnownEvent(eventId: .myTrainsLayoutDeleted)
@@ -332,7 +332,7 @@ public class LayoutNode : OpenLCBNodeVirtual {
         switch event {
         case .identifyMyTrainsLayouts:
           
-          sendWellKnownEvent(eventId: layoutState == .activated ? .myTrainsLayoutActivated : .myTrainsLayoutDeactivated, payload: appNodeId!.nodeIdBigEndianData)
+          sendWellKnownEvent(eventId: layoutState == .activated ? .myTrainsLayoutActivated : .myTrainsLayoutDeactivated, payload: appNode!.nodeId.nodeIdBigEndianData)
 
         default:
           break

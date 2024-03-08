@@ -10,11 +10,9 @@ import Foundation
 
 class Database {
   
-  // MARK: Private Class Properties
+  // MARK: Public Class Properties
   
   private static var connection : SqliteConnection? = nil
-  
-  // MARK: Public Class Properties
   
   public static var __number : Int = 0
   
@@ -639,6 +637,65 @@ class Database {
     
     return result
 
+  }
+  
+  public static func numberOfRows(tableName:String) -> Int {
+    
+    let conn = Database.getConnection()
+    var shouldClose = false
+    
+    if conn.state != .Open {
+      if conn.open() != .Open {
+        return 0
+      }
+      shouldClose = true
+    }
+    
+    var result : Int = 0
+    
+    var _cmd : SqliteCommand? = conn.createCommand()
+    
+    if let cmd = _cmd {
+      
+      cmd.commandText = "SELECT COUNT(*) FROM [\(tableName)]"
+      
+      if let reader = cmd.executeReader() {
+        
+        if reader.read() {
+          if let count = reader.getInt(index: 0) {
+            result = count
+          }
+        }
+        
+        reader.close()
+        
+      }
+      
+    }
+    
+    _cmd = nil
+    
+    if shouldClose {
+      conn.close()
+    }
+    
+    return result
+
+  }
+
+  
+  public static func deleteAllRows() {
+    
+    let commands = [
+      "DELETE FROM \(TABLE.VERSION)",
+      "DELETE FROM \(TABLE.LAYOUT)",
+      "DELETE FROM \(TABLE.SWITCHBOARD_PANEL)",
+      "DELETE FROM \(TABLE.SWITCHBOARD_ITEM)",
+      "DELETE FROM \(TABLE.MEMORY_SPACE)",
+    ]
+    
+    execute(commands: commands)
+    
   }
 
   public static func execute(commands:[String]) {

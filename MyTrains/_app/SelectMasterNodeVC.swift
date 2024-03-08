@@ -82,7 +82,7 @@ class SelectMasterNodeVC: MyTrainsViewController, NSTextFieldDelegate, NSControl
   
   // MARK: Public Properties
   
-  public var controller : MyTrainsController?
+  public var networkLayer : OpenLCBNetworkLayer?
   
   // MARK: NSTextFieldDelegate, NSControlTextEditingDelegate Methods
  
@@ -111,7 +111,7 @@ class SelectMasterNodeVC: MyTrainsViewController, NSTextFieldDelegate, NSControl
   
   @objc func btnOKAction(_ sender: NSButton) {
     view.window?.close()
-    controller?.createApplicationNode(nodeId: UInt64(dotHex: txtAppNodeId.stringValue, numberOfBytes: 6)!)
+    networkLayer?.createAppNode(newNodeId: UInt64(dotHex: txtAppNodeId.stringValue, numberOfBytes: 6)!)
   }
 
 }
