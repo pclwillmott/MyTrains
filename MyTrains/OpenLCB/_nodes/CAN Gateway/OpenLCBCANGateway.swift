@@ -18,9 +18,6 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
     var configurationSize = 0
 
     initSpaceAddress(&addressDevicePath, 256, &configurationSize)
-    initSpaceAddress(&addressBaudRate, 1, &configurationSize)
-    initSpaceAddress(&addressParity, 1, &configurationSize)
-    initSpaceAddress(&addressFlowControl, 1, &configurationSize)
     initSpaceAddress(&addressMaxAliasesToCache, 1, &configurationSize)
     initSpaceAddress(&addressMinAliasesToCache, 1, &configurationSize)
 
@@ -37,9 +34,8 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
       memorySpaces[configuration.space] = configuration
       
       registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDevicePath)
-      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressBaudRate)
-      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressParity)
-      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressFlowControl)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressMaxAliasesToCache)
+      registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressMinAliasesToCache)
       
       if !memorySpacesInitialized {
         resetToFactoryDefaults()
@@ -56,9 +52,6 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
   // Configuration varaible addresses
   
   internal var addressDevicePath        = 0
-  internal var addressBaudRate          = 0
-  internal var addressParity            = 0
-  internal var addressFlowControl       = 0
   internal var addressMaxAliasesToCache = 0
   internal var addressMinAliasesToCache = 0
 
@@ -68,33 +61,6 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
     }
     set(value) {
       configuration!.setString(address: addressDevicePath, value: value, fieldSize: 256)
-    }
-  }
-  
-  internal var baudRate : BaudRate {
-    get {
-      return BaudRate(rawValue: configuration!.getUInt8(address: addressBaudRate)!)!
-    }
-    set(value) {
-      configuration!.setUInt(address: addressBaudRate, value: value.rawValue)
-    }
-  }
-
-  internal var parity : Parity {
-    get {
-      return Parity(rawValue: configuration!.getUInt8(address: addressParity)!)!
-    }
-    set(value) {
-      configuration!.setUInt(address: addressBaudRate, value: value.rawValue)
-    }
-  }
-  
-  internal var flowControl : FlowControl {
-    get {
-      return FlowControl(rawValue: configuration!.getUInt8(address: addressFlowControl)!)!
-    }
-    set(value) {
-      configuration!.setUInt(address: addressBaudRate, value: value.rawValue)
     }
   }
   
@@ -189,12 +155,6 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
     
     devicePath = ""
     
-    baudRate = .br125000
-    
-    flowControl = .noFlowControl
-    
-    parity = .none
-    
     minAliasesToCache = 16
     
     maxAliasesToCache = 64
@@ -209,7 +169,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
     if let port = MTSerialPort(path: devicePath) {
       
       serialPort = port
-      port.baudRate = baudRate
+      port.baudRate = .br125000
       port.numberOfDataBits = 8
       port.numberOfStopBits = 1
       port.parity = .none
@@ -225,19 +185,22 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
         }
         
         if !internalNodes.contains(nodeId) {
-          
           waitingForAlias.insert(nodeId)
-          
           internalNodes.insert(nodeId)
-          
           aliasTimerAction()
           
         }
         
       }
+      else {
+        debugLog("serial port did not open")
+        networkLayer?.nodeDidInitialize(node: self)
+        networkLayer?.nodeDidStart(node: self)
+      }
       
     }
     else {
+      debugLog("serial port did not allocate")
       networkLayer?.nodeDidInitialize(node: self)
       networkLayer?.nodeDidStart(node: self)
     }
@@ -371,6 +334,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
     
     if let serialPort {
       serialPort.close()
+      self.serialPort = nil
     }
     else {
       super.stop()
@@ -382,7 +346,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
   
   // This is running in the main thread
   public override func openLCBMessageReceived(message: OpenLCBMessage) {
- 
+
     if message.sourceNodeId! != nodeId && (message.destinationNodeId == nil || message.destinationNodeId! == nodeId) {
       super.openLCBMessageReceived(message: message)
       if let id = message.destinationNodeId, id == nodeId {
@@ -397,7 +361,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
     }
 
     if let appNode, message.visibility == .visibilitySemiPublic {
-      
+  
       let validMessageTypes : Set<OpenLCBMTI> = [
         .producerConsumerEventReport,
         .producerIdentifiedAsCurrentlyValid,
@@ -422,6 +386,9 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
     if let sourceNodeId = message.sourceNodeId, !waitingForAlias.contains(sourceNodeId) && !nodeIdLookup.keys.contains(sourceNodeId) {
       waitingForAlias.insert(sourceNodeId)
       internalNodes.insert(sourceNodeId)
+      aliasTimerAction()
+    }
+    else if !outputQueue.isEmpty {
       aliasTimerAction()
     }
 
@@ -481,7 +448,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
     default:
       break
     }
-    
+
     outputQueue.append(message)
 
     processOutputQueue()
@@ -500,6 +467,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
   public func serialPortDidClose(_ serialPort: MTSerialPort) {
     if isStopping {
       super.stop()
+      isStopping = false
     }
     else {
       #if DEBUG

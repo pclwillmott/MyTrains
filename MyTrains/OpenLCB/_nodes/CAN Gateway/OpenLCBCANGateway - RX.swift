@@ -55,7 +55,6 @@ extension OpenLCBCANGateway {
           
           frame.timeStamp = Date.timeIntervalSinceReferenceDate
           canFrameReceived(frame: frame)
-
         }
         else {
      //     for (_, observer) in observers {

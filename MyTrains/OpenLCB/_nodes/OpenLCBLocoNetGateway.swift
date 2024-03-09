@@ -122,7 +122,7 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, M
       return Parity(rawValue: configuration!.getUInt8(address: addressParity)!)!
     }
     set(value) {
-      configuration!.setUInt(address: addressBaudRate, value: value.rawValue)
+      configuration!.setUInt(address: addressParity, value: value.rawValue)
     }
   }
   
@@ -131,7 +131,7 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, M
       return FlowControl(rawValue: configuration!.getUInt8(address: addressFlowControl)!)!
     }
     set(value) {
-      configuration!.setUInt(address: addressBaudRate, value: value.rawValue)
+      configuration!.setUInt(address: addressFlowControl, value: value.rawValue)
     }
   }
   
@@ -141,7 +141,7 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, M
     }
     set(value) {
       let uInt : UInt8 = value ? 1 : 0
-      configuration!.setUInt(address: addressBaudRate, value: uInt)
+      configuration!.setUInt(address: addressBlockAllMessages, value: uInt)
     }
   }
   

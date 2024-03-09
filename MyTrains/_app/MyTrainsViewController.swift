@@ -97,5 +97,5 @@ public class MyTrainsViewController: NSViewController, NSWindowDelegate {
   public func closeWindow() {
     view.window?.close()
   }
-
+  
 }

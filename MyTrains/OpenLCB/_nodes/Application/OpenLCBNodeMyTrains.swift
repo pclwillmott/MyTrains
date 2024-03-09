@@ -86,8 +86,6 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
 
   private var getUniqueNodeIdQueue : [UInt64] = []
   
-  private var getUniqueNodeIdInProgress = false
-  
   private var timeoutTimer : Timer?
   
   internal var layoutList : [UInt64:LayoutListItem] = [:]
@@ -290,9 +288,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   
   private func tryCandidate() {
     
-    getUniqueNodeIdInProgress = !getUniqueNodeIdQueue.isEmpty
-    
-    guard getUniqueNodeIdInProgress else {
+    guard !getUniqueNodeIdQueue.isEmpty && timeoutTimer == nil else {
       return
     }
     
@@ -312,7 +308,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
 
     stopTimeoutTimer()
 
-    if getUniqueNodeIdInProgress {
+    if !getUniqueNodeIdQueue.isEmpty {
       let newNodeId = getUniqueNodeIdQueue.removeFirst()
       networkLayer?.createVirtualNode(newNodeId: newNodeId)
       tryCandidate()
@@ -537,7 +533,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
       
     case .verifiedNodeIDSimpleSetSufficient, .verifiedNodeIDFullProtocolRequired:
       
-      if getUniqueNodeIdInProgress, let id = UInt64(bigEndianData: message.payload) {
+      if !getUniqueNodeIdQueue.isEmpty, let id = UInt64(bigEndianData: message.payload) {
         
         if (id & 0x0000ffffffffffff) == getUniqueNodeIdQueue[0] {
           stopTimeoutTimer()

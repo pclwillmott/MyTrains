@@ -804,12 +804,12 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
       }
 
     case .verifyNodeIDAddressed:
-      sendVerifiedNodeId(isSimpleSetSufficient: false)
+      sendVerifiedNodeId(isSimpleSetSufficient: !isFullProtocolRequired)
 
     case .verifyNodeIDGlobal:
       let id = UInt64(bigEndianData: message.payload)
       if message.payload.isEmpty || id! == nodeId {
-       sendVerifiedNodeId(isSimpleSetSufficient: false)
+       sendVerifiedNodeId(isSimpleSetSufficient: !isFullProtocolRequired)
       }
       
     case .protocolSupportInquiry:

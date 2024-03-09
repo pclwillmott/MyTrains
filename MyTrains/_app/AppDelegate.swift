@@ -91,6 +91,12 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
     debugLog("applicationDidFinishLaunching")
     #endif
     
+    // Do the legal stuff, if they don't accept the agreement stop the app.
+    
+    if !eulaAccepted! {
+      MyTrainsWindow.license.runModel()
+    }
+
     func gatherMenuItems(menu:NSMenu) {
       
       var index = 0
@@ -146,7 +152,12 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
     debugLog("applicationShouldTerminate")
     #endif
     
-    return isSafeToTerminate ? .terminateNow : .terminateCancel
+    if isSafeToTerminate {
+      state = .terminating
+      closeAllWindows()
+    }
+    
+    return .terminateCancel
     
   }
 
@@ -156,14 +167,8 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
     debugLog("applicationWillTerminate")
     #endif
     
-    networkLayer.stop()
+    debugLog("application stopped")
     
-    checkPortsTimer?.invalidate()
-
-    if let activity {
-      ProcessInfo.processInfo.endActivity(activity)
-    }
-
   }
 
   // MARK: Private Methods
@@ -234,7 +239,6 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
     Database.deleteAllRows()
     
     appLayoutId = nil
-    eulaAccepted = nil
     lastCSVPath = nil
     lastDMFPath = nil
     appMode = nil
@@ -298,7 +302,7 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
   
   public func windowsDidClose() {
     switch state {
-    case .stopping, .rebooting, .resetToFactoryDefaults:
+    case .stopping, .rebooting, .resetToFactoryDefaults, .terminating:
       networkLayer.stop()
     default:
       break
@@ -337,6 +341,13 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
         networkLayer.start()
       case .resetToFactoryDefaults:
         completeResetToFactoryDefaults()
+      case .terminating:
+        checkPortsTimer?.invalidate()
+        if let activity {
+          ProcessInfo.processInfo.endActivity(activity)
+        }
+        exit(0)
+        
       default:
         break
       }
@@ -461,12 +472,6 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
         
       case .createApplicationNode:
         
-        // Do the legal stuff, if they don't accept the agreement stop the app.
-        
-        if !eulaAccepted! {
-          MyTrainsWindow.license.runModel()
-        }
-
         let vc = MyTrainsWindow.selectMasterNode.viewController as! SelectMasterNodeVC
         vc.networkLayer = networkLayer
         vc.showWindow()

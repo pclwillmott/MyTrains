@@ -16,4 +16,5 @@ public enum OpenLCBNetworkLayerState {
   case stopped
   case rebooting
   case resetToFactoryDefaults
+  case terminating
 }

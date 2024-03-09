@@ -18,7 +18,6 @@ public enum SerialPortState {
   
   case closed
   case open
-  case removed
   
 }
 
@@ -130,7 +129,7 @@ public class MTSerialPort : NSObject, MTPipeDelegate {
     var didDetach = false
     
     repeat {
-      
+ 
       let nbyte = readSerialPort(fd, buffer, kInitialBufferSize)
       
       if nbyte == -1 {
@@ -152,7 +151,10 @@ public class MTSerialPort : NSObject, MTPipeDelegate {
       
     } while !quit;
     
+    quit = false
+    
     txPipe?.close()
+    txPipe = nil
     
     // try and restore previous options
     
@@ -162,7 +164,7 @@ public class MTSerialPort : NSObject, MTPipeDelegate {
     
     fd = -1
     
-    state = didDetach ? .removed : .closed
+    state = .closed
 
     DispatchQueue.main.async {
       didDetach ? self.delegate?.serialPortDidDetach?(self) : self.delegate?.serialPortDidClose?(self)
@@ -235,6 +237,9 @@ public class MTSerialPort : NSObject, MTPipeDelegate {
         fd = -1
       }
       
+    }
+    else {
+      debugLog("serial port did not reopen")
     }
     
   }

@@ -273,6 +273,13 @@ extension OpenLCBCANGateway {
             }
             startGateway = true
           }
+          else {
+            for message in outputQueue {
+              if message.sourceNodeId! == nodeId {
+                message.sourceNIDAlias = item.alias
+              }
+            }
+          }
           
           found = true
           

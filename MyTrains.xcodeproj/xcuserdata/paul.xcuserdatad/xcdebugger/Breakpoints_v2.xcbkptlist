@@ -64,7 +64,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "327"
             endingLineNumber = "327"
-            landmarkName = "locationServicesContent"
+            landmarkName = "datagramId"
             landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
@@ -238,9 +238,25 @@
             filePath = "MyTrains/_app/AppDelegate.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "183"
-            endingLineNumber = "183"
-            landmarkName = "updateMenuItems(state:)"
+            startingLineNumber = "188"
+            endingLineNumber = "188"
+            landmarkName = "initiateRebootApplication()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "7C061ECB-6478-4E68-86D6-CC76C2731A4A"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MyTrains/OpenLCB/_nodes/Application/OpenLCBNodeMyTrains.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "291"
+            endingLineNumber = "291"
+            landmarkName = "tryCandidate()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -28,6 +28,10 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
   
   private var initializationLevel = 0
   
+  private var isCreatingANode = false
+  
+  private var isDeletingANode = false
+  
   private var startupGroup : [Int:StartupGroup] = [:]
   
   private var gatewayNodes : [UInt64:OpenLCBNodeVirtual] = [:]
@@ -289,7 +293,10 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
   }
 
   public func nodeDidStart(node:OpenLCBNodeVirtual) {
-    startNodes()
+    if !isCreatingANode {
+      startNodes()
+    }
+    isCreatingANode = false
   }
 
   public func nodeDidInitialize(node:OpenLCBNodeVirtual) {
@@ -347,8 +354,16 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
 
     startupGroup[node.virtualNodeType.startupGroup]?.uninitialize(node)
     
-    stopNodes()
-    
+    if isDeletingANode {
+      startupGroup[node.virtualNodeType.startupGroup]?.remove(node)
+      OpenLCBMemorySpace.deleteAllMemorySpaces(forNodeId: node.nodeId)
+      isDeletingANode = false
+      appDelegate.rebootRequest()
+    }
+    else {
+      stopNodes()
+    }
+
   }
 
   public func nodeDidDetach(node:OpenLCBNodeVirtual) {
@@ -381,10 +396,7 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
   
   public func registerNode(node:OpenLCBNodeVirtual) {
     
-    if let appNode, node.virtualNodeType.startupGroup < appNode.virtualNodeType.startupGroup {
-      appDelegate.rebootRequest()
-    }
-    else if let group = startupGroup[node.virtualNodeType.startupGroup] {
+    if let group = startupGroup[node.virtualNodeType.startupGroup] {
       virtualNodeLookup[node.nodeId] = node
       node.networkLayer = self
       group.add(node)
@@ -400,8 +412,8 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
   public func deleteNode(nodeId:UInt64) {
     if let virtualNode = virtualNodeLookup[nodeId] {
       virtualNode.willDelete()
+      isDeletingANode = true
       deregisterNode(node: virtualNode)
-      OpenLCBMemorySpace.deleteAllMemorySpaces(forNodeId: nodeId)
     }
   }
   
@@ -482,6 +494,8 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
     
     if let newNodeId = appNode.nextGatewayNodeId {
       
+      isCreatingANode = true
+      
       let node = OpenLCBCANGateway(nodeId: newNodeId)
       
       node.hostAppNodeId = appNode.nodeId
@@ -502,8 +516,8 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
       let alert = NSAlert()
       
       alert.messageText = String(localized: "No available gateway node IDs")
-      alert.informativeText = "Your application has run out of gateway node IDs. Increase the maximum number of gateways in the application node using the configuration tool."
-      alert.addButton(withTitle: "OK")
+      alert.informativeText = String(localized: "Your application has run out of gateway node IDs. Increase the maximum number of gateways in the application node using the configuration tool.")
+      alert.addButton(withTitle: String(localized: "OK"))
       alert.alertStyle = .informational
       
       alert.runModal()

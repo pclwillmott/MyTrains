@@ -1434,6 +1434,9 @@
     "Configuration Tool Unavailable" : {
 
     },
+    "Configure" : {
+
+    },
     "Configure %@ (%@)" : {
       "localizations" : {
         "en" : {
@@ -1466,7 +1469,7 @@
 
     },
     "Copy" : {
-      "comment" : "Used for a menu title\nUsed for the title of a button copies to the clipboard"
+      "comment" : "Used for the title of a button copies to the clipboard\nUsed for a menu title"
     },
     "Couple" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -1880,6 +1883,9 @@
           }
         }
       }
+    },
+    "Delete" : {
+
     },
     "Destination Blind Front" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -2843,6 +2849,9 @@
     },
     "India" : {
       "comment" : "This is the name of a country."
+    },
+    "Info" : {
+
     },
     "Initialization Complete Full Protocol Required" : {
 
@@ -4065,7 +4074,7 @@
       }
     },
     "Paste" : {
-      "comment" : "Used for a menu title\nUsed for the title of a button that pastes from the clipboard"
+      "comment" : "Used for the title of a button that pastes from the clipboard\nUsed for a menu title"
     },
     "Permanent Error" : {
 
@@ -5632,7 +5641,7 @@
       "comment" : "This is the name of a country."
     },
     "Unknown" : {
-      "comment" : "Used to indicate the state of a turnout\nUsed to indicate that the type of something is unknown",
+      "comment" : "Used to indicate that the type of something is unknown\nUsed to indicate the state of a turnout",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -5649,6 +5658,9 @@
       }
     },
     "Update Complete Command" : {
+
+    },
+    "Update Firmware" : {
 
     },
     "Use Custom Dimensions" : {
@@ -6107,6 +6119,9 @@
       }
     },
     "You must create and select a layout before you can add switchboard panels and items." : {
+
+    },
+    "Your application has run out of gateway node IDs. Increase the maximum number of gateways in the application node using the configuration tool." : {
 
     }
   },

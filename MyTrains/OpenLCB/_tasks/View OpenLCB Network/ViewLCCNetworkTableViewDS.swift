@@ -10,14 +10,6 @@ import AppKit
 
 public class ViewLCCNetworkTableViewDS : NSObject, NSTableViewDataSource, NSTableViewDelegate {
 
-  // MARK: Constructors
-  
-  override public init() {
-    
-    super.init()
-    
-  }
-  
   // MARK: Private Properties
   
   private var _dictionary : [UInt64:OpenLCBNode] = [:]
@@ -40,8 +32,6 @@ public class ViewLCCNetworkTableViewDS : NSObject, NSTableViewDataSource, NSTabl
     }
   }
   
-  // MARK: NSTableViewDataSource Delegate Methods
-  
   // MARK: NSTableViewDelegate Methods
   
   // Returns the number of records managed for a TableView by the data source object.
@@ -52,8 +42,6 @@ public class ViewLCCNetworkTableViewDS : NSObject, NSTableViewDataSource, NSTabl
   // Sets the data object for an item in the specified row and column.
   public func tableView(_ tableView: NSTableView, setObjectValue object: Any?, for tableColumn: NSTableColumn?, row: Int) {
   }
-  
-
   
   public func tableView(_ tableView: NSTableView,
                         viewFor tableColumn: NSTableColumn?,row: Int) -> NSView? {
@@ -107,13 +95,12 @@ public class ViewLCCNetworkTableViewDS : NSObject, NSTableViewDataSource, NSTabl
     case ColumnIdentifiers.userNodeDescription:
       text = "\(item.userNodeDescription)"
       
-      
     case ColumnIdentifiers.configure:
       
       if let cell = tableView.makeView(withIdentifier:
                                         NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil), let button = cell.subviews[0] as? NSButton {
        
-        button.title = "Configure"
+        button.title = String(localized: "Configure")
         
         button.tag = row
         
@@ -128,7 +115,7 @@ public class ViewLCCNetworkTableViewDS : NSObject, NSTableViewDataSource, NSTabl
       if let cell = tableView.makeView(withIdentifier:
                                         NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil), let button = cell.subviews[0] as? NSButton {
         
-        button.title = "Update Firmware"
+        button.title = String(localized: "Update Firmware")
         
         button.tag = row
         
@@ -142,7 +129,7 @@ public class ViewLCCNetworkTableViewDS : NSObject, NSTableViewDataSource, NSTabl
       if let cell = tableView.makeView(withIdentifier:
                                         NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil), let button = cell.subviews[0] as? NSButton {
         
-        button.title = "Info"
+        button.title = String(localized: "Info")
         
         button.tag = row
         
@@ -156,11 +143,28 @@ public class ViewLCCNetworkTableViewDS : NSObject, NSTableViewDataSource, NSTabl
       if let cell = tableView.makeView(withIdentifier:
                                         NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil), let button = cell.subviews[0] as? NSButton {
         
-        button.title = "Delete"
+        button.title = String(localized: "Delete")
         
         button.tag = row
         
-        button.isEnabled = true
+        if appDelegate.networkLayer.isInternalVirtualNode(nodeId: item.nodeId), let node = appDelegate.networkLayer.virtualNodeLookup[item.nodeId] {
+          
+          let validNodesToDelete : Set<MyTrainsVirtualNodeType> = [
+            .canGatewayNode,
+            .clockNode,
+            .digitraxBXP88Node,
+            .layoutNode,
+            .locoNetGatewayNode,
+            .programmingTrackNode,
+            .trainNode,
+          ]
+          
+          button.isEnabled = validNodesToDelete.contains(node.virtualNodeType)
+          
+        }
+        else {
+          button.isEnabled = false
+        }
         
         return cell
         

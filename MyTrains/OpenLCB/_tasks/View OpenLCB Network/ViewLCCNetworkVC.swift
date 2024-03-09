@@ -67,6 +67,8 @@ class ViewLCCNetworkVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate
     tableView.reloadData()
   }
   
+  // MARK: OpenLCBConfigurationTollDelegate Methods
+  
   public func openLCBMessageReceived(message:OpenLCBMessage) {
     
     guard let configurationTool else {
@@ -77,15 +79,11 @@ class ViewLCCNetworkVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate
      
     case .initializationCompleteSimpleSetSufficient, .initializationCompleteFullProtocolRequired, .verifiedNodeIDSimpleSetSufficient, .verifiedNodeIDFullProtocolRequired:
       
-      if let newNodeId = UInt64(bigEndianData: message.payload), !nodes.keys.contains(newNodeId) {
-        
+      if let newNodeId = message.sourceNodeId, !nodes.keys.contains(newNodeId) {
         nodes[newNodeId] = OpenLCBNode(nodeId: newNodeId)
-        
         reload()
-        
         configurationTool.sendSimpleNodeInformationRequest(destinationNodeId: newNodeId)
         configurationTool.sendProtocolSupportInquiry(destinationNodeId: newNodeId)
-        
       }
       
     case .simpleNodeIdentInfoReply:
