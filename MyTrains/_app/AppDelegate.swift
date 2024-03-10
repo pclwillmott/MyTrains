@@ -64,6 +64,8 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
 
   public func startApp() {
 
+    showInitAppWindow()
+    
     // KEEP ALIVE - This is to stop the app and the timers going to sleep when
     // app is not in view.
     
@@ -173,6 +175,91 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
 
   // MARK: Private Methods
   
+  private var initAppVC : InitAppVC?
+  
+  private func showInitAppWindow() {
+    let storyboard = NSStoryboard(name: "InitApp", bundle: Bundle.main)
+    let wc = storyboard.instantiateController(withIdentifier: "InitAppWC") as! NSWindowController
+    initAppVC = wc.window!.contentViewController! as? InitAppVC
+    initAppVC!.showWindow()
+  }
+  
+  private func closeInitAppWindow() {
+    initAppVC?.closeWindow()
+  }
+  
+  private func openWindow(viewType:MyTrainsViewType) {
+    
+    switch viewType {
+    case .openLCBNetworkView:
+      let networkLayer = appDelegate.networkLayer
+      
+      let vc = MyTrainsWindow.viewLCCNetwork.viewController as! ViewLCCNetworkVC
+      vc.configurationTool = networkLayer.getConfigurationTool()
+      vc.configurationTool?.delegate = vc
+      vc.showWindow()
+
+    case .openLCBTrafficMonitor:
+      MyTrainsWindow.openLCBMonitor.showWindow()
+
+    case .throttle:
+      let networkLayer = appDelegate.networkLayer
+      guard let throttle = networkLayer.getThrottle()  else {
+        return
+      }
+      let vc = MyTrainsWindow.throttle.viewController as! ThrottleVC
+      vc.throttle = throttle
+      throttle.delegate = vc
+      vc.showWindow()
+
+    case .switchboardPanel:
+      break
+    case .clock:
+      break
+    case .locoNetTrafficMonitor:
+      guard let monitorNode = networkLayer.getLocoNetMonitor() else {
+        return
+      }
+      let vc = MyTrainsWindow.monitor.viewController as! MonitorVC
+      vc.monitorNode = monitorNode
+      monitorNode.delegate = vc
+      vc.showWindow()
+
+    case .locoNetSlotView:
+      guard let monitorNode = networkLayer.getLocoNetMonitor() else {
+        return
+      }
+      let vc = MyTrainsWindow.slotView.viewController as! SlotViewVC
+      vc.monitorNode = monitorNode
+      monitorNode.delegate = vc
+      vc.showWindow()
+
+    case .locoNetDashboard:
+      MyTrainsWindow.dashBoard.showWindow()
+
+    }
+    
+  }
+  
+  public func openWindows() {
+    
+    guard state == .runningLocal || state == .runningNetwork else {
+      return
+    }
+    
+    closeInitAppWindow()
+
+    for rawValue in 0 ... MyTrainsViewType.numberOfTypes - 1 {
+      if let viewType = MyTrainsViewType(rawValue: rawValue), let appNode {
+        let option = appNode.getViewOption(type: viewType)
+        if option == .open || (option == .restorePreviousState && appNode.getViewState(type: viewType)) {
+          openWindow(viewType: viewType)
+        }
+      }
+    }
+    
+  }
+  
   @objc func checkPortsTimerAction() {
     MTSerialPortManager.checkPorts()
   }
@@ -188,6 +275,7 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
     if isSafeToTerminate {
       state = .rebooting
       closeAllWindows()
+      showInitAppWindow()
     }
     
   }
@@ -392,25 +480,13 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
         appNode.sendGlobalPowerOn()
 
       case .throttle:
-        let networkLayer = appDelegate.networkLayer
-        guard let throttle = networkLayer.getThrottle()  else {
-          return
-        }
-        let vc = MyTrainsWindow.throttle.viewController as! ThrottleVC
-        vc.throttle = throttle
-        throttle.delegate = vc
-        vc.showWindow()
+        openWindow(viewType: .throttle)
         
       case .selectLayout:
         MyTrainsWindow.selectLayout.showWindow()
         
       case .configLCCNetwork:
-        let networkLayer = appDelegate.networkLayer
-        
-        let vc = MyTrainsWindow.viewLCCNetwork.viewController as! ViewLCCNetworkVC
-        vc.configurationTool = networkLayer.getConfigurationTool()
-        vc.configurationTool?.delegate = vc
-        vc.showWindow()
+        openWindow(viewType: .openLCBNetworkView)
         
       case .configClock:
         let networkLayer = appDelegate.networkLayer
@@ -444,28 +520,16 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
         MyTrainsWindow.groupSetup.showWindow()
         
       case .lccTrafficMonitor:
-        MyTrainsWindow.openLCBMonitor.showWindow()
+        openWindow(viewType: .openLCBTrafficMonitor)
         
       case .locoNetSlotView:
-        guard let monitorNode = networkLayer.getLocoNetMonitor() else {
-          return
-        }
-        let vc = MyTrainsWindow.slotView.viewController as! SlotViewVC
-        vc.monitorNode = monitorNode
-        monitorNode.delegate = vc
-        vc.showWindow()
+        openWindow(viewType: .locoNetSlotView)
         
       case .locoNetTrafficMonitor:
-        guard let monitorNode = networkLayer.getLocoNetMonitor() else {
-          return
-        }
-        let vc = MyTrainsWindow.monitor.viewController as! MonitorVC
-        vc.monitorNode = monitorNode
-        monitorNode.delegate = vc
-        vc.showWindow()
+        openWindow(viewType: .locoNetTrafficMonitor)
 
       case .locoNetDashboard:
-        MyTrainsWindow.dashBoard.showWindow()
+        openWindow(viewType: .locoNetDashboard)
 
       case .about:
         MyTrainsWindow.about.showWindow()
@@ -564,10 +628,11 @@ public enum MyTrainsWindow : String {
   case license                           = "License"                      
   case about                             = "About"                        
   case textView                          = "TextView"
+  case initApp                           = "InitApp"
   
-  // MARK: Private Properties
+  // MARK: Public Properties
   
-  private var windowController : NSWindowController {
+  public var windowController : NSWindowController {
     let storyboard = NSStoryboard(name: self.rawValue, bundle: Bundle.main)
     let wc = storyboard.instantiateController(withIdentifier: "\(self.rawValue)WC") as! NSWindowController
     let vc = viewController(windowController: wc)
@@ -575,8 +640,6 @@ public enum MyTrainsWindow : String {
     appDelegate.addViewController(vc)
     return wc
   }
-  
-  // MARK: Public Properties
   
   public var viewController : MyTrainsViewController {
     let wc = windowController

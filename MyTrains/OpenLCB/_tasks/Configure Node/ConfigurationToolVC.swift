@@ -37,6 +37,12 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
     
   }
   
+  override func viewDidDisappear() {
+    if dataWasWritten {
+      appDelegate.rebootRequest()
+    }
+  }
+  
   override func viewWillAppear() {
     
     super.viewWillAppear()
@@ -152,22 +158,12 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
     let title = node!.userNodeName == "" ? "\(node!.manufacturerName) - \(node!.nodeModelName)" : node!.userNodeName
     
     
-    if #available(macOS 12, *) {
-      self.view.window?.title = String(localized: "Configure \(title) (\(node!.nodeId.toHexDotFormat(numberOfBytes: 6)))")
-    } 
-    else {
-      self.view.window?.title = "Configure \(title) (\(node!.nodeId.toHexDotFormat(numberOfBytes: 6)))"
-    }
-    
+    self.view.window?.title = String(localized: "Configure \(title) (\(node!.nodeId.toHexDotFormat(numberOfBytes: 6)))")
+
     if let configurationTool {
 
-      if #available(macOS 12, *) {
-        statusMessage(String(localized: "Getting CDI"))
-      } 
-      else {
-        statusMessage("Getting CDI")
-      }
-      
+      statusMessage(String(localized: "Getting CDI"))
+
       state = .gettingCDI
       
       totalBytesRead = 0
@@ -190,10 +186,12 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
   // MARK: Private Properties
   
   private var networkLayer : OpenLCBNetworkLayer?
-
+  
   private var nodeId : UInt64 = 0
   
   private var CDI : [UInt8] = []
+  
+  private var dataWasWritten = false
   
   private var cdiText : String {
     var cdi = CDI
@@ -1229,6 +1227,8 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
       
       configurationTool.sendWriteCommand(destinationNodeId: node.nodeId, addressSpace: dataToWrite[0].space, startAddress: dataToWrite[0].address, dataToWrite: dataToWrite[0].data)
 
+      dataWasWritten = true
+      
     }
 
   }
@@ -1352,6 +1352,8 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
     
     configurationTool.sendWriteCommand(destinationNodeId: node.nodeId, addressSpace: dataToWrite[0].space, startAddress: dataToWrite[0].address, dataToWrite: dataToWrite[0].data)
 
+    dataWasWritten = true
+    
   }
 
   @IBAction func btnShowCDITextAction(_ sender: NSButton) {

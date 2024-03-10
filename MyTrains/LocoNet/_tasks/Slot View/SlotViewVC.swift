@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Cocoa
+import AppKit
 
 class SlotViewVC : MyTrainsViewController, OpenLCBLocoNetMonitorDelegate {
   
@@ -24,6 +24,11 @@ class SlotViewVC : MyTrainsViewController, OpenLCBLocoNetMonitorDelegate {
     
   }
   
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    viewType = .locoNetSlotView
+  }
+
   override func viewWillAppear() {
     
     super.viewWillAppear()

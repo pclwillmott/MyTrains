@@ -17,6 +17,11 @@ class OpenLCBMonitorVC: MyTrainsViewController, OpenLCBNetworkObserverDelegate {
     super.windowWillClose(notification)
   }
   
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    viewType = .openLCBTrafficMonitor
+  }
+
   override func viewWillAppear() {
     
     super.viewWillAppear()

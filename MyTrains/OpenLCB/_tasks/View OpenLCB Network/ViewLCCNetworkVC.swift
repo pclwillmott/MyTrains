@@ -24,6 +24,11 @@ class ViewLCCNetworkVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate
     super.windowWillClose(notification)
   }
   
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    viewType = .openLCBNetworkView
+  }
+  
   override func viewWillAppear() {
     
     super.viewWillAppear()

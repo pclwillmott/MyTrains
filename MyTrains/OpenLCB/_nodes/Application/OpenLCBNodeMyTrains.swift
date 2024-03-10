@@ -13,9 +13,13 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   
   public override init(nodeId:UInt64) {
     
+    var configurationSize = MyTrainsViewType.numberOfTypes * 2
+    
+    viewOptions = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.viewOptions.rawValue, defaultMemorySize: configurationSize, isReadOnly: false, description: "")
+    
     super.init(nodeId: nodeId)
 
-    var configurationSize = 0
+    configurationSize = 0
     
     initSpaceAddress(&addressUnitsActualLength,   1, &configurationSize)
     initSpaceAddress(&addressUnitsScaleLength,    1, &configurationSize)
@@ -27,7 +31,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     initSpaceAddress(&addressMaxNumberOfGateways, 1, &configurationSize)
 
     configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: configurationSize, isReadOnly: false, description: "")
-    
+
     if let configuration {
       
       virtualNodeType = MyTrainsVirtualNodeType.applicationNode
@@ -50,9 +54,8 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
       ]
       
       configuration.delegate = self
-      
       memorySpaces[configuration.space] = configuration
-      
+
       registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressUnitsActualLength)
       registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressUnitsScaleLength)
       registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressUnitsActualDistance)
@@ -60,7 +63,10 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
       registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressUnitsActualSpeed)
       registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressUnitsScaleSpeed)
       registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressUnitsTime)
-      
+
+      viewOptions.delegate = self
+      memorySpaces[viewOptions.space] = viewOptions
+
       if !memorySpacesInitialized {
         resetToFactoryDefaults()
       }
@@ -83,7 +89,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   internal var addressUnitsScaleSpeed     = 0
   internal var addressUnitsTime           = 0
   internal var addressMaxNumberOfGateways = 0
-
+  
   private var getUniqueNodeIdQueue : [UInt64] = []
   
   private var timeoutTimer : Timer?
@@ -102,6 +108,8 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   
   public var locoNetGateways : [UInt64:String] = [:]
 
+  public var viewOptions : OpenLCBMemorySpace
+  
   public var unitsActualLength : UnitLength {
     get {
       return UnitLength(rawValue: configuration!.getUInt8(address: addressUnitsActualLength)!)!
@@ -173,7 +181,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
       configuration!.setUInt(address: addressMaxNumberOfGateways, value: value)
     }
   }
-  
+
   internal var nextUniqueNodeIdCandidate : UInt64 {
     
     let seed = nextUniqueNodeIdSeed
@@ -254,6 +262,9 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     
     maximumNumberOfGateways = 1
     
+    setViewOption(type: .openLCBNetworkView, option: .open)
+    setViewOption(type: .openLCBTrafficMonitor, option: .open)
+
     saveMemorySpaces()
     
   }
@@ -277,6 +288,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     var result = UnitLength.insertMap(cdi: cdi)
     result = UnitSpeed.insertMap(cdi: result)
     result = UnitTime.insertMap(cdi: result)
+    result = MyTrainsViewType.insertMap(cdi: result)
     
     let maxPossibleGatewayNodes = 256 - (nodeId & 0xff) - 2
     
@@ -364,6 +376,24 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
 
   // MARK: Public Methods
   
+  public func getViewOption(type:MyTrainsViewType) -> MyTrainsViewOption {
+    return MyTrainsViewOption(rawValue: viewOptions.getUInt8(address: type.rawValue * 2)!)!
+  }
+
+  public func setViewOption(type:MyTrainsViewType, option:MyTrainsViewOption) {
+    viewOptions.setUInt(address: type.rawValue * 2, value: option.rawValue)
+    saveMemorySpaces()
+  }
+
+  public func getViewState(type:MyTrainsViewType) -> Bool {
+    return viewOptions.getUInt8(address: type.rawValue * 2 + 1)! != 0
+  }
+
+  public func setViewState(type:MyTrainsViewType, isOpen:Bool) {
+    viewOptions.setUInt(address: type.rawValue * 2 + 1, value: isOpen ? UInt8(1) : UInt8(0))
+    saveMemorySpaces()
+  }
+
   public func addObserver(observer:MyTrainsAppDelegate) -> Int {
     
     let id = nextObserverId

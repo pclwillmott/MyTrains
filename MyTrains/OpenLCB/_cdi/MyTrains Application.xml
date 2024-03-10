@@ -71,6 +71,8 @@
   </group>
 </segment>
 
+%%VIEW_TYPES%%
+
 %%VIRTUAL_NODE_CONFIG%%
 
 </cdi>

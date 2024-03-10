@@ -242,10 +242,10 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
     if initializationLevel > MyTrainsVirtualNodeType.numberOfStartupGroups {
       if appNode != nil {
         state = gatewayNodes.isEmpty ? .runningLocal : .runningNetwork
-        createVirtualNode(virtualNodeType: .configurationToolNode, completion: dummyCompletion)
-        createVirtualNode(virtualNodeType: .throttleNode, completion: dummyCompletion)
-        createVirtualNode(virtualNodeType: .locoNetMonitorNode, completion: dummyCompletion)
-        createVirtualNode(virtualNodeType: .programmerToolNode, completion: dummyCompletion)
+        createVirtualNode(virtualNodeType: .configurationToolNode, completion: startupCompletion)
+        createVirtualNode(virtualNodeType: .throttleNode, completion: startupCompletion)
+        createVirtualNode(virtualNodeType: .locoNetMonitorNode, completion: startupCompletion)
+        createVirtualNode(virtualNodeType: .programmerToolNode, completion: startupCompletion)
       }
       else {
         initializationLevel = 0
@@ -451,6 +451,12 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
   }
   
   private func dummyCompletion(node:OpenLCBNodeVirtual) {
+  }
+  
+  private func startupCompletion(node:OpenLCBNodeVirtual) {
+    if configurationToolManager.numberOfFreeNodes > 0 && throttleManager.numberOfFreeNodes > 0 && locoNetMonitorManager.numberOfFreeNodes > 0 && programmerToolManager.numberOfFreeNodes > 0 {
+      appDelegate.openWindows()
+    }
   }
   
   public func getConfigurationTool(exclusive:Bool = false) -> OpenLCBNodeConfigurationTool? {
@@ -727,11 +733,17 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
   
   @objc public func serialPortWasAdded(path:String) {
     
+    var reboot = false
+    
     for (_, node) in nodesInhibited {
       if let gateway = node as? OpenLCBCANGateway, path == gateway.devicePath {
-        gateway.start()
+        reboot = true
         break
       }
+    }
+    
+    if reboot {
+      appDelegate.rebootRequest()
     }
     
   }

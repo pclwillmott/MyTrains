@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22505"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Window Controller-->
+        <scene sceneID="OLc-Lp-Ygy">
+            <objects>
+                <windowController storyboardIdentifier="InitAppWC" id="FiG-Ov-pjk" sceneMemberID="viewController">
+                    <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="6xL-dM-u6U">
+                        <rect key="contentRect" x="268" y="330" width="480" height="287"/>
+                        <rect key="screenRect" x="0.0" y="0.0" width="1792" height="1095"/>
+                        <value key="minSize" type="size" width="480" height="287"/>
+                        <value key="maxSize" type="size" width="480" height="287"/>
+                        <value key="minFullScreenContentSize" type="size" width="480" height="287"/>
+                        <value key="maxFullScreenContentSize" type="size" width="480" height="287"/>
+                        <view key="contentView" id="Cz1-1I-p21">
+                            <rect key="frame" x="0.0" y="0.0" width="480" height="287"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </view>
+                        <connections>
+                            <outlet property="delegate" destination="FiG-Ov-pjk" id="7CS-kF-ubs"/>
+                        </connections>
+                    </window>
+                    <connections>
+                        <segue destination="rPy-Qk-kmb" kind="relationship" relationship="window.shadowedContentViewController" id="mYm-ZA-qqV"/>
+                    </connections>
+                </windowController>
+                <customObject id="3Le-yw-HbQ" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="32" y="145.5"/>
+        </scene>
+        <!--Init AppVC-->
+        <scene sceneID="X1R-wV-hs0">
+            <objects>
+                <viewController id="rPy-Qk-kmb" customClass="InitAppVC" customModule="MyTrains" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="43n-e5-aic">
+                        <rect key="frame" x="0.0" y="0.0" width="480" height="287"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </view>
+                </viewController>
+                <customObject id="wJ8-SM-dNU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="542" y="145.5"/>
+        </scene>
+    </scenes>
+</document>

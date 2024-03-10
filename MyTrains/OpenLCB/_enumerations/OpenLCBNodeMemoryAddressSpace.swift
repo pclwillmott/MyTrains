@@ -18,4 +18,6 @@ public enum OpenLCBNodeMemoryAddressSpace : UInt8 {
   case cv                = 0xf8 // 248
   case firmware          = 0xef // 239
   case virtualNodeConfig = 0x00 //   0
+  case viewOptions       = 0x01 //   1
+  case viewStates        = 0x02 //   2
 }

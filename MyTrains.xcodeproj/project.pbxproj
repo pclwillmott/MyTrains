@@ -95,6 +95,10 @@
 		DA467BB3281D60E400AB9650 /* SwitchBoardShapeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA467BB2281D60E400AB9650 /* SwitchBoardShapeButton.swift */; };
 		DA48EE29293CEF16006C26A0 /* DayOfWeek.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA48EE28293CEF16006C26A0 /* DayOfWeek.swift */; };
 		DA48EE2B293CEFEA006C26A0 /* LocoNetFastClockScaleFactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA48EE2A293CEFEA006C26A0 /* LocoNetFastClockScaleFactor.swift */; };
+		DA497BC12B9DCF6700D96ACA /* MyTrainsViewOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA497BC02B9DCF6700D96ACA /* MyTrainsViewOption.swift */; };
+		DA497BC32B9DDFDB00D96ACA /* MyTrainsViewType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA497BC22B9DDFDB00D96ACA /* MyTrainsViewType.swift */; };
+		DA497BC52B9E0B6600D96ACA /* InitApp.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA497BC42B9E0B6600D96ACA /* InitApp.storyboard */; };
+		DA497BC72B9E0B7600D96ACA /* InitAppVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA497BC62B9E0B7600D96ACA /* InitAppVC.swift */; };
 		DA4DE5232B2CBC16000C74F1 /* SwitchBoardEventType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA4DE5222B2CBC16000C74F1 /* SwitchBoardEventType.swift */; };
 		DA50C2F32B77AC1A00C2F6A1 /* UnitTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA50C2F22B77AC1A00C2F6A1 /* UnitTime.swift */; };
 		DA50C2F52B77B8D400C2F6A1 /* SensorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA50C2F42B77B8D400C2F6A1 /* SensorType.swift */; };
@@ -409,6 +413,10 @@
 		DA467BB2281D60E400AB9650 /* SwitchBoardShapeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchBoardShapeButton.swift; sourceTree = "<group>"; };
 		DA48EE28293CEF16006C26A0 /* DayOfWeek.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayOfWeek.swift; sourceTree = "<group>"; };
 		DA48EE2A293CEFEA006C26A0 /* LocoNetFastClockScaleFactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocoNetFastClockScaleFactor.swift; sourceTree = "<group>"; };
+		DA497BC02B9DCF6700D96ACA /* MyTrainsViewOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTrainsViewOption.swift; sourceTree = "<group>"; };
+		DA497BC22B9DDFDB00D96ACA /* MyTrainsViewType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTrainsViewType.swift; sourceTree = "<group>"; };
+		DA497BC42B9E0B6600D96ACA /* InitApp.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = InitApp.storyboard; sourceTree = "<group>"; };
+		DA497BC62B9E0B7600D96ACA /* InitAppVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitAppVC.swift; sourceTree = "<group>"; };
 		DA4DE5222B2CBC16000C74F1 /* SwitchBoardEventType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchBoardEventType.swift; sourceTree = "<group>"; };
 		DA50C2F22B77AC1A00C2F6A1 /* UnitTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitTime.swift; sourceTree = "<group>"; };
 		DA50C2F42B77B8D400C2F6A1 /* SensorType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorType.swift; sourceTree = "<group>"; };
@@ -827,6 +835,8 @@
 			isa = PBXGroup;
 			children = (
 				DAA83DEA272C37670075CBCD /* AppDelegate.swift */,
+				DA497BC42B9E0B6600D96ACA /* InitApp.storyboard */,
+				DA497BC62B9E0B7600D96ACA /* InitAppVC.swift */,
 				DA9FDD022B9364D6003C6672 /* MenuTag.swift */,
 				DAB5250E2B52E9AA00EEE9A0 /* Main.storyboard */,
 				DAA83DEC272C37670075CBCD /* MainVC.swift */,
@@ -1332,6 +1342,8 @@
 				DA56261429E1BE7800D465CC /* OpenLCBMTI.swift */,
 				DA56261229E1B64F00D465CC /* OpenLCBNetworkLayerState.swift */,
 				DA60140A29F448B000AD9ACD /* OpenLCBNodeMemoryAddressSpace.swift */,
+				DA497BC02B9DCF6700D96ACA /* MyTrainsViewOption.swift */,
+				DA497BC22B9DDFDB00D96ACA /* MyTrainsViewType.swift */,
 				DA1003222A7E81F7004CC86C /* OpenLCBProgrammingMode.swift */,
 				DA0D3E0B2A485E9A0042748C /* OpenLCBSearchMatchTarget.swift */,
 				DA0D3E092A485E770042748C /* OpenLCBSearchMatchType.swift */,
@@ -1469,6 +1481,7 @@
 				DAA83DEF272C37680075CBCD /* Assets.xcassets in Resources */,
 				DA60140129F408D800AD9ACD /* ViewLCCNetwork.storyboard in Resources */,
 				DA5BD1EB2B65536D00CEA5BA /* License.storyboard in Resources */,
+				DA497BC52B9E0B6600D96ACA /* InitApp.storyboard in Resources */,
 				DA1ECC9328439D4600C4F963 /* UpdateFirmware.storyboard in Resources */,
 				DAAC7E912A79308B001A424E /* MyTrains DCC Programming Track.xml in Resources */,
 				DA408A5C2B582DB6005EBBDE /* SelectMasterNode.storyboard in Resources */,
@@ -1590,6 +1603,7 @@
 				DABD4F342A3C9B1B000A25AB /* LocoNetMessageType.swift in Sources */,
 				DA0BBB7B29FD4ED3003E03EF /* CDIMapRelation.swift in Sources */,
 				DA6E28E3285F8F1A00772641 /* TrackElectrificationType.swift in Sources */,
+				DA497BC12B9DCF6700D96ACA /* MyTrainsViewOption.swift in Sources */,
 				DA1003252A7E8F62004CC86C /* LocoNetProgrammingMode.swift in Sources */,
 				DADFFF902946025500CD2119 /* DateExtensions.swift in Sources */,
 				DA3866232A7A653900A0FAEB /* OpenLCBNodeManager.swift in Sources */,
@@ -1619,6 +1633,7 @@
 				DA9FDD012B935908003C6672 /* MyTrainsViewController.swift in Sources */,
 				DAA83DEB272C37670075CBCD /* AppDelegate.swift in Sources */,
 				DAF6778C2B432372009707A4 /* CDIStackViewManagerDelegate.swift in Sources */,
+				DA497BC72B9E0B7600D96ACA /* InitAppVC.swift in Sources */,
 				DA0D3E062A4850880042748C /* OpenLCBThrottleDelegate.swift in Sources */,
 				DAACFC742A4336F7001743DA /* OpenLCBTractionManagementType.swift in Sources */,
 				DA613ACB28A7E02E003218BA /* PlaceLocomotiveVC.swift in Sources */,
@@ -1718,6 +1733,7 @@
 				DA467BA3281D501300AB9650 /* SwitchBoardDefs.swift in Sources */,
 				DAEF18732A3DFEBF00AC227D /* LocoNetDeviceAttribute.swift in Sources */,
 				DAEA21302A51976C008545A6 /* LocoNet.swift in Sources */,
+				DA497BC32B9DDFDB00D96ACA /* MyTrainsViewType.swift in Sources */,
 				DA1272C52A7576CD00AB42F6 /* OpenLCBFDIItem.swift in Sources */,
 				DA0D3E102A48AA6F0042748C /* OpenLCBThrottleState.swift in Sources */,
 				DA5550EA28392A6B00C4FE4E /* DigitraxProductCode.swift in Sources */,

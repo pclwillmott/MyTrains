@@ -29,6 +29,11 @@ class DashBoardVC: MyTrainsViewController, MyTrainsControllerDelegate {
     
   }
 
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    viewType = .locoNetDashboard
+  }
+
   override func viewWillAppear() {
     
     super.viewWillAppear()

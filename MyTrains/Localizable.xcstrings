@@ -1469,7 +1469,7 @@
 
     },
     "Copy" : {
-      "comment" : "Used for the title of a button copies to the clipboard\nUsed for a menu title"
+      "comment" : "Used for a menu title\nUsed for the title of a button copies to the clipboard"
     },
     "Couple" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -2028,6 +2028,9 @@
           }
         }
       }
+    },
+    "Do not open" : {
+
     },
     "Doppler Horn" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -3052,6 +3055,9 @@
         }
       }
     },
+    "LCC/OpenLCB Network View" : {
+
+    },
     "LCC/OpenLCB Traffic Monitor" : {
       "comment" : "Used for a menu title",
       "localizations" : {
@@ -3652,6 +3658,9 @@
     "MyTrains Application" : {
       "comment" : "Used to create a default OpenLCB virtual name"
     },
+    "MyTrains is initializing. This may take a few seconds." : {
+
+    },
     "MyTrains Layout Activated" : {
 
     },
@@ -3963,6 +3972,9 @@
         }
       }
     },
+    "Open" : {
+
+    },
     "Operations" : {
       "comment" : "Used for a menu title",
       "localizations" : {
@@ -4074,7 +4086,7 @@
       }
     },
     "Paste" : {
-      "comment" : "Used for the title of a button that pastes from the clipboard\nUsed for a menu title"
+      "comment" : "Used for a menu title\nUsed for the title of a button that pastes from the clipboard"
     },
     "Permanent Error" : {
 
@@ -4542,6 +4554,9 @@
           }
         }
       }
+    },
+    "Restore previous state" : {
+
     },
     "Reverse" : {
       "comment" : "Used to indicate that the train is moving in the reverse direction",
@@ -5326,6 +5341,9 @@
     "Terminate Due To Error" : {
 
     },
+    "The following options determine which windows are automatically displayed at start-up and when the application restarts after configuration changes." : {
+
+    },
     "The node \"%@\" (%@) is attempting to send the unadvertised event: %@" : {
       "localizations" : {
         "en" : {
@@ -5641,7 +5659,7 @@
       "comment" : "This is the name of a country."
     },
     "Unknown" : {
-      "comment" : "Used to indicate that the type of something is unknown\nUsed to indicate the state of a turnout",
+      "comment" : "Used to indicate the state of a turnout\nUsed to indicate that the type of something is unknown",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -5922,6 +5940,9 @@
     },
     "Window" : {
       "comment" : "Used for a menu title"
+    },
+    "Window startup options" : {
+
     },
     "Write All" : {
       "localizations" : {

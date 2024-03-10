@@ -19,8 +19,9 @@ class MonitorVC: MyTrainsViewController, OpenLCBLocoNetMonitorDelegate, MyTrains
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    viewType = .locoNetTrafficMonitor
   }
-   
+
   override func windowWillClose(_ notification: Notification) {
     
     guard let monitorNode else {

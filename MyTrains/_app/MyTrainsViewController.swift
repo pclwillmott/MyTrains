@@ -19,6 +19,8 @@ public class MyTrainsViewController: NSViewController, NSWindowDelegate {
     #if DEBUG
     debugLog("viewDidLoad")
     #endif
+    
+    // The override function sets the view type.
 
   }
   
@@ -42,6 +44,10 @@ public class MyTrainsViewController: NSViewController, NSWindowDelegate {
     debugLog("viewDidAppear")
     #endif
     
+    if let viewType {
+      appNode?.setViewState(type: viewType, isOpen: true)
+    }
+    
   }
   
   public func windowShouldClose(_ sender: NSWindow) -> Bool {
@@ -61,6 +67,10 @@ public class MyTrainsViewController: NSViewController, NSWindowDelegate {
     #endif
     
     appDelegate.removeViewController(self)
+
+    if let viewType, isManualClose {
+      appNode?.setViewState(type: viewType, isOpen: false)
+    }
     
   }
   
@@ -87,6 +97,10 @@ public class MyTrainsViewController: NSViewController, NSWindowDelegate {
   // MARK: Public Properties
   
   public var objectIdentifier : ObjectIdentifier?
+  
+  public var viewType : MyTrainsViewType?
+  
+  public var isManualClose = true
 
   // MARK: Public Methods
   
@@ -95,6 +109,7 @@ public class MyTrainsViewController: NSViewController, NSWindowDelegate {
   }
   
   public func closeWindow() {
+    isManualClose = false
     view.window?.close()
   }
   
