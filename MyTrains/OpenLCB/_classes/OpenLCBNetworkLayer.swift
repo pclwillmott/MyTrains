@@ -34,7 +34,7 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
   
   private var startupGroup : [Int:StartupGroup] = [:]
   
-  private var gatewayNodes : [UInt64:OpenLCBNodeVirtual] = [:]
+  public var gatewayNodes : [UInt64:OpenLCBNodeVirtual] = [:]
 
   private var nodesSimpleSetSufficient : [UInt64:OpenLCBNodeVirtual] = [:]
 
@@ -58,7 +58,7 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
   
   // MARK: Public Properties
 
-  public var configurationToolManager = OpenLCBNodeManager()
+  public var configurationToolManager = OpenLCBConfigurationToolManager()
   
   public var virtualNodeLookup : [UInt64:OpenLCBNodeVirtual] = [:]
   
@@ -204,11 +204,15 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
       
     }
     
+    numberOfGatewayNodes = 0
+    
     state = .initializing
     
     startNodes()
     
   }
+  
+  public var numberOfGatewayNodes : Int = 0
   
   public func stop() {
     stopNodes()
@@ -240,12 +244,9 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
     }
     
     if initializationLevel > MyTrainsVirtualNodeType.numberOfStartupGroups {
-      if appNode != nil {
+      if let appNode {
         state = gatewayNodes.isEmpty ? .runningLocal : .runningNetwork
-        createVirtualNode(virtualNodeType: .configurationToolNode, completion: startupCompletion)
-        createVirtualNode(virtualNodeType: .throttleNode, completion: startupCompletion)
-        createVirtualNode(virtualNodeType: .locoNetMonitorNode, completion: startupCompletion)
-        createVirtualNode(virtualNodeType: .programmerToolNode, completion: startupCompletion)
+        appNode.updateNodeIdCache()
       }
       else {
         initializationLevel = 0
@@ -305,9 +306,12 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
     
     if node.state == .inhibited {
       nodesInhibited[node.nodeId] = node
+      appDelegate.refreshRequired()
     }
     else if node.isGatewayNode {
       gatewayNodes[node.nodeId] = node
+      (node as? OpenLCBCANGateway)?.gatewayNumber = numberOfGatewayNodes
+      numberOfGatewayNodes += 1
     }
     else {
       
@@ -417,16 +421,18 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
     }
   }
   
+  public func getConfigurationTool(exclusive:Bool = false) -> OpenLCBNodeConfigurationTool? {
+    let tool = configurationToolManager.getNode(virtualNodeType: .configurationToolNode, exclusive: exclusive) as? OpenLCBNodeConfigurationTool
+      tool?.networkLayer = self
+    return tool
+  }
+  
+  public func releaseConfigurationTool(configurationTool:OpenLCBNodeConfigurationTool) {
+    configurationToolManager.releaseNode(node: configurationTool)
+  }
+  
   public func getThrottle() -> OpenLCBThrottle? {
-    
-    let result = throttleManager.getNode() as? OpenLCBThrottle
-    
-    if throttleManager.numberOfFreeNodes == 0 {
-      createVirtualNode(virtualNodeType: .throttleNode, completion: dummyCompletion(node:))
-    }
-    
-    return result
-    
+    return throttleManager.getNode(virtualNodeType: .throttleNode) as? OpenLCBThrottle
   }
   
   public func releaseThrottle(throttle:OpenLCBThrottle) {
@@ -435,7 +441,7 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
   }
   
   public func getLocoNetMonitor() -> OpenLCBLocoNetMonitorNode? {
-    return locoNetMonitorManager.getNode() as? OpenLCBLocoNetMonitorNode
+    return locoNetMonitorManager.getNode(virtualNodeType: .locoNetMonitorNode) as? OpenLCBLocoNetMonitorNode
   }
   
   public func releaseLocoNetMonitor(monitor:OpenLCBLocoNetMonitorNode) {
@@ -443,7 +449,7 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
   }
   
   public func getProgrammerTool() -> OpenLCBProgrammerToolNode? {
-    return programmerToolManager.getNode() as? OpenLCBProgrammerToolNode
+    return programmerToolManager.getNode(virtualNodeType: .programmerToolNode) as? OpenLCBProgrammerToolNode
   }
   
   public func releaseProgrammerTool(programmerTool:OpenLCBProgrammerToolNode) {
@@ -453,43 +459,10 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
   private func dummyCompletion(node:OpenLCBNodeVirtual) {
   }
   
-  private func startupCompletion(node:OpenLCBNodeVirtual) {
-    if configurationToolManager.numberOfFreeNodes > 0 && throttleManager.numberOfFreeNodes > 0 && locoNetMonitorManager.numberOfFreeNodes > 0 && programmerToolManager.numberOfFreeNodes > 0 {
+  public func nodeIdCacheCompleted() {
+    if configurationToolManager.numberOfNodes == 0 {
       appDelegate.openWindows()
     }
-  }
-  
-  public func getConfigurationTool(exclusive:Bool = false) -> OpenLCBNodeConfigurationTool? {
-    
-    if let result = configurationToolManager.getNode(exclusive: exclusive) as? OpenLCBNodeConfigurationTool {
-      
-      if configurationToolManager.numberOfFreeNodes == 0 {
-        createVirtualNode(virtualNodeType: .configurationToolNode, completion: dummyCompletion(node:))
-      }
-      
-      return result
-      
-    }
-    
-    return nil
-    
-  }
-  
-  public func releaseConfigurationTool(configurationTool:OpenLCBNodeConfigurationTool) {
-    configurationToolManager.releaseNode(node: configurationTool)
-  }
-  
-  public var newNodeQueue : [(virtualNodeType:MyTrainsVirtualNodeType, completion:(OpenLCBNodeVirtual) -> Void)] = []
-  
-  public func createVirtualNode(virtualNodeType:MyTrainsVirtualNodeType, completion: @escaping (OpenLCBNodeVirtual) -> Void) {
-    
-    guard let appNode else {
-      return
-    }
-    
-    newNodeQueue.append((virtualNodeType, completion))
-    appNode.getUniqueNodeId()
-    
   }
   
   public func createGatewayNode() {
@@ -532,17 +505,13 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
 
   }
   
-  public func createVirtualNode(newNodeId:UInt64) {
+  public func createVirtualNode(virtualNodeType:MyTrainsVirtualNodeType) -> OpenLCBNodeVirtual {
     
-    guard !newNodeQueue.isEmpty else {
-      return
-    }
+    let newNodeId = appNode!.getUniqueNodeId()
     
-    let item = newNodeQueue.removeFirst()
+    var node : OpenLCBNodeVirtual
     
-    var node : OpenLCBNodeVirtual?
-    
-    switch item.virtualNodeType {
+    switch virtualNodeType {
     case .clockNode:
       node = OpenLCBClock(nodeId: newNodeId)
     case .throttleNode:
@@ -552,7 +521,7 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
     case .trainNode:
       node = OpenLCBNodeRollingStockLocoNet(nodeId: newNodeId)
     case .canGatewayNode:
-      break
+      node = OpenLCBCANGateway(nodeId: newNodeId)
     case .applicationNode:
       node = OpenLCBNodeMyTrains(nodeId: newNodeId)
     case .configurationToolNode:
@@ -564,28 +533,23 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
     case .programmingTrackNode:
       node = OpenLCBProgrammingTrackNode(nodeId: newNodeId)
     case .genericVirtualNode:
-      break
+      node = OpenLCBNodeVirtual(nodeId: newNodeId)
     case .digitraxBXP88Node:
       node = OpenLCBDigitraxBXP88Node(nodeId: newNodeId)
     case .layoutNode:
       node = LayoutNode(nodeId: newNodeId)
     case .switchboardPanelNode:
-      if let layoutNodeId {
-        node = SwitchboardPanelNode(nodeId: newNodeId, layoutNodeId: layoutNodeId)
-      }
+      node = SwitchboardPanelNode(nodeId: newNodeId, layoutNodeId: layoutNodeId!)
     case .switchboardItemNode:
-      if let layoutNodeId {
-        node = SwitchboardItemNode(nodeId: newNodeId, layoutNodeId: layoutNodeId)
-      }
-      node?.layoutNodeId = layoutNodeId!
+      node = SwitchboardItemNode(nodeId: newNodeId, layoutNodeId: layoutNodeId!)
     }
 
-    if let node {
-      node.hostAppNodeId = appNode!.nodeId
-      registerNode(node: node)
-      item.completion(node)
-    }
+    node.hostAppNodeId = appNode!.nodeId
 
+    registerNode(node: node)
+
+    return node
+    
   }
   
   // MARK: Messages
@@ -616,7 +580,7 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
         virtualNode.openLCBMessageReceived(message: message)
       }
       else if message.visibility.rawValue > OpenLCBNodeVisibility.visibilityPrivate.rawValue {
-        for (nodeId, virtualNode) in gatewayNodes {
+        for (_, virtualNode) in gatewayNodes {
           virtualNode.openLCBMessageReceived(message: message)
         }
       }
@@ -635,7 +599,7 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
           virtualNode.openLCBMessageReceived(message: message)
         }
       }
-      for (nodeId, virtualNode) in gatewayNodes {
+      for (_, virtualNode) in gatewayNodes {
         virtualNode.openLCBMessageReceived(message: message)
       }
       for (_, virtualNode) in nodesInhibited {
@@ -654,6 +618,9 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
     monitorItem.frame = frame
     monitorItem.direction = .received
     addToMonitorBuffer(item: monitorItem, isBackgroundThread: true)
+    for (_, observer) in observers {
+      observer.gatewayRXPacket?(gateway: gateway.gatewayNumber)
+    }
   }
   
   public func canFrameSent(gateway:OpenLCBCANGateway, frame:LCCCANFrame, isBackgroundThread:Bool) {
@@ -661,6 +628,9 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
     monitorItem.frame = frame
     monitorItem.direction = .sent
     addToMonitorBuffer(item: monitorItem, isBackgroundThread: isBackgroundThread)
+    for (_, observer) in observers {
+      observer.gatewayTXPacket?(gateway: gateway.gatewayNumber)
+    }
   }
   
   public func clearMonitorBuffer() {

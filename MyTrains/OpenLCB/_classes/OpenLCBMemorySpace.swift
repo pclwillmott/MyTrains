@@ -592,6 +592,54 @@ public class OpenLCBMemorySpace {
     
     var result : [OpenLCBNodeVirtual] = []
     
+    for nodeId in getVirtualNodeIds() {
+      
+      var node : OpenLCBNodeVirtual
+      
+      switch OpenLCBNodeVirtual(nodeId: nodeId).virtualNodeType {
+      case .clockNode:
+        node = OpenLCBClock(nodeId: nodeId)
+      case .throttleNode:
+        node = OpenLCBThrottle(nodeId: nodeId)
+      case .locoNetGatewayNode:
+        node = OpenLCBLocoNetGateway(nodeId: nodeId)
+      case .trainNode:
+        node = OpenLCBNodeRollingStockLocoNet(nodeId: nodeId)
+      case .applicationNode:
+        node =  OpenLCBNodeMyTrains(nodeId: nodeId)
+      case .configurationToolNode:
+        node = OpenLCBNodeConfigurationTool(nodeId: nodeId)
+      case .genericVirtualNode:
+        node = OpenLCBNodeVirtual(nodeId: nodeId)
+      case .canGatewayNode:
+        node = OpenLCBCANGateway(nodeId: nodeId)
+      case .locoNetMonitorNode:
+        node = OpenLCBLocoNetMonitorNode(nodeId: nodeId)
+      case .programmerToolNode:
+        node = OpenLCBProgrammerToolNode(nodeId: nodeId)
+      case .programmingTrackNode:
+        node = OpenLCBProgrammingTrackNode(nodeId: nodeId)
+      case .digitraxBXP88Node:
+        node = OpenLCBDigitraxBXP88Node(nodeId: nodeId)
+      case .layoutNode:
+        node = LayoutNode(nodeId: nodeId)
+      case .switchboardPanelNode:
+        node = SwitchboardPanelNode(nodeId: nodeId)
+      case .switchboardItemNode:
+        node = SwitchboardItemNode(nodeId: nodeId)
+      }
+      
+      result.append(node)
+
+    }
+    
+    return result
+  }
+  
+  public static func getVirtualNodeIds() -> Set<UInt64> {
+    
+    var result : Set<UInt64> = []
+    
     let conn = Database.getConnection()
     
     let shouldClose = conn.state != .Open
@@ -602,65 +650,13 @@ public class OpenLCBMemorySpace {
     
     let cmd = conn.createCommand()
      
-    cmd.commandText = "SELECT \(columnNames) FROM [\(TABLE.MEMORY_SPACE)] ORDER BY [\(MEMORY_SPACE.NODE_ID)], [\(MEMORY_SPACE.SPACE)]"
+    cmd.commandText = "SELECT DISTINCT [\(MEMORY_SPACE.NODE_ID)] FROM [\(TABLE.MEMORY_SPACE)]"
 
     if let reader = cmd.executeReader() {
-      
-      var nodeIds : Set<UInt64> = []
-      
       while reader.read() {
-        let space = OpenLCBMemorySpace(reader: reader, isReadOnly: true, description: "")
-        nodeIds.insert(space.nodeId)
+        result.insert(reader.getUInt64(index: 0)!)
       }
-      
       reader.close()
-      
-      for nodeId in nodeIds {
-        
-        let temp = OpenLCBNodeVirtual(nodeId: nodeId)
-        
-        var node : OpenLCBNodeVirtual?
-        
-        switch temp.virtualNodeType {
-        case .clockNode:
-          node = OpenLCBClock(nodeId: nodeId)
-        case .throttleNode:
-          node = OpenLCBThrottle(nodeId: nodeId)
-        case .locoNetGatewayNode:
-          node = OpenLCBLocoNetGateway(nodeId: nodeId)
-        case .trainNode:
-          node = OpenLCBNodeRollingStockLocoNet(nodeId: nodeId)
-        case .applicationNode:
-          node =  OpenLCBNodeMyTrains(nodeId: nodeId)
-        case .configurationToolNode:
-          node = OpenLCBNodeConfigurationTool(nodeId: nodeId)
-        case .genericVirtualNode:
-          node = OpenLCBNodeVirtual(nodeId: nodeId)
-        case .canGatewayNode:
-          node = OpenLCBCANGateway(nodeId: nodeId)
-        case .locoNetMonitorNode:
-          node = OpenLCBLocoNetMonitorNode(nodeId: nodeId)
-        case .programmerToolNode:
-          node = OpenLCBProgrammerToolNode(nodeId: nodeId)
-        case .programmingTrackNode:
-          node = OpenLCBProgrammingTrackNode(nodeId: nodeId)
-        case .digitraxBXP88Node:
-          node = OpenLCBDigitraxBXP88Node(nodeId: nodeId)
-        case .layoutNode:
-          node = LayoutNode(nodeId: nodeId)
-          break
-        case .switchboardPanelNode:
-          node = SwitchboardPanelNode(nodeId: nodeId)
-        case .switchboardItemNode:
-          node = SwitchboardItemNode(nodeId: nodeId)
-        }
-        
-        if let node {
-          result.append(node)
-        }
-                
-      }
-      
     }
     
     if shouldClose {
@@ -669,39 +665,6 @@ public class OpenLCBMemorySpace {
 
     return result
     
-  }
-
-  public static func getMemorySpaces() {
-    
-    let conn = Database.getConnection()
-    
-    let shouldClose = conn.state != .Open
-     
-    if shouldClose {
-      _ = conn.open()
-    }
-    
-    let cmd = conn.createCommand()
-     
-    cmd.commandText = "SELECT \(columnNames) FROM [\(TABLE.MEMORY_SPACE)] ORDER BY [\(MEMORY_SPACE.NODE_ID)], [\(MEMORY_SPACE.SPACE)]"
-
-    if let reader = cmd.executeReader() {
-      
-      while reader.read() {
-        let result = OpenLCBMemorySpace(reader: reader, isReadOnly: true, description: "")
-        
- //       print("*** \(result.nodeId.toHexDotFormat(numberOfBytes: 6)) - 0x\(result.space.toHex(numberOfDigits: 2)) PK: \(result.primaryKey) \(result.memory)")
-        
-      }
-      
-      reader.close()
-  
-    }
-    
-    if shouldClose {
-      conn.close()
-    }
-
   }
 
   public static func delete(nodeId: UInt64, space:UInt8) {

@@ -116,6 +116,10 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
       eventRangesProduced = [
         EventRange(startId: OpenLCBWellKnownEvent.locationServicesReport.rawValue, mask: 0x0000ffffffffffff)!,
       ]
+      
+      eventsToSendAtStartup = [
+        OpenLCBWellKnownEvent.nodeIsATrain.rawValue,
+      ]
 
       cdiFilename = "MyTrains Train"
       
@@ -643,8 +647,6 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
   public override func start() {
     
     super.start()
-    
-    sendWellKnownEvent(eventId: .nodeIsATrain)
     
   }
   

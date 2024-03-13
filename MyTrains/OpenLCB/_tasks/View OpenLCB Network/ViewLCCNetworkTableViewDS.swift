@@ -157,6 +157,7 @@ public class ViewLCCNetworkTableViewDS : NSObject, NSTableViewDataSource, NSTabl
             .locoNetGatewayNode,
             .programmingTrackNode,
             .trainNode,
+            .genericVirtualNode,
           ]
           
           button.isEnabled = validNodesToDelete.contains(node.virtualNodeType)

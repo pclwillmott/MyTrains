@@ -92,6 +92,7 @@ public enum MyTrainsVirtualNodeType : UInt16 {
   ]
 
   private static let _startupGroup : [MyTrainsVirtualNodeType:Int] = [
+    .genericVirtualNode    : 5,
     .canGatewayNode        : 1,
     .applicationNode       : 2,
     .locoNetGatewayNode    : 3,

@@ -36,7 +36,7 @@ public enum LocomotiveType : Int {
   
   private static var map : String {
     
-    var items : [LocomotiveType] = [
+    let items : [LocomotiveType] = [
       .unknown,
       .diesel,
       .electricOverhead,

@@ -96,7 +96,31 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
     // Do the legal stuff, if they don't accept the agreement stop the app.
     
     if !eulaAccepted! {
-      MyTrainsWindow.license.runModel()
+      
+      let alert = NSAlert()
+
+      if let filepath = Bundle.main.path(forResource: "License", ofType: "txt") {
+        do {
+          let text = try String(contentsOfFile: filepath)
+          alert.informativeText = text.replacingOccurrences(of: "%%COPYRIGHT%%", with: appCopyright)
+        }
+        catch {
+        }
+      }
+ 
+      alert.messageText = String(localized: "Agreement")
+      alert.addButton(withTitle: String(localized: "Decline"))
+      alert.addButton(withTitle: String(localized: "Accept"))
+      alert.alertStyle = .informational
+      
+      switch alert.runModal() {
+      case .alertFirstButtonReturn:
+        exit(0)
+      default:
+        eulaAccepted = true
+        break
+      }
+
     }
 
     func gatherMenuItems(menu:NSMenu) {
@@ -135,7 +159,12 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
     
     state = .uninitialized
  
-    if Database.numberOfRows(tableName: TABLE.MEMORY_SPACE) != 0 {
+    if Database.isEmpty() {
+      let vc = MyTrainsWindow.selectMasterNode.viewController as! SelectMasterNodeVC
+      vc.networkLayer = networkLayer
+      vc.showWindow()
+    }
+    else {
       startApp()
     }
     
@@ -155,12 +184,15 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
     #endif
     
     if isSafeToTerminate {
+      if appNode == nil {
+        return .terminateNow
+      }
       state = .terminating
       closeAllWindows()
     }
     
     return .terminateCancel
-    
+
   }
 
   public func applicationWillTerminate(_ aNotification: Notification) {
@@ -188,10 +220,22 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
     initAppVC?.closeWindow()
   }
   
+  private func isWindowOpen(viewType:MyTrainsViewType) -> Bool {
+    for (_, view) in activeViewControllers {
+      if view.viewType == viewType {
+        return true
+      }
+    }
+    return false
+  }
+  
   private func openWindow(viewType:MyTrainsViewType) {
     
     switch viewType {
     case .openLCBNetworkView:
+      if isWindowOpen(viewType: viewType) {
+        return
+      }
       let networkLayer = appDelegate.networkLayer
       
       let vc = MyTrainsWindow.viewLCCNetwork.viewController as! ViewLCCNetworkVC
@@ -200,6 +244,9 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
       vc.showWindow()
 
     case .openLCBTrafficMonitor:
+      if isWindowOpen(viewType: viewType) {
+        return
+      }
       MyTrainsWindow.openLCBMonitor.showWindow()
 
     case .throttle:
@@ -239,6 +286,14 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
 
     }
     
+  }
+  
+  public func refreshRequired() {
+    for (_, view) in activeViewControllers {
+      if view.viewType == .openLCBNetworkView {
+        view.refreshRequired()
+      }
+    }
   }
   
   public func openWindows() {
@@ -337,35 +392,6 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
     
   }
 
-  func newNodeCompletion(node:OpenLCBNodeVirtual) {
-    
-    let networkLayer = appDelegate.networkLayer
-    
-    node.hostAppNodeId = node.virtualNodeType == .applicationNode ? node.nodeId : appNode!.nodeId
-    
-    switch node.virtualNodeType {
-    case .layoutNode:
-      node.layoutNodeId = node.nodeId
-      node.saveMemorySpaces()
-    case .switchboardItemNode, .switchboardPanelNode:
-      node.layoutNodeId = appLayoutId!
-      node.saveMemorySpaces()
-    default:
-      break
-    }
-
-    if node.isConfigurationDescriptionInformationProtocolSupported {
-      let vc = MyTrainsWindow.configurationTool.viewController as! ConfigurationToolVC
-      vc.configurationTool = networkLayer.getConfigurationTool()
-      vc.configurationTool?.delegate = vc
-      vc.node = node
-      vc.showWindow()
-    }
-    
-    createVirtualNodeVC?.stop()
-    
-  }
-  
   // MARK: Public Methods
   
   public func addViewController(_ viewController:MyTrainsViewController) {
@@ -585,15 +611,35 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
             return
           }
               
-          let vc = MyTrainsWindow.createVirtualNode.viewController as? CreateVirtualNodeVC
-          createVirtualNodeVC = vc
-          vc?.showWindow()
+          let node = networkLayer.createVirtualNode(virtualNodeType: virtualNodeType)
 
-          networkLayer.createVirtualNode(virtualNodeType: virtualNodeType, completion: newNodeCompletion(node:))
+          let networkLayer = appDelegate.networkLayer
+          
+          node.hostAppNodeId = node.virtualNodeType == .applicationNode ? node.nodeId : appNode!.nodeId
+          
+          switch node.virtualNodeType {
+          case .layoutNode:
+            node.layoutNodeId = node.nodeId
+            node.saveMemorySpaces()
+          case .switchboardItemNode, .switchboardPanelNode:
+            node.layoutNodeId = appLayoutId!
+            node.saveMemorySpaces()
+          default:
+            break
+          }
+
+          if node.isConfigurationDescriptionInformationProtocolSupported {
+            let vc = MyTrainsWindow.configurationTool.viewController as! ConfigurationToolVC
+            vc.configurationTool = networkLayer.getConfigurationTool()
+            vc.configurationTool?.delegate = vc
+            vc.node = node
+            vc.showWindow()
+          }
 
         }
         
       }
+      
     }
     
   }
@@ -625,8 +671,7 @@ public enum MyTrainsWindow : String {
   case selectMasterNode                  = "SelectMasterNode"             
   case createVirtualNode                 = "CreateVirtualNode"            
   case selectLayout                      = "SelectLayout"                 
-  case license                           = "License"                      
-  case about                             = "About"                        
+  case about                             = "About"
   case textView                          = "TextView"
   case initApp                           = "InitApp"
   

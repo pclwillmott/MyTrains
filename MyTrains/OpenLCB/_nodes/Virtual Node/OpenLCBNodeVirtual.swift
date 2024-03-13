@@ -64,8 +64,6 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     
     isAbbreviatedDefaultCDIProtocolSupported = true
     
-    isEventExchangeProtocolSupported = true
-    
     isFirmwareUpgradeProtocolSupported = false
     
     setupConfigurationOptions()
@@ -82,6 +80,8 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   
   internal var userConfigEventConsumedAddresses : Set<Int> = []
   internal var userConfigEventProducedAddresses : Set<Int> = []
+  
+  internal var eventsToSendAtStartup : [UInt64] = []
 
   internal var memorySpaces : [UInt8:OpenLCBMemorySpace] = [:]
   
@@ -548,7 +548,9 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   }
   
   internal func resetToFactoryDefaults() {
-    
+
+    acdiManufacturerSpace.zeroMemory()
+
     acdiManufacturerSpaceVersion = 4
     
     manufacturerName     = virtualNodeType.manufacturerName
@@ -556,6 +558,8 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     nodeHardwareVersion  = "\(Bundle.main.releaseVersionNumberPretty)"
     nodeSoftwareVersion  = "\(Bundle.main.releaseVersionNumberPretty)"
 
+    acdiUserSpace.zeroMemory()
+    
     acdiUserSpaceVersion = 2
     
     userNodeName         = virtualNodeType.defaultUserNodeName
@@ -674,11 +678,13 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     
     networkLayer.nodeDidInitialize(node: self)
 
-    sendInitializationComplete()
-    
     userConfigEventsConsumed = getUserConfigEvents(eventAddresses: userConfigEventConsumedAddresses)
     userConfigEventsProduced = getUserConfigEvents(eventAddresses: userConfigEventProducedAddresses)
 
+    isEventExchangeProtocolSupported = !eventsProduced.union(userConfigEventsProduced).isEmpty || !eventsConsumed.union(userConfigEventsConsumed).isEmpty || !eventRangesConsumed.isEmpty || !eventRangesProduced.isEmpty
+    
+    sendInitializationComplete()
+    
     for eventId in eventsConsumed.union(userConfigEventsConsumed) {
       if !OpenLCBWellKnownEvent.isAutomaticallyRouted(eventId: eventId) {
         var validity : OpenLCBValidity = .unknown
@@ -701,6 +707,10 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
 
     for eventRange in eventRangesProduced {
       sendProducerRangeIdentified(eventId: eventRange.eventId)
+    }
+    
+    for eventId in eventsToSendAtStartup {
+      sendEvent(eventId: eventId)
     }
     
     // TODO: Add events sent on initialization here!

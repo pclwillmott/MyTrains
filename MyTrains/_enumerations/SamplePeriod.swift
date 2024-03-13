@@ -54,7 +54,7 @@ public enum SamplePeriod : Int {
   
   private static var map : String {
     
-    var items : [SamplePeriod] = [
+    let items : [SamplePeriod] = [
       .sec5,
       .sec10,
       .sec15,

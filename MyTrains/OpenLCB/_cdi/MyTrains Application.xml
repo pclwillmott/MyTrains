@@ -61,12 +61,25 @@
     
   </group>
   <group>
-    <name>Gateways</name>
+    <name>Gateways and Virtual Node ID Cache</name>
+
     <int size='1'>
     <name>Maximum number of gateway nodes</name>
     <min>1</min>
     <max>%%MAX_GATEWAYS%%</max>
-   </int>
+    </int>
+    
+    <int size='1'>
+    <name>Maximum number of virtual node IDs to cache</name>
+    <min>8</min>
+    <max>255</max>
+    </int>
+    
+    <int size='1'>
+    <name>Minimum number of virtual node IDs to cache</name>
+    <min>8</min>
+    <max>255</max>
+    </int>
     
   </group>
 </segment>

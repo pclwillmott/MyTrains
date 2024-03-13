@@ -639,6 +639,10 @@ class Database {
 
   }
   
+  public static func isEmpty() -> Bool {
+    return numberOfRows(tableName: TABLE.MEMORY_SPACE) == 0
+  }
+  
   public static func numberOfRows(tableName:String) -> Int {
     
     let conn = Database.getConnection()

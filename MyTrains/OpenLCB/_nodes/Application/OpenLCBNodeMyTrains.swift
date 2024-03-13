@@ -29,6 +29,8 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     initSpaceAddress(&addressUnitsScaleSpeed,     1, &configurationSize)
     initSpaceAddress(&addressUnitsTime,           1, &configurationSize)
     initSpaceAddress(&addressMaxNumberOfGateways, 1, &configurationSize)
+    initSpaceAddress(&addressMaxNodeIdsToCache,   1, &configurationSize)
+    initSpaceAddress(&addressMinNodeIdsToCache,   1, &configurationSize)
 
     configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: configurationSize, isReadOnly: false, description: "")
 
@@ -89,10 +91,14 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   internal var addressUnitsScaleSpeed     = 0
   internal var addressUnitsTime           = 0
   internal var addressMaxNumberOfGateways = 0
+  internal var addressMaxNodeIdsToCache   = 0
+  internal var addressMinNodeIdsToCache   = 0
+
+  private var nodeIdCacheTimer : Timer?
   
-  private var getUniqueNodeIdQueue : [UInt64] = []
+  private var nodeIdCacheLock = NSLock()
   
-  private var timeoutTimer : Timer?
+  private var nodeIdCache : [UInt64:(nodeId:UInt64, timeStamp:TimeInterval)] = [:]
   
   internal var layoutList : [UInt64:LayoutListItem] = [:]
   
@@ -182,6 +188,24 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     }
   }
 
+  public var maximumNodeIdsToCache : Int {
+    get {
+      return Int(configuration!.getUInt8(address: addressMaxNodeIdsToCache)!)
+    }
+    set(value) {
+      configuration!.setUInt(address: addressMaxNodeIdsToCache, value: UInt8(value))
+    }
+  }
+  
+  public var minimumNodeIdsToCache : Int {
+    get {
+      return Int(configuration!.getUInt8(address: addressMinNodeIdsToCache)!)
+    }
+    set(value) {
+      configuration!.setUInt(address: addressMinNodeIdsToCache, value: UInt8(value))
+    }
+  }
+  
   internal var nextUniqueNodeIdCandidate : UInt64 {
     
     let seed = nextUniqueNodeIdSeed
@@ -262,24 +286,13 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     
     maximumNumberOfGateways = 1
     
-    setViewOption(type: .openLCBNetworkView, option: .open)
-    setViewOption(type: .openLCBTrafficMonitor, option: .open)
-
+    maximumNodeIdsToCache = 32
+    minimumNodeIdsToCache = 8
+    
+    setViewState(type: .openLCBNetworkView, isOpen: true)
+    setViewState(type: .openLCBTrafficMonitor, isOpen: true)
+    
     saveMemorySpaces()
-    
-  }
-  
-  internal override func resetReboot() {
-    
-    super.resetReboot()
-    
-    layoutList.removeAll()
-    
-    panelList.removeAll()
-    
-    switchboardItemList.removeAll()
-    
-    locoNetGateways.removeAll()
     
   }
   
@@ -298,56 +311,51 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     
   }
   
-  private func tryCandidate() {
+  public func getUniqueNodeId() -> UInt64 {
     
-    guard !getUniqueNodeIdQueue.isEmpty && timeoutTimer == nil else {
-      return
+    var result : UInt64 = 0
+    
+    nodeIdCacheLock.lock()
+    
+    let now = Date.timeIntervalSinceReferenceDate
+    
+    for (key, item) in nodeIdCache {
+      if now - item.timeStamp > 0.8 {
+        nodeIdCache.removeValue(forKey: key)
+        result = key
+        break
+      }
     }
     
-    startTimeoutTimer(interval: 0.8)
+    nodeIdCacheLock.unlock()
     
-    sendVerifyNodeIdAddressed(destinationNodeId: getUniqueNodeIdQueue[0])
+    updateNodeIdCache()
+  
+    return result
     
   }
   
-  public func getUniqueNodeId() {
-    getUniqueNodeIdQueue.append(nextUniqueNodeIdCandidate)
-    tryCandidate()
+
+  @objc func nodeIdCacheTimerAction() {
+    nodeIdCacheTimer = nil
+    networkLayer?.nodeIdCacheCompleted()
   }
   
+  private func startNodeIdCacheTimer(interval: TimeInterval) {
 
-  @objc func timeoutTimerAction() {
-
-    stopTimeoutTimer()
-
-    if !getUniqueNodeIdQueue.isEmpty {
-      let newNodeId = getUniqueNodeIdQueue.removeFirst()
-      networkLayer?.createVirtualNode(newNodeId: newNodeId)
-      tryCandidate()
-    }
+    nodeIdCacheTimer?.invalidate()
     
-  }
-  
-  private func startTimeoutTimer(interval: TimeInterval) {
+    nodeIdCacheTimer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(nodeIdCacheTimerAction), userInfo: nil, repeats: false)
 
-    stopTimeoutTimer()
-    
-    timeoutTimer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(timeoutTimerAction), userInfo: nil, repeats: false)
-
-    if let timeoutTimer {
-      RunLoop.current.add(timeoutTimer, forMode: .common)
+    if let nodeIdCacheTimer {
+      RunLoop.current.add(nodeIdCacheTimer, forMode: .common)
     }
     else {
       #if DEBUG
-      debugLog("failed to create timeoutTimer")
+      debugLog("failed to create nodeIdCacheTimer")
       #endif
     }
     
-  }
-  
-  private func stopTimeoutTimer() {
-    timeoutTimer?.invalidate()
-    timeoutTimer = nil
   }
   
   private func layoutListUpdated() {
@@ -375,6 +383,46 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   }
 
   // MARK: Public Methods
+  
+  public override func stop() {
+
+    nodeIdCacheTimer?.invalidate()
+    nodeIdCacheTimer = nil
+    nodeIdCache.removeAll()
+    layoutList.removeAll()
+    panelList.removeAll()
+    switchboardItemList.removeAll()
+    observers.removeAll()
+    locoNetGateways.removeAll()
+    
+    super.stop()
+    
+  }
+  
+  // At this point the messaging is running.
+  
+  public func updateNodeIdCache() {
+    
+    var alreadyInUse = OpenLCBMemorySpace.getVirtualNodeIds()
+    
+    if nodeIdCache.count < minimumNodeIdsToCache {
+      
+      while nodeIdCache.count < maximumNodeIdsToCache {
+        let candidate = nextUniqueNodeIdCandidate
+        if !alreadyInUse.contains(candidate) {
+          nodeIdCacheLock.lock()
+          nodeIdCache[candidate] = (nodeId:candidate, timeStamp:Date.timeIntervalSinceReferenceDate)
+          nodeIdCacheLock.unlock()
+          alreadyInUse.insert(candidate)
+          sendVerifyNodeIdAddressed(destinationNodeId: candidate)
+        }
+      }
+      
+      startNodeIdCacheTimer(interval: 1.0)
+      
+    }
+    
+  }
   
   public func getViewOption(type:MyTrainsViewType) -> MyTrainsViewOption {
     return MyTrainsViewOption(rawValue: viewOptions.getUInt8(address: type.rawValue * 2)!)!
@@ -561,16 +609,15 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     
     switch message.messageTypeIndicator {
       
-    case .verifiedNodeIDSimpleSetSufficient, .verifiedNodeIDFullProtocolRequired:
+    case .verifiedNodeIDSimpleSetSufficient, .verifiedNodeIDFullProtocolRequired, .initializationCompleteSimpleSetSufficient, .initializationCompleteFullProtocolRequired:
       
-      if !getUniqueNodeIdQueue.isEmpty, let id = UInt64(bigEndianData: message.payload) {
-        
-        if (id & 0x0000ffffffffffff) == getUniqueNodeIdQueue[0] {
-          stopTimeoutTimer()
-          getUniqueNodeIdQueue[0] = nextUniqueNodeIdCandidate
-          tryCandidate()
+      if let id = UInt64(bigEndianData: message.payload) {
+        nodeIdCacheLock.lock()
+        if nodeIdCache.keys.contains(id) {
+          nodeIdCache.removeValue(forKey: id)
         }
-        
+        nodeIdCacheLock.unlock()
+        updateNodeIdCache()
       }
       
     case .simpleNodeIdentInfoReply:

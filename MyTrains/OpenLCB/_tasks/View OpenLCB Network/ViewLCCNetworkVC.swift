@@ -56,15 +56,8 @@ class ViewLCCNetworkVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate
   // MARK: Private Methods
   
   private func findAll() {
-    
     nodes.removeAll()
-    
-    guard let configurationTool else {
-      return
-    }
-    
-    configurationTool.sendVerifyNodeIdGlobal()
-
+    configurationTool?.sendVerifyNodeIdGlobal()
   }
   
   private func reload() {
@@ -72,6 +65,10 @@ class ViewLCCNetworkVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate
     tableView.reloadData()
   }
   
+  public override func refreshRequired() {
+    findAll()
+  }
+
   // MARK: OpenLCBConfigurationTollDelegate Methods
   
   public func openLCBMessageReceived(message:OpenLCBMessage) {
@@ -187,13 +184,25 @@ class ViewLCCNetworkVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate
     guard let networkLayer = configurationTool?.networkLayer else {
       return
     }
-    
+
     let node = tableViewDS.nodes[sender.tag]
 
-    networkLayer.deleteNode(nodeId: node.nodeId)
+    let alert = NSAlert()
     
-    findAll()
+    alert.messageText = String(localized: "Are You Sure?")
+    alert.informativeText = String(localized: "Are you sure that you want to delete the node \"\(node.userNodeName)\" (\(node.nodeId.toHexDotFormat(numberOfBytes: 6)))? This action cannot be undone!")
+    alert.addButton(withTitle: String(localized: "Yes"))
+    alert.addButton(withTitle: String(localized: "No"))
+    alert.alertStyle = .informational
     
+    switch alert.runModal() {
+    case .alertFirstButtonReturn:
+      networkLayer.deleteNode(nodeId: node.nodeId)
+      findAll()
+    default:
+      break
+    }
+
   }
   
 }

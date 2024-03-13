@@ -28,7 +28,7 @@ public enum RouteDirection : UInt8 {
   
   private static var map : String {
     
-    var items : [RouteDirection] = [
+    let items : [RouteDirection] = [
       .next,
       .previous,
     ]

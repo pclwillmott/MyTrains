@@ -113,4 +113,7 @@ public class MyTrainsViewController: NSViewController, NSWindowDelegate {
     view.window?.close()
   }
   
+  public func refreshRequired() {
+  }
+  
 }

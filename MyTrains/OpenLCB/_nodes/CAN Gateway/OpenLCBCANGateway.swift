@@ -147,6 +147,10 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
   
   internal var datagrams : [UInt32:OpenLCBMessage] = [:]
   
+  // MARK: Public Properties
+  
+  public var gatewayNumber : Int = -1
+  
   // MARK: internal Methods
   
   internal override func resetToFactoryDefaults() {

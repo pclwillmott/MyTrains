@@ -125,7 +125,7 @@ public class OpenLCBNode : NSObject {
       
       guard acdiManufacturerSpaceVersion == 0x01 || acdiManufacturerSpaceVersion == 0x04 else {
         #if DEBUG
-        debugLog("invalid acdiManufacturerSpaceVersion: 0x\(acdiManufacturerSpaceVersion.toHex(numberOfDigits: 2))")
+        debugLog("invalid acdiManufacturerSpaceVersion: 0x\(acdiManufacturerSpaceVersion.toHex(numberOfDigits: 2)) \(nodeId.toHexDotFormat(numberOfBytes: 6))")
         #endif
         return nil
       }

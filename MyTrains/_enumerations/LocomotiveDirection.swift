@@ -28,7 +28,7 @@ public enum LocomotiveDirection : Int {
 
   private static var map : String {
     
-    var items : [LocomotiveDirection] = [
+    let items : [LocomotiveDirection] = [
       .forward,
       .reverse,
     ]

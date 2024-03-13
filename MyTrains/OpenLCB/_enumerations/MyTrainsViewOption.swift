@@ -9,9 +9,9 @@ import Foundation
 
 public enum MyTrainsViewOption : UInt8 {
   
-  case doNotOpen            = 0
+  case doNotOpen            = 2
   case open                 = 1
-  case restorePreviousState = 2
+  case restorePreviousState = 0
 
   // MARK: Public Properties
   
