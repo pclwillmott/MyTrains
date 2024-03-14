@@ -72,6 +72,7 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
     activity = ProcessInfo.processInfo.beginActivity(options: .userInitiatedAllowingIdleSystemSleep, reason: "Good Reason")
 
     checkPortsTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(checkPortsTimerAction), userInfo: nil, repeats: true)
+    
     if let checkPortsTimer {
       RunLoop.current.add(checkPortsTimer, forMode: .common)
     }

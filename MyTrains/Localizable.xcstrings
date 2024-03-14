@@ -4197,6 +4197,9 @@
     "Poland" : {
       "comment" : "This is the name of a country."
     },
+    "Post Office" : {
+
+    },
     "Power Supply Brownout Detected Node" : {
 
     },
@@ -4574,6 +4577,9 @@
     "Restore previous state" : {
 
     },
+    "Resume" : {
+
+    },
     "Reverse" : {
       "comment" : "Used to indicate that the train is moving in the reverse direction",
       "localizations" : {
@@ -4653,6 +4659,9 @@
     },
     "Russia" : {
       "comment" : "This is the name of a country."
+    },
+    "RX" : {
+      "comment" : "This is an abbreviation of Receive used for an LED label"
     },
     "s" : {
       "comment" : "Used for the abbreviation of seconds",
@@ -5579,6 +5588,9 @@
     },
     "Turnout Right" : {
       "comment" : "This is used to describe a piece of track."
+    },
+    "TX" : {
+      "comment" : "This is an abbreviation of Transmit used for an LED label"
     },
     "Ukraine" : {
       "comment" : "This is the name of a country."

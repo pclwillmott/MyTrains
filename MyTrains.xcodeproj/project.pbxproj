@@ -311,6 +311,7 @@
 		DAF6778A2B431EAF009707A4 /* CDIStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF677892B431EAF009707A4 /* CDIStackView.swift */; };
 		DAF6778C2B432372009707A4 /* CDIStackViewManagerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF6778B2B432372009707A4 /* CDIStackViewManagerDelegate.swift */; };
 		DAF6778E2B433BC2009707A4 /* CDIIdentificationItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF6778D2B433BC2009707A4 /* CDIIdentificationItemView.swift */; };
+		DAF6826F2BA33EB700E6D590 /* GatewayActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF6826E2BA33EB700E6D590 /* GatewayActivityView.swift */; };
 		DAFACF592A26C5E0007C10F0 /* MyTrains Clock.xml in Resources */ = {isa = PBXBuildFile; fileRef = DAFACF582A26C5E0007C10F0 /* MyTrains Clock.xml */; };
 		DAFBC3ED29EC39A6003336BE /* OpenLCBErrorCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAFBC3EC29EC39A6003336BE /* OpenLCBErrorCode.swift */; };
 		DAFFB6592B5D49040035AC74 /* CreateVirtualNode.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DAFFB6582B5D49040035AC74 /* CreateVirtualNode.storyboard */; };
@@ -637,6 +638,7 @@
 		DAF677892B431EAF009707A4 /* CDIStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDIStackView.swift; sourceTree = "<group>"; };
 		DAF6778B2B432372009707A4 /* CDIStackViewManagerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDIStackViewManagerDelegate.swift; sourceTree = "<group>"; };
 		DAF6778D2B433BC2009707A4 /* CDIIdentificationItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDIIdentificationItemView.swift; sourceTree = "<group>"; };
+		DAF6826E2BA33EB700E6D590 /* GatewayActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayActivityView.swift; sourceTree = "<group>"; };
 		DAFACF582A26C5E0007C10F0 /* MyTrains Clock.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "MyTrains Clock.xml"; sourceTree = "<group>"; usesTabs = 1; };
 		DAFBC3EC29EC39A6003336BE /* OpenLCBErrorCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBErrorCode.swift; sourceTree = "<group>"; };
 		DAFFB6582B5D49040035AC74 /* CreateVirtualNode.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = CreateVirtualNode.storyboard; sourceTree = "<group>"; };
@@ -872,6 +874,7 @@
 				DA5225F82B307B09005DCBF4 /* MultiTabView.swift */,
 				DA48DA6F2BA1FA1C0009FEBF /* FrameView.swift */,
 				DA48DA712BA201BD0009FEBF /* LEDView.swift */,
+				DAF6826E2BA33EB700E6D590 /* GatewayActivityView.swift */,
 			);
 			path = "_custom views";
 			sourceTree = "<group>";
@@ -1579,6 +1582,7 @@
 				DA17E0882A77D7CC000154E0 /* OpenLCBLocoNetMonitorDelegate.swift in Sources */,
 				DAAA9C252A0FDD9800A5B9D6 /* ViewNodeInfoVC.swift in Sources */,
 				DAB4A73B2B3F282100CD5256 /* CDIDataView.swift in Sources */,
+				DAF6826F2BA33EB700E6D590 /* GatewayActivityView.swift in Sources */,
 				DA0D3E0E2A487A780042748C /* ComboBoxSimpleDS.swift in Sources */,
 				DA467BB3281D60E400AB9650 /* SwitchBoardShapeButton.swift in Sources */,
 				DA5A9F90295C89FC00950479 /* NumberBase.swift in Sources */,

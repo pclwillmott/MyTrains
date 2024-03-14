@@ -11,4 +11,6 @@ import Foundation
   @objc optional func updateMonitor(text:String)
   @objc optional func gatewayRXPacket(gateway:Int)
   @objc optional func gatewayTXPacket(gateway:Int)
+  @objc optional func postOfficeRXMessage()
+  @objc optional func postOfficeTXMessage()
 }

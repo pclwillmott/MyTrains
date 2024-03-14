@@ -407,17 +407,18 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     
     if nodeIdCache.count < minimumNodeIdsToCache {
       
+ //     nodeIdCacheLock.lock()
       while nodeIdCache.count < maximumNodeIdsToCache {
         let candidate = nextUniqueNodeIdCandidate
         if !alreadyInUse.contains(candidate) {
-          nodeIdCacheLock.lock()
           nodeIdCache[candidate] = (nodeId:candidate, timeStamp:Date.timeIntervalSinceReferenceDate)
-          nodeIdCacheLock.unlock()
           alreadyInUse.insert(candidate)
-          sendVerifyNodeIdAddressed(destinationNodeId: candidate)
         }
       }
-      
+ //     nodeIdCacheLock.unlock()
+
+      sendVerifyNodeIdGlobal()
+
       startNodeIdCacheTimer(interval: 1.0)
       
     }

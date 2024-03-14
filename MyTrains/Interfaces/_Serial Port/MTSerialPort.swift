@@ -196,12 +196,12 @@ public class MTSerialPort : NSObject, MTPipeDelegate {
         
         let count = writeSerialPort(self.fd, buffer, size)
         
-        if count < 0 {
+        if count <= 0 {
           break
         }
         
         _data.removeFirst(max(count,0))
-        
+   
       }
       
     }

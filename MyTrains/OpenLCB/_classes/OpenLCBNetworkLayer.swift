@@ -556,13 +556,15 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
 
   // This is running in the main thread
   
+  public var postOfficeNodeId : UInt64 {
+    return appNode!.nodeId + 1
+  }
+  
   public func sendMessage(message:OpenLCBMessage) {
     
     guard let appNode else {
       return
     }
-    
-    let postOfficeNodeId = appNode.nodeId + 1
     
     guard !message.routing.contains(postOfficeNodeId) else {
       return
@@ -574,12 +576,16 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
     monitorItem.message = message
     addToMonitorBuffer(item: monitorItem, isBackgroundThread: false)
 
+    var tx = false
+
     if let destinationNodeId = message.destinationNodeId {
 
       if let virtualNode = virtualNodeLookup[destinationNodeId] {
         virtualNode.openLCBMessageReceived(message: message)
+        tx = true
       }
       else if message.visibility.rawValue > OpenLCBNodeVisibility.visibilityPrivate.rawValue {
+        tx = true
         for (_, virtualNode) in gatewayNodes {
           virtualNode.openLCBMessageReceived(message: message)
         }
@@ -591,24 +597,35 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
         for (_, virtualNode) in nodesSimpleSetSufficient {
           if !message.routing.contains(virtualNode.nodeId) {
             virtualNode.openLCBMessageReceived(message: message)
+            tx = true
           }
         }
       }
       for (_, virtualNode) in nodesFullProtocolRequired {
         if !message.routing.contains(virtualNode.nodeId) {
           virtualNode.openLCBMessageReceived(message: message)
+          tx = true
         }
       }
       for (_, virtualNode) in gatewayNodes {
         virtualNode.openLCBMessageReceived(message: message)
+        tx = true
       }
       for (_, virtualNode) in nodesInhibited {
         if !message.routing.contains(virtualNode.nodeId) {
           virtualNode.openLCBMessageReceived(message: message)
+          tx = true
         }
       }
     }
     
+    for (_, observer) in observers {
+      observer.postOfficeRXMessage?()
+      if tx {
+        observer.postOfficeTXMessage?()
+      }
+    }
+
   }
   
   // This is running in a background thread
@@ -617,6 +634,7 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
     let monitorItem = MonitorItem()
     monitorItem.frame = frame
     monitorItem.direction = .received
+    monitorItem.gatewayNumber = gateway.gatewayNumber + 1
     addToMonitorBuffer(item: monitorItem, isBackgroundThread: true)
     for (_, observer) in observers {
       observer.gatewayRXPacket?(gateway: gateway.gatewayNumber)
@@ -627,6 +645,7 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
     let monitorItem = MonitorItem()
     monitorItem.frame = frame
     monitorItem.direction = .sent
+    monitorItem.gatewayNumber = gateway.gatewayNumber + 1
     addToMonitorBuffer(item: monitorItem, isBackgroundThread: isBackgroundThread)
     for (_, observer) in observers {
       observer.gatewayTXPacket?(gateway: gateway.gatewayNumber)
@@ -634,10 +653,15 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
   }
   
   public func clearMonitorBuffer() {
+    
     monitorBufferLock.lock()
     monitorBuffer.removeAll()
     monitorBufferLock.unlock()
-    startMonitorTimer()
+    
+    for (_, observer) in self.observers {
+      observer.updateMonitor?(text: "")
+    }
+    
   }
   
   public func addToMonitorBuffer(item:MonitorItem, isBackgroundThread:Bool) {

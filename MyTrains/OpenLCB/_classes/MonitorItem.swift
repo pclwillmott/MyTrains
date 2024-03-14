@@ -30,16 +30,18 @@ public class MonitorItem : NSObject {
   
   public var direction : MonitorItemDirection = .notApplicable
   
+  public var gatewayNumber : Int = 0
+  
   public var message : OpenLCBMessage?
   
   public var info : String {
     if _info == nil {
       if let frame {
-        _info = "\(direction == .received ? "→" : "←") \(frame.info)"
+        _info = "\(gatewayNumber) \(direction == .received ? "→" : "←") \(frame.info)"
         return _info!
      }
       if let message {
-        _info = "\(message.info)"
+        _info = "0 \(message.info)"
         return _info!
       }
     }

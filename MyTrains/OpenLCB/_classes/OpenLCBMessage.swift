@@ -379,7 +379,7 @@ public class OpenLCBMessage : NSObject {
   
   public var info : String {
     
-    let padding = String(repeating: " ", count: 39)
+    let padding = String(repeating: " ", count: 41)
 
     var text = ""
     
@@ -739,7 +739,7 @@ public class OpenLCBMessage : NSObject {
     var bytes : String = ""
     var chars : String = ""
     
-    let padding = String(repeating: " ", count: 39)
+    let padding = String(repeating: " ", count: 41)
     
     for byte in data {
       

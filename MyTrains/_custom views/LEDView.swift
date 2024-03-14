@@ -14,10 +14,6 @@ class LEDView: NSView {
   
   override func draw(_ dirtyRect: NSRect) {
     
-    guard state else {
-      return
-    }
-    
     let path = NSBezierPath()
 
     path.lineWidth = 1.0
@@ -26,7 +22,9 @@ class LEDView: NSView {
 
     NSColor.setFillColor(color: fillColor)
     
-    path.fill()
+    if state {
+      path.fill()
+    }
 
     NSColor.setStrokeColor(color: strokeColor)
     
