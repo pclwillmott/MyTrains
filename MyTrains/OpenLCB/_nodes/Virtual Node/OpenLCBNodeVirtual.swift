@@ -85,7 +85,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
 
   internal var memorySpaces : [UInt8:OpenLCBMemorySpace] = [:]
   
-  internal var cdiFilename : String? 
+  internal var _cdiFilename : String?
   
   internal var registeredVariables : [UInt8:Set<Int>] = [:]
   
@@ -162,6 +162,16 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   internal var firmwareBuffer : [UInt8] = []
   
   // MARK: Public Properties
+  
+  public var cdiFilename : String? {
+    get {
+      return _cdiFilename
+    }
+    set(value) {
+      _cdiFilename = value
+      isConfigurationDescriptionInformationProtocolSupported = _cdiFilename != nil
+    }
+  }
   
   public var visibility : OpenLCBNodeVisibility {
     return virtualNodeType.visibility
@@ -527,8 +537,6 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
         
         memorySpaces[OpenLCBNodeMemoryAddressSpace.cdi.rawValue] = memorySpace
         
-        isConfigurationDescriptionInformationProtocolSupported = true
-        
         setupConfigurationOptions()
         
       }
@@ -669,10 +677,6 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     }
     
     state = .permitted
-
-    if cdiFilename != nil {
-      isConfigurationDescriptionInformationProtocolSupported = true
-    }
 
     resetReboot()
     

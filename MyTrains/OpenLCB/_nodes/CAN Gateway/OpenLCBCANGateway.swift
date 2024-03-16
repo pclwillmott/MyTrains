@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSerialPortManagerDelegate {
+public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
  
   // MARK: Constructors & Destructors
   
@@ -91,12 +91,12 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
   internal var buffer : [UInt8] = []
   
   internal var isOpen : Bool {
-    if let port = serialPort {
-      return port.isOpen
+    guard let port = serialPort else {
+      return false
     }
-    return false
+    return port.isOpen
   }
-  
+
   internal var waitingForNodeId : Set<UInt16> = []
 
   internal var waitingForAlias : Set<UInt64> = []
@@ -157,71 +157,13 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
     
     super.resetToFactoryDefaults()
     
-    devicePath = ""
+    configuration?.zeroMemory()
     
     minAliasesToCache = 16
     
     maxAliasesToCache = 64
     
     saveMemorySpaces()
-    
-  }
-  
-  // This is running in the main thread
-  internal func openSerialPort() {
-    
-    if let port = MTSerialPort(path: devicePath) {
-      
-      serialPort = port
-      port.baudRate = .br125000
-      port.numberOfDataBits = 8
-      port.numberOfStopBits = 1
-      port.parity = .none
-      port.usesRTSCTSFlowControl = false
-      port.delegate = self
-      port.open()
-      
-      if port.isOpen {
-        
-        if sendToSerialPortPipe == nil {
-          sendToSerialPortPipe = MTPipe(name: MTSerialPort.pipeName(path: devicePath))
-          sendToSerialPortPipe?.open()
-        }
-        
-        if !internalNodes.contains(nodeId) {
-          waitingForAlias.insert(nodeId)
-          internalNodes.insert(nodeId)
-          aliasTimerAction()
-          
-        }
-        
-      }
-      else {
-        debugLog("serial port did not open")
-        networkLayer?.nodeDidInitialize(node: self)
-        networkLayer?.nodeDidStart(node: self)
-      }
-      
-    }
-    else {
-      debugLog("serial port did not allocate")
-      networkLayer?.nodeDidInitialize(node: self)
-      networkLayer?.nodeDidStart(node: self)
-    }
-
-  }
-  
-  public override func start() {
-    
-    isStopping = false
-    
-    setupConfigurationOptions()
-
-    isConfigurationDescriptionInformationProtocolSupported = true
-
-    buffer.removeAll()
-    
-    openSerialPort()
     
   }
   
@@ -285,6 +227,47 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
 
   // MARK: Public Methods
   
+  // This is running in the main thread
+  public override func start() {
+    
+    setupConfigurationOptions()
+
+    if let port = MTSerialPort(path: devicePath) {
+      
+      serialPort = port
+      port.baudRate = .br125000
+      port.numberOfDataBits = 8
+      port.numberOfStopBits = 1
+      port.parity = .none
+      port.usesRTSCTSFlowControl = false
+      port.delegate = self
+      port.open()
+      
+      if isOpen {
+        
+        sendToSerialPortPipe = MTPipe(name: MTSerialPort.pipeName(path: devicePath))
+        sendToSerialPortPipe?.open()
+
+        if !internalNodes.contains(nodeId) {
+          waitingForAlias.insert(nodeId)
+          internalNodes.insert(nodeId)
+          aliasTimerAction()
+        }
+        
+      }
+      
+    }
+    
+    if !isOpen {
+      #if DEBUG
+      debugLog("serial port did not open")
+      #endif
+      networkLayer?.nodeDidInitialize(node: self)
+      networkLayer?.nodeDidStart(node: self)
+    }
+
+  }
+  
   public override func stop() {
  
     isStopping = true
@@ -333,14 +316,14 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
     
     // Close the port.
     
-    sendToSerialPortPipe?.close()
-    sendToSerialPortPipe = nil
-    
     if let serialPort {
+      sendToSerialPortPipe?.close()
+      sendToSerialPortPipe = nil
       serialPort.close()
-      self.serialPort = nil
     }
     else {
+      isStopping = false
+      buffer.removeAll()
       super.stop()
     }
 
@@ -469,9 +452,11 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
   
   //This is running in the main thread
   public func serialPortDidClose(_ serialPort: MTSerialPort) {
+    self.serialPort = nil
+    buffer.removeAll()
     if isStopping {
-      super.stop()
       isStopping = false
+      super.stop()
     }
     else {
       #if DEBUG
@@ -484,8 +469,6 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
 
     state = .inhibited
     
-    isStopping = true
-
     // There is no serial port connection so reset everything to
     // start-up state.
     
@@ -516,28 +499,15 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate, MTSer
     externalConsumedEventRanges = []
     internalConsumedEvents = []
     internalConsumedEventRanges = []
-    
-    // Close the port.
-    
+    buffer.removeAll()
+    isStopping = false
+
     sendToSerialPortPipe?.close()
     sendToSerialPortPipe = nil
     
     self.serialPort = nil
     
     networkLayer?.nodeDidDetach(node: self)
-    
-  }
-  
-  // MARK: MTSerialPortManagerDelegate Methods
-  
-  // This is running in the main thread
-  @objc public func serialPortWasAdded(path:String) {
-    
-    guard path == devicePath, serialPort == nil else {
-      return
-    }
-    
-    openSerialPort()
     
   }
   

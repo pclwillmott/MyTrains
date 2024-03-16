@@ -215,8 +215,10 @@ public class OpenLCBMessage : NSObject {
     
     data.removeFirst(2)
     
-    return LocoNetMessage(payload: data)
+    let message = LocoNetMessage(data: data)
   
+    return message.isCheckSumOK ? message : nil
+    
   }
   
   public var datagramType : OpenLCBDatagramType? {

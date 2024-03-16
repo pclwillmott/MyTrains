@@ -11,36 +11,12 @@ public class LocoNetMessage : NSObject {
   
   // MARK: Constructors
   
-  init(data:[UInt8], appendCheckSum: Bool) {
+  init(data:[UInt8], appendCheckSum: Bool = false) {
     self.message = data
     if appendCheckSum {
-      self.message.append(LocoNetMessage.checkSum(data: Data(message), length: data.count))
+      self.message.append(LocoNetMessage.checkSum(data: message))
     }
     super.init()
-  }
-
-  init(data:[Int], appendCheckSum: Bool) {
-    self.message = []
-    for x in data {
-      self.message.append(UInt8(x & 0xff))
-    }
-    if appendCheckSum {
-      self.message.append(LocoNetMessage.checkSum(data: Data(message), length: data.count))
-    }
-    super.init()
-  }
-
-  init(data:[UInt8]) {
-    self.message = data
-    super.init()
-  }
-
-  init?(payload:[UInt8]) {
-    self.message = payload
-    super.init()
-    if !checkSumOK {
-      return nil
-    }
   }
 
   init(message: LocoNetMessage) {
@@ -56,16 +32,39 @@ public class LocoNetMessage : NSObject {
   
   public var message : [UInt8]
   
-  public var checkSumOK : Bool {
-    get {
-      var checkSum = message[0]
-      var index = 1
-      while index < message.count {
-        checkSum ^= message[index]
-        index += 1
-      }
-      return checkSum == 0xff
+  public var opCodeRawValue : UInt8 {
+    return message[0]
+  }
+  
+  public var opCode : LocoNetMessageOpcode {
+    return LocoNetMessageOpcode.init(rawValue: opCodeRawValue) ?? .OPC_UNKNOWN
+  }
+  
+  public var messageLength : UInt8 {
+      
+    var length : UInt8
+    
+    switch (message[0] & 0b01100000) >> 5 {
+    case 0b00 :
+      length = 2
+    case 0b01 :
+      length = 4
+    case 0b10 :
+      length = 6
+    default :
+      length = message[1] == 0 ? 128 : message[1]
     }
+    
+    return length
+
+  }
+  
+  public var isCheckSumOK : Bool {
+    var checkSum : UInt8 = 0xff
+    for byte in message {
+      checkSum ^= byte
+    }
+    return checkSum == 0
   }
   
   public var timeStamp : TimeInterval = 0.0
@@ -75,18 +74,6 @@ public class LocoNetMessage : NSObject {
   public var timeoutCode : UInt8 {
     get {
       return message.count == 2 && message[0] == 0x7f ? message[1] : 0x00
-    }
-  }
-  
-  public var opCodeRawValue : UInt8 {
-    get {
-      return message[0]
-    }
-  }
-  
-  public var opCode : LocoNetMessageOpcode {
-    get {
-      return LocoNetMessageOpcode.init(rawValue: opCodeRawValue) ?? .OPC_UNKNOWN
     }
   }
   
@@ -110,31 +97,6 @@ public class LocoNetMessage : NSObject {
     
     return []
     
-  }
-  
-  public var messageLength : UInt8 {
-    get {
-      
-      var length = (message[0] & 0b01100000) >> 5
-      
-      switch length {
-      case 0b00 :
-        length = 2
-        break
-      case 0b01 :
-        length = 4
-        break
-      case 0b10 :
-        length = 6
-        break
-      default :
-        length = message[1]
-        break
-      }
-      
-      return length
-      
-    }
   }
   
   public var messageHex : String {
@@ -2471,12 +2433,10 @@ public class LocoNetMessage : NSObject {
   
   // MARK: Class Methods
   
-  public static func checkSum(data: Data, length: Int) -> UInt8 {
+  public static func checkSum(data: [UInt8]) -> UInt8 {
     var cs : UInt8 = 0xff
-    var index : Int = 0
-    while (index < length) {
-      cs ^= data[index]
-      index += 1
+    for byte in data {
+      cs ^= byte
     }
     return cs
   }

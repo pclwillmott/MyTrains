@@ -683,6 +683,14 @@
 			path = _Pipe;
 			sourceTree = "<group>";
 		};
+		DA0FB0A42BA452B70075AC3A /* LocoNet Gateway */ = {
+			isa = PBXGroup;
+			children = (
+				DA123A502A50431B000E63E2 /* OpenLCBLocoNetGateway.swift */,
+			);
+			path = "LocoNet Gateway";
+			sourceTree = "<group>";
+		};
 		DA1B949B2A3DE84700E2CE6A /* _WiFi */ = {
 			isa = PBXGroup;
 			children = (
@@ -1134,13 +1142,13 @@
 		DA7B453C2A2C08240017D36B /* _nodes */ = {
 			isa = PBXGroup;
 			children = (
+				DA0FB0A42BA452B70075AC3A /* LocoNet Gateway */,
 				DA5C20042B8E321C00D3BFEB /* Application */,
 				DABC51FE2B8218E300C45423 /* Virtual Node */,
 				DA0949382B7F6EC900545650 /* CAN Gateway */,
 				DAD394BC2B2E15D300403040 /* OpenLCBCANGatewayWiFi.swift */,
 				DAA777C92A20C84C008EAF02 /* OpenLCBClock.swift */,
 				DAD73C1D2A9A4F64002E7618 /* OpenLCBDigitraxBXP88Node.swift */,
-				DA123A502A50431B000E63E2 /* OpenLCBLocoNetGateway.swift */,
 				DA17E0852A77C83A000154E0 /* OpenLCBLocoNetMonitorNode.swift */,
 				DA5B6AA929EAC2D90095F7D5 /* OpenLCBNode.swift */,
 				DAA54F7E2A217CDA005CED7E /* OpenLCBNodeConfigurationTool.swift */,

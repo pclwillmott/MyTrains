@@ -75,8 +75,12 @@ public enum OpenLCBDatagramType : UInt16 {
   case updateCompleteCommand                            = 0x20a8
   case resetRebootCommand                               = 0x20a9
   case reinitializeFactoryResetCommand                  = 0x20aa
-  case sendLocoNetMessage                               = 0x3000 // Unofficial
-  
+  case sendLocoNetMessageCompleteCommand                = 0x3000 // Unofficial
+  case sendLocoNetMessageFirstPartCommand               = 0x3001 // Unofficial
+  case sendLocoNetMessageFinalPartCommand               = 0x3002 // Unofficial
+  case sendLocoNetMessageReply                          = 0x3010 // Unofficial
+  case sendLocoNetMessageReplyFailure                   = 0x3018 // Unofficial
+
   // MARK: Public Properties
   
   public var bigEndianData : [UInt8] {

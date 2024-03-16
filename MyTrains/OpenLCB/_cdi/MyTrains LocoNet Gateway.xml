@@ -18,21 +18,6 @@
 <name>Port</name>
   %%PORTS%%
 </string>
-
-<int size='1'>
-<name>Baud Rate</name>
-%%BAUD_RATE%%
-</int>
-
-<int size='1'>
-<name>Parity</name>
-  %%PARITY%%
-</int>
-
-<int size='1'>
-<name>Flow Control</name>
-  %%FLOW_CONTROL%%
-</int>
 </group>
 
 <group>
@@ -45,7 +30,6 @@
     <relation><property>1</property><value>Block all LocoNet messages</value></relation>
   </map>
   </int>
-
 </group>
 
 </segment>

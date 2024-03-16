@@ -276,6 +276,8 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     
     super.resetToFactoryDefaults()
     
+    configuration?.zeroMemory()
+    
     unitsActualLength   = UnitLength.defaultValueActualLength
     unitsScaleLength    = UnitLength.defaultValueScaleLength
     unitsActualDistance = UnitLength.defaultValueActualDistance

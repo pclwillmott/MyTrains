@@ -47,6 +47,8 @@ public enum OpenLCBErrorCode : UInt16 {
   case temporaryErrorOutOfOrder                                              = 0x2040
   case temporaryErrorOutOfOrderMiddleOrEndFrameWithoutStartFrame             = 0x2041
   case temporaryErrorOutOfOrderStartFrameBeforeFinishingPreviousMessage      = 0x2042
+  case temporaryErrorOutOfOrderFirstPartOfLocoNetMessageBeforeFinishingPreviousMessage      = 0x2043
+  case temporaryErrorOutOfOrderFinalPartOfLocoNetMessageBeforeFirstPart      = 0x2044
   case temporaryErrorReserved5                                               = 0x2050
   case temporaryErrorReserved6                                               = 0x2060
   case temporaryErrorReserved7                                               = 0x2070

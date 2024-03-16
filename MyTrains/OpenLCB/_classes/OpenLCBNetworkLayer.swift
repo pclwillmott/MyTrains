@@ -381,7 +381,7 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
     nodesFullProtocolRequired.removeValue(forKey: node.nodeId)
     nodesInhibited[node.nodeId] = node
 
-    if node.virtualNodeType == .canGatewayNode {
+    if node.virtualNodeType == .canGatewayNode || node.virtualNodeType == .locoNetGatewayNode {
       appDelegate.rebootRequest()
     }
     
@@ -562,7 +562,7 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
   
   public func sendMessage(message:OpenLCBMessage) {
     
-    guard let appNode else {
+    guard appNode != nil else {
       return
     }
     
@@ -731,6 +731,10 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
     
     for (_, node) in nodesInhibited {
       if let gateway = node as? OpenLCBCANGateway, path == gateway.devicePath {
+        reboot = true
+        break
+      }
+      else if let locoNetGateway = node as? OpenLCBLocoNetGateway, path == locoNetGateway.devicePath {
         reboot = true
         break
       }

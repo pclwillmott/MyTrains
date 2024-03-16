@@ -31,24 +31,12 @@ extension OpenLCBNodeVirtual {
   }
 
   public func sendLocoNetMessageReceived(locoNetMessage:[UInt8]) {
-    
     var data = [UInt8](OpenLCBWellKnownEvent.locoNetMessage.rawValue.bigEndianData.prefix(2))
-    
     data.append(contentsOf: locoNetMessage)
-    
-    var numberOfPaddingBytes = 8 - data.count
-    
-    while numberOfPaddingBytes > 0 {
-      data.append(0xff)
-      numberOfPaddingBytes -= 1
-    }
-    
+    data.append(contentsOf: [UInt8](repeating: 0xff, count: max(0, 8 - data.count)))
     let eventId = UInt64(bigEndianData: [UInt8](data.prefix(8)))!
-    
     data.removeFirst(8)
-    
     sendEvent(eventId: eventId, payload: data)
-    
   }
 
   public func sendLocoNetMessage(destinationNodeId:UInt64, locoNetMessage:LocoNetMessage) {
@@ -59,10 +47,19 @@ extension OpenLCBNodeVirtual {
     sendMessage(message: message)
   }
 
-  public func sendLocoNetMessageReply(destinationNodeId:UInt64, errorCode:OpenLCBErrorCode) {
-    let message = OpenLCBMessage(messageTypeIndicator: .sendLocoNetMessageReply)
+  public func sendLocoNetMessageReply(destinationNodeId:UInt64) {
+    let message = OpenLCBMessage(messageTypeIndicator: .datagram)
     message.destinationNodeId = destinationNodeId
-    message.payload = errorCode.bigEndianData
+    message.payload = OpenLCBDatagramType.sendLocoNetMessageReply.bigEndianData
+    sendMessage(message: message)
+  }
+
+  public func sendLocoNetMessageReplyFailure(destinationNodeId:UInt64, errorCode:OpenLCBErrorCode) {
+    let message = OpenLCBMessage(messageTypeIndicator: .datagram)
+    message.destinationNodeId = destinationNodeId
+    var data = OpenLCBDatagramType.sendLocoNetMessageReply.bigEndianData
+    data.append(contentsOf: errorCode.bigEndianData)
+    message.payload = data
     sendMessage(message: message)
   }
 
