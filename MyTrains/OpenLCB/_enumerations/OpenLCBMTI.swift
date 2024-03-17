@@ -152,7 +152,6 @@ public enum OpenLCBMTI : UInt16 {
     .streamDataSend : String(localized: "Stream Data Send"),
     .streamDataProceed : String(localized: "Stream Data Proceed"),
     .streamDataComplete : String(localized: "Stream Data Complete"),
-    .sendLocoNetMessageReply : String(localized: "Send LocoNet Message Reply"),
     .unknown : String(localized: "Unknown"),
   ]
   

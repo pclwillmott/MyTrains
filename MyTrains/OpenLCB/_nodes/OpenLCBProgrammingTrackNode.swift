@@ -218,7 +218,9 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
       return
     }
     
-    locoNet = LocoNet(gatewayNodeId: locoNetGatewayNodeId, virtualNode: self)
+    locoNet = LocoNet(gatewayNodeId: locoNetGatewayNodeId, node: self)
+    
+    locoNet?.start()
     
     locoNet?.delegate = self
     
@@ -253,7 +255,7 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
       return
     }
     
-    if locoNet.commandStationType.programmingTrackExists {
+    if let commandStationType = locoNet.commandStationType, commandStationType.programmingTrackExists {
       sendWellKnownEvent(eventId: .nodeIsADCCProgrammingTrack)
     }
     

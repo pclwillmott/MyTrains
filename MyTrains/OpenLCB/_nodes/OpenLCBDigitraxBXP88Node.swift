@@ -819,8 +819,8 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
       return
     }
     
-    locoNet = LocoNet(gatewayNodeId: locoNetGatewayNodeId, virtualNode: self)
-    
+    locoNet = LocoNet(gatewayNodeId: locoNetGatewayNodeId, node: self)
+    locoNet?.start()
     locoNet?.delegate = self
     
   }

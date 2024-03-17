@@ -43,7 +43,8 @@ public class OpenLCBLocoNetMonitorNode : OpenLCBNodeVirtual, LocoNetDelegate {
     }
     set(value) {
       _gatewayId = value
-      locoNet = LocoNet(gatewayNodeId: _gatewayId, virtualNode: self)
+      locoNet = LocoNet(gatewayNodeId: _gatewayId, node: self)
+      locoNet?.start()
       locoNet?.delegate = self
     }
   }

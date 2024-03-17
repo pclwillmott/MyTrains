@@ -33,11 +33,9 @@ public enum OpenLCBDatagramTimeout : UInt8 {
     return self != .ok
   }
   
-  public var timeout : TimeInterval {
+  public var timeout : TimeInterval? {
     
     let timeouts : [OpenLCBDatagramTimeout:TimeInterval] = [
-      .ok                    : 0.0,
-      .replyPendingNoTimeout : 0.0,
       .replyPending2s        : 2.0,
       .replyPending4s        : 4.0,
       .replyPending8s        : 8.0,
@@ -55,7 +53,7 @@ public enum OpenLCBDatagramTimeout : UInt8 {
       .replyPending32768s    : 32768.0,
     ]
     
-    return timeouts[self]!
+    return timeouts[self]
 
   }
   

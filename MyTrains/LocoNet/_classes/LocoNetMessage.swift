@@ -294,6 +294,29 @@ public class LocoNetMessage : NSObject {
     
   }
   
+  public var datagramFirstPart : [UInt8] {
+    
+    var data = message.count <= 70 ? OpenLCBDatagramType.sendLocoNetMessageCompleteCommand.bigEndianData : OpenLCBDatagramType.sendLocoNetMessageFirstPartCommand.bigEndianData
+    
+    data.append(contentsOf: [UInt8](message.prefix(70)))
+    
+    return data
+    
+  }
+  
+  public var datagramFinalPart : [UInt8]? {
+    
+    guard message.count > 70 else {
+      return nil
+    }
+    
+    var data = OpenLCBDatagramType.sendLocoNetMessageFinalPartCommand.bigEndianData
+    
+    data.append(contentsOf: [UInt8](message.suffix(message.count - 70)))
+    
+    return data
+    
+  }
   
   public var messageType : LocoNetMessageType {
     

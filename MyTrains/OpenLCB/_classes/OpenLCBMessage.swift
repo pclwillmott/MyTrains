@@ -334,11 +334,12 @@ public class OpenLCBMessage : NSObject {
     return (UInt32(sourceNIDAlias!) << 12) | UInt32(destinationNIDAlias!)
   }
 
-  public var errorCode : OpenLCBErrorCode {
-    if payload.count >= 2, let error = UInt16(bigEndianData: [payload[0], payload[1]]) {
-      return OpenLCBErrorCode(rawValue: error)!
-    }
-    return .success
+  public var errorCode : UInt16 {
+    return UInt16(bigEndianData: [UInt8](payload.prefix(2))) ?? 0
+  }
+
+  public var error : OpenLCBErrorCode {
+    return OpenLCBErrorCode(rawValue: errorCode)!
   }
 
   public var rwReplyFailureErrorCode : OpenLCBErrorCode {
@@ -647,7 +648,15 @@ public class OpenLCBMessage : NSObject {
           data.removeFirst(2)
           let nodeId = UInt64(bigEndianData: [UInt8](data.prefix(6)))!
           text += "\(nodeId.toHexDotFormat(numberOfBytes: 6))"
-        case .sendLocoNetMessage:
+        case .sendLocoNetMessageCompleteCommand:
+          break
+        case .sendLocoNetMessageFirstPartCommand:
+          break
+        case .sendLocoNetMessageFinalPartCommand:
+          break
+        case .sendLocoNetMessageReply:
+          break
+        case .sendLocoNetMessageReplyFailure:
           break
         }
       }

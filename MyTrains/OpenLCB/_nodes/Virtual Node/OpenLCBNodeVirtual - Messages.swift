@@ -39,11 +39,10 @@ extension OpenLCBNodeVirtual {
     sendEvent(eventId: eventId, payload: data)
   }
 
-  public func sendLocoNetMessage(destinationNodeId:UInt64, locoNetMessage:LocoNetMessage) {
+  public func sendLocoNetMessage(destinationNodeId:UInt64, locoNetMessage:LocoNetMessage, isFinalPart:Bool = false) {
     let message = OpenLCBMessage(messageTypeIndicator: .datagram)
     message.destinationNodeId = destinationNodeId
-    message.payload = OpenLCBDatagramType.sendLocoNetMessage.bigEndianData
-    message.payload.append(contentsOf: locoNetMessage.message)
+    message.payload = isFinalPart ? locoNetMessage.datagramFinalPart! : locoNetMessage.datagramFirstPart
     sendMessage(message: message)
   }
 

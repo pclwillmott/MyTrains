@@ -9,7 +9,6 @@ import Foundation
 
 public enum LocoNetCommandStationType : UInt8 {
   
-  case DT200         = 0xff
   case DCS100_DCS200 = 0x78
   case DB150         = 0x00
   case DCS50         = 0x08
@@ -19,7 +18,8 @@ public enum LocoNetCommandStationType : UInt8 {
   case DCS240        = 0x1c
   case DCS210Plus    = 0x1a
   case DCS240Plus    = 0x1d
- 
+  case DT200         = 0xff
+
   public var name : String {
     
     get {

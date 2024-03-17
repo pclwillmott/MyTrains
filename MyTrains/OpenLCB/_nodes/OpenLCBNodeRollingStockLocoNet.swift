@@ -418,12 +418,13 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
       return
     }
     
-    locoNet = LocoNet(gatewayNodeId: locoNetGatewayNodeId, virtualNode: self)
+    locoNet = LocoNet(gatewayNodeId: locoNetGatewayNodeId, node: self)
     
     locoNet?.delegate = self
+    
+    locoNet?.start()
 
   }
-
 
   // MARK: Public Methods
   
@@ -436,11 +437,12 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
   
   // MARK: LocoNetDelegate Methods
   
-  @objc public func locoNetInitializationComplete() {
+  @objc public func locoNetStartupComplete() {
   }
   
   @objc public func locoNetMessageReceived(message:LocoNetMessage) {
     
+    debugLog("\(message.messageType)")
     switch message.messageType {
       
     case .programmerBusy:

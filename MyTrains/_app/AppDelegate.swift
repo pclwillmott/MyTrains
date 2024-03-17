@@ -39,6 +39,8 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
   
   public var networkLayer = OpenLCBNetworkLayer()
   
+  public var windowsLoaded = false
+  
   public var isSafeToTerminate : Bool {
   
     var isSafeToTerminate = true
@@ -202,8 +204,6 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
     debugLog("applicationWillTerminate")
     #endif
     
-    debugLog("application stopped")
-    
   }
 
   // MARK: Private Methods
@@ -299,7 +299,7 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
   
   public func openWindows() {
     
-    guard state == .runningLocal || state == .runningNetwork else {
+    guard (state == .runningLocal || state == .runningNetwork) && !windowsLoaded else {
       return
     }
     
@@ -313,6 +313,8 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
         }
       }
     }
+    
+    windowsLoaded = true
     
   }
   
@@ -416,6 +418,7 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
   }
   
   public func windowsDidClose() {
+    windowsLoaded = false
     switch state {
     case .stopping, .rebooting, .resetToFactoryDefaults, .terminating:
       networkLayer.stop()

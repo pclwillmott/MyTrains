@@ -123,7 +123,7 @@ class OpenLCBFirmwareUpdateVC: MyTrainsViewController, OpenLCBConfigurationToolD
   }
   
   private func startTimeoutTimer(timeOut:OpenLCBDatagramTimeout) {
-    let interval = timeOut.timeout
+    let interval = timeOut.timeout ?? 0.0
     timeoutTimer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(timeoutTimerAction), userInfo: nil, repeats: false)
     RunLoop.current.add(timeoutTimer!, forMode: .common)
   }

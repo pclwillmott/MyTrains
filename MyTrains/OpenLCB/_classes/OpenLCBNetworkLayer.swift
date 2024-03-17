@@ -231,7 +231,7 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
       }
       
       initializationLevel += 1
-      
+
       if let group = startupGroup[initializationLevel], !group.uninitializedIsEmpty {
         for node in group.uninitializedNodes {
           virtualNodeLookup[node.nodeId] = node
@@ -460,9 +460,7 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
   }
   
   public func nodeIdCacheCompleted() {
-    if configurationToolManager.numberOfNodes == 0 {
-      appDelegate.openWindows()
-    }
+    appDelegate.openWindows()
   }
   
   public func createGatewayNode() {

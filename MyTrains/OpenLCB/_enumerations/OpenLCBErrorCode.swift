@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import AppKit
 
 public enum OpenLCBErrorCode : UInt16 {
   
@@ -75,13 +76,11 @@ public enum OpenLCBErrorCode : UInt16 {
   }
   
   public var isPermanent : Bool {
-    let mask : UInt16 = 0x1000
-    return (self.rawValue & mask) == mask
+    return OpenLCBErrorCode.isPermanentError(errorCode: self.rawValue)
   }
 
   public var isTemporary : Bool {
-    let mask : UInt16 = 0x2000
-    return (self.rawValue & mask) == mask
+    return OpenLCBErrorCode.isTemporaryError(errorCode: self.rawValue)
   }
   
   public var userMessage : String {
@@ -156,4 +155,42 @@ public enum OpenLCBErrorCode : UInt16 {
     .acceptFlag : String(localized: "Accept Flag"),
   ]
 
+  // MARK: Public Class Methods
+  
+  public static func showAlert(messageText:String, errorCode:UInt16) {
+    
+    let alert = NSAlert()
+    
+    var informativeText : String
+    
+    if let error = OpenLCBErrorCode(rawValue: errorCode) {
+      informativeText = error.title
+    }
+    else if isPermanentError(errorCode: errorCode) {
+      informativeText = String(localized: "Unknown permanent error with value: 0x\(errorCode.toHex(numberOfDigits: 4))")
+    }
+    else {
+      informativeText = String(localized: "Unknown temporary error with value: 0x\(errorCode.toHex(numberOfDigits: 4))")
+    }
+
+    alert.messageText = messageText
+    alert.informativeText = informativeText
+    alert.addButton(withTitle: String(localized: "OK"))
+    alert.alertStyle = .critical
+
+    alert.runModal()
+    
+  }
+  
+  public static func isPermanentError(errorCode:UInt16) -> Bool {
+    let mask : UInt16 = 0x1000
+    return (errorCode & mask) == mask
+  }
+
+  public static func isTemporaryError(errorCode:UInt16) -> Bool {
+    let mask : UInt16 = 0x2000
+    return (errorCode & mask) == mask
+  }
+
+  
 }

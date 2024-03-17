@@ -717,8 +717,6 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
       sendEvent(eventId: eventId)
     }
     
-    // TODO: Add events sent on initialization here!
-    
     networkLayer.nodeDidStart(node: self)
 
   }

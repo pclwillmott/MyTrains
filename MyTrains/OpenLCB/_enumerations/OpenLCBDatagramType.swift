@@ -160,7 +160,11 @@ public enum OpenLCBDatagramType : UInt16 {
     .updateCompleteCommand : String(localized: "Update Complete Command"),
     .resetRebootCommand : String(localized: "Reset Reboot Command"),
     .reinitializeFactoryResetCommand : String(localized: "Reinitialize/Factory Reset Command"),
-    .sendLocoNetMessage : String(localized: "Send LocoNet Message Command"),
+    .sendLocoNetMessageCompleteCommand : String(localized: "Send LocoNet Message Complete Command"),
+    .sendLocoNetMessageFirstPartCommand : String(localized: "Send LocoNet Message First Part Command"),
+    .sendLocoNetMessageFinalPartCommand : String(localized: "Send LocoNet Message Final Part Command"),
+    .sendLocoNetMessageReply : String(localized: "Send LocoNet Message Reply"),
+    .sendLocoNetMessageReplyFailure : String(localized: "Send LocoNet Message Reply Failure"),
   ]
   
 }

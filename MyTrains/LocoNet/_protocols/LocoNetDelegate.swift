@@ -8,6 +8,8 @@
 import Foundation
 
 @objc public protocol LocoNetDelegate {
-  @objc optional func locoNetInitializationComplete()
+  @objc optional func locoNetStartupComplete()
+  @objc optional func locoNetStartupFailed()
+  @objc optional func locoNetStopComplete()
   @objc optional func locoNetMessageReceived(message:LocoNetMessage)
 }

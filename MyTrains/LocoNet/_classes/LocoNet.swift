@@ -6,47 +6,40 @@
 //
 
 import Foundation
+import AppKit
 
 // private typealias QueueItem = (message:LocoNetMessage, spacingDelay:UInt8)
 
 private enum State {
   case idle
+  case waitingForOpSwDataAP1
   case initialized
 }
 
 internal enum MessageState {
   case idle
-  case waitingForDatagramReceivedOK
-  case waitingForSendLocoNetMessageReply
+  case waitingForDatagramReceivedOK1
+  case waitingForSendLocoNetMessageReply1
+  case waitingForDatagramReceivedOK2
+  case waitingForSendLocoNetMessageReply2
 }
 
 public class LocoNet {
   
   // MARK: Constructors & Destructors
   
-  init(gatewayNodeId: UInt64, virtualNode: OpenLCBNodeVirtual) {
-    
+  init(gatewayNodeId: UInt64, node: OpenLCBNodeVirtual) {
     self.gatewayNodeId = gatewayNodeId
-    
-    self.virtualNode = virtualNode
-    
-    self.networkLayer = virtualNode.networkLayer!
-    
-    self.nodeId = virtualNode.nodeId
-    
-    getOpSwDataAP1()
-    
+    self.node = node
   }
   
   // MARK: Private Properties
   
   internal var gatewayNodeId : UInt64
   
-  internal var virtualNode : OpenLCBNodeVirtual
+  internal var node : OpenLCBNodeVirtual
   
-  internal var networkLayer : OpenLCBNetworkLayer
-  
-  internal var nodeId : UInt64
+  internal var gatewayConnected = false
   
   private var state : State = .idle
   
@@ -56,9 +49,13 @@ public class LocoNet {
   
   internal var outputQueue : [LocoNetMessage] = []
   
+  internal var outputQueueLock = NSLock()
+  
   internal var currentMessage : LocoNetMessage?
   
   internal var timeoutTimer : Timer?
+  
+  internal var retryTimer : Timer?
   
   internal var messageState : MessageState = .idle
   
@@ -74,51 +71,64 @@ public class LocoNet {
   
   public var globalEmergencyStop : Bool = false
   
-  public var commandStationType : LocoNetCommandStationType = .DT200
+  public var commandStationType : LocoNetCommandStationType?
   
   public var implementsProtocol0 : Bool {
-    get {
-      return commandStationType.protocolsSupported.contains(.protocol0)
+    guard let commandStationType else {
+      return false
     }
+    return commandStationType.protocolsSupported.contains(.protocol0)
   }
   
   public var implementsProtocol1 : Bool {
-    get {
-      return commandStationType.protocolsSupported.contains(.protocol1)
+    guard let commandStationType else {
+      return false
     }
+    return commandStationType.protocolsSupported.contains(.protocol1)
   }
 
   public var implementsProtocol2 : Bool {
-    get {
-      return commandStationType.protocolsSupported.contains(.protocol2)
+    guard let commandStationType else {
+      return false
     }
+    return commandStationType.protocolsSupported.contains(.protocol2)
   }
 
   // MARK: Private Methods
   
   @objc internal func timeoutTimerAction() {
     
-    stopTimeoutTimer()
-    
-    switch messageState {
-    case .idle:
-      break
-    case .waitingForDatagramReceivedOK:
-      currentMessage = nil
-      outputQueue.removeAll()
-    case .waitingForSendLocoNetMessageReply:
-      currentMessage = nil
-      sendNext()
+    if state == .initialized {
+      
+      let alert = NSAlert()
+      
+      alert.messageText = String(localized: "Timeout")
+      alert.informativeText = String(localized: "A reply from the LocoNet gateway was not received within the expected time period.")
+      alert.addButton(withTitle: String(localized: "OK"))
+      alert.alertStyle = .critical
+      
+      alert.runModal()
+      
     }
-
+    else {
+      self.delegate?.locoNetStartupComplete?()
+    }
+    
   }
   
-  internal func startTimeoutTimer(interval: TimeInterval) {
+  internal func startTimeoutTimer(interval:TimeInterval = 0.250) {
     guard currentMessage != nil else {
       return
     }
     timeoutTimer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(timeoutTimerAction), userInfo: nil, repeats: false)
-    RunLoop.current.add(timeoutTimer!, forMode: .common)
+    if let timeoutTimer {
+      RunLoop.current.add(timeoutTimer, forMode: .common)
+    }
+    else {
+      #if DEBUG
+      debugLog("failed to create timeoutTimer")
+      #endif
+    }
   }
   
   internal func stopTimeoutTimer() {
@@ -126,21 +136,53 @@ public class LocoNet {
     timeoutTimer = nil
   }
 
-  internal func sendNext() {
+  @objc internal func retryTimerAction() {
     
-    guard currentMessage == nil && !outputQueue.isEmpty else {
+    guard let currentMessage else {
       return
     }
     
-    currentMessage = outputQueue.removeFirst()
+    messageState = .waitingForDatagramReceivedOK1
+    startTimeoutTimer()
+    node.sendLocoNetMessage(destinationNodeId: gatewayNodeId, locoNetMessage: currentMessage)
     
-    messageState = .waitingForDatagramReceivedOK
+  }
+
+  internal func startRetryTimer() {
     
-    retryCount = 10
+    retryTimer?.invalidate()
     
-    startTimeoutTimer(interval: 1.0)
+    retryTimer = Timer.scheduledTimer(timeInterval: 0.050, target: self, selector: #selector(retryTimerAction), userInfo: nil, repeats: false)
     
-//    networkLayer.sendLocoNetMessage(sourceNodeId: nodeId, destinationNodeId: gatewayNodeId, locoNetMessage: currentMessage!)
+    if let retryTimer {
+      RunLoop.current.add(retryTimer, forMode: .common)
+    }
+    else {
+      #if DEBUG
+      debugLog("failed to create retryTimer")
+      #endif
+    }
+    
+  }
+  
+  internal func sendNext() {
+    
+    var ok = false
+    
+    outputQueueLock.lock()
+    
+    if currentMessage == nil && !outputQueue.isEmpty {
+      currentMessage = outputQueue.removeFirst()
+      ok = true
+    }
+    
+    outputQueueLock.unlock()
+    
+    if ok, let currentMessage {
+      messageState = .waitingForDatagramReceivedOK1
+      startTimeoutTimer()
+      node.sendLocoNetMessage(destinationNodeId: gatewayNodeId, locoNetMessage: currentMessage)
+    }
     
   }
   
@@ -149,15 +191,37 @@ public class LocoNet {
     sendNext()
   }
   
-
   // MARK: Public Methods
  
+  public func start() {
+    
+    guard state == .idle else {
+      return
+    }
+    
+    node.datagramTypesSupported.insert(.sendLocoNetMessageReply)
+    node.datagramTypesSupported.insert(.sendLocoNetMessageReplyFailure)
+    
+    state = .waitingForOpSwDataAP1
+    
+    startTimeoutTimer()
+    
+    getOpSwDataAP1()
+    
+  }
+  
+  public func stop() {
+    
+  }
+  
   public func locoNetMessageReceived(message:LocoNetMessage) {
     
     switch message.messageType {
       
     case .opSwDataAP1:
-      
+
+      stopTimeoutTimer()
+
       let trackByte = message.message[7]
       
       let mask_TrackPower    : UInt8 = 0b00000001
@@ -170,13 +234,13 @@ public class LocoNet {
       
       trackPowerOn = (trackByte & mask_TrackPower) == mask_TrackPower
       
-      if commandStationType.idleSupportedByDefault {
+      if let commandStationType, commandStationType.idleSupportedByDefault {
         globalEmergencyStop = (trackByte & mask_EmergencyStop) != mask_EmergencyStop
       }
 
-      if state == .idle {
+      if state == .waitingForOpSwDataAP1 {
         state = .initialized
-        self.delegate?.locoNetInitializationComplete?()
+        self.delegate?.locoNetStartupComplete?()
       }
 
     case .immPacketOK:
@@ -205,8 +269,156 @@ public class LocoNet {
   
   public func openLCBMessageReceived(message: OpenLCBMessage) {
     
-    switch message.messageTypeIndicator {
+    guard let sourceNodeId = message.sourceNodeId else {
+      return
+    }
     
+    switch message.messageTypeIndicator {
+      
+    case .datagramReceivedOK:
+      
+      if let currentMessage, sourceNodeId == gatewayNodeId {
+        
+        stopTimeoutTimer()
+        
+        var data = message.payload
+        
+        if data.isEmpty {
+          data.append(0)
+        }
+        
+        if let flags = OpenLCBDatagramTimeout(rawValue: data[0]), flags.replyPending {
+          
+          messageState = messageState == .waitingForDatagramReceivedOK1 ? .waitingForSendLocoNetMessageReply1 : .waitingForSendLocoNetMessageReply2
+          
+          if let timeout = flags.timeout {
+            startTimeoutTimer(interval: timeout)
+          }
+          
+        }
+        
+        // If there is no reply pending then we assume that the first part of
+        // the message has been sent.
+        
+        else {
+          
+          if currentMessage.datagramFinalPart != nil {
+            messageState = .waitingForDatagramReceivedOK2
+            startTimeoutTimer()
+            node.sendLocoNetMessage(destinationNodeId: gatewayNodeId, locoNetMessage: currentMessage, isFinalPart: true)
+          }
+          else {
+            outputQueueLock.lock()
+            self.currentMessage = nil
+            messageState = .idle
+            outputQueueLock.unlock()
+            sendNext()
+          }
+          
+        }
+        
+      }
+      
+    case .datagramRejected:
+      
+      if  let currentMessage, sourceNodeId == gatewayNodeId {
+        
+        stopTimeoutTimer()
+        
+        let errorCode = message.errorCode
+        
+        if OpenLCBErrorCode.isPermanentError(errorCode: errorCode) {
+          
+          OpenLCBErrorCode.showAlert(messageText: String(localized: "LocoNet gateway has rejected a datagram with the following error:"), errorCode: errorCode)
+          
+          switch message.error {
+          case .permanentErrorInvalidArguments:
+            outputQueueLock.lock()
+            self.currentMessage = nil
+            outputQueueLock.unlock()
+            messageState = .idle
+            sendNext()
+          default:
+            outputQueueLock.lock()
+            self.currentMessage = nil
+            outputQueue.removeAll()
+            outputQueueLock.unlock()
+            messageState = .idle
+          }
+          
+        }
+        else if OpenLCBErrorCode.isTemporaryError(errorCode: errorCode) {
+          
+          switch message.error {
+          case .temporaryErrorBufferUnavailable, .temporaryErrorLocoNetCollision, .temporaryErrorOutOfOrderFinalPartOfLocoNetMessageBeforeFirstPart, .temporaryErrorOutOfOrderFirstPartOfLocoNetMessageBeforeFinishingPreviousMessage:
+            startRetryTimer()
+          default:
+            break
+          }
+          
+        }
+        
+      }
+
+    case .datagram:
+      
+      if let currentMessage, sourceNodeId == gatewayNodeId {
+        
+        var doNext = true
+        
+        switch message.datagramType {
+          
+        case .sendLocoNetMessageReply:
+          
+          switch messageState {
+            
+          case .waitingForSendLocoNetMessageReply1:
+            
+            stopTimeoutTimer()
+            
+            if currentMessage.datagramFinalPart != nil {
+              doNext = false
+              messageState = .waitingForDatagramReceivedOK2
+              startTimeoutTimer()
+              node.sendLocoNetMessage(destinationNodeId: gatewayNodeId, locoNetMessage: currentMessage, isFinalPart: true)
+            }
+            
+          case .waitingForSendLocoNetMessageReply2:
+            stopTimeoutTimer()
+            break
+            
+          default:
+            doNext = false
+          }
+          
+        case .sendLocoNetMessageReplyFailure:
+          
+          stopTimeoutTimer()
+          
+          if let errorCode = UInt16(bigEndianData: [UInt8](message.payload.suffix(2))), let error = OpenLCBErrorCode(rawValue: errorCode) {
+            switch error {
+            case .temporaryErrorLocoNetCollision:
+              doNext = false
+              startRetryTimer()
+            default:
+              break
+            }
+          }
+          
+        default:
+          doNext = false
+        }
+        
+        if doNext {
+          outputQueueLock.lock()
+          self.currentMessage = nil
+          messageState = .idle
+          outputQueueLock.unlock()
+          sendNext()
+        }
+        
+      }
+      
     case .producerConsumerEventReport:
       
       if let event = OpenLCBWellKnownEvent(rawValue: message.eventId!) {
@@ -234,13 +446,11 @@ public class LocoNet {
 
         case .locoNetMessage:
 
-          if message.sourceNodeId! == gatewayNodeId, let locoNetMessage = message.locoNetMessage {
-              
+          if sourceNodeId == gatewayNodeId, let locoNetMessage = message.locoNetMessage {
             locoNetMessage.timeStamp = message.timeStamp
             locoNetMessage.timeSinceLastMessage = locoNetMessage.timeStamp - lastTimeStamp
             lastTimeStamp = locoNetMessage.timeStamp
             locoNetMessageReceived(message: locoNetMessage)
-            
           }
           
         default:
@@ -249,109 +459,6 @@ public class LocoNet {
 
       }
       
-    case .sendLocoNetMessageReply:
-      
-      if message.sourceNodeId! == gatewayNodeId, let locoNetMessage = currentMessage {
-        
-        stopTimeoutTimer()
-        
-        let errorCode = message.errorCode
-        
-        switch errorCode {
-        case .success:
-          messageState = .idle
-          currentMessage = nil
-          sendNext()
-        case .temporaryErrorLocoNetCollision:
-          retryCount -= 1
-          if retryCount == 0 {
-            messageState = .idle
-            currentMessage = nil
-            sendNext()
-          }
-          else {
-            messageState = .waitingForDatagramReceivedOK
-            startTimeoutTimer(interval: 1.0)
- //           networkLayer.sendLocoNetMessage(sourceNodeId: nodeId, destinationNodeId: gatewayNodeId, locoNetMessage: locoNetMessage)
-          }
-        default:
-          #if DEBUG
-          debugLog("error: \(errorCode)")
-          #endif
-          messageState = .idle
-          currentMessage = nil
-          sendNext()
-        }
-        
-      }
-      
-    case .datagramReceivedOK:
-      
-      if message.destinationNodeId! == nodeId && message.sourceNodeId! == gatewayNodeId, let _ = currentMessage {
-        
-        stopTimeoutTimer()
-        
-        var data = message.payload
-        
-        if data.isEmpty {
-          data.append(0)
-        }
-        
-        if let flags = OpenLCBDatagramTimeout(rawValue: data[0]) {
-          
-          messageState = .waitingForSendLocoNetMessageReply
-          
-          startTimeoutTimer(interval: flags.timeout)
-          
-        }
-        
-      }
-      
-    case .datagramRejected:
-      
-      if message.destinationNodeId! == nodeId && message.sourceNodeId! == gatewayNodeId, let locoNetMessage = currentMessage {
-        
-        stopTimeoutTimer()
-        
-        let errorCode = message.errorCode
-        
-        switch errorCode {
-        case .permanentErrorNoConnection:
-          #if DEBUG
-          debugLog("error: \(errorCode)")
-          #endif
-          currentMessage = nil
-          outputQueue.removeAll()
-        case .permanentErrorInvalidArguments:
-          #if DEBUG
-          debugLog("error: \(errorCode)")
-          #endif
-          currentMessage = nil
-          sendNext()
-        case .temporaryErrorBufferUnavailable:
-          #if DEBUG
-          debugLog("error: \(errorCode)")
-          #endif
-          retryCount -= 1
-          if retryCount == 0 {
-            #if DEBUG
-            debugLog("max retries exceeded")
-            #endif
-            messageState = .idle
-            currentMessage = nil
-            sendNext()
-          }
-          else {
-            startTimeoutTimer(interval: 1.0)
-     //       networkLayer.sendLocoNetMessage(sourceNodeId: nodeId, destinationNodeId: gatewayNodeId, locoNetMessage: locoNetMessage)
-          }
-        default:
-          #if DEBUG
-          debugLog("unexpected error: \(errorCode)")
-          #endif
-        }
-        
-      }
     default:
       break
       

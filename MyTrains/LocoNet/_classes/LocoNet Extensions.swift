@@ -44,7 +44,7 @@ extension LocoNet {
   
   public func emergencyStop() {
     
-    if commandStationType.idleSupportedByDefault {
+    if let commandStationType, commandStationType.idleSupportedByDefault {
       
       let message = LocoNetMessage(data: [LocoNetMessageOpcode.OPC_IDLE.rawValue], appendCheckSum: true)
       
@@ -65,10 +65,8 @@ extension LocoNet {
   
   public func clearEmergencyStop() {
     
-    if commandStationType.idleSupportedByDefault {
-      
+    if let commandStationType, commandStationType.idleSupportedByDefault {
       powerOn()
-      
     }
     else {
       

@@ -33,6 +33,10 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
     configurationTool.delegate = nil
     networkLayer.releaseConfigurationTool(configurationTool: configurationTool)
 
+    for view in stackView.arrangedSubviews {
+      stackView.removeArrangedSubview(view)
+    }
+    
     super.windowWillClose(notification)
     
   }

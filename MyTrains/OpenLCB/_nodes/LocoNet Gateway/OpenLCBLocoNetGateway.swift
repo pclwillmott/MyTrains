@@ -291,6 +291,7 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
       if isOpen {
         sendToSerialPortPipe = MTPipe(name: MTSerialPort.pipeName(path: devicePath))
         sendToSerialPortPipe?.open()
+        startComplete()
       }
       
     }

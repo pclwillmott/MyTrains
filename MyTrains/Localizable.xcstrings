@@ -411,6 +411,9 @@
     "A critical task is running that cannot be interrupted. Try again when the task has completed." : {
 
     },
+    "A reply from the LocoNet gateway was not received within the expected time period." : {
+
+    },
     "Abbreviated Default CDI Protocol" : {
 
     },
@@ -3212,6 +3215,9 @@
     "LocoNet Gateway" : {
       "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name"
     },
+    "LocoNet gateway has rejected a datagram with the following error:" : {
+
+    },
     "LocoNet Gateway Protocol" : {
 
     },
@@ -4790,10 +4796,19 @@
         }
       }
     },
-    "Send LocoNet Message Command" : {
+    "Send LocoNet Message Complete Command" : {
+
+    },
+    "Send LocoNet Message Final Part Command" : {
+
+    },
+    "Send LocoNet Message First Part Command" : {
 
     },
     "Send LocoNet Message Reply" : {
+
+    },
+    "Send LocoNet Message Reply Failure" : {
 
     },
     "Sending unadvertised event" : {
@@ -5467,6 +5482,9 @@
         }
       }
     },
+    "Timeout" : {
+
+    },
     "Timeout - write failed" : {
       "localizations" : {
         "en" : {
@@ -5702,6 +5720,12 @@
           }
         }
       }
+    },
+    "Unknown permanent error with value: 0x%@" : {
+
+    },
+    "Unknown temporary error with value: 0x%@" : {
+
     },
     "Update Complete Command" : {
 
