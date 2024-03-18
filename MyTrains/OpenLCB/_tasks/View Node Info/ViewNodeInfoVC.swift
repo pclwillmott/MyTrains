@@ -91,15 +91,15 @@ class ViewNodeInfoVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate {
   
     textView.string = node!.supportedProtocolsAsString
     
-    txtAvailableCommands.string = node!.configurationOptions.availableCommandsAsString
+    txtAvailableCommands.string = node!.configurationOptions!.availableCommandsAsString
     
-    txtWriteLengths.string = node!.configurationOptions.writeLengthsAsString
+    txtWriteLengths.string = node!.configurationOptions!.writeLengthsAsString
     
-    lblLowestAddressSpace.stringValue = "0x\(node!.configurationOptions.lowestAddressSpace.toHex(numberOfDigits: 2))"
+    lblLowestAddressSpace.stringValue = "0x\(node!.configurationOptions!.lowestAddressSpace.toHex(numberOfDigits: 2))"
     
-    lblHighestAddressSpace.stringValue = "0x\(node!.configurationOptions.highestAddressSpace.toHex(numberOfDigits: 2))"
+    lblHighestAddressSpace.stringValue = "0x\(node!.configurationOptions!.highestAddressSpace.toHex(numberOfDigits: 2))"
     
-    lblName.stringValue = node!.configurationOptions.name
+    lblName.stringValue = node!.configurationOptions!.name
     
     tableViewDS.addressSpaceInformation = node!.addressSpaceInformation
     tableView.dataSource = tableViewDS
@@ -180,7 +180,7 @@ class ViewNodeInfoVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate {
           
         case .getConfigurationOptionsReply:
           
-          node.configurationOptions.encodedOptions = message.payload
+          node.configurationOptions!.encodedOptions = message.payload
           
           reload()
           

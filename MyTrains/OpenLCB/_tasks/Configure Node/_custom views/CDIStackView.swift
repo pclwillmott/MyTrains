@@ -10,11 +10,20 @@ import AppKit
 
 class CDIStackView : CDIView, CDIStackViewManagerDelegate {
  
+  // MARK: Destructors
+  
+  deinit {
+    for view in stackView!.arrangedSubviews {
+      stackView?.removeArrangedSubview(view)
+    }
+    stackView = nil
+  }
+  
   // MARK: Private & Internal Methods
   
   override internal func setup() {
     
-    guard needsInit else {
+    guard let stackView, needsInit else {
       return
     }
     
@@ -39,6 +48,10 @@ class CDIStackView : CDIView, CDIStackViewManagerDelegate {
   
   public func addArrangedSubview(_ view:NSView) {
   
+    guard let stackView else {
+      return
+    }
+    
     stackView.addArrangedSubview(view)
  
     NSLayoutConstraint.activate([
@@ -50,6 +63,6 @@ class CDIStackView : CDIView, CDIStackViewManagerDelegate {
   
   // MARK: Controls
   
-  internal var stackView = NSStackView()
+  internal var stackView : NSStackView? = NSStackView()
   
 }

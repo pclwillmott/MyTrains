@@ -10,6 +10,26 @@ import AppKit
 
 class CDIDataView: CDIView {
   
+  // MARK: Destructors
+  
+  deinit {
+    debugLog("deinit")
+    self.subviews.removeAll()
+    box?.subviews.removeAll()
+    box = nil
+    for view in stackView!.arrangedSubviews {
+      stackView?.removeArrangedSubview(view)
+    }
+    stackView = nil
+    dataButtonView?.subviews.removeAll()
+    dataButtonView = nil
+    writeButton = nil
+    refreshButton = nil
+    copyButton = nil
+    pasteButton = nil
+    newEventId = nil
+  }
+  
   // MARK: Private & Internal properties
   
   internal var needsRefreshWrite : Bool {
@@ -36,10 +56,10 @@ class CDIDataView: CDIView {
 
   public var name : String {
     get {
-      return box.title
+      return box!.title
     }
     set(value) {
-      box.title = value
+      box?.title = value
     }
   }
   
@@ -69,7 +89,7 @@ class CDIDataView: CDIView {
   
   public var floatFormat : String?
   
-  public var delegate : CDIDataViewDelegate?
+  public weak var delegate : CDIDataViewDelegate?
 
   // MARK: Private & Internal Methods
   
@@ -370,7 +390,7 @@ class CDIDataView: CDIView {
 
   internal func addButtons(view:NSView) {
     
-    guard elementType != nil else {
+    guard elementType != nil, let dataButtonView, let writeButton, let refreshButton, let copyButton, let pasteButton, let newEventId else {
       return
     }
     
@@ -386,6 +406,7 @@ class CDIDataView: CDIView {
       dataButtonView.heightAnchor.constraint(equalToConstant: 20.0),
     ])
     
+      
     if needsRefreshWrite {
       
       dataButtonView.addSubview(writeButton)
@@ -403,6 +424,9 @@ class CDIDataView: CDIView {
         refreshButton.trailingAnchor.constraint(equalTo: writeButton.leadingAnchor, constant:  -siblingGap),
       ])
       
+      refreshButton.target = self
+      refreshButton.action = #selector(self.btnRefreshAction(_:))
+      
       if !needsCopyPaste {
         constraints.append(contentsOf: [
           dataButtonView.leadingAnchor.constraint(equalTo: refreshButton.leadingAnchor)
@@ -411,12 +435,9 @@ class CDIDataView: CDIView {
 
       writeButton.target = self
       writeButton.action = #selector(self.btnWriteAction(_:))
-
-      refreshButton.target = self
-      refreshButton.action = #selector(self.btnRefreshAction(_:))
-
+      
     }
-
+    
     if needsCopyPaste {
       
       dataButtonView.addSubview(pasteButton)
@@ -426,7 +447,7 @@ class CDIDataView: CDIView {
       dataButtonView.addSubview(copyButton)
       copyButton.title = String(localized: "Copy", comment: "Used for the title of a button copies to the clipboard")
       copyButton.translatesAutoresizingMaskIntoConstraints = false
-
+      
       dataButtonView.addSubview(newEventId)
       newEventId.title = String(localized: "New Event ID", comment: "Used for the title of a button that creates a new event ID")
       newEventId.translatesAutoresizingMaskIntoConstraints = false
@@ -442,15 +463,14 @@ class CDIDataView: CDIView {
       ])
       
     }
-
-
-    NSLayoutConstraint.activate(constraints)
     
+    NSLayoutConstraint.activate(constraints)
+
   }
   
   override internal func setup() {
     
-    guard needsInit else {
+    guard needsInit, let box, let stackView else {
       return
     }
     
@@ -494,6 +514,10 @@ class CDIDataView: CDIView {
     
   public func addDescription(description:[String]) {
     
+    guard let stackView else {
+      return
+    }
+    
     for desc in description {
       
       if !desc.trimmingCharacters(in: .whitespaces).isEmpty {
@@ -525,21 +549,14 @@ class CDIDataView: CDIView {
 
   // MARK: Controls
   
-  internal var box = NSBox()
-  
-  internal var stackView = NSStackView()
-  
-  internal var refreshButton = NSButton()
-  
-  internal var writeButton = NSButton()
-  
-  internal var copyButton = NSButton()
-  
-  internal var pasteButton = NSButton()
-  
-  internal var newEventId = NSButton()
-  
-  internal var dataButtonView = NSView()
+  internal var box            : NSBox?       = NSBox()
+  internal var writeButton    : NSButton?    = NSButton()
+  internal var refreshButton  : NSButton?    = NSButton()
+  internal var copyButton     : NSButton?    = NSButton()
+  internal var pasteButton    : NSButton?    = NSButton()
+  internal var stackView      : NSStackView? = NSStackView()
+  internal var newEventId     : NSButton?    = NSButton()
+  internal var dataButtonView : NSView?      = NSView()
   
   // MARK: Actions
   

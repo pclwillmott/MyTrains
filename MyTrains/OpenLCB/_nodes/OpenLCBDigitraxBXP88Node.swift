@@ -1062,7 +1062,7 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
           userNodeName = "Digitrax BXP88 S/N: \(message.serialNumber!)"
         }
         nodeSoftwareVersion = "v\(message.softwareVersion!)"
-        acdiUserSpace.save()
+        acdiUserSpace?.save()
         // Read Option Switches
         enterOpSwMode()
         configState = .gettingOptionSwitches

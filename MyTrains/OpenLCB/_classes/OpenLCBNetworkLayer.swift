@@ -13,6 +13,7 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
   // MARK: Constructors & Destructors
   
   deinit {
+    debugLog("deinit")
     removeAll()
   }
   
@@ -92,9 +93,9 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
     }
   }
   
-  public var appNode : OpenLCBNodeMyTrains?
+  public weak var appNode : OpenLCBNodeMyTrains?
   
-  public var fastClock : OpenLCBClock?
+  public weak var fastClock : OpenLCBClock?
   
   // MARK: Private Methods
   
@@ -114,6 +115,9 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
     nodesSimpleSetSufficient.removeAll()
     nodesInhibited.removeAll()
     gatewayNodes.removeAll()
+    for (_, group) in startupGroup {
+      group.removeAll()
+    }
     startupGroup.removeAll()
     initializationLevel = 0
     state = .uninitialized

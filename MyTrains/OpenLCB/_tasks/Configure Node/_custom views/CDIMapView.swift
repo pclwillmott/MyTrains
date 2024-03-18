@@ -10,17 +10,26 @@ import AppKit
 
 class CDIMapView : CDIDataView {
 
+  // MARK: Destructors
+  
+  deinit {
+    debugLog("deinit")
+    comboView?.subviews.removeAll()
+    comboView = nil
+    comboBox = nil
+  }
+  
   // MARK: Private & Internal Properties
 
-  internal var comboView = NSView()
+  internal var comboView : NSView? = NSView()
   
-  internal var comboBox = NSComboBox()
+  internal var comboBox : NSComboBox? = NSComboBox()
   
   // MARK: Private & Internal Methods
   
   override internal func dataWasSet() {
     
-    guard let string = setString() else {
+    guard let comboBox, let string = setString() else {
       return
     }
     
@@ -32,7 +41,7 @@ class CDIMapView : CDIDataView {
 
   internal func addComboBox() {
     
-    guard let map else {
+    guard let map, let stackView, let dataButtonView, let comboView, let comboBox else {
       return
     }
     
@@ -75,7 +84,7 @@ class CDIMapView : CDIDataView {
 
   override public var getData : [UInt8] {
 
-    guard let map, let textValue = map.selectedItem(comboBox: comboBox), let data = getData(string: textValue) else {
+    guard let map, let comboBox, let textValue = map.selectedItem(comboBox: comboBox), let data = getData(string: textValue) else {
       return []
     }
 

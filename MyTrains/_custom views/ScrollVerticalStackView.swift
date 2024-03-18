@@ -10,6 +10,18 @@ import AppKit
 
 class ScrollVerticalStackView : NSView, CDIStackViewManagerDelegate {
   
+  // MARK: Destructors
+  
+  deinit {
+    debugLog("deinit")
+    scrollView?.documentView = nil
+    scrollView = nil
+    for view in stackView!.arrangedSubviews {
+      stackView?.removeArrangedSubview(view)
+    }
+    stackView = nil
+  }
+  
   // MARK: Drawing Methods
   
   override func draw(_ dirtyRect: NSRect) {
@@ -18,15 +30,15 @@ class ScrollVerticalStackView : NSView, CDIStackViewManagerDelegate {
   
   // MARK: Private & Internal Properties
   
-  internal var scrollView : NSScrollView = NSScrollView()
+  internal var scrollView : NSScrollView? = NSScrollView()
   
-  internal var stackView : NSStackView = NSStackView()
+  internal var stackView : NSStackView? = NSStackView()
   
   // MARK: Private & Internal Methods
   
   private func setup() {
     
-    guard scrollView.documentView == nil else {
+    guard let scrollView, let stackView, scrollView.documentView == nil else {
       return
     }
     
@@ -62,12 +74,16 @@ class ScrollVerticalStackView : NSView, CDIStackViewManagerDelegate {
   // MARK: Public Properties
   
   public var arrangedSubViews : [NSView] {
-    return stackView.arrangedSubviews
+    return stackView!.arrangedSubviews
   }
   
   // MARK: Public Methods
   
   public func addArrangedSubview(_ view:NSView) {
+    
+    guard let stackView else {
+      return
+    }
     
     view.translatesAutoresizingMaskIntoConstraints = false
     

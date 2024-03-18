@@ -14,10 +14,17 @@ public enum MonitorItemDirection {
 }
 public class MonitorItem : NSObject {
   
-  // MARK: Constructors
+  // MARK: Constructors & Destructors
   
   public override init() {
     super.init()
+  }
+  
+  deinit {
+    debugLog("deinit")
+    frame = nil
+    message = nil
+    _info = nil
   }
   
   // MARK: Private Properties

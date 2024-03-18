@@ -13,8 +13,23 @@ class OpenLCBMonitorVC: MyTrainsViewController, OpenLCBNetworkObserverDelegate {
   // MARK: Window & View Methods
   
   override func windowWillClose(_ notification: Notification) {
-    appDelegate.networkLayer.removeObserver(id: observerId)
+    
+    appDelegate.networkLayer!.removeObserver(id: observerId)
+    
+    view.subviews.removeAll()
+    for view in stackView!.arrangedSubviews {
+      stackView?.removeArrangedSubview(view)
+    }
+    stackView = nil
+    monitorView?.subviews.removeAll()
+    frame = nil
+    btnClear = nil
+    btnPause = nil
+    gatewayViews.removeAll()
+    postOfficeView = nil
+
     super.windowWillClose(notification)
+    
   }
   
   override func viewDidLoad() {
@@ -26,19 +41,17 @@ class OpenLCBMonitorVC: MyTrainsViewController, OpenLCBNetworkObserverDelegate {
     
     super.viewWillAppear()
     
+    guard let stackView, let monitorView, let frame, let btnClear, let btnPause, let postOfficeView else {
+      return
+    }
+    
     txtMonitor.font = NSFont(name: "Menlo", size: 12)
     
-    observerId = appDelegate.networkLayer.addObserver(observer: self)
+    observerId = appDelegate.networkLayer!.addObserver(observer: self)
     
-    appDelegate.networkLayer.isMonitorPaused = false
+    appDelegate.networkLayer!.isMonitorPaused = false
  
     view.window?.title = String(localized: "LCC/OpenLCB Traffic Monitor")
-    
-    let stackView = NSStackView()
-    let monitorView = NSView()
-    let frame = FrameView()
-    let btnClear = NSButton()
-    let btnPause = NSButton()
     
     stackView.translatesAutoresizingMaskIntoConstraints = false
     monitorView.translatesAutoresizingMaskIntoConstraints = false
@@ -119,11 +132,11 @@ class OpenLCBMonitorVC: MyTrainsViewController, OpenLCBNetworkObserverDelegate {
     postOfficeView.translatesAutoresizingMaskIntoConstraints = false
     postOfficeView.gatewayNumber = 0
     postOfficeView.name = String(localized: "Post Office")
-    postOfficeView.nodeId = appDelegate.networkLayer.postOfficeNodeId
+    postOfficeView.nodeId = appDelegate.networkLayer!.postOfficeNodeId
     horizontalView.addArrangedSubview(postOfficeView)
     horizontalView.alignment = .top
     
-    if !appDelegate.networkLayer.gatewayNodes.isEmpty {
+    if !appDelegate.networkLayer!.gatewayNodes.isEmpty {
       
       NSLayoutConstraint.activate([
         horizontalView.widthAnchor.constraint(equalTo: stackView.widthAnchor, multiplier: 1.0),
@@ -131,14 +144,14 @@ class OpenLCBMonitorVC: MyTrainsViewController, OpenLCBNetworkObserverDelegate {
 //        horizontalView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
       ])
       
-      for index in 0 ... appDelegate.networkLayer.gatewayNodes.count - 1 {
+      for index in 0 ... appDelegate.networkLayer!.gatewayNodes.count - 1 {
         let gatewayView = GatewayActivityView()
         gatewayView.translatesAutoresizingMaskIntoConstraints = false
         horizontalView.addArrangedSubview(gatewayView)
         gatewayViews.append(gatewayView)
       }
       
-      for (_, temp) in appDelegate.networkLayer.gatewayNodes {
+      for (_, temp) in appDelegate.networkLayer!.gatewayNodes {
         let gateway = temp as! OpenLCBCANGateway
         let view = gatewayViews[gateway.gatewayNumber]
         view.gatewayNumber = gateway.gatewayNumber + 1
@@ -156,7 +169,7 @@ class OpenLCBMonitorVC: MyTrainsViewController, OpenLCBNetworkObserverDelegate {
   
   private var gatewayViews : [GatewayActivityView] = []
 
-  private let postOfficeView = GatewayActivityView()
+  private var postOfficeView : GatewayActivityView? = GatewayActivityView()
 
   // MARK: Private Methods
   
@@ -182,29 +195,36 @@ class OpenLCBMonitorVC: MyTrainsViewController, OpenLCBNetworkObserverDelegate {
   }
   
   @objc func postOfficeRXMessage() {
-    postOfficeView.rxPacket()
+    postOfficeView?.rxPacket()
   }
   
   @objc func postOfficeTXMessage() {
-    postOfficeView.txPacket()
+    postOfficeView?.txPacket()
   }
 
   // MARK: Actions
   
   @objc func btnClearAction(_ sender: NSButton) {
-    appDelegate.networkLayer.clearMonitorBuffer()
+    appDelegate.networkLayer!.clearMonitorBuffer()
   }
   
   @objc func btnPauseAction(_ sender: NSButton) {
     sender.title = sender.state == .on ? String(localized: "Resume") : String(localized: "Pause")
-    appDelegate.networkLayer.isMonitorPaused = sender.state == .on
+    appDelegate.networkLayer!.isMonitorPaused = sender.state == .on
   }
   
   // MARK: Outlets
   
   @IBOutlet weak var scvMonitor: NSScrollView!
   
-  @IBOutlet var txtMonitor: NSTextView!
+  @IBOutlet weak var txtMonitor: NSTextView!
   
+  var stackView : NSStackView? = NSStackView()
+  var monitorView : NSView? = NSView()
+  var frame : FrameView? = FrameView()
+  var btnClear : NSButton? = NSButton()
+  var btnPause : NSButton? = NSButton()
+  
+
 }
 

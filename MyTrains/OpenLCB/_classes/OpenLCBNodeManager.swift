@@ -70,7 +70,7 @@ public class OpenLCBNodeManager {
   public func getNode(virtualNodeType:MyTrainsVirtualNodeType) -> OpenLCBNodeVirtual? {
     
     if freeNodes.isEmpty {
-      addNode(node: appDelegate.networkLayer.createVirtualNode(virtualNodeType:virtualNodeType))
+      addNode(node: appDelegate.networkLayer!.createVirtualNode(virtualNodeType:virtualNodeType))
     }
     
     if let id = freeNodes.first {

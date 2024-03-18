@@ -255,7 +255,7 @@ extension OpenLCBNodeVirtual {
   }
 
   public func sendGetConfigurationOptionsReply(destinationNodeId:UInt64, node:OpenLCBNodeVirtual) {
-    sendDatagram(destinationNodeId: destinationNodeId, data: node.configurationOptions.encodedOptions)
+    sendDatagram(destinationNodeId: destinationNodeId, data: node.configurationOptions!.encodedOptions)
   }
 
   public func sendGetMemorySpaceInformationCommand(destinationNodeId:UInt64, addressSpace:UInt8) {

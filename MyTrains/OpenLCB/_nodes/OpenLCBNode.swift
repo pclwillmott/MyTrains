@@ -9,7 +9,7 @@ import Foundation
 
 public class OpenLCBNode : NSObject {
   
-  // MARK: Constructors
+  // MARK: Constructors & Destructors
   
   public init(nodeId:UInt64) {
     
@@ -21,6 +21,12 @@ public class OpenLCBNode : NSObject {
     
     super.init()
     
+  }
+  
+  deinit {
+    debugLog("deinit")
+    addressSpaceInformation.removeAll()
+    configurationOptions = nil
   }
   
   // MARK: Private Properties
@@ -264,7 +270,7 @@ public class OpenLCBNode : NSObject {
     
   }
   
-  public var configurationOptions : OpenLCBNodeConfigurationOptions = OpenLCBNodeConfigurationOptions()
+  public var configurationOptions : OpenLCBNodeConfigurationOptions? = OpenLCBNodeConfigurationOptions()
   
   public var supportedProtocols : [UInt8] {
     get {
@@ -593,9 +599,9 @@ public class OpenLCBNode : NSObject {
       possibles.insert(OpenLCBNodeMemoryAddressSpace.cv.rawValue)
     }
     
-    let highest = Int(configurationOptions.highestAddressSpace)
+    let highest = Int(configurationOptions!.highestAddressSpace)
     
-    var lowest = Int(configurationOptions.lowestAddressSpace)
+    var lowest = Int(configurationOptions!.lowestAddressSpace)
     
     while lowest <= highest {
       possibles.insert(UInt8(lowest & 0xff))

@@ -82,6 +82,8 @@ public class MyTrainsViewController: NSViewController, NSWindowDelegate {
     debugLog("viewWillDisappear")
     #endif
     
+    removeAllViews(view: view)
+    
   }
 
   public override func viewDidDisappear() {
@@ -102,6 +104,27 @@ public class MyTrainsViewController: NSViewController, NSWindowDelegate {
   
   public var isManualClose = true
 
+  // MARK: Private Methods
+  
+  private func removeAllViews(view:NSView) {
+    
+    if let stackView = view as? NSStackView {
+      for v in stackView.arrangedSubviews {
+        removeAllViews(view: v)
+        stackView.removeArrangedSubview(v)
+      }
+    }
+    else if let scrollView = view as? NSScrollView {
+      scrollView.documentView = nil
+    }
+    else {
+      for view in view.subviews {
+        removeAllViews(view: view)
+      }
+      view.subviews.removeAll(keepingCapacity: false)
+    }
+  }
+  
   // MARK: Public Methods
   
   public func showWindow() {

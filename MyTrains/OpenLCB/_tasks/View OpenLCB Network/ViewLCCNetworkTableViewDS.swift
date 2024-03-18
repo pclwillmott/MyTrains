@@ -10,6 +10,14 @@ import AppKit
 
 public class ViewLCCNetworkTableViewDS : NSObject, NSTableViewDataSource, NSTableViewDelegate {
 
+  // MARK: Destructors
+  
+  deinit {
+    debugLog("deinit")
+    _dictionary.removeAll()
+    nodes.removeAll()
+  }
+  
   // MARK: Private Properties
   
   private var _dictionary : [UInt64:OpenLCBNode] = [:]
@@ -147,7 +155,7 @@ public class ViewLCCNetworkTableViewDS : NSObject, NSTableViewDataSource, NSTabl
         
         button.tag = row
         
-        if appDelegate.networkLayer.isInternalVirtualNode(nodeId: item.nodeId), let node = appDelegate.networkLayer.virtualNodeLookup[item.nodeId] {
+        if appDelegate.networkLayer!.isInternalVirtualNode(nodeId: item.nodeId), let node = appDelegate.networkLayer!.virtualNodeLookup[item.nodeId] {
           
           let validNodesToDelete : Set<MyTrainsVirtualNodeType> = [
             .canGatewayNode,

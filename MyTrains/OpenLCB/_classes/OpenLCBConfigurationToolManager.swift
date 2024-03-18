@@ -66,7 +66,7 @@ public class OpenLCBConfigurationToolManager : OpenLCBNodeManager {
     }
     
     if freeNodes.isEmpty {
-      addNode(node: appDelegate.networkLayer.createVirtualNode(virtualNodeType: virtualNodeType))
+      addNode(node: appDelegate.networkLayer!.createVirtualNode(virtualNodeType: virtualNodeType))
     }
     
     if let id = freeNodes.first {

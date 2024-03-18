@@ -37,6 +37,10 @@ public class OpenLCBNodeConfigurationOptions {
     name = ""
 
   }
+  
+  deinit {
+    debugLog("deinit")
+  }
 
   // MARK: Private Properties
 

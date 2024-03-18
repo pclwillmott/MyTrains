@@ -9,16 +9,16 @@ import Foundation
 
 public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   
-  // MARK: Constructors
+  // MARK: Constructors & Destructors
   
   public override init(nodeId:UInt64) {
     
+    super.init(nodeId: nodeId)
+
     var configurationSize = MyTrainsViewType.numberOfTypes * 2
     
     viewOptions = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.viewOptions.rawValue, defaultMemorySize: configurationSize, isReadOnly: false, description: "")
     
-    super.init(nodeId: nodeId)
-
     configurationSize = 0
     
     initSpaceAddress(&addressUnitsActualLength,   1, &configurationSize)
@@ -66,8 +66,8 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
       registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressUnitsScaleSpeed)
       registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressUnitsTime)
 
-      viewOptions.delegate = self
-      memorySpaces[viewOptions.space] = viewOptions
+      viewOptions?.delegate = self
+      memorySpaces[viewOptions!.space] = viewOptions!
 
       if !memorySpacesInitialized {
         resetToFactoryDefaults()
@@ -77,6 +77,19 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
       
     }
     
+  }
+  
+  deinit {
+    debugLog("deinit")
+    nodeIdCacheTimer = nil
+    nodeIdCacheLock = nil
+    nodeIdCache.removeAll()
+    layoutList.removeAll()
+    panelList.removeAll()
+    switchboardItemList.removeAll()
+    observers.removeAll()
+    locoNetGateways.removeAll()
+    viewOptions = nil
   }
   
   // MARK: Private Properties
@@ -96,7 +109,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
 
   private var nodeIdCacheTimer : Timer?
   
-  private var nodeIdCacheLock = NSLock()
+  private var nodeIdCacheLock : NSLock? = NSLock()
   
   private var nodeIdCache : [UInt64:(nodeId:UInt64, timeStamp:TimeInterval)] = [:]
   
@@ -114,7 +127,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   
   public var locoNetGateways : [UInt64:String] = [:]
 
-  public var viewOptions : OpenLCBMemorySpace
+  public var viewOptions : OpenLCBMemorySpace?
   
   public var unitsActualLength : UnitLength {
     get {
@@ -317,7 +330,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     
     var result : UInt64 = 0
     
-    nodeIdCacheLock.lock()
+    nodeIdCacheLock!.lock()
     
     let now = Date.timeIntervalSinceReferenceDate
     
@@ -329,7 +342,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
       }
     }
     
-    nodeIdCacheLock.unlock()
+    nodeIdCacheLock!.unlock()
     
     updateNodeIdCache()
   
@@ -428,20 +441,20 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   }
   
   public func getViewOption(type:MyTrainsViewType) -> MyTrainsViewOption {
-    return MyTrainsViewOption(rawValue: viewOptions.getUInt8(address: type.rawValue * 2)!)!
+    return MyTrainsViewOption(rawValue: viewOptions!.getUInt8(address: type.rawValue * 2)!)!
   }
 
   public func setViewOption(type:MyTrainsViewType, option:MyTrainsViewOption) {
-    viewOptions.setUInt(address: type.rawValue * 2, value: option.rawValue)
+    viewOptions?.setUInt(address: type.rawValue * 2, value: option.rawValue)
     saveMemorySpaces()
   }
 
   public func getViewState(type:MyTrainsViewType) -> Bool {
-    return viewOptions.getUInt8(address: type.rawValue * 2 + 1)! != 0
+    return viewOptions!.getUInt8(address: type.rawValue * 2 + 1)! != 0
   }
 
   public func setViewState(type:MyTrainsViewType, isOpen:Bool) {
-    viewOptions.setUInt(address: type.rawValue * 2 + 1, value: isOpen ? UInt8(1) : UInt8(0))
+    viewOptions?.setUInt(address: type.rawValue * 2 + 1, value: isOpen ? UInt8(1) : UInt8(0))
     saveMemorySpaces()
   }
 
@@ -615,11 +628,11 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     case .verifiedNodeIDSimpleSetSufficient, .verifiedNodeIDFullProtocolRequired, .initializationCompleteSimpleSetSufficient, .initializationCompleteFullProtocolRequired:
       
       if let id = UInt64(bigEndianData: message.payload) {
-        nodeIdCacheLock.lock()
+        nodeIdCacheLock!.lock()
         if nodeIdCache.keys.contains(id) {
           nodeIdCache.removeValue(forKey: id)
         }
-        nodeIdCacheLock.unlock()
+        nodeIdCacheLock!.unlock()
         updateNodeIdCache()
       }
       

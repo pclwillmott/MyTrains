@@ -9,14 +9,27 @@ import Foundation
 import AppKit
 
 class CDIGroupView: CDIView, CDIStackViewManagerDelegate {
+ 
+  // MARK: Destructors
+  
+  deinit {
+    debugLog("deinit")
+    self.subviews.removeAll()
+    for view in contentView!.arrangedSubviews {
+      contentView?.removeArrangedSubview(view)
+    }
+    contentView = nil
+    disclosureButton = nil
+    title = nil
+  }
   
   // MARK: Private & Internal Methods
   
-  internal var contentView = NSStackView()
+  internal var contentView : NSStackView? = NSStackView()
   
-  internal var disclosureButton = NSButton()
+  internal var disclosureButton : NSButton? = NSButton()
   
-  internal var title = NSTextField()
+  internal var title : NSTextField? = NSTextField()
   
   internal var lastDisclosureConstraint : NSLayoutConstraint?
 
@@ -24,10 +37,10 @@ class CDIGroupView: CDIView, CDIStackViewManagerDelegate {
   
   public var name : String {
     get {
-      return title.stringValue
+      return title!.stringValue
     }
     set(value) {
-      title.stringValue = value
+      title?.stringValue = value
     }
   }
   
@@ -35,7 +48,7 @@ class CDIGroupView: CDIView, CDIStackViewManagerDelegate {
   
   override internal func setup() {
     
-    guard needsInit else {
+    guard needsInit, let disclosureButton, let title, let contentView else {
       return
     }
     
@@ -98,6 +111,10 @@ class CDIGroupView: CDIView, CDIStackViewManagerDelegate {
   
   internal func doDisclosure() {
     
+    guard let disclosureButton, let contentView, let title else {
+      return
+    }
+    
     NSLayoutConstraint.deactivate([
       lastDisclosureConstraint!,
     ])
@@ -123,6 +140,10 @@ class CDIGroupView: CDIView, CDIStackViewManagerDelegate {
   
   public func addArrangedSubview(_ view:NSView) {
   
+    guard let contentView else {
+      return
+    }
+    
     contentView.addArrangedSubview(view)
  
     NSLayoutConstraint.activate([

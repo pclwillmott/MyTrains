@@ -17,6 +17,13 @@ public var appDelegate : AppDelegate {
 @main
 public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDelegate {
 
+  // MARK: Destructors
+  
+  deinit {
+    debugLog("deinit")
+    networkLayer = nil
+  }
+  
   // MARK: Private Properties
 
   private var menuItems : [MenuTag:NSMenuItem] = [:]
@@ -37,7 +44,7 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
   
   // MARK: Public Properties
   
-  public var networkLayer = OpenLCBNetworkLayer()
+  public var networkLayer : OpenLCBNetworkLayer? = OpenLCBNetworkLayer()
   
   public var windowsLoaded = false
   
@@ -86,7 +93,7 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
 
     state = .uninitialized
     
-    networkLayer.start()
+    networkLayer?.start()
 
   }
   
@@ -240,7 +247,7 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
       let networkLayer = appDelegate.networkLayer
       
       let vc = MyTrainsWindow.viewLCCNetwork.viewController as! ViewLCCNetworkVC
-      vc.configurationTool = networkLayer.getConfigurationTool()
+      vc.configurationTool = networkLayer!.getConfigurationTool()
       vc.configurationTool?.delegate = vc
       vc.showWindow()
 
@@ -252,7 +259,7 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
 
     case .throttle:
       let networkLayer = appDelegate.networkLayer
-      guard let throttle = networkLayer.getThrottle()  else {
+      guard let throttle = networkLayer!.getThrottle()  else {
         return
       }
       let vc = MyTrainsWindow.throttle.viewController as! ThrottleVC
@@ -265,7 +272,7 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
     case .clock:
       break
     case .locoNetTrafficMonitor:
-      guard let monitorNode = networkLayer.getLocoNetMonitor() else {
+      guard let monitorNode = networkLayer!.getLocoNetMonitor() else {
         return
       }
       let vc = MyTrainsWindow.monitor.viewController as! MonitorVC
@@ -274,7 +281,7 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
       vc.showWindow()
 
     case .locoNetSlotView:
-      guard let monitorNode = networkLayer.getLocoNetMonitor() else {
+      guard let monitorNode = networkLayer!.getLocoNetMonitor() else {
         return
       }
       let vc = MyTrainsWindow.slotView.viewController as! SlotViewVC
@@ -421,7 +428,7 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
     windowsLoaded = false
     switch state {
     case .stopping, .rebooting, .resetToFactoryDefaults, .terminating:
-      networkLayer.stop()
+      networkLayer?.stop()
     default:
       break
     }
@@ -522,12 +529,12 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
         let networkLayer = appDelegate.networkLayer
         
         let vc = MyTrainsWindow.setFastClock.viewController as! SetFastClockVC
-        vc.configurationTool = networkLayer.getConfigurationTool()
+        vc.configurationTool = networkLayer!.getConfigurationTool()
         vc.configurationTool?.delegate = vc
         vc.showWindow()
         
       case .dccProgrammerTool:
-        guard let programmerTool = networkLayer.getProgrammerTool() else {
+        guard let programmerTool = networkLayer!.getProgrammerTool() else {
           return
         }
         let vc = MyTrainsWindow.programmerTool.viewController as! ProgrammerToolVC
@@ -595,7 +602,7 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
             
           }
           
-          if networkLayer.configurationToolManager.isLocked {
+          if networkLayer!.configurationToolManager.isLocked {
             
             let alert = NSAlert()
             
@@ -611,11 +618,11 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
           }
           
           if virtualNodeType == .canGatewayNode {
-            networkLayer.createGatewayNode()
+            networkLayer!.createGatewayNode()
             return
           }
               
-          let node = networkLayer.createVirtualNode(virtualNodeType: virtualNodeType)
+          let node = networkLayer!.createVirtualNode(virtualNodeType: virtualNodeType)
 
           let networkLayer = appDelegate.networkLayer
           
@@ -634,7 +641,7 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
 
           if node.isConfigurationDescriptionInformationProtocolSupported {
             let vc = MyTrainsWindow.configurationTool.viewController as! ConfigurationToolVC
-            vc.configurationTool = networkLayer.getConfigurationTool()
+            vc.configurationTool = networkLayer!.getConfigurationTool()
             vc.configurationTool?.delegate = vc
             vc.node = node
             vc.showWindow()

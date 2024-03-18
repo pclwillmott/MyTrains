@@ -131,10 +131,10 @@ class SelectLayoutVC: MyTrainsViewController, MyTrainsAppDelegate {
   // MARK: Actions
   
   @IBAction func btnOKAction(_ sender: NSButton) {
-     let networkLayer = appDelegate.networkLayer
-      networkLayer.layoutNodeId = (cboLayout.indexOfSelectedItem == -1) ? nil : layoutList[cboLayout.indexOfSelectedItem].layoutId
-//      menuUpdate()
-    
+    guard let networkLayer = appDelegate.networkLayer else {
+      return
+    }
+    networkLayer.layoutNodeId = (cboLayout.indexOfSelectedItem == -1) ? nil : layoutList[cboLayout.indexOfSelectedItem].layoutId
     view.window?.close()
   }
 

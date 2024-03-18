@@ -32,7 +32,7 @@ class CDITextViewVC: MyTrainsViewController {
   
   // MARK: Outlets & Actions
   
-  @IBOutlet var textView: NSTextView!
+  @IBOutlet weak var textView: NSTextView!
   
   @IBOutlet weak var lblCDIInfo: NSTextField!
   

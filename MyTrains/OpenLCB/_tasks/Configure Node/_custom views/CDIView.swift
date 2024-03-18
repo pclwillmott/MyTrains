@@ -10,6 +10,12 @@ import AppKit
 
 class CDIView: NSView {
   
+  // MARK: Destructors
+  
+  deinit {
+    debugLog("deinit")
+  }
+  
   // MARK: Drawing Stuff
   
   override func draw(_ dirtyRect: NSRect) {

@@ -10,11 +10,34 @@ import AppKit
 
 class CDIGroupTabView : CDIGroupView {
   
+  // MARK: Destructors
+  
+  deinit {
+    debugLog("deinit")
+    self.subviews.removeAll()
+    _tabViewItems.removeAll()
+    _tabs.removeAll()
+    for view in tabSelectorView!.arrangedSubviews {
+      tabSelectorView?.removeArrangedSubview(view)
+    }
+    tabSelectorView = nil
+    tabButtonView?.subviews.removeAll()
+    tabButtonView = nil
+    tabContentView?.subviews.removeAll()
+    tabContentView = nil
+    btnPrevious = nil
+    btnNext = nil
+  }
+  
   // MARK: Drawing Stuff
   
   override func draw(_ dirtyRect: NSRect) {
     
     super.draw(dirtyRect)
+    
+    guard let btnNext, let btnPrevious, let tabButtonView else {
+      return
+    }
     
     NSLayoutConstraint.deactivate(buttonConstraints)
     
@@ -103,7 +126,7 @@ class CDIGroupTabView : CDIGroupView {
       maxButtonWidth = max(maxButtonWidth, tab.fittingSize.width)
     }
       
-    var result = max(1, Int(tabButtonView.bounds.width / maxButtonWidth))
+    var result = max(1, Int(tabButtonView!.bounds.width / maxButtonWidth))
     
     if result % 2 == 0 {
       result -= 1
@@ -117,24 +140,20 @@ class CDIGroupTabView : CDIGroupView {
 
   internal var _replicationName : String {
     
-    get {
-      
-      var encoded = _encodedReplicationName
-      
-      while !encoded.isEmpty {
-        let cc = encoded.last!
-        if cc >= "0" && cc <= "9" {
-          encoded.removeLast()
-        }
-        else {
-          break
-        }
+    var encoded = _encodedReplicationName
+    
+    while !encoded.isEmpty {
+      let cc = encoded.last!
+      if cc >= "0" && cc <= "9" {
+        encoded.removeLast()
       }
-      
-      return encoded
-      
+      else {
+        break
+      }
     }
     
+    return encoded
+
   }
   
   internal var _noStartNumberSpecified : Bool {
@@ -142,18 +161,15 @@ class CDIGroupTabView : CDIGroupView {
   }
   
   internal var _replicationStartNumber : Int {
-    get {
       
-      let numberLength = _encodedReplicationName.count - _replicationName.count
-      
-      if numberLength == 0 {
-        return 1
-      }
-      
-      return Int(_encodedReplicationName.suffix(numberLength))!
-      
+    let numberLength = _encodedReplicationName.count - _replicationName.count
+    
+    if numberLength == 0 {
+      return 1
     }
     
+    return Int(_encodedReplicationName.suffix(numberLength))!
+
   }
   
   // MARK: Public Properties
@@ -184,6 +200,10 @@ class CDIGroupTabView : CDIGroupView {
     }
     
     set(value) {
+      
+      guard let tabContentView else {
+        return
+      }
       
       while _tabViewItems.count > value {
         _tabViewItems.removeLast()
@@ -219,7 +239,7 @@ class CDIGroupTabView : CDIGroupView {
   
   override internal func setup() {
     
-    guard needsInit else {
+    guard needsInit, let tabSelectorView, let tabButtonView, let btnPrevious, let btnNext, let tabContentView else {
       return
     }
     
@@ -276,15 +296,15 @@ class CDIGroupTabView : CDIGroupView {
   
   // MARK: Controls
   
-  internal var tabSelectorView = NSStackView()
+  internal var tabSelectorView : NSStackView? = NSStackView()
   
-  internal var tabButtonView = NSView()
+  internal var tabButtonView : NSView? = NSView()
   
-  internal var tabContentView = NSView()
+  internal var tabContentView : NSView? = NSView()
   
-  internal var btnPrevious = NSButton(title: "⇦", target: nil, action: nil)
+  internal var btnPrevious : NSButton? = NSButton(title: "⇦", target: nil, action: nil)
   
-  internal var btnNext = NSButton(title: "⇨", target: nil, action: nil)
+  internal var btnNext : NSButton? = NSButton(title: "⇨", target: nil, action: nil)
 
   // MARK: Actions
   

@@ -9,7 +9,7 @@ import Foundation
 
 public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, OpenLCBMemorySpaceDelegate, MTPipeDelegate {
   
-  // MARK: Constructors
+  // MARK: Constructors & Destructors
   
   public override init(nodeId:UInt64) {
     
@@ -27,9 +27,9 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
 
     super.init(nodeId: nodeId)
 
-    acdiManufacturerSpace.delegate = self
+    acdiManufacturerSpace?.delegate = self
 
-    memorySpaces[acdiManufacturerSpace.space] = acdiManufacturerSpace
+    memorySpaces[acdiManufacturerSpace!.space] = acdiManufacturerSpace
     
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.acdiManufacturer.rawValue, address: addressACDIManufacturerSpaceVersion)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.acdiManufacturer.rawValue, address: addressACDIManufacturerName)
@@ -37,17 +37,17 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.acdiManufacturer.rawValue, address: addressACDIHardwareVersion)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.acdiManufacturer.rawValue, address: addressACDISoftwareVersion)
     
-    acdiUserSpace.delegate = self
+    acdiUserSpace?.delegate = self
 
-    memorySpaces[acdiUserSpace.space] = acdiUserSpace
+    memorySpaces[acdiUserSpace!.space] = acdiUserSpace!
 
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.acdiUser.rawValue, address: addressACDIUserSpaceVersion)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.acdiUser.rawValue, address: addressACDIUserNodeName)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.acdiUser.rawValue, address: addressACDIUserNodeDescription)
 
-    virtualNodeConfigSpace.delegate = self
+    virtualNodeConfigSpace?.delegate = self
     
-    memorySpaces[virtualNodeConfigSpace.space] = virtualNodeConfigSpace
+    memorySpaces[virtualNodeConfigSpace!.space] = virtualNodeConfigSpace!
 
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.virtualNodeConfig.rawValue, address: addressVirtualNodeConfigSpaceVersion)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.virtualNodeConfig.rawValue, address: addressVirtualNodeConfigLayoutNodeId)
@@ -68,6 +68,19 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     
     setupConfigurationOptions()
 
+  }
+  
+  deinit {
+    debugLog("deinit")
+    memorySpaces.removeAll()
+    firmwareBuffer.removeAll()
+    eventRangesConsumed.removeAll()
+    eventRangesProduced.removeAll()
+    networkLayer = nil
+    acdiManufacturerSpace = nil
+    acdiUserSpace = nil
+    virtualNodeConfigSpace = nil
+    configuration = nil
   }
   
   // MARK: Private Properties
@@ -212,149 +225,149 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
 
   public var state : OpenLCBTransportLayerState = .inhibited
   
-  public var networkLayer : OpenLCBNetworkLayer?
+  public weak var networkLayer : OpenLCBNetworkLayer?
   
   public var memorySpacesInitialized : Bool {
-    return acdiManufacturerSpace.getUInt8(address: addressACDIManufacturerSpaceVersion) != 0
+    return acdiManufacturerSpace!.getUInt8(address: addressACDIManufacturerSpaceVersion) != 0
   }
     
-  public var acdiManufacturerSpace : OpenLCBMemorySpace
+  public var acdiManufacturerSpace : OpenLCBMemorySpace?
   
-  public var acdiUserSpace : OpenLCBMemorySpace
+  public var acdiUserSpace : OpenLCBMemorySpace?
   
-  public var virtualNodeConfigSpace : OpenLCBMemorySpace
+  public var virtualNodeConfigSpace : OpenLCBMemorySpace?
   
   public var configuration : OpenLCBMemorySpace?
 
   public override var acdiManufacturerSpaceVersion : UInt8 {
     get {
-      return acdiManufacturerSpace.getUInt8(address: addressACDIManufacturerSpaceVersion)!
+      return acdiManufacturerSpace!.getUInt8(address: addressACDIManufacturerSpaceVersion)!
     }
     set(value) {
-      acdiManufacturerSpace.setUInt(address: addressACDIManufacturerSpaceVersion, value: value)
+      acdiManufacturerSpace?.setUInt(address: addressACDIManufacturerSpaceVersion, value: value)
     }
   }
   
   public override var manufacturerName : String {
     get {
-      return acdiManufacturerSpace.getString(address: addressACDIManufacturerName, count: 41)!
+      return acdiManufacturerSpace!.getString(address: addressACDIManufacturerName, count: 41)!
     }
     set(value) {
-      acdiManufacturerSpace.setString(address: addressACDIManufacturerName, value: String(value.prefix(40)), fieldSize: 41)
+      acdiManufacturerSpace?.setString(address: addressACDIManufacturerName, value: String(value.prefix(40)), fieldSize: 41)
     }
   }
   
   public override var nodeModelName : String {
     get {
-      return acdiManufacturerSpace.getString(address: addressACDIModelName, count: 41)!
+      return acdiManufacturerSpace!.getString(address: addressACDIModelName, count: 41)!
     }
     set(value) {
-      acdiManufacturerSpace.setString(address: addressACDIModelName, value: String(value.prefix(40)), fieldSize: 41)
+      acdiManufacturerSpace?.setString(address: addressACDIModelName, value: String(value.prefix(40)), fieldSize: 41)
     }
   }
   
   public override var nodeHardwareVersion : String {
     get {
-      return acdiManufacturerSpace.getString(address: addressACDIHardwareVersion, count: 21)!
+      return acdiManufacturerSpace!.getString(address: addressACDIHardwareVersion, count: 21)!
     }
     set(value) {
-      acdiManufacturerSpace.setString(address: addressACDIHardwareVersion, value: String(value.prefix(20)), fieldSize: 21)
+      acdiManufacturerSpace?.setString(address: addressACDIHardwareVersion, value: String(value.prefix(20)), fieldSize: 21)
     }
   }
   
   public override var nodeSoftwareVersion : String {
     get {
-      return acdiManufacturerSpace.getString(address: addressACDISoftwareVersion, count: 21)!
+      return acdiManufacturerSpace!.getString(address: addressACDISoftwareVersion, count: 21)!
     }
     set(value) {
-      acdiManufacturerSpace.setString(address: addressACDISoftwareVersion, value: String(value.prefix(20)), fieldSize: 21)
+      acdiManufacturerSpace?.setString(address: addressACDISoftwareVersion, value: String(value.prefix(20)), fieldSize: 21)
     }
 
   }
   
   public override var acdiUserSpaceVersion : UInt8 {
     get {
-      return acdiUserSpace.getUInt8(address: addressACDIUserSpaceVersion)!
+      return acdiUserSpace!.getUInt8(address: addressACDIUserSpaceVersion)!
     }
     set(value) {
-      acdiUserSpace.setUInt(address: addressACDIUserSpaceVersion, value: value)
+      acdiUserSpace?.setUInt(address: addressACDIUserSpaceVersion, value: value)
     }
   }
 
   public override var userNodeName : String { 
     get {
-      return acdiUserSpace.getString(address: addressACDIUserNodeName, count: 63)!
+      return acdiUserSpace!.getString(address: addressACDIUserNodeName, count: 63)!
     }
     set(value) {
-      acdiUserSpace.setString(address: addressACDIUserNodeName, value: String(value.prefix(62)), fieldSize: 63)
+      acdiUserSpace?.setString(address: addressACDIUserNodeName, value: String(value.prefix(62)), fieldSize: 63)
     }
   }
 
   public override var userNodeDescription : String {
     get {
-      return acdiUserSpace.getString(address: addressACDIUserNodeDescription, count: 64)!
+      return acdiUserSpace!.getString(address: addressACDIUserNodeDescription, count: 64)!
     }
     set(value) {
-      acdiUserSpace.setString(address: addressACDIUserNodeDescription, value: String(value.prefix(63)), fieldSize: 64)
+      acdiUserSpace?.setString(address: addressACDIUserNodeDescription, value: String(value.prefix(63)), fieldSize: 64)
     }
   }
   
   public var virtualNodeConfigSpaceVersion : UInt16 {
     get {
-      return virtualNodeConfigSpace.getUInt16(address: addressVirtualNodeConfigSpaceVersion)!
+      return virtualNodeConfigSpace!.getUInt16(address: addressVirtualNodeConfigSpaceVersion)!
     }
     set(value) {
-      virtualNodeConfigSpace.setUInt(address: addressVirtualNodeConfigSpaceVersion, value:value)
+      virtualNodeConfigSpace?.setUInt(address: addressVirtualNodeConfigSpaceVersion, value:value)
     }
   }
 
   public var layoutNodeId : UInt64 {
     get {
-      return virtualNodeConfigSpace.getUInt64(address: addressVirtualNodeConfigLayoutNodeId)!
+      return virtualNodeConfigSpace!.getUInt64(address: addressVirtualNodeConfigLayoutNodeId)!
     }
     set(value) {
-      virtualNodeConfigSpace.setUInt(address: addressVirtualNodeConfigLayoutNodeId, value:value)
+      virtualNodeConfigSpace?.setUInt(address: addressVirtualNodeConfigLayoutNodeId, value:value)
     }
   }
 
   public var virtualNodeType : MyTrainsVirtualNodeType {
     get {
-      return MyTrainsVirtualNodeType(rawValue: virtualNodeConfigSpace.getUInt16(address: addressVirtualNodeConfigNodeType)!)!
+      return MyTrainsVirtualNodeType(rawValue: virtualNodeConfigSpace!.getUInt16(address: addressVirtualNodeConfigNodeType)!)!
     }
     set(value) {
-      virtualNodeConfigSpace.setUInt(address: addressVirtualNodeConfigNodeType, value:value.rawValue)
+      virtualNodeConfigSpace?.setUInt(address: addressVirtualNodeConfigNodeType, value:value.rawValue)
     }
   }
   
   public var nextUniqueEventId : UInt64 {
     get {
-      let id = virtualNodeConfigSpace.getUInt64(address: addressVirtualNodeConfigUniqueEventId)!
+      let id = virtualNodeConfigSpace!.getUInt64(address: addressVirtualNodeConfigUniqueEventId)!
       self.nextUniqueEventId = id + 1
       return id
     }
     set(value) {
-      virtualNodeConfigSpace.setUInt(address: addressVirtualNodeConfigUniqueEventId, value:value)
-      virtualNodeConfigSpace.save()
+      virtualNodeConfigSpace?.setUInt(address: addressVirtualNodeConfigUniqueEventId, value:value)
+      virtualNodeConfigSpace?.save()
     }
   }
 
   public var nextUniqueNodeIdSeed : UInt64 {
     get {
-      return virtualNodeConfigSpace.getUInt64(address: addressVirtualNodeConfigNextNodeIdSeed)!
+      return virtualNodeConfigSpace!.getUInt64(address: addressVirtualNodeConfigNextNodeIdSeed)!
     }
     set(value) {
-      virtualNodeConfigSpace.setUInt(address: addressVirtualNodeConfigNextNodeIdSeed, value:value)
-      virtualNodeConfigSpace.save()
+      virtualNodeConfigSpace?.setUInt(address: addressVirtualNodeConfigNextNodeIdSeed, value:value)
+      virtualNodeConfigSpace?.save()
     }
   }
 
   public var hostAppNodeId : UInt64 {
     get {
-      return virtualNodeConfigSpace.getUInt64(address: addressVirtualNodeConfigHostAppNodeId)!
+      return virtualNodeConfigSpace!.getUInt64(address: addressVirtualNodeConfigHostAppNodeId)!
     }
     set(value) {
-      virtualNodeConfigSpace.setUInt(address: addressVirtualNodeConfigHostAppNodeId, value:value)
-      virtualNodeConfigSpace.save()
+      virtualNodeConfigSpace?.setUInt(address: addressVirtualNodeConfigHostAppNodeId, value:value)
+      virtualNodeConfigSpace?.save()
     }
   }
 
@@ -557,7 +570,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   
   internal func resetToFactoryDefaults() {
 
-    acdiManufacturerSpace.zeroMemory()
+    acdiManufacturerSpace?.zeroMemory()
 
     acdiManufacturerSpaceVersion = 4
     
@@ -566,7 +579,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     nodeHardwareVersion  = "\(Bundle.main.releaseVersionNumberPretty)"
     nodeSoftwareVersion  = "\(Bundle.main.releaseVersionNumberPretty)"
 
-    acdiUserSpace.zeroMemory()
+    acdiUserSpace?.zeroMemory()
     
     acdiUserSpaceVersion = 2
     
@@ -630,6 +643,10 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   }
   
   internal func setupConfigurationOptions() {
+    
+    guard let configurationOptions else {
+      return
+    }
     
     var minSpace : UInt8 = 0xff
     var maxSpace : UInt8 = 0x00

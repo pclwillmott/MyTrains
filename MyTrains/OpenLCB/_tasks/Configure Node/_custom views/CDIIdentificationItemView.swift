@@ -10,23 +10,31 @@ import AppKit
 
 class CDIIdentificationItemView : CDIView {
 
+  // MARK: Destructors
+  
+  deinit {
+    debugLog("deinit")
+    lblName = nil
+    lblValue = nil
+  }
+  
   // MARK: Public Properties
   
   public var name : String {
     get {
-      return lblName.stringValue
+      return lblName!.stringValue
     }
     set(value) {
-      lblName.stringValue = value
+      lblName?.stringValue = value
     }
   }
 
   public var value : String {
     get {
-      return lblValue.stringValue
+      return lblValue!.stringValue
     }
     set(value) {
-      lblValue.stringValue = value
+      lblValue?.stringValue = value
     }
   }
 
@@ -34,7 +42,7 @@ class CDIIdentificationItemView : CDIView {
   
   override internal func setup() {
     
-    guard needsInit else {
+    guard let lblName, let lblValue, needsInit else {
       return
     }
     
@@ -59,8 +67,8 @@ class CDIIdentificationItemView : CDIView {
 
   // MARK: Controls
 
-  internal var lblName = NSTextField(labelWithString: "")
+  internal var lblName : NSTextField? = NSTextField(labelWithString: "")
   
-  internal var lblValue = NSTextField(labelWithString: "")
+  internal var lblValue : NSTextField? = NSTextField(labelWithString: "")
   
 }

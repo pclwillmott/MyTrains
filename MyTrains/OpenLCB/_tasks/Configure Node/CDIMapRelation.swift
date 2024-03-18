@@ -12,11 +12,8 @@ public class CDIMapRelation {
   // MARK: Constructors
   
   init(property:String, stringValue:String) {
-    
     self.property = property
-    
     self.stringValue = stringValue
-    
   }
   
   // MARK: Public Properties
@@ -26,15 +23,11 @@ public class CDIMapRelation {
   public var stringValue : String
   
   public var intValue : Int {
-    get {
-      return Int(stringValue) ?? 0
-    }
+    return Int(stringValue) ?? 0
   }
   
   public var floatValue : Float32 {
-    get {
-      return Float32(stringValue) ?? +0.0
-    }
+    return Float32(stringValue) ?? +0.0
   }
   
 }

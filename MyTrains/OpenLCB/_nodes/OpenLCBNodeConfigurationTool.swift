@@ -29,7 +29,7 @@ public class OpenLCBNodeConfigurationTool : OpenLCBNodeVirtual {
   
   // MARK: Public Properties
   
-  public var delegate : OpenLCBConfigurationToolDelegate?
+  public weak var delegate : OpenLCBConfigurationToolDelegate?
   
   // MARK: Private Methods
   

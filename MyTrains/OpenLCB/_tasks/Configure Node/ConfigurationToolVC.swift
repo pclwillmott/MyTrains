@@ -30,12 +30,45 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
       return
     }
     
+    node = nil
+    
     configurationTool.delegate = nil
+    self.configurationTool = nil
+    
     networkLayer.releaseConfigurationTool(configurationTool: configurationTool)
+    self.networkLayer = nil
+    
+    btnRefreshAll = nil
+    
+    btnWriteAll = nil
+    
+    btnResetToDefaults = nil
+    
+    btnReboot = nil
+    
+    barProgress = nil
+    
+    lblStatus = nil
 
-    for view in stackView.arrangedSubviews {
-      stackView.removeArrangedSubview(view)
+    containerView = nil
+    
+    for view in stackView!.arrangedSubviews {
+      stackView?.removeArrangedSubview(view)
     }
+    stackView = nil
+    
+    statusView?.subviews.removeAll()
+    statusView = nil
+    
+    progressView?.subviews.removeAll()
+    progressView = nil
+      
+    buttonView?.subviews.removeAll()
+    buttonView = nil
+    
+    btnShowCDIText = nil
+
+    view.subviews.removeAll()
     
     super.windowWillClose(notification)
     
@@ -51,8 +84,12 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
     
     super.viewWillAppear()
     
+    guard let containerView, let btnWriteAll, let btnRefreshAll, let btnResetToDefaults, let btnReboot, let lblStatus, let barProgress, let stackView, let buttonView, let progressView, let statusView, let btnShowCDIText else {
+      return
+    }
+    
     containerView.translatesAutoresizingMaskIntoConstraints = false
-    containerView.scrollView.contentView.translatesAutoresizingMaskIntoConstraints = false
+    containerView.scrollView?.contentView.translatesAutoresizingMaskIntoConstraints = false
     btnWriteAll.translatesAutoresizingMaskIntoConstraints = false
     btnRefreshAll.translatesAutoresizingMaskIntoConstraints = false
     btnResetToDefaults.translatesAutoresizingMaskIntoConstraints = false
@@ -65,7 +102,7 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
     statusView.translatesAutoresizingMaskIntoConstraints = false
     btnShowCDIText.translatesAutoresizingMaskIntoConstraints = false
   
-    containerView.scrollView.backgroundColor = self.view.window!.backgroundColor
+    containerView.scrollView?.backgroundColor = self.view.window!.backgroundColor
     
     self.view.addSubview(stackView)
  
@@ -189,7 +226,7 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
   
   // MARK: Private Properties
   
-  private var networkLayer : OpenLCBNetworkLayer?
+  private weak var networkLayer : OpenLCBNetworkLayer?
   
   private var nodeId : UInt64 = 0
   
@@ -297,12 +334,12 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
   
   private var isProgressViewHidden : Bool {
     get {
-      return progressView.isHidden
+      return progressView!.isHidden
     }
     set(value) {
       progressViewHeightConstraint?.isActive = false
-      progressView.isHidden = value
-      progressViewHeightConstraint = progressView.heightAnchor.constraint(equalToConstant: value ? 0.0 : state == .idle ? 18.0 : 40.0)
+      progressView?.isHidden = value
+      progressViewHeightConstraint = progressView!.heightAnchor.constraint(equalToConstant: value ? 0.0 : state == .idle ? 18.0 : 40.0)
       progressViewHeightConstraint?.isActive = true
     }
   }
@@ -311,12 +348,12 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
   
   private var isStatusViewHidden : Bool {
     get {
-      return statusView.isHidden
+      return statusView!.isHidden
     }
     set(value) {
       statusViewHeightConstraint?.isActive = false
-      statusView.isHidden = value
-      statusViewHeightConstraint = statusView.heightAnchor.constraint(equalToConstant: value ? 0.0 : 18.0)
+      statusView?.isHidden = value
+      statusViewHeightConstraint = statusView!.heightAnchor.constraint(equalToConstant: value ? 0.0 : 18.0)
       statusViewHeightConstraint?.isActive = true
     }
   }
@@ -325,21 +362,21 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
   
   private var isButtonViewHidden : Bool {
     get {
-      return buttonView.isHidden
+      return buttonView!.isHidden
     }
     set(value) {
       buttonViewHeightConstraint?.isActive = false
-      buttonView.isHidden = value
-      buttonViewHeightConstraint = buttonView.heightAnchor.constraint(equalToConstant: value ? 0.0 : 18.0)
+      buttonView?.isHidden = value
+      buttonViewHeightConstraint = buttonView!.heightAnchor.constraint(equalToConstant: value ? 0.0 : 18.0)
       buttonViewHeightConstraint?.isActive = true
     }
   }
 
   // MARK: Public Properties
   
-  public var node: OpenLCBNode?
+  public weak var node: OpenLCBNode?
   
-  public var configurationTool : OpenLCBNodeConfigurationTool?
+  public weak var configurationTool : OpenLCBNodeConfigurationTool?
   
   // MARK: Private Methods
  
@@ -347,14 +384,8 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
     
     let alert = NSAlert()
 
-    if #available(macOS 12, *) {
-      alert.messageText = String(localized: "Error")
-      alert.addButton(withTitle: String(localized: "OK"))
-    }
-    else {
-      alert.messageText = "Error"
-      alert.addButton(withTitle: "OK")
-    }
+    alert.messageText = String(localized: "Error")
+    alert.addButton(withTitle: String(localized: "OK"))
     alert.informativeText = message
     alert.alertStyle = .critical
 
@@ -363,21 +394,16 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
   }
   
   private func statusMessage(_ message:String) {
-    lblStatus.stringValue = message
+    lblStatus!.stringValue = message
   }
   
   private func updateProgressIndicator(_ value:Int) {
-    self.barProgress.doubleValue = Double(value)
+    self.barProgress?.doubleValue = Double(value)
   }
   
   private func decodeCDI() {
     
-    if #available(macOS 12, *) {
-      statusMessage(String(localized: "Decoding CDI and building user interface"))
-    } 
-    else {
-      statusMessage("Decoding CDI and building user interface")
-    }
+    statusMessage(String(localized: "Decoding CDI and building user interface"))
 
     state = .decodingCDI
     
@@ -391,12 +417,7 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
 
   @objc func timeOutTimer() {
     stopTimer()
-    if #available(macOS 12, *) {
-      displayErrorMessage(message: String(localized: "Timeout - write failed"))
-    }
-    else {
-      displayErrorMessage(message: "Timeout - write failed")
-    }
+    displayErrorMessage(message: String(localized: "Timeout - write failed"))
     state = .idle
   }
   
@@ -545,7 +566,7 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
       return
     }
     
-    makeInterface(stackView: containerView, element: currentElement)
+    makeInterface(stackView: containerView!, element: currentElement)
 
     memoryMap.sort {$0.sortAddress < $1.sortAddress}
 
@@ -568,6 +589,10 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
   
   private func refreshAll() {
     
+    guard let barProgress else {
+      return
+    }
+    
     dataBytesToRead = 0
     var index = 0
     while index < memoryMap.count {
@@ -587,8 +612,8 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
     totalBytesRead = 0
 
     progressIndicatorConstraints = [
-      barProgress.leadingAnchor.constraint(equalTo: progressView.leadingAnchor, constant: parentGap),
-      barProgress.trailingAnchor.constraint(equalTo: progressView.trailingAnchor, constant: -parentGap),
+      barProgress.leadingAnchor.constraint(equalTo: progressView!.leadingAnchor, constant: parentGap),
+      barProgress.trailingAnchor.constraint(equalTo: progressView!.trailingAnchor, constant: -parentGap),
     ]
     
     NSLayoutConstraint.activate(progressIndicatorConstraints)
@@ -775,12 +800,7 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
                 
                 updateProgressIndicator(totalBytesRead)
                 
-                if #available(macOS 12, *) {
-                  statusMessage(String(localized: "Writing Variables - \(totalBytesRead) bytes"))
-                }
-                else {
-                  statusMessage("Writing Variables - \(totalBytesRead) bytes")
-                }
+                statusMessage(String(localized: "Writing Variables - \(totalBytesRead) bytes"))
 
                 dataToWrite.removeFirst()
                 
@@ -800,12 +820,8 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
               
               state = .idle
 
-              if #available(macOS 12, *) {
-                displayErrorMessage(message: String(localized: "Write failed"))
-              } else {
-                displayErrorMessage(message: "Write failed")
-              }
-              
+              displayErrorMessage(message: String(localized: "Write failed"))
+
             case .readReplyGeneric, .readReply0xFD, .readReply0xFE:
               
               if state == .refreshMemory || state == .refreshElement {
@@ -837,13 +853,8 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
                   
                   updateProgressIndicator(totalBytesRead)
                   
-                  if #available(macOS 12, *) {
-                    statusMessage(String(localized: "Reading Variables - \(totalBytesRead) bytes"))
-                  } 
-                  else {
-                    statusMessage("Reading Variables - \(totalBytesRead) bytes")
-                  }
-                  
+                  statusMessage(String(localized: "Reading Variables - \(totalBytesRead) bytes"))
+
                   memoryMap[currentMemoryBlock].data.append(contentsOf: data)
                   
                   let bytesToRead = UInt8(min(64, memoryMap[currentMemoryBlock].size - memoryMap[currentMemoryBlock].data.count))
@@ -917,12 +928,7 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
                   
                   updateProgressIndicator(totalBytesRead)
                   
-                  if #available(macOS 12, *) {
-                    statusMessage(String(localized: "Reading Configuration Description Information - \(totalBytesRead) bytes"))
-                  } 
-                  else {
-                    statusMessage("Reading Configuration Description Information - \(totalBytesRead) bytes")
-                  }
+                  statusMessage(String(localized: "Reading Configuration Description Information - \(totalBytesRead) bytes"))
 
                   var isLast = false
                   
@@ -1171,7 +1177,7 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
   
   @objc func cdiDataViewReadData(_ dataView:CDIDataView) {
     
-    guard let node, let configurationTool else {
+    guard let node, let configurationTool, let barProgress else {
       return
     }
 
@@ -1238,7 +1244,7 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
   }
   
   @objc func cdiDataViewSetWriteAllEnabledState(_ isEnabled:Bool) {
-    btnWriteAll.isEnabled = isEnabled
+    btnWriteAll?.isEnabled = isEnabled
   }
   
   private var getNewEventIdTextField : NSTextField?
@@ -1258,29 +1264,29 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
 
   // MARK: Controls
   
-  private var btnRefreshAll = NSButton()
+  private var btnRefreshAll : NSButton? = NSButton()
   
-  private var btnWriteAll = NSButton()
+  private var btnWriteAll : NSButton? = NSButton()
   
-  private var btnResetToDefaults = NSButton()
+  private var btnResetToDefaults : NSButton? = NSButton()
   
-  private var btnReboot = NSButton()
+  private var btnReboot : NSButton? = NSButton()
   
-  private var barProgress = NSProgressIndicator()
+  private var barProgress : NSProgressIndicator? = NSProgressIndicator()
   
-  private var lblStatus = NSTextField(labelWithString: "")
+  private var lblStatus : NSTextField? = NSTextField(labelWithString: "")
 
-  private var containerView = ScrollVerticalStackView()
+  private var containerView : ScrollVerticalStackView? = ScrollVerticalStackView()
   
-  private var stackView = NSStackView()
+  private var stackView : NSStackView? = NSStackView()
   
-  private var statusView = NSView()
+  private var statusView : NSView? = NSView()
   
-  private var progressView = NSView()
+  private var progressView : NSView? = NSView()
     
-  private var buttonView = NSView()
+  private var buttonView : NSView? = NSView()
   
-  private var btnShowCDIText = NSButton()
+  private var btnShowCDIText : NSButton? = NSButton()
   
   // MARK: Actions
   
@@ -1316,7 +1322,7 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
 
   @IBAction func btnWriteAllAction(_ sender: NSButton) {
     
-    guard let node, let configurationTool else {
+    guard let node, let configurationTool, let barProgress else {
       return
     }
 
@@ -1366,11 +1372,11 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
     
     title = String(localized: "CDI: \(title) (\(node!.nodeId.toHexDotFormat(numberOfBytes: 6)))")
 
-    let vc = MyTrainsWindow.cdiTextView.viewController as! CDITextViewVC
-    vc.name = title
-    vc.cdiText = cdiText
-    vc.cdiInfo = cdiInfo
-    vc.showWindow()
+    let vc = MyTrainsWindow.cdiTextView.viewController as? CDITextViewVC
+    vc?.name = title
+    vc?.cdiText = cdiText
+    vc?.cdiInfo = cdiInfo
+    vc?.showWindow()
   }
 
 }

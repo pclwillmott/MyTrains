@@ -18,7 +18,7 @@ public class CDIMap {
   
   // MARK: Public Properties
   
-  public var field : CDIElement
+  public weak var field : CDIElement!
   
   // MARK: Public Methods
   

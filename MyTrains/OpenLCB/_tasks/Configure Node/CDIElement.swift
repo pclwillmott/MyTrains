@@ -9,10 +9,16 @@ import Foundation
 
 public class CDIElement {
   
-  // MARK: Constructors
+  // MARK: Constructors & Destructors
   
   init(type:OpenLCBCDIElementType) {
     self.type = type
+  }
+  
+  deinit {
+    debugLog("deinit")
+    childElements.removeAll()
+    map.removeAll()
   }
   
   // MARK: Private Properties

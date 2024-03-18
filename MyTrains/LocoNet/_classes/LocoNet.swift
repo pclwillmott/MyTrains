@@ -33,11 +33,24 @@ public class LocoNet {
     self.node = node
   }
   
+  deinit {
+    debugLog("deinit")
+    node = nil
+    buffer.removeAll()
+    immPacketQueue.removeAll()
+    outputQueue.removeAll()
+    outputQueueLock = nil
+    currentMessage = nil
+    timeoutTimer = nil
+    retryTimer = nil
+    delegate = nil
+  }
+  
   // MARK: Private Properties
   
   internal var gatewayNodeId : UInt64
   
-  internal var node : OpenLCBNodeVirtual
+  internal weak var node : OpenLCBNodeVirtual?
   
   internal var gatewayConnected = false
   
@@ -49,7 +62,7 @@ public class LocoNet {
   
   internal var outputQueue : [LocoNetMessage] = []
   
-  internal var outputQueueLock = NSLock()
+  internal var outputQueueLock : NSLock? = NSLock()
   
   internal var currentMessage : LocoNetMessage?
   
@@ -144,7 +157,7 @@ public class LocoNet {
     
     messageState = .waitingForDatagramReceivedOK1
     startTimeoutTimer()
-    node.sendLocoNetMessage(destinationNodeId: gatewayNodeId, locoNetMessage: currentMessage)
+    node?.sendLocoNetMessage(destinationNodeId: gatewayNodeId, locoNetMessage: currentMessage)
     
   }
 
@@ -169,19 +182,19 @@ public class LocoNet {
     
     var ok = false
     
-    outputQueueLock.lock()
+    outputQueueLock!.lock()
     
     if currentMessage == nil && !outputQueue.isEmpty {
       currentMessage = outputQueue.removeFirst()
       ok = true
     }
     
-    outputQueueLock.unlock()
+    outputQueueLock!.unlock()
     
     if ok, let currentMessage {
       messageState = .waitingForDatagramReceivedOK1
       startTimeoutTimer()
-      node.sendLocoNetMessage(destinationNodeId: gatewayNodeId, locoNetMessage: currentMessage)
+      node?.sendLocoNetMessage(destinationNodeId: gatewayNodeId, locoNetMessage: currentMessage)
     }
     
   }
@@ -199,8 +212,8 @@ public class LocoNet {
       return
     }
     
-    node.datagramTypesSupported.insert(.sendLocoNetMessageReply)
-    node.datagramTypesSupported.insert(.sendLocoNetMessageReplyFailure)
+    node?.datagramTypesSupported.insert(.sendLocoNetMessageReply)
+    node?.datagramTypesSupported.insert(.sendLocoNetMessageReplyFailure)
     
     state = .waitingForOpSwDataAP1
     
@@ -305,13 +318,13 @@ public class LocoNet {
           if currentMessage.datagramFinalPart != nil {
             messageState = .waitingForDatagramReceivedOK2
             startTimeoutTimer()
-            node.sendLocoNetMessage(destinationNodeId: gatewayNodeId, locoNetMessage: currentMessage, isFinalPart: true)
+            node?.sendLocoNetMessage(destinationNodeId: gatewayNodeId, locoNetMessage: currentMessage, isFinalPart: true)
           }
           else {
-            outputQueueLock.lock()
+            outputQueueLock!.lock()
             self.currentMessage = nil
             messageState = .idle
-            outputQueueLock.unlock()
+            outputQueueLock!.unlock()
             sendNext()
           }
           
@@ -333,16 +346,16 @@ public class LocoNet {
           
           switch message.error {
           case .permanentErrorInvalidArguments:
-            outputQueueLock.lock()
+            outputQueueLock!.lock()
             self.currentMessage = nil
-            outputQueueLock.unlock()
+            outputQueueLock!.unlock()
             messageState = .idle
             sendNext()
           default:
-            outputQueueLock.lock()
+            outputQueueLock!.lock()
             self.currentMessage = nil
             outputQueue.removeAll()
-            outputQueueLock.unlock()
+            outputQueueLock!.unlock()
             messageState = .idle
           }
           
@@ -380,7 +393,7 @@ public class LocoNet {
               doNext = false
               messageState = .waitingForDatagramReceivedOK2
               startTimeoutTimer()
-              node.sendLocoNetMessage(destinationNodeId: gatewayNodeId, locoNetMessage: currentMessage, isFinalPart: true)
+              node?.sendLocoNetMessage(destinationNodeId: gatewayNodeId, locoNetMessage: currentMessage, isFinalPart: true)
             }
             
           case .waitingForSendLocoNetMessageReply2:
@@ -410,10 +423,10 @@ public class LocoNet {
         }
         
         if doNext {
-          outputQueueLock.lock()
+          outputQueueLock!.lock()
           self.currentMessage = nil
           messageState = .idle
-          outputQueueLock.unlock()
+          outputQueueLock!.unlock()
           sendNext()
         }
         

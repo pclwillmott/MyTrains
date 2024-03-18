@@ -68,6 +68,18 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     
   }
   
+  deinit {
+    debugLog("deinit")
+    serialPort = nil
+    buffer.removeAll()
+    sendToSerialPortPipe = nil
+    queue.removeAll()
+    queueLock = nil
+    timeoutTimer = nil
+    currentItem = nil
+    datagramBuffer.removeAll()
+  }
+  
   // MARK: Private Properties
   
   // Configuration varaible addresses
@@ -101,7 +113,7 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
 
   private var queue : [QueueItem] = []
   
-  private var queueLock = NSLock()
+  private var queueLock : NSLock? = NSLock()
   
   private var timeoutTimer : Timer?
   
@@ -234,7 +246,7 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   
   private func sendNext() {
     
-    queueLock.lock()
+    queueLock?.lock()
     
     var sendMessage = false
     
@@ -243,7 +255,7 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
       sendMessage = true
     }
 
-    queueLock.unlock()
+    queueLock?.unlock()
     
     if sendMessage {
       startTimeoutTimer(interval: 1.0)

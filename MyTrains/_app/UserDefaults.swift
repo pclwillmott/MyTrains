@@ -66,8 +66,7 @@ enum DEFAULT {
 }
 
 public var appNode : OpenLCBNodeMyTrains? {
-  let networkLayer = appDelegate.networkLayer 
-  return networkLayer.appNode
+  return appDelegate.networkLayer?.appNode
 }
 
 public var appLayoutId : UInt64? {

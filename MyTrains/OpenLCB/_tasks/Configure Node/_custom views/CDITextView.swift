@@ -10,11 +10,20 @@ import AppKit
 
 class CDITextView: CDIDataView, NSTextFieldDelegate, NSControlTextEditingDelegate {
   
+  // MARK: Destructors
+  
+  deinit {
+    debugLog("deinit")
+    textView?.subviews.removeAll()
+    textView = nil
+    textField = nil
+  }
+  
   // MARK: Private & Internal Properties
 
-  internal var textView = NSView()
+  internal var textView : NSView? = NSView()
   
-  internal var textField = NSTextField()
+  internal var textField : NSTextField? = NSTextField()
   
   internal var needsTextField = true
   
@@ -22,7 +31,7 @@ class CDITextView: CDIDataView, NSTextFieldDelegate, NSControlTextEditingDelegat
   
   override public var getData : [UInt8] {
 
-    guard let data = getData(string: textField.stringValue) else {
+    guard let textField, let data = getData(string: textField.stringValue) else {
       return []
     }
     
@@ -34,7 +43,7 @@ class CDITextView: CDIDataView, NSTextFieldDelegate, NSControlTextEditingDelegat
 
   override internal func dataWasSet() {
     
-    guard let string = setString() else {
+    guard let textField, let string = setString() else {
       return
     }
     
@@ -49,7 +58,7 @@ class CDITextView: CDIDataView, NSTextFieldDelegate, NSControlTextEditingDelegat
   
   public func addTextField() {
   
-    guard needsTextField else {
+    guard needsTextField, let stackView, let copyButton, let pasteButton, let dataButtonView, let newEventId, let textView, let textField else {
       return
     }
 
@@ -125,6 +134,9 @@ class CDITextView: CDIDataView, NSTextFieldDelegate, NSControlTextEditingDelegat
   }
 
   @objc func controlTextDidChange(_ obj: Notification) {
+    guard let textField, let writeButton else {
+      return
+    }
     writeButton.isEnabled = isValid(string: textField.stringValue)
     delegate?.cdiDataViewSetWriteAllEnabledState?(writeButton.isEnabled)
   }
@@ -132,18 +144,27 @@ class CDITextView: CDIDataView, NSTextFieldDelegate, NSControlTextEditingDelegat
   // MARK: Outlets & Actions
   
   @IBAction func btnCopyAction(_ sender: NSButton) {
+    guard let textField else {
+      return
+    }
     let pasteboard = NSPasteboard.general
     pasteboard.declareTypes([.string], owner: nil)
     pasteboard.setString(textField.stringValue, forType: .string)
   }
 
   @IBAction func btnPasteAction(_ sender: NSButton) {
+    guard let textField else {
+      return
+    }
     let pasteboard = NSPasteboard.general
     let value = pasteboard.string(forType: .string) ?? ""
     textField.stringValue = value
   }
 
   @IBAction func newEventIdAction(_ sender: NSButton) {
+    guard let textField else {
+      return
+    }
     delegate?.cdiDataViewGetNewEventId?(textField: textField)
   }
 
