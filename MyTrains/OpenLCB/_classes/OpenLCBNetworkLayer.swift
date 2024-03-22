@@ -12,20 +12,27 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
   
   // MARK: Constructors & Destructors
   
+  public override init() {
+    super.init()
+    addInit()
+  }
+  
   deinit {
-    debugLog("deinit")
     removeAll()
+    addDeinit()
+    showInstances()
+    exit(0)
   }
   
   // MARK: Private Properties
   
   private var nodeManagers : [OpenLCBNodeManager] = []
   
-  private var throttleManager = OpenLCBNodeManager()
+  private var throttleManager : OpenLCBNodeManager? = OpenLCBNodeManager()
   
-  private var locoNetMonitorManager = OpenLCBNodeManager()
+  private var locoNetMonitorManager : OpenLCBNodeManager? = OpenLCBNodeManager()
   
-  private var programmerToolManager = OpenLCBNodeManager()
+  private var programmerToolManager : OpenLCBNodeManager? = OpenLCBNodeManager()
   
   private var initializationLevel = 0
   
@@ -59,7 +66,7 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
   
   // MARK: Public Properties
 
-  public var configurationToolManager = OpenLCBConfigurationToolManager()
+  public var configurationToolManager : OpenLCBConfigurationToolManager? = OpenLCBConfigurationToolManager()
   
   public var virtualNodeLookup : [UInt64:OpenLCBNodeVirtual] = [:]
   
@@ -97,28 +104,34 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
   
   public weak var fastClock : OpenLCBClock?
   
+  public var numberOfGatewayNodes : Int = 0
+  
   // MARK: Private Methods
   
   private func removeAll() {
+    for (_, group) in startupGroup {
+      group.removeAll()
+    }
+    startupGroup.removeAll()
+    virtualNodeLookup.removeAll()
+    nodesSimpleSetSufficient.removeAll()
+    nodesSimpleSetSufficient.removeAll()
+    nodesInhibited.removeAll()
+    gatewayNodes.removeAll()
     appNode = nil
     fastClock = nil
     observers.removeAll()
     monitorTimer?.invalidate()
     monitorBuffer.removeAll()
     nodeManagers.removeAll()
-    throttleManager.removeAll()
-    locoNetMonitorManager.removeAll()
-    programmerToolManager.removeAll()
-    configurationToolManager.removeAll()
-    virtualNodeLookup.removeAll()
-    nodesSimpleSetSufficient.removeAll()
-    nodesSimpleSetSufficient.removeAll()
-    nodesInhibited.removeAll()
-    gatewayNodes.removeAll()
-    for (_, group) in startupGroup {
-      group.removeAll()
-    }
-    startupGroup.removeAll()
+    throttleManager?.removeAll()
+    throttleManager = nil
+    locoNetMonitorManager?.removeAll()
+    locoNetMonitorManager = nil
+    programmerToolManager?.removeAll()
+    programmerToolManager = nil
+    configurationToolManager?.removeAll()
+    configurationToolManager = nil
     initializationLevel = 0
     state = .uninitialized
   }
@@ -180,9 +193,6 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
   
   public func start() {
     
-    appNode = nil
-    fastClock = nil
-    
     serialPortManagerObserverId = MTSerialPortManager.addObserver(observer: self)
     
     initializationLevel = 0
@@ -191,10 +201,10 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
 
     if startupGroup.isEmpty {
       
-      nodeManagers.append(configurationToolManager)
-      nodeManagers.append(throttleManager)
-      nodeManagers.append(locoNetMonitorManager)
-      nodeManagers.append(programmerToolManager)
+      nodeManagers.append(configurationToolManager!)
+      nodeManagers.append(throttleManager!)
+      nodeManagers.append(locoNetMonitorManager!)
+      nodeManagers.append(programmerToolManager!)
       
       for group in 0 ... MyTrainsVirtualNodeType.numberOfStartupGroups + 1 {
         startupGroup[group] = StartupGroup()
@@ -215,8 +225,6 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
     startNodes()
     
   }
-  
-  public var numberOfGatewayNodes : Int = 0
   
   public func stop() {
     stopNodes()
@@ -239,7 +247,6 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
       if let group = startupGroup[initializationLevel], !group.uninitializedIsEmpty {
         for node in group.uninitializedNodes {
           virtualNodeLookup[node.nodeId] = node
-          node.networkLayer = self
           node.start()
         }
         return
@@ -293,6 +300,8 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
         group.delete(type: .locoNetMonitorNode)
       }
       state = .stopped
+      appNode = nil
+      fastClock = nil
     }
     
   }
@@ -325,13 +334,13 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
       case .clockNode:
         fastClock = node as? OpenLCBClock
       case .configurationToolNode:
-        configurationToolManager.addNode(node: node)
+        configurationToolManager?.addNode(node: node)
       case .locoNetMonitorNode:
-        locoNetMonitorManager.addNode(node: node)
+        locoNetMonitorManager?.addNode(node: node)
       case .programmerToolNode:
-        programmerToolManager.addNode(node: node)
+        programmerToolManager?.addNode(node: node)
       case .throttleNode:
-        throttleManager.addNode(node: node)
+        throttleManager?.addNode(node: node)
       default:
         break
       }
@@ -354,7 +363,6 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
     }
     
     virtualNodeLookup.removeValue(forKey: node.nodeId)
-    node.networkLayer = nil
     gatewayNodes.removeValue(forKey: node.nodeId)
     nodesSimpleSetSufficient.removeValue(forKey: node.nodeId)
     nodesFullProtocolRequired.removeValue(forKey: node.nodeId)
@@ -406,7 +414,6 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
     
     if let group = startupGroup[node.virtualNodeType.startupGroup] {
       virtualNodeLookup[node.nodeId] = node
-      node.networkLayer = self
       group.add(node)
       node.start()
     }
@@ -426,38 +433,37 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
   }
   
   public func getConfigurationTool(exclusive:Bool = false) -> OpenLCBNodeConfigurationTool? {
-    let tool = configurationToolManager.getNode(virtualNodeType: .configurationToolNode, exclusive: exclusive) as? OpenLCBNodeConfigurationTool
-      tool?.networkLayer = self
+    let tool = configurationToolManager!.getNode(virtualNodeType: .configurationToolNode, exclusive: exclusive) as? OpenLCBNodeConfigurationTool
     return tool
   }
   
   public func releaseConfigurationTool(configurationTool:OpenLCBNodeConfigurationTool) {
-    configurationToolManager.releaseNode(node: configurationTool)
+    configurationToolManager?.releaseNode(node: configurationTool)
   }
   
   public func getThrottle() -> OpenLCBThrottle? {
-    return throttleManager.getNode(virtualNodeType: .throttleNode) as? OpenLCBThrottle
+    return throttleManager!.getNode(virtualNodeType: .throttleNode) as? OpenLCBThrottle
   }
   
   public func releaseThrottle(throttle:OpenLCBThrottle) {
     throttle.delegate = nil
-    throttleManager.releaseNode(node: throttle)
+    throttleManager?.releaseNode(node: throttle)
   }
   
   public func getLocoNetMonitor() -> OpenLCBLocoNetMonitorNode? {
-    return locoNetMonitorManager.getNode(virtualNodeType: .locoNetMonitorNode) as? OpenLCBLocoNetMonitorNode
+    return locoNetMonitorManager!.getNode(virtualNodeType: .locoNetMonitorNode) as? OpenLCBLocoNetMonitorNode
   }
   
   public func releaseLocoNetMonitor(monitor:OpenLCBLocoNetMonitorNode) {
-    locoNetMonitorManager.releaseNode(node: monitor)
+    locoNetMonitorManager?.releaseNode(node: monitor)
   }
   
   public func getProgrammerTool() -> OpenLCBProgrammerToolNode? {
-    return programmerToolManager.getNode(virtualNodeType: .programmerToolNode) as? OpenLCBProgrammerToolNode
+    return programmerToolManager!.getNode(virtualNodeType: .programmerToolNode) as? OpenLCBProgrammerToolNode
   }
   
   public func releaseProgrammerTool(programmerTool:OpenLCBProgrammerToolNode) {
-    programmerToolManager.releaseNode(node: programmerTool)
+    programmerToolManager?.releaseNode(node: programmerTool)
   }
   
   private func dummyCompletion(node:OpenLCBNodeVirtual) {
@@ -748,11 +754,15 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
     
   }
 
-
-
 }
 
 class StartupGroup {
+  
+  // MARK: Destructors
+  
+  deinit {
+    removeAll()
+  }
   
   // MARK: Private Properties
   

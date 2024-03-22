@@ -19,6 +19,8 @@ public class OpenLCBMessage : NSObject {
     
     super.init()
     
+    addInit()
+    
   }
   
   init?(fullMessage:[UInt8]) {
@@ -104,6 +106,8 @@ public class OpenLCBMessage : NSObject {
     
     payload = data
     
+    addInit()
+    
   }
   
   init?(frame:LCCCANFrame) {
@@ -157,7 +161,14 @@ public class OpenLCBMessage : NSObject {
     }
     
     super.init()
+    
+    addInit()
 
+  }
+  
+  deinit {
+    payload.removeAll()
+    addDeinit()
   }
   
   // MARK: Public Properties

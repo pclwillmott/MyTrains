@@ -67,6 +67,14 @@ public class MTSerialPort : NSObject, MTPipeDelegate {
     
     super.init()
     
+    addInit()
+    
+  }
+  
+  deinit {
+    delegate = nil
+    txPipe = nil
+    addDeinit()
   }
   
   // MARK: Private Properties
@@ -103,7 +111,7 @@ public class MTSerialPort : NSObject, MTPipeDelegate {
   
   public var usesRTSCTSFlowControl : Bool = false
   
-  public var delegate : MTSerialPortDelegate?
+  public weak var delegate : MTSerialPortDelegate?
   
   public var isOpen : Bool {
     return state == .open

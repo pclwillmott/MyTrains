@@ -66,18 +66,21 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
       
     }
     
+    addInit()
+    
   }
   
   deinit {
-    debugLog("deinit")
     serialPort = nil
     buffer.removeAll()
     sendToSerialPortPipe = nil
     queue.removeAll()
     queueLock = nil
+    timeoutTimer?.invalidate()
     timeoutTimer = nil
     currentItem = nil
     datagramBuffer.removeAll()
+    addDeinit()
   }
   
   // MARK: Private Properties
@@ -312,8 +315,8 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
       #if DEBUG
       debugLog("serial port did not open")
       #endif
-      networkLayer?.nodeDidInitialize(node: self)
-      networkLayer?.nodeDidStart(node: self)
+      appDelegate.networkLayer?.nodeDidInitialize(node: self)
+      appDelegate.networkLayer?.nodeDidStart(node: self)
     }
 
   }
@@ -493,7 +496,7 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
                            
     self.serialPort = nil
                            
-    networkLayer?.nodeDidDetach(node: self)
+    appDelegate.networkLayer?.nodeDidDetach(node: self)
                            
   }
 

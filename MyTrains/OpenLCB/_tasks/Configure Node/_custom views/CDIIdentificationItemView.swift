@@ -11,11 +11,22 @@ import AppKit
 class CDIIdentificationItemView : CDIView {
 
   // MARK: Destructors
+
+  required init?(coder: NSCoder) {
+    super.init(coder: coder)
+    addInit()
+  }
   
+  override init(frame frameRect: NSRect) {
+    super.init(frame: frameRect)
+    addInit()
+  }
+
   deinit {
-    debugLog("deinit")
     lblName = nil
     lblValue = nil
+    subviews.removeAll()
+    addDeinit()
   }
   
   // MARK: Public Properties

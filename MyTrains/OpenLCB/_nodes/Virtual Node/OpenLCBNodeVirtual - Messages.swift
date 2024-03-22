@@ -16,12 +16,12 @@ extension OpenLCBNodeVirtual {
     message.sourceNodeId = nodeId
     message.routing.insert(nodeId)
     message.visibility = visibility
-    networkLayer?.sendMessage(message: message)
+    appDelegate.networkLayer?.sendMessage(message: message)
   }
   
   internal func sendMessage(gatewayNodeId: UInt64, message: OpenLCBMessage) {
     message.routing.insert(gatewayNodeId)
-    networkLayer?.sendMessage(message: message)
+    appDelegate.networkLayer?.sendMessage(message: message)
   }
 
   public func sendClockQuery(baseEventId:UInt64) {

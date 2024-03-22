@@ -11,12 +11,24 @@ import AppKit
 class CDIMapView : CDIDataView {
 
   // MARK: Destructors
+
+  required init?(coder: NSCoder) {
+    super.init(coder: coder)
+    addInit()
+  }
   
+  override init(frame frameRect: NSRect) {
+    super.init(frame: frameRect)
+    addInit()
+  }
+
   deinit {
-    debugLog("deinit")
     comboView?.subviews.removeAll()
     comboView = nil
+    comboBox?.target = nil
     comboBox = nil
+    subviews.removeAll()
+    addDeinit()
   }
   
   // MARK: Private & Internal Properties

@@ -26,6 +26,11 @@ class CSVParser {
   
   init(withURL url: URL){
     self.url = url
+    addInit()
+  }
+  
+  deinit {
+    addDeinit()
   }
   
   // MARK: Private Properties
@@ -51,15 +56,11 @@ class CSVParser {
   public var chunkSize = 65536
   
   public var numberOfRows : Int {
-    get {
-      return _numberOfRows
-    }
+    return _numberOfRows
   }
   
   public var numberOfColumns : Int {
-    get {
-      return _numberOfColumns
-    }
+    return _numberOfColumns
   }
   
   // MARK: Public Methods

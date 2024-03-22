@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class OpenLCBMemorySpace {
+public class OpenLCBMemorySpace : NSObject {
   
   // MARK: Constructors
   
@@ -15,12 +15,23 @@ public class OpenLCBMemorySpace {
     self.nodeId = nodeId
     self.space = space
     self._isReadOnly = isReadOnly
-    self.description = description
+    self.memorySpaceDescription = description
+    super.init()
+    addInit()
   }
   
   init(reader: SqliteDataReader, isReadOnly:Bool, description: String) {
     self._isReadOnly = isReadOnly
+    super.init()
     decode(sqliteDataReader: reader)
+    addInit()
+  }
+  
+  deinit {
+    unitConversions.removeAll()
+    delegate = nil
+    memory.removeAll()
+    addDeinit()
   }
   
   // MARK: Private Properties
@@ -31,7 +42,7 @@ public class OpenLCBMemorySpace {
   
   // MARK: Public Properties
   
-  public var delegate : OpenLCBMemorySpaceDelegate?
+  public weak var delegate : OpenLCBMemorySpaceDelegate?
   
   public var primaryKey : Int = -1
   
@@ -48,7 +59,7 @@ public class OpenLCBMemorySpace {
   
   public var memory : [UInt8] = []
   
-  public var description : String = ""
+  public var memorySpaceDescription : String = ""
   
   public var isReadOnly : Bool {
     return _isReadOnly
@@ -596,7 +607,9 @@ public class OpenLCBMemorySpace {
       
       var node : OpenLCBNodeVirtual
       
-      switch OpenLCBNodeVirtual(nodeId: nodeId).virtualNodeType {
+      var temp : OpenLCBNodeVirtual? = OpenLCBNodeVirtual(nodeId: nodeId)
+      
+      switch temp!.virtualNodeType {
       case .clockNode:
         node = OpenLCBClock(nodeId: nodeId)
       case .throttleNode:
@@ -629,11 +642,14 @@ public class OpenLCBMemorySpace {
         node = SwitchboardItemNode(nodeId: nodeId)
       }
       
+      temp = nil
+      
       result.append(node)
 
     }
     
     return result
+    
   }
   
   public static func getVirtualNodeIds() -> Set<UInt64> {

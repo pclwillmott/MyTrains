@@ -18,13 +18,14 @@ public class MonitorItem : NSObject {
   
   public override init() {
     super.init()
+    addInit()
   }
   
   deinit {
-    debugLog("deinit")
     frame = nil
     message = nil
     _info = nil
+    addDeinit()
   }
   
   // MARK: Private Properties

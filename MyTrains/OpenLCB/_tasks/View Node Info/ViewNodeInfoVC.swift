@@ -25,13 +25,16 @@ class ViewNodeInfoVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate {
   
   override func windowWillClose(_ notification: Notification) {
     
-    guard let networkLayer, let configurationTool else {
-      return
-    }
-    
-    configurationTool.delegate = nil
-    networkLayer.releaseConfigurationTool(configurationTool: configurationTool)
-    
+    configurationTool?.delegate = nil
+    appDelegate.networkLayer?.releaseConfigurationTool(configurationTool: configurationTool!)
+    configurationTool = nil
+    tableView.delegate = nil
+    tableView.dataSource = nil
+    tableViewDS = nil
+    timeoutTimer?.invalidate()
+    timeoutTimer = nil
+    node = nil
+
     super.windowWillClose(notification)
     
   }
@@ -44,8 +47,6 @@ class ViewNodeInfoVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate {
       return
     }
     
-    networkLayer = configurationTool.networkLayer
-    
     nodeId = configurationTool.nodeId
     
     if node.userNodeName != "" {
@@ -55,19 +56,20 @@ class ViewNodeInfoVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate {
       self.view.window?.title = "\(node.manufacturerName) - \(node.nodeModelName) (\(node.nodeId.toHexDotFormat(numberOfBytes: 6)))"
     }
     
+    tableView.dataSource = tableViewDS
+    tableView.delegate = tableViewDS
+    
     reload()
     
     state = .waitingForGetConfigOptionsAck
     startTimeoutTimer()
-//    networkLayer?.sendGetConfigurationOptionsCommand(sourceNodeId: nodeId, destinationNodeId: node.nodeId)
+    configurationTool.sendGetConfigurationOptionsCommand(destinationNodeId: node.nodeId)
 
   }
   
   // MARK: Private Properties
   
-  private var tableViewDS = ViewNodeInfoMemorySpaceInfoTVDS()
-  
-  private var networkLayer : OpenLCBNetworkLayer?
+  private var tableViewDS : ViewNodeInfoMemorySpaceInfoTVDS? = ViewNodeInfoMemorySpaceInfoTVDS()
   
   private var nodeId : UInt64 = 0
   
@@ -81,9 +83,9 @@ class ViewNodeInfoVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate {
   
   // MARK: Public Properties
   
-  public var node: OpenLCBNode?
+  public weak var node: OpenLCBNode?
   
-  public var configurationTool : OpenLCBNodeConfigurationTool?
+  public weak var configurationTool : OpenLCBNodeConfigurationTool?
 
   // MARK: Private Methods
   
@@ -101,9 +103,7 @@ class ViewNodeInfoVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate {
     
     lblName.stringValue = node!.configurationOptions!.name
     
-    tableViewDS.addressSpaceInformation = node!.addressSpaceInformation
-    tableView.dataSource = tableViewDS
-    tableView.delegate = tableViewDS
+    tableViewDS?.addressSpaceInformation = node!.addressSpaceInformation
     tableView.reloadData()
     
   }
@@ -147,7 +147,7 @@ class ViewNodeInfoVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate {
           
           startTimeoutTimer()
           
-    //      networkLayer.sendGetMemorySpaceInformationRequest(sourceNodeId: nodeId, destinationNodeId: node.nodeId, addressSpace: currentAddressSpace)
+          configurationTool?.sendGetMemorySpaceInformationCommand(destinationNodeId: node.nodeId, addressSpace: currentAddressSpace)
           
         }
         else {
@@ -194,7 +194,7 @@ class ViewNodeInfoVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate {
             
             startTimeoutTimer()
             
-     //       networkLayer.sendGetMemorySpaceInformationRequest(sourceNodeId: nodeId, destinationNodeId: node.nodeId, addressSpace: currentAddressSpace)
+            configurationTool?.sendGetMemorySpaceInformationCommand(destinationNodeId: node.nodeId, addressSpace: currentAddressSpace)
             
           }
           
@@ -212,7 +212,7 @@ class ViewNodeInfoVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate {
             
             startTimeoutTimer()
             
-     //       networkLayer.sendGetMemorySpaceInformationRequest(sourceNodeId: nodeId, destinationNodeId: node.nodeId, addressSpace: currentAddressSpace)
+            configurationTool?.sendGetMemorySpaceInformationCommand(destinationNodeId: node.nodeId, addressSpace: currentAddressSpace)
             
           }
           else {

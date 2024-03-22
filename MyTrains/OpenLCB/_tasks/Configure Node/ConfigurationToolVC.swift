@@ -26,17 +26,11 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
   
   override func windowWillClose(_ notification: Notification) {
     
-    guard let networkLayer, let configurationTool else {
-      return
-    }
-    
     node = nil
     
-    configurationTool.delegate = nil
-    self.configurationTool = nil
-    
-    networkLayer.releaseConfigurationTool(configurationTool: configurationTool)
-    self.networkLayer = nil
+    configurationTool?.delegate = nil
+    appDelegate.networkLayer?.releaseConfigurationTool(configurationTool: configurationTool!)
+    configurationTool = nil
     
     btnRefreshAll = nil
     
@@ -68,6 +62,35 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
     
     btnShowCDIText = nil
 
+    CDI.removeAll()
+    
+    xmlParser = nil
+    
+    timer?.invalidate()
+    timer = nil
+    
+    dataToWrite.removeAll()
+    
+    memoryMap.removeAll()
+    
+    dataViews.removeAll()
+    
+    refreshDataView = nil
+    
+    editElement = nil
+    
+    currentElement = nil
+    
+    groupStack.removeAll()
+    
+    progressViewHeightConstraint = nil
+    
+    progressIndicatorConstraints.removeAll()
+    
+    statusViewHeightConstraint = nil
+    
+    buttonViewHeightConstraint = nil
+    
     view.subviews.removeAll()
     
     super.windowWillClose(notification)
@@ -192,8 +215,6 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
     btnShowCDIText.target = self
     btnShowCDIText.action = #selector(self.btnShowCDITextAction(_:))
 
-    networkLayer = configurationTool!.networkLayer
-    
     nodeId = configurationTool!.nodeId
     
     let title = node!.userNodeName == "" ? "\(node!.manufacturerName) - \(node!.nodeModelName)" : node!.userNodeName
@@ -226,13 +247,59 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
   
   // MARK: Private Properties
   
-  private weak var networkLayer : OpenLCBNetworkLayer?
-  
   private var nodeId : UInt64 = 0
   
   private var CDI : [UInt8] = []
   
   private var dataWasWritten = false
+
+  private var xmlParser : XMLParser?
+  
+  private var nextCDIStartAddress : Int = 0
+  
+  private var totalBytesRead = 0
+  
+  private var timer : Timer?
+  
+  private var dataToWrite : [(space: UInt8, address:Int, data:[UInt8])] = []
+  
+  private var memoryMap : [MemoryMapItem] = []
+  
+  private var dataViews : [CDIDataView] = []
+  
+  private var refreshDataView : CDIDataView?
+  
+  private var currentMemoryBlock : Int = 0
+  
+  private var editElement : CDIElement?
+  
+  private var currentElement : CDIElement?
+  
+  private var currentElementType : OpenLCBCDIElementType = .int
+  
+  private var groupStack : [CDIElement] = []
+  
+  private var currentSpace : UInt8 = 0
+  
+  private var currentAddress : Int = 0
+  
+  private var dataBytesToRead = 0
+  
+  private var relationProperty : String?
+  
+  private var relationValue : String?
+  
+  private let siblingGap : CGFloat = 8.0
+  
+  private let parentGap : CGFloat = 20.0
+  
+  private var progressViewHeightConstraint : NSLayoutConstraint?
+  
+  private var progressIndicatorConstraints : [NSLayoutConstraint] = []
+  
+  private var statusViewHeightConstraint : NSLayoutConstraint?
+  
+  private var buttonViewHeightConstraint : NSLayoutConstraint?
   
   private var cdiText : String {
     var cdi = CDI
@@ -288,50 +355,6 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
     }
   }
   
-  private var xmlParser : XMLParser?
-  
-  private var nextCDIStartAddress : Int = 0
-  
-  private var totalBytesRead = 0
-  
-  private var timer : Timer?
-  
-  private var dataToWrite : [(space: UInt8, address:Int, data:[UInt8])] = []
-  
-  private var memoryMap : [MemoryMapItem] = []
-  
-  private var dataViews : [CDIDataView] = []
-  
-  private var refreshDataView : CDIDataView?
-  
-  private var currentMemoryBlock : Int = 0
-  
-  private var editElement : CDIElement?
-  
-  private var currentElement : CDIElement?
-  
-  private var currentElementType : OpenLCBCDIElementType = .int
-  
-  private var groupStack : [CDIElement] = []
-  
-  private var currentSpace : UInt8 = 0
-  
-  private var currentAddress : Int = 0
-  
-  private var dataBytesToRead = 0
-  
-  private var relationProperty : String?
-  
-  private var relationValue : String?
-  
-  private let siblingGap : CGFloat = 8.0
-  
-  private let parentGap : CGFloat = 20.0
-  
-  private var progressViewHeightConstraint : NSLayoutConstraint?
-  
-  private var progressIndicatorConstraints : [NSLayoutConstraint] = []
-  
   private var isProgressViewHidden : Bool {
     get {
       return progressView!.isHidden
@@ -344,8 +367,6 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
     }
   }
 
-  private var statusViewHeightConstraint : NSLayoutConstraint?
-  
   private var isStatusViewHidden : Bool {
     get {
       return statusView!.isHidden
@@ -358,8 +379,6 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
     }
   }
 
-  private var buttonViewHeightConstraint : NSLayoutConstraint?
-  
   private var isButtonViewHidden : Bool {
     get {
       return buttonView!.isHidden
@@ -455,19 +474,9 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
           
           switch element.type {
           case .identification:
-            if #available(macOS 12, *) {
-              group.name = String(localized: "Identification")
-            } 
-            else {
-              group.name = "Identification"
-            }
+            group.name = String(localized: "Identification")
           case .acdi:
-            if #available(macOS 12, *) {
-              group.name = String(localized: "ACDI")
-            } 
-            else {
-              group.name = "ACDI"
-            }
+            group.name = String(localized: "ACDI")
           case .segment:
             currentSpace = element.space
             currentAddress = element.origin
@@ -620,12 +629,7 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
 
     updateProgressIndicator(totalBytesRead)
     
-    if #available(macOS 12, *) {
-      statusMessage(String(localized: "Reading Variables - \(totalBytesRead) bytes"))
-    } 
-    else {
-      statusMessage("Reading Variables - \(totalBytesRead) bytes")
-    }
+    statusMessage(String(localized: "Reading Variables - \(totalBytesRead) bytes"))
 
     if let node, let configurationTool {
 
@@ -745,13 +749,8 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
               
               updateProgressIndicator(totalBytesRead)
               
-              if #available(macOS 12, *) {
-                statusMessage(String(localized: "Writing Variables - \(totalBytesRead) bytes"))
-              } 
-              else {
-                statusMessage("Writing Variables - \(totalBytesRead) bytes")
-              }
-              
+              statusMessage(String(localized: "Writing Variables - \(totalBytesRead) bytes"))
+
               dataToWrite.removeFirst()
               
               if !dataToWrite.isEmpty {
@@ -1291,9 +1290,7 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
   // MARK: Actions
   
   @IBAction func btnRebootAction(_ sender: NSButton) {
-    if let configurationTool {
-      configurationTool.sendResetRebootCommand(destinationNodeId: node!.nodeId)
-    }
+    configurationTool?.sendResetRebootCommand(destinationNodeId: node!.nodeId)
   }
   
   @IBAction func btnResetToDefaultsAction(_ sender: NSButton) {

@@ -45,6 +45,61 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
       
     }
     
+    addInit()
+    
+  }
+  
+  deinit {
+    
+    serialPort = nil
+    
+    sendToSerialPortPipe = nil
+    
+    buffer.removeAll()
+    
+    managedAliases.removeAll()
+    
+    aliasLock = nil
+    
+    managedNodeIdLookup.removeAll()
+    
+    managedAliasLookup.removeAll()
+    
+    stoppedNodesLookup.removeAll()
+    
+    aliasLookup.removeAll()
+    
+    nodeIdLookup.removeAll()
+    
+    outputQueue.removeAll()
+    
+    outputQueueLock = nil
+    
+    inputQueueLock = nil
+    
+    inputQueue.removeAll()
+    
+    externalConsumedEventRanges.removeAll()
+    
+    internalConsumedEvents.removeAll()
+    
+    internalConsumedEventRanges.removeAll()
+    
+    waitOutputTimer?.invalidate()
+    waitOutputTimer = nil
+    
+    waitInputTimer?.invalidate()
+    waitInputTimer = nil
+    
+    aliasTimer?.invalidate()
+    aliasTimer = nil
+    
+    splitFrames.removeAll()
+    
+    datagrams.removeAll()
+    
+    addDeinit()
+    
   }
   
   // MARK: internal Properties
@@ -103,7 +158,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
 
   internal var managedAliases : [UInt16:OpenLCBTransportLayerAlias] = [:]
   
-  internal var aliasLock = NSLock()
+  internal var aliasLock : NSLock? = NSLock()
   
   internal var managedNodeIdLookup : [UInt64:OpenLCBTransportLayerAlias] = [:]
   
@@ -117,9 +172,9 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
   
   internal var outputQueue : [OpenLCBMessage] = []
   
-  internal var outputQueueLock = NSLock()
+  internal var outputQueueLock : NSLock? = NSLock()
   
-  internal var inputQueueLock = NSLock()
+  internal var inputQueueLock : NSLock? = NSLock()
   
   internal var inputQueue : [OpenLCBMessage] = []
   
@@ -262,8 +317,8 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
       #if DEBUG
       debugLog("serial port did not open")
       #endif
-      networkLayer?.nodeDidInitialize(node: self)
-      networkLayer?.nodeDidStart(node: self)
+      appDelegate.networkLayer?.nodeDidInitialize(node: self)
+      appDelegate.networkLayer?.nodeDidStart(node: self)
     }
 
   }
@@ -478,15 +533,15 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     waitOutputTimer = nil
     aliasTimer?.invalidate()
     aliasTimer = nil
-    inputQueueLock.lock()
+    inputQueueLock!.lock()
     inputQueue = []
-    inputQueueLock.unlock()
+    inputQueueLock!.unlock()
     waitingForNodeId = []
     splitFrames = [:]
     datagrams = [:]
-    outputQueueLock.lock()
+    outputQueueLock!.lock()
     outputQueue = []
-    outputQueueLock.unlock()
+    outputQueueLock!.unlock()
     waitingForAlias = []
     managedAliases = [:]
     managedNodeIdLookup = [:]
@@ -507,7 +562,7 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     
     self.serialPort = nil
     
-    networkLayer?.nodeDidDetach(node: self)
+    appDelegate.networkLayer?.nodeDidDetach(node: self)
     
   }
   

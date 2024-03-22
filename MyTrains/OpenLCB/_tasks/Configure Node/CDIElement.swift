@@ -16,9 +16,13 @@ public class CDIElement {
   }
   
   deinit {
-    debugLog("deinit")
     childElements.removeAll()
     map.removeAll()
+    min = nil
+    max = nil
+    defaultValue = nil
+    floatFormat = nil
+    description.removeAll()
   }
   
   // MARK: Private Properties
@@ -41,13 +45,25 @@ public class CDIElement {
   
   public var map : [CDIMapRelation] = []
   
-  public var isMap : Bool {
-    return map.count > 0
-  }
-  
   public var size : Int = 0
   
   public var offset : Int = 0
+  
+  public var description : [String] = []
+  
+  public var repname : String = ""
+  
+  public var replication : Int = 1
+  
+  public var stringValue : String = ""
+
+  public var space : UInt8 = 0
+  
+  public var origin : Int = 0
+
+  public var isMap : Bool {
+    return map.count > 0
+  }
   
   public var name : String {
     get {
@@ -68,17 +84,5 @@ public class CDIElement {
       _name = value
     }
   }
-  
-  public var description : [String] = []
-  
-  public var repname : String = ""
-  
-  public var replication : Int = 1
-  
-  public var stringValue : String = ""
-
-  public var space : UInt8 = 0
-  
-  public var origin : Int = 0
-  
+    
 }

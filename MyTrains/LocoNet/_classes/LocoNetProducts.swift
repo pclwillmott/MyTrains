@@ -16,6 +16,11 @@ public class LocoNetProductDictionaryItem : EditorObject {
   init(product: LocoNetProduct) {
     self.product = product
     super.init(primaryKey: product.id.rawValue)
+    addInit()
+  }
+  
+  deinit {
+    addDeinit()
   }
   
   private var product : LocoNetProduct

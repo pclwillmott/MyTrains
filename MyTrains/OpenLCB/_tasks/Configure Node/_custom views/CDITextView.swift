@@ -11,12 +11,25 @@ import AppKit
 class CDITextView: CDIDataView, NSTextFieldDelegate, NSControlTextEditingDelegate {
   
   // MARK: Destructors
+
+  required init?(coder: NSCoder) {
+    super.init(coder: coder)
+    addInit()
+  }
   
+  override init(frame frameRect: NSRect) {
+    super.init(frame: frameRect)
+    addInit()
+  }
+
   deinit {
-    debugLog("deinit")
     textView?.subviews.removeAll()
     textView = nil
     textField = nil
+    textField?.target = nil
+    textField?.delegate = nil
+    subviews.removeAll()
+    addDeinit()
   }
   
   // MARK: Private & Internal Properties

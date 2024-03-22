@@ -486,6 +486,12 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
       
     }
     
+    addInit()
+    
+  }
+  
+  deinit {
+    addDeinit()
   }
 
   // MARK: Private Properties
@@ -649,7 +655,7 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
   internal var addressSpeedConstraintDNValue15      = 0
 
   private var layoutNode : LayoutNode? {
-    return networkLayer!.virtualNodeLookup[layoutNodeId] as? LayoutNode
+    return appDelegate.networkLayer!.virtualNodeLookup[layoutNodeId] as? LayoutNode
   }
 
   // MARK: Public Properties

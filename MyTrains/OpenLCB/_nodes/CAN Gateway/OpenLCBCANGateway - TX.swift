@@ -12,10 +12,6 @@ extension OpenLCBCANGateway {
   // This is may or may not be running in the main thread
   public func send(frames:[LCCCANFrame], isBackgroundThread:Bool) {
     
-    guard let networkLayer else {
-      return
-    }
-    
     var buffer : [UInt8] = []
 
     for frame in frames {
@@ -29,7 +25,7 @@ extension OpenLCBCANGateway {
       
       buffer.append(contentsOf: item)
       
-      networkLayer.canFrameSent(gateway: self, frame: frame, isBackgroundThread: isBackgroundThread)
+      appDelegate.networkLayer?.canFrameSent(gateway: self, frame: frame, isBackgroundThread: isBackgroundThread)
       
     }
     
@@ -46,7 +42,7 @@ extension OpenLCBCANGateway {
       return
     }
     
-    outputQueueLock.lock()
+    outputQueueLock!.lock()
     
     var frames : [LCCCANFrame] = []
     
@@ -195,7 +191,7 @@ extension OpenLCBCANGateway {
     
     send(frames: frames, isBackgroundThread: false)
     
-    outputQueueLock.unlock()
+    outputQueueLock!.unlock()
     
     if !isStopping {
       startWaitTimer(interval: 1.0)

@@ -55,8 +55,6 @@ class MonitorVC: MyTrainsViewController, OpenLCBLocoNetMonitorDelegate, MyTrains
       self.view.window?.title = "\(monitorNode.userNodeName) (\(monitorNode.nodeId.toHexDotFormat(numberOfBytes: 6)))"
     }
     
-    networkLayer = monitorNode!.networkLayer
-    
     monitorNode?.delegate = self
 
     sendFilename = UserDefaults.standard.string(forKey: DEFAULT.MONITOR_SEND_FILENAME) ?? ""
@@ -91,8 +89,6 @@ class MonitorVC: MyTrainsViewController, OpenLCBLocoNetMonitorDelegate, MyTrains
   private var observerId : Int = -1
   
   private var updateLock : NSLock = NSLock()
-  
-  private var networkLayer : OpenLCBNetworkLayer?
   
   private var gatewayDS = ComboBoxSimpleDS()
   

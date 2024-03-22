@@ -13,8 +13,6 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   
   public override init(nodeId:UInt64) {
     
-    networkLayer = appDelegate.networkLayer
-    
     lfsr1 = UInt32(nodeId >> 24)
     
     lfsr2 = UInt32(nodeId & 0xffffff)
@@ -67,20 +65,25 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     isFirmwareUpgradeProtocolSupported = false
     
     setupConfigurationOptions()
-
+    
+    addInit()
+    
   }
   
   deinit {
-    debugLog("deinit")
     memorySpaces.removeAll()
     firmwareBuffer.removeAll()
     eventRangesConsumed.removeAll()
     eventRangesProduced.removeAll()
-    networkLayer = nil
     acdiManufacturerSpace = nil
     acdiUserSpace = nil
     virtualNodeConfigSpace = nil
     configuration = nil
+    eventsToSendAtStartup.removeAll()
+    registeredVariables.removeAll()
+    unitConversions.removeAll()
+    datagramTypesSupported.removeAll()
+    addDeinit()
   }
   
   // MARK: Private Properties
@@ -224,8 +227,6 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   public var lfsr2 : UInt32
 
   public var state : OpenLCBTransportLayerState = .inhibited
-  
-  public weak var networkLayer : OpenLCBNetworkLayer?
   
   public var memorySpacesInitialized : Bool {
     return acdiManufacturerSpace!.getUInt8(address: addressACDIManufacturerSpaceVersion) != 0
@@ -689,15 +690,11 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   
   public func startComplete() {
     
-    guard let networkLayer else {
-      return
-    }
-    
     state = .permitted
 
     resetReboot()
     
-    networkLayer.nodeDidInitialize(node: self)
+    appDelegate.networkLayer?.nodeDidInitialize(node: self)
 
     userConfigEventsConsumed = getUserConfigEvents(eventAddresses: userConfigEventConsumedAddresses)
     userConfigEventsProduced = getUserConfigEvents(eventAddresses: userConfigEventProducedAddresses)
@@ -734,7 +731,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
       sendEvent(eventId: eventId)
     }
     
-    networkLayer.nodeDidStart(node: self)
+    appDelegate.networkLayer?.nodeDidStart(node: self)
 
   }
   
@@ -746,7 +743,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
 
   public func stop() {
     state = .inhibited
-    networkLayer?.nodeDidStop(node: self)
+    appDelegate.networkLayer?.nodeDidStop(node: self)
   }
   
   public func registerVariable(space:UInt8, address:Int, unitConversionType:UnitConversionType = .none) {

@@ -114,8 +114,8 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
       registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressDefaultDateTime)
       registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressInitialRate)
       
-      dateFormatter.timeZone = Date().dateComponents.timeZone
-      dateFormatter.formatOptions = [.withFullDate, .withTime, .withColonSeparatorInTime]
+      dateFormatter?.timeZone = Date().dateComponents.timeZone
+      dateFormatter?.formatOptions = [.withFullDate, .withTime, .withColonSeparatorInTime]
       
       if !memorySpacesInitialized {
         resetToFactoryDefaults()
@@ -136,10 +136,31 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
       
     }
     
+    addInit()
+    
   }
   
   deinit {
-    stopTimer()
+    
+    timer?.invalidate()
+    timer = nil
+    
+    syncTimer?.invalidate()
+    syncTimer = nil
+    
+    rolloverTimer?.invalidate()
+    rolloverTimer = nil
+    
+    observers.removeAll()
+    
+    dateFormatter = nil
+    
+    lastEvents.removeAll()
+    
+    calendar = nil
+
+    addDeinit()
+    
   }
   
   // MARK: Private Properties
@@ -162,7 +183,7 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
     }
   }
   
-  private var dateFormatter = ISO8601DateFormatter()
+  private var dateFormatter : ISO8601DateFormatter? = ISO8601DateFormatter()
   
   private let specificUpperPartMask : UInt64 = 0xffffffffffff0000
   
@@ -172,7 +193,7 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
   
   private var lastEvents : [UInt64] = [UInt64](repeating: 0, count: 5)
   
-  private var calendar : Calendar = Calendar(identifier: .gregorian)
+  private var calendar : Calendar? = Calendar(identifier: .gregorian)
   
   private var specificEvents : Set<UInt64> = []
   
@@ -330,7 +351,7 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
     set(value) {
       var newValue : String
       var newDate : Date
-      if let date = dateFormatter.date(from: value) {
+      if let date = dateFormatter?.date(from: value) {
         newValue = String(value.prefix(19))
         newDate = date
       }
@@ -349,7 +370,7 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
     }
     set(value) {
       var newValue : String
-      if let _ = dateFormatter.date(from: value) {
+      if let _ = dateFormatter?.date(from: value) {
         newValue = value
       }
       else {
@@ -381,7 +402,7 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
       components.quarter           = nil
       components.weekOfMonth       = nil
       
-      return calendar.date(from: components)!
+      return calendar!.date(from: components)!
       
     }
     set(value) {
@@ -454,7 +475,7 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
     case .master:
       switch initialDateTime {
       case .computerDateTime:
-        let dt = dateFormatter.string(from: Date())
+        let dt = dateFormatter!.string(from: Date())
         dateTime = dt
       case .defaultDateTime:
         dateTime = defaultDateTime
@@ -604,7 +625,7 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
       }
     }
     
-    let str = String(dateFormatter.string(from: date).prefix(19))
+    let str = String(dateFormatter!.string(from: date).prefix(19))
     configuration!.setString(address: addressCurrentDateTime, value: str, fieldSize: 20)
     
     if minuteRollover && isClockGenerator {

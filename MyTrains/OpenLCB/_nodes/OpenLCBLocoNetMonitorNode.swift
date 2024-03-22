@@ -24,9 +24,20 @@ public class OpenLCBLocoNetMonitorNode : OpenLCBNodeVirtual, LocoNetDelegate {
     if !memorySpacesInitialized {
       resetToFactoryDefaults()
     }
+    
+    addInit()
 
   }
   
+  deinit {
+    
+    locoNet = nil
+    
+    delegate = nil
+    
+    addDeinit()
+    
+  }
   // MARK: Private Properties
   
   private var _gatewayId : UInt64 = 0
@@ -49,7 +60,7 @@ public class OpenLCBLocoNetMonitorNode : OpenLCBNodeVirtual, LocoNetDelegate {
     }
   }
   
-  public var delegate : OpenLCBLocoNetMonitorDelegate?
+  public weak var delegate : OpenLCBLocoNetMonitorDelegate?
   
   // MARK: Private Methods
   

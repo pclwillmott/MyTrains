@@ -19,8 +19,11 @@ class ViewLCCNetworkVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate
   
   override func windowWillClose(_ notification: Notification) {
     configurationTool?.delegate = nil
-    configurationTool?.networkLayer?.releaseConfigurationTool(configurationTool: configurationTool!)
+    appDelegate.networkLayer?.releaseConfigurationTool(configurationTool: configurationTool!)
     configurationTool = nil
+    tableView.dataSource = nil
+    tableViewDS = nil
+    nodes.removeAll()
     super.windowWillClose(notification)
   }
   
@@ -33,7 +36,7 @@ class ViewLCCNetworkVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate
     
     super.viewWillAppear()
     
-    configurationTool!.delegate = self
+    configurationTool?.delegate = self
     
     tableView.dataSource = tableViewDS
     tableView.delegate = tableViewDS
@@ -47,11 +50,11 @@ class ViewLCCNetworkVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate
   
   private var nodes : [UInt64:OpenLCBNode] = [:]
   
-  private var tableViewDS : ViewLCCNetworkTableViewDS = ViewLCCNetworkTableViewDS()
+  private var tableViewDS : ViewLCCNetworkTableViewDS? = ViewLCCNetworkTableViewDS()
   
   // MARK: Public Properties
   
-  public var configurationTool : OpenLCBNodeConfigurationTool?
+  public weak var configurationTool : OpenLCBNodeConfigurationTool?
   
   // MARK: Private Methods
   
@@ -61,7 +64,8 @@ class ViewLCCNetworkVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate
   }
   
   private func reload() {
-    tableViewDS.dictionary = nodes
+    tableViewDS?.dictionary = nil
+    tableViewDS?.dictionary = nodes
     tableView.reloadData()
   }
   
@@ -118,15 +122,11 @@ class ViewLCCNetworkVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate
   
   @IBAction func btnConfigureAction(_ sender: NSButton) {
     
-    guard let networkLayer = configurationTool?.networkLayer else {
-      return
-    }
-
-    let node = tableViewDS.nodes[sender.tag]
+    let node = tableViewDS!.nodes[sender.tag]
     
     var exclusive = false
     
-    if let internalNode = networkLayer.virtualNodeLookup[node.nodeId] {
+    if let internalNode = appDelegate.networkLayer?.virtualNodeLookup[node.nodeId] {
       
       let requireExclusive : Set<MyTrainsVirtualNodeType> = [
         .applicationNode,
@@ -137,7 +137,7 @@ class ViewLCCNetworkVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate
       
     }
     
-    if let ct = networkLayer.getConfigurationTool(exclusive: exclusive) {
+    if let ct = appDelegate.networkLayer?.getConfigurationTool(exclusive: exclusive) {
       let vc = MyTrainsWindow.configurationTool.viewController as! ConfigurationToolVC
       vc.configurationTool = ct
       vc.configurationTool?.delegate = vc
@@ -149,14 +149,10 @@ class ViewLCCNetworkVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate
   
   @IBAction func btnUpdateFirmwareAction(_ sender: NSButton) {
     
-    guard let networkLayer = configurationTool?.networkLayer else {
-      return
-    }
-
-    let node = tableViewDS.nodes[sender.tag]
+    let node = tableViewDS!.nodes[sender.tag]
     
     let vc = MyTrainsWindow.openLCBFirmwareUpdate.viewController as! OpenLCBFirmwareUpdateVC
-    vc.configurationTool = networkLayer.getConfigurationTool()
+    vc.configurationTool = appDelegate.networkLayer!.getConfigurationTool()
     vc.configurationTool?.delegate = vc
     vc.node = node
     vc.showWindow()
@@ -165,14 +161,10 @@ class ViewLCCNetworkVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate
   
   @IBAction func btnInfoAction(_ sender: NSButton) {
     
-    guard let networkLayer = configurationTool?.networkLayer else {
-      return
-    }
-
-    let node = tableViewDS.nodes[sender.tag]
+    let node = tableViewDS!.nodes[sender.tag]
     
     let vc = MyTrainsWindow.viewNodeInfo.viewController as! ViewNodeInfoVC
-    vc.configurationTool = networkLayer.getConfigurationTool()
+    vc.configurationTool = appDelegate.networkLayer!.getConfigurationTool()
     vc.configurationTool?.delegate = vc
     vc.node = node
     vc.showWindow()
@@ -181,11 +173,7 @@ class ViewLCCNetworkVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate
     
   @IBAction func btnDeleteAction(_ sender: NSButton) {
     
-    guard let networkLayer = configurationTool?.networkLayer else {
-      return
-    }
-
-    let node = tableViewDS.nodes[sender.tag]
+    let node = tableViewDS!.nodes[sender.tag]
 
     let alert = NSAlert()
     
@@ -197,7 +185,7 @@ class ViewLCCNetworkVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate
     
     switch alert.runModal() {
     case .alertFirstButtonReturn:
-      networkLayer.deleteNode(nodeId: node.nodeId)
+      appDelegate.networkLayer?.deleteNode(nodeId: node.nodeId)
       findAll()
     default:
       break

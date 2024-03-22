@@ -14,6 +14,11 @@ public class EditorObject : NSObject {
   init(primaryKey:Int) {
     self.primaryKey = primaryKey
     super.init()
+    addInit()
+  }
+  
+  deinit {
+    addDeinit()
   }
   
   // MARK: Private Properties

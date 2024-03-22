@@ -12,27 +12,36 @@ public class ViewLCCNetworkTableViewDS : NSObject, NSTableViewDataSource, NSTabl
 
   // MARK: Destructors
   
+  public override init() {
+    super.init()
+    addInit()
+  }
+  
   deinit {
-    debugLog("deinit")
-    _dictionary.removeAll()
+    _dictionary?.removeAll()
+    _dictionary = nil
     nodes.removeAll()
+    addDeinit()
   }
   
   // MARK: Private Properties
   
-  private var _dictionary : [UInt64:OpenLCBNode] = [:]
+  private var _dictionary : [UInt64:OpenLCBNode]? = [:]
   
   // MARK: Public Properties
   
   public var nodes : [OpenLCBNode] = []
   
-  public var dictionary : [UInt64:OpenLCBNode] {
+  public var dictionary : [UInt64:OpenLCBNode]? {
     get {
-      return _dictionary
+      return _dictionary!
     }
     set(value) {
       _dictionary = value
       nodes.removeAll()
+      guard let _dictionary else {
+        return
+      }
       for (_, node) in _dictionary {
         nodes.append(node)
       }

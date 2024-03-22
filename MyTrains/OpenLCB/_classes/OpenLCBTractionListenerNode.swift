@@ -16,6 +16,11 @@ public class OpenLCBTractionListenerNode {
     self.nodeId = nodeId
     self.flags = flags
     
+    addInit()
+  }
+  
+  deinit {
+    addDeinit()
   }
   
   // MARK: Private Properties

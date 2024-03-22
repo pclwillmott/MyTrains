@@ -45,14 +45,31 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
     
     isDatagramProtocolSupported = true
 
-    numberBase.delegate = self
+    numberBase?.delegate = self
     
-    memorySpaces[numberBase.space] = numberBase
+    memorySpaces[numberBase!.space] = numberBase!
     
     if !memorySpacesInitialized {
       resetToFactoryDefaults()
     }
+    
+    addInit()
 
+  }
+  
+  deinit {
+    
+    programmingTracks.removeAll()
+    
+    dccTrainNodes.removeAll()
+    
+    _delegate = nil
+    
+    numberBase = nil
+
+    cvs.removeAll()
+    
+    addDeinit()
   }
   
   // MARK: Private Properties
@@ -61,7 +78,7 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
   
   private var dccTrainNodes : [UInt64:String] = [:]
   
-  private var _delegate : OpenLCBProgrammerToolDelegate?
+  private weak var _delegate : OpenLCBProgrammerToolDelegate?
   
   private var _programmingTrackId : UInt64 = 0
   
@@ -79,8 +96,36 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
   
   private var ioState : IOState = .idle
   
-  internal var numberBase : OpenLCBMemorySpace
+  internal var numberBase : OpenLCBMemorySpace?
 
+  private let defaultCleanMask     : UInt8 = 0b00010000
+  private let valueCleanMask       : UInt8 = 0b00000001
+  private let valueWriteFailedMask : UInt8 = 0b00000010
+  
+  private var targetNodeId : UInt64? {
+    let result = programmingTrackId == 0 ? dccTrainNodeId : programmingTrackId
+    return result == 0 ? nil : result
+  }
+  
+  private var progModeMask : UInt32? {
+    
+    if programmingTrackId == 0 {
+      return OpenLCBProgrammingMode.defaultProgrammingMode.rawValue
+    }
+    
+    switch programmingMode {
+    case 0:
+      return OpenLCBProgrammingMode.defaultProgrammingMode.rawValue
+    case 1:
+      return OpenLCBProgrammingMode.directModeProgramming.rawValue
+    case 2:
+      return OpenLCBProgrammingMode.pagedModeProgramming.rawValue
+    default:
+      return nil
+    }
+    
+  }
+  
   // MARK: Public Properties
   
   public var programmerToolId : Int
@@ -134,30 +179,6 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
 
   // MARK: Private Methods
   
-  private var targetNodeId : UInt64? {
-    let result = programmingTrackId == 0 ? dccTrainNodeId : programmingTrackId
-    return result == 0 ? nil : result
-  }
-  
-  private var progModeMask : UInt32? {
-    
-    if programmingTrackId == 0 {
-      return OpenLCBProgrammingMode.defaultProgrammingMode.rawValue
-    }
-    
-    switch programmingMode {
-    case 0:
-      return OpenLCBProgrammingMode.defaultProgrammingMode.rawValue
-    case 1:
-      return OpenLCBProgrammingMode.directModeProgramming.rawValue
-    case 2:
-      return OpenLCBProgrammingMode.pagedModeProgramming.rawValue
-    default:
-      return nil
-    }
-    
-  }
-  
   internal override func resetToFactoryDefaults() {
 
     super.resetToFactoryDefaults()
@@ -183,10 +204,6 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
   
   // MARK: Public Methods
 
-  private let defaultCleanMask     : UInt8 = 0b00010000
-  private let valueCleanMask       : UInt8 = 0b00000001
-  private let valueWriteFailedMask : UInt8 = 0b00000010
-  
   public func isDefaultClean(cvNumber:Int) -> Bool {
     let stat = cvs[statusOffset + cvNumber]
     return (stat & defaultCleanMask) == defaultCleanMask
@@ -517,12 +534,12 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
   }
   
   public func getNumberBase(cvNumber:Int) -> UInt8? {
-    return numberBase.getUInt8(address: cvNumber)
+    return numberBase!.getUInt8(address: cvNumber)
   }
   
   public func setNumberBase(cvNumber:Int, value:UInt8) {
-    numberBase.setUInt(address: cvNumber, value: value)
-    numberBase.save()
+    numberBase?.setUInt(address: cvNumber, value: value)
+    numberBase?.save()
   }
   
   // MARK: OpenLCBNetworkLayerDelegate Methods

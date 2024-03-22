@@ -17,10 +17,24 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
     
     eventRangesConsumed.append(EventRange(startId: OpenLCBWellKnownEvent.locoNetMessage.rawValue, mask: 0x0000ffffffffffff)!)
     
+    addInit()
   }
   
   deinit {
+    
+    refreshTimer?.invalidate()
+    refreshTimer = nil
+    
+    timeoutTimer?.invalidate()
+    timeoutTimer = nil
+    
+    cvTimeoutTimer?.invalidate()
+    cvTimeoutTimer = nil
+    
     locoNet = nil
+    
+    addDeinit()
+    
   }
   
   // MARK: Private Properties
@@ -101,9 +115,9 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
 
     switch ioState {
     case .readingCVWaitingForAck, .readingCVWaitingForResult:
-      sendReadReplyFailure(destinationNodeId: ioSourceNodeId, addressSpace: cvs.space, startAddress: ioStartAddress, errorCode: .temporaryErrorTimeOut)
+      sendReadReplyFailure(destinationNodeId: ioSourceNodeId, addressSpace: cvs!.space, startAddress: ioStartAddress, errorCode: .temporaryErrorTimeOut)
     case .writingCVWaitingForAck:
-      sendWriteReplyFailure(destinationNodeId: ioSourceNodeId, addressSpace: cvs.space, startAddress: ioStartAddress, errorCode: .temporaryErrorTimeOut)
+      sendWriteReplyFailure(destinationNodeId: ioSourceNodeId, addressSpace: cvs!.space, startAddress: ioStartAddress, errorCode: .temporaryErrorTimeOut)
     default:
       break
     }
@@ -166,7 +180,7 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
         
         startCVTimeoutTimer(interval: ackTimeoutInterval)
         
-        locoNet?.writeCV(progMode: progMode.locoNetProgrammingMode(isProgrammingTrack: false), cv: Int(ioAddress), address: Int(dccAddress), value: cvs.getUInt8(address: ioAddress)!)
+        locoNet?.writeCV(progMode: progMode.locoNetProgrammingMode(isProgrammingTrack: false), cv: Int(ioAddress), address: Int(dccAddress), value: cvs!.getUInt8(address: ioAddress)!)
         
       }
       else {
@@ -174,7 +188,7 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
           for addr in Int(address) ... Int(address) + data.count - 1 {
             setDefaultStatus(cvNumber: addr, isClean: true)
           }
-          cvs.save()
+          cvs?.save()
         }
         sendWriteReply(destinationNodeId: sourceNodeId, addressSpace: memorySpace.space, startAddress: startAddress)
       }
@@ -193,7 +207,7 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
     var mask : UInt64 = 1
     
     for fn in 0 ... 28 {
-      if let fx = functions.getUInt8(address: fn), fx != 0 {
+      if let fx = functions!.getUInt8(address: fn), fx != 0 {
         standardFunctions |= mask
       }
       mask <<= 1
@@ -208,7 +222,7 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
     var mask : UInt64 = 1
     
     for fn in 29 ... 68 {
-      if let fx = functions.getUInt8(address: fn), fx != 0 {
+      if let fx = functions!.getUInt8(address: fn), fx != 0 {
         expandedFunctions |= mask
       }
       mask <<= 1
@@ -453,7 +467,7 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
         locoNet?.readCV(progMode: progMode.locoNetProgrammingMode(isProgrammingTrack: true), cv: self.ioAddress, address: 0)
       case .writingCVWaitingForAck:
         startCVTimeoutTimer(interval: ackTimeoutInterval)
-        locoNet?.writeCV(progMode: progMode.locoNetProgrammingMode(isProgrammingTrack: true), cv: ioAddress, address: 0, value: cvs.getUInt8(address: ioAddress)!)
+        locoNet?.writeCV(progMode: progMode.locoNetProgrammingMode(isProgrammingTrack: true), cv: ioAddress, address: 0, value: cvs!.getUInt8(address: ioAddress)!)
       default:
         break
       }
@@ -472,22 +486,22 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
         
         setValueStatus(cvNumber: ioAddress, isClean: true)
         
-        if !isDefaultClean(cvNumber: ioAddress), let value = cvs.getUInt8(address: ioAddress) {
-          cvs.setUInt(address: defaultOffset + ioAddress, value: value)
+        if !isDefaultClean(cvNumber: ioAddress), let value = cvs!.getUInt8(address: ioAddress) {
+          cvs?.setUInt(address: defaultOffset + ioAddress, value: value)
           setDefaultStatus(cvNumber: ioAddress, isClean: true)
         }
         
-        cvs.save()
+        cvs?.save()
         
         ioAddress += 1
         
         if ioAddress < Int(ioStartAddress & OpenLCBProgrammingMode.addressMask) + ioCount {
           ioState = .writingCVWaitingForAck
           startCVTimeoutTimer(interval: ackTimeoutInterval)
-          locoNet?.writeCV(progMode: progMode.locoNetProgrammingMode(isProgrammingTrack: false), cv: Int(ioAddress), address: Int(dccAddress), value: cvs.getUInt8(address: ioAddress)!)
+          locoNet?.writeCV(progMode: progMode.locoNetProgrammingMode(isProgrammingTrack: false), cv: Int(ioAddress), address: Int(dccAddress), value: cvs!.getUInt8(address: ioAddress)!)
         }
         else {
-          sendWriteReply(destinationNodeId: ioSourceNodeId, addressSpace: cvs.space, startAddress: ioStartAddress)
+          sendWriteReply(destinationNodeId: ioSourceNodeId, addressSpace: cvs!.space, startAddress: ioStartAddress)
         }
 
       default:

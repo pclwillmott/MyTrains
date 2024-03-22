@@ -39,8 +39,6 @@ class SlotViewVC : MyTrainsViewController, OpenLCBLocoNetMonitorDelegate {
       self.view.window?.title = "\(self.view.window!.title) (\(monitorNode.nodeId.toHexDotFormat(numberOfBytes: 6)))"
     }
     
-    networkLayer = monitorNode!.networkLayer
-    
     monitorNode?.delegate = self
 
     slotTableViewDS.slots = slots
@@ -54,8 +52,6 @@ class SlotViewVC : MyTrainsViewController, OpenLCBLocoNetMonitorDelegate {
   private var slotTableViewDS : SlotTableViewDS = SlotTableViewDS()
   
   private var timer : Timer?
-  
-  private var networkLayer : OpenLCBNetworkLayer?
   
   private var gatewayDS = ComboBoxSimpleDS()
   

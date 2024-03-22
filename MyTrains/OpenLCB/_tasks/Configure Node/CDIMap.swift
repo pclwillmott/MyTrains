@@ -16,9 +16,13 @@ public class CDIMap {
     self.field = field
   }
   
+  deinit {
+    field = nil
+  }
+  
   // MARK: Public Properties
   
-  public weak var field : CDIElement!
+  public weak var field : CDIElement?
   
   // MARK: Public Methods
   
@@ -26,11 +30,11 @@ public class CDIMap {
     
     comboBox.removeAllItems()
     
-    for item in field.map {
+    for item in field!.map {
       comboBox.addItem(withObjectValue: item.stringValue)
     }
     
-    if let defaultValue = field.defaultValue {
+    if let defaultValue = field?.defaultValue {
       selectItem(comboBox: comboBox, property: defaultValue)
     }
     
@@ -42,7 +46,7 @@ public class CDIMap {
     
     comboBox.deselectItem(at: comboBox.indexOfSelectedItem)
     
-    for item in field.map {
+    for item in field!.map {
       if property == item.property {
         comboBox.selectItem(at: index)
         return
@@ -56,7 +60,7 @@ public class CDIMap {
     if comboBox.indexOfSelectedItem == -1 {
       return nil
     }
-    return field.map[comboBox.indexOfSelectedItem].property
+    return field!.map[comboBox.indexOfSelectedItem].property
   }
 
 }

@@ -224,7 +224,7 @@ extension OpenLCBCANGateway {
   // This is running in the main thread
   @objc internal func aliasTimerAction() {
     
-    aliasLock.lock()
+    aliasLock!.lock()
     
     let now = Date.timeIntervalSinceReferenceDate
     
@@ -331,7 +331,7 @@ extension OpenLCBCANGateway {
       
     }
     
-    aliasLock.unlock()
+    aliasLock!.unlock()
     
     send(frames: frames, isBackgroundThread: false)
     

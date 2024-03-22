@@ -138,6 +138,12 @@ public class LayoutNode : OpenLCBNodeVirtual {
       
     }
     
+    addInit()
+    
+  }
+  
+  deinit {
+    addDeinit()
   }
   
   // MARK: Private Properties
@@ -281,7 +287,7 @@ public class LayoutNode : OpenLCBNodeVirtual {
 
   public override func variableChanged(space: OpenLCBMemorySpace, address: Int) {
     
-    guard let networkLayer, let appNode else {
+    guard let appNode else {
       return
     }
     
@@ -292,7 +298,7 @@ public class LayoutNode : OpenLCBNodeVirtual {
         if layoutState == .activated {
           sendWellKnownEvent(eventId: .myTrainsLayoutActivated, payload: appNode.nodeId.nodeIdBigEndianData)
         }
-        else if networkLayer.layoutNodeId == nodeId {
+        else if appDelegate.networkLayer!.layoutNodeId == nodeId {
           sendWellKnownEvent(eventId: .myTrainsLayoutDeactivated, payload: appNode.nodeId.nodeIdBigEndianData)
         }
       default:

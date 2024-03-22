@@ -12,9 +12,17 @@ class CDIDataView: CDIView {
   
   // MARK: Destructors
   
+  required init?(coder: NSCoder) {
+    super.init(coder: coder)
+    addInit()
+  }
+  
+  override init(frame frameRect: NSRect) {
+    super.init(frame: frameRect)
+    addInit()
+  }
+  
   deinit {
-    debugLog("deinit")
-    self.subviews.removeAll()
     box?.subviews.removeAll()
     box = nil
     for view in stackView!.arrangedSubviews {
@@ -23,11 +31,18 @@ class CDIDataView: CDIView {
     stackView = nil
     dataButtonView?.subviews.removeAll()
     dataButtonView = nil
+    writeButton?.target = nil
     writeButton = nil
+    refreshButton?.target = nil
     refreshButton = nil
+    copyButton?.target = nil
     copyButton = nil
+    pasteButton?.target = nil
     pasteButton = nil
+    newEventId?.target = nil
     newEventId = nil
+    subviews.removeAll()
+    addDeinit()
   }
   
   // MARK: Private & Internal properties

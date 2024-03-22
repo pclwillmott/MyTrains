@@ -7,6 +7,6 @@
 
 import Foundation
 
-public protocol OpenLCBMemorySpaceDelegate {
-  func memorySpaceChanged(memorySpace:OpenLCBMemorySpace, startAddress:Int, endAddress:Int)
+@objc public protocol OpenLCBMemorySpaceDelegate {
+  @objc func memorySpaceChanged(memorySpace:OpenLCBMemorySpace, startAddress:Int, endAddress:Int)
 }

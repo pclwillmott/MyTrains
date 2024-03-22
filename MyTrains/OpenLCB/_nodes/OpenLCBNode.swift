@@ -21,12 +21,15 @@ public class OpenLCBNode : NSObject {
     
     super.init()
     
+    addInit()
+    
   }
   
   deinit {
-    debugLog("deinit")
     addressSpaceInformation.removeAll()
     configurationOptions = nil
+    _supportedProtocols.removeAll()
+    addDeinit()
   }
   
   // MARK: Private Properties

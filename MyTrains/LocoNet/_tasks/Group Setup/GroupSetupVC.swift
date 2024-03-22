@@ -8,7 +8,7 @@
 import Foundation
 import AppKit
 
-class GroupSetupVC: MyTrainsViewController, MyTrainsControllerDelegate {
+class GroupSetupVC: MyTrainsViewController {
   
   // MARK: Window & View Control
   
@@ -107,37 +107,6 @@ class GroupSetupVC: MyTrainsViewController, MyTrainsControllerDelegate {
     timer = nil
   }
   
-  // MARK: MyTrainsControllerDelegate Methods
-  
-  /*
-  func interfacesUpdated(interfaces: [Interface]) {
-    
-    if observerId != -1 {
-      self.interface?.removeObserver(id: observerId)
-      observerId = -1
-    }
-    
-    let interfaceId = UserDefaults.standard.string(forKey: DEFAULT.MONITOR_INTERFACE_ID) ?? ""
-
-    cboInterface.removeAllItems()
-    cboInterface.deselectItem(at: cboInterface.indexOfSelectedItem)
-    
-    for interface in interfaces {
-      
-      let name = interface.deviceName
-      
-      cboInterface.addItem(withObjectValue: name)
-      
-      if interfaceId == name {
-        cboInterface.selectItem(at: cboInterface.numberOfItems-1)
-        self.interface = interface as? InterfaceLocoNet
-        observerId = interface.addObserver(observer: self)
-      }
-      
-    }
-    
-  }
-*/
   // MARK: NetworkMessengerDelegate Methods
   
   @objc func networkMessageReceived(message: LocoNetMessage) {

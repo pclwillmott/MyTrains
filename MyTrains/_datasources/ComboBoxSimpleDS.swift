@@ -14,10 +14,13 @@ class ComboBoxSimpleDS : NSObject, NSComboBoxDataSource {
   
   override init() {
     super.init()
+    addInit()
   }
   
   deinit {
+    _dictionary.removeAll()
     _items.removeAll()
+    addDeinit()
   }
   
   // MARK: Private Properties

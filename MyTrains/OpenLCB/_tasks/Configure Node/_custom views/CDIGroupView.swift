@@ -11,16 +11,28 @@ import AppKit
 class CDIGroupView: CDIView, CDIStackViewManagerDelegate {
  
   // MARK: Destructors
+ 
+  required init?(coder: NSCoder) {
+    super.init(coder: coder)
+    addInit()
+  }
   
+  override init(frame frameRect: NSRect) {
+    super.init(frame: frameRect)
+    addInit()
+  }
+
   deinit {
-    debugLog("deinit")
-    self.subviews.removeAll()
     for view in contentView!.arrangedSubviews {
       contentView?.removeArrangedSubview(view)
     }
     contentView = nil
+    disclosureButton?.target = nil
     disclosureButton = nil
     title = nil
+    lastDisclosureConstraint = nil
+    subviews.removeAll()
+    addDeinit()
   }
   
   // MARK: Private & Internal Methods

@@ -11,11 +11,23 @@ import AppKit
 class CDIGroupTabView : CDIGroupView {
   
   // MARK: Destructors
+ 
+  required init?(coder: NSCoder) {
+    super.init(coder: coder)
+    addInit()
+  }
   
+  override init(frame frameRect: NSRect) {
+    super.init(frame: frameRect)
+    addInit()
+  }
+
   deinit {
-    debugLog("deinit")
-    self.subviews.removeAll()
+    buttonConstraints.removeAll()
     _tabViewItems.removeAll()
+    for tab in _tabs {
+      tab.target = nil
+    }
     _tabs.removeAll()
     for view in tabSelectorView!.arrangedSubviews {
       tabSelectorView?.removeArrangedSubview(view)
@@ -27,6 +39,8 @@ class CDIGroupTabView : CDIGroupView {
     tabContentView = nil
     btnPrevious = nil
     btnNext = nil
+    subviews.removeAll()
+    addDeinit()
   }
   
   // MARK: Drawing Stuff
@@ -96,6 +110,10 @@ class CDIGroupTabView : CDIGroupView {
   
   internal var _tabs : [NSButton] = []
   
+  internal var buttonConstraints : [NSLayoutConstraint] = []
+  
+  internal var _encodedReplicationName : String = "Tab"
+
   internal var currentPage : Int {
     guard tabsToShow > 0 else {
       return 0
@@ -116,8 +134,6 @@ class CDIGroupTabView : CDIGroupView {
     return (numberOfTabViewItems - 1 ) / tabsToShow + 1
   }
   
-  internal var buttonConstraints : [NSLayoutConstraint] = []
-  
   internal var tabsToShow : Int {
     
     var maxButtonWidth : CGFloat = 0.0
@@ -135,8 +151,6 @@ class CDIGroupTabView : CDIGroupView {
     return result
     
   }
-
-  internal var _encodedReplicationName : String = "Tab"
 
   internal var _replicationName : String {
     

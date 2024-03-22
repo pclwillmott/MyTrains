@@ -13,6 +13,7 @@ public class OpenLCBNodeConfigurationOptions {
   
   init(message:OpenLCBMessage) {
     encodedOptions = message.payload
+    addInit()
   }
   
   init() {
@@ -35,11 +36,13 @@ public class OpenLCBNodeConfigurationOptions {
     isStreamSupported         = false
     
     name = ""
+    
+    addInit()
 
   }
   
   deinit {
-    debugLog("deinit")
+    addDeinit()
   }
 
   // MARK: Private Properties

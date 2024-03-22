@@ -15,6 +15,11 @@ public class OpenLCBTransportLayerAlias {
     self.alias = alias
     self.nodeId = nodeId
     self.timeStamp = Date.timeIntervalSinceReferenceDate
+    addInit()
+  }
+  
+  deinit {
+    addDeinit()
   }
   
   // MARK: Public Properties

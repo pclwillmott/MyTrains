@@ -351,10 +351,24 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
       
     }
     
+    addInit()
   }
   
   deinit {
+    
     locoNet = nil
+    
+    trainNodeIdLookup.removeAll()
+    
+    eventQueue.removeAll()
+    
+    lastDetectionSectionShorted.removeAll()
+    
+    timeoutTimer?.invalidate()
+    timeoutTimer = nil
+    
+    addDeinit()
+    
   }
   
   // MARK: Private Properties

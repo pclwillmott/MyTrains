@@ -34,8 +34,6 @@ class SetFastClockVC: MyTrainsViewController, OpenLCBClockDelegate, OpenLCBConfi
     
     super.viewWillAppear()
     
-    networkLayer = configurationTool!.networkLayer
-    
     nodeId = configurationTool!.nodeId
     
     fastClock = networkLayer!.fastClock

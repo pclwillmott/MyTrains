@@ -7,7 +7,7 @@
 
 import Cocoa
 
-class MainVC: NSViewController, MyTrainsControllerDelegate, LayoutDelegate, OpenLCBClockDelegate {
+class MainVC: NSViewController, LayoutDelegate, OpenLCBClockDelegate {
 
   override func viewWillAppear() {
 
@@ -96,7 +96,7 @@ class MainVC: NSViewController, MyTrainsControllerDelegate, LayoutDelegate, Open
   
   // MARK: OpenLCBClockDelegate Methods
   
-  func clockTick(clock: OpenLCBClock) {
+  @objc func clockTick(clock: OpenLCBClock) {
     clockView.subState = clock.subState
     clockView.date = clock.date
     let dateFormatter = DateFormatter()
@@ -115,20 +115,6 @@ class MainVC: NSViewController, MyTrainsControllerDelegate, LayoutDelegate, Open
   
   func switchBoardUpdated() {
     switchBoardView.needsDisplay = true
-  }
-  
-  func myTrainsControllerUpdated(myTrainsController: MyTrainsController) {
-    
-    cboLayout.deselectItem(at: cboLayout.indexOfSelectedItem)
-    
-    cboLayoutDS = ComboBoxDBDS(tableName: TABLE.LAYOUT, codeColumn: LAYOUT.LAYOUT_ID, displayColumn: LAYOUT.LAYOUT_NAME, sortColumn: LAYOUT.LAYOUT_NAME)
-    
-    cboLayout.dataSource = cboLayoutDS
-    
-    if let index = cboLayoutDS!.indexOfItemWithCodeValue(code: myTrainsController.layoutId) {
-      cboLayout.selectItem(at: index)
-    }
-    
   }
   
   // MARK: Outlets & Actions

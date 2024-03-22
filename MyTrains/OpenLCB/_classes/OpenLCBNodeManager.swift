@@ -12,8 +12,13 @@ public class OpenLCBNodeManager {
   
   // MARK: Constructors & Destructors
   
+  init() {
+    addInit()
+  }
+  
   deinit {
     removeAll()
+    addDeinit()
   }
   
   // MARK: Private Properties

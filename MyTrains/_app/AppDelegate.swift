@@ -20,7 +20,6 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
   // MARK: Destructors
   
   deinit {
-    debugLog("deinit")
     networkLayer = nil
   }
   
@@ -171,7 +170,6 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
  
     if Database.isEmpty() {
       let vc = MyTrainsWindow.selectMasterNode.viewController as! SelectMasterNodeVC
-      vc.networkLayer = networkLayer
       vc.showWindow()
     }
     else {
@@ -323,6 +321,8 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
     
     windowsLoaded = true
     
+//    showInstances()
+    
   }
   
   @objc func checkPortsTimerAction() {
@@ -467,11 +467,11 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
       case .resetToFactoryDefaults:
         completeResetToFactoryDefaults()
       case .terminating:
+        self.networkLayer = nil
         checkPortsTimer?.invalidate()
         if let activity {
           ProcessInfo.processInfo.endActivity(activity)
         }
-        exit(0)
         
       default:
         break
@@ -574,7 +574,6 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
       case .createApplicationNode:
         
         let vc = MyTrainsWindow.selectMasterNode.viewController as! SelectMasterNodeVC
-        vc.networkLayer = networkLayer
         vc.showWindow()
 
       case .resetToFactoryDefaults:
@@ -602,7 +601,7 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
             
           }
           
-          if networkLayer!.configurationToolManager.isLocked {
+          if networkLayer!.configurationToolManager!.isLocked {
             
             let alert = NSAlert()
             

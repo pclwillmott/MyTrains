@@ -77,10 +77,12 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
       
     }
     
+    addInit()
+    
   }
   
   deinit {
-    debugLog("deinit")
+    nodeIdCacheTimer?.invalidate()
     nodeIdCacheTimer = nil
     nodeIdCacheLock = nil
     nodeIdCache.removeAll()
@@ -90,6 +92,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     observers.removeAll()
     locoNetGateways.removeAll()
     viewOptions = nil
+    addDeinit()
   }
   
   // MARK: Private Properties
@@ -267,14 +270,10 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   
   public var nextGatewayNodeId : UInt64? {
     
-    guard let networkLayer else {
-      return nil
-    }
-    
     let firstGatewayNodeId = nodeId + 2
     
     for candidate in firstGatewayNodeId ... min(nodeId + 0xff, firstGatewayNodeId + UInt64(maximumNumberOfGateways) - 1) {
-      if !networkLayer.virtualNodeLookup.keys.contains(candidate) {
+      if !appDelegate.networkLayer!.virtualNodeLookup.keys.contains(candidate) {
         return candidate
       }
     }
@@ -353,7 +352,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
 
   @objc func nodeIdCacheTimerAction() {
     nodeIdCacheTimer = nil
-    networkLayer?.nodeIdCacheCompleted()
+    appDelegate.networkLayer?.nodeIdCacheCompleted()
   }
   
   private func startNodeIdCacheTimer(interval: TimeInterval) {
@@ -617,7 +616,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   
   public override func openLCBMessageReceived(message: OpenLCBMessage) {
 
-    guard let networkLayer, let sourceNodeId = message.sourceNodeId else {
+    guard let sourceNodeId = message.sourceNodeId else {
       return
     }
     
@@ -673,7 +672,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
         case .myTrainsLayoutDeleted:
 
           if sourceNodeId == appLayoutId {
-            networkLayer.layoutNodeId = nil
+            appDelegate.networkLayer?.layoutNodeId = nil
           }
           
           layoutList.removeValue(forKey: sourceNodeId)
@@ -685,10 +684,10 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
           let layoutState : LayoutState = (event == .myTrainsLayoutActivated) ? .activated : .deactivated
           
           if layoutState == .activated {
-            networkLayer.layoutNodeId = sourceNodeId
+            appDelegate.networkLayer?.layoutNodeId = sourceNodeId
           }
           else if let appLayoutId, appLayoutId == sourceNodeId {
-            networkLayer.layoutNodeId = nil
+            appDelegate.networkLayer?.layoutNodeId = nil
           }
           
           if let item = layoutList[sourceNodeId] {
@@ -764,7 +763,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
      
     case .identifyEventsGlobal, .identifyEventsAddressed:
       
-      for (nodeId, node) in networkLayer.virtualNodeLookup {
+      for (nodeId, node) in appDelegate.networkLayer!.virtualNodeLookup {
         if node.visibility == .visibilitySemiPublic {
           sendIdentifyEventsAddressed(destinationNodeId: nodeId)
         }

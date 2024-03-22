@@ -19,12 +19,15 @@ public class MTPipe : NSObject {
   
   init(name:String) {
     _name = "/tmp/\(name)"
+    addInit()
   }
   
   // MARK: Destructors
   
   deinit {
     close()
+    _delegate = nil
+    addDeinit()
   }
   
   // MARK: Private Properties
@@ -33,7 +36,7 @@ public class MTPipe : NSObject {
   
   private var _fd : Int32 = -1
   
-  private var _delegate : MTPipeDelegate?
+  private weak var _delegate : MTPipeDelegate?
   
   private var quit = false
   

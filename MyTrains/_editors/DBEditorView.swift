@@ -55,26 +55,36 @@ class DBEditorView: NSView {
 
     // custom initialization logic
     
+    addInit()
+    
+  }
+  
+  deinit {
+    dataSource = nil
+    _dictionary?.removeAll()
+    _dictionary = nil
+    _tabView = nil
+    addDeinit()
   }
   
   // MARK: Private Properties
   
   private var editorState : DBEditorState = .select
   
-  private var dataSource : ComboBoxDictDS = ComboBoxDictDS()
+  private var dataSource : ComboBoxDictDS? = ComboBoxDictDS()
   
   private var _dictionary : [Int:Any]?
   
   private var _modified = false
 
-  private var _tabView : NSTabView?
+  private weak var _tabView : NSTabView?
   
   private var first = true
   
   // MARK: Public Properties
   
   public var editorObject : EditorObject? {
-    return dataSource.editorObjectAt(index: cboSelect.indexOfSelectedItem)
+    return dataSource!.editorObjectAt(index: cboSelect.indexOfSelectedItem)
   }
 
   public var tabView : NSTabView? {
@@ -88,10 +98,10 @@ class DBEditorView: NSView {
   }
   
   public func setSelection(key:Int) {
-    if dataSource.numberOfItems(in: cboSelect) > 0 {
-      if let index = dataSource.indexWithKey(key: key) {
+    if dataSource!.numberOfItems(in: cboSelect) > 0 {
+      if let index = dataSource!.indexWithKey(key: key) {
         cboSelect.selectItem(at: index)
-        if let editorObject = dataSource.editorObjectAt(index: cboSelect.indexOfSelectedItem) {
+        if let editorObject = dataSource?.editorObjectAt(index: cboSelect.indexOfSelectedItem) {
           delegate?.setupFields(dbEditorView: self, editorObject: editorObject)
         }
       }
@@ -108,19 +118,19 @@ class DBEditorView: NSView {
     set(value) {
       _dictionary = value
       if let dict = _dictionary {
-        dataSource.dictionary = dict
+        dataSource?.dictionary = dict
       }
       else {
-        dataSource.dictionary = [:]
+        dataSource?.dictionary = [:]
       }
       cboSelect.dataSource = nil
       cboSelect.dataSource = dataSource
       cboSelect.reloadData()
       
       if first {
-        if dataSource.numberOfItems(in: cboSelect) > 0 {
+        if dataSource!.numberOfItems(in: cboSelect) > 0 {
           cboSelect.selectItem(at: 0)
-          if let editorObject = dataSource.editorObjectAt(index: cboSelect.indexOfSelectedItem) {
+          if let editorObject = dataSource?.editorObjectAt(index: cboSelect.indexOfSelectedItem) {
             delegate?.setupFields(dbEditorView: self, editorObject: editorObject)
           }
         }
@@ -177,7 +187,7 @@ class DBEditorView: NSView {
   @IBOutlet weak var cboSelect: NSComboBox!
   
   @IBAction func cboSelectAction(_ sender: NSComboBox) {
-    if let editorObject = dataSource.editorObjectAt(index: cboSelect.indexOfSelectedItem) {
+    if let editorObject = dataSource?.editorObjectAt(index: cboSelect.indexOfSelectedItem) {
       delegate?.setupFields(dbEditorView: self, editorObject: editorObject)
     }
   }
@@ -195,7 +205,7 @@ class DBEditorView: NSView {
   
   @IBAction func btnEditAction(_ sender: NSButton) {
     editorState = .editExisting
-    if let editorObject = dataSource.editorObjectAt(index: cboSelect.indexOfSelectedItem) {
+    if let editorObject = dataSource?.editorObjectAt(index: cboSelect.indexOfSelectedItem) {
       delegate?.clearFields(dbEditorView: self)
       delegate?.setupFields(dbEditorView: self, editorObject: editorObject)
     }
@@ -235,7 +245,7 @@ class DBEditorView: NSView {
         }
         break
       case .editExisting:
-        if let editorObject = dataSource.editorObjectAt(index: cboSelect.indexOfSelectedItem) {
+        if let editorObject = dataSource?.editorObjectAt(index: cboSelect.indexOfSelectedItem) {
           delegate?.saveExisting(dbEditorView: self, editorObject: editorObject)
           key = editorObject.primaryKey
         }
@@ -247,7 +257,7 @@ class DBEditorView: NSView {
       if key == -1 {
         cboSelect.deselectItem(at: cboSelect.indexOfSelectedItem)
       }
-      else if let index = dataSource.indexWithKey(key: key) {
+      else if let index = dataSource?.indexWithKey(key: key) {
         cboSelect.selectItem(at: index)
       }
 
@@ -265,7 +275,7 @@ class DBEditorView: NSView {
       delegate?.clearFields(dbEditorView: self)
       break
     case .editExisting:
-      if let editorObject = dataSource.editorObjectAt(index: cboSelect.indexOfSelectedItem) {
+      if let editorObject = dataSource?.editorObjectAt(index: cboSelect.indexOfSelectedItem) {
         delegate?.setupFields(dbEditorView: self, editorObject: editorObject)
       }
       break
@@ -282,7 +292,7 @@ class DBEditorView: NSView {
     
     var deleted = false
     
-    if let editorObject = dataSource.editorObjectAt(index: cboSelect.indexOfSelectedItem) {
+    if let editorObject = dataSource?.editorObjectAt(index: cboSelect.indexOfSelectedItem) {
       
       let alert = NSAlert()
 

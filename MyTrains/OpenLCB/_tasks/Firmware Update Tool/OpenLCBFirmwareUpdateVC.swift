@@ -29,8 +29,6 @@ class OpenLCBFirmwareUpdateVC: MyTrainsViewController, OpenLCBConfigurationToolD
       return
     }
     
-    networkLayer = configurationTool.networkLayer
-    
     nodeId = configurationTool.nodeId
     
     let title = node.userNodeName == "" ? "\(node.manufacturerName) - \(node.nodeModelName)" : node.userNodeName
@@ -44,8 +42,6 @@ class OpenLCBFirmwareUpdateVC: MyTrainsViewController, OpenLCBConfigurationToolD
   }
   
   // MARK: Private Properties
-  
-  private var networkLayer : OpenLCBNetworkLayer?
   
   private var nodeId : UInt64 = 0
   

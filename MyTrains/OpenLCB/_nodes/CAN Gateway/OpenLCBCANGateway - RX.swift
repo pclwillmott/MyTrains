@@ -78,7 +78,7 @@ extension OpenLCBCANGateway {
     // Send a clone to the monitor system. It has to be a clone as the multi-part
     // message decode damages the original frame.
     
-    networkLayer?.canFrameReceived(gateway: self, frame: frame.clone)
+    appDelegate.networkLayer?.canFrameReceived(gateway: self, frame: frame.clone)
 
     var frames : [LCCCANFrame] = []
     
@@ -88,13 +88,13 @@ extension OpenLCBCANGateway {
     
     // Items in the initNodeQueue are all in inhibited state, and only the first is attempting to get an alias.
     
-    aliasLock.lock()
+    aliasLock!.lock()
     for (alias, item) in managedAliases {
       if alias == frame.sourceNIDAlias && item.state != .mappingDeclared {
         managedAliases.removeValue(forKey: alias)
       }
     }
-    aliasLock.unlock()
+    aliasLock!.unlock()
     
     // A node shall compare the source Node ID alias in each received frame against all reserved Node ID
     // aliases it currently holds. In case of a match, the receiving node shall:
@@ -116,12 +116,12 @@ extension OpenLCBCANGateway {
       // ID alias.
       
       else {
-        aliasLock.lock()
+        aliasLock!.lock()
         managedAliases.removeValue(forKey: item.alias)
         removeNodeIdAliasMapping(nodeId: item.nodeId)
         removeManagedNodeIdAliasMapping(nodeId: item.nodeId)
         waitingForAlias.insert(item.nodeId)
-        aliasLock.unlock()
+        aliasLock!.unlock()
         frames.append(contentsOf: createAliasMapResetFrame(nodeId: item.nodeId, alias: item.alias))
       }
 
@@ -193,9 +193,9 @@ extension OpenLCBCANGateway {
           // The node shall restart the process at the beginning if, before completion of the process, any error is
           // encountered during frame transmission.
           
-          aliasLock.lock()
+          aliasLock!.lock()
           managedAliases.removeAll()
-          aliasLock.unlock()
+          aliasLock!.unlock()
           
         default:
           break
@@ -345,7 +345,7 @@ extension OpenLCBCANGateway {
       return
     }
     
-    inputQueueLock.lock()
+    inputQueueLock!.lock()
     
     var frames : [LCCCANFrame] = []
     
@@ -435,7 +435,7 @@ extension OpenLCBCANGateway {
     
     send(frames: frames, isBackgroundThread: true)
     
-    inputQueueLock.unlock()
+    inputQueueLock!.unlock()
     
     DispatchQueue.main.async {
       self.startWaitInputTimer(interval: 1.0)

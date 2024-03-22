@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol OpenLCBClockDelegate {
-  func clockTick(clock:OpenLCBClock)
+@objc public protocol OpenLCBClockDelegate {
+  @objc func clockTick(clock:OpenLCBClock)
 }
 

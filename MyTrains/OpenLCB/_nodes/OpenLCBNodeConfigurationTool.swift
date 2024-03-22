@@ -24,7 +24,14 @@ public class OpenLCBNodeConfigurationTool : OpenLCBNodeVirtual {
     if !memorySpacesInitialized {
       resetToFactoryDefaults()
     }
+    
+    addInit()
 
+  }
+  
+  deinit {
+    delegate = nil
+    addDeinit()
   }
   
   // MARK: Public Properties

@@ -10,6 +10,8 @@ import AppKit
 
 public class OpenLCBConfigurationToolManager : OpenLCBNodeManager {
   
+  // MARK: Constructors and Destructors
+  
   // MARK: Private Properties
   
   private var exclusiveLock : Bool = false

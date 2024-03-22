@@ -17,11 +17,18 @@ public class LocoNetMessage : NSObject {
       self.message.append(LocoNetMessage.checkSum(data: message))
     }
     super.init()
+    addInit()
   }
 
   init(message: LocoNetMessage) {
     self.message = message.message
     super.init()
+    addInit()
+  }
+  
+  deinit {
+    message.removeAll()
+    addDeinit()
   }
   
   // MARK: Private Properties
@@ -72,9 +79,7 @@ public class LocoNetMessage : NSObject {
   public var timeSinceLastMessage : TimeInterval = 0.0
   
   public var timeoutCode : UInt8 {
-    get {
-      return message.count == 2 && message[0] == 0x7f ? message[1] : 0x00
-    }
+    return message.count == 2 && message[0] == 0x7f ? message[1] : 0x00
   }
   
   public var slotData : [UInt8] {
@@ -100,13 +105,11 @@ public class LocoNetMessage : NSObject {
   }
   
   public var messageHex : String {
-    get {
-      var str : String = ""
-      for x in message {
-        str += String(format: "%02X ",x)
-      }
-      return str.trimmingCharacters(in: [" "])
+    var str : String = ""
+    for x in message {
+      str += String(format: "%02X ",x)
     }
+    return str.trimmingCharacters(in: [" "])
   }
   
   public var immPacketRepeatCount : LocoNetIMMPacketRepeat? {

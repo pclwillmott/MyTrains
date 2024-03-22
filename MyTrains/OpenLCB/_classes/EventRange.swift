@@ -30,6 +30,8 @@ public class EventRange {
     
     startId = eventId & ~mask
     
+    addInit()
+    
   }
   
   init?(startId:UInt64, mask:UInt64) {
@@ -54,7 +56,13 @@ public class EventRange {
     let invert = (startId & firstBitOfBase) != 0
     
     eventId = startId | (invert ? 0 : mask)
+   
+    addInit()
     
+  }
+  
+  deinit {
+    addDeinit()
   }
   
   // MARK: Public Properties

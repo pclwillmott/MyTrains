@@ -13,7 +13,7 @@ class CDIView: NSView {
   // MARK: Destructors
   
   deinit {
-    debugLog("deinit")
+    subviews.removeAll()
   }
   
   // MARK: Drawing Stuff

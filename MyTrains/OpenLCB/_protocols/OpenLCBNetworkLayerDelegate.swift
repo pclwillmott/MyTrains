@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol OpenLCBNetworkLayerDelegate {
-  func networkLayerStateChanged(networkLayer:OpenLCBNetworkLayer)
-  func openLCBMessageReceived(message:OpenLCBMessage)
+@objc public protocol OpenLCBNetworkLayerDelegate {
+  @objc func networkLayerStateChanged(networkLayer:OpenLCBNetworkLayer)
+  @objc func openLCBMessageReceived(message:OpenLCBMessage)
 }

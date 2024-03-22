@@ -10,12 +10,17 @@ import AppKit
 
 public class ViewNodeInfoMemorySpaceInfoTVDS : NSObject, NSTableViewDataSource, NSTableViewDelegate {
 
-  // MARK: Constructors
+  // MARK: Constructors & Destructors
   
-  override public init() {
-    
+  public override init() {
     super.init()
-    
+    addInit()
+  }
+  
+  deinit {
+    _addressSpaceInformation.removeAll()
+    items.removeAll()
+    addDeinit()
   }
   
   // MARK: Private Properties
@@ -52,8 +57,6 @@ public class ViewNodeInfoMemorySpaceInfoTVDS : NSObject, NSTableViewDataSource, 
   // Sets the data object for an item in the specified row and column.
   public func tableView(_ tableView: NSTableView, setObjectValue object: Any?, for tableColumn: NSTableColumn?, row: Int) {
   }
-  
-
   
   public func tableView(_ tableView: NSTableView,
                         viewFor tableColumn: NSTableColumn?,row: Int) -> NSView? {

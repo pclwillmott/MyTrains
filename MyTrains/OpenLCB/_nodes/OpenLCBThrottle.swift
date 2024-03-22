@@ -46,6 +46,29 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
       resetToFactoryDefaults()
     }
     
+    addInit()
+    
+  }
+  
+  deinit {
+    
+    searchResults.removeAll()
+    
+    xmlParser = nil
+    
+    fdi.removeAll()
+
+    timeoutTimer?.invalidate()
+    timeoutTimer = nil
+    
+    _delegate = nil
+    
+    _trainNode = nil
+    
+    fdiItems.removeAll()
+
+    addDeinit()
+    
   }
   
   // MARK: Private Properties
@@ -64,6 +87,12 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
   
   private var fdiItem : OpenLCBFDIItem = (number:0, kind:.binary, name:"")
 
+  private var inFunction = false
+
+  private var inName = false
+
+  private var inNumber = false
+  
   private var controllerState : ControllerState = .idle {
     didSet {
       
@@ -112,7 +141,7 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
     }
   }
   
-  private var _delegate : OpenLCBThrottleDelegate?
+  private weak var _delegate : OpenLCBThrottleDelegate?
   
   private var _trainNode : OpenLCBNode? {
     didSet {
@@ -692,10 +721,6 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
   }
   
   #endif
-  
-  private var inFunction = false
-  private var inName = false
-  private var inNumber = false
   
   public func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
 

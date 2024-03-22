@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Cocoa
+import AppKit
 
 class OpenLCBMonitorVC: MyTrainsViewController, OpenLCBNetworkObserverDelegate {
   
@@ -16,17 +16,19 @@ class OpenLCBMonitorVC: MyTrainsViewController, OpenLCBNetworkObserverDelegate {
     
     appDelegate.networkLayer!.removeObserver(id: observerId)
     
-    view.subviews.removeAll()
+    monitorView?.subviews.removeAll()
+    frame = nil
+    btnClear?.target = nil
+    btnClear = nil
+    btnPause?.target = nil
+    btnPause = nil
+    gatewayViews.removeAll()
+    postOfficeView = nil
     for view in stackView!.arrangedSubviews {
       stackView?.removeArrangedSubview(view)
     }
     stackView = nil
-    monitorView?.subviews.removeAll()
-    frame = nil
-    btnClear = nil
-    btnPause = nil
-    gatewayViews.removeAll()
-    postOfficeView = nil
+    view.subviews.removeAll()
 
     super.windowWillClose(notification)
     
@@ -225,6 +227,5 @@ class OpenLCBMonitorVC: MyTrainsViewController, OpenLCBNetworkObserverDelegate {
   var btnClear : NSButton? = NSButton()
   var btnPause : NSButton? = NSButton()
   
-
 }
 

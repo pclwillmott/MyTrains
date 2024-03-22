@@ -52,6 +52,12 @@ public class SwitchboardPanelNode : OpenLCBNodeVirtual {
       
     }
     
+    addInit()
+    
+  }
+  
+  deinit {
+    addDeinit()
   }
 
   // MARK: Private Properties

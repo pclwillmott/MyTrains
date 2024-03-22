@@ -31,19 +31,22 @@ public class LocoNet {
   init(gatewayNodeId: UInt64, node: OpenLCBNodeVirtual) {
     self.gatewayNodeId = gatewayNodeId
     self.node = node
+    addInit()
   }
   
   deinit {
-    debugLog("deinit")
     node = nil
     buffer.removeAll()
     immPacketQueue.removeAll()
     outputQueue.removeAll()
     outputQueueLock = nil
     currentMessage = nil
+    timeoutTimer?.invalidate()
     timeoutTimer = nil
+    retryTimer?.invalidate()
     retryTimer = nil
     delegate = nil
+    addDeinit()
   }
   
   // MARK: Private Properties
@@ -78,7 +81,7 @@ public class LocoNet {
 
   // MARK: Public Properties
   
-  public var delegate : LocoNetDelegate?
+  public weak var delegate : LocoNetDelegate?
   
   public var trackPowerOn : Bool = false
   

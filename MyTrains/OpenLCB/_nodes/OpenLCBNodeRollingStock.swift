@@ -72,17 +72,17 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
         registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressFNDescription      + groupOffset)
       }
       
-      functions.delegate = self
+      functions?.delegate = self
       
-      memorySpaces[functions.space] = functions
+      memorySpaces[functions!.space] = functions
       
       for fn in 0 ... numberOfFunctions - 1 {
         registerVariable(space: OpenLCBNodeMemoryAddressSpace.functions.rawValue, address: fn)
       }
       
-      cvs.delegate = self
+      cvs?.delegate = self
       
-      memorySpaces[cvs.space] = cvs
+      memorySpaces[cvs!.space] = cvs
       
       for cv in 0 ... numberOfCVs - 1 {
         registerVariable(space: OpenLCBNodeMemoryAddressSpace.cv.rawValue, address: cv)
@@ -127,15 +127,34 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
       
     }
     
+    addInit()
+    
+  }
+  
+  deinit {
+    
+    functions = nil
+    
+    cvs = nil
+    
+    listeners.removeAll()
+    
+    moveTimer?.invalidate()
+    moveTimer = nil
+    
+    timer?.invalidate()
+    timer = nil
+    
+    addDeinit()
   }
   
   // MARK: Private Properties
   
   internal let functionSpaceSize : Int
   
-  internal var functions : OpenLCBMemorySpace
+  internal var functions : OpenLCBMemorySpace?
   
-  internal var cvs : OpenLCBMemorySpace
+  internal var cvs : OpenLCBMemorySpace?
   
   internal var addressDCCAddress         = 0
   internal var addressSpeedSteps         = 0
@@ -152,7 +171,13 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
   internal let numberOfFunctions : Int = 69
   internal let functionGroupSize : Int = 35
   internal let numberOfCVs : Int = 1024
+
+  private let defaultCleanMask : UInt8 = 0b00010000
+  private let valueCleanMask   : UInt8 = 0b00000001
   
+  internal let defaultOffset = 1024
+  internal let statusOffset  = 2048
+
   internal var activeControllerNodeId : UInt64 = 0 {
     didSet {
       if activeControllerNodeId == 0 {
@@ -305,44 +330,38 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
   
   // MARK: Private Methods
   
-  private let defaultCleanMask : UInt8 = 0b00010000
-  private let valueCleanMask   : UInt8 = 0b00000001
-  
-  internal let defaultOffset = 1024
-  internal let statusOffset  = 2048
-
   internal func isDefaultClean(cvNumber:Int) -> Bool {
-    guard let stat = cvs.getUInt8(address: statusOffset + cvNumber) else {
+    guard let stat = cvs?.getUInt8(address: statusOffset + cvNumber) else {
       return false
     }
     return (stat & defaultCleanMask) == defaultCleanMask
   }
   
   internal func isValueClean(cvNumber:Int) -> Bool {
-    guard let stat = cvs.getUInt8(address: statusOffset + cvNumber) else {
+    guard let stat = cvs?.getUInt8(address: statusOffset + cvNumber) else {
       return false
     }
     return (stat & valueCleanMask) == valueCleanMask
   }
   
   internal func setDefaultStatus(cvNumber:Int, isClean:Bool) {
-    guard let stat = cvs.getUInt8(address: statusOffset + cvNumber) else {
+    guard let stat = cvs?.getUInt8(address: statusOffset + cvNumber) else {
       return
     }
     var status = stat
     status &= ~defaultCleanMask
     status |= isClean ? defaultCleanMask : 0
-    cvs.setUInt(address: statusOffset + cvNumber, value: status)
+    cvs?.setUInt(address: statusOffset + cvNumber, value: status)
   }
   
   internal func setValueStatus(cvNumber:Int, isClean:Bool) {
-    guard let stat = cvs.getUInt8(address: statusOffset + cvNumber) else {
+    guard let stat = cvs?.getUInt8(address: statusOffset + cvNumber) else {
       return
     }
     var status = stat
     status &= ~valueCleanMask
     status |= isClean ? valueCleanMask : 0
-    cvs.setUInt(address: statusOffset + cvNumber, value: status)
+    cvs?.setUInt(address: statusOffset + cvNumber, value: status)
   }
   
   internal func isMomentary(number:Int) -> Bool {
@@ -418,7 +437,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     
     super.resetToFactoryDefaults()
     
-    functions.zeroMemory()
+    functions?.zeroMemory()
     
     saveMemorySpaces()
     
