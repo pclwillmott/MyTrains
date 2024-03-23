@@ -8,16 +8,16 @@
 import Foundation
 
 #if DEBUG
+
 public func debugLog(functionName: String = #function, fileName: String = #file, lineNumber: Int = #line, _ message:String = "") {
     let className = (fileName as NSString).lastPathComponent
     print("<\(className)> \(functionName) [#\(lineNumber)] \(message)")
 }
-#endif
 
 public var instances : [String:Int] = [:]
 
 public func addInit(fileName: String = #file) {
-  
+
   let className = (fileName as NSString).lastPathComponent
   
   var newTotal : Int = 1
@@ -30,7 +30,7 @@ public func addInit(fileName: String = #file) {
 }
 
 public func addDeinit(fileName: String = #file) {
-  
+
   let className = (fileName as NSString).lastPathComponent
   
   var newTotal : Int = -1
@@ -43,7 +43,7 @@ public func addDeinit(fileName: String = #file) {
 }
 
 public func showInstances() {
-  
+
   var result : [(className:String, count:Int)] = []
   
   for (className, count) in instances {
@@ -56,3 +56,5 @@ public func showInstances() {
   }
   
 }
+
+#endif

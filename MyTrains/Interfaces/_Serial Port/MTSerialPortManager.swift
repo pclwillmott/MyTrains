@@ -89,12 +89,13 @@ class MTSerialPortManager : NSObject {
     
     var result : [String] = []
     
-    for i in 0...findSerialPorts()-1 {
-      let path = String(cString: getSerialPortPath(i))
-      result.append(path)
-    }
-    
-    clearSerialPorts()
+//    autoreleasepool {
+      for i in 0...findSerialPorts()-1 {
+        let path = String(cString: getSerialPortPath(i))
+        result.append(path)
+      }
+      clearSerialPorts()
+//    }
     
     return result
     

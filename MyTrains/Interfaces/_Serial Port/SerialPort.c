@@ -513,8 +513,6 @@ int serialPortCount = 0;
 
 void clearSerialPorts(void) {
   
-  serialPortCount = 0;
-  
   if (serialPortPaths != NULL) {
     for (int i=0; i<serialPortCount; i++) {
       free(serialPortPaths[i]);
@@ -522,6 +520,8 @@ void clearSerialPorts(void) {
     free(serialPortPaths);
     serialPortPaths = NULL;
   }
+
+  serialPortCount = 0;
   
 }
 

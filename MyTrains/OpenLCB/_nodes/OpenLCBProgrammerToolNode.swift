@@ -53,7 +53,9 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
       resetToFactoryDefaults()
     }
     
+    #if DEBUG
     addInit()
+    #endif
 
   }
   
@@ -69,7 +71,10 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
 
     cvs.removeAll()
     
+    #if DEBUG
     addDeinit()
+    #endif
+    
   }
   
   // MARK: Private Properties

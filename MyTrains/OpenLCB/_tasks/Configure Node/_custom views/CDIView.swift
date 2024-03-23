@@ -13,6 +13,8 @@ class CDIView: NSView {
   // MARK: Destructors
   
   deinit {
+    NSLayoutConstraint.deactivate(cdiConstraints)
+    cdiConstraints.removeAll()
     subviews.removeAll()
   }
   
@@ -32,7 +34,11 @@ class CDIView: NSView {
     
     path.stroke()
     
-    setup()
+    if needsInit {
+      setup()
+      needsInit = false
+      NSLayoutConstraint.activate(cdiConstraints)
+    }
 
   }
   
@@ -43,6 +49,8 @@ class CDIView: NSView {
   internal let siblingGap : CGFloat = 8.0
 
   internal var needsInit = true
+  
+  internal var cdiConstraints : [NSLayoutConstraint] = []
   
   // MARK: Private & Internal Methods
   

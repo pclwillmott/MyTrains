@@ -12,6 +12,7 @@ class CDIGroupView: CDIView, CDIStackViewManagerDelegate {
  
   // MARK: Destructors
  
+  #if DEBUG
   required init?(coder: NSCoder) {
     super.init(coder: coder)
     addInit()
@@ -21,7 +22,8 @@ class CDIGroupView: CDIView, CDIStackViewManagerDelegate {
     super.init(frame: frameRect)
     addInit()
   }
-
+  #endif
+  
   deinit {
     for view in contentView!.arrangedSubviews {
       contentView?.removeArrangedSubview(view)
@@ -32,7 +34,9 @@ class CDIGroupView: CDIView, CDIStackViewManagerDelegate {
     title = nil
     lastDisclosureConstraint = nil
     subviews.removeAll()
+    #if DEBUG
     addDeinit()
+    #endif
   }
   
   // MARK: Private & Internal Methods
@@ -60,7 +64,7 @@ class CDIGroupView: CDIView, CDIStackViewManagerDelegate {
   
   override internal func setup() {
     
-    guard needsInit, let disclosureButton, let title, let contentView else {
+    guard let disclosureButton, let title, let contentView else {
       return
     }
     
@@ -78,7 +82,7 @@ class CDIGroupView: CDIView, CDIStackViewManagerDelegate {
 
     addSubview(disclosureButton)
  
-    NSLayoutConstraint.activate([
+    cdiConstraints.append(contentsOf:[
       disclosureButton.topAnchor.constraint(equalTo: self.topAnchor, constant: parentGap),
       disclosureButton.leadingAnchor.constraint(equalTo: self.leadingAnchor),
       disclosureButton.heightAnchor.constraint(equalToConstant: 20),
@@ -92,7 +96,7 @@ class CDIGroupView: CDIView, CDIStackViewManagerDelegate {
     
     addSubview(title)
 
-    NSLayoutConstraint.activate([
+    cdiConstraints.append(contentsOf:[
       title.topAnchor.constraint(equalTo: self.topAnchor, constant: parentGap),
       title.leadingAnchor.constraint(equalTo: disclosureButton.trailingAnchor, constant: siblingGap),
       title.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: parentGap),
@@ -105,7 +109,7 @@ class CDIGroupView: CDIView, CDIStackViewManagerDelegate {
     
     addSubview(contentView)
     
-    NSLayoutConstraint.activate([
+    cdiConstraints.append(contentsOf:[
       contentView.topAnchor.constraint(equalTo: title.bottomAnchor, constant: siblingGap),
       contentView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: parentGap),
       contentView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -parentGap),
@@ -113,12 +117,10 @@ class CDIGroupView: CDIView, CDIStackViewManagerDelegate {
     
     lastDisclosureConstraint = self.bottomAnchor.constraint(equalToSystemSpacingBelow: title.bottomAnchor, multiplier: 1.0)
 
-    NSLayoutConstraint.activate([
+    cdiConstraints.append(contentsOf:[
       lastDisclosureConstraint!,
     ])
     
-    needsInit = false
-
   }
   
   internal func doDisclosure() {
@@ -158,7 +160,7 @@ class CDIGroupView: CDIView, CDIStackViewManagerDelegate {
     
     contentView.addArrangedSubview(view)
  
-    NSLayoutConstraint.activate([
+    cdiConstraints.append(contentsOf:[
       view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
       view.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
     ])

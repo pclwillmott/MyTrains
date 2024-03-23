@@ -23,7 +23,9 @@ class ComboBoxDBDS : NSObject, NSComboBoxDataSource, NSComboBoxDelegate {
     
     reloadData()
     
+    #if DEBUG
     addInit()
+    #endif
     
   }
   
@@ -39,13 +41,17 @@ class ComboBoxDBDS : NSObject, NSComboBoxDataSource, NSComboBoxDelegate {
     
     reloadData()
     
+    #if DEBUG
     addInit()
+    #endif
     
   }
   
   deinit {
     _items.removeAll()
+    #if DEBUG
     addDeinit()
+    #endif
   }
   
   // MARK: Private Properties
@@ -215,11 +221,15 @@ class ComboItem {
   init(code:Int, title:String) {
     self.code = code
     self.title = title
+    #if DEBUG
     addInit()
+    #endif
   }
   
+  #if DEBUG
   deinit {
     addDeinit()
   }
+  #endif
   
 }

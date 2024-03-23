@@ -11,16 +11,20 @@ import AppKit
 public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
   
   // MARK: Constructors & Destructors
-  
+ 
+  #if DEBUG
   public override init() {
     super.init()
     addInit()
   }
+  #endif
   
   deinit {
     removeAll()
+    #if DEBUG
     addDeinit()
     showInstances()
+    #endif
     exit(0)
   }
   
@@ -291,17 +295,30 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
     }
     
     if initializationLevel == 0 {
+      
       MTSerialPortManager.removeObserver(observerId: serialPortManagerObserverId)
+      
       serialPortManagerObserverId = -1
+      
       for (_, group) in startupGroup {
         group.delete(type: .configurationToolNode)
         group.delete(type: .throttleNode)
         group.delete(type: .programmerToolNode)
         group.delete(type: .locoNetMonitorNode)
       }
-      state = .stopped
+      
+      isCreatingANode = false
+      
+      isDeletingANode = false
+      
+      numberOfGatewayNodes = 0
+
       appNode = nil
+      
       fastClock = nil
+      
+      state = .stopped
+      
     }
     
   }

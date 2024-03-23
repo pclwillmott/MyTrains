@@ -25,13 +25,17 @@ public class OpenLCBNodeConfigurationTool : OpenLCBNodeVirtual {
       resetToFactoryDefaults()
     }
     
+    #if DEBUG
     addInit()
+    #endif
 
   }
   
   deinit {
     delegate = nil
+    #if DEBUG
     addDeinit()
+    #endif
   }
   
   // MARK: Public Properties

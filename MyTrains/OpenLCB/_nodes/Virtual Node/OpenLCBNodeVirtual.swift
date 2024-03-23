@@ -66,7 +66,9 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     
     setupConfigurationOptions()
     
+    #if DEBUG
     addInit()
+    #endif
     
   }
   
@@ -83,7 +85,9 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     registeredVariables.removeAll()
     unitConversions.removeAll()
     datagramTypesSupported.removeAll()
+    #if DEBUG
     addDeinit()
+    #endif
   }
   
   // MARK: Private Properties

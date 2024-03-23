@@ -55,7 +55,9 @@ class DBEditorView: NSView {
 
     // custom initialization logic
     
+    #if DEBUG
     addInit()
+    #endif
     
   }
   
@@ -64,7 +66,9 @@ class DBEditorView: NSView {
     _dictionary?.removeAll()
     _dictionary = nil
     _tabView = nil
+    #if DEBUG
     addDeinit()
+    #endif
   }
   
   // MARK: Private Properties

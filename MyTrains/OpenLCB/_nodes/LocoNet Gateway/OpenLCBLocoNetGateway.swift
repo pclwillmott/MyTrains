@@ -66,7 +66,9 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
       
     }
     
+    #if DEBUG
     addInit()
+    #endif
     
   }
   
@@ -80,7 +82,9 @@ public class OpenLCBLocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     timeoutTimer = nil
     currentItem = nil
     datagramBuffer.removeAll()
+    #if DEBUG
     addDeinit()
+    #endif
   }
   
   // MARK: Private Properties

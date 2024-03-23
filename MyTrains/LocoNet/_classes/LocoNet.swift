@@ -31,7 +31,9 @@ public class LocoNet {
   init(gatewayNodeId: UInt64, node: OpenLCBNodeVirtual) {
     self.gatewayNodeId = gatewayNodeId
     self.node = node
+    #if DEBUG
     addInit()
+    #endif
   }
   
   deinit {
@@ -46,7 +48,9 @@ public class LocoNet {
     retryTimer?.invalidate()
     retryTimer = nil
     delegate = nil
+    #if DEBUG
     addDeinit()
+    #endif
   }
   
   // MARK: Private Properties
@@ -337,7 +341,7 @@ public class LocoNet {
       
     case .datagramRejected:
       
-      if  let currentMessage, sourceNodeId == gatewayNodeId {
+      if currentMessage != nil, sourceNodeId == gatewayNodeId {
         
         stopTimeoutTimer()
         

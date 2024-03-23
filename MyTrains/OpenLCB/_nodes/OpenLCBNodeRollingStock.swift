@@ -25,8 +25,6 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     
     var configurationSize = 0
 
-    initSpaceAddress(&addressLocoNetGateway, 8, &configurationSize)
-
     initSpaceAddress(&addressDCCAddress, 2, &configurationSize)
     initSpaceAddress(&addressSpeedSteps, 1, &configurationSize)
     initSpaceAddress(&addressF0ConsistBehaviour, 1, &configurationSize)
@@ -44,7 +42,7 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     }
     
     initSpaceAddress(&addressDeleteFromRoster, 1, &configurationSize)
-    initSpaceAddress(&addressLocoNetGateway, 8, &configurationSize)
+    initSpaceAddress(&addressLocoNetGateway, 6, &configurationSize)
 
     configuration = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, defaultMemorySize: configurationSize, isReadOnly: false, description: "")
     
@@ -127,7 +125,9 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
       
     }
     
+    #if DEBUG
     addInit()
+    #endif
     
   }
   
@@ -145,7 +145,10 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     timer?.invalidate()
     timer = nil
     
+    #if DEBUG
     addDeinit()
+    #endif
+    
   }
   
   // MARK: Private Properties
@@ -317,10 +320,10 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
   
   public var locoNetGatewayNodeId : UInt64 {
     get {
-      return configuration!.getUInt64(address: addressLocoNetGateway)!
+      return configuration!.getUInt48(address: addressLocoNetGateway)!
     }
     set(value) {
-      configuration!.setUInt(address: addressLocoNetGateway, value: value)
+      configuration!.setUInt48(address: addressLocoNetGateway, value: value)
     }
   }
   

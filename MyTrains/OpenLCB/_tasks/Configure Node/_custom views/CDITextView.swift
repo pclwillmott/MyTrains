@@ -12,6 +12,7 @@ class CDITextView: CDIDataView, NSTextFieldDelegate, NSControlTextEditingDelegat
   
   // MARK: Destructors
 
+  #if DEBUG
   required init?(coder: NSCoder) {
     super.init(coder: coder)
     addInit()
@@ -21,7 +22,8 @@ class CDITextView: CDIDataView, NSTextFieldDelegate, NSControlTextEditingDelegat
     super.init(frame: frameRect)
     addInit()
   }
-
+  #endif
+  
   deinit {
     textView?.subviews.removeAll()
     textView = nil
@@ -29,7 +31,9 @@ class CDITextView: CDIDataView, NSTextFieldDelegate, NSControlTextEditingDelegat
     textField?.target = nil
     textField?.delegate = nil
     subviews.removeAll()
+    #if DEBUG
     addDeinit()
+    #endif
   }
   
   // MARK: Private & Internal Properties
@@ -79,7 +83,7 @@ class CDITextView: CDIDataView, NSTextFieldDelegate, NSControlTextEditingDelegat
     
     stackView.addArrangedSubview(textView)
 
-    NSLayoutConstraint.activate([
+    cdiConstraints.append(contentsOf:[
       textView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
       textView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
     ])
@@ -92,7 +96,7 @@ class CDITextView: CDIDataView, NSTextFieldDelegate, NSControlTextEditingDelegat
 
     textField.delegate = self
     
-    NSLayoutConstraint.activate([
+    cdiConstraints.append(contentsOf:[
       textField.topAnchor.constraint(equalTo: textView.topAnchor),
       textField.leadingAnchor.constraint(equalTo: textView.leadingAnchor),
       textView.heightAnchor.constraint(equalTo: textField.heightAnchor),
@@ -101,17 +105,17 @@ class CDITextView: CDIDataView, NSTextFieldDelegate, NSControlTextEditingDelegat
     if needsCopyPaste {
 
       if let elementType, elementType == .eventid {
-        NSLayoutConstraint.activate([
+        cdiConstraints.append(contentsOf:[
           textField.widthAnchor.constraint(equalToConstant: 160)
         ])
         textField.placeholderString = "00.00.00.00.00.00.00.00"
-        NSLayoutConstraint.activate([
+        cdiConstraints.append(contentsOf:[
 //          dataButtonView.leadingAnchor.constraint(equalTo: newEventId.leadingAnchor)
         ])
 
       }
       else {
-        NSLayoutConstraint.activate([
+        cdiConstraints.append(contentsOf:[
    //       textField.trailingAnchor.constraint(equalTo: dataButtonView.leadingAnchor, constant: -siblingGap),
           dataButtonView.leadingAnchor.constraint(lessThanOrEqualTo: dataButtonView.leadingAnchor, constant: -siblingGap),
         ])
@@ -129,7 +133,7 @@ class CDITextView: CDIDataView, NSTextFieldDelegate, NSControlTextEditingDelegat
     }
     else {
 
-      NSLayoutConstraint.activate([
+      cdiConstraints.append(contentsOf:[
  //       textField.trailingAnchor.constraint(equalTo: dataButtonView.leadingAnchor, constant: -gap),
         dataButtonView.leadingAnchor.constraint(equalToSystemSpacingAfter: textField.trailingAnchor, multiplier: 1.0),
       ])

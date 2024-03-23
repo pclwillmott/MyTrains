@@ -12,6 +12,7 @@ class CDIMapView : CDIDataView {
 
   // MARK: Destructors
 
+  #if DEBUG
   required init?(coder: NSCoder) {
     super.init(coder: coder)
     addInit()
@@ -21,14 +22,17 @@ class CDIMapView : CDIDataView {
     super.init(frame: frameRect)
     addInit()
   }
-
+  #endif
+  
   deinit {
     comboView?.subviews.removeAll()
     comboView = nil
     comboBox?.target = nil
     comboBox = nil
     subviews.removeAll()
+    #if DEBUG
     addDeinit()
+    #endif
   }
   
   // MARK: Private & Internal Properties
@@ -61,7 +65,7 @@ class CDIMapView : CDIDataView {
     
     stackView.addArrangedSubview(comboView)
 
-    NSLayoutConstraint.activate([
+    cdiConstraints.append(contentsOf:[
       comboView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
       comboView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
     ])
@@ -74,7 +78,7 @@ class CDIMapView : CDIDataView {
     
     comboView.addSubview(comboBox)
 
-    NSLayoutConstraint.activate([
+    cdiConstraints.append(contentsOf:[
       comboBox.topAnchor.constraint(equalTo: comboView.topAnchor),
       comboBox.leadingAnchor.constraint(equalTo: comboView.leadingAnchor),
       comboBox.widthAnchor.constraint(greaterThanOrEqualToConstant: 100),

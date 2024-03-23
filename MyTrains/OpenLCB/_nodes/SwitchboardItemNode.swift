@@ -486,13 +486,17 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
       
     }
     
+    #if DEBUG
     addInit()
+    #endif
     
   }
   
+  #if DEBUG
   deinit {
     addDeinit()
   }
+  #endif
 
   // MARK: Private Properties
 

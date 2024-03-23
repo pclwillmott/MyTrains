@@ -45,7 +45,9 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
       
     }
     
+    #if DEBUG
     addInit()
+    #endif
     
   }
   
@@ -98,7 +100,9 @@ public class OpenLCBCANGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     
     datagrams.removeAll()
     
+    #if DEBUG
     addDeinit()
+    #endif
     
   }
   

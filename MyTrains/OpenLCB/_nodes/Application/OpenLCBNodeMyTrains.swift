@@ -77,7 +77,9 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
       
     }
     
+    #if DEBUG
     addInit()
+    #endif
     
   }
   
@@ -92,7 +94,9 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     observers.removeAll()
     locoNetGateways.removeAll()
     viewOptions = nil
+    #if DEBUG
     addDeinit()
+    #endif
   }
   
   // MARK: Private Properties
@@ -506,10 +510,10 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     
     sorted.sort {$0.name < $1.name}
 
-    var layouts = "<map>\n<relation><property>00.00.00.00.00.00.00.00</property><value>No Layout Selected</value></relation>\n"
+    var layouts = "<map>\n<relation><property>0</property><value>No Layout Selected</value></relation>\n"
     
     for item in sorted {
-      layouts += "<relation><property>\(item.nodeId.toHexDotFormat(numberOfBytes: 8))</property><value>\(item.name)</value></relation>\n"
+      layouts += "<relation><property>\(item.nodeId)</property><value>\(item.name)</value></relation>\n"
     }
 
     layouts += "</map>\n"
@@ -530,10 +534,10 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     
     sorted.sort {$0.name < $1.name}
 
-    var panels = "<map>\n<relation><property>00.00.00.00.00.00.00.00</property><value>No Panel Selected</value></relation>\n"
+    var panels = "<map>\n<relation><property>0</property><value>No Panel Selected</value></relation>\n"
     
     for item in sorted {
-      panels += "<relation><property>\(item.nodeId.toHexDotFormat(numberOfBytes: 8))</property><value>\(item.name)</value></relation>\n"
+      panels += "<relation><property>\(item.nodeId)</property><value>\(item.name)</value></relation>\n"
     }
 
     panels += "</map>\n"
@@ -554,10 +558,10 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     
     sorted.sort {$0.name < $1.name}
 
-    var items = "<map>\n<relation><property>00.00.00.00.00.00.00.00</property><value>No Group Selected</value></relation>\n"
+    var items = "<map>\n<relation><property>0</property><value>No Group Selected</value></relation>\n"
     
     for item in sorted {
-      items += "<relation><property>\(item.nodeId.toHexDotFormat(numberOfBytes: 8))</property><value>\(item.name)</value></relation>\n"
+      items += "<relation><property>\(item.nodeId)</property><value>\(item.name)</value></relation>\n"
     }
 
     items += "</map>\n"
@@ -578,10 +582,10 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     
     sorted.sort {$0.name < $1.name}
 
-    var items = "<map>\n<relation><property>00.00.00.00.00.00.00.00</property><value>No Link Selected</value></relation>\n"
+    var items = "<map>\n<relation><property>0</property><value>No Link Selected</value></relation>\n"
     
     for item in sorted {
-      items += "<relation><property>\(item.nodeId.toHexDotFormat(numberOfBytes: 8))</property><value>\(item.name)</value></relation>\n"
+      items += "<relation><property>\(item.nodeId)</property><value>\(item.name)</value></relation>\n"
     }
 
     items += "</map>\n"
@@ -600,10 +604,10 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     
     sorted.sort {$0.name < $1.name}
     
-    var map = "<map>\n<relation><property>00.00.00.00.00.00.00.00</property><value>No LocoNet Gateway Selected</value></relation>\n"
+    var map = "<map>\n<relation><property>0</property><value>No LocoNet Gateway Selected</value></relation>\n"
     
     for item in sorted {
-      map += "<relation><property>\(item.nodeId.toHexDotFormat(numberOfBytes: 8))</property><value>\(item.name)</value></relation>\n"
+      map += "<relation><property>\(item.nodeId)</property><value>\(item.name)</value></relation>\n"
     }
 
     map += "</map>\n"

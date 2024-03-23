@@ -73,7 +73,9 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
       
     }
     
+    #if DEBUG
     addInit()
+    #endif
     
   }
   
@@ -86,7 +88,10 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
     timeoutTimer?.invalidate()
     timeoutTimer = nil
     
+    #if DEBUG
     addDeinit()
+    #endif
+    
   }
   
   // MARK: Private Properties

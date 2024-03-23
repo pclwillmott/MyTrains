@@ -12,16 +12,20 @@ public class ViewLCCNetworkTableViewDS : NSObject, NSTableViewDataSource, NSTabl
 
   // MARK: Destructors
   
+  #if DEBUG
   public override init() {
     super.init()
     addInit()
   }
+  #endif
   
   deinit {
     _dictionary?.removeAll()
     _dictionary = nil
     nodes.removeAll()
+    #if DEBUG
     addDeinit()
+    #endif
   }
   
   // MARK: Private Properties

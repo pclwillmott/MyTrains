@@ -67,14 +67,18 @@ public class MTSerialPort : NSObject, MTPipeDelegate {
     
     super.init()
     
+    #if DEBUG
     addInit()
+    #endif
     
   }
   
   deinit {
     delegate = nil
     txPipe = nil
+    #if DEBUG
     addDeinit()
+    #endif
   }
   
   // MARK: Private Properties
@@ -247,7 +251,9 @@ public class MTSerialPort : NSObject, MTPipeDelegate {
       
     }
     else {
+      #if DEBUG
       debugLog("serial port did not reopen")
+      #endif
     }
     
   }

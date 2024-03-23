@@ -30,7 +30,9 @@ public class EventRange {
     
     startId = eventId & ~mask
     
+    #if DEBUG
     addInit()
+    #endif
     
   }
   
@@ -57,13 +59,17 @@ public class EventRange {
     
     eventId = startId | (invert ? 0 : mask)
    
+    #if DEBUG
     addInit()
+    #endif
     
   }
   
+  #if DEBUG
   deinit {
     addDeinit()
   }
+  #endif
   
   // MARK: Public Properties
   

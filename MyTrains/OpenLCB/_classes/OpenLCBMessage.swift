@@ -19,7 +19,9 @@ public class OpenLCBMessage : NSObject {
     
     super.init()
     
+    #if DEBUG
     addInit()
+    #endif
     
   }
   
@@ -106,7 +108,9 @@ public class OpenLCBMessage : NSObject {
     
     payload = data
     
+    #if DEBUG
     addInit()
+    #endif
     
   }
   
@@ -162,13 +166,17 @@ public class OpenLCBMessage : NSObject {
     
     super.init()
     
+    #if DEBUG
     addInit()
+    #endif
 
   }
   
   deinit {
     payload.removeAll()
+    #if DEBUG
     addDeinit()
+    #endif
   }
   
   // MARK: Public Properties

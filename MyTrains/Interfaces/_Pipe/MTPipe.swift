@@ -19,7 +19,9 @@ public class MTPipe : NSObject {
   
   init(name:String) {
     _name = "/tmp/\(name)"
+    #if DEBUG
     addInit()
+    #endif
   }
   
   // MARK: Destructors
@@ -27,7 +29,9 @@ public class MTPipe : NSObject {
   deinit {
     close()
     _delegate = nil
+    #if DEBUG
     addDeinit()
+    #endif
   }
   
   // MARK: Private Properties
@@ -124,14 +128,18 @@ public class MTPipe : NSObject {
   
   public func sendOpenLCBMessage(message:OpenLCBMessage) {
     guard isOpen else {
+      #if DEBUG
       debugLog("pipe not open")
+      #endif
       return
     }
     if let fullMessage = message.fullMessage {
       write(data: fullMessage)
     }
     else {
+      #if DEBUG
       debugLog("fullMessage failed")
+      #endif
     }
   }
   

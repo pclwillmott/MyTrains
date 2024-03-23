@@ -267,6 +267,8 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
   
   private var dataViews : [CDIDataView] = []
   
+  private var myConstraints : [NSLayoutConstraint] = []
+  
   private var refreshDataView : CDIDataView?
   
   private var currentMemoryBlock : Int = 0
@@ -450,7 +452,7 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
     timer = nil
   }
 
-  private func makeInterface(stackView:CDIStackViewManagerDelegate, element:CDIElement) {
+  private func makeInterface(stackView:CDIStackViewManagerDelegate, element:CDIElement, myConstraints: inout [NSLayoutConstraint]) {
     
     currentAddress += element.offset
 
@@ -459,7 +461,7 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
     case .cdi:
       
       for childElement in element.childElements {
-        makeInterface(stackView: stackView, element: childElement)
+        makeInterface(stackView: stackView, element: childElement, myConstraints: &myConstraints)
       }
       
     case .identification, .segment, .group, .acdi:
@@ -489,7 +491,7 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
           group.addDescription(description: element.description)
           
           for childElement in element.childElements {
-            makeInterface(stackView: group, element: childElement)
+            makeInterface(stackView: group, element: childElement, myConstraints: &myConstraints)
           }
           
         }
@@ -511,7 +513,7 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
         
         for index in 0 ... element.replication - 1 {
           for childElement in element.childElements {
-            makeInterface(stackView: group.tabViewItems[index], element: childElement)
+            makeInterface(stackView: group.tabViewItems[index], element: childElement, myConstraints: &myConstraints)
           }
         }
         
@@ -575,7 +577,7 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
       return
     }
     
-    makeInterface(stackView: containerView!, element: currentElement)
+    makeInterface(stackView: containerView!, element: currentElement, myConstraints: &myConstraints)
 
     memoryMap.sort {$0.sortAddress < $1.sortAddress}
 

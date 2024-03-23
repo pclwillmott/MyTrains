@@ -4811,9 +4811,6 @@
     "Send LocoNet Message Reply Failure" : {
 
     },
-    "Sending unadvertised event" : {
-
-    },
     "Sensor" : {
       "comment" : "This is used to describe a switchboard item."
     },
@@ -5383,16 +5380,6 @@
     },
     "The following options determine which windows are automatically displayed at start-up and when the application restarts after configuration changes." : {
 
-    },
-    "The node \"%@\" (%@) is attempting to send the unadvertised event: %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "The node \"%1$@\" (%2$@) is attempting to send the unadvertised event: %3$@"
-          }
-        }
-      }
     },
     "Third Rail" : {
       "comment" : "Used to indicate that the track models 3rd rail electrification",

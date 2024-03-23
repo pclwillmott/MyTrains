@@ -12,6 +12,7 @@ class CDIStackView : CDIView, CDIStackViewManagerDelegate {
  
   // MARK: Destructors
   
+  #if DEBUG
   required init?(coder: NSCoder) {
     super.init(coder: coder)
     addInit()
@@ -21,21 +22,24 @@ class CDIStackView : CDIView, CDIStackViewManagerDelegate {
     super.init(frame: frameRect)
     addInit()
   }
-
+  #endif
+  
   deinit {
     for view in stackView!.arrangedSubviews {
       stackView?.removeArrangedSubview(view)
     }
     stackView = nil
     subviews.removeAll()
+    #if DEBUG
     addDeinit()
+    #endif
   }
   
   // MARK: Private & Internal Methods
   
   override internal func setup() {
     
-    guard let stackView, needsInit else {
+    guard let stackView else {
       return
     }
     
@@ -47,7 +51,7 @@ class CDIStackView : CDIView, CDIStackViewManagerDelegate {
     
     addSubview(stackView)
     
-    NSLayoutConstraint.activate([
+    cdiConstraints.append(contentsOf:[
       stackView.topAnchor.constraint(equalTo: self.topAnchor, constant: parentGap),
       stackView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: parentGap),
       stackView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -parentGap),
@@ -66,7 +70,7 @@ class CDIStackView : CDIView, CDIStackViewManagerDelegate {
     
     stackView.addArrangedSubview(view)
  
-    NSLayoutConstraint.activate([
+    cdiConstraints.append(contentsOf:[
       view.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
       view.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
     ])

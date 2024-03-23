@@ -13,7 +13,9 @@ class ThrottleVC: MyTrainsViewController, OpenLCBThrottleDelegate {
   // MARK: Window & View Control
   
   override func windowWillClose(_ notification: Notification) {
-//    appDelegate.networkLayer?.releaseThrottle(throttle: throttle!)
+    throttle?.releaseController()
+    tabView.selectTabViewItem(at: 0)
+    appDelegate.networkLayer?.releaseThrottle(throttle: throttle!)
     super.windowWillClose(notification)
   }
   

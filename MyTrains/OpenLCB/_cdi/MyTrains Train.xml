@@ -106,11 +106,11 @@
   <relation><property>1</property><value>Delete All Settings</value></relation>
 </map>
 </int>
-<eventid>
+<int size='6'>
   <name>LocoNet Gateway</name>
     %%LOCONET_GATEWAYS%%
-</eventid>
-  
+</int>
+
 </segment>
 
 %%VIRTUAL_NODE_CONFIG%%

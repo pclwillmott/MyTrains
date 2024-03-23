@@ -11,7 +11,8 @@ import AppKit
 class CDIDataView: CDIView {
   
   // MARK: Destructors
-  
+ 
+  #if DEBUG
   required init?(coder: NSCoder) {
     super.init(coder: coder)
     addInit()
@@ -21,6 +22,7 @@ class CDIDataView: CDIView {
     super.init(frame: frameRect)
     addInit()
   }
+  #endif
   
   deinit {
     box?.subviews.removeAll()
@@ -42,7 +44,9 @@ class CDIDataView: CDIView {
     newEventId?.target = nil
     newEventId = nil
     subviews.removeAll()
+    #if DEBUG
     addDeinit()
+    #endif
   }
   
   // MARK: Private & Internal properties
@@ -121,56 +125,18 @@ class CDIDataView: CDIView {
       
     case .int:
       
-      switch elementSize {
-      case 1:
-        if let uint8 = UInt8(string) {
-          if let max = maxValue, let maxUInt8 = UInt8(max), uint8 > maxUInt8 {
-            return false
-          }
-          if let min = minValue, let minUInt8 = UInt8(min), uint8 < minUInt8 {
-            return false
-          }
-        }
-        else {
+      if let uint = UInt64(string) {
+        if uint > (UInt64(1) << (8 * elementSize)) - 1 {
           return false
         }
-      case 2:
-        if let uint16 = UInt16(string) {
-          if let max = maxValue, let maxUInt16 = UInt16(max), uint16 > maxUInt16 {
-            return false
-          }
-          if let min = minValue, let minUInt16 = UInt16(min), uint16 < minUInt16 {
-            return false
-          }
-       }
-        else {
+        if let max = maxValue, let maxUInt = UInt64(max), uint > maxUInt {
           return false
         }
-      case 4:
-        if let uint32 = UInt32(string) {
-          if let max = maxValue, let maxUInt32 = UInt32(max), uint32 > maxUInt32 {
-            return false
-          }
-          if let min = minValue, let minUInt32 = UInt32(min), uint32 < minUInt32 {
-            return false
-          }
-        }
-        else {
+        if let min = minValue, let minUInt = UInt64(min), uint < minUInt {
           return false
         }
-      case 8:
-        if let uint64 = UInt64(string) {
-          if let max = maxValue, let maxUInt64 = UInt64(max), uint64 > maxUInt64 {
-            return false
-          }
-          if let min = minValue, let minUInt64 = UInt64(min), uint64 < minUInt64 {
-            return false
-          }
-        }
-        else {
-          return false
-        }
-      default:
+      }
+      else {
         return false
       }
       
@@ -293,25 +259,7 @@ class CDIDataView: CDIView {
     case .int:
       
       if let intValue = UInt64(bigEndianData: bigEndianData) {
-        
-        switch elementSize {
-        case 1:
-          let byte = UInt8(intValue & 0xff)
-          return "\(byte)"
-        case 2:
-          let word = UInt16(intValue & 0xffff)
-          return "\(word)"
-        case 4:
-          let dword = UInt32(intValue & 0xffffffff)
-          return "\(dword)"
-        case 8:
-          return "\(intValue)"
-        default:
-          #if DEBUG
-          debugLog("CDIDataView.setString: bad int size: \(elementSize)")
-          #endif
-        }
-        
+        return "\(intValue)"
       }
       
     case .string:
@@ -338,27 +286,10 @@ class CDIDataView: CDIView {
       
     case .int:
       
-      switch elementSize {
-      case 1:
-        if let uint8 = UInt8(string) {
-          return uint8.bigEndianData
-        }
-      case 2:
-        if let uint16 = UInt16(string) {
-          return uint16.bigEndianData
-        }
-      case 4:
-        if let uint32 = UInt32(string) {
-          return uint32.bigEndianData
-        }
-      case 8:
-        if let uint64 = UInt64(string) {
-          return uint64.bigEndianData
-        }
-      default:
-        #if DEBUG
-        debugLog("CDIDataView.getData: unexpected integer size: \(elementSize)")
-        #endif
+      if let uint = UInt64(string) {
+        var data = uint.bigEndianData
+        data.removeFirst(8 - elementSize)
+        return data
       }
       
     case .float:
@@ -413,9 +344,7 @@ class CDIDataView: CDIView {
     
     view.addSubview(dataButtonView)
 
-    var constraints : [NSLayoutConstraint] = []
-    
-    constraints.append(contentsOf: [
+    cdiConstraints.append(contentsOf: [
       dataButtonView.topAnchor.constraint(equalTo: view.topAnchor),
       dataButtonView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
       dataButtonView.heightAnchor.constraint(equalToConstant: 20.0),
@@ -432,7 +361,7 @@ class CDIDataView: CDIView {
       refreshButton.title = "Refresh"
       refreshButton.translatesAutoresizingMaskIntoConstraints = false
       
-      constraints.append(contentsOf: [
+      cdiConstraints.append(contentsOf: [
         writeButton.topAnchor.constraint(equalTo: dataButtonView.topAnchor),
         writeButton.trailingAnchor.constraint(equalTo: dataButtonView.trailingAnchor),
         refreshButton.topAnchor.constraint(equalTo: dataButtonView.topAnchor),
@@ -443,7 +372,7 @@ class CDIDataView: CDIView {
       refreshButton.action = #selector(self.btnRefreshAction(_:))
       
       if !needsCopyPaste {
-        constraints.append(contentsOf: [
+        cdiConstraints.append(contentsOf: [
           dataButtonView.leadingAnchor.constraint(equalTo: refreshButton.leadingAnchor)
         ])
       }
@@ -467,7 +396,7 @@ class CDIDataView: CDIView {
       newEventId.title = String(localized: "New Event ID", comment: "Used for the title of a button that creates a new event ID")
       newEventId.translatesAutoresizingMaskIntoConstraints = false
       
-      constraints.append(contentsOf: [
+      cdiConstraints.append(contentsOf: [
         pasteButton.topAnchor.constraint(equalTo: dataButtonView.topAnchor),
         pasteButton.trailingAnchor.constraint(equalTo: refreshButton.leadingAnchor, constant: -siblingGap),
         copyButton.topAnchor.constraint(equalTo: dataButtonView.topAnchor),
@@ -479,13 +408,13 @@ class CDIDataView: CDIView {
       
     }
     
-    NSLayoutConstraint.activate(constraints)
+//    NSLayoutConstraint.activate(constraints)
 
   }
   
   override internal func setup() {
     
-    guard needsInit, let box, let stackView else {
+    guard let box, let stackView else {
       return
     }
     
@@ -500,7 +429,7 @@ class CDIDataView: CDIView {
     box.titlePosition = .atTop
     box.titleFont = NSFont(name: box.titleFont.familyName!, size: 13.0)!
 
-    NSLayoutConstraint.activate([
+    cdiConstraints.append(contentsOf: [
       box.topAnchor.constraint(equalToSystemSpacingBelow: self.topAnchor, multiplier: 1.0),
       box.leadingAnchor.constraint(equalToSystemSpacingAfter: self.leadingAnchor, multiplier: 1.0),
       box.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -parentGap),
@@ -512,7 +441,7 @@ class CDIDataView: CDIView {
     
     box.addSubview(stackView)
 
-    NSLayoutConstraint.activate([
+    cdiConstraints.append(contentsOf:[
 //      stackView.topAnchor.constraint(equalToSystemSpacingBelow: box.topAnchor, multiplier: 1.0),
       stackView.topAnchor.constraint(equalTo: box.topAnchor, constant: 36.0),
       stackView.leadingAnchor.constraint(equalTo: box.leadingAnchor, constant: parentGap),
@@ -520,8 +449,6 @@ class CDIDataView: CDIView {
       box.bottomAnchor.constraint(equalTo: stackView.bottomAnchor, constant: parentGap),
       self.bottomAnchor.constraint(equalTo: box.bottomAnchor, constant: parentGap),
     ])
-
-    needsInit = false
 
   }
   
@@ -551,7 +478,7 @@ class CDIDataView: CDIView {
         
         stackView.addArrangedSubview(field)
 
-        NSLayoutConstraint.activate([
+        cdiConstraints.append(contentsOf: [
           field.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
           field.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
         ])

@@ -74,12 +74,17 @@ public class OptionSwitch {
     
     self._switchDefinition = switchDefinition
     
+    #if DEBUG
     addInit()
+    #endif
+    
   }
   
+  #if DEBUG
   deinit {
     addDeinit()
   }
+  #endif
   
   // MARK: Private Properties
   

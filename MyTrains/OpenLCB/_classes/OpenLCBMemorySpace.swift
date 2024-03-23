@@ -17,21 +17,27 @@ public class OpenLCBMemorySpace : NSObject {
     self._isReadOnly = isReadOnly
     self.memorySpaceDescription = description
     super.init()
+    #if DEBUG
     addInit()
+    #endif
   }
   
   init(reader: SqliteDataReader, isReadOnly:Bool, description: String) {
     self._isReadOnly = isReadOnly
     super.init()
     decode(sqliteDataReader: reader)
+    #if DEBUG
     addInit()
+    #endif
   }
   
   deinit {
     unitConversions.removeAll()
     delegate = nil
     memory.removeAll()
+    #if DEBUG
     addDeinit()
+    #endif
   }
   
   // MARK: Private Properties
@@ -121,6 +127,16 @@ public class OpenLCBMemorySpace : NSObject {
   public func getUInt64(address:Int) -> UInt64? {
     
     if let data = getBlock(address: address, count: 8) {
+      return UInt64(bigEndianData: data)
+    }
+    
+    return nil
+
+  }
+  
+  public func getUInt48(address:Int) -> UInt64? {
+    
+    if let data = getBlock(address: address, count: 6) {
       return UInt64(bigEndianData: data)
     }
     
@@ -295,6 +311,12 @@ public class OpenLCBMemorySpace : NSObject {
 
   public func setUInt(address:Int, value:UInt64) {
     setBlock(address: address, data: value.bigEndianData, isInternal: true)
+  }
+  
+  public func setUInt48(address:Int, value:UInt64) {
+    var data = value.bigEndianData
+    data.removeFirst(2)
+    setBlock(address: address, data: data, isInternal: true)
   }
   
   public func setFloat(address:Int, value:Float) {

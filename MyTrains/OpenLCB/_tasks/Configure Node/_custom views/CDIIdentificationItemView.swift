@@ -12,6 +12,7 @@ class CDIIdentificationItemView : CDIView {
 
   // MARK: Destructors
 
+  #if DEBUG
   required init?(coder: NSCoder) {
     super.init(coder: coder)
     addInit()
@@ -21,12 +22,15 @@ class CDIIdentificationItemView : CDIView {
     super.init(frame: frameRect)
     addInit()
   }
-
+  #endif
+  
   deinit {
     lblName = nil
     lblValue = nil
     subviews.removeAll()
+    #if DEBUG
     addDeinit()
+    #endif
   }
   
   // MARK: Public Properties
@@ -53,7 +57,7 @@ class CDIIdentificationItemView : CDIView {
   
   override internal func setup() {
     
-    guard let lblName, let lblValue, needsInit else {
+    guard let lblName, let lblValue else {
       return
     }
     
@@ -65,7 +69,7 @@ class CDIIdentificationItemView : CDIView {
     lblName.translatesAutoresizingMaskIntoConstraints = false
     lblValue.translatesAutoresizingMaskIntoConstraints = false
     
-    NSLayoutConstraint.activate([
+    cdiConstraints.append(contentsOf:[
       lblName.topAnchor.constraint(equalTo: self.topAnchor, constant: parentGap),
       lblName.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: parentGap),
       lblName.widthAnchor.constraint(greaterThanOrEqualToConstant: 150.0),

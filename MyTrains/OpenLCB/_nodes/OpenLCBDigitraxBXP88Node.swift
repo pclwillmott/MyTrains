@@ -351,7 +351,10 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
       
     }
     
+    #if DEBUG
     addInit()
+    #endif
+    
   }
   
   deinit {
@@ -367,7 +370,9 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
     timeoutTimer?.invalidate()
     timeoutTimer = nil
     
+    #if DEBUG
     addDeinit()
+    #endif
     
   }
   

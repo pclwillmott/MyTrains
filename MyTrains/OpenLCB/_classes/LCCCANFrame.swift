@@ -38,7 +38,9 @@ public class LCCCANFrame : NSObject {
     
     super.init()
     
+    #if DEBUG
     addInit()
+    #endif
     
   }
   
@@ -46,7 +48,9 @@ public class LCCCANFrame : NSObject {
     self.header = header
     self.data = data
     super.init()
+    #if DEBUG
     addInit()
+    #endif
   }
 
   init?(message:OpenLCBMessage) {
@@ -75,7 +79,9 @@ public class LCCCANFrame : NSObject {
     
     super.init()
     
+    #if DEBUG
     addInit()
+    #endif
     
   }
 
@@ -92,7 +98,9 @@ public class LCCCANFrame : NSObject {
     
     super.init()
     
+    #if DEBUG
     addInit()
+    #endif
     
   }
 
@@ -120,7 +128,9 @@ public class LCCCANFrame : NSObject {
 
     super.init()
     
+    #if DEBUG
     addInit()
+    #endif
 
   }
 
@@ -137,7 +147,9 @@ public class LCCCANFrame : NSObject {
     
     super.init()
     
+    #if DEBUG
     addInit()
+    #endif
     
   }
 
@@ -154,13 +166,17 @@ public class LCCCANFrame : NSObject {
     
     super.init()
     
+    #if DEBUG
     addInit()
+    #endif
     
   }
   
   deinit {
     data.removeAll()
+    #if DEBUG
     addDeinit()
+    #endif
   }
 
   // MARK: Private Properties

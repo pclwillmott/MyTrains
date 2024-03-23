@@ -21,7 +21,9 @@ public class OpenLCBNode : NSObject {
     
     super.init()
     
+    #if DEBUG
     addInit()
+    #endif
     
   }
   
@@ -29,7 +31,9 @@ public class OpenLCBNode : NSObject {
     addressSpaceInformation.removeAll()
     configurationOptions = nil
     _supportedProtocols.removeAll()
+    #if DEBUG
     addDeinit()
+    #endif
   }
   
   // MARK: Private Properties
@@ -198,12 +202,12 @@ public class OpenLCBNode : NSObject {
     
     set(value) {
       
-      #if DEBUG
       guard let value, !value.isEmpty else {
+        #if DEBUG
         debugLog("nil or no data bytes")
+        #endif
         return
       }
-      #endif
       
       var _value = value
       

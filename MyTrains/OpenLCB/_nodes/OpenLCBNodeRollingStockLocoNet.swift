@@ -17,7 +17,10 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
     
     eventRangesConsumed.append(EventRange(startId: OpenLCBWellKnownEvent.locoNetMessage.rawValue, mask: 0x0000ffffffffffff)!)
     
+    #if DEBUG
     addInit()
+    #endif
+    
   }
   
   deinit {
@@ -33,7 +36,9 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
     
     locoNet = nil
     
+    #if DEBUG
     addDeinit()
+    #endif
     
   }
   
@@ -456,7 +461,6 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
   
   @objc public func locoNetMessageReceived(message:LocoNetMessage) {
     
-    debugLog("\(message.messageType)")
     switch message.messageType {
       
     case .programmerBusy:

@@ -136,7 +136,9 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
       
     }
     
+    #if DEBUG
     addInit()
+    #endif
     
   }
   
@@ -159,7 +161,9 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
     
     calendar = nil
 
+    #if DEBUG
     addDeinit()
+    #endif
     
   }
   

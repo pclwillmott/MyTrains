@@ -12,6 +12,7 @@ class CDIGroupTabView : CDIGroupView {
   
   // MARK: Destructors
  
+  #if DEBUG
   required init?(coder: NSCoder) {
     super.init(coder: coder)
     addInit()
@@ -21,7 +22,8 @@ class CDIGroupTabView : CDIGroupView {
     super.init(frame: frameRect)
     addInit()
   }
-
+  #endif
+  
   deinit {
     buttonConstraints.removeAll()
     _tabViewItems.removeAll()
@@ -40,7 +42,9 @@ class CDIGroupTabView : CDIGroupView {
     btnPrevious = nil
     btnNext = nil
     subviews.removeAll()
+    #if DEBUG
     addDeinit()
+    #endif
   }
   
   // MARK: Drawing Stuff
@@ -230,7 +234,7 @@ class CDIGroupTabView : CDIGroupView {
         stackView.isHidden = true
         _tabViewItems.append(stackView)
         tabContentView.addSubview(stackView)
-        NSLayoutConstraint.activate([
+        cdiConstraints.append(contentsOf:[
           stackView.topAnchor.constraint(equalTo: tabContentView.topAnchor),
           stackView.leadingAnchor.constraint(equalTo: tabContentView.leadingAnchor),
           stackView.trailingAnchor.constraint(equalTo: tabContentView.trailingAnchor),
@@ -253,7 +257,7 @@ class CDIGroupTabView : CDIGroupView {
   
   override internal func setup() {
     
-    guard needsInit, let tabSelectorView, let tabButtonView, let btnPrevious, let btnNext, let tabContentView else {
+    guard let tabSelectorView, let tabButtonView, let btnPrevious, let btnNext, let tabContentView else {
       return
     }
     
@@ -280,7 +284,7 @@ class CDIGroupTabView : CDIGroupView {
     tabSelectorView.addArrangedSubview(tabButtonView)
     tabSelectorView.addArrangedSubview(btnNext)
     
-    NSLayoutConstraint.activate([
+    cdiConstraints.append(contentsOf:[
       tabSelectorView.arrangedSubviews[0].widthAnchor.constraint(equalTo: btnPrevious.widthAnchor),
       tabSelectorView.arrangedSubviews[2].widthAnchor.constraint(equalTo: btnNext.widthAnchor),
     ])

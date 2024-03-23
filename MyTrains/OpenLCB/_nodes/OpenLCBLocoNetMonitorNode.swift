@@ -25,7 +25,9 @@ public class OpenLCBLocoNetMonitorNode : OpenLCBNodeVirtual, LocoNetDelegate {
       resetToFactoryDefaults()
     }
     
+    #if DEBUG
     addInit()
+    #endif
 
   }
   
@@ -35,7 +37,9 @@ public class OpenLCBLocoNetMonitorNode : OpenLCBNodeVirtual, LocoNetDelegate {
     
     delegate = nil
     
+    #if DEBUG
     addDeinit()
+    #endif
     
   }
   // MARK: Private Properties

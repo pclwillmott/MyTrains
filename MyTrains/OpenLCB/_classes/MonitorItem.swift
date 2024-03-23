@@ -16,16 +16,20 @@ public class MonitorItem : NSObject {
   
   // MARK: Constructors & Destructors
   
+  #if DEBUG
   public override init() {
     super.init()
     addInit()
   }
+  #endif
   
   deinit {
     frame = nil
     message = nil
     _info = nil
+    #if DEBUG
     addDeinit()
+    #endif
   }
   
   // MARK: Private Properties

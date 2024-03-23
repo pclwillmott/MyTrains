@@ -205,12 +205,12 @@ extension OpenLCBCANGateway {
       
     case .openLCBMessage:
       
-      #if DEBUG
       guard let message = OpenLCBMessage(frame: frame), let sourceNIDAlias = message.sourceNIDAlias else {
+        #if DEBUG
         debugLog("message create error that should never happen!")
+        #endif
         return
       }
-      #endif
 
       switch message.canFrameType {
         
