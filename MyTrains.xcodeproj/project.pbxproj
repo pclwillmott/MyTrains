@@ -279,6 +279,7 @@
 		DADFFF902946025500CD2119 /* DateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADFFF8F2946025500CD2119 /* DateExtensions.swift */; };
 		DAE2BAD92B09157100FC587A /* OpenLCBLocationServiceFlag.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE2BAD82B09157100FC587A /* OpenLCBLocationServiceFlag.swift */; };
 		DAE2BADB2B091EB200FC587A /* OpenLCBStandardContentBlockType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE2BADA2B091EB200FC587A /* OpenLCBStandardContentBlockType.swift */; };
+		DAE44C5B2BB031A400BBCCE9 /* SoftUIntX.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE44C5A2BB031A400BBCCE9 /* SoftUIntX.swift */; };
 		DAE8DD51286741BD0097C2D1 /* TrackPart.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE8DD50286741BD0097C2D1 /* TrackPart.swift */; };
 		DAE8DD53286751BE0097C2D1 /* Manufacturer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE8DD52286751BE0097C2D1 /* Manufacturer.swift */; };
 		DAE8DD55286754C00097C2D1 /* TrackCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE8DD54286754C00097C2D1 /* TrackCode.swift */; };
@@ -604,6 +605,7 @@
 		DADFFF8F2946025500CD2119 /* DateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensions.swift; sourceTree = "<group>"; };
 		DAE2BAD82B09157100FC587A /* OpenLCBLocationServiceFlag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBLocationServiceFlag.swift; sourceTree = "<group>"; };
 		DAE2BADA2B091EB200FC587A /* OpenLCBStandardContentBlockType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBStandardContentBlockType.swift; sourceTree = "<group>"; };
+		DAE44C5A2BB031A400BBCCE9 /* SoftUIntX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoftUIntX.swift; sourceTree = "<group>"; };
 		DAE8DD50286741BD0097C2D1 /* TrackPart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackPart.swift; sourceTree = "<group>"; };
 		DAE8DD52286751BE0097C2D1 /* Manufacturer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Manufacturer.swift; sourceTree = "<group>"; };
 		DAE8DD54286754C00097C2D1 /* TrackCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackCode.swift; sourceTree = "<group>"; };
@@ -1224,6 +1226,7 @@
 		DAA83DDE272C37670075CBCD = {
 			isa = PBXGroup;
 			children = (
+				DAE44C5A2BB031A400BBCCE9 /* SoftUIntX.swift */,
 				DA8FC5E5272C3F8100FCCFCA /* Frameworks */,
 				DAA83DE9272C37670075CBCD /* MyTrains */,
 				DAA83DE8272C37670075CBCD /* Products */,
@@ -1645,6 +1648,7 @@
 				DA9B87282A2B979E00E9969E /* DBEditorView.swift in Sources */,
 				DA0949482B81085C00545650 /* mtpipe.c in Sources */,
 				DA595E142B890AD700ADF87B /* OpenLCBNodeVirtual - Messages - Memory Configuration.swift in Sources */,
+				DAE44C5B2BB031A400BBCCE9 /* SoftUIntX.swift in Sources */,
 				DA48EE29293CEF16006C26A0 /* DayOfWeek.swift in Sources */,
 				DAF4DD50289ABDDE000B848E /* SpeedProfileResultsType.swift in Sources */,
 				DAAC7E932A79514E001A424E /* OpenLCBProgrammerToolDelegate.swift in Sources */,
