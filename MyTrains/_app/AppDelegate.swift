@@ -176,10 +176,8 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
       startApp()
     }
     
-    var temp4 = SoftUIntX("340282366920938463463374607431768211455")
-    print(temp4!.stringValue)
-    print(temp4!.size)
-    
+//    var temp4 = SoftUIntX("340282366920938463463374607431768211455")
+  
   }
   
   /*

@@ -237,6 +237,7 @@
 		DAA83DEB272C37670075CBCD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA83DEA272C37670075CBCD /* AppDelegate.swift */; };
 		DAA83DED272C37670075CBCD /* MainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA83DEC272C37670075CBCD /* MainVC.swift */; };
 		DAA83DEF272C37680075CBCD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DAA83DEE272C37680075CBCD /* Assets.xcassets */; };
+		DAA85DB92BB490FC0011DE82 /* MyTrainsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA85DB82BB490FC0011DE82 /* MyTrainsTests.swift */; };
 		DAA867C427930C62008B6EEC /* IntExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA867C327930C62008B6EEC /* IntExtensions.swift */; };
 		DAA867C627933265008B6EEC /* CSVParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA867C527933265008B6EEC /* CSVParser.swift */; };
 		DAAA9C212A0FAE0100A5B9D6 /* OpenLCBDatagramType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAAA9C202A0FAE0100A5B9D6 /* OpenLCBDatagramType.swift */; };
@@ -321,6 +322,16 @@
 		DAFFB6642B5D8AA50035AC74 /* LayoutListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAFFB6632B5D8AA50035AC74 /* LayoutListItem.swift */; };
 		DAFFB6662B5D8F650035AC74 /* LayoutState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAFFB6652B5D8F650035AC74 /* LayoutState.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		DAA85DBA2BB490FC0011DE82 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DAA83DDF272C37670075CBCD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DAA83DE6272C37670075CBCD;
+			remoteInfo = MyTrains;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		DA0197242773500100350F71 /* ComboBoxDictDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComboBoxDictDS.swift; sourceTree = "<group>"; };
@@ -561,6 +572,8 @@
 		DAA83DEC272C37670075CBCD /* MainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainVC.swift; sourceTree = "<group>"; };
 		DAA83DEE272C37680075CBCD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DAA83DF3272C37680075CBCD /* MyTrains.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MyTrains.entitlements; sourceTree = "<group>"; };
+		DAA85DB62BB490FC0011DE82 /* MyTrainsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyTrainsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DAA85DB82BB490FC0011DE82 /* MyTrainsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTrainsTests.swift; sourceTree = "<group>"; };
 		DAA867C327930C62008B6EEC /* IntExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntExtensions.swift; sourceTree = "<group>"; };
 		DAA867C527933265008B6EEC /* CSVParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVParser.swift; sourceTree = "<group>"; };
 		DAAA9C202A0FAE0100A5B9D6 /* OpenLCBDatagramType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBDatagramType.swift; sourceTree = "<group>"; };
@@ -650,6 +663,13 @@
 
 /* Begin PBXFrameworksBuildPhase section */
 		DAA83DE4272C37670075CBCD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DAA85DB32BB490FC0011DE82 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -763,6 +783,14 @@
 				DA92E0792B66B8FA00762058 /* SwitchboardItemListItem.swift */,
 			);
 			path = _types;
+			sourceTree = "<group>";
+		};
+		DA4FC8E52BB33A2100629595 /* SoftUIntX */ = {
+			isa = PBXGroup;
+			children = (
+				DAE44C5A2BB031A400BBCCE9 /* SoftUIntX.swift */,
+			);
+			path = SoftUIntX;
 			sourceTree = "<group>";
 		};
 		DA57A6E72A449669005C72B0 /* _types */ = {
@@ -1226,7 +1254,7 @@
 		DAA83DDE272C37670075CBCD = {
 			isa = PBXGroup;
 			children = (
-				DAE44C5A2BB031A400BBCCE9 /* SoftUIntX.swift */,
+				DAA85DB72BB490FC0011DE82 /* MyTrainsTests */,
 				DA8FC5E5272C3F8100FCCFCA /* Frameworks */,
 				DAA83DE9272C37670075CBCD /* MyTrains */,
 				DAA83DE8272C37670075CBCD /* Products */,
@@ -1237,6 +1265,7 @@
 			isa = PBXGroup;
 			children = (
 				DAA83DE7272C37670075CBCD /* MyTrains.app */,
+				DAA85DB62BB490FC0011DE82 /* MyTrainsTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1244,7 +1273,6 @@
 		DAA83DE9272C37670075CBCD /* MyTrains */ = {
 			isa = PBXGroup;
 			children = (
-				DAA7BECA2B5072CE00508140 /* Info.plist */,
 				DA7B2CFA2B2F391500327281 /* _app */,
 				DA7B2D112B2F4FEB00327281 /* _classes */,
 				DA7B2CFB2B2F3EC100327281 /* _custom views */,
@@ -1256,16 +1284,26 @@
 				DA3254E62A4704E2006DF357 /* _types */,
 				DAA83DEE272C37680075CBCD /* Assets.xcassets */,
 				DA58F00E2A45AE4400D36E90 /* DCC */,
+				DAA7BECA2B5072CE00508140 /* Info.plist */,
 				DA72DDE42A3C6E150027BE50 /* Interfaces */,
+				DAA7BEBA2B504EE900508140 /* Localizable.xcstrings */,
 				DABD4F2F2A3C99B1000A25AB /* LocoNet */,
 				DA434291283698CA00E8D555 /* MyTrains-Bridging-Header.h */,
 				DAA83DF3272C37680075CBCD /* MyTrains.entitlements */,
 				DA2CB4B22A071CC7000E197E /* OpenLCB */,
 				DA7B2D122B2F776A00327281 /* SoftFloat */,
+				DA4FC8E52BB33A2100629595 /* SoftUIntX */,
 				DA7B2CFD2B2F41A300327281 /* SwitchBoard */,
-				DAA7BEBA2B504EE900508140 /* Localizable.xcstrings */,
 			);
 			path = MyTrains;
+			sourceTree = "<group>";
+		};
+		DAA85DB72BB490FC0011DE82 /* MyTrainsTests */ = {
+			isa = PBXGroup;
+			children = (
+				DAA85DB82BB490FC0011DE82 /* MyTrainsTests.swift */,
+			);
+			path = MyTrainsTests;
 			sourceTree = "<group>";
 		};
 		DABC51FE2B8218E300C45423 /* Virtual Node */ = {
@@ -1439,6 +1477,24 @@
 			productReference = DAA83DE7272C37670075CBCD /* MyTrains.app */;
 			productType = "com.apple.product-type.application";
 		};
+		DAA85DB52BB490FC0011DE82 /* MyTrainsTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DAA85DBC2BB490FC0011DE82 /* Build configuration list for PBXNativeTarget "MyTrainsTests" */;
+			buildPhases = (
+				DAA85DB22BB490FC0011DE82 /* Sources */,
+				DAA85DB32BB490FC0011DE82 /* Frameworks */,
+				DAA85DB42BB490FC0011DE82 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DAA85DBB2BB490FC0011DE82 /* PBXTargetDependency */,
+			);
+			name = MyTrainsTests;
+			productName = MyTrainsTests;
+			productReference = DAA85DB62BB490FC0011DE82 /* MyTrainsTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -1446,12 +1502,16 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1310;
+				LastSwiftUpdateCheck = 1530;
 				LastUpgradeCheck = 1520;
 				TargetAttributes = {
 					DAA83DE6272C37670075CBCD = {
 						CreatedOnToolsVersion = 13.1;
 						LastSwiftMigration = 1340;
+					};
+					DAA85DB52BB490FC0011DE82 = {
+						CreatedOnToolsVersion = 15.3;
+						TestTargetID = DAA83DE6272C37670075CBCD;
 					};
 				};
 			};
@@ -1472,6 +1532,7 @@
 			projectRoot = "";
 			targets = (
 				DAA83DE6272C37670075CBCD /* MyTrains */,
+				DAA85DB52BB490FC0011DE82 /* MyTrainsTests */,
 			);
 		};
 /* End PBXProject section */
@@ -1527,6 +1588,13 @@
 				DA88378C2770FBEC000B9A41 /* DBEditorView.xib in Resources */,
 				DA073F072B5FEBB20040067A /* MyTrains Switchboard Panel.xml in Resources */,
 				DAC8FB2F2AED5F5E00456C40 /* StaRFIshrail Hub.xml in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DAA85DB42BB490FC0011DE82 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1807,7 +1875,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DAA85DB22BB490FC0011DE82 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DAA85DB92BB490FC0011DE82 /* MyTrainsTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		DAA85DBB2BB490FC0011DE82 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DAA83DE6272C37670075CBCD /* MyTrains */;
+			targetProxy = DAA85DBA2BB490FC0011DE82 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		DAA7BEC42B50664B00508140 /* CDITextView.storyboard */ = {
@@ -2033,6 +2117,51 @@
 			};
 			name = Release;
 		};
+		DAA85DBD2BB490FC0011DE82 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DKK8LC6ZQC;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = Oswalds.MyTrainsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MyTrains.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MyTrains";
+			};
+			name = Debug;
+		};
+		DAA85DBE2BB490FC0011DE82 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DKK8LC6ZQC;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = Oswalds.MyTrainsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MyTrains.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MyTrains";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -2050,6 +2179,15 @@
 			buildConfigurations = (
 				DAA83DF7272C37680075CBCD /* Debug */,
 				DAA83DF8272C37680075CBCD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DAA85DBC2BB490FC0011DE82 /* Build configuration list for PBXNativeTarget "MyTrainsTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DAA85DBD2BB490FC0011DE82 /* Debug */,
+				DAA85DBE2BB490FC0011DE82 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
