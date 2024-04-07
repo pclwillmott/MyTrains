@@ -75,11 +75,11 @@ public enum OpenLCBDatagramType : UInt16 {
   case updateCompleteCommand                            = 0x20a8
   case resetRebootCommand                               = 0x20a9
   case reinitializeFactoryResetCommand                  = 0x20aa
-  case sendLocoNetMessageCompleteCommand                = 0x3000 // Unofficial
-  case sendLocoNetMessageFirstPartCommand               = 0x3001 // Unofficial
-  case sendLocoNetMessageFinalPartCommand               = 0x3002 // Unofficial
-  case sendLocoNetMessageReply                          = 0x3010 // Unofficial
-  case sendLocoNetMessageReplyFailure                   = 0x3018 // Unofficial
+  case sendLocoNetMessageCompleteCommand                = 0x4000 // Unofficial
+  case sendLocoNetMessageFirstPartCommand               = 0x4001 // Unofficial
+  case sendLocoNetMessageFinalPartCommand               = 0x4002 // Unofficial
+  case sendLocoNetMessageReply                          = 0x4010 // Unofficial
+  case sendLocoNetMessageReplyFailure                   = 0x4018 // Unofficial
 
   // MARK: Public Properties
   

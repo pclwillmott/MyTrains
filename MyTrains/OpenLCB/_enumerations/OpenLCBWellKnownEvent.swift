@@ -29,6 +29,7 @@ public enum OpenLCBWellKnownEvent : UInt64 {
   case duplicateNodeIdDetected             = 0x0101000000000201
   case nodeIsATrain                        = 0x0101000000000303
   case nodeIsATractionProxy                = 0x0101000000000304
+  case nodeIsALocoNetGateway               = 0x0101000000000401
   case firmwareCorrupted                   = 0x0101000000000601
   case firmwareUpgradeRequestedBySwitch    = 0x0101000000000602
   case defaultFastClock                    = 0x0101000001000000
@@ -37,7 +38,6 @@ public enum OpenLCBWellKnownEvent : UInt64 {
   case alternateClock2                     = 0x0101000001030000
   case locationServicesReport              = 0x0102000000000000
   case locoNetMessage                      = 0x0181000000000000
-  case nodeIsALocoNetGateway               = 0x050101017b00ffff
   case myTrainsLayoutActivated             = 0x050101017b00fffe
   case myTrainsLayoutDeactivated           = 0x050101017b00fffd
   case myTrainsLayoutDeleted               = 0x050101017b00fffc

@@ -17,6 +17,8 @@ public func debugLog(functionName: String = #function, fileName: String = #file,
 public var instances : [String:Int] = [:]
 
 public func addInit(fileName: String = #file) {
+  
+  return
 
   let className = (fileName as NSString).lastPathComponent
   

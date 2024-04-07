@@ -74,12 +74,14 @@ extension OpenLCBCANGateway {
   // This is running in the serail port's background thread
   
   internal func canFrameReceived(frame:LCCCANFrame) {
-    
+
+
     // Send a clone to the monitor system. It has to be a clone as the multi-part
     // message decode damages the original frame.
     
-    appDelegate.networkLayer?.canFrameReceived(gateway: self, frame: frame.clone)
-
+    DispatchQueue.main.async {
+      appDelegate.networkLayer?.canFrameReceived(gateway: self, frame: frame.clone)
+    }
     var frames : [LCCCANFrame] = []
     
     // The node shall restart the [alias allocation] process at the beginning if, before completion of the process, a

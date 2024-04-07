@@ -62,6 +62,7 @@
 		DA1DC9FF28A1CE0D007A957A /* SamplePeriod.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1DC9FE28A1CE0D007A957A /* SamplePeriod.swift */; };
 		DA1ECC9328439D4600C4F963 /* UpdateFirmware.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA1ECC9228439D4600C4F963 /* UpdateFirmware.storyboard */; };
 		DA1ECC9828439DE500C4F963 /* UpdateFirmwareVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1ECC9728439DE500C4F963 /* UpdateFirmwareVC.swift */; };
+		DA20941E2BC3012B00737A12 /* OpenLCBLocoNetCommandStation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA20941D2BC3012B00737A12 /* OpenLCBLocoNetCommandStation.swift */; };
 		DA2785402837EAE700EDCBB7 /* MTSerialPortManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA27853F2837EAE700EDCBB7 /* MTSerialPortManager.swift */; };
 		DA28C2BA2801CC0300857471 /* DashBoard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA28C2B92801CC0300857471 /* DashBoard.storyboard */; };
 		DA28C2BD2801CC4800857471 /* DashBoardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA28C2BC2801CC4800857471 /* DashBoardVC.swift */; };
@@ -390,6 +391,7 @@
 		DA1DC9FE28A1CE0D007A957A /* SamplePeriod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SamplePeriod.swift; sourceTree = "<group>"; };
 		DA1ECC9228439D4600C4F963 /* UpdateFirmware.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = UpdateFirmware.storyboard; sourceTree = "<group>"; };
 		DA1ECC9728439DE500C4F963 /* UpdateFirmwareVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateFirmwareVC.swift; sourceTree = "<group>"; };
+		DA20941D2BC3012B00737A12 /* OpenLCBLocoNetCommandStation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBLocoNetCommandStation.swift; sourceTree = "<group>"; };
 		DA27853F2837EAE700EDCBB7 /* MTSerialPortManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTSerialPortManager.swift; sourceTree = "<group>"; };
 		DA28C2B92801CC0300857471 /* DashBoard.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = DashBoard.storyboard; sourceTree = "<group>"; };
 		DA28C2BC2801CC4800857471 /* DashBoardVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashBoardVC.swift; sourceTree = "<group>"; };
@@ -716,6 +718,14 @@
 				DA1B949E2A3DE8E000E2CE6A /* Client.swift */,
 			);
 			path = _WiFi;
+			sourceTree = "<group>";
+		};
+		DA20941C2BC300E500737A12 /* LocoNet Command Station */ = {
+			isa = PBXGroup;
+			children = (
+				DA20941D2BC3012B00737A12 /* OpenLCBLocoNetCommandStation.swift */,
+			);
+			path = "LocoNet Command Station";
 			sourceTree = "<group>";
 		};
 		DA2CB4B22A071CC7000E197E /* OpenLCB */ = {
@@ -1159,6 +1169,7 @@
 		DA7B453C2A2C08240017D36B /* _nodes */ = {
 			isa = PBXGroup;
 			children = (
+				DA20941C2BC300E500737A12 /* LocoNet Command Station */,
 				DA0FB0A42BA452B70075AC3A /* LocoNet Gateway */,
 				DA5C20042B8E321C00D3BFEB /* Application */,
 				DABC51FE2B8218E300C45423 /* Virtual Node */,
@@ -1750,6 +1761,7 @@
 				DAE8DD5728675B040097C2D1 /* FrogType.swift in Sources */,
 				DA0197272773520400350F71 /* EditorObject.swift in Sources */,
 				DA5BD1F72B65893600CEA5BA /* TextViewVC.swift in Sources */,
+				DA20941E2BC3012B00737A12 /* OpenLCBLocoNetCommandStation.swift in Sources */,
 				DA063399293CEB8700CEAFD1 /* SetFastClockVC.swift in Sources */,
 				DA3904092A349B3A00864157 /* OpenLCBClockInitialDateTime.swift in Sources */,
 				DA2785402837EAE700EDCBB7 /* MTSerialPortManager.swift in Sources */,

@@ -22,60 +22,48 @@ public enum LocoNetCommandStationType : UInt8 {
 
   public var name : String {
     
-    get {
-      
-      let names : [LocoNetCommandStationType:String] = [
-        LocoNetCommandStationType.DT200         : "Digitrax DT200",
-        LocoNetCommandStationType.DCS100_DCS200 : "Digitrax DCS100 or DCS200",
-        LocoNetCommandStationType.DB150         : "Digitrax DB150",
-        LocoNetCommandStationType.DCS50         : "Digitrax DCS50",
-        LocoNetCommandStationType.DCS51         : "Digitrax DCS51",
-        LocoNetCommandStationType.DCS52         : "Digitrax DCS52",
-        LocoNetCommandStationType.DCS210        : "Digitrax DCS210",
-        LocoNetCommandStationType.DCS240        : "Digitrax DCS240",
-        LocoNetCommandStationType.DCS210Plus    : "Digitrax DCS210+",
-        LocoNetCommandStationType.DCS240Plus    : "Digitrax DCS240+",
-      ]
+    let names : [LocoNetCommandStationType:String] = [
+      LocoNetCommandStationType.DT200         : "Digitrax DT200",
+      LocoNetCommandStationType.DCS100_DCS200 : "Digitrax DCS100 or DCS200",
+      LocoNetCommandStationType.DB150         : "Digitrax DB150",
+      LocoNetCommandStationType.DCS50         : "Digitrax DCS50",
+      LocoNetCommandStationType.DCS51         : "Digitrax DCS51",
+      LocoNetCommandStationType.DCS52         : "Digitrax DCS52",
+      LocoNetCommandStationType.DCS210        : "Digitrax DCS210",
+      LocoNetCommandStationType.DCS240        : "Digitrax DCS240",
+      LocoNetCommandStationType.DCS210Plus    : "Digitrax DCS210+",
+      LocoNetCommandStationType.DCS240Plus    : "Digitrax DCS240+",
+    ]
 
-      return names[self]!
-      
-    }
-    
+    return names[self]!
+
   }
   
   public var protocolsSupported : Set<LocoNetProtocol> {
     
-    get {
-      
-      var result : Set<LocoNetProtocol>
-      
-      switch self {
-      case .DT200:
-        result = [.protocol0]
-      case .DCS100_DCS200, .DB150, .DCS50, .DCS51:
-        result = [.protocol0, .protocol1]
-      case .DCS210, .DCS240, .DCS52, .DCS210Plus, .DCS240Plus:
-        result = [.protocol0, .protocol1, .protocol2]
-      }
-      
-      return result
-      
+    var result : Set<LocoNetProtocol>
+    
+    switch self {
+    case .DT200:
+      result = [.protocol0]
+    case .DCS100_DCS200, .DB150, .DCS50, .DCS51:
+      result = [.protocol0, .protocol1]
+    case .DCS210, .DCS240, .DCS52, .DCS210Plus, .DCS240Plus:
+      result = [.protocol0, .protocol1, .protocol2]
     }
     
+    return result
+
   }
   
   public var idleSupportedByDefault : Bool {
-    get {
-      let commandStationsThatSupportIdle : Set<LocoNetCommandStationType> = [.DT200, .DCS100_DCS200, .DB150]
-      return commandStationsThatSupportIdle.contains(self)
-    }
+    let commandStationsThatSupportIdle : Set<LocoNetCommandStationType> = [.DT200, .DCS100_DCS200, .DB150]
+    return commandStationsThatSupportIdle.contains(self)
   }
   
   public var programmingTrackExists : Bool {
-    get {
-      let commandStationsWithProgrammingTrack : Set<LocoNetCommandStationType> = [.DCS100_DCS200, .DCS50, .DCS51, .DCS52, .DCS210, .DCS210Plus, .DCS240, .DCS240Plus]
-      return commandStationsWithProgrammingTrack.contains(self)
-    }
+    let commandStationsWithProgrammingTrack : Set<LocoNetCommandStationType> = [.DCS100_DCS200, .DCS50, .DCS51, .DCS52, .DCS210, .DCS210Plus, .DCS240, .DCS240Plus]
+    return commandStationsWithProgrammingTrack.contains(self)
   }
   
 }
