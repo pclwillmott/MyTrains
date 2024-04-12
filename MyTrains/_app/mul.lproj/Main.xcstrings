@@ -1549,6 +1549,18 @@
         }
       }
     },
+    "Ote-DE-r1D.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Switchboard Panel\"; ObjectID = \"Ote-DE-r1D\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Switchboard Panel"
+          }
+        }
+      }
+    },
     "OY7-WF-poV.title" : {
       "comment" : "Class = \"NSMenuItem\"; title = \"Minimize\"; ObjectID = \"OY7-WF-poV\";",
       "extractionState" : "extracted_with_value",

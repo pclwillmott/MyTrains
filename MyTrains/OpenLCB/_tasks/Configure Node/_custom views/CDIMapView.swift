@@ -45,12 +45,19 @@ class CDIMapView : CDIDataView {
   
   override internal func dataWasSet() {
     
-    guard let comboBox, let string = setString() else {
+    guard let comboBox, let elementType, let string = setString() else {
       return
     }
     
     if let map {
-      map.selectItem(comboBox: comboBox, property: string)
+      var test = string
+      switch elementType {
+      case .eventid:
+        test = "\(UInt64(dotHex: string)!)"
+      default:
+        break
+      }
+      map.selectItem(comboBox: comboBox, property: test)
     }
 
   }
@@ -100,11 +107,16 @@ class CDIMapView : CDIDataView {
 
   override public var getData : [UInt8] {
 
-    guard let map, let comboBox, let textValue = map.selectedItem(comboBox: comboBox), let data = getData(string: textValue) else {
+    guard let map, let comboBox, let textValue = map.selectedItem(comboBox: comboBox), let elementType else {
       return []
     }
 
-    return data
+    switch elementType {
+    case .eventid:
+      return UInt64(textValue)!.bigEndianData
+    default:
+      return getData(string: textValue)!
+    }
     
   }
 

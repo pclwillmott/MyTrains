@@ -1236,10 +1236,13 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
         address += block.count
       }
       
-      configurationTool.sendWriteCommand(destinationNodeId: node.nodeId, addressSpace: dataToWrite[0].space, startAddress: dataToWrite[0].address, dataToWrite: dataToWrite[0].data)
-
-      dataWasWritten = true
+      if !dataToWrite.isEmpty {
+        configurationTool.sendWriteCommand(destinationNodeId: node.nodeId, addressSpace: dataToWrite[0].space, startAddress: dataToWrite[0].address, dataToWrite: dataToWrite[0].data)
+        
+      }
       
+      dataWasWritten = true
+
     }
 
   }

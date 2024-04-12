@@ -26,6 +26,11 @@
   <max>65535</max>
 </int>
 
+<int size='1'>
+  <name>Panel is visible</name>
+  %%YES_NO%%
+</int>
+
 </segment>
 
 %%VIRTUAL_NODE_CONFIG%%

@@ -13,7 +13,6 @@ class SelectLayoutVC: MyTrainsViewController, MyTrainsAppDelegate {
   // MARK: Window & View Control
   
   override func windowWillClose(_ notification: Notification) {
- //   appDelegate.networkLayer?.myTrainsNode?.removeObserver(observerId: observerId)
     super.windowWillClose(notification)
   }
   
@@ -100,15 +99,14 @@ class SelectLayoutVC: MyTrainsViewController, MyTrainsAppDelegate {
   @objc func layoutListUpdated(appNode:OpenLCBNodeMyTrains) {
     
     cboLayout.removeAllItems()
-    self.layoutList.removeAll()
+    layoutList.removeAll()
     
+    debugLog("\(appNode.layoutList)")
     for (key, item) in appNode.layoutList {
-      if item.masterNodeId == appNode.nodeId || item.layoutState == .activated {
-        self.layoutList.append(item)
-        cboLayout.addItem(withObjectValue: item.layoutName)
-        if item.layoutId == appLayoutId {
-          cboLayout.selectItem(withObjectValue: item.layoutName)
-        }
+      layoutList.append(item)
+      cboLayout.addItem(withObjectValue: item.layoutName)
+      if item.layoutId == appLayoutId {
+        cboLayout.selectItem(withObjectValue: item.layoutName)
       }
     }
     

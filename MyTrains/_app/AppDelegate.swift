@@ -268,7 +268,15 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
       vc.showWindow()
 
     case .switchboardPanel:
-      break
+      for (_, panel) in appNode!.panelList {
+        if panel.panelIsVisible {
+          let wc = MyTrainsWindow.panelView.windowController
+          wc.window?.setFrameAutosaveName("PanelView-\(panel.nodeId.toHexDotFormat(numberOfBytes: 6))") 
+          let vc = MyTrainsWindow.panelView.viewController(windowController: wc) as! PanelViewVC
+          vc.switchboardView.switchboardPanel = panel
+          vc.showWindow()
+        }
+      }
     case .clock:
       break
     case .locoNetTrafficMonitor:
@@ -315,7 +323,7 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
     for rawValue in 0 ... MyTrainsViewType.numberOfTypes - 1 {
       if let viewType = MyTrainsViewType(rawValue: rawValue), let appNode {
         let option = appNode.getViewOption(type: viewType)
-        if option == .open || (option == .restorePreviousState && appNode.getViewState(type: viewType)) {
+        if option == .open || (option == .restorePreviousState && (viewType == .switchboardPanel || appNode.getViewState(type: viewType))) {
           openWindow(viewType: viewType)
         }
       }
@@ -434,6 +442,13 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
     default:
       break
     }
+  }
+  
+  public func closeAllPanels() {
+    for (_, vc) in activeViewControllers {
+      vc.closeWindow()
+    }
+    openWindows()
   }
   
   public func closeAllWindows() {
@@ -584,6 +599,9 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
       case .rebootApplication:
         initiateRebootApplication()
         
+      case .switchboardPanel:
+        MyTrainsWindow.panelView.showWindow()
+        
       default:
         
         if let virtualNodeType = MyTrainsVirtualNodeType(rawValue: UInt16(sender.tag)) {
@@ -625,20 +643,18 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
               
           let node = networkLayer!.createVirtualNode(virtualNodeType: virtualNodeType)
 
-          let networkLayer = appDelegate.networkLayer
+      //    let networkLayer = appDelegate.networkLayer
           
-          node.hostAppNodeId = node.virtualNodeType == .applicationNode ? node.nodeId : appNode!.nodeId
+    //      node.hostAppNodeId = node.virtualNodeType == .applicationNode ? node.nodeId : appNode!.nodeId
           
-          switch node.virtualNodeType {
-          case .layoutNode:
-            node.layoutNodeId = node.nodeId
-            node.saveMemorySpaces()
-          case .switchboardItemNode, .switchboardPanelNode:
-            node.layoutNodeId = appLayoutId!
-            node.saveMemorySpaces()
-          default:
-            break
-          }
+    //      switch node.virtualNodeType {
+    //      case .layoutNode:
+    //        node.layoutNodeId = node.nodeId
+    //      case .applicationNode:
+    //        node.layoutNodeId = 0
+    //      default:
+    //        node.layoutNodeId = appLayoutId!
+    //      }
 
           if node.isConfigurationDescriptionInformationProtocolSupported {
             let vc = MyTrainsWindow.configurationTool.viewController as! ConfigurationToolVC
@@ -686,6 +702,7 @@ public enum MyTrainsWindow : String {
   case about                             = "About"
   case textView                          = "TextView"
   case initApp                           = "InitApp"
+  case panelView                         = "PanelView"
   
   // MARK: Public Properties
   
@@ -705,7 +722,7 @@ public enum MyTrainsWindow : String {
 
   // MARK: Private Methods
   
-  private func viewController(windowController: NSWindowController) -> MyTrainsViewController {
+  internal func viewController(windowController: NSWindowController) -> MyTrainsViewController {
     return windowController.window!.contentViewController! as! MyTrainsViewController
   }
 

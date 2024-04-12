@@ -79,15 +79,9 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
       return appLayoutId
     }
     set(id) {
-      if id != layoutNodeId {
+      if id != appLayoutId {
         appLayoutId = id
-        if let id {
-          appMode = isInternalVirtualNode(nodeId: id) ? .master : .delegate
-        }
-        else {
-          appMode = .master
-        }
-  //      updateVirtualNodeList()
+        appDelegate.initiateRebootApplication()
       }
     }
   }
@@ -203,12 +197,16 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
     
     state = .uninitialized
 
+    startupGroup.removeAll()
+    
     if startupGroup.isEmpty {
       
-      nodeManagers.append(configurationToolManager!)
-      nodeManagers.append(throttleManager!)
-      nodeManagers.append(locoNetMonitorManager!)
-      nodeManagers.append(programmerToolManager!)
+      if nodeManagers.isEmpty {
+        nodeManagers.append(configurationToolManager!)
+        nodeManagers.append(throttleManager!)
+        nodeManagers.append(locoNetMonitorManager!)
+        nodeManagers.append(programmerToolManager!)
+      }
       
       for group in 0 ... MyTrainsVirtualNodeType.numberOfStartupGroups + 1 {
         startupGroup[group] = StartupGroup()
@@ -216,7 +214,21 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
       
       for node in OpenLCBMemorySpace.getVirtualNodes() {
         if let group = startupGroup[node.virtualNodeType.startupGroup] {
-          group.add(node)
+          if node.virtualNodeType != .applicationNode && node.virtualNodeType != .layoutNode {
+  //          node.layoutNodeId = layoutNodeId!
+            if let layoutNodeId, node.layoutNodeId == layoutNodeId {
+              group.add(node)
+            }
+          }
+          else {
+ //           if node.virtualNodeType == .applicationNode {
+ //             node.layoutNodeId = 0
+ //           }
+ //           else {
+ //             node.layoutNodeId = node.nodeId
+ //           }
+            group.add(node)
+          }
         }
       }
       
@@ -503,6 +515,7 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
       let node = OpenLCBCANGateway(nodeId: newNodeId)
       
       node.hostAppNodeId = appNode.nodeId
+      node.layoutNodeId = layoutNodeId == nil ? 0 : layoutNodeId!
       
       registerNode(node: node)
 
@@ -536,6 +549,8 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
     
     var node : OpenLCBNodeVirtual
     
+    var layout : UInt64? = layoutNodeId
+    
     switch virtualNodeType {
     case .clockNode:
       node = OpenLCBClock(nodeId: newNodeId)
@@ -549,6 +564,7 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
       node = OpenLCBCANGateway(nodeId: newNodeId)
     case .applicationNode:
       node = OpenLCBNodeMyTrains(nodeId: newNodeId)
+      layout = nil
     case .configurationToolNode:
       node = OpenLCBNodeConfigurationTool(nodeId: newNodeId)
     case .locoNetMonitorNode:
@@ -563,6 +579,12 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
       node = OpenLCBDigitraxBXP88Node(nodeId: newNodeId)
     case .layoutNode:
       node = LayoutNode(nodeId: newNodeId)
+      layout = node.nodeId
+      for (_, otherNode) in virtualNodeLookup {
+        if otherNode.virtualNodeType != .applicationNode && otherNode.virtualNodeType != .layoutNode, otherNode.layoutNodeId == 0 {
+          otherNode.layoutNodeId = node.nodeId
+        }
+      }
     case .switchboardPanelNode:
       node = SwitchboardPanelNode(nodeId: newNodeId, layoutNodeId: layoutNodeId!)
     case .switchboardItemNode:
@@ -570,7 +592,8 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
     }
 
     node.hostAppNodeId = appNode!.nodeId
-
+    node.layoutNodeId = layout == nil ? 0 : layout!
+    
     registerNode(node: node)
 
     return node

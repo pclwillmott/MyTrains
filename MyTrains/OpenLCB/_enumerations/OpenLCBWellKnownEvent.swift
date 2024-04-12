@@ -38,14 +38,15 @@ public enum OpenLCBWellKnownEvent : UInt64 {
   case alternateClock2                     = 0x0101000001030000
   case locationServicesReport              = 0x0102000000000000
   case locoNetMessage                      = 0x0181000000000000
-  case myTrainsLayoutActivated             = 0x050101017b00fffe
-  case myTrainsLayoutDeactivated           = 0x050101017b00fffd
-  case myTrainsLayoutDeleted               = 0x050101017b00fffc
-  case identifyMyTrainsLayouts             = 0x050101017b00fffb
-  case identifyMyTrainsSwitchboardPanels   = 0x050101017b00fffa
-  case identifyMyTrainsSwitchboardItems    = 0x050101017b00fff9
-  case nodeIsASwitchboardPanel             = 0x050101017b00fff8
-  case nodeIsASwitchboardItem              = 0x050101017b00fff7
+  case nodeIsAMyTrainsLayout               = 0x050101017b00ffff
+//  case myTrainsLayoutActivated             = 0x050101017b00fffe
+//  case myTrainsLayoutDeactivated           = 0x050101017b00fffd
+//  case myTrainsLayoutDeleted               = 0x050101017b00fffc
+//  case identifyMyTrainsLayouts             = 0x050101017b00fffb
+//  case identifyMyTrainsSwitchboardPanels   = 0x050101017b00fffa
+//  case identifyMyTrainsSwitchboardItems    = 0x050101017b00fff9
+//  case nodeIsASwitchboardPanel             = 0x050101017b00fff8
+//  case nodeIsASwitchboardItem              = 0x050101017b00fff7
   case trainSearchEvent                    = 0x090099ff00000000
   case nodeIsADCCProgrammingTrack          = 0x090099feffff0002
   case trainSearchDCCShortAddress          = 0x090099ffffffff08
@@ -91,15 +92,8 @@ public enum OpenLCBWellKnownEvent : UInt64 {
     .locationServicesReport : String(localized: "Location Services Report"),
     .locoNetMessage : String(localized: "LocoNet Message"),
     .nodeIsALocoNetGateway : String(localized: "Node Is A LocoNet Gateway"),
-    .myTrainsLayoutActivated : String(localized: "MyTrains Layout Activated"),
-    .myTrainsLayoutDeactivated : String(localized: "MyTrains Layout Deactivated"),
-    .myTrainsLayoutDeleted : String(localized: "MyTrains Layout Deleted"),
-    .identifyMyTrainsLayouts : String(localized: "Identify MyTrains Layouts"),
-    .identifyMyTrainsSwitchboardPanels : String(localized: "Identify MyTrains Switchboard Panels"),
-    .identifyMyTrainsSwitchboardItems : String(localized: "Identify MyTrains Switchboard Items"),
-    .nodeIsASwitchboardPanel : String(localized: "Node Is A Switchboard Panel"),
-    .nodeIsASwitchboardItem : String(localized: "Node Is A Switchboard Item"),
     .trainSearchEvent : String(localized: "Train Search"),
+    .nodeIsAMyTrainsLayout : String(localized: "Node Is A MyTrains Layout"),
     .nodeIsADCCProgrammingTrack : String(localized: "Node Is A DCC Programming Track"),
     .trainSearchDCCShortAddress : String(localized: "Train Search DCC Short Address"),
     .trainSearchDCCLongAddress : String(localized: "Train Search DCC Long Address"),

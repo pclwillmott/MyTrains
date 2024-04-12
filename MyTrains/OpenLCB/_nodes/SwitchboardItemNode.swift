@@ -187,9 +187,6 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
         self.layoutNodeId = layoutNodeId
       }
       
-      eventsConsumed.insert(OpenLCBWellKnownEvent.identifyMyTrainsSwitchboardItems.rawValue)
-      eventsProduced.insert(OpenLCBWellKnownEvent.nodeIsASwitchboardItem.rawValue)
-      
       configuration.delegate = self
       
       memorySpaces[configuration.space] = configuration
@@ -704,6 +701,16 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     }
   }
 
+  public var location : SwitchBoardLocation {
+    get {
+      return (x: Int(xPos), y: Int(yPos))
+    }
+    set(value) {
+      xPos = UInt16(exactly: value.x)!
+      yPos = UInt16(exactly: value.y)!
+    }
+  }
+  
   public var orientation : Orientation {
     get {
       return Orientation(rawValue: configuration!.getUInt8(address: addressOrientation)!)!
@@ -940,15 +947,11 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     switch spaceId {
     case .configuration:
       switch address {
-      case addressItemType:
-        sendNodeIsASwitchboardItemEvent()
       default:
         break
       }
     case .acdiUser:
       switch address {
-      case addressACDIUserNodeName:
-        sendNodeIsASwitchboardItemEvent()
       default:
         break
       }
@@ -971,15 +974,6 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
 
   }
   
-  internal func sendNodeIsASwitchboardItemEvent() {
-    
-    var payload = layoutNodeId.nodeIdBigEndianData
-    payload.append(contentsOf: itemType.rawValue.bigEndianData)
-    
-    sendWellKnownEvent(eventId: .nodeIsASwitchboardItem, payload: payload)
-
-  }
-
   override internal func customizeDynamicCDI(cdi:String) -> String {
  
     var result = cdi
@@ -1496,8 +1490,6 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
       if let eventId = message.eventId, let event = OpenLCBWellKnownEvent(rawValue: eventId) {
       
         switch event {
-        case .identifyMyTrainsSwitchboardItems:
-          sendNodeIsASwitchboardItemEvent()
         default:
           break
         }

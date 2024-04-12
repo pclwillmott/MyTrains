@@ -332,6 +332,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     }
     set(value) {
       virtualNodeConfigSpace?.setUInt(address: addressVirtualNodeConfigLayoutNodeId, value:value)
+      saveMemorySpaces()
     }
   }
 
@@ -449,7 +450,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
 
     config += "<eventid>\n"
     config += "  <name>Layout Node</name>\n"
-    config += "  %%LAYOUT_NODES%%\n"
+    config += "  %%LAYOUT_NODES%%"
     config += "</eventid>\n"
 
     config += "<int size='2'>\n"
@@ -735,8 +736,14 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
       sendEvent(eventId: eventId)
     }
     
+    sendStartupMessages()
+    
     appDelegate.networkLayer?.nodeDidStart(node: self)
 
+  }
+  
+  internal func sendStartupMessages() {
+    
   }
   
   internal func setValidity(eventId:UInt64, validity: inout OpenLCBValidity) {

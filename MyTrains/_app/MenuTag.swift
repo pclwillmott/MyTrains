@@ -69,6 +69,7 @@ public enum MenuTag : Int {
   case createApplicationNode    = 3041
   case resetToFactoryDefaults   = 3042
   case rebootApplication        = 3043
+  case switchboardPanel         = 3044
   
   // MARK: Public Properties
   
@@ -169,6 +170,7 @@ public enum MenuTag : Int {
     .createApplicationNode    : String(localized: "Application Node",                      comment: "Used for a menu title"),
     .rebootApplication        : String(localized: "Reboot Application",                    comment: "Used for a menu title"),
     .resetToFactoryDefaults   : String(localized: "Reset Application to Factory Defaults", comment: "Used for a menu title"),
+    .switchboardPanel   : String(localized: "Switchboard Panel", comment: "Used for a menu title"),
   ]
   
   private static let validStates : [MenuTag:Set<OpenLCBNetworkLayerState>] = [
@@ -225,6 +227,7 @@ public enum MenuTag : Int {
     .createApplicationNode    : [.uninitialized],
     .resetToFactoryDefaults   : [.runningLocal, .runningNetwork],
     .rebootApplication        : [.runningLocal, .runningNetwork],
+    .switchboardPanel         : [.runningLocal, .runningNetwork],
   ]
   
 }

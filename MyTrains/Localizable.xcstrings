@@ -2785,15 +2785,6 @@
     "Identify Events Global" : {
 
     },
-    "Identify MyTrains Layouts" : {
-
-    },
-    "Identify MyTrains Switchboard Items" : {
-
-    },
-    "Identify MyTrains Switchboard Panels" : {
-
-    },
     "Identify Producer" : {
 
     },
@@ -3680,15 +3671,6 @@
     "MyTrains is initializing. This may take a few seconds." : {
 
     },
-    "MyTrains Layout Activated" : {
-
-    },
-    "MyTrains Layout Deactivated" : {
-
-    },
-    "MyTrains Layout Deleted" : {
-
-    },
     "N" : {
       "comment" : "Used to indicate the track gauge",
       "extractionState" : "stale",
@@ -3824,10 +3806,7 @@
     "Node Is A LocoNet Gateway" : {
 
     },
-    "Node Is A Switchboard Item" : {
-
-    },
-    "Node Is A Switchboard Panel" : {
+    "Node Is A MyTrains Layout" : {
 
     },
     "Node Is A Traction Proxy" : {

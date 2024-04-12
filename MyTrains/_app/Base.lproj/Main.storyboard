@@ -240,6 +240,10 @@
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" tag="9999" id="AkN-tY-o0Y"/>
+                                        <menuItem title="Switchboard Panel" tag="3044" id="Ote-DE-r1D">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" tag="9999" id="gKS-7Q-Xmc"/>
                                         <menuItem title="Select Layout" tag="3016" id="Jo9-xh-G6P">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                         </menuItem>

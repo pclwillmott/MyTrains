@@ -125,37 +125,37 @@ class CDIDataView: CDIView {
       
     case .int:
       
-      if let uint = SoftUIntX(string) {
-        if uint.size > elementSize {
+//      if let uint = SoftUIntX(string) {
+//        if uint.size > elementSize {
+//          return false
+//        }
+//        if let max = maxValue, let maxUInt = SoftUIntX(max), uint > maxUInt {
+//          debugLog("uint: \(uint) \(elementSize) \(maxUInt)")
+//         return false
+//        }
+//       if let min = minValue, let minUInt = SoftUIntX(min), uint < minUInt {
+//          debugLog("uint: \(uint) \(elementSize) \(minUInt)")
+//          return false
+//        }
+//      }
+//      else {
+//        return false
+//      }
+
+      if let uint = UInt64(string) {
+        if uint > (UInt64(1) << (8 * elementSize)) - 1 {
           return false
         }
-        if let max = maxValue, let maxUInt = SoftUIntX(max), uint > maxUInt {
-          debugLog("uint: \(uint) \(elementSize) \(maxUInt)")
-         return false
+        if let max = maxValue, let maxUInt = UInt64(max), uint > maxUInt {
+          return false
         }
-        if let min = minValue, let minUInt = SoftUIntX(min), uint < minUInt {
-          debugLog("uint: \(uint) \(elementSize) \(minUInt)")
+        if let min = minValue, let minUInt = UInt64(min), uint < minUInt {
           return false
         }
       }
       else {
         return false
       }
-
- //     if let uint = UInt64(string) {
- //       if uint > (UInt64(1) << (8 * elementSize)) - 1 {
- //         return false
- //       }
- //       if let max = maxValue, let maxUInt = UInt64(max), uint > maxUInt {
- //         return false
- //       }
- //       if let min = minValue, let minUInt = UInt64(min), uint < minUInt {
- //         return false
- //       }
- //     }
- //     else {
- //       return false
- //     }
 
     case .float:
       
@@ -275,12 +275,12 @@ class CDIDataView: CDIView {
       
     case .int:
       
-      if let intValue = SoftUIntX(size: elementSize, bigEndianData: bigEndianData) {
-        return intValue.stringValue
-      }
-//      if let intValue = UInt64(bigEndianData: bigEndianData) {
-//        return "\(intValue)"
+//      if let intValue = SoftUIntX(size: elementSize, bigEndianData: bigEndianData) {
+//        return intValue.stringValue
 //      }
+      if let intValue = UInt64(bigEndianData: bigEndianData) {
+        return "\(intValue)"
+      }
       
     case .string:
       
@@ -306,16 +306,16 @@ class CDIDataView: CDIView {
       
     case .int:
       
-      if let uint = SoftUIntX(string) {
-        var data = uint.bigEndianData
-        data.removeFirst(uint.size - elementSize)
-        return data
-      }
-//      if let uint = UInt64(string) {
+//      if let uint = SoftUIntX(string) {
 //        var data = uint.bigEndianData
-//        data.removeFirst(8 - elementSize)
+//        data.removeFirst(uint.size - elementSize)
 //        return data
 //      }
+      if let uint = UInt64(string) {
+        var data = uint.bigEndianData
+        data.removeFirst(8 - elementSize)
+        return data
+      }
       
     case .float:
       
