@@ -51,7 +51,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="162" height="221"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lFt-Uw-DkZ" customClass="SwitchboardView" customModule="MyTrains" customModuleProvider="target">
+                                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lFt-Uw-DkZ" customClass="SwitchboardOperationsView" customModule="MyTrains" customModuleProvider="target">
                                                     <rect key="frame" x="0.0" y="0.0" width="170" height="230"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 </customView>

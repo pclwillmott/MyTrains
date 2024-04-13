@@ -187,12 +187,18 @@ class OpenLCBMonitorVC: MyTrainsViewController, OpenLCBNetworkObserverDelegate {
   }
 
   @objc func gatewayRXPacket(gateway:Int) {
+    guard gateway < gatewayViews.count else {
+      return
+    }
     DispatchQueue.main.async {
       self.gatewayViews[gateway].rxPacket()
     }
   }
   
   @objc func gatewayTXPacket(gateway:Int) {
+    guard gateway < gatewayViews.count else {
+      return
+    }
     gatewayViews[gateway].txPacket()
   }
   

@@ -87,6 +87,15 @@ public class SwitchboardPanelNode : OpenLCBNodeVirtual {
     return result
   }
   
+  public func findSwitchboardItem(location:SwitchBoardLocation) -> SwitchboardItemNode? {
+    for (_, item) in switchboardItems {
+      if item.location == location {
+        return item
+      }
+    }
+    return nil
+  }
+  
   public func bounds() -> NSRect? {
     var minX : UInt16?
     var maxX : UInt16?
@@ -153,6 +162,10 @@ public class SwitchboardPanelNode : OpenLCBNodeVirtual {
     
     saveMemorySpaces()
 
+  }
+  
+  internal override func customizeDynamicCDI(cdi:String) -> String {
+    return YesNo.insertMap(cdi: cdi)
   }
   
   // MARK: OpenLCBNetworkLayerDelegate Methods

@@ -241,7 +241,11 @@ public class LayoutNode : OpenLCBNodeVirtual {
       configuration!.setUInt(address: addressDefaultTrackGuage, value: value.rawValue)
     }
   }
-
+  
+  public var operationalBlocks : [UInt64:SwitchboardItemNode] = [:]
+  
+  public var operationalGroups : [UInt64:[SwitchboardItemNode]] = [:]
+  
   // MARK: Private Methods
 
   internal override func resetToFactoryDefaults() {
@@ -268,6 +272,226 @@ public class LayoutNode : OpenLCBNodeVirtual {
     result = result.replacingOccurrences(of: CDI.SCALE_SPEED_UNITS, with: appNode!.unitsScaleSpeed.symbol)
     return result
   }
+  
+  // MARK: Public Methods
+  
+  public func linkSwitchBoardItems() {
+    
+    guard let appNode else {
+      return
+    }
+    
+    let switchboardItems = appNode.switchboardItemList
+    
+    let panels = appNode.panelList
+    
+    // Remove all links
+    
+    for (_, item) in switchboardItems {
+      item.nodeLinks = [SWBNodeLink](repeating: (nil, -1, []), count: 8)
+      item.isEliminated = item.isScenic
+    }
+    
+    let lookup : [(dx:Int, dy:Int, point:Int)] = [
+      (dx: -1, dy: +1, point: 4),
+      (dx:  0, dy: +1, point: 5),
+      (dx: +1, dy: +1, point: 6),
+      (dx: +1, dy:  0, point: 7),
+      (dx: +1, dy: -1, point: 0),
+      (dx:  0, dy: -1, point: 1),
+      (dx: -1, dy: -1, point: 2),
+      (dx: -1, dy:  0, point: 3),
+    ]
+    
+    // Link the nodes
+    
+    for (_, item1) in switchboardItems {
+      
+      if item1.isEliminated {
+        continue
+      }
+      
+      let x = Int(item1.xPos)
+      let y = Int(item1.yPos)
+      
+      for point1 in item1.itemType.pointsSet(orientation: item1.orientation) {
+        
+        if item1.nodeLinks[point1].switchBoardItem == nil {
+          
+          let look = lookup[point1]
+          
+          let test : SwitchBoardLocation = (x: x + look.dx, y: y + look.dy)
+          
+          if test.x >= 0 && test.y >= 0 {
+            
+            let point2 = look.point
+            
+            if let panel = panels[item1.panelId], let item2 = panel.findSwitchboardItem(location: test), item2.itemType.pointsSet(orientation: item2.orientation).contains(point2) {
+              if item1.trackGauge == item2.trackGauge {
+                item1.nodeLinks[point1].switchBoardItem = item2
+                item1.nodeLinks[point1].connectionPointId = point2
+                item2.nodeLinks[point2].switchBoardItem = item1
+                item2.nodeLinks[point2].connectionPointId = point1
+              }
+            }
+
+          }
+          
+        }
+        
+      }
+      
+    }
+    
+    // Eliminate track items linked to turnouts and blocks
+    
+    for (_, item1) in switchboardItems {
+      
+      if item1.isEliminated {
+        continue
+      }
+      
+      for point1 in item1.itemType.pointsSet(orientation: item1.orientation) {
+        var nodeLink = item1.nodeLinks[point1]
+        while let node = nodeLink.switchBoardItem, node.isTrack {
+          let exits = node.exitPoint(entryPoint: nodeLink.connectionPointId)
+          let exit = exits[0] // Track items only have one item
+          item1.nodeLinks[point1] = exit
+          if let item2 = exit.switchBoardItem {
+            item2.nodeLinks[exit.connectionPointId].switchBoardItem = item1
+            item2.nodeLinks[exit.connectionPointId].connectionPointId = point1
+          }
+          node.isEliminated = true
+          nodeLink = item1.nodeLinks[point1]
+        }
+
+      }
+      
+    }
+    
+    // Eliminate track parts that are not connected to a block or a turnout
+    
+    for (_, item) in switchboardItems {
+      if item.isTrack {
+        item.isEliminated = true
+      }
+    }
+    
+    // Now do inter-panel links
+    
+    for (_, item1) in switchboardItems {
+      if item1.isLink {
+        for (_, item2) in switchboardItems {
+          if item1.linkId == item2.nodeId && item2.linkId == item1.nodeId {
+            let point1 = item1.itemType.points(orientation: item1.orientation)[0]
+            let point2 = item2.itemType.points(orientation: item2.orientation)[0]
+            let node1 = item1.nodeLinks[point1]
+            let node2 = item2.nodeLinks[point2]
+            node1.switchBoardItem?.nodeLinks[node1.connectionPointId].switchBoardItem = node2.switchBoardItem
+            node1.switchBoardItem?.nodeLinks[node1.connectionPointId].connectionPointId = node2.connectionPointId
+            node2.switchBoardItem?.nodeLinks[node2.connectionPointId].switchBoardItem = node1.switchBoardItem
+            node2.switchBoardItem?.nodeLinks[node2.connectionPointId].connectionPointId = node1.connectionPointId
+            item1.isEliminated = true
+            item2.isEliminated = true
+          }
+        }
+      }
+    }
+    
+    // Create Dictionaries
+    
+    operationalBlocks.removeAll()
+    operationalGroups.removeAll()
+    
+    for (_, item) in switchboardItems {
+      
+      if !item.isEliminated {
+        operationalBlocks[item.nodeId] = item
+      }
+      
+      if item.groupId != -1 {
+        
+        if var group = operationalGroups[item.groupId] {
+          group.append(item)
+          operationalGroups[item.groupId] = group
+        }
+        else {
+          let group : [SwitchboardItemNode] = [item]
+          operationalGroups[item.groupId] = group
+        }
+        
+      }
+      
+    }
+    
+    for (_, block) in operationalBlocks {
+      
+      var index : Int = 0
+      
+      for connection in block.itemType.connections {
+        
+        let from = (connection.from + Int(block.orientation.rawValue)) % 8
+        
+        let to = (connection.to + Int(block.orientation.rawValue)) % 8
+        
+        if let fromNode = block.nodeLinks[from].switchBoardItem, let toNode = block.nodeLinks[to].switchBoardItem {
+          
+          var route : SWBRoutePart = (block, from, toNode, block.nodeLinks[to].connectionPointId, index, distance: block.getDimension(routeNumber: index + 1)!, routeDirection: .next)
+          
+          block.nodeLinks[from].routes.append(route)
+          
+          if fromNode.isTurnout || fromNode.directionality == .bidirectional {
+          
+            route = (block, to, fromNode, block.nodeLinks[from].connectionPointId, index, distance: block.getDimension(routeNumber: index + 1)!, routeDirection: .previous)
+            
+            block.nodeLinks[to].routes.append(route)
+
+          }
+
+        }
+        
+        index += 1
+        
+      }
+      /*
+      
+      var index = 0
+      for node in block.nodeLinks {
+        
+        if let item = node.switchBoardItem {
+          for route in node.routes {
+            print("  \(route.fromSwitchBoardItem.blockName) \(route.fromNodeId)  -> \(route.toSwitchBoardItem.blockName) \(route.toNodeId) \(route.switchSettings)")
+          }
+        }
+        index += 1
+      }
+      */
+      // Find Loops
+      
+    }
+    
+//    findLoops()
+    
+    /*
+    for (_, item) in switchBoardItems {
+      
+      if item.isEliminated {
+        continue
+      }
+      
+      print("\(item.itemPartType.partName) \(item.primaryKey) \(item.blockName)")
+      
+      for point in item.itemPartType.pointsSet(orientation: item.orientation) {
+        let nodeLink = item.nodeLinks[point]
+        if let node = nodeLink.switchBoardItem {
+          print("  \(point): \(node.primaryKey) - \(nodeLink.nodeId)")
+        }
+      }
+       
+    }
+    */
+  }
+
 
   // MARK: OpenLCBNetworkLayerDelegate Methods
   

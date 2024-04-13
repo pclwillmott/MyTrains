@@ -5171,6 +5171,9 @@
     "Switchboard" : {
       "comment" : "Used for a menu title"
     },
+    "Switchboard Editor" : {
+
+    },
     "Switchboard Item" : {
       "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name",
       "localizations" : {

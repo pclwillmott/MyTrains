@@ -16,7 +16,8 @@ public enum MyTrainsViewType : Int {
   case clock                 = 4
   case locoNetTrafficMonitor = 5
   case locoNetSlotView       = 6
-  case locoNetDashboard      = 7 // Remember to change numberOfTypes property value.
+  case locoNetDashboard      = 7
+  case switchboardEditor     = 8 // Remember to change numberOfTypes property value.
 
   // MARK: Public Properties
   
@@ -27,7 +28,7 @@ public enum MyTrainsViewType : Int {
   // MARK: Public Class Properties
   
   public static var numberOfTypes : Int {
-    return 8
+    return 9
   }
   
   // MARK: Private Class Methods
@@ -41,6 +42,7 @@ public enum MyTrainsViewType : Int {
     .locoNetTrafficMonitor : String(localized: "LocoNet Traffic Monitor"),
     .locoNetSlotView       : String(localized: "LocoNet Slot View"),
     .locoNetDashboard      : String(localized: "LocoNet Dashboard"),
+    .switchboardEditor     : String(localized: "Switchboard Editor"),
   ]
 
   private static var map : String {
@@ -54,6 +56,7 @@ public enum MyTrainsViewType : Int {
       .locoNetTrafficMonitor,
       .locoNetSlotView,
       .locoNetDashboard,
+      .switchboardEditor,
     ]
     
     var map = "<segment space='1' origin='0'>\n"

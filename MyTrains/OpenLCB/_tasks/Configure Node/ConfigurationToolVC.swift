@@ -251,8 +251,6 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
   
   private var CDI : [UInt8] = []
   
-  private var dataWasWritten = false
-
   private var xmlParser : XMLParser?
   
   private var nextCDIStartAddress : Int = 0
@@ -399,6 +397,8 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
   
   public weak var configurationTool : OpenLCBNodeConfigurationTool?
   
+  public var dataWasWritten = false
+
   // MARK: Private Methods
  
   private func displayErrorMessage(message: String) {

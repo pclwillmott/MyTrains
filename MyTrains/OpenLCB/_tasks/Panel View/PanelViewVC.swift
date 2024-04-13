@@ -81,6 +81,8 @@ class PanelViewVC: MyTrainsViewController {
       }
     }
     
+    switchboardView.showGridLines = false
+    
   }
   
   // MARK: Private Properties
@@ -126,14 +128,14 @@ class PanelViewVC: MyTrainsViewController {
   @IBOutlet weak var btnZoomIn: NSButton!
   
   @IBAction func btnZoomInAction(_ sender: NSButton) {
-    switchboardMagnification += 0.25
+    switchboardMagnification += 0.1
     scrollView.magnification = switchboardMagnification
   }
   
   @IBOutlet weak var btnZoomOut: NSButton!
   
   @IBAction func btnZoomOutAction(_ sender: NSButton) {
-    switchboardMagnification -= 0.25
+    switchboardMagnification -= 0.1
     scrollView.magnification = switchboardMagnification
   }
   

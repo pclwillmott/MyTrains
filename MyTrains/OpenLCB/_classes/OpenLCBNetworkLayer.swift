@@ -215,18 +215,17 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
       for node in OpenLCBMemorySpace.getVirtualNodes() {
         if let group = startupGroup[node.virtualNodeType.startupGroup] {
           if node.virtualNodeType != .applicationNode && node.virtualNodeType != .layoutNode {
-  //          node.layoutNodeId = layoutNodeId!
+            if let layoutNodeId, node.virtualNodeType == .canGatewayNode, node.layoutNodeId == 0 {
+              node.layoutNodeId = layoutNodeId
+            }
             if let layoutNodeId, node.layoutNodeId == layoutNodeId {
+              group.add(node)
+            }
+            else if node.virtualNodeType == .canGatewayNode && node.layoutNodeId == 0 {
               group.add(node)
             }
           }
           else {
- //           if node.virtualNodeType == .applicationNode {
- //             node.layoutNodeId = 0
- //           }
- //           else {
- //             node.layoutNodeId = node.nodeId
- //           }
             group.add(node)
           }
         }
@@ -580,11 +579,7 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
     case .layoutNode:
       node = LayoutNode(nodeId: newNodeId)
       layout = node.nodeId
-      for (_, otherNode) in virtualNodeLookup {
-        if otherNode.virtualNodeType != .applicationNode && otherNode.virtualNodeType != .layoutNode, otherNode.layoutNodeId == 0 {
-          otherNode.layoutNodeId = node.nodeId
-        }
-      }
+      appLayoutId = node.nodeId
     case .switchboardPanelNode:
       node = SwitchboardPanelNode(nodeId: newNodeId, layoutNodeId: layoutNodeId!)
     case .switchboardItemNode:

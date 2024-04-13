@@ -129,15 +129,14 @@ class SelectLayoutVC: MyTrainsViewController, MyTrainsAppDelegate {
   // MARK: Actions
   
   @IBAction func btnOKAction(_ sender: NSButton) {
-    guard let networkLayer = appDelegate.networkLayer else {
-      return
-    }
-    networkLayer.layoutNodeId = (cboLayout.indexOfSelectedItem == -1) ? nil : layoutList[cboLayout.indexOfSelectedItem].layoutId
+    appDelegate.networkLayer?.layoutNodeId = (cboLayout.indexOfSelectedItem == -1) ? nil : layoutList[cboLayout.indexOfSelectedItem].layoutId
     view.window?.close()
   }
 
   @IBAction func btnClearAction(_ sender: NSButton) {
     cboLayout.deselectItem(at: cboLayout.indexOfSelectedItem)
+    appDelegate.networkLayer?.layoutNodeId = nil
+    view.window?.close()
   }
 
 }

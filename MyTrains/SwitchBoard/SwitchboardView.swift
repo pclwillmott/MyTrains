@@ -37,7 +37,7 @@ class SwitchboardView: NSView {
     
     for (_, item) in switchboardPanel.switchboardItems {
       
-      SwitchBoardShape.drawShape(partType: item.itemType, orientation: item.orientation, location: item.location, lineWidth: lineWidth, cellSize: cellSize, isButton: false, isEnabled: true, offset: CGPoint(x: 0.0, y: 0.0), switchBoardItem: nil)
+      SwitchboardShape.drawShape(partType: item.itemType, orientation: item.orientation, location: item.location, lineWidth: lineWidth, cellSize: cellSize, isButton: false, isEnabled: true, offset: CGPoint(x: 0.0, y: 0.0), switchBoardItem: nil)
 
     }
     
@@ -113,7 +113,7 @@ class SwitchboardView: NSView {
       return nil
     }
     let gridSquare = gridSquare(from: event)
-    for (key, item) in switchboardPanel.switchboardItems {
+    for (_, item) in switchboardPanel.switchboardItems {
       if item.location == gridSquare {
         return item
       }
@@ -126,7 +126,7 @@ class SwitchboardView: NSView {
       return nil
     }
     let test : SwitchBoardLocation = (x:x, y:y)
-    for (key, item) in switchboardPanel.switchboardItems {
+    for (_, item) in switchboardPanel.switchboardItems {
       if item.location == test {
         return item
       }

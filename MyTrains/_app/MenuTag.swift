@@ -108,9 +108,41 @@ public enum MenuTag : Int {
       return false
     }
     
-    return validStates.contains(state)
+    var result = validStates.contains(state)
+    
+    if let networkLayer = appDelegate.networkLayer {
+      
+      if MenuTag.requireSelectedLayoutId.contains(self) {
+        
+        if (networkLayer.layoutNodeId == nil) {
+          result = false
+        }
+        else if let layoutNodeId = networkLayer.layoutNodeId, !networkLayer.virtualNodeLookup.keys.contains(layoutNodeId) {
+          result = false
+        }
+        
+      }
+      else if self == .newLayout && networkLayer.layoutNodeId != nil {
+        result = false
+      }
+      
+    }
+    
+    return result
     
   }
+  
+  private static let requireSelectedLayoutId : Set<MenuTag> = [
+    .newClock,
+    .newTrain,
+    .newThrottle,
+    .newSwitchboardItem,
+    .newSwitchboardPanel,
+    .newDigitraxBXP88,
+    .newLocoNetGateway,
+    .newLocoNetMonitor,
+    .newDCCProgrammerTrack,
+  ]
   
   // MARK: Private Static Properties
   
@@ -170,7 +202,7 @@ public enum MenuTag : Int {
     .createApplicationNode    : String(localized: "Application Node",                      comment: "Used for a menu title"),
     .rebootApplication        : String(localized: "Reboot Application",                    comment: "Used for a menu title"),
     .resetToFactoryDefaults   : String(localized: "Reset Application to Factory Defaults", comment: "Used for a menu title"),
-    .switchboardPanel   : String(localized: "Switchboard Panel", comment: "Used for a menu title"),
+    .switchboardPanel         : String(localized: "Switchboard Panel",                     comment: "Used for a menu title"),
   ]
   
   private static let validStates : [MenuTag:Set<OpenLCBNetworkLayerState>] = [

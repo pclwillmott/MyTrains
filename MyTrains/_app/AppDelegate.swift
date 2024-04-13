@@ -169,6 +169,7 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
     state = .uninitialized
  
     if Database.isEmpty() {
+      appLayoutId = nil
       let vc = MyTrainsWindow.selectMasterNode.viewController as! SelectMasterNodeVC
       vc.showWindow()
     }
@@ -300,6 +301,8 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
     case .locoNetDashboard:
       MyTrainsWindow.dashBoard.showWindow()
 
+    case .switchboardEditor:
+      MyTrainsWindow.switchboardEditor.showWindow()
     }
     
   }
@@ -480,6 +483,7 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
         self.state = .stopped
       case .rebooting:
         self.state = .uninitialized
+        networkLayer.clearMonitorBuffer()
         networkLayer.start()
       case .resetToFactoryDefaults:
         completeResetToFactoryDefaults()
@@ -560,9 +564,7 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
         vc.showWindow()
         
       case .configSwitchboard:
-    //    if let _ = myTrainsController.layout {
-          MyTrainsWindow.switchBoardEditor.showWindow()
-     //   }
+        openWindow(viewType: .switchboardEditor)
 
       case .trainSpeedProfiler:
         MyTrainsWindow.speedProfiler.showWindow()
@@ -661,6 +663,7 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
             vc.configurationTool = networkLayer!.getConfigurationTool()
             vc.configurationTool?.delegate = vc
             vc.node = node
+            vc.dataWasWritten = virtualNodeType == .layoutNode
             vc.showWindow()
           }
 
@@ -703,6 +706,7 @@ public enum MyTrainsWindow : String {
   case textView                          = "TextView"
   case initApp                           = "InitApp"
   case panelView                         = "PanelView"
+  case switchboardEditor                 = "SwitchboardEditor2"
   
   // MARK: Public Properties
   

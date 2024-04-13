@@ -936,6 +936,140 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     }
   }
 
+  public var nodeLinks = [SWBNodeLink](repeating: (nil, -1, []), count: 8)
+
+  public var isEliminated : Bool = false
+
+  public var isTurnout : Bool {
+    let turnouts : Set<SwitchBoardItemType> = [
+      .cross,
+      .rightCurvedTurnout,
+      .leftCurvedTurnout,
+      .turnout3Way,
+      .yTurnout,
+      .diagonalCross,
+      .turnoutLeft,
+      .turnoutRight,
+      .singleSlip,
+      .doubleSlip,
+    ]
+    return turnouts.contains(itemType)
+  }
+  
+  public var isScenic : Bool {
+    let scenics : Set<SwitchBoardItemType> = [
+      .platform,
+    ]
+    return scenics.contains(itemType)
+  }
+
+  public var isSensor : Bool {
+    get {
+      return itemType == .sensor
+    }
+  }
+  
+  public var isBlock : Bool {
+    get {
+      return itemType == .block
+    }
+  }
+  
+  public var isLink : Bool {
+    get {
+      return itemType == .link
+    }
+  }
+  
+  public var isOccupied : Bool = false {
+    didSet {
+   //   layout?.needsDisplay()
+    }
+  }
+  
+  public var isTrackFault : Bool = false {
+    didSet {
+   //   layout?.needsDisplay()
+    }
+  }
+  
+  public var isTrack : Bool {
+    get {
+      let track : Set<SwitchBoardItemType> = [
+        .curve,
+        .sensor,
+        .longCurve,
+        .straight,
+        .buffer,
+      ]
+      return track.contains(itemType)
+    }
+  }
+
+  public func exitPoint(entryPoint:Int) -> [SWBNodeLink] {
+    var result : [SWBNodeLink] = []
+    for connection in itemType.connections {
+      let to = (connection.to + Int(orientation.rawValue)) % 8
+      let from = (connection.from + Int(orientation.rawValue)) % 8
+      if entryPoint == to {
+        result.append(nodeLinks[from])
+      }
+      else if entryPoint == from {
+        result.append(nodeLinks[to])
+      }
+    }
+    return result
+  }
+  
+  public var numberOfConnections : Int {
+    return isTurnout ? itemType.connections.count : 0
+  }
+  
+  public var actualTurnoutConnection : Int? {
+      
+    var state1 : TurnoutSwitchSetting = (switchNumber:1, switchState: .closed)
+    
+//      if let sw1 = self.sw1 {
+//        state1 = (switchNumber:1, switchState: sw1.state)
+//      }
+    
+    var state2 : TurnoutSwitchSetting = (switchNumber:2, switchState: .closed)
+
+//     if let sw2 = self.sw2 {
+//       state2 = (switchNumber:1, switchState: sw2.state)
+//     }
+    
+    var index : Int = 0
+    
+    while index < numberOfConnections {
+      
+      let switchSettings = itemType.connections[index].switchSettings
+              
+      switch switchSettings.count {
+      case 1:
+        
+        if switchSettings[0] == state1 {
+          return index
+        }
+        
+      case 2:
+        
+        if switchSettings[0] == state1 && switchSettings[1] == state2 {
+          return index
+        }
+        
+      default:
+        break
+      }
+
+      index += 1
+      
+    }
+    
+    return nil
+
+  }
+
   // MARK: Private Methods
 
   override public func variableChanged(space:OpenLCBMemorySpace, address:Int) {

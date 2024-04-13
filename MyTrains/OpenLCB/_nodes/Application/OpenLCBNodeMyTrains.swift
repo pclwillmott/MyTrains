@@ -283,8 +283,18 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     
     let firstGatewayNodeId = nodeId + 2
     
+    let nodes = OpenLCBMemorySpace.getVirtualNodes()
+    
+    var gatewayNodes : [UInt64:OpenLCBCANGateway] = [:]
+    
+    for node in nodes {
+      if let gateway = node as? OpenLCBCANGateway {
+        gatewayNodes[gateway.nodeId] = gateway
+      }
+    }
+    
     for candidate in firstGatewayNodeId ... min(nodeId + 0xff, firstGatewayNodeId + UInt64(maximumNumberOfGateways) - 1) {
-      if !appDelegate.networkLayer!.virtualNodeLookup.keys.contains(candidate) {
+      if !gatewayNodes.keys.contains(candidate) {
         return candidate
       }
     }

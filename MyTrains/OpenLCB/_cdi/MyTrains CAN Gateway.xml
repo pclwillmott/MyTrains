@@ -14,8 +14,8 @@
 <name>Configuration</name>
 
   <group>
-    <name>Serial Port</name>
-    <description>Configures the serial port</description>
+    <name>USB Port</name>
+    <description>Selects the USB port</description>
     <string size='256'>
     <name>Port</name>
       %%PORTS%%
