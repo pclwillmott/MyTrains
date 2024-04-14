@@ -301,8 +301,8 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
     case .locoNetDashboard:
       MyTrainsWindow.dashBoard.showWindow()
 
-    case .switchboardEditor:
-      MyTrainsWindow.switchboardEditor.showWindow()
+    case .layoutBuilder:
+      MyTrainsWindow.layoutBuilder.showWindow()
     }
     
   }
@@ -563,8 +563,8 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
         programmerTool.delegate = vc
         vc.showWindow()
         
-      case .configSwitchboard:
-        openWindow(viewType: .switchboardEditor)
+      case .layoutBuilder:
+        openWindow(viewType: .layoutBuilder)
 
       case .trainSpeedProfiler:
         MyTrainsWindow.speedProfiler.showWindow()
@@ -601,7 +601,7 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
       case .rebootApplication:
         initiateRebootApplication()
         
-      case .switchboardPanel:
+      case .panelView:
         MyTrainsWindow.panelView.showWindow()
         
       default:
@@ -706,7 +706,7 @@ public enum MyTrainsWindow : String {
   case textView                          = "TextView"
   case initApp                           = "InitApp"
   case panelView                         = "PanelView"
-  case switchboardEditor                 = "SwitchboardEditor2"
+  case layoutBuilder                     = "LayoutBuilder"
   
   // MARK: Public Properties
   

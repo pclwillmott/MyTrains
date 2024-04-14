@@ -44,7 +44,7 @@ public enum MenuTag : Int {
   case configLCCNetwork         = 3017
   case configClock              = 3018
   case dccProgrammerTool        = 3019
-  case configSwitchboard        = 3020
+  case layoutBuilder            = 3020
   case trainSpeedProfiler       = 3021
   case locoNetFirmwareUpdate    = 3022
   case locoNetWirelessSetup     = 3023
@@ -69,7 +69,7 @@ public enum MenuTag : Int {
   case createApplicationNode    = 3041
   case resetToFactoryDefaults   = 3042
   case rebootApplication        = 3043
-  case switchboardPanel         = 3044
+  case panelView                = 3044
   
   // MARK: Public Properties
   
@@ -178,7 +178,7 @@ public enum MenuTag : Int {
     .configLCCNetwork         : String(localized: "LCC/OpenLCB Network",                   comment: "Used for a menu title"),
     .configClock              : String(localized: "Clock",                                 comment: "Used for a menu title"),
     .dccProgrammerTool        : String(localized: "DCC Programmer Tool",                   comment: "Used for a menu title"),
-    .configSwitchboard        : String(localized: "Switchboard",                           comment: "Used for a menu title"),
+    .layoutBuilder            : String(localized: "Layout Builder",                        comment: "Used for a menu title"),
     .trainSpeedProfiler       : String(localized: "Train Speed Profiler",                  comment: "Used for a menu title"),
     .locoNetFirmwareUpdate    : String(localized: "LocoNet Firmware Update",               comment: "Used for a menu title"),
     .locoNetWirelessSetup     : String(localized: "LocoNet Wireless Setup",                comment: "Used for a menu title"),
@@ -202,7 +202,7 @@ public enum MenuTag : Int {
     .createApplicationNode    : String(localized: "Application Node",                      comment: "Used for a menu title"),
     .rebootApplication        : String(localized: "Reboot Application",                    comment: "Used for a menu title"),
     .resetToFactoryDefaults   : String(localized: "Reset Application to Factory Defaults", comment: "Used for a menu title"),
-    .switchboardPanel         : String(localized: "Switchboard Panel",                     comment: "Used for a menu title"),
+    .panelView                : String(localized: "Panel View",                            comment: "Used for a menu title"),
   ]
   
   private static let validStates : [MenuTag:Set<OpenLCBNetworkLayerState>] = [
@@ -234,7 +234,7 @@ public enum MenuTag : Int {
     .configLCCNetwork         : [.runningLocal, .runningNetwork],
     .configClock              : [.runningLocal, .runningNetwork],
     .dccProgrammerTool        : [.runningLocal, .runningNetwork],
-    .configSwitchboard        : [.runningLocal, .runningNetwork],
+    .layoutBuilder            : [.runningLocal, .runningNetwork],
     .trainSpeedProfiler       : [.runningLocal, .runningNetwork],
     .locoNetFirmwareUpdate    : [.runningLocal, .runningNetwork],
     .locoNetWirelessSetup     : [.runningLocal, .runningNetwork],
@@ -259,7 +259,7 @@ public enum MenuTag : Int {
     .createApplicationNode    : [.uninitialized],
     .resetToFactoryDefaults   : [.runningLocal, .runningNetwork],
     .rebootApplication        : [.runningLocal, .runningNetwork],
-    .switchboardPanel         : [.runningLocal, .runningNetwork],
+    .panelView                : [.runningLocal, .runningNetwork],
   ]
   
 }

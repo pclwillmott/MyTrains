@@ -2734,6 +2734,15 @@
     "Hide Others" : {
       "comment" : "Used for a menu title"
     },
+    "Hide the Inspector Area" : {
+
+    },
+    "Hide the Palette Area" : {
+
+    },
+    "Hide the Panel Configuration Area" : {
+
+    },
     "Horn" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -3024,6 +3033,9 @@
           }
         }
       }
+    },
+    "Layout Builder" : {
+      "comment" : "Used for a menu title\nUsed for the title of the Layout Builder window."
     },
     "Layout Node" : {
       "comment" : "Used to describe an OpenLCB virtual node",
@@ -4049,6 +4061,9 @@
         }
       }
     },
+    "Panel View" : {
+      "comment" : "Used for a menu title"
+    },
     "Pantograph" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -4849,6 +4864,15 @@
         }
       }
     },
+    "Show the Inspector Area" : {
+
+    },
+    "Show the Palette Area" : {
+
+    },
+    "Show the Panel Configuration Area" : {
+
+    },
     "Shunting Mode" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -5167,12 +5191,6 @@
           }
         }
       }
-    },
-    "Switchboard" : {
-      "comment" : "Used for a menu title"
-    },
-    "Switchboard Editor" : {
-
     },
     "Switchboard Item" : {
       "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name",
