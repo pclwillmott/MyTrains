@@ -34,6 +34,8 @@ public class MyTrainsViewController: NSViewController, NSWindowDelegate {
 
     view.window?.delegate = self
     
+    userSettings = UserSettings(window: view.window!)
+    
   }
   
   public override func viewDidAppear() {
@@ -103,6 +105,8 @@ public class MyTrainsViewController: NSViewController, NSWindowDelegate {
   public var viewType : MyTrainsViewType?
   
   public var isManualClose = true
+  
+  public var userSettings : UserSettings?
 
   // MARK: Private Methods
   

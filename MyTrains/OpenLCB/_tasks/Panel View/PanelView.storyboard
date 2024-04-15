@@ -11,7 +11,7 @@
         <scene sceneID="fce-pJ-2Gu">
             <objects>
                 <windowController storyboardIdentifier="PanelViewWC" id="Rhc-gR-RFd" sceneMemberID="viewController">
-                    <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" visibleAtLaunch="NO" frameAutosaveName="PanelView" animationBehavior="default" id="mGW-qb-DMc">
+                    <window key="window" title="Window" autorecalculatesKeyViewLoop="NO" visibleAtLaunch="NO" frameAutosaveName="PanelView" animationBehavior="default" id="mGW-qb-DMc">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="268" y="330" width="480" height="270"/>

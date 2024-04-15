@@ -85,25 +85,20 @@ class PanelViewVC: MyTrainsViewController {
     
   }
   
+  private enum DEFAULT {
+    static let MAGNIFICATION = "MAGNIFICATION"
+  }
+  
   // MARK: Private Properties
   
   private var panels : [SwitchboardPanelNode] = []
   
-  private var switchboardMagnificationTag : String {
-    var tag = "SwitchboardMagnification"
-    if let panel = switchboardView.switchboardPanel {
-      tag = "\(tag)-\(panel.nodeId.toHexDotFormat(numberOfBytes: 6))"
-    }
-    return tag
-  }
-  
   private var switchboardMagnification : CGFloat {
     get {
-      let result = UserDefaults.standard.double(forKey: switchboardMagnificationTag)
-      return result == 0.0 ? 1.0 : result
+      return userSettings?.cgFloat(forKey: DEFAULT.MAGNIFICATION) ?? 1.0
     }
     set(value) {
-      UserDefaults.standard.set(value, forKey: switchboardMagnificationTag)
+      userSettings?.set(value, forKey: DEFAULT.MAGNIFICATION)
     }
   }
 
@@ -111,7 +106,11 @@ class PanelViewVC: MyTrainsViewController {
   
   @IBOutlet weak var scrollView: NSScrollView!
   
-  @IBOutlet weak var switchboardView: SwitchboardView!
+  @IBOutlet weak var switchboardView: SwitchboardView! {
+    didSet {
+      userSettings?.node = switchboardView.switchboardPanel
+    }
+  }
   
   @IBAction func cboPanelAction(_ sender: NSComboBox) {
     guard sender.indexOfSelectedItem != -1 else {
@@ -120,7 +119,6 @@ class PanelViewVC: MyTrainsViewController {
     switchboardView.switchboardPanel = panels[sender.indexOfSelectedItem]
     view.window?.title = "\(switchboardView.switchboardPanel!.userNodeName) (\(switchboardView.switchboardPanel!.nodeId.toHexDotFormat(numberOfBytes: 6)))"
     switchboardView.switchboardPanel?.panelIsVisible = false
-    self.view.window?.setFrameAutosaveName("PanelView-\(switchboardView.switchboardPanel!.nodeId.toHexDotFormat(numberOfBytes: 6))")
   }
   
   @IBOutlet weak var cboPanel: NSComboBox!

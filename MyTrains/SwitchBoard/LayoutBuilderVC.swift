@@ -43,6 +43,12 @@ class LayoutBuilderVC: MyTrainsViewController {
     viewType = .switchboardPanel
   }
   
+  private enum DEFAULT {
+    static let SHOW_PANEL_VIEW     = "SHOW_PANEL_VIEW"
+    static let SHOW_PALETTE_VIEW   = "SHOW_PALETTE_VIEW"
+    static let SHOW_INSPECTOR_VIEW = "SHOW_INSPECTOR_VIEW"
+  }
+  
   override func viewWillAppear() {
     
     super.viewWillAppear()
@@ -55,11 +61,11 @@ class LayoutBuilderVC: MyTrainsViewController {
     
     cboPanel.translatesAutoresizingMaskIntoConstraints = false
     cboPanel.isEditable = false
-    
+
     view.subviews.removeAll() // Get rid of the buttons for now!
     
     view.addSubview(cboPanel)
-    
+
     constraints.append(cboPanel.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: 1.0))
     constraints.append(cboPanel.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 1.0))
     constraints.append(view.trailingAnchor.constraint(equalToSystemSpacingAfter: cboPanel.trailingAnchor, multiplier: 1.0))
@@ -68,6 +74,8 @@ class LayoutBuilderVC: MyTrainsViewController {
     splitView.isVertical = true
 
     view.addSubview(splitView)
+    
+    userSettings?.splitView = splitView
     
     constraints.append(splitView.topAnchor.constraint(equalToSystemSpacingBelow: cboPanel.bottomAnchor, multiplier: 1.0))
     constraints.append(splitView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 1.0))
@@ -161,25 +169,30 @@ class LayoutBuilderVC: MyTrainsViewController {
 
     NSLayoutConstraint.activate(constraints)
     
-     if let appNode {
-       for (_, item) in appNode.panelList {
-         panels.append(item)
-       }
-       panels.sort {$0.userNodeName < $1.userNodeName}
-       cboPanel.removeAllItems()
-       var index = -1
-       var test = 0
-       for item in panels {
-       cboPanel.addItem(withObjectValue: item.userNodeName)
-  //     if let panel = switchboardView.switchboardPanel, panel.nodeId == item.nodeId {
-  //     index = test
-  //     }
-       test += 1
-       }
-       if index != -1 {
-         cboPanel.selectItem(at: index)
-       }
-     }
+    if let appNode {
+      for (_, item) in appNode.panelList {
+        panels.append(item)
+      }
+      panels.sort {$0.userNodeName < $1.userNodeName}
+      cboPanel.removeAllItems()
+      var index = -1
+      var test = 0
+      for item in panels {
+        cboPanel.addItem(withObjectValue: item.userNodeName)
+        if let panel = switchboardPanel, panel.nodeId == item.nodeId {
+          index = test
+        }
+        test += 1
+      }
+      if index != -1 {
+        cboPanel.selectItem(at: index)
+      }
+    }
+
+    self.cboPanel?.target = self
+    self.cboPanel?.action = #selector(self.cboPanelAction(_:))
+
+    setStates()
     
   }
   
@@ -191,9 +204,44 @@ class LayoutBuilderVC: MyTrainsViewController {
   
   private var panels : [SwitchboardPanelNode] = []
   
+  // MARK: Public Properties
+  
+  public weak var switchboardPanel : SwitchboardPanelNode? {
+    didSet {
+      userSettings?.node = switchboardPanel
+      setStates()
+    }
+  }
+  
+  // MARK: Private Methods
+  
+  private func setStates() {
+    
+    guard let btnShowPanelView, let btnShowPaletteView, let btnShowInspectorView else {
+      return
+    }
+    
+    btnShowPanelView.state = userSettings!.state(forKey: DEFAULT.SHOW_PANEL_VIEW)
+    btnShowPaletteView.state = userSettings!.state(forKey: DEFAULT.SHOW_PALETTE_VIEW)
+    btnShowInspectorView.state = userSettings!.state(forKey: DEFAULT.SHOW_INSPECTOR_VIEW)
+
+    btnShowPanelViewAction(btnShowPanelView)
+    btnShowPaletteViewAction(btnShowPaletteView)
+    btnShowInspectorViewAction(btnShowInspectorView)
+    
+  }
   // MARK: Outlets & Actions
   
-  private var cboPanel : NSComboBox? = NSComboBox()
+  private var cboPanel : NSComboBox? = MyComboBox()
+ 
+  @objc func cboPanelAction(_ sender: NSComboBox) {
+    if sender.indexOfSelectedItem == -1 {
+      switchboardPanel = nil
+    }
+    else {
+      switchboardPanel = panels[sender.indexOfSelectedItem]
+    }
+  }
   
   private var splitView : NSSplitView? = NSSplitView()
   
@@ -224,6 +272,7 @@ class LayoutBuilderVC: MyTrainsViewController {
       btnShowPanelView?.toolTip = String(localized: "Hide the Panel Configuration Area")
     }
     showPanelConstraint?.isActive = true
+    userSettings?.set(btnShowPanelView!.state, forKey: DEFAULT.SHOW_PANEL_VIEW)
   }
 
   @IBAction func btnShowInspectorViewAction(_ sender: NSButton) {
@@ -237,6 +286,7 @@ class LayoutBuilderVC: MyTrainsViewController {
       btnShowInspectorView?.contentTintColor = NSColor.systemBlue
       btnShowInspectorView?.toolTip = String(localized: "Hide the Inspector Area")
     }
+    userSettings?.set(btnShowInspectorView!.state, forKey: DEFAULT.SHOW_INSPECTOR_VIEW)
   }
   
   @IBAction func btnShowPaletteViewAction(_ sender: NSButton) {
@@ -250,6 +300,7 @@ class LayoutBuilderVC: MyTrainsViewController {
       btnShowPaletteView?.contentTintColor = NSColor.systemBlue
       btnShowPaletteView?.toolTip = String(localized: "Hide the Palette Area")
     }
+    userSettings?.set(btnShowPaletteView!.state, forKey: DEFAULT.SHOW_PALETTE_VIEW)
   }
   
 }

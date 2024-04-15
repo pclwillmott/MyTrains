@@ -10,7 +10,7 @@
         <scene sceneID="bet-Kn-yzb">
             <objects>
                 <windowController storyboardIdentifier="LayoutBuilderWC" id="1In-nT-KRg" sceneMemberID="viewController">
-                    <window key="window" title="Window" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="XgE-5N-a7j">
+                    <window key="window" title="Window" autorecalculatesKeyViewLoop="NO" visibleAtLaunch="NO" frameAutosaveName="LayoutBuilder" animationBehavior="default" id="XgE-5N-a7j">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="268" y="330" width="480" height="270"/>
