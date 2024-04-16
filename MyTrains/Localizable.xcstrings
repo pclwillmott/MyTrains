@@ -462,6 +462,12 @@
         }
       }
     },
+    "Add Item to Group" : {
+
+    },
+    "Add Item to Panel" : {
+
+    },
     "Agreement" : {
 
     },
@@ -4506,6 +4512,12 @@
     "Remote Button Request" : {
 
     },
+    "Remove Item from Group" : {
+
+    },
+    "Remove Item from Panel" : {
+
+    },
     "Reservation Protocol" : {
 
     },
@@ -4622,6 +4634,12 @@
     },
     "Romania" : {
       "comment" : "This is the name of a country."
+    },
+    "Rotate Item Clockwise" : {
+
+    },
+    "Rotate Item Counter Clockwise" : {
+
     },
     "RTS/CTS" : {
       "comment" : "Used to indicate that serial port uses the RTS/CTS lines for hardware flow control",
@@ -4848,6 +4866,9 @@
     "Show All" : {
       "comment" : "Used for a menu title"
     },
+    "Show Attributes Inspector" : {
+
+    },
     "Show CDI Text" : {
       "localizations" : {
         "en" : {
@@ -4864,6 +4885,18 @@
         }
       }
     },
+    "Show Events Inspector" : {
+
+    },
+    "Show Information Inspector" : {
+
+    },
+    "Show Quick Help Inspector" : {
+
+    },
+    "Show Speed Constraints Inspector" : {
+
+    },
     "Show the Inspector Area" : {
 
     },
@@ -4871,6 +4904,9 @@
 
     },
     "Show the Panel Configuration Area" : {
+
+    },
+    "Show Turnout Inspector" : {
 
     },
     "Shunting Mode" : {
@@ -5191,6 +5227,12 @@
           }
         }
       }
+    },
+    "Switch to Arrange Mode" : {
+
+    },
+    "Switch to Grouping Mode" : {
+
     },
     "Switchboard Item" : {
       "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name",

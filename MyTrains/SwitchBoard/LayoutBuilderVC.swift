@@ -35,6 +35,19 @@ class LayoutBuilderVC: MyTrainsViewController {
     btnShowPaletteView = nil
     btnShowInspectorView?.target = nil
     btnShowInspectorView = nil
+    inspectorButtons.removeAll()
+    inspectorStripView?.subviews.removeAll()
+    inspectorStripView = nil
+    arrangeView?.subviews.removeAll()
+    arrangeView = nil
+    groupView?.subviews.removeAll()
+    groupView = nil
+    arrangeButtons.removeAll()
+    arrangeStripView?.subviews.removeAll()
+    arrangeStripView = nil
+    groupButtons.removeAll()
+    groupStripView?.subviews.removeAll()
+    groupStripView = nil
     super.windowWillClose(notification)
   }
   
@@ -47,6 +60,7 @@ class LayoutBuilderVC: MyTrainsViewController {
     static let SHOW_PANEL_VIEW     = "SHOW_PANEL_VIEW"
     static let SHOW_PALETTE_VIEW   = "SHOW_PALETTE_VIEW"
     static let SHOW_INSPECTOR_VIEW = "SHOW_INSPECTOR_VIEW"
+    static let CURRENT_INSPECTOR   = "CURRENT_INSPECTOR"
   }
   
   override func viewWillAppear() {
@@ -55,15 +69,62 @@ class LayoutBuilderVC: MyTrainsViewController {
     
     view.window?.title = String(localized: "Layout Builder", comment:"Used for the title of the Layout Builder window.")
     
-    guard let cboPanel, let splitView, let paletteView, let layoutView, let inspectorView, let panelView, let panelStripView, let btnShowPanelView, let btnShowInspectorView, let btnShowPaletteView else {
+    btnShowInspectorView = MyIcon.trailingThird.button(target: self, action: #selector(btnShowInspectorViewAction(_:)))
+
+    btnShowPaletteView = MyIcon.leadingThird.button(target: self, action: #selector(btnShowPaletteViewAction(_:)))
+    
+    btnShowPanelView = MyIcon.bottomThird.button(target: self, action: #selector(btnShowPanelViewAction(_:)))
+
+    inspectorButtons = [
+      MyIcon.info.button(target: self, action: nil),
+      MyIcon.help.button(target: self, action: nil),
+      MyIcon.gear.button(target: self, action: nil),
+      MyIcon.bolt.button(target: self, action: nil),
+      MyIcon.speedometer.button(target: self, action: nil),
+      MyIcon.connection.button(target: self, action: nil),
+    ]
+    
+    inspectorButtons[0]?.toolTip = String(localized: "Show Information Inspector")
+    inspectorButtons[1]?.toolTip = String(localized: "Show Quick Help Inspector")
+    inspectorButtons[2]?.toolTip = String(localized: "Show Attributes Inspector")
+    inspectorButtons[3]?.toolTip = String(localized: "Show Events Inspector")
+    inspectorButtons[4]?.toolTip = String(localized: "Show Speed Constraints Inspector")
+    inspectorButtons[5]?.toolTip = String(localized: "Show Turnout Inspector")
+
+    arrangeButtons = [
+      MyIcon.addItem.button(target: self, action: nil),
+      MyIcon.removeItem.button(target: self, action: nil),
+      MyIcon.rotateCounterClockwise.button(target: self, action: nil),
+      MyIcon.rotateClockwise.button(target: self, action: nil),
+      MyIcon.groupMode.button(target: self, action: nil),
+    ]
+
+    arrangeButtons[0]?.toolTip = String(localized: "Add Item to Panel")
+    arrangeButtons[1]?.toolTip = String(localized: "Remove Item from Panel")
+    arrangeButtons[2]?.toolTip = String(localized: "Rotate Item Counter Clockwise")
+    arrangeButtons[3]?.toolTip = String(localized: "Rotate Item Clockwise")
+    arrangeButtons[4]?.toolTip = String(localized: "Switch to Grouping Mode")
+
+    arrangeButtons[0]?.keyEquivalent = "+"
+    arrangeButtons[1]?.keyEquivalent = "-"
+    
+    groupButtons = [
+      MyIcon.addToGroup.button(target: self, action: nil),
+      MyIcon.removeFromGroup.button(target: self, action: nil),
+      MyIcon.cursor.button(target: self, action: nil),
+    ]
+
+    groupButtons[0]?.toolTip = String(localized: "Add Item to Group")
+    groupButtons[1]?.toolTip = String(localized: "Remove Item from Group")
+    groupButtons[2]?.toolTip = String(localized: "Switch to Arrange Mode")
+
+    guard let cboPanel, let splitView, let paletteView, let layoutView, let inspectorView, let panelView, let panelStripView, let btnShowPanelView, let btnShowInspectorView, let btnShowPaletteView, let inspectorStripView, let arrangeView, let arrangeStripView, let groupView, let groupStripView else {
       return
     }
     
     cboPanel.translatesAutoresizingMaskIntoConstraints = false
     cboPanel.isEditable = false
 
-    view.subviews.removeAll() // Get rid of the buttons for now!
-    
     view.addSubview(cboPanel)
 
     constraints.append(cboPanel.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: 1.0))
@@ -96,8 +157,8 @@ class LayoutBuilderVC: MyTrainsViewController {
     layoutView.wantsLayer = true
     layoutView.layer?.backgroundColor = NSColor.red.cgColor
     
-    inspectorView.wantsLayer = true
-    inspectorView.layer?.backgroundColor = NSColor.green.cgColor
+//    inspectorView.wantsLayer = true
+//    inspectorView.layer?.backgroundColor = NSColor.green.cgColor
     
     constraints.append(paletteView.widthAnchor.constraint(greaterThanOrEqualToConstant: 100))
     constraints.append(paletteView.heightAnchor.constraint(equalToConstant: 100.0))
@@ -166,7 +227,99 @@ class LayoutBuilderVC: MyTrainsViewController {
     
     constraints.append(btnShowPaletteView.centerYAnchor.constraint(equalTo: panelStripView.centerYAnchor))
     constraints.append(btnShowPaletteView.leadingAnchor.constraint(equalToSystemSpacingAfter: panelStripView.leadingAnchor, multiplier: 1.0))
+    
+    inspectorStripView.translatesAutoresizingMaskIntoConstraints = false
+    
+    inspectorView.addSubview(inspectorStripView)
 
+//    inspectorStripView.wantsLayer = true
+//    inspectorStripView.layer?.backgroundColor = NSColor.white.cgColor
+
+    constraints.append(inspectorStripView.topAnchor.constraint(equalTo: inspectorView.topAnchor))
+    constraints.append(inspectorStripView.centerXAnchor.constraint(equalTo: inspectorView.centerXAnchor))
+    constraints.append(inspectorStripView.heightAnchor.constraint(equalToConstant: 20.0))
+
+    var lastButton : NSButton?
+    
+    var index = 0
+    for button in inspectorButtons {
+      if let button {
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.isBordered = false
+        button.tag = index
+        button.target = self
+        button.action = #selector(btnInspectorAction(_:))
+        let view = NSView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.wantsLayer = true
+        view.layer?.backgroundColor = (index % 2 == 0) ? NSColor.brown.cgColor : NSColor.yellow.cgColor
+        inspectorViews.append(view)
+        inspectorView.addSubview(view)
+        constraints.append(view.topAnchor.constraint(equalToSystemSpacingBelow: inspectorStripView.bottomAnchor, multiplier: 1.0))
+        constraints.append(view.leadingAnchor.constraint(equalTo: inspectorView.leadingAnchor))
+        constraints.append(view.trailingAnchor.constraint(equalTo: inspectorView.trailingAnchor))
+        constraints.append(view.heightAnchor.constraint(equalToConstant: 300))
+        index += 1
+        inspectorStripView.addSubview(button)
+        constraints.append(button.centerYAnchor.constraint(equalTo: inspectorStripView.centerYAnchor))
+        if let lastButton {
+          constraints.append(button.leadingAnchor.constraint(equalToSystemSpacingAfter: lastButton.trailingAnchor, multiplier: 1.0))
+        }
+        else {
+          constraints.append(button.leadingAnchor.constraint(equalToSystemSpacingAfter: inspectorStripView.leadingAnchor, multiplier: 1.0))
+        }
+        lastButton = button
+      }
+    }
+    constraints.append(inspectorStripView.trailingAnchor.constraint(equalToSystemSpacingAfter: lastButton!.trailingAnchor, multiplier: 1.0))
+    constraints.append(inspectorView.widthAnchor.constraint(greaterThanOrEqualTo: inspectorStripView.widthAnchor, multiplier: 1.0))
+    inspectorButtons[currentInspectorIndex]?.contentTintColor = NSColor.systemBlue
+
+    arrangeView.translatesAutoresizingMaskIntoConstraints = false
+    arrangeStripView.translatesAutoresizingMaskIntoConstraints = false
+
+    arrangeView.wantsLayer = true
+    arrangeView.layer?.backgroundColor = NSColor.orange.cgColor
+//    arrangeStripView.wantsLayer = true
+//    arrangeStripView.layer?.backgroundColor = NSColor.white.cgColor
+
+    paletteView.addSubview(arrangeView)
+    
+    constraints.append(arrangeView.topAnchor.constraint(equalTo: paletteView.topAnchor))
+    constraints.append(arrangeView.centerXAnchor.constraint(equalTo: paletteView.centerXAnchor))
+    constraints.append(paletteView.bottomAnchor.constraint(greaterThanOrEqualTo: arrangeView.bottomAnchor))
+    constraints.append(paletteView.widthAnchor.constraint(greaterThanOrEqualTo: arrangeView.widthAnchor))
+    
+    arrangeView.addSubview(arrangeStripView)
+    
+    constraints.append(arrangeStripView.topAnchor.constraint(equalTo: arrangeView.topAnchor))
+    constraints.append(arrangeStripView.centerXAnchor.constraint(equalTo: arrangeView.centerXAnchor))
+    constraints.append(arrangeStripView.heightAnchor.constraint(equalToConstant: 20.0))
+    constraints.append(arrangeView.bottomAnchor.constraint(greaterThanOrEqualTo: arrangeStripView.bottomAnchor))
+
+    lastButton = nil
+    index = 0
+    for button in arrangeButtons {
+      if let button {
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.isBordered = false
+        button.tag = index
+        button.target = self
+        button.action = #selector(btnArrangeAction(_:))
+        index += 1
+        arrangeStripView.addSubview(button)
+        constraints.append(button.centerYAnchor.constraint(equalTo: arrangeStripView.centerYAnchor))
+        if let lastButton {
+          constraints.append(button.leadingAnchor.constraint(equalToSystemSpacingAfter: lastButton.trailingAnchor, multiplier: 1.0))
+        }
+        else {
+          constraints.append(button.leadingAnchor.constraint(equalToSystemSpacingAfter: arrangeStripView.leadingAnchor, multiplier: 1.0))
+        }
+      }
+      lastButton = button
+    }
+    constraints.append(arrangeStripView.trailingAnchor.constraint(equalToSystemSpacingAfter: lastButton!.trailingAnchor, multiplier: 1.0))
+    constraints.append(arrangeView.widthAnchor.constraint(greaterThanOrEqualTo: arrangeStripView.widthAnchor))
     NSLayoutConstraint.activate(constraints)
     
     if let appNode {
@@ -230,7 +383,10 @@ class LayoutBuilderVC: MyTrainsViewController {
     btnShowPaletteViewAction(btnShowPaletteView)
     btnShowInspectorViewAction(btnShowInspectorView)
     
+    btnInspectorAction(inspectorButtons[userSettings!.integer(forKey: DEFAULT.CURRENT_INSPECTOR)]!)
+    
   }
+  
   // MARK: Outlets & Actions
   
   private var cboPanel : NSComboBox? = MyComboBox()
@@ -254,11 +410,31 @@ class LayoutBuilderVC: MyTrainsViewController {
   
   private var panelStripView : NSView? = NSView()
 
-  private var btnShowInspectorView = MyIcon.trailingThird.button(target: self, action: #selector(btnShowInspectorViewAction(_:)))
-
-  private var btnShowPaletteView = MyIcon.leadingThird.button(target: self, action: #selector(btnShowPaletteViewAction(_:)))
+  private var btnShowInspectorView : NSButton?
   
-  private var btnShowPanelView = MyIcon.bottomThird.button(target: self, action: #selector(btnShowPanelViewAction(_:)))
+  private var inspectorStripView : NSView? = NSView()
+  
+  private var inspectorButtons : [NSButton?] = []
+  
+  private var inspectorViews : [NSView] = []
+  
+  private var arrangeView : NSView? = NSView()
+  
+  private var arrangeStripView : NSView? = NSView()
+  
+  private var arrangeButtons : [NSButton?] = []
+  
+  private var groupView : NSView? = NSView()
+  
+  private var groupStripView : NSView? = NSView()
+  
+  private var groupButtons : [NSButton?] = []
+  
+  private var currentInspectorIndex = 0
+
+  private var btnShowPaletteView : NSButton?
+  
+  private var btnShowPanelView : NSButton?
   
   @IBAction func btnShowPanelViewAction(_ sender: NSButton) {
     showPanelConstraint?.isActive = false
@@ -302,6 +478,21 @@ class LayoutBuilderVC: MyTrainsViewController {
       btnShowPaletteView?.toolTip = String(localized: "Hide the Palette Area")
     }
     userSettings?.set(btnShowPaletteView!.state, forKey: DEFAULT.SHOW_PALETTE_VIEW)
+  }
+  
+  @IBAction func btnInspectorAction(_ sender: NSButton) {
+    currentInspectorIndex = sender.tag
+    for button in inspectorButtons {
+      button!.contentTintColor = nil
+      inspectorViews[button!.tag].isHidden = true
+    }
+    inspectorButtons[currentInspectorIndex]?.contentTintColor = NSColor.systemBlue
+    inspectorViews[currentInspectorIndex].isHidden = false
+    userSettings?.set(currentInspectorIndex, forKey: DEFAULT.CURRENT_INSPECTOR)
+  }
+
+  @IBAction func btnArrangeAction(_ sender: NSButton) {
+    debugLog("\(sender.tag)")
   }
   
 }

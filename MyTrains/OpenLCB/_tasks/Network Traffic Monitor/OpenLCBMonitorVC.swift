@@ -146,7 +146,7 @@ class OpenLCBMonitorVC: MyTrainsViewController, OpenLCBNetworkObserverDelegate {
 //        horizontalView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
       ])
       
-      for index in 0 ... appDelegate.networkLayer!.gatewayNodes.count - 1 {
+      for _ in 0 ... appDelegate.networkLayer!.gatewayNodes.count - 1 {
         let gatewayView = GatewayActivityView()
         gatewayView.translatesAutoresizingMaskIntoConstraints = false
         horizontalView.addArrangedSubview(gatewayView)
