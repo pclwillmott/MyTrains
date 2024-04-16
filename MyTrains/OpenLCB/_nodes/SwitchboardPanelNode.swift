@@ -109,7 +109,7 @@ public class SwitchboardPanelNode : OpenLCBNodeVirtual {
         maxX = item.xPos
       }
       if minY == nil || item.yPos < minY! {
-        minX = item.yPos
+        minY = item.yPos
       }
       if maxY == nil || item.yPos > maxY! {
         maxY = item.yPos

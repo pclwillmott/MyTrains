@@ -825,7 +825,7 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
       sendStartClockPreamble()
     }
     else {
-      let eventId = baseEventId | 0xffff
+ //     let eventId = baseEventId | 0xffff
       sendClockQuery(baseEventId: baseEventId)
     }
 

@@ -284,6 +284,7 @@
 		DAD394C12B2E238A00403040 /* OptionSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD394C02B2E238A00403040 /* OptionSwitch.swift */; };
 		DAD41AB82A3C9E54002EF847 /* DCCAddressPartition.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD41AB72A3C9E54002EF847 /* DCCAddressPartition.swift */; };
 		DAD41ABA2A3C9E80002EF847 /* DCCPacketType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD41AB92A3C9E80002EF847 /* DCCPacketType.swift */; };
+		DAD554E82BCEBA6B004E17DF /* MyIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD554E72BCEBA6B004E17DF /* MyIcon.swift */; };
 		DAD73C1C2A9A298E002E7618 /* Digitrax BXP88.xml in Resources */ = {isa = PBXBuildFile; fileRef = DAD73C1B2A9A298E002E7618 /* Digitrax BXP88.xml */; };
 		DAD73C1E2A9A4F64002E7618 /* OpenLCBDigitraxBXP88Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD73C1D2A9A4F64002E7618 /* OpenLCBDigitraxBXP88Node.swift */; };
 		DAD89F962B8B5B7E00F611CD /* MonitorItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD89F952B8B5B7E00F611CD /* MonitorItem.swift */; };
@@ -634,6 +635,7 @@
 		DAD394C02B2E238A00403040 /* OptionSwitch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OptionSwitch.swift; sourceTree = "<group>"; };
 		DAD41AB72A3C9E54002EF847 /* DCCAddressPartition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DCCAddressPartition.swift; sourceTree = "<group>"; };
 		DAD41AB92A3C9E80002EF847 /* DCCPacketType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DCCPacketType.swift; sourceTree = "<group>"; };
+		DAD554E72BCEBA6B004E17DF /* MyIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyIcon.swift; sourceTree = "<group>"; };
 		DAD73C1B2A9A298E002E7618 /* Digitrax BXP88.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Digitrax BXP88.xml"; sourceTree = "<group>"; };
 		DAD73C1D2A9A4F64002E7618 /* OpenLCBDigitraxBXP88Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBDigitraxBXP88Node.swift; sourceTree = "<group>"; };
 		DAD89F952B8B5B7E00F611CD /* MonitorItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonitorItem.swift; sourceTree = "<group>"; };
@@ -959,6 +961,7 @@
 				DA5BD1F42B6588FA00CEA5BA /* TextView.storyboard */,
 				DA5BD1F62B65893600CEA5BA /* TextViewVC.swift */,
 				DA0949412B7F940100545650 /* DebugLog.swift */,
+				DAD554E72BCEBA6B004E17DF /* MyIcon.swift */,
 			);
 			path = _app;
 			sourceTree = "<group>";
@@ -1797,6 +1800,7 @@
 				DA48EE29293CEF16006C26A0 /* DayOfWeek.swift in Sources */,
 				DAF4DD50289ABDDE000B848E /* SpeedProfileResultsType.swift in Sources */,
 				DAAC7E932A79514E001A424E /* OpenLCBProgrammerToolDelegate.swift in Sources */,
+				DAD554E82BCEBA6B004E17DF /* MyIcon.swift in Sources */,
 				DA1B949D2A3DE89300E2CE6A /* ClientConnection.swift in Sources */,
 				DA0DD2152A2CA4AB003376F8 /* ViewNodeInfoMemorySpaceInfoTVDS.swift in Sources */,
 				DA31688F2BCAE75100059B6C /* SwitchboardShape.swift in Sources */,

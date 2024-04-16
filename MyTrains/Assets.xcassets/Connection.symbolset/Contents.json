@@ -1,0 +1,12 @@
+{
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  },
+  "symbols" : [
+    {
+      "filename" : "app.connected.to.app.below.fill.svg",
+      "idiom" : "universal"
+    }
+  ]
+}

@@ -102,7 +102,7 @@ class SelectLayoutVC: MyTrainsViewController, MyTrainsAppDelegate {
     layoutList.removeAll()
     
     debugLog("\(appNode.layoutList)")
-    for (key, item) in appNode.layoutList {
+    for (_, item) in appNode.layoutList {
       layoutList.append(item)
       cboLayout.addItem(withObjectValue: item.layoutName)
       if item.layoutId == appLayoutId {

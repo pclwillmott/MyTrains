@@ -82,7 +82,7 @@ class PanelViewVC: MyTrainsViewController {
     }
     
     switchboardView.showGridLines = false
-    
+
   }
   
   private enum DEFAULT {
@@ -109,6 +109,7 @@ class PanelViewVC: MyTrainsViewController {
   @IBOutlet weak var switchboardView: SwitchboardView! {
     didSet {
       userSettings?.node = switchboardView.switchboardPanel
+      scrollView.magnification = switchboardMagnification
     }
   }
   
@@ -116,6 +117,8 @@ class PanelViewVC: MyTrainsViewController {
     guard sender.indexOfSelectedItem != -1 else {
       return
     }
+    userSettings?.node = panels[sender.indexOfSelectedItem]
+    scrollView.magnification = switchboardMagnification
     switchboardView.switchboardPanel = panels[sender.indexOfSelectedItem]
     view.window?.title = "\(switchboardView.switchboardPanel!.userNodeName) (\(switchboardView.switchboardPanel!.nodeId.toHexDotFormat(numberOfBytes: 6)))"
     switchboardView.switchboardPanel?.panelIsVisible = false

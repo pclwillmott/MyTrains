@@ -24,7 +24,7 @@ class MonitorVC: MyTrainsViewController, OpenLCBLocoNetMonitorDelegate, MyTrains
 
   override func windowWillClose(_ notification: Notification) {
     
-    guard let monitorNode else {
+    guard monitorNode != nil else {
       return
     }
     

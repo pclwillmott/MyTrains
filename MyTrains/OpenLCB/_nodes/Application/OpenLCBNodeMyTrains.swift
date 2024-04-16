@@ -123,7 +123,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   
   public var panelList : [UInt64:SwitchboardPanelNode] {
     var result : [UInt64:SwitchboardPanelNode] = [:]
-    for (key, node) in appDelegate.networkLayer!.virtualNodeLookup {
+    for (_, node) in appDelegate.networkLayer!.virtualNodeLookup {
       if let panel = node as? SwitchboardPanelNode, let appLayoutId, panel.layoutNodeId == appLayoutId {
         result[panel.nodeId] = panel
       }
@@ -133,7 +133,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   
   public var switchboardItemList : [UInt64:SwitchboardItemNode] {
     var result : [UInt64:SwitchboardItemNode] = [:]
-    for (key, node) in appDelegate.networkLayer!.virtualNodeLookup {
+    for (_, node) in appDelegate.networkLayer!.virtualNodeLookup {
       if let item = node as? SwitchboardItemNode, let appLayoutId, item.layoutNodeId == appLayoutId {
         result[item.nodeId] = item
       }

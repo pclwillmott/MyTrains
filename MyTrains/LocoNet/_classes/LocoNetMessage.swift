@@ -1766,7 +1766,7 @@ public class LocoNetMessage : NSObject {
   
   public var isSlotUpdate : Bool {
     
-    guard let slotNumber else {
+    guard slotNumber != nil else {
       return false
     }
     

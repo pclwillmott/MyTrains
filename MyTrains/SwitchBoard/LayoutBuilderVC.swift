@@ -189,6 +189,7 @@ class LayoutBuilderVC: MyTrainsViewController {
       }
     }
 
+    userSettings?.node = switchboardPanel
     self.cboPanel?.target = self
     self.cboPanel?.action = #selector(self.cboPanelAction(_:))
 
@@ -253,12 +254,12 @@ class LayoutBuilderVC: MyTrainsViewController {
   
   private var panelStripView : NSView? = NSView()
 
-  private var btnShowInspectorView : NSButton? = NSButton(image: NSImage(systemSymbolName: "square.trailingthird.inset.filled", accessibilityDescription: nil)!, target: self, action: #selector(btnShowInspectorViewAction(_:)))
+  private var btnShowInspectorView = MyIcon.trailingThird.button(target: self, action: #selector(btnShowInspectorViewAction(_:)))
 
-  private var btnShowPaletteView : NSButton? = NSButton(image: NSImage(systemSymbolName: "square.leadingthird.inset.filled", accessibilityDescription: nil)!, target: self, action: #selector(btnShowPaletteViewAction(_:)))
-
-  private var btnShowPanelView : NSButton? = NSButton(image: NSImage(systemSymbolName: "square.bottomthird.inset.filled", accessibilityDescription: nil)!, target: self, action: #selector(btnShowPanelViewAction(_:)))
-
+  private var btnShowPaletteView = MyIcon.leadingThird.button(target: self, action: #selector(btnShowPaletteViewAction(_:)))
+  
+  private var btnShowPanelView = MyIcon.bottomThird.button(target: self, action: #selector(btnShowPanelViewAction(_:)))
+  
   @IBAction func btnShowPanelViewAction(_ sender: NSButton) {
     showPanelConstraint?.isActive = false
     if sender.state == .on {
