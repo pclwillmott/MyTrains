@@ -814,6 +814,9 @@
     "Block" : {
       "comment" : "This is used to describe a piece of track."
     },
+    "Blocks" : {
+      "comment" : "Used for the title of a switchboard item palette in LayoutBuilder"
+    },
     "Blow Down" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -4768,6 +4771,9 @@
         }
       }
     },
+    "Scenic Items" : {
+      "comment" : "Used for the title of a switchboard item palette in LayoutBuilder"
+    },
     "Seconds" : {
 
     },
@@ -4828,6 +4834,9 @@
     },
     "Sensor" : {
       "comment" : "This is used to describe a switchboard item."
+    },
+    "Sensors" : {
+      "comment" : "Used for the title of a switchboard item palette in LayoutBuilder"
     },
     "Short Whistle" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -4928,6 +4937,12 @@
     },
     "Signal" : {
       "comment" : "This is used to describe a switchboard item."
+    },
+    "Signals" : {
+      "comment" : "Used for the title of a switchboard item palette in LayoutBuilder"
+    },
+    "Signals - Great Britain" : {
+      "comment" : "Used for the title of a switchboard item palette in LayoutBuilder"
     },
     "Simple Node Ident Info Reply" : {
 
@@ -5560,6 +5575,9 @@
         }
       }
     },
+    "Tracks" : {
+      "comment" : "Used for the title of a switchboard item palette in LayoutBuilder"
+    },
     "Traction Control Command" : {
 
     },
@@ -5648,6 +5666,9 @@
     },
     "Turnout Right" : {
       "comment" : "This is used to describe a piece of track."
+    },
+    "Turnouts & Crossovers" : {
+      "comment" : "Used for the title of a switchboard item palette in LayoutBuilder"
     },
     "TX" : {
       "comment" : "This is an abbreviation of Transmit used for an LED label"

@@ -45,6 +45,8 @@ class LayoutBuilderVC: MyTrainsViewController {
     arrangeButtons.removeAll()
     arrangeStripView?.subviews.removeAll()
     arrangeStripView = nil
+    cboPalette?.removeAllItems()
+    cboPalette = nil
     groupButtons.removeAll()
     groupStripView?.subviews.removeAll()
     groupStripView = nil
@@ -61,6 +63,8 @@ class LayoutBuilderVC: MyTrainsViewController {
     static let SHOW_PALETTE_VIEW   = "SHOW_PALETTE_VIEW"
     static let SHOW_INSPECTOR_VIEW = "SHOW_INSPECTOR_VIEW"
     static let CURRENT_INSPECTOR   = "CURRENT_INSPECTOR"
+    static let IS_GROUP_MODE       = "IS_GROUP_MODE"
+    static let CURRENT_PALETTE     = "CURRENT_PALETTE"
   }
   
   override func viewWillAppear() {
@@ -118,7 +122,7 @@ class LayoutBuilderVC: MyTrainsViewController {
     groupButtons[1]?.toolTip = String(localized: "Remove Item from Group")
     groupButtons[2]?.toolTip = String(localized: "Switch to Arrange Mode")
 
-    guard let cboPanel, let splitView, let paletteView, let layoutView, let inspectorView, let panelView, let panelStripView, let btnShowPanelView, let btnShowInspectorView, let btnShowPaletteView, let inspectorStripView, let arrangeView, let arrangeStripView, let groupView, let groupStripView else {
+    guard let cboPanel, let splitView, let paletteView, let layoutView, let inspectorView, let panelView, let panelStripView, let btnShowPanelView, let btnShowInspectorView, let btnShowPaletteView, let inspectorStripView, let arrangeView, let arrangeStripView, let groupView, let groupStripView, let layout = appNode?.layout, let cboPalette else {
       return
     }
     
@@ -151,8 +155,8 @@ class LayoutBuilderVC: MyTrainsViewController {
     splitView.addArrangedSubview(layoutView)
     splitView.addArrangedSubview(inspectorView)
     
-    paletteView.wantsLayer = true
-    paletteView.layer?.backgroundColor = NSColor.blue.cgColor
+ //   paletteView.wantsLayer = true
+ //   paletteView.layer?.backgroundColor = NSColor.blue.cgColor
     
     layoutView.wantsLayer = true
     layoutView.layer?.backgroundColor = NSColor.red.cgColor
@@ -160,14 +164,14 @@ class LayoutBuilderVC: MyTrainsViewController {
 //    inspectorView.wantsLayer = true
 //    inspectorView.layer?.backgroundColor = NSColor.green.cgColor
     
-    constraints.append(paletteView.widthAnchor.constraint(greaterThanOrEqualToConstant: 100))
-    constraints.append(paletteView.heightAnchor.constraint(equalToConstant: 100.0))
+ //   constraints.append(paletteView.widthAnchor.constraint(greaterThanOrEqualToConstant: 100))
+ //   constraints.append(paletteView.heightAnchor.constraint(equalToConstant: 100.0))
 
-    constraints.append(layoutView.widthAnchor.constraint(greaterThanOrEqualToConstant: 100))
-    constraints.append(layoutView.heightAnchor.constraint(equalToConstant: 100.0))
+//    constraints.append(layoutView.widthAnchor.constraint(greaterThanOrEqualToConstant: 100))
+//    constraints.append(layoutView.heightAnchor.constraint(equalToConstant: 100.0))
 
-    constraints.append(inspectorView.widthAnchor.constraint(greaterThanOrEqualToConstant: 100))
-    constraints.append(inspectorView.heightAnchor.constraint(equalToConstant: 100.0))
+//    constraints.append(inspectorView.widthAnchor.constraint(greaterThanOrEqualToConstant: 100))
+//    constraints.append(inspectorView.heightAnchor.constraint(equalToConstant: 100.0))
     constraints.append(inspectorView.trailingAnchor.constraint(equalTo: splitView.trailingAnchor))
 
     panelView.translatesAutoresizingMaskIntoConstraints = false
@@ -278,8 +282,8 @@ class LayoutBuilderVC: MyTrainsViewController {
     arrangeView.translatesAutoresizingMaskIntoConstraints = false
     arrangeStripView.translatesAutoresizingMaskIntoConstraints = false
 
-    arrangeView.wantsLayer = true
-    arrangeView.layer?.backgroundColor = NSColor.orange.cgColor
+//    arrangeView.wantsLayer = true
+//    arrangeView.layer?.backgroundColor = NSColor.orange.cgColor
 //    arrangeStripView.wantsLayer = true
 //    arrangeStripView.layer?.backgroundColor = NSColor.white.cgColor
 
@@ -287,6 +291,8 @@ class LayoutBuilderVC: MyTrainsViewController {
     
     constraints.append(arrangeView.topAnchor.constraint(equalTo: paletteView.topAnchor))
     constraints.append(arrangeView.centerXAnchor.constraint(equalTo: paletteView.centerXAnchor))
+    constraints.append(arrangeView.leadingAnchor.constraint(equalTo: paletteView.leadingAnchor))
+    constraints.append(paletteView.trailingAnchor.constraint(greaterThanOrEqualTo: arrangeView.trailingAnchor))
     constraints.append(paletteView.bottomAnchor.constraint(greaterThanOrEqualTo: arrangeView.bottomAnchor))
     constraints.append(paletteView.widthAnchor.constraint(greaterThanOrEqualTo: arrangeView.widthAnchor))
     
@@ -320,8 +326,81 @@ class LayoutBuilderVC: MyTrainsViewController {
     }
     constraints.append(arrangeStripView.trailingAnchor.constraint(equalToSystemSpacingAfter: lastButton!.trailingAnchor, multiplier: 1.0))
     constraints.append(arrangeView.widthAnchor.constraint(greaterThanOrEqualTo: arrangeStripView.widthAnchor))
+
+    cboPalette.translatesAutoresizingMaskIntoConstraints = false
+    
+    SwitchboardItemPalette.populate(comboBox: cboPalette, country: layout.countryCode)
+    
+    arrangeView.addSubview(cboPalette)
+    
+    constraints.append(cboPalette.topAnchor.constraint(equalToSystemSpacingBelow: arrangeStripView.bottomAnchor, multiplier: 1.0))
+    constraints.append(cboPalette.centerXAnchor.constraint(equalTo: arrangeStripView.centerXAnchor))
+    constraints.append(arrangeView.trailingAnchor.constraint(greaterThanOrEqualToSystemSpacingAfter: cboPalette.trailingAnchor, multiplier: 1.0))
+    constraints.append(arrangeView.bottomAnchor.constraint(greaterThanOrEqualToSystemSpacingBelow: cboPalette.bottomAnchor, multiplier: 1.0))
+    
+    SwitchboardItemPalette.select(comboBox: cboPalette, value: currentPalette)
+    
+    for palette in SwitchboardItemPalette.availablePalettes(country: layout.countryCode) {
+      let view = NSView()
+      view.translatesAutoresizingMaskIntoConstraints = false
+      constraints.append(contentsOf: SwitchboardItemPalette.populate(paletteView: view, palette: palette, target: nil, action: nil))
+      paletteViews[palette] = view
+      arrangeView.addSubview(view)
+      constraints.append(view.topAnchor.constraint(equalTo: cboPalette.bottomAnchor))
+      constraints.append(view.centerXAnchor.constraint(equalTo: arrangeView.centerXAnchor))
+      constraints.append(arrangeView.bottomAnchor.constraint(greaterThanOrEqualTo: view.bottomAnchor))
+    }
+    
+    groupView.translatesAutoresizingMaskIntoConstraints = false
+    groupStripView.translatesAutoresizingMaskIntoConstraints = false
+
+//    groupView.wantsLayer = true
+//    groupView.layer?.backgroundColor = NSColor.systemPink.cgColor
+//    groupStripView.wantsLayer = true
+//    groupStripView.layer?.backgroundColor = NSColor.white.cgColor
+
+    paletteView.addSubview(groupView)
+    
+    constraints.append(groupView.topAnchor.constraint(equalTo: paletteView.topAnchor))
+    constraints.append(groupView.centerXAnchor.constraint(equalTo: paletteView.centerXAnchor))
+    constraints.append(paletteView.bottomAnchor.constraint(greaterThanOrEqualTo: groupView.bottomAnchor))
+    constraints.append(paletteView.widthAnchor.constraint(greaterThanOrEqualTo: groupView.widthAnchor))
+    
+    groupView.addSubview(groupStripView)
+    
+    constraints.append(groupStripView.topAnchor.constraint(equalTo: groupView.topAnchor))
+    constraints.append(groupStripView.centerXAnchor.constraint(equalTo: groupView.centerXAnchor))
+    constraints.append(groupStripView.heightAnchor.constraint(equalToConstant: 20.0))
+    constraints.append(groupView.bottomAnchor.constraint(greaterThanOrEqualTo: groupStripView.bottomAnchor))
+
+    lastButton = nil
+    index = 0
+    for button in groupButtons {
+      if let button {
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.isBordered = false
+        button.tag = index
+        button.target = self
+        button.action = #selector(btnGroupAction(_:))
+        index += 1
+        groupStripView.addSubview(button)
+        constraints.append(button.centerYAnchor.constraint(equalTo: groupStripView.centerYAnchor))
+        if let lastButton {
+          constraints.append(button.leadingAnchor.constraint(equalToSystemSpacingAfter: lastButton.trailingAnchor, multiplier: 1.0))
+        }
+        else {
+          constraints.append(button.leadingAnchor.constraint(equalToSystemSpacingAfter: groupStripView.leadingAnchor, multiplier: 1.0))
+        }
+      }
+      lastButton = button
+    }
+    constraints.append(groupStripView.trailingAnchor.constraint(equalToSystemSpacingAfter: lastButton!.trailingAnchor, multiplier: 1.0))
+    constraints.append(groupView.widthAnchor.constraint(greaterThanOrEqualTo: groupStripView.widthAnchor))
+
     NSLayoutConstraint.activate(constraints)
     
+    arrangeView.isHidden = true
+
     if let appNode {
       for (_, item) in appNode.panelList {
         panels.append(item)
@@ -345,6 +424,10 @@ class LayoutBuilderVC: MyTrainsViewController {
     userSettings?.node = switchboardPanel
     self.cboPanel?.target = self
     self.cboPanel?.action = #selector(self.cboPanelAction(_:))
+
+    self.cboPalette?.target = self
+    self.cboPalette?.action = #selector(self.cboPaletteAction(_:))
+    cboPaletteAction(cboPalette)
 
     setStates()
     
@@ -371,7 +454,7 @@ class LayoutBuilderVC: MyTrainsViewController {
   
   private func setStates() {
     
-    guard let btnShowPanelView, let btnShowPaletteView, let btnShowInspectorView else {
+    guard let btnShowPanelView, let btnShowPaletteView, let btnShowInspectorView, let cboPalette else {
       return
     }
     
@@ -385,6 +468,11 @@ class LayoutBuilderVC: MyTrainsViewController {
     
     btnInspectorAction(inspectorButtons[userSettings!.integer(forKey: DEFAULT.CURRENT_INSPECTOR)]!)
     
+    arrangeView?.isHidden = isGroupMode
+    groupView?.isHidden = !isGroupMode
+    
+    SwitchboardItemPalette.select(comboBox: cboPalette, value: currentPalette)
+
   }
   
   // MARK: Outlets & Actions
@@ -424,6 +512,14 @@ class LayoutBuilderVC: MyTrainsViewController {
   
   private var arrangeButtons : [NSButton?] = []
   
+  private var cboPalette : MyComboBox? = MyComboBox()
+  
+  @objc func cboPaletteAction(_ sender: NSComboBox) {
+    currentPalette = SwitchboardItemPalette.selected(comboBox: sender)
+  }
+  
+  private var paletteViews : [SwitchboardItemPalette:NSView] = [:]
+  
   private var groupView : NSView? = NSView()
   
   private var groupStripView : NSView? = NSView()
@@ -435,6 +531,33 @@ class LayoutBuilderVC: MyTrainsViewController {
   private var btnShowPaletteView : NSButton?
   
   private var btnShowPanelView : NSButton?
+  
+  private var isGroupMode : Bool {
+    get {
+      return userSettings!.bool(forKey: DEFAULT.IS_GROUP_MODE)
+    }
+    set(value) {
+      userSettings?.set(value, forKey: DEFAULT.IS_GROUP_MODE)
+      arrangeView?.isHidden = value
+      groupView?.isHidden = !value
+    }
+  }
+  
+  private var currentPalette : SwitchboardItemPalette {
+    get {
+      guard let palette = SwitchboardItemPalette(rawValue: userSettings!.integer(forKey: DEFAULT.CURRENT_PALETTE)) else {
+        return SwitchboardItemPalette.defaultValue
+      }
+      return palette
+    }
+    set(value) {
+      for (_, view) in paletteViews {
+        view.isHidden = true
+      }
+      userSettings?.set(value.rawValue, forKey: DEFAULT.CURRENT_PALETTE)
+      paletteViews[value]?.isHidden = false
+    }
+  }
   
   @IBAction func btnShowPanelViewAction(_ sender: NSButton) {
     showPanelConstraint?.isActive = false
@@ -492,7 +615,21 @@ class LayoutBuilderVC: MyTrainsViewController {
   }
 
   @IBAction func btnArrangeAction(_ sender: NSButton) {
-    debugLog("\(sender.tag)")
+    switch sender.tag {
+    case 4:
+      isGroupMode = true
+    default:
+      break
+    }
+  }
+  
+  @IBAction func btnGroupAction(_ sender: NSButton) {
+    switch sender.tag {
+    case 2:
+      isGroupMode = false
+    default:
+      break
+    }
   }
   
 }

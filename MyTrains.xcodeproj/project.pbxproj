@@ -287,6 +287,8 @@
 		DAD554E82BCEBA6B004E17DF /* MyIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD554E72BCEBA6B004E17DF /* MyIcon.swift */; };
 		DAD73C1C2A9A298E002E7618 /* Digitrax BXP88.xml in Resources */ = {isa = PBXBuildFile; fileRef = DAD73C1B2A9A298E002E7618 /* Digitrax BXP88.xml */; };
 		DAD73C1E2A9A4F64002E7618 /* OpenLCBDigitraxBXP88Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD73C1D2A9A4F64002E7618 /* OpenLCBDigitraxBXP88Node.swift */; };
+		DAD7750A2BCFE73600D8AD55 /* SwitchboardItemPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD775092BCFE73600D8AD55 /* SwitchboardItemPalette.swift */; };
+		DAD7750C2BD0230400D8AD55 /* SwitchboardShapeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD7750B2BD0230400D8AD55 /* SwitchboardShapeButton.swift */; };
 		DAD89F962B8B5B7E00F611CD /* MonitorItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD89F952B8B5B7E00F611CD /* MonitorItem.swift */; };
 		DADC21CE2944ABE2008A2F33 /* ClockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADC21CD2944ABE2008A2F33 /* ClockView.swift */; };
 		DADFFF902946025500CD2119 /* DateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADFFF8F2946025500CD2119 /* DateExtensions.swift */; };
@@ -638,6 +640,8 @@
 		DAD554E72BCEBA6B004E17DF /* MyIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyIcon.swift; sourceTree = "<group>"; };
 		DAD73C1B2A9A298E002E7618 /* Digitrax BXP88.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Digitrax BXP88.xml"; sourceTree = "<group>"; };
 		DAD73C1D2A9A4F64002E7618 /* OpenLCBDigitraxBXP88Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBDigitraxBXP88Node.swift; sourceTree = "<group>"; };
+		DAD775092BCFE73600D8AD55 /* SwitchboardItemPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchboardItemPalette.swift; sourceTree = "<group>"; };
+		DAD7750B2BD0230400D8AD55 /* SwitchboardShapeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchboardShapeButton.swift; sourceTree = "<group>"; };
 		DAD89F952B8B5B7E00F611CD /* MonitorItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonitorItem.swift; sourceTree = "<group>"; };
 		DADC21CD2944ABE2008A2F33 /* ClockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClockView.swift; sourceTree = "<group>"; };
 		DADFFF8F2946025500CD2119 /* DateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensions.swift; sourceTree = "<group>"; };
@@ -834,6 +838,7 @@
 				DA50C2F62B77F09F00C2F6A1 /* SignalType.swift */,
 				DAF4D2D62B78F42A00759539 /* SpeedConstraintType.swift */,
 				DA6E28DE285F827600772641 /* SwitchBoardItemType.swift */,
+				DAD775092BCFE73600D8AD55 /* SwitchboardItemPalette.swift */,
 				DA7243F728A81165003157CA /* ThrottleMode.swift */,
 				DAE8DD54286754C00097C2D1 /* TrackCode.swift */,
 				DA6E28E2285F8F1A00772641 /* TrackElectrificationType.swift */,
@@ -989,6 +994,7 @@
 				DA29E94D2BC85C8900E6A757 /* SwitchboardView.swift */,
 				DA3168882BCAC84300059B6C /* SwitchboardOperationsView.swift */,
 				DA31688E2BCAE75100059B6C /* SwitchboardShape.swift */,
+				DAD7750B2BD0230400D8AD55 /* SwitchboardShapeButton.swift */,
 				DA3168922BCAF93D00059B6C /* LayoutBuilderVC.swift */,
 				DAE4285D2BCC07E60016571B /* LayoutBuilder.storyboard */,
 			);
@@ -1783,10 +1789,12 @@
 				DA9FDD012B935908003C6672 /* MyTrainsViewController.swift in Sources */,
 				DAA83DEB272C37670075CBCD /* AppDelegate.swift in Sources */,
 				DAF6778C2B432372009707A4 /* CDIStackViewManagerDelegate.swift in Sources */,
+				DAD7750A2BCFE73600D8AD55 /* SwitchboardItemPalette.swift in Sources */,
 				DA497BC72B9E0B7600D96ACA /* InitAppVC.swift in Sources */,
 				DA0D3E062A4850880042748C /* OpenLCBThrottleDelegate.swift in Sources */,
 				DAACFC742A4336F7001743DA /* OpenLCBTractionManagementType.swift in Sources */,
 				DA613ACB28A7E02E003218BA /* PlaceLocomotiveVC.swift in Sources */,
+				DAD7750C2BD0230400D8AD55 /* SwitchboardShapeButton.swift in Sources */,
 				DA1B949F2A3DE8E000E2CE6A /* Client.swift in Sources */,
 				DA8FDB2D279C4AC000E15024 /* LocoSlotTableViewDS.swift in Sources */,
 				DA3D9A672B74FEED00451EFB /* UnitConversionType.swift in Sources */,
