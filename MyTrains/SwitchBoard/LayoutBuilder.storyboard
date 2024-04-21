@@ -39,16 +39,41 @@
                         <rect key="frame" x="0.0" y="0.0" width="745" height="614"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="j9c-X3-r9W">
-                                <rect key="frame" x="89" y="347" width="48" height="48"/>
+                            <scrollView fixedFrame="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cEm-GO-2QI">
+                                <rect key="frame" x="56" y="219" width="406" height="369"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="KGw-AB-Ub2">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                            </button>
+                                <clipView key="contentView" id="XEF-g7-yqa">
+                                    <rect key="frame" x="1" y="1" width="404" height="367"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <view id="KGC-Tu-jzW">
+                                            <rect key="frame" x="0.0" y="0.0" width="389" height="352"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <subviews>
+                                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Cdr-eJ-mEM" customClass="SwitchboardEditorView" customModule="MyTrains" customModuleProvider="target">
+                                                    <rect key="frame" x="0.0" y="0.0" width="389" height="360"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                </customView>
+                                            </subviews>
+                                        </view>
+                                    </subviews>
+                                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </clipView>
+                                <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="y5N-cC-TKs">
+                                    <rect key="frame" x="1" y="352" width="404" height="16"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                                <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="7rf-Tc-YKy">
+                                    <rect key="frame" x="389" y="1" width="16" height="367"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                            </scrollView>
                         </subviews>
                     </view>
+                    <connections>
+                        <outlet property="scrollView" destination="cEm-GO-2QI" id="i9E-LF-w41"/>
+                        <outlet property="switchboardView" destination="Cdr-eJ-mEM" id="HKb-nE-ft5"/>
+                    </connections>
                 </viewController>
                 <customObject id="sLi-58-bqR" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>

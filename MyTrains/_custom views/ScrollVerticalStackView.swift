@@ -56,6 +56,12 @@ class ScrollVerticalStackView : NSView, CDIStackViewManagerDelegate {
       return
     }
     
+    scrollView.contentView = FlippedNSClipView()
+    scrollView.contentView.drawsBackground = false
+    scrollView.drawsBackground = false
+    scrollView.hasVerticalScroller = true
+    scrollView.autohidesScrollers = true
+    
     addSubview(scrollView)
 
     scrollView.translatesAutoresizingMaskIntoConstraints = false

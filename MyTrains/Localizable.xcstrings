@@ -548,6 +548,9 @@
     "Alias Mapping Enquiry Frame" : {
 
     },
+    "Allow Shunt" : {
+
+    },
     "Alternate Clock 1" : {
       "comment" : "Used to indicate a clock's type",
       "localizations" : {
@@ -1912,6 +1915,9 @@
     "Delete" : {
 
     },
+    "Description" : {
+
+    },
     "Destination Blind Front" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -2016,6 +2022,9 @@
           }
         }
       }
+    },
+    "Directionality" : {
+
     },
     "Disabled" : {
       "comment" : "Used to indicate that something is disabled",
@@ -2181,6 +2190,9 @@
           }
         }
       }
+    },
+    "Electrification" : {
+
     },
     "Electro-diesel" : {
       "comment" : "Used to indicate that a locomotive is can be powered by diesel or electric power",
@@ -2463,6 +2475,9 @@
     "First Frame " : {
 
     },
+    "Fit to Size" : {
+
+    },
     "Flange Squeal" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -2662,6 +2677,9 @@
     },
     "Great Britain" : {
       "comment" : "This is the name of a country."
+    },
+    "Group" : {
+
     },
     "Guard's Whistle" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -2961,6 +2979,12 @@
     "Iran" : {
       "comment" : "This is the name of a country."
     },
+    "Is Critical Section" : {
+
+    },
+    "Is Hidden Section" : {
+
+    },
     "Italy" : {
       "comment" : "This is the name of a country."
     },
@@ -3046,6 +3070,12 @@
     "Layout Builder" : {
       "comment" : "Used for a menu title\nUsed for the title of the Layout Builder window."
     },
+    "Layout ID" : {
+
+    },
+    "Layout Name" : {
+
+    },
     "Layout Node" : {
       "comment" : "Used to describe an OpenLCB virtual node",
       "localizations" : {
@@ -3108,6 +3138,30 @@
     },
     "Left Curved Turnout" : {
       "comment" : "This is used to describe a piece of track."
+    },
+    "Length of Route #1" : {
+
+    },
+    "Length of Route #2" : {
+
+    },
+    "Length of Route #3" : {
+
+    },
+    "Length of Route #4" : {
+
+    },
+    "Length of Route #5" : {
+
+    },
+    "Length of Route #6" : {
+
+    },
+    "Length of Route #7" : {
+
+    },
+    "Length of Route #8" : {
+
     },
     "License Agreement" : {
 
@@ -3710,6 +3764,9 @@
         }
       }
     },
+    "Name" : {
+
+    },
     "New" : {
       "comment" : "Used for a menu title",
       "localizations" : {
@@ -3865,6 +3922,12 @@
         }
       }
     },
+    "Number of Columns" : {
+
+    },
+    "Number of Rows" : {
+
+    },
     "o" : {
       "comment" : "Used for the Global Power Off menu key equivalent",
       "extractionState" : "stale",
@@ -4014,6 +4077,9 @@
     "Optional Interaction Rejected" : {
 
     },
+    "Orientation" : {
+
+    },
     "Other" : {
 
     },
@@ -4069,6 +4135,15 @@
           }
         }
       }
+    },
+    "Panel Description" : {
+
+    },
+    "Panel ID" : {
+
+    },
+    "Panel Name" : {
+
     },
     "Panel View" : {
       "comment" : "Used for a menu title"
@@ -5575,6 +5650,12 @@
         }
       }
     },
+    "Track Gradient" : {
+
+    },
+    "Track Guage" : {
+
+    },
     "Tracks" : {
       "comment" : "Used for the title of a switchboard item palette in LayoutBuilder"
     },
@@ -6215,7 +6296,13 @@
         }
       }
     },
+    "X Coordinate" : {
+
+    },
     "Xpressnet" : {
+
+    },
+    "Y Coordinate" : {
 
     },
     "Y Turnout" : {
@@ -6258,6 +6345,12 @@
 
     },
     "Your application has run out of gateway node IDs. Increase the maximum number of gateways in the application node using the configuration tool." : {
+
+    },
+    "Zoom In" : {
+
+    },
+    "Zoom Out" : {
 
     }
   },

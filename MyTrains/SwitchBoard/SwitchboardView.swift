@@ -97,8 +97,6 @@ class SwitchboardView: NSView {
     }
   }
   
-  public var delegate : SwitchBoardViewDelegate?
-  
   // MARK: Private Methods
   
   internal func gridSquare(from: NSEvent) -> SwitchBoardLocation {

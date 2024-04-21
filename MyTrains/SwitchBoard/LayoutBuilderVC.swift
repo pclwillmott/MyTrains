@@ -8,7 +8,7 @@
 import Foundation
 import AppKit
 
-class LayoutBuilderVC: MyTrainsViewController {
+class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate {
   
   // MARK: Window & View Methods
   
@@ -50,6 +50,8 @@ class LayoutBuilderVC: MyTrainsViewController {
     groupButtons.removeAll()
     groupStripView?.subviews.removeAll()
     groupStripView = nil
+    layoutStripView?.subviews.removeAll()
+    layoutStripView = nil
     super.windowWillClose(notification)
   }
   
@@ -65,6 +67,70 @@ class LayoutBuilderVC: MyTrainsViewController {
     static let CURRENT_INSPECTOR   = "CURRENT_INSPECTOR"
     static let IS_GROUP_MODE       = "IS_GROUP_MODE"
     static let CURRENT_PALETTE     = "CURRENT_PALETTE"
+    static let MAGNIFICATION       = "MAGNIFICATION"
+  }
+  
+  private enum ArrangeButton : Int {
+    case addItemToPanel = 0
+    case removeItemFromPanel = 1
+    case rotateCounterClockwise = 2
+    case rotateClockwise = 3
+    case switchToGroupingMode = 4
+  }
+  
+  private enum InspectorButton : Int {
+    case showInformationInspector = 0
+    case showQuickHelpInspector = 1
+    case showAttributesInspector = 2
+    case showEventsInspector = 3
+    case showSpeedConstraintsInspector = 4
+    case showTurnoutInspector = 5
+  }
+  
+  private enum GroupButton : Int {
+    case addItemToGroup = 0
+    case removeItemFromGroup = 1
+    case switchToArrangeMode = 2
+  }
+  
+  private enum LayoutButton : Int {
+    case zoomIn = 0
+    case zoomOut = 1
+    case fitToSize = 2
+  }
+  
+  private enum PanelProperty : Int {
+    case layoutId = 1
+    case layoutName = 2
+    case panelId = 3
+    case panelName = 4
+    case panelDescription = 5
+    case numberOfRows = 6
+    case numberOfColumns = 7
+  }
+
+  private enum AttributeProperty : Int {
+    case name = 1
+    case description = 2
+    case xPos = 3
+    case yPos = 4
+    case orientation = 5
+    case group = 6
+    case directionality = 7
+    case allowShunt = 8
+    case trackElectrificationType = 9
+    case isCriticalSection = 10
+    case isHiddenSection = 11
+    case trackGradient = 12
+    case trackGauge = 13
+    case lengthRoute1 = 14
+    case lengthRoute2 = 15
+    case lengthRoute3 = 16
+    case lengthRoute4 = 17
+    case lengthRoute5 = 18
+    case lengthRoute6 = 19
+    case lengthRoute7 = 20
+    case lengthRoute8 = 21
   }
   
   override func viewWillAppear() {
@@ -72,6 +138,8 @@ class LayoutBuilderVC: MyTrainsViewController {
     super.viewWillAppear()
     
     view.window?.title = String(localized: "Layout Builder", comment:"Used for the title of the Layout Builder window.")
+    
+    switchboardView.delegate = self
     
     btnShowInspectorView = MyIcon.trailingThird.button(target: self, action: #selector(btnShowInspectorViewAction(_:)))
 
@@ -88,12 +156,12 @@ class LayoutBuilderVC: MyTrainsViewController {
       MyIcon.connection.button(target: self, action: nil),
     ]
     
-    inspectorButtons[0]?.toolTip = String(localized: "Show Information Inspector")
-    inspectorButtons[1]?.toolTip = String(localized: "Show Quick Help Inspector")
-    inspectorButtons[2]?.toolTip = String(localized: "Show Attributes Inspector")
-    inspectorButtons[3]?.toolTip = String(localized: "Show Events Inspector")
-    inspectorButtons[4]?.toolTip = String(localized: "Show Speed Constraints Inspector")
-    inspectorButtons[5]?.toolTip = String(localized: "Show Turnout Inspector")
+    inspectorButtons[InspectorButton.showInformationInspector.rawValue]?.toolTip = String(localized: "Show Information Inspector")
+    inspectorButtons[InspectorButton.showQuickHelpInspector.rawValue]?.toolTip = String(localized: "Show Quick Help Inspector")
+    inspectorButtons[InspectorButton.showAttributesInspector.rawValue]?.toolTip = String(localized: "Show Attributes Inspector")
+    inspectorButtons[InspectorButton.showEventsInspector.rawValue]?.toolTip = String(localized: "Show Events Inspector")
+    inspectorButtons[InspectorButton.showSpeedConstraintsInspector.rawValue]?.toolTip = String(localized: "Show Speed Constraints Inspector")
+    inspectorButtons[InspectorButton.showTurnoutInspector.rawValue]?.toolTip = String(localized: "Show Turnout Inspector")
 
     arrangeButtons = [
       MyIcon.addItem.button(target: self, action: nil),
@@ -102,15 +170,15 @@ class LayoutBuilderVC: MyTrainsViewController {
       MyIcon.rotateClockwise.button(target: self, action: nil),
       MyIcon.groupMode.button(target: self, action: nil),
     ]
+    
+    arrangeButtons[ArrangeButton.addItemToPanel.rawValue]?.toolTip = String(localized: "Add Item to Panel")
+    arrangeButtons[ArrangeButton.removeItemFromPanel.rawValue]?.toolTip = String(localized: "Remove Item from Panel")
+    arrangeButtons[ArrangeButton.rotateCounterClockwise.rawValue]?.toolTip = String(localized: "Rotate Item Counter Clockwise")
+    arrangeButtons[ArrangeButton.rotateClockwise.rawValue]?.toolTip = String(localized: "Rotate Item Clockwise")
+    arrangeButtons[ArrangeButton.switchToGroupingMode.rawValue]?.toolTip = String(localized: "Switch to Grouping Mode")
 
-    arrangeButtons[0]?.toolTip = String(localized: "Add Item to Panel")
-    arrangeButtons[1]?.toolTip = String(localized: "Remove Item from Panel")
-    arrangeButtons[2]?.toolTip = String(localized: "Rotate Item Counter Clockwise")
-    arrangeButtons[3]?.toolTip = String(localized: "Rotate Item Clockwise")
-    arrangeButtons[4]?.toolTip = String(localized: "Switch to Grouping Mode")
-
-    arrangeButtons[0]?.keyEquivalent = "+"
-    arrangeButtons[1]?.keyEquivalent = "-"
+    arrangeButtons[ArrangeButton.addItemToPanel.rawValue]?.keyEquivalent = "+"
+    arrangeButtons[ArrangeButton.removeItemFromPanel.rawValue]?.keyEquivalent = "-"
     
     groupButtons = [
       MyIcon.addToGroup.button(target: self, action: nil),
@@ -118,13 +186,192 @@ class LayoutBuilderVC: MyTrainsViewController {
       MyIcon.cursor.button(target: self, action: nil),
     ]
 
-    groupButtons[0]?.toolTip = String(localized: "Add Item to Group")
-    groupButtons[1]?.toolTip = String(localized: "Remove Item from Group")
-    groupButtons[2]?.toolTip = String(localized: "Switch to Arrange Mode")
+    groupButtons[GroupButton.addItemToGroup.rawValue]?.toolTip = String(localized: "Add Item to Group")
+    groupButtons[GroupButton.removeItemFromGroup.rawValue]?.toolTip = String(localized: "Remove Item from Group")
+    groupButtons[GroupButton.switchToArrangeMode.rawValue]?.toolTip = String(localized: "Switch to Arrange Mode")
+    
+    layoutButtons = [
+      MyIcon.zoomIn.button(target: self, action: nil),
+      MyIcon.zoomOut.button(target: self, action: nil),
+      MyIcon.fitToSize.button(target: self, action: nil),
+    ]
+    
+    panelControls = [
+      (
+        NSTextField(labelWithString: String(localized: "Layout ID")),
+        NSTextField(labelWithString: ""),
+        .layoutId
+      ),
+      (
+        NSTextField(labelWithString: String(localized: "Layout Name")),
+        NSTextField(labelWithString: ""),
+        .layoutName
+      ),
+      (
+        NSTextField(labelWithString: String(localized: "Panel ID")),
+        NSTextField(labelWithString: ""),
+        .panelId
+      ),
+      (
+        NSTextField(labelWithString: String(localized: "Panel Name")),
+        NSTextField(),
+        .panelName
+      ),
+      (
+        NSTextField(labelWithString: String(localized: "Panel Description")),
+        NSTextField(),
+        .panelDescription
+      ),
+      (
+        NSTextField(labelWithString: String(localized: "Number of Rows")),
+        NSTextField(),
+        .numberOfRows
+      ),
+      (
+        NSTextField(labelWithString: String(localized: "Number of Columns")),
+        NSTextField(),
+        .numberOfColumns
+      ),
+    ]
+    
+    attributeControls = [
+      (
+        "Identity",
+        NSTextField(labelWithString: String(localized: "Name")),
+        NSTextField(),
+        .name
+      ),
+      (
+        "Identity",
+        NSTextField(labelWithString: String(localized: "Description")),
+        NSTextField(),
+        .description
+      ),
+      (
+        "General Settings",
+        NSTextField(labelWithString: String(localized: "X Coordinate")),
+        NSTextField(),
+        .xPos
+      ),
+      (
+        "General Settings",
+        NSTextField(labelWithString: String(localized: "Y Coordinate")),
+        NSTextField(),
+        .yPos
+      ),
+      (
+        "General Settings",
+        NSTextField(labelWithString: String(localized: "Orientation")),
+        NSComboBox(),
+        .orientation
+      ),
+      (
+        "General Settings",
+        NSTextField(labelWithString: String(localized: "Group")),
+        NSComboBox(),
+        .group
+      ),
+      (
+        "Block Settings",
+        NSTextField(labelWithString: String(localized: "Directionality")),
+        NSComboBox(),
+        .directionality
+      ),
+      (
+        "Block Settings",
+        NSTextField(labelWithString: String(localized: "Allow Shunt")),
+        NSComboBox(),
+        .allowShunt
+      ),
+      (
+        "Block Settings",
+        NSTextField(labelWithString: String(localized: "Electrification")),
+        NSComboBox(),
+        .trackElectrificationType
+      ),
+      (
+        "Block Settings",
+        NSTextField(labelWithString: String(localized: "Is Critical Section")),
+        NSComboBox(),
+        .isCriticalSection
+      ),
+      (
+        "Block Settings",
+        NSTextField(labelWithString: String(localized: "Is Hidden Section")),
+        NSComboBox(),
+        .isHiddenSection
+      ),
+      (
+        "Track Configuration",
+        NSTextField(labelWithString: String(localized: "Track Gradient")),
+        NSTextField(),
+        .trackGradient
+      ),
+      (
+        "Track Configuration",
+        NSTextField(labelWithString: String(localized: "Track Guage")),
+        NSComboBox(),
+        .isHiddenSection
+      ),
+      (
+        "Track Configuration",
+        NSTextField(labelWithString: String(localized: "Length of Route #1")),
+        NSTextField(),
+        .lengthRoute1
+      ),
+      (
+        "Track Configuration",
+        NSTextField(labelWithString: String(localized: "Length of Route #2")),
+        NSTextField(),
+        .lengthRoute2
+      ),
+      (
+        "Track Configuration",
+        NSTextField(labelWithString: String(localized: "Length of Route #3")),
+        NSTextField(),
+        .lengthRoute3
+      ),
+      (
+        "Track Configuration",
+        NSTextField(labelWithString: String(localized: "Length of Route #4")),
+        NSTextField(),
+        .lengthRoute4
+      ),
+      (
+        "Track Configuration",
+        NSTextField(labelWithString: String(localized: "Length of Route #5")),
+        NSTextField(),
+        .lengthRoute5
+      ),
+      (
+        "Track Configuration",
+        NSTextField(labelWithString: String(localized: "Length of Route #6")),
+        NSTextField(),
+        .lengthRoute6
+      ),
+      (
+        "Track Configuration",
+        NSTextField(labelWithString: String(localized: "Length of Route #7")),
+        NSTextField(),
+        .lengthRoute7
+      ),
+      (
+        "Track Configuration",
+        NSTextField(labelWithString: String(localized: "Length of Route #8")),
+        NSTextField(),
+        .lengthRoute8
+      ),
+    ]
+    
+    layoutButtons[LayoutButton.zoomIn.rawValue]?.toolTip = String(localized: "Zoom In")
+    layoutButtons[LayoutButton.zoomOut.rawValue]?.toolTip = String(localized: "Zoom Out")
+    layoutButtons[LayoutButton.fitToSize.rawValue]?.toolTip = String(localized: "Fit to Size")
 
-    guard let cboPanel, let splitView, let paletteView, let layoutView, let inspectorView, let panelView, let panelStripView, let btnShowPanelView, let btnShowInspectorView, let btnShowPaletteView, let inspectorStripView, let arrangeView, let arrangeStripView, let groupView, let groupStripView, let layout = appNode?.layout, let cboPalette else {
+    guard let cboPanel, let splitView, let paletteView, let layoutView, let inspectorView, let panelView, let panelStripView, let btnShowPanelView, let btnShowInspectorView, let btnShowPaletteView, let inspectorStripView, let arrangeView, let arrangeStripView, let groupView, let groupStripView, let layout = appNode?.layout, let cboPalette, let layoutStripView, let panelStack else {
       return
     }
+    
+    view.subviews.removeAll()
     
     cboPanel.translatesAutoresizingMaskIntoConstraints = false
     cboPanel.isEditable = false
@@ -144,7 +391,7 @@ class LayoutBuilderVC: MyTrainsViewController {
     
     constraints.append(splitView.topAnchor.constraint(equalToSystemSpacingBelow: cboPanel.bottomAnchor, multiplier: 1.0))
     constraints.append(splitView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 1.0))
-    constraints.append(splitView.trailingAnchor.constraint(equalTo: cboPanel.trailingAnchor))
+    constraints.append(splitView.trailingAnchor.constraint(equalTo: view.trailingAnchor))
     
     paletteView.translatesAutoresizingMaskIntoConstraints = false
     layoutView.translatesAutoresizingMaskIntoConstraints = false
@@ -158,28 +405,64 @@ class LayoutBuilderVC: MyTrainsViewController {
  //   paletteView.wantsLayer = true
  //   paletteView.layer?.backgroundColor = NSColor.blue.cgColor
     
-    layoutView.wantsLayer = true
-    layoutView.layer?.backgroundColor = NSColor.red.cgColor
+//    layoutView.wantsLayer = true
+//    layoutView.layer?.backgroundColor = NSColor.red.cgColor
     
-//    inspectorView.wantsLayer = true
-//    inspectorView.layer?.backgroundColor = NSColor.green.cgColor
+    scrollView.translatesAutoresizingMaskIntoConstraints = false
+    switchboardView.translatesAutoresizingMaskIntoConstraints = false
     
- //   constraints.append(paletteView.widthAnchor.constraint(greaterThanOrEqualToConstant: 100))
- //   constraints.append(paletteView.heightAnchor.constraint(equalToConstant: 100.0))
+    layoutStripView.translatesAutoresizingMaskIntoConstraints = false
+//    layoutStripView.wantsLayer = true
+//    layoutStripView.layer?.backgroundColor = NSColor.white.cgColor
 
-//    constraints.append(layoutView.widthAnchor.constraint(greaterThanOrEqualToConstant: 100))
-//    constraints.append(layoutView.heightAnchor.constraint(equalToConstant: 100.0))
+    layoutView.addSubview(layoutStripView)
+    
+    constraints.append(layoutStripView.topAnchor.constraint(equalTo: layoutView.topAnchor))
+    constraints.append(layoutStripView.centerXAnchor.constraint(equalTo: layoutView.centerXAnchor))
+    constraints.append(layoutStripView.heightAnchor.constraint(equalToConstant: 20.0))
+    
+    var lastButton : NSButton?
+    
+    var index = 0
+    for button in layoutButtons {
+      if let button {
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.isBordered = false
+        button.tag = index
+        index += 1
+        button.target = self
+        button.action = #selector(btnLayoutAction(_:))
+        layoutStripView.addSubview(button)
+        constraints.append(button.centerYAnchor.constraint(equalTo: layoutStripView.centerYAnchor))
+        if let lastButton {
+          constraints.append(button.leadingAnchor.constraint(equalToSystemSpacingAfter: lastButton.trailingAnchor, multiplier: 1.0))
+        }
+        else {
+          constraints.append(button.leadingAnchor.constraint(equalToSystemSpacingAfter: layoutStripView.leadingAnchor, multiplier: 1.0))
+        }
+        lastButton = button
+      }
+    }
+    constraints.append(layoutStripView.trailingAnchor.constraint(equalToSystemSpacingAfter: lastButton!.trailingAnchor, multiplier: 1.0))
+    constraints.append(layoutView.widthAnchor.constraint(greaterThanOrEqualTo: layoutStripView.widthAnchor, multiplier: 1.0))
+    
+    layoutView.addSubview(scrollView)
+    constraints.append(scrollView.topAnchor.constraint(equalToSystemSpacingBelow: layoutStripView.bottomAnchor, multiplier: 1.0))
+    constraints.append(scrollView.leadingAnchor.constraint(equalTo: layoutView.leadingAnchor))
+    constraints.append(scrollView.trailingAnchor.constraint(equalTo: layoutView.trailingAnchor))
+    constraints.append(scrollView.bottomAnchor.constraint(equalTo: layoutView.bottomAnchor))
 
-//    constraints.append(inspectorView.widthAnchor.constraint(greaterThanOrEqualToConstant: 100))
-//    constraints.append(inspectorView.heightAnchor.constraint(equalToConstant: 100.0))
-    constraints.append(inspectorView.trailingAnchor.constraint(equalTo: splitView.trailingAnchor))
+    scrollView.documentView?.frame = NSMakeRect(0.0, 0.0, 2000.0, 2000.0)
+    scrollView.allowsMagnification = true
+    scrollView.magnification = switchboardMagnification
 
+    // MARK: PanelView
+    
     panelView.translatesAutoresizingMaskIntoConstraints = false
     
     view.addSubview(panelView)
 
-    panelView.wantsLayer = true
-    panelView.layer?.backgroundColor = NSColor.yellow.cgColor
+ //   panelView.backgroundColor = NSColor.yellow.cgColor
 
     constraints.append(panelView.topAnchor.constraint(equalToSystemSpacingBelow: splitView.bottomAnchor, multiplier: 1.0))
     constraints.append(panelView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 1.0))
@@ -190,17 +473,81 @@ class LayoutBuilderVC: MyTrainsViewController {
     
     panelView.addSubview(panelStripView)
     
-    showPanelConstraint = panelView.heightAnchor.constraint(equalToConstant: 100)
-    showPanelConstraint?.isActive = true
+    panelStack.translatesAutoresizingMaskIntoConstraints = false
+    
+    panelView.addSubview(panelStack)
+    
+    panelStack.orientation = .vertical
+    panelStack.spacing = 4
+    
+    constraints.append(panelStack.topAnchor.constraint(equalToSystemSpacingBelow: panelStripView.bottomAnchor, multiplier: 1.0))
+    constraints.append(panelStack.leadingAnchor.constraint(equalTo: panelView.leadingAnchor))
+    constraints.append(panelView.trailingAnchor.constraint(equalTo: panelStack.trailingAnchor))
+    
+    let labelFontSize : CGFloat = 10.0
+    let textFontSize  : CGFloat = 11.0
+    
+    let longFields : Set<PanelProperty> = [
+      .layoutName,
+      .panelName,
+      .panelDescription,
+    ]
 
-    panelStripView.wantsLayer = true
-    panelStripView.layer?.backgroundColor = NSColor.white.cgColor
+    for field in panelControls {
+      
+      let fieldView = NSView()
+      fieldView.translatesAutoresizingMaskIntoConstraints = false
+//      fieldView.backgroundColor = NSColor.orange.cgColor
+      
+      panelStack.addArrangedSubview(fieldView)
+      
+      constraints.append(fieldView.leadingAnchor.constraint(equalTo: panelStack.leadingAnchor))
+      constraints.append(fieldView.trailingAnchor.constraint(equalTo: panelStack.trailingAnchor))
+      
+      field.label.translatesAutoresizingMaskIntoConstraints = false
+      field.label.fontSize = labelFontSize
+      field.label.alignment = .right
+      
+      fieldView.addSubview(field.label)
+      
+      field.control.translatesAutoresizingMaskIntoConstraints = false
+      field.control.fontSize = textFontSize
+      field.control.tag = field.property.rawValue
+      
+      fieldView.addSubview(field.control)
+      
+      constraints.append(field.label.centerYAnchor.constraint(equalTo: field.control.centerYAnchor))
+      constraints.append(field.control.topAnchor.constraint(equalTo: fieldView.topAnchor))
+      constraints.append(field.label.leadingAnchor.constraint(equalTo: fieldView.leadingAnchor))
+      constraints.append(field.control.leadingAnchor.constraint(equalToSystemSpacingAfter: field.label.trailingAnchor, multiplier: 1.0))
+      constraints.append(fieldView.trailingAnchor.constraint(equalTo: panelStack.trailingAnchor))
+      constraints.append(fieldView.heightAnchor.constraint(equalTo: field.control.heightAnchor))
+      
+      if longFields.contains(field.property) {
+        constraints.append(fieldView.trailingAnchor.constraint(equalTo: field.control.trailingAnchor))
+      }
+      
+    }
+    
+    constraints.append(panelControls[0].control.widthAnchor.constraint(equalToConstant: 100))
+    constraints.append(panelControls[2].control.widthAnchor.constraint(equalToConstant: 100))
+    constraints.append(panelControls[5].control.widthAnchor.constraint(equalToConstant: 50))
+    constraints.append(panelControls[6].control.widthAnchor.constraint(equalToConstant: 50))
+
+    for field in panelControls {
+      for other in panelControls {
+        if !(field.control === other.control) {
+          constraints.append(field.label.widthAnchor.constraint(greaterThanOrEqualTo: other.label.widthAnchor))
+        }
+      }
+    }
+    
+    panelStripView.backgroundColor = NSColor.white.cgColor
 
     constraints.append(panelStripView.topAnchor.constraint(equalTo: panelView.topAnchor))
-    constraints.append(panelStripView.leadingAnchor.constraint(equalTo: panelView.leadingAnchor))
-    constraints.append(panelStripView.trailingAnchor.constraint(equalTo: panelView.trailingAnchor))
+    constraints.append(panelStripView.leadingAnchor.constraint(equalTo: layoutView.leadingAnchor))
+    constraints.append(panelStripView.trailingAnchor.constraint(equalTo: layoutView.trailingAnchor))
     constraints.append(panelStripView.heightAnchor.constraint(equalToConstant: 20.0))
-    constraints.append(panelView.bottomAnchor.constraint(greaterThanOrEqualTo: panelStripView.bottomAnchor))
     
     btnShowPanelView.translatesAutoresizingMaskIntoConstraints = false
     btnShowPanelView.isBordered = false
@@ -232,20 +579,22 @@ class LayoutBuilderVC: MyTrainsViewController {
     constraints.append(btnShowPaletteView.centerYAnchor.constraint(equalTo: panelStripView.centerYAnchor))
     constraints.append(btnShowPaletteView.leadingAnchor.constraint(equalToSystemSpacingAfter: panelStripView.leadingAnchor, multiplier: 1.0))
     
+    constraints.append(inspectorView.trailingAnchor.constraint(equalTo: splitView.trailingAnchor))
+
     inspectorStripView.translatesAutoresizingMaskIntoConstraints = false
     
     inspectorView.addSubview(inspectorStripView)
+    
+//    inspectorView.backgroundColor = NSColor.yellow.cgColor
 
-//    inspectorStripView.wantsLayer = true
-//    inspectorStripView.layer?.backgroundColor = NSColor.white.cgColor
+ //   inspectorStripView.backgroundColor = NSColor.white.cgColor
 
     constraints.append(inspectorStripView.topAnchor.constraint(equalTo: inspectorView.topAnchor))
     constraints.append(inspectorStripView.centerXAnchor.constraint(equalTo: inspectorView.centerXAnchor))
     constraints.append(inspectorStripView.heightAnchor.constraint(equalToConstant: 20.0))
 
-    var lastButton : NSButton?
-    
-    var index = 0
+    lastButton = nil
+    index = 0
     for button in inspectorButtons {
       if let button {
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -253,16 +602,29 @@ class LayoutBuilderVC: MyTrainsViewController {
         button.tag = index
         button.target = self
         button.action = #selector(btnInspectorAction(_:))
-        let view = NSView()
+        let scrollView = NSScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.drawsBackground = false
+        scrollView.contentView = FlippedNSClipView()
+        scrollView.contentView.drawsBackground = false
+        scrollView.hasVerticalScroller = true
+        scrollView.autohidesScrollers = true
+         inspectorViews.append(scrollView)
+        inspectorView.addSubview(scrollView)
+
+        let view = NSStackView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.wantsLayer = true
-        view.layer?.backgroundColor = (index % 2 == 0) ? NSColor.brown.cgColor : NSColor.yellow.cgColor
-        inspectorViews.append(view)
-        inspectorView.addSubview(view)
-        constraints.append(view.topAnchor.constraint(equalToSystemSpacingBelow: inspectorStripView.bottomAnchor, multiplier: 1.0))
-        constraints.append(view.leadingAnchor.constraint(equalTo: inspectorView.leadingAnchor))
-        constraints.append(view.trailingAnchor.constraint(equalTo: inspectorView.trailingAnchor))
-        constraints.append(view.heightAnchor.constraint(equalToConstant: 300))
+        view.backgroundColor = nil
+        //view.backgroundColor = NSColor.green.cgColor
+        
+        scrollView.documentView = view
+        
+        constraints.append(scrollView.topAnchor.constraint(equalToSystemSpacingBelow: inspectorStripView.bottomAnchor, multiplier: 1.0))
+        constraints.append(scrollView.trailingAnchor.constraint(equalTo: inspectorView.trailingAnchor))
+        constraints.append(scrollView.leadingAnchor.constraint(equalTo: inspectorView.leadingAnchor))
+        constraints.append(scrollView.bottomAnchor.constraint(equalTo: inspectorView.bottomAnchor))
+        constraints.append(view.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -10))
+        
         index += 1
         inspectorStripView.addSubview(button)
         constraints.append(button.centerYAnchor.constraint(equalTo: inspectorStripView.centerYAnchor))
@@ -279,6 +641,96 @@ class LayoutBuilderVC: MyTrainsViewController {
     constraints.append(inspectorView.widthAnchor.constraint(greaterThanOrEqualTo: inspectorStripView.widthAnchor, multiplier: 1.0))
     inspectorButtons[currentInspectorIndex]?.contentTintColor = NSColor.systemBlue
 
+    // MARK: Attributes Inspector
+    
+    let attributeStack = (inspectorViews[2] as! NSScrollView).documentView as! NSStackView
+    attributeStack.backgroundColor = NSColor.clear.cgColor
+    attributeStack.orientation = .vertical
+    attributeStack.spacing = 4
+    attributeStack.alignment = .right
+    
+    var attributeIndex = 0
+    while attributeIndex < attributeControls.count {
+      var showHeader = true
+      var showSeparator = false
+      let groupField = attributeControls[attributeIndex]
+      while attributeIndex < attributeControls.count && groupField.group == attributeControls[attributeIndex].group {
+        let isApplicable = true
+        if isApplicable {
+          if showHeader {
+            let labelView = NSView()
+            labelView.translatesAutoresizingMaskIntoConstraints = false
+            let label = NSTextField(labelWithString: groupField.group)
+            label.translatesAutoresizingMaskIntoConstraints = false
+            label.font = NSFont.systemFont(ofSize: 12, weight: .bold)
+            label.textColor = NSColor.systemGray
+            label.alignment = .left
+            label.stringValue = groupField.group
+            attributeStack.addArrangedSubview(labelView)
+            labelView.addSubview(label)
+      //      labelView.backgroundColor = NSColor.black.cgColor
+            constraints.append(label.leadingAnchor.constraint(equalTo: labelView.leadingAnchor))
+            constraints.append(labelView.heightAnchor.constraint(equalTo: label.heightAnchor))
+            showHeader = false
+          }
+          
+          let fieldView = NSView()
+ //         fieldView.backgroundColor = NSColor.systemPink.cgColor
+          
+          fieldView.translatesAutoresizingMaskIntoConstraints = false
+          attributeStack.addArrangedSubview(fieldView)
+          
+          let field = attributeControls[attributeIndex]
+          field.label.translatesAutoresizingMaskIntoConstraints = false
+          field.label.fontSize = labelFontSize
+          field.label.alignment = .right
+
+          fieldView.addSubview(field.label)
+          
+          field.control.translatesAutoresizingMaskIntoConstraints = false
+          field.control.fontSize = textFontSize
+          
+          fieldView.addSubview(field.control)
+   
+          /// Note to self: Views within a StackView must not have constraints to the outside world as this will lock the StackView size.
+          /// They must only have internal constraints to the view that is added to the StackView.
+          ///
+          constraints.append(fieldView.heightAnchor.constraint(equalTo: field.control.heightAnchor))
+          constraints.append(field.label.leadingAnchor.constraint(equalTo: fieldView.leadingAnchor, constant: 20))
+          constraints.append(field.control.leadingAnchor.constraint(equalToSystemSpacingAfter: field.label.trailingAnchor, multiplier: 1.0))
+          constraints.append(field.control.trailingAnchor.constraint(equalTo: fieldView.trailingAnchor))
+          constraints.append(field.control.widthAnchor.constraint(greaterThanOrEqualToConstant: 100))
+          constraints.append(field.control.centerYAnchor.constraint(equalTo: fieldView.centerYAnchor))
+          constraints.append(field.label.centerYAnchor.constraint(equalTo: fieldView.centerYAnchor))
+    
+          showSeparator = true
+        
+        }
+        attributeIndex += 1
+      }
+      if showSeparator {
+        let separator = SeparatorView()
+        separator.translatesAutoresizingMaskIntoConstraints = false
+        attributeStack.addArrangedSubview(separator)
+        constraints.append(separator.heightAnchor.constraint(equalToConstant: 20))
+        constraints.append(attributeStack.trailingAnchor.constraint(greaterThanOrEqualTo: separator.trailingAnchor))
+        constraints.append(separator.widthAnchor.constraint(equalTo: attributeStack.widthAnchor))
+      }
+    }
+    
+    for field1 in attributeControls {
+      let applicable = true
+      if applicable {
+        for field2 in attributeControls {
+          let applicable = true
+          if applicable && !(field1.label === field2.label) {
+            constraints.append(field1.label.widthAnchor.constraint(greaterThanOrEqualTo: field2.label.widthAnchor))
+          }
+        }
+      }
+    }
+
+    
     arrangeView.translatesAutoresizingMaskIntoConstraints = false
     arrangeStripView.translatesAutoresizingMaskIntoConstraints = false
 
@@ -441,11 +893,23 @@ class LayoutBuilderVC: MyTrainsViewController {
   
   private var panels : [SwitchboardPanelNode] = []
   
+  private var switchboardMagnification : CGFloat {
+    get {
+      return userSettings?.cgFloat(forKey: DEFAULT.MAGNIFICATION) ?? 1.0
+    }
+    set(value) {
+      userSettings?.set(value, forKey: DEFAULT.MAGNIFICATION)
+    }
+  }
+  
+  private weak var currentSwitchboardItem : SwitchboardItemNode?
+
   // MARK: Public Properties
   
   public weak var switchboardPanel : SwitchboardPanelNode? {
     didSet {
       userSettings?.node = switchboardPanel
+      switchboardView.switchboardPanel = switchboardPanel
       setStates()
     }
   }
@@ -472,7 +936,30 @@ class LayoutBuilderVC: MyTrainsViewController {
     groupView?.isHidden = !isGroupMode
     
     SwitchboardItemPalette.select(comboBox: cboPalette, value: currentPalette)
+    
+    cboPaletteAction(cboPalette)
 
+    scrollView.magnification = switchboardMagnification
+    
+    for field in panelControls {
+      switch field.property {
+      case .layoutId:
+        field.control.stringValue = appNode?.layout?.nodeId.toHexDotFormat(numberOfBytes: 6) ?? ""
+      case .layoutName:
+        field.control.stringValue = appNode?.layout?.userNodeName ?? ""
+      case .panelId:
+        field.control.stringValue = switchboardPanel?.nodeId.toHexDotFormat(numberOfBytes: 6) ?? ""
+      case .panelName:
+        field.control.stringValue = switchboardPanel?.userNodeName ?? ""
+      case .panelDescription:
+        field.control.stringValue = switchboardPanel?.userNodeDescription ?? ""
+      case .numberOfRows:
+        field.control.integerValue = Int(switchboardPanel?.numberOfRows ?? 30)
+      case .numberOfColumns:
+        field.control.integerValue = Int(switchboardPanel?.numberOfColumns ?? 30)
+      }
+    }
+        
   }
   
   // MARK: Outlets & Actions
@@ -497,7 +984,13 @@ class LayoutBuilderVC: MyTrainsViewController {
   private var panelView : NSView? = NSView()
   
   private var panelStripView : NSView? = NSView()
-
+  
+  private var panelControls : [(label:NSTextField, control:NSControl, property:PanelProperty)] = []
+  
+  private var attributeControls : [(group:String, label:NSTextField, control:NSControl, property:AttributeProperty)] = []
+  
+  private var panelStack : NSStackView? = NSStackView()
+  
   private var btnShowInspectorView : NSButton?
   
   private var inspectorStripView : NSView? = NSView()
@@ -527,6 +1020,10 @@ class LayoutBuilderVC: MyTrainsViewController {
   private var groupButtons : [NSButton?] = []
   
   private var currentInspectorIndex = 0
+  
+  private var layoutStripView : NSView? = NSView()
+  
+  private var layoutButtons : [NSButton?] = []
 
   private var btnShowPaletteView : NSButton?
   
@@ -540,6 +1037,7 @@ class LayoutBuilderVC: MyTrainsViewController {
       userSettings?.set(value, forKey: DEFAULT.IS_GROUP_MODE)
       arrangeView?.isHidden = value
       groupView?.isHidden = !value
+      switchboardView.mode = isGroupMode ? .group : .arrange
     }
   }
   
@@ -565,11 +1063,13 @@ class LayoutBuilderVC: MyTrainsViewController {
       showPanelConstraint = panelView?.bottomAnchor.constraint(equalTo: panelStripView!.bottomAnchor)
       btnShowPanelView?.contentTintColor = nil
       btnShowPanelView?.toolTip = String(localized: "Show the Panel Configuration Area")
+      panelStack?.isHidden = true
     }
     else {
-      showPanelConstraint = panelView?.heightAnchor.constraint(equalToConstant: 200)
+      showPanelConstraint = panelView?.bottomAnchor.constraint(equalTo: panelStack!.bottomAnchor)
       btnShowPanelView?.contentTintColor = NSColor.systemBlue
       btnShowPanelView?.toolTip = String(localized: "Hide the Panel Configuration Area")
+      panelStack?.isHidden = false
     }
     showPanelConstraint?.isActive = true
     userSettings?.set(btnShowPanelView!.state, forKey: DEFAULT.SHOW_PANEL_VIEW)
@@ -615,21 +1115,79 @@ class LayoutBuilderVC: MyTrainsViewController {
   }
 
   @IBAction func btnArrangeAction(_ sender: NSButton) {
-    switch sender.tag {
-    case 4:
-      isGroupMode = true
-    default:
+    guard let button = ArrangeButton(rawValue: sender.tag) else {
+      return
+    }
+    switch button {
+    case .addItemToPanel:
       break
+    case .removeItemFromPanel:
+      break
+    case .rotateCounterClockwise:
+      break
+    case .rotateClockwise:
+      break
+    case .switchToGroupingMode:
+      isGroupMode = true
     }
   }
   
   @IBAction func btnGroupAction(_ sender: NSButton) {
-    switch sender.tag {
-    case 2:
-      isGroupMode = false
-    default:
+    guard let button = GroupButton(rawValue: sender.tag) else {
+      return
+    }
+    switch button {
+    case .addItemToGroup:
       break
+    case .removeItemFromGroup:
+      break
+    case .switchToArrangeMode:
+      isGroupMode = false
     }
   }
   
+  @IBAction func btnLayoutAction(_ sender: NSButton) {
+    guard let button = LayoutButton(rawValue: sender.tag) else {
+      return
+    }
+    switch button {
+    case .zoomIn:
+      switchboardMagnification += 0.1
+      scrollView.magnification = switchboardMagnification
+    case .zoomOut:
+      switchboardMagnification -= 0.1
+      scrollView.magnification = switchboardMagnification
+    case .fitToSize:
+      
+      scrollView.magnification = 1.0
+
+      let sWidth = scrollView.frame.width
+      let sHeight = scrollView.frame.height
+      let gWidth = switchboardView.bounds.width
+      let gHeight = switchboardView.bounds.height
+
+      var scale = 1.0
+
+      if gWidth > gHeight {
+        scale = sWidth / gWidth
+      }
+      else {
+        scale = sHeight / gHeight
+      }
+      switchboardMagnification = scale
+      scrollView.magnification = switchboardMagnification
+      
+    }
+  }
+  
+  @IBOutlet weak var scrollView: NSScrollView!
+  
+  @IBOutlet weak var switchboardView: SwitchboardEditorView!
+  
+  // MARK: SwitchboardEditorViewDelegate Methods
+  
+  @objc func selectedItemChanged(_ switchboardEditorView:SwitchboardEditorView, switchboardItem:SwitchboardItemNode?) {
+    
+  }
+
 }

@@ -143,6 +143,7 @@ class PanelViewVC: MyTrainsViewController {
   @IBOutlet weak var btnFitToSize: NSButton!
   
   @IBAction func btnFitToSizeAction(_ sender: NSButton) {
+
     scrollView.magnification = 1.0
 
     let sWidth = scrollView.frame.width
@@ -160,6 +161,7 @@ class PanelViewVC: MyTrainsViewController {
     }
     switchboardMagnification = scale
     scrollView.magnification = switchboardMagnification
+
   }
   
 }
