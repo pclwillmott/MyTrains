@@ -408,8 +408,14 @@
     "A configuration tool has exclusive use of the configuration mechanism. Try again after you have finished with the configuration tool." : {
 
     },
+    "A critical section is a turnout or block which cannot be reserved unless the section following it is ready to accept the train." : {
+      "comment" : "This is used for a tooltip."
+    },
     "A critical task is running that cannot be interrupted. Try again when the task has completed." : {
 
+    },
+    "A hidden section is an area outside of the scenic area of the layout, i.e. it is hidden from the public view." : {
+      "comment" : "This is used for a tooltip."
     },
     "A reply from the LocoNet gateway was not received within the expected time period." : {
 
@@ -549,7 +555,7 @@
 
     },
     "Allow Shunt" : {
-
+      "comment" : "This is used for the title of a check box where the user can select if shunting is allowed in reverese direction on this switchbaord item."
     },
     "Alternate Clock 1" : {
       "comment" : "Used to indicate a clock's type",
@@ -709,6 +715,9 @@
         }
       }
     },
+    "Attributes" : {
+
+    },
     "Australia" : {
       "comment" : "This is the name of a country."
     },
@@ -816,6 +825,12 @@
     },
     "Block" : {
       "comment" : "This is used to describe a piece of track."
+    },
+    "Block Events" : {
+      "comment" : "This is used for the title of the Block Events section in the Layout Builder."
+    },
+    "Block Settings" : {
+      "comment" : "This is used for the title of the Block Settings section in the Layout Builder."
     },
     "Blocks" : {
       "comment" : "Used for the title of a switchboard item palette in LayoutBuilder"
@@ -1067,6 +1082,9 @@
     },
     "Check ID 7 Frame" : {
 
+    },
+    "Check this box to allow shunting in the reverse direction to that permitted for this switchboard item." : {
+      "comment" : "This is used for a tooltip."
     },
     "China" : {
       "comment" : "This is the name of a country."
@@ -1583,6 +1601,9 @@
         }
       }
     },
+    "Critical Section" : {
+      "comment" : "This is used for the title of a check box where the user can select if a piece or track or turnout is a critical section."
+    },
     "Critical Task Running" : {
 
     },
@@ -1916,7 +1937,7 @@
 
     },
     "Description" : {
-
+      "comment" : "This is used for the title of an input field where the user can enter a description of a switchboard item."
     },
     "Destination Blind Front" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -2023,8 +2044,17 @@
         }
       }
     },
+    "Direction Next" : {
+      "comment" : "This is used for the title of the Speed Constraints Direction Next section in the Layout Builder."
+    },
+    "Direction Previous" : {
+      "comment" : "This is used for the title of the Speed Constraints Direction Previous section in the Layout Builder."
+    },
     "Directionality" : {
-
+      "comment" : "This is used for the title of combo box where the user can select which directions of travel are valid for the switchboard item."
+    },
+    "Directionality applicable to this signal." : {
+      "comment" : "This is used for a tooltip."
     },
     "Disabled" : {
       "comment" : "Used to indicate that something is disabled",
@@ -2192,7 +2222,7 @@
       }
     },
     "Electrification" : {
-
+      "comment" : "This is used for the title of a combo box where the user can select the applicable electrification type for the switchboard item."
     },
     "Electro-diesel" : {
       "comment" : "Used to indicate that a locomotive is can be powered by diesel or electric power",
@@ -2309,8 +2339,14 @@
         }
       }
     },
+    "Enter Detection Zone Event ID" : {
+      "comment" : "This is used for the title of an input field where the user can enter an event ID."
+    },
     "Enter Full Screen" : {
       "comment" : "Used for a menu title"
+    },
+    "Enter Transponding Zone Event ID" : {
+      "comment" : "This is used for the title of an input field where the user can enter an event ID."
     },
     "Error" : {
       "localizations" : {
@@ -2360,6 +2396,183 @@
     "Event Exchange Protocol" : {
 
     },
+    "Event ID generated when the sensor is activated." : {
+      "comment" : "this is used for a tooltip."
+    },
+    "Event ID generated when the sensor is deactivated." : {
+      "comment" : "this is used for a tooltip."
+    },
+    "Event ID that indicates that turnout switch #1 has been closed." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID that indicates that turnout switch #1 has been thrown." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID that indicates that turnout switch #2 has been closed." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID that indicates that turnout switch #2 has been thrown." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID that indicates that turnout switch #3 has been closed." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID that indicates that turnout switch #3 has been thrown." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID that indicates that turnout switch #4 has been closed." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID that indicates that turnout switch #4 has been thrown." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID that reports location services information for the zone associated with this switchboard item." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID that signals that a track fault has been detected in the detection zone associated with this switchboard item." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID that signals that a track fault is no longer detected in the detection zone associated with this switchboard item." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID that signals that a train has entered the detection zone associated with this switchboard item." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID that signals that a train has exited the detection zone associated with this switchboard item." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID that signals that a train's transponder has been detected in the transponding zone associated with this switchboard item." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID that signals that a train's transponder is no longer detected in the transponding zone associated with this switchboard item." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID that the sensor uses to report location services information." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID to send to close turnout switch #1. In general the diverging route is selected by close and the through route by throw." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID to send to close turnout switch #2. In general the diverging route is selected by close and the through route by throw." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID to send to close turnout switch #3. In general the diverging route is selected by close and the through route by throw." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID to send to close turnout switch #4. In general the diverging route is selected by close and the through route by throw." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID to send to set the signal to aspect #1." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID to send to set the signal to aspect #2." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID to send to set the signal to aspect #3." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID to send to set the signal to aspect #4." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID to send to set the signal to aspect #5." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID to send to set the signal to aspect #6." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID to send to set the signal to aspect #7." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID to send to set the signal to aspect #8." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID to send to set the signal to aspect #9." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID to send to set the signal to aspect #10." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID to send to set the signal to aspect #11." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID to send to set the signal to aspect #12." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID to send to set the signal to aspect #13." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID to send to set the signal to aspect #14." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID to send to set the signal to aspect #15." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID to send to set the signal to aspect #16." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID to send to set the signal to aspect #17." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID to send to set the signal to aspect #18." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID to send to set the signal to aspect #19." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID to send to set the signal to aspect #20." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID to send to set the signal to aspect #21." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID to send to set the signal to aspect #22." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID to send to set the signal to aspect #23." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID to send to set the signal to aspect #24." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID to send to set the signal to aspect #25." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID to send to set the signal to aspect #26." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID to send to set the signal to aspect #27." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID to send to set the signal to aspect #28." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID to send to set the signal to aspect #29." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID to send to set the signal to aspect #30." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID to send to set the signal to aspect #31." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID to send to set the signal to aspect #32." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID to send to throw turnout switch #1. In general the diverging route is selected by close and the through route by throw." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID to send to throw turnout switch #2. In general the diverging route is selected by close and the through route by throw." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID to send to throw turnout switch #3. In general the diverging route is selected by close and the through route by throw." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID to send to throw turnout switch #4. In general the diverging route is selected by close and the through route by throw." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Events" : {
+
+    },
     "Exhaust Fan" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -2376,6 +2589,12 @@
           }
         }
       }
+    },
+    "Exit Detection Zone Event ID" : {
+      "comment" : "This is used for the title of an input field where the user can enter an event ID."
+    },
+    "Exit Transponding Zone Event ID" : {
+      "comment" : "This is used for the title of an input field where the user can enter an event ID."
     },
     "Fan Operation" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -2547,6 +2766,9 @@
     "Function Description Information" : {
 
     },
+    "General Settings" : {
+      "comment" : "This is used for the title of the General Settings section in the Layout Builder."
+    },
     "Generic Virtual" : {
       "comment" : "Used to create a default OpenLCB virtual name",
       "localizations" : {
@@ -2679,7 +2901,10 @@
       "comment" : "This is the name of a country."
     },
     "Group" : {
-
+      "comment" : "This is used for the title of a combo box where the user can select which group the switchboard item belongs to."
+    },
+    "Group that this switchboard item belongs to. Groups are used to identify which track items belong to which block. It is also used to group opposing turnouts." : {
+      "comment" : "This is used for a tooltip."
     },
     "Guard's Whistle" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -2755,6 +2980,9 @@
         }
       }
     },
+    "Hidden Section" : {
+      "comment" : "This is used for the title of a check box where the user can select if a switchboard item is marked as hidden."
+    },
     "Hide MyTrains" : {
       "comment" : "Used for a menu title"
     },
@@ -2790,6 +3018,9 @@
     "Hours" : {
 
     },
+    "ID of the parent panel for this switchboard item." : {
+      "comment" : "This is used for a tooltip."
+    },
     "Ident Button Combination Pressed" : {
 
     },
@@ -2823,6 +3054,9 @@
     },
     "Identify Producer" : {
 
+    },
+    "Identity" : {
+      "comment" : "This is used for the title of the Identity section in the Layout Builder."
     },
     "Idle" : {
       "comment" : "Used to indicate a LocoNet command station slot status",
@@ -2897,6 +3131,9 @@
       "comment" : "This is the name of a country."
     },
     "Info" : {
+
+    },
+    "Information" : {
 
     },
     "Initialization Complete Full Protocol Required" : {
@@ -2987,6 +3224,9 @@
     },
     "Italy" : {
       "comment" : "This is the name of a country."
+    },
+    "Item Type" : {
+      "comment" : "This is used for the title of an informational field that displays the switchboard item's type."
     },
     "Japan" : {
       "comment" : "This is the name of a country."
@@ -3139,29 +3379,77 @@
     "Left Curved Turnout" : {
       "comment" : "This is used to describe a piece of track."
     },
+    "Length of route #1" : {
+      "comment" : "This is used for a tooltip."
+    },
     "Length of Route #1" : {
 
+    },
+    "Length of Route #1 (%%UNITS_ACTUAL_LENGTH%%)" : {
+      "comment" : "This is used for the title of an input field where the user enters the length of the specified route. The %%UNITS_ACTUAL_LENGTH%% will be replaced at runtime by the name of the user selected units of length - place this at an approprate position in the title for the language."
+    },
+    "Length of route #2" : {
+      "comment" : "This is used for a tooltip."
     },
     "Length of Route #2" : {
 
     },
+    "Length of Route #2 (%%UNITS_ACTUAL_LENGTH%%)" : {
+      "comment" : "This is used for the title of an input field where the user enters the length of the specified route. The %%UNITS_ACTUAL_LENGTH%% will be replaced at runtime by the name of the user selected units of length - place this at an approprate position in the title for the language."
+    },
+    "Length of route #3" : {
+      "comment" : "This is used for a tooltip."
+    },
     "Length of Route #3" : {
 
+    },
+    "Length of Route #3 (%%UNITS_ACTUAL_LENGTH%%)" : {
+      "comment" : "This is used for the title of an input field where the user enters the length of the specified route. The %%UNITS_ACTUAL_LENGTH%% will be replaced at runtime by the name of the user selected units of length - place this at an approprate position in the title for the language."
+    },
+    "Length of route #4" : {
+      "comment" : "This is used for a tooltip."
     },
     "Length of Route #4" : {
 
     },
+    "Length of Route #4 (%%UNITS_ACTUAL_LENGTH%%)" : {
+      "comment" : "This is used for the title of an input field where the user enters the length of the specified route. The %%UNITS_ACTUAL_LENGTH%% will be replaced at runtime by the name of the user selected units of length - place this at an approprate position in the title for the language."
+    },
+    "Length of route #5" : {
+      "comment" : "This is used for a tooltip."
+    },
     "Length of Route #5" : {
 
+    },
+    "Length of Route #5 (%%UNITS_ACTUAL_LENGTH%%)" : {
+      "comment" : "This is used for the title of an input field where the user enters the length of the specified route. The %%UNITS_ACTUAL_LENGTH%% will be replaced at runtime by the name of the user selected units of length - place this at an approprate position in the title for the language."
+    },
+    "Length of route #6" : {
+      "comment" : "This is used for a tooltip."
     },
     "Length of Route #6" : {
 
     },
+    "Length of Route #6 (%%UNITS_ACTUAL_LENGTH%%)" : {
+      "comment" : "This is used for the title of an input field where the user enters the length of the specified route. The %%UNITS_ACTUAL_LENGTH%% will be replaced at runtime by the name of the user selected units of length - place this at an approprate position in the title for the language."
+    },
+    "Length of route #7" : {
+      "comment" : "This is used for a tooltip."
+    },
     "Length of Route #7" : {
 
     },
+    "Length of Route #7 (%%UNITS_ACTUAL_LENGTH%%)" : {
+      "comment" : "This is used for the title of an input field where the user enters the length of the specified route. The %%UNITS_ACTUAL_LENGTH%% will be replaced at runtime by the name of the user selected units of length - place this at an approprate position in the title for the language."
+    },
+    "Length of route #8" : {
+      "comment" : "This is used for a tooltip."
+    },
     "Length of Route #8" : {
 
+    },
+    "Length of Route #8 (%%UNITS_ACTUAL_LENGTH%%)" : {
+      "comment" : "This is used for the title of an input field where the user enters the length of the specified route. The %%UNITS_ACTUAL_LENGTH%% will be replaced at runtime by the name of the user selected units of length - place this at an approprate position in the title for the language."
     },
     "License Agreement" : {
 
@@ -3221,7 +3509,7 @@
       }
     },
     "Link" : {
-      "comment" : "This is used to describe a switchboard item."
+      "comment" : "This is used for the title of a combo box that the user selects which switchboard link this link connects to.\nThis is used to describe a switchboard item."
     },
     "Link Error Code 1" : {
 
@@ -3234,6 +3522,9 @@
     },
     "Link Error Code 4" : {
 
+    },
+    "Location Services Event ID" : {
+      "comment" : "This is used for the title of an input field where the user can enter an event ID."
     },
     "Location Services Report" : {
 
@@ -3765,7 +4056,10 @@
       }
     },
     "Name" : {
-
+      "comment" : "This is used for the title of an input field where the user can define the name of a switchboard item."
+    },
+    "Name of the parent panel for this switchboard item." : {
+      "comment" : "This is used for a tooltip."
     },
     "New" : {
       "comment" : "Used for a menu title",
@@ -4078,7 +4372,7 @@
 
     },
     "Orientation" : {
-
+      "comment" : "This is used for the title of a combo box where the user can select the orientation/rotation state of the switchboard item."
     },
     "Other" : {
 
@@ -4140,10 +4434,10 @@
 
     },
     "Panel ID" : {
-
+      "comment" : "This is used for the title of an informational field that displays the ID of the parent panel of the switchboard item."
     },
     "Panel Name" : {
-
+      "comment" : "This is used for the title of an informational field that displays the name of the parent panel of the switchboard item."
     },
     "Panel View" : {
       "comment" : "Used for a menu title"
@@ -4275,6 +4569,9 @@
     "Permanent Error Write CV Failed" : {
 
     },
+    "Permitted directions of travel for a train on this switchboard item." : {
+      "comment" : "This is used for a tooltip."
+    },
     "Platform" : {
       "comment" : "This is used to describe a switchboard item."
     },
@@ -4344,6 +4641,9 @@
 
     },
     "Push Button" : {
+
+    },
+    "Quick Help" : {
 
     },
     "Quit MyTrains" : {
@@ -4719,6 +5019,9 @@
     "Rotate Item Counter Clockwise" : {
 
     },
+    "Rotation angle of the switchboard item." : {
+      "comment" : "This is used for a tooltip."
+    },
     "RTS/CTS" : {
       "comment" : "Used to indicate that serial port uses the RTS/CTS lines for hardware flow control",
       "localizations" : {
@@ -4910,8 +5213,131 @@
     "Sensor" : {
       "comment" : "This is used to describe a switchboard item."
     },
+    "Sensor Activate Latency (%%UNITS_TIME%%)" : {
+      "comment" : "This is used for the title of an input field where the user enters the time delay between a sensor being activated and when it sends the event report. The %%UNITS_TIME%% will be replaced at runtime by the name of the user selected units of time - place this at an approprate position in the title for the language."
+    },
+    "Sensor Activated Event ID" : {
+      "comment" : "This is used for the title of an input field where the user enters a specific event ID."
+    },
+    "Sensor Deactivate Latency (%%UNITS_TIME%%)" : {
+      "comment" : "This is used for the title of an input field where the user enters the time delay between a sensor being deactivated and when it sends the event report. The %%UNITS_TIME%% will be replaced at runtime by the name of the user selected units of time - place this at an approprate position in the title for the language."
+    },
+    "Sensor Deactivated Event ID" : {
+      "comment" : "This is used for the title of an input field where the user enters a specific event ID."
+    },
+    "Sensor Location Services Event ID" : {
+      "comment" : "This is used for the title of an input field where the user can enter an event ID."
+    },
+    "Sensor Position (%%UNITS_ACTUAL_DISTANCE%%)" : {
+      "comment" : "This is used for the title of an input field that the user enters the position of a sensor device."
+    },
+    "Sensor position from the start of the block." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Sensor Settings" : {
+      "comment" : "This is used for the title of the Sensor Settings section in the Layout Builder."
+    },
+    "Sensor Type" : {
+      "comment" : "This is used for the title of a combo box that the user selects the type of sensor."
+    },
     "Sensors" : {
       "comment" : "Used for the title of a switchboard item palette in LayoutBuilder"
+    },
+    "Set Signal Aspect #1 Event ID" : {
+      "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
+    },
+    "Set Signal Aspect #2 Event ID" : {
+      "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
+    },
+    "Set Signal Aspect #3 Event ID" : {
+      "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
+    },
+    "Set Signal Aspect #4 Event ID" : {
+      "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
+    },
+    "Set Signal Aspect #5 Event ID" : {
+      "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
+    },
+    "Set Signal Aspect #6 Event ID" : {
+      "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
+    },
+    "Set Signal Aspect #7 Event ID" : {
+      "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
+    },
+    "Set Signal Aspect #8 Event ID" : {
+      "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
+    },
+    "Set Signal Aspect #9 Event ID" : {
+      "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
+    },
+    "Set Signal Aspect #10 Event ID" : {
+      "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
+    },
+    "Set Signal Aspect #11 Event ID" : {
+      "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
+    },
+    "Set Signal Aspect #12 Event ID" : {
+      "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
+    },
+    "Set Signal Aspect #13 Event ID" : {
+      "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
+    },
+    "Set Signal Aspect #14 Event ID" : {
+      "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
+    },
+    "Set Signal Aspect #15 Event ID" : {
+      "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
+    },
+    "Set Signal Aspect #16 Event ID" : {
+      "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
+    },
+    "Set Signal Aspect #17 Event ID" : {
+      "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
+    },
+    "Set Signal Aspect #18 Event ID" : {
+      "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
+    },
+    "Set Signal Aspect #19 Event ID" : {
+      "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
+    },
+    "Set Signal Aspect #20 Event ID" : {
+      "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
+    },
+    "Set Signal Aspect #21 Event ID" : {
+      "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
+    },
+    "Set Signal Aspect #22 Event ID" : {
+      "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
+    },
+    "Set Signal Aspect #23 Event ID" : {
+      "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
+    },
+    "Set Signal Aspect #24 Event ID" : {
+      "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
+    },
+    "Set Signal Aspect #25 Event ID" : {
+      "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
+    },
+    "Set Signal Aspect #26 Event ID" : {
+      "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
+    },
+    "Set Signal Aspect #27 Event ID" : {
+      "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
+    },
+    "Set Signal Aspect #28 Event ID" : {
+      "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
+    },
+    "Set Signal Aspect #29 Event ID" : {
+      "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
+    },
+    "Set Signal Aspect #30 Event ID" : {
+      "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
+    },
+    "Set Signal Aspect #31 Event ID" : {
+      "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
+    },
+    "Set Signal Aspect #32 Event ID" : {
+      "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
     },
     "Short Whistle" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -5012,6 +5438,21 @@
     },
     "Signal" : {
       "comment" : "This is used to describe a switchboard item."
+    },
+    "Signal Events" : {
+      "comment" : "This is used for the title of the Signal Events section in the Layout Builder."
+    },
+    "Signal Route Direction" : {
+      "comment" : "This is used for the title of a combo box which the user selects the directionality applicable to the signal."
+    },
+    "Signal Settings" : {
+      "comment" : "This is used for the title of the Signal Settings section in the Layout Builder."
+    },
+    "Signal Stop Position (%%UNITS_ACTUAL_DISTANCE%%)" : {
+
+    },
+    "Signal Type" : {
+      "comment" : "This is used for the title of a combo box that the user selects the signal type."
     },
     "Signals" : {
       "comment" : "Used for the title of a switchboard item palette in LayoutBuilder"
@@ -5153,6 +5594,15 @@
     },
     "Spain" : {
       "comment" : "This is the name of a country."
+    },
+    "Speed Constraint (%%UNITS_SCALE_SPEED%%)" : {
+      "comment" : "This is used for the title of an input field where the user enters the speed constraint value. The %%UNITS_SCALE_SPEED%% will be replaced at runtime by the name of the user selected units of speed - place this at an approprate position in the title for the language."
+    },
+    "Speed Constraint Type" : {
+      "comment" : "This is used for the title of a combo box from which the user selects the speed constraint type."
+    },
+    "Speed Constraints" : {
+
     },
     "Spirax Valve" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -5300,6 +5750,54 @@
     "Success" : {
 
     },
+    "Switch #1 Close Event ID" : {
+      "comment" : "This is used for the title of an input field where the user can select which event ID to send to close a turnout switch."
+    },
+    "Switch #1 Closed Event ID" : {
+      "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been closed."
+    },
+    "Switch #1 Throw Event ID" : {
+      "comment" : "This is used for the title of an input field where the user can select which event ID to send to throw a turnout switch."
+    },
+    "Switch #1 Thrown Event ID" : {
+      "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been thrown."
+    },
+    "Switch #2 Close Event ID" : {
+      "comment" : "This is used for the title of an input field where the user can select which event ID to send to close a turnout switch."
+    },
+    "Switch #2 Closed Event ID" : {
+      "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been closed."
+    },
+    "Switch #2 Throw Event ID" : {
+      "comment" : "This is used for the title of an input field where the user can select which event ID to send to throw a turnout switch."
+    },
+    "Switch #2 Thrown Event ID" : {
+      "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been thrown."
+    },
+    "Switch #3 Close Event ID" : {
+      "comment" : "This is used for the title of an input field where the user can select which event ID to send to close a turnout switch."
+    },
+    "Switch #3 Closed Event ID" : {
+      "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been closed."
+    },
+    "Switch #3 Throw Event ID" : {
+      "comment" : "This is used for the title of an input field where the user can select which event ID to send to throw a turnout switch."
+    },
+    "Switch #3 Thrown Event ID" : {
+      "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been thrown."
+    },
+    "Switch #4 Close Event ID" : {
+      "comment" : "This is used for the title of an input field where the user can select which event ID to send to close a turnout switch."
+    },
+    "Switch #4 Closed Event ID" : {
+      "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been closed."
+    },
+    "Switch #4 Throw Event ID" : {
+      "comment" : "This is used for the title of an input field where the user can select which event ID to send to throw a turnout switch."
+    },
+    "Switch #4 Thrown Event ID" : {
+      "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been thrown."
+    },
     "Switch Board" : {
       "comment" : "Used for the Switch Board menu item title",
       "extractionState" : "stale",
@@ -5357,6 +5855,9 @@
           }
         }
       }
+    },
+    "Switchboard link that this link connects to. Links are used to make connections between switchboard panels and to allow tracks to go above or below other tracks." : {
+      "comment" : "This is used for a tooltip."
     },
     "Switchboard Panel" : {
       "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name",
@@ -5513,6 +6014,9 @@
     "Terminate Due To Error" : {
 
     },
+    "The applicable speed for this constraint." : {
+      "comment" : "This is used for a tooltip."
+    },
     "The following options determine which windows are automatically displayed at start-up and when the application restarts after configuration changes." : {
 
     },
@@ -5525,6 +6029,12 @@
           }
         }
       }
+    },
+    "The position from the start of the block where a train should stop." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "The turnout switching method for this turnout." : {
+      "comment" : "This is used for a tooltip."
     },
     "Third Rail" : {
       "comment" : "Used to indicate that the track models 3rd rail electrification",
@@ -5562,6 +6072,12 @@
     },
     "This device requires exclusive use of the configuration mechanism. If you have any other configuration tools open for other devices please close them all and try again." : {
 
+    },
+    "This identifies the type of electrification that is applicable for this switchboard item. Electric trains will not be permitted on non-electrified track, or trains with the wrong electrification type." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "This is a percentage from 0 to 100 where 0 means horizontal and 100 means vertical." : {
+      "comment" : "This is used for a tooltip."
     },
     "This name will appear in network browsers for this device." : {
       "comment" : "Used for the description of the user name input field in the CDI",
@@ -5614,6 +6130,12 @@
         }
       }
     },
+    "Time between the sensor no longer being triggered and the sensor reporting such non-triggering." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Time between the sensor triggering and the sensor reporting such trigger." : {
+      "comment" : "This is used for a tooltip."
+    },
     "Timeout" : {
 
     },
@@ -5650,11 +6172,23 @@
         }
       }
     },
+    "Track Configuration" : {
+      "comment" : "This is used for the title of the Track Configuration section in the Layout Builder."
+    },
+    "Track Fault Cleared Event ID" : {
+      "comment" : "This is used for the title of an input field where the user can enter an event ID."
+    },
+    "Track Fault Event ID" : {
+      "comment" : "This is used for the title of an input field where the user can enter an event ID."
+    },
     "Track Gradient" : {
-
+      "comment" : "This is used for the title of an input field where the user can enter the gradient of the track."
     },
     "Track Guage" : {
-
+      "comment" : "This is used for the title of a combo box where the user can select the track guage."
+    },
+    "Track guage of this switchboard item. Trains will not be permitted on track of the wrong guage. Also you cannot connect together track items with different track guages." : {
+      "comment" : "This is used for a tooltip."
     },
     "Tracks" : {
       "comment" : "Used for the title of a switchboard item palette in LayoutBuilder"
@@ -5745,14 +6279,32 @@
     "Turnout Left" : {
       "comment" : "This is used to describe a piece of track."
     },
+    "Turnout Motor Type" : {
+      "comment" : "This is used for the title of a combo box where the user can select the applicable turnout motor type."
+    },
     "Turnout Right" : {
       "comment" : "This is used to describe a piece of track."
+    },
+    "Turnouts" : {
+
     },
     "Turnouts & Crossovers" : {
       "comment" : "Used for the title of a switchboard item palette in LayoutBuilder"
     },
     "TX" : {
       "comment" : "This is an abbreviation of Transmit used for an LED label"
+    },
+    "Type of sensor." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Type of signal." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Type of speed constraint." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Type of this switchboard item." : {
+      "comment" : "This is used for a tooltip."
     },
     "Ukraine" : {
       "comment" : "This is the name of a country."
@@ -5897,6 +6449,9 @@
         }
       }
     },
+    "User description of this switchboard item. This is an optional field and may contain any descriptive text the user chooses." : {
+      "comment" : "This is used for a tooltip."
+    },
     "User Name" : {
       "comment" : "Used for the title of the User Name input field in CDI",
       "localizations" : {
@@ -5913,6 +6468,9 @@
           }
         }
       }
+    },
+    "User name of this switchboard item. Switchboard items should be given unique names with a logical naming convention." : {
+      "comment" : "This is used for a tooltip."
     },
     "User Specified" : {
       "comment" : "Used to indicate that a custom clock should use the user specified node Id",
@@ -6299,11 +6857,23 @@
     "X Coordinate" : {
 
     },
+    "X Position" : {
+      "comment" : "This is used for the title of an input field where the user can enter a switchboard item's x coordinate in the panel's grid."
+    },
+    "X position coordinate of this switchboard item in the panel's grid." : {
+      "comment" : "This is used for a tooltip."
+    },
     "Xpressnet" : {
 
     },
     "Y Coordinate" : {
 
+    },
+    "Y Position" : {
+      "comment" : "This is used for the title of an input field where the user can enter a switchboard item's y coordinate in the panel's grid."
+    },
+    "Y position coordinate of this switchboard item in the panel's grid." : {
+      "comment" : "This is used for a tooltip."
     },
     "Y Turnout" : {
       "comment" : "This is used to describe a piece of track."

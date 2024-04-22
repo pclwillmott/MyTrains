@@ -689,6 +689,7 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate {
           
           field.control.translatesAutoresizingMaskIntoConstraints = false
           field.control.fontSize = textFontSize
+          field.control.toolTip = "Here I Am!!!!"
           
           fieldView.addSubview(field.control)
    
