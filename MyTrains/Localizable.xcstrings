@@ -3216,12 +3216,6 @@
     "Iran" : {
       "comment" : "This is the name of a country."
     },
-    "Is Critical Section" : {
-
-    },
-    "Is Hidden Section" : {
-
-    },
     "Italy" : {
       "comment" : "This is the name of a country."
     },
@@ -3382,17 +3376,11 @@
     "Length of route #1" : {
       "comment" : "This is used for a tooltip."
     },
-    "Length of Route #1" : {
-
-    },
     "Length of Route #1 (%%UNITS_ACTUAL_LENGTH%%)" : {
       "comment" : "This is used for the title of an input field where the user enters the length of the specified route. The %%UNITS_ACTUAL_LENGTH%% will be replaced at runtime by the name of the user selected units of length - place this at an approprate position in the title for the language."
     },
     "Length of route #2" : {
       "comment" : "This is used for a tooltip."
-    },
-    "Length of Route #2" : {
-
     },
     "Length of Route #2 (%%UNITS_ACTUAL_LENGTH%%)" : {
       "comment" : "This is used for the title of an input field where the user enters the length of the specified route. The %%UNITS_ACTUAL_LENGTH%% will be replaced at runtime by the name of the user selected units of length - place this at an approprate position in the title for the language."
@@ -3400,17 +3388,11 @@
     "Length of route #3" : {
       "comment" : "This is used for a tooltip."
     },
-    "Length of Route #3" : {
-
-    },
     "Length of Route #3 (%%UNITS_ACTUAL_LENGTH%%)" : {
       "comment" : "This is used for the title of an input field where the user enters the length of the specified route. The %%UNITS_ACTUAL_LENGTH%% will be replaced at runtime by the name of the user selected units of length - place this at an approprate position in the title for the language."
     },
     "Length of route #4" : {
       "comment" : "This is used for a tooltip."
-    },
-    "Length of Route #4" : {
-
     },
     "Length of Route #4 (%%UNITS_ACTUAL_LENGTH%%)" : {
       "comment" : "This is used for the title of an input field where the user enters the length of the specified route. The %%UNITS_ACTUAL_LENGTH%% will be replaced at runtime by the name of the user selected units of length - place this at an approprate position in the title for the language."
@@ -3418,17 +3400,11 @@
     "Length of route #5" : {
       "comment" : "This is used for a tooltip."
     },
-    "Length of Route #5" : {
-
-    },
     "Length of Route #5 (%%UNITS_ACTUAL_LENGTH%%)" : {
       "comment" : "This is used for the title of an input field where the user enters the length of the specified route. The %%UNITS_ACTUAL_LENGTH%% will be replaced at runtime by the name of the user selected units of length - place this at an approprate position in the title for the language."
     },
     "Length of route #6" : {
       "comment" : "This is used for a tooltip."
-    },
-    "Length of Route #6" : {
-
     },
     "Length of Route #6 (%%UNITS_ACTUAL_LENGTH%%)" : {
       "comment" : "This is used for the title of an input field where the user enters the length of the specified route. The %%UNITS_ACTUAL_LENGTH%% will be replaced at runtime by the name of the user selected units of length - place this at an approprate position in the title for the language."
@@ -3436,17 +3412,11 @@
     "Length of route #7" : {
       "comment" : "This is used for a tooltip."
     },
-    "Length of Route #7" : {
-
-    },
     "Length of Route #7 (%%UNITS_ACTUAL_LENGTH%%)" : {
       "comment" : "This is used for the title of an input field where the user enters the length of the specified route. The %%UNITS_ACTUAL_LENGTH%% will be replaced at runtime by the name of the user selected units of length - place this at an approprate position in the title for the language."
     },
     "Length of route #8" : {
       "comment" : "This is used for a tooltip."
-    },
-    "Length of Route #8" : {
-
     },
     "Length of Route #8 (%%UNITS_ACTUAL_LENGTH%%)" : {
       "comment" : "This is used for the title of an input field where the user enters the length of the specified route. The %%UNITS_ACTUAL_LENGTH%% will be replaced at runtime by the name of the user selected units of length - place this at an approprate position in the title for the language."
@@ -5225,6 +5195,9 @@
     "Sensor Deactivated Event ID" : {
       "comment" : "This is used for the title of an input field where the user enters a specific event ID."
     },
+    "Sensor Events" : {
+      "comment" : "This is used for the title of the Sensor Events section in the Layout Builder."
+    },
     "Sensor Location Services Event ID" : {
       "comment" : "This is used for the title of an input field where the user can enter an event ID."
     },
@@ -6276,6 +6249,9 @@
         }
       }
     },
+    "Turnout Events" : {
+      "comment" : "This is used for the title of the Turnout Events section in the Layout Builder."
+    },
     "Turnout Left" : {
       "comment" : "This is used to describe a piece of track."
     },
@@ -6854,9 +6830,6 @@
         }
       }
     },
-    "X Coordinate" : {
-
-    },
     "X Position" : {
       "comment" : "This is used for the title of an input field where the user can enter a switchboard item's x coordinate in the panel's grid."
     },
@@ -6864,9 +6837,6 @@
       "comment" : "This is used for a tooltip."
     },
     "Xpressnet" : {
-
-    },
-    "Y Coordinate" : {
 
     },
     "Y Position" : {

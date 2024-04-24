@@ -238,6 +238,9 @@
 		DAA36B9D2A110B6200F07D8E /* OpenLCBTransportLayerAlias.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA36B9C2A110B6200F07D8E /* OpenLCBTransportLayerAlias.swift */; };
 		DAA36B9F2A110C0000F07D8E /* OpenLCBAliasState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA36B9E2A110C0000F07D8E /* OpenLCBAliasState.swift */; };
 		DAA54F7F2A217CDA005CED7E /* OpenLCBNodeConfigurationTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA54F7E2A217CDA005CED7E /* OpenLCBNodeConfigurationTool.swift */; };
+		DAA56B4F2BD9381600BAB6EF /* LayoutInspectorPropertyField.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA56B4E2BD9381600BAB6EF /* LayoutInspectorPropertyField.swift */; };
+		DAA56B512BD938AE00BAB6EF /* LayoutInspectorGroupField.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA56B502BD938AE00BAB6EF /* LayoutInspectorGroupField.swift */; };
+		DAA56B532BD93A7900BAB6EF /* LayoutInspectorControlType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA56B522BD93A7900BAB6EF /* LayoutInspectorControlType.swift */; };
 		DAA66BD22A092DC2001804AC /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA66BD12A092DC2001804AC /* StringExtensions.swift */; };
 		DAA777CA2A20C84C008EAF02 /* OpenLCBClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA777C92A20C84C008EAF02 /* OpenLCBClock.swift */; };
 		DAA777CC2A20C861008EAF02 /* OpenLCBClockType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA777CB2A20C861008EAF02 /* OpenLCBClockType.swift */; };
@@ -593,6 +596,9 @@
 		DAA36B9C2A110B6200F07D8E /* OpenLCBTransportLayerAlias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBTransportLayerAlias.swift; sourceTree = "<group>"; };
 		DAA36B9E2A110C0000F07D8E /* OpenLCBAliasState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBAliasState.swift; sourceTree = "<group>"; };
 		DAA54F7E2A217CDA005CED7E /* OpenLCBNodeConfigurationTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBNodeConfigurationTool.swift; sourceTree = "<group>"; };
+		DAA56B4E2BD9381600BAB6EF /* LayoutInspectorPropertyField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutInspectorPropertyField.swift; sourceTree = "<group>"; };
+		DAA56B502BD938AE00BAB6EF /* LayoutInspectorGroupField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutInspectorGroupField.swift; sourceTree = "<group>"; };
+		DAA56B522BD93A7900BAB6EF /* LayoutInspectorControlType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutInspectorControlType.swift; sourceTree = "<group>"; };
 		DAA66BD12A092DC2001804AC /* StringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		DAA777C92A20C84C008EAF02 /* OpenLCBClock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OpenLCBClock.swift; path = ../OpenLCBClock.swift; sourceTree = "<group>"; };
 		DAA777CB2A20C861008EAF02 /* OpenLCBClockType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBClockType.swift; sourceTree = "<group>"; };
@@ -1018,7 +1024,10 @@
 				DAB26FF82BD1362300AC1B29 /* SwitchboardEditorView.swift */,
 				DAD22F742BD401AC00F396AD /* SwitchboardEditorViewDelegate.swift */,
 				DA7C50992BD688EB0079E876 /* LayoutInspectorProperty.swift */,
+				DAA56B522BD93A7900BAB6EF /* LayoutInspectorControlType.swift */,
 				DA7C509B2BD6D7A60079E876 /* LayoutInspectorGroup.swift */,
+				DAA56B502BD938AE00BAB6EF /* LayoutInspectorGroupField.swift */,
+				DAA56B4E2BD9381600BAB6EF /* LayoutInspectorPropertyField.swift */,
 				DA7C509D2BD6D8FA0079E876 /* LayoutInspector.swift */,
 				DA31688E2BCAE75100059B6C /* SwitchboardShape.swift */,
 				DAD7750B2BD0230400D8AD55 /* SwitchboardShapeButton.swift */,
@@ -1897,6 +1906,7 @@
 				DA467BA7281D534900AB9650 /* SwitchBoardItem.swift in Sources */,
 				DA8601BB2B7E268A00B73C16 /* OpenLCBNodeVisibility.swift in Sources */,
 				DA5B4607276F6917005CA03C /* ComboBoxDBDS.swift in Sources */,
+				DAA56B532BD93A7900BAB6EF /* LayoutInspectorControlType.swift in Sources */,
 				DAA7BEB92B5033A700508140 /* SwitchboardItemNode.swift in Sources */,
 				DA0883FD2A76727700C2CFBD /* OpenLCBFunction.swift in Sources */,
 				DAA3338D2A7D2B31005E4C8B /* ProgrammerToolTableViewDS.swift in Sources */,
@@ -1938,6 +1948,7 @@
 				DA1272C52A7576CD00AB42F6 /* OpenLCBFDIItem.swift in Sources */,
 				DA0D3E102A48AA6F0042748C /* OpenLCBThrottleState.swift in Sources */,
 				DA5550EA28392A6B00C4FE4E /* DigitraxProductCode.swift in Sources */,
+				DAA56B4F2BD9381600BAB6EF /* LayoutInspectorPropertyField.swift in Sources */,
 				DAD41AB82A3C9E54002EF847 /* DCCAddressPartition.swift in Sources */,
 				DAB4A7392B3F0E7D00CD5256 /* CDIGroupView.swift in Sources */,
 				DA60140529F4162500AD9ACD /* ViewLCCNetworkTableViewDS.swift in Sources */,
@@ -1965,6 +1976,7 @@
 				DA5B6AAA29EAC2D90095F7D5 /* OpenLCBNode.swift in Sources */,
 				DAE8DD53286751BE0097C2D1 /* Manufacturer.swift in Sources */,
 				DACB59312896CDCE006B1861 /* TurnoutSwitchState.swift in Sources */,
+				DAA56B512BD938AE00BAB6EF /* LayoutInspectorGroupField.swift in Sources */,
 				DA5BC9912A1A4CDF00D67ABE /* FileHandleExtensions.swift in Sources */,
 				DAFBC3ED29EC39A6003336BE /* OpenLCBErrorCode.swift in Sources */,
 				DA0DA27A2779E96B00E4F23C /* Layout.swift in Sources */,

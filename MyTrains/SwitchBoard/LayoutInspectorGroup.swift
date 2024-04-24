@@ -6,8 +6,9 @@
 //
 
 import Foundation
+import AppKit
 
-public enum LayoutInspectorGroup : Int {
+public enum LayoutInspectorGroup : Int, CaseIterable {
   
   // MARK: Enumeration
   
@@ -20,8 +21,10 @@ public enum LayoutInspectorGroup : Int {
   case signalSettings     = 7
   case turnoutControl     = 8
   case signalEvents       = 9
-  case speedConstraintsDP = 10
-  case speedConstraintsDN = 11
+  case turnoutEvents      = 10
+  case sensorEvents       = 11
+  case speedConstraintsDP = 12
+  case speedConstraintsDN = 13
 
   // MARK: Public Properties
   
@@ -38,7 +41,7 @@ public enum LayoutInspectorGroup : Int {
   private static let groups : [LayoutInspectorGroup:(title:String, inspector:LayoutInspector)] = [
     .identity : (
       String(localized: "Identity", comment: "This is used for the title of the Identity section in the Layout Builder."),
-      .attributes
+      .information
     ),
     .generalSettings : (
       String(localized: "General Settings", comment: "This is used for the title of the General Settings section in the Layout Builder."),
@@ -66,7 +69,7 @@ public enum LayoutInspectorGroup : Int {
     ),
     .turnoutControl : (
       String(localized: "Identity", comment: "This is used for the title of the Turnout Control section in the Layout Builder."),
-      .turnouts
+      .attributes
     ),
     .signalEvents : (
       String(localized: "Signal Events", comment: "This is used for the title of the Signal Events section in the Layout Builder."),
@@ -80,6 +83,78 @@ public enum LayoutInspectorGroup : Int {
       String(localized: "Direction Next", comment: "This is used for the title of the Speed Constraints Direction Next section in the Layout Builder."),
       .speedConstraints
     ),
+    .turnoutEvents : (
+      String(localized: "Turnout Events", comment: "This is used for the title of the Turnout Events section in the Layout Builder."),
+      .events
+    ),
+    .sensorEvents : (
+      String(localized: "Sensor Events", comment: "This is used for the title of the Sensor Events section in the Layout Builder."),
+      .events
+    ),
   ]
   
+  // MARK: Public Class Properties
+  
+  public static var inspectorGroupFields : [LayoutInspectorGroup:LayoutInspectorGroupField] {
+    
+    var constraints : [NSLayoutConstraint] = []
+
+    var result : [LayoutInspectorGroup:LayoutInspectorGroupField] = [:]
+    
+    for item in LayoutInspectorGroup.allCases {
+      
+      var field : LayoutInspectorGroupField = (nil, nil, item)
+      
+      let view = NSView()
+      view.translatesAutoresizingMaskIntoConstraints = false
+      
+      let label = NSTextField(labelWithString: item.title)
+      label.translatesAutoresizingMaskIntoConstraints = false
+      label.font = NSFont.systemFont(ofSize: 12, weight: .bold)
+      label.textColor = NSColor.systemGray
+      label.alignment = .left
+      
+      view.addSubview(label)
+      constraints.append(label.leadingAnchor.constraint(equalTo: view.leadingAnchor))
+      constraints.append(view.heightAnchor.constraint(equalTo: label.heightAnchor))
+      
+      field.view = view
+      field.label = label
+      
+      result[item] = field
+      
+    }
+    
+    NSLayoutConstraint.activate(constraints)
+
+    return result
+    
+  }
+  
+  public static var inspectorGroupSeparators : [LayoutInspectorGroup:LayoutInspectorGroupField] {
+    
+    var constraints : [NSLayoutConstraint] = []
+
+    var result : [LayoutInspectorGroup:LayoutInspectorGroupField] = [:]
+    
+    for item in LayoutInspectorGroup.allCases {
+      
+      var field : LayoutInspectorGroupField = (nil, nil, item)
+      
+      let separator = SeparatorView()
+      separator.translatesAutoresizingMaskIntoConstraints = false
+      constraints.append(separator.heightAnchor.constraint(equalToConstant: 20))
+
+      field.view = separator
+      
+      result[item] = field
+      
+    }
+    
+    NSLayoutConstraint.activate(constraints)
+
+    return result
+    
+  }
+
 }

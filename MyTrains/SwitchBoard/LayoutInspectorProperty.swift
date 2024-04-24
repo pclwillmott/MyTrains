@@ -6,75 +6,92 @@
 //
 
 import Foundation
+import AppKit
 
 /// The value of zero is reserved as a trap for unintialized fields. The actual rawValues have no purpose
 /// other than to uniquely identify the property and its label. Where a field is overloaded between
 /// switchboard item types a separate property is required if the function or label is different between
 /// the item types; a single item property may map to multiple LayoutInspectorProperty values.
 
-public enum LayoutInspectorProperty : Int {
+public enum LayoutInspectorProperty : Int, CaseIterable {
   
   // MARK: Enumeration
   
-  case name                          = 1
-  case description                   = 2
-  case xPos                          = 3
-  case yPos                          = 4
-  case orientation                   = 5
-  case groupId                       = 6
-  case directionality                = 7
-  case allowShunt                    = 8
-  case electrification               = 9
-  case isCriticalSection             = 10
-  case isHiddenSection               = 11
-  case trackGradient                 = 12
-  case trackGauge                    = 13
-  case lengthRoute1                  = 14
-  case lengthRoute2                  = 15
-  case lengthRoute3                  = 16
-  case lengthRoute4                  = 17
-  case lengthRoute5                  = 18
-  case lengthRoute6                  = 19
-  case lengthRoute7                  = 20
-  case lengthRoute8                  = 21
-  case panelId                       = 22
-  case panelName                     = 23
-  case itemType                      = 24
-  case enterDetectionZoneEventId     = 25
-  case exitDetectionZoneEventId      = 26
-  case enterTranspondingZoneEventId  = 27
-  case exitTranspondingZoneEventId   = 28
-  case trackFaultEventId             = 29
-  case trackFaultClearedEventId      = 30
-  case locationServicesEventId       = 31
-  case turnoutMotorType              = 32
-  case sw1ThrowEventId               = 33
-  case sw1CloseEventId               = 34
-  case sw1ThrownEventId              = 35
-  case sw1ClosedEventId              = 36
-  case sw2ThrowEventId               = 37
-  case sw2CloseEventId               = 38
-  case sw2ThrownEventId              = 39
-  case sw2ClosedEventId              = 40
-  case sw3ThrowEventId               = 41
-  case sw3CloseEventId               = 42
-  case sw3ThrownEventId              = 43
-  case sw3ClosedEventId              = 44
-  case sw4ThrowEventId               = 45
-  case sw4CloseEventId               = 46
-  case sw4ThrownEventId              = 47
-  case sw4ClosedEventId              = 48
-  case sensorType                    = 49
-  case sensorPosition                = 50
-  case sensorActivatedEventId        = 51
-  case sensorActivateLatency         = 52
-  case sensorDeactivatedEventId      = 53
-  case sensorDeactivateLatency       = 54
-  case sensorLocationServicesEventId = 55
-  case link                          = 56
-  case signalType                    = 57
-  case signalRouteDirection          = 58
-  case signalPosition                = 59
+  // Information Inspector
+  /// Identity
+  case panelId                       = 1
+  case panelName                     = 2
+  case itemType                      = 3
+  
+  // Attributes Inspector
+  /// General Settings
+  case name                          = 4
+  case description                   = 5
+  case xPos                          = 6
+  case yPos                          = 7
+  case orientation                   = 8
+  case groupId                       = 9
+  /// Block Settings
+  case directionality                = 10
+  case allowShunt                    = 11
+  case electrification               = 12
+  case isCriticalSection             = 13
+  case isHiddenSection               = 14
+  /// Track Configuration
+  case trackGradient                 = 15
+  case trackGauge                    = 16
+  case lengthRoute1                  = 17
+  case lengthRoute2                  = 18
+  case lengthRoute3                  = 19
+  case lengthRoute4                  = 20
+  case lengthRoute5                  = 21
+  case lengthRoute6                  = 22
+  case lengthRoute7                  = 23
+  case lengthRoute8                  = 24
+  case link                          = 25
+  /// Turnout Control
+  case turnoutMotorType              = 26
+  /// Sensor Settings
+  case sensorType                    = 27
+  case sensorPosition                = 28
+  case sensorActivateLatency         = 29
+  case sensorDeactivateLatency       = 30
+  /// Signal Settings
+  case signalType                    = 31
+  case signalRouteDirection          = 32
+  case signalPosition                = 33
+
+  // Events
+  /// Block Events
+  case enterDetectionZoneEventId     = 34
+  case exitDetectionZoneEventId      = 35
+  case enterTranspondingZoneEventId  = 36
+  case exitTranspondingZoneEventId   = 37
+  case trackFaultEventId             = 38
+  case trackFaultClearedEventId      = 39
+  case locationServicesEventId       = 40
+  /// Turnout Events
+  case sw1ThrowEventId               = 41
+  case sw1CloseEventId               = 42
+  case sw1ThrownEventId              = 43
+  case sw1ClosedEventId              = 44
+  case sw2ThrowEventId               = 45
+  case sw2CloseEventId               = 46
+  case sw2ThrownEventId              = 47
+  case sw2ClosedEventId              = 48
+  case sw3ThrowEventId               = 49
+  case sw3CloseEventId               = 50
+  case sw3ThrownEventId              = 51
+  case sw3ClosedEventId              = 52
+  case sw4ThrowEventId               = 53
+  case sw4CloseEventId               = 54
+  case sw4ThrownEventId              = 55
+  case sw4ClosedEventId              = 56
+  /// Sensor Events
+  case sensorActivatedEventId        = 57
+  case sensorDeactivatedEventId      = 58
+  case sensorLocationServicesEventId = 59
+  /// Signal Events
   case signalSetState0EventId        = 60
   case signalSetState1EventId        = 61
   case signalSetState2EventId        = 62
@@ -107,6 +124,9 @@ public enum LayoutInspectorProperty : Int {
   case signalSetState29EventId       = 89
   case signalSetState30EventId       = 90
   case signalSetState31EventId       = 91
+  
+  // Speed Constraints
+  /// Direction Previous
   case speedConstraintDPType0        = 92
   case speedConstraintDPValue0       = 93
   case speedConstraintDPType1        = 94
@@ -139,6 +159,7 @@ public enum LayoutInspectorProperty : Int {
   case speedConstraintDPValue14      = 121
   case speedConstraintDPType15       = 122
   case speedConstraintDPValue15      = 123
+  /// Direction Next
   case speedConstraintDNType0        = 124
   case speedConstraintDNValue0       = 125
   case speedConstraintDNType1        = 126
@@ -194,940 +215,1191 @@ public enum LayoutInspectorProperty : Int {
   public var toolTip : String {
     return LayoutInspectorProperty.labels[self]!.toolTip
   }
-  
+
+  /// This will cause a runtime error if the lookup is not defined - this is the intent!
+  public var group : LayoutInspectorGroup {
+    return LayoutInspectorProperty.labels[self]!.group
+  }
+
+  /// This will cause a runtime error if the lookup is not defined - this is the intent!
+  public var inspector : LayoutInspector {
+    return LayoutInspectorProperty.labels[self]!.group.inspector
+  }
+
+  /// This will cause a runtime error if the lookup is not defined - this is the intent!
+  public var controlType : LayoutInspectorControlType {
+    return LayoutInspectorProperty.labels[self]!.controlType
+  }
+
   // MARK: Private Class Properties
   
-  private static let labels : [LayoutInspectorProperty:(labelTitle:String, toolTip:String, group:LayoutInspectorGroup)] = [
+  private static let labels : [LayoutInspectorProperty:(labelTitle:String, toolTip:String, group:LayoutInspectorGroup, controlType:LayoutInspectorControlType)] = [
     .name
     : (
       String(localized:"Name", comment:"This is used for the title of an input field where the user can define the name of a switchboard item."),
       String(localized:"User name of this switchboard item. Switchboard items should be given unique names with a logical naming convention.", comment:"This is used for a tooltip."),
-      .identity
+      .generalSettings,
+      .textField
     ),
     .description
     : (
       String(localized:"Description", comment:"This is used for the title of an input field where the user can enter a description of a switchboard item."),
       String(localized:"User description of this switchboard item. This is an optional field and may contain any descriptive text the user chooses.", comment:"This is used for a tooltip."),
-      .identity
+      .generalSettings,
+      .textField
     ),
     .xPos
     : (
       String(localized:"X Position", comment:"This is used for the title of an input field where the user can enter a switchboard item's x coordinate in the panel's grid."),
       String(localized:"X position coordinate of this switchboard item in the panel's grid.", comment:"This is used for a tooltip."),
-      .generalSettings
+      .generalSettings,
+      .textField
     ),
     .yPos
     : (
       String(localized:"Y Position", comment:"This is used for the title of an input field where the user can enter a switchboard item's y coordinate in the panel's grid."),
       String(localized:"Y position coordinate of this switchboard item in the panel's grid.", comment:"This is used for a tooltip."),
-      .generalSettings
+      .generalSettings,
+      .textField
     ),
     .orientation
     : (
       String(localized:"Orientation", comment:"This is used for the title of a combo box where the user can select the orientation/rotation state of the switchboard item."),
       String(localized:"Rotation angle of the switchboard item.", comment:"This is used for a tooltip."),
-      .generalSettings
+      .generalSettings,
+      .comboBox
     ),
     .groupId
     : (
       String(localized:"Group", comment:"This is used for the title of a combo box where the user can select which group the switchboard item belongs to."),
       String(localized:"Group that this switchboard item belongs to. Groups are used to identify which track items belong to which block. It is also used to group opposing turnouts.", comment:"This is used for a tooltip."),
-      .generalSettings
+      .generalSettings,
+      .comboBox
     ),
     .directionality
     : (
       String(localized:"Directionality", comment:"This is used for the title of combo box where the user can select which directions of travel are valid for the switchboard item."),
       String(localized:"Permitted directions of travel for a train on this switchboard item.", comment:"This is used for a tooltip."),
-      .blockSettings
+      .blockSettings,
+      .comboBox
     ),
     .allowShunt
     : (
       String(localized:"Allow Shunt", comment:"This is used for the title of a check box where the user can select if shunting is allowed in reverese direction on this switchbaord item."),
       String(localized:"Check this box to allow shunting in the reverse direction to that permitted for this switchboard item.", comment:"This is used for a tooltip."),
-      .blockSettings
+      .blockSettings,
+      .checkBox
     ),
     .electrification
     : (
       String(localized:"Electrification", comment:"This is used for the title of a combo box where the user can select the applicable electrification type for the switchboard item."),
       String(localized:"This identifies the type of electrification that is applicable for this switchboard item. Electric trains will not be permitted on non-electrified track, or trains with the wrong electrification type.", comment:"This is used for a tooltip."),
-      .blockSettings
+      .blockSettings,
+      .comboBox
     ),
     .isCriticalSection
     : (
       String(localized:"Critical Section", comment:"This is used for the title of a check box where the user can select if a piece or track or turnout is a critical section."),
       String(localized:"A critical section is a turnout or block which cannot be reserved unless the section following it is ready to accept the train.", comment:"This is used for a tooltip."),
-      .blockSettings
+      .blockSettings,
+      .checkBox
     ),
     .isHiddenSection
     : (
       String(localized:"Hidden Section", comment:"This is used for the title of a check box where the user can select if a switchboard item is marked as hidden."),
       String(localized:"A hidden section is an area outside of the scenic area of the layout, i.e. it is hidden from the public view.", comment:"This is used for a tooltip."),
-      .blockSettings
+      .blockSettings,
+      .checkBox
     ),
     .trackGradient
     : (
       String(localized:"Track Gradient", comment:"This is used for the title of an input field where the user can enter the gradient of the track."),
       String(localized:"This is a percentage from 0 to 100 where 0 means horizontal and 100 means vertical.", comment:"This is used for a tooltip."),
-      .trackConfiguration
+      .trackConfiguration,
+      .textField
     ),
     .trackGauge
     : (
       String(localized:"Track Guage", comment:"This is used for the title of a combo box where the user can select the track guage."),
       String(localized:"Track guage of this switchboard item. Trains will not be permitted on track of the wrong guage. Also you cannot connect together track items with different track guages.", comment:"This is used for a tooltip."),
-      .trackConfiguration
+      .trackConfiguration,
+      .comboBox
     ),
     .lengthRoute1
     : (
       String(localized:"Length of Route #1 (%%UNITS_ACTUAL_LENGTH%%)", comment:"This is used for the title of an input field where the user enters the length of the specified route. The %%UNITS_ACTUAL_LENGTH%% will be replaced at runtime by the name of the user selected units of length - place this at an approprate position in the title for the language."),
       String(localized:"Length of route #1", comment:"This is used for a tooltip."),
-      .trackConfiguration
+      .trackConfiguration,
+      .textField
     ),
     .lengthRoute2
     : (
       String(localized:"Length of Route #2 (%%UNITS_ACTUAL_LENGTH%%)", comment:"This is used for the title of an input field where the user enters the length of the specified route. The %%UNITS_ACTUAL_LENGTH%% will be replaced at runtime by the name of the user selected units of length - place this at an approprate position in the title for the language."),
       String(localized:"Length of route #2", comment:"This is used for a tooltip."),
-      .trackConfiguration
+      .trackConfiguration,
+      .textField
     ),
     .lengthRoute3
     : (
       String(localized:"Length of Route #3 (%%UNITS_ACTUAL_LENGTH%%)", comment:"This is used for the title of an input field where the user enters the length of the specified route. The %%UNITS_ACTUAL_LENGTH%% will be replaced at runtime by the name of the user selected units of length - place this at an approprate position in the title for the language."),
       String(localized:"Length of route #3", comment:"This is used for a tooltip."),
-      .trackConfiguration
+      .trackConfiguration,
+      .textField
     ),
     .lengthRoute4
     : (
       String(localized:"Length of Route #4 (%%UNITS_ACTUAL_LENGTH%%)", comment:"This is used for the title of an input field where the user enters the length of the specified route. The %%UNITS_ACTUAL_LENGTH%% will be replaced at runtime by the name of the user selected units of length - place this at an approprate position in the title for the language."),
       String(localized:"Length of route #4", comment:"This is used for a tooltip."),
-      .trackConfiguration
+      .trackConfiguration,
+      .textField
     ),
     .lengthRoute5
     : (
       String(localized:"Length of Route #5 (%%UNITS_ACTUAL_LENGTH%%)", comment:"This is used for the title of an input field where the user enters the length of the specified route. The %%UNITS_ACTUAL_LENGTH%% will be replaced at runtime by the name of the user selected units of length - place this at an approprate position in the title for the language."),
       String(localized:"Length of route #5", comment:"This is used for a tooltip."),
-      .trackConfiguration
+      .trackConfiguration,
+      .textField
     ),
     .lengthRoute6
     : (
       String(localized:"Length of Route #6 (%%UNITS_ACTUAL_LENGTH%%)", comment:"This is used for the title of an input field where the user enters the length of the specified route. The %%UNITS_ACTUAL_LENGTH%% will be replaced at runtime by the name of the user selected units of length - place this at an approprate position in the title for the language."),
       String(localized:"Length of route #6", comment:"This is used for a tooltip."),
-      .trackConfiguration
+      .trackConfiguration,
+      .textField
     ),
     .lengthRoute7
     : (
       String(localized:"Length of Route #7 (%%UNITS_ACTUAL_LENGTH%%)", comment:"This is used for the title of an input field where the user enters the length of the specified route. The %%UNITS_ACTUAL_LENGTH%% will be replaced at runtime by the name of the user selected units of length - place this at an approprate position in the title for the language."),
       String(localized:"Length of route #7", comment:"This is used for a tooltip."),
-      .trackConfiguration
+      .trackConfiguration,
+      .textField
     ),
     .lengthRoute8
     : (
       String(localized:"Length of Route #8 (%%UNITS_ACTUAL_LENGTH%%)", comment:"This is used for the title of an input field where the user enters the length of the specified route. The %%UNITS_ACTUAL_LENGTH%% will be replaced at runtime by the name of the user selected units of length - place this at an approprate position in the title for the language."),
       String(localized:"Length of route #8", comment:"This is used for a tooltip."),
-      .trackConfiguration
+      .trackConfiguration,
+      .textField
     ),
     .panelId
     : (
       String(localized:"Panel ID", comment:"This is used for the title of an informational field that displays the ID of the parent panel of the switchboard item."),
       String(localized:"ID of the parent panel for this switchboard item.", comment:"This is used for a tooltip."),
-      .identity
+      .identity,
+      .label
     ),
     .panelName
     : (
       String(localized:"Panel Name", comment:"This is used for the title of an informational field that displays the name of the parent panel of the switchboard item."),
       String(localized:"Name of the parent panel for this switchboard item.", comment:"This is used for a tooltip."),
-      .identity
+      .identity,
+      .label
     ),
     .itemType
     : (
       String(localized:"Item Type", comment:"This is used for the title of an informational field that displays the switchboard item's type."),
       String(localized:"Type of this switchboard item.", comment:"This is used for a tooltip."),
-      .identity
+      .identity,
+      .label
     ),
     .enterDetectionZoneEventId
     : (
       String(localized:"Enter Detection Zone Event ID", comment:"This is used for the title of an input field where the user can enter an event ID."),
       String(localized:"Event ID that signals that a train has entered the detection zone associated with this switchboard item.", comment:"This is used for a tooltip."),
-      .blockEvents
+      .blockEvents,
+      .eventId
     ),
     .exitDetectionZoneEventId
     : (
       String(localized:"Exit Detection Zone Event ID", comment:"This is used for the title of an input field where the user can enter an event ID."),
       String(localized:"Event ID that signals that a train has exited the detection zone associated with this switchboard item.", comment:"This is used for a tooltip."),
-      .blockEvents
+      .blockEvents,
+      .eventId
     ),
     .enterTranspondingZoneEventId
     : (
       String(localized:"Enter Transponding Zone Event ID", comment:"This is used for the title of an input field where the user can enter an event ID."),
       String(localized:"Event ID that signals that a train's transponder has been detected in the transponding zone associated with this switchboard item.", comment:"This is used for a tooltip."),
-      .blockEvents
+      .blockEvents,
+      .eventId
     ),
     .exitTranspondingZoneEventId
     : (
       String(localized:"Exit Transponding Zone Event ID", comment:"This is used for the title of an input field where the user can enter an event ID."),
       String(localized:"Event ID that signals that a train's transponder is no longer detected in the transponding zone associated with this switchboard item.", comment:"This is used for a tooltip."),
-      .blockEvents
+      .blockEvents,
+      .eventId
     ),
     .trackFaultEventId
     : (
       String(localized:"Track Fault Event ID", comment:"This is used for the title of an input field where the user can enter an event ID."),
       String(localized:"Event ID that signals that a track fault has been detected in the detection zone associated with this switchboard item.", comment:"This is used for a tooltip."),
-      .blockEvents
+      .blockEvents,
+      .eventId
     ),
     .trackFaultClearedEventId
     : (
       String(localized:"Track Fault Cleared Event ID", comment:"This is used for the title of an input field where the user can enter an event ID."),
       String(localized:"Event ID that signals that a track fault is no longer detected in the detection zone associated with this switchboard item.", comment:"This is used for a tooltip."),
-      .blockEvents
+      .blockEvents,
+      .eventId
     ),
     .locationServicesEventId
     : (
       String(localized:"Location Services Event ID", comment:"This is used for the title of an input field where the user can enter an event ID."),
       String(localized:"Event ID that reports location services information for the zone associated with this switchboard item.", comment:"This is used for a tooltip."),
-      .blockEvents
+      .blockEvents,
+      .eventId
     ),
     .turnoutMotorType
     : (
       String(localized:"Turnout Motor Type", comment:"This is used for the title of a combo box where the user can select the applicable turnout motor type."),
       String(localized:"The turnout switching method for this turnout.", comment:"This is used for a tooltip."),
-      .turnoutControl
+      .turnoutControl,
+      .comboBox
     ),
     .sw1ThrowEventId
     : (
       String(localized:"Switch #1 Throw Event ID", comment:"This is used for the title of an input field where the user can select which event ID to send to throw a turnout switch."),
       String(localized:"Event ID to send to throw turnout switch #1. In general the diverging route is selected by close and the through route by throw.", comment:"This is used for a tooltip."),
-      .turnoutControl
+      .turnoutEvents,
+      .eventId
     ),
     .sw1CloseEventId
     : (
       String(localized:"Switch #1 Close Event ID", comment:"This is used for the title of an input field where the user can select which event ID to send to close a turnout switch."),
       String(localized:"Event ID to send to close turnout switch #1. In general the diverging route is selected by close and the through route by throw.", comment:"This is used for a tooltip."),
-      .turnoutControl
+      .turnoutEvents,
+      .eventId
     ),
     .sw1ThrownEventId
     : (
       String(localized:"Switch #1 Thrown Event ID", comment:"This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been thrown."),
       String(localized:"Event ID that indicates that turnout switch #1 has been thrown.", comment:"This is used for a tooltip."),
-      .turnoutControl
+      .turnoutEvents,
+      .eventId
     ),
     .sw1ClosedEventId
     : (
       String(localized:"Switch #1 Closed Event ID", comment:"This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been closed."),
       String(localized:"Event ID that indicates that turnout switch #1 has been closed.", comment:"This is used for a tooltip."),
-      .turnoutControl
+      .turnoutEvents,
+      .eventId
     ),
     .sw2ThrowEventId
     : (
       String(localized:"Switch #2 Throw Event ID", comment:"This is used for the title of an input field where the user can select which event ID to send to throw a turnout switch."),
       String(localized:"Event ID to send to throw turnout switch #2. In general the diverging route is selected by close and the through route by throw.", comment:"This is used for a tooltip."),
-      .turnoutControl
+      .turnoutEvents,
+      .eventId
     ),
     .sw2CloseEventId
     : (
       String(localized:"Switch #2 Close Event ID", comment:"This is used for the title of an input field where the user can select which event ID to send to close a turnout switch."),
       String(localized:"Event ID to send to close turnout switch #2. In general the diverging route is selected by close and the through route by throw.", comment:"This is used for a tooltip."),
-      .turnoutControl
+      .turnoutEvents,
+      .eventId
     ),
     .sw2ThrownEventId
     : (
       String(localized:"Switch #2 Thrown Event ID", comment:"This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been thrown."),
       String(localized:"Event ID that indicates that turnout switch #2 has been thrown.", comment:"This is used for a tooltip."),
-      .turnoutControl
+      .turnoutEvents,
+      .eventId
     ),
     .sw2ClosedEventId
     : (
       String(localized:"Switch #2 Closed Event ID", comment:"This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been closed."),
       String(localized:"Event ID that indicates that turnout switch #2 has been closed.", comment:"This is used for a tooltip."),
-      .turnoutControl
+      .turnoutEvents,
+      .eventId
     ),
     .sw3ThrowEventId
     : (
       String(localized:"Switch #3 Throw Event ID", comment:"This is used for the title of an input field where the user can select which event ID to send to throw a turnout switch."),
       String(localized:"Event ID to send to throw turnout switch #3. In general the diverging route is selected by close and the through route by throw.", comment:"This is used for a tooltip."),
-      .turnoutControl
+      .turnoutEvents,
+      .eventId
     ),
     .sw3CloseEventId
     : (
       String(localized:"Switch #3 Close Event ID", comment:"This is used for the title of an input field where the user can select which event ID to send to close a turnout switch."),
       String(localized:"Event ID to send to close turnout switch #3. In general the diverging route is selected by close and the through route by throw.", comment:"This is used for a tooltip."),
-      .turnoutControl
+      .turnoutEvents,
+      .eventId
     ),
     .sw3ThrownEventId
     : (
       String(localized:"Switch #3 Thrown Event ID", comment:"This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been thrown."),
       String(localized:"Event ID that indicates that turnout switch #3 has been thrown.", comment:"This is used for a tooltip."),
-      .turnoutControl
+      .turnoutEvents,
+      .eventId
     ),
     .sw3ClosedEventId
     : (
       String(localized:"Switch #3 Closed Event ID", comment:"This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been closed."),
       String(localized:"Event ID that indicates that turnout switch #3 has been closed.", comment:"This is used for a tooltip."),
-      .turnoutControl
+      .turnoutEvents,
+      .eventId
     ),
     .sw4ThrowEventId
     : (
       String(localized:"Switch #4 Throw Event ID", comment:"This is used for the title of an input field where the user can select which event ID to send to throw a turnout switch."),
       String(localized:"Event ID to send to throw turnout switch #4. In general the diverging route is selected by close and the through route by throw.", comment:"This is used for a tooltip."),
-      .turnoutControl
+      .turnoutEvents,
+      .eventId
     ),
     .sw4CloseEventId
     : (
       String(localized:"Switch #4 Close Event ID", comment:"This is used for the title of an input field where the user can select which event ID to send to close a turnout switch."),
       String(localized:"Event ID to send to close turnout switch #4. In general the diverging route is selected by close and the through route by throw.", comment:"This is used for a tooltip."),
-      .turnoutControl
+      .turnoutEvents,
+      .eventId
     ),
     .sw4ThrownEventId
     : (
       String(localized:"Switch #4 Thrown Event ID", comment:"This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been thrown."),
       String(localized:"Event ID that indicates that turnout switch #4 has been thrown.", comment:"This is used for a tooltip."),
-      .turnoutControl
+      .turnoutEvents,
+      .eventId
     ),
     .sw4ClosedEventId
     : (
       String(localized:"Switch #4 Closed Event ID", comment:"This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been closed."),
       String(localized:"Event ID that indicates that turnout switch #4 has been closed.", comment:"This is used for a tooltip."),
-      .turnoutControl
+      .turnoutEvents,
+      .eventId
     ),
     .sensorType
     : (
       String(localized:"Sensor Type", comment:"This is used for the title of a combo box that the user selects the type of sensor."),
       String(localized:"Type of sensor.", comment:"This is used for a tooltip."),
-      .sensorSettings
+      .sensorSettings,
+      .comboBox
     ),
     .sensorPosition
     : (
       String(localized:"Sensor Position (%%UNITS_ACTUAL_DISTANCE%%)", comment:"This is used for the title of an input field that the user enters the position of a sensor device."),
       String(localized:"Sensor position from the start of the block.", comment:"This is used for a tooltip."),
-      .sensorSettings
+      .sensorSettings,
+      .textField
     ),
     .sensorActivatedEventId
     : (
       String(localized:"Sensor Activated Event ID", comment:"This is used for the title of an input field where the user enters a specific event ID."),
       String(localized:"Event ID generated when the sensor is activated.", comment:"this is used for a tooltip."),
-      .sensorSettings
+      .sensorEvents,
+      .eventId
     ),
     .sensorActivateLatency
     : (
       String(localized:"Sensor Activate Latency (%%UNITS_TIME%%)", comment:"This is used for the title of an input field where the user enters the time delay between a sensor being activated and when it sends the event report. The %%UNITS_TIME%% will be replaced at runtime by the name of the user selected units of time - place this at an approprate position in the title for the language."),
       String(localized:"Time between the sensor triggering and the sensor reporting such trigger.", comment:"This is used for a tooltip."),
-      .sensorSettings
+      .sensorSettings,
+      .textField
     ),
     .sensorDeactivatedEventId
     : (
       String(localized:"Sensor Deactivated Event ID", comment:"This is used for the title of an input field where the user enters a specific event ID."),
       String(localized:"Event ID generated when the sensor is deactivated.", comment:"this is used for a tooltip."),
-      .sensorSettings
+      .sensorEvents,
+      .eventId
     ),
     .sensorDeactivateLatency
     : (
       String(localized:"Sensor Deactivate Latency (%%UNITS_TIME%%)", comment:"This is used for the title of an input field where the user enters the time delay between a sensor being deactivated and when it sends the event report. The %%UNITS_TIME%% will be replaced at runtime by the name of the user selected units of time - place this at an approprate position in the title for the language."),
       String(localized:"Time between the sensor no longer being triggered and the sensor reporting such non-triggering.", comment:"This is used for a tooltip."),
-      .sensorSettings
+      .sensorSettings,
+      .textField
     ),
     .sensorLocationServicesEventId
     : (
       String(localized:"Sensor Location Services Event ID", comment:"This is used for the title of an input field where the user can enter an event ID."),
       String(localized:"Event ID that the sensor uses to report location services information.", comment:"This is used for a tooltip."),
-      .sensorSettings
+      .sensorEvents,
+      .eventId
     ),
     .link
     : (
       String(localized:"Link", comment:"This is used for the title of a combo box that the user selects which switchboard link this link connects to."),
       String(localized:"Switchboard link that this link connects to. Links are used to make connections between switchboard panels and to allow tracks to go above or below other tracks.", comment:"This is used for a tooltip."),
-      .generalSettings
+      .trackConfiguration,
+      .comboBox
     ),
     .signalType
     : (
       String(localized:"Signal Type", comment:"This is used for the title of a combo box that the user selects the signal type."),
       String(localized:"Type of signal.", comment:"This is used for a tooltip."),
-      .signalSettings
+      .signalSettings,
+      .comboBox
     ),
     .signalRouteDirection
     : (
       String(localized:"Signal Route Direction", comment:"This is used for the title of a combo box which the user selects the directionality applicable to the signal."),
       String(localized:"Directionality applicable to this signal.", comment:"This is used for a tooltip."),
-      .signalSettings
+      .signalSettings,
+      .comboBox
     ),
     .signalPosition
     : (
       String(localized:"Signal Stop Position (%%UNITS_ACTUAL_DISTANCE%%)", comment:""),
       String(localized:"The position from the start of the block where a train should stop.", comment:"This is used for a tooltip."),
-      .signalSettings
+      .signalSettings,
+      .textField
     ),
     .signalSetState0EventId
     : (
       String(localized:"Set Signal Aspect #1 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #1.", comment:"This is used for a tooltip."),
-      .signalEvents
+      .signalEvents,
+      .eventId
     ),
     .signalSetState1EventId
     : (
       String(localized:"Set Signal Aspect #2 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #2.", comment:"This is used for a tooltip."),
-      .signalEvents
+      .signalEvents,
+      .eventId
     ),
     .signalSetState2EventId
     : (
       String(localized:"Set Signal Aspect #3 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #3.", comment:"This is used for a tooltip."),
-      .signalEvents
+      .signalEvents,
+      .eventId
     ),
     .signalSetState3EventId
     : (
       String(localized:"Set Signal Aspect #4 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #4.", comment:"This is used for a tooltip."),
-      .signalEvents
+      .signalEvents,
+      .eventId
     ),
     .signalSetState4EventId
     : (
       String(localized:"Set Signal Aspect #5 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #5.", comment:"This is used for a tooltip."),
-      .signalEvents
+      .signalEvents,
+      .eventId
     ),
     .signalSetState5EventId
     : (
       String(localized:"Set Signal Aspect #6 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #6.", comment:"This is used for a tooltip."),
-      .signalEvents
+      .signalEvents,
+      .eventId
     ),
     .signalSetState6EventId
     : (
       String(localized:"Set Signal Aspect #7 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #7.", comment:"This is used for a tooltip."),
-      .signalEvents
+      .signalEvents,
+      .eventId
     ),
     .signalSetState7EventId
     : (
       String(localized:"Set Signal Aspect #8 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #8.", comment:"This is used for a tooltip."),
-      .signalEvents
+      .signalEvents,
+      .eventId
     ),
     .signalSetState8EventId
     : (
       String(localized:"Set Signal Aspect #9 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #9.", comment:"This is used for a tooltip."),
-      .signalEvents
+      .signalEvents,
+      .eventId
     ),
     .signalSetState9EventId
     : (
       String(localized:"Set Signal Aspect #10 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #10.", comment:"This is used for a tooltip."),
-      .signalEvents
+      .signalEvents,
+      .eventId
     ),
     .signalSetState10EventId
     : (
       String(localized:"Set Signal Aspect #11 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #11.", comment:"This is used for a tooltip."),
-      .signalEvents
+      .signalEvents,
+      .eventId
     ),
     .signalSetState11EventId
     : (
       String(localized:"Set Signal Aspect #12 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #12.", comment:"This is used for a tooltip."),
-      .signalEvents
+      .signalEvents,
+      .eventId
     ),
     .signalSetState12EventId
     : (
       String(localized:"Set Signal Aspect #13 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #13.", comment:"This is used for a tooltip."),
-      .signalEvents
+      .signalEvents,
+      .eventId
     ),
     .signalSetState13EventId
     : (
       String(localized:"Set Signal Aspect #14 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #14.", comment:"This is used for a tooltip."),
-      .signalEvents
+      .signalEvents,
+      .eventId
     ),
     .signalSetState14EventId
     : (
       String(localized:"Set Signal Aspect #15 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #15.", comment:"This is used for a tooltip."),
-      .signalEvents
+      .signalEvents,
+      .eventId
     ),
     .signalSetState15EventId
     : (
       String(localized:"Set Signal Aspect #16 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #16.", comment:"This is used for a tooltip."),
-      .signalEvents
+      .signalEvents,
+      .eventId
     ),
     .signalSetState16EventId
     : (
       String(localized:"Set Signal Aspect #17 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #17.", comment:"This is used for a tooltip."),
-      .signalEvents
+      .signalEvents,
+      .eventId
     ),
     .signalSetState17EventId
     : (
       String(localized:"Set Signal Aspect #18 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #18.", comment:"This is used for a tooltip."),
-      .signalEvents
+      .signalEvents,
+      .eventId
     ),
     .signalSetState18EventId
     : (
       String(localized:"Set Signal Aspect #19 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #19.", comment:"This is used for a tooltip."),
-      .signalEvents
+      .signalEvents,
+      .eventId
     ),
     .signalSetState19EventId
     : (
       String(localized:"Set Signal Aspect #20 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #20.", comment:"This is used for a tooltip."),
-      .signalEvents
+      .signalEvents,
+      .eventId
     ),
     .signalSetState20EventId
     : (
       String(localized:"Set Signal Aspect #21 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #21.", comment:"This is used for a tooltip."),
-      .signalEvents
+      .signalEvents,
+      .eventId
     ),
     .signalSetState21EventId
     : (
       String(localized:"Set Signal Aspect #22 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #22.", comment:"This is used for a tooltip."),
-      .signalEvents
+      .signalEvents,
+      .eventId
     ),
     .signalSetState22EventId
     : (
       String(localized:"Set Signal Aspect #23 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #23.", comment:"This is used for a tooltip."),
-      .signalEvents
+      .signalEvents,
+      .eventId
     ),
     .signalSetState23EventId
     : (
       String(localized:"Set Signal Aspect #24 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #24.", comment:"This is used for a tooltip."),
-      .signalEvents
+      .signalEvents,
+      .eventId
     ),
     .signalSetState24EventId
     : (
       String(localized:"Set Signal Aspect #25 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #25.", comment:"This is used for a tooltip."),
-      .signalEvents
+      .signalEvents,
+      .eventId
     ),
     .signalSetState25EventId
     : (
       String(localized:"Set Signal Aspect #26 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #26.", comment:"This is used for a tooltip."),
-      .signalEvents
+      .signalEvents,
+      .eventId
     ),
     .signalSetState26EventId
     : (
       String(localized:"Set Signal Aspect #27 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #27.", comment:"This is used for a tooltip."),
-      .signalEvents
+      .signalEvents,
+      .eventId
     ),
     .signalSetState27EventId
     : (
       String(localized:"Set Signal Aspect #28 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #28.", comment:"This is used for a tooltip."),
-      .signalEvents
+      .signalEvents,
+      .eventId
     ),
     .signalSetState28EventId
     : (
       String(localized:"Set Signal Aspect #29 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #29.", comment:"This is used for a tooltip."),
-      .signalEvents
+      .signalEvents,
+      .eventId
     ),
     .signalSetState29EventId
     : (
       String(localized:"Set Signal Aspect #30 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #30.", comment:"This is used for a tooltip."),
-      .signalEvents
+      .signalEvents,
+      .eventId
     ),
     .signalSetState30EventId
     : (
       String(localized:"Set Signal Aspect #31 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #31.", comment:"This is used for a tooltip."),
-      .signalEvents
+      .signalEvents,
+      .eventId
     ),
     .signalSetState31EventId
     : (
       String(localized:"Set Signal Aspect #32 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #32.", comment:"This is used for a tooltip."),
-      .signalEvents
+      .signalEvents,
+      .eventId
     ),
     .speedConstraintDPType0
     : (
       String(localized:"Speed Constraint Type", comment:"This is used for the title of a combo box from which the user selects the speed constraint type."),
       String(localized:"Type of speed constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDP
+      .speedConstraintsDP,
+      .comboBox
     ),
     .speedConstraintDPValue0
     : (
       String(localized:"Speed Constraint (%%UNITS_SCALE_SPEED%%)", comment:"This is used for the title of an input field where the user enters the speed constraint value. The %%UNITS_SCALE_SPEED%% will be replaced at runtime by the name of the user selected units of speed - place this at an approprate position in the title for the language."),
       String(localized:"The applicable speed for this constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDP
+      .speedConstraintsDP,
+      .textField
     ),
     .speedConstraintDPType1
     : (
       String(localized:"Speed Constraint Type", comment:"This is used for the title of a combo box from which the user selects the speed constraint type."),
       String(localized:"Type of speed constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDP
+      .speedConstraintsDP,
+      .comboBox
     ),
     .speedConstraintDPValue1
     : (
       String(localized:"Speed Constraint (%%UNITS_SCALE_SPEED%%)", comment:"This is used for the title of an input field where the user enters the speed constraint value. The %%UNITS_SCALE_SPEED%% will be replaced at runtime by the name of the user selected units of speed - place this at an approprate position in the title for the language."),
       String(localized:"The applicable speed for this constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDP
+      .speedConstraintsDP,
+      .textField
     ),
     .speedConstraintDPType2
     : (
       String(localized:"Speed Constraint Type", comment:"This is used for the title of a combo box from which the user selects the speed constraint type."),
       String(localized:"Type of speed constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDP
+      .speedConstraintsDP,
+      .comboBox
     ),
     .speedConstraintDPValue2
     : (
       String(localized:"Speed Constraint (%%UNITS_SCALE_SPEED%%)", comment:"This is used for the title of an input field where the user enters the speed constraint value. The %%UNITS_SCALE_SPEED%% will be replaced at runtime by the name of the user selected units of speed - place this at an approprate position in the title for the language."),
       String(localized:"The applicable speed for this constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDP
+      .speedConstraintsDP,
+      .textField
     ),
     .speedConstraintDPType3
     : (
       String(localized:"Speed Constraint Type", comment:"This is used for the title of a combo box from which the user selects the speed constraint type."),
       String(localized:"Type of speed constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDP
+      .speedConstraintsDP,
+      .comboBox
     ),
     .speedConstraintDPValue3
     : (
       String(localized:"Speed Constraint (%%UNITS_SCALE_SPEED%%)", comment:"This is used for the title of an input field where the user enters the speed constraint value. The %%UNITS_SCALE_SPEED%% will be replaced at runtime by the name of the user selected units of speed - place this at an approprate position in the title for the language."),
       String(localized:"The applicable speed for this constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDP
+      .speedConstraintsDP,
+      .textField
     ),
     .speedConstraintDPType4
     : (
       String(localized:"Speed Constraint Type", comment:"This is used for the title of a combo box from which the user selects the speed constraint type."),
       String(localized:"Type of speed constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDP
+      .speedConstraintsDP,
+      .comboBox
     ),
     .speedConstraintDPValue4
     : (
       String(localized:"Speed Constraint (%%UNITS_SCALE_SPEED%%)", comment:"This is used for the title of an input field where the user enters the speed constraint value. The %%UNITS_SCALE_SPEED%% will be replaced at runtime by the name of the user selected units of speed - place this at an approprate position in the title for the language."),
       String(localized:"The applicable speed for this constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDP
+      .speedConstraintsDP,
+      .textField
     ),
     .speedConstraintDPType5
     : (
       String(localized:"Speed Constraint Type", comment:"This is used for the title of a combo box from which the user selects the speed constraint type."),
       String(localized:"Type of speed constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDP
+      .speedConstraintsDP,
+      .comboBox
     ),
     .speedConstraintDPValue5
     : (
       String(localized:"Speed Constraint (%%UNITS_SCALE_SPEED%%)", comment:"This is used for the title of an input field where the user enters the speed constraint value. The %%UNITS_SCALE_SPEED%% will be replaced at runtime by the name of the user selected units of speed - place this at an approprate position in the title for the language."),
       String(localized:"The applicable speed for this constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDP
+      .speedConstraintsDP,
+      .textField
     ),
     .speedConstraintDPType6
     : (
       String(localized:"Speed Constraint Type", comment:"This is used for the title of a combo box from which the user selects the speed constraint type."),
       String(localized:"Type of speed constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDP
+      .speedConstraintsDP,
+      .comboBox
     ),
     .speedConstraintDPValue6
     : (
       String(localized:"Speed Constraint (%%UNITS_SCALE_SPEED%%)", comment:"This is used for the title of an input field where the user enters the speed constraint value. The %%UNITS_SCALE_SPEED%% will be replaced at runtime by the name of the user selected units of speed - place this at an approprate position in the title for the language."),
       String(localized:"The applicable speed for this constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDP
+      .speedConstraintsDP,
+      .textField
     ),
     .speedConstraintDPType7
     : (
       String(localized:"Speed Constraint Type", comment:"This is used for the title of a combo box from which the user selects the speed constraint type."),
       String(localized:"Type of speed constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDP
+      .speedConstraintsDP,
+      .comboBox
     ),
     .speedConstraintDPValue7
     : (
       String(localized:"Speed Constraint (%%UNITS_SCALE_SPEED%%)", comment:"This is used for the title of an input field where the user enters the speed constraint value. The %%UNITS_SCALE_SPEED%% will be replaced at runtime by the name of the user selected units of speed - place this at an approprate position in the title for the language."),
       String(localized:"The applicable speed for this constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDP
+      .speedConstraintsDP,
+      .textField
     ),
     .speedConstraintDPType8
     : (
       String(localized:"Speed Constraint Type", comment:"This is used for the title of a combo box from which the user selects the speed constraint type."),
       String(localized:"Type of speed constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDP
+      .speedConstraintsDP,
+      .comboBox
     ),
     .speedConstraintDPValue8
     : (
       String(localized:"Speed Constraint (%%UNITS_SCALE_SPEED%%)", comment:"This is used for the title of an input field where the user enters the speed constraint value. The %%UNITS_SCALE_SPEED%% will be replaced at runtime by the name of the user selected units of speed - place this at an approprate position in the title for the language."),
       String(localized:"The applicable speed for this constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDP
+      .speedConstraintsDP,
+      .textField
     ),
     .speedConstraintDPType9
     : (
       String(localized:"Speed Constraint Type", comment:"This is used for the title of a combo box from which the user selects the speed constraint type."),
       String(localized:"Type of speed constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDP
+      .speedConstraintsDP,
+      .comboBox
     ),
     .speedConstraintDPValue9
     : (
       String(localized:"Speed Constraint (%%UNITS_SCALE_SPEED%%)", comment:"This is used for the title of an input field where the user enters the speed constraint value. The %%UNITS_SCALE_SPEED%% will be replaced at runtime by the name of the user selected units of speed - place this at an approprate position in the title for the language."),
       String(localized:"The applicable speed for this constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDP
+      .speedConstraintsDP,
+      .textField
     ),
     .speedConstraintDPType10
     : (
       String(localized:"Speed Constraint Type", comment:"This is used for the title of a combo box from which the user selects the speed constraint type."),
       String(localized:"Type of speed constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDP
+      .speedConstraintsDP,
+      .comboBox
     ),
     .speedConstraintDPValue10
     : (
       String(localized:"Speed Constraint (%%UNITS_SCALE_SPEED%%)", comment:"This is used for the title of an input field where the user enters the speed constraint value. The %%UNITS_SCALE_SPEED%% will be replaced at runtime by the name of the user selected units of speed - place this at an approprate position in the title for the language."),
       String(localized:"The applicable speed for this constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDP
+      .speedConstraintsDP,
+      .textField
     ),
     .speedConstraintDPType11
     : (
       String(localized:"Speed Constraint Type", comment:"This is used for the title of a combo box from which the user selects the speed constraint type."),
       String(localized:"Type of speed constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDP
+      .speedConstraintsDP,
+      .comboBox
     ),
     .speedConstraintDPValue11
     : (
       String(localized:"Speed Constraint (%%UNITS_SCALE_SPEED%%)", comment:"This is used for the title of an input field where the user enters the speed constraint value. The %%UNITS_SCALE_SPEED%% will be replaced at runtime by the name of the user selected units of speed - place this at an approprate position in the title for the language."),
       String(localized:"The applicable speed for this constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDP
+      .speedConstraintsDP,
+      .textField
     ),
     .speedConstraintDPType12
     : (
       String(localized:"Speed Constraint Type", comment:"This is used for the title of a combo box from which the user selects the speed constraint type."),
       String(localized:"Type of speed constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDP
+      .speedConstraintsDP,
+      .comboBox
     ),
     .speedConstraintDPValue12
     : (
       String(localized:"Speed Constraint (%%UNITS_SCALE_SPEED%%)", comment:"This is used for the title of an input field where the user enters the speed constraint value. The %%UNITS_SCALE_SPEED%% will be replaced at runtime by the name of the user selected units of speed - place this at an approprate position in the title for the language."),
       String(localized:"The applicable speed for this constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDP
+      .speedConstraintsDP,
+      .textField
     ),
     .speedConstraintDPType13
     : (
       String(localized:"Speed Constraint Type", comment:"This is used for the title of a combo box from which the user selects the speed constraint type."),
       String(localized:"Type of speed constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDP
+      .speedConstraintsDP,
+      .comboBox
     ),
     .speedConstraintDPValue13
     : (
       String(localized:"Speed Constraint (%%UNITS_SCALE_SPEED%%)", comment:"This is used for the title of an input field where the user enters the speed constraint value. The %%UNITS_SCALE_SPEED%% will be replaced at runtime by the name of the user selected units of speed - place this at an approprate position in the title for the language."),
       String(localized:"The applicable speed for this constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDP
+      .speedConstraintsDP,
+      .textField
     ),
     .speedConstraintDPType14
     : (
       String(localized:"Speed Constraint Type", comment:"This is used for the title of a combo box from which the user selects the speed constraint type."),
       String(localized:"Type of speed constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDP
+      .speedConstraintsDP,
+      .comboBox
     ),
     .speedConstraintDPValue14
     : (
       String(localized:"Speed Constraint (%%UNITS_SCALE_SPEED%%)", comment:"This is used for the title of an input field where the user enters the speed constraint value. The %%UNITS_SCALE_SPEED%% will be replaced at runtime by the name of the user selected units of speed - place this at an approprate position in the title for the language."),
       String(localized:"The applicable speed for this constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDP
+      .speedConstraintsDP,
+      .textField
     ),
     .speedConstraintDPType15
     : (
       String(localized:"Speed Constraint Type", comment:"This is used for the title of a combo box from which the user selects the speed constraint type."),
       String(localized:"Type of speed constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDP
+      .speedConstraintsDP,
+      .comboBox
     ),
     .speedConstraintDPValue15
     : (
       String(localized:"Speed Constraint (%%UNITS_SCALE_SPEED%%)", comment:"This is used for the title of an input field where the user enters the speed constraint value. The %%UNITS_SCALE_SPEED%% will be replaced at runtime by the name of the user selected units of speed - place this at an approprate position in the title for the language."),
       String(localized:"The applicable speed for this constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDP
+      .speedConstraintsDP,
+      .textField
     ),
     .speedConstraintDNType0
     : (
       String(localized:"Speed Constraint Type", comment:"This is used for the title of a combo box from which the user selects the speed constraint type."),
       String(localized:"Type of speed constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDN
+      .speedConstraintsDN,
+      .comboBox
     ),
     .speedConstraintDNValue0
     : (
       String(localized:"Speed Constraint (%%UNITS_SCALE_SPEED%%)", comment:"This is used for the title of an input field where the user enters the speed constraint value. The %%UNITS_SCALE_SPEED%% will be replaced at runtime by the name of the user selected units of speed - place this at an approprate position in the title for the language."),
       String(localized:"The applicable speed for this constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDN
+      .speedConstraintsDN,
+      .textField
     ),
     .speedConstraintDNType1
     : (
       String(localized:"Speed Constraint Type", comment:"This is used for the title of a combo box from which the user selects the speed constraint type."),
       String(localized:"Type of speed constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDN
+      .speedConstraintsDN,
+      .comboBox
     ),
     .speedConstraintDNValue1
     : (
       String(localized:"Speed Constraint (%%UNITS_SCALE_SPEED%%)", comment:"This is used for the title of an input field where the user enters the speed constraint value. The %%UNITS_SCALE_SPEED%% will be replaced at runtime by the name of the user selected units of speed - place this at an approprate position in the title for the language."),
       String(localized:"The applicable speed for this constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDN
+      .speedConstraintsDN,
+      .textField
     ),
     .speedConstraintDNType2
     : (
       String(localized:"Speed Constraint Type", comment:"This is used for the title of a combo box from which the user selects the speed constraint type."),
       String(localized:"Type of speed constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDN
+      .speedConstraintsDN,
+      .comboBox
     ),
     .speedConstraintDNValue2
     : (
       String(localized:"Speed Constraint (%%UNITS_SCALE_SPEED%%)", comment:"This is used for the title of an input field where the user enters the speed constraint value. The %%UNITS_SCALE_SPEED%% will be replaced at runtime by the name of the user selected units of speed - place this at an approprate position in the title for the language."),
       String(localized:"The applicable speed for this constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDN
+      .speedConstraintsDN,
+      .textField
     ),
     .speedConstraintDNType3
     : (
       String(localized:"Speed Constraint Type", comment:"This is used for the title of a combo box from which the user selects the speed constraint type."),
       String(localized:"Type of speed constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDN
+      .speedConstraintsDN,
+      .comboBox
     ),
     .speedConstraintDNValue3
     : (
       String(localized:"Speed Constraint (%%UNITS_SCALE_SPEED%%)", comment:"This is used for the title of an input field where the user enters the speed constraint value. The %%UNITS_SCALE_SPEED%% will be replaced at runtime by the name of the user selected units of speed - place this at an approprate position in the title for the language."),
       String(localized:"The applicable speed for this constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDN
+      .speedConstraintsDN,
+      .textField
     ),
     .speedConstraintDNType4
     : (
       String(localized:"Speed Constraint Type", comment:"This is used for the title of a combo box from which the user selects the speed constraint type."),
       String(localized:"Type of speed constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDN
+      .speedConstraintsDN,
+      .comboBox
     ),
     .speedConstraintDNValue4
     : (
       String(localized:"Speed Constraint (%%UNITS_SCALE_SPEED%%)", comment:"This is used for the title of an input field where the user enters the speed constraint value. The %%UNITS_SCALE_SPEED%% will be replaced at runtime by the name of the user selected units of speed - place this at an approprate position in the title for the language."),
       String(localized:"The applicable speed for this constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDN
+      .speedConstraintsDN,
+      .textField
     ),
     .speedConstraintDNType5
     : (
       String(localized:"Speed Constraint Type", comment:"This is used for the title of a combo box from which the user selects the speed constraint type."),
       String(localized:"Type of speed constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDN
+      .speedConstraintsDN,
+      .comboBox
     ),
     .speedConstraintDNValue5
     : (
       String(localized:"Speed Constraint (%%UNITS_SCALE_SPEED%%)", comment:"This is used for the title of an input field where the user enters the speed constraint value. The %%UNITS_SCALE_SPEED%% will be replaced at runtime by the name of the user selected units of speed - place this at an approprate position in the title for the language."),
       String(localized:"The applicable speed for this constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDN
+      .speedConstraintsDN,
+      .textField
     ),
     .speedConstraintDNType6
     : (
       String(localized:"Speed Constraint Type", comment:"This is used for the title of a combo box from which the user selects the speed constraint type."),
       String(localized:"Type of speed constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDN
+      .speedConstraintsDN,
+      .comboBox
     ),
     .speedConstraintDNValue6
     : (
       String(localized:"Speed Constraint (%%UNITS_SCALE_SPEED%%)", comment:"This is used for the title of an input field where the user enters the speed constraint value. The %%UNITS_SCALE_SPEED%% will be replaced at runtime by the name of the user selected units of speed - place this at an approprate position in the title for the language."),
       String(localized:"The applicable speed for this constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDN
+      .speedConstraintsDN,
+      .textField
     ),
     .speedConstraintDNType7
     : (
       String(localized:"Speed Constraint Type", comment:"This is used for the title of a combo box from which the user selects the speed constraint type."),
       String(localized:"Type of speed constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDN
+      .speedConstraintsDN,
+      .comboBox
     ),
     .speedConstraintDNValue7
     : (
       String(localized:"Speed Constraint (%%UNITS_SCALE_SPEED%%)", comment:"This is used for the title of an input field where the user enters the speed constraint value. The %%UNITS_SCALE_SPEED%% will be replaced at runtime by the name of the user selected units of speed - place this at an approprate position in the title for the language."),
       String(localized:"The applicable speed for this constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDN
+      .speedConstraintsDN,
+      .textField
     ),
     .speedConstraintDNType8
     : (
       String(localized:"Speed Constraint Type", comment:"This is used for the title of a combo box from which the user selects the speed constraint type."),
       String(localized:"Type of speed constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDN
+      .speedConstraintsDN,
+      .comboBox
     ),
     .speedConstraintDNValue8
     : (
       String(localized:"Speed Constraint (%%UNITS_SCALE_SPEED%%)", comment:"This is used for the title of an input field where the user enters the speed constraint value. The %%UNITS_SCALE_SPEED%% will be replaced at runtime by the name of the user selected units of speed - place this at an approprate position in the title for the language."),
       String(localized:"The applicable speed for this constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDN
+      .speedConstraintsDN,
+      .textField
     ),
     .speedConstraintDNType9
     : (
       String(localized:"Speed Constraint Type", comment:"This is used for the title of a combo box from which the user selects the speed constraint type."),
       String(localized:"Type of speed constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDN
+      .speedConstraintsDN,
+      .comboBox
     ),
     .speedConstraintDNValue9
     : (
       String(localized:"Speed Constraint (%%UNITS_SCALE_SPEED%%)", comment:"This is used for the title of an input field where the user enters the speed constraint value. The %%UNITS_SCALE_SPEED%% will be replaced at runtime by the name of the user selected units of speed - place this at an approprate position in the title for the language."),
       String(localized:"The applicable speed for this constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDN
+      .speedConstraintsDN,
+      .textField
     ),
     .speedConstraintDNType10
     : (
       String(localized:"Speed Constraint Type", comment:"This is used for the title of a combo box from which the user selects the speed constraint type."),
       String(localized:"Type of speed constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDN
+      .speedConstraintsDN,
+      .comboBox
     ),
     .speedConstraintDNValue10
     : (
       String(localized:"Speed Constraint (%%UNITS_SCALE_SPEED%%)", comment:"This is used for the title of an input field where the user enters the speed constraint value. The %%UNITS_SCALE_SPEED%% will be replaced at runtime by the name of the user selected units of speed - place this at an approprate position in the title for the language."),
       String(localized:"The applicable speed for this constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDN
+      .speedConstraintsDN,
+      .textField
     ),
     .speedConstraintDNType11
     : (
       String(localized:"Speed Constraint Type", comment:"This is used for the title of a combo box from which the user selects the speed constraint type."),
       String(localized:"Type of speed constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDN
+      .speedConstraintsDN,
+      .comboBox
     ),
     .speedConstraintDNValue11
     : (
       String(localized:"Speed Constraint (%%UNITS_SCALE_SPEED%%)", comment:"This is used for the title of an input field where the user enters the speed constraint value. The %%UNITS_SCALE_SPEED%% will be replaced at runtime by the name of the user selected units of speed - place this at an approprate position in the title for the language."),
       String(localized:"The applicable speed for this constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDN
+      .speedConstraintsDN,
+      .textField
     ),
     .speedConstraintDNType12
     : (
       String(localized:"Speed Constraint Type", comment:"This is used for the title of a combo box from which the user selects the speed constraint type."),
       String(localized:"Type of speed constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDN
+      .speedConstraintsDN,
+      .comboBox
     ),
     .speedConstraintDNValue12
     : (
       String(localized:"Speed Constraint (%%UNITS_SCALE_SPEED%%)", comment:"This is used for the title of an input field where the user enters the speed constraint value. The %%UNITS_SCALE_SPEED%% will be replaced at runtime by the name of the user selected units of speed - place this at an approprate position in the title for the language."),
       String(localized:"The applicable speed for this constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDN
+      .speedConstraintsDN,
+      .textField
     ),
     .speedConstraintDNType13
     : (
       String(localized:"Speed Constraint Type", comment:"This is used for the title of a combo box from which the user selects the speed constraint type."),
       String(localized:"Type of speed constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDN
+      .speedConstraintsDN,
+      .comboBox
     ),
     .speedConstraintDNValue13
     : (
       String(localized:"Speed Constraint (%%UNITS_SCALE_SPEED%%)", comment:"This is used for the title of an input field where the user enters the speed constraint value. The %%UNITS_SCALE_SPEED%% will be replaced at runtime by the name of the user selected units of speed - place this at an approprate position in the title for the language."),
       String(localized:"The applicable speed for this constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDN
+      .speedConstraintsDN,
+      .textField
     ),
     .speedConstraintDNType14
     : (
       String(localized:"Speed Constraint Type", comment:"This is used for the title of a combo box from which the user selects the speed constraint type."),
       String(localized:"Type of speed constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDN
+      .speedConstraintsDN,
+      .comboBox
     ),
     .speedConstraintDNValue14
     : (
       String(localized:"Speed Constraint (%%UNITS_SCALE_SPEED%%)", comment:"This is used for the title of an input field where the user enters the speed constraint value. The %%UNITS_SCALE_SPEED%% will be replaced at runtime by the name of the user selected units of speed - place this at an approprate position in the title for the language."),
       String(localized:"The applicable speed for this constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDN
+      .speedConstraintsDN,
+      .textField
     ),
     .speedConstraintDNType15
     : (
       String(localized:"Speed Constraint Type", comment:"This is used for the title of a combo box from which the user selects the speed constraint type."),
       String(localized:"Type of speed constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDN
+      .speedConstraintsDN,
+      .comboBox
     ),
     .speedConstraintDNValue15
     : (
       String(localized:"Speed Constraint (%%UNITS_SCALE_SPEED%%)", comment:"This is used for the title of an input field where the user enters the speed constraint value. The %%UNITS_SCALE_SPEED%% will be replaced at runtime by the name of the user selected units of speed - place this at an approprate position in the title for the language."),
       String(localized:"The applicable speed for this constraint.", comment:"This is used for a tooltip."),
-      .speedConstraintsDN
+      .speedConstraintsDN,
+      .textField
     ),
   ]
+  
+  public static var inspectorPropertyFields: [LayoutInspectorPropertyField] {
+    
+    var result : [LayoutInspectorPropertyField] = []
+    
+    let labelFontSize : CGFloat = 10.0
+    let textFontSize  : CGFloat = 11.0
+    
+    var constraints : [NSLayoutConstraint] = []
+
+    for item in LayoutInspectorProperty.allCases {
+      
+      var field : LayoutInspectorPropertyField = (view:nil, label:nil, control:nil, item)
+      
+      field.label = NSTextField(labelWithString: item.label)
+      
+      switch item.controlType {
+      case .checkBox:
+        field.label!.stringValue = ""
+        let checkBox = NSButton()
+        checkBox.setButtonType(.switch)
+        checkBox.title = item.label
+        field.control = checkBox
+      case .comboBox:
+        let comboBox = MyComboBox()
+        comboBox.isEditable = false
+        field.control = comboBox
+      case .eventId:
+        let textField = NSTextField()
+        textField.placeholderString = "00.00.00.00.00.00.00.00"
+        field.control = textField
+      case .label:
+        let textField = NSTextField(labelWithString: item.label)
+        field.control = textField
+      case .textField:
+        let textField = NSTextField()
+        field.control = textField
+      }
+      
+      field.control?.toolTip = item.toolTip
+      field.control?.tag = item.rawValue
+      
+      let view = NSView()
+      
+      view.translatesAutoresizingMaskIntoConstraints = false
+      
+      field.label!.translatesAutoresizingMaskIntoConstraints = false
+      field.label!.fontSize = labelFontSize
+      field.label!.alignment = .right
+
+      view.addSubview(field.label!)
+      
+      field.control!.translatesAutoresizingMaskIntoConstraints = false
+      field.control!.fontSize = textFontSize
+      
+      view.addSubview(field.control!)
+      view.backgroundColor = NSColor.yellow.cgColor
+
+      field.view = view
+      
+      /// Note to self: Views within a StackView must not have constraints to the outside world as this will lock the StackView size.
+      /// They must only have internal constraints to the view that is added to the StackView.
+      ///
+      constraints.append(field.view!.heightAnchor.constraint(greaterThanOrEqualTo: field.label!.heightAnchor))
+      constraints.append(field.view!.heightAnchor.constraint(greaterThanOrEqualTo: field.control!.heightAnchor))
+      constraints.append(field.label!.leadingAnchor.constraint(equalTo: field.view!.leadingAnchor, constant: 20))
+      constraints.append(field.control!.leadingAnchor.constraint(equalToSystemSpacingAfter: field.label!.trailingAnchor, multiplier: 1.0))
+      constraints.append(field.control!.trailingAnchor.constraint(equalTo: field.view!.trailingAnchor))
+ //     constraints.append(field.control!.widthAnchor.constraint(greaterThanOrEqualToConstant: 100))
+      constraints.append(field.control!.centerYAnchor.constraint(equalTo: field.view!.centerYAnchor))
+      constraints.append(field.label!.centerYAnchor.constraint(equalTo: field.view!.centerYAnchor))
+
+      result.append(field)
+      
+    }
+    
+    NSLayoutConstraint.activate(constraints)
+
+    return result
+    
+  }
   
 }

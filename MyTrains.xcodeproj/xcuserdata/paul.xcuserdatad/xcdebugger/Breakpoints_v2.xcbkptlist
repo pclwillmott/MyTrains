@@ -446,8 +446,8 @@
             filePath = "MyTrains/SwitchBoard/LayoutBuilderVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1028"
-            endingLineNumber = "1028"
+            startingLineNumber = "940"
+            endingLineNumber = "940"
             landmarkName = "LayoutBuilderVC"
             landmarkType = "3">
          </BreakpointContent>
@@ -462,10 +462,10 @@
             filePath = "MyTrains/SwitchBoard/LayoutBuilderVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1061"
-            endingLineNumber = "1061"
-            landmarkName = "btnShowPanelViewAction(_:)"
-            landmarkType = "7">
+            startingLineNumber = "973"
+            endingLineNumber = "973"
+            landmarkName = "LayoutBuilderVC"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -478,8 +478,8 @@
             filePath = "MyTrains/SwitchBoard/LayoutBuilderVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "366"
-            endingLineNumber = "366"
+            startingLineNumber = "220"
+            endingLineNumber = "220"
             landmarkName = "viewWillAppear()"
             landmarkType = "7">
          </BreakpointContent>

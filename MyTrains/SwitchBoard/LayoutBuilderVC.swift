@@ -109,29 +109,6 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate {
     case numberOfColumns = 7
   }
 
-  private enum AttributeProperty : Int {
-    case name = 1
-    case description = 2
-    case xPos = 3
-    case yPos = 4
-    case orientation = 5
-    case group = 6
-    case directionality = 7
-    case allowShunt = 8
-    case trackElectrificationType = 9
-    case isCriticalSection = 10
-    case isHiddenSection = 11
-    case trackGradient = 12
-    case trackGauge = 13
-    case lengthRoute1 = 14
-    case lengthRoute2 = 15
-    case lengthRoute3 = 16
-    case lengthRoute4 = 17
-    case lengthRoute5 = 18
-    case lengthRoute6 = 19
-    case lengthRoute7 = 20
-    case lengthRoute8 = 21
-  }
   
   override func viewWillAppear() {
     
@@ -234,134 +211,11 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate {
       ),
     ]
     
-    attributeControls = [
-      (
-        "Identity",
-        NSTextField(labelWithString: String(localized: "Name")),
-        NSTextField(),
-        .name
-      ),
-      (
-        "Identity",
-        NSTextField(labelWithString: String(localized: "Description")),
-        NSTextField(),
-        .description
-      ),
-      (
-        "General Settings",
-        NSTextField(labelWithString: String(localized: "X Coordinate")),
-        NSTextField(),
-        .xPos
-      ),
-      (
-        "General Settings",
-        NSTextField(labelWithString: String(localized: "Y Coordinate")),
-        NSTextField(),
-        .yPos
-      ),
-      (
-        "General Settings",
-        NSTextField(labelWithString: String(localized: "Orientation")),
-        NSComboBox(),
-        .orientation
-      ),
-      (
-        "General Settings",
-        NSTextField(labelWithString: String(localized: "Group")),
-        NSComboBox(),
-        .group
-      ),
-      (
-        "Block Settings",
-        NSTextField(labelWithString: String(localized: "Directionality")),
-        NSComboBox(),
-        .directionality
-      ),
-      (
-        "Block Settings",
-        NSTextField(labelWithString: String(localized: "Allow Shunt")),
-        NSComboBox(),
-        .allowShunt
-      ),
-      (
-        "Block Settings",
-        NSTextField(labelWithString: String(localized: "Electrification")),
-        NSComboBox(),
-        .trackElectrificationType
-      ),
-      (
-        "Block Settings",
-        NSTextField(labelWithString: String(localized: "Is Critical Section")),
-        NSComboBox(),
-        .isCriticalSection
-      ),
-      (
-        "Block Settings",
-        NSTextField(labelWithString: String(localized: "Is Hidden Section")),
-        NSComboBox(),
-        .isHiddenSection
-      ),
-      (
-        "Track Configuration",
-        NSTextField(labelWithString: String(localized: "Track Gradient")),
-        NSTextField(),
-        .trackGradient
-      ),
-      (
-        "Track Configuration",
-        NSTextField(labelWithString: String(localized: "Track Guage")),
-        NSComboBox(),
-        .isHiddenSection
-      ),
-      (
-        "Track Configuration",
-        NSTextField(labelWithString: String(localized: "Length of Route #1")),
-        NSTextField(),
-        .lengthRoute1
-      ),
-      (
-        "Track Configuration",
-        NSTextField(labelWithString: String(localized: "Length of Route #2")),
-        NSTextField(),
-        .lengthRoute2
-      ),
-      (
-        "Track Configuration",
-        NSTextField(labelWithString: String(localized: "Length of Route #3")),
-        NSTextField(),
-        .lengthRoute3
-      ),
-      (
-        "Track Configuration",
-        NSTextField(labelWithString: String(localized: "Length of Route #4")),
-        NSTextField(),
-        .lengthRoute4
-      ),
-      (
-        "Track Configuration",
-        NSTextField(labelWithString: String(localized: "Length of Route #5")),
-        NSTextField(),
-        .lengthRoute5
-      ),
-      (
-        "Track Configuration",
-        NSTextField(labelWithString: String(localized: "Length of Route #6")),
-        NSTextField(),
-        .lengthRoute6
-      ),
-      (
-        "Track Configuration",
-        NSTextField(labelWithString: String(localized: "Length of Route #7")),
-        NSTextField(),
-        .lengthRoute7
-      ),
-      (
-        "Track Configuration",
-        NSTextField(labelWithString: String(localized: "Length of Route #8")),
-        NSTextField(),
-        .lengthRoute8
-      ),
-    ]
+    inspectorFields = LayoutInspectorProperty.inspectorPropertyFields
+    
+    inspectorGroupFields = LayoutInspectorGroup.inspectorGroupFields
+    
+    inspectorGroupSeparators = LayoutInspectorGroup.inspectorGroupSeparators
     
     layoutButtons[LayoutButton.zoomIn.rawValue]?.toolTip = String(localized: "Zoom In")
     layoutButtons[LayoutButton.zoomOut.rawValue]?.toolTip = String(localized: "Zoom Out")
@@ -643,93 +497,6 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate {
 
     // MARK: Attributes Inspector
     
-    let attributeStack = (inspectorViews[2] as! NSScrollView).documentView as! NSStackView
-    attributeStack.backgroundColor = NSColor.clear.cgColor
-    attributeStack.orientation = .vertical
-    attributeStack.spacing = 4
-    attributeStack.alignment = .right
-    
-    var attributeIndex = 0
-    while attributeIndex < attributeControls.count {
-      var showHeader = true
-      var showSeparator = false
-      let groupField = attributeControls[attributeIndex]
-      while attributeIndex < attributeControls.count && groupField.group == attributeControls[attributeIndex].group {
-        let isApplicable = true
-        if isApplicable {
-          if showHeader {
-            let labelView = NSView()
-            labelView.translatesAutoresizingMaskIntoConstraints = false
-            let label = NSTextField(labelWithString: groupField.group)
-            label.translatesAutoresizingMaskIntoConstraints = false
-            label.font = NSFont.systemFont(ofSize: 12, weight: .bold)
-            label.textColor = NSColor.systemGray
-            label.alignment = .left
-            label.stringValue = groupField.group
-            attributeStack.addArrangedSubview(labelView)
-            labelView.addSubview(label)
-      //      labelView.backgroundColor = NSColor.black.cgColor
-            constraints.append(label.leadingAnchor.constraint(equalTo: labelView.leadingAnchor))
-            constraints.append(labelView.heightAnchor.constraint(equalTo: label.heightAnchor))
-            showHeader = false
-          }
-          
-          let fieldView = NSView()
- //         fieldView.backgroundColor = NSColor.systemPink.cgColor
-          
-          fieldView.translatesAutoresizingMaskIntoConstraints = false
-          attributeStack.addArrangedSubview(fieldView)
-          
-          let field = attributeControls[attributeIndex]
-          field.label.translatesAutoresizingMaskIntoConstraints = false
-          field.label.fontSize = labelFontSize
-          field.label.alignment = .right
-
-          fieldView.addSubview(field.label)
-          
-          field.control.translatesAutoresizingMaskIntoConstraints = false
-          field.control.fontSize = textFontSize
-          field.control.toolTip = "Here I Am!!!!"
-          
-          fieldView.addSubview(field.control)
-   
-          /// Note to self: Views within a StackView must not have constraints to the outside world as this will lock the StackView size.
-          /// They must only have internal constraints to the view that is added to the StackView.
-          ///
-          constraints.append(fieldView.heightAnchor.constraint(equalTo: field.control.heightAnchor))
-          constraints.append(field.label.leadingAnchor.constraint(equalTo: fieldView.leadingAnchor, constant: 20))
-          constraints.append(field.control.leadingAnchor.constraint(equalToSystemSpacingAfter: field.label.trailingAnchor, multiplier: 1.0))
-          constraints.append(field.control.trailingAnchor.constraint(equalTo: fieldView.trailingAnchor))
-          constraints.append(field.control.widthAnchor.constraint(greaterThanOrEqualToConstant: 100))
-          constraints.append(field.control.centerYAnchor.constraint(equalTo: fieldView.centerYAnchor))
-          constraints.append(field.label.centerYAnchor.constraint(equalTo: fieldView.centerYAnchor))
-    
-          showSeparator = true
-        
-        }
-        attributeIndex += 1
-      }
-      if showSeparator {
-        let separator = SeparatorView()
-        separator.translatesAutoresizingMaskIntoConstraints = false
-        attributeStack.addArrangedSubview(separator)
-        constraints.append(separator.heightAnchor.constraint(equalToConstant: 20))
-        constraints.append(attributeStack.trailingAnchor.constraint(greaterThanOrEqualTo: separator.trailingAnchor))
-        constraints.append(separator.widthAnchor.constraint(equalTo: attributeStack.widthAnchor))
-      }
-    }
-    
-    for field1 in attributeControls {
-      let applicable = true
-      if applicable {
-        for field2 in attributeControls {
-          let applicable = true
-          if applicable && !(field1.label === field2.label) {
-            constraints.append(field1.label.widthAnchor.constraint(greaterThanOrEqualTo: field2.label.widthAnchor))
-          }
-        }
-      }
-    }
 
     
     arrangeView.translatesAutoresizingMaskIntoConstraints = false
@@ -884,11 +651,15 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate {
 
     setStates()
     
+    displayInspector()
+    
   }
   
   // MARK: Private Properties
   
   private var constraints : [NSLayoutConstraint] = []
+  
+  private var inspectorConstraints : [NSLayoutConstraint] = []
   
   private var showPanelConstraint : NSLayoutConstraint?
   
@@ -963,6 +734,143 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate {
         
   }
   
+  private func displayInspector() {
+    
+    NSLayoutConstraint.deactivate(inspectorConstraints)
+    inspectorConstraints.removeAll()
+
+    var usedFields : [LayoutInspectorPropertyField] = []
+    
+    var index = 0
+    while index < inspectorFields.count {
+      
+      let inspector = inspectorFields[index].property.inspector
+      let stackView = (inspectorViews[inspector.rawValue] as! NSScrollView).documentView as! NSStackView
+      stackView.backgroundColor = NSColor.clear.cgColor
+      stackView.orientation = .vertical
+      stackView.spacing = 4
+      stackView.alignment = .right
+      stackView.subviews.removeAll()
+      
+      while index < inspectorFields.count && inspectorFields[index].property.inspector == inspector {
+        
+        let group = inspectorFields[index].property.group
+        
+        stackView.addArrangedSubview(inspectorGroupFields[group]!.view!)
+        
+        while index < inspectorFields.count && inspectorFields[index].property.group == group {
+          
+          stackView.addArrangedSubview(inspectorFields[index].view!)
+          usedFields.append(inspectorFields[index])
+          
+          index += 1
+          
+        }
+        
+        stackView.addArrangedSubview(inspectorGroupSeparators[group]!.view!)
+
+      }
+      
+    }
+    
+    for field1 in usedFields {
+      for field2 in usedFields {
+        if !(field1.label! === field2.label) {
+          inspectorConstraints.append(field1.label!.widthAnchor.constraint(greaterThanOrEqualTo: field2.label!.widthAnchor))
+     //     inspectorConstraints.append(field1.control!.widthAnchor.constraint(greaterThanOrEqualTo: field2.control!.widthAnchor))
+        }
+      }
+    }
+    
+    NSLayoutConstraint.activate(inspectorConstraints)
+
+    
+    /*
+    var attributeIndex = 0
+    while attributeIndex < attributeControls.count {
+      var showHeader = true
+      var showSeparator = false
+      let groupField = attributeControls[attributeIndex]
+      while attributeIndex < attributeControls.count && groupField.group == attributeControls[attributeIndex].group {
+        let isApplicable = true
+        if isApplicable {
+          if showHeader {
+            let labelView = NSView()
+            labelView.translatesAutoresizingMaskIntoConstraints = false
+            let label = NSTextField(labelWithString: groupField.group)
+            label.translatesAutoresizingMaskIntoConstraints = false
+            label.font = NSFont.systemFont(ofSize: 12, weight: .bold)
+            label.textColor = NSColor.systemGray
+            label.alignment = .left
+            label.stringValue = groupField.group
+            attributeStack.addArrangedSubview(labelView)
+            labelView.addSubview(label)
+      //      labelView.backgroundColor = NSColor.black.cgColor
+            constraints.append(label.leadingAnchor.constraint(equalTo: labelView.leadingAnchor))
+            constraints.append(labelView.heightAnchor.constraint(equalTo: label.heightAnchor))
+            showHeader = false
+          }
+          
+          let fieldView = NSView()
+ //         fieldView.backgroundColor = NSColor.systemPink.cgColor
+          
+          fieldView.translatesAutoresizingMaskIntoConstraints = false
+          attributeStack.addArrangedSubview(fieldView)
+          
+          let field = attributeControls[attributeIndex]
+          field.label.translatesAutoresizingMaskIntoConstraints = false
+          field.label.fontSize = labelFontSize
+          field.label.alignment = .right
+
+          fieldView.addSubview(field.label)
+          
+          field.control.translatesAutoresizingMaskIntoConstraints = false
+          field.control.fontSize = textFontSize
+          
+          fieldView.addSubview(field.control)
+   
+          /// Note to self: Views within a StackView must not have constraints to the outside world as this will lock the StackView size.
+          /// They must only have internal constraints to the view that is added to the StackView.
+          ///
+          constraints.append(fieldView.heightAnchor.constraint(equalTo: field.control.heightAnchor))
+          constraints.append(field.label.leadingAnchor.constraint(equalTo: fieldView.leadingAnchor, constant: 20))
+          constraints.append(field.control.leadingAnchor.constraint(equalToSystemSpacingAfter: field.label.trailingAnchor, multiplier: 1.0))
+          constraints.append(field.control.trailingAnchor.constraint(equalTo: fieldView.trailingAnchor))
+          constraints.append(field.control.widthAnchor.constraint(greaterThanOrEqualToConstant: 100))
+          constraints.append(field.control.centerYAnchor.constraint(equalTo: fieldView.centerYAnchor))
+          constraints.append(field.label.centerYAnchor.constraint(equalTo: fieldView.centerYAnchor))
+    
+          showSeparator = true
+        
+        }
+        attributeIndex += 1
+      }
+      if showSeparator {
+        let separator = SeparatorView()
+        separator.translatesAutoresizingMaskIntoConstraints = false
+        attributeStack.addArrangedSubview(separator)
+        constraints.append(separator.heightAnchor.constraint(equalToConstant: 20))
+        constraints.append(attributeStack.trailingAnchor.constraint(greaterThanOrEqualTo: separator.trailingAnchor))
+        constraints.append(separator.widthAnchor.constraint(equalTo: attributeStack.widthAnchor))
+      }
+    }
+    
+    for field1 in attributeControls {
+      let applicable = true
+      if applicable {
+        for field2 in attributeControls {
+          let applicable = true
+          if applicable && !(field1.label === field2.label) {
+            constraints.append(field1.label.widthAnchor.constraint(greaterThanOrEqualTo: field2.label.widthAnchor))
+          }
+        }
+      }
+    }
+     
+     */
+
+  }
+  
   // MARK: Outlets & Actions
   
   private var cboPanel : NSComboBox? = MyComboBox()
@@ -988,8 +896,6 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate {
   
   private var panelControls : [(label:NSTextField, control:NSControl, property:PanelProperty)] = []
   
-  private var attributeControls : [(group:String, label:NSTextField, control:NSControl, property:AttributeProperty)] = []
-  
   private var panelStack : NSStackView? = NSStackView()
   
   private var btnShowInspectorView : NSButton?
@@ -999,6 +905,12 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate {
   private var inspectorButtons : [NSButton?] = []
   
   private var inspectorViews : [NSView] = []
+  
+  private var inspectorFields : [LayoutInspectorPropertyField] = []
+  
+  private var inspectorGroupFields : [LayoutInspectorGroup:LayoutInspectorGroupField] = [:]
+  
+  private var inspectorGroupSeparators : [LayoutInspectorGroup:LayoutInspectorGroupField] = [:]
   
   private var arrangeView : NSView? = NSView()
   

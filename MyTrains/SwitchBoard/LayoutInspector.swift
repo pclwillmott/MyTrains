@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum LayoutInspector : Int {
+public enum LayoutInspector : Int, CaseIterable {
   
   // MARK: Enumeration
   
