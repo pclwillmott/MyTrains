@@ -8,7 +8,7 @@
 import Foundation
 import AppKit
 
-public enum TrackGauge : UInt8 {
+public enum TrackGauge : UInt8, CaseIterable {
 
   case z                   = 1
   case nEurope             = 2
@@ -144,6 +144,10 @@ public enum TrackGauge : UInt8 {
 
   }
   
+  // MARK: Public Class Properties
+  
+  public static let defaultValue : TrackGauge = .ho
+
   // MARK: Public Class Methods
   
   public static func insertMap(cdi:String, layout:LayoutNode?) -> String {
@@ -153,6 +157,23 @@ public enum TrackGauge : UInt8 {
   public static func insertMap(cdi:String) -> String {
     return cdi.replacingOccurrences(of: CDI.ALL_TRACK_GAUGES, with: map(layout: nil))
   }
+  
+  public static func populate(comboBox: NSComboBox) {
+    comboBox.removeAllItems()
+    for item in TrackGauge.allCases {
+      comboBox.addItem(withObjectValue: item.title)
+    }
+    select(comboBox: comboBox, value: defaultValue)
+  }
+  
+  public static func select(comboBox:NSComboBox, value: TrackGauge) {
+    comboBox.selectItem(at: Int(value.rawValue)-1)
+  }
+  
+  public static func selected(comboBox: NSComboBox) -> TrackGauge {
+    return TrackGauge(rawValue: UInt8(comboBox.indexOfSelectedItem) + 1) ?? defaultValue
+  }
+
 
 }
 

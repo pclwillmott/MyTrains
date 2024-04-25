@@ -463,7 +463,15 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate {
         scrollView.contentView.drawsBackground = false
         scrollView.hasVerticalScroller = true
         scrollView.autohidesScrollers = true
-         inspectorViews.append(scrollView)
+        inspectorViews.append(scrollView)
+        let noSelection = NSTextField(labelWithString: String(localized: "No Selection"))
+        noSelection.textColor = NSColor.gray
+        noSelection.fontSize = 16.0
+        inspectorNoSelection.append(noSelection)
+        let notApplicable = NSTextField(labelWithString: String(localized: "Not Applicable"))
+        notApplicable.textColor = NSColor.gray
+        notApplicable.fontSize = 16.0
+        inspectorNotApplicable.append(notApplicable)
         inspectorView.addSubview(scrollView)
 
         let view = NSStackView()
@@ -738,7 +746,39 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate {
     
     NSLayoutConstraint.deactivate(inspectorConstraints)
     inspectorConstraints.removeAll()
-
+    
+    var fieldCount = [Int](repeating: 0, count: inspectorViews.count)
+    
+    for index in 0 ... inspectorViews.count - 1 {
+      
+      let stackView = (inspectorViews[index] as! NSScrollView).documentView as! NSStackView
+      stackView.backgroundColor = NSColor.clear.cgColor
+      stackView.orientation = .vertical
+      stackView.spacing = 4
+      stackView.subviews.removeAll()
+      
+      if switchboardView.selectedItems.isEmpty {
+        stackView.alignment = .centerX
+        stackView.addArrangedSubview(inspectorNoSelection[index])
+      }
+      
+    }
+    
+    if switchboardView.selectedItems.isEmpty {
+      return
+    }
+    
+    var commonProperties : Set<LayoutInspectorProperty>?
+    
+    for item in switchboardView.selectedItems {
+      if commonProperties == nil {
+        commonProperties = item.itemType.properties
+      }
+      else {
+        commonProperties = commonProperties!.intersection(item.itemType.properties)
+      }
+    }
+    
     var usedFields : [LayoutInspectorPropertyField] = []
     
     var index = 0
@@ -746,40 +786,83 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate {
       
       let inspector = inspectorFields[index].property.inspector
       let stackView = (inspectorViews[inspector.rawValue] as! NSScrollView).documentView as! NSStackView
-      stackView.backgroundColor = NSColor.clear.cgColor
-      stackView.orientation = .vertical
-      stackView.spacing = 4
       stackView.alignment = .right
-      stackView.subviews.removeAll()
-      
+
       while index < inspectorFields.count && inspectorFields[index].property.inspector == inspector {
         
         let group = inspectorFields[index].property.group
         
-        stackView.addArrangedSubview(inspectorGroupFields[group]!.view!)
+        var showGroupHeader = true
+        var showGroupSeparator = false
         
         while index < inspectorFields.count && inspectorFields[index].property.group == group {
           
-          stackView.addArrangedSubview(inspectorFields[index].view!)
-          usedFields.append(inspectorFields[index])
+          let field = inspectorFields[index]
+          
+          if let commonProperties, commonProperties.contains(field.property) {
+            
+            fieldCount[inspector.rawValue] += 1
+            
+            if showGroupHeader {
+              stackView.addArrangedSubview(inspectorGroupFields[group]!.view!)
+              showGroupHeader = false
+              showGroupSeparator = true
+            }
+            
+            stackView.addArrangedSubview(field.view!)
+            
+            /// Note to self: Views within a StackView must not have constraints to the outside world as this will lock the StackView size.
+            /// They must only have internal constraints to the view that is added to the StackView.
+            ///  https://manasaprema04.medium.com/autolayout-fundamental-522f0a6e5790
+            
+            inspectorConstraints.append(field.view!.heightAnchor.constraint(greaterThanOrEqualTo: field.label!.heightAnchor))
+            inspectorConstraints.append(field.view!.heightAnchor.constraint(greaterThanOrEqualTo: field.control!.heightAnchor))
+            inspectorConstraints.append(field.control!.leadingAnchor.constraint(equalToSystemSpacingAfter: field.label!.trailingAnchor, multiplier: 1.0))
+            inspectorConstraints.append(field.label!.leadingAnchor.constraint(equalTo: field.view!.leadingAnchor, constant: 20))
+            inspectorConstraints.append(field.view!.trailingAnchor.constraint(equalTo: field.control!.trailingAnchor))
+            if field.property.controlType == .eventId {
+              inspectorConstraints.append(field.control!.widthAnchor.constraint(greaterThanOrEqualToConstant: 140))
+            }
+            else {
+              inspectorConstraints.append(field.control!.widthAnchor.constraint(greaterThanOrEqualToConstant: 100))
+            }
+            inspectorConstraints.append(field.control!.centerYAnchor.constraint(equalTo: field.view!.centerYAnchor))
+            inspectorConstraints.append(field.label!.centerYAnchor.constraint(equalTo: field.view!.centerYAnchor))
+            //      inspectorConstraints.append(field.view!.widthAnchor.constraint(equalTo: stackView.widthAnchor))
+            
+            usedFields.append(field)
+          }
           
           index += 1
           
         }
         
-        stackView.addArrangedSubview(inspectorGroupSeparators[group]!.view!)
-
+        if showGroupSeparator {
+          stackView.addArrangedSubview(inspectorGroupSeparators[group]!.view!)
+        }
+        
       }
-      
+            
     }
     
     for field1 in usedFields {
       for field2 in usedFields {
-        if !(field1.label! === field2.label) {
+        if !(field1.label! === field2.label) && field1.property.inspector == field2.property.inspector {
           inspectorConstraints.append(field1.label!.widthAnchor.constraint(greaterThanOrEqualTo: field2.label!.widthAnchor))
-     //     inspectorConstraints.append(field1.control!.widthAnchor.constraint(greaterThanOrEqualTo: field2.control!.widthAnchor))
+ //         inspectorConstraints.append(field1.view!.widthAnchor.constraint(greaterThanOrEqualTo: field2.view!.widthAnchor))
         }
       }
+    }
+    
+    for index in 0 ... inspectorViews.count - 1 {
+      
+      let stackView = (inspectorViews[index] as! NSScrollView).documentView as! NSStackView
+      
+      if fieldCount[index] == 0 {
+        stackView.alignment = .centerX
+        stackView.addArrangedSubview(inspectorNotApplicable[index])
+      }
+      
     }
     
     NSLayoutConstraint.activate(inspectorConstraints)
@@ -905,7 +988,9 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate {
   private var inspectorButtons : [NSButton?] = []
   
   private var inspectorViews : [NSView] = []
-  
+  private var inspectorNoSelection : [NSTextField] = []
+  private var inspectorNotApplicable : [NSTextField] = []
+
   private var inspectorFields : [LayoutInspectorPropertyField] = []
   
   private var inspectorGroupFields : [LayoutInspectorGroup:LayoutInspectorGroupField] = [:]
@@ -937,7 +1022,7 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate {
   private var layoutStripView : NSView? = NSView()
   
   private var layoutButtons : [NSButton?] = []
-
+  
   private var btnShowPaletteView : NSButton?
   
   private var btnShowPanelView : NSButton?
@@ -1100,7 +1185,7 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate {
   // MARK: SwitchboardEditorViewDelegate Methods
   
   @objc func selectedItemChanged(_ switchboardEditorView:SwitchboardEditorView, switchboardItem:SwitchboardItemNode?) {
-    
+    displayInspector()
   }
 
 }

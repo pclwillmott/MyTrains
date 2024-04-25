@@ -108,11 +108,11 @@ class SwitchboardEditorView: SwitchboardView {
   
   private var endMove : SwitchBoardLocation?
   
-  private var selectedItems : [SwitchboardItemNode] = []
-  
   private var isDrag : Bool = false
   
   // MARK: Public Properties
+  
+  public var selectedItems : [SwitchboardItemNode] = []
   
   public var groupId : Int = -1 {
     didSet {
@@ -234,13 +234,25 @@ class SwitchboardEditorView: SwitchboardView {
   }
 
   override func mouseDown(with event: NSEvent) {
-    
-    debugLog("mouseDown")
-    
-    if let item = getItem(event: event) {
+
+    switch event.modifierFlags.intersection(.deviceIndependentFlagsMask) {
+    case [.control]:
+      break
+    case [.option]:
+      break
+    case [.shift]:
+      if let item = getItem(event: event) {
+        selectedItems.append(item)
+      }
+    default:
       selectedItems.removeAll()
-      selectedItems.append(item)
-    }
+      if let item = getItem(event: event) {
+        selectedItems.append(item)
+      }
+   }
+    
+   delegate?.selectedItemChanged?(self, switchboardItem: nil)
+
     
 /*
     if let layout = self.layout {

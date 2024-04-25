@@ -404,217 +404,217 @@ public enum LayoutInspectorProperty : Int, CaseIterable {
     ),
     .enterDetectionZoneEventId
     : (
-      String(localized:"Enter Detection Zone Event ID", comment:"This is used for the title of an input field where the user can enter an event ID."),
+      String(localized:"Enter Detection Zone", comment:"This is used for the title of an input field where the user can enter an event ID."),
       String(localized:"Event ID that signals that a train has entered the detection zone associated with this switchboard item.", comment:"This is used for a tooltip."),
       .blockEvents,
       .eventId
     ),
     .exitDetectionZoneEventId
     : (
-      String(localized:"Exit Detection Zone Event ID", comment:"This is used for the title of an input field where the user can enter an event ID."),
+      String(localized:"Exit Detection Zone", comment:"This is used for the title of an input field where the user can enter an event ID."),
       String(localized:"Event ID that signals that a train has exited the detection zone associated with this switchboard item.", comment:"This is used for a tooltip."),
       .blockEvents,
       .eventId
     ),
     .enterTranspondingZoneEventId
     : (
-      String(localized:"Enter Transponding Zone Event ID", comment:"This is used for the title of an input field where the user can enter an event ID."),
+      String(localized:"Enter Transponding Zone", comment:"This is used for the title of an input field where the user can enter an event ID."),
       String(localized:"Event ID that signals that a train's transponder has been detected in the transponding zone associated with this switchboard item.", comment:"This is used for a tooltip."),
       .blockEvents,
       .eventId
     ),
     .exitTranspondingZoneEventId
     : (
-      String(localized:"Exit Transponding Zone Event ID", comment:"This is used for the title of an input field where the user can enter an event ID."),
+      String(localized:"Exit Transponding Zone", comment:"This is used for the title of an input field where the user can enter an event ID."),
       String(localized:"Event ID that signals that a train's transponder is no longer detected in the transponding zone associated with this switchboard item.", comment:"This is used for a tooltip."),
       .blockEvents,
       .eventId
     ),
     .trackFaultEventId
     : (
-      String(localized:"Track Fault Event ID", comment:"This is used for the title of an input field where the user can enter an event ID."),
+      String(localized:"Track Fault", comment:"This is used for the title of an input field where the user can enter an event ID."),
       String(localized:"Event ID that signals that a track fault has been detected in the detection zone associated with this switchboard item.", comment:"This is used for a tooltip."),
       .blockEvents,
       .eventId
     ),
     .trackFaultClearedEventId
     : (
-      String(localized:"Track Fault Cleared Event ID", comment:"This is used for the title of an input field where the user can enter an event ID."),
+      String(localized:"Track Fault Cleared", comment:"This is used for the title of an input field where the user can enter an event ID."),
       String(localized:"Event ID that signals that a track fault is no longer detected in the detection zone associated with this switchboard item.", comment:"This is used for a tooltip."),
       .blockEvents,
       .eventId
     ),
     .locationServicesEventId
     : (
-      String(localized:"Location Services Event ID", comment:"This is used for the title of an input field where the user can enter an event ID."),
+      String(localized:"Location Services", comment:"This is used for the title of an input field where the user can enter an event ID."),
       String(localized:"Event ID that reports location services information for the zone associated with this switchboard item.", comment:"This is used for a tooltip."),
       .blockEvents,
       .eventId
     ),
     .turnoutMotorType
     : (
-      String(localized:"Turnout Motor Type", comment:"This is used for the title of a combo box where the user can select the applicable turnout motor type."),
+      String(localized:"Switching Method", comment:"This is used for the title of a combo box where the user can select the applicable turnout motor type."),
       String(localized:"The turnout switching method for this turnout.", comment:"This is used for a tooltip."),
       .turnoutControl,
       .comboBox
     ),
     .sw1ThrowEventId
     : (
-      String(localized:"Switch #1 Throw Event ID", comment:"This is used for the title of an input field where the user can select which event ID to send to throw a turnout switch."),
+      String(localized:"Throw Switch #1", comment:"This is used for the title of an input field where the user can select which event ID to send to throw a turnout switch."),
       String(localized:"Event ID to send to throw turnout switch #1. In general the diverging route is selected by close and the through route by throw.", comment:"This is used for a tooltip."),
       .turnoutEvents,
       .eventId
     ),
     .sw1CloseEventId
     : (
-      String(localized:"Switch #1 Close Event ID", comment:"This is used for the title of an input field where the user can select which event ID to send to close a turnout switch."),
+      String(localized:"Close Switch #1", comment:"This is used for the title of an input field where the user can select which event ID to send to close a turnout switch."),
       String(localized:"Event ID to send to close turnout switch #1. In general the diverging route is selected by close and the through route by throw.", comment:"This is used for a tooltip."),
       .turnoutEvents,
       .eventId
     ),
     .sw1ThrownEventId
     : (
-      String(localized:"Switch #1 Thrown Event ID", comment:"This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been thrown."),
+      String(localized:"Switch #1 Thrown", comment:"This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been thrown."),
       String(localized:"Event ID that indicates that turnout switch #1 has been thrown.", comment:"This is used for a tooltip."),
       .turnoutEvents,
       .eventId
     ),
     .sw1ClosedEventId
     : (
-      String(localized:"Switch #1 Closed Event ID", comment:"This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been closed."),
+      String(localized:"Switch #1 Closed", comment:"This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been closed."),
       String(localized:"Event ID that indicates that turnout switch #1 has been closed.", comment:"This is used for a tooltip."),
       .turnoutEvents,
       .eventId
     ),
     .sw2ThrowEventId
     : (
-      String(localized:"Switch #2 Throw Event ID", comment:"This is used for the title of an input field where the user can select which event ID to send to throw a turnout switch."),
+      String(localized:"Throw Switch #2", comment:"This is used for the title of an input field where the user can select which event ID to send to throw a turnout switch."),
       String(localized:"Event ID to send to throw turnout switch #2. In general the diverging route is selected by close and the through route by throw.", comment:"This is used for a tooltip."),
       .turnoutEvents,
       .eventId
     ),
     .sw2CloseEventId
     : (
-      String(localized:"Switch #2 Close Event ID", comment:"This is used for the title of an input field where the user can select which event ID to send to close a turnout switch."),
+      String(localized:"Close Switch #2", comment:"This is used for the title of an input field where the user can select which event ID to send to close a turnout switch."),
       String(localized:"Event ID to send to close turnout switch #2. In general the diverging route is selected by close and the through route by throw.", comment:"This is used for a tooltip."),
       .turnoutEvents,
       .eventId
     ),
     .sw2ThrownEventId
     : (
-      String(localized:"Switch #2 Thrown Event ID", comment:"This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been thrown."),
+      String(localized:"Switch #2 Thrown", comment:"This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been thrown."),
       String(localized:"Event ID that indicates that turnout switch #2 has been thrown.", comment:"This is used for a tooltip."),
       .turnoutEvents,
       .eventId
     ),
     .sw2ClosedEventId
     : (
-      String(localized:"Switch #2 Closed Event ID", comment:"This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been closed."),
+      String(localized:"Switch #2 Closed", comment:"This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been closed."),
       String(localized:"Event ID that indicates that turnout switch #2 has been closed.", comment:"This is used for a tooltip."),
       .turnoutEvents,
       .eventId
     ),
     .sw3ThrowEventId
     : (
-      String(localized:"Switch #3 Throw Event ID", comment:"This is used for the title of an input field where the user can select which event ID to send to throw a turnout switch."),
+      String(localized:"Throw Switch #3", comment:"This is used for the title of an input field where the user can select which event ID to send to throw a turnout switch."),
       String(localized:"Event ID to send to throw turnout switch #3. In general the diverging route is selected by close and the through route by throw.", comment:"This is used for a tooltip."),
       .turnoutEvents,
       .eventId
     ),
     .sw3CloseEventId
     : (
-      String(localized:"Switch #3 Close Event ID", comment:"This is used for the title of an input field where the user can select which event ID to send to close a turnout switch."),
+      String(localized:"Close Switch #3", comment:"This is used for the title of an input field where the user can select which event ID to send to close a turnout switch."),
       String(localized:"Event ID to send to close turnout switch #3. In general the diverging route is selected by close and the through route by throw.", comment:"This is used for a tooltip."),
       .turnoutEvents,
       .eventId
     ),
     .sw3ThrownEventId
     : (
-      String(localized:"Switch #3 Thrown Event ID", comment:"This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been thrown."),
+      String(localized:"Switch #3 Thrown", comment:"This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been thrown."),
       String(localized:"Event ID that indicates that turnout switch #3 has been thrown.", comment:"This is used for a tooltip."),
       .turnoutEvents,
       .eventId
     ),
     .sw3ClosedEventId
     : (
-      String(localized:"Switch #3 Closed Event ID", comment:"This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been closed."),
+      String(localized:"Switch #3 Closed", comment:"This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been closed."),
       String(localized:"Event ID that indicates that turnout switch #3 has been closed.", comment:"This is used for a tooltip."),
       .turnoutEvents,
       .eventId
     ),
     .sw4ThrowEventId
     : (
-      String(localized:"Switch #4 Throw Event ID", comment:"This is used for the title of an input field where the user can select which event ID to send to throw a turnout switch."),
+      String(localized:"Throw Switch #4", comment:"This is used for the title of an input field where the user can select which event ID to send to throw a turnout switch."),
       String(localized:"Event ID to send to throw turnout switch #4. In general the diverging route is selected by close and the through route by throw.", comment:"This is used for a tooltip."),
       .turnoutEvents,
       .eventId
     ),
     .sw4CloseEventId
     : (
-      String(localized:"Switch #4 Close Event ID", comment:"This is used for the title of an input field where the user can select which event ID to send to close a turnout switch."),
+      String(localized:"Close Switch #4", comment:"This is used for the title of an input field where the user can select which event ID to send to close a turnout switch."),
       String(localized:"Event ID to send to close turnout switch #4. In general the diverging route is selected by close and the through route by throw.", comment:"This is used for a tooltip."),
       .turnoutEvents,
       .eventId
     ),
     .sw4ThrownEventId
     : (
-      String(localized:"Switch #4 Thrown Event ID", comment:"This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been thrown."),
+      String(localized:"Switch #4 Thrown", comment:"This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been thrown."),
       String(localized:"Event ID that indicates that turnout switch #4 has been thrown.", comment:"This is used for a tooltip."),
       .turnoutEvents,
       .eventId
     ),
     .sw4ClosedEventId
     : (
-      String(localized:"Switch #4 Closed Event ID", comment:"This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been closed."),
+      String(localized:"Switch #4 Closed", comment:"This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been closed."),
       String(localized:"Event ID that indicates that turnout switch #4 has been closed.", comment:"This is used for a tooltip."),
       .turnoutEvents,
       .eventId
     ),
     .sensorType
     : (
-      String(localized:"Sensor Type", comment:"This is used for the title of a combo box that the user selects the type of sensor."),
+      String(localized:"Type", comment:"This is used for the title of a combo box that the user selects the type of sensor."),
       String(localized:"Type of sensor.", comment:"This is used for a tooltip."),
       .sensorSettings,
       .comboBox
     ),
     .sensorPosition
     : (
-      String(localized:"Sensor Position (%%UNITS_ACTUAL_DISTANCE%%)", comment:"This is used for the title of an input field that the user enters the position of a sensor device."),
+      String(localized:"Position (%%UNITS_ACTUAL_DISTANCE%%)", comment:"This is used for the title of an input field that the user enters the position of a sensor device."),
       String(localized:"Sensor position from the start of the block.", comment:"This is used for a tooltip."),
       .sensorSettings,
       .textField
     ),
     .sensorActivatedEventId
     : (
-      String(localized:"Sensor Activated Event ID", comment:"This is used for the title of an input field where the user enters a specific event ID."),
+      String(localized:"Activated", comment:"This is used for the title of an input field where the user enters a specific event ID."),
       String(localized:"Event ID generated when the sensor is activated.", comment:"this is used for a tooltip."),
       .sensorEvents,
       .eventId
     ),
     .sensorActivateLatency
     : (
-      String(localized:"Sensor Activate Latency (%%UNITS_TIME%%)", comment:"This is used for the title of an input field where the user enters the time delay between a sensor being activated and when it sends the event report. The %%UNITS_TIME%% will be replaced at runtime by the name of the user selected units of time - place this at an approprate position in the title for the language."),
+      String(localized:"Activate Latency (%%UNITS_TIME%%)", comment:"This is used for the title of an input field where the user enters the time delay between a sensor being activated and when it sends the event report. The %%UNITS_TIME%% will be replaced at runtime by the name of the user selected units of time - place this at an approprate position in the title for the language."),
       String(localized:"Time between the sensor triggering and the sensor reporting such trigger.", comment:"This is used for a tooltip."),
       .sensorSettings,
       .textField
     ),
     .sensorDeactivatedEventId
     : (
-      String(localized:"Sensor Deactivated Event ID", comment:"This is used for the title of an input field where the user enters a specific event ID."),
+      String(localized:"Deactivated", comment:"This is used for the title of an input field where the user enters a specific event ID."),
       String(localized:"Event ID generated when the sensor is deactivated.", comment:"this is used for a tooltip."),
       .sensorEvents,
       .eventId
     ),
     .sensorDeactivateLatency
     : (
-      String(localized:"Sensor Deactivate Latency (%%UNITS_TIME%%)", comment:"This is used for the title of an input field where the user enters the time delay between a sensor being deactivated and when it sends the event report. The %%UNITS_TIME%% will be replaced at runtime by the name of the user selected units of time - place this at an approprate position in the title for the language."),
+      String(localized:"Deactivate Latency (%%UNITS_TIME%%)", comment:"This is used for the title of an input field where the user enters the time delay between a sensor being deactivated and when it sends the event report. The %%UNITS_TIME%% will be replaced at runtime by the name of the user selected units of time - place this at an approprate position in the title for the language."),
       String(localized:"Time between the sensor no longer being triggered and the sensor reporting such non-triggering.", comment:"This is used for a tooltip."),
       .sensorSettings,
       .textField
     ),
     .sensorLocationServicesEventId
     : (
-      String(localized:"Sensor Location Services Event ID", comment:"This is used for the title of an input field where the user can enter an event ID."),
+      String(localized:"Location Services", comment:"This is used for the title of an input field where the user can enter an event ID."),
       String(localized:"Event ID that the sensor uses to report location services information.", comment:"This is used for a tooltip."),
       .sensorEvents,
       .eventId
@@ -628,245 +628,245 @@ public enum LayoutInspectorProperty : Int, CaseIterable {
     ),
     .signalType
     : (
-      String(localized:"Signal Type", comment:"This is used for the title of a combo box that the user selects the signal type."),
+      String(localized:"Type", comment:"This is used for the title of a combo box that the user selects the signal type."),
       String(localized:"Type of signal.", comment:"This is used for a tooltip."),
       .signalSettings,
       .comboBox
     ),
     .signalRouteDirection
     : (
-      String(localized:"Signal Route Direction", comment:"This is used for the title of a combo box which the user selects the directionality applicable to the signal."),
+      String(localized:"Route Direction", comment:"This is used for the title of a combo box which the user selects the directionality applicable to the signal."),
       String(localized:"Directionality applicable to this signal.", comment:"This is used for a tooltip."),
       .signalSettings,
       .comboBox
     ),
     .signalPosition
     : (
-      String(localized:"Signal Stop Position (%%UNITS_ACTUAL_DISTANCE%%)", comment:""),
+      String(localized:"Stop Position (%%UNITS_ACTUAL_DISTANCE%%)", comment:""),
       String(localized:"The position from the start of the block where a train should stop.", comment:"This is used for a tooltip."),
       .signalSettings,
       .textField
     ),
     .signalSetState0EventId
     : (
-      String(localized:"Set Signal Aspect #1 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
+      String(localized:"Set Aspect #1", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #1.", comment:"This is used for a tooltip."),
       .signalEvents,
       .eventId
     ),
     .signalSetState1EventId
     : (
-      String(localized:"Set Signal Aspect #2 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
+      String(localized:"Set Aspect #2", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #2.", comment:"This is used for a tooltip."),
       .signalEvents,
       .eventId
     ),
     .signalSetState2EventId
     : (
-      String(localized:"Set Signal Aspect #3 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
+      String(localized:"Set Aspect #3", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #3.", comment:"This is used for a tooltip."),
       .signalEvents,
       .eventId
     ),
     .signalSetState3EventId
     : (
-      String(localized:"Set Signal Aspect #4 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
+      String(localized:"Set Aspect #4", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #4.", comment:"This is used for a tooltip."),
       .signalEvents,
       .eventId
     ),
     .signalSetState4EventId
     : (
-      String(localized:"Set Signal Aspect #5 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
+      String(localized:"Set Aspect #5", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #5.", comment:"This is used for a tooltip."),
       .signalEvents,
       .eventId
     ),
     .signalSetState5EventId
     : (
-      String(localized:"Set Signal Aspect #6 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
+      String(localized:"Set Aspect #6", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #6.", comment:"This is used for a tooltip."),
       .signalEvents,
       .eventId
     ),
     .signalSetState6EventId
     : (
-      String(localized:"Set Signal Aspect #7 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
+      String(localized:"Set Aspect #7", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #7.", comment:"This is used for a tooltip."),
       .signalEvents,
       .eventId
     ),
     .signalSetState7EventId
     : (
-      String(localized:"Set Signal Aspect #8 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
+      String(localized:"Set Aspect #8", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #8.", comment:"This is used for a tooltip."),
       .signalEvents,
       .eventId
     ),
     .signalSetState8EventId
     : (
-      String(localized:"Set Signal Aspect #9 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
+      String(localized:"Set Aspect #9", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #9.", comment:"This is used for a tooltip."),
       .signalEvents,
       .eventId
     ),
     .signalSetState9EventId
     : (
-      String(localized:"Set Signal Aspect #10 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
+      String(localized:"Set Aspect #10", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #10.", comment:"This is used for a tooltip."),
       .signalEvents,
       .eventId
     ),
     .signalSetState10EventId
     : (
-      String(localized:"Set Signal Aspect #11 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
+      String(localized:"Set Aspect #11", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #11.", comment:"This is used for a tooltip."),
       .signalEvents,
       .eventId
     ),
     .signalSetState11EventId
     : (
-      String(localized:"Set Signal Aspect #12 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
+      String(localized:"Set Aspect #12", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #12.", comment:"This is used for a tooltip."),
       .signalEvents,
       .eventId
     ),
     .signalSetState12EventId
     : (
-      String(localized:"Set Signal Aspect #13 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
+      String(localized:"Set Aspect #13", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #13.", comment:"This is used for a tooltip."),
       .signalEvents,
       .eventId
     ),
     .signalSetState13EventId
     : (
-      String(localized:"Set Signal Aspect #14 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
+      String(localized:"Set Aspect #14", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #14.", comment:"This is used for a tooltip."),
       .signalEvents,
       .eventId
     ),
     .signalSetState14EventId
     : (
-      String(localized:"Set Signal Aspect #15 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
+      String(localized:"Set Aspect #15", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #15.", comment:"This is used for a tooltip."),
       .signalEvents,
       .eventId
     ),
     .signalSetState15EventId
     : (
-      String(localized:"Set Signal Aspect #16 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
+      String(localized:"Set Aspect #16", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #16.", comment:"This is used for a tooltip."),
       .signalEvents,
       .eventId
     ),
     .signalSetState16EventId
     : (
-      String(localized:"Set Signal Aspect #17 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
+      String(localized:"Set Aspect #17", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #17.", comment:"This is used for a tooltip."),
       .signalEvents,
       .eventId
     ),
     .signalSetState17EventId
     : (
-      String(localized:"Set Signal Aspect #18 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
+      String(localized:"Set Aspect #18", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #18.", comment:"This is used for a tooltip."),
       .signalEvents,
       .eventId
     ),
     .signalSetState18EventId
     : (
-      String(localized:"Set Signal Aspect #19 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
+      String(localized:"Set Aspect #19", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #19.", comment:"This is used for a tooltip."),
       .signalEvents,
       .eventId
     ),
     .signalSetState19EventId
     : (
-      String(localized:"Set Signal Aspect #20 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
+      String(localized:"Set Aspect #20", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #20.", comment:"This is used for a tooltip."),
       .signalEvents,
       .eventId
     ),
     .signalSetState20EventId
     : (
-      String(localized:"Set Signal Aspect #21 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
+      String(localized:"Set Aspect #21", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #21.", comment:"This is used for a tooltip."),
       .signalEvents,
       .eventId
     ),
     .signalSetState21EventId
     : (
-      String(localized:"Set Signal Aspect #22 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
+      String(localized:"Set Aspect #22", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #22.", comment:"This is used for a tooltip."),
       .signalEvents,
       .eventId
     ),
     .signalSetState22EventId
     : (
-      String(localized:"Set Signal Aspect #23 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
+      String(localized:"Set Aspect #23", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #23.", comment:"This is used for a tooltip."),
       .signalEvents,
       .eventId
     ),
     .signalSetState23EventId
     : (
-      String(localized:"Set Signal Aspect #24 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
+      String(localized:"Set Aspect #24", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #24.", comment:"This is used for a tooltip."),
       .signalEvents,
       .eventId
     ),
     .signalSetState24EventId
     : (
-      String(localized:"Set Signal Aspect #25 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
+      String(localized:"Set Aspect #25", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #25.", comment:"This is used for a tooltip."),
       .signalEvents,
       .eventId
     ),
     .signalSetState25EventId
     : (
-      String(localized:"Set Signal Aspect #26 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
+      String(localized:"Set Aspect #26", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #26.", comment:"This is used for a tooltip."),
       .signalEvents,
       .eventId
     ),
     .signalSetState26EventId
     : (
-      String(localized:"Set Signal Aspect #27 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
+      String(localized:"Set Aspect #27", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #27.", comment:"This is used for a tooltip."),
       .signalEvents,
       .eventId
     ),
     .signalSetState27EventId
     : (
-      String(localized:"Set Signal Aspect #28 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
+      String(localized:"Set Aspect #28", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #28.", comment:"This is used for a tooltip."),
       .signalEvents,
       .eventId
     ),
     .signalSetState28EventId
     : (
-      String(localized:"Set Signal Aspect #29 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
+      String(localized:"Set Aspect #29", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #29.", comment:"This is used for a tooltip."),
       .signalEvents,
       .eventId
     ),
     .signalSetState29EventId
     : (
-      String(localized:"Set Signal Aspect #30 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
+      String(localized:"Set Aspect #30", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #30.", comment:"This is used for a tooltip."),
       .signalEvents,
       .eventId
     ),
     .signalSetState30EventId
     : (
-      String(localized:"Set Signal Aspect #31 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
+      String(localized:"Set Aspect #31", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #31.", comment:"This is used for a tooltip."),
       .signalEvents,
       .eventId
     ),
     .signalSetState31EventId
     : (
-      String(localized:"Set Signal Aspect #32 Event ID", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
+      String(localized:"Set Aspect #32", comment:"This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."),
       String(localized:"Event ID to send to set the signal to aspect #32.", comment:"This is used for a tooltip."),
       .signalEvents,
       .eventId
@@ -1321,6 +1321,8 @@ public enum LayoutInspectorProperty : Int, CaseIterable {
     ),
   ]
   
+  // MARK: Public Class Properties
+  
   public static var inspectorPropertyFields: [LayoutInspectorPropertyField] {
     
     var result : [LayoutInspectorPropertyField] = []
@@ -1347,12 +1349,13 @@ public enum LayoutInspectorProperty : Int, CaseIterable {
         let comboBox = MyComboBox()
         comboBox.isEditable = false
         field.control = comboBox
+        initComboBox(property: field.property, comboBox: comboBox)
       case .eventId:
         let textField = NSTextField()
         textField.placeholderString = "00.00.00.00.00.00.00.00"
         field.control = textField
       case .label:
-        let textField = NSTextField(labelWithString: item.label)
+        let textField = NSTextField(labelWithString: "")
         field.control = textField
       case .textField:
         let textField = NSTextField()
@@ -1366,31 +1369,27 @@ public enum LayoutInspectorProperty : Int, CaseIterable {
       
       view.translatesAutoresizingMaskIntoConstraints = false
       
+      /// https://manasaprema04.medium.com/autolayout-fundamental-522f0a6e5790
+      
       field.label!.translatesAutoresizingMaskIntoConstraints = false
       field.label!.fontSize = labelFontSize
       field.label!.alignment = .right
+      field.label!.setContentHuggingPriority(NSLayoutConstraint.Priority(rawValue: 250), for: .horizontal)
+ //     field.label!.lineBreakMode = .byWordWrapping
+ //     field.label!.maximumNumberOfLines = 0
+ //     field.label!.preferredMaxLayoutWidth = 120.0
 
       view.addSubview(field.label!)
       
       field.control!.translatesAutoresizingMaskIntoConstraints = false
       field.control!.fontSize = textFontSize
-      
+      field.control!.setContentHuggingPriority(NSLayoutConstraint.Priority(rawValue: 1), for: .horizontal)
+
       view.addSubview(field.control!)
-      view.backgroundColor = NSColor.yellow.cgColor
+//      view.backgroundColor = NSColor.yellow.cgColor
 
       field.view = view
-      
-      /// Note to self: Views within a StackView must not have constraints to the outside world as this will lock the StackView size.
-      /// They must only have internal constraints to the view that is added to the StackView.
-      ///
-      constraints.append(field.view!.heightAnchor.constraint(greaterThanOrEqualTo: field.label!.heightAnchor))
-      constraints.append(field.view!.heightAnchor.constraint(greaterThanOrEqualTo: field.control!.heightAnchor))
-      constraints.append(field.label!.leadingAnchor.constraint(equalTo: field.view!.leadingAnchor, constant: 20))
-      constraints.append(field.control!.leadingAnchor.constraint(equalToSystemSpacingAfter: field.label!.trailingAnchor, multiplier: 1.0))
-      constraints.append(field.control!.trailingAnchor.constraint(equalTo: field.view!.trailingAnchor))
- //     constraints.append(field.control!.widthAnchor.constraint(greaterThanOrEqualToConstant: 100))
-      constraints.append(field.control!.centerYAnchor.constraint(equalTo: field.view!.centerYAnchor))
-      constraints.append(field.label!.centerYAnchor.constraint(equalTo: field.view!.centerYAnchor))
+      field.view!.setContentHuggingPriority(NSLayoutConstraint.Priority(rawValue: 500), for: .horizontal)
 
       result.append(field)
       
@@ -1402,4 +1401,99 @@ public enum LayoutInspectorProperty : Int, CaseIterable {
     
   }
   
+  // MARK: Private Class Methods
+  
+  private static func initComboBox(property:LayoutInspectorProperty, comboBox:MyComboBox) {
+    
+    switch property {
+    case .orientation:
+      Orientation.populate(comboBox: comboBox)
+    case .groupId:
+      break
+    case .directionality:
+      RouteDirection.populate(comboBox: comboBox)
+    case .electrification:
+      TrackElectrificationType.populate(comboBox: comboBox)
+    case .trackGauge:
+      TrackGauge.populate(comboBox: comboBox)
+    case .link:
+      break
+    case .turnoutMotorType:
+      TurnoutMotorType.populate(comboBox: comboBox)
+    case .sensorType:
+      break
+    case .signalType:
+      break
+    case .signalRouteDirection:
+      RouteDirection.populate(comboBox: comboBox)
+    case .speedConstraintDPType0:
+      break
+    case .speedConstraintDPType1:
+      break
+    case .speedConstraintDPType2:
+      break
+    case .speedConstraintDPType3:
+      break
+    case .speedConstraintDPType4:
+      break
+    case .speedConstraintDPType5:
+      break
+    case .speedConstraintDPType6:
+      break
+    case .speedConstraintDPType7:
+      break
+    case .speedConstraintDPType8:
+      break
+    case .speedConstraintDPType9:
+      break
+    case .speedConstraintDPType10:
+      break
+    case .speedConstraintDPType11:
+      break
+    case .speedConstraintDPType12:
+      break
+    case .speedConstraintDPType13:
+      break
+    case .speedConstraintDPType14:
+      break
+    case .speedConstraintDPType15:
+      break
+    case .speedConstraintDNType0:
+      break
+    case .speedConstraintDNType1:
+      break
+    case .speedConstraintDNType2:
+      break
+    case .speedConstraintDNType3:
+      break
+    case .speedConstraintDNType4:
+      break
+    case .speedConstraintDNType5:
+      break
+    case .speedConstraintDNType6:
+      break
+    case .speedConstraintDNType7:
+      break
+    case .speedConstraintDNType8:
+      break
+    case .speedConstraintDNType9:
+      break
+    case .speedConstraintDNType10:
+      break
+    case .speedConstraintDNType11:
+      break
+    case .speedConstraintDNType12:
+      break
+    case .speedConstraintDNType13:
+      break
+    case .speedConstraintDNType14:
+      break
+    case .speedConstraintDNType15:
+      break
+    default:
+      break
+    }
+  }
+  
+
 }

@@ -451,8 +451,11 @@
     "Acknowledgements" : {
 
     },
+    "Activate Latency (%%UNITS_TIME%%)" : {
+      "comment" : "This is used for the title of an input field where the user enters the time delay between a sensor being activated and when it sends the event report. The %%UNITS_TIME%% will be replaced at runtime by the name of the user selected units of time - place this at an approprate position in the title for the language."
+    },
     "Activated" : {
-      "comment" : "Used to indicate a layout's state",
+      "comment" : "This is used for the title of an input field where the user enters a specific event ID.\nUsed to indicate a layout's state",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -826,8 +829,8 @@
     "Block" : {
       "comment" : "This is used to describe a piece of track."
     },
-    "Block Events" : {
-      "comment" : "This is used for the title of the Block Events section in the Layout Builder."
+    "Block Event IDs" : {
+      "comment" : "This is used for the title of the Block Event IDs section in the Layout Builder."
     },
     "Block Settings" : {
       "comment" : "This is used for the title of the Block Settings section in the Layout Builder."
@@ -1148,6 +1151,18 @@
           }
         }
       }
+    },
+    "Close Switch #1" : {
+      "comment" : "This is used for the title of an input field where the user can select which event ID to send to close a turnout switch."
+    },
+    "Close Switch #2" : {
+      "comment" : "This is used for the title of an input field where the user can select which event ID to send to close a turnout switch."
+    },
+    "Close Switch #3" : {
+      "comment" : "This is used for the title of an input field where the user can select which event ID to send to close a turnout switch."
+    },
+    "Close Switch #4" : {
+      "comment" : "This is used for the title of an input field where the user can select which event ID to send to close a turnout switch."
     },
     "Closed" : {
       "comment" : "Used to indicate the state of a turnout",
@@ -1836,8 +1851,11 @@
         }
       }
     },
+    "Deactivate Latency (%%UNITS_TIME%%)" : {
+      "comment" : "This is used for the title of an input field where the user enters the time delay between a sensor being deactivated and when it sends the event report. The %%UNITS_TIME%% will be replaced at runtime by the name of the user selected units of time - place this at an approprate position in the title for the language."
+    },
     "Deactivated" : {
-      "comment" : "Used to indicate a layout's state",
+      "comment" : "This is used for the title of an input field where the user enters a specific event ID.\nUsed to indicate a layout's state",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2339,13 +2357,13 @@
         }
       }
     },
-    "Enter Detection Zone Event ID" : {
+    "Enter Detection Zone" : {
       "comment" : "This is used for the title of an input field where the user can enter an event ID."
     },
     "Enter Full Screen" : {
       "comment" : "Used for a menu title"
     },
-    "Enter Transponding Zone Event ID" : {
+    "Enter Transponding Zone" : {
       "comment" : "This is used for the title of an input field where the user can enter an event ID."
     },
     "Error" : {
@@ -2590,10 +2608,10 @@
         }
       }
     },
-    "Exit Detection Zone Event ID" : {
+    "Exit Detection Zone" : {
       "comment" : "This is used for the title of an input field where the user can enter an event ID."
     },
-    "Exit Transponding Zone Event ID" : {
+    "Exit Transponding Zone" : {
       "comment" : "This is used for the title of an input field where the user can enter an event ID."
     },
     "Fan Operation" : {
@@ -3493,7 +3511,7 @@
     "Link Error Code 4" : {
 
     },
-    "Location Services Event ID" : {
+    "Location Services" : {
       "comment" : "This is used for the title of an input field where the user can enter an event ID."
     },
     "Location Services Report" : {
@@ -4125,6 +4143,9 @@
         }
       }
     },
+    "No Selection" : {
+
+    },
     "Node ID" : {
       "comment" : "Used for title of the Node ID segment of a CDI",
       "localizations" : {
@@ -4168,6 +4189,9 @@
     },
     "Northern Ireland" : {
       "comment" : "This is the name of a country."
+    },
+    "Not Applicable" : {
+
     },
     "Not Electrified" : {
       "comment" : "Used to indicate that the track is not electrified, i.e. only steam and diesels can use it",
@@ -4547,6 +4571,9 @@
     },
     "Poland" : {
       "comment" : "This is the name of a country."
+    },
+    "Position (%%UNITS_ACTUAL_DISTANCE%%)" : {
+      "comment" : "This is used for the title of an input field that the user enters the position of a sensor device."
     },
     "Post Office" : {
 
@@ -4992,6 +5019,9 @@
     "Rotation angle of the switchboard item." : {
       "comment" : "This is used for a tooltip."
     },
+    "Route Direction" : {
+      "comment" : "This is used for the title of a combo box which the user selects the directionality applicable to the signal."
+    },
     "RTS/CTS" : {
       "comment" : "Used to indicate that serial port uses the RTS/CTS lines for hardware flow control",
       "localizations" : {
@@ -5183,26 +5213,8 @@
     "Sensor" : {
       "comment" : "This is used to describe a switchboard item."
     },
-    "Sensor Activate Latency (%%UNITS_TIME%%)" : {
-      "comment" : "This is used for the title of an input field where the user enters the time delay between a sensor being activated and when it sends the event report. The %%UNITS_TIME%% will be replaced at runtime by the name of the user selected units of time - place this at an approprate position in the title for the language."
-    },
-    "Sensor Activated Event ID" : {
-      "comment" : "This is used for the title of an input field where the user enters a specific event ID."
-    },
-    "Sensor Deactivate Latency (%%UNITS_TIME%%)" : {
-      "comment" : "This is used for the title of an input field where the user enters the time delay between a sensor being deactivated and when it sends the event report. The %%UNITS_TIME%% will be replaced at runtime by the name of the user selected units of time - place this at an approprate position in the title for the language."
-    },
-    "Sensor Deactivated Event ID" : {
-      "comment" : "This is used for the title of an input field where the user enters a specific event ID."
-    },
-    "Sensor Events" : {
-      "comment" : "This is used for the title of the Sensor Events section in the Layout Builder."
-    },
-    "Sensor Location Services Event ID" : {
-      "comment" : "This is used for the title of an input field where the user can enter an event ID."
-    },
-    "Sensor Position (%%UNITS_ACTUAL_DISTANCE%%)" : {
-      "comment" : "This is used for the title of an input field that the user enters the position of a sensor device."
+    "Sensor Event IDs" : {
+      "comment" : "This is used for the title of the Sensor Event IDs section in the Layout Builder."
     },
     "Sensor position from the start of the block." : {
       "comment" : "This is used for a tooltip."
@@ -5210,106 +5222,103 @@
     "Sensor Settings" : {
       "comment" : "This is used for the title of the Sensor Settings section in the Layout Builder."
     },
-    "Sensor Type" : {
-      "comment" : "This is used for the title of a combo box that the user selects the type of sensor."
-    },
     "Sensors" : {
       "comment" : "Used for the title of a switchboard item palette in LayoutBuilder"
     },
-    "Set Signal Aspect #1 Event ID" : {
+    "Set Aspect #1" : {
       "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
     },
-    "Set Signal Aspect #2 Event ID" : {
+    "Set Aspect #2" : {
       "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
     },
-    "Set Signal Aspect #3 Event ID" : {
+    "Set Aspect #3" : {
       "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
     },
-    "Set Signal Aspect #4 Event ID" : {
+    "Set Aspect #4" : {
       "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
     },
-    "Set Signal Aspect #5 Event ID" : {
+    "Set Aspect #5" : {
       "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
     },
-    "Set Signal Aspect #6 Event ID" : {
+    "Set Aspect #6" : {
       "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
     },
-    "Set Signal Aspect #7 Event ID" : {
+    "Set Aspect #7" : {
       "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
     },
-    "Set Signal Aspect #8 Event ID" : {
+    "Set Aspect #8" : {
       "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
     },
-    "Set Signal Aspect #9 Event ID" : {
+    "Set Aspect #9" : {
       "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
     },
-    "Set Signal Aspect #10 Event ID" : {
+    "Set Aspect #10" : {
       "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
     },
-    "Set Signal Aspect #11 Event ID" : {
+    "Set Aspect #11" : {
       "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
     },
-    "Set Signal Aspect #12 Event ID" : {
+    "Set Aspect #12" : {
       "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
     },
-    "Set Signal Aspect #13 Event ID" : {
+    "Set Aspect #13" : {
       "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
     },
-    "Set Signal Aspect #14 Event ID" : {
+    "Set Aspect #14" : {
       "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
     },
-    "Set Signal Aspect #15 Event ID" : {
+    "Set Aspect #15" : {
       "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
     },
-    "Set Signal Aspect #16 Event ID" : {
+    "Set Aspect #16" : {
       "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
     },
-    "Set Signal Aspect #17 Event ID" : {
+    "Set Aspect #17" : {
       "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
     },
-    "Set Signal Aspect #18 Event ID" : {
+    "Set Aspect #18" : {
       "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
     },
-    "Set Signal Aspect #19 Event ID" : {
+    "Set Aspect #19" : {
       "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
     },
-    "Set Signal Aspect #20 Event ID" : {
+    "Set Aspect #20" : {
       "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
     },
-    "Set Signal Aspect #21 Event ID" : {
+    "Set Aspect #21" : {
       "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
     },
-    "Set Signal Aspect #22 Event ID" : {
+    "Set Aspect #22" : {
       "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
     },
-    "Set Signal Aspect #23 Event ID" : {
+    "Set Aspect #23" : {
       "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
     },
-    "Set Signal Aspect #24 Event ID" : {
+    "Set Aspect #24" : {
       "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
     },
-    "Set Signal Aspect #25 Event ID" : {
+    "Set Aspect #25" : {
       "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
     },
-    "Set Signal Aspect #26 Event ID" : {
+    "Set Aspect #26" : {
       "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
     },
-    "Set Signal Aspect #27 Event ID" : {
+    "Set Aspect #27" : {
       "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
     },
-    "Set Signal Aspect #28 Event ID" : {
+    "Set Aspect #28" : {
       "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
     },
-    "Set Signal Aspect #29 Event ID" : {
+    "Set Aspect #29" : {
       "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
     },
-    "Set Signal Aspect #30 Event ID" : {
+    "Set Aspect #30" : {
       "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
     },
-    "Set Signal Aspect #31 Event ID" : {
+    "Set Aspect #31" : {
       "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
     },
-    "Set Signal Aspect #32 Event ID" : {
+    "Set Aspect #32" : {
       "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
     },
     "Short Whistle" : {
@@ -5412,20 +5421,11 @@
     "Signal" : {
       "comment" : "This is used to describe a switchboard item."
     },
-    "Signal Events" : {
-      "comment" : "This is used for the title of the Signal Events section in the Layout Builder."
-    },
-    "Signal Route Direction" : {
-      "comment" : "This is used for the title of a combo box which the user selects the directionality applicable to the signal."
+    "Signal Event IDs" : {
+      "comment" : "This is used for the title of the Signal Event IDs section in the Layout Builder."
     },
     "Signal Settings" : {
       "comment" : "This is used for the title of the Signal Settings section in the Layout Builder."
-    },
-    "Signal Stop Position (%%UNITS_ACTUAL_DISTANCE%%)" : {
-
-    },
-    "Signal Type" : {
-      "comment" : "This is used for the title of a combo box that the user selects the signal type."
     },
     "Signals" : {
       "comment" : "Used for the title of a switchboard item palette in LayoutBuilder"
@@ -5662,6 +5662,9 @@
         }
       }
     },
+    "Stop Position (%%UNITS_ACTUAL_DISTANCE%%)" : {
+
+    },
     "Stopped" : {
       "comment" : "Used to indicate a clock is stopped",
       "localizations" : {
@@ -5723,52 +5726,28 @@
     "Success" : {
 
     },
-    "Switch #1 Close Event ID" : {
-      "comment" : "This is used for the title of an input field where the user can select which event ID to send to close a turnout switch."
-    },
-    "Switch #1 Closed Event ID" : {
+    "Switch #1 Closed" : {
       "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been closed."
     },
-    "Switch #1 Throw Event ID" : {
-      "comment" : "This is used for the title of an input field where the user can select which event ID to send to throw a turnout switch."
-    },
-    "Switch #1 Thrown Event ID" : {
+    "Switch #1 Thrown" : {
       "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been thrown."
     },
-    "Switch #2 Close Event ID" : {
-      "comment" : "This is used for the title of an input field where the user can select which event ID to send to close a turnout switch."
-    },
-    "Switch #2 Closed Event ID" : {
+    "Switch #2 Closed" : {
       "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been closed."
     },
-    "Switch #2 Throw Event ID" : {
-      "comment" : "This is used for the title of an input field where the user can select which event ID to send to throw a turnout switch."
-    },
-    "Switch #2 Thrown Event ID" : {
+    "Switch #2 Thrown" : {
       "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been thrown."
     },
-    "Switch #3 Close Event ID" : {
-      "comment" : "This is used for the title of an input field where the user can select which event ID to send to close a turnout switch."
-    },
-    "Switch #3 Closed Event ID" : {
+    "Switch #3 Closed" : {
       "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been closed."
     },
-    "Switch #3 Throw Event ID" : {
-      "comment" : "This is used for the title of an input field where the user can select which event ID to send to throw a turnout switch."
-    },
-    "Switch #3 Thrown Event ID" : {
+    "Switch #3 Thrown" : {
       "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been thrown."
     },
-    "Switch #4 Close Event ID" : {
-      "comment" : "This is used for the title of an input field where the user can select which event ID to send to close a turnout switch."
-    },
-    "Switch #4 Closed Event ID" : {
+    "Switch #4 Closed" : {
       "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been closed."
     },
-    "Switch #4 Throw Event ID" : {
-      "comment" : "This is used for the title of an input field where the user can select which event ID to send to throw a turnout switch."
-    },
-    "Switch #4 Thrown Event ID" : {
+    "Switch #4 Thrown" : {
       "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been thrown."
     },
     "Switch Board" : {
@@ -5882,6 +5861,9 @@
           }
         }
       }
+    },
+    "Switching Method" : {
+      "comment" : "This is used for the title of a combo box where the user can select the applicable turnout motor type."
     },
     "t" : {
       "comment" : "Used for the Throttle menu key equivalent",
@@ -6086,6 +6068,18 @@
         }
       }
     },
+    "Throw Switch #1" : {
+      "comment" : "This is used for the title of an input field where the user can select which event ID to send to throw a turnout switch."
+    },
+    "Throw Switch #2" : {
+      "comment" : "This is used for the title of an input field where the user can select which event ID to send to throw a turnout switch."
+    },
+    "Throw Switch #3" : {
+      "comment" : "This is used for the title of an input field where the user can select which event ID to send to throw a turnout switch."
+    },
+    "Throw Switch #4" : {
+      "comment" : "This is used for the title of an input field where the user can select which event ID to send to throw a turnout switch."
+    },
     "Thrown" : {
       "comment" : "Used to indicate the state of a turnout",
       "localizations" : {
@@ -6148,10 +6142,10 @@
     "Track Configuration" : {
       "comment" : "This is used for the title of the Track Configuration section in the Layout Builder."
     },
-    "Track Fault Cleared Event ID" : {
+    "Track Fault" : {
       "comment" : "This is used for the title of an input field where the user can enter an event ID."
     },
-    "Track Fault Event ID" : {
+    "Track Fault Cleared" : {
       "comment" : "This is used for the title of an input field where the user can enter an event ID."
     },
     "Track Gradient" : {
@@ -6249,14 +6243,14 @@
         }
       }
     },
-    "Turnout Events" : {
-      "comment" : "This is used for the title of the Turnout Events section in the Layout Builder."
+    "Turnout Control" : {
+      "comment" : "This is used for the title of the Turnout Control section in the Layout Builder."
+    },
+    "Turnout Event IDs" : {
+      "comment" : "This is used for the title of the Turnout Event IDs section in the Layout Builder."
     },
     "Turnout Left" : {
       "comment" : "This is used to describe a piece of track."
-    },
-    "Turnout Motor Type" : {
-      "comment" : "This is used for the title of a combo box where the user can select the applicable turnout motor type."
     },
     "Turnout Right" : {
       "comment" : "This is used to describe a piece of track."
@@ -6269,6 +6263,9 @@
     },
     "TX" : {
       "comment" : "This is an abbreviation of Transmit used for an LED label"
+    },
+    "Type" : {
+      "comment" : "This is used for the title of a combo box that the user selects the type of sensor."
     },
     "Type of sensor." : {
       "comment" : "This is used for a tooltip."

@@ -37,6 +37,250 @@ public enum SwitchBoardItemType : UInt16 {
 
   // MARK: Public Properties
   
+  public var properties : Set<LayoutInspectorProperty> {
+    var result : Set<LayoutInspectorProperty> = [
+      .panelId,
+      .panelName,
+      .itemType,
+      .name,
+      .description,
+      .xPos,
+      .yPos,
+      .orientation,
+      .groupId,
+    ]
+    switch self {
+    case .straight:
+      break
+    case .curve:
+      break
+    case .longCurve:
+      break
+    case .turnoutRight:
+      result = result.union([
+        .lengthRoute1,
+        .lengthRoute2,
+        .turnoutMotorType,
+        .sw1CloseEventId,
+        .sw1ThrowEventId,
+        .sw1ClosedEventId,
+        .sw1ThrownEventId,
+        ])
+    case .turnoutLeft:
+      result = result.union([
+        .lengthRoute1,
+        .lengthRoute2,
+        .turnoutMotorType,
+        .sw1CloseEventId,
+        .sw1ThrowEventId,
+        .sw1ClosedEventId,
+        .sw1ThrownEventId,
+      ])
+    case .cross:
+      result = result.union([
+        .lengthRoute1,
+        .lengthRoute2,
+      ])
+    case .diagonalCross:
+      result = result.union([
+        .lengthRoute1,
+        .lengthRoute2,
+      ])
+    case .yTurnout:
+      result = result.union([
+        .lengthRoute1,
+        .lengthRoute2,
+        .turnoutMotorType,
+        .sw1CloseEventId,
+        .sw1ThrowEventId,
+        .sw1ClosedEventId,
+        .sw1ThrownEventId,
+      ])
+    case .turnout3Way:
+      result = result.union([
+        .lengthRoute1,
+        .lengthRoute2,
+        .lengthRoute3,
+        .turnoutMotorType,
+        .sw1CloseEventId,
+        .sw1ThrowEventId,
+        .sw1ClosedEventId,
+        .sw1ThrownEventId,
+        .sw2CloseEventId,
+        .sw2ThrowEventId,
+        .sw2ClosedEventId,
+        .sw2ThrownEventId,
+      ])
+    case .leftCurvedTurnout:
+      result = result.union([
+        .lengthRoute1,
+        .lengthRoute2,
+        .turnoutMotorType,
+        .sw1CloseEventId,
+        .sw1ThrowEventId,
+        .sw1ClosedEventId,
+        .sw1ThrownEventId,
+      ])
+    case .rightCurvedTurnout:
+      result = result.union([
+        .lengthRoute1,
+        .lengthRoute2,
+        .turnoutMotorType,
+        .sw1CloseEventId,
+        .sw1ThrowEventId,
+        .sw1ClosedEventId,
+        .sw1ThrownEventId,
+      ])
+    case .singleSlip:
+      result = result.union([
+      ])
+    case .doubleSlip:
+      result = result.union([
+      ])
+    case .buffer:
+      break
+    case .block:
+      result = result.union([
+        .directionality,
+        .allowShunt,
+        .electrification,
+        .isCriticalSection,
+        .isHiddenSection,
+        .trackGradient,
+        .trackGauge,
+        .lengthRoute1,
+      ])
+    case .sensor:
+      result = result.union([
+        .sensorType,
+        .sensorPosition,
+        .sensorActivateLatency,
+        .sensorDeactivateLatency,
+        .sensorActivatedEventId,
+        .sensorDeactivatedEventId,
+        .sensorLocationServicesEventId,
+      ])
+    case .link:
+      result = result.union([
+        .link,
+      ])
+    case .platform:
+      break
+    case .signal:
+      result = result.union([
+        .signalType,
+        .signalRouteDirection,
+        .signalPosition,
+        .signalSetState0EventId,
+        .signalSetState1EventId,
+        .signalSetState2EventId,
+        .signalSetState3EventId,
+        .signalSetState4EventId,
+        .signalSetState5EventId,
+        .signalSetState6EventId,
+        .signalSetState7EventId,
+        .signalSetState8EventId,
+        .signalSetState9EventId,
+        .signalSetState10EventId,
+        .signalSetState11EventId,
+        .signalSetState12EventId,
+        .signalSetState13EventId,
+        .signalSetState14EventId,
+        .signalSetState15EventId,
+        .signalSetState16EventId,
+        .signalSetState17EventId,
+        .signalSetState18EventId,
+        .signalSetState19EventId,
+        .signalSetState20EventId,
+        .signalSetState21EventId,
+        .signalSetState22EventId,
+        .signalSetState23EventId,
+        .signalSetState24EventId,
+        .signalSetState25EventId,
+        .signalSetState26EventId,
+        .signalSetState27EventId,
+        .signalSetState28EventId,
+        .signalSetState29EventId,
+        .signalSetState30EventId,
+        .signalSetState31EventId,
+      ])
+    case .none:
+      break
+    }
+    if isGroup {
+      result = result.union([
+        .enterDetectionZoneEventId,
+        .exitDetectionZoneEventId,
+        .enterTranspondingZoneEventId,
+        .exitTranspondingZoneEventId,
+        .trackFaultEventId,
+        .trackFaultClearedEventId,
+        .locationServicesEventId,
+        .speedConstraintDNType0,
+        .speedConstraintDNValue0,
+        .speedConstraintDPType0,
+        .speedConstraintDPValue0,
+        .speedConstraintDNType1,
+        .speedConstraintDNValue1,
+        .speedConstraintDPType1,
+        .speedConstraintDPValue1,
+        .speedConstraintDNType3,
+        .speedConstraintDNValue3,
+        .speedConstraintDPType3,
+        .speedConstraintDPValue3,
+        .speedConstraintDNType4,
+        .speedConstraintDNValue4,
+        .speedConstraintDPType4,
+        .speedConstraintDPValue4,
+        .speedConstraintDNType5,
+        .speedConstraintDNValue5,
+        .speedConstraintDPType5,
+        .speedConstraintDPValue5,
+        .speedConstraintDNType6,
+        .speedConstraintDNValue6,
+        .speedConstraintDPType6,
+        .speedConstraintDPValue6,
+        .speedConstraintDNType7,
+        .speedConstraintDNValue7,
+        .speedConstraintDPType7,
+        .speedConstraintDPValue7,
+        .speedConstraintDNType8,
+        .speedConstraintDNValue8,
+        .speedConstraintDPType8,
+        .speedConstraintDPValue8,
+        .speedConstraintDNType9,
+        .speedConstraintDNValue9,
+        .speedConstraintDPType9,
+        .speedConstraintDPValue9,
+        .speedConstraintDNType10,
+        .speedConstraintDNValue10,
+        .speedConstraintDPType10,
+        .speedConstraintDPValue10,
+        .speedConstraintDNType11,
+        .speedConstraintDNValue11,
+        .speedConstraintDPType11,
+        .speedConstraintDPValue11,
+        .speedConstraintDNType12,
+        .speedConstraintDNValue12,
+        .speedConstraintDPType12,
+        .speedConstraintDPValue12,
+        .speedConstraintDNType13,
+        .speedConstraintDNValue13,
+        .speedConstraintDPType13,
+        .speedConstraintDPValue13,
+        .speedConstraintDNType14,
+        .speedConstraintDNValue14,
+        .speedConstraintDPType14,
+        .speedConstraintDPValue14,
+        .speedConstraintDNType15,
+        .speedConstraintDNValue15,
+        .speedConstraintDPType15,
+        .speedConstraintDPValue15,
+      ])
+    }
+    return result
+  }
+  
   public var visibility : OpenLCBNodeVisibility {
     guard let result = SwitchBoardItemType.visibility[self] else {
       return .visibilityNone

@@ -56,7 +56,7 @@ public enum LayoutInspectorGroup : Int, CaseIterable {
       .attributes
     ),
     .blockEvents : (
-      String(localized: "Block Events", comment: "This is used for the title of the Block Events section in the Layout Builder."),
+      String(localized: "Block Event IDs", comment: "This is used for the title of the Block Event IDs section in the Layout Builder."),
       .events
     ),
     .sensorSettings : (
@@ -68,11 +68,11 @@ public enum LayoutInspectorGroup : Int, CaseIterable {
       .attributes
     ),
     .turnoutControl : (
-      String(localized: "Identity", comment: "This is used for the title of the Turnout Control section in the Layout Builder."),
+      String(localized: "Turnout Control", comment: "This is used for the title of the Turnout Control section in the Layout Builder."),
       .attributes
     ),
     .signalEvents : (
-      String(localized: "Signal Events", comment: "This is used for the title of the Signal Events section in the Layout Builder."),
+      String(localized: "Signal Event IDs", comment: "This is used for the title of the Signal Event IDs section in the Layout Builder."),
       .events
     ),
     .speedConstraintsDP : (
@@ -84,11 +84,11 @@ public enum LayoutInspectorGroup : Int, CaseIterable {
       .speedConstraints
     ),
     .turnoutEvents : (
-      String(localized: "Turnout Events", comment: "This is used for the title of the Turnout Events section in the Layout Builder."),
+      String(localized: "Turnout Event IDs", comment: "This is used for the title of the Turnout Event IDs section in the Layout Builder."),
       .events
     ),
     .sensorEvents : (
-      String(localized: "Sensor Events", comment: "This is used for the title of the Sensor Events section in the Layout Builder."),
+      String(localized: "Sensor Event IDs", comment: "This is used for the title of the Sensor Event IDs section in the Layout Builder."),
       .events
     ),
   ]
