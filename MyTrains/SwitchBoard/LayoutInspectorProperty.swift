@@ -22,176 +22,180 @@ public enum LayoutInspectorProperty : Int, CaseIterable {
   case panelId                       = 1
   case panelName                     = 2
   case itemType                      = 3
+  case itemId                        = 4
   
   // Attributes Inspector
   /// General Settings
-  case name                          = 4
-  case description                   = 5
-  case xPos                          = 6
-  case yPos                          = 7
-  case orientation                   = 8
-  case groupId                       = 9
+  case name                          = 5
+  case description                   = 6
+  case xPos                          = 7
+  case yPos                          = 8
+  case orientation                   = 9
+  case groupId                       = 10
   /// Block Settings
-  case directionality                = 10
-  case allowShunt                    = 11
-  case electrification               = 12
-  case isCriticalSection             = 13
-  case isHiddenSection               = 14
+  case directionality                = 11
+  case allowShunt                    = 12
+  case electrification               = 13
+  case isCriticalSection             = 14
+  case isHiddenSection               = 15
   /// Track Configuration
-  case trackGradient                 = 15
-  case trackGauge                    = 16
-  case lengthRoute1                  = 17
-  case lengthRoute2                  = 18
-  case lengthRoute3                  = 19
-  case lengthRoute4                  = 20
-  case lengthRoute5                  = 21
-  case lengthRoute6                  = 22
-  case lengthRoute7                  = 23
-  case lengthRoute8                  = 24
-  case link                          = 25
+  case trackGradient                 = 16
+  case trackGauge                    = 17
+  case lengthRoute1                  = 18
+  case lengthRoute2                  = 19
+  case lengthRoute3                  = 20
+  case lengthRoute4                  = 21
+  case lengthRoute5                  = 22
+  case lengthRoute6                  = 23
+  case lengthRoute7                  = 24
+  case lengthRoute8                  = 25
+  case link                          = 26
   /// Turnout Control
-  case turnoutMotorType              = 26
+  case turnoutMotorType1             = 27
+  case turnoutMotorType2             = 28
+  case turnoutMotorType3             = 29
+  case turnoutMotorType4             = 30
   /// Sensor Settings
-  case sensorType                    = 27
-  case sensorPosition                = 28
-  case sensorActivateLatency         = 29
-  case sensorDeactivateLatency       = 30
+  case sensorType                    = 31
+  case sensorPosition                = 32
+  case sensorActivateLatency         = 33
+  case sensorDeactivateLatency       = 34
   /// Signal Settings
-  case signalType                    = 31
-  case signalRouteDirection          = 32
-  case signalPosition                = 33
+  case signalType                    = 35
+  case signalRouteDirection          = 36
+  case signalPosition                = 37
 
   // Events
   /// Block Events
-  case enterDetectionZoneEventId     = 34
-  case exitDetectionZoneEventId      = 35
-  case enterTranspondingZoneEventId  = 36
-  case exitTranspondingZoneEventId   = 37
-  case trackFaultEventId             = 38
-  case trackFaultClearedEventId      = 39
-  case locationServicesEventId       = 40
+  case enterDetectionZoneEventId     = 38
+  case exitDetectionZoneEventId      = 39
+  case enterTranspondingZoneEventId  = 40
+  case exitTranspondingZoneEventId   = 41
+  case trackFaultEventId             = 42
+  case trackFaultClearedEventId      = 43
+  case locationServicesEventId       = 44
   /// Turnout Events
-  case sw1ThrowEventId               = 41
-  case sw1CloseEventId               = 42
-  case sw1ThrownEventId              = 43
-  case sw1ClosedEventId              = 44
-  case sw2ThrowEventId               = 45
-  case sw2CloseEventId               = 46
-  case sw2ThrownEventId              = 47
-  case sw2ClosedEventId              = 48
-  case sw3ThrowEventId               = 49
-  case sw3CloseEventId               = 50
-  case sw3ThrownEventId              = 51
-  case sw3ClosedEventId              = 52
-  case sw4ThrowEventId               = 53
-  case sw4CloseEventId               = 54
-  case sw4ThrownEventId              = 55
-  case sw4ClosedEventId              = 56
+  case sw1ThrowEventId               = 45
+  case sw1CloseEventId               = 46
+  case sw1ThrownEventId              = 47
+  case sw1ClosedEventId              = 48
+  case sw2ThrowEventId               = 49
+  case sw2CloseEventId               = 50
+  case sw2ThrownEventId              = 51
+  case sw2ClosedEventId              = 52
+  case sw3ThrowEventId               = 53
+  case sw3CloseEventId               = 54
+  case sw3ThrownEventId              = 55
+  case sw3ClosedEventId              = 56
+  case sw4ThrowEventId               = 57
+  case sw4CloseEventId               = 58
+  case sw4ThrownEventId              = 59
+  case sw4ClosedEventId              = 60
   /// Sensor Events
-  case sensorActivatedEventId        = 57
-  case sensorDeactivatedEventId      = 58
-  case sensorLocationServicesEventId = 59
+  case sensorActivatedEventId        = 61
+  case sensorDeactivatedEventId      = 62
+  case sensorLocationServicesEventId = 63
   /// Signal Events
-  case signalSetState0EventId        = 60
-  case signalSetState1EventId        = 61
-  case signalSetState2EventId        = 62
-  case signalSetState3EventId        = 63
-  case signalSetState4EventId        = 64
-  case signalSetState5EventId        = 65
-  case signalSetState6EventId        = 66
-  case signalSetState7EventId        = 67
-  case signalSetState8EventId        = 68
-  case signalSetState9EventId        = 69
-  case signalSetState10EventId       = 70
-  case signalSetState11EventId       = 71
-  case signalSetState12EventId       = 72
-  case signalSetState13EventId       = 73
-  case signalSetState14EventId       = 74
-  case signalSetState15EventId       = 75
-  case signalSetState16EventId       = 76
-  case signalSetState17EventId       = 77
-  case signalSetState18EventId       = 78
-  case signalSetState19EventId       = 79
-  case signalSetState20EventId       = 80
-  case signalSetState21EventId       = 81
-  case signalSetState22EventId       = 82
-  case signalSetState23EventId       = 83
-  case signalSetState24EventId       = 84
-  case signalSetState25EventId       = 85
-  case signalSetState26EventId       = 86
-  case signalSetState27EventId       = 87
-  case signalSetState28EventId       = 88
-  case signalSetState29EventId       = 89
-  case signalSetState30EventId       = 90
-  case signalSetState31EventId       = 91
-  
+  case signalSetState0EventId        = 64
+  case signalSetState1EventId        = 65
+  case signalSetState2EventId        = 66
+  case signalSetState3EventId        = 67
+  case signalSetState4EventId        = 68
+  case signalSetState5EventId        = 69
+  case signalSetState6EventId        = 70
+  case signalSetState7EventId        = 71
+  case signalSetState8EventId        = 72
+  case signalSetState9EventId        = 73
+  case signalSetState10EventId       = 74
+  case signalSetState11EventId       = 75
+  case signalSetState12EventId       = 76
+  case signalSetState13EventId       = 77
+  case signalSetState14EventId       = 78
+  case signalSetState15EventId       = 79
+  case signalSetState16EventId       = 80
+  case signalSetState17EventId       = 81
+  case signalSetState18EventId       = 82
+  case signalSetState19EventId       = 83
+  case signalSetState20EventId       = 84
+  case signalSetState21EventId       = 85
+  case signalSetState22EventId       = 86
+  case signalSetState23EventId       = 87
+  case signalSetState24EventId       = 88
+  case signalSetState25EventId       = 89
+  case signalSetState26EventId       = 90
+  case signalSetState27EventId       = 91
+  case signalSetState28EventId       = 92
+  case signalSetState29EventId       = 93
+  case signalSetState30EventId       = 94
+  case signalSetState31EventId       = 95
+
   // Speed Constraints
   /// Direction Previous
-  case speedConstraintDPType0        = 92
-  case speedConstraintDPValue0       = 93
-  case speedConstraintDPType1        = 94
-  case speedConstraintDPValue1       = 95
-  case speedConstraintDPType2        = 96
-  case speedConstraintDPValue2       = 97
-  case speedConstraintDPType3        = 98
-  case speedConstraintDPValue3       = 99
-  case speedConstraintDPType4        = 100
-  case speedConstraintDPValue4       = 101
-  case speedConstraintDPType5        = 102
-  case speedConstraintDPValue5       = 103
-  case speedConstraintDPType6        = 104
-  case speedConstraintDPValue6       = 105
-  case speedConstraintDPType7        = 106
-  case speedConstraintDPValue7       = 107
-  case speedConstraintDPType8        = 108
-  case speedConstraintDPValue8       = 109
-  case speedConstraintDPType9        = 110
-  case speedConstraintDPValue9       = 111
-  case speedConstraintDPType10       = 112
-  case speedConstraintDPValue10      = 113
-  case speedConstraintDPType11       = 114
-  case speedConstraintDPValue11      = 115
-  case speedConstraintDPType12       = 116
-  case speedConstraintDPValue12      = 117
-  case speedConstraintDPType13       = 118
-  case speedConstraintDPValue13      = 119
-  case speedConstraintDPType14       = 120
-  case speedConstraintDPValue14      = 121
-  case speedConstraintDPType15       = 122
-  case speedConstraintDPValue15      = 123
+  case speedConstraintDPType0        = 96
+  case speedConstraintDPValue0       = 97
+  case speedConstraintDPType1        = 98
+  case speedConstraintDPValue1       = 99
+  case speedConstraintDPType2        = 100
+  case speedConstraintDPValue2       = 101
+  case speedConstraintDPType3        = 102
+  case speedConstraintDPValue3       = 103
+  case speedConstraintDPType4        = 104
+  case speedConstraintDPValue4       = 105
+  case speedConstraintDPType5        = 106
+  case speedConstraintDPValue5       = 107
+  case speedConstraintDPType6        = 108
+  case speedConstraintDPValue6       = 109
+  case speedConstraintDPType7        = 110
+  case speedConstraintDPValue7       = 111
+  case speedConstraintDPType8        = 112
+  case speedConstraintDPValue8       = 113
+  case speedConstraintDPType9        = 114
+  case speedConstraintDPValue9       = 115
+  case speedConstraintDPType10       = 116
+  case speedConstraintDPValue10      = 117
+  case speedConstraintDPType11       = 118
+  case speedConstraintDPValue11      = 119
+  case speedConstraintDPType12       = 120
+  case speedConstraintDPValue12      = 121
+  case speedConstraintDPType13       = 122
+  case speedConstraintDPValue13      = 123
+  case speedConstraintDPType14       = 124
+  case speedConstraintDPValue14      = 125
+  case speedConstraintDPType15       = 126
+  case speedConstraintDPValue15      = 127
   /// Direction Next
-  case speedConstraintDNType0        = 124
-  case speedConstraintDNValue0       = 125
-  case speedConstraintDNType1        = 126
-  case speedConstraintDNValue1       = 127
-  case speedConstraintDNType2        = 128
-  case speedConstraintDNValue2       = 129
-  case speedConstraintDNType3        = 130
-  case speedConstraintDNValue3       = 131
-  case speedConstraintDNType4        = 132
-  case speedConstraintDNValue4       = 133
-  case speedConstraintDNType5        = 134
-  case speedConstraintDNValue5       = 135
-  case speedConstraintDNType6        = 136
-  case speedConstraintDNValue6       = 137
-  case speedConstraintDNType7        = 138
-  case speedConstraintDNValue7       = 139
-  case speedConstraintDNType8        = 140
-  case speedConstraintDNValue8       = 141
-  case speedConstraintDNType9        = 142
-  case speedConstraintDNValue9       = 143
-  case speedConstraintDNType10       = 144
-  case speedConstraintDNValue10      = 145
-  case speedConstraintDNType11       = 146
-  case speedConstraintDNValue11      = 147
-  case speedConstraintDNType12       = 148
-  case speedConstraintDNValue12      = 149
-  case speedConstraintDNType13       = 150
-  case speedConstraintDNValue13      = 151
-  case speedConstraintDNType14       = 152
-  case speedConstraintDNValue14      = 153
-  case speedConstraintDNType15       = 154
-  case speedConstraintDNValue15      = 155
+  case speedConstraintDNType0        = 128
+  case speedConstraintDNValue0       = 129
+  case speedConstraintDNType1        = 130
+  case speedConstraintDNValue1       = 131
+  case speedConstraintDNType2        = 132
+  case speedConstraintDNValue2       = 133
+  case speedConstraintDNType3        = 134
+  case speedConstraintDNValue3       = 135
+  case speedConstraintDNType4        = 136
+  case speedConstraintDNValue4       = 137
+  case speedConstraintDNType5        = 138
+  case speedConstraintDNValue5       = 139
+  case speedConstraintDNType6        = 140
+  case speedConstraintDNValue6       = 141
+  case speedConstraintDNType7        = 142
+  case speedConstraintDNValue7       = 143
+  case speedConstraintDNType8        = 144
+  case speedConstraintDNValue8       = 145
+  case speedConstraintDNType9        = 146
+  case speedConstraintDNValue9       = 147
+  case speedConstraintDNType10       = 148
+  case speedConstraintDNValue10      = 149
+  case speedConstraintDNType11       = 150
+  case speedConstraintDNValue11      = 151
+  case speedConstraintDNType12       = 152
+  case speedConstraintDNValue12      = 153
+  case speedConstraintDNType13       = 154
+  case speedConstraintDNValue13      = 155
+  case speedConstraintDNType14       = 156
+  case speedConstraintDNValue14      = 157
+  case speedConstraintDNType15       = 158
+  case speedConstraintDNValue15      = 159
   
   // MARK: Public Properties
   
@@ -402,6 +406,13 @@ public enum LayoutInspectorProperty : Int, CaseIterable {
       .identity,
       .label
     ),
+    .itemId
+    : (
+      String(localized:"Item ID", comment:"This is used for the title of an informational field that displays the ID of the switchboard item."),
+      String(localized:"ID of this switchboard item.", comment:"This is used for a tooltip."),
+      .identity,
+      .label
+    ),
     .enterDetectionZoneEventId
     : (
       String(localized:"Enter Detection Zone", comment:"This is used for the title of an input field where the user can enter an event ID."),
@@ -451,10 +462,31 @@ public enum LayoutInspectorProperty : Int, CaseIterable {
       .blockEvents,
       .eventId
     ),
-    .turnoutMotorType
+    .turnoutMotorType1
     : (
-      String(localized:"Switching Method", comment:"This is used for the title of a combo box where the user can select the applicable turnout motor type."),
-      String(localized:"The turnout switching method for this turnout.", comment:"This is used for a tooltip."),
+      String(localized:"Switch #1 Method", comment:"This is used for the title of a combo box where the user can select the applicable turnout motor type."),
+      String(localized:"The turnout switching method for turnout switch #1.", comment:"This is used for a tooltip."),
+      .turnoutControl,
+      .comboBox
+    ),
+    .turnoutMotorType2
+    : (
+      String(localized:"Switch #2 Method", comment:"This is used for the title of a combo box where the user can select the applicable turnout motor type."),
+      String(localized:"The turnout switching method for turnout switch #2.", comment:"This is used for a tooltip."),
+      .turnoutControl,
+      .comboBox
+    ),
+    .turnoutMotorType3
+    : (
+      String(localized:"Switch #3 Method", comment:"This is used for the title of a combo box where the user can select the applicable turnout motor type."),
+      String(localized:"The turnout switching method for turnout switch #3.", comment:"This is used for a tooltip."),
+      .turnoutControl,
+      .comboBox
+    ),
+    .turnoutMotorType4
+    : (
+      String(localized:"Switch #4 Method", comment:"This is used for the title of a combo box where the user can select the applicable turnout motor type."),
+      String(localized:"The turnout switching method for turnout switch #4.", comment:"This is used for a tooltip."),
       .turnoutControl,
       .comboBox
     ),
@@ -1411,85 +1443,25 @@ public enum LayoutInspectorProperty : Int, CaseIterable {
     case .groupId:
       break
     case .directionality:
-      RouteDirection.populate(comboBox: comboBox)
+      BlockDirection.populate(comboBox: comboBox)
     case .electrification:
       TrackElectrificationType.populate(comboBox: comboBox)
     case .trackGauge:
       TrackGauge.populate(comboBox: comboBox)
     case .link:
       break
-    case .turnoutMotorType:
+    case .turnoutMotorType1, .turnoutMotorType2, .turnoutMotorType3, .turnoutMotorType4:
       TurnoutMotorType.populate(comboBox: comboBox)
     case .sensorType:
-      break
+      SensorType.populate(comboBox: comboBox)
     case .signalType:
-      break
+      SignalType.populate(comboBox: comboBox, countryCode: appNode!.layout!.countryCode)
     case .signalRouteDirection:
       RouteDirection.populate(comboBox: comboBox)
-    case .speedConstraintDPType0:
-      break
-    case .speedConstraintDPType1:
-      break
-    case .speedConstraintDPType2:
-      break
-    case .speedConstraintDPType3:
-      break
-    case .speedConstraintDPType4:
-      break
-    case .speedConstraintDPType5:
-      break
-    case .speedConstraintDPType6:
-      break
-    case .speedConstraintDPType7:
-      break
-    case .speedConstraintDPType8:
-      break
-    case .speedConstraintDPType9:
-      break
-    case .speedConstraintDPType10:
-      break
-    case .speedConstraintDPType11:
-      break
-    case .speedConstraintDPType12:
-      break
-    case .speedConstraintDPType13:
-      break
-    case .speedConstraintDPType14:
-      break
-    case .speedConstraintDPType15:
-      break
-    case .speedConstraintDNType0:
-      break
-    case .speedConstraintDNType1:
-      break
-    case .speedConstraintDNType2:
-      break
-    case .speedConstraintDNType3:
-      break
-    case .speedConstraintDNType4:
-      break
-    case .speedConstraintDNType5:
-      break
-    case .speedConstraintDNType6:
-      break
-    case .speedConstraintDNType7:
-      break
-    case .speedConstraintDNType8:
-      break
-    case .speedConstraintDNType9:
-      break
-    case .speedConstraintDNType10:
-      break
-    case .speedConstraintDNType11:
-      break
-    case .speedConstraintDNType12:
-      break
-    case .speedConstraintDNType13:
-      break
-    case .speedConstraintDNType14:
-      break
-    case .speedConstraintDNType15:
-      break
+    case .speedConstraintDPType0, .speedConstraintDPType1, .speedConstraintDPType2, .speedConstraintDPType3, .speedConstraintDPType4, .speedConstraintDPType5, .speedConstraintDPType6, .speedConstraintDPType7, .speedConstraintDPType8, .speedConstraintDPType9, .speedConstraintDPType10, .speedConstraintDPType11, .speedConstraintDPType12, .speedConstraintDPType13, .speedConstraintDPType14, .speedConstraintDPType15:
+      SpeedConstraintType.populate(comboBox: comboBox)
+    case .speedConstraintDNType0, .speedConstraintDNType1, .speedConstraintDNType2, .speedConstraintDNType3, .speedConstraintDNType4, .speedConstraintDNType5, .speedConstraintDNType6, .speedConstraintDNType7, .speedConstraintDNType8, .speedConstraintDNType9, .speedConstraintDNType10, .speedConstraintDNType11, .speedConstraintDNType12, .speedConstraintDNType13, .speedConstraintDNType14, .speedConstraintDNType15:
+      SpeedConstraintType.populate(comboBox: comboBox)
     default:
       break
     }

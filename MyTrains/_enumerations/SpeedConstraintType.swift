@@ -6,8 +6,9 @@
 //
 
 import Foundation
+import AppKit
 
-public enum SpeedConstraintType : UInt16 {
+public enum SpeedConstraintType : UInt16, CaseIterable {
   
   case noConstraintSelected     = 0
   case maximumSpeed             = 1
@@ -58,5 +59,21 @@ public enum SpeedConstraintType : UInt16 {
   public static func insertMap(cdi:String) -> String {
     return cdi.replacingOccurrences(of: CDI.SPEED_CONSTRAINT_TYPE, with: map)
   }
+
+  public static func populate(comboBox: NSComboBox) {
+    comboBox.removeAllItems()
+    for item in SpeedConstraintType.allCases {
+      comboBox.addItem(withObjectValue: item.title)
+    }
+  }
+  
+  public static func select(comboBox: NSComboBox, constraintType:SpeedConstraintType) {
+    comboBox.selectItem(at: Int(constraintType.rawValue))
+  }
+  
+  public static func selected(comboBox: NSComboBox) -> SpeedConstraintType? {
+    return SpeedConstraintType(rawValue: UInt16(comboBox.indexOfSelectedItem))
+  }
+  
 
 }

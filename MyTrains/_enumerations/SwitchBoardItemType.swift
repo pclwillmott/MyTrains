@@ -42,6 +42,7 @@ public enum SwitchBoardItemType : UInt16 {
       .panelId,
       .panelName,
       .itemType,
+      .itemId,
       .name,
       .description,
       .xPos,
@@ -60,7 +61,7 @@ public enum SwitchBoardItemType : UInt16 {
       result = result.union([
         .lengthRoute1,
         .lengthRoute2,
-        .turnoutMotorType,
+        .turnoutMotorType1,
         .sw1CloseEventId,
         .sw1ThrowEventId,
         .sw1ClosedEventId,
@@ -70,7 +71,7 @@ public enum SwitchBoardItemType : UInt16 {
       result = result.union([
         .lengthRoute1,
         .lengthRoute2,
-        .turnoutMotorType,
+        .turnoutMotorType1,
         .sw1CloseEventId,
         .sw1ThrowEventId,
         .sw1ClosedEventId,
@@ -90,7 +91,7 @@ public enum SwitchBoardItemType : UInt16 {
       result = result.union([
         .lengthRoute1,
         .lengthRoute2,
-        .turnoutMotorType,
+        .turnoutMotorType1,
         .sw1CloseEventId,
         .sw1ThrowEventId,
         .sw1ClosedEventId,
@@ -101,7 +102,8 @@ public enum SwitchBoardItemType : UInt16 {
         .lengthRoute1,
         .lengthRoute2,
         .lengthRoute3,
-        .turnoutMotorType,
+        .turnoutMotorType1,
+        .turnoutMotorType2,
         .sw1CloseEventId,
         .sw1ThrowEventId,
         .sw1ClosedEventId,
@@ -115,7 +117,7 @@ public enum SwitchBoardItemType : UInt16 {
       result = result.union([
         .lengthRoute1,
         .lengthRoute2,
-        .turnoutMotorType,
+        .turnoutMotorType1,
         .sw1CloseEventId,
         .sw1ThrowEventId,
         .sw1ClosedEventId,
@@ -125,7 +127,7 @@ public enum SwitchBoardItemType : UInt16 {
       result = result.union([
         .lengthRoute1,
         .lengthRoute2,
-        .turnoutMotorType,
+        .turnoutMotorType1,
         .sw1CloseEventId,
         .sw1ThrowEventId,
         .sw1ClosedEventId,

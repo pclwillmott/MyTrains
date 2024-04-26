@@ -828,9 +828,11 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate {
             }
             inspectorConstraints.append(field.control!.centerYAnchor.constraint(equalTo: field.view!.centerYAnchor))
             inspectorConstraints.append(field.label!.centerYAnchor.constraint(equalTo: field.view!.centerYAnchor))
-            //      inspectorConstraints.append(field.view!.widthAnchor.constraint(equalTo: stackView.widthAnchor))
             
             usedFields.append(field)
+            
+            setValue(field: field)
+            
           }
           
           index += 1
@@ -849,7 +851,6 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate {
       for field2 in usedFields {
         if !(field1.label! === field2.label) && field1.property.inspector == field2.property.inspector {
           inspectorConstraints.append(field1.label!.widthAnchor.constraint(greaterThanOrEqualTo: field2.label!.widthAnchor))
- //         inspectorConstraints.append(field1.view!.widthAnchor.constraint(greaterThanOrEqualTo: field2.view!.widthAnchor))
         }
       }
     }
@@ -952,6 +953,48 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate {
      
      */
 
+  }
+  
+  private func setValue(field:LayoutInspectorPropertyField) {
+    
+    var value : String?
+    
+    for item in switchboardView.selectedItems {
+      let newValue = item.getValue(property: field.property)
+      if value == nil {
+        value = newValue
+      }
+      else if newValue != value {
+        value = ""
+        break
+      }
+    }
+    
+    if let value {
+      switch field.property.controlType {
+      case .textField:
+        (field.control as? NSTextField)?.stringValue = value
+      case .label:
+        (field.control as? NSTextField)?.stringValue = value
+      case .checkBox:
+        (field.control as? NSButton)?.state = value == "true" ? .on : .off
+      case .comboBox:
+        if let comboBox = field.control as? NSComboBox {
+          comboBox.deselectItem(at: comboBox.indexOfSelectedItem)
+          var index = 0
+          while index < comboBox.numberOfItems {
+            if let title = comboBox.itemObjectValue(at: index) as? String, title == value {
+              comboBox.selectItem(at: index)
+              break
+            }
+            index += 1
+          }
+        }
+      case .eventId:
+        (field.control as? NSTextField)?.stringValue = value
+      }
+    }
+    
   }
   
   // MARK: Outlets & Actions

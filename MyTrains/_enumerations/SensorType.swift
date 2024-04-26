@@ -6,8 +6,9 @@
 //
 
 import Foundation
+import AppKit
 
-public enum SensorType : UInt8 {
+public enum SensorType : UInt8, CaseIterable {
   
   case other       = 0
   case lightSensor = 1
@@ -62,4 +63,17 @@ public enum SensorType : UInt8 {
     return cdi.replacingOccurrences(of: CDI.SENSOR_TYPE, with: map)
   }
 
+  public static func populate(comboBox: NSComboBox) {
+    comboBox.removeAllItems()
+    comboBox.addItems(withObjectValues: titles)
+  }
+  
+  public static func select(comboBox: NSComboBox, sensorType:SensorType) {
+    comboBox.selectItem(at: Int(sensorType.rawValue))
+  }
+  
+  public static func selected(comboBox: NSComboBox) -> SensorType {
+    return SensorType(rawValue: UInt8(comboBox.indexOfSelectedItem)) ?? defaultValue
+  }
+  
 }

@@ -262,7 +262,7 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
       registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSensorDeactivateLatency)
       registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSensorLocationServicesEventId)
       
-      configuration.registerUnitConversion(address: addressSensorPosition, unitConversionType: .actualLength8)
+      configuration.registerUnitConversion(address: addressSensorPosition, unitConversionType: .actualDistance8)
       configuration.registerUnitConversion(address: addressSensorActivateLatency, unitConversionType: .time8)
       configuration.registerUnitConversion(address: addressSensorDeactivateLatency, unitConversionType: .time8)
       
@@ -271,6 +271,9 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
       registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalType)
       registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalRouteDirection)
       registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalPosition)
+      
+      configuration.registerUnitConversion(address: addressSignalPosition, unitConversionType: .actualDistance8)
+
       registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState0EventId)
       registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState1EventId)
       registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressSignalSetState2EventId)
@@ -900,7 +903,7 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     }
   }
 
-  public var sensorDectivateLatency : Double {
+  public var sensorDeactivateLatency : Double {
     get {
       return configuration!.getDouble(address: addressSensorDeactivateLatency)!
     }
@@ -933,6 +936,24 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     }
     set(value) {
       configuration!.setUInt(address: addressSignalType, value: value.rawValue)
+    }
+  }
+
+  public var signalRouteDirection : RouteDirection {
+    get {
+      return RouteDirection(rawValue: configuration!.getUInt8(address: addressSignalRouteDirection)!)!
+    }
+    set(value) {
+      configuration!.setUInt(address: addressSignalRouteDirection, value: value.rawValue)
+    }
+  }
+
+  public var signalPosition : Double {
+    get {
+      return configuration!.getDouble(address: addressSignalPosition)!
+    }
+    set(value) {
+      configuration!.setDouble(address: addressSignalPosition, value: value)
     }
   }
 
@@ -1069,8 +1090,216 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     return nil
 
   }
-
+  
   // MARK: Private Methods
+
+  public func getValue(property:LayoutInspectorProperty) -> String {
+    
+    switch property {
+    case .panelId:
+      return panelId.toHexDotFormat(numberOfBytes: 6)
+    case .panelName:
+      let panel = appDelegate.networkLayer!.virtualNodeLookup[panelId]!
+      return panel.userNodeName
+    case .itemType:
+      return itemType.title
+    case .itemId:
+      return nodeId.toHexDotFormat(numberOfBytes: 6)
+    case .name:
+      return userNodeName
+    case .description:
+      return userNodeDescription
+    case .xPos:
+      return "\(xPos)"
+    case .yPos:
+      return "\(yPos)"
+    case .orientation:
+      return orientation.title
+    case .groupId:
+      if let group = appDelegate.networkLayer?.virtualNodeLookup[groupId] {
+        return group.userNodeName
+      }
+      return ""
+    case .directionality:
+      return directionality.title
+    case .allowShunt:
+      return isReverseShuntAllowed ? "true" : "false"
+    case .electrification:
+      return trackElectrificationType.title
+    case .isCriticalSection:
+      return isCriticalSection ? "true" : "false"
+    case .isHiddenSection:
+      return isHiddenSection ? "true" : "false"
+    case .trackGradient:
+      return "\(trackGradient)"
+    case .trackGauge:
+      return trackGauge.title
+    case .lengthRoute1:
+      return "\(UnitLength.convert(fromValue: getDimension(routeNumber: 1)!, fromUnits: UnitLength.defaultValueActualLength, toUnits: appNode!.unitsActualLength))"
+
+      /*
+      var newValue : Double = 0.0
+      
+      switch unitConversionType.baseType {
+      case .actualLength:
+        newValue = UnitLength.convert(fromValue: floatValue, fromUnits: UnitLength.defaultValueActualLength, toUnits: appNode.unitsActualLength)
+      case .scaleLength:
+        newValue = UnitLength.convert(fromValue: floatValue, fromUnits: UnitLength.defaultValueScaleLength, toUnits: appNode.unitsScaleLength)
+      case .actualDistance:
+        newValue = UnitLength.convert(fromValue: floatValue, fromUnits: UnitLength.defaultValueActualDistance, toUnits: appNode.unitsActualDistance)
+      case .scaleDistance:
+        newValue = UnitLength.convert(fromValue: floatValue, fromUnits: UnitLength.defaultValueScaleDistance, toUnits: appNode.unitsScaleDistance)
+      case .actualSpeed:
+        newValue = UnitSpeed.convert(fromValue: floatValue, fromUnits: UnitSpeed.defaultValueActualSpeed, toUnits: appNode.unitsActualSpeed)
+      case .scaleSpeed:
+        newValue = UnitSpeed.convert(fromValue: floatValue, fromUnits: UnitSpeed.defaultValueScaleSpeed, toUnits: appNode.unitsScaleSpeed)
+      case .time:
+        newValue = UnitTime.convert(fromValue: floatValue, fromUnits: UnitTime.defaultValue, toUnits: appNode.unitsTime)
+      default:
+        break
+      }
+      */
+    case .lengthRoute2:
+      return "\(UnitLength.convert(fromValue: getDimension(routeNumber: 2)!, fromUnits: UnitLength.defaultValueActualLength, toUnits: appNode!.unitsActualLength))"
+    case .lengthRoute3:
+      return "\(UnitLength.convert(fromValue: getDimension(routeNumber: 3)!, fromUnits: UnitLength.defaultValueActualLength, toUnits: appNode!.unitsActualLength))"
+    case .lengthRoute4:
+      return "\(UnitLength.convert(fromValue: getDimension(routeNumber: 4)!, fromUnits: UnitLength.defaultValueActualLength, toUnits: appNode!.unitsActualLength))"
+    case .lengthRoute5:
+      return "\(UnitLength.convert(fromValue: getDimension(routeNumber: 5)!, fromUnits: UnitLength.defaultValueActualLength, toUnits: appNode!.unitsActualLength))"
+    case .lengthRoute6:
+      return "\(UnitLength.convert(fromValue: getDimension(routeNumber: 6)!, fromUnits: UnitLength.defaultValueActualLength, toUnits: appNode!.unitsActualLength))"
+    case .lengthRoute7:
+      return "\(UnitLength.convert(fromValue: getDimension(routeNumber: 7)!, fromUnits: UnitLength.defaultValueActualLength, toUnits: appNode!.unitsActualLength))"
+    case .lengthRoute8:
+      return "\(UnitLength.convert(fromValue: getDimension(routeNumber: 8)!, fromUnits: UnitLength.defaultValueActualLength, toUnits: appNode!.unitsActualLength))"
+    case .link:
+      if let link = appDelegate.networkLayer?.virtualNodeLookup[linkId] {
+        return link.userNodeName
+      }
+      return ""
+    case .turnoutMotorType1:
+      return getTurnoutMotorType(turnoutNumber: 1)!.title
+    case .turnoutMotorType2:
+      return getTurnoutMotorType(turnoutNumber: 2)!.title
+    case .turnoutMotorType3:
+      return getTurnoutMotorType(turnoutNumber: 3)!.title
+    case .turnoutMotorType4:
+      return getTurnoutMotorType(turnoutNumber: 4)!.title
+    case .sensorType:
+      return sensorType.title
+    case .sensorPosition:
+      return "\(UnitLength.convert(fromValue: sensorPosition, fromUnits: UnitLength.defaultValueActualDistance, toUnits: appNode!.unitsActualDistance))"
+    case .sensorActivateLatency:
+      return "\(UnitTime.convert(fromValue: sensorActivateLatency, fromUnits: UnitTime.defaultValue, toUnits: appNode!.unitsTime))"
+    case .sensorDeactivateLatency:
+      return "\(UnitTime.convert(fromValue: sensorDeactivateLatency, fromUnits: UnitTime.defaultValue, toUnits: appNode!.unitsTime))"
+    case .signalType:
+      return signalType.title
+    case .signalRouteDirection:
+      return signalRouteDirection.title
+    case .signalPosition:
+      return "\(UnitLength.convert(fromValue: signalPosition, fromUnits: UnitLength.defaultValueActualDistance, toUnits: appNode!.unitsActualDistance))"
+    case .enterDetectionZoneEventId:
+      let id = enterDetectionZoneEventId
+      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+    case .exitDetectionZoneEventId:
+      let id = exitDetectionZoneEventId
+      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+    case .enterTranspondingZoneEventId:
+      let id = enterTranspondingZoneEventId
+      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+    case .exitTranspondingZoneEventId:
+      let id = exitTranspondingZoneEventId
+      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+    case .trackFaultEventId:
+      let id = trackFaultEventId
+      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+    case .trackFaultClearedEventId:
+      let id = trackFaultClearedEventId
+      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+    case .locationServicesEventId:
+      let id = locationServicesEventId
+      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+    case .sw1ThrowEventId:
+      let id = getTurnoutThrowEventId(turnoutNumber: 1)!
+      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+    case .sw1CloseEventId:
+      let id = getTurnoutCloseEventId(turnoutNumber: 1)!
+      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+    case .sw1ThrownEventId:
+      let id = getTurnoutThrownEventId(turnoutNumber: 1)!
+      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+    case .sw1ClosedEventId:
+      let id = getTurnoutClosedEventId(turnoutNumber: 1)!
+      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+    case .sw2ThrowEventId:
+      let id = getTurnoutThrowEventId(turnoutNumber: 2)!
+      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+    case .sw2CloseEventId:
+      let id = getTurnoutCloseEventId(turnoutNumber: 2)!
+      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+    case .sw2ThrownEventId:
+      let id = getTurnoutThrownEventId(turnoutNumber: 2)!
+      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+    case .sw2ClosedEventId:
+      let id = getTurnoutClosedEventId(turnoutNumber: 2)!
+      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+    case .sw3ThrowEventId:
+      let id = getTurnoutThrowEventId(turnoutNumber: 3)!
+      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+    case .sw3CloseEventId:
+      let id = getTurnoutCloseEventId(turnoutNumber: 3)!
+      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+    case .sw3ThrownEventId:
+      let id = getTurnoutThrownEventId(turnoutNumber: 3)!
+      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+    case .sw3ClosedEventId:
+      let id = getTurnoutClosedEventId(turnoutNumber: 3)!
+      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+    case .sw4ThrowEventId:
+      let id = getTurnoutThrowEventId(turnoutNumber: 4)!
+      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+    case .sw4CloseEventId:
+      let id = getTurnoutCloseEventId(turnoutNumber: 4)!
+      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+    case .sw4ThrownEventId:
+      let id = getTurnoutThrownEventId(turnoutNumber: 4)!
+      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+    case .sw4ClosedEventId:
+      let id = getTurnoutClosedEventId(turnoutNumber: 4)!
+      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+    case .sensorActivatedEventId:
+      let id = sensorActivatedEventId
+      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+    case .sensorDeactivatedEventId:
+      let id = sensorDeactivatedEventId
+      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+    case .sensorLocationServicesEventId:
+      let id = sensorLocationServicesEventId
+      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+    case .signalSetState0EventId, .signalSetState1EventId, .signalSetState2EventId, .signalSetState3EventId, .signalSetState4EventId, .signalSetState5EventId, .signalSetState6EventId, .signalSetState7EventId, .signalSetState8EventId, .signalSetState9EventId, .signalSetState10EventId, .signalSetState11EventId, .signalSetState12EventId, .signalSetState13EventId, .signalSetState14EventId, .signalSetState15EventId, .signalSetState16EventId, .signalSetState17EventId, .signalSetState18EventId, .signalSetState19EventId, .signalSetState20EventId, .signalSetState21EventId, .signalSetState22EventId, .signalSetState23EventId, .signalSetState24EventId, .signalSetState25EventId, .signalSetState26EventId, .signalSetState27EventId, .signalSetState28EventId, .signalSetState29EventId, .signalSetState30EventId, .signalSetState31EventId:
+      let index = property.rawValue - LayoutInspectorProperty.signalSetState0EventId.rawValue + 1
+      let id = getSetSignalAspectEventId(number: index)!
+      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+    case .speedConstraintDPType0, .speedConstraintDPType1, .speedConstraintDPType2, .speedConstraintDPType3, .speedConstraintDPType4, .speedConstraintDPType5, .speedConstraintDPType6, .speedConstraintDPType7, .speedConstraintDPType8, .speedConstraintDPType9, .speedConstraintDPType10, .speedConstraintDPType11, .speedConstraintDPType12, .speedConstraintDPType13, .speedConstraintDPType14, .speedConstraintDPType15:
+      let index = (property.rawValue - LayoutInspectorProperty.speedConstraintDPType0.rawValue) / 2 + 1
+      return getSpeedConstraintDPType(number: index)!.title
+    case .speedConstraintDPValue0, .speedConstraintDPValue1, .speedConstraintDPValue2, .speedConstraintDPValue3, .speedConstraintDPValue4, .speedConstraintDPValue5, .speedConstraintDPValue6, .speedConstraintDPValue7, .speedConstraintDPValue8, .speedConstraintDPValue9, .speedConstraintDPValue10, .speedConstraintDPValue11, .speedConstraintDPValue12, .speedConstraintDPValue13, .speedConstraintDPValue14, .speedConstraintDPValue15:
+      let index = (property.rawValue - LayoutInspectorProperty.speedConstraintDPValue0.rawValue) / 2 + 1
+      let value = Double(float16: getSpeedConstraintDPValue(number: index)!)
+      return "\(UnitSpeed.convert(fromValue: value, fromUnits: UnitSpeed.defaultValueScaleSpeed, toUnits: appNode!.unitsScaleSpeed))"
+
+    case .speedConstraintDNType0, .speedConstraintDNType1, .speedConstraintDNType2, .speedConstraintDNType3, .speedConstraintDNType4, .speedConstraintDNType5, .speedConstraintDNType6, .speedConstraintDNType7, .speedConstraintDNType8, .speedConstraintDNType9, .speedConstraintDNType10, .speedConstraintDNType11, .speedConstraintDNType12, .speedConstraintDNType13, .speedConstraintDNType14, .speedConstraintDNType15:
+      let index = (property.rawValue - LayoutInspectorProperty.speedConstraintDNType0.rawValue) / 2 + 1
+      return getSpeedConstraintDNType(number: index)!.title
+    case .speedConstraintDNValue0, .speedConstraintDNValue1, .speedConstraintDNValue2, .speedConstraintDNValue3, .speedConstraintDNValue4, .speedConstraintDNValue5, .speedConstraintDNValue6, .speedConstraintDNValue7, .speedConstraintDNValue8, .speedConstraintDNValue9, .speedConstraintDNValue10, .speedConstraintDNValue11, .speedConstraintDNValue12, .speedConstraintDNValue13, .speedConstraintDNValue14, .speedConstraintDNValue15:
+      let index = (property.rawValue - LayoutInspectorProperty.speedConstraintDNValue0.rawValue) / 2 + 1
+      let value = Double(float16: getSpeedConstraintDNValue(number: index)!)
+      return "\(UnitSpeed.convert(fromValue: value, fromUnits: UnitSpeed.defaultValueScaleSpeed, toUnits: appNode!.unitsScaleSpeed))"
+    }
+    
+  }
 
   override public func variableChanged(space:OpenLCBMemorySpace, address:Int) {
     
@@ -1221,7 +1450,7 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
       sub += "</int>\n"
 
       sub += "<float size='8'>\n"
-      sub += "<name>Position of Sensor (\(CDI.ACTUAL_LENGTH_UNITS))</name>\n"
+      sub += "<name>Position of Sensor (\(CDI.ACTUAL_DISTANCE_UNITS))</name>\n"
       sub += "</float>\n\n"
 
       sub += "<eventid>\n"
@@ -1291,7 +1520,7 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
       sub += "</int>\n"
 
       sub += "<float size='8'>\n"
-      sub += "<name>Position of Signal (\(CDI.ACTUAL_LENGTH_UNITS))</name>\n"
+      sub += "<name>Position of Signal (\(CDI.ACTUAL_DISTANCE_UNITS))</name>\n"
       sub += "</float>\n\n"
 
       if signalType.numberOfStates > 0 {
@@ -1522,6 +1751,7 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
       result = appNode.insertPanelMap(cdi: result, layoutId: layoutNodeId)
       result = appNode.insertGroupMap(cdi: result, layoutId: layoutNodeId)
       result = result.replacingOccurrences(of: CDI.ACTUAL_LENGTH_UNITS, with: appNode.unitsActualLength.symbol)
+      result = result.replacingOccurrences(of: CDI.ACTUAL_DISTANCE_UNITS, with: appNode.unitsActualDistance.symbol)
       result = result.replacingOccurrences(of: CDI.SCALE_SPEED_UNITS, with: appNode.unitsScaleSpeed.symbol)
       result = result.replacingOccurrences(of: CDI.TIME_UNITS, with: appNode.unitsTime.symbol)
     }
@@ -1610,7 +1840,72 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
       configuration!.setUInt(address: addressSW1ClosedEventId + (turnoutNumber - 1) * 33, value: eventId)
     }
   }
+  
+  public func getSetSignalAspectEventId(number:Int) -> UInt64? {
+    guard number > 0 && number <= 32 else {
+      return nil
+    }
+    return configuration!.getUInt64(address: addressSignalSetState0EventId + (number - 1) * 8)
+  }
 
+  public func setSetSignalAspectEventId(number:Int, eventId:UInt64) {
+    if number > 0 && number <= 32 {
+      configuration!.setUInt(address: addressSignalSetState0EventId + (number - 1) * 8, value: eventId)
+    }
+  }
+
+  public func getSpeedConstraintDPType(number:Int) -> SpeedConstraintType? {
+    guard number > 0 && number <= 16 else {
+      return nil
+    }
+    return SpeedConstraintType(rawValue: configuration!.getUInt16(address: addressSpeedConstraintDPType0 + (number - 1) * 4)!)
+  }
+
+  public func setSpeedConstraintDPType(number:Int, constraintType:SpeedConstraintType) {
+    if number > 0 && number <= 16 {
+      configuration!.setUInt(address: addressSpeedConstraintDPType0 + (number - 1) * 4, value: constraintType.rawValue)
+    }
+  }
+
+  public func getSpeedConstraintDPValue(number:Int) -> float16_t? {
+    guard number > 0 && number <= 16 else {
+      return nil
+    }
+    return configuration!.getFloat16(address: addressSpeedConstraintDPValue0 + (number - 1) * 4)!
+  }
+
+  public func setSpeedConstraintDPValue(number:Int, constraint:float16_t) {
+    if number > 0 && number <= 16 {
+      configuration!.setUInt(address: addressSpeedConstraintDPValue0 + (number - 1) * 4, value: constraint.v)
+    }
+  }
+
+  public func getSpeedConstraintDNType(number:Int) -> SpeedConstraintType? {
+    guard number > 0 && number <= 16 else {
+      return nil
+    }
+    return SpeedConstraintType(rawValue: configuration!.getUInt16(address: addressSpeedConstraintDNType0 + (number - 1) * 4)!)
+  }
+
+  public func setSpeedConstraintDNType(number:Int, constraintType:SpeedConstraintType) {
+    if number > 0 && number <= 16 {
+      configuration!.setUInt(address: addressSpeedConstraintDNType0 + (number - 1) * 4, value: constraintType.rawValue)
+    }
+  }
+
+  public func getSpeedConstraintDNValue(number:Int) -> float16_t? {
+    guard number > 0 && number <= 16 else {
+      return nil
+    }
+    return configuration!.getFloat16(address: addressSpeedConstraintDNValue0 + (number - 1) * 4)!
+  }
+
+  public func setSpeedConstraintDNValue(number:Int, constraint:float16_t) {
+    if number > 0 && number <= 16 {
+      configuration!.setUInt(address: addressSpeedConstraintDNValue0 + (number - 1) * 4, value: constraint.v)
+    }
+  }
+  
   // MARK: OpenLCBNetworkLayerDelegate Methods
   
   public override func openLCBMessageReceived(message: OpenLCBMessage) {

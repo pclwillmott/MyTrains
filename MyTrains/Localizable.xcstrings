@@ -3039,6 +3039,9 @@
     "ID of the parent panel for this switchboard item." : {
       "comment" : "This is used for a tooltip."
     },
+    "ID of this switchboard item." : {
+      "comment" : "This is used for a tooltip."
+    },
     "Ident Button Combination Pressed" : {
 
     },
@@ -3236,6 +3239,9 @@
     },
     "Italy" : {
       "comment" : "This is the name of a country."
+    },
+    "Item ID" : {
+      "comment" : "This is used for the title of an informational field that displays the ID of the switchboard item."
     },
     "Item Type" : {
       "comment" : "This is used for the title of an informational field that displays the switchboard item's type."
@@ -5729,11 +5735,17 @@
     "Switch #1 Closed" : {
       "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been closed."
     },
+    "Switch #1 Method" : {
+      "comment" : "This is used for the title of a combo box where the user can select the applicable turnout motor type."
+    },
     "Switch #1 Thrown" : {
       "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been thrown."
     },
     "Switch #2 Closed" : {
       "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been closed."
+    },
+    "Switch #2 Method" : {
+      "comment" : "This is used for the title of a combo box where the user can select the applicable turnout motor type."
     },
     "Switch #2 Thrown" : {
       "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been thrown."
@@ -5741,11 +5753,17 @@
     "Switch #3 Closed" : {
       "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been closed."
     },
+    "Switch #3 Method" : {
+      "comment" : "This is used for the title of a combo box where the user can select the applicable turnout motor type."
+    },
     "Switch #3 Thrown" : {
       "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been thrown."
     },
     "Switch #4 Closed" : {
       "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been closed."
+    },
+    "Switch #4 Method" : {
+      "comment" : "This is used for the title of a combo box where the user can select the applicable turnout motor type."
     },
     "Switch #4 Thrown" : {
       "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been thrown."
@@ -5861,9 +5879,6 @@
           }
         }
       }
-    },
-    "Switching Method" : {
-      "comment" : "This is used for the title of a combo box where the user can select the applicable turnout motor type."
     },
     "t" : {
       "comment" : "Used for the Throttle menu key equivalent",
@@ -5988,7 +6003,16 @@
     "The position from the start of the block where a train should stop." : {
       "comment" : "This is used for a tooltip."
     },
-    "The turnout switching method for this turnout." : {
+    "The turnout switching method for turnout switch #1." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "The turnout switching method for turnout switch #2." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "The turnout switching method for turnout switch #3." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "The turnout switching method for turnout switch #4." : {
       "comment" : "This is used for a tooltip."
     },
     "Third Rail" : {

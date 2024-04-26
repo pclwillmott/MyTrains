@@ -6,8 +6,9 @@
 //
 
 import Foundation
+import AppKit
 
-public enum SignalType : UInt16 {
+public enum SignalType : UInt16, CaseIterable {
   
   // MARK: Great Britain
   
@@ -57,8 +58,10 @@ public enum SignalType : UInt16 {
     var items : [SignalType] = []
     
     if let signalTypes = applicable[countryCode] {
-      for item in signalTypes {
-        items.append(item)
+      for item in SignalType.allCases {
+        if signalTypes.contains(item) {
+          items.append(item)
+        }
       }
     }
     
@@ -82,6 +85,40 @@ public enum SignalType : UInt16 {
   
   public static func insertMap(cdi:String, countryCode:CountryCode) -> String {
     return cdi.replacingOccurrences(of: CDI.SIGNAL_TYPE, with: map(countryCode: countryCode))
+  }
+  
+  public static func populate(comboBox: NSComboBox, countryCode:CountryCode) {
+    comboBox.removeAllItems()
+    if let signalTypes = applicable[countryCode] {
+      for item in SignalType.allCases {
+        if signalTypes.contains(item) {
+          comboBox.addItem(withObjectValue: item.title)
+        }
+      }
+    }
+  }
+  
+  public static func select(comboBox: NSComboBox, signalType:SignalType) {
+    comboBox.deselectItem(at: comboBox.indexOfSelectedItem)
+    var index = 0
+    while index < comboBox.numberOfItems {
+      if let title = comboBox.itemObjectValue(at: index) as? String, title == signalType.title {
+        comboBox.selectItem(at: index)
+        return
+      }
+      index += 1
+    }
+  }
+  
+  public static func selected(comboBox: NSComboBox) -> SignalType? {
+    if let title = comboBox.objectValueOfSelectedItem as? String {
+      for item in SignalType.allCases {
+        if item.title == title {
+          return item
+        }
+      }
+    }
+    return nil
   }
 
 }
