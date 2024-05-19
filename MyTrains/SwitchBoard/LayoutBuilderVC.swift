@@ -8,7 +8,7 @@
 import Foundation
 import AppKit
 
-class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate {
+class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NSTextFieldDelegate, NSControlTextEditingDelegate {
   
   // MARK: Window & View Methods
   
@@ -212,6 +212,20 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate {
     ]
     
     inspectorFields = LayoutInspectorProperty.inspectorPropertyFields
+    
+    for temp in inspectorFields {
+      if let comboBox = temp.control as? MyComboBox {
+        comboBox.target = self
+        comboBox.action = #selector(self.cboAction(_:))
+      }
+      else if let chkBox = temp.control as? NSButton {
+        chkBox.target = self
+        chkBox.action = #selector(self.chkAction(_:))
+      }
+      else if let field = temp.control as? NSTextField {
+        field.delegate = self
+      }
+    }
     
     inspectorGroupFields = LayoutInspectorGroup.inspectorGroupFields
     
@@ -1225,10 +1239,78 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate {
   
   @IBOutlet weak var switchboardView: SwitchboardEditorView!
   
+  @IBAction func cboAction(_ sender: NSComboBox) {
+    
+    if let property = LayoutInspectorProperty(rawValue: sender.tag), sender.indexOfSelectedItem >= 0, let string = sender.itemObjectValue(at: sender.indexOfSelectedItem) as? String  {
+      
+      for item in switchboardView.selectedItems {
+        item.setValue(property: property, string: string)
+        item.saveMemorySpaces()
+      }
+      
+      switchboardView.needsDisplay = true
+
+    }
+    
+  }
+
+  @IBAction func chkAction(_ sender: NSButton) {
+
+    if let property = LayoutInspectorProperty(rawValue: sender.tag) {
+      
+      let string = sender.state == .on ? "true" : "false"
+      
+      debugLog("\(string)")
+      
+      for item in switchboardView.selectedItems {
+        item.setValue(property: property, string: string)
+        item.saveMemorySpaces()
+      }
+      
+      switchboardView.needsDisplay = true
+      
+    }
+    
+  }
+  
   // MARK: SwitchboardEditorViewDelegate Methods
   
   @objc func selectedItemChanged(_ switchboardEditorView:SwitchboardEditorView, switchboardItem:SwitchboardItemNode?) {
     displayInspector()
   }
+  
+  // MARK: NSTextFieldDelegate, NSControlTextEditingDelegate Methods
+
+  /// This is called when the user presses return.
+  @objc func control(_ control: NSControl, textShouldEndEditing fieldEditor: NSText) -> Bool {
+    
+    var isValid = true
+    
+    if let textField = control as? NSTextField, let property = LayoutInspectorProperty(rawValue: textField.tag) {
+      
+      isValid = property.isValid(string: textField.stringValue.trimmingCharacters(in: .whitespaces))
+      
+      if isValid {
+        for item in switchboardView.selectedItems {
+          item.setValue(property: property, string: textField.stringValue)
+          item.saveMemorySpaces()
+        }
+      }
+ 
+      switchboardView.needsDisplay = true
+      switchboardView.needsDisplay = true
+
+    }
+    
+    return isValid
+    
+  }
+
+  /// This is called when the user changes the text.
+  @objc func controlTextDidChange(_ obj: Notification) {
+    if let textField = obj.object as? NSTextField, let property = LayoutInspectorProperty(rawValue: textField.tag) {
+    }
+  }
+
 
 }

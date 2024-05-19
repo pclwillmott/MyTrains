@@ -16,6 +16,16 @@ public enum SpeedConstraintType : UInt16, CaseIterable {
   case maximumStopExpectedSpeed = 3
   case maximumRestrictedSpeed   = 4
 
+  init?(title:String) {
+    for temp in SpeedConstraintType.allCases {
+      if temp.title == title {
+        self = temp
+        return
+      }
+    }
+    return nil
+  }
+
   // MARK: Public Properties
   
   public var title : String {

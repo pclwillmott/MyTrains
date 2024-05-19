@@ -8,11 +8,21 @@
 import Foundation
 import AppKit
 
-public enum TrackElectrificationType : UInt8 {
+public enum TrackElectrificationType : UInt8, CaseIterable {
   
   case notElectrified = 0
   case thirdRail      = 1
   case overhead       = 2
+
+  init?(title:String) {
+    for temp in TrackElectrificationType.allCases {
+      if temp.title == title {
+        self = temp
+        return
+      }
+    }
+    return nil
+  }
 
   // MARK: Public Properties
   

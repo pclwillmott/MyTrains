@@ -15,7 +15,17 @@ public enum SensorType : UInt8, CaseIterable {
   case reedSwitch  = 2
   case rfid        = 3
   case button      = 4
-  
+
+  init?(title:String) {
+    for temp in SensorType.allCases {
+      if temp.title == title {
+        self = temp
+        return
+      }
+    }
+    return nil
+  }
+
   // MARK: Public Properties
   
   public var title : String {

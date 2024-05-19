@@ -8,7 +8,7 @@
 import Foundation
 import AppKit
 
-public enum Orientation : UInt8 {
+public enum Orientation : UInt8, CaseIterable {
   
   case deg0   = 0
   case deg45  = 1
@@ -18,6 +18,16 @@ public enum Orientation : UInt8 {
   case deg225 = 5
   case deg270 = 6
   case deg315 = 7
+  
+  init?(title:String) {
+    for temp in Orientation.allCases {
+      if temp.title == title {
+        self = temp
+        return
+      }
+    }
+    return nil
+  }
 
   // MARK: Public Properties
   

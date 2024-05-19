@@ -234,6 +234,51 @@ public enum LayoutInspectorProperty : Int, CaseIterable {
   public var controlType : LayoutInspectorControlType {
     return LayoutInspectorProperty.labels[self]!.controlType
   }
+  
+  // MARK: Public Methods
+  
+  public func isValid(string:String) -> Bool {
+    
+    switch self {
+    case .xPos, .yPos:
+      guard let value = Int(string), value >= 0x0000 && value <= 0xffff else {
+        return false
+      }
+    case .trackGradient:
+      guard let value = Double(string), value >= 0.0 && value <= 100.0 else {
+        return false
+      }
+    case .lengthRoute1, .lengthRoute2, .lengthRoute3, .lengthRoute4, .lengthRoute5, .lengthRoute6, .lengthRoute7, .lengthRoute8:
+      guard let value = Double(string), value >= 0.0 else {
+        return false
+      }
+    case .sensorPosition:
+      guard let value = Double(string), value >= 0.0 else {
+        return false
+      }
+    case .sensorActivateLatency, .sensorDeactivateLatency:
+      guard let value = Double(string), value >= 0.0 else {
+        return false
+      }
+    case .signalPosition:
+      guard let value = Double(string), value >= 0.0 else {
+        return false
+      }
+    case .enterDetectionZoneEventId, .exitDetectionZoneEventId, .enterTranspondingZoneEventId, .exitTranspondingZoneEventId, .trackFaultEventId, .trackFaultClearedEventId, .locationServicesEventId, .sw1ThrowEventId, .sw1CloseEventId, .sw1ThrownEventId, .sw1ClosedEventId, .sw2ThrowEventId, .sw2CloseEventId, .sw2ThrownEventId, .sw2ClosedEventId, .sw3ThrowEventId, .sw3CloseEventId, .sw3ThrownEventId, .sw3ClosedEventId, .sw4ThrowEventId, .sw4CloseEventId, .sw4ThrownEventId, .sw4ClosedEventId, .sensorActivatedEventId, .sensorDeactivatedEventId, .sensorLocationServicesEventId, .signalSetState0EventId, .signalSetState1EventId, .signalSetState2EventId, .signalSetState3EventId, .signalSetState4EventId, .signalSetState5EventId, .signalSetState6EventId, .signalSetState7EventId, .signalSetState8EventId, .signalSetState9EventId, .signalSetState10EventId, .signalSetState11EventId, .signalSetState12EventId, .signalSetState13EventId, .signalSetState14EventId, .signalSetState15EventId, .signalSetState16EventId, .signalSetState17EventId, .signalSetState18EventId, .signalSetState19EventId, .signalSetState20EventId, .signalSetState21EventId, .signalSetState22EventId, .signalSetState23EventId, .signalSetState24EventId, .signalSetState25EventId, .signalSetState26EventId, .signalSetState27EventId, .signalSetState28EventId, .signalSetState29EventId, .signalSetState30EventId, .signalSetState31EventId:
+      guard let value = UInt64(dotHex: string, numberOfBytes: 8) else {
+        return string.isEmpty
+      }
+    case .speedConstraintDPValue0, .speedConstraintDPValue1, .speedConstraintDPValue2, .speedConstraintDPValue3, .speedConstraintDPValue4, .speedConstraintDPValue5, .speedConstraintDPValue6, .speedConstraintDPValue7, .speedConstraintDPValue8, .speedConstraintDPValue9, .speedConstraintDPValue10, .speedConstraintDPValue11, .speedConstraintDPValue12, .speedConstraintDPValue13, .speedConstraintDPValue14, .speedConstraintDPValue15, .speedConstraintDNValue0, .speedConstraintDNValue1, .speedConstraintDNValue2, .speedConstraintDNValue3, .speedConstraintDNValue4, .speedConstraintDNValue5, .speedConstraintDNValue6, .speedConstraintDNValue7, .speedConstraintDNValue8, .speedConstraintDNValue9, .speedConstraintDNValue10, .speedConstraintDNValue11, .speedConstraintDNValue12, .speedConstraintDNValue13, .speedConstraintDNValue14, .speedConstraintDNValue15:
+      guard let value = Double(string), value >= 0.0 else {
+        return false
+      }
+    default:
+      break
+    }
+    
+    return true
+    
+  }
 
   // MARK: Private Class Properties
   

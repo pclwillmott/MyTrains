@@ -8,10 +8,20 @@
 import Foundation
 import AppKit
 
-public enum RouteDirection : UInt8 {
+public enum RouteDirection : UInt8, CaseIterable {
   
   case next     = 0
   case previous = 1
+
+  init?(title:String) {
+    for temp in RouteDirection.allCases {
+      if temp.title == title {
+        self = temp
+        return
+      }
+    }
+    return nil
+  }
 
   // MARK: Public Properties
   

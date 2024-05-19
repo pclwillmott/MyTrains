@@ -17,6 +17,16 @@ public enum SignalType : UInt16, CaseIterable {
   case gbColourLight3Aspect = 2
   case gbColourLight4Aspect = 3
 
+  init?(title:String) {
+    for temp in SignalType.allCases {
+      if temp.title == title {
+        self = temp
+        return
+      }
+    }
+    return nil
+  }
+
   // MARK: Public Properties
   
   public var title : String {

@@ -45,6 +45,16 @@ public enum TrackGauge : UInt8, CaseIterable {
   case sixteenmm           = 33
   case t                   = 34
 
+  init?(title:String) {
+    for temp in TrackGauge.allCases {
+      if temp.title == title {
+        self = temp
+        return
+      }
+    }
+    return nil
+  }
+
   // MARK: Public Properties
   
   public var title : String {

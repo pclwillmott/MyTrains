@@ -8,10 +8,20 @@
 import Foundation
 import AppKit
 
-public enum BlockDirection : UInt8 {
+public enum BlockDirection : UInt8, CaseIterable {
 
   case bidirectional  = 0
   case unidirectional = 1
+
+  init?(title:String) {
+    for temp in BlockDirection.allCases {
+      if temp.title == title {
+        self = temp
+        return
+      }
+    }
+    return nil
+  }
 
   // MARK: Public Properties
   

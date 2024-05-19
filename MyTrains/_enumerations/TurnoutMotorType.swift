@@ -8,11 +8,21 @@
 import Foundation
 import AppKit
 
-public enum TurnoutMotorType : UInt8 {
+public enum TurnoutMotorType : UInt8, CaseIterable {
   
   case manual     = 0
   case slowMotion = 1
   case solenoid   = 2
+
+  init?(title:String) {
+    for temp in TurnoutMotorType.allCases {
+      if temp.title == title {
+        self = temp
+        return
+      }
+    }
+    return nil
+  }
 
   // MARK: Public Properties
   
