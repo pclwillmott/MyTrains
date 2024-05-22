@@ -1411,9 +1411,13 @@ public enum LayoutInspectorProperty : Int, CaseIterable {
 
     for item in LayoutInspectorProperty.allCases {
       
-      var field : LayoutInspectorPropertyField = (view:nil, label:nil, control:nil, item)
+      var field : LayoutInspectorPropertyField = (view:nil, label:nil, control:nil, item, new:nil, copy:nil, paste:nil)
       
       field.label = NSTextField(labelWithString: item.label)
+      
+      let view = NSView()
+      
+      view.translatesAutoresizingMaskIntoConstraints = false
       
       switch item.controlType {
       case .checkBox:
@@ -1431,6 +1435,29 @@ public enum LayoutInspectorProperty : Int, CaseIterable {
         let textField = NSTextField()
         textField.placeholderString = "00.00.00.00.00.00.00.00"
         field.control = textField
+        let newButton = NSButton()
+        newButton.title = String(localized: "New")
+        newButton.fontSize = labelFontSize
+        newButton.translatesAutoresizingMaskIntoConstraints = false
+        newButton.tag = item.rawValue
+        view.addSubview(newButton)
+        field.new = newButton
+        let copyButton = NSButton()
+        copyButton.title = String(localized: "Copy")
+        copyButton.fontSize = labelFontSize
+        copyButton.translatesAutoresizingMaskIntoConstraints = false
+        copyButton.tag = item.rawValue
+
+        view.addSubview(copyButton)
+        field.copy = copyButton
+        let pasteButton = NSButton()
+        pasteButton.title = String(localized: "Paste")
+        pasteButton.fontSize = labelFontSize
+        pasteButton.translatesAutoresizingMaskIntoConstraints = false
+        pasteButton.tag = item.rawValue
+        view.addSubview(pasteButton)
+        field.paste = pasteButton
+        
       case .label:
         let textField = NSTextField(labelWithString: "")
         field.control = textField
@@ -1441,10 +1468,6 @@ public enum LayoutInspectorProperty : Int, CaseIterable {
       
       field.control?.toolTip = item.toolTip
       field.control?.tag = item.rawValue
-      
-      let view = NSView()
-      
-      view.translatesAutoresizingMaskIntoConstraints = false
       
       /// https://manasaprema04.medium.com/autolayout-fundamental-522f0a6e5790
       

@@ -132,4 +132,16 @@ class SwitchboardView: NSView {
     return nil
   }
 
+  internal func getItem(location:SwitchBoardLocation) -> SwitchboardItemNode? {
+    guard let switchboardPanel else {
+      return nil
+    }
+    for (_, item) in switchboardPanel.switchboardItems {
+      if item.location == location {
+        return item
+      }
+    }
+    return nil
+  }
+
 }

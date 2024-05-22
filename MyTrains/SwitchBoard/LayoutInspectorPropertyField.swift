@@ -8,4 +8,4 @@
 import Foundation
 import AppKit
 
-public typealias LayoutInspectorPropertyField = (view:NSView?, label:NSTextField?, control:NSControl?, property:LayoutInspectorProperty)
+public typealias LayoutInspectorPropertyField = (view:NSView?, label:NSTextField?, control:NSControl?, property:LayoutInspectorProperty, new:NSButton?, copy:NSButton?, paste:NSButton?)

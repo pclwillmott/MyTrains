@@ -402,7 +402,9 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
       startupGroup[node.virtualNodeType.startupGroup]?.remove(node)
       OpenLCBMemorySpace.deleteAllMemorySpaces(forNodeId: node.nodeId)
       isDeletingANode = false
-      appDelegate.rebootRequest()
+      if node.virtualNodeType != .switchboardItemNode {
+        appDelegate.rebootRequest()
+      }
     }
     else {
       stopNodes()

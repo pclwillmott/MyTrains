@@ -308,6 +308,10 @@ public enum SwitchBoardItemType : UInt16 {
     return turnouts.contains(self)
     
   }
+  
+  public var requireUniqueName : Bool {
+    return self == .link || isBlock || isTurnout
+  }
 
   public var isBlock : Bool {
   

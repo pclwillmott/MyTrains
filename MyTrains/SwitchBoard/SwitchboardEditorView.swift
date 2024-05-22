@@ -67,7 +67,25 @@ class SwitchboardEditorView: SwitchboardView {
       }
       
     }
-        
+    
+    if selectedItems.isEmpty, let currentLocation {
+      
+      let path = NSBezierPath()
+      
+      let x = CGFloat(currentLocation.x) * cellSize
+      let y = CGFloat(currentLocation.y) * cellSize
+      
+      let rect = NSRect(x: x, y: y, width: cellSize, height: cellSize)
+      
+      path.appendRect(rect)
+      
+      path.lineWidth = lineWidth
+      
+      path.stroke()
+      
+    }
+     
+    /*
     if let start = startMove {
       
       let path = NSBezierPath()
@@ -99,11 +117,15 @@ class SwitchboardEditorView: SwitchboardView {
       path.stroke()
 
     }
-
+ 
+     */
+    
   }
   
   // MARK: Private Properties
-    
+   
+  private var currentLocation : SwitchBoardLocation?
+  
   private var startMove : SwitchBoardLocation?
   
   private var endMove : SwitchBoardLocation?
@@ -116,8 +138,6 @@ class SwitchboardEditorView: SwitchboardView {
   
   public var groupId : Int = -1 {
     didSet {
-      
-      updateCombo()
       
     }
   }
@@ -141,68 +161,6 @@ class SwitchboardEditorView: SwitchboardView {
   public var delegate: SwitchboardEditorViewDelegate?
   
   // MARK: Private Methods
-  
-  private func updateCombo() {
-    /*
-    if let layout = self.layout {
-    
-      var groups : [Int] = []
-      
-      for kv in layout.switchBoardItems {
-        
-        let gid = kv.value.groupId
-        
-        if gid != -1 {
-          var duplicate = false
-          for group in groups {
-            if group == gid {
-              duplicate = true
-              break
-            }
-          }
-          if !duplicate {
-            groups.append(gid)
-          }
-        }
-        
-      }
-      
-      groups.sort { $0 < $1 }
-      
-      var groupNames : [String] = ["0"]
-      
-      for group in groups {
-        groupNames.append("\(group)")
-      }
-      
-/*      groupNames.sort() {
-        $0 < $1
-      } */
-      
-      var selectedIndex = 0
-     
-      if groupId != -1 {
-        for group in groupNames {
-          if group == "\(groupId)" {
-            break
-          }
-          selectedIndex += 1
-        }
-      }
-      
-      groupNames[0] = "(new group)"
-      
-      if selectedIndex == groupNames.count {
-        groupId = -1
-      }
-      else {
-        delegate?.groupChanged?(groupNames: groupNames, selectedIndex: selectedIndex)
-        needsDisplay = true
-      }
-
-    }
-    */
-  }
   
   private func newGroup() -> Int {
     /*
@@ -237,15 +195,22 @@ class SwitchboardEditorView: SwitchboardView {
 
     switch event.modifierFlags.intersection(.deviceIndependentFlagsMask) {
     case [.control]:
+      debugLog("control")
       break
     case [.option]:
+      debugLog("option")
       break
     case [.shift]:
+      debugLog("shift")
       if let item = getItem(event: event) {
         selectedItems.append(item)
       }
+      currentLocation = selectedItems.count > 1 ? nil : gridSquare(from: event)
+
     default:
+      debugLog("default")
       selectedItems.removeAll()
+      currentLocation = gridSquare(from: event)
       if let item = getItem(event: event) {
         selectedItems.append(item)
       }
@@ -367,10 +332,19 @@ class SwitchboardEditorView: SwitchboardView {
   override func mouseDragged(with event: NSEvent) {
     debugLog("mouseDragged")
     if isArrangeMode {
-      let square = gridSquare(from: event)
-      endMove = square
-      isDrag = true
-      needsDisplay = true
+      switch event.modifierFlags.intersection(.deviceIndependentFlagsMask) {
+      case [.control]:
+        break
+      case [.option]:
+        break
+      case [.shift]:
+        break
+      default:
+        let square = gridSquare(from: event)
+        endMove = square
+        isDrag = true
+        needsDisplay = true
+      }
     }
   }
   
@@ -378,6 +352,24 @@ class SwitchboardEditorView: SwitchboardView {
     
     debugLog("mouseUp")
 
+    if isArrangeMode {
+      switch event.modifierFlags.intersection(.deviceIndependentFlagsMask) {
+      case [.control]:
+        debugLog("control")
+        break
+      case [.option]:
+        debugLog("option")
+        break
+      case [.shift]:
+        debugLog("shift")
+        
+      default:
+        
+        break
+      }
+      
+    }
+    
    /*
     if let layout = self.layout {
     
@@ -456,7 +448,7 @@ class SwitchboardEditorView: SwitchboardView {
   public func rotateRight() {
     
     for item in selectedItems {
- //     item.rotateRight()
+      item.rotateRight()
     }
     
     needsDisplay = true
@@ -466,7 +458,7 @@ class SwitchboardEditorView: SwitchboardView {
   public func rotateLeft() {
     
     for item in selectedItems {
- //     item.rotateLeft()
+      item.rotateLeft()
     }
     
     needsDisplay = true
@@ -502,29 +494,114 @@ class SwitchboardEditorView: SwitchboardView {
   //    item.groupId = -1
     }
     
-    updateCombo()
-    
   }
   
-  public func delete() {
-    /*
-    if let layout = self.layout {
+  public func deleteItem() {
     
-      for item in selectedItems {
-        if item.isDatabaseItem {
-          item.nextAction = .delete
-        }
-        else {
-          layout.switchBoardItems.removeValue(forKey: item.key)
-        }
+    guard let networkLayer = appDelegate.networkLayer, let currentLocation else {
+      return
+    }
+    
+    if let item = getItem(location: currentLocation) {
+      
+      let alert = NSAlert()
+      
+      alert.messageText = String(localized: "Are You Sure?")
+      alert.informativeText = String(localized: "Are you sure that you want to delete this item?")
+      alert.addButton(withTitle: String(localized: "Yes"))
+      alert.addButton(withTitle: String(localized: "No"))
+      alert.alertStyle = .informational
+      
+      switch alert.runModal() {
+      case .alertFirstButtonReturn:
+        break
+      default:
+        return
       }
       
+      networkLayer.deleteNode(nodeId: item.nodeId)
       selectedItems.removeAll()
       
       needsDisplay = true
 
     }
-    */
+
+  }
+  
+  public func addItem(partType:SwitchBoardItemType) {
+    
+    guard let networkLayer = appDelegate.networkLayer, let currentLocation, let switchboardPanel else {
+      return
+    }
+    
+    if let item = getItem(location: currentLocation) {
+      
+      let alert = NSAlert()
+      
+      alert.messageText = String(localized: "Are You Sure?")
+      alert.informativeText = String(localized: "Are you sure that you want to replace the existing item at this location?")
+      alert.addButton(withTitle: String(localized: "Yes"))
+      alert.addButton(withTitle: String(localized: "No"))
+      alert.alertStyle = .informational
+      
+      switch alert.runModal() {
+      case .alertFirstButtonReturn:
+        break
+      default:
+        return
+      }
+      
+      networkLayer.deleteNode(nodeId: item.nodeId)
+
+    }
+    
+    if let node = networkLayer.createVirtualNode(virtualNodeType: .switchboardItemNode) as? SwitchboardItemNode {
+      node.layoutNodeId = switchboardPanel.layoutNodeId
+      node.panelId = switchboardPanel.nodeId
+      node.itemType = partType
+      node.userNodeName = partType.title
+      
+      if partType.requireUniqueName {
+        
+        var index = 0
+        var isUnique = true
+        var test = ""
+        
+        repeat {
+          index += 1
+          isUnique = true
+          var prefix = ""
+          if partType.isBlock {
+            prefix = "B"
+          }
+          else if partType.isTurnout {
+            prefix = "T"
+          }
+          else {
+            prefix = "L"
+          }
+          test = " - \(prefix)\(index)"
+          for (_, item) in switchboardPanel.switchboardItems {
+            if test == item.userNodeName.suffix(test.count) {
+              isUnique = false
+              break
+            }
+          }
+        } while !isUnique
+        
+        node.userNodeName = "\(node.userNodeName)\(test)"
+        
+      }
+      
+      node.xPos = UInt16(exactly: currentLocation.x)!
+      node.yPos = UInt16(exactly: currentLocation.y)!
+      node.saveMemorySpaces()
+      selectedItems.removeAll()
+      selectedItems.append(node)
+    }
+    
+    needsDisplay = true
+    
   }
 
 }

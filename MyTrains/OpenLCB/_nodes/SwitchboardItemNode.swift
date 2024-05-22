@@ -2033,6 +2033,26 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     }
   }
   
+  public func rotateRight() {
+    var orientation = Int(self.orientation.rawValue)
+    orientation += 1
+    if orientation > 7 {
+      orientation = 0
+    }
+    self.orientation = Orientation(rawValue: UInt8(orientation)) ?? Orientation.defaultValue
+    saveMemorySpaces()
+  }
+  
+  public func rotateLeft() {
+    var orientation = Int(self.orientation.rawValue)
+    orientation -= 1
+    if orientation < 0 {
+      orientation = 7
+    }
+    self.orientation = Orientation(rawValue: UInt8(orientation)) ?? Orientation.defaultValue
+    saveMemorySpaces()
+  }
+  
   // MARK: OpenLCBNetworkLayerDelegate Methods
   
   public override func openLCBMessageReceived(message: OpenLCBMessage) {

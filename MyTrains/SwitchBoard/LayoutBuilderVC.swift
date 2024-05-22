@@ -581,11 +581,13 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
     constraints.append(arrangeView.bottomAnchor.constraint(greaterThanOrEqualToSystemSpacingBelow: cboPalette.bottomAnchor, multiplier: 1.0))
     
     SwitchboardItemPalette.select(comboBox: cboPalette, value: currentPalette)
-    
+  
     for palette in SwitchboardItemPalette.availablePalettes(country: layout.countryCode) {
       let view = NSView()
       view.translatesAutoresizingMaskIntoConstraints = false
-      constraints.append(contentsOf: SwitchboardItemPalette.populate(paletteView: view, palette: palette, target: nil, action: nil))
+      /// Palette Buttons are created here!
+      constraints.append(contentsOf: SwitchboardItemPalette.populate(paletteView: view, palette: palette, target: self, action: #selector(btnPartType(_:))))
+      
       paletteViews[palette] = view
       arrangeView.addSubview(view)
       constraints.append(view.topAnchor.constraint(equalTo: cboPalette.bottomAnchor))
@@ -833,12 +835,34 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
             inspectorConstraints.append(field.view!.heightAnchor.constraint(greaterThanOrEqualTo: field.control!.heightAnchor))
             inspectorConstraints.append(field.control!.leadingAnchor.constraint(equalToSystemSpacingAfter: field.label!.trailingAnchor, multiplier: 1.0))
             inspectorConstraints.append(field.label!.leadingAnchor.constraint(equalTo: field.view!.leadingAnchor, constant: 20))
-            inspectorConstraints.append(field.view!.trailingAnchor.constraint(equalTo: field.control!.trailingAnchor))
+            
             if field.property.controlType == .eventId {
+              
               inspectorConstraints.append(field.control!.widthAnchor.constraint(greaterThanOrEqualToConstant: 140))
+              
+              inspectorConstraints.append(field.new!.leadingAnchor.constraint(equalToSystemSpacingAfter: field.control!.trailingAnchor, multiplier: 1.0))
+              inspectorConstraints.append(field.copy!.leadingAnchor.constraint(equalToSystemSpacingAfter: field.new!.trailingAnchor, multiplier: 1.0))
+              inspectorConstraints.append(field.paste!.leadingAnchor.constraint(equalToSystemSpacingAfter: field.copy!.trailingAnchor, multiplier: 1.0))
+              inspectorConstraints.append(field.view!.trailingAnchor.constraint(equalTo: field.paste!.trailingAnchor))
+              
+              inspectorConstraints.append(field.new!.centerYAnchor.constraint(equalTo: field.view!.centerYAnchor))
+              inspectorConstraints.append(field.copy!.centerYAnchor.constraint(equalTo: field.view!.centerYAnchor))
+              inspectorConstraints.append(field.paste!.centerYAnchor.constraint(equalTo: field.view!.centerYAnchor))
+
+              inspectorConstraints.append(field.view!.heightAnchor.constraint(greaterThanOrEqualTo: field.new!.heightAnchor))
+              
+              field.new?.target = self
+              field.new?.action = #selector(newEventIdAction(_:))
+              field.copy?.target = self
+              field.copy?.action = #selector(btnCopyAction(_:))
+              field.paste?.target = self
+              field.paste?.action = #selector(btnPasteAction(_:))
+
             }
             else {
               inspectorConstraints.append(field.control!.widthAnchor.constraint(greaterThanOrEqualToConstant: 100))
+              inspectorConstraints.append(field.view!.trailingAnchor.constraint(equalTo: field.control!.trailingAnchor))
+              
             }
             inspectorConstraints.append(field.control!.centerYAnchor.constraint(equalTo: field.view!.centerYAnchor))
             inspectorConstraints.append(field.label!.centerYAnchor.constraint(equalTo: field.view!.centerYAnchor))
@@ -1062,10 +1086,6 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
   
   private var cboPalette : MyComboBox? = MyComboBox()
   
-  @objc func cboPaletteAction(_ sender: NSComboBox) {
-    currentPalette = SwitchboardItemPalette.selected(comboBox: sender)
-  }
-  
   private var paletteViews : [SwitchboardItemPalette:NSView] = [:]
   
   private var groupView : NSView? = NSView()
@@ -1175,13 +1195,20 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
     }
     switch button {
     case .addItemToPanel:
-      break
+      guard let currentPartType else {
+        return
+      }
+      switchboardView.addItem(partType: currentPartType)
+      displayInspector()
     case .removeItemFromPanel:
-      break
+      switchboardView.deleteItem()
+      displayInspector()
     case .rotateCounterClockwise:
-      break
+      switchboardView.rotateLeft()
+      displayInspector()
     case .rotateClockwise:
-      break
+      switchboardView.rotateRight()
+      displayInspector()
     case .switchToGroupingMode:
       isGroupMode = true
     }
@@ -1260,8 +1287,6 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
       
       let string = sender.state == .on ? "true" : "false"
       
-      debugLog("\(string)")
-      
       for item in switchboardView.selectedItems {
         item.setValue(property: property, string: string)
         item.saveMemorySpaces()
@@ -1312,5 +1337,80 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
     }
   }
 
+  // MARK: Actions
+  
+  private func getTextField(button:NSButton) -> NSTextField? {
+    guard let item = LayoutInspectorProperty(rawValue: button.tag) else {
+      return nil
+    }
+    for field in inspectorFields {
+      if field.property == item, let textField = field.control as? NSTextField {
+        return textField
+      }
+    }
+    return nil
+  }
+  
+  @IBAction func btnCopyAction(_ sender: NSButton) {
+    guard let textField = getTextField(button: sender), let _ = UInt64(dotHex: textField.stringValue, numberOfBytes: 8) else {
+      return
+    }
+    let pasteboard = NSPasteboard.general
+    pasteboard.declareTypes([.string], owner: nil)
+    pasteboard.setString(textField.stringValue, forType: .string)
+  }
+
+  @IBAction func btnPasteAction(_ sender: NSButton) {
+    guard let textField = getTextField(button: sender) else {
+      return
+    }
+    let pasteboard = NSPasteboard.general
+    let value = pasteboard.string(forType: .string) ?? ""
+    if let _ = UInt64(dotHex: value, numberOfBytes: 8) {
+      textField.stringValue = value
+      _ = control(textField, textShouldEndEditing: NSText())
+    }
+  }
+
+  @IBAction func newEventIdAction(_ sender: NSButton) {
+    guard let textField = getTextField(button: sender), let appNode else {
+      return
+    }
+    textField.stringValue = appNode.nextUniqueEventId.toHexDotFormat(numberOfBytes: 8)
+    _ = control(textField, textShouldEndEditing: NSText())
+  }
+  
+  private func resetPartButtons() {
+    for (_, paletteView) in paletteViews {
+      for view in paletteView.subviews {
+        for control in view.subviews {
+          if let button = control as? SwitchboardShapeButton {
+            button.state = .off
+          }
+        }
+      }
+    }
+  }
+  
+  private var currentPartType : SwitchBoardItemType?
+  
+  @IBAction func btnPartType(_ sender: NSButton) {
+    guard let button = sender as? SwitchboardShapeButton else {
+      return
+    }
+    let state = button.state
+    resetPartButtons()
+    button.state = state
+    currentPartType = state == .on ? button.partType : nil
+  }
+  
+  @objc func cboPaletteAction(_ sender: NSComboBox) {
+    let lastPalette = currentPalette
+    currentPalette = SwitchboardItemPalette.selected(comboBox: sender)
+    if lastPalette != currentPalette {
+      resetPartButtons()
+      currentPartType = nil
+    }
+  }
 
 }
