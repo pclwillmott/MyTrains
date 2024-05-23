@@ -307,7 +307,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
       acdiUserSpace?.setString(address: addressACDIUserNodeName, value: String(value.prefix(62)), fieldSize: 63)
     }
   }
-
+  
   public override var userNodeDescription : String {
     get {
       return acdiUserSpace!.getString(address: addressACDIUserNodeDescription, count: 64)!

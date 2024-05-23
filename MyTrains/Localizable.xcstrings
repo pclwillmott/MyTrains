@@ -6064,6 +6064,9 @@
     "This is a percentage from 0 to 100 where 0 means horizontal and 100 means vertical." : {
       "comment" : "This is used for a tooltip."
     },
+    "This move will overwrite one or more existing items. Do you want to proceed?" : {
+
+    },
     "This name will appear in network browsers for this device." : {
       "comment" : "Used for the description of the user name input field in the CDI",
       "localizations" : {

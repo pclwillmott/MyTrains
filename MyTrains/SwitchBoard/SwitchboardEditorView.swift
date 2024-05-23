@@ -44,25 +44,50 @@ class SwitchboardEditorView: SwitchboardView {
     }
     
     super.draw(dirtyRect)
-        
-    NSColor.setStrokeColor(color: .systemBlue)
     
+    let dX = isDrag ? endMove!.x - startMove!.x : 0
+    let dY = isDrag ? endMove!.y - startMove!.y : 0
+
     for (_, item) in switchboardPanel.switchboardItems {
       
       if isSelected(item: item) {
         
-        let path = NSBezierPath()
-        
-        let x = CGFloat(item.location.x) * cellSize
-        let y = CGFloat(item.location.y) * cellSize
-        
-        let rect = NSRect(x: x, y: y, width: cellSize, height: cellSize)
-        
-        path.appendRect(rect)
-        
-        path.lineWidth = lineWidth
-        
-        path.stroke()
+        if isDrag {
+          
+          let path = NSBezierPath()
+          
+          let x = CGFloat(item.location.x + dX) * cellSize
+          let y = CGFloat(item.location.y + dY) * cellSize
+          
+          let rect = NSRect(x: x, y: y, width: cellSize, height: cellSize)
+          
+          path.appendRect(rect)
+          
+          path.lineWidth = lineWidth
+          
+          NSColor.setStrokeColor(color: .systemGreen)
+          
+          path.stroke()
+          
+        }
+        else {
+          
+          let path = NSBezierPath()
+          
+          let x = CGFloat(item.location.x) * cellSize
+          let y = CGFloat(item.location.y) * cellSize
+          
+          let rect = NSRect(x: x, y: y, width: cellSize, height: cellSize)
+          
+          path.appendRect(rect)
+          
+          path.lineWidth = lineWidth
+          
+          NSColor.setStrokeColor(color: .systemBlue)
+          
+          path.stroke()          
+
+        }
         
       }
       
@@ -80,6 +105,8 @@ class SwitchboardEditorView: SwitchboardView {
       path.appendRect(rect)
       
       path.lineWidth = lineWidth
+      
+      NSColor.setStrokeColor(color: .systemBlue)
       
       path.stroke()
       
@@ -193,6 +220,8 @@ class SwitchboardEditorView: SwitchboardView {
 
   override func mouseDown(with event: NSEvent) {
 
+    startMove = gridSquare(from: event)
+    
     switch event.modifierFlags.intersection(.deviceIndependentFlagsMask) {
     case [.control]:
       debugLog("control")
@@ -202,245 +231,119 @@ class SwitchboardEditorView: SwitchboardView {
       break
     case [.shift]:
       debugLog("shift")
-      if let item = getItem(event: event) {
+      if let item = getItem(event: event), !isSelected(item: item) {
         selectedItems.append(item)
       }
-      currentLocation = selectedItems.count > 1 ? nil : gridSquare(from: event)
+      currentLocation = selectedItems.count > 1 ? nil : startMove
 
     default:
       debugLog("default")
       selectedItems.removeAll()
-      currentLocation = gridSquare(from: event)
-      if let item = getItem(event: event) {
+      currentLocation = startMove
+      if let item = getItem(event: event), !isSelected(item: item) {
         selectedItems.append(item)
       }
-   }
-    
-   delegate?.selectedItemChanged?(self, switchboardItem: nil)
-
-    
-/*
-    if let layout = self.layout {
       
-      switch event.modifierFlags.intersection(.deviceIndependentFlagsMask) {
-        
-      case [.control]:
-        
-        startMove = gridSquare(from: event)
-        if let item = getItem(event: event) {
-          selectedItems.append(item)
-        }
-        else {
-          
-          let blank = SwitchBoardItem(location: startMove!, itemPartType: .none, orientation: .deg0, groupId: -1, panelId: panelId, layoutId: -1)
-          
-          layout.switchBoardItems[blank.key] = blank
-          selectedItems.append(blank)
-           
-        }
-        
-      case [.option]:
-        
-        if let item = getItem(event: event) {
-          item.propertySheet()
-          needsDisplay = true
-        }
-        
-      case [.shift]:
-        
-        if startMove == nil {
-          startMove = gridSquare(from: event)
-          selectedItems.removeAll()
-          if let item = getItem(event: event) {
-            selectedItems.append(item)
-          }
-          else {
-            
-            let blank = SwitchBoardItem(location: startMove!, itemPartType: .none, orientation: .deg0, groupId: -1, panelId: panelId, layoutId: -1)
-            layout.switchBoardItems[blank.key] = blank
-            selectedItems.append(blank)
-             
-          }
-        }
-        else {
-          
-          endMove = gridSquare(from: event)
-          
-          let sx = min(startMove!.x, endMove!.x)
-          let sy = min(startMove!.y, endMove!.y)
-          let ex = max(startMove!.x, endMove!.x)
-          let ey = max(startMove!.y, endMove!.y)
-          
-          selectedItems.removeAll()
-          
-          for x in sx...ex {
-            for y in sy...ey {
-              if let item = getItem(x: x, y: y) {
-                selectedItems.append(item)
-              }
-              else {
-                let blank = SwitchBoardItem(location: (x:x, y:y), itemPartType: .none, orientation: .deg0, groupId: -1, panelId: panelId, layoutId: -1)
-                layout.switchBoardItems[blank.key] = blank
-                selectedItems.append(blank)
-                 
-              }
-            }
-            
-          }
-          
-          startMove = endMove
-          endMove = nil
-          
-        }
-        
-      default:
-        
-        startMove = gridSquare(from: event)
-        
-        selectedItems.removeAll()
-        
-        if let item = getItem(event: event) {
-          if isArrangeMode && nextPart != .none {
-          
-            item.itemPartType = nextPart
-          }
-          selectedItems.append(item)
-        }
-        else {
-          let blank = SwitchBoardItem(location: startMove!, itemPartType: .none, orientation: .deg0, groupId: -1, panelId: panelId, layoutId: -1)
-          if isArrangeMode && nextPart != .none {
-            blank.itemPartType = nextPart
-          }
-          layout.switchBoardItems[blank.key] = blank
-          selectedItems.append(blank)
-           
-        }
-        
-        if selectedItems[0].groupId != -1 {
-          groupId = selectedItems[0].groupId
-        }
-
-      }
-
     }
-    */
+    
+    delegate?.selectedItemChanged?(self, switchboardItem: nil)
+
 
     needsDisplay = true
 
   }
 
   override func mouseDragged(with event: NSEvent) {
-    debugLog("mouseDragged")
     if isArrangeMode {
-      switch event.modifierFlags.intersection(.deviceIndependentFlagsMask) {
-      case [.control]:
-        break
-      case [.option]:
-        break
-      case [.shift]:
-        break
-      default:
-        let square = gridSquare(from: event)
-        endMove = square
-        isDrag = true
-        needsDisplay = true
+      endMove = gridSquare(from: event)
+      var minX : Int?
+      var minY : Int?
+      for selectedItem in selectedItems {
+        if minX == nil || selectedItem.location.x < minX! {
+          minX = selectedItem.location.x
+        }
+        if minY == nil || selectedItem.location.y < minY! {
+          minY = selectedItem.location.y
+        }
       }
+      if let minX, let minY, let endMove {
+        let dX = endMove.x - startMove!.x + minX
+        let dY = endMove.y - startMove!.y + minY
+        self.endMove = (x: dX < 0 ? endMove.x - dX : endMove.x, y: dY < 0 ? endMove.y - dY : endMove.y)
+      }
+      isDrag = true
+      needsDisplay = true
     }
   }
   
   override func mouseUp(with event: NSEvent) {
     
-    debugLog("mouseUp")
-
-    if isArrangeMode {
-      switch event.modifierFlags.intersection(.deviceIndependentFlagsMask) {
-      case [.control]:
-        debugLog("control")
-        break
-      case [.option]:
-        debugLog("option")
-        break
-      case [.shift]:
-        debugLog("shift")
-        
-      default:
-        
-        break
-      }
-      
+    guard let switchboardPanel, let networkLayer = appDelegate.networkLayer else {
+      return
     }
     
-   /*
-    if let layout = self.layout {
-    
-      if isArrangeMode && selectedItems.count > 0 && isDrag && endMove != nil {
-        
-        let x = selectedItems[selectedItems.count-1]
-        
-        let sx = x.location.x
-        let sy = x.location.y
-        
-        let ex = endMove!.x
-        let ey = endMove!.y
-        
-        let dx = ex - sx
-        let dy = ey - sy
-        
-        if dx <= 0 {
-          if dy <= 0 {
-            selectedItems.sort {$0.location.x < $1.location.x && $0.location.y < $1.location.y}
-          }
-          else {
-            selectedItems.sort {$0.location.x < $1.location.x && $0.location.y > $1.location.y}
-          }
-        }
-        else {
-          if dy <= 0 {
-            selectedItems.sort {$0.location.x > $1.location.x && $0.location.y < $1.location.y}
-          }
-          else {
-            selectedItems.sort {$0.location.x > $1.location.x && $0.location.y > $1.location.y}
-          }
-        }
-        
-        for item in selectedItems {
-          
-          layout.switchBoardItems[item.key] = nil
-          
-          let newX = item.location.x + dx
-          let newY = item.location.y + dy
-          
-          if let occupant = getItem(x: newX, y: newY) {
-            
-            if occupant.itemPartType == .none {
-              layout.switchBoardItems[item.key] = nil
-            }
-            else {
-              occupant.nextAction = .delete
-            }
-             
-          }
-          
-          item.location.x = newX
-          item.location.y = newY
-          
-          layout.switchBoardItems[item.key] = item
-          
-        }
-        
-        selectedItems.removeAll()
-        
-        startMove = nil
-        endMove = nil
-        
-        isDrag = false
-        
-      }
+    if isArrangeMode {
       
+      if isDrag {
+        
+        let dX = endMove!.x - startMove!.x
+        let dY = endMove!.y - startMove!.y
+
+        var deleteList : [SwitchboardItemNode] = []
+        
+        for selectedItem in selectedItems {
+          
+          for (_, item) in switchboardPanel.switchboardItems {
+            
+            if !isSelected(item: item) && selectedItem.location.x + dX == item.location.x && selectedItem.location.y + dY == item.location.y {
+              deleteList.append(item)
+            }
+            
+          }
+          
+        }
+        
+        if !deleteList.isEmpty {
+          
+          let alert = NSAlert()
+          
+          alert.messageText = String(localized: "Are You Sure?")
+          alert.informativeText = String(localized: "This move will overwrite one or more existing items. Do you want to proceed?")
+          alert.addButton(withTitle: String(localized: "Yes"))
+          alert.addButton(withTitle: String(localized: "No"))
+          alert.alertStyle = .informational
+          
+          switch alert.runModal() {
+          case .alertFirstButtonReturn:
+            break
+          default:
+            return
+          }
+          
+          while !deleteList.isEmpty {
+            let item = deleteList.removeFirst()
+            networkLayer.deleteNode(nodeId: item.nodeId)
+          }
+
+        }
+        
+        for selectedItem in selectedItems {
+          selectedItem.xPos = UInt16(exactly: selectedItem.location.x + dX)!
+          selectedItem.yPos = UInt16(exactly: selectedItem.location.y + dY)!
+          selectedItem.saveMemorySpaces()
+        }
+
+        isDrag = false
+        endMove = nil
+
+        delegate?.selectedItemChanged?(self, switchboardItem: nil)
+
+      }
+
       needsDisplay = true
 
     }
-   */
+    
   }
   
   // MARK: Public Methods

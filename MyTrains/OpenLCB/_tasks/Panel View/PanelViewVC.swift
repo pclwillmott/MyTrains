@@ -62,10 +62,11 @@ class PanelViewVC: MyTrainsViewController {
     ])
     
     if let appNode {
+      panels.removeAll()
       for (_, item) in appNode.panelList {
         panels.append(item)
       }
-      panels.sort {$0.userNodeName < $1.userNodeName}
+      panels.sort {$0.userNodeName.sortValue < $1.userNodeName.sortValue}
       cboPanel.removeAllItems()
       var index = -1
       var test = 0
@@ -148,8 +149,8 @@ class PanelViewVC: MyTrainsViewController {
 
     let sWidth = scrollView.frame.width
     let sHeight = scrollView.frame.height
-    let gWidth = switchboardView.bounds.width
-    let gHeight = switchboardView.bounds.height
+    let gWidth = switchboardView.width
+    let gHeight = switchboardView.height
 
     var scale = 1.0
 

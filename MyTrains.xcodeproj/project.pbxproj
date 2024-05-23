@@ -298,6 +298,7 @@
 		DAD41AB82A3C9E54002EF847 /* DCCAddressPartition.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD41AB72A3C9E54002EF847 /* DCCAddressPartition.swift */; };
 		DAD41ABA2A3C9E80002EF847 /* DCCPacketType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD41AB92A3C9E80002EF847 /* DCCPacketType.swift */; };
 		DAD554E82BCEBA6B004E17DF /* MyIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD554E72BCEBA6B004E17DF /* MyIcon.swift */; };
+		DAD7352B2BFF74C200BDC0A4 /* PanelProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD7352A2BFF74C200BDC0A4 /* PanelProperty.swift */; };
 		DAD73C1C2A9A298E002E7618 /* Digitrax BXP88.xml in Resources */ = {isa = PBXBuildFile; fileRef = DAD73C1B2A9A298E002E7618 /* Digitrax BXP88.xml */; };
 		DAD73C1E2A9A4F64002E7618 /* OpenLCBDigitraxBXP88Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD73C1D2A9A4F64002E7618 /* OpenLCBDigitraxBXP88Node.swift */; };
 		DAD7750A2BCFE73600D8AD55 /* SwitchboardItemPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD775092BCFE73600D8AD55 /* SwitchboardItemPalette.swift */; };
@@ -664,6 +665,7 @@
 		DAD41AB72A3C9E54002EF847 /* DCCAddressPartition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DCCAddressPartition.swift; sourceTree = "<group>"; };
 		DAD41AB92A3C9E80002EF847 /* DCCPacketType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DCCPacketType.swift; sourceTree = "<group>"; };
 		DAD554E72BCEBA6B004E17DF /* MyIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyIcon.swift; sourceTree = "<group>"; };
+		DAD7352A2BFF74C200BDC0A4 /* PanelProperty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanelProperty.swift; sourceTree = "<group>"; };
 		DAD73C1B2A9A298E002E7618 /* Digitrax BXP88.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Digitrax BXP88.xml"; sourceTree = "<group>"; };
 		DAD73C1D2A9A4F64002E7618 /* OpenLCBDigitraxBXP88Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBDigitraxBXP88Node.swift; sourceTree = "<group>"; };
 		DAD775092BCFE73600D8AD55 /* SwitchboardItemPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchboardItemPalette.swift; sourceTree = "<group>"; };
@@ -1024,6 +1026,7 @@
 				DAB26FF82BD1362300AC1B29 /* SwitchboardEditorView.swift */,
 				DAD22F742BD401AC00F396AD /* SwitchboardEditorViewDelegate.swift */,
 				DA7C50992BD688EB0079E876 /* LayoutInspectorProperty.swift */,
+				DAD7352A2BFF74C200BDC0A4 /* PanelProperty.swift */,
 				DAA56B522BD93A7900BAB6EF /* LayoutInspectorControlType.swift */,
 				DA7C509B2BD6D7A60079E876 /* LayoutInspectorGroup.swift */,
 				DAA56B502BD938AE00BAB6EF /* LayoutInspectorGroupField.swift */,
@@ -1744,6 +1747,7 @@
 				DA7C509A2BD688EB0079E876 /* LayoutInspectorProperty.swift in Sources */,
 				DA6E28E5285F925C00772641 /* BlockDirection.swift in Sources */,
 				DA09493A2B7F726200545650 /* OpenLCBCANGateway - Messages.swift in Sources */,
+				DAD7352B2BFF74C200BDC0A4 /* PanelProperty.swift in Sources */,
 				DA467B9D281CAFDA00AB9650 /* NSColorExtensions.swift in Sources */,
 				DA7F89B12B371BDE00F43819 /* ConfigurationToolVC.swift in Sources */,
 				DA467B9F281CBAF900AB9650 /* NSRectExtensions.swift in Sources */,

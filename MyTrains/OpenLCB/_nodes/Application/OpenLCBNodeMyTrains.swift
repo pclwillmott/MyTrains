@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import AppKit
 
 public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   
@@ -513,7 +514,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
       sorted.append((nodeId:nodeId, name:item.layoutName))
     }
     
-    sorted.sort {$0.name < $1.name}
+    sorted.sort {$0.name.sortValue < $1.name.sortValue}
 
     var layouts = "<map>\n<relation><property>0</property><value>No Layout Selected</value></relation>\n"
     
@@ -537,7 +538,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
       }
     }
     
-    sorted.sort {$0.name < $1.name}
+    sorted.sort {$0.name.sortValue < $1.name.sortValue}
 
     var panels = "<map>\n<relation><property>0</property><value>No Panel Selected</value></relation>\n"
     
@@ -551,6 +552,51 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
 
   }
 
+  public func populateGroup(comboBox:NSComboBox) {
+  
+    let selected = comboBox.objectValueOfSelectedItem
+    
+    var sorted : [SwitchboardItemNode] = []
+
+    for (nodeId, item) in switchboardItemList {
+      if item.itemType.isGroup {
+        sorted.append(item)
+      }
+    }
+    
+    sorted.sort {$0.userNodeName.sortValue < $1.userNodeName.sortValue}
+
+    comboBox.isEditable = false
+    comboBox.removeAllItems()
+    
+    for item in sorted {
+      comboBox.addItem(withObjectValue: item.userNodeName)
+    }
+    
+    comboBox.selectItem(withObjectValue: selected)
+    
+  }
+  
+  public func selectGroup(comboBox:NSComboBox, nodeId:UInt64) {
+    comboBox.deselectItem(at: comboBox.indexOfSelectedItem)
+    guard let node = appDelegate.networkLayer?.virtualNodeLookup[nodeId] else {
+      return
+    }
+    comboBox.selectItem(withObjectValue: node.userNodeName)
+  }
+  
+  public func selectedGroup(comboBox:NSComboBox) -> SwitchboardItemNode? {
+    guard let objectValue = comboBox.objectValueOfSelectedItem as? String else {
+      return nil
+    }
+    for (_, item) in switchboardItemList {
+      if item.itemType.isGroup && item.userNodeName == objectValue {
+        return item
+      }
+    }
+    return nil
+  }
+  
   public func insertGroupMap(cdi:String, layoutId:UInt64) -> String {
     
     var sorted : [(nodeId:UInt64, name:String)] = []
@@ -561,7 +607,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
       }
     }
     
-    sorted.sort {$0.name < $1.name}
+    sorted.sort {$0.name.sortValue < $1.name.sortValue}
 
     var items = "<map>\n<relation><property>0</property><value>No Group Selected</value></relation>\n"
     
@@ -585,7 +631,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
       }
     }
     
-    sorted.sort {$0.name < $1.name}
+    sorted.sort {$0.name.sortValue < $1.name.sortValue}
 
     var items = "<map>\n<relation><property>0</property><value>No Link Selected</value></relation>\n"
     
@@ -607,7 +653,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
       sorted.append((nodeId, name))
     }
     
-    sorted.sort {$0.name < $1.name}
+    sorted.sort {$0.name.sortValue < $1.name.sortValue}
     
     var map = "<map>\n<relation><property>0</property><value>No LocoNet Gateway Selected</value></relation>\n"
     

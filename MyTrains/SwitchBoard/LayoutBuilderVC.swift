@@ -99,17 +99,6 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
     case fitToSize = 2
   }
   
-  private enum PanelProperty : Int {
-    case layoutId = 1
-    case layoutName = 2
-    case panelId = 3
-    case panelName = 4
-    case panelDescription = 5
-    case numberOfRows = 6
-    case numberOfColumns = 7
-  }
-
-  
   override func viewWillAppear() {
     
     super.viewWillAppear()
@@ -210,6 +199,14 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
         .numberOfColumns
       ),
     ]
+    
+    for field in panelControls {
+      if let textField = field.control as? NSTextField {
+        textField.tag = field.property.rawValue
+        textField.delegate = self
+      }
+      
+    }
     
     inspectorFields = LayoutInspectorProperty.inspectorPropertyFields
     
@@ -615,7 +612,16 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
     constraints.append(groupStripView.topAnchor.constraint(equalTo: groupView.topAnchor))
     constraints.append(groupStripView.centerXAnchor.constraint(equalTo: groupView.centerXAnchor))
     constraints.append(groupStripView.heightAnchor.constraint(equalToConstant: 20.0))
-    constraints.append(groupView.bottomAnchor.constraint(greaterThanOrEqualTo: groupStripView.bottomAnchor))
+    
+    cboGroup?.translatesAutoresizingMaskIntoConstraints = false
+    appNode?.populateGroup(comboBox: cboGroup!)
+    
+    groupView.addSubview(cboGroup!)
+    
+    constraints.append(cboGroup!.topAnchor.constraint(equalToSystemSpacingBelow: groupStripView.bottomAnchor, multiplier: 1.0))
+    constraints.append(groupView.bottomAnchor.constraint(greaterThanOrEqualTo: cboGroup!.bottomAnchor))
+    constraints.append(cboGroup!.leadingAnchor.constraint(equalTo: groupView.leadingAnchor))
+    constraints.append(cboGroup!.trailingAnchor.constraint(equalTo: groupView.trailingAnchor))
 
     lastButton = nil
     index = 0
@@ -645,26 +651,8 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
     
     arrangeView.isHidden = true
 
-    if let appNode {
-      for (_, item) in appNode.panelList {
-        panels.append(item)
-      }
-      panels.sort {$0.userNodeName < $1.userNodeName}
-      cboPanel.removeAllItems()
-      var index = -1
-      var test = 0
-      for item in panels {
-        cboPanel.addItem(withObjectValue: item.userNodeName)
-        if let panel = switchboardPanel, panel.nodeId == item.nodeId {
-          index = test
-        }
-        test += 1
-      }
-      if index != -1 {
-        cboPanel.selectItem(at: index)
-      }
-    }
-
+    updatePanelComboBox()
+    
     userSettings?.node = switchboardPanel
     self.cboPanel?.target = self
     self.cboPanel?.action = #selector(self.cboPanelAction(_:))
@@ -711,6 +699,37 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
   }
   
   // MARK: Private Methods
+  
+  private func updatePanelComboBox() {
+  
+    if let appNode, let cboPanel {
+      
+      cboPanel.target = nil
+      
+      panels.removeAll()
+      for (_, item) in appNode.panelList {
+        panels.append(item)
+      }
+      panels.sort {$0.userNodeName.sortValue < $1.userNodeName.sortValue}
+      cboPanel.removeAllItems()
+      var index = -1
+      var test = 0
+      for item in panels {
+        cboPanel.addItem(withObjectValue: item.userNodeName)
+        if let panel = switchboardPanel, panel.nodeId == item.nodeId {
+          index = test
+        }
+        test += 1
+      }
+      if index != -1 {
+        cboPanel.selectItem(at: index)
+      }
+      
+      cboPanel.target = self
+      
+    }
+
+  }
   
   private func setStates() {
     
@@ -1040,6 +1059,7 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
   private var cboPanel : NSComboBox? = MyComboBox()
  
   @objc func cboPanelAction(_ sender: NSComboBox) {
+    debugLog("triggered")
     if sender.indexOfSelectedItem == -1 {
       switchboardPanel = nil
     }
@@ -1061,6 +1081,8 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
   private var panelControls : [(label:NSTextField, control:NSControl, property:PanelProperty)] = []
   
   private var panelStack : NSStackView? = NSStackView()
+  
+  private var cboGroup : NSComboBox? = NSComboBox()
   
   private var btnShowInspectorView : NSButton?
   
@@ -1245,8 +1267,8 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
 
       let sWidth = scrollView.frame.width
       let sHeight = scrollView.frame.height
-      let gWidth = switchboardView.bounds.width
-      let gHeight = switchboardView.bounds.height
+      let gWidth = switchboardView.width
+      let gHeight = switchboardView.height
 
       var scale = 1.0
 
@@ -1311,15 +1333,35 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
     
     var isValid = true
     
-    if let textField = control as? NSTextField, let property = LayoutInspectorProperty(rawValue: textField.tag) {
+    if let textField = control as? NSTextField {
       
-      isValid = property.isValid(string: textField.stringValue.trimmingCharacters(in: .whitespaces))
+      let trimmed = textField.stringValue.trimmingCharacters(in: .whitespaces)
       
-      if isValid {
-        for item in switchboardView.selectedItems {
-          item.setValue(property: property, string: textField.stringValue)
-          item.saveMemorySpaces()
+      if let property = LayoutInspectorProperty(rawValue: textField.tag) {
+        
+        isValid = property.isValid(string: trimmed)
+        
+        if isValid {
+          for item in switchboardView.selectedItems {
+            item.setValue(property: property, string: trimmed)
+            item.saveMemorySpaces()
+          }
         }
+        
+      }
+      else if let property = PanelProperty(rawValue: textField.tag) {
+
+        isValid = property.isValid(string: trimmed)
+
+        if isValid, let switchboardPanel {
+          switchboardPanel.setValue(property: property, string: trimmed)
+          switchboardPanel.saveMemorySpaces()
+        }
+        
+        displayInspector()
+        
+        updatePanelComboBox()
+        
       }
  
       switchboardView.needsDisplay = true

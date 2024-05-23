@@ -168,6 +168,25 @@ public class SwitchboardPanelNode : OpenLCBNodeVirtual {
     return YesNo.insertMap(cdi: cdi)
   }
   
+  // MARK: Public Methods
+  
+  public func setValue(property:PanelProperty, string:String) {
+    
+    switch property {
+    case .panelName:
+      userNodeName = string
+    case .panelDescription:
+      userNodeDescription = string
+    case .numberOfRows:
+      numberOfRows = UInt16(string)!
+    case .numberOfColumns:
+      numberOfColumns = UInt16(string)!
+    default:
+      break
+    }
+    
+  }
+  
   // MARK: OpenLCBNetworkLayerDelegate Methods
   
   public override func openLCBMessageReceived(message: OpenLCBMessage) {

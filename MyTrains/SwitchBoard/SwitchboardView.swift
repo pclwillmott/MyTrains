@@ -77,6 +77,28 @@ class SwitchboardView: NSView {
 
   // MARK: Public Properties
   
+  public var height : CGFloat {
+    guard let switchboardPanel else {
+      return 0.0
+    }
+    var result : CGFloat = 0.0
+    for (_, item) in switchboardPanel.switchboardItems {
+      result = max(result,CGFloat(item.yPos))
+    }
+    return (result + 2.0) * cellSize
+  }
+
+  public var width : CGFloat {
+    guard let switchboardPanel else {
+      return 0.0
+    }
+    var result : CGFloat = 0.0
+    for (_, item) in switchboardPanel.switchboardItems {
+      result = max(result,CGFloat(item.xPos))
+    }
+    return (result + 2.0) * cellSize
+  }
+
   public var switchboardPanel : SwitchboardPanelNode? {
     didSet {
       needsDisplay = true

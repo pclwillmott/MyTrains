@@ -302,14 +302,14 @@ public enum LayoutInspectorProperty : Int, CaseIterable {
       String(localized:"X Position", comment:"This is used for the title of an input field where the user can enter a switchboard item's x coordinate in the panel's grid."),
       String(localized:"X position coordinate of this switchboard item in the panel's grid.", comment:"This is used for a tooltip."),
       .generalSettings,
-      .textField
+      .label
     ),
     .yPos
     : (
       String(localized:"Y Position", comment:"This is used for the title of an input field where the user can enter a switchboard item's y coordinate in the panel's grid."),
       String(localized:"Y position coordinate of this switchboard item in the panel's grid.", comment:"This is used for a tooltip."),
       .generalSettings,
-      .textField
+      .label
     ),
     .orientation
     : (
@@ -1509,7 +1509,7 @@ public enum LayoutInspectorProperty : Int, CaseIterable {
     case .orientation:
       Orientation.populate(comboBox: comboBox)
     case .groupId:
-      break
+      appNode?.populateGroup(comboBox: comboBox)
     case .directionality:
       BlockDirection.populate(comboBox: comboBox)
     case .electrification:
