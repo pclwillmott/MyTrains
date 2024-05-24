@@ -99,8 +99,14 @@ class SwitchboardView: NSView {
     return (result + 2.0) * cellSize
   }
 
+  internal var _switchboardPanel : SwitchboardPanelNode?
+  
   public var switchboardPanel : SwitchboardPanelNode? {
-    didSet {
+    get {
+      return _switchboardPanel
+    }
+    set(value) {
+      _switchboardPanel = value
       needsDisplay = true
     }
   }

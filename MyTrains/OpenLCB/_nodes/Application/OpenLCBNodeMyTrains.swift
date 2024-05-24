@@ -552,14 +552,16 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
 
   }
 
-  public func populateGroup(comboBox:NSComboBox) {
+  public func populateGroup(comboBox:NSComboBox, panelId:UInt64 = 0) {
   
     let selected = comboBox.objectValueOfSelectedItem
     
+    comboBox.deselectItem(at: comboBox.indexOfSelectedItem)
+    
     var sorted : [SwitchboardItemNode] = []
 
-    for (nodeId, item) in switchboardItemList {
-      if item.itemType.isGroup {
+    for (_, item) in switchboardItemList {
+      if item.itemType.isGroup && (item.panelId == panelId || panelId == 0) {
         sorted.append(item)
       }
     }
@@ -573,7 +575,15 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
       comboBox.addItem(withObjectValue: item.userNodeName)
     }
     
-    comboBox.selectItem(withObjectValue: selected)
+    if comboBox.numberOfItems > 0 {
+      
+      comboBox.selectItem(withObjectValue: selected)
+      
+      if comboBox.indexOfSelectedItem == -1 {
+        comboBox.selectItem(at: 0)
+      }
+      
+    }
     
   }
   
@@ -619,6 +629,64 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
 
     return cdi.replacingOccurrences(of: CDI.SWITCHBOARD_GROUP_NODES, with: items)
 
+  }
+
+  public func populateLink(comboBox:NSComboBox) {
+  
+    let selected = comboBox.objectValueOfSelectedItem
+    
+    comboBox.deselectItem(at: comboBox.indexOfSelectedItem)
+    
+    var sorted : [SwitchboardItemNode] = []
+
+    for (_, item) in switchboardItemList {
+      if item.itemType == .link {
+        sorted.append(item)
+      }
+    }
+    
+    sorted.sort {$0.userNodeName.sortValue < $1.userNodeName.sortValue}
+
+    comboBox.isEditable = false
+    comboBox.removeAllItems()
+    
+    for item in sorted {
+      comboBox.addItem(withObjectValue: item.userNodeName)
+    }
+    
+    if comboBox.numberOfItems > 0 {
+      comboBox.selectItem(withObjectValue: selected)
+    }
+    
+  }
+
+  public func selectLink(comboBox:NSComboBox, nodeId:UInt64) {
+    comboBox.deselectItem(at: comboBox.indexOfSelectedItem)
+    guard let node = appDelegate.networkLayer?.virtualNodeLookup[nodeId] else {
+      return
+    }
+    comboBox.selectItem(withObjectValue: node.userNodeName)
+  }
+  
+  public func selectedLink(comboBox:NSComboBox) -> SwitchboardItemNode? {
+    guard let objectValue = comboBox.objectValueOfSelectedItem as? String else {
+      return nil
+    }
+    for (_, item) in switchboardItemList {
+      if item.itemType == .link && item.userNodeName == objectValue {
+        return item
+      }
+    }
+    return nil
+  }
+  
+  public func getLink(name:String) -> SwitchboardItemNode? {
+    for (_, item) in switchboardItemList {
+      if item.itemType == .link && item.userNodeName == name {
+        return item
+      }
+    }
+    return nil
   }
 
   public func insertLinkMap(cdi:String, layoutId:UInt64, excludeLinkId:UInt64) -> String {

@@ -14,8 +14,8 @@
             filePath = "MyTrains/OpenLCB/_nodes/SwitchboardItemNode.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1502"
-            endingLineNumber = "1502"
+            startingLineNumber = "1504"
+            endingLineNumber = "1504"
             landmarkName = "customizeDynamicCDI(cdi:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -30,8 +30,8 @@
             filePath = "MyTrains/OpenLCB/_nodes/SwitchboardItemNode.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1565"
-            endingLineNumber = "1565"
+            startingLineNumber = "1567"
+            endingLineNumber = "1567"
             landmarkName = "customizeDynamicCDI(cdi:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -206,8 +206,8 @@
             filePath = "MyTrains/OpenLCB/_nodes/SwitchboardItemNode.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1467"
-            endingLineNumber = "1467"
+            startingLineNumber = "1469"
+            endingLineNumber = "1469"
             landmarkName = "customizeDynamicCDI(cdi:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -446,10 +446,10 @@
             filePath = "MyTrains/SwitchBoard/LayoutBuilderVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1157"
-            endingLineNumber = "1157"
-            landmarkName = "btnShowPanelViewAction(_:)"
-            landmarkType = "7">
+            startingLineNumber = "1168"
+            endingLineNumber = "1168"
+            landmarkName = "currentPalette"
+            landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -497,6 +497,22 @@
             startingLineNumber = "1168"
             endingLineNumber = "1168"
             landmarkName = "getValue(property:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "A2BCA048-D614-47DC-B20C-B48F8521FC07"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MyTrains/SwitchBoard/LayoutBuilderVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "802"
+            endingLineNumber = "802"
+            landmarkName = "setStates()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

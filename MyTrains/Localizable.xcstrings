@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "" : {
+
+    },
     "%lld bytes %@" : {
       "localizations" : {
         "en" : {
@@ -675,12 +678,6 @@
           }
         }
       }
-    },
-    "Are you sure that you want to delete this item?" : {
-
-    },
-    "Are you sure that you want to replace the existing item at this location?" : {
-
     },
     "Are you sure that you want to reset MyTrains to the factory defaults? This will delete all layouts and all virtual nodes managed by this workstation. This action cannot be undone!" : {
 
@@ -2096,6 +2093,9 @@
           }
         }
       }
+    },
+    "Discussion" : {
+
     },
     "Display Protocol" : {
 
@@ -5738,6 +5738,9 @@
     "Success" : {
 
     },
+    "Summary" : {
+
+    },
     "Switch #1 Closed" : {
       "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been closed."
     },
@@ -6006,6 +6009,9 @@
         }
       }
     },
+    "The only purpose of this item is to connect items to other items." : {
+
+    },
     "The position from the start of the block where a train should stop." : {
       "comment" : "This is used for a tooltip."
     },
@@ -6064,7 +6070,7 @@
     "This is a percentage from 0 to 100 where 0 means horizontal and 100 means vertical." : {
       "comment" : "This is used for a tooltip."
     },
-    "This move will overwrite one or more existing items. Do you want to proceed?" : {
+    "This item is used to connect items to other items. This item is used to connect items to other items. This item is used to connect items to other items. This item is used to connect items to other items. This item is used to connect items to other items." : {
 
     },
     "This name will appear in network browsers for this device." : {

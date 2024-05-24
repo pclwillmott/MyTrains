@@ -256,8 +256,7 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
     
     constraints.append(splitView.topAnchor.constraint(equalToSystemSpacingBelow: cboPanel.bottomAnchor, multiplier: 1.0))
     constraints.append(splitView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 1.0))
-    constraints.append(splitView.trailingAnchor.constraint(equalTo: view.trailingAnchor))
-    
+    constraints.append(view.trailingAnchor.constraint(equalToSystemSpacingAfter: splitView.trailingAnchor, multiplier: 1.0))
     paletteView.translatesAutoresizingMaskIntoConstraints = false
     layoutView.translatesAutoresizingMaskIntoConstraints = false
     inspectorView.translatesAutoresizingMaskIntoConstraints = false
@@ -496,7 +495,7 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
         constraints.append(scrollView.trailingAnchor.constraint(equalTo: inspectorView.trailingAnchor))
         constraints.append(scrollView.leadingAnchor.constraint(equalTo: inspectorView.leadingAnchor))
         constraints.append(scrollView.bottomAnchor.constraint(equalTo: inspectorView.bottomAnchor))
-        constraints.append(view.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -10))
+        constraints.append(view.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: 0))
         
         index += 1
         inspectorStripView.addSubview(button)
@@ -515,8 +514,6 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
     inspectorButtons[currentInspectorIndex]?.contentTintColor = NSColor.systemBlue
 
     // MARK: Attributes Inspector
-    
-
     
     arrangeView.translatesAutoresizingMaskIntoConstraints = false
     arrangeStripView.translatesAutoresizingMaskIntoConstraints = false
@@ -614,7 +611,8 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
     constraints.append(groupStripView.heightAnchor.constraint(equalToConstant: 20.0))
     
     cboGroup?.translatesAutoresizingMaskIntoConstraints = false
-    appNode?.populateGroup(comboBox: cboGroup!)
+    cboGroup?.target = self
+    cboGroup?.action = #selector(cboGroupAction(_:))
     
     groupView.addSubview(cboGroup!)
     
@@ -650,6 +648,60 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
     NSLayoutConstraint.activate(constraints)
     
     arrangeView.isHidden = true
+    
+    if let quickHelpView, let lblQuickHelp, let lblQuickHelpSummary, let lblQuickHelpSummaryText, let lblQuickHelpDiscussion, let lblQuickHelpDiscussionText, let sepQuickHelpSummary, let sepQuickHelpDiscussion {
+      
+      var constraints : [NSLayoutConstraint] = []
+      
+      quickHelpSuperView?.translatesAutoresizingMaskIntoConstraints = false
+      quickHelpView.translatesAutoresizingMaskIntoConstraints = false
+      lblQuickHelp.translatesAutoresizingMaskIntoConstraints = false
+      lblQuickHelpSummary.translatesAutoresizingMaskIntoConstraints = false
+      lblQuickHelpSummaryText.translatesAutoresizingMaskIntoConstraints = false
+      lblQuickHelpDiscussion.translatesAutoresizingMaskIntoConstraints = false
+      lblQuickHelpDiscussionText.translatesAutoresizingMaskIntoConstraints = false
+      sepQuickHelpSummary.translatesAutoresizingMaskIntoConstraints = false
+      sepQuickHelpDiscussion.translatesAutoresizingMaskIntoConstraints = false
+      
+      quickHelpSuperView?.addSubview(quickHelpView)
+      
+      lblQuickHelp.stringValue = String(localized: "Quick Help")
+      lblQuickHelp.font = NSFont.systemFont(ofSize: 12, weight: .bold)
+      lblQuickHelp.textColor = NSColor.systemGray
+      lblQuickHelp.alignment = .left
+      quickHelpView.addSubview(lblQuickHelp)
+      
+      lblQuickHelpSummary.stringValue = String(localized: "Summary")
+      lblQuickHelpSummary.font = NSFont.systemFont(ofSize: 12, weight: .bold)
+      lblQuickHelpSummary.alignment = .left
+      quickHelpView.addSubview(lblQuickHelpSummary)
+            
+      lblQuickHelpSummaryText.font = NSFont.systemFont(ofSize: 10, weight: .regular)
+      lblQuickHelpSummaryText.alignment = .left
+      lblQuickHelpSummaryText.lineBreakMode = .byWordWrapping
+      lblQuickHelpSummaryText.maximumNumberOfLines = 0
+      lblQuickHelpSummaryText.preferredMaxLayoutWidth = 300
+      quickHelpView.addSubview(lblQuickHelpSummaryText)
+
+      quickHelpView.addSubview(sepQuickHelpSummary)
+      
+      lblQuickHelpDiscussion.stringValue = String(localized: "Discussion")
+      lblQuickHelpDiscussion.font = NSFont.systemFont(ofSize: 12, weight: .bold)
+      lblQuickHelpDiscussion.alignment = .left
+      quickHelpView.addSubview(lblQuickHelpDiscussion)
+
+      lblQuickHelpDiscussionText.font = NSFont.systemFont(ofSize: 10, weight: .regular)
+      lblQuickHelpDiscussionText.alignment = .left
+      lblQuickHelpDiscussionText.lineBreakMode = .byWordWrapping
+      lblQuickHelpDiscussionText.maximumNumberOfLines = 0
+      lblQuickHelpDiscussionText.preferredMaxLayoutWidth = 300
+      quickHelpView.addSubview(lblQuickHelpDiscussionText)
+
+      quickHelpView.addSubview(sepQuickHelpDiscussion)
+
+      NSLayoutConstraint.activate(constraints)
+
+    }
 
     updatePanelComboBox()
     
@@ -733,7 +785,7 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
   
   private func setStates() {
     
-    guard let btnShowPanelView, let btnShowPaletteView, let btnShowInspectorView, let cboPalette else {
+    guard let appNode, let btnShowPanelView, let btnShowPaletteView, let btnShowInspectorView, let cboPalette else {
       return
     }
     
@@ -746,9 +798,10 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
     btnShowInspectorViewAction(btnShowInspectorView)
     
     btnInspectorAction(inspectorButtons[userSettings!.integer(forKey: DEFAULT.CURRENT_INSPECTOR)]!)
-    
+
     arrangeView?.isHidden = isGroupMode
     groupView?.isHidden = !isGroupMode
+    switchboardView.mode = isGroupMode ? .group : .arrange
     
     SwitchboardItemPalette.select(comboBox: cboPalette, value: currentPalette)
     
@@ -759,9 +812,9 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
     for field in panelControls {
       switch field.property {
       case .layoutId:
-        field.control.stringValue = appNode?.layout?.nodeId.toHexDotFormat(numberOfBytes: 6) ?? ""
+        field.control.stringValue = appNode.layout?.nodeId.toHexDotFormat(numberOfBytes: 6) ?? ""
       case .layoutName:
-        field.control.stringValue = appNode?.layout?.userNodeName ?? ""
+        field.control.stringValue = appNode.layout?.userNodeName ?? ""
       case .panelId:
         field.control.stringValue = switchboardPanel?.nodeId.toHexDotFormat(numberOfBytes: 6) ?? ""
       case .panelName:
@@ -774,7 +827,12 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
         field.control.integerValue = Int(switchboardPanel?.numberOfColumns ?? 30)
       }
     }
-        
+    
+    appNode.populateGroup(comboBox: cboGroup!, panelId: switchboardPanel?.nodeId ?? 0)
+    cboGroupAction(cboGroup!)
+    
+    switchboardView.needsDisplay = true
+
   }
   
   private func displayInspector() {
@@ -799,13 +857,15 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
       
     }
     
-    if switchboardView.selectedItems.isEmpty {
+    let selectedItems = switchboardView.selectedItems
+    
+    if selectedItems.isEmpty {
       return
     }
     
     var commonProperties : Set<LayoutInspectorProperty>?
     
-    for item in switchboardView.selectedItems {
+    for item in selectedItems {
       if commonProperties == nil {
         commonProperties = item.itemType.properties
       }
@@ -916,99 +976,52 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
       
       let stackView = (inspectorViews[index] as! NSScrollView).documentView as! NSStackView
       
-      if fieldCount[index] == 0 {
+      if fieldCount[index] == 0, (index != 1 || selectedItems.count > 1) {
         stackView.alignment = .centerX
         stackView.addArrangedSubview(inspectorNotApplicable[index])
+      }
+      
+      if index == 1 && selectedItems.count == 1, let item = selectedItems.first {
+        stackView.alignment = .left
+        stackView.addArrangedSubview(quickHelpSuperView!)
+        
+        inspectorConstraints.append(quickHelpView!.widthAnchor.constraint(equalTo: quickHelpSuperView!.widthAnchor))
+        
+        lblQuickHelpSummaryText?.stringValue = item.itemType.quickHelpSummary
+        lblQuickHelpDiscussionText?.stringValue = item.itemType.quickHelpDiscussion
+        
+        inspectorConstraints.append(lblQuickHelp!.topAnchor.constraint(equalToSystemSpacingBelow: quickHelpView!.topAnchor, multiplier: 1.0))
+        inspectorConstraints.append(lblQuickHelp!.leadingAnchor.constraint(equalToSystemSpacingAfter: quickHelpView!.leadingAnchor, multiplier: 1.0))
+
+        inspectorConstraints.append(lblQuickHelpSummary!.topAnchor.constraint(equalToSystemSpacingBelow: lblQuickHelp!.bottomAnchor, multiplier: 2.0))
+        inspectorConstraints.append(lblQuickHelpSummary!.leadingAnchor.constraint(equalToSystemSpacingAfter: quickHelpView!.leadingAnchor, multiplier: 1.0))
+        inspectorConstraints.append(lblQuickHelpSummaryText!.topAnchor.constraint(equalToSystemSpacingBelow: lblQuickHelpSummary!.bottomAnchor, multiplier: 2.0))
+        inspectorConstraints.append(lblQuickHelpSummaryText!.leadingAnchor.constraint(equalToSystemSpacingAfter: quickHelpView!.leadingAnchor, multiplier: 1.0))
+        inspectorConstraints.append(lblQuickHelpSummaryText!.trailingAnchor.constraint(equalTo: quickHelpView!.trailingAnchor))
+        
+
+        inspectorConstraints.append(sepQuickHelpSummary!.topAnchor.constraint(equalToSystemSpacingBelow: lblQuickHelpSummaryText!.bottomAnchor, multiplier: 1.0))
+        inspectorConstraints.append(sepQuickHelpSummary!.leadingAnchor.constraint(equalTo: lblQuickHelp!.leadingAnchor))
+        inspectorConstraints.append(sepQuickHelpSummary!.trailingAnchor.constraint(equalTo: quickHelpView!.trailingAnchor))
+        lblQuickHelpSummaryText!.setContentHuggingPriority(NSLayoutConstraint.Priority(rawValue: 1), for: .horizontal)
+
+        inspectorConstraints.append(lblQuickHelpDiscussion!.topAnchor.constraint(equalToSystemSpacingBelow: sepQuickHelpSummary!.bottomAnchor, multiplier: 1.0))
+        inspectorConstraints.append(lblQuickHelpDiscussion!.leadingAnchor.constraint(equalTo: lblQuickHelpSummary!.leadingAnchor))
+        
+        inspectorConstraints.append(lblQuickHelpDiscussionText!.topAnchor.constraint(equalToSystemSpacingBelow: lblQuickHelpDiscussion!.bottomAnchor, multiplier: 1.0))
+        inspectorConstraints.append(lblQuickHelpDiscussionText!.leadingAnchor.constraint(equalTo: lblQuickHelpSummaryText!.leadingAnchor))
+        lblQuickHelpDiscussionText!.setContentHuggingPriority(NSLayoutConstraint.Priority(rawValue: 1), for: .horizontal)
+        inspectorConstraints.append(lblQuickHelpDiscussionText!.trailingAnchor.constraint(equalTo: quickHelpView!.trailingAnchor))
+ 
+        inspectorConstraints.append(sepQuickHelpDiscussion!.topAnchor.constraint(equalToSystemSpacingBelow: lblQuickHelpDiscussionText!.bottomAnchor, multiplier: 1.0))
+        inspectorConstraints.append(sepQuickHelpDiscussion!.leadingAnchor.constraint(equalTo: lblQuickHelp!.leadingAnchor))
+        inspectorConstraints.append(sepQuickHelpDiscussion!.trailingAnchor.constraint(equalTo: quickHelpView!.trailingAnchor))
+
       }
       
     }
     
     NSLayoutConstraint.activate(inspectorConstraints)
-
-    
-    /*
-    var attributeIndex = 0
-    while attributeIndex < attributeControls.count {
-      var showHeader = true
-      var showSeparator = false
-      let groupField = attributeControls[attributeIndex]
-      while attributeIndex < attributeControls.count && groupField.group == attributeControls[attributeIndex].group {
-        let isApplicable = true
-        if isApplicable {
-          if showHeader {
-            let labelView = NSView()
-            labelView.translatesAutoresizingMaskIntoConstraints = false
-            let label = NSTextField(labelWithString: groupField.group)
-            label.translatesAutoresizingMaskIntoConstraints = false
-            label.font = NSFont.systemFont(ofSize: 12, weight: .bold)
-            label.textColor = NSColor.systemGray
-            label.alignment = .left
-            label.stringValue = groupField.group
-            attributeStack.addArrangedSubview(labelView)
-            labelView.addSubview(label)
-      //      labelView.backgroundColor = NSColor.black.cgColor
-            constraints.append(label.leadingAnchor.constraint(equalTo: labelView.leadingAnchor))
-            constraints.append(labelView.heightAnchor.constraint(equalTo: label.heightAnchor))
-            showHeader = false
-          }
-          
-          let fieldView = NSView()
- //         fieldView.backgroundColor = NSColor.systemPink.cgColor
-          
-          fieldView.translatesAutoresizingMaskIntoConstraints = false
-          attributeStack.addArrangedSubview(fieldView)
-          
-          let field = attributeControls[attributeIndex]
-          field.label.translatesAutoresizingMaskIntoConstraints = false
-          field.label.fontSize = labelFontSize
-          field.label.alignment = .right
-
-          fieldView.addSubview(field.label)
-          
-          field.control.translatesAutoresizingMaskIntoConstraints = false
-          field.control.fontSize = textFontSize
-          
-          fieldView.addSubview(field.control)
-   
-          /// Note to self: Views within a StackView must not have constraints to the outside world as this will lock the StackView size.
-          /// They must only have internal constraints to the view that is added to the StackView.
-          ///
-          constraints.append(fieldView.heightAnchor.constraint(equalTo: field.control.heightAnchor))
-          constraints.append(field.label.leadingAnchor.constraint(equalTo: fieldView.leadingAnchor, constant: 20))
-          constraints.append(field.control.leadingAnchor.constraint(equalToSystemSpacingAfter: field.label.trailingAnchor, multiplier: 1.0))
-          constraints.append(field.control.trailingAnchor.constraint(equalTo: fieldView.trailingAnchor))
-          constraints.append(field.control.widthAnchor.constraint(greaterThanOrEqualToConstant: 100))
-          constraints.append(field.control.centerYAnchor.constraint(equalTo: fieldView.centerYAnchor))
-          constraints.append(field.label.centerYAnchor.constraint(equalTo: fieldView.centerYAnchor))
-    
-          showSeparator = true
-        
-        }
-        attributeIndex += 1
-      }
-      if showSeparator {
-        let separator = SeparatorView()
-        separator.translatesAutoresizingMaskIntoConstraints = false
-        attributeStack.addArrangedSubview(separator)
-        constraints.append(separator.heightAnchor.constraint(equalToConstant: 20))
-        constraints.append(attributeStack.trailingAnchor.constraint(greaterThanOrEqualTo: separator.trailingAnchor))
-        constraints.append(separator.widthAnchor.constraint(equalTo: attributeStack.widthAnchor))
-      }
-    }
-    
-    for field1 in attributeControls {
-      let applicable = true
-      if applicable {
-        for field2 in attributeControls {
-          let applicable = true
-          if applicable && !(field1.label === field2.label) {
-            constraints.append(field1.label.widthAnchor.constraint(greaterThanOrEqualTo: field2.label.widthAnchor))
-          }
-        }
-      }
-    }
-     
-     */
 
   }
   
@@ -1059,13 +1072,13 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
   private var cboPanel : NSComboBox? = MyComboBox()
  
   @objc func cboPanelAction(_ sender: NSComboBox) {
-    debugLog("triggered")
     if sender.indexOfSelectedItem == -1 {
       switchboardPanel = nil
     }
     else {
       switchboardPanel = panels[sender.indexOfSelectedItem]
     }
+    displayInspector()
   }
   
   private var splitView : NSSplitView? = NSSplitView()
@@ -1081,8 +1094,6 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
   private var panelControls : [(label:NSTextField, control:NSControl, property:PanelProperty)] = []
   
   private var panelStack : NSStackView? = NSStackView()
-  
-  private var cboGroup : NSComboBox? = NSComboBox()
   
   private var btnShowInspectorView : NSButton?
   
@@ -1221,16 +1232,12 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
         return
       }
       switchboardView.addItem(partType: currentPartType)
-      displayInspector()
     case .removeItemFromPanel:
       switchboardView.deleteItem()
-      displayInspector()
     case .rotateCounterClockwise:
       switchboardView.rotateLeft()
-      displayInspector()
     case .rotateClockwise:
       switchboardView.rotateRight()
-      displayInspector()
     case .switchToGroupingMode:
       isGroupMode = true
     }
@@ -1242,9 +1249,9 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
     }
     switch button {
     case .addItemToGroup:
-      break
+      switchboardView.addToGroup()
     case .removeItemFromGroup:
-      break
+      switchboardView.removeFromGroup()
     case .switchToArrangeMode:
       isGroupMode = false
     }
@@ -1322,8 +1329,15 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
   
   // MARK: SwitchboardEditorViewDelegate Methods
   
-  @objc func selectedItemChanged(_ switchboardEditorView:SwitchboardEditorView, switchboardItem:SwitchboardItemNode?) {
+  @objc func selectedItemChanged(_ switchboardEditorView:SwitchboardEditorView) {
     displayInspector()
+  }
+  
+  @objc func groupChanged(_ switchboardEditorView:SwitchboardEditorView) {
+    guard let cboGroup, let appNode else {
+      return
+    }
+    appNode.selectGroup(comboBox: cboGroup, nodeId: switchboardEditorView.groupId)
   }
   
   // MARK: NSTextFieldDelegate, NSControlTextEditingDelegate Methods
@@ -1454,5 +1468,21 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
       currentPartType = nil
     }
   }
+  
+  private var cboGroup : MyComboBox? = MyComboBox()
+  
+  @objc func cboGroupAction(_ sender: NSComboBox) {
+    switchboardView.groupId = appNode?.selectedGroup(comboBox: sender)?.nodeId ?? 0
+  }
+  
+  private var lblQuickHelp : NSTextField? = NSTextField(labelWithString: "")
+  private var lblQuickHelpSummary : NSTextField? = NSTextField(labelWithString: "")
+  private var lblQuickHelpSummaryText : NSTextField? = NSTextField(labelWithString: "")
+  private var sepQuickHelpSummary : SeparatorView? = SeparatorView()
+  private var lblQuickHelpDiscussion : NSTextField? = NSTextField(labelWithString: "")
+  private var lblQuickHelpDiscussionText : NSTextField? = NSTextField(labelWithString: "")
+  private var sepQuickHelpDiscussion : SeparatorView? = SeparatorView()
+  private var quickHelpView : NSView? = NSView()
+  private var quickHelpSuperView : NSView? = NSView()
 
 }

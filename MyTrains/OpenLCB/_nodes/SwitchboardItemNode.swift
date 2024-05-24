@@ -1327,10 +1327,12 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     case .lengthRoute8:
       setDimension(routeNumber: 8, value: UnitLength.convert(fromValue: Double(string)!, fromUnits: appNode!.unitsActualLength, toUnits: UnitLength.defaultValueActualLength))
     case .link:
-//      if let link = appDelegate.networkLayer?.virtualNodeLookup[linkId] {
-//        return link.userNodeName
-//      }
-      break
+      if let link = appNode?.getLink(name: string) {
+        linkId = link.nodeId
+      }
+      else {
+        linkId = 0
+      }
     case .turnoutMotorType1:
       setTurnoutMotorType(turnoutNumber: 1, motorType: TurnoutMotorType(title: string)!)
     case .turnoutMotorType2:

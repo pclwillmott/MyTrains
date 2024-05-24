@@ -8,5 +8,6 @@
 import Foundation
 
 @objc protocol SwitchboardEditorViewDelegate {
-  @objc optional func selectedItemChanged(_ switchboardEditorView:SwitchboardEditorView, switchboardItem:SwitchboardItemNode?)
+  @objc optional func selectedItemChanged(_ switchboardEditorView:SwitchboardEditorView)
+  @objc optional func groupChanged(_ switchboardEditorView:SwitchboardEditorView)
 }

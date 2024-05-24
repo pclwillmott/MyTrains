@@ -14,6 +14,8 @@ public typealias SwitchBoardConnection = (from: Int, to: Int, switchSettings: [T
 
 public enum SwitchBoardItemType : UInt16 {
   
+  // MARK: Enumeration
+  
   case straight           = 0
   case curve              = 1
   case longCurve          = 2
@@ -36,6 +38,88 @@ public enum SwitchBoardItemType : UInt16 {
   case none               = 0xffff
 
   // MARK: Public Properties
+  
+  public var quickHelpSummary : String {
+    switch self {
+    case .straight, .curve, .longCurve:
+      return String(localized: "This item is used to connect items to other items. This item is used to connect items to other items. This item is used to connect items to other items. This item is used to connect items to other items. This item is used to connect items to other items.")
+    case .turnoutRight:
+      return String(localized: "")
+    case .turnoutLeft:
+      return String(localized: "")
+    case .cross:
+      return String(localized: "")
+    case .diagonalCross:
+      return String(localized: "")
+    case .yTurnout:
+      return String(localized: "")
+    case .turnout3Way:
+      return String(localized: "")
+    case .leftCurvedTurnout:
+      return String(localized: "")
+    case .rightCurvedTurnout:
+      return String(localized: "")
+    case .singleSlip:
+      return String(localized: "")
+    case .doubleSlip:
+      return String(localized: "")
+    case .buffer:
+      return String(localized: "")
+    case .block:
+      return String(localized: "")
+    case .sensor:
+      return String(localized: "")
+    case .link:
+      return String(localized: "")
+    case .platform:
+      return String(localized: "")
+    case .signal:
+      return String(localized: "")
+    case .none:
+      return String(localized: "")
+    }
+  }
+  
+  public var quickHelpDiscussion : String {
+    switch self {
+    case .straight, .curve, .longCurve:
+      return String(localized: "The only purpose of this item is to connect items to other items.")
+    case .turnoutRight:
+      return String(localized: "")
+    case .turnoutLeft:
+      return String(localized: "")
+    case .cross:
+      return String(localized: "")
+    case .diagonalCross:
+      return String(localized: "")
+    case .yTurnout:
+      return String(localized: "")
+    case .turnout3Way:
+      return String(localized: "")
+    case .leftCurvedTurnout:
+      return String(localized: "")
+    case .rightCurvedTurnout:
+      return String(localized: "")
+    case .singleSlip:
+      return String(localized: "")
+    case .doubleSlip:
+      return String(localized: "")
+    case .buffer:
+      return String(localized: "")
+    case .block:
+      return String(localized: "")
+    case .sensor:
+      return String(localized: "")
+    case .link:
+      return String(localized: "")
+    case .platform:
+      return String(localized: "")
+    case .signal:
+      return String(localized: "")
+    case .none:
+      return String(localized: "")
+    }
+  }
   
   public var properties : Set<LayoutInspectorProperty> {
     var result : Set<LayoutInspectorProperty> = [

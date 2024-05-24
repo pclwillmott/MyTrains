@@ -15,15 +15,24 @@ class SwitchboardEditorView: SwitchboardView {
   
   override func draw(_ dirtyRect: NSRect) {
 
-    guard let switchboardPanel, let appLayoutId, let layout = appDelegate.networkLayer?.virtualNodeLookup[appLayoutId] as? LayoutNode else {
+    guard let switchboardPanel, let appLayoutId, let _ = appDelegate.networkLayer?.virtualNodeLookup[appLayoutId] as? LayoutNode else {
       return
     }
 
-    if isGroupMode && groupId != -1 {
+    if bounds.width <= bounds.height {
+      cellSize = bounds.width / CGFloat(switchboardPanel.numberOfColumns)
+    }
+    else {
+      cellSize = bounds.height / CGFloat(switchboardPanel.numberOfRows)
+    }
+    
+    let lineWidth = cellSize * 0.1
+    
+    if isGroupMode {
       
-      for (key, item) in switchboardPanel.switchboardItems {
+      for (_, item) in switchboardPanel.switchboardItems {
         
-        if item.groupId != -1 {
+        if item.groupId != 0 {
           
           let path = NSBezierPath()
           
@@ -112,41 +121,6 @@ class SwitchboardEditorView: SwitchboardView {
       
     }
      
-    /*
-    if let start = startMove {
-      
-      let path = NSBezierPath()
-      
-      path.lineWidth = lineWidth
-      
-      NSColor.setStrokeColor(color: .orange)
-   
-      let rect = NSRect(x: CGFloat(start.x) * cellSize, y: CGFloat(start.y) * cellSize, width: cellSize, height: cellSize)
-
-      path.appendRect(rect)
-      
-      path.stroke()
-
-    }
-    
-    if let end = endMove {
-      
-      let path = NSBezierPath()
-      
-      path.lineWidth = lineWidth
-      
-      NSColor.setStrokeColor(color: .green)
-   
-      let rect = NSRect(x: CGFloat(end.x) * cellSize, y: CGFloat(end.y) * cellSize, width: cellSize, height: cellSize)
-
-      path.appendRect(rect)
-      
-      path.stroke()
-
-    }
- 
-     */
-    
   }
   
   // MARK: Private Properties
@@ -159,13 +133,29 @@ class SwitchboardEditorView: SwitchboardView {
   
   private var isDrag : Bool = false
   
+  public override var switchboardPanel : SwitchboardPanelNode? {
+    get {
+      return _switchboardPanel
+    }
+    set(value) {
+      _switchboardPanel = value
+      selectedItems.removeAll()
+      currentLocation = nil
+      startMove = nil
+      endMove = nil
+      isDrag = false
+      groupId = 0
+    }
+  }
+
+  
   // MARK: Public Properties
   
   public var selectedItems : [SwitchboardItemNode] = []
   
-  public var groupId : Int = -1 {
+  public var groupId : UInt64 = 0 {
     didSet {
-      
+      needsDisplay = true
     }
   }
   
@@ -174,8 +164,6 @@ class SwitchboardEditorView: SwitchboardView {
       needsDisplay = true
     }
   }
-  
-  public var nextPart : SwitchBoardItemType = .none
   
   public var isGroupMode : Bool {
     return mode == .group
@@ -188,26 +176,6 @@ class SwitchboardEditorView: SwitchboardView {
   public var delegate: SwitchboardEditorViewDelegate?
   
   // MARK: Private Methods
-  
-  private func newGroup() -> Int {
-    /*
-    var candidate : Int = 1
-    while true {
-      var used = false
-      for kv in layout!.switchBoardItems {
-        if kv.value.groupId == candidate {
-          used = true
-          break
-        }
-      }
-      if !used {
-        return candidate
-      }
-      candidate += 1
-    }
-     */
-    return 0
-  }
   
   private func isSelected(item:SwitchboardItemNode) -> Bool {
     for selectedItem in selectedItems {
@@ -223,21 +191,22 @@ class SwitchboardEditorView: SwitchboardView {
     startMove = gridSquare(from: event)
     
     switch event.modifierFlags.intersection(.deviceIndependentFlagsMask) {
+    case [.command]:
+      if let item = getItem(event: event) {
+        groupId = item.groupId
+        delegate?.groupChanged?(self)
+      }
     case [.control]:
-      debugLog("control")
       break
     case [.option]:
-      debugLog("option")
       break
     case [.shift]:
-      debugLog("shift")
       if let item = getItem(event: event), !isSelected(item: item) {
         selectedItems.append(item)
       }
       currentLocation = selectedItems.count > 1 ? nil : startMove
 
     default:
-      debugLog("default")
       selectedItems.removeAll()
       currentLocation = startMove
       if let item = getItem(event: event), !isSelected(item: item) {
@@ -246,8 +215,7 @@ class SwitchboardEditorView: SwitchboardView {
       
     }
     
-    delegate?.selectedItemChanged?(self, switchboardItem: nil)
-
+    delegate?.selectedItemChanged?(self)
 
     needsDisplay = true
 
@@ -336,7 +304,7 @@ class SwitchboardEditorView: SwitchboardView {
         isDrag = false
         endMove = nil
 
-        delegate?.selectedItemChanged?(self, switchboardItem: nil)
+        delegate?.selectedItemChanged?(self)
 
       }
 
@@ -355,7 +323,8 @@ class SwitchboardEditorView: SwitchboardView {
     }
     
     needsDisplay = true
-    
+    delegate?.selectedItemChanged?(self)
+
   }
   
   public func rotateLeft() {
@@ -365,38 +334,29 @@ class SwitchboardEditorView: SwitchboardView {
     }
     
     needsDisplay = true
-    
+    delegate?.selectedItemChanged?(self)
+
   }
   
-  public func changeGroup(groupName: String) {
-    groupId = groupName == "(new group)" ? -1 : Int(groupName) ?? -1
-  }
-  
-  public func addToGroup(groupName: String) {
-    /*
-    var gid = -1
-    
-    if groupName == "(new group)" {
-      gid = newGroup()
+  public func addToGroup() {
+    guard groupId != 0 else {
+      return
     }
-    else {
-      gid = Int(groupName) ?? -1
-    }
-    
     for item in selectedItems {
-      item.groupId = gid
+      item.groupId = groupId
+      item.saveMemorySpaces()
     }
-    
-    groupId = gid
-*/
+    needsDisplay = true
+    delegate?.selectedItemChanged?(self)
   }
 
   public func removeFromGroup() {
-    
     for item in selectedItems {
-  //    item.groupId = -1
+      item.groupId = 0
+      item.saveMemorySpaces()
     }
-    
+    needsDisplay = true
+    delegate?.selectedItemChanged?(self)
   }
   
   public func deleteItem() {
@@ -424,8 +384,8 @@ class SwitchboardEditorView: SwitchboardView {
       
       networkLayer.deleteNode(nodeId: item.nodeId)
       selectedItems.removeAll()
-      
       needsDisplay = true
+      delegate?.selectedItemChanged?(self)
 
     }
 
@@ -501,6 +461,7 @@ class SwitchboardEditorView: SwitchboardView {
       node.saveMemorySpaces()
       selectedItems.removeAll()
       selectedItems.append(node)
+      delegate?.selectedItemChanged?(self)
     }
     
     needsDisplay = true
