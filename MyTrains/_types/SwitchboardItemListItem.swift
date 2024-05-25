@@ -7,4 +7,4 @@
 
 import Foundation
 
-public typealias SwitchboardItemListItem = (layoutId:UInt64, itemId:UInt64, itemName:String, itemType:SwitchBoardItemType)
+public typealias SwitchboardItemListItem = (layoutId:UInt64, itemId:UInt64, itemName:String, itemType:SwitchboardItemType)

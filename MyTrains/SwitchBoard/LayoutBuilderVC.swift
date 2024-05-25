@@ -649,11 +649,10 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
     
     arrangeView.isHidden = true
     
-    if let quickHelpView, let lblQuickHelp, let lblQuickHelpSummary, let lblQuickHelpSummaryText, let lblQuickHelpDiscussion, let lblQuickHelpDiscussionText, let sepQuickHelpSummary, let sepQuickHelpDiscussion {
+    if let quickHelpView, let lblQuickHelp, let lblQuickHelpSummary, let lblQuickHelpSummaryText, let lblQuickHelpDiscussion, let lblQuickHelpDiscussionText, let sepQuickHelpSummary {
       
       var constraints : [NSLayoutConstraint] = []
       
-      quickHelpSuperView?.translatesAutoresizingMaskIntoConstraints = false
       quickHelpView.translatesAutoresizingMaskIntoConstraints = false
       lblQuickHelp.translatesAutoresizingMaskIntoConstraints = false
       lblQuickHelpSummary.translatesAutoresizingMaskIntoConstraints = false
@@ -661,9 +660,6 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
       lblQuickHelpDiscussion.translatesAutoresizingMaskIntoConstraints = false
       lblQuickHelpDiscussionText.translatesAutoresizingMaskIntoConstraints = false
       sepQuickHelpSummary.translatesAutoresizingMaskIntoConstraints = false
-      sepQuickHelpDiscussion.translatesAutoresizingMaskIntoConstraints = false
-      
-      quickHelpSuperView?.addSubview(quickHelpView)
       
       lblQuickHelp.stringValue = String(localized: "Quick Help")
       lblQuickHelp.font = NSFont.systemFont(ofSize: 12, weight: .bold)
@@ -680,7 +676,7 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
       lblQuickHelpSummaryText.alignment = .left
       lblQuickHelpSummaryText.lineBreakMode = .byWordWrapping
       lblQuickHelpSummaryText.maximumNumberOfLines = 0
-      lblQuickHelpSummaryText.preferredMaxLayoutWidth = 300
+      lblQuickHelpSummaryText.preferredMaxLayoutWidth = 250
       quickHelpView.addSubview(lblQuickHelpSummaryText)
 
       quickHelpView.addSubview(sepQuickHelpSummary)
@@ -694,10 +690,8 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
       lblQuickHelpDiscussionText.alignment = .left
       lblQuickHelpDiscussionText.lineBreakMode = .byWordWrapping
       lblQuickHelpDiscussionText.maximumNumberOfLines = 0
-      lblQuickHelpDiscussionText.preferredMaxLayoutWidth = 300
+      lblQuickHelpDiscussionText.preferredMaxLayoutWidth = 250
       quickHelpView.addSubview(lblQuickHelpDiscussionText)
-
-      quickHelpView.addSubview(sepQuickHelpDiscussion)
 
       NSLayoutConstraint.activate(constraints)
 
@@ -983,9 +977,7 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
       
       if index == 1 && selectedItems.count == 1, let item = selectedItems.first {
         stackView.alignment = .left
-        stackView.addArrangedSubview(quickHelpSuperView!)
-        
-        inspectorConstraints.append(quickHelpView!.widthAnchor.constraint(equalTo: quickHelpSuperView!.widthAnchor))
+        stackView.addArrangedSubview(quickHelpView!)
         
         lblQuickHelpSummaryText?.stringValue = item.itemType.quickHelpSummary
         lblQuickHelpDiscussionText?.stringValue = item.itemType.quickHelpDiscussion
@@ -1011,11 +1003,10 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
         inspectorConstraints.append(lblQuickHelpDiscussionText!.topAnchor.constraint(equalToSystemSpacingBelow: lblQuickHelpDiscussion!.bottomAnchor, multiplier: 1.0))
         inspectorConstraints.append(lblQuickHelpDiscussionText!.leadingAnchor.constraint(equalTo: lblQuickHelpSummaryText!.leadingAnchor))
         lblQuickHelpDiscussionText!.setContentHuggingPriority(NSLayoutConstraint.Priority(rawValue: 1), for: .horizontal)
+        lblQuickHelpDiscussionText!.setContentHuggingPriority(NSLayoutConstraint.Priority(rawValue: 1), for: .vertical)
         inspectorConstraints.append(lblQuickHelpDiscussionText!.trailingAnchor.constraint(equalTo: quickHelpView!.trailingAnchor))
  
-        inspectorConstraints.append(sepQuickHelpDiscussion!.topAnchor.constraint(equalToSystemSpacingBelow: lblQuickHelpDiscussionText!.bottomAnchor, multiplier: 1.0))
-        inspectorConstraints.append(sepQuickHelpDiscussion!.leadingAnchor.constraint(equalTo: lblQuickHelp!.leadingAnchor))
-        inspectorConstraints.append(sepQuickHelpDiscussion!.trailingAnchor.constraint(equalTo: quickHelpView!.trailingAnchor))
+        inspectorConstraints.append(quickHelpView!.bottomAnchor.constraint(greaterThanOrEqualTo: lblQuickHelpDiscussionText!.bottomAnchor))
 
       }
       
@@ -1448,7 +1439,7 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
     }
   }
   
-  private var currentPartType : SwitchBoardItemType?
+  private var currentPartType : SwitchboardItemType?
   
   @IBAction func btnPartType(_ sender: NSButton) {
     guard let button = sender as? SwitchboardShapeButton else {
@@ -1481,8 +1472,6 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
   private var sepQuickHelpSummary : SeparatorView? = SeparatorView()
   private var lblQuickHelpDiscussion : NSTextField? = NSTextField(labelWithString: "")
   private var lblQuickHelpDiscussionText : NSTextField? = NSTextField(labelWithString: "")
-  private var sepQuickHelpDiscussion : SeparatorView? = SeparatorView()
   private var quickHelpView : NSView? = NSView()
-  private var quickHelpSuperView : NSView? = NSView()
 
 }

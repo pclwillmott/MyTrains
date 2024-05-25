@@ -534,7 +534,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
         cdi = TrackElectrificationType.insertMap(cdi: cdi)
         cdi = TurnoutMotorType.insertMap(cdi: cdi)
         cdi = Orientation.insertMap(cdi: cdi)
-        cdi = SwitchBoardItemType.insertMap(cdi: cdi)
+        cdi = SwitchboardItemType.insertMap(cdi: cdi)
         cdi = BlockDirection.insertMap(cdi: cdi)
 
         if let app = networkLayer?.myTrainsNode {

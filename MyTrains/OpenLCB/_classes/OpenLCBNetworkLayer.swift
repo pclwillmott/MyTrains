@@ -25,7 +25,8 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
     addDeinit()
     showInstances()
     #endif
-    exit(0)
+    //exit(0)
+    NSApplication.shared.terminate(self)
   }
   
   // MARK: Private Properties

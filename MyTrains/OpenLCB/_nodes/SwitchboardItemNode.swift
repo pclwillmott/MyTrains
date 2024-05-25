@@ -677,9 +677,9 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     }
   }
 
-  public var itemType : SwitchBoardItemType {
+  public var itemType : SwitchboardItemType {
     get {
-      return SwitchBoardItemType(rawValue: configuration!.getUInt16(address: addressItemType)!)!
+      return SwitchboardItemType(rawValue: configuration!.getUInt16(address: addressItemType)!)!
     }
     set(value) {
       configuration!.setUInt(address: addressItemType, value: value.rawValue)
@@ -962,7 +962,7 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
   public var isEliminated : Bool = false
 
   public var isTurnout : Bool {
-    let turnouts : Set<SwitchBoardItemType> = [
+    let turnouts : Set<SwitchboardItemType> = [
       .cross,
       .rightCurvedTurnout,
       .leftCurvedTurnout,
@@ -978,7 +978,7 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
   }
   
   public var isScenic : Bool {
-    let scenics : Set<SwitchBoardItemType> = [
+    let scenics : Set<SwitchboardItemType> = [
       .platform,
     ]
     return scenics.contains(itemType)
@@ -1016,7 +1016,7 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
   
   public var isTrack : Bool {
     get {
-      let track : Set<SwitchBoardItemType> = [
+      let track : Set<SwitchboardItemType> = [
         .curve,
         .sensor,
         .longCurve,
@@ -1134,11 +1134,11 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
       return "\(trackGradient)"
     case .trackGauge:
       return trackGauge.title
-    case .lengthRoute1:
+    case .lengthRoute1, .leftDivergingRoute, .rightThroughRoute, .yLeftDivergingRoute, .way3LeftDivergingRoute, .leftCurvedSmallerRadiusRoute, .rightCurvedLargerRadiusRoute:
       return "\(UnitLength.convert(fromValue: getDimension(routeNumber: 1)!, fromUnits: UnitLength.defaultValueActualLength, toUnits: appNode!.unitsActualLength))"
-    case .lengthRoute2:
+    case .lengthRoute2, .leftThroughRoute, .rightDivergingRoute, .yRightDivergingRoute, .way3ThroughRoute, .leftCurvedLargerRadiusRoute, .rightCurvedSmallerRadiusRoute:
       return "\(UnitLength.convert(fromValue: getDimension(routeNumber: 2)!, fromUnits: UnitLength.defaultValueActualLength, toUnits: appNode!.unitsActualLength))"
-    case .lengthRoute3:
+    case .lengthRoute3, .way3RightDivergingRoute:
       return "\(UnitLength.convert(fromValue: getDimension(routeNumber: 3)!, fromUnits: UnitLength.defaultValueActualLength, toUnits: appNode!.unitsActualLength))"
     case .lengthRoute4:
       return "\(UnitLength.convert(fromValue: getDimension(routeNumber: 4)!, fromUnits: UnitLength.defaultValueActualLength, toUnits: appNode!.unitsActualLength))"
@@ -1310,11 +1310,11 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
       trackGradient = Float32(string)!
     case .trackGauge:
       trackGauge = TrackGauge(title: string)!
-    case .lengthRoute1:
+    case .lengthRoute1, .leftDivergingRoute, .rightThroughRoute, .yLeftDivergingRoute, .leftCurvedSmallerRadiusRoute, .rightCurvedLargerRadiusRoute, .way3LeftDivergingRoute:
       setDimension(routeNumber: 1, value: UnitLength.convert(fromValue: Double(string)!, fromUnits: appNode!.unitsActualLength, toUnits: UnitLength.defaultValueActualLength))
-    case .lengthRoute2:
+    case .lengthRoute2, .leftThroughRoute, .rightDivergingRoute, .yRightDivergingRoute, .way3ThroughRoute, .leftCurvedLargerRadiusRoute, .rightCurvedSmallerRadiusRoute:
       setDimension(routeNumber: 2, value: UnitLength.convert(fromValue: Double(string)!, fromUnits: appNode!.unitsActualLength, toUnits: UnitLength.defaultValueActualLength))
-    case .lengthRoute3:
+    case .lengthRoute3, .way3RightDivergingRoute:
       setDimension(routeNumber: 3, value: UnitLength.convert(fromValue: Double(string)!, fromUnits: appNode!.unitsActualLength, toUnits: UnitLength.defaultValueActualLength))
     case .lengthRoute4:
       setDimension(routeNumber: 4, value: UnitLength.convert(fromValue: Double(string)!, fromUnits: appNode!.unitsActualLength, toUnits: UnitLength.defaultValueActualLength))
@@ -1864,7 +1864,7 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
 
     sub = ""
     
-    result = SwitchBoardItemType.insertMap(cdi: result)
+    result = SwitchboardItemType.insertMap(cdi: result)
     result = Orientation.insertMap(cdi: result)
     result = BlockDirection.insertMap(cdi: result)
     result = YesNo.insertMap(cdi: result)

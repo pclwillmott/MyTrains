@@ -70,6 +70,9 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
   }
   #endif
 
+  
+  // https://stackoverflow.com/questions/65055487/is-there-a-way-to-delete-main-storyboard-in-swiftui-macos-project
+
   public func startApp() {
 
     showInitAppWindow()
@@ -101,7 +104,14 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
     #if DEBUG
     debugLog("applicationDidFinishLaunching")
     #endif
-    
+    /*
+    let appMenu = NSMenuItem()
+    appMenu.submenu = NSMenu()
+    appMenu.submenu?.addItem(NSMenuItem(title: "Quit", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
+    let mainMenu = NSMenu(title: "MyTrains")
+    mainMenu.addItem(appMenu)
+    NSApplication.shared.mainMenu = mainMenu
+    */
     // Do the legal stuff, if they don't accept the agreement stop the app.
     
     if !eulaAccepted! {

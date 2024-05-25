@@ -391,7 +391,7 @@ class SwitchboardEditorView: SwitchboardView {
 
   }
   
-  public func addItem(partType:SwitchBoardItemType) {
+  public func addItem(partType:SwitchboardItemType) {
     
     guard let networkLayer = appDelegate.networkLayer, let currentLocation, let switchboardPanel else {
       return
@@ -458,7 +458,13 @@ class SwitchboardEditorView: SwitchboardView {
       
       node.xPos = UInt16(exactly: currentLocation.x)!
       node.yPos = UInt16(exactly: currentLocation.y)!
+      
+      if node.itemType.isGroup, let layout = appNode?.layout {
+        node.trackGauge = layout.defaultTrackGuage
+      }
+      
       node.saveMemorySpaces()
+      
       selectedItems.removeAll()
       selectedItems.append(node)
       delegate?.selectedItemChanged?(self)

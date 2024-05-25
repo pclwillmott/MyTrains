@@ -16,15 +16,16 @@ public enum LayoutInspectorGroup : Int, CaseIterable {
   case generalSettings    = 2
   case blockSettings      = 3
   case trackConfiguration = 4
-  case blockEvents        = 5
-  case sensorSettings     = 6
-  case signalSettings     = 7
-  case turnoutControl     = 8
-  case signalEvents       = 9
-  case turnoutEvents      = 10
-  case sensorEvents       = 11
-  case speedConstraintsDP = 12
-  case speedConstraintsDN = 13
+  case routeLengths       = 5
+  case blockEvents        = 6
+  case sensorSettings     = 7
+  case signalSettings     = 8
+  case turnoutControl     = 9
+  case signalEvents       = 10
+  case turnoutEvents      = 11
+  case sensorEvents       = 12
+  case speedConstraintsDP = 13
+  case speedConstraintsDN = 14
 
   // MARK: Public Properties
   
@@ -53,6 +54,10 @@ public enum LayoutInspectorGroup : Int, CaseIterable {
     ),
     .trackConfiguration : (
       String(localized: "Track Configuration", comment: "This is used for the title of the Track Configuration section in the Layout Builder."),
+      .attributes
+    ),
+    .routeLengths : (
+      String(localized: "Route Length Settings", comment: "This is used for the title of the Route Length Settings section in the Layout Builder."),
       .attributes
     ),
     .blockEvents : (

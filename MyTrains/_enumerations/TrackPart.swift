@@ -20,7 +20,7 @@ import Foundation
  ]
 
  */
-public typealias TrackPartInfo = (trackPartId:TrackPart, manufacturer:Manufacturer, brandName:String, title: String, partNumber: String, itemPartType: SwitchBoardItemType, trackCode: TrackCode, trackGauge: TrackGauge, frogType:FrogType, dimensions: [Double])
+public typealias TrackPartInfo = (trackPartId:TrackPart, manufacturer:Manufacturer, brandName:String, title: String, partNumber: String, itemPartType: SwitchboardItemType, trackCode: TrackCode, trackGauge: TrackGauge, frogType:FrogType, dimensions: [Double])
 
 public enum TrackPart : UInt16 {
   
@@ -908,7 +908,7 @@ public enum TrackPart : UInt16 {
   
   public static let mapPlaceholder = CDI.TRACK_PART
 
-  private static func map(itemType:SwitchBoardItemType, layout:LayoutNode) -> String {
+  private static func map(itemType:SwitchboardItemType, layout:LayoutNode) -> String {
 
     var gauges : Set<TrackGauge> = []
     
@@ -948,14 +948,14 @@ public enum TrackPart : UInt16 {
 
   // MARK: Public Class Methods
   
-  public static func insertMap(cdi:String, itemType:SwitchBoardItemType, layout:LayoutNode?) -> String {
+  public static func insertMap(cdi:String, itemType:SwitchboardItemType, layout:LayoutNode?) -> String {
     guard let layout else {
       return cdi
     }
     return cdi.replacingOccurrences(of: mapPlaceholder, with: map(itemType: itemType, layout: layout))
   }
 
-  public static func dictionary(itemPartType:SwitchBoardItemType, trackGauge:TrackGauge) -> [Int:TrackPartEditorObject] {
+  public static func dictionary(itemPartType:SwitchboardItemType, trackGauge:TrackGauge) -> [Int:TrackPartEditorObject] {
     
     var result : [Int:TrackPartEditorObject] = [:]
     

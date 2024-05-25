@@ -53,3 +53,29 @@ public enum SwitchBoardMode {
   case arrange
   case group
 }
+
+public enum SwitchBoardItemAction {
+  case delete
+  case save
+  case noAction
+}
+
+public typealias RoutePart = (
+  fromSwitchBoardItem: SwitchBoardItem,
+  fromNodeId: Int,
+  toSwitchBoardItem: SwitchBoardItem,
+  toNodeId: Int,
+  turnoutConnection:Int,
+  distance: Double,
+  routeDirection: RouteDirection
+)
+
+public typealias NodeLink = (switchBoardItem: SwitchBoardItem?, nodeId: Int, routes: [RoutePart])
+
+@objc public protocol LayoutDelegate {
+  @objc optional func needsDisplay()
+}
+
+public typealias Route = [RoutePart]
+
+

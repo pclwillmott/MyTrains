@@ -8,24 +8,6 @@
 import Foundation
 import Cocoa
 
-public enum SwitchBoardItemAction {
-  case delete
-  case save
-  case noAction
-}
-
-public typealias RoutePart = (
-  fromSwitchBoardItem: SwitchBoardItem,
-  fromNodeId: Int,
-  toSwitchBoardItem: SwitchBoardItem,
-  toNodeId: Int,
-  turnoutConnection:Int,
-  distance: Double,
-  routeDirection: RouteDirection
-) 
-
-public typealias NodeLink = (switchBoardItem: SwitchBoardItem?, nodeId: Int, routes: [RoutePart])
-
 public class SwitchBoardItem : EditorObject {
 
   // MARK: Constructors
@@ -35,7 +17,7 @@ public class SwitchBoardItem : EditorObject {
     decode(sqliteDataReader: reader)
   }
   
-  init(location: SwitchBoardLocation, itemPartType: SwitchBoardItemType, orientation: Orientation, groupId: Int, panelId: Int, layoutId: Int) {
+  init(location: SwitchBoardLocation, itemPartType: SwitchboardItemType, orientation: Orientation, groupId: Int, panelId: Int, layoutId: Int) {
     super.init(primaryKey: -1)
     self.location = location
     self.itemPartType = itemPartType
@@ -109,7 +91,7 @@ public class SwitchBoardItem : EditorObject {
   
   public var isEliminated : Bool = false
   
-  public var itemPartType : SwitchBoardItemType = .none {
+  public var itemPartType : SwitchboardItemType = .none {
     didSet {
       if isTurnout {
         blockType = .turnout
@@ -133,7 +115,7 @@ public class SwitchBoardItem : EditorObject {
   
   public var isTurnout : Bool {
     get {
-      let turnouts : Set<SwitchBoardItemType> = [
+      let turnouts : Set<SwitchboardItemType> = [
         .cross,
         .rightCurvedTurnout,
         .leftCurvedTurnout,
@@ -151,7 +133,7 @@ public class SwitchBoardItem : EditorObject {
   
   public var isScenic : Bool {
     get {
-      let scenics : Set<SwitchBoardItemType> = [
+      let scenics : Set<SwitchboardItemType> = [
         .platform,
       ]
       return scenics.contains(itemPartType)
@@ -178,7 +160,7 @@ public class SwitchBoardItem : EditorObject {
   
   public var isTrack : Bool {
     get {
-      let track : Set<SwitchBoardItemType> = [
+      let track : Set<SwitchboardItemType> = [
         .curve,
         .sensor,
         .longCurve,
@@ -867,9 +849,9 @@ public class SwitchBoardItem : EditorObject {
       window.close()
     }
  */
-    let vc = MyTrainsWindow.switchBoardItemPropertySheet.viewController as! SwitchBoardItemPropertySheetVC
-    vc.switchBoardItem = self
-    vc.showWindow()
+//    let vc = MyTrainsWindow.switchBoardItemPropertySheet.viewController as! SwitchBoardItemPropertySheetVC
+//    vc.switchBoardItem = self
+//    vc.showWindow()
 
   }
   
@@ -894,7 +876,7 @@ public class SwitchBoardItem : EditorObject {
       }
       
       if !reader.isDBNull(index: 4) {
-        itemPartType = SwitchBoardItemType(rawValue: UInt16(reader.getInt(index: 4)!)) ?? .none
+        itemPartType = SwitchboardItemType(rawValue: UInt16(reader.getInt(index: 4)!)) ?? .none
       }
       
       if !reader.isDBNull(index: 5) {

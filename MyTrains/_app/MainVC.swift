@@ -7,7 +7,7 @@
 
 import Cocoa
 
-class MainVC: NSViewController, LayoutDelegate, OpenLCBClockDelegate {
+class xMainVC: NSViewController, LayoutDelegate, OpenLCBClockDelegate {
 
   override func viewWillAppear() {
 
@@ -108,13 +108,13 @@ class MainVC: NSViewController, LayoutDelegate, OpenLCBClockDelegate {
   // MARK: LayoutDelegate Methods
   
   func needsDisplay() {
-    switchBoardView.needsDisplay = true
+    //switchBoardView.needsDisplay = true
   }
   
   // MARK: MyTrainsController Delegate Methods
   
   func switchBoardUpdated() {
-    switchBoardView.needsDisplay = true
+    //switchBoardView.needsDisplay = true
   }
   
   // MARK: Outlets & Actions
@@ -129,7 +129,7 @@ class MainVC: NSViewController, LayoutDelegate, OpenLCBClockDelegate {
   
   @IBOutlet weak var scrollView: NSScrollView!
   
-  @IBOutlet weak var switchBoardView: SwitchBoardOperationsView!
+  //@IBOutlet weak var switchBoardView: SwitchBoardOperationsView!
   
   @IBAction func btnZoomIn(_ sender: NSButton) {
     mainSwitchboardMagnification += 0.25
@@ -143,24 +143,6 @@ class MainVC: NSViewController, LayoutDelegate, OpenLCBClockDelegate {
   
   @IBAction func btnZoomToFit(_ sender: NSButton) {
     
-    scrollView.magnification = 1.0
-
-    let sWidth = scrollView.frame.width
-    let sHeight = scrollView.frame.height
-    let gWidth = switchBoardView.bounds.width
-    let gHeight = switchBoardView.bounds.height
-
-    var scale = 1.0
-
-    if gWidth > gHeight {
-      scale = sWidth / gWidth
-    }
-    else {
-      scale = sHeight / gHeight
-    }
-    
-    mainSwitchboardMagnification = scale
-    scrollView.magnification = mainSwitchboardMagnification
 
   }
   

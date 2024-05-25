@@ -7,12 +7,6 @@
 
 import Foundation
 
-@objc public protocol LayoutDelegate {
-  @objc optional func needsDisplay()
-}
-
-public typealias Route = [RoutePart]
-
 public class Layout : EditorObject {
   
   // MARK: Constructors
