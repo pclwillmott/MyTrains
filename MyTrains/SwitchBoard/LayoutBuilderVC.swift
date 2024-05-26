@@ -57,7 +57,7 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    viewType = .switchboardPanel
+    viewType = .layoutBuilder
   }
   
   private enum DEFAULT {
@@ -84,7 +84,6 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
     case showAttributesInspector = 2
     case showEventsInspector = 3
     case showSpeedConstraintsInspector = 4
-    case showTurnoutInspector = 5
   }
   
   private enum GroupButton : Int {
@@ -99,6 +98,10 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
     case fitToSize = 2
   }
   
+  override func viewDidDisappear() {
+    appDelegate.rebootRequest()
+  }
+
   override func viewWillAppear() {
     
     super.viewWillAppear()
@@ -119,15 +122,13 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
       MyIcon.gear.button(target: self, action: nil),
       MyIcon.bolt.button(target: self, action: nil),
       MyIcon.speedometer.button(target: self, action: nil),
-      MyIcon.connection.button(target: self, action: nil),
     ]
     
-    inspectorButtons[InspectorButton.showInformationInspector.rawValue]?.toolTip = String(localized: "Show Information Inspector")
+    inspectorButtons[InspectorButton.showInformationInspector.rawValue]?.toolTip = String(localized: "Show Identity Inspector")
     inspectorButtons[InspectorButton.showQuickHelpInspector.rawValue]?.toolTip = String(localized: "Show Quick Help Inspector")
     inspectorButtons[InspectorButton.showAttributesInspector.rawValue]?.toolTip = String(localized: "Show Attributes Inspector")
     inspectorButtons[InspectorButton.showEventsInspector.rawValue]?.toolTip = String(localized: "Show Events Inspector")
     inspectorButtons[InspectorButton.showSpeedConstraintsInspector.rawValue]?.toolTip = String(localized: "Show Speed Constraints Inspector")
-    inspectorButtons[InspectorButton.showTurnoutInspector.rawValue]?.toolTip = String(localized: "Show Turnout Inspector")
 
     arrangeButtons = [
       MyIcon.addItem.button(target: self, action: nil),
@@ -707,9 +708,14 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
     self.cboPalette?.action = #selector(self.cboPaletteAction(_:))
     cboPaletteAction(cboPalette)
 
+    if cboPanel.indexOfSelectedItem == -1, cboPanel.numberOfItems > 0 {
+      cboPanel.selectItem(at: 0)
+    }
+
     setStates()
     
     displayInspector()
+ 
     
   }
   
@@ -845,10 +851,52 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
       stackView.subviews.removeAll()
       
       if switchboardView.selectedItems.isEmpty {
-        stackView.alignment = .centerX
-        stackView.addArrangedSubview(inspectorNoSelection[index])
+        
+        if index == 1 {
+          
+          stackView.alignment = .left
+          stackView.addArrangedSubview(quickHelpView!)
+          
+          lblQuickHelpSummaryText?.stringValue = String(localized: "A layout is defined by one or more switchboard panels. A small layout may only require a single panel. Larger layouts will require more than one panel. A panel may be viewed as a single signal box, interlocking tower, or signal cabin. All the items relating to the operation of that box, tower, or cabin are defined on the panel. Where a track exits the operational area of a panel it moves to the operational area of another panel. The Layout Builder is used to configure switchboard panels.")
+          
+          lblQuickHelpDiscussionText?.stringValue = String(localized: "Layout Builder is divided into 4 sections. The central top section is the panel upon which you will add switchboard items. Below the panel are 3 disclosure buttons which will hide and show the other operational sections of Layout Builder. Screen space may be limited so these buttons allow you to hide those sections that you don't currently need.\n\nAt the bottom of Layout Builder is the panel configuration section. Here you can give the panel a user defined name and description and set the grid size.\n\nOn the leading (right hand) side of Layout Builder are the controls to create, delete, arrange, and group items on a panel. This section operates in 2 mutually exclusive modes - \"Arrange Mode\" and \"Grouping Mode\". Buttons are provided to switch between the 2 modes.\n\nArrange Mode\n\nThe various switchboard items are grouped into palettes by functional type. The required palette is selected from the dropdown list. To place an item on the panel press the item button in the palette. The button will be outlined in red. Now click on the grid square on the panel where you want to place the item. The selected grid square will be outlined in blue. Now press the \"Add Item to Panel\" button. To remove an item from a panel select it by clicking on the item in the panel and then press the \"Remove Item from Panel\" button. You will be asked to confirm that you really want to delete the item (and all of its configuration information such as event ids). You can select multiple items on a panel using the shift modifier key when clicking on an item. Buttons are provided to rotate the selected items. Some of the items in the palettes (e.g. signals) are specific to the country specified in the layout configuration.\n\nGrouping Mode\n\nGrouping mode is used to create blocks of track or groups. A group is controlled by a block item or a turnout/crossing item. A group may only have one controlling item. The controlling item defines the properties of the block of track, such as its route lengths, event ids, speed constraints etc. All switchboard items, with the exception of certain purely scenic items such as platforms, must belong to a group. To select a group for editing choose the required group from the drop down list. Groups are named after their controlling block or turnot/crossing. Alternatively you can select a given item's current group by clicking on the item on the panel while pressing the ⌘ modifier key. The members of the current group will be displayed with an orange background. Items that have been added to a group but are not members of the selected group will be displayed with a dark grey background. Items will no group set will be displayed with a black background. To add an item or items to a group select the item or items in the same way as in arrange mode and then press the \"Add Item to Group\" button. To remove an item or items from a group, select the item or items and press the \"Remove Item from Group\" button. Removing an item from a group only removes it from the group, nothing is deleted and you are free to add it to another group.\n\nOn the trailing (right hand) side of Layout Builder is the inspector area. There are 5 inspectors each of which is selected by pressing the appropriate button at the top of the inspector area. Inspectors allow you to view and edit the properties of one or more switchboard items. The inspectors display the common properties of the currently selected items.\n\nIdentity Inspector\n\nThis inspector displays the id and type of the item and information about the panel it belongs to.\n\nQuick Help Inspector\n\nIf you are reading this then you have already found this inspector. Selecting a single item on the panel will give context help about the item and how to configure it. Quick help does not work with multiple item selections. If you click on an unpopulated grid square you will see this Layout Builder quick help page.\n\nAttributes Inspector\n\nThis inspector allows you to edit the properties of the selected items. Only those properties that all the selected items have in common are displayed. A blank or unselected field indicates that not all selected items have the same value for that property.\n\nEvents Inspector\n\nThis inspector is used to edit the events applicable to the item. The \"New\" button may be used to get a new event id from the application's pool of event ids. The copy and paste buttons are provided as a convenience for copying event ids to and/or from a configuration tool or another Layout Builder instance\n\nSpeed Constraints Inspector\n\nThe speed limits applicable for the item can be set by using the \"Speed Constraints Inspector\". Any speed constraints set for an item will override any speed constraints set in the layout properties. You can set your preferred units of speed in the application preferences. Different speed constarints can be set for \"Direction Next\" and \"Direction Previous\".")
+          
+          inspectorConstraints.append(lblQuickHelp!.topAnchor.constraint(equalToSystemSpacingBelow: quickHelpView!.topAnchor, multiplier: 1.0))
+          inspectorConstraints.append(lblQuickHelp!.leadingAnchor.constraint(equalToSystemSpacingAfter: quickHelpView!.leadingAnchor, multiplier: 1.0))
+          
+          inspectorConstraints.append(lblQuickHelpSummary!.topAnchor.constraint(equalToSystemSpacingBelow: lblQuickHelp!.bottomAnchor, multiplier: 2.0))
+          inspectorConstraints.append(lblQuickHelpSummary!.leadingAnchor.constraint(equalToSystemSpacingAfter: quickHelpView!.leadingAnchor, multiplier: 1.0))
+          inspectorConstraints.append(lblQuickHelpSummaryText!.topAnchor.constraint(equalToSystemSpacingBelow: lblQuickHelpSummary!.bottomAnchor, multiplier: 2.0))
+          inspectorConstraints.append(lblQuickHelpSummaryText!.leadingAnchor.constraint(equalToSystemSpacingAfter: quickHelpView!.leadingAnchor, multiplier: 1.0))
+          inspectorConstraints.append(lblQuickHelpSummaryText!.trailingAnchor.constraint(equalTo: quickHelpView!.trailingAnchor))
+          
+          
+          inspectorConstraints.append(sepQuickHelpSummary!.topAnchor.constraint(equalToSystemSpacingBelow: lblQuickHelpSummaryText!.bottomAnchor, multiplier: 1.0))
+          inspectorConstraints.append(sepQuickHelpSummary!.leadingAnchor.constraint(equalTo: lblQuickHelp!.leadingAnchor))
+          inspectorConstraints.append(sepQuickHelpSummary!.trailingAnchor.constraint(equalTo: quickHelpView!.trailingAnchor))
+          lblQuickHelpSummaryText!.setContentHuggingPriority(NSLayoutConstraint.Priority(rawValue: 1), for: .horizontal)
+          
+          inspectorConstraints.append(lblQuickHelpDiscussion!.topAnchor.constraint(equalToSystemSpacingBelow: sepQuickHelpSummary!.bottomAnchor, multiplier: 1.0))
+          inspectorConstraints.append(lblQuickHelpDiscussion!.leadingAnchor.constraint(equalTo: lblQuickHelpSummary!.leadingAnchor))
+          
+          inspectorConstraints.append(lblQuickHelpDiscussionText!.topAnchor.constraint(equalToSystemSpacingBelow: lblQuickHelpDiscussion!.bottomAnchor, multiplier: 1.0))
+          inspectorConstraints.append(lblQuickHelpDiscussionText!.leadingAnchor.constraint(equalTo: lblQuickHelpSummaryText!.leadingAnchor))
+          lblQuickHelpDiscussionText!.setContentHuggingPriority(NSLayoutConstraint.Priority(rawValue: 1), for: .horizontal)
+          lblQuickHelpDiscussionText!.setContentHuggingPriority(NSLayoutConstraint.Priority(rawValue: 1), for: .vertical)
+          inspectorConstraints.append(lblQuickHelpDiscussionText!.trailingAnchor.constraint(equalTo: quickHelpView!.trailingAnchor))
+          
+          inspectorConstraints.append(quickHelpView!.bottomAnchor.constraint(greaterThanOrEqualTo: lblQuickHelpDiscussionText!.bottomAnchor))
+          
+          NSLayoutConstraint.activate(inspectorConstraints)
+          
+        }
+        else {
+          stackView.alignment = .centerX
+          stackView.addArrangedSubview(inspectorNoSelection[index])
+        }
+        
       }
-      
+              
     }
     
     let selectedItems = switchboardView.selectedItems

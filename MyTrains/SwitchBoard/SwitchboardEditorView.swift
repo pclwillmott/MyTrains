@@ -440,6 +440,9 @@ class SwitchboardEditorView: SwitchboardView {
           else if partType.isTurnout {
             prefix = "T"
           }
+          else if partType == .signal {
+            prefix = "S"
+          }
           else {
             prefix = "L"
           }

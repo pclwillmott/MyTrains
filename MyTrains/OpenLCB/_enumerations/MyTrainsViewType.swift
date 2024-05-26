@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum MyTrainsViewType : Int {
+public enum MyTrainsViewType : Int, CaseIterable {
   
   case openLCBNetworkView    = 0
   case openLCBTrafficMonitor = 1

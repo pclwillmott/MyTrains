@@ -45,25 +45,25 @@ public enum SwitchboardItemType : UInt16 {
     case .straight, .curve, .longCurve:
       result += String(localized: "This item is used to connect items to other items.")
     case .turnoutRight:
-      return String(localized: "")
+      result += String(localized: "This item defines the properties and control methodology for a right hand turnout.")
     case .turnoutLeft:
-      return String(localized: "")
+      result += String(localized: "This item defines the properties and control methodology for a left hand turnout.")
     case .cross:
-      return String(localized: "")
+      result += String(localized: "This item defines the properties for a crossing.")
     case .diagonalCross:
-      return String(localized: "")
+      result += String(localized: "This item defines the properties for a diagonal crossing.")
     case .yTurnout:
-      return String(localized: "")
+      result += String(localized: "This item defines the properties and control methodology for a Y turnout.")
     case .turnout3Way:
-      return String(localized: "")
+      result += String(localized: "This item defines the properties and control methodology for a 3-way turnout.")
     case .leftCurvedTurnout:
-      return String(localized: "")
+      result += String(localized: "This item defines the properties and control methodology for a left curved turnout.")
     case .rightCurvedTurnout:
-      return String(localized: "")
+      result += String(localized: "This item defines the properties and control methodology for a right curved turnout.")
     case .singleSlip:
-      return String(localized: "")
+      result += String(localized: "This item defines the properties and control methodology for a single slip turnout.")
     case .doubleSlip:
-      return String(localized: "")
+      result += String(localized: "This item defines the properties and control methodology for a double slip turnout.")
     case .buffer:
       result += String(localized: "The buffer stop item is used to indicate the end of a line or siding in the panel view.")
     case .block:
@@ -84,29 +84,34 @@ public enum SwitchboardItemType : UInt16 {
   
   public var quickHelpDiscussion : String {
     var result = ""
+    
+    if self.isTurnout {
+      result += String(localized: "This item is used to configure a turnout or crossing. Each turnout or crossing item must be given a unique name.\n\nElectric trains can only run on electrified track of the correct type. Select the appropriate electrification type. Diesel and Electro-Diesel trains can run on any type of track.\n\nA \"Hidden Section\" is a block of track that is not in the scenic area of the layout, such as a fiddle yard. The application may turn off a train's sound effects in hidden sections.\n\nThe \"Track Gradient\" is used when calculating a train's speed when on an incline. The application determines what routes are available on the layout by examining the connections between switchboard items. If two adjacent tracks have different track guages they will not be connected together. The route lengths are simply the physical lengths of the different routes through the turnout or crossing. These dimensions are critical values for automatic train control so try and be as accurate as possible. A piece of rope is very useful for curved routes. You can select your preferred units of length in the application preferences.\n\n")
+    }
+    
     switch self {
     case .straight, .curve, .longCurve:
       result += String(localized: "The only purpose of this item is to connect items to other items. A track group may contain multiple instances of this item type.")
     case .turnoutRight:
-      return String(localized: "")
+      result += String(localized: "A right hand turnout is controlled with a single switch. Select the applicable turnout control method - manual, solenoid, or slow motion. The application requires this information for timing purposes. If the turnout is to be controlled by the application then the enter the applicable event ids for the throw and close actions. These events will be sent to the node controlling the switch when the application needs to change the selected route throgh the turnout. The thrown and closed events are sent by a node monitoring the current state of the turnout to tell the application that a throw or close action was successful. If no node is monitoring the state of the turnout then leave these events blank and the application will assume that all throw and close actions are always successful. ")
     case .turnoutLeft:
-      return String(localized: "")
+      result += String(localized: "A left hand turnout is controlled with a single switch. Select the applicable turnout control method - manual, solenoid, or slow motion. The application requires this information for timing purposes. If the turnout is to be controlled by the application then the enter the applicable event ids for the throw and close actions. These events will be sent to the node controlling the switch when the application needs to change the selected route throgh the turnout. The thrown and closed events are sent by a node monitoring the current state of the turnout to tell the application that a throw or close action was successful. If no node is monitoring the state of the turnout then leave these events blank and the application will assume that all throw and close actions are always successful. ")
     case .cross:
-      return String(localized: "")
+      result += String(localized: "")
     case .diagonalCross:
-      return String(localized: "")
+      result += String(localized: "")
     case .yTurnout:
-      return String(localized: "")
+      result += String(localized: "A Y turnout is controlled with a single switch. Select the applicable turnout control method - manual, solenoid, or slow motion. The application requires this information for timing purposes. If the turnout is to be controlled by the application then the enter the applicable event ids for the throw and close actions. These events will be sent to the node controlling the switch when the application needs to change the selected route throgh the turnout. The thrown and closed events are sent by a node monitoring the current state of the turnout to tell the application that a throw or close action was successful. If no node is monitoring the state of the turnout then leave these events blank and the application will assume that all throw and close actions are always successful. ")
     case .turnout3Way:
-      return String(localized: "")
+      result += String(localized: "A 3-way turnout is controlled with two switches. Switch #1 is the switch nearest the toe of the turnout. Select the applicable turnout control methods - manual, solenoid, or slow motion. The application requires this information for timing purposes. If the turnout is to be controlled by the application then the enter the applicable event ids for the throw and close actions. These events will be sent to the node controlling the switch when the application needs to change the selected route throgh the turnout. The thrown and closed events are sent by a node monitoring the current state of the turnout to tell the application that a throw or close action was successful. If no node is monitoring the state of the turnout then leave these events blank and the application will assume that all throw and close actions are always successful. ")
     case .leftCurvedTurnout:
-      return String(localized: "")
+      result += String(localized: "A left curved turnout is controlled with a single switch. Select the applicable turnout control method - manual, solenoid, or slow motion. The application requires this information for timing purposes. If the turnout is to be controlled by the application then the enter the applicable event ids for the throw and close actions. These events will be sent to the node controlling the switch when the application needs to change the selected route throgh the turnout. The thrown and closed events are sent by a node monitoring the current state of the turnout to tell the application that a throw or close action was successful. If no node is monitoring the state of the turnout then leave these events blank and the application will assume that all throw and close actions are always successful. ")
     case .rightCurvedTurnout:
-      return String(localized: "")
+      result += String(localized: "A right hand turnout is controlled with a single switch. Select the applicable turnout control method - manual, solenoid, or slow motion. The application requires this information for timing purposes. If the turnout is to be controlled by the application then the enter the applicable event ids for the throw and close actions. These events will be sent to the node controlling the switch when the application needs to change the selected route throgh the turnout. The thrown and closed events are sent by a node monitoring the current state of the turnout to tell the application that a throw or close action was successful. If no node is monitoring the state of the turnout then leave these events blank and the application will assume that all throw and close actions are always successful. ")
     case .singleSlip:
-      return String(localized: "")
+      result += String(localized: "")
     case .doubleSlip:
-      return String(localized: "")
+      result += String(localized: "")
     case .buffer:
       result += String(localized: "The buffer stop item serves no other purpose.")
     case .block:
@@ -118,11 +123,17 @@ public enum SwitchboardItemType : UInt16 {
     case .platform:
       result += String(localized: "The platform item serves no other purpose.")
     case .signal:
-      return String(localized: "")
+      result += String(localized: "")
     case .none:
-      return String(localized: "")
+      result += String(localized: "")
     }
+    
+    if self.isTurnout {
+      result += String(localized: "Each event has a unique id. You can enter the event ids applicable to the turnout or crossing in the \"Events Inspector\". The \"New\" button may be used to get a new event id from the application's pool of event ids. The copy and paste buttons are provided as a convenience for copying event ids to and/or from a configuration tool.\n\nThe speed limits applicable for the specific turnout or crossing can be set by using the \"Speed Constraints Inspector\". Any speed constraints set for the turnout or crossing will override any speed constraints set as layout properties. You can set your preferred units of speed in the application preferences. Different speed constarints can be set for \"Direction Next\" and \"Direction Previous\". \"Direction Next\" and \"Direction Previous\" are defined by the blocks of track connected to the turnout or crossing.")
+    }
+
     return result
+    
   }
   
   public var properties : Set<LayoutInspectorProperty> {
@@ -398,7 +409,7 @@ public enum SwitchboardItemType : UInt16 {
   }
   
   public var requireUniqueName : Bool {
-    return self == .link || isBlock || isTurnout
+    return self == .link || isBlock || isTurnout || self == .signal
   }
 
   public var isBlock : Bool {

@@ -333,15 +333,15 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
     
     closeInitAppWindow()
 
-    for rawValue in 0 ... MyTrainsViewType.numberOfTypes - 1 {
-      if let viewType = MyTrainsViewType(rawValue: rawValue), let appNode {
+    if let appNode {
+      for viewType in MyTrainsViewType.allCases {
         let option = appNode.getViewOption(type: viewType)
         if option == .open || (option == .restorePreviousState && (viewType == .switchboardPanel || appNode.getViewState(type: viewType))) {
           openWindow(viewType: viewType)
         }
       }
     }
-    
+
     windowsLoaded = true
     
 //    showInstances()
