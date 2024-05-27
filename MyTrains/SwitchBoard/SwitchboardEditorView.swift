@@ -173,7 +173,7 @@ class SwitchboardEditorView: SwitchboardView {
     return mode == .arrange
   }
   
-  public var delegate: SwitchboardEditorViewDelegate?
+  weak public var delegate: SwitchboardEditorViewDelegate?
   
   // MARK: Private Methods
   

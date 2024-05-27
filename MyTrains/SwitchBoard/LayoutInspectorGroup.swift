@@ -42,7 +42,7 @@ public enum LayoutInspectorGroup : Int, CaseIterable {
   private static let groups : [LayoutInspectorGroup:(title:String, inspector:LayoutInspector)] = [
     .identity : (
       String(localized: "Identity", comment: "This is used for the title of the Identity section in the Layout Builder."),
-      .information
+      .identity
     ),
     .generalSettings : (
       String(localized: "General Settings", comment: "This is used for the title of the General Settings section in the Layout Builder."),

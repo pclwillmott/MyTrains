@@ -446,10 +446,10 @@
             filePath = "MyTrains/SwitchBoard/LayoutBuilderVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1207"
-            endingLineNumber = "1207"
-            landmarkName = "btnShowPanelViewAction(_:)"
-            landmarkType = "7">
+            startingLineNumber = "1179"
+            endingLineNumber = "1179"
+            landmarkName = "currentPalette"
+            landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -462,8 +462,8 @@
             filePath = "MyTrains/SwitchBoard/LayoutBuilderVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "232"
-            endingLineNumber = "232"
+            startingLineNumber = "234"
+            endingLineNumber = "234"
             landmarkName = "viewWillAppear()"
             landmarkType = "7">
          </BreakpointContent>
@@ -510,9 +510,25 @@
             filePath = "MyTrains/SwitchBoard/LayoutBuilderVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "802"
-            endingLineNumber = "802"
+            startingLineNumber = "774"
+            endingLineNumber = "774"
             landmarkName = "setStates()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "BADC108D-0183-4AED-B563-049F8FFD76D0"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MyTrains/SwitchBoard/Layout Builder/LayoutBuilderPanelConfigArea.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "111"
+            endingLineNumber = "111"
+            landmarkName = "setupPanelConfigArea()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

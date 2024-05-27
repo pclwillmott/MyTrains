@@ -3151,6 +3151,9 @@
     "Hide the Palette Area" : {
 
     },
+    "Hide the Palette/Grouping Area" : {
+
+    },
     "Hide the Panel Configuration Area" : {
 
     },
@@ -3290,9 +3293,6 @@
       "comment" : "This is the name of a country."
     },
     "Info" : {
-
-    },
-    "Information" : {
 
     },
     "Initialization Complete Full Protocol Required" : {
@@ -5181,10 +5181,10 @@
     "Romania" : {
       "comment" : "This is the name of a country."
     },
-    "Rotate Item Clockwise" : {
+    "Rotate Clockwise" : {
 
     },
-    "Rotate Item Counter Clockwise" : {
+    "Rotate Counterclockwise" : {
 
     },
     "Rotation angle of the switchboard item." : {
@@ -6509,9 +6509,6 @@
     },
     "Turnout Right" : {
       "comment" : "This is used to describe a piece of track."
-    },
-    "Turnouts" : {
-
     },
     "Turnouts & Crossovers" : {
       "comment" : "Used for the title of a switchboard item palette in LayoutBuilder"

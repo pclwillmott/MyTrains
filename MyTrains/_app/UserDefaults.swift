@@ -63,6 +63,17 @@ enum DEFAULT {
   static let TC64_CONFIG_LAST_DEVICE            = "TC64_CONFIG_LAST_DEVICE"
   static let IODEVICE_MANAGER_NETWORK           = "IODEVICE_MANAGER_NETWORK"
   static let PROGRAMMING_TRACK_ID               = "PROGRAMMING_TRACK_ID"
+  
+  // Layout Builder Defaults
+  
+  static let SHOW_PANEL_VIEW     = "SHOW_PANEL_VIEW"
+  static let SHOW_PALETTE_VIEW   = "SHOW_PALETTE_VIEW"
+  static let SHOW_INSPECTOR_VIEW = "SHOW_INSPECTOR_VIEW"
+  static let CURRENT_INSPECTOR   = "CURRENT_INSPECTOR"
+  static let IS_GROUP_MODE       = "IS_GROUP_MODE"
+  static let CURRENT_PALETTE     = "CURRENT_PALETTE"
+  static let MAGNIFICATION       = "MAGNIFICATION"
+
 }
 
 public var appNode : OpenLCBNodeMyTrains? {
