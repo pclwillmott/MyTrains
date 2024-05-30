@@ -438,7 +438,7 @@ public class OpenLCBMessage : NSObject {
         case .replyPendingNoTimeout:
           text += "reply pending "
         default:
-          text += "reply pending with timeout \(timeout.timeout)s "
+          text += "reply pending with timeout \(timeout.timeout!)s "
         }
       }
       

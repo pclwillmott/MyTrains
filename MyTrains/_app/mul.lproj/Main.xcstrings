@@ -349,18 +349,6 @@
         }
       }
     },
-    "aNN-8G-AJf.title" : {
-      "comment" : "Class = \"NSMenuItem\"; title = \"Switchboard Item\"; ObjectID = \"aNN-8G-AJf\";",
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Switchboard Item"
-          }
-        }
-      }
-    },
     "aTl-1u-JFS.title" : {
       "comment" : "Class = \"NSMenuItem\"; title = \"Print…\"; ObjectID = \"aTl-1u-JFS\";",
       "extractionState" : "extracted_with_value",
@@ -1737,18 +1725,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Select All"
-          }
-        }
-      }
-    },
-    "sht-Rs-Rq7.title" : {
-      "comment" : "Class = \"NSMenuItem\"; title = \"Switchboard Panel\"; ObjectID = \"sht-Rs-Rq7\";",
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Switchboard Panel"
           }
         }
       }

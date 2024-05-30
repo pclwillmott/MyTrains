@@ -8,11 +8,13 @@
 import Foundation
 import AppKit
 
-class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NSTextFieldDelegate, NSControlTextEditingDelegate {
+class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NSTextFieldDelegate, MyTrainsAppDelegate, NSControlTextEditingDelegate {
   
   // MARK: Window & View Methods
   
   override func windowWillClose(_ notification: Notification) {
+    
+    appNode?.removeObserver(observerId: appObserverId)
     
     NSLayoutConstraint.deactivate(constraints)
     
@@ -20,11 +22,11 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
     
     inspectorConstraints.removeAll()
     
-//    releaseInspectorAreaControls()
-//    releasePanelAreaControls()
-//    releasePaletteGroupingAreaControls()
-//    releasePanelConfigAreaControls()
-//    releaseGeneralAreaControls()
+    releaseInspectorAreaControls()
+    releasePanelAreaControls()
+    releasePaletteGroupingAreaControls()
+    releasePanelConfigAreaControls()
+    releaseGeneralAreaControls()
 
     super.windowWillClose(notification)
     
@@ -101,18 +103,10 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
 
     }
 
-    updatePanelComboBox()
-    
-    setStates()
-    
-    displayInspector()
-    
     self.cboPanel?.target = self
     self.cboPanel?.action = #selector(self.cboPanelAction(_:))
     
-    if cboPanel!.indexOfSelectedItem == -1, cboPanel!.numberOfItems > 0 {
-      cboPanel!.selectItem(at: 0)
-    }
+    appObserverId = appNode!.addObserver(observer: self)
  
   }
   
@@ -145,21 +139,25 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
         panels.append(item)
       }
       panels.sort {$0.userNodeName.sortValue < $1.userNodeName.sortValue}
+      
+      let selectedItem = cboPanel.objectValueOfSelectedItem
+      
       cboPanel.removeAllItems()
-      var index = -1
-      var test = 0
       for item in panels {
         cboPanel.addItem(withObjectValue: item.userNodeName)
-        if let panel = switchboardPanel, panel.nodeId == item.nodeId {
-          index = test
-        }
-        test += 1
-      }
-      if index != -1 {
-        cboPanel.selectItem(at: index)
       }
       
+      cboPanel.selectItem(withObjectValue: selectedItem)
+      
       cboPanel.target = self
+      
+      if panels.isEmpty {
+        btnNewPanelAction(btnNewPanel!)
+      }
+ 
+      if cboPanel.indexOfSelectedItem == -1, cboPanel.numberOfItems > 0 {
+        cboPanel.selectItem(at: 0)
+      }
       
     }
 
@@ -499,6 +497,10 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
   internal var btnShowPanelView : NSButton?
   
   internal var cboPanel : NSComboBox? = MyComboBox()
+  
+  internal var btnNewPanel : NSButton? = NSButton()
+  
+  internal var btnDeletePanel : NSButton? = NSButton()
  
   internal var constraints : [NSLayoutConstraint] = []
   
@@ -513,6 +515,8 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
   internal var inspectorView : NSView? = NSView()
   
   internal var panels : [SwitchboardPanelNode] = []
+  
+  internal var appObserverId : Int = -1
   
   // MARK: Palette/Grouping Area Controls
   
@@ -589,6 +593,8 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
       
       switchboardView.needsDisplay = true
 
+      appNode?.panelChanged(panel: switchboardPanel!)
+
     }
     
   }
@@ -606,6 +612,8 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
       
       switchboardView.needsDisplay = true
       
+      appNode?.panelChanged(panel: switchboardPanel!)
+      
     }
     
   }
@@ -614,6 +622,7 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
   
   @objc func selectedItemChanged(_ switchboardEditorView:SwitchboardEditorView) {
     displayInspector()
+    appNode?.panelChanged(panel: switchboardPanel!)
   }
   
   @objc func groupChanged(_ switchboardEditorView:SwitchboardEditorView) {
@@ -672,8 +681,6 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
 
   /// This is called when the user changes the text.
   @objc func controlTextDidChange(_ obj: Notification) {
-    if let textField = obj.object as? NSTextField, let property = LayoutInspectorProperty(rawValue: textField.tag) {
-    }
   }
 
   // MARK: Actions
@@ -726,5 +733,11 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
   private var lblQuickHelpDiscussion : NSTextField? = NSTextField(labelWithString: "")
   private var lblQuickHelpDiscussionText : NSTextField? = NSTextField(labelWithString: "")
   private var quickHelpView : NSView? = NSView()
+
+  // MARK: MyTrainsAppDelegate Methods
+  
+  func panelListUpdated(appNode:OpenLCBNodeMyTrains) {
+    updatePanelComboBox()
+  }
 
 }

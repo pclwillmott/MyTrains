@@ -207,7 +207,7 @@ extension OpenLCBCANGateway {
       
     case .openLCBMessage:
       
-      guard let message = OpenLCBMessage(frame: frame), let sourceNIDAlias = message.sourceNIDAlias else {
+      guard let message = OpenLCBMessage(frame: frame) else {
         #if DEBUG
         debugLog("message create error that should never happen!")
         #endif

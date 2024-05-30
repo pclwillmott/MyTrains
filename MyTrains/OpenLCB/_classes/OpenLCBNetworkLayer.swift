@@ -593,7 +593,7 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
     node.layoutNodeId = layout == nil ? 0 : layout!
     
     registerNode(node: node)
-
+    
     return node
     
   }

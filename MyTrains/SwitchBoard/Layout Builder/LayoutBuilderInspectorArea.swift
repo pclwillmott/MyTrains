@@ -146,7 +146,10 @@ extension LayoutBuilderVC {
     }
     inspectorButtons.removeAll()
     
-    // TODO: inspectorViews
+    for index in 0 ... inspectorViews.count - 1 {
+      inspectorViews[index] = nil
+    }
+    inspectorViews.removeAll()
 
     inspectorFields.removeAll()
     inspectorGroupFields.removeAll()
@@ -176,6 +179,4 @@ extension LayoutBuilderVC {
     
   }
 
-
-  
 }

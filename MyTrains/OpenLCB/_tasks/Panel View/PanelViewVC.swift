@@ -8,11 +8,12 @@
 import Foundation
 import AppKit
 
-class PanelViewVC: MyTrainsViewController {
+class PanelViewVC: MyTrainsViewController, MyTrainsAppDelegate {
   
   // MARK: Window & View Methods
   
   override func windowWillClose(_ notification: Notification) {
+    appNode?.removeObserver(observerId: appObserverId)
     switchboardView.switchboardPanel?.panelIsVisible = !isManualClose
     super.windowWillClose(notification)
   }
@@ -61,29 +62,10 @@ class PanelViewVC: MyTrainsViewController {
       view.bottomAnchor.constraint(equalToSystemSpacingBelow: scrollView.bottomAnchor, multiplier: 1.0),
     ])
     
-    if let appNode {
-      panels.removeAll()
-      for (_, item) in appNode.panelList {
-        panels.append(item)
-      }
-      panels.sort {$0.userNodeName.sortValue < $1.userNodeName.sortValue}
-      cboPanel.removeAllItems()
-      var index = -1
-      var test = 0
-      for item in panels {
-        cboPanel?.addItem(withObjectValue: item.userNodeName)
-        if let panel = switchboardView.switchboardPanel, panel.nodeId == item.nodeId {
-          index = test
-        }
-        test += 1
-      }
-      if index != -1 {
-        cboPanel.selectItem(at: index)
-      }
-    }
-    
     switchboardView.showGridLines = false
 
+    appObserverId = appNode!.addObserver(observer: self)
+    
   }
   
   private enum DEFAULT {
@@ -101,6 +83,48 @@ class PanelViewVC: MyTrainsViewController {
     set(value) {
       userSettings?.set(value, forKey: DEFAULT.MAGNIFICATION)
     }
+  }
+  
+  private var appObserverId : Int = -1
+
+  // MARK: Private Methods
+  
+  private func updatePanelComboBox() {
+  
+    if let appNode, let cboPanel {
+      
+      cboPanel.target = nil
+      
+      panels.removeAll()
+      for (_, item) in appNode.panelList {
+        panels.append(item)
+      }
+      panels.sort {$0.userNodeName.sortValue < $1.userNodeName.sortValue}
+      
+      let selectedItem = cboPanel.objectValueOfSelectedItem
+      
+      cboPanel.removeAllItems()
+      for item in panels {
+        cboPanel.addItem(withObjectValue: item.userNodeName)
+      }
+      
+      cboPanel.selectItem(withObjectValue: selectedItem)
+      
+      cboPanel.target = self
+ 
+      if cboPanel.indexOfSelectedItem == -1, cboPanel.numberOfItems > 0 {
+        if let panel = switchboardView.switchboardPanel {
+          cboPanel.selectItem(withObjectValue: panel.userNodeName)
+        }
+        else {
+          cboPanel.selectItem(at: 0)
+        }
+      }
+      
+      switchboardView.needsDisplay = true
+      
+    }
+
   }
 
   // MARK: Outlets & Actions
@@ -165,4 +189,16 @@ class PanelViewVC: MyTrainsViewController {
 
   }
   
+  // MARK: MyTrainsAppDelegate Methods
+  
+  func panelListUpdated(appNode:OpenLCBNodeMyTrains) {
+    updatePanelComboBox()
+  }
+
+  func panelUpdated(panel:SwitchboardPanelNode) {
+    if panel === switchboardView.switchboardPanel {
+      switchboardView.needsDisplay = true
+    }
+  }
+
 }

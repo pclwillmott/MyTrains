@@ -9,7 +9,7 @@ import Foundation
 
 @objc public protocol MyTrainsAppDelegate {
   @objc optional func layoutListUpdated(appNode:OpenLCBNodeMyTrains)
-//  @objc optional func panelListUpdated(appNode:OpenLCBNodeMyTrains)
-//  @objc optional func switchboardItemListUpdated(appNode:OpenLCBNodeMyTrains)
   @objc optional func locoNetGatewayListUpdated(appNode:OpenLCBNodeMyTrains)
+  @objc optional func panelListUpdated(appNode:OpenLCBNodeMyTrains)
+  @objc optional func panelUpdated(panel:SwitchboardPanelNode)
 }

@@ -51,7 +51,7 @@ class MultiTabView: NSView {
   }
   
   private var tabsStartX : CGFloat {
-    guard maxButtonWidth > 0.0, let nextButton, let previousButton else {
+    guard maxButtonWidth > 0.0 else {
       return 0.0
     }
     let number = min(tabsToShow, tabButtons.count - currentTab)
@@ -137,7 +137,7 @@ class MultiTabView: NSView {
     
     var x : CGFloat = 0.0
     
-    var y : CGFloat = frame.height - 60.0
+    let y : CGFloat = frame.height - 60.0
     
     previousButton.isHidden = currentPage == 0
     previousButton.frame = NSRect(x: x , y: y, width: previousButton.frame.width, height: previousButton.frame.height)

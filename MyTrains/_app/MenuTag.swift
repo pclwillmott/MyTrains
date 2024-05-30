@@ -21,8 +21,6 @@ public enum MenuTag : Int {
   case newDCCProgrammerTrack    = 10
   case newDigitraxBXP88         = 11
   case newLayout                = 12
-  case newSwitchboardPanel      = 13
-  case newSwitchboardItem       = 14
   
   case myTrains                 = 1000
 //  case file                   = 1001
@@ -136,8 +134,6 @@ public enum MenuTag : Int {
     .newClock,
     .newTrain,
     .newThrottle,
-    .newSwitchboardItem,
-    .newSwitchboardPanel,
     .newDigitraxBXP88,
     .newLocoNetGateway,
     .newLocoNetMonitor,
@@ -159,8 +155,6 @@ public enum MenuTag : Int {
     .window                   : String(localized: "Window",                                comment: "Used for a menu title"),
 //  .help                     : String(localized: "Help",                                  comment: "Used for a menu title"),
     .newLayout                : String(localized: "Layout",                                comment: "Used for a menu title"),
-    .newSwitchboardPanel      : String(localized: "Switchboard Panel",                     comment: "Used for a menu title"),
-    .newSwitchboardItem       : String(localized: "Switchboard Item",                      comment: "Used for a menu title"),
     .newThrottle              : String(localized: "Throttle",                              comment: "Used for a menu title"),
     .newTrain                 : String(localized: "Train",                                 comment: "Used for a menu title"),
     .newCANGateway            : String(localized: "CAN Gateway",                           comment: "Used for a menu title"),
@@ -215,8 +209,6 @@ public enum MenuTag : Int {
     .newDCCProgrammerTrack    : [.runningNetwork],
     .newDigitraxBXP88         : [.runningNetwork],
     .newLayout                : [.runningNetwork],
-    .newSwitchboardPanel      : [.runningNetwork],
-    .newSwitchboardItem       : [.runningNetwork],
     .myTrains                 : [.uninitialized, .runningLocal, .runningNetwork, .stopping, .stopped, .rebooting],
     .new                      : [.uninitialized, .runningLocal, .runningNetwork, .stopping, .stopped, .rebooting],
     .edit                     : [.uninitialized, .runningLocal, .runningNetwork, .stopping, .stopped, .rebooting],
@@ -234,7 +226,7 @@ public enum MenuTag : Int {
     .configLCCNetwork         : [.runningLocal, .runningNetwork],
     .configClock              : [.runningLocal, .runningNetwork],
     .dccProgrammerTool        : [.runningLocal, .runningNetwork],
-    .layoutBuilder            : [.runningLocal, .runningNetwork],
+    .layoutBuilder            : [.runningNetwork],
     .trainSpeedProfiler       : [.runningLocal, .runningNetwork],
     .locoNetFirmwareUpdate    : [.runningLocal, .runningNetwork],
     .locoNetWirelessSetup     : [.runningLocal, .runningNetwork],

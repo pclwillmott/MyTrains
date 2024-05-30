@@ -1511,8 +1511,6 @@ public enum LayoutInspectorProperty : Int, CaseIterable {
     let labelFontSize : CGFloat = 10.0
     let textFontSize  : CGFloat = 11.0
     
-    var constraints : [NSLayoutConstraint] = []
-
     for item in LayoutInspectorProperty.allCases {
       
       var field : LayoutInspectorPropertyField = (view:nil, label:nil, control:nil, item, new:nil, copy:nil, paste:nil)
@@ -1599,8 +1597,6 @@ public enum LayoutInspectorProperty : Int, CaseIterable {
       
     }
     
-    NSLayoutConstraint.activate(constraints)
-
     return result
     
   }

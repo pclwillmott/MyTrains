@@ -60,7 +60,7 @@ extension LayoutBuilderVC {
       
       constraints.append(panelView.topAnchor.constraint(equalToSystemSpacingBelow: splitView.bottomAnchor, multiplier: 1.0))
       constraints.append(panelView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 1.0))
-      constraints.append(panelView.trailingAnchor.constraint(equalTo: cboPanel.trailingAnchor))
+      constraints.append(panelView.trailingAnchor.constraint(equalTo: btnDeletePanel!.trailingAnchor))
       constraints.append(view.bottomAnchor.constraint(equalToSystemSpacingBelow: panelView.bottomAnchor, multiplier: 1.0))
       
       panelStripView.translatesAutoresizingMaskIntoConstraints = false

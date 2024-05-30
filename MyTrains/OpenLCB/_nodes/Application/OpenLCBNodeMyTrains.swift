@@ -481,6 +481,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     
     observer.layoutListUpdated?(appNode: self)
     observer.locoNetGatewayListUpdated?(appNode: self)
+    observer.panelListUpdated?(appNode: self)
 
     return id
     
@@ -488,6 +489,82 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   
   public func removeObserver(observerId:Int) {
     observers.removeValue(forKey: observerId)
+  }
+  
+  public func deletePanel(panel:SwitchboardPanelNode) {
+    
+    guard let networkLayer = appDelegate.networkLayer else {
+      return
+    }
+  
+    let alert = NSAlert()
+    
+    alert.messageText = String(localized: "Are You Sure?")
+    alert.informativeText = String(localized: "Are you sure that you want to delete this switchboard panel?")
+    alert.addButton(withTitle: String(localized: "Yes"))
+    alert.addButton(withTitle: String(localized: "No"))
+    alert.alertStyle = .informational
+    
+    switch alert.runModal() {
+    case .alertFirstButtonReturn:
+      break
+    default:
+      return
+    }
+    
+    for (_, item) in panel.switchboardItems {
+      networkLayer.deleteNode(nodeId: item.nodeId)
+    }
+    
+    networkLayer.deleteNode(nodeId: panel.nodeId)
+    
+  }
+  
+  public func createPanel() -> SwitchboardPanelNode? {
+    
+    guard let networkLayer = appDelegate.networkLayer, let appLayoutId else {
+      return nil
+    }
+    
+    if let node = networkLayer.createVirtualNode(virtualNodeType: .switchboardPanelNode) as? SwitchboardPanelNode {
+
+      var index = 0
+      var isUnique = true
+      var test = ""
+
+      repeat {
+        index += 1
+        isUnique = true
+        test = " #\(index)"
+        for (_, item) in panelList {
+          if test == item.userNodeName.suffix(test.count) {
+            isUnique = false
+            break
+          }
+        }
+      } while !isUnique
+      
+      node.userNodeName = "\(node.userNodeName)\(test)"
+      
+      node.saveMemorySpaces()
+      
+      for (_, observer) in observers {
+        observer.panelListUpdated?(appNode: self)
+      }
+      
+      return node
+
+    }
+    
+    return nil
+
+  }
+  
+  public func panelChanged(panel:SwitchboardPanelNode) {
+    for (_, observer) in observers {
+      observer.panelUpdated?(panel: panel)
+      observer.panelListUpdated?(appNode: self)
+    }
   }
   
   public func sendGlobalEmergencyStop() {

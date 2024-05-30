@@ -75,16 +75,21 @@ public class SwitchboardPanelNode : OpenLCBNodeVirtual {
   // MARK: Public Properties
   
   public var switchboardItems : [UInt64:SwitchboardItemNode] {
+    
     var result : [UInt64:SwitchboardItemNode] = [:]
+    
     guard let appNode else {
       return result
     }
+    
     for (key, item) in appNode.switchboardItemList {
       if item.panelId == nodeId {
         result[key] = item
       }
     }
+    
     return result
+    
   }
   
   public func findSwitchboardItem(location:SwitchBoardLocation) -> SwitchboardItemNode? {

@@ -426,26 +426,27 @@ class SwitchboardEditorView: SwitchboardView {
       
       if partType.requireUniqueName {
         
+        var prefix = ""
+        if partType.isBlock {
+          prefix = "B"
+        }
+        else if partType.isTurnout {
+          prefix = "T"
+        }
+        else if partType == .signal {
+          prefix = "S"
+        }
+        else {
+          prefix = "L"
+        }
+
         var index = 0
         var isUnique = true
         var test = ""
-        
+ 
         repeat {
           index += 1
           isUnique = true
-          var prefix = ""
-          if partType.isBlock {
-            prefix = "B"
-          }
-          else if partType.isTurnout {
-            prefix = "T"
-          }
-          else if partType == .signal {
-            prefix = "S"
-          }
-          else {
-            prefix = "L"
-          }
           test = " - \(prefix)\(index)"
           for (_, item) in switchboardPanel.switchboardItems {
             if test == item.userNodeName.suffix(test.count) {

@@ -130,12 +130,6 @@
                                         <menuItem title="Layout" tag="12" id="mXf-1G-VXA">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                         </menuItem>
-                                        <menuItem title="Switchboard Panel" tag="13" id="sht-Rs-Rq7">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                        </menuItem>
-                                        <menuItem title="Switchboard Item" tag="14" id="aNN-8G-AJf">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                        </menuItem>
                                         <menuItem title="Train" tag="5" id="t7i-s0-NIc">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                         </menuItem>
