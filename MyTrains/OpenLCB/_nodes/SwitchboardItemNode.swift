@@ -1002,18 +1002,6 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     }
   }
   
-  public var isOccupied : Bool = false {
-    didSet {
-   //   layout?.needsDisplay()
-    }
-  }
-  
-  public var isTrackFault : Bool = false {
-    didSet {
-   //   layout?.needsDisplay()
-    }
-  }
-  
   public var isTrack : Bool {
     get {
       let track : Set<SwitchboardItemType> = [
@@ -1091,6 +1079,18 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
 
   }
   
+  public var isBlockOccupied : Bool = false {
+    didSet {
+      appNode?.panelChanged(panelId: panelId)
+    }
+  }
+  
+  public var isTrackFaulted : Bool = false {
+    didSet {
+      appNode?.panelChanged(panelId: panelId)
+    }
+  }
+
   // MARK: Public Methods
 
   public func getValue(property:LayoutInspectorProperty) -> String {
@@ -2065,9 +2065,19 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
      
     case .producerConsumerEventReport:
       
-      if let eventId = message.eventId, let event = OpenLCBWellKnownEvent(rawValue: eventId) {
+      if let eventId = message.eventId {
       
-        switch event {
+        switch eventId {
+        case enterDetectionZoneEventId:
+          isBlockOccupied = true
+        case exitDetectionZoneEventId:
+          isBlockOccupied = false
+        case locationServicesEventId:
+          break
+        case trackFaultEventId:
+          isTrackFaulted = true
+        case trackFaultClearedEventId:
+          isTrackFaulted = false
         default:
           break
         }

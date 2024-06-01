@@ -560,7 +560,10 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
 
   }
   
-  public func panelChanged(panel:SwitchboardPanelNode) {
+  public func panelChanged(panelId:UInt64) {
+    guard let panel = appDelegate.networkLayer?.virtualNodeLookup[panelId] as? SwitchboardPanelNode else {
+      return
+    }
     for (_, observer) in observers {
       observer.panelUpdated?(panel: panel)
       observer.panelListUpdated?(appNode: self)

@@ -353,7 +353,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     }
     set(value) {
       virtualNodeConfigSpace?.setUInt(address: addressVirtualNodeConfigUniqueEventId, value:value)
-      virtualNodeConfigSpace?.save()
+      saveMemorySpaces()
     }
   }
 

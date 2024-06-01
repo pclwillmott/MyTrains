@@ -593,7 +593,7 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
       
       switchboardView.needsDisplay = true
 
-      appNode?.panelChanged(panel: switchboardPanel!)
+      appNode?.panelChanged(panelId: switchboardPanel!.nodeId)
 
     }
     
@@ -612,7 +612,7 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
       
       switchboardView.needsDisplay = true
       
-      appNode?.panelChanged(panel: switchboardPanel!)
+      appNode?.panelChanged(panelId: switchboardPanel!.nodeId)
       
     }
     
@@ -622,7 +622,7 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
   
   @objc func selectedItemChanged(_ switchboardEditorView:SwitchboardEditorView) {
     displayInspector()
-    appNode?.panelChanged(panel: switchboardPanel!)
+    appNode?.panelChanged(panelId: switchboardPanel!.nodeId)
   }
   
   @objc func groupChanged(_ switchboardEditorView:SwitchboardEditorView) {

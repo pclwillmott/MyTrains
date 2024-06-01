@@ -83,7 +83,7 @@ class SwitchboardShape {
             if let fillColor = shapePart.actionColors[.fill] {
               isEnabled ? NSColor.setFillColor(color:fillColor) : NSColor.setFillColor(color: .lightGray)
               if let item = switchBoardItem {
-                item.isOccupied ? NSColor.setFillColor(color:fillColor) : NSColor.setFillColor(color:.darkGray)
+                item.isBlockOccupied ? NSColor.setFillColor(color:fillColor) : NSColor.setFillColor(color:.darkGray)
               }
               path.fill()
             }

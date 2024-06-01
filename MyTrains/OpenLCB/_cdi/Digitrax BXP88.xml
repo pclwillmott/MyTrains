@@ -12,10 +12,10 @@
 <segment space='253' origin='0'>
 <name>BXP88 Configuration</name>
 
-<eventid>
+<int size='8'>
   <name>LocoNet Gateway</name>
     %%LOCONET_GATEWAYS%%
-</eventid>
+</int>
 
 <int size='2'>
 <name>Board ID</name>
@@ -39,99 +39,91 @@
 </map>
 </int>
 
-  <int size='1'>
-  <name>Reset to factory defaults</name>
-  <map>
-    <relation><property>0</property><value>Keep current settings</value></relation>
-    <relation><property>1</property><value>Reset BXP88 to factory defaults</value></relation>
-  </map>
-  </int>
+<int size='1'>
+<name>Write changes to BXP88</name>
+<description>The changes that you have made will not become effective until they are written to the BXP88.</description>
+<map>
+  <relation><property>0</property><value>Do not write changes to BXP88</value></relation>
+  <relation><property>1</property><value>Write changes to BXP88</value></relation>
+</map>
+</int>
 
-  <int size='1'>
-  <name>Write changes to BXP88</name>
-  <description>The changes that you have made will not become effective until they are written to the BXP88.</description>
-  <map>
-    <relation><property>0</property><value>Do not write changes to BXP88</value></relation>
-    <relation><property>1</property><value>Write changes to BXP88</value></relation>
-  </map>
-  </int>
-
-<group>
-<name>Power Manager</name>
+<int size='1'>
+<name>Reset to factory defaults</name>
+<map>
+  <relation><property>0</property><value>Keep current settings</value></relation>
+  <relation><property>1</property><value>Reset BXP88 to factory defaults</value></relation>
+</map>
+</int>
 
 <int size='1'>
 <name>Power Manager</name>
-%%ENABLE_STATE%%
+<relation><property>0</property><value>Enable Power Manager</value></relation>
+<relation><property>1</property><value>Disable Power Manager</value></relation>
 </int>
 
 <int size='1'>
 <name>Power Manager Reporting to LocoNet</name>
-%%ENABLE_STATE%%
+<relation><property>0</property><value>Enable Power Manager Reporting to LocoNet</value></relation>
+<relation><property>1</property><value>Disable Power Manager Reporting to LocoNet</value></relation>
 </int>
 
 <int size='1'>
-<name>Slower Short Circuit Detection</name>
-%%ENABLE_STATE%%
-</int>
-
-</group>
-<group>
-<name>Occupancy Detection</name>
-
-<int size='1'>
-<name>Higher Detection Sensitivity</name>
-%%ENABLE_STATE%%
+<name>Short Circuit Detection</name>
+<relation><property>0</property><value>Normal Short Circuit Detection</value></relation>
+<relation><property>1</property><value>Slower Short Circuit Detection</value></relation>
 </int>
 
 <int size='1'>
 <name>Send Occupied Message When Faulted</name>
-%%ENABLE_STATE%%
+<relation><property>0</property><value>Send Occupied Message when Faulted</value></relation>
+<relation><property>1</property><value>Do Not Send Occupied Message when Faulted</value></relation>
 </int>
 
-</group>
-
-<group>
-<name>Transponding</name>
+<int size='1'>
+<name>Occupancy Detection Sensitivity</name>
+<relation><property>0</property><value>Regular Detection Sensitivity</value></relation>
+<relation><property>1</property><value>High Detection Sensitivity</value></relation>
+</int>
 
 <int size='1'>
 <name>Transponding State</name>
-%%ENABLE_STATE%%
+<relation><property>0</property><value>Transponding Enabled</value></relation>
+<relation><property>1</property><value>Transponding Disabled</value></relation>
 </int>
 
 <int size='1'>
 <name>Fast Find</name>
-%%ENABLE_STATE%%
+<relation><property>0</property><value>Fast Find Enabled</value></relation>
+<relation><property>1</property><value>Fast Find Disabled</value></relation>
 </int>
 
 <int size='1'>
 <name>Operations Mode Readback</name>
-%%ENABLE_STATE%%
+<relation><property>0</property><value>Operations Mode Readback Enabled</value></relation>
+<relation><property>1</property><value>Operations Mode Readback Disabled</value></relation>
 </int>
 
 <int size='1'>
 <name>Selective Transponding Disabling</name>
-%%ENABLE_STATE%%
+<relation><property>0</property><value>Allow Selective Transponding Disabling</value></relation>
+<relation><property>1</property><value>Do Not Allow Selective Transponding Disabling</value></relation>
 </int>
-
-</group>
 
 <group replication='8'>
 <name>Detection Sections</name>
 <repname>Section</repname>
 
 <int size='1'>
-<name>Occupancy Detection</name>
-%%ENABLE_STATE%%
+<name>Occupancy Reporting</name>
+<relation><property>0</property><value>Enabled</value></relation>
+<relation><property>1</property><value>Disabled</value></relation>
 </int>
 
 <int size='1'>
-<name>Occupancy Reporting</name>
-<map>
-  <relation><property>0</property><value>Send enter and exit occupancy zone events only</value></relation>
-  <relation><property>1</property><value>Send location services occupancy events only</value></relation>
-  <relation><property>2</property><value>Send all types of occupancy events</value></relation>
-  <relation><property>3</property><value>Disable occupancy events</value></relation>
-</map>
+<name>Transponding Reporting</name>
+<relation><property>0</property><value>Enabled</value></relation>
+<relation><property>1</property><value>Disabled</value></relation>
 </int>
 
 <eventid>
@@ -145,24 +137,9 @@
 </eventid>
 
 <eventid>
-  <name>Location Services Occupancy Event Id</name>
+  <name>Location Services Event Id</name>
   <description>(P) this event will be sent when the zone occupancy state changes.</description>
 </eventid>
-
-<int size='1'>
-<name>Transponding Reporting</name>
-%%ENABLE_STATE%%
-</int>
-
-<eventid>
-  <name>Location Services Transponding Event Id</name>
-  <description>(P) this event will be sent when the transponding detection state changes.</description>
-</eventid>
-
-<int size='1'>
-<name>Track Fault Reporting</name>
-%%ENABLE_STATE%%
-</int>
 
 <eventid>
   <name>Track Fault Detected Event Id</name>

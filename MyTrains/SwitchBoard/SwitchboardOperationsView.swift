@@ -25,28 +25,28 @@ class SwitchboardOperationsView : SwitchboardView {
       cellSize = bounds.height / CGFloat(switchboardPanel.numberOfRows)
     }
     
-    for (_, block) in layout.operationalBlocks {
+    for (_, block) in switchboardPanel.switchboardBlocks {
       
-      if block.panelId != switchboardPanel.nodeId {
-        continue
-      }
-      
-      if block.isOccupied || block.isTrackFault, let group = layout.operationalGroups[block.groupId] {
+      if block.isBlockOccupied || block.isTrackFaulted {
         
-        for item in group {
+        for (key, item) in switchboardPanel.switchboardItems {
           
-          let path = NSBezierPath()
-          
-          let x = CGFloat(item.location.x) * cellSize
-          let y = CGFloat(item.location.y) * cellSize
-          
-          let rect = NSRect(x: x, y: y, width: cellSize, height: cellSize)
-          
-          path.appendRect(rect)
-          
-          NSColor.setFillColor(color: block.isTrackFault ? .red : .orange)
-          
-          path.fill()
+          if item.groupId == block.nodeId {
+            
+            let path = NSBezierPath()
+            
+            let x = CGFloat(item.location.x) * cellSize
+            let y = CGFloat(item.location.y) * cellSize
+            
+            let rect = NSRect(x: x, y: y, width: cellSize, height: cellSize)
+            
+            path.appendRect(rect)
+            
+            NSColor.setFillColor(color: block.isTrackFaulted ? .red : .orange)
+            
+            path.fill()
+            
+          }
           
         }
         
