@@ -99,7 +99,7 @@ class ConfigurationToolVC: MyTrainsViewController, OpenLCBConfigurationToolDeleg
   
   override func viewDidDisappear() {
     if dataWasWritten {
-      appDelegate.rebootRequest()
+  //    appDelegate.rebootRequest()
     }
   }
   

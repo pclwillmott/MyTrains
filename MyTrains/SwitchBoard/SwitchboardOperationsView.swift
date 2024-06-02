@@ -14,7 +14,7 @@ class SwitchboardOperationsView : SwitchboardView {
   
   override func draw(_ dirtyRect: NSRect) {
     
-    guard let switchboardPanel, let appLayoutId, let layout = appDelegate.networkLayer?.virtualNodeLookup[appLayoutId] as? LayoutNode else {
+    guard let switchboardPanel else {
       return
     }
     
@@ -29,7 +29,7 @@ class SwitchboardOperationsView : SwitchboardView {
       
       if block.isBlockOccupied || block.isTrackFaulted {
         
-        for (key, item) in switchboardPanel.switchboardItems {
+        for (_, item) in switchboardPanel.switchboardItems {
           
           if item.groupId == block.nodeId {
             
@@ -42,9 +42,16 @@ class SwitchboardOperationsView : SwitchboardView {
             
             path.appendRect(rect)
             
-            NSColor.setFillColor(color: block.isTrackFaulted ? .red : .orange)
+            if block.isBlockOccupied {
+              NSColor.setFillColor(color: .orange)
+              path.fill()
+            }
             
-            path.fill()
+            if block.isTrackFaulted {
+              NSColor.setStrokeColor(color: .red)
+              path.lineWidth = cellSize * 0.1
+              path.stroke()
+            }
             
           }
           
@@ -77,44 +84,9 @@ class SwitchboardOperationsView : SwitchboardView {
     
   }
 
-
   // MARK: Mouse Events
   
   override func mouseDown(with event: NSEvent) {
-    /*
-     if let item = getItem(event: event) {
-     
-     switch event.modifierFlags.intersection(.deviceIndependentFlagsMask) {
-     
-     case [.control]:
-     if item.itemPartType == .block {
-     let vc = MyTrainsWindow.placeLocomotive.viewController as! PlaceLocomotiveVC
-     vc.switchBoardItem = item
-     vc.isOrigin = false
-     vc.showWindow()
-     }
-     case [.option]:
-     break
-     case [.shift]:
-     if item.itemPartType == .block {
-     let vc = MyTrainsWindow.placeLocomotive.viewController as! PlaceLocomotiveVC
-     vc.switchBoardItem = item
-     vc.isOrigin = true
-     vc.showWindow()
-     }
-     default:
-     if item.isTurnout {
-     item.nextTurnoutConnection()
-     }
-     }
-     
-     }
-     
-     */
-    //    needsDisplay = true
-    
-    
   }
-
 
 }

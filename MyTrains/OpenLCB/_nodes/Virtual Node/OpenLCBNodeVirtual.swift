@@ -484,7 +484,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
 
     #endif
     
-    return cdi.replacingOccurrences(of: CDI.VIRTUAL_NODE_CONFIG, with: config)
+    return cdi.replacingOccurrences(of: CDI.VIRTUAL_NODE_CONFIG, with: "")
     
   }
 

@@ -1702,8 +1702,8 @@ public class LocoNetMessage : NSObject {
         var shorted = [Bool](repeating: false, count: 8)
         var mask : UInt8 = 0b00000001
         for index in 0...3 {
-          shorted[index + 0] = (message[3] & mask) == mask
-          shorted[index + 4] = (message[4] & mask) == mask
+          shorted[index + 4] = (message[3] & mask) == mask
+          shorted[index + 0] = (message[4] & mask) == mask
           mask <<= 1
         }
         return shorted

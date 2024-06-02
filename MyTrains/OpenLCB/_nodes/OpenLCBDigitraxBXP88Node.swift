@@ -701,13 +701,11 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
         
         let id = (sensorAddress - 1) / numberOfChannels + 1
  
-        debugLog("id: \(id)")
-
         if id == boardId, let sensorState = message.sensorState {
           
           let zone = (sensorAddress - 1) % numberOfChannels
           
-          debugLog("id: \(id) zone: \(zone)")
+          print(" \(userNodeName) \(sensorState ? "enter" : "exit") id: \(id) zone: \(zone + 1) ")
           
           if sensorState, let eventId = enterOccupancyEventId(zone: zone) {
             sendEvent(eventId: eventId)
@@ -730,12 +728,13 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
         let zone = transponderZone % numberOfChannels
         
         if let eventId = locationServicesEventId(zone: zone) {
-          sendLocationServiceEvent(eventId: eventId, trainNodeId: trainNodeId, entryExit: sensorState ? .entryWithState : .exit, motionRelative: .unknown, motionAbsolute: .unknown, contentFormat: .occupancyInformationOnly, content: nil)
+//          sendLocationServiceEvent(eventId: eventId, trainNodeId: trainNodeId, entryExit: sensorState ? .entryWithState : .exit, motionRelative: .unknown, motionAbsolute: .unknown, contentFormat: .occupancyInformationOnly, content: nil)
         }
         
       }
       
     case .pmRepBXP88:
+      
       if let id = message.boardId, id == boardId, let shorted = message.detectionSectionShorted {
         if lastDetectionSectionShorted.isEmpty {
           for zone in 0...numberOfChannels - 1 {
@@ -744,6 +743,7 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
         }
         for zone in 0...numberOfChannels - 1 {
           if lastDetectionSectionShorted[zone] != shorted[zone] {
+            print("\(shorted[zone] ? "short" : "short cleared") \(userNodeName) id: \(id) zone: \(zone + 1)")
             if shorted[zone], let eventId = trackFaultEventId(zone: zone) {
               sendEvent(eventId: eventId)
             }

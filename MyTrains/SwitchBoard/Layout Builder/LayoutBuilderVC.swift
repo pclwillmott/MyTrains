@@ -39,7 +39,7 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
   
   override func viewDidDisappear() {
     if isManualClose {
-      appDelegate.rebootRequest()
+ //     appDelegate.rebootRequest()
     }
   }
 

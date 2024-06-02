@@ -84,9 +84,9 @@ public enum LayoutInspectorProperty : Int, CaseIterable {
   case exitDetectionZoneEventId      = 39
   case enterTranspondingZoneEventId  = 40
   case exitTranspondingZoneEventId   = 41
+  case locationServicesEventId       = 44
   case trackFaultEventId             = 42
   case trackFaultClearedEventId      = 43
-  case locationServicesEventId       = 44
   /// Turnout Events
   case sw1ThrowEventId               = 45
   case sw1CloseEventId               = 46

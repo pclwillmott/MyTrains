@@ -47,7 +47,15 @@ extension UInt64 {
   
   init?(dotHex:String) {
     
-    let split = dotHex.trimmingCharacters(in: .whitespacesAndNewlines).split(separator: ".", omittingEmptySubsequences: true)
+    let trimmed = dotHex.trimmingCharacters(in: .whitespacesAndNewlines)
+    
+    if trimmed.isEmpty {
+      self.init()
+      self = 0
+      return
+    }
+    
+    let split = trimmed.split(separator: ".", omittingEmptySubsequences: true)
     
     if split.count != 8 {
       return nil
