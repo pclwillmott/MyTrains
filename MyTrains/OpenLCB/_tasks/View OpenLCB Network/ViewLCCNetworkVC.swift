@@ -86,10 +86,19 @@ class ViewLCCNetworkVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate
     case .initializationCompleteSimpleSetSufficient, .initializationCompleteFullProtocolRequired, .verifiedNodeIDSimpleSetSufficient, .verifiedNodeIDFullProtocolRequired:
       
       if let newNodeId = message.sourceNodeId, !nodes.keys.contains(newNodeId) {
-        nodes[newNodeId] = OpenLCBNode(nodeId: newNodeId)
-        reload()
-        configurationTool.sendSimpleNodeInformationRequest(destinationNodeId: newNodeId)
-        configurationTool.sendProtocolSupportInquiry(destinationNodeId: newNodeId)
+        
+        var ok = true
+        
+        if chkShowInternalNodes.state == .off, let internalNode = appDelegate.networkLayer?.virtualNodeLookup[newNodeId] {
+          ok = internalNode.virtualNodeType.visibility == .visibilityPublic
+        }
+        
+        if ok {
+          nodes[newNodeId] = OpenLCBNode(nodeId: newNodeId)
+          reload()
+          configurationTool.sendSimpleNodeInformationRequest(destinationNodeId: newNodeId)
+          configurationTool.sendProtocolSupportInquiry(destinationNodeId: newNodeId)
+        }
       }
       
     case .simpleNodeIdentInfoReply:
@@ -119,6 +128,12 @@ class ViewLCCNetworkVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate
   @IBAction func btnRefreshAction(_ sender: NSButton) {
     findAll()
   }
+  
+  @IBAction func chkShowInternalNodesAction(_ sender: NSButton) {
+    findAll()
+  }
+  
+  @IBOutlet weak var chkShowInternalNodes: NSButton!
   
   @IBAction func btnConfigureAction(_ sender: NSButton) {
     

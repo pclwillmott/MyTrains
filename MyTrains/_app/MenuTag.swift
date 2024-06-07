@@ -21,6 +21,7 @@ public enum MenuTag : Int {
   case newDCCProgrammerTrack    = 10
   case newDigitraxBXP88         = 11
   case newLayout                = 12
+  case newDigitraxDS64          = 16
   
   case myTrains                 = 1000
 //  case file                   = 1001
@@ -138,6 +139,7 @@ public enum MenuTag : Int {
     .newLocoNetGateway,
     .newLocoNetMonitor,
     .newDCCProgrammerTrack,
+    .newDigitraxDS64,
   ]
   
   // MARK: Private Static Properties
@@ -162,6 +164,7 @@ public enum MenuTag : Int {
     .newLocoNetGateway        : String(localized: "LocoNet Gateway",                       comment: "Used for a menu title"),
     .newDCCProgrammerTrack    : String(localized: "DCC Programmer Track",                  comment: "Used for a menu title"),
     .newDigitraxBXP88         : String(localized: "Digitrax BXP88",                        comment: "Used for a menu title"),
+    .newDigitraxDS64         : String(localized: "Digitrax DS64",                        comment: "Used for a menu title"),
     .newLocoNetMonitor        : String(localized: "LocoNet Monitor",                       comment: "Used for a menu title"),
     .globalEmergencyStop      : String(localized: "Global Emergency Stop",                 comment: "Used for a menu title"),
     .clearGlobalEmergencyStop : String(localized: "Clear Global Emergency Stop",           comment: "Used for a menu title"),
@@ -208,6 +211,7 @@ public enum MenuTag : Int {
     .newLocoNetMonitor        : [.runningNetwork],
     .newDCCProgrammerTrack    : [.runningNetwork],
     .newDigitraxBXP88         : [.runningNetwork],
+    .newDigitraxDS64          : [.runningNetwork],
     .newLayout                : [.runningNetwork],
     .myTrains                 : [.uninitialized, .runningLocal, .runningNetwork, .stopping, .stopped, .rebooting],
     .new                      : [.uninitialized, .runningLocal, .runningNetwork, .stopping, .stopped, .rebooting],
@@ -226,7 +230,7 @@ public enum MenuTag : Int {
     .configLCCNetwork         : [.runningLocal, .runningNetwork],
     .configClock              : [.runningLocal, .runningNetwork],
     .dccProgrammerTool        : [.runningLocal, .runningNetwork],
-    .layoutBuilder            : [.runningNetwork],
+    .layoutBuilder            : [.runningLocal, .runningNetwork],
     .trainSpeedProfiler       : [.runningLocal, .runningNetwork],
     .locoNetFirmwareUpdate    : [.runningLocal, .runningNetwork],
     .locoNetWirelessSetup     : [.runningLocal, .runningNetwork],

@@ -2,7 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22689"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22690"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -429,9 +429,21 @@
                                     <action selector="btnRefreshAction:" target="XKz-Ri-U20" id="nbI-Jj-xTD"/>
                                 </connections>
                             </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="icD-kM-1eb">
+                                <rect key="frame" x="113" y="21" width="152" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <buttonCell key="cell" type="check" title="Show Internal Nodes" bezelStyle="regularSquare" imagePosition="left" inset="2" id="No0-RK-wmq">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="chkShowInternalNodesAction:" target="XKz-Ri-U20" id="Yi5-Te-JqV"/>
+                                </connections>
+                            </button>
                         </subviews>
                     </view>
                     <connections>
+                        <outlet property="chkShowInternalNodes" destination="icD-kM-1eb" id="lJb-Ut-rpT"/>
                         <outlet property="tableView" destination="gvn-aO-OXg" id="Ihh-Ek-7E3"/>
                     </connections>
                 </viewController>

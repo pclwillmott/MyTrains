@@ -7,7 +7,8 @@
 
 import Foundation
 
-public enum OptionSwitchState : Int {
+/*
+public enum xOptionSwitchState : Int {
   
   case thrown = 0
   case closed = 1
@@ -32,13 +33,14 @@ public enum OptionSwitchState : Int {
     }
   }
   
-  public var value : OptionSwitchState {
+  public var value : xOptionSwitchState {
     get {
-      return OptionSwitchState(rawValue: self.rawValue & 1) ?? .thrown
+      return xOptionSwitchState(rawValue: self.rawValue & 1) ?? .thrown
     }
   }
 
 }
+
 
 public enum OptionSwitchDefinitionType {
   case decoder
@@ -52,7 +54,9 @@ public enum OptionSwitchMethod {
   case OpSwDataBP1
   case OpMode
 }
+*/
 
+/*
 public typealias OptionSwitchDefinition = (
   definitionType: OptionSwitchDefinitionType,
   model: Set<LocoNetDeviceId>,
@@ -61,11 +65,13 @@ public typealias OptionSwitchDefinition = (
   thrownEffect : String,
   closedEffect : String
 )
+*/
 
 public class OptionSwitch {
   
   // MARK: Constructors
   
+  /*
   init(switchDefinition:OptionSwitchDefinition) {
     
 //    self._locoNetDevice = locoNetDevice
@@ -79,6 +85,7 @@ public class OptionSwitch {
     #endif
     
   }
+  */
   
   #if DEBUG
   deinit {
@@ -90,9 +97,9 @@ public class OptionSwitch {
   
 //  private var _locoNetDevice : LocoNetDevice
   
-  private var _switchNumber : Int
+//  private var _switchNumber : Int
   
-  private var _switchDefinition : OptionSwitchDefinition
+//  private var _switchDefinition : OptionSwitchDefinition
   
   // MARK: Public Properties
   /*
@@ -102,18 +109,21 @@ public class OptionSwitch {
     }
   }
   */
+  /*
   public var switchNumber : Int {
     get {
       return _switchNumber
     }
   }
-  
+   */
+  /*
   public var switchDefinition : OptionSwitchDefinition {
     get {
       return _switchDefinition
     }
   }
-  
+  */
+  /*
   public var state : OptionSwitchState {
     get {
       return .closed// locoNetDevice.getState(switchNumber: self.switchNumber)
@@ -131,7 +141,7 @@ public class OptionSwitch {
   //    locoNetDevice.setNewState(switchNumber: self.switchNumber, value: value)
     }
   }
-  
+  */
   public var newDefaultDecoderType : SpeedSteps = SpeedSteps.defaultValue
 
   public var defaultDecoderType : SpeedSteps {
@@ -198,6 +208,7 @@ public class OptionSwitch {
     .DCS240PLUS : "Move the Mode toggle switch on the DCS240+ to the \"RUN\" position.",
   ]
   
+  /*
   public static let allOptions : [OptionSwitchDefinition] = [
     (
       definitionType: .standard,
@@ -1986,9 +1997,12 @@ public class OptionSwitch {
     ),
     
   ]
+   
+   */
 
   // MARK: Class Methods
   
+  /*
   public static func switches(locoNetProductId: LocoNetDeviceId) -> [OptionSwitchDefinition] {
   
     var result : [OptionSwitchDefinition] = []
@@ -2004,5 +2018,6 @@ public class OptionSwitch {
     }
     
   }
+  */
   
 }

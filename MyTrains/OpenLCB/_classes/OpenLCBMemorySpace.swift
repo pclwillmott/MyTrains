@@ -656,6 +656,8 @@ public class OpenLCBMemorySpace : NSObject {
         node = OpenLCBProgrammingTrackNode(nodeId: nodeId)
       case .digitraxBXP88Node:
         node = OpenLCBDigitraxBXP88Node(nodeId: nodeId)
+      case .digitraxDS64Node:
+        node = OpenLCBDigitraxDS64Node(nodeId: nodeId)
       case .layoutNode:
         node = LayoutNode(nodeId: nodeId)
       case .switchboardPanelNode:

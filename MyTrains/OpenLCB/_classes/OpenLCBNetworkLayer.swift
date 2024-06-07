@@ -579,6 +579,8 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
       node = OpenLCBNodeVirtual(nodeId: newNodeId)
     case .digitraxBXP88Node:
       node = OpenLCBDigitraxBXP88Node(nodeId: newNodeId)
+    case .digitraxDS64Node:
+      node = OpenLCBDigitraxDS64Node(nodeId: newNodeId)
     case .layoutNode:
       node = LayoutNode(nodeId: newNodeId)
       layout = node.nodeId

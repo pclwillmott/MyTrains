@@ -89,20 +89,28 @@ public enum LayoutInspectorProperty : Int, CaseIterable {
   case trackFaultClearedEventId      = 43
   /// Turnout Events
   case sw1ThrowEventId               = 45
-  case sw1CloseEventId               = 46
+  case sw1CommandedThrownEventId     = 173
   case sw1ThrownEventId              = 47
+  case sw1CloseEventId               = 46
+  case sw1CommandedClosedEventId     = 177
   case sw1ClosedEventId              = 48
   case sw2ThrowEventId               = 49
-  case sw2CloseEventId               = 50
+  case sw2CommandedThrownEventId     = 174
   case sw2ThrownEventId              = 51
+  case sw2CloseEventId               = 50
+  case sw2CommandedClosedEventId     = 178
   case sw2ClosedEventId              = 52
   case sw3ThrowEventId               = 53
-  case sw3CloseEventId               = 54
+  case sw3CommandedThrownEventId     = 175
   case sw3ThrownEventId              = 55
+  case sw3CloseEventId               = 54
+  case sw3CommandedClosedEventId     = 179
   case sw3ClosedEventId              = 56
   case sw4ThrowEventId               = 57
-  case sw4CloseEventId               = 58
+  case sw4CommandedThrownEventId     = 176
   case sw4ThrownEventId              = 59
+  case sw4CloseEventId               = 58
+  case sw4CommandedClosedEventId     = 180
   case sw4ClosedEventId              = 60
   /// Sensor Events
   case sensorActivatedEventId        = 61
@@ -277,7 +285,7 @@ public enum LayoutInspectorProperty : Int, CaseIterable {
       guard let value = Double(string), value >= 0.0 else {
         return false
       }
-    case .enterDetectionZoneEventId, .exitDetectionZoneEventId, .enterTranspondingZoneEventId, .exitTranspondingZoneEventId, .trackFaultEventId, .trackFaultClearedEventId, .locationServicesEventId, .sw1ThrowEventId, .sw1CloseEventId, .sw1ThrownEventId, .sw1ClosedEventId, .sw2ThrowEventId, .sw2CloseEventId, .sw2ThrownEventId, .sw2ClosedEventId, .sw3ThrowEventId, .sw3CloseEventId, .sw3ThrownEventId, .sw3ClosedEventId, .sw4ThrowEventId, .sw4CloseEventId, .sw4ThrownEventId, .sw4ClosedEventId, .sensorActivatedEventId, .sensorDeactivatedEventId, .sensorLocationServicesEventId, .signalSetState0EventId, .signalSetState1EventId, .signalSetState2EventId, .signalSetState3EventId, .signalSetState4EventId, .signalSetState5EventId, .signalSetState6EventId, .signalSetState7EventId, .signalSetState8EventId, .signalSetState9EventId, .signalSetState10EventId, .signalSetState11EventId, .signalSetState12EventId, .signalSetState13EventId, .signalSetState14EventId, .signalSetState15EventId, .signalSetState16EventId, .signalSetState17EventId, .signalSetState18EventId, .signalSetState19EventId, .signalSetState20EventId, .signalSetState21EventId, .signalSetState22EventId, .signalSetState23EventId, .signalSetState24EventId, .signalSetState25EventId, .signalSetState26EventId, .signalSetState27EventId, .signalSetState28EventId, .signalSetState29EventId, .signalSetState30EventId, .signalSetState31EventId:
+    case .enterDetectionZoneEventId, .exitDetectionZoneEventId, .enterTranspondingZoneEventId, .exitTranspondingZoneEventId, .trackFaultEventId, .trackFaultClearedEventId, .locationServicesEventId, .sw1ThrowEventId, .sw1CloseEventId, .sw1ThrownEventId, .sw1ClosedEventId, .sw2ThrowEventId, .sw2CloseEventId, .sw2ThrownEventId, .sw2ClosedEventId, .sw3ThrowEventId, .sw3CloseEventId, .sw3ThrownEventId, .sw3ClosedEventId, .sw4ThrowEventId, .sw4CloseEventId, .sw4ThrownEventId, .sw4ClosedEventId, .sensorActivatedEventId, .sensorDeactivatedEventId, .sensorLocationServicesEventId, .signalSetState0EventId, .signalSetState1EventId, .signalSetState2EventId, .signalSetState3EventId, .signalSetState4EventId, .signalSetState5EventId, .signalSetState6EventId, .signalSetState7EventId, .signalSetState8EventId, .signalSetState9EventId, .signalSetState10EventId, .signalSetState11EventId, .signalSetState12EventId, .signalSetState13EventId, .signalSetState14EventId, .signalSetState15EventId, .signalSetState16EventId, .signalSetState17EventId, .signalSetState18EventId, .signalSetState19EventId, .signalSetState20EventId, .signalSetState21EventId, .signalSetState22EventId, .signalSetState23EventId, .signalSetState24EventId, .signalSetState25EventId, .signalSetState26EventId, .signalSetState27EventId, .signalSetState28EventId, .signalSetState29EventId, .signalSetState30EventId, .signalSetState31EventId, .sw1CommandedClosedEventId, .sw1CommandedThrownEventId, .sw2CommandedClosedEventId, .sw2CommandedThrownEventId, .sw3CommandedClosedEventId, .sw3CommandedThrownEventId, .sw4CommandedClosedEventId, .sw4CommandedThrownEventId:
       guard let _ = UInt64(dotHex: string, numberOfBytes: 8) else {
         return string.isEmpty
       }
@@ -751,6 +759,63 @@ public enum LayoutInspectorProperty : Int, CaseIterable {
       .turnoutEvents,
       .eventId
     ),
+    .sw1CommandedThrownEventId
+    : (
+      String(localized:"Switch #1 Commanded Thrown", comment:"This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been commanded thrown."),
+      String(localized:"Event ID that indicates that turnout switch #1 has been commanded thrown.", comment:"This is used for a tooltip."),
+      .turnoutEvents,
+      .eventId
+    ),
+    .sw1CommandedClosedEventId
+    : (
+      String(localized:"Switch #1 Commanded Closed", comment:"This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been commanded closed."),
+      String(localized:"Event ID that indicates that turnout switch #1 has been commanded closed.", comment:"This is used for a tooltip."),
+      .turnoutEvents,
+      .eventId
+    ),
+    .sw2CommandedThrownEventId
+    : (
+      String(localized:"Switch #2 Commanded Thrown", comment:"This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been commanded thrown."),
+      String(localized:"Event ID that indicates that turnout switch #2 has been commanded thrown.", comment:"This is used for a tooltip."),
+      .turnoutEvents,
+      .eventId
+    ),
+    .sw2CommandedClosedEventId
+    : (
+      String(localized:"Switch #2 Commanded Closed", comment:"This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been commanded closed."),
+      String(localized:"Event ID that indicates that turnout switch #2 has been commanded closed.", comment:"This is used for a tooltip."),
+      .turnoutEvents,
+      .eventId
+    ),
+    .sw3CommandedThrownEventId
+    : (
+      String(localized:"Switch #3 Commanded Thrown", comment:"This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been commanded thrown."),
+      String(localized:"Event ID that indicates that turnout switch #3 has been commanded thrown.", comment:"This is used for a tooltip."),
+      .turnoutEvents,
+      .eventId
+    ),
+    .sw3CommandedClosedEventId
+    : (
+      String(localized:"Switch #3 Commanded Closed", comment:"This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been commanded closed."),
+      String(localized:"Event ID that indicates that turnout switch #3 has been commanded closed.", comment:"This is used for a tooltip."),
+      .turnoutEvents,
+      .eventId
+    ),
+    .sw4CommandedThrownEventId
+    : (
+      String(localized:"Switch #4 Commanded Thrown", comment:"This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been commanded thrown."),
+      String(localized:"Event ID that indicates that turnout switch #4 has been commanded thrown.", comment:"This is used for a tooltip."),
+      .turnoutEvents,
+      .eventId
+    ),
+    .sw4CommandedClosedEventId
+    : (
+      String(localized:"Switch #4 Commanded Closed", comment:"This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been commanded closed."),
+      String(localized:"Event ID that indicates that turnout switch #4 has been commanded closed.", comment:"This is used for a tooltip."),
+      .turnoutEvents,
+      .eventId
+    ),
+
     .sensorType
     : (
       String(localized:"Type", comment:"This is used for the title of a combo box that the user selects the type of sensor."),

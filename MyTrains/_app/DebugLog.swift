@@ -33,6 +33,8 @@ public func addInit(fileName: String = #file) {
 
 public func addDeinit(fileName: String = #file) {
 
+  return
+  
   let className = (fileName as NSString).lastPathComponent
   
   var newTotal : Int = -1

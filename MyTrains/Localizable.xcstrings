@@ -1205,6 +1205,7 @@
     },
     "Closed" : {
       "comment" : "Used to indicate the state of a turnout",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2183,6 +2184,12 @@
         }
       }
     },
+    "Digitrax DS64" : {
+      "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name"
+    },
+    "Digitrax DS64 Node" : {
+      "comment" : "Used to describe an OpenLCB virtual node"
+    },
     "Dimmer" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -2567,10 +2574,22 @@
     "Event ID that indicates that turnout switch #1 has been closed." : {
       "comment" : "This is used for a tooltip."
     },
+    "Event ID that indicates that turnout switch #1 has been commanded closed." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID that indicates that turnout switch #1 has been commanded thrown." : {
+      "comment" : "This is used for a tooltip."
+    },
     "Event ID that indicates that turnout switch #1 has been thrown." : {
       "comment" : "This is used for a tooltip."
     },
     "Event ID that indicates that turnout switch #2 has been closed." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID that indicates that turnout switch #2 has been commanded closed." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID that indicates that turnout switch #2 has been commanded thrown." : {
       "comment" : "This is used for a tooltip."
     },
     "Event ID that indicates that turnout switch #2 has been thrown." : {
@@ -2579,10 +2598,22 @@
     "Event ID that indicates that turnout switch #3 has been closed." : {
       "comment" : "This is used for a tooltip."
     },
+    "Event ID that indicates that turnout switch #3 has been commanded closed." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID that indicates that turnout switch #3 has been commanded thrown." : {
+      "comment" : "This is used for a tooltip."
+    },
     "Event ID that indicates that turnout switch #3 has been thrown." : {
       "comment" : "This is used for a tooltip."
     },
     "Event ID that indicates that turnout switch #4 has been closed." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID that indicates that turnout switch #4 has been commanded closed." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID that indicates that turnout switch #4 has been commanded thrown." : {
       "comment" : "This is used for a tooltip."
     },
     "Event ID that indicates that turnout switch #4 has been thrown." : {
@@ -5909,6 +5940,12 @@
     "Switch #1 Closed" : {
       "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been closed."
     },
+    "Switch #1 Commanded Closed" : {
+      "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been commanded closed."
+    },
+    "Switch #1 Commanded Thrown" : {
+      "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been commanded thrown."
+    },
     "Switch #1 Method" : {
       "comment" : "This is used for the title of a combo box where the user can select the applicable turnout motor type."
     },
@@ -5917,6 +5954,12 @@
     },
     "Switch #2 Closed" : {
       "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been closed."
+    },
+    "Switch #2 Commanded Closed" : {
+      "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been commanded closed."
+    },
+    "Switch #2 Commanded Thrown" : {
+      "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been commanded thrown."
     },
     "Switch #2 Method" : {
       "comment" : "This is used for the title of a combo box where the user can select the applicable turnout motor type."
@@ -5927,6 +5970,12 @@
     "Switch #3 Closed" : {
       "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been closed."
     },
+    "Switch #3 Commanded Closed" : {
+      "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been commanded closed."
+    },
+    "Switch #3 Commanded Thrown" : {
+      "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been commanded thrown."
+    },
     "Switch #3 Method" : {
       "comment" : "This is used for the title of a combo box where the user can select the applicable turnout motor type."
     },
@@ -5935,6 +5984,12 @@
     },
     "Switch #4 Closed" : {
       "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been closed."
+    },
+    "Switch #4 Commanded Closed" : {
+      "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been commanded closed."
+    },
+    "Switch #4 Commanded Thrown" : {
+      "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been commanded thrown."
     },
     "Switch #4 Method" : {
       "comment" : "This is used for the title of a combo box where the user can select the applicable turnout motor type."
@@ -6346,6 +6401,7 @@
     },
     "Thrown" : {
       "comment" : "Used to indicate the state of a turnout",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -6635,7 +6691,7 @@
       "comment" : "This is the name of a country."
     },
     "Unknown" : {
-      "comment" : "Used to indicate that the type of something is unknown\nUsed to indicate the state of a turnout",
+      "comment" : "Used to indicate that the type of something is unknown",
       "localizations" : {
         "en" : {
           "stringUnit" : {

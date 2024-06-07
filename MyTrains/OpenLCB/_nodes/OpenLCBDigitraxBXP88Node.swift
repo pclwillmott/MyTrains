@@ -15,7 +15,7 @@ private enum ConfigState {
   case settingOptionSwitches
 }
 
-private enum BXP88OptionSwitches : Int {
+private enum BXP88OptionSwitches : UInt16 {
   
   case shortCircuitDetection          = 4
   case transpondingState              = 5
@@ -394,7 +394,8 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
     
     if let opSw = optionSwitchesToDo.first {
       
-      var state : OptionSwitchState?
+      var state : DCCSwitchState?
+      
       switch opSw {
       case .shortCircuitDetection:
         state = isShortCircuitDetectionNormal ? .thrown : .closed
@@ -663,7 +664,7 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
       
       while true {
         
-        locoNet.setSw(switchNumber: Int(boardId), state: .closed)
+        locoNet.setSw(switchNumber: boardId, state: .closed)
         
         let alertCheck = NSAlert()
         alertCheck.messageText = "Has the set Board ID command been accepted?"

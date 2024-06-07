@@ -14,8 +14,8 @@
             filePath = "MyTrains/OpenLCB/_nodes/SwitchboardItemNode.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1504"
-            endingLineNumber = "1504"
+            startingLineNumber = "1501"
+            endingLineNumber = "1501"
             landmarkName = "customizeDynamicCDI(cdi:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -30,8 +30,8 @@
             filePath = "MyTrains/OpenLCB/_nodes/SwitchboardItemNode.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1567"
-            endingLineNumber = "1567"
+            startingLineNumber = "1564"
+            endingLineNumber = "1564"
             landmarkName = "customizeDynamicCDI(cdi:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -206,8 +206,8 @@
             filePath = "MyTrains/OpenLCB/_nodes/SwitchboardItemNode.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1469"
-            endingLineNumber = "1469"
+            startingLineNumber = "1466"
+            endingLineNumber = "1466"
             landmarkName = "customizeDynamicCDI(cdi:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -286,8 +286,8 @@
             filePath = "MyTrains/OpenLCB/_classes/OpenLCBNetworkLayer.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "708"
-            endingLineNumber = "708"
+            startingLineNumber = "710"
+            endingLineNumber = "710"
             landmarkName = "clearMonitorBuffer()"
             landmarkType = "7">
          </BreakpointContent>
@@ -414,8 +414,8 @@
             filePath = "MyTrains/_app/MenuTag.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "124"
-            endingLineNumber = "124"
+            startingLineNumber = "125"
+            endingLineNumber = "125"
             landmarkName = "isValid(state:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -430,8 +430,8 @@
             filePath = "MyTrains/OpenLCB/_classes/OpenLCBNetworkLayer.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "583"
-            endingLineNumber = "583"
+            startingLineNumber = "585"
+            endingLineNumber = "585"
             landmarkName = "createVirtualNode(virtualNodeType:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -494,8 +494,8 @@
             filePath = "MyTrains/OpenLCB/_nodes/SwitchboardItemNode.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1168"
-            endingLineNumber = "1168"
+            startingLineNumber = "1151"
+            endingLineNumber = "1151"
             landmarkName = "getValue(property:)"
             landmarkType = "7">
          </BreakpointContent>

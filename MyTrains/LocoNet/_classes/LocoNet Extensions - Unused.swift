@@ -11,7 +11,7 @@ extension LocoNet {
   
   // MARK: Public Methods
  
-  public func getBrdOpSwState(locoNetDeviceId:LocoNetDeviceId, boardId:Int, switchNumber:Int) {
+  public func getBrdOpSwState(locoNetDeviceId:LocoNetDeviceId, boardId:UInt16, switchNumber:Int) {
     
     let boardType : [LocoNetDeviceId:UInt8] = [
       .PM4 : 0,
@@ -43,7 +43,11 @@ extension LocoNet {
 
   }
 
-  public func setBrdOpSwState(locoNetDeviceId:LocoNetDeviceId, boardId:Int, switchNumber:Int, state:OptionSwitchState) {
+  public func setBrdOpSwState(locoNetDeviceId:LocoNetDeviceId, boardId:UInt16, switchNumber:Int, state:DCCSwitchState) {
+    
+    guard state != .unknown else {
+      return
+    }
     
     let boardType : [LocoNetDeviceId:UInt8] = [
       .PM4 : 0,
@@ -124,7 +128,7 @@ extension LocoNet {
     
   }
 
-  public func setSwIMM(address: Int, state:TurnoutSwitchState, isOutputOn:Bool) {
+  public func setSwIMM(address: Int, state:DCCSwitchState, isOutputOn:Bool) {
     
     let add = address - 1
     

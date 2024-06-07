@@ -148,6 +148,9 @@
                                         <menuItem title="Digitrax BXP88" tag="11" id="zt7-Tz-hwr">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                         </menuItem>
+                                        <menuItem title="Digitrax DS64" tag="16" id="Suj-GC-uhz">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                        </menuItem>
                                     </items>
                                 </menu>
                             </menuItem>

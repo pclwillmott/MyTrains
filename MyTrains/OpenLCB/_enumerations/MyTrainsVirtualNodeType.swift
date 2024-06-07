@@ -25,6 +25,7 @@ public enum MyTrainsVirtualNodeType : UInt16 {
   case switchboardPanelNode  = 13
   case switchboardItemNode   = 14
   case applicationNode       = 15
+  case digitraxDS64Node      = 16
 
   // MARK: Public Properties
   
@@ -67,6 +68,7 @@ public enum MyTrainsVirtualNodeType : UInt16 {
     .programmerToolNode    : .visibilityPublic,
     .programmingTrackNode  : .visibilityPublic,
     .digitraxBXP88Node     : .visibilityPublic,
+    .digitraxDS64Node      : .visibilityPublic,
     .layoutNode            : .visibilityInternal,
     .switchboardPanelNode  : .visibilityInternal,
     .switchboardItemNode   : .visibilityInternal,
@@ -86,6 +88,7 @@ public enum MyTrainsVirtualNodeType : UInt16 {
     .programmerToolNode:    String(localized: "DCC Programmer Tool", comment: "Used to create a default OpenLCB virtual name"),
     .programmingTrackNode:  String(localized: "DCC Programming Track", comment: "Used to create a default OpenLCB virtual name"),
     .digitraxBXP88Node:     String(localized: "Digitrax BXP88", comment: "Used to create a default OpenLCB virtual name"),
+    .digitraxDS64Node:      String(localized: "Digitrax DS64", comment: "Used to create a default OpenLCB virtual name"),
     .layoutNode:            String(localized: "Layout", comment: "Used to create a default OpenLCB virtual name"),
     .switchboardPanelNode:  String(localized: "Switchboard Panel", comment: "Used to create a default OpenLCB virtual name"),
     .switchboardItemNode:   String(localized: "Switchboard Item", comment: "Used to create a default OpenLCB virtual name"),
@@ -102,6 +105,7 @@ public enum MyTrainsVirtualNodeType : UInt16 {
     .trainNode             : 4, // LocoNet
     .programmingTrackNode  : 4, // LocoNet
     .digitraxBXP88Node     : 4, // LocoNet
+    .digitraxDS64Node      : 4, // LocoNet
     .layoutNode            : 5, // Panel
     .configurationToolNode : 5,
     .throttleNode          : 5,
@@ -126,6 +130,7 @@ public enum MyTrainsVirtualNodeType : UInt16 {
     .programmerToolNode:    String(localized: "DCC Programmer Tool Node", comment: "Used to describe an OpenLCB virtual node"),
     .programmingTrackNode:  String(localized: "DCC Programming Track Node", comment: "Used to describe an OpenLCB virtual node"),
     .digitraxBXP88Node:     String(localized: "Digitrax BXP88 Node", comment: "Used to describe an OpenLCB virtual node"),
+    .digitraxDS64Node:      String(localized: "Digitrax DS64 Node", comment: "Used to describe an OpenLCB virtual node"),
     .layoutNode:            String(localized: "Layout Node", comment: "Used to describe an OpenLCB virtual node"),
     .switchboardPanelNode:  String(localized: "Switchboard Panel Node", comment: "Used to describe an OpenLCB virtual node"),
     .switchboardItemNode:   String(localized: "Switchboard Item Node", comment: "Used to describe an OpenLCB virtual node"),
@@ -156,6 +161,7 @@ public enum MyTrainsVirtualNodeType : UInt16 {
       .switchboardPanelNode  ,
       .switchboardItemNode   ,
       .digitraxBXP88Node     ,
+      .digitraxDS64Node      ,
       .genericVirtualNode    ,
     ]
     
@@ -196,6 +202,7 @@ public enum MyTrainsVirtualNodeType : UInt16 {
         .locoNetGatewayNode,
         .programmingTrackNode,
         .digitraxBXP88Node,
+        .digitraxDS64Node,
         .locoNetMonitorNode,
       ]
     case .delegate:

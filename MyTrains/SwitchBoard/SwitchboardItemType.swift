@@ -8,9 +8,9 @@
 import Foundation
 import AppKit
 
-public typealias TurnoutSwitchSetting = (switchNumber: Int, switchState: TurnoutSwitchState)
+public typealias TurnoutSwitchSetting = (switchNumber: Int, switchState: DCCSwitchState)
 
-public typealias SwitchBoardConnection = (from: Int, to: Int, switchSettings: [TurnoutSwitchSetting])
+public typealias SwitchBoardConnection = (from: Int, to: Int, modifier: NSEvent.ModifierFlags, switchSettings: [TurnoutSwitchSetting])
 
 public enum SwitchboardItemType : UInt16 {
   
@@ -165,6 +165,8 @@ public enum SwitchboardItemType : UInt16 {
         .sw1ThrowEventId,
         .sw1ClosedEventId,
         .sw1ThrownEventId,
+        .sw1CommandedClosedEventId,
+        .sw1CommandedThrownEventId,
         ])
     case .turnoutLeft:
       result = result.union([
@@ -175,6 +177,8 @@ public enum SwitchboardItemType : UInt16 {
         .sw1ThrowEventId,
         .sw1ClosedEventId,
         .sw1ThrownEventId,
+        .sw1CommandedClosedEventId,
+        .sw1CommandedThrownEventId,
       ])
     case .cross:
       result = result.union([
@@ -195,6 +199,8 @@ public enum SwitchboardItemType : UInt16 {
         .sw1ThrowEventId,
         .sw1ClosedEventId,
         .sw1ThrownEventId,
+        .sw1CommandedClosedEventId,
+        .sw1CommandedThrownEventId,
       ])
     case .turnout3Way:
       result = result.union([
@@ -211,6 +217,10 @@ public enum SwitchboardItemType : UInt16 {
         .sw2ThrowEventId,
         .sw2ClosedEventId,
         .sw2ThrownEventId,
+        .sw1CommandedClosedEventId,
+        .sw1CommandedThrownEventId,
+        .sw2CommandedClosedEventId,
+        .sw2CommandedThrownEventId,
       ])
     case .leftCurvedTurnout:
       result = result.union([
@@ -221,6 +231,8 @@ public enum SwitchboardItemType : UInt16 {
         .sw1ThrowEventId,
         .sw1ClosedEventId,
         .sw1ThrownEventId,
+        .sw1CommandedClosedEventId,
+        .sw1CommandedThrownEventId,
       ])
     case .rightCurvedTurnout:
       result = result.union([
@@ -231,6 +243,8 @@ public enum SwitchboardItemType : UInt16 {
         .sw1ThrowEventId,
         .sw1ClosedEventId,
         .sw1ThrownEventId,
+        .sw1CommandedClosedEventId,
+        .sw1CommandedThrownEventId,
       ])
     case .singleSlip:
       result = result.union([
@@ -431,9 +445,7 @@ public enum SwitchboardItemType : UInt16 {
   }
   
   public var connections : [SwitchBoardConnection] {
-    get {
-      return SwitchboardItemType.connections[self] ?? []
-    }
+    return SwitchboardItemType.connections[self] ?? []
   }
   
   public var numberOfDimensionsRequired : Int {
@@ -537,29 +549,42 @@ public enum SwitchboardItemType : UInt16 {
   ]
   
   private static let connections : [SwitchboardItemType:[SwitchBoardConnection]] = [
-    .straight           : [(5, 1, [])],
-    .curve              : [(5, 3, [])],
-    .longCurve          : [(5, 2, [])],
-    .turnoutRight       : [(5, 1, [(1, .closed)]),(5, 2, [(1, .thrown)])],
-    .turnoutLeft        : [(5, 1, [(1, .closed)]),(5, 0, [(1, .thrown)])],
-    .cross              : [(7, 3, []),(5, 1, [])],
-    .diagonalCross      : [(0, 4, []),(5, 1, [])],
-    .yTurnout           : [(5, 0, [(1, .closed)]),(5, 2, [(1, .thrown)])],
-    .turnout3Way        : [(5, 0, [(1, .thrown), (2, .closed)]),(5, 1, [(1, .closed), (2, .closed)]),(5, 2, [(1, .thrown), (2, .thrown)])],
-    .leftCurvedTurnout  : [(5, 7, [(1, .thrown)]),(5, 0, [(1, .closed)])],
-    .rightCurvedTurnout : [(5, 3, [(1, .closed)]),(5, 2, [(1, .thrown)])],
-    .singleSlip         : [(0, 4, [(1, .closed)]),(5, 1, [(1, .closed)]),(4, 1, [(1, .thrown)])],
-    .doubleSlip         : [(0, 4, [(1, .closed), (2, .closed)]),
-                           (5, 1, [(1, .closed), (2, .closed)]),
-                           (4, 1, [(1, .thrown), (2, .thrown)]),
-                           (5, 0, [(1, .thrown), (2, .thrown)])],
-    .buffer             : [(5, -1, [])],
-    .block              : [(5, 1, [])],
-    .sensor             : [(5, 1, [])],
-    .link               : [(5, -1, [])],
+    
+    .straight           : [(5, 1, [] , [])],
+    .curve              : [(5, 3, [], [])],
+    .longCurve          : [(5, 2, [], [])],
+    .turnoutLeft        : [(5, 1, [], [(1, .closed)]),
+                           (5, 0, [.control], [(1, .thrown)])],
+    .turnoutRight       : [(5, 1, [], [(1, .closed)]),
+                           (5, 2, [.control], [(1, .thrown)])],
+    .cross              : [(7, 3, [], []),
+                           (5, 1, [], [])],
+    .diagonalCross      : [(0, 4, [], []),
+                           (5, 1, [], [])],
+    .yTurnout           : [(5, 0, [.control], [(1, .thrown)]),
+                           (5, 2, [], [(1, .closed)])],
+    .turnout3Way        : [(5, 0, [.control], [(1, .thrown), (2, .closed)]),
+                           (5, 1, [], [(1, .closed), (2, .closed)]),
+                           (5, 2, [.option], [(1, .closed), (2, .thrown)])],
+    .leftCurvedTurnout  : [(5, 7, [.control], [(1, .thrown)]),
+                           (5, 0, [], [(1, .closed)])],
+    .rightCurvedTurnout : [(5, 3, [.control], [(1, .thrown)]),
+                           (5, 2, [], [(1, .closed)])],
+    .singleSlip         : [(0, 4, [], [(1, .closed)]),
+                           (5, 1, [], [(1, .closed)]),
+                           (4, 1, [], [(1, .thrown)])],
+    .doubleSlip         : [(0, 4, [], [(1, .closed), (2, .closed)]),
+                           (5, 1, [], [(1, .closed), (2, .closed)]),
+                           (4, 1, [], [(1, .thrown), (2, .thrown)]),
+                           (5, 0, [], [(1, .thrown), (2, .thrown)])],
+    .buffer             : [(5, -1, [], [])],
+    .block              : [(5, 1, [], [])],
+    .sensor             : [(5, 1, [], [])],
+    .link               : [(5, -1, [], [])],
     .platform           : [],
     .signal             : [],
     .none               : [],
+    
   ]
   
   private static let titles = [

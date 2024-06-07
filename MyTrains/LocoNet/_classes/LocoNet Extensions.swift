@@ -1121,7 +1121,7 @@ extension LocoNet {
 
   }
 
-  public func getSwState(switchNumber: Int) {
+  public func getSwState(switchNumber: UInt16) {
     
     let lo = UInt8((switchNumber - 1) & 0x7f)
     
@@ -1133,7 +1133,11 @@ extension LocoNet {
 
   }
   
-  public func setSw(switchNumber: Int, state:OptionSwitchState) {
+  public func setSw(switchNumber: UInt16, state:DCCSwitchState) {
+    
+    guard state != .unknown else {
+      return
+    }
     
     let sn = switchNumber - 1
     
@@ -1149,7 +1153,11 @@ extension LocoNet {
 
   }
   
-  public func setSwWithAck(switchNumber: Int, state:OptionSwitchState) {
+  public func setSwWithAck(switchNumber: UInt16, state:DCCSwitchState) {
+    
+    guard state != .unknown else {
+      return
+    }
     
     let sn = switchNumber - 1
     

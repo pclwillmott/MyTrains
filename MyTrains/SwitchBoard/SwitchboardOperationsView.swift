@@ -87,6 +87,24 @@ class SwitchboardOperationsView : SwitchboardView {
   // MARK: Mouse Events
   
   override func mouseDown(with event: NSEvent) {
+    
+    if let item = getItem(event: event), item.itemType.isTurnout {
+      
+      let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
+      let connections = item.itemType.connections
+      
+      var index = 0
+      while index < connections.count {
+        let route = connections[index]
+        if !route.switchSettings.isEmpty, route.modifier == flags {
+          item.setRoute(route: index)
+          break
+        }
+        index += 1
+      }
+      
+    }
+    
   }
-
+  
 }

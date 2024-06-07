@@ -106,7 +106,7 @@ class CDITextView: CDIDataView, NSTextFieldDelegate, NSControlTextEditingDelegat
 
       if let elementType, elementType == .eventid {
         cdiConstraints.append(contentsOf:[
-          textField.widthAnchor.constraint(equalToConstant: 160)
+          textField.widthAnchor.constraint(equalToConstant: 170)
         ])
         textField.placeholderString = "00.00.00.00.00.00.00.00"
         cdiConstraints.append(contentsOf:[

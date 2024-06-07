@@ -1771,6 +1771,18 @@
         }
       }
     },
+    "Suj-GC-uhz.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Digitrax DS64\"; ObjectID = \"Suj-GC-uhz\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Digitrax DS64"
+          }
+        }
+      }
+    },
     "t7i-s0-NIc.title" : {
       "comment" : "Class = \"NSMenuItem\"; title = \"Train\"; ObjectID = \"t7i-s0-NIc\";",
       "extractionState" : "extracted_with_value",

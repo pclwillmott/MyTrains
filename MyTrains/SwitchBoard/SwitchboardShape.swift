@@ -24,9 +24,8 @@ class SwitchboardShape {
     
     var turnoutConnection : Int = -1
     
-    if let item = switchBoardItem, let actualTurnoutConnection = item.actualTurnoutConnection {
-      turnoutConnection = actualTurnoutConnection
-   //   turnoutConnection = item.turnoutConnection
+    if let item = switchBoardItem {
+      turnoutConnection = item.routeSet
     }
         
     if let shape = SwitchboardShape.getShape(part: partType, orientation: orientation) {
@@ -83,7 +82,7 @@ class SwitchboardShape {
             if let fillColor = shapePart.actionColors[.fill] {
               isEnabled ? NSColor.setFillColor(color:fillColor) : NSColor.setFillColor(color: .lightGray)
               if let item = switchBoardItem {
-                item.isBlockOccupied ? NSColor.setFillColor(color:fillColor) : NSColor.setFillColor(color:.darkGray)
+                item.isSensorActivated ? NSColor.setFillColor(color:fillColor) : NSColor.setFillColor(color:.darkGray)
               }
               path.fill()
             }

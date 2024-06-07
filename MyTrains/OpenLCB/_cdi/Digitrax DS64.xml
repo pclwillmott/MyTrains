@@ -32,6 +32,14 @@
 </int>
 
 <int size='1'>
+<name>Write switch addresses to DS64</name>
+<map>
+  <relation><property>0</property><value>Keep</value></relation>
+  <relation><property>1</property><value>Write switch addresses to DS64</value></relation>
+</map>
+</int>
+
+<int size='1'>
 <name>Read settings from DS64</name>
 <map>
   <relation><property>0</property><value>Keep</value></relation>
@@ -39,41 +47,56 @@
 </map>
 </int>
 
-  <int size='1'>
-  <name>Reset to factory defaults</name>
-  <map>
-    <relation><property>0</property><value>Keep current settings</value></relation>
-    <relation><property>1</property><value>Reset DS64 to factory defaults</value></relation>
-  </map>
-  </int>
-
-  <int size='1'>
-  <name>Write changes to DS64</name>
-  <description>The changes that you have made will not become effective until they are written to the DS64.</description>
-  <map>
-    <relation><property>0</property><value>Do not write changes to DS64</value></relation>
-    <relation><property>1</property><value>Write changes to DS64</value></relation>
-  </map>
-  </int>
-
-<group>
-<name>Commands</name>
-
 <int size='1'>
-<name>Computer and/or Throttle Inputs</name>
+<name>Write changes to DS64</name>
+<description>The changes that you have made will not become effective until they are written to the DS64.</description>
 <map>
-  <relation><property>0</property><value>The DS64 accepts both throttle and computer commands</value></relation>
-  <relation><property>1</property><value>The DS64 accepts computer commands only</value></relation>
+  <relation><property>0</property><value>Do not write changes to DS64</value></relation>
+  <relation><property>1</property><value>Write changes to DS64</value></relation>
 </map>
 </int>
 
-</group>
-
-<group>
-<name>Power</name>
+<int size='1'>
+<name>Reset to factory defaults</name>
+<map>
+  <relation><property>0</property><value>Keep current settings</value></relation>
+  <relation><property>1</property><value>Reset DS64 to factory defaults</value></relation>
+</map>
+</int>
 
 <int size='1'>
-<name>Power Management Options for DS64 Outputs</name>
+<name>Output Type (OpSw 01)</name>
+<map>
+  <relation><property>0</property><value>Solenoid pulse mode</value></relation>
+  <relation><property>1</property><value>Slow motion mode</value></relation>
+</map>
+</int>
+
+<int size='1'>
+<name>Solenoid Pulse Length/Crossing Gate Flashing Rate (OpSw 02, 03, 04, 05)</name>
+<description>When in solenoid mode this defines the pulse length. When in slow motion mode this defines the crossing gate light flashing rate.</description>
+<map>
+  <relation><property>0</property><value>0 ms</value></relation>
+  <relation><property>1</property><value>200 ms</value></relation>
+  <relation><property>2</property><value>400 ms</value></relation>
+  <relation><property>3</property><value>600 ms</value></relation>
+  <relation><property>4</property><value>800 ms</value></relation>
+  <relation><property>5</property><value>1000 ms</value></relation>
+  <relation><property>6</property><value>1200 ms</value></relation>
+  <relation><property>7</property><value>1400 ms</value></relation>
+  <relation><property>8</property><value>1600 ms</value></relation>
+  <relation><property>9</property><value>1800 ms</value></relation>
+  <relation><property>10</property><value>2000 ms</value></relation>
+  <relation><property>11</property><value>2200 ms</value></relation>
+  <relation><property>12</property><value>2400 ms</value></relation>
+  <relation><property>13</property><value>2600 ms</value></relation>
+  <relation><property>14</property><value>2800 ms</value></relation>
+  <relation><property>15</property><value>3000 ms</value></relation>
+</map>
+</int>
+
+<int size='1'>
+<name>Power Management Options for DS64 Outputs (OpSw 06)</name>
 <map>
   <relation><property>0</property><value>At power on, the DS64's 4 outputs power up to their last state</value></relation>
   <relation><property>1</property><value>At power on, the DS64's 4 outputs do not power up until they receive a command</value></relation>
@@ -81,8 +104,8 @@
 </int>
 
 <int size='1'>
-<name>Startup Delay</name>
-<description>The startup delay tells the DS64 to wait for a certain time after the layout is powered up before 'waking up'. This feature prevents multiple DS64s on your layout from powering up at the same instant and overwhelming your lay-outs power supply.</description>
+<name>Startup Delay (OpSw 08)</name>
+<description>The startup delay tells the DS64 to wait for a certain time after the layout is powered up before 'waking up'. This feature prevents multiple DS64s on your layout from powering up at the same instant and overwhelming your layout's power supply.</description>
 <map>
   <relation><property>0</property><value>The DS64's startup delay is 65ms times the address of switch 1</value></relation>
   <relation><property>1</property><value>The DS64's startup delay is 130ms times the address of switch 1</value></relation>
@@ -90,7 +113,7 @@
 </int>
 
 <int size='1'>
-<name>Static Time Out Length</name>
+<name>Static Time Out Length (OpSw 09)</name>
 <description>This sets the static timeout length for slow motion turnout operation.</description>
 <map>
   <relation><property>0</property><value>Outputs do not shut off</value></relation>
@@ -98,96 +121,40 @@
 </map>
 </int>
 
-</group>
-
-<group>
-<name>Outputs</name>
-
 <int size='1'>
-<name>Output Type</name>
+<name>Computer and/or Throttle Inputs (OpSw 10)</name>
 <map>
-  <relation><property>0</property><value>Solenoid mode</value></relation>
-  <relation><property>1</property><value>Slow motion mode</value></relation>
+  <relation><property>0</property><value>The DS64 accepts both throttle and computer commands</value></relation>
+  <relation><property>1</property><value>The DS64 accepts computer commands only</value></relation>
 </map>
 </int>
 
 <int size='1'>
-<name>Solenoid Pulse Length/Crossing Gate Flashing Rate</name>
-<description>When in solenoid mode this defines the pulse length. When in slow motion mode this defines the timing of the crossing gate light flashing.</description>
+<name>Command priority to LocoNet or track (OpSw 14)</name>
 <map>
-  <relation><property>0</property><value>0 ms</value></relation>
-  <relation><property>1</property><value>200 ms</value></relation>
-  <relation><property>1</property><value>400 ms</value></relation>
-  <relation><property>1</property><value>600 ms</value></relation>
-  <relation><property>1</property><value>800 ms</value></relation>
-  <relation><property>1</property><value>1000 ms</value></relation>
-  <relation><property>1</property><value>1200 ms</value></relation>
-  <relation><property>1</property><value>1400 ms</value></relation>
-  <relation><property>1</property><value>1600 ms</value></relation>
-  <relation><property>1</property><value>1800 ms</value></relation>
-  <relation><property>1</property><value>2000 ms</value></relation>
-  <relation><property>1</property><value>2200 ms</value></relation>
-  <relation><property>1</property><value>2400 ms</value></relation>
-  <relation><property>1</property><value>2600 ms</value></relation>
-  <relation><property>1</property><value>2800 ms</value></relation>
-  <relation><property>1</property><value>3000 ms</value></relation>
+  <relation><property>0</property><value>Obeys switch commands from LocoNet or DCC track if no LocoNet</value></relation>
+  <relation><property>1</property><value>The DS64 obeys switch commands from DCC track only</value></relation>
 </map>
 </int>
 
-<group replication='4'>
-<name>Outputs</name>
-<repname>Output</repname>
-
-<int size='2'>
-<name>LocoNet Switch Address</name>
-<min>1</min>
-<max>2048</max>
-</int>
-
 <int size='1'>
-<name>Thrown Event Enable</name>
+<name>Operate local routes using DS64 inputs (OpSw 11)</name>
 <map>
-  <relation><property>0</property><value>Thrown event disabled</value></relation>
-  <relation><property>1</property><value>Thrown event enabled</value></relation>
+  <relation><property>0</property><value>Route commands from throttle and computer only</value></relation>
+  <relation><property>1</property><value>Enable route commands from local inputs</value></relation>
 </map>
 </int>
 
-<eventid>
-  <name>Thrown Event Id</name>
-  <description>(C) When this event is received the output will be set to thrown.</description>
-</eventid>
-
 <int size='1'>
-<name>Closed Event Enable</name>
+<name>Local routes (OpSw 16)</name>
 <map>
-  <relation><property>0</property><value>Closed event disabled</value></relation>
-  <relation><property>1</property><value>Closed event enabled</value></relation>
+  <relation><property>0</property><value>Disabled</value></relation>
+  <relation><property>1</property><value>Enabled</value></relation>
 </map>
 </int>
 
-<eventid>
-  <name>Closed Event Id</name>
-  <description>(C) When this event is received the output will be set to closed.</description>
-</eventid>
-
 <int size='1'>
-<name>Crossing Gate Feature</name>
-<description>When the crossing gate feature is enabled, a high on either of the A or S inputs related to this output will cause the output to blink at the defined rate.</description>
-<map>
-  <relation><property>0</property><value>Crossing gate feature is disabled</value></relation>
-  <relation><property>1</property><value>Crossing gate feature is enabled</value></relation>
-</map>
-</int>
-
-</group>
-
-</group>
-
-<group>
-<name>Inputs</name>
-
-<int size='1'>
-<name>LocoNet Sensor Message Type</name>
+<name>LocoNet Sensor Message Type (OpSw 21)</name>
 <map>
   <relation><property>0</property><value>General sensor reporting</value></relation>
   <relation><property>1</property><value>Turnout sensor state reporting</value></relation>
@@ -195,76 +162,90 @@
 </int>
 
 <int size='1'>
-<name>Input Sensor Configuration</name>
+<name>Forced output on high (OpSw 12)</name>
+<description>This determines whether the local inputs are set to toggle a turnout from one state to the other or to force the state to closed or thrown. In the first case the local 'A' input if high will send a general sensor message to LocoNet. No sensor capability is available with the second case.</description>
 <map>
-  <relation><property>0</property><value>Configuration 1</value></relation>
-  <relation><property>1</property><value>Configuration 2</value></relation>
-  <relation><property>2</property><value>Configuration 3</value></relation>
-  <relation><property>3</property><value>Configuration 4</value></relation>
-  <relation><property>4</property><value>Configuration 5</value></relation>
-  <relation><property>5</property><value>Configuration 6</value></relation>
-  <relation><property>6</property><value>Configuration 7</value></relation>
-  <relation><property>7</property><value>Configuration 8</value></relation>
+  <relation><property>0</property><value>The local 'S' input toggles the state of the output with each trigger (high)</value></relation>
+  <relation><property>1</property><value>The local 'S' input will force output to closed and the 'A' input will force it to thrown.</value></relation>
+</map>
+</int>
+
+<int size='1'>
+<name>Set inputs for sensor message and turnout setting (OpSw 13)</name>
+<description>When enabled all 8 inputs 'A' and 'S' are set for sensor messages to LocoNet. Additionally the input will also control the output per OpSw 12. This second feature will only operate if OpSw 15 is disabled.</description>
+<map>
+  <relation><property>0</property><value>Disabled</value></relation>
+  <relation><property>1</property><value>Enabled</value></relation>
+</map>
+</int>
+
+<int size='1'>
+<name>Set inputs for sensor message and turnout setting (OpSw 15)</name>
+<description>When enabled all 8 inputs 'A' and 'S' are set for sensor messages to LocoNet only. No outputs are changed.</description>
+<map>
+  <relation><property>0</property><value>Disabled</value></relation>
+  <relation><property>1</property><value>Enabled</value></relation>
 </map>
 </int>
 
 <group replication='4'>
-<name>Inputs</name>
-<repname>Input</repname>
+<name>Inputs/Outputs</name>
+<repname>I/O #</repname>
 
-<int size='1'>
-<name>"A" Sensor Thrown Event Enable</name>
-<map>
-  <relation><property>0</property><value>"A" sensor thrown event disabled</value></relation>
-  <relation><property>1</property><value>"A" sensor thrown event enabled</value></relation>
-</map>
+<eventid>
+  <name>'A' Sensor Thrown Event Id</name>
+  <description>(P) This event will be sent when the 'A' sensor is set to thrown.</description>
+</eventid>
+
+<eventid>
+  <name>'A' Sensor Closed Event Id</name>
+  <description>(P) This event will be sent when the 'A' sensor is set to closed.</description>
+</eventid>
+
+<eventid>
+  <name>'S' Sensor Thrown Event Id</name>
+  <description>(P) This event will be sent when the 'S' sensor is set to thrown.</description>
+</eventid>
+
+<eventid>
+  <name>'S' Sensor Closed Event Id</name>
+  <description>(P) This event will be sent when the 'S' sensor is set to closed.</description>
+</eventid>
+
+<int size='2'>
+<name>LocoNet Switch Address</name>
+<min>1</min>
+<max>2048</max>
 </int>
 
 <eventid>
-  <name>"A" Sensor Thrown Event Id</name>
-  <description>(P) This event will be sent when the "A" sensor is set to thrown.</description>
+  <name>Throw Event Id</name>
+  <description>(C) When this event is received the output will be set to thrown.</description>
+</eventid>
+
+<eventid>
+  <name>Switch Commanded Thrown Event Id</name>
+  <description>(P) When this event will be sent when the output is commanded to be thrown.</description>
+</eventid>
+
+<eventid>
+  <name>Close Event Id</name>
+  <description>(C) When this event is received the output will be set to closed.</description>
+</eventid>
+
+<eventid>
+  <name>Switch Commanded Closed Event Id</name>
+  <description>(P) When this event will be sent when the output is commanded to be closed.</description>
 </eventid>
 
 <int size='1'>
-<name>"A" Sensor Closed Event Enable</name>
+<name>Crossing Gate Feature</name>
+<description>When the crossing gate feature is enabled, a high on either of the 'A' or 'S' inputs related to this output will cause the output to blink at the defined rate.</description>
 <map>
-  <relation><property>0</property><value>"A" sensor closed event disabled</value></relation>
-  <relation><property>1</property><value>"A" sensor closed event enabled</value></relation>
+  <relation><property>0</property><value>Crossing gate feature is disabled</value></relation>
+  <relation><property>1</property><value>Crossing gate feature is enabled</value></relation>
 </map>
 </int>
-
-<eventid>
-  <name>"A" Sensor Closed Event Id</name>
-  <description>(P) This event will be sent when the "A" sensor is set to closed.</description>
-</eventid>
-
-<int size='1'>
-<name>"S" Sensor Thrown Event Enable</name>
-<map>
-  <relation><property>0</property><value>"S" sensor thrown event disabled</value></relation>
-  <relation><property>1</property><value>"S" sensor thrown event enabled</value></relation>
-</map>
-</int>
-
-<eventid>
-  <name>"S" Sensor Thrown Event Id</name>
-  <description>(P) This event will be sent when the "S" sensor is set to thrown.</description>
-</eventid>
-
-<int size='1'>
-<name>"S" Sensor Closed Event Enable</name>
-<map>
-  <relation><property>0</property><value>"S" sensor closed event disabled</value></relation>
-  <relation><property>1</property><value>"S" sensor closed event enabled</value></relation>
-</map>
-</int>
-
-<eventid>
-  <name>"S" Sensor Closed Event Id</name>
-  <description>(P) This event will be sent when the "S" sensor is set to closed.</description>
-</eventid>
-
-</group>
 
 </group>
 

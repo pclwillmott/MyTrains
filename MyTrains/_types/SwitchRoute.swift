@@ -7,4 +7,4 @@
 
 import Foundation
 
-public typealias SwitchRoute = (switchNumber: Int, switchState:TurnoutSwitchState)
+public typealias SwitchRoute = (switchNumber: Int, switchState:DCCSwitchState)
