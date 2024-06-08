@@ -706,7 +706,7 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
           
           let zone = (sensorAddress - 1) % numberOfChannels
           
-          print(" \(userNodeName) \(sensorState ? "enter" : "exit") id: \(id) zone: \(zone + 1) ")
+   //       print(" \(userNodeName) \(sensorState ? "enter" : "exit") id: \(id) zone: \(zone + 1) ")
           
           if sensorState, let eventId = enterOccupancyEventId(zone: zone) {
             sendEvent(eventId: eventId)
@@ -744,7 +744,7 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
         }
         for zone in 0...numberOfChannels - 1 {
           if lastDetectionSectionShorted[zone] != shorted[zone] {
-            print("\(shorted[zone] ? "short" : "short cleared") \(userNodeName) id: \(id) zone: \(zone + 1)")
+ //           print("\(shorted[zone] ? "short" : "short cleared") \(userNodeName) id: \(id) zone: \(zone + 1)")
             if shorted[zone], let eventId = trackFaultEventId(zone: zone) {
               sendEvent(eventId: eventId)
             }

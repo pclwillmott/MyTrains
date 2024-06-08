@@ -860,7 +860,7 @@ public class OpenLCBDigitraxDS64Node : OpenLCBNodeVirtual, LocoNetDelegate {
           let zone = x >> 1
           
           if x % 2 == 0 {
-            print(" \(userNodeName) \(sensorAddress) \(x) \(sensorState ? "A closed" : "A thrown") id: \(id) zone: \(zone + 1) ")
+    //        print(" \(userNodeName) \(sensorAddress) \(x) \(sensorState ? "A closed" : "A thrown") id: \(id) zone: \(zone + 1) ")
             if sensorState, let eventId = getASensorClosedEventId(zone: zone) {
               sendEvent(eventId: eventId)
             }
@@ -869,7 +869,7 @@ public class OpenLCBDigitraxDS64Node : OpenLCBNodeVirtual, LocoNetDelegate {
             }
           }
           else {
-            print(" \(userNodeName) \(sensorAddress) \(x) \(sensorState ? "S closed" : "S thrown") id: \(id) zone: \(zone + 1) ")
+  //          print(" \(userNodeName) \(sensorAddress) \(x) \(sensorState ? "S closed" : "S thrown") id: \(id) zone: \(zone + 1) ")
             if sensorState, let eventId = getSSensorClosedEventId(zone: zone) {
               sendEvent(eventId: eventId)
             }

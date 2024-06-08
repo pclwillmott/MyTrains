@@ -2583,6 +2583,12 @@
     "Event ID that indicates that turnout switch #1 has been thrown." : {
       "comment" : "This is used for a tooltip."
     },
+    "Event ID that indicates that turnout switch #1 is no longer closed." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID that indicates that turnout switch #1 is no longer thrown." : {
+      "comment" : "This is used for a tooltip."
+    },
     "Event ID that indicates that turnout switch #2 has been closed." : {
       "comment" : "This is used for a tooltip."
     },
@@ -2593,6 +2599,12 @@
       "comment" : "This is used for a tooltip."
     },
     "Event ID that indicates that turnout switch #2 has been thrown." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID that indicates that turnout switch #2 is no longer closed." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID that indicates that turnout switch #2 is no longer thrown." : {
       "comment" : "This is used for a tooltip."
     },
     "Event ID that indicates that turnout switch #3 has been closed." : {
@@ -2607,6 +2619,12 @@
     "Event ID that indicates that turnout switch #3 has been thrown." : {
       "comment" : "This is used for a tooltip."
     },
+    "Event ID that indicates that turnout switch #3 is no longer closed." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID that indicates that turnout switch #3 is no longer thrown." : {
+      "comment" : "This is used for a tooltip."
+    },
     "Event ID that indicates that turnout switch #4 has been closed." : {
       "comment" : "This is used for a tooltip."
     },
@@ -2617,6 +2635,12 @@
       "comment" : "This is used for a tooltip."
     },
     "Event ID that indicates that turnout switch #4 has been thrown." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID that indicates that turnout switch #4 is no longer closed." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Event ID that indicates that turnout switch #4 is no longer thrown." : {
       "comment" : "This is used for a tooltip."
     },
     "Event ID that reports location services information for the zone associated with this switchboard item." : {
@@ -5949,6 +5973,12 @@
     "Switch #1 Method" : {
       "comment" : "This is used for the title of a combo box where the user can select the applicable turnout motor type."
     },
+    "Switch #1 Not Closed" : {
+      "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch is no longer closed."
+    },
+    "Switch #1 Not Thrown" : {
+      "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch is no longer thrown."
+    },
     "Switch #1 Thrown" : {
       "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been thrown."
     },
@@ -5963,6 +5993,12 @@
     },
     "Switch #2 Method" : {
       "comment" : "This is used for the title of a combo box where the user can select the applicable turnout motor type."
+    },
+    "Switch #2 Not Closed" : {
+      "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch is no longer closed."
+    },
+    "Switch #2 Not Thrown" : {
+      "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch is no longer thrown."
     },
     "Switch #2 Thrown" : {
       "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been thrown."
@@ -5979,6 +6015,12 @@
     "Switch #3 Method" : {
       "comment" : "This is used for the title of a combo box where the user can select the applicable turnout motor type."
     },
+    "Switch #3 Not Closed" : {
+      "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch is no longer closed."
+    },
+    "Switch #3 Not Thrown" : {
+      "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch is no longer thrown."
+    },
     "Switch #3 Thrown" : {
       "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been thrown."
     },
@@ -5993,6 +6035,12 @@
     },
     "Switch #4 Method" : {
       "comment" : "This is used for the title of a combo box where the user can select the applicable turnout motor type."
+    },
+    "Switch #4 Not Closed" : {
+      "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch is no longer closed."
+    },
+    "Switch #4 Not Thrown" : {
+      "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch is no longer thrown."
     },
     "Switch #4 Thrown" : {
       "comment" : "This is used for the title of an input field where the user can select which event ID indicates that the turnout switch has been thrown."

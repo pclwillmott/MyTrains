@@ -167,6 +167,8 @@ public enum SwitchboardItemType : UInt16 {
         .sw1ThrownEventId,
         .sw1CommandedClosedEventId,
         .sw1CommandedThrownEventId,
+        .sw1NotClosedEventId,
+        .sw1NotThrownEventId,
         ])
     case .turnoutLeft:
       result = result.union([
@@ -179,6 +181,8 @@ public enum SwitchboardItemType : UInt16 {
         .sw1ThrownEventId,
         .sw1CommandedClosedEventId,
         .sw1CommandedThrownEventId,
+        .sw1NotClosedEventId,
+        .sw1NotThrownEventId,
       ])
     case .cross:
       result = result.union([
@@ -201,6 +205,8 @@ public enum SwitchboardItemType : UInt16 {
         .sw1ThrownEventId,
         .sw1CommandedClosedEventId,
         .sw1CommandedThrownEventId,
+        .sw1NotClosedEventId,
+        .sw1NotThrownEventId,
       ])
     case .turnout3Way:
       result = result.union([
@@ -221,6 +227,10 @@ public enum SwitchboardItemType : UInt16 {
         .sw1CommandedThrownEventId,
         .sw2CommandedClosedEventId,
         .sw2CommandedThrownEventId,
+        .sw1NotClosedEventId,
+        .sw1NotThrownEventId,
+        .sw2NotClosedEventId,
+        .sw2NotThrownEventId,
       ])
     case .leftCurvedTurnout:
       result = result.union([
@@ -233,6 +243,8 @@ public enum SwitchboardItemType : UInt16 {
         .sw1ThrownEventId,
         .sw1CommandedClosedEventId,
         .sw1CommandedThrownEventId,
+        .sw1NotClosedEventId,
+        .sw1NotThrownEventId,
       ])
     case .rightCurvedTurnout:
       result = result.union([
@@ -245,6 +257,8 @@ public enum SwitchboardItemType : UInt16 {
         .sw1ThrownEventId,
         .sw1CommandedClosedEventId,
         .sw1CommandedThrownEventId,
+        .sw1NotClosedEventId,
+        .sw1NotThrownEventId,
       ])
     case .singleSlip:
       result = result.union([

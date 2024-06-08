@@ -14,20 +14,22 @@ class SwitchboardShape {
   
   public static func drawShape(partType: SwitchboardItemType, orientation: Orientation, location: SwitchBoardLocation, lineWidth:CGFloat, cellSize: CGFloat, isButton: Bool, isEnabled: Bool, offset: CGPoint, switchBoardItem: SwitchboardItemNode?) {
     
-    let onlyTurnouts : Bool = switchBoardItem != nil
-    
-    var isFeedback : Bool = false
-    
-    if let item = switchBoardItem, item.isSensor {
-      isFeedback = true
-    }
-    
-    var turnoutConnection : Int = -1
-    
+    let onlyTurnouts = switchBoardItem != nil
+    var isFeedback = false
+    var turnoutConnection = -1
+    var isRouteConsistent = false
+
     if let item = switchBoardItem {
-      turnoutConnection = item.routeSet
+      isFeedback = item.isSensor
+      isRouteConsistent = item.isRouteConsistent
+      if isRouteConsistent, let routeSet = item.routeSet {
+        turnoutConnection = routeSet
+      }
+      else if let routeCommanded = item.routeCommanded {
+        turnoutConnection = routeCommanded
+      }
     }
-        
+    
     if let shape = SwitchboardShape.getShape(part: partType, orientation: orientation) {
 
       let bx = (CGFloat(location.x) + 0.5) * cellSize
@@ -61,7 +63,15 @@ class SwitchboardShape {
           isEnabled ? NSColor.setStrokeColor(color: .black) : NSColor.setStrokeColor(color: .lightGray)
         }
         else if onlyTurnouts {
-          NSColor.setStrokeColor(color: .white)
+          if isFeedback {
+            NSColor.setStrokeColor(color: .white)
+          }
+          else if isRouteConsistent {
+            NSColor.setStrokeColor(color: .white)
+          }
+          else {
+            NSColor.setStrokeColor(color: .yellow)
+          }
         }
         else {
           NSColor.setStrokeColor(color: .lightGray)

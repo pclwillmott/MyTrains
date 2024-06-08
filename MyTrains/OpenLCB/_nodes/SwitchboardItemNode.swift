@@ -179,9 +179,13 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
 
     initSpaceAddress(&addressCommandedThrownEventId0, 8, &configurationSize)
     initSpaceAddress(&addressCommandedClosedEventId0, 8, &configurationSize)
-    
+    initSpaceAddress(&addressNotThrownEventId0, 8, &configurationSize)
+    initSpaceAddress(&addressNotClosedEventId0, 8, &configurationSize)
+
     var temp = 0
     for index in 1 ... 3 {
+      initSpaceAddress(&temp, 8, &configurationSize)
+      initSpaceAddress(&temp, 8, &configurationSize)
       initSpaceAddress(&temp, 8, &configurationSize)
       initSpaceAddress(&temp, 8, &configurationSize)
     }
@@ -442,14 +446,17 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
       ]
 
       for index in 0 ... 3 {
-        let offset = index * 16
+        let offset = index * 32
         registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressCommandedThrownEventId0 + offset)
         registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressCommandedClosedEventId0 + offset)
+        registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressNotThrownEventId0 + offset)
+        registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressNotClosedEventId0 + offset)
         userConfigEventConsumedAddresses.insert(addressCommandedThrownEventId0 + offset)
         userConfigEventConsumedAddresses.insert(addressCommandedClosedEventId0 + offset)
+        userConfigEventConsumedAddresses.insert(addressNotThrownEventId0 + offset)
+        userConfigEventConsumedAddresses.insert(addressNotClosedEventId0 + offset)
       }
       
-
       userConfigEventProducedAddresses = [
         
         addressSW1ThrowEventId,
@@ -496,6 +503,37 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
         
       ]
       
+      configurationSize = 0
+      initSpaceAddress(&addressRouteCommanded, 1, &configurationSize)
+      initSpaceAddress(&addressIsThrown0, 1, &configurationSize)
+      initSpaceAddress(&addressIsClosed0, 1, &configurationSize)
+      
+      temp = 0
+      for _ in 1 ... 3 {
+        initSpaceAddress(&temp, 1, &configurationSize)
+        initSpaceAddress(&temp, 1, &configurationSize)
+      }
+
+      routeSettings = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.routeSettings.rawValue, defaultMemorySize: configurationSize, isReadOnly: false, description: "")
+
+      if let routeSettings {
+        
+        routeSettings.delegate = self
+        
+        memorySpaces[routeSettings.space] = routeSettings
+        
+        registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressRouteCommanded)
+        
+        for temp in 0 ... 3 {
+          let offset = temp * 2
+          registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressIsThrown0 + offset)
+          registerVariable(space: OpenLCBNodeMemoryAddressSpace.configuration.rawValue, address: addressIsClosed0 + offset)
+        }
+        
+        findRouteSet()
+
+      }
+
       if !memorySpacesInitialized {
         resetToFactoryDefaults()
       }
@@ -503,6 +541,7 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
       cdiFilename = "MyTrains Switchboard Item"
       
     }
+    
     
     #if DEBUG
     addInit()
@@ -677,6 +716,17 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
   internal var addressSpeedConstraintDNValue15      = 0
   internal var addressCommandedThrownEventId0       = 0
   internal var addressCommandedClosedEventId0       = 0
+  internal var addressNotThrownEventId0             = 0
+  internal var addressNotClosedEventId0             = 0
+  
+  // Route Settings Memory Space Addresses
+  
+  internal var addressRouteCommanded = 0
+  /// Repeats 4
+  internal var addressIsThrown0      = 0
+  internal var addressIsClosed0      = 0
+  
+  internal var routeSettings : OpenLCBMemorySpace?
 
   private var layoutNode : LayoutNode? {
     return appDelegate.networkLayer!.virtualNodeLookup[layoutNodeId] as? LayoutNode
@@ -977,6 +1027,28 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     }
   }
 
+  public var routeCommanded : Int? {
+    get {
+      let saveValue = routeSettings!.getUInt8(address: addressRouteCommanded)!
+      if saveValue == 0xff {
+        return nil
+      }
+      return Int(saveValue)
+    }
+    set(value) {
+      var saveValue : UInt8
+      if let value {
+        saveValue = UInt8(value)
+      }
+      else {
+        saveValue = 0xff
+      }
+      routeSettings!.setUInt(address: addressRouteCommanded, value: saveValue)
+      routeSettings?.save()
+      appNode?.panelChanged(panelId: panelId)
+    }
+  }
+
   public var nodeLinks = [SWBNodeLink](repeating: (nil, -1, []), count: 8)
 
   public var isEliminated : Bool = false
@@ -1072,8 +1144,19 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     }
   }
   
-  public var routeSet : Int = -1
-
+  public var routeSet : Int? {
+    didSet {
+      appNode?.panelChanged(panelId: panelId)
+    }
+  }
+  
+  public var isRouteConsistent : Bool {
+    guard let routeSet, let routeCommanded else {
+      return false
+    }
+    return routeSet == routeCommanded
+  }
+  
   // MARK: Public Methods
 
   public func getValue(property:LayoutInspectorProperty) -> String {
@@ -1193,6 +1276,12 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     case .sw1ClosedEventId:
       let id = getTurnoutClosedEventId(turnoutNumber: 1)!
       return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+    case .sw1NotThrownEventId:
+      let id = getNotThrownEventId(turnoutNumber: 1) ?? 0
+      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+    case .sw1NotClosedEventId:
+      let id = getTurnoutClosedEventId(turnoutNumber: 1) ?? 0
+      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
     case .sw2ThrowEventId:
       let id = getTurnoutThrowEventId(turnoutNumber: 2)!
       return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
@@ -1204,6 +1293,12 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
       return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
     case .sw2ClosedEventId:
       let id = getTurnoutClosedEventId(turnoutNumber: 2)!
+      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+    case .sw2NotThrownEventId:
+      let id = getNotThrownEventId(turnoutNumber: 2) ?? 0
+      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+    case .sw2NotClosedEventId:
+      let id = getTurnoutClosedEventId(turnoutNumber: 2) ?? 0
       return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
     case .sw3ThrowEventId:
       let id = getTurnoutThrowEventId(turnoutNumber: 3)!
@@ -1217,6 +1312,12 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     case .sw3ClosedEventId:
       let id = getTurnoutClosedEventId(turnoutNumber: 3)!
       return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+    case .sw3NotThrownEventId:
+      let id = getNotThrownEventId(turnoutNumber: 3) ?? 0
+      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+    case .sw3NotClosedEventId:
+      let id = getTurnoutClosedEventId(turnoutNumber: 3) ?? 0
+      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
     case .sw4ThrowEventId:
       let id = getTurnoutThrowEventId(turnoutNumber: 4)!
       return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
@@ -1228,6 +1329,12 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
       return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
     case .sw4ClosedEventId:
       let id = getTurnoutClosedEventId(turnoutNumber: 4)!
+      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+    case .sw4NotThrownEventId:
+      let id = getNotThrownEventId(turnoutNumber: 4) ?? 0
+      return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
+    case .sw4NotClosedEventId:
+      let id = getTurnoutClosedEventId(turnoutNumber: 4) ?? 0
       return id == 0 ? "" : id.toHexDotFormat(numberOfBytes: 8)
     case .sensorActivatedEventId:
       let id = sensorActivatedEventId
@@ -1368,6 +1475,10 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
       setTurnoutThrownEventId(turnoutNumber: 1, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
     case .sw1ClosedEventId:
       setTurnoutClosedEventId(turnoutNumber: 1, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
+    case .sw1NotThrownEventId:
+      setNotThrownEventId(turnoutNumber: 1, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
+    case .sw1NotClosedEventId:
+      setNotClosedEventId(turnoutNumber: 1, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
     case .sw2ThrowEventId:
       setTurnoutThrowEventId(turnoutNumber: 2, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
     case .sw2CloseEventId:
@@ -1376,6 +1487,10 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
       setTurnoutThrownEventId(turnoutNumber: 2, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
     case .sw2ClosedEventId:
       setTurnoutClosedEventId(turnoutNumber: 2, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
+    case .sw2NotThrownEventId:
+      setNotThrownEventId(turnoutNumber: 2, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
+    case .sw2NotClosedEventId:
+      setNotClosedEventId(turnoutNumber: 2, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
     case .sw3ThrowEventId:
       setTurnoutThrowEventId(turnoutNumber: 3, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
     case .sw3CloseEventId:
@@ -1384,6 +1499,10 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
       setTurnoutThrownEventId(turnoutNumber: 3, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
     case .sw3ClosedEventId:
       setTurnoutClosedEventId(turnoutNumber: 3, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
+    case .sw3NotThrownEventId:
+      setNotThrownEventId(turnoutNumber: 3, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
+    case .sw3NotClosedEventId:
+      setNotClosedEventId(turnoutNumber: 3, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
     case .sw4ThrowEventId:
       setTurnoutThrowEventId(turnoutNumber: 4, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
     case .sw4CloseEventId:
@@ -1392,6 +1511,10 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
       setTurnoutThrownEventId(turnoutNumber: 4, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
     case .sw4ClosedEventId:
       setTurnoutClosedEventId(turnoutNumber: 4, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
+    case .sw4NotThrownEventId:
+      setNotThrownEventId(turnoutNumber: 4, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
+    case .sw4NotClosedEventId:
+      setNotClosedEventId(turnoutNumber: 4, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
     case .sensorActivatedEventId:
       sensorActivatedEventId = UInt64(dotHex: string, numberOfBytes: 8) ?? 0
     case .sensorDeactivatedEventId:
@@ -1458,6 +1581,8 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
  
     xPos = 1
     yPos = 1
+    
+    routeCommanded = nil
     
     saveMemorySpaces()
 
@@ -1971,12 +2096,12 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     guard turnoutNumber > 0 && turnoutNumber <= 4 else {
       return nil
     }
-    return configuration!.getUInt64(address: addressCommandedThrownEventId0 + (turnoutNumber - 1) * 16)
+    return configuration!.getUInt64(address: addressCommandedThrownEventId0 + (turnoutNumber - 1) * 32)
   }
   
   public func setCommandedThrownEventId(turnoutNumber:Int, eventId:UInt64) {
     if turnoutNumber > 0 && turnoutNumber <= 4 {
-      configuration!.setUInt(address: addressCommandedThrownEventId0 + (turnoutNumber - 1) * 16, value: eventId)
+      configuration!.setUInt(address: addressCommandedThrownEventId0 + (turnoutNumber - 1) * 32, value: eventId)
     }
   }
 
@@ -1984,15 +2109,107 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     guard turnoutNumber > 0 && turnoutNumber <= 4 else {
       return nil
     }
-    return configuration!.getUInt64(address: addressCommandedClosedEventId0 + (turnoutNumber - 1) * 16)
+    return configuration!.getUInt64(address: addressCommandedClosedEventId0 + (turnoutNumber - 1) * 32)
   }
   
   public func setCommandedClosedEventId(turnoutNumber:Int, eventId:UInt64) {
     if turnoutNumber > 0 && turnoutNumber <= 4 {
-      configuration!.setUInt(address: addressCommandedClosedEventId0 + (turnoutNumber - 1) * 16, value: eventId)
+      configuration!.setUInt(address: addressCommandedClosedEventId0 + (turnoutNumber - 1) * 32, value: eventId)
     }
   }
   
+  public func getNotThrownEventId(turnoutNumber:Int) -> UInt64? {
+    guard turnoutNumber > 0 && turnoutNumber <= 4 else {
+      return nil
+    }
+    return configuration!.getUInt64(address: addressNotThrownEventId0 + (turnoutNumber - 1) * 32)
+  }
+  
+  public func setNotThrownEventId(turnoutNumber:Int, eventId:UInt64) {
+    if turnoutNumber > 0 && turnoutNumber <= 4 {
+      configuration!.setUInt(address: addressNotThrownEventId0 + (turnoutNumber - 1) * 32, value: eventId)
+    }
+  }
+
+  public func getNotClosedEventId(turnoutNumber:Int) -> UInt64? {
+    guard turnoutNumber > 0 && turnoutNumber <= 4 else {
+      return nil
+    }
+    return configuration!.getUInt64(address: addressNotClosedEventId0 + (turnoutNumber - 1) * 32)
+  }
+  
+  public func setNotClosedEventId(turnoutNumber:Int, eventId:UInt64) {
+    if turnoutNumber > 0 && turnoutNumber <= 4 {
+      configuration!.setUInt(address: addressNotClosedEventId0 + (turnoutNumber - 1) * 32, value: eventId)
+    }
+  }
+
+  public func getIsThrown(turnoutNumber:Int) -> Bool? {
+    guard turnoutNumber > 0 && turnoutNumber <= 4 else {
+      return nil
+    }
+    let state = routeSettings!.getUInt8(address: addressIsThrown0 + (turnoutNumber - 1) * 2)
+    switch state {
+    case 1:
+      return true
+    case 2:
+      return false
+    default:
+      return nil
+    }
+  }
+  
+  public func setIsThrown(turnoutNumber:Int, state:Bool?) {
+    guard turnoutNumber > 0 && turnoutNumber <= 4 else {
+      return
+    }
+    var value : UInt8
+    switch state {
+    case true:
+      value = 1
+    case false:
+      value = 2
+    default:
+      value = 0
+    }
+    routeSettings!.setUInt(address: addressIsThrown0 + (turnoutNumber - 1) * 2, value: value)
+    routeSettings?.save()
+    findRouteSet()
+  }
+
+  public func getIsClosed(turnoutNumber:Int) -> Bool? {
+    guard turnoutNumber > 0 && turnoutNumber <= 4 else {
+      return nil
+    }
+    let state = routeSettings!.getUInt8(address: addressIsClosed0 + (turnoutNumber - 1) * 2)
+    switch state {
+    case 1:
+      return true
+    case 2:
+      return false
+    default:
+      return nil
+    }
+  }
+  
+  public func setIsClosed(turnoutNumber:Int, state:Bool?) {
+    guard turnoutNumber > 0 && turnoutNumber <= 4 else {
+      return
+    }
+    var value : UInt8
+    switch state {
+    case true:
+      value = 1
+    case false:
+      value = 2
+    default:
+      value = 0
+    }
+    routeSettings!.setUInt(address: addressIsClosed0 + (turnoutNumber - 1) * 2, value: value)
+    routeSettings?.save()
+    findRouteSet()
+  }
+
   public func getSetSignalAspectEventId(number:Int) -> UInt64? {
     guard number > 0 && number <= 32 else {
       return nil
@@ -2078,21 +2295,92 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     saveMemorySpaces()
   }
   
+  public func findRouteSet() {
+    
+    routeSet = nil
+    
+    var routeNumber = 0
+    
+    let connections = itemType.connections
+    
+    while routeNumber < connections.count {
+      
+      let route = connections[routeNumber]
+      
+      var routeOK = true
+      
+      for item in route.switchSettings {
+        
+        if item.switchState == .thrown, let state = getIsThrown(turnoutNumber: item.switchNumber) {
+          routeOK = state
+        }
+        else if item.switchState == .closed, let state = getIsClosed(turnoutNumber: item.switchNumber) {
+          routeOK = state
+        }
+        else {
+          routeOK = false
+        }
+        
+        if !routeOK {
+          break
+        }
+        
+      }
+      
+      if routeOK {
+        routeSet = routeNumber
+        break
+      }
+      
+      routeNumber += 1
+      
+    }
+    
+  }
+
+  public func isTurnoutFeedbackAvailable(route:SwitchBoardConnection) -> Bool {
+    
+    for item in route.switchSettings {
+      
+      let index = item.switchNumber
+      
+      guard let thrownEventId = getTurnoutThrownEventId(turnoutNumber: index), let notThrownEventId = getNotThrownEventId(turnoutNumber: index), let closedEventId = getTurnoutClosedEventId(turnoutNumber: index), let notClosedEventId = getNotClosedEventId(turnoutNumber: index), thrownEventId != 0 && notThrownEventId != 0 && closedEventId != 0 && notClosedEventId != 0 else {
+        return false
+      }
+      
+    }
+    
+    return true
+
+  }
+  
   public func setRoute(route:Int) {
     
-    routeSet = route
+    routeCommanded = route
     
-    let route = itemType.connections[routeSet]
+    let route = itemType.connections[route]
+    
+    let isNoFeedback = !isTurnoutFeedbackAvailable(route: route)
     
     for setting in route.switchSettings {
       
       var eventId : UInt64?
       
+      let index = setting.switchNumber - 1
+      
       switch setting.switchState {
       case .closed:
         eventId = getTurnoutCloseEventId(turnoutNumber: setting.switchNumber)
+        if isNoFeedback {
+          setIsThrown(turnoutNumber: index, state: false)
+          setIsClosed(turnoutNumber: index, state: true)
+        }
       case .thrown:
         eventId = getTurnoutThrowEventId(turnoutNumber: setting.switchNumber)
+        if isNoFeedback {
+          setIsClosed(turnoutNumber: index, state: false)
+          setIsThrown(turnoutNumber: index, state: true)
+        }
       default:
         break
       }
@@ -2102,8 +2390,6 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
       }
       
     }
-    
-    appNode?.panelChanged(panelId: panelId)
     
   }
   
@@ -2134,6 +2420,38 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
           isSensorActivated = true
         case sensorDeactivatedEventId:
           isSensorActivated = false
+        case getTurnoutClosedEventId(turnoutNumber: 1):
+          setIsClosed(turnoutNumber: 1, state: true)
+        case getTurnoutClosedEventId(turnoutNumber: 2):
+          setIsClosed(turnoutNumber: 2, state: true)
+        case getTurnoutClosedEventId(turnoutNumber: 3):
+          setIsClosed(turnoutNumber: 3, state: true)
+        case getTurnoutClosedEventId(turnoutNumber: 4):
+          setIsClosed(turnoutNumber: 4, state: true)
+        case getTurnoutThrownEventId(turnoutNumber: 1):
+          setIsThrown(turnoutNumber: 1, state: true)
+        case getTurnoutThrownEventId(turnoutNumber: 2):
+          setIsThrown(turnoutNumber: 2, state: true)
+        case getTurnoutThrownEventId(turnoutNumber: 3):
+          setIsThrown(turnoutNumber: 3, state: true)
+        case getTurnoutThrownEventId(turnoutNumber: 4):
+          setIsThrown(turnoutNumber: 4, state: true)
+        case getNotClosedEventId(turnoutNumber: 1):
+          setIsClosed(turnoutNumber: 1, state: false)
+        case getNotClosedEventId(turnoutNumber: 2):
+          setIsClosed(turnoutNumber: 2, state: false)
+        case getNotClosedEventId(turnoutNumber: 3):
+          setIsClosed(turnoutNumber: 3, state: false)
+        case getNotClosedEventId(turnoutNumber: 4):
+          setIsClosed(turnoutNumber: 4, state: false)
+        case getNotThrownEventId(turnoutNumber: 1):
+          setIsThrown(turnoutNumber: 1, state: false)
+        case getNotThrownEventId(turnoutNumber: 2):
+          setIsThrown(turnoutNumber: 2, state: false)
+        case getNotThrownEventId(turnoutNumber: 3):
+          setIsThrown(turnoutNumber: 3, state: false)
+        case getNotThrownEventId(turnoutNumber: 4):
+          setIsThrown(turnoutNumber: 4, state: false)
         default:
           break
         }
