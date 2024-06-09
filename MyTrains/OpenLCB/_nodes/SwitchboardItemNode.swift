@@ -183,7 +183,7 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     initSpaceAddress(&addressNotClosedEventId0, 8, &configurationSize)
 
     var temp = 0
-    for index in 1 ... 3 {
+    for _ in 1 ... 3 {
       initSpaceAddress(&temp, 8, &configurationSize)
       initSpaceAddress(&temp, 8, &configurationSize)
       initSpaceAddress(&temp, 8, &configurationSize)
@@ -538,7 +538,7 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
         resetToFactoryDefaults()
       }
       
-      cdiFilename = "MyTrains Switchboard Item"
+//      cdiFilename = "MyTrains Switchboard Item"
       
     }
     
@@ -738,6 +738,10 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     return itemType.visibility
   }
 
+  public override var isPassiveNode: Bool {
+    return itemType.isPassiveNode
+  }
+  
   public var panelId : UInt64 {
     get {
       return configuration!.getUInt64(address: addressPanelId)!
@@ -1054,19 +1058,7 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
   public var isEliminated : Bool = false
 
   public var isTurnout : Bool {
-    let turnouts : Set<SwitchboardItemType> = [
-      .cross,
-      .rightCurvedTurnout,
-      .leftCurvedTurnout,
-      .turnout3Way,
-      .yTurnout,
-      .diagonalCross,
-      .turnoutLeft,
-      .turnoutRight,
-      .singleSlip,
-      .doubleSlip,
-    ]
-    return turnouts.contains(itemType)
+    return itemType.isTurnout
   }
   
   public var isScenic : Bool {
@@ -1077,34 +1069,26 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
   }
 
   public var isSensor : Bool {
-    get {
-      return itemType == .sensor
-    }
+    return itemType == .sensor
   }
   
   public var isBlock : Bool {
-    get {
-      return itemType == .block
-    }
+    return itemType.isBlock
   }
   
   public var isLink : Bool {
-    get {
-      return itemType == .link
-    }
+    return itemType == .link
   }
   
   public var isTrack : Bool {
-    get {
-      let track : Set<SwitchboardItemType> = [
-        .curve,
-        .sensor,
-        .longCurve,
-        .straight,
-        .buffer,
-      ]
-      return track.contains(itemType)
-    }
+    let track : Set<SwitchboardItemType> = [
+      .curve,
+      .sensor,
+      .longCurve,
+      .straight,
+      .buffer,
+    ]
+    return track.contains(itemType)
   }
 
   public func exitPoint(entryPoint:Int) -> [SWBNodeLink] {
@@ -1588,429 +1572,6 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
 
   }
   
-  override internal func customizeDynamicCDI(cdi:String) -> String {
- 
-    var result = cdi
-
-    var sub = ""
-    
-    if itemType.isGroup {
-      
-      sub += "<group>\n"
-      sub += "  <name>Track Configuration</name>\n"
-
-      sub += "  <float size='4'>\n"
-      sub += "    <name>Track Gradient %</name>\n"
-      sub += "    <min>0.0</min>\n"
-      sub += "    <max>100.0</max>\n"
-      sub += "  </float>\n"
-
-      sub += "  <int size='1'>\n"
-      sub += "    <name>Track Gauge</name>\n"
-      sub += "    \(CDI.TRACK_GAUGE)"
-      sub += "  </int>\n"
-
-      sub += "  \(CDI.ROUTE_DIMENSION)"
-
-      sub += "</group>\n"
-
-    }
-    else {
-      sub += "<group offset='\(69)'/>\n"
-    }
-
-    result = result.replacingOccurrences(of: CDI.SBI_TRACK_CONFIGURATION, with: sub)
-
-    sub = ""
-
-    if itemType.numberOfDimensionsRequired > 0 {
-      
-      for route in 1 ... itemType.numberOfDimensionsRequired {
-        sub += "<float size='8'>\n"
-        if itemType.isBlock {
-          sub += "<name>Length of Block (\(CDI.ACTUAL_LENGTH_UNITS))</name>\n"
-        }
-        else {
-          sub += "<name>Length of Route #\(route) (\(CDI.ACTUAL_LENGTH_UNITS))</name>\n"
-        }
-        sub += "<min>0.0</min>\n"
-        sub += "</float>\n\n"
-      }
-      
-    }
-    
-    if itemType.numberOfDimensionsRequired < 8 {
-      for route in itemType.numberOfDimensionsRequired + 1 ... 8 {
-        sub += "<group offset='8'/>\n"
-      }
-    }
-    
-    result = result.replacingOccurrences(of: CDI.ROUTE_DIMENSION, with: sub)
-
-    sub = ""
-    
-    if itemType.numberOfTurnoutSwitches > 0 {
- 
-      sub += "<group replication='\(itemType.numberOfTurnoutSwitches)'>\n"
-      sub += "  <name>Switch Configuration</name>\n"
-      sub += "  <repname>Switch #</repname>\n"
-
-      sub += "<int size='1'>\n"
-      sub += "  <name>Turnout Motor Type</name>\n"
-      sub += "  \(CDI.TURNOUT_MOTOR_TYPE)"
-      sub += "</int>\n"
-
-      sub += "<eventid>\n"
-      sub += "  <name>Throw Switch Event ID</name>\n"
-      sub += "</eventid>\n"
-
-      sub += "<eventid>"
-      sub += "  <name>Close Switch Event ID</name>\n"
-      sub += "</eventid>\n"
-
-      sub += "<eventid>\n"
-      sub += "  <name>Switch Thrown Confirmation Event ID</name>\n"
-      sub += "</eventid>\n"
-
-      sub += "<eventid>\n"
-      sub += "  <name>Switch Closed Confirmation Event ID</name>\n"
-      sub += "</eventid>\n"
-
-      sub += "</group>\n"
-
-    }
-    
-    if itemType.numberOfTurnoutSwitches < 4 {
-      for route in itemType.numberOfTurnoutSwitches + 1 ... 4 {
-        sub += "<group offset='33'/>\n"
-      }
-    }
-    
-    result = result.replacingOccurrences(of: CDI.TURNOUT_SWITCHES, with: sub)
-
-    sub = ""
-    
-    if itemType == .sensor {
-      
-      sub += "<group>\n"
-      sub += "  <name>Sensor Configuration</name>\n"
-
-      sub += "<int size='1'>\n"
-      sub += "  <name>Sensor Type</name>\n"
-      sub += "  \(CDI.SENSOR_TYPE)"
-      sub += "</int>\n"
-
-      sub += "<float size='8'>\n"
-      sub += "<name>Position of Sensor (\(CDI.ACTUAL_DISTANCE_UNITS))</name>\n"
-      sub += "</float>\n\n"
-
-      sub += "<eventid>\n"
-      sub += "  <name>Sensor Activated Event ID</name>\n"
-      sub += "</eventid>\n"
-
-      sub += "<float size='8'>\n"
-      sub += "<name>Sensor Activate Latency (\(CDI.TIME_UNITS))</name>\n"
-      sub += "</float>\n\n"
-
-      sub += "<eventid>\n"
-      sub += "  <name>Sensor Deactivated Event ID</name>\n"
-      sub += "</eventid>\n"
-
-      sub += "<float size='8'>\n"
-      sub += "<name>Sensor Deactivate Latency (\(CDI.TIME_UNITS))</name>\n"
-      sub += "</float>\n\n"
-
-      sub += "<eventid>\n"
-      sub += "  <name>Sensor Location Services Event ID</name>\n"
-      sub += "</eventid>\n"
-
-      sub += "</group>\n"
-
-    }
-    else {
-      sub += "<group offset='49'/>\n"
-    }
-
-    result = result.replacingOccurrences(of: CDI.SPECIAL_SENSOR, with: sub)
-    
-    sub = ""
-    
-    if itemType == .link {
-
-      sub += "<eventid>\n"
-      sub += "  <name>Link ID</name>\n"
-      sub += "  \(CDI.SWITCHBOARD_LINKS)"
-      sub += "</eventid>\n"
-
-    }
-    else {
-      sub += "<group offset='8'/>\n"
-    }
-
-    result = result.replacingOccurrences(of: CDI.LINK, with: sub)
-    
-    sub = ""
-    
-    if let appNode {
-      result = appNode.insertLinkMap(cdi: result, layoutId: layoutNodeId, excludeLinkId: nodeId)
-    }
-    
-    if itemType == .signal {
-      
-      sub += "<group>\n"
-      sub += "  <name>Signal Configuration</name>\n"
-
-      sub += "<int size='2'>\n"
-      sub += "  <name>Signal Type</name>\n"
-      sub += "  \(CDI.SIGNAL_TYPE)"
-      sub += "</int>\n"
-
-      sub += "<int size='1'>\n"
-      sub += "  <name>Route Direction</name>\n"
-      sub += "  \(CDI.ROUTE_DIRECTION)"
-      sub += "</int>\n"
-
-      sub += "<float size='8'>\n"
-      sub += "<name>Position of Signal (\(CDI.ACTUAL_DISTANCE_UNITS))</name>\n"
-      sub += "</float>\n\n"
-
-      if signalType.numberOfStates > 0 {
-        for index in 1 ... signalType.numberOfStates {
-          sub += "<eventid>\n"
-          sub += "  <name>Set State #\(index) Event ID</name>\n"
-          sub += "</eventid>\n"
-        }
-      }
-      
-      if signalType.numberOfStates < 32 {
-        let filler = 32 - signalType.numberOfStates
-        sub += "<group offset='\(filler * 8)'/>\n"
-      }
-      
-      sub += "</group>\n"
-
-    }
-    else {
-      sub += "<group offset='267'/>\n"
-    }
-
-    result = result.replacingOccurrences(of: CDI.SIGNAL, with: sub)
-    
-    sub = ""
-    
-    if itemType.isGroup {
-
-      sub += "<group>\n"
-      sub += "  <name>Speed Constraints</name>\n"
-
-      sub += "<group replication='16'>\n"
-      
-      sub += "  <name>Direction Previous</name>\n"
-      sub += "  <description>Defines the custom speed constraints for this block in the direction previous. These constraints will override any constraint of the same type set in the layout configuration.</description>\n"
-      sub += "  <repname>Constraint #</repname>\n"
-
-      sub += "<int size='2'>\n"
-      sub += "  <name>Speed Constraint Type</name>\n"
-      sub += "  <default>0</default>\n"
-      sub += "  %%SPEED_CONSTRAINT_TYPE%%\n"
-      sub += "</int>\n"
-
-      sub += "<float size='2'>\n"
-      sub += "  <name>Speed Constraint Value (%%SCALE_SPEED_UNITS%%)</name>\n"
-      sub += "  <default>0.0</default>\n"
-      sub += "  <min>0.0</min>\n"
-      sub += "</float>\n"
-
-      sub += "</group>\n"
-
-      sub += "<group replication='16'>\n"
-      
-      sub += "  <name>Direction Next</name>\n"
-      sub += "  <description>Defines the custom speed constraints for this block in the direction next. These constraints will override any constraint of the same type set in the layout configuration.</description>\n"
-      sub += "  <repname>Constraint #</repname>\n"
-
-      sub += "<int size='2'>\n"
-      sub += "  <name>Speed Constraint Type</name>\n"
-      sub += "  <default>0</default>\n"
-      sub += "  %%SPEED_CONSTRAINT_TYPE%%\n"
-      sub += "</int>\n"
-
-      sub += "<float size='2'>\n"
-      sub += "  <name>Speed Constraint Value (%%SCALE_SPEED_UNITS%%)</name>\n"
-      sub += "  <default>0.0</default>\n"
-      sub += "  <min>0.0</min>\n"
-      sub += "</float>\n"
-
-      sub += "</group>\n"
-
-      sub += "</group>\n"
-
-    }
-    else {
-      sub += "<group offset='128'/>\n"
-    }
-    
-    result = result.replacingOccurrences(of: CDI.SPEED_CONSTRAINTS, with: sub)
-
-    sub = ""
-    
-    #if DEBUG
-    
-    sub += "<group>\n"
-    sub += "  <name>General Settings</name>\n"
-
-    sub += "<eventid>\n"
-    sub += "  <name>Switchboard Panel</name>\n"
-    sub += "    \(CDI.SWITCHBOARD_PANEL_NODES)"
-    sub += "</eventid>\n"
-
-    sub += "<int size='2'>\n"
-    sub += "  <name>Switchboard Item Type</name>\n"
-    sub += "  \(CDI.SWITCHBOARD_ITEM_TYPE)"
-    sub += "</int>\n"
-
-    sub += "<int size='2'>\n"
-    sub += "  <name>X Coordinate</name>\n"
-    sub += "  <min>1</min>\n"
-    sub += "  <max>65535</max>\n"
-    sub += "</int>\n"
-
-    sub += "<int size='2'>\n"
-    sub += "  <name>Y Coordinate</name>\n"
-    sub += "  <min>1</min>\n"
-    sub += "  <max>65535</max>\n"
-    sub += "</int>\n"
-
-    sub += "<int size='1'>\n"
-    sub += "  <name>Orientation</name>\n"
-    sub += "  \(CDI.ORIENTATION)\n"
-    sub += "</int>\n"
-
-    sub += "<eventid>\n"
-    sub += "  <name>Group</name>\n"
-    sub += "  \(CDI.SWITCHBOARD_GROUP_NODES)"
-    sub += "</eventid>\n"
-
-    sub += "</group>\n"
-
-    #else
-    sub += "<group offset='23'/>\n"
-    #endif
-
-    result = result.replacingOccurrences(of: CDI.SBI_GENERAL_SETTINGS, with: sub)
-
-    sub = ""
-    
-    if itemType.isGroup {
-      
-      sub += "<group>\n"
-      sub += "  <name>Block Configuration</name>\n"
-        
-      sub += "  <int size='1'>\n"
-      sub += "    <name>Directionality</name>\n"
-      sub += "    \(CDI.DIRECTIONALITY)"
-      sub += "  </int>\n"
-        
-      sub += "  <int size='1'>\n"
-      sub += "    <name>Allow Shunt</name>\n"
-      sub += "    \(CDI.YES_NO)"
-      sub += "  </int>\n"
-        
-      sub += "  <int size='1'>\n"
-      sub += "    <name>Track Electrification Type</name>\n"
-      sub += "    \(CDI.TRACK_ELECTRIFICATION_TYPE)"
-      sub += "  </int>\n"
-        
-      sub += "  <int size='1'>\n"
-      sub += "    <name>Is Critical Section</name>\n"
-      sub += "    \(CDI.YES_NO)"
-      sub += "  </int>\n"
-        
-      sub += "  <int size='1'>\n"
-      sub += "    <name>Is Hidden Section</name>\n"
-      sub += "    \(CDI.YES_NO)"
-      sub += "  </int>\n"
-        
-      sub += "</group>\n"
-
-    }
-    else {
-      sub += "<group offset='5'/>\n"
-    }
-
-    result = result.replacingOccurrences(of: CDI.SBI_BLOCK_CONFIGURATION, with: sub)
-    
-    sub = ""
-
-    if itemType.isGroup {
-      
-      sub += "<group>\n"
-      sub += "  <name>Block Events</name>\n"
-        
-      sub += "  <eventid>\n"
-      sub += "    <name>Enter Detection Zone Event ID</name>\n"
-      sub += "  </eventid>\n"
-        
-      sub += "  <eventid>\n"
-      sub += "    <name>Exit Detection Zone Event ID</name>\n"
-      sub += "  </eventid>\n"
-
-      sub += "  <eventid>\n"
-      sub += "    <name>Enter Transponding Zone Event ID</name>\n"
-      sub += "  </eventid>\n"
-        
-      sub += "  <eventid>\n"
-      sub += "    <name>Exit Transponding Zone Event ID</name>\n"
-      sub += "  </eventid>\n"
-
-      sub += "  <eventid>\n"
-      sub += "    <name>Track Fault Event ID</name>\n"
-      sub += "  </eventid>\n"
-
-      sub += "  <eventid>\n"
-      sub += "    <name>Track Fault Cleared Event ID</name>\n"
-      sub += "  </eventid>\n"
-
-      sub += "  <eventid>\n"
-      sub += "    <name>Location Services Event ID</name>\n"
-      sub += "  </eventid>\n"
-
-      sub += "</group>\n"
-
-    }
-    else {
-      sub += "<group offset='56'/>\n"
-    }
-
-    result = result.replacingOccurrences(of: CDI.SBI_BLOCK_EVENTS, with: sub)
-
-    sub = ""
-    
-    result = SwitchboardItemType.insertMap(cdi: result)
-    result = Orientation.insertMap(cdi: result)
-    result = BlockDirection.insertMap(cdi: result)
-    result = YesNo.insertMap(cdi: result)
-    result = TrackElectrificationType.insertMap(cdi: result)
-    result = TrackGauge.insertMap(cdi: result, layout: layoutNode)
-    result = TurnoutMotorType.insertMap(cdi: result)
-    result = SensorType.insertMap(cdi: result)
-    result = RouteDirection.insertMap(cdi: result)
-    result = SignalType.insertMap(cdi: result, countryCode: layoutNode!.countryCode)
-    result = SpeedConstraintType.insertMap(cdi: result)
-
-    if let appNode {
-      result = appNode.insertPanelMap(cdi: result, layoutId: layoutNodeId)
-      result = appNode.insertGroupMap(cdi: result, layoutId: layoutNodeId)
-      result = result.replacingOccurrences(of: CDI.ACTUAL_LENGTH_UNITS, with: appNode.unitsActualLength.symbol)
-      result = result.replacingOccurrences(of: CDI.ACTUAL_DISTANCE_UNITS, with: appNode.unitsActualDistance.symbol)
-      result = result.replacingOccurrences(of: CDI.SCALE_SPEED_UNITS, with: appNode.unitsScaleSpeed.symbol)
-      result = result.replacingOccurrences(of: CDI.TIME_UNITS, with: appNode.unitsTime.symbol)
-    }
-
-    return result
-    
-  }
-
  // MARK: Public Methods
   
   public func getDimension(routeNumber:Int) -> Double?
@@ -2397,69 +1958,92 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
   
   public override func openLCBMessageReceived(message: OpenLCBMessage) {
     
-    super.openLCBMessageReceived(message: message)
+    guard !isPassiveNode else {
+      return
+    }
     
     switch message.messageTypeIndicator {
      
     case .producerConsumerEventReport:
       
-      if let eventId = message.eventId {
+      if isEventConsumed, let eventId = message.eventId {
       
-        switch eventId {
-        case enterDetectionZoneEventId:
-          isBlockOccupied = true
-        case exitDetectionZoneEventId:
-          isBlockOccupied = false
-        case locationServicesEventId:
-          break
-        case trackFaultEventId:
-          isTrackFaulted = true
-        case trackFaultClearedEventId:
-          isTrackFaulted = false
-        case sensorActivatedEventId:
-          isSensorActivated = true
-        case sensorDeactivatedEventId:
-          isSensorActivated = false
-        case getTurnoutClosedEventId(turnoutNumber: 1):
-          setIsClosed(turnoutNumber: 1, state: true)
-        case getTurnoutClosedEventId(turnoutNumber: 2):
-          setIsClosed(turnoutNumber: 2, state: true)
-        case getTurnoutClosedEventId(turnoutNumber: 3):
-          setIsClosed(turnoutNumber: 3, state: true)
-        case getTurnoutClosedEventId(turnoutNumber: 4):
-          setIsClosed(turnoutNumber: 4, state: true)
-        case getTurnoutThrownEventId(turnoutNumber: 1):
-          setIsThrown(turnoutNumber: 1, state: true)
-        case getTurnoutThrownEventId(turnoutNumber: 2):
-          setIsThrown(turnoutNumber: 2, state: true)
-        case getTurnoutThrownEventId(turnoutNumber: 3):
-          setIsThrown(turnoutNumber: 3, state: true)
-        case getTurnoutThrownEventId(turnoutNumber: 4):
-          setIsThrown(turnoutNumber: 4, state: true)
-        case getNotClosedEventId(turnoutNumber: 1):
-          setIsClosed(turnoutNumber: 1, state: false)
-        case getNotClosedEventId(turnoutNumber: 2):
-          setIsClosed(turnoutNumber: 2, state: false)
-        case getNotClosedEventId(turnoutNumber: 3):
-          setIsClosed(turnoutNumber: 3, state: false)
-        case getNotClosedEventId(turnoutNumber: 4):
-          setIsClosed(turnoutNumber: 4, state: false)
-        case getNotThrownEventId(turnoutNumber: 1):
-          setIsThrown(turnoutNumber: 1, state: false)
-        case getNotThrownEventId(turnoutNumber: 2):
-          setIsThrown(turnoutNumber: 2, state: false)
-        case getNotThrownEventId(turnoutNumber: 3):
-          setIsThrown(turnoutNumber: 3, state: false)
-        case getNotThrownEventId(turnoutNumber: 4):
-          setIsThrown(turnoutNumber: 4, state: false)
-        default:
-          break
+        if itemType.isGroup {
+          
+          switch eventId {
+          case enterDetectionZoneEventId:
+            isBlockOccupied = true
+          case locationServicesEventId:
+            break
+          case trackFaultEventId:
+            isTrackFaulted = true
+          case exitDetectionZoneEventId:
+            isBlockOccupied = false
+          case trackFaultClearedEventId:
+            isTrackFaulted = false
+          default:
+            break
+          }
+          
+          if isTurnout {
+            
+            switch eventId {
+            case getTurnoutClosedEventId(turnoutNumber: 1):
+              setIsClosed(turnoutNumber: 1, state: true)
+            case getTurnoutClosedEventId(turnoutNumber: 2):
+              setIsClosed(turnoutNumber: 2, state: true)
+            case getTurnoutClosedEventId(turnoutNumber: 3):
+              setIsClosed(turnoutNumber: 3, state: true)
+            case getTurnoutClosedEventId(turnoutNumber: 4):
+              setIsClosed(turnoutNumber: 4, state: true)
+            case getTurnoutThrownEventId(turnoutNumber: 1):
+              setIsThrown(turnoutNumber: 1, state: true)
+            case getTurnoutThrownEventId(turnoutNumber: 2):
+              setIsThrown(turnoutNumber: 2, state: true)
+            case getTurnoutThrownEventId(turnoutNumber: 3):
+              setIsThrown(turnoutNumber: 3, state: true)
+            case getTurnoutThrownEventId(turnoutNumber: 4):
+              setIsThrown(turnoutNumber: 4, state: true)
+            case getNotClosedEventId(turnoutNumber: 1):
+              setIsClosed(turnoutNumber: 1, state: false)
+            case getNotClosedEventId(turnoutNumber: 2):
+              setIsClosed(turnoutNumber: 2, state: false)
+            case getNotClosedEventId(turnoutNumber: 3):
+              setIsClosed(turnoutNumber: 3, state: false)
+            case getNotClosedEventId(turnoutNumber: 4):
+              setIsClosed(turnoutNumber: 4, state: false)
+            case getNotThrownEventId(turnoutNumber: 1):
+              setIsThrown(turnoutNumber: 1, state: false)
+            case getNotThrownEventId(turnoutNumber: 2):
+              setIsThrown(turnoutNumber: 2, state: false)
+            case getNotThrownEventId(turnoutNumber: 3):
+              setIsThrown(turnoutNumber: 3, state: false)
+            case getNotThrownEventId(turnoutNumber: 4):
+              setIsThrown(turnoutNumber: 4, state: false)
+            default:
+              break
+            }
+            
+          }
+
         }
-        
+        else if isSensor {
+          
+          switch eventId {
+          case sensorActivatedEventId:
+            isSensorActivated = true
+          case sensorDeactivatedEventId:
+            isSensorActivated = false
+          default:
+            break
+          }
+          
+        }
+
       }
       
     default:
-      break
+      super.openLCBMessageReceived(message: message)
     }
     
   }

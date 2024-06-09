@@ -49,6 +49,8 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
   
   public var gatewayNodes : [UInt64:OpenLCBNodeVirtual] = [:]
 
+  private var nodesPassive : [UInt64:OpenLCBNodeVirtual] = [:]
+  
   private var nodesSimpleSetSufficient : [UInt64:OpenLCBNodeVirtual] = [:]
 
   private var nodesFullProtocolRequired : [UInt64:OpenLCBNodeVirtual] = [:]
@@ -116,6 +118,7 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
     nodesSimpleSetSufficient.removeAll()
     nodesSimpleSetSufficient.removeAll()
     nodesInhibited.removeAll()
+    nodesPassive.removeAll()
     gatewayNodes.removeAll()
     appNode = nil
     fastClock = nil
@@ -134,45 +137,6 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
     initializationLevel = 0
     state = .uninitialized
   }
-  
-  /*
-  private func updateVirtualNodeList() {
-    
-    let list = virtualNodes
-    
-    for node in list {
-      switch node.virtualNodeType {
-      case .layoutNode:
-        (node as? LayoutNode)?.layoutState = node.nodeId == layoutNodeId ? .activated : .deactivated
-      case .switchboardItemNode:
-        deregisterNode(node: node)
-      default:
-        break
-      }
-    }
-    
-    if let layoutNodeId {
-      
-      switch appMode {
-        
-      case .master:
-        for node in OpenLCBMemorySpace.getVirtualNodes() {
-          if node.virtualNodeType == .switchboardItemNode && node.layoutNodeId == layoutNodeId {
-            registerNode(node: node)
-          }
-        }
-        
-      case .delegate:
-        break // MARK: TODO Add the delegate switchboard items
-        
-      default:
-        break
-      }
-      
-    }
-    
-  }
-  */
   
   // MARK: Public Methods
   
@@ -346,7 +310,10 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
 
     startupGroup[node.virtualNodeType.startupGroup]?.initialize(node)
     
-    if node.state == .inhibited {
+    if node.isPassiveNode {
+      nodesPassive[node.nodeId] = node
+    }
+    else if node.state == .inhibited {
       nodesInhibited[node.nodeId] = node
       appDelegate.refreshRequired()
     }
@@ -396,6 +363,7 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
     nodesSimpleSetSufficient.removeValue(forKey: node.nodeId)
     nodesFullProtocolRequired.removeValue(forKey: node.nodeId)
     nodesInhibited.removeValue(forKey: node.nodeId)
+    nodesPassive.removeValue(forKey: node.nodeId)
 
     startupGroup[node.virtualNodeType.startupGroup]?.uninitialize(node)
     
@@ -403,7 +371,7 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
       startupGroup[node.virtualNodeType.startupGroup]?.remove(node)
       OpenLCBMemorySpace.deleteAllMemorySpaces(forNodeId: node.nodeId)
       isDeletingANode = false
-      if node.virtualNodeType != .switchboardItemNode {
+      if !node.isPassiveNode && node.virtualNodeType != .switchboardItemNode {
         appDelegate.rebootRequest()
       }
     }

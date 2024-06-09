@@ -686,8 +686,10 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
   // MARK: OpenLCBNetworkLayerDelegate Methods
   
   public override func openLCBMessageReceived(message: OpenLCBMessage) {
+    
     super.openLCBMessageReceived(message: message)
     locoNet?.openLCBMessageReceived(message: message)
+    
   }
   
   // MARK: LocoNetDelegate Methods

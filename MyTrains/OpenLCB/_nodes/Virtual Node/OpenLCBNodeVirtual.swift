@@ -54,18 +54,6 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.virtualNodeConfig.rawValue, address: addressVirtualNodeConfigNextNodeIdSeed)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.virtualNodeConfig.rawValue, address: addressVirtualNodeConfigHostAppNodeId)
 
-    isSimpleNodeInformationProtocolSupported = true
-    
-    isDatagramProtocolSupported = true
-    
-    isMemoryConfigurationProtocolSupported = true
-    
-    isAbbreviatedDefaultCDIProtocolSupported = true
-    
-    isFirmwareUpgradeProtocolSupported = false
-    
-    setupConfigurationOptions()
-    
     #if DEBUG
     addInit()
     #endif
@@ -191,6 +179,14 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
       _cdiFilename = value
       isConfigurationDescriptionInformationProtocolSupported = _cdiFilename != nil
     }
+  }
+  
+  /// A "Passive Node" is a node in name only. It can only be configured by programatically manipulating
+  /// its properties. It does consume any OpenLCB/LCC messages or produce any such messages. It
+  /// does not get connected to the OpenLCB/LCC bus internally or externally.
+  
+  public var isPassiveNode : Bool {
+    return false
   }
   
   public var visibility : OpenLCBNodeVisibility {
@@ -376,6 +372,14 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
       virtualNodeConfigSpace?.save()
     }
   }
+  
+  public var isEventConsumed : Bool {
+    return eventsConsumed.count != 0 || userConfigEventConsumedAddresses.count != 0 || eventRangesConsumed.count != 0
+  }
+
+  public var isEventProduced : Bool {
+    return eventsProduced.count != 0 || userConfigEventProducedAddresses.count != 0 || eventRangesProduced.count != 0
+  }
 
   // MARK: Private Methods
   
@@ -510,43 +514,6 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
         cdi = cdi.replacingOccurrences(of: CDI.HARDWARE_VERSION, with: nodeHardwareVersion)
         cdi = standardACDI(cdi: cdi)
         cdi = standardVirtualNodeConfig(cdi: cdi)
-/*
-        cdi = OpenLCBFunction.insertMap(cdi: cdi)
- 
-        cdi = MTSerialPortManager.insertMap(cdi: cdi)
-        cdi = BaudRate.insertMap(cdi: cdi)
-        cdi = Parity.insertMap(cdi: cdi)
-        cdi = FlowControl.insertMap(cdi: cdi)
- 
-        cdi = OpenLCBClockOperatingMode.insertMap(cdi: cdi)
-        cdi = OpenLCBClockType.insertMap(cdi: cdi)
-        cdi = ClockCustomIdType.insertMap(cdi: cdi)
-        cdi = OpenLCBClockState.insertMap(cdi: cdi)
-        cdi = EnableState.insertMap(cdi: cdi)
-        cdi = OpenLCBClockInitialDateTime.insertMap(cdi: cdi)
-
- 
-        cdi = UnitLength.insertMap(cdi: cdi)
-        cdi = UnitSpeed.insertMap(cdi: cdi)
- 
-        cdi = TrackCode.insertMap(cdi: cdi)
-        cdi = TrackGauge.insertMap(cdi: cdi, scale: .scale1to76dot2)
-        cdi = TrackElectrificationType.insertMap(cdi: cdi)
-        cdi = TurnoutMotorType.insertMap(cdi: cdi)
-        cdi = Orientation.insertMap(cdi: cdi)
-        cdi = SwitchboardItemType.insertMap(cdi: cdi)
-        cdi = BlockDirection.insertMap(cdi: cdi)
-
-        if let app = networkLayer?.myTrainsNode {
-          cdi = app.insertPanelMap(cdi: cdi, layoutId: layoutNodeId)
-          cdi = app.insertGroupMap(cdi: cdi, layoutId: layoutNodeId)
-        }
-
-        cdi = CountryCode.insertMap(cdi: cdi)
-        cdi = YesNo.insertMap(cdi: cdi)
-        cdi = TrackGauge.insertMap(cdi: cdi)
-
-*/
         
         let memorySpace = OpenLCBMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.cdi.rawValue, isReadOnly: true, description: "")
         
@@ -690,10 +657,24 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   // MARK: Public Methods
   
   public func start() {
+    
     startComplete()
+    
   }
   
   public func startComplete() {
+    
+    isSimpleNodeInformationProtocolSupported = !isPassiveNode
+    
+    isDatagramProtocolSupported = !isPassiveNode
+    
+    isMemoryConfigurationProtocolSupported = !isPassiveNode
+    
+    isAbbreviatedDefaultCDIProtocolSupported = !isPassiveNode
+    
+    isFirmwareUpgradeProtocolSupported = false
+    
+    setupConfigurationOptions()
     
     state = .permitted
 
@@ -743,7 +724,6 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   }
   
   internal func sendStartupMessages() {
-    
   }
   
   internal func setValidity(eventId:UInt64, validity: inout OpenLCBValidity) {
@@ -826,14 +806,14 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
   
   public func openLCBMessageReceived(message: OpenLCBMessage) {
     
-    guard let sourceNodeId = message.sourceNodeId else {
-      #if DEBUG
-      debugLog("no sourceNodeId")
-      #endif
+    guard !isPassiveNode, let sourceNodeId = message.sourceNodeId else {
       return
     }
 
     switch message.messageTypeIndicator {
+      
+    case .producerConsumerEventReport:
+      return
       
     case .simpleNodeIdentInfoRequest:
       if let data = encodedNodeInformation {
@@ -850,15 +830,7 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
       }
       
     case .protocolSupportInquiry:
-      
-      var data = supportedProtocols
-      /*
-      if isSwitchboardNode && !networkLayer.isInternalVirtualNode(nodeId: sourceNodeId) {
-        let mask : UInt8 = 0x08
-        data[1] = data[1] & ~mask
-      }
-      */
-      sendProtocolSupportReply(destinationNodeId: sourceNodeId, data: data)
+      sendProtocolSupportReply(destinationNodeId: sourceNodeId, data: supportedProtocols)
 
     case .datagram:
       

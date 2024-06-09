@@ -492,18 +492,4 @@ public class LayoutNode : OpenLCBNodeVirtual {
     */
   }
 
-
-  // MARK: OpenLCBNetworkLayerDelegate Methods
-  
-  public override func openLCBMessageReceived(message: OpenLCBMessage) {
-    
-    super.openLCBMessageReceived(message: message)
-    
-    switch message.messageTypeIndicator {
-    default:
-      break
-    }
-    
-  }
-  
 }

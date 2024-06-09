@@ -7,38 +7,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "6AB91A34-EBD6-4EFC-8456-E0696A15E6D6"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MyTrains/OpenLCB/_nodes/SwitchboardItemNode.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1626"
-            endingLineNumber = "1626"
-            landmarkName = "customizeDynamicCDI(cdi:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "12DED66A-15C6-43DE-9CFB-6FAFA5F59E77"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MyTrains/OpenLCB/_nodes/SwitchboardItemNode.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1689"
-            endingLineNumber = "1689"
-            landmarkName = "customizeDynamicCDI(cdi:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "41D9DC77-FE07-457F-86FB-86D575A182C5"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -206,10 +174,10 @@
             filePath = "MyTrains/OpenLCB/_nodes/SwitchboardItemNode.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1591"
-            endingLineNumber = "1591"
-            landmarkName = "customizeDynamicCDI(cdi:)"
-            landmarkType = "7">
+            startingLineNumber = "1575"
+            endingLineNumber = "1575"
+            landmarkName = "SwitchboardItemNode"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -286,8 +254,8 @@
             filePath = "MyTrains/OpenLCB/_classes/OpenLCBNetworkLayer.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "710"
-            endingLineNumber = "710"
+            startingLineNumber = "678"
+            endingLineNumber = "678"
             landmarkName = "clearMonitorBuffer()"
             landmarkType = "7">
          </BreakpointContent>
@@ -430,8 +398,8 @@
             filePath = "MyTrains/OpenLCB/_classes/OpenLCBNetworkLayer.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "585"
-            endingLineNumber = "585"
+            startingLineNumber = "553"
+            endingLineNumber = "553"
             landmarkName = "createVirtualNode(virtualNodeType:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -494,8 +462,8 @@
             filePath = "MyTrains/OpenLCB/_nodes/SwitchboardItemNode.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1234"
-            endingLineNumber = "1234"
+            startingLineNumber = "1218"
+            endingLineNumber = "1218"
             landmarkName = "getValue(property:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -535,16 +503,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "A71615F3-3FCC-4793-B7A1-2376C4D9A837"
+            uuid = "30B986CD-868A-409E-BD0F-05E23413D650"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "MyTrains/OpenLCB/_nodes/SwitchboardItemNode.swift"
+            filePath = "MyTrains/OpenLCB/_nodes/SwitchboardPanelNode.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2440"
-            endingLineNumber = "2440"
-            landmarkName = "openLCBMessageReceived(message:)"
+            startingLineNumber = "51"
+            endingLineNumber = "51"
+            landmarkName = "init(nodeId:layoutNodeId:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

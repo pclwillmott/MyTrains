@@ -417,6 +417,22 @@ public enum SwitchboardItemType : UInt16 {
     return result
   }
   
+  public var isPassiveNode : Bool {
+    
+    let passiveNodeTypes : Set<SwitchboardItemType> = [
+      .straight,
+      .curve,
+      .longCurve,
+      .buffer,
+      .link,
+      .platform,
+      .none,
+    ]
+    
+    return passiveNodeTypes.contains(self)
+
+  }
+  
   public var isTurnout : Bool {
   
     let turnouts : Set<SwitchboardItemType> = [

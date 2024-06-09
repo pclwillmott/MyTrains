@@ -48,8 +48,6 @@ public class SwitchboardPanelNode : OpenLCBNodeVirtual {
         resetToFactoryDefaults()
       }
       
-      cdiFilename = "MyTrains Switchboard Panel"
-      
     }
     
     #if DEBUG
@@ -73,6 +71,10 @@ public class SwitchboardPanelNode : OpenLCBNodeVirtual {
   internal var addressPanelIsVisible  = 0
   
   // MARK: Public Properties
+  
+  public override var isPassiveNode: Bool {
+    return true
+  }
   
   public var switchboardItems : [UInt64:SwitchboardItemNode] {
     
@@ -183,10 +185,6 @@ public class SwitchboardPanelNode : OpenLCBNodeVirtual {
 
   }
   
-  internal override func customizeDynamicCDI(cdi:String) -> String {
-    return YesNo.insertMap(cdi: cdi)
-  }
-  
   // MARK: Public Methods
   
   public func setValue(property:PanelProperty, string:String) {
@@ -200,19 +198,6 @@ public class SwitchboardPanelNode : OpenLCBNodeVirtual {
       numberOfRows = UInt16(string)!
     case .numberOfColumns:
       numberOfColumns = UInt16(string)!
-    default:
-      break
-    }
-    
-  }
-  
-  // MARK: OpenLCBNetworkLayerDelegate Methods
-  
-  public override func openLCBMessageReceived(message: OpenLCBMessage) {
-    
-    super.openLCBMessageReceived(message: message)
-    
-    switch message.messageTypeIndicator {
     default:
       break
     }

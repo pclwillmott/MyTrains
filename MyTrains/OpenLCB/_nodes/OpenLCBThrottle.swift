@@ -393,8 +393,6 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
   
   public override func openLCBMessageReceived(message: OpenLCBMessage) {
     
-    super.openLCBMessageReceived(message: message)
-   
     switch message.messageTypeIndicator {
     
     case .producerConsumerEventReport:
@@ -615,7 +613,7 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
       
     case .datagram:
       
-      if message.destinationNodeId! == nodeId, let datagramType = message.datagramType {
+      if let datagramType = message.datagramType {
         
         if fdiState == .gettingFDI {
           
@@ -680,8 +678,10 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
         
       }
       
+      fallthrough
+      
     default:
-      break
+      super.openLCBMessageReceived(message: message)
     }
     
   }

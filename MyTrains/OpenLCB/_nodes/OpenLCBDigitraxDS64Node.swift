@@ -175,6 +175,8 @@ public class OpenLCBDigitraxDS64Node : OpenLCBNodeVirtual, LocoNetDelegate {
       
       cdiFilename = "Digitrax DS64"
       
+      makeLookups()
+      
     }
     
     #if DEBUG
@@ -249,6 +251,8 @@ public class OpenLCBDigitraxDS64Node : OpenLCBNodeVirtual, LocoNetDelegate {
   private var switchQueue : [(switchNumber:Int, state:DCCSwitchState, confirmEventId:UInt64?)] = []
   
   private var commandedState : [DCCSwitchState]
+  
+  private var turnoutLookup : [UInt64:(turnoutNumber:Int, state:DCCSwitchState, ackEventId:UInt64?)] = [:]
   
   private var boardId : UInt16 {
     get {
@@ -389,6 +393,24 @@ public class OpenLCBDigitraxDS64Node : OpenLCBNodeVirtual, LocoNetDelegate {
 
   // MARK: Private Methods
   
+  private func makeLookups() {
+  
+    turnoutLookup.removeAll()
+    
+    for turnoutNumber in 0 ... 3 {
+      
+      if let eventId = getThrowEventId(zone: turnoutNumber) {
+        turnoutLookup[eventId] = (turnoutNumber, .thrown, getCommandedThrownEventId(zone: turnoutNumber))
+      }
+      
+      if let eventId = getCloseEventId(zone: turnoutNumber) {
+        turnoutLookup[eventId] = (turnoutNumber, .closed, getCommandedClosedEventId(zone: turnoutNumber))
+      }
+      
+    }
+    
+  }
+  
   private func baseAddress(zone:Int) -> Int {
     return zone * zoneBlockSize
   }
@@ -447,6 +469,7 @@ public class OpenLCBDigitraxDS64Node : OpenLCBNodeVirtual, LocoNetDelegate {
 
   private func setThrowEventId(zone:Int, eventId:UInt64?) {
     configuration!.setUInt(address: addressThrowEventId0 + baseAddress(zone: zone), value: eventId ?? 0)
+    makeLookups()
   }
 
   private func getThrowEventId(zone:Int) -> UInt64? {
@@ -469,6 +492,7 @@ public class OpenLCBDigitraxDS64Node : OpenLCBNodeVirtual, LocoNetDelegate {
 
   private func setCloseEventId(zone:Int, eventId:UInt64?) {
     configuration!.setUInt(address: addressCloseEventId0 + baseAddress(zone: zone), value: eventId ?? 0)
+    makeLookups()
   }
 
   private func getCloseEventId(zone:Int) -> UInt64? {
@@ -809,34 +833,21 @@ public class OpenLCBDigitraxDS64Node : OpenLCBNodeVirtual, LocoNetDelegate {
   
   public override func openLCBMessageReceived(message: OpenLCBMessage) {
     
-    super.openLCBMessageReceived(message: message)
-    
-    locoNet?.openLCBMessageReceived(message: message)
-    
     switch message.messageTypeIndicator {
       
     case .producerConsumerEventReport:
       
-      if let eventId = message.eventId {
-        
-        for zone in 0 ... 3 {
-          
-          if getThrowEventId(zone: zone) == eventId {
-            switchQueue.append((zone, .thrown, getCommandedThrownEventId(zone: zone)))
-          }
-          
-          if getCloseEventId(zone: zone) == eventId {
-            switchQueue.append((zone, .closed, getCommandedClosedEventId(zone: zone)))
-          }
-
-        }
-        
+      if message.isLocoNetEvent {
+        locoNet?.openLCBMessageReceived(message: message)
+      }
+      else if let eventId = message.eventId, let turnout = turnoutLookup[eventId] {
+        switchQueue.append((turnout.turnoutNumber, turnout.state, turnout.ackEventId))
         processSwitchQueue()
-        
       }
       
     default:
-      break
+      locoNet?.openLCBMessageReceived(message: message)
+      super.openLCBMessageReceived(message: message)
     }
     
   }
