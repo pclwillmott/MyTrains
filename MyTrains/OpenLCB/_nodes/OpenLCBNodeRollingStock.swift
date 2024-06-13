@@ -284,6 +284,8 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
   
   internal var moveTimer : Timer?
   
+  internal var _locoNetGateway : LocoNetGateway?
+  
   private enum HeartbeatMode {
     case stopped
     case waitingForCommand
@@ -327,6 +329,15 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     }
   }
   
+  public var locoNetGateway : LocoNetGateway? {
+    let id = locoNetGatewayNodeId
+    if let gateway = _locoNetGateway, gateway.nodeId == id {
+      return gateway
+    }
+    _locoNetGateway = appNode?.locoNetGateways[id]
+    return _locoNetGateway
+  }
+
   public let heartbeatPeriod : UInt8 = 10
   
   public let heartbeatDeadline : UInt8 = 3

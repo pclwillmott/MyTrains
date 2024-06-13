@@ -438,9 +438,6 @@
     "A link item is primarily used to connect switchboard panels. They may also be used to implement track layouts where one track goes over or under another track." : {
 
     },
-    "A reply from the LocoNet gateway was not received within the expected time period." : {
-
-    },
     "A right hand turnout is controlled with a single switch. Select the applicable turnout control method - manual, solenoid, or slow motion. The application requires this information for timing purposes. If the turnout is to be controlled by the application then the enter the applicable event ids for the throw and close actions. These events will be sent to the node controlling the switch when the application needs to change the selected route throgh the turnout. The thrown and closed events are sent by a node monitoring the current state of the turnout to tell the application that a throw or close action was successful. If no node is monitoring the state of the turnout then leave these events blank and the application will assume that all throw and close actions are always successful. " : {
 
     },
@@ -2184,11 +2181,41 @@
         }
       }
     },
+    "Digitrax DB150" : {
+
+    },
+    "Digitrax DCS50" : {
+
+    },
+    "Digitrax DCS51" : {
+
+    },
+    "Digitrax DCS52" : {
+
+    },
+    "Digitrax DCS100 or DCS200" : {
+
+    },
+    "Digitrax DCS210" : {
+
+    },
+    "Digitrax DCS210+" : {
+
+    },
+    "Digitrax DCS240" : {
+
+    },
+    "Digitrax DCS240+" : {
+
+    },
     "Digitrax DS64" : {
       "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name"
     },
     "Digitrax DS64 Node" : {
       "comment" : "Used to describe an OpenLCB virtual node"
+    },
+    "Digitrax DT200" : {
+
     },
     "Dimmer" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -3789,15 +3816,6 @@
     "LocoNet Gateway" : {
       "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name"
     },
-    "LocoNet gateway has rejected a datagram with the following error:" : {
-
-    },
-    "LocoNet Gateway Protocol" : {
-
-    },
-    "LocoNet Message" : {
-
-    },
     "LocoNet Monitor" : {
       "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name",
       "localizations" : {
@@ -4396,9 +4414,6 @@
       }
     },
     "Node Is A DCC Programming Track" : {
-
-    },
-    "Node Is A LocoNet Gateway" : {
 
     },
     "Node Is A MyTrains Layout" : {
@@ -5430,21 +5445,6 @@
         }
       }
     },
-    "Send LocoNet Message Complete Command" : {
-
-    },
-    "Send LocoNet Message Final Part Command" : {
-
-    },
-    "Send LocoNet Message First Part Command" : {
-
-    },
-    "Send LocoNet Message Reply" : {
-
-    },
-    "Send LocoNet Message Reply Failure" : {
-
-    },
     "Sending unadvertised event" : {
 
     },
@@ -5825,6 +5825,9 @@
           }
         }
       }
+    },
+    "Stand Alone LocoNet" : {
+
     },
     "Steam" : {
       "comment" : "Used to indicate that a locomotive is steam powered",
@@ -6470,9 +6473,6 @@
     },
     "Time between the sensor triggering and the sensor reporting such trigger." : {
       "comment" : "This is used for a tooltip."
-    },
-    "Timeout" : {
-
     },
     "Timeout - write failed" : {
       "localizations" : {

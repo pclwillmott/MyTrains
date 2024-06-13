@@ -43,7 +43,7 @@ private enum DS64OptionSwitches : Int, CaseIterable {
   
 }
 
-public class OpenLCBDigitraxDS64Node : OpenLCBNodeVirtual, LocoNetDelegate {
+public class OpenLCBDigitraxDS64Node : OpenLCBNodeVirtual, LocoNetGatewayDelegate {
   
   // MARK: Constructors
   
@@ -187,8 +187,6 @@ public class OpenLCBDigitraxDS64Node : OpenLCBNodeVirtual, LocoNetDelegate {
   
   deinit {
     
-    locoNet = nil
-    
     timeoutTimer?.invalidate()
     timeoutTimer = nil
     
@@ -237,8 +235,6 @@ public class OpenLCBDigitraxDS64Node : OpenLCBNodeVirtual, LocoNetDelegate {
   internal var zoneBlockSize = 67
 
   internal var numberOfChannels : Int = 4
-  
-  private var locoNet : LocoNet?
   
   private var configState : ConfigState = .idle
   
@@ -379,6 +375,8 @@ public class OpenLCBDigitraxDS64Node : OpenLCBNodeVirtual, LocoNetDelegate {
       configuration!.setUInt(address: addressSensorMessagesOnly, value: UInt8(value ? 1 : 0))
     }
   }
+  
+  private var _locoNetGateway : LocoNetGateway?
 
   // MARK: Public Properties
   
@@ -390,6 +388,16 @@ public class OpenLCBDigitraxDS64Node : OpenLCBNodeVirtual, LocoNetDelegate {
       configuration!.setUInt(address: addressLocoNetGateway, value: value)
     }
   }
+  
+  public var locoNetGateway : LocoNetGateway? {
+    let id = locoNetGatewayNodeId
+    if let gateway = _locoNetGateway, gateway.nodeId == id {
+      return gateway
+    }
+    _locoNetGateway = appNode?.locoNetGateways[id]
+    return _locoNetGateway
+  }
+
 
   // MARK: Private Methods
   
@@ -570,10 +578,10 @@ public class OpenLCBDigitraxDS64Node : OpenLCBNodeVirtual, LocoNetDelegate {
         state = isMessageTypeGeneralSensor ? .thrown : .closed
       }
       
-      if let state, let locoNet {
+      if let state, let locoNetGateway {
         configState = .settingOptionSwitches
         startTimeoutTimer(timeInterval: 1.0)
-        locoNet.setBrdOpSwState(locoNetDeviceId: .DS64, boardId: boardId, switchNumber: opSw.rawValue, state: state)
+        locoNetGateway.setBrdOpSwState(locoNetDeviceId: .DS64, boardId: boardId, switchNumber: opSw.rawValue, state: state)
       }
     }
     else {
@@ -618,9 +626,7 @@ public class OpenLCBDigitraxDS64Node : OpenLCBNodeVirtual, LocoNetDelegate {
       return
     }
     
-    locoNet = LocoNet(gatewayNodeId: locoNetGatewayNodeId, node: self)
-    locoNet?.start()
-    locoNet?.delegate = self
+    locoNetGateway?.addObserver(observer: self)
     
   }
   
@@ -714,7 +720,7 @@ public class OpenLCBDigitraxDS64Node : OpenLCBNodeVirtual, LocoNetDelegate {
     
     configState = .setSwitchState
     
-    locoNet?.setSwWithAck(switchNumber: getSwitchAddress(zone: item.switchNumber), state: item.state)
+    locoNetGateway?.setSwWithAck(switchNumber: getSwitchAddress(zone: item.switchNumber), state: item.state)
 
   }
   
@@ -752,7 +758,7 @@ public class OpenLCBDigitraxDS64Node : OpenLCBNodeVirtual, LocoNetDelegate {
           optionSwitchesToDo.append(opsw)
         }
         startTimeoutTimer(timeInterval: 1.0)
-        locoNet?.getBrdOpSwState(locoNetDeviceId: .DS64, boardId: boardId, switchNumber: optionSwitchesToDo.first!.rawValue)
+        locoNetGateway?.getBrdOpSwState(locoNetDeviceId: .DS64, boardId: boardId, switchNumber: optionSwitchesToDo.first!.rawValue)
       }
     case addressWriteChanges:
       if configuration!.getUInt8(address: addressWriteChanges) != 0 {
@@ -777,7 +783,7 @@ public class OpenLCBDigitraxDS64Node : OpenLCBNodeVirtual, LocoNetDelegate {
         configState = .settingSwitchAddresses
         switchToWrite = 0
         enterSwitchAddressMode()
-        locoNet?.setSwWithAck(switchNumber: getSwitchAddress(zone: switchToWrite), state: .closed)
+        locoNetGateway?.setSwWithAck(switchNumber: getSwitchAddress(zone: switchToWrite), state: .closed)
       }
 
     case addressResetToDefaults:
@@ -793,7 +799,7 @@ public class OpenLCBDigitraxDS64Node : OpenLCBNodeVirtual, LocoNetDelegate {
   
   public func setBoardId() {
 
-    guard let locoNet else {
+    guard let locoNetGateway else {
       return
     }
     
@@ -810,7 +816,7 @@ public class OpenLCBDigitraxDS64Node : OpenLCBNodeVirtual, LocoNetDelegate {
       
       while true {
         
-        locoNet.setSw(switchNumber: boardId, state: .closed)
+        locoNetGateway.setSw(switchNumber: boardId, state: .closed)
         
         let alertCheck = NSAlert()
         alertCheck.messageText = "Has the set Board ID command been accepted?"
@@ -837,22 +843,18 @@ public class OpenLCBDigitraxDS64Node : OpenLCBNodeVirtual, LocoNetDelegate {
       
     case .producerConsumerEventReport:
       
-      if message.isLocoNetEvent {
-        locoNet?.openLCBMessageReceived(message: message)
-      }
-      else if let eventId = message.eventId, let turnout = turnoutLookup[eventId] {
+      if let eventId = message.eventId, let turnout = turnoutLookup[eventId] {
         switchQueue.append((turnout.turnoutNumber, turnout.state, turnout.ackEventId))
         processSwitchQueue()
       }
       
     default:
-      locoNet?.openLCBMessageReceived(message: message)
       super.openLCBMessageReceived(message: message)
     }
     
   }
   
-  // MARK: LocoNetDelegate Methods
+  // MARK: LocoNetGatewayDelegate Methods
   
   @objc public func locoNetMessageReceived(message:LocoNetMessage) {
     
@@ -917,7 +919,7 @@ public class OpenLCBDigitraxDS64Node : OpenLCBNodeVirtual, LocoNetDelegate {
           configState = .idle
         }
         else {
-          locoNet?.setSwWithAck(switchNumber: getSwitchAddress(zone: switchToWrite), state: .closed)
+          locoNetGateway?.setSwWithAck(switchNumber: getSwitchAddress(zone: switchToWrite), state: .closed)
         }
         
       case .setSwitchState:
@@ -1000,7 +1002,7 @@ public class OpenLCBDigitraxDS64Node : OpenLCBNodeVirtual, LocoNetDelegate {
         if let opSw = optionSwitchesToDo.first {
           configState = .gettingOptionSwitches
           startTimeoutTimer(timeInterval: 1.0)
-          locoNet?.getBrdOpSwState(locoNetDeviceId: .DS64, boardId: boardId, switchNumber: opSw.rawValue)
+          locoNetGateway?.getBrdOpSwState(locoNetDeviceId: .DS64, boardId: boardId, switchNumber: opSw.rawValue)
         }
         else {
           configuration!.save()

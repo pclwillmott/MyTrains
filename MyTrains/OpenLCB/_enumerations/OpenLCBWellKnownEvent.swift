@@ -29,7 +29,6 @@ public enum OpenLCBWellKnownEvent : UInt64 {
   case duplicateNodeIdDetected             = 0x0101000000000201
   case nodeIsATrain                        = 0x0101000000000303
   case nodeIsATractionProxy                = 0x0101000000000304
-  case nodeIsALocoNetGateway               = 0x0101000000000401
   case firmwareCorrupted                   = 0x0101000000000601
   case firmwareUpgradeRequestedBySwitch    = 0x0101000000000602
   case defaultFastClock                    = 0x0101000001000000
@@ -37,16 +36,7 @@ public enum OpenLCBWellKnownEvent : UInt64 {
   case alternateClock1                     = 0x0101000001020000
   case alternateClock2                     = 0x0101000001030000
   case locationServicesReport              = 0x0102000000000000
-  case locoNetMessage                      = 0x0181000000000000
   case nodeIsAMyTrainsLayout               = 0x050101017b00ffff
-//  case myTrainsLayoutActivated             = 0x050101017b00fffe
-//  case myTrainsLayoutDeactivated           = 0x050101017b00fffd
-//  case myTrainsLayoutDeleted               = 0x050101017b00fffc
-//  case identifyMyTrainsLayouts             = 0x050101017b00fffb
-//  case identifyMyTrainsSwitchboardPanels   = 0x050101017b00fffa
-//  case identifyMyTrainsSwitchboardItems    = 0x050101017b00fff9
-//  case nodeIsASwitchboardPanel             = 0x050101017b00fff8
-//  case nodeIsASwitchboardItem              = 0x050101017b00fff7
   case trainSearchEvent                    = 0x090099ff00000000
   case nodeIsADCCProgrammingTrack          = 0x090099feffff0002
   case trainSearchDCCShortAddress          = 0x090099ffffffff08
@@ -90,8 +80,6 @@ public enum OpenLCBWellKnownEvent : UInt64 {
     .alternateClock1 : String(localized: "Alternate Clock 1"),
     .alternateClock2 : String(localized: "Alternate Clock 2"),
     .locationServicesReport : String(localized: "Location Services Report"),
-    .locoNetMessage : String(localized: "LocoNet Message"),
-    .nodeIsALocoNetGateway : String(localized: "Node Is A LocoNet Gateway"),
     .trainSearchEvent : String(localized: "Train Search"),
     .nodeIsAMyTrainsLayout : String(localized: "Node Is A MyTrains Layout"),
     .nodeIsADCCProgrammingTrack : String(localized: "Node Is A DCC Programming Track"),

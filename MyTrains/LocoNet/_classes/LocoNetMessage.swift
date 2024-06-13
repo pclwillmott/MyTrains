@@ -307,30 +307,6 @@ public class LocoNetMessage : NSObject {
     
   }
   
-  public var datagramFirstPart : [UInt8] {
-    
-    var data = message.count <= 70 ? OpenLCBDatagramType.sendLocoNetMessageCompleteCommand.bigEndianData : OpenLCBDatagramType.sendLocoNetMessageFirstPartCommand.bigEndianData
-    
-    data.append(contentsOf: [UInt8](message.prefix(70)))
-    
-    return data
-    
-  }
-  
-  public var datagramFinalPart : [UInt8]? {
-    
-    guard message.count > 70 else {
-      return nil
-    }
-    
-    var data = OpenLCBDatagramType.sendLocoNetMessageFinalPartCommand.bigEndianData
-    
-    data.append(contentsOf: [UInt8](message.suffix(message.count - 70)))
-    
-    return data
-    
-  }
-  
   public var messageType : LocoNetMessageType {
     
     get {
@@ -341,6 +317,136 @@ public class LocoNetMessage : NSObject {
         
         switch message[0] {
         
+          // MARK: 0xB2
+            
+          case 0xb2: // OPC_INPUT_REP
+            
+            if (message[2] & 0b11000000) == 0b01000000 {
+              _messageType = .sensRepGenIn
+            }
+            
+          // MARK: 0xB4
+            
+          case 0xb4: // OPC_LONG_ACK
+            
+            switch message[1] {
+            case 0x30:
+              switch message[2] {
+              case 0x00:
+                _messageType = .setSwRejected
+              case 0x7f:
+                _messageType = .setSwAccepted
+              default:
+                break
+              }
+            case 0x38:
+              switch message[2] {
+              case 0x00:
+                _messageType = .invalidUnlinkP1
+              default:
+                break
+              }
+            case 0x39:
+              switch message[2] {
+              case 0x00:
+                _messageType = .invalidLinkP1
+              default:
+                break
+              }
+            case 0x3a:
+              switch message[2] {
+              case 0x00:
+                _messageType = .illegalMoveP1
+              default:
+                break
+              }
+            case 0x3b:
+              switch message[2] {
+              case 0x00:
+                _messageType = .slotNotImplemented
+              default:
+                break
+              }
+            case 0x3c:
+              _messageType = .swState
+            case 0x3d:
+              switch message[2] {
+              case 0x00:
+                _messageType = .setSwWithAckRejected
+              case 0x7f:
+                _messageType = .setSwWithAckAccepted
+              default:
+                break
+              }
+            case 0x3e:
+              switch message[2] {
+              case 0x00:
+                _messageType = .noFreeSlotsP2
+              default:
+                break
+              }
+            case 0x3f:
+              switch message[2] {
+              case 0x00:
+                _messageType = .noFreeSlotsP1
+              default:
+                break
+              }
+            case 0x50:
+              if (message[2] & 0b01011111) == 0b00010000 {
+                _messageType = .brdOpSwState
+              }
+              else if message[2] == 0x7f {
+                _messageType = .setBrdOpSwOK
+              }
+            case 0x54:
+              switch message[2] {
+              case 0x00:
+                _messageType = .d4Error
+              default:
+                break
+              }
+            case 0x55:
+              _messageType = .zapped
+            case 0x6d:
+              switch message[2] {
+                case 0x00:
+                _messageType = .immPacketBufferFull
+                case 0x7f:
+                _messageType = .immPacketOK
+              default:
+                _messageType = .s7CVState
+                break
+              }
+            case 0x6e:
+              switch message[2] {
+              case 0x00:
+                _messageType = .routesDisabled
+              case 0x7f:
+                _messageType = .setSlotDataOKP2
+              default:
+                _messageType = .s7CVState
+                break
+              }
+            case 0x6f:
+              switch message[2] {
+              case 0x00:
+                _messageType = .programmerBusy
+              case 0x01:
+                _messageType = .progCmdAccepted
+              case 0x40:
+                _messageType = .progCmdAcceptedBlind
+              case 0x7f:
+                _messageType = .setSlotDataOKP1
+              default:
+                break
+              }
+            case 0x7e:
+              _messageType = .immPacketLMOK
+           default:
+              break
+            }
+            
         // MARK: 0x81
           
         case 0x81: // OPC_BUSY
@@ -428,136 +534,6 @@ public class LocoNetMessage : NSObject {
             _messageType = .sensRepTurnOut
           }
 
-        // MARK: 0xB2
-          
-        case 0xb2: // OPC_INPUT_REP
-          
-          if (message[2] & 0b11000000) == 0b01000000 {
-            _messageType = .sensRepGenIn
-          }
-          
-        // MARK: 0xB4
-          
-        case 0xb4: // OPC_LONG_ACK
-          
-          switch message[1] {
-          case 0x30:
-            switch message[2] {
-            case 0x00:
-              _messageType = .setSwRejected
-            case 0x7f:
-              _messageType = .setSwAccepted
-            default:
-              break
-            }
-          case 0x38:
-            switch message[2] {
-            case 0x00:
-              _messageType = .invalidUnlinkP1
-            default:
-              break
-            }
-          case 0x39:
-            switch message[2] {
-            case 0x00:
-              _messageType = .invalidLinkP1
-            default:
-              break
-            }
-          case 0x3a:
-            switch message[2] {
-            case 0x00:
-              _messageType = .illegalMoveP1
-            default:
-              break
-            }
-          case 0x3b:
-            switch message[2] {
-            case 0x00:
-              _messageType = .slotNotImplemented
-            default:
-              break
-            }
-          case 0x3c:
-            _messageType = .swState
-          case 0x3d:
-            switch message[2] {
-            case 0x00:
-              _messageType = .setSwWithAckRejected
-            case 0x7f:
-              _messageType = .setSwWithAckAccepted
-            default:
-              break
-            }
-          case 0x3e:
-            switch message[2] {
-            case 0x00:
-              _messageType = .noFreeSlotsP2
-            default:
-              break
-            }
-          case 0x3f:
-            switch message[2] {
-            case 0x00:
-              _messageType = .noFreeSlotsP1
-            default:
-              break
-            }
-          case 0x50:
-            if (message[2] & 0b01011111) == 0b00010000 {
-              _messageType = .brdOpSwState
-            }
-            else if message[2] == 0x7f {
-              _messageType = .setBrdOpSwOK
-            }
-          case 0x54:
-            switch message[2] {
-            case 0x00:
-              _messageType = .d4Error
-            default:
-              break
-            }
-          case 0x55:
-            _messageType = .zapped
-          case 0x6d:
-            switch message[2] {
-              case 0x00:
-              _messageType = .immPacketBufferFull
-              case 0x7f:
-              _messageType = .immPacketOK
-            default:
-              _messageType = .s7CVState
-              break
-            }
-          case 0x6e:
-            switch message[2] {
-            case 0x00:
-              _messageType = .routesDisabled
-            case 0x7f:
-              _messageType = .setSlotDataOKP2
-            default:
-              _messageType = .s7CVState
-              break
-            }
-          case 0x6f:
-            switch message[2] {
-            case 0x00:
-              _messageType = .programmerBusy
-            case 0x01:
-              _messageType = .progCmdAccepted
-            case 0x40:
-              _messageType = .progCmdAcceptedBlind
-            case 0x7f:
-              _messageType = .setSlotDataOKP1
-            default:
-              break
-            }
-          case 0x7e:
-            _messageType = .immPacketLMOK
-         default:
-            break
-          }
-          
         // MARK: 0xB5
           
         case 0xb5: // OPC_SLOT_STAT1

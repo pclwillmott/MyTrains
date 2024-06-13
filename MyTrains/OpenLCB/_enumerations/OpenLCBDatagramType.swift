@@ -75,11 +75,6 @@ public enum OpenLCBDatagramType : UInt16 {
   case updateCompleteCommand                            = 0x20a8
   case resetRebootCommand                               = 0x20a9
   case reinitializeFactoryResetCommand                  = 0x20aa
-  case sendLocoNetMessageCompleteCommand                = 0x4000 // Unofficial
-  case sendLocoNetMessageFirstPartCommand               = 0x4001 // Unofficial
-  case sendLocoNetMessageFinalPartCommand               = 0x4002 // Unofficial
-  case sendLocoNetMessageReply                          = 0x4010 // Unofficial
-  case sendLocoNetMessageReplyFailure                   = 0x4018 // Unofficial
 
   // MARK: Public Properties
   
@@ -160,11 +155,6 @@ public enum OpenLCBDatagramType : UInt16 {
     .updateCompleteCommand : String(localized: "Update Complete Command"),
     .resetRebootCommand : String(localized: "Reset Reboot Command"),
     .reinitializeFactoryResetCommand : String(localized: "Reinitialize/Factory Reset Command"),
-    .sendLocoNetMessageCompleteCommand : String(localized: "Send LocoNet Message Complete Command"),
-    .sendLocoNetMessageFirstPartCommand : String(localized: "Send LocoNet Message First Part Command"),
-    .sendLocoNetMessageFinalPartCommand : String(localized: "Send LocoNet Message Final Part Command"),
-    .sendLocoNetMessageReply : String(localized: "Send LocoNet Message Reply"),
-    .sendLocoNetMessageReplyFailure : String(localized: "Send LocoNet Message Reply Failure"),
   ]
   
 }

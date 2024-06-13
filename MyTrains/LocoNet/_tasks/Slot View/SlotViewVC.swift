@@ -150,7 +150,7 @@ class SlotViewVC : MyTrainsViewController, OpenLCBLocoNetMonitorDelegate {
         insertSlot(slot: slot)
       }
       
-      if state == .readAll, let locoNet = monitorNode?.locoNet {
+      if state == .readAll, let locoNet = monitorNode?.locoNetGateway {
         
         slotNumber += 1
         if slotNumber == 120 {
@@ -160,7 +160,7 @@ class SlotViewVC : MyTrainsViewController, OpenLCBLocoNetMonitorDelegate {
         
         startTimer(timeInterval: 1.0)
         
-        if locoNet.implementsProtocol2 {
+        if locoNet.commandStationType.implementsProtocol2 {
           locoNet.getLocoSlotDataP2(bankNumber: bankNumber, slotNumber: slotNumber)
         }
         else {
@@ -177,11 +177,11 @@ class SlotViewVC : MyTrainsViewController, OpenLCBLocoNetMonitorDelegate {
       
     default:
       
-      if state == .idle && message.isSlotUpdate, let number = message.slotNumber, let locoNet = monitorNode?.locoNet {
+      if state == .idle && message.isSlotUpdate, let number = message.slotNumber, let locoNet = monitorNode?.locoNetGateway {
         
         let bank : UInt8 = message.slotBank ?? 0x00
         
-        if locoNet.implementsProtocol2 {
+        if locoNet.commandStationType.implementsProtocol2 {
           locoNet.getLocoSlotDataP2(bankNumber: bank, slotNumber: number)
         }
         else {
@@ -218,10 +218,10 @@ class SlotViewVC : MyTrainsViewController, OpenLCBLocoNetMonitorDelegate {
     
     let index = slotTableView.selectedRow
     
-    if index != -1, let locoNet = monitorNode?.locoNet {
+    if index != -1, let locoNet = monitorNode?.locoNetGateway {
       currentIndex = index
       let slot = slots[index]
-      if locoNet.implementsProtocol2 {
+      if locoNet.commandStationType.implementsProtocol2 {
         locoNet.getLocoSlotDataP2(bankNumber: slot.slotBank, slotNumber: slot.slotNumber)
       }
       else {
@@ -235,12 +235,12 @@ class SlotViewVC : MyTrainsViewController, OpenLCBLocoNetMonitorDelegate {
   @IBOutlet weak var btnReadAllSlots: NSButton!
   
   @IBAction func btnReadAllSlotsAction(_ sender: NSButton) {
-    if let locoNet = monitorNode?.locoNet {
+    if let locoNet = monitorNode?.locoNetGateway {
       bankNumber = 0
       slotNumber = 1
       state = .readAll
       startTimer(timeInterval: 1.0)
-      if locoNet.implementsProtocol2 {
+      if locoNet.commandStationType.implementsProtocol2 {
         locoNet.getLocoSlotDataP2(bankNumber: bankNumber, slotNumber: slotNumber)
       }
       else {
@@ -255,11 +255,11 @@ class SlotViewVC : MyTrainsViewController, OpenLCBLocoNetMonitorDelegate {
     
     let index = slotTableView.selectedRow
     
-    if index != -1, let locoNet = monitorNode?.locoNet {
+    if index != -1, let locoNet = monitorNode?.locoNetGateway {
       currentIndex = index
       let slot = slots[index]
       let stat1 = (slot.slotStatus1 & 0b11001111) | 0b00010000
-      if locoNet.implementsProtocol2 {
+      if locoNet.commandStationType.implementsProtocol2 {
         locoNet.locoSpdDirP2(slotNumber: slot.slotNumber, slotPage: slot.slotBank, speed: 0, direction: slot.direction, throttleID: slot.throttleID)
         locoNet.setLocoSlotStat1P2(slotPage: slot.slotBank, slotNumber: slot.slotNumber, stat1: stat1)
         locoNet.getLocoSlotDataP2(bankNumber: slot.slotBank, slotNumber: slot.slotNumber)

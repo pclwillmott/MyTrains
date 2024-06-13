@@ -90,7 +90,7 @@ class MonitorVC: MyTrainsViewController, OpenLCBLocoNetMonitorDelegate, MyTrains
   
   private var updateLock : NSLock = NSLock()
   
-  private var gatewayDS = ComboBoxSimpleDS()
+  private var gatewayDS = ComboBoxNodeDS()
   
   private var lineBuffer : [String] = []
   

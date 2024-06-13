@@ -30,38 +30,6 @@ extension OpenLCBNodeVirtual {
     sendMessage(message: message)
   }
 
-  public func sendLocoNetMessageReceived(locoNetMessage:[UInt8]) {
-    var data = [UInt8](OpenLCBWellKnownEvent.locoNetMessage.rawValue.bigEndianData.prefix(2))
-    data.append(contentsOf: locoNetMessage)
-    data.append(contentsOf: [UInt8](repeating: 0xff, count: max(0, 8 - data.count)))
-    let eventId = UInt64(bigEndianData: [UInt8](data.prefix(8)))!
-    data.removeFirst(8)
-    sendEvent(eventId: eventId, payload: data)
-  }
-
-  public func sendLocoNetMessage(destinationNodeId:UInt64, locoNetMessage:LocoNetMessage, isFinalPart:Bool = false) {
-    let message = OpenLCBMessage(messageTypeIndicator: .datagram)
-    message.destinationNodeId = destinationNodeId
-    message.payload = isFinalPart ? locoNetMessage.datagramFinalPart! : locoNetMessage.datagramFirstPart
-    sendMessage(message: message)
-  }
-
-  public func sendLocoNetMessageReply(destinationNodeId:UInt64) {
-    let message = OpenLCBMessage(messageTypeIndicator: .datagram)
-    message.destinationNodeId = destinationNodeId
-    message.payload = OpenLCBDatagramType.sendLocoNetMessageReply.bigEndianData
-    sendMessage(message: message)
-  }
-
-  public func sendLocoNetMessageReplyFailure(destinationNodeId:UInt64, errorCode:OpenLCBErrorCode) {
-    let message = OpenLCBMessage(messageTypeIndicator: .datagram)
-    message.destinationNodeId = destinationNodeId
-    var data = OpenLCBDatagramType.sendLocoNetMessageReply.bigEndianData
-    data.append(contentsOf: errorCode.bigEndianData)
-    message.payload = data
-    sendMessage(message: message)
-  }
-
   public func sendLocationServiceEvent(eventId:UInt64, trainNodeId:UInt64, entryExit:OpenLCBLocationServiceFlagEntryExit, motionRelative:OpenLCBLocationServiceFlagDirectionRelative, motionAbsolute:OpenLCBLocationServiceFlagDirectionAbsolute, contentFormat:OpenLCBLocationServiceFlagContentFormat, content: [OpenLCBLocationServicesContentBlock]? ) {
     
     var payload : [UInt8] = []

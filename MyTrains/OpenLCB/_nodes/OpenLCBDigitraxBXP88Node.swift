@@ -46,7 +46,7 @@ private enum BXP88OptionSwitches : UInt16 {
 
 }
 
-public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
+public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetGatewayDelegate {
   
   // MARK: Constructors
   
@@ -168,8 +168,6 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
   
   deinit {
     
-    locoNet = nil
-    
     trainNodeIdLookup.removeAll()
     
     eventQueue.removeAll()
@@ -216,8 +214,6 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
   internal var zoneBlockSize = 42
 
   internal var numberOfChannels : Int = 8
-  
-  private var locoNet : LocoNet?
   
   private var configState : ConfigState = .idle
   
@@ -355,6 +351,8 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
   
   private var optionSwitchesToDo : [BXP88OptionSwitches] = []
   
+  private var _locoNetGateway : LocoNetGateway?
+  
   // MARK: Public Properties
   
   public let productCode : DigitraxProductCode = .BXP88
@@ -366,6 +364,15 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
     set(value) {
       configuration!.setUInt(address: addressLocoNetGateway, value: value)
     }
+  }
+  
+  public var locoNetGateway : LocoNetGateway? {
+    let id = locoNetGatewayNodeId
+    if let gateway = _locoNetGateway, gateway.nodeId == id {
+      return gateway
+    }
+    _locoNetGateway = appNode?.locoNetGateways[id]
+    return _locoNetGateway
   }
 
   // MARK: Private Methods
@@ -450,10 +457,10 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
       default:
         break
       }
-      if let state, let locoNet {
+      if let state, let locoNetGateway {
         configState = .settingOptionSwitches
         startTimeoutTimer(timeInterval: 1.0)
-        locoNet.setSwWithAck(switchNumber: opSw.rawValue, state: state)
+        locoNetGateway.setSwWithAck(switchNumber: opSw.rawValue, state: state)
       }
     }
     else {
@@ -535,9 +542,7 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
       return
     }
     
-    locoNet = LocoNet(gatewayNodeId: locoNetGatewayNodeId, node: self)
-    locoNet?.start()
-    locoNet?.delegate = self
+    locoNetGateway?.addObserver(observer: self)
     
   }
   
@@ -618,7 +623,7 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
         configuration!.save()
         configState = .waitingForDeviceData
         startTimeoutTimer(timeInterval: 3.0)
-        locoNet?.iplDiscover(productCode: productCode)
+        locoNetGateway?.iplDiscover(productCode: productCode)
       }
     case addressWriteChanges:
       if configuration!.getUInt8(address: addressWriteChanges) != 0 {
@@ -647,7 +652,7 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
   
   public func setBoardId() {
 
-    guard let locoNet else {
+    guard let locoNetGateway else {
       return
     }
     
@@ -664,7 +669,7 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
       
       while true {
         
-        locoNet.setSw(switchNumber: boardId, state: .closed)
+        locoNetGateway.setSw(switchNumber: boardId, state: .closed)
         
         let alertCheck = NSAlert()
         alertCheck.messageText = "Has the set Board ID command been accepted?"
@@ -683,15 +688,6 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
 
   }
 
-  // MARK: OpenLCBNetworkLayerDelegate Methods
-  
-  public override func openLCBMessageReceived(message: OpenLCBMessage) {
-    
-    super.openLCBMessageReceived(message: message)
-    locoNet?.openLCBMessageReceived(message: message)
-    
-  }
-  
   // MARK: LocoNetDelegate Methods
   
   @objc public func locoNetMessageReceived(message:LocoNetMessage) {
@@ -781,7 +777,7 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
         configState = .gettingOptionSwitches
         optionSwitchesToDo = allDataOptionSwitches
         startTimeoutTimer(timeInterval: 1.0)
-        locoNet?.getSwState(switchNumber: optionSwitchesToDo.first!.rawValue)
+        locoNetGateway?.getSwState(switchNumber: optionSwitchesToDo.first!.rawValue)
       }
       
     case .setSwWithAckAccepted:
@@ -866,7 +862,7 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetDelegate {
         optionSwitchesToDo.removeFirst()
         if let opSw = optionSwitchesToDo.first {
           startTimeoutTimer(timeInterval: 1.0)
-          locoNet?.getSwState(switchNumber: opSw.rawValue)
+          locoNetGateway?.getSwState(switchNumber: opSw.rawValue)
         }
         else {
           configState = .idle

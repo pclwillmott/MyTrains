@@ -142,9 +142,6 @@ public class OpenLCBMessage : NSObject {
       
       if messageTypeIndicator.isEventPresent, let eventPrefix = UInt16(bigEndianData: [payload[0], payload[1]]) {
         switch eventPrefix {
-        case 0x0181: // LocoNet
-          eventId = OpenLCBWellKnownEvent.locoNetMessage.rawValue
-          payload.removeFirst(2)
         default:
           if let id = UInt64(bigEndianData: [UInt8](payload.prefix(8))) {
             eventId = id
@@ -204,41 +201,6 @@ public class OpenLCBMessage : NSObject {
   public var eventId : UInt64?
   
   public var payload : [UInt8] = []
-  
-  public var isLocoNetEvent : Bool {
-    guard let eventId else {
-      return false
-    }
-    return messageTypeIndicator == .producerConsumerEventReport && ((eventId & 0xffff000000000000) == OpenLCBWellKnownEvent.locoNetMessage.rawValue)
-  }
-  
-  public var locoNetMessage : LocoNetMessage? {
-    
-    guard let eventId, isLocoNetEvent else {
-      return nil
-    }
-
-    var data : [UInt8] = []
-    
-    var firstByte = true
-    
-    for byte in eventId.bigEndianData {
-      if !firstByte && byte == 0xff {
-        break
-      }
-      firstByte = false
-      data.append(byte)
-    }
-    
-    data.append(contentsOf: payload)
-    
-    data.removeFirst(2)
-    
-    let message = LocoNetMessage(data: data)
-  
-    return message.isCheckSumOK ? message : nil
-    
-  }
   
   public var datagramType : OpenLCBDatagramType? {
     
@@ -667,16 +629,6 @@ public class OpenLCBMessage : NSObject {
           data.removeFirst(2)
           let nodeId = UInt64(bigEndianData: [UInt8](data.prefix(6)))!
           text += "\(nodeId.toHexDotFormat(numberOfBytes: 6))"
-        case .sendLocoNetMessageCompleteCommand:
-          break
-        case .sendLocoNetMessageFirstPartCommand:
-          break
-        case .sendLocoNetMessageFinalPartCommand:
-          break
-        case .sendLocoNetMessageReply:
-          break
-        case .sendLocoNetMessageReplyFailure:
-          break
         }
       }
       else {

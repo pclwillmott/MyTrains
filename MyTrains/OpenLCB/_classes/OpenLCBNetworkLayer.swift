@@ -527,7 +527,7 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
     case .throttleNode:
       node = OpenLCBThrottle(nodeId: newNodeId)
     case .locoNetGatewayNode:
-      node = OpenLCBLocoNetGateway(nodeId: newNodeId)
+      node = LocoNetGateway(nodeId: newNodeId)
     case .trainNode:
       node = OpenLCBNodeRollingStockLocoNet(nodeId: newNodeId)
     case .canGatewayNode:
@@ -750,7 +750,7 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
         reboot = true
         break
       }
-      else if let locoNetGateway = node as? OpenLCBLocoNetGateway, path == locoNetGateway.devicePath {
+      else if let locoNetGateway = node as? LocoNetGateway, path == locoNetGateway.devicePath {
         reboot = true
         break
       }

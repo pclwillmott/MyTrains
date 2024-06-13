@@ -15,7 +15,7 @@ private enum IOState {
   case writingCVWaitingForResult
 }
 
-public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
+public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetGatewayDelegate {
   
   // MARK: Constructors
   
@@ -41,6 +41,10 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
       eventsConsumed = []
       
       eventsProduced = [
+        OpenLCBWellKnownEvent.nodeIsADCCProgrammingTrack.rawValue
+      ]
+      
+      eventsToSendAtStartup = [
         OpenLCBWellKnownEvent.nodeIsADCCProgrammingTrack.rawValue
       ]
       
@@ -83,8 +87,6 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
     
     cvs = nil
     
-    locoNet = nil
-    
     timeoutTimer?.invalidate()
     timeoutTimer = nil
     
@@ -103,8 +105,6 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
   
   internal let numberOfCVs : Int = 1024
 
-  private var locoNet : LocoNet?
-  
   private var progMode : OpenLCBProgrammingMode = .defaultProgrammingMode
   
   private var ioState : IOState = .idle
@@ -122,6 +122,8 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
   private let ackTimeoutInterval : TimeInterval = 0.2
   
   private let resultTimeoutInterval : TimeInterval = 3.0
+  
+  private var _locoNetGateway : LocoNetGateway?
 
   // MARK: Public Properties
   
@@ -132,6 +134,15 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
     set(value) {
       configuration!.setUInt(address: addressLocoNetGateway, value: value)
     }
+  }
+
+  public var locoNetGateway : LocoNetGateway? {
+    let id = locoNetGatewayNodeId
+    if let gateway = _locoNetGateway, gateway.nodeId == id {
+      return gateway
+    }
+    _locoNetGateway = appNode?.locoNetGateways[id]
+    return _locoNetGateway
   }
 
   // MARK: Private Methods
@@ -189,7 +200,7 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
     
     startTimeoutTimer(interval: ackTimeoutInterval)
     
-    locoNet?.readCV(progMode: progMode.locoNetProgrammingMode(isProgrammingTrack: true), cv: self.ioAddress, address: 0)
+    locoNetGateway?.readCV(progMode: progMode.locoNetProgrammingMode(isProgrammingTrack: true), cv: self.ioAddress, address: 0)
     
   }
   
@@ -215,7 +226,7 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
     if memorySpace.isWithinSpace(address: Int(ioAddress), count: data.count) {
       memorySpace.setBlock(address: ioAddress, data: data, isInternal: true)
       startTimeoutTimer(interval: resultTimeoutInterval)
-      locoNet?.writeCV(progMode: progMode.locoNetProgrammingMode(isProgrammingTrack: true), cv: ioAddress, address: 0, value: cvs!.getUInt8(address: ioAddress)!)
+      locoNetGateway?.writeCV(progMode: progMode.locoNetProgrammingMode(isProgrammingTrack: true), cv: ioAddress, address: 0, value: cvs!.getUInt8(address: ioAddress)!)
     }
     else {
       sendWriteReplyFailure(destinationNodeId: sourceNodeId, addressSpace: memorySpace.space, startAddress: startAddress, errorCode: .permanentErrorAddressOutOfBounds)
@@ -229,15 +240,7 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
     
     super.resetReboot()
     
-    guard locoNetGatewayNodeId != 0 else {
-      return
-    }
-    
-    locoNet = LocoNet(gatewayNodeId: locoNetGatewayNodeId, node: self)
-    
-    locoNet?.start()
-    
-    locoNet?.delegate = self
+    locoNetGateway?.addObserver(observer: self)
     
   }
   
@@ -255,26 +258,7 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
 
   // MARK: Public Methods
   
-  // MARK: OpenLCBNetworkLayerDelegate Methods
-  
-  public override func openLCBMessageReceived(message: OpenLCBMessage) {
-    super.openLCBMessageReceived(message: message)
-    locoNet?.openLCBMessageReceived(message: message)
-  }
-  
-  // MARK: LocoNetDelegate Methods
-  
-  @objc public func locoNetInitializationComplete() {
-    
-    guard let locoNet else {
-      return
-    }
-    
-    if let commandStationType = locoNet.commandStationType, commandStationType.programmingTrackExists {
-      sendWellKnownEvent(eventId: .nodeIsADCCProgrammingTrack)
-    }
-    
-  }
+  // MARK: LocoNetGatewayDelegate Methods
   
   @objc public func locoNetMessageReceived(message:LocoNetMessage) {
     
@@ -298,10 +282,10 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
       switch ioState {
       case .readingCVWaitingForAck:
         startTimeoutTimer(interval: ackTimeoutInterval)
-        locoNet?.readCV(progMode: progMode.locoNetProgrammingMode(isProgrammingTrack: true), cv: self.ioAddress, address: 0)
+        locoNetGateway?.readCV(progMode: progMode.locoNetProgrammingMode(isProgrammingTrack: true), cv: self.ioAddress, address: 0)
       case .writingCVWaitingForAck:
         startTimeoutTimer(interval: ackTimeoutInterval)
-        locoNet?.writeCV(progMode: progMode.locoNetProgrammingMode(isProgrammingTrack: true), cv: ioAddress, address: 0, value: cvs!.getUInt8(address: ioAddress)!)
+        locoNetGateway?.writeCV(progMode: progMode.locoNetProgrammingMode(isProgrammingTrack: true), cv: ioAddress, address: 0, value: cvs!.getUInt8(address: ioAddress)!)
       default:
         break
       }
@@ -342,7 +326,7 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
             if ioAddress < (ioStartAddress & OpenLCBProgrammingMode.addressMask) + UInt32(ioCount) {
               ioState = .readingCVWaitingForAck
               startTimeoutTimer(interval: ackTimeoutInterval)
-              locoNet?.readCV(progMode: progMode.locoNetProgrammingMode(isProgrammingTrack: true), cv: self.ioAddress, address: 0)
+              locoNetGateway?.readCV(progMode: progMode.locoNetProgrammingMode(isProgrammingTrack: true), cv: self.ioAddress, address: 0)
             }
             else {
               if let data = cvs!.getBlock(address: Int(ioStartAddress & OpenLCBProgrammingMode.addressMask), count: Int(ioCount)) {
@@ -367,7 +351,7 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetDelegate {
             if ioAddress < (ioStartAddress & OpenLCBProgrammingMode.addressMask) + UInt32(ioCount) {
               ioState = .writingCVWaitingForAck
               startTimeoutTimer(interval: ackTimeoutInterval)
-              locoNet?.writeCV(progMode: progMode.locoNetProgrammingMode(isProgrammingTrack: true), cv: ioAddress, address: 0, value: cvs!.getUInt8(address: ioAddress)!)
+              locoNetGateway?.writeCV(progMode: progMode.locoNetProgrammingMode(isProgrammingTrack: true), cv: ioAddress, address: 0, value: cvs!.getUInt8(address: ioAddress)!)
             }
             else {
               ioState = .idle

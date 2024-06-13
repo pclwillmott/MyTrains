@@ -17,7 +17,7 @@ public class OpenLCBNode : NSObject {
     
     _supportedProtocols = [UInt8](repeating: 0, count: UNDERSTOOD_BYTES)
     
-    self.nodeId = nodeId
+    self._nodeId = nodeId
     
     super.init()
     
@@ -52,10 +52,18 @@ public class OpenLCBNode : NSObject {
   private var _acdiUserSpaceVersion         : UInt8 = 2
   private var _userNodeName                 = ""
   private var _userNodeDescription          = ""
+  @objc private var _nodeId : UInt64
            
   // MARK: Public Properties
   
-  public var nodeId : UInt64
+  @objc public var nodeId : UInt64 {
+    get {
+      return _nodeId
+    }
+    set(value) {
+      _nodeId = value
+    }
+  }
   
   public var acdiManufacturerSpaceVersion : UInt8 {
     get {
@@ -531,18 +539,6 @@ public class OpenLCBNode : NSObject {
     }
   }
 
-  public var isLocoNetGatewayProtocolSupported : Bool {
-    get {
-      let mask : UInt8 = 0x08
-      return (_supportedProtocols[2] & mask) == mask
-    }
-    set(value) {
-      let mask : UInt8 = 0x08
-      _supportedProtocols[2] &= ~mask
-      _supportedProtocols[2] |= value ? mask : 0x00
-    }
-  }
-
   public var supportedProtocolsInfo : [(protocol:String, supported:Bool)] {
 
     var result : [(protocol:String, supported:Bool)] = []
@@ -567,7 +563,6 @@ public class OpenLCBNode : NSObject {
     result.append((String(localized:"Function Configuration"), isFunctionConfigurationProtocolSupported))
     result.append((String(localized:"Firmware Upgrade Protocol"), isFirmwareUpgradeProtocolSupported))
     result.append((String(localized:"Firmware Upgrade Active"), isFirmwareUpgradeActive))
-    result.append((String(localized:"LocoNet Gateway Protocol"), isLocoNetGatewayProtocolSupported))
     
     return result
 

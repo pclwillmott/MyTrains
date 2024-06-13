@@ -11,26 +11,11 @@
 
 <segment space='253' origin='0'>
 <name>Configuration</name>
-<group>
-<name>Serial Port</name>
-<description>Configures the serial port</description>
+
 <string size='256'>
-<name>Port</name>
+<name>Serial Port</name>
   %%PORTS%%
 </string>
-</group>
-
-<group>
-  <name>Message Blocks</name>
-  <description>Configure which LocoNet messages are blocked from the OpenLCB Network</description>
-  <int size='1'>
-  <name>All Messages</name>
-  <map>
-    <relation><property>0</property><value>Do not block any LocoNet messages</value></relation>
-    <relation><property>1</property><value>Block all LocoNet messages</value></relation>
-  </map>
-  </int>
-</group>
 
 </segment>
 

@@ -7,22 +7,10 @@
 
 import Foundation
 
-public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDelegate {
+public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetGatewayDelegate {
   
   // MARK: Constructors
 
-  public override init(nodeId:UInt64) {
-    
-    super.init(nodeId: nodeId)
-    
-    eventRangesConsumed.append(EventRange(startId: OpenLCBWellKnownEvent.locoNetMessage.rawValue, mask: 0x0000ffffffffffff)!)
-    
-    #if DEBUG
-    addInit()
-    #endif
-    
-  }
-  
   deinit {
     
     refreshTimer?.invalidate()
@@ -33,8 +21,6 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
     
     cvTimeoutTimer?.invalidate()
     cvTimeoutTimer = nil
-    
-    locoNet = nil
     
     #if DEBUG
     addDeinit()
@@ -75,8 +61,6 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
   private var timeoutTimer : Timer?
   
   private var cvTimeoutTimer : Timer?
-  
-  private var locoNet : LocoNet?
   
   private var slotState : LocoNetSlotState {
     get {
@@ -185,7 +169,7 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
         
         startCVTimeoutTimer(interval: ackTimeoutInterval)
         
-        locoNet?.writeCV(progMode: progMode.locoNetProgrammingMode(isProgrammingTrack: false), cv: Int(ioAddress), address: Int(dccAddress), value: cvs!.getUInt8(address: ioAddress)!)
+        locoNetGateway?.writeCV(progMode: progMode.locoNetProgrammingMode(isProgrammingTrack: false), cv: Int(ioAddress), address: Int(dccAddress), value: cvs!.getUInt8(address: ioAddress)!)
         
       }
       else {
@@ -261,7 +245,7 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
       attachFailed()
     case .writeBack:
       slotState = .common
-      locoNet?.setLocoSlotStat1(slotPage: slotPage, slotNumber: slotNumber, stat1: stat1)
+      locoNetGateway?.setLocoSlotStat1(slotPage: slotPage, slotNumber: slotNumber, stat1: stat1)
       attachFailed()
     default:
       break
@@ -301,7 +285,7 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
 
   private func updateLocoState() {
     
-    guard let locoNet else {
+    guard let locoNetGateway else {
       return
     }
     
@@ -330,11 +314,11 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
     )
     
     if let last = lastLocomotiveState {
-      let temp = locoNet.updateLocomotiveState(address: dccAddress, slotNumber: slotNumber, slotPage: slotPage, previousState: last, nextState: nextState, throttleID: 0, forceRefresh: forceRefresh)
+      let temp = locoNetGateway.updateLocomotiveState(address: dccAddress, slotNumber: slotNumber, slotPage: slotPage, previousState: last, nextState: nextState, throttleID: 0, forceRefresh: forceRefresh)
       lastLocomotiveState = temp.state
     }
     else {
-      let temp = locoNet.setLocomotiveState(address: dccAddress, slotNumber: slotNumber, slotPage: slotPage, nextState: nextState, throttleID: 0)
+      let temp = locoNetGateway.setLocomotiveState(address: dccAddress, slotNumber: slotNumber, slotPage: slotPage, nextState: nextState, throttleID: 0)
       lastLocomotiveState = temp.state
     }
     
@@ -375,7 +359,7 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
 
     startTimeoutTimer()
     
-    locoNet?.getLocoSlot(forAddress: dccAddress)
+    locoNetGateway?.getLocoSlotData(forAddress: dccAddress)
     
   }
   
@@ -383,7 +367,7 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
     
     stopRefreshTimer()
     
-    guard let locoNet else {
+    guard let locoNetGateway else {
       return
     }
     
@@ -393,11 +377,11 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
     
     emergencyStop = false
     
-    locoNet.clearLocomotiveState(address: dccAddress, slotNumber: slotNumber, slotPage: slotPage, previousState: lastLocomotiveState!, throttleID: 0)
+    locoNetGateway.clearLocomotiveState(address: dccAddress, slotNumber: slotNumber, slotPage: slotPage, previousState: lastLocomotiveState!, throttleID: 0)
 
     slotState = .common
 
-    locoNet.setLocoSlotStat1(slotPage: slotPage, slotNumber: slotNumber, stat1: stat1)
+    locoNetGateway.setLocoSlotStat1(slotPage: slotPage, slotNumber: slotNumber, stat1: stat1)
 
     configState = .idle
     
@@ -437,27 +421,13 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
       return
     }
     
-    locoNet = LocoNet(gatewayNodeId: locoNetGatewayNodeId, node: self)
-    
-    locoNet?.delegate = self
-    
-    locoNet?.start()
+    locoNetGateway?.addObserver(observer: self)
 
   }
 
   // MARK: Public Methods
   
-  // MARK: OpenLCBNetworkLayerDelegate Methods
-   
-  public override func openLCBMessageReceived(message: OpenLCBMessage) {
-    super.openLCBMessageReceived(message: message)
-    locoNet?.openLCBMessageReceived(message: message)
-  }
-  
-  // MARK: LocoNetDelegate Methods
-  
-  @objc public func locoNetStartupComplete() {
-  }
+  // MARK: LocoNetGatewayDelegate Methods
   
   @objc public func locoNetMessageReceived(message:LocoNetMessage) {
     
@@ -468,10 +438,10 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
       switch ioState {
       case .readingCVWaitingForAck:
         startCVTimeoutTimer(interval: ackTimeoutInterval)
-        locoNet?.readCV(progMode: progMode.locoNetProgrammingMode(isProgrammingTrack: true), cv: self.ioAddress, address: 0)
+        locoNetGateway?.readCV(progMode: progMode.locoNetProgrammingMode(isProgrammingTrack: true), cv: self.ioAddress, address: 0)
       case .writingCVWaitingForAck:
         startCVTimeoutTimer(interval: ackTimeoutInterval)
-        locoNet?.writeCV(progMode: progMode.locoNetProgrammingMode(isProgrammingTrack: true), cv: ioAddress, address: 0, value: cvs!.getUInt8(address: ioAddress)!)
+        locoNetGateway?.writeCV(progMode: progMode.locoNetProgrammingMode(isProgrammingTrack: true), cv: ioAddress, address: 0, value: cvs!.getUInt8(address: ioAddress)!)
       default:
         break
       }
@@ -502,7 +472,7 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
         if ioAddress < Int(ioStartAddress & OpenLCBProgrammingMode.addressMask) + ioCount {
           ioState = .writingCVWaitingForAck
           startCVTimeoutTimer(interval: ackTimeoutInterval)
-          locoNet?.writeCV(progMode: progMode.locoNetProgrammingMode(isProgrammingTrack: false), cv: Int(ioAddress), address: Int(dccAddress), value: cvs!.getUInt8(address: ioAddress)!)
+          locoNetGateway?.writeCV(progMode: progMode.locoNetProgrammingMode(isProgrammingTrack: false), cv: Int(ioAddress), address: Int(dccAddress), value: cvs!.getUInt8(address: ioAddress)!)
         }
         else {
           sendWriteReply(destinationNodeId: ioSourceNodeId, addressSpace: cvs!.space, startAddress: ioStartAddress)
@@ -530,7 +500,7 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
             let wbm = LocoNetMessage(data: writeBackMessage, appendCheckSum: true)
             configState = .writeBack
             startTimeoutTimer()
-            sendLocoNetMessage(destinationNodeId: locoNetGatewayNodeId, locoNetMessage: wbm)
+            locoNetGateway?.sendMessage(message: wbm)
             let directionMask : UInt8 = 0b00100000
             let direction : LocomotiveDirection = ((message.message[6] & directionMask) == directionMask) ? .reverse : .forward
             setSpeed(speedStep: message.message[5], direction: direction)
@@ -538,7 +508,7 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
           else {
             configState = .setInUse
             startTimeoutTimer()
-            locoNet?.moveSlotsP1(sourceSlotNumber: slotNumber, destinationSlotNumber: slotNumber)
+            locoNetGateway?.moveSlotsP1(sourceSlotNumber: slotNumber, destinationSlotNumber: slotNumber)
           }
         case .setInUse:
           if slotState != .inUse {
@@ -554,7 +524,7 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
             let wbm = LocoNetMessage(data: writeBackMessage, appendCheckSum: true)
             configState = .writeBack
             startTimeoutTimer()
-            locoNet?.addToQueue(message: wbm)
+            locoNetGateway?.addToQueue(message: wbm)
           }
         default:
           break
@@ -580,12 +550,12 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
             let wbm = LocoNetMessage(data: writeBackMessage, appendCheckSum: true)
             configState = .writeBack
             startTimeoutTimer()
-            locoNet?.addToQueue(message: wbm)
+            locoNetGateway?.addToQueue(message: wbm)
           }
           else {
             configState = .setInUse
             startTimeoutTimer()
-            locoNet?.moveSlotsP2(sourceSlotNumber: slotNumber, sourceSlotPage: slotPage, destinationSlotNumber: slotNumber, destinationSlotPage: slotPage)
+            locoNetGateway?.moveSlotsP2(sourceSlotNumber: slotNumber, sourceSlotPage: slotPage, destinationSlotNumber: slotNumber, destinationSlotPage: slotPage)
           }
         case .setInUse:
           if slotState != .inUse {
@@ -603,7 +573,7 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetDe
             let wbm = LocoNetMessage(data: writeBackMessage, appendCheckSum: true)
             configState = .writeBack
             startTimeoutTimer()
-            locoNet?.addToQueue(message: wbm)
+            locoNetGateway?.addToQueue(message: wbm)
           }
         default:
           break

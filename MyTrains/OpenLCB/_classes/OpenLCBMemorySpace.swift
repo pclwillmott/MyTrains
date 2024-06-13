@@ -637,7 +637,7 @@ public class OpenLCBMemorySpace : NSObject {
       case .throttleNode:
         node = OpenLCBThrottle(nodeId: nodeId)
       case .locoNetGatewayNode:
-        node = OpenLCBLocoNetGateway(nodeId: nodeId)
+        node = LocoNetGateway(nodeId: nodeId)
       case .trainNode:
         node = OpenLCBNodeRollingStockLocoNet(nodeId: nodeId)
       case .applicationNode:

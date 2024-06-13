@@ -43,7 +43,6 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
       
       eventsConsumed = [
         OpenLCBWellKnownEvent.nodeIsAMyTrainsLayout.rawValue,
-        OpenLCBWellKnownEvent.nodeIsALocoNetGateway.rawValue,
       ]
       
       eventsProduced = [
@@ -84,7 +83,6 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     nodeIdCache.removeAll()
     layoutList.removeAll()
     observers.removeAll()
-    locoNetGateways.removeAll()
     viewOptions = nil
     #if DEBUG
     addDeinit()
@@ -171,7 +169,18 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     return appDelegate.networkLayer?.virtualNodeLookup[appLayoutId] as? LayoutNode
   }
   
-  public var locoNetGateways : [UInt64:String] = [:]
+  public var locoNetGateways : [UInt64:LocoNetGateway] {
+    var result : [UInt64:LocoNetGateway] = [:]
+    guard let networkLayer = appDelegate.networkLayer else {
+      return result
+    }
+    for (key, node) in networkLayer.virtualNodeLookup {
+      if let gateway = node as? LocoNetGateway {
+        result[key] = gateway
+      }
+    }
+    return result
+  }
   
   public var panelList : [UInt64:SwitchboardPanelNode] {
     var result : [UInt64:SwitchboardPanelNode] = [:]
@@ -423,7 +432,6 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     nodeIdCache.removeAll()
     layoutList.removeAll()
     observers.removeAll()
-    locoNetGateways.removeAll()
     
     super.stop()
     
@@ -797,8 +805,8 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     
     var sorted : [(nodeId:UInt64, name:String)] = []
     
-    for (nodeId, name) in locoNetGateways {
-      sorted.append((nodeId, name))
+    for (nodeId, node) in locoNetGateways {
+      sorted.append((nodeId, node.userNodeName))
     }
     
     sorted.sort {$0.name.sortValue < $1.name.sortValue}
@@ -848,12 +856,6 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
         layoutList[sourceNodeId] = layout
         layoutListUpdated()
       }
-      else if locoNetGateways.keys.contains(sourceNodeId) {
-        let node = OpenLCBNode(nodeId: sourceNodeId)
-        node.encodedNodeInformation = message.payload
-        locoNetGateways[sourceNodeId] = node.userNodeName
-        locoNetGatewayListUpdated()
-      }
 
     case .producerConsumerEventReport:
       
@@ -861,13 +863,6 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
         
         switch event {
          
-        case .nodeIsALocoNetGateway:
-          
-          if !locoNetGateways.keys.contains(sourceNodeId) {
-            locoNetGateways[sourceNodeId] = ""
-            sendSimpleNodeInformationRequest(destinationNodeId: sourceNodeId)
-          }
-          
         case .nodeIsAMyTrainsLayout:
           
           if !layoutList.keys.contains(sourceNodeId) {
@@ -887,13 +882,6 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
         
         switch event {
           
-        case .nodeIsALocoNetGateway:
-          
-          if !locoNetGateways.keys.contains(sourceNodeId) {
-            locoNetGateways[sourceNodeId] = ""
-            sendSimpleNodeInformationRequest(destinationNodeId: sourceNodeId)
-          }
-
         case .nodeIsAMyTrainsLayout:
           
           if !layoutList.keys.contains(sourceNodeId) {

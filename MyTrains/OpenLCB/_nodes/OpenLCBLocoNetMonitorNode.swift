@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class OpenLCBLocoNetMonitorNode : OpenLCBNodeVirtual, LocoNetDelegate {
+public class OpenLCBLocoNetMonitorNode : OpenLCBNodeVirtual, LocoNetGatewayDelegate {
   
   // MARK: Constructors
   
@@ -33,8 +33,6 @@ public class OpenLCBLocoNetMonitorNode : OpenLCBNodeVirtual, LocoNetDelegate {
   
   deinit {
     
-    locoNet = nil
-    
     delegate = nil
     
     #if DEBUG
@@ -46,9 +44,9 @@ public class OpenLCBLocoNetMonitorNode : OpenLCBNodeVirtual, LocoNetDelegate {
   
   private var _gatewayId : UInt64 = 0
   
-  // MARK: Public Properties
+  public var locoNetGateway : LocoNetGateway?
   
-  public var locoNet : LocoNet?
+  // MARK: Public Properties
   
   public var monitorId : UInt8
   
@@ -58,9 +56,8 @@ public class OpenLCBLocoNetMonitorNode : OpenLCBNodeVirtual, LocoNetDelegate {
     }
     set(value) {
       _gatewayId = value
-      locoNet = LocoNet(gatewayNodeId: _gatewayId, node: self)
-      locoNet?.start()
-      locoNet?.delegate = self
+      locoNetGateway = appNode?.locoNetGateways[value]
+      locoNetGateway?.addObserver(observer: self)
     }
   }
   
@@ -76,20 +73,13 @@ public class OpenLCBLocoNetMonitorNode : OpenLCBNodeVirtual, LocoNetDelegate {
   // MARK: Public Methods
   
   public func sendMessage(message:LocoNetMessage) {
-    locoNet?.sendMessage(message: message)
+    locoNetGateway?.sendMessage(message: message)
   }
   
-  // MARK: LocoNetDelegate Methods
+  // MARK: LocoNetGatewayDelegate Methods
   
   @objc public func locoNetMessageReceived(message:LocoNetMessage) {
     delegate?.locoNetMessageReceived?(message: message)
   }
 
-  // MARK: OpenLCBNetworkLayerDelegate Methods
-  
-  public override func openLCBMessageReceived(message: OpenLCBMessage) {
-    super.openLCBMessageReceived(message: message)
-    locoNet?.openLCBMessageReceived(message: message)
-  }
-  
 }
