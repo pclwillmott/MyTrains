@@ -89,8 +89,6 @@ class ThrottleVC: MyTrainsViewController, OpenLCBThrottleDelegate {
   
   // MARK: Private Properties
   
-  private var dataSource : ComboBoxDictDS = ComboBoxDictDS()
-  
   private var buttons : [NSButton] = []
   
   private var cboLocomotiveDS = ComboBoxSimpleDS()

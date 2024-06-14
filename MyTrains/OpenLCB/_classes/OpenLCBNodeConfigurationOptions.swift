@@ -13,9 +13,6 @@ public class OpenLCBNodeConfigurationOptions {
   
   init(message:OpenLCBMessage) {
     encodedOptions = message.payload
-    #if DEBUG
-    addInit()
-    #endif
   }
   
   init() {
@@ -39,18 +36,8 @@ public class OpenLCBNodeConfigurationOptions {
     
     name = ""
     
-    #if DEBUG
-    addInit()
-    #endif
-
   }
   
-  #if DEBUG
-  deinit {
-    addDeinit()
-  }
-  #endif
-
   // MARK: Private Properties
 
   // Masks for available commands

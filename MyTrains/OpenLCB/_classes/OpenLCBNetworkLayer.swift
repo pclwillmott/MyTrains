@@ -12,20 +12,8 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
   
   // MARK: Constructors & Destructors
  
-  #if DEBUG
-  public override init() {
-    super.init()
-    addInit()
-  }
-  #endif
-  
   deinit {
     removeAll()
-    #if DEBUG
-    addDeinit()
-    showInstances()
-    #endif
-    //exit(0)
     NSApplication.shared.terminate(self)
   }
   
@@ -371,7 +359,10 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
       startupGroup[node.virtualNodeType.startupGroup]?.remove(node)
       OpenLCBMemorySpace.deleteAllMemorySpaces(forNodeId: node.nodeId)
       isDeletingANode = false
-      if !node.isPassiveNode && node.virtualNodeType != .switchboardItemNode {
+      if node.virtualNodeType == .switchboardItemNode {
+        appNode?._switchboardItemList = nil
+      }
+      else if !node.isPassiveNode {
         appDelegate.rebootRequest()
       }
     }
@@ -521,6 +512,8 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
     
     var layout : UInt64? = layoutNodeId
     
+    var switchboardChanged = false
+    
     switch virtualNodeType {
     case .clockNode:
       node = OpenLCBClock(nodeId: newNodeId)
@@ -557,12 +550,17 @@ public class OpenLCBNetworkLayer : NSObject, MTSerialPortManagerDelegate {
       node = SwitchboardPanelNode(nodeId: newNodeId, layoutNodeId: layoutNodeId!)
     case .switchboardItemNode:
       node = SwitchboardItemNode(nodeId: newNodeId, layoutNodeId: layoutNodeId!)
+      switchboardChanged = true
     }
 
     node.hostAppNodeId = appNode!.nodeId
     node.layoutNodeId = layout == nil ? 0 : layout!
     
     registerNode(node: node)
+    
+    if switchboardChanged {
+      appNode?._switchboardItemList = nil
+    }
     
     return node
     

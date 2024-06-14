@@ -70,10 +70,6 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
       
     }
     
-    #if DEBUG
-    addInit()
-    #endif
-    
   }
   
   deinit {
@@ -84,9 +80,6 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     layoutList.removeAll()
     observers.removeAll()
     viewOptions = nil
-    #if DEBUG
-    addDeinit()
-    #endif
   }
   
   // MARK: Private Properties
@@ -193,14 +186,22 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   }
   
   public var switchboardItemList : [UInt64:SwitchboardItemNode] {
-    var result : [UInt64:SwitchboardItemNode] = [:]
+    if let _switchboardItemList {
+      return _switchboardItemList
+    }
+    _switchboardItemList = [:]
     for (_, node) in appDelegate.networkLayer!.virtualNodeLookup {
       if let item = node as? SwitchboardItemNode, let appLayoutId, item.layoutNodeId == appLayoutId {
-        result[item.nodeId] = item
+        _switchboardItemList![item.nodeId] = item
       }
     }
-    return result
+    for (_, panel) in panelList {
+      panel._switchboardItems = nil
+    }
+    return _switchboardItemList!
   }
+  
+  public var _switchboardItemList : [UInt64:SwitchboardItemNode]?
 
   public var viewOptions : OpenLCBMemorySpace?
   
@@ -520,8 +521,10 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
       return
     }
     
-    for (_, item) in panel.switchboardItems {
-      networkLayer.deleteNode(nodeId: item.nodeId)
+    if let switchboardItems = panel.switchboardItems {
+      for (_, item) in switchboardItems {
+        networkLayer.deleteNode(nodeId: item.nodeId)
+      }
     }
     
     networkLayer.deleteNode(nodeId: panel.nodeId)
@@ -530,7 +533,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   
   public func createPanel() -> SwitchboardPanelNode? {
     
-    guard let networkLayer = appDelegate.networkLayer, let appLayoutId else {
+    guard let networkLayer = appDelegate.networkLayer else {
       return nil
     }
     

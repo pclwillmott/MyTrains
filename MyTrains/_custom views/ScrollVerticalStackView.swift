@@ -12,18 +12,6 @@ class ScrollVerticalStackView : NSView, CDIStackViewManagerDelegate {
   
   // MARK: Destructors
   
-  #if DEBUG
-  override init(frame frameRect: NSRect) {
-    super.init(frame: frameRect)
-    addInit()
-  }
-  
-  required init?(coder: NSCoder) {
-    super.init(coder: coder)
-    addInit()
-  }
-  #endif
-  
   deinit {
     scrollView?.documentView = nil
     scrollView = nil
@@ -31,9 +19,6 @@ class ScrollVerticalStackView : NSView, CDIStackViewManagerDelegate {
       stackView?.removeArrangedSubview(view)
     }
     stackView = nil
-    #if DEBUG
-    addDeinit()
-    #endif
   }
   
   // MARK: Drawing Methods

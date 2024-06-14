@@ -19,9 +19,6 @@ public class MTPipe : NSObject {
   
   init(name:String) {
     _name = "/tmp/\(name)"
-    #if DEBUG
-    addInit()
-    #endif
   }
   
   // MARK: Destructors
@@ -29,9 +26,6 @@ public class MTPipe : NSObject {
   deinit {
     close()
     _delegate = nil
-    #if DEBUG
-    addDeinit()
-    #endif
   }
   
   // MARK: Private Properties

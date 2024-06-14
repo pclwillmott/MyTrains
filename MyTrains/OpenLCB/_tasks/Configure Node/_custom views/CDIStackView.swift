@@ -12,27 +12,12 @@ class CDIStackView : CDIView, CDIStackViewManagerDelegate {
  
   // MARK: Destructors
   
-  #if DEBUG
-  required init?(coder: NSCoder) {
-    super.init(coder: coder)
-    addInit()
-  }
-  
-  override init(frame frameRect: NSRect) {
-    super.init(frame: frameRect)
-    addInit()
-  }
-  #endif
-  
   deinit {
     for view in stackView!.arrangedSubviews {
       stackView?.removeArrangedSubview(view)
     }
     stackView = nil
     subviews.removeAll()
-    #if DEBUG
-    addDeinit()
-    #endif
   }
   
   // MARK: Private & Internal Methods

@@ -139,17 +139,7 @@ public class LayoutNode : OpenLCBNodeVirtual {
       
     }
     
-    #if DEBUG
-    addInit()
-    #endif
-    
   }
-  
-  #if DEBUG
-  deinit {
-    addDeinit()
-  }
-  #endif
   
   // MARK: Private Properties
   
@@ -320,7 +310,7 @@ public class LayoutNode : OpenLCBNodeVirtual {
           
           let look = lookup[point1]
           
-          let test : SwitchBoardLocation = (x: x + look.dx, y: y + look.dy)
+          let test : SwitchboardLocation = (x: x + look.dx, y: y + look.dy)
           
           if test.x >= 0 && test.y >= 0 {
             

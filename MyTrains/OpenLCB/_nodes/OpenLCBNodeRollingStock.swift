@@ -125,10 +125,6 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
       
     }
     
-    #if DEBUG
-    addInit()
-    #endif
-    
   }
   
   deinit {
@@ -144,10 +140,6 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     
     timer?.invalidate()
     timer = nil
-    
-    #if DEBUG
-    addDeinit()
-    #endif
     
   }
   
@@ -326,15 +318,15 @@ public class OpenLCBNodeRollingStock : OpenLCBNodeVirtual {
     }
     set(value) {
       configuration!.setUInt48(address: addressLocoNetGateway, value: value)
+      _locoNetGateway = nil
     }
   }
   
   public var locoNetGateway : LocoNetGateway? {
-    let id = locoNetGatewayNodeId
-    if let gateway = _locoNetGateway, gateway.nodeId == id {
+    if let gateway = _locoNetGateway {
       return gateway
     }
-    _locoNetGateway = appNode?.locoNetGateways[id]
+    _locoNetGateway = appNode?.locoNetGateways[locoNetGatewayNodeId]
     return _locoNetGateway
   }
 

@@ -136,10 +136,6 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
       
     }
     
-    #if DEBUG
-    addInit()
-    #endif
-    
   }
   
   deinit {
@@ -161,10 +157,6 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
     
     calendar = nil
 
-    #if DEBUG
-    addDeinit()
-    #endif
-    
   }
   
   // MARK: Private Properties
@@ -970,18 +962,6 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
     super.openLCBMessageReceived(message: message)
     
     switch message.messageTypeIndicator {
-    case .consumerIdentifiedAsCurrentlyInvalid, .consumerIdentifiedAsCurrentlyValid, .consumerIdentifiedWithValidityUnknown:
-
-      if isClockGenerator {
-        
-        let eventId = message.eventId!
-        
-        if (eventId & specificUpperPartMask) == baseEventId {
-          specificEvents.insert(eventId)
-        }
-        
-      }
-      
     case .producerConsumerEventReport, .producerIdentifiedAsCurrentlyValid:
       
       let eventId = message.eventId!
@@ -1102,6 +1082,19 @@ public class OpenLCBClock : OpenLCBNodeVirtual {
         }
                                                  
       }
+      
+    case .consumerIdentifiedAsCurrentlyInvalid, .consumerIdentifiedAsCurrentlyValid, .consumerIdentifiedWithValidityUnknown:
+
+      if isClockGenerator {
+        
+        let eventId = message.eventId!
+        
+        if (eventId & specificUpperPartMask) == baseEventId {
+          specificEvents.insert(eventId)
+        }
+        
+      }
+      
     default:
       break
     }

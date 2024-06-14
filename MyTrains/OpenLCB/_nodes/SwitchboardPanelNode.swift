@@ -50,18 +50,8 @@ public class SwitchboardPanelNode : OpenLCBNodeVirtual {
       
     }
     
-    #if DEBUG
-    addInit()
-    #endif
-    
   }
   
-  #if DEBUG
-  deinit {
-    addDeinit()
-  }
-  #endif
-
   // MARK: Private Properties
 
   // Configuration varaible addresses
@@ -76,25 +66,40 @@ public class SwitchboardPanelNode : OpenLCBNodeVirtual {
     return true
   }
   
-  public var switchboardItems : [UInt64:SwitchboardItemNode] {
+  public var _switchboardItems : [UInt64:SwitchboardItemNode]?
+  
+  public var switchboardItems : [UInt64:SwitchboardItemNode]? {
     
-    var result : [UInt64:SwitchboardItemNode] = [:]
-    
-    guard let appNode else {
-      return result
+    if let _switchboardItems {
+      return _switchboardItems
     }
     
-    for (key, item) in appNode.switchboardItemList {
-      if item.panelId == nodeId {
-        result[key] = item
+    if let appNode {
+      
+      let switchboardItemList = appNode.switchboardItemList
+      
+      _switchboardItems = [:]
+      
+      for (key, item) in switchboardItemList {
+        if item.panelId == nodeId {
+          _switchboardItems![key] = item
+        }
       }
+      
+    }
+    else {
+      _switchboardItems = [:]
     }
     
-    return result
+    return _switchboardItems
     
   }
   
   public var switchboardBlocks : [UInt64:SwitchboardItemNode] {
+    
+    guard let switchboardItems else {
+      return [:]
+    }
     
     var result : [UInt64:SwitchboardItemNode] = [:]
     
@@ -108,7 +113,10 @@ public class SwitchboardPanelNode : OpenLCBNodeVirtual {
     
   }
   
-  public func findSwitchboardItem(location:SwitchBoardLocation) -> SwitchboardItemNode? {
+  public func findSwitchboardItem(location:SwitchboardLocation) -> SwitchboardItemNode? {
+    guard let switchboardItems else {
+      return nil
+    }
     for (_, item) in switchboardItems {
       if item.location == location {
         return item

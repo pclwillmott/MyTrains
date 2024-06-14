@@ -12,18 +12,6 @@ class CDITextView: CDIDataView, NSTextFieldDelegate, NSControlTextEditingDelegat
   
   // MARK: Destructors
 
-  #if DEBUG
-  required init?(coder: NSCoder) {
-    super.init(coder: coder)
-    addInit()
-  }
-  
-  override init(frame frameRect: NSRect) {
-    super.init(frame: frameRect)
-    addInit()
-  }
-  #endif
-  
   deinit {
     textView?.subviews.removeAll()
     textView = nil
@@ -31,9 +19,6 @@ class CDITextView: CDIDataView, NSTextFieldDelegate, NSControlTextEditingDelegat
     textField?.target = nil
     textField?.delegate = nil
     subviews.removeAll()
-    #if DEBUG
-    addDeinit()
-    #endif
   }
   
   // MARK: Private & Internal Properties

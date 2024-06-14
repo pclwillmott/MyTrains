@@ -67,18 +67,11 @@ public class MTSerialPort : NSObject, MTPipeDelegate {
     
     super.init()
     
-    #if DEBUG
-    addInit()
-    #endif
-    
   }
   
   deinit {
     delegate = nil
     txPipe = nil
-    #if DEBUG
-    addDeinit()
-    #endif
   }
   
   // MARK: Private Properties

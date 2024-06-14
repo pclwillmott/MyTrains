@@ -46,10 +46,6 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
       resetToFactoryDefaults()
     }
     
-    #if DEBUG
-    addInit()
-    #endif
-    
   }
   
   deinit {
@@ -69,10 +65,6 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
     
     fdiItems.removeAll()
 
-    #if DEBUG
-    addDeinit()
-    #endif
-    
   }
   
   // MARK: Private Properties

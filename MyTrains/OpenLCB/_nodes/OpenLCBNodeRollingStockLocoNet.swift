@@ -22,10 +22,6 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetGa
     cvTimeoutTimer?.invalidate()
     cvTimeoutTimer = nil
     
-    #if DEBUG
-    addDeinit()
-    #endif
-    
   }
   
   // MARK: Private Properties
@@ -430,6 +426,23 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetGa
   // MARK: LocoNetGatewayDelegate Methods
   
   @objc public func locoNetMessageReceived(message:LocoNetMessage) {
+    
+    let interestingMessages : Set<LocoNetMessageType> = [
+      .programmerBusy,
+      .progCmdAcceptedBlind,
+      .locoSlotDataP1,
+      .locoSlotDataP2,
+      .noFreeSlotsP1,
+      .noFreeSlotsP2,
+      .setSlotDataOKP1,
+      .setSlotDataOKP2,
+      .illegalMoveP1,
+      .d4Error,
+    ]
+    
+    guard interestingMessages.contains(message.messageType) else {
+      return
+    }
     
     switch message.messageType {
       

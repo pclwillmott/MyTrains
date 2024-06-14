@@ -160,10 +160,6 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetGatewayDelega
       
     }
     
-    #if DEBUG
-    addInit()
-    #endif
-    
   }
   
   deinit {
@@ -176,10 +172,6 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetGatewayDelega
     
     timeoutTimer?.invalidate()
     timeoutTimer = nil
-    
-    #if DEBUG
-    addDeinit()
-    #endif
     
   }
   
@@ -363,15 +355,15 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetGatewayDelega
     }
     set(value) {
       configuration!.setUInt(address: addressLocoNetGateway, value: value)
+      _locoNetGateway = nil
     }
   }
   
   public var locoNetGateway : LocoNetGateway? {
-    let id = locoNetGatewayNodeId
-    if let gateway = _locoNetGateway, gateway.nodeId == id {
+    if let gateway = _locoNetGateway {
       return gateway
     }
-    _locoNetGateway = appNode?.locoNetGateways[id]
+    _locoNetGateway = appNode?.locoNetGateways[locoNetGatewayNodeId]
     return _locoNetGateway
   }
 
@@ -691,6 +683,20 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetGatewayDelega
   // MARK: LocoNetDelegate Methods
   
   @objc public func locoNetMessageReceived(message:LocoNetMessage) {
+
+    let interestingMessages : Set<LocoNetMessageType> = [
+      .sensRepGenIn,
+      .transRep,
+      .pmRepBXP88,
+      .locoRep,
+      .iplDevData,
+      .setSwWithAckAccepted,
+      .swState,
+    ]
+    
+    guard interestingMessages.contains(message.messageType) else {
+      return
+    }
     
     switch message.messageType {
       
@@ -703,8 +709,6 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetGatewayDelega
         if id == boardId, let sensorState = message.sensorState {
           
           let zone = (sensorAddress - 1) % numberOfChannels
-          
-   //       print(" \(userNodeName) \(sensorState ? "enter" : "exit") id: \(id) zone: \(zone + 1) ")
           
           if sensorState, let eventId = enterOccupancyEventId(zone: zone) {
             sendEvent(eventId: eventId)
@@ -719,30 +723,20 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetGatewayDelega
       }
       
     case .transRep:
-      
-      let id = message.transponderZone! / numberOfChannels + 1
-      
-      if id == boardId, let transponderZone = message.transponderZone, let locomotiveAddress = message.locomotiveAddress, let trainNodeId = OpenLCBNodeRollingStock.mapDCCAddressToID(address: locomotiveAddress), let sensorState = message.sensorState {
-        
-        let zone = transponderZone % numberOfChannels
-        
-        if let eventId = locationServicesEventId(zone: zone) {
-//          sendLocationServiceEvent(eventId: eventId, trainNodeId: trainNodeId, entryExit: sensorState ? .entryWithState : .exit, motionRelative: .unknown, motionAbsolute: .unknown, contentFormat: .occupancyInformationOnly, content: nil)
-        }
-        
-      }
+      break
       
     case .pmRepBXP88:
       
       if let id = message.boardId, id == boardId, let shorted = message.detectionSectionShorted {
+        
         if lastDetectionSectionShorted.isEmpty {
           for zone in 0...numberOfChannels - 1 {
             lastDetectionSectionShorted.append(!shorted[zone])
           }
         }
+        
         for zone in 0...numberOfChannels - 1 {
           if lastDetectionSectionShorted[zone] != shorted[zone] {
- //           print("\(shorted[zone] ? "short" : "short cleared") \(userNodeName) id: \(id) zone: \(zone + 1)")
             if shorted[zone], let eventId = trackFaultEventId(zone: zone) {
               sendEvent(eventId: eventId)
             }
@@ -751,17 +745,12 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetGatewayDelega
             }
           }
         }
+        
         lastDetectionSectionShorted = shorted
+        
       }
     
     case .locoRep:
-      /*
-      let id = message.transponderZone! / numberOfChannels + 1
-       if id == boardId, let locomotiveAddress = message.locomotiveAddress, let transponderZone = message.transponderZone {
-        let zone = transponderZone % numberOfChannels
-  //      processEvents(zone: zone, eventType: .locomotiveReport, dccAddress: locomotiveAddress, trainNodeId: 0)
-      }
-      */
       break
       
     case .iplDevData:
@@ -792,13 +781,7 @@ public class OpenLCBDigitraxBXP88Node : OpenLCBNodeVirtual, LocoNetGatewayDelega
           setOpSw()
         }
       }
-      
-    case .setSwWithAckRejected:
-      if configState == .settingOptionSwitches {
-        stopTimeoutTimer()
-        setOpSw()
-      }
-      
+
     case .swState:
       
       if configState == .gettingOptionSwitches, let opSw = optionSwitchesToDo.first, let state = message.swState {

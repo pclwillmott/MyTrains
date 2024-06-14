@@ -542,19 +542,10 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
       
     }
     
-    
-    #if DEBUG
-    addInit()
-    #endif
+    makeLookups()
     
   }
   
-  #if DEBUG
-  deinit {
-    addDeinit()
-  }
-  #endif
-
   // MARK: Private Properties
 
   // Configuration varaible addresses
@@ -731,8 +722,22 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
   private var layoutNode : LayoutNode? {
     return appDelegate.networkLayer!.virtualNodeLookup[layoutNodeId] as? LayoutNode
   }
+  
+  internal var eventLookup : [UInt64:Selector] = [:]
+  
+  internal var _controlBlock : SwitchboardItemNode?
 
   // MARK: Public Properties
+  
+  public var controlBlock : SwitchboardItemNode? {
+    if let _controlBlock {
+      return _controlBlock
+    }
+    if let item = appNode?.switchboardItemList[groupId] {
+      _controlBlock = item
+    }
+    return _controlBlock
+  }
   
   public override var visibility : OpenLCBNodeVisibility {
     return itemType.visibility
@@ -778,7 +783,7 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     }
   }
 
-  public var location : SwitchBoardLocation {
+  public var location : SwitchboardLocation {
     get {
       return (x: Int(xPos), y: Int(yPos))
     }
@@ -803,6 +808,7 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     }
     set(value) {
       configuration!.setUInt(address: addressGroupId, value: value)
+      _controlBlock = nil
     }
   }
 
@@ -1362,6 +1368,8 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
 
   public func setValue(property:LayoutInspectorProperty, string:String) {
     
+    var eventChanged = false
+    
     switch property {
     case .name:
       userNodeName = string
@@ -1439,75 +1447,110 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
       signalPosition = UnitLength.convert(fromValue: Double(string)!, fromUnits: appNode!.unitsActualDistance, toUnits: UnitLength.defaultValueActualDistance)
     case .enterDetectionZoneEventId:
       enterDetectionZoneEventId = UInt64(dotHex: string, numberOfBytes: 8) ?? 0
+      eventChanged = true
     case .exitDetectionZoneEventId:
       exitDetectionZoneEventId = UInt64(dotHex: string, numberOfBytes: 8) ?? 0
+      eventChanged = true
     case .enterTranspondingZoneEventId:
       enterTranspondingZoneEventId = UInt64(dotHex: string, numberOfBytes: 8) ?? 0
+      eventChanged = true
     case .exitTranspondingZoneEventId:
       exitTranspondingZoneEventId = UInt64(dotHex: string, numberOfBytes: 8) ?? 0
+      eventChanged = true
     case .trackFaultEventId:
       trackFaultEventId = UInt64(dotHex: string, numberOfBytes: 8) ?? 0
+      eventChanged = true
     case .trackFaultClearedEventId:
       trackFaultClearedEventId = UInt64(dotHex: string, numberOfBytes: 8) ?? 0
+      eventChanged = true
     case .locationServicesEventId:
       locationServicesEventId = UInt64(dotHex: string, numberOfBytes: 8) ?? 0
+      eventChanged = true
     case .sw1ThrowEventId:
       setTurnoutThrowEventId(turnoutNumber: 1, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
+      eventChanged = true
     case .sw1CloseEventId:
       setTurnoutCloseEventId(turnoutNumber: 1, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
+      eventChanged = true
     case .sw1ThrownEventId:
       setTurnoutThrownEventId(turnoutNumber: 1, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
+      eventChanged = true
     case .sw1ClosedEventId:
       setTurnoutClosedEventId(turnoutNumber: 1, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
+      eventChanged = true
     case .sw1NotThrownEventId:
       setNotThrownEventId(turnoutNumber: 1, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
+      eventChanged = true
     case .sw1NotClosedEventId:
       setNotClosedEventId(turnoutNumber: 1, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
+      eventChanged = true
     case .sw2ThrowEventId:
       setTurnoutThrowEventId(turnoutNumber: 2, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
+      eventChanged = true
     case .sw2CloseEventId:
       setTurnoutCloseEventId(turnoutNumber: 2, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
+      eventChanged = true
     case .sw2ThrownEventId:
       setTurnoutThrownEventId(turnoutNumber: 2, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
+      eventChanged = true
     case .sw2ClosedEventId:
       setTurnoutClosedEventId(turnoutNumber: 2, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
+      eventChanged = true
     case .sw2NotThrownEventId:
       setNotThrownEventId(turnoutNumber: 2, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
+      eventChanged = true
     case .sw2NotClosedEventId:
       setNotClosedEventId(turnoutNumber: 2, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
+      eventChanged = true
     case .sw3ThrowEventId:
       setTurnoutThrowEventId(turnoutNumber: 3, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
+      eventChanged = true
     case .sw3CloseEventId:
       setTurnoutCloseEventId(turnoutNumber: 3, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
+      eventChanged = true
     case .sw3ThrownEventId:
       setTurnoutThrownEventId(turnoutNumber: 3, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
+      eventChanged = true
     case .sw3ClosedEventId:
       setTurnoutClosedEventId(turnoutNumber: 3, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
+      eventChanged = true
     case .sw3NotThrownEventId:
       setNotThrownEventId(turnoutNumber: 3, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
+      eventChanged = true
     case .sw3NotClosedEventId:
       setNotClosedEventId(turnoutNumber: 3, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
+      eventChanged = true
     case .sw4ThrowEventId:
       setTurnoutThrowEventId(turnoutNumber: 4, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
+      eventChanged = true
     case .sw4CloseEventId:
       setTurnoutCloseEventId(turnoutNumber: 4, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
+      eventChanged = true
     case .sw4ThrownEventId:
       setTurnoutThrownEventId(turnoutNumber: 4, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
+      eventChanged = true
     case .sw4ClosedEventId:
       setTurnoutClosedEventId(turnoutNumber: 4, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
+      eventChanged = true
     case .sw4NotThrownEventId:
       setNotThrownEventId(turnoutNumber: 4, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
+      eventChanged = true
     case .sw4NotClosedEventId:
       setNotClosedEventId(turnoutNumber: 4, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
+      eventChanged = true
     case .sensorActivatedEventId:
       sensorActivatedEventId = UInt64(dotHex: string, numberOfBytes: 8) ?? 0
+      eventChanged = true
     case .sensorDeactivatedEventId:
       sensorDeactivatedEventId = UInt64(dotHex: string, numberOfBytes: 8) ?? 0
+      eventChanged = true
     case .sensorLocationServicesEventId:
       sensorLocationServicesEventId = UInt64(dotHex: string, numberOfBytes: 8) ?? 0
+      eventChanged = true
     case .signalSetState0EventId, .signalSetState1EventId, .signalSetState2EventId, .signalSetState3EventId, .signalSetState4EventId, .signalSetState5EventId, .signalSetState6EventId, .signalSetState7EventId, .signalSetState8EventId, .signalSetState9EventId, .signalSetState10EventId, .signalSetState11EventId, .signalSetState12EventId, .signalSetState13EventId, .signalSetState14EventId, .signalSetState15EventId, .signalSetState16EventId, .signalSetState17EventId, .signalSetState18EventId, .signalSetState19EventId, .signalSetState20EventId, .signalSetState21EventId, .signalSetState22EventId, .signalSetState23EventId, .signalSetState24EventId, .signalSetState25EventId, .signalSetState26EventId, .signalSetState27EventId, .signalSetState28EventId, .signalSetState29EventId, .signalSetState30EventId, .signalSetState31EventId:
       let index = property.rawValue - LayoutInspectorProperty.signalSetState0EventId.rawValue + 1
       setSetSignalAspectEventId(number: index, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
+      eventChanged = true
     case .speedConstraintDPType0, .speedConstraintDPType1, .speedConstraintDPType2, .speedConstraintDPType3, .speedConstraintDPType4, .speedConstraintDPType5, .speedConstraintDPType6, .speedConstraintDPType7, .speedConstraintDPType8, .speedConstraintDPType9, .speedConstraintDPType10, .speedConstraintDPType11, .speedConstraintDPType12, .speedConstraintDPType13, .speedConstraintDPType14, .speedConstraintDPType15:
       let index = (property.rawValue - LayoutInspectorProperty.speedConstraintDPType0.rawValue) / 2 + 1
       setSpeedConstraintDPType(number: index, constraintType: SpeedConstraintType(title: string)!)
@@ -1525,34 +1568,17 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     case .sw1CommandedClosedEventId, .sw2CommandedClosedEventId, .sw3CommandedClosedEventId, .sw4CommandedClosedEventId:
       let index = 1 + property.rawValue - LayoutInspectorProperty.sw1CommandedClosedEventId.rawValue
       setCommandedClosedEventId(turnoutNumber: index, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
+      eventChanged = true
     case .sw1CommandedThrownEventId, .sw2CommandedThrownEventId, .sw3CommandedThrownEventId, .sw4CommandedThrownEventId:
       let index = 1 + property.rawValue - LayoutInspectorProperty.sw1CommandedThrownEventId.rawValue
       setCommandedThrownEventId(turnoutNumber: index, eventId: UInt64(dotHex: string, numberOfBytes: 8) ?? 0)
+      eventChanged = true
     default:
       break
     }
     
-  }
-
-  override public func variableChanged(space:OpenLCBMemorySpace, address:Int) {
-    
-    guard let spaceId = space.standardSpace else {
-      return
-    }
-    
-    switch spaceId {
-    case .configuration:
-      switch address {
-      default:
-        break
-      }
-    case .acdiUser:
-      switch address {
-      default:
-        break
-      }
-    default:
-      break
+    if eventChanged {
+      makeLookups()
     }
     
   }
@@ -1569,6 +1595,8 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     routeCommanded = nil
     
     saveMemorySpaces()
+    
+    makeLookups()
 
   }
   
@@ -1954,6 +1982,146 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     
   }
   
+  internal func makeLookups() {
+    
+    func addItem(eventId:UInt64?, action:Selector) {
+      guard let eventId, eventId != 0 else {
+        return
+      }
+      eventLookup[eventId] = action
+    }
+    
+    eventLookup.removeAll()
+    
+    if itemType.isGroup {
+      
+      addItem(eventId: enterDetectionZoneEventId, action: #selector(enterDetectionZoneAction(_:)))
+      addItem(eventId: exitDetectionZoneEventId, action: #selector(exitDetectionZoneAction(_:)))
+      addItem(eventId: locationServicesEventId, action: #selector(locationServicesAction(_:)))
+      addItem(eventId: trackFaultEventId, action: #selector(trackFaultAction(_:)))
+      addItem(eventId: trackFaultClearedEventId, action: #selector(trackFaultClearedAction(_:)))
+      
+      if isTurnout {
+        addItem(eventId: getTurnoutClosedEventId(turnoutNumber: 1), action: #selector(turnout1ClosedAction(_:)))
+        addItem(eventId: getTurnoutClosedEventId(turnoutNumber: 2), action: #selector(turnout2ClosedAction(_:)))
+        addItem(eventId: getTurnoutClosedEventId(turnoutNumber: 3), action: #selector(turnout3ClosedAction(_:)))
+        addItem(eventId: getTurnoutClosedEventId(turnoutNumber: 4), action: #selector(turnout4ClosedAction(_:)))
+        addItem(eventId: getNotClosedEventId(turnoutNumber: 1), action: #selector(turnout1NotClosedAction(_:)))
+        addItem(eventId: getNotClosedEventId(turnoutNumber: 2), action: #selector(turnout2NotClosedAction(_:)))
+        addItem(eventId: getNotClosedEventId(turnoutNumber: 3), action: #selector(turnout3NotClosedAction(_:)))
+        addItem(eventId: getNotClosedEventId(turnoutNumber: 4), action: #selector(turnout4NotClosedAction(_:)))
+        addItem(eventId: getTurnoutThrownEventId(turnoutNumber: 1), action: #selector(turnout1ThrownAction(_:)))
+        addItem(eventId: getTurnoutThrownEventId(turnoutNumber: 2), action: #selector(turnout2ThrownAction(_:)))
+        addItem(eventId: getTurnoutThrownEventId(turnoutNumber: 3), action: #selector(turnout3ThrownAction(_:)))
+        addItem(eventId: getTurnoutThrownEventId(turnoutNumber: 4), action: #selector(turnout4ThrownAction(_:)))
+        addItem(eventId: getNotThrownEventId(turnoutNumber: 1), action: #selector(turnout1NotThrownAction(_:)))
+        addItem(eventId: getNotThrownEventId(turnoutNumber: 2), action: #selector(turnout2NotThrownAction(_:)))
+        addItem(eventId: getNotThrownEventId(turnoutNumber: 3), action: #selector(turnout3NotThrownAction(_:)))
+        addItem(eventId: getNotThrownEventId(turnoutNumber: 4), action: #selector(turnout4NotThrownAction(_:)))
+      }
+      
+    }
+    else if isSensor {
+      addItem(eventId: sensorActivatedEventId, action: #selector(sensorActivatedAction(_:)))
+      addItem(eventId: sensorDeactivatedEventId, action: #selector(sensorDeactivatedAction(_:)))
+    }
+    
+  }
+  
+  // MARK: Event Actions
+  
+  @objc func enterDetectionZoneAction(_ event:OpenLCBMessage) {
+    isBlockOccupied = true
+  }
+
+  @objc func exitDetectionZoneAction(_ event:OpenLCBMessage) {
+    isBlockOccupied = false
+  }
+
+  @objc func locationServicesAction(_ event:OpenLCBMessage) {
+    
+  }
+
+  @objc func trackFaultAction(_ event:OpenLCBMessage) {
+    isTrackFaulted = true
+  }
+
+  @objc func trackFaultClearedAction(_ event:OpenLCBMessage) {
+    isTrackFaulted = false
+  }
+
+  @objc func sensorActivatedAction(_ event:OpenLCBMessage) {
+    isSensorActivated = true
+  }
+
+  @objc func sensorDeactivatedAction(_ event:OpenLCBMessage) {
+    isSensorActivated = false
+  }
+
+  @objc func turnout1ClosedAction(_ event:OpenLCBMessage) {
+    setIsClosed(turnoutNumber: 1, state: true)
+  }
+
+  @objc func turnout2ClosedAction(_ event:OpenLCBMessage) {
+    setIsClosed(turnoutNumber: 2, state: true)
+  }
+
+  @objc func turnout3ClosedAction(_ event:OpenLCBMessage) {
+    setIsClosed(turnoutNumber: 3, state: true)
+  }
+
+  @objc func turnout4ClosedAction(_ event:OpenLCBMessage) {
+    setIsClosed(turnoutNumber: 4, state: true)
+  }
+
+  @objc func turnout1NotClosedAction(_ event:OpenLCBMessage) {
+    setIsClosed(turnoutNumber: 1, state: false)
+  }
+
+  @objc func turnout2NotClosedAction(_ event:OpenLCBMessage) {
+    setIsClosed(turnoutNumber: 2, state: false)
+  }
+
+  @objc func turnout3NotClosedAction(_ event:OpenLCBMessage) {
+    setIsClosed(turnoutNumber: 3, state: false)
+  }
+
+  @objc func turnout4NotClosedAction(_ event:OpenLCBMessage) {
+    setIsClosed(turnoutNumber: 4, state: false)
+  }
+
+  @objc func turnout1ThrownAction(_ event:OpenLCBMessage) {
+    setIsThrown(turnoutNumber: 1, state: true)
+  }
+
+  @objc func turnout2ThrownAction(_ event:OpenLCBMessage) {
+    setIsThrown(turnoutNumber: 2, state: true)
+  }
+
+  @objc func turnout3ThrownAction(_ event:OpenLCBMessage) {
+    setIsThrown(turnoutNumber: 3, state: true)
+  }
+
+  @objc func turnout4ThrownAction(_ event:OpenLCBMessage) {
+    setIsThrown(turnoutNumber: 4, state: true)
+  }
+
+  @objc func turnout1NotThrownAction(_ event:OpenLCBMessage) {
+    setIsThrown(turnoutNumber: 1, state: false)
+  }
+
+  @objc func turnout2NotThrownAction(_ event:OpenLCBMessage) {
+    setIsThrown(turnoutNumber: 2, state: false)
+  }
+
+  @objc func turnout3NotThrownAction(_ event:OpenLCBMessage) {
+    setIsThrown(turnoutNumber: 3, state: false)
+  }
+
+  @objc func turnout4NotThrownAction(_ event:OpenLCBMessage) {
+    setIsThrown(turnoutNumber: 4, state: false)
+  }
+
   // MARK: OpenLCBNetworkLayerDelegate Methods
   
   public override func openLCBMessageReceived(message: OpenLCBMessage) {
@@ -1966,82 +2134,10 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
      
     case .producerConsumerEventReport:
       
-      if isEventConsumed, let eventId = message.eventId {
-      
-        if itemType.isGroup {
-          
-          switch eventId {
-          case enterDetectionZoneEventId:
-            isBlockOccupied = true
-          case locationServicesEventId:
-            break
-          case trackFaultEventId:
-            isTrackFaulted = true
-          case exitDetectionZoneEventId:
-            isBlockOccupied = false
-          case trackFaultClearedEventId:
-            isTrackFaulted = false
-          default:
-            break
-          }
-          
-          if isTurnout {
-            
-            switch eventId {
-            case getTurnoutClosedEventId(turnoutNumber: 1):
-              setIsClosed(turnoutNumber: 1, state: true)
-            case getTurnoutClosedEventId(turnoutNumber: 2):
-              setIsClosed(turnoutNumber: 2, state: true)
-            case getTurnoutClosedEventId(turnoutNumber: 3):
-              setIsClosed(turnoutNumber: 3, state: true)
-            case getTurnoutClosedEventId(turnoutNumber: 4):
-              setIsClosed(turnoutNumber: 4, state: true)
-            case getTurnoutThrownEventId(turnoutNumber: 1):
-              setIsThrown(turnoutNumber: 1, state: true)
-            case getTurnoutThrownEventId(turnoutNumber: 2):
-              setIsThrown(turnoutNumber: 2, state: true)
-            case getTurnoutThrownEventId(turnoutNumber: 3):
-              setIsThrown(turnoutNumber: 3, state: true)
-            case getTurnoutThrownEventId(turnoutNumber: 4):
-              setIsThrown(turnoutNumber: 4, state: true)
-            case getNotClosedEventId(turnoutNumber: 1):
-              setIsClosed(turnoutNumber: 1, state: false)
-            case getNotClosedEventId(turnoutNumber: 2):
-              setIsClosed(turnoutNumber: 2, state: false)
-            case getNotClosedEventId(turnoutNumber: 3):
-              setIsClosed(turnoutNumber: 3, state: false)
-            case getNotClosedEventId(turnoutNumber: 4):
-              setIsClosed(turnoutNumber: 4, state: false)
-            case getNotThrownEventId(turnoutNumber: 1):
-              setIsThrown(turnoutNumber: 1, state: false)
-            case getNotThrownEventId(turnoutNumber: 2):
-              setIsThrown(turnoutNumber: 2, state: false)
-            case getNotThrownEventId(turnoutNumber: 3):
-              setIsThrown(turnoutNumber: 3, state: false)
-            case getNotThrownEventId(turnoutNumber: 4):
-              setIsThrown(turnoutNumber: 4, state: false)
-            default:
-              break
-            }
-            
-          }
-
-        }
-        else if isSensor {
-          
-          switch eventId {
-          case sensorActivatedEventId:
-            isSensorActivated = true
-          case sensorDeactivatedEventId:
-            isSensorActivated = false
-          default:
-            break
-          }
-          
-        }
-
+      if let eventId = message.eventId, let action = eventLookup[eventId] {
+        self.perform(action, with: message)
       }
-      
+
     default:
       super.openLCBMessageReceived(message: message)
     }

@@ -303,7 +303,7 @@
     },
     "AbY-9S-xUt.title" : {
       "comment" : "Class = \"NSBox\"; title = \"Layout\"; ObjectID = \"AbY-9S-xUt\";",
-      "extractionState" : "extracted_with_value",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -639,7 +639,7 @@
     },
     "ELL-xv-dmg.title" : {
       "comment" : "Class = \"NSBox\"; title = \"Box\"; ObjectID = \"ELL-xv-dmg\";",
-      "extractionState" : "extracted_with_value",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1225,18 +1225,6 @@
         }
       }
     },
-    "KDp-qa-AWZ.title" : {
-      "comment" : "Class = \"NSButtonCell\"; title = \"Convert\"; ObjectID = \"KDp-qa-AWZ\";",
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Convert"
-          }
-        }
-      }
-    },
     "kIP-vf-haE.title" : {
       "comment" : "Class = \"NSMenuItem\"; title = \"Show Sidebar\"; ObjectID = \"kIP-vf-haE\";",
       "extractionState" : "extracted_with_value",
@@ -1473,7 +1461,7 @@
     },
     "oeW-CB-kAA.ibShadowedToolTip" : {
       "comment" : "Class = \"NSButton\"; ibShadowedToolTip = \"Scale to Fit\"; ObjectID = \"oeW-CB-kAA\";",
-      "extractionState" : "extracted_with_value",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1605,7 +1593,7 @@
     },
     "Q4n-AY-BBa.ibShadowedToolTip" : {
       "comment" : "Class = \"NSButton\"; ibShadowedToolTip = \"Zoom Out\"; ObjectID = \"Q4n-AY-BBa\";",
-      "extractionState" : "extracted_with_value",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1845,7 +1833,7 @@
     },
     "TQD-qK-bW9.ibShadowedToolTip" : {
       "comment" : "Class = \"NSButton\"; ibShadowedToolTip = \"Zoom In\"; ObjectID = \"TQD-qK-bW9\";",
-      "extractionState" : "extracted_with_value",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

@@ -12,19 +12,9 @@ public class ViewNodeInfoMemorySpaceInfoTVDS : NSObject, NSTableViewDataSource, 
 
   // MARK: Constructors & Destructors
   
-  #if DEBUG
-  public override init() {
-    super.init()
-    addInit()
-  }
-  #endif
-  
   deinit {
     _addressSpaceInformation.removeAll()
     items.removeAll()
-    #if DEBUG
-    addDeinit()
-    #endif
   }
   
   // MARK: Private Properties

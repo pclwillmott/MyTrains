@@ -54,10 +54,6 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.virtualNodeConfig.rawValue, address: addressVirtualNodeConfigNextNodeIdSeed)
     registerVariable(space: OpenLCBNodeMemoryAddressSpace.virtualNodeConfig.rawValue, address: addressVirtualNodeConfigHostAppNodeId)
 
-    #if DEBUG
-    addInit()
-    #endif
-    
   }
   
   deinit {
@@ -73,9 +69,6 @@ public class OpenLCBNodeVirtual : OpenLCBNode, OpenLCBNetworkLayerDelegate, Open
     registeredVariables.removeAll()
     unitConversions.removeAll()
     datagramTypesSupported.removeAll()
-    #if DEBUG
-    addDeinit()
-    #endif
   }
   
   // MARK: Private Properties

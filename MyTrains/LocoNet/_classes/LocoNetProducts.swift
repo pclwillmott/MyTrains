@@ -11,6 +11,7 @@ public typealias LocoNetDeviceAttributes = Set<LocoNetDeviceAttribute>
 
 public typealias LocoNetProduct = (id: LocoNetDeviceId, productName: String, description: String, approxDate: Int, productCode: DigitraxProductCode, attributes: LocoNetDeviceAttributes, sensors: Int, switches: Int, manufacturer:Manufacturer, cvs: Int)
 
+/*
 public class LocoNetProductDictionaryItem : EditorObject {
 
   init(product: LocoNetProduct) {
@@ -34,6 +35,7 @@ public class LocoNetProductDictionaryItem : EditorObject {
   }
   
 }
+*/
 
 public class LocoNetProducts {
 
@@ -183,7 +185,7 @@ public class LocoNetProducts {
     return result
     
   }
-  
+  /*
   public static func productDictionary(attributes: LocoNetDeviceAttributes) -> [Int:LocoNetProductDictionaryItem] {
     
     var result : [Int:LocoNetProductDictionaryItem] = [:]
@@ -252,5 +254,6 @@ public class LocoNetProducts {
     return result
     
   }
-
+*/
+  
 }

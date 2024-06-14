@@ -25,21 +25,14 @@ public class OpenLCBLocoNetMonitorNode : OpenLCBNodeVirtual, LocoNetGatewayDeleg
       resetToFactoryDefaults()
     }
     
-    #if DEBUG
-    addInit()
-    #endif
-
   }
   
   deinit {
     
     delegate = nil
     
-    #if DEBUG
-    addDeinit()
-    #endif
-    
   }
+
   // MARK: Private Properties
   
   private var _gatewayId : UInt64 = 0

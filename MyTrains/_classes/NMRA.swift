@@ -232,7 +232,7 @@ public class NMRA {
       
     }
   }
-  
+  /*
   public static var manufacturersComboDict : [Int:EditorObject] {
     get {
       var result : [Int:EditorObject] = [:]
@@ -245,7 +245,7 @@ public class NMRA {
       return result
     }
   }
-  
+  */
   public static var manufacturers : [Int:ManufacturerInfo] {
     get {
 

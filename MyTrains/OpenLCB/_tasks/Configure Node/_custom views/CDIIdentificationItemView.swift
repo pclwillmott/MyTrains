@@ -12,25 +12,10 @@ class CDIIdentificationItemView : CDIView {
 
   // MARK: Destructors
 
-  #if DEBUG
-  required init?(coder: NSCoder) {
-    super.init(coder: coder)
-    addInit()
-  }
-  
-  override init(frame frameRect: NSRect) {
-    super.init(frame: frameRect)
-    addInit()
-  }
-  #endif
-  
   deinit {
     lblName = nil
     lblValue = nil
     subviews.removeAll()
-    #if DEBUG
-    addDeinit()
-    #endif
   }
   
   // MARK: Public Properties

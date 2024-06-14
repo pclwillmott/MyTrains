@@ -109,7 +109,7 @@ class SpeedProfilerVC: MyTrainsViewController {
     }
   }
   
-  private var cboLocomotiveDS = ComboBoxDictDS()
+//  private var cboLocomotiveDS = ComboBoxDictDS()
   
   private var tableViewDS = SpeedProfileTableViewDS()
   
@@ -133,7 +133,7 @@ class SpeedProfilerVC: MyTrainsViewController {
   
   private var startTime : TimeInterval = 0.0
   
-  private var route : Route = []
+//  private var route : Route = []
   
   private var routeDirection : LocomotiveDirection = .forward
   

@@ -53,10 +53,6 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
       resetToFactoryDefaults()
     }
     
-    #if DEBUG
-    addInit()
-    #endif
-
   }
   
   deinit {
@@ -70,10 +66,6 @@ public class OpenLCBProgrammerToolNode : OpenLCBNodeVirtual {
     numberBase = nil
 
     cvs.removeAll()
-    
-    #if DEBUG
-    addDeinit()
-    #endif
     
   }
   

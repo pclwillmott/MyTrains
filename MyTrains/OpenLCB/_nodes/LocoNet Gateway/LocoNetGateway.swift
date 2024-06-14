@@ -53,10 +53,6 @@ public class LocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
       
     }
     
-    #if DEBUG
-    addInit()
-    #endif
-    
   }
   
   deinit {
@@ -68,9 +64,6 @@ public class LocoNetGateway : OpenLCBNodeVirtual, MTSerialPortDelegate {
     timeoutTimer?.invalidate()
     timeoutTimer = nil
     currentItem = nil
-    #if DEBUG
-    addDeinit()
-    #endif
   }
   
   // MARK: Private Properties

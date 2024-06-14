@@ -38,19 +38,12 @@ public class LCCCANFrame : NSObject {
     
     super.init()
     
-    #if DEBUG
-    addInit()
-    #endif
-    
   }
   
   init(header:UInt32, data:[UInt8]) {
     self.header = header
     self.data = data
     super.init()
-    #if DEBUG
-    addInit()
-    #endif
   }
 
   init?(message:OpenLCBMessage) {
@@ -79,10 +72,6 @@ public class LCCCANFrame : NSObject {
     
     super.init()
     
-    #if DEBUG
-    addInit()
-    #endif
-    
   }
 
   init?(pcerMessage:OpenLCBMessage, payload:[UInt8]) {
@@ -97,10 +86,6 @@ public class LCCCANFrame : NSObject {
     timeStamp = pcerMessage.timeStamp
     
     super.init()
-    
-    #if DEBUG
-    addInit()
-    #endif
     
   }
 
@@ -128,10 +113,6 @@ public class LCCCANFrame : NSObject {
 
     super.init()
     
-    #if DEBUG
-    addInit()
-    #endif
-
   }
 
   init?(message:OpenLCBMessage, mti:OpenLCBMTI, payload:[UInt8]) {
@@ -146,10 +127,6 @@ public class LCCCANFrame : NSObject {
     timeStamp = message.timeStamp
     
     super.init()
-    
-    #if DEBUG
-    addInit()
-    #endif
     
   }
 
@@ -166,17 +143,10 @@ public class LCCCANFrame : NSObject {
     
     super.init()
     
-    #if DEBUG
-    addInit()
-    #endif
-    
   }
   
   deinit {
     data.removeAll()
-    #if DEBUG
-    addDeinit()
-    #endif
   }
 
   // MARK: Private Properties

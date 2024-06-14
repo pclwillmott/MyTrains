@@ -26,15 +26,6 @@ class CSVParser {
   
   init(withURL url: URL){
     self.url = url
-    #if DEBUG
-    addInit()
-    #endif
-  }
-  
-  deinit {
-    #if DEBUG
-    addDeinit()
-    #endif
   }
   
   // MARK: Private Properties

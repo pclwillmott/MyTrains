@@ -77,10 +77,6 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetGatewayDel
       
     }
     
-    #if DEBUG
-    addInit()
-    #endif
-    
   }
   
   deinit {
@@ -89,10 +85,6 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetGatewayDel
     
     timeoutTimer?.invalidate()
     timeoutTimer = nil
-    
-    #if DEBUG
-    addDeinit()
-    #endif
     
   }
   
@@ -133,15 +125,15 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetGatewayDel
     }
     set(value) {
       configuration!.setUInt(address: addressLocoNetGateway, value: value)
+      _locoNetGateway = nil
     }
   }
 
   public var locoNetGateway : LocoNetGateway? {
-    let id = locoNetGatewayNodeId
-    if let gateway = _locoNetGateway, gateway.nodeId == id {
+    if let gateway = _locoNetGateway {
       return gateway
     }
-    _locoNetGateway = appNode?.locoNetGateways[id]
+    _locoNetGateway = appNode?.locoNetGateways[locoNetGatewayNodeId]
     return _locoNetGateway
   }
 
@@ -261,6 +253,16 @@ public class OpenLCBProgrammingTrackNode : OpenLCBNodeVirtual, LocoNetGatewayDel
   // MARK: LocoNetGatewayDelegate Methods
   
   @objc public func locoNetMessageReceived(message:LocoNetMessage) {
+    
+    let interestingMessages : Set<LocoNetMessageType> = [
+      .progCmdAccepted,
+      .programmerBusy,
+      .progSlotDataP1,
+    ]
+    
+    guard interestingMessages.contains(message.messageType) else {
+      return
+    }
     
     switch message.messageType {
       

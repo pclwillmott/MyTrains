@@ -12,18 +12,6 @@ class CDIDataView: CDIView {
   
   // MARK: Destructors
  
-  #if DEBUG
-  required init?(coder: NSCoder) {
-    super.init(coder: coder)
-    addInit()
-  }
-  
-  override init(frame frameRect: NSRect) {
-    super.init(frame: frameRect)
-    addInit()
-  }
-  #endif
-  
   deinit {
     box?.subviews.removeAll()
     box = nil
@@ -44,9 +32,6 @@ class CDIDataView: CDIView {
     newEventId?.target = nil
     newEventId = nil
     subviews.removeAll()
-    #if DEBUG
-    addDeinit()
-    #endif
   }
   
   // MARK: Private & Internal properties

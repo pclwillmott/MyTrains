@@ -17,27 +17,18 @@ public class OpenLCBMemorySpace : NSObject {
     self._isReadOnly = isReadOnly
     self.memorySpaceDescription = description
     super.init()
-    #if DEBUG
-    addInit()
-    #endif
   }
   
   init(reader: SqliteDataReader, isReadOnly:Bool, description: String) {
     self._isReadOnly = isReadOnly
     super.init()
     decode(sqliteDataReader: reader)
-    #if DEBUG
-    addInit()
-    #endif
   }
   
   deinit {
     unitConversions.removeAll()
     delegate = nil
     memory.removeAll()
-    #if DEBUG
-    addDeinit()
-    #endif
   }
   
   // MARK: Private Properties

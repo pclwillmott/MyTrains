@@ -12,18 +12,6 @@ class CDIGroupTabView : CDIGroupView {
   
   // MARK: Destructors
  
-  #if DEBUG
-  required init?(coder: NSCoder) {
-    super.init(coder: coder)
-    addInit()
-  }
-  
-  override init(frame frameRect: NSRect) {
-    super.init(frame: frameRect)
-    addInit()
-  }
-  #endif
-  
   deinit {
     buttonConstraints.removeAll()
     _tabViewItems.removeAll()
@@ -42,9 +30,6 @@ class CDIGroupTabView : CDIGroupView {
     btnPrevious = nil
     btnNext = nil
     subviews.removeAll()
-    #if DEBUG
-    addDeinit()
-    #endif
   }
   
   // MARK: Drawing Stuff

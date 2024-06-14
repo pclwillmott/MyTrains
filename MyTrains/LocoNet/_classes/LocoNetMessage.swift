@@ -17,24 +17,15 @@ public class LocoNetMessage : NSObject {
       self.message.append(LocoNetMessage.checkSum(data: message))
     }
     super.init()
-    #if DEBUG
-    addInit()
-    #endif
   }
 
   init(message: LocoNetMessage) {
     self.message = message.message
     super.init()
-    #if DEBUG
-    addInit()
-    #endif
   }
   
   deinit {
     message.removeAll()
-    #if DEBUG
-    addDeinit()
-    #endif
   }
   
   // MARK: Private Properties

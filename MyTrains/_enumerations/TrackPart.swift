@@ -954,7 +954,7 @@ public enum TrackPart : UInt16 {
     }
     return cdi.replacingOccurrences(of: mapPlaceholder, with: map(itemType: itemType, layout: layout))
   }
-
+/*
   public static func dictionary(itemPartType:SwitchboardItemType, trackGauge:TrackGauge) -> [Int:TrackPartEditorObject] {
     
     var result : [Int:TrackPartEditorObject] = [:]
@@ -971,11 +971,11 @@ public enum TrackPart : UInt16 {
     return result
     
   }
-  
 }
+ */
 
 // MARK: TrackPartEditorObject
-
+/*
 public class TrackPartEditorObject : EditorObject {
   
   // MARK: Constructors
@@ -994,5 +994,5 @@ public class TrackPartEditorObject : EditorObject {
   override public func displayString() -> String {
     return trackPart.title
   }
-
+*/
 }
