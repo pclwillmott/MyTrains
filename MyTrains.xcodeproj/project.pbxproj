@@ -42,13 +42,14 @@
 		DA1272C32A7569AF00AB42F6 /* FDI Generic.xml in Resources */ = {isa = PBXBuildFile; fileRef = DA1272C22A7569AF00AB42F6 /* FDI Generic.xml */; };
 		DA1272C52A7576CD00AB42F6 /* OpenLCBFDIItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1272C42A7576CD00AB42F6 /* OpenLCBFDIItem.swift */; };
 		DA1272C72A75773D00AB42F6 /* OpenLCBFDIFunctionKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1272C62A75773D00AB42F6 /* OpenLCBFDIFunctionKind.swift */; };
-		DA15BE26289806BF00FD82FD /* SpeedProfileTableViewDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA15BE25289806BF00FD82FD /* SpeedProfileTableViewDS.swift */; };
 		DA17297F2B25E7330013301B /* OpenLCBLocationServicesContentBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA17297E2B25E7330013301B /* OpenLCBLocationServicesContentBlock.swift */; };
 		DA17E0862A77C83A000154E0 /* OpenLCBLocoNetMonitorNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA17E0852A77C83A000154E0 /* OpenLCBLocoNetMonitorNode.swift */; };
 		DA17E0882A77D7CC000154E0 /* OpenLCBLocoNetMonitorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA17E0872A77D7CC000154E0 /* OpenLCBLocoNetMonitorDelegate.swift */; };
 		DA19A10E2A4469B00048C55E /* LocoNetGateway Extensions - Unused.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA19A10D2A4469B00048C55E /* LocoNetGateway Extensions - Unused.swift */; };
 		DA19A2622BD29BDA00296E15 /* NSViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA19A2612BD29BDA00296E15 /* NSViewExtensions.swift */; };
 		DA19A2642BD2D74F00296E15 /* NSTextFieldExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA19A2632BD2D74F00296E15 /* NSTextFieldExtensions.swift */; };
+		DA1ADFEE2C1F10100018088F /* SpeedProfilerValueType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1ADFED2C1F10100018088F /* SpeedProfilerValueType.swift */; };
+		DA1ADFF02C1F4ABD0018088F /* SpeedProfilerInspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1ADFEF2C1F4ABD0018088F /* SpeedProfilerInspector.swift */; };
 		DA1B79F9285F3885009E1189 /* UnitSpeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1B79F8285F3885009E1189 /* UnitSpeed.swift */; };
 		DA1B79FB285F3AD0009E1189 /* UnitLength.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1B79FA285F3AD0009E1189 /* UnitLength.swift */; };
 		DA1B79FD285F3C5E009E1189 /* TrackGauge.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1B79FC285F3C5E009E1189 /* TrackGauge.swift */; };
@@ -325,7 +326,6 @@
 		DAF4D2D72B78F42A00759539 /* SpeedConstraintType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF4D2D62B78F42A00759539 /* SpeedConstraintType.swift */; };
 		DAF4DD4C289A90C1000B848E /* SpeedResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF4DD4B289A90C1000B848E /* SpeedResultsView.swift */; };
 		DAF4DD4E289A9901000B848E /* BestFitMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF4DD4D289A9901000B848E /* BestFitMethod.swift */; };
-		DAF4DD50289ABDDE000B848E /* SpeedProfileResultsType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF4DD4F289ABDDE000B848E /* SpeedProfileResultsType.swift */; };
 		DAF5B4FD28A91A830015E758 /* SpeedSteps.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF5B4FC28A91A830015E758 /* SpeedSteps.swift */; };
 		DAF5B4FF28A93D0E0015E758 /* RandomAccessCollectionExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF5B4FE28A93D0E0015E758 /* RandomAccessCollectionExtensions.swift */; };
 		DAF6778A2B431EAF009707A4 /* CDIStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF677892B431EAF009707A4 /* CDIStackView.swift */; };
@@ -391,13 +391,14 @@
 		DA1272C22A7569AF00AB42F6 /* FDI Generic.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "FDI Generic.xml"; sourceTree = "<group>"; };
 		DA1272C42A7576CD00AB42F6 /* OpenLCBFDIItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBFDIItem.swift; sourceTree = "<group>"; };
 		DA1272C62A75773D00AB42F6 /* OpenLCBFDIFunctionKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBFDIFunctionKind.swift; sourceTree = "<group>"; };
-		DA15BE25289806BF00FD82FD /* SpeedProfileTableViewDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedProfileTableViewDS.swift; sourceTree = "<group>"; };
 		DA17297E2B25E7330013301B /* OpenLCBLocationServicesContentBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBLocationServicesContentBlock.swift; sourceTree = "<group>"; };
 		DA17E0852A77C83A000154E0 /* OpenLCBLocoNetMonitorNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBLocoNetMonitorNode.swift; sourceTree = "<group>"; };
 		DA17E0872A77D7CC000154E0 /* OpenLCBLocoNetMonitorDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBLocoNetMonitorDelegate.swift; sourceTree = "<group>"; };
 		DA19A10D2A4469B00048C55E /* LocoNetGateway Extensions - Unused.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LocoNetGateway Extensions - Unused.swift"; sourceTree = "<group>"; };
 		DA19A2612BD29BDA00296E15 /* NSViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSViewExtensions.swift; sourceTree = "<group>"; };
 		DA19A2632BD2D74F00296E15 /* NSTextFieldExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSTextFieldExtensions.swift; sourceTree = "<group>"; };
+		DA1ADFED2C1F10100018088F /* SpeedProfilerValueType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedProfilerValueType.swift; sourceTree = "<group>"; };
+		DA1ADFEF2C1F4ABD0018088F /* SpeedProfilerInspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedProfilerInspector.swift; sourceTree = "<group>"; };
 		DA1B79F8285F3885009E1189 /* UnitSpeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitSpeed.swift; sourceTree = "<group>"; };
 		DA1B79FA285F3AD0009E1189 /* UnitLength.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitLength.swift; sourceTree = "<group>"; };
 		DA1B79FC285F3C5E009E1189 /* TrackGauge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackGauge.swift; sourceTree = "<group>"; };
@@ -684,7 +685,6 @@
 		DAF4D2D62B78F42A00759539 /* SpeedConstraintType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedConstraintType.swift; sourceTree = "<group>"; };
 		DAF4DD4B289A90C1000B848E /* SpeedResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedResultsView.swift; sourceTree = "<group>"; };
 		DAF4DD4D289A9901000B848E /* BestFitMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BestFitMethod.swift; sourceTree = "<group>"; };
-		DAF4DD4F289ABDDE000B848E /* SpeedProfileResultsType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedProfileResultsType.swift; sourceTree = "<group>"; };
 		DAF5B4FC28A91A830015E758 /* SpeedSteps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedSteps.swift; sourceTree = "<group>"; };
 		DAF5B4FE28A93D0E0015E758 /* RandomAccessCollectionExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomAccessCollectionExtensions.swift; sourceTree = "<group>"; };
 		DAF677892B431EAF009707A4 /* CDIStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDIStackView.swift; sourceTree = "<group>"; };
@@ -813,6 +813,7 @@
 				DA9CF8FA2860952300825FA9 /* BlockType.swift */,
 				DA9DBA022B643774004F8EB9 /* CountryCode.swift */,
 				DA48EE28293CEF16006C26A0 /* DayOfWeek.swift */,
+				DA1D72FF2C11E9730084ABA7 /* DCCSwitchState.swift */,
 				DA8A05682B544087003A39D7 /* EnableState.swift */,
 				DA1DA5EB28280FCD00E0F993 /* FlowControl.swift */,
 				DAE8DD5628675B040097C2D1 /* FrogType.swift */,
@@ -840,7 +841,6 @@
 				DA1B79F8285F3885009E1189 /* UnitSpeed.swift */,
 				DA50C2F22B77AC1A00C2F6A1 /* UnitTime.swift */,
 				DA92E0772B66B09800762058 /* YesNo.swift */,
-				DA1D72FF2C11E9730084ABA7 /* DCCSwitchState.swift */,
 			);
 			path = _enumerations;
 			sourceTree = "<group>";
@@ -1187,7 +1187,8 @@
 			children = (
 				DA5CCB4B2897F58D00F99AE6 /* SpeedProfiler.storyboard */,
 				DA5CCB4D2897F6B200F99AE6 /* SpeedProfilerVC.swift */,
-				DA15BE25289806BF00FD82FD /* SpeedProfileTableViewDS.swift */,
+				DA1ADFED2C1F10100018088F /* SpeedProfilerValueType.swift */,
+				DA1ADFEF2C1F4ABD0018088F /* SpeedProfilerInspector.swift */,
 			);
 			path = "Speed Profiler";
 			sourceTree = "<group>";
@@ -1490,7 +1491,6 @@
 				DA56260C29E1A13300D465CC /* OpenLCBTransportLayerState.swift */,
 				DA311BAB2A7BB8CC0019FDCE /* OpenLCBValidity.swift */,
 				DA5F7A192A3F11A7004D7EBB /* OpenLCBWellKnownEvent.swift */,
-				DAF4DD4F289ABDDE000B848E /* SpeedProfileResultsType.swift */,
 			);
 			path = _enumerations;
 			sourceTree = "<group>";
@@ -1807,6 +1807,7 @@
 				DA1B949F2A3DE8E000E2CE6A /* Client.swift in Sources */,
 				DA8FDB2D279C4AC000E15024 /* LocoSlotTableViewDS.swift in Sources */,
 				DA3D9A672B74FEED00451EFB /* UnitConversionType.swift in Sources */,
+				DA1ADFEE2C1F10100018088F /* SpeedProfilerValueType.swift in Sources */,
 				DA5BD1F12B65736600CEA5BA /* AboutVC.swift in Sources */,
 				DAFFB6662B5D8F650035AC74 /* LayoutState.swift in Sources */,
 				DA95D6BD280833FE00D9F1B6 /* GroupSetupVC.swift in Sources */,
@@ -1815,7 +1816,6 @@
 				DA595E142B890AD700ADF87B /* OpenLCBNodeVirtual - Messages - Memory Configuration.swift in Sources */,
 				DAE44C5B2BB031A400BBCCE9 /* SoftUIntX.swift in Sources */,
 				DA48EE29293CEF16006C26A0 /* DayOfWeek.swift in Sources */,
-				DAF4DD50289ABDDE000B848E /* SpeedProfileResultsType.swift in Sources */,
 				DAAC7E932A79514E001A424E /* OpenLCBProgrammerToolDelegate.swift in Sources */,
 				DAD554E82BCEBA6B004E17DF /* MyIcon.swift in Sources */,
 				DA1B949D2A3DE89300E2CE6A /* ClientConnection.swift in Sources */,
@@ -1861,7 +1861,6 @@
 				DA8A05672B540B2E003A39D7 /* CDI.swift in Sources */,
 				DA3866252A7A880A00A0FAEB /* OpenLCBConfigurationToolDelegate.swift in Sources */,
 				DAA66BD22A092DC2001804AC /* StringExtensions.swift in Sources */,
-				DA15BE26289806BF00FD82FD /* SpeedProfileTableViewDS.swift in Sources */,
 				DAAA9C212A0FAE0100A5B9D6 /* OpenLCBDatagramType.swift in Sources */,
 				DA51FB9C29D88320002CAAC1 /* LCCCANFrame.swift in Sources */,
 				DA56261529E1BE7800D465CC /* OpenLCBMTI.swift in Sources */,
@@ -1903,6 +1902,7 @@
 				DA1D73002C11E9730084ABA7 /* DCCSwitchState.swift in Sources */,
 				DA0B63DA2AF7C612007C7CD6 /* OpenLCBMonitorVC.swift in Sources */,
 				DA0D3E0A2A485E770042748C /* OpenLCBSearchMatchType.swift in Sources */,
+				DA1ADFF02C1F4ABD0018088F /* SpeedProfilerInspector.swift in Sources */,
 				DA9CF8FD2860978A00825FA9 /* TurnoutMotorType.swift in Sources */,
 				DA7A127829E32E99000DCE1C /* OpenLCBMessageCANFrameType.swift in Sources */,
 				DAA7BEB72B50338800508140 /* SwitchboardPanelNode.swift in Sources */,

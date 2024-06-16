@@ -498,6 +498,9 @@
         }
       }
     },
+    "Actual Samples" : {
+
+    },
     "Add Item to Group" : {
 
     },
@@ -827,6 +830,9 @@
           }
         }
       }
+    },
+    "Best Fit Values" : {
+
     },
     "Bidirectional" : {
       "comment" : "Used by combobox to indicate that trains can travel in both directions in the track block",
@@ -2263,6 +2269,9 @@
         }
       }
     },
+    "Discard Changes" : {
+
+    },
     "Discussion" : {
 
     },
@@ -3243,6 +3252,9 @@
 
     },
     "Hide the Panel Configuration Area" : {
+
+    },
+    "Hide the Results Area" : {
 
     },
     "Horn" : {
@@ -5384,6 +5396,9 @@
         }
       }
     },
+    "Save Changes" : {
+
+    },
     "Scale 7" : {
       "comment" : "Used to indicate the track gauge",
       "extractionState" : "stale",
@@ -5624,6 +5639,12 @@
     "Show Quick Help Inspector" : {
 
     },
+    "Show Route Inspector" : {
+
+    },
+    "Show Settings Inspector" : {
+
+    },
     "Show Speed Constraints Inspector" : {
 
     },
@@ -5634,6 +5655,9 @@
 
     },
     "Show the Panel Configuration Area" : {
+
+    },
+    "Show the Results Area" : {
 
     },
     "Shunting Mode" : {
@@ -5809,6 +5833,9 @@
     "Speed Constraints" : {
 
     },
+    "Speed Profiler" : {
+
+    },
     "Spirax Valve" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -5827,6 +5854,9 @@
       }
     },
     "Stand Alone LocoNet" : {
+
+    },
+    "Start Profiling" : {
 
     },
     "Steam" : {
@@ -5862,6 +5892,9 @@
           }
         }
       }
+    },
+    "Step" : {
+
     },
     "Step Lights" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",

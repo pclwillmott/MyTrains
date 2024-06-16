@@ -17,7 +17,8 @@ public enum MyTrainsViewType : Int, CaseIterable {
   case locoNetTrafficMonitor = 5
   case locoNetSlotView       = 6
   case locoNetDashboard      = 7
-  case layoutBuilder         = 8 // Remember to change numberOfTypes property value.
+  case layoutBuilder         = 8 
+  case speedProfiler         = 9 // Remember to change numberOfTypes property value.
 
   // MARK: Public Properties
   
@@ -28,7 +29,7 @@ public enum MyTrainsViewType : Int, CaseIterable {
   // MARK: Public Class Properties
   
   public static var numberOfTypes : Int {
-    return 9
+    return 10
   }
   
   // MARK: Private Class Methods
@@ -43,6 +44,7 @@ public enum MyTrainsViewType : Int, CaseIterable {
     .locoNetSlotView       : String(localized: "LocoNet Slot View"),
     .locoNetDashboard      : String(localized: "LocoNet Dashboard"),
     .layoutBuilder         : String(localized: "Layout Builder"),
+    .speedProfiler         : String(localized: "Speed Profiler"),
   ]
 
   private static var map : String {
@@ -57,6 +59,7 @@ public enum MyTrainsViewType : Int, CaseIterable {
       .locoNetSlotView,
       .locoNetDashboard,
       .layoutBuilder,
+      .speedProfiler,
     ]
     
     var map = "<segment space='1' origin='0'>\n"

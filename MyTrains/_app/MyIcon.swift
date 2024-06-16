@@ -25,6 +25,7 @@ public enum MyIcon : String {
   case info                   = "Info"
   case leadingThird           = "LeadingThird"
   case locationFinder         = "LocationFinder"
+  case map                    = "Map"
   case removeFromGroup        = "RemoveFromGroup"
   case removeItem             = "RemoveItem"
   case rotateClockwise        = "RotateClockwise"

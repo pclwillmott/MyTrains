@@ -29,6 +29,12 @@ public class UserSettings {
     }
   }
   
+  public weak var tableView : NSTableView? {
+    didSet {
+      update()
+    }
+  }
+  
   // MARK: Public Properties
   
   public weak var node : OpenLCBNodeVirtual? {
@@ -42,6 +48,8 @@ public class UserSettings {
   private func update() {
     window?.setFrameAutosaveName(key())
     splitView?.autosaveName = key(forKey: "SPLIT-VIEW")
+    tableView?.autosaveTableColumns = true
+    tableView?.autosaveName = key(forKey: "TABLE-VIEW")
   }
   
   private func key(forKey:String? = nil) -> String {

@@ -313,6 +313,13 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
 
     case .layoutBuilder:
       MyTrainsWindow.layoutBuilder.showWindow()
+    
+    case .speedProfiler:
+      let vc = MyTrainsWindow.speedProfiler.viewController as! SpeedProfilerVC
+      vc.configurationTool = networkLayer!.getConfigurationTool()
+      vc.configurationTool?.delegate = vc
+      vc.showWindow()
+     
     }
     
   }
@@ -577,7 +584,10 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
         openWindow(viewType: .layoutBuilder)
 
       case .trainSpeedProfiler:
-        MyTrainsWindow.speedProfiler.showWindow()
+        let vc = MyTrainsWindow.speedProfiler.viewController as! SpeedProfilerVC
+        vc.configurationTool = networkLayer!.getConfigurationTool()
+        vc.configurationTool?.delegate = vc
+        vc.showWindow()
 
       case .locoNetFirmwareUpdate:
         MyTrainsWindow.updateFirmware.showWindow()

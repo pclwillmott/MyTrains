@@ -73,6 +73,14 @@ enum DEFAULT {
   static let IS_GROUP_MODE       = "IS_GROUP_MODE"
   static let CURRENT_PALETTE     = "CURRENT_PALETTE"
   static let MAGNIFICATION       = "MAGNIFICATION"
+  
+  // Speed Profiler Defaults
+  
+  static let SHOW_VALUES_VIEW           = "SHOW_VALUES_VIEW"
+  static let SHOW_SETTINGS_VIEW         = "SHOW_SETTINGS_VIEW"
+  static let CURRENT_SETTINGS_INSPECTOR = "CURRENT_SETTINGS_INSPECTOR"
+  static let CURRENT_VALUES_MODE        = "CURRENT_VALUES_MODE"
+
 
 }
 
