@@ -29,6 +29,12 @@ public class UserSettings {
     }
   }
   
+  public weak var splitView2 : NSSplitView? {
+    didSet {
+      update()
+    }
+  }
+  
   public weak var tableView : NSTableView? {
     didSet {
       update()
@@ -48,8 +54,9 @@ public class UserSettings {
   private func update() {
     window?.setFrameAutosaveName(key())
     splitView?.autosaveName = key(forKey: "SPLIT-VIEW")
+    splitView2?.autosaveName = key(forKey: "SPLIT-VIEW2")
     tableView?.autosaveTableColumns = true
-    tableView?.autosaveName = key(forKey: "TABLE-VIEW")
+    tableView?.autosaveName = key(forKey: "TABLE-VIEW7")
   }
   
   private func key(forKey:String? = nil) -> String {

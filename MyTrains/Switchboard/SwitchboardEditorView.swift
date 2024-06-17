@@ -419,10 +419,14 @@ class SwitchboardEditorView: SwitchboardView {
     }
     
     if let node = networkLayer.createVirtualNode(virtualNodeType: .switchboardItemNode) as? SwitchboardItemNode {
+      
       node.layoutNodeId = switchboardPanel.layoutNodeId
       node.panelId = switchboardPanel.nodeId
       node.itemType = partType
       node.userNodeName = partType.title
+      if partType.isTurnout {
+        node.doNotUseForSpeedProfiling = true
+      }
       
       if partType.requireUniqueName {
         

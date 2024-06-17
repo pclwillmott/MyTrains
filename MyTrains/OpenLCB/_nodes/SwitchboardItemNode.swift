@@ -181,6 +181,7 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     initSpaceAddress(&addressCommandedClosedEventId0, 8, &configurationSize)
     initSpaceAddress(&addressNotThrownEventId0, 8, &configurationSize)
     initSpaceAddress(&addressNotClosedEventId0, 8, &configurationSize)
+    initSpaceAddress(&addressDoNotUseForSpeedProfiling, 1, &configurationSize)
 
     var temp = 0
     for _ in 1 ... 3 {
@@ -709,6 +710,7 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
   internal var addressCommandedClosedEventId0       = 0
   internal var addressNotThrownEventId0             = 0
   internal var addressNotClosedEventId0             = 0
+  internal var addressDoNotUseForSpeedProfiling     = 0
   
   // Route Settings Memory Space Addresses
   
@@ -827,6 +829,15 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
     }
     set(value) {
       configuration!.setUInt(address: addressAllowShunt, value: value ? UInt8(1) : UInt8(0))
+    }
+  }
+
+  public var doNotUseForSpeedProfiling : Bool {
+    get {
+      return configuration!.getUInt8(address: addressDoNotUseForSpeedProfiling)! == 1
+    }
+    set(value) {
+      configuration!.setUInt(address: addressDoNotUseForSpeedProfiling, value: value ? UInt8(1) : UInt8(0))
     }
   }
 
@@ -1178,6 +1189,8 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
       return ""
     case .directionality:
       return directionality.title
+    case .blockDoNotUseForSpeedProfile, .sensorDoNotUseForSpeedProfile:
+      return doNotUseForSpeedProfiling ? "true" : "false"
     case .allowShunt:
       return isReverseShuntAllowed ? "true" : "false"
     case .electrification:
@@ -1439,6 +1452,8 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
       sensorActivateLatency = UnitTime.convert(fromValue: Double(string)!, fromUnits: appNode!.unitsTime, toUnits: UnitTime.defaultValue)
     case .sensorDeactivateLatency:
       sensorDeactivateLatency = UnitTime.convert(fromValue: Double(string)!, fromUnits: appNode!.unitsTime, toUnits: UnitTime.defaultValue)
+    case .blockDoNotUseForSpeedProfile, .sensorDoNotUseForSpeedProfile:
+      doNotUseForSpeedProfiling = string == "true"
     case .signalType:
       signalType = SignalType(title: string)!
     case .signalRouteDirection:

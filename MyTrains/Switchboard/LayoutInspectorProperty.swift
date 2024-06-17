@@ -81,6 +81,7 @@ public enum LayoutInspectorProperty : Int, CaseIterable {
   // Events
   /// Block Events
   case enterDetectionZoneEventId     = 38
+  case blockDoNotUseForSpeedProfile  = 190
   case exitDetectionZoneEventId      = 39
   case enterTranspondingZoneEventId  = 40
   case exitTranspondingZoneEventId   = 41
@@ -122,6 +123,7 @@ public enum LayoutInspectorProperty : Int, CaseIterable {
   case sw4NotClosedEventId           = 188
   /// Sensor Events
   case sensorActivatedEventId        = 61
+  case sensorDoNotUseForSpeedProfile = 189
   case sensorDeactivatedEventId      = 62
   case sensorLocationServicesEventId = 63
   /// Signal Events
@@ -260,7 +262,7 @@ public enum LayoutInspectorProperty : Int, CaseIterable {
   }
 
   /// This will cause a runtime error if the lookup is not defined - this is the intent!
-  public var controlType : LayoutInspectorControlType {
+  public var controlType : InspectorControlType {
     return LayoutInspectorProperty.labels[self]!.controlType
   }
   
@@ -311,7 +313,7 @@ public enum LayoutInspectorProperty : Int, CaseIterable {
 
   // MARK: Private Class Properties
   
-  private static let labels : [LayoutInspectorProperty:(labelTitle:String, toolTip:String, group:LayoutInspectorGroup, controlType:LayoutInspectorControlType)] = [
+  private static let labels : [LayoutInspectorProperty:(labelTitle:String, toolTip:String, group:LayoutInspectorGroup, controlType:InspectorControlType)] = [
     .name
     : (
       String(localized:"Name", comment:"This is used for the title of an input field where the user can define the name of a switchboard item."),
@@ -584,6 +586,13 @@ public enum LayoutInspectorProperty : Int, CaseIterable {
       String(localized:"Event ID that signals that a train has entered the detection zone associated with this switchboard item.", comment:"This is used for a tooltip."),
       .blockEvents,
       .eventId
+    ),
+    .blockDoNotUseForSpeedProfile
+    : (
+      String(localized:"Do not use enter zone event for speed profiling", comment:"This is used for the title of a check box."),
+      String(localized:"If this box is checked then the enter zone event will not be used by the speed profiler.", comment:"This is used for a tooltip."),
+      .blockEvents,
+      .checkBox
     ),
     .exitDetectionZoneEventId
     : (
@@ -900,6 +909,13 @@ public enum LayoutInspectorProperty : Int, CaseIterable {
       String(localized:"Event ID generated when the sensor is activated.", comment:"this is used for a tooltip."),
       .sensorEvents,
       .eventId
+    ),
+    .sensorDoNotUseForSpeedProfile
+    : (
+      String(localized:"Do not use activated event for speed profiling", comment:"This is used for the title of a check box."),
+      String(localized:"If this box is checked then the activated event will not be used by the speed profiler.", comment:"This is used for a tooltip."),
+      .sensorEvents,
+      .checkBox
     ),
     .sensorActivateLatency
     : (

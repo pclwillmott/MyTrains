@@ -624,6 +624,9 @@
         }
       }
     },
+    "Analysis Settings" : {
+      "comment" : "This is used for the title of the Analysis Settings section in the Speed Profiler."
+    },
     "Announce" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -1443,6 +1446,9 @@
     "Colour-light 4 aspect" : {
 
     },
+    "Commanded" : {
+
+    },
     "Common" : {
       "comment" : "Used to indicate a LocoNet command station slot status",
       "localizations" : {
@@ -2153,6 +2159,12 @@
         }
       }
     },
+    "Difference between commanded speed and actual speed in the forward direction" : {
+
+    },
+    "Difference between commanded speed and actual speed in the reverse direction" : {
+
+    },
     "Digitrax BXP88" : {
       "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name",
       "localizations" : {
@@ -2297,6 +2309,12 @@
     },
     "Do not open" : {
 
+    },
+    "Do not use activated event for speed profiling" : {
+      "comment" : "This is used for the title of a check box."
+    },
+    "Do not use enter zone event for speed profiling" : {
+      "comment" : "This is used for the title of a check box."
     },
     "Doppler Horn" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -2503,6 +2521,9 @@
           }
         }
       }
+    },
+    "End Block" : {
+      "comment" : "This is used for the title of combobox."
     },
     "End User License Agreement" : {
 
@@ -3242,6 +3263,9 @@
     "Hide Others" : {
       "comment" : "Used for a menu title"
     },
+    "Hide the Chart Area" : {
+
+    },
     "Hide the Inspector Area" : {
 
     },
@@ -3252,9 +3276,6 @@
 
     },
     "Hide the Panel Configuration Area" : {
-
-    },
-    "Hide the Results Area" : {
 
     },
     "Horn" : {
@@ -3318,7 +3339,7 @@
 
     },
     "Identity" : {
-      "comment" : "This is used for the title of the Identity section in the Layout Builder."
+      "comment" : "This is used for the title of the Identity section in the Layout Builder.\nThis is used for the title of the Identity section in the Speed Profiler."
     },
     "Idle" : {
       "comment" : "Used to indicate a LocoNet command station slot status",
@@ -3336,6 +3357,12 @@
           }
         }
       }
+    },
+    "If this box is checked then the activated event will not be used by the speed profiler." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "If this box is checked then the enter zone event will not be used by the speed profiler." : {
+      "comment" : "This is used for a tooltip."
     },
     "In Use" : {
       "comment" : "Used to indicate a LocoNet command station slot status",
@@ -3790,6 +3817,24 @@
     },
     "Lock Reserve Reply" : {
 
+    },
+    "Locomotive Control" : {
+      "comment" : "This is used for the title of the Locomotive Control section in the Speed Profiler."
+    },
+    "Locomotive Control Basis" : {
+      "comment" : "This is used for the title of combobox."
+    },
+    "Locomotive ID" : {
+      "comment" : "This is used for the title of label which displays the locomotive's node Id."
+    },
+    "Locomotive Name" : {
+      "comment" : "This is used for the title of label which displays the locomotive's name."
+    },
+    "Locomotive's name." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Locomotive's node ID." : {
+      "comment" : "This is used for a tooltip."
     },
     "LocoNet Dashboard" : {
       "comment" : "Used for a menu title",
@@ -4475,6 +4520,9 @@
     "Number of Rows" : {
 
     },
+    "Number of the sample" : {
+
+    },
     "o" : {
       "comment" : "Used for the Global Power Off menu key equivalent",
       "extractionState" : "stale",
@@ -4900,7 +4948,7 @@
 
     },
     "Quick Help" : {
-
+      "comment" : "This is used for the title of the Quick Help section in the Speed Profiler."
     },
     "Quit MyTrains" : {
       "comment" : "Used for a menu title"
@@ -5281,11 +5329,23 @@
     "Rotation angle of the switchboard item." : {
       "comment" : "This is used for a tooltip."
     },
+    "Route" : {
+      "comment" : "This is used for the title of combobox.\nThis is used for the title of the Route section in the Speed Profiler."
+    },
     "Route Direction" : {
       "comment" : "This is used for the title of a combo box which the user selects the directionality applicable to the signal."
     },
+    "Route Length" : {
+      "comment" : "This is used for the title of combobox."
+    },
     "Route Length Settings" : {
       "comment" : "This is used for the title of the Route Length Settings section in the Layout Builder."
+    },
+    "Route Type" : {
+      "comment" : "This is used for the title of combobox."
+    },
+    "Route Type." : {
+      "comment" : "This is used for a tooltip."
     },
     "RTS/CTS" : {
       "comment" : "Used to indicate that serial port uses the RTS/CTS lines for hardware flow control",
@@ -5379,6 +5439,12 @@
         }
       }
     },
+    "Sample" : {
+
+    },
+    "Sampling Settings" : {
+      "comment" : "This is used for the title of the Sampling Settings section in the Speed Profiler."
+    },
     "Sanding" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -5459,6 +5525,15 @@
           }
         }
       }
+    },
+    "Select the end block for the route." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Select the required route." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Select the starting block for the route." : {
+      "comment" : "This is used for a tooltip."
     },
     "Sending unadvertised event" : {
 
@@ -5648,6 +5723,9 @@
     "Show Speed Constraints Inspector" : {
 
     },
+    "Show the Chart Area" : {
+
+    },
     "Show the Inspector Area" : {
 
     },
@@ -5655,9 +5733,6 @@
 
     },
     "Show the Panel Configuration Area" : {
-
-    },
-    "Show the Results Area" : {
 
     },
     "Shunting Mode" : {
@@ -5836,6 +5911,15 @@
     "Speed Profiler" : {
 
     },
+    "Speed that the locomotive was commanded to travel at" : {
+
+    },
+    "Speed that the train actually travelled at in the forward direction" : {
+
+    },
+    "Speed that the train actually travelled at in the reverse direction" : {
+
+    },
     "Spirax Valve" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -5855,6 +5939,9 @@
     },
     "Stand Alone LocoNet" : {
 
+    },
+    "Start Block" : {
+      "comment" : "This is used for the title of combobox."
     },
     "Start Profiling" : {
 
@@ -5892,9 +5979,6 @@
           }
         }
       }
-    },
-    "Step" : {
-
     },
     "Step Lights" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -6386,6 +6470,9 @@
         }
       }
     },
+    "This determines how MyTrains controls this locomotive in automatic mode." : {
+      "comment" : "This is used for a tooltip."
+    },
     "This device requires exclusive use of the configuration mechanism. If you have any other configuration tools open for other devices please close them all and try again." : {
 
     },
@@ -6393,6 +6480,9 @@
       "comment" : "This is used for a tooltip."
     },
     "This is a percentage from 0 to 100 where 0 means horizontal and 100 means vertical." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "This is the total length of the selected route." : {
       "comment" : "This is used for a tooltip."
     },
     "This item defines the properties and control methodology for a 3-way turnout." : {
@@ -6556,6 +6646,12 @@
       "comment" : "This is used for the title of a combo box where the user can select the track guage."
     },
     "Track guage of this switchboard item. Trains will not be permitted on track of the wrong guage. Also you cannot connect together track items with different track guages." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Track Protocol" : {
+      "comment" : "This is used for the title of combobox."
+    },
+    "Track Protocol." : {
       "comment" : "This is used for a tooltip."
     },
     "Tracks" : {
@@ -7286,6 +7382,12 @@
 
     },
     "Zoom Out" : {
+
+    },
+    "δ Forward" : {
+
+    },
+    "δ Reverse" : {
 
     }
   },

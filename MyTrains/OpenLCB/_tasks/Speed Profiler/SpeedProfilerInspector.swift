@@ -45,4 +45,17 @@ public enum SpeedProfilerInspector : Int, CaseIterable {
     
   }
   
+  public var backgroundColor : CGColor {
+    
+    let colors : [SpeedProfilerInspector:CGColor] = [
+      .identity  : NSColor.blue.cgColor,
+      .quickHelp : NSColor.red.cgColor,
+      .settings  : NSColor.yellow.cgColor,
+      .route     : NSColor.green.cgColor,
+    ]
+    
+    return colors[self]!
+    
+  }
+  
 }

@@ -27,6 +27,13 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
     }
     sptSplitView = nil
     
+    for view in sptResultsView!.arrangedSubviews {
+      sptResultsView?.removeArrangedSubview(view)
+    }
+    sptResultsView = nil
+    
+    pnlInspectorStackView.removeAll()
+    
     pnlDisclosure?.subviews.removeAll()
     pnlDisclosure = nil
     
@@ -92,7 +99,7 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
     
     super.viewWillAppear()
     
-    guard let cboLocomotive, let sptSplitView, let pnlDisclosure, let pnlButtons, let btnReset, let btnDiscardChanges, let btnSaveChanges, let btnStartStop, let btnShowValuesPanel, let btnShowInspectorPanel, let pnlChart, let pnlValues, let cboValueTypes, let pnlInspector, let pnlValuesScrollView, let tblValuesTableView, let pnlInspectorButtons else {
+    guard let cboLocomotive, let sptSplitView, let pnlDisclosure, let pnlButtons, let btnReset, let btnDiscardChanges, let btnSaveChanges, let btnStartStop, let btnShowValuesPanel, let btnShowInspectorPanel, let pnlChart, let pnlValues, let cboValueTypes, let pnlInspector, let pnlValuesScrollView, let tblValuesTableView, let pnlInspectorButtons, let sptResultsView else {
       return
     }
     
@@ -122,12 +129,20 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
     constraints.append(sptSplitView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 1.0))
     constraints.append(view.trailingAnchor.constraint(equalToSystemSpacingAfter: sptSplitView.trailingAnchor, multiplier: 1.0))
     
+    // sptResultsView
+    
+    sptResultsView.translatesAutoresizingMaskIntoConstraints = false
+    sptResultsView.isVertical = false
+    sptResultsView.arrangesAllSubviews = true
+    
+    sptSplitView.addArrangedSubview(sptResultsView)
+    
     // pnlValues
     
     pnlValues.translatesAutoresizingMaskIntoConstraints = false
     pnlValues.backgroundColor = nil
     
-    sptSplitView.addArrangedSubview(pnlValues)
+    sptResultsView.addArrangedSubview(pnlValues)
     
     cboValueTypes.translatesAutoresizingMaskIntoConstraints = false
     cboValueTypes.isEditable = false
@@ -150,41 +165,61 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
     pnlValuesScrollView.backgroundColor = nil
     pnlValuesScrollView.drawsBackground = false
     pnlValuesScrollView.hasVerticalScroller = true
-    pnlValuesScrollView.hasHorizontalScroller = false
+    pnlValuesScrollView.hasHorizontalScroller = true
     pnlValuesScrollView.autoresizesSubviews = true
     
     pnlValues.addSubview(pnlValuesScrollView)
     
     constraints.append(pnlValuesScrollView.topAnchor.constraint(equalToSystemSpacingBelow: cboValueTypes.bottomAnchor, multiplier: 1.0))
-    constraints.append(pnlValuesScrollView.centerXAnchor.constraint(equalTo: pnlValues.centerXAnchor))
-    constraints.append(pnlValuesScrollView.widthAnchor.constraint(equalToConstant: 366))
+    constraints.append(pnlValuesScrollView.leadingAnchor.constraint(equalTo: pnlValues.leadingAnchor))
+    constraints.append(pnlValuesScrollView.trailingAnchor.constraint(equalTo: pnlValues.trailingAnchor))
+//    constraints.append(pnlValuesScrollView.centerXAnchor.constraint(equalTo: pnlValues.centerXAnchor))
+//    constraints.append(pnlValuesScrollView.widthAnchor.constraint(equalToConstant: 718))
     constraints.append(pnlValues.bottomAnchor.constraint(equalTo: pnlValuesScrollView.bottomAnchor))
     constraints.append(pnlValues.widthAnchor.constraint(greaterThanOrEqualTo: pnlValuesScrollView.widthAnchor))
     
-    tblValuesTableView.allowsColumnReordering = false
+    tblValuesTableView.allowsColumnReordering = true
     tblValuesTableView.selectionHighlightStyle = .none
-    tblValuesTableView.columnAutoresizingStyle = .noColumnAutoresizing
-    tblValuesTableView.allowsColumnResizing = false
+//    tblValuesTableView.columnAutoresizingStyle = .noColumnAutoresizing
+    tblValuesTableView.allowsColumnResizing = true
     tblValuesTableView.usesAlternatingRowBackgroundColors = true
     
-    for index in 0 ... 2 {
-      tblValuesColumns.append(NSTableColumn())
+    let columnNames = [
+      "Sample Number",
+      "Commanded Speed",
+      "Forward Speed",
+      "Delta Forward Speed",
+      "Reverse Speed",
+      "Delta Reverse Speed"
+    ]
+
+    let columnTitles = [
+      String(localized:"Sample"),
+      String(localized:"Commanded"),
+      String(localized:"Forward"),
+      String(localized:"δ Forward"),
+      String(localized:"Reverse"),
+      String(localized:"δ Reverse"),
+    ]
+    
+    let columnToolTips = [
+      String(localized: "Number of the sample"),
+      String(localized: "Speed that the locomotive was commanded to travel at"),
+      String(localized: "Speed that the train actually travelled at in the forward direction"),
+      String(localized: "Difference between commanded speed and actual speed in the forward direction"),
+      String(localized: "Speed that the train actually travelled at in the reverse direction"),
+      String(localized: "Difference between commanded speed and actual speed in the reverse direction"),
+    ]
+
+    for index in 0 ... columnNames.count - 1 {
+      tblValuesColumns.append(NSTableColumn(identifier: NSUserInterfaceItemIdentifier(rawValue: columnNames[index])))
       if let column = tblValuesColumns[index] {
-        column.minWidth = 100
+        column.minWidth = 60
         tblValuesTableView.addTableColumn(column)
         column.headerCell.alignment = .left
-        switch index {
-        case 0:
-          column.title = String(localized:"Step")
-        case 1:
-          column.title = String(localized:"Forward")
-        case 2:
-          column.title = String(localized:"Reverse")
-        default:
-          break
-        }
+        column.title = columnTitles[index]
+        column.headerToolTip = columnToolTips[index]
       }
-
     }
 
     pnlValuesScrollView.documentView = tblValuesTableView
@@ -193,12 +228,15 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
     
     pnlChart.translatesAutoresizingMaskIntoConstraints = false
 
-    sptSplitView.addArrangedSubview(pnlChart)
+    sptResultsView.addArrangedSubview(pnlChart)
     
+    constraints.append(pnlChart.heightAnchor.constraint(greaterThanOrEqualToConstant: 250))
+    constraints.append(pnlChart.widthAnchor.constraint(greaterThanOrEqualToConstant: 450))
+
     // pnlInspector
     
     pnlInspector.translatesAutoresizingMaskIntoConstraints = false
-//    pnlInspector.backgroundColor = NSColor.orange.cgColor
+    pnlInspector.backgroundColor = NSColor.white.cgColor
     
     sptSplitView.addArrangedSubview(pnlInspector)
     
@@ -206,26 +244,46 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
     
     pnlInspector.addSubview(pnlInspectorButtons)
     
+    constraints.append(pnlInspector.widthAnchor.constraint(greaterThanOrEqualTo: pnlInspectorButtons.widthAnchor))
+    
     constraints.append(pnlInspectorButtons.centerXAnchor.constraint(equalTo: pnlInspector.centerXAnchor))
     constraints.append(pnlInspectorButtons.topAnchor.constraint(equalToSystemSpacingBelow: pnlInspector.topAnchor, multiplier: 1.0))
     
     var lastButton : NSButton?
     
     for item in SpeedProfilerInspector.allCases {
+      
       let button = item.button
       button.target = self
       button.action = #selector(btnInspectorAction(_:))
       pnlInspectorButtons.addSubview(button)
       constraints.append(button.centerYAnchor.constraint(equalTo: pnlInspectorButtons.centerYAnchor))
       if lastButton == nil {
-        constraints.append(button.leadingAnchor.constraint(equalTo: pnlInspectorButtons.leadingAnchor))
+        constraints.append(button.leadingAnchor.constraint(equalToSystemSpacingAfter: pnlInspectorButtons.leadingAnchor, multiplier: 1.0))
       }
       else {
         constraints.append(button.leadingAnchor.constraint(equalToSystemSpacingAfter: lastButton!.trailingAnchor, multiplier: 1.0))
       }
       constraints.append(pnlInspectorButtons.heightAnchor.constraint(equalTo: button.heightAnchor))
       lastButton = button
+      
+      let stackView = ScrollVerticalStackView()
+      
+      pnlInspectorStackView[item] = stackView
+      
+      pnlInspector.addSubview(stackView)
+    
+      stackView.translatesAutoresizingMaskIntoConstraints = false
+      stackView.isHidden = true
+      stackView.backgroundColor = item.backgroundColor
+      
+      constraints.append(stackView.topAnchor.constraint(equalToSystemSpacingBelow: pnlInspectorButtons.bottomAnchor, multiplier: 1.0))
+      constraints.append(stackView.leadingAnchor.constraint(equalTo: pnlInspector.leadingAnchor))
+      constraints.append(stackView.trailingAnchor.constraint(equalTo: pnlInspector.trailingAnchor))
+      constraints.append(pnlInspector.bottomAnchor.constraint(equalTo: stackView.bottomAnchor))
+      
     }
+    
     constraints.append(pnlInspectorButtons.trailingAnchor.constraint(equalToSystemSpacingAfter: lastButton!.trailingAnchor, multiplier: 1.0))
     
     // pnlDisclosure
@@ -322,8 +380,9 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
     currentInspector = SpeedProfilerInspector(rawValue: userSettings!.integer(forKey: DEFAULT.CURRENT_SETTINGS_INSPECTOR)) ?? .quickHelp
  
     userSettings?.splitView = sptSplitView
+    userSettings?.splitView2 = sptResultsView
 
-//    userSettings?.tableView = tblValuesTableView
+    userSettings?.tableView = tblValuesTableView
     
     tblValuesTableView.dataSource = self
     tblValuesTableView.delegate = self
@@ -336,7 +395,20 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
   
   private var valueType : SpeedProfilerValueType = .actualSamples
   
-  private var currentInspector : SpeedProfilerInspector = .quickHelp
+  private var currentInspector : SpeedProfilerInspector = .quickHelp {
+    didSet {
+      for view in pnlInspectorButtons!.subviews {
+        if let button = view as? NSButton {
+          button.state = .off
+          button.contentTintColor = button.tag == currentInspector.rawValue ? NSColor.systemBlue : nil
+        }
+      }
+      for (key, item) in pnlInspectorStackView {
+        item.isHidden = key != currentInspector
+      }
+      userSettings?.set(currentInspector.rawValue, forKey: DEFAULT.CURRENT_SETTINGS_INSPECTOR)
+    }
+  }
   
   // MARK: Controls
   
@@ -356,9 +428,11 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
   
   private var btnStartStop : NSButton? = NSButton()
   
-  private var btnShowValuesPanel : NSButton? = MyIcon.leadingThird.button(target: nil, action: nil)
+  private var btnShowValuesPanel : NSButton? = MyIcon.bottomThird.button(target: nil, action: nil)
   
   private var btnShowInspectorPanel : NSButton? = MyIcon.trailingThird.button(target: nil, action: nil)
+  
+  private var sptResultsView : NSSplitView? = NSSplitView()
   
   private var pnlChart : SpeedResultsView? = SpeedResultsView()
   
@@ -387,14 +461,14 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
   @objc public func btnShowValuesPanelAction(_ sender:NSButton) {
     
     if sender.state == .on {
-      pnlValues?.isHidden = true
+      pnlChart?.isHidden = true
       btnShowValuesPanel?.contentTintColor = nil
-      btnShowValuesPanel?.toolTip = String(localized: "Show the Results Area")
+      btnShowValuesPanel?.toolTip = String(localized: "Show the Chart Area")
     }
     else {
-      pnlValues?.isHidden = false
+      pnlChart?.isHidden = false
       btnShowValuesPanel?.contentTintColor = NSColor.systemBlue
-      btnShowValuesPanel?.toolTip = String(localized: "Hide the Results Area")
+      btnShowValuesPanel?.toolTip = String(localized: "Hide the Chart Area")
     }
     
     userSettings?.set(sender.state, forKey: DEFAULT.SHOW_VALUES_VIEW)
@@ -427,13 +501,6 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
     
     if let item = SpeedProfilerInspector(rawValue: sender.tag), let pnlInspectorButtons {
       currentInspector = item
-      for view in pnlInspectorButtons.subviews {
-        if let button = view as? NSButton {
-          button.state = .off
-          button.contentTintColor = nil
-        }
-      }
-      sender.contentTintColor = NSColor.systemBlue
     }
     
   }

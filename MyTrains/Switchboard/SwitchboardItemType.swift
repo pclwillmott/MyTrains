@@ -283,6 +283,7 @@ public enum SwitchboardItemType : UInt16 {
         .sensorActivatedEventId,
         .sensorDeactivatedEventId,
         .sensorLocationServicesEventId,
+        .sensorDoNotUseForSpeedProfile,
       ])
     case .link:
       result = result.union([
@@ -333,6 +334,7 @@ public enum SwitchboardItemType : UInt16 {
     }
     if isGroup {
       result = result.union([
+        .blockDoNotUseForSpeedProfile,
         .electrification,
         .isCriticalSection,
         .isHiddenSection,
