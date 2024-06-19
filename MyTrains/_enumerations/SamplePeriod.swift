@@ -8,9 +8,11 @@
 import Foundation
 import AppKit
 
-public enum SamplePeriod : Int {
+public enum SamplePeriod : UInt8, CaseIterable {
   
-  case sec5 = 0
+  // MARK: Enumeration
+  
+  case sec5  = 0
   case sec10 = 1
   case sec15 = 2
   case sec20 = 3
@@ -26,52 +28,37 @@ public enum SamplePeriod : Int {
   // MARK: Public Properties
   
   public var title : String {
-    return SamplePeriod.titles[self.rawValue]
+    
+    let titles : [SamplePeriod:String] = [
+      .sec5:  String(localized: "5 seconds",  comment: "Used to select a sampling period"),
+      .sec10: String(localized: "10 seconds", comment: "Used to select a sampling period"),
+      .sec15: String(localized: "15 seconds", comment: "Used to select a sampling period"),
+      .sec20: String(localized: "20 seconds", comment: "Used to select a sampling period"),
+      .sec25: String(localized: "25 seconds", comment: "Used to select a sampling period"),
+      .sec30: String(localized: "30 seconds", comment: "Used to select a sampling period"),
+      .sec35: String(localized: "35 seconds", comment: "Used to select a sampling period"),
+      .sec40: String(localized: "40 seconds", comment: "Used to select a sampling period"),
+      .sec45: String(localized: "45 seconds", comment: "Used to select a sampling period"),
+      .sec50: String(localized: "50 seconds", comment: "Used to select a sampling period"),
+      .sec55: String(localized: "55 seconds", comment: "Used to select a sampling period"),
+      .sec60: String(localized: "1 minute",   comment: "Used to select a sampling period"),
+    ]
+
+    return titles[self]!
+    
   }
   
   public var samplePeriod : TimeInterval {
-    get {
-      return Double(self.rawValue + 1) * 5.0
-    }
+    return Double(self.rawValue + 1) * 5.0
   }
   
   // MARK: Private Class Properties
   
-  private static let titles = [
-    String(localized: "5 seconds", comment: "Used to select a sampling period"),
-    String(localized: "10 seconds", comment: "Used to select a sampling period"),
-    String(localized: "15 seconds", comment: "Used to select a sampling period"),
-    String(localized: "20 seconds", comment: "Used to select a sampling period"),
-    String(localized: "25 seconds", comment: "Used to select a sampling period"),
-    String(localized: "30 seconds", comment: "Used to select a sampling period"),
-    String(localized: "35 seconds", comment: "Used to select a sampling period"),
-    String(localized: "40 seconds", comment: "Used to select a sampling period"),
-    String(localized: "45 seconds", comment: "Used to select a sampling period"),
-    String(localized: "50 seconds", comment: "Used to select a sampling period"),
-    String(localized: "55 seconds", comment: "Used to select a sampling period"),
-    String(localized: "1 minute", comment: "Used to select a sampling period"),
-  ]
-  
   private static var map : String {
-    
-    let items : [SamplePeriod] = [
-      .sec5,
-      .sec10,
-      .sec15,
-      .sec20,
-      .sec25,
-      .sec30,
-      .sec35,
-      .sec40,
-      .sec45,
-      .sec50,
-      .sec55,
-      .sec60,
-    ]
     
     var map = ""
     
-    for item in items {
+    for item in SamplePeriod.allCases {
       map += "<relation><property>\(item.rawValue)</property><value>\(item.title)</value></relation>\n"
     }
 
@@ -89,16 +76,18 @@ public enum SamplePeriod : Int {
   
   public static func populate(comboBox:NSComboBox) {
     comboBox.removeAllItems()
-    comboBox.addItems(withObjectValues: titles)
+    for item in SamplePeriod.allCases {
+      comboBox.addItem(withObjectValue: item.title)
+    }
     select(comboBox: comboBox, value: .defaultValue)
   }
   
   public static func select(comboBox:NSComboBox, value:SamplePeriod) {
-    comboBox.selectItem(at: value.rawValue)
+    comboBox.selectItem(at: Int(value.rawValue))
   }
   
   public static func selected(comboBox: NSComboBox) -> SamplePeriod {
-    return SamplePeriod(rawValue: comboBox.indexOfSelectedItem) ?? defaultValue
+    return SamplePeriod(rawValue: UInt8(comboBox.indexOfSelectedItem)) ?? defaultValue
   }
   
   public static func insertMap(cdi:String) -> String {

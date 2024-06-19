@@ -501,6 +501,9 @@
     "Actual Samples" : {
 
     },
+    "Actual Values" : {
+
+    },
     "Add Item to Group" : {
 
     },
@@ -834,6 +837,9 @@
         }
       }
     },
+    "Best Fit Method" : {
+      "comment" : "This is used for the title of a combobox."
+    },
     "Best Fit Values" : {
 
     },
@@ -916,6 +922,9 @@
           }
         }
       }
+    },
+    "Both Forward & Reverse" : {
+
     },
     "Brake" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -1674,6 +1683,9 @@
     "Consumer Range Identified" : {
 
     },
+    "Control Basis" : {
+      "comment" : "This is used for the title of combobox."
+    },
     "Copy" : {
       "comment" : "Used for a menu title\nUsed for the title of a button copies to the clipboard"
     },
@@ -1770,6 +1782,9 @@
     "Cross" : {
       "comment" : "This is used to describe a piece of track."
     },
+    "Curve fit methodology." : {
+      "comment" : "This is used for a tooltip."
+    },
     "Curve Squeal" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -1854,6 +1869,9 @@
         }
       }
     },
+    "DCC 14 Speed Steps" : {
+
+    },
     "DCC 28" : {
       "comment" : "Used for LocoNet train control protocol selection",
       "localizations" : {
@@ -1888,6 +1906,9 @@
         }
       }
     },
+    "DCC 28 Speed Steps" : {
+
+    },
     "DCC 128" : {
       "comment" : "Used for LocoNet train control protocol selection",
       "localizations" : {
@@ -1921,6 +1942,9 @@
           }
         }
       }
+    },
+    "DCC 128 Speed Steps" : {
+
     },
     "DCC Command Station Protocol" : {
 
@@ -2077,6 +2101,9 @@
 
     },
     "Default Real-Time Clock" : {
+
+    },
+    "Default Values" : {
 
     },
     "Delegate" : {
@@ -2257,6 +2284,9 @@
     },
     "Direction Previous" : {
       "comment" : "This is used for the title of the Speed Constraints Direction Previous section in the Layout Builder."
+    },
+    "Direction to profile" : {
+      "comment" : "This is used for the title of a combobox."
     },
     "Directionality" : {
       "comment" : "This is used for the title of combo box where the user can select which directions of travel are valid for the switchboard item."
@@ -2523,7 +2553,7 @@
       }
     },
     "End Block" : {
-      "comment" : "This is used for the title of combobox."
+      "comment" : "This is used for the title of a combobox."
     },
     "End User License Agreement" : {
 
@@ -2870,6 +2900,9 @@
     "Exit Zone" : {
       "comment" : "This is used for the title of an input field where the user can enter an event ID."
     },
+    "Facing Direction" : {
+      "comment" : "This is used for the title of combobox."
+    },
     "Fan Operation" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -3004,6 +3037,9 @@
           }
         }
       }
+    },
+    "Forward Only" : {
+
     },
     "France" : {
       "comment" : "This is the name of a country."
@@ -3821,9 +3857,6 @@
     "Locomotive Control" : {
       "comment" : "This is used for the title of the Locomotive Control section in the Speed Profiler."
     },
-    "Locomotive Control Basis" : {
-      "comment" : "This is used for the title of combobox."
-    },
     "Locomotive ID" : {
       "comment" : "This is used for the title of label which displays the locomotive's node Id."
     },
@@ -3978,6 +4011,9 @@
         }
       }
     },
+    "Loop" : {
+
+    },
     "m" : {
       "comment" : "Used for the abbreviation of meters"
     },
@@ -4072,6 +4108,12 @@
     "Manufacturer" : {
 
     },
+    "Marklin-Motorola I" : {
+
+    },
+    "Marklin-Motorola II" : {
+
+    },
     "Master" : {
       "comment" : "Used to indicate that the workstation is the master mode",
       "localizations" : {
@@ -4123,6 +4165,9 @@
         }
       }
     },
+    "Maximum Speed" : {
+      "comment" : "This is used for the title of a text field."
+    },
     "Maximum speed at any time" : {
 
     },
@@ -4160,6 +4205,9 @@
     },
     "Mexico" : {
       "comment" : "This is the name of a country."
+    },
+    "MFX/M4 Track Protocol" : {
+
     },
     "mi." : {
       "comment" : "Used for the abbreviation of miles"
@@ -4239,6 +4287,12 @@
     },
     "Minimize" : {
       "comment" : "Used for a menu title"
+    },
+    "Minimum period to profile one speed step." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Minimum Sample Period" : {
+      "comment" : "This is used for the title of combobox."
     },
     "mm" : {
       "comment" : "Used for the abbreviation of millimeters"
@@ -4352,6 +4406,9 @@
     },
     "Name of the parent panel for this switchboard item." : {
       "comment" : "This is used for a tooltip."
+    },
+    "Native OpenLCB" : {
+
     },
     "New" : {
       "comment" : "Used for a menu title",
@@ -4520,8 +4577,20 @@
     "Number of Rows" : {
 
     },
+    "Number of Samples" : {
+      "comment" : "This is used for the title of text field."
+    },
+    "Number of sampling points." : {
+      "comment" : "This is used for a tooltip."
+    },
     "Number of the sample" : {
 
+    },
+    "Number of the sample to start profiling at." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Number of the sample to stop profiling at." : {
+      "comment" : "This is used for a tooltip."
     },
     "o" : {
       "comment" : "Used for the Global Power Off menu key equivalent",
@@ -5274,6 +5343,9 @@
     "Resume" : {
 
     },
+    "Reverese Only" : {
+
+    },
     "Reverse" : {
       "comment" : "Used to indicate that the train is moving in the reverse direction",
       "localizations" : {
@@ -5330,19 +5402,19 @@
       "comment" : "This is used for a tooltip."
     },
     "Route" : {
-      "comment" : "This is used for the title of combobox.\nThis is used for the title of the Route section in the Speed Profiler."
+      "comment" : "This is used for the title of a combobox.\nThis is used for the title of the Route section in the Speed Profiler."
     },
     "Route Direction" : {
       "comment" : "This is used for the title of a combo box which the user selects the directionality applicable to the signal."
     },
     "Route Length" : {
-      "comment" : "This is used for the title of combobox."
+      "comment" : "This is used for the title of a label."
     },
     "Route Length Settings" : {
       "comment" : "This is used for the title of the Route Length Settings section in the Layout Builder."
     },
     "Route Type" : {
-      "comment" : "This is used for the title of combobox."
+      "comment" : "This is used for the title of a combobox."
     },
     "Route Type." : {
       "comment" : "This is used for a tooltip."
@@ -5735,6 +5807,12 @@
     "Show the Panel Configuration Area" : {
 
     },
+    "Show Trendline" : {
+      "comment" : "This is used for the title of a check box."
+    },
+    "Show trendline on chart." : {
+      "comment" : "This is used for a tooltip."
+    },
     "Shunting Mode" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -5941,10 +6019,13 @@
 
     },
     "Start Block" : {
-      "comment" : "This is used for the title of combobox."
+      "comment" : "This is used for the title of a combobox."
     },
     "Start Profiling" : {
 
+    },
+    "Start Sample Number" : {
+      "comment" : "This is used for the title of a text field."
     },
     "Steam" : {
       "comment" : "Used to indicate that a locomotive is steam powered",
@@ -6017,6 +6098,9 @@
     "Stop Position (%%UNITS_ACTUAL_DISTANCE%%)" : {
 
     },
+    "Stop Sample Number" : {
+      "comment" : "This is used for the title of a text field."
+    },
     "Stopped" : {
       "comment" : "Used to indicate a clock is stopped",
       "localizations" : {
@@ -6033,6 +6117,9 @@
           }
         }
       }
+    },
+    "Straight" : {
+
     },
     "Straight Line" : {
       "comment" : "Used by combobox to select curve fitting method)",
@@ -6399,6 +6486,9 @@
     "The following options determine which windows are automatically displayed at start-up and when the application restarts after configuration changes." : {
 
     },
+    "The maximum speed that the locomotive can be commanded to travel at." : {
+      "comment" : "This is used for a tooltip."
+    },
     "The node \"%@\" (%@) is attempting to send the unadvertised event: %@" : {
       "localizations" : {
         "en" : {
@@ -6483,6 +6573,9 @@
       "comment" : "This is used for a tooltip."
     },
     "This is the total length of the selected route." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "This is the track direction that the front of the locomotive is facing." : {
       "comment" : "This is used for a tooltip."
     },
     "This item defines the properties and control methodology for a 3-way turnout." : {
@@ -6668,6 +6761,9 @@
     },
     "Train" : {
       "comment" : "Used for a menu title\nUsed to create a default OpenLCB virtual name"
+    },
+    "Train direction or directions to profile." : {
+      "comment" : "This is used for a tooltip."
     },
     "Train Move Complete" : {
 
@@ -6898,6 +6994,30 @@
     },
     "Use Custom Dimensions" : {
       "comment" : "Used as the title for custom dimensions of a track part."
+    },
+    "Use Light Sensors" : {
+      "comment" : "This is used for the title of a check box."
+    },
+    "Use light sensors for profiling." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Use Occupancy Detectors" : {
+      "comment" : "This is used for the title of a check box."
+    },
+    "Use occupancy detectors for profiling." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Use Reed Switches" : {
+      "comment" : "This is used for the title of a check box."
+    },
+    "Use reed switches for profiling." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Use RFID Readers" : {
+      "comment" : "This is used for the title of a check box."
+    },
+    "Use RFID readers for profiling." : {
+      "comment" : "This is used for a tooltip."
     },
     "User Description" : {
       "comment" : "Used for the title of the User Description input field in CDI",

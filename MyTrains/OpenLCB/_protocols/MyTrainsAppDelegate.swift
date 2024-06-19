@@ -12,4 +12,5 @@ import Foundation
   @objc optional func locoNetGatewayListUpdated(appNode:OpenLCBNodeMyTrains)
   @objc optional func panelListUpdated(appNode:OpenLCBNodeMyTrains)
   @objc optional func panelUpdated(panel:SwitchboardPanelNode)
+  @objc optional func locomotiveListUpdated(appNode:OpenLCBNodeMyTrains)
 }

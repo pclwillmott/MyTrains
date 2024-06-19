@@ -43,6 +43,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
       
       eventsConsumed = [
         OpenLCBWellKnownEvent.nodeIsAMyTrainsLayout.rawValue,
+        OpenLCBWellKnownEvent.nodeIsATrain.rawValue,
       ]
       
       eventsProduced = [
@@ -78,7 +79,7 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     nodeIdCacheLock = nil
     nodeIdCache.removeAll()
     layoutList.removeAll()
-    observers.removeAll()
+//    observers.removeAll()
     viewOptions = nil
   }
   
@@ -104,6 +105,8 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   private var nodeIdCache : [UInt64:(nodeId:UInt64, timeStamp:TimeInterval)] = [:]
   
   internal var layoutList : [UInt64:LayoutListItem] = [:]
+  
+  internal var locomotiveList : [UInt64:String] = [:]
   
   internal var nextObserverId : Int = 0
   
@@ -418,6 +421,12 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     }
   }
 
+  private func locomotiveListUpdated() {
+    for (_, observer) in observers {
+      observer.locoNetGatewayListUpdated?(appNode: self)
+    }
+  }
+
   private func locoNetGatewayListUpdated() {
     for (_, observer) in observers {
       observer.locoNetGatewayListUpdated?(appNode: self)
@@ -491,13 +500,16 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     observer.layoutListUpdated?(appNode: self)
     observer.locoNetGatewayListUpdated?(appNode: self)
     observer.panelListUpdated?(appNode: self)
+    observer.locomotiveListUpdated?(appNode: self)
 
     return id
     
   }
   
   public func removeObserver(observerId:Int) {
-    observers.removeValue(forKey: observerId)
+    if observers.keys.contains(observerId) {
+      observers.removeValue(forKey: observerId)
+    }
   }
   
   public func deletePanel(panel:SwitchboardPanelNode) {
@@ -859,13 +871,25 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
         layoutList[sourceNodeId] = layout
         layoutListUpdated()
       }
+      else if let item = locomotiveList[sourceNodeId] {
+        let node = OpenLCBNode(nodeId: sourceNodeId)
+        node.encodedNodeInformation = message.payload
+        locomotiveList[sourceNodeId] = node.userNodeName
+        locomotiveListUpdated()
+      }
 
     case .producerConsumerEventReport:
       
       if let event = OpenLCBWellKnownEvent(rawValue: message.eventId!) {
         
         switch event {
-         
+        case .nodeIsATrain:
+
+          if !locomotiveList.keys.contains(sourceNodeId) {
+            locomotiveList[sourceNodeId] = ""
+            sendSimpleNodeInformationRequest(destinationNodeId: sourceNodeId)
+          }
+
         case .nodeIsAMyTrainsLayout:
           
           if !layoutList.keys.contains(sourceNodeId) {
@@ -885,6 +909,13 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
         
         switch event {
           
+        case .nodeIsATrain:
+          
+          if !locomotiveList.keys.contains(sourceNodeId) {
+            locomotiveList[sourceNodeId] = ""
+            sendSimpleNodeInformationRequest(destinationNodeId: sourceNodeId)
+          }
+
         case .nodeIsAMyTrainsLayout:
           
           if !layoutList.keys.contains(sourceNodeId) {

@@ -8,36 +8,42 @@
 import Foundation
 import AppKit
 
-public enum BestFitMethod : Int {
+public enum BestFitMethod : UInt8, CaseIterable {
   
-  case straightLine = 0
-  case centralMovingAverage
+  // MARK: Enumeration
+  
+  case straightLine         = 0
+  case centralMovingAverage = 1
 
-  public var title : String {
-    get {
-      return BestFitMethod.titles[self.rawValue]
-    }
-  }
+  // MARK: Public Properties
   
-  private static let titles = [
-    String(localized: "Straight Line", comment: "Used by combobox to select curve fitting method)"),
-    String(localized: "Moving Average", comment: "Used by combobox to select curve fitting method)"),
-  ]
+  public var title : String {
+    
+    let titles : [BestFitMethod:String] = [
+      .straightLine: String(localized: "Straight Line", comment: "Used by combobox to select curve fitting method)"),
+      .centralMovingAverage: String(localized: "Moving Average", comment: "Used by combobox to select curve fitting method)"),
+    ]
+    
+    return titles[self]!
+    
+  }
   
   public static let defaultValue : BestFitMethod = .straightLine
   
   public static func populate(comboBox:NSComboBox) {
     comboBox.removeAllItems()
-    comboBox.addItems(withObjectValues: titles)
+    for item in BestFitMethod.allCases {
+      comboBox.addItem(withObjectValue: item.title)
+    }
     select(comboBox: comboBox, value: .defaultValue)
   }
   
   public static func select(comboBox:NSComboBox, value:BestFitMethod) {
-    comboBox.selectItem(at: value.rawValue)
+    comboBox.selectItem(at: Int(value.rawValue))
   }
   
   public static func selected(comboBox: NSComboBox) -> BestFitMethod {
-    return BestFitMethod(rawValue: comboBox.indexOfSelectedItem) ?? defaultValue
+    return BestFitMethod(rawValue: UInt8(comboBox.indexOfSelectedItem)) ?? defaultValue
   }
   
 }

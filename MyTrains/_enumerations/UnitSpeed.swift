@@ -121,7 +121,7 @@ public enum UnitSpeed : UInt8 {
     case .milesPerHour:
       return (1.609344 * km2cm) / secondsPerHour
     }
-    
+        
   }
   
   // The factor to be applied to a speed in cm/s to get a speed in units.

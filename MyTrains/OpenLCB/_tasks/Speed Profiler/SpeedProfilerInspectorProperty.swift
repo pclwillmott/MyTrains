@@ -21,26 +21,27 @@ public enum SpeedProfilerInspectorProperty : Int, CaseIterable {
   
   case trackProtocol = 3   //
   case locomotiveControlBasis = 4 //
-  case locomotiveFacingDirection = 5
-  case maximumSpeed = 24
+  case locomotiveFacingDirection = 5 //
+  case maximumSpeed = 24 //
+  case maximumSpeedLabel = 25
 
   // Sampling
 
-  case locomotiveTravelDirectionToSample = 6
-  case numberOfSamples = 7
-  case numberOfSamplesLabel = 8
-  case minimumSamplePeriod = 9
-  case startSampleNumber = 10
-  case stopSampleNumber = 11
-  case useLightSensors = 12
-  case useReedSwitches = 13
-  case useRFIDReaders = 14
-  case useOccupancyDetectors = 15
+  case locomotiveTravelDirectionToSample = 6 //
+  case numberOfSamples = 7 //
+  case numberOfSamplesLabel = 8 //
+  case minimumSamplePeriod = 9 //
+  case startSampleNumber = 10 //
+  case stopSampleNumber = 11 //
+  case useLightSensors = 12 //
+  case useReedSwitches = 13 //
+  case useRFIDReaders = 14 //
+  case useOccupancyDetectors = 15 //
 
   // Analysis
 
-  case bestFitMethod = 16
-  case showTrendline = 17
+  case bestFitMethod = 16 //
+  case showTrendline = 17 //
 
   // Route
   
@@ -48,8 +49,48 @@ public enum SpeedProfilerInspectorProperty : Int, CaseIterable {
   case startBlockId = 19   //
   case endBlockId = 20     //
   case route = 21            //
-  case routeSegments = 22
+//  case routeSegments = 22
   case totalRouteLength = 23 //
+  
+  // MARK: Public Properties
+  
+  /// This will cause a runtime error if the lookup is not defined - this is the intent!
+  public var label : String {
+    guard let appNode else {
+      return ""
+    }
+    var result = SpeedProfilerInspectorProperty.labels[self]!.labelTitle
+    result = result.replacingOccurrences(of: "%%UNITS_ACTUAL_LENGTH%%", with: appNode.unitsActualLength.symbol)
+    result = result.replacingOccurrences(of: "%%UNITS_SCALE_LENGTH%%", with: appNode.unitsScaleLength.symbol)
+    result = result.replacingOccurrences(of: "%%UNITS_ACTUAL_DISTANCE%%", with: appNode.unitsActualDistance.symbol)
+    result = result.replacingOccurrences(of: "%%UNITS_SCALE_DISTANCE%%", with: appNode.unitsScaleDistance.symbol)
+    result = result.replacingOccurrences(of: "%%UNITS_ACTUAL_SPEED%%", with: appNode.unitsActualSpeed.symbol)
+    result = result.replacingOccurrences(of: "%%UNITS_SCALE_SPEED%%", with: appNode.unitsScaleSpeed.symbol)
+    result = result.replacingOccurrences(of: "%%UNITS_TIME%%", with: appNode.unitsTime.symbol)
+    return result
+  }
+  
+  /// This will cause a runtime error if the lookup is not defined - this is the intent!
+  public var toolTip : String {
+    return SpeedProfilerInspectorProperty.labels[self]!.toolTip
+  }
+
+  /// This will cause a runtime error if the lookup is not defined - this is the intent!
+  public var group : SpeedProfilerInspectorGroup {
+    return SpeedProfilerInspectorProperty.labels[self]!.group
+  }
+
+  /// This will cause a runtime error if the lookup is not defined - this is the intent!
+  public var inspector : SpeedProfilerInspector {
+    return SpeedProfilerInspectorProperty.labels[self]!.group.inspector
+  }
+
+  /// This will cause a runtime error if the lookup is not defined - this is the intent!
+  public var controlType : InspectorControlType {
+    return SpeedProfilerInspectorProperty.labels[self]!.controlType
+  }
+  
+
   
   // MARK: Private Class Properties
   
@@ -77,46 +118,250 @@ public enum SpeedProfilerInspectorProperty : Int, CaseIterable {
     ),
     .locomotiveControlBasis
     : (
-      String(localized:"Locomotive Control Basis", comment:"This is used for the title of combobox."),
+      String(localized:"Control Basis", comment:"This is used for the title of combobox."),
       String(localized:"This determines how MyTrains controls this locomotive in automatic mode.", comment:"This is used for a tooltip."),
       .locomotiveControl,
       .comboBox
     ),
+    .locomotiveFacingDirection
+    : (
+      String(localized:"Facing Direction", comment:"This is used for the title of combobox."),
+      String(localized:"This is the track direction that the front of the locomotive is facing.", comment:"This is used for a tooltip."),
+      .locomotiveControl,
+      .comboBox
+    ),
+    .maximumSpeed
+    : (
+      String(localized:"Maximum Speed", comment:"This is used for the title of a text field."),
+      String(localized:"The maximum speed that the locomotive can be commanded to travel at.", comment:"This is used for a tooltip."),
+      .locomotiveControl,
+      .textField
+    ),
+    .maximumSpeedLabel
+    : (
+      String(localized:"Maximum Speed", comment:"This is used for the title of a label."),
+      String(localized:"The maximum speed that the locomotive can be commanded to travel at.", comment:"This is used for a tooltip."),
+      .locomotiveControl,
+      .label
+    ),
+    .locomotiveTravelDirectionToSample
+    : (
+      String(localized:"Direction to profile", comment:"This is used for the title of a combobox."),
+      String(localized:"Train direction or directions to profile.", comment:"This is used for a tooltip."),
+      .sampling,
+      .comboBox
+    ),
+    .numberOfSamples
+    : (
+      String(localized:"Number of Samples", comment:"This is used for the title of text field."),
+      String(localized:"Number of sampling points.", comment:"This is used for a tooltip."),
+      .sampling,
+      .textField
+    ),
+    .numberOfSamplesLabel
+    : (
+      String(localized:"Number of Samples", comment:"This is used for the title of a label."),
+      String(localized:"Number of sampling points.", comment:"This is used for a tooltip."),
+      .sampling,
+      .label
+    ),
+    .minimumSamplePeriod
+    : (
+      String(localized:"Minimum Sample Period", comment:"This is used for the title of combobox."),
+      String(localized:"Minimum period to profile one speed step.", comment:"This is used for a tooltip."),
+      .sampling,
+      .comboBox
+    ),
+    .startSampleNumber
+    : (
+      String(localized:"Start Sample Number", comment:"This is used for the title of a text field."),
+      String(localized:"Number of the sample to start profiling at.", comment:"This is used for a tooltip."),
+      .sampling,
+      .textField
+    ),
+    .stopSampleNumber
+    : (
+      String(localized:"Stop Sample Number", comment:"This is used for the title of a text field."),
+      String(localized:"Number of the sample to stop profiling at.", comment:"This is used for a tooltip."),
+      .sampling,
+      .textField
+    ),
+    .useLightSensors
+    : (
+      String(localized:"Use Light Sensors", comment:"This is used for the title of a check box."),
+      String(localized:"Use light sensors for profiling.", comment:"This is used for a tooltip."),
+      .sampling,
+      .checkBox
+    ),
+    .useReedSwitches
+    : (
+      String(localized:"Use Reed Switches", comment:"This is used for the title of a check box."),
+      String(localized:"Use reed switches for profiling.", comment:"This is used for a tooltip."),
+      .sampling,
+      .checkBox
+    ),
+    .useRFIDReaders
+    : (
+      String(localized:"Use RFID Readers", comment:"This is used for the title of a check box."),
+      String(localized:"Use RFID readers for profiling.", comment:"This is used for a tooltip."),
+      .sampling,
+      .checkBox
+    ),
+    .useOccupancyDetectors
+    : (
+      String(localized:"Use Occupancy Detectors", comment:"This is used for the title of a check box."),
+      String(localized:"Use occupancy detectors for profiling.", comment:"This is used for a tooltip."),
+      .sampling,
+      .checkBox
+    ),
+    .bestFitMethod
+    : (
+      String(localized:"Best Fit Method", comment:"This is used for the title of a combobox."),
+      String(localized:"Curve fit methodology.", comment:"This is used for a tooltip."),
+      .analysis,
+      .comboBox
+    ),
+    .showTrendline
+    : (
+      String(localized:"Show Trendline", comment:"This is used for the title of a check box."),
+      String(localized:"Show trendline on chart.", comment:"This is used for a tooltip."),
+      .analysis,
+      .checkBox
+    ),
     .routeType
     : (
-      String(localized:"Route Type", comment:"This is used for the title of combobox."),
+      String(localized:"Route Type", comment:"This is used for the title of a combobox."),
       String(localized:"Route Type.", comment:"This is used for a tooltip."),
       .route,
       .comboBox
     ),
     .startBlockId
     : (
-      String(localized:"Start Block", comment:"This is used for the title of combobox."),
+      String(localized:"Start Block", comment:"This is used for the title of a combobox."),
       String(localized:"Select the starting block for the route.", comment:"This is used for a tooltip."),
       .route,
       .comboBox
     ),
     .endBlockId
     : (
-      String(localized:"End Block", comment:"This is used for the title of combobox."),
+      String(localized:"End Block", comment:"This is used for the title of a combobox."),
       String(localized:"Select the end block for the route.", comment:"This is used for a tooltip."),
       .route,
       .comboBox
     ),
     .route
     : (
-      String(localized:"Route", comment:"This is used for the title of combobox."),
+      String(localized:"Route", comment:"This is used for the title of a combobox."),
       String(localized:"Select the required route.", comment:"This is used for a tooltip."),
       .route,
       .comboBox
     ),
     .totalRouteLength
     : (
-      String(localized:"Route Length", comment:"This is used for the title of combobox."),
+      String(localized:"Route Length", comment:"This is used for the title of a label."),
       String(localized:"This is the total length of the selected route.", comment:"This is used for a tooltip."),
       .route,
-      .comboBox
+      .label
     ),
   ]
   
+  // MARK: Public Class Properties
+  
+  public static var inspectorPropertyFields: [SpeedProfilerInspectorPropertyField] {
+    
+    var result : [SpeedProfilerInspectorPropertyField] = []
+    
+    let labelFontSize : CGFloat = 10.0
+    let textFontSize  : CGFloat = 11.0
+    
+    for item in SpeedProfilerInspectorProperty.allCases {
+      
+      var field : SpeedProfilerInspectorPropertyField = (view:nil, label:nil, control:nil, item, new:nil, copy:nil, paste:nil)
+      
+      field.label = NSTextField(labelWithString: item.label)
+      
+      let view = NSView()
+      
+      view.translatesAutoresizingMaskIntoConstraints = false
+      
+      switch item.controlType {
+      case .checkBox:
+        field.label!.stringValue = ""
+        let checkBox = NSButton()
+        checkBox.setButtonType(.switch)
+        checkBox.title = item.label
+        field.control = checkBox
+      case .comboBox:
+        let comboBox = MyComboBox()
+        comboBox.isEditable = false
+        field.control = comboBox
+  //      initComboBox(property: field.property, comboBox: comboBox)
+      case .eventId:
+        let textField = NSTextField()
+        textField.placeholderString = "00.00.00.00.00.00.00.00"
+        field.control = textField
+        let newButton = NSButton()
+        newButton.title = String(localized: "New")
+        newButton.fontSize = labelFontSize
+        newButton.translatesAutoresizingMaskIntoConstraints = false
+        newButton.tag = item.rawValue
+        view.addSubview(newButton)
+        field.new = newButton
+        let copyButton = NSButton()
+        copyButton.title = String(localized: "Copy")
+        copyButton.fontSize = labelFontSize
+        copyButton.translatesAutoresizingMaskIntoConstraints = false
+        copyButton.tag = item.rawValue
+
+        view.addSubview(copyButton)
+        field.copy = copyButton
+        let pasteButton = NSButton()
+        pasteButton.title = String(localized: "Paste")
+        pasteButton.fontSize = labelFontSize
+        pasteButton.translatesAutoresizingMaskIntoConstraints = false
+        pasteButton.tag = item.rawValue
+        view.addSubview(pasteButton)
+        field.paste = pasteButton
+        
+      case .label:
+        let textField = NSTextField(labelWithString: "")
+        field.control = textField
+      case .textField:
+        let textField = NSTextField()
+        field.control = textField
+      }
+      
+      field.control?.toolTip = item.toolTip
+      field.control?.tag = item.rawValue
+      
+      /// https://manasaprema04.medium.com/autolayout-fundamental-522f0a6e5790
+      
+      field.label!.translatesAutoresizingMaskIntoConstraints = false
+      field.label!.fontSize = labelFontSize
+      field.label!.alignment = .right
+      field.label!.setContentHuggingPriority(NSLayoutConstraint.Priority(rawValue: 250), for: .horizontal)
+ //     field.label!.lineBreakMode = .byWordWrapping
+ //     field.label!.maximumNumberOfLines = 0
+ //     field.label!.preferredMaxLayoutWidth = 120.0
+
+      view.addSubview(field.label!)
+      
+      field.control!.translatesAutoresizingMaskIntoConstraints = false
+      field.control!.fontSize = textFontSize
+      field.control!.setContentHuggingPriority(NSLayoutConstraint.Priority(rawValue: 1), for: .horizontal)
+
+      view.addSubview(field.control!)
+//      view.backgroundColor = NSColor.yellow.cgColor
+
+      field.view = view
+      field.view!.setContentHuggingPriority(NSLayoutConstraint.Priority(rawValue: 500), for: .horizontal)
+
+      result.append(field)
+      
+    }
+    
+    return result
+    
+  }
+
 }

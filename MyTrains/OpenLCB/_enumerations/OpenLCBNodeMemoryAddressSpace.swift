@@ -21,4 +21,5 @@ public enum OpenLCBNodeMemoryAddressSpace : UInt8 {
   case viewOptions       = 0x01 //   1
   case viewStates        = 0x02 //   2
   case routeSettings     = 0x03 //   3
+  case speedProfile      = 0x04 //   4
 }

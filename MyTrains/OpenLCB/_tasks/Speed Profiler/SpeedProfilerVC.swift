@@ -8,13 +8,15 @@
 import Foundation
 import AppKit
 
-class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate, NSTableViewDataSource, NSTableViewDelegate {
+class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate, NSTableViewDataSource, NSTableViewDelegate, MyTrainsAppDelegate {
  
   // MARK: Window & View Control
 
   deinit {
-  
+    
     constraints.removeAll()
+    
+    inspectorConstraints.removeAll()
     
     cboLocomotive?.removeAllItems()
     cboLocomotive = nil
@@ -91,6 +93,10 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
       self.configurationTool = nil
     }
     
+    if let observerId, let appNode {
+      appNode.removeObserver(observerId: observerId)
+    }
+    
     super.windowWillClose(notification)
 
   }
@@ -103,13 +109,12 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
       return
     }
     
-    for index in 0 ... 50 {
-      test.append(index)
-    }
-    
     // cboLocomotive
     
     cboLocomotive.translatesAutoresizingMaskIntoConstraints = false
+    cboLocomotive.isEditable = false
+    cboLocomotive.target = self
+    cboLocomotive.action = #selector(cboLocomotiveAction(_:))
     
     view.addSubview(cboLocomotive)
     
@@ -212,7 +217,9 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
     ]
 
     for index in 0 ... columnNames.count - 1 {
-      tblValuesColumns.append(NSTableColumn(identifier: NSUserInterfaceItemIdentifier(rawValue: columnNames[index])))
+      let id = NSUserInterfaceItemIdentifier(rawValue: columnNames[index])
+      columnIds.append(id)
+      tblValuesColumns.append(NSTableColumn(identifier: id))
       if let column = tblValuesColumns[index] {
         column.minWidth = 60
         tblValuesTableView.addTableColumn(column)
@@ -235,8 +242,28 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
 
     // pnlInspector
     
+    inspectorFields = SpeedProfilerInspectorProperty.inspectorPropertyFields
+    
+    for temp in inspectorFields {
+      if let comboBox = temp.control as? MyComboBox {
+        comboBox.target = self
+//        comboBox.action = #selector(self.cboAction(_:))
+      }
+      else if let chkBox = temp.control as? NSButton {
+        chkBox.target = self
+//        chkBox.action = #selector(self.chkAction(_:))
+      }
+      else if let field = temp.control as? NSTextField {
+//        field.delegate = self
+      }
+    }
+    
+    inspectorGroupFields = SpeedProfilerInspectorGroup.inspectorGroupFields
+    
+    inspectorGroupSeparators = SpeedProfilerInspectorGroup.inspectorGroupSeparators
+    
     pnlInspector.translatesAutoresizingMaskIntoConstraints = false
-    pnlInspector.backgroundColor = NSColor.white.cgColor
+//    pnlInspector.backgroundColor = NSColor.white.cgColor
     
     sptSplitView.addArrangedSubview(pnlInspector)
     
@@ -247,7 +274,7 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
     constraints.append(pnlInspector.widthAnchor.constraint(greaterThanOrEqualTo: pnlInspectorButtons.widthAnchor))
     
     constraints.append(pnlInspectorButtons.centerXAnchor.constraint(equalTo: pnlInspector.centerXAnchor))
-    constraints.append(pnlInspectorButtons.topAnchor.constraint(equalToSystemSpacingBelow: pnlInspector.topAnchor, multiplier: 1.0))
+    constraints.append(pnlInspectorButtons.topAnchor.constraint(equalTo: pnlInspector.topAnchor, constant: 5))
     
     var lastButton : NSButton?
     
@@ -275,8 +302,11 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
     
       stackView.translatesAutoresizingMaskIntoConstraints = false
       stackView.isHidden = true
-      stackView.backgroundColor = item.backgroundColor
-      
+//      stackView.backgroundColor = item.backgroundColor
+      stackView.backgroundColor = NSColor.clear.cgColor
+      stackView.stackView?.orientation = .vertical
+      stackView.stackView?.spacing = 4
+
       constraints.append(stackView.topAnchor.constraint(equalToSystemSpacingBelow: pnlInspectorButtons.bottomAnchor, multiplier: 1.0))
       constraints.append(stackView.leadingAnchor.constraint(equalTo: pnlInspector.leadingAnchor))
       constraints.append(stackView.trailingAnchor.constraint(equalTo: pnlInspector.trailingAnchor))
@@ -386,6 +416,14 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
     
     tblValuesTableView.dataSource = self
     tblValuesTableView.delegate = self
+    
+    observerId = appNode?.addObserver(observer: self)
+    
+    if cboLocomotive.numberOfItems > 0, cboLocomotive.indexOfSelectedItem == -1 {
+      cboLocomotive.selectItem(at: 0)
+    }
+    
+    displayInspector()
 
   }
   
@@ -410,6 +448,140 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
     }
   }
   
+  // MARK: Private Methods
+  
+  internal func displayInspector() {
+    
+    NSLayoutConstraint.deactivate(inspectorConstraints)
+    inspectorConstraints.removeAll()
+
+    for (key, stackView) in pnlInspectorStackView {
+      stackView.stackView?.subviews.removeAll()
+    }
+    
+    var commonProperties : Set<SpeedProfilerInspectorProperty> = [
+
+      .locomotiveId,
+      .locomotiveName,
+      .trackProtocol,
+      .locomotiveControlBasis,
+      .locomotiveFacingDirection,
+      .locomotiveTravelDirectionToSample,
+      .minimumSamplePeriod,
+      .startSampleNumber,
+      .stopSampleNumber,
+      .useRFIDReaders,
+      .useLightSensors,
+      .useReedSwitches,
+      .useOccupancyDetectors,
+      .bestFitMethod,
+      .showTrendline,
+      .routeType,
+      .startBlockId,
+      .route,
+      .totalRouteLength,
+      
+    ]
+
+    /*
+     
+     case maximumSpeed = 24 //
+     case maximumSpeedLabel
+     case numberOfSamples = 7 //
+     case numberOfSamplesLabel = 8 //
+     case endBlockId = 20     //
+     case routeSegments = 22
+
+     */
+        
+    var usedFields : [SpeedProfilerInspectorPropertyField] = []
+    
+    var index = 0
+    while index < inspectorFields.count {
+      
+      let inspector = inspectorFields[index].property.inspector
+      let stackView = pnlInspectorStackView[inspector]!.stackView!
+                       
+      stackView.alignment = .right
+
+      while index < inspectorFields.count && inspectorFields[index].property.inspector == inspector {
+        
+        let group = inspectorFields[index].property.group
+        
+        var showGroupHeader = true
+        var showGroupSeparator = false
+        
+        while index < inspectorFields.count && inspectorFields[index].property.group == group {
+          
+          let field = inspectorFields[index]
+          
+          if commonProperties.contains(field.property) {
+            
+            if showGroupHeader {
+              stackView.addArrangedSubview(inspectorGroupFields[group]!.view!)
+              showGroupHeader = false
+              showGroupSeparator = true
+            }
+            
+            stackView.addArrangedSubview(field.view!)
+            
+            /// Note to self: Views within a StackView must not have constraints to the outside world as this will lock the StackView size.
+            /// They must only have internal constraints to the view that is added to the StackView.
+            ///  https://manasaprema04.medium.com/autolayout-fundamental-522f0a6e5790
+            
+            inspectorConstraints.append(field.view!.heightAnchor.constraint(greaterThanOrEqualTo: field.label!.heightAnchor))
+            inspectorConstraints.append(field.view!.heightAnchor.constraint(greaterThanOrEqualTo: field.control!.heightAnchor))
+            inspectorConstraints.append(field.control!.leadingAnchor.constraint(equalToSystemSpacingAfter: field.label!.trailingAnchor, multiplier: 1.0))
+            inspectorConstraints.append(field.label!.leadingAnchor.constraint(equalTo: field.view!.leadingAnchor, constant: 20))
+            
+            inspectorConstraints.append(field.control!.widthAnchor.constraint(greaterThanOrEqualToConstant: 100))
+            inspectorConstraints.append(field.view!.trailingAnchor.constraint(equalTo: field.control!.trailingAnchor))
+
+            inspectorConstraints.append(field.control!.centerYAnchor.constraint(equalTo: field.view!.centerYAnchor))
+            inspectorConstraints.append(field.label!.centerYAnchor.constraint(equalTo: field.view!.centerYAnchor))
+            
+            usedFields.append(field)
+            
+ //           setValue(field: field)
+            
+          }
+          
+          index += 1
+          
+        }
+        
+        if showGroupSeparator {
+          stackView.addArrangedSubview(inspectorGroupSeparators[group]!.view!)
+        }
+        
+      }
+            
+    }
+    
+    for field1 in usedFields {
+      for field2 in usedFields {
+        if !(field1.label! === field2.label) && field1.property.inspector == field2.property.inspector {
+          inspectorConstraints.append(field1.label!.widthAnchor.constraint(greaterThanOrEqualTo: field2.label!.widthAnchor))
+        }
+      }
+    }
+    
+    NSLayoutConstraint.activate(inspectorConstraints)
+
+  }
+
+  // MARK: Private Properties
+  
+  private var observerId : Int?
+  
+  private var locomotiveLookup : [String:UInt64] = [:]
+  
+  private var profile : SpeedProfile?
+  
+  private var sampleTable : [[Double]] = []
+  
+  private var columnIds : [NSUserInterfaceItemIdentifier] = []
+    
   // MARK: Controls
   
   private var cboLocomotive : MyComboBox? = MyComboBox()
@@ -452,9 +624,19 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
   
   private var pnlInspectorButtons : NSView? = NSView()
   
+  internal var inspectorFields : [SpeedProfilerInspectorPropertyField] = []
+  
+  internal var inspectorGroupFields : [SpeedProfilerInspectorGroup:SpeedProfilerInspectorGroupField] = [:]
+  
+  internal var inspectorGroupSeparators : [SpeedProfilerInspectorGroup:SpeedProfilerInspectorGroupField] = [:]
+  
+  internal var inspectorConstraints : [NSLayoutConstraint] = []
+  
   // MARK: Public Properties
   
   public var configurationTool : OpenLCBNodeConfigurationTool?
+  
+  // MARK: Private Methods
   
   // MARK: Actions
   
@@ -499,23 +681,59 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
   
   @objc public func btnInspectorAction(_ sender:NSButton) {
     
-    if let item = SpeedProfilerInspector(rawValue: sender.tag), let pnlInspectorButtons {
+    if let item = SpeedProfilerInspector(rawValue: sender.tag) {
       currentInspector = item
+    }
+    
+  }
+  
+  @objc func cboLocomotiveAction(_ sender:NSComboBox) {
+    
+    if let value = sender.objectValueOfSelectedItem as? String, let nodeId = locomotiveLookup[value] {
+      profile = SpeedProfile(nodeId: nodeId)
+      sampleTable = profile!.getSampleTable()
+      tblValuesTableView?.reloadData()
+      displayInspector()
     }
     
   }
   
   // MARK: ValuesTableView Datasource
   
-  public var test : [Int] = []
-    
-  // MARK: NSTableViewDataSource Delegate Methods
+  // MARK: MyTrainsAppDelegate Methods
   
+  @objc func locomotiveListUpdated(appNode:OpenLCBNodeMyTrains) {
+    
+    guard let cboLocomotive else {
+      return
+    }
+    
+    let value = cboLocomotive.objectValueOfSelectedItem
+    
+    cboLocomotive.removeAllItems()
+    
+    locomotiveLookup.removeAll()
+    
+    var list : [String] = []
+    
+    for (key, item) in appNode.locomotiveList {
+      list.append(item)
+      locomotiveLookup[item] = key
+    }
+    
+    list.sort {$0 < $1}
+    
+    cboLocomotive.addItems(withObjectValues: list)
+    
+    cboLocomotive.selectItem(withObjectValue: value)
+    
+   }
+
   // MARK: NSTableViewDelegate Methods
   
   // Returns the number of records managed for aTableView by the data source object.
    public func numberOfRows(in tableView: NSTableView) -> Int {
-     return test.count
+     return sampleTable.count
    }
   
   // Sets the data object for an item in the specified row and column.
@@ -525,14 +743,40 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
   public func tableView(_ tableView: NSTableView,
                         viewFor tableColumn: NSTableColumn?,row: Int) -> NSView? {
     
-    let item = test[row]
+    let item = sampleTable[row]
     
-    let columnName = tableColumn!.title
-    
-    let isEditable = columnName != "Step"
+    var isEditable = false
 
     let text = NSTextField()
-    text.stringValue = "\(item)"
+    
+    let formatter = NumberFormatter()
+    formatter.alwaysShowsDecimalSeparator = true
+    formatter.maximumFractionDigits = 3
+    formatter.minimumFractionDigits = 3
+    formatter.numberStyle = .decimal
+    
+    switch tableColumn!.identifier {
+    case columnIds[0]:
+      text.stringValue = "\(row)"
+    case columnIds[1]:
+      let value = UnitSpeed.convert(fromValue: item[0], fromUnits: .metersPerSecond, toUnits: appNode!.unitsScaleSpeed)
+      text.stringValue = formatter.string(from: NSNumber(value: value)) ?? ""
+    case columnIds[2]:
+      let value = UnitSpeed.convert(fromValue: item[1], fromUnits: .metersPerSecond, toUnits: appNode!.unitsScaleSpeed)
+      text.stringValue = (item[1] == 0.0 && row > 0) ? "?" : formatter.string(from: NSNumber(value: value)) ?? ""
+    case columnIds[3]:
+      let value = UnitSpeed.convert(fromValue: item[1] - item[0], fromUnits: .metersPerSecond, toUnits: appNode!.unitsScaleSpeed)
+      text.stringValue = (item[1] == 0.0 && row > 0) ? "?" :  formatter.string(from: NSNumber(value: value)) ?? ""
+    case columnIds[4]:
+      let value = UnitSpeed.convert(fromValue: item[2], fromUnits: .metersPerSecond, toUnits: appNode!.unitsScaleSpeed)
+      text.stringValue = (item[2] == 0.0 && row > 0) ? "?" :  formatter.string(from: NSNumber(value: value)) ?? ""
+    case columnIds[5]:
+      let value = UnitSpeed.convert(fromValue: item[2] - item[0], fromUnits: .metersPerSecond, toUnits: appNode!.unitsScaleSpeed)
+      text.stringValue = (item[2] == 0.0 && row > 0) ? "?" :  formatter.string(from: NSNumber(value: value)) ?? ""
+    default:
+      break
+    }
+    
     let cell = NSTableCellView()
     cell.addSubview(text)
     text.drawsBackground = false
