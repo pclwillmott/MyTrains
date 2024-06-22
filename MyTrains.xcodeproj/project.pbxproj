@@ -78,6 +78,7 @@
 		DA3254E52A4704BF006DF357 /* SwitchRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3254E42A4704BF006DF357 /* SwitchRoute.swift */; };
 		DA3254E82A4755AC006DF357 /* OpenLCBThrottle.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3254E72A4755AC006DF357 /* OpenLCBThrottle.swift */; };
 		DA32C97A294CB0E40034DB4F /* SampleRate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA32C979294CB0E40034DB4F /* SampleRate.swift */; };
+		DA3303E82C271076002D2EDF /* SwitchboardSpeedProfilerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3303E72C271076002D2EDF /* SwitchboardSpeedProfilerView.swift */; };
 		DA347B6C2B9F43A00089CED9 /* OpenLCBConfigurationToolManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA347B6B2B9F43A00089CED9 /* OpenLCBConfigurationToolManager.swift */; };
 		DA3866232A7A653900A0FAEB /* OpenLCBNodeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3866222A7A653900A0FAEB /* OpenLCBNodeManager.swift */; };
 		DA3866252A7A880A00A0FAEB /* OpenLCBConfigurationToolDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3866242A7A880A00A0FAEB /* OpenLCBConfigurationToolDelegate.swift */; };
@@ -162,6 +163,7 @@
 		DA6239322BCD511D000E9018 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6239312BCD511D000E9018 /* UserSettings.swift */; };
 		DA6239342BCD827C000E9018 /* MyComboBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6239332BCD827C000E9018 /* MyComboBox.swift */; };
 		DA631E2A2A52D263001AD638 /* MyTrainsVirtualNodeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA631E292A52D263001AD638 /* MyTrainsVirtualNodeType.swift */; };
+		DA6389252C259AA80011D3AC /* SpeedProfileDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6389242C259AA80011D3AC /* SpeedProfileDelegate.swift */; };
 		DA6403EF2A24EF62001CE29B /* OpenLCBMemorySpace.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6403EE2A24EF62001CE29B /* OpenLCBMemorySpace.swift */; };
 		DA6A0AD8275295BF00913F2B /* Monitor.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA6A0AD7275295BF00913F2B /* Monitor.storyboard */; };
 		DA6A0ADA2752976800913F2B /* MonitorVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6A0AD92752976800913F2B /* MonitorVC.swift */; };
@@ -436,6 +438,7 @@
 		DA3254E42A4704BF006DF357 /* SwitchRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchRoute.swift; sourceTree = "<group>"; };
 		DA3254E72A4755AC006DF357 /* OpenLCBThrottle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBThrottle.swift; sourceTree = "<group>"; };
 		DA32C979294CB0E40034DB4F /* SampleRate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleRate.swift; sourceTree = "<group>"; };
+		DA3303E72C271076002D2EDF /* SwitchboardSpeedProfilerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchboardSpeedProfilerView.swift; sourceTree = "<group>"; };
 		DA347B6B2B9F43A00089CED9 /* OpenLCBConfigurationToolManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBConfigurationToolManager.swift; sourceTree = "<group>"; };
 		DA3866222A7A653900A0FAEB /* OpenLCBNodeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBNodeManager.swift; sourceTree = "<group>"; };
 		DA3866242A7A880A00A0FAEB /* OpenLCBConfigurationToolDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBConfigurationToolDelegate.swift; sourceTree = "<group>"; };
@@ -521,6 +524,7 @@
 		DA6239312BCD511D000E9018 /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
 		DA6239332BCD827C000E9018 /* MyComboBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyComboBox.swift; sourceTree = "<group>"; };
 		DA631E292A52D263001AD638 /* MyTrainsVirtualNodeType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTrainsVirtualNodeType.swift; sourceTree = "<group>"; };
+		DA6389242C259AA80011D3AC /* SpeedProfileDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedProfileDelegate.swift; sourceTree = "<group>"; };
 		DA6403EE2A24EF62001CE29B /* OpenLCBMemorySpace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBMemorySpace.swift; sourceTree = "<group>"; };
 		DA6A0AD7275295BF00913F2B /* Monitor.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Monitor.storyboard; sourceTree = "<group>"; };
 		DA6A0AD92752976800913F2B /* MonitorVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonitorVC.swift; sourceTree = "<group>"; };
@@ -1203,19 +1207,21 @@
 		DA7B2D0E2B2F4E7300327281 /* Speed Profiler */ = {
 			isa = PBXGroup;
 			children = (
-				DA5CCB4B2897F58D00F99AE6 /* SpeedProfiler.storyboard */,
-				DA5CCB4D2897F6B200F99AE6 /* SpeedProfilerVC.swift */,
-				DA1ADFED2C1F10100018088F /* SpeedProfilerValueType.swift */,
-				DA1ADFEF2C1F4ABD0018088F /* SpeedProfilerInspector.swift */,
-				DA73666A2C2070EB0074697B /* SpeedProfilerInspectorProperty.swift */,
-				DA73666C2C2082950074697B /* SpeedProfilerInspectorGroup.swift */,
-				DA73666E2C20853D0074697B /* SpeedProfilerGroupField.swift */,
-				DA6040852C22E879006E6325 /* SpeedProfilerInspectorPropertyField.swift */,
-				DA6040872C230AC1006E6325 /* SpeedProfile.swift */,
-				DA60408F2C2328F9006E6325 /* SamplingRouteType.swift */,
-				DA6040892C23139C006E6325 /* TrackProtocol.swift */,
 				DA60408B2C2318A2006E6325 /* LocomotiveControlBasis.swift */,
 				DA60408D2C232019006E6325 /* SamplingDirection.swift */,
+				DA60408F2C2328F9006E6325 /* SamplingRouteType.swift */,
+				DA6040872C230AC1006E6325 /* SpeedProfile.swift */,
+				DA6389242C259AA80011D3AC /* SpeedProfileDelegate.swift */,
+				DA5CCB4B2897F58D00F99AE6 /* SpeedProfiler.storyboard */,
+				DA73666E2C20853D0074697B /* SpeedProfilerGroupField.swift */,
+				DA1ADFEF2C1F4ABD0018088F /* SpeedProfilerInspector.swift */,
+				DA73666C2C2082950074697B /* SpeedProfilerInspectorGroup.swift */,
+				DA73666A2C2070EB0074697B /* SpeedProfilerInspectorProperty.swift */,
+				DA6040852C22E879006E6325 /* SpeedProfilerInspectorPropertyField.swift */,
+				DA1ADFED2C1F10100018088F /* SpeedProfilerValueType.swift */,
+				DA5CCB4D2897F6B200F99AE6 /* SpeedProfilerVC.swift */,
+				DA3303E72C271076002D2EDF /* SwitchboardSpeedProfilerView.swift */,
+				DA6040892C23139C006E6325 /* TrackProtocol.swift */,
 			);
 			path = "Speed Profiler";
 			sourceTree = "<group>";
@@ -1717,6 +1723,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DA51FB9E29D8921B002CAAC1 /* OpenLCBCANFrameType.swift in Sources */,
+				DA6389252C259AA80011D3AC /* SpeedProfileDelegate.swift in Sources */,
 				DA0949402B7F7AF500545650 /* OpenLCBCANGateway - TX.swift in Sources */,
 				DAD89F962B8B5B7E00F611CD /* MonitorItem.swift in Sources */,
 				DA441D262C1C971900AF0165 /* SwitchboardLocation.swift in Sources */,
@@ -1919,6 +1926,7 @@
 				DACA33572A18D065009E791F /* OpenLCBNodeAddressSpaceInformation.swift in Sources */,
 				DAA867C627933265008B6EEC /* CSVParser.swift in Sources */,
 				DAF374712A1A2AB3009E91F0 /* OpenLCBNodeMyTrains.swift in Sources */,
+				DA3303E82C271076002D2EDF /* SwitchboardSpeedProfilerView.swift in Sources */,
 				DA92E07A2B66B8FA00762058 /* SwitchboardItemListItem.swift in Sources */,
 				DA56261329E1B64F00D465CC /* OpenLCBNetworkLayerState.swift in Sources */,
 				DAA867C427930C62008B6EEC /* IntExtensions.swift in Sources */,

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import AppKit
 
 public class LayoutNode : OpenLCBNodeVirtual {
   
@@ -265,7 +266,7 @@ public class LayoutNode : OpenLCBNodeVirtual {
   
   // MARK: Public Methods
   
-  public func linkSwitchBoardItems() {
+  public func linkSwitchboardItems() {
     
     guard let appNode else {
       return
@@ -306,7 +307,7 @@ public class LayoutNode : OpenLCBNodeVirtual {
       
       for point1 in item1.itemType.pointsSet(orientation: item1.orientation) {
         
-        if item1.nodeLinks[point1].switchBoardItem == nil {
+        if item1.nodeLinks[point1].switchboardItem == nil {
           
           let look = lookup[point1]
           
@@ -318,9 +319,9 @@ public class LayoutNode : OpenLCBNodeVirtual {
             
             if let panel = panels[item1.panelId], let item2 = panel.findSwitchboardItem(location: test), item2.itemType.pointsSet(orientation: item2.orientation).contains(point2) {
               if item1.trackGauge == item2.trackGauge {
-                item1.nodeLinks[point1].switchBoardItem = item2
+                item1.nodeLinks[point1].switchboardItem = item2
                 item1.nodeLinks[point1].connectionPointId = point2
-                item2.nodeLinks[point2].switchBoardItem = item1
+                item2.nodeLinks[point2].switchboardItem = item1
                 item2.nodeLinks[point2].connectionPointId = point1
               }
             }
@@ -343,12 +344,12 @@ public class LayoutNode : OpenLCBNodeVirtual {
       
       for point1 in item1.itemType.pointsSet(orientation: item1.orientation) {
         var nodeLink = item1.nodeLinks[point1]
-        while let node = nodeLink.switchBoardItem, node.isTrack {
+        while let node = nodeLink.switchboardItem, node.isTrack {
           let exits = node.exitPoint(entryPoint: nodeLink.connectionPointId)
           let exit = exits[0] // Track items only have one item
           item1.nodeLinks[point1] = exit
-          if let item2 = exit.switchBoardItem {
-            item2.nodeLinks[exit.connectionPointId].switchBoardItem = item1
+          if let item2 = exit.switchboardItem {
+            item2.nodeLinks[exit.connectionPointId].switchboardItem = item1
             item2.nodeLinks[exit.connectionPointId].connectionPointId = point1
           }
           node.isEliminated = true
@@ -377,10 +378,10 @@ public class LayoutNode : OpenLCBNodeVirtual {
             let point2 = item2.itemType.points(orientation: item2.orientation)[0]
             let node1 = item1.nodeLinks[point1]
             let node2 = item2.nodeLinks[point2]
-            node1.switchBoardItem?.nodeLinks[node1.connectionPointId].switchBoardItem = node2.switchBoardItem
-            node1.switchBoardItem?.nodeLinks[node1.connectionPointId].connectionPointId = node2.connectionPointId
-            node2.switchBoardItem?.nodeLinks[node2.connectionPointId].switchBoardItem = node1.switchBoardItem
-            node2.switchBoardItem?.nodeLinks[node2.connectionPointId].connectionPointId = node1.connectionPointId
+            node1.switchboardItem?.nodeLinks[node1.connectionPointId].switchboardItem = node2.switchboardItem
+            node1.switchboardItem?.nodeLinks[node1.connectionPointId].connectionPointId = node2.connectionPointId
+            node2.switchboardItem?.nodeLinks[node2.connectionPointId].switchboardItem = node1.switchboardItem
+            node2.switchboardItem?.nodeLinks[node2.connectionPointId].connectionPointId = node1.connectionPointId
             item1.isEliminated = true
             item2.isEliminated = true
           }
@@ -424,7 +425,7 @@ public class LayoutNode : OpenLCBNodeVirtual {
         
         let to = (connection.to + Int(block.orientation.rawValue)) % 8
         
-        if let fromNode = block.nodeLinks[from].switchBoardItem, let toNode = block.nodeLinks[to].switchBoardItem {
+        if let fromNode = block.nodeLinks[from].switchboardItem, let toNode = block.nodeLinks[to].switchboardItem {
           
           var route : SWBRoutePart = (block, from, toNode, block.nodeLinks[to].connectionPointId, index, distance: block.getDimension(routeNumber: index + 1)!, routeDirection: .next)
           
@@ -443,43 +444,282 @@ public class LayoutNode : OpenLCBNodeVirtual {
         index += 1
         
       }
-      /*
-      
-      var index = 0
-      for node in block.nodeLinks {
-        
-        if let item = node.switchBoardItem {
-          for route in node.routes {
-            print("  \(route.fromSwitchBoardItem.blockName) \(route.fromNodeId)  -> \(route.toSwitchBoardItem.blockName) \(route.toNodeId) \(route.switchSettings)")
-          }
-        }
-        index += 1
-      }
-      */
-      // Find Loops
-      
+            
     }
     
-//    findLoops()
+    findLoops()
     
     /*
-    for (_, item) in switchBoardItems {
+    for (_, item) in switchboardItems {
       
       if item.isEliminated {
         continue
       }
       
-      print("\(item.itemPartType.partName) \(item.primaryKey) \(item.blockName)")
+      debugLog("\(item.itemType.title) \(item.nodeId.toHexDotFormat(numberOfBytes: 6)) \(item.userNodeName)")
       
-      for point in item.itemPartType.pointsSet(orientation: item.orientation) {
+      for point in item.itemType.pointsSet(orientation: item.orientation) {
         let nodeLink = item.nodeLinks[point]
-        if let node = nodeLink.switchBoardItem {
-          print("  \(point): \(node.primaryKey) - \(nodeLink.nodeId)")
+        if let node = nodeLink.switchboardItem {
+          debugLog("  \(point): \(node.nodeId.toHexDotFormat(numberOfBytes: 6)) - \(node.userNodeName)")
         }
       }
        
     }
-    */
+     
+     */
+    
+  }
+  
+  public func loopSet(containing:UInt64) -> Set<UInt16> {
+    
+    var result : Set<UInt16> = []
+    
+    var index : UInt16 = 0
+    
+    while index < loopNodes.count {
+      if loopNodes[Int(index)].contains(containing) {
+        result.insert(index + 1)
+      }
+      index += 1
+    }
+    
+    return result
+    
+  }
+  
+  public func loops(containing:UInt64) -> [Int] {
+    
+    var result : [Int] = []
+    
+    var index = 0
+    
+    while index < loopNodes.count {
+      if loopNodes[index].contains(containing) {
+        result.append(index)
+      }
+      index += 1
+    }
+    
+    return result
+    
+  }
+  
+  public func populateLoop(comboBox:NSComboBox, startBlockId:UInt64) {
+    
+    comboBox.removeAllItems()
+    for loop in loops(containing: startBlockId) {
+      comboBox.addItem(withObjectValue: "\(loop + 1)")
+    }
+    
   }
 
+  public var loops : [SWBRoute] = []
+  
+  public var loopLengths : [Double] = []
+  
+  public var loopNodes : [Set<UInt64>] = []
+  
+  private var routeSoFar : SWBRoute = []
+  
+  private var inLoop : Set<UInt64> = []
+  
+  func findLoopsFrom(startPos:UInt64, connectionPointId:Int, next:SWBRoutePart) -> Bool {
+  
+    if startPos == next.toSwitchboardItem.nodeId && connectionPointId == next.toConnectionPointId {
+      
+      var newRoute : SWBRoute = []
+      
+      for temp in routeSoFar {
+        newRoute.append(temp)
+      }
+      
+      loops.append(newRoute)
+      
+      return true
+      
+    }
+      
+    var found = false
+
+    for route in next.toSwitchboardItem.nodeLinks[next.toConnectionPointId].routes {
+      if !inLoop.contains(next.toSwitchboardItem.nodeId) {
+        inLoop.insert(next.toSwitchboardItem.nodeId)
+        routeSoFar.append(route)
+        found = findLoopsFrom(startPos: startPos, connectionPointId: connectionPointId, next: route)
+        routeSoFar.remove(at: routeSoFar.count - 1)
+        inLoop.remove(next.toSwitchboardItem.nodeId)
+        if found {
+          break
+        }
+      }
+    }
+
+    return found
+    
+  }
+  
+  func findLoops() {
+  
+    var blocks : [SwitchboardItemNode] = []
+    
+    for (_, block) in operationalBlocks {
+      blocks.append(block)
+    }
+    
+    blocks.sort {$0.userNodeName.sortValue < $1.userNodeName.sortValue}
+    
+    loops.removeAll()
+    
+    routeSoFar.removeAll()
+    
+    var found = false
+    
+    for startBlock in blocks {
+      for nodeLink in startBlock.nodeLinks {
+        for route in nodeLink.routes {
+          routeSoFar.append(route)
+          found = findLoopsFrom(startPos: startBlock.nodeId, connectionPointId: route.fromConnectionPointId, next: route)
+          routeSoFar.remove(at: routeSoFar.count-1)
+          if found {
+            break
+          }
+        }
+      }
+    }
+    
+    var numLoop = loops.count
+    
+    var index = 0
+    
+    while index < numLoop {
+    
+    var items : Set<UInt64> = []
+    for rp in loops[index] {
+      items.insert(rp.fromSwitchboardItem.nodeId)
+    }
+    
+    var index2 = index + 1
+    
+    while index2 < numLoop {
+    
+      var items2 : Set<UInt64> = []
+      for rp2 in loops[index2] {
+        items2.insert(rp2.fromSwitchboardItem.nodeId)
+      }
+      
+      if items == items2 {
+        loops.remove(at: index2)
+        numLoop -= 1
+      }
+      else {
+        index2 += 1
+      }
+      
+      }
+      
+      index += 1
+
+    }
+    
+    loopLengths.removeAll()
+    loopNodes.removeAll()
+    
+    for loop in loops {
+      var length : Double = 0.0
+      var nodes : Set<UInt64> = []
+      for item in loop {
+        length += item.distance
+        nodes.insert(item.fromSwitchboardItem.nodeId)
+      }
+      loopLengths.append(length)
+      loopNodes.append(nodes)
+    }
+
+  }
+  
+  /*
+  public func findRouteFrom(locomotive:Locomotive, origin:SwitchBoardItem, destination:SwitchBoardItem, routeDirection:RouteDirection, routeSoFar: inout Route, inLoop: inout Set<Int>, next:RoutePart) -> Route? {
+  
+  if next.fromSwitchBoardItem.validLocomotiveTypes.contains(locomotive.locomotiveType) {
+  
+  if destination == next.toSwitchBoardItem {
+  
+  let routePart : RoutePart = (
+  fromSwitchBoardItem: next.toSwitchBoardItem,
+  fromNodeId: next.toNodeId,
+  toSwitchBoardItem: next.toSwitchBoardItem,
+  toNodeId: next.toNodeId,
+  turnoutConnection: 0,
+  distance: destination.stopPositionInCM(routeDirection: next.routeDirection),
+  routeDirection: next.routeDirection
+  )
+  
+  routeSoFar.append(routePart)
+  
+  return routeSoFar
+  
+  }
+  
+  for routePart in next.toSwitchBoardItem.nodeLinks[next.toNodeId].routes {
+  if !inLoop.contains(next.toSwitchBoardItem.primaryKey) {
+  if next.toSwitchBoardItem.isTurnout || routePart.routeDirection == routeDirection {
+  inLoop.insert(next.toSwitchBoardItem.primaryKey)
+  routeSoFar.append(routePart)
+  if let temp = findRouteFrom(locomotive: locomotive, origin: origin, destination: destination, routeDirection: routeDirection, routeSoFar: &routeSoFar, inLoop: &inLoop, next: routePart) {
+  return temp
+  }
+  routeSoFar.remove(at: routeSoFar.count-1)
+  inLoop.remove(next.toSwitchBoardItem.primaryKey)
+  }
+  }
+  
+  }
+  
+  }
+  
+  return nil
+  
+  }
+  
+  
+  
+  public func findRoute(locomotive:Locomotive, origin:SwitchBoardItem, originPosition: Double, destination:SwitchBoardItem, routeDirection:RouteDirection) -> Route? {
+  
+  if origin.validLocomotiveTypes.contains(locomotive.locomotiveType) && destination.validLocomotiveTypes.contains(locomotive.locomotiveType) {
+  
+  var routeSoFar : Route = []
+  
+  var inLoop : Set<Int> = []
+  
+  inLoop.insert(origin.primaryKey)
+  
+  for nodeLink in origin.nodeLinks {
+  
+  for routePart in nodeLink.routes {
+  
+  var newRoutePart = routePart
+  
+  newRoutePart.distance -= originPosition
+  
+  routeSoFar.append(newRoutePart)
+  
+  if let temp = findRouteFrom(locomotive: locomotive, origin: origin, destination: destination, routeDirection: routeDirection, routeSoFar: &routeSoFar, inLoop: &inLoop, next: routePart) {
+  return temp
+  }
+  
+  routeSoFar.remove(at: routeSoFar.count-1)
+  
+  }
+  
+  }
+  
+  }
+  
+  return nil
+  
+  }
+
+   */
+  
 }

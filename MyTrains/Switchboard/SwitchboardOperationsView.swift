@@ -13,7 +13,7 @@ class SwitchboardOperationsView : SwitchboardView {
   // MARK: Drawing Stuff
   
   override func draw(_ dirtyRect: NSRect) {
-    
+ 
     guard let switchboardPanel, let switchboardItems = switchboardPanel.switchboardItems else {
       return
     }
@@ -28,7 +28,7 @@ class SwitchboardOperationsView : SwitchboardView {
     let lineWidth = cellSize * 0.1
     
     for (_, item) in switchboardItems {
-      
+
       if let block = item.controlBlock {
         
         let path = NSBezierPath()

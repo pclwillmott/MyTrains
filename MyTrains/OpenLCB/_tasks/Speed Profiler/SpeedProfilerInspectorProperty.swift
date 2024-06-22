@@ -49,9 +49,9 @@ public enum SpeedProfilerInspectorProperty : Int, CaseIterable {
   case startBlockId = 19   //
   case endBlockId = 20     //
   case route = 21            //
-//  case routeSegments = 22
   case totalRouteLength = 23 //
-  
+  case routeSegments = 22
+
   // MARK: Public Properties
   
   /// This will cause a runtime error if the lookup is not defined - this is the intent!
@@ -90,7 +90,7 @@ public enum SpeedProfilerInspectorProperty : Int, CaseIterable {
     return SpeedProfilerInspectorProperty.labels[self]!.controlType
   }
   
-
+  // MARK: Public Methods
   
   // MARK: Private Class Properties
   
@@ -132,14 +132,14 @@ public enum SpeedProfilerInspectorProperty : Int, CaseIterable {
     ),
     .maximumSpeed
     : (
-      String(localized:"Maximum Speed", comment:"This is used for the title of a text field."),
+      String(localized:"Maximum Speed (%%UNITS_SCALE_SPEED%%)", comment:"This is used for the title of a text field."),
       String(localized:"The maximum speed that the locomotive can be commanded to travel at.", comment:"This is used for a tooltip."),
       .locomotiveControl,
       .textField
     ),
     .maximumSpeedLabel
     : (
-      String(localized:"Maximum Speed", comment:"This is used for the title of a label."),
+      String(localized:"Maximum Speed (%%UNITS_SCALE_SPEED%%)", comment:"This is used for the title of a label."),
       String(localized:"The maximum speed that the locomotive can be commanded to travel at.", comment:"This is used for a tooltip."),
       .locomotiveControl,
       .label
@@ -258,10 +258,17 @@ public enum SpeedProfilerInspectorProperty : Int, CaseIterable {
     ),
     .totalRouteLength
     : (
-      String(localized:"Route Length", comment:"This is used for the title of a label."),
+      String(localized:"Route Length (%%UNITS_ACTUAL_LENGTH%%)", comment:"This is used for the title of a label."),
       String(localized:"This is the total length of the selected route.", comment:"This is used for a tooltip."),
       .route,
       .label
+    ),
+    .routeSegments
+    : (
+      String(localized:"Route Length (%%UNITS_ACTUAL_LENGTH%%)", comment:"This is used for the title of a label."),
+      String(localized:"This is the total length of the selected route.", comment:"This is used for a tooltip."),
+      .route,
+      .panelView
     ),
   ]
   
@@ -278,90 +285,144 @@ public enum SpeedProfilerInspectorProperty : Int, CaseIterable {
       
       var field : SpeedProfilerInspectorPropertyField = (view:nil, label:nil, control:nil, item, new:nil, copy:nil, paste:nil)
       
-      field.label = NSTextField(labelWithString: item.label)
-      
-      let view = NSView()
-      
-      view.translatesAutoresizingMaskIntoConstraints = false
-      
-      switch item.controlType {
-      case .checkBox:
-        field.label!.stringValue = ""
-        let checkBox = NSButton()
-        checkBox.setButtonType(.switch)
-        checkBox.title = item.label
-        field.control = checkBox
-      case .comboBox:
-        let comboBox = MyComboBox()
-        comboBox.isEditable = false
-        field.control = comboBox
-  //      initComboBox(property: field.property, comboBox: comboBox)
-      case .eventId:
-        let textField = NSTextField()
-        textField.placeholderString = "00.00.00.00.00.00.00.00"
-        field.control = textField
-        let newButton = NSButton()
-        newButton.title = String(localized: "New")
-        newButton.fontSize = labelFontSize
-        newButton.translatesAutoresizingMaskIntoConstraints = false
-        newButton.tag = item.rawValue
-        view.addSubview(newButton)
-        field.new = newButton
-        let copyButton = NSButton()
-        copyButton.title = String(localized: "Copy")
-        copyButton.fontSize = labelFontSize
-        copyButton.translatesAutoresizingMaskIntoConstraints = false
-        copyButton.tag = item.rawValue
-
-        view.addSubview(copyButton)
-        field.copy = copyButton
-        let pasteButton = NSButton()
-        pasteButton.title = String(localized: "Paste")
-        pasteButton.fontSize = labelFontSize
-        pasteButton.translatesAutoresizingMaskIntoConstraints = false
-        pasteButton.tag = item.rawValue
-        view.addSubview(pasteButton)
-        field.paste = pasteButton
+      if item.controlType == .panelView {
         
-      case .label:
-        let textField = NSTextField(labelWithString: "")
-        field.control = textField
-      case .textField:
-        let textField = NSTextField()
-        field.control = textField
+        let view = NSStackView()
+        view.orientation = .vertical
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        field.view = view
+        
+        result.append(field)
+        
+        for (_, item) in appNode!.panelList {
+          if item.switchboardItems!.count > 0 {
+            let panel = SwitchboardSpeedProfilerView()
+            panel.translatesAutoresizingMaskIntoConstraints = false
+            panel.switchboardPanel = item
+            view.addArrangedSubview(panel)
+          }
+        }
+        
+      }
+      else {
+        
+        field.label = NSTextField(labelWithString: item.label)
+        
+        let view = NSView()
+        
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        switch item.controlType {
+        case .checkBox:
+          field.label!.stringValue = ""
+          let checkBox = NSButton()
+          checkBox.setButtonType(.switch)
+          checkBox.title = item.label
+          field.control = checkBox
+        case .comboBox:
+          let comboBox = MyComboBox()
+          comboBox.isEditable = false
+          field.control = comboBox
+          initComboBox(property: field.property, comboBox: comboBox)
+        case .eventId:
+          let textField = NSTextField()
+          textField.placeholderString = "00.00.00.00.00.00.00.00"
+          field.control = textField
+          let newButton = NSButton()
+          newButton.title = String(localized: "New")
+          newButton.fontSize = labelFontSize
+          newButton.translatesAutoresizingMaskIntoConstraints = false
+          newButton.tag = item.rawValue
+          view.addSubview(newButton)
+          field.new = newButton
+          let copyButton = NSButton()
+          copyButton.title = String(localized: "Copy")
+          copyButton.fontSize = labelFontSize
+          copyButton.translatesAutoresizingMaskIntoConstraints = false
+          copyButton.tag = item.rawValue
+          
+          view.addSubview(copyButton)
+          field.copy = copyButton
+          let pasteButton = NSButton()
+          pasteButton.title = String(localized: "Paste")
+          pasteButton.fontSize = labelFontSize
+          pasteButton.translatesAutoresizingMaskIntoConstraints = false
+          pasteButton.tag = item.rawValue
+          view.addSubview(pasteButton)
+          field.paste = pasteButton
+          
+        case .label:
+          let textField = NSTextField(labelWithString: "")
+          field.control = textField
+        case .textField:
+          let textField = NSTextField()
+          field.control = textField
+        case .panelView:
+          break
+        }
+        
+        field.control?.toolTip = item.toolTip
+        field.control?.tag = item.rawValue
+        
+        /// https://manasaprema04.medium.com/autolayout-fundamental-522f0a6e5790
+        
+        field.label!.translatesAutoresizingMaskIntoConstraints = false
+        field.label!.fontSize = labelFontSize
+        field.label!.alignment = .right
+        field.label!.setContentHuggingPriority(NSLayoutConstraint.Priority(rawValue: 250), for: .horizontal)
+        //     field.label!.lineBreakMode = .byWordWrapping
+        //     field.label!.maximumNumberOfLines = 0
+        //     field.label!.preferredMaxLayoutWidth = 120.0
+        
+        view.addSubview(field.label!)
+        
+        field.control!.translatesAutoresizingMaskIntoConstraints = false
+        field.control!.fontSize = textFontSize
+        field.control!.setContentHuggingPriority(NSLayoutConstraint.Priority(rawValue: 1), for: .horizontal)
+        
+        view.addSubview(field.control!)
+        //      view.backgroundColor = NSColor.yellow.cgColor
+        
+        field.view = view
+        field.view!.setContentHuggingPriority(NSLayoutConstraint.Priority(rawValue: 500), for: .horizontal)
+        
       }
       
-      field.control?.toolTip = item.toolTip
-      field.control?.tag = item.rawValue
-      
-      /// https://manasaprema04.medium.com/autolayout-fundamental-522f0a6e5790
-      
-      field.label!.translatesAutoresizingMaskIntoConstraints = false
-      field.label!.fontSize = labelFontSize
-      field.label!.alignment = .right
-      field.label!.setContentHuggingPriority(NSLayoutConstraint.Priority(rawValue: 250), for: .horizontal)
- //     field.label!.lineBreakMode = .byWordWrapping
- //     field.label!.maximumNumberOfLines = 0
- //     field.label!.preferredMaxLayoutWidth = 120.0
-
-      view.addSubview(field.label!)
-      
-      field.control!.translatesAutoresizingMaskIntoConstraints = false
-      field.control!.fontSize = textFontSize
-      field.control!.setContentHuggingPriority(NSLayoutConstraint.Priority(rawValue: 1), for: .horizontal)
-
-      view.addSubview(field.control!)
-//      view.backgroundColor = NSColor.yellow.cgColor
-
-      field.view = view
-      field.view!.setContentHuggingPriority(NSLayoutConstraint.Priority(rawValue: 500), for: .horizontal)
-
       result.append(field)
       
     }
     
     return result
     
+  }
+
+  // MARK: Private Class Methods
+  
+  private static func initComboBox(property:SpeedProfilerInspectorProperty, comboBox:MyComboBox) {
+    
+    switch property {
+    case trackProtocol:
+      TrackProtocol.populate(comboBox: comboBox)
+    case locomotiveControlBasis:
+      LocomotiveControlBasis.populate(comboBox: comboBox)
+    case locomotiveFacingDirection:
+      RouteDirection.populate(comboBox: comboBox)
+    case locomotiveTravelDirectionToSample:
+      SamplingDirection.populate(comboBox: comboBox)
+    case minimumSamplePeriod:
+      SamplePeriod.populate(comboBox: comboBox)
+    case bestFitMethod:
+      BestFitMethod.populate(comboBox: comboBox)
+    case routeType:
+      SamplingRouteType.populate(comboBox: comboBox)
+    case startBlockId:
+      appNode?.populateSpeedProfilerBlocks(comboBox: comboBox)
+    case endBlockId:
+      appNode?.populateSpeedProfilerBlocks(comboBox: comboBox)
+    default:
+      break
+    }
   }
 
 }

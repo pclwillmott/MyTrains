@@ -1711,6 +1711,8 @@ public enum LayoutInspectorProperty : Int, CaseIterable {
       case .textField:
         let textField = NSTextField()
         field.control = textField
+      case .panelView:
+        break
       }
       
       field.control?.toolTip = item.toolTip

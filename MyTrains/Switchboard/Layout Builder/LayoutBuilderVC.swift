@@ -471,18 +471,12 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
         (field.control as? NSButton)?.state = value == "true" ? .on : .off
       case .comboBox:
         if let comboBox = field.control as? NSComboBox {
-          comboBox.deselectItem(at: comboBox.indexOfSelectedItem)
-          var index = 0
-          while index < comboBox.numberOfItems {
-            if let title = comboBox.itemObjectValue(at: index) as? String, title == value {
-              comboBox.selectItem(at: index)
-              break
-            }
-            index += 1
-          }
+          comboBox.selectItem(withObjectValue: value)
         }
       case .eventId:
         (field.control as? NSTextField)?.stringValue = value
+      case .panelView:
+        break
       }
     }
     

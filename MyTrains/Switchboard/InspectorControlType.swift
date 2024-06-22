@@ -16,5 +16,6 @@ public enum InspectorControlType {
   case checkBox
   case comboBox
   case eventId
+  case panelView
   
 }

@@ -25,6 +25,18 @@ public enum SamplePeriod : UInt8, CaseIterable {
   case sec55 = 10
   case sec60 = 11
 
+  // MARK: Constructors
+  
+  init?(title:String) {
+    for temp in SamplePeriod.allCases {
+      if temp.title == title {
+        self = temp
+        return
+      }
+    }
+    return nil
+  }
+
   // MARK: Public Properties
   
   public var title : String {

@@ -81,7 +81,6 @@ enum DEFAULT {
   static let CURRENT_SETTINGS_INSPECTOR = "CURRENT_SETTINGS_INSPECTOR"
   static let CURRENT_VALUES_MODE        = "CURRENT_VALUES_MODE"
 
-
 }
 
 public var appNode : OpenLCBNodeMyTrains? {

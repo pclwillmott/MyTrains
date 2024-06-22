@@ -16,6 +16,18 @@ public enum LocomotiveControlBasis : UInt8, CaseIterable {
   case bestFitValues = 1
   case actualValues  = 2
   
+  // MARK: Constructors
+  
+  init?(title:String) {
+    for temp in LocomotiveControlBasis.allCases {
+      if temp.title == title {
+        self = temp
+        return
+      }
+    }
+    return nil
+  }
+
   // MARK: Public Properties
   
   public var title : String {
@@ -29,5 +41,25 @@ public enum LocomotiveControlBasis : UInt8, CaseIterable {
     return titles[self]!
     
   }
+
+  // MARK: Public Class Methods
   
+  public static func populate(comboBox:NSComboBox) {
+    comboBox.removeAllItems()
+    for item in LocomotiveControlBasis.allCases {
+      comboBox.addItem(withObjectValue: item.title)
+    }
+  }
+  
+  public static func select(comboBox:NSComboBox, item:LocomotiveControlBasis) {
+    comboBox.selectItem(withObjectValue: item.title)
+  }
+  
+  public static func selected(comboBox:NSComboBox) -> LocomotiveControlBasis? {
+    guard comboBox.indexOfSelectedItem != -1 else {
+      return nil
+    }
+    return LocomotiveControlBasis(rawValue: UInt8(exactly: comboBox.indexOfSelectedItem)!)
+  }
+
 }

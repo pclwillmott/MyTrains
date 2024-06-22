@@ -99,6 +99,29 @@ class SwitchboardView: NSView {
     return (result + 2.0) * cellSize
   }
 
+  public var cellsHigh : Int {
+    guard let switchboardPanel, let switchboardItems = switchboardPanel.switchboardItems else {
+      return 0
+    }
+    var result = 0
+    for (_, item) in switchboardItems {
+      result = max(result,Int(item.yPos))
+    }
+    return result + 2
+  }
+
+  public var cellsWide : Int {
+    guard let switchboardPanel, let switchboardItems = switchboardPanel.switchboardItems else {
+      return 0
+    }
+    var result = 0
+    for (_, item) in switchboardItems {
+      result = max(result,Int(item.xPos))
+    }
+    return result + 2
+  }
+
+
   internal var _switchboardPanel : SwitchboardPanelNode?
   
   public var switchboardPanel : SwitchboardPanelNode? {

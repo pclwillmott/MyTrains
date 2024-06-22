@@ -8,11 +8,14 @@
 import Foundation
 
 public typealias SWBRoutePart = (
-  fromSwitchBoardItem: SwitchboardItemNode,
+  fromSwitchboardItem: SwitchboardItemNode,
   fromConnectionPointId: Int,
-  toSwitchBoardItem: SwitchboardItemNode,
+  toSwitchboardItem: SwitchboardItemNode,
   toConnectionPointId: Int,
   turnoutConnection:Int,
   distance: Double,
   routeDirection: RouteDirection
 )
+
+public typealias SWBRoute = [SWBRoutePart]
+

@@ -16,12 +16,24 @@ public enum SamplingDirection : UInt8, CaseIterable {
   case forward
   case reverse
   
+  // MARK: Constructors
+  
+  init?(title:String) {
+    for temp in SamplingDirection.allCases {
+      if temp.title == title {
+        self = temp
+        return
+      }
+    }
+    return nil
+  }
+
   // MARK: Public Properties
   
   public var title : String {
     
     let titles : [SamplingDirection:String] = [
-      .bothDirections : String(localized: "Both Forward & Reverse"),
+      .bothDirections : String(localized: "Forward & Reverse"),
       .forward        : String(localized: "Forward Only"),
       .reverse        : String(localized: "Reverese Only"),
     ]
@@ -29,4 +41,25 @@ public enum SamplingDirection : UInt8, CaseIterable {
     return titles[self]!
     
   }
+  
+  // MARK: Public Class Methods
+  
+  public static func populate(comboBox:NSComboBox) {
+    comboBox.removeAllItems()
+    for item in SamplingDirection.allCases {
+      comboBox.addItem(withObjectValue: item.title)
+    }
+  }
+  
+  public static func select(comboBox:NSComboBox, item:SamplingDirection) {
+    comboBox.selectItem(withObjectValue: item.title)
+  }
+  
+  public static func selected(comboBox:NSComboBox) -> SamplingDirection? {
+    guard comboBox.indexOfSelectedItem != -1 else {
+      return nil
+    }
+    return SamplingDirection(rawValue: UInt8(exactly: comboBox.indexOfSelectedItem)!)
+  }
+
 }

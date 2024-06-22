@@ -923,9 +923,6 @@
         }
       }
     },
-    "Both Forward & Reverse" : {
-
-    },
     "Brake" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -1455,7 +1452,7 @@
     "Colour-light 4 aspect" : {
 
     },
-    "Commanded" : {
+    "Commanded (%%SCALE_SPEED_UNITS%%)" : {
 
     },
     "Common" : {
@@ -3038,6 +3035,12 @@
         }
       }
     },
+    "Forward (%%SCALE_SPEED_UNITS%%)" : {
+
+    },
+    "Forward & Reverse" : {
+
+    },
     "Forward Only" : {
 
     },
@@ -4165,7 +4168,7 @@
         }
       }
     },
-    "Maximum Speed" : {
+    "Maximum Speed (%%UNITS_SCALE_SPEED%%)" : {
       "comment" : "This is used for the title of a text field."
     },
     "Maximum speed at any time" : {
@@ -5363,6 +5366,9 @@
         }
       }
     },
+    "Reverse (%%SCALE_SPEED_UNITS%%)" : {
+
+    },
     "Reverser" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -5407,7 +5413,7 @@
     "Route Direction" : {
       "comment" : "This is used for the title of a combo box which the user selects the directionality applicable to the signal."
     },
-    "Route Length" : {
+    "Route Length (%%UNITS_ACTUAL_LENGTH%%)" : {
       "comment" : "This is used for the title of a label."
     },
     "Route Length Settings" : {
@@ -7504,10 +7510,10 @@
     "Zoom Out" : {
 
     },
-    "δ Forward" : {
+    "δ Forward (%%SCALE_SPEED_UNITS%%)" : {
 
     },
-    "δ Reverse" : {
+    "δ Reverse (%%SCALE_SPEED_UNITS%%)" : {
 
     }
   },

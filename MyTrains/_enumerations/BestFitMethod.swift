@@ -15,6 +15,18 @@ public enum BestFitMethod : UInt8, CaseIterable {
   case straightLine         = 0
   case centralMovingAverage = 1
 
+  // MARK: Constructors
+  
+  init?(title:String) {
+    for temp in BestFitMethod.allCases {
+      if temp.title == title {
+        self = temp
+        return
+      }
+    }
+    return nil
+  }
+
   // MARK: Public Properties
   
   public var title : String {

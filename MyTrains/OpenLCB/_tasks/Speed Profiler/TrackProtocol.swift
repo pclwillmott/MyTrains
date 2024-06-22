@@ -20,6 +20,18 @@ public enum TrackProtocol : UInt8, CaseIterable {
   case motorolaII = 5
   case openLCB    = 6
   
+  // MARK: Constructors
+  
+  init?(title:String) {
+    for temp in TrackProtocol.allCases {
+      if temp.title == title {
+        self = temp
+        return
+      }
+    }
+    return nil
+  }
+  
   // MARK: Public Properties
   
   public var title : String {
@@ -52,6 +64,53 @@ public enum TrackProtocol : UInt8, CaseIterable {
     
     return samples[self]!
     
+  }
+  
+  public var isNumberOfSamplesFixed : Bool {
+    
+    let fixed : Set<TrackProtocol> = [
+      .dcc128,
+      .dcc28,
+      .dcc14,
+      .mfx_m4,
+      .motorolaI,
+      .motorolaII,
+    ]
+    
+    return fixed.contains(self)
+    
+  }
+
+  public var isMaximumSpeedFixed : Bool {
+    
+    let fixed : Set<TrackProtocol> = [
+      .dcc128,
+      .dcc28,
+      .dcc14,
+    ]
+    
+    return fixed.contains(self)
+    
+  }
+
+  // MARK: Public Class Methods
+  
+  public static func populate(comboBox:NSComboBox) {
+    comboBox.removeAllItems()
+    for item in TrackProtocol.allCases {
+      comboBox.addItem(withObjectValue: item.title)
+    }
+  }
+  
+  public static func select(comboBox:NSComboBox, item:TrackProtocol) {
+    comboBox.selectItem(withObjectValue: item.title)
+  }
+  
+  public static func selected(comboBox:NSComboBox) -> TrackProtocol? {
+    guard comboBox.indexOfSelectedItem != -1 else {
+      return nil
+    }
+    return TrackProtocol(rawValue: UInt8(exactly: comboBox.indexOfSelectedItem)!)
   }
   
 }

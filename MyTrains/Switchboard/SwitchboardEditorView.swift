@@ -393,9 +393,11 @@ class SwitchboardEditorView: SwitchboardView {
   
   public func addItem(partType:SwitchboardItemType) {
     
-    guard let networkLayer = appDelegate.networkLayer, let currentLocation, let switchboardPanel, let switchboardItems = switchboardPanel.switchboardItems else {
+    guard let networkLayer = appDelegate.networkLayer, let currentLocation, let switchboardPanel, let appNode else {
       return
     }
+    
+    let switchboardItems = appNode.switchboardItemList
     
     if let item = getItem(location: currentLocation) {
       
@@ -453,7 +455,7 @@ class SwitchboardEditorView: SwitchboardView {
           isUnique = true
           test = " - \(prefix)\(index)"
           for (_, item) in switchboardItems {
-            if test == item.userNodeName.suffix(test.count) {
+            if test == item.userNodeName.trimmingCharacters(in: .whitespaces).suffix(test.count) {
               isUnique = false
               break
             }
@@ -467,7 +469,7 @@ class SwitchboardEditorView: SwitchboardView {
       node.xPos = UInt16(exactly: currentLocation.x)!
       node.yPos = UInt16(exactly: currentLocation.y)!
       
-      if node.itemType.isGroup, let layout = appNode?.layout {
+      if node.itemType.isGroup, let layout = appNode.layout {
         node.trackGauge = layout.defaultTrackGuage
       }
       
@@ -476,6 +478,7 @@ class SwitchboardEditorView: SwitchboardView {
       selectedItems.removeAll()
       selectedItems.append(node)
       delegate?.selectedItemChanged?(self)
+      
     }
     
     needsDisplay = true

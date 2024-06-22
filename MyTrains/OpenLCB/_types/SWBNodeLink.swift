@@ -7,4 +7,4 @@
 
 import Foundation
 
-public typealias SWBNodeLink = (switchBoardItem: SwitchboardItemNode?, connectionPointId:Int, routes: [SWBRoutePart])
+public typealias SWBNodeLink = (switchboardItem: SwitchboardItemNode?, connectionPointId:Int, routes: [SWBRoutePart])

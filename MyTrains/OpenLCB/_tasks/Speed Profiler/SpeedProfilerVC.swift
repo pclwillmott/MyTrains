@@ -8,7 +8,7 @@
 import Foundation
 import AppKit
 
-class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate, NSTableViewDataSource, NSTableViewDelegate, MyTrainsAppDelegate {
+class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate, NSTableViewDataSource, NSTableViewDelegate, MyTrainsAppDelegate, NSTextFieldDelegate, NSControlTextEditingDelegate, SpeedProfileDelegate {
  
   // MARK: Window & View Control
 
@@ -109,6 +109,8 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
       return
     }
     
+    appNode?.layout?.linkSwitchboardItems()
+
     // cboLocomotive
     
     cboLocomotive.translatesAutoresizingMaskIntoConstraints = false
@@ -200,11 +202,11 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
 
     let columnTitles = [
       String(localized:"Sample"),
-      String(localized:"Commanded"),
-      String(localized:"Forward"),
-      String(localized:"δ Forward"),
-      String(localized:"Reverse"),
-      String(localized:"δ Reverse"),
+      String(localized:"Commanded (%%SCALE_SPEED_UNITS%%)"),
+      String(localized:"Forward (%%SCALE_SPEED_UNITS%%)"),
+      String(localized:"δ Forward (%%SCALE_SPEED_UNITS%%)"),
+      String(localized:"Reverse (%%SCALE_SPEED_UNITS%%)"),
+      String(localized:"δ Reverse (%%SCALE_SPEED_UNITS%%)"),
     ]
     
     let columnToolTips = [
@@ -224,7 +226,7 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
         column.minWidth = 60
         tblValuesTableView.addTableColumn(column)
         column.headerCell.alignment = .left
-        column.title = columnTitles[index]
+        column.title = columnTitles[index].replacingOccurrences(of: "%%SCALE_SPEED_UNITS%%", with: appNode!.unitsScaleSpeed.symbol)
         column.headerToolTip = columnToolTips[index]
       }
     }
@@ -247,14 +249,14 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
     for temp in inspectorFields {
       if let comboBox = temp.control as? MyComboBox {
         comboBox.target = self
-//        comboBox.action = #selector(self.cboAction(_:))
+        comboBox.action = #selector(self.cboAction(_:))
       }
       else if let chkBox = temp.control as? NSButton {
         chkBox.target = self
-//        chkBox.action = #selector(self.chkAction(_:))
+        chkBox.action = #selector(self.chkAction(_:))
       }
       else if let field = temp.control as? NSTextField {
-//        field.delegate = self
+        field.delegate = self
       }
     }
     
@@ -364,6 +366,8 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
     
     btnReset.translatesAutoresizingMaskIntoConstraints = false
     btnReset.title = String(localized: "Reset to Defaults")
+    btnReset.target = self
+    btnReset.action = #selector(btnResetToDefaultsAction(_:))
     
     pnlButtons.addSubview(btnReset)
     
@@ -372,6 +376,8 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
     
     btnDiscardChanges.translatesAutoresizingMaskIntoConstraints = false
     btnDiscardChanges.title = String(localized: "Discard Changes")
+    btnDiscardChanges.target = self
+    btnDiscardChanges.action = #selector(btnDiscardChangesAction(_:))
     
     pnlButtons.addSubview(btnDiscardChanges)
     
@@ -380,6 +386,8 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
 
     btnSaveChanges.translatesAutoresizingMaskIntoConstraints = false
     btnSaveChanges.title = String(localized: "Save Changes")
+    btnSaveChanges.target = self
+    btnSaveChanges.action = #selector(btnSaveChangesAction(_:))
 
     pnlButtons.addSubview(btnSaveChanges)
     
@@ -452,6 +460,10 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
   
   internal func displayInspector() {
     
+    guard let profile, let appNode else {
+      return
+    }
+    
     NSLayoutConstraint.deactivate(inspectorConstraints)
     inspectorConstraints.removeAll()
 
@@ -478,22 +490,22 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
       .showTrendline,
       .routeType,
       .startBlockId,
-      .route,
       .totalRouteLength,
+      .routeSegments,
       
     ]
+    
+    commonProperties.insert(profile.trackProtocol.isNumberOfSamplesFixed ? .numberOfSamplesLabel : .numberOfSamples)
 
-    /*
-     
-     case maximumSpeed = 24 //
-     case maximumSpeedLabel
-     case numberOfSamples = 7 //
-     case numberOfSamplesLabel = 8 //
-     case endBlockId = 20     //
-     case routeSegments = 22
-
-     */
-        
+    commonProperties.insert(profile.trackProtocol.isMaximumSpeedFixed ? .maximumSpeedLabel : .maximumSpeed)
+    
+    if profile.routeType == .straight {
+      commonProperties.insert(.endBlockId)
+    }
+    else {
+      commonProperties.insert(.route)
+    }
+    
     var usedFields : [SpeedProfilerInspectorPropertyField] = []
     
     var index = 0
@@ -529,20 +541,49 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
             /// They must only have internal constraints to the view that is added to the StackView.
             ///  https://manasaprema04.medium.com/autolayout-fundamental-522f0a6e5790
             
-            inspectorConstraints.append(field.view!.heightAnchor.constraint(greaterThanOrEqualTo: field.label!.heightAnchor))
-            inspectorConstraints.append(field.view!.heightAnchor.constraint(greaterThanOrEqualTo: field.control!.heightAnchor))
-            inspectorConstraints.append(field.control!.leadingAnchor.constraint(equalToSystemSpacingAfter: field.label!.trailingAnchor, multiplier: 1.0))
-            inspectorConstraints.append(field.label!.leadingAnchor.constraint(equalTo: field.view!.leadingAnchor, constant: 20))
-            
-            inspectorConstraints.append(field.control!.widthAnchor.constraint(greaterThanOrEqualToConstant: 100))
-            inspectorConstraints.append(field.view!.trailingAnchor.constraint(equalTo: field.control!.trailingAnchor))
-
-            inspectorConstraints.append(field.control!.centerYAnchor.constraint(equalTo: field.view!.centerYAnchor))
-            inspectorConstraints.append(field.label!.centerYAnchor.constraint(equalTo: field.view!.centerYAnchor))
-            
-            usedFields.append(field)
-            
- //           setValue(field: field)
+            if field.property.controlType == .panelView {
+              
+              if let stackView = field.view as? NSStackView {
+                
+                for item in stackView.arrangedSubviews {
+                  if let view = item as? SwitchboardSpeedProfilerView {
+                    let x = CGFloat(view.cellsHigh) / CGFloat(view.cellsWide)
+                    inspectorConstraints.append(view.heightAnchor.constraint(equalTo: view.widthAnchor, multiplier: x))
+                    view.speedProfile = profile
+                    view.backgroundColor = NSColor.black.cgColor
+                  }
+                }
+                
+              }
+              
+            }
+            else {
+              inspectorConstraints.append(field.view!.heightAnchor.constraint(greaterThanOrEqualTo: field.label!.heightAnchor))
+              inspectorConstraints.append(field.view!.heightAnchor.constraint(greaterThanOrEqualTo: field.control!.heightAnchor))
+              inspectorConstraints.append(field.control!.leadingAnchor.constraint(equalToSystemSpacingAfter: field.label!.trailingAnchor, multiplier: 1.0))
+              inspectorConstraints.append(field.label!.leadingAnchor.constraint(equalTo: field.view!.leadingAnchor, constant: 20))
+              
+              inspectorConstraints.append(field.control!.widthAnchor.constraint(greaterThanOrEqualToConstant: 100))
+              inspectorConstraints.append(field.view!.trailingAnchor.constraint(equalTo: field.control!.trailingAnchor))
+              
+              inspectorConstraints.append(field.control!.centerYAnchor.constraint(equalTo: field.view!.centerYAnchor))
+              inspectorConstraints.append(field.label!.centerYAnchor.constraint(equalTo: field.view!.centerYAnchor))
+              
+              usedFields.append(field)
+              
+              if field.property == .route {
+                if let comboBox = field.control as? NSComboBox {
+                  comboBox.target = nil
+                  comboBox.action = nil
+                  appNode.layout?.populateLoop(comboBox: comboBox , startBlockId: profile.startBlockId)
+                  comboBox.target = self
+                  comboBox.action = #selector(cboAction(_:))
+                }
+              }
+              
+              setValue(field: field)
+              
+            }
             
           }
           
@@ -567,8 +608,43 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
     }
     
     NSLayoutConstraint.activate(inspectorConstraints)
+    
+  }
+  
+  private func setValue(field:SpeedProfilerInspectorPropertyField) {
+    
+    guard let profile else {
+      return
+    }
+    
+    let value = profile.getValue(property: field.property)
+    
+    switch field.property.controlType {
+    case .textField:
+      (field.control as? NSTextField)?.stringValue = value
+    case .label:
+      (field.control as? NSTextField)?.stringValue = value
+    case .checkBox:
+      (field.control as? NSButton)?.state = value == "true" ? .on : .off
+    case .comboBox:
+      
+      if let comboBox = field.control as? NSComboBox {
+        
+        comboBox.stringValue = ""
+        
+        if comboBox.numberOfItems > 0 {
+          comboBox.selectItem(withObjectValue: value)
+        }
+        
+      }
+    case .eventId:
+      (field.control as? NSTextField)?.stringValue = value
+    case .panelView:
+      break
+    }
 
   }
+
 
   // MARK: Private Properties
   
@@ -691,6 +767,7 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
     
     if let value = sender.objectValueOfSelectedItem as? String, let nodeId = locomotiveLookup[value] {
       profile = SpeedProfile(nodeId: nodeId)
+      profile?.delegate = self
       sampleTable = profile!.getSampleTable()
       tblValuesTableView?.reloadData()
       displayInspector()
@@ -698,7 +775,64 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
     
   }
   
-  // MARK: ValuesTableView Datasource
+  @objc func cboAction(_ sender: NSComboBox) {
+    
+    if let profile, let property = SpeedProfilerInspectorProperty(rawValue: sender.tag) {
+      
+      if sender.indexOfSelectedItem >= 0, let string = sender.itemObjectValue(at: sender.indexOfSelectedItem) as? String {
+        
+        profile.setValue(property: property, string: string)
+                
+      }
+      else {
+        profile.setValue(property: property, string: "")
+      }
+      
+      if property == .route {
+        for item in inspectorFields {
+          if item.property == .totalRouteLength {
+            setValue(field: item)
+          }
+          else if item.property == .routeSegments {
+            if let view = item.view as? NSStackView {
+              for temp in view.arrangedSubviews {
+                if let panel = temp as? SwitchboardSpeedProfilerView {
+                  panel.needsDisplay = true
+                }
+              }
+            }
+          }
+        }
+      }
+
+    }
+    
+  }
+
+  @objc func chkAction(_ sender: NSButton) {
+
+    if let profile, let property = SpeedProfilerInspectorProperty(rawValue: sender.tag) {
+      profile.setValue(property: property, string: sender.state == .on ? "true" : "false")
+    }
+    
+  }
+  
+  @objc func btnResetToDefaultsAction(_ sender:NSButton) {
+    profile?.resetTable()
+  }
+
+  @objc func btnDiscardChangesAction(_ sender:NSButton) {
+    guard let profile else {
+      return
+    }
+    sampleTable = profile.getSampleTable()
+    tblValuesTableView?.reloadData()
+  }
+  
+  @objc func btnSaveChangesAction(_ sender:NSButton) {
+    profile?.setSampleTable(sampleTable: sampleTable)
+    debugLog("Here")
+  }
   
   // MARK: MyTrainsAppDelegate Methods
   
@@ -759,19 +893,25 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
     case columnIds[0]:
       text.stringValue = "\(row)"
     case columnIds[1]:
-      let value = UnitSpeed.convert(fromValue: item[0], fromUnits: .metersPerSecond, toUnits: appNode!.unitsScaleSpeed)
+      let value = UnitSpeed.convert(fromValue: item[0], fromUnits: .defaultValueScaleSpeed, toUnits: appNode!.unitsScaleSpeed)
       text.stringValue = formatter.string(from: NSNumber(value: value)) ?? ""
     case columnIds[2]:
-      let value = UnitSpeed.convert(fromValue: item[1], fromUnits: .metersPerSecond, toUnits: appNode!.unitsScaleSpeed)
+      let value = UnitSpeed.convert(fromValue: item[1], fromUnits: .defaultValueScaleSpeed, toUnits: appNode!.unitsScaleSpeed)
       text.stringValue = (item[1] == 0.0 && row > 0) ? "?" : formatter.string(from: NSNumber(value: value)) ?? ""
+      isEditable = true
+      text.delegate = self
+      text.tag = 1000 + row
     case columnIds[3]:
-      let value = UnitSpeed.convert(fromValue: item[1] - item[0], fromUnits: .metersPerSecond, toUnits: appNode!.unitsScaleSpeed)
+      let value = UnitSpeed.convert(fromValue: item[1] - item[0], fromUnits: .defaultValueScaleSpeed, toUnits: appNode!.unitsScaleSpeed)
       text.stringValue = (item[1] == 0.0 && row > 0) ? "?" :  formatter.string(from: NSNumber(value: value)) ?? ""
     case columnIds[4]:
-      let value = UnitSpeed.convert(fromValue: item[2], fromUnits: .metersPerSecond, toUnits: appNode!.unitsScaleSpeed)
+      let value = UnitSpeed.convert(fromValue: item[2], fromUnits: .defaultValueScaleSpeed, toUnits: appNode!.unitsScaleSpeed)
       text.stringValue = (item[2] == 0.0 && row > 0) ? "?" :  formatter.string(from: NSNumber(value: value)) ?? ""
+      isEditable = true
+      text.delegate = self
+      text.tag = 2000 + row
     case columnIds[5]:
-      let value = UnitSpeed.convert(fromValue: item[2] - item[0], fromUnits: .metersPerSecond, toUnits: appNode!.unitsScaleSpeed)
+      let value = UnitSpeed.convert(fromValue: item[2] - item[0], fromUnits: .defaultValueScaleSpeed, toUnits: appNode!.unitsScaleSpeed)
       text.stringValue = (item[2] == 0.0 && row > 0) ? "?" :  formatter.string(from: NSNumber(value: value)) ?? ""
     default:
       break
@@ -788,6 +928,84 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
     cell.addConstraint(NSLayoutConstraint(item: text, attribute: .right, relatedBy: .equal, toItem: cell, attribute: .right, multiplier: 1, constant: -13))
     return cell
 
+  }
+
+  // MARK: NSTextFieldDelegate, NSControlTextEditingDelegate Methods
+
+  /// This is called when the user presses return.
+  @objc func control(_ control: NSControl, textShouldEndEditing fieldEditor: NSText) -> Bool {
+    
+    var isValid = true
+    
+    if let textField = control as? NSTextField, let profile {
+      
+      let trimmed = textField.stringValue.trimmingCharacters(in: .whitespaces)
+      
+      if let property = SpeedProfilerInspectorProperty(rawValue: textField.tag) {
+        
+        isValid = profile.isValid(property: property, string: trimmed)
+        
+        if isValid {
+          profile.setValue(property: property, string: trimmed)
+        }
+        
+      }
+      else {
+        let row = textField.tag % 1000
+        let column = textField.tag / 1000
+        if trimmed == "?" {
+          sampleTable[row][column] = 0.0
+        }
+        else {
+          if let value = Double(trimmed), value >= 0.0 {
+            sampleTable[row][column] = UnitSpeed.convert(fromValue: value, fromUnits: appNode!.unitsScaleSpeed, toUnits: .defaultValueScaleSpeed)
+          }
+          else {
+            isValid = false
+          }
+        }
+        tblValuesTableView?.reloadData()
+      }
+ 
+    }
+    
+    return isValid
+    
+  }
+
+  // MARK: SpeedProfileDelegate Methods
+  
+  @objc func inspectorNeedsUpdate(profile:SpeedProfile) {
+    displayInspector()
+  }
+  
+  @objc func tableNeedsUpdate(profile:SpeedProfile) {
+    tblValuesTableView?.reloadData()
+  }
+  
+  @objc func chartNeedsUpdate(profile:SpeedProfile) {
+    
+  }
+
+  @objc func reloadSamples(profile:SpeedProfile) {
+    sampleTable = profile.getSampleTable()
+    tblValuesTableView?.reloadData()
+  }
+
+  // MARK: MyTrainsAppDelegate Methods
+  
+  func panelUpdated(panel:SwitchboardPanelNode) {
+    for item in inspectorFields {
+      if item.property == .routeSegments {
+        if let view = item.view as? NSStackView {
+          for temp in view.arrangedSubviews {
+            if let panel = temp as? SwitchboardSpeedProfilerView {
+              panel.needsDisplay = true
+            }
+          }
+        }
+      }
+    }
   }
 
 }

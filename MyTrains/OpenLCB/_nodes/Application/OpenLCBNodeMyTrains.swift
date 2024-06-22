@@ -112,6 +112,8 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   
   internal var observers : [Int:MyTrainsAppDelegate] = [:]
   
+  internal var _speedProfilerBlocks : [UInt64:SwitchboardItemNode]?
+  
   internal var nextUniqueNodeIdCandidate : UInt64 {
     
     let seed = nextUniqueNodeIdSeed
@@ -204,7 +206,25 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
     return _switchboardItemList!
   }
   
-  public var _switchboardItemList : [UInt64:SwitchboardItemNode]?
+  public var _switchboardItemList : [UInt64:SwitchboardItemNode]? {
+    didSet {
+      _speedProfilerBlocks = nil
+    }
+  }
+  
+  public var speedProfilerBlocks : [UInt64:SwitchboardItemNode] {
+    if let _speedProfilerBlocks {
+      return _speedProfilerBlocks
+    }
+    var temp : [UInt64:SwitchboardItemNode] = [:]
+    for (key, item) in switchboardItemList {
+      if item.itemType.isGroup && !item.doNotUseForSpeedProfiling {
+        temp[key] = item
+      }
+    }
+    _speedProfilerBlocks = temp
+    return temp
+  }
 
   public var viewOptions : OpenLCBMemorySpace?
   
@@ -430,6 +450,12 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
   private func locoNetGatewayListUpdated() {
     for (_, observer) in observers {
       observer.locoNetGatewayListUpdated?(appNode: self)
+    }
+  }
+
+  private func speedProfilerBlockListUpdated() {
+    for (_, observer) in observers {
+      observer.speedProfilerBlockListUpdated?(appNode: self)
     }
   }
 
@@ -732,6 +758,46 @@ public class OpenLCBNodeMyTrains : OpenLCBNodeVirtual {
 
     return cdi.replacingOccurrences(of: CDI.SWITCHBOARD_GROUP_NODES, with: items)
 
+  }
+  
+  public func populateSpeedProfilerBlocks(comboBox:NSComboBox) {
+  
+    let selected = comboBox.objectValueOfSelectedItem
+    
+    comboBox.deselectItem(at: comboBox.indexOfSelectedItem)
+    
+    var sorted : [SwitchboardItemNode] = []
+
+    for (_, item) in speedProfilerBlocks {
+      sorted.append(item)
+    }
+    
+    sorted.sort {$0.userNodeName.sortValue < $1.userNodeName.sortValue}
+
+    comboBox.isEditable = false
+    comboBox.removeAllItems()
+    
+    for item in sorted {
+      comboBox.addItem(withObjectValue: item.userNodeName)
+    }
+        
+  }
+  
+  public func selectSpeedProfilerBlock(comboBox:NSComboBox, nodeId:UInt64) {
+    comboBox.deselectItem(at: comboBox.indexOfSelectedItem)
+    guard let node = appNode?.speedProfilerBlocks[nodeId] else {
+      return
+    }
+    comboBox.selectItem(withObjectValue: node.userNodeName)
+  }
+  
+  public func selectedSpeedProfilerBlock(title:String) -> SwitchboardItemNode? {
+    for (_, item) in speedProfilerBlocks {
+      if item.userNodeName == title {
+        return item
+      }
+    }
+    return nil
   }
 
   public func populateLink(comboBox:NSComboBox) {
