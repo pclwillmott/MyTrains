@@ -20,7 +20,7 @@ class SwitchboardShape {
     var isRouteConsistent = false
 
     if let item = switchBoardItem {
-      isFeedback = item.isSensor
+      isFeedback = item.itemType.isSensor
       isRouteConsistent = item.isRouteConsistent
       if isRouteConsistent, let routeSet = item.routeSet {
         turnoutConnection = routeSet

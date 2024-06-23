@@ -280,7 +280,7 @@ public class LayoutNode : OpenLCBNodeVirtual {
     
     for (_, item) in switchboardItems {
       item.nodeLinks = [SWBNodeLink](repeating: (nil, -1, []), count: 8)
-      item.isEliminated = item.isScenic
+      item.isEliminated = item.itemType.isScenic
     }
     
     let lookup : [(dx:Int, dy:Int, point:Int)] = [
@@ -344,7 +344,7 @@ public class LayoutNode : OpenLCBNodeVirtual {
       
       for point1 in item1.itemType.pointsSet(orientation: item1.orientation) {
         var nodeLink = item1.nodeLinks[point1]
-        while let node = nodeLink.switchboardItem, node.isTrack {
+        while let node = nodeLink.switchboardItem, node.itemType.isTrack {
           let exits = node.exitPoint(entryPoint: nodeLink.connectionPointId)
           let exit = exits[0] // Track items only have one item
           item1.nodeLinks[point1] = exit
@@ -363,7 +363,7 @@ public class LayoutNode : OpenLCBNodeVirtual {
     // Eliminate track parts that are not connected to a block or a turnout
     
     for (_, item) in switchboardItems {
-      if item.isTrack {
+      if item.itemType.isTrack {
         item.isEliminated = true
       }
     }
@@ -371,7 +371,7 @@ public class LayoutNode : OpenLCBNodeVirtual {
     // Now do inter-panel links
     
     for (_, item1) in switchboardItems {
-      if item1.isLink {
+      if item1.itemType.isLink {
         for (_, item2) in switchboardItems {
           if item1.linkId == item2.nodeId && item2.linkId == item1.nodeId {
             let point1 = item1.itemType.points(orientation: item1.orientation)[0]
@@ -431,7 +431,7 @@ public class LayoutNode : OpenLCBNodeVirtual {
           
           block.nodeLinks[from].routes.append(route)
           
-          if fromNode.isTurnout || fromNode.directionality == .bidirectional {
+          if fromNode.itemType.isTurnout || fromNode.directionality == .bidirectional {
           
             route = (block, to, fromNode, block.nodeLinks[from].connectionPointId, index, distance: block.getDimension(routeNumber: index + 1)!, routeDirection: .previous)
             

@@ -8,10 +8,22 @@
 import Foundation
 import AppKit
 
-class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate, NSTableViewDataSource, NSTableViewDelegate, MyTrainsAppDelegate, NSTextFieldDelegate, NSControlTextEditingDelegate, SpeedProfileDelegate {
- 
-  // MARK: Window & View Control
+private enum SpeedProfilerState {
 
+  // MARK: Enumeration
+  
+  case idle
+  case settingTurnouts
+  case connectingToLoco
+  case gettingUpToSpeed
+  case sampling
+  
+}
+
+class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableViewDataSource, NSTableViewDelegate, MyTrainsAppDelegate, NSTextFieldDelegate, NSControlTextEditingDelegate, SpeedProfileDelegate {
+  
+  // MARK: Window & View Control
+  
   deinit {
     
     constraints.removeAll()
@@ -87,10 +99,10 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
   
   override func windowWillClose(_ notification: Notification) {
     
-    if let configurationTool {
-      configurationTool.delegate = nil
-      appDelegate.networkLayer?.releaseConfigurationTool(configurationTool: configurationTool)
-      self.configurationTool = nil
+    if let throttle {
+      throttle.delegate = nil
+      appDelegate.networkLayer?.releaseThrottle(throttle: throttle)
+      self.throttle = nil
     }
     
     if let observerId, let appNode {
@@ -98,7 +110,7 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
     }
     
     super.windowWillClose(notification)
-
+    
   }
   
   override func viewWillAppear() {
@@ -110,7 +122,7 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
     }
     
     appNode?.layout?.linkSwitchboardItems()
-
+    
     // cboLocomotive
     
     cboLocomotive.translatesAutoresizingMaskIntoConstraints = false
@@ -129,7 +141,7 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
     sptSplitView.translatesAutoresizingMaskIntoConstraints = false
     sptSplitView.isVertical = true
     sptSplitView.arrangesAllSubviews = true
-
+    
     view.addSubview(sptSplitView)
     
     constraints.append(sptSplitView.topAnchor.constraint(equalToSystemSpacingBelow: cboLocomotive.bottomAnchor, multiplier: 2.0))
@@ -166,7 +178,7 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
     constraints.append(cboValueTypes.centerXAnchor.constraint(equalTo: pnlValues.centerXAnchor))
     constraints.append(cboValueTypes.leadingAnchor.constraint(greaterThanOrEqualToSystemSpacingAfter: pnlValues.leadingAnchor, multiplier: 1.0))
     constraints.append(pnlValues.trailingAnchor.constraint(greaterThanOrEqualToSystemSpacingAfter: cboValueTypes.trailingAnchor, multiplier: 1.0))
-//    constraints.append(cboValueTypes.widthAnchor.constraint(greaterThanOrEqualToConstant: 100))
+    //    constraints.append(cboValueTypes.widthAnchor.constraint(greaterThanOrEqualToConstant: 100))
     
     pnlValuesScrollView.translatesAutoresizingMaskIntoConstraints = false
     pnlValuesScrollView.backgroundColor = nil
@@ -180,14 +192,14 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
     constraints.append(pnlValuesScrollView.topAnchor.constraint(equalToSystemSpacingBelow: cboValueTypes.bottomAnchor, multiplier: 1.0))
     constraints.append(pnlValuesScrollView.leadingAnchor.constraint(equalTo: pnlValues.leadingAnchor))
     constraints.append(pnlValuesScrollView.trailingAnchor.constraint(equalTo: pnlValues.trailingAnchor))
-//    constraints.append(pnlValuesScrollView.centerXAnchor.constraint(equalTo: pnlValues.centerXAnchor))
-//    constraints.append(pnlValuesScrollView.widthAnchor.constraint(equalToConstant: 718))
+    //    constraints.append(pnlValuesScrollView.centerXAnchor.constraint(equalTo: pnlValues.centerXAnchor))
+    //    constraints.append(pnlValuesScrollView.widthAnchor.constraint(equalToConstant: 718))
     constraints.append(pnlValues.bottomAnchor.constraint(equalTo: pnlValuesScrollView.bottomAnchor))
     constraints.append(pnlValues.widthAnchor.constraint(greaterThanOrEqualTo: pnlValuesScrollView.widthAnchor))
     
     tblValuesTableView.allowsColumnReordering = true
     tblValuesTableView.selectionHighlightStyle = .none
-//    tblValuesTableView.columnAutoresizingStyle = .noColumnAutoresizing
+    //    tblValuesTableView.columnAutoresizingStyle = .noColumnAutoresizing
     tblValuesTableView.allowsColumnResizing = true
     tblValuesTableView.usesAlternatingRowBackgroundColors = true
     
@@ -199,7 +211,7 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
       "Reverse Speed",
       "Delta Reverse Speed"
     ]
-
+    
     let columnTitles = [
       String(localized:"Sample"),
       String(localized:"Commanded (%%SCALE_SPEED_UNITS%%)"),
@@ -217,7 +229,7 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
       String(localized: "Speed that the train actually travelled at in the reverse direction"),
       String(localized: "Difference between commanded speed and actual speed in the reverse direction"),
     ]
-
+    
     for index in 0 ... columnNames.count - 1 {
       let id = NSUserInterfaceItemIdentifier(rawValue: columnNames[index])
       columnIds.append(id)
@@ -230,18 +242,18 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
         column.headerToolTip = columnToolTips[index]
       }
     }
-
+    
     pnlValuesScrollView.documentView = tblValuesTableView
     
     // pnlChart
     
     pnlChart.translatesAutoresizingMaskIntoConstraints = false
-
+    
     sptResultsView.addArrangedSubview(pnlChart)
     
     constraints.append(pnlChart.heightAnchor.constraint(greaterThanOrEqualToConstant: 250))
     constraints.append(pnlChart.widthAnchor.constraint(greaterThanOrEqualToConstant: 450))
-
+    
     // pnlInspector
     
     inspectorFields = SpeedProfilerInspectorProperty.inspectorPropertyFields
@@ -265,7 +277,7 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
     inspectorGroupSeparators = SpeedProfilerInspectorGroup.inspectorGroupSeparators
     
     pnlInspector.translatesAutoresizingMaskIntoConstraints = false
-//    pnlInspector.backgroundColor = NSColor.white.cgColor
+    //    pnlInspector.backgroundColor = NSColor.white.cgColor
     
     sptSplitView.addArrangedSubview(pnlInspector)
     
@@ -301,14 +313,14 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
       pnlInspectorStackView[item] = stackView
       
       pnlInspector.addSubview(stackView)
-    
+      
       stackView.translatesAutoresizingMaskIntoConstraints = false
       stackView.isHidden = true
-//      stackView.backgroundColor = item.backgroundColor
+      //      stackView.backgroundColor = item.backgroundColor
       stackView.backgroundColor = NSColor.clear.cgColor
       stackView.stackView?.orientation = .vertical
       stackView.stackView?.spacing = 4
-
+      
       constraints.append(stackView.topAnchor.constraint(equalToSystemSpacingBelow: pnlInspectorButtons.bottomAnchor, multiplier: 1.0))
       constraints.append(stackView.leadingAnchor.constraint(equalTo: pnlInspector.leadingAnchor))
       constraints.append(stackView.trailingAnchor.constraint(equalTo: pnlInspector.trailingAnchor))
@@ -322,7 +334,7 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
     
     pnlDisclosure.translatesAutoresizingMaskIntoConstraints = false
     pnlDisclosure.backgroundColor = NSColor.white.cgColor
-//    pnlDisclosure.setContentHuggingPriority(NSLayoutConstraint.Priority(rawValue: 999), for: .vertical)
+    //    pnlDisclosure.setContentHuggingPriority(NSLayoutConstraint.Priority(rawValue: 999), for: .vertical)
     
     view.addSubview(pnlDisclosure)
     
@@ -335,24 +347,24 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
     btnShowValuesPanel.target = self
     btnShowValuesPanel.action = #selector(btnShowValuesPanelAction(_:))
     btnShowValuesPanel.state = userSettings!.state(forKey: DEFAULT.SHOW_VALUES_VIEW)
-
+    
     pnlDisclosure.addSubview(btnShowValuesPanel)
     
     constraints.append(btnShowValuesPanel.centerYAnchor.constraint(equalTo: pnlDisclosure.centerYAnchor))
     constraints.append(btnShowValuesPanel.leadingAnchor.constraint(equalToSystemSpacingAfter: pnlDisclosure.leadingAnchor, multiplier: 1.0))
     constraints.append(pnlDisclosure.heightAnchor.constraint(equalToConstant: 20))
-
+    
     btnShowInspectorPanel.translatesAutoresizingMaskIntoConstraints = false
     btnShowInspectorPanel.isBordered = false
     btnShowInspectorPanel.target = self
     btnShowInspectorPanel.action = #selector(btnShowInspectorPanelAction(_:))
     btnShowInspectorPanel.state = userSettings!.state(forKey: DEFAULT.SHOW_SETTINGS_VIEW)
-
+    
     pnlDisclosure.addSubview(btnShowInspectorPanel)
-
+    
     constraints.append(btnShowInspectorPanel.centerYAnchor.constraint(equalTo: pnlDisclosure.centerYAnchor))
     constraints.append(pnlDisclosure.trailingAnchor.constraint(equalToSystemSpacingAfter: btnShowInspectorPanel.trailingAnchor, multiplier: 1.0))
- 
+    
     // pnlButtons
     
     pnlButtons.translatesAutoresizingMaskIntoConstraints = false
@@ -383,19 +395,21 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
     
     constraints.append(btnDiscardChanges.centerYAnchor.constraint(equalTo: pnlButtons.centerYAnchor))
     constraints.append(btnDiscardChanges.leadingAnchor.constraint(equalToSystemSpacingAfter: btnReset.trailingAnchor, multiplier: 1.0))
-
+    
     btnSaveChanges.translatesAutoresizingMaskIntoConstraints = false
     btnSaveChanges.title = String(localized: "Save Changes")
     btnSaveChanges.target = self
     btnSaveChanges.action = #selector(btnSaveChangesAction(_:))
-
+    
     pnlButtons.addSubview(btnSaveChanges)
     
     constraints.append(btnSaveChanges.centerYAnchor.constraint(equalTo: pnlButtons.centerYAnchor))
     constraints.append(btnSaveChanges.leadingAnchor.constraint(equalToSystemSpacingAfter: btnDiscardChanges.trailingAnchor, multiplier: 1.0))
-
+    
     btnStartStop.translatesAutoresizingMaskIntoConstraints = false
     btnStartStop.title = String(localized: "Start Profiling")
+    btnStartStop.target = self
+    btnStartStop.action = #selector(btnStartProfilingAction(_:))
     
     pnlButtons.addSubview(btnStartStop)
     
@@ -410,16 +424,16 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
     // Activate all constraints
     
     NSLayoutConstraint.activate(constraints)
-
+    
     btnShowValuesPanelAction(btnShowValuesPanel)
     
     btnShowInspectorPanelAction(btnShowInspectorPanel)
     
     currentInspector = SpeedProfilerInspector(rawValue: userSettings!.integer(forKey: DEFAULT.CURRENT_SETTINGS_INSPECTOR)) ?? .quickHelp
- 
+    
     userSettings?.splitView = sptSplitView
     userSettings?.splitView2 = sptResultsView
-
+    
     userSettings?.tableView = tblValuesTableView
     
     tblValuesTableView.dataSource = self
@@ -432,7 +446,7 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
     }
     
     displayInspector()
-
+    
   }
   
   // MARK: Private Properties
@@ -440,6 +454,25 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
   private var constraints : [NSLayoutConstraint] = []
   
   private var valueType : SpeedProfilerValueType = .actualSamples
+  
+  private var state : SpeedProfilerState = .idle {
+    didSet {
+      switch state {
+      case .idle:
+        throttle?.speed = isForward ? 0.0 : -0.0
+        throttle?.releaseController()
+        btnStartStop?.title = String(localized: "Start Profiling")
+      default:
+        btnStartStop?.title = String(localized: "Stop Profiling")
+      }
+    }
+  }
+  
+  private var retryCount = 0
+  
+  private var nextSampleNumber : UInt16 = 0
+  
+  private var sampleOnNextEvent = false
   
   private var currentInspector : SpeedProfilerInspector = .quickHelp {
     didSet {
@@ -466,13 +499,13 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
     
     NSLayoutConstraint.deactivate(inspectorConstraints)
     inspectorConstraints.removeAll()
-
+    
     for (key, stackView) in pnlInspectorStackView {
       stackView.stackView?.subviews.removeAll()
     }
     
     var commonProperties : Set<SpeedProfilerInspectorProperty> = [
-
+      
       .locomotiveId,
       .locomotiveName,
       .trackProtocol,
@@ -496,7 +529,7 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
     ]
     
     commonProperties.insert(profile.trackProtocol.isNumberOfSamplesFixed ? .numberOfSamplesLabel : .numberOfSamples)
-
+    
     commonProperties.insert(profile.trackProtocol.isMaximumSpeedFixed ? .maximumSpeedLabel : .maximumSpeed)
     
     if profile.routeType == .straight {
@@ -513,9 +546,9 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
       
       let inspector = inspectorFields[index].property.inspector
       let stackView = pnlInspectorStackView[inspector]!.stackView!
-                       
+      
       stackView.alignment = .right
-
+      
       while index < inspectorFields.count && inspectorFields[index].property.inspector == inspector {
         
         let group = inspectorFields[index].property.group
@@ -596,7 +629,7 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
         }
         
       }
-            
+      
     }
     
     for field1 in usedFields {
@@ -642,10 +675,9 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
     case .panelView:
       break
     }
-
+    
   }
-
-
+  
   // MARK: Private Properties
   
   private var observerId : Int?
@@ -656,8 +688,10 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
   
   private var sampleTable : [[Double]] = []
   
+  private var isForward = true
+  
   private var columnIds : [NSUserInterfaceItemIdentifier] = []
-    
+  
   // MARK: Controls
   
   private var cboLocomotive : MyComboBox? = MyComboBox()
@@ -708,11 +742,197 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
   
   internal var inspectorConstraints : [NSLayoutConstraint] = []
   
+  private var timeoutTimer : Timer?
+  
+  private var next     : [UInt64:(eventId:UInt64, eventType:SpeedProfilerEventType, position:Double)] = [:]
+  private var previous : [UInt64:(eventId:UInt64, eventType:SpeedProfilerEventType, position:Double)] = [:]
+  
+  private var eventsTriggeredList : [UInt64] = []
+  
+  private var eventsTriggered : Set<UInt64> = []
+  
+  private var completedLoopsDistance : Double = 0.0
+  
+  private var thisLoop : Double = 0.0
+  
+  private var timeAtStart : TimeInterval = 0.0
+  
+  private var distanceAtStart : Double = 0.0
+  
+  private var routeLength : Double = 0.0
+  
+  private var currentPosition : Double = 0.0
+  
+  private var takeSampleNow = false
+  
   // MARK: Public Properties
   
-  public var configurationTool : OpenLCBNodeConfigurationTool?
+  public var throttle : OpenLCBThrottle?
   
   // MARK: Private Methods
+  
+  @objc func timeoutTimerAction() {
+    
+    guard let profile else {
+      stopTimeoutTimer()
+      state = .idle
+      return
+    }
+    
+    switch state {
+      
+    case .idle:
+      
+      stopTimeoutTimer()
+      
+    case .settingTurnouts:
+      
+      retryCount -= 1
+      
+      if retryCount == 0 {
+        
+        stopTimeoutTimer()
+        
+        let alert = NSAlert()
+        
+        alert.messageText = String(localized: "Route Set Failed")
+        alert.informativeText = String(localized: "One or more turnouts failed to set correctly.")
+        alert.addButton(withTitle: String(localized: "OK"))
+        alert.alertStyle = .informational
+        
+        alert.runModal()
+        
+        state = .idle
+        
+      }
+      else if let routeSet = profile.routeSet {
+        
+        for item in routeSet {
+          if item.fromSwitchboardItem.itemType.isTurnout && !item.fromSwitchboardItem.isRouteConsistent {
+            return
+          }
+        }
+        
+        stopTimeoutTimer()
+        
+        // TODO: Setup Event & Distance Table
+        
+        next.removeAll()
+        
+        for item in routeSet {
+          
+          if let blockLength = item.fromSwitchboardItem.lengthOfRoute {
+            
+            for event in item.fromSwitchboardItem.getEventsForProfiler(profile: profile) {
+              let position = routeLength + (event.eventType == .sensor ? event.position : 0.0)
+              next[event.eventId] = (event.eventId, event.eventType, position)
+            }
+            
+            routeLength += blockLength
+            
+          }
+          
+        }
+        
+        routeLength = 0.0
+        
+        previous.removeAll()
+        
+        for item in routeSet {
+          
+          if let blockLength = item.fromSwitchboardItem.lengthOfRoute {
+            
+            for event in item.fromSwitchboardItem.getEventsForProfiler(profile: profile).reversed() {
+              let position = routeLength + ((event.eventType == .sensor ? blockLength - event.position : 0.0))
+              previous[event.eventId] = (event.eventId, event.eventType, position)
+            }
+            
+            routeLength += blockLength
+            
+          }
+          
+        }
+        
+        state = .connectingToLoco
+        
+        retryCount = 2
+        
+        startTimeoutTimer(interval: 0.5, repeats: true)
+        
+        throttle?.assignController(trainNodeId: profile.nodeId)
+        
+      }
+      
+    case .connectingToLoco:
+      
+      retryCount -= 1
+      
+      if retryCount == 0 {
+        
+        stopTimeoutTimer()
+        
+        let alert = NSAlert()
+        
+        alert.messageText = String(localized: "Connecting to Locomotive Failed")
+        alert.informativeText = String(localized: "The throttle was unable to connect to the locomotive.")
+        alert.addButton(withTitle: String(localized: "OK"))
+        alert.alertStyle = .informational
+        
+        alert.runModal()
+        
+        state = .idle
+        
+        return
+        
+      }
+      
+    case .gettingUpToSpeed:
+      break
+    case .sampling:
+      takeSampleNow = true
+    }
+    
+  }
+  
+  private func startTimeoutTimer(interval: TimeInterval, repeats:Bool = false) {
+    timeoutTimer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(timeoutTimerAction), userInfo: nil, repeats: repeats)
+    RunLoop.current.add(timeoutTimer!, forMode: .common)
+  }
+  
+  private func stopTimeoutTimer() {
+    timeoutTimer?.invalidate()
+    timeoutTimer = nil
+  }
+  
+  private func getNextSample() {
+
+    takeSampleNow = false
+
+    guard let profile, let throttle else {
+      state = .idle
+      return
+    }
+    
+    if nextSampleNumber > profile.stopSampleNumber {
+      if !isForward || profile.locomotiveTravelDirection == .forward {
+        state = .idle
+        return
+      }
+      isForward = false
+      nextSampleNumber = profile.startSampleNumber
+    }
+    
+    nextSampleNumber = max(1, nextSampleNumber)
+    
+    let speeds = sampleTable[Int(nextSampleNumber)]
+    
+    let speed = UnitSpeed.convert(fromValue: speeds[0], fromUnits: .defaultValueScaleSpeed, toUnits: .metersPerSecond) * (isForward ? 1.0 : -1.0)
+    
+    state = .gettingUpToSpeed
+    
+    throttle.speed = Float(speed)
+    
+  }
   
   // MARK: Actions
   
@@ -730,9 +950,9 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
     }
     
     userSettings?.set(sender.state, forKey: DEFAULT.SHOW_VALUES_VIEW)
-
+    
   }
-
+  
   @objc public func btnShowInspectorPanelAction(_ sender:NSButton) {
     
     if sender.state == .on {
@@ -747,7 +967,7 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
     }
     
     userSettings?.set(sender.state, forKey: DEFAULT.SHOW_SETTINGS_VIEW)
-
+    
   }
   
   @objc public func cboValueTypesAction(_ sender:NSComboBox) {
@@ -782,7 +1002,7 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
       if sender.indexOfSelectedItem >= 0, let string = sender.itemObjectValue(at: sender.indexOfSelectedItem) as? String {
         
         profile.setValue(property: property, string: string)
-                
+        
       }
       else {
         profile.setValue(property: property, string: "")
@@ -804,13 +1024,13 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
           }
         }
       }
-
+      
     }
     
   }
-
+  
   @objc func chkAction(_ sender: NSButton) {
-
+    
     if let profile, let property = SpeedProfilerInspectorProperty(rawValue: sender.tag) {
       profile.setValue(property: property, string: sender.state == .on ? "true" : "false")
     }
@@ -820,7 +1040,7 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
   @objc func btnResetToDefaultsAction(_ sender:NSButton) {
     profile?.resetTable()
   }
-
+  
   @objc func btnDiscardChangesAction(_ sender:NSButton) {
     guard let profile else {
       return
@@ -831,7 +1051,45 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
   
   @objc func btnSaveChangesAction(_ sender:NSButton) {
     profile?.setSampleTable(sampleTable: sampleTable)
-    debugLog("Here")
+  }
+  
+  @objc func btnStartProfilingAction(_ sender:NSButton) {
+    
+    guard let profile, let appNode, let layout = appNode.layout else {
+      return
+    }
+    
+    if state == .idle {
+      
+      guard let routeSet = profile.routeSet else {
+        
+        let alert = NSAlert()
+        
+        alert.messageText = String(localized: "Route Not Set")
+        alert.informativeText = String(localized: "You have not set a route in the route inspector.")
+        alert.addButton(withTitle: String(localized: "OK"))
+        alert.alertStyle = .informational
+        
+        alert.runModal()
+        
+        return
+        
+      }
+      
+      state = .settingTurnouts
+      
+      for item in routeSet {
+        item.fromSwitchboardItem.setRoute(route: item.turnoutConnection)
+      }
+      
+      retryCount = 10
+      startTimeoutTimer(interval: 1.0, repeats: true)
+      
+    }
+    else {
+      state = .idle
+    }
+    
   }
   
   // MARK: MyTrainsAppDelegate Methods
@@ -861,14 +1119,14 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
     
     cboLocomotive.selectItem(withObjectValue: value)
     
-   }
-
+  }
+  
   // MARK: NSTableViewDelegate Methods
   
   // Returns the number of records managed for aTableView by the data source object.
-   public func numberOfRows(in tableView: NSTableView) -> Int {
-     return sampleTable.count
-   }
+  public func numberOfRows(in tableView: NSTableView) -> Int {
+    return sampleTable.count
+  }
   
   // Sets the data object for an item in the specified row and column.
   public func tableView(_ tableView: NSTableView, setObjectValue object: Any?, for tableColumn: NSTableColumn?, row: Int) {
@@ -880,7 +1138,7 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
     let item = sampleTable[row]
     
     var isEditable = false
-
+    
     let text = NSTextField()
     
     let formatter = NumberFormatter()
@@ -927,11 +1185,11 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
     cell.addConstraint(NSLayoutConstraint(item: text, attribute: .left, relatedBy: .equal, toItem: cell, attribute: .left, multiplier: 1, constant: 13))
     cell.addConstraint(NSLayoutConstraint(item: text, attribute: .right, relatedBy: .equal, toItem: cell, attribute: .right, multiplier: 1, constant: -13))
     return cell
-
+    
   }
-
+  
   // MARK: NSTextFieldDelegate, NSControlTextEditingDelegate Methods
-
+  
   /// This is called when the user presses return.
   @objc func control(_ control: NSControl, textShouldEndEditing fieldEditor: NSText) -> Bool {
     
@@ -966,13 +1224,13 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
         }
         tblValuesTableView?.reloadData()
       }
- 
+      
     }
     
     return isValid
     
   }
-
+  
   // MARK: SpeedProfileDelegate Methods
   
   @objc func inspectorNeedsUpdate(profile:SpeedProfile) {
@@ -986,12 +1244,12 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
   @objc func chartNeedsUpdate(profile:SpeedProfile) {
     
   }
-
+  
   @objc func reloadSamples(profile:SpeedProfile) {
     sampleTable = profile.getSampleTable()
     tblValuesTableView?.reloadData()
   }
-
+  
   // MARK: MyTrainsAppDelegate Methods
   
   func panelUpdated(panel:SwitchboardPanelNode) {
@@ -1006,6 +1264,121 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBConfigurationToolDelegate,
         }
       }
     }
+  }
+  
+  // MARK: OpenLCBThrottleDelegate Methods
+  
+  @objc func trainSearchResultsReceived(throttle:OpenLCBThrottle, results:[UInt64:String]) {
+    /*
+     cboLocomotive.selectItem(at: -1)
+     cboLocomotiveDS.dictionary = results
+     cboLocomotive.reloadData()
+     if !results.isEmpty && throttle.throttleState == .idle {
+     cboLocomotive.selectItem(at: 0)
+     }
+     */
+  }
+  
+  @objc func speedChanged(throttle:OpenLCBThrottle, speed:Float) {
+    
+    let smps2mph : Float = 3600.0 / (1000.0 * 1.609344)
+    
+    let _speed = speed * smps2mph
+    
+    //    vsThrottle.floatValue = abs(_speed)
+    
+    //    lblSpeed.stringValue = String(format: "%.0f", vsThrottle.floatValue)
+    
+    //    lblCurrentSpeed.stringValue = String(format: "%.1f", vsThrottle.floatValue)
+    
+    let minusZero : Float = -0.0
+    
+    let isReverse = speed.bitPattern == minusZero.bitPattern || speed < 0.0
+    
+    //  radForward.state = isReverse ? .off : .on
+    //  radReverse.state = isReverse ? .on : .off
+    
+  }
+  
+  @objc func throttleStateChanged(throttle:OpenLCBThrottle) {
+    
+    if state == .connectingToLoco, let trainNode = throttle.trainNode, throttle.throttleState == .activeController, let profile {
+      stopTimeoutTimer()
+      nextSampleNumber = profile.startSampleNumber
+      isForward = profile.locomotiveTravelDirection != .reverse ? true : false
+      getNextSample()
+    }
+    
+  }
+  
+  @objc func eventReceived(throttle:OpenLCBThrottle, message:OpenLCBMessage) {
+  
+    guard let profile, message.messageTypeIndicator == .producerConsumerEventReport, let eventId = message.eventId, let layout = appNode?.layout else {
+      return
+    }
+    
+    let direction = isForward ? profile.locomotiveFacingDirection : profile.locomotiveFacingDirection == .next ? .previous : .next
+    
+    var event : (eventId:UInt64, eventType:SpeedProfilerEventType, position:Double)?
+    
+    switch direction {
+    case .next:
+      event = next[eventId]
+    case .previous:
+      event = previous[eventId]
+    }
+    
+    if let event {
+      
+      eventsTriggered.insert(eventId)
+      eventsTriggeredList.append(eventId)
+      
+      var numberToRemove = max(0, eventsTriggeredList.count - 3)
+      while numberToRemove > 0 {
+        let id = eventsTriggeredList.removeFirst()
+        eventsTriggered.remove(id)
+        numberToRemove -= 1
+      }
+      
+      print(event.position)
+      
+      if state == .gettingUpToSpeed {
+        distanceAtStart = event.position
+        currentPosition = distanceAtStart
+        completedLoopsDistance = 0.0
+        timeAtStart = message.timeStamp
+        state = .sampling
+        startTimeoutTimer(interval: profile.minimumSamplePeriod.samplePeriod)
+      }
+      else {
+        
+        if event.position == 0.0 {
+          completedLoopsDistance += routeLength - distanceAtStart
+          distanceAtStart = 0.0
+          currentPosition = distanceAtStart
+        }
+        else {
+          currentPosition = event.position
+        }
+        
+        let totalDistance = completedLoopsDistance + currentPosition - distanceAtStart
+        
+  //      print(totalDistance)
+        
+        if state == .sampling && takeSampleNow {
+          let distance = completedLoopsDistance + currentPosition - distanceAtStart
+          let time = message.timeStamp - timeAtStart
+          let speed = UnitSpeed.convert(fromValue: distance / time, fromUnits: .centimetersPerSecond, toUnits: .metersPerSecond) * layout.scale.ratio
+          sampleTable[Int(nextSampleNumber)][isForward ? 1 : 2] = speed
+          tblValuesTableView?.reloadData()
+          nextSampleNumber += 1
+          getNextSample()
+        }
+        
+      }
+      
+    }
+    
   }
 
 }

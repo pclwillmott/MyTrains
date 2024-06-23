@@ -316,8 +316,8 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
     
     case .speedProfiler:
       let vc = MyTrainsWindow.speedProfiler.viewController as! SpeedProfilerVC
-      vc.configurationTool = networkLayer!.getConfigurationTool()
-      vc.configurationTool?.delegate = vc
+      vc.throttle = networkLayer!.getThrottle()
+      vc.throttle?.delegate = vc
       vc.showWindow()
      
     }
@@ -585,8 +585,8 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
 
       case .trainSpeedProfiler:
         let vc = MyTrainsWindow.speedProfiler.viewController as! SpeedProfilerVC
-        vc.configurationTool = networkLayer!.getConfigurationTool()
-        vc.configurationTool?.delegate = vc
+        vc.throttle = networkLayer!.getThrottle()
+        vc.throttle?.delegate = vc
         vc.showWindow()
 
       case .locoNetFirmwareUpdate:

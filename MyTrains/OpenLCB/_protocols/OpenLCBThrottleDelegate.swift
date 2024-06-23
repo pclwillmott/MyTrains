@@ -15,4 +15,5 @@ import Foundation
   @objc optional func emergencyStopChanged(throttle:OpenLCBThrottle)
   @objc optional func globalEmergencyChanged(throttle:OpenLCBThrottle)
   @objc optional func fdiAvailable(throttle:OpenLCBThrottle)
+  @objc optional func eventReceived(throttle:OpenLCBThrottle, message:OpenLCBMessage)
 }

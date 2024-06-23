@@ -1074,40 +1074,6 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
 
   public var isEliminated : Bool = false
 
-  public var isTurnout : Bool {
-    return itemType.isTurnout
-  }
-  
-  public var isScenic : Bool {
-    let scenics : Set<SwitchboardItemType> = [
-      .platform,
-    ]
-    return scenics.contains(itemType)
-  }
-
-  public var isSensor : Bool {
-    return itemType == .sensor
-  }
-  
-  public var isBlock : Bool {
-    return itemType.isBlock
-  }
-  
-  public var isLink : Bool {
-    return itemType == .link
-  }
-  
-  public var isTrack : Bool {
-    let track : Set<SwitchboardItemType> = [
-      .curve,
-      .sensor,
-      .longCurve,
-      .straight,
-      .buffer,
-    ]
-    return track.contains(itemType)
-  }
-
   public func exitPoint(entryPoint:Int) -> [SWBNodeLink] {
     var result : [SWBNodeLink] = []
     for connection in itemType.connections {
@@ -1124,7 +1090,7 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
   }
   
   public var numberOfConnections : Int {
-    return isTurnout ? itemType.connections.count : 0
+    return itemType.isTurnout ? itemType.connections.count : 0
   }
   
   public var isBlockOccupied : Bool = false {
@@ -1958,6 +1924,75 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
 
   }
   
+  public var lengthOfRoute : Double? {
+  
+    switch itemType {
+    case .block:
+      return getDimension(routeNumber: 1)
+    case .sensor:
+      return controlBlock?.lengthOfRoute
+    case .turnoutRight, .turnoutLeft, .cross, .diagonalCross, .yTurnout, .turnout3Way, .leftCurvedTurnout, .rightCurvedTurnout, .singleSlip, .doubleSlip:
+      if let routeCommanded {
+        return getDimension(routeNumber: routeCommanded)
+      }
+    default:
+      break
+    }
+    
+    return nil
+    
+  }
+  
+  public func getEventsForProfiler(profile:SpeedProfile) -> [(eventId:UInt64, eventType:SpeedProfilerEventType, position:Double)] {
+
+    var result : [(eventId:UInt64, eventType:SpeedProfilerEventType, position:Double)] = []
+
+    guard let appNode else {
+      return result
+    }
+    
+    for (key, item) in appNode.switchboardItemList {
+      
+      if item.controlBlock === self {
+        
+        if (item.itemType.isSensor || item.itemType.isGroup) && !item.doNotUseForSpeedProfiling {
+          
+          if item.itemType.isGroup {
+            
+            if item.enterDetectionZoneEventId != 0, profile.useOccupancyDetectors, let lengthOfRoute = item.lengthOfRoute {
+              result.append((item.enterDetectionZoneEventId, .occupancy, lengthOfRoute))
+            }
+            
+          }
+          else {
+            
+            let ok =
+            (profile.useLightSensors && item.sensorType == .lightSensor) ||
+            (profile.useRFIDReaders  && item.sensorType == .rfid) ||
+            (profile.useReedSwitches && item.sensorType == .reedSwitch)
+
+            if ok && item.sensorActivatedEventId != 0 {
+              var position = item.sensorPosition
+              if position < 0.0, let lengthOfRoute = item.lengthOfRoute {
+                position += lengthOfRoute
+              }
+              result.append((item.sensorActivatedEventId, .sensor, position))
+            }
+            
+          }
+          
+        }
+        
+      }
+      
+    }
+    
+    result.sort {$0.position < $1.position}
+
+    return result
+    
+  }
+  
   public func setRoute(route:Int) {
     
     routeCommanded = route
@@ -2016,7 +2051,7 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
       addItem(eventId: trackFaultEventId, action: #selector(trackFaultAction(_:)))
       addItem(eventId: trackFaultClearedEventId, action: #selector(trackFaultClearedAction(_:)))
       
-      if isTurnout {
+      if itemType.isTurnout {
         addItem(eventId: getTurnoutClosedEventId(turnoutNumber: 1), action: #selector(turnout1ClosedAction(_:)))
         addItem(eventId: getTurnoutClosedEventId(turnoutNumber: 2), action: #selector(turnout2ClosedAction(_:)))
         addItem(eventId: getTurnoutClosedEventId(turnoutNumber: 3), action: #selector(turnout3ClosedAction(_:)))
@@ -2036,7 +2071,7 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
       }
       
     }
-    else if isSensor {
+    else if itemType.isSensor {
       addItem(eventId: sensorActivatedEventId, action: #selector(sensorActivatedAction(_:)))
       addItem(eventId: sensorDeactivatedEventId, action: #selector(sensorDeactivatedAction(_:)))
     }

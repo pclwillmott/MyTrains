@@ -458,6 +458,32 @@ public enum SwitchboardItemType : UInt16 {
     return self == .link || isBlock || isTurnout || self == .signal
   }
 
+  public var isScenic : Bool {
+    let scenics : Set<SwitchboardItemType> = [
+      .platform,
+    ]
+    return scenics.contains(self)
+  }
+
+  public var isSensor : Bool {
+    return self == .sensor
+  }
+  
+  public var isLink : Bool {
+    return self == .link
+  }
+  
+  public var isTrack : Bool {
+    let track : Set<SwitchboardItemType> = [
+      .curve,
+      .sensor,
+      .longCurve,
+      .straight,
+      .buffer,
+    ]
+    return track.contains(self)
+  }
+
   public var isBlock : Bool {
   
     let blocks : Set<SwitchboardItemType> = [

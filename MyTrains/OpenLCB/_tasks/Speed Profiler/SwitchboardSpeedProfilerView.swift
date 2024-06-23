@@ -52,7 +52,7 @@ class SwitchboardSpeedProfilerView: SwitchboardView {
             
       SwitchboardShape.drawShape(partType: item.itemType, orientation: item.orientation, location: item.location, lineWidth: lineWidth, cellSize: cellSize, isButton: false, isEnabled: true, offset: CGPoint(x: 0.0, y: 0.0), switchBoardItem: nil)
       
-      if item.isTurnout || item.isSensor {
+      if item.itemType.isTurnout || item.itemType.isSensor {
         
         SwitchboardShape.drawShape(partType: item.itemType, orientation: item.orientation, location: item.location, lineWidth: lineWidth, cellSize: cellSize, isButton: false, isEnabled: true, offset: CGPoint(x: 0.0, y: 0.0), switchBoardItem: item)
         

@@ -69,6 +69,7 @@
 		DA29E9482BC8042300E6A757 /* PanelView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA29E9472BC8042200E6A757 /* PanelView.storyboard */; };
 		DA29E94A2BC8043500E6A757 /* PanelViewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA29E9492BC8043500E6A757 /* PanelViewVC.swift */; };
 		DA29E94E2BC85C8900E6A757 /* SwitchboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA29E94D2BC85C8900E6A757 /* SwitchboardView.swift */; };
+		DA2B5FD22C2863B000A15FAA /* SpeedProfilerEventType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2B5FD12C2863B000A15FAA /* SpeedProfilerEventType.swift */; };
 		DA311BAC2A7BB8CC0019FDCE /* OpenLCBValidity.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA311BAB2A7BB8CC0019FDCE /* OpenLCBValidity.swift */; };
 		DA3168892BCAC84300059B6C /* SwitchboardOperationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3168882BCAC84300059B6C /* SwitchboardOperationsView.swift */; };
 		DA31688B2BCACBD000059B6C /* SWBNodeLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA31688A2BCACBD000059B6C /* SWBNodeLink.swift */; };
@@ -429,6 +430,7 @@
 		DA29E9472BC8042200E6A757 /* PanelView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = PanelView.storyboard; sourceTree = "<group>"; };
 		DA29E9492BC8043500E6A757 /* PanelViewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanelViewVC.swift; sourceTree = "<group>"; };
 		DA29E94D2BC85C8900E6A757 /* SwitchboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchboardView.swift; sourceTree = "<group>"; };
+		DA2B5FD12C2863B000A15FAA /* SpeedProfilerEventType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedProfilerEventType.swift; sourceTree = "<group>"; };
 		DA311BAB2A7BB8CC0019FDCE /* OpenLCBValidity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBValidity.swift; sourceTree = "<group>"; };
 		DA3168882BCAC84300059B6C /* SwitchboardOperationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchboardOperationsView.swift; sourceTree = "<group>"; };
 		DA31688A2BCACBD000059B6C /* SWBNodeLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SWBNodeLink.swift; sourceTree = "<group>"; };
@@ -1219,6 +1221,7 @@
 				DA73666A2C2070EB0074697B /* SpeedProfilerInspectorProperty.swift */,
 				DA6040852C22E879006E6325 /* SpeedProfilerInspectorPropertyField.swift */,
 				DA1ADFED2C1F10100018088F /* SpeedProfilerValueType.swift */,
+				DA2B5FD12C2863B000A15FAA /* SpeedProfilerEventType.swift */,
 				DA5CCB4D2897F6B200F99AE6 /* SpeedProfilerVC.swift */,
 				DA3303E72C271076002D2EDF /* SwitchboardSpeedProfilerView.swift */,
 				DA6040892C23139C006E6325 /* TrackProtocol.swift */,
@@ -1736,6 +1739,7 @@
 				DA408A5A2B5829C3005EBBDE /* AppMode.swift in Sources */,
 				DAFFB65B2B5D49680035AC74 /* CreateVirtualNodeVC.swift in Sources */,
 				DA31688B2BCACBD000059B6C /* SWBNodeLink.swift in Sources */,
+				DA2B5FD22C2863B000A15FAA /* SpeedProfilerEventType.swift in Sources */,
 				DA8AE0F0279B3074001E9311 /* SlotViewVC.swift in Sources */,
 				DAB93F1A2C04AA80006C0580 /* LayoutBuilderPaletteGroupingArea.swift in Sources */,
 				DAF4D2D72B78F42A00759539 /* SpeedConstraintType.swift in Sources */,

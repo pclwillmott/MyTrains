@@ -389,6 +389,8 @@ public class OpenLCBThrottle : OpenLCBNodeVirtual, XMLParserDelegate {
     
     case .producerConsumerEventReport:
       
+      delegate?.eventReceived?(throttle: self, message: message)
+
       if let event = OpenLCBWellKnownEvent(rawValue: message.eventId!) {
         
         switch event {

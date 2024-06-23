@@ -305,6 +305,13 @@ public class SpeedProfile : NSObject {
     }
   }
   
+  public var routeSet : SWBRoute? {
+    guard let layout = appNode?.layout, route != 0 else {
+      return nil
+    }
+    return layout.loops[Int(route - 1)]
+  }
+  
   public var routeLength : Double {
     
     guard let appNode, let layout = appNode.layout else {

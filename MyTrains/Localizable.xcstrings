@@ -1569,6 +1569,9 @@
         }
       }
     },
+    "Connecting to Locomotive Failed" : {
+
+    },
     "Constraint #1 (%%UNITS_SCALE_SPEED%%)" : {
       "comment" : "This is used for the title of an input field where the user enters the speed constraint value. The %%UNITS_SCALE_SPEED%% will be replaced at runtime by the name of the user selected units of speed - place this at an approprate position in the title for the language."
     },
@@ -4682,6 +4685,9 @@
         }
       }
     },
+    "One or more turnouts failed to set correctly." : {
+
+    },
     "Only Frame  " : {
 
     },
@@ -5419,6 +5425,12 @@
     "Route Length Settings" : {
       "comment" : "This is used for the title of the Route Length Settings section in the Layout Builder."
     },
+    "Route Not Set" : {
+
+    },
+    "Route Set Failed" : {
+
+    },
     "Route Type" : {
       "comment" : "This is used for the title of a combobox."
     },
@@ -6104,6 +6116,9 @@
     "Stop Position (%%UNITS_ACTUAL_DISTANCE%%)" : {
 
     },
+    "Stop Profiling" : {
+
+    },
     "Stop Sample Number" : {
       "comment" : "This is used for the title of a text field."
     },
@@ -6516,6 +6531,9 @@
     },
     "The position from the start of the block where a train should stop." : {
       "comment" : "This is used for a tooltip."
+    },
+    "The throttle was unable to connect to the locomotive." : {
+
     },
     "The turnout switching method for turnout switch #1." : {
       "comment" : "This is used for a tooltip."
@@ -7481,6 +7499,9 @@
           }
         }
       }
+    },
+    "You have not set a route in the route inspector." : {
+
     },
     "You may either select any layout stored locally on this MyTrains workstation or an active layout stored on another MyTrains workstation connected to this LCC/OpenLCB network. You can only modify layouts that are stored locally." : {
       "localizations" : {

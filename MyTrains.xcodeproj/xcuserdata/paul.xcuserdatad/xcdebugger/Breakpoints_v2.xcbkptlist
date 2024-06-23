@@ -158,8 +158,8 @@
             filePath = "MyTrains/OpenLCB/_nodes/SwitchboardItemNode.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1618"
-            endingLineNumber = "1618"
+            startingLineNumber = "1584"
+            endingLineNumber = "1584"
             landmarkName = "SwitchboardItemNode"
             landmarkType = "3">
          </BreakpointContent>
@@ -414,8 +414,8 @@
             filePath = "MyTrains/OpenLCB/_nodes/SwitchboardItemNode.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1237"
-            endingLineNumber = "1237"
+            startingLineNumber = "1203"
+            endingLineNumber = "1203"
             landmarkName = "getValue(property:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -542,8 +542,8 @@
             filePath = "MyTrains/OpenLCB/_tasks/Speed Profiler/SpeedProfilerVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "840"
-            endingLineNumber = "840"
+            startingLineNumber = "1098"
+            endingLineNumber = "1098"
             landmarkName = "locomotiveListUpdated(appNode:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -558,8 +558,8 @@
             filePath = "MyTrains/OpenLCB/_tasks/Speed Profiler/SpeedProfilerVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "993"
-            endingLineNumber = "993"
+            startingLineNumber = "1251"
+            endingLineNumber = "1251"
             landmarkName = "reloadSamples(profile:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -574,10 +574,26 @@
             filePath = "MyTrains/OpenLCB/_tasks/Speed Profiler/SpeedProfile.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "319"
-            endingLineNumber = "319"
+            startingLineNumber = "326"
+            endingLineNumber = "326"
             landmarkName = "routeLength"
             landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "265E8430-C4AB-4A4A-83B1-18884DD8F973"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MyTrains/OpenLCB/_nodes/SwitchboardItemNode.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1953"
+            endingLineNumber = "1953"
+            landmarkName = "getEventsForProfiler(profile:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
