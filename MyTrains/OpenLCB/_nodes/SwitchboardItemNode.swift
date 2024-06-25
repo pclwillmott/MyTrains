@@ -1933,7 +1933,7 @@ public class SwitchboardItemNode : OpenLCBNodeVirtual {
       return controlBlock?.lengthOfRoute
     case .turnoutRight, .turnoutLeft, .cross, .diagonalCross, .yTurnout, .turnout3Way, .leftCurvedTurnout, .rightCurvedTurnout, .singleSlip, .doubleSlip:
       if let routeCommanded {
-        return getDimension(routeNumber: routeCommanded)
+        return getDimension(routeNumber: routeCommanded + 1)
       }
     default:
       break

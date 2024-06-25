@@ -488,6 +488,35 @@ public class LayoutNode : OpenLCBNodeVirtual {
     
   }
   
+  public func getLoop(loopNumber:UInt16, startBlock:UInt64, direction:RouteDirection) -> SWBRoute? {
+    
+    guard loopNodes[Int(loopNumber) - 1].contains(startBlock) else {
+      return nil
+    }
+        
+    var result = loops[Int(loopNumber) - 1]
+    
+    var reverse = false
+    
+    for item in result {
+      if item.fromSwitchboardItem.itemType.isBlock && item.routeDirection != direction {
+        reverse = true
+        break
+      }
+    }
+    
+    if reverse {
+      result = result.reversed()
+    }
+    
+    while result[0].fromSwitchboardItem.nodeId != startBlock {
+      result.append(result.removeFirst())
+    }
+    
+    return result
+    
+  }
+  
   public func loops(containing:UInt64) -> [Int] {
     
     var result : [Int] = []
