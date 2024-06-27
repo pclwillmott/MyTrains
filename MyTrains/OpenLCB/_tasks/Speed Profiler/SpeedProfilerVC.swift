@@ -34,9 +34,6 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
     cboLocomotive?.removeAllItems()
     cboLocomotive = nil
     
-    cboValueTypes?.removeAllItems()
-    cboValueTypes = nil
-    
     for view in sptSplitView!.arrangedSubviews {
       sptSplitView?.removeArrangedSubview(view)
     }
@@ -118,7 +115,7 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
     
     super.viewWillAppear()
     
-    guard let cboLocomotive, let sptSplitView, let pnlDisclosure, let pnlButtons, let btnReset, let btnDiscardChanges, let btnSaveChanges, let btnStartStop, let btnShowValuesPanel, let btnShowInspectorPanel, let pnlChart, let pnlValues, let cboValueTypes, let pnlInspector, let pnlValuesScrollView, let tblValuesTableView, let pnlInspectorButtons, let sptResultsView else {
+    guard let cboLocomotive, let sptSplitView, let pnlDisclosure, let pnlButtons, let btnReset, let btnDiscardChanges, let btnSaveChanges, let btnStartStop, let btnShowValuesPanel, let btnShowInspectorPanel, let pnlChart, let pnlValues, let pnlInspector, let pnlValuesScrollView, let tblValuesTableView, let pnlInspectorButtons, let sptResultsView else {
       return
     }
     
@@ -164,23 +161,6 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
     
     sptResultsView.addArrangedSubview(pnlValues)
     
-    cboValueTypes.translatesAutoresizingMaskIntoConstraints = false
-    cboValueTypes.isEditable = false
-    cboValueTypes.target = self
-    cboValueTypes.action = #selector(cboValueTypesAction(_:))
-    
-    SpeedProfilerValueType.populate(comboBox: cboValueTypes)
-    valueType = SpeedProfilerValueType(rawValue: userSettings!.integer(forKey: DEFAULT.CURRENT_VALUES_MODE)) ?? .actualSamples
-    SpeedProfilerValueType.select(comboBox: cboValueTypes, valueType: valueType)
-    
-    pnlValues.addSubview(cboValueTypes)
-    
-    constraints.append(cboValueTypes.topAnchor.constraint(equalTo: pnlValues.topAnchor))
-    constraints.append(cboValueTypes.centerXAnchor.constraint(equalTo: pnlValues.centerXAnchor))
-    constraints.append(cboValueTypes.leadingAnchor.constraint(greaterThanOrEqualToSystemSpacingAfter: pnlValues.leadingAnchor, multiplier: 1.0))
-    constraints.append(pnlValues.trailingAnchor.constraint(greaterThanOrEqualToSystemSpacingAfter: cboValueTypes.trailingAnchor, multiplier: 1.0))
-    //    constraints.append(cboValueTypes.widthAnchor.constraint(greaterThanOrEqualToConstant: 100))
-    
     pnlValuesScrollView.translatesAutoresizingMaskIntoConstraints = false
     pnlValuesScrollView.backgroundColor = nil
     pnlValuesScrollView.drawsBackground = false
@@ -190,7 +170,7 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
     
     pnlValues.addSubview(pnlValuesScrollView)
     
-    constraints.append(pnlValuesScrollView.topAnchor.constraint(equalToSystemSpacingBelow: cboValueTypes.bottomAnchor, multiplier: 1.0))
+    constraints.append(pnlValuesScrollView.topAnchor.constraint(equalTo: pnlValues.topAnchor))
     constraints.append(pnlValuesScrollView.leadingAnchor.constraint(equalTo: pnlValues.leadingAnchor))
     constraints.append(pnlValuesScrollView.trailingAnchor.constraint(equalTo: pnlValues.trailingAnchor))
     //    constraints.append(pnlValuesScrollView.centerXAnchor.constraint(equalTo: pnlValues.centerXAnchor))
@@ -522,6 +502,7 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
       .useOccupancyDetectors,
       .bestFitMethod,
       .showTrendline,
+      .showSamples,
       .routeType,
       .startBlockId,
       .totalRouteLength,
@@ -685,9 +666,17 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
   
   private var locomotiveLookup : [String:UInt64] = [:]
   
-  private var profile : SpeedProfile?
+  private var profile : SpeedProfile? {
+    didSet {
+      pnlChart?.speedProfile = profile
+    }
+  }
   
-  private var sampleTable : [[Double]] = []
+  private var sampleTable : [[Double]] = [] {
+    didSet {
+      pnlChart?.sampleTable = sampleTable
+    }
+  }
   
   private var isForward = true
   
@@ -720,8 +709,6 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
   private var pnlChart : SpeedResultsView? = SpeedResultsView()
   
   private var pnlValues : NSView? = NSView()
-  
-  private var cboValueTypes : MyComboBox? = MyComboBox()
   
   private var pnlInspector : NSView? = NSView()
   
@@ -1256,7 +1243,7 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
   }
   
   @objc func chartNeedsUpdate(profile:SpeedProfile) {
-    
+    pnlChart?.needsDisplay = true
   }
   
   @objc func reloadSamples(profile:SpeedProfile) {

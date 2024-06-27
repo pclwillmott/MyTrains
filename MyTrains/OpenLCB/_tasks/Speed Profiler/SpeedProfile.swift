@@ -45,7 +45,8 @@ public class SpeedProfile : NSObject {
     initSpaceAddress(&addressStartBlockId, 8, &configurationSize)
     initSpaceAddress(&addressEndBlockId, 8, &configurationSize)
     initSpaceAddress(&addressRoute, 2, &configurationSize)
-    
+    initSpaceAddress(&addressShowSamples, 1, &configurationSize)
+
     profile = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.speedProfile.rawValue, defaultMemorySize: configurationSize, isReadOnly: false, description: "")
 
     super.init()
@@ -66,6 +67,7 @@ public class SpeedProfile : NSObject {
       useReedSwitches = true
       useRFIDReaders = true
       useOccupancyDetectors = true
+      showSamples = true
       profile.save()
     }
     
@@ -98,6 +100,7 @@ public class SpeedProfile : NSObject {
   private var addressStartBlockId          = 0
   private var addressEndBlockId            = 0
   private var addressRoute                 = 0
+  private var addressShowSamples           = 0
   
   // MARK: Public Properties
   
@@ -156,6 +159,7 @@ public class SpeedProfile : NSObject {
     }
     set(value) {
       profile.setUInt(address: addressLocoTravelDirection, value: value.rawValue)
+      delegate?.chartNeedsUpdate?(profile: self)
     }
   }
   
@@ -237,6 +241,7 @@ public class SpeedProfile : NSObject {
     }
     set(value) {
       profile.setUInt(address: addressBestFitMethod, value: value.rawValue)
+      delegate?.chartNeedsUpdate?(profile: self)
     }
   }
   
@@ -246,6 +251,17 @@ public class SpeedProfile : NSObject {
     }
     set(value) {
       profile.setUInt(address: addressShowTrendline, value: value ? UInt8(1) : UInt8(0))
+      delegate?.chartNeedsUpdate?(profile: self)
+    }
+  }
+  
+  public var showSamples : Bool {
+    get {
+      return profile.getUInt8(address: addressShowSamples)! != 0
+    }
+    set(value) {
+      profile.setUInt(address: addressShowSamples, value: value ? UInt8(1) : UInt8(0))
+      delegate?.chartNeedsUpdate?(profile: self)
     }
   }
   
@@ -448,6 +464,8 @@ public class SpeedProfile : NSObject {
       return bestFitMethod.title
     case .showTrendline:
       return showTrendline ? "true" : "false"
+    case .showSamples:
+      return showSamples ? "true" : "false"
     case .routeType:
       return routeType.title
     case .startBlockId:
@@ -506,7 +524,6 @@ public class SpeedProfile : NSObject {
   public func setValue(property: SpeedProfilerInspectorProperty, string: String) {
     
     var inspectorNeedsUpdate = false
-    var chartNeedsUpdate = false
     var tableNeedsReset = false
     
     switch property {
@@ -556,10 +573,10 @@ public class SpeedProfile : NSObject {
       useOccupancyDetectors = string == "true"
     case .bestFitMethod:
       bestFitMethod = BestFitMethod(title: string)!
-      chartNeedsUpdate = true
     case .showTrendline:
       showTrendline = string == "true"
-      chartNeedsUpdate = true
+    case .showSamples:
+      showSamples = string == "true"
     case .routeType:
       routeType = SamplingRouteType(title: string)!
       if routeType == .loop {
@@ -597,10 +614,6 @@ public class SpeedProfile : NSObject {
     
     if tableNeedsReset {
       resetTable()
-    }
-    
-    if chartNeedsUpdate {
-      delegate?.chartNeedsUpdate?(profile: self)
     }
     
   }

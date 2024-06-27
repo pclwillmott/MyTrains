@@ -42,6 +42,7 @@ public enum SpeedProfilerInspectorProperty : Int, CaseIterable {
 
   case bestFitMethod = 16 //
   case showTrendline = 17 //
+  case showSamples = 26
 
   // Route
   
@@ -225,6 +226,13 @@ public enum SpeedProfilerInspectorProperty : Int, CaseIterable {
     : (
       String(localized:"Show Trendline", comment:"This is used for the title of a check box."),
       String(localized:"Show trendline on chart.", comment:"This is used for a tooltip."),
+      .analysis,
+      .checkBox
+    ),
+    .showSamples
+    : (
+      String(localized:"Show Samples", comment:"This is used for the title of a check box."),
+      String(localized:"Show samples on chart.", comment:"This is used for a tooltip."),
       .analysis,
       .checkBox
     ),

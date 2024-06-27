@@ -5352,9 +5352,6 @@
     "Resume" : {
 
     },
-    "Reverese Only" : {
-
-    },
     "Reverse" : {
       "comment" : "Used to indicate that the train is moving in the reverse direction",
       "localizations" : {
@@ -5373,6 +5370,9 @@
       }
     },
     "Reverse (%%SCALE_SPEED_UNITS%%)" : {
+
+    },
+    "Reverse Only" : {
 
     },
     "Reverser" : {
@@ -5806,6 +5806,12 @@
     },
     "Show Route Inspector" : {
 
+    },
+    "Show Samples" : {
+      "comment" : "This is used for the title of a check box."
+    },
+    "Show samples on chart." : {
+      "comment" : "This is used for a tooltip."
     },
     "Show Settings Inspector" : {
 

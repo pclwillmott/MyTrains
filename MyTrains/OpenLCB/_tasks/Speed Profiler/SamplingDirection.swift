@@ -35,7 +35,7 @@ public enum SamplingDirection : UInt8, CaseIterable {
     let titles : [SamplingDirection:String] = [
       .bothDirections : String(localized: "Forward & Reverse"),
       .forward        : String(localized: "Forward Only"),
-      .reverse        : String(localized: "Reverese Only"),
+      .reverse        : String(localized: "Reverse Only"),
     ]
     
     return titles[self]!
