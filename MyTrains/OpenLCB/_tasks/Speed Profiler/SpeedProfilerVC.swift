@@ -86,7 +86,7 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
     
     pnlChart = nil
     
-    debugLog("DEINIT - REMOVE BEFORE FLIGHT!")
+    lblStatus = nil
     
   }
   
@@ -115,7 +115,7 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
     
     super.viewWillAppear()
     
-    guard let cboLocomotive, let sptSplitView, let pnlDisclosure, let pnlButtons, let btnReset, let btnDiscardChanges, let btnSaveChanges, let btnStartStop, let btnShowValuesPanel, let btnShowInspectorPanel, let pnlChart, let pnlValues, let pnlInspector, let pnlValuesScrollView, let tblValuesTableView, let pnlInspectorButtons, let sptResultsView else {
+    guard let cboLocomotive, let sptSplitView, let pnlDisclosure, let pnlButtons, let btnReset, let btnDiscardChanges, let btnSaveChanges, let btnStartStop, let btnShowValuesPanel, let btnShowInspectorPanel, let pnlChart, let pnlValues, let pnlInspector, let pnlValuesScrollView, let tblValuesTableView, let pnlInspectorButtons, let sptResultsView, let lblStatus else {
       return
     }
     
@@ -346,6 +346,15 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
     constraints.append(btnShowInspectorPanel.centerYAnchor.constraint(equalTo: pnlDisclosure.centerYAnchor))
     constraints.append(pnlDisclosure.trailingAnchor.constraint(equalToSystemSpacingAfter: btnShowInspectorPanel.trailingAnchor, multiplier: 1.0))
     
+    lblStatus.translatesAutoresizingMaskIntoConstraints = false
+    lblStatus.alignment = .center
+    lblStatus.drawsBackground = false
+    
+    pnlDisclosure.addSubview(lblStatus)
+    
+    constraints.append(lblStatus.centerXAnchor.constraint(equalTo: pnlDisclosure.centerXAnchor))
+    constraints.append(lblStatus.centerYAnchor.constraint(equalTo: pnlDisclosure.centerYAnchor))
+    
     // pnlButtons
     
     pnlButtons.translatesAutoresizingMaskIntoConstraints = false
@@ -443,6 +452,7 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
         throttle?.speed = isForward ? 0.0 : -0.0
         throttle?.releaseController()
         btnStartStop?.title = String(localized: "Start Profiling")
+        lblStatus?.stringValue = ""
       default:
         btnStartStop?.title = String(localized: "Stop Profiling")
       }
@@ -730,10 +740,12 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
   
   internal var inspectorConstraints : [NSLayoutConstraint] = []
   
+  internal var lblStatus : NSTextField? = NSTextField(labelWithString: "")
+  
   private var timeoutTimer : Timer?
   
-  private var next     : [UInt64:(eventId:UInt64, eventType:SpeedProfilerEventType, position:Double)] = [:]
-  private var previous : [UInt64:(eventId:UInt64, eventType:SpeedProfilerEventType, position:Double)] = [:]
+  private var next     : [UInt64:(eventId:UInt64, eventType:SpeedProfilerEventType, position:Double, index:Int)] = [:]
+  private var previous : [UInt64:(eventId:UInt64, eventType:SpeedProfilerEventType, position:Double, index:Int)] = [:]
   
   private var eventsTriggeredList : [UInt64] = []
   
@@ -813,17 +825,20 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
         
         // TODO: Setup Event & Distance Table
         
+        var index = 0
+        
+        routeLength = 0.0
+
         next.removeAll()
                 
         for item in routeSetNext {
           
           if let blockLength = item.fromSwitchboardItem.lengthOfRoute {
             
-            print("\(item.fromSwitchboardItem.userNodeName) \(item.routeDirection)")
-            
             for event in item.fromSwitchboardItem.getEventsForProfiler(profile: profile) {
               let position = routeLength + (event.eventType == .sensor ? event.position : 0.0)
-              next[event.eventId] = (event.eventId, event.eventType, position)
+              next[event.eventId] = (event.eventId, event.eventType, position, index)
+              index += 1
             }
             
             routeLength += blockLength
@@ -831,6 +846,8 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
           }
           
         }
+        
+        index = 0
         
         routeLength = 0.0
         
@@ -842,7 +859,8 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
             
             for event in item.fromSwitchboardItem.getEventsForProfiler(profile: profile).reversed() {
               let position = routeLength + ((event.eventType == .sensor ? blockLength - event.position : 0.0))
-              previous[event.eventId] = (event.eventId, event.eventType, position)
+              previous[event.eventId] = (event.eventId, event.eventType, position, index)
+              index += 1
             }
             
             routeLength += blockLength
@@ -929,6 +947,8 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
     state = .gettingUpToSpeed
     
     throttle.speed = Float(speed)
+    
+    lblStatus?.stringValue = "Sample #\(nextSampleNumber): getting up to speed"
     
   }
   
@@ -1325,7 +1345,7 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
     
     let direction = isForward ? profile.locomotiveFacingDirection : profile.locomotiveFacingDirection == .next ? .previous : .next
     
-    var event : (eventId:UInt64, eventType:SpeedProfilerEventType, position:Double)?
+    var event : (eventId:UInt64, eventType:SpeedProfilerEventType, position:Double, index:Int)?
     
     switch direction {
     case .next:
@@ -1341,53 +1361,47 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
         eventsTriggered.insert(eventId)
         eventsTriggeredList.append(eventId)
         
-        var numberToRemove = max(0, eventsTriggeredList.count - 3)
-        while numberToRemove > 0 {
-          let id = eventsTriggeredList.removeFirst()
-          eventsTriggered.remove(id)
-          numberToRemove -= 1
+        while eventsTriggeredList.count > 2 {
+          eventsTriggered.remove(eventsTriggeredList.removeFirst())
         }
         
       }
       
       if state == .initializing {
-        if event.position == 0.0 {
+        if event.index == 0 {
           distanceCompleted = 0.0
           currentPositionInLoop = 0.0
           completedLoopsDistance = 0.0
           nextSampleNumber = profile.startSampleNumber
           isForward = profile.locomotiveTravelDirection != .reverse ? true : false
           getNextSample()
+          return
         }
       }
       else {
         
-        if event.position == 0.0 {
+        if event.index == 0 {
           completedLoopsDistance += routeLength
           currentPositionInLoop = 0.0
-          print("new loop")
         }
         else {
           currentPositionInLoop = event.position
-          print("position: \(event.position)")
         }
         
       }
       
       distanceCompleted = completedLoopsDistance + currentPositionInLoop
       
-      print("\(state) \(distanceCompleted)")
-      
       if state == .gettingUpToSpeed {
         sampleStartTime = message.timeStamp
         sampleStartPosition = distanceCompleted
         state = .sampling
         startTimeoutTimer(interval: profile.minimumSamplePeriod.samplePeriod)
+        lblStatus?.stringValue = "Sample #\(nextSampleNumber): sampling"
       }
       else if state == .sampling && takeSampleNow {
         let distance = distanceCompleted - sampleStartPosition
         let time = message.timeStamp - sampleStartTime
-        print("\(distanceCompleted) \(distance) \(time)")
         let speed = UnitSpeed.convert(fromValue: distance / time, fromUnits: .centimetersPerSecond, toUnits: .defaultValueScaleSpeed) * layout.scale.ratio
         sampleTable[Int(nextSampleNumber)][isForward ? 1 : 2] = speed
         tblValuesTableView?.reloadData()
