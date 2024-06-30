@@ -178,6 +178,7 @@
 		DA7195FB2A3F2D40004D2D4B /* MyTrains Train - OLD.xml in Resources */ = {isa = PBXBuildFile; fileRef = DA7195FA2A3F2D40004D2D4B /* MyTrains Train - OLD.xml */; };
 		DA7243F628A7F1E5003157CA /* RouteDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7243F528A7F1E5003157CA /* RouteDirection.swift */; };
 		DA7243F828A81165003157CA /* ThrottleMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7243F728A81165003157CA /* ThrottleMode.swift */; };
+		DA73610D2C31628F00557404 /* SpeedProfilerMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA73610C2C31628F00557404 /* SpeedProfilerMode.swift */; };
 		DA73666B2C2070EB0074697B /* SpeedProfilerInspectorProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA73666A2C2070EB0074697B /* SpeedProfilerInspectorProperty.swift */; };
 		DA73666D2C2082950074697B /* SpeedProfilerInspectorGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA73666C2C2082950074697B /* SpeedProfilerInspectorGroup.swift */; };
 		DA73666F2C20853D0074697B /* SpeedProfilerGroupField.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA73666E2C20853D0074697B /* SpeedProfilerGroupField.swift */; };
@@ -195,6 +196,7 @@
 		DA7F23902B331B88001E5C8C /* ScrollVerticalStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7F238F2B331B88001E5C8C /* ScrollVerticalStackView.swift */; };
 		DA7F89B12B371BDE00F43819 /* ConfigurationToolVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7F89B02B371BDE00F43819 /* ConfigurationToolVC.swift */; };
 		DA80205B2B7CEE730090DEC8 /* EventRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA80205A2B7CEE730090DEC8 /* EventRange.swift */; };
+		DA8327E62C30158500C19A80 /* Colour.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8327E52C30158500C19A80 /* Colour.swift */; };
 		DA8479972A34CA87003067E6 /* OpenLCBClockSubState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8479962A34CA87003067E6 /* OpenLCBClockSubState.swift */; };
 		DA8601BB2B7E268A00B73C16 /* OpenLCBNodeVisibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8601BA2B7E268A00B73C16 /* OpenLCBNodeVisibility.swift */; };
 		DA877B0F29FEC13B00F8546D /* CDIMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA877B0E29FEC13B00F8546D /* CDIMap.swift */; };
@@ -540,6 +542,7 @@
 		DA7195FA2A3F2D40004D2D4B /* MyTrains Train - OLD.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "MyTrains Train - OLD.xml"; sourceTree = "<group>"; };
 		DA7243F528A7F1E5003157CA /* RouteDirection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteDirection.swift; sourceTree = "<group>"; };
 		DA7243F728A81165003157CA /* ThrottleMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThrottleMode.swift; sourceTree = "<group>"; };
+		DA73610C2C31628F00557404 /* SpeedProfilerMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedProfilerMode.swift; sourceTree = "<group>"; };
 		DA73666A2C2070EB0074697B /* SpeedProfilerInspectorProperty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedProfilerInspectorProperty.swift; sourceTree = "<group>"; };
 		DA73666C2C2082950074697B /* SpeedProfilerInspectorGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedProfilerInspectorGroup.swift; sourceTree = "<group>"; };
 		DA73666E2C20853D0074697B /* SpeedProfilerGroupField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedProfilerGroupField.swift; sourceTree = "<group>"; };
@@ -558,6 +561,7 @@
 		DA7F238F2B331B88001E5C8C /* ScrollVerticalStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollVerticalStackView.swift; sourceTree = "<group>"; };
 		DA7F89B02B371BDE00F43819 /* ConfigurationToolVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationToolVC.swift; sourceTree = "<group>"; };
 		DA80205A2B7CEE730090DEC8 /* EventRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventRange.swift; sourceTree = "<group>"; };
+		DA8327E52C30158500C19A80 /* Colour.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colour.swift; sourceTree = "<group>"; };
 		DA8479962A34CA87003067E6 /* OpenLCBClockSubState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBClockSubState.swift; sourceTree = "<group>"; };
 		DA8601BA2B7E268A00B73C16 /* OpenLCBNodeVisibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBNodeVisibility.swift; sourceTree = "<group>"; };
 		DA877B0E29FEC13B00F8546D /* CDIMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDIMap.swift; sourceTree = "<group>"; };
@@ -865,6 +869,7 @@
 				DA1B79F8285F3885009E1189 /* UnitSpeed.swift */,
 				DA50C2F22B77AC1A00C2F6A1 /* UnitTime.swift */,
 				DA92E0772B66B09800762058 /* YesNo.swift */,
+				DA8327E52C30158500C19A80 /* Colour.swift */,
 			);
 			path = _enumerations;
 			sourceTree = "<group>";
@@ -1225,6 +1230,7 @@
 				DAF4DD4B289A90C1000B848E /* SpeedResultsView.swift */,
 				DA3303E72C271076002D2EDF /* SwitchboardSpeedProfilerView.swift */,
 				DA6040892C23139C006E6325 /* TrackProtocol.swift */,
+				DA73610C2C31628F00557404 /* SpeedProfilerMode.swift */,
 			);
 			path = "Speed Profiler";
 			sourceTree = "<group>";
@@ -1757,6 +1763,7 @@
 				DAD394BD2B2E15D300403040 /* OpenLCBCANGatewayWiFi.swift in Sources */,
 				DA9325A6289C02C300CC317F /* LocomotiveDirection.swift in Sources */,
 				DA408A5E2B582DF9005EBBDE /* SelectMasterNodeVC.swift in Sources */,
+				DA73610D2C31628F00557404 /* SpeedProfilerMode.swift in Sources */,
 				DA6040902C2328F9006E6325 /* SamplingRouteType.swift in Sources */,
 				DAA36B9F2A110C0000F07D8E /* OpenLCBAliasState.swift in Sources */,
 				DA441D302C1C988200AF0165 /* ActionColor.swift in Sources */,
@@ -2024,6 +2031,7 @@
 				DA9DBA032B643774004F8EB9 /* CountryCode.swift in Sources */,
 				DA413FF02A45CCF600675AD4 /* OpenLCBNodeRollingStockLocoNet.swift in Sources */,
 				DA09493C2B7F762000545650 /* OpenLCBCANGateway - Alias Mapping.swift in Sources */,
+				DA8327E62C30158500C19A80 /* Colour.swift in Sources */,
 				DAFFB6642B5D8AA50035AC74 /* LayoutListItem.swift in Sources */,
 				DA6002C82C01FE0200E14154 /* xmain.swift in Sources */,
 				DAF479CB2A4092380054DA92 /* OpenLCBTractionControllerConfigurationType.swift in Sources */,

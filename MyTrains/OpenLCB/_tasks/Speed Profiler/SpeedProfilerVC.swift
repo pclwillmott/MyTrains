@@ -121,6 +121,11 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
     
     appNode?.layout?.linkSwitchboardItems()
     
+    formatter.alwaysShowsDecimalSeparator = true
+    formatter.maximumFractionDigits = 3
+    formatter.minimumFractionDigits = 3
+    formatter.numberStyle = .decimal
+
     // cboLocomotive
     
     cboLocomotive.translatesAutoresizingMaskIntoConstraints = false
@@ -448,6 +453,8 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
   private var state : SpeedProfilerState = .idle {
     didSet {
       switch state {
+      case .initializing:
+        lblStatus?.stringValue = String(localized: "Initializing")
       case .idle:
         throttle?.speed = isForward ? 0.0 : -0.0
         throttle?.releaseController()
@@ -504,21 +511,30 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
       .locomotiveFacingDirection,
       .locomotiveTravelDirectionToSample,
       .minimumSamplePeriod,
-      .startSampleNumber,
-      .stopSampleNumber,
       .useRFIDReaders,
       .useLightSensors,
       .useReedSwitches,
       .useOccupancyDetectors,
-      .bestFitMethod,
-      .showTrendline,
-      .showSamples,
       .routeType,
       .startBlockId,
       .totalRouteLength,
       .routeSegments,
-      
+      .profilerMode,
     ]
+    
+    if profile.speedProfilerMode == .sampleAllSpeeds {
+      commonProperties.insert(.startSampleNumber)
+      commonProperties.insert(.stopSampleNumber)
+      commonProperties.insert(.bestFitMethod)
+      commonProperties.insert(.showTrendline)
+      commonProperties.insert(.showSamples)
+      commonProperties.insert(.directionToChart)
+      commonProperties.insert(.colourForward)
+      commonProperties.insert(.colourReverse)
+    }
+    else {
+      commonProperties.insert(.commandedSampleNumber)
+    }
     
     commonProperties.insert(profile.trackProtocol.isNumberOfSamplesFixed ? .numberOfSamplesLabel : .numberOfSamples)
     
@@ -601,6 +617,18 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
                   comboBox.target = nil
                   comboBox.action = nil
                   appNode.layout?.populateLoop(comboBox: comboBox , startBlockId: profile.startBlockId)
+                  comboBox.target = self
+                  comboBox.action = #selector(cboAction(_:))
+                }
+              }
+              else if field.property == .commandedSampleNumber {
+                if let comboBox = field.control as? NSComboBox {
+                  comboBox.target = nil
+                  comboBox.action = nil
+                  comboBox.removeAllItems()
+                  for sample in 0 ... profile.numberOfSamples - 1 {
+                    comboBox.addItem(withObjectValue: profile.commandedSampleTitle(sampleNumber: sample))
+                  }
                   comboBox.target = self
                   comboBox.action = #selector(cboAction(_:))
                 }
@@ -690,6 +718,8 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
   
   private var isForward = true
   
+  private var currentDirection : RouteDirection = .next
+  
   private var columnIds : [NSUserInterfaceItemIdentifier] = []
   
   // MARK: Controls
@@ -769,9 +799,15 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
   
   private var takeSampleNow = false
   
+  private var totalSpeed : Double = 0.0
+  
+  private var averageSamples : Double = 0.0
+  
   private var routeSetNext : SWBRoute?
   
   private var routeSetPrevious : SWBRoute?
+  
+  private let formatter = NumberFormatter()
   
   // MARK: Public Properties
   
@@ -929,26 +965,37 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
       return
     }
     
-    if nextSampleNumber > profile.stopSampleNumber {
-      if !isForward || profile.locomotiveTravelDirection == .forward {
-        state = .idle
-        return
+    if profile.speedProfilerMode == .sampleAllSpeeds {
+      
+      if nextSampleNumber > profile.stopSampleNumber {
+        if !isForward || profile.locomotiveTravelDirection == .forward {
+          state = .idle
+          return
+        }
+        isForward = false
+        currentDirection = currentDirection == .next ? .previous : .next
+        nextSampleNumber = profile.startSampleNumber
       }
-      isForward = false
-      nextSampleNumber = profile.startSampleNumber
+      
+      nextSampleNumber = max(1, nextSampleNumber)
+      
+      state = .gettingUpToSpeed
+      
+      lblStatus?.stringValue = "Sample #\(nextSampleNumber): getting up to speed"
+      
+      let speed = Float(UnitSpeed.convert(fromValue: sampleTable[Int(nextSampleNumber)][0], fromUnits: .defaultValueScaleSpeed, toUnits: .metersPerSecond) * (isForward ? 1.0 : -1.0))
+      
+      throttle.speed = speed
     }
-    
-    nextSampleNumber = max(1, nextSampleNumber)
-    
-    let speeds = sampleTable[Int(nextSampleNumber)]
-    
-    let speed = UnitSpeed.convert(fromValue: speeds[0], fromUnits: .defaultValueScaleSpeed, toUnits: .metersPerSecond) * (isForward ? 1.0 : -1.0)
-    
-    state = .gettingUpToSpeed
-    
-    throttle.speed = Float(speed)
-    
-    lblStatus?.stringValue = "Sample #\(nextSampleNumber): getting up to speed"
+    else if state == .initializing {
+
+      state = .gettingUpToSpeed
+      
+      lblStatus?.stringValue = "Sample #\(nextSampleNumber): getting up to speed"
+      
+      throttle.speed = Float(UnitSpeed.convert(fromValue: sampleTable[Int(nextSampleNumber)][0], fromUnits: .defaultValueScaleSpeed, toUnits: .metersPerSecond) * (isForward ? 1.0 : -1.0))
+      
+    }
     
   }
   
@@ -1161,13 +1208,7 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
     var isEditable = false
     
     let text = NSTextField()
-    
-    let formatter = NumberFormatter()
-    formatter.alwaysShowsDecimalSeparator = true
-    formatter.maximumFractionDigits = 3
-    formatter.minimumFractionDigits = 3
-    formatter.numberStyle = .decimal
-    
+        
     switch tableColumn!.identifier {
     case columnIds[0]:
       text.stringValue = "\(row)"
@@ -1326,7 +1367,17 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
     if state == .connectingToLoco, let trainNode = throttle.trainNode, throttle.throttleState == .activeController, let profile {
       stopTimeoutTimer()
       state = .initializing
-      throttle.speed = Float(sampleTable[10][0])
+      if profile.locomotiveTravelDirection == .reverse {
+        isForward = false
+        currentDirection = profile.locomotiveFacingDirection == .next ? .previous : .next
+      }
+      else {
+        isForward = true
+        currentDirection = profile.locomotiveFacingDirection == .next ? .next : .previous
+      }
+      let sample = profile.speedProfilerMode == .sampleAllSpeeds ? profile.startSampleNumber : profile.commandedSampleNumber
+      throttle.speed = Float(UnitSpeed.convert(fromValue: sampleTable[Int(sample)][0] * (isForward ? 1.0 : -1.0), fromUnits: .defaultValueScaleSpeed, toUnits: .metersPerSecond))
+
     }
     
   }
@@ -1343,11 +1394,9 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
       return
     }
     
-    let direction = isForward ? profile.locomotiveFacingDirection : profile.locomotiveFacingDirection == .next ? .previous : .next
-    
     var event : (eventId:UInt64, eventType:SpeedProfilerEventType, position:Double, index:Int)?
     
-    switch direction {
+    switch currentDirection {
     case .next:
       event = next[eventId]
     case .previous:
@@ -1372,8 +1421,7 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
           distanceCompleted = 0.0
           currentPositionInLoop = 0.0
           completedLoopsDistance = 0.0
-          nextSampleNumber = profile.startSampleNumber
-          isForward = profile.locomotiveTravelDirection != .reverse ? true : false
+          nextSampleNumber = profile.speedProfilerMode == .sampleAllSpeeds ?  profile.startSampleNumber : profile.commandedSampleNumber
           getNextSample()
           return
         }
@@ -1392,23 +1440,61 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
       
       distanceCompleted = completedLoopsDistance + currentPositionInLoop
       
-      if state == .gettingUpToSpeed {
-        sampleStartTime = message.timeStamp
-        sampleStartPosition = distanceCompleted
-        state = .sampling
-        startTimeoutTimer(interval: profile.minimumSamplePeriod.samplePeriod)
-        lblStatus?.stringValue = "Sample #\(nextSampleNumber): sampling"
+      if profile.speedProfilerMode == .sampleAllSpeeds {
+        
+        if state == .gettingUpToSpeed {
+          sampleStartTime = message.timeStamp
+          sampleStartPosition = distanceCompleted
+          state = .sampling
+          startTimeoutTimer(interval: profile.minimumSamplePeriod.samplePeriod)
+          lblStatus?.stringValue = "Sample #\(nextSampleNumber): sampling"
+        }
+        else if state == .sampling && takeSampleNow {
+          let distance = distanceCompleted - sampleStartPosition
+          let time = message.timeStamp - sampleStartTime
+          let speed = UnitSpeed.convert(fromValue: distance / time, fromUnits: .centimetersPerSecond, toUnits: .defaultValueScaleSpeed) * layout.scale.ratio
+          sampleTable[Int(nextSampleNumber)][isForward ? 1 : 2] = speed
+          tblValuesTableView?.reloadData()
+          nextSampleNumber += 1
+          getNextSample()
+        }
+        
       }
-      else if state == .sampling && takeSampleNow {
-        let distance = distanceCompleted - sampleStartPosition
-        let time = message.timeStamp - sampleStartTime
-        let speed = UnitSpeed.convert(fromValue: distance / time, fromUnits: .centimetersPerSecond, toUnits: .defaultValueScaleSpeed) * layout.scale.ratio
-        sampleTable[Int(nextSampleNumber)][isForward ? 1 : 2] = speed
-        tblValuesTableView?.reloadData()
-        nextSampleNumber += 1
-        getNextSample()
-      }
+      else {
+ 
+        if state == .gettingUpToSpeed {
+          sampleStartTime = message.timeStamp
+          sampleStartPosition = distanceCompleted
+          state = .sampling
+          totalSpeed = 0.0
+          averageSamples = 0.0
+          startTimeoutTimer(interval: profile.minimumSamplePeriod.samplePeriod)
+          lblStatus?.stringValue = "Sampling"
+        }
+        else if state == .sampling && takeSampleNow {
+          takeSampleNow = false
+          let distance = distanceCompleted - sampleStartPosition
+          let time = message.timeStamp - sampleStartTime
+          let speed = UnitSpeed.convert(fromValue: distance / time, fromUnits: .centimetersPerSecond, toUnits: appNode!.unitsScaleSpeed) * layout.scale.ratio
+          totalSpeed += speed
+          averageSamples += 1
+          var result = "Last Sample: \(formatter.string(from: NSNumber(value: speed))!) \(appNode!.unitsScaleSpeed.symbol)"
+          if averageSamples > 1.0 {
+            result += "   Average of \(Int(round(averageSamples))) Samples: \(formatter.string(from: NSNumber(value: totalSpeed / averageSamples))!) \(appNode!.unitsScaleSpeed.symbol)"
+          }
+          lblStatus?.stringValue = result
+          if profile.commandedSampleNumber == nextSampleNumber {
+            sampleStartTime = message.timeStamp
+            sampleStartPosition = distanceCompleted
+            startTimeoutTimer(interval: profile.minimumSamplePeriod.samplePeriod)
+          }
+          else {
+            state = .initializing
+          }
+        }
 
+      }
+      
     }
     
   }

@@ -877,6 +877,9 @@
         }
       }
     },
+    "Black" : {
+      "comment" : "The name of a color."
+    },
     "Block" : {
       "comment" : "This is used to describe a piece of track."
     },
@@ -922,6 +925,9 @@
           }
         }
       }
+    },
+    "Blue" : {
+      "comment" : "The name of a color."
     },
     "Brake" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -979,6 +985,9 @@
     },
     "Bring All to Front" : {
       "comment" : "Used for a menu title"
+    },
+    "Brown" : {
+      "comment" : "The name of a color."
     },
     "Buffer Stop" : {
       "comment" : "This is used to describe a piece of track."
@@ -1443,6 +1452,12 @@
         }
       }
     },
+    "Color of the forward samples and trendline." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "Color of the reverse samples and trendline." : {
+      "comment" : "This is used for a tooltip."
+    },
     "Colour-light 2 aspect" : {
 
     },
@@ -1454,6 +1469,9 @@
     },
     "Commanded (%%SCALE_SPEED_UNITS%%)" : {
 
+    },
+    "Commanded Speed (%%UNITS_SCALE_SPEED%%)" : {
+      "comment" : "This is used for the title of combobox."
     },
     "Common" : {
       "comment" : "Used to indicate a LocoNet command station slot status",
@@ -1825,6 +1843,12 @@
     "Cut" : {
       "comment" : "Used for a menu title"
     },
+    "Cyan" : {
+      "comment" : "The name of a color."
+    },
+    "Dark Gray" : {
+      "comment" : "The name of a color."
+    },
     "Datagram" : {
 
     },
@@ -2166,6 +2190,9 @@
         }
       }
     },
+    "Determines the speed profiler mode of operation." : {
+      "comment" : "This is used for a tooltip."
+    },
     "Diagonal Cross" : {
       "comment" : "This is used to describe a piece of track."
     },
@@ -2284,6 +2311,9 @@
     },
     "Direction Previous" : {
       "comment" : "This is used for the title of the Speed Constraints Direction Previous section in the Layout Builder."
+    },
+    "Direction to Chart" : {
+      "comment" : "This is used for the title of a combobox."
     },
     "Direction to profile" : {
       "comment" : "This is used for the title of a combobox."
@@ -3044,6 +3074,9 @@
     "Forward & Reverse" : {
 
     },
+    "Forward Color" : {
+      "comment" : "This is used for the title of a check box."
+    },
     "Forward Only" : {
 
     },
@@ -3213,8 +3246,14 @@
         }
       }
     },
+    "Gray" : {
+      "comment" : "The name of a color."
+    },
     "Great Britain" : {
       "comment" : "This is the name of a country."
+    },
+    "Green" : {
+      "comment" : "The name of a color."
     },
     "Group" : {
       "comment" : "This is used for the title of a combo box where the user can select which group the switchboard item belongs to."
@@ -3460,6 +3499,9 @@
     },
     "India" : {
       "comment" : "This is the name of a country."
+    },
+    "Indigo" : {
+      "comment" : "The name of a color."
     },
     "Info" : {
 
@@ -3796,6 +3838,9 @@
         }
       }
     },
+    "Light Gray" : {
+      "comment" : "The name of a color."
+    },
     "Light Sensor" : {
 
     },
@@ -4042,6 +4087,9 @@
           }
         }
       }
+    },
+    "Magenta" : {
+      "comment" : "The name of a color."
     },
     "Manual" : {
       "comment" : "Used to indicate turnout motor type",
@@ -4299,6 +4347,9 @@
     },
     "Minimum Sample Period" : {
       "comment" : "This is used for the title of combobox."
+    },
+    "Mint" : {
+      "comment" : "The name of a color."
     },
     "mm" : {
       "comment" : "Used for the abbreviation of millimeters"
@@ -4750,6 +4801,9 @@
     "Optional Interaction Rejected" : {
 
     },
+    "Orange" : {
+      "comment" : "The name of a color."
+    },
     "Orientation" : {
       "comment" : "This is used for the title of a combo box where the user can select the orientation/rotation state of the switchboard item."
     },
@@ -4951,6 +5005,9 @@
     "Permitted directions of travel for a train on this switchboard item." : {
       "comment" : "This is used for a tooltip."
     },
+    "Pink" : {
+      "comment" : "The name of a color."
+    },
     "Platform" : {
       "comment" : "This is used to describe a switchboard item."
     },
@@ -5016,11 +5073,17 @@
     "Producer Range Identified" : {
 
     },
+    "Profiler Mode" : {
+      "comment" : "This is used for the title of combobox."
+    },
     "Protocol Support Inquiry" : {
 
     },
     "Protocol Support Reply" : {
 
+    },
+    "Purple" : {
+      "comment" : "The name of a color."
     },
     "Push Button" : {
 
@@ -5241,6 +5304,9 @@
     "Reboot Application" : {
       "comment" : "Used for a menu title"
     },
+    "Red" : {
+      "comment" : "The name of a color."
+    },
     "Reed Switch" : {
 
     },
@@ -5371,6 +5437,9 @@
     },
     "Reverse (%%SCALE_SPEED_UNITS%%)" : {
 
+    },
+    "Reverse Color" : {
+      "comment" : "This is used for the title of a check box."
     },
     "Reverse Only" : {
 
@@ -5530,6 +5599,12 @@
       }
     },
     "Sample" : {
+
+    },
+    "Sample All Speeds" : {
+
+    },
+    "Sample Single Speed" : {
 
     },
     "Sampling Settings" : {
@@ -6429,6 +6504,9 @@
     "Teaching/Learning Configuration Protocol" : {
 
     },
+    "Teal" : {
+      "comment" : "The name of a color."
+    },
     "Temporary Error Buffer Unavailable" : {
 
     },
@@ -6513,6 +6591,9 @@
     "The following options determine which windows are automatically displayed at start-up and when the application restarts after configuration changes." : {
 
     },
+    "The locomotive direction or directions to plot on the chart." : {
+      "comment" : "This is used for a tooltip."
+    },
     "The maximum speed that the locomotive can be commanded to travel at." : {
       "comment" : "This is used for a tooltip."
     },
@@ -6536,6 +6617,9 @@
 
     },
     "The position from the start of the block where a train should stop." : {
+      "comment" : "This is used for a tooltip."
+    },
+    "The speed to command the locomotive to run at." : {
       "comment" : "This is used for a tooltip."
     },
     "The throttle was unable to connect to the locomotive." : {
@@ -7309,6 +7393,9 @@
         }
       }
     },
+    "White" : {
+      "comment" : "The name of a color."
+    },
     "Window" : {
       "comment" : "Used for a menu title"
     },
@@ -7488,6 +7575,9 @@
     },
     "Y Turnout" : {
       "comment" : "This is used to describe a piece of track."
+    },
+    "Yellow" : {
+      "comment" : "The name of a color."
     },
     "Yes" : {
       "comment" : "Used to indicate a yes/no state",

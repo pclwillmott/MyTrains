@@ -13,14 +13,6 @@ class SpeedResultsView: NSView {
   
   // MARK: Public Properties
   
-  /*
-   public var locomotive : Locomotive? {
-   didSet {
-   needsDisplay = true
-   }
-   }
-   */
-  
   public var sampleTable : [[Double]] = [] {
     didSet {
       needsDisplay = true
@@ -136,23 +128,27 @@ class SpeedResultsView: NSView {
         
         for row in sampleTable {
           
-          for dataSet in show[speedProfile.locomotiveTravelDirection]! {
+          for dataSet in (1 ... 2).reversed() {
             
-            if row[dataSet] != 0.0 || row[0] == 0.0 {
+            if show[speedProfile.directionToChart]!.contains(dataSet) {
               
-              dataSet == 1 ? NSColor.systemBlue.setFill() : NSColor.systemRed.setFill()
-              
-              let dx = xOffset + (bounds.width - xOffset) * CGFloat(UnitSpeed.convert(fromValue: row[0], fromUnits: .defaultValueScaleSpeed, toUnits: appNode.unitsScaleSpeed)) / scaleMax
-              
-              let dy = yOffset + (bounds.height - yOffset) * CGFloat(UnitSpeed.convert(fromValue: row[dataSet], fromUnits: .defaultValueScaleSpeed, toUnits: appNode.unitsScaleSpeed)) / scaleMax
-              
-              let path = NSBezierPath()
-              path.move(to: NSMakePoint(dx-2, dy+2))
-              path.line(to: NSMakePoint(dx+2, dy+2))
-              path.line(to: NSMakePoint(dx+2, dy-2))
-              path.line(to: NSMakePoint(dx-2, dy-2))
-              path.close()
-              path.fill()
+              if row[dataSet] != 0.0 || row[0] == 0.0 {
+                
+                dataSet == 1 ? speedProfile.colourForward.color.setFill() : speedProfile.colourReverse.color.setFill()
+                
+                let dx = xOffset + (bounds.width - xOffset) * CGFloat(UnitSpeed.convert(fromValue: row[0], fromUnits: .defaultValueScaleSpeed, toUnits: appNode.unitsScaleSpeed)) / scaleMax
+                
+                let dy = yOffset + (bounds.height - yOffset) * CGFloat(UnitSpeed.convert(fromValue: row[dataSet], fromUnits: .defaultValueScaleSpeed, toUnits: appNode.unitsScaleSpeed)) / scaleMax
+                
+                let path = NSBezierPath()
+                path.move(to: NSMakePoint(dx-2, dy+2))
+                path.line(to: NSMakePoint(dx+2, dy+2))
+                path.line(to: NSMakePoint(dx+2, dy-2))
+                path.line(to: NSMakePoint(dx-2, dy-2))
+                path.close()
+                path.fill()
+                
+              }
               
             }
             
@@ -164,29 +160,33 @@ class SpeedResultsView: NSView {
       
       if speedProfile.showTrendline {
         
-        for dataSet in show[speedProfile.locomotiveTravelDirection]! {
+        for dataSet in (1 ... 2).reversed() {
           
-          let samples = speedProfile.bestFitMethod.fit(sampleTable: sampleTable, dataSet: dataSet)
-          
-          let path = NSBezierPath()
-          
-          dataSet == 1 ? NSColor.systemBlue.setStroke() : NSColor.systemRed.setStroke()
-          
-          path.move(to: NSMakePoint(xOffset, yOffset))
-          
-          path.lineWidth = 3
-          
-          for row in samples {
+          if show[speedProfile.directionToChart]!.contains(dataSet) {
             
-            let dx = xOffset + (bounds.width - xOffset) * CGFloat(UnitSpeed.convert(fromValue: row[0], fromUnits: .defaultValueScaleSpeed, toUnits: appNode.unitsScaleSpeed)) / scaleMax
+            let samples = speedProfile.bestFitMethod.fit(sampleTable: sampleTable, dataSet: dataSet)
             
-            let dy = yOffset + (bounds.height - yOffset) * CGFloat(UnitSpeed.convert(fromValue: row[1], fromUnits: .defaultValueScaleSpeed, toUnits: appNode.unitsScaleSpeed)) / scaleMax
+            let path = NSBezierPath()
             
-            path.line(to: NSMakePoint(dx, dy))
+            dataSet == 1 ? speedProfile.colourForward.color.setStroke() : speedProfile.colourReverse.color.setStroke()
+            
+            path.move(to: NSMakePoint(xOffset, yOffset))
+            
+            path.lineWidth = 3
+            
+            for row in samples {
+              
+              let dx = xOffset + (bounds.width - xOffset) * CGFloat(UnitSpeed.convert(fromValue: row[0], fromUnits: .defaultValueScaleSpeed, toUnits: appNode.unitsScaleSpeed)) / scaleMax
+              
+              let dy = yOffset + (bounds.height - yOffset) * CGFloat(UnitSpeed.convert(fromValue: row[1], fromUnits: .defaultValueScaleSpeed, toUnits: appNode.unitsScaleSpeed)) / scaleMax
+              
+              path.line(to: NSMakePoint(dx, dy))
+              
+            }
+            
+            path.stroke()
             
           }
-          
-          path.stroke()
           
         }
         

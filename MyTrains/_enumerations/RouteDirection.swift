@@ -10,9 +10,13 @@ import AppKit
 
 public enum RouteDirection : UInt8, CaseIterable {
   
+  // MARK: Enumeration
+  
   case next     = 0
   case previous = 1
 
+  // MARK: Constructors
+  
   init?(title:String) {
     for temp in RouteDirection.allCases {
       if temp.title == title {

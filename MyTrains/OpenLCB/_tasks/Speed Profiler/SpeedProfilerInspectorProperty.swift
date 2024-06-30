@@ -27,6 +27,8 @@ public enum SpeedProfilerInspectorProperty : Int, CaseIterable {
 
   // Sampling
 
+  case profilerMode = 30
+  case commandedSampleNumber = 31
   case locomotiveTravelDirectionToSample = 6 //
   case numberOfSamples = 7 //
   case numberOfSamplesLabel = 8 //
@@ -40,9 +42,12 @@ public enum SpeedProfilerInspectorProperty : Int, CaseIterable {
 
   // Analysis
 
+  case directionToChart = 27
   case bestFitMethod = 16 //
   case showTrendline = 17 //
   case showSamples = 26
+  case colourForward = 28
+  case colourReverse = 29
 
   // Route
   
@@ -173,6 +178,20 @@ public enum SpeedProfilerInspectorProperty : Int, CaseIterable {
       .sampling,
       .comboBox
     ),
+    .profilerMode
+    : (
+      String(localized:"Profiler Mode", comment:"This is used for the title of combobox."),
+      String(localized:"Determines the speed profiler mode of operation.", comment:"This is used for a tooltip."),
+      .sampling,
+      .comboBox
+    ),
+    .commandedSampleNumber
+    : (
+      String(localized:"Commanded Speed (%%UNITS_SCALE_SPEED%%)", comment:"This is used for the title of combobox."),
+      String(localized:"The speed to command the locomotive to run at.", comment:"This is used for a tooltip."),
+      .sampling,
+      .comboBox
+    ),
     .startSampleNumber
     : (
       String(localized:"Start Sample Number", comment:"This is used for the title of a text field."),
@@ -222,6 +241,13 @@ public enum SpeedProfilerInspectorProperty : Int, CaseIterable {
       .analysis,
       .comboBox
     ),
+    .directionToChart
+    : (
+      String(localized:"Direction to Chart", comment:"This is used for the title of a combobox."),
+      String(localized:"The locomotive direction or directions to plot on the chart.", comment:"This is used for a tooltip."),
+      .analysis,
+      .comboBox
+    ),
     .showTrendline
     : (
       String(localized:"Show Trendline", comment:"This is used for the title of a check box."),
@@ -235,6 +261,20 @@ public enum SpeedProfilerInspectorProperty : Int, CaseIterable {
       String(localized:"Show samples on chart.", comment:"This is used for a tooltip."),
       .analysis,
       .checkBox
+    ),
+    .colourForward
+    : (
+      String(localized:"Forward Color", comment:"This is used for the title of a check box."),
+      String(localized:"Color of the forward samples and trendline.", comment:"This is used for a tooltip."),
+      .analysis,
+      .comboBox
+    ),
+    .colourReverse
+    : (
+      String(localized:"Reverse Color", comment:"This is used for the title of a check box."),
+      String(localized:"Color of the reverse samples and trendline.", comment:"This is used for a tooltip."),
+      .analysis,
+      .comboBox
     ),
     .routeType
     : (
@@ -416,7 +456,7 @@ public enum SpeedProfilerInspectorProperty : Int, CaseIterable {
       LocomotiveControlBasis.populate(comboBox: comboBox)
     case locomotiveFacingDirection:
       RouteDirection.populate(comboBox: comboBox)
-    case locomotiveTravelDirectionToSample:
+    case locomotiveTravelDirectionToSample, directionToChart:
       SamplingDirection.populate(comboBox: comboBox)
     case minimumSamplePeriod:
       SamplePeriod.populate(comboBox: comboBox)
@@ -428,6 +468,10 @@ public enum SpeedProfilerInspectorProperty : Int, CaseIterable {
       appNode?.populateSpeedProfilerBlocks(comboBox: comboBox)
     case endBlockId:
       appNode?.populateSpeedProfilerBlocks(comboBox: comboBox)
+    case colourForward, colourReverse:
+      Colour.populate(comboBox: comboBox)
+    case profilerMode:
+      SpeedProfilerMode.populate(comboBox: comboBox)
     default:
       break
     }

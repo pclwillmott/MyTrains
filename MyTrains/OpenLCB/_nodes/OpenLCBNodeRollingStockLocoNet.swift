@@ -285,7 +285,7 @@ public class OpenLCBNodeRollingStockLocoNet : OpenLCBNodeRollingStock, LocoNetGa
       return
     }
     
-    var step = UInt8(min(126, Int(abs(setSpeed) * 3600.0 / (1000.0 * 1.609344))))
+    var step = UInt8(min(126, Int(round(UnitSpeed.convert(fromValue: Double(abs(setSpeed)), fromUnits: .metersPerSecond, toUnits: .milesPerHour)))))
     
     // THIS SHOULD BE DONE WITH A SPEED TABLE
     

@@ -46,6 +46,11 @@ public class SpeedProfile : NSObject {
     initSpaceAddress(&addressEndBlockId, 8, &configurationSize)
     initSpaceAddress(&addressRoute, 2, &configurationSize)
     initSpaceAddress(&addressShowSamples, 1, &configurationSize)
+    initSpaceAddress(&addressDirectionToChart, 1, &configurationSize)
+    initSpaceAddress(&addressColourForward, 1, &configurationSize)
+    initSpaceAddress(&addressColourReverse, 1, &configurationSize)
+    initSpaceAddress(&addressSpeedProfilerMode, 1, &configurationSize)
+    initSpaceAddress(&addressCommandedSampleNumber, 2, &configurationSize)
 
     profile = OpenLCBMemorySpace.getMemorySpace(nodeId: nodeId, space: OpenLCBNodeMemoryAddressSpace.speedProfile.rawValue, defaultMemorySize: configurationSize, isReadOnly: false, description: "")
 
@@ -67,6 +72,9 @@ public class SpeedProfile : NSObject {
       useReedSwitches = true
       useRFIDReaders = true
       useOccupancyDetectors = true
+      directionToChart = .bothDirections
+      colourForward = .blue
+      colourReverse = .red
       showSamples = true
       profile.save()
     }
@@ -101,6 +109,11 @@ public class SpeedProfile : NSObject {
   private var addressEndBlockId            = 0
   private var addressRoute                 = 0
   private var addressShowSamples           = 0
+  private var addressDirectionToChart      = 0
+  private var addressColourForward         = 0
+  private var addressColourReverse         = 0
+  private var addressSpeedProfilerMode     = 0
+  private var addressCommandedSampleNumber = 0
   
   // MARK: Public Properties
   
@@ -163,6 +176,65 @@ public class SpeedProfile : NSObject {
     }
   }
   
+  public var speedProfilerMode : SpeedProfilerMode {
+    get {
+      return SpeedProfilerMode(rawValue: profile.getUInt8(address: addressSpeedProfilerMode)!)!
+    }
+    set(value) {
+      profile.setUInt(address: addressSpeedProfilerMode, value: value.rawValue)
+      delegate?.inspectorNeedsUpdate?(profile: self)
+    }
+  }
+  
+  public var commandedSampleNumber : UInt16 {
+    get {
+      return profile.getUInt16(address: addressCommandedSampleNumber)!
+    }
+    set(value) {
+      profile.setUInt(address: addressCommandedSampleNumber, value: value)
+    }
+  }
+  
+  public func commandedSampleTitle(sampleNumber:UInt16) -> String {
+    let speed = UnitSpeed.convert(fromValue: maximumSpeed * Double(sampleNumber) / Double(numberOfSamples - 1), fromUnits: .defaultValueScaleSpeed, toUnits: appNode!.unitsScaleSpeed)
+    let formatter = NumberFormatter()
+    formatter.alwaysShowsDecimalSeparator = true
+    formatter.maximumFractionDigits = 3
+    formatter.minimumFractionDigits = 3
+    formatter.numberStyle = .decimal
+    return formatter.string(from: NSNumber(value: speed)) ?? ""
+  }
+  
+  public var directionToChart : SamplingDirection {
+    get {
+      return SamplingDirection(rawValue: profile.getUInt8(address: addressDirectionToChart)!)!
+    }
+    set(value) {
+      profile.setUInt(address: addressDirectionToChart, value: value.rawValue)
+      delegate?.chartNeedsUpdate?(profile: self)
+    }
+  }
+
+  public var colourForward : Colour {
+    get {
+      return Colour(rawValue: profile.getUInt8(address: addressColourForward)!)!
+    }
+    set(value) {
+      profile.setUInt(address: addressColourForward, value: value.rawValue)
+      delegate?.chartNeedsUpdate?(profile: self)
+    }
+  }
+
+  public var colourReverse : Colour {
+    get {
+      return Colour(rawValue: profile.getUInt8(address: addressColourReverse)!)!
+    }
+    set(value) {
+      profile.setUInt(address: addressColourReverse, value: value.rawValue)
+      delegate?.chartNeedsUpdate?(profile: self)
+    }
+  }
+
   public var numberOfSamples : UInt16 {
     get {
       return profile.getUInt16(address: addressNumberOfSamples)!
@@ -430,6 +502,16 @@ public class SpeedProfile : NSObject {
       return locomotiveControlBasis.title
     case .locomotiveFacingDirection:
       return locomotiveFacingDirection.title
+    case .colourForward:
+      return colourForward.title
+    case .colourReverse:
+      return colourReverse.title
+    case .profilerMode:
+      return speedProfilerMode.title
+    case .commandedSampleNumber:
+      return commandedSampleTitle(sampleNumber: commandedSampleNumber)
+    case .directionToChart:
+      return directionToChart.title
     case .maximumSpeed, .maximumSpeedLabel:
       
       let formatter = NumberFormatter()
@@ -549,8 +631,23 @@ public class SpeedProfile : NSObject {
         maximumSpeed = temp
         tableNeedsReset = true
       }
+    case .profilerMode:
+      speedProfilerMode = SpeedProfilerMode(title: string)!
+    case .commandedSampleNumber:
+      for sample : UInt16 in 0 ... numberOfSamples - 1 {
+        if string == commandedSampleTitle(sampleNumber: sample) {
+          commandedSampleNumber = sample
+          break
+        }
+      }
     case .locomotiveTravelDirectionToSample:
       locomotiveTravelDirection = SamplingDirection(title: string)!
+    case .directionToChart:
+      directionToChart = SamplingDirection(title: string)!
+    case .colourForward:
+      colourForward = Colour(title: string)!
+    case .colourReverse:
+      colourReverse = Colour(title: string)!
     case .numberOfSamples:
       let temp = UInt16(string)!
       if temp != numberOfSamples {
@@ -602,6 +699,7 @@ public class SpeedProfile : NSObject {
       }
     case .route:
       route = string.trimmingCharacters(in: .whitespaces).isEmpty ? 0 : UInt16(string)!
+    
     default:
       break
     }
