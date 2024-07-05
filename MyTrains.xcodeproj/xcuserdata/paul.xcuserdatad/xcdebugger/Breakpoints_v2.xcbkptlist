@@ -174,8 +174,8 @@
             filePath = "MyTrains/_app/AppDelegate.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "370"
-            endingLineNumber = "370"
+            startingLineNumber = "379"
+            endingLineNumber = "379"
             landmarkName = "initiateRebootApplication()"
             landmarkType = "7">
          </BreakpointContent>
@@ -254,8 +254,8 @@
             filePath = "MyTrains/_app/AppDelegate.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "337"
-            endingLineNumber = "337"
+            startingLineNumber = "346"
+            endingLineNumber = "346"
             landmarkName = "openWindows()"
             landmarkType = "7">
          </BreakpointContent>
@@ -542,8 +542,8 @@
             filePath = "MyTrains/OpenLCB/_tasks/Speed Profiler/SpeedProfilerVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1166"
-            endingLineNumber = "1166"
+            startingLineNumber = "1170"
+            endingLineNumber = "1170"
             landmarkName = "locomotiveListUpdated(appNode:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -558,10 +558,10 @@
             filePath = "MyTrains/OpenLCB/_tasks/Speed Profiler/SpeedProfilerVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1313"
-            endingLineNumber = "1313"
-            landmarkName = "SpeedProfilerVC"
-            landmarkType = "3">
+            startingLineNumber = "1317"
+            endingLineNumber = "1317"
+            landmarkName = "reloadSamples(profile:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -606,8 +606,8 @@
             filePath = "MyTrains/OpenLCB/_tasks/Speed Profiler/SpeedProfilerVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1455"
-            endingLineNumber = "1455"
+            startingLineNumber = "1459"
+            endingLineNumber = "1459"
             landmarkName = "eventReceived(throttle:message:)"
             landmarkType = "7">
          </BreakpointContent>

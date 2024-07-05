@@ -34,6 +34,17 @@ public enum MyIcon : String {
   case trailingThird          = "TrailingThird"
   case zoomIn                 = "ZoomIn"
   case zoomOut                = "ZoomOut"
+  case wrench                 = "Wrench"
+  case lightbulb              = "LightBulb"
+  case gearshift              = "GearShift"
+  case speaker                = "Speaker"
+  case sliderVertical         = "SliderVertical"
+  case smoke                  = "Smoke"
+  case brake                  = "Brake"
+  case engine                 = "Engine"
+  case envelope               = "Envelope"
+  case button                 = "Button"
+  case id                     = "ID"
   
   // MARK: Public Methods
   

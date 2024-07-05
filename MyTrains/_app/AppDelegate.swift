@@ -320,6 +320,15 @@ public class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCen
       vc.throttle?.delegate = vc
       vc.showWindow()
      
+    case .programmerTool:
+      guard let programmerTool = networkLayer!.getProgrammerTool() else {
+        return
+      }
+      let vc = MyTrainsWindow.programmerTool.viewController as! ProgrammerToolVC
+      vc.programmerTool = programmerTool
+      programmerTool.delegate = vc
+      vc.showWindow()
+
     }
     
   }

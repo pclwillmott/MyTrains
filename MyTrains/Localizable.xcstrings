@@ -510,6 +510,9 @@
     "Add Item to Panel" : {
 
     },
+    "Address" : {
+
+    },
     "Agreement" : {
 
     },
@@ -626,6 +629,9 @@
           }
         }
       }
+    },
+    "Analog Settings" : {
+
     },
     "Analysis Settings" : {
       "comment" : "This is used for the title of the Analysis Settings section in the Speed Profiler."
@@ -962,6 +968,9 @@
           }
         }
       }
+    },
+    "Brake Settings" : {
+
     },
     "Brake Squeal" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -1489,6 +1498,9 @@
           }
         }
       }
+    },
+    "Compatibility" : {
+
     },
     "Computer Date & Time" : {
       "comment" : "Used to indicate what is the initial date and time setting for a clock",
@@ -2044,6 +2056,9 @@
         }
       }
     },
+    "DCC Settings" : {
+
+    },
     "Deactivate Latency (%%UNITS_TIME%%)" : {
       "comment" : "This is used for the title of an input field where the user enters the time delay between a sensor being deactivated and when it sends the event report. The %%UNITS_TIME%% will be replaced at runtime by the name of the user selected units of time - place this at an approprate position in the title for the language."
     },
@@ -2429,6 +2444,9 @@
           }
         }
       }
+    },
+    "Driving Characteristics" : {
+
     },
     "Duplicate Node ID Detected" : {
 
@@ -3113,6 +3131,15 @@
 
     },
     "Function Description Information" : {
+
+    },
+    "Function Mappings" : {
+
+    },
+    "Function Outputs" : {
+
+    },
+    "Function Settings" : {
 
     },
     "General Settings" : {
@@ -4108,6 +4135,9 @@
         }
       }
     },
+    "Manual CV Input" : {
+
+    },
     "Manual Notch Down" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -4373,6 +4403,9 @@
           }
         }
       }
+    },
+    "Motor Settings" : {
+
     },
     "Motorola Trinary" : {
       "comment" : "Used for LocoNet train control protocol selection",
@@ -5076,6 +5109,9 @@
     "Profiler Mode" : {
       "comment" : "This is used for the title of combobox."
     },
+    "Programmer Tool" : {
+
+    },
     "Protocol Support Inquiry" : {
 
     },
@@ -5494,9 +5530,6 @@
     "Route Length Settings" : {
       "comment" : "This is used for the title of the Route Length Settings section in the Layout Builder."
     },
-    "Route Not Set" : {
-
-    },
     "Route Set Failed" : {
 
     },
@@ -5879,6 +5912,9 @@
     "Show Quick Help Inspector" : {
 
     },
+    "Show Read/Write CVs Inspector" : {
+
+    },
     "Show Route Inspector" : {
 
     },
@@ -5889,6 +5925,9 @@
       "comment" : "This is used for a tooltip."
     },
     "Show Settings Inspector" : {
+
+    },
+    "Show Sound Inspector" : {
 
     },
     "Show Speed Constraints Inspector" : {
@@ -6022,6 +6061,9 @@
         }
       }
     },
+    "Smoke Unit" : {
+
+    },
     "Software Version" : {
 
     },
@@ -6076,11 +6118,20 @@
         }
       }
     },
+    "Sound Settings" : {
+
+    },
+    "Sound Slot Settings" : {
+
+    },
     "South Africa" : {
       "comment" : "This is the name of a country."
     },
     "Spain" : {
       "comment" : "This is the name of a country."
+    },
+    "Special Options" : {
+
     },
     "Speed Constraints" : {
 
@@ -7595,9 +7646,6 @@
           }
         }
       }
-    },
-    "You have not set a route in the route inspector." : {
-
     },
     "You may either select any layout stored locally on this MyTrains workstation or an active layout stored on another MyTrains workstation connected to this LCC/OpenLCB network. You can only modify layouts that are stored locally." : {
       "localizations" : {

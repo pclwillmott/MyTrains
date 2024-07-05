@@ -1120,6 +1120,10 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
   
   @objc func btnStartProfilingAction(_ sender:NSButton) {
     
+    esuCVExtract()
+    
+    return
+    
     guard let profile, let appNode, let layout = appNode.layout else {
       return
     }

@@ -6,308 +6,368 @@
 //
 
 import Foundation
-import Cocoa
+import AppKit
 
 // https://github.com/JMRI/JMRI/blob/master/xml/decoders/esu/v4decoderInfoCVs.xml
 
-class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, CSVParserDelegate {
+class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, MyTrainsAppDelegate {
+  
+  // MARK: Constructors & Destructors
+  
+  deinit {
+
+    NSLayoutConstraint.deactivate(settingsConstraints)
+    settingsConstraints.removeAll()
+
+    NSLayoutConstraint.deactivate(constraints)
+    constraints.removeAll()
+    
+    selectorStackView?.subviews.removeAll()
+    selectorStackView = nil
+    
+    pnlInspectorView.removeAll()
+    
+    pnlInspectorButtons?.subviews.removeAll()
+    pnlInspectorButtons = nil
+    
+    cboProgrammingTrack?.removeAllItems()
+    cboProgrammingTrack = nil
+    
+    for view in pnlGroups {
+      view.subviews.removeAll()
+    }
+    pnlGroups.removeAll()
+    
+    btnGroups.removeAll()
+    
+    lblGroups.removeAll()
+
+    pnlSettings?.subviews.removeAll()
+    pnlSettings = nil
+    
+    for index in 0 ... pnlSettingsView.count - 1 {
+      if let group = ProgrammerToolSettingsGroup(rawValue: index) {
+        switch group {
+        case .manualCVInput:
+          break
+        default:
+          pnlSettingsView[index].subviews.removeAll()
+        }
+      }
+    }
+    pnlSettingsView.removeAll()
+    
+  }
+  
+  // MARK: Controls
+  
+  private var constraints : [NSLayoutConstraint] = []
+  
+  private var cboProgrammingTrack : MyComboBox? = MyComboBox()
+  
+  private var pnlInspectorButtons : NSView? = NSView()
+  
+  private var pnlInspectorView : [ProgrammerToolInspector:NSView] = [:]
+  
+  private var pnlGroups : [NSView] = []
+  
+  private var btnGroups : [NSButton] = []
+  
+  private var lblGroups : [NSTextField] = []
+  
+  private var settingsConstraints : [NSLayoutConstraint] = []
+  
+  private var selectorStackView : ScrollVerticalStackView? = ScrollVerticalStackView()
+  
+  private var pnlSettings : NSView? = NSView()
+  
+  private var pnlSettingsView : [NSView] = []
   
   // MARK: Window & View Control
   
-  override func windowWillClose(_ notification: Notification) {
-//    appDelegate.networkLayer?.releaseProgrammerTool(programmerTool: programmerTool!)
-    super.windowWillClose(notification)
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    viewType = .programmerTool
   }
   
+  override func windowWillClose(_ notification: Notification) {
+    
+    if let programmerTool {
+      programmerTool.delegate = nil
+      appDelegate.networkLayer?.releaseProgrammerTool(programmerTool: programmerTool)
+      self.programmerTool = nil
+    }
+    
+    if let observerId, let appNode {
+      appNode.removeObserver(observerId: observerId)
+    }
+    
+    super.windowWillClose(notification)
+    
+  }
+
   override func viewWillAppear() {
     
     super.viewWillAppear()
-    
-    cboProgrammingTrack.dataSource = cboProgrammingTrackDS
-
-    let programmingTrackId = UInt64(UserDefaults.standard.integer(forKey: DEFAULT.PROGRAMMING_TRACK_ID))
-    
-    if let index = cboProgrammingTrackDS.indexWithKey(key: programmingTrackId) {
-      cboProgrammingTrack.selectItem(at: index)
-      programmerTool?.programmingTrackId = programmingTrackId
+   
+    guard let appNode, let cboProgrammingTrack, let pnlInspectorButtons, let selectorStackView, let pnlSettings else {
+      return
     }
-
-    cboTrainNode.dataSource = cboTrainNodeDS
     
-    self.view.window?.title = "\(programmerTool!.userNodeName) (\(programmerTool!.nodeId.toHexDotFormat(numberOfBytes: 6)))"
+    observerId = appNode.addObserver(observer: self)
     
-    programmerTool?.cvs = []
-    tableViewDS.programmerTool = programmerTool
-    tableView.dataSource = tableViewDS
-    tableView.delegate = tableViewDS
-    tableView.reloadData()
+    // Selection Section
+    
+    cboProgrammingTrack.translatesAutoresizingMaskIntoConstraints = false
+    
+    view.addSubview(cboProgrammingTrack)
+    
+    constraints.append(cboProgrammingTrack.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: 1.0))
+    constraints.append(cboProgrammingTrack.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 1.0))
+    constraints.append(view.trailingAnchor.constraint(equalToSystemSpacingAfter: cboProgrammingTrack.trailingAnchor, multiplier: 1.0))
+    
+    pnlInspectorButtons.translatesAutoresizingMaskIntoConstraints = false
+//    pnlInspectorButtons.backgroundColor = NSColor.orange.cgColor
+    
+    view.addSubview(pnlInspectorButtons)
+    
+    // Inspector Section
+    
+    constraints.append(pnlInspectorButtons.topAnchor.constraint(equalToSystemSpacingBelow: cboProgrammingTrack.bottomAnchor, multiplier: 1.0))
+    constraints.append(pnlInspectorButtons.centerXAnchor.constraint(equalTo: view.centerXAnchor))
+    
+    var lastButton : NSButton?
+    
+    for item in ProgrammerToolInspector.allCases {
+      
+      let button = item.button
+      button.target = self
+      button.action = #selector(btnInspectorAction(_:))
+      pnlInspectorButtons.addSubview(button)
+      constraints.append(button.centerYAnchor.constraint(equalTo: pnlInspectorButtons.centerYAnchor))
+      if lastButton == nil {
+        constraints.append(button.leadingAnchor.constraint(equalToSystemSpacingAfter: pnlInspectorButtons.leadingAnchor, multiplier: 1.0))
+      }
+      else {
+        constraints.append(button.leadingAnchor.constraint(equalToSystemSpacingAfter: lastButton!.trailingAnchor, multiplier: 1.0))
+      }
+      constraints.append(button.heightAnchor.constraint(equalToConstant: 30))
+      constraints.append(pnlInspectorButtons.heightAnchor.constraint(equalTo: button.heightAnchor))
+      lastButton = button
+      
+      var inspectorPanel : NSView?
+      
+      switch item {
+      case .identity, .quickHelp, .sound:
+        inspectorPanel = ScrollVerticalStackView()
+        if let stackView = inspectorPanel as? ScrollVerticalStackView {
+          stackView.backgroundColor = NSColor.clear.cgColor
+          stackView.stackView?.orientation = .vertical
+          stackView.stackView?.spacing = 4
+        }
+      case .rwCVs:
+        inspectorPanel = NSView()
+      case .settings:
+        inspectorPanel = NSSplitView()
+        if let splitView = inspectorPanel as? NSSplitView {
+          splitView.isVertical = true
+          splitView.arrangesAllSubviews = true
+          selectorStackView.translatesAutoresizingMaskIntoConstraints = false
+          splitView.addArrangedSubview(selectorStackView)
+          pnlSettings.translatesAutoresizingMaskIntoConstraints = false
+          splitView.addArrangedSubview(pnlSettings)
+          userSettings?.splitView = splitView
+        }
+      }
+      
+      if let inspectorPanel {
+        
+        inspectorPanel.translatesAutoresizingMaskIntoConstraints = false
+//        inspectorPanel.backgroundColor = item.backgroundColor
+        
+        pnlInspectorView[item] = inspectorPanel
+        
+        view.addSubview(inspectorPanel)
+        
+        constraints.append(inspectorPanel.topAnchor.constraint(equalToSystemSpacingBelow: pnlInspectorButtons.bottomAnchor, multiplier: 1.0))
+        constraints.append(inspectorPanel.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 1.0))
+        constraints.append(view.trailingAnchor.constraint(equalToSystemSpacingAfter: inspectorPanel.trailingAnchor, multiplier: 1.0))
+        constraints.append(view.bottomAnchor.constraint(equalToSystemSpacingBelow: inspectorPanel.bottomAnchor, multiplier: 1.0))
+        
+      }
+      
+    }
+    
+    constraints.append(pnlInspectorButtons.trailingAnchor.constraint(equalToSystemSpacingAfter: lastButton!.trailingAnchor, multiplier: 1.0))
+    
+    // Settings Group Selectors
+    
+    for group in ProgrammerToolSettingsGroup.allCases {
+      
+      var view = NSView()
+      
+      view.translatesAutoresizingMaskIntoConstraints = false
+      view.backgroundColor = nil
+      
+      let button = group.button
+      button.tag = group.rawValue
+      button.target = self
+      button.action = #selector(btnSelectorAction(_:))
+      view.addSubview(button)
+      
+      btnGroups.append(button)
+      
+      let label = NSTextField(labelWithString: group.title)
+      label.translatesAutoresizingMaskIntoConstraints = false
+      label.tag = group.rawValue
+      label.alignment = .center
+      label.target = self
+      label.action = #selector(btnSelectorAction(_:))
 
+      view.addSubview(label)
+      
+      lblGroups.append(label)
+      
+      pnlGroups.append(view)
+      
+      var settingsView : NSView?
+      
+      switch group {
+      case .manualCVInput:
+        settingsView = NSScrollView()
+        if let scrollView = settingsView as? NSScrollView {
+          scrollView.documentView = NSTableView()
+        }
+      default:
+        settingsView = ScrollVerticalStackView()
+      }
+      
+      if let settingsView {
+        
+        settingsView.translatesAutoresizingMaskIntoConstraints = false
+        settingsView.isHidden = true
+        
+        pnlSettingsView.append(settingsView)
+        
+        pnlSettings.addSubview(settingsView)
+        
+      }
+      
+    }
+    
+    NSLayoutConstraint.activate(constraints)
+
+    currentInspector = ProgrammerToolInspector(rawValue: userSettings!.integer(forKey: DEFAULT.PROGRAMMER_TOOL_CURRENT_INSPECTOR)) ?? .quickHelp
+
+    currentSelector = ProgrammerToolSettingsGroup(rawValue: userSettings!.integer(forKey: DEFAULT.PROGRAMMER_TOOL_CURRENT_SELECTOR)) ?? .address
+
+    displaySettings()
+    
   }
   
   // MARK: Private Properties
   
-  private var cboProgrammingTrackDS = ComboBoxSimpleDS()
+  private var observerId : Int?
   
-  private var cboTrainNodeDS = ComboBoxSimpleDS()
+  private var currentInspector : ProgrammerToolInspector = .quickHelp {
+    didSet {
+      for view in pnlInspectorButtons!.subviews {
+        if let button = view as? NSButton {
+          button.state = .off
+          button.contentTintColor = button.tag == currentInspector.rawValue ? NSColor.systemBlue : nil
+        }
+      }
+      for (key, item) in pnlInspectorView {
+        item.isHidden = key != currentInspector
+      }
+      userSettings?.set(currentInspector.rawValue, forKey: DEFAULT.PROGRAMMER_TOOL_CURRENT_INSPECTOR)
+    }
+  }
   
-  private var tableViewDS = ProgrammerToolTableViewDS()
-  
-  private var csvParser : CSVParser?
-  
+  private var currentSelector : ProgrammerToolSettingsGroup = .address {
+    didSet {
+
+      for index in 0 ... btnGroups.count - 1 {
+        btnGroups[index].contentTintColor = nil
+        lblGroups[index].textColor = nil
+        pnlSettingsView[index].isHidden = true
+      }
+      btnGroups[currentSelector.rawValue].contentTintColor = NSColor.systemBlue
+      lblGroups[currentSelector.rawValue].textColor = NSColor.systemBlue
+      pnlSettingsView[currentSelector.rawValue].isHidden = false
+      
+      userSettings?.set(currentSelector.rawValue, forKey: DEFAULT.PROGRAMMER_TOOL_CURRENT_SELECTOR)
+
+    }
+  }
+
   // MARK: Public Properties
   
   public var programmerTool : OpenLCBProgrammerToolNode?
-  
-  // MARK: CSVParserDelegate Methods
-  
-  func csvParserDidStartDocument() {
-  }
-  
-  func csvParserDidEndDocument() {
-    tableView.reloadData()
-  }
-  
-  func csvParser(didStartRow row: Int) {
-    cvNumber = nil
-  }
-  
-  func csvParser(didEndRow row: Int) {
-  }
-  
-  private var cvNumber : Int?
-  
-  func csvParser(foundCharacters column: Int, string: String) {
-    if column == 0 {
-      if string == "CV" {
-        return
-      }
-      cvNumber = Int(string.trimmingCharacters(in: .whitespacesAndNewlines))
-    }
-    else if column == 1 {
-      if string == "Default Value" {
-        return
-      }
-      if let cvNumber, let value = UInt8(string.trimmingCharacters(in: .whitespacesAndNewlines)) {
-        programmerTool?.cvs[cvNumber - 1 + programmerTool!.defaultOffset] = value
-      }
-    }
-    else if column == 2 {
-      if string == "Value" {
-        return
-      }
-      if let cvNumber, let value = UInt8(string.trimmingCharacters(in: .whitespacesAndNewlines)) {
-        programmerTool?.cvs[cvNumber - 1] = value
-      }
-    }
-  }
 
-  // MARK: OpenLCBProgrammerToolDelegate Methods
+  // MARK: Private Methods
   
-  @objc public func programmingModeUpdated(ProgrammerTool:OpenLCBProgrammerToolNode, programmingMode:Int) {
-    cboProgrammingTrackMode.selectItem(at: programmingMode)
-  }
-
-  @objc public func programmingTracksUpdated(programmerTool:OpenLCBProgrammerToolNode, programmingTracks:[UInt64:String]) {
+  private func displaySettings() {
     
-    cboProgrammingTrackDS.dictionary = programmingTracks
-    cboProgrammingTrack.reloadData()
+    NSLayoutConstraint.deactivate(settingsConstraints)
+    settingsConstraints.removeAll()
     
-    let programmingTrackId = UInt64(UserDefaults.standard.integer(forKey: DEFAULT.PROGRAMMING_TRACK_ID))
-    
-    if let index = cboProgrammingTrackDS.indexWithKey(key: programmingTrackId) {
-      cboProgrammingTrack.selectItem(at: index)
-    }
-
-  }
-  
-  @objc public func dccTrainsUpdated(programmerTool:OpenLCBProgrammerToolNode, dccTrainNodes:[UInt64:String]) {
-    cboTrainNodeDS.dictionary = dccTrainNodes
-    cboTrainNode.reloadData()
-  }
-  
-  @objc public func cvDataUpdated(programmerTool:OpenLCBProgrammerToolNode, cvData:[UInt8]) {
-    tableView.reloadData()
-    txtCV31.integerValue = Int(cvData[30])
-    txtCV32.integerValue = Int(cvData[31])
-  }
-
-  @objc public func statusUpdate(ProgrammerTool:OpenLCBProgrammerToolNode, status:String) {
-    var text = txtActions.string
-    if status.isEmpty {
-      text = ""
-    }
-    if !txtActions.string.isEmpty && txtActions.string.last! != " " {
-      text += "\n"
-    }
-    text += status
-    txtActions.string = text
-    if !text.isEmpty {
-      let range = NSMakeRange(text.count - 1, 0)
-      txtActions.scrollRangeToVisible(range)
-    }
-
-  }
-  
-  // MARK: Outlets & Actions
-  
-  @IBOutlet weak var cboProgrammingTrack: NSComboBox!
-  
-  @IBAction func cboProgrammingTrackAction(_ sender: NSComboBox) {
-    if let id = cboProgrammingTrackDS.keyForItemAt(index: cboProgrammingTrack.indexOfSelectedItem) {
-      UserDefaults.standard.set(id, forKey: DEFAULT.PROGRAMMING_TRACK_ID)
-    }
-  }
-  
-  @IBOutlet weak var cboTrainNode: NSComboBox!
-  
-  @IBAction func cboTrainNodeAction(_ sender: NSComboBox) {
-    if let trainNodeId = cboTrainNodeDS.keyForItemAt(index: cboTrainNode.indexOfSelectedItem) {
-      programmerTool?.dccTrainNodeId = trainNodeId
-    }
-  }
-  
-  @IBAction func btnGetAllAction(_ sender: NSButton) {
-    programmerTool?.getAllValues()
-  }
-  
-  @IBAction func btnSetAllAction(_ sender: NSButton) {
-    programmerTool?.setAllValues()
-  }
-  
-  @IBAction func btnCancelAction(_ sender: NSButton) {
-    programmerTool?.cancelOperation()
-  }
-  
-  @IBAction func btnImportCSVAction(_ sender: NSButton) {
-    
-    let panel = NSOpenPanel()
-    
-    panel.directoryURL = lastCSVPath
-    panel.canChooseDirectories = false
-    panel.canChooseFiles = true
-    panel.allowsOtherFileTypes = true
-    panel.allowedContentTypes = [.csv]
-    
-    if (panel.runModal() == .OK) {
+    if let selectorStackView, let pnlSettings {
       
-      lastCSVPath = panel.directoryURL!.deletingLastPathComponent()
+      selectorStackView.removeSubViews()
       
-      csvParser = CSVParser(withURL: panel.url!)
-      csvParser?.delegate = self
-      csvParser?.columnSeparator = ","
-      csvParser?.lineTerminator = "\n"
-      csvParser?.stringDelimiter = "\""
-      csvParser?.parse()
-    }
+      for index in 0 ... pnlGroups.count - 1 {
+      
+        // TODO: Add Test Here
+        
+        let selectorView = pnlGroups[index]
+        
+        selectorStackView.addArrangedSubview(selectorView)
+        
+        let button = btnGroups[index]
+        
+        let label = lblGroups[index]
+        
+        let settingsView = pnlSettingsView[index]
+        
+        settingsConstraints.append(button.topAnchor.constraint(equalToSystemSpacingBelow: selectorView.topAnchor, multiplier: 0.5))
+        settingsConstraints.append(button.centerXAnchor.constraint(equalTo: selectorView.centerXAnchor))
+        settingsConstraints.append(label.topAnchor.constraint(equalToSystemSpacingBelow: button.bottomAnchor, multiplier: 1.0))
+        settingsConstraints.append(label.centerXAnchor.constraint(equalTo: selectorView.centerXAnchor))
+        settingsConstraints.append(selectorView.bottomAnchor.constraint(equalToSystemSpacingBelow: label.bottomAnchor, multiplier: 0.5))
+        
+        settingsConstraints.append(selectorStackView.stackView!.widthAnchor.constraint(greaterThanOrEqualTo: label.widthAnchor))
 
-  }
-  
-  @IBAction func btnExportCSVAction(_ sender: NSButton) {
-    
-    let panel = NSSavePanel()
-    
-    panel.directoryURL = lastCSVPath
-    
-    panel.nameFieldStringValue = cboTrainNode.stringValue
-
-    panel.canCreateDirectories = true
-    
-    panel.allowedContentTypes = [.csv]
-    
-    if (panel.runModal() == .OK) {
-      
-      lastCSVPath = panel.directoryURL!.deletingLastPathComponent()
-      
-      var output = "\"CV\",\"Default Value\",\"Value\"\n"
-      
-      for cvNumber in 1...256 {
-        output += "\(cvNumber), \(programmerTool!.cvs[cvNumber - 1 + programmerTool!.defaultOffset]), \(programmerTool!.cvs[cvNumber - 1])\n"
+        settingsConstraints.append(settingsView.topAnchor.constraint(equalTo: pnlSettings.topAnchor))
+        settingsConstraints.append(settingsView.leadingAnchor.constraint(equalTo: pnlSettings.leadingAnchor))
+        settingsConstraints.append(settingsView.trailingAnchor.constraint(equalTo: pnlSettings.trailingAnchor))
+        settingsConstraints.append(settingsView.bottomAnchor.constraint(equalTo: pnlSettings.bottomAnchor))
+        
       }
       
-      try? output.write(to: panel.url!, atomically: true, encoding: .utf8)
+    }
+    
+    NSLayoutConstraint.activate(settingsConstraints)
+    
+  }
+  
+  // MARK: Actions
+  
+  @objc public func btnInspectorAction(_ sender:NSButton) {
+    
+    if let item = ProgrammerToolInspector(rawValue: sender.tag) {
+      currentInspector = item
+    }
+    
+  }
 
+  @objc public func btnSelectorAction(_ sender:AnyObject) {
+    
+    if let item = ProgrammerToolSettingsGroup(rawValue: sender.tag) {
+      currentSelector = item
     }
+    
+  }
 
-  }
-  
-  @IBAction func btnGetDefaultAction(_ sender: NSButton) {
-    programmerTool?.getDefaultValue(cvNumber: sender.tag)
-  }
-  
-  @IBAction func btnSetDefaultAction(_ sender: NSButton) {
-    programmerTool?.setDefaultValue(cvNumber: sender.tag)
-  }
-  
-  @IBAction func btnGetValueAction(_ sender: NSButton) {
-    programmerTool?.getValue(cvNumber: sender.tag)
-  }
-  
-  @IBAction func btnSetValueAction(_ sender: NSButton) {
-    programmerTool?.setValue(cvNumber: sender.tag)
-  }
-  
-  @IBAction func btnSetToDefaultAction(_ sender: NSButton) {
-    programmerTool?.setValueToDefault(cvNumber: sender.tag)
-  }
-  
-  @IBAction func cboNumberBaseAction(_ sender: NSComboBox) {
-    programmerTool!.setNumberBase(cvNumber: sender.tag, value: UInt8(NumberBase.selected(comboBox: sender).rawValue))
-    tableView.reloadData()
-  }
-  
-  @IBOutlet weak var tableView: NSTableView!
-  
-  @IBAction func tableViewAction(_ sender: NSTableView) {
-  }
-  
-  @IBAction func txtDefaultAction(_ sender: NSTextField) {
-    programmerTool?.cvs[1024 + sender.tag] = UInt8(sender.integerValue & 0xff)
-  }
-  
-  @IBAction func txtValueAction(_ sender: NSTextField) {
-    programmerTool?.cvs[sender.tag] = UInt8(sender.integerValue & 0xff)
-  }
-  
-  @IBOutlet weak var cboProgrammingTrackMode: NSComboBox!
-  
-  @IBAction func cboProgrammingTrackModeAction(_ sender: NSComboBox) {
-    programmerTool?.programmingMode = cboProgrammingTrackMode.indexOfSelectedItem
-  }
-  
-  @IBOutlet weak var txtCV31: NSTextField!
-  
-  @IBAction func txtCV31Action(_ sender: NSTextField) {
-    if let value = UInt8(sender.stringValue) {
-      programmerTool?.cvs[30] = value
-      programmerTool?.setValue(cvNumber: 30)
-    }
-  }
-  
-  @IBOutlet weak var txtCV32: NSTextField!
-  
-  @IBAction func txtCV32Action(_ sender: NSTextField) {
-    if let value = UInt8(sender.stringValue) {
-      programmerTool?.cvs[31] = value
-      programmerTool?.setValue(cvNumber: 31)
-    }
-  }
-  
-  @IBAction func btnGetAllIndexedAction(_ sender: NSButton) {
-    programmerTool?.getAllValuesIndexed()
-  }
-  
-  @IBAction func btnSetAllIndexedAction(_ sender: NSButton) {
-    programmerTool?.setAllValuesIndexed()
-  }
-  
-  @IBAction func btnGetAllExtendedAction(_ sender: NSButton) {
-    programmerTool?.getAllValuesExtended()
-  }
-  
-  @IBAction func btnSetAllExtendedAction(_ sender: NSButton) {
-    programmerTool?.setAllValuesExtended()
-  }
-  
-  @IBOutlet var txtActions: NSTextView!
-  
+
 }
