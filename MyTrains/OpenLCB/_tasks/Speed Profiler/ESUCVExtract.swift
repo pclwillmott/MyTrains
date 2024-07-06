@@ -9,6 +9,10 @@ import Foundation
 
 public func esuCVExtract() {
   
+  let x = Decoder(decoderType: .lokSound5)
+  debugLog("Here")
+  return
+  
   let fm = FileManager.default
   
   let path = "/Users/paul/Desktop/CV EXPORTS"
@@ -33,8 +37,13 @@ public func esuCVExtract() {
       
       let parts = decoder.split(separator: "(")
       
-      let decoderTitle = String(parts[0].trimmingCharacters(in: .whitespaces))
-      let versionNumber = String(parts[1].trimmingCharacters(in: .whitespaces))
+      var decoderTitle = String(parts[0].trimmingCharacters(in: .whitespaces))
+      var versionNumber = String(parts[1].trimmingCharacters(in: .whitespaces))
+      
+      if parts.count == 3 {
+        decoderTitle += " \(versionNumber)"
+        versionNumber = String(parts[2].trimmingCharacters(in: .whitespaces))
+      }
       
       var enumName = decoderTitle.replacingOccurrences(of: " ", with: "")
       enumName = enumName.replacingOccurrences(of: ".", with: "_")
@@ -50,7 +59,9 @@ public func esuCVExtract() {
       
  //     print("  case \(enumName) = \(indexNumber) // \"\(decoderTitle)\" \"\(versionNumber)\"")
 
-      print("    .\(enumName) : \"\(item)\",")
+      let parts2 = item.split(separator: "[")
+      
+ //     print("    .\(enumName) : \"\(parts2[0].trimmingCharacters(in: .whitespaces))\",")
       
       indexNumber += 1
       
@@ -93,9 +104,7 @@ public func esuCVExtract() {
             
             let enumName = String(format: "cv_%03i_%03i_%03i", cv31, cv32, cv)
             
-            let rawValue : UInt64 = (UInt64(cv31) << 24) | (UInt64(cv32) << 16) | (UInt64(cv))
-            
-            cvsFound.insert(rawValue)
+            cvsFound.insert(CV.encodeRawValue(cv31: cv31, cv32: cv32, cv: cv, indexMethod: .cv3132))
             
           }
           
@@ -117,14 +126,13 @@ public func esuCVExtract() {
     
     for item in sorted {
       
-      let cv = item & 0x0000ffff
+      let cv = ((item & 0x0000ffff00000000) >> 32) + 1
       
-      let cv32 = (item & 0x00ff0000) >> 16
+      let cv32 = (item & 0x00ff000000000000) >> 48
       
-      let cv31 = (item & 0xff000000) >> 24
+      let cv31 = (item & 0xff00000000000000) >> 56
       
-//      print("CV31: \(cv31) CV32: \(cv32) CV: \(cv)")
-      
+//      print("\(String(format:"    case cv_%03i_%03i_%03i", cv31, cv32, cv)) = 0x\(item.toHex(numberOfDigits: 16))")
     }
     
 //    print(sorted.count)

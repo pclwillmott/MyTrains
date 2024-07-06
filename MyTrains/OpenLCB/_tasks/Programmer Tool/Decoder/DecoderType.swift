@@ -87,92 +87,318 @@ public enum DecoderType : UInt64, CaseIterable {
   case lokSound5LDCC = 73 // "LokSound 5 L DCC" "5.10.166"
   case lokSound5micro = 74 // "LokSound 5 micro" "5.10.166"
   
+  // MARK: Constructors
+  
+  init?(esuProductId:UInt32) {
+    guard let id = DecoderType.esuProductIdLookup[esuProductId] else {
+      return nil
+    }
+    self = id
+  }
+  
   // MARK: Public Properties
   
-  public var cvListFilename : String {
+  public var allCVlists : [CVList] {
+  
+    var result : [CVList] = []
     
-    let lookup : [DecoderType:String] = [
+    do {
       
-      .lokPilotV4_0DCCPX : "LokPilot V4.0 DCC PX [4.16.9247].cvlist",
-      .lokPilot5L : "LokPilot 5 L [5.10.166].cvlist",
-      .lokPilotV3_0 : "LokPilot V3.0 [0.0.6607].cvlist",
-      .lokPilot5FxmicroDCC : "LokPilot 5 Fx micro DCC [5.10.166].cvlist",
-      .lokSoundmicroV4_0 : "LokSound micro V4.0 [4.17.9249].cvlist",
-      .lokPilotBasic : "LokPilot Basic [0.9.0].cvlist",
-      .lokSoundSelect : "LokSound Select [4.17.9249].cvlist",
-      .lokSound5 : "LokSound 5 [5.10.166].cvlist",
-      .lokPilot5FxmicroNext18DCC : "LokPilot 5 Fx micro Next18 DCC [5.10.166].cvlist",
-      .lokPilotV4_0M4 : "LokPilot V4.0 M4 [4.16.9247].cvlist",
-      .lokSoundSelectL : "LokSound Select L [4.17.9249].cvlist",
-      .lokSound5micro : "LokSound 5 micro [5.10.166].cvlist",
-      .lokPilot5Basic : "LokPilot 5 Basic [5.1.6].cvlist",
-      .lokPilot5micro : "LokPilot 5 micro [5.10.166].cvlist",
-      .lokPilotmicroV4_0 : "LokPilot micro V4.0 [4.16.9247].cvlist",
-      .lokPilotFxNanoV1_0 : "LokPilot Fx Nano V1.0 [1.2.1415].cvlist",
-      .lokPilotMicroSlideInV4_0DCC : "LokPilot Micro SlideIn V4.0 DCC [4.16.9247].cvlist",
-      .lokSoundV4_0M4 : "LokSound V4.0 M4 [4.17.9249].cvlist",
-      .lokSound5microDCC : "LokSound 5 micro DCC [5.10.166].cvlist",
-      .lokPilotStandardV1_0 : "LokPilot Standard V1.0 [1.2.1415].cvlist",
-      .lokPilot5 : "LokPilot 5 [5.10.166].cvlist",
-      .lokSoundV3_5 : "LokSound V3.5 [0.0.6093].cvlist",
-      .lokPilot5microNext18 : "LokPilot 5 micro Next18 [5.10.166].cvlist",
-      .lokSound5XL : "LokSound 5 XL [5.10.166].cvlist",
-      .lokSoundV4_0M4OEM : "LokSound V4.0 M4 OEM [4.17.9249].cvlist",
-      .lokSoundXLV3_5 : "LokSound XL V3.5 [0.0.6093su].cvlist",
-      .lokSound5microDCCDirect : "LokSound micro DCC Direct [5.10.166].cvlist",
-      .lokPilot5MKL : "LokPilot 5 MKL [5.10.166].cvlist",
-      .lokPilot5FxDCC : "LokPilot 5 Fx DCC [5.10.166].cvlist",
-      .lokPilot5Fxmicro : "LokPilot 5 Fx micro [5.10.166].cvlist",
-      .lokSound5microDCCDirectAtlasS2 : "LokSound micro DCC Direct Atlas S2 [5.10.166].cvlist",
-      .lokPilot5Fx : "LokPilot 5 Fx [5.10.166].cvlist",
-      .lokSound5MKL : "LokSound 5 MKL [5.10.166].cvlist",
-      .lokSound5nanoDCCNext18 : "LokSound 5 nano DCC Next18 [5.10.166].cvlist",
-      .lokSoundV4_0 : "LokSound V4.0 [4.17.9249].cvlist",
-      .lokSound5Fx : "LokSound 5 Fx [5.10.166].cvlist",
-      .lokPilot5MKLDCC : "LokPilot 5 MKL DCC [5.10.166].cvlist",
-      .lokPilot5microDCCDirect : "LokPilot 5 micro DCC Direct [5.10.166].cvlist",
-      .lokPilot5LDCC : "LokPilot 5 L DCC [5.10.166].cvlist",
-      .lokPilotV4_0DCC : "LokPilot V4.0 DCC [4.16.9247].cvlist",
-      .lokPilotXLV4_0 : "LokPilot XL V4.0 [4.16.9247].cvlist",
-      .lokPilotmicroV3_0 : "LokPilot micro V3.0 [0.0.6607].cvlist",
-      .lokPilotmicroV4_0DCC : "LokPilot micro V4.0 DCC [4.16.9247].cvlist",
-      .lokSoundSelectdirect_micro : "LokSound Select direct - micro [4.17.9249].cvlist",
-      .lokPilotmicroV3_0DCC : "LokPilot micro V3.0 DCC [0.0.6607].cvlist",
-      .lokSoundmicroV3_5 : "LokSound micro V3.5 [0.0.6093].cvlist",
-      .lokPilotBasicLA : "LokPilot Basic (LA) [0.9.0].cvlist",
-      .lokPilotFxmicroV3_0 : "LokPilot Fx micro V3.0 [0.0.6607].cvlist",
-      .lokSoundXLV4_0 : "LokSound XL V4.0 [4.17.9249].cvlist",
-      .lokSoundSelectOEM : "LokSound Select OEM [4.17.9249].cvlist",
-      .lokSound5nanoDCC : "LokSound 5 nano DCC [5.10.166].cvlist",
-      .essentialSoundUnit : "Essential Sound Unit [5.10.166].cvlist",
-      .lokPilotNanoStandardV1_0 : "LokPilot Nano Standard V1.0 [1.2.1415].cvlist",
-      .lokSoundV3_0M4 : "LokSound V3.0 M4 [0.0.6354].cvlist",
-      .lokSound5LDCC : "LokSound 5 L DCC [5.10.166].cvlist",
-      .lokPilotV3_0OEM : "LokPilot V3.0 OEM [0.0.5973].cvlist",
-      .lokPilotFxV3_0 : "LokPilot Fx V3.0 [0.0.6442].cvlist",
-      .lokPilotXLV3_0 : "LokPilot XL V3.0 [0.0.6607].cvlist",
-      .lokPilot5DCC : "LokPilot 5 DCC [5.10.166].cvlist",
-      .lokSound5microDCCDirectAtlasLegacy : "LokSound micro DCC Direct Atlas Legacy [5.10.166].cvlist",
-      .lokSound5L : "LokSound 5 L [5.10.166].cvlist",
-      .lokPilotV4_0M4MKL : "LokPilot V4.0 M4 MKL [4.16.9247].cvlist",
-      .lokSoundLV4_0 : "LokSound L V4.0 [4.17.9249].cvlist",
-      .lokPilotV3_0M4 : "LokPilot V3.0 M4 [0.0.6445].cvlist",
-      .lokPilot5FxmicroNext18 : "LokPilot 5 Fx micro Next18 [5.10.166].cvlist",
-      .lokSound5FxDCC : "LokSound 5 Fx DCC [5.10.166].cvlist",
-      .lokPilot5microDCC : "LokPilot 5 micro DCC [5.10.166].cvlist",
-      .lokPilotFxV4_0 : "LokPilot Fx V4.0 [4.16.9247].cvlist",
-      .lokPilot5nanoDCC : "LokPilot 5 nano DCC [5.10.166].cvlist",
-      .lokPilotV4_0 : "LokPilot V4.0 [4.16.9247].cvlist",
-      .lokPilotV3_0DCC : "LokPilot V3.0 DCC [0.0.6607].cvlist",
-      .lokPilot5microNext18DCC : "LokPilot 5 micro Next18 DCC [5.10.166].cvlist",
-      .lokSound5DCC : "LokSound 5 DCC [5.10.166].cvlist",
-      .lokSound5microKATO : "LokSound 5 micro KATO [5.10.166].cvlist",
+      let docsArray = try FileManager.default.contentsOfDirectory(atPath: Bundle.main.resourcePath!)
+      
+      for item in docsArray {
+        
+        if item.suffix(7) == ".cvlist" {
+          
+          let parts = item.split(separator: "[")
+          
+          if parts[0].trimmingCharacters(in: .whitespaces) == self.cvListPrefix {
+            var parts2 = parts[1].split(separator: ".")
+            parts2[2].removeLast()
+            
+            if let major = UInt8(parts2[0]), let minor = UInt8(parts2[1]), let build = UInt16(parts2[2]) {
+              result.append((major, minor, build, item))
+            }
+          }
+          
+        }
+        
+      }
+      
+    }
+    catch {
+      debugLog("Error")
+    }
     
+    result.sort {
+      ((UInt32($0.major) << 24) | (UInt32($0.minor) << 16) | UInt32(($0.build))) >
+        ((UInt32($1.major) << 24) | (UInt32($1.minor) << 16) | UInt32(($1.build)))
+    }
+    
+    return result
+    
+  }
+  
+  public var title : String {
+    
+    let lookup : [DecoderType: String] = [
+      .nmra : "NMRA Standard Decoder",
+      .lokPilotV4_0DCCPX : "LokPilot V4.0 DCC PX",
+      .lokPilot5L : "LokPilot 5 L",
+      .lokPilotV3_0 : "LokPilot V3.0",
+      .lokPilot5FxmicroDCC : "LokPilot 5 Fx micro DCC",
+      .lokSoundmicroV4_0 : "LokSound micro V4.0",
+      .lokPilotBasic : "LokPilot Basic",
+      .lokSoundSelect : "LokSound Select",
+      .lokSound5 : "LokSound 5",
+      .lokPilot5FxmicroNext18DCC : "LokPilot 5 Fx micro Next18 DCC",
+      .lokPilotV4_0M4 : "LokPilot V4.0 M4",
+      .lokSoundSelectL : "LokSound Select L",
+      .lokSound5micro : "LokSound 5 micro",
+      .lokPilot5Basic : "LokPilot 5 Basic",
+      .lokPilot5micro : "LokPilot 5 micro",
+      .lokPilotmicroV4_0 : "LokPilot micro V4.0",
+      .lokPilotFxNanoV1_0 : "LokPilot Fx Nano V1.0",
+      .lokPilotMicroSlideInV4_0DCC : "LokPilot Micro SlideIn V4.0 DCC",
+      .lokSoundV4_0M4 : "LokSound V4.0 M4",
+      .lokSound5microDCC : "LokSound 5 micro DCC",
+      .lokPilotStandardV1_0 : "LokPilot Standard V1.0",
+      .lokPilot5 : "LokPilot 5",
+      .lokSoundV3_5 : "LokSound V3.5",
+      .lokPilot5microNext18 : "LokPilot 5 micro Next18",
+      .lokSound5XL : "LokSound 5 XL",
+      .lokSoundV4_0M4OEM : "LokSound V4.0 M4 OEM",
+      .lokSoundXLV3_5 : "LokSound XL V3.5",
+      .lokSound5microDCCDirect : "LokSound 5 micro DCC Direct",
+      .lokPilot5MKL : "LokPilot 5 MKL",
+      .lokPilot5FxDCC : "LokPilot 5 Fx DCC",
+      .lokPilot5Fxmicro : "LokPilot 5 Fx micro",
+      .lokSound5microDCCDirectAtlasS2 : "LokSound 5 micro DCC Direct Atlas S2",
+      .lokPilot5Fx : "LokPilot 5 Fx",
+      .lokSound5MKL : "LokSound 5 MKL",
+      .lokSound5nanoDCCNext18 : "LokSound 5 nano DCC Next18",
+      .lokSoundV4_0 : "LokSound V4.0",
+      .lokSound5Fx : "LokSound 5 Fx",
+      .lokPilot5MKLDCC : "LokPilot 5 MKL DCC",
+      .lokPilot5microDCCDirect : "LokPilot 5 micro DCC Direct",
+      .lokPilot5LDCC : "LokPilot 5 L DCC",
+      .lokPilotV4_0DCC : "LokPilot V4.0 DCC",
+      .lokPilotXLV4_0 : "LokPilot XL V4.0",
+      .lokPilotmicroV3_0 : "LokPilot micro V3.0",
+      .lokPilotmicroV4_0DCC : "LokPilot micro V4.0 DCC",
+      .lokSoundSelectdirect_micro : "LokSound Select direct / micro",
+      .lokPilotmicroV3_0DCC : "LokPilot micro V3.0 DCC",
+      .lokSoundmicroV3_5 : "LokSound micro V3.5",
+      .lokPilotBasicLA : "LokPilot Basic (LA)",
+      .lokPilotFxmicroV3_0 : "LokPilot Fx micro V3.0",
+      .lokSoundXLV4_0 : "LokSound XL V4.0",
+      .lokSoundSelectOEM : "LokSound Select OEM",
+      .lokSound5nanoDCC : "LokSound 5 nano DCC",
+      .essentialSoundUnit : "Essential Sound Unit",
+      .lokPilotNanoStandardV1_0 : "LokPilot Nano Standard V1.0",
+      .lokSoundV3_0M4 : "LokSound V3.0 M4",
+      .lokSound5LDCC : "LokSound 5 L DCC",
+      .lokPilotV3_0OEM : "LokPilot V3.0 OEM",
+      .lokPilotFxV3_0 : "LokPilot Fx V3.0",
+      .lokPilotXLV3_0 : "LokPilot XL V3.0",
+      .lokPilot5DCC : "LokPilot 5 DCC",
+      .lokSound5microDCCDirectAtlasLegacy : "LokSound 5 micro DCC Direct Atlas Legacy",
+      .lokSound5L : "LokSound 5 L",
+      .lokPilotV4_0M4MKL : "LokPilot V4.0 M4 MKL",
+      .lokSoundLV4_0 : "LokSound L V4.0",
+      .lokPilotV3_0M4 : "LokPilot V3.0 M4",
+      .lokPilot5FxmicroNext18 : "LokPilot 5 Fx micro Next18",
+      .lokSound5FxDCC : "LokSound 5 Fx DCC",
+      .lokPilot5microDCC : "LokPilot 5 micro DCC",
+      .lokPilotFxV4_0 : "LokPilot Fx V4.0",
+      .lokPilot5nanoDCC : "LokPilot 5 nano DCC",
+      .lokPilotV4_0 : "LokPilot V4.0",
+      .lokPilotV3_0DCC : "LokPilot V3.0 DCC",
+      .lokPilot5microNext18DCC : "LokPilot 5 micro Next18 DCC",
+      .lokSound5DCC : "LokSound 5 DCC",
+      .lokSound5microKATO : "LokSound 5 micro KATO",
     ]
     
     return lookup[self]!
     
   }
+  
+  public var cvListPrefix : String {
+    
+    let lookup : [DecoderType:String] = [
+      
+      .lokPilotV4_0DCCPX : "LokPilot V4.0 DCC PX",
+      .lokPilot5L : "LokPilot 5 L",
+      .lokPilotV3_0 : "LokPilot V3.0",
+      .lokPilot5FxmicroDCC : "LokPilot 5 Fx micro DCC",
+      .lokSoundmicroV4_0 : "LokSound micro V4.0",
+      .lokPilotBasic : "LokPilot Basic",
+      .lokSoundSelect : "LokSound Select",
+      .lokSound5 : "LokSound 5",
+      .lokPilot5FxmicroNext18DCC : "LokPilot 5 Fx micro Next18 DCC",
+      .lokPilotV4_0M4 : "LokPilot V4.0 M4",
+      .lokSoundSelectL : "LokSound Select L",
+      .lokSound5micro : "LokSound 5 micro",
+      .lokPilot5Basic : "LokPilot 5 Basic",
+      .lokPilot5micro : "LokPilot 5 micro",
+      .lokPilotmicroV4_0 : "LokPilot micro V4.0",
+      .lokPilotFxNanoV1_0 : "LokPilot Fx Nano V1.0",
+      .lokPilotMicroSlideInV4_0DCC : "LokPilot Micro SlideIn V4.0 DCC",
+      .lokSoundV4_0M4 : "LokSound V4.0 M4",
+      .lokSound5microDCC : "LokSound 5 micro DCC",
+      .lokPilotStandardV1_0 : "LokPilot Standard V1.0",
+      .lokPilot5 : "LokPilot 5",
+      .lokSoundV3_5 : "LokSound V3.5",
+      .lokPilot5microNext18 : "LokPilot 5 micro Next18",
+      .lokSound5XL : "LokSound 5 XL",
+      .lokSoundV4_0M4OEM : "LokSound V4.0 M4 OEM",
+      .lokSoundXLV3_5 : "LokSound XL V3.5",
+      .lokSound5microDCCDirect : "LokSound micro DCC Direct",
+      .lokPilot5MKL : "LokPilot 5 MKL",
+      .lokPilot5FxDCC : "LokPilot 5 Fx DCC",
+      .lokPilot5Fxmicro : "LokPilot 5 Fx micro",
+      .lokSound5microDCCDirectAtlasS2 : "LokSound micro DCC Direct Atlas S2",
+      .lokPilot5Fx : "LokPilot 5 Fx",
+      .lokSound5MKL : "LokSound 5 MKL",
+      .lokSound5nanoDCCNext18 : "LokSound 5 nano DCC Next18",
+      .lokSoundV4_0 : "LokSound V4.0",
+      .lokSound5Fx : "LokSound 5 Fx",
+      .lokPilot5MKLDCC : "LokPilot 5 MKL DCC",
+      .lokPilot5microDCCDirect : "LokPilot 5 micro DCC Direct",
+      .lokPilot5LDCC : "LokPilot 5 L DCC",
+      .lokPilotV4_0DCC : "LokPilot V4.0 DCC",
+      .lokPilotXLV4_0 : "LokPilot XL V4.0",
+      .lokPilotmicroV3_0 : "LokPilot micro V3.0",
+      .lokPilotmicroV4_0DCC : "LokPilot micro V4.0 DCC",
+      .lokSoundSelectdirect_micro : "LokSound Select direct - micro",
+      .lokPilotmicroV3_0DCC : "LokPilot micro V3.0 DCC",
+      .lokSoundmicroV3_5 : "LokSound micro V3.5",
+      .lokPilotBasicLA : "LokPilot Basic (LA)",
+      .lokPilotFxmicroV3_0 : "LokPilot Fx micro V3.0",
+      .lokSoundXLV4_0 : "LokSound XL V4.0",
+      .lokSoundSelectOEM : "LokSound Select OEM",
+      .lokSound5nanoDCC : "LokSound 5 nano DCC",
+      .essentialSoundUnit : "Essential Sound Unit",
+      .lokPilotNanoStandardV1_0 : "LokPilot Nano Standard V1.0",
+      .lokSoundV3_0M4 : "LokSound V3.0 M4",
+      .lokSound5LDCC : "LokSound 5 L DCC",
+      .lokPilotV3_0OEM : "LokPilot V3.0 OEM",
+      .lokPilotFxV3_0 : "LokPilot Fx V3.0",
+      .lokPilotXLV3_0 : "LokPilot XL V3.0",
+      .lokPilot5DCC : "LokPilot 5 DCC",
+      .lokSound5microDCCDirectAtlasLegacy : "LokSound micro DCC Direct Atlas Legacy",
+      .lokSound5L : "LokSound 5 L",
+      .lokPilotV4_0M4MKL : "LokPilot V4.0 M4 MKL",
+      .lokSoundLV4_0 : "LokSound L V4.0",
+      .lokPilotV3_0M4 : "LokPilot V3.0 M4",
+      .lokPilot5FxmicroNext18 : "LokPilot 5 Fx micro Next18",
+      .lokSound5FxDCC : "LokSound 5 Fx DCC",
+      .lokPilot5microDCC : "LokPilot 5 micro DCC",
+      .lokPilotFxV4_0 : "LokPilot Fx V4.0",
+      .lokPilot5nanoDCC : "LokPilot 5 nano DCC",
+      .lokPilotV4_0 : "LokPilot V4.0",
+      .lokPilotV3_0DCC : "LokPilot V3.0 DCC",
+      .lokPilot5microNext18DCC : "LokPilot 5 micro Next18 DCC",
+      .lokSound5DCC : "LokSound 5 DCC",
+      .lokSound5microKATO : "LokSound 5 micro KATO",
+      
+    ]
+    
+    return lookup[self]!
+    
+  }
+  
+  // MARK: Public Methods
+  
+  public func cvList(filename:String) -> [(cv: CV, defaultValue:UInt8)] {
+    
+    var result : [(cv: CV, defaultValue:UInt8)] = []
+    
+    do {
+      
+      let text = try String(contentsOfFile: "\(Bundle.main.resourcePath!)/\(filename)", encoding: String.Encoding.utf8)
+      
+      let lines = text.split(separator: "\r\n")
+      
+      var cv31 : UInt8 = 0
+      
+      var cv32 : UInt8 = 0
+      
+      var index = 2
+      
+      var addESUDecoderInfoCDs = false
+      
+      while index < lines.count {
+        
+        let line = lines[index].trimmingCharacters(in: .whitespaces)
+        
+        if !line.isEmpty && line != "--------------------------------" {
+          
+          if line.prefix(7) == "Index: " {
+            
+            let parts = line.suffix(line.count - 7).split(separator: "(")
+            
+            let pageIndex = UInt32(parts[0].trimmingCharacters(in: .whitespaces))!
+            
+            cv31 = UInt8(pageIndex / 256)
+            cv32 = UInt8(pageIndex % 256)
+            
+          }
+          else {
+            
+            let parts = line.split(separator: "=")
+            
+            var cvName = String(parts[0].trimmingCharacters(in: .whitespaces).replacingOccurrences(of: " ", with: ""))
+            cvName.removeFirst(2)
+            
+            let cv = UInt16(cvName)!
+            
+            if let cvConstant = CV(cv31: cv31, cv32: cv32, cv: cv, indexMethod: .cv3132), let cvValue = UInt8(parts[1].trimmingCharacters(in: .whitespaces)) {
+              
+              if cvConstant.index > 255 && addESUDecoderInfoCDs {
+                
+                for cv : UInt16 in 261 ... 296 {
+                  if let cvConstant = CV(cv31: 0, cv32: 255, cv: cv, indexMethod: .cv3132, isHidden: true, isReadOnly: false) {
+                    result.append((cvConstant, 0))
+                  }
+                  else {
+                    debugLog("error: \(cv)")
+                  }
+                }
+                
+                addESUDecoderInfoCDs = false
+                
+              }
+              
+              result.append((cvConstant, cvValue))
+              
+              if cvConstant == .cv_000_000_008 && cvValue == 0x97 {
+                addESUDecoderInfoCDs = true
+              }
+              
+            }
+            else {
+              debugLog("CV Not Found: CV31:\(cv31) CV32:\(cv32) CV:\(cv) \"\(parts[1])\"")
+            }
+            
+          }
+          
+        }
+        
+        index += 1
+        
+      }
+    
+    }
+    catch {
+      debugLog("error: \(filename)")
+    }
+    
+    return result
+
+  }
+  
+  // MARK: Public Class Properties
   
   public static let esuProductIdLookup : [UInt32:DecoderType] = [
    
@@ -182,153 +408,150 @@ public enum DecoderType : UInt64, CaseIterable {
     0x0200009C : lokSound5DCC,
     0x020000F8 : lokSound5DCC,
     0x020000DB : lokSound5DCC,
-   /*
-   0x0200009B  LokSound 5 micro
-   0x0200009E  LokSound 5 micro DCC
-   0x0100009A  LokSound 5 micro DCC Direct
-   0x010000D8  LokSound 5 micro DCC Direct Atlas Legacy
-   0x010000FB  LokSound 5 micro DCC Direct Atlas S2
-   0x010000BC  LokSound 5 nano DCC
-   0x010000E4  LokSound 5 nano DCC Next18
-   0x0200009D  LokSound 5 L
-   0x020000E2  LokSound 5 L
-   0x020000DD  LokSound 5 L
-   0x020000A0  LokSound 5 L DCC
-   0x020000E3  LokSound 5 L DCC
-   0x020000DE  LokSound 5 L DCC
-   0x0200009F  LokSound 5 XL
-   0x020000C5  LokSound 5 Fx
-   0x020000C6  LokSound 5 Fx DCC
-   0x020000A6  LokSound 5 MKL
-   0x020000F9  LokSound 5 MKL
-   0x020000DC  LokSound 5 MKL
-   0x010000BD  LokSound 5 micro KATO
-   0x0200003D  LokSound V4.0
-   0x02000047  LokSound V4.0
-   0x0200006A  LokSound V4.0
-   0x0200003C  LokSound Select
-   0x0200004F  LokSound Select
-   0x0200005F  LokSound Select
-   0x02000089  LokSound Select
-   0x02000041  LokSound micro V4.0
-   0x02000078  LokSound micro V4.0
-   0x0200004A  LokSound Select direct / micro
-   0x0200006F  LokSound Select direct / micro
-   0x02000080  LokSound Select direct / micro
-   0x02000065  LokSound Select OEM
-   0x0200008A  LokSound Select OEM
-   0x0200004B  LokSound XL V4.0
-   0x0200006D  LokSound XL V4.0
-   0x02000044  LokSound V4.0 M4
-   0x02000068  LokSound V4.0 M4
-   0x02000059  LokSound V4.0 M4 OEM
-   0x02000073  LokSound V4.0 M4 OEM
-   0x02000070  LokSound L V4.0
-   0x02000079  LokSound Select L
-   0x0100000D  LokSound V3.5
-   0x01000012  LokSound V3.5
-   0x01000017  LokSound V3.5
-   0x01000020  LokSound V3.5
-   0x0100000E  LokSound XL V3.5
-   0x01000014  LokSound XL V3.5
-   0x01000024  LokSound XL V3.5
-   0x0200000E  LokSound V3.0 M4
-   0x02000015  LokSound V3.0 M4
-   0x02000021  LokSound V3.0 M4
-   0x01000019  LokSound micro V3.5
-   0x0100001E  LokSound micro V3.5
-   0x020000A8  LokPilot 5
-   0x020000CC  LokPilot 5
-   0x020000AA  LokPilot 5 DCC
-   0x020000CE  LokPilot 5 DCC
-   0x010000AE  LokPilot 5 micro
-   0x010000AF  LokPilot 5 micro DCC
-   0x010000E1  LokPilot 5 micro DCC Direct
-   0x020000AC  LokPilot 5 micro Next18
-   0x020000AD  LokPilot 5 micro Next18 DCC
-   0x010000FC  LokPilot 5 nano DCC
-   0x020000B1  LokPilot 5 L
-   0x020000CF  LokPilot 5 L
-   0x020000F0  LokPilot 5 L
-   0x020000B2  LokPilot 5 L DCC
-   0x020000D0  LokPilot 5 L DCC
-   0x020000F1  LokPilot 5 L DCC
-   0x010000BE  LokPilot 5 Fx
-   0x010000D1  LokPilot 5 Fx
-   0x010000BF  LokPilot 5 Fx DCC
-   0x010000D2  LokPilot 5 Fx DCC
-   0x020000B3  LokPilot 5 Fx micro
-   0x020000B4  LokPilot 5 Fx micro DCC
-   0x020000B8  LokPilot 5 Fx micro Next18
-   0x020000B9  LokPilot 5 Fx micro Next18 DCC
-   0x020000A9  LokPilot 5 MKL
-   0x020000CD  LokPilot 5 MKL
-   0x020000B0  LokPilot 5 MKL DCC
-   0x020000D3  LokPilot 5 MKL DCC
-   0x010000C7  LokPilot 5 Basic
-   0x0200003F  LokPilot V4.0
-   0x02000084  LokPilot V4.0
-   0x02000042  LokPilot V4.0 DCC
-   0x02000085  LokPilot V4.0 DCC
-   0x0200005B  LokPilot V4.0 DCC PX
-   0x02000040  LokPilot micro V4.0
-   0x02000046  LokPilot micro V4.0 DCC
-   0x02000043  LokPilot V4.0 M4
-   0x02000086  LokPilot V4.0 M4
-   0x02000055  LokPilot XL V4.0
-   0x02000056  LokPilot Fx V4.0
-   0x0200008B  LokPilot V4.0 M4 MKL
-   0x0200008E  LokPilot Micro SlideIn V4.0 DCC
-   0x0100005C  LokPilot Standard V1.0
-   0x01000091  LokPilot Standard V1.0
-   0x01000088  LokPilot Nano Standard V1.0
-   0x0100008D  LokPilot Fx Nano V1.0
-   0x0200001C  LokPilot V3.0
-   0x02000026  LokPilot V3.0
-   0x02000029  LokPilot V3.0
-   0x0200001D  LokPilot V3.0 DCC
-   0x02000027  LokPilot V3.0 DCC
-   0x0200002A  LokPilot V3.0 DCC
-   0x0200001F  LokPilot V3.0 M4
-   0x02000028  LokPilot V3.0 M4
-   0x0200002B  LokPilot V3.0 M4
-   0x02000023  LokPilot V3.0 OEM
-   0x02000030  LokPilot V3.0 OEM
-   0x02000031  LokPilot V3.0 OEM
-   0x0200002E  LokPilot micro V3.0
-   0x0200002F  LokPilot micro V3.0 DCC
-   0x02000033  LokPilot XL V3.0
-   0x0200002C  LokPilot Fx V3.0
-   0x02000036  LokPilot Fx micro V3.0
-   0x010000A7  SignalPilot
-   0x010000FE  SignalPilot
-   0x020000C0  SwitchPilot 3
-   0x020000D4  SwitchPilot 3
-   0x020000C1  SwitchPilot 3 Plus
-   0x020000D5  SwitchPilot 3 Plus
-   0x020000C2  SwitchPilot 3 Servo
-   0x020000D6  SwitchPilot 3 Servo
-   0x02000058  SwitchPilot V2.0
-   0x0200005A  SwitchPilot Servo V2.0
-   0x01000093  Essential Sound Unit
-   0x010000CB  Essential Sound Unit
-   0x010000DF  Essential Sound Unit
-   0x02000062  Test Coach EHG388
-   0x02000076  Test Coach EHG388 M4
-   0x02000083  Club Car Wgye
-   0x01000061  Smoke Unit (Gauge 0, G)
-   0x02000045  KM1 Smoke Unit
-   0x01000064  ESU digital interior light
-   0x01000081  Scale Trains Tender Light
-   0x0100008F  Pullman panorama car BEX
-   0x010000A2  Pullman Silberling
-   0x010000F4  Pullman BLS Bt9
-   0x01000090  MBW Silberling
-   0x01000092  Bachmann MK2F
-   0x01000097  Walthers ML8
-   0x010000A3  Zeitgeist Models zugspitz car
-   
-   */
+    0x0200009B : lokSound5micro,
+    0x0200009E : lokSound5microDCC,
+    0x0100009A : lokSound5microDCCDirect,
+    0x010000D8 : lokSound5microDCCDirectAtlasLegacy,
+    0x010000FB : lokSound5microDCCDirectAtlasS2,
+    0x010000BC : lokSound5nanoDCC,
+    0x010000E4 : lokSound5nanoDCCNext18,
+    0x0200009D : lokSound5L,
+    0x020000E2 : lokSound5L,
+    0x020000DD : lokSound5L,
+    0x020000A0 : lokSound5LDCC,
+    0x020000E3 : lokSound5LDCC,
+    0x020000DE : lokSound5LDCC,
+    0x0200009F : lokSound5XL,
+    0x020000C5 : lokSound5Fx,
+    0x020000C6 : lokSound5FxDCC,
+    0x020000A6 : lokSound5MKL,
+    0x020000F9 : lokSound5MKL,
+    0x020000DC : lokSound5MKL,
+    0x010000BD : lokSound5microKATO,
+    0x0200003D : lokSoundV4_0,
+    0x02000047 : lokSoundV4_0,
+    0x0200006A : lokSoundV4_0,
+    0x0200003C : lokSoundSelect,
+    0x0200004F : lokSoundSelect,
+    0x0200005F : lokSoundSelect,
+    0x02000089 : lokSoundSelect,
+    0x02000041 : lokSoundmicroV4_0,
+    0x02000078 : lokSoundmicroV4_0,
+    0x0200004A : lokSoundSelectdirect_micro,
+    0x0200006F : lokSoundSelectdirect_micro,
+    0x02000080 : lokSoundSelectdirect_micro,
+    0x02000065 : lokSoundSelectOEM,
+    0x0200008A : lokSoundSelectOEM,
+    0x0200004B : lokSoundXLV4_0,
+    0x0200006D : lokSoundXLV4_0,
+    0x02000044 : lokSoundV4_0M4,
+    0x02000068 : lokSoundV4_0M4,
+    0x02000059 : lokSoundV4_0M4OEM,
+    0x02000073 : lokSoundV4_0M4OEM,
+    0x02000070 : lokSoundLV4_0,
+    0x02000079 : lokSoundSelectL,
+    0x0100000D : lokSoundV3_5,
+    0x01000012 : lokSoundV3_5,
+    0x01000017 : lokSoundV3_5,
+    0x01000020 : lokSoundV3_5,
+    0x0100000E : lokSoundXLV3_5,
+    0x01000014 : lokSoundXLV3_5,
+    0x01000024 : lokSoundXLV3_5,
+    0x0200000E : lokSoundV3_0M4,
+    0x02000015 : lokSoundV3_0M4,
+    0x02000021 : lokSoundV3_0M4,
+    0x01000019 : lokSoundmicroV3_5,
+    0x0100001E : lokSoundmicroV3_5,
+    0x020000A8 : lokPilot5,
+    0x020000CC : lokPilot5,
+    0x020000AA : lokPilot5DCC,
+    0x020000CE : lokPilot5DCC,
+    0x010000AE : lokPilot5micro,
+    0x010000AF : lokPilot5microDCC,
+    0x010000E1 : lokPilot5microDCCDirect,
+    0x020000AC : lokPilot5microNext18,
+    0x020000AD : lokPilot5microNext18DCC,
+    0x010000FC : lokPilot5nanoDCC,
+    0x020000B1 : lokPilot5L,
+    0x020000CF : lokPilot5L,
+    0x020000F0 : lokPilot5L,
+    0x020000B2 : lokPilot5LDCC,
+    0x020000D0 : lokPilot5LDCC,
+    0x020000F1 : lokPilot5LDCC,
+    0x010000BE : lokPilot5Fx,
+    0x010000D1 : lokPilot5Fx,
+    0x010000BF : lokPilot5FxDCC,
+    0x010000D2 : lokPilot5FxDCC,
+    0x020000B3 : lokPilot5Fxmicro,
+    0x020000B4 : lokPilot5FxmicroDCC,
+    0x020000B8 : lokPilot5FxmicroNext18,
+    0x020000B9 : lokPilot5FxmicroNext18DCC,
+    0x020000A9 : lokPilot5MKL,
+    0x020000CD : lokPilot5MKL,
+    0x020000B0 : lokPilot5MKLDCC,
+    0x020000D3 : lokPilot5MKLDCC,
+    0x010000C7 : lokPilot5Basic,
+    0x0200003F : lokPilotV4_0,
+    0x02000084 : lokPilotV4_0,
+    0x02000042 : lokPilotV4_0DCC,
+    0x02000085 : lokPilotV4_0DCC,
+    0x0200005B : lokPilotV4_0DCCPX,
+    0x02000040 : lokPilotmicroV4_0,
+    0x02000046 : lokPilotmicroV4_0DCC,
+    0x02000043 : lokPilotV4_0M4,
+    0x02000086 : lokPilotV4_0M4,
+    0x02000055 : lokPilotXLV4_0,
+    0x02000056 : lokPilotFxV4_0,
+    0x0200008B : lokPilotV4_0M4MKL,
+    0x0200008E : lokPilotMicroSlideInV4_0DCC,
+    0x0100005C : lokPilotStandardV1_0,
+    0x01000091 : lokPilotStandardV1_0,
+    0x01000088 : lokPilotNanoStandardV1_0,
+    0x0100008D : lokPilotFxNanoV1_0,
+    0x0200001C : lokPilotV3_0,
+    0x02000026 : lokPilotV3_0,
+    0x02000029 : lokPilotV3_0,
+    0x0200001D : lokPilotV3_0DCC,
+    0x02000027 : lokPilotV3_0DCC,
+    0x0200002A : lokPilotV3_0DCC,
+    0x0200001F : lokPilotV3_0M4,
+    0x02000028 : lokPilotV3_0M4,
+    0x0200002B : lokPilotV3_0M4,
+    0x02000023 : lokPilotV3_0OEM,
+    0x02000030 : lokPilotV3_0OEM,
+    0x02000031 : lokPilotV3_0OEM,
+    0x0200002E : lokPilotmicroV3_0,
+    0x0200002F : lokPilotmicroV3_0DCC,
+    0x02000033 : lokPilotXLV3_0,
+    0x0200002C : lokPilotFxV3_0,
+    0x02000036 : lokPilotFxmicroV3_0,
+//    0x010000A7 : signalPilot,
+//    0x010000FE : signalPilot,
+//    0x020000C0 : switchPilot3,
+//    0x020000D4 : switchPilot3,
+//    0x020000C1 : switchPilot3Plus,
+//    0x020000D5 : switchPilot3Plus,
+//    0x020000C2 : switchPilot3Servo,
+//    0x020000D6 : switchPilot3Servo,
+//    0x02000058 : switchPilotV2_0,
+//    0x0200005A : switchPilotServoV2_0,
+    0x01000093 : essentialSoundUnit,
+    0x010000CB : essentialSoundUnit,
+    0x010000DF : essentialSoundUnit,
+//    0x02000062 : testCoachEHG388,
+//    0x02000076 : testCoachEHG388M4,
+//    0x02000083 : clubCarWgye,
+//    0x01000061 : smokeUnitGauge0G,
+//    0x02000045 : kM1SmokeUnit,
+//    0x01000064 : esudigitalinteriorlight,
+//    0x01000081 : scaleTrainsTenderLight,
+//    0x0100008F : pullmanpanoramacarBEX,
+//    0x010000A2 : pullmanSilberling,
+//    0x010000F4 : pullmanBLSBt9,
+//    0x01000090 : mbwSilberling,
+//    0x01000092 : bachmannMK2F,
+//    0x01000097 : walthersML8,
+//    0x010000A3 : zeitgeistModelszugspitzcar,
     
   ]
   
