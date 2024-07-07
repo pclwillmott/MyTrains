@@ -226,7 +226,7 @@ public enum DecoderType : UInt64, CaseIterable {
   public var cvListPrefix : String {
     
     let lookup : [DecoderType:String] = [
-      
+      .nmra : "NMRA Standard Decoder",
       .lokPilotV4_0DCCPX : "LokPilot V4.0 DCC PX",
       .lokPilot5L : "LokPilot 5 L",
       .lokPilotV3_0 : "LokPilot V3.0",

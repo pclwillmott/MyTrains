@@ -9,8 +9,48 @@ import Foundation
 
 public func esuCVExtract() {
   
-  let x = Decoder(decoderType: .lokSound5)
-  debugLog("Here")
+//  let x = Decoder(decoderType: .lokSound5)
+//  debugLog("Here")
+  
+  var sort : [ManufacturerInfo] = []
+  
+  for (_, item) in NMRA.manufacturers {
+    sort.append(item)
+  }
+  
+  sort.sort {$0.codeNMRA < $1.codeNMRA}
+  
+  for item in sort {
+    
+    if item.codeNMRA >= 0 {
+      
+      var enumName = item.name.replacingOccurrences(of: " ", with: "")
+      
+      enumName = enumName.replacingOccurrences(of: ".", with: "")
+      enumName = enumName.replacingOccurrences(of: "-", with: "_")
+      enumName = enumName.replacingOccurrences(of: ",", with: "")
+      enumName = enumName.replacingOccurrences(of: "(", with: "")
+      enumName = enumName.replacingOccurrences(of: ")", with: "")
+      enumName = enumName.replacingOccurrences(of: "&", with: "_")
+      enumName = enumName.replacingOccurrences(of: "/", with: "")
+      enumName = enumName.replacingOccurrences(of: "–", with: "_")
+      
+      let first = enumName.removeFirst()
+      
+      enumName = "\(first.lowercased())\(enumName)"
+      
+//      print("  case \(enumName) = 0x\(UInt8(item.codeNMRA).toHex(numberOfDigits: 2).lowercased())")
+      
+      print("    .\(enumName) : \"\(item.name)\",")
+    }
+    
+  }
+  
+  var cv : CV = .cv_000_000_001
+  
+  cv = cv + 1
+  
+  print(cv)
   return
   
   let fm = FileManager.default

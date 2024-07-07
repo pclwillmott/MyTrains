@@ -285,21 +285,57 @@ extension UInt8 {
     return String(hexStr.suffix(numberOfDigits))
     
   }
+  
+  public func toBinary(numberOfDigits:Int) -> String {
+    
+    guard numberOfDigits >= 0 && numberOfDigits <= 8 else {
+      return "error"
+    }
+    
+    let str = "00000000\(String(self, radix: 2))"
+
+    return String(str.suffix(numberOfDigits))
+
+  }
  
-  init(hex:String) {
+  init?(hex:String) {
     
-    self.init()
+    guard let value = UInt8(hex, radix: 16) else {
+      return nil
+    }
+
+    self = value
+
+  }
+
+  init?(hex:String.SubSequence) {
     
-    self = UInt8(hex, radix: 16) ?? 0
+    guard let value = UInt8(hex, radix: 16) else {
+      return nil
+    }
+
+    self = value
+
+  }
+
+  init?(binary:String) {
+    
+    guard let value = UInt8(binary, radix: 2) else {
+      return nil
+    }
+
+    self = value
     
   }
 
-  init(hex:String.SubSequence) {
+  init?(binary:String.SubSequence) {
     
-    self.init()
-    
-    self = UInt8(hex, radix: 16) ?? 0
-    
+    guard let value = UInt8(binary, radix: 2) else {
+      return nil
+    }
+
+    self = value
+
   }
 
   init?(bigEndianData: [UInt8]) {

@@ -10,7 +10,7 @@ import AppKit
 
 // https://github.com/JMRI/JMRI/blob/master/xml/decoders/esu/v4decoderInfoCVs.xml
 
-class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, MyTrainsAppDelegate {
+class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, MyTrainsAppDelegate, NSTableViewDataSource, NSTableViewDelegate, NSTextFieldDelegate, DecoderDelegate {
   
   // MARK: Constructors & Destructors
   
@@ -57,6 +57,16 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
     }
     pnlSettingsView.removeAll()
     
+    tableView?.delegate = nil
+    tableView = nil
+    
+    tableColumns.removeAll()
+    
+    changedCVsScrollView?.documentView = nil
+    changedCVsScrollView = nil
+    
+    lblChangedCVs = nil
+    
   }
   
   // MARK: Controls
@@ -82,6 +92,22 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
   private var pnlSettings : NSView? = NSView()
   
   private var pnlSettingsView : [NSView] = []
+  
+  private var tableView : NSTableView? = NSTableView()
+  
+  private var columnIds : [NSUserInterfaceItemIdentifier] = []
+  
+  private var tableColumns : [NSTableColumn?] = []
+  
+  private var changedCVsScrollView : NSScrollView? = NSScrollView()
+  
+  private var lblChangedCVs : NSTextField? = NSTextField(labelWithString: "")
+  
+  private var decoder : Decoder? {
+    didSet {
+      tableView?.reloadData()
+    }
+  }
   
   // MARK: Window & View Control
   
@@ -110,7 +136,7 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
     
     super.viewWillAppear()
    
-    guard let appNode, let cboProgrammingTrack, let pnlInspectorButtons, let selectorStackView, let pnlSettings else {
+    guard let appNode, let cboProgrammingTrack, let pnlInspectorButtons, let selectorStackView, let pnlSettings, let tableView, let lblChangedCVs else {
       return
     }
     
@@ -165,6 +191,23 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
           stackView.stackView?.orientation = .vertical
           stackView.stackView?.spacing = 4
         }
+      case .changedCVs:
+        
+        inspectorPanel = changedCVsScrollView
+        
+        if let scrollView = inspectorPanel as? NSScrollView {
+          scrollView.documentView = lblChangedCVs
+          lblChangedCVs.translatesAutoresizingMaskIntoConstraints = false
+          lblChangedCVs.maximumNumberOfLines = 0
+          lblChangedCVs.lineBreakMode = .byWordWrapping
+          lblChangedCVs.font = NSFont(name: "Menlo", size: 12)
+          lblChangedCVs.stringValue = ""
+
+          constraints.append(lblChangedCVs.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor))
+          constraints.append(lblChangedCVs.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor))
+          
+        }
+        
       case .rwCVs:
         inspectorPanel = NSView()
       case .settings:
@@ -234,10 +277,59 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
       
       switch group {
       case .manualCVInput:
+        
         settingsView = NSScrollView()
+        
         if let scrollView = settingsView as? NSScrollView {
-          scrollView.documentView = NSTableView()
+          
+          scrollView.documentView = tableView
+          
+          scrollView.translatesAutoresizingMaskIntoConstraints = false
+          scrollView.backgroundColor = nil
+          scrollView.drawsBackground = false
+          scrollView.hasVerticalScroller = true
+          scrollView.hasHorizontalScroller = true
+          scrollView.autoresizesSubviews = true
+          
+          tableView.allowsColumnReordering = true
+          tableView.selectionHighlightStyle = .none
+          tableView.allowsColumnResizing = true
+          tableView.usesAlternatingRowBackgroundColors = true
+          
+          let columnNames = [
+            "CV31",
+            "CV32",
+            "CV",
+            "Value",
+            "Binary",
+            "Hex"
+          ]
+          
+          let columnTitles = [
+            String(localized:"CV31"),
+            String(localized:"CV32"),
+            String(localized:"CV"),
+            String(localized:"Value"),
+            String(localized:"Binary"),
+            String(localized:"Hex"),
+          ]
+          
+          for index in 0 ... columnNames.count - 1 {
+            let id = NSUserInterfaceItemIdentifier(rawValue: columnNames[index])
+            columnIds.append(id)
+            tableColumns.append(NSTableColumn(identifier: id))
+            if let column = tableColumns[index] {
+              column.minWidth = 60
+              tableView.addTableColumn(column)
+              column.headerCell.alignment = .left
+              column.title = columnTitles[index]
+            }
+          }
+          
+          userSettings?.tableView = tableView
+          
         }
+        
       default:
         settingsView = ScrollVerticalStackView()
       }
@@ -261,6 +353,12 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
 
     currentSelector = ProgrammerToolSettingsGroup(rawValue: userSettings!.integer(forKey: DEFAULT.PROGRAMMER_TOOL_CURRENT_SELECTOR)) ?? .address
 
+    tableView.delegate = self
+    tableView.dataSource = self
+    
+    decoder = Decoder(decoderType: .lokSound5)
+    decoder?.delegate = self
+    
     displaySettings()
     
   }
@@ -369,5 +467,131 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
     
   }
 
+  // MARK: NSTableViewDelegate Methods
+  
+  // Returns the number of records managed for aTableView by the data source object.
+  public func numberOfRows(in tableView: NSTableView) -> Int {
+    guard let decoder else {
+      return 0
+    }
+    return decoder.visibleCVs.count
+  }
+  
+  // Sets the data object for an item in the specified row and column.
+  public func tableView(_ tableView: NSTableView, setObjectValue object: Any?, for tableColumn: NSTableColumn?, row: Int) {
+  }
+  
+  public func tableView(_ tableView: NSTableView,
+                        viewFor tableColumn: NSTableColumn?,row: Int) -> NSView? {
+    
+    guard let decoder else {
+      return nil
+    }
+    
+    let cv = decoder.visibleCVs[row].cv
+    
+    let value = decoder.getUInt8(cv: cv) ?? 0
+    
+    var isEditable = false
+    
+    let text = NSTextField()
+    
+    text.font = NSFont(name: "Menlo", size: 12)
+ 
+    switch tableColumn!.identifier {
+    case columnIds[0]:
+      text.stringValue = "\(cv.cv31)"
+    case columnIds[1]:
+      text.stringValue = "\(cv.cv32)"
+    case columnIds[2]:
+      text.stringValue = "\(cv.cv)"
+    case columnIds[3]:
+      text.stringValue = "\(value)"
+      isEditable = !cv.isReadOnly
+      text.delegate = self
+      text.tag = 100000 + row * 10 + 0
+    case columnIds[4]:
+      text.stringValue = "\(value.toBinary(numberOfDigits: 8))"
+      isEditable = !cv.isReadOnly
+      text.delegate = self
+      text.tag = 100000 + row * 10 + 1
+    case columnIds[5]:
+      text.stringValue = "\(value.toHex(numberOfDigits: 2))"
+      isEditable = !cv.isReadOnly
+      text.delegate = self
+      text.tag = 100000 + row * 10 + 2
+    default:
+      break
+    }
+    
+    let cell = NSTableCellView()
+    cell.addSubview(text)
+    text.drawsBackground = false
+    text.isBordered = false
+    text.isEditable = isEditable
+    text.translatesAutoresizingMaskIntoConstraints = false
+    cell.addConstraint(NSLayoutConstraint(item: text, attribute: .centerY, relatedBy: .equal, toItem: cell, attribute: .centerY, multiplier: 1, constant: 0))
+    cell.addConstraint(NSLayoutConstraint(item: text, attribute: .left, relatedBy: .equal, toItem: cell, attribute: .left, multiplier: 1, constant: 13))
+    cell.addConstraint(NSLayoutConstraint(item: text, attribute: .right, relatedBy: .equal, toItem: cell, attribute: .right, multiplier: 1, constant: -13))
+    return cell
+    
+  }
+
+  // MARK: NSTextFieldDelegate, NSControlTextEditingDelegate Methods
+  
+  /// This is called when the user presses return.
+  @objc func control(_ control: NSControl, textShouldEndEditing fieldEditor: NSText) -> Bool {
+    
+    var isValid = true
+    
+    if let textField = control as? NSTextField, let decoder {
+      
+      let trimmed = textField.stringValue.trimmingCharacters(in: .whitespaces)
+      
+      // This is the tableView validation - all tags are >= 100000
+      
+      if textField.tag >= 100000 {
+        let row = (textField.tag - 100000) / 10
+        let column = (textField.tag - 100000) % 10
+        let cv = decoder.visibleCVs[row].cv
+        switch column {
+        case 0:
+          if let value = UInt8(trimmed) {
+            decoder.setUInt8(cv: cv, value: value)
+          }
+          else {
+            isValid = false
+          }
+        case 1:
+          if let value = UInt8(binary:trimmed) {
+            decoder.setUInt8(cv: cv, value: value)
+          }
+          else {
+            isValid = false
+          }
+        case 2:
+          if let value = UInt8(hex:trimmed) {
+            decoder.setUInt8(cv: cv, value: value)
+          }
+          else {
+            isValid = false
+          }
+        default:
+          break
+        }
+      }
+      
+    }
+    
+    return isValid
+    
+  }
+
+  // MARK: DecoderDelegate Methods
+  
+  @objc func reloadData(_ decoder : Decoder) {
+    tableView?.reloadData()
+    lblChangedCVs?.stringValue = decoder.cvTextList(list: decoder.cvsModified)
+  }
 
 }

@@ -2766,6 +2766,16 @@ public enum CV : UInt64, CaseIterable {
     return CVIndexMethod(rawValue: self.rawValue & 0x00000000000000ff)!
   }
   
+  public var isHidden : Bool {
+    let mask = CVFlag.isHidden.rawValue
+    return (self.rawValue & mask) == mask
+  }
+  
+  public var isReadOnly : Bool {
+    let mask = CVFlag.isReadOnly.rawValue
+    return (self.rawValue & mask) == mask
+  }
+  
   // MARK: Public Class Methods
   
   public static func encodeRawValue(cv31:UInt8, cv32:UInt8, cv:UInt16, indexMethod:CVIndexMethod, isHidden:Bool = false, isReadOnly : Bool = false) -> UInt64 {
@@ -2774,4 +2784,64 @@ public enum CV : UInt64, CaseIterable {
     
   }
   
+  public static func + (lhs:CV, rhs:Int) -> CV {
+    
+    var index = lhs.index
+    var cv = Int(lhs.cv) + Int(rhs)
+    
+    if lhs.isIndexed {
+      if cv > 512 {
+        index += 1
+        cv = 257
+      }
+    }
+    else {
+      if cv > 1024 {
+        index += 1
+        cv = 257
+      }
+    }
+  
+    return CV(index: index, cv: UInt16(cv), indexMethod: lhs.indexMethod, isHidden: lhs.isHidden, isReadOnly: lhs.isReadOnly)!
+    
+  }
+
+  public static func + (lhs:Int, rhs:CV) -> CV {
+    
+    var index = rhs.index
+    var cv = Int(rhs.cv) + Int(lhs)
+    
+    if rhs.isIndexed {
+      if cv > 512 {
+        index += 1
+        cv = 257
+      }
+    }
+    else {
+      if cv > 1024 {
+        index += 1
+        cv = 257
+      }
+    }
+  
+    return CV(index: index, cv: UInt16(cv), indexMethod: rhs.indexMethod, isHidden: rhs.isHidden, isReadOnly: rhs.isReadOnly)!
+    
+  }
+  
+  public static func consecutiveCVs(startCV:CV, numberOfCVs:Int) -> [CV] {
+    
+    var result : [CV] = []
+    
+    if numberOfCVs > 0 {
+      
+      for index in 0 ... numberOfCVs - 1 {
+        result.append(startCV + index)
+      }
+      
+    }
+    
+    return result
+    
+  }
+
 }

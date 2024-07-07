@@ -45,6 +45,7 @@ public enum MyIcon : String {
   case envelope               = "Envelope"
   case button                 = "Button"
   case id                     = "ID"
+  case sunglasses             = "Sunglasses"
   
   // MARK: Public Methods
   

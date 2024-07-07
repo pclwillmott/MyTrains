@@ -16,7 +16,8 @@ public enum ProgrammerToolInspector : Int, CaseIterable {
   case quickHelp = 1
   case settings = 2
   case rwCVs = 3
-  case sound = 4
+  case changedCVs = 4
+  case sound = 5
   
   // MARK: Public Properties
   
@@ -28,6 +29,7 @@ public enum ProgrammerToolInspector : Int, CaseIterable {
       .settings   : .gear,
       .rwCVs      : .wrench,
       .sound      : .speaker,
+      .changedCVs : .sunglasses,
     ]
     
     let tooltip : [ProgrammerToolInspector:String] = [
@@ -36,6 +38,7 @@ public enum ProgrammerToolInspector : Int, CaseIterable {
       .settings   : String(localized: "Show Settings Inspector"),
       .rwCVs      : String(localized: "Show Read/Write CVs Inspector"),
       .sound      : String(localized: "Show Sound Inspector"),
+      .changedCVs : String(localized: "Show Changed CVs Inspector"),
     ]
     
     let button = icons[self]!.button(target: nil, action: nil)!
@@ -51,11 +54,12 @@ public enum ProgrammerToolInspector : Int, CaseIterable {
   public var backgroundColor : CGColor {
     
     let colors : [ProgrammerToolInspector:CGColor] = [
-      .identity  : NSColor.blue.cgColor,
-      .quickHelp : NSColor.red.cgColor,
-      .settings  : NSColor.yellow.cgColor,
-      .rwCVs     : NSColor.green.cgColor,
-      .sound     : NSColor.magenta.cgColor,
+      .identity   : NSColor.blue.cgColor,
+      .quickHelp  : NSColor.red.cgColor,
+      .settings   : NSColor.yellow.cgColor,
+      .rwCVs      : NSColor.green.cgColor,
+      .sound      : NSColor.magenta.cgColor,
+      .changedCVs : NSColor.orange.cgColor,
     ]
     
     return colors[self]!

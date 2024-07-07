@@ -101,6 +101,10 @@
 		DA441D302C1C988200AF0165 /* ActionColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA441D2F2C1C988200AF0165 /* ActionColor.swift */; };
 		DA467B9D281CAFDA00AB9650 /* NSColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA467B9C281CAFDA00AB9650 /* NSColorExtensions.swift */; };
 		DA467B9F281CBAF900AB9650 /* NSRectExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA467B9E281CBAF900AB9650 /* NSRectExtensions.swift */; };
+		DA47E5412C3AB6DD00A1D803 /* DecoderDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA47E5402C3AB6DD00A1D803 /* DecoderDelegate.swift */; };
+		DA47E5432C3AE5E200A1D803 /* ProgrammerToolInspectorProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA47E5422C3AE5E200A1D803 /* ProgrammerToolInspectorProperty.swift */; };
+		DA47E5452C3AEF3300A1D803 /* ManufacturerCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA47E5442C3AEF3300A1D803 /* ManufacturerCode.swift */; };
+		DA47E5472C3B0CAE00A1D803 /* NMRA Standard Decoder [0.0.0].cvlist in Resources */ = {isa = PBXBuildFile; fileRef = DA47E5462C3B0CAE00A1D803 /* NMRA Standard Decoder [0.0.0].cvlist */; };
 		DA48DA702BA1FA1C0009FEBF /* FrameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA48DA6F2BA1FA1C0009FEBF /* FrameView.swift */; };
 		DA48DA722BA201BD0009FEBF /* LEDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA48DA712BA201BD0009FEBF /* LEDView.swift */; };
 		DA48EE29293CEF16006C26A0 /* DayOfWeek.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA48EE28293CEF16006C26A0 /* DayOfWeek.swift */; };
@@ -548,6 +552,10 @@
 		DA441D2F2C1C988200AF0165 /* ActionColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionColor.swift; sourceTree = "<group>"; };
 		DA467B9C281CAFDA00AB9650 /* NSColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSColorExtensions.swift; sourceTree = "<group>"; };
 		DA467B9E281CBAF900AB9650 /* NSRectExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSRectExtensions.swift; sourceTree = "<group>"; };
+		DA47E5402C3AB6DD00A1D803 /* DecoderDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecoderDelegate.swift; sourceTree = "<group>"; };
+		DA47E5422C3AE5E200A1D803 /* ProgrammerToolInspectorProperty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgrammerToolInspectorProperty.swift; sourceTree = "<group>"; };
+		DA47E5442C3AEF3300A1D803 /* ManufacturerCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManufacturerCode.swift; sourceTree = "<group>"; };
+		DA47E5462C3B0CAE00A1D803 /* NMRA Standard Decoder [0.0.0].cvlist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "NMRA Standard Decoder [0.0.0].cvlist"; sourceTree = "<group>"; };
 		DA48DA6F2BA1FA1C0009FEBF /* FrameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameView.swift; sourceTree = "<group>"; };
 		DA48DA712BA201BD0009FEBF /* LEDView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LEDView.swift; sourceTree = "<group>"; };
 		DA48EE28293CEF16006C26A0 /* DayOfWeek.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayOfWeek.swift; sourceTree = "<group>"; };
@@ -1240,6 +1248,7 @@
 				DAAC7E942A7966EE001A424E /* ProgrammerTool.storyboard */,
 				DAAC7E962A796705001A424E /* ProgrammerToolVC.swift */,
 				DA8C29E72C3811D8001755AB /* ProgrammerToolInspector.swift */,
+				DA47E5422C3AE5E200A1D803 /* ProgrammerToolInspectorProperty.swift */,
 				DA8C29E92C382408001755AB /* ProgrammerToolSettingsGroup.swift */,
 			);
 			path = "Programmer Tool";
@@ -1491,6 +1500,7 @@
 				DA8C2B282C386962001755AB /* Essential Sound Unit [5.10.166].cvlist */,
 				DA8C2B302C386964001755AB /* LokPilot 5 [5.10.166].cvlist */,
 				DA8C2B322C386964001755AB /* LokPilot 5 Basic [5.1.6].cvlist */,
+				DA47E5462C3B0CAE00A1D803 /* NMRA Standard Decoder [0.0.0].cvlist */,
 				DA8C2B4E2C38696B001755AB /* LokPilot 5 DCC [5.10.166].cvlist */,
 				DA8C2B3E2C386967001755AB /* LokPilot 5 Fx [5.10.166].cvlist */,
 				DA8C2B582C38696E001755AB /* LokPilot 5 Fx DCC [5.10.166].cvlist */,
@@ -1570,11 +1580,13 @@
 			isa = PBXGroup;
 			children = (
 				DA8C2B162C3852DA001755AB /* Decoder.swift */,
+				DA47E5402C3AB6DD00A1D803 /* DecoderDelegate.swift */,
 				DA8C2B182C385344001755AB /* DecoderType.swift */,
 				DA97872B2C395D9C00765C83 /* CV.swift */,
 				DA97872D2C396B7300765C83 /* CVIndexMethod.swift */,
 				DA9787312C39A0B000765C83 /* CVFlag.swift */,
 				DA97872F2C3993BB00765C83 /* CVList.swift */,
+				DA47E5442C3AEF3300A1D803 /* ManufacturerCode.swift */,
 			);
 			path = Decoder;
 			sourceTree = "<group>";
@@ -2023,6 +2035,7 @@
 				DAA7BEBB2B504EE900508140 /* Localizable.xcstrings in Resources */,
 				DA8C2B782C386970001755AB /* LokPilot V4.0 M4 [4.16.9247].cvlist in Resources */,
 				DA8C2B772C386970001755AB /* LokPilot 5 micro DCC [5.10.166].cvlist in Resources */,
+				DA47E5472C3B0CAE00A1D803 /* NMRA Standard Decoder [0.0.0].cvlist in Resources */,
 				DA8C2BA82C386970001755AB /* LokPilot Fx V4.0 [4.16.9247].cvlist in Resources */,
 				DAED17222A5ABF4A0051C9AF /* MyTrains CAN Gateway.xml in Resources */,
 				DA8C2B9B2C386970001755AB /* LokPilot V3.0 OEM [0.0.5973].cvlist in Resources */,
@@ -2096,6 +2109,7 @@
 				DA467B9D281CAFDA00AB9650 /* NSColorExtensions.swift in Sources */,
 				DA7F89B12B371BDE00F43819 /* ConfigurationToolVC.swift in Sources */,
 				DA467B9F281CBAF900AB9650 /* NSRectExtensions.swift in Sources */,
+				DA47E5412C3AB6DD00A1D803 /* DecoderDelegate.swift in Sources */,
 				DAFFB6612B5D88CA0035AC74 /* MyTrainsAppDelegate.swift in Sources */,
 				DAD394BD2B2E15D300403040 /* OpenLCBCANGatewayWiFi.swift in Sources */,
 				DA9325A6289C02C300CC317F /* LocomotiveDirection.swift in Sources */,
@@ -2117,6 +2131,7 @@
 				DA311BAC2A7BB8CC0019FDCE /* OpenLCBValidity.swift in Sources */,
 				DA60408C2C2318A2006E6325 /* LocomotiveControlBasis.swift in Sources */,
 				DABC089D2B1B8DBF00260605 /* DCCCVAccessMode.swift in Sources */,
+				DA47E5432C3AE5E200A1D803 /* ProgrammerToolInspectorProperty.swift in Sources */,
 				DA5BC9932A1A6CEA00D67ABE /* OpenLCBNodeRollingStock.swift in Sources */,
 				DA6239342BCD827C000E9018 /* MyComboBox.swift in Sources */,
 				DA0949422B7F940100545650 /* DebugLog.swift in Sources */,
@@ -2190,6 +2205,7 @@
 				DA0D3E062A4850880042748C /* OpenLCBThrottleDelegate.swift in Sources */,
 				DA7C509C2BD6D7A60079E876 /* LayoutInspectorGroup.swift in Sources */,
 				DAACFC742A4336F7001743DA /* OpenLCBTractionManagementType.swift in Sources */,
+				DA47E5452C3AEF3300A1D803 /* ManufacturerCode.swift in Sources */,
 				DAA799E22C3313EA0006D2BE /* ESUCVExtract.swift in Sources */,
 				DAD7750C2BD0230400D8AD55 /* SwitchboardShapeButton.swift in Sources */,
 				DA1B949F2A3DE8E000E2CE6A /* Client.swift in Sources */,

@@ -1855,6 +1855,15 @@
     "Cut" : {
       "comment" : "Used for a menu title"
     },
+    "CV" : {
+
+    },
+    "CV31" : {
+
+    },
+    "CV32" : {
+
+    },
     "Cyan" : {
       "comment" : "The name of a color."
     },
@@ -5903,6 +5912,9 @@
         }
       }
     },
+    "Show Changed CVs Inspector" : {
+
+    },
     "Show Events Inspector" : {
 
     },
@@ -7240,6 +7252,9 @@
           }
         }
       }
+    },
+    "Value" : {
+
     },
     "Verified Node ID Full Protocol Required" : {
 

@@ -30,7 +30,7 @@ public class LCCCANFrame : NSObject {
       var temp = section[1]
       
       while temp.count > 0 {
-        data.append(UInt8(hex:temp.prefix(2)))
+        data.append(UInt8(hex:temp.prefix(2))!)
         temp.removeFirst(2)
       }
       
