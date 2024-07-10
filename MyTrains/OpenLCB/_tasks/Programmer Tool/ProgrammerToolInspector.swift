@@ -21,6 +21,21 @@ public enum ProgrammerToolInspector : Int, CaseIterable {
   
   // MARK: Public Properties
   
+  public var title : String {
+    
+    let titles : [ProgrammerToolInspector:String] = [
+      .identity   : String(localized: "Decoder Information"),
+      .quickHelp  : String(localized: "Quick Help"),
+      .settings   : String(localized: "Change Decoder Settings"),
+      .rwCVs      : String(localized: "Read and Write CVs"),
+      .changedCVs : String(localized: "Changed CVs"),
+      .sound      : String(localized: "Sound Project Overview"),
+    ]
+    
+    return titles[self]!
+    
+  }
+  
   public var button : NSButton {
     
     let icons : [ProgrammerToolInspector:MyIcon] = [

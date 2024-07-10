@@ -16,11 +16,16 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
   
   deinit {
 
+    NSLayoutConstraint.deactivate(inspectorConstraints)
+    inspectorConstraints.removeAll()
+
     NSLayoutConstraint.deactivate(settingsConstraints)
     settingsConstraints.removeAll()
 
     NSLayoutConstraint.deactivate(constraints)
     constraints.removeAll()
+    
+    inspectorFields.removeAll()
     
     selectorStackView?.subviews.removeAll()
     selectorStackView = nil
@@ -73,11 +78,25 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
   
   private var constraints : [NSLayoutConstraint] = []
   
+  private var inspectorConstraints : [NSLayoutConstraint] = []
+  
   private var cboProgrammingTrack : MyComboBox? = MyComboBox()
   
   private var pnlInspectorButtons : NSView? = NSView()
   
   private var pnlInspectorView : [ProgrammerToolInspector:NSView] = [:]
+
+  internal var inspectorFields : [ProgrammerToolInspectorPropertyField] = []
+
+  internal var settingsFields : [ProgrammerToolSettingsPropertyField] = []
+
+  internal var settingsGroupFields : [ProgrammerToolSettingsSection:ProgrammerToolSettingsSectionField] = [:]
+  
+  internal var settingsGroupSeparators : [ProgrammerToolSettingsSection:ProgrammerToolSettingsSectionField] = [:]
+
+  internal var settingsPropertyConstraints : [NSLayoutConstraint] = []
+  
+  private var lblInspectorTitles : [NSTextField] = []
   
   private var pnlGroups : [NSView] = []
   
@@ -181,21 +200,33 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
       constraints.append(pnlInspectorButtons.heightAnchor.constraint(equalTo: button.heightAnchor))
       lastButton = button
       
-      var inspectorPanel : NSView?
+      var inspectorPanel = NSView()
+      var subView : NSView?
+      
+      let inspectorTitle = NSTextField(labelWithString: item.title)
+      inspectorTitle.translatesAutoresizingMaskIntoConstraints = false
+      inspectorTitle.fontSize = 16.0
+      inspectorTitle.textColor = .gray
+      
+      inspectorPanel.addSubview(inspectorTitle)
+      
+      constraints.append(inspectorTitle.topAnchor.constraint(equalTo: inspectorPanel.topAnchor))
+      constraints.append(inspectorTitle.leadingAnchor.constraint(equalTo: inspectorPanel.leadingAnchor))
+      constraints.append(inspectorPanel.widthAnchor.constraint(greaterThanOrEqualTo: inspectorTitle.widthAnchor))
       
       switch item {
-      case .identity, .quickHelp, .sound:
-        inspectorPanel = ScrollVerticalStackView()
-        if let stackView = inspectorPanel as? ScrollVerticalStackView {
+      case .identity, .quickHelp, .sound, .rwCVs:
+        subView = ScrollVerticalStackView()
+        if let stackView = subView as? ScrollVerticalStackView {
           stackView.backgroundColor = NSColor.clear.cgColor
           stackView.stackView?.orientation = .vertical
-          stackView.stackView?.spacing = 4
+          stackView.stackView?.spacing = 8
         }
       case .changedCVs:
         
-        inspectorPanel = changedCVsScrollView
+        subView = changedCVsScrollView
         
-        if let scrollView = inspectorPanel as? NSScrollView {
+        if let scrollView = subView as? NSScrollView {
           scrollView.documentView = lblChangedCVs
           lblChangedCVs.translatesAutoresizingMaskIntoConstraints = false
           lblChangedCVs.maximumNumberOfLines = 0
@@ -208,11 +239,9 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
           
         }
         
-      case .rwCVs:
-        inspectorPanel = NSView()
       case .settings:
-        inspectorPanel = NSSplitView()
-        if let splitView = inspectorPanel as? NSSplitView {
+        subView = NSSplitView()
+        if let splitView = subView as? NSSplitView {
           splitView.isVertical = true
           splitView.arrangesAllSubviews = true
           selectorStackView.translatesAutoresizingMaskIntoConstraints = false
@@ -223,7 +252,7 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
         }
       }
       
-      if let inspectorPanel {
+      if let subView {
         
         inspectorPanel.translatesAutoresizingMaskIntoConstraints = false
 //        inspectorPanel.backgroundColor = item.backgroundColor
@@ -236,6 +265,15 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
         constraints.append(inspectorPanel.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 1.0))
         constraints.append(view.trailingAnchor.constraint(equalToSystemSpacingAfter: inspectorPanel.trailingAnchor, multiplier: 1.0))
         constraints.append(view.bottomAnchor.constraint(equalToSystemSpacingBelow: inspectorPanel.bottomAnchor, multiplier: 1.0))
+        
+        inspectorPanel.addSubview(subView)
+        
+        subView.translatesAutoresizingMaskIntoConstraints = false
+        
+        constraints.append(subView.topAnchor.constraint(equalToSystemSpacingBelow: inspectorTitle.bottomAnchor, multiplier: 2.0))
+        constraints.append(subView.leadingAnchor.constraint(equalTo: inspectorPanel.leadingAnchor))
+        constraints.append(subView.trailingAnchor.constraint(equalTo: inspectorPanel.trailingAnchor))
+        constraints.append(subView.bottomAnchor.constraint(equalTo: inspectorPanel.bottomAnchor))
         
       }
       
@@ -347,6 +385,42 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
       
     }
     
+    inspectorFields = ProgrammerToolInspectorProperty.inspectorPropertyFields
+    
+    for temp in inspectorFields {
+      if let comboBox = temp.control as? MyComboBox {
+ //       comboBox.target = self
+ //       comboBox.action = #selector(self.cboAction(_:))
+      }
+      else if let chkBox = temp.control as? NSButton {
+ //       chkBox.target = self
+ //       chkBox.action = #selector(self.chkAction(_:))
+      }
+      else if let field = temp.control as? NSTextField {
+ //       field.delegate = self
+      }
+    }
+    
+    settingsFields = ProgrammerToolSettingsProperty.inspectorPropertyFields
+    
+    for temp in inspectorFields {
+      if let comboBox = temp.control as? MyComboBox {
+ //       comboBox.target = self
+ //       comboBox.action = #selector(self.cboAction(_:))
+      }
+      else if let chkBox = temp.control as? NSButton {
+ //       chkBox.target = self
+ //       chkBox.action = #selector(self.chkAction(_:))
+      }
+      else if let field = temp.control as? NSTextField {
+ //       field.delegate = self
+      }
+    }
+    
+    settingsGroupFields = ProgrammerToolSettingsSection.inspectorSectionFields
+    
+    settingsGroupSeparators = ProgrammerToolSettingsSection.inspectorSectionSeparators
+
     NSLayoutConstraint.activate(constraints)
 
     currentInspector = ProgrammerToolInspector(rawValue: userSettings!.integer(forKey: DEFAULT.PROGRAMMER_TOOL_CURRENT_INSPECTOR)) ?? .quickHelp
@@ -360,6 +434,8 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
     decoder?.delegate = self
     
     displaySettings()
+    
+    displayInspector()
     
   }
   
@@ -448,6 +524,135 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
     NSLayoutConstraint.activate(settingsConstraints)
     
   }
+  
+  // MARK: Private Methods
+  
+  internal func displayInspector() {
+    
+    guard let decoder, let appNode else {
+      return
+    }
+    
+    NSLayoutConstraint.deactivate(inspectorConstraints)
+    inspectorConstraints.removeAll()
+    
+    for (_, view) in pnlInspectorView {
+      if let stackView = view.subviews[1] as? ScrollVerticalStackView {
+        stackView.stackView?.subviews.removeAll()
+      }
+    }
+    
+    var commonProperties : Set<ProgrammerToolInspectorProperty> = [
+      .cv7,
+      .cv8,
+      .programmingMode,
+      .decoderType,
+      .decoderAddress,
+      .value,
+      .bits,
+      .cv31,
+      .cv32,
+      .useIndexCVs,
+      .cv,
+      .projectName,
+      .manufacturer,
+      .manufacturerId,
+      .model,
+    ]
+    
+    if let manufacturer = decoder.manufacturer, manufacturer == .electronicSolutionsUlmGmbH {
+      commonProperties.insert(.esuflash)
+      commonProperties.insert(.esuProductId)
+      commonProperties.insert(.esuSoundLock)
+      commonProperties.insert(.esuFirmwareType)
+      commonProperties.insert(.esuSerialNumber)
+      commonProperties.insert(.esuProductionDate)
+      commonProperties.insert(.esuProductionInfo)
+      commonProperties.insert(.esuBootcodeVersion)
+      commonProperties.insert(.esuFirmwareVersion)
+      commonProperties.insert(.esuDecoderOperatingTime)
+      commonProperties.insert(.esuSmokeUnitOperatingTime)
+    }
+    else {
+    }
+    
+    var usedFields : [ProgrammerToolInspectorPropertyField] = []
+    
+    for field in inspectorFields {
+      
+      if field.control == nil {
+   //     continue
+      }
+      
+      if commonProperties.contains(field.property), let inspectorView = pnlInspectorView[field.property.inspector], let stackView = inspectorView.subviews[1] as? ScrollVerticalStackView {
+
+        stackView.addArrangedSubview(field.view!)
+        
+        /// Note to self: Views within a StackView must not have constraints to the outside world as this will lock the StackView size.
+        /// They must only have internal constraints to the view that is added to the StackView.
+        ///  https://manasaprema04.medium.com/autolayout-fundamental-522f0a6e5790
+        
+        inspectorConstraints.append(field.view!.heightAnchor.constraint(greaterThanOrEqualTo: field.label!.heightAnchor))
+        
+        if let bits = field.bits {
+          var lastAnchor : NSLayoutXAxisAnchor? = nil
+          for bit in bits {
+            if let lastAnchor {
+              inspectorConstraints.append(bit.leadingAnchor.constraint(equalTo: lastAnchor, constant: 2))
+            }
+            else {
+              inspectorConstraints.append(bit.leadingAnchor.constraint(equalToSystemSpacingAfter: field.label!.trailingAnchor, multiplier: 1.0))
+            }
+            lastAnchor = bit.trailingAnchor
+            inspectorConstraints.append(field.view!.heightAnchor.constraint(greaterThanOrEqualTo: bit.heightAnchor))
+          }
+        }
+        else {
+          inspectorConstraints.append(field.view!.heightAnchor.constraint(greaterThanOrEqualTo: field.control!.heightAnchor))
+          inspectorConstraints.append(field.control!.leadingAnchor.constraint(equalToSystemSpacingAfter: field.label!.trailingAnchor, multiplier: 1.0))
+        }
+        inspectorConstraints.append(field.label!.leadingAnchor.constraint(equalTo: field.view!.leadingAnchor, constant: 20))
+        
+        if field.property.controlType == .comboBox {
+          inspectorConstraints.append(field.control!.widthAnchor.constraint(greaterThanOrEqualToConstant: 200))
+        }
+        else if field.control != nil {
+          inspectorConstraints.append(field.control!.widthAnchor.constraint(greaterThanOrEqualToConstant: 100))
+        }
+          
+   //     inspectorConstraints.append(field.view!.trailingAnchor.constraint(equalTo: field.control!.trailingAnchor))
+        
+        if field.control != nil {
+          inspectorConstraints.append(field.control!.centerYAnchor.constraint(equalTo: field.view!.centerYAnchor))
+        }
+        inspectorConstraints.append(field.label!.centerYAnchor.constraint(equalTo: field.view!.centerYAnchor))
+        
+        if let button = field.readButton {
+          inspectorConstraints.append(button.leadingAnchor.constraint(equalToSystemSpacingAfter: field.control!.trailingAnchor, multiplier: 1.0))
+        }
+
+        if let button = field.writeButton {
+          inspectorConstraints.append(button.leadingAnchor.constraint(equalToSystemSpacingAfter: field.control!.trailingAnchor, multiplier: 1.0))
+        }
+        
+        usedFields.append(field)
+
+      }
+      
+    }
+    
+    for field1 in usedFields {
+      for field2 in usedFields {
+        if !(field1.label! === field2.label) && field1.property.inspector == field2.property.inspector {
+          inspectorConstraints.append(field1.label!.widthAnchor.constraint(greaterThanOrEqualTo: field2.label!.widthAnchor))
+        }
+      }
+    }
+    
+    NSLayoutConstraint.activate(inspectorConstraints)
+    
+  }
+
   
   // MARK: Actions
   

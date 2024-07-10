@@ -694,6 +694,12 @@ class SpeedProfilerVC: MyTrainsViewController, OpenLCBThrottleDelegate, NSTableV
       (field.control as? NSTextField)?.stringValue = value
     case .panelView:
       break
+    case .readCV:
+      break
+    case .writeCV:
+      break
+    case .bits8:
+      break
     }
     
   }

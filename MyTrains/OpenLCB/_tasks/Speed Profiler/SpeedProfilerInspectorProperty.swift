@@ -62,6 +62,7 @@ public enum SpeedProfilerInspectorProperty : Int, CaseIterable {
   
   /// This will cause a runtime error if the lookup is not defined - this is the intent!
   public var label : String {
+
     guard let appNode else {
       return ""
     }
@@ -407,6 +408,12 @@ public enum SpeedProfilerInspectorProperty : Int, CaseIterable {
           let textField = NSTextField()
           field.control = textField
         case .panelView:
+          break
+        case .readCV:
+          break
+        case .writeCV:
+          break
+        case .bits8:
           break
         }
         

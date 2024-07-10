@@ -477,6 +477,12 @@ class LayoutBuilderVC: MyTrainsViewController, SwitchboardEditorViewDelegate, NS
         (field.control as? NSTextField)?.stringValue = value
       case .panelView:
         break
+      case .readCV:
+        break
+      case .writeCV:
+        break
+      case .bits8:
+        break
       }
     }
     

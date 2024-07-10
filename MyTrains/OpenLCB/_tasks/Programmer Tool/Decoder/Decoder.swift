@@ -197,6 +197,10 @@ public class Decoder : NSObject {
     
   }
   
+  public var manufacturer : ManufacturerCode? {
+    return ManufacturerCode(rawValue: UInt16(getUInt8(cv: .cv_000_000_008)!))
+  }
+  
   // MARK: Private Methods
   
   // MARK: Public Methods

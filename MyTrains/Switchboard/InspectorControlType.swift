@@ -17,5 +17,8 @@ public enum InspectorControlType {
   case comboBox
   case eventId
   case panelView
+  case readCV
+  case writeCV
+  case bits8
   
 }
