@@ -201,6 +201,186 @@ public class Decoder : NSObject {
     return ManufacturerCode(rawValue: UInt16(getUInt8(cv: .cv_000_000_008)!))
   }
   
+  public var locomotiveAddressType : LocomotiveAddressType {
+    get {
+      return getBool(cv: .cv_000_000_029, mask: ByteMask.d5)! ? .extended : .primary
+    }
+    set(value) {
+      if value != locomotiveAddressType {
+        setBool(cv: .cv_000_000_029, mask: ByteMask.d5, value: value == .extended)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var primaryAddress : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_001)! & 0x7f
+    }
+    set(value) {
+      setMaskedUInt8(cv: .cv_000_000_001, mask: 0x7f, value: value)
+    }
+  }
+  
+  public var extendedAddress : UInt16 {
+    get {
+      return ((UInt16(getUInt8(cv: .cv_000_000_017)!) << 8) | UInt16(getUInt8(cv: .cv_000_000_018)!)) - 49152
+    }
+    set(value) {
+      let temp = value + 49152
+      setUInt8(cv: .cv_000_000_017, value: UInt8(temp >> 8))
+      setUInt8(cv: .cv_000_000_018, value: UInt8(temp & 0xff))
+    }
+  }
+  
+  public var marklinConsecutiveAddresses : MarklinConsecutiveAddresses {
+    get {
+      return MarklinConsecutiveAddresses(rawValue: getUInt8(cv: .cv_000_000_049)! & MarklinConsecutiveAddresses.mask)!
+    }
+    set(value) {
+      setMaskedUInt8(cv: .cv_000_000_049, mask: MarklinConsecutiveAddresses.mask, value: value.rawValue)
+    }
+  }
+  
+  public var isConsistAddressEnabled : Bool {
+    get {
+      return consistAddress != 0
+    }
+    set(value) {
+      if value != isConsistAddressEnabled {
+        consistAddress = value ? 1 : 0
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var consistAddress : UInt8 {
+    get {
+      return getMaskedUInt8(cv: .cv_000_000_019, mask: 0b01111111)!
+    }
+    set(value) {
+      setMaskedUInt8(cv: .cv_000_000_019, mask: 0b01111111, value: value)
+    }
+  }
+  
+  public var isConsistReverseDirection : Bool {
+    get {
+      return getMaskedUInt8(cv: .cv_000_000_019, mask: ByteMask.d7)! == ByteMask.d7
+    }
+    set(value) {
+      setMaskedUInt8(cv: .cv_000_000_019, mask: ByteMask.d7, value: value ? ByteMask.d7 : 0)
+    }
+  }
+  
+  public var isAnalogModeEnabled : Bool {
+    get {
+      return getBool(cv: .cv_000_000_029, mask: ByteMask.d2)!
+    }
+    set(value) {
+      setMaskedUInt8(cv: .cv_000_000_029, mask: ByteMask.d2, value: value ? ByteMask.d2 : 0)
+    }
+  }
+  
+  public var isACAnalogModeEnabled : Bool {
+    get {
+      return getBool(cv: .cv_000_000_050, mask: ByteMask.d0)!
+    }
+    set(value) {
+      if value != isACAnalogModeEnabled {
+        setMaskedUInt8(cv: .cv_000_000_050, mask: ByteMask.d0, value: value ? ByteMask.d0 : 0)
+        if value {
+          isAnalogModeEnabled = true
+        }
+        else if !isDCAnalogModeEnabled {
+          isAnalogModeEnabled = false
+        }
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var isDCAnalogModeEnabled : Bool {
+    get {
+      return getBool(cv: .cv_000_000_050, mask: ByteMask.d1)!
+    }
+    set(value) {
+      if value != isDCAnalogModeEnabled {
+        setMaskedUInt8(cv: .cv_000_000_050, mask: ByteMask.d1, value: value ? ByteMask.d1 : 0)
+        if value {
+          isAnalogModeEnabled = true
+        }
+        else if !isACAnalogModeEnabled {
+          isAnalogModeEnabled = false
+        }
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var analogModeACStartVoltage : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_127)!
+    }
+    set(value) {
+      if value != analogModeACStartVoltage {
+        setUInt8(cv: .cv_000_000_127, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var analogModeACStartVoltageInVolts : Double {
+    return Double(analogModeACStartVoltage) / 10.0
+  }
+
+  public var analogModeACMaximumSpeedVoltage : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_128)!
+    }
+    set(value) {
+      if value != analogModeACMaximumSpeedVoltage {
+        setUInt8(cv: .cv_000_000_128, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var analogModeACMaximumSpeedVoltageInVolts : Double {
+    return Double(analogModeACMaximumSpeedVoltage) / 10.0
+  }
+
+  public var analogModeDCStartVoltage : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_125)!
+    }
+    set(value) {
+      if value != analogModeDCStartVoltage {
+        setUInt8(cv: .cv_000_000_125, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var analogModeDCStartVoltageInVolts : Double {
+    return Double(analogModeDCStartVoltage) / 10.0
+  }
+
+  public var analogModeDCMaximumSpeedVoltage : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_126)!
+    }
+    set(value) {
+      if value != analogModeDCMaximumSpeedVoltage {
+        setUInt8(cv: .cv_000_000_126, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var analogModeDCMaximumSpeedVoltageInVolts : Double {
+    return Double(analogModeDCMaximumSpeedVoltage) / 10.0
+  }
+
   // MARK: Private Methods
   
   // MARK: Public Methods
@@ -249,6 +429,13 @@ public class Decoder : NSObject {
       return nil
     }
     return value & mask
+  }
+  
+  public func setMaskedUInt8(cv:CV, mask:UInt8, value:UInt8) {
+    guard var temp = getUInt8(cv: cv) else {
+      return
+    }
+    setUInt8(cv: cv, value: (temp & ~mask) | (value & mask))
   }
   
   public func getBool(cv:CV, mask:UInt8) -> Bool? {
@@ -338,6 +525,121 @@ public class Decoder : NSObject {
     }
     
     return result.replacingOccurrences(of: "%%UNDERLINE%%", with: String(repeating: "-", count: maxTitle))
+    
+  }
+  
+  public func getValue(property:ProgrammerToolSettingsProperty) -> String {
+    
+    switch property {
+    case .locomotiveAddressType:
+      return "\(locomotiveAddressType.title)"
+    case .locomotiveAddressShort:
+      return "\(primaryAddress)"
+    case .locomotiveAddressLong:
+      return "\(extendedAddress)"
+    case .marklinConsecutiveAddresses:
+      return "\(marklinConsecutiveAddresses.title)"
+    case .locomotiveAddressWarning:
+      return String(localized:"The decoder will only respond to DCC commands!")
+    case .enableDCCConsistAddress:
+      return isConsistAddressEnabled ? "true" : "false"
+    case .consistAddress:
+      return "\(consistAddress)"
+    case .consistReverseDirection:
+      return isConsistReverseDirection ? "true" : "false"
+    case .enableACAnalogMode:
+      return isACAnalogModeEnabled ? "true" : "false"
+    case .acAnalogModeStartVoltage:
+      return "\(analogModeACStartVoltage)"
+    case .acAnalogModeMaximumSpeedVoltage:
+      return "\(analogModeACMaximumSpeedVoltage)"
+    case .enableDCAnalogMode:
+      return isDCAnalogModeEnabled ? "true" : "false"
+    case .dcAnalogModeStartVoltage:
+      return "\(analogModeDCStartVoltage)"
+    case .dcAnalogModeMaximumSpeedVoltage:
+      return "\(analogModeDCMaximumSpeedVoltage)"
+    }
+  }
+  
+  public func getInfo(property:ProgrammerToolSettingsProperty) -> String {
+    
+    switch property {
+    case .dcAnalogModeStartVoltage:
+      return "\(analogModeDCStartVoltageInVolts)V"
+    case .acAnalogModeStartVoltage:
+      return "\(analogModeACStartVoltageInVolts)V"
+    case .dcAnalogModeMaximumSpeedVoltage:
+      return "\(analogModeDCMaximumSpeedVoltageInVolts)V"
+    case .acAnalogModeMaximumSpeedVoltage:
+      return "\(analogModeACMaximumSpeedVoltageInVolts)V"
+    default:
+      return ""
+    }
+    
+  }
+  
+  public func isValid(property:ProgrammerToolSettingsProperty, string:String) -> Bool {
+    
+    switch property {
+    case .locomotiveAddressShort:
+      guard let value = UInt8(string), value > 0 && value < 128 else {
+        return false
+      }
+    case .locomotiveAddressLong:
+      guard let value = UInt16(string), value > 0 && value < 10240 else {
+        return false
+      }
+    case .consistAddress:
+      guard let value = UInt8(string), value > 0 && value < 128 else {
+        return false
+      }
+    case .acAnalogModeStartVoltage, .acAnalogModeMaximumSpeedVoltage, .dcAnalogModeStartVoltage, .dcAnalogModeMaximumSpeedVoltage:
+      guard let _ = UInt8(string) else {
+        return false
+      }
+    default:
+      break
+    }
+    
+    return true
+    
+  }
+  
+  public func setValue(property: ProgrammerToolSettingsProperty, string: String) {
+    
+    switch property {
+    case .locomotiveAddressType:
+      if let temp = LocomotiveAddressType(title: string) {
+        locomotiveAddressType = temp
+      }
+    case .locomotiveAddressShort:
+      primaryAddress = UInt8(string)!
+    case .locomotiveAddressLong:
+      extendedAddress = UInt16(string)!
+    case .marklinConsecutiveAddresses:
+      marklinConsecutiveAddresses = MarklinConsecutiveAddresses(title: string)!
+    case .enableDCCConsistAddress:
+      isConsistAddressEnabled = string == "true"
+    case .consistAddress:
+      consistAddress = UInt8(string)!
+    case .consistReverseDirection:
+      isConsistReverseDirection = string == "true"
+    case .enableACAnalogMode:
+      isACAnalogModeEnabled = string == "true"
+    case .acAnalogModeStartVoltage:
+      analogModeACStartVoltage = UInt8(string)!
+    case .acAnalogModeMaximumSpeedVoltage:
+      analogModeACMaximumSpeedVoltage = UInt8(string)!
+    case .enableDCAnalogMode:
+      isDCAnalogModeEnabled = string == "true"
+    case .dcAnalogModeStartVoltage:
+      analogModeDCStartVoltage = UInt8(string)!
+    case .dcAnalogModeMaximumSpeedVoltage:
+      analogModeDCMaximumSpeedVoltage = UInt8(string)!
+    default:
+      break
+    }
     
   }
   

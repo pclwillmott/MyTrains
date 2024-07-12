@@ -77,191 +77,222 @@ public enum ProgrammerToolInspectorProperty : Int, CaseIterable {
   public var controlType : InspectorControlType {
     return ProgrammerToolInspectorProperty.labels[self]!.controlType
   }
+  
+  public var requiredCapabilities : Set<DecoderCapability> {
+    return ProgrammerToolInspectorProperty.labels[self]?.requiredCapabilities ?? []
+  }
+
 
   // MARK: Private Class Properties
   
-  private static let labels : [ProgrammerToolInspectorProperty:(labelTitle:String, toolTip:String, inspector:ProgrammerToolInspector, controlType:InspectorControlType)] = [
+  private static let labels : [ProgrammerToolInspectorProperty:(labelTitle:String, toolTip:String, inspector:ProgrammerToolInspector, controlType:InspectorControlType, requiredCapabilities:Set<DecoderCapability>)] = [
     .projectName
     : (
       String(localized:"Project Name", comment:"This is used for the title of a text field."),
       String(localized:"The name of this decoder project.", comment:"This is used for a tooltip."),
       .identity,
-      .textField
+      .textField,
+      []
     ),
     .manufacturer
     : (
       String(localized:"Manufacturer"),
       String(localized:"The manufacturer of this decoder.", comment:"This is used for a tooltip."),
       .identity,
-      .label
+      .label,
+      []
     ),
     .model
     : (
       String(localized:"Model"),
       String(localized:"The model of this decoder.", comment:"This is used for a tooltip."),
       .identity,
-      .label
+      .label,
+      []
     ),
     .esuflash
     : (
       String(localized:"Flash"),
       String(localized:"", comment:"This is used for a tooltip."),
       .identity,
-      .label
+      .label,
+      []
     ),
     .manufacturerId
     : (
       String(localized:"Manufacturer ID"),
       String(localized:"The NMRA ID for the manufacturer of this decoder.", comment:"This is used for a tooltip."),
       .identity,
-      .label
+      .label,
+      []
     ),
     .esuProductId
     : (
       String(localized:"Product ID"),
       String(localized:"The product ID.", comment:"This is used for a tooltip."),
       .identity,
-      .label
+      .label,
+      []
     ),
     .esuSerialNumber
     : (
       String(localized:"Serial Number"),
       String(localized:"The serial number of this decoder.", comment:"This is used for a tooltip."),
       .identity,
-      .label
+      .label,
+      []
     ),
     .esuSoundLock
     : (
       String(localized:"Sound Lock"),
       String(localized:"", comment:"This is used for a tooltip."),
       .identity,
-      .label
+      .label,
+      []
     ),
     .esuFirmwareVersion
     : (
       String(localized:"Firmware Version"),
       String(localized:"The firmware version of this decoder.", comment:"This is used for a tooltip."),
       .identity,
-      .label
+      .label,
+      []
     ),
     .esuFirmwareType
     : (
       String(localized:"Firmware Type"),
       String(localized:"The firmware type of this decoder.", comment:"This is used for a tooltip."),
       .identity,
-      .label
+      .label,
+      []
     ),
     .esuBootcodeVersion
     : (
       String(localized:"Bootcode Version"),
       String(localized:"The bootcode version of this decoder.", comment:"This is used for a tooltip."),
       .identity,
-      .label
+      .label,
+      []
     ),
     .esuProductionInfo
     : (
       String(localized:"Production Info"),
       String(localized:"", comment:"This is used for a tooltip."),
       .identity,
-      .label
+      .label,
+      []
     ),
     .esuProductionDate
     : (
       String(localized:"Production Date"),
       String(localized:"The production date of this decoder.", comment:"This is used for a tooltip."),
       .identity,
-      .label
+      .label,
+      []
     ),
     .cv7
     : (
       String(localized:"CV7"),
       String(localized:"CV7 setting.", comment:"This is used for a tooltip."),
       .identity,
-      .label
+      .label,
+      []
     ),
     .cv8
     : (
       String(localized:"CV8"),
       String(localized:"CV8 Ssetting.", comment:"This is used for a tooltip."),
       .identity,
-      .label
+      .label,
+      []
     ),
     .esuDecoderOperatingTime
     : (
       String(localized:"Decoder Operating Time"),
       String(localized:"The operating time of this decoder.", comment:"This is used for a tooltip."),
       .identity,
-      .label
+      .label,
+      []
     ),
     .esuSmokeUnitOperatingTime
     : (
       String(localized:"Smoke Unit Operating Time"),
       String(localized:"The operating time of the smoke unit.", comment:"This is used for a tooltip."),
       .identity,
-      .label
+      .label,
+      []
     ),
     .programmingMode
     : (
       String(localized:"Programming Track"),
       String(localized:"Programming track.", comment:"This is used for a tooltip."),
       .rwCVs,
-      .comboBox
+      .comboBox,
+      []
     ),
     .decoderType
     : (
       String(localized:"Decoder Type"),
       String(localized:"Decoder type.", comment:"This is used for a tooltip."),
       .rwCVs,
-      .comboBox
+      .comboBox,
+      []
     ),
     .decoderAddress
     : (
       String(localized:"Decoder Address"),
       String(localized:"Decoder address.", comment:"This is used for a tooltip."),
       .rwCVs,
-      .textField
+      .textField,
+      []
     ),
     .cv
     : (
       String(localized:"CV"),
       String(localized:"The number of the CV that you wish to change.", comment:"This is used for a tooltip."),
       .rwCVs,
-      .readCV
+      .readCV,
+      []
     ),
     .value
     : (
       String(localized:"Value"),
       String(localized:"The value of the CV in decimal.", comment:"This is used for a tooltip."),
       .rwCVs,
-      .writeCV
+      .writeCV,
+      []
     ),
     .bits
     : (
       String(localized:"Bit [7..0]"),
       String(localized:"The value of the CV in binary.", comment:"This is used for a tooltip."),
       .rwCVs,
-      .bits8
+      .bits8,
+      []
     ),
     .useIndexCVs
     : (
       String(localized:"Use Index CVs (CV31, CV32)"),
       String(localized:"Check this box to use index CVs.", comment:"This is used for a tooltip."),
       .rwCVs,
-      .checkBox
+      .checkBox,
+      []
     ),
     .cv31
     : (
       String(localized:"CV31"),
       String(localized:"The value of CV31 in decimal.", comment:"This is used for a tooltip."),
       .rwCVs,
-      .textField
+      .textField,
+      []
     ),
     .cv32
     : (
       String(localized:"CV32"),
       String(localized:"The value of CV32 in decimal.", comment:"This is used for a tooltip."),
       .rwCVs,
-      .textField
+      .textField,
+      []
     ),
   ]
   

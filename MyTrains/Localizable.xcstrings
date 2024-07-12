@@ -10,7 +10,34 @@
     " [CV17, CV18]" : {
 
     },
+    " [CV19.6:0]" : {
+
+    },
+    " [CV19.7]" : {
+
+    },
+    " [CV29.2, CV50.0]" : {
+
+    },
+    " [CV29.2, CV50.1]" : {
+
+    },
     " [CV29.5]" : {
+
+    },
+    " [CV49.7, CV49.3]" : {
+
+    },
+    " [CV125]" : {
+
+    },
+    " [CV126]" : {
+
+    },
+    " [CV127]" : {
+
+    },
+    " [CV128]" : {
 
     },
     "%lld bytes %@" : {
@@ -462,6 +489,9 @@
     "About MyTrains" : {
       "comment" : "Used for a menu title"
     },
+    "AC Analog Mode" : {
+
+    },
     "Accept" : {
       "comment" : "Used to accept license agreement"
     },
@@ -487,6 +517,9 @@
     "Acknowledgements" : {
 
     },
+    "Activate Functions in Consist Mode" : {
+
+    },
     "Activate Latency (%%UNITS_TIME%%)" : {
       "comment" : "This is used for the title of an input field where the user enters the time delay between a sensor being activated and when it sends the event report. The %%UNITS_TIME%% will be replaced at runtime by the name of the user selected units of time - place this at an approprate position in the title for the language."
     },
@@ -507,6 +540,9 @@
         }
       }
     },
+    "Active Functions in Analog Mode" : {
+
+    },
     "Actual Samples" : {
 
     },
@@ -519,7 +555,19 @@
     "Add Item to Panel" : {
 
     },
+    "Additional addresses." : {
+
+    },
+    "Additional Addresses%%CV%%" : {
+
+    },
     "Address" : {
+
+    },
+    "Address for consist operation." : {
+
+    },
+    "Address for Consist Operation%%CV%%" : {
 
     },
     "Agreement" : {
@@ -639,7 +687,13 @@
         }
       }
     },
+    "Analog Mode Motor Control" : {
+
+    },
     "Analog Settings" : {
+
+    },
+    "Analog Voltage Hysteresis" : {
 
     },
     "Analysis Settings" : {
@@ -1933,6 +1987,9 @@
     "Datagram Type Unknown: %@ " : {
 
     },
+    "DC Analog Mode" : {
+
+    },
     "DCC 14" : {
       "comment" : "Used for LocoNet train control protocol selection",
       "localizations" : {
@@ -2028,6 +2085,9 @@
 
     },
     "DCC Command Station Protocol" : {
+
+    },
+    "DCC Consist Address" : {
 
     },
     "DCC Programmer Tool" : {
@@ -2644,6 +2704,24 @@
 
     },
     "Emergency Stop All" : {
+
+    },
+    "Enable AC analog mode." : {
+
+    },
+    "Enable AC Analog Mode%%CV%%" : {
+
+    },
+    "Enable DC analog mode." : {
+
+    },
+    "Enable DC Analog Mode%%CV%%" : {
+
+    },
+    "Enable DCC consist address." : {
+
+    },
+    "Enable DCC Consist Address%%CV%%" : {
 
     },
     "Enabled" : {
@@ -4348,6 +4426,12 @@
     "Maximum speed at any time" : {
 
     },
+    "Maximum speed voltage." : {
+
+    },
+    "Maximum Speed Voltage%%CV%%" : {
+
+    },
     "Maximum speed when restrictions apply" : {
 
     },
@@ -4649,6 +4733,9 @@
           }
         }
       }
+    },
+    "No Additional Addresses" : {
+
     },
     "No available gateway node IDs" : {
 
@@ -5235,6 +5322,9 @@
     "Push Button" : {
 
     },
+    "Quantum Engineer" : {
+
+    },
     "Quick Help" : {
       "comment" : "This is used for the title of the Quick Help section in the Speed Profiler."
     },
@@ -5594,6 +5684,12 @@
     "Reverse Color" : {
       "comment" : "This is used for the title of a check box."
     },
+    "Reverse direction." : {
+
+    },
+    "Reverse Direction%%CV%%" : {
+
+    },
     "Reverse Only" : {
 
     },
@@ -5800,6 +5896,9 @@
     },
     "Scenic Items" : {
       "comment" : "Used for the title of a switchboard item palette in LayoutBuilder"
+    },
+    "Second Address for Motorola and Selectrix" : {
+
     },
     "Seconds" : {
 
@@ -6210,6 +6309,9 @@
         }
       }
     },
+    "Sound Control Behaviour" : {
+
+    },
     "Sound Enable" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -6308,6 +6410,12 @@
     },
     "Start Sample Number" : {
       "comment" : "This is used for the title of a text field."
+    },
+    "Start voltage (minimum speed)." : {
+
+    },
+    "Start Voltage (minimum speed)%%CV%%" : {
+
     },
     "Steam" : {
       "comment" : "Used to indicate that a locomotive is steam powered",
@@ -6772,6 +6880,9 @@
 
     },
     "The buffer stop item serves no other purpose." : {
+
+    },
+    "The decoder will only respond to DCC commands!" : {
 
     },
     "The firmware type of this decoder." : {
@@ -7340,8 +7451,17 @@
     "Update Firmware" : {
 
     },
+    "Use 3 Addresses (Motorola only)" : {
+
+    },
+    "Use 4 Addresses (Motorola only)" : {
+
+    },
     "Use Custom Dimensions" : {
       "comment" : "Used as the title for custom dimensions of a track part."
+    },
+    "Use extended (long) address" : {
+
     },
     "Use Index CVs (CV31, CV32)" : {
 
@@ -7357,6 +7477,9 @@
     },
     "Use occupancy detectors for profiling." : {
       "comment" : "This is used for a tooltip."
+    },
+    "Use primary (short) address" : {
+
     },
     "Use Reed Switches" : {
       "comment" : "This is used for the title of a check box."

@@ -403,17 +403,17 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
     
     settingsFields = ProgrammerToolSettingsProperty.inspectorPropertyFields
     
-    for temp in inspectorFields {
+    for temp in settingsFields {
       if let comboBox = temp.control as? MyComboBox {
- //       comboBox.target = self
- //       comboBox.action = #selector(self.cboAction(_:))
+        comboBox.target = self
+        comboBox.action = #selector(self.cboAction(_:))
       }
       else if let chkBox = temp.control as? NSButton {
- //       chkBox.target = self
- //       chkBox.action = #selector(self.chkAction(_:))
+        chkBox.target = self
+        chkBox.action = #selector(self.chkAction(_:))
       }
       else if let field = temp.control as? NSTextField {
- //       field.delegate = self
+        field.delegate = self
       }
     }
     
@@ -523,6 +523,8 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
     
     NSLayoutConstraint.activate(settingsConstraints)
     
+    displaySettingsInspector()
+    
   }
   
   // MARK: Private Methods
@@ -542,38 +544,12 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
       }
     }
     
-    var commonProperties : Set<ProgrammerToolInspectorProperty> = [
-      .cv7,
-      .cv8,
-      .programmingMode,
-      .decoderType,
-      .decoderAddress,
-      .value,
-      .bits,
-      .cv31,
-      .cv32,
-      .useIndexCVs,
-      .cv,
-      .projectName,
-      .manufacturer,
-      .manufacturerId,
-      .model,
-    ]
+    var commonProperties : Set<ProgrammerToolInspectorProperty> = []
     
-    if let manufacturer = decoder.manufacturer, manufacturer == .electronicSolutionsUlmGmbH {
-      commonProperties.insert(.esuflash)
-      commonProperties.insert(.esuProductId)
-      commonProperties.insert(.esuSoundLock)
-      commonProperties.insert(.esuFirmwareType)
-      commonProperties.insert(.esuSerialNumber)
-      commonProperties.insert(.esuProductionDate)
-      commonProperties.insert(.esuProductionInfo)
-      commonProperties.insert(.esuBootcodeVersion)
-      commonProperties.insert(.esuFirmwareVersion)
-      commonProperties.insert(.esuDecoderOperatingTime)
-      commonProperties.insert(.esuSmokeUnitOperatingTime)
-    }
-    else {
+    for property in ProgrammerToolInspectorProperty.allCases {
+      if decoder.decoderType.isInspectorPropertySupported(property: property) {
+        commonProperties.insert(property)
+      }
     }
     
     var usedFields : [ProgrammerToolInspectorPropertyField] = []
@@ -653,7 +629,190 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
     
   }
 
-  
+  internal func displaySettingsInspector() {
+    
+    guard let decoder, let appNode else {
+      return
+    }
+    
+    NSLayoutConstraint.deactivate(settingsPropertyConstraints)
+    settingsPropertyConstraints.removeAll()
+    
+    for (view) in pnlSettingsView {
+      if let stackView = view as? ScrollVerticalStackView {
+        stackView.stackView?.subviews.removeAll()
+      }
+    }
+    
+    var commonProperties : Set<ProgrammerToolSettingsProperty> = [
+    ]
+    
+    for property in ProgrammerToolSettingsProperty.allCases {
+      if decoder.decoderType.isSettingsPropertySupported(property: property) {
+        commonProperties.insert(property)
+      }
+    }
+    
+    if decoder.locomotiveAddressType == .extended {
+      commonProperties.remove(.locomotiveAddressShort)
+      commonProperties.remove(.marklinConsecutiveAddresses)
+    }
+    
+    if decoder.locomotiveAddressType == .primary {
+      commonProperties.remove(.locomotiveAddressLong)
+      commonProperties.remove(.locomotiveAddressWarning)
+    }
+    
+    if !decoder.isConsistAddressEnabled {
+      commonProperties.remove(.consistAddress)
+      commonProperties.remove(.consistReverseDirection)
+    }
+    
+    if !decoder.isACAnalogModeEnabled {
+      commonProperties.remove(.acAnalogModeStartVoltage)
+      commonProperties.remove(.acAnalogModeMaximumSpeedVoltage)
+    }
+
+    if !decoder.isDCAnalogModeEnabled {
+      commonProperties.remove(.dcAnalogModeStartVoltage)
+      commonProperties.remove(.dcAnalogModeMaximumSpeedVoltage)
+    }
+
+    var usedFields : [ProgrammerToolSettingsPropertyField] = []
+    
+    var index = 0
+    while index < settingsFields.count {
+      
+      let inspector = settingsFields[index].property.section.inspector
+      
+      let view = pnlSettingsView[inspector.rawValue]
+      
+      if let stackView = (view as? ScrollVerticalStackView)?.stackView {
+        
+        stackView.alignment = .right
+        
+        while index < settingsFields.count && settingsFields[index].property.section.inspector == inspector {
+          
+          let group = settingsFields[index].property.section
+          
+          var showGroupHeader = true
+          var showGroupSeparator = false
+          
+          while index < settingsFields.count && settingsFields[index].property.section == group {
+            
+            let field = settingsFields[index]
+            
+            if commonProperties.contains(field.property) {
+              
+              if showGroupHeader {
+                stackView.addArrangedSubview(settingsGroupFields[group]!.view!)
+                showGroupHeader = false
+                showGroupSeparator = true
+              }
+              
+              stackView.addArrangedSubview(field.view!)
+              
+              /// Note to self: Views within a StackView must not have constraints to the outside world as this will lock the StackView size.
+              /// They must only have internal constraints to the view that is added to the StackView.
+              ///  https://manasaprema04.medium.com/autolayout-fundamental-522f0a6e5790
+              
+ 
+              if field.property.controlType == .warning {
+                settingsPropertyConstraints.append(field.label!.leadingAnchor.constraint(equalTo: field.view!.leadingAnchor, constant: 20))
+                settingsPropertyConstraints.append(field.customView!.leadingAnchor.constraint(equalToSystemSpacingAfter: field.label!.trailingAnchor, multiplier: 1.0))
+                 settingsPropertyConstraints.append(field.view!.heightAnchor.constraint(greaterThanOrEqualTo: field.customView!.heightAnchor))
+                settingsPropertyConstraints.append(field.control!.leadingAnchor.constraint(equalToSystemSpacingAfter: field.customView!.trailingAnchor, multiplier: 1.0))
+              }
+              else if field.property.controlType == .textFieldWithInfo {
+                settingsPropertyConstraints.append(field.label!.leadingAnchor.constraint(equalTo: field.view!.leadingAnchor, constant: 20))
+                settingsPropertyConstraints.append(field.control!.leadingAnchor.constraint(equalToSystemSpacingAfter: field.label!.trailingAnchor, multiplier: 1.0))
+                settingsPropertyConstraints.append(field.customView!.leadingAnchor.constraint(equalToSystemSpacingAfter: field.control!.trailingAnchor, multiplier: 1.0))
+                settingsPropertyConstraints.append(field.control!.widthAnchor.constraint(equalToConstant: 100))
+                settingsPropertyConstraints.append(field.view!.heightAnchor.constraint(greaterThanOrEqualTo: field.label!.heightAnchor))
+                settingsPropertyConstraints.append(field.view!.heightAnchor.constraint(greaterThanOrEqualTo: field.control!.heightAnchor))
+                settingsPropertyConstraints.append(field.control!.centerYAnchor.constraint(equalTo: field.view!.centerYAnchor))
+                settingsPropertyConstraints.append(field.label!.centerYAnchor.constraint(equalTo: field.view!.centerYAnchor))
+                settingsPropertyConstraints.append(field.customView!.centerYAnchor.constraint(equalTo: field.view!.centerYAnchor))
+              }
+              else {
+                settingsPropertyConstraints.append(field.label!.leadingAnchor.constraint(equalTo: field.view!.leadingAnchor, constant: 20))
+               settingsPropertyConstraints.append(field.control!.leadingAnchor.constraint(equalToSystemSpacingAfter: field.label!.trailingAnchor, multiplier: 1.0))
+                settingsPropertyConstraints.append(field.control!.widthAnchor.constraint(greaterThanOrEqualToConstant: 100))
+                settingsPropertyConstraints.append(field.view!.heightAnchor.constraint(greaterThanOrEqualTo: field.label!.heightAnchor))
+                settingsPropertyConstraints.append(field.view!.heightAnchor.constraint(greaterThanOrEqualTo: field.control!.heightAnchor))
+                settingsPropertyConstraints.append(field.view!.trailingAnchor.constraint(equalTo: field.control!.trailingAnchor))
+                settingsPropertyConstraints.append(field.control!.centerYAnchor.constraint(equalTo: field.view!.centerYAnchor))
+                settingsPropertyConstraints.append(field.label!.centerYAnchor.constraint(equalTo: field.view!.centerYAnchor))
+              }
+              
+
+              usedFields.append(field)
+                
+              setValue(field: field)
+                
+            }
+            
+            index += 1
+            
+          }
+          
+          if showGroupSeparator {
+            stackView.addArrangedSubview(settingsGroupSeparators[group]!.view!)
+          }
+          
+        }
+        
+      }
+      
+    }
+    
+    for field1 in usedFields {
+      for field2 in usedFields {
+        if !(field1.label! === field2.label) && field1.property.section.inspector == field2.property.section.inspector {
+          settingsPropertyConstraints.append(field1.label!.widthAnchor.constraint(greaterThanOrEqualTo: field2.label!.widthAnchor))
+        }
+      }
+    }
+    
+    NSLayoutConstraint.activate(settingsPropertyConstraints)
+    
+  }
+
+  private func setValue(field:ProgrammerToolSettingsPropertyField) {
+    
+    guard let decoder else {
+      return
+    }
+    
+    let value = decoder.getValue(property: field.property)
+    
+    switch field.property.controlType {
+    case .textField, .textFieldWithInfo:
+      (field.control as? NSTextField)?.stringValue = value
+      if field.property.controlType == .textFieldWithInfo {
+        (field.customView as? NSTextField)?.stringValue = decoder.getInfo(property: field.property)
+      }
+    case .label, .warning:
+      (field.control as? NSTextField)?.stringValue = value
+    case .checkBox:
+      (field.control as? NSButton)?.state = value == "true" ? .on : .off
+    case .comboBox:
+      
+      if let comboBox = field.control as? NSComboBox {
+        
+        comboBox.stringValue = ""
+        
+        if comboBox.numberOfItems > 0 {
+          comboBox.selectItem(withObjectValue: value)
+        }
+        
+      }
+    case .description:
+      break
+    }
+    
+  }
+
   // MARK: Actions
   
   @objc public func btnInspectorAction(_ sender:NSButton) {
@@ -668,6 +827,31 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
     
     if let item = ProgrammerToolSettingsGroup(rawValue: sender.tag) {
       currentSelector = item
+    }
+    
+  }
+
+  @objc func cboAction(_ sender: NSComboBox) {
+    
+    if let decoder, let property = ProgrammerToolSettingsProperty(rawValue: sender.tag) {
+      
+      if sender.indexOfSelectedItem >= 0, let string = sender.itemObjectValue(at: sender.indexOfSelectedItem) as? String {
+        
+        decoder.setValue(property: property, string: string)
+        
+      }
+      else {
+        decoder.setValue(property: property, string: "")
+      }
+      
+    }
+    
+  }
+  
+  @objc func chkAction(_ sender: NSButton) {
+    
+    if let decoder, let property = ProgrammerToolSettingsProperty(rawValue: sender.tag) {
+      decoder.setValue(property: property, string: sender.state == .on ? "true" : "false")
     }
     
   }
@@ -785,6 +969,21 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
           break
         }
       }
+      else {
+        
+        let trimmed = textField.stringValue.trimmingCharacters(in: .whitespaces)
+        
+        if let property = ProgrammerToolSettingsProperty(rawValue: textField.tag) {
+          
+          isValid = decoder.isValid(property: property, string: trimmed)
+          
+          if isValid {
+            decoder.setValue(property: property, string: trimmed)
+          }
+          
+        }
+        
+      }
       
     }
     
@@ -794,9 +993,13 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
 
   // MARK: DecoderDelegate Methods
   
-  @objc func reloadData(_ decoder : Decoder) {
+  @objc func reloadData(_ decoder: Decoder) {
     tableView?.reloadData()
     lblChangedCVs?.stringValue = decoder.cvTextList(list: decoder.cvsModified)
+  }
+
+  @objc func reloadSettings(_ decoder: Decoder) {
+    displaySettingsInspector()
   }
 
 }

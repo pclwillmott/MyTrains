@@ -20,7 +20,7 @@ import Foundation
  ]
 
  */
-public typealias TrackPartInfo = (trackPartId:TrackPart, manufacturer:Manufacturer, brandName:String, title: String, partNumber: String, itemPartType: SwitchboardItemType, trackCode: TrackCode, trackGauge: TrackGauge, frogType:FrogType, dimensions: [Double])
+public typealias TrackPartInfo = (trackPartId:TrackPart, manufacturer:xManufacturer, brandName:String, title: String, partNumber: String, itemPartType: SwitchboardItemType, trackCode: TrackCode, trackGauge: TrackGauge, frogType:FrogType, dimensions: [Double])
 
 public enum TrackPart : UInt16 {
   

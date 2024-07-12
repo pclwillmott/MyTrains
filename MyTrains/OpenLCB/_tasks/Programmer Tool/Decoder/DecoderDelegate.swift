@@ -8,7 +8,8 @@
 import Foundation
 
 @objc public protocol DecoderDelegate {
-  @objc optional func reloadData(_ decoder : Decoder)
+  @objc optional func reloadData(_ decoder: Decoder)
+  @objc optional func reloadSettings(_ decoder: Decoder)
 }
 
 public protocol IdentifyDecoderDelegate {

@@ -9,7 +9,7 @@ import Foundation
 
 public typealias LocoNetDeviceAttributes = Set<LocoNetDeviceAttribute>
 
-public typealias LocoNetProduct = (id: LocoNetDeviceId, productName: String, description: String, approxDate: Int, productCode: DigitraxProductCode, attributes: LocoNetDeviceAttributes, sensors: Int, switches: Int, manufacturer:Manufacturer, cvs: Int)
+public typealias LocoNetProduct = (id: LocoNetDeviceId, productName: String, description: String, approxDate: Int, productCode: DigitraxProductCode, attributes: LocoNetDeviceAttributes, sensors: Int, switches: Int, manufacturer:xManufacturer, cvs: Int)
 
 /*
 public class LocoNetProductDictionaryItem : EditorObject {

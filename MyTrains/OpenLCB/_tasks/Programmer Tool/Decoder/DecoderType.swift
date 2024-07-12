@@ -310,6 +310,16 @@ public enum DecoderType : UInt64, CaseIterable {
   
   // MARK: Public Methods
   
+  public func isSettingsPropertySupported(property:ProgrammerToolSettingsProperty) -> Bool {
+    let requiredCapabilities = property.requiredCapabilities
+    return requiredCapabilities.intersection(self.capabilities) == requiredCapabilities
+  }
+  
+  public func isInspectorPropertySupported(property:ProgrammerToolInspectorProperty) -> Bool {
+    let requiredCapabilities = property.requiredCapabilities
+    return requiredCapabilities.intersection(self.capabilities) == requiredCapabilities
+  }
+
   public func cvList(filename:String) -> [(cv: CV, defaultValue:UInt8)] {
     
     var result : [(cv: CV, defaultValue:UInt8)] = []

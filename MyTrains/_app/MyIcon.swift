@@ -46,6 +46,16 @@ public enum MyIcon : String {
   case button                 = "Button"
   case id                     = "ID"
   case sunglasses             = "Sunglasses"
+  case warning                = "Warning"
+  
+  // MARK: Public Properties
+  
+  public var image : NSImage? {
+    guard let image = NSImage(named: self.rawValue) else {
+      return nil
+    }
+    return image
+  }
   
   // MARK: Public Methods
   

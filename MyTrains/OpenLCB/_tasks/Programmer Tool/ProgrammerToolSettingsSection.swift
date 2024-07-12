@@ -13,6 +13,15 @@ public enum ProgrammerToolSettingsSection : Int, CaseIterable {
   // MARK: Enumeration
   
   case locomotiveAddress = 1
+  case dccConsistAddress = 2
+  case activateFunctionsInConsistMode = 3
+  case activeFunctionsInAnalogMode = 4
+  case acAnalogMode = 5
+  case dcAnalogMode = 6
+  case quantumEngineer = 7
+  case soundControlBehaviour = 8
+  case analogModeMotorControl = 9
+  case analogVoltageHysteresis = 10
  
   // MARK: Public Properties
   
@@ -30,6 +39,42 @@ public enum ProgrammerToolSettingsSection : Int, CaseIterable {
     .locomotiveAddress : (
       String(localized: "Locomotive Address"),
       .address
+    ),
+    .dccConsistAddress : (
+      String(localized: "DCC Consist Address"),
+      .address
+    ),
+    .activateFunctionsInConsistMode : (
+      String(localized: "Activate Functions in Consist Mode"),
+      .address
+    ),
+    .activeFunctionsInAnalogMode: (
+      String(localized: "Active Functions in Analog Mode"),
+      .analogSettings
+    ),
+    .acAnalogMode : (
+      String(localized: "AC Analog Mode"),
+      .analogSettings
+    ),
+    .dcAnalogMode : (
+      String(localized: "DC Analog Mode"),
+      .analogSettings
+    ),
+    .quantumEngineer : (
+      String(localized: "Quantum Engineer"),
+      .analogSettings
+    ),
+    .soundControlBehaviour : (
+      String(localized: "Sound Control Behaviour"),
+      .analogSettings
+    ),
+    .analogModeMotorControl : (
+      String(localized: "Analog Mode Motor Control"),
+      .analogSettings
+    ),
+    .analogVoltageHysteresis : (
+      String(localized: "Analog Voltage Hysteresis"),
+      .analogSettings
     ),
   ]
   

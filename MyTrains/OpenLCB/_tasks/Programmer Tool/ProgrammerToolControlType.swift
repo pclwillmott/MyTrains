@@ -18,5 +18,6 @@ public enum ProgrammerToolControlType {
   case comboBox
   case description
   case warning
+  case textFieldWithInfo
   
 }
