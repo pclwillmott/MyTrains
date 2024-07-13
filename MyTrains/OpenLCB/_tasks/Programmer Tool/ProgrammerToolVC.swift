@@ -677,6 +677,43 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
       commonProperties.remove(.dcAnalogModeStartVoltage)
       commonProperties.remove(.dcAnalogModeMaximumSpeedVoltage)
     }
+    
+    if !(decoder.abcBrakeIfLeftRailMorePositive || decoder.abcBrakeIfRightRailMorePositive) {
+      commonProperties.remove(.voltageDifferenceIndicatingABCBrakeSection)
+      commonProperties.remove(.abcReducedSpeed)
+    }
+    
+    if !decoder.isABCShuttleTrainEnabled {
+      commonProperties.remove(.waitingPeriodBeforeDirectionChange)
+    }
+    
+    if !decoder.isConstantBrakeDistanceEnabled {
+      commonProperties.remove(.brakeDistanceLength)
+      commonProperties.remove(.differentBrakeDistanceBackwards)
+      commonProperties.remove(.brakeDistanceLengthBackwards)
+      commonProperties.remove(.driveUntilLocomotiveStopsInSpecifiedPeriod)
+      commonProperties.remove(.stoppingPeriod)
+      commonProperties.remove(.constantBrakeDistanceOnSpeedStep0)
+    }
+
+    if !decoder.isDifferentBrakeDistanceBackwards {
+      commonProperties.remove(.brakeDistanceLengthBackwards)
+    }
+
+    if !decoder.driveUntilLocomotiveStopsInSpecifiedPeriod {
+      commonProperties.remove(.stoppingPeriod)
+    }
+    
+    if !decoder.isRailComFeedbackEnabled {
+      commonProperties.remove(.enableRailComPlusAutomaticAnnouncement)
+      commonProperties.remove(.sendFollowingToCommandStation)
+      commonProperties.remove(.sendAddressViaBroadcastOnChannel1)
+      commonProperties.remove(.allowDataTransmissionOnChannel2)
+    }
+    
+    if decoder.detectSpeedStepModeAutomatically {
+      commonProperties.remove(.speedStepMode)
+    }
 
     var usedFields : [ProgrammerToolSettingsPropertyField] = []
     
@@ -733,6 +770,15 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
                 settingsPropertyConstraints.append(field.control!.centerYAnchor.constraint(equalTo: field.view!.centerYAnchor))
                 settingsPropertyConstraints.append(field.label!.centerYAnchor.constraint(equalTo: field.view!.centerYAnchor))
                 settingsPropertyConstraints.append(field.customView!.centerYAnchor.constraint(equalTo: field.view!.centerYAnchor))
+              }
+              else if field.property.controlType == .textField {
+                settingsPropertyConstraints.append(field.label!.leadingAnchor.constraint(equalTo: field.view!.leadingAnchor, constant: 20))
+               settingsPropertyConstraints.append(field.control!.leadingAnchor.constraint(equalToSystemSpacingAfter: field.label!.trailingAnchor, multiplier: 1.0))
+                settingsPropertyConstraints.append(field.control!.widthAnchor.constraint(equalToConstant: 100))
+                settingsPropertyConstraints.append(field.view!.heightAnchor.constraint(greaterThanOrEqualTo: field.label!.heightAnchor))
+                settingsPropertyConstraints.append(field.view!.heightAnchor.constraint(greaterThanOrEqualTo: field.control!.heightAnchor))
+                settingsPropertyConstraints.append(field.control!.centerYAnchor.constraint(equalTo: field.view!.centerYAnchor))
+                settingsPropertyConstraints.append(field.label!.centerYAnchor.constraint(equalTo: field.view!.centerYAnchor))
               }
               else {
                 settingsPropertyConstraints.append(field.label!.leadingAnchor.constraint(equalTo: field.view!.leadingAnchor, constant: 20))
@@ -792,7 +838,7 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
       if field.property.controlType == .textFieldWithInfo {
         (field.customView as? NSTextField)?.stringValue = decoder.getInfo(property: field.property)
       }
-    case .label, .warning:
+    case .label, .warning, .description:
       (field.control as? NSTextField)?.stringValue = value
     case .checkBox:
       (field.control as? NSButton)?.state = value == "true" ? .on : .off

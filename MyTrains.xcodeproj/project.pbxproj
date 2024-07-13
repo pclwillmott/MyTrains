@@ -446,6 +446,7 @@
 		DAFA94472C1B483F005D6AE8 /* ComboBoxNodeDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAFA94462C1B483F005D6AE8 /* ComboBoxNodeDS.swift */; };
 		DAFACF592A26C5E0007C10F0 /* MyTrains Clock.xml in Resources */ = {isa = PBXBuildFile; fileRef = DAFACF582A26C5E0007C10F0 /* MyTrains Clock.xml */; };
 		DAFBC3ED29EC39A6003336BE /* OpenLCBErrorCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAFBC3EC29EC39A6003336BE /* OpenLCBErrorCode.swift */; };
+		DAFECB4B2C42DA3700B87CA8 /* SpeedStepMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAFECB4A2C42DA3700B87CA8 /* SpeedStepMode.swift */; };
 		DAFFB6592B5D49040035AC74 /* CreateVirtualNode.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DAFFB6582B5D49040035AC74 /* CreateVirtualNode.storyboard */; };
 		DAFFB65B2B5D49680035AC74 /* CreateVirtualNodeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAFFB65A2B5D49680035AC74 /* CreateVirtualNodeVC.swift */; };
 		DAFFB65D2B5D877F0035AC74 /* SelectLayout.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DAFFB65C2B5D877F0035AC74 /* SelectLayout.storyboard */; };
@@ -916,6 +917,7 @@
 		DAFA94462C1B483F005D6AE8 /* ComboBoxNodeDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComboBoxNodeDS.swift; sourceTree = "<group>"; };
 		DAFACF582A26C5E0007C10F0 /* MyTrains Clock.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "MyTrains Clock.xml"; sourceTree = "<group>"; usesTabs = 1; };
 		DAFBC3EC29EC39A6003336BE /* OpenLCBErrorCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBErrorCode.swift; sourceTree = "<group>"; };
+		DAFECB4A2C42DA3700B87CA8 /* SpeedStepMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedStepMode.swift; sourceTree = "<group>"; };
 		DAFFB6582B5D49040035AC74 /* CreateVirtualNode.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = CreateVirtualNode.storyboard; sourceTree = "<group>"; };
 		DAFFB65A2B5D49680035AC74 /* CreateVirtualNodeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateVirtualNodeVC.swift; sourceTree = "<group>"; };
 		DAFFB65C2B5D877F0035AC74 /* SelectLayout.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SelectLayout.storyboard; sourceTree = "<group>"; };
@@ -1043,6 +1045,7 @@
 				DAB4FF5D2854F8CF00D74920 /* LocomotiveType.swift */,
 				DA73E5042C4154A0002AB3DF /* LocomotiveAddressType.swift */,
 				DA74922A2C418251002070CE /* MarklinConsecutiveAddresses.swift */,
+				DAFECB4A2C42DA3700B87CA8 /* SpeedStepMode.swift */,
 				DAE8DD52286751BE0097C2D1 /* xManufacturer.swift */,
 				DA5A9F8F295C89FC00950479 /* NumberBase.swift */,
 				DA6E28E0285F86B900772641 /* Orientation.swift */,
@@ -2284,6 +2287,7 @@
 				DABC089B2B1B895B00260605 /* LocoNetIMMPacketRepeat.swift in Sources */,
 				DAB4A73F2B40483700CD5256 /* CDIMapView.swift in Sources */,
 				DAA777CC2A20C861008EAF02 /* OpenLCBClockType.swift in Sources */,
+				DAFECB4B2C42DA3700B87CA8 /* SpeedStepMode.swift in Sources */,
 				DA5563D82B499C4600D8BF90 /* CDITextViewVC.swift in Sources */,
 				DA9C6A1E2A408F060069FED8 /* OpenLCBTractionControlInstructionType.swift in Sources */,
 				DA595E162B891D1D00ADF87B /* OpenLCBNodeVirtual - Messages - Traction Protocol.swift in Sources */,

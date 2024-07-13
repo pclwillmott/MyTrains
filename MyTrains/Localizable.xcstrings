@@ -16,16 +16,82 @@
     " [CV19.7]" : {
 
     },
+    " [CV27.0]" : {
+
+    },
+    " [CV27.1]" : {
+
+    },
+    " [CV27.2]" : {
+
+    },
+    " [CV27.3]" : {
+
+    },
+    " [CV27.4]" : {
+
+    },
+    " [CV27.5]" : {
+
+    },
+    " [CV27.6]" : {
+
+    },
+    " [CV27.7]" : {
+
+    },
+    " [CV28.0]" : {
+
+    },
+    " [CV28.1]" : {
+
+    },
+    " [CV28.7]" : {
+
+    },
+    " [CV29.1]" : {
+
+    },
     " [CV29.2, CV50.0]" : {
 
     },
     " [CV29.2, CV50.1]" : {
 
     },
+    " [CV29.3]" : {
+
+    },
     " [CV29.5]" : {
 
     },
+    " [CV49.4]" : {
+
+    },
     " [CV49.7, CV49.3]" : {
+
+    },
+    " [CV50.2]" : {
+
+    },
+    " [CV102]" : {
+
+    },
+    " [CV105]" : {
+
+    },
+    " [CV106]" : {
+
+    },
+    " [CV122.2]" : {
+
+    },
+    " [CV122.5]" : {
+
+    },
+    " [CV122.6]" : {
+
+    },
+    " [CV123]" : {
 
     },
     " [CV125]" : {
@@ -38,6 +104,60 @@
 
     },
     " [CV128]" : {
+
+    },
+    " [CV129]" : {
+
+    },
+    " [CV130]" : {
+
+    },
+    " [CV134]" : {
+
+    },
+    " [CV149]" : {
+
+    },
+    " [CV150]" : {
+
+    },
+    " [CV151]" : {
+
+    },
+    " [CV152]" : {
+
+    },
+    " [CV153]" : {
+
+    },
+    " [CV154]" : {
+
+    },
+    " [CV179]" : {
+
+    },
+    " [CV180]" : {
+
+    },
+    " [CV181]" : {
+
+    },
+    " [CV182]" : {
+
+    },
+    " [CV183]" : {
+
+    },
+    " [CV184]" : {
+
+    },
+    " [CV253]" : {
+
+    },
+    " [CV254]" : {
+
+    },
+    " [CV255]" : {
 
     },
     "%lld bytes %@" : {
@@ -486,10 +606,22 @@
     "Abbreviated Default CDI Protocol" : {
 
     },
+    "ABC Brake Sections" : {
+
+    },
+    "ABC Reduced Speed." : {
+
+    },
+    "ABC Reduced Speed%%CV%%" : {
+
+    },
     "About MyTrains" : {
       "comment" : "Used for a menu title"
     },
     "AC Analog Mode" : {
+
+    },
+    "Acceleration and Deceleration" : {
 
     },
     "Accept" : {
@@ -650,8 +782,20 @@
     "Alias Mapping Enquiry Frame" : {
 
     },
+    "Allow data transmission on channel 2." : {
+
+    },
+    "Allow Data Transmission on Channel 2%%CV%%" : {
+
+    },
     "Allow Shunt" : {
       "comment" : "This is used for the title of a check box where the user can select if shunting is allowed in reverese direction on this switchbaord item."
+    },
+    "Allow ZIMO (HLU) brake sections." : {
+
+    },
+    "Allow ZIMO (HLU) Brake Sections%%CV%%" : {
+
     },
     "Alternate Clock 1" : {
       "comment" : "Used to indicate a clock's type",
@@ -838,6 +982,9 @@
     "Australia" : {
       "comment" : "This is the name of a country."
     },
+    "Auto Stop in presence of DC Polarity" : {
+
+    },
     "Auto Uncouple Cycle" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -854,6 +1001,12 @@
           }
         }
       }
+    },
+    "Automatic Parking Brake" : {
+
+    },
+    "Automatic Uncoupling" : {
+
     },
     "AWS Bell" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -1021,6 +1174,69 @@
         }
       }
     },
+    "Brake distance length." : {
+
+    },
+    "Brake Distance Length%%CV%%" : {
+
+    },
+    "Brake function 1 reduces brake time by." : {
+
+    },
+    "Brake Function 1 Reduces Brake Time by%%CV%%" : {
+
+    },
+    "Brake function 2 reduces brake time by." : {
+
+    },
+    "Brake Function 2 Reduces Brake Time by%%CV%%" : {
+
+    },
+    "Brake function 3 reduces brake time by." : {
+
+    },
+    "Brake Function 3 Reduces Brake Time by%%CV%%" : {
+
+    },
+    "Brake Functions" : {
+
+    },
+    "Brake if left rail signal in driving direction is more positive than the right rail." : {
+
+    },
+    "Brake if left rail signal in driving direction is more positive than the right rail%%CV%%" : {
+
+    },
+    "Brake if right rail signal in driving direction is more positive than the left rail." : {
+
+    },
+    "Brake if right rail signal in driving direction is more positive than the left rail%%CV%%" : {
+
+    },
+    "Brake on forward DC polarity." : {
+
+    },
+    "Brake on Forward DC Polarity%%CV%%" : {
+
+    },
+    "Brake on forward polarity of brake diode." : {
+
+    },
+    "Brake on Forward Polarity of Brake Diode%%CV%%" : {
+
+    },
+    "Brake on reverse DC polarity." : {
+
+    },
+    "Brake on Reverse DC Polarity%%CV%%" : {
+
+    },
+    "Brake on reverse polarity of brake diode." : {
+
+    },
+    "Brake on Reverse Polarity of Brake Diode%%CV%%" : {
+
+    },
     "Brake Release" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -1038,7 +1254,13 @@
         }
       }
     },
+    "Brake Section Settings" : {
+
+    },
     "Brake Settings" : {
+
+    },
+    "Brake Sound" : {
 
     },
     "Brake Squeal" : {
@@ -1063,6 +1285,9 @@
     },
     "Bring All to Front" : {
       "comment" : "Used for a menu title"
+    },
+    "Broadway Limited Steam Engine Control" : {
+
     },
     "Brown" : {
       "comment" : "The name of a color."
@@ -1680,6 +1905,15 @@
     "Connecting to Locomotive Failed" : {
 
     },
+    "Constant brake distance on speed step 0." : {
+
+    },
+    "Constant Brake Distance on Speed Step 0%%CV%%" : {
+
+    },
+    "ConstantBrake Distance" : {
+
+    },
     "Constraint #1 (%%UNITS_SCALE_SPEED%%)" : {
       "comment" : "This is used for the title of an input field where the user enters the speed constraint value. The %%UNITS_SCALE_SPEED%% will be replaced at runtime by the name of the user selected units of speed - place this at an approprate position in the title for the language."
     },
@@ -2268,6 +2502,12 @@
     "Default Values" : {
 
     },
+    "Delay time before exiting a brake section." : {
+
+    },
+    "Delay Time Before Exiting a Brake Section%%CV%%" : {
+
+    },
     "Delegate" : {
       "comment" : "Used to indicate that the workstation is delegate mode",
       "localizations" : {
@@ -2328,6 +2568,12 @@
         }
       }
     },
+    "Detect speed step mode automatically." : {
+
+    },
+    "Detect Speed Step Mode Automatically%%CV%%" : {
+
+    },
     "Determines the speed profiler mode of operation." : {
       "comment" : "This is used for a tooltip."
     },
@@ -2355,6 +2601,12 @@
 
     },
     "Difference between commanded speed and actual speed in the reverse direction" : {
+
+    },
+    "Different brake distance while driving backwards." : {
+
+    },
+    "Different Brake Distance While Driving Backwards%%CV%%" : {
 
     },
     "Digitrax BXP88" : {
@@ -2551,6 +2803,12 @@
         }
       }
     },
+    "Drive until locomotive stops in specified period." : {
+
+    },
+    "Drive Until Locomotive Stops in Specified Period%%CV%%" : {
+
+    },
     "Driver's Door" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -2590,6 +2848,9 @@
           }
         }
       }
+    },
+    "Dynamic Sound Control" : {
+
     },
     "Each event has a unique id. You can enter the event ids applicable to the turnout or crossing in the \"Events Inspector\". The \"New\" button may be used to get a new event id from the application's pool of event ids. The copy and paste buttons are provided as a convenience for copying event ids to and/or from a configuration tool.\n\nThe speed limits applicable for the specific turnout or crossing can be set by using the \"Speed Constraints Inspector\". Any speed constraints set for the turnout or crossing will override any speed constraints set as layout properties. You can set your preferred units of speed in the application preferences. Different speed constarints can be set for \"Direction Next\" and \"Direction Previous\". \"Direction Next\" and \"Direction Previous\" are defined by the blocks of track connected to the turnout or crossing." : {
 
@@ -2706,10 +2967,25 @@
     "Emergency Stop All" : {
 
     },
+    "Enable ABC brake mode (asymmetrical DCC signal:" : {
+
+    },
+    "Enable ABC shuttle train." : {
+
+    },
+    "Enable ABC Shuttle Train%%CV%%" : {
+
+    },
     "Enable AC analog mode." : {
 
     },
     "Enable AC Analog Mode%%CV%%" : {
+
+    },
+    "Enable constant brake distance." : {
+
+    },
+    "Enable Constant Brake Distance%%CV%%" : {
 
     },
     "Enable DC analog mode." : {
@@ -2722,6 +2998,24 @@
 
     },
     "Enable DCC Consist Address%%CV%%" : {
+
+    },
+    "Enable quantum engineer support." : {
+
+    },
+    "Enable Quantum Engineer Support%%CV%%" : {
+
+    },
+    "Enable RailCom feedback." : {
+
+    },
+    "Enable RailCom Feedback%%CV%%" : {
+
+    },
+    "Enable RailComPlus automatic announcement." : {
+
+    },
+    "Enable RailComPlus Automatic Announcement%%CV%%" : {
 
     },
     "Enabled" : {
@@ -2740,6 +3034,9 @@
           }
         }
       }
+    },
+    "Enabled Protocols" : {
+
     },
     "End Block" : {
       "comment" : "This is used for the title of a combobox."
@@ -2819,6 +3116,9 @@
 
     },
     "Error Information Report 3" : {
+
+    },
+    "ESU Smoke Unit" : {
 
     },
     "Even Parity" : {
@@ -3283,6 +3583,15 @@
     "Function Description Information" : {
 
     },
+    "Function difference voltage." : {
+
+    },
+    "Function Difference Voltage%%CV%%" : {
+
+    },
+    "Function Mapping" : {
+
+    },
     "Function Mappings" : {
 
     },
@@ -3290,6 +3599,12 @@
 
     },
     "Function Settings" : {
+
+    },
+    "Gearbox Backlash" : {
+
+    },
+    "General Physical Output Settings" : {
 
     },
     "General Settings" : {
@@ -3536,6 +3851,42 @@
     "Hide the Panel Configuration Area" : {
 
     },
+    "High Frequency PWM Motor Control%%CV%%" : {
+
+    },
+    "HLU Sections" : {
+
+    },
+    "HLU speed limit 1." : {
+
+    },
+    "HLU Speed Limit 1%%CV%%" : {
+
+    },
+    "HLU Speed Limit 2 (Ultra Low)%%CV%%" : {
+
+    },
+    "HLU speed limit 2." : {
+
+    },
+    "HLU speed limit 3." : {
+
+    },
+    "HLU Speed Limit 3%%CV%%" : {
+
+    },
+    "HLU Speed Limit 4 (Low Speed)%%CV%%" : {
+
+    },
+    "HLU speed limit 4." : {
+
+    },
+    "HLU speed limit 5." : {
+
+    },
+    "HLU Speed Limit 5%%CV%%" : {
+
+    },
     "Horn" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -3621,6 +3972,12 @@
     },
     "If this box is checked then the enter zone event will not be used by the speed profiler." : {
       "comment" : "This is used for a tooltip."
+    },
+    "Ignore acceleration and deceleration in the sound schedule." : {
+
+    },
+    "Ignore Acceleration and Deceleration in the Sound Schedule%%CV%%" : {
+
     },
     "In Use" : {
       "comment" : "Used to indicate a LocoNet command station slot status",
@@ -4070,6 +4427,12 @@
     "Link Error Code 4" : {
 
     },
+    "Load Adjustment" : {
+
+    },
+    "Load Control / Back EMF" : {
+
+    },
     "Location Services" : {
       "comment" : "This is used for the title of an input field where the user can enter an event ID."
     },
@@ -4432,6 +4795,24 @@
     "Maximum Speed Voltage%%CV%%" : {
 
     },
+    "Maximum speed when brake function 1 is active." : {
+
+    },
+    "Maximum Speed when Brake Function 1 is Active%%CV%%" : {
+
+    },
+    "Maximum speed when brake function 2 is active." : {
+
+    },
+    "Maximum Speed when Brake Function 2 is Active%%CV%%" : {
+
+    },
+    "Maximum speed when brake function 3 is active." : {
+
+    },
+    "Maximum Speed when Brake Function 3 is Active%%CV%%" : {
+
+    },
     "Maximum speed when restrictions apply" : {
 
     },
@@ -4442,6 +4823,9 @@
 
     },
     "Memory Configuration Protocol" : {
+
+    },
+    "Memory Settings" : {
 
     },
     "Meters" : {
@@ -4580,6 +4964,15 @@
           }
         }
       }
+    },
+    "Motor hysteresis Voltage." : {
+
+    },
+    "Motor Hysteresis Voltage%%CV%%" : {
+
+    },
+    "Motor Overload Protection" : {
+
     },
     "Motor Settings" : {
 
@@ -5218,6 +5611,9 @@
     "Permitted directions of travel for a train on this switchboard item." : {
       "comment" : "This is used for a tooltip."
     },
+    "Physical Output Configuration" : {
+
+    },
     "Pink" : {
       "comment" : "The name of a color."
     },
@@ -5233,6 +5629,9 @@
     "Post Office" : {
 
     },
+    "Power Pack" : {
+
+    },
     "Power Supply Brownout Detected Node" : {
 
     },
@@ -5241,6 +5640,9 @@
     },
     "Preferences" : {
       "comment" : "Used for a menu title"
+    },
+    "Preserve Direction" : {
+
     },
     "Previous" : {
       "comment" : "Used to describe the direction of the previous block in respect of a train route",
@@ -5322,6 +5724,9 @@
     "Push Button" : {
 
     },
+    "PWM Frequency" : {
+
+    },
     "Quantum Engineer" : {
 
     },
@@ -5364,6 +5769,15 @@
           }
         }
       }
+    },
+    "RailCom Settings" : {
+
+    },
+    "RailComPlus and M4 Master Decoder Synchronization" : {
+
+    },
+    "Random Functions" : {
+
     },
     "Read" : {
 
@@ -5690,6 +6104,9 @@
     "Reverse Direction%%CV%%" : {
 
     },
+    "Reverse Mode" : {
+
+    },
     "Reverse Only" : {
 
     },
@@ -5949,11 +6366,29 @@
     "Select the starting block for the route." : {
       "comment" : "This is used for a tooltip."
     },
+    "Selectrix Brake Sections" : {
+
+    },
+    "Send address via broadcast on channel 1." : {
+
+    },
+    "Send Address via Broadcast on Channel 1%%CV%%" : {
+
+    },
+    "Send ZIMO ZACK signals." : {
+
+    },
+    "Send ZIMO ZACK Signals%%CV%%" : {
+
+    },
     "Sending unadvertised event" : {
 
     },
     "Sensor" : {
       "comment" : "This is used to describe a switchboard item."
+    },
+    "Sensor Configuration" : {
+
     },
     "Sensor Event IDs" : {
       "comment" : "This is used for the title of the Sensor Event IDs section in the Layout Builder."
@@ -5968,6 +6403,9 @@
       "comment" : "Used for the title of a switchboard item palette in LayoutBuilder"
     },
     "Serial Number" : {
+
+    },
+    "Serial User Standard Interface" : {
 
     },
     "Set Aspect #1" : {
@@ -6065,6 +6503,9 @@
     },
     "Set Aspect #32" : {
       "comment" : "This is used for the title of an input field where the user enters the event ID that sets the signal to the specified aspect."
+    },
+    "Settings for certain Command Stations" : {
+
     },
     "Short Whistle" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -6283,6 +6724,9 @@
         }
       }
     },
+    "Smoke Chuffs" : {
+
+    },
     "Smoke Unit" : {
 
     },
@@ -6310,6 +6754,9 @@
       }
     },
     "Sound Control Behaviour" : {
+
+    },
+    "Sound CV Configuration" : {
 
     },
     "Sound Enable" : {
@@ -6355,6 +6802,9 @@
     "Sound Settings" : {
 
     },
+    "Sound Slot Configuration" : {
+
+    },
     "Sound Slot Settings" : {
 
     },
@@ -6371,6 +6821,18 @@
 
     },
     "Speed Profiler" : {
+
+    },
+    "Speed Step Mode" : {
+
+    },
+    "Speed step mode." : {
+
+    },
+    "Speed Step Mode%%CV%%" : {
+
+    },
+    "Speed Table" : {
 
     },
     "Speed that the locomotive was commanded to travel at" : {
@@ -6417,6 +6879,9 @@
     "Start Voltage (minimum speed)%%CV%%" : {
 
     },
+    "Starting Delay" : {
+
+    },
     "Steam" : {
       "comment" : "Used to indicate that a locomotive is steam powered",
       "localizations" : {
@@ -6433,6 +6898,9 @@
           }
         }
       }
+    },
+    "Steam Chuffs" : {
+
     },
     "Steam Generator" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -6511,6 +6979,12 @@
         }
       }
     },
+    "Stopping period." : {
+
+    },
+    "Stopping Period%%CV%%" : {
+
+    },
     "Straight" : {
 
     },
@@ -6559,6 +7033,9 @@
 
     },
     "Summary" : {
+
+    },
+    "SUSI Mapping" : {
 
     },
     "Switch #1 Closed" : {
@@ -6906,6 +7383,9 @@
     "The model of this decoder." : {
       "comment" : "This is used for a tooltip."
     },
+    "The motor will stop when the voltage falls below start voltage minus the motor hysteresis voltage. Functions will be activated when the voltage reaches the motor start voltage minus the function difference voltage." : {
+
+    },
     "The name of this decoder project." : {
       "comment" : "This is used for a tooltip."
     },
@@ -7165,6 +7645,9 @@
         }
       }
     },
+    "Tone Control" : {
+
+    },
     "Tools" : {
       "comment" : "Used for a menu title",
       "localizations" : {
@@ -7258,6 +7741,9 @@
           }
         }
       }
+    },
+    "Trimming" : {
+
     },
     "TT" : {
       "comment" : "Used to indicate the track gauge",
@@ -7457,10 +7943,19 @@
     "Use 4 Addresses (Motorola only)" : {
 
     },
+    "Use 14 Speed Steps" : {
+
+    },
+    "Use 28 or 128 Speed Steps" : {
+
+    },
     "Use Custom Dimensions" : {
       "comment" : "Used as the title for custom dimensions of a track part."
     },
     "Use extended (long) address" : {
+
+    },
+    "Use high frequency PWM motor control." : {
 
     },
     "Use Index CVs (CV31, CV32)" : {
@@ -7512,6 +8007,21 @@
     },
     "User description of this switchboard item. This is an optional field and may contain any descriptive text the user chooses." : {
       "comment" : "This is used for a tooltip."
+    },
+    "User ID #1." : {
+
+    },
+    "User ID #1%%CV%%" : {
+
+    },
+    "User ID #2." : {
+
+    },
+    "User ID #2%%CV%%" : {
+
+    },
+    "User Identification" : {
+
     },
     "User Name" : {
       "comment" : "Used for the title of the User Name input field in CDI",
@@ -7721,6 +8231,21 @@
           }
         }
       }
+    },
+    "Voltage difference indicating an ABC brake section." : {
+
+    },
+    "Voltage difference indicating an ABC brake section%%CV%%" : {
+
+    },
+    "Volume" : {
+
+    },
+    "Waiting time before direction change." : {
+
+    },
+    "Waiting time before direction change%%CV%%" : {
+
     },
     "Water Fill" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",

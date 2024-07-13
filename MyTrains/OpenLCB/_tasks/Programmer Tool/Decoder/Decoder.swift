@@ -380,6 +380,527 @@ public class Decoder : NSObject {
   public var analogModeDCMaximumSpeedVoltageInVolts : Double {
     return Double(analogModeDCMaximumSpeedVoltage) / 10.0
   }
+  
+  public var isQuantumEngineerEnabled : Bool {
+    get {
+      return getBool(cv: .cv_000_000_050, mask: ByteMask.d2)!
+    }
+    set(value) {
+      setBool(cv: .cv_000_000_050, mask: ByteMask.d2, value: value)
+    }
+  }
+  
+  public var ignoreAccelerationDecelerationInSoundSchedule : Bool {
+    get {
+      return getBool(cv: .cv_000_000_122, mask: ByteMask.d5)!
+    }
+    set(value) {
+      setBool(cv: .cv_000_000_122, mask: ByteMask.d5, value: value)
+    }
+  }
+  
+  public var useHighFrequencyPWMMotorControl : Bool {
+    get {
+      return getBool(cv: .cv_000_000_122, mask: ByteMask.d6)!
+    }
+    set(value) {
+      setBool(cv: .cv_000_000_122, mask: ByteMask.d6, value: value)
+    }
+  }
+  
+  public var analogMotorHysteresisVoltage : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_130)!
+    }
+    set(value) {
+      if value != analogMotorHysteresisVoltage {
+        setUInt8(cv: .cv_000_000_130, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var analogMotorHysteresisVoltageInVolts : Double {
+    return Double(analogMotorHysteresisVoltage) / 10.0
+  }
+  
+  public var analogFunctionDifferenceVoltage : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_129)!
+    }
+    set(value) {
+      if value != analogFunctionDifferenceVoltage {
+        setUInt8(cv: .cv_000_000_129, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var analogFunctionDifferenceVoltageInVolts : Double {
+    return Double(analogFunctionDifferenceVoltage) / 10.0
+  }
+
+  public var abcBrakeIfRightRailMorePositive : Bool {
+    get {
+      return getBool(cv: .cv_000_000_027, mask: ByteMask.d0)!
+    }
+    set(value) {
+      if value != abcBrakeIfRightRailMorePositive {
+        setBool(cv: .cv_000_000_027, mask: ByteMask.d0, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var abcBrakeIfLeftRailMorePositive : Bool {
+    get {
+      return getBool(cv: .cv_000_000_027, mask: ByteMask.d1)!
+    }
+    set(value) {
+      if value != abcBrakeIfLeftRailMorePositive {
+        setBool(cv: .cv_000_000_027, mask: ByteMask.d1, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var voltageDifferenceIndicatingABCBrakeSection : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_134)!
+    }
+    set(value) {
+      setUInt8(cv: .cv_000_000_134, value: value)
+    }
+  }
+  
+  public var abcReducedSpeed : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_123)!
+    }
+    set(value) {
+      setUInt8(cv: .cv_000_000_123, value: value)
+    }
+  }
+  
+  public var isABCShuttleTrainEnabled : Bool {
+    get {
+      return getUInt8(cv: .cv_000_000_149)! != 0
+    }
+    set(value) {
+      if value != isABCShuttleTrainEnabled {
+        setUInt8(cv: .cv_000_000_149, value: value ? 1 : 0)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var abcWaitingTime : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_149)!
+    }
+    set(value) {
+      if value != abcWaitingTime {
+        setUInt8(cv: .cv_000_000_149, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var abcWaitingTimeInSeconds : TimeInterval {
+    return Double(abcWaitingTime)
+  }
+
+  public var allowZIMOBrakeSections : Bool {
+    get {
+      return getBool(cv: .cv_000_000_027, mask: ByteMask.d2)!
+    }
+    set(value) {
+      setBool(cv: .cv_000_000_027, mask: ByteMask.d2, value: value)
+    }
+  }
+
+  public var sendZIMOZACKSignals : Bool {
+    get {
+      return getBool(cv: .cv_000_000_122, mask: ByteMask.d2)!
+    }
+    set(value) {
+      setBool(cv: .cv_000_000_122, mask: ByteMask.d2, value: value)
+    }
+  }
+
+  public var hluSpeedLimit1 : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_150)!
+    }
+    set(value) {
+      if value != hluSpeedLimit1 {
+        setUInt8(cv: .cv_000_000_150, value: value)
+        hluSpeedLimit2 = max(hluSpeedLimit2, value)
+        hluSpeedLimit3 = max(hluSpeedLimit3, value)
+        hluSpeedLimit4 = max(hluSpeedLimit4, value)
+        hluSpeedLimit5 = max(hluSpeedLimit5, value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var hluSpeedLimit2 : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_151)!
+    }
+    set(value) {
+      if value != hluSpeedLimit2 {
+        setUInt8(cv: .cv_000_000_151, value: value)
+        hluSpeedLimit1 = min(hluSpeedLimit1, value)
+        hluSpeedLimit3 = max(hluSpeedLimit3, value)
+        hluSpeedLimit4 = max(hluSpeedLimit4, value)
+        hluSpeedLimit5 = max(hluSpeedLimit5, value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var hluSpeedLimit3 : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_152)!
+    }
+    set(value) {
+      if value != hluSpeedLimit3 {
+        setUInt8(cv: .cv_000_000_152, value: value)
+        hluSpeedLimit1 = min(hluSpeedLimit1, value)
+        hluSpeedLimit2 = min(hluSpeedLimit2, value)
+        hluSpeedLimit4 = max(hluSpeedLimit4, value)
+        hluSpeedLimit5 = max(hluSpeedLimit5, value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var hluSpeedLimit4 : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_153)!
+    }
+    set(value) {
+      if value != hluSpeedLimit4 {
+        setUInt8(cv: .cv_000_000_153, value: value)
+        hluSpeedLimit1 = min(hluSpeedLimit1, value)
+        hluSpeedLimit2 = min(hluSpeedLimit2, value)
+        hluSpeedLimit3 = min(hluSpeedLimit3, value)
+        hluSpeedLimit5 = max(hluSpeedLimit5, value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var hluSpeedLimit5 : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_154)!
+    }
+    set(value) {
+      if value != hluSpeedLimit5 {
+        setUInt8(cv: .cv_000_000_154, value: value)
+        hluSpeedLimit1 = min(hluSpeedLimit1, value)
+        hluSpeedLimit2 = min(hluSpeedLimit2, value)
+        hluSpeedLimit3 = min(hluSpeedLimit3, value)
+        hluSpeedLimit4 = min(hluSpeedLimit4, value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var brakeOnForwardDCPolarity : Bool {
+    get {
+      return getBool(cv: .cv_000_000_027, mask: ByteMask.d4)!
+    }
+    set(value) {
+      setBool(cv: .cv_000_000_027, mask: ByteMask.d4, value: value)
+    }
+  }
+
+  public var brakeOnReverseDCPolarity : Bool {
+    get {
+      return getBool(cv: .cv_000_000_027, mask: ByteMask.d3)!
+    }
+    set(value) {
+      setBool(cv: .cv_000_000_027, mask: ByteMask.d3, value: value)
+    }
+  }
+
+  public var selectrixBrakeOnForwardPolarity : Bool {
+    get {
+      return getBool(cv: .cv_000_000_027, mask: ByteMask.d6)!
+    }
+    set(value) {
+      setBool(cv: .cv_000_000_027, mask: ByteMask.d6, value: value)
+    }
+  }
+
+  public var selectrixBrakeOnReversePolarity : Bool {
+    get {
+      return getBool(cv: .cv_000_000_027, mask: ByteMask.d5)!
+    }
+    set(value) {
+      setBool(cv: .cv_000_000_027, mask: ByteMask.d5, value: value)
+    }
+  }
+
+  public var isConstantBrakeDistanceEnabled : Bool {
+    get {
+      return getUInt8(cv: .cv_000_000_254)! != 0
+    }
+    set(value) {
+      if value != isConstantBrakeDistanceEnabled {
+        setUInt8(cv: .cv_000_000_254, value: value ? 1 : 0)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var brakeDistanceLength : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_254)!
+    }
+    set(value) {
+      setUInt8(cv: .cv_000_000_254, value: value)
+    }
+  }
+
+  public var isDifferentBrakeDistanceBackwards : Bool {
+    get {
+      return getUInt8(cv: .cv_000_000_255)! != 0
+    }
+    set(value) {
+      if value != isDifferentBrakeDistanceBackwards {
+        setUInt8(cv: .cv_000_000_255, value: value ? 1 : 0)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var brakeDistanceLengthBackwards : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_255)!
+    }
+    set(value) {
+      setUInt8(cv: .cv_000_000_255, value: value)
+    }
+  }
+
+  public var driveUntilLocomotiveStopsInSpecifiedPeriod : Bool {
+    get {
+      return getUInt8(cv: .cv_000_000_253)! != 0
+    }
+    set(value) {
+      if value != driveUntilLocomotiveStopsInSpecifiedPeriod {
+        setUInt8(cv: .cv_000_000_253, value: value ? 1 : 0)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var stoppingPeriod : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_253)!
+    }
+    set(value) {
+      if value != stoppingPeriod {
+        setUInt8(cv: .cv_000_000_253, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var stoppingPeriodInSeconds : TimeInterval {
+    return Double(stoppingPeriod) / 4.0
+  }
+
+  public var constantBrakeDistanceOnSpeedStep0 : Bool {
+    get {
+      return getBool(cv: .cv_000_000_027, mask: ByteMask.d7)!
+    }
+    set(value) {
+      setBool(cv: .cv_000_000_027, mask: ByteMask.d7, value: value)
+    }
+  }
+
+  public var delayBeforeExitingBrakeSection : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_102)!
+    }
+    set(value) {
+      if value != delayBeforeExitingBrakeSection {
+        setUInt8(cv: .cv_000_000_102, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var delayBeforeExitingBrakeSectionInSeconds : TimeInterval {
+    /// The NMRA spec says that the multipler should be 0.016s, the 61.0 factor
+    /// was derived from LokProgrammer app.
+    return Double(delayBeforeExitingBrakeSection) / 61.0
+  }
+
+  public var brakeFunction1BrakeTimeReduction : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_179)!
+    }
+    set(value) {
+      if value != brakeFunction1BrakeTimeReduction {
+        setUInt8(cv: .cv_000_000_179, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var brakeFunction1BrakeTimeReductionPercentage : Double {
+    return Double(brakeFunction1BrakeTimeReduction) / 255.0 * 100.0
+  }
+  
+  public var maximumSpeedWhenBrakeFunction1Active : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_182)!
+    }
+    set(value) {
+      setUInt8(cv: .cv_000_000_182, value: value)
+    }
+  }
+
+  public var brakeFunction2BrakeTimeReduction : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_180)!
+    }
+    set(value) {
+      if value != brakeFunction2BrakeTimeReduction {
+        setUInt8(cv: .cv_000_000_180, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var brakeFunction2BrakeTimeReductionPercentage : Double {
+    return Double(brakeFunction2BrakeTimeReduction) / 255.0 * 100.0
+  }
+  
+  public var maximumSpeedWhenBrakeFunction2Active : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_183)!
+    }
+    set(value) {
+      setUInt8(cv: .cv_000_000_183, value: value)
+    }
+  }
+
+  public var brakeFunction3BrakeTimeReduction : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_181)!
+    }
+    set(value) {
+      if value != brakeFunction3BrakeTimeReduction {
+        setUInt8(cv: .cv_000_000_181, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var brakeFunction3BrakeTimeReductionPercentage : Double {
+    return Double(brakeFunction3BrakeTimeReduction) / 255.0 * 100.0
+  }
+  
+  public var maximumSpeedWhenBrakeFunction3Active : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_184)!
+    }
+    set(value) {
+      setUInt8(cv: .cv_000_000_184, value: value)
+    }
+  }
+  
+  public var isRailComFeedbackEnabled : Bool {
+    get {
+      return getBool(cv: .cv_000_000_029, mask: ByteMask.d3)!
+    }
+    set(value) {
+      if value != isRailComFeedbackEnabled {
+        setBool(cv: .cv_000_000_029, mask: ByteMask.d3, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var isRailComPlusAutomaticAnnouncementEnabled : Bool {
+    get {
+      return getBool(cv: .cv_000_000_028, mask: ByteMask.d7)!
+    }
+    set(value) {
+      if value != isRailComPlusAutomaticAnnouncementEnabled {
+        setBool(cv: .cv_000_000_028, mask: ByteMask.d7, value: value)
+      }
+    }
+  }
+
+  public var sendAddressViaBroadcastOnChannel1 : Bool {
+    get {
+      return getBool(cv: .cv_000_000_028, mask: ByteMask.d0)!
+    }
+    set(value) {
+      if value != sendAddressViaBroadcastOnChannel1 {
+        setBool(cv: .cv_000_000_028, mask: ByteMask.d0, value: value)
+      }
+    }
+  }
+
+  public var allowDataTransmissionOnChannel2 : Bool {
+    get {
+      return getBool(cv: .cv_000_000_028, mask: ByteMask.d1)!
+    }
+    set(value) {
+      if value != allowDataTransmissionOnChannel2 {
+        setBool(cv: .cv_000_000_028, mask: ByteMask.d1, value: value)
+      }
+    }
+  }
+
+  public var detectSpeedStepModeAutomatically : Bool {
+    get {
+      return getBool(cv: .cv_000_000_049, mask: ByteMask.d4)!
+    }
+    set(value) {
+      if value != detectSpeedStepModeAutomatically {
+        setBool(cv: .cv_000_000_049, mask: ByteMask.d4, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var speedStepMode : SpeedStepMode {
+    get {
+      return SpeedStepMode(rawValue: getMaskedUInt8(cv: .cv_000_000_029, mask: SpeedStepMode.mask)!)!
+    }
+    set(value) {
+      if value != speedStepMode {
+        setMaskedUInt8(cv: .cv_000_000_029, mask: SpeedStepMode.mask, value: value.rawValue)
+      }
+    }
+  }
+  
+  public var userId1 : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_105)!
+    }
+    set(value) {
+      setUInt8(cv: .cv_000_000_105, value: value)
+    }
+  }
+
+  public var userId2 : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_106)!
+    }
+    set(value) {
+      setUInt8(cv: .cv_000_000_106, value: value)
+    }
+  }
 
   // MARK: Private Methods
   
@@ -559,11 +1080,113 @@ public class Decoder : NSObject {
       return "\(analogModeDCStartVoltage)"
     case .dcAnalogModeMaximumSpeedVoltage:
       return "\(analogModeDCMaximumSpeedVoltage)"
+    case .enableQuantumEngineer:
+      return isQuantumEngineerEnabled ? "true" : "false"
+    case .ignoreAccelerationDecelerationInSoundSchedule:
+      return ignoreAccelerationDecelerationInSoundSchedule ? "true" : "false"
+    case .useHighFrequencyPWMMotorControl:
+      return useHighFrequencyPWMMotorControl ? "true" : "false"
+    case .analogVoltageHysteresisDescription:
+      return String(localized:"The motor will stop when the voltage falls below start voltage minus the motor hysteresis voltage. Functions will be activated when the voltage reaches the motor start voltage minus the function difference voltage.")
+    case .analogMotorHysteresisVoltage:
+      return "\(analogMotorHysteresisVoltage)"
+    case .analogFunctionDifferenceVoltage:
+      return "\(analogFunctionDifferenceVoltage)"
+    case .enableABCBrakeMode:
+      return String(localized: "Enable ABC brake mode (asymmetrical DCC signal:")
+    case .brakeIfRightRailSignalPositive:
+      return abcBrakeIfRightRailMorePositive ? "true" : "false"
+    case .brakeIfLeftRailSignalPositive:
+      return abcBrakeIfLeftRailMorePositive ? "true" : "false"
+    case .voltageDifferenceIndicatingABCBrakeSection:
+      return "\(voltageDifferenceIndicatingABCBrakeSection)"
+    case .abcReducedSpeed:
+      return "\(abcReducedSpeed)"
+    case .enableABCShuttleTrain:
+      return isABCShuttleTrainEnabled ? "true" : "false"
+    case .waitingPeriodBeforeDirectionChange:
+      return "\(abcWaitingTime)"
+    case .hluAllowZIMO:
+      return allowZIMOBrakeSections ? "true" : "false"
+    case .hluSendZIMOZACKSignals:
+      return sendZIMOZACKSignals ? "true" : "false"
+    case .hluSpeedLimit1:
+      return "\(hluSpeedLimit1)"
+    case .hluSpeedLimit2:
+      return "\(hluSpeedLimit2)"
+    case .hluSpeedLimit3:
+      return "\(hluSpeedLimit3)"
+    case .hluSpeedLimit4:
+      return "\(hluSpeedLimit4)"
+    case .hluSpeedLimit5:
+      return "\(hluSpeedLimit5)"
+    case .brakeOnForwardPolarity:
+      return brakeOnForwardDCPolarity ? "true" : "false"
+    case .brakeOnReversePolarity:
+      return brakeOnReverseDCPolarity ? "true" : "false"
+    case .selectrixBrakeOnForwardPolarity:
+      return selectrixBrakeOnForwardPolarity ? "true" : "false"
+    case .selectrixBrakeOnReversePolarity:
+      return selectrixBrakeOnReversePolarity ? "true" : "false"
+    case .enableConstantBrakeDistance:
+      return isConstantBrakeDistanceEnabled ? "true" : "false"
+    case .brakeDistanceLength:
+      return "\(brakeDistanceLength)"
+    case .differentBrakeDistanceBackwards:
+      return isDifferentBrakeDistanceBackwards ? "true" : "false"
+    case .brakeDistanceLengthBackwards:
+      return "\(brakeDistanceLengthBackwards)"
+    case .driveUntilLocomotiveStopsInSpecifiedPeriod:
+      return driveUntilLocomotiveStopsInSpecifiedPeriod ? "true" : "false"
+    case .stoppingPeriod:
+      return "\(stoppingPeriod)"
+    case .constantBrakeDistanceOnSpeedStep0:
+      return constantBrakeDistanceOnSpeedStep0 ? "true" : "false"
+    case .delayTimeBeforeExitingBrakeSection:
+      return "\(delayBeforeExitingBrakeSection)"
+    case .brakeFunction1BrakeTimeReduction:
+      return "\(brakeFunction1BrakeTimeReduction)"
+    case .maximumSpeedWhenBrakeFunction1Active:
+      return "\(maximumSpeedWhenBrakeFunction1Active)"
+    case .brakeFunction2BrakeTimeReduction:
+      return "\(brakeFunction2BrakeTimeReduction)"
+    case .maximumSpeedWhenBrakeFunction2Active:
+      return "\(maximumSpeedWhenBrakeFunction2Active)"
+    case .brakeFunction3BrakeTimeReduction:
+      return "\(brakeFunction3BrakeTimeReduction)"
+    case .maximumSpeedWhenBrakeFunction3Active:
+      return "\(maximumSpeedWhenBrakeFunction3Active)"
+    case .enableRailComFeedback:
+      return isRailComFeedbackEnabled ? "true" : "false"
+    case .enableRailComPlusAutomaticAnnouncement:
+      return isRailComPlusAutomaticAnnouncementEnabled ? "true" : "false"
+    case .sendFollowingToCommandStation:
+      return "Send following information to the command station:"
+    case .sendAddressViaBroadcastOnChannel1:
+      return sendAddressViaBroadcastOnChannel1 ? "true" : "false"
+    case .allowDataTransmissionOnChannel2:
+      return allowDataTransmissionOnChannel2 ? "true" : "false"
+    case .detectSpeedStepModeAutomatically:
+      return detectSpeedStepModeAutomatically ? "true" : "false"
+    case .speedStepMode:
+      return speedStepMode.title
+    case .userId1:
+      return "\(userId1)"
+    case .userId2:
+      return "\(userId2)"
     }
   }
   
   public func getInfo(property:ProgrammerToolSettingsProperty) -> String {
+
+    let formatter = NumberFormatter()
     
+    formatter.usesGroupingSeparator = true
+    formatter.groupingSize = 3
+
+    formatter.alwaysShowsDecimalSeparator = false
+    formatter.minimumFractionDigits = 0
+
     switch property {
     case .dcAnalogModeStartVoltage:
       return "\(analogModeDCStartVoltageInVolts)V"
@@ -573,6 +1196,34 @@ public class Decoder : NSObject {
       return "\(analogModeDCMaximumSpeedVoltageInVolts)V"
     case .acAnalogModeMaximumSpeedVoltage:
       return "\(analogModeACMaximumSpeedVoltageInVolts)V"
+    case .analogMotorHysteresisVoltage:
+      return "\(analogMotorHysteresisVoltageInVolts)V"
+    case .analogFunctionDifferenceVoltage:
+      return "\(analogFunctionDifferenceVoltageInVolts)V"
+    case .waitingPeriodBeforeDirectionChange:
+      let x = UnitTime.convert(fromValue: abcWaitingTimeInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
+      formatter.maximumFractionDigits = 2
+      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
+    case .stoppingPeriod:
+      let x = UnitTime.convert(fromValue: stoppingPeriodInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
+      formatter.maximumFractionDigits = 2
+      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
+    case .delayTimeBeforeExitingBrakeSection:
+      let x = UnitTime.convert(fromValue: delayBeforeExitingBrakeSectionInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
+      formatter.maximumFractionDigits = 2
+      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
+    case .brakeFunction1BrakeTimeReduction:
+      let x = brakeFunction1BrakeTimeReductionPercentage
+      formatter.maximumFractionDigits = 2
+      return "\(formatter.string(from: x as NSNumber)!)%"
+    case .brakeFunction2BrakeTimeReduction:
+      let x = brakeFunction2BrakeTimeReductionPercentage
+      formatter.maximumFractionDigits = 2
+      return "\(formatter.string(from: x as NSNumber)!)%"
+    case .brakeFunction3BrakeTimeReduction:
+      let x = brakeFunction3BrakeTimeReductionPercentage
+      formatter.maximumFractionDigits = 2
+      return "\(formatter.string(from: x as NSNumber)!)%"
     default:
       return ""
     }
@@ -582,7 +1233,7 @@ public class Decoder : NSObject {
   public func isValid(property:ProgrammerToolSettingsProperty, string:String) -> Bool {
     
     switch property {
-    case .locomotiveAddressShort:
+    case .locomotiveAddressShort, .consistAddress:
       guard let value = UInt8(string), value > 0 && value < 128 else {
         return false
       }
@@ -590,11 +1241,15 @@ public class Decoder : NSObject {
       guard let value = UInt16(string), value > 0 && value < 10240 else {
         return false
       }
-    case .consistAddress:
-      guard let value = UInt8(string), value > 0 && value < 128 else {
+    case .waitingPeriodBeforeDirectionChange, .brakeDistanceLength, .brakeDistanceLengthBackwards, .stoppingPeriod:
+      guard let value = UInt8(string), value > 0 else {
         return false
       }
-    case .acAnalogModeStartVoltage, .acAnalogModeMaximumSpeedVoltage, .dcAnalogModeStartVoltage, .dcAnalogModeMaximumSpeedVoltage:
+    case .maximumSpeedWhenBrakeFunction1Active, .maximumSpeedWhenBrakeFunction2Active, .maximumSpeedWhenBrakeFunction3Active:
+      guard let value = UInt8(string), value < 127 else {
+        return false
+      }
+    case .acAnalogModeStartVoltage, .acAnalogModeMaximumSpeedVoltage, .dcAnalogModeStartVoltage, .dcAnalogModeMaximumSpeedVoltage, .analogMotorHysteresisVoltage, .analogFunctionDifferenceVoltage, .voltageDifferenceIndicatingABCBrakeSection, .abcReducedSpeed, .hluSpeedLimit1, .hluSpeedLimit2, .hluSpeedLimit3, .hluSpeedLimit4, .hluSpeedLimit5, .delayTimeBeforeExitingBrakeSection, .brakeFunction1BrakeTimeReduction, .brakeFunction2BrakeTimeReduction, .brakeFunction3BrakeTimeReduction, .userId1, .userId2:
       guard let _ = UInt8(string) else {
         return false
       }
@@ -637,6 +1292,94 @@ public class Decoder : NSObject {
       analogModeDCStartVoltage = UInt8(string)!
     case .dcAnalogModeMaximumSpeedVoltage:
       analogModeDCMaximumSpeedVoltage = UInt8(string)!
+    case .enableQuantumEngineer:
+      isQuantumEngineerEnabled = string == "true"
+    case .ignoreAccelerationDecelerationInSoundSchedule:
+      ignoreAccelerationDecelerationInSoundSchedule = string == "true"
+    case .useHighFrequencyPWMMotorControl:
+      useHighFrequencyPWMMotorControl = string == "true"
+    case .analogMotorHysteresisVoltage:
+      analogMotorHysteresisVoltage = UInt8(string)!
+    case .analogFunctionDifferenceVoltage:
+      analogFunctionDifferenceVoltage = UInt8(string)!
+    case .brakeIfRightRailSignalPositive:
+      abcBrakeIfRightRailMorePositive = string == "true"
+    case .brakeIfLeftRailSignalPositive:
+      abcBrakeIfLeftRailMorePositive = string == "true"
+    case .voltageDifferenceIndicatingABCBrakeSection:
+      voltageDifferenceIndicatingABCBrakeSection = UInt8(string)!
+    case .abcReducedSpeed:
+      abcReducedSpeed = UInt8(string)!
+    case .enableABCShuttleTrain:
+      isABCShuttleTrainEnabled = string == "true"
+    case .waitingPeriodBeforeDirectionChange:
+      abcWaitingTime = UInt8(string)!
+    case .hluAllowZIMO:
+      allowZIMOBrakeSections = string == "true"
+    case .hluSendZIMOZACKSignals:
+      sendZIMOZACKSignals = string == "true"
+    case .hluSpeedLimit1:
+      hluSpeedLimit1 = UInt8(string)!
+    case .hluSpeedLimit2:
+      hluSpeedLimit2 = UInt8(string)!
+    case .hluSpeedLimit3:
+      hluSpeedLimit3 = UInt8(string)!
+    case .hluSpeedLimit4:
+      hluSpeedLimit4 = UInt8(string)!
+    case .hluSpeedLimit5:
+      hluSpeedLimit5 = UInt8(string)!
+    case .brakeOnForwardPolarity:
+      brakeOnForwardDCPolarity = string == "true"
+    case .brakeOnReversePolarity:
+      brakeOnReverseDCPolarity = string == "true"
+    case .selectrixBrakeOnForwardPolarity:
+      selectrixBrakeOnForwardPolarity = string == "true"
+    case .selectrixBrakeOnReversePolarity:
+      selectrixBrakeOnReversePolarity = string == "true"
+    case .enableConstantBrakeDistance:
+      isConstantBrakeDistanceEnabled = string == "true"
+    case .brakeDistanceLength:
+      brakeDistanceLength = UInt8(string)!
+    case .differentBrakeDistanceBackwards:
+      isDifferentBrakeDistanceBackwards = string == "true"
+    case .brakeDistanceLengthBackwards:
+      brakeDistanceLengthBackwards = UInt8(string)!
+    case .driveUntilLocomotiveStopsInSpecifiedPeriod:
+      driveUntilLocomotiveStopsInSpecifiedPeriod = string == "true"
+    case .stoppingPeriod:
+      stoppingPeriod = UInt8(string)!
+    case .constantBrakeDistanceOnSpeedStep0:
+      constantBrakeDistanceOnSpeedStep0 = string == "true"
+    case .delayTimeBeforeExitingBrakeSection:
+      delayBeforeExitingBrakeSection = UInt8(string)!
+    case .brakeFunction1BrakeTimeReduction:
+      brakeFunction1BrakeTimeReduction = UInt8(string)!
+    case .maximumSpeedWhenBrakeFunction1Active:
+      maximumSpeedWhenBrakeFunction1Active = UInt8(string)!
+    case .brakeFunction2BrakeTimeReduction:
+      brakeFunction2BrakeTimeReduction = UInt8(string)!
+    case .maximumSpeedWhenBrakeFunction2Active:
+      maximumSpeedWhenBrakeFunction2Active = UInt8(string)!
+    case .brakeFunction3BrakeTimeReduction:
+      brakeFunction3BrakeTimeReduction = UInt8(string)!
+    case .maximumSpeedWhenBrakeFunction3Active:
+      maximumSpeedWhenBrakeFunction3Active = UInt8(string)!
+    case .enableRailComFeedback:
+      isRailComFeedbackEnabled = string == "true"
+    case .enableRailComPlusAutomaticAnnouncement:
+      isRailComPlusAutomaticAnnouncementEnabled = string == "true"
+    case .sendAddressViaBroadcastOnChannel1:
+      sendAddressViaBroadcastOnChannel1 = string == "true"
+    case .allowDataTransmissionOnChannel2:
+      allowDataTransmissionOnChannel2 = string == "true"
+    case .detectSpeedStepModeAutomatically:
+      detectSpeedStepModeAutomatically = string == "true"
+    case .speedStepMode:
+      speedStepMode = SpeedStepMode(title: string)!
+    case .userId1:
+      userId1 = UInt8(string)!
+    case .userId2:
+      userId2 = UInt8(string)!
     default:
       break
     }
