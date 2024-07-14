@@ -415,6 +415,10 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
       else if let field = temp.control as? NSTextField {
         field.delegate = self
       }
+      if let slider = temp.slider {
+        slider.target = self
+        slider.action = #selector(sliderAction(_:))
+      }
     }
     
     settingsGroupFields = ProgrammerToolSettingsSection.inspectorSectionFields
@@ -714,6 +718,37 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
     if decoder.detectSpeedStepModeAutomatically {
       commonProperties.remove(.speedStepMode)
     }
+    
+    if !decoder.isAccelerationEnabled {
+      commonProperties.remove(.accelerationRate)
+      commonProperties.remove(.accelerationAdjustment)
+    }
+
+    if !decoder.isDecelerationEnabled {
+      commonProperties.remove(.decelerationRate)
+      commonProperties.remove(.decelerationAdjustment)
+    }
+    
+    if !decoder.isForwardTrimEnabled {
+      commonProperties.remove(.forwardTrim)
+    }
+
+    if !decoder.isReverseTrimEnabled {
+      commonProperties.remove(.reverseTrim)
+    }
+
+    if !decoder.isShuntingModeTrimEnabled {
+      commonProperties.remove(.shuntingModeTrim)
+    }
+    
+    if !decoder.isGearboxBacklashCompensationEnabled {
+      commonProperties.remove(.gearboxBacklashCompensation)
+    }
+    
+    if !decoder.isDecoderSynchronizedWithMasterDecoder {
+      commonProperties.remove(.m4MasterDecoderManufacturer)
+      commonProperties.remove(.m4MasterDecoderSerialNumber)
+    }
 
     var usedFields : [ProgrammerToolSettingsPropertyField] = []
     
@@ -739,7 +774,7 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
             
             let field = settingsFields[index]
             
-            if commonProperties.contains(field.property) {
+            if commonProperties.contains(field.property), let label = field.label, let control = field.control, let view = field.view, let cvLabel = field.cvLabel {
               
               if showGroupHeader {
                 stackView.addArrangedSubview(settingsGroupFields[group]!.view!)
@@ -747,50 +782,69 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
                 showGroupSeparator = true
               }
               
-              stackView.addArrangedSubview(field.view!)
+              stackView.addArrangedSubview(view)
+              
+              cvLabel.stringValue = field.property.cvLabel
               
               /// Note to self: Views within a StackView must not have constraints to the outside world as this will lock the StackView size.
               /// They must only have internal constraints to the view that is added to the StackView.
               ///  https://manasaprema04.medium.com/autolayout-fundamental-522f0a6e5790
+
+              settingsPropertyConstraints.append(label.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20))
+              settingsPropertyConstraints.append(label.centerYAnchor.constraint(equalTo: view.centerYAnchor))
+              settingsPropertyConstraints.append(view.heightAnchor.constraint(greaterThanOrEqualTo: label.heightAnchor))
+              settingsPropertyConstraints.append(control.centerYAnchor.constraint(equalTo: view.centerYAnchor))
+              settingsPropertyConstraints.append(view.heightAnchor.constraint(greaterThanOrEqualTo: control.heightAnchor))
+              settingsPropertyConstraints.append(cvLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor))
+              settingsPropertyConstraints.append(view.heightAnchor.constraint(greaterThanOrEqualTo: cvLabel.heightAnchor))
+              settingsPropertyConstraints.append(cvLabel.leadingAnchor.constraint(greaterThanOrEqualToSystemSpacingAfter: control.trailingAnchor, multiplier: 1.0))
+              settingsPropertyConstraints.append(view.trailingAnchor.constraint(equalToSystemSpacingAfter: cvLabel.trailingAnchor, multiplier: 1.0))
               
- 
-              if field.property.controlType == .warning {
-                settingsPropertyConstraints.append(field.label!.leadingAnchor.constraint(equalTo: field.view!.leadingAnchor, constant: 20))
-                settingsPropertyConstraints.append(field.customView!.leadingAnchor.constraint(equalToSystemSpacingAfter: field.label!.trailingAnchor, multiplier: 1.0))
-                 settingsPropertyConstraints.append(field.view!.heightAnchor.constraint(greaterThanOrEqualTo: field.customView!.heightAnchor))
-                settingsPropertyConstraints.append(field.control!.leadingAnchor.constraint(equalToSystemSpacingAfter: field.customView!.trailingAnchor, multiplier: 1.0))
-              }
-              else if field.property.controlType == .textFieldWithInfo {
-                settingsPropertyConstraints.append(field.label!.leadingAnchor.constraint(equalTo: field.view!.leadingAnchor, constant: 20))
-                settingsPropertyConstraints.append(field.control!.leadingAnchor.constraint(equalToSystemSpacingAfter: field.label!.trailingAnchor, multiplier: 1.0))
-                settingsPropertyConstraints.append(field.customView!.leadingAnchor.constraint(equalToSystemSpacingAfter: field.control!.trailingAnchor, multiplier: 1.0))
-                settingsPropertyConstraints.append(field.control!.widthAnchor.constraint(equalToConstant: 100))
-                settingsPropertyConstraints.append(field.view!.heightAnchor.constraint(greaterThanOrEqualTo: field.label!.heightAnchor))
-                settingsPropertyConstraints.append(field.view!.heightAnchor.constraint(greaterThanOrEqualTo: field.control!.heightAnchor))
-                settingsPropertyConstraints.append(field.control!.centerYAnchor.constraint(equalTo: field.view!.centerYAnchor))
-                settingsPropertyConstraints.append(field.label!.centerYAnchor.constraint(equalTo: field.view!.centerYAnchor))
-                settingsPropertyConstraints.append(field.customView!.centerYAnchor.constraint(equalTo: field.view!.centerYAnchor))
-              }
-              else if field.property.controlType == .textField {
-                settingsPropertyConstraints.append(field.label!.leadingAnchor.constraint(equalTo: field.view!.leadingAnchor, constant: 20))
-               settingsPropertyConstraints.append(field.control!.leadingAnchor.constraint(equalToSystemSpacingAfter: field.label!.trailingAnchor, multiplier: 1.0))
-                settingsPropertyConstraints.append(field.control!.widthAnchor.constraint(equalToConstant: 100))
-                settingsPropertyConstraints.append(field.view!.heightAnchor.constraint(greaterThanOrEqualTo: field.label!.heightAnchor))
-                settingsPropertyConstraints.append(field.view!.heightAnchor.constraint(greaterThanOrEqualTo: field.control!.heightAnchor))
-                settingsPropertyConstraints.append(field.control!.centerYAnchor.constraint(equalTo: field.view!.centerYAnchor))
-                settingsPropertyConstraints.append(field.label!.centerYAnchor.constraint(equalTo: field.view!.centerYAnchor))
-              }
-              else {
-                settingsPropertyConstraints.append(field.label!.leadingAnchor.constraint(equalTo: field.view!.leadingAnchor, constant: 20))
-               settingsPropertyConstraints.append(field.control!.leadingAnchor.constraint(equalToSystemSpacingAfter: field.label!.trailingAnchor, multiplier: 1.0))
-                settingsPropertyConstraints.append(field.control!.widthAnchor.constraint(greaterThanOrEqualToConstant: 100))
-                settingsPropertyConstraints.append(field.view!.heightAnchor.constraint(greaterThanOrEqualTo: field.label!.heightAnchor))
-                settingsPropertyConstraints.append(field.view!.heightAnchor.constraint(greaterThanOrEqualTo: field.control!.heightAnchor))
-                settingsPropertyConstraints.append(field.view!.trailingAnchor.constraint(equalTo: field.control!.trailingAnchor))
-                settingsPropertyConstraints.append(field.control!.centerYAnchor.constraint(equalTo: field.view!.centerYAnchor))
-                settingsPropertyConstraints.append(field.label!.centerYAnchor.constraint(equalTo: field.view!.centerYAnchor))
+              if let slider = field.slider {
+                settingsPropertyConstraints.append(slider.centerYAnchor.constraint(equalTo: view.centerYAnchor))
+                settingsPropertyConstraints.append(view.heightAnchor.constraint(greaterThanOrEqualTo: slider.heightAnchor))
+                settingsPropertyConstraints.append(slider.leadingAnchor.constraint(equalToSystemSpacingAfter: label.trailingAnchor, multiplier: 1.0))
+                settingsPropertyConstraints.append(slider.widthAnchor.constraint(equalToConstant: 200))
               }
               
+              if let customView = field.customView {
+                settingsPropertyConstraints.append(customView.centerYAnchor.constraint(equalTo: view.centerYAnchor))
+                settingsPropertyConstraints.append(view.heightAnchor.constraint(greaterThanOrEqualTo: customView.heightAnchor))
+                settingsPropertyConstraints.append(cvLabel.leadingAnchor.constraint(greaterThanOrEqualToSystemSpacingAfter: customView.trailingAnchor, multiplier: 1.0))
+              }
+              
+              switch field.property.controlType {
+              case .textField:
+               settingsPropertyConstraints.append(control.leadingAnchor.constraint(equalToSystemSpacingAfter: label.trailingAnchor, multiplier: 1.0))
+                settingsPropertyConstraints.append(control.widthAnchor.constraint(equalToConstant: 100))
+              case .textFieldWithSlider:
+                if let slider = field.slider {
+                  settingsPropertyConstraints.append(control.leadingAnchor.constraint(equalToSystemSpacingAfter: slider.trailingAnchor, multiplier: 1.0))
+                  settingsPropertyConstraints.append(control.widthAnchor.constraint(equalToConstant: 100))
+                }
+              case .warning:
+                if let customView = field.customView {
+                  settingsPropertyConstraints.append(customView.leadingAnchor.constraint(equalToSystemSpacingAfter: label.trailingAnchor, multiplier: 1.0))
+                  settingsPropertyConstraints.append(control.leadingAnchor.constraint(equalToSystemSpacingAfter: customView.trailingAnchor, multiplier: 1.0))
+                }
+              case .textFieldWithInfo:
+                if let customView = field.customView {
+                  settingsPropertyConstraints.append(control.leadingAnchor.constraint(equalToSystemSpacingAfter: label.trailingAnchor, multiplier: 1.0))
+                  settingsPropertyConstraints.append(control.widthAnchor.constraint(equalToConstant: 100))
+                  settingsPropertyConstraints.append(customView.leadingAnchor.constraint(equalToSystemSpacingAfter: control.trailingAnchor, multiplier: 1.0))
+                }
+              case .textFieldWithInfoWithSlider:
+                if let customView = field.customView, let slider = field.slider {
+                  settingsPropertyConstraints.append(control.leadingAnchor.constraint(equalToSystemSpacingAfter: slider.trailingAnchor, multiplier: 1.0))
+                  settingsPropertyConstraints.append(control.widthAnchor.constraint(equalToConstant: 100))
+                  settingsPropertyConstraints.append(customView.leadingAnchor.constraint(equalToSystemSpacingAfter: control.trailingAnchor, multiplier: 1.0))
+                }
+
+              default:
+                settingsPropertyConstraints.append(control.leadingAnchor.constraint(equalToSystemSpacingAfter: label.trailingAnchor, multiplier: 1.0))
+                settingsPropertyConstraints.append(control.widthAnchor.constraint(greaterThanOrEqualToConstant: 100))
+                settingsPropertyConstraints.append(view.trailingAnchor.constraint(greaterThanOrEqualTo: control.trailingAnchor))
+              }
 
               usedFields.append(field)
                 
@@ -832,10 +886,14 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
     
     let value = decoder.getValue(property: field.property)
     
+    if let slider = field.slider {
+      slider.intValue = Int32(value)!
+    }
+    
     switch field.property.controlType {
-    case .textField, .textFieldWithInfo:
+    case .textField, .textFieldWithInfo, .textFieldWithSlider, .textFieldWithInfoWithSlider:
       (field.control as? NSTextField)?.stringValue = value
-      if field.property.controlType == .textFieldWithInfo {
+      if field.property.controlType == .textFieldWithInfo || field.property.controlType == .textFieldWithInfoWithSlider {
         (field.customView as? NSTextField)?.stringValue = decoder.getInfo(property: field.property)
       }
     case .label, .warning, .description:
@@ -853,8 +911,6 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
         }
         
       }
-    case .description:
-      break
     }
     
   }
@@ -900,6 +956,12 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
       decoder.setValue(property: property, string: sender.state == .on ? "true" : "false")
     }
     
+  }
+  
+  @objc func sliderAction(_ sender: NSSlider) {
+    if let decoder, let property = ProgrammerToolSettingsProperty(rawValue: sender.tag) {
+      decoder.setValue(property: property, string: "\(sender.intValue)")
+    }
   }
 
   // MARK: NSTableViewDelegate Methods

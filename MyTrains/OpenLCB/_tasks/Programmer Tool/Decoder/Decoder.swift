@@ -469,7 +469,10 @@ public class Decoder : NSObject {
       return getUInt8(cv: .cv_000_000_134)!
     }
     set(value) {
-      setUInt8(cv: .cv_000_000_134, value: value)
+      if value != voltageDifferenceIndicatingABCBrakeSection {
+        setUInt8(cv: .cv_000_000_134, value: value)
+        delegate?.reloadSettings?(self)
+      }
     }
   }
   
@@ -478,7 +481,10 @@ public class Decoder : NSObject {
       return getUInt8(cv: .cv_000_000_123)!
     }
     set(value) {
-      setUInt8(cv: .cv_000_000_123, value: value)
+      if value != abcReducedSpeed {
+        setUInt8(cv: .cv_000_000_123, value: value)
+        delegate?.reloadSettings?(self)
+      }
     }
   }
   
@@ -661,7 +667,10 @@ public class Decoder : NSObject {
       return getUInt8(cv: .cv_000_000_254)!
     }
     set(value) {
-      setUInt8(cv: .cv_000_000_254, value: value)
+      if value != brakeDistanceLength {
+        setUInt8(cv: .cv_000_000_254, value: value)
+        delegate?.reloadSettings?(self)
+      }
     }
   }
 
@@ -682,7 +691,10 @@ public class Decoder : NSObject {
       return getUInt8(cv: .cv_000_000_255)!
     }
     set(value) {
-      setUInt8(cv: .cv_000_000_255, value: value)
+      if value != brakeDistanceLengthBackwards {
+        setUInt8(cv: .cv_000_000_255, value: value)
+        delegate?.reloadSettings?(self)
+      }
     }
   }
 
@@ -762,7 +774,10 @@ public class Decoder : NSObject {
       return getUInt8(cv: .cv_000_000_182)!
     }
     set(value) {
-      setUInt8(cv: .cv_000_000_182, value: value)
+      if value != maximumSpeedWhenBrakeFunction1Active {
+        setUInt8(cv: .cv_000_000_182, value: value)
+        delegate?.reloadSettings?(self)
+      }
     }
   }
 
@@ -787,7 +802,10 @@ public class Decoder : NSObject {
       return getUInt8(cv: .cv_000_000_183)!
     }
     set(value) {
-      setUInt8(cv: .cv_000_000_183, value: value)
+      if value != maximumSpeedWhenBrakeFunction2Active {
+        setUInt8(cv: .cv_000_000_183, value: value)
+        delegate?.reloadSettings?(self)
+      }
     }
   }
 
@@ -812,7 +830,10 @@ public class Decoder : NSObject {
       return getUInt8(cv: .cv_000_000_184)!
     }
     set(value) {
-      setUInt8(cv: .cv_000_000_184, value: value)
+      if value != maximumSpeedWhenBrakeFunction3Active {
+        setUInt8(cv: .cv_000_000_184, value: value)
+        delegate?.reloadSettings?(self)
+      }
     }
   }
   
@@ -901,6 +922,373 @@ public class Decoder : NSObject {
       setUInt8(cv: .cv_000_000_106, value: value)
     }
   }
+  
+  public var isAccelerationEnabled : Bool {
+    get {
+      return getUInt8(cv: .cv_000_000_003)! != 0
+    }
+    set(value) {
+      if value != isAccelerationEnabled {
+        setUInt8(cv: .cv_000_000_003, value: value ? 40 : 0)
+        delegate?.reloadSettings!(self)
+      }
+    }
+  }
+  
+  public var accelerationRate : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_003)!
+    }
+    set(value) {
+      if value != accelerationRate {
+        setUInt8(cv: .cv_000_000_003, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var accelerationRateInSeconds : TimeInterval {
+    return Double(accelerationRate) * 0.25
+  }
+  
+  public var accelerationAdjustment : Int8 {
+    get {
+      let value = getUInt8(cv: .cv_000_000_023)!
+      return Int8(value & 0x7f) * (((value & ByteMask.d7) == ByteMask.d7) ? -1 : 1)
+    }
+    set(value) {
+      if value != accelerationAdjustment {
+        setUInt8(cv: .cv_000_000_023, value: UInt8(abs(value)) | (value < 0 ? ByteMask.d7 : 0))
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var accelerationAdjustmentInSeconds : TimeInterval {
+    return Double(accelerationAdjustment) * 0.25
+  }
+
+  public var isDecelerationEnabled : Bool {
+    get {
+      return getUInt8(cv: .cv_000_000_004)! != 0
+    }
+    set(value) {
+      if value != isDecelerationEnabled {
+        setUInt8(cv: .cv_000_000_004, value: value ? 40 : 0)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var decelerationRate : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_004)!
+    }
+    set(value) {
+      if value != decelerationRate {
+        setUInt8(cv: .cv_000_000_004, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var decelerationRateInSeconds : TimeInterval {
+    return Double(decelerationRate) * 0.25
+  }
+  
+  public var decelerationAdjustment : Int8 {
+    get {
+      let value = getUInt8(cv: .cv_000_000_024)!
+      return Int8(value & 0x7f) * (((value & ByteMask.d7) == ByteMask.d7) ? -1 : 1)
+    }
+    set(value) {
+      if decelerationAdjustment != value {
+        setUInt8(cv: .cv_000_000_024, value: UInt8(abs(value)) | (value < 0 ? ByteMask.d7 : 0))
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var decelerationAdjustmentInSeconds : TimeInterval {
+    return Double(decelerationAdjustment) * 0.25
+  }
+  
+  public var isReversed : Bool {
+    get {
+      return getBool(cv: .cv_000_000_029, mask: ByteMask.d0)!
+    }
+    set(value) {
+      setBool(cv: .cv_000_000_029, mask: ByteMask.d0, value: value)
+    }
+  }
+  
+  public var isForwardTrimEnabled : Bool {
+    get {
+      return getUInt8(cv: .cv_000_000_066)! != 0
+    }
+    set(value) {
+      if value != isForwardTrimEnabled {
+        setUInt8(cv: .cv_000_000_066, value: value ? 128 : 0)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var forwardTrim : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_066)!
+    }
+    set(value) {
+      if value != forwardTrim {
+        setUInt8(cv: .cv_000_000_066, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var forwardTrimMultiplier : Double {
+    return Double(forwardTrim) / 128.0
+  }
+
+  public var isReverseTrimEnabled : Bool {
+    get {
+      return getUInt8(cv: .cv_000_000_095)! != 0
+    }
+    set(value) {
+      if value != isReverseTrimEnabled {
+        setUInt8(cv: .cv_000_000_095, value: value ? 128 : 0)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var reverseTrim : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_095)!
+    }
+    set(value) {
+      if value != reverseTrim {
+        setUInt8(cv: .cv_000_000_095, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var reverseTrimMultiplier : Double {
+    return Double(reverseTrim) / 128.0
+  }
+
+  public var isShuntingModeTrimEnabled : Bool {
+    get {
+      return getUInt8(cv: .cv_000_000_101)! != 0
+    }
+    set(value) {
+      if value != isShuntingModeTrimEnabled {
+        setUInt8(cv: .cv_000_000_101, value: value ? 64 : 0)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var shuntingModeTrim : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_101)!
+    }
+    set(value) {
+      if value != shuntingModeTrim {
+        setUInt8(cv: .cv_000_000_101, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var shuntingModeTrimMultiplier : Double {
+    return Double(shuntingModeTrim) / 128.0
+  }
+  
+  public var loadAdjustmentOptionalLoad : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_103)!
+    }
+    set(value) {
+      if value != loadAdjustmentOptionalLoad {
+        setUInt8(cv: .cv_000_000_103, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var loadAdjustmentOptionalLoadMultiplier : Double {
+    return Double(loadAdjustmentOptionalLoad) / 128.0
+  }
+
+  public var loadAdjustmentPrimaryLoad : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_104)!
+    }
+    set(value) {
+      if value != loadAdjustmentPrimaryLoad {
+        setUInt8(cv: .cv_000_000_104, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var loadAdjustmentPrimaryLoadMultiplier : Double {
+    return Double(loadAdjustmentPrimaryLoad) / 128.0
+  }
+
+  public var isGearboxBacklashCompensationEnabled : Bool {
+    get {
+      return getUInt8(cv: .cv_000_000_111)! != 0
+    }
+    set(value) {
+      if value != isGearboxBacklashCompensationEnabled {
+        setUInt8(cv: .cv_000_000_111, value: value ? 1 : 0)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var gearboxBacklashCompensation : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_111)!
+    }
+    set(value) {
+      if value != gearboxBacklashCompensation {
+        setUInt8(cv: .cv_000_000_111, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var gearboxBacklashCompensationInSeconds : Double {
+    return Double(gearboxBacklashCompensation) / 61.0
+  }
+  
+  public var timeToBridgePowerInterruption : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_113)!
+    }
+    set(value) {
+      if value != timeToBridgePowerInterruption {
+        setUInt8(cv: .cv_000_000_113, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var timeToBridgePowerInterruptionInSeconds : TimeInterval {
+    return Double(timeToBridgePowerInterruption) * 0.032768
+  }
+
+  public var isDirectionPreserved : Bool {
+    get {
+      return getBool(cv: .cv_000_000_124, mask: ByteMask.d0)!
+    }
+    set(value) {
+      setBool(cv: .cv_000_000_124, mask: ByteMask.d0, value: value)
+    }
+  }
+  
+  public var isStartingDelayEnabled : Bool {
+    get {
+      return getBool(cv: .cv_000_000_124, mask: ByteMask.d2)!
+    }
+    set(value) {
+      setBool(cv: .cv_000_000_124, mask: ByteMask.d2, value: value)
+    }
+  }
+  
+  public var isDCCProtocolEnabled : Bool {
+    get {
+      return getBool(cv: .cv_000_000_047, mask: ByteMask.d0)!
+    }
+    set(value) {
+      setBool(cv: .cv_000_000_047, mask: ByteMask.d0, value: value)
+    }
+  }
+  
+  public var isMarklinMotorolaProtocolEnabled : Bool {
+    get {
+      return getBool(cv: .cv_000_000_047, mask: ByteMask.d2)!
+    }
+    set(value) {
+      setBool(cv: .cv_000_000_047, mask: ByteMask.d2, value: value)
+    }
+  }
+  
+  public var isSelectrixProtocolEnabled : Bool {
+    get {
+      return getBool(cv: .cv_000_000_047, mask: ByteMask.d3)!
+    }
+    set(value) {
+      setBool(cv: .cv_000_000_047, mask: ByteMask.d3, value: value)
+    }
+  }
+  
+  public var isM4ProtocolEnabled : Bool {
+    get {
+      return getBool(cv: .cv_000_000_047, mask: ByteMask.d1)!
+    }
+    set(value) {
+      setBool(cv: .cv_000_000_047, mask: ByteMask.d1, value: value)
+    }
+  }
+
+  public var isMemoryPersistentFunctionEnabled : Bool {
+    get {
+      return getBool(cv: .cv_000_000_122, mask: ByteMask.d0)!
+    }
+    set(value) {
+      setBool(cv: .cv_000_000_122, mask: ByteMask.d0, value: value)
+    }
+  }
+  
+  public var isMemoryPersistentSpeedEnabled : Bool {
+    get {
+      return getBool(cv: .cv_000_000_122, mask: ByteMask.d1)!
+    }
+    set(value) {
+      setBool(cv: .cv_000_000_122, mask: ByteMask.d1, value: value)
+    }
+  }
+  
+  public var isDecoderSynchronizedWithMasterDecoder : Bool {
+    get {
+      return m4MasterDecoderManufacturerId != .noneSelected
+    }
+    set(value) {
+      if value != isDecoderSynchronizedWithMasterDecoder {
+        if !value {
+          m4MasterDecoderManufacturerId = .noneSelected
+          m4MasterDecoderSerialNumber = 0
+        }
+        else {
+          m4MasterDecoderManufacturerId = .cMLElectronicsLimited
+        }
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var m4MasterDecoderManufacturerId : ManufacturerCode {
+    get {
+      return ManufacturerCode(rawValue: UInt16(getUInt8(cv: .cv_000_000_191)!))!
+    }
+    set(value) {
+      setUInt8(cv: .cv_000_000_191, value: UInt8(value.rawValue & 0xff))
+    }
+  }
+  
+  public var m4MasterDecoderSerialNumber : UInt32 {
+    get {
+      return getUInt32(cv: .cv_000_000_192)!
+    }
+    set(value) {
+      setUInt32(cv: .cv_000_000_192, value: value)
+    }
+  }
 
   // MARK: Private Methods
   
@@ -940,7 +1328,22 @@ public class Decoder : NSObject {
     modifiedBlocks[offset + Int(cv.cv) - 1 - (cv.isIndexed ? 256 : 0)] = value
     
   }
-  
+
+  public func setUInt32(cv:CV, value:UInt32) {
+
+    guard let offset = indexLookup[cv.index] else {
+      return
+    }
+
+    var temp = value
+    
+    for index in 0 ... 3 {
+      modifiedBlocks[offset + Int(cv.cv) - 1 - (cv.isIndexed ? 256 : 0) + index] = UInt8(temp & 0xff)
+      temp >>= 8
+    }
+    
+  }
+
   public func revertToSaved() {
     modifiedBlocks = savedBlocks
   }
@@ -1170,10 +1573,68 @@ public class Decoder : NSObject {
       return detectSpeedStepModeAutomatically ? "true" : "false"
     case .speedStepMode:
       return speedStepMode.title
+    case .enableAcceleration:
+      return isAccelerationEnabled ? "true" : "false"
+    case .accelerationRate:
+      return "\(accelerationRate)"
+    case .accelerationAdjustment:
+      return "\(accelerationAdjustment)"
+    case .enableDeceleration:
+      return isDecelerationEnabled ? "true" : "false"
+    case .decelerationRate:
+      return "\(decelerationRate)"
+    case .decelerationAdjustment:
+      return "\(decelerationAdjustment)"
+    case .reverseMode:
+      return isReversed ? "true" : "false"
+    case .enableForwardTrim:
+      return isForwardTrimEnabled ? "true" : "false"
+    case .forwardTrim:
+      return "\(forwardTrim)"
+    case .enableReverseTrim:
+      return isReverseTrimEnabled ? "true" : "false"
+    case .reverseTrim:
+      return "\(reverseTrim)"
+    case .enableShuntingModeTrim:
+      return isShuntingModeTrimEnabled ? "true" : "false"
+    case .shuntingModeTrim:
+      return "\(shuntingModeTrim)"
+    case .loadAdjustmentOptionalLoad:
+      return "\(loadAdjustmentOptionalLoad)"
+    case .loadAdjustmentPrimaryLoad:
+      return "\(loadAdjustmentPrimaryLoad)"
+    case .enableGearboxBacklashCompensation:
+      return isGearboxBacklashCompensationEnabled ? "true" : "false"
+    case .gearboxBacklashCompensation:
+      return "\(gearboxBacklashCompensation)"
+    case .timeToBridgePowerInterruption:
+      return "\(timeToBridgePowerInterruption)"
+    case .preserveDirection:
+      return isDirectionPreserved ? "true" : "false"
+    case .enableStartingDelay:
+      return isStartingDelayEnabled ? "true" : "false"
     case .userId1:
       return "\(userId1)"
     case .userId2:
       return "\(userId2)"
+    case .enableDCCProtocol:
+      return isDCCProtocolEnabled ? "true" : "false"
+    case .enableMarklinMotorolaProtocol:
+      return isMarklinMotorolaProtocolEnabled ? "true" : "false"
+    case .enableSelectrixProtocol:
+      return isSelectrixProtocolEnabled ? "true" : "false"
+    case .enableM4Protocol:
+      return isM4ProtocolEnabled ? "true" : "false"
+    case .memoryPersistentFunction:
+      return isMemoryPersistentFunctionEnabled ? "true" : "false"
+    case .memoryPersistentSpeed:
+      return isMemoryPersistentSpeedEnabled ? "true" : "false"
+    case .enableRailComPlusSynchronization:
+      return isDecoderSynchronizedWithMasterDecoder ? "true" : "false"
+    case .m4MasterDecoderManufacturer:
+      return m4MasterDecoderManufacturerId.title
+    case .m4MasterDecoderSerialNumber:
+      return m4MasterDecoderSerialNumber.toHex(numberOfDigits: 8)
     }
   }
   
@@ -1224,6 +1685,51 @@ public class Decoder : NSObject {
       let x = brakeFunction3BrakeTimeReductionPercentage
       formatter.maximumFractionDigits = 2
       return "\(formatter.string(from: x as NSNumber)!)%"
+    case .accelerationRate:
+      let x = UnitTime.convert(fromValue: accelerationRateInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
+      formatter.maximumFractionDigits = 2
+      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
+    case .accelerationAdjustment:
+      let x = UnitTime.convert(fromValue: accelerationAdjustmentInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
+      formatter.maximumFractionDigits = 2
+      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
+    case .decelerationRate:
+      let x = UnitTime.convert(fromValue: decelerationRateInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
+      formatter.maximumFractionDigits = 2
+      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
+    case .decelerationAdjustment:
+      let x = UnitTime.convert(fromValue: decelerationAdjustmentInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
+      formatter.maximumFractionDigits = 2
+      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
+    case .forwardTrim:
+      let x = forwardTrimMultiplier
+      formatter.maximumFractionDigits = 2
+      return String(localized: "\(formatter.string(from: x as NSNumber)!) × Voltage")
+    case .reverseTrim:
+      let x = reverseTrimMultiplier
+      formatter.maximumFractionDigits = 2
+      return String(localized: "\(formatter.string(from: x as NSNumber)!) × Voltage")
+    case .shuntingModeTrim:
+      let x = shuntingModeTrimMultiplier
+      formatter.maximumFractionDigits = 2
+      return String(localized: "\(formatter.string(from: x as NSNumber)!) × Drive Level")
+    case .loadAdjustmentOptionalLoad:
+      let x = loadAdjustmentOptionalLoadMultiplier
+      formatter.maximumFractionDigits = 2
+      return String(localized: "\(formatter.string(from: x as NSNumber)!)")
+    case .loadAdjustmentPrimaryLoad:
+      let x = loadAdjustmentPrimaryLoadMultiplier
+      formatter.maximumFractionDigits = 2
+      return String(localized: "\(formatter.string(from: x as NSNumber)!)")
+    case .gearboxBacklashCompensation:
+      let x = UnitTime.convert(fromValue: gearboxBacklashCompensationInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
+      formatter.maximumFractionDigits = 2
+      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
+    case .timeToBridgePowerInterruption:
+      let x = UnitTime.convert(fromValue: timeToBridgePowerInterruptionInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
+      formatter.maximumFractionDigits = 2
+      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
+
     default:
       return ""
     }
@@ -1233,32 +1739,24 @@ public class Decoder : NSObject {
   public func isValid(property:ProgrammerToolSettingsProperty, string:String) -> Bool {
     
     switch property {
-    case .locomotiveAddressShort, .consistAddress:
-      guard let value = UInt8(string), value > 0 && value < 128 else {
-        return false
-      }
     case .locomotiveAddressLong:
       guard let value = UInt16(string), value > 0 && value < 10240 else {
         return false
       }
-    case .waitingPeriodBeforeDirectionChange, .brakeDistanceLength, .brakeDistanceLengthBackwards, .stoppingPeriod:
-      guard let value = UInt8(string), value > 0 else {
+    case .m4MasterDecoderSerialNumber:
+      guard let value = UInt32(hex:string) else {
         return false
       }
-    case .maximumSpeedWhenBrakeFunction1Active, .maximumSpeedWhenBrakeFunction2Active, .maximumSpeedWhenBrakeFunction3Active:
-      guard let value = UInt8(string), value < 127 else {
-        return false
-      }
-    case .acAnalogModeStartVoltage, .acAnalogModeMaximumSpeedVoltage, .dcAnalogModeStartVoltage, .dcAnalogModeMaximumSpeedVoltage, .analogMotorHysteresisVoltage, .analogFunctionDifferenceVoltage, .voltageDifferenceIndicatingABCBrakeSection, .abcReducedSpeed, .hluSpeedLimit1, .hluSpeedLimit2, .hluSpeedLimit3, .hluSpeedLimit4, .hluSpeedLimit5, .delayTimeBeforeExitingBrakeSection, .brakeFunction1BrakeTimeReduction, .brakeFunction2BrakeTimeReduction, .brakeFunction3BrakeTimeReduction, .userId1, .userId2:
-      guard let _ = UInt8(string) else {
+    case .locomotiveAddressShort, .consistAddress, .waitingPeriodBeforeDirectionChange, .brakeDistanceLength, .brakeDistanceLengthBackwards, .stoppingPeriod, .accelerationRate, .decelerationRate, .forwardTrim, .reverseTrim, .gearboxBacklashCompensation, .accelerationAdjustment, .decelerationAdjustment, .shuntingModeTrim, .acAnalogModeStartVoltage, .acAnalogModeMaximumSpeedVoltage, .dcAnalogModeStartVoltage, .dcAnalogModeMaximumSpeedVoltage, .analogMotorHysteresisVoltage, .analogFunctionDifferenceVoltage, .voltageDifferenceIndicatingABCBrakeSection, .abcReducedSpeed, .hluSpeedLimit1, .hluSpeedLimit2, .hluSpeedLimit3, .hluSpeedLimit4, .hluSpeedLimit5, .delayTimeBeforeExitingBrakeSection, .brakeFunction1BrakeTimeReduction, .brakeFunction2BrakeTimeReduction, .brakeFunction3BrakeTimeReduction, .userId1, .userId2, .loadAdjustmentOptionalLoad, .loadAdjustmentPrimaryLoad, .timeToBridgePowerInterruption, .maximumSpeedWhenBrakeFunction1Active, .maximumSpeedWhenBrakeFunction2Active, .maximumSpeedWhenBrakeFunction3Active:
+      guard let value = UInt8(string), Double(value) >= property.minValue && Double(value) <= property.maxValue else {
         return false
       }
     default:
       break
     }
-    
+
     return true
-    
+
   }
   
   public func setValue(property: ProgrammerToolSettingsProperty, string: String) {
@@ -1376,10 +1874,68 @@ public class Decoder : NSObject {
       detectSpeedStepModeAutomatically = string == "true"
     case .speedStepMode:
       speedStepMode = SpeedStepMode(title: string)!
+    case .enableAcceleration:
+      isAccelerationEnabled = string == "true"
+    case .accelerationRate:
+      accelerationRate = UInt8(string)!
+    case .accelerationAdjustment:
+      accelerationAdjustment = Int8(string)!
+    case .enableDeceleration:
+      isDecelerationEnabled = string == "true"
+    case .decelerationRate:
+      decelerationRate = UInt8(string)!
+    case .decelerationAdjustment:
+      decelerationAdjustment = Int8(string)!
+    case .reverseMode:
+      isReversed = string == "true"
+    case .enableForwardTrim:
+      isForwardTrimEnabled = string == "true"
+    case .forwardTrim:
+      forwardTrim = UInt8(string)!
+    case .enableReverseTrim:
+      isReverseTrimEnabled = string == "true"
+    case .reverseTrim:
+      reverseTrim = UInt8(string)!
+    case .enableShuntingModeTrim:
+      isShuntingModeTrimEnabled = string == "true"
+    case .shuntingModeTrim:
+      shuntingModeTrim = UInt8(string)!
+    case .loadAdjustmentOptionalLoad:
+      loadAdjustmentOptionalLoad = UInt8(string)!
+    case .loadAdjustmentPrimaryLoad:
+      loadAdjustmentPrimaryLoad = UInt8(string)!
+    case .enableGearboxBacklashCompensation:
+      isGearboxBacklashCompensationEnabled = string == "true"
+    case .gearboxBacklashCompensation:
+      gearboxBacklashCompensation = UInt8(string)!
+    case .timeToBridgePowerInterruption:
+      timeToBridgePowerInterruption = UInt8(string)!
+    case .preserveDirection:
+      isDirectionPreserved = string == "true"
+    case .enableStartingDelay:
+      isStartingDelayEnabled = string == "true"
     case .userId1:
       userId1 = UInt8(string)!
     case .userId2:
       userId2 = UInt8(string)!
+    case .enableDCCProtocol:
+      isDCCProtocolEnabled = string == "true"
+    case .enableMarklinMotorolaProtocol:
+      isMarklinMotorolaProtocolEnabled = string == "true"
+    case .enableSelectrixProtocol:
+      isSelectrixProtocolEnabled = string == "true"
+    case .enableM4Protocol:
+      isM4ProtocolEnabled = string == "true"
+    case .memoryPersistentFunction:
+      isMemoryPersistentFunctionEnabled = string == "true"
+    case .memoryPersistentSpeed:
+      isMemoryPersistentSpeedEnabled = string == "true"
+    case .enableRailComPlusSynchronization:
+      isDecoderSynchronizedWithMasterDecoder = string == "true"
+    case .m4MasterDecoderManufacturer:
+      m4MasterDecoderManufacturerId = ManufacturerCode(title: string) ?? .noneSelected
+    case .m4MasterDecoderSerialNumber:
+      m4MasterDecoderSerialNumber = UInt32(hex:string)!
     default:
       break
     }

@@ -6,11 +6,13 @@
 //
 
 import Foundation
+import AppKit
 
 public enum ManufacturerCode : UInt16, CaseIterable {
   
   // MARK: Enumeration
   
+  case noneSelected = 0x00
   case cMLElectronicsLimited = 0x01
   case trainTechnology = 0x02
   case nCECorporationformerlyNorthCoastEngineering = 0x0b
@@ -174,11 +176,24 @@ public enum ManufacturerCode : UInt16, CaseIterable {
   case con_ComGmbH = 0xcc
   case blueDigital = 0xe1
   
+  // MARK: Constructors
+  
+  init?(title:String) {
+    for temp in ManufacturerCode.allCases {
+      if temp.title == title {
+        self = temp
+        return
+      }
+    }
+    return nil
+  }
+
   // MARK: Public Properties
   
   public var title : String {
     
     let titles : [ManufacturerCode:String] = [
+      .noneSelected : String(localized:"None Selected"),
       .cMLElectronicsLimited : "CML Electronics Limited",
       .trainTechnology : "Train Technology",
       .nCECorporationformerlyNorthCoastEngineering : "NCE Corporation (formerly North Coast Engineering)",
@@ -345,6 +360,18 @@ public enum ManufacturerCode : UInt16, CaseIterable {
     
     return titles[self]!
     
+  }
+  
+  // MARK: Public Class Methods
+  
+  public static func populate(comboBox:NSComboBox) {
+    var items : [String] = []
+    for item in ManufacturerCode.allCases {
+      items.append(item.title)
+    }
+    items.sort {$0.uppercased() < $1.uppercased()}
+    comboBox.removeAllItems()
+    comboBox.addItems(withObjectValues: items)
   }
   
 }

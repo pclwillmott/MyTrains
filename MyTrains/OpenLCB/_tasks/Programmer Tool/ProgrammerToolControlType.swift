@@ -19,5 +19,7 @@ public enum ProgrammerToolControlType {
   case description
   case warning
   case textFieldWithInfo
+  case textFieldWithSlider
+  case textFieldWithInfoWithSlider
   
 }

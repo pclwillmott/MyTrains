@@ -7,6 +7,12 @@
     " [CV1]" : {
 
     },
+    " [CV3]" : {
+
+    },
+    " [CV4]" : {
+
+    },
     " [CV17, CV18]" : {
 
     },
@@ -14,6 +20,12 @@
 
     },
     " [CV19.7]" : {
+
+    },
+    " [CV23]" : {
+
+    },
+    " [CV24]" : {
 
     },
     " [CV27.0]" : {
@@ -49,6 +61,9 @@
     " [CV28.7]" : {
 
     },
+    " [CV29.0]" : {
+
+    },
     " [CV29.1]" : {
 
     },
@@ -64,6 +79,18 @@
     " [CV29.5]" : {
 
     },
+    " [CV47.0]" : {
+
+    },
+    " [CV47.1]" : {
+
+    },
+    " [CV47.2]" : {
+
+    },
+    " [CV47.3]" : {
+
+    },
     " [CV49.4]" : {
 
     },
@@ -73,13 +100,40 @@
     " [CV50.2]" : {
 
     },
+    " [CV66]" : {
+
+    },
+    " [CV95]" : {
+
+    },
+    " [CV101]" : {
+
+    },
     " [CV102]" : {
+
+    },
+    " [CV103]" : {
+
+    },
+    " [CV104]" : {
 
     },
     " [CV105]" : {
 
     },
     " [CV106]" : {
+
+    },
+    " [CV111]" : {
+
+    },
+    " [CV113]" : {
+
+    },
+    " [CV122.0]" : {
+
+    },
+    " [CV122.1]" : {
 
     },
     " [CV122.2]" : {
@@ -92,6 +146,12 @@
 
     },
     " [CV123]" : {
+
+    },
+    " [CV124.0]" : {
+
+    },
+    " [CV124.2]" : {
 
     },
     " [CV125]" : {
@@ -151,6 +211,12 @@
     " [CV184]" : {
 
     },
+    " [CV191]" : {
+
+    },
+    " [CV195, CV194, CV193, CV192]" : {
+
+    },
     " [CV253]" : {
 
     },
@@ -158,6 +224,15 @@
 
     },
     " [CV255]" : {
+
+    },
+    "%@" : {
+
+    },
+    "%@ × Drive Level" : {
+
+    },
+    "%@ × Voltage" : {
 
     },
     "%lld bytes %@" : {
@@ -619,6 +694,12 @@
       "comment" : "Used for a menu title"
     },
     "AC Analog Mode" : {
+
+    },
+    "Acceleration Adjustment." : {
+
+    },
+    "Acceleration Adjustment%%CV%%" : {
 
     },
     "Acceleration and Deceleration" : {
@@ -2395,6 +2476,9 @@
         }
       }
     },
+    "DCC Protocol%%CV%%" : {
+
+    },
     "DCC Settings" : {
 
     },
@@ -2417,6 +2501,12 @@
           }
         }
       }
+    },
+    "Deceleration Adjustment." : {
+
+    },
+    "Deceleration Adjustment%%CV%%" : {
+
     },
     "Decimal" : {
       "comment" : "Used by combobox to select number base for display",
@@ -2447,7 +2537,19 @@
     "Decoder Information" : {
 
     },
+    "Decoder manufacturer." : {
+
+    },
+    "Decoder Manufacturer%%CV%%" : {
+
+    },
     "Decoder Operating Time" : {
+
+    },
+    "Decoder serial number." : {
+
+    },
+    "Decoder Serial Number%%CV%%" : {
 
     },
     "Decoder Type" : {
@@ -2500,6 +2602,12 @@
 
     },
     "Default Values" : {
+
+    },
+    "Delay starting if drive sound is enabled." : {
+
+    },
+    "Delay Starting if Drive Sound is Enabled%%CV%%" : {
 
     },
     "Delay time before exiting a brake section." : {
@@ -2982,6 +3090,12 @@
     "Enable AC Analog Mode%%CV%%" : {
 
     },
+    "Enable acceleration time." : {
+
+    },
+    "Enable Acceleration Time%%CV%%" : {
+
+    },
     "Enable constant brake distance." : {
 
     },
@@ -3000,6 +3114,39 @@
     "Enable DCC Consist Address%%CV%%" : {
 
     },
+    "Enable DCC protocol." : {
+
+    },
+    "Enable deceleration time." : {
+
+    },
+    "Enable Deceleration Time%%CV%%" : {
+
+    },
+    "Enable forward trimming." : {
+
+    },
+    "Enable Forward Trimming%%CV%%" : {
+
+    },
+    "Enable gearbox backlash compensation." : {
+
+    },
+    "Enable Gearbox Backlash Compensation%%CV%%" : {
+
+    },
+    "Enable M4 protocol." : {
+
+    },
+    "Enable Märklin Motorola protocol." : {
+
+    },
+    "Enable persistent function." : {
+
+    },
+    "Enable persistent speed." : {
+
+    },
     "Enable quantum engineer support." : {
 
     },
@@ -3016,6 +3163,21 @@
 
     },
     "Enable RailComPlus Automatic Announcement%%CV%%" : {
+
+    },
+    "Enable Reverse trimming." : {
+
+    },
+    "Enable Reverse Trimming%%CV%%" : {
+
+    },
+    "Enable Selectrix protocol." : {
+
+    },
+    "Enable shunting mode trimming." : {
+
+    },
+    "Enable Shunting Mode Trimming%%CV%%" : {
 
     },
     "Enabled" : {
@@ -3546,6 +3708,12 @@
       "comment" : "This is used for the title of a check box."
     },
     "Forward Only" : {
+
+    },
+    "Forward trimming." : {
+
+    },
+    "Forward Trimming%%CV%%" : {
 
     },
     "France" : {
@@ -4430,6 +4598,18 @@
     "Load Adjustment" : {
 
     },
+    "Load adjustment when \"Optional Load\" is enabled." : {
+
+    },
+    "Load Adjustment when \"Optional Load\" is Enabled%%CV%%" : {
+
+    },
+    "Load adjustment when \"Primary Load\" is enabled." : {
+
+    },
+    "Load Adjustment when \"Primary Load\" is Enabled%%CV%%" : {
+
+    },
     "Load Control / Back EMF" : {
 
     },
@@ -4629,6 +4809,9 @@
     "m/s" : {
       "comment" : "Used for the abbreviation of meters per second"
     },
+    "M4 Protocol%%CV%%" : {
+
+    },
     "Machine Room Lights" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -4724,6 +4907,9 @@
 
     },
     "Manufacturer ID" : {
+
+    },
+    "Märklin Motorola Protocol%%CV%%" : {
 
     },
     "Marklin-Motorola I" : {
@@ -5611,6 +5797,12 @@
     "Permitted directions of travel for a train on this switchboard item." : {
       "comment" : "This is used for a tooltip."
     },
+    "Persistent Function%%CV%%" : {
+
+    },
+    "Persistent Speed%%CV%%" : {
+
+    },
     "Physical Output Configuration" : {
 
     },
@@ -5642,6 +5834,12 @@
       "comment" : "Used for a menu title"
     },
     "Preserve Direction" : {
+
+    },
+    "Preserve direction when changing from analog to digital." : {
+
+    },
+    "Preserve Direction when changing from Analog to Digital%%CV%%" : {
 
     },
     "Previous" : {
@@ -6098,6 +6296,9 @@
     "Reverse Color" : {
       "comment" : "This is used for the title of a check box."
     },
+    "Reverse Direction (Forward becomes Reverse)%%CV%%" : {
+
+    },
     "Reverse direction." : {
 
     },
@@ -6108,6 +6309,12 @@
 
     },
     "Reverse Only" : {
+
+    },
+    "Reverse trimming." : {
+
+    },
+    "Reverse Trimming%%CV%%" : {
 
     },
     "Reverser" : {
@@ -6367,6 +6574,9 @@
       "comment" : "This is used for a tooltip."
     },
     "Selectrix Brake Sections" : {
+
+    },
+    "Selectrix%%CV%%" : {
 
     },
     "Send address via broadcast on channel 1." : {
@@ -6631,6 +6841,12 @@
         }
       }
     },
+    "Shunting mode trimming." : {
+
+    },
+    "Shunting Mode Trimming%%CV%%" : {
+
+    },
     "Signal" : {
       "comment" : "This is used to describe a switchboard item."
     },
@@ -6703,6 +6919,12 @@
           }
         }
       }
+    },
+    "Slow motion time until acceleration starts." : {
+
+    },
+    "Slow motion time until Acceleration Starts%%CV%%" : {
+
     },
     "Smaller Radius Route (%%UNITS_ACTUAL_LENGTH%%)" : {
       "comment" : "This is used for the title of an input field where the user enters the length of the specified route. The %%UNITS_ACTUAL_LENGTH%% will be replaced at runtime by the name of the user selected units of length - place this at an approprate position in the title for the language."
@@ -7482,6 +7704,12 @@
         }
       }
     },
+    "This decoder synchronizes RailComPlus / M4 address with a Master decoder." : {
+
+    },
+    "This decoder synchronizes RailComPlus / M4 address with a Master decoder%%CV%%" : {
+
+    },
     "This description will appear in network browsers for this device." : {
       "comment" : "Used for the description of the user description input field in the CDI",
       "localizations" : {
@@ -7628,6 +7856,24 @@
     },
     "Time between the sensor triggering and the sensor reporting such trigger." : {
       "comment" : "This is used for a tooltip."
+    },
+    "Time from maximum speed to stop." : {
+
+    },
+    "Time from Maximum Speed to Stop%%CV%%" : {
+
+    },
+    "Time from stop to maximum speed." : {
+
+    },
+    "Time from Stop to Maximum Speed%%CV%%" : {
+
+    },
+    "Time to Bridge Power Interruption (PowerPack required)%%CV%%" : {
+
+    },
+    "Time to bridge power interruption." : {
+
     },
     "Timeout - write failed" : {
       "localizations" : {

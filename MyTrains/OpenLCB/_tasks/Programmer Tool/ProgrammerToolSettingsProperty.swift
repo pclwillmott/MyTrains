@@ -86,10 +86,45 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case detectSpeedStepModeAutomatically = 59
   case speedStepMode = 60
   
+  // Driving Characteristics
+  
+  case enableAcceleration = 63
+  case accelerationRate = 64
+  case accelerationAdjustment = 65
+  case enableDeceleration = 66
+  case decelerationRate = 67
+  case decelerationAdjustment = 68
+  case reverseMode = 69
+  case enableForwardTrim = 70
+  case forwardTrim = 71
+  case enableReverseTrim = 72
+  case reverseTrim = 73
+  case enableShuntingModeTrim = 74
+  case shuntingModeTrim = 75
+  case loadAdjustmentOptionalLoad = 76
+  case loadAdjustmentPrimaryLoad = 77
+  case enableGearboxBacklashCompensation = 78
+  case gearboxBacklashCompensation = 79
+  case timeToBridgePowerInterruption = 80
+  case preserveDirection = 81
+  case enableStartingDelay = 82
+  
   // Identification
   
   case userId1 = 61
   case userId2 = 62
+  
+  // Special Options
+  
+  case enableDCCProtocol = 83
+  case enableMarklinMotorolaProtocol = 84
+  case enableSelectrixProtocol = 85
+  case enableM4Protocol = 86
+  case memoryPersistentFunction = 87
+  case memoryPersistentSpeed = 88
+  case enableRailComPlusSynchronization = 89
+  case m4MasterDecoderManufacturer = 90
+  case m4MasterDecoderSerialNumber = 91
   
   // MARK: Public Properties
   
@@ -109,13 +144,44 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     return ProgrammerToolSettingsProperty.labels[self]?.requiredCapabilities ?? []
   }
   
+  public var minValue : Double {
+    switch self {
+    case .locomotiveAddressShort, .consistAddress, .waitingPeriodBeforeDirectionChange, .brakeDistanceLength, .brakeDistanceLengthBackwards, .stoppingPeriod, .accelerationRate, .decelerationRate, .forwardTrim, .reverseTrim, .gearboxBacklashCompensation, .shuntingModeTrim:
+      return 1
+    case .accelerationAdjustment, .decelerationAdjustment:
+      return -127
+    default:
+      return 0
+    }
+  }
+  
+  public var maxValue : Double {
+    switch self {
+    case .maximumSpeedWhenBrakeFunction1Active, .maximumSpeedWhenBrakeFunction2Active, .maximumSpeedWhenBrakeFunction3Active:
+      return 126
+    case .locomotiveAddressShort, .consistAddress, .accelerationAdjustment, .decelerationAdjustment:
+      return 127
+    case .shuntingModeTrim:
+      return 128
+    default:
+      return 255
+    }
+  }
+  
+  public var cvLabel : String {
+    guard let label = ProgrammerToolSettingsProperty.labels[self] else {
+      return "error"
+    }
+    return label.cv
+  }
+  
   // MARK: Public Methods
   
   public func label(showCV:Bool) -> String {
     guard let label = ProgrammerToolSettingsProperty.labels[self] else {
       return "error"
     }
-    return label.labelTitle.replacingOccurrences(of: "%%CV%%", with: label.cv)
+    return label.labelTitle.replacingOccurrences(of: "%%CV%%", with: "")
   }
   
   // MARK: Private Class Properties
@@ -208,7 +274,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       String(localized:"Start voltage (minimum speed)."),
       String(localized:" [CV127]"),
       .acAnalogMode,
-      .textFieldWithInfo,
+      .textFieldWithInfoWithSlider,
       []
     ),
     .acAnalogModeMaximumSpeedVoltage
@@ -217,7 +283,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       String(localized:"Maximum speed voltage."),
       String(localized:" [CV128]"),
       .acAnalogMode,
-      .textFieldWithInfo,
+      .textFieldWithInfoWithSlider,
       []
     ),
     .enableDCAnalogMode
@@ -235,7 +301,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       String(localized:"Start voltage (minimum speed)."),
       String(localized:" [CV125]"),
       .dcAnalogMode,
-      .textFieldWithInfo,
+      .textFieldWithInfoWithSlider,
       []
     ),
     .dcAnalogModeMaximumSpeedVoltage
@@ -244,7 +310,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       String(localized:"Maximum speed voltage."),
       String(localized:" [CV126]"),
       .dcAnalogMode,
-      .textFieldWithInfo,
+      .textFieldWithInfoWithSlider,
       []
     ),
     .enableQuantumEngineer
@@ -289,7 +355,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       String(localized:"Motor hysteresis Voltage."),
       String(localized:" [CV130]"),
       .analogVoltageHysteresis,
-      .textFieldWithInfo,
+      .textFieldWithInfoWithSlider,
       []
     ),
     .analogFunctionDifferenceVoltage
@@ -298,7 +364,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       String(localized:"Function difference voltage."),
       String(localized:" [CV129]"),
       .analogVoltageHysteresis,
-      .textFieldWithInfo,
+      .textFieldWithInfoWithSlider,
       []
     ),
     .enableABCBrakeMode
@@ -334,7 +400,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       String(localized:"Voltage difference indicating an ABC brake section."),
       String(localized:" [CV134]"),
       .abcBrakeSections,
-      .textField,
+      .textFieldWithSlider,
       []
     ),
     .abcReducedSpeed
@@ -343,7 +409,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       String(localized:"ABC Reduced Speed."),
       String(localized:" [CV123]"),
       .abcBrakeSections,
-      .textField,
+      .textFieldWithSlider,
       []
     ),
     .enableABCShuttleTrain
@@ -361,7 +427,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       String(localized:"Waiting time before direction change."),
       String(localized:" [CV149]"),
       .abcBrakeSections,
-      .textFieldWithInfo,
+      .textFieldWithInfoWithSlider,
       []
     ),
     .hluAllowZIMO
@@ -388,7 +454,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       String(localized:"HLU speed limit 1."),
       String(localized:" [CV150]"),
       .hluSettings,
-      .textField,
+      .textFieldWithSlider,
       []
     ),
     .hluSpeedLimit2
@@ -397,7 +463,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       String(localized:"HLU speed limit 2."),
       String(localized:" [CV151]"),
       .hluSettings,
-      .textField,
+      .textFieldWithSlider,
       []
     ),
     .hluSpeedLimit3
@@ -406,7 +472,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       String(localized:"HLU speed limit 3."),
       String(localized:" [CV152]"),
       .hluSettings,
-      .textField,
+      .textFieldWithSlider,
       []
     ),
     .hluSpeedLimit4
@@ -415,7 +481,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       String(localized:"HLU speed limit 4."),
       String(localized:" [CV153]"),
       .hluSettings,
-      .textField,
+      .textFieldWithSlider,
       []
     ),
     .hluSpeedLimit5
@@ -424,7 +490,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       String(localized:"HLU speed limit 5."),
       String(localized:" [CV154]"),
       .hluSettings,
-      .textField,
+      .textFieldWithSlider,
       []
     ),
     .brakeOnForwardPolarity
@@ -478,7 +544,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       String(localized:"Brake distance length."),
       String(localized:" [CV254]"),
       .constantBrakeDistance,
-      .textField,
+      .textFieldWithSlider,
       []
     ),
     .differentBrakeDistanceBackwards
@@ -496,7 +562,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       String(localized:"Brake distance length."),
       String(localized:" [CV255]"),
       .constantBrakeDistance,
-      .textField,
+      .textFieldWithSlider,
       []
     ),
     .driveUntilLocomotiveStopsInSpecifiedPeriod
@@ -514,7 +580,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       String(localized:"Stopping period."),
       String(localized:" [CV253]"),
       .constantBrakeDistance,
-      .textFieldWithInfo,
+      .textFieldWithInfoWithSlider,
       []
     ),
     .constantBrakeDistanceOnSpeedStep0
@@ -532,7 +598,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       String(localized:"Delay time before exiting a brake section."),
       String(localized:" [CV102]"),
       .brakeSectionSettings,
-      .textFieldWithInfo,
+      .textFieldWithInfoWithSlider,
       []
     ),
     .brakeFunction1BrakeTimeReduction
@@ -541,7 +607,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       String(localized:"Brake function 1 reduces brake time by."),
       String(localized:" [CV179]"),
       .brakeFunctions,
-      .textFieldWithInfo,
+      .textFieldWithInfoWithSlider,
       []
     ),
     .maximumSpeedWhenBrakeFunction1Active
@@ -550,7 +616,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       String(localized:"Maximum speed when brake function 1 is active."),
       String(localized:" [CV182]"),
       .brakeFunctions,
-      .textField,
+      .textFieldWithSlider,
       []
     ),
     .brakeFunction2BrakeTimeReduction
@@ -559,7 +625,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       String(localized:"Brake function 2 reduces brake time by."),
       String(localized:" [CV180]"),
       .brakeFunctions,
-      .textFieldWithInfo,
+      .textFieldWithInfoWithSlider,
       []
     ),
     .maximumSpeedWhenBrakeFunction2Active
@@ -568,7 +634,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       String(localized:"Maximum speed when brake function 2 is active."),
       String(localized:" [CV183]"),
       .brakeFunctions,
-      .textField,
+      .textFieldWithSlider,
       []
     ),
     .brakeFunction3BrakeTimeReduction
@@ -577,7 +643,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       String(localized:"Brake function 3 reduces brake time by."),
       String(localized:" [CV181]"),
       .brakeFunctions,
-      .textFieldWithInfo,
+      .textFieldWithInfoWithSlider,
       []
     ),
     .maximumSpeedWhenBrakeFunction3Active
@@ -586,7 +652,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       String(localized:"Maximum speed when brake function 3 is active."),
       String(localized:" [CV184]"),
       .brakeFunctions,
-      .textField,
+      .textFieldWithSlider,
       []
     ),
     .enableRailComFeedback
@@ -652,6 +718,186 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       .comboBox,
       []
     ),
+    .enableAcceleration
+    : (
+      String(localized:"Enable Acceleration Time%%CV%%"),
+      String(localized:"Enable acceleration time."),
+      String(localized:" [CV3]"),
+      .accelerationAndDeceleration,
+      .checkBox,
+      []
+    ),
+    .accelerationRate
+    : (
+      String(localized:"Time from Stop to Maximum Speed%%CV%%"),
+      String(localized:"Time from stop to maximum speed."),
+      String(localized:" [CV3]"),
+      .accelerationAndDeceleration,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .accelerationAdjustment
+    : (
+      String(localized:"Acceleration Adjustment%%CV%%"),
+      String(localized:"Acceleration Adjustment."),
+      String(localized:" [CV23]"),
+      .accelerationAndDeceleration,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .enableDeceleration
+    : (
+      String(localized:"Enable Deceleration Time%%CV%%"),
+      String(localized:"Enable deceleration time."),
+      String(localized:" [CV4]"),
+      .accelerationAndDeceleration,
+      .checkBox,
+      []
+    ),
+    .decelerationRate
+    : (
+      String(localized:"Time from Maximum Speed to Stop%%CV%%"),
+      String(localized:"Time from maximum speed to stop."),
+      String(localized:" [CV4]"),
+      .accelerationAndDeceleration,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .decelerationAdjustment
+    : (
+      String(localized:"Deceleration Adjustment%%CV%%"),
+      String(localized:"Deceleration Adjustment."),
+      String(localized:" [CV24]"),
+      .accelerationAndDeceleration,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .reverseMode
+    : (
+      String(localized:"Reverse Direction (Forward becomes Reverse)%%CV%%"),
+      String(localized:"Reverse direction."),
+      String(localized:" [CV29.0]"),
+      .reverseMode,
+      .checkBox,
+      []
+    ),
+    .enableForwardTrim
+    : (
+      String(localized:"Enable Forward Trimming%%CV%%"),
+      String(localized:"Enable forward trimming."),
+      String(localized:" [CV66]"),
+      .trimming,
+      .checkBox,
+      []
+    ),
+    .forwardTrim
+    : (
+      String(localized:"Forward Trimming%%CV%%"),
+      String(localized:"Forward trimming."),
+      String(localized:" [CV66]"),
+      .trimming,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .enableReverseTrim
+    : (
+      String(localized:"Enable Reverse Trimming%%CV%%"),
+      String(localized:"Enable Reverse trimming."),
+      String(localized:" [CV95]"),
+      .trimming,
+      .checkBox,
+      []
+    ),
+    .reverseTrim
+    : (
+      String(localized:"Reverse Trimming%%CV%%"),
+      String(localized:"Reverse trimming."),
+      String(localized:" [CV95]"),
+      .trimming,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .enableShuntingModeTrim
+    : (
+      String(localized:"Enable Shunting Mode Trimming%%CV%%"),
+      String(localized:"Enable shunting mode trimming."),
+      String(localized:" [CV101]"),
+      .trimming,
+      .checkBox,
+      []
+    ),
+    .shuntingModeTrim
+    : (
+      String(localized:"Shunting Mode Trimming%%CV%%"),
+      String(localized:"Shunting mode trimming."),
+      String(localized:" [CV101]"),
+      .trimming,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .loadAdjustmentOptionalLoad
+    : (
+      String(localized:"Load Adjustment when \"Optional Load\" is Enabled%%CV%%"),
+      String(localized:"Load adjustment when \"Optional Load\" is enabled."),
+      String(localized:" [CV103]"),
+      .loadAdjustment,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .loadAdjustmentPrimaryLoad
+    : (
+      String(localized:"Load Adjustment when \"Primary Load\" is Enabled%%CV%%"),
+      String(localized:"Load adjustment when \"Primary Load\" is enabled."),
+      String(localized:" [CV104]"),
+      .loadAdjustment,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .enableGearboxBacklashCompensation
+    : (
+      String(localized:"Enable Gearbox Backlash Compensation%%CV%%"),
+      String(localized:"Enable gearbox backlash compensation."),
+      String(localized:" [CV111]"),
+      .gearboxBacklash,
+      .checkBox,
+      []
+    ),
+    .gearboxBacklashCompensation
+    : (
+      String(localized:"Slow motion time until Acceleration Starts%%CV%%"),
+      String(localized:"Slow motion time until acceleration starts."),
+      String(localized:" [CV111]"),
+      .gearboxBacklash,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .timeToBridgePowerInterruption
+    : (
+      String(localized:"Time to Bridge Power Interruption (PowerPack required)%%CV%%"),
+      String(localized:"Time to bridge power interruption."),
+      String(localized:" [CV113]"),
+      .powerPack,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .preserveDirection
+    : (
+      String(localized:"Preserve Direction when changing from Analog to Digital%%CV%%"),
+      String(localized:"Preserve direction when changing from analog to digital."),
+      String(localized:" [CV124.0]"),
+      .preserveDirection,
+      .checkBox,
+      []
+    ),
+    .enableStartingDelay
+    : (
+      String(localized:"Delay Starting if Drive Sound is Enabled%%CV%%"),
+      String(localized:"Delay starting if drive sound is enabled."),
+      String(localized:" [CV124.2]"),
+      .startingDelay,
+      .checkBox,
+      []
+    ),
     .userId1
     : (
       String(localized:"User ID #1%%CV%%"),
@@ -670,6 +916,87 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       .textField,
       []
     ),
+    .enableDCCProtocol
+    : (
+      String(localized:"DCC Protocol%%CV%%"),
+      String(localized:"Enable DCC protocol."),
+      String(localized:" [CV47.0]"),
+      .enabledProtocols,
+      .checkBox,
+      []
+    ),
+    .enableMarklinMotorolaProtocol
+    : (
+      String(localized:"Märklin Motorola Protocol%%CV%%"),
+      String(localized:"Enable Märklin Motorola protocol."),
+      String(localized:" [CV47.2]"),
+      .enabledProtocols,
+      .checkBox,
+      []
+    ),
+    .enableSelectrixProtocol
+    : (
+      String(localized:"Selectrix%%CV%%"),
+      String(localized:"Enable Selectrix protocol."),
+      String(localized:" [CV47.3]"),
+      .enabledProtocols,
+      .checkBox,
+      []
+    ),
+    .enableM4Protocol
+    : (
+      String(localized:"M4 Protocol%%CV%%"),
+      String(localized:"Enable M4 protocol."),
+      String(localized:" [CV47.1]"),
+      .enabledProtocols,
+      .checkBox,
+      []
+    ),
+    .memoryPersistentFunction
+    : (
+      String(localized:"Persistent Function%%CV%%"),
+      String(localized:"Enable persistent function."),
+      String(localized:" [CV122.0]"),
+      .memorySettings,
+      .checkBox,
+      []
+    ),
+    .memoryPersistentSpeed
+    : (
+      String(localized:"Persistent Speed%%CV%%"),
+      String(localized:"Enable persistent speed."),
+      String(localized:" [CV122.1]"),
+      .memorySettings,
+      .checkBox,
+      []
+    ),
+    .enableRailComPlusSynchronization
+    : (
+      String(localized:"This decoder synchronizes RailComPlus / M4 address with a Master decoder%%CV%%"),
+      String(localized:"This decoder synchronizes RailComPlus / M4 address with a Master decoder."),
+      String(localized:" [CV191]"),
+      .railComDecoderSync,
+      .checkBox,
+      []
+    ),
+    .m4MasterDecoderManufacturer
+    : (
+      String(localized:"Decoder Manufacturer%%CV%%"),
+      String(localized:"Decoder manufacturer."),
+      String(localized:" [CV191]"),
+      .railComDecoderSync,
+      .comboBox,
+      []
+    ),
+    .m4MasterDecoderSerialNumber
+    : (
+      String(localized:"Decoder Serial Number%%CV%%"),
+      String(localized:"Decoder serial number."),
+      String(localized:" [CV195, CV194, CV193, CV192]"),
+      .railComDecoderSync,
+      .textField,
+      []
+    ),
 
   ]
 
@@ -684,15 +1011,10 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     
     for item in ProgrammerToolSettingsProperty.allCases {
       
-      var field : ProgrammerToolSettingsPropertyField = (view:nil, label:nil, control:nil, item, customView:nil)
+      var field : ProgrammerToolSettingsPropertyField = (view:nil, label:nil, control:nil, item, customView:nil, cvLabel:nil, slider:nil)
       
-        
       field.label = NSTextField(labelWithString: item.label(showCV: true))
-      
-      let view = NSView()
-      
-      view.translatesAutoresizingMaskIntoConstraints = false
-      
+
       switch item.controlType {
       case .checkBox:
         field.label!.stringValue = ""
@@ -705,15 +1027,11 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
         comboBox.isEditable = false
         field.control = comboBox
         initComboBox(property: field.property, comboBox: comboBox)
-        
       case .warning:
-        let image = NSImageView(image: MyIcon.warning.image!)
-  //      image.contentTintColor = .yellow
-        field.customView = image
+        field.customView = NSImageView(image: MyIcon.warning.image!)
         field.control = NSTextField(labelWithString: "")
       case .label:
-        let textField = NSTextField(labelWithString: "")
-        field.control = textField
+        field.control = NSTextField(labelWithString: "")
       case .description:
         let textField = NSTextField(labelWithString: "")
         textField.lineBreakMode = .byWordWrapping
@@ -721,46 +1039,69 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
         textField.preferredMaxLayoutWidth = 400.0
         field.control = textField
       case .textField:
-        let textField = NSTextField()
-        field.control = textField
+        field.control = NSTextField()
       case .textFieldWithInfo:
-        let textField = NSTextField()
-        field.control = textField
-        var info = NSTextField(labelWithString: "")
+        field.control = NSTextField()
+        let info = NSTextField(labelWithString: "")
         info.fontSize = textFontSize
-        info.backgroundColor = .brown
         field.customView = info
+      case .textFieldWithSlider:
+        field.control = NSTextField()
+        field.slider = NSSlider()
+      case .textFieldWithInfoWithSlider:
+        field.control = NSTextField()
+        let info = NSTextField(labelWithString: "")
+        info.fontSize = textFontSize
+        field.customView = info
+        field.slider = NSSlider()
       }
-      
-      field.control?.toolTip = item.toolTip
-      field.control?.tag = item.rawValue
       
       /// https://manasaprema04.medium.com/autolayout-fundamental-522f0a6e5790
       
-      field.label!.translatesAutoresizingMaskIntoConstraints = false
-      field.label!.fontSize = labelFontSize
-      field.label!.alignment = .right
-      field.label!.setContentHuggingPriority(NSLayoutConstraint.Priority(rawValue: 250), for: .horizontal)
-      //     field.label!.lineBreakMode = .byWordWrapping
-      //     field.label!.maximumNumberOfLines = 0
-      //     field.label!.preferredMaxLayoutWidth = 120.0
+      let view = NSView()
+      view.translatesAutoresizingMaskIntoConstraints = false
+      view.setContentHuggingPriority(NSLayoutConstraint.Priority(rawValue: 500), for: .horizontal)
+      field.view = view
+
+      if let label = field.label {
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.fontSize = labelFontSize
+        label.alignment = .right
+        label.setContentHuggingPriority(NSLayoutConstraint.Priority(rawValue: 250), for: .horizontal)
+        view.addSubview(label)
+      }
       
-      view.addSubview(field.label!)
+      if let slider = field.slider {
+        slider.translatesAutoresizingMaskIntoConstraints = false
+        slider.altIncrementValue = 1
+        slider.minValue = item.minValue
+        slider.maxValue = item.maxValue
+        slider.tag = item.rawValue
+        view.addSubview(slider)
+      }
       
-      field.control!.translatesAutoresizingMaskIntoConstraints = false
-      field.control!.fontSize = textFontSize
-      field.control!.setContentHuggingPriority(NSLayoutConstraint.Priority(rawValue: 1), for: .horizontal)
+      if let control = field.control {
+        control.translatesAutoresizingMaskIntoConstraints = false
+        control.fontSize = textFontSize
+        control.setContentHuggingPriority(NSLayoutConstraint.Priority(rawValue: 1), for: .horizontal)
+        control.toolTip = item.toolTip
+        control.tag = item.rawValue
+        view.addSubview(control)
+      }
       
       if let customView = field.customView {
         customView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(customView)
       }
-      
-      view.addSubview(field.control!)
-      //      view.backgroundColor = NSColor.yellow.cgColor
-      
-      field.view = view
-      field.view!.setContentHuggingPriority(NSLayoutConstraint.Priority(rawValue: 500), for: .horizontal)
+
+      field.cvLabel = NSTextField(labelWithString: "")
+
+      if let cvLabel = field.cvLabel {
+        cvLabel.translatesAutoresizingMaskIntoConstraints = false
+        cvLabel.fontSize = labelFontSize
+        cvLabel.alignment = .right
+        view.addSubview(cvLabel)
+      }
       
       result.append(field)
       
@@ -779,6 +1120,8 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       LocomotiveAddressType.populate(comboBox: comboBox)
     case .marklinConsecutiveAddresses:
       MarklinConsecutiveAddresses.populate(comboBox: comboBox)
+    case .m4MasterDecoderManufacturer:
+      ManufacturerCode.populate(comboBox: comboBox)
     case .speedStepMode:
       SpeedStepMode.populate(comboBox: comboBox)
     default:

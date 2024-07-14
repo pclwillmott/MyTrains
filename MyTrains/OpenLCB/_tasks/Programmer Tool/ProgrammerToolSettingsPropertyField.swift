@@ -8,4 +8,4 @@
 import Foundation
 import AppKit
 
-public typealias ProgrammerToolSettingsPropertyField = (view:NSView?, label:NSTextField?, control:NSControl?, property:ProgrammerToolSettingsProperty, customView:NSView?)
+public typealias ProgrammerToolSettingsPropertyField = (view:NSView?, label:NSTextField?, control:NSControl?, property:ProgrammerToolSettingsProperty, customView:NSView?, cvLabel:NSTextField?, slider:NSSlider?)

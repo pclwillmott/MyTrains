@@ -23,7 +23,7 @@ public class LCCCANFrame : NSObject {
     
     let section = frame.split(separator: "N", omittingEmptySubsequences: true)
     
-    header = UInt32(hex: section[0])
+    header = UInt32(hex: section[0]) ?? 0
     
     if section.count == 2 {
       

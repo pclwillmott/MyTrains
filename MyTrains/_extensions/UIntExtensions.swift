@@ -168,20 +168,28 @@ extension UInt32 {
     
   }
   
-  init(hex:String) {
+  init?(hex:String) {
+    
+    guard let value = UInt32(hex, radix: 16) else {
+      return nil
+    }
     
     self.init()
     
-    self = UInt32(hex, radix: 16) ?? 0
+    self = value
     
   }
 
-  init(hex:String.SubSequence) {
+  init?(hex:String.SubSequence) {
+    
+    guard let value = UInt32(hex, radix: 16) else {
+      return nil
+    }
     
     self.init()
     
-    self = UInt32(hex, radix: 16) ?? 0
-    
+    self = value
+
   }
 
   init?(bigEndianData: [UInt8]) {
