@@ -127,7 +127,16 @@
     " [CV111]" : {
 
     },
+    " [CV112]" : {
+
+    },
     " [CV113]" : {
+
+    },
+    " [CV114]" : {
+
+    },
+    " [CV115]" : {
 
     },
     " [CV122.0]" : {
@@ -154,6 +163,9 @@
     " [CV124.2]" : {
 
     },
+    " [CV124.4]" : {
+
+    },
     " [CV125]" : {
 
     },
@@ -172,7 +184,34 @@
     " [CV130]" : {
 
     },
+    " [CV131]" : {
+
+    },
+    " [CV132]" : {
+
+    },
     " [CV134]" : {
+
+    },
+    " [CV138]" : {
+
+    },
+    " [CV139]" : {
+
+    },
+    " [CV140]" : {
+
+    },
+    " [CV141]" : {
+
+    },
+    " [CV142]" : {
+
+    },
+    " [CV143]" : {
+
+    },
+    " [CV144]" : {
 
     },
     " [CV149]" : {
@@ -217,6 +256,21 @@
     " [CV195, CV194, CV193, CV192]" : {
 
     },
+    " [CV199]" : {
+
+    },
+    " [CV245]" : {
+
+    },
+    " [CV246]" : {
+
+    },
+    " [CV247]" : {
+
+    },
+    " [CV248]" : {
+
+    },
     " [CV253]" : {
 
     },
@@ -233,6 +287,12 @@
 
     },
     "%@ × Voltage" : {
+
+    },
+    "%@%%" : {
+
+    },
+    "%@°C" : {
 
     },
     "%lld bytes %@" : {
@@ -329,6 +389,12 @@
     },
     "1:%@" : {
       "comment" : "This is a ratio used for layout scale, e.g. 1:76.2"
+    },
+    "2 (Two different color class lights)" : {
+
+    },
+    "3 (Three different color class lights)" : {
+
     },
     "3-Way Turnout" : {
       "comment" : "This is used to describe a piece of track."
@@ -684,10 +750,10 @@
     "ABC Brake Sections" : {
 
     },
-    "ABC Reduced Speed." : {
+    "ABC Reduced Speed" : {
 
     },
-    "ABC Reduced Speed%%CV%%" : {
+    "ABC Reduced Speed." : {
 
     },
     "About MyTrains" : {
@@ -696,10 +762,10 @@
     "AC Analog Mode" : {
 
     },
-    "Acceleration Adjustment." : {
+    "Acceleration Adjustment" : {
 
     },
-    "Acceleration Adjustment%%CV%%" : {
+    "Acceleration Adjustment." : {
 
     },
     "Acceleration and Deceleration" : {
@@ -768,19 +834,19 @@
     "Add Item to Panel" : {
 
     },
-    "Additional addresses." : {
+    "Additional Addresses" : {
 
     },
-    "Additional Addresses%%CV%%" : {
+    "Additional addresses." : {
 
     },
     "Address" : {
 
     },
-    "Address for consist operation." : {
+    "Address for Consist Operation" : {
 
     },
-    "Address for Consist Operation%%CV%%" : {
+    "Address for consist operation." : {
 
     },
     "Agreement" : {
@@ -863,19 +929,19 @@
     "Alias Mapping Enquiry Frame" : {
 
     },
-    "Allow data transmission on channel 2." : {
+    "Allow Data Transmission on Channel 2" : {
 
     },
-    "Allow Data Transmission on Channel 2%%CV%%" : {
+    "Allow data transmission on channel 2." : {
 
     },
     "Allow Shunt" : {
       "comment" : "This is used for the title of a check box where the user can select if shunting is allowed in reverese direction on this switchbaord item."
     },
-    "Allow ZIMO (HLU) brake sections." : {
+    "Allow ZIMO (HLU) Brake Sections" : {
 
     },
-    "Allow ZIMO (HLU) Brake Sections%%CV%%" : {
+    "Allow ZIMO (HLU) brake sections." : {
 
     },
     "Alternate Clock 1" : {
@@ -1089,6 +1155,90 @@
     "Automatic Uncoupling" : {
 
     },
+    "Automatic Uncoupling Move Time" : {
+
+    },
+    "Automatic uncoupling move time." : {
+
+    },
+    "Automatic Uncoupling Push Time" : {
+
+    },
+    "Automatic uncoupling push time." : {
+
+    },
+    "Automatic Uncoupling Speed" : {
+
+    },
+    "Automatic uncoupling speed." : {
+
+    },
+    "Automatic Uncoupling Wait Time" : {
+
+    },
+    "Automatic uncoupling wait time." : {
+
+    },
+    "AUX1 [1]" : {
+
+    },
+    "AUX1 [2]" : {
+
+    },
+    "AUX2 [1]" : {
+
+    },
+    "AUX2 [2]" : {
+
+    },
+    "AUX3" : {
+
+    },
+    "AUX4" : {
+
+    },
+    "AUX5" : {
+
+    },
+    "AUX6" : {
+
+    },
+    "AUX7" : {
+
+    },
+    "AUX8" : {
+
+    },
+    "AUX9" : {
+
+    },
+    "AUX10" : {
+
+    },
+    "AUX11" : {
+
+    },
+    "AUX12" : {
+
+    },
+    "AUX13" : {
+
+    },
+    "AUX14" : {
+
+    },
+    "AUX15" : {
+
+    },
+    "AUX16" : {
+
+    },
+    "AUX17" : {
+
+    },
+    "AUX18" : {
+
+    },
     "AWS Bell" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -1255,67 +1405,67 @@
         }
       }
     },
+    "Brake Distance Length" : {
+
+    },
     "Brake distance length." : {
 
     },
-    "Brake Distance Length%%CV%%" : {
+    "Brake Function 1 Reduces Brake Time by" : {
 
     },
     "Brake function 1 reduces brake time by." : {
 
     },
-    "Brake Function 1 Reduces Brake Time by%%CV%%" : {
+    "Brake Function 2 Reduces Brake Time by" : {
 
     },
     "Brake function 2 reduces brake time by." : {
 
     },
-    "Brake Function 2 Reduces Brake Time by%%CV%%" : {
+    "Brake Function 3 Reduces Brake Time by" : {
 
     },
     "Brake function 3 reduces brake time by." : {
 
     },
-    "Brake Function 3 Reduces Brake Time by%%CV%%" : {
+    "Brake Functions" : {
 
     },
-    "Brake Functions" : {
+    "Brake if left rail signal in driving direction is more positive than the right rail" : {
 
     },
     "Brake if left rail signal in driving direction is more positive than the right rail." : {
 
     },
-    "Brake if left rail signal in driving direction is more positive than the right rail%%CV%%" : {
+    "Brake if right rail signal in driving direction is more positive than the left rail" : {
 
     },
     "Brake if right rail signal in driving direction is more positive than the left rail." : {
 
     },
-    "Brake if right rail signal in driving direction is more positive than the left rail%%CV%%" : {
+    "Brake on Forward DC Polarity" : {
 
     },
     "Brake on forward DC polarity." : {
 
     },
-    "Brake on Forward DC Polarity%%CV%%" : {
+    "Brake on Forward Polarity of Brake Diode" : {
 
     },
     "Brake on forward polarity of brake diode." : {
 
     },
-    "Brake on Forward Polarity of Brake Diode%%CV%%" : {
+    "Brake on Reverse DC Polarity" : {
 
     },
     "Brake on reverse DC polarity." : {
 
     },
-    "Brake on Reverse DC Polarity%%CV%%" : {
+    "Brake on Reverse Polarity of Brake Diode" : {
 
     },
     "Brake on reverse polarity of brake diode." : {
-
-    },
-    "Brake on Reverse Polarity of Brake Diode%%CV%%" : {
 
     },
     "Brake Release" : {
@@ -1544,6 +1694,12 @@
     },
     "China" : {
       "comment" : "This is the name of a country."
+    },
+    "Class Light Logic Sequence Length" : {
+
+    },
+    "Class light logic sequence length." : {
+
     },
     "Clear" : {
       "comment" : "Used for the Clear Layout Selection button title",
@@ -1986,10 +2142,10 @@
     "Connecting to Locomotive Failed" : {
 
     },
-    "Constant brake distance on speed step 0." : {
+    "Constant Brake Distance on Speed Step 0" : {
 
     },
-    "Constant Brake Distance on Speed Step 0%%CV%%" : {
+    "Constant brake distance on speed step 0." : {
 
     },
     "ConstantBrake Distance" : {
@@ -2476,7 +2632,7 @@
         }
       }
     },
-    "DCC Protocol%%CV%%" : {
+    "DCC Protocol" : {
 
     },
     "DCC Settings" : {
@@ -2502,10 +2658,10 @@
         }
       }
     },
-    "Deceleration Adjustment." : {
+    "Deceleration Adjustment" : {
 
     },
-    "Deceleration Adjustment%%CV%%" : {
+    "Deceleration Adjustment." : {
 
     },
     "Decimal" : {
@@ -2537,19 +2693,19 @@
     "Decoder Information" : {
 
     },
-    "Decoder manufacturer." : {
+    "Decoder Manufacturer" : {
 
     },
-    "Decoder Manufacturer%%CV%%" : {
+    "Decoder manufacturer." : {
 
     },
     "Decoder Operating Time" : {
 
     },
-    "Decoder serial number." : {
+    "Decoder Serial Number" : {
 
     },
-    "Decoder Serial Number%%CV%%" : {
+    "Decoder serial number." : {
 
     },
     "Decoder Type" : {
@@ -2604,16 +2760,16 @@
     "Default Values" : {
 
     },
+    "Delay Starting if Drive Sound is Enabled" : {
+
+    },
     "Delay starting if drive sound is enabled." : {
 
     },
-    "Delay Starting if Drive Sound is Enabled%%CV%%" : {
+    "Delay Time Before Exiting a Brake Section" : {
 
     },
     "Delay time before exiting a brake section." : {
-
-    },
-    "Delay Time Before Exiting a Brake Section%%CV%%" : {
 
     },
     "Delegate" : {
@@ -2676,10 +2832,10 @@
         }
       }
     },
-    "Detect speed step mode automatically." : {
+    "Detect Speed Step Mode Automatically" : {
 
     },
-    "Detect Speed Step Mode Automatically%%CV%%" : {
+    "Detect speed step mode automatically." : {
 
     },
     "Determines the speed profiler mode of operation." : {
@@ -2711,10 +2867,10 @@
     "Difference between commanded speed and actual speed in the reverse direction" : {
 
     },
-    "Different brake distance while driving backwards." : {
+    "Different Brake Distance While Driving Backwards" : {
 
     },
-    "Different Brake Distance While Driving Backwards%%CV%%" : {
+    "Different brake distance while driving backwards." : {
 
     },
     "Digitrax BXP88" : {
@@ -2911,10 +3067,10 @@
         }
       }
     },
-    "Drive until locomotive stops in specified period." : {
+    "Drive Until Locomotive Stops in Specified Period" : {
 
     },
-    "Drive Until Locomotive Stops in Specified Period%%CV%%" : {
+    "Drive until locomotive stops in specified period." : {
 
     },
     "Driver's Door" : {
@@ -2938,6 +3094,12 @@
 
     },
     "Duplicate Node ID Detected" : {
+
+    },
+    "Duration of Steam Chuffs Relative to Trigger Distance" : {
+
+    },
+    "Duration of steam chuffs relative to trigger distance." : {
 
     },
     "Dynamic Brake" : {
@@ -3075,64 +3237,70 @@
     "Emergency Stop All" : {
 
     },
-    "Enable ABC brake mode (asymmetrical DCC signal:" : {
+    "Enable ABC brake mode (asymmetrical DCC signal):" : {
+
+    },
+    "Enable ABC Shuttle Train" : {
 
     },
     "Enable ABC shuttle train." : {
 
     },
-    "Enable ABC Shuttle Train%%CV%%" : {
+    "Enable AC Analog Mode" : {
 
     },
     "Enable AC analog mode." : {
 
     },
-    "Enable AC Analog Mode%%CV%%" : {
+    "Enable Acceleration Time" : {
 
     },
     "Enable acceleration time." : {
 
     },
-    "Enable Acceleration Time%%CV%%" : {
+    "Enable Automatic Uncoupling" : {
+
+    },
+    "Enable automatic uncoupling." : {
+
+    },
+    "Enable Constant Brake Distance" : {
 
     },
     "Enable constant brake distance." : {
 
     },
-    "Enable Constant Brake Distance%%CV%%" : {
+    "Enable DC Analog Mode" : {
 
     },
     "Enable DC analog mode." : {
 
     },
-    "Enable DC Analog Mode%%CV%%" : {
+    "Enable DCC Consist Address" : {
 
     },
     "Enable DCC consist address." : {
 
     },
-    "Enable DCC Consist Address%%CV%%" : {
+    "Enable DCC protocol." : {
 
     },
-    "Enable DCC protocol." : {
+    "Enable Deceleration Time" : {
 
     },
     "Enable deceleration time." : {
 
     },
-    "Enable Deceleration Time%%CV%%" : {
+    "Enable Forward Trimming" : {
 
     },
     "Enable forward trimming." : {
 
     },
-    "Enable Forward Trimming%%CV%%" : {
+    "Enable Gearbox Backlash Compensation" : {
 
     },
     "Enable gearbox backlash compensation." : {
-
-    },
-    "Enable Gearbox Backlash Compensation%%CV%%" : {
 
     },
     "Enable M4 protocol." : {
@@ -3147,37 +3315,37 @@
     "Enable persistent speed." : {
 
     },
+    "Enable Quantum Engineer Support" : {
+
+    },
     "Enable quantum engineer support." : {
 
     },
-    "Enable Quantum Engineer Support%%CV%%" : {
+    "Enable RailCom Feedback" : {
 
     },
     "Enable RailCom feedback." : {
 
     },
-    "Enable RailCom Feedback%%CV%%" : {
+    "Enable RailComPlus Automatic Announcement" : {
 
     },
     "Enable RailComPlus automatic announcement." : {
 
     },
-    "Enable RailComPlus Automatic Announcement%%CV%%" : {
+    "Enable Reverse Trimming" : {
 
     },
     "Enable Reverse trimming." : {
 
     },
-    "Enable Reverse Trimming%%CV%%" : {
-
-    },
     "Enable Selectrix protocol." : {
 
     },
-    "Enable shunting mode trimming." : {
+    "Enable Shunting Mode Trimming" : {
 
     },
-    "Enable Shunting Mode Trimming%%CV%%" : {
+    "Enable shunting mode trimming." : {
 
     },
     "Enabled" : {
@@ -3204,6 +3372,12 @@
       "comment" : "This is used for the title of a combobox."
     },
     "End User License Agreement" : {
+
+    },
+    "Enforce Slave Communication on AUX3 and AUX4" : {
+
+    },
+    "Enforce slave communication on AUX3 and AUX4." : {
 
     },
     "Engine" : {
@@ -3554,6 +3728,18 @@
     "Facing Direction" : {
       "comment" : "This is used for the title of combobox."
     },
+    "Fade-In Time of Light Effects" : {
+
+    },
+    "Fade-in time of light effects." : {
+
+    },
+    "Fade-Out Time of Light Effects" : {
+
+    },
+    "Fade-out time of light effects." : {
+
+    },
     "Fan Operation" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
       "localizations" : {
@@ -3570,6 +3756,12 @@
           }
         }
       }
+    },
+    "Fan Speed Trim" : {
+
+    },
+    "Fan speed trim." : {
+
     },
     "Far Light" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -3710,10 +3902,10 @@
     "Forward Only" : {
 
     },
-    "Forward trimming." : {
+    "Forward Trimming" : {
 
     },
-    "Forward Trimming%%CV%%" : {
+    "Forward trimming." : {
 
     },
     "France" : {
@@ -3739,6 +3931,18 @@
     "Freeze Command" : {
 
     },
+    "Frequency for Blinking Effects" : {
+
+    },
+    "Frequency for blinking effects." : {
+
+    },
+    "Front Light [1]" : {
+
+    },
+    "Front Light [2]" : {
+
+    },
     "ft." : {
       "comment" : "Used for the abbreviation of feet (length)"
     },
@@ -3751,10 +3955,10 @@
     "Function Description Information" : {
 
     },
-    "Function difference voltage." : {
+    "Function Difference Voltage" : {
 
     },
-    "Function Difference Voltage%%CV%%" : {
+    "Function difference voltage." : {
 
     },
     "Function Mapping" : {
@@ -3906,6 +4110,12 @@
         }
       }
     },
+    "Grade Crossing Holding Time" : {
+
+    },
+    "Grade crossing holding time." : {
+
+    },
     "Gray" : {
       "comment" : "The name of a color."
     },
@@ -4019,40 +4229,40 @@
     "Hide the Panel Configuration Area" : {
 
     },
-    "High Frequency PWM Motor Control%%CV%%" : {
+    "High Frequency PWM Motor Control" : {
 
     },
     "HLU Sections" : {
 
     },
+    "HLU Speed Limit 1" : {
+
+    },
     "HLU speed limit 1." : {
 
     },
-    "HLU Speed Limit 1%%CV%%" : {
-
-    },
-    "HLU Speed Limit 2 (Ultra Low)%%CV%%" : {
+    "HLU Speed Limit 2 (Ultra Low)" : {
 
     },
     "HLU speed limit 2." : {
 
     },
+    "HLU Speed Limit 3" : {
+
+    },
     "HLU speed limit 3." : {
 
     },
-    "HLU Speed Limit 3%%CV%%" : {
-
-    },
-    "HLU Speed Limit 4 (Low Speed)%%CV%%" : {
+    "HLU Speed Limit 4 (Low Speed)" : {
 
     },
     "HLU speed limit 4." : {
 
     },
-    "HLU speed limit 5." : {
+    "HLU Speed Limit 5" : {
 
     },
-    "HLU Speed Limit 5%%CV%%" : {
+    "HLU speed limit 5." : {
 
     },
     "Horn" : {
@@ -4141,10 +4351,10 @@
     "If this box is checked then the enter zone event will not be used by the speed profiler." : {
       "comment" : "This is used for a tooltip."
     },
-    "Ignore acceleration and deceleration in the sound schedule." : {
+    "Ignore Acceleration and Deceleration in the Sound Schedule" : {
 
     },
-    "Ignore Acceleration and Deceleration in the Sound Schedule%%CV%%" : {
+    "Ignore acceleration and deceleration in the sound schedule." : {
 
     },
     "In Use" : {
@@ -4598,16 +4808,16 @@
     "Load Adjustment" : {
 
     },
+    "Load Adjustment when \"Optional Load\" is Enabled" : {
+
+    },
     "Load adjustment when \"Optional Load\" is enabled." : {
 
     },
-    "Load Adjustment when \"Optional Load\" is Enabled%%CV%%" : {
+    "Load Adjustment when \"Primary Load\" is Enabled" : {
 
     },
     "Load adjustment when \"Primary Load\" is enabled." : {
-
-    },
-    "Load Adjustment when \"Primary Load\" is Enabled%%CV%%" : {
 
     },
     "Load Control / Back EMF" : {
@@ -4628,10 +4838,7 @@
     "Locomotive Address" : {
 
     },
-    "Locomotive Address Type%%CV%%" : {
-
-    },
-    "Locomotive Address%%CV%%" : {
+    "Locomotive Address Type" : {
 
     },
     "Locomotive Control" : {
@@ -4780,6 +4987,12 @@
         }
       }
     },
+    "Logical Function Dimmer Brightness Reduction" : {
+
+    },
+    "Logical function dimmer brightness reduction." : {
+
+    },
     "Long Curved Track" : {
       "comment" : "This is used to describe a piece of track."
     },
@@ -4809,7 +5022,7 @@
     "m/s" : {
       "comment" : "Used for the abbreviation of meters per second"
     },
-    "M4 Protocol%%CV%%" : {
+    "M4 Protocol" : {
 
     },
     "Machine Room Lights" : {
@@ -4909,7 +5122,7 @@
     "Manufacturer ID" : {
 
     },
-    "Märklin Motorola Protocol%%CV%%" : {
+    "Märklin Motorola Protocol" : {
 
     },
     "Marklin-Motorola I" : {
@@ -4975,28 +5188,28 @@
     "Maximum speed at any time" : {
 
     },
+    "Maximum Speed Voltage" : {
+
+    },
     "Maximum speed voltage." : {
 
     },
-    "Maximum Speed Voltage%%CV%%" : {
+    "Maximum Speed when Brake Function 1 is Active" : {
 
     },
     "Maximum speed when brake function 1 is active." : {
 
     },
-    "Maximum Speed when Brake Function 1 is Active%%CV%%" : {
+    "Maximum Speed when Brake Function 2 is Active" : {
 
     },
     "Maximum speed when brake function 2 is active." : {
 
     },
-    "Maximum Speed when Brake Function 2 is Active%%CV%%" : {
+    "Maximum Speed when Brake Function 3 is Active" : {
 
     },
     "Maximum speed when brake function 3 is active." : {
-
-    },
-    "Maximum Speed when Brake Function 3 is Active%%CV%%" : {
 
     },
     "Maximum speed when restrictions apply" : {
@@ -5006,6 +5219,12 @@
 
     },
     "Maximum speed when stop expected" : {
+
+    },
+    "Maximum Steam Chuff Duration" : {
+
+    },
+    "Maximum steam chuff duration." : {
 
     },
     "Memory Configuration Protocol" : {
@@ -5125,6 +5344,12 @@
     "Minimum Sample Period" : {
       "comment" : "This is used for the title of combobox."
     },
+    "Minimum Steam Chuff Duration" : {
+
+    },
+    "Minimum steam chuff duration." : {
+
+    },
     "Mint" : {
       "comment" : "The name of a color."
     },
@@ -5151,10 +5376,10 @@
         }
       }
     },
-    "Motor hysteresis Voltage." : {
+    "Motor Hysteresis Voltage" : {
 
     },
-    "Motor Hysteresis Voltage%%CV%%" : {
+    "Motor hysteresis Voltage." : {
 
     },
     "Motor Overload Protection" : {
@@ -5797,10 +6022,10 @@
     "Permitted directions of travel for a train on this switchboard item." : {
       "comment" : "This is used for a tooltip."
     },
-    "Persistent Function%%CV%%" : {
+    "Persistent Function" : {
 
     },
-    "Persistent Speed%%CV%%" : {
+    "Persistent Speed" : {
 
     },
     "Physical Output Configuration" : {
@@ -5833,13 +6058,19 @@
     "Preferences" : {
       "comment" : "Used for a menu title"
     },
+    "Preheating Temperature for Secondary Smoke Units" : {
+
+    },
+    "Preheating temperature for secondary smoke units." : {
+
+    },
     "Preserve Direction" : {
 
     },
-    "Preserve direction when changing from analog to digital." : {
+    "Preserve Direction when changing from Analog to Digital" : {
 
     },
-    "Preserve Direction when changing from Analog to Digital%%CV%%" : {
+    "Preserve direction when changing from analog to digital." : {
 
     },
     "Previous" : {
@@ -6140,6 +6371,12 @@
         }
       }
     },
+    "Rear Light [1]" : {
+
+    },
+    "Rear Light [2]" : {
+
+    },
     "Reboot" : {
       "localizations" : {
         "en" : {
@@ -6296,13 +6533,13 @@
     "Reverse Color" : {
       "comment" : "This is used for the title of a check box."
     },
-    "Reverse Direction (Forward becomes Reverse)%%CV%%" : {
+    "Reverse Direction" : {
+
+    },
+    "Reverse Direction (Forward becomes Reverse)" : {
 
     },
     "Reverse direction." : {
-
-    },
-    "Reverse Direction%%CV%%" : {
 
     },
     "Reverse Mode" : {
@@ -6311,10 +6548,10 @@
     "Reverse Only" : {
 
     },
-    "Reverse trimming." : {
+    "Reverse Trimming" : {
 
     },
-    "Reverse Trimming%%CV%%" : {
+    "Reverse trimming." : {
 
     },
     "Reverser" : {
@@ -6573,22 +6810,22 @@
     "Select the starting block for the route." : {
       "comment" : "This is used for a tooltip."
     },
+    "Selectrix" : {
+
+    },
     "Selectrix Brake Sections" : {
 
     },
-    "Selectrix%%CV%%" : {
+    "Send Address via Broadcast on Channel 1" : {
 
     },
     "Send address via broadcast on channel 1." : {
 
     },
-    "Send Address via Broadcast on Channel 1%%CV%%" : {
+    "Send ZIMO ZACK Signals" : {
 
     },
     "Send ZIMO ZACK signals." : {
-
-    },
-    "Send ZIMO ZACK Signals%%CV%%" : {
 
     },
     "Sending unadvertised event" : {
@@ -6608,6 +6845,9 @@
     },
     "Sensor Settings" : {
       "comment" : "This is used for the title of the Sensor Settings section in the Layout Builder."
+    },
+    "Sensor settings." : {
+
     },
     "Sensors" : {
       "comment" : "Used for the title of a switchboard item palette in LayoutBuilder"
@@ -6841,10 +7081,10 @@
         }
       }
     },
-    "Shunting mode trimming." : {
+    "Shunting Mode Trimming" : {
 
     },
-    "Shunting Mode Trimming%%CV%%" : {
+    "Shunting mode trimming." : {
 
     },
     "Signal" : {
@@ -6920,10 +7160,10 @@
         }
       }
     },
-    "Slow motion time until acceleration starts." : {
+    "Slow motion time until Acceleration Starts" : {
 
     },
-    "Slow motion time until Acceleration Starts%%CV%%" : {
+    "Slow motion time until acceleration starts." : {
 
     },
     "Smaller Radius Route (%%UNITS_ACTUAL_LENGTH%%)" : {
@@ -7051,9 +7291,6 @@
     "Speed step mode." : {
 
     },
-    "Speed Step Mode%%CV%%" : {
-
-    },
     "Speed Table" : {
 
     },
@@ -7095,10 +7332,10 @@
     "Start Sample Number" : {
       "comment" : "This is used for the title of a text field."
     },
-    "Start voltage (minimum speed)." : {
+    "Start Voltage (minimum speed)" : {
 
     },
-    "Start Voltage (minimum speed)%%CV%%" : {
+    "Start voltage (minimum speed)." : {
 
     },
     "Starting Delay" : {
@@ -7201,10 +7438,10 @@
         }
       }
     },
-    "Stopping period." : {
+    "Stopping Period" : {
 
     },
-    "Stopping Period%%CV%%" : {
+    "Stopping period." : {
 
     },
     "Straight" : {
@@ -7497,6 +7734,12 @@
     "Teal" : {
       "comment" : "The name of a color."
     },
+    "Temperature Trim" : {
+
+    },
+    "Temperature trim." : {
+
+    },
     "Temporary Error Buffer Unavailable" : {
 
     },
@@ -7704,10 +7947,10 @@
         }
       }
     },
-    "This decoder synchronizes RailComPlus / M4 address with a Master decoder." : {
+    "This decoder synchronizes RailComPlus / M4 address with a Master decoder" : {
 
     },
-    "This decoder synchronizes RailComPlus / M4 address with a Master decoder%%CV%%" : {
+    "This decoder synchronizes RailComPlus / M4 address with a Master decoder." : {
 
     },
     "This description will appear in network browsers for this device." : {
@@ -7857,22 +8100,28 @@
     "Time between the sensor triggering and the sensor reporting such trigger." : {
       "comment" : "This is used for a tooltip."
     },
+    "Time from Maximum Speed to Stop" : {
+
+    },
     "Time from maximum speed to stop." : {
 
     },
-    "Time from Maximum Speed to Stop%%CV%%" : {
+    "Time from Stop to Maximum Speed" : {
 
     },
     "Time from stop to maximum speed." : {
 
     },
-    "Time from Stop to Maximum Speed%%CV%%" : {
-
-    },
-    "Time to Bridge Power Interruption (PowerPack required)%%CV%%" : {
+    "Time to Bridge Power Interruption (PowerPack required)" : {
 
     },
     "Time to bridge power interruption." : {
+
+    },
+    "Time until Smoke Unit Automatic Power Off" : {
+
+    },
+    "Time until smoke unit automatic power off." : {
 
     },
     "Timeout - write failed" : {
@@ -8198,6 +8447,9 @@
     "Use Custom Dimensions" : {
       "comment" : "Used as the title for custom dimensions of a track part."
     },
+    "Use digital wheel sensor" : {
+
+    },
     "Use extended (long) address" : {
 
     },
@@ -8218,6 +8470,9 @@
     },
     "Use occupancy detectors for profiling." : {
       "comment" : "This is used for a tooltip."
+    },
+    "Use output AUX10" : {
+
     },
     "Use primary (short) address" : {
 
@@ -8254,16 +8509,16 @@
     "User description of this switchboard item. This is an optional field and may contain any descriptive text the user chooses." : {
       "comment" : "This is used for a tooltip."
     },
+    "User ID #1" : {
+
+    },
     "User ID #1." : {
 
     },
-    "User ID #1%%CV%%" : {
+    "User ID #2" : {
 
     },
     "User ID #2." : {
-
-    },
-    "User ID #2%%CV%%" : {
 
     },
     "User Identification" : {
@@ -8478,19 +8733,19 @@
         }
       }
     },
-    "Voltage difference indicating an ABC brake section." : {
+    "Voltage difference indicating an ABC brake section" : {
 
     },
-    "Voltage difference indicating an ABC brake section%%CV%%" : {
+    "Voltage difference indicating an ABC brake section." : {
 
     },
     "Volume" : {
 
     },
-    "Waiting time before direction change." : {
+    "Waiting time before direction change" : {
 
     },
-    "Waiting time before direction change%%CV%%" : {
+    "Waiting time before direction change." : {
 
     },
     "Water Fill" : {

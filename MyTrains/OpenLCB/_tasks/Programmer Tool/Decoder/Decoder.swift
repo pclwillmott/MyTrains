@@ -1289,6 +1289,307 @@ public class Decoder : NSObject {
       setUInt32(cv: .cv_000_000_192, value: value)
     }
   }
+  
+  public var frequencyForBlinkingEffects : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_112)!
+    }
+    set(value) {
+      if value != frequencyForBlinkingEffects {
+        setUInt8(cv: .cv_000_000_112, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var frequencyForBlinkingEffectsInSeconds : TimeInterval {
+    /// The multipler value is for ESU decoders and is different from NMRA value
+    return Double(frequencyForBlinkingEffects) / 20.0
+  }
+  
+  public var gradeCrossingHoldingTime : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_132)!
+    }
+    set(value) {
+      if value != gradeCrossingHoldingTime {
+        setUInt8(cv: .cv_000_000_132, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var gradeCrossingHoldingTimeInSeconds : TimeInterval {
+    return Double(gradeCrossingHoldingTime) * 0.065536
+  }
+  
+  public var fadeInTimeOfLightEffects : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_114)!
+    }
+    set(value) {
+      if value != fadeInTimeOfLightEffects {
+        setUInt8(cv: .cv_000_000_114, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var fadeInTimeOfLightEffectsInSeconds : TimeInterval {
+    /// This is an approximation from LokProgrammer
+    return Double(fadeInTimeOfLightEffects) * 0.008189
+  }
+  
+  public var fadeOutTimeOfLightEffects : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_115)!
+    }
+    set(value) {
+      if value != fadeOutTimeOfLightEffects {
+        setUInt8(cv: .cv_000_000_115, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var fadeOutTimeOfLightEffectsInSeconds : TimeInterval {
+    /// This is an approximation from LokProgrammer
+    return Double(fadeOutTimeOfLightEffects) * 0.008189
+  }
+  
+  public var logicalFunctionDimmerBrightnessReduction : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_131)!
+    }
+    set(value) {
+      if value != logicalFunctionDimmerBrightnessReduction {
+        setUInt8(cv: .cv_000_000_131, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var logicalFunctionDimmerBrightnessReductionPercentage : Double {
+    return Double(logicalFunctionDimmerBrightnessReduction) / 128.0 * 100.0
+  }
+  
+  public var classLightLogicSequenceLength : ClassLightLogicSequenceLength {
+    get {
+      return ClassLightLogicSequenceLength(rawValue: getMaskedUInt8(cv: .cv_000_000_199, mask: ClassLightLogicSequenceLength.mask)!)!
+    }
+    set(value) {
+      setMaskedUInt8(cv: .cv_000_000_199, mask: ClassLightLogicSequenceLength.mask, value: value.rawValue)
+    }
+  }
+  
+  public var isSlaveCommunicationOnAUX3andAUX4Enforced : Bool {
+    get {
+      return getBool(cv: .cv_000_000_122, mask: ByteMask.d4)!
+    }
+    set(value) {
+      setBool(cv: .cv_000_000_122, mask: ByteMask.d4, value: value)
+    }
+  }
+  
+  public var decoderSensorSettings : DecoderSensorSettings {
+    get {
+      return DecoderSensorSettings(rawValue: getMaskedUInt8(cv: .cv_000_000_124, mask: DecoderSensorSettings.mask)!)!
+    }
+    set(value) {
+      setMaskedUInt8(cv: .cv_000_000_124, mask: DecoderSensorSettings.mask, value: value.rawValue)
+    }
+  }
+  
+  public var isAutomaticUncouplingEnabled : Bool {
+    get {
+      return getUInt8(cv: .cv_000_000_246)! != 0
+    }
+    set(value) {
+      if value != isAutomaticUncouplingEnabled {
+        setUInt8(cv: .cv_000_000_246, value: value ? 1 : 0)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var automaticUncouplingSpeed : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_246)!
+    }
+    set(value) {
+      if value != automaticUncouplingSpeed {
+        setUInt8(cv: .cv_000_000_246, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var automaticUncouplingPushTime : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_248)!
+    }
+    set(value) {
+      if value != automaticUncouplingPushTime {
+        setUInt8(cv: .cv_000_000_248, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var automaticUncouplingPushTimeInSeconds : TimeInterval {
+    ///multiplier derived from LokProgramme; not NMRA value
+    return Double(automaticUncouplingPushTime) / 61.0
+  }
+
+  public var automaticUncouplingWaitTime : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_245)!
+    }
+    set(value) {
+      if value != automaticUncouplingWaitTime {
+        setUInt8(cv: .cv_000_000_245, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var automaticUncouplingWaitTimeInSeconds : TimeInterval {
+    ///multiplier derived from LokProgramme; not NMRA value
+    return Double(automaticUncouplingWaitTime) / 61.0
+  }
+
+  public var automaticUncouplingMoveTime : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_247)!
+    }
+    set(value) {
+      if value != automaticUncouplingMoveTime {
+        setUInt8(cv: .cv_000_000_247, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var automaticUncouplingMoveTimeInSeconds : TimeInterval {
+    ///multiplier derived from LokProgramme; not NMRA value
+    return Double(automaticUncouplingMoveTime) / 61.0
+  }
+  
+  public var smokeUnitTimeUntilAutomaticPowerOff : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_140)!
+    }
+    set(value) {
+      if value != smokeUnitTimeUntilAutomaticPowerOff {
+        setUInt8(cv: .cv_000_000_140, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var smokeUnitTimeUntilAutomaticPowerOffInSeconds : TimeInterval {
+    return Double(smokeUnitTimeUntilAutomaticPowerOff) * 5.0
+  }
+  
+  public var smokeUnitFanSpeedTrim : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_138)!
+    }
+    set(value) {
+      if value != smokeUnitFanSpeedTrim {
+        setUInt8(cv: .cv_000_000_138, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var smokeUnitFanSpeedTrimPercentage : Double {
+    return Double(smokeUnitFanSpeedTrim) / 128.0 * 100.0
+  }
+  
+  public var smokeUnitTemperatureTrim : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_139)!
+    }
+    set(value) {
+      if value != smokeUnitTemperatureTrim {
+        setUInt8(cv: .cv_000_000_139, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var smokeUnitTemperatureTrimPercentage : Double {
+    return Double(smokeUnitTemperatureTrim) / 128.0 * 100.0
+  }
+  
+  public var smokeUnitPreheatingTemperatureForSecondarySmokeUnits : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_144)!
+    }
+    set(value) {
+      if value != smokeUnitPreheatingTemperatureForSecondarySmokeUnits {
+        setUInt8(cv: .cv_000_000_144, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var smokeUnitPreheatingTemperatureForSecondarySmokeUnitsInCelsius : Double {
+    return Double(smokeUnitPreheatingTemperatureForSecondarySmokeUnits)
+  }
+  
+  public var smokeChuffsDurationRelativeToTriggerDistance : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_143)!
+    }
+    set(value) {
+      if value != smokeChuffsDurationRelativeToTriggerDistance {
+        setUInt8(cv: .cv_000_000_143, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var smokeChuffsDurationRelativeToTriggerDistancePercentage : Double {
+    return Double(smokeChuffsDurationRelativeToTriggerDistance) / 255.0 * 100.0
+  }
+  
+  public var smokeChuffsMinimumDuration : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_141)!
+    }
+    set(value) {
+      if value != smokeChuffsMinimumDuration {
+        setUInt8(cv: .cv_000_000_141, value: value)
+        smokeChuffsMaximumDuration = max(smokeChuffsMaximumDuration, value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var smokeChuffsMinimumDurationInSeconds : TimeInterval {
+    /// This is the NMRA multiplier, the Lokprogrammer version was 0.004078
+    return Double(smokeChuffsMinimumDuration) * 0.041
+  }
+
+  public var smokeChuffsMaximumDuration : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_142)!
+    }
+    set(value) {
+      if value != smokeChuffsMaximumDuration {
+        setUInt8(cv: .cv_000_000_142, value: value)
+        smokeChuffsMinimumDuration = min(smokeChuffsMinimumDuration, value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var smokeChuffsMaximumDurationInSeconds : TimeInterval {
+    /// This is the NMRA multiplier, the Lokprogrammer version was 0.004078
+    return Double(smokeChuffsMaximumDuration) * 0.041
+  }
 
   // MARK: Private Methods
   
@@ -1496,7 +1797,7 @@ public class Decoder : NSObject {
     case .analogFunctionDifferenceVoltage:
       return "\(analogFunctionDifferenceVoltage)"
     case .enableABCBrakeMode:
-      return String(localized: "Enable ABC brake mode (asymmetrical DCC signal:")
+      return String(localized: "Enable ABC brake mode (asymmetrical DCC signal):")
     case .brakeIfRightRailSignalPositive:
       return abcBrakeIfRightRailMorePositive ? "true" : "false"
     case .brakeIfLeftRailSignalPositive:
@@ -1635,6 +1936,46 @@ public class Decoder : NSObject {
       return m4MasterDecoderManufacturerId.title
     case .m4MasterDecoderSerialNumber:
       return m4MasterDecoderSerialNumber.toHex(numberOfDigits: 8)
+    case .frequencyForBlinkingEffects:
+      return "\(frequencyForBlinkingEffects)"
+    case .gradeCrossingHoldingTime:
+      return "\(gradeCrossingHoldingTime)"
+    case .fadeInTimeOfLightEffects:
+      return "\(fadeInTimeOfLightEffects)"
+    case .fadeOutTimeOfLightEffects:
+      return "\(fadeOutTimeOfLightEffects)"
+    case .logicalFunctionDimmerBrightnessReduction:
+      return "\(logicalFunctionDimmerBrightnessReduction)"
+    case .classLightLogicSequenceLength:
+      return classLightLogicSequenceLength.title
+    case .enforceSlaveCommunicationOnAUX3AndAUX4:
+      return isSlaveCommunicationOnAUX3andAUX4Enforced ? "true" : "false"
+    case .decoderSensorSettings:
+      return decoderSensorSettings.title
+    case .enableAutomaticUncoupling:
+      return isAutomaticUncouplingEnabled ? "true" : "false"
+    case .automaticUncouplingSpeed:
+      return "\(automaticUncouplingSpeed)"
+    case .automaticUncouplingPushTime:
+      return "\(automaticUncouplingPushTime)"
+    case .automaticUncouplingWaitTime:
+      return "\(automaticUncouplingWaitTime)"
+    case .automaticUncouplingMoveTime:
+      return "\(automaticUncouplingMoveTime)"
+    case .smokeUnitTimeUntilPowerOff:
+      return "\(smokeUnitTimeUntilAutomaticPowerOff)"
+    case .smokeUnitFanSpeedTrim:
+      return "\(smokeUnitFanSpeedTrim)"
+    case .smokeUnitTemperatureTrim:
+      return "\(smokeUnitTemperatureTrim)"
+    case .smokeUnitPreheatingTemperatureForSecondarySmokeUnits:
+      return "\(smokeUnitPreheatingTemperatureForSecondarySmokeUnits)"
+    case .smokeChuffsDurationRelativeToTriggerDistance:
+      return "\(smokeChuffsDurationRelativeToTriggerDistance)"
+    case .smokeChuffsMinimumDuration:
+      return "\(smokeChuffsMinimumDuration)"
+    case .smokeChuffsMaximumDuration:
+      return "\(smokeChuffsMaximumDuration)"
     }
   }
   
@@ -1729,6 +2070,66 @@ public class Decoder : NSObject {
       let x = UnitTime.convert(fromValue: timeToBridgePowerInterruptionInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
       formatter.maximumFractionDigits = 2
       return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
+    case .frequencyForBlinkingEffects:
+      let x = UnitTime.convert(fromValue: frequencyForBlinkingEffectsInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
+      formatter.maximumFractionDigits = 2
+      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
+    case .gradeCrossingHoldingTime:
+      let x = UnitTime.convert(fromValue: gradeCrossingHoldingTimeInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
+      formatter.maximumFractionDigits = 2
+      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
+    case .fadeInTimeOfLightEffects:
+      let x = UnitTime.convert(fromValue: fadeInTimeOfLightEffectsInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
+      formatter.maximumFractionDigits = 2
+      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
+    case .fadeOutTimeOfLightEffects:
+      let x = UnitTime.convert(fromValue: fadeOutTimeOfLightEffectsInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
+      formatter.maximumFractionDigits = 2
+      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
+    case .logicalFunctionDimmerBrightnessReduction:
+      let x = logicalFunctionDimmerBrightnessReductionPercentage
+      formatter.maximumFractionDigits = 2
+      return String(localized: "\(formatter.string(from: x as NSNumber)!)%")
+    case .automaticUncouplingPushTime:
+      let x = UnitTime.convert(fromValue: automaticUncouplingPushTimeInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
+      formatter.maximumFractionDigits = 2
+      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
+    case .automaticUncouplingWaitTime:
+      let x = UnitTime.convert(fromValue: automaticUncouplingWaitTimeInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
+      formatter.maximumFractionDigits = 2
+      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
+    case .automaticUncouplingMoveTime:
+      let x = UnitTime.convert(fromValue: automaticUncouplingMoveTimeInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
+      formatter.maximumFractionDigits = 2
+      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
+    case .smokeUnitTimeUntilPowerOff:
+      let x = UnitTime.convert(fromValue: smokeUnitTimeUntilAutomaticPowerOffInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
+      formatter.maximumFractionDigits = 2
+      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
+    case .smokeUnitFanSpeedTrim:
+      let x = smokeUnitFanSpeedTrimPercentage
+      formatter.maximumFractionDigits = 2
+      return String(localized: "\(formatter.string(from: x as NSNumber)!)%")
+    case .smokeUnitTemperatureTrim:
+      let x = smokeUnitTemperatureTrimPercentage
+      formatter.maximumFractionDigits = 2
+      return String(localized: "\(formatter.string(from: x as NSNumber)!)%")
+    case .smokeUnitPreheatingTemperatureForSecondarySmokeUnits:
+      let x = smokeUnitPreheatingTemperatureForSecondarySmokeUnitsInCelsius
+      formatter.maximumFractionDigits = 2
+      return String(localized: "\(formatter.string(from: x as NSNumber)!)°C")
+    case .smokeChuffsDurationRelativeToTriggerDistance:
+      let x = smokeChuffsDurationRelativeToTriggerDistancePercentage
+      formatter.maximumFractionDigits = 2
+      return String(localized: "\(formatter.string(from: x as NSNumber)!)%")
+    case .smokeChuffsMinimumDuration:
+      let x = UnitTime.convert(fromValue: smokeChuffsMinimumDurationInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
+      formatter.maximumFractionDigits = 2
+      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
+    case .smokeChuffsMaximumDuration:
+      let x = UnitTime.convert(fromValue: smokeChuffsMaximumDurationInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
+      formatter.maximumFractionDigits = 2
+      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
 
     default:
       return ""
@@ -1744,10 +2145,10 @@ public class Decoder : NSObject {
         return false
       }
     case .m4MasterDecoderSerialNumber:
-      guard let value = UInt32(hex:string) else {
+      guard let _ = UInt32(hex:string) else {
         return false
       }
-    case .locomotiveAddressShort, .consistAddress, .waitingPeriodBeforeDirectionChange, .brakeDistanceLength, .brakeDistanceLengthBackwards, .stoppingPeriod, .accelerationRate, .decelerationRate, .forwardTrim, .reverseTrim, .gearboxBacklashCompensation, .accelerationAdjustment, .decelerationAdjustment, .shuntingModeTrim, .acAnalogModeStartVoltage, .acAnalogModeMaximumSpeedVoltage, .dcAnalogModeStartVoltage, .dcAnalogModeMaximumSpeedVoltage, .analogMotorHysteresisVoltage, .analogFunctionDifferenceVoltage, .voltageDifferenceIndicatingABCBrakeSection, .abcReducedSpeed, .hluSpeedLimit1, .hluSpeedLimit2, .hluSpeedLimit3, .hluSpeedLimit4, .hluSpeedLimit5, .delayTimeBeforeExitingBrakeSection, .brakeFunction1BrakeTimeReduction, .brakeFunction2BrakeTimeReduction, .brakeFunction3BrakeTimeReduction, .userId1, .userId2, .loadAdjustmentOptionalLoad, .loadAdjustmentPrimaryLoad, .timeToBridgePowerInterruption, .maximumSpeedWhenBrakeFunction1Active, .maximumSpeedWhenBrakeFunction2Active, .maximumSpeedWhenBrakeFunction3Active:
+    case .locomotiveAddressShort, .consistAddress, .waitingPeriodBeforeDirectionChange, .brakeDistanceLength, .brakeDistanceLengthBackwards, .stoppingPeriod, .accelerationRate, .decelerationRate, .forwardTrim, .reverseTrim, .gearboxBacklashCompensation, .accelerationAdjustment, .decelerationAdjustment, .shuntingModeTrim, .acAnalogModeStartVoltage, .acAnalogModeMaximumSpeedVoltage, .dcAnalogModeStartVoltage, .dcAnalogModeMaximumSpeedVoltage, .analogMotorHysteresisVoltage, .analogFunctionDifferenceVoltage, .voltageDifferenceIndicatingABCBrakeSection, .abcReducedSpeed, .hluSpeedLimit1, .hluSpeedLimit2, .hluSpeedLimit3, .hluSpeedLimit4, .hluSpeedLimit5, .delayTimeBeforeExitingBrakeSection, .brakeFunction1BrakeTimeReduction, .brakeFunction2BrakeTimeReduction, .brakeFunction3BrakeTimeReduction, .userId1, .userId2, .loadAdjustmentOptionalLoad, .loadAdjustmentPrimaryLoad, .timeToBridgePowerInterruption, .maximumSpeedWhenBrakeFunction1Active, .maximumSpeedWhenBrakeFunction2Active, .maximumSpeedWhenBrakeFunction3Active, .frequencyForBlinkingEffects, .gradeCrossingHoldingTime, .fadeInTimeOfLightEffects, .fadeOutTimeOfLightEffects, .logicalFunctionDimmerBrightnessReduction, .automaticUncouplingSpeed, .automaticUncouplingPushTime, .automaticUncouplingWaitTime, .automaticUncouplingMoveTime, .smokeUnitTimeUntilPowerOff, .smokeUnitFanSpeedTrim, .smokeUnitTemperatureTrim, .smokeUnitPreheatingTemperatureForSecondarySmokeUnits, .smokeChuffsDurationRelativeToTriggerDistance, .smokeChuffsMinimumDuration, .smokeChuffsMaximumDuration:
       guard let value = UInt8(string), Double(value) >= property.minValue && Double(value) <= property.maxValue else {
         return false
       }
@@ -1936,6 +2337,46 @@ public class Decoder : NSObject {
       m4MasterDecoderManufacturerId = ManufacturerCode(title: string) ?? .noneSelected
     case .m4MasterDecoderSerialNumber:
       m4MasterDecoderSerialNumber = UInt32(hex:string)!
+    case .frequencyForBlinkingEffects:
+      frequencyForBlinkingEffects = UInt8(string)!
+    case .gradeCrossingHoldingTime:
+      gradeCrossingHoldingTime = UInt8(string)!
+    case .fadeInTimeOfLightEffects:
+      fadeInTimeOfLightEffects = UInt8(string)!
+    case .fadeOutTimeOfLightEffects:
+      fadeOutTimeOfLightEffects = UInt8(string)!
+    case .logicalFunctionDimmerBrightnessReduction:
+      logicalFunctionDimmerBrightnessReduction = UInt8(string)!
+    case .classLightLogicSequenceLength:
+      classLightLogicSequenceLength = ClassLightLogicSequenceLength(title: string)!
+    case .enforceSlaveCommunicationOnAUX3AndAUX4:
+      isSlaveCommunicationOnAUX3andAUX4Enforced = string == "true"
+    case .decoderSensorSettings:
+      decoderSensorSettings = DecoderSensorSettings(title: string)!
+    case .enableAutomaticUncoupling:
+      isAutomaticUncouplingEnabled = string == "true"
+    case .automaticUncouplingSpeed:
+      automaticUncouplingSpeed = UInt8(string)!
+    case .automaticUncouplingPushTime:
+      automaticUncouplingPushTime = UInt8(string)!
+    case .automaticUncouplingWaitTime:
+      automaticUncouplingWaitTime = UInt8(string)!
+    case .automaticUncouplingMoveTime:
+      automaticUncouplingMoveTime = UInt8(string)!
+    case .smokeUnitTimeUntilPowerOff:
+      smokeUnitTimeUntilAutomaticPowerOff = UInt8(string)!
+    case .smokeUnitFanSpeedTrim:
+      smokeUnitFanSpeedTrim = UInt8(string)!
+    case .smokeUnitTemperatureTrim:
+      smokeUnitTemperatureTrim = UInt8(string)!
+    case .smokeUnitPreheatingTemperatureForSecondarySmokeUnits:
+      smokeUnitPreheatingTemperatureForSecondarySmokeUnits = UInt8(string)!
+    case .smokeChuffsDurationRelativeToTriggerDistance:
+      smokeChuffsDurationRelativeToTriggerDistance = UInt8(string)!
+    case .smokeChuffsMinimumDuration:
+      smokeChuffsMinimumDuration = UInt8(string)!
+    case .smokeChuffsMaximumDuration:
+      smokeChuffsMaximumDuration = UInt8(string)!
     default:
       break
     }

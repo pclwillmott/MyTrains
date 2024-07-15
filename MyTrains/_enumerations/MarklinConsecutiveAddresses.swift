@@ -57,8 +57,4 @@ public enum MarklinConsecutiveAddresses : UInt8, CaseIterable {
     }
   }
 
-  public static func select(comboBox:NSComboBox, value:MarklinConsecutiveAddresses) {
-    comboBox.selectItem(withObjectValue: value.title)
-  }
-  
 }

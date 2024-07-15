@@ -416,6 +416,9 @@
 		DAE2BADB2B091EB200FC587A /* OpenLCBStandardContentBlockType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE2BADA2B091EB200FC587A /* OpenLCBStandardContentBlockType.swift */; };
 		DAE4285E2BCC07E60016571B /* LayoutBuilder.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DAE4285D2BCC07E60016571B /* LayoutBuilder.storyboard */; };
 		DAE44C5B2BB031A400BBCCE9 /* SoftUIntX.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE44C5A2BB031A400BBCCE9 /* SoftUIntX.swift */; };
+		DAE524FC2C454B66000FC319 /* ClassLightLogicSequenceLength.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE524FB2C454B66000FC319 /* ClassLightLogicSequenceLength.swift */; };
+		DAE524FE2C454D60000FC319 /* DecoderSensorSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE524FD2C454D60000FC319 /* DecoderSensorSettings.swift */; };
+		DAE525002C459854000FC319 /* ESUDecoderPhysicalOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE524FF2C459854000FC319 /* ESUDecoderPhysicalOutput.swift */; };
 		DAE8DD51286741BD0097C2D1 /* TrackPart.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE8DD50286741BD0097C2D1 /* TrackPart.swift */; };
 		DAE8DD53286751BE0097C2D1 /* xManufacturer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE8DD52286751BE0097C2D1 /* xManufacturer.swift */; };
 		DAE8DD55286754C00097C2D1 /* TrackCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE8DD54286754C00097C2D1 /* TrackCode.swift */; };
@@ -887,6 +890,9 @@
 		DAE2BADA2B091EB200FC587A /* OpenLCBStandardContentBlockType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLCBStandardContentBlockType.swift; sourceTree = "<group>"; };
 		DAE4285D2BCC07E60016571B /* LayoutBuilder.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LayoutBuilder.storyboard; sourceTree = "<group>"; };
 		DAE44C5A2BB031A400BBCCE9 /* SoftUIntX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoftUIntX.swift; sourceTree = "<group>"; };
+		DAE524FB2C454B66000FC319 /* ClassLightLogicSequenceLength.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassLightLogicSequenceLength.swift; sourceTree = "<group>"; };
+		DAE524FD2C454D60000FC319 /* DecoderSensorSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecoderSensorSettings.swift; sourceTree = "<group>"; };
+		DAE524FF2C459854000FC319 /* ESUDecoderPhysicalOutput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ESUDecoderPhysicalOutput.swift; sourceTree = "<group>"; };
 		DAE8DD50286741BD0097C2D1 /* TrackPart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackPart.swift; sourceTree = "<group>"; };
 		DAE8DD52286751BE0097C2D1 /* xManufacturer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = xManufacturer.swift; sourceTree = "<group>"; };
 		DAE8DD54286754C00097C2D1 /* TrackCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackCode.swift; sourceTree = "<group>"; };
@@ -1046,6 +1052,9 @@
 				DA73E5042C4154A0002AB3DF /* LocomotiveAddressType.swift */,
 				DA74922A2C418251002070CE /* MarklinConsecutiveAddresses.swift */,
 				DAFECB4A2C42DA3700B87CA8 /* SpeedStepMode.swift */,
+				DAE524FB2C454B66000FC319 /* ClassLightLogicSequenceLength.swift */,
+				DAE524FD2C454D60000FC319 /* DecoderSensorSettings.swift */,
+				DAE524FF2C459854000FC319 /* ESUDecoderPhysicalOutput.swift */,
 				DAE8DD52286751BE0097C2D1 /* xManufacturer.swift */,
 				DA5A9F8F295C89FC00950479 /* NumberBase.swift */,
 				DA6E28E0285F86B900772641 /* Orientation.swift */,
@@ -2196,6 +2205,7 @@
 				DA0949452B81078D00545650 /* MTPipe.swift in Sources */,
 				DAEF18712A3DFDE100AC227D /* LocoNetDeviceId.swift in Sources */,
 				DA74922B2C418251002070CE /* MarklinConsecutiveAddresses.swift in Sources */,
+				DAE525002C459854000FC319 /* ESUDecoderPhysicalOutput.swift in Sources */,
 				DAD73C1E2A9A4F64002E7618 /* OpenLCBDigitraxBXP88Node.swift in Sources */,
 				DA6239322BCD511D000E9018 /* UserSettings.swift in Sources */,
 				DA48DA722BA201BD0009FEBF /* LEDView.swift in Sources */,
@@ -2249,6 +2259,7 @@
 				DA7C509C2BD6D7A60079E876 /* LayoutInspectorGroup.swift in Sources */,
 				DAACFC742A4336F7001743DA /* OpenLCBTractionManagementType.swift in Sources */,
 				DA47E5452C3AEF3300A1D803 /* ManufacturerCode.swift in Sources */,
+				DAE524FE2C454D60000FC319 /* DecoderSensorSettings.swift in Sources */,
 				DAA799E22C3313EA0006D2BE /* ESUCVExtract.swift in Sources */,
 				DAD7750C2BD0230400D8AD55 /* SwitchboardShapeButton.swift in Sources */,
 				DA1B949F2A3DE8E000E2CE6A /* Client.swift in Sources */,
@@ -2423,6 +2434,7 @@
 				DA9CF8FB2860952300825FA9 /* BlockType.swift in Sources */,
 				DA412E14278099AF00748CCD /* ThrottleVC.swift in Sources */,
 				DA58F00D2A45AA3700D36E90 /* LocoNetFunctionConstants.swift in Sources */,
+				DAE524FC2C454B66000FC319 /* ClassLightLogicSequenceLength.swift in Sources */,
 				DA9807C52789AFE300F73ACD /* NMRA.swift in Sources */,
 				DAB93F182C04A960006C0580 /* LayoutBuilderPanelConfigArea.swift in Sources */,
 				DA7243F628A7F1E5003157CA /* RouteDirection.swift in Sources */,

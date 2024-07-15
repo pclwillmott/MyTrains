@@ -369,7 +369,7 @@ public enum ProgrammerToolSettingsSection : Int, CaseIterable {
       
       let label = NSTextField(labelWithString: item.title)
       label.translatesAutoresizingMaskIntoConstraints = false
-      label.font = NSFont.systemFont(ofSize: 12, weight: .bold)
+      label.font = NSFont.systemFont(ofSize: 15, weight: .bold)
       label.textColor = NSColor.systemGray
       label.alignment = .left
       

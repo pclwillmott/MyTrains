@@ -109,10 +109,36 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case preserveDirection = 81
   case enableStartingDelay = 82
   
+  // Function Settings
+  
+  case frequencyForBlinkingEffects = 92
+  case gradeCrossingHoldingTime = 93
+  case fadeInTimeOfLightEffects = 94
+  case fadeOutTimeOfLightEffects = 95
+  case logicalFunctionDimmerBrightnessReduction = 96
+  case classLightLogicSequenceLength = 97
+  case enforceSlaveCommunicationOnAUX3AndAUX4 = 98
+  case decoderSensorSettings = 99
+  case enableAutomaticUncoupling = 100
+  case automaticUncouplingSpeed = 101
+  case automaticUncouplingPushTime = 102
+  case automaticUncouplingWaitTime = 103
+  case automaticUncouplingMoveTime = 104
+  
   // Identification
   
   case userId1 = 61
   case userId2 = 62
+  
+  // Smoke Unit
+  
+  case smokeUnitTimeUntilPowerOff = 105
+  case smokeUnitFanSpeedTrim = 106
+  case smokeUnitTemperatureTrim = 107
+  case smokeUnitPreheatingTemperatureForSecondarySmokeUnits = 108
+  case smokeChuffsDurationRelativeToTriggerDistance = 109
+  case smokeChuffsMinimumDuration = 110
+  case smokeChuffsMaximumDuration = 111
   
   // Special Options
   
@@ -146,7 +172,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   
   public var minValue : Double {
     switch self {
-    case .locomotiveAddressShort, .consistAddress, .waitingPeriodBeforeDirectionChange, .brakeDistanceLength, .brakeDistanceLengthBackwards, .stoppingPeriod, .accelerationRate, .decelerationRate, .forwardTrim, .reverseTrim, .gearboxBacklashCompensation, .shuntingModeTrim:
+    case .locomotiveAddressShort, .consistAddress, .waitingPeriodBeforeDirectionChange, .brakeDistanceLength, .brakeDistanceLengthBackwards, .stoppingPeriod, .accelerationRate, .decelerationRate, .forwardTrim, .reverseTrim, .gearboxBacklashCompensation, .shuntingModeTrim, .automaticUncouplingSpeed, .frequencyForBlinkingEffects:
       return 1
     case .accelerationAdjustment, .decelerationAdjustment:
       return -127
@@ -159,9 +185,9 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     switch self {
     case .maximumSpeedWhenBrakeFunction1Active, .maximumSpeedWhenBrakeFunction2Active, .maximumSpeedWhenBrakeFunction3Active:
       return 126
-    case .locomotiveAddressShort, .consistAddress, .accelerationAdjustment, .decelerationAdjustment:
+    case .locomotiveAddressShort, .consistAddress, .accelerationAdjustment, .decelerationAdjustment, .fadeInTimeOfLightEffects, .fadeOutTimeOfLightEffects:
       return 127
-    case .shuntingModeTrim:
+    case .shuntingModeTrim, .logicalFunctionDimmerBrightnessReduction:
       return 128
     default:
       return 255
@@ -175,21 +201,23 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     return label.cv
   }
   
-  // MARK: Public Methods
-  
-  public func label(showCV:Bool) -> String {
+  public var label : String {
     guard let label = ProgrammerToolSettingsProperty.labels[self] else {
       return "error"
     }
-    return label.labelTitle.replacingOccurrences(of: "%%CV%%", with: "")
+    return label.labelTitle
   }
+  
+
+  
+  // MARK: Public Methods
   
   // MARK: Private Class Properties
   
   private static let labels : [ProgrammerToolSettingsProperty:(labelTitle:String, toolTip:String, cv:String, section:ProgrammerToolSettingsSection, controlType:ProgrammerToolControlType, requiredCapabilities:Set<DecoderCapability>)] = [
     .locomotiveAddressType
     : (
-      String(localized:"Locomotive Address Type%%CV%%"),
+      String(localized:"Locomotive Address Type"),
       String(localized:"Locomotive's address type."),
       String(localized:" [CV29.5]"),
       .locomotiveAddress,
@@ -198,7 +226,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .locomotiveAddressShort
     : (
-      String(localized:"Locomotive Address%%CV%%"),
+      String(localized:"Locomotive Address"),
       String(localized:"Locomotive's primary or short address."),
       String(localized:" [CV1]"),
       .locomotiveAddress,
@@ -207,7 +235,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .locomotiveAddressLong
     : (
-      String(localized:"Locomotive Address%%CV%%"),
+      String(localized:"Locomotive Address"),
       String(localized:"Locomotive's extended or long address."),
       String(localized:" [CV17, CV18]"),
       .locomotiveAddress,
@@ -216,7 +244,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .marklinConsecutiveAddresses
     : (
-      String(localized:"Additional Addresses%%CV%%"),
+      String(localized:"Additional Addresses"),
       String(localized:"Additional addresses."),
       String(localized:" [CV49.7, CV49.3]"),
       .locomotiveAddress,
@@ -234,7 +262,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .enableDCCConsistAddress
     : (
-      String(localized:"Enable DCC Consist Address%%CV%%"),
+      String(localized:"Enable DCC Consist Address"),
       String(localized:"Enable DCC consist address."),
       String(localized:" [CV19.6:0]"),
       .dccConsistAddress,
@@ -243,7 +271,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .consistAddress
     : (
-      String(localized:"Address for Consist Operation%%CV%%"),
+      String(localized:"Address for Consist Operation"),
       String(localized:"Address for consist operation."),
       String(localized:" [CV19.6:0]"),
       .dccConsistAddress,
@@ -252,7 +280,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .consistReverseDirection
     : (
-      String(localized:"Reverse Direction%%CV%%"),
+      String(localized:"Reverse Direction"),
       String(localized:"Reverse direction."),
       String(localized:" [CV19.7]"),
       .dccConsistAddress,
@@ -261,7 +289,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .enableACAnalogMode
     : (
-      String(localized:"Enable AC Analog Mode%%CV%%"),
+      String(localized:"Enable AC Analog Mode"),
       String(localized:"Enable AC analog mode."),
       String(localized:" [CV29.2, CV50.0]"),
       .acAnalogMode,
@@ -270,7 +298,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .acAnalogModeStartVoltage
     : (
-      String(localized:"Start Voltage (minimum speed)%%CV%%"),
+      String(localized:"Start Voltage (minimum speed)"),
       String(localized:"Start voltage (minimum speed)."),
       String(localized:" [CV127]"),
       .acAnalogMode,
@@ -279,7 +307,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .acAnalogModeMaximumSpeedVoltage
     : (
-      String(localized:"Maximum Speed Voltage%%CV%%"),
+      String(localized:"Maximum Speed Voltage"),
       String(localized:"Maximum speed voltage."),
       String(localized:" [CV128]"),
       .acAnalogMode,
@@ -288,7 +316,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .enableDCAnalogMode
     : (
-      String(localized:"Enable DC Analog Mode%%CV%%"),
+      String(localized:"Enable DC Analog Mode"),
       String(localized:"Enable DC analog mode."),
       String(localized:" [CV29.2, CV50.1]"),
       .dcAnalogMode,
@@ -297,7 +325,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .dcAnalogModeStartVoltage
     : (
-      String(localized:"Start Voltage (minimum speed)%%CV%%"),
+      String(localized:"Start Voltage (minimum speed)"),
       String(localized:"Start voltage (minimum speed)."),
       String(localized:" [CV125]"),
       .dcAnalogMode,
@@ -306,7 +334,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .dcAnalogModeMaximumSpeedVoltage
     : (
-      String(localized:"Maximum Speed Voltage%%CV%%"),
+      String(localized:"Maximum Speed Voltage"),
       String(localized:"Maximum speed voltage."),
       String(localized:" [CV126]"),
       .dcAnalogMode,
@@ -315,7 +343,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .enableQuantumEngineer
     : (
-      String(localized:"Enable Quantum Engineer Support%%CV%%"),
+      String(localized:"Enable Quantum Engineer Support"),
       String(localized:"Enable quantum engineer support."),
       String(localized:" [CV50.2]"),
       .quantumEngineer,
@@ -324,7 +352,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .ignoreAccelerationDecelerationInSoundSchedule
     : (
-      String(localized:"Ignore Acceleration and Deceleration in the Sound Schedule%%CV%%"),
+      String(localized:"Ignore Acceleration and Deceleration in the Sound Schedule"),
       String(localized:"Ignore acceleration and deceleration in the sound schedule."),
       String(localized:" [CV122.5]"),
       .soundControlBehaviour,
@@ -333,7 +361,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .useHighFrequencyPWMMotorControl
     : (
-      String(localized:"High Frequency PWM Motor Control%%CV%%"),
+      String(localized:"High Frequency PWM Motor Control"),
       String(localized:"Use high frequency PWM motor control."),
       String(localized:" [CV122.6]"),
       .analogModeMotorControl,
@@ -351,7 +379,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .analogMotorHysteresisVoltage
     : (
-      String(localized:"Motor Hysteresis Voltage%%CV%%"),
+      String(localized:"Motor Hysteresis Voltage"),
       String(localized:"Motor hysteresis Voltage."),
       String(localized:" [CV130]"),
       .analogVoltageHysteresis,
@@ -360,7 +388,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .analogFunctionDifferenceVoltage
     : (
-      String(localized:"Function Difference Voltage%%CV%%"),
+      String(localized:"Function Difference Voltage"),
       String(localized:"Function difference voltage."),
       String(localized:" [CV129]"),
       .analogVoltageHysteresis,
@@ -378,7 +406,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .brakeIfRightRailSignalPositive
     : (
-      String(localized:"Brake if right rail signal in driving direction is more positive than the left rail%%CV%%"),
+      String(localized:"Brake if right rail signal in driving direction is more positive than the left rail"),
       String(localized:"Brake if right rail signal in driving direction is more positive than the left rail."),
       String(localized:" [CV27.0]"),
       .abcBrakeSections,
@@ -387,7 +415,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .brakeIfLeftRailSignalPositive
     : (
-      String(localized:"Brake if left rail signal in driving direction is more positive than the right rail%%CV%%"),
+      String(localized:"Brake if left rail signal in driving direction is more positive than the right rail"),
       String(localized:"Brake if left rail signal in driving direction is more positive than the right rail."),
       String(localized:" [CV27.1]"),
       .abcBrakeSections,
@@ -396,7 +424,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .voltageDifferenceIndicatingABCBrakeSection
     : (
-      String(localized:"Voltage difference indicating an ABC brake section%%CV%%"),
+      String(localized:"Voltage difference indicating an ABC brake section"),
       String(localized:"Voltage difference indicating an ABC brake section."),
       String(localized:" [CV134]"),
       .abcBrakeSections,
@@ -405,7 +433,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .abcReducedSpeed
     : (
-      String(localized:"ABC Reduced Speed%%CV%%"),
+      String(localized:"ABC Reduced Speed"),
       String(localized:"ABC Reduced Speed."),
       String(localized:" [CV123]"),
       .abcBrakeSections,
@@ -414,7 +442,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .enableABCShuttleTrain
     : (
-      String(localized:"Enable ABC Shuttle Train%%CV%%"),
+      String(localized:"Enable ABC Shuttle Train"),
       String(localized:"Enable ABC shuttle train."),
       String(localized:" [CV149]"),
       .abcBrakeSections,
@@ -423,7 +451,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .waitingPeriodBeforeDirectionChange
     : (
-      String(localized:"Waiting time before direction change%%CV%%"),
+      String(localized:"Waiting time before direction change"),
       String(localized:"Waiting time before direction change."),
       String(localized:" [CV149]"),
       .abcBrakeSections,
@@ -432,7 +460,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .hluAllowZIMO
     : (
-      String(localized:"Allow ZIMO (HLU) Brake Sections%%CV%%"),
+      String(localized:"Allow ZIMO (HLU) Brake Sections"),
       String(localized:"Allow ZIMO (HLU) brake sections."),
       String(localized:" [CV27.2]"),
       .hluSettings,
@@ -441,7 +469,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .hluSendZIMOZACKSignals
     : (
-      String(localized:"Send ZIMO ZACK Signals%%CV%%"),
+      String(localized:"Send ZIMO ZACK Signals"),
       String(localized:"Send ZIMO ZACK signals."),
       String(localized:" [CV122.2]"),
       .hluSettings,
@@ -450,7 +478,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .hluSpeedLimit1
     : (
-      String(localized:"HLU Speed Limit 1%%CV%%"),
+      String(localized:"HLU Speed Limit 1"),
       String(localized:"HLU speed limit 1."),
       String(localized:" [CV150]"),
       .hluSettings,
@@ -459,7 +487,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .hluSpeedLimit2
     : (
-      String(localized:"HLU Speed Limit 2 (Ultra Low)%%CV%%"),
+      String(localized:"HLU Speed Limit 2 (Ultra Low)"),
       String(localized:"HLU speed limit 2."),
       String(localized:" [CV151]"),
       .hluSettings,
@@ -468,7 +496,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .hluSpeedLimit3
     : (
-      String(localized:"HLU Speed Limit 3%%CV%%"),
+      String(localized:"HLU Speed Limit 3"),
       String(localized:"HLU speed limit 3."),
       String(localized:" [CV152]"),
       .hluSettings,
@@ -477,7 +505,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .hluSpeedLimit4
     : (
-      String(localized:"HLU Speed Limit 4 (Low Speed)%%CV%%"),
+      String(localized:"HLU Speed Limit 4 (Low Speed)"),
       String(localized:"HLU speed limit 4."),
       String(localized:" [CV153]"),
       .hluSettings,
@@ -486,7 +514,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .hluSpeedLimit5
     : (
-      String(localized:"HLU Speed Limit 5%%CV%%"),
+      String(localized:"HLU Speed Limit 5"),
       String(localized:"HLU speed limit 5."),
       String(localized:" [CV154]"),
       .hluSettings,
@@ -495,7 +523,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .brakeOnForwardPolarity
     : (
-      String(localized:"Brake on Forward DC Polarity%%CV%%"),
+      String(localized:"Brake on Forward DC Polarity"),
       String(localized:"Brake on forward DC polarity."),
       String(localized:" [CV27.4]"),
       .autoStopInPresenceOfDCPolarity,
@@ -504,7 +532,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .brakeOnReversePolarity
     : (
-      String(localized:"Brake on Reverse DC Polarity%%CV%%"),
+      String(localized:"Brake on Reverse DC Polarity"),
       String(localized:"Brake on reverse DC polarity."),
       String(localized:" [CV27.3]"),
       .autoStopInPresenceOfDCPolarity,
@@ -513,7 +541,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .selectrixBrakeOnForwardPolarity
     : (
-      String(localized:"Brake on Forward Polarity of Brake Diode%%CV%%"),
+      String(localized:"Brake on Forward Polarity of Brake Diode"),
       String(localized:"Brake on forward polarity of brake diode."),
       String(localized:" [CV27.6]"),
       .selectrixBrakeSections,
@@ -522,7 +550,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .selectrixBrakeOnReversePolarity
     : (
-      String(localized:"Brake on Reverse Polarity of Brake Diode%%CV%%"),
+      String(localized:"Brake on Reverse Polarity of Brake Diode"),
       String(localized:"Brake on reverse polarity of brake diode."),
       String(localized:" [CV27.5]"),
       .selectrixBrakeSections,
@@ -531,7 +559,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .enableConstantBrakeDistance
     : (
-      String(localized:"Enable Constant Brake Distance%%CV%%"),
+      String(localized:"Enable Constant Brake Distance"),
       String(localized:"Enable constant brake distance."),
       String(localized:" [CV254]"),
       .constantBrakeDistance,
@@ -540,7 +568,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .brakeDistanceLength
     : (
-      String(localized:"Brake Distance Length%%CV%%"),
+      String(localized:"Brake Distance Length"),
       String(localized:"Brake distance length."),
       String(localized:" [CV254]"),
       .constantBrakeDistance,
@@ -549,7 +577,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .differentBrakeDistanceBackwards
     : (
-      String(localized:"Different Brake Distance While Driving Backwards%%CV%%"),
+      String(localized:"Different Brake Distance While Driving Backwards"),
       String(localized:"Different brake distance while driving backwards."),
       String(localized:" [CV255]"),
       .constantBrakeDistance,
@@ -558,7 +586,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .brakeDistanceLengthBackwards
     : (
-      String(localized:"Brake Distance Length%%CV%%"),
+      String(localized:"Brake Distance Length"),
       String(localized:"Brake distance length."),
       String(localized:" [CV255]"),
       .constantBrakeDistance,
@@ -567,7 +595,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .driveUntilLocomotiveStopsInSpecifiedPeriod
     : (
-      String(localized:"Drive Until Locomotive Stops in Specified Period%%CV%%"),
+      String(localized:"Drive Until Locomotive Stops in Specified Period"),
       String(localized:"Drive until locomotive stops in specified period."),
       String(localized:" [CV253]"),
       .constantBrakeDistance,
@@ -576,7 +604,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .stoppingPeriod
     : (
-      String(localized:"Stopping Period%%CV%%"),
+      String(localized:"Stopping Period"),
       String(localized:"Stopping period."),
       String(localized:" [CV253]"),
       .constantBrakeDistance,
@@ -585,7 +613,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .constantBrakeDistanceOnSpeedStep0
     : (
-      String(localized:"Constant Brake Distance on Speed Step 0%%CV%%"),
+      String(localized:"Constant Brake Distance on Speed Step 0"),
       String(localized:"Constant brake distance on speed step 0."),
       String(localized:" [CV27.7]"),
       .constantBrakeDistance,
@@ -594,7 +622,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .delayTimeBeforeExitingBrakeSection
     : (
-      String(localized:"Delay Time Before Exiting a Brake Section%%CV%%"),
+      String(localized:"Delay Time Before Exiting a Brake Section"),
       String(localized:"Delay time before exiting a brake section."),
       String(localized:" [CV102]"),
       .brakeSectionSettings,
@@ -603,7 +631,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .brakeFunction1BrakeTimeReduction
     : (
-      String(localized:"Brake Function 1 Reduces Brake Time by%%CV%%"),
+      String(localized:"Brake Function 1 Reduces Brake Time by"),
       String(localized:"Brake function 1 reduces brake time by."),
       String(localized:" [CV179]"),
       .brakeFunctions,
@@ -612,7 +640,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .maximumSpeedWhenBrakeFunction1Active
     : (
-      String(localized:"Maximum Speed when Brake Function 1 is Active%%CV%%"),
+      String(localized:"Maximum Speed when Brake Function 1 is Active"),
       String(localized:"Maximum speed when brake function 1 is active."),
       String(localized:" [CV182]"),
       .brakeFunctions,
@@ -621,7 +649,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .brakeFunction2BrakeTimeReduction
     : (
-      String(localized:"Brake Function 2 Reduces Brake Time by%%CV%%"),
+      String(localized:"Brake Function 2 Reduces Brake Time by"),
       String(localized:"Brake function 2 reduces brake time by."),
       String(localized:" [CV180]"),
       .brakeFunctions,
@@ -630,7 +658,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .maximumSpeedWhenBrakeFunction2Active
     : (
-      String(localized:"Maximum Speed when Brake Function 2 is Active%%CV%%"),
+      String(localized:"Maximum Speed when Brake Function 2 is Active"),
       String(localized:"Maximum speed when brake function 2 is active."),
       String(localized:" [CV183]"),
       .brakeFunctions,
@@ -639,7 +667,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .brakeFunction3BrakeTimeReduction
     : (
-      String(localized:"Brake Function 3 Reduces Brake Time by%%CV%%"),
+      String(localized:"Brake Function 3 Reduces Brake Time by"),
       String(localized:"Brake function 3 reduces brake time by."),
       String(localized:" [CV181]"),
       .brakeFunctions,
@@ -648,7 +676,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .maximumSpeedWhenBrakeFunction3Active
     : (
-      String(localized:"Maximum Speed when Brake Function 3 is Active%%CV%%"),
+      String(localized:"Maximum Speed when Brake Function 3 is Active"),
       String(localized:"Maximum speed when brake function 3 is active."),
       String(localized:" [CV184]"),
       .brakeFunctions,
@@ -657,7 +685,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .enableRailComFeedback
     : (
-      String(localized:"Enable RailCom Feedback%%CV%%"),
+      String(localized:"Enable RailCom Feedback"),
       String(localized:"Enable RailCom feedback."),
       String(localized:" [CV29.3]"),
       .railComSettings,
@@ -666,7 +694,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .enableRailComPlusAutomaticAnnouncement
     : (
-      String(localized:"Enable RailComPlus Automatic Announcement%%CV%%"),
+      String(localized:"Enable RailComPlus Automatic Announcement"),
       String(localized:"Enable RailComPlus automatic announcement."),
       String(localized:" [CV28.7]"),
       .railComSettings,
@@ -684,7 +712,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .sendAddressViaBroadcastOnChannel1
     : (
-      String(localized:"Send Address via Broadcast on Channel 1%%CV%%"),
+      String(localized:"Send Address via Broadcast on Channel 1"),
       String(localized:"Send address via broadcast on channel 1."),
       String(localized:" [CV28.0]"),
       .railComSettings,
@@ -693,7 +721,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .allowDataTransmissionOnChannel2
     : (
-      String(localized:"Allow Data Transmission on Channel 2%%CV%%"),
+      String(localized:"Allow Data Transmission on Channel 2"),
       String(localized:"Allow data transmission on channel 2."),
       String(localized:" [CV28.1]"),
       .railComSettings,
@@ -702,7 +730,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .detectSpeedStepModeAutomatically
     : (
-      String(localized:"Detect Speed Step Mode Automatically%%CV%%"),
+      String(localized:"Detect Speed Step Mode Automatically"),
       String(localized:"Detect speed step mode automatically."),
       String(localized:" [CV49.4]"),
       .speedStepMode,
@@ -711,7 +739,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .speedStepMode
     : (
-      String(localized:"Speed Step Mode%%CV%%"),
+      String(localized:"Speed Step Mode"),
       String(localized:"Speed step mode."),
       String(localized:" [CV29.1]"),
       .speedStepMode,
@@ -720,7 +748,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .enableAcceleration
     : (
-      String(localized:"Enable Acceleration Time%%CV%%"),
+      String(localized:"Enable Acceleration Time"),
       String(localized:"Enable acceleration time."),
       String(localized:" [CV3]"),
       .accelerationAndDeceleration,
@@ -729,7 +757,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .accelerationRate
     : (
-      String(localized:"Time from Stop to Maximum Speed%%CV%%"),
+      String(localized:"Time from Stop to Maximum Speed"),
       String(localized:"Time from stop to maximum speed."),
       String(localized:" [CV3]"),
       .accelerationAndDeceleration,
@@ -738,7 +766,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .accelerationAdjustment
     : (
-      String(localized:"Acceleration Adjustment%%CV%%"),
+      String(localized:"Acceleration Adjustment"),
       String(localized:"Acceleration Adjustment."),
       String(localized:" [CV23]"),
       .accelerationAndDeceleration,
@@ -747,7 +775,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .enableDeceleration
     : (
-      String(localized:"Enable Deceleration Time%%CV%%"),
+      String(localized:"Enable Deceleration Time"),
       String(localized:"Enable deceleration time."),
       String(localized:" [CV4]"),
       .accelerationAndDeceleration,
@@ -756,7 +784,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .decelerationRate
     : (
-      String(localized:"Time from Maximum Speed to Stop%%CV%%"),
+      String(localized:"Time from Maximum Speed to Stop"),
       String(localized:"Time from maximum speed to stop."),
       String(localized:" [CV4]"),
       .accelerationAndDeceleration,
@@ -765,7 +793,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .decelerationAdjustment
     : (
-      String(localized:"Deceleration Adjustment%%CV%%"),
+      String(localized:"Deceleration Adjustment"),
       String(localized:"Deceleration Adjustment."),
       String(localized:" [CV24]"),
       .accelerationAndDeceleration,
@@ -774,7 +802,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .reverseMode
     : (
-      String(localized:"Reverse Direction (Forward becomes Reverse)%%CV%%"),
+      String(localized:"Reverse Direction (Forward becomes Reverse)"),
       String(localized:"Reverse direction."),
       String(localized:" [CV29.0]"),
       .reverseMode,
@@ -783,7 +811,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .enableForwardTrim
     : (
-      String(localized:"Enable Forward Trimming%%CV%%"),
+      String(localized:"Enable Forward Trimming"),
       String(localized:"Enable forward trimming."),
       String(localized:" [CV66]"),
       .trimming,
@@ -792,7 +820,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .forwardTrim
     : (
-      String(localized:"Forward Trimming%%CV%%"),
+      String(localized:"Forward Trimming"),
       String(localized:"Forward trimming."),
       String(localized:" [CV66]"),
       .trimming,
@@ -801,7 +829,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .enableReverseTrim
     : (
-      String(localized:"Enable Reverse Trimming%%CV%%"),
+      String(localized:"Enable Reverse Trimming"),
       String(localized:"Enable Reverse trimming."),
       String(localized:" [CV95]"),
       .trimming,
@@ -810,7 +838,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .reverseTrim
     : (
-      String(localized:"Reverse Trimming%%CV%%"),
+      String(localized:"Reverse Trimming"),
       String(localized:"Reverse trimming."),
       String(localized:" [CV95]"),
       .trimming,
@@ -819,7 +847,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .enableShuntingModeTrim
     : (
-      String(localized:"Enable Shunting Mode Trimming%%CV%%"),
+      String(localized:"Enable Shunting Mode Trimming"),
       String(localized:"Enable shunting mode trimming."),
       String(localized:" [CV101]"),
       .trimming,
@@ -828,7 +856,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .shuntingModeTrim
     : (
-      String(localized:"Shunting Mode Trimming%%CV%%"),
+      String(localized:"Shunting Mode Trimming"),
       String(localized:"Shunting mode trimming."),
       String(localized:" [CV101]"),
       .trimming,
@@ -837,7 +865,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .loadAdjustmentOptionalLoad
     : (
-      String(localized:"Load Adjustment when \"Optional Load\" is Enabled%%CV%%"),
+      String(localized:"Load Adjustment when \"Optional Load\" is Enabled"),
       String(localized:"Load adjustment when \"Optional Load\" is enabled."),
       String(localized:" [CV103]"),
       .loadAdjustment,
@@ -846,7 +874,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .loadAdjustmentPrimaryLoad
     : (
-      String(localized:"Load Adjustment when \"Primary Load\" is Enabled%%CV%%"),
+      String(localized:"Load Adjustment when \"Primary Load\" is Enabled"),
       String(localized:"Load adjustment when \"Primary Load\" is enabled."),
       String(localized:" [CV104]"),
       .loadAdjustment,
@@ -855,7 +883,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .enableGearboxBacklashCompensation
     : (
-      String(localized:"Enable Gearbox Backlash Compensation%%CV%%"),
+      String(localized:"Enable Gearbox Backlash Compensation"),
       String(localized:"Enable gearbox backlash compensation."),
       String(localized:" [CV111]"),
       .gearboxBacklash,
@@ -864,7 +892,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .gearboxBacklashCompensation
     : (
-      String(localized:"Slow motion time until Acceleration Starts%%CV%%"),
+      String(localized:"Slow motion time until Acceleration Starts"),
       String(localized:"Slow motion time until acceleration starts."),
       String(localized:" [CV111]"),
       .gearboxBacklash,
@@ -873,7 +901,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .timeToBridgePowerInterruption
     : (
-      String(localized:"Time to Bridge Power Interruption (PowerPack required)%%CV%%"),
+      String(localized:"Time to Bridge Power Interruption (PowerPack required)"),
       String(localized:"Time to bridge power interruption."),
       String(localized:" [CV113]"),
       .powerPack,
@@ -882,7 +910,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .preserveDirection
     : (
-      String(localized:"Preserve Direction when changing from Analog to Digital%%CV%%"),
+      String(localized:"Preserve Direction when changing from Analog to Digital"),
       String(localized:"Preserve direction when changing from analog to digital."),
       String(localized:" [CV124.0]"),
       .preserveDirection,
@@ -891,16 +919,133 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .enableStartingDelay
     : (
-      String(localized:"Delay Starting if Drive Sound is Enabled%%CV%%"),
+      String(localized:"Delay Starting if Drive Sound is Enabled"),
       String(localized:"Delay starting if drive sound is enabled."),
       String(localized:" [CV124.2]"),
       .startingDelay,
       .checkBox,
       []
     ),
+    .frequencyForBlinkingEffects
+    : (
+      String(localized:"Frequency for Blinking Effects"),
+      String(localized:"Frequency for blinking effects."),
+      String(localized:" [CV112]"),
+      .generalPhysicalOutputSettings,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .gradeCrossingHoldingTime
+    : (
+      String(localized:"Grade Crossing Holding Time"),
+      String(localized:"Grade crossing holding time."),
+      String(localized:" [CV132]"),
+      .generalPhysicalOutputSettings,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .fadeInTimeOfLightEffects
+    : (
+      String(localized:"Fade-In Time of Light Effects"),
+      String(localized:"Fade-in time of light effects."),
+      String(localized:" [CV114]"),
+      .generalPhysicalOutputSettings,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .fadeOutTimeOfLightEffects
+    : (
+      String(localized:"Fade-Out Time of Light Effects"),
+      String(localized:"Fade-out time of light effects."),
+      String(localized:" [CV115]"),
+      .generalPhysicalOutputSettings,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .logicalFunctionDimmerBrightnessReduction
+    : (
+      String(localized:"Logical Function Dimmer Brightness Reduction"),
+      String(localized:"Logical function dimmer brightness reduction."),
+      String(localized:" [CV131]"),
+      .generalPhysicalOutputSettings,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .classLightLogicSequenceLength
+    : (
+      String(localized:"Class Light Logic Sequence Length"),
+      String(localized:"Class light logic sequence length."),
+      String(localized:" [CV199]"),
+      .generalPhysicalOutputSettings,
+      .comboBox,
+      []
+    ),
+    .enforceSlaveCommunicationOnAUX3AndAUX4
+    : (
+      String(localized:"Enforce Slave Communication on AUX3 and AUX4"),
+      String(localized:"Enforce slave communication on AUX3 and AUX4."),
+      String(localized:" [CV114]"),
+      .generalPhysicalOutputSettings,
+      .checkBox,
+      []
+    ),
+    .decoderSensorSettings
+    : (
+      String(localized:"Sensor Settings"),
+      String(localized:"Sensor settings."),
+      String(localized:" [CV124.4]"),
+      .sensorSettings,
+      .comboBox,
+      []
+    ),
+    .enableAutomaticUncoupling
+    : (
+      String(localized:"Enable Automatic Uncoupling"),
+      String(localized:"Enable automatic uncoupling."),
+      String(localized:" [CV246]"),
+      .automaticUncoupling,
+      .checkBox,
+      []
+    ),
+    .automaticUncouplingSpeed
+    : (
+      String(localized:"Automatic Uncoupling Speed"),
+      String(localized:"Automatic uncoupling speed."),
+      String(localized:" [CV246]"),
+      .automaticUncoupling,
+      .textFieldWithSlider,
+      []
+    ),
+    .automaticUncouplingPushTime
+    : (
+      String(localized:"Automatic Uncoupling Push Time"),
+      String(localized:"Automatic uncoupling push time."),
+      String(localized:" [CV248]"),
+      .automaticUncoupling,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .automaticUncouplingWaitTime
+    : (
+      String(localized:"Automatic Uncoupling Wait Time"),
+      String(localized:"Automatic uncoupling wait time."),
+      String(localized:" [CV245]"),
+      .automaticUncoupling,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .automaticUncouplingMoveTime
+    : (
+      String(localized:"Automatic Uncoupling Move Time"),
+      String(localized:"Automatic uncoupling move time."),
+      String(localized:" [CV247]"),
+      .automaticUncoupling,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
     .userId1
     : (
-      String(localized:"User ID #1%%CV%%"),
+      String(localized:"User ID #1"),
       String(localized:"User ID #1."),
       String(localized:" [CV105]"),
       .userIdentification,
@@ -909,16 +1054,79 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .userId2
     : (
-      String(localized:"User ID #2%%CV%%"),
+      String(localized:"User ID #2"),
       String(localized:"User ID #2."),
       String(localized:" [CV106]"),
       .userIdentification,
       .textField,
       []
     ),
+    .smokeUnitTimeUntilPowerOff
+    : (
+      String(localized:"Time until Smoke Unit Automatic Power Off"),
+      String(localized:"Time until smoke unit automatic power off."),
+      String(localized:" [CV140]"),
+      .esuSmokeUnit,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .smokeUnitFanSpeedTrim
+    : (
+      String(localized:"Fan Speed Trim"),
+      String(localized:"Fan speed trim."),
+      String(localized:" [CV138]"),
+      .esuSmokeUnit,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .smokeUnitTemperatureTrim
+    : (
+      String(localized:"Temperature Trim"),
+      String(localized:"Temperature trim."),
+      String(localized:" [CV139]"),
+      .esuSmokeUnit,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .smokeUnitPreheatingTemperatureForSecondarySmokeUnits
+    : (
+      String(localized:"Preheating Temperature for Secondary Smoke Units"),
+      String(localized:"Preheating temperature for secondary smoke units."),
+      String(localized:" [CV144]"),
+      .esuSmokeUnit,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .smokeChuffsDurationRelativeToTriggerDistance
+    : (
+      String(localized:"Duration of Steam Chuffs Relative to Trigger Distance"),
+      String(localized:"Duration of steam chuffs relative to trigger distance."),
+      String(localized:" [CV143]"),
+      .smokeChuffs,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .smokeChuffsMinimumDuration
+    : (
+      String(localized:"Minimum Steam Chuff Duration"),
+      String(localized:"Minimum steam chuff duration."),
+      String(localized:" [CV141]"),
+      .smokeChuffs,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .smokeChuffsMaximumDuration
+    : (
+      String(localized:"Maximum Steam Chuff Duration"),
+      String(localized:"Maximum steam chuff duration."),
+      String(localized:" [CV142]"),
+      .smokeChuffs,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
     .enableDCCProtocol
     : (
-      String(localized:"DCC Protocol%%CV%%"),
+      String(localized:"DCC Protocol"),
       String(localized:"Enable DCC protocol."),
       String(localized:" [CV47.0]"),
       .enabledProtocols,
@@ -927,7 +1135,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .enableMarklinMotorolaProtocol
     : (
-      String(localized:"Märklin Motorola Protocol%%CV%%"),
+      String(localized:"Märklin Motorola Protocol"),
       String(localized:"Enable Märklin Motorola protocol."),
       String(localized:" [CV47.2]"),
       .enabledProtocols,
@@ -936,7 +1144,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .enableSelectrixProtocol
     : (
-      String(localized:"Selectrix%%CV%%"),
+      String(localized:"Selectrix"),
       String(localized:"Enable Selectrix protocol."),
       String(localized:" [CV47.3]"),
       .enabledProtocols,
@@ -945,7 +1153,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .enableM4Protocol
     : (
-      String(localized:"M4 Protocol%%CV%%"),
+      String(localized:"M4 Protocol"),
       String(localized:"Enable M4 protocol."),
       String(localized:" [CV47.1]"),
       .enabledProtocols,
@@ -954,7 +1162,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .memoryPersistentFunction
     : (
-      String(localized:"Persistent Function%%CV%%"),
+      String(localized:"Persistent Function"),
       String(localized:"Enable persistent function."),
       String(localized:" [CV122.0]"),
       .memorySettings,
@@ -963,7 +1171,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .memoryPersistentSpeed
     : (
-      String(localized:"Persistent Speed%%CV%%"),
+      String(localized:"Persistent Speed"),
       String(localized:"Enable persistent speed."),
       String(localized:" [CV122.1]"),
       .memorySettings,
@@ -972,7 +1180,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .enableRailComPlusSynchronization
     : (
-      String(localized:"This decoder synchronizes RailComPlus / M4 address with a Master decoder%%CV%%"),
+      String(localized:"This decoder synchronizes RailComPlus / M4 address with a Master decoder"),
       String(localized:"This decoder synchronizes RailComPlus / M4 address with a Master decoder."),
       String(localized:" [CV191]"),
       .railComDecoderSync,
@@ -981,7 +1189,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .m4MasterDecoderManufacturer
     : (
-      String(localized:"Decoder Manufacturer%%CV%%"),
+      String(localized:"Decoder Manufacturer"),
       String(localized:"Decoder manufacturer."),
       String(localized:" [CV191]"),
       .railComDecoderSync,
@@ -990,7 +1198,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
     ),
     .m4MasterDecoderSerialNumber
     : (
-      String(localized:"Decoder Serial Number%%CV%%"),
+      String(localized:"Decoder Serial Number"),
       String(localized:"Decoder serial number."),
       String(localized:" [CV195, CV194, CV193, CV192]"),
       .railComDecoderSync,
@@ -1013,14 +1221,15 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       
       var field : ProgrammerToolSettingsPropertyField = (view:nil, label:nil, control:nil, item, customView:nil, cvLabel:nil, slider:nil)
       
-      field.label = NSTextField(labelWithString: item.label(showCV: true))
-
+      if item.controlType != .checkBox && item.controlType != .description && item.controlType != .warning {
+        field.label = NSTextField(labelWithString: item.label)
+      }
+      
       switch item.controlType {
       case .checkBox:
-        field.label!.stringValue = ""
         let checkBox = NSButton()
         checkBox.setButtonType(.switch)
-        checkBox.title = item.label(showCV: true)
+        checkBox.title = item.label
         field.control = checkBox
       case .comboBox:
         let comboBox = MyComboBox()
@@ -1065,8 +1274,8 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
 
       if let label = field.label {
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.fontSize = labelFontSize
-        label.alignment = .right
+ //       label.fontSize = labelFontSize
+ //       label.alignment = .right
         label.setContentHuggingPriority(NSLayoutConstraint.Priority(rawValue: 250), for: .horizontal)
         view.addSubview(label)
       }
@@ -1082,7 +1291,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       
       if let control = field.control {
         control.translatesAutoresizingMaskIntoConstraints = false
-        control.fontSize = textFontSize
+  //      control.fontSize = textFontSize
         control.setContentHuggingPriority(NSLayoutConstraint.Priority(rawValue: 1), for: .horizontal)
         control.toolTip = item.toolTip
         control.tag = item.rawValue
@@ -1098,7 +1307,7 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
 
       if let cvLabel = field.cvLabel {
         cvLabel.translatesAutoresizingMaskIntoConstraints = false
-        cvLabel.fontSize = labelFontSize
+  //      cvLabel.fontSize = labelFontSize
         cvLabel.alignment = .right
         view.addSubview(cvLabel)
       }
@@ -1124,6 +1333,10 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       ManufacturerCode.populate(comboBox: comboBox)
     case .speedStepMode:
       SpeedStepMode.populate(comboBox: comboBox)
+    case .classLightLogicSequenceLength:
+      ClassLightLogicSequenceLength.populate(comboBox: comboBox)
+    case .decoderSensorSettings:
+      DecoderSensorSettings.populate(comboBox: comboBox)
     default:
       break
     }

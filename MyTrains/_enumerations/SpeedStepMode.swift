@@ -53,8 +53,4 @@ public enum SpeedStepMode : UInt8, CaseIterable {
     }
   }
 
-//  public static func select(comboBox:NSComboBox, value:SpeedStepMode) {
-//    comboBox.selectItem(withObjectValue: value.title)
-//  }
-  
 }
