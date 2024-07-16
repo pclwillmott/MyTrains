@@ -7,10 +7,19 @@
     " [CV1]" : {
 
     },
+    " [CV2]" : {
+
+    },
     " [CV3]" : {
 
     },
     " [CV4]" : {
+
+    },
+    " [CV5]" : {
+
+    },
+    " [CV9]" : {
 
     },
     " [CV17, CV18]" : {
@@ -91,6 +100,9 @@
     " [CV47.3]" : {
 
     },
+    " [CV49.0]" : {
+
+    },
     " [CV49.4]" : {
 
     },
@@ -100,10 +112,28 @@
     " [CV50.2]" : {
 
     },
+    " [CV51]" : {
+
+    },
+    " [CV53]" : {
+
+    },
+    " [CV54]" : {
+
+    },
+    " [CV55]" : {
+
+    },
+    " [CV56]" : {
+
+    },
     " [CV66]" : {
 
     },
     " [CV95]" : {
+
+    },
+    " [CV100]" : {
 
     },
     " [CV101]" : {
@@ -139,6 +169,18 @@
     " [CV115]" : {
 
     },
+    " [CV116]" : {
+
+    },
+    " [CV117]" : {
+
+    },
+    " [CV118]" : {
+
+    },
+    " [CV119]" : {
+
+    },
     " [CV122.0]" : {
 
     },
@@ -164,6 +206,12 @@
 
     },
     " [CV124.4]" : {
+
+    },
+    " [CV124.5]" : {
+
+    },
+    " [CV124.6]" : {
 
     },
     " [CV125]" : {
@@ -293,6 +341,12 @@
 
     },
     "%@°C" : {
+
+    },
+    "%@Hz" : {
+
+    },
+    "%@V" : {
 
     },
     "%lld bytes %@" : {
@@ -1272,6 +1326,12 @@
           }
         }
       }
+    },
+    "Back EMF Settings" : {
+
+    },
+    "Basic Settings" : {
+
     },
     "Bell" : {
       "comment" : "Used as a label for a button that controls a trains's functions such as sound effects",
@@ -3258,6 +3318,12 @@
     "Enable acceleration time." : {
 
     },
+    "Enable Automatic Parking Brake" : {
+
+    },
+    "Enable automatic parking brake." : {
+
+    },
     "Enable Automatic Uncoupling" : {
 
     },
@@ -3303,10 +3369,28 @@
     "Enable gearbox backlash compensation." : {
 
     },
+    "Enable Load Control / Back EMF" : {
+
+    },
+    "Enable load control / back EMF." : {
+
+    },
     "Enable M4 protocol." : {
 
     },
     "Enable Märklin Motorola protocol." : {
+
+    },
+    "Enable Motor Current Limiter" : {
+
+    },
+    "Enable motor current limiter." : {
+
+    },
+    "Enable Motor Overload Protection" : {
+
+    },
+    "Enable motor overload protection." : {
 
     },
     "Enable persistent function." : {
@@ -3949,6 +4033,18 @@
     "ft/s" : {
       "comment" : "Used for the abbreviation of feet (length) per second"
     },
+    "Full Speed Back EMF Sampling Period" : {
+
+    },
+    "Full speed back EMF sampling period." : {
+
+    },
+    "Full Speed Length of Measurement Gap" : {
+
+    },
+    "Full speed length of measurement gap." : {
+
+    },
     "Function Configuration" : {
 
     },
@@ -4569,6 +4665,12 @@
     "Larger Radius Route (%%UNITS_ACTUAL_LENGTH%%)" : {
       "comment" : "This is used for the title of an input field where the user enters the length of the specified route. The %%UNITS_ACTUAL_LENGTH%% will be replaced at runtime by the name of the user selected units of length - place this at an approprate position in the title for the language."
     },
+    "Largest Internal Speed Step that uses \"K Slow\"" : {
+
+    },
+    "Largest internal speed step that uses \"K Slow\"." : {
+
+    },
     "Last Frame  " : {
 
     },
@@ -5182,6 +5284,9 @@
         }
       }
     },
+    "Maximum Speed" : {
+
+    },
     "Maximum Speed (%%UNITS_SCALE_SPEED%%)" : {
       "comment" : "This is used for the title of a text field."
     },
@@ -5219,6 +5324,9 @@
 
     },
     "Maximum speed when stop expected" : {
+
+    },
+    "Maximum speed." : {
 
     },
     "Maximum Steam Chuff Duration" : {
@@ -5344,6 +5452,12 @@
     "Minimum Sample Period" : {
       "comment" : "This is used for the title of combobox."
     },
+    "Minimum Speed" : {
+
+    },
+    "Minimum speed." : {
+
+    },
     "Minimum Steam Chuff Duration" : {
 
     },
@@ -5376,6 +5490,12 @@
         }
       }
     },
+    "Motor Current Limiter Limit" : {
+
+    },
+    "Motor current limiter limit." : {
+
+    },
     "Motor Hysteresis Voltage" : {
 
     },
@@ -5383,6 +5503,12 @@
 
     },
     "Motor Overload Protection" : {
+
+    },
+    "Motor Pulse Frequency" : {
+
+    },
+    "Motor pulse frequency." : {
 
     },
     "Motor Settings" : {
@@ -6418,6 +6544,36 @@
         }
       }
     },
+    "Regulation Influence During Slow Speed" : {
+
+    },
+    "Regulation influence during slow speed." : {
+
+    },
+    "Regulation Parameter \"I\"" : {
+
+    },
+    "Regulation parameter \"I\"." : {
+
+    },
+    "Regulation Parameter \"K Slow\"" : {
+
+    },
+    "Regulation parameter \"K Slow\"." : {
+
+    },
+    "Regulation Parameter \"K\"" : {
+
+    },
+    "Regulation parameter \"K\"." : {
+
+    },
+    "Regulation Reference" : {
+
+    },
+    "Regulation reference." : {
+
+    },
     "Reinitialize/Factory Reset Command" : {
 
     },
@@ -7164,6 +7320,21 @@
 
     },
     "Slow motion time until acceleration starts." : {
+
+    },
+    "Slow Speed Back EMF Sampling Period" : {
+
+    },
+    "Slow speed back EMF sampling period." : {
+
+    },
+    "Slow Speed Length of Measurement Gap" : {
+
+    },
+    "Slow speed length of measurement gap." : {
+
+    },
+    "Slow Speed Settings" : {
 
     },
     "Smaller Radius Route (%%UNITS_ACTUAL_LENGTH%%)" : {

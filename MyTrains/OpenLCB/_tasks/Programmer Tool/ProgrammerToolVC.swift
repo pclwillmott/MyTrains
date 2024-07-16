@@ -756,6 +756,23 @@ class ProgrammerToolVC : MyTrainsViewController, OpenLCBProgrammerToolDelegate, 
       commonProperties.remove(.automaticUncouplingWaitTime)
       commonProperties.remove(.automaticUncouplingMoveTime)
     }
+    
+    if !decoder.isLoadControlBackEMFEnabled {
+      commonProperties.remove(.regulationReference)
+      commonProperties.remove(.regulationParameterK)
+      commonProperties.remove(.regulationParameterI)
+      commonProperties.remove(.regulationParameterKSlow)
+      commonProperties.remove(.largestInternalSpeedStepThatUsesKSlow)
+      commonProperties.remove(.regulationInfluenceDuringSlowSpeed)
+      commonProperties.remove(.slowSpeedBackEMFSamplingPeriod)
+      commonProperties.remove(.fullSpeedBackEMFSamplingPeriod)
+      commonProperties.remove(.slowSpeedLengthOfMeasurementGap)
+      commonProperties.remove(.fullSpeedLengthOfMeasurementGap)
+    }
+    
+    if !decoder.isMotorCurrentLimiterEnabled {
+      commonProperties.remove(.motorCurrentLimiterLimit)
+    }
 
     var usedFields : [ProgrammerToolSettingsPropertyField] = []
     

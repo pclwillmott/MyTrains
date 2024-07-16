@@ -1590,6 +1590,264 @@ public class Decoder : NSObject {
     /// This is the NMRA multiplier, the Lokprogrammer version was 0.004078
     return Double(smokeChuffsMaximumDuration) * 0.041
   }
+  
+  public var minimumSpeed : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_002)!
+    }
+    set(value) {
+      if value != minimumSpeed {
+        setUInt8(cv: .cv_000_000_002, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var minimumSpeedPercentage : Double {
+    return Double(minimumSpeed) / 255 * 100.0
+  }
+
+  public var maximumSpeed : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_005)!
+    }
+    set(value) {
+      if value != maximumSpeed {
+        setUInt8(cv: .cv_000_000_005, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var maximumSpeedPercentage : Double {
+    return Double(maximumSpeed) / 255 * 100.0
+  }
+  
+  public var isLoadControlBackEMFEnabled : Bool {
+    get {
+      return getBool(cv: .cv_000_000_049, mask: ByteMask.d0)!
+    }
+    set(value) {
+      if value != isLoadControlBackEMFEnabled {
+        setBool(cv: .cv_000_000_049, mask: ByteMask.d0, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var regulationReference : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_053)!
+    }
+    set(value) {
+      if value != regulationReference {
+        setUInt8(cv: .cv_000_000_053, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var regulationReferenceInVolts : Double {
+    return Double(regulationReference) / 10.0
+  }
+  
+  public var regulationParameterK : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_054)!
+    }
+    set(value) {
+      if value != regulationParameterK {
+        setUInt8(cv: .cv_000_000_054, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var regulationParameterI : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_055)!
+    }
+    set(value) {
+      if value != regulationParameterI {
+        setUInt8(cv: .cv_000_000_055, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var regulationParameterIInSeconds : Double {
+    return Double(regulationParameterI) * 2.0 / 1000.0
+  }
+
+  public var regulationParameterKSlow : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_052)!
+    }
+    set(value) {
+      if value != regulationParameterKSlow {
+        setUInt8(cv: .cv_000_000_052, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var largestInternalSpeedStepThatUsesKSlow : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_051)!
+    }
+    set(value) {
+      if value != largestInternalSpeedStepThatUsesKSlow {
+        setUInt8(cv: .cv_000_000_051, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var regulationInfluenceDuringSlowSpeed : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_056)!
+    }
+    set(value) {
+      if value != regulationInfluenceDuringSlowSpeed {
+        setUInt8(cv: .cv_000_000_056, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var regulationInfluenceDuringSlowSpeedPercentage : Double {
+    return Double(regulationInfluenceDuringSlowSpeed) / 255.0 * 100.0
+  }
+  
+  public var slowSpeedBackEMFSamplingPeriod : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_116)!
+    }
+    set(value) {
+      if value != slowSpeedBackEMFSamplingPeriod {
+        setUInt8(cv: .cv_000_000_116, value: value)
+        fullSpeedBackEMFSamplingPeriod = max(fullSpeedBackEMFSamplingPeriod, value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var slowSpeedBackEMFSamplingPeriodInSeconds : Double {
+    return Double(slowSpeedBackEMFSamplingPeriod) / 10000.0
+  }
+  
+  public var fullSpeedBackEMFSamplingPeriod : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_117)!
+    }
+    set(value) {
+      if value != fullSpeedBackEMFSamplingPeriod {
+        setUInt8(cv: .cv_000_000_117, value: value)
+        slowSpeedBackEMFSamplingPeriod = min(slowSpeedBackEMFSamplingPeriod, value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var fullSpeedBackEMFSamplingPeriodInSeconds : Double {
+    return Double(fullSpeedBackEMFSamplingPeriod) / 10000.0
+  }
+  
+  public var slowSpeedLengthOfMeasurementGap : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_118)!
+    }
+    set(value) {
+      if value != slowSpeedLengthOfMeasurementGap {
+        setUInt8(cv: .cv_000_000_118, value: value)
+        fullSpeedLengthOfMeasurementGap = max(fullSpeedLengthOfMeasurementGap, value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var slowSpeedLengthOfMeasurementGapInSeconds : Double {
+    return Double(slowSpeedLengthOfMeasurementGap) / 10000.0
+  }
+
+  public var fullSpeedLengthOfMeasurementGap : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_119)!
+    }
+    set(value) {
+      if value != fullSpeedLengthOfMeasurementGap {
+        setUInt8(cv: .cv_000_000_119, value: value)
+        slowSpeedLengthOfMeasurementGap = min(slowSpeedLengthOfMeasurementGap, value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var fullSpeedLengthOfMeasurementGapInSeconds : Double {
+    return Double(fullSpeedLengthOfMeasurementGap) / 10000.0
+  }
+  
+  public var isMotorOverloadProtectionEnabled : Bool {
+    get {
+      return getBool(cv: .cv_000_000_124, mask: ByteMask.d5)!
+    }
+    set(value) {
+      setBool(cv: .cv_000_000_124, mask: ByteMask.d5, value: value)
+    }
+  }
+  
+  public var isMotorCurrentLimiterEnabled : Bool {
+    get {
+      return getUInt8(cv: .cv_000_000_100)! != 0
+    }
+    set(value) {
+      if value != isMotorCurrentLimiterEnabled {
+        setUInt8(cv: .cv_000_000_100, value: value ? 1 : 0)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+  
+  public var motorCurrentLimiterLimit : UInt8 {
+    get {
+      getUInt8(cv: .cv_000_000_100)!
+    }
+    set(value) {
+      if value != motorCurrentLimiterLimit {
+        setUInt8(cv: .cv_000_000_100, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var motorCurrentLimiterLimitPercentage : Double {
+    return Double(motorCurrentLimiterLimit) / 255.0 * 100.0
+  }
+  
+  public var motorPulseFrequency : UInt8 {
+    get {
+      return getUInt8(cv: .cv_000_000_009)!
+    }
+    set(value) {
+      if value != motorPulseFrequency {
+        setUInt8(cv: .cv_000_000_009, value: value)
+        delegate?.reloadSettings?(self)
+      }
+    }
+  }
+
+  public var motorPulseFrequencyInHertz : Double {
+    return Double(motorPulseFrequency) * 1000.0
+  }
+  
+  public var isAutomaticParkingBrakeEnabled : Bool {
+    get {
+      return getBool(cv: .cv_000_000_124, mask: ByteMask.d6)!
+    }
+    set(value) {
+      setBool(cv: .cv_000_000_124, mask: ByteMask.d6, value: value)
+    }
+  }
 
   // MARK: Private Methods
   
@@ -1798,6 +2056,12 @@ public class Decoder : NSObject {
       return "\(analogFunctionDifferenceVoltage)"
     case .enableABCBrakeMode:
       return String(localized: "Enable ABC brake mode (asymmetrical DCC signal):")
+    case .emfBasicSettings:
+      return String(localized: "Basic Settings")
+    case .emfSlowSpeedSettings:
+      return String(localized: "Slow Speed Settings")
+    case .emfBackEMFSettings:
+      return String(localized: "Back EMF Settings")
     case .brakeIfRightRailSignalPositive:
       return abcBrakeIfRightRailMorePositive ? "true" : "false"
     case .brakeIfLeftRailSignalPositive:
@@ -1976,6 +2240,42 @@ public class Decoder : NSObject {
       return "\(smokeChuffsMinimumDuration)"
     case .smokeChuffsMaximumDuration:
       return "\(smokeChuffsMaximumDuration)"
+    case .minimumSpeed:
+      return "\(minimumSpeed)"
+    case .maximumSpeed:
+      return "\(maximumSpeed)"
+    case .enableLoadControlBackEMF:
+      return isLoadControlBackEMFEnabled ? "true" : "false"
+    case .regulationReference:
+      return "\(regulationReference)"
+    case .regulationParameterK:
+      return "\(regulationParameterK)"
+    case .regulationParameterI:
+      return "\(regulationParameterI)"
+    case .regulationParameterKSlow:
+      return "\(regulationParameterKSlow)"
+    case .largestInternalSpeedStepThatUsesKSlow:
+      return "\(largestInternalSpeedStepThatUsesKSlow)"
+    case .regulationInfluenceDuringSlowSpeed:
+      return "\(regulationInfluenceDuringSlowSpeed)"
+    case .slowSpeedBackEMFSamplingPeriod:
+      return "\(slowSpeedBackEMFSamplingPeriod)"
+    case .fullSpeedBackEMFSamplingPeriod:
+      return "\(fullSpeedBackEMFSamplingPeriod)"
+    case .slowSpeedLengthOfMeasurementGap:
+      return "\(slowSpeedLengthOfMeasurementGap)"
+    case .fullSpeedLengthOfMeasurementGap:
+      return "\(fullSpeedLengthOfMeasurementGap)"
+    case .enableMotorOverloadProtection:
+      return isMotorOverloadProtectionEnabled ? "true" : "false"
+    case .enableMotorCurrentLimiter:
+      return isMotorCurrentLimiterEnabled ? "true" : "false"
+    case .motorCurrentLimiterLimit:
+      return "\(motorCurrentLimiterLimit)"
+    case .motorPulseFrequency:
+      return "\(motorPulseFrequency)"
+    case .enableAutomaticParkingBrake:
+      return isAutomaticParkingBrakeEnabled ? "true" : "false"
     }
   }
   
@@ -2130,7 +2430,50 @@ public class Decoder : NSObject {
       let x = UnitTime.convert(fromValue: smokeChuffsMaximumDurationInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
       formatter.maximumFractionDigits = 2
       return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
-
+    case .minimumSpeed:
+      let x = minimumSpeedPercentage
+      formatter.maximumFractionDigits = 2
+      return String(localized: "\(formatter.string(from: x as NSNumber)!)%")
+    case .maximumSpeed:
+      let x = maximumSpeedPercentage
+      formatter.maximumFractionDigits = 2
+      return String(localized: "\(formatter.string(from: x as NSNumber)!)%")
+    case .regulationReference:
+      let x = regulationReferenceInVolts
+      formatter.maximumFractionDigits = 2
+      return String(localized: "\(formatter.string(from: x as NSNumber)!)V")
+    case .regulationParameterI:
+      let x = UnitTime.convert(fromValue: regulationParameterIInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
+      formatter.maximumFractionDigits = 2
+      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
+    case .regulationInfluenceDuringSlowSpeed:
+      let x = regulationInfluenceDuringSlowSpeedPercentage
+      formatter.maximumFractionDigits = 2
+      return String(localized: "\(formatter.string(from: x as NSNumber)!)%")
+    case .slowSpeedBackEMFSamplingPeriod:
+      let x = UnitTime.convert(fromValue: slowSpeedBackEMFSamplingPeriodInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
+      formatter.maximumFractionDigits = 2
+      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
+    case .fullSpeedBackEMFSamplingPeriod:
+      let x = UnitTime.convert(fromValue: fullSpeedBackEMFSamplingPeriodInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
+      formatter.maximumFractionDigits = 2
+      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
+    case .slowSpeedLengthOfMeasurementGap:
+      let x = UnitTime.convert(fromValue: slowSpeedLengthOfMeasurementGapInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
+      formatter.maximumFractionDigits = 2
+      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
+    case .fullSpeedLengthOfMeasurementGap:
+      let x = UnitTime.convert(fromValue: fullSpeedLengthOfMeasurementGapInSeconds, fromUnits: .seconds, toUnits: appNode!.unitsTime)
+      formatter.maximumFractionDigits = 2
+      return "\(formatter.string(from: x as NSNumber)!)\(appNode!.unitsTime.symbol)"
+    case .motorCurrentLimiterLimit:
+      let x = motorCurrentLimiterLimitPercentage
+      formatter.maximumFractionDigits = 2
+      return String(localized: "\(formatter.string(from: x as NSNumber)!)%")
+    case .motorPulseFrequency:
+      let x = motorPulseFrequencyInHertz
+      formatter.maximumFractionDigits = 2
+      return String(localized: "\(formatter.string(from: x as NSNumber)!)Hz")
     default:
       return ""
     }
@@ -2148,7 +2491,7 @@ public class Decoder : NSObject {
       guard let _ = UInt32(hex:string) else {
         return false
       }
-    case .locomotiveAddressShort, .consistAddress, .waitingPeriodBeforeDirectionChange, .brakeDistanceLength, .brakeDistanceLengthBackwards, .stoppingPeriod, .accelerationRate, .decelerationRate, .forwardTrim, .reverseTrim, .gearboxBacklashCompensation, .accelerationAdjustment, .decelerationAdjustment, .shuntingModeTrim, .acAnalogModeStartVoltage, .acAnalogModeMaximumSpeedVoltage, .dcAnalogModeStartVoltage, .dcAnalogModeMaximumSpeedVoltage, .analogMotorHysteresisVoltage, .analogFunctionDifferenceVoltage, .voltageDifferenceIndicatingABCBrakeSection, .abcReducedSpeed, .hluSpeedLimit1, .hluSpeedLimit2, .hluSpeedLimit3, .hluSpeedLimit4, .hluSpeedLimit5, .delayTimeBeforeExitingBrakeSection, .brakeFunction1BrakeTimeReduction, .brakeFunction2BrakeTimeReduction, .brakeFunction3BrakeTimeReduction, .userId1, .userId2, .loadAdjustmentOptionalLoad, .loadAdjustmentPrimaryLoad, .timeToBridgePowerInterruption, .maximumSpeedWhenBrakeFunction1Active, .maximumSpeedWhenBrakeFunction2Active, .maximumSpeedWhenBrakeFunction3Active, .frequencyForBlinkingEffects, .gradeCrossingHoldingTime, .fadeInTimeOfLightEffects, .fadeOutTimeOfLightEffects, .logicalFunctionDimmerBrightnessReduction, .automaticUncouplingSpeed, .automaticUncouplingPushTime, .automaticUncouplingWaitTime, .automaticUncouplingMoveTime, .smokeUnitTimeUntilPowerOff, .smokeUnitFanSpeedTrim, .smokeUnitTemperatureTrim, .smokeUnitPreheatingTemperatureForSecondarySmokeUnits, .smokeChuffsDurationRelativeToTriggerDistance, .smokeChuffsMinimumDuration, .smokeChuffsMaximumDuration:
+    case .locomotiveAddressShort, .consistAddress, .waitingPeriodBeforeDirectionChange, .brakeDistanceLength, .brakeDistanceLengthBackwards, .stoppingPeriod, .accelerationRate, .decelerationRate, .forwardTrim, .reverseTrim, .gearboxBacklashCompensation, .accelerationAdjustment, .decelerationAdjustment, .shuntingModeTrim, .acAnalogModeStartVoltage, .acAnalogModeMaximumSpeedVoltage, .dcAnalogModeStartVoltage, .dcAnalogModeMaximumSpeedVoltage, .analogMotorHysteresisVoltage, .analogFunctionDifferenceVoltage, .voltageDifferenceIndicatingABCBrakeSection, .abcReducedSpeed, .hluSpeedLimit1, .hluSpeedLimit2, .hluSpeedLimit3, .hluSpeedLimit4, .hluSpeedLimit5, .delayTimeBeforeExitingBrakeSection, .brakeFunction1BrakeTimeReduction, .brakeFunction2BrakeTimeReduction, .brakeFunction3BrakeTimeReduction, .userId1, .userId2, .loadAdjustmentOptionalLoad, .loadAdjustmentPrimaryLoad, .timeToBridgePowerInterruption, .maximumSpeedWhenBrakeFunction1Active, .maximumSpeedWhenBrakeFunction2Active, .maximumSpeedWhenBrakeFunction3Active, .frequencyForBlinkingEffects, .gradeCrossingHoldingTime, .fadeInTimeOfLightEffects, .fadeOutTimeOfLightEffects, .logicalFunctionDimmerBrightnessReduction, .automaticUncouplingSpeed, .automaticUncouplingPushTime, .automaticUncouplingWaitTime, .automaticUncouplingMoveTime, .smokeUnitTimeUntilPowerOff, .smokeUnitFanSpeedTrim, .smokeUnitTemperatureTrim, .smokeUnitPreheatingTemperatureForSecondarySmokeUnits, .smokeChuffsDurationRelativeToTriggerDistance, .smokeChuffsMinimumDuration, .smokeChuffsMaximumDuration, .minimumSpeed, .maximumSpeed, .regulationReference, .regulationParameterK, .regulationParameterI, .regulationParameterKSlow, .largestInternalSpeedStepThatUsesKSlow, .regulationInfluenceDuringSlowSpeed, .slowSpeedBackEMFSamplingPeriod, .fullSpeedBackEMFSamplingPeriod, .slowSpeedLengthOfMeasurementGap, .fullSpeedLengthOfMeasurementGap, .motorCurrentLimiterLimit, .motorPulseFrequency:
       guard let value = UInt8(string), Double(value) >= property.minValue && Double(value) <= property.maxValue else {
         return false
       }
@@ -2377,6 +2720,42 @@ public class Decoder : NSObject {
       smokeChuffsMinimumDuration = UInt8(string)!
     case .smokeChuffsMaximumDuration:
       smokeChuffsMaximumDuration = UInt8(string)!
+    case .minimumSpeed:
+      minimumSpeed = UInt8(string)!
+    case .maximumSpeed:
+      maximumSpeed = UInt8(string)!
+    case .enableLoadControlBackEMF:
+      isLoadControlBackEMFEnabled = string == "true"
+    case .regulationReference:
+      regulationReference = UInt8(string)!
+    case .regulationParameterK:
+      regulationParameterK = UInt8(string)!
+    case .regulationParameterI:
+      regulationParameterI = UInt8(string)!
+    case .regulationParameterKSlow:
+      regulationParameterKSlow = UInt8(string)!
+    case .largestInternalSpeedStepThatUsesKSlow:
+      largestInternalSpeedStepThatUsesKSlow = UInt8(string)!
+    case .regulationInfluenceDuringSlowSpeed:
+      regulationInfluenceDuringSlowSpeed = UInt8(string)!
+    case .slowSpeedBackEMFSamplingPeriod:
+      slowSpeedBackEMFSamplingPeriod = UInt8(string)!
+    case .fullSpeedBackEMFSamplingPeriod:
+      fullSpeedBackEMFSamplingPeriod = UInt8(string)!
+    case .slowSpeedLengthOfMeasurementGap:
+      slowSpeedLengthOfMeasurementGap = UInt8(string)!
+    case .fullSpeedLengthOfMeasurementGap:
+      fullSpeedLengthOfMeasurementGap = UInt8(string)!
+    case .enableMotorOverloadProtection:
+      isMotorOverloadProtectionEnabled = string == "true"
+    case .enableMotorCurrentLimiter:
+      isMotorCurrentLimiterEnabled = string == "true"
+    case .motorCurrentLimiterLimit:
+      motorCurrentLimiterLimit = UInt8(string)!
+    case .motorPulseFrequency:
+      motorPulseFrequency = UInt8(string)!
+    case .enableAutomaticParkingBrake:
+      isAutomaticParkingBrakeEnabled = string == "true"
     default:
       break
     }

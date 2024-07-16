@@ -130,6 +130,32 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   case userId1 = 61
   case userId2 = 62
   
+  // Compatibility
+  
+  // Motor Settings
+  
+  case minimumSpeed = 112
+  case maximumSpeed = 113
+  case emfBasicSettings = 130
+  case enableLoadControlBackEMF = 114
+  case regulationReference = 115
+  case regulationParameterK = 116
+  case regulationParameterI = 117
+  case emfSlowSpeedSettings = 131
+  case regulationParameterKSlow = 118
+  case largestInternalSpeedStepThatUsesKSlow = 129
+  case regulationInfluenceDuringSlowSpeed = 119
+  case emfBackEMFSettings = 132
+  case slowSpeedBackEMFSamplingPeriod = 120
+  case fullSpeedBackEMFSamplingPeriod = 121
+  case slowSpeedLengthOfMeasurementGap = 122
+  case fullSpeedLengthOfMeasurementGap = 123
+  case enableMotorOverloadProtection = 124
+  case enableMotorCurrentLimiter = 125
+  case motorCurrentLimiterLimit = 126
+  case motorPulseFrequency = 127
+  case enableAutomaticParkingBrake = 128
+  
   // Smoke Unit
   
   case smokeUnitTimeUntilPowerOff = 105
@@ -172,10 +198,16 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
   
   public var minValue : Double {
     switch self {
-    case .locomotiveAddressShort, .consistAddress, .waitingPeriodBeforeDirectionChange, .brakeDistanceLength, .brakeDistanceLengthBackwards, .stoppingPeriod, .accelerationRate, .decelerationRate, .forwardTrim, .reverseTrim, .gearboxBacklashCompensation, .shuntingModeTrim, .automaticUncouplingSpeed, .frequencyForBlinkingEffects:
+    case .locomotiveAddressShort, .consistAddress, .waitingPeriodBeforeDirectionChange, .brakeDistanceLength, .brakeDistanceLengthBackwards, .stoppingPeriod, .accelerationRate, .decelerationRate, .forwardTrim, .reverseTrim, .gearboxBacklashCompensation, .shuntingModeTrim, .automaticUncouplingSpeed, .frequencyForBlinkingEffects, .minimumSpeed, .maximumSpeed, .motorCurrentLimiterLimit:
       return 1
+    case .slowSpeedBackEMFSamplingPeriod, .fullSpeedBackEMFSamplingPeriod:
+      return 25
     case .accelerationAdjustment, .decelerationAdjustment:
       return -127
+    case .slowSpeedLengthOfMeasurementGap, .fullSpeedLengthOfMeasurementGap:
+      return 3
+    case .motorPulseFrequency:
+      return 10
     default:
       return 0
     }
@@ -189,6 +221,12 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       return 127
     case .shuntingModeTrim, .logicalFunctionDimmerBrightnessReduction:
       return 128
+    case .slowSpeedBackEMFSamplingPeriod, .fullSpeedBackEMFSamplingPeriod:
+      return 200
+    case .slowSpeedLengthOfMeasurementGap, .fullSpeedLengthOfMeasurementGap:
+      return 40
+    case .motorPulseFrequency:
+      return 50
     default:
       return 255
     }
@@ -1059,6 +1097,195 @@ public enum ProgrammerToolSettingsProperty : Int, CaseIterable {
       String(localized:" [CV106]"),
       .userIdentification,
       .textField,
+      []
+    ),
+    .minimumSpeed
+    : (
+      String(localized:"Minimum Speed"),
+      String(localized:"Minimum speed."),
+      String(localized:" [CV2]"),
+      .speedTable,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .maximumSpeed
+    : (
+      String(localized:"Maximum Speed"),
+      String(localized:"Maximum speed."),
+      String(localized:" [CV5]"),
+      .speedTable,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .emfBasicSettings
+    : (
+      String(localized:""),
+      String(localized:""),
+      String(localized:""),
+      .loadControlBackEMF,
+      .description,
+      []
+    ),
+    .emfSlowSpeedSettings
+    : (
+      String(localized:""),
+      String(localized:""),
+      String(localized:""),
+      .loadControlBackEMF,
+      .description,
+      []
+    ),
+    .emfBackEMFSettings
+    : (
+      String(localized:""),
+      String(localized:""),
+      String(localized:""),
+      .loadControlBackEMF,
+      .description,
+      []
+    ),
+    .enableLoadControlBackEMF
+    : (
+      String(localized:"Enable Load Control / Back EMF"),
+      String(localized:"Enable load control / back EMF."),
+      String(localized:" [CV49.0]"),
+      .loadControlBackEMF,
+      .checkBox,
+      []
+    ),
+    .regulationReference
+    : (
+      String(localized:"Regulation Reference"),
+      String(localized:"Regulation reference."),
+      String(localized:" [CV53]"),
+      .loadControlBackEMF,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .regulationParameterK
+    : (
+      String(localized:"Regulation Parameter \"K\""),
+      String(localized:"Regulation parameter \"K\"."),
+      String(localized:" [CV54]"),
+      .loadControlBackEMF,
+      .textFieldWithSlider,
+      []
+    ),
+    .regulationParameterI
+    : (
+      String(localized:"Regulation Parameter \"I\""),
+      String(localized:"Regulation parameter \"I\"."),
+      String(localized:" [CV55]"),
+      .loadControlBackEMF,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .regulationParameterKSlow
+    : (
+      String(localized:"Regulation Parameter \"K Slow\""),
+      String(localized:"Regulation parameter \"K Slow\"."),
+      String(localized:" [CV54]"),
+      .loadControlBackEMF,
+      .textFieldWithSlider,
+      []
+    ),
+    .largestInternalSpeedStepThatUsesKSlow
+    : (
+      String(localized:"Largest Internal Speed Step that uses \"K Slow\""),
+      String(localized:"Largest internal speed step that uses \"K Slow\"."),
+      String(localized:" [CV51]"),
+      .loadControlBackEMF,
+      .textFieldWithSlider,
+      []
+    ),
+    .regulationInfluenceDuringSlowSpeed
+    : (
+      String(localized:"Regulation Influence During Slow Speed"),
+      String(localized:"Regulation influence during slow speed."),
+      String(localized:" [CV56]"),
+      .loadControlBackEMF,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .slowSpeedBackEMFSamplingPeriod
+    : (
+      String(localized:"Slow Speed Back EMF Sampling Period"),
+      String(localized:"Slow speed back EMF sampling period."),
+      String(localized:" [CV116]"),
+      .loadControlBackEMF,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .fullSpeedBackEMFSamplingPeriod
+    : (
+      String(localized:"Full Speed Back EMF Sampling Period"),
+      String(localized:"Full speed back EMF sampling period."),
+      String(localized:" [CV117]"),
+      .loadControlBackEMF,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .slowSpeedLengthOfMeasurementGap
+    : (
+      String(localized:"Slow Speed Length of Measurement Gap"),
+      String(localized:"Slow speed length of measurement gap."),
+      String(localized:" [CV118]"),
+      .loadControlBackEMF,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .fullSpeedLengthOfMeasurementGap
+    : (
+      String(localized:"Full Speed Length of Measurement Gap"),
+      String(localized:"Full speed length of measurement gap."),
+      String(localized:" [CV119]"),
+      .loadControlBackEMF,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .enableMotorOverloadProtection
+    : (
+      String(localized:"Enable Motor Overload Protection"),
+      String(localized:"Enable motor overload protection."),
+      String(localized:" [CV124.5]"),
+      .motorOverloadProtection,
+      .checkBox,
+      []
+    ),
+    .enableMotorCurrentLimiter
+    : (
+      String(localized:"Enable Motor Current Limiter"),
+      String(localized:"Enable motor current limiter."),
+      String(localized:" [CV100]"),
+      .motorOverloadProtection,
+      .checkBox,
+      []
+    ),
+    .motorCurrentLimiterLimit
+    : (
+      String(localized:"Motor Current Limiter Limit"),
+      String(localized:"Motor current limiter limit."),
+      String(localized:" [CV100]"),
+      .motorOverloadProtection,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .motorPulseFrequency
+    : (
+      String(localized:"Motor Pulse Frequency"),
+      String(localized:"Motor pulse frequency."),
+      String(localized:" [CV9]"),
+      .pwmFrequency,
+      .textFieldWithInfoWithSlider,
+      []
+    ),
+    .enableAutomaticParkingBrake
+    : (
+      String(localized:"Enable Automatic Parking Brake"),
+      String(localized:"Enable automatic parking brake."),
+      String(localized:" [CV124.6]"),
+      .automaticParkingBrake,
+      .checkBox,
       []
     ),
     .smokeUnitTimeUntilPowerOff
